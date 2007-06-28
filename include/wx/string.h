@@ -380,16 +380,31 @@ protected:
 // see the comment near wxString::iterator for why we need this
 struct WXDLLIMPEXP_BASE wxStringIteratorNode
 {
-    inline wxStringIteratorNode(const wxString *str,
-                                wxStringImpl::const_iterator *citer);
-    inline wxStringIteratorNode(const wxString *str,
-                                wxStringImpl::iterator *iter);
-    inline ~wxStringIteratorNode();
+    wxStringIteratorNode()
+        : m_str(NULL), m_citer(NULL), m_iter(NULL), m_prev(NULL), m_next(NULL) {}
+    wxStringIteratorNode(const wxString *str,
+                          wxStringImpl::const_iterator *citer)
+        { DoSet(str, citer, NULL); }
+    wxStringIteratorNode(const wxString *str, wxStringImpl::iterator *iter)
+        { DoSet(str, NULL, iter); }
+    ~wxStringIteratorNode()
+        { clear(); }
+
+    inline void set(const wxString *str, wxStringImpl::const_iterator *citer)
+        { clear(); DoSet(str, citer, NULL); }
+    inline void set(const wxString *str, wxStringImpl::iterator *iter)
+        { clear(); DoSet(str, NULL, iter); }
 
     const wxString *m_str;
     wxStringImpl::const_iterator *m_citer;
     wxStringImpl::iterator *m_iter;
     wxStringIteratorNode *m_prev, *m_next;
+
+private:
+    inline void clear();
+    inline void DoSet(const wxString *str,
+                      wxStringImpl::const_iterator *citer,
+                      wxStringImpl::iterator *iter);
 
     // the node belongs to a particular iterator instance, it's not copied
     // when a copy of the iterator is made
@@ -665,10 +680,11 @@ public:
       WX_STR_ITERATOR_IMPL(iterator, wxChar*, wxUniCharRef);
 
   public:
+      iterator() {}
       iterator(const iterator& i)
           : m_cur(i.m_cur), m_node(i.str(), &m_cur) {}
       iterator& operator=(const iterator& i)
-        { m_cur = i.m_cur; return *this; }
+        { m_cur = i.m_cur; m_node.set(i.str(), &m_cur); return *this; }
 
       reference operator*()
         { return wxUniCharRef::CreateForString(m_node, m_cur); }
@@ -700,15 +716,16 @@ public:
       WX_STR_ITERATOR_IMPL(const_iterator, const wxChar*, wxUniChar);
 
   public:
+      const_iterator() {}
       const_iterator(const const_iterator& i)
           : m_cur(i.m_cur), m_node(i.str(), &m_cur) {}
       const_iterator(const iterator& i)
           : m_cur(i.m_cur), m_node(i.str(), &m_cur) {}
 
       const_iterator& operator=(const const_iterator& i)
-        { m_cur = i.m_cur; return *this; }
+        { m_cur = i.m_cur; m_node.set(i.str(), &m_cur); return *this; }
       const_iterator& operator=(const iterator& i)
-        { m_cur = i.m_cur; return *this; }
+        { m_cur = i.m_cur; m_node.set(i.str(), &m_cur); return *this; }
 
       reference operator*() const
         { return wxStringOperations::DecodeChar(m_cur); }
@@ -742,6 +759,7 @@ public:
       WX_STR_ITERATOR_IMPL(iterator, wxChar*, wxUniCharRef);
 
   public:
+      iterator() {}
       iterator(const iterator& i) : m_cur(i.m_cur) {}
 
       reference operator*()
@@ -771,6 +789,7 @@ public:
       WX_STR_ITERATOR_IMPL(const_iterator, const wxChar*, wxUniChar);
 
   public:
+      const_iterator() {}
       const_iterator(const const_iterator& i) : m_cur(i.m_cur) {}
       const_iterator(const iterator& i) : m_cur(i.m_cur) {}
 
@@ -812,6 +831,7 @@ public:
       typedef typename T::reference reference;
       typedef typename T::pointer *pointer;
 
+      reverse_iterator_impl() {}
       reverse_iterator_impl(iterator_type i) : m_cur(i) {}
       reverse_iterator_impl(const reverse_iterator_impl& ri)
           : m_cur(ri.m_cur) {}
@@ -3102,40 +3122,36 @@ inline wxWCharBuffer::wxWCharBuffer(const wxCStrData& cstr)
 // implementation of wxStringIteratorNode inline methods
 // ----------------------------------------------------------------------------
 
-wxStringIteratorNode::wxStringIteratorNode(const wxString *str,
-                                           wxStringImpl::const_iterator *citer)
-    : m_str(str),
-      m_citer(citer),
-      m_iter(NULL),
-      m_prev(NULL),
-      m_next(str->m_iterators.ptr)
+void wxStringIteratorNode::DoSet(const wxString *str,
+                                 wxStringImpl::const_iterator *citer,
+                                 wxStringImpl::iterator *iter)
 {
-    wx_const_cast(wxString*, m_str)->m_iterators.ptr = this;
-    if ( m_next )
-        m_next->m_prev = this;
+    m_next = m_prev = NULL;
+    m_iter = iter;
+    m_citer = citer;
+    m_str = str;
+    if ( str )
+    {
+        m_next = str->m_iterators.ptr;
+        wx_const_cast(wxString*, m_str)->m_iterators.ptr = this;
+        if ( m_next )
+            m_next->m_prev = this;
+    }
 }
 
-wxStringIteratorNode::wxStringIteratorNode(const wxString *str,
-                                           wxStringImpl::iterator *iter)
-    : m_str(str),
-      m_citer(NULL),
-      m_iter(iter),
-      m_prev(NULL),
-      m_next(str->m_iterators.ptr)
-{
-    wx_const_cast(wxString*, m_str)->m_iterators.ptr = this;
-    if ( m_next)
-        m_next->m_prev = this;
-}
-
-wxStringIteratorNode::~wxStringIteratorNode()
+void wxStringIteratorNode::clear()
 {
     if ( m_next )
         m_next->m_prev = m_prev;
     if ( m_prev )
         m_prev->m_next = m_next;
-    else // first in the list
+    else if ( m_str ) // first in the list
         wx_const_cast(wxString*, m_str)->m_iterators.ptr = m_next;
+
+    m_next = m_prev = NULL;
+    m_citer = NULL;
+    m_iter = NULL;
+    m_str = NULL;
 }
 #endif // wxUSE_UNICODE_UTF8
 

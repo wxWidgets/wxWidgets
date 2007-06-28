@@ -33,6 +33,7 @@ public:
 private:
     CPPUNIT_TEST_SUITE( StdStringTestCase );
         CPPUNIT_TEST( StdConstructors );
+        CPPUNIT_TEST( StdIterators );
         CPPUNIT_TEST( StdAppend );
         CPPUNIT_TEST( StdAssign );
         CPPUNIT_TEST( StdCompare );
@@ -52,6 +53,7 @@ private:
     CPPUNIT_TEST_SUITE_END();
 
     void StdConstructors();
+    void StdIterators();
     void StdAppend();
     void StdAssign();
     void StdCompare();
@@ -106,6 +108,15 @@ void StdStringTestCase::StdConstructors()
 
     const wchar_t *pw = s2.c_str();
     WX_ASSERT_STR_EQUAL( "a", wxString(pw, pw + 1) );
+}
+
+void StdStringTestCase::StdIterators()
+{
+    // test compilation of default iterators ctors:
+    wxString::iterator i1;
+    wxString::const_iterator i2;
+    wxString::reverse_iterator i3;
+    wxString::const_reverse_iterator i4;
 }
 
 void StdStringTestCase::StdAppend()
