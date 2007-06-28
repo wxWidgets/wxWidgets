@@ -999,7 +999,7 @@ wxString wxString::FromAscii(const char *ascii, size_t len)
 
 wxString wxString::FromAscii(const char *ascii)
 {
-    return FromAscii(ascii, strlen(ascii));
+    return FromAscii(ascii, wxStrlen(ascii));
 }
 
 wxString wxString::FromAscii(const char ascii)
