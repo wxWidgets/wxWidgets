@@ -194,7 +194,8 @@ void wxWindowDFB::SetFocus()
 
     gs_focusedWindow = this;
 
-    if ( IsShownOnScreen() )
+    if ( IsShownOnScreen() &&
+         (!oldFocusedWindow || oldFocusedWindow->GetTLW() != m_tlw) )
     {
         m_tlw->SetDfbFocus();
     }

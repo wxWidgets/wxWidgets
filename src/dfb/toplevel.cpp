@@ -200,6 +200,8 @@ void wxTopLevelWindowDFB::HandleFocusEvent(const wxDFBWindowEvent& event_)
 
             if ( CanAcceptFocus() )
                 SetFocus();
+            else
+                wxLogTrace(TRACE_EVENTS, "...which doesn't accept it");
         }
     }
 }
