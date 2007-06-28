@@ -582,17 +582,35 @@ public:
         // this class clients and take into account the current window state
     virtual bool AcceptsFocus() const { return true; }
 
-        // can this window have focus right now?
-    bool CanAcceptFocus() const { return AcceptsFocus() && IsShown() && IsEnabled(); }
+        // can this window or one of its children accept focus?
+        //
+        // usually it's the same as AcceptsFocus() but is overridden for
+        // container windows
+    virtual bool AcceptsFocusRecursively() const { return AcceptsFocus(); }
 
         // can this window be given focus by keyboard navigation? if not, the
         // only way to give it focus (provided it accepts it at all) is to
         // click it
     virtual bool AcceptsFocusFromKeyboard() const { return AcceptsFocus(); }
 
+
+        // this is mostly a helper for the various functions using it below
+    bool CanBeFocused() const { return IsShown() && IsEnabled(); }
+
+        // can this window itself have focus?
+    bool IsFocusable() const { return AcceptsFocus() && CanBeFocused(); }
+
+        // can this window have focus right now?
+        //
+        // if this method returns true, it means that calling SetFocus() will
+        // put focus either to this window or one of its children, if you need
+        // to know whether this window accepts focus itself, use IsFocusable()
+    bool CanAcceptFocus() const
+        { return AcceptsFocusRecursively() && CanBeFocused(); }
+
         // can this window be assigned focus from keyboard right now?
     bool CanAcceptFocusFromKeyboard() const
-        { return AcceptsFocusFromKeyboard() && CanAcceptFocus(); }
+        { return AcceptsFocusFromKeyboard() && CanBeFocused(); }
 
         // call this when the return value of AcceptsFocus() changes
     virtual void SetCanFocus(bool WXUNUSED(canFocus)) { }

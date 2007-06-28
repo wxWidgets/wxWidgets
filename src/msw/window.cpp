@@ -2742,7 +2742,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                     // problems, so don't do it for them (unnecessary anyhow)
                     if ( !win->IsOfStandardClass() )
                     {
-                        if ( message == WM_LBUTTONDOWN && win->CanAcceptFocus() )
+                        if ( message == WM_LBUTTONDOWN && win->IsFocusable() )
                             win->SetFocus();
                     }
                 }

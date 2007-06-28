@@ -57,32 +57,24 @@ void wxControlContainerBase::SetCanFocus(bool acceptsFocus)
     m_winParent->SetCanFocus(m_acceptsFocus);
 }
 
-// if the window has a focusable child, it shouldn't be focusable itself (think
-// of wxPanel used for grouping different controls) but if it doesn't have any
-// (focusable) children, then it should be possible to give it focus (think of
-// wxGrid or generic wxListCtrl)
-bool wxControlContainerBase::ShouldAcceptFocus() const
+bool wxControlContainerBase::HasAnyFocusableChildren() const
 {
-    // we can accept focus either if we have no children at all (in this case
-    // we're probably not used as a container) or only when at least one child
-    // accepts focus
-    wxWindowList::compatibility_iterator node = m_winParent->GetChildren().GetFirst();
-    if ( !node )
-        return true;
-
-    while ( node )
+    const wxWindowList& children = m_winParent->GetChildren();
+    for ( wxWindowList::const_iterator i = children.begin(),
+                                     end = children.end();
+          i != end;
+          ++i )
     {
-        wxWindow *child = node->GetData();
-        node = node->GetNext();
+        const wxWindow * const child = *i;
 
         if ( !m_winParent->IsClientAreaChild(child) )
             continue;
 
         if ( child->CanAcceptFocus() )
-            return false;
+            return true;
     }
 
-    return true;
+    return false;
 }
 
 #ifndef wxHAS_NATIVE_TAB_TRAVERSAL

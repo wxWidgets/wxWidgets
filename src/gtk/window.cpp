@@ -1434,7 +1434,7 @@ gtk_window_button_press_callback( GtkWidget *widget,
 
     g_lastButtonNumber = gdk_event->button;
 
-    if (win->m_wxwindow && (g_focusWindow != win) && win->CanAcceptFocus())
+    if (win->m_wxwindow && (g_focusWindow != win) && win->IsFocusable())
     {
         gtk_widget_grab_focus( win->m_wxwindow );
     }
@@ -1570,7 +1570,7 @@ gtk_window_button_press_callback( GtkWidget *widget,
         return TRUE;
 
     if ((event_type == wxEVT_LEFT_DOWN) && !win->IsOfStandardClass() && 
-        (g_focusWindow != win) && win->CanAcceptFocus())
+        (g_focusWindow != win) && win->IsFocusable())
     {
         gtk_widget_grab_focus( win->m_wxwindow );
     }
