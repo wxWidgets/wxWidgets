@@ -295,7 +295,6 @@ Quantize
 QueryLayoutInfoEvent
 QueryNewPaletteEvent
 RadioBox
-RadioButton
 RealPoint
 Rect2D
 Region
