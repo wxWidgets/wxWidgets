@@ -11,7 +11,7 @@
 # Python Code By:
 #
 # Andrea Gavana, @ 02 Oct 2006
-# Latest Revision: 26 Jun 2007, 21.00 GMT
+# Latest Revision: 28 Jun 2007, 21.00 GMT
 #
 #
 # For All Kind Of Problems, Requests Of Enhancements And Bug Reports, Please
@@ -58,9 +58,9 @@ License And Version:
 
 FlatNotebook Is Freeware And Distributed Under The wxPython License. 
 
-Latest Revision: Andrea Gavana @ 26 Jun 2007, 21.00 GMT
+Latest Revision: Andrea Gavana @ 28 Jun 2007, 21.00 GMT
 
-Version 2.1.
+Version 2.2.
 
 @undocumented: FNB_HEIGHT_SPACER, VERTICAL_BORDER_PADDING, VC8_SHAPE_LEN,
     wxEVT*, left_arrow_*, right_arrow*, x_button*, down_arrow*,
@@ -3500,6 +3500,7 @@ class FlatNotebook(wx.PyPanel):
             else:
                 # change pages
                 self.AdvanceSelection(event.GetDirection())
+
         else:
             event.Skip()
             
@@ -3818,7 +3819,7 @@ class PageContainer(wx.Panel):
         tabHeight = height + FNB_HEIGHT_SPACER # We use 10 pixels as padding
 
         wx.Panel.__init__(self, parent, id, pos, wx.Size(size.x, tabHeight),
-                          style|wx.NO_BORDER|wx.NO_FULL_REPAINT_ON_RESIZE)
+                          style|wx.NO_BORDER|wx.NO_FULL_REPAINT_ON_RESIZE|wx.WANTS_CHARS)
 
         self._pDropTarget = FNBDropTarget(self)
         self.SetDropTarget(self._pDropTarget)
@@ -3837,7 +3838,8 @@ class PageContainer(wx.Panel):
         self.Bind(wx.EVT_LEFT_DCLICK, self.OnLeftDClick)
         self.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
         self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
-
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+        
 
     def OnEraseBackground(self, event):
         """ Handles the wx.EVT_ERASE_BACKGROUND event for L{PageContainer} (does nothing)."""
@@ -4789,8 +4791,28 @@ class PageContainer(wx.Panel):
         """ Handles the wx.EVT_KILL_FOCUS event for L{PageContainer}. """
 
         self.SetFocusedPage()
-        
 
+
+    def OnKeyDown(self, event):
+        """
+        When the PageContainer has the focus tabs can be changed with
+        the left/right arrow keys.
+        """
+        key = event.GetKeyCode()
+        print key
+        if key == wx.WXK_LEFT:
+            self.GetParent().AdvanceSelection(False)
+        elif key == wx.WXK_RIGHT:
+            self.GetParent().AdvanceSelection(True)
+        elif key == wx.WXK_TAB:
+            flags = 0
+            if not event.ShiftDown(): flags |= wx.NavigationKeyEvent.IsForward
+            if event.CmdDown():       flags |= wx.NavigationKeyEvent.WinChange
+            self.Navigate(flags)
+        else:
+            event.Skip()
+
+            
     def SetFocusedPage(self, pageIndex=-1):
         """
         Sets/Unsets the focus on the appropriate page.
@@ -4804,7 +4826,7 @@ class PageContainer(wx.Panel):
                 page._hasFocus = False
             
         self.Refresh()
-        
+                
 
     def PopupTabsMenu(self):
         """ Pops up the menu activated with the drop down arrow in the navigation area. """
