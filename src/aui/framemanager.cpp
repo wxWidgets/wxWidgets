@@ -28,6 +28,7 @@
 #include "wx/aui/framemanager.h"
 #include "wx/aui/dockart.h"
 #include "wx/aui/floatpane.h"
+#include "wx/aui/tabmdi.h"
 
 #ifndef WX_PRECOMP
     #include "wx/panel.h"
@@ -769,6 +770,17 @@ void wxAuiManager::SetManagedWindow(wxWindow* wnd)
                 wxAuiPaneInfo().Name(wxT("mdiclient")).
                 CenterPane().PaneBorder(false));
     }
+	 else if (m_frame->IsKindOf(CLASSINFO(wxAuiMDIParentFrame)))
+    {
+        wxAuiMDIParentFrame* mdi_frame = (wxAuiMDIParentFrame*)m_frame;
+        wxAuiMDIClientWindow* client_window = mdi_frame->GetClientWindow();
+        wxASSERT_MSG(client_window, wxT("Client window is NULL!"));
+
+        AddPane(client_window,
+                wxAuiPaneInfo().Name(wxT("mdiclient")).
+                CenterPane().PaneBorder(false));
+    }
+
 #endif
 
     UpdateHintWindowConfig();
