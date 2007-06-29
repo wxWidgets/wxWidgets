@@ -552,7 +552,7 @@ namespace
 {
 
 #if !wxUSE_UTF8_LOCALE_ONLY
-int wxInternalConvertStringToBuf(const wxString& s, char *out, size_t outsize)
+int ConvertStringToBuf(const wxString& s, char *out, size_t outsize)
 {
     const wxWX2WCbuf buf = s.wc_str();
 
@@ -565,13 +565,19 @@ int wxInternalConvertStringToBuf(const wxString& s, char *out, size_t outsize)
 #endif // !wxUSE_UTF8_LOCALE_ONLY
 
 #if wxUSE_UNICODE_UTF8
-int wxInternalConvertStringToBuf(const wxString& s, wchar_t *out, size_t outsize)
+int ConvertStringToBuf(const wxString& s, wchar_t *out, size_t outsize)
 {
     const wxWX2WCbuf buf(s.wc_str());
-    size_t len = wxWcslen(buf);
+    size_t len = s.length(); // same as buf length for wchar_t*
     if ( outsize > len )
+    {
         memcpy(out, buf, (len+1) * sizeof(wchar_t));
-    // else: not enough space
+    }
+    else // not enough space
+    {
+        memcpy(out, buf, (outsize-1) * sizeof(wchar_t));
+        out[outsize-1] = 0;
+    }
     return len;
 }
 #endif // wxUSE_UNICODE_UTF8
@@ -585,7 +591,7 @@ static size_t PrintfViaString(T *out, size_t outsize,
     wxString s;
     s.PrintfV(format, argptr);
 
-    return wxInternalConvertStringToBuf(s, out, outsize);
+    return ConvertStringToBuf(s, out, outsize);
 }
 #endif // wxUSE_UNICODE
 
