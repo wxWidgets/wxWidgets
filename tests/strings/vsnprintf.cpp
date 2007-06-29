@@ -84,8 +84,9 @@ int r;
 //
 // use with extreme care and only when you're really sure the warnings must be
 // suppressed!
+template<typename T>
 static int
-wxUnsafeSnprintf(wxChar *buf, size_t len, const wxChar *fmt, ...)
+wxUnsafeSnprintf(T *buf, size_t len, const wxChar *fmt, ...)
 {
     va_list args;
     va_start(args, fmt);
@@ -153,7 +154,7 @@ private:
     void WrongFormatStrings();
 #endif // wxUSE_WXVSNPRINTF
     void Miscellaneous();
-    void Misc(wxChar *buffer, int size);
+    template<typename T> void Misc(T *buffer, int size);
 
     // compares the expectedString and the result of wxVsnprintf() char by char
     // for all its lenght (not only for first expectedLen chars) and also
@@ -380,7 +381,8 @@ void VsnprintfTestCase::LongLong()
 }
 #endif
 
-void VsnprintfTestCase::Misc(wxChar *buffer, int size)
+template<typename T>
+void VsnprintfTestCase::Misc(T *buffer, int size)
 {
     // Remember that wx*printf could be mapped either to system
     // implementation or to wx implementation.
@@ -461,12 +463,18 @@ void VsnprintfTestCase::WrongFormatStrings()
 
 void VsnprintfTestCase::BigToSmallBuffer()
 {
-    wxChar buf[1024], buf2[16], buf3[4], buf4;
+    wchar_t bufw[1024], bufw2[16], bufw3[4], bufw4;
+    char bufa[1024], bufa2[16], bufa3[4], bufa4;
 
-    Misc(buf, 1024);
-    Misc(buf2, 16);
-    Misc(buf3, 4);
-    Misc(&buf4, 1);
+    Misc(bufw, 1024);
+    Misc(bufw2, 16);
+    Misc(bufw3, 4);
+    Misc(&bufw4, 1);
+
+    Misc(bufa, 1024);
+    Misc(bufa2, 16);
+    Misc(bufa3, 4);
+    Misc(&bufa4, 1);
 }
 
 void VsnprintfTestCase::DoMisc(
