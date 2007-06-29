@@ -111,6 +111,7 @@ wxMSW:
 
 wxGTK:
 
+- Fixed missing key events in wxGTK1 build
 - Setting foreground colour of single line wxTextCtrl now works
 - More work on setting defaults in GNOME print dialogs.
 - Also made landscape printing work as per wxMSW.
