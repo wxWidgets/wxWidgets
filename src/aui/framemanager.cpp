@@ -3061,6 +3061,7 @@ void wxAuiManager::ShowHint(const wxRect& rect)
             m_hint_fadeamt = 0;
 
         m_hint_wnd->SetSize(rect);
+        m_hint_wnd->SetTransparent(m_hint_fadeamt);
 
         if (!m_hint_wnd->IsShown())
             m_hint_wnd->Show();
@@ -3070,7 +3071,6 @@ void wxAuiManager::ShowHint(const wxRect& rect)
         if (m_action == actionDragFloatingPane && m_action_window)
             m_action_window->SetFocus();
 
-        m_hint_wnd->SetTransparent(m_hint_fadeamt);
         m_hint_wnd->Raise();
 
 
