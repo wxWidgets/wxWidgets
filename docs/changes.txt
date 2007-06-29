@@ -100,6 +100,8 @@ All (GUI):
 - Significantly improved startup times of XRC-based applications using
   embedded resources on Unix (requires resources recompilation)
 - Fixed freeing of "static" alpha data in wxImage (Axel Gembe)
+- Added tab mouse click events to wxAuiNotebook (Ben Williams)
+- Option for middle-click tab close in wxAuiNotebook (Ben Williams)
 
 wxMSW:
 
