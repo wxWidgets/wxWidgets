@@ -4430,7 +4430,9 @@ AC_CACHE_CHECK([if wchar_t is separate type],
 )
 
 if test "$wx_cv_wchar_t_is_separate_type" = "yes"; then
-    AC_DEFINE(wxWCHAR_T_IS_SEPARATE_TYPE)
+    AC_DEFINE(wxWCHAR_T_IS_SEPARATE_TYPE, 1)
+else
+    AC_DEFINE(wxWCHAR_T_IS_SEPARATE_TYPE, 0)
 fi
 
 AC_LANG_POP() dnl C++
