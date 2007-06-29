@@ -636,7 +636,18 @@ wxFileType *
 wxMimeTypesManager::GetFileTypeFromExtension(const wxString& ext)
 {
     EnsureImpl();
-    wxFileType *ft = m_impl->GetFileTypeFromExtension(ext);
+
+    wxString::const_iterator i = ext.begin();
+    const wxString::const_iterator end = ext.end();
+    wxString extWithoutDot;
+    if ( i != end && *i == '.' )
+        extWithoutDot.assign(++i, ext.end());
+    else
+        extWithoutDot = ext;
+
+    wxCHECK_MSG( !ext.empty(), NULL, _T("extension can't be empty") );
+
+    wxFileType *ft = m_impl->GetFileTypeFromExtension(extWithoutDot);
 
     if ( !ft ) {
         // check the fallbacks
