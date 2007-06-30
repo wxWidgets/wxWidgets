@@ -1,9 +1,0 @@
-#!/bin/bash
-#----------------------------------------------------------------------
-
-set -o errexit
-
-
-# clean out the local dist dir
-rm -f dist/*
-
