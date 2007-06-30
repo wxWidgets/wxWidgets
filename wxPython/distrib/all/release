@@ -1,4 +1,0 @@
-#!/bin/bash
-
-distrib/all/build-all release $* 2>&1 | tee tmp/release.log
-
