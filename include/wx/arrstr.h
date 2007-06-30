@@ -42,7 +42,8 @@ public:
 
     wxArrayString() { }
     wxArrayString(const wxArrayString& a) : wxArrayStringBase(a) { }
-    wxArrayString(size_t sz, const wxChar** a);
+    wxArrayString(size_t sz, const char** a);
+    wxArrayString(size_t sz, const wchar_t** a);
     wxArrayString(size_t sz, const wxString* a);
 
     int Index(const wxString& str, bool bCase = true, bool bFromEnd = false) const;
