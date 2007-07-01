@@ -3010,7 +3010,7 @@ inline wxCStrData::wxCStrData(const wxCStrData& data)
 inline wxCStrData::~wxCStrData()
 {
     if ( m_owned )
-        delete m_str;
+        delete wx_const_cast(wxString*, m_str); // cast to silence warnings
 }
 
 // simple cases for AsChar() and AsWChar(), the complicated ones are
