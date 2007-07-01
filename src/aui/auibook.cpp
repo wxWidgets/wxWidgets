@@ -2067,11 +2067,14 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
 
     if (m_is_dragging)
     {
+        m_is_dragging = false;
+        
         wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, m_windowId);
         evt.SetSelection(GetIdxFromWindow(m_click_tab));
         evt.SetOldSelection(evt.GetSelection());
         evt.SetEventObject(this);
         GetEventHandler()->ProcessEvent(evt);
+         
         return;
     }
 
@@ -3662,6 +3665,27 @@ void wxAuiNotebook::RemoveEmptyTabFrames()
 
 void wxAuiNotebook::OnChildFocus(wxChildFocusEvent& evt)
 {
+    // if we're dragging a tab, don't change the current selection.
+    // This code prevents a bug that used to happen when the hint window
+    // was hidden.  In the bug, the focus would return to the notebook
+    // child, which would then enter this handler and call
+    // SetSelection, which is not desired turn tab dragging.
+    
+    wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
+    size_t i, pane_count = all_panes.GetCount();
+    for (i = 0; i < pane_count; ++i)
+    {
+        wxAuiPaneInfo& pane = all_panes.Item(i);
+        if (pane.name == wxT("dummy"))
+            continue;
+        wxTabFrame* tabframe = (wxTabFrame*)pane.window;
+        if (tabframe->m_tabs->IsDragging())
+            return;
+    }
+
+
+    // change the tab selection to the child
+    // which was focused
     int idx = m_tabs.GetIdxFromWindow(evt.GetWindow());
     if (idx != -1 && idx != m_curpage)
     {

@@ -446,6 +446,10 @@ public:
 
     ~wxAuiTabCtrl();
 
+#if wxABI_VERSION >= 20805
+    bool IsDragging() const { return m_is_dragging; }
+#endif
+
 protected:
 
     void OnPaint(wxPaintEvent& evt);
