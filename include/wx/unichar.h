@@ -92,14 +92,14 @@ public:
     operator char() const { return To8bit(m_value); }
     operator unsigned char() const { return (unsigned char)To8bit(m_value); }
 #if wxWCHAR_T_IS_SEPARATE_TYPE
-    operator wchar_t() const { return m_value; }
+    operator wchar_t() const { return (wchar_t)m_value; }
 #endif
-    operator int() const { return m_value; }
-    operator unsigned int() const { return m_value; }
-    operator long int() const { return m_value; }
-    operator unsigned long int() const { return m_value; }
-    operator short int() const { return m_value; }
-    operator unsigned short int() const { return m_value; }
+    operator int() const { return (int)m_value; }
+    operator unsigned int() const { return (unsigned int)m_value; }
+    operator long int() const { return (long int)m_value; }
+    operator unsigned long int() const { return (unsigned long)m_value; }
+    operator short int() const { return (short int)m_value; }
+    operator unsigned short int() const { return (unsigned short int)m_value; }
 
     // We need this operator for the "*p" part of expressions like "for (
     // const_iterator p = begin() + nStart; *p; ++p )". In this case,
