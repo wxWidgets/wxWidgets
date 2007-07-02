@@ -37,6 +37,8 @@
         *wxLogChain*DetachOldLog*;
         *wxMemoryFSHandler*AddFileWithMimeType*;
         *wxMetafileDC*DoGetTextExtent*;
+        *wxWizard*GetBitmap*;
+        *wxWizard*SetBitmap*;
 };
 
 # public symbols added in 2.8.4 (please keep in alphabetical order):

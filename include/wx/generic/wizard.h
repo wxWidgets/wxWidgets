@@ -58,6 +58,12 @@ public:
     virtual wxSizer *GetPageAreaSizer() const;
     virtual void SetBorder(int border);
 
+    /// set/get bitmap
+#if wxABI_VERSION >= 20805
+    const wxBitmap& GetBitmap() const { return m_bitmap; }
+    void SetBitmap(const wxBitmap& bitmap);
+#endif
+
     // implementation only from now on
     // -------------------------------
 

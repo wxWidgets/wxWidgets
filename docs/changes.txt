@@ -93,38 +93,48 @@ Major new features in 2.8 release
 
 All (GUI):
 
-- Added colour normalization to PNM image handler (Ray Johnston)
-- Fixed selecting part of word from right to left in wxHTML (Michael Hieke)
+- Added colour normalization to PNM image handler (Ray Johnston).
+- Fixed selecting part of word from right to left in wxHTML (Michael Hieke).
 - Selecting text in wxHTML with character precision was made easier, it's
-  enough to select half of a character (Michael Hieke)
+  enough to select half of a character (Michael Hieke).
 - Significantly improved startup times of XRC-based applications using
-  embedded resources on Unix (requires resources recompilation)
-- Fixed freeing of "static" alpha data in wxImage (Axel Gembe)
-- Added tab mouse click events to wxAuiNotebook (Ben Williams)
-- Option for middle-click tab close in wxAuiNotebook (Ben Williams)
+  embedded resources on Unix (requires resources recompilation).
+- Fixed freeing of "static" alpha data in wxImage (Axel Gembe).
+- Added tab mouse click events to wxAuiNotebook (Ben Williams).
+- Option for middle-click tab close in wxAuiNotebook (Ben Williams).
+- Added wxAuiNotebook::SetFont, GetTabCtrlHeight, GetHeightForPageHeight.
+- Added SetBitmap/GetBitmap to wxWizard, to allow e.g. on-the-fly creation
+  of bitmap to fit page height.
 
 wxMSW:
 
-- Fix crash when destroying a default button (Tim Kosse)
-- Correct problem with page setup dialog when using landscape mode
-- Added msw.font.no-proof-quality system option, see manual for description
-- Fix appearance of notebook with non-top tabs under Windows Vista
-- Fixed bug with symbol resolving in wxStackWalker (Axel Gembe)
+- Fix crash when destroying a default button (Tim Kosse).
+- Correct problem with page setup dialog when using landscape mode.
+- Added msw.font.no-proof-quality system option, see manual for description.
+- Fix appearance of notebook with non-top tabs under Windows Vista.
+- Fixed bug with symbol resolving in wxStackWalker (Axel Gembe).
 
 wxGTK:
 
-- Fixed missing key events in wxGTK1 build
-- Setting foreground colour of single line wxTextCtrl now works
+- Fixed missing key events in wxGTK1 build.
+- Setting foreground colour of single line wxTextCtrl now works.
 - More work on setting defaults in GNOME print dialogs.
 - Also made landscape printing work as per wxMSW.
 - Add support for (rectangular) clipping in GNOME print backend.
-- Speed up wxBitmap::Rescale()
-- Add right button event for wxToolbar's tools (Tim Kosse)
+- Speed up wxBitmap::Rescale().
+- Add right button event for wxToolbar's tools (Tim Kosse).
 - Made wxWindow::SetScrollPos and wxScrollbar::SetThumbPos
-  not emit any event
-- Correct hyperactive mouse wheel support
-- Correct grid line mode in wxListCtrl
-- Don't unconditionally add wxCAPTION style to wxMiniFrame
+  not emit any event.
+- Correct hyperactive mouse wheel support.
+- Correct grid line mode in wxListCtrl.
+- Don't unconditionally add wxCAPTION style to wxMiniFrame.
+- Fixed crash in file and dir pickers for GTK+ < 2.6 if compiled
+  with GTK+ >= 2.6.
+
+wxMac:
+
+- Fixed ability of non-native/installed toolbars to have controls,
+  in native toolbar compilation mode.
 
 
 2.8.4
@@ -132,66 +142,66 @@ wxGTK:
 
 All:
 
-- Fix bug in wxFileConfig when recreating a group (Steven Van Ingelgem)
+- Fix bug in wxFileConfig when recreating a group (Steven Van Ingelgem).
 - Fix wxStringOutputStream::Write() in Unicode build when the argument
-  overlaps UTF-8 characters boundary
-- Account for lines without newline at the end in wxExecute()
+  overlaps UTF-8 characters boundary.
+- Account for lines without newline at the end in wxExecute().
 - Added wxString::char_str(), wchar_str(), From8BitData(), To8BitData(),
   FromUTF8(), ToUTF8() and utf8_str() methods for forward compatiblity
-  with wxWidgets 3
+  with wxWidgets 3.
 
 All (Unix):
 
-- Handle socket shutdown by the peer correctly in wxSocket (Tim Kosse)
+- Handle socket shutdown by the peer correctly in wxSocket (Tim Kosse).
 
 All (GUI):
 
-- Allow status bar children in XRC (Edmunt Pienkowski)
-- Fix memory leak in wxWizard when not using sizers for the page layout
-- Added wxListCtrl::SetItemPtrData()
-- wxHTML: Apply table background colour between the cells too (Michael Hieke)
+- Allow status bar children in XRC (Edmunt Pienkowski).
+- Fix memory leak in wxWizard when not using sizers for the page layout.
+- Added wxListCtrl::SetItemPtrData().
+- wxHTML: Apply table background colour between the cells too (Michael Hieke).
 
 wxMSW:
 
 - Corrected wxStaticBox label appearance when its foreground colour was set:
-  it didn't respect font size nor background colour then (Juan Antonio Ortega)
-- Don't lose combobox text when it's opened and closed (Kolya Kosenko)
-- Corrected GetChecked() for events from checkable menu items (smanders)
-- Fixed popup menus under Windows NT 4
-- Fixed bug in wxThread::Wait() in console applications introduced in 2.8.3
-- Support right-aligned/centered owner drawn items in wxListCtrl (troelsk)
-- Compilation fixed with WXWIN_COMPATIBILITY_2_6==0
-- Fix wxComboCtrl colours under Windows Vista (Kolya Kosenko)
+  it didn't respect font size nor background colour then (Juan Antonio Ortega).
+- Don't lose combobox text when it's opened and closed (Kolya Kosenko).
+- Corrected GetChecked() for events from checkable menu items (smanders).
+- Fixed popup menus under Windows NT 4.
+- Fixed bug in wxThread::Wait() in console applications introduced in 2.8.3.
+- Support right-aligned/centered owner drawn items in wxListCtrl (troelsk).
+- Compilation fixed with WXWIN_COMPATIBILITY_2_6==0.
+- Fix wxComboCtrl colours under Windows Vista (Kolya Kosenko).
 
 wxGTK:
 
-- Fix infinite loop when adding a wxStaticText control to a toolbar
-- Fix wxNO_BORDER style for wxRadioBox (David Hart)
-- wxComboBox::SetValue() doesn't emit EVT_TEXT anymore
-- Fix wxTextCtrl::GetLineText() for empty lines (Marcin Wojdyr)
-- Fix support for wxFD_FILE_MUST_EXIST in wxFileDialog
+- Fix infinite loop when adding a wxStaticText control to a toolbar.
+- Fix wxNO_BORDER style for wxRadioBox (David Hart).
+- wxComboBox::SetValue() doesn't emit EVT_TEXT anymore.
+- Fix wxTextCtrl::GetLineText() for empty lines (Marcin Wojdyr).
+- Fix support for wxFD_FILE_MUST_EXIST in wxFileDialog.
 - Fix support for setting orientation, paper size and collate
-  in GNOME print backend
+  in GNOME print backend.
 - Support wxTEXT_ALIGNMENT_JUSTIFIED in wxTextCtrl if GTK+ version is at
-  least 2.11 (Mart Raudsepp).
+  least 2.11 (Mart Raudsepp)..
 
 wxMac:
 
-- Fix wxComboBox::SetSelection(wxNOT_FOUND) (Adrian Secord)
+- Fix wxComboBox::SetSelection(wxNOT_FOUND) (Adrian Secord).
 
 wxUniv:
 
-- Fix wxTextCtrl::SetSelection(-1, -1) to behave as documented (Anders Larsen)
-- Fix wxComboBox::SetSelection(wxNOT_FOUND)
-- Fix setting background colour for controls with transparent background
+- Fix wxTextCtrl::SetSelection(-1, -1) to behave as documented (Anders Larsen).
+- Fix wxComboBox::SetSelection(wxNOT_FOUND).
+- Fix setting background colour for controls with transparent background.
 
 2.8.3
 -----
 
 All:
 
-- Shut down the sockets gracefully (Sergio Aguayo)
-- Fix extra indentation in wxHTML_ALIGN_JUSTIFY display (Chacal)
+- Shut down the sockets gracefully (Sergio Aguayo).
+- Fix extra indentation in wxHTML_ALIGN_JUSTIFY display (Chacal).
 
 wxMac
 
@@ -205,7 +215,7 @@ wxMSW:
 
 wxGTK:
 
-- Fixed handling of accelerators using PageUp/Down keys
+- Fixed handling of accelerators using PageUp/Down keys.
 
 
 2.8.2
@@ -226,9 +236,9 @@ All:
 - Fixed tab-related drawing and hit-testing bugs in wxRichTextCtrl.
 - Implemented background colour in wxRichTextCtrl.
 - Fixed crashes in helpview when opening a file.
-- Fixed detection of number of processors under Linux 2.6
-- Fixed Base64 computation in wxHTTP (p_michalczyk)
-- Fix handling of wxSOCKET_REUSEADDR in wxDatagramSocket (troelsk)
+- Fixed detection of number of processors under Linux 2.6.
+- Fixed Base64 computation in wxHTTP (p_michalczyk).
+- Fix handling of wxSOCKET_REUSEADDR in wxDatagramSocket (troelsk).
 
 Unix Ports:
 
