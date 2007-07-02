@@ -542,19 +542,19 @@ public:
 
     const wxAuiManager& GetAuiManager() const { return m_mgr; }
 
-	// Sets the normal font
-	void SetNormalFont(const wxFont& font);
+    // Sets the normal font
+    void SetNormalFont(const wxFont& font);
 
-	// Sets the selected tab font
-	void SetSelectedFont(const wxFont& font);
+    // Sets the selected tab font
+    void SetSelectedFont(const wxFont& font);
 
-	// Sets the measuring font
-	void SetMeasuringFont(const wxFont& font);
+    // Sets the measuring font
+    void SetMeasuringFont(const wxFont& font);
 
-	// Sets the tab font
+    // Sets the tab font
     virtual bool SetFont(const wxFont& font);
 
-	// Gets the tab control height
+    // Gets the tab control height
     int GetTabCtrlHeight() const;
 
     // Gets the height of the notebook for a given page height
