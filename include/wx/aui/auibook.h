@@ -547,19 +547,19 @@ public:
 #endif
 
 #if wxABI_VERSION >= 20805
-	// Sets the normal font
-	void SetNormalFont(const wxFont& font);
+    // Sets the normal font
+    void SetNormalFont(const wxFont& font);
 
-	// Sets the selected tab font
-	void SetSelectedFont(const wxFont& font);
+    // Sets the selected tab font
+    void SetSelectedFont(const wxFont& font);
 
-	// Sets the measuring font
-	void SetMeasuringFont(const wxFont& font);
+    // Sets the measuring font
+    void SetMeasuringFont(const wxFont& font);
 
-	// Sets the tab font
+    // Sets the tab font
     virtual bool SetFont(const wxFont& font);
 
-	// Gets the tab control height
+    // Gets the tab control height
     int GetTabCtrlHeight() const;
 
     // Gets the height of the notebook for a given page height
@@ -669,7 +669,7 @@ typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, winid, wxAuiNotebookEventHandler(fn))
 #define EVT_AUINOTEBOOK_ALLOW_DND(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND, winid, wxAuiNotebookEventHandler(fn))
-    
+
 #if wxABI_VERSION >= 20805
 #define EVT_AUINOTEBOOK_TAB_MIDDLE_DOWN(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_DOWN, winid, wxAuiNotebookEventHandler(fn))
