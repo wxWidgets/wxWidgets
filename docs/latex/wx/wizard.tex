@@ -157,6 +157,11 @@ This is useful if the decision about which pages to show is taken during
 run-time, as in this case, the wizard won't be able to get to all pages starting
 from a single one and you should call {\it Fit} separately for the others.
 
+\membersection{wxWizard::GetBitmap}\label{wxwizardgetbitmap}
+
+\constfunc{const wxBitmap\&}{GetBitmap}{\void}
+
+Returns the bitmap used for the wizard.
 
 \membersection{wxWizard::GetCurrentPage}\label{wxwizardgetcurrentpage}
 
@@ -241,6 +246,11 @@ Executes the wizard starting from the given page, returning {\tt true} if it was
 successfully finished or {\tt false} if user cancelled it. The {\it firstPage} 
 can not be {\tt NULL}.
 
+\membersection{wxWizard::SetBitmap}\label{wxwizardsetbitmap}
+
+\func{void}{SetBitmap}{\param{const wxBitmap\& }{bitmap}}
+
+Sets the bitmap used for the wizard.
 
 \membersection{wxWizard::SetPageSize}\label{wxwizardsetpagesize}
 

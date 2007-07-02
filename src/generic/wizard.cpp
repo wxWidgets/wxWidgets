@@ -843,6 +843,13 @@ void wxWizard::OnWizEvent(wxWizardEvent& event)
     }
 }
 
+void wxWizard::SetBitmap(const wxBitmap& bitmap)
+{
+    m_bitmap = bitmap;
+    if (m_statbmp)
+        m_statbmp->SetBitmap(m_bitmap);
+}
+
 // ----------------------------------------------------------------------------
 // wxWizardEvent
 // ----------------------------------------------------------------------------

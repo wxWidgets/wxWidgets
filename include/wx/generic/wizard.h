@@ -55,6 +55,10 @@ public:
     virtual wxSizer *GetPageAreaSizer() const;
     virtual void SetBorder(int border);
 
+    /// set/get bitmap
+    const wxBitmap& GetBitmap() const { return m_bitmap; }
+    void SetBitmap(const wxBitmap& bitmap);
+
     // implementation only from now on
     // -------------------------------
 
