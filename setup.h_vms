@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 4 June 2007                                                        *
+ * Date : 3 July 2007                                                        *
  *                                                                           *
  *****************************************************************************/
 
@@ -1202,7 +1202,7 @@ typedef pid_t GPid;
 #define HAVE_WPUTCHAR 1
 
 /* Define this if you have putws() */
-#define HAVE_PUTWS 1
+#undef HAVE_PUTWS
 
 /* Define this if you have fputws() */
 #define HAVE_FPUTWS 1
