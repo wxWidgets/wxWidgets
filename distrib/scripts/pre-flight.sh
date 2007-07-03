@@ -23,7 +23,7 @@ fi
 if [ ! -d $WX_SRC_DIR ]; then
   cd $WX_TEMP_DIR
   echo "Grabbing wx CVS with tag $BUILD_TAG"
-  svn co https://svn.wxwidgets.org/svn/wxWidgets/trunk wxWidgets
+  svn co https://svn.wxwidgets.org/svn/wx/wxWidgets/trunk/ wxWidgets
   cd $WX_SRC_DIR
 else
   cd $WX_SRC_DIR
