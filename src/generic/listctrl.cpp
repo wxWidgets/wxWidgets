@@ -2449,6 +2449,20 @@ wxRect wxListMainWindow::GetLineLabelRect(size_t line) const
     if ( !InReportView() )
         return GetLine(line)->m_gi->m_rectLabel;
 
+    int image_x = 0;
+    wxListLineData *data = GetLine(line);
+    wxListItemDataList::compatibility_iterator node = data->m_items.GetFirst();
+    if (node)
+    {
+        wxListItemData *item = node->GetData();
+        if ( item->HasImage() )
+        {
+            int ix, iy;
+            GetImageSize( item->GetImage(), ix, iy );
+            image_x = 3 + ix + IMAGE_MARGIN_IN_REPORT_MODE;
+        }
+    }
+    
     wxRect rect;
     rect.x = HEADER_OFFSET_X;
     rect.y = GetLineY(line);
@@ -3142,7 +3156,15 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
                 (hitResult == wxLIST_HITTEST_ONITEMLABEL) &&
                 HasFlag(wxLC_EDIT_LABELS) )
             {
-                m_renameTimer->Start( 100, true );
+                if (InReportView())
+                {
+                    wxRect label = GetLineLabelRect( current );
+                    if (label.Contains( x, y ))
+                        m_renameTimer->Start( 250, true );
+                        
+                }
+                else
+                    m_renameTimer->Start( 250, true );
             }
         }
 
