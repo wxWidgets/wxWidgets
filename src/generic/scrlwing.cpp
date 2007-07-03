@@ -277,10 +277,14 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
         m_scrollHelper->HandleOnMouseLeave((wxMouseEvent &)event);
     }
 #if wxUSE_MOUSEWHEEL
+    // Use GTK's own scroll wheel handling in GtkScrolledWindow
+#ifndef __WXGTK20__
     else if ( evType == wxEVT_MOUSEWHEEL )
     {
         m_scrollHelper->HandleOnMouseWheel((wxMouseEvent &)event);
+        return true;
     }
+#endif
 #endif // wxUSE_MOUSEWHEEL
     else if ( evType == wxEVT_CHAR )
     {
