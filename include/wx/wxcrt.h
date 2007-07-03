@@ -415,17 +415,16 @@ inline int wxStricmp_String(const wxString& s1, const T& s2)
 WX_STRCMP_FUNC(wxStricmp, wxCRT_StricmpA, wxCRT_StricmpW, wxStricmp_String)
 
 
-// GCC 3.3 has a bug that causes it to fail compilation if the template's
-// implementation uses overloaded function declared later (see the wxStrcoll()
-// call in wxStrcoll_String<T>()), so we have to forward-declare the template
-// and implement it below WX_STRCMP_FUNC. OTOH, this fails to compile with VC6,
-// so we do it for GCC only.
-// The same is needed for HP CXX on OpenVMS 
-#if defined( __GNUG__ ) || defined( __VMS )
+// GCC 3.3 and other compilers have a bug that causes it to fail compilation if
+// the template's implementation uses overloaded function declared later (see
+// the wxStrcoll() call in wxStrcoll_String<T>()), so we have to
+// forward-declare the template and implement it below WX_STRCMP_FUNC. OTOH,
+// this fails to compile with VC6, so don't do it for VC.
+#if !defined(__VISUALC__)
 template<typename T>
 inline int wxStrcoll_String(const wxString& s1, const T& s2);
 WX_STRCMP_FUNC(wxStrcoll, wxCRT_StrcollA, wxCRT_StrcollW, wxStrcoll_String)
-#endif // __GNUG__ or __VMS
+#endif // !__VISUALC__
 
 template<typename T>
 inline int wxStrcoll_String(const wxString& s1, const T& s2)
@@ -441,7 +440,7 @@ inline int wxStrcoll_String(const wxString& s1, const T& s2)
 #endif
 }
 
-#if !defined( __GNUG__ ) && !defined( __VMS )
+#if defined(__VISUALC__)
 // this is exactly the same WX_STRCMP_FUNC line as above wxStrcoll_String<>
 WX_STRCMP_FUNC(wxStrcoll, wxCRT_StrcollA, wxCRT_StrcollW, wxStrcoll_String)
 #endif
