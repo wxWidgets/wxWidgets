@@ -4798,10 +4798,6 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 
 void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
 {
-    // update our idea of which lines are shown when we redraw the window the
-    // next time
-    ResetVisibleLinesRange();
-
     // FIXME
 #if ( defined(__WXGTK__) || defined(__WXMAC__) ) && !defined(__WXUNIVERSAL__)
     wxScrolledWindow::OnScroll(event);
@@ -4809,6 +4805,10 @@ void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
     HandleOnScroll( event );
 #endif
 
+    // update our idea of which lines are shown when we redraw the window the
+    // next time
+    ResetVisibleLinesRange();
+    
     if ( event.GetOrientation() == wxHORIZONTAL && HasHeader() )
     {
         wxGenericListCtrl* lc = GetListCtrl();
