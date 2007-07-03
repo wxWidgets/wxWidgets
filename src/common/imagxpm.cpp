@@ -181,12 +181,10 @@ bool wxXPMHandler::SaveFile(wxImage * image,
         symbols[index] = symbols_data + index * (chars_per_pixel+1);
         char *sym = symbols[index];
 
-        k = index % MaxCixels;
-        sym[0] = Cixel[k];
-        for (j = 1; j < chars_per_pixel; j++)
+        for (j = 0; j < chars_per_pixel; j++)
         {
-            k = ((index - k) / MaxCixels) % MaxCixels;
-            sym[j] = Cixel[k];
+            sym[j] = Cixel[index % MaxCixels];
+            index /= MaxCixels;
         }
         sym[j] = '\0';
 

@@ -181,6 +181,7 @@ All (GUI):
 - Fixed freeing of "static" alpha data in wxImage (Axel Gembe)
 - Don't invalidate the font in SetNativeFontInfo[Desc]() if the string is
   invalid, to conform to the documented behaviour (Langhammer)
+- Fixed wxXPMHandler::SaveFile for images with more than 92 colors.
 
 wxMSW:
 
