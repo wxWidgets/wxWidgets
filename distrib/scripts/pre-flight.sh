@@ -17,6 +17,7 @@ if [ ! -d $WX_WEB_DIR ]; then
   svn co https://svn.wxwidgets.org/svn/wxWebSite/trunk wxWebSite
 else
     cd $WX_WEB_DIR
+    svn cleanup
     svn up
 fi
 
@@ -27,6 +28,7 @@ if [ ! -d $WX_SRC_DIR ]; then
   cd $WX_SRC_DIR
 else
   cd $WX_SRC_DIR
+  svn cleanup
   svn up
 fi
 
