@@ -1860,15 +1860,27 @@ void wxGnomePrintDC::DoGetTextExtent(const wxString& string, wxCoord *width, wxC
     const wxCharBuffer dataUTF8 = string.utf8_str();
 #endif
 
+    PangoFontDescription *desc = (theFont) ? theFont->GetNativeFontInfo()->description : m_fontdesc;
+
+    gint oldSize = pango_font_description_get_size( desc );
+    double size = oldSize;
+    size = size * m_scaleY;
+    pango_font_description_set_size( desc, (gint)size );
+
+    // apply scaled font
+    pango_layout_set_font_description( m_layout, desc );
+
     pango_layout_set_text( m_layout, dataUTF8, strlen(dataUTF8) );
 
-    int w,h;
+    int w, h;
     pango_layout_get_pixel_size( m_layout, &w, &h );
+
 
     if (width)
         *width = (wxCoord)(w / m_scaleX);
     if (height)
         *height = (wxCoord)(h / m_scaleY);
+
     if (descent)
     {
         PangoLayoutIter *iter = pango_layout_get_iter(m_layout);
@@ -1877,9 +1889,11 @@ void wxGnomePrintDC::DoGetTextExtent(const wxString& string, wxCoord *width, wxC
         *descent = h - PANGO_PIXELS(baseline);
     }
 
-    // Reset old font description
-    if (theFont)
-        pango_layout_set_font_description( m_layout, m_fontdesc );
+    // reset unscaled size
+    pango_font_description_set_size( desc, oldSize );
+
+    // reset unscaled font
+    pango_layout_set_font_description( m_layout, m_fontdesc );
 }
 
 void wxGnomePrintDC::DoGetSize(int* width, int* height) const
