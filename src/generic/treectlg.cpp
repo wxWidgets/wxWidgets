@@ -74,7 +74,7 @@ class WXDLLEXPORT wxTreeRenameTimer: public wxTimer
 public:
     // start editing the current item after half a second (if the mouse hasn't
     // been clicked/moved)
-    enum { DELAY = 500 };
+    enum { DELAY = 250 };
 
     wxTreeRenameTimer( wxGenericTreeCtrl *owner );
 
