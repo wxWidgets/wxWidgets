@@ -105,6 +105,7 @@ All (GUI):
 - Added wxAuiNotebook::SetFont, GetTabCtrlHeight, GetHeightForPageHeight.
 - Added SetBitmap/GetBitmap to wxWizard, to allow e.g. on-the-fly creation
   of bitmap to fit page height.
+- Fixed wxXPMHandler::SaveFile for images with more than 92 colors.
 
 wxMSW:
 
