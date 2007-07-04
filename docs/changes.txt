@@ -106,6 +106,7 @@ All:
 - Added wxStreamBuffer::Truncate() (Stas Sergeev)
 - Allow using  wxEventLoop in console applications (Lukasz Michalski)
 - Added functions for Base64 en/decoding (Charles Reimers)
+- Added functions for atomically inc/decrementing integers (Armel Asselin)
 - wxLogInterposer has been added to replace wxLogPassThrough and new
   wxLogInterposerTemp was added
 

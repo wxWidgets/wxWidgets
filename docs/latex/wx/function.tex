@@ -35,6 +35,8 @@ the corresponding topic.
 \helpref{wxASSERT}{wxassert}\\
 \helpref{wxASSERT\_MIN\_BITSIZE}{wxassertminbitsize}\\
 \helpref{wxASSERT\_MSG}{wxassertmsg}\\
+\helpref{wxAtomicDec}{wxatomicdec}\\
+\helpref{wxAtomicInc}{wxatomicinc}\\
 \helpref{wxBeginBusyCursor}{wxbeginbusycursor}\\
 \helpref{wxBell}{wxbell}\\
 \helpref{wxBITMAP}{wxbitmapmacro}\\
@@ -4721,3 +4723,42 @@ Returns \true on success.
 \wxheading{See also}
 
 \helpref{wxSetEnv}{wxsetenv}
+
+
+\section{Atomic operations}\label{atomicoperations}
+
+When using multi-threaded applications, it is often required to access or
+modify memory which is shared between threads. Atomic integer and pointer
+operations are an efficient way to handle this issue (another, less efficient,
+way is to use a \helpref{mutex}{wxmutex} or \helpref{critical
+section}{wxcriticalsection}). A native implementation exists for Windows,
+Linux, Solaris and Mac OS X, for other OS, a 
+\helpref{wxCriticalSection}{wxcriticalsection} is used to protect the data.
+
+One particular application is reference counting (used by so-called smart
+pointers).
+
+You should define your variable with the type wxAtomicInt in order to apply
+atomic operations to it.
+
+\wxheading{Include files}
+
+<wx/atomic.h>
+
+\membersection{::wxAtomicInc}\label{wxatomicinc}
+
+\func{void}{wxAtomicInc}{\param{wxAtomicInt\& }{value}}
+
+This function increments \arg{value} in an atomic manner.
+
+
+\membersection{::wxAtomicDec}\label{wxatomicdec}
+
+\func{wxInt32}{wxAtomicDec}{\param{wxAtomicInt\& }{value}}
+
+This function decrements \arg{value} in an atomic manner.
+
+Returns 0 if \arg{value} is 0 after decrementation or any non-zero value (not
+necessarily equal to the value of the variable) otherwise.
+
+
