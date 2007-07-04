@@ -443,6 +443,10 @@ SOURCE=.\arrays\arrays.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\thread\atomic.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\streams\bstream.cpp
 # End Source File
 # Begin Source File

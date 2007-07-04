@@ -32,6 +32,7 @@ TOOLKIT_VERSION = @TOOLKIT_VERSION@
 TOOLCHAIN_FULLNAME = @TOOLCHAIN_FULLNAME@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
+CXXWARNINGS = @CXXWARNINGS@
 HOST_SUFFIX = @HOST_SUFFIX@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
 SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
@@ -45,8 +46,8 @@ WX_VERSION = $(WX_RELEASE).0
 LIBDIRNAME = $(wx_top_builddir)/lib
 TEST_CXXFLAGS = $(__test_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	-I$(srcdir) $(__DLLFLAG_p) -DwxUSE_GUI=0 $(CPPUNIT_CFLAGS) $(CPPFLAGS) \
-	$(CXXFLAGS)
+	-I$(srcdir) $(__DLLFLAG_p) -DwxUSE_GUI=0 $(CPPUNIT_CFLAGS) $(CXXWARNINGS) \
+	$(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
 	test_test.o \
 	test_archivetest.o \
@@ -89,12 +90,13 @@ TEST_OBJECTS =  \
 	test_textstreamtest.o \
 	test_zlibstream.o \
 	test_textfiletest.o \
+	test_atomic.o \
 	test_uris.o
 TEST_ODEP =  $(___pch_testprec_test_testprec_h_gch___depname)
 TEST_GUI_CXXFLAGS = $(__test_gui_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../samples \
-	$(CPPUNIT_CFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+	$(CPPUNIT_CFLAGS) $(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 TEST_GUI_OBJECTS =  \
 	$(__test_gui___win32rc) \
 	$(__test_gui_os2_lib_res) \
@@ -106,7 +108,7 @@ TEST_GUI_ODEP =  $(___pch_testprec_test_gui_testprec_h_gch___depname)
 PRINTFBENCH_CXXFLAGS = $(__printfbench_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -DwxUSE_GUI=0 \
-	$(CPPUNIT_CFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+	$(CPPUNIT_CFLAGS) $(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 PRINTFBENCH_OBJECTS =  \
 	printfbench_printfbench.o
 PRINTFBENCH_ODEP =  $(___pch_testprec_printfbench_testprec_h_gch___depname)
@@ -428,6 +430,9 @@ test_zlibstream.o: $(srcdir)/streams/zlibstream.cpp $(TEST_ODEP)
 
 test_textfiletest.o: $(srcdir)/textfile/textfiletest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/textfile/textfiletest.cpp
+
+test_atomic.o: $(srcdir)/thread/atomic.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/thread/atomic.cpp
 
 test_uris.o: $(srcdir)/uris/uris.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/uris/uris.cpp
