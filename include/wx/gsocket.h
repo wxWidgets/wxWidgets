@@ -150,6 +150,7 @@ GAddressType GAddress_GetFamily(GAddress *address);
  */
 
 GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname);
+GSocketError GAddress_INET_SetBroadcastAddress(GAddress *address);
 GSocketError GAddress_INET_SetAnyAddress(GAddress *address);
 GSocketError GAddress_INET_SetHostAddress(GAddress *address,
                                           unsigned long hostaddr);

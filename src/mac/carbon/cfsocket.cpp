@@ -1562,6 +1562,11 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   return GSOCK_NOERROR;
 }
 
+GSocketError GAddress_INET_SetBroadcastAddress(GAddress *address)
+{
+  return GAddress_INET_SetHostAddress(address, INADDR_BROADCAST);
+}
+
 GSocketError GAddress_INET_SetAnyAddress(GAddress *address)
 {
   return GAddress_INET_SetHostAddress(address, INADDR_ANY);

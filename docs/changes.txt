@@ -109,6 +109,7 @@ All:
 - Added functions for atomically inc/decrementing integers (Armel Asselin)
 - wxLogInterposer has been added to replace wxLogPassThrough and new
   wxLogInterposerTemp was added
+- Added support for broadcasting to UDP sockets (Andrew Vincent)
 
 All (GUI):
 

@@ -178,6 +178,11 @@ bool wxIPV4address::IsLocalHost() const
   return (Hostname() == wxT("localhost") || IPAddress() == wxT("127.0.0.1"));
 }
 
+bool wxIPV4address::BroadcastAddress()
+{
+  return (GAddress_INET_SetBroadcastAddress(m_address) == GSOCK_NOERROR);
+}
+
 bool wxIPV4address::AnyAddress()
 {
   return (GAddress_INET_SetAnyAddress(m_address) == GSOCK_NOERROR);
@@ -273,6 +278,11 @@ bool wxIPV6address::LocalHost()
 bool wxIPV6address::IsLocalHost() const
 {
   return (Hostname() == wxT("localhost") || IPAddress() == wxT("127.0.0.1"));
+}
+
+bool wxIPV6address::BroadcastAddress()
+{
+  return (GAddress_INET_SetBroadcastAddress(m_address) == GSOCK_NOERROR);
 }
 
 bool wxIPV6address::AnyAddress()
