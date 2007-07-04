@@ -225,7 +225,7 @@ public:
         *this = source;
     }
 
-    bool IsOk() const { return (window != NULL) ? true : false; }
+    bool IsOk() const { return window != NULL; }
     bool IsFixed() const { return !HasFlag(optionResizable); }
     bool IsResizable() const { return HasFlag(optionResizable); }
     bool IsShown() const { return !HasFlag(optionHidden); }
@@ -334,14 +334,14 @@ public:
     {
         if (option_state)
             state |= flag;
-             else
+        else
             state &= ~flag;
         return *this;
     }
 
     bool HasFlag(unsigned int flag) const
     {
-        return (state & flag) ? true:false;
+        return (state & flag) != 0;
     }
 
 #ifdef SWIG
@@ -739,12 +739,12 @@ public:
     }
 #endif // SWIG
 
-    bool IsOk() const { return (dock_direction != 0) ? true : false; }
-    bool IsHorizontal() const { return (dock_direction == wxAUI_DOCK_TOP ||
-                             dock_direction == wxAUI_DOCK_BOTTOM) ? true:false; }
-    bool IsVertical() const { return (dock_direction == wxAUI_DOCK_LEFT ||
+    bool IsOk() const { return dock_direction != 0; }
+    bool IsHorizontal() const { return dock_direction == wxAUI_DOCK_TOP ||
+                             dock_direction == wxAUI_DOCK_BOTTOM; }
+    bool IsVertical() const { return dock_direction == wxAUI_DOCK_LEFT ||
                              dock_direction == wxAUI_DOCK_RIGHT ||
-                             dock_direction == wxAUI_DOCK_CENTER) ? true:false; }
+                             dock_direction == wxAUI_DOCK_CENTER; }
 public:
     wxAuiPaneInfoPtrArray panes; // array of panes
     wxRect rect;              // current rectangle

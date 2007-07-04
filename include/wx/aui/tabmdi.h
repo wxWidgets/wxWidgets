@@ -154,6 +154,8 @@ public:
     virtual void Activate();
     virtual bool Destroy();
 
+    virtual bool Show(bool show = true);
+
 #if wxUSE_STATUSBAR
     // no status bars
     virtual wxStatusBar* CreateStatusBar(int WXUNUSED(number) = 1,
@@ -204,7 +206,6 @@ public:
     
 protected:
     void Init();
-    virtual bool Show(bool show = true);
     virtual void DoSetSize(int x, int y, int width, int height, int size_flags);
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
