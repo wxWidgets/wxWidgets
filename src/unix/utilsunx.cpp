@@ -897,16 +897,12 @@ bool wxGetUserName(wxChar *buf, int sz)
 
 bool wxIsPlatform64Bit()
 {
-    wxString machine = wxGetCommandOutput(wxT("uname -m"));
+    const wxString machine = wxGetCommandOutput(wxT("uname -m"));
 
-    // NOTE: these tests are not 100% reliable!
-    return machine.Contains(wxT("AMD64")) ||
-           machine.Contains(wxT("IA64")) ||
-           machine.Contains(wxT("x64")) ||
-           machine.Contains(wxT("X64")) ||
-           machine.Contains(wxT("alpha")) ||
-           machine.Contains(wxT("hppa64")) ||
-           machine.Contains(wxT("ppc64"));
+    // the test for "64" is obviously not 100% reliable but seems to work fine
+    // in practice
+    return machine.Contains(wxT("64")) ||
+                machine.Contains(wxT("alpha"));
 }
 
 // these functions are in mac/utils.cpp for wxMac
