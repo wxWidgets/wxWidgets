@@ -180,7 +180,7 @@
 #define  wxCRT_VfprintfW     vfwprintf
 #define  wxCRT_VprintfW      vwprintf
 
-#if defined(__WINDOWS__) && !HAVE_VSWPRINTF
+#if defined(__WINDOWS__) && !defined(HAVE_VSWPRINTF)
 // only non-standard vswprintf() without buffer size argument can be used here
 #define  wxCRT_VsprintfW     vswprintf
 #endif
