@@ -466,10 +466,12 @@ void VsnprintfTestCase::BigToSmallBuffer()
     wchar_t bufw[1024], bufw2[16], bufw3[4], bufw4;
     char bufa[1024], bufa2[16], bufa3[4], bufa4;
 
+#if wxUSE_UNICODE
     Misc(bufw, 1024);
     Misc(bufw2, 16);
     Misc(bufw3, 4);
     Misc(&bufw4, 1);
+#endif // wxUSE_UNICODE
 
     Misc(bufa, 1024);
     Misc(bufa2, 16);
