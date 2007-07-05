@@ -36,6 +36,8 @@ public:
         { Init(); Set(red, green, blue, alpha); }
     wxColour(unsigned long colRGB) { Init(); Set(colRGB); }
     wxColour(const wxString& colourName) { Init(); Set(colourName); }
+    wxColour(const char *colourName) { Init(); Set(colourName); }
+    wxColour(const wchar_t *colourName) { Init(); Set(colourName); }
 
     // initialization using existing NSColor
     wxColour( WX_NSColor aColor );
