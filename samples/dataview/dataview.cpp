@@ -65,7 +65,7 @@ public:
     
     virtual unsigned int GetColumnCount() const
     {
-        return 2;
+        return 3;
     }
 
     virtual wxString GetColumnType( unsigned int col ) const
@@ -76,19 +76,20 @@ public:
     virtual void GetValue( wxVariant &variant, 
                            const wxDataViewItem &item, unsigned int col ) const
     {
+        variant = wxString("");
         int ID = item.GetID();
         switch (ID)
         {
-            case 1: variant = "My Music"; break;
-            case 2: variant = "Pop music"; break;
-            case 5: variant = "Classical music"; break;
+            case 1: if (col == 0) variant = wxString("My Music"); break;
+            case 2: if (col == 0) variant = wxString("Pop music"); break;
+            case 5: if (col == 0) variant = wxString("Classical music"); break;
             case 3:
             {
                 switch (col)
                 {
-                    case 0: variant = "You are not alone"; break;
-                    case 1: variant = "Michael Jackson"; break;
-                    case 2: variant = "1995";
+                    case 0: variant = wxString("You are not alone"); break;
+                    case 1: variant = wxString("Michael Jackson"); break;
+                    case 2: variant = wxString("1995");
                 }
             }
             break;
@@ -96,9 +97,9 @@ public:
             {
                 switch (col)
                 {
-                    case 0: variant = "Take a bow"; break;
-                    case 1: variant = "Madonna"; break;
-                    case 2: variant = "1994";
+                    case 0: variant = wxString("Take a bow"); break;
+                    case 1: variant = wxString("Madonna"); break;
+                    case 2: variant = wxString("1994");
                 }
             }
             break;
@@ -106,9 +107,9 @@ public:
             {
                 switch (col)
                 {
-                    case 0: variant = "Ninth symphony"; break;
-                    case 1: variant = "Ludwig v. Beethoven"; break;
-                    case 2: variant = "1824";
+                    case 0: variant = wxString("Ninth symphony"); break;
+                    case 1: variant = wxString("Ludwig v. Beethoven"); break;
+                    case 2: variant = wxString("1824");
                 }
             }
             break;
@@ -116,9 +117,9 @@ public:
             {
                 switch (col)
                 {
-                    case 0: variant = "German requiem"; break;
-                    case 1: variant = "Johannes Brahms"; break;
-                    case 2: variant = "1868";
+                    case 0: variant = wxString("German requiem"); break;
+                    case 1: variant = wxString("Johannes Brahms"); break;
+                    case 2: variant = wxString("1868");
                 }
             }
             break;
@@ -324,11 +325,11 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     wxObjectDataPtr<MyMusicModel> model(new MyMusicModel);
     m_dataview->AssociateModel( model.get() );
 
-    m_dataview->AppendTextColumn( "Title", 0, wxDATAVIEW_CELL_INERT, -1, 
+    m_dataview->AppendTextColumn( "Title", 0, wxDATAVIEW_CELL_INERT, 200, 
                                      DEFAULT_ALIGN );
-    m_dataview->AppendTextColumn( "Artist", 1, wxDATAVIEW_CELL_INERT, -1,
+    m_dataview->AppendTextColumn( "Artist", 1, wxDATAVIEW_CELL_INERT, 200,
                                      DEFAULT_ALIGN );
-    m_dataview->AppendTextColumn( "Year", 1, wxDATAVIEW_CELL_INERT, -1,
+    m_dataview->AppendTextColumn( "Year", 2, wxDATAVIEW_CELL_INERT, 50,
                                      DEFAULT_ALIGN );
 }
 

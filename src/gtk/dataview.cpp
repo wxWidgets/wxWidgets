@@ -267,21 +267,14 @@ wxgtk_tree_model_get_iter (GtkTreeModel *tree_model,
 
     wxDataViewItem item;
 
-    wxPrintf( "get_iter depth: %d\n", depth );
-
     int i;
     for (i = 0; i < depth; i++)    
     {
         gint pos = gtk_tree_path_get_indices (path)[i];
         item = model->GetNthChild( item, (unsigned int) pos );
 
-        wxPrintf( "pos %d\n", pos );
-
         if (!item.IsOk())
-        {
-            wxPrintf( "wrong item from path\n" );
             return FALSE;
-        }
     }
 
     iter->stamp = wxtree_model->stamp;
