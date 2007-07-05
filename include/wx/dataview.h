@@ -38,12 +38,13 @@
 // wxDataViewCtrl globals
 // ----------------------------------------------------------------------------
 
+class WXDLLIMPEXP_ADV wxDataViewItem;
 class WXDLLIMPEXP_ADV wxDataViewModel;
-class WXDLLIMPEXP_ADV wxDataViewListModel;
 class WXDLLIMPEXP_ADV wxDataViewCtrl;
 class WXDLLIMPEXP_ADV wxDataViewColumn;
 class WXDLLIMPEXP_ADV wxDataViewRenderer;
-class                 wxDataViewEventListModelNotifier;
+class WXDLLIMPEXP_ADV wxDataViewModelNotifier;
+class                 wxDataViewEventModelNotifier;
 
 extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxDataViewCtrlNameStr[];
 
@@ -61,158 +62,97 @@ extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxDataViewCtrlNameStr[];
 
 
 // ---------------------------------------------------------
+// wxDataViewItem
+// ---------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewItem
+{
+public:
+    wxDataViewItem( wxUint32 id = 0 ) 
+        { m_id = id; m_reserved1 = 0; m_reserved2 = NULL; }
+    wxDataViewItem( const wxDataViewItem &item )
+        { m_id = item.m_id; m_reserved1 = item.m_reserved1; m_reserved2 = item.m_reserved2; }
+    bool IsOk() const                  { return m_id != 0; }
+    wxUint32 GetID() const             { return m_id; }
+    
+public:
+    wxUint32 m_reserved1;
+    void*    m_reserved2;
+    
+private:
+    wxUint32 m_id;
+};
+
+// ---------------------------------------------------------
 // wxDataViewModel
 // ---------------------------------------------------------
 
 class WXDLLIMPEXP_ADV wxDataViewModel: public wxObjectRefData
 {
 public:
-    wxDataViewModel() { }
+    wxDataViewModel();
 
-protected:
-    // the user should not delete this class directly: he should use DecRef() instead!
-    virtual ~wxDataViewModel() { }
-};
-
-// ---------------------------------------------------------
-// wxDataViewListModelNotifier
-// ---------------------------------------------------------
-
-class WXDLLIMPEXP_ADV wxDataViewListModelNotifier: public wxObject
-{
-public:
-    wxDataViewListModelNotifier() { }
-    virtual ~wxDataViewListModelNotifier() { m_owner = NULL; }
-
-    virtual bool RowAppended() = 0;
-    virtual bool RowPrepended() = 0;
-    virtual bool RowInserted( unsigned int before ) = 0;
-    virtual bool RowDeleted( unsigned int row ) = 0;
-    virtual bool RowChanged( unsigned int row ) = 0;
-    virtual bool ValueChanged( unsigned int col, unsigned int row ) = 0;
-    virtual bool RowsReordered( unsigned int *new_order ) = 0;
-    virtual bool Cleared() = 0;
-
-    void SetOwner( wxDataViewListModel *owner ) { m_owner = owner; }
-    wxDataViewListModel *GetOwner()             { return m_owner; }
-
-private:
-    wxDataViewListModel *m_owner;
-};
-
-// ---------------------------------------------------------
-// wxDataViewListModel
-// ---------------------------------------------------------
-
-class WXDLLIMPEXP_ADV wxDataViewListModel: public wxDataViewModel
-{
-public:
-    wxDataViewListModel();
-
-    virtual unsigned int GetRowCount() const = 0;
     virtual unsigned int GetColumnCount() const = 0;
 
     // return type as reported by wxVariant
     virtual wxString GetColumnType( unsigned int col ) const = 0;
 
     // get value into a wxVariant
-    virtual void GetValue( wxVariant &variant, unsigned int col, unsigned int row ) const = 0;
+    virtual void GetValue( wxVariant &variant, 
+                           const wxDataViewItem &item, unsigned int col ) const = 0;
 
     // set value, call ValueChanged() afterwards!
-    virtual bool SetValue( const wxVariant &variant, unsigned int col, unsigned int row ) = 0;
+    virtual bool SetValue( const wxVariant &variant, 
+                           const wxDataViewItem &item, unsigned int col ) = 0;
 
-    // override to set cell attributes
-    virtual void GetAttr( wxListItemAttr& WXUNUSED(attr),
-                          unsigned int WXUNUSED(col),
-                          unsigned int WXUNUSED(row) )
-    {
-    }
+    // define hierachy
+    virtual bool HasChildren( const wxDataViewItem &item ) const = 0;
+    virtual int GetChildCount( const wxDataViewItem &item ) const = 0;
+    virtual wxDataViewItem GetParent( const wxDataViewItem &child ) const = 0;
+    virtual wxDataViewItem GetFirstChild( const wxDataViewItem &parent ) const = 0;
+    virtual wxDataViewItem GetNextSibling( const wxDataViewItem &item ) const = 0;
+    virtual wxDataViewItem GetNthChild(  const wxDataViewItem &parent, unsigned int n ) const = 0;
 
     // delegated notifiers
-    virtual bool RowAppended();
-    virtual bool RowPrepended();
-    virtual bool RowInserted( unsigned int before );
-    virtual bool RowDeleted( unsigned int row );
-    virtual bool RowChanged( unsigned int row );
-    virtual bool ValueChanged( unsigned int col, unsigned int row );
-    virtual bool RowsReordered( unsigned int *new_order );
+    virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
+    virtual bool ItemDeleted( const wxDataViewItem &item );
+    virtual bool ItemChanged( const wxDataViewItem &item );
+    virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col );
     virtual bool Cleared();
 
-    void AddNotifier( wxDataViewListModelNotifier *notifier );
-    void RemoveNotifier( wxDataViewListModelNotifier *notifier );
+    void AddNotifier( wxDataViewModelNotifier *notifier );
+    void RemoveNotifier( wxDataViewModelNotifier *notifier );
     
 protected:
     // the user should not delete this class directly: he should use DecRef() instead!
-    virtual ~wxDataViewListModel();
+    virtual ~wxDataViewModel();
 
     wxList  m_notifiers;
 };
 
 // ---------------------------------------------------------
-// wxDataViewSortedListModel
+// wxDataViewModelNotifier
 // ---------------------------------------------------------
 
-typedef int (wxCALLBACK *wxDataViewListModelCompare)
-    (unsigned int row1, unsigned int row2, unsigned int col, wxDataViewListModel* model );
-
-WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_SIZE_T(unsigned int, 
-                                            wxDataViewSortedIndexArray, WXDLLIMPEXP_ADV);
-
-class WXDLLIMPEXP_ADV wxDataViewSortedListModel: public wxDataViewListModel
+class WXDLLIMPEXP_ADV wxDataViewModelNotifier: public wxObject
 {
-    friend class wxDataViewSortedListModelNotifier;
-
 public:
-    wxDataViewSortedListModel( wxDataViewListModel *child );
-    virtual ~wxDataViewSortedListModel();
+    wxDataViewModelNotifier() { }
+    virtual ~wxDataViewModelNotifier() { m_owner = NULL; }
 
-    void SetAscending( bool ascending ) { m_ascending = ascending; }
-    bool IsAscending() const { return m_ascending; }
+    virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item ) = 0;
+    virtual bool ItemDeleted( const wxDataViewItem &item ) = 0;
+    virtual bool ItemChanged( const wxDataViewItem &item ) = 0;
+    virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col ) = 0;
+    virtual bool Cleared() = 0;
 
-    virtual unsigned int GetRowCount() const;
-    virtual unsigned int GetColumnCount() const;
-
-    // return type as reported by wxVariant
-    virtual wxString GetColumnType( unsigned int col ) const;
-
-    // get value into a wxVariant
-    virtual void GetValue( wxVariant &variant, unsigned int col, unsigned int row ) const;
-
-    // set value, call ValueChanged() afterwards!
-    virtual bool SetValue( const wxVariant &variant, unsigned int col, unsigned int row );
-
-    // called from user
-    virtual bool RowAppended();
-    virtual bool RowPrepended();
-    virtual bool RowInserted( unsigned int before );
-    virtual bool RowDeleted( unsigned int row );
-    virtual bool RowChanged( unsigned int row );
-    virtual bool ValueChanged( unsigned int col, unsigned int row );
-    virtual bool RowsReordered( unsigned int *new_order );
-    virtual bool Cleared();
-
-    // called if child's notifiers are called
-    bool ChildRowAppended();
-    bool ChildRowPrepended();
-    bool ChildRowInserted( unsigned int before );
-    bool ChildRowDeleted( unsigned int row );
-    bool ChildRowChanged( unsigned int row );
-    bool ChildValueChanged( unsigned int col, unsigned int row );
-    bool ChildRowsReordered( unsigned int *new_order );
-    bool ChildCleared();
-
-    virtual void Resort();
-    
-    void DetachChild();
+    void SetOwner( wxDataViewModel *owner ) { m_owner = owner; }
+    wxDataViewModel *GetOwner()             { return m_owner; }
 
 private:
-    bool                             m_ascending;
-    wxDataViewListModel             *m_child;
-    wxDataViewSortedIndexArray       m_array;
-    wxDataViewListModelNotifier     *m_notifierOnChild;
-    
-    void InitStatics(); // BAD
+    wxDataViewModel *m_owner;
 };
+
 
 //-----------------------------------------------------------------------------
 // wxDataViewEditorCtrlEvtHandler
@@ -300,7 +240,7 @@ public:
                                         wxVariant& WXUNUSED(value))
         { return false; }
 
-    virtual bool StartEditing( unsigned int row, wxRect labelRect );
+    virtual bool StartEditing( const wxDataViewItem &item, wxRect labelRect );
     virtual void CancelEditing();
     virtual bool FinishEditing();
     
@@ -310,7 +250,7 @@ protected:
     wxString                m_variantType;
     wxDataViewColumn       *m_owner;
     wxControl              *m_editorCtrl;
-    unsigned int            m_row; // for m_editorCtrl
+    wxDataViewItem          m_item; // for m_editorCtrl
 
     // internal utility:
     const wxDataViewCtrl* GetView() const;
@@ -408,8 +348,8 @@ public:
     wxDataViewCtrlBase();
     virtual ~wxDataViewCtrlBase();
 
-    virtual bool AssociateModel( wxDataViewListModel *model );
-    wxDataViewListModel* GetModel();
+    virtual bool AssociateModel( wxDataViewModel *model );
+    wxDataViewModel* GetModel();
 
     // short cuts
     bool AppendTextColumn( const wxString &label, unsigned int model_column, 
@@ -461,25 +401,16 @@ public:
     virtual bool ClearColumns();
     virtual wxDataViewColumn* GetColumn( unsigned int pos );
 
-    virtual void SetSelection( int row ) = 0; // -1 for unselect
-    inline void ClearSelection() { SetSelection( -1 ); }
-    virtual void Unselect( unsigned int row ) = 0;
-    virtual void SetSelectionRange( unsigned int from, unsigned int to ) = 0;
-    virtual void SetSelections( const wxArrayInt& aSelections) = 0;
-    
-    virtual bool IsSelected( unsigned int row ) const = 0;
-    virtual int GetSelection() const = 0;
-    virtual int GetSelections(wxArrayInt& aSelections) const = 0;
+    // TODO selection code
 
 private:
-    wxDataViewListModel    *m_model;
+    wxDataViewModel        *m_model;
     wxList                  m_cols;
-    wxDataViewEventListModelNotifier *m_eventNotifier;
+    wxDataViewEventModelNotifier *m_eventNotifier;
     
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCtrlBase)
 };
-
 
 // ----------------------------------------------------------------------------
 // wxDataViewEvent - the event class for the wxDataViewCtrl notifications
@@ -490,29 +421,27 @@ class WXDLLIMPEXP_ADV wxDataViewEvent : public wxNotifyEvent
 public:
     wxDataViewEvent(wxEventType commandType = wxEVT_NULL, int winid = 0)
         : wxNotifyEvent(commandType, winid),
+        m_item(0),
         m_col(-1),
-        m_row(-1),
         m_model(NULL),
         m_value(wxNullVariant),
-        m_editCancelled(false),
         m_column(NULL)
         { }
 
     wxDataViewEvent(const wxDataViewEvent& event)
         : wxNotifyEvent(event),
+        m_item(event.m_item),
         m_col(event.m_col),
-        m_row(event.m_col),
         m_model(event.m_model),
         m_value(event.m_value),
-        m_editCancelled(event.m_editCancelled),
         m_column(event.m_column)
         { }
 
+    wxDataViewItem GetItem() const { return m_item; }
+    void SetItem( const wxDataViewItem &item ) { m_item = item; }
+
     int GetColumn() const { return m_col; }
     void SetColumn( int col ) { m_col = col; }
-
-    int GetRow() const { return m_row; }
-    void SetRow( int row ) { m_row = row; }
 
     wxDataViewModel* GetModel() const { return m_model; }
     void SetModel( wxDataViewModel *model ) { m_model = model; }
@@ -524,18 +453,13 @@ public:
     void SetDataViewColumn( wxDataViewColumn *col ) { m_column = col; }
     wxDataViewColumn *GetDataViewColumn() const { return m_column; }
 
-    // was label editing canceled? (for wxEVT_COMMAND_DATVIEW_END_LABEL_EDIT only)
-    bool IsEditCancelled() const { return m_editCancelled; }
-    void SetEditCanceled(bool editCancelled) { m_editCancelled = editCancelled; }
-
     virtual wxEvent *Clone() const { return new wxDataViewEvent(*this); }
 
 protected:
+    wxDataViewItem      m_item;
     int                 m_col;
-    int                 m_row;
     wxDataViewModel    *m_model;
     wxVariant           m_value;
-    bool                m_editCancelled;
     wxDataViewColumn   *m_column;
 
 private:
@@ -543,19 +467,16 @@ private:
 };
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ROW_SELECTED, -1)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ROW_ACTIVATED, -1)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_SELECTED, -1)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, -1)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, -1)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, -1)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, -1)
     // notifications from the model to the control
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_MODEL_ROW_APPENDED, -1)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_MODEL_ROW_PREPENDED, -1)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_MODEL_ROW_INSERTED, -1)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_MODEL_ROW_DELETED, -1)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_MODEL_ROW_CHANGED, -1)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_ADDED, -1)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_DELETED, -1)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_CHANGED, -1)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_MODEL_VALUE_CHANGED, -1)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_MODEL_ROWS_REORDERED, -1)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_MODEL_CLEARED, -1)
 END_DECLARE_EVENT_TYPES()
 
@@ -567,19 +488,16 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 #define wx__DECLARE_DATAVIEWEVT(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_DATAVIEW_ ## evt, id, wxDataViewEventHandler(fn))
 
-#define EVT_DATAVIEW_ROW_SELECTED(id, fn) wx__DECLARE_DATAVIEWEVT(ROW_SELECTED, id, fn)
-#define EVT_DATAVIEW_ROW_ACTIVATED(id, fn) wx__DECLARE_DATAVIEWEVT(ROW_ACTIVATED, id, fn)
+#define EVT_DATAVIEW_ITEM_SELECTED(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_SELECTED, id, fn)
+#define EVT_DATAVIEW_ITEM_ACTIVATED(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_ACTIVATED, id, fn)
 #define EVT_DATAVIEW_COLUMN_HEADER_CLICK(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_HEADER_CLICK, id, fn)
 #define EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_HEADER_RIGHT_CLICK, id, fn)
 #define EVT_DATAVIEW_COLUMN_SORTED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_SORTED, id, fn)
 
-#define EVT_DATAVIEW_MODEL_ROW_APPENDED(id, fn) wx__DECLARE_DATAVIEWEVT(MODEL_ROW_APPENDED, id, fn)
-#define EVT_DATAVIEW_MODEL_ROW_PREPENDED(id, fn) wx__DECLARE_DATAVIEWEVT(MODEL_ROW_PREPENDED, id, fn)
-#define EVT_DATAVIEW_MODEL_ROW_INSERTED(id, fn) wx__DECLARE_DATAVIEWEVT(MODEL_ROW_INSERTED, id, fn)
-#define EVT_DATAVIEW_MODEL_ROW_DELETED(id, fn) wx__DECLARE_DATAVIEWEVT(MODEL_ROW_DELETED, id, fn)
-#define EVT_DATAVIEW_MODEL_ROW_CHANGED(id, fn) wx__DECLARE_DATAVIEWEVT(MODEL_ROW_CHANGED, id, fn)
+#define EVT_DATAVIEW_MODEL_ITEM_ADDED(id, fn) wx__DECLARE_DATAVIEWEVT(MODEL_ITEM_APPENDED, id, fn)
+#define EVT_DATAVIEW_MODEL_ITEM_DELETED(id, fn) wx__DECLARE_DATAVIEWEVT(MODEL_ITEM_DELETED, id, fn)
+#define EVT_DATAVIEW_MODEL_ITEM_CHANGED(id, fn) wx__DECLARE_DATAVIEWEVT(MODEL_ITEM_CHANGED, id, fn)
 #define EVT_DATAVIEW_MODEL_VALUE_CHANGED(id, fn) wx__DECLARE_DATAVIEWEVT(MODEL_VALUE_CHANGED, id, fn)
-#define EVT_DATAVIEW_MODEL_ROWS_REORDERED(id, fn) wx__DECLARE_DATAVIEWEVT(MODEL_ROWS_REORDERED, id, fn)
 #define EVT_DATAVIEW_MODEL_CLEARED(id, fn) wx__DECLARE_DATAVIEWEVT(MODEL_CLEARED, id, fn)
 
 

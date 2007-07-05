@@ -123,17 +123,17 @@ public:
     virtual wxSize GetSize() const = 0;
 
     virtual bool Activate( wxRect cell,
-                           wxDataViewListModel *model, unsigned int col, unsigned int row )   
+                           wxDataViewModel *model, const wxDataViewItem &item, unsigned int col )   
                            { return false; }
 
     virtual bool LeftClick( wxPoint cursor, wxRect cell, 
-                           wxDataViewListModel *model, unsigned int col, unsigned int row )   
+                           wxDataViewModel *model, const wxDataViewItem &item, unsigned int col )   
                            { return false; }
     virtual bool RightClick( wxPoint cursor, wxRect cell,
-                           wxDataViewListModel *model, unsigned int col, unsigned int row )   
+                           wxDataViewModel *model, const wxDataViewItem &item, unsigned int col )   
                            { return false; }
     virtual bool StartDrag( wxPoint cursor, wxRect cell, 
-                           wxDataViewListModel *model, unsigned int col, unsigned int row )   
+                           wxDataViewModel *model, const wxDataViewItem &item, unsigned int col )   
                            { return false; }
     
     // Create DC on request
@@ -195,7 +195,7 @@ public:
     virtual bool Render( wxRect cell, wxDC *dc, int state );
     virtual wxSize GetSize() const;
     virtual bool Activate( wxRect cell,
-                           wxDataViewListModel *model, unsigned int col, unsigned int row );
+                           wxDataViewModel *model, const wxDataViewItem &item, unsigned int col );
     
 private:
     wxDateTime    m_date;
@@ -302,17 +302,10 @@ public:
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator );
 
-    virtual bool AssociateModel( wxDataViewListModel *model );
+    virtual bool AssociateModel( wxDataViewModel *model );
     virtual bool AppendColumn( wxDataViewColumn *col );
     
-    virtual void SetSelection( int row ); // -1 for unselect
-    virtual void SetSelectionRange( unsigned int from, unsigned int to );
-    virtual void SetSelections( const wxArrayInt& aSelections);
-    virtual void Unselect( unsigned int row );
-    
-    virtual bool IsSelected( unsigned int row ) const;
-    virtual int GetSelection() const;
-    virtual int GetSelections(wxArrayInt& aSelections) const;
+    // selection code
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
@@ -323,9 +316,9 @@ public:
 private:
     friend class wxDataViewCtrlDC;
     friend class wxDataViewColumn;
-    friend class wxGtkDataViewListModelNotifier;
-    GtkWidget                   *m_treeview;
-    wxDataViewListModelNotifier *m_notifier;
+    friend class wxGtkDataViewModelNotifier;
+    GtkWidget               *m_treeview;
+    wxDataViewModelNotifier *m_notifier;
     
     virtual void OnInternalIdle();
     
