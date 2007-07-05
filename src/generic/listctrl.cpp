@@ -3161,7 +3161,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
                     wxRect label = GetLineLabelRect( current );
                     if (label.Contains( x, y ))
                         m_renameTimer->Start( 250, true );
-                        
+
                 }
                 else
                     m_renameTimer->Start( 250, true );
@@ -3332,7 +3332,8 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
     else // !shift
     {
         // all previously selected items are unselected unless ctrl is held
-        if ( !event.ControlDown() )
+        // in a multiselection control
+        if ( !event.ControlDown() || IsSingleSel() )
             HighlightAll(false);
 
         ChangeCurrent(newCurrent);
@@ -3340,10 +3341,9 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
         // refresh the old focus to remove it
         RefreshLine( oldCurrent );
 
-        if ( !event.ControlDown() )
-        {
+        // in single selection mode we must always have a selected item
+        if ( !event.ControlDown() || IsSingleSel() )
             HighlightLine( m_current, true );
-        }
     }
 
     RefreshLine( m_current );
@@ -3523,17 +3523,19 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
         case WXK_SPACE:
             if ( IsSingleSel() )
             {
-                SendNotify( m_current, wxEVT_COMMAND_LIST_ITEM_ACTIVATED );
-
-                if ( IsHighlighted(m_current) )
+                if ( event.ControlDown() )
                 {
-                    // don't unselect the item in single selection mode
-                    break;
+                    ReverseHighlight(m_current);
                 }
-                //else: select it in ReverseHighlight() below if unselected
+                else // normal space press
+                {
+                    SendNotify( m_current, wxEVT_COMMAND_LIST_ITEM_ACTIVATED );
+                }
             }
-
-            ReverseHighlight(m_current);
+            else // multiple selection
+            {
+                ReverseHighlight(m_current);
+            }
             break;
 
         case WXK_RETURN:
@@ -4808,6 +4810,11 @@ int LINKAGEMODE list_ctrl_compare_func_1( wxListLineData **arg1, wxListLineData 
 
 void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 {
+    // selections won't make sense any more after sorting the items so reset
+    // them
+    HighlightAll(false);
+    ResetCurrent();
+
     list_ctrl_compare_func_2 = fn;
     list_ctrl_compare_data = data;
     m_lines.Sort( list_ctrl_compare_func_1 );
@@ -4830,7 +4837,7 @@ void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
     // update our idea of which lines are shown when we redraw the window the
     // next time
     ResetVisibleLinesRange();
-    
+
     if ( event.GetOrientation() == wxHORIZONTAL && HasHeader() )
     {
         wxGenericListCtrl* lc = GetListCtrl();
