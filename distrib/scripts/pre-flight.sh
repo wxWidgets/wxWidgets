@@ -118,6 +118,6 @@ md5sum ${FTPDIR}/wx* > ${FTPDIR}/MD5SUM
 
 ## make sure updated at is really last
 sleep 10
-echo cvs checkout done at  `date -u` > ${FTPDIR}/updated_at.txt
+echo svn checkout done at  `date -u` > ${FTPDIR}/updated_at.txt
        
 echo "Delivery complete. Flying."
