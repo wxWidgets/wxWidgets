@@ -4810,6 +4810,11 @@ int LINKAGEMODE list_ctrl_compare_func_1( wxListLineData **arg1, wxListLineData 
 
 void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 {
+    // selections won't make sense any more after sorting the items so reset
+    // them
+    HighlightAll(false);
+    ResetCurrent();
+
     list_ctrl_compare_func_2 = fn;
     list_ctrl_compare_data = data;
     m_lines.Sort( list_ctrl_compare_func_1 );
