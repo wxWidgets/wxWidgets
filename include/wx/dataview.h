@@ -125,7 +125,7 @@ public:
     
 protected:
     // the user should not delete this class directly: he should use DecRef() instead!
-    virtual ~wxDataViewModel();
+    virtual ~wxDataViewModel() { }
 
     wxList  m_notifiers;
 };
