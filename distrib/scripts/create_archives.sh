@@ -208,7 +208,7 @@ prepareforrelease()
     cp $APPDIR/docs/cocoa/install.txt $APPDIR/install-cocoa.txt
 
     # Now delete a few files that are unnecessary
-    rm -f BuildCVS.txt descrip.mms
+    rm -f BuildSVN.txt descrip.mms
     rm -f setup.h_vms
     rm -f docs/html/wxbook.htm docs/html/roadmap.htm
     rm -f src/mingegcs.bat
