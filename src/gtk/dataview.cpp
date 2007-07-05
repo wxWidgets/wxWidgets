@@ -267,15 +267,19 @@ wxgtk_tree_model_get_iter (GtkTreeModel *tree_model,
 
     wxDataViewItem item;
 
+    wxPrintf( "get_iter depth: %d\n", depth );
+
     int i;
     for (i = 0; i < depth; i++)    
     {
         gint pos = gtk_tree_path_get_indices (path)[i];
         item = model->GetNthChild( item, (unsigned int) pos );
 
+        wxPrintf( "pos %d\n", pos );
+
         if (!item.IsOk())
         {
-            wxPrintf( wxT("wrong item from path\n") );
+            wxPrintf( "wrong item from path\n" );
             return FALSE;
         }
     }
@@ -438,18 +442,32 @@ wxgtk_tree_model_iter_nth_child (GtkTreeModel *tree_model,
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) tree_model;
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
 
-    g_return_val_if_fail (wxtree_model->stamp == parent->stamp, FALSE);
-    
     wxDataViewModel *model = wxtree_model->model;
     
-    wxDataViewItem item( (wxUint32) parent->user_data );
-    item = model->GetNthChild( item, n );
+    if (!parent)
+    {
+        wxDataViewItem item;
+        item = model->GetNthChild( item, n );
+        
+        if (!item.IsOk())
+            return FALSE;
     
-    if (!item.IsOk())
-        return FALSE;
+        iter->stamp = wxtree_model->stamp;
+        iter->user_data = (gpointer) item.GetID();
+    }
+    else
+    {
+        g_return_val_if_fail (wxtree_model->stamp == parent->stamp, FALSE);
     
-    iter->stamp = wxtree_model->stamp;
-    iter->user_data = (gpointer) item.GetID();
+        wxDataViewItem item( (wxUint32) parent->user_data );
+        item = model->GetNthChild( item, n );
+    
+        if (!item.IsOk())
+            return FALSE;
+    
+        iter->stamp = wxtree_model->stamp;
+        iter->user_data = (gpointer) item.GetID();
+    }
 
     return TRUE;
 }

@@ -191,6 +191,15 @@ public:
     }
     virtual wxDataViewItem GetNthChild(  const wxDataViewItem &parent, unsigned int n ) const
     {
+        if (!parent.IsOk())
+        {
+            // root node
+            if (n == 0)
+                return wxDataViewItem( 1 );
+                
+            return wxDataViewItem( 0 );
+        }
+    
         int ID = parent.GetID();
         switch (ID)
         {
