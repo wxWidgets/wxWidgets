@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/dataview.h
+// Name:        wx/dataview.h 
 // Purpose:     wxDataViewCtrl base classes
 // Author:      Robert Roebling
 // Modified by: Bo Yang, 2007/06/18
