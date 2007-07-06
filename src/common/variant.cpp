@@ -643,10 +643,10 @@ class WXDLLIMPEXP_BASE wxVariantDataChar: public wxVariantData
 DECLARE_DYNAMIC_CLASS(wxVariantDataChar)
 public:
     wxVariantDataChar() { m_value = 0; }
-    wxVariantDataChar(wxChar value) { m_value = value; }
+    wxVariantDataChar(const wxUniChar& value) { m_value = value; }
 
-    inline wxChar GetValue() const { return m_value; }
-    inline void SetValue(wxChar value) { m_value = value; }
+    inline wxUniChar GetValue() const { return m_value; }
+    inline void SetValue(const wxUniChar& value) { m_value = value; }
 
     virtual bool Eq(wxVariantData& data) const;
 #if wxUSE_STD_IOSTREAM
@@ -662,7 +662,7 @@ public:
     virtual wxString GetType() const { return wxT("char"); }
 
 protected:
-    wxChar m_value;
+    wxUniChar m_value;
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxVariantDataChar, wxVariantData)
@@ -679,16 +679,14 @@ bool wxVariantDataChar::Eq(wxVariantData& data) const
 #if wxUSE_STD_IOSTREAM
 bool wxVariantDataChar::Write(wxSTD ostream& str) const
 {
-    wxString s;
-    Write(s);
-    str << (const char*) s.mb_str();
+    str << wxString(m_value);
     return true;
 }
 #endif
 
 bool wxVariantDataChar::Write(wxString& str) const
 {
-    str.Printf(wxT("%c"), m_value);
+    str = m_value;
     return true;
 }
 
@@ -706,7 +704,9 @@ bool wxVariantDataChar::Write(wxOutputStream& str) const
 {
     wxTextOutputStream s(str);
 
-    s << m_value;
+    // FIXME-UTF8: this should be just "s << m_value;" after removal of
+    //             ANSI build and addition of wxUniChar to wxTextOutputStream:
+    s << (wxChar)m_value;
 
     return true;
 }
@@ -715,7 +715,11 @@ bool wxVariantDataChar::Read(wxInputStream& str)
 {
     wxTextInputStream s(str);
 
-    s >> m_value;
+    // FIXME-UTF8: this should be just "s >> m_value;" after removal of
+    //             ANSI build and addition of wxUniChar to wxTextInputStream:
+    wxChar ch;
+    s >> ch;
+    m_value = ch;
 
     return true;
 }
@@ -723,31 +727,38 @@ bool wxVariantDataChar::Read(wxInputStream& str)
 
 bool wxVariantDataChar::Read(wxString& str)
 {
-    m_value = str[size_t(0)];
+    m_value = str[0u];
     return true;
 }
 
-wxVariant::wxVariant(wxChar val, const wxString& name)
+wxVariant::wxVariant(const wxUniChar& val, const wxString& name)
 {
     m_data = new wxVariantDataChar(val);
     m_name = name;
 }
 
-bool wxVariant::operator== (wxChar value) const
+wxVariant::wxVariant(char val, const wxString& name)
 {
-    wxChar thisValue;
+    m_data = new wxVariantDataChar(val);
+    m_name = name;
+}
+
+wxVariant::wxVariant(wchar_t val, const wxString& name)
+{
+    m_data = new wxVariantDataChar(val);
+    m_name = name;
+}
+
+bool wxVariant::operator==(const wxUniChar& value) const
+{
+    wxUniChar thisValue;
     if (!Convert(&thisValue))
         return false;
     else
         return (value == thisValue);
 }
 
-bool wxVariant::operator!= (wxChar value) const
-{
-    return (!((*this) == value));
-}
-
-void wxVariant::operator= (wxChar value)
+wxVariant& wxVariant::operator=(const wxUniChar& value)
 {
     if (GetType() == wxT("char") &&
         m_data->GetRefCount() == 1)
@@ -759,17 +770,19 @@ void wxVariant::operator= (wxChar value)
         UnRef();
         m_data = new wxVariantDataChar(value);
     }
+
+    return *this;
 }
 
-wxChar wxVariant::GetChar() const
+wxUniChar wxVariant::GetChar() const
 {
-    wxChar value;
+    wxUniChar value;
     if (Convert(& value))
         return value;
     else
     {
         wxFAIL_MSG(wxT("Could not convert to a char"));
-        return 0;
+        return wxUniChar(0);
     }
 }
 
@@ -863,7 +876,31 @@ wxVariant::wxVariant(const wxString& val, const wxString& name)
     m_name = name;
 }
 
-wxVariant::wxVariant(const wxChar* val, const wxString& name)
+wxVariant::wxVariant(const char* val, const wxString& name)
+{
+    m_data = new wxVariantDataString(wxString(val));
+    m_name = name;
+}
+
+wxVariant::wxVariant(const wchar_t* val, const wxString& name)
+{
+    m_data = new wxVariantDataString(wxString(val));
+    m_name = name;
+}
+
+wxVariant::wxVariant(const wxCStrData& val, const wxString& name)
+{
+    m_data = new wxVariantDataString(val.AsString());
+    m_name = name;
+}
+
+wxVariant::wxVariant(const wxCharBuffer& val, const wxString& name)
+{
+    m_data = new wxVariantDataString(wxString(val));
+    m_name = name;
+}
+
+wxVariant::wxVariant(const wxWCharBuffer& val, const wxString& name)
 {
     m_data = new wxVariantDataString(wxString(val));
     m_name = name;
@@ -883,7 +920,7 @@ bool wxVariant::operator!= (const wxString& value) const
     return (!((*this) == value));
 }
 
-void wxVariant::operator= (const wxString& value)
+wxVariant& wxVariant::operator= (const wxString& value)
 {
     if (GetType() == wxT("string") &&
         m_data->GetRefCount() == 1)
@@ -895,20 +932,7 @@ void wxVariant::operator= (const wxString& value)
         UnRef();
         m_data = new wxVariantDataString(value);
     }
-}
-
-void wxVariant::operator= (const wxChar* value)
-{
-    if (GetType() == wxT("string") &&
-        m_data->GetRefCount() == 1)
-    {
-        ((wxVariantDataString*)GetData())->SetValue(wxString(value));
-    }
-    else
-    {
-        UnRef();
-        m_data = new wxVariantDataString(wxString(value));
-    }
+    return *this;
 }
 
 wxString wxVariant::GetString() const
@@ -1812,7 +1836,7 @@ bool wxVariant::Convert(double* value) const
     return true;
 }
 
-bool wxVariant::Convert(wxChar* value) const
+bool wxVariant::Convert(wxUniChar* value) const
 {
     wxString type(GetType());
     if (type == wxT("char"))
@@ -1826,6 +1850,24 @@ bool wxVariant::Convert(wxChar* value) const
     else
         return false;
 
+    return true;
+}
+
+bool wxVariant::Convert(char* value) const
+{
+    wxUniChar ch;
+    if ( !Convert(&ch) )
+        return false;
+    *value = ch;
+    return true;
+}
+
+bool wxVariant::Convert(wchar_t* value) const
+{
+    wxUniChar ch;
+    if ( !Convert(&ch) )
+        return false;
+    *value = ch;
     return true;
 }
 
