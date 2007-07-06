@@ -25,15 +25,14 @@ extern "C" {
 // classes
 //---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGLContext;
-class WXDLLEXPORT wxGLCanvas;
+class WXDLLIMPEXP_GL wxGLCanvas;
 
 //---------------------------------------------------------------------------
 // wxGLContext
 //---------------------------------------------------------------------------
 
 
-class WXDLLEXPORT wxGLContext: public wxObject
+class WXDLLIMPEXP_GL wxGLContext: public wxObject
 {
 public:
     wxGLContext(wxWindow* win, const wxGLContext* other=NULL /* for sharing display lists */);
@@ -55,7 +54,7 @@ private:
 // wxGLCanvas
 //---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGLCanvas: public wxWindow
+class WXDLLIMPEXP_GL wxGLCanvas: public wxWindow
 {
 public:
     // This ctor is identical to the next, except for the fact that it
