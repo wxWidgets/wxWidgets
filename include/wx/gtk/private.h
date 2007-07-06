@@ -33,7 +33,7 @@
     #include "wx/font.h"
 
     // convert the text in given encoding to UTF-8 used by wxGTK
-    extern wxCharBuffer
+    WXDLLIMPEXP_CORE extern wxCharBuffer
     wxConvertToGTK(const wxString& s,
                    wxFontEncoding enc = wxFONTENCODING_SYSTEM);
 

@@ -183,6 +183,7 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 
 #if !wxUSE_UNICODE
 
+WXDLLIMPEXP_CORE 
 wxCharBuffer wxConvertToGTK(const wxString& s, wxFontEncoding enc)
 {
     wxWCharBuffer wbuf;
