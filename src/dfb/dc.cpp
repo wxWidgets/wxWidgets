@@ -691,7 +691,10 @@ bool wxDC::DoBlitFromSurface(const wxIDirectFBSurfacePtr& src,
     wxIDirectFBSurfacePtr dst(m_surface);
 
     // FIXME: this will have to be different in useMask case, see above
-    if ( !dst->SetBlittingFlags(DSBLIT_NOFX) )
+    DFBSurfaceBlittingFlags blitFlag = (src->GetPixelFormat() == DSPF_ARGB)
+                                       ? DSBLIT_BLEND_ALPHACHANNEL
+                                       : DSBLIT_NOFX;
+    if ( !dst->SetBlittingFlags(blitFlag) )
         return false;
 
     if ( srcRect.w != dstRect.w || srcRect.h != dstRect.h )

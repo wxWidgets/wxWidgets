@@ -82,6 +82,8 @@ protected:
     virtual wxObjectRefData *CreateRefData() const;
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
+    bool CreateWithFormat(int width, int height, int dfbFormat);
+
     DECLARE_DYNAMIC_CLASS(wxBitmap)
 };
 
