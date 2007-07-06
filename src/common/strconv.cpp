@@ -2300,7 +2300,10 @@ private:
 // Cocoa conversion classes
 // ============================================================================
 
-#if defined(__WXCOCOA__)
+// DE: Does anyone know the purpose of this code?
+// This file is compiled in the base library, so __WXCOCOA__ check is totally wrong
+// in the first place.
+#if 0 // defined(__WXCOCOA__)
 
 // RN: There is no UTF-32 support in either Core Foundation or Cocoa.
 // Strangely enough, internally Core Foundation uses
@@ -2722,6 +2725,11 @@ private:
 // Mac conversion classes
 // ============================================================================
 
+// DE: Can someone explain to me why this is conditional upon __WXMAC__ instead
+// of being used for all Mac OS X systems?  This file is part of the base library
+// not the core library.
+// If we really need GUI-specific conversions then a better method might be to
+// provide something in wxAppTraits that could be implemented in the core library.
 #if defined(__WXMAC__) && defined(TARGET_CARBON)
 
 class wxMBConv_mac : public wxMBConv
@@ -3411,7 +3419,7 @@ wxMBConv *wxCSConv::DoCreate() const
     }
 #endif
 
-#if defined(__WXCOCOA__)
+#if 0 //defined(__WXCOCOA__)
     {
         if ( m_name || ( m_encoding <= wxFONTENCODING_UTF16 ) )
         {
