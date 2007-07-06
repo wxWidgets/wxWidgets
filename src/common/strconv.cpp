@@ -56,6 +56,11 @@
 #include "wx/encconv.h"
 #include "wx/fontmap.h"
 
+#ifdef __DARWIN__
+#include <CoreFoundation/CFString.h>
+#include <CoreFoundation/CFStringEncodingExt.h>
+#endif //def __DARWIN__
+
 #ifdef __WXMAC__
 #ifndef __DARWIN__
 #include <ATSUnicode.h>
@@ -2297,20 +2302,14 @@ private:
 #endif // wxHAVE_WIN32_MB2WC
 
 // ============================================================================
-// Cocoa conversion classes
+// CoreFoundation conversion classes
 // ============================================================================
 
-// DE: Does anyone know the purpose of this code?
-// This file is compiled in the base library, so __WXCOCOA__ check is totally wrong
-// in the first place.
-#if 0 // defined(__WXCOCOA__)
+#ifdef __DARWIN__
 
 // RN: There is no UTF-32 support in either Core Foundation or Cocoa.
 // Strangely enough, internally Core Foundation uses
 // UTF-32 internally quite a bit - its just not public (yet).
-
-#include <CoreFoundation/CFString.h>
-#include <CoreFoundation/CFStringEncodingExt.h>
 
 CFStringEncoding wxCFStringEncFromFontEnc(wxFontEncoding encoding)
 {
@@ -2572,32 +2571,32 @@ CFStringEncoding wxCFStringEncFromFontEnc(wxFontEncoding encoding)
     return enc ;
 }
 
-class wxMBConv_cocoa : public wxMBConv
+class wxMBConv_cf : public wxMBConv
 {
 public:
-    wxMBConv_cocoa()
+    wxMBConv_cf()
     {
         Init(CFStringGetSystemEncoding()) ;
     }
 
-    wxMBConv_cocoa(const wxMBConv_cocoa& conv)
+    wxMBConv_cf(const wxMBConv_cf& conv)
     {
         m_encoding = conv.m_encoding;
     }
 
 #if wxUSE_FONTMAP
-    wxMBConv_cocoa(const wxChar* name)
+    wxMBConv_cf(const char* name)
     {
         Init( wxCFStringEncFromFontEnc(wxFontMapperBase::Get()->CharsetToEncoding(name, false) ) ) ;
     }
 #endif
 
-    wxMBConv_cocoa(wxFontEncoding encoding)
+    wxMBConv_cf(wxFontEncoding encoding)
     {
         Init( wxCFStringEncFromFontEnc(encoding) );
     }
 
-    virtual ~wxMBConv_cocoa()
+    virtual ~wxMBConv_cf()
     {
     }
 
@@ -2707,7 +2706,7 @@ public:
         return  nRealOutSize - 1;
     }
 
-    virtual wxMBConv *Clone() const { return new wxMBConv_cocoa(*this); }
+    virtual wxMBConv *Clone() const { return new wxMBConv_cf(*this); }
 
     bool IsOk() const
     {
@@ -2719,17 +2718,18 @@ private:
     CFStringEncoding m_encoding ;
 };
 
-#endif // defined(__WXCOCOA__)
+#endif // __DARWIN__
 
 // ============================================================================
 // Mac conversion classes
 // ============================================================================
 
-// DE: Can someone explain to me why this is conditional upon __WXMAC__ instead
-// of being used for all Mac OS X systems?  This file is part of the base library
-// not the core library.
-// If we really need GUI-specific conversions then a better method might be to
-// provide something in wxAppTraits that could be implemented in the core library.
+/* Although we are in the base library we currently have this wxMac
+ * conditional.  This is not generally good but fortunately does not affect
+ * the ABI of the base library, only what encodings might work.
+ * It does mean that a wxBase built as part of wxMac has slightly more support
+ * than one built for wxCocoa or even wxGtk.
+ */
 #if defined(__WXMAC__) && defined(TARGET_CARBON)
 
 class wxMBConv_mac : public wxMBConv
@@ -3419,15 +3419,15 @@ wxMBConv *wxCSConv::DoCreate() const
     }
 #endif
 
-#if 0 //defined(__WXCOCOA__)
+#ifdef __DARWIN__
     {
         if ( m_name || ( m_encoding <= wxFONTENCODING_UTF16 ) )
         {
 #if wxUSE_FONTMAP
-            wxMBConv_cocoa *conv = m_name ? new wxMBConv_cocoa(m_name)
-                                          : new wxMBConv_cocoa(m_encoding);
+            wxMBConv_cf *conv = m_name ? new wxMBConv_cf(m_name)
+                                          : new wxMBConv_cf(m_encoding);
 #else
-            wxMBConv_cocoa *conv = new wxMBConv_cocoa(m_encoding);
+            wxMBConv_cf *conv = new wxMBConv_cf(m_encoding);
 #endif
 
             if ( conv->IsOk() )
@@ -3436,7 +3436,8 @@ wxMBConv *wxCSConv::DoCreate() const
             delete conv;
         }
     }
-#endif
+#endif // __DARWIN__
+
     // step (2)
     wxFontEncoding enc = m_encoding;
 #if wxUSE_FONTMAP
