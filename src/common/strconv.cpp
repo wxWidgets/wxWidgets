@@ -59,6 +59,8 @@
 #ifdef __DARWIN__
 #include <CoreFoundation/CFString.h>
 #include <CoreFoundation/CFStringEncodingExt.h>
+
+#include "wx/mac/corefoundation/cfref.h"
 #endif //def __DARWIN__
 
 #ifdef __WXMAC__
@@ -2307,10 +2309,6 @@ private:
 
 #ifdef __DARWIN__
 
-// RN: There is no UTF-32 support in either Core Foundation or Cocoa.
-// Strangely enough, internally Core Foundation uses
-// UTF-32 internally quite a bit - its just not public (yet).
-
 CFStringEncoding wxCFStringEncFromFontEnc(wxFontEncoding encoding)
 {
     CFStringEncoding enc = kCFStringEncodingInvalidId ;
@@ -2439,9 +2437,12 @@ CFStringEncoding wxCFStringEncFromFontEnc(wxFontEncoding encoding)
         case wxFONTENCODING_EUC_JP :
             enc = kCFStringEncodingEUC_JP;
             break ;
+/* Don't support conversion to/from UTF16 as wxWidgets can do this better.
+ * In particular, ToWChar would fail miserably using strlen on an input UTF16.
         case wxFONTENCODING_UTF16 :
             enc = kCFStringEncodingUnicode ;
             break ;
+*/
         case wxFONTENCODING_MACROMAN :
             enc = kCFStringEncodingMacRoman ;
             break ;
@@ -2571,6 +2572,16 @@ CFStringEncoding wxCFStringEncFromFontEnc(wxFontEncoding encoding)
     return enc ;
 }
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+// Provide a constant for the wchat_t encoding used by the host platform.
+#ifdef WORDS_BIGENDIAN
+    static const CFStringEncoding wxCFStringEncodingWcharT = kCFStringEncodingUTF32BE;
+#else
+    static const CFStringEncoding wxCFStringEncodingWcharT = kCFStringEncodingUTF32LE;
+#endif
+
+#endif /* MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4 */
+
 class wxMBConv_cf : public wxMBConv
 {
 public:
@@ -2605,105 +2616,167 @@ public:
         m_encoding = encoding ;
     }
 
-    size_t MB2WC(wchar_t * szOut, const char * szUnConv, size_t nOutSize) const
+    virtual size_t ToWChar(wchar_t * dst, size_t dstSize, const char * src, size_t srcSize = wxNO_LEN) const
     {
-        wxASSERT(szUnConv);
+        wxCHECK(src, wxCONV_FAILED);
 
-        CFStringRef theString = CFStringCreateWithBytes (
+        /* NOTE: This is wrong if the source encoding has an element size
+         * other than char (e.g. it's kCFStringEncodingUnicode)
+         * If the user specifies it, it's presumably right though.
+         * Right now we don't support UTF-16 in anyway since wx can do a better job.
+         */
+        if(srcSize == wxNO_LEN)
+            srcSize = strlen(src) + 1;
+
+        // First create the temporary CFString
+        wxCFRef<CFStringRef> theString( CFStringCreateWithBytes (
                                                 NULL, //the allocator
-                                                (const UInt8*)szUnConv,
-                                                strlen(szUnConv),
+                                                (const UInt8*)src,
+                                                srcSize,
                                                 m_encoding,
                                                 false //no BOM/external representation
-                                                );
+                                                ));
 
-        wxASSERT(theString);
+        wxCHECK(theString != NULL, wxCONV_FAILED);
 
-        size_t nOutLength = CFStringGetLength(theString);
+        /* NOTE: The string content includes the NULL element if the source string did
+         * That means we have to do nothing special because the destination will have
+         * the NULL element iff the source did and the NULL element will be included
+         * in the count iff it was included in the source count.
+         */
 
-        if (szOut == NULL)
+
+/* If we're compiling against Tiger headers we can support direct conversion
+ * to UTF32.  If we are then run against a pre-Tiger system, the encoding
+ * won't be available so we'll defer to the string->UTF-16->UTF-32 conversion.
+ */
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+        if(CFStringIsEncodingAvailable(wxCFStringEncodingWcharT))
         {
-            CFRelease(theString);
-            return nOutLength;
-        }
+            CFRange fullStringRange = CFRangeMake(0, CFStringGetLength(theString));
+            CFIndex usedBufLen;
 
-        CFRange theRange = { 0, nOutSize };
+            CFIndex charsConverted = CFStringGetBytes(
+                    theString,
+                    fullStringRange,
+                    wxCFStringEncodingWcharT,
+                    0,
+                    false,
+                    // if dstSize is 0 then pass NULL to get required length in usedBufLen
+                    dstSize != 0?(UInt8*)dst:NULL,
+                    dstSize * sizeof(wchar_t),
+                    &usedBufLen);
 
-#if SIZEOF_WCHAR_T == 4
-        UniChar* szUniCharBuffer = new UniChar[nOutSize];
-#endif
+            // charsConverted is > 0 iff conversion succeeded
+            if(charsConverted <= 0)
+                return wxCONV_FAILED;
 
-        CFStringGetCharacters(theString, theRange, szUniCharBuffer);
+            /* usedBufLen is the number of bytes written, so we divide by
+             * sizeof(wchar_t) to get the number of elements written.
+             */
+            wxASSERT( (usedBufLen % sizeof(wchar_t)) == 0 );
 
-        CFRelease(theString);
-
-        szUniCharBuffer[nOutLength] = '\0';
-
-#if SIZEOF_WCHAR_T == 4
-        wxMBConvUTF16 converter;
-        converter.MB2WC( szOut, (const char*)szUniCharBuffer, nOutSize );
-        delete [] szUniCharBuffer;
-#endif
-
-        return nOutLength;
-    }
-
-    size_t WC2MB(char *szOut, const wchar_t *szUnConv, size_t nOutSize) const
-    {
-        wxASSERT(szUnConv);
-
-        size_t nRealOutSize;
-        size_t nBufSize = wxWcslen(szUnConv);
-        UniChar* szUniBuffer = (UniChar*) szUnConv;
-
-#if SIZEOF_WCHAR_T == 4
-        wxMBConvUTF16 converter ;
-        nBufSize = converter.WC2MB( NULL, szUnConv, 0 );
-        szUniBuffer = new UniChar[ (nBufSize / sizeof(UniChar)) + 1];
-        converter.WC2MB( (char*) szUniBuffer, szUnConv, nBufSize + sizeof(UniChar));
-        nBufSize /= sizeof(UniChar);
-#endif
-
-        CFStringRef theString = CFStringCreateWithCharactersNoCopy(
-                                NULL, //allocator
-                                szUniBuffer,
-                                nBufSize,
-                                kCFAllocatorNull //deallocator - we want to deallocate it ourselves
-                            );
-
-        wxASSERT(theString);
-
-        //Note that CER puts a BOM when converting to unicode
-        //so we  check and use getchars instead in that case
-        if (m_encoding == kCFStringEncodingUnicode)
-        {
-            if (szOut != NULL)
-                CFStringGetCharacters(theString, CFRangeMake(0, nOutSize - 1), (UniChar*) szOut);
-
-            nRealOutSize = CFStringGetLength(theString) + 1;
+            // CFStringGetBytes does exactly the right thing when buffer
+            // pointer is NULL and returns the number of bytes required
+            return usedBufLen / sizeof(wchar_t);
         }
         else
+#endif /* MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4 */
         {
-            CFStringGetBytes(
-                theString,
-                CFRangeMake(0, CFStringGetLength(theString)),
-                m_encoding,
-                0, //what to put in characters that can't be converted -
-                    //0 tells CFString to return NULL if it meets such a character
-                false, //not an external representation
-                (UInt8*) szOut,
-                nOutSize,
-                (CFIndex*) &nRealOutSize
-                        );
+            // NOTE: Includes NULL iff source did
+            /* NOTE: This is an approximation.  The eventual UTF-32 will    
+             * possibly have less elements but certainly not more.
+             */
+            size_t returnSize = CFStringGetLength(theString);
+    
+            if (dstSize == 0 || dst == NULL)
+            {
+                return returnSize;
+            }
+
+            // Convert the entire string.. too hard to figure out how many UTF-16 we'd need
+            // for an undersized UTF-32 destination buffer.
+            CFRange fullStringRange = CFRangeMake(0, CFStringGetLength(theString));
+            UniChar *szUniCharBuffer = new UniChar[fullStringRange.length];
+    
+            CFStringGetCharacters(theString, fullStringRange, szUniCharBuffer);
+    
+            wxMBConvUTF16 converter;
+            returnSize = converter.ToWChar( dst, dstSize, (const char*)szUniCharBuffer, fullStringRange.length );
+            delete [] szUniCharBuffer;
+    
+            return returnSize;
+        }
+        // NOTREACHED
+    }
+
+    virtual size_t FromWChar(char *dst, size_t dstSize, const wchar_t *src, size_t srcSize) const
+    {
+        wxCHECK(src, wxCONV_FAILED);
+
+        if(srcSize == wxNO_LEN)
+            srcSize = wxStrlen(src) + 1;
+
+        // Temporary CFString
+        wxCFRef<CFStringRef> theString;
+
+/* If we're compiling against Tiger headers we can support direct conversion
+ * from UTF32.  If we are then run against a pre-Tiger system, the encoding
+ * won't be available so we'll defer to the UTF-32->UTF-16->string conversion.
+ */
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+        if(CFStringIsEncodingAvailable(wxCFStringEncodingWcharT))
+        {
+            theString = wxCFRef<CFStringRef>(CFStringCreateWithBytes(
+                    kCFAllocatorDefault,
+                    (UInt8*)src,
+                    srcSize * sizeof(wchar_t),
+                    wxCFStringEncodingWcharT,
+                    false));
+        }
+        else
+#endif /* MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4 */
+        {
+            wxMBConvUTF16 converter;
+            size_t cbUniBuffer = converter.FromWChar( NULL, 0, src, srcSize );
+            wxASSERT(cbUniBuffer % sizeof(UniChar));
+
+            // Will be free'd by kCFAllocatorMalloc when CFString is released
+            UniChar *tmpUniBuffer = (UniChar*)malloc(cbUniBuffer);
+
+            cbUniBuffer = converter.FromWChar( (char*) tmpUniBuffer, cbUniBuffer, src, srcSize );
+            wxASSERT(cbUniBuffer % sizeof(UniChar));
+
+            theString = wxCFRef<CFStringRef>(CFStringCreateWithCharactersNoCopy(
+                        kCFAllocatorDefault,
+                        tmpUniBuffer,
+                        cbUniBuffer / sizeof(UniChar),
+                        kCFAllocatorMalloc
+                    ));
+
         }
 
-        CFRelease(theString);
+        wxCHECK(theString != NULL, wxCONV_FAILED);
 
-#if SIZEOF_WCHAR_T == 4
-        delete[] szUniBuffer;
-#endif
+        CFIndex usedBufLen;
 
-        return  nRealOutSize - 1;
+        CFIndex charsConverted = CFStringGetBytes(
+                theString, 
+                CFRangeMake(0, CFStringGetLength(theString)),
+                m_encoding,
+                0, // FAIL on unconvertible characters
+                false, // not an external representation
+                // if dstSize is 0 then pass NULL to get required length in usedBufLen
+                (dstSize != 0)?(UInt8*)dst:NULL,
+                dstSize,
+                &usedBufLen
+            );
+
+        // charsConverted is > 0 iff conversion succeeded
+        if(charsConverted <= 0)
+            return wxCONV_FAILED;
+
+        return usedBufLen;
     }
 
     virtual wxMBConv *Clone() const { return new wxMBConv_cf(*this); }
@@ -3421,7 +3494,9 @@ wxMBConv *wxCSConv::DoCreate() const
 
 #ifdef __DARWIN__
     {
-        if ( m_name || ( m_encoding <= wxFONTENCODING_UTF16 ) )
+        // leave UTF16 and UTF32 to the built-ins of wx
+        if ( m_name || ( m_encoding < wxFONTENCODING_UTF16BE ||
+            ( m_encoding >= wxFONTENCODING_MACMIN && m_encoding <= wxFONTENCODING_MACMAX ) ) )
         {
 #if wxUSE_FONTMAP
             wxMBConv_cf *conv = m_name ? new wxMBConv_cf(m_name)
