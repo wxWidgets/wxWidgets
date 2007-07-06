@@ -115,6 +115,7 @@ public:
 
     // Assignment operators:
     wxUniChar& operator=(const wxUniChar& c) { m_value = c.m_value; return *this; }
+    wxUniChar& operator=(const wxUniCharRef& c);
     wxUniChar& operator=(char c) { m_value = From8bit(c); return *this; }
     wxUniChar& operator=(unsigned char c) { m_value = From8bit((char)c); return *this; }
 #if wxWCHAR_T_IS_SEPARATE_TYPE
@@ -285,6 +286,12 @@ private:
 inline wxUniChar::wxUniChar(const wxUniCharRef& c)
 {
     m_value = c.UniChar().m_value;
+}
+
+inline wxUniChar& wxUniChar::operator=(const wxUniCharRef& c)
+{
+    m_value = c.UniChar().m_value;
+    return *this;
 }
 
 // Comparison operators for the case when wxUniChar(Ref) is the second operand
