@@ -338,12 +338,8 @@ wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
 
     wxASSERT_MSG( value <= m_maximum, wxT("invalid progress value") );
 
-    // fill up the gauge if value == maximum because this means that the dialog
-    // is going to close and the gauge shouldn't be partly empty in this case
-    if ( m_gauge && value <= m_maximum )
-    {
-        m_gauge->SetValue(value == m_maximum ? value : value + 1);
-    }
+    if ( m_gauge )
+        m_gauge->SetValue(value);
 
     UpdateMessage(newmsg);
 
