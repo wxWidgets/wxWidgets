@@ -202,8 +202,11 @@ This method is not implemented (doesn't do anything) for most platforms.
 
 \func{void}{SetValue}{\param{int }{pos}}
 
-Sets the position of the gauge.
-This function makes the gauge switch to determinate mode, if it's not already.
+Sets the position of the gauge. The \arg{pos} must be between $0$ and the gauge
+range as returned by \helpref{GetRange}{wxgaugegetrange}, inclusive.
+
+This function makes the gauge switch to determinate mode, if it was in
+indeterminate mode before.
 
 \wxheading{Parameters}
 
