@@ -267,6 +267,14 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     TIFFGetField( tif, TIFFTAG_IMAGEWIDTH, &w );
     TIFFGetField( tif, TIFFTAG_IMAGELENGTH, &h );
 
+    uint16 extraSamples;
+    uint16* samplesInfo;
+    TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES,
+                          &extraSamples, &samplesInfo);
+    const bool hasAlpha = (extraSamples == 1 &&
+                           (samplesInfo[0] == EXTRASAMPLE_ASSOCALPHA ||
+                            samplesInfo[0] == EXTRASAMPLE_UNASSALPHA));
+
     npixels = w * h;
 
     raster = (uint32*) _TIFFmalloc( npixels * sizeof(uint32) );
@@ -293,6 +301,9 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
         return false;
     }
 
+    if ( hasAlpha )
+        image->SetAlpha();
+
     if (!TIFFReadRGBAImage( tif, w, h, raster, 0 ))
     {
         if (verbose)
@@ -305,46 +316,37 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
         return false;
     }
 
-    bool hasmask = false;
-
     unsigned char *ptr = image->GetData();
     ptr += w*3*(h-1);
+
+    unsigned char *alpha = hasAlpha ? image->GetAlpha() : NULL;
+    if ( hasAlpha )
+        alpha += w*(h-1);
+
     uint32 pos = 0;
 
     for (uint32 i = 0; i < h; i++)
     {
         for (uint32 j = 0; j < w; j++)
         {
-            unsigned char alpha = (unsigned char)TIFFGetA(raster[pos]);
-            if (alpha < 127)
-            {
-                hasmask = true;
-                ptr[0] = image->GetMaskRed();
-                ptr++;
-                ptr[0] = image->GetMaskGreen();
-                ptr++;
-                ptr[0] = image->GetMaskBlue();
-                ptr++;
-            }
-            else
-            {
-                ptr[0] = (unsigned char)TIFFGetR(raster[pos]);
-                ptr++;
-                ptr[0] = (unsigned char)TIFFGetG(raster[pos]);
-                ptr++;
-                ptr[0] = (unsigned char)TIFFGetB(raster[pos]);
-                ptr++;
-            }
+            *(ptr++) = (unsigned char)TIFFGetR(raster[pos]);
+            *(ptr++) = (unsigned char)TIFFGetG(raster[pos]);
+            *(ptr++) = (unsigned char)TIFFGetB(raster[pos]);
+            if ( hasAlpha )
+                *(alpha++) = (unsigned char)TIFFGetA(raster[pos]);
+
             pos++;
         }
-        ptr -= 2*w*3; // subtract line we just added plus one line
+
+        // subtract line we just added plus one line:
+        ptr -= 2*w*3;
+        if ( hasAlpha )
+            alpha -= 2*w;
     }
 
     _TIFFfree( raster );
 
     TIFFClose( tif );
-
-    image->SetMask( hasmask );
 
     return true;
 }
