@@ -43,7 +43,7 @@ wxCocoaDCStack wxDC::sm_cocoaDCStack;
 inline void CocoaSetPenForNSBezierPath(wxPen &pen, NSBezierPath *bezpath)
 {
     [pen.GetNSColor() set];
-    const float *pattern;
+    const CGFloat *pattern;
     [bezpath setLineDash:pattern count:pen.GetCocoaLineDash(&pattern) phase:0.0];
     [bezpath setLineWidth:pen.GetWidth()];
     switch(pen.GetJoin())

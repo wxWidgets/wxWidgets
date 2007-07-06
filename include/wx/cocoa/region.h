@@ -14,7 +14,11 @@
 
 #include "wx/generic/region.h"
 
+#if defined(__LP64__) || defined(NS_BUILD_32_LIKE_64)
+typedef struct CGRect NSRect;
+#else
 typedef struct _NSRect NSRect;
+#endif
 
 class WXDLLEXPORT wxRegion : public wxRegionGeneric
 {
