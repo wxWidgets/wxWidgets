@@ -60,17 +60,6 @@
 #include "wx/mac/corefoundation/private/strconv_cf.h"
 #endif //def __DARWIN__
 
-#ifdef __WXMAC__
-#ifndef __DARWIN__
-#include <ATSUnicode.h>
-#include <TextCommon.h>
-#include <TextEncodingConverter.h>
-#endif
-
-// includes Mac headers
-#include "wx/mac/private.h"
-#endif
-
 
 #define TRACE_STRCONV _T("strconv")
 
@@ -2302,379 +2291,6 @@ private:
 
 
 // ============================================================================
-// Mac conversion classes
-// ============================================================================
-
-/* Although we are in the base library we currently have this wxMac
- * conditional.  This is not generally good but fortunately does not affect
- * the ABI of the base library, only what encodings might work.
- * It does mean that a wxBase built as part of wxMac has slightly more support
- * than one built for wxCocoa or even wxGtk.
- */
-#if defined(__WXMAC__) && defined(TARGET_CARBON)
-
-class wxMBConv_mac : public wxMBConv
-{
-public:
-    wxMBConv_mac()
-    {
-        Init(CFStringGetSystemEncoding()) ;
-    }
-
-    wxMBConv_mac(const wxMBConv_mac& conv)
-    {
-        Init(conv.m_char_encoding);
-    }
-
-#if wxUSE_FONTMAP
-    wxMBConv_mac(const char* name)
-    {
-        Init( wxMacGetSystemEncFromFontEnc( wxFontMapperBase::Get()->CharsetToEncoding(name, false) ) );
-    }
-#endif
-
-    wxMBConv_mac(wxFontEncoding encoding)
-    {
-        Init( wxMacGetSystemEncFromFontEnc(encoding) );
-    }
-
-    virtual ~wxMBConv_mac()
-    {
-        OSStatus status = noErr ;
-        if (m_MB2WC_converter)
-            status = TECDisposeConverter(m_MB2WC_converter);
-        if (m_WC2MB_converter)
-            status = TECDisposeConverter(m_WC2MB_converter);
-    }
-
-    void Init( TextEncodingBase encoding,TextEncodingVariant encodingVariant = kTextEncodingDefaultVariant ,
-            TextEncodingFormat encodingFormat = kTextEncodingDefaultFormat)
-    {
-        m_MB2WC_converter = NULL ;
-        m_WC2MB_converter = NULL ;
-        m_char_encoding = CreateTextEncoding(encoding, encodingVariant, encodingFormat) ;
-        m_unicode_encoding = CreateTextEncoding(kTextEncodingUnicodeDefault, 0, kUnicode16BitFormat) ;
-    }
-
-    virtual void CreateIfNeeded() const
-    {
-        if ( m_MB2WC_converter == NULL && m_WC2MB_converter == NULL )
-        {
-            OSStatus status = noErr ;
-            status = TECCreateConverter(&m_MB2WC_converter,
-                                    m_char_encoding,
-                                    m_unicode_encoding);
-            wxASSERT_MSG( status == noErr , _("Unable to create TextEncodingConverter")) ;
-            status = TECCreateConverter(&m_WC2MB_converter,
-                                    m_unicode_encoding,
-                                    m_char_encoding);
-            wxASSERT_MSG( status == noErr , _("Unable to create TextEncodingConverter")) ;
-        }
-    }
-
-    size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const
-    {
-        CreateIfNeeded() ;
-        OSStatus status = noErr ;
-        ByteCount byteOutLen ;
-        ByteCount byteInLen = strlen(psz) + 1;
-        wchar_t *tbuf = NULL ;
-        UniChar* ubuf = NULL ;
-        size_t res = 0 ;
-
-        if (buf == NULL)
-        {
-            // Apple specs say at least 32
-            n = wxMax( 32, byteInLen ) ;
-            tbuf = (wchar_t*) malloc( n * SIZEOF_WCHAR_T ) ;
-        }
-
-        ByteCount byteBufferLen = n * sizeof( UniChar ) ;
-
-#if SIZEOF_WCHAR_T == 4
-        ubuf = (UniChar*) malloc( byteBufferLen + 2 ) ;
-#else
-        ubuf = (UniChar*) (buf ? buf : tbuf) ;
-#endif
-
-        status = TECConvertText(
-            m_MB2WC_converter, (ConstTextPtr) psz, byteInLen, &byteInLen,
-            (TextPtr) ubuf, byteBufferLen, &byteOutLen);
-
-#if SIZEOF_WCHAR_T == 4
-        // we have to terminate here, because n might be larger for the trailing zero, and if UniChar
-        // is not properly terminated we get random characters at the end
-        ubuf[byteOutLen / sizeof( UniChar ) ] = 0 ;
-        wxMBConvUTF16 converter ;
-        res = converter.MB2WC( (buf ? buf : tbuf), (const char*)ubuf, n ) ;
-        free( ubuf ) ;
-#else
-        res = byteOutLen / sizeof( UniChar ) ;
-#endif
-
-        if ( buf == NULL )
-             free(tbuf) ;
-
-        if ( buf  && res < n)
-            buf[res] = 0;
-
-        return res ;
-    }
-
-    size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const
-    {
-        CreateIfNeeded() ;
-        OSStatus status = noErr ;
-        ByteCount byteOutLen ;
-        ByteCount byteInLen = wxWcslen(psz) * SIZEOF_WCHAR_T ;
-
-        char *tbuf = NULL ;
-
-        if (buf == NULL)
-        {
-            // Apple specs say at least 32
-            n = wxMax( 32, ((byteInLen / SIZEOF_WCHAR_T) * 8) + SIZEOF_WCHAR_T );
-            tbuf = (char*) malloc( n ) ;
-        }
-
-        ByteCount byteBufferLen = n ;
-        UniChar* ubuf = NULL ;
-
-#if SIZEOF_WCHAR_T == 4
-        wxMBConvUTF16 converter ;
-        size_t unicharlen = converter.WC2MB( NULL, psz, 0 ) ;
-        byteInLen = unicharlen ;
-        ubuf = (UniChar*) malloc( byteInLen + 2 ) ;
-        converter.WC2MB( (char*) ubuf, psz, unicharlen + 2 ) ;
-#else
-        ubuf = (UniChar*) psz ;
-#endif
-
-        status = TECConvertText(
-            m_WC2MB_converter, (ConstTextPtr) ubuf, byteInLen, &byteInLen,
-            (TextPtr) (buf ? buf : tbuf), byteBufferLen, &byteOutLen);
-
-#if SIZEOF_WCHAR_T == 4
-        free( ubuf ) ;
-#endif
-
-        if ( buf == NULL )
-            free(tbuf) ;
-
-        size_t res = byteOutLen ;
-        if ( buf  && res < n)
-        {
-            buf[res] = 0;
-
-            //we need to double-trip to verify it didn't insert any ? in place
-            //of bogus characters
-            wxWCharBuffer wcBuf(n);
-            size_t pszlen = wxWcslen(psz);
-            if ( MB2WC(wcBuf.data(), buf, n) == wxCONV_FAILED ||
-                        wxWcslen(wcBuf) != pszlen ||
-                        memcmp(wcBuf, psz, pszlen * sizeof(wchar_t)) != 0 )
-            {
-                // we didn't obtain the same thing we started from, hence
-                // the conversion was lossy and we consider that it failed
-                return wxCONV_FAILED;
-            }
-        }
-
-        return res ;
-    }
-
-    virtual wxMBConv *Clone() const { return new wxMBConv_mac(*this); }
-
-    bool IsOk() const
-    {
-        CreateIfNeeded() ;
-        return m_MB2WC_converter != NULL && m_WC2MB_converter != NULL;
-    }
-
-protected :
-    mutable TECObjectRef m_MB2WC_converter;
-    mutable TECObjectRef m_WC2MB_converter;
-
-    TextEncodingBase m_char_encoding;
-    TextEncodingBase m_unicode_encoding;
-};
-
-// MB is decomposed (D) normalized UTF8
-
-class wxMBConv_macUTF8D : public wxMBConv_mac
-{
-public :
-    wxMBConv_macUTF8D()
-    {
-        Init( kTextEncodingUnicodeDefault , kUnicodeNoSubset , kUnicodeUTF8Format ) ;
-        m_uni = NULL;
-        m_uniBack = NULL ;
-    }
-
-    virtual ~wxMBConv_macUTF8D()
-    {
-        if (m_uni!=NULL)
-            DisposeUnicodeToTextInfo(&m_uni);
-        if (m_uniBack!=NULL)
-            DisposeUnicodeToTextInfo(&m_uniBack);
-    }
-
-    size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const
-    {
-        CreateIfNeeded() ;
-        OSStatus status = noErr ;
-        ByteCount byteOutLen ;
-        ByteCount byteInLen = wxWcslen(psz) * SIZEOF_WCHAR_T ;
-
-        char *tbuf = NULL ;
-
-        if (buf == NULL)
-        {
-            // Apple specs say at least 32
-            n = wxMax( 32, ((byteInLen / SIZEOF_WCHAR_T) * 8) + SIZEOF_WCHAR_T );
-            tbuf = (char*) malloc( n ) ;
-        }
-
-        ByteCount byteBufferLen = n ;
-        UniChar* ubuf = NULL ;
-
-#if SIZEOF_WCHAR_T == 4
-        wxMBConvUTF16 converter ;
-        size_t unicharlen = converter.WC2MB( NULL, psz, 0 ) ;
-        byteInLen = unicharlen ;
-        ubuf = (UniChar*) malloc( byteInLen + 2 ) ;
-        converter.WC2MB( (char*) ubuf, psz, unicharlen + 2 ) ;
-#else
-        ubuf = (UniChar*) psz ;
-#endif
-
-        // ubuf is a non-decomposed UniChar buffer
-
-        ByteCount dcubuflen = byteInLen * 2 + 2 ;
-        ByteCount dcubufread , dcubufwritten ;
-        UniChar *dcubuf = (UniChar*) malloc( dcubuflen ) ;
-
-        ConvertFromUnicodeToText( m_uni , byteInLen , ubuf ,
-            kUnicodeDefaultDirectionMask, 0, NULL, NULL, NULL, dcubuflen  , &dcubufread , &dcubufwritten , dcubuf ) ;
-
-        // we now convert that decomposed buffer into UTF8
-
-        status = TECConvertText(
-            m_WC2MB_converter, (ConstTextPtr) dcubuf, dcubufwritten, &dcubufread,
-            (TextPtr) (buf ? buf : tbuf), byteBufferLen, &byteOutLen);
-
-        free( dcubuf );
-
-#if SIZEOF_WCHAR_T == 4
-        free( ubuf ) ;
-#endif
-
-        if ( buf == NULL )
-            free(tbuf) ;
-
-        size_t res = byteOutLen ;
-        if ( buf  && res < n)
-        {
-            buf[res] = 0;
-            // don't test for round-trip fidelity yet, we cannot guarantee it yet
-        }
-
-        return res ;
-    }
-
-    size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const
-    {
-        CreateIfNeeded() ;
-        OSStatus status = noErr ;
-        ByteCount byteOutLen ;
-        ByteCount byteInLen = strlen(psz) + 1;
-        wchar_t *tbuf = NULL ;
-        UniChar* ubuf = NULL ;
-        size_t res = 0 ;
-
-        if (buf == NULL)
-        {
-            // Apple specs say at least 32
-            n = wxMax( 32, byteInLen ) ;
-            tbuf = (wchar_t*) malloc( n * SIZEOF_WCHAR_T ) ;
-        }
-
-        ByteCount byteBufferLen = n * sizeof( UniChar ) ;
-
-#if SIZEOF_WCHAR_T == 4
-        ubuf = (UniChar*) malloc( byteBufferLen + 2 ) ;
-#else
-        ubuf = (UniChar*) (buf ? buf : tbuf) ;
-#endif
-
-        ByteCount dcubuflen = byteBufferLen * 2 + 2 ;
-        ByteCount dcubufread , dcubufwritten ;
-        UniChar *dcubuf = (UniChar*) malloc( dcubuflen ) ;
-
-        status = TECConvertText(
-                                m_MB2WC_converter, (ConstTextPtr) psz, byteInLen, &byteInLen,
-                                (TextPtr) dcubuf, dcubuflen, &byteOutLen);
-        // we have to terminate here, because n might be larger for the trailing zero, and if UniChar
-        // is not properly terminated we get random characters at the end
-        dcubuf[byteOutLen / sizeof( UniChar ) ] = 0 ;
-
-        // now from the decomposed UniChar to properly composed uniChar
-        ConvertFromUnicodeToText( m_uniBack , byteOutLen , dcubuf ,
-                                  kUnicodeDefaultDirectionMask, 0, NULL, NULL, NULL, dcubuflen  , &dcubufread , &dcubufwritten , ubuf ) ;
-
-        free( dcubuf );
-        byteOutLen = dcubufwritten ;
-        ubuf[byteOutLen / sizeof( UniChar ) ] = 0 ;
-
-
-#if SIZEOF_WCHAR_T == 4
-        wxMBConvUTF16 converter ;
-        res = converter.MB2WC( (buf ? buf : tbuf), (const char*)ubuf, n ) ;
-        free( ubuf ) ;
-#else
-        res = byteOutLen / sizeof( UniChar ) ;
-#endif
-
-        if ( buf == NULL )
-            free(tbuf) ;
-
-        if ( buf  && res < n)
-            buf[res] = 0;
-
-        return res ;
-    }
-
-    virtual void CreateIfNeeded() const
-    {
-        wxMBConv_mac::CreateIfNeeded() ;
-        if ( m_uni == NULL )
-        {
-            m_map.unicodeEncoding = CreateTextEncoding(kTextEncodingUnicodeDefault,
-                kUnicodeNoSubset, kTextEncodingDefaultFormat);
-            m_map.otherEncoding = CreateTextEncoding(kTextEncodingUnicodeDefault,
-                kUnicodeCanonicalDecompVariant, kTextEncodingDefaultFormat);
-            m_map.mappingVersion = kUnicodeUseLatestMapping;
-
-            OSStatus err = CreateUnicodeToTextInfo(&m_map, &m_uni);
-            wxASSERT_MSG( err == noErr , _(" Couldn't create the UnicodeConverter")) ;
-
-            m_map.unicodeEncoding = CreateTextEncoding(kTextEncodingUnicodeDefault,
-                                                       kUnicodeNoSubset, kTextEncodingDefaultFormat);
-            m_map.otherEncoding = CreateTextEncoding(kTextEncodingUnicodeDefault,
-                                                     kUnicodeCanonicalCompVariant, kTextEncodingDefaultFormat);
-            m_map.mappingVersion = kUnicodeUseLatestMapping;
-            err = CreateUnicodeToTextInfo(&m_map, &m_uniBack);
-            wxASSERT_MSG( err == noErr , _(" Couldn't create the UnicodeConverter")) ;
-        }
-    }
-protected :
-    mutable UnicodeToTextInfo   m_uni;
-    mutable UnicodeToTextInfo   m_uniBack;
-    mutable UnicodeMapping      m_map;
-};
-#endif // defined(__WXMAC__) && defined(TARGET_CARBON)
-
-// ============================================================================
 // wxEncodingConverter based conversion classes
 // ============================================================================
 
@@ -2685,7 +2301,10 @@ class wxMBConv_wxwin : public wxMBConv
 private:
     void Init()
     {
-        m_ok = m2w.Init(m_enc, wxFONTENCODING_UNICODE) &&
+        // Refuse to use broken wxEncodingConverter code for Mac-specific encodings.
+        // The wxMBConv_cf class does a better job.
+        m_ok = (m_enc < wxFONTENCODING_MACMIN || m_enc > wxFONTENCODING_MACMAX) &&
+               m2w.Init(m_enc, wxFONTENCODING_UNICODE) &&
                w2m.Init(wxFONTENCODING_UNICODE, m_enc);
     }
 
@@ -2979,26 +2598,6 @@ wxMBConv *wxCSConv::DoCreate() const
 #endif
     }
 #endif // wxHAVE_WIN32_MB2WC
-
-#if defined(__WXMAC__)
-    {
-        // leave UTF16 and UTF32 to the built-ins of wx
-        if ( m_name || ( m_encoding < wxFONTENCODING_UTF16BE ||
-            ( m_encoding >= wxFONTENCODING_MACMIN && m_encoding <= wxFONTENCODING_MACMAX ) ) )
-        {
-#if wxUSE_FONTMAP
-            wxMBConv_mac *conv = m_name ? new wxMBConv_mac(m_name)
-                                        : new wxMBConv_mac(m_encoding);
-#else
-            wxMBConv_mac *conv = new wxMBConv_mac(m_encoding);
-#endif
-            if ( conv->IsOk() )
-                 return conv;
-
-            delete conv;
-        }
-    }
-#endif
 
 #ifdef __DARWIN__
     {
@@ -3300,8 +2899,6 @@ wxCharBuffer wxSafeConvertWX2MB(const wchar_t *ws)
 
 #ifdef __WINDOWS__
     WX_DEFINE_GLOBAL_CONV2(wxMBConv, wxMBConv_win32, wxConvLibc, wxEMPTY_PARAMETER_VALUE);
-#elif defined(__WXMAC__) && !defined(__MACH__)
-    WX_DEFINE_GLOBAL_CONV2(wxMBConv, wxMBConv_mac, wxConvLibc, wxEMPTY_PARAMETER_VALUE);
 #else
     WX_DEFINE_GLOBAL_CONV2(wxMBConv, wxMBConvLibc, wxConvLibc, wxEMPTY_PARAMETER_VALUE);
 #endif
@@ -3315,19 +2912,18 @@ WX_DEFINE_GLOBAL_CONV(wxCSConv, wxConvISO8859_1, (wxFONTENCODING_ISO8859_1));
 WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent = wxGet_wxConvLibcPtr();
 WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI = wxGet_wxConvLocalPtr();
 
-#if defined(__WXMAC__) && defined(TARGET_CARBON)
-static wxMBConv_macUTF8D wxConvMacUTF8DObj;
+#ifdef __DARWIN__
+// The xnu kernel always communicates file paths in decomposed UTF-8.
+// WARNING: Are we sure that CFString's conversion will cause decomposition?
+static wxMBConv_cf wxConvMacUTF8DObj(wxFONTENCODING_UTF8);
 #endif
+
 WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvFileName =
-#ifdef __WXOSX__
-#if defined(__WXMAC__) && defined(TARGET_CARBON)
+#ifdef __DARWIN__
                                     &wxConvMacUTF8DObj;
-#else
-                                    wxGet_wxConvUTF8Ptr();
-#endif
-#else // !__WXOSX__
+#else // !__DARWIN__
                                     wxGet_wxConvLibcPtr();
-#endif // __WXOSX__/!__WXOSX__
+#endif // __DARWIN__/!__DARWIN__
 
 #else // !wxUSE_WCHAR_T
 
