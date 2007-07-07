@@ -29,6 +29,33 @@
 // CoreFoundation conversion classes
 // ============================================================================
 
+/* Provide factory functions for unit tests.  Not in any header.  Do not
+ * assume ABI compatibility even within a given wxWidgets release.
+ */
+
+WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf( const char* name)
+{
+    wxMBConv_cf *result = new wxMBConv_cf(name);
+    if(!result->IsOk())
+    {
+        delete result;
+        return NULL;
+    }
+    else
+        return result;
+}
+
+WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
+{
+    wxMBConv_cf *result = new wxMBConv_cf(encoding);
+    if(!result->IsOk())
+    {
+        delete result;
+        return NULL;
+    }
+    else
+        return result;
+}
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
 // Provide a constant for the wchat_t encoding used by the host platform.
