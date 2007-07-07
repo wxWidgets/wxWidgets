@@ -66,6 +66,7 @@
             textfile/textfiletest.cpp
             thread/atomic.cpp
             uris/uris.cpp
+            vectors/vectors.cpp
         </sources>
         <wx-lib>net</wx-lib>
         <wx-lib>base</wx-lib>

@@ -71,7 +71,8 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_zlibstream.o \
 	$(OBJS)\test_textfiletest.o \
 	$(OBJS)\test_atomic.o \
-	$(OBJS)\test_uris.o
+	$(OBJS)\test_uris.o \
+	$(OBJS)\test_vectors.o
 TEST_GUI_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -441,6 +442,9 @@ $(OBJS)\test_atomic.o: ./thread/atomic.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_uris.o: ./uris/uris.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_vectors.o: ./vectors/vectors.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_sample_rc.o: ./../samples/sample.rc

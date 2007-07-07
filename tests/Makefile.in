@@ -91,7 +91,8 @@ TEST_OBJECTS =  \
 	test_zlibstream.o \
 	test_textfiletest.o \
 	test_atomic.o \
-	test_uris.o
+	test_uris.o \
+	test_vectors.o
 TEST_ODEP =  $(___pch_testprec_test_testprec_h_gch___depname)
 TEST_GUI_CXXFLAGS = $(__test_gui_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -436,6 +437,9 @@ test_atomic.o: $(srcdir)/thread/atomic.cpp $(TEST_ODEP)
 
 test_uris.o: $(srcdir)/uris/uris.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/uris/uris.cpp
+
+test_vectors.o: $(srcdir)/vectors/vectors.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/vectors/vectors.cpp
 
 test_gui_sample_rc.o: $(srcdir)/../samples/sample.rc $(TEST_GUI_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5)  $(__EXCEPTIONS_DEFINE_p_5) $(__RTTI_DEFINE_p_5) $(__THREAD_DEFINE_p_5)   --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include

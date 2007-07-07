@@ -597,6 +597,10 @@ SOURCE=.\strings\vararg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\vectors\vectors.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\strings\vsnprintf.cpp
 # End Source File
 # Begin Source File
