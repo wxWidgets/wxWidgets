@@ -270,9 +270,13 @@ inline CFStringEncoding wxCFStringEncFromFontEnc(wxFontEncoding encoding)
         case wxFONTENCODING_MACGAELIC :
             enc = kCFStringEncodingMacGaelic ;
             break ;
-//      case wxFONTENCODING_MACKEYBOARD :
-//          enc = kCFStringEncodingMacKeyboardGlyphs ;
-//          break ;
+        /* CFString is known to support this back to the original CarbonLib */
+        /* http://developer.apple.com/samplecode/CarbonMDEF/listing2.html */
+        case wxFONTENCODING_MACKEYBOARD :
+            /* We don't wish to pollute the namespace too much, even though we're a private header. */
+            /* The constant is well-defined as 41 and is not expected to change. */
+            enc = 41 /*kTextEncodingMacKeyboardGlyphs*/ ;
+            break ;
 
         default :
             // because gcc is picky
