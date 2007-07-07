@@ -36,6 +36,8 @@
 #include "wx/cocoa/dcscreen.h"
 #elif defined(__WXPM__)
 #include "wx/os2/dcscreen.h"
+#elif defined(__WXWEB__)
+#include "wx/web/dcscreen.h"
 #endif
 
 #endif

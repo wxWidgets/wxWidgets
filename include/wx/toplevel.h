@@ -342,6 +342,9 @@ protected:
 #elif defined(__WXMOTIF__)
     #include "wx/motif/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowMotif
+#elif defined(__WXWEB__)
+    #include "wx/web/toplevel.h"
+    #define wxTopLevelWindowNative wxTopLevelWindowWeb
 #endif
 
 #ifdef __WXUNIVERSAL__

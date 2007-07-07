@@ -245,6 +245,8 @@ private:
     #include "wx/cocoa/font.h"
 #elif defined(__WXPM__)
     #include "wx/os2/font.h"
+#elif defined(__WXWEB__)
+    #include "wx/web/font.h"
 #endif
 
 #endif

@@ -34,6 +34,8 @@
 #include "wx/cocoa/pen.h"
 #elif defined(__WXPM__)
 #include "wx/os2/pen.h"
+#elif defined(__WXWEB__)
+#include "wx/web/pen.h"
 #endif
 
 #endif

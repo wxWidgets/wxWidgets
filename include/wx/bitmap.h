@@ -72,7 +72,8 @@ protected:
     defined(__WXGTK__) || \
     defined(__WXCOCOA__) || \
     defined(__WXMOTIF__) || \
-    defined(__WXX11__)
+    defined(__WXX11__) || \
+    defined(__WXWEB__)
     #define wxUSE_BITMAP_BASE 1
 #else
     #define wxUSE_BITMAP_BASE 0
@@ -225,6 +226,8 @@ protected:
     #include "wx/cocoa/bitmap.h"
 #elif defined(__WXPM__)
     #include "wx/os2/bitmap.h"
+#elif defined(__WXWEB__)
+    #include "wx/web/bitmap.h"
 #endif
 
 // we must include generic mask.h after wxBitmap definition

@@ -70,6 +70,8 @@ protected:
 #include "wx/cocoa/dcmemory.h"
 #elif defined(__WXPM__)
 #include "wx/os2/dcmemory.h"
+#elif defined(__WXWEB__)
+#include "wx/web/dcmemory.h"
 #endif
 
 #endif

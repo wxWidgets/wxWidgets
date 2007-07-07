@@ -566,6 +566,8 @@ protected:
     #include "wx/cocoa/app.h"
 #elif defined(__WXPM__)
     #include "wx/os2/app.h"
+#elif defined(__WXWEB__)
+    #include "wx/web/app.h"
 #endif
 
 #else // !GUI

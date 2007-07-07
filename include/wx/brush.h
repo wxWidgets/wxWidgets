@@ -48,6 +48,8 @@ public:
     #include "wx/cocoa/brush.h"
 #elif defined(__WXPM__)
     #include "wx/os2/brush.h"
+#elif defined(__WXWEB__)
+    #include "wx/web/brush.h"
 #endif
 
 #endif

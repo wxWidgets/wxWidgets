@@ -1790,6 +1790,8 @@ private:
     #include "wx/cocoa/dc.h"
 #elif defined(__WXPM__)
     #include "wx/os2/dc.h"
+#elif defined(__WXWEB__)
+    #include "wx/web/dc.h"
 #endif
 
 #if wxUSE_GRAPHICS_CONTEXT

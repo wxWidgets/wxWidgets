@@ -94,7 +94,7 @@ NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 dnl the list of all available toolkits
 dnl
 dnl update NUM_TOOLKITS calculation below when adding a new toolkit here!
-ALL_TOOLKITS="COCOA GTK MAC MGL MICROWIN MOTIF MSW PM X11 DFB"
+ALL_TOOLKITS="COCOA GTK MAC MGL MICROWIN MOTIF MSW PM X11 DFB WEB"
 
 dnl NB: these wxUSE_XXX constants have value of 0 or 1 unlike all the other ones
 dnl     which are either yes or no
@@ -108,6 +108,7 @@ DEFAULT_wxUSE_MSW=0
 DEFAULT_wxUSE_PM=0
 DEFAULT_wxUSE_X11=0
 DEFAULT_wxUSE_DFB=0
+DEFAULT_wxUSE_WEB=0
 
 dnl these are the values which are really default for the given platform -
 dnl they're not cached and are only used if no --with-toolkit was given *and*
@@ -122,6 +123,7 @@ DEFAULT_DEFAULT_wxUSE_MSW=0
 DEFAULT_DEFAULT_wxUSE_PM=0
 DEFAULT_DEFAULT_wxUSE_X11=0
 DEFAULT_DEFAULT_wxUSE_DFB=0
+DEFAULT_DEFAULT_wxUSE_WEB=0
 
 PROGRAM_EXT=
 SO_SUFFIX=so
@@ -883,6 +885,7 @@ AC_ARG_WITH(mgl,           [  --with-mgl              use SciTech MGL], [wxUSE_M
 AC_ARG_WITH(directfb,      [  --with-directfb         use DirectFB], [wxUSE_DFB="$withval" wxUSE_UNIVERSAL="yes" CACHE_DFB=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(microwin,      [  --with-microwin         use MicroWindows], [wxUSE_MICROWIN="$withval" CACHE_MICROWIN=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(x11,           [  --with-x11              use X11], [wxUSE_X11="$withval" wxUSE_UNIVERSAL="yes" CACHE_X11=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(web,           [  --with-web              use Web platform], [wxUSE_WEB="$withval" wxUSE_UNIVERSAL="yes" CACHE_WEB=1 TOOLKIT_GIVEN=1])
 WX_ARG_ENABLE(nanox,       [  --enable-nanox          use NanoX], wxUSE_NANOX)
 
 AC_ARG_ENABLE(gtk2,        [  --disable-gtk2          use GTK+ 1.2 instead of 2.0], [wxUSE_GTK2="$enableval"])
@@ -1388,7 +1391,8 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl this? what about using ALL_TOOLKITS? TODO)
     NUM_TOOLKITS=`expr ${wxUSE_COCOA:-0} + ${wxUSE_GTK:-0} + ${wxUSE_MAC:-0} \
                   + ${wxUSE_MGL:-0} + ${wxUSE_DFB:-0} + ${wxUSE_MICROWIN:-0} \
-                  + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} + ${wxUSE_X11:-0}`
+                  + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} + ${wxUSE_X11:-0} \
+                  + ${wxUSE_WEB:-0}`
 
     dnl Allow wxUSE_PM only for OS/2 with EMX.
     case "${host}" in
@@ -3781,6 +3785,11 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
     if test "$wxUSE_COCOA" = 1; then
         TOOLKIT=COCOA
         GUIDIST=COCOA_DIST
+    fi
+
+    if test "$wxUSE_WEB" = 1; then
+        TOOLKIT=WEB
+        GUIDIST=WEB_DIST
     fi
 
     if test "$wxUSE_PM" = 1; then
@@ -6757,7 +6766,7 @@ if test "$wxUSE_IPC" = "yes"; then
 fi
 
 if test "$wxUSE_DATAOBJ" = "yes"; then
-    if test "$wxUSE_MGL" = 1 -o "$wxUSE_DFB" = 1; then
+    if test "$wxUSE_MGL" = 1 -o "$wxUSE_DFB" = 1 -o "$wxUSE_WEB" = 1; then
         AC_MSG_WARN([wxDataObject not yet supported under $TOOLKIT... disabled])
         wxUSE_DATAOBJ=no
     else
@@ -6770,7 +6779,7 @@ else
 fi
 
 if test "$wxUSE_CLIPBOARD" = "yes"; then
-    if test "$wxUSE_MGL" = 1 -o "$wxUSE_DFB" = 1; then
+    if test "$wxUSE_MGL" = 1 -o "$wxUSE_DFB" = 1 -o "$wxUSE_WEB" = 1; then
         AC_MSG_WARN([Clipboard not yet supported under $TOOLKIT... disabled])
         wxUSE_CLIPBOARD=no
     fi
@@ -6789,7 +6798,7 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
     fi
 
     if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_MGL" = 1 -o \
-            "$wxUSE_DFB" = 1; then
+            "$wxUSE_DFB" = 1 -o "$wxUSE_WEB" = 1; then
         AC_MSG_WARN([Drag and drop not yet supported under $TOOLKIT... disabled])
         wxUSE_DRAG_AND_DROP=no
     fi
@@ -7306,8 +7315,8 @@ if test "$wxUSE_VALIDATORS" = "yes"; then
 fi
 
 if test "$wxUSE_PALETTE" = "yes" ; then
-    if test "$wxUSE_DFB" = 1; then
-        AC_MSG_WARN([wxPalette not yet supported under DFB... disabled])
+    if test "$wxUSE_DFB" = 1 -o "$wxUSE_WEB" = 1; then
+        AC_MSG_WARN([wxPalette not yet supported under $TOOLKIT... disabled])
         wxUSE_PALETTE=no
     else
         AC_DEFINE(wxUSE_PALETTE)

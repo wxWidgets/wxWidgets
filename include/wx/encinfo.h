@@ -41,6 +41,7 @@ struct WXDLLEXPORT wxNativeEncodingInfo
 #if defined(__WXMSW__) || \
     defined(__WXPM__)  || \
     defined(__WXMAC__) || \
+    defined(__WXWEB__) || \
     defined(__WXCOCOA__) // FIXME: __WXCOCOA__
 
     wxNativeEncodingInfo()

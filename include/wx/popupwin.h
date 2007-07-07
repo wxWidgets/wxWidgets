@@ -68,6 +68,8 @@ public:
     #include "wx/dfb/popupwin.h"
 #elif defined(__WXMGL__)
     #include "wx/mgl/popupwin.h"
+#elif defined(__WXWEB__)
+    #include "wx/web/popupwin.h"
 #else
     #error "wxPopupWindow is not supported under this platform."
 #endif

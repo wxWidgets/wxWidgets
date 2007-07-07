@@ -1,0 +1,4 @@
+could just inherit from the unix console app/event stuff
+    - instead of using their pipe, use the request fifo
+    - read events from the fifo and add them to the wxPendingEvents list
+    - let the existing console functions do all the stuff needed to call processing for those events

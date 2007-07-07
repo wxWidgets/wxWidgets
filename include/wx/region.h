@@ -236,6 +236,8 @@ protected:
     #include "wx/cocoa/region.h"
 #elif defined(__WXPM__)
     #include "wx/os2/region.h"
+#elif defined(__WXWEB__)
+    #include "wx/web/region.h"
 #endif
 
 // ----------------------------------------------------------------------------

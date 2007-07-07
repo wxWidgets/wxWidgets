@@ -1598,6 +1598,13 @@ inline void wxWindowBase::SetInitialBestSize(const wxSize& size)
         #define wxWindowOS2 wxWindow
     #endif // wxUniv/!wxUniv
     #include "wx/os2/window.h"
+#elif defined(__WXWEB__)
+    #ifdef __WXUNIVERSAL__
+        #define wxWindowNative wxWindowWeb
+    #else // !wxUniv
+        #define wxWindowWeb wxWindow
+    #endif // wxUniv
+    #include "wx/web/window.h"
 #endif
 
 // for wxUniversal, we now derive the real wxWindow from wxWindow<platform>,

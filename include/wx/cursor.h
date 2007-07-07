@@ -36,6 +36,8 @@
     #include "wx/cocoa/cursor.h"
 #elif defined(__WXPM__)
     #include "wx/os2/cursor.h"
+#elif defined(__WXWEB__)
+    #include "wx/web/cursor.h"
 #endif
 
 #include "wx/utils.h"

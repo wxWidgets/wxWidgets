@@ -145,6 +145,8 @@ protected:
     #include "wx/cocoa/colour.h"
 #elif defined(__WXPM__)
     #include "wx/os2/colour.h"
+#elif defined(__WXWEB__)
+    #include "wx/web/colour.h"
 #endif
 
 #define wxColor wxColour

@@ -36,6 +36,8 @@
 #include "wx/cocoa/dcclient.h"
 #elif defined(__WXPM__)
 #include "wx/os2/dcclient.h"
+#elif defined(__WXWEB__)
+#include "wx/web/dcclient.h"
 #endif
 
 #endif
