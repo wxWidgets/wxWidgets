@@ -346,9 +346,10 @@ public:
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator );
 
-    virtual bool AssociateModel( wxDataViewListModel *model );
+    virtual bool AssociateModel( wxDataViewModel *model );
     virtual bool AppendColumn( wxDataViewColumn *col );
 
+/********************selection code*********************
     virtual void SetSelection( int row ); // -1 for unselect
     virtual void SetSelectionRange( unsigned int from, unsigned int to );
     virtual void SetSelections( const wxArrayInt& aSelections);
@@ -357,6 +358,7 @@ public:
     virtual bool IsSelected( unsigned int row ) const;
     virtual int GetSelection() const;
     virtual int GetSelections(wxArrayInt& aSelections) const;
+*****************************************************/
 
 public:     // utility functions not part of the API
 
@@ -372,7 +374,7 @@ public:     // utility functions not part of the API
     wxWindow *GetMainWindow() { return (wxWindow*) m_clientArea; }
 
 private:
-    wxDataViewListModelNotifier *m_notifier;
+    wxDataViewModelNotifier *m_notifier;
     wxDataViewMainWindow        *m_clientArea;
     wxDataViewHeaderWindow      *m_headerArea;
 

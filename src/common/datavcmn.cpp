@@ -26,193 +26,24 @@
 const wxChar wxDataViewCtrlNameStr[] = wxT("dataviewCtrl");
 
 
-// --------------------------------------------------------
-// wxDataViewPath
-// --------------------------------------------------------
-
-wxDataViewPath::wxDataViewPath( unsigned int path[], unsigned int depth )
-{
-    int i = 0;
-    //I am wondering whether limitation check should be performed here.
-    for( ; i < depth; i ++ )
-    {
-        m_path.Add( path[i] );
-    }
-}
-
-wxDataViewPath::wxDataViewPath( wxString &path )
-{
-    //I will implement this method later
-}
-
-wxDataViewPath::wxDataViewPath( const wxDataViewPath &path )
-{
-    m_path = path.m_path;
-}
-
-void wxDataViewPath::NextSibling()
-{
-    m_path.Last() ++;
-}
-
-void wxDataViewPath::PreviousSibling()
-{
-    m_path.Last()  --;
-}
-
-void wxDataViewPath::FirstChild()
-{
-    AddBranch(1);
-}
-
-void wxDataViewPath::Parent()
-{
-    m_path.RemoveAt( m_path.GetCount() -1 );
-}
-
-wxString wxDataViewPath::ToString() const
-{
-    //I will implement this later
-    return wxString();
-}
-
-int wxDataViewPath::GetDepth() const 
-{
-    return m_path.GetCount();
-}
-
-void wxDataViewPath::AddBranch( int branch )
-{
-    m_path.Add( branch );
-}
-
-wxDataViewPath & wxDataViewPath::operator=( const wxDataViewPath &path )
-{
-    m_path = path.m_path;
-    return *this;
-}
-
-bool operator== ( const wxDataViewPath &left, const wxDataViewPath & right )
-{
-    if( left.GetDepth() != right.GetDepth() )
-        return false;
-    int count = left.GetDepth();
-    int i = 0;
-    for( ; i < count; i ++ )
-    {
-        if( left.m_path.Item(i) != right.m_path.Item(i) )
-            return false;
-    }
-
-    return true;
-}
-
-
-// ---------------------------------------------------------
-// wxDataViewModel
-// ---------------------------------------------------------
-
-bool wxDataViewModel::ItemInserted( const wxDataViewPath &path )
-{
-    bool ret = true;
-    wxList::compatibility_iterator node = m_notifiers.GetFirst();
-    while (node)
-    {
-        wxDataViewModelNotifier* notifier = (wxDataViewModelNotifier*) node->GetData();
-        if (!notifier->ItemInserted( path ))
-            ret = false;
-        node = node->GetNext();
-    }
-
-    return ret;
-}
-
-bool wxDataViewModel::ItemDeleted( const wxDataViewPath &path )
-{
-    bool ret = true;
-    wxList::compatibility_iterator node = m_notifiers.GetFirst();
-    while (node)
-    {
-        wxDataViewModelNotifier* notifier = (wxDataViewModelNotifier*) node->GetData();
-        if (!notifier->ItemDeleted( path ))
-            ret = false;
-        node = node->GetNext();
-    }
-
-    return ret;
-
-}
-
-bool wxDataViewModel::ValueChanged( const wxDataViewPath &path )
-{
-    bool ret = true;
-    wxList::compatibility_iterator node = m_notifiers.GetFirst();
-    while (node)
-    {
-        wxDataViewModelNotifier* notifier = (wxDataViewModelNotifier*) node->GetData();
-        if (!notifier->ValueChanged( path ))
-            ret = false;
-        node = node->GetNext();
-    }
-
-    return ret;
-
-}
-
-void wxDataViewModel::AddNotifier( wxDataViewModelNotifier *notifier)
-{
-    m_notifiers.Append( notifier );
-    notifier->SetOwner( this );
-}
-
-void wxDataViewModel::RemoveNotifier( wxDataViewModelNotifier *notifier )
-{
-    m_notifiers.DeleteObject( notifier );
-}
-
-
-// ---------------------------------------------------------
-// wxDataViewTreeModel
-// ---------------------------------------------------------
-
-wxDataViewTreeModel::wxDataViewTreeModel()
-{
-
-}
-
-wxDataViewTreeModel::~wxDataViewTreeModel()
-{
-
-}
-
-bool wxDataViewTreeModel::IsTree() const
-{
-    return true;
-}
-
 // ---------------------------------------------------------
 // wxDataViewListModel
 // ---------------------------------------------------------
 
-wxDataViewListModel::wxDataViewListModel()
+wxDataViewModel::wxDataViewModel()
 {
-    m_viewingColumns.DeleteContents( true );
     m_notifiers.DeleteContents( true );
 }
 
-wxDataViewListModel::~wxDataViewListModel()
-{
-}
-
-bool wxDataViewListModel::RowAppended()
+bool wxDataViewModel::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
     bool ret = true;
 
     wxList::compatibility_iterator node = m_notifiers.GetFirst();
     while (node)
     {
-        wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
-        if (!notifier->RowAppended())
+        wxDataViewModelNotifier* notifier = (wxDataViewModelNotifier*) node->GetData();
+        if (!notifier->ItemAdded( parent, item ))
             ret = false;
         node = node->GetNext();
     }
@@ -220,15 +51,15 @@ bool wxDataViewListModel::RowAppended()
     return ret;
 }
 
-bool wxDataViewListModel::RowPrepended()
+bool wxDataViewModel::ItemDeleted( const wxDataViewItem &item )
 {
     bool ret = true;
 
     wxList::compatibility_iterator node = m_notifiers.GetFirst();
     while (node)
     {
-        wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
-        if (!notifier->RowPrepended())
+        wxDataViewModelNotifier* notifier = (wxDataViewModelNotifier*) node->GetData();
+        if (!notifier->ItemDeleted( item ))
             ret = false;
         node = node->GetNext();
     }
@@ -236,15 +67,15 @@ bool wxDataViewListModel::RowPrepended()
     return ret;
 }
 
-bool wxDataViewListModel::RowInserted( unsigned int before )
+bool wxDataViewModel::ItemChanged( const wxDataViewItem &item )
 {
     bool ret = true;
 
     wxList::compatibility_iterator node = m_notifiers.GetFirst();
     while (node)
     {
-        wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
-        if (!notifier->RowInserted(before))
+        wxDataViewModelNotifier* notifier = (wxDataViewModelNotifier*) node->GetData();
+        if (!notifier->ItemChanged( item ))
             ret = false;
         node = node->GetNext();
     }
@@ -252,15 +83,15 @@ bool wxDataViewListModel::RowInserted( unsigned int before )
     return ret;
 }
 
-bool wxDataViewListModel::RowDeleted( unsigned int row )
+bool wxDataViewModel::ValueChanged( const wxDataViewItem &item, unsigned int col )
 {
     bool ret = true;
 
     wxList::compatibility_iterator node = m_notifiers.GetFirst();
     while (node)
     {
-        wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
-        if (!notifier->RowDeleted( row ))
+        wxDataViewModelNotifier* notifier = (wxDataViewModelNotifier*) node->GetData();
+        if (!notifier->ValueChanged( item, col ))
             ret = false;
         node = node->GetNext();
     }
@@ -268,62 +99,14 @@ bool wxDataViewListModel::RowDeleted( unsigned int row )
     return ret;
 }
 
-bool wxDataViewListModel::RowChanged( unsigned int row )
+bool wxDataViewModel::Cleared()
 {
     bool ret = true;
 
     wxList::compatibility_iterator node = m_notifiers.GetFirst();
     while (node)
     {
-        wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
-        if (!notifier->RowChanged( row ))
-            ret = false;
-        node = node->GetNext();
-    }
-
-    return ret;
-}
-
-bool wxDataViewListModel::ValueChanged( unsigned int col, unsigned int row )
-{
-    bool ret = true;
-
-    wxList::compatibility_iterator node = m_notifiers.GetFirst();
-    while (node)
-    {
-        wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
-        if (!notifier->ValueChanged( col, row ))
-            ret = false;
-        node = node->GetNext();
-    }
-
-    return ret;
-}
-
-bool wxDataViewListModel::RowsReordered( unsigned int *new_order )
-{
-    bool ret = true;
-
-    wxList::compatibility_iterator node = m_notifiers.GetFirst();
-    while (node)
-    {
-        wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
-        if (!notifier->RowsReordered( new_order ))
-            ret = false;
-        node = node->GetNext();
-    }
-
-    return ret;
-}
-
-bool wxDataViewListModel::Cleared()
-{
-    bool ret = true;
-
-    wxList::compatibility_iterator node = m_notifiers.GetFirst();
-    while (node)
-    {
-        wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
+        wxDataViewModelNotifier* notifier = (wxDataViewModelNotifier*) node->GetData();
         if (!notifier->Cleared())
             ret = false;
         node = node->GetNext();
@@ -332,532 +115,15 @@ bool wxDataViewListModel::Cleared()
     return ret;
 }
 
-void wxDataViewListModel::AddViewingColumn( wxDataViewColumn *view_column, unsigned int model_column )
-{
-    m_viewingColumns.Append( new wxDataViewViewingColumn( view_column, model_column ) );
-}
-
-void wxDataViewListModel::RemoveViewingColumn( wxDataViewColumn *column )
-{
-    wxList::compatibility_iterator node = m_viewingColumns.GetFirst();
-    while (node)
-    {
-        wxDataViewViewingColumn* tmp = (wxDataViewViewingColumn*) node->GetData();
-
-        if (tmp->m_viewColumn == column)
-        {
-            m_viewingColumns.DeleteObject( tmp );
-            return;
-        }
-
-        node = node->GetNext();
-    }
-}
-
-void wxDataViewListModel::AddNotifier( wxDataViewListModelNotifier *notifier )
+void wxDataViewModel::AddNotifier( wxDataViewModelNotifier *notifier )
 {
     m_notifiers.Append( notifier );
     notifier->SetOwner( this );
 }
 
-void wxDataViewListModel::RemoveNotifier( wxDataViewListModelNotifier *notifier )
+void wxDataViewModel::RemoveNotifier( wxDataViewModelNotifier *notifier )
 {
     m_notifiers.DeleteObject( notifier );
-}
-
-// ---------------------------------------------------------
-// wxDataViewSortedListModelNotifier
-// ---------------------------------------------------------
-
-class wxDataViewSortedListModelNotifier: public wxDataViewListModelNotifier
-{
-public:
-    wxDataViewSortedListModelNotifier( wxDataViewSortedListModel *model )
-        { m_model = model; }
-        
-    ~wxDataViewSortedListModelNotifier()
-        { m_model->DetachChild(); }
-
-    virtual bool RowAppended()
-        { return m_model->ChildRowAppended(); }
-
-    virtual bool RowPrepended()
-        { return m_model->ChildRowPrepended(); }
-
-    virtual bool RowInserted( unsigned int before )
-        { return m_model->ChildRowInserted( before ); }
-
-    virtual bool RowDeleted( unsigned int row )
-        { return m_model->ChildRowDeleted( row ); }
-
-    virtual bool RowChanged( unsigned int row )
-        { return m_model->ChildRowChanged( row ); }
-
-    virtual bool ValueChanged( unsigned int col, unsigned int row )
-        { return m_model->ChildValueChanged( col, row); }
-
-    virtual bool RowsReordered( unsigned int *new_order )
-        { return m_model->ChildRowsReordered( new_order ); }
-
-    virtual bool Cleared()
-        { return m_model->ChildCleared(); }
-
-    wxDataViewSortedListModel *m_model;
-};
-
-// ---------------------------------------------------------
-// wxDataViewSortedListModel compare function
-// ---------------------------------------------------------
-
-int wxCALLBACK wxDataViewListModelSortedDefaultCompare
-      (unsigned int row1, unsigned int row2, unsigned int col, wxDataViewListModel* model )
-{
-    wxVariant value1,value2;
-    model->GetValue( value1, col, row1 );
-    model->GetValue( value2, col, row2 );
-    if (value1.GetType() == wxT("string"))
-    {
-        wxString str1 = value1.GetString();
-        wxString str2 = value2.GetString();
-        return str1.Cmp( str2 );
-    }
-    if (value1.GetType() == wxT("long"))
-    {
-        long l1 = value1.GetLong();
-        long l2 = value2.GetLong();
-        return l1-l2;
-    }
-    if (value1.GetType() == wxT("double"))
-    {
-        double d1 = value1.GetDouble();
-        double d2 = value2.GetDouble();
-        if (d1 == d2) return 0;
-        if (d1 < d2) return 1;
-        return -1;
-    }
-    if (value1.GetType() == wxT("datetime"))
-    {
-        wxDateTime dt1 = value1.GetDateTime();
-        wxDateTime dt2 = value2.GetDateTime();
-        if (dt1.IsEqualTo(dt2)) return 0;
-        if (dt1.IsEarlierThan(dt2)) return 1;
-        return -1;
-    }
-
-    return 0;
-}
-
-int wxCALLBACK wxDataViewListModelSortedDefaultCompareDescending
-      (unsigned int row1, unsigned int row2, unsigned int col, wxDataViewListModel* model )
-{
-    return wxDataViewListModelSortedDefaultCompare( row2, row1, col, model );
-}
-
-static wxDataViewListModelCompare   s_CmpFunc;
-static wxDataViewListModel         *s_CmpModel;
-static unsigned int                 s_CmpCol;
-
-int LINKAGEMODE wxDataViewIntermediateCmp( unsigned int row1, unsigned int row2 )
-{
-    return s_CmpFunc( row1, row2, s_CmpCol, s_CmpModel );
-}
-
-// ---------------------------------------------------------
-// wxDataViewSortedListModel
-// ---------------------------------------------------------
-
-wxDataViewSortedListModel::wxDataViewSortedListModel( wxDataViewListModel *child ) :
-  m_array( wxDataViewIntermediateCmp )
-{
-    m_child = child;
-    
-    m_ascending = true;
-
-    m_notifierOnChild = new wxDataViewSortedListModelNotifier( this );
-    m_child->AddNotifier( m_notifierOnChild );
-
-    Resort();
-}
-
-wxDataViewSortedListModel::~wxDataViewSortedListModel()
-{
-    if (m_child)
-        m_child->RemoveNotifier( m_notifierOnChild );
-}
-
-void wxDataViewSortedListModel::DetachChild()
-{
-    m_child = NULL;
-}
-
-// FIXME
-void wxDataViewSortedListModel::InitStatics()
-{
-    s_CmpCol = 0;
-    s_CmpModel = m_child;
-    if (m_ascending)
-        s_CmpFunc = wxDataViewListModelSortedDefaultCompare;
-    else
-        s_CmpFunc = wxDataViewListModelSortedDefaultCompareDescending;
-}
-
-void wxDataViewSortedListModel::Resort()
-{
-    InitStatics();
-    
-    m_array.Clear();
-    unsigned int n = m_child->GetRowCount();
-    unsigned int i;
-    for (i = 0; i < n; i++)
-        m_array.Add( i );
-       
-    // do we need the neworder?
-    wxDataViewListModel::RowsReordered( NULL );
-}
-
-#if 0
-static void Dump( wxDataViewListModel *model, unsigned int col )
-{
-    unsigned int n = model->GetRowCount();
-    unsigned int i;
-    for (i = 0; i < n; i++)
-    {
-        wxVariant variant;
-        model->GetValue( variant, col, i );
-        wxString tmp;
-        tmp = variant.GetString();
-        wxPrintf( wxT("%d: %s\n"), (int) i, tmp.c_str() );
-    }
-}
-#endif
-
-bool wxDataViewSortedListModel::ChildRowAppended()
-{
-    // no need to fix up array
-
-    unsigned int len = m_array.GetCount();
-
-    unsigned int pos = m_array.Add( len );
-
-    if (pos == 0)
-        return wxDataViewListModel::RowPrepended();
-
-    if (pos == len)
-        return wxDataViewListModel::RowAppended();
-
-    return wxDataViewListModel::RowInserted( pos );
-}
-
-bool wxDataViewSortedListModel::ChildRowPrepended()
-{
-    // fix up array
-    unsigned int i;
-    unsigned int len = m_array.GetCount();
-    for (i = 0; i < len; i++)
-    {
-        unsigned int value = m_array[i];
-        m_array[i] = value+1;
-    }
-
-    unsigned int pos = m_array.Add( 0 );
-
-    if (pos == 0)
-        return wxDataViewListModel::RowPrepended();
-
-    if (pos == len)
-        return wxDataViewListModel::RowAppended();
-
-    return wxDataViewListModel::RowInserted( pos );
-}
-
-bool wxDataViewSortedListModel::ChildRowInserted( unsigned int before )
-{
-    // fix up array
-    unsigned int i;
-    unsigned int len = m_array.GetCount();
-    for (i = 0; i < len; i++)
-    {
-        unsigned int value = m_array[i];
-        if (value >= before)
-           m_array[i] = value+1;
-    }
-
-    unsigned int pos = m_array.Add( before );
-
-    if (pos == 0)
-        return wxDataViewListModel::RowPrepended();
-
-    if (pos == len)
-        return wxDataViewListModel::RowAppended();
-
-    return wxDataViewListModel::RowInserted( pos );
-}
-
-bool wxDataViewSortedListModel::ChildRowDeleted( unsigned int row )
-{
-    unsigned int i;
-    unsigned int len = m_array.GetCount();
-    int pos = -1;
-    for (i = 0; i < len; i++)
-    {
-        unsigned int value = m_array[i];
-        if (value == row)
-        {
-            // delete later
-            pos = (int) i;
-        }
-        else
-        {
-            // Fix up array
-            if (value > row)
-                m_array[i] = value-1;
-        }
-    }
-
-    if (pos == -1)
-        return false; // we should probably assert
-
-    // remove
-    m_array.RemoveAt( (unsigned int) pos );
-
-    return wxDataViewListModel::RowDeleted( (unsigned int) pos);
-}
-
-bool wxDataViewSortedListModel::ChildRowChanged( unsigned int row )
-{
-    unsigned int i;
-    unsigned int len = m_array.GetCount();
-
-    // Remove and readd sorted. Find out at which
-    // position it was and where it ended.
-    unsigned int start_pos = 0,end_pos = 0;
-    for (i = 0; i < len; i++)
-        if (m_array[i] == row)
-        {
-            start_pos = i;
-            break;
-        }
-    m_array.RemoveAt( start_pos );
-    m_array.Add( row );
-
-    for (i = 0; i < len; i++)
-        if (m_array[i] == row)
-        {
-            end_pos = i;
-            break;
-        }
-
-    if (end_pos == start_pos)
-        return wxDataViewListModel::RowChanged( start_pos );
-
-    // Create an array where order[old] -> new_pos, so that
-    // if nothing changed order[0] -> 0 etc.
-    unsigned int *order = new unsigned int[ len ];
-    // Fill up initial values.
-    for (i = 0; i < len; i++)
-        order[i] = i;
-
-    if (start_pos < end_pos)
-    {
-        for (i = start_pos; i < end_pos; i++)
-            order[i] = order[i+1];
-        order[end_pos] = start_pos;
-    }
-    else
-    {
-        for (i = end_pos; i > start_pos; i--)
-            order[i] = order[i-1];
-        order[start_pos] = end_pos;
-    }
-
-    wxDataViewListModel::RowsReordered( order );
-
-    delete [] order;
-
-    return true;
-}
-
-bool wxDataViewSortedListModel::ChildValueChanged( unsigned int col, unsigned int row )
-{
-    unsigned int i;
-    unsigned int len = m_array.GetCount();
-
-    // Remove and readd sorted. Find out at which
-    // position it was and where it ended.
-    unsigned int start_pos = 0,end_pos = 0;
-    for (i = 0; i < len; i++)
-        if (m_array[i] == row)
-        {
-            start_pos = i;
-            break;
-        }
-    m_array.RemoveAt( start_pos );
-    m_array.Add( row );
-
-    for (i = 0; i < len; i++)
-        if (m_array[i] == row)
-        {
-            end_pos = i;
-            break;
-        }
-
-    if (end_pos == start_pos)
-        return wxDataViewListModel::ValueChanged( col, start_pos );
-
-    // Create an array where order[old] -> new_pos, so that
-    // if nothing changed order[0] -> 0 etc.
-    unsigned int *order = new unsigned int[ len ];
-    // Fill up initial values.
-    for (i = 0; i < len; i++)
-        order[i] = i;
-
-    if (start_pos < end_pos)
-    {
-        for (i = start_pos; i < end_pos; i++)
-            order[i] = order[i+1];
-        order[end_pos] = start_pos;
-    }
-    else
-    {
-        for (i = end_pos; i > start_pos; i--)
-            order[i] = order[i-1];
-        order[start_pos] = end_pos;
-    }
-
-    wxDataViewListModel::RowsReordered( order );
-
-    delete [] order;
-
-    return true;
-}
-
-bool wxDataViewSortedListModel::ChildRowsReordered( unsigned int *WXUNUSED(new_order) )
-{
-    // Nothing needs to be done. If the sort criteria
-    // of this list don't change, the order of the
-    // items of the child list isn't relevant.
-    return true;
-}
-
-bool wxDataViewSortedListModel::ChildCleared()
-{
-    return wxDataViewListModel::Cleared();
-}
-
-unsigned int wxDataViewSortedListModel::GetRowCount() const
-{
-    return m_array.GetCount();
-}
-
-unsigned int wxDataViewSortedListModel::GetColumnCount() const
-{
-    return m_child->GetColumnCount();
-}
-
-wxString wxDataViewSortedListModel::GetColumnType( unsigned int col ) const
-{
-    return m_child->GetColumnType( col );
-}
-
-void wxDataViewSortedListModel::GetValue( wxVariant &variant, unsigned int col, unsigned int row ) const
-{
-    unsigned int child_row = m_array[row];
-    m_child->GetValue( variant, col, child_row );
-}
-
-bool wxDataViewSortedListModel::SetValue( const wxVariant &variant, unsigned int col, unsigned int row )
-{
-    unsigned int child_row = m_array[row];
-    bool ret = m_child->SetValue( variant, col, child_row );
-
-    // Do nothing here as the change in the
-    // child model will be reported back.
-
-    return ret;
-}
-
-bool wxDataViewSortedListModel::RowAppended()
-{
-    // you can only append
-    bool ret = m_child->RowAppended();
-
-    // Do nothing here as the change in the
-    // child model will be reported back.
-
-    return ret;
-}
-
-bool wxDataViewSortedListModel::RowPrepended()
-{
-    // you can only append
-    bool ret = m_child->RowAppended();
-
-    // Do nothing here as the change in the
-    // child model will be reported back.
-
-    return ret;
-}
-
-bool wxDataViewSortedListModel::RowInserted( unsigned int WXUNUSED(before) )
-{
-    // you can only append
-    bool ret = m_child->RowAppended();
-
-    // Do nothing here as the change in the
-    // child model will be reported back.
-
-    return ret;
-}
-
-bool wxDataViewSortedListModel::RowDeleted( unsigned int row )
-{
-    unsigned int child_row = m_array[row];
-
-    bool ret = m_child->RowDeleted( child_row );
-
-    // Do nothing here as the change in the
-    // child model will be reported back.
-
-    return ret;
-}
-
-bool wxDataViewSortedListModel::RowChanged( unsigned int row )
-{
-    unsigned int child_row = m_array[row];
-    bool ret = m_child->RowChanged( child_row );
-
-    // Do nothing here as the change in the
-    // child model will be reported back.
-
-    return ret;
-}
-
-bool wxDataViewSortedListModel::ValueChanged( unsigned int col, unsigned int row )
-{
-    unsigned int child_row = m_array[row];
-    bool ret = m_child->ValueChanged( col, child_row );
-
-    // Do nothing here as the change in the
-    // child model will be reported back.
-
-    return ret;
-}
-
-bool wxDataViewSortedListModel::RowsReordered( unsigned int *WXUNUSED(new_order) )
-{
-    // We sort them ourselves.
-
-    return false;
-}
-
-bool wxDataViewSortedListModel::Cleared()
-{
-    bool ret = m_child->Cleared();
-
-    // Do nothing here as the change in the
-    // child model will be reported back.
-
-    return ret;
 }
 
 // ---------------------------------------------------------
@@ -872,7 +138,6 @@ wxDataViewRendererBase::wxDataViewRendererBase( const wxString &varianttype,
 {
     m_variantType = varianttype;
     m_editorCtrl = NULL;
-    m_row = (unsigned int) -1;
 }
 
 const wxDataViewCtrl* wxDataViewRendererBase::GetView() const
@@ -880,13 +145,13 @@ const wxDataViewCtrl* wxDataViewRendererBase::GetView() const
     return wx_const_cast(wxDataViewRendererBase*, this)->GetOwner()->GetOwner();
 }
 
-bool wxDataViewRendererBase::StartEditing( unsigned int row, wxRect labelRect )
+bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect labelRect )
 {
-    m_row = row; // remember for later
+    m_item = item; // remember for later
                                      
     unsigned int col = GetOwner()->GetModelColumn();
     wxVariant value;
-    GetOwner()->GetOwner()->GetModel()->GetValue( value, col, row );
+    GetOwner()->GetOwner()->GetModel()->GetValue( value, item, col );
     
     m_editorCtrl = CreateEditorCtrl( GetOwner()->GetOwner()->GetMainWindow(), labelRect, value );
     
@@ -926,8 +191,8 @@ bool wxDataViewRendererBase::FinishEditing()
         return false;
         
     unsigned int col = GetOwner()->GetModelColumn();
-    GetOwner()->GetOwner()->GetModel()->SetValue( value, col, m_row );
-    GetOwner()->GetOwner()->GetModel()->ValueChanged( col, m_row );
+    GetOwner()->GetOwner()->GetModel()->SetValue( value, m_item, col );
+    GetOwner()->GetOwner()->GetModel()->ValueChanged( m_item, col );
     
     // m_editorCtrl->PopEventHandler( true );
     
@@ -1036,11 +301,6 @@ wxDataViewColumnBase::~wxDataViewColumnBase()
 {
     if (m_renderer)
         delete m_renderer;
-
-    if (GetOwner())
-    {
-        GetOwner()->GetModel()->RemoveViewingColumn( (wxDataViewColumn*) this );
-    }
 }
 
 int wxDataViewColumnBase::GetFlags() const
@@ -1064,6 +324,41 @@ void wxDataViewColumnBase::SetFlags(int flags)
     SetHidden((flags & wxDATAVIEW_COL_HIDDEN) != 0);
 }
 
+// ---------------------------------------------------------
+// wxDataViewEventModelNotifier
+// ---------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewEventModelNotifier: public wxDataViewModelNotifier
+{
+public:
+    wxDataViewEventModelNotifier( wxDataViewCtrl *ctrl ) { m_ctrl = ctrl; }
+    
+    bool SendEvent( wxEventType event_type, const wxDataViewItem &item, unsigned int col = 0 )
+    {
+        wxDataViewEvent event( event_type, m_ctrl->GetId() );
+        event.SetEventObject( m_ctrl );
+        event.SetModel( m_ctrl->GetModel() );
+        event.SetItem( item );
+        event.SetColumn( col );
+        m_ctrl->GetEventHandler()->ProcessEvent( event );
+        return true;
+    }
+
+    virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )  
+        { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_ADDED, item ); }
+    virtual bool ItemDeleted( const wxDataViewItem &item )
+        { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_DELETED, item ); }
+    virtual bool ItemChanged( const wxDataViewItem &item )
+        { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_CHANGED, item ); }
+    virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col )
+        { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_VALUE_CHANGED, item, col ); }
+    virtual bool Cleared()      
+        { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_CLEARED, wxDataViewItem(0) ); }
+
+private:
+    wxDataViewCtrl *m_ctrl;
+};
+
 
 // ---------------------------------------------------------
 // wxDataViewCtrlBase
@@ -1075,6 +370,7 @@ wxDataViewCtrlBase::wxDataViewCtrlBase()
 {
     m_model = NULL;
     m_cols.DeleteContents( true );
+    m_eventNotifier = NULL;
 }
 
 wxDataViewCtrlBase::~wxDataViewCtrlBase()
@@ -1086,25 +382,39 @@ wxDataViewCtrlBase::~wxDataViewCtrlBase()
 
     if (m_model)
     {
+        if (m_eventNotifier)
+            m_model->RemoveNotifier( m_eventNotifier );
+        m_eventNotifier = NULL;
+    
         m_model->DecRef();
         m_model = NULL;
     }
 }
 
-bool wxDataViewCtrlBase::AssociateModel( wxDataViewListModel *model )
+bool wxDataViewCtrlBase::AssociateModel( wxDataViewModel *model )
 {
-    if ( m_model )
+    if (m_model)
+    {
+        if (m_eventNotifier)
+            m_model->RemoveNotifier( m_eventNotifier );
+        m_eventNotifier = NULL;
+        
         m_model->DecRef();   // discard old model, if any
+    }
 
     // add our own reference to the new model:
     m_model = model;
-    if ( m_model )
+    if (m_model)
+    {
         m_model->IncRef(); 
+        m_eventNotifier = new wxDataViewEventModelNotifier( (wxDataViewCtrl*) this );
+        m_model->AddNotifier( m_eventNotifier );
+    }
 
     return true;
 }
 
-wxDataViewListModel* wxDataViewCtrlBase::GetModel()
+wxDataViewModel* wxDataViewCtrlBase::GetModel()
 {
     return m_model;
 }
@@ -1193,7 +503,6 @@ bool wxDataViewCtrlBase::AppendColumn( wxDataViewColumn *col )
 {
     m_cols.Append( (wxObject*) col );
     col->SetOwner( (wxDataViewCtrl*) this );
-    m_model->AddViewingColumn( col, col->GetModelColumn() );
     return true;
 }
 
@@ -1223,10 +532,16 @@ wxDataViewColumn* wxDataViewCtrlBase::GetColumn( unsigned int pos )
 
 IMPLEMENT_DYNAMIC_CLASS(wxDataViewEvent,wxNotifyEvent)
 
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_ROW_SELECTED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_ROW_ACTIVATED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_ITEM_SELECTED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED)
 
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_ADDED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_DELETED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_CHANGED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_MODEL_VALUE_CHANGED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_MODEL_CLEARED)
 
 #endif

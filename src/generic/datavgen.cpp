@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/generic/datavgen.cpp 
+// Name:        src/generic/datavgen.cpp
 // Purpose:     wxDataViewCtrl generic implementation
 // Author:      Robert Roebling
 // Modified by: Francesco Montorsi, Guru Kathiresan, Otto Wyss
@@ -263,14 +263,11 @@ public:
                             const wxString &name = wxT("wxdataviewctrlmainwindow") );
     virtual ~wxDataViewMainWindow();
 
-    // notifications from wxDataViewListModel
-    bool RowAppended();
-    bool RowPrepended();
-    bool RowInserted( unsigned int before );
-    bool RowDeleted( unsigned int row );
-    bool RowChanged( unsigned int row );
-    bool ValueChanged( unsigned int col, unsigned int row );
-    bool RowsReordered( unsigned int *new_order );
+    // notifications from wxDataViewModel
+    bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
+    bool ItemDeleted( const wxDataViewItem &item );
+    bool ItemChanged( const wxDataViewItem &item );
+    bool ValueChanged( const wxDataViewItem &item, unsigned int col );
     bool Cleared();
 
     void SetOwner( wxDataViewCtrl* owner ) { m_owner = owner; }
@@ -355,29 +352,23 @@ private:
 };
 
 // ---------------------------------------------------------
-// wxGenericDataViewListModelNotifier
+// wxGenericDataViewModelNotifier
 // ---------------------------------------------------------
 
-class wxGenericDataViewListModelNotifier: public wxDataViewListModelNotifier
+class wxGenericDataViewModelNotifier: public wxDataViewModelNotifier
 {
 public:
-    wxGenericDataViewListModelNotifier( wxDataViewMainWindow *mainWindow )
+    wxGenericDataViewModelNotifier( wxDataViewMainWindow *mainWindow )
         { m_mainWindow = mainWindow; }
 
-    virtual bool RowAppended()
-        { return m_mainWindow->RowAppended(); }
-    virtual bool RowPrepended()
-        { return m_mainWindow->RowPrepended(); }
-    virtual bool RowInserted( unsigned int before )
-        { return m_mainWindow->RowInserted( before ); }
-    virtual bool RowDeleted( unsigned int row )
-        { return m_mainWindow->RowDeleted( row ); }
-    virtual bool RowChanged( unsigned int row )
-        { return m_mainWindow->RowChanged( row ); }
-    virtual bool ValueChanged( unsigned int col, unsigned int row )
-        { return m_mainWindow->ValueChanged( col, row ); }
-    virtual bool RowsReordered( unsigned int *new_order )
-        { return m_mainWindow->RowsReordered( new_order ); }
+    virtual bool ItemAdded( const wxDataViewItem & parent, const wxDataViewItem & item )
+        { return m_mainWindow->ItemAdded( parent , item ); }
+    virtual bool ItemDeleted( const wxDataViewItem & item )
+        { return m_mainWindow->ItemDeleted( item ); }
+    virtual bool ItemChanged( const wxDataViewItem & item )
+        { return m_mainWindow->ItemChanged(item);  }
+    virtual bool ValueChanged( const wxDataViewItem & item , unsigned int col )
+        { return m_mainWindow->ValueChanged( item, col ); }
     virtual bool Cleared()
         { return m_mainWindow->Cleared(); }
 
