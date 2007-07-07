@@ -925,7 +925,7 @@ void wxGTKRenderer::DrawFrameWithLabel(wxDC& dc,
 }
 
 // ----------------------------------------------------------------------------
-// check/radion buttons
+// check/radio buttons
 // ----------------------------------------------------------------------------
 
 void wxGTKRenderer::DrawCheckItemBitmap(wxDC& dc,

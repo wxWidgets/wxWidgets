@@ -59,9 +59,9 @@ WX_DEFINE_USER_EXPORTED_OBJARRAY(wxDynamicLibraryDetailsArray)
 // ---------------------------------------------------------------------------
 
 #if defined(__WXPM__) || defined(__EMX__)
-    const wxChar *wxDynamicLibrary::ms_dllext = _T(".dll");
+    const wxString wxDynamicLibrary::ms_dllext(_T(".dll"));
 #elif defined(__WXMAC__) && !defined(__DARWIN__)
-    const wxChar *wxDynamicLibrary::ms_dllext = wxEmptyString;
+    const wxString wxDynamicLibrary::ms_dllext; // empty string
 #endif
 
 // for MSW/Unix it is defined in platform-specific file

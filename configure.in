@@ -575,7 +575,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_POPUPWIN=no
   DEFAULT_wxUSE_TIPWINDOW=no
 
-  DEFAULT_wxUSE_UNICODE=no
+  DEFAULT_wxUSE_UNICODE=yes
   DEFAULT_wxUSE_UNICODE_MSLU=no
   DEFAULT_wxUSE_UNICODE_UTF8=auto
   DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
@@ -803,7 +803,7 @@ else
   DEFAULT_wxUSE_POPUPWIN=yes
   DEFAULT_wxUSE_TIPWINDOW=yes
 
-  DEFAULT_wxUSE_UNICODE=no
+  DEFAULT_wxUSE_UNICODE=yes
   DEFAULT_wxUSE_UNICODE_MSLU=yes
   DEFAULT_wxUSE_UNICODE_UTF8=auto
   DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
@@ -827,6 +827,9 @@ else
   dnl Applicable only when --with-gtk was used:
   DEFAULT_wxUSE_GTK2=yes
 fi
+
+dnl Always default to no. Only special cases require this.
+DEFAULT_wxUSE_OBJC_UNIQUIFYING=no
 
 
 dnl WX_ARG_WITH should be used to select whether an external package will be
@@ -951,6 +954,7 @@ WX_ARG_ENABLE(compat28,      [  --disable-compat28      disable wxWidgets 2.8 co
 
 WX_ARG_ENABLE(rpath,         [  --disable-rpath         disable use of rpath for uninstalled builds], wxUSE_RPATH)
 
+WX_ARG_ENABLE(objc_uniquifying,[  --enable-objc_uniquifying enable Objective-C class name uniquifying], wxUSE_OBJC_UNIQUIFYING)
 
 dnl ---------------------------------------------------------------------------
 dnl (small) optional non GUI classes
@@ -1006,7 +1010,7 @@ WX_ARG_ENABLE(tarstream,     [  --enable-tarstream      use wxTar streams], wxUS
 WX_ARG_ENABLE(textbuf,       [  --enable-textbuf        use wxTextBuffer class], wxUSE_TEXTBUFFER)
 WX_ARG_ENABLE(textfile,      [  --enable-textfile       use wxTextFile class], wxUSE_TEXTFILE)
 WX_ARG_ENABLE(timer,         [  --enable-timer          use wxTimer class], wxUSE_TIMER)
-WX_ARG_ENABLE(unicode,       [  --enable-unicode        compile wxString with Unicode support], wxUSE_UNICODE)
+WX_ARG_ENABLE(unicode,       [  --enable-unicode       compile without Unicode support], wxUSE_UNICODE)
 WX_ARG_ENABLE(sound,         [  --enable-sound          use wxSound class], wxUSE_SOUND)
 WX_ARG_ENABLE(mediactrl,     [  --enable-mediactrl      use wxMediaCtrl class], wxUSE_MEDIACTRL)
 WX_ARG_ENABLE(gstreamer8,    [  --enable-gstreamer8     force GStreamer 0.8 instead of 0.10 with the wxMediaCtrl class on unix], wxUSE_GSTREAMER8)
@@ -3095,26 +3099,21 @@ if test "$wxUSE_GUI" = "yes"; then
                 wx_cv_lib_gtk=
                 if test "x$wxGTK_VERSION" != "x1"
                 then
-                    dnl The gthread.pc that ships with solaris returns '-mt',
+                    dnl The gthread.pc that ships with Solaris returns '-mt',
                     dnl it's correct for Sun CC, but gcc requires '-pthreads'.
                     dnl So disable the compile check and remove the -mt below.
                     case "${host}" in
                         *-*-solaris2* )
                             if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
-                            enable_gtktest=no
+                                enable_gtktest=no
                             fi
                     esac
 
                     AM_PATH_GTK_2_0(2.0.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
 
-                    dnl Remove the '-mt' for gcc on solaris
+                    dnl Solaris also requires -lX11 for static lib
                     case "${host}" in
                         *-*-solaris2* )
-                            if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
-                                GTK_CFLAGS=`echo $GTK_CFLAGS | sed 's/-mt//'`
-                                GTK_LIBS=`echo $GTK_LIBS | sed 's/-mt//'`
-                            fi
-                            dnl solaris also requires -lX11 for static lib
                             if test "$wxUSE_SHARED" != "yes"; then
                                 GTK_LIBS="$GTK_LIBS -lX11"
                             fi
@@ -3855,6 +3854,11 @@ if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_UTF8" = "auto" ; then
         wxUSE_UNICODE_UTF8=yes
     elif test "$TOOLKIT" = "GTK" -a "$WXGTK20" = "1" ; then
         wxUSE_UNICODE_UTF8=yes
+    elif test "$USE_OS2" = "1" ; then
+        dnl wide char support is quite incomplete in libc;
+        dnl UTF-8 might actually work when evaluating/setting
+        dnl code pages correctly, even for ports other than GTK20.
+        wxUSE_UNICODE_UTF8=yes
     else
         wxUSE_UNICODE_UTF8=no
     fi
@@ -4123,6 +4127,11 @@ if test "$wxUSE_SHARED" = "yes"; then
     dnl use versioned symbols if available on the platform
     WX_VERSIONED_SYMBOLS([\$(wx_top_builddir)/version-script])
 
+    dnl test for Sun CC which can be used under both Solaris and Linux
+    if test "x$SUNCXX" = xyes; then
+        SAMPLES_RPATH_FLAG="-R\$(wx_top_builddir)/lib"
+        WXCONFIG_RPATH="-R\$libdir"
+    else
     case "${host}" in
       *-*-linux* | *-*-gnu* )
         SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
@@ -4130,41 +4139,39 @@ if test "$wxUSE_SHARED" = "yes"; then
         ;;
 
       *-*-solaris2* )
-        if test "$GCC" = yes ; then
-            dnl newer versions of gcc need -isystem to compile X headers on
-            dnl Solaris (which use old style C syntax)
-            CPPFLAGS="-isystem /usr/openwin/include $CPPFLAGS"
+        dnl here we know that Sun CC is not used as we tested for it above,
+        dnl hence we must be using gcc
 
-            dnl gcc may use Sun's ld, in which case -rpath gives a confusing
-            dnl error message. We have to try both -Wl,-rpath and -Wl,-R:
-            saveLdflags="$LDFLAGS"
-            LDFLAGS="$saveLdflags -Wl,-rpath,/"
-            AC_MSG_CHECKING([if the linker accepts -rpath])
-            AC_TRY_LINK(
-                [],[],
-                [
-                    AC_MSG_RESULT([yes])
-                    SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
-                    WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
-                ],[
-                    AC_MSG_RESULT([no])
-                    AC_MSG_CHECKING([if the linker accepts -R])
-                    LDFLAGS="$saveLdflags -Wl,-R,/"
-                    AC_TRY_LINK(
-                        [],[],
-                        [
-                            AC_MSG_RESULT([yes])
-                            SAMPLES_RPATH_FLAG="-Wl,-R,\$(wx_top_builddir)/lib"
-                            WXCONFIG_RPATH="-Wl,-R,\$libdir"
-                        ],[
-                            AC_MSG_RESULT([no])
-                        ])
-                ])
-            LDFLAGS="$saveLdflags"
-        else
-            SAMPLES_RPATH_FLAG="-R\$(wx_top_builddir)/lib"
-            WXCONFIG_RPATH="-R\$libdir"
-        fi
+        dnl newer versions of gcc need -isystem to compile X headers on
+        dnl Solaris (which use old style C syntax)
+        CPPFLAGS="-isystem /usr/openwin/include $CPPFLAGS"
+
+        dnl gcc may use Sun's ld, in which case -rpath gives a confusing
+        dnl error message. We have to try both -Wl,-rpath and -Wl,-R:
+        saveLdflags="$LDFLAGS"
+        LDFLAGS="$saveLdflags -Wl,-rpath,/"
+        AC_MSG_CHECKING([if the linker accepts -rpath])
+        AC_TRY_LINK(
+            [],[],
+            [
+                AC_MSG_RESULT([yes])
+                SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
+                WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
+            ],[
+                AC_MSG_RESULT([no])
+                AC_MSG_CHECKING([if the linker accepts -R])
+                LDFLAGS="$saveLdflags -Wl,-R,/"
+                AC_TRY_LINK(
+                    [],[],
+                    [
+                        AC_MSG_RESULT([yes])
+                        SAMPLES_RPATH_FLAG="-Wl,-R,\$(wx_top_builddir)/lib"
+                        WXCONFIG_RPATH="-Wl,-R,\$libdir"
+                    ],[
+                        AC_MSG_RESULT([no])
+                    ])
+            ])
+        LDFLAGS="$saveLdflags"
       ;;
 
       *-*-darwin* )
@@ -4196,6 +4203,7 @@ EOF
         ;;
 
     esac
+    fi
 
     if test $wxUSE_RPATH = "no"; then
         SAMPLES_RPATH_FLAG=''
@@ -4403,6 +4411,30 @@ else
     fi
 fi
 
+AC_CACHE_CHECK([if wchar_t is separate type],
+    wx_cv_wchar_t_is_separate_type,
+    AC_TRY_COMPILE([#include <wchar.h>],
+        [
+            return 0; }
+
+            struct Foo { void foo(wchar_t);
+                         void foo(unsigned short);
+                         void foo(unsigned int);
+                         void foo(unsigned long); };
+
+            int bar() {
+        ],
+        wx_cv_wchar_t_is_separate_type=yes,
+        wx_cv_wchar_t_is_separate_type=no
+    )
+)
+
+if test "$wx_cv_wchar_t_is_separate_type" = "yes"; then
+    AC_DEFINE(wxWCHAR_T_IS_SEPARATE_TYPE, 1)
+else
+    AC_DEFINE(wxWCHAR_T_IS_SEPARATE_TYPE, 0)
+fi
+
 AC_LANG_POP() dnl C++
 
 dnl ---------------------------------------------------------------------------
@@ -4459,6 +4491,8 @@ if test "$wxUSE_WCHAR_T" = "yes"; then
     if test "$WCSLEN_FOUND" = 1; then
         AC_DEFINE(HAVE_WCSLEN)
     fi
+
+    AC_CHECK_FUNCS([wcsdup])
 
     dnl On HP-UX aCC need this define to find mbstrtowcs() &c
     dnl Can't be used for g++ since the mbstate_t in wchar.h can conflict
@@ -5102,13 +5136,15 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
         dnl with the convention that anything starting with '-' is a cpp flag
         dnl while anything else is a library (i.e. there is an implicit "-l")
         THREAD_OPTS="-pthread"
+        if test "x$SUNCXX" = xyes; then
+            THREAD_OPTS="-mt lthread $THREAD_OPTS"
+        fi
+
         case "${host}" in
           *-*-solaris2* | *-*-sunos4* )
                 if test "x$GCC" = "xyes"; then
                     dnl Solaris/gcc combination use this one for some reason
                     THREAD_OPTS="-pthreads $THREAD_OPTS"
-                else
-                    THREAD_OPTS="-mt $THREAD_OPTS"
                 fi
                 ;;
           *-*-freebsd*)
@@ -5253,6 +5289,10 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
       dnl wouldn't be found by it
       AC_CACHE_CHECK([for pthread_cleanup_push/pop], wx_cv_func_pthread_cleanup,
       [
+        dnl C compiler may treat pthread_cleanup_push() as an undeclared
+        dnl function and not give a warning even if it's unavailable, so use
+        dnl the C++ one for this test
+        AC_LANG_PUSH(C++)
         AC_TRY_COMPILE([#include <pthread.h>
                void ThreadCleanupFunc(void *p);
             ],
@@ -5266,6 +5306,7 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
                wx_cv_func_pthread_cleanup=no
             ]
         )
+        AC_LANG_POP()
       ])
       if test "x$wx_cv_func_pthread_cleanup" = "xyes"; then
         AC_DEFINE(wxHAVE_PTHREAD_CLEANUP)
@@ -6073,6 +6114,9 @@ if test "$wxUSE_PRINTF_POS_PARAMS" = "yes"; then
   AC_DEFINE(wxUSE_PRINTF_POS_PARAMS)
 fi
 
+if test "$wxUSE_OBJC_UNIQUIFYING" = "yes"; then
+  AC_DEFINE(wxUSE_OBJC_UNIQUIFYING)
+fi
 
 dnl ---------------------------------------------------------------------------
 dnl time/date functions
@@ -6080,8 +6124,7 @@ dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_DATETIME" = "yes"; then
     dnl check for strptime and for its declaration as some systems lack it
-    dnl FIXME: use WX_CHECK_FUNCS instead
-    AC_CHECK_FUNCS(strptime)
+    AC_CHECK_FUNC(strptime)
     if test "$ac_cv_func_strptime" = "yes"; then
         AC_CACHE_CHECK([for strptime declaration], wx_cv_func_strptime_decl,
             [
@@ -6103,6 +6146,40 @@ if test "$wxUSE_DATETIME" = "yes"; then
     fi
     if test "$wx_cv_func_strptime_decl" = "yes"; then
         AC_DEFINE(HAVE_STRPTIME_DECL)
+    else
+        wx_strptime_decl="extern char *strptime(const char *, const char *, struct tm *);"
+    fi
+    if test "$ac_cv_func_strptime" = "yes"; then
+        dnl strptime() behaviour doesn't conform to POSIX under Mac OS X <
+        dnl 10.5 and possibly other BSD variants, check that strptime() we
+        dnl have fails to parse format when the string doesn't match it instea
+        dnl of just stopping immediately and returning non-NULL
+        AC_CACHE_CHECK([whether strptime() fails on invalid strings],
+            wx_cv_func_strptime_ok,
+            [AC_RUN_IFELSE(
+                [
+                    #include <stdlib.h>
+                    #include <time.h>
+                    #include "confdefs.h"
+
+                    $wx_strptime_decl
+
+                    int main()
+                    {
+                        struct tm t;
+                        return !!strptime("", "%x", &t);
+                    }
+                ],
+                wx_cv_func_strptime_ok=yes,
+                wx_cv_func_strptime_ok=no,
+                dnl be pessimistic when cross-compiling
+                wx_cv_func_strptime_ok=no
+            )]
+        )
+
+        if test "$wx_cv_func_strptime_ok" = "yes"; then
+            AC_DEFINE(HAVE_STRPTIME)
+        fi
     fi
 
     dnl check for timezone variable
@@ -7433,16 +7510,6 @@ if test "$wxUSE_MEDIACTRL" = "yes"; then
 
 
         if test "$wxUSE_GSTREAMER" = "yes"; then
-            dnl system gstreamer package is compiled with Sun CC and outputs
-            dnl CC-specific "-mt" in its flags, remove it for gcc compilation
-            case "${host}" in
-                *-*-solaris2* )
-                    if "$GCC" = yes; then
-                        GST_CFLAGS=`echo $GST_CFLAGS | sed 's/-mt//'`
-                        GST_LIBS=`echo $GST_LIBS | sed 's/-mt//'`
-                    fi
-            esac
-
             CPPFLAGS="$GST_CFLAGS $CPPFLAGS"
             LIBS="$GST_LIBS $LIBS"
 
@@ -7975,6 +8042,38 @@ fi
 
 dnl TOOLCHAIN_DEFS should be used for both wx and client code
 WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS $TOOLCHAIN_DEFS"
+
+
+dnl Sun cc is compatible with gcc and so either of them can use the C
+dnl libraries built with the other, i.e. gcc can be used to build wxGTK under
+dnl Solaris where GTK+ is compiled using cc and cc can be used under Linux
+dnl where GTK+ is built with gcc
+dnl
+dnl However the compiler options are not compatible at all and in particular
+dnl gcc doesn't like cc -mt option and cc doesn't like -pthread. We simply
+dnl filter them out as we already have the correct options for multithreaded
+dnl programs if we're using threads (and if we don't, it shouldn't matter)
+case "${host}" in
+    *-*-solaris2* )
+        dnl system packages are compiled with Sun CC and so pkg-config outputs
+        dnl CC-specific "-mt" flag, remove it when using gcc
+        if "$GCC" = yes; then
+            CPPFLAGS=`echo $CPPFLAGS | sed 's/-mt//'`
+            LIBS=`echo $LIBS | sed 's/-mt//'`
+            EXTRALIBS_GUI=`echo $EXTRALIBS_GUI | sed 's/-mt//'`
+        fi
+        ;;
+
+    *-*-linux* )
+        dnl OTOH when using Sun CC under Linux, the flags contain gcc-specific
+        dnl -pthreads which Sun CC doesn't know about
+        if test "x$SUNCXX" = xyes; then
+            CPPFLAGS=`echo $CPPFLAGS | sed 's/-pthread//'`
+            LIBS=`echo $LIBS | sed 's/-pthread//'`
+            EXTRALIBS_GUI=`echo $EXTRALIBS_GUI | sed 's/-pthread//'`
+        fi
+        ;;
+esac
 
 dnl for convenience, sort the samples in alphabetical order
 dnl

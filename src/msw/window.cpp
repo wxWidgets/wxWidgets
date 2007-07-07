@@ -1979,7 +1979,7 @@ void wxWindowMSW::GetTextExtent(const wxString& string,
 
     SIZE sizeRect;
     TEXTMETRIC tm;
-    ::GetTextExtentPoint32(hdc, string, string.length(), &sizeRect);
+    ::GetTextExtentPoint32(hdc, string.wx_str(), string.length(), &sizeRect);
     GetTextMetrics(hdc, &tm);
 
     if ( x )
@@ -2742,7 +2742,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                     // problems, so don't do it for them (unnecessary anyhow)
                     if ( !win->IsOfStandardClass() )
                     {
-                        if ( message == WM_LBUTTONDOWN && win->CanAcceptFocus() )
+                        if ( message == WM_LBUTTONDOWN && win->IsFocusable() )
                             win->SetFocus();
                     }
                 }
@@ -3151,6 +3151,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             break;
 #endif
 
+#if wxUSE_MENUS
         case WM_MENUCHAR:
             // we're only interested in our own menus, not MF_SYSMENU
             if ( HIWORD(wParam) == MF_POPUP )
@@ -3164,6 +3165,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 }
             }
             break;
+#endif // wxUSE_MENUS
 
 #ifndef __WXWINCE__
         case WM_POWERBROADCAST:
@@ -3369,8 +3371,8 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     m_hWnd = (WXHWND)::CreateWindowEx
                        (
                         extendedStyle,
-                        className,
-                        title ? title : (const wxChar*)m_windowName.c_str(),
+                        className.wx_str(),
+                        title ? title : m_windowName.wx_str(),
                         style,
                         x, y, w, h,
                         (HWND)MSWGetParent(),
@@ -3490,7 +3492,7 @@ bool wxWindowMSW::HandleTooltipNotify(WXUINT code,
                     (
                         CP_ACP,
                         0,                      // no flags
-                        ttip,
+                        ttip.wx_str(),
                         tipLength,
                         buf,
                         WXSIZEOF(buf) - 1
@@ -5195,6 +5197,7 @@ bool wxWindowMSW::HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam)
     return GetEventHandler()->ProcessEvent(event);
 }
 
+#if wxUSE_MENUS
 int wxWindowMSW::HandleMenuChar(int WXUNUSED_IN_WINCE(chAccel),
                                 WXLPARAM WXUNUSED_IN_WINCE(lParam))
 {
@@ -5229,7 +5232,7 @@ int wxWindowMSW::HandleMenuChar(int WXUNUSED_IN_WINCE(chAccel),
                 //  menu creation code
                 wxMenuItem *item = (wxMenuItem*)mii.dwItemData;
 
-                const wxChar *p = wxStrchr(item->GetText(), _T('&'));
+                const wxChar *p = wxStrchr(item->GetText().wx_str(), _T('&'));
                 while ( p++ )
                 {
                     if ( *p == _T('&') )
@@ -5276,6 +5279,7 @@ bool wxWindowMSW::HandleClipboardEvent( WXUINT nMsg )
 
     return GetEventHandler()->ProcessEvent(evt);
 }
+#endif // wxUSE_MENUS
 
 // ---------------------------------------------------------------------------
 // joystick

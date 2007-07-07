@@ -59,12 +59,21 @@ Changes in behaviour which may result in compilation errors
   to const wxChar*:
      wxLogError(_("error: %s"), !err.empty() ? (const wxChar*)err.c_str() : "")
 
+- wxCtime() and wxAsctime() return char*; this is incompatible with Unicode
+  build in wxWidgets 2.8 that returned wchar_t*.
+
 - DigitalMars compiler has a bug that prevents it from using
   wxUniChar::operator bool in conditions and it erroneously reports type
   conversion ambiguity in expressions such as this:
      for ( wxString::const_iterator p = s.begin(); *p; ++p )
   This can be worked around by explicitly casting to bool:
      for ( wxString::const_iterator p = s.begin(); (bool)*p; ++p )
+
+- virtual wxHtmlParser::AddText() takes wxString, not wxChar*, argument now.
+
+- Funtions that took wxChar* arguments that could by NULL in wxWidgets 2.8.
+  are deprecated and passing NULL to them won't compile anymore, wxEmptyString
+  must be used instead.
 
 Deprecated methods and their replacements
 -----------------------------------------
@@ -74,6 +83,9 @@ Deprecated methods and their replacements
   or wxStringBufferLength instead.
 - wxDIRCTRL_SHOW_FILTERS style is deprecated, filters are alwsys shown if
   specified so this style should simply be removed
+- wxDocManager::MakeDefaultName() replaced by MakeNewDocumentName() and
+  wxDocument::GetPrintableName() with GetUserReadableName() which are simpler
+  to use
 
 
 Major new features in this release
@@ -93,6 +105,11 @@ All:
 - Add support for wxStream-derived classes to wxRTTI (Stas Sergeev)
 - Added wxStreamBuffer::Truncate() (Stas Sergeev)
 - Allow using  wxEventLoop in console applications (Lukasz Michalski)
+- Added functions for Base64 en/decoding (Charles Reimers)
+- Added functions for atomically inc/decrementing integers (Armel Asselin)
+- wxLogInterposer has been added to replace wxLogPassThrough and new
+  wxLogInterposerTemp was added
+- Added support for broadcasting to UDP sockets (Andrew Vincent)
 
 All (GUI):
 
@@ -100,6 +117,7 @@ All (GUI):
 - Added wxDC::StretchBlit() for wxMac and wxMSW (Vince Harron)
 - Added support for drop down toolbar buttons (Tim Kosse)
 - Added support for labels for toolbar controls (Vince Harron)
+- Added wxMessageDialog::SetMessage() and SetExtendedMessage()
 - Added wxEventBlocker class (Francesco Montorsi).
 - Added wxFile/DirPickerCtrl::Get/SetFile/DirName() (Francesco Montorsi).
 - Added wxSizerFlags::Top() and Bottom().
@@ -128,13 +146,13 @@ wxGTK:
 - wxTopLevelWindow::GetSize() returns the size including the WM decorations.
 - wxTopLevelWindow::GetClientSize() returns 0x0 when the window is minimized.
 - Added support for colour cursors (Pascal Monasse).
-- Setting foreground colour of single line wxTextCtrl now works
 - Pass current control text to EVT_TEXT handler for wxSpinCtrl (John Ratliff)
 - Added gtk.tlw.can-set-transparency system option
 
 wxMac:
 
 - Better IconRef support (Alan Shouls)
+- Added support for changing button labels in wxMessageDialog (Gareth Simpson)
 - Fix duplicate (empty) help menu in non-English programs (Andreas Jacobs)
 - Allow accelerators to be used with buttons too (Ryan Wilcox)
 - Support resource forks in wxCopyFile() (Hank Schultz)
@@ -149,6 +167,40 @@ wxX11:
 
 - Added mouse wheel support (David Hart)
 - Make Enter key activate the default button (David Hart)
+
+
+2.8.5
+-----
+
+All (GUI):
+
+- Added colour normalization to PNM image handler (Ray Johnston)
+- Fixed selecting part of word from right to left in wxHTML (Michael Hieke)
+- Selecting text in wxHTML with character precision was made easier, it's
+  enough to select half of a character (Michael Hieke)
+- Significantly improved startup times of XRC-based applications using
+  embedded resources on Unix (requires resources recompilation)
+- Fixed freeing of "static" alpha data in wxImage (Axel Gembe)
+- Don't invalidate the font in SetNativeFontInfo[Desc]() if the string is
+  invalid, to conform to the documented behaviour (Langhammer)
+- Fixed wxXPMHandler::SaveFile for images with more than 92 colors.
+
+wxMSW:
+
+- Correct problem with page setup dialog when using landscape mode
+- Added msw.font.no-proof-quality system option, see manual for description
+- Fix appearance of notebook with non-top tabs under Windows Vista
+- Fixed bug with symbol resolving in wxStackWalker (Axel Gembe)
+
+wxGTK:
+
+- Setting foreground colour of single line wxTextCtrl now works
+- More work on setting defaults in GNOME print dialogs.
+- Also made landscape printing work as per wxMSW.
+- Add support for clipping in GNOME print backend.
+- Speed up wxBitmap::Rescale()
+- Add right button event for wxToolbar's tools (Tim Kosse)
+- Don't unconditionally add wxCAPTION style to wxMiniFrame
 
 
 2.8.4

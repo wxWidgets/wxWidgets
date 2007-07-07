@@ -132,7 +132,7 @@ public:
     void GtkDisableEvents();
     void GtkEnableEvents();
 #if wxUSE_TOOLTIPS
-    void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
+    void ApplyToolTip( GtkTooltips *tips, const gchar *tip );
 #endif // wxUSE_TOOLTIPS
 
     virtual void OnInternalIdle();

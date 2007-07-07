@@ -53,7 +53,7 @@ protected:
     virtual void
     InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 
-    virtual bool FromString(const wxChar *str);
+    virtual bool FromString(const wxString& str);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxColour)

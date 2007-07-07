@@ -129,7 +129,7 @@
                                           const char *szFunc,
                                           const char *szCond,
                                           const wxChar *szMsg);
-#endif // wxUSE_UNICODE
+#endif /* wxUSE_UNICODE */
 
   class WXDLLIMPEXP_BASE wxString;
   class WXDLLIMPEXP_BASE wxCStrData;

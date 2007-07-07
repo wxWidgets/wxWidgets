@@ -127,6 +127,11 @@ bool wxSetEnv(const wxString& var, const wxChar *value)
     return false;
 }
 
+bool wxUnsetEnv(const wxString& var)
+{
+    return false;
+}
+
 // ----------------------------------------------------------------------------
 // process management
 // ----------------------------------------------------------------------------

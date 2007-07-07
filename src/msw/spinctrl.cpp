@@ -462,7 +462,8 @@ void  wxSpinCtrl::SetValue(int val)
         // text control is currently empty, the spin button seems to be happy
         // to leave it like this, while we really want to always show the
         // current value in the control, so do it manually
-        ::SetWindowText(GetBuddyHwnd(), wxString::Format(_T("%d"), val));
+        ::SetWindowText(GetBuddyHwnd(),
+                        wxString::Format(_T("%d"), val).wx_str());
     }
 
     m_oldValue = GetValue();

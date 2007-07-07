@@ -55,14 +55,12 @@ static wxString GetGtkHotKey( const wxMenuItem& item );
 
 static wxString wxReplaceUnderscore( const wxString& title )
 {
-    const wxChar *pc;
-
     // GTK 1.2 wants to have "_" instead of "&" for accelerators
     wxString str;
-    pc = title;
-    while (*pc != wxT('\0'))
+
+    for ( wxString::const_iterator pc = title.begin(); pc != title.end(); ++pc )
     {
-        if ((*pc == wxT('&')) && (*(pc+1) == wxT('&')))
+        if ((*pc == wxT('&')) && (pc+1 != title.end()) && (*(pc+1) == wxT('&')))
         {
             // "&" is doubled to indicate "&" instead of accelerator
             ++pc;
@@ -83,7 +81,6 @@ static wxString wxReplaceUnderscore( const wxString& title )
 
             str << *pc;
         }
-        ++pc;
     }
 
     // wxPrintf( wxT("before %s after %s\n"), title.c_str(), str.c_str() );
@@ -871,18 +868,22 @@ wxString wxMenuItem::GTKProcessMenuItemLabel(const wxString& str, wxString *hotK
     wxString text;
 
     // '\t' is the deliminator indicating a hot key
-    const wxChar *pc = str;
-    while ( (*pc != wxT('\0')) && (*pc != wxT('\t')) )
+    wxString::const_iterator pc = str.begin();
+    while ( pc != str.end() && *pc != wxT('\t') )
     {
-        if ((*pc == wxT('&')) && (*(pc+1) == wxT('&')))
+        if (*pc == wxT('&'))
         {
-            // "&" is doubled to indicate "&" instead of accelerator
-            ++pc;
-            text << wxT('&');
-        }
-        else if (*pc == wxT('&'))
-        {
-            text << wxT('_');
+            wxString::const_iterator next = pc + 1;
+            if (next != str.end() && *next == wxT('&'))
+            {
+                // "&" is doubled to indicate "&" instead of accelerator
+                ++pc;
+                text << wxT('&');
+            }
+            else
+            {
+                text << wxT('_');
+            }
         }
         else if ( *pc == wxT('_') )    // escape underscores
         {
@@ -901,7 +902,7 @@ wxString wxMenuItem::GTKProcessMenuItemLabel(const wxString& str, wxString *hotK
         if(*pc == wxT('\t'))
         {
             pc++;
-            *hotKey = pc;
+            hotKey->assign(pc, str.end());
         }
     }
 

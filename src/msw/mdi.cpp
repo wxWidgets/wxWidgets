@@ -199,7 +199,7 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
   msflags &= ~WS_HSCROLL;
 
   if ( !wxWindow::MSWCreate(wxMDIFrameClassName,
-                            title,
+                            title.wx_str(),
                             pos, size,
                             msflags,
                             exflags) )
@@ -711,7 +711,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
   mcs.szClass = style & wxFULL_REPAINT_ON_RESIZE
                     ? wxMDIChildFrameClassName
                     : wxMDIChildFrameClassNameNoRedraw;
-  mcs.szTitle = title;
+  mcs.szTitle = title.wx_str();
   mcs.hOwner = wxGetInstance();
   if (x != wxDefaultCoord)
       mcs.x = x;
@@ -1430,14 +1430,14 @@ static void InsertWindowMenu(wxWindow *win, WXHMENU menu, HMENU subMenu)
             {
                 success = true;
                 ::InsertMenu(hmenu, i, MF_BYPOSITION | MF_POPUP | MF_STRING,
-                             (UINT)subMenu, _("&Window"));
+                             (UINT)subMenu, _("&Window").wx_str());
                 break;
             }
         }
 
         if ( !success )
         {
-            ::AppendMenu(hmenu, MF_POPUP, (UINT)subMenu, _("&Window"));
+            ::AppendMenu(hmenu, MF_POPUP, (UINT)subMenu, _("&Window").wx_str());
         }
     }
 

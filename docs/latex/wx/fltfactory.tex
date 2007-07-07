@@ -55,7 +55,7 @@ enum wxStreamProtocolType
 
 \membersection{wxFilterClassFactory::CanHandle}\label{wxfilterclassfactorycanhandle}
 
-\constfunc{bool}{CanHandle}{\param{const wxChar* }{protocol}, \param{wxStreamProtocolType }{type = wxSTREAM\_PROTOCOL}}
+\constfunc{bool}{CanHandle}{\param{const wxString\& }{protocol}, \param{wxStreamProtocolType }{type = wxSTREAM\_PROTOCOL}}
 
 Returns true if this factory can handle the given protocol, MIME type, HTTP
 encoding or file extension.
@@ -66,7 +66,7 @@ can be a complete filename rather than just an extension.
 
 \membersection{wxFilterClassFactory::Find}\label{wxfilterclassfactoryfind}
 
-\func{static const wxFilterClassFactory*}{Find}{\param{const wxChar* }{protocol}, \param{wxStreamProtocolType }{type = wxSTREAM\_PROTOCOL}}
+\func{static const wxFilterClassFactory*}{Find}{\param{const wxString\& }{protocol}, \param{wxStreamProtocolType }{type = wxSTREAM\_PROTOCOL}}
 
 A static member that finds a factory that can handle a given protocol, MIME
 type, HTTP encoding or file extension.  Returns a pointer to the class

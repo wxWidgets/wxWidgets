@@ -65,11 +65,11 @@
 
 // standard shared libraries extensions for different Unix versions
 #if defined(__HPUX__)
-    const wxChar *wxDynamicLibrary::ms_dllext = _T(".sl");
+    const wxString wxDynamicLibrary::ms_dllext(".sl");
 #elif defined(__DARWIN__)
-    const wxChar *wxDynamicLibrary::ms_dllext = _T(".bundle");
+    const wxString wxDynamicLibrary::ms_dllext(".bundle");
 #else
-    const wxChar *wxDynamicLibrary::ms_dllext = _T(".so");
+    const wxString wxDynamicLibrary::ms_dllext(".so");
 #endif
 
 // ============================================================================

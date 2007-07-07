@@ -170,7 +170,7 @@ bool wxRadioBox::Create(wxWindow *parent,
         long newId = NewControlId();
 
         HWND hwndBtn = ::CreateWindow(_T("BUTTON"),
-                                      choices[i],
+                                      choices[i].wx_str(),
                                       styleBtn,
                                       0, 0, 0, 0,   // will be set in SetSize()
                                       GetHwndOf(parent),
@@ -270,9 +270,14 @@ bool wxRadioBox::MSWCommand(WXUINT cmd, WXWORD id)
         const unsigned int count = GetCount();
         for ( unsigned int i = 0; i < count; i++ )
         {
-            if ( id == wxGetWindowId((*m_radioButtons)[i]) )
+            const HWND hwndBtn = (*m_radioButtons)[i];
+            if ( id == wxGetWindowId(hwndBtn) )
             {
-                selectedButton = i;
+                // we can get BN_CLICKED for a button which just became focused
+                // but it may not be checked, in which case we shouldn't
+                // generate a radiobox selection changed event for it
+                if ( ::SendMessage(hwndBtn, BM_GETCHECK, 0, 0) == BST_CHECKED )
+                    selectedButton = i;
 
                 break;
             }

@@ -50,7 +50,7 @@ class WXDLLIMPEXP_CORE wxFontMapper;
 class WXDLLIMPEXP_BASE wxFontMapperBase
 {
 public:
-    // constructtor and such
+    // constructor and such
     // ---------------------
 
     // default ctor
@@ -122,7 +122,7 @@ public:
     void SetConfigPath(const wxString& prefix);
 
     // return default config path
-    static const wxChar *GetDefaultConfigPath();
+    static const wxString& GetDefaultConfigPath();
 #endif // wxUSE_CONFIG
 
 

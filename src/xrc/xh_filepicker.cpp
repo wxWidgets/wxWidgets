@@ -30,6 +30,7 @@ wxFilePickerCtrlXmlHandler::wxFilePickerCtrlXmlHandler() : wxXmlResourceHandler(
     XRC_ADD_STYLE(wxFLP_FILE_MUST_EXIST);
     XRC_ADD_STYLE(wxFLP_CHANGE_DIR);
     XRC_ADD_STYLE(wxFLP_DEFAULT_STYLE);
+    XRC_ADD_STYLE(wxFLP_USE_TEXTCTRL);
     AddWindowStyles();
 }
 

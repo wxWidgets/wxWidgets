@@ -303,7 +303,6 @@ bool wxFontBase::SetNativeFontInfo(const wxString& info)
         return true;
     }
 
-    UnRef();
     return false;
 }
 
@@ -316,7 +315,6 @@ bool wxFontBase::SetNativeFontInfoUserDesc(const wxString& info)
         return true;
     }
 
-    UnRef();
     return false;
 }
 

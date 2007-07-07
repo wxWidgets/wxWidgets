@@ -238,11 +238,10 @@ bool wxGetEnv(const wxString& var, wxString *value)
     return true;
 }
 
-bool wxSetEnv(const wxString& variable, const wxChar *value)
+bool wxSetEnv(const wxString& variable, const char *value)
 {
 #if defined(HAVE_SETENV)
-    return setenv(variable.mb_str(), value ? wxString(value).mb_str().data()
-                                           : NULL, 1 /* overwrite */) == 0;
+    return setenv(variable.mb_str(), value, 1 /* overwrite */) == 0;
 #elif defined(HAVE_PUTENV)
     wxString s = variable;
     if ( value )
@@ -261,6 +260,16 @@ bool wxSetEnv(const wxString& variable, const wxChar *value)
     wxUnusedVar(value);
     return false;
 #endif
+}
+
+bool wxSetEnv(const wxString& variable, const wxString& value)
+{
+    return wxDoSetEnv(variable, value.mb_str());
+}
+
+bool wxUnsetEnv(const wxString& variable)
+{
+    return wxDoSetEnv(variable, NULL);
 }
 
 void wxMilliSleep(

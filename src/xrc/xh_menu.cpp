@@ -88,7 +88,7 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
                 kind = wxITEM_RADIO;
             if (GetBool(wxT("checkable")))
             {
-                wxASSERT_MSG( kind == wxITEM_NORMAL, _T("can't have both checkable and radion button at once") );
+                wxASSERT_MSG( kind == wxITEM_NORMAL, _T("can't have both checkable and radio button at once") );
                 kind = wxITEM_CHECK;
             }
 

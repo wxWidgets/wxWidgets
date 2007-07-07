@@ -178,8 +178,9 @@ wxString RegExTestCase::Conv(const char *str)
 //
 void RegExTestCase::parseFlags(const wxString& flags)
 {
-    for (const wxChar *p = flags; *p; p++) {
-        switch (*p) {
+    for ( wxString::const_iterator p = flags.begin(); p != flags.end(); ++p )
+    {
+        switch ( (*p).GetValue() ) {
             // noop
             case '-': break;
 

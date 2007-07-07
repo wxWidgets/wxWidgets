@@ -593,8 +593,19 @@ void MyFrame::LogDialog(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
 {
-    wxMessageDialog dialog( NULL, _T("This is a message box\nA long, long string to test out the message box properly"),
-        _T("Message box text"), wxNO_DEFAULT|wxYES_NO|wxCANCEL|wxICON_INFORMATION);
+    wxMessageDialog dialog(NULL,
+                           _T("This is a message box\nA long, long string to test out the message box properly"),
+                           _T("Message box text"),
+                           wxNO_DEFAULT | wxYES_NO | wxCANCEL | wxICON_INFORMATION);
+
+    if ( dialog.SetYesNoLabels(_T("Answer &Yes"),_T("Answer &No")) )
+    {
+        dialog.SetExtendedMessage(_T("This platform supports custom button labels"));
+    }
+    else
+    {
+        dialog.SetExtendedMessage(_T("Custom button labels are not supported."));
+    }
 
     switch ( dialog.ShowModal() )
     {
@@ -782,7 +793,7 @@ void MyFrame::FileOpen2(wxCommandEvent& WXUNUSED(event) )
     s_extDef = path.AfterLast(_T('.'));
 
     wxLogMessage(_T("You selected the file '%s', remembered extension '%s'"),
-                 (const wxChar*) path, (const wxChar*) s_extDef);
+                 path, s_extDef);
 }
 
 void MyFrame::FilesOpen(wxCommandEvent& WXUNUSED(event) )

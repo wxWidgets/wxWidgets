@@ -573,7 +573,7 @@ void wxSlider::SetValue(int value)
 
     if ( m_labels )
     {
-        ::SetWindowText((*m_labels)[SliderLabel_Value], Format(value));
+        ::SetWindowText((*m_labels)[SliderLabel_Value], Format(value).wx_str());
     }
 }
 
@@ -587,8 +587,10 @@ void wxSlider::SetRange(int minValue, int maxValue)
 
     if ( m_labels )
     {
-        ::SetWindowText((*m_labels)[SliderLabel_Min], Format(ValueInvertOrNot(m_rangeMin)));
-        ::SetWindowText((*m_labels)[SliderLabel_Max], Format(ValueInvertOrNot(m_rangeMax)));
+        ::SetWindowText((*m_labels)[SliderLabel_Min],
+                        Format(ValueInvertOrNot(m_rangeMin)).wx_str());
+        ::SetWindowText((*m_labels)[SliderLabel_Max],
+                        Format(ValueInvertOrNot(m_rangeMax)).wx_str());
     }
 }
 

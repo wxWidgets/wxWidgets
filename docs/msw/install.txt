@@ -702,9 +702,9 @@ SHARED=1
   Build shared libraries (DLLs). By default, DLLs are not built
   (SHARED=0).
 
-UNICODE=1
-  To build Unicode versions of the libraries, add UNICODE=1 to make invocation
-  (default is UNICODE=0). If you want to be able to use Unicode version on
+UNICODE=0
+  To build ANSI versions of the libraries, add UNICODE=0 to make invocation
+  (default is UNICODE=1). If you want to be able to use Unicode version on
   Windows9x, you will need to set MSLU=1 as well.
 
   This option affect name of the library ('u' is appended) and the directory

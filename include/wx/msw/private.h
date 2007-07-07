@@ -692,7 +692,7 @@ public:
     {
         if ( IsRegistered() )
         {
-            if ( !::UnregisterClass(m_clsname, wxhInstance) )
+            if ( !::UnregisterClass(m_clsname.wx_str(), wxhInstance) )
             {
                 wxLogLastError(_T("UnregisterClass"));
             }

@@ -306,7 +306,13 @@ WXDLLEXPORT bool wxGetEnv(const wxString& var, wxString *value)
 }
 
 // set the env var name to the given value, return true on success
-WXDLLEXPORT bool wxSetEnv(const wxString& var, const wxChar *value)
+WXDLLEXPORT bool wxSetEnv(const wxString& var, const wxString& value)
+{
+    // TODO : under classic there is no environement support, under X yes
+    return false;
+}
+
+WXDLLEXPORT bool wxUnsetEnv(const wxString& var)
 {
     // TODO : under classic there is no environement support, under X yes
     return false;

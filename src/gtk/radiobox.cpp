@@ -275,7 +275,8 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
             radio_button_group = gtk_radio_button_get_group( GTK_RADIO_BUTTON(rbtn) );
 
         label.Empty();
-        for ( const wxChar *pc = choices[i]; *pc; pc++ )
+        for ( wxString::const_iterator pc = choices[i].begin();
+              pc != choices[i].end(); ++pc )
         {
             if ( *pc != wxT('&') )
                 label += *pc;
@@ -554,9 +555,8 @@ void wxRadioBox::GtkDisableEvents()
     wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.GetFirst();
     while (node)
     {
-        g_signal_handlers_disconnect_by_func (node->GetData()->button,
-                                              (gpointer) gtk_radiobutton_clicked_callback,
-                                              this);
+        g_signal_handlers_block_by_func(node->GetData()->button,
+            (gpointer)gtk_radiobutton_clicked_callback, this);
 
         node = node->GetNext();
     }
@@ -567,8 +567,8 @@ void wxRadioBox::GtkEnableEvents()
     wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.GetFirst();
     while (node)
     {
-        g_signal_connect (node->GetData()->button, "clicked",
-                          G_CALLBACK (gtk_radiobutton_clicked_callback), this);
+        g_signal_handlers_unblock_by_func(node->GetData()->button,
+            (gpointer)gtk_radiobutton_clicked_callback, this);
 
         node = node->GetNext();
     }
@@ -601,7 +601,7 @@ void wxRadioBox::GTKWidgetDoSetMnemonic(GtkWidget* w)
 }
 
 #if wxUSE_TOOLTIPS
-void wxRadioBox::ApplyToolTip(GtkTooltips * WXUNUSED(tips), const wxChar *tip)
+void wxRadioBox::ApplyToolTip(GtkTooltips * WXUNUSED(tips), const gchar *tip)
 {
     // set this tooltip for all radiobuttons which don't have their own tips
     unsigned n = 0;
@@ -611,8 +611,7 @@ void wxRadioBox::ApplyToolTip(GtkTooltips * WXUNUSED(tips), const wxChar *tip)
     {
         if ( !GetItemToolTip(n) )
         {
-            wxToolTip::Apply(GTK_WIDGET(node->GetData()->button),
-                             wxConvCurrent->cWX2MB(tip));
+            wxToolTip::Apply(GTK_WIDGET(node->GetData()->button), tip);
         }
     }
 }

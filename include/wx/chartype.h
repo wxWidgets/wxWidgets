@@ -154,8 +154,8 @@
     /* Sun's SunPro compiler supports the wchar_t type and wide character    */
     /* functions, but does not define __WCHAR_TYPE__. Define it here to      */
     /* allow unicode enabled builds.                                         */
-    #if defined(__SUNPRO_CC) || defined(__SUNPRO_C)
-    #define __WCHAR_TYPE__ wxchar_t
+    #if (defined(__SUNPRO_CC) || defined(__SUNPRO_C)) && !defined(__WCHAR_TYPE__)
+        #define __WCHAR_TYPE__ wxchar_t
     #endif
 
     /* GNU libc has __WCHAR_TYPE__ which requires special treatment, see */
@@ -190,7 +190,7 @@
 /* depending on the platform, Unicode build can either store wxStrings as
    wchar_t* or UTF-8 encoded char*: */
 #if wxUSE_UNICODE
-    // FIXME-UTF8: what would be better place for this?
+    /* FIXME-UTF8: what would be better place for this? */
     #if defined(wxUSE_UTF8_LOCALE_ONLY) && !defined(wxUSE_UNICODE_UTF8)
         #error "wxUSE_UTF8_LOCALE_ONLY only makes sense with wxUSE_UNICODE_UTF8"
     #endif

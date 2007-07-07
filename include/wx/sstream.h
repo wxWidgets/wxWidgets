@@ -26,7 +26,6 @@ public:
     // ctor associates the stream with the given string which makes a copy of
     // it
     wxStringInputStream(const wxString& s);
-    virtual ~wxStringInputStream();
 
     virtual wxFileOffset GetLength() const;
 
@@ -40,7 +39,7 @@ private:
     wxString m_str;
 
     // the buffer we're reading from
-    char* m_buf;
+    wxCharBuffer m_buf;
 
     // length of the buffer we're reading from
     size_t m_len;

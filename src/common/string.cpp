@@ -565,6 +565,12 @@ wxString operator+(const wchar_t *pwz, const wxString& str)
 // string comparison
 // ---------------------------------------------------------------------------
 
+bool wxString::IsSameAs(wxUniChar c, bool compareWithCase) const
+{
+    return (length() == 1) && (compareWithCase ? GetChar(0u) == c
+                               : wxToupper(GetChar(0u)) == wxToupper(c));
+}
+
 #ifdef HAVE_STD_STRING_COMPARE
 
 // NB: Comparison code (both if HAVE_STD_STRING_COMPARE and if not) works with
@@ -967,33 +973,33 @@ int wxString::CmpNoCase(const wxString& s) const
 #endif
 #endif
 
-wxString wxString::FromAscii(const char *ascii)
+wxString wxString::FromAscii(const char *ascii, size_t len)
 {
-    if (!ascii)
+    if (!ascii || len == 0)
        return wxEmptyString;
 
-    size_t len = strlen(ascii);
     wxString res;
 
-    if ( len )
     {
         wxImplStringBuffer buf(res, len);
         wxStringCharType *dest = buf;
 
-        for ( ;; )
+        for ( ; len > 0; --len )
         {
             unsigned char c = (unsigned char)*ascii++;
             wxASSERT_MSG( c < 0x80,
                           _T("Non-ASCII value passed to FromAscii().") );
 
             *dest++ = (wchar_t)c;
-
-            if ( c == '\0' )
-                break;
         }
     }
 
     return res;
+}
+
+wxString wxString::FromAscii(const char *ascii)
+{
+    return FromAscii(ascii, wxStrlen(ascii));
 }
 
 wxString wxString::FromAscii(const char ascii)
@@ -1376,14 +1382,15 @@ int wxString::Find(wxUniChar ch, bool bFromEnd) const
 // conversion to numbers
 // ----------------------------------------------------------------------------
 
-// the implementation of all the functions below is exactly the same so factor
-// it out
+// The implementation of all the functions below is exactly the same so factor
+// it out. Note that number extraction works correctly on UTF-8 strings, so
+// we can use wxStringCharType and wx_str() for maximum efficiency.
 
-template <typename T, typename F>
-bool wxStringToIntType(const wxChar *start,
+template <typename T>
+bool wxStringToIntType(const wxStringCharType *start,
                        T *val,
                        int base,
-                       F func)
+                       T (*func)(const wxStringCharType*, wxStringCharType**, int))
 {
     wxCHECK_MSG( val, false, _T("NULL output pointer") );
     wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
@@ -1392,7 +1399,7 @@ bool wxStringToIntType(const wxChar *start,
     errno = 0;
 #endif
 
-    wxChar *end;
+    wxStringCharType *end;
     *val = (*func)(start, &end, base);
 
     // return true only if scan was stopped by the terminating NUL and if the
@@ -1406,22 +1413,22 @@ bool wxStringToIntType(const wxChar *start,
 
 bool wxString::ToLong(long *val, int base) const
 {
-    return wxStringToIntType((const wxChar*)c_str(), val, base, wxStrtol);
+    return wxStringToIntType(wx_str(), val, base, wxStrtol);
 }
 
 bool wxString::ToULong(unsigned long *val, int base) const
 {
-    return wxStringToIntType((const wxChar*)c_str(), val, base, wxStrtoul);
+    return wxStringToIntType(wx_str(), val, base, wxStrtoul);
 }
 
 bool wxString::ToLongLong(wxLongLong_t *val, int base) const
 {
-    return wxStringToIntType((const wxChar*)c_str(), val, base, wxStrtoll);
+    return wxStringToIntType(wx_str(), val, base, wxStrtoll);
 }
 
 bool wxString::ToULongLong(wxULongLong_t *val, int base) const
 {
-    return wxStringToIntType((const wxChar*)c_str(), val, base, wxStrtoull);
+    return wxStringToIntType(wx_str(), val, base, wxStrtoull);
 }
 
 bool wxString::ToDouble(double *val) const
@@ -1559,6 +1566,11 @@ static int DoStringPrintfV(wxString& str,
         if ( !buf )
         {
             // out of memory
+
+            // in UTF-8 build, leaving uninitialized junk in the buffer
+            // could result in invalid non-empty UTF-8 string, so just
+            // reset the string to empty on failure:
+            buf[0] = '\0';
             return -1;
         }
 
@@ -1579,14 +1591,20 @@ static int DoStringPrintfV(wxString& str,
         // buffer were large enough (newer standards such as Unix98)
         if ( len < 0 )
         {
+            // NB: wxVsnprintf() may call either wxCRT_VsnprintfW or
+            //     wxCRT_VsnprintfA in UTF-8 build; wxUSE_WXVSNPRINTF
+            //     is true if *both* of them use our own implementation,
+            //     otherwise we can't be sure
 #if wxUSE_WXVSNPRINTF
             // we know that our own implementation of wxVsnprintf() returns -1
             // only for a format error - thus there's something wrong with
             // the user's format string
+            buf[0] = '\0';
             return -1;
-#else // assume that system version only returns error if not enough space
-            // still not enough, as we don't know how much we need, double the
-            // current size of the buffer
+#else // possibly using system version
+            // assume it only returns error if there is not enough space, but
+            // as we don't know how much we need, double the current size of
+            // the buffer
             size *= 2;
 #endif // wxUSE_WXVSNPRINTF/!wxUSE_WXVSNPRINTF
         }
@@ -1617,9 +1635,6 @@ static int DoStringPrintfV(wxString& str,
 
 int wxString::PrintfV(const wxString& format, va_list argptr)
 {
-    va_list argcopy;
-    wxVaCopy(argcopy, argptr);
-
 #if wxUSE_UNICODE_UTF8
     #if wxUSE_STL_BASED_WXSTRING
         typedef wxStringTypeBuffer<char> Utf8Buffer;
@@ -1629,16 +1644,16 @@ int wxString::PrintfV(const wxString& format, va_list argptr)
 #endif
 
 #if wxUSE_UTF8_LOCALE_ONLY
-    return DoStringPrintfV<Utf8Buffer>(*this, format, argcopy);
+    return DoStringPrintfV<Utf8Buffer>(*this, format, argptr);
 #else
     #if wxUSE_UNICODE_UTF8
     if ( wxLocaleIsUtf8 )
-        return DoStringPrintfV<Utf8Buffer>(*this, format, argcopy);
+        return DoStringPrintfV<Utf8Buffer>(*this, format, argptr);
     else
         // wxChar* version
-        return DoStringPrintfV<wxStringBuffer>(*this, format, argcopy);
+        return DoStringPrintfV<wxStringBuffer>(*this, format, argptr);
     #else
-        return DoStringPrintfV(*this, format, argcopy);
+        return DoStringPrintfV(*this, format, argptr);
     #endif // UTF8/WCHAR
 #endif
 }

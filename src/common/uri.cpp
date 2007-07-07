@@ -23,6 +23,10 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/crt.h"
+#endif
+
 #include "wx/uri.h"
 
 // ---------------------------------------------------------------------------
@@ -93,7 +97,10 @@ const wxChar* wxURI::Create(const wxString& uri)
     if (m_fields)
         Clear();
 
-    return Parse(uri);
+    // FIXME-UTF8: rewrite ParseXXX() methods using iterators
+    // NB: using wxWxCharBuffer instead of just c_str() avoids keeping
+    //     converted string in memory for longer than needed
+    return Parse(wxWxCharBuffer(uri.c_str()));
 }
 
 // ---------------------------------------------------------------------------
@@ -374,7 +381,7 @@ bool wxURI::IsReference() const
 // URI-reference = URI / relative
 // ---------------------------------------------------------------------------
 
-const wxChar* wxURI::Parse(const wxChar* uri)
+const wxChar* wxURI::Parse(const wxChar *uri)
 {
     uri = ParseScheme(uri);
     uri = ParseAuthority(uri);
@@ -389,7 +396,7 @@ const wxChar* wxURI::Parse(const wxChar* uri)
 // Individual parsers for each URI component
 // ---------------------------------------------------------------------------
 
-const wxChar* wxURI::ParseScheme(const wxChar* uri)
+const wxChar* wxURI::ParseScheme(const wxChar *uri)
 {
     wxASSERT(uri != NULL);
 

@@ -39,12 +39,14 @@ private:
 #if wxUSE_STD_STRING
         CPPUNIT_TEST( StdString );
 #endif
+        CPPUNIT_TEST( Sscanf );
     CPPUNIT_TEST_SUITE_END();
 
     void StringPrintf();
 #if wxUSE_STD_STRING
     void StdString();
 #endif
+    void Sscanf();
 
     DECLARE_NO_COPY_CLASS(VarArgTestCase)
 };
@@ -108,3 +110,21 @@ void VarArgTestCase::StdString()
     CPPUNIT_ASSERT( s == "string widechar(2)." );
 }
 #endif // wxUSE_STD_STRING
+
+void VarArgTestCase::Sscanf()
+{
+    int i = 0;
+    char str[20];
+    wchar_t wstr[20];
+
+    wxString input("42 test");
+
+    wxSscanf(input, "%d %s", &i, &str);
+    CPPUNIT_ASSERT( i == 42 );
+    CPPUNIT_ASSERT( wxStrcmp(str, "test") == 0 );
+
+    i = 0;
+    wxSscanf(input, L"%d %s", &i, &wstr);
+    CPPUNIT_ASSERT( i == 42 );
+    CPPUNIT_ASSERT( wxStrcmp(wstr, "test") == 0 );
+}

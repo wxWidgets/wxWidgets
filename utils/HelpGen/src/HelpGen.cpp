@@ -677,7 +677,7 @@ int main(int argc, char **argv)
                         directoryOut = argv[current];
                         if ( !directoryOut.empty() ) {
                             // terminate with a '/' if it doesn't have it
-                            switch ( directoryOut.Last() ) {
+                            switch ( directoryOut.Last().GetValue() ) {
                                 case '/':
 #ifdef __WXMSW__
                                 case '\\':
@@ -2211,6 +2211,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.45  2007/05/25 20:29:14  VS
+   compilation fix: can't use wxUniCharRef in switch statement
+
    Revision 1.44  2005/05/31 17:47:45  ABX
    More warning and error fixes (work in progress with Tinderbox).
 

@@ -49,15 +49,15 @@
 class wxSTCTimer : public wxTimer {
 public:
     wxSTCTimer(ScintillaWX* swx) {
-        this->swx = swx;
+        m_swx = swx;
     }
 
     void Notify() {
-        swx->DoTick();
+        m_swx->DoTick();
     }
 
 private:
-    ScintillaWX* swx;
+    ScintillaWX* m_swx;
 };
 
 
@@ -65,32 +65,32 @@ private:
 class wxStartDragTimer : public wxTimer {
 public:
     wxStartDragTimer(ScintillaWX* swx) {
-        this->swx = swx;
+        m_swx = swx;
     }
 
     void Notify() {
-        swx->DoStartDrag();
+        m_swx->DoStartDrag();
     }
 
 private:
-    ScintillaWX* swx;
+    ScintillaWX* m_swx;
 };
 
 
 bool wxSTCDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString& data) {
-    return swx->DoDropText(x, y, data);
+    return m_swx->DoDropText(x, y, data);
 }
 
 wxDragResult  wxSTCDropTarget::OnEnter(wxCoord x, wxCoord y, wxDragResult def) {
-    return swx->DoDragEnter(x, y, def);
+    return m_swx->DoDragEnter(x, y, def);
 }
 
 wxDragResult  wxSTCDropTarget::OnDragOver(wxCoord x, wxCoord y, wxDragResult def) {
-    return swx->DoDragOver(x, y, def);
+    return m_swx->DoDragOver(x, y, def);
 }
 
 void  wxSTCDropTarget::OnLeave() {
-    swx->DoDragLeave();
+    m_swx->DoDragLeave();
 }
 #endif // wxUSE_DRAG_AND_DROP
 

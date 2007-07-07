@@ -639,7 +639,7 @@ void DateTimeTestCase::TestTimeFormat()
 
             // convert back
             wxDateTime dt2;
-            const wxChar *result = dt2.ParseFormat(s, fmt);
+            const wxChar *result = dt2.ParseFormat(s.c_str(), fmt);
             if ( !result )
             {
                 // converion failed - should it have?

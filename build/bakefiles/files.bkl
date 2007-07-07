@@ -394,6 +394,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/archive.h
     wx/arrimpl.cpp
     wx/arrstr.h
+    wx/atomic.h
     wx/beforestd.h
     wx/buffer.h
     wx/build.h
@@ -406,6 +407,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/convauto.h
     wx/containr.h
     wx/cpp.h
+    wx/crt.h
     wx/datetime.h
     wx/datstrm.h
     wx/dde.h
@@ -502,6 +504,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/wx.h
     wx/wxchar.h
     wx/wxcrt.h
+    wx/wxcrtbase.h
     wx/wxcrtvararg.h
     wx/wxprec.h
     wx/xti.h

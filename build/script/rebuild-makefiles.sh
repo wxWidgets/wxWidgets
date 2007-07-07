@@ -6,11 +6,11 @@ WINSRCDIR=/mnt/daily
 FTPDIR=/home/ftp/pub
 LD_LIBRARY_PATH=/usr/local/lib
 
-update_from_cvs()
+update_from_svn()
 {
     (
     cd ${WORKDIR}/wxWidgets 
-    cvs -z3 update -P -d
+    svn up
     find . -name \.#\* | xargs rm -rf
     )
 
@@ -70,45 +70,45 @@ copy_files ()
 ##delete old files and then copy new ones, add a symlink
 
 ## Makefiles
-find ${FTPDIR}/CVS_Makefiles/files -type f -name wx-mk\* -mtime +3 | xargs rm -rf
-cp  ${WORKDIR}/archives/wx-mk-* ${FTPDIR}/CVS_Makefiles/files
+find ${FTPDIR}/Daily_Makefiles/files -type f -name wx-mk\* -mtime +3 | xargs rm -rf
+cp  ${WORKDIR}/archives/wx-mk-* ${FTPDIR}/Daily_Makefiles/files
 
-rm -f ${FTPDIR}/CVS_Makefiles/wx* ${FTPDIR}/CVS_Makefiles/MD5SUM
+rm -f ${FTPDIR}/Daily_Makefiles/wx* ${FTPDIR}/Daily_Makefiles/MD5SUM
 ##there must be an easier way of doing these links...
-for f in `find ${FTPDIR}/CVS_Makefiles/files -type f -name wx-mk\* -mmin -601` ; do
+for f in `find ${FTPDIR}/Daily_Makefiles/files -type f -name wx-mk\* -mmin -601` ; do
        ln -s $f `echo $f | sed -e "s/-${CURDATE}//" | sed -e "s|/files||" `
 done
-md5sum ${FTPDIR}/CVS_Makefiles/wx* > ${FTPDIR}/CVS_Makefiles/MD5SUM
+md5sum ${FTPDIR}/Daily_Makefiles/wx* > ${FTPDIR}/Daily_Makefiles/MD5SUM
 sleep 10
-echo CVS Makefiles generated from bakefiles last updated at `date -u` > ${FTPDIR}/CVS_Makefiles/updated_at.txt
+echo CVS Makefiles generated from bakefiles last updated at `date -u` > ${FTPDIR}/Daily_Makefiles/updated_at.txt
 
 ## Setup.exe
-find ${FTPDIR}/CVS_HEAD/v1/files -type f -name wx\* -mtime +3 | xargs rm -rf
-cp  ${WORKDIR}/archives/win/*.exe ${FTPDIR}/CVS_HEAD/v1/files
+find ${FTPDIR}/Daily_HEAD/files -type f -name wx\* -mtime +3 | xargs rm -rf
+cp  ${WORKDIR}/archives/win/*.exe ${FTPDIR}/Daily_HEAD/files
 
-rm -f ${FTPDIR}/CVS_HEAD/v1/*.exe ${FTPDIR}/CVS_HEAD/v1/MD5SUM
+rm -f ${FTPDIR}/Daily_HEAD/*.exe ${FTPDIR}/Daily_HEAD/MD5SUM
 ##there must be an easier way of doing these links...
-for f in `find ${FTPDIR}/CVS_HEAD/v1/files -type f -name wx\*.exe -mmin -601` ; do
+for f in `find ${FTPDIR}/Daily_HEAD/files -type f -name wx\*.exe -mmin -601` ; do
        ln -s $f `echo $f | sed -e "s/-${CURDATE}//" | sed -e "s|/files||" `
 done
-md5sum ${FTPDIR}/CVS_HEAD/v1/wx* > ${FTPDIR}/CVS_HEAD/v1/MD5SUM
+md5sum ${FTPDIR}/Daily_HEAD/wx* > ${FTPDIR}/Daily_HEAD/MD5SUM
 sleep 10
-echo CVS HEAD  last updated at `date -u` > ${FTPDIR}/CVS_HEAD/v1/updated_at.txt
+echo CVS HEAD  last updated at `date -u` > ${FTPDIR}/Daily_HEAD/updated_at.txt
 
 
 ## Docs...
-find ${FTPDIR}/CVS_Docs/files -type f -name wx\* -mtime +3 | xargs rm -rf
-cp  ${WORKDIR}/archives/wx-doc* ${FTPDIR}/CVS_Docs/files
-cp  ${WORKDIR}/archives/win/wxW* ${FTPDIR}/CVS_Docs/files
+find ${FTPDIR}/Daily_Docs/files -type f -name wx\* -mtime +3 | xargs rm -rf
+cp  ${WORKDIR}/archives/wx-doc* ${FTPDIR}/Daily_Docs/files
+cp  ${WORKDIR}/archives/win/wxW* ${FTPDIR}/Daily_Docs/files
 
-rm -f ${FTPDIR}/CVS_Docs/wx* ${FTPDIR}/CVS_Docs/MD5SUM
+rm -f ${FTPDIR}/Daily_Docs/wx* ${FTPDIR}/Daily_Docs/MD5SUM
 ##there must be an easier way of doing these links...
-for f in `find ${FTPDIR}/CVS_Docs/files -type f -name wx\* -mmin -601` ; do
+for f in `find ${FTPDIR}/Daily_Docs/files -type f -name wx\* -mmin -601` ; do
        ln -s $f `echo $f | sed -e "s/-${CURDATE}//" | sed -e "s|/files||" `
 done
-md5sum ${FTPDIR}/CVS_Docs/wx* > ${FTPDIR}/CVS_Docs/MD5SUM
+md5sum ${FTPDIR}/Daily_Docs/wx* > ${FTPDIR}/Daily_Docs/MD5SUM
 sleep 10
-echo CVS Documentation generated from bakefiles last updated at `date -u` > ${FTPDIR}/CVS_Docs/updated_at.txt
+echo CVS Documentation generated from bakefiles last updated at `date -u` > ${FTPDIR}/Daily_Docs/updated_at.txt
 }
 
 do_texrtf ()
@@ -180,17 +180,17 @@ add_win_files ()
 {
 ### starts with wx***.zip
 
-for f in `find ${WINSRCDIR}/ -maxdepth 0 -name wx\*.zip ` ; do       
+for f in `find ${WINSRCDIR}/ -maxdepth 1 -name wx\*.zip ` ; do       
        cp $f ${WORKDIR}/archives/win/`basename $f | sed -e "s/.zip//"`-${CURDATE}.zip
        done
 
-for f in `find ${WINSRCDIR}/ -maxdepth 0 -name wx\*.exe ` ; do       
+for f in `find ${WINSRCDIR}/ -maxdepth 1 -name wx\*.exe ` ; do       
        cp $f ${WORKDIR}/archives/win/`basename $f | sed -e "s/.exe//"`-${CURDATE}.exe
        done
 
 }
 
-update_from_cvs
+update_from_svn
 regenerate_makefiles
 package_makefiles
 

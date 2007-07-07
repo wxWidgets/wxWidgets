@@ -650,13 +650,6 @@ void wxDataOutputStream::WriteDouble(const double *buffer, size_t size)
   }
 }
 
-wxDataOutputStream& wxDataOutputStream::operator<<(const wxChar *string)
-{
-  Write32(wxStrlen(string));
-  m_output->Write((const char *)string, wxStrlen(string)*sizeof(wxChar));
-  return *this;
-}
-
 wxDataOutputStream& wxDataOutputStream::operator<<(const wxString& string)
 {
   WriteString(string);

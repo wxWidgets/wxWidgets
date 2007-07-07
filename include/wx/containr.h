@@ -57,12 +57,21 @@ public:
     // returns whether we should accept focus ourselves or not
     bool AcceptsFocus() const { return m_acceptsFocus; }
 
+    // returns whether we or one of our children accepts focus: we always do
+    // because if we don't have any focusable children it probably means that
+    // we're not being used as a container at all (think of wxGrid or generic
+    // wxListCtrl) and so should get focus for ourselves
+    bool AcceptsFocusRecursively() const { return true; }
+
     // call this when the number of children of the window changes
-    void UpdateCanFocus() { SetCanFocus(ShouldAcceptFocus()); }
+    //
+    // note that we have any children, this panel (used just as container for
+    // them) shouldn't get focus for itself
+    void UpdateCanFocus() { SetCanFocus(!HasAnyFocusableChildren()); }
 
 protected:
-    // return true if we should be focusable
-    bool ShouldAcceptFocus() const;
+    // return true if we have any children accepting focus
+    bool HasAnyFocusableChildren() const;
 
     // the parent window we manage the children for
     wxWindow *m_winParent;
@@ -78,6 +87,7 @@ private:
 #define WX_DECLARE_CONTROL_CONTAINER_BASE()                                   \
 public:                                                                       \
     virtual bool AcceptsFocus() const;                                        \
+    virtual bool AcceptsFocusRecursively() const;                             \
     virtual void AddChild(wxWindowBase *child);                               \
     virtual void RemoveChild(wxWindowBase *child);                            \
     void SetFocusIgnoringChildren();                                          \
@@ -101,6 +111,11 @@ protected:                                                                    \
         basename::AddChild(child);                                            \
                                                                               \
         m_container.UpdateCanFocus();                                         \
+    }                                                                         \
+                                                                              \
+    bool classname::AcceptsFocusRecursively() const                           \
+    {                                                                         \
+        return m_container.AcceptsFocusRecursively();                         \
     }                                                                         \
                                                                               \
     bool classname::AcceptsFocus() const                                      \

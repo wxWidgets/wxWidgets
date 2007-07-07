@@ -51,7 +51,7 @@
     #include <StringMgr.h>
 #endif
 
-#include "wx/wxcrt.h"       // for wxChar, wxStrlen() etc.
+#include "wx/wxcrtbase.h"   // for wxChar, wxStrlen() etc.
 #include "wx/strvararg.h"
 #include "wx/buffer.h"      // for wxCharBuffer
 #include "wx/strconv.h"     // for wxConvertXXX() macros and wxMBConv classes
@@ -380,16 +380,35 @@ protected:
 // see the comment near wxString::iterator for why we need this
 struct WXDLLIMPEXP_BASE wxStringIteratorNode
 {
-    inline wxStringIteratorNode(const wxString *str,
-                                wxStringImpl::const_iterator *citer);
-    inline wxStringIteratorNode(const wxString *str,
-                                wxStringImpl::iterator *iter);
-    inline ~wxStringIteratorNode();
+    wxStringIteratorNode()
+        : m_str(NULL), m_citer(NULL), m_iter(NULL), m_prev(NULL), m_next(NULL) {}
+    wxStringIteratorNode(const wxString *str,
+                          wxStringImpl::const_iterator *citer)
+        { DoSet(str, citer, NULL); }
+    wxStringIteratorNode(const wxString *str, wxStringImpl::iterator *iter)
+        { DoSet(str, NULL, iter); }
+    ~wxStringIteratorNode()
+        { clear(); }
+
+    inline void set(const wxString *str, wxStringImpl::const_iterator *citer)
+        { clear(); DoSet(str, citer, NULL); }
+    inline void set(const wxString *str, wxStringImpl::iterator *iter)
+        { clear(); DoSet(str, NULL, iter); }
 
     const wxString *m_str;
     wxStringImpl::const_iterator *m_citer;
     wxStringImpl::iterator *m_iter;
     wxStringIteratorNode *m_prev, *m_next;
+
+private:
+    inline void clear();
+    inline void DoSet(const wxString *str,
+                      wxStringImpl::const_iterator *citer,
+                      wxStringImpl::iterator *iter);
+
+    // the node belongs to a particular iterator instance, it's not copied
+    // when a copy of the iterator is made
+    DECLARE_NO_COPY_CLASS(wxStringIteratorNode)
 };
 #endif // wxUSE_UNICODE_UTF8
 
@@ -639,7 +658,7 @@ public:
       private:                                                              \
           underlying_iterator m_cur
 
-  class const_iterator;
+  class WXDLLIMPEXP_BASE const_iterator;
 
 #if wxUSE_UNICODE_UTF8
   // NB: In UTF-8 build, (non-const) iterator needs to keep reference
@@ -656,13 +675,16 @@ public:
   //     string and traversing it in wxUniCharRef::operator=(). Head of the
   //     list is stored in wxString. (FIXME-UTF8)
 
-  class iterator
+  class WXDLLIMPEXP_BASE iterator
   {
       WX_STR_ITERATOR_IMPL(iterator, wxChar*, wxUniCharRef);
 
   public:
+      iterator() {}
       iterator(const iterator& i)
           : m_cur(i.m_cur), m_node(i.str(), &m_cur) {}
+      iterator& operator=(const iterator& i)
+        { m_cur = i.m_cur; m_node.set(i.str(), &m_cur); return *this; }
 
       reference operator*()
         { return wxUniCharRef::CreateForString(m_node, m_cur); }
@@ -687,17 +709,23 @@ public:
       friend class const_iterator;
   };
 
-  class const_iterator
+  class WXDLLIMPEXP_BASE const_iterator
   {
       // NB: reference_type is intentionally value, not reference, the character
       //     may be encoded differently in wxString data:
       WX_STR_ITERATOR_IMPL(const_iterator, const wxChar*, wxUniChar);
 
   public:
+      const_iterator() {}
       const_iterator(const const_iterator& i)
           : m_cur(i.m_cur), m_node(i.str(), &m_cur) {}
       const_iterator(const iterator& i)
           : m_cur(i.m_cur), m_node(i.str(), &m_cur) {}
+
+      const_iterator& operator=(const const_iterator& i)
+        { m_cur = i.m_cur; m_node.set(i.str(), &m_cur); return *this; }
+      const_iterator& operator=(const iterator& i)
+        { m_cur = i.m_cur; m_node.set(i.str(), &m_cur); return *this; }
 
       reference operator*() const
         { return wxStringOperations::DecodeChar(m_cur); }
@@ -726,11 +754,12 @@ public:
 
 #else // !wxUSE_UNICODE_UTF8
 
-  class iterator
+  class WXDLLIMPEXP_BASE iterator
   {
       WX_STR_ITERATOR_IMPL(iterator, wxChar*, wxUniCharRef);
 
   public:
+      iterator() {}
       iterator(const iterator& i) : m_cur(i.m_cur) {}
 
       reference operator*()
@@ -753,13 +782,14 @@ public:
       friend class const_iterator;
   };
 
-  class const_iterator
+  class WXDLLIMPEXP_BASE const_iterator
   {
       // NB: reference_type is intentionally value, not reference, the character
       //     may be encoded differently in wxString data:
       WX_STR_ITERATOR_IMPL(const_iterator, const wxChar*, wxUniChar);
 
   public:
+      const_iterator() {}
       const_iterator(const const_iterator& i) : m_cur(i.m_cur) {}
       const_iterator(const iterator& i) : m_cur(i.m_cur) {}
 
@@ -801,6 +831,7 @@ public:
       typedef typename T::reference reference;
       typedef typename T::pointer *pointer;
 
+      reverse_iterator_impl() {}
       reverse_iterator_impl(iterator_type i) : m_cur(i) {}
       reverse_iterator_impl(const reverse_iterator_impl& ri)
           : m_cur(ri.m_cur) {}
@@ -992,7 +1023,12 @@ public:
     wxString(const std::string& str)
         { assign(str.c_str(), str.length()); }
   #endif
+#endif // wxUSE_STD_STRING
 
+  // Unlike ctor from std::string, we provide conversion to std::string only
+  // if wxUSE_STL and not merely wxUSE_STD_STRING (which is on by default),
+  // because it conflicts with operator const char/wchar_t*:
+#if wxUSE_STL
   #if wxUSE_UNICODE_WCHAR && wxUSE_STL_BASED_WXSTRING
     // wxStringImpl is std::string in the encoding we want
     operator const wxStdWideString&() const { return m_impl; }
@@ -1165,8 +1201,13 @@ public:
 
     // implicit conversion to C string
     operator wxCStrData() const { return c_str(); }
+
+    // these operators conflict with operators for conversion to std::string,
+    // so they must be disabled in STL build:
+#if !wxUSE_STL
     operator const char*() const { return c_str(); }
     operator const wchar_t*() const { return c_str(); }
+#endif
 
     // implicit conversion to untyped pointer for compatibility with previous
     // wxWidgets versions: this is the same as conversion to const char * so it
@@ -1194,11 +1235,14 @@ public:
     // the behaviour of these functions with the strings containing anything
     // else than 7 bit ASCII characters is undefined, use at your own risk.
 #if wxUSE_UNICODE
+    static wxString FromAscii(const char *ascii, size_t len);  // string
     static wxString FromAscii(const char *ascii);  // string
     static wxString FromAscii(const char ascii);   // char
     const wxCharBuffer ToAscii() const;
 #else // ANSI
     static wxString FromAscii(const char *ascii) { return wxString( ascii ); }
+    static wxString FromAscii(const char *ascii, size_t len)
+        { return wxString( ascii, len ); }
     static wxString FromAscii(const char ascii) { return wxString( ascii ); }
     const char *ToAscii() const { return c_str(); }
 #endif // Unicode/!Unicode
@@ -1207,11 +1251,19 @@ public:
 #if wxUSE_UNICODE_UTF8
     static wxString FromUTF8(const char *utf8)
     {
+      if ( !utf8 )
+          return wxEmptyString;
+
       wxASSERT( wxStringOperations::IsValidUtf8String(utf8) );
       return FromImpl(wxStringImpl(utf8));
     }
     static wxString FromUTF8(const char *utf8, size_t len)
     {
+      if ( !utf8 )
+          return wxEmptyString;
+      if ( len == npos )
+          return FromUTF8(utf8);
+
       wxASSERT( wxStringOperations::IsValidUtf8String(utf8, len) );
       return FromImpl(wxStringImpl(utf8, len));
     }
@@ -1510,11 +1562,7 @@ public:
   bool IsSameAs(const wxWCharBuffer& str, bool compareWithCase = true) const
     { return IsSameAs(str.data(), compareWithCase); }
     // comparison with a single character: returns true if equal
-  bool IsSameAs(wxUniChar c, bool compareWithCase = true) const
-    {
-      return (length() == 1) && (compareWithCase ? GetChar(0u) == c
-                              : wxToupper(GetChar(0u)) == wxToupper(c));
-    }
+  bool IsSameAs(wxUniChar c, bool compareWithCase = true) const;
   // FIXME-UTF8: remove these overloads
   bool IsSameAs(wxUniCharRef c, bool compareWithCase = true) const
     { return IsSameAs(wxUniChar(c), compareWithCase); }
@@ -2524,6 +2572,12 @@ private:
 private:
   wxStringImpl m_impl;
 
+#ifdef __VISUALC__
+    // "struct 'ConvertedBuffer<T>' needs to have dll-interface to be used by
+    // clients of class 'wxString'" - this is private, we don't care
+    #pragma warning (disable:4251)
+#endif
+
   // buffers for compatibility conversion from (char*)c_str() and
   // (wchar_t*)c_str():
   // FIXME-UTF8: bechmark various approaches to keeping compatibility buffers
@@ -2552,6 +2606,10 @@ private:
   ConvertedBuffer<wchar_t> m_convertedToWChar;
 #endif
 
+#ifdef __VISUALC__
+    #pragma warning (default:4251)
+#endif
+
 #if wxUSE_UNICODE_UTF8
   // FIXME-UTF8: (try to) move this elsewhere (TLS) or solve differently
   //             assigning to character pointer to by wxString::interator may
@@ -2561,6 +2619,10 @@ private:
   {
       wxStringIteratorNodeHead() : ptr(NULL) {}
       wxStringIteratorNode *ptr;
+
+      // copying is disallowed as it would result in more than one pointer into
+      // the same linked list
+      DECLARE_NO_COPY_CLASS(wxStringIteratorNodeHead)
   };
 
   wxStringIteratorNodeHead m_iterators;
@@ -2948,7 +3010,7 @@ inline wxCStrData::wxCStrData(const wxCStrData& data)
 inline wxCStrData::~wxCStrData()
 {
     if ( m_owned )
-        delete m_str;
+        delete wx_const_cast(wxString*, m_str); // cast to silence warnings
 }
 
 // simple cases for AsChar() and AsWChar(), the complicated ones are
@@ -3060,49 +3122,49 @@ inline wxWCharBuffer::wxWCharBuffer(const wxCStrData& cstr)
 // implementation of wxStringIteratorNode inline methods
 // ----------------------------------------------------------------------------
 
-wxStringIteratorNode::wxStringIteratorNode(const wxString *str,
-                                           wxStringImpl::const_iterator *citer)
-    : m_str(str),
-      m_citer(citer),
-      m_iter(NULL),
-      m_prev(NULL),
-      m_next(str->m_iterators.ptr)
+void wxStringIteratorNode::DoSet(const wxString *str,
+                                 wxStringImpl::const_iterator *citer,
+                                 wxStringImpl::iterator *iter)
 {
-    wx_const_cast(wxString*, m_str)->m_iterators.ptr = this;
-    if ( m_next )
-        m_next->m_prev = this;
+    m_prev = NULL;
+    m_iter = iter;
+    m_citer = citer;
+    m_str = str;
+    if ( str )
+    {
+        m_next = str->m_iterators.ptr;
+        wx_const_cast(wxString*, m_str)->m_iterators.ptr = this;
+        if ( m_next )
+            m_next->m_prev = this;
+    }
+    else
+    {
+        m_next = NULL;
+    }
 }
 
-wxStringIteratorNode::wxStringIteratorNode(const wxString *str,
-                                           wxStringImpl::iterator *iter)
-    : m_str(str),
-      m_citer(NULL),
-      m_iter(iter),
-      m_prev(NULL),
-      m_next(str->m_iterators.ptr)
-{
-    wx_const_cast(wxString*, m_str)->m_iterators.ptr = this;
-    if ( m_next)
-        m_next->m_prev = this;
-}
-
-wxStringIteratorNode::~wxStringIteratorNode()
+void wxStringIteratorNode::clear()
 {
     if ( m_next )
         m_next->m_prev = m_prev;
     if ( m_prev )
         m_prev->m_next = m_next;
-    else // first in the list
+    else if ( m_str ) // first in the list
         wx_const_cast(wxString*, m_str)->m_iterators.ptr = m_next;
+
+    m_next = m_prev = NULL;
+    m_citer = NULL;
+    m_iter = NULL;
+    m_str = NULL;
 }
 #endif // wxUSE_UNICODE_UTF8
 
 #if WXWIN_COMPATIBILITY_2_8
-    // lot of code out there doesn't explicitly include wx/wxchar.h, but uses
+    // lot of code out there doesn't explicitly include wx/crt.h, but uses
     // CRT wrappers that are now declared in wx/wxcrt.h and wx/wxcrtvararg.h,
     // so let's include this header now that wxString is defined and it's safe
     // to do it:
-    #include "wx/wxchar.h"
+    #include "wx/crt.h"
 #endif
 
 #endif  // _WX_WXSTRING_H_

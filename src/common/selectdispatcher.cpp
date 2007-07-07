@@ -79,7 +79,7 @@ bool wxSelectSets::HasFD(int fd) const
 {
     for ( int n = 0; n < Max; n++ )
     {
-        if ( wxFD_ISSET(fd, &m_fds[n]) )
+        if ( wxFD_ISSET(fd, (fd_set*) &m_fds[n]) )
             return true;
     }
 
@@ -98,7 +98,7 @@ bool wxSelectSets::SetFD(int fd, int flags)
             wxLogTrace(wxSelectDispatcher_Trace,
                        _T("Registered fd %d for %s events"), fd, ms_names[n]);
         }
-        else if ( wxFD_ISSET(fd, &m_fds[n]) )
+        else if ( wxFD_ISSET(fd,  (fd_set*) &m_fds[n]) )
         {
             wxFD_CLR(fd, &m_fds[n]);
             wxLogTrace(wxSelectDispatcher_Trace,
@@ -118,7 +118,7 @@ void wxSelectSets::Handle(int fd, wxFDIOHandler& handler) const
 {
     for ( int n = 0; n < Max; n++ )
     {
-        if ( wxFD_ISSET(fd, &m_fds[n]) )
+        if ( wxFD_ISSET(fd, (fd_set*) &m_fds[n]) )
         {
             wxLogTrace(wxSelectDispatcher_Trace,
                        _T("Got %s event on fd %d"), ms_names[n], fd);
@@ -160,7 +160,7 @@ wxSelectDispatcher::wxSelectDispatcher()
 
 bool wxSelectDispatcher::RegisterFD(int fd, wxFDIOHandler *handler, int flags)
 {
-    if ( !wxFDIODispatcher::RegisterFD(fd, handler, flags) )
+    if ( !wxMappedFDIODispatcher::RegisterFD(fd, handler, flags) )
         return false;
 
     if ( !m_sets.SetFD(fd, flags) )
@@ -174,7 +174,7 @@ bool wxSelectDispatcher::RegisterFD(int fd, wxFDIOHandler *handler, int flags)
 
 bool wxSelectDispatcher::ModifyFD(int fd, wxFDIOHandler *handler, int flags)
 {
-    if ( !wxFDIODispatcher::ModifyFD(fd, handler, flags) )
+    if ( !wxMappedFDIODispatcher::ModifyFD(fd, handler, flags) )
         return false;
 
     wxASSERT_MSG( fd <= m_maxFD, _T("logic error: registered fd > m_maxFD?") );
@@ -182,10 +182,8 @@ bool wxSelectDispatcher::ModifyFD(int fd, wxFDIOHandler *handler, int flags)
     return m_sets.SetFD(fd, flags);
 }
 
-wxFDIOHandler *wxSelectDispatcher::UnregisterFD(int fd, int flags)
+bool wxSelectDispatcher::UnregisterFD(int fd, int flags)
 {
-    wxFDIOHandler * const handler = wxFDIODispatcher::UnregisterFD(fd, flags);
-
     m_sets.ClearFD(fd, flags);
 
     // remove the handler if we don't need it any more
@@ -205,7 +203,7 @@ wxFDIOHandler *wxSelectDispatcher::UnregisterFD(int fd, int flags)
         }
     }
 
-    return handler;
+    return true;
 }
 
 void wxSelectDispatcher::ProcessSets(const wxSelectSets& sets)

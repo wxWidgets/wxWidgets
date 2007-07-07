@@ -57,34 +57,24 @@ void wxControlContainerBase::SetCanFocus(bool acceptsFocus)
     m_winParent->SetCanFocus(m_acceptsFocus);
 }
 
-// if the window has a focusable child, it shouldn't be focusable itself (think
-// of wxPanel used for grouping different controls) but if it doesn't have any
-// (focusable) children, then it should be possible to give it focus (think of
-// wxGrid or generic wxListCtrl)
-bool wxControlContainerBase::ShouldAcceptFocus() const
+bool wxControlContainerBase::HasAnyFocusableChildren() const
 {
-    // we can accept focus either if we have no children at all (in this case
-    // we're probably not used as a container) or only when at least one child
-    // accepts focus
-    wxWindowList::compatibility_iterator node = m_winParent->GetChildren().GetFirst();
-    if ( !node )
-        return true;
-
-    while ( node )
+    const wxWindowList& children = m_winParent->GetChildren();
+    for ( wxWindowList::const_iterator i = children.begin(),
+                                     end = children.end();
+          i != end;
+          ++i )
     {
-        wxWindow *child = node->GetData();
-        node = node->GetNext();
+        const wxWindow * const child = *i;
 
-#ifdef __WXMAC__
-        if ( m_winParent->MacIsWindowScrollbar( child ) )
+        if ( !m_winParent->IsClientAreaChild(child) )
             continue;
-#endif
 
         if ( child->CanAcceptFocus() )
-            return false;
+            return true;
     }
 
-    return true;
+    return false;
 }
 
 #ifndef wxHAS_NATIVE_TAB_TRAVERSAL
@@ -141,12 +131,16 @@ void wxControlContainer::SetLastFocus(wxWindow *win)
     }
 
     // propagate the last focus upwards so that our parent can set focus back
-    // to us if it loses it now and regains later
-    wxWindow *parent = m_winParent->GetParent();
-    if ( parent )
+    // to us if it loses it now and regains later; do *not* do this if we are
+    // a toplevel window (e.g. wxDialog) that has another frame as its parent
+    if ( !m_winParent->IsTopLevel() )
     {
-        wxChildFocusEvent eventFocus(m_winParent);
-        parent->GetEventHandler()->ProcessEvent(eventFocus);
+        wxWindow *parent = m_winParent->GetParent();
+        if ( parent )
+        {
+            wxChildFocusEvent eventFocus(m_winParent);
+            parent->GetEventHandler()->ProcessEvent(eventFocus);
+        }
     }
 }
 
@@ -654,11 +648,10 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
         wxWindow *child = node->GetData();
         node = node->GetNext();
 
-#ifdef __WXMAC__
-        if ( child->GetParent()->MacIsWindowScrollbar( child ) )
+        // skip special windows:
+        if ( !win->IsClientAreaChild(child) )
             continue;
-#endif
-        
+
         if ( child->CanAcceptFocusFromKeyboard() && !child->IsTopLevel() )
         {
 #ifdef __WXMSW__

@@ -61,7 +61,7 @@ public:
 
    static size_t GetNumber() { return ms_bars; }
 
-   const wxChar *GetName() const { return m_name; }
+   const wxChar *GetName() const { return m_name.c_str(); }
 
 private:
    wxString m_name;

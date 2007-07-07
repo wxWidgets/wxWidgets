@@ -28,7 +28,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
-    #include "wx/wxchar.h"
+    #include "wx/crt.h"
     #include "wx/dcclient.h"
     #include "wx/frame.h"
     #include "wx/textctrl.h"

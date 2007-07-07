@@ -833,7 +833,7 @@ void MyFrame::OnFileExec(wxCommandEvent& WXUNUSED(event))
     wxString filename;
 
 #if wxUSE_FILEDLG
-    filename = wxLoadFileSelector(_T("any file"), NULL, s_filename, this);
+    filename = wxLoadFileSelector(_T("any file"), wxEmptyString, s_filename, this);
 #else // !wxUSE_FILEDLG
     filename = wxGetTextFromUser(_T("Enter the file name"), _T("exec sample"),
                                  s_filename, this);

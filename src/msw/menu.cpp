@@ -731,7 +731,7 @@ void wxMenu::SetTitle(const wxString& label)
         if ( !label.empty() )
         {
             if ( !::InsertMenu(hMenu, 0u, MF_BYPOSITION | MF_STRING,
-                               (unsigned)idMenuTitle, m_title) ||
+                               (unsigned)idMenuTitle, m_title.wx_str()) ||
                  !::InsertMenu(hMenu, 1u, MF_BYPOSITION, (unsigned)-1, NULL) )
             {
                 wxLogLastError(wxT("InsertMenu"));
@@ -767,7 +767,7 @@ void wxMenu::SetTitle(const wxString& label)
 #else
             if ( !ModifyMenu(hMenu, 0u,
                              MF_BYPOSITION | MF_STRING,
-                             (unsigned)idMenuTitle, m_title) )
+                             (unsigned)idMenuTitle, m_title.wx_str()) )
             {
                 wxLogLastError(wxT("ModifyMenu"));
             }
@@ -979,7 +979,7 @@ WXHMENU wxMenuBar::Create()
         {
             if ( !::AppendMenu((HMENU)m_hMenu, MF_POPUP | MF_STRING,
                                (UINT)(*it)->GetHMenu(),
-                               m_titles[i]) )
+                               m_titles[i].wx_str()) )
             {
                 wxLogLastError(wxT("AppendMenu"));
             }
@@ -1085,7 +1085,7 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
 
 #else
     if ( ::ModifyMenu(GetHmenu(), mswpos, MF_BYPOSITION | MF_STRING | flagsOld,
-        id, label) == (int)0xFFFFFFFF )
+                      id, label.wx_str()) == (int)0xFFFFFFFF )
     {
         wxLogLastError(wxT("ModifyMenu"));
     }
@@ -1130,7 +1130,7 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 
         if ( !::InsertMenu(GetHmenu(), (UINT)mswpos,
                            MF_BYPOSITION | MF_POPUP | MF_STRING,
-                           (UINT)GetHmenuOf(menu), title) )
+                           (UINT)GetHmenuOf(menu), title.wx_str()) )
         {
             wxLogLastError(wxT("InsertMenu"));
         }
@@ -1197,7 +1197,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 #else
         if ( !::InsertMenu(GetHmenu(), mswpos,
                            MF_BYPOSITION | MF_POPUP | MF_STRING,
-                           (UINT)GetHmenuOf(menu), title) )
+                           (UINT)GetHmenuOf(menu), title.wx_str()) )
         {
             wxLogLastError(wxT("InsertMenu"));
         }
@@ -1256,7 +1256,7 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
         }
 #else
         if ( !::AppendMenu(GetHmenu(), MF_POPUP | MF_STRING,
-                           (UINT)submenu, title) )
+                           (UINT)submenu, title.wx_str()) )
         {
             wxLogLastError(wxT("AppendMenu"));
         }

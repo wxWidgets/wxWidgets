@@ -1042,7 +1042,7 @@ public:
         // default, they will not change if they had valid values or will
         // default to Today() otherwise)
     const wxChar *ParseFormat(const wxChar *date,
-                              const wxChar *format = wxDefaultDateTimeFormat,
+                              const wxString& format = wxDefaultDateTimeFormat,
                               const wxDateTime& dateDef = wxDefaultDateTime);
         // parse a string containing the date/time in "free" format, this
         // function will try to make an educated guess at the string contents
@@ -1057,7 +1057,7 @@ public:
         // argument corresponds to the preferred date and time representation
         // for the current locale) and returns the string containing the
         // resulting text representation
-    wxString Format(const wxChar *format = wxDefaultDateTimeFormat,
+    wxString Format(const wxString& format = wxDefaultDateTimeFormat,
                     const TimeZone& tz = Local) const;
         // preferred date representation for the current locale
     wxString FormatDate() const { return Format(_T("%x")); }
@@ -1294,7 +1294,7 @@ public:
         // resulting text representation. Notice that only some of format
         // specifiers valid for wxDateTime are valid for wxTimeSpan: hours,
         // minutes and seconds make sense, but not "PM/AM" string for example.
-    wxString Format(const wxChar *format = wxDefaultTimeSpanFormat) const;
+    wxString Format(const wxString& format = wxDefaultTimeSpanFormat) const;
 
     // implementation
     // ------------------------------------------------------------------------

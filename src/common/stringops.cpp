@@ -190,13 +190,14 @@ bool wxStringOperationsUtf8::IsValidUtf8LeadByte(unsigned char c)
 #endif
 
 
-wxStringOperationsUtf8::Utf8CharBuffer
-wxStringOperationsUtf8::EncodeChar(const wxUniChar& ch)
+// NB: this is in this file and not unichar.cpp to keep all UTF-8 encoding
+//     code in single place
+wxUniChar::Utf8CharBuffer wxUniChar::AsUTF8() const
 {
     Utf8CharBuffer buf;
     char *out = buf.data;
 
-    wxUniChar::value_type code = ch.GetValue();
+    value_type code = GetValue();
 
     //    Char. number range   |        UTF-8 octet sequence
     //       (hexadecimal)     |              (binary)

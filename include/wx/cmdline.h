@@ -209,7 +209,7 @@ public:
     void Reset();
 
     // break down the command line in arguments
-    static wxArrayString ConvertStringToArgs(const wxChar *cmdline);
+    static wxArrayString ConvertStringToArgs(const wxString& cmdline);
 
 private:
     // get usage string
@@ -230,7 +230,7 @@ private:
 class WXDLLIMPEXP_BASE wxCmdLineParser
 {
 public:
-    static wxArrayString ConvertStringToArgs(const wxChar *cmdline);
+    static wxArrayString ConvertStringToArgs(const wxString& cmdline);
 };
 
 #endif // wxUSE_CMDLINE_PARSER/!wxUSE_CMDLINE_PARSER

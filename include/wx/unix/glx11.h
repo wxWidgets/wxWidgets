@@ -17,7 +17,7 @@
 // wxGLContext
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGLContext : public wxGLContextBase
+class WXDLLIMPEXP_GL wxGLContext : public wxGLContextBase
 {
 public:
     wxGLContext(wxGLCanvas *win, const wxGLContext *other = NULL);
@@ -38,7 +38,7 @@ private:
 // wxGLCanvasX11
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGLCanvasX11 : public wxGLCanvasBase
+class WXDLLIMPEXP_GL wxGLCanvasX11 : public wxGLCanvasBase
 {
 public:
     // initialization and dtor
@@ -129,7 +129,7 @@ private:
 // this is used in wx/glcanvas.h, prevent it from defining a generic wxGLApp
 #define wxGL_APP_DEFINED
 
-class wxGLApp : public wxGLAppBase
+class WXDLLIMPEXP_GL wxGLApp : public wxGLAppBase
 {
 public:
     wxGLApp();

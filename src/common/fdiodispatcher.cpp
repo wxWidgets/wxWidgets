@@ -32,7 +32,7 @@
 // implementation
 // ============================================================================
 
-wxFDIOHandler *wxFDIODispatcher::FindHandler(int fd) const
+wxFDIOHandler *wxMappedFDIODispatcher::FindHandler(int fd) const
 {
     const wxFDIOHandlerMap::const_iterator it = m_handlers.find(fd);
 
@@ -40,7 +40,7 @@ wxFDIOHandler *wxFDIODispatcher::FindHandler(int fd) const
 }
 
 
-bool wxFDIODispatcher::RegisterFD(int fd, wxFDIOHandler *handler, int flags)
+bool wxMappedFDIODispatcher::RegisterFD(int fd, wxFDIOHandler *handler, int flags)
 {
     wxUnusedVar(flags);
 
@@ -63,7 +63,7 @@ bool wxFDIODispatcher::RegisterFD(int fd, wxFDIOHandler *handler, int flags)
     return true;
 }
 
-bool wxFDIODispatcher::ModifyFD(int fd, wxFDIOHandler *handler, int flags)
+bool wxMappedFDIODispatcher::ModifyFD(int fd, wxFDIOHandler *handler, int flags)
 {
     wxUnusedVar(flags);
 
@@ -78,13 +78,12 @@ bool wxFDIODispatcher::ModifyFD(int fd, wxFDIOHandler *handler, int flags)
     return true;
 }
 
-wxFDIOHandler *wxFDIODispatcher::UnregisterFD(int fd, int flags)
+bool wxMappedFDIODispatcher::UnregisterFD(int fd, int flags)
 {
     wxFDIOHandlerMap::iterator i = m_handlers.find(fd);
-    wxCHECK_MSG( i != m_handlers.end(), NULL,
-                    _T("unregistering unregistered handler?") );
+    if( i == m_handlers.end())
+      return false;
 
-    wxFDIOHandler * const handler = i->second.handler;
     i->second.flags &= ~flags;
     if ( !i->second.flags )
     {
@@ -92,6 +91,6 @@ wxFDIOHandler *wxFDIODispatcher::UnregisterFD(int fd, int flags)
         m_handlers.erase(i);
     }
 
-    return handler;
+    return true;
 }
 

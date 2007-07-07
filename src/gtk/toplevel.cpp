@@ -379,46 +379,6 @@ gtk_window_expose_callback( GtkWidget *widget,
 }
 
 // ----------------------------------------------------------------------------
-// wxTopLevelWindowGTK itself
-// ----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// InsertChild for wxTopLevelWindowGTK
-//-----------------------------------------------------------------------------
-
-/* Callback for wxTopLevelWindowGTK. This very strange beast has to be used because
- * C++ has no virtual methods in a constructor. We have to emulate a
- * virtual function here as wxWidgets requires different ways to insert
- * a child in container classes. */
-
-static void wxInsertChildInTopLevelWindow( wxTopLevelWindowGTK* parent, wxWindow* child )
-{
-    wxASSERT( GTK_IS_WIDGET(child->m_widget) );
-
-    if (!parent->m_insertInClientArea)
-    {
-        // these are outside the client area
-        wxTopLevelWindowGTK* frame = (wxTopLevelWindowGTK*) parent;
-        gtk_pizza_put( GTK_PIZZA(frame->m_mainWidget),
-                         child->m_widget,
-                         child->m_x,
-                         child->m_y,
-                         child->m_width,
-                         child->m_height );
-    }
-    else
-    {
-        // these are inside the client area
-        gtk_pizza_put( GTK_PIZZA(parent->m_wxwindow),
-                         child->m_widget,
-                         child->m_x,
-                         child->m_y,
-                         child->m_width,
-                         child->m_height );
-    }
-}
-
-// ----------------------------------------------------------------------------
 // wxTopLevelWindowGTK creation
 // ----------------------------------------------------------------------------
 
@@ -428,10 +388,8 @@ void wxTopLevelWindowGTK::Init()
     m_miniEdge = 0;
     m_miniTitle = 0;
     m_mainWidget = (GtkWidget*) NULL;
-    m_insertInClientArea = true;
     m_isIconized = false;
     m_fsIsShowing = false;
-    m_fsSaveFlag = 0;
     m_themeEnabled = true;
     m_gdkDecor = m_gdkFunc = 0;
     m_grabbed = false;
@@ -463,8 +421,6 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     }
 
     m_title = title;
-
-    m_insertCallback = (wxInsertChildFunction) wxInsertChildInTopLevelWindow;
 
     // NB: m_widget may be !=NULL if it was created by derived class' Create,
     //     e.g. in wxTaskBarIconAreaGTK
@@ -691,7 +647,7 @@ bool wxTopLevelWindowGTK::EnableCloseButton( bool enable )
     return true;
 }
 
-bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
+bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
 {
     if (show == m_fsIsShowing)
         return false; // return what?
@@ -710,15 +666,9 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
     if ( (method == wxX11_FS_WMSPEC) && !gtk_check_version(2,2,0) )
     {
         if (show)
-        {
-            m_fsSaveFlag = style;
             gtk_window_fullscreen( GTK_WINDOW( m_widget ) );
-        }
         else
-        {
-            m_fsSaveFlag = 0;
             gtk_window_unfullscreen( GTK_WINDOW( m_widget ) );
-        }
     }
     else
 #endif // GTK+ >= 2.2.0
@@ -727,7 +677,6 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
 
         if (show)
         {
-            m_fsSaveFlag = style;
             GetPosition( &m_fsSaveFrame.x, &m_fsSaveFrame.y );
             GetSize( &m_fsSaveFrame.width, &m_fsSaveFrame.height );
 
@@ -761,7 +710,6 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
         }
         else // hide
         {
-            m_fsSaveFlag = 0;
             if (method != wxX11_FS_WMSPEC)
             {
                 // don't do it always, Metacity hates it
@@ -783,7 +731,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
 
     // documented behaviour is to show the window if it's still hidden when
     // showing it full screen
-    if ( show && !IsShown() )
+    if (show)
         Show();
 
     return true;

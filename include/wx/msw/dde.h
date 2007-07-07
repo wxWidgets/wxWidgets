@@ -51,7 +51,10 @@ public:
 
   // Calls that CLIENT can make
   virtual bool Execute(const wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
-  virtual bool Execute(const wxString& str) { return Execute(str, -1, wxIPC_TEXT); }
+  // FIXME-UTF8: change Execute() to DoExecute() to avoid having to do this;
+  //             don't use c_str() below after removing ANSI build
+  virtual bool Execute(const wxString& str)
+      { return Execute(str.c_str(), -1, wxIPC_TEXT); }
   virtual wxChar *Request(const wxString& item, int *size = NULL, wxIPCFormat format = wxIPC_TEXT);
   virtual bool Poke(const wxString& item, wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
   virtual bool StartAdvise(const wxString& item);

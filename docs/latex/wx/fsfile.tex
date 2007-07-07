@@ -43,7 +43,9 @@ Constructor. You probably won't use it. See Notes for details.
 
 \docparam{location}{The full location (aka filename) of the file}
 
-\docparam{mimetype}{MIME type of this file. Mime type is either extension-based or HTTP Content-Type}
+\docparam{mimetype}{MIME type of this file. It may be left empty, in which
+case the type will be determined from file's extension (\arg{location} must
+not be empty in this case).}
 
 \docparam{anchor}{Anchor. See \helpref{GetAnchor()}{wxfsfilegetanchor} for details.}
 

@@ -14,8 +14,6 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_STDPATHS
-
 #include "wx/string.h"
 #include "wx/filefn.h"
 
@@ -23,6 +21,8 @@
 // wxStandardPaths returns the standard locations in the file system
 // ----------------------------------------------------------------------------
 
+// NB: This is always compiled in, wxUSE_STDPATHS=0 only disables native
+//     wxStandardPaths class, but a minimal version is always available
 class WXDLLIMPEXP_BASE wxStandardPathsBase
 {
 public:
@@ -135,23 +135,34 @@ protected:
     static wxString AppendAppName(const wxString& dir);
 };
 
-#if defined(__WXMSW__)
-    #include "wx/msw/stdpaths.h"
-// We want CoreFoundation paths on both CarbonLib and Darwin (for all ports)
-#elif defined(__WXMAC__) || defined(__DARWIN__)
-    #include "wx/mac/corefoundation/stdpaths.h"
-#elif defined(__OS2__)
-    #include "wx/os2/stdpaths.h"
-#elif defined(__UNIX__)
-    #include "wx/unix/stdpaths.h"
-#elif defined(__PALMOS__)
-    #include "wx/palmos/stdpaths.h"
-#else
+#if wxUSE_STDPATHS
+    #if defined(__WXMSW__)
+        #include "wx/msw/stdpaths.h"
+        #define wxHAS_NATIVE_STDPATHS
+    // We want CoreFoundation paths on both CarbonLib and Darwin (for all ports)
+    #elif defined(__WXMAC__) || defined(__DARWIN__)
+        #include "wx/mac/corefoundation/stdpaths.h"
+        #define wxHAS_NATIVE_STDPATHS
+    #elif defined(__OS2__)
+        #include "wx/os2/stdpaths.h"
+        #define wxHAS_NATIVE_STDPATHS
+    #elif defined(__UNIX__)
+        #include "wx/unix/stdpaths.h"
+        #define wxHAS_NATIVE_STDPATHS
+    #elif defined(__PALMOS__)
+        #include "wx/palmos/stdpaths.h"
+        #define wxHAS_NATIVE_STDPATHS
+    #endif
+#endif
 
 // ----------------------------------------------------------------------------
 // Minimal generic implementation
 // ----------------------------------------------------------------------------
 
+// NB: Note that this minimal implementation is compiled in even if
+//     wxUSE_STDPATHS=0, so that our code can still use wxStandardPaths.
+
+#ifndef wxHAS_NATIVE_STDPATHS
 class WXDLLIMPEXP_BASE wxStandardPaths : public wxStandardPathsBase
 {
 public:
@@ -170,10 +181,7 @@ public:
 private:
     wxString m_prefix;
 };
-
-#endif
-
-#endif // wxUSE_STDPATHS
+#endif // !wxHAS_NATIVE_STDPATHS
 
 #endif // _WX_STDPATHS_H_
 

@@ -85,7 +85,7 @@ public:
     GtkWidget *GetConnectWidget();
 
 #if wxUSE_TOOLTIPS
-    void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
+    void ApplyToolTip( GtkTooltips *tips, const gchar *tip );
 #endif // wxUSE_TOOLTIPS
 
     struct _GtkTreeView   *m_treeview;

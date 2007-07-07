@@ -28,18 +28,6 @@
 
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
 
-wxMessageDialog::wxMessageDialog(wxWindow *parent,
-                                 const wxString& message,
-                                 const wxString& caption,
-                                 long style,
-                                 const wxPoint& WXUNUSED(pos))
-{
-    m_caption = caption;
-    m_message = message;
-    m_parent = parent;
-    SetMessageDialogStyle(style);
-}
-
 int wxMessageDialog::ShowModal()
 {
     int AlertID=1000;
@@ -111,7 +99,7 @@ int wxMessageDialog::ShowModal()
     DmReleaseResource(AlertHandle);
 
     // Display the dialog
-    Result=FrmCustomAlert(AppDB,AlertID,m_message.c_str(),"","");
+    Result=FrmCustomAlert(AppDB,AlertID,GetFullMessage().c_str(),"","");
 
     // Convert the Palm OS result to wxResult
     if(AlertID<1100)

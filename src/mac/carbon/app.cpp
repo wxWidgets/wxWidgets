@@ -1196,6 +1196,15 @@ bool wxApp::Yield(bool onlyIfNeeded)
         return false;
     }
 
+#if wxUSE_THREADS
+    // Yielding from a non-gui thread needs to bail out, otherwise we end up
+    // possibly sending events in the thread too.
+    if ( !wxThread::IsMain() )
+    {
+        return true;
+    }
+#endif // wxUSE_THREADS
+
     s_inYield = true;
 
     // by definition yield should handle all non-processed events

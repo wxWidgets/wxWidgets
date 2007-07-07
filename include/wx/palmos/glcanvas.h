@@ -35,7 +35,7 @@ public:
 
     void SetCurrent();
 
-    void SetColour(const wxChar *colour);
+    void SetColour(const wxString& colour);
 
     void SwapBuffers();
 

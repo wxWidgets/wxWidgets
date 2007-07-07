@@ -25,6 +25,7 @@
     #include "wx/string.h"
     #include "wx/utils.h"
     #include "wx/log.h"
+    #include "wx/crt.h"
 #endif
 
 #ifdef DBDEBUG_CONSOLE

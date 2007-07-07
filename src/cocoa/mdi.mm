@@ -232,10 +232,10 @@ void wxMDIParentFrame::WindowDidBecomeMain(NSNotification *notification)
         }
         if(!hashmap.empty())
         {
-            int windowCount = 0;
+            NSInteger windowCount = 0;
             NSCountWindows(&windowCount);
             wxASSERT(windowCount>0);
-            int *windowList = new int[windowCount];
+            NSInteger *windowList = new NSInteger[windowCount];
             NSWindowList(windowCount, windowList);
             wxIntMDIChildFrameHashMap::iterator iter = hashmap.end();
             for(int i=0; i<windowCount && iter == hashmap.end(); i++)

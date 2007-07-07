@@ -253,6 +253,7 @@ public:
     wxRichTextStyleSheet(const wxRichTextStyleSheet& sheet)
     : wxObject()
     {
+		Init();
         Copy(sheet);
     }
     wxRichTextStyleSheet() { Init(); }

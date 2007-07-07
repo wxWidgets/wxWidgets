@@ -54,7 +54,7 @@ public:
         m_style = wxSTIPPLE;
     }
     WX_NSColor GetNSColor();
-    int GetCocoaLineDash(const float **pattern);
+    int GetCocoaLineDash(const CGFloat **pattern);
 protected:
     void FreeCocoaNSColor();
     void FreeCocoaDash();
@@ -68,36 +68,36 @@ protected:
     wxDash         *m_dash;
     wxBitmap        m_stipple;
     WX_NSColor      m_cocoaNSColor;
-    float          *m_cocoaDash;
+    CGFloat        *m_cocoaDash;
 
     // Predefined dash patterns
     static const int scm_countDot;
-    static const float scm_patternDot[];
+    static const CGFloat scm_patternDot[];
     static const int scm_countLongDash;
-    static const float scm_patternLongDash[];
+    static const CGFloat scm_patternLongDash[];
     static const int scm_countShortDash;
-    static const float scm_patternShortDash[];
+    static const CGFloat scm_patternShortDash[];
     static const int scm_countDotDash;
-    static const float scm_patternDotDash[];
+    static const CGFloat scm_patternDotDash[];
 private:
     // Don't allow assignment
     wxPenRefData& operator=(const wxPenRefData& data);
 };
 
 const int wxPenRefData::scm_countDot = 1;
-const float wxPenRefData::scm_patternDot[] = {
+const CGFloat wxPenRefData::scm_patternDot[] = {
     1.0
 };
 const int wxPenRefData::scm_countLongDash = 1;
-const float wxPenRefData::scm_patternLongDash[] = {
+const CGFloat wxPenRefData::scm_patternLongDash[] = {
     10.0
 };
 const int wxPenRefData::scm_countShortDash = 1;
-const float wxPenRefData::scm_patternShortDash[] = {
+const CGFloat wxPenRefData::scm_patternShortDash[] = {
     5.0
 };
 const int wxPenRefData::scm_countDotDash = 4;
-const float wxPenRefData::scm_patternDotDash[] = {
+const CGFloat wxPenRefData::scm_patternDotDash[] = {
     1.0
 ,   1.0
 ,   5.0
@@ -185,7 +185,7 @@ inline WX_NSColor wxPenRefData::GetNSColor()
     return m_cocoaNSColor;
 }
 
-int wxPenRefData::GetCocoaLineDash(const float **pattern)
+int wxPenRefData::GetCocoaLineDash(const CGFloat **pattern)
 {
     int count;
     switch( m_style )
@@ -216,7 +216,7 @@ int wxPenRefData::GetCocoaLineDash(const float **pattern)
         {
             if(!m_cocoaDash)
             {
-                m_cocoaDash = new float[count];
+                m_cocoaDash = new CGFloat[count];
                 for(int i=0; i<count; i++)
                     m_cocoaDash[i] = m_dash[i];
             }
@@ -362,7 +362,7 @@ WX_NSColor wxPen::GetNSColor()
     return (M_PENDATA ? M_PENDATA->GetNSColor() : nil);
 }
 
-int wxPen::GetCocoaLineDash(const float **pattern)
+int wxPen::GetCocoaLineDash(const CGFloat **pattern)
 {
     if(M_PENDATA)
         return M_PENDATA->GetCocoaLineDash(pattern);

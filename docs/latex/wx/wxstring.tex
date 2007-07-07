@@ -770,6 +770,8 @@ This is a convenience method useful when storing binary data in wxString.
 
 \func{static wxString }{FromAscii}{\param{const char*}{ s}}
 
+\func{static wxString }{FromAscii}{\param{const char*}{ s}, \param{size\_t}{ len}}
+
 \func{static wxString }{FromAscii}{\param{const char}{ c}}
 
 Converts the string or character from an ASCII, 7-bit form
@@ -1371,10 +1373,10 @@ The macro wxWX2WCbuf is defined as the correct return type (without const).
 \constfunc{wxWritableWCharBuffer}{wchar\_str}{\void}
 
 Returns an object with string data that is implicitly convertible to
-{\tt char*} pointer. Note that any change to the returned buffer is lost and so
-this function is only usable for passing strings to legacy libraries that
-don't have const-correct API. Use \helpref{wxStringBuffer}{wxstringbuffer} if
-you want to modify the string.
+{\tt char*} pointer. Note that changes to the returned buffer may or may
+not be lost (depending on the build) and so this function is only usable for
+passing strings to legacy libraries that don't have const-correct API. Use
+\helpref{wxStringBuffer}{wxstringbuffer} if you want to modify the string.
 
 \wxheading{See also}
 

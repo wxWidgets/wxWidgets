@@ -56,7 +56,7 @@ void wxStackFrame::OnGetName()
     wxZeroMemory(symbolBuffer);
 
     PSYMBOL_INFO pSymbol = (PSYMBOL_INFO)symbolBuffer;
-    pSymbol->SizeOfStruct = sizeof(symbolBuffer);
+    pSymbol->SizeOfStruct = sizeof(SYMBOL_INFO);
     pSymbol->MaxNameLen = MAX_NAME_LEN;
 
     DWORD64 symDisplacement = 0;

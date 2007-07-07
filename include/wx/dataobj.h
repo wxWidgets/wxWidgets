@@ -55,7 +55,7 @@ public:
     typedef <integral type> NativeFormat;
 
     wxDataFormat(NativeFormat format = wxDF_INVALID);
-    wxDataFormat(const wxChar *format);
+    wxDataFormat(const wxString& format);
 
     wxDataFormat& operator=(NativeFormat format);
     wxDataFormat& operator=(const wxDataFormat& format);
@@ -67,7 +67,7 @@ public:
     NativeFormat GetType() const;
 
     wxString GetId() const;
-    void SetId(const wxChar *format);
+    void SetId(const wxString& format);
 };
 
 */

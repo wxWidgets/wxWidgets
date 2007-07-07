@@ -390,6 +390,10 @@ public:
         { m_key.integer = i; }
     wxListKey(const wxString& s) : m_keyType(wxKEY_STRING)
         { m_key.string = new wxString(s); }
+    wxListKey(const char *s) : m_keyType(wxKEY_STRING)
+        { m_key.string = new wxString(s); }
+    wxListKey(const wchar_t *s) : m_keyType(wxKEY_STRING)
+        { m_key.string = new wxString(s); }
 
     // accessors
     wxKeyType GetKeyType() const { return m_keyType; }

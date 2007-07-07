@@ -127,25 +127,7 @@ Finally commit $(wx)/build/bakefiles/make_dist.mk and all the other modified fil
 Currently we commit the generated makefiles except .dms, .vcp.
 
 
-5. Adding contrib library
--------------------------
-
-Contrib library bakefiles are located in $(wx)/contrib/build/name-of-contrib
-directory, together with generated makefiles. Copy the bakefile from another
-contrib library, change the IDs and files accordingly. Note that there must be
-two targets for contrib wxFoo: foodll and foolib.
-
-foodll definition must contain <wx-lib> statements for all libraries it
-depends on. WXUSINGDLL and WXMAKINGDLL_FOO must be defined and symbols from
-the library should use WXDLLIMPEXP_FOO defined in wxFoo's headers analogically
-to WXDLLIMPEXP_{BASE,CORE,HTML,...} in the main library (see 5g below for
-additional details).
-
-Run bakefile_gen in $(wx)/build/bakefiles to regenerate makefiles
-then commit $(wx)/build/bakefiles/Makefile.
-
-
-6. Adding new core library
+5. Adding new core library
 --------------------------
 
 When adding new library to the core set of libraries, the files must be

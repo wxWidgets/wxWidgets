@@ -413,7 +413,7 @@ wxFSFile* wxArchiveFSHandler::OpenFile(
 
     return new wxFSFile(s,
                         key + right,
-                        GetMimeTypeFromExt(location),
+                        wxEmptyString,
                         GetAnchor(location)
 #if wxUSE_DATETIME
                         , entry->GetDateTime()

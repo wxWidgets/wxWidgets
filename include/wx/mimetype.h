@@ -151,8 +151,9 @@ public:
     //               const wxString& openCmd,
     //               const wxString& printCmd,
     //               const wxString& desc,
-    //               // the other parameters form a NULL terminated list of
-    //               // extensions
+    //               // the other parameters form a list of extensions for this
+    //               // file type and should be terminated with wxNullPtr (not
+    //               // just NULL!)
     //               ...);
     WX_DEFINE_VARARG_FUNC_CTOR(wxFileTypeInfo,
                                // NB: these are not format strings, using

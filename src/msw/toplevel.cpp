@@ -479,7 +479,7 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
 
     if ( !title.empty() )
     {
-        ::SetWindowText(GetHwnd(), title);
+        ::SetWindowText(GetHwnd(), title.wx_str());
     }
 
     SubclassWin(m_hWnd);
@@ -507,7 +507,7 @@ bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
         exflags |= WS_EX_LAYOUTRTL;
 #endif
 
-    return MSWCreate(wxCanvasClassName, title, pos, sz, flags, exflags);
+    return MSWCreate(wxCanvasClassName, title.wx_str(), pos, sz, flags, exflags);
 }
 
 bool wxTopLevelWindowMSW::Create(wxWindow *parent,

@@ -523,6 +523,17 @@ typedef int wxWindowID;
     #define wxDEPRECATED(x) x
 #endif
 
+/*
+   Special variant of the macro above which should be used for the functions
+   which are deprecated but called by wx itself: this often happens with
+   deprecated virtual functions which are called by the library.
+ */
+#ifdef WXBUILDING
+#   define wxDEPRECATED_BUT_USED_INTERNALLY(x) x
+#else
+#   define wxDEPRECATED_BUT_USED_INTERNALLY(x) wxDEPRECATED(x)
+#endif
+
 /*  everybody gets the assert and other debug macros */
 #include "wx/debug.h"
 
@@ -1140,6 +1151,18 @@ typedef float wxFloat32;
 #       define wxWCHAR_T_IS_REAL_TYPE 1
 #   endif
 #endif /* wxUSE_WCHAR_T */
+
+/*
+   This constant should be used instead of NULL in vararg functions taking
+   wxChar* arguments: passing NULL (which is the same as 0, unless the compiler
+   defines it specially, e.g. like gcc does with its __null built-in) doesn't
+   work in this case as va_arg() wouldn't interpret the integer 0 correctly
+   when trying to convert it to a pointer on architectures where sizeof(int) is
+   strictly less than sizeof(void *).
+
+   Examples of places where this must be used include wxFileTypeInfo ctor.
+ */
+#define wxNullPtr ((void *)NULL)
 
 /*  ---------------------------------------------------------------------------- */
 /*  byte ordering related definition and macros */
@@ -2498,6 +2521,36 @@ typedef void*       WXDisplay;
 #endif
 
 #ifdef __WXCOCOA__
+
+/* Definitions of 32-bit/64-bit types
+ * These are typedef'd exactly the same way in newer OS X headers so
+ * redefinition when real headers are included should not be a problem.  If
+ * it is, the types are being defined wrongly here.
+ * The purpose of these types is so they can be used from public wx headers.
+ * and also because the older (pre-Leopard) headers don't define them.
+ */
+
+/* NOTE: We don't pollute namespace with CGFLOAT_MIN/MAX/IS_DOUBLE macros
+ * since they are unlikely to be needed in a public header.
+ */
+#if defined(__LP64__) && __LP64__
+	typedef double CGFloat;
+#else
+	typedef float CGFloat;
+#endif
+
+#if (defined(__LP64__) && __LP64__) || (defined(NS_BUILD_32_LIKE_64) && NS_BUILD_32_LIKE_64)
+typedef long NSInteger;
+typedef unsigned long NSUInteger;
+#else
+typedef int NSInteger;
+typedef unsigned int NSUInteger;
+#endif
+
+/* Objective-C type declarations.
+ * These are to be used in public headers in lieu of NSSomething* because
+ * Objective-C class names are not available in C/C++ code.
+ */
 
 /*  NOTE: This ought to work with other compilers too, but I'm being cautious */
 #if (defined(__GNUC__) && defined(__APPLE__)) || defined(__MWERKS__)

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/dfb/nonownedwnd.cpp
-// Purpose:     implementation of wxNonOwnedWindowow
+// Purpose:     implementation of wxNonOwnedWindow
 // Author:      Vaclav Slavik
 // Created:     2006-12-24
 // RCS-ID:      $Id$
@@ -244,18 +244,16 @@ bool wxNonOwnedWindow::Show(bool show)
 
     if ( show )
     {
-        wxWindow *focused = wxWindow::FindFocus();
+        wxWindow *focused = FindFocus();
         if ( focused && focused->GetTLW() == this )
         {
+            // focus is on this frame or its children, apply it to DirectFB
             SetDfbFocus();
         }
-        else if ( CanAcceptFocus() )
-        {
-            // FIXME: we should probably always call SetDfbFocus instead
-            // and call SetFocus() from wxActivateEvent/DWET_GOTFOCUS
-            // handler
-            SetFocus();
-        }
+        // else: don't do anything, if this is wxFrame or wxDialog that should
+        //       get focus when it's shown,
+        //       wxTopLevelWindowDFB::HandleFocusEvent() will do it as soon as
+        //       the event loop starts
     }
 
     return true;
@@ -381,11 +379,65 @@ void wxNonOwnedWindow::Update()
 // events handling
 // ---------------------------------------------------------------------------
 
+namespace
+{
+
+static wxNonOwnedWindow *gs_insideDFBFocusHandlerOf = NULL;
+
+struct InsideDFBFocusHandlerSetter
+{
+    InsideDFBFocusHandlerSetter(wxNonOwnedWindow *win)
+    {
+        wxASSERT( gs_insideDFBFocusHandlerOf == NULL );
+        gs_insideDFBFocusHandlerOf = win;
+    }
+    ~InsideDFBFocusHandlerSetter()
+    {
+        gs_insideDFBFocusHandlerOf = NULL;
+    }
+};
+
+} // anonymous namespace
+
+
 void wxNonOwnedWindow::SetDfbFocus()
 {
     wxCHECK_RET( IsShown(), _T("cannot set focus to hidden window") );
     wxASSERT_MSG( FindFocus() && FindFocus()->GetTLW() == this,
                   _T("setting DirectFB focus to unexpected window") );
+
+    // Don't set DirectFB focus if we're called from HandleFocusEvent() on
+    // this window, because we already have the focus in that case. Not only
+    // would it be unnecessary, it would be harmful: RequestFocus() adds
+    // an event to DirectFB event queue and calling it when in
+    // HandleFocusEvent() could result in a window being focused when it
+    // should not be. Consider this example:
+    //
+    //     tlw1->SetFocus(); // (1)
+    //     tlw2->SetFocus(); // (2)
+    //
+    // This results in adding these events to DFB queue:
+    //
+    //     DWET_GOTFOCUS(tlw1)
+    //     DWET_LOSTFOCUS(tlw1)
+    //     DWET_GOTFOCUS(tlw2)
+    //
+    // Note that the events are processed by event loop, i.e. not between
+    // execution of lines (1) and (2) above. So by the time the first
+    // DWET_GOTFOCUS event is handled, tlw2->SetFocus() was already executed.
+    // If we onconditionally called RequestFocus() from here, handling the
+    // first event would result in this change to the event queue:
+    //
+    //     DWET_LOSTFOCUS(tlw1)
+    //     DWET_GOTFOCUS(tlw2) // (3)
+    //     DWET_LOSTFOCUS(tlw2)
+    //     DWET_GOTFOCUS(tlw1)
+    //
+    // And the focus would get back to tlw1 even though that's not what we
+    // wanted.
+
+    if ( gs_insideDFBFocusHandlerOf == this )
+        return;
 
     GetDirectFBWindow()->RequestFocus();
 }
@@ -403,42 +455,44 @@ void wxNonOwnedWindow::HandleDFBWindowEvent(const wxDFBWindowEvent& event_)
     }
 
     wxNonOwnedWindow *tlw = gs_dfbWindowsMap[event.window_id];
-    wxWindow *recipient = NULL;
-    void (wxWindow::*handlerFunc)(const wxDFBWindowEvent&) = NULL;
 
     switch ( event.type )
     {
         case DWET_KEYDOWN:
         case DWET_KEYUP:
         {
-            recipient = wxWindow::FindFocus();
-            handlerFunc = &wxWindowDFB::HandleKeyEvent;
+            wxWindow *recipient = wxWindow::FindFocus();
+            if ( !recipient )
+            {
+                wxLogTrace(TRACE_EVENTS,
+                           _T("ignoring event: no recipient window"));
+                return;
+            }
+
+            wxCHECK_RET( recipient && recipient->GetTLW() == tlw,
+                         _T("event recipient not in TLW which received the event") );
+
+            recipient->HandleKeyEvent(event_);
             break;
         }
 
+        case DWET_GOTFOCUS:
+        case DWET_LOSTFOCUS:
+            {
+                InsideDFBFocusHandlerSetter inside(tlw);
+                tlw->HandleFocusEvent(event_);
+            }
+            break;
+
         case DWET_NONE:
         case DWET_ALL:
-        {
             wxFAIL_MSG( _T("invalid event type") );
             break;
-        }
 
         default:
             // we're not interested in them here
             break;
     }
-
-    if ( !recipient )
-    {
-        wxLogTrace(TRACE_EVENTS, _T("ignoring event: no recipient window"));
-        return;
-    }
-
-    wxCHECK_RET( recipient && recipient->GetTLW() == tlw,
-                 _T("event recipient not in TLW which received the event") );
-
-    // process the event:
-    (recipient->*handlerFunc)(event_);
 }
 
 // ---------------------------------------------------------------------------

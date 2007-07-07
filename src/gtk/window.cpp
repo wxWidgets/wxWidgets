@@ -1136,8 +1136,8 @@ gtk_wxwindow_commit_cb (GtkIMContext *context,
         event.SetEventObject( window );
     }
 
-    const wxWxCharBuffer data(wxGTK_CONV_BACK_SYS(str));
-    if( !data )
+    const wxString data(wxGTK_CONV_BACK_SYS(str));
+    if( data.empty() )
         return;
 
     bool ret = false;
@@ -1147,7 +1147,7 @@ gtk_wxwindow_commit_cb (GtkIMContext *context,
     while (parent && !parent->IsTopLevel())
         parent = parent->GetParent();
 
-    for( const wxChar* pstr = data; *pstr; pstr++ )
+    for( wxString::const_iterator pstr = data.begin(); pstr != data.end(); ++pstr )
     {
 #if wxUSE_UNICODE
         event.m_uniChar = *pstr;
@@ -1155,7 +1155,7 @@ gtk_wxwindow_commit_cb (GtkIMContext *context,
         event.m_keyCode = *pstr < 256 ? event.m_uniChar : 0;
         wxLogTrace(TRACE_KEYS, _T("IM sent character '%c'"), event.m_uniChar);
 #else
-        event.m_keyCode = *pstr;
+        event.m_keyCode = (char)*pstr;
 #endif  // wxUSE_UNICODE
 
         // To conform to the docs we need to translate Ctrl-alpha
@@ -1240,15 +1240,6 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
     event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK);
     event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK);
     event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK);
-    if (event.GetEventType() == wxEVT_MOUSEWHEEL)
-    {
-       event.m_linesPerAction = 3;
-       event.m_wheelDelta = 120;
-       if (((GdkEventButton*)gdk_event)->button == 4)
-           event.m_wheelRotation = 120;
-       else if (((GdkEventButton*)gdk_event)->button == 5)
-           event.m_wheelRotation = -120;
-    }
 
     wxPoint pt = win->GetClientAreaOrigin();
     event.m_x = (wxCoord)gdk_event->x - pt.x;
@@ -1443,7 +1434,7 @@ gtk_window_button_press_callback( GtkWidget *widget,
 
     g_lastButtonNumber = gdk_event->button;
 
-    if (win->m_wxwindow && (g_focusWindow != win) && win->CanAcceptFocus())
+    if (win->m_wxwindow && (g_focusWindow != win) && win->IsFocusable())
     {
         gtk_widget_grab_focus( win->m_wxwindow );
     }
@@ -1545,13 +1536,6 @@ gtk_window_button_press_callback( GtkWidget *widget,
                 ;
         }
     }
-    else if (gdk_event->button == 4 || gdk_event->button == 5)
-    {
-        if (gdk_event->type == GDK_BUTTON_PRESS )
-        {
-            event_type = wxEVT_MOUSEWHEEL;
-        }
-    }
 
     if ( event_type == wxEVT_NULL )
     {
@@ -1586,7 +1570,7 @@ gtk_window_button_press_callback( GtkWidget *widget,
         return TRUE;
 
     if ((event_type == wxEVT_LEFT_DOWN) && !win->IsOfStandardClass() && 
-        (g_focusWindow != win) && win->CanAcceptFocus())
+        (g_focusWindow != win) && win->IsFocusable())
     {
         gtk_widget_grab_focus( win->m_wxwindow );
     }
@@ -1742,7 +1726,7 @@ gtk_window_motion_notify_callback( GtkWidget *widget,
 }
 
 //-----------------------------------------------------------------------------
-// "scroll_event", (mouse wheel event)
+// "scroll_event" (mouse wheel event)
 //-----------------------------------------------------------------------------
 
 static gboolean
@@ -2020,9 +2004,7 @@ gtk_scrollbar_value_changed(GtkRange* range, wxWindow* win)
         wxScrollWinEvent event(eventType, win->GetScrollPos(orient), orient);
         event.SetEventObject(win);
 
-        win->m_blockValueChanged[dir] = true;
         win->GTKProcessEvent(event);
-        win->m_blockValueChanged[dir] = false;
     }
 }
 
@@ -2264,7 +2246,6 @@ void wxWindowGTK::Init()
     {
         m_scrollBar[dir] = NULL;
         m_scrollPos[dir] = 0;
-        m_blockValueChanged[dir] = false;
     }
 
     m_oldClientWidth =
@@ -2272,7 +2253,7 @@ void wxWindowGTK::Init()
 
     m_resizing = false;
 
-    m_insertCallback = (wxInsertChildFunction) NULL;
+    m_insertCallback = wxInsertChildInWindow;
 
     m_hasFocus = false;
 
@@ -2316,9 +2297,6 @@ bool wxWindowGTK::Create( wxWindow *parent,
         wxFAIL_MSG( wxT("wxWindowGTK creation failed") );
         return false;
     }
-
-    m_insertCallback = wxInsertChildInWindow;
-
 
     if (!HasFlag(wxHSCROLL) && !HasFlag(wxVSCROLL))
     {
@@ -2403,7 +2381,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
             g_signal_handler_block(m_scrollBar[dir], handler_id);
 
             // these handlers get notified when scrollbar slider moves
-            g_signal_connect(m_scrollBar[dir], "value_changed",
+            g_signal_connect_after(m_scrollBar[dir], "value_changed",
                          G_CALLBACK(gtk_scrollbar_value_changed), this);
         }
 
@@ -2741,12 +2719,12 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
                 right_border += default_border->right;
                 top_border += default_border->top;
                 bottom_border += default_border->bottom;
-                g_free( default_border );
+                gtk_border_free( default_border );
             }
         }
 
-        DoMoveWindow( m_x-top_border,
-                      m_y-left_border,
+        DoMoveWindow( m_x - left_border,
+                      m_y - top_border,
                       m_width+left_border+right_border,
                       m_height+top_border+bottom_border );
     }
@@ -3305,10 +3283,7 @@ bool wxWindowGTK::Reparent( wxWindowBase *newParentBase )
 void wxWindowGTK::DoAddChild(wxWindowGTK *child)
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid window") );
-
     wxASSERT_MSG( (child != NULL), wxT("invalid child window") );
-
-    wxASSERT_MSG( (m_insertCallback != NULL), wxT("invalid child insertion function") );
 
     /* add to list */
     AddChild( child );
@@ -3818,17 +3793,9 @@ void wxWindowGTK::DoSetToolTip( wxToolTip *tip )
         m_tooltip->Apply( (wxWindow *)this );
 }
 
-void wxWindowGTK::ApplyToolTip( GtkTooltips *tips, const wxChar *tip )
+void wxWindowGTK::ApplyToolTip( GtkTooltips *tips, const gchar *tip )
 {
-    if (tip)
-    {
-        wxString tmp( tip );
-        gtk_tooltips_set_tip( tips, GetConnectWidget(), wxGTK_CONV(tmp), (gchar*) NULL );
-    }
-    else
-    {
-        gtk_tooltips_set_tip( tips, GetConnectWidget(), NULL, NULL);
-    }
+    gtk_tooltips_set_tip(tips, GetConnectWidget(), tip, NULL);
 }
 #endif // wxUSE_TOOLTIPS
 
@@ -3976,11 +3943,16 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
 
     if (style == wxBG_STYLE_CUSTOM)
     {
-        GdkWindow *window = (GdkWindow*) NULL;
-        if (m_wxwindow)
+        GdkWindow *window;
+        if ( m_wxwindow )
+        {
             window = GTK_PIZZA(m_wxwindow)->bin_window;
+        }
         else
-            window = GetConnectWidget()->window;
+        {
+            GtkWidget * const w = GetConnectWidget();
+            window = w ? w->window : NULL;
+        }
 
         if (window)
         {
@@ -3993,9 +3965,11 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
 #endif
             m_needsStyleChange = false;
         }
-        else
+        else // window not realized yet
+        {
             // Do in OnIdle, because the window is not yet available
             m_needsStyleChange = true;
+        }
 
         // Don't apply widget style, or we get a grey background
     }
@@ -4140,9 +4114,8 @@ void wxWindowGTK::SetScrollbar(int orient,
                                int range,
                                bool WXUNUSED(update))
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
-    wxCHECK_RET( m_wxwindow != NULL, wxT("window needs client area for scrolling") );
-    wxCHECK_RET( m_wxwindow != m_widget, wxT("no scrolling for this wxWindow, use wxHSCROLL or wxVSCROLL") );
+    GtkRange * const sb = m_scrollBar[ScrollDirFromOrient(orient)];
+    wxCHECK_RET( sb, _T("this window is not scrollable") );
 
     if (range > 0)
     {
@@ -4159,7 +4132,7 @@ void wxWindowGTK::SetScrollbar(int orient,
         pos = range - thumbVisible;
     if (pos < 0)
         pos = 0;
-    GtkAdjustment* adj = m_scrollBar[ScrollDirFromOrient(orient)]->adjustment;
+    GtkAdjustment * const adj = sb->adjustment;
     adj->step_increment = 1;
     adj->page_increment =
     adj->page_size = thumbVisible;
@@ -4170,16 +4143,15 @@ void wxWindowGTK::SetScrollbar(int orient,
 
 void wxWindowGTK::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
-    wxCHECK_RET( m_wxwindow != NULL, wxT("window needs client area for scrolling") );
-    wxCHECK_RET( m_wxwindow != m_widget, wxT("no scrolling for this wxWindow, use wxHSCROLL or wxVSCROLL") );
+    const int dir = ScrollDirFromOrient(orient);
+    GtkRange * const sb = m_scrollBar[dir];
+    wxCHECK_RET( sb, _T("this window is not scrollable") );
 
     // This check is more than an optimization. Without it, the slider
     //   will not move smoothly while tracking when using wxScrollHelper.
     if (GetScrollPos(orient) != pos)
     {
-        const int dir = ScrollDirFromOrient(orient);
-        GtkAdjustment* adj = m_scrollBar[dir]->adjustment;
+        GtkAdjustment* adj = sb->adjustment;
         const int max = int(adj->upper - adj->page_size);
         if (pos > max)
             pos = max;
@@ -4187,39 +4159,38 @@ void wxWindowGTK::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
             pos = 0;
         m_scrollPos[dir] = adj->value = pos;
 
-        // If a "value_changed" signal emission is not already in progress
-        if (!m_blockValueChanged[dir])
-        {
-            gtk_adjustment_value_changed(adj);
-        }
+        g_signal_handlers_block_by_func(m_scrollBar[dir],
+            (gpointer)gtk_scrollbar_value_changed, this);
+
+        gtk_adjustment_value_changed(adj);
+
+        g_signal_handlers_unblock_by_func(m_scrollBar[dir],
+            (gpointer)gtk_scrollbar_value_changed, this);
     }
 }
 
 int wxWindowGTK::GetScrollThumb(int orient) const
 {
-    wxCHECK_MSG( m_widget != NULL, 0, wxT("invalid window") );
-    wxCHECK_MSG( m_wxwindow != NULL, 0, wxT("window needs client area for scrolling") );
-    wxCHECK_MSG( m_wxwindow != m_widget, 0, wxT("no scrolling for this wxWindow, use wxHSCROLL or wxVSCROLL") );
+    GtkRange * const sb = m_scrollBar[ScrollDirFromOrient(orient)];
+    wxCHECK_MSG( sb, 0, _T("this window is not scrollable") );
 
-    return int(m_scrollBar[ScrollDirFromOrient(orient)]->adjustment->page_size);
+    return int(sb->adjustment->page_size);
 }
 
 int wxWindowGTK::GetScrollPos( int orient ) const
 {
-    wxCHECK_MSG( m_widget != NULL, 0, wxT("invalid window") );
-    wxCHECK_MSG( m_wxwindow != NULL, 0, wxT("window needs client area for scrolling") );
-    wxCHECK_MSG( m_wxwindow != m_widget, 0, wxT("no scrolling for this wxWindow, use wxHSCROLL or wxVSCROLL") );
+    GtkRange * const sb = m_scrollBar[ScrollDirFromOrient(orient)];
+    wxCHECK_MSG( sb, 0, _T("this window is not scrollable") );
 
-    return int(m_scrollBar[ScrollDirFromOrient(orient)]->adjustment->value + 0.5);
+    return int(sb->adjustment->value + 0.5);
 }
 
 int wxWindowGTK::GetScrollRange( int orient ) const
 {
-    wxCHECK_MSG( m_widget != NULL, 0, wxT("invalid window") );
-    wxCHECK_MSG( m_wxwindow != NULL, 0, wxT("window needs client area for scrolling") );
-    wxCHECK_MSG( m_wxwindow != m_widget, 0, wxT("no scrolling for this wxWindow, use wxHSCROLL or wxVSCROLL") );
+    GtkRange * const sb = m_scrollBar[ScrollDirFromOrient(orient)];
+    wxCHECK_MSG( sb, 0, _T("this window is not scrollable") );
 
-    return int(m_scrollBar[ScrollDirFromOrient(orient)]->adjustment->upper);
+    return int(sb->adjustment->upper);
 }
 
 // Determine if increment is the same as +/-x, allowing for some small
@@ -4284,7 +4255,7 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 
     // No scrolling requested.
     if ((dx == 0) && (dy == 0)) return;
-
+    
     m_clipPaintRegion = true;
 
     if (GetLayoutDirection() == wxLayout_RightToLeft)

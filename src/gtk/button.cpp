@@ -71,11 +71,11 @@ gtk_button_style_set_callback( GtkWidget *m_widget, GtkStyle *WXUNUSED(style), w
             right_border += default_border->right;
             top_border += default_border->top;
             bottom_border += default_border->bottom;
-            g_free( default_border );
+            gtk_border_free( default_border );
         }
         win->MoveWindow(
-            win->m_x - top_border,
-            win->m_y - left_border,
+            win->m_x - left_border,
+            win->m_y - top_border,
             win->m_width + left_border + right_border,
             win->m_height + top_border + bottom_border);
     }

@@ -171,6 +171,9 @@ void StringTestCase::Constructors()
     const wxChar *start = wxStrchr(s, _T('r'));
     const wxChar *end = wxStrchr(s, _T('!'));
     TEST_CTOR((start, end), _T("really"));
+
+    // test if creating string from NULL C pointer works:
+    TEST_CTOR(((char*)NULL), "");
 }
 
 
@@ -630,7 +633,7 @@ void StringTestCase::ToDouble()
 
     // we need to use decimal point, not comma or whatever is its value for the
     // current locale
-    wxSetlocale(LC_ALL, _T("C"));
+    wxSetlocale(LC_ALL, "C");
 
     size_t n;
     for ( n = 0; n < WXSIZEOF(doubleData); n++ )
@@ -733,10 +736,13 @@ void StringTestCase::CStrDataImplicitConversion()
     wxString s("foo");
 
     CPPUNIT_ASSERT( CheckStrConstWChar(s, s.c_str()) );
-    CPPUNIT_ASSERT( CheckStrConstWChar(s, s) );
-
     CPPUNIT_ASSERT( CheckStrConstChar(s, s.c_str()) );
+
+    // implicit conversion of wxString is not available in STL build
+#if !wxUSE_STL
+    CPPUNIT_ASSERT( CheckStrConstWChar(s, s) );
     CPPUNIT_ASSERT( CheckStrConstChar(s, s) );
+#endif
 }
 
 void StringTestCase::ExplicitConversion()

@@ -346,9 +346,10 @@ GdkVisual *wxApp::GetGdkVisual()
     return visual;
 }
 
-bool wxApp::Initialize(int& argc, wxChar **argv)
+// use unusual names for the parameters to avoid conflict with wxApp::arg[cv]
+bool wxApp::Initialize(int& argc_, wxChar **argv_)
 {
-    if ( !wxAppBase::Initialize(argc, argv) )
+    if ( !wxAppBase::Initialize(argc_, argv_) )
         return false;
 
 #if wxUSE_THREADS
@@ -407,15 +408,15 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 #if wxUSE_UNICODE
     // gtk_init() wants UTF-8, not wchar_t, so convert
     int i;
-    char **argvGTK = new char *[argc + 1];
-    for ( i = 0; i < argc; i++ )
+    char **argvGTK = new char *[argc_ + 1];
+    for ( i = 0; i < argc_; i++ )
     {
-        argvGTK[i] = wxStrdupA(wxConvUTF8.cWX2MB(argv[i]));
+        argvGTK[i] = wxStrdupA(wxConvUTF8.cWX2MB(argv_[i]));
     }
 
-    argvGTK[argc] = NULL;
+    argvGTK[argc_] = NULL;
 
-    int argcGTK = argc;
+    int argcGTK = argc_;
 
 #ifdef __WXGPE__
     init_result = true;  // is there a _check() version of this?
@@ -425,18 +426,18 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 #endif
     wxUpdateLocaleIsUtf8();
 
-    if ( argcGTK != argc )
+    if ( argcGTK != argc_ )
     {
         // we have to drop the parameters which were consumed by GTK+
         for ( i = 0; i < argcGTK; i++ )
         {
-            while ( strcmp(wxConvUTF8.cWX2MB(argv[i]), argvGTK[i]) != 0 )
+            while ( strcmp(wxConvUTF8.cWX2MB(argv_[i]), argvGTK[i]) != 0 )
             {
-                memmove(argv + i, argv + i + 1, (argc - i)*sizeof(*argv));
+                memmove(argv_ + i, argv_ + i + 1, (argc_ - i)*sizeof(*argv_));
             }
         }
 
-        argc = argcGTK;
+        argc_ = argcGTK;
     }
     //else: gtk_init() didn't modify our parameters
 
@@ -448,14 +449,14 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     delete [] argvGTK;
 #else // !wxUSE_UNICODE
-    // gtk_init() shouldn't actually change argv itself (just its contents) so
+    // gtk_init() shouldn't actually change argv_ itself (just its contents) so
     // it's ok to pass pointer to it
-    init_result = gtk_init_check( &argc, &argv );
+    init_result = gtk_init_check( &argc_, &argv_ );
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     // update internal arg[cv] as GTK+ may have removed processed options:
-    this->argc = argc;
-    this->argv = argv;
+    this->argc = argc_;
+    this->argv = argv_;
 
     if ( m_traits )
     {
@@ -466,10 +467,10 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         wxArrayString opt, desc;
         m_traits->GetStandardCmdLineOptions(opt, desc);
 
-        for ( int i = 0; i < argc; i++ )
+        for ( int i = 0; i < argc_; i++ )
         {
             // leave just the names of the options with values
-            const wxString str = wxString(argv[i]).BeforeFirst('=');
+            const wxString str = wxString(argv_[i]).BeforeFirst('=');
 
             for ( size_t j = 0; j < opt.size(); j++ )
             {
@@ -482,7 +483,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
                     // options) it, so abort, just as we do if incorrect
                     // program option is given
                     wxLogError(_("Invalid GTK+ command line option, use \"%s --help\""),
-                               argv[0]);
+                               argv_[0]);
                     return false;
                 }
             }

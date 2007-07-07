@@ -52,11 +52,7 @@ BEGIN_EVENT_TABLE(wxDialogBase, wxTopLevelWindow)
     EVT_CLOSE(wxDialogBase::OnCloseWindow)
 
     EVT_CHAR_HOOK(wxDialogBase::OnCharHook)
-
-    WX_EVENT_TABLE_CONTROL_CONTAINER(wxDialogBase)
 END_EVENT_TABLE()
-
-WX_DELEGATE_TO_CONTROL_CONTAINER(wxDialogBase, wxTopLevelWindow)
 
 void wxDialogBase::Init()
 {
@@ -68,8 +64,6 @@ void wxDialogBase::Init()
     // dialog controls from reaching the parent frame which is usually
     // undesirable and can lead to unexpected and hard to find bugs
     SetExtraStyle(GetExtraStyle() | wxWS_EX_BLOCK_EVENTS);
-
-    WX_INIT_CONTROL_CONTAINER();
 }
 
 // helper of GetParentForModalDialog()

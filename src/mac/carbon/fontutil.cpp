@@ -17,6 +17,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/wxcrtvararg.h"
     #include "wx/log.h"
     #include "wx/intl.h"
 #endif

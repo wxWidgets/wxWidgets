@@ -323,7 +323,7 @@ bool wxBMPResourceHandler::LoadFile(wxBitmap *bitmap,
                                     int WXUNUSED(desiredHeight))
 {
     // TODO: load colourmap.
-    bitmap->SetHBITMAP((WXHBITMAP)::LoadBitmap(wxGetInstance(), name));
+    bitmap->SetHBITMAP((WXHBITMAP)::LoadBitmap(wxGetInstance(), name.wx_str()));
 
     if ( !bitmap->Ok() )
     {
@@ -438,7 +438,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
          desiredHeight == ::GetSystemMetrics(SM_CYICON) )
     {
         // get the specified large icon from file
-        if ( !::ExtractIconEx(nameReal, iconIndex, &hicon, NULL, 1) )
+        if ( !::ExtractIconEx(nameReal.wx_str(), iconIndex, &hicon, NULL, 1) )
         {
             // it is not an error, but it might still be useful to be informed
             // about it optionally
@@ -451,7 +451,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
               desiredHeight == ::GetSystemMetrics(SM_CYSMICON) )
     {
         // get the specified small icon from file
-        if ( !::ExtractIconEx(nameReal, iconIndex, NULL, &hicon, 1) )
+        if ( !::ExtractIconEx(nameReal.wx_str(), iconIndex, NULL, &hicon, 1) )
         {
             wxLogTrace(_T("iconload"),
                        _T("No small icons found in the file '%s'."),
@@ -464,7 +464,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
     if ( !hicon )
     {
         // take any size icon from the file by index
-        hicon = ::ExtractIcon(wxGetInstance(), nameReal, iconIndex);
+        hicon = ::ExtractIcon(wxGetInstance(), nameReal.wx_str(), iconIndex);
     }
 #endif
 
@@ -518,13 +518,13 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
     // some icon rescaling internally which results in very ugly 16x16 icons
     if ( hasSize )
     {
-        hicon = (HICON)::LoadImage(wxGetInstance(), name, IMAGE_ICON,
+        hicon = (HICON)::LoadImage(wxGetInstance(), name.wx_str(), IMAGE_ICON,
                                     desiredWidth, desiredHeight,
                                     LR_DEFAULTCOLOR);
     }
     else
     {
-        hicon = ::LoadIcon(wxGetInstance(), name);
+        hicon = ::LoadIcon(wxGetInstance(), name.wx_str());
     }
 
     // next check if it's not a standard icon

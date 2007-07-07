@@ -100,6 +100,9 @@ typedef struct {
 
 typedef wx_source_mgr * wx_src_ptr;
 
+extern "C"
+{
+
 CPP_METHODDEF(void) wx_init_source ( j_decompress_ptr WXUNUSED(cinfo) )
 {
 }
@@ -205,6 +208,8 @@ void wx_jpeg_io_src( j_decompress_ptr cinfo, wxInputStream& infile )
     src->pub.resync_to_restart = jpeg_resync_to_restart; /* use default method */
     src->pub.term_source = wx_term_source;
 }
+
+} // extern "C"
 
 static inline void wx_cmyk_to_rgb(unsigned char* rgb, const unsigned char* cmyk)
 {
@@ -321,6 +326,9 @@ typedef wx_destination_mgr * wx_dest_ptr;
 
 #define OUTPUT_BUF_SIZE  4096    /* choose an efficiently fwrite'able size */
 
+extern "C"
+{
+
 CPP_METHODDEF(void) wx_init_destination (j_compress_ptr cinfo)
 {
     wx_dest_ptr dest = (wx_dest_ptr) cinfo->dest;
@@ -368,6 +376,8 @@ GLOBAL(void) wx_jpeg_io_dest (j_compress_ptr cinfo, wxOutputStream& outfile)
     dest->pub.term_destination = wx_term_destination;
     dest->stream = &outfile;
 }
+
+} // extern "C"
 
 bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbose )
 {

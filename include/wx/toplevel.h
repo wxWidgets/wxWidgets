@@ -20,6 +20,7 @@
 
 #include "wx/nonownedwnd.h"
 #include "wx/iconbndl.h"
+#include "wx/containr.h"
 
 // the default names for various classes
 extern WXDLLEXPORT_DATA(const wxChar) wxFrameNameStr[];
@@ -206,9 +207,6 @@ public:
     // reverts to the "permanent" default as soon as this temporary default
     // item loses focus
 
-    // used to reset default if pointing to removed child
-    virtual void RemoveChild(wxWindowBase *child);
-
     // get the default item, temporary or permanent
     wxWindow *GetDefaultItem() const
         { return m_winTmpDefault ? m_winTmpDefault : m_winDefault; }
@@ -306,6 +304,7 @@ protected:
 
     DECLARE_NO_COPY_CLASS(wxTopLevelWindowBase)
     DECLARE_EVENT_TABLE()
+    WX_DECLARE_CONTROL_CONTAINER();
 };
 
 

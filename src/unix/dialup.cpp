@@ -29,7 +29,7 @@
 #include "wx/filefn.h"
 #include "wx/ffile.h"
 #include "wx/process.h"
-#include "wx/wxchar.h"
+#include "wx/crt.h"
 
 #include <stdlib.h>
 

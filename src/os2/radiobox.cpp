@@ -18,7 +18,7 @@
 
 #ifndef WX_PRECOMP
     #include <stdio.h>
-    #include "wx/wxchar.h"
+    #include "wx/crt.h"
     #include "wx/string.h"
     #include "wx/bitmap.h"
     #include "wx/brush.h"

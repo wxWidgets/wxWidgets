@@ -1352,6 +1352,8 @@ void wxFlexGridSizer::RecalcSizes()
     AdjustForGrowables(sz);
 
     wxSizerItemList::const_iterator i = m_children.begin();
+    const wxSizerItemList::const_iterator end = m_children.end();
+
     int y = 0;
     for ( int r = 0; r < nrows; r++ )
     {
@@ -1359,7 +1361,12 @@ void wxFlexGridSizer::RecalcSizes()
         {
             // this row is entirely hidden, skip it
             for ( int c = 0; c < ncols; c++ )
+            {
+                if ( i == end )
+                    return;
+
                 ++i;
+            }
 
             continue;
         }
@@ -1370,21 +1377,12 @@ void wxFlexGridSizer::RecalcSizes()
             h = hrow;
 
         int x = 0;
-        for ( int c = 0; c < ncols; c++, ++i )
+        for ( int c = 0; c < ncols && i != end; c++, ++i )
         {
             const int wcol = m_colWidths[c];
 
             if ( wcol == -1 )
                 continue;
-
-            // check if there are any remaining children: it may happen that
-            // the last row is incomplete
-            if ( i == m_children.end() )
-            {
-                wxASSERT_MSG( r == nrows - 1, _T("too few items") );
-
-                return;
-            }
 
             int w = sz.x - x; // max possible value, ensure we don't overflow
             if ( wcol < w )
@@ -1394,6 +1392,9 @@ void wxFlexGridSizer::RecalcSizes()
 
             x += wcol + m_hgap;
         }
+
+        if ( i == end )
+            return;
 
         y += hrow + m_vgap;
     }

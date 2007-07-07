@@ -357,13 +357,11 @@
 #       endif
 #    endif  /* SGI */
 
-#    if defined(sun) || defined(__SUN__)
-#        ifndef __GNUG__
-#            ifndef __SUNCC__
-#                define __SUNCC__
-#            endif /* Sun CC */
-#        endif
-#    endif /* Sun */
+#    if defined(__SUNPRO_CC)
+#       ifndef __SUNCC__
+#           define __SUNCC__ __SUNPRO_CC
+#       endif /* Sun CC */
+#    endif /* Sun CC */
 
 #    ifdef __EMX__
 #        define OS2EMX_PLAIN_CHAR
@@ -556,6 +554,18 @@
 #else
 #    undef wxCHECK_W32API_VERSION
 #    define wxCHECK_W32API_VERSION(maj, min) (0)
+#endif
+
+/**
+    This is similar to wxCHECK_GCC_VERSION but for Sun CC compiler.
+ */
+#ifdef __SUNCC__
+    /*
+       __SUNCC__ is 0xVRP where V is major version, R release and P patch level
+     */
+    #define wxCHECK_SUNCC_VERSION(maj, min) (__SUNCC__ >= (((maj)<<8) | ((min)<<4)))
+#else
+    #define wxCHECK_SUNCC_VERSION(maj, min) (0)
 #endif
 
 #if defined (__WXMSW__)

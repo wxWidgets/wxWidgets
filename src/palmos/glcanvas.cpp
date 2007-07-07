@@ -67,7 +67,7 @@ void wxGLContext::SetCurrent()
 {
 }
 
-void wxGLContext::SetColour(const wxChar *colour)
+void wxGLContext::SetColour(const wxString& colour)
 {
 }
 

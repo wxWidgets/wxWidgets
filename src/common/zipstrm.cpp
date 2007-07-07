@@ -1004,7 +1004,7 @@ size_t wxZipEntry::ReadLocal(wxInputStream& stream, wxMBConv& conv)
 size_t wxZipEntry::WriteLocal(wxOutputStream& stream, wxMBConv& conv) const
 {
     wxString unixName = GetName(wxPATH_UNIX);
-    const wxWX2MBbuf name_buf = conv.cWX2MB(unixName);
+    const wxWX2MBbuf name_buf = unixName.mb_str(conv);
     const char *name = name_buf;
     if (!name) name = "";
     wxUint16 nameLen = wx_truncate_cast(wxUint16, strlen(name));
@@ -1080,12 +1080,12 @@ size_t wxZipEntry::ReadCentral(wxInputStream& stream, wxMBConv& conv)
 size_t wxZipEntry::WriteCentral(wxOutputStream& stream, wxMBConv& conv) const
 {
     wxString unixName = GetName(wxPATH_UNIX);
-    const wxWX2MBbuf name_buf = conv.cWX2MB(unixName);
+    const wxWX2MBbuf name_buf = unixName.mb_str(conv);
     const char *name = name_buf;
     if (!name) name = "";
     wxUint16 nameLen = wx_truncate_cast(wxUint16, strlen(name));
 
-    const wxWX2MBbuf comment_buf = conv.cWX2MB(m_Comment);
+    const wxWX2MBbuf comment_buf = m_Comment.mb_str(conv);
     const char *comment = comment_buf;
     if (!comment) comment = "";
     wxUint16 commentLen = wx_truncate_cast(wxUint16, strlen(comment));
@@ -1235,7 +1235,7 @@ wxZipEndRec::wxZipEndRec()
 
 bool wxZipEndRec::Write(wxOutputStream& stream, wxMBConv& conv) const
 {
-    const wxWX2MBbuf comment_buf = conv.cWX2MB(m_Comment);
+    const wxWX2MBbuf comment_buf = m_Comment.mb_str(conv);
     const char *comment = comment_buf;
     if (!comment) comment = "";
     wxUint16 commentLen = (wxUint16)strlen(comment);

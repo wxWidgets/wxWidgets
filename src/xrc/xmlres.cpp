@@ -1543,17 +1543,17 @@ void wxXmlResourceHandler::CreateChildrenPrivately(wxObject *parent, wxXmlNode *
 struct XRCID_record
 {
     int id;
-    wxChar *key;
+    char *key;
     XRCID_record *next;
 };
 
 static XRCID_record *XRCID_Records[XRCID_TABLE_SIZE] = {NULL};
 
-static int XRCID_Lookup(const wxChar *str_id, int value_if_not_found = wxID_NONE)
+static int XRCID_Lookup(const char *str_id, int value_if_not_found = wxID_NONE)
 {
     int index = 0;
 
-    for (const wxChar *c = str_id; *c != wxT('\0'); c++) index += (int)*c;
+    for (const char *c = str_id; *c != '\0'; c++) index += (int)*c;
     index %= XRCID_TABLE_SIZE;
 
     XRCID_record *oldrec = NULL;
@@ -1572,7 +1572,7 @@ static int XRCID_Lookup(const wxChar *str_id, int value_if_not_found = wxID_NONE
     (*rec_var)->key = wxStrdup(str_id);
     (*rec_var)->next = NULL;
 
-    wxChar *end;
+    char *end;
     if (value_if_not_found != wxID_NONE)
         (*rec_var)->id = value_if_not_found;
     else
@@ -1595,7 +1595,7 @@ static int XRCID_Lookup(const wxChar *str_id, int value_if_not_found = wxID_NONE
 static void AddStdXRCID_Records();
 
 /*static*/
-int wxXmlResource::GetXRCID(const wxChar *str_id, int value_if_not_found)
+int wxXmlResource::DoGetXRCID(const char *str_id, int value_if_not_found)
 {
     static bool s_stdIDsAdded = false;
 
@@ -1630,7 +1630,7 @@ static void CleanXRCID_Records()
 
 static void AddStdXRCID_Records()
 {
-#define stdID(id) XRCID_Lookup(wxT(#id), id)
+#define stdID(id) XRCID_Lookup(#id, id)
     stdID(-1);
 
     stdID(wxID_ANY);

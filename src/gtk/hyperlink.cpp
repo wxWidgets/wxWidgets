@@ -151,7 +151,7 @@ wxString wxHyperlinkCtrl::GetURL() const
     if ( UseNative() )
     {
         const gchar *str = gtk_link_button_get_uri(GTK_LINK_BUTTON(m_widget));
-        return wxConvFileName->cMB2WX(str);
+        return wxString(str, *wxConvFileName);
     }
 
     return wxGenericHyperlinkCtrl::GetURL();

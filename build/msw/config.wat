@@ -41,7 +41,7 @@ WXUNIV = 0
 
 # Compile Unicode build of wxWidgets? [0,1]
 #   1 - Unicode
-UNICODE = 0
+UNICODE = 1
 
 # Type of compiled binaries [debug,release]
 BUILD = debug

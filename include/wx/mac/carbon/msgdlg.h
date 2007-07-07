@@ -13,23 +13,8 @@
 #ifndef _WX_MSGBOXDLG_H_
 #define _WX_MSGBOXDLG_H_
 
-#include "wx/defs.h"
-#include "wx/dialog.h"
-
-/*
- * Message box dialog
- */
-
-WXDLLEXPORT_DATA(extern const wxChar) wxMessageBoxCaptionStr[];
-
-class WXDLLEXPORT wxMessageDialog: public wxDialog, public wxMessageDialogBase
+class WXDLLEXPORT wxMessageDialog : public wxMessageDialogBase
 {
-    DECLARE_DYNAMIC_CLASS(wxMessageDialog)
-
-protected:
-    wxString    m_caption;
-    wxString    m_message;
-    wxWindow *  m_parent;
 public:
     wxMessageDialog(wxWindow *parent,
                     const wxString& message,
@@ -37,15 +22,27 @@ public:
                     long style = wxOK|wxCENTRE,
                     const wxPoint& pos = wxDefaultPosition);
 
-    int ShowModal();
+    virtual int ShowModal();
+
+    // customization of the message box
+    virtual bool SetYesNoLabels(const wxString& yes,const wxString& no);
+    virtual bool SetYesNoCancelLabels(const wxString& yes, const wxString& no, const wxString& cancel);
+    virtual bool SetOKLabel(const wxString& ok);
+    virtual bool SetOKCancelLabels(const wxString& ok, const wxString& cancel);
 
 protected:
-    // not supported for message dialog, RR
+    // not supported for message dialog
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
                            int WXUNUSED(width), int WXUNUSED(height),
                            int WXUNUSED(sizeFlags) = wxSIZE_AUTO) {}
 
+    // labels for the buttons
+    wxString m_yes,
+             m_no,
+             m_ok,
+             m_cancel;
+
+    DECLARE_DYNAMIC_CLASS(wxMessageDialog)
 };
 
-#endif
-    // _WX_MSGBOXDLG_H_
+#endif // _WX_MSGBOXDLG_H_

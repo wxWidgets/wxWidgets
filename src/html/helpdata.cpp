@@ -125,7 +125,7 @@ public:
     wxObject* GetProduct() { return NULL; }
 
 protected:
-    virtual void AddText(const wxChar* WXUNUSED(txt)) {}
+    virtual void AddText(const wxString& WXUNUSED(txt)) {}
 
     DECLARE_NO_COPY_CLASS(HP_Parser)
 };

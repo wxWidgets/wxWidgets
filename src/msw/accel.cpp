@@ -90,7 +90,7 @@ wxAcceleratorTable::wxAcceleratorTable(const wxString& resource)
 {
     m_refData = new wxAcceleratorRefData;
 
-    HACCEL hAccel = ::LoadAccelerators(wxGetInstance(), resource);
+    HACCEL hAccel = ::LoadAccelerators(wxGetInstance(), resource.wx_str());
     M_ACCELDATA->m_hAccel = hAccel;
     M_ACCELDATA->m_ok = hAccel != 0;
 }

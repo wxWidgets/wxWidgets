@@ -693,8 +693,8 @@ inline bool wxIsMainThread() { return wxThread::IsMain(); }
 #else // !wxUSE_THREADS
 
 // no thread support
-inline void WXDLLIMPEXP_BASE wxMutexGuiEnter() { }
-inline void WXDLLIMPEXP_BASE wxMutexGuiLeave() { }
+inline void wxMutexGuiEnter() { }
+inline void wxMutexGuiLeave() { }
 
 // macros for entering/leaving critical sections which may be used without
 // having to take them inside "#if wxUSE_THREADS"

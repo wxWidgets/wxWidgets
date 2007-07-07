@@ -320,7 +320,7 @@ int wxFileDialog::ShowModal()
 
     of.lStructSize       = gs_ofStructSize;
     of.hwndOwner         = hWnd;
-    of.lpstrTitle        = WXSTRINGCAST m_message;
+    of.lpstrTitle        = m_message.wx_str();
     of.lpstrFileTitle    = titleBuffer;
     of.nMaxFileTitle     = wxMAXFILE + 1 + wxMAXEXT;
 
@@ -396,7 +396,7 @@ int wxFileDialog::ShowModal()
 
     //=== Setting defaultFileName >>=========================================
 
-    wxStrncpy( fileNameBuffer, (const wxChar *)m_fileName, wxMAXPATH-1 );
+    wxStrncpy(fileNameBuffer, m_fileName, wxMAXPATH-1);
     fileNameBuffer[ wxMAXPATH-1 ] = wxT('\0');
 
     of.lpstrFile = fileNameBuffer;  // holds returned filename
@@ -409,7 +409,7 @@ int wxFileDialog::ShowModal()
     wxString defextBuffer; // we need it to be alive until GetSaveFileName()!
     if (HasFdFlag(wxFD_SAVE))
     {
-        const wxChar* extension = filterBuffer;
+        const wxChar* extension = filterBuffer.wx_str();
         int maxFilter = (int)(of.nFilterIndex*2L) - 1;
 
         for( int i = 0; i < maxFilter; i++ )           // get extension
@@ -511,7 +511,7 @@ int wxFileDialog::ShowModal()
                  (of.nFileExtension && fileNameBuffer[of.nFileExtension] == wxT('\0')) )
             {
                 // User has typed a filename without an extension:
-                const wxChar* extension = filterBuffer;
+                const wxChar* extension = filterBuffer.wx_str();
                 int   maxFilter = (int)(of.nFilterIndex*2L) - 1;
 
                 for( int i = 0; i < maxFilter; i++ )           // get extension

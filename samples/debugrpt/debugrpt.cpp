@@ -125,7 +125,7 @@ static void bar(const wxChar *p)
 
 void baz(const wxString& s)
 {
-    printf("baz: %s\n", s.c_str());
+    printf("baz: %s\n", (const char*)s.c_str());
 }
 
 void foo(int n)

@@ -35,6 +35,8 @@ the corresponding topic.
 \helpref{wxASSERT}{wxassert}\\
 \helpref{wxASSERT\_MIN\_BITSIZE}{wxassertminbitsize}\\
 \helpref{wxASSERT\_MSG}{wxassertmsg}\\
+\helpref{wxAtomicDec}{wxatomicdec}\\
+\helpref{wxAtomicInc}{wxatomicinc}\\
 \helpref{wxBeginBusyCursor}{wxbeginbusycursor}\\
 \helpref{wxBell}{wxbell}\\
 \helpref{wxBITMAP}{wxbitmapmacro}\\
@@ -45,6 +47,7 @@ the corresponding topic.
 \helpref{wxCHECK\_GCC\_VERSION}{wxcheckgccversion}\\
 \helpref{wxCHECK\_MSG}{wxcheckmsg}\\
 \helpref{wxCHECK\_RET}{wxcheckret}\\
+\helpref{wxCHECK\_SUNCC\_VERSION}{wxchecksunccversion}\\
 \helpref{wxCHECK\_VERSION}{wxcheckversion}\\
 \helpref{wxCHECK\_VERSION\_FULL}{wxcheckversionfull}\\
 \helpref{wxCHECK\_W32API\_VERSION}{wxcheckw32apiversion}\\
@@ -69,6 +72,8 @@ the corresponding topic.
 \helpref{wxDROP\_ICON}{wxdropicon}\\
 \helpref{wxDebugMsg}{wxdebugmsg}\\
 \helpref{WXDEBUG\_NEW}{debugnew}\\
+\helpref{wxDEPRECATED}{wxdeprecated}\\
+\helpref{wxDEPRECATED\_BUT\_USED\_INTERNALLY}{wxdeprecatedbutusedinternally}\\
 \helpref{wxDirExists}{functionwxdirexists}\\
 \helpref{wxDirSelector}{wxdirselector}\\
 \helpref{wxDisplayDepth}{wxdisplaydepth}\\
@@ -315,6 +320,15 @@ compiler (g++) version major.minor or greater. Otherwise, and also if
 the compiler is not GNU C++ at all, returns $0$.
 
 
+\membersection{wxCHECK\_SUNCC\_VERSION}\label{wxchecksunccversion}
+
+\func{bool}{wxCHECK\_SUNCC\_VERSION}{\param{}{major, minor}}
+
+Returns $1$ if the compiler being used to compile the code is Sun CC Pro
+compiler and its version is at least \texttt{major.minor}. Otherwise returns
+$0$.
+
+
 \membersection{wxCHECK\_VERSION}\label{wxcheckversion}
 
 \func{bool}{wxCHECK\_VERSION}{\param{}{major, minor, release}}
@@ -434,6 +448,15 @@ least the GUI part of) the library can't be used at all.
 
 Notice that parameters \arg{argc} and \arg{argv} may be modified by this
 function.
+
+An additional overload of wxEntryStart() is provided under MSW only: it is
+meant to be called with the parameters passed to \texttt{WinMain()}.
+
+\func{bool}{wxEntryStart}{\param{HINSTANCE }{hInstance}, \param{HINSTANCE }{hPrevInstance = \NULL}, \param{char *}{pCmdLine = \NULL}, \param{int }{nCmdShow = \texttt{SW\_SHOWNORMAL}}}
+
+(notice that under Windows CE platform, and only there, the type of 
+\arg{pCmdLine} is \texttt{wchar\_t *}, otherwise it is \texttt{char *}, even in
+Unicode build).
 
 \wxheading{Include files}
 
@@ -1035,7 +1058,7 @@ temporary storage that should not be deallocated.
 
 \membersection{::wxFindFirstFile}\label{wxfindfirstfile}
 
-\func{wxString}{wxFindFirstFile}{\param{const char *}{spec}, \param{int}{ flags = 0}}
+\func{wxString}{wxFindFirstFile}{\param{const wxString\& }{spec}, \param{int}{ flags = 0}}
 
 This function does directory searching; returns the first file
 that matches the path {\it spec}, or the empty string. Use \helpref{wxFindNextFile}{wxfindnextfile} to
@@ -1333,7 +1356,7 @@ Note that empty tokens will be generated if there are two or more adjacent separ
 
 \membersection{::wxSplitPath}\label{wxsplitfunction}
 
-\func{void}{wxSplitPath}{\param{const char *}{ fullname}, \param{wxString *}{ path}, \param{wxString *}{ name}, \param{wxString *}{ ext}}
+\func{void}{wxSplitPath}{\param{const wxString\&}{ fullname}, \param{wxString *}{ path}, \param{wxString *}{ name}, \param{wxString *}{ ext}}
 
 {\bf NB:} This function is obsolete, please use
 \helpref{wxFileName::SplitPath}{wxfilenamesplitpath} instead.
@@ -2412,7 +2435,7 @@ checkbox which is shown in the tips dialog.}
 
 \func{int}{wxFinite}{\param{double }{x}}
 
-Returns a non-zero value if {\it x} is neither infinite or NaN (not a number),
+Returns a non-zero value if {\it x} is neither infinite nor NaN (not a number),
 returns 0 otherwise.
 
 
@@ -2847,6 +2870,36 @@ it is quoted automatically by the macro)}
 
 \docparam{dynlib}{the library to load the function from}
 
+
+
+\membersection{wxDEPRECATED}\label{wxdeprecated}
+
+This macro can be used around a function declaration to generate warnings
+indicating that this function is deprecated (i.e. obsolete and planned to be
+removed in the future) when it is used. Only Visual C++ 7 and higher and g++
+compilers currently support this functionality.
+
+Example of use:
+\begin{verbatim}
+    // old function, use wxString version instead
+    wxDEPRECATED( void wxGetSomething(char *buf, size_t len) );
+
+    // ...
+    wxString wxGetSomething();
+\end{verbatim}
+
+
+\membersection{wxDEPRECATED\_BUT\_USED\_INTERNALLY}\label{wxdeprecatedbutusedinternally}
+
+This is a special version of \helpref{wxDEPRECATED}{wxdeprecated} macro which
+only does something when the deprecated function is used from the code outside
+wxWidgets itself but doesn't generate warnings when it is used from wxWidgets.
+It is used with the virtual functions which are called by the library itself --
+even if such function is deprecated the library still has to call it to ensure
+that the existing code overriding it continues to work, but the use of this
+macro ensures that a deprecation warning will be generated if this function is
+used from the user code or, in case of Visual C++, even when it is simply
+overridden.
 
 
 \membersection{wxEXPLICIT}\label{wxexplicit}
@@ -4645,12 +4698,16 @@ Returns \true if the variable exists, \false otherwise.
 
 \membersection{wxSetEnv}\label{wxsetenv}
 
-\func{bool}{wxSetEnv}{\param{const wxString\&}{ var}, \param{const wxChar *}{value}}
+\func{bool}{wxSetEnv}{\param{const wxString\&}{ var}, \param{const wxString\& }{value}}
 
 Sets the value of the environment variable {\it var} (adding it if necessary)
 to {\it value}.
 
 Returns \true on success.
+
+\wxheading{See also}
+
+\helpref{wxUnsetEnv}{wxunsetenv}
 
 
 \membersection{wxUnsetEnv}\label{wxunsetenv}
@@ -4662,3 +4719,46 @@ Removes the variable {\it var} from the environment.
 function.
 
 Returns \true on success.
+
+\wxheading{See also}
+
+\helpref{wxSetEnv}{wxsetenv}
+
+
+\section{Atomic operations}\label{atomicoperations}
+
+When using multi-threaded applications, it is often required to access or
+modify memory which is shared between threads. Atomic integer and pointer
+operations are an efficient way to handle this issue (another, less efficient,
+way is to use a \helpref{mutex}{wxmutex} or \helpref{critical
+section}{wxcriticalsection}). A native implementation exists for Windows,
+Linux, Solaris and Mac OS X, for other OS, a 
+\helpref{wxCriticalSection}{wxcriticalsection} is used to protect the data.
+
+One particular application is reference counting (used by so-called smart
+pointers).
+
+You should define your variable with the type wxAtomicInt in order to apply
+atomic operations to it.
+
+\wxheading{Include files}
+
+<wx/atomic.h>
+
+\membersection{::wxAtomicInc}\label{wxatomicinc}
+
+\func{void}{wxAtomicInc}{\param{wxAtomicInt\& }{value}}
+
+This function increments \arg{value} in an atomic manner.
+
+
+\membersection{::wxAtomicDec}\label{wxatomicdec}
+
+\func{wxInt32}{wxAtomicDec}{\param{wxAtomicInt\& }{value}}
+
+This function decrements \arg{value} in an atomic manner.
+
+Returns 0 if \arg{value} is 0 after decrementation or any non-zero value (not
+necessarily equal to the value of the variable) otherwise.
+
+

@@ -14,9 +14,10 @@ include ../build/msw/config.gcc
 
 CPPDEPS = -MT$@ -MF$@.d -MD
 WX_RELEASE_NODOT = 29
+COMPILER_PREFIX = gcc
 OBJS = \
-	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-LIBDIRNAME = .\..\lib\gcc_$(LIBTYPE_SUFFIX)$(CFG)
+	$(COMPILER_PREFIX)_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+LIBDIRNAME = .\..\lib\$(COMPILER_PREFIX)_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 TEST_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
@@ -69,6 +70,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_textstreamtest.o \
 	$(OBJS)\test_zlibstream.o \
 	$(OBJS)\test_textfiletest.o \
+	$(OBJS)\test_atomic.o \
 	$(OBJS)\test_uris.o
 TEST_GUI_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
@@ -433,6 +435,9 @@ $(OBJS)\test_zlibstream.o: ./streams/zlibstream.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_textfiletest.o: ./textfile/textfiletest.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_atomic.o: ./thread/atomic.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_uris.o: ./uris/uris.cpp

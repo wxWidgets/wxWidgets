@@ -342,15 +342,13 @@ wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type,
     return GetFS()->OpenFile(myurl, flags);
 }
 
-void wxHtmlWinParser::AddText(const wxChar* txt)
+void wxHtmlWinParser::AddText(const wxString& txt)
 {
-    size_t i = 0,
-           x,
-           lng = wxStrlen(txt);
     register wxChar d;
     int templen = 0;
     wxChar nbsp = GetEntitiesParser()->GetCharForCode(160 /* nbsp */);
 
+    size_t lng = txt.length();
     if (lng+1 > m_tmpStrBufSize)
     {
         delete[] m_tmpStrBuf;
@@ -359,24 +357,36 @@ void wxHtmlWinParser::AddText(const wxChar* txt)
     }
     wxChar *temp = m_tmpStrBuf;
 
+    wxString::const_iterator i = txt.begin();
+    wxString::const_iterator end = txt.end();
+
     if (m_tmpLastWasSpace)
     {
-        while ((i < lng) &&
-               ((txt[i] == wxT('\n')) || (txt[i] == wxT('\r')) || (txt[i] == wxT(' ')) ||
-                (txt[i] == wxT('\t')))) i++;
+        while ( (i < end) &&
+                (*i == wxT('\n') || *i == wxT('\r') || *i == wxT(' ') ||
+                 *i == wxT('\t')) )
+        {
+            ++i;
+        }
     }
 
-    while (i < lng)
+    while (i < end)
     {
-        x = 0;
-        d = temp[templen++] = txt[i];
+        size_t x = 0;
+        d = temp[templen++] = *i;
         if ((d == wxT('\n')) || (d == wxT('\r')) || (d == wxT(' ')) || (d == wxT('\t')))
         {
-            i++, x++;
-            while ((i < lng) && ((txt[i] == wxT('\n')) || (txt[i] == wxT('\r')) ||
-                                 (txt[i] == wxT(' ')) || (txt[i] == wxT('\t')))) i++, x++;
+            ++i, ++x;
+            while ( (i < end) &&
+                    (*i == wxT('\n') || *i == wxT('\r') ||
+                     *i == wxT(' ')) || *i == wxT('\t') )
+            {
+                ++i;
+                ++x;
+            }
         }
-        else i++;
+        else
+            ++i;
 
         if (x)
         {

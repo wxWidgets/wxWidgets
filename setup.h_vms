@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 16 May 2007                                                        *
+ * Date : 3 July 2007                                                        *
  *                                                                           *
  *****************************************************************************/
 
@@ -191,7 +191,7 @@ typedef pid_t GPid;
 
 
 #ifndef wxUSE_UNICODE
-    #define wxUSE_UNICODE 0
+    #define wxUSE_UNICODE 1
 #endif
 
 #define wxUSE_WCHAR_T 1
@@ -261,6 +261,7 @@ typedef pid_t GPid;
 #define wxUSE_DYNAMIC_LOADER  0
 
 #define wxUSE_SOCKETS       1
+#include <socket.h>
 
 #define wxUSE_FILESYSTEM    1
 
@@ -804,6 +805,11 @@ typedef pid_t GPid;
 #define wxUSE_WEBKIT 1
 
 /*
+ * Objective-C class name uniquifying
+ */
+#define wxUSE_OBJC_UNIQUIFYING 0
+
+/*
  * The const keyword is being introduced more in wxWindows.
  * You can use this setting to maintain backward compatibility.
  * If 0: will use const wherever possible.
@@ -991,6 +997,9 @@ typedef pid_t GPid;
 /* Define if you have wcslen function  */
 #define HAVE_WCSLEN 1
 
+/* Define if you have wcsdup function  */
+#define HAVE_WCSDUP 0
+
 /* Define if you have wcstoull() and wcstoll() */
 #undef HAVE_WCSTOULL
 
@@ -1023,6 +1032,9 @@ typedef pid_t GPid;
 
 /* Define if size_t on your machine is the same type as unsigned long. */
 #undef wxSIZE_T_IS_ULONG
+
+/* Define if wchar_t is distinct type in your compiler. */
+#define wxWCHAR_T_IS_SEPARATE_TYPE 1
 
 /* Define if you have the dlopen function.  */
 #define HAVE_DLOPEN 1
@@ -1190,7 +1202,7 @@ typedef pid_t GPid;
 #define HAVE_WPUTCHAR 1
 
 /* Define this if you have putws() */
-#define HAVE_PUTWS 1
+#undef HAVE_PUTWS
 
 /* Define this if you have fputws() */
 #define HAVE_FPUTWS 1

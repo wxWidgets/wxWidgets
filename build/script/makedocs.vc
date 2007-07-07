@@ -11,7 +11,7 @@ DOCDIR = $(WXDIR)\docs
 WAITFLAG=/w
 
 # Making documents
-docs:   wxhlp rtf pdfrtf wxhtml htmlhelp htb
+docs:   wxhlp rtf pdfrtf wxhtml htmlhelp htb tex2rtf
 alldocs: docs
 hlp:    wxhlp
 wxhlp:  $(DOCDIR)/winhelp/wx.hlp

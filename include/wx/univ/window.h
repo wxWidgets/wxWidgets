@@ -190,6 +190,16 @@ public:
     // should we use the standard control colours or not?
     virtual bool ShouldInheritColours() const { return false; }
 
+    virtual bool IsClientAreaChild(const wxWindow *child) const
+    {
+#if wxUSE_SCROLLBAR
+        if ( child == (wxWindow*)m_scrollbarHorz ||
+             child == (wxWindow*)m_scrollbarVert )
+            return false;
+#endif
+        return wxWindowNative::IsClientAreaChild(child);
+    }
+
 protected:
     // common part of all ctors
     void Init();

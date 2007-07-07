@@ -996,7 +996,7 @@ bool wxThread::SetConcurrency(size_t WXUNUSED_IN_WINCE(level))
     // set it: we can't link to SetProcessAffinityMask() because it doesn't
     // exist in Win9x, use RT binding instead
 
-    typedef BOOL (*SETPROCESSAFFINITYMASK)(HANDLE, DWORD);
+    typedef BOOL (WINAPI *SETPROCESSAFFINITYMASK)(HANDLE, DWORD_PTR);
 
     // can use static var because we're always in the main thread here
     static SETPROCESSAFFINITYMASK pfnSetProcessAffinityMask = NULL;

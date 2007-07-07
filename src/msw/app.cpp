@@ -40,7 +40,7 @@
     #include "wx/dialog.h"
     #include "wx/msgdlg.h"
     #include "wx/intl.h"
-    #include "wx/wxchar.h"
+    #include "wx/crt.h"
     #include "wx/log.h"
     #include "wx/module.h"
 #endif

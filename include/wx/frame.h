@@ -190,6 +190,10 @@ protected:
 
     // test whether this window makes part of the frame
     virtual bool IsOneOfBars(const wxWindow *win) const;
+    virtual bool IsClientAreaChild(const wxWindow *child) const
+    {
+        return !IsOneOfBars(child) && wxTopLevelWindow::IsClientAreaChild(child);
+    }
 
 #if wxUSE_MENUS
     // override to update menu bar position when the frame size changes

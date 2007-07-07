@@ -266,7 +266,7 @@ GridFrame::GridFrame()
 
     logger = new wxLogTextCtrl( logWin );
     m_logOld = wxLog::SetActiveTarget( logger );
-    wxLog::SetTimestamp( NULL );
+    wxLog::DisableTimestamp();
 #endif // wxUSE_LOG
 
     // this will create a grid and, by default, an associated grid

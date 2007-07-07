@@ -52,6 +52,8 @@ public:
     GSocketError SetServer();
     GSocket *WaitConnection();
     bool SetReusable();
+    bool SetBroadcast();
+    bool DontDoBind();
     GSocketError Connect(GSocketStream stream);
     GSocketError SetNonOriented();
     int Read(char *buffer, int size);
@@ -91,6 +93,8 @@ public:
   bool m_stream;
   bool m_establishing;
   bool m_reusable;
+  bool m_broadcast;
+  bool m_dobind;
   unsigned long m_timeout;
 
   /* Callbacks */

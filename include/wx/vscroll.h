@@ -576,50 +576,59 @@ public:
 
     // this is the same as GetVisibleRowsBegin(), exists to match
     // GetLastVisibleLine() and for backwards compatibility only
-    size_t GetFirstVisibleLine() const { return GetVisibleRowsBegin(); }
+    wxDEPRECATED( size_t GetFirstVisibleLine() const )
+        { return GetVisibleRowsBegin(); }
 
     // get the last currently visible line
     //
     // this function is unsafe as it returns (size_t)-1 (i.e. a huge positive
     // number) if the control is empty, use GetVisibleRowsEnd() instead, this
     // one is kept for backwards compatibility
-    size_t GetLastVisibleLine() const { return GetVisibleRowsEnd() - 1; }
+    wxDEPRECATED( size_t GetLastVisibleLine() const )
+        { return GetVisibleRowsEnd() - 1; }
 
     // "line" to "unit" compatibility functions
     // ----------------------------------------
 
     // get the number of lines this window contains (set by SetLineCount())
-    size_t GetLineCount() const { return GetRowCount(); }
+    wxDEPRECATED( size_t GetLineCount() const )
+        { return GetRowCount(); }
 
     // set the number of lines the helper contains: the derived class must
     // provide the sizes for all lines with indices up to the one given here
     // in its OnGetLineHeight()
-    void SetLineCount(size_t count) { SetRowCount(count); }
+    wxDEPRECATED( void SetLineCount(size_t count) )
+        { SetRowCount(count); }
 
     // redraw the specified line
-    virtual void RefreshLine(size_t line) { RefreshRow(line); }
+    wxDEPRECATED( virtual void RefreshLine(size_t line) )
+        { RefreshRow(line); }
 
     // redraw all lines in the specified range (inclusive)
-    virtual void RefreshLines(size_t from, size_t to) { RefreshRows(from, to); }
+    wxDEPRECATED( virtual void RefreshLines(size_t from, size_t to) )
+        { RefreshRows(from, to); }
 
     // scroll to the specified line: it will become the first visible line in
     // the window
     //
     // return true if we scrolled the window, false if nothing was done
-    bool ScrollToLine(size_t line) { return ScrollToRow(line); }
+    wxDEPRECATED( bool ScrollToLine(size_t line) )
+        { return ScrollToRow(line); }
 
     // scroll by the specified number of lines/pages
-    virtual bool ScrollLines(int lines) { return ScrollRows(lines); }
-    virtual bool ScrollPages(int pages) { return ScrollRowPages(pages); }
+    wxDEPRECATED( virtual bool ScrollLines(int lines) )
+        { return ScrollRows(lines); }
+    wxDEPRECATED( virtual bool ScrollPages(int pages) )
+        { return ScrollRowPages(pages); }
 
 protected:
     // unless the code has been updated to override OnGetRowHeight() instead,
     // this function must be overridden in the derived class and it should
     // return the height of the given row in pixels
-    virtual wxCoord OnGetLineHeight(size_t WXUNUSED(n)) const
+    wxDEPRECATED_BUT_USED_INTERNALLY(
+        virtual wxCoord OnGetLineHeight(size_t WXUNUSED(n)) const )
     {
-        wxFAIL_MSG( _T("must be overridden if OnGetRowHeight() isn't!") );
-
+        wxFAIL_MSG( _T("OnGetLineHeight() must be overridden if OnGetRowHeight() isn't!") );
         return -1;
     }
 
@@ -643,19 +652,13 @@ protected:
     //
     // finally note that lineMin is inclusive, while lineMax is exclusive, as
     // usual
-    virtual void OnGetLinesHint(size_t WXUNUSED(lineMin),
-                                size_t WXUNUSED(lineMax)) const { }
+    wxDEPRECATED_BUT_USED_INTERNALLY( virtual void OnGetLinesHint(
+        size_t WXUNUSED(lineMin), size_t WXUNUSED(lineMax)) const ) { }
 
     // forwards the calls from base class pure virtual function to pure virtual
     // OnGetLinesHint instead (backwards compatible name)
     void OnGetRowsHeightHint(size_t rowMin, size_t rowMax) const
         { OnGetLinesHint(rowMin, rowMax); }
-
-
-    // get the total height of the lines between lineMin (inclusive) and
-    // lineMax (exclusive)
-    wxCoord GetLinesHeight(size_t lineMin, size_t lineMax) const
-        { return GetRowsHeight(lineMin, lineMax); }
 };
 
 #else // !WXWIN_COMPATIBILITY_2_8

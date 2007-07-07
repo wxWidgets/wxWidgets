@@ -53,7 +53,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID winid,
 {
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
-    SetNSView([[WXNSView alloc] initWithFrame: MakeDefaultNSRect(size)]);
+    SetNSView([[WX_GET_OBJC_CLASS(WXNSView) alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
     if(m_parent)
         m_parent->CocoaAddChild(this);

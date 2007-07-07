@@ -43,12 +43,12 @@ wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
                 const wxAuiPaneInfo& pane,
                 wxWindowID id /*= wxID_ANY*/,
                 long style /*=wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION |
-                              wxFRAME_NO_TASKBAR | wxFRAME_FLOAT_ON_PARENT | 
+                              wxFRAME_NO_TASKBAR | wxFRAME_FLOAT_ON_PARENT |
                               wxCLIP_CHILDREN
                            */)
                 : wxAuiFloatingFrameBaseClass(parent, id, wxEmptyString,
                         pane.floating_pos, pane.floating_size,
-                        style | 
+                        style |
                         (pane.HasCloseButton()?wxCLOSE_BOX:0) |
                         (pane.HasMaximizeButton()?wxMAXIMIZE_BOX:0) |
                         (pane.IsFixed()?0:wxRESIZE_BORDER)
@@ -58,7 +58,7 @@ wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
     m_moving = false;
     m_mgr.SetManagedWindow(this);
     m_solid_drag = true;
-    
+
     // find out if the system supports solid window drag.
     // on non-msw systems, this is assumed to be the case
 #ifdef __WXMSW__
@@ -66,7 +66,7 @@ wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
     SystemParametersInfo(38 /*SPI_GETDRAGFULLWINDOWS*/, 0, &b, 0);
     m_solid_drag = b ? true : false;
 #endif
-    
+
     SetExtraStyle(wxWS_EX_PROCESS_IDLE);
 }
 
@@ -93,7 +93,7 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
 
     // Carry over the minimum size
     wxSize pane_min_size = pane.window->GetMinSize();
-    
+
     // if the frame window's max size is greater than the min size
     // then set the max size to the min size as well
     wxSize cur_max_size = GetMaxSize();
@@ -104,7 +104,7 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
     {
         SetMaxSize(pane_min_size);
     }
-    
+
     SetMinSize(pane.window->GetMinSize());
 
     m_mgr.AddPane(m_pane_window, contained_pane);
@@ -126,7 +126,7 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
     {
         SetSize(pane.floating_size);
     }
-        else
+    else
     {
         wxSize size = pane.best_size;
         if (size == wxDefaultSize)
@@ -160,7 +160,7 @@ void wxAuiFloatingFrame::OnClose(wxCloseEvent& evt)
 {
     m_owner_mgr->OnFloatingPaneClosed(m_pane_window, evt);
     if (!evt.GetVeto()) {
-	m_mgr.DetachPane(m_pane_window);
+        m_mgr.DetachPane(m_pane_window);
         Destroy();
     }
 }
@@ -179,8 +179,8 @@ void wxAuiFloatingFrame::OnMoveEvent(wxMoveEvent& event)
         m_moving = true;
         return;
     }
-    
-    
+
+
     wxRect win_rect = GetRect();
 
     if (win_rect == m_last_rect)
@@ -193,7 +193,7 @@ void wxAuiFloatingFrame::OnMoveEvent(wxMoveEvent& event)
         return;
     }
 
-    // skip if moving too fast to avoid massive redraws and 
+    // skip if moving too fast to avoid massive redraws and
     // jumping hint windows
     if ((abs(win_rect.x - m_last_rect.x) > 3) ||
         (abs(win_rect.y - m_last_rect.y) > 3))
@@ -214,10 +214,10 @@ void wxAuiFloatingFrame::OnMoveEvent(wxMoveEvent& event)
     }
 
     wxDirection dir = wxALL;
-    
+
     int horiz_dist = abs(win_rect.x - m_last3_rect.x);
     int vert_dist = abs(win_rect.y - m_last3_rect.y);
-    
+
     if (vert_dist >= horiz_dist)
     {
         if (win_rect.y < m_last3_rect.y)
@@ -232,7 +232,7 @@ void wxAuiFloatingFrame::OnMoveEvent(wxMoveEvent& event)
         else
             dir = wxEAST;
     }
-    
+
     m_last3_rect = m_last2_rect;
     m_last2_rect = m_last_rect;
     m_last_rect = win_rect;
@@ -248,7 +248,7 @@ void wxAuiFloatingFrame::OnMoveEvent(wxMoveEvent& event)
 
     if (m_last3_rect.IsEmpty())
         return;
-        
+
     OnMoving(event.GetRect(), dir);
 }
 
@@ -261,7 +261,7 @@ void wxAuiFloatingFrame::OnIdle(wxIdleEvent& event)
             m_moving = false;
             OnMoveFinished();
         }
-         else
+        else
         {
             event.RequestMore();
         }

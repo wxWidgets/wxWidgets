@@ -104,13 +104,6 @@ private:
     DECLARE_DYNAMIC_CLASS(wxGenericFontDialog)
 };
 
-WXDLLEXPORT const wxChar *wxFontFamilyIntToString(int family);
-WXDLLEXPORT const wxChar *wxFontWeightIntToString(int weight);
-WXDLLEXPORT const wxChar *wxFontStyleIntToString(int style);
-WXDLLEXPORT int wxFontFamilyStringToInt(wxChar *family);
-WXDLLEXPORT int wxFontWeightStringToInt(wxChar *weight);
-WXDLLEXPORT int wxFontStyleStringToInt(wxChar *style);
-
 #if WXWIN_COMPATIBILITY_2_6
     // deprecated, for backwards compatibility only
 inline wxGenericFontDialog::wxGenericFontDialog(wxWindow *parent, const wxFontData *data)

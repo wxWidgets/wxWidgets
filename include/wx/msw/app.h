@@ -96,6 +96,14 @@ protected:
     typedef char *wxCmdLineArgType;
 #endif
 
+// wxMSW-only overloads of wxEntry() and wxEntryStart() which take the
+// parameters passed to WinMain() instead of those passed to main()
+extern bool WXDLLEXPORT
+wxEntryStart(HINSTANCE hInstance,
+             HINSTANCE hPrevInstance = NULL,
+             wxCmdLineArgType pCmdLine = NULL,
+             int nCmdShow = SW_SHOWNORMAL);
+
 extern int WXDLLEXPORT
 wxEntry(HINSTANCE hInstance,
         HINSTANCE hPrevInstance = NULL,

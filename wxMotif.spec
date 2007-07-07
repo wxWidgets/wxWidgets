@@ -128,6 +128,7 @@ wx/config.h
 wx/convauto.h
 wx/containr.h
 wx/cpp.h
+wx/crt.h
 wx/datetime.h
 wx/datstrm.h
 wx/dde.h
@@ -224,6 +225,7 @@ wx/wfstream.h
 wx/wx.h
 wx/wxchar.h
 wx/wxcrt.h
+wx/wxcrtbase.h
 wx/wxcrtvararg.h
 wx/wxprec.h
 wx/xti.h

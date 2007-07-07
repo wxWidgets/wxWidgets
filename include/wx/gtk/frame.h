@@ -69,6 +69,7 @@ public:
     void SetToolBar(wxToolBar *toolbar);
 #endif // wxUSE_TOOLBAR
     
+    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     wxPoint GetClientAreaOrigin() const { return wxPoint(0, 0); }
 
     // implementation from now on
@@ -103,6 +104,9 @@ public:
     void UpdateMenuBarSize();
 
 #endif // wxUSE_MENUS_NATIVE
+
+private:
+    long m_fsSaveFlag;
 
     DECLARE_DYNAMIC_CLASS(wxFrame)
 };
