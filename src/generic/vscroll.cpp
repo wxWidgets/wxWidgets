@@ -923,3 +923,47 @@ IMPLEMENT_ABSTRACT_CLASS(wxVScrolledWindow, wxPanel)
 IMPLEMENT_ABSTRACT_CLASS(wxHScrolledWindow, wxPanel)
 IMPLEMENT_ABSTRACT_CLASS(wxHVScrolledWindow, wxPanel)
 
+
+#if WXWIN_COMPATIBILITY_2_8
+
+// ===========================================================================
+// wxVarVScrollLegacyAdaptor
+// ===========================================================================
+
+size_t wxVarVScrollLegacyAdaptor::GetFirstVisibleLine() const 
+{ return GetVisibleRowsBegin(); }
+
+size_t wxVarVScrollLegacyAdaptor::GetLastVisibleLine() const
+{ return GetVisibleRowsEnd() - 1; }
+
+size_t wxVarVScrollLegacyAdaptor::GetLineCount() const
+{ return GetRowCount(); }
+
+void wxVarVScrollLegacyAdaptor::SetLineCount(size_t count)
+{ SetRowCount(count); }
+
+void wxVarVScrollLegacyAdaptor::RefreshLine(size_t line)
+{ RefreshRow(line); }
+
+void wxVarVScrollLegacyAdaptor::RefreshLines(size_t from, size_t to)
+{ RefreshRows(from, to); }
+        
+bool wxVarVScrollLegacyAdaptor::ScrollToLine(size_t line)
+{ return ScrollToRow(line); }
+
+bool wxVarVScrollLegacyAdaptor::ScrollLines(int lines)
+{ return ScrollRows(lines); }
+        
+bool wxVarVScrollLegacyAdaptor::ScrollPages(int pages)
+{ return ScrollRowPages(pages); }
+
+wxCoord wxVarVScrollLegacyAdaptor::OnGetLineHeight(size_t WXUNUSED(n)) const
+{
+    wxFAIL_MSG( _T("OnGetLineHeight() must be overridden if OnGetRowHeight() isn't!") );
+    return -1;
+}
+
+void wxVarVScrollLegacyAdaptor::OnGetLinesHint( size_t WXUNUSED(lineMin), size_t WXUNUSED(lineMax)) const
+{ }
+
+#endif
