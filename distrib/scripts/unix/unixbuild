@@ -20,15 +20,15 @@ for i in "$@"; do
     ansi)          UNICODE=0 ;;
     debug)         DEBUG=1 ;;
     wxpython)      WXPYTHON=1 ;;
-	gtk2)          PORT="gtk2" ;;
-	gtk)           PORT="gtk" ;;
-	x11)           PORT="x11" ;;
-	motif)         PORT="motif" ;;
-	static)        STATIC=1 ;;
-	*)
-	    usage
-	    exit
-	    ;;
+    gtk2)          PORT="gtk2" ;;
+    gtk)           PORT="gtk" ;;
+    x11)           PORT="x11" ;;
+    motif)         PORT="motif" ;;
+    static)        STATIC=1 ;;
+    *)
+        usage
+        exit
+        ;;
     esac
 done
 
@@ -39,9 +39,8 @@ do_build
 make prefix=$INSTALLDIR install
 
 if [ "$WXPYTHON" == "1" ]; then
-  make -C contrib/src/animate prefix=$INSTALLDIR install
-  make -C contrib/src/gizmos prefix=$INSTALLDIR install
-  make -C contrib/src/stc prefix=$INSTALLDIR install
+    make -C contrib/src/gizmos prefix=$INSTALLDIR install
+    make -C contrib/src/stc prefix=$INSTALLDIR install
 fi
 
 cd $OLDDIR
