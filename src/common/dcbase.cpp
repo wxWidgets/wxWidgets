@@ -2302,7 +2302,7 @@ void wxDCBase::DrawLabel(const wxString& text,
     wxString curLine;
     for ( wxString::const_iterator pc = text.begin(); ; ++pc )
     {
-        if ( *pc == _T('\n') || pc == text.end() )
+        if ( pc == text.end() || *pc == _T('\n') )
         {
             int xRealStart = x; // init it here to avoid compielr warnings
 

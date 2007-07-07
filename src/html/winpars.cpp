@@ -379,7 +379,7 @@ void wxHtmlWinParser::AddText(const wxString& txt)
             ++i, ++x;
             while ( (i < end) &&
                     (*i == wxT('\n') || *i == wxT('\r') ||
-                     *i == wxT(' ')) || *i == wxT('\t') )
+                     *i == wxT(' ') || *i == wxT('\t')) )
             {
                 ++i;
                 ++x;
