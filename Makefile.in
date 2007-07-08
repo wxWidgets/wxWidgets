@@ -315,6 +315,7 @@ ALL_BASE_HEADERS =  \
 	wx/archive.h \
 	wx/arrimpl.cpp \
 	wx/arrstr.h \
+	wx/atomic.h \
 	wx/beforestd.h \
 	wx/buffer.h \
 	wx/build.h \
@@ -459,6 +460,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/archive.h \
 	wx/arrimpl.cpp \
 	wx/arrstr.h \
+	wx/atomic.h \
 	wx/beforestd.h \
 	wx/buffer.h \
 	wx/build.h \
@@ -2103,6 +2105,24 @@ COND_TOOLKIT_MSW_LOWLEVEL_HDR =  \
 	wx/msw/helpwin.h
 @COND_TOOLKIT_MSW@LOWLEVEL_HDR = $(COND_TOOLKIT_MSW_LOWLEVEL_HDR)
 @COND_TOOLKIT_PM@LOWLEVEL_HDR = 
+COND_TOOLKIT_WEB_LOWLEVEL_HDR =  \
+	wx/generic/icon.h \
+	wx/web/app.h \
+	wx/web/bitmap.h \
+	wx/web/brush.h \
+	wx/web/colour.h \
+	wx/web/cursor.h \
+	wx/web/dc.h \
+	wx/web/dcclient.h \
+	wx/web/dcmemory.h \
+	wx/web/dcscreen.h \
+	wx/web/font.h \
+	wx/web/pen.h \
+	wx/web/popupwin.h \
+	wx/web/region.h \
+	wx/web/toplevel.h \
+	wx/web/window.h
+@COND_TOOLKIT_WEB@LOWLEVEL_HDR = $(COND_TOOLKIT_WEB_LOWLEVEL_HDR)
 COND_TOOLKIT_WINCE_LOWLEVEL_HDR =  \
 	wx/msw/popupwin.h \
 	wx/msw/uxtheme.h \
@@ -4216,6 +4236,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_uuid.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS = 
+@COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS = monodll_icon.o \
+@COND_TOOLKIT_WEB@	monodll_app.o monodll_evtloop.o
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_app.o \
 	monodll_bitmap.o \
@@ -5045,6 +5067,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_uuid.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_1 = 
+@COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_1 = \
+@COND_TOOLKIT_WEB@	monodll_icon.o monodll_app.o monodll_evtloop.o
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_app.o \
 	monodll_bitmap.o \
@@ -6052,6 +6076,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_uuid.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_2 = 
+@COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_2 = \
+@COND_TOOLKIT_WEB@	monolib_icon.o monolib_app.o monolib_evtloop.o
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_app.o \
 	monolib_bitmap.o \
@@ -6882,6 +6908,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_uuid.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_3 = 
+@COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_3 = \
+@COND_TOOLKIT_WEB@	monolib_icon.o monolib_app.o monolib_evtloop.o
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_app.o \
 	monolib_bitmap.o \
@@ -8157,6 +8185,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_uuid.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_4 = 
+@COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_4 = \
+@COND_TOOLKIT_WEB@	coredll_icon.o coredll_app.o coredll_evtloop.o
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_app.o \
 	coredll_bitmap.o \
@@ -8987,6 +9017,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_uuid.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_5 = 
+@COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_5 = \
+@COND_TOOLKIT_WEB@	coredll_icon.o coredll_app.o coredll_evtloop.o
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_app.o \
 	coredll_bitmap.o \
@@ -9612,6 +9644,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_uuid.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_6 = 
+@COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_6 = \
+@COND_TOOLKIT_WEB@	corelib_icon.o corelib_app.o corelib_evtloop.o
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_app.o \
 	corelib_bitmap.o \
@@ -10442,6 +10476,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_uuid.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_7 = 
+@COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_7 = \
+@COND_TOOLKIT_WEB@	corelib_icon.o corelib_app.o corelib_evtloop.o
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_app.o \
 	corelib_bitmap.o \
@@ -14717,6 +14753,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_evtloop.o: $(srcdir)/src/dfb/evtloop.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/evtloop.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@monodll_evtloop.o: $(srcdir)/src/web/evtloop.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/web/evtloop.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
 
@@ -14945,6 +14984,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_icon.o: $(srcdir)/src/generic/icon.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@monodll_icon.o: $(srcdir)/src/generic/icon.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_icon.o: $(srcdir)/src/msw/icon.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/icon.cpp
 
@@ -14992,6 +15034,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_app.o: $(srcdir)/src/dfb/app.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/app.cpp
+
+@COND_TOOLKIT_WEB_USE_GUI_1@monodll_app.o: $(srcdir)/src/web/app.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/web/app.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_app.o: $(srcdir)/src/motif/app.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/app.cpp
@@ -19010,6 +19055,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_evtloop.o: $(srcdir)/src/dfb/evtloop.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/evtloop.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@monolib_evtloop.o: $(srcdir)/src/web/evtloop.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/web/evtloop.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
 
@@ -19238,6 +19286,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_icon.o: $(srcdir)/src/generic/icon.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@monolib_icon.o: $(srcdir)/src/generic/icon.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_icon.o: $(srcdir)/src/msw/icon.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/icon.cpp
 
@@ -19285,6 +19336,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_app.o: $(srcdir)/src/dfb/app.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/app.cpp
+
+@COND_TOOLKIT_WEB_USE_GUI_1@monolib_app.o: $(srcdir)/src/web/app.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/web/app.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_app.o: $(srcdir)/src/motif/app.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/app.cpp
@@ -23801,6 +23855,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_evtloop.o: $(srcdir)/src/dfb/evtloop.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/evtloop.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@coredll_evtloop.o: $(srcdir)/src/web/evtloop.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/web/evtloop.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
 
@@ -24032,6 +24089,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_icon.o: $(srcdir)/src/generic/icon.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@coredll_icon.o: $(srcdir)/src/generic/icon.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_icon.o: $(srcdir)/src/msw/icon.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/icon.cpp
 
@@ -24079,6 +24139,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_app.o: $(srcdir)/src/dfb/app.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/app.cpp
+
+@COND_TOOLKIT_WEB_USE_GUI_1@coredll_app.o: $(srcdir)/src/web/app.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/web/app.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_app.o: $(srcdir)/src/motif/app.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/app.cpp
@@ -26756,6 +26819,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_evtloop.o: $(srcdir)/src/dfb/evtloop.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/evtloop.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@corelib_evtloop.o: $(srcdir)/src/web/evtloop.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/web/evtloop.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
 
@@ -26987,6 +27053,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_icon.o: $(srcdir)/src/generic/icon.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@corelib_icon.o: $(srcdir)/src/generic/icon.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_icon.o: $(srcdir)/src/msw/icon.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/icon.cpp
 
@@ -27034,6 +27103,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_app.o: $(srcdir)/src/dfb/app.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/app.cpp
+
+@COND_TOOLKIT_WEB_USE_GUI_1@corelib_app.o: $(srcdir)/src/web/app.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/web/app.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_app.o: $(srcdir)/src/motif/app.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/app.cpp

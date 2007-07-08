@@ -1479,6 +1479,10 @@ SOURCE=..\..\include\wx\arrstr.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\atomic.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\beforestd.h
 # End Source File
 # Begin Source File

@@ -38,7 +38,7 @@
 #elif defined(__WXPM__)
   #include "wx/os2/icon.h"
 #elif defined(__WXWEB__)
-  #include "wx/web/icon.h"
+  #include "wx/generic/icon.h"
 #endif
 
 //-----------------------------------------------------------------------------

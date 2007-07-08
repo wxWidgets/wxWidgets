@@ -2565,6 +2565,37 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 
 <!-- ====================================================================== -->
+<!--                              wxWEB                                     -->
+<!-- ====================================================================== -->
+
+
+<set var="WEB_LOWLEVEL_SRC" hints="files">
+    src/generic/icon.cpp
+    src/web/app.cpp
+    src/web/evtloop.cpp
+</set>
+<set var="WEB_LOWLEVEL_HDR" hints="files">
+    wx/generic/icon.h
+    wx/web/app.h
+    wx/web/bitmap.h
+    wx/web/brush.h
+    wx/web/colour.h
+    wx/web/cursor.h
+    wx/web/dc.h
+    wx/web/dcclient.h
+    wx/web/dcmemory.h
+    wx/web/dcscreen.h
+    wx/web/font.h
+    wx/web/pen.h
+    wx/web/popupwin.h
+    wx/web/region.h
+    wx/web/toplevel.h
+    wx/web/window.h
+</set>
+
+
+
+<!-- ====================================================================== -->
 <!--                              wxUniversal                               -->
 <!-- ====================================================================== -->
 
@@ -3358,6 +3389,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MGL'">$(MGL_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='DFB'">$(DFB_LOWLEVEL_SRC)</if>
+        <if cond="TOOLKIT=='WEB'">$(WEB_LOWLEVEL_SRC)</if>
     </set>
     <set var="LOWLEVEL_HDR" hints="files">
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK_LOWLEVEL_HDR)</if>
@@ -3371,6 +3403,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='MGL'">$(MGL_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='DFB'">$(DFB_LOWLEVEL_HDR)</if>
+        <if cond="TOOLKIT=='WEB'">$(WEB_LOWLEVEL_HDR)</if>
     </set>
 
     <set var="GUI_SRC" hints="files">

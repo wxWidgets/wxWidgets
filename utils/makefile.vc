@@ -42,34 +42,34 @@ clean:
 	-if exist .\*.pch del .\*.pch
 	cd emulator\src
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
-	cd "$(MAKEDIR)"
+	cd $(MAKEDIR)
 	cd helpview\src
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
-	cd "$(MAKEDIR)"
+	cd $(MAKEDIR)
 	cd tex2rtf\src
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
-	cd "$(MAKEDIR)"
+	cd $(MAKEDIR)
 	cd HelpGen\src
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
-	cd "$(MAKEDIR)"
+	cd $(MAKEDIR)
 
 sub_emulator: 
 	cd emulator\src
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
-	cd "$(MAKEDIR)"
+	cd $(MAKEDIR)
 
 sub_helpview: 
 	cd helpview\src
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
-	cd "$(MAKEDIR)"
+	cd $(MAKEDIR)
 
 sub_tex2rtf: 
 	cd tex2rtf\src
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
-	cd "$(MAKEDIR)"
+	cd $(MAKEDIR)
 
 sub_helpgen: 
 	cd HelpGen\src
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
-	cd "$(MAKEDIR)"
+	cd $(MAKEDIR)
 

@@ -764,6 +764,18 @@ dnl ### begin block 20_COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0[wx.bkl] ###
         COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0=""
     fi
     AC_SUBST(COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0)
+dnl ### begin block 20_COND_TOOLKIT_WEB[wx.bkl] ###
+    COND_TOOLKIT_WEB="#"
+    if test "x$TOOLKIT" = "xWEB" ; then
+        COND_TOOLKIT_WEB=""
+    fi
+    AC_SUBST(COND_TOOLKIT_WEB)
+dnl ### begin block 20_COND_TOOLKIT_WEB_USE_GUI_1[wx.bkl] ###
+    COND_TOOLKIT_WEB_USE_GUI_1="#"
+    if test "x$TOOLKIT" = "xWEB" -a "x$USE_GUI" = "x1" ; then
+        COND_TOOLKIT_WEB_USE_GUI_1=""
+    fi
+    AC_SUBST(COND_TOOLKIT_WEB_USE_GUI_1)
 dnl ### begin block 20_COND_TOOLKIT_WINCE[wx.bkl] ###
     COND_TOOLKIT_WINCE="#"
     if test "x$TOOLKIT" = "xWINCE" ; then
