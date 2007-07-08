@@ -115,7 +115,7 @@ template<> void wxStringReadValue(const wxString &s , bool &data )
 {
     int intdata ;
     wxSscanf(s, _T("%d"), &intdata ) ;
-    data = (bool)intdata ;
+    data = (bool)(intdata != 0);
 }
 
 template<> void wxStringWriteValue(wxString &s , const bool &data )
@@ -287,7 +287,13 @@ wxTypeInfoMap *wxTypeInfo::ms_typeTable = NULL ;
 wxTypeInfo *wxTypeInfo::FindType(const wxChar *typeName)
 {
     wxTypeInfoMap::iterator iter = ms_typeTable->find(typeName) ;
-    wxASSERT_MSG( iter != ms_typeTable->end() , wxT("lookup for a non-existent type-info") ) ;
+
+    //wxASSERT_MSG( iter != ms_typeTable->end() , wxT("lookup for a non-existent type-info") ) ;
+    // FM 3/6/2007 - disabled because otherwise wxPropertyInfo::GetCollectionElementTypeInfo
+    //               may easily crash
+    if (iter == ms_typeTable->end())
+        return NULL;
+
     return (wxTypeInfo *)iter->second;
 }
 
