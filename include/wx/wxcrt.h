@@ -2,7 +2,7 @@
 // Name:        wx/wxcrt.h
 // Purpose:     Type-safe ANSI and Unicode builds compatible wrappers for
 //              CRT functions
-// Author:      Joel Farley, Ove Kåven
+// Author:      Joel Farley, Ove Kï¿½ven
 // Modified by: Vadim Zeitlin, Robert Roebling, Ron Lee, Vaclav Slavik
 // Created:     1998/06/12
 // RCS-ID:      $Id$
@@ -702,13 +702,6 @@ inline int wxRemove(const wxString& path)
     { return wxCRT_Remove(path.fn_str()); }
 inline int wxRename(const wxString& oldpath, const wxString& newpath)
     { return wxCRT_Rename(oldpath.fn_str(), newpath.fn_str()); }
-
-// NB: we don't provide wxString/wxCStrData versions of wxTmpnam, because 's'
-//     is writable
-inline char *wxTmpnam(char *s)
-    { return wxCRT_TmpnamA(s); }
-inline wchar_t *wxTmpnam(wchar_t *s)
-    { return wxCRT_TmpnamW(s); }
 
 extern WXDLLIMPEXP_BASE int wxPuts(const wxString& s);
 extern WXDLLIMPEXP_BASE int wxFputs(const wxString& s, FILE *stream);

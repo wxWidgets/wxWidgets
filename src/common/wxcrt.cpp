@@ -1106,22 +1106,6 @@ int wxCRT_RemoveW(const wchar_t *path)
 }
 #endif
 
-#ifndef wxCRT_TmpnamW
-wchar_t *wxCRT_TmpnamW(wchar_t *s)
-{
-    // tmpnam_r() returns NULL if s=NULL, do the same
-    wxCHECK_MSG( s, NULL, "wxTmpnam must be called with a buffer" );
-
-#ifndef L_tmpnam
-    #define L_tmpnam 1024
-#endif
-    wxCharBuffer buf(L_tmpnam);
-    tmpnam(buf.data());
-
-    wxConvLibc.ToWChar(s, L_tmpnam+1, buf.data());
-    return s;
-}
-#endif // !wxCRT_TmpnamW
 
 
 // ============================================================================

@@ -2,7 +2,7 @@
  * Name:        wx/wxcrtbase.h
  * Purpose:     Type-safe ANSI and Unicode builds compatible wrappers for
  *              CRT functions
- * Author:      Joel Farley, Ove Kåven
+ * Author:      Joel Farley, Ove Kï¿½ven
  * Modified by: Vadim Zeitlin, Robert Roebling, Ron Lee
  * Created:     1998/06/12
  * RCS-ID:      $Id$
@@ -476,14 +476,12 @@ WXDLLIMPEXP_BASE int wxCRT_FputsW(const wchar_t *ch, FILE *stream);
 WXDLLIMPEXP_BASE int wxCRT_FputcW(wchar_t wc, FILE *stream);
 #endif
 
-#define wxCRT_TmpnamA     tmpnam
-#ifdef _ttmpnam
-    #define wxCRT_TmpnamW _wtmpnam
-#endif
-
-#ifndef wxCRT_TmpnamW
-WXDLLIMPEXP_BASE wchar_t *wxCRT_TmpnamW(wchar_t *s);
-#endif
+/*
+   NB: tmpnam() is unsafe and thus is not wrapped!
+       Use other wxWidgets facilities instead:
+        wxFileName::CreateTempFileName, wxTempFile, or wxTempFileOutputStream
+*/
+#define wxTmpnam(x)         wxTmpnam_is_insecure_use_wxTempFile_instead
 
 #define wxCRT_PerrorA   perror
 #ifdef wxHAVE_TCHAR_SUPPORT
