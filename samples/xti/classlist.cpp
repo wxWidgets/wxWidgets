@@ -224,6 +224,8 @@ void ClassListDialog::InitControls()
 
     // add root item to parent-mode treectrl
     wxTreeItemId id = m_pParentTreeCtrl->AddRoot(_T("wxObject"));
+
+    // recursively add all leaves to the treectrl
     int count = AddClassesWithParent(CLASSINFO(wxObject), id);
     m_pParentTreeCtrl->SetItemText(id, m_pParentTreeCtrl->GetItemText(id) +
                                  wxString::Format(wxT(" [%d]"), count));
@@ -259,6 +261,7 @@ wxIcon ClassListDialog::GetIconResource( const wxString& name )
 // wxClassListDialog - event handlers
 // ----------------------------------------------------------------------------
 
+// defined later
 wxString DumpClassInfo(const wxClassInfo*);
 
 void ClassListDialog::OnListboxSelected( wxCommandEvent& event )
@@ -296,6 +299,26 @@ wxString DumpTypeInfo(const wxTypeInfo *ti)
     return DumpStr(ti->GetTypeName());
 }
 
+wxString DumpPropertyAccessor(const wxPropertyAccessor *acc, int indent)
+{
+    wxString ind = _T("\n") + wxString(indent, wxT(' '));
+    wxString infostr;
+
+    if (!acc)
+        return ind + _T("no property accessors");
+    
+    if (acc->HasSetter())
+        infostr << ind << _T("setter name: ") << acc->GetSetterName();
+    if (acc->HasCollectionGetter())
+        infostr << ind << _T("collection getter name: ") << acc->GetCollectionGetterName();
+    if (acc->HasGetter())
+        infostr << ind << _T("getter name: ") << acc->GetGetterName();
+    if (acc->HasAdder())
+        infostr << ind << _T("adder name: ") << acc->GetAdderName();
+
+    return infostr;
+}
+
 wxString DumpPropertyInfo(const wxPropertyInfo *prop, int indent)
 {
     wxString ind = _T("\n") + wxString(indent, wxT(' '));
@@ -326,10 +349,8 @@ wxString DumpPropertyInfo(const wxPropertyInfo *prop, int indent)
     infostr << ind << _T("type: ") << DumpTypeInfo(prop->GetTypeInfo());
 
     infostr << ind << _T("default value: ") << DumpStr(prop->GetDefaultValue().GetAsString());
-/*
-    // return the accessor for this property
-    wxPropertyAccessor* GetAccessor() const { return m_accessor; }
-*/
+    infostr << DumpPropertyAccessor(prop->GetAccessor(), indent+1);
+
     return infostr;
 }
 
