@@ -1,11 +1,16 @@
 #ifndef __WX_APP_H__
 #define __WX_APP_H__
 
+#include "wx/app.h"
+#include "wx/gdicmn.h"
+#include "wx/event.h"
+#include "wx/string.h"
+
 class WXDLLEXPORT wxApp: public wxAppBase
 {
 public:
     wxApp();
-    ~wxApp();
+    virtual ~wxApp();
 
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
@@ -21,7 +26,7 @@ private:
     wxString m_requestFifoPath;
     wxString m_responseFifoPath;
 
-private:
+protected:
     DECLARE_DYNAMIC_CLASS(wxApp)
     DECLARE_EVENT_TABLE()
 };
