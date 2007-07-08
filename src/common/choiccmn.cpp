@@ -82,7 +82,9 @@ wxEND_HANDLERS_TABLE()
 
 wxCONSTRUCTOR_4( wxChoice , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size )
 #else
+
 IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControlWithItems)
+
 #endif
 /*
     TODO PROPERTIES
