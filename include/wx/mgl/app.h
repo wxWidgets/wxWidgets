@@ -51,7 +51,6 @@ public:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxApp)
-    DECLARE_EVENT_TABLE()
 
     wxVideoMode m_displayMode;
 };

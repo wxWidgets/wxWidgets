@@ -25,7 +25,6 @@ typedef const struct __CFString * CFStringRef;
 class WXDLLEXPORT wxApp: public wxAppBase
 {
     DECLARE_DYNAMIC_CLASS(wxApp)
-    DECLARE_EVENT_TABLE()
 // ------------------------------------------------------------------------
 // initialization
 // ------------------------------------------------------------------------

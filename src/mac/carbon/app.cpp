@@ -1136,12 +1136,7 @@ wxApp::wxApp()
 
 void wxApp::OnIdle(wxIdleEvent& event)
 {
-    wxAppBase::OnIdle(event);
-
-    // If they are pending events, we must process them: pending events are
-    // either events to the threads other than main or events posted with
-    // wxPostEvent() functions
-    wxMacProcessNotifierAndPendingEvents();
+    wxMacProcessNotifierEvents();
 
   if (!wxMenuBar::MacGetInstalledMenuBar() && wxMenuBar::MacGetCommonMenuBar())
     wxMenuBar::MacGetCommonMenuBar()->MacInstallMenuBar();

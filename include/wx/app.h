@@ -497,10 +497,6 @@ public:
     wxDEPRECATED( bool Initialized() );
 #endif // WXWIN_COMPATIBILITY_2_6
 
-    // perform standard OnIdle behaviour, ensure that this is always called
-    void OnIdle(wxIdleEvent& event);
-
-
 protected:
     // delete all objects in wxPendingDelete list
     void DeletePendingObjects();

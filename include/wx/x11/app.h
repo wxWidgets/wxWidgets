@@ -106,7 +106,6 @@ protected:
     long                  m_maxRequestSize;
 
     DECLARE_DYNAMIC_CLASS(wxApp)
-    DECLARE_EVENT_TABLE()
 };
 
 #endif // _WX_X11_APP_H_

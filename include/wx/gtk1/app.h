@@ -72,7 +72,6 @@ private:
 #endif // __WXDEBUG__
 
     DECLARE_DYNAMIC_CLASS(wxApp)
-    DECLARE_EVENT_TABLE()
 };
 
 #endif // __GTKAPPH__

@@ -42,7 +42,6 @@ public:
     virtual int GetPrintMode() const { return m_printMode; }
 
     // implementation only
-    void OnIdle(wxIdleEvent& event);
     void OnEndSession(wxCloseEvent& event);
     void OnQueryEndSession(wxCloseEvent& event);
 

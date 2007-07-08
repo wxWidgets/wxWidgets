@@ -86,10 +86,6 @@ long wxApp::sm_lastMessageTime = 0;
 
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 
-BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
-    EVT_IDLE(wxAppBase::OnIdle)
-END_EVENT_TABLE()
-
 bool wxApp::Initialize(int& argC, wxChar **argV)
 {
 #if defined(__WXDEBUG__) && !wxUSE_NANOX

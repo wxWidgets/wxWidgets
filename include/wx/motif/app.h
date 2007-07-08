@@ -91,8 +91,6 @@ private:
     WXColormap            m_mainColormap;
     WXDisplay*            m_initialDisplay;
     wxPerDisplayDataMap*  m_perDisplayData;
-
-    DECLARE_EVENT_TABLE()
 };
 
 #endif

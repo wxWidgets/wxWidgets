@@ -425,10 +425,6 @@ GtkWidget* wxGetRootWindow()
 
 IMPLEMENT_DYNAMIC_CLASS(wxApp,wxEvtHandler)
 
-BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
-    EVT_IDLE(wxAppBase::OnIdle)
-END_EVENT_TABLE()
-
 wxApp::wxApp()
 {
 #ifdef __WXDEBUG__

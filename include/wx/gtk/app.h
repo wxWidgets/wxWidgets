@@ -81,7 +81,6 @@ private:
     guint m_idleSourceId;
 
     DECLARE_DYNAMIC_CLASS(wxApp)
-    DECLARE_EVENT_TABLE()
 };
 
 #endif // _WX_GTK_APP_H_

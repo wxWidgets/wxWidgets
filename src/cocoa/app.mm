@@ -101,11 +101,6 @@ WX_IMPLEMENT_GET_OBJC_CLASS(wxNSApplicationObserver,NSObject)
 // wxApp Static member initialization
 // ----------------------------------------------------------------------------
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
-BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
-    EVT_IDLE(wxAppBase::OnIdle)
-//    EVT_END_SESSION(wxApp::OnEndSession)
-//    EVT_QUERY_END_SESSION(wxApp::OnQueryEndSession)
-END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // wxApp initialization/cleanup
