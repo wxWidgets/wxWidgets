@@ -250,7 +250,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxMessageBox(wxString::Format(
                     _T("Welcome to %s!\n")
                     _T("\n")
-                    _T("This sample demonstrates wxWidgets eXtended RTTI (XTI)")
+                    _T("This sample demonstrates wxWidgets eXtended RTTI (XTI) system."),
                     wxVERSION_STRING
                  ),
                  _T("About wxWidgets XTI sample"),
