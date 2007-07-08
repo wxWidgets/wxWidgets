@@ -950,7 +950,7 @@
 #undef wxSIZE_T_IS_ULONG
 
 /* Define if wchar_t is distinct type in your compiler. */
-#undef wxWCHAR_T_IS_SEPARATE_TYPE
+#undef wxWCHAR_T_IS_REAL_TYPE
 
 /* Define if you have the dlopen function.  */
 #undef HAVE_DLOPEN

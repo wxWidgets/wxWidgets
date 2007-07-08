@@ -15,24 +15,6 @@
 #include "wx/chartype.h"
 #include "wx/stringimpl.h"
 
-#ifndef wxWCHAR_T_IS_SEPARATE_TYPE
-    // older versions of VC++ have wchar_t as typedef by default; this is
-    // configurable, so we have to check which behaviour is enabled
-    #if defined(__VISUALC__) && !defined(_NATIVE_WCHAR_T_DEFINED)
-        #define wxWCHAR_T_IS_SEPARATE_TYPE 0
-    #else
-        #define wxWCHAR_T_IS_SEPARATE_TYPE 1
-    #endif
-#endif
-
-// helper macro for doing something dependent on whether wchar_t is or isn't a
-// typedef inside another macro
-#if wxWCHAR_T_IS_SEPARATE_TYPE
-    #define wxIF_WCHAR_T_TYPE(x) x
-#else // !wxWCHAR_T_IS_SEPARATE_TYPE
-    #define wxIF_WCHAR_T_TYPE(x)
-#endif // wxWCHAR_T_IS_SEPARATE_TYPE/!wxWCHAR_T_IS_SEPARATE_TYPE
-
 class WXDLLIMPEXP_BASE wxUniCharRef;
 class WXDLLIMPEXP_BASE wxStringIteratorNode;
 
@@ -54,7 +36,7 @@ public:
     wxUniChar(unsigned char c) { m_value = From8bit((char)c); }
 
     // Create the character from a wchar_t character value.
-#if wxWCHAR_T_IS_SEPARATE_TYPE
+#if wxWCHAR_T_IS_REAL_TYPE
     wxUniChar(wchar_t c) { m_value = c; }
 #endif
 
@@ -91,7 +73,7 @@ public:
     // functions
     operator char() const { return To8bit(m_value); }
     operator unsigned char() const { return (unsigned char)To8bit(m_value); }
-#if wxWCHAR_T_IS_SEPARATE_TYPE
+#if wxWCHAR_T_IS_REAL_TYPE
     operator wchar_t() const { return (wchar_t)m_value; }
 #endif
     operator int() const { return (int)m_value; }
@@ -118,7 +100,7 @@ public:
     wxUniChar& operator=(const wxUniCharRef& c);
     wxUniChar& operator=(char c) { m_value = From8bit(c); return *this; }
     wxUniChar& operator=(unsigned char c) { m_value = From8bit((char)c); return *this; }
-#if wxWCHAR_T_IS_SEPARATE_TYPE
+#if wxWCHAR_T_IS_REAL_TYPE
     wxUniChar& operator=(wchar_t c) { m_value = c; return *this; }
 #endif
     wxUniChar& operator=(int c) { m_value = c; return *this; }
@@ -213,7 +195,7 @@ public:
 
     wxUniCharRef& operator=(char c) { return *this = wxUniChar(c); }
     wxUniCharRef& operator=(unsigned char c) { return *this = wxUniChar(c); }
-#if wxWCHAR_T_IS_SEPARATE_TYPE
+#if wxWCHAR_T_IS_REAL_TYPE
     wxUniCharRef& operator=(wchar_t c) { return *this = wxUniChar(c); }
 #endif
     wxUniCharRef& operator=(int c) { return *this = wxUniChar(c); }
@@ -226,7 +208,7 @@ public:
     // Conversions to the same types as wxUniChar is convertible too:
     operator char() const { return UniChar(); }
     operator unsigned char() const { return UniChar(); }
-#if wxWCHAR_T_IS_SEPARATE_TYPE
+#if wxWCHAR_T_IS_REAL_TYPE
     operator wchar_t() const { return UniChar(); }
 #endif
     operator int() const { return UniChar(); }

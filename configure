@@ -34140,12 +34140,12 @@ echo "${ECHO_T}$wx_cv_wchar_t_is_separate_type" >&6; }
 
 if test "$wx_cv_wchar_t_is_separate_type" = "yes"; then
     cat >>confdefs.h <<\_ACEOF
-#define wxWCHAR_T_IS_SEPARATE_TYPE 1
+#define wxWCHAR_T_IS_REAL_TYPE 1
 _ACEOF
 
 else
     cat >>confdefs.h <<\_ACEOF
-#define wxWCHAR_T_IS_SEPARATE_TYPE 0
+#define wxWCHAR_T_IS_REAL_TYPE 0
 _ACEOF
 
 fi

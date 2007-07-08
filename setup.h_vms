@@ -1034,7 +1034,7 @@ typedef pid_t GPid;
 #undef wxSIZE_T_IS_ULONG
 
 /* Define if wchar_t is distinct type in your compiler. */
-#define wxWCHAR_T_IS_SEPARATE_TYPE 1
+#define wxWCHAR_T_IS_REAL_TYPE 1
 
 /* Define if you have the dlopen function.  */
 #define HAVE_DLOPEN 1

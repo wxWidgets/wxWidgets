@@ -1139,18 +1139,26 @@ typedef float wxFloat32;
     of treating it as a real fundamental type, set wxWCHAR_T_IS_REAL_TYPE to 0
     for them and to 1 for all the others.
  */
-#if wxUSE_WCHAR_T
+#ifndef wxWCHAR_T_IS_REAL_TYPE
     /*
-        VC++ typedefs wchar_t as unsigned short by default, that is unless
-        /Za or /Zc:wchar_t option is used in which case _WCHAR_T_DEFINED is
-        defined.
+        VC++ typedefs wchar_t as unsigned short by default until VC8, that is
+        unless /Za or /Zc:wchar_t option is used in which case _WCHAR_T_DEFINED
+        is defined.
      */
 #   if defined(__VISUALC__) && !defined(_NATIVE_WCHAR_T_DEFINED)
 #       define wxWCHAR_T_IS_REAL_TYPE 0
 #   else /* compiler having standard-conforming wchar_t */
 #       define wxWCHAR_T_IS_REAL_TYPE 1
 #   endif
-#endif /* wxUSE_WCHAR_T */
+#endif /* !defined(wxWCHAR_T_IS_REAL_TYPE) */
+
+/* Helper macro for doing something dependent on whether wchar_t is or isn't a
+   typedef inside another macro. */
+#if wxWCHAR_T_IS_REAL_TYPE
+    #define wxIF_WCHAR_T_TYPE(x) x
+#else /* !wxWCHAR_T_IS_REAL_TYPE */
+    #define wxIF_WCHAR_T_TYPE(x)
+#endif /* wxWCHAR_T_IS_REAL_TYPE/!wxWCHAR_T_IS_REAL_TYPE */
 
 /*
    This constant should be used instead of NULL in vararg functions taking
