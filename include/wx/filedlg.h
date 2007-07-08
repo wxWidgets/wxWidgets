@@ -148,180 +148,41 @@ private:
 // wxFileDialog convenience functions
 //----------------------------------------------------------------------------
 
-// NB: wxFileSelector() etc. used to take const wxChar* arguments in wx-2.8
-//     and their default value was NULL. The official way to use these
-//     functions is to use wxString, with wxEmptyString as the default value.
-//     The templates below exist only to maintain compatibility with wx-2.8.
-
-#if WXWIN_COMPATIBILITY_2_8
-// return wxString created from the argument, return empty string if the
-// argument is NULL:
-inline wxString wxPtrOrStringToString(const wxString& s) { return s; }
-inline wxString wxPtrOrStringToString(const char *s) { return s; }
-inline wxString wxPtrOrStringToString(const wchar_t *s) { return s; }
-inline wxString wxPtrOrStringToString(const wxCStrData& s) { return s; }
-inline wxString wxPtrOrStringToString(const wxCharBuffer& s) { return s; }
-inline wxString wxPtrOrStringToString(const wxWCharBuffer& s) { return s; }
-// this one is for NULL:
-inline wxString wxPtrOrStringToString(int s)
-{
-    wxASSERT_MSG( s == 0, _T("passing non-NULL int as string?") );
-    return wxEmptyString;
-}
-#endif // WXWIN_COMPATIBILITY_2_8
-
+// File selector - backward compatibility
 WXDLLEXPORT wxString
-wxDoFileSelector(const wxString& message = wxFileSelectorPromptStr,
+wxFileSelector(const wxString& message = wxFileSelectorPromptStr,
+               const wxString& default_path = wxEmptyString,
+               const wxString& default_filename = wxEmptyString,
+               const wxString& default_extension = wxEmptyString,
+               const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
+               int flags = 0,
+               wxWindow *parent = NULL,
+               int x = wxDefaultCoord, int y = wxDefaultCoord);
+
+// An extended version of wxFileSelector
+WXDLLEXPORT wxString
+wxFileSelectorEx(const wxString& message = wxFileSelectorPromptStr,
                  const wxString& default_path = wxEmptyString,
                  const wxString& default_filename = wxEmptyString,
-                 const wxString& default_extension = wxEmptyString,
+                 int *indexDefaultExtension = NULL,
                  const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
                  int flags = 0,
                  wxWindow *parent = NULL,
                  int x = wxDefaultCoord, int y = wxDefaultCoord);
 
-WXDLLEXPORT wxString
-wxDoFileSelectorEx(const wxString& message = wxFileSelectorPromptStr,
-                   const wxString& default_path = wxEmptyString,
-                   const wxString& default_filename = wxEmptyString,
-                   int *indexDefaultExtension = NULL,
-                   const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
-                   int flags = 0,
-                   wxWindow *parent = NULL,
-                   int x = wxDefaultCoord, int y = wxDefaultCoord);
-
-WXDLLEXPORT wxString
-wxDoLoadFileSelector(const wxString& what,
-                     const wxString& extension,
-                     const wxString& default_name = wxEmptyString,
-                     wxWindow *parent = NULL);
-
-WXDLLEXPORT wxString
-wxDoSaveFileSelector(const wxString& what,
-                     const wxString& extension,
-                     const wxString& default_name = wxEmptyString,
-                     wxWindow *parent = NULL);
-
-#if WXWIN_COMPATIBILITY_2_8
-
-// File selector - backward compatibility
-inline wxString wxFileSelector()
-{
-    return wxDoFileSelector();
-}
-
-inline wxString wxFileSelector(const wxString& message)
-{
-    return wxDoFileSelector(message);
-}
-
-template<typename T>
-inline wxString wxFileSelector(const wxString& message, const T& default_path)
-{
-    return wxDoFileSelector(message, wxPtrOrStringToString(default_path));
-}
-
-template<typename T1, typename T2>
-inline wxString wxFileSelector(const wxString& message,
-                               const T1& default_path,
-                               const T2& default_filename)
-{
-    return wxDoFileSelector(message,
-                            wxPtrOrStringToString(default_path),
-                            wxPtrOrStringToString(default_filename));
-}
-
-template<typename T1, typename T2, typename T3>
-inline wxString
-wxFileSelector(const wxString& message,
-               const T1& default_path,
-               const T2& default_filename,
-               const T3& default_extension,
-               const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
-               int flags = 0,
-               wxWindow *parent = NULL,
-               int x = wxDefaultCoord, int y = wxDefaultCoord)
-{
-    return wxDoFileSelector(message,
-                            wxPtrOrStringToString(default_path),
-                            wxPtrOrStringToString(default_filename),
-                            wxPtrOrStringToString(default_extension),
-                            wildcard,
-                            flags,
-                            parent,
-                            x, y);
-}
-
-// An extended version of wxFileSelector
-inline wxString wxFileSelectorEx()
-{
-    return wxDoFileSelectorEx();
-}
-
-inline wxString wxFileSelectorEx(const wxString& message)
-{
-    return wxDoFileSelectorEx(message);
-}
-
-template<typename T>
-inline wxString wxFileSelectorEx(const wxString& message, const T& default_path)
-{
-    return wxDoFileSelectorEx(message, wxPtrOrStringToString(default_path));
-}
-
-template<typename T1, typename T2>
-inline wxString
-wxFileSelectorEx(const wxString& message,
-                 const T1& default_path,
-                 const T2& default_filename,
-                 int *indexDefaultExtension = NULL,
-                 const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
-                 int flags = 0,
-                 wxWindow *parent = NULL,
-                 int x = wxDefaultCoord, int y = wxDefaultCoord)
-{
-    return wxDoFileSelectorEx(message,
-                              wxPtrOrStringToString(default_path),
-                              wxPtrOrStringToString(default_filename),
-                              indexDefaultExtension,
-                              wildcard,
-                              flags,
-                              parent,
-                              x, y);
-}
-
 // Ask for filename to load
-template<typename T>
-inline wxString wxLoadFileSelector(const wxString& what,
-                                   const wxString& extension,
-                                   const T& default_name = T(),
-                                   wxWindow *parent = NULL)
-{
-    return wxDoLoadFileSelector(what, extension,
-                                wxPtrOrStringToString(default_name),
-                                parent);
-}
+WXDLLEXPORT wxString
+wxLoadFileSelector(const wxString& what,
+                   const wxString& extension,
+                   const wxString& default_name = wxEmptyString,
+                   wxWindow *parent = NULL);
 
 // Ask for filename to save
-template<typename T>
-inline wxString wxSaveFileSelector(const wxString& what,
-                                   const wxString& extension,
-                                   const T& default_name = T(),
-                                   wxWindow *parent = NULL)
-{
-    return wxDoSaveFileSelector(what, extension,
-                                wxPtrOrStringToString(default_name),
-                                parent);
-}
-
-#else // !WXWIN_COMPATIBILITY_2_8
-
-#define wxFileSelector wxDoFileSelector
-#define wxFileSelectorEx wxDoFileSelectorEx
-#define wxLoadFileSelector wxDoLoadFileSelector
-#define wxSaveFileSelector wxDoSaveFileSelector
-
-#endif // WXWIN_COMPATIBILITY_2_8/!WXWIN_COMPATIBILITY_2_8
+WXDLLEXPORT wxString
+wxSaveFileSelector(const wxString& what,
+                   const wxString& extension,
+                   const wxString& default_name = wxEmptyString,
+                   wxWindow *parent = NULL);
 
 
 #if defined (__WXUNIVERSAL__)
