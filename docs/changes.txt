@@ -69,11 +69,14 @@ Changes in behaviour which may result in compilation errors
   This can be worked around by explicitly casting to bool:
      for ( wxString::const_iterator p = s.begin(); (bool)*p; ++p )
 
-- virtual wxHtmlParser::AddText() takes wxString, not wxChar*, argument now.
+- Virtual wxHtmlParser::AddText() takes wxString, not wxChar*, argument now.
 
 - Funtions that took wxChar* arguments that could by NULL in wxWidgets 2.8.
   are deprecated and passing NULL to them won't compile anymore, wxEmptyString
   must be used instead.
+
+- Removed insecure wxGets() and wxTmpnam() functions.
+
 
 Deprecated methods and their replacements
 -----------------------------------------
