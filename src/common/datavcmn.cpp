@@ -33,6 +33,7 @@ const wxChar wxDataViewCtrlNameStr[] = wxT("dataviewCtrl");
 wxDataViewModel::wxDataViewModel()
 {
     m_notifiers.DeleteContents( true );
+    m_cmpFunc = NULL;
 }
 
 bool wxDataViewModel::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )

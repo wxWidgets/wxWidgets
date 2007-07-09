@@ -83,11 +83,14 @@ private:
     wxUint32 m_id;
 };
 
-bool operator == ( const wxDataViewItem & left, const wxDataViewItem & right );
+bool operator == ( const wxDataViewItem& left, const wxDataViewItem& right );
 
 // ---------------------------------------------------------
 // wxDataViewModel
 // ---------------------------------------------------------
+
+typedef int (wxCALLBACK *wxDataViewModelCompare)
+    (const wxDataViewItem& item1, const wxDataViewItem& item2, unsigned int col, unsigned int option );
 
 class WXDLLIMPEXP_ADV wxDataViewModel: public wxObjectRefData
 {
@@ -125,11 +128,15 @@ public:
     void AddNotifier( wxDataViewModelNotifier *notifier );
     void RemoveNotifier( wxDataViewModelNotifier *notifier );
     
+    void SetCompareFunction( wxDataViewModelCompare func ) { m_cmpFunc = func; }
+    wxDataViewModelCompare GetCompareFunction() { return m_cmpFunc; }
+    
 protected:
     // the user should not delete this class directly: he should use DecRef() instead!
     virtual ~wxDataViewModel() { }
 
-    wxList  m_notifiers;
+    wxList                  m_notifiers;
+    wxDataViewModelCompare  m_cmpFunc;
 };
 
 // ---------------------------------------------------------
