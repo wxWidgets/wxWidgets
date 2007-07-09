@@ -131,6 +131,7 @@ wxGTK:
 - Don't unconditionally add wxCAPTION style to wxMiniFrame.
 - Fixed crash in file and dir pickers for GTK+ < 2.6 if compiled
   with GTK+ >= 2.6.
+- Generate wxEVT_COMMAND_LIST_END_LABEL_EDIT event even if label didn't change
 
 wxMac:
 
