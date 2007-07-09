@@ -204,6 +204,7 @@ wxGTK:
 - Speed up wxBitmap::Rescale()
 - Add right button event for wxToolbar's tools (Tim Kosse)
 - Don't unconditionally add wxCAPTION style to wxMiniFrame
+- Generate wxEVT_COMMAND_LIST_END_LABEL_EDIT event even if label didn't change
 
 
 2.8.4

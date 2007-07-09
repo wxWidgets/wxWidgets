@@ -2160,16 +2160,17 @@ bool wxListTextCtrlWrapper::AcceptChanges()
 {
     const wxString value = m_text->GetValue();
 
-    if ( value == m_startValue )
-        // nothing changed, always accept
-        return true;
-
+    // notice that we should always call OnRenameAccept() to generate the "end
+    // label editing" event, even if the user hasn't really changed anything
     if ( !m_owner->OnRenameAccept(m_itemEdited, value) )
+    {
         // vetoed by the user
         return false;
+    }
 
-    // accepted, do rename the item
-    m_owner->SetItemText(m_itemEdited, value);
+    // accepted, do rename the item (unless nothing changed)
+    if ( value != m_startValue )
+        m_owner->SetItemText(m_itemEdited, value);
 
     return true;
 }
