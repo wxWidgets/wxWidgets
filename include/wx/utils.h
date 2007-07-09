@@ -686,7 +686,7 @@ void WXDLLEXPORT wxGetMousePosition( int* x, int* y );
 #if defined(__X__) || defined(__WXGTK__)
 
 #ifdef __WXGTK__
-    void *wxGetDisplay();
+    WXDLLIMPEXP_CORE void *wxGetDisplay();
 #endif
 
 #ifdef __X__
