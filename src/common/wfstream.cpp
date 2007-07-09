@@ -227,7 +227,7 @@ wxFileStream::wxFileStream(const wxString& fileName)
 
 bool wxFileStream::IsOk() const
 {
-    return wxStreamBase::IsOk() && wxFileInputStream::m_file->IsOpened();
+    return wxFileOutputStream::IsOk() && wxFileInputStream::m_file->IsOpened();
 }
 
 #endif //wxUSE_FILE
