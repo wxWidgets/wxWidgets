@@ -16,7 +16,7 @@
 #ifndef _WX_DLIMPEXP_H_
 #define _WX_DLIMPEXP_H_
 
-#if defined(__WXMSW__)
+#if defined(__WINDOWS__)
     /*
        __declspec works in BC++ 5 and later, Watcom C++ 11.0 and later as well
        as VC++ and gcc
@@ -51,6 +51,9 @@
 #elif defined(__CYGWIN__)
 #    define WXEXPORT __declspec(dllexport)
 #    define WXIMPORT __declspec(dllimport)
+#elif defined(HAVE_VISIBILITY)
+#    define WXEXPORT __attribute__ ((visibility("default")))
+#    define WXIMPORT
 #endif
 
 /* for other platforms/compilers we don't anything */
@@ -240,21 +243,39 @@
 
 /* GCC warns about using __attribute__ on forward declarations, so we need
    another set of macros for them: */
-#define WXDLLIMPEXP_FWD_BASE      WXDLLIMPEXP_BASE
-#define WXDLLIMPEXP_FWD_NET       WXDLLIMPEXP_NET
-#define WXDLLIMPEXP_FWD_CORE      WXDLLIMPEXP_CORE
-#define WXDLLIMPEXP_FWD_ADV       WXDLLIMPEXP_ADV
-#define WXDLLIMPEXP_FWD_QA        WXDLLIMPEXP_QA
-#define WXDLLIMPEXP_FWD_ODBC      WXDLLIMPEXP_ODBC
-#define WXDLLIMPEXP_FWD_DBGRID    WXDLLIMPEXP_DBGRID
-#define WXDLLIMPEXP_FWD_HTML      WXDLLIMPEXP_HTML
-#define WXDLLIMPEXP_FWD_GL        WXDLLIMPEXP_GL
-#define WXDLLIMPEXP_FWD_XML       WXDLLIMPEXP_XML
-#define WXDLLIMPEXP_FWD_XRC       WXDLLIMPEXP_XRC
-#define WXDLLIMPEXP_FWD_AUI       WXDLLIMPEXP_AUI
-#define WXDLLIMPEXP_FWD_RICHTEXT  WXDLLIMPEXP_RICHTEXT
-#define WXDLLIMPEXP_FWD_MEDIA     WXDLLIMPEXP_MEDIA
-#define WXDLLIMPEXP_FWD_STC       WXDLLIMPEXP_STC
+#if defined(HAVE_VISIBILITY)
+    #define WXDLLIMPEXP_FWD_BASE
+    #define WXDLLIMPEXP_FWD_NET
+    #define WXDLLIMPEXP_FWD_CORE
+    #define WXDLLIMPEXP_FWD_ADV
+    #define WXDLLIMPEXP_FWD_QA
+    #define WXDLLIMPEXP_FWD_ODBC
+    #define WXDLLIMPEXP_FWD_DBGRID
+    #define WXDLLIMPEXP_FWD_HTML
+    #define WXDLLIMPEXP_FWD_GL
+    #define WXDLLIMPEXP_FWD_XML
+    #define WXDLLIMPEXP_FWD_XRC
+    #define WXDLLIMPEXP_FWD_AUI
+    #define WXDLLIMPEXP_FWD_RICHTEXT
+    #define WXDLLIMPEXP_FWD_MEDIA
+    #define WXDLLIMPEXP_FWD_STC
+#else
+    #define WXDLLIMPEXP_FWD_BASE      WXDLLIMPEXP_BASE
+    #define WXDLLIMPEXP_FWD_NET       WXDLLIMPEXP_NET
+    #define WXDLLIMPEXP_FWD_CORE      WXDLLIMPEXP_CORE
+    #define WXDLLIMPEXP_FWD_ADV       WXDLLIMPEXP_ADV
+    #define WXDLLIMPEXP_FWD_QA        WXDLLIMPEXP_QA
+    #define WXDLLIMPEXP_FWD_ODBC      WXDLLIMPEXP_ODBC
+    #define WXDLLIMPEXP_FWD_DBGRID    WXDLLIMPEXP_DBGRID
+    #define WXDLLIMPEXP_FWD_HTML      WXDLLIMPEXP_HTML
+    #define WXDLLIMPEXP_FWD_GL        WXDLLIMPEXP_GL
+    #define WXDLLIMPEXP_FWD_XML       WXDLLIMPEXP_XML
+    #define WXDLLIMPEXP_FWD_XRC       WXDLLIMPEXP_XRC
+    #define WXDLLIMPEXP_FWD_AUI       WXDLLIMPEXP_AUI
+    #define WXDLLIMPEXP_FWD_RICHTEXT  WXDLLIMPEXP_RICHTEXT
+    #define WXDLLIMPEXP_FWD_MEDIA     WXDLLIMPEXP_MEDIA
+    #define WXDLLIMPEXP_FWD_STC       WXDLLIMPEXP_STC
+#endif
 
 /* for backwards compatibility, define suffix-less versions too */
 #define WXDLLEXPORT WXDLLIMPEXP_CORE

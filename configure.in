@@ -4127,6 +4127,10 @@ if test "$wxUSE_SHARED" = "yes"; then
     dnl use versioned symbols if available on the platform
     WX_VERSIONED_SYMBOLS([\$(wx_top_builddir)/version-script])
 
+    dnl test for GCC's visibility support (sets CFLAGS_VISIBILITY, which is
+    dnl assigned to CFLAGS and CXXFLAGS below)
+    WX_VISIBILITY
+
     dnl test for Sun CC which can be used under both Solaris and Linux
     if test "x$SUNCXX" = xyes; then
         SAMPLES_RPATH_FLAG="-R\$(wx_top_builddir)/lib"
@@ -8074,6 +8078,11 @@ case "${host}" in
         fi
         ;;
 esac
+
+dnl Add visibility support flags to CFLAGS/CXXFLAGS - do it this late so that
+dnl it doesn't affect compilation checks above
+CFLAGS="$CFLAGS $CFLAGS_VISIBILITY"
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_VISIBILITY"
 
 dnl for convenience, sort the samples in alphabetical order
 dnl

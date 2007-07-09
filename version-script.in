@@ -14,7 +14,6 @@
 #
 #   # public symbols added in release 2.6.2 (please keep in alphabetical order):
 #   @WX_VERSION_TAG@.2 {
-#       global:
 #           *wxChoice*GetCurrentSelection*;
 #   };
 #
@@ -28,6 +27,5 @@
 # generic branch tag (don't remove this!):
 
 @WX_VERSION_TAG@ {
-    global:
         *;
 };

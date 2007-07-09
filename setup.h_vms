@@ -677,6 +677,11 @@ typedef pid_t GPid;
 #undef HAVE_GNU_CXX_HASH_MAP
 
 /*
+ * Define if the compiler supports simple visibility declarations.
+ */
+#undef HAVE_VISIBILITY
+
+/*
  * The built-in regex supports advanced REs in additional to POSIX's basic
  * and extended. Your system regex probably won't support this, and in this
  * case WX_NO_REGEX_ADVANCED should be defined.
