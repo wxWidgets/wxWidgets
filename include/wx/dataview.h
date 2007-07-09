@@ -83,6 +83,8 @@ private:
     wxUint32 m_id;
 };
 
+bool operator == ( const wxDataViewItem & left, const wxDataViewItem & right );
+
 // ---------------------------------------------------------
 // wxDataViewModel
 // ---------------------------------------------------------

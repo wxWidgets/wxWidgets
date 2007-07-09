@@ -51,28 +51,28 @@ public:
         { return m_mode; }
 
     virtual bool Activate( wxRect WXUNUSED(cell),
-                           wxDataViewListModel *WXUNUSED(model),
-                           unsigned int WXUNUSED(col),
-                           unsigned int WXUNUSED(row) )
+                           wxDataViewModel *WXUNUSED(model),
+                           const wxDataViewItem & item, 
+                           unsigned int WXUNUSED(col) )
                            { return false; }
 
     virtual bool LeftClick( wxPoint WXUNUSED(cursor),
                             wxRect WXUNUSED(cell),
-                            wxDataViewListModel *WXUNUSED(model),
-                            unsigned int WXUNUSED(col),
-                            unsigned int WXUNUSED(row) )
+                            wxDataViewModel *WXUNUSED(model),
+                            const wxDataViewItem & item, 
+                            unsigned int WXUNUSED(col) )
                             { return false; }
     virtual bool RightClick( wxPoint WXUNUSED(cursor),
                              wxRect WXUNUSED(cell),
-                             wxDataViewListModel *WXUNUSED(model),
-                             unsigned int WXUNUSED(col),
-                             unsigned int WXUNUSED(row) )
+                             wxDataViewModel *WXUNUSED(model),
+                             const wxDataViewItem & item, 
+                             unsigned int WXUNUSED(col) )
                              { return false; }
     virtual bool StartDrag( wxPoint WXUNUSED(cursor),
                             wxRect WXUNUSED(cell),
-                            wxDataViewListModel *WXUNUSED(model),
-                            unsigned int WXUNUSED(col),
-                            unsigned int WXUNUSED(row) )
+                            wxDataViewModel *WXUNUSED(model),
+                            const wxDataViewItem & item, 
+                            unsigned int WXUNUSED(col) )
                             { return false; }
 
     // Create DC on request
@@ -172,8 +172,8 @@ public:
     bool GetValue( wxVariant &value ) const;
 
     bool Render( wxRect cell, wxDC *dc, int state );
-    bool Activate( wxRect cell, wxDataViewListModel *model, unsigned int col, 
-                   unsigned int row );
+    bool Activate( wxRect cell, wxDataViewModel *model, const wxDataViewItem & item, 
+                            unsigned int col );
     wxSize GetSize() const;
 
 private:
@@ -227,7 +227,7 @@ public:
     virtual bool Render( wxRect cell, wxDC *dc, int state );
     virtual wxSize GetSize() const;
     virtual bool Activate( wxRect cell,
-                           wxDataViewListModel *model, unsigned int col, unsigned int row );
+                           wxDataViewModel *model, const wxDataViewItem & item, unsigned int col );
 
 private:
     wxDateTime    m_date;
@@ -346,9 +346,10 @@ public:
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator );
 
-    virtual bool AssociateModel( wxDataViewListModel *model );
+    virtual bool AssociateModel( wxDataViewModel *model );
     virtual bool AppendColumn( wxDataViewColumn *col );
 
+/********************selection code*********************
     virtual void SetSelection( int row ); // -1 for unselect
     virtual void SetSelectionRange( unsigned int from, unsigned int to );
     virtual void SetSelections( const wxArrayInt& aSelections);
@@ -357,6 +358,7 @@ public:
     virtual bool IsSelected( unsigned int row ) const;
     virtual int GetSelection() const;
     virtual int GetSelections(wxArrayInt& aSelections) const;
+*****************************************************/
 
 public:     // utility functions not part of the API
 
@@ -372,7 +374,7 @@ public:     // utility functions not part of the API
     wxWindow *GetMainWindow() { return (wxWindow*) m_clientArea; }
 
 private:
-    wxDataViewListModelNotifier *m_notifier;
+    wxDataViewModelNotifier *m_notifier;
     wxDataViewMainWindow        *m_clientArea;
     wxDataViewHeaderWindow      *m_headerArea;
 

@@ -57,7 +57,7 @@ Implement this data model
         7:  German Requiem      Johannes Brahms      1868
 */
 
-
+ 
 class MyMusicModel: public wxDataViewModel
 {
 public:
@@ -134,10 +134,15 @@ public:
         return true;
     }
 
+    /*****************************************************************
+    If wxDataViewItem is not valid in the two methods I quote above
+    then it means "return the child item from the invisible root".
+    ******************************************************************/
+    
     virtual bool HasChildren( const wxDataViewItem &item ) const
     {
         int ID = item.GetID();
-        return ((ID == 1) || (ID == 2) || (ID == 5));
+        return ((ID == 1) || (ID == 2) || (ID == 5) || (ID == 0));
     }
     
     virtual int GetChildCount( const wxDataViewItem &item ) const
@@ -145,6 +150,7 @@ public:
         int ID = item.GetID();
         switch (ID)
         {
+            case 0: return 1;
             case 1: return 2;
             case 2: return 2;
             case 5: return 2;
@@ -171,6 +177,7 @@ public:
         int ID = parent.GetID();
         switch (ID)
         {
+            case 0: return wxDataViewItem( 1 );
             case 1: return wxDataViewItem( 2 );
             case 2: return wxDataViewItem( 3 );
             case 5: return wxDataViewItem( 6 );
@@ -189,11 +196,11 @@ public:
         }
         
         return wxDataViewItem(0);
-    }
+    } 
     virtual wxDataViewItem GetNthChild(  const wxDataViewItem &parent, unsigned int n ) const
     {
         if (!parent.IsOk())
-        {
+        { 
             // root node
             if (n == 0)
                 return wxDataViewItem( 1 );
