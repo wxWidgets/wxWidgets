@@ -375,6 +375,7 @@ public:
 
     //Methods for building the mapping tree
     void BuildTree( wxDataViewModel  * model );
+    void DestroyTree();
 
 private:
     wxDataViewCtrl             *m_owner;
@@ -1627,6 +1628,7 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 
 wxDataViewMainWindow::~wxDataViewMainWindow()
 {
+    DestroyTree();
     delete m_renameTimer;
 }
 
@@ -2343,6 +2345,27 @@ void wxDataViewMainWindow::BuildTree(wxDataViewModel * model)
     //First we define a invalid item to fetch the top-level elements
     wxDataViewItem item;
     m_count = BuildTreeHelper( model, item, m_root);
+}
+
+void DestroyTreeHelper( wxDataViewTreeNode * node )
+{
+    if( node->HasChildren() )
+    {
+        int len = node->GetChildrenNumber();
+	 int i = 0 ;
+	 wxDataViewTreeNodes nodes = node->GetChildren();
+	 for( ; i < len; i ++ )
+        {
+            DestroyTreeHelper(nodes[i]);
+        }
+    }
+    delete node;
+}
+
+void wxDataViewMainWindow::DestroyTree()
+{
+    DestroyTreeHelper(m_root);
+    m_count = 0 ;
 }
 
 void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
