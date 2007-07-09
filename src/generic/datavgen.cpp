@@ -1661,13 +1661,21 @@ void wxDataViewMainWindow::OnRenameTimer()
     m_currentCol->GetRenderer()->StartEditing( m_currentRow, labelRect );
 }
 
+//------------------------------------------------------------------
+// Helper class for do operation on the tree node
+//------------------------------------------------------------------
 class DoJob
 {
 public:
     DoJob(){};
     virtual ~DoJob(){};
 
-    virtual bool operator() ( wxDataViewTreeNode * node ) = 0 ;
+    //The return value control how the tree-walker tranverse the tree
+    // 0: Job done, stop tranverse and return
+    // 1: Ignore the current node's subtree and continue
+    // 2: Job not done, continue
+    enum  { OK = 0 , IGR = 1, CONT = 2 };
+    virtual int operator() ( wxDataViewTreeNode * node ) = 0 ;
 };
 
 class ItemAddJob: public DoJob
@@ -1677,16 +1685,16 @@ public:
     	{ this->parent = parent ; this->item = item ; }
     virtual ~ItemAddJob(){};
 
-    virtual bool operator() ( wxDataViewTreeNode * node )
+    virtual int operator() ( wxDataViewTreeNode * node )
     {
         if( node->GetItem() == parent )
         {
             wxDataViewTreeNode * newnode = new wxDataViewTreeNode( node );
 	     newnode->SetItem(item);
 	     node->AppendChild( newnode);
-	     return true;
+	     return OK;
         }
-	 return false;
+	 return CONT;
     }
 private:
     wxDataViewItem parent, item;
@@ -1703,8 +1711,17 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
     for( ; i < len ; i ++ )
     {
         wxDataViewTreeNode * n = nodes[i];
-	 if( func( n ) )
-	     return true;
+	 switch( func( n ) )
+        {
+            case DoJob::OK :
+	         return DoJob::OK ;
+	     case DoJob::IGR:
+	         continue;
+	     case DoJob::CONT:
+	     default:
+	         ;
+        }
+	 
 	 if( Walker( n , func ) )
 	 	return true;
     }
@@ -2268,15 +2285,18 @@ public:
     RowToItemJob( unsigned int row , int current ) { this->row = row; this->current = current ;}
     virtual ~RowToItemJob(){};
 
-    virtual bool operator() ( wxDataViewTreeNode * node )
+    virtual int operator() ( wxDataViewTreeNode * node )
     	{
     	    if( current == row)
     	    {
 	        ret = node->GetItem() ;
-               return true;
+               return DoJob::OK;
 	    }
 	    current ++;
-	    return false;
+	    if ( node->IsOpen())
+	        return DoJob::CONT;
+	    else
+		 return DoJob::IGR;
     	}
 
     wxDataViewItem GetResult(){ return ret; }
@@ -2299,13 +2319,16 @@ public:
     ItemToRowJob(const wxDataViewItem & item){ this->item = item ; }
     virtual ~ItemToRowJob(){};
 
-    virtual bool operator() ( wxDataViewTreeNode * node)
+    virtual int operator() ( wxDataViewTreeNode * node)
         {
             ret ++;
             if( node->GetItem() == item )
-	        return true;
+	        return DoJob::OK;
 
-	    return false;
+           if( node->IsOpen())
+	        return DoJob::CONT;
+	    else
+	        return DoJob::IGR;
         }
 
     int GetResult(){ return ret; }
