@@ -116,6 +116,7 @@ class WXDLLIMPEXP_BASE wxFileStream : public wxFileInputStream,
 {
 public:
     wxFileStream(const wxString& fileName);
+    virtual bool IsOk() const;
 
 private:
     DECLARE_NO_COPY_CLASS(wxFileStream)
