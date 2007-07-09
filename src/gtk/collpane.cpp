@@ -93,6 +93,10 @@ static void gtk_collapsiblepane_expanded_callback (GObject    *object,
 
     if (p->HasFlag(wxCP_NO_TLW_RESIZE))
     {
+        // fire an event
+        wxCollapsiblePaneEvent ev(p, p->GetId(), p->IsCollapsed());
+        p->GetEventHandler()->ProcessEvent(ev);
+    
         // the user asked to explicitely handle the resizing itself...
         return;
     }
