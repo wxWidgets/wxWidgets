@@ -12,7 +12,7 @@
 
 #include "wx/bitmap.h"
 
-class WXDLLIMPEXP_CORE wxGTKRadioButtonInfo;
+class WXDLLIMPEXP_FWD_CORE wxGTKRadioButtonInfo;
 
 #include "wx/list.h"
 

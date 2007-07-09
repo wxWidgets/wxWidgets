@@ -22,8 +22,8 @@
 #include "wx/buffer.h"
 #include "wx/unichar.h"
 
-class WXDLLIMPEXP_BASE wxCStrData;
-class WXDLLIMPEXP_BASE wxString;
+class WXDLLIMPEXP_FWD_BASE wxCStrData;
+class WXDLLIMPEXP_FWD_BASE wxString;
 
 // ----------------------------------------------------------------------------
 // WX_DEFINE_VARARG_FUNC* macros

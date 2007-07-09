@@ -91,19 +91,19 @@ extern WXDLLIMPEXP_RICHTEXT const wxChar wxRichTextLineBreakChar;
  * Forward declarations
  */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextCtrl;
-class WXDLLIMPEXP_RICHTEXT wxRichTextObject;
-class WXDLLIMPEXP_RICHTEXT wxRichTextCacheObject;
-class WXDLLIMPEXP_RICHTEXT wxRichTextObjectList;
-class WXDLLIMPEXP_RICHTEXT wxRichTextLine;
-class WXDLLIMPEXP_RICHTEXT wxRichTextParagraph;
-class WXDLLIMPEXP_RICHTEXT wxRichTextFileHandler;
-class WXDLLIMPEXP_RICHTEXT wxRichTextStyleSheet;
-class WXDLLIMPEXP_RICHTEXT wxTextAttrEx;
-class WXDLLIMPEXP_RICHTEXT wxRichTextListStyleDefinition;
-class WXDLLIMPEXP_RICHTEXT wxRichTextEvent;
-class WXDLLIMPEXP_RICHTEXT wxRichTextRenderer;
-class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextCtrl;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextObject;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextCacheObject;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextObjectList;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextLine;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextParagraph;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextFileHandler;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextStyleSheet;
+class WXDLLIMPEXP_FWD_RICHTEXT wxTextAttrEx;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextListStyleDefinition;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextEvent;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextRenderer;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextBuffer;
 
 /*!
  * Flags determining the available space, passed to Layout
@@ -1460,8 +1460,8 @@ protected:
  * wxRichTextImageBlock stores information about an image, in binary in-memory form
  */
 
-class WXDLLIMPEXP_BASE wxDataInputStream;
-class WXDLLIMPEXP_BASE wxDataOutputStream;
+class WXDLLIMPEXP_FWD_BASE wxDataInputStream;
+class WXDLLIMPEXP_FWD_BASE wxDataOutputStream;
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextImageBlock: public wxObject
 {
@@ -1608,8 +1608,8 @@ protected:
  * This is a kind of box, used to represent the whole buffer
  */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextCommand;
-class WXDLLIMPEXP_RICHTEXT wxRichTextAction;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextCommand;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextAction;
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer: public wxRichTextParagraphLayoutBox
 {
@@ -1998,7 +1998,7 @@ enum wxRichTextCommandId
  *
  */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextAction;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextAction;
 class WXDLLIMPEXP_RICHTEXT wxRichTextCommand: public wxCommand
 {
 public:

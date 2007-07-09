@@ -18,9 +18,9 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxApp;
-class WXDLLEXPORT wxLog;
-class WXDLLEXPORT wxEventLoop;
+class WXDLLIMPEXP_FWD_CORE wxApp;
+class WXDLLIMPEXP_FWD_CORE wxLog;
+class WXDLLIMPEXP_FWD_CORE wxEventLoop;
 
 //-----------------------------------------------------------------------------
 // wxApp

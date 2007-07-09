@@ -22,15 +22,15 @@
 #include "wx/init.h"        // we must declare wxEntry()
 #include "wx/intl.h"        // for wxLayoutDirection
 
-class WXDLLIMPEXP_BASE wxAppConsole;
-class WXDLLIMPEXP_BASE wxAppTraits;
-class WXDLLIMPEXP_BASE wxCmdLineParser;
-class WXDLLIMPEXP_BASE wxEventLoopBase;
-class WXDLLIMPEXP_BASE wxLog;
-class WXDLLIMPEXP_BASE wxMessageOutput;
+class WXDLLIMPEXP_FWD_BASE wxAppConsole;
+class WXDLLIMPEXP_FWD_BASE wxAppTraits;
+class WXDLLIMPEXP_FWD_BASE wxCmdLineParser;
+class WXDLLIMPEXP_FWD_BASE wxEventLoopBase;
+class WXDLLIMPEXP_FWD_BASE wxLog;
+class WXDLLIMPEXP_FWD_BASE wxMessageOutput;
 
 #if wxUSE_GUI
-    struct WXDLLIMPEXP_CORE wxVideoMode;
+    struct WXDLLIMPEXP_FWD_CORE wxVideoMode;
 #endif
 
 // ----------------------------------------------------------------------------

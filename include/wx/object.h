@@ -19,8 +19,8 @@
 
 #include "wx/memory.h"
 
-class WXDLLIMPEXP_BASE wxObject;
-class WXDLLIMPEXP_BASE wxString;
+class WXDLLIMPEXP_FWD_BASE wxObject;
+class WXDLLIMPEXP_FWD_BASE wxString;
 
 #ifndef wxUSE_EXTENDED_RTTI
 #define wxUSE_EXTENDED_RTTI 0
@@ -65,12 +65,12 @@ class WXDLLIMPEXP_BASE wxString;
 // conditional compilation
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxClassInfo;
-class WXDLLIMPEXP_BASE wxHashTable;
-class WXDLLIMPEXP_BASE wxObject;
-class WXDLLIMPEXP_BASE wxPluginLibrary;
-class WXDLLIMPEXP_BASE wxObjectRefData;
-class WXDLLIMPEXP_BASE wxHashTable_Node;
+class WXDLLIMPEXP_FWD_BASE wxClassInfo;
+class WXDLLIMPEXP_FWD_BASE wxHashTable;
+class WXDLLIMPEXP_FWD_BASE wxObject;
+class WXDLLIMPEXP_FWD_BASE wxPluginLibrary;
+class WXDLLIMPEXP_FWD_BASE wxObjectRefData;
+class WXDLLIMPEXP_FWD_BASE wxHashTable_Node;
 
 // ----------------------------------------------------------------------------
 // wxClassInfo
@@ -80,7 +80,7 @@ typedef wxObject *(*wxObjectConstructorFn)(void);
 
 class WXDLLIMPEXP_BASE wxClassInfo
 {
-    friend class WXDLLIMPEXP_BASE wxObject;
+    friend class WXDLLIMPEXP_FWD_BASE wxObject;
     friend WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxString& name);
 public:
     wxClassInfo( const wxChar *className,
@@ -408,7 +408,7 @@ inline void* wxCheckCast(void *ptr)
 
 class WXDLLIMPEXP_BASE wxObjectRefData
 {
-    friend class WXDLLIMPEXP_BASE wxObject;
+    friend class WXDLLIMPEXP_FWD_BASE wxObject;
 
 public:
     wxObjectRefData() : m_count(1) { }
@@ -594,7 +594,7 @@ inline wxObject *wxCheckDynamicCast(wxObject *obj, wxClassInfo *classInfo)
 #if wxUSE_EXTENDED_RTTI
 class WXDLLIMPEXP_BASE wxDynamicObject : public wxObject
 {
-    friend class WXDLLIMPEXP_BASE wxDynamicClassInfo ;
+    friend class WXDLLIMPEXP_FWD_BASE wxDynamicClassInfo ;
 public:
     // instantiates this object with an instance of its superclass
     wxDynamicObject(wxObject* superClassInstance, const wxDynamicClassInfo *info) ;

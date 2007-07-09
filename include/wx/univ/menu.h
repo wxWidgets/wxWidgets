@@ -19,12 +19,12 @@
 #include "wx/dynarray.h"
 
 // fwd declarations
-class WXDLLEXPORT wxMenuInfo;
+class WXDLLIMPEXP_FWD_CORE wxMenuInfo;
 WX_DECLARE_EXPORTED_OBJARRAY(wxMenuInfo, wxMenuInfoArray);
 
-class WXDLLEXPORT wxMenuGeometryInfo;
-class WXDLLEXPORT wxPopupMenuWindow;
-class WXDLLEXPORT wxRenderer;
+class WXDLLIMPEXP_FWD_CORE wxMenuGeometryInfo;
+class WXDLLIMPEXP_FWD_CORE wxPopupMenuWindow;
+class WXDLLIMPEXP_FWD_CORE wxRenderer;
 
 // ----------------------------------------------------------------------------
 // wxMenu

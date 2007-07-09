@@ -156,7 +156,7 @@ protected:
 
     double            m_mm_to_pix_x, m_mm_to_pix_y;
 
-    friend class WXDLLIMPEXP_CORE wxOverlayImpl; // for Init
+    friend class WXDLLIMPEXP_FWD_CORE wxOverlayImpl; // for Init
 
     DECLARE_DYNAMIC_CLASS(wxDC)
 };

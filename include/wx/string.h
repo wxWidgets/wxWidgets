@@ -59,7 +59,7 @@
 #include "wx/stringops.h"
 #include "wx/unichar.h"
 
-class WXDLLIMPEXP_BASE wxString;
+class WXDLLIMPEXP_FWD_BASE wxString;
 
 // unless this symbol is predefined to disable the compatibility functions, do
 // use them
@@ -276,7 +276,7 @@ private:
     size_t m_offset;
     bool m_owned;
 
-    friend class WXDLLIMPEXP_BASE wxString;
+    friend class WXDLLIMPEXP_FWD_BASE wxString;
 };
 
 // ----------------------------------------------------------------------------
@@ -652,13 +652,13 @@ public:
           /* for internal wxString use only: */                             \
           underlying_iterator impl() const { return m_cur; }                \
                                                                             \
-          friend class WXDLLIMPEXP_BASE wxString;                           \
-          friend class WXDLLIMPEXP_BASE wxCStrData;                         \
+          friend class wxString;                                            \
+          friend class wxCStrData;                                          \
                                                                             \
       private:                                                              \
           underlying_iterator m_cur
 
-  class WXDLLIMPEXP_BASE const_iterator;
+  class WXDLLIMPEXP_FWD_BASE const_iterator;
 
 #if wxUSE_UNICODE_UTF8
   // NB: In UTF-8 build, (non-const) iterator needs to keep reference
@@ -2627,11 +2627,11 @@ private:
 
   wxStringIteratorNodeHead m_iterators;
 
-  friend class WXDLLIMPEXP_BASE wxStringIteratorNode;
-  friend class WXDLLIMPEXP_BASE wxUniCharRef;
+  friend class WXDLLIMPEXP_FWD_BASE wxStringIteratorNode;
+  friend class WXDLLIMPEXP_FWD_BASE wxUniCharRef;
 #endif // wxUSE_UNICODE_UTF8
 
-  friend class WXDLLIMPEXP_BASE wxCStrData;
+  friend class WXDLLIMPEXP_FWD_BASE wxCStrData;
   friend class wxImplStringBuffer;
   friend class wxImplStringBufferLength;
 };

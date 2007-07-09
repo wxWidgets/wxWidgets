@@ -25,8 +25,8 @@
 
 WX_DEFINE_EXPORTED_ARRAY_PTR(wxWindow *, wxArrayPages);
 
-class WXDLLEXPORT wxImageList;
-class WXDLLEXPORT wxBookCtrlBaseEvent;
+class WXDLLIMPEXP_FWD_CORE wxImageList;
+class WXDLLIMPEXP_FWD_CORE wxBookCtrlBaseEvent;
 
 // ----------------------------------------------------------------------------
 // constants

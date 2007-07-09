@@ -18,8 +18,8 @@
 
 #include "wx/event.h"
 
-class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxWindowBase;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 
 /*
  A validator has up to three purposes:
@@ -86,7 +86,7 @@ extern WXDLLEXPORT_DATA(const wxValidator) wxDefaultValidator;
     // want to be able to pass wxDefaultValidator to the functions which take
     // a wxValidator parameter to avoid using "#if wxUSE_VALIDATORS"
     // everywhere
-    class WXDLLEXPORT wxValidator;
+    class WXDLLIMPEXP_FWD_CORE wxValidator;
     #define wxDefaultValidator (*((wxValidator *)NULL))
 
     // this macro allows to avoid warnings about unused parameters when

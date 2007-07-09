@@ -15,7 +15,7 @@
 #include "wx/hashmap.h"
 #include "wx/cocoa/NSWindow.h"
 
-class WXDLLEXPORT wxMenuBar;
+class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 
 // ========================================================================
 // wxTopLevelWindowCocoa

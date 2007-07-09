@@ -12,11 +12,11 @@
 #ifndef _TASKBAR_H_
 #define _TASKBAR_H_
 
-class WXDLLEXPORT wxIcon;
-class WXDLLEXPORT wxFrame;
-class WXDLLEXPORT wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxIcon;
+class WXDLLIMPEXP_FWD_CORE wxFrame;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 
-class WXDLLIMPEXP_ADV wxTaskBarIconArea;
+class WXDLLIMPEXP_FWD_ADV wxTaskBarIconArea;
 
 class WXDLLIMPEXP_ADV wxTaskBarIcon: public wxTaskBarIconBase
 {

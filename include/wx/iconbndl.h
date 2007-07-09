@@ -18,10 +18,10 @@
 #include "wx/gdicmn.h"
 #include "wx/icon.h"
 
-class WXDLLIMPEXP_CORE wxIcon;
-class WXDLLIMPEXP_BASE wxString;
+class WXDLLIMPEXP_FWD_CORE wxIcon;
+class WXDLLIMPEXP_FWD_BASE wxString;
 
-class WXDLLEXPORT wxIconBundle;
+class WXDLLIMPEXP_FWD_CORE wxIconBundle;
 
 WX_DECLARE_EXPORTED_OBJARRAY(wxIcon, wxIconArray);
 

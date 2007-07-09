@@ -28,9 +28,9 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_AUI wxAuiMDIParentFrame;
-class WXDLLIMPEXP_AUI wxAuiMDIClientWindow;
-class WXDLLIMPEXP_AUI wxAuiMDIChildFrame;
+class WXDLLIMPEXP_FWD_AUI wxAuiMDIParentFrame;
+class WXDLLIMPEXP_FWD_AUI wxAuiMDIClientWindow;
+class WXDLLIMPEXP_FWD_AUI wxAuiMDIChildFrame;
 
 //-----------------------------------------------------------------------------
 // wxAuiMDIParentFrame

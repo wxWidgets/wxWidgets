@@ -18,8 +18,8 @@
 // fwd declarations
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWindowDC;
-class WXDLLEXPORT wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxWindowDC;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 // Under Windows, wxClientDC, wxPaintDC and wxWindowDC are implemented
 // differently. On many platforms, however, they will be the same.

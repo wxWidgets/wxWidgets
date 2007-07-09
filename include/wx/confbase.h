@@ -18,7 +18,7 @@
 #include "wx/string.h"
 #include "wx/object.h"
 
-class WXDLLIMPEXP_BASE wxArrayString;
+class WXDLLIMPEXP_FWD_BASE wxArrayString;
 
 // ----------------------------------------------------------------------------
 // constants

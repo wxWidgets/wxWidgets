@@ -15,7 +15,7 @@
 #include "wx/colour.h"
 #include "wx/font.h"
 
-class WXDLLEXPORT wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 // possible values for wxSystemSettings::GetFont() parameter
 //

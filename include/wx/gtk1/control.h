@@ -19,7 +19,7 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxControl;
+class WXDLLIMPEXP_FWD_CORE wxControl;
 
 typedef struct _GtkLabel GtkLabel;
 typedef struct _GtkFrame GtkFrame;

@@ -19,7 +19,7 @@
 // classes
 // --------------------------------------------------------- 
 
-class WXDLLIMPEXP_CORE wxDataViewCtrl;
+class WXDLLIMPEXP_FWD_CORE wxDataViewCtrl;
 
 
 // --------------------------------------------------------- 

@@ -201,6 +201,7 @@ g) Update dlimpexp.h to define WXMAKINGDLL_FOO if WXMAKINGDLL is defined (add
             #define WXDLLIMPEXP_NET
             #define WXDLLIMPEXP_DATA_NET(type) type
         #endif
+   Don't forget to add WXDLLIMPEXP_FWD_FOO definitions too.
    Use WXDLLIMPEXP_FOO when declaring wxFoo classes and functions.
 
 h) Add this code to one of wxFoo's files (the more often used, the better):

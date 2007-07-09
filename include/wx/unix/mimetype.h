@@ -140,7 +140,7 @@ protected:
     virtual bool WriteMimeInfo(int nIndex, bool delete_mime );
 
     // give it access to m_aXXX variables
-    friend class WXDLLEXPORT wxFileTypeImpl;
+    friend class WXDLLIMPEXP_FWD_CORE wxFileTypeImpl;
 };
 
 

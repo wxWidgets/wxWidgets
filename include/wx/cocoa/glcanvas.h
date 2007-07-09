@@ -18,7 +18,7 @@
 // Include gl.h from the OpenGL framework
 #include <OpenGL/gl.h>
 
-class WXDLLIMPEXP_GL wxGLCanvas;
+class WXDLLIMPEXP_FWD_GL wxGLCanvas;
 DECLARE_WXCOCOA_OBJC_CLASS(NSOpenGLContext);
 DECLARE_WXCOCOA_OBJC_CLASS(NSOpenGLView);
 

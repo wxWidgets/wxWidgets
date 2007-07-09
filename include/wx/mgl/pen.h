@@ -20,8 +20,8 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBitmap;
-class WXDLLEXPORT wxPen;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxPen;
 
 //-----------------------------------------------------------------------------
 // wxPen

@@ -16,7 +16,7 @@
 
 #if wxUSE_STACKWALKER
 
-class WXDLLIMPEXP_BASE wxStackFrame;
+class WXDLLIMPEXP_FWD_BASE wxStackFrame;
 
 // ----------------------------------------------------------------------------
 // wxStackFrame: a single stack level

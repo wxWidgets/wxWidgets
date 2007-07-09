@@ -40,7 +40,7 @@
 // wxDCFactory
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxImplDC;
+class WXDLLIMPEXP_FWD_CORE wxImplDC;
 
 class WXDLLIMPEXP_CORE wxDCFactory
 {
@@ -977,8 +977,8 @@ private:
 #else  // wxUSE_NEW_DC
 
 
-class WXDLLEXPORT wxDC;
-class WXDLLEXPORT wxDCBase;
+class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxDCBase;
 
 class WXDLLEXPORT wxDrawObject
 {

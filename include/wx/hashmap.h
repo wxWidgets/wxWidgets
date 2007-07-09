@@ -144,8 +144,6 @@ public: \
         value_type m_value; \
     }; \
  \
-    CLASSEXP Iterator; \
-    friend CLASSEXP Iterator; \
 protected: \
     static void DeleteNode( _wxHashTable_NodeBase* node ) \
     { \
@@ -186,6 +184,7 @@ public: \
             m_node = next ? next : GetNextNode(); \
         } \
     }; \
+    friend class Iterator; \
  \
 public: \
     CLASSEXP iterator : public Iterator \

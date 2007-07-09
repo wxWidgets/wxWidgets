@@ -16,8 +16,8 @@
 #include "wx/sizer.h"
 #include "wx/containr.h"
 
-class WXDLLIMPEXP_CORE wxTextCtrl;
-class WXDLLEXPORT wxToolTip;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxToolTip;
 
 extern WXDLLEXPORT_DATA(const wxChar) wxButtonNameStr[];
 

@@ -14,7 +14,7 @@
 
 #include "wx/event.h"
 
-class WXDLLEXPORT wxJoystickThread;
+class WXDLLIMPEXP_FWD_CORE wxJoystickThread;
 
 class WXDLLEXPORT wxJoystick: public wxObject
 {

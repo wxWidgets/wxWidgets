@@ -22,7 +22,7 @@
 
 #include "wx/dynarray.h"
 
-class WXDLLEXPORT wxChoice;
+class WXDLLIMPEXP_FWD_CORE wxChoice;
 WX_DEFINE_EXPORTED_ARRAY_PTR(wxChoice *, wxArrayChoiceSpins);
 
 // ----------------------------------------------------------------------------

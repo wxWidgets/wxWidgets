@@ -70,10 +70,10 @@ typedef unsigned long wxLogLevel;
 // ----------------------------------------------------------------------------
 
 #if wxUSE_GUI
-    class WXDLLIMPEXP_CORE wxTextCtrl;
-    class WXDLLIMPEXP_CORE wxLogFrame;
-    class WXDLLIMPEXP_CORE wxFrame;
-    class WXDLLIMPEXP_CORE wxWindow;
+    class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
+    class WXDLLIMPEXP_FWD_CORE wxLogFrame;
+    class WXDLLIMPEXP_FWD_CORE wxFrame;
+    class WXDLLIMPEXP_FWD_CORE wxWindow;
 #endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
@@ -684,7 +684,7 @@ DECLARE_LOG_FUNCTION(Status);
 
 #if wxUSE_GUI
     // this one is the same as previous except that it allows to explicitly
-    class WXDLLEXPORT wxFrame;
+    class WXDLLIMPEXP_FWD_CORE wxFrame;
     // specify the frame to which the output should go
     DECLARE_LOG_FUNCTION2_EXP(Status, wxFrame *, pFrame, WXDLLIMPEXP_CORE);
 #endif // wxUSE_GUI

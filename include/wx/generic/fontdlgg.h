@@ -20,7 +20,7 @@
 
 #ifdef __WXWINCE__
 #define USE_SPINCTRL_FOR_POINT_SIZE 1
-class WXDLLEXPORT wxSpinEvent;
+class WXDLLIMPEXP_FWD_CORE wxSpinEvent;
 #else
 #define USE_SPINCTRL_FOR_POINT_SIZE 0
 #endif
@@ -29,10 +29,10 @@ class WXDLLEXPORT wxSpinEvent;
  * FONT DIALOG
  */
 
-class WXDLLEXPORT wxChoice;
-class WXDLLEXPORT wxText;
-class WXDLLEXPORT wxCheckBox;
-class WXDLLEXPORT wxFontPreviewer;
+class WXDLLIMPEXP_FWD_CORE wxChoice;
+class WXDLLIMPEXP_FWD_CORE wxText;
+class WXDLLIMPEXP_FWD_CORE wxCheckBox;
+class WXDLLIMPEXP_FWD_CORE wxFontPreviewer;
 
 enum
 {

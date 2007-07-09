@@ -23,8 +23,8 @@
     #include "wx/gdicmn.h"
 #endif
 
-class WXDLLIMPEXP_BASE wxArrayString;
-class WXDLLIMPEXP_BASE wxArrayInt;
+class WXDLLIMPEXP_FWD_BASE wxArrayString;
+class WXDLLIMPEXP_FWD_BASE wxArrayInt;
 
 // need this for wxGetDiskSpace() as we can't, unfortunately, forward declare
 // wxLongLong
@@ -46,10 +46,10 @@ class WXDLLIMPEXP_BASE wxArrayInt;
 // Forward declaration
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxProcess;
-class WXDLLIMPEXP_CORE wxFrame;
-class WXDLLIMPEXP_CORE wxWindow;
-class WXDLLIMPEXP_CORE wxWindowList;
+class WXDLLIMPEXP_FWD_CORE wxProcess;
+class WXDLLIMPEXP_FWD_CORE wxFrame;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxWindowList;
 
 // ----------------------------------------------------------------------------
 // Macros
@@ -574,7 +574,7 @@ wxDEPRECATED(
 );
 
 #if wxUSE_ACCEL
-class WXDLLEXPORT wxAcceleratorEntry;
+class WXDLLIMPEXP_FWD_CORE wxAcceleratorEntry;
 
 // use wxAcceleratorEntry::Create() or FromString() methods instead
 wxDEPRECATED(

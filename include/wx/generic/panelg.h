@@ -19,7 +19,7 @@
 #include "wx/window.h"
 #include "wx/containr.h"
 
-class WXDLLEXPORT wxControlContainer;
+class WXDLLIMPEXP_FWD_CORE wxControlContainer;
 
 extern WXDLLEXPORT_DATA(const wxChar) wxPanelNameStr[];
 

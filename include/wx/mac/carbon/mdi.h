@@ -18,8 +18,8 @@
 
 WXDLLEXPORT_DATA(extern const wxChar) wxStatusLineNameStr[];
 
-class WXDLLEXPORT wxMDIClientWindow;
-class WXDLLEXPORT wxMDIChildFrame;
+class WXDLLIMPEXP_FWD_CORE wxMDIClientWindow;
+class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
 
 class WXDLLEXPORT wxMDIParentFrame: public wxFrame
 {
@@ -106,7 +106,7 @@ protected:
     bool m_shouldBeShown;
 
 private:
-    friend class WXDLLEXPORT wxMDIChildFrame;
+    friend class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
     DECLARE_EVENT_TABLE()
 };
 

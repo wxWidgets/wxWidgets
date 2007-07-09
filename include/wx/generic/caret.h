@@ -20,7 +20,7 @@
     #define wxHAS_CARET_USING_OVERLAYS
 #endif
 
-class WXDLLIMPEXP_CORE wxCaret;
+class WXDLLIMPEXP_FWD_CORE wxCaret;
 
 class WXDLLEXPORT wxCaretTimer : public wxTimer
 {

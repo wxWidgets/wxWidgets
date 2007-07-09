@@ -12,7 +12,7 @@
 
 #include "wx/list.h"
 
-class WXDLLIMPEXP_BASE wxSortedArrayString;
+class WXDLLIMPEXP_FWD_BASE wxSortedArrayString;
 
 //-----------------------------------------------------------------------------
 // wxListBox

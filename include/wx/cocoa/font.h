@@ -14,7 +14,7 @@
 
 class WXDLLEXPORT wxFontRefData: public wxGDIRefData
 {
-    friend class WXDLLEXPORT wxFont;
+    friend class WXDLLIMPEXP_FWD_CORE wxFont;
 public:
     wxFontRefData()
         : m_fontId(0)

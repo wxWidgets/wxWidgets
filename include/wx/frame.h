@@ -22,10 +22,10 @@
 extern WXDLLEXPORT_DATA(const wxChar) wxStatusLineNameStr[];
 extern WXDLLEXPORT_DATA(const wxChar) wxToolBarNameStr[];
 
-class WXDLLEXPORT wxFrame;
-class WXDLLEXPORT wxMenuBar;
-class WXDLLEXPORT wxStatusBar;
-class WXDLLEXPORT wxToolBar;
+class WXDLLIMPEXP_FWD_CORE wxFrame;
+class WXDLLIMPEXP_FWD_CORE wxMenuBar;
+class WXDLLIMPEXP_FWD_CORE wxStatusBar;
+class WXDLLIMPEXP_FWD_CORE wxToolBar;
 
 // ----------------------------------------------------------------------------
 // constants

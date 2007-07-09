@@ -28,8 +28,8 @@
 // internal code
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxOverlayImpl;
-class WXDLLEXPORT wxWindowDC;
+class WXDLLIMPEXP_FWD_CORE wxOverlayImpl;
+class WXDLLIMPEXP_FWD_CORE wxWindowDC;
 
 class WXDLLEXPORT wxOverlay
 {
@@ -45,7 +45,7 @@ public:
     wxOverlayImpl *GetImpl() { return m_impl; }
 
 private:
-    friend class WXDLLEXPORT wxDCOverlay;
+    friend class WXDLLIMPEXP_FWD_CORE wxDCOverlay;
 
     // returns true if it has been setup
     bool IsOk();

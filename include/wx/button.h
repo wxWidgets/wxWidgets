@@ -45,7 +45,7 @@
 
 #include "wx/control.h"
 
-class WXDLLEXPORT wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
 
 extern WXDLLEXPORT_DATA(const wxChar) wxButtonNameStr[];
 

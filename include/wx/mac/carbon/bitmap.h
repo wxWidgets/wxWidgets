@@ -15,15 +15,15 @@
 #include "wx/palette.h"
 
 // Bitmap
-class WXDLLEXPORT wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class wxBitmapRefData ;
-class WXDLLEXPORT wxBitmapHandler;
-class WXDLLEXPORT wxControl;
-class WXDLLEXPORT wxCursor;
-class WXDLLEXPORT wxDC;
-class WXDLLEXPORT wxIcon;
-class WXDLLEXPORT wxImage;
-class WXDLLEXPORT wxPixelDataBase;
+class WXDLLIMPEXP_FWD_CORE wxBitmapHandler;
+class WXDLLIMPEXP_FWD_CORE wxControl;
+class WXDLLIMPEXP_FWD_CORE wxCursor;
+class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxIcon;
+class WXDLLIMPEXP_FWD_CORE wxImage;
+class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 
 // A mask is a bitmap used for drawing bitmaps
 // Internally it is stored as a 8 bit deep memory chunk, 0 = black means the source will be drawn
@@ -89,7 +89,7 @@ class WXDLLEXPORT wxBitmap: public wxBitmapBase
 {
     DECLARE_DYNAMIC_CLASS(wxBitmap)
 
-    friend class WXDLLEXPORT wxBitmapHandler;
+    friend class WXDLLIMPEXP_FWD_CORE wxBitmapHandler;
 
 public:
     wxBitmap(); // Platform-specific

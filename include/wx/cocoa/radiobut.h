@@ -14,7 +14,7 @@
 
 #include "wx/cocoa/NSButton.h"
 
-class WXDLLEXPORT wxRadioButton;
+class WXDLLIMPEXP_FWD_CORE wxRadioButton;
 
 WX_DECLARE_LIST(wxRadioButton, wxRadioButtonList);
 

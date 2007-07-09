@@ -19,7 +19,7 @@
 // ----------------------------------------------------------------------------
 
 #if wxUSE_OWNER_DRAWN
-  class WXDLLEXPORT wxOwnerDrawn;
+  class WXDLLIMPEXP_FWD_CORE wxOwnerDrawn;
 
   // define the array of list box items
   #include  "wx/dynarray.h"

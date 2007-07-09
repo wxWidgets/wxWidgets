@@ -15,10 +15,10 @@
 // classes
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDC;
-class WXDLLEXPORT wxPaintDC;
-class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxFont;
+class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxPaintDC;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxFont;
 
 struct font_t;
 

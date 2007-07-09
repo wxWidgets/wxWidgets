@@ -16,7 +16,7 @@
 #include "wx/font.h"
 #include "wx/arrstr.h"
 
-class WXDLLIMPEXP_CORE wxFrame;
+class WXDLLIMPEXP_FWD_CORE wxFrame;
 
 // ----------------------------------------------------------------------------
 // Menu

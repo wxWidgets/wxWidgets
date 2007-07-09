@@ -15,7 +15,7 @@
 #include "wx/vscroll.h"         // base class
 #include "wx/bitmap.h"
 
-class WXDLLEXPORT wxSelectionStore;
+class WXDLLIMPEXP_FWD_CORE wxSelectionStore;
 
 #define wxVListBoxNameStr _T("wxVListBox")
 

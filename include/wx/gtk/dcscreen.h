@@ -16,7 +16,7 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxScreenDC;
+class WXDLLIMPEXP_FWD_CORE wxScreenDC;
 
 //-----------------------------------------------------------------------------
 // wxScreenDC

@@ -14,8 +14,8 @@
 
 #if wxUSE_IMAGE && wxUSE_XPM
 
-class WXDLLIMPEXP_CORE wxImage;
-class WXDLLIMPEXP_BASE wxInputStream;
+class WXDLLIMPEXP_FWD_CORE wxImage;
+class WXDLLIMPEXP_FWD_BASE wxInputStream;
 
 // --------------------------------------------------------------------------
 // wxXPMDecoder class

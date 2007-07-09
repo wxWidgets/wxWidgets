@@ -15,8 +15,8 @@
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"
 
-class WXDLLEXPORT wxColour;
-class WXDLLEXPORT wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxColour;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
 
 // ========================================================================
 // wxPen

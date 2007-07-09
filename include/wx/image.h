@@ -69,9 +69,9 @@ const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxImageHandler;
-class WXDLLEXPORT wxImage;
-class WXDLLEXPORT wxPalette;
+class WXDLLIMPEXP_FWD_CORE wxImageHandler;
+class WXDLLIMPEXP_FWD_CORE wxImage;
+class WXDLLIMPEXP_FWD_CORE wxPalette;
 
 //-----------------------------------------------------------------------------
 // wxVariant support
@@ -438,7 +438,7 @@ protected:
     virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const;
 
 private:
-    friend class WXDLLEXPORT wxImageHandler;
+    friend class WXDLLIMPEXP_FWD_CORE wxImageHandler;
 
     DECLARE_DYNAMIC_CLASS(wxImage)
 };

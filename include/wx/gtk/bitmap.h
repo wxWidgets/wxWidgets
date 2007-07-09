@@ -11,7 +11,7 @@
 #define _WX_GTK_BITMAP_H_
 
 typedef struct _GdkPixbuf GdkPixbuf;
-class WXDLLEXPORT wxPixelDataBase;
+class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 
 //-----------------------------------------------------------------------------
 // wxMask

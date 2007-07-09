@@ -20,7 +20,7 @@
 
 #if wxUSE_CMDLINE_PARSER
 
-class WXDLLIMPEXP_BASE wxDateTime;
+class WXDLLIMPEXP_FWD_BASE wxDateTime;
 
 // ----------------------------------------------------------------------------
 // constants

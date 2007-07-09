@@ -18,7 +18,7 @@
 #if !wxUSE_STL
     #include "wx/object.h"
 #else
-    class WXDLLIMPEXP_BASE wxObject;
+    class WXDLLIMPEXP_FWD_BASE wxObject;
 #endif
 
 // the default size of the hash
@@ -39,12 +39,12 @@ union wxHashKeyValue
 
 // for some compilers (AIX xlC), defining it as friend inside the class is not
 // enough, so provide a real forward declaration
-class WXDLLIMPEXP_BASE wxHashTableBase;
+class WXDLLIMPEXP_FWD_BASE wxHashTableBase;
 
 class WXDLLIMPEXP_BASE wxHashTableBase_Node
 {
-    friend class WXDLLIMPEXP_BASE wxHashTableBase;
-    typedef class WXDLLIMPEXP_BASE wxHashTableBase_Node _Node;
+    friend class WXDLLIMPEXP_FWD_BASE wxHashTableBase;
+    typedef class WXDLLIMPEXP_FWD_BASE wxHashTableBase_Node _Node;
 public:
     wxHashTableBase_Node( long key, void* value,
                           wxHashTableBase* table );
@@ -84,7 +84,7 @@ class WXDLLIMPEXP_BASE wxHashTableBase
     : public wxObject
 #endif
 {
-    friend class WXDLLIMPEXP_BASE wxHashTableBase_Node;
+    friend class WXDLLIMPEXP_FWD_BASE wxHashTableBase_Node;
 public:
     typedef wxHashTableBase_Node Node;
 
@@ -159,7 +159,7 @@ private:
 
 class WXDLLIMPEXP_BASE wxHashTable_Node : public wxHashTableBase_Node
 {
-    friend class WXDLLIMPEXP_BASE wxHashTable;
+    friend class WXDLLIMPEXP_FWD_BASE wxHashTable;
 public:
     wxHashTable_Node( long key, void* value,
                       wxHashTableBase* table )

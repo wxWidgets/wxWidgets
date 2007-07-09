@@ -257,14 +257,14 @@ public:
         /* for wxStringImpl use only */                                       \
         operator pointer() const { return m_ptr; }                            \
                                                                               \
-        friend class WXDLLIMPEXP_BASE wxStringImpl;                           \
+        friend class wxStringImpl;                                            \
                                                                               \
         pointer m_ptr
 
   // we need to declare const_iterator in wxStringImpl scope, the friend
   // declaration inside iterator class itself is not enough, or at least not
   // for g++ 3.4 (g++ 4 is ok)
-  class WXDLLIMPEXP_BASE const_iterator;
+  class WXDLLIMPEXP_FWD_BASE const_iterator;
 
   class WXDLLIMPEXP_BASE iterator
   {
@@ -547,7 +547,7 @@ public:
   void DoUngetWriteBuf();
   void DoUngetWriteBuf(size_t nLen);
 
-  friend class WXDLLIMPEXP_BASE wxString;
+  friend class WXDLLIMPEXP_FWD_BASE wxString;
 };
 
 #endif // !wxUSE_STL_BASED_WXSTRING

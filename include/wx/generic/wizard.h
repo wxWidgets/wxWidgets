@@ -16,11 +16,11 @@
 // wxWizard
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxButton;
-class WXDLLEXPORT wxStaticBitmap;
-class WXDLLIMPEXP_ADV wxWizardEvent;
-class WXDLLEXPORT wxBoxSizer;
-class WXDLLIMPEXP_ADV wxWizardSizer;
+class WXDLLIMPEXP_FWD_CORE wxButton;
+class WXDLLIMPEXP_FWD_CORE wxStaticBitmap;
+class WXDLLIMPEXP_FWD_ADV wxWizardEvent;
+class WXDLLIMPEXP_FWD_CORE wxBoxSizer;
+class WXDLLIMPEXP_FWD_ADV wxWizardSizer;
 
 class WXDLLIMPEXP_ADV wxWizard : public wxWizardBase
 {

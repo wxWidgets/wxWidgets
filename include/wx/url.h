@@ -34,7 +34,7 @@ typedef enum {
 } wxURLError;
 
 #if wxUSE_URL_NATIVE
-class WXDLLIMPEXP_NET wxURL;
+class WXDLLIMPEXP_FWD_NET wxURL;
 
 class WXDLLIMPEXP_NET wxURLNativeImp : public wxObject
 {

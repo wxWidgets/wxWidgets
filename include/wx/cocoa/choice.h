@@ -15,7 +15,7 @@
 //#include "wx/cocoa/NSPopUpButton.h"
 #include "wx/cocoa/NSMenu.h"
 
-class WXDLLIMPEXP_BASE wxSortedArrayString;
+class WXDLLIMPEXP_FWD_BASE wxSortedArrayString;
 
 // ========================================================================
 // wxChoice

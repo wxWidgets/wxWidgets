@@ -14,7 +14,7 @@
 #include "wx/univ/renderer.h"
 #include "wx/pen.h"
 
-class WXDLLEXPORT wxColourScheme;
+class WXDLLIMPEXP_FWD_CORE wxColourScheme;
 
 // ----------------------------------------------------------------------------
 // wxStdRenderer: implements as much of wxRenderer API as possible generically

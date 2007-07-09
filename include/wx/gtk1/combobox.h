@@ -21,7 +21,7 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxComboBox;
+class WXDLLIMPEXP_FWD_CORE wxComboBox;
 
 //-----------------------------------------------------------------------------
 // global data

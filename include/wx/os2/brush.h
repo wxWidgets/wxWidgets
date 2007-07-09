@@ -16,11 +16,11 @@
 #include "wx/gdiobj.h"
 #include "wx/bitmap.h"
 
-class WXDLLEXPORT wxBrush;
+class WXDLLIMPEXP_FWD_CORE wxBrush;
 
 class WXDLLEXPORT wxBrushRefData: public wxGDIRefData
 {
-    friend class WXDLLEXPORT wxBrush;
+    friend class WXDLLIMPEXP_FWD_CORE wxBrush;
 public:
     wxBrushRefData();
     wxBrushRefData(const wxBrushRefData& rData);

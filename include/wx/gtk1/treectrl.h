@@ -27,7 +27,7 @@ struct wxTreeViewItem;
 // a callback function used for sorting tree items, it should return -1 if the
 // first item precedes the second, +1 if the second precedes the first or 0 if
 // they're equivalent
-class WXDLLIMPEXP_CORE wxTreeItemData;
+class WXDLLIMPEXP_FWD_CORE wxTreeItemData;
 typedef int (*wxTreeItemCmpFunc)(wxTreeItemData *item1, wxTreeItemData *item2);
 
 // ----------------------------------------------------------------------------

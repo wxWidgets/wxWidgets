@@ -17,9 +17,9 @@
 
 #include "wx/panel.h"
 
-class WXDLLEXPORT wxBitmapButton;
-class WXDLLEXPORT wxListCtrl;
-class WXDLLEXPORT wxListEvent;
+class WXDLLIMPEXP_FWD_CORE wxBitmapButton;
+class WXDLLIMPEXP_FWD_CORE wxListCtrl;
+class WXDLLIMPEXP_FWD_CORE wxListEvent;
 
 #define wxEL_ALLOW_NEW          0x0100
 #define wxEL_ALLOW_EDIT         0x0200

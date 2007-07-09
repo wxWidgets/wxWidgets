@@ -32,7 +32,7 @@
     #define wxHAVE_DYNLIB_ERROR
 #endif
 
-class WXDLLIMPEXP_BASE wxDynamicLibraryDetailsCreator;
+class WXDLLIMPEXP_FWD_BASE wxDynamicLibraryDetailsCreator;
 
 // ----------------------------------------------------------------------------
 // conditional compilation

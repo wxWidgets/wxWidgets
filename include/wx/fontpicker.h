@@ -20,7 +20,7 @@
 #include "wx/pickerbase.h"
 
 
-class WXDLLIMPEXP_CORE wxFontPickerEvent;
+class WXDLLIMPEXP_FWD_CORE wxFontPickerEvent;
 
 extern WXDLLEXPORT_DATA(const wxChar) wxFontPickerWidgetNameStr[];
 extern WXDLLEXPORT_DATA(const wxChar) wxFontPickerCtrlNameStr[];

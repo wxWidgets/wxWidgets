@@ -20,7 +20,7 @@
 #include "wx/panel.h"
 #include "wx/list.h"
 
-class WXDLLEXPORT wxTabView;
+class WXDLLIMPEXP_FWD_CORE wxTabView;
 
 /*
  * A wxTabControl is the internal and visual representation

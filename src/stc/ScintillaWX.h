@@ -60,8 +60,8 @@
 //----------------------------------------------------------------------
 
 
-class WXDLLIMPEXP_CORE wxDC;
-class WXDLLIMPEXP_STC wxStyledTextCtrl;           // forward
+class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_STC wxStyledTextCtrl;           // forward
 class ScintillaWX;
 
 

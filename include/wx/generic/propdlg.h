@@ -18,7 +18,7 @@
 
 #include "wx/dialog.h"
 
-class WXDLLIMPEXP_CORE wxBookCtrlBase;
+class WXDLLIMPEXP_FWD_CORE wxBookCtrlBase;
 
 //-----------------------------------------------------------------------------
 // wxPropertySheetDialog

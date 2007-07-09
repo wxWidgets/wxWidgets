@@ -18,9 +18,9 @@
 
 #include "wx/object.h"
 
-class WXDLLEXPORT wxAcceleratorTable;
-class WXDLLEXPORT wxMenuItem;
-class WXDLLEXPORT wxKeyEvent;
+class WXDLLIMPEXP_FWD_CORE wxAcceleratorTable;
+class WXDLLIMPEXP_FWD_CORE wxMenuItem;
+class WXDLLIMPEXP_FWD_CORE wxKeyEvent;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -137,7 +137,7 @@ private:
     wxMenuItem *m_item;
 
     // for compatibility with old code, use accessors now!
-    friend class WXDLLEXPORT wxMenu;
+    friend class WXDLLIMPEXP_FWD_CORE wxMenu;
 };
 
 // ----------------------------------------------------------------------------

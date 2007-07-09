@@ -38,12 +38,12 @@
 // wxDataViewCtrl globals
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewItem;
-class WXDLLIMPEXP_ADV wxDataViewModel;
-class WXDLLIMPEXP_ADV wxDataViewCtrl;
-class WXDLLIMPEXP_ADV wxDataViewColumn;
-class WXDLLIMPEXP_ADV wxDataViewRenderer;
-class WXDLLIMPEXP_ADV wxDataViewModelNotifier;
+class WXDLLIMPEXP_FWD_ADV wxDataViewItem;
+class WXDLLIMPEXP_FWD_ADV wxDataViewModel;
+class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
+class WXDLLIMPEXP_FWD_ADV wxDataViewColumn;
+class WXDLLIMPEXP_FWD_ADV wxDataViewRenderer;
+class WXDLLIMPEXP_FWD_ADV wxDataViewModelNotifier;
 class                 wxDataViewEventModelNotifier;
 
 extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxDataViewCtrlNameStr[];

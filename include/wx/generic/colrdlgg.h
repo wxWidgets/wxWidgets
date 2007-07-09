@@ -25,7 +25,7 @@
     #define wxID_GREEN_SLIDER   3002
     #define wxID_BLUE_SLIDER    3003
 
-    class WXDLLEXPORT wxSlider;
+    class WXDLLIMPEXP_FWD_CORE wxSlider;
 
 #endif // wxUSE_SLIDER
 

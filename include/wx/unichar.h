@@ -15,8 +15,8 @@
 #include "wx/chartype.h"
 #include "wx/stringimpl.h"
 
-class WXDLLIMPEXP_BASE wxUniCharRef;
-class WXDLLIMPEXP_BASE wxStringIteratorNode;
+class WXDLLIMPEXP_FWD_BASE wxUniCharRef;
+class WXDLLIMPEXP_FWD_BASE wxStringIteratorNode;
 
 // This class represents single Unicode character. It can be converted to
 // and from char or wchar_t and implements commonly used character operations.
@@ -255,7 +255,7 @@ private:
     wxUniChar UniChar() const { return *m_pos; }
 #endif
 
-    friend class WXDLLIMPEXP_BASE wxUniChar;
+    friend class WXDLLIMPEXP_FWD_BASE wxUniChar;
 
 private:
     // reference to the string and pointer to the character in string

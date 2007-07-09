@@ -26,9 +26,9 @@
 // forward declarations
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxAcceleratorEntry;
-class WXDLLEXPORT wxMenuItem;
-class WXDLLEXPORT wxMenu;
+class WXDLLIMPEXP_FWD_CORE wxAcceleratorEntry;
+class WXDLLIMPEXP_FWD_CORE wxMenuItem;
+class WXDLLIMPEXP_FWD_CORE wxMenu;
 
 // ----------------------------------------------------------------------------
 // wxMenuItem is an item in the menu which may be either a normal item, a sub

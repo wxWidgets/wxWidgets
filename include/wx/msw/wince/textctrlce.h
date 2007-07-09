@@ -14,7 +14,7 @@
 
 #include "wx/dynarray.h"
 
-class WXDLLEXPORT wxTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 WX_DEFINE_EXPORTED_ARRAY_PTR(wxTextCtrl *, wxArrayTextSpins);
 
 class WXDLLEXPORT wxTextCtrl : public wxTextCtrlBase

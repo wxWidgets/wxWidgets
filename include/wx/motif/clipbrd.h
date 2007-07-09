@@ -14,7 +14,7 @@
 
 #if wxUSE_CLIPBOARD
 
-class WXDLLIMPEXP_CORE wxDataObject;
+class WXDLLIMPEXP_FWD_CORE wxDataObject;
 struct wxDataIdToDataObject;
 
 #include "wx/list.h"

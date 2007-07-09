@@ -16,7 +16,7 @@
 #include "wx/gdiobj.h"
 
 
-class WXDLLEXPORT wxColour;
+class WXDLLIMPEXP_FWD_CORE wxColour;
 
 // the standard wxColour constructors;
 // this macro avoids to repeat these lines across all colour.h files, since

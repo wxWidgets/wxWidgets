@@ -18,7 +18,7 @@
 
 #include "wx/xtistrm.h"
 
-class WXDLLIMPEXP_XML wxXmlNode ;
+class WXDLLIMPEXP_FWD_XML wxXmlNode ;
 
 class WXDLLIMPEXP_XML wxXmlWriter : public wxWriter
 {

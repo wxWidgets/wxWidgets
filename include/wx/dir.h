@@ -15,7 +15,7 @@
 #include "wx/longlong.h"
 #include "wx/string.h"
 
-class WXDLLIMPEXP_BASE wxArrayString;
+class WXDLLIMPEXP_FWD_BASE wxArrayString;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -78,7 +78,7 @@ public:
 // wxDir: portable equivalent of {open/read/close}dir functions
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxDirData;
+class WXDLLIMPEXP_FWD_BASE wxDirData;
 
 class WXDLLIMPEXP_BASE wxDir
 {

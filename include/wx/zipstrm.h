@@ -112,8 +112,8 @@ enum wxZipFlags
 
 // Forward decls
 //
-class WXDLLIMPEXP_BASE wxZipEntry;
-class WXDLLIMPEXP_BASE wxZipInputStream;
+class WXDLLIMPEXP_FWD_BASE wxZipEntry;
+class WXDLLIMPEXP_FWD_BASE wxZipInputStream;
 
 
 /////////////////////////////////////////////////////////////////////////////

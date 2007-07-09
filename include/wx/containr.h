@@ -15,8 +15,8 @@
 
 #include "wx/defs.h"
 
-class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxWindowBase;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 
 /*
    Implementation note: wxControlContainer is not a real mix-in but rather
@@ -156,8 +156,8 @@ class WXDLLEXPORT wxControlContainer : public wxControlContainerBase
 
 #else // !wxHAS_NATIVE_TAB_TRAVERSAL
 
-class WXDLLEXPORT wxFocusEvent;
-class WXDLLEXPORT wxNavigationKeyEvent;
+class WXDLLIMPEXP_FWD_CORE wxFocusEvent;
+class WXDLLIMPEXP_FWD_CORE wxNavigationKeyEvent;
 
 // ----------------------------------------------------------------------------
 // wxControlContainer for TAB navigation implemented in wx itself

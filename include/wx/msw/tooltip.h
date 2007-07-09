@@ -14,7 +14,7 @@
 
 #include "wx/object.h"
 
-class WXDLLIMPEXP_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 class WXDLLEXPORT wxToolTip : public wxObject
 {

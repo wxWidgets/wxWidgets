@@ -28,7 +28,7 @@
 #include "wx/dnd.h"
 #include "wx/stopwatch.h"
 
-class WXDLLIMPEXP_CORE wxScrollBar;
+class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 
 // SWIG can't handle "#if" type of conditionals, only "#ifdef"
 #ifdef SWIG
@@ -1797,8 +1797,8 @@ struct SCNotification;
 
 #ifndef SWIG
 extern WXDLLIMPEXP_STC const wxChar* wxSTCNameStr;
-class  WXDLLIMPEXP_STC wxStyledTextCtrl;
-class  WXDLLIMPEXP_STC wxStyledTextEvent;
+class WXDLLIMPEXP_FWD_STC wxStyledTextCtrl;
+class WXDLLIMPEXP_FWD_STC wxStyledTextEvent;
 #endif
 
 //----------------------------------------------------------------------

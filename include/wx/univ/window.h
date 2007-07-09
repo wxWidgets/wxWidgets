@@ -16,18 +16,18 @@
 
 #include "wx/bitmap.h"      // for m_bitmapBg
 
-class WXDLLEXPORT wxControlRenderer;
-class WXDLLEXPORT wxEventLoop;
+class WXDLLIMPEXP_FWD_CORE wxControlRenderer;
+class WXDLLIMPEXP_FWD_CORE wxEventLoop;
 
 #if wxUSE_MENUS
-    class WXDLLEXPORT wxMenu;
-    class WXDLLEXPORT wxMenuBar;
+    class WXDLLIMPEXP_FWD_CORE wxMenu;
+    class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 #endif // wxUSE_MENUS
 
-class WXDLLEXPORT wxRenderer;
+class WXDLLIMPEXP_FWD_CORE wxRenderer;
 
 #if wxUSE_SCROLLBAR
-    class WXDLLEXPORT wxScrollBar;
+    class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #endif // wxUSE_SCROLLBAR
 
 #ifdef __WXX11__

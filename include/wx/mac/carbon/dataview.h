@@ -23,7 +23,7 @@
 // classes
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewCtrl;
+class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
 
 // ---------------------------------------------------------
 // wxDataViewRenderer

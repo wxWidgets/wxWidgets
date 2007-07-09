@@ -18,8 +18,8 @@ class WXDLLEXPORT wxCursorRefData: public wxObjectRefData
 {
     DECLARE_NO_COPY_CLASS(wxCursorRefData)
 
-    friend class WXDLLEXPORT wxBitmap;
-    friend class WXDLLEXPORT wxCursor;
+    friend class WXDLLIMPEXP_FWD_CORE wxBitmap;
+    friend class WXDLLIMPEXP_FWD_CORE wxCursor;
 public:
     wxCursorRefData();
     virtual ~wxCursorRefData();

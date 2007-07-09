@@ -12,8 +12,8 @@
 
 #include "wx/object.h"
 
-class WXDLLIMPEXP_CORE wxColour;
-class WXDLLIMPEXP_CORE wxImage;
+class WXDLLIMPEXP_FWD_CORE wxColour;
+class WXDLLIMPEXP_FWD_CORE wxImage;
 
 //-----------------------------------------------------------------------------
 // wxCursor

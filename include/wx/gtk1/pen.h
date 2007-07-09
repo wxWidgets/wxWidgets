@@ -20,7 +20,7 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxPen;
+class WXDLLIMPEXP_FWD_CORE wxPen;
 
 #if defined(__WXGTK127__)
 typedef    gint8 wxGTKDash;

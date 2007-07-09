@@ -15,7 +15,7 @@
 
 #if wxUSE_XRC && wxUSE_TOOLBAR
 
-class WXDLLEXPORT wxToolBar;
+class WXDLLIMPEXP_FWD_CORE wxToolBar;
 
 class WXDLLIMPEXP_XRC wxToolBarXmlHandler : public wxXmlResourceHandler
 {

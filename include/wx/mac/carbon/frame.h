@@ -19,9 +19,9 @@
 
 WXDLLEXPORT_DATA(extern const wxChar) wxToolBarNameStr[];
 
-class WXDLLEXPORT wxMenuBar;
-class WXDLLEXPORT wxStatusBar;
-class WXDLLEXPORT wxMacToolTip ;
+class WXDLLIMPEXP_FWD_CORE wxMenuBar;
+class WXDLLIMPEXP_FWD_CORE wxStatusBar;
+class WXDLLIMPEXP_FWD_CORE wxMacToolTip ;
 
 class WXDLLEXPORT wxFrame: public wxFrameBase 
 {

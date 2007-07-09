@@ -37,11 +37,11 @@
 #include "wx/event.h"
 #include "wx/icon.h"
 
-class WXDLLEXPORT wxFrame;
-class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxApp;
-class WXDLLEXPORT wxKeyEvent;
-class WXDLLEXPORT wxLog;
+class WXDLLIMPEXP_FWD_CORE wxFrame;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxApp;
+class WXDLLIMPEXP_FWD_CORE wxKeyEvent;
+class WXDLLIMPEXP_FWD_CORE wxLog;
 
 WXDLLEXPORT_DATA(extern wxApp*) wxTheApp;
 WXDLLEXPORT_DATA(extern HAB)    vHabmain;

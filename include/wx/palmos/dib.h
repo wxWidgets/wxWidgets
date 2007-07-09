@@ -12,8 +12,8 @@
 #ifndef _WX_PALMOS_DIB_H_
 #define _WX_PALMOS_DIB_H_
 
-class WXDLLEXPORT wxBitmap;
-class WXDLLEXPORT wxPalette;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxPalette;
 
 #include "wx/msw/private.h"
 

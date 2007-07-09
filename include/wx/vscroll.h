@@ -15,7 +15,7 @@
 #include "wx/panel.h"
 #include "wx/position.h"
 
-class WXDLLEXPORT wxVarScrollHelperEvtHandler;
+class WXDLLIMPEXP_FWD_CORE wxVarScrollHelperEvtHandler;
 
 
 // Using the same techniques as the wxScrolledWindow class      |

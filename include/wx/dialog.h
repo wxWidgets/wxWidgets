@@ -15,8 +15,8 @@
 #include "wx/defs.h"
 #include "wx/toplevel.h"
 
-class WXDLLEXPORT wxSizer;
-class WXDLLEXPORT wxStdDialogButtonSizer;
+class WXDLLIMPEXP_FWD_CORE wxSizer;
+class WXDLLIMPEXP_FWD_CORE wxStdDialogButtonSizer;
 
 #define wxDIALOG_NO_PARENT      0x0001  // Don't make owned by apps top window
 

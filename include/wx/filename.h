@@ -29,11 +29,11 @@
 #include "wx/intl.h"
 
 #if wxUSE_FILE
-class WXDLLIMPEXP_BASE wxFile;
+class WXDLLIMPEXP_FWD_BASE wxFile;
 #endif
 
 #if wxUSE_FFILE
-class WXDLLIMPEXP_BASE wxFFile;
+class WXDLLIMPEXP_FWD_BASE wxFFile;
 #endif
 
 // ----------------------------------------------------------------------------

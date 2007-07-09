@@ -18,7 +18,7 @@
 
 #include "wx/stream.h"
 
-class WXDLLIMPEXP_BASE wxMemoryOutputStream;
+class WXDLLIMPEXP_FWD_BASE wxMemoryOutputStream;
 
 class WXDLLIMPEXP_BASE wxMemoryInputStream : public wxInputStream
 {

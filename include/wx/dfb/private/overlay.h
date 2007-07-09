@@ -16,8 +16,8 @@
 
 wxDFB_DECLARE_INTERFACE(IDirectFBSurface);
 
-class WXDLLIMPEXP_CORE wxWindow;
-class WXDLLIMPEXP_CORE wxwindowDC;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxwindowDC;
 
 class wxOverlayImpl
 {

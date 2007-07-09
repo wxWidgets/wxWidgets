@@ -30,9 +30,9 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxTextCtrl;
-class WXDLLIMPEXP_CORE wxImageList;
-class WXDLLIMPEXP_BASE wxHashTable;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxImageList;
+class WXDLLIMPEXP_FWD_BASE wxHashTable;
 
 //-----------------------------------------------------------------------------
 // Extra styles for wxGenericDirCtrl
@@ -78,7 +78,7 @@ public:
 // wxDirCtrl
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDirFilterListCtrl;
+class WXDLLIMPEXP_FWD_CORE wxDirFilterListCtrl;
 
 class WXDLLEXPORT wxGenericDirCtrl: public wxControl
 {

@@ -24,15 +24,15 @@
     #include "wx/print.h"
 #endif
 
-class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxDocument;
-class WXDLLEXPORT wxView;
-class WXDLLEXPORT wxDocTemplate;
-class WXDLLEXPORT wxDocManager;
-class WXDLLEXPORT wxPrintInfo;
-class WXDLLEXPORT wxCommandProcessor;
-class WXDLLEXPORT wxFileHistory;
-class WXDLLEXPORT wxConfigBase;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxDocument;
+class WXDLLIMPEXP_FWD_CORE wxView;
+class WXDLLIMPEXP_FWD_CORE wxDocTemplate;
+class WXDLLIMPEXP_FWD_CORE wxDocManager;
+class WXDLLIMPEXP_FWD_CORE wxPrintInfo;
+class WXDLLIMPEXP_FWD_CORE wxCommandProcessor;
+class WXDLLIMPEXP_FWD_CORE wxFileHistory;
+class WXDLLIMPEXP_FWD_CORE wxConfigBase;
 
 #if wxUSE_STD_IOSTREAM
   #include "wx/iosfwrap.h"
@@ -244,7 +244,7 @@ private:
 class WXDLLEXPORT wxDocTemplate: public wxObject
 {
 
-friend class WXDLLEXPORT wxDocManager;
+friend class WXDLLIMPEXP_FWD_CORE wxDocManager;
 
 public:
     // Associate document and view types. They're for identifying what view is

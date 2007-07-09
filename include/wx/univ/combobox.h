@@ -15,7 +15,7 @@
 
 #include "wx/combo.h"
 
-class WXDLLEXPORT wxListBox;
+class WXDLLIMPEXP_FWD_CORE wxListBox;
 
 // ----------------------------------------------------------------------------
 // NB: some actions supported by this control are in wx/generic/combo.h

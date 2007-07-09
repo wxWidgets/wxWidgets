@@ -16,7 +16,7 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxScrollBar;
+class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 
 //-----------------------------------------------------------------------------
 // wxScrollBar

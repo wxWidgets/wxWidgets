@@ -21,9 +21,9 @@
 // classes
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewCtrl;
-class WXDLLIMPEXP_ADV wxDataViewMainWindow;
-class WXDLLIMPEXP_ADV wxDataViewHeaderWindow;
+class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
+class WXDLLIMPEXP_FWD_ADV wxDataViewMainWindow;
+class WXDLLIMPEXP_FWD_ADV wxDataViewHeaderWindow;
 
 // ---------------------------------------------------------
 // wxDataViewRenderer

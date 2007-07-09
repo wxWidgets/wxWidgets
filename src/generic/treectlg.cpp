@@ -49,7 +49,7 @@
 // array types
 // -----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGenericTreeItem;
+class WXDLLIMPEXP_FWD_CORE wxGenericTreeItem;
 
 WX_DEFINE_EXPORTED_ARRAY_PTR(wxGenericTreeItem *, wxArrayGenericTreeItems);
 

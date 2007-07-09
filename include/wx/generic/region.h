@@ -42,7 +42,7 @@ protected:
     virtual bool DoSubtract(const wxRegion& region);
     virtual bool DoXor(const wxRegion& region);
 
-    friend class WXDLLEXPORT wxRegionIteratorGeneric;
+    friend class WXDLLIMPEXP_FWD_CORE wxRegionIteratorGeneric;
 };
 
 class WXDLLEXPORT wxRegionIteratorGeneric : public wxObject

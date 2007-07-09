@@ -54,7 +54,7 @@ extern "C"
 typedef int (* LINKAGEMODE wxSortCompareFunction)(const void *elem1, const void *elem2);
 }
 
-class WXDLLIMPEXP_BASE wxObjectListNode;
+class WXDLLIMPEXP_FWD_BASE wxObjectListNode;
 typedef wxObjectListNode wxNode;
 
 //
@@ -425,7 +425,7 @@ private:
 
 extern WXDLLIMPEXP_DATA_BASE(wxListKey) wxDefaultListKey;
 
-class WXDLLIMPEXP_BASE wxListBase;
+class WXDLLIMPEXP_FWD_BASE wxListBase;
 
 class WXDLLIMPEXP_BASE wxNodeBase
 {
@@ -487,11 +487,11 @@ private:
 // a double-linked list class
 // -----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxList;
+class WXDLLIMPEXP_FWD_BASE wxList;
 
 class WXDLLIMPEXP_BASE wxListBase : public wxObject
 {
-friend class WXDLLIMPEXP_BASE wxNodeBase; // should be able to call DetachNode()
+friend class WXDLLIMPEXP_FWD_BASE wxNodeBase; // should be able to call DetachNode()
 friend class wxHashTableBase;   // should be able to call untyped Find()
 
 public:

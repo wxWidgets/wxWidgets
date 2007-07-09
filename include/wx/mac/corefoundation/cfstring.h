@@ -20,7 +20,7 @@
 
 #include "wx/fontenc.h"
 
-class WXDLLIMPEXP_BASE wxString;
+class WXDLLIMPEXP_FWD_BASE wxString;
 
 void wxMacConvertNewlines13To10( wxString *data ) ;
 void wxMacConvertNewlines10To13( wxString *data ) ;

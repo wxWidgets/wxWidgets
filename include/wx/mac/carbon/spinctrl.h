@@ -24,10 +24,10 @@
 
 #include "wx/containr.h"
 
-class WXDLLEXPORT wxSpinButton;
-class WXDLLEXPORT wxTextCtrl;
-class WXDLLEXPORT wxSpinCtrlText;
-class WXDLLEXPORT wxSpinCtrlButton;
+class WXDLLIMPEXP_FWD_CORE wxSpinButton;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxSpinCtrlText;
+class WXDLLIMPEXP_FWD_CORE wxSpinCtrlButton;
 
 // ----------------------------------------------------------------------------
 // wxSpinCtrl is a combination of wxTextCtrl and wxSpinButton

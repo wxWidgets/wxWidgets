@@ -20,7 +20,7 @@
 #include "wx/textctrl.h"
 
 
-class WXDLLEXPORT wxImageList;
+class WXDLLIMPEXP_FWD_CORE wxImageList;
 
 typedef int (wxCALLBACK *wxListCtrlCompare)(long lItem1, long lItem2, long lSortData);
 

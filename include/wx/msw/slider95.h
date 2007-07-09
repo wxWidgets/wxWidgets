@@ -12,7 +12,7 @@
 #ifndef _WX_SLIDER95_H_
 #define _WX_SLIDER95_H_
 
-class WXDLLEXPORT wxSubwindows;
+class WXDLLIMPEXP_FWD_CORE wxSubwindows;
 
 // Slider
 class WXDLLEXPORT wxSlider : public wxSliderBase

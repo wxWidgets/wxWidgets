@@ -20,9 +20,9 @@
 #include "wx/object.h"
 #include "wx/chartype.h"
 
-class WXDLLEXPORT wxDataFormat;
-class WXDLLEXPORT wxDataObject;
-class WXDLLEXPORT wxClipboard;
+class WXDLLIMPEXP_FWD_CORE wxDataFormat;
+class WXDLLIMPEXP_FWD_CORE wxDataObject;
+class WXDLLIMPEXP_FWD_CORE wxClipboard;
 
 // ----------------------------------------------------------------------------
 // wxClipboard represents the system clipboard. Normally, you should use

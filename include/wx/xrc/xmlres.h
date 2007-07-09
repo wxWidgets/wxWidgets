@@ -30,17 +30,17 @@
 
 #include "wx/xml/xml.h"
 
-class WXDLLEXPORT wxMenu;
-class WXDLLEXPORT wxMenuBar;
-class WXDLLEXPORT wxDialog;
-class WXDLLEXPORT wxPanel;
-class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxFrame;
-class WXDLLEXPORT wxToolBar;
+class WXDLLIMPEXP_FWD_CORE wxMenu;
+class WXDLLIMPEXP_FWD_CORE wxMenuBar;
+class WXDLLIMPEXP_FWD_CORE wxDialog;
+class WXDLLIMPEXP_FWD_CORE wxPanel;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxFrame;
+class WXDLLIMPEXP_FWD_CORE wxToolBar;
 
-class WXDLLIMPEXP_XRC wxXmlResourceHandler;
-class WXDLLIMPEXP_XRC wxXmlSubclassFactory;
-class WXDLLIMPEXP_XRC wxXmlSubclassFactoriesList;
+class WXDLLIMPEXP_FWD_XRC wxXmlResourceHandler;
+class WXDLLIMPEXP_FWD_XRC wxXmlSubclassFactory;
+class WXDLLIMPEXP_FWD_XRC wxXmlSubclassFactoriesList;
 class wxXmlResourceModule;
 
 

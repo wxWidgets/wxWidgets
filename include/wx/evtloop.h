@@ -121,7 +121,7 @@ protected:
     #include "wx/dfb/evtloop.h"
 #else // other platform
 
-class WXDLLEXPORT wxEventLoopImpl;
+class WXDLLIMPEXP_FWD_CORE wxEventLoopImpl;
 
 class WXDLLEXPORT wxGUIEventLoop : public wxEventLoopBase
 {

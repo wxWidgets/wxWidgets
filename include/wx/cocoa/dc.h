@@ -14,7 +14,7 @@
 
 DECLARE_WXCOCOA_OBJC_CLASS(NSAffineTransform);
 
-class WXDLLEXPORT wxDC;
+class WXDLLIMPEXP_FWD_CORE wxDC;
 WX_DECLARE_LIST(wxDC, wxCocoaDCStack);
 
 //=========================================================================

@@ -15,20 +15,20 @@
 #include "wx/string.h"
 #include "wx/platinfo.h"
 
-class WXDLLIMPEXP_BASE wxArrayString;
-class WXDLLIMPEXP_BASE wxConfigBase;
-class WXDLLIMPEXP_BASE wxEventLoopBase;
+class WXDLLIMPEXP_FWD_BASE wxArrayString;
+class WXDLLIMPEXP_FWD_BASE wxConfigBase;
+class WXDLLIMPEXP_FWD_BASE wxEventLoopBase;
 #if wxUSE_FONTMAP
-    class WXDLLEXPORT wxFontMapper;
+    class WXDLLIMPEXP_FWD_CORE wxFontMapper;
 #endif // wxUSE_FONTMAP
-class WXDLLIMPEXP_BASE wxLog;
-class WXDLLIMPEXP_BASE wxMessageOutput;
-class WXDLLIMPEXP_BASE wxObject;
-class WXDLLEXPORT wxRendererNative;
-class WXDLLIMPEXP_BASE wxStandardPathsBase;
-class WXDLLIMPEXP_BASE wxString;
-class WXDLLIMPEXP_BASE wxTimer;
-class WXDLLIMPEXP_BASE wxTimerImpl;
+class WXDLLIMPEXP_FWD_BASE wxLog;
+class WXDLLIMPEXP_FWD_BASE wxMessageOutput;
+class WXDLLIMPEXP_FWD_BASE wxObject;
+class WXDLLIMPEXP_FWD_CORE wxRendererNative;
+class WXDLLIMPEXP_FWD_BASE wxStandardPathsBase;
+class WXDLLIMPEXP_FWD_BASE wxString;
+class WXDLLIMPEXP_FWD_BASE wxTimer;
+class WXDLLIMPEXP_FWD_BASE wxTimerImpl;
 
 class GSocketGUIFunctionsTable;
 

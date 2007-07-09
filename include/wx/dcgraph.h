@@ -18,7 +18,7 @@
 #include "wx/dynarray.h"
 #include "wx/graphics.h"
 
-class WXDLLEXPORT wxWindowDC;
+class WXDLLIMPEXP_FWD_CORE wxWindowDC;
 
 #ifdef __WXMAC__
 #define wxGCDC wxDC

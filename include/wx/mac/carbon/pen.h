@@ -16,11 +16,11 @@
 #include "wx/colour.h"
 #include "wx/bitmap.h"
 
-class WXDLLEXPORT wxPen;
+class WXDLLIMPEXP_FWD_CORE wxPen;
 
 class WXDLLEXPORT wxPenRefData: public wxGDIRefData
 {
-    friend class WXDLLEXPORT wxPen;
+    friend class WXDLLIMPEXP_FWD_CORE wxPen;
 public:
     wxPenRefData();
     wxPenRefData(const wxPenRefData& data);

@@ -12,8 +12,8 @@
 #ifndef _WX_COCOA_FRAME_H_
 #define _WX_COCOA_FRAME_H_
 
-class WXDLLEXPORT wxMenuBar;
-class WXDLLEXPORT wxStatusBar;
+class WXDLLIMPEXP_FWD_CORE wxMenuBar;
+class WXDLLIMPEXP_FWD_CORE wxStatusBar;
 
 class WXDLLEXPORT wxFrame: public wxFrameBase
 {

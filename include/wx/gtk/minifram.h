@@ -22,7 +22,7 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxMiniFrame;
+class WXDLLIMPEXP_FWD_CORE wxMiniFrame;
 
 //-----------------------------------------------------------------------------
 // wxMiniFrame

@@ -80,14 +80,14 @@
 
 #define EMPTY_MACROVALUE /**/
 
-class WXDLLIMPEXP_BASE wxObject;
-class WXDLLIMPEXP_BASE wxClassInfo;
-class WXDLLIMPEXP_BASE wxDynamicClassInfo;
-class WXDLLIMPEXP_BASE wxHashTable;
-class WXDLLIMPEXP_BASE wxHashTable_Node;
-class WXDLLIMPEXP_BASE wxObjectRefData;
-class WXDLLIMPEXP_BASE wxEvent;
-class WXDLLIMPEXP_BASE wxEvtHandler;
+class WXDLLIMPEXP_FWD_BASE wxObject;
+class WXDLLIMPEXP_FWD_BASE wxClassInfo;
+class WXDLLIMPEXP_FWD_BASE wxDynamicClassInfo;
+class WXDLLIMPEXP_FWD_BASE wxHashTable;
+class WXDLLIMPEXP_FWD_BASE wxHashTable_Node;
+class WXDLLIMPEXP_FWD_BASE wxObjectRefData;
+class WXDLLIMPEXP_FWD_BASE wxEvent;
+class WXDLLIMPEXP_FWD_BASE wxEvtHandler;
 
 typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
 
@@ -368,8 +368,8 @@ enum wxTypeKind
     wxT_LAST_TYPE_KIND = wxT_DELEGATE // sentinel for bad data, asserts, debugging
 };
 
-class WXDLLIMPEXP_BASE wxxVariant ;
-class WXDLLIMPEXP_BASE wxTypeInfo ;
+class WXDLLIMPEXP_FWD_BASE wxxVariant ;
+class WXDLLIMPEXP_FWD_BASE wxTypeInfo ;
 
 WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxTypeInfo* , wxTypeInfoMap , class WXDLLIMPEXP_BASE ) ;
 
@@ -931,7 +931,7 @@ enum {
 
 class WXDLLIMPEXP_BASE wxPropertyInfo
 {
-    friend class WXDLLIMPEXP_BASE wxDynamicClassInfo ;
+    friend class WXDLLIMPEXP_FWD_BASE wxDynamicClassInfo ;
 public :
     wxPropertyInfo(wxPropertyInfo* &iter,
                    wxClassInfo* itsClass,
@@ -1205,7 +1205,7 @@ public: \
 
 class WXDLLIMPEXP_BASE wxHandlerInfo
 {
-    friend class WXDLLIMPEXP_BASE wxDynamicClassInfo ;
+    friend class WXDLLIMPEXP_FWD_BASE wxDynamicClassInfo ;
 public :
     wxHandlerInfo(wxHandlerInfo* &iter,
                    wxClassInfo* itsClass,
@@ -1593,15 +1593,15 @@ typedef wxObject *(*wxObjectConstructorFn)(void);
 typedef wxObject* (*wxVariantToObjectConverter)( wxxVariant &data ) ;
 typedef wxxVariant (*wxObjectToVariantConverter)( wxObject* ) ;
 
-class WXDLLIMPEXP_BASE wxWriter;
-class WXDLLIMPEXP_BASE wxPersister;
+class WXDLLIMPEXP_FWD_BASE wxWriter;
+class WXDLLIMPEXP_FWD_BASE wxPersister;
 
 typedef bool (*wxObjectStreamingCallback) ( const wxObject *, wxWriter * , wxPersister * , wxxVariantArray & ) ;
 
 class WXDLLIMPEXP_BASE wxClassInfo
 {
-    friend class WXDLLIMPEXP_BASE wxPropertyInfo ;
-    friend class WXDLLIMPEXP_BASE wxHandlerInfo ;
+    friend class WXDLLIMPEXP_FWD_BASE wxPropertyInfo ;
+    friend class WXDLLIMPEXP_FWD_BASE wxHandlerInfo ;
     friend wxObject *wxCreateDynamicObject(const wxString& name);
 public:
     wxClassInfo(const wxClassInfo **_Parents,
@@ -1840,7 +1840,7 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxString& name);
 
 class WXDLLIMPEXP_BASE wxDynamicClassInfo : public wxClassInfo
 {
-    friend class WXDLLIMPEXP_BASE wxDynamicObject ;
+    friend class WXDLLIMPEXP_FWD_BASE wxDynamicObject ;
 public :
     wxDynamicClassInfo( const wxChar *_UnitName, const wxChar *_ClassName , const wxClassInfo* superClass ) ;
     virtual ~wxDynamicClassInfo() ;

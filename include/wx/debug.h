@@ -131,8 +131,8 @@
                                           const wxChar *szMsg);
 #endif /* wxUSE_UNICODE */
 
-  class WXDLLIMPEXP_BASE wxString;
-  class WXDLLIMPEXP_BASE wxCStrData;
+  class WXDLLIMPEXP_FWD_BASE wxString;
+  class WXDLLIMPEXP_FWD_BASE wxCStrData;
 
   /* these two work when szMsg passed to debug macro is a string,
      we also have to provide wxCStrData overload to resolve ambiguity

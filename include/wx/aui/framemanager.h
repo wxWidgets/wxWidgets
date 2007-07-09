@@ -417,7 +417,7 @@ public:
 
 
 
-class WXDLLIMPEXP_AUI wxAuiFloatingFrame;
+class WXDLLIMPEXP_FWD_AUI wxAuiFloatingFrame;
 
 class WXDLLIMPEXP_AUI wxAuiManager : public wxEvtHandler
 {

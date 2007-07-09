@@ -21,7 +21,7 @@
 #undef true
 #undef false
 
-class WXDLLEXPORT wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
 
 
 // ---------------------------------------------------------------------------

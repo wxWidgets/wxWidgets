@@ -14,7 +14,7 @@
 
 #include "wx/bitmap.h"
 
-class WXDLLEXPORT wxMenuBar;
+class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 
 // ----------------------------------------------------------------------------
 // wxMenuItem: an item in the menu, optionally implements owner-drawn behaviour

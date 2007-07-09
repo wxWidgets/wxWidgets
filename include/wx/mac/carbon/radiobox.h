@@ -13,9 +13,9 @@
 #define _WX_RADIOBOX_H_
 
 // List box item
-class WXDLLEXPORT wxBitmap ;
+class WXDLLIMPEXP_FWD_CORE wxBitmap ;
 
-class WXDLLEXPORT wxRadioButton ;
+class WXDLLIMPEXP_FWD_CORE wxRadioButton ;
 
 class WXDLLEXPORT wxRadioBox: public wxControl, public wxRadioBoxBase
 {

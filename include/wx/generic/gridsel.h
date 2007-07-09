@@ -79,7 +79,7 @@ private:
     wxGrid                              *m_grid;
     wxGrid::wxGridSelectionModes        m_selectionMode;
 
-    friend class WXDLLIMPEXP_ADV wxGrid;
+    friend class WXDLLIMPEXP_FWD_ADV wxGrid;
 
     DECLARE_NO_COPY_CLASS(wxGridSelection)
 };

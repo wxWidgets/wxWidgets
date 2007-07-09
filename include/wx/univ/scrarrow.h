@@ -23,11 +23,11 @@
 // to derive from the wxControlWithArrows interface and implement its methods.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxControlWithArrows;
-class WXDLLEXPORT wxDC;
-class WXDLLEXPORT wxMouseEvent;
-class WXDLLEXPORT wxRect;
-class WXDLLEXPORT wxRenderer;
+class WXDLLIMPEXP_FWD_CORE wxControlWithArrows;
+class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxMouseEvent;
+class WXDLLIMPEXP_FWD_CORE wxRect;
+class WXDLLIMPEXP_FWD_CORE wxRenderer;
 
 // ----------------------------------------------------------------------------
 // wxScrollArrows: an abstraction of scrollbar arrow

@@ -14,7 +14,7 @@
 
 #include "wx/textctrl.h"
 
-class WXDLLEXPORT wxImageList;
+class WXDLLIMPEXP_FWD_CORE wxImageList;
 
 /*
     The wxListCtrl can show lists of items in four different modes:

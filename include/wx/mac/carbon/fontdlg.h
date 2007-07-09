@@ -59,13 +59,13 @@ extern "C" int RunMixedFontDialog(wxFontDialog* dialog) ;
 
 class wxFontColourSwatchCtrl;
 class wxFontPreviewCtrl;
-class WXDLLEXPORT wxSpinCtrl;
-class WXDLLEXPORT wxSpinEvent;
-class WXDLLEXPORT wxListBox;
-class WXDLLEXPORT wxChoice;
-class WXDLLEXPORT wxButton;
-class WXDLLEXPORT wxStaticText;
-class WXDLLEXPORT wxCheckBox;
+class WXDLLIMPEXP_FWD_CORE wxSpinCtrl;
+class WXDLLIMPEXP_FWD_CORE wxSpinEvent;
+class WXDLLIMPEXP_FWD_CORE wxListBox;
+class WXDLLIMPEXP_FWD_CORE wxChoice;
+class WXDLLIMPEXP_FWD_CORE wxButton;
+class WXDLLIMPEXP_FWD_CORE wxStaticText;
+class WXDLLIMPEXP_FWD_CORE wxCheckBox;
 
 /*!
  * Control identifiers

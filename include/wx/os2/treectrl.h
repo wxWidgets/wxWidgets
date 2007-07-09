@@ -29,7 +29,7 @@ typedef long wxDataType;
 // fwd decl
 class  WXDLLEXPORT wxImageList;
 class  WXDLLEXPORT wxDragImage;
-struct WXDLLEXPORT wxTreeViewItem;
+struct WXDLLIMPEXP_FWD_CORE wxTreeViewItem;
 
 // a callback function used for sorting tree items, it should return -1 if the
 // first item precedes the second, +1 if the second precedes the first or 0 if

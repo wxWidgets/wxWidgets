@@ -17,11 +17,11 @@
 
 typedef long wxPMDash;
 
-class WXDLLEXPORT wxPen;
+class WXDLLIMPEXP_FWD_CORE wxPen;
 
 class WXDLLEXPORT wxPenRefData: public wxGDIRefData
 {
-    friend class WXDLLEXPORT wxPen;
+    friend class WXDLLIMPEXP_FWD_CORE wxPen;
 public:
     wxPenRefData();
     wxPenRefData(const wxPenRefData& rData);

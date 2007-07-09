@@ -15,9 +15,9 @@
 #include "wx/brush.h"
 #include "wx/dc.h"
 
-class WXDLLEXPORT wxButton;
-class WXDLLEXPORT wxScrollBar;
-class WXDLLEXPORT wxTopLevelWindowMac;
+class WXDLLIMPEXP_FWD_CORE wxButton;
+class WXDLLIMPEXP_FWD_CORE wxScrollBar;
+class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowMac;
 
 class wxMacControl ;
 

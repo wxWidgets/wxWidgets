@@ -17,7 +17,7 @@
 #include "wx/dialog.h"
 #include "wx/cmndata.h"
 
-class WXDLLEXPORT wxDC;
+class WXDLLIMPEXP_FWD_CORE wxDC;
 
 // ---------------------------------------------------------------------------
 // wxPrinterDialog: the common dialog for printing.
