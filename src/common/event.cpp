@@ -1252,8 +1252,10 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     // Try going down the event handler chain
     if ( GetNextHandler() )
     {
-        if ( GetNextHandler()->ProcessEvent(event) )
-            return true;
+        // notice that we shouldn't let the parent have the event even if the
+        // next handler does not process it because it will have already passed
+        // it to the parent in this case
+        return GetNextHandler()->ProcessEvent(event);
     }
 
     // Finally propagate the event upwards the window chain and/or to the
