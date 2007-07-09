@@ -79,6 +79,7 @@ struct _GtkWxTreeModel
   gint sort_column_id;
   GtkSortType order;
   GtkTreeIterCompareFunc default_sort_func;
+  GtkTreeIterCompareFunc sort_func;
 };
 
 struct _GtkWxTreeModelClass
@@ -227,11 +228,11 @@ wxgtk_tree_model_tree_model_init (GtkTreeModelIface *iface)
 static void
 wxgtk_tree_model_sortable_init (GtkTreeSortableIface *iface)
 {
-  iface->get_sort_column_id = wxgtk_tree_model_get_sort_column_id;
-  iface->set_sort_column_id = wxgtk_tree_model_set_sort_column_id;
-  iface->set_sort_func = wxgtk_tree_model_set_sort_func;
-  iface->set_default_sort_func = wxgtk_tree_model_set_default_sort_func;
-  iface->has_default_sort_func = wxgtk_tree_model_has_default_sort_func;
+    iface->get_sort_column_id = wxgtk_tree_model_get_sort_column_id;
+    iface->set_sort_column_id = wxgtk_tree_model_set_sort_column_id;
+    iface->set_sort_func = wxgtk_tree_model_set_sort_func;
+    iface->set_default_sort_func = wxgtk_tree_model_set_default_sort_func;
+    iface->has_default_sort_func = wxgtk_tree_model_has_default_sort_func;
 }
 
 static void
@@ -241,6 +242,7 @@ wxgtk_tree_model_init (GtkWxTreeModel *tree_model)
     tree_model->stamp = g_random_int();
     tree_model->sort_column_id = -2;
     tree_model->order = GTK_SORT_ASCENDING;
+    tree_model->sort_func = NULL;
     tree_model->default_sort_func = NULL;
 }
 
@@ -543,13 +545,46 @@ gboolean wxgtk_tree_model_get_sort_column_id    (GtkTreeSortable        *sortabl
 						      gint                     *sort_column_id,
 						      GtkSortType              *order)
 {
-    return FALSE;
+    GtkWxTreeModel *tree_model = (GtkWxTreeModel *) sortable;
+
+    g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (sortable), FALSE);
+
+    if (tree_model->sort_column_id == GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
+        return FALSE;
+
+    if (sort_column_id)
+        *sort_column_id = tree_model->sort_column_id;
+        
+    if (order)
+        *order = tree_model->order;
+        
+    return TRUE;
 }
 
 void     wxgtk_tree_model_set_sort_column_id    (GtkTreeSortable        *sortable,
 						      gint                      sort_column_id,
 						      GtkSortType               order)
 {
+    GtkWxTreeModel *tree_model = (GtkWxTreeModel *) sortable;
+
+    g_return_if_fail (GTK_IS_WX_TREE_MODEL (sortable) );
+
+    if ((tree_model->sort_column_id == sort_column_id) &&
+        (tree_model->order == order))
+    return;
+
+    if (sort_column_id == GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
+    {
+        g_return_if_fail (tree_model->default_sort_func != NULL);
+    }
+
+    tree_model->sort_column_id = sort_column_id;
+    tree_model->order = order;
+
+    gtk_tree_sortable_sort_column_changed (sortable);
+
+    wxPrintf( "wxgtk_tree_model_set_column_id, sort_column_id = %d, order = %d\n", sort_column_id, (int)order );
+    // sort
 }
 
 void     wxgtk_tree_model_set_sort_func         (GtkTreeSortable        *sortable,
@@ -558,6 +593,15 @@ void     wxgtk_tree_model_set_sort_func         (GtkTreeSortable        *sortabl
 						      gpointer                  data,
 						      GtkDestroyNotify          destroy)
 {
+    GtkWxTreeModel *tree_model = (GtkWxTreeModel *) sortable;
+
+    g_return_if_fail (GTK_IS_WX_TREE_MODEL (sortable) );
+    g_return_if_fail (func != NULL);
+
+    tree_model->sort_func = func;
+    
+    wxPrintf( "wxgtk_tree_model_set_sort_func, sort_column_id = %d\n", sort_column_id );
+    // sort
 }
 
 void     wxgtk_tree_model_set_default_sort_func (GtkTreeSortable        *sortable,
@@ -565,6 +609,15 @@ void     wxgtk_tree_model_set_default_sort_func (GtkTreeSortable        *sortabl
 						      gpointer                  data,
 						      GtkDestroyNotify          destroy)
 {
+    GtkWxTreeModel *tree_model = (GtkWxTreeModel *) sortable;
+
+    g_return_if_fail (GTK_IS_WX_TREE_MODEL (sortable) );
+
+    g_return_if_fail (func != NULL);
+
+    tree_model->default_sort_func = func;
+    
+    wxPrintf( "wxgtk_tree_model_set_default_sort_func\n" );
 }
 
 gboolean wxgtk_tree_model_has_default_sort_func (GtkTreeSortable        *sortable)
@@ -1723,7 +1776,7 @@ gtk_dataview_header_button_press_callback( GtkWidget *widget,
                                            wxDataViewColumn *column )
 {
     if (gdk_event->type != GDK_BUTTON_PRESS)
-        return TRUE;
+        return FALSE;
 
     if (gdk_event->button == 1)
     {
@@ -1731,10 +1784,11 @@ gtk_dataview_header_button_press_callback( GtkWidget *widget,
         wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, dv->GetId() );
         event.SetDataViewColumn( column );
         event.SetModel( dv->GetModel() );
-        dv->GetEventHandler()->ProcessEvent( event );
+        if (dv->GetEventHandler()->ProcessEvent( event ))
+            return TRUE;
     }
 
-    return TRUE;
+    return FALSE;
 }
 
 extern "C" {
@@ -1975,13 +2029,17 @@ wxAlignment wxDataViewColumn::GetAlignment() const
 void wxDataViewColumn::SetSortable( bool sortable )
 {
     GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
-    gtk_tree_view_column_set_sort_indicator( column, sortable );
+    
+    if (sortable)
+        gtk_tree_view_column_set_sort_column_id( column, GetModelColumn() );
+    else
+        gtk_tree_view_column_set_sort_column_id( column, -1 );
 }
 
 bool wxDataViewColumn::IsSortable() const
 {
     GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
-    return gtk_tree_view_column_get_sort_indicator( column );
+    return (gtk_tree_view_column_get_sort_column_id( column ) != -1);
 }
 
 bool wxDataViewColumn::IsResizeable() const
