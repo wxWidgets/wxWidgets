@@ -97,7 +97,7 @@ public:
 private:
     // FIXME: shouldn't we destroy these windows somewhere?
 
-    // used by DrawHeaderButton and DrawPushButton
+    // used by DrawPushButton and DrawDropArrow
     static GtkWidget *GetButtonWidget();
 
     // used by DrawTreeItemButton()
@@ -105,6 +105,9 @@ private:
 
     // used by DrawCheckBox()
     static GtkWidget *GetCheckButtonWidget();
+
+    // Used by DrawHeaderButton
+    static GtkWidget *GetHeaderButtonWidget();
 };
 
 // ============================================================================
@@ -177,6 +180,26 @@ wxRendererGTK::GetTreeWidget()
     return s_tree;
 }
 
+
+// This one just makes a button be a child of a tree widget.  This is
+// apparently how gtk themes decide to draw column headers differently than
+// normal buttons.
+GtkWidget *
+wxRendererGTK::GetHeaderButtonWidget()
+{
+    static GtkWidget *s_button = NULL;
+
+    if ( !s_button )
+    {
+        GtkWidget* treewidget = GetTreeWidget();
+        s_button = gtk_button_new();
+        gtk_widget_set_parent( s_button, treewidget );
+        gtk_widget_realize( s_button );
+    }
+
+    return s_button;
+}
+
 // ----------------------------------------------------------------------------
 // list/tree controls drawing
 // ----------------------------------------------------------------------------
@@ -190,8 +213,8 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
                                 wxHeaderButtonParams* params)
 {
 
-    GtkWidget *button = GetButtonWidget();
-
+    GtkWidget *button = GetHeaderButtonWidget();
+    
     GdkWindow* gdk_window = dc.GetGDKWindow();
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
