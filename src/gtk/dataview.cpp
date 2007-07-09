@@ -33,6 +33,7 @@
 
 #include <gobject/gvaluecollector.h>
 #include <gtk/gtktreemodel.h>
+#include <gtk/gtktreesortable.h>
 #include <gtk/gtktreednd.h>
 
 #include <gdk/gdkkeysyms.h>
@@ -74,6 +75,10 @@ struct _GtkWxTreeModel
   /*< private >*/
   gint stamp;
   wxDataViewModel *model;
+  
+  gint sort_column_id;
+  GtkSortType order;
+  GtkTreeIterCompareFunc default_sort_func;
 };
 
 struct _GtkWxTreeModelClass
@@ -82,9 +87,10 @@ struct _GtkWxTreeModelClass
 };
 
 static GtkWxTreeModel *wxgtk_tree_model_new          (void);
-static void         wxgtk_tree_model_init            (GtkWxTreeModel      *tree_model);
-static void         wxgtk_tree_model_class_init      (GtkWxTreeModelClass *klass);
-static void         wxgtk_tree_model_tree_model_init (GtkTreeModelIface *iface);
+static void         wxgtk_tree_model_init            (GtkWxTreeModel       *tree_model);
+static void         wxgtk_tree_model_class_init      (GtkWxTreeModelClass  *klass);
+static void         wxgtk_tree_model_tree_model_init (GtkTreeModelIface    *iface);
+static void         wxgtk_tree_model_sortable_init   (GtkTreeSortableIface *iface);
 static void         wxgtk_tree_model_finalize        (GObject           *object);
 static GtkTreeModelFlags wxgtk_tree_model_get_flags  (GtkTreeModel      *tree_model);
 static gint         wxgtk_tree_model_get_n_columns   (GtkTreeModel      *tree_model);
@@ -116,6 +122,26 @@ static gboolean     wxgtk_tree_model_iter_parent     (GtkTreeModel      *tree_mo
                                                       GtkTreeIter       *iter,
                                                       GtkTreeIter       *child);
 
+/* sortable */
+static gboolean wxgtk_tree_model_get_sort_column_id    (GtkTreeSortable       *sortable,
+						      gint                     *sort_column_id,
+						      GtkSortType              *order);
+static void     wxgtk_tree_model_set_sort_column_id    (GtkTreeSortable       *sortable,
+						      gint                      sort_column_id,
+						      GtkSortType               order);
+static void     wxgtk_tree_model_set_sort_func         (GtkTreeSortable       *sortable,
+						      gint                      sort_column_id,
+						      GtkTreeIterCompareFunc    func,
+						      gpointer                  data,
+						      GtkDestroyNotify          destroy);
+static void     wxgtk_tree_model_set_default_sort_func (GtkTreeSortable       *sortable,
+						      GtkTreeIterCompareFunc    func,
+						      gpointer                  data,
+						      GtkDestroyNotify          destroy);
+static gboolean wxgtk_tree_model_has_default_sort_func (GtkTreeSortable       *sortable);
+
+
+
 static GObjectClass *list_parent_class = NULL;
 
 GType
@@ -138,22 +164,32 @@ gtk_wx_tree_model_get_type (void)
             (GInstanceInitFunc) wxgtk_tree_model_init,
         };
 
-      static const GInterfaceInfo tree_model_iface_info =
-      {
-          (GInterfaceInitFunc) wxgtk_tree_model_tree_model_init,
-          NULL,
-          NULL
-      };
+        static const GInterfaceInfo tree_model_iface_info =
+        {
+            (GInterfaceInitFunc) wxgtk_tree_model_tree_model_init,
+            NULL,
+            NULL
+        };
 
-      tree_model_type = g_type_register_static (G_TYPE_OBJECT, "GtkWxTreeModel",
+        static const GInterfaceInfo sortable_iface_info =
+        {
+            (GInterfaceInitFunc) wxgtk_tree_model_sortable_init,
+            NULL,
+            NULL
+        };
+
+        tree_model_type = g_type_register_static (G_TYPE_OBJECT, "GtkWxTreeModel",
                                                 &tree_model_info, (GTypeFlags)0 );
 
-      g_type_add_interface_static (tree_model_type,
-                                   GTK_TYPE_TREE_MODEL,
-                                   &tree_model_iface_info);
+        g_type_add_interface_static (tree_model_type,
+                                     GTK_TYPE_TREE_MODEL,
+                                     &tree_model_iface_info);
+        g_type_add_interface_static (tree_model_type,
+                                     GTK_TYPE_TREE_SORTABLE,
+                                     &sortable_iface_info);
     }
 
-  return tree_model_type;
+    return tree_model_type;
 }
 
 static GtkWxTreeModel *
@@ -189,10 +225,23 @@ wxgtk_tree_model_tree_model_init (GtkTreeModelIface *iface)
 }
 
 static void
+wxgtk_tree_model_sortable_init (GtkTreeSortableIface *iface)
+{
+  iface->get_sort_column_id = wxgtk_tree_model_get_sort_column_id;
+  iface->set_sort_column_id = wxgtk_tree_model_set_sort_column_id;
+  iface->set_sort_func = wxgtk_tree_model_set_sort_func;
+  iface->set_default_sort_func = wxgtk_tree_model_set_default_sort_func;
+  iface->has_default_sort_func = wxgtk_tree_model_has_default_sort_func;
+}
+
+static void
 wxgtk_tree_model_init (GtkWxTreeModel *tree_model)
 {
     tree_model->model = NULL;
     tree_model->stamp = g_random_int();
+    tree_model->sort_column_id = -2;
+    tree_model->order = GTK_SORT_ASCENDING;
+    tree_model->default_sort_func = NULL;
 }
 
 static void
@@ -487,6 +536,40 @@ wxgtk_tree_model_iter_parent (GtkTreeModel *tree_model,
     iter->user_data = (gpointer) item.GetID();
 
     return TRUE;
+}
+
+/* sortable */
+gboolean wxgtk_tree_model_get_sort_column_id    (GtkTreeSortable        *sortable,
+						      gint                     *sort_column_id,
+						      GtkSortType              *order)
+{
+    return FALSE;
+}
+
+void     wxgtk_tree_model_set_sort_column_id    (GtkTreeSortable        *sortable,
+						      gint                      sort_column_id,
+						      GtkSortType               order)
+{
+}
+
+void     wxgtk_tree_model_set_sort_func         (GtkTreeSortable        *sortable,
+						      gint                      sort_column_id,
+						      GtkTreeIterCompareFunc    func,
+						      gpointer                  data,
+						      GtkDestroyNotify          destroy)
+{
+}
+
+void     wxgtk_tree_model_set_default_sort_func (GtkTreeSortable        *sortable,
+						      GtkTreeIterCompareFunc    func,
+						      gpointer                  data,
+						      GtkDestroyNotify          destroy)
+{
+}
+
+gboolean wxgtk_tree_model_has_default_sort_func (GtkTreeSortable        *sortable)
+{
+    return FALSE;
 }
 
 //-----------------------------------------------------------------------------
