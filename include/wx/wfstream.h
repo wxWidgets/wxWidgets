@@ -171,7 +171,7 @@ public:
     wxFileOffset GetLength() const;
 
     bool Ok() const { return IsOk(); }
-    virtual bool IsOk() const ;
+    virtual bool IsOk() const;
     bool IsSeekable() const { return m_file->GetKind() == wxFILE_KIND_DISK; }
 
 protected:
@@ -193,6 +193,7 @@ class WXDLLIMPEXP_BASE wxFFileStream : public wxFFileInputStream,
 {
 public:
     wxFFileStream(const wxString& fileName);
+    virtual bool IsOk() const;
 
 private:
     DECLARE_NO_COPY_CLASS(wxFFileStream)
