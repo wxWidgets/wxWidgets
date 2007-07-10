@@ -117,7 +117,6 @@ public:
     void UngetRawData(wxPixelDataBase& data);
 
     bool HasAlpha() const;
-    void UseAlpha();
 
 protected:
     bool CreateFromImage(const wxImage& image, int depth);

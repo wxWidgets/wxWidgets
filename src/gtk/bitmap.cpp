@@ -917,19 +917,6 @@ bool wxBitmap::HasAlpha() const
         gdk_pixbuf_get_has_alpha(M_BMPDATA->m_pixbuf);
 }
 
-void wxBitmap::UseAlpha()
-{
-    GdkPixbuf* pixbuf = GetPixbuf();
-    // add alpha if necessary
-    if (!gdk_pixbuf_get_has_alpha(pixbuf))
-    {
-        M_BMPDATA->m_pixbuf = NULL;
-        AllocExclusive();
-        M_BMPDATA->m_pixbuf = gdk_pixbuf_add_alpha(pixbuf, false, 0, 0, 0);
-        g_object_unref(pixbuf);
-    }
-}
-
 wxObjectRefData* wxBitmap::CreateRefData() const
 {
     return new wxBitmapRefData;

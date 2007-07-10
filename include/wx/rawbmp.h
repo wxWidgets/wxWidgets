@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_RAWBMP_H_BASE_
-#define _WX_RAWBMP_H_BASE_
+#ifndef _WX_RAWBMP_H_
+#define _WX_RAWBMP_H_
 
 #include "wx/image.h"
 
@@ -525,7 +525,7 @@ struct wxPixelDataOut<wxBitmap>
             {
                 m_ptr = NULL;
             }
-            
+
             // return true if this iterator is valid
             bool IsOk() const { return m_ptr != NULL; }
 
@@ -631,11 +631,22 @@ struct wxPixelDataOut<wxBitmap>
         // dtor unlocks the bitmap
         ~wxPixelDataIn()
         {
-            m_bmp.UngetRawData(*this);
+            if ( m_pixels.IsOk() )
+            {
+#if defined(__WXMSW__) || defined(__WXMAC__)
+                // this is a hack to mark wxBitmap as using alpha channel
+                if ( Format::HasAlpha )
+                    m_bmp.UseAlpha();
+#endif
+                m_bmp.UngetRawData(*this);
+            }
+            // else: don't call UngetRawData() if GetRawData() failed
         }
 
-        // call this to indicate that we should use the alpha channel
-        void UseAlpha() { m_bmp.UseAlpha(); }
+#if WXWIN_COMPATIBILITY_2_8
+        // not needed anymore, calls to it should be simply removed
+        wxDEPRECATED( inline void UseAlpha() {} );
+#endif
 
     // private: -- see comment in the beginning of the file
 
@@ -656,6 +667,7 @@ struct wxPixelDataOut<wxBitmap>
         }
     };
 };
+
 #endif //wxUSE_GUI
 
 template <class Image, class PixelFormat = wxPixelFormatFor<Image> >
@@ -709,5 +721,4 @@ struct wxPixelIterator : public wxPixelData<Image, PixelFormat>::Iterator
 {
 };
 
-#endif // _WX_RAWBMP_H_BASE_
-
+#endif // _WX_RAWBMP_H_
