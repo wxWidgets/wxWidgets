@@ -55,12 +55,12 @@ public:
     // implementation
     void OnChar( wxKeyEvent &event );
     
-    void GtkDisableEvents() const;
-    void GtkEnableEvents() const;
-
     int m_pos;
 
 protected:
+    void GtkDisableEvents() const;
+    void GtkEnableEvents() const;
+
     virtual wxSize DoGetBestSize() const;
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
