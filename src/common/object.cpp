@@ -42,26 +42,35 @@
 #endif
 
 #if wxUSE_EXTENDED_RTTI
-const wxClassInfo* wxObject::ms_classParents[] = { NULL } ;
- wxObject* wxVariantToObjectConverterwxObject ( wxxVariant &data )
-{ return data.wxTEMPLATED_MEMBER_CALL(Get , wxObject*) ; }
- wxObject* wxVariantOfPtrToObjectConverterwxObject ( wxxVariant &data )
-{ return &data.wxTEMPLATED_MEMBER_CALL(Get , wxObject) ; }
- wxxVariant wxObjectToVariantConverterwxObject ( wxObject *data )
- { return wxxVariant( dynamic_cast<wxObject*> (data)  ) ; }
- wxClassInfo wxObject::ms_classInfo(ms_classParents , wxEmptyString , wxT("wxObject"),
-            (int) sizeof(wxObject),                              \
-            (wxObjectConstructorFn) 0   ,
-            (wxPropertyInfo*) NULL,(wxHandlerInfo*) NULL,0 , 0 ,
-            0 , wxVariantOfPtrToObjectConverterwxObject , wxVariantToObjectConverterwxObject , wxObjectToVariantConverterwxObject);
- template<> void wxStringReadValue(const wxString & , wxObject * & ){assert(0) ;}
- template<> void wxStringWriteValue(wxString & , wxObject* const & ){assert(0) ;}
- template<> void wxStringReadValue(const wxString & , wxObject & ){assert(0) ;}
- template<> void wxStringWriteValue(wxString & , wxObject const & ){assert(0) ;}
- wxClassTypeInfo s_typeInfo(wxT_OBJECT_PTR , &wxObject::ms_classInfo , NULL , NULL , typeid(wxObject*).name() ) ;
- wxClassTypeInfo s_typeInfowxObject(wxT_OBJECT , &wxObject::ms_classInfo , NULL , NULL , typeid(wxObject).name() ) ;
+    const wxClassInfo* wxObject::ms_classParents[] = { NULL } ;
+
+    wxObject* wxVariantToObjectConverterwxObject ( wxxVariant &data )
+        { return data.wxTEMPLATED_MEMBER_CALL(Get, wxObject*) ; }
+    wxObject* wxVariantOfPtrToObjectConverterwxObject ( wxxVariant &data )
+        { return &data.wxTEMPLATED_MEMBER_CALL(Get, wxObject) ; }
+    wxxVariant wxObjectToVariantConverterwxObject ( wxObject *data )
+        { return wxxVariant( dynamic_cast<wxObject*> (data)  ) ; }
+
+    wxClassInfo 
+        wxObject::ms_classInfo(ms_classParents, wxEmptyString, wxT("wxObject"),
+                              (int) sizeof(wxObject), (wxObjectConstructorFn) NULL,
+                              (wxPropertyInfo*) NULL,(wxHandlerInfo*) NULL, 0, 0,
+                              0, wxVariantOfPtrToObjectConverterwxObject, 
+                              wxVariantToObjectConverterwxObject, 
+                              wxObjectToVariantConverterwxObject);
+
+    template<> void wxStringReadValue(const wxString &, wxObject * &) {assert(0);}
+    template<> void wxStringWriteValue(wxString &, wxObject* const &) {assert(0);}
+    template<> void wxStringReadValue(const wxString &, wxObject &) {assert(0);}
+    template<> void wxStringWriteValue(wxString &, wxObject const &) {assert(0);}
+
+    wxClassTypeInfo s_typeInfo(wxT_OBJECT_PTR, &wxObject::ms_classInfo, \
+                                NULL, NULL, typeid(wxObject*).name() );
+    wxClassTypeInfo s_typeInfowxObject(wxT_OBJECT, &wxObject::ms_classInfo, \
+                                        NULL, NULL, typeid(wxObject).name() );
+
 #else
-wxClassInfo wxObject::ms_classInfo( wxT("wxObject"), 0, 0,
+    wxClassInfo wxObject::ms_classInfo( wxT("wxObject"), 0, 0,
                                         (int) sizeof(wxObject),
                                         (wxObjectConstructorFn) 0 );
 #endif
@@ -238,7 +247,9 @@ void wxClassInfo::Register()
     wxASSERT_MSG( sm_classTable->Get(m_className) == NULL,
         wxString::Format
         (
-            _T("Class \"%s\" already in RTTI table - have you used IMPLEMENT_DYNAMIC_CLASS() multiple times or linked some object file twice)?"),
+            _T("Class \"%s\" already in RTTI table - have you used ")
+            _T("IMPLEMENT_DYNAMIC_CLASS() multiple times or linked ")
+            _T("some object file twice)?"),
             m_className
         )
     );
