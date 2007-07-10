@@ -23,6 +23,7 @@
 #include "wx/bitmap.h"
 #include "wx/colour.h"
 #include "wx/image.h"
+#include "wx/rawbmp.h"
 
 #include "wx/dfb/private.h"
 
@@ -167,6 +168,20 @@ static void CopyImageToSurface(const wxImage& image,
     }
 }
 
+static wxIDirectFBSurfacePtr
+CreateSurfaceWithFormat(int w, int h, DFBSurfacePixelFormat format)
+{
+    DFBSurfaceDescription desc;
+    desc.flags = (DFBSurfaceDescriptionFlags)
+        (DSDESC_CAPS | DSDESC_WIDTH | DSDESC_HEIGHT | DSDESC_PIXELFORMAT);
+    desc.caps = DSCAPS_NONE;
+    desc.width = w;
+    desc.height = h;
+    desc.pixelformat = format;
+
+    return wxIDirectFB::Get()->CreateSurface(&desc);
+}
+
 // Creates a surface that will use wxImage's pixel data (RGB only)
 static wxIDirectFBSurfacePtr CreateSurfaceForImage(const wxImage& image)
 {
@@ -178,15 +193,8 @@ static wxIDirectFBSurfacePtr CreateSurfaceForImage(const wxImage& image)
     // NB: wxImage uses RGB order of bytes while DirectFB uses BGR, so we
     //     cannot use preallocated surface that shares data with wxImage, we
     //     have to copy the data to temporary surface instead
-    DFBSurfaceDescription desc;
-    desc.flags = (DFBSurfaceDescriptionFlags)
-        (DSDESC_CAPS | DSDESC_WIDTH | DSDESC_HEIGHT | DSDESC_PIXELFORMAT);
-    desc.caps = DSCAPS_NONE;
-    desc.width = image.GetWidth();
-    desc.height = image.GetHeight();
-    desc.pixelformat = DSPF_RGB24;
-
-    return wxIDirectFB::Get()->CreateSurface(&desc);
+    return CreateSurfaceWithFormat(image.GetWidth(), image.GetHeight(),
+                                   DSPF_RGB24);
 }
 
 //-----------------------------------------------------------------------------
@@ -360,6 +368,48 @@ wxImage wxBitmap::ConvertToImage() const
     return img;
 }
 #endif // wxUSE_IMAGE
+
+void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
+{
+    wxCHECK_MSG( Ok(), NULL, "invalid bitmap" );
+
+    AllocExclusive();
+
+    DFBSurfacePixelFormat format;
+    if ( bpp == 32 )
+        format = DSPF_ARGB;
+    else
+        format = DSPF_RGB24;
+
+    // requested format is not what this bitmap uses
+    if ( format != M_BITMAP->m_surface->GetPixelFormat() )
+        return NULL;
+
+    void *bits = NULL;
+    if ( !M_BITMAP->m_surface->Lock
+                               (
+                                 (DFBSurfaceLockFlags)(DSLF_READ | DSLF_WRITE),
+                                 &bits,
+                                 &data.m_stride
+                               ) )
+        return NULL;
+
+    M_BITMAP->m_surface->GetSize(&data.m_width, &data.m_height);
+
+    return bits;
+}
+
+void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(data))
+{
+    M_BITMAP->m_surface->Unlock();
+}
+
+bool wxBitmap::HasAlpha() const
+{
+    wxCHECK_MSG( Ok(), false, "invalid bitmap" );
+
+    return M_BITMAP->m_surface->GetPixelFormat() == DSPF_ARGB;
+}
 
 wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type)
 {

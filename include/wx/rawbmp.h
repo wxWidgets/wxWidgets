@@ -168,6 +168,11 @@ typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
     typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxNativePixelFormat;
 
     #define wxPIXEL_FORMAT_ALPHA 3
+#elif defined(__WXDFB__)
+    // Under DirectFB, RGB components are reversed, they're in BGR order
+    typedef wxPixelFormat<unsigned char, 24, 2, 1, 0> wxNativePixelFormat;
+
+    #define wxPIXEL_FORMAT_ALPHA 3
 #endif
 
 // the (most common) native format for bitmaps with alpha channel

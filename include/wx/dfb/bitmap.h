@@ -13,6 +13,8 @@
 
 #include "wx/dfb/dfbptr.h"
 
+class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
+
 wxDFB_DECLARE_INTERFACE(IDirectFBSurface);
 
 //-----------------------------------------------------------------------------
@@ -68,6 +70,12 @@ public:
     virtual bool CopyFromIcon(const wxIcon& icon);
 
     static void InitStandardHandlers();
+
+    // raw bitmap access support functions
+    void *GetRawData(wxPixelDataBase& data, int bpp);
+    void UngetRawData(wxPixelDataBase& data);
+
+    bool HasAlpha() const;
 
     // implementation:
     virtual void SetHeight(int height);
