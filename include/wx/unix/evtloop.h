@@ -12,7 +12,6 @@
 #define _WX_UNIX_EVTLOOP_H_
 
 #include "wx/private/fdiodispatcher.h"
-#include "wx/unix/private/timer.h"
 #include "wx/unix/pipe.h"
 
 // ----------------------------------------------------------------------------
