@@ -34,11 +34,7 @@
 
 #include "wx/spinbutt.h" // for wxSpinnerBestSize
 
-#if wxUSE_EXTENDED_RTTI
-// TODO
-#else
 IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
-#endif
 
 #define GetBuddyHwnd()      (HWND)(m_hwndBuddy)
 

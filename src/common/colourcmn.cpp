@@ -30,6 +30,50 @@
 IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxColour,WXDLLEXPORT)
 #endif
 
+
+// ----------------------------------------------------------------------------
+// XTI
+// ----------------------------------------------------------------------------
+
+#if wxUSE_EXTENDED_RTTI
+
+#include <string.h>
+
+template<> void wxStringReadValue(const wxString &s , wxColour &data )
+{
+    if ( !data.Set(s) )
+    {
+        wxLogError(_("String To Colour : Incorrect colour specification : %s"),
+            s.c_str() );
+        data = wxNullColour;
+    }
+}
+
+template<> void wxStringWriteValue(wxString &s , const wxColour &data )
+{
+    s = data.GetAsString(wxC2S_HTML_SYNTAX);
+}
+
+wxTO_STRING_IMP( wxColour )
+wxFROM_STRING_IMP( wxColour )
+
+IMPLEMENT_DYNAMIC_CLASS_WITH_COPY_AND_STREAMERS_XTI( wxColour , wxObject , "wx/colour.h" ,  &wxTO_STRING( wxColour ) , &wxFROM_STRING( wxColour ))
+
+wxBEGIN_PROPERTIES_TABLE(wxColour)
+    wxREADONLY_PROPERTY( Red, unsigned char, Red, EMPTY_MACROVALUE , 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxREADONLY_PROPERTY( Green, unsigned char, Green, EMPTY_MACROVALUE , 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxREADONLY_PROPERTY( Blue, unsigned char, Blue, EMPTY_MACROVALUE , 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+wxEND_PROPERTIES_TABLE()
+
+wxDIRECT_CONSTRUCTOR_3( wxColour, unsigned char, Red, unsigned char, Green, unsigned char, Blue )
+
+wxBEGIN_HANDLERS_TABLE(wxColour)
+wxEND_HANDLERS_TABLE()
+#else
+IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
+#endif
+
+
 // ============================================================================
 // wxString <-> wxColour conversions
 // ============================================================================

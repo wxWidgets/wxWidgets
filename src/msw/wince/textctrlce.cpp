@@ -43,11 +43,7 @@
 // event tables and other macros
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-// TODO
-#else
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
-#endif
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_CHAR(wxTextCtrl::OnChar)
