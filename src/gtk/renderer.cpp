@@ -181,20 +181,22 @@ wxRendererGTK::GetTreeWidget()
 }
 
 
-// This one just makes a button be a child of a tree widget.  This is
-// apparently how gtk themes decide to draw column headers differently than
-// normal buttons.
+// This one just gets the button used by the column header.  Although it's
+// still a gtk_button the themes will typically differentiate and draw them
+// differently if the button is in a treeview.
 GtkWidget *
 wxRendererGTK::GetHeaderButtonWidget()
 {
     static GtkWidget *s_button = NULL;
-
+    
     if ( !s_button )
     {
+        // Get the dummy tree widget, give it a column, and then use the
+        // widget in the column header for the rendering code.
         GtkWidget* treewidget = GetTreeWidget();
-        s_button = gtk_button_new();
-        gtk_widget_set_parent( s_button, treewidget );
-        gtk_widget_realize( s_button );
+        GtkTreeViewColumn*  column = gtk_tree_view_column_new();
+        gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
+        s_button = column->button;
     }
 
     return s_button;
