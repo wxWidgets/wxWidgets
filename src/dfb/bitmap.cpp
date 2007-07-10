@@ -173,11 +173,17 @@ CreateSurfaceWithFormat(int w, int h, DFBSurfacePixelFormat format)
 {
     DFBSurfaceDescription desc;
     desc.flags = (DFBSurfaceDescriptionFlags)
-        (DSDESC_CAPS | DSDESC_WIDTH | DSDESC_HEIGHT | DSDESC_PIXELFORMAT);
+        (DSDESC_CAPS | DSDESC_WIDTH | DSDESC_HEIGHT);
     desc.caps = DSCAPS_NONE;
     desc.width = w;
     desc.height = h;
-    desc.pixelformat = format;
+
+    if ( format != DSPF_UNKNOWN )
+    {
+        desc.flags = (DFBSurfaceDescriptionFlags)(
+                            desc.flags | DSDESC_PIXELFORMAT);
+        desc.pixelformat = format;
+    }
 
     return wxIDirectFB::Get()->CreateSurface(&desc);
 }
@@ -195,6 +201,24 @@ static wxIDirectFBSurfacePtr CreateSurfaceForImage(const wxImage& image)
     //     have to copy the data to temporary surface instead
     return CreateSurfaceWithFormat(image.GetWidth(), image.GetHeight(),
                                    DSPF_RGB24);
+}
+
+static DFBSurfacePixelFormat DepthToFormat(int depth)
+{
+    switch ( depth )
+    {
+        case 24:
+            return DSPF_RGB24;
+        case 32:
+            // NB: we treat depth=32 as requesting ARGB for consistency with
+            //     other ports
+            return DSPF_ARGB;
+        default:
+            wxFAIL_MSG( "unsupported depth requested" );
+            // fall through
+        case -1:
+            return DSPF_UNKNOWN;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -264,9 +288,7 @@ bool wxBitmap::Create(const wxIDirectFBSurfacePtr& surface)
 
 bool wxBitmap::Create(int width, int height, int depth)
 {
-    wxCHECK_MSG( depth == -1, false, wxT("only default depth supported now") );
-
-    return CreateWithFormat(width, height, -1);
+    return CreateWithFormat(width, height, DepthToFormat(depth));
 }
 
 bool wxBitmap::CreateWithFormat(int width, int height, int dfbFormat)
@@ -275,33 +297,22 @@ bool wxBitmap::CreateWithFormat(int width, int height, int dfbFormat)
 
     wxCHECK_MSG( width > 0 && height > 0, false, wxT("invalid bitmap size") );
 
-    DFBSurfaceDescription desc;
-    desc.flags = (DFBSurfaceDescriptionFlags)(
-                        DSDESC_CAPS | DSDESC_WIDTH | DSDESC_HEIGHT);
-    desc.caps = DSCAPS_NONE;
-    desc.width = width;
-    desc.height = height;
-
-    if ( dfbFormat != -1 )
-    {
-        desc.flags = (DFBSurfaceDescriptionFlags)(
-                            desc.flags | DSDESC_PIXELFORMAT);
-        desc.pixelformat = (DFBSurfacePixelFormat)dfbFormat;
-    }
-
-    return Create(wxIDirectFB::Get()->CreateSurface(&desc));
+    return Create(CreateSurfaceWithFormat(width, height,
+                                          DFBSurfacePixelFormat(dfbFormat)));
 }
 
 #if wxUSE_IMAGE
 wxBitmap::wxBitmap(const wxImage& image, int depth)
 {
     wxCHECK_RET( image.Ok(), wxT("invalid image") );
-    wxCHECK_RET( depth == -1, wxT("only default depth supported now") );
+
+    DFBSurfacePixelFormat format = DepthToFormat(depth);
+    if ( format == DSPF_UNKNOWN && image.HasAlpha() )
+        format = DSPF_ARGB;
 
     // create surface in screen's format (unless we need alpha channel,
     // in which case use ARGB):
-    if ( !CreateWithFormat(image.GetWidth(), image.GetHeight(),
-                           image.HasAlpha() ? DSPF_ARGB : -1) )
+    if ( !CreateWithFormat(image.GetWidth(), image.GetHeight(), format) )
         return;
 
     // then copy the image to it:
@@ -583,9 +594,23 @@ void wxBitmap::SetWidth(int width)
 
 void wxBitmap::SetDepth(int depth)
 {
+    DFBSurfacePixelFormat format = DepthToFormat(depth);
+    if ( M_BITMAP->m_surface->GetPixelFormat() == format )
+        return;
+
     AllocExclusive();
 
-    wxFAIL_MSG( _T("SetDepth not implemented") );
+    int w, h;
+    M_BITMAP->m_surface->GetSize(&w, &h);
+    wxIDirectFBSurfacePtr s = CreateSurfaceWithFormat(w, h, format);
+    if ( !s )
+        return;
+    if ( !s->SetBlittingFlags(DSBLIT_NOFX) )
+        return;
+    if ( !s->Blit(M_BITMAP->m_surface->GetRaw(), NULL, 0, 0) )
+        return;
+
+    M_BITMAP->m_surface = s;
 }
 
 wxIDirectFBSurfacePtr wxBitmap::GetDirectFBSurface() const
