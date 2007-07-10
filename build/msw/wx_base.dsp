@@ -472,6 +472,10 @@ SOURCE=..\..\src\common\arrstr.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\base64.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\clntdata.cpp
 # End Source File
 # Begin Source File
@@ -1476,6 +1480,14 @@ SOURCE=..\..\include\wx\archive.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\arrstr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\atomic.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\base64.h
 # End Source File
 # Begin Source File
 

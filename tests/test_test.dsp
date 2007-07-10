@@ -447,6 +447,10 @@ SOURCE=.\thread\atomic.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\base64\base64.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\streams\bstream.cpp
 # End Source File
 # Begin Source File

@@ -283,6 +283,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_arcfind.o \
 	$(OBJS)\monodll_archive.o \
 	$(OBJS)\monodll_arrstr.o \
+	$(OBJS)\monodll_base64.o \
 	$(OBJS)\monodll_clntdata.o \
 	$(OBJS)\monodll_cmdline.o \
 	$(OBJS)\monodll_config.o \
@@ -419,6 +420,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_arcfind.o \
 	$(OBJS)\monolib_archive.o \
 	$(OBJS)\monolib_arrstr.o \
+	$(OBJS)\monolib_base64.o \
 	$(OBJS)\monolib_clntdata.o \
 	$(OBJS)\monolib_cmdline.o \
 	$(OBJS)\monolib_config.o \
@@ -553,6 +555,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_arcfind.o \
 	$(OBJS)\basedll_archive.o \
 	$(OBJS)\basedll_arrstr.o \
+	$(OBJS)\basedll_base64.o \
 	$(OBJS)\basedll_clntdata.o \
 	$(OBJS)\basedll_cmdline.o \
 	$(OBJS)\basedll_config.o \
@@ -670,6 +673,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_arcfind.o \
 	$(OBJS)\baselib_archive.o \
 	$(OBJS)\baselib_arrstr.o \
+	$(OBJS)\baselib_base64.o \
 	$(OBJS)\baselib_clntdata.o \
 	$(OBJS)\baselib_cmdline.o \
 	$(OBJS)\baselib_config.o \
@@ -5359,6 +5363,9 @@ $(OBJS)\monodll_archive.o: ../../src/common/archive.cpp
 $(OBJS)\monodll_arrstr.o: ../../src/common/arrstr.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_base64.o: ../../src/common/base64.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_clntdata.o: ../../src/common/clntdata.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -7519,6 +7526,9 @@ $(OBJS)\monolib_archive.o: ../../src/common/archive.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_arrstr.o: ../../src/common/arrstr.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_base64.o: ../../src/common/base64.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_clntdata.o: ../../src/common/clntdata.cpp
@@ -9683,6 +9693,9 @@ $(OBJS)\basedll_archive.o: ../../src/common/archive.cpp
 $(OBJS)\basedll_arrstr.o: ../../src/common/arrstr.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\basedll_base64.o: ../../src/common/base64.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\basedll_clntdata.o: ../../src/common/clntdata.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -9981,6 +9994,9 @@ $(OBJS)\baselib_archive.o: ../../src/common/archive.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_arrstr.o: ../../src/common/arrstr.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\baselib_base64.o: ../../src/common/base64.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_clntdata.o: ../../src/common/clntdata.cpp

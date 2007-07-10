@@ -116,6 +116,8 @@ wx/apptrait.h
 wx/archive.h
 wx/arrimpl.cpp
 wx/arrstr.h
+wx/atomic.h
+wx/base64.h
 wx/beforestd.h
 wx/buffer.h
 wx/build.h

@@ -3227,6 +3227,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_arcfind.obj &
 	$(OBJS)\monodll_archive.obj &
 	$(OBJS)\monodll_arrstr.obj &
+	$(OBJS)\monodll_base64.obj &
 	$(OBJS)\monodll_clntdata.obj &
 	$(OBJS)\monodll_cmdline.obj &
 	$(OBJS)\monodll_config.obj &
@@ -3362,6 +3363,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_arcfind.obj &
 	$(OBJS)\monolib_archive.obj &
 	$(OBJS)\monolib_arrstr.obj &
+	$(OBJS)\monolib_base64.obj &
 	$(OBJS)\monolib_clntdata.obj &
 	$(OBJS)\monolib_cmdline.obj &
 	$(OBJS)\monolib_config.obj &
@@ -3495,6 +3497,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_arcfind.obj &
 	$(OBJS)\basedll_archive.obj &
 	$(OBJS)\basedll_arrstr.obj &
+	$(OBJS)\basedll_base64.obj &
 	$(OBJS)\basedll_clntdata.obj &
 	$(OBJS)\basedll_cmdline.obj &
 	$(OBJS)\basedll_config.obj &
@@ -3612,6 +3615,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_arcfind.obj &
 	$(OBJS)\baselib_archive.obj &
 	$(OBJS)\baselib_arrstr.obj &
+	$(OBJS)\baselib_base64.obj &
 	$(OBJS)\baselib_clntdata.obj &
 	$(OBJS)\baselib_cmdline.obj &
 	$(OBJS)\baselib_config.obj &
@@ -5619,6 +5623,9 @@ $(OBJS)\monodll_archive.obj :  .AUTODEPEND ..\..\src\common\archive.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_arrstr.obj :  .AUTODEPEND ..\..\src\common\arrstr.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_base64.obj :  .AUTODEPEND ..\..\src\common\base64.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_clntdata.obj :  .AUTODEPEND ..\..\src\common\clntdata.cpp
@@ -7783,6 +7790,9 @@ $(OBJS)\monolib_archive.obj :  .AUTODEPEND ..\..\src\common\archive.cpp
 $(OBJS)\monolib_arrstr.obj :  .AUTODEPEND ..\..\src\common\arrstr.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_base64.obj :  .AUTODEPEND ..\..\src\common\base64.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_clntdata.obj :  .AUTODEPEND ..\..\src\common\clntdata.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -9945,6 +9955,9 @@ $(OBJS)\basedll_archive.obj :  .AUTODEPEND ..\..\src\common\archive.cpp
 $(OBJS)\basedll_arrstr.obj :  .AUTODEPEND ..\..\src\common\arrstr.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_base64.obj :  .AUTODEPEND ..\..\src\common\base64.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_clntdata.obj :  .AUTODEPEND ..\..\src\common\clntdata.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -10243,6 +10256,9 @@ $(OBJS)\baselib_archive.obj :  .AUTODEPEND ..\..\src\common\archive.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_arrstr.obj :  .AUTODEPEND ..\..\src\common\arrstr.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_base64.obj :  .AUTODEPEND ..\..\src\common\base64.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_clntdata.obj :  .AUTODEPEND ..\..\src\common\clntdata.cpp

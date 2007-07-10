@@ -316,6 +316,7 @@ ALL_BASE_HEADERS =  \
 	wx/arrimpl.cpp \
 	wx/arrstr.h \
 	wx/atomic.h \
+	wx/base64.h \
 	wx/beforestd.h \
 	wx/buffer.h \
 	wx/build.h \
@@ -461,6 +462,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/arrimpl.cpp \
 	wx/arrstr.h \
 	wx/atomic.h \
+	wx/base64.h \
 	wx/beforestd.h \
 	wx/buffer.h \
 	wx/build.h \
@@ -643,6 +645,7 @@ ALL_BASE_SOURCES =  \
 	src/common/arcfind.cpp \
 	src/common/archive.cpp \
 	src/common/arrstr.cpp \
+	src/common/base64.cpp \
 	src/common/clntdata.cpp \
 	src/common/cmdline.cpp \
 	src/common/config.cpp \
@@ -820,6 +823,7 @@ MONODLL_OBJECTS =  \
 	monodll_arcfind.o \
 	monodll_archive.o \
 	monodll_arrstr.o \
+	monodll_base64.o \
 	monodll_clntdata.o \
 	monodll_cmdline.o \
 	monodll_config.o \
@@ -933,6 +937,7 @@ MONOLIB_OBJECTS =  \
 	monolib_arcfind.o \
 	monolib_archive.o \
 	monolib_arrstr.o \
+	monolib_base64.o \
 	monolib_clntdata.o \
 	monolib_cmdline.o \
 	monolib_config.o \
@@ -1043,6 +1048,7 @@ BASEDLL_OBJECTS =  \
 	basedll_arcfind.o \
 	basedll_archive.o \
 	basedll_arrstr.o \
+	basedll_base64.o \
 	basedll_clntdata.o \
 	basedll_cmdline.o \
 	basedll_config.o \
@@ -1137,6 +1143,7 @@ BASELIB_OBJECTS =  \
 	baselib_arcfind.o \
 	baselib_archive.o \
 	baselib_arrstr.o \
+	baselib_base64.o \
 	baselib_clntdata.o \
 	baselib_cmdline.o \
 	baselib_config.o \
@@ -13422,6 +13429,9 @@ monodll_archive.o: $(srcdir)/src/common/archive.cpp $(MONODLL_ODEP)
 monodll_arrstr.o: $(srcdir)/src/common/arrstr.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/arrstr.cpp
 
+monodll_base64.o: $(srcdir)/src/common/base64.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/base64.cpp
+
 monodll_clntdata.o: $(srcdir)/src/common/clntdata.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/clntdata.cpp
 
@@ -17735,6 +17745,9 @@ monolib_archive.o: $(srcdir)/src/common/archive.cpp $(MONOLIB_ODEP)
 
 monolib_arrstr.o: $(srcdir)/src/common/arrstr.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/arrstr.cpp
+
+monolib_base64.o: $(srcdir)/src/common/base64.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/base64.cpp
 
 monolib_clntdata.o: $(srcdir)/src/common/clntdata.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/clntdata.cpp
@@ -22050,6 +22063,9 @@ basedll_archive.o: $(srcdir)/src/common/archive.cpp $(BASEDLL_ODEP)
 basedll_arrstr.o: $(srcdir)/src/common/arrstr.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/arrstr.cpp
 
+basedll_base64.o: $(srcdir)/src/common/base64.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/base64.cpp
+
 basedll_clntdata.o: $(srcdir)/src/common/clntdata.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/clntdata.cpp
 
@@ -22814,6 +22830,9 @@ baselib_archive.o: $(srcdir)/src/common/archive.cpp $(BASELIB_ODEP)
 
 baselib_arrstr.o: $(srcdir)/src/common/arrstr.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/arrstr.cpp
+
+baselib_base64.o: $(srcdir)/src/common/base64.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/base64.cpp
 
 baselib_clntdata.o: $(srcdir)/src/common/clntdata.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/clntdata.cpp
