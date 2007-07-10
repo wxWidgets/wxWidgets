@@ -383,15 +383,21 @@ protected:
 
 class WXDLLEXPORT wxMenuInfo : public wxObject
 {
-public :
+public:
     wxMenuInfo() { m_menu = NULL; }
     virtual ~wxMenuInfo() { }
 
-    void Create( wxMenu *menu , const wxString &title )
-    { m_menu = menu; m_title = title; }
+    bool Create( wxMenu *menu, const wxString &title )
+    { 
+        m_menu = menu; 
+        m_title = title; 
+        return true;
+    }
+
     wxMenu* GetMenu() const { return m_menu; }
     wxString GetTitle() const { return m_title; }
-private :
+
+private:
     wxMenu *m_menu;
     wxString m_title;
 

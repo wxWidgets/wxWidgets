@@ -57,7 +57,9 @@ typedef wxWindow wxNotebookPage;  // so far, any window can be a page
 extern WXDLLEXPORT_DATA(const wxChar) wxNotebookNameStr[];
 
 
-// XTI accessors:
+// ----------------------------------------------------------------------------
+// XTI accessor
+// ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxNotebookPageInfo : public wxObject
 {
@@ -65,7 +67,7 @@ public:
     wxNotebookPageInfo() { m_page = NULL; m_imageId = -1; m_selected = false; }
     virtual ~wxNotebookPageInfo() { }
 
-    void Create(wxNotebookPage *page,
+    bool Create(wxNotebookPage *page,
                 const wxString& text,
                 bool selected,
                 int imageId)
@@ -74,6 +76,7 @@ public:
         m_text = text;
         m_selected = selected;
         m_imageId = imageId;
+        return true;
     }
 
     wxNotebookPage* GetPage() const { return m_page; }
