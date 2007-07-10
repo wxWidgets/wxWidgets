@@ -18,6 +18,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_TIMER
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/module.h"
@@ -253,4 +255,6 @@ wxUsecClock_t wxGetLocalTimeUsec()
 
     return wxGetLocalTimeMillis() * 1000L;
 }
+
+#endif // wxUSE_TIMER
 
