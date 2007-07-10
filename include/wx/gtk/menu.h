@@ -23,6 +23,9 @@ public:
     wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long style = 0);
     virtual ~wxMenuBar();
 
+    virtual bool Append( const wxMenuInfo *info )
+        { return Append( info->GetMenu(), info->GetTitle() ); }
+
     // implement base class (pure) virtuals
     virtual bool Append( wxMenu *menu, const wxString &title );
     virtual bool Insert(size_t pos, wxMenu *menu, const wxString& title);

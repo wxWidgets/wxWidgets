@@ -378,6 +378,29 @@ protected:
 };
 
 // ----------------------------------------------------------------------------
+// XTI accessor
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxMenuInfo : public wxObject
+{
+public :
+    wxMenuInfo() { m_menu = NULL; }
+    virtual ~wxMenuInfo() { }
+
+    void Create( wxMenu *menu , const wxString &title )
+    { m_menu = menu; m_title = title; }
+    wxMenu* GetMenu() const { return m_menu; }
+    wxString GetTitle() const { return m_title; }
+private :
+    wxMenu *m_menu;
+    wxString m_title;
+
+    DECLARE_DYNAMIC_CLASS(wxMenuInfo)
+};
+
+WX_DECLARE_EXPORTED_LIST(wxMenuInfo, wxMenuInfoList );
+
+// ----------------------------------------------------------------------------
 // wxMenuBar
 // ----------------------------------------------------------------------------
 
@@ -490,9 +513,17 @@ public:
 
     virtual bool CanBeOutsideClientArea() const { return true; }
 
+    // XTI helpers:
+    virtual bool Append( const wxMenuInfo *info )
+        { return Append( info->GetMenu(), info->GetTitle() ); }
+    const wxMenuInfoList& GetMenuInfos() const;
+
 protected:
     // the list of all our menus
     wxMenuList m_menus;
+
+    // used by XTI
+    wxMenuInfoList m_menuInfos;
 
     // the frame we are attached to (may be NULL)
     wxFrame *m_menuBarFrame;

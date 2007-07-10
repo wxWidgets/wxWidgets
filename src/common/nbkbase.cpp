@@ -82,45 +82,67 @@ wxBEGIN_FLAGS( wxNotebookStyle )
 wxEND_FLAGS( wxNotebookStyle )
 
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxNotebook, wxControl,"wx/notebook.h")
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxNotebookPageInfo, wxObject , "wx/notebook.h" )
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxNotebookPageInfo, wxObject, "wx/notebook.h" )
 
-wxCOLLECTION_TYPE_INFO( wxNotebookPageInfo * , wxNotebookPageInfoList ) ;
+wxCOLLECTION_TYPE_INFO( wxNotebookPageInfo *, wxNotebookPageInfoList );
 
 template<> void wxCollectionToVariantArray( wxNotebookPageInfoList const &theList, wxxVariantArray &value)
 {
-    wxListCollectionToVariantArray<wxNotebookPageInfoList::compatibility_iterator>( theList , value ) ;
+    wxListCollectionToVariantArray<wxNotebookPageInfoList::compatibility_iterator>( theList, value );
 }
 
 wxBEGIN_PROPERTIES_TABLE(wxNotebook)
-    wxEVENT_PROPERTY( PageChanging , wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING , wxNotebookEvent )
-    wxEVENT_PROPERTY( PageChanged , wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED , wxNotebookEvent )
+    wxEVENT_PROPERTY( PageChanging, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEvent )
+    wxEVENT_PROPERTY( PageChanged, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEvent )
 
-    wxPROPERTY_COLLECTION( PageInfos , wxNotebookPageInfoList , wxNotebookPageInfo* , AddPageInfo , GetPageInfos , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_FLAGS( WindowStyle , wxNotebookStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY_COLLECTION( PageInfos, wxNotebookPageInfoList, wxNotebookPageInfo*, AddPageInfo, GetPageInfos, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxPROPERTY_FLAGS( WindowStyle, wxNotebookStyle, long, SetWindowStyleFlag, GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxNotebook)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_5( wxNotebook , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle)
+wxCONSTRUCTOR_5( wxNotebook, wxWindow*, Parent, wxWindowID, Id, wxPoint, Position, wxSize, Size, long, WindowStyle)
 
 
 wxBEGIN_PROPERTIES_TABLE(wxNotebookPageInfo)
-    wxREADONLY_PROPERTY( Page , wxNotebookPage* , GetPage , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxREADONLY_PROPERTY( Text , wxString , GetText , wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxREADONLY_PROPERTY( Selected , bool , GetSelected , false, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxREADONLY_PROPERTY( ImageId , int , GetImageId , -1 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxREADONLY_PROPERTY( Page, wxNotebookPage*, GetPage, EMPTY_MACROVALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxREADONLY_PROPERTY( Text, wxString, GetText, wxString(), 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxREADONLY_PROPERTY( Selected, bool, GetSelected, false, 0 /*flags*/, wxT("Helpstring"), wxT("group") )
+    wxREADONLY_PROPERTY( ImageId, int, GetImageId, -1, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxNotebookPageInfo)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_4( wxNotebookPageInfo , wxNotebookPage* , Page , wxString , Text , bool , Selected , int , ImageId )
+wxCONSTRUCTOR_4( wxNotebookPageInfo, wxNotebookPage*, Page, wxString, Text, bool, Selected, int, ImageId )
 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxNotebookPageInfo, wxObject )
 #endif
+
+
+// XTI accessors:
+
+void wxNotebookBase::AddPageInfo( wxNotebookPageInfo* info )
+{
+    AddPage( info->GetPage(), info->GetText(), info->GetSelected(), info->GetImageId() ); 
+}
+
+const wxNotebookPageInfoList& wxNotebookBase::GetPageInfos() const
+{
+    wxNotebookPageInfoList* list = const_cast< wxNotebookPageInfoList* >( &m_pageInfos );
+    WX_CLEAR_LIST( wxNotebookPageInfoList, *list );
+    for( size_t i = 0; i < GetPageCount(); ++i )
+    {
+        wxNotebookPageInfo *info = new wxNotebookPageInfo();
+        info->Create( const_cast<wxNotebookBase*>(this)->GetPage(i), GetPageText(i),
+                        GetSelection() == int(i), GetPageImage(i) );
+        list->Append( info );
+    }
+    return m_pageInfos;
+}
 
 // ----------------------------------------------------------------------------
 // geometry

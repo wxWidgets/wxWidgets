@@ -56,6 +56,43 @@ typedef wxWindow wxNotebookPage;  // so far, any window can be a page
 
 extern WXDLLEXPORT_DATA(const wxChar) wxNotebookNameStr[];
 
+
+// XTI accessors:
+
+class WXDLLEXPORT wxNotebookPageInfo : public wxObject
+{
+public:
+    wxNotebookPageInfo() { m_page = NULL; m_imageId = -1; m_selected = false; }
+    virtual ~wxNotebookPageInfo() { }
+
+    void Create(wxNotebookPage *page,
+                const wxString& text,
+                bool selected,
+                int imageId)
+    {
+        m_page = page;
+        m_text = text;
+        m_selected = selected;
+        m_imageId = imageId;
+    }
+
+    wxNotebookPage* GetPage() const { return m_page; }
+    wxString GetText() const { return m_text; }
+    bool GetSelected() const { return m_selected; }
+    int GetImageId() const { return m_imageId; }
+
+private:
+    wxNotebookPage *m_page;
+    wxString m_text;
+    bool m_selected;
+    int m_imageId;
+
+    DECLARE_DYNAMIC_CLASS(wxNotebookPageInfo)
+};
+
+WX_DECLARE_EXPORTED_LIST(wxNotebookPageInfo, wxNotebookPageInfoList );
+
+
 // ----------------------------------------------------------------------------
 // wxNotebookBase: define wxNotebook interface
 // ----------------------------------------------------------------------------
@@ -110,7 +147,15 @@ public:
     // focus because we have tabs
     virtual bool AcceptsFocus() const { return wxControl::AcceptsFocus(); }
 
+
+    // XTI accessors
+    virtual void AddPageInfo( wxNotebookPageInfo* info );
+    virtual const wxNotebookPageInfoList& GetPageInfos() const;
+
+
 protected:
+    wxNotebookPageInfoList m_pageInfos;
+
     DECLARE_NO_COPY_CLASS(wxNotebookBase)
 };
 
@@ -177,6 +222,7 @@ typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
 #endif
 
 #endif // wxUSE_NOTEBOOK
+
 
 #endif
     // _WX_NOTEBOOK_H_BASE_
