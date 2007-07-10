@@ -150,18 +150,18 @@ void wxSpinButton::SetValue( int value )
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
 
-    BlockScrollEvent();
+    GtkDisableEvents();
     gtk_spin_button_set_value((GtkSpinButton*)m_widget, value);
-    UnblockScrollEvent();
+    GtkEnableEvents();
 }
 
 void wxSpinButton::SetRange(int minVal, int maxVal)
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
 
-    BlockScrollEvent();
+    GtkDisableEvents();
     gtk_spin_button_set_range((GtkSpinButton*)m_widget, minVal, maxVal);
-    UnblockScrollEvent();
+    GtkEnableEvents();
 }
 
 void wxSpinButton::OnSize( wxSizeEvent &WXUNUSED(event) )
@@ -170,6 +170,18 @@ void wxSpinButton::OnSize( wxSizeEvent &WXUNUSED(event) )
 
     m_width = DoGetBestSize().x;
     gtk_widget_set_size_request( m_widget, m_width, m_height );
+}
+
+void wxSpinButton::GtkDisableEvents() const
+{
+    g_signal_handlers_block_by_func(m_widget,
+        (gpointer)gtk_value_changed, (void*) this);
+}
+
+void wxSpinButton::GtkEnableEvents() const
+{
+    g_signal_handlers_unblock_by_func(m_widget,
+        (gpointer)gtk_value_changed, (void*) this);
 }
 
 GdkWindow *wxSpinButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
