@@ -139,7 +139,9 @@
 #endif
 
 
+#if wxUSE_LONGLONG
 wxULongLong wxInvalidSize = (unsigned)-1;
+#endif // wxUSE_LONGLONG
 
 
 // ----------------------------------------------------------------------------
@@ -2317,6 +2319,8 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
 // file size functions
 // ----------------------------------------------------------------------------
 
+#if wxUSE_LONGLONG
+
 /* static */
 wxULongLong wxFileName::GetSize(const wxString &filename)
 {
@@ -2385,6 +2389,7 @@ wxString wxFileName::GetHumanReadableSize(const wxString &failmsg, int precision
     return GetHumanReadableSize(GetSize(), failmsg, precision);
 }
 
+#endif // wxUSE_LONGLONG
 
 // ----------------------------------------------------------------------------
 // Mac-specific functions

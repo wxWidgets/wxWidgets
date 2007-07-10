@@ -146,8 +146,10 @@ public:
                               const wxString& filespec,
                               int flags = wxDIR_DEFAULT);
 
+#if wxUSE_LONGLONG
     // returns the size of all directories recursively found in given path
     static wxULongLong GetTotalSize(const wxString &dir, wxArrayString *filesSkipped = NULL);
+#endif // wxUSE_LONGLONG
 
 private:
     friend class wxDirData;

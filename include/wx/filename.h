@@ -84,8 +84,10 @@ enum
     wxPATH_MKDIR_FULL    = 0x0001   // create directories recursively
 };
 
+#if wxUSE_LONGLONG
 // error code of wxFileName::GetSize()
 extern wxULongLong wxInvalidSize;
+#endif // wxUSE_LONGLONG
 
 
 
@@ -483,6 +485,7 @@ public:
 
     // Filesize
 
+#if wxUSE_LONGLONG
         // returns the size of the given filename
     wxULongLong GetSize() const;
     static wxULongLong GetSize(const wxString &file);
@@ -493,6 +496,7 @@ public:
     static wxString GetHumanReadableSize(const wxULongLong &sz,
                                          const wxString &nullsize = wxGetTranslation(_T("Not available")),
                                          int precision = 1);
+#endif // wxUSE_LONGLONG
 
 
     // deprecated methods, don't use any more
