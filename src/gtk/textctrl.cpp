@@ -10,6 +10,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_TEXTCTRL
+
 #include "wx/textctrl.h"
 
 #ifndef WX_PRECOMP
@@ -1989,3 +1991,5 @@ wxTextCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
     return GetDefaultAttributesFromGTKWidget(gtk_entry_new, true);
 }
+
+#endif // wxUSE_TEXTCTRL

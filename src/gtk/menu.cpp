@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/gtk/menu.cpp
-// Purpose:
+// Purpose:     implementation of wxMenuBar and wxMenu classes for wxGTK
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
@@ -9,6 +9,8 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+
+#if wxUSE_MENUS
 
 #include "wx/menu.h"
 
@@ -1792,3 +1794,5 @@ bool wxGetStockGtkAccelerator(const char *id, GdkModifierType *mod, guint *key)
 }
 
 #endif // __WXGTK20__
+
+#endif // wxUSE_MENUS

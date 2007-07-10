@@ -119,6 +119,8 @@ static void gtk_toolbar_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidge
 // InsertChild for wxFrame
 //-----------------------------------------------------------------------------
 
+#if wxUSE_TOOLBAR
+
 /* Callback for wxFrame. This very strange beast has to be used because
  * C++ has no virtual methods in a constructor. We have to emulate a
  * virtual function here as wxWidgets requires different ways to insert
@@ -152,8 +154,10 @@ static void wxInsertChildInFrame(wxWindow* parent, wxWindow* child)
                               parent);
         }
     }
-#endif // wxUSE_TOOLBAR
+#endif // wxUSE_TOOLBAR_NATIVE
 }
+
+#endif // wxUSE_TOOLBAR
 
 // ----------------------------------------------------------------------------
 // wxFrame creation
@@ -242,7 +246,21 @@ bool wxFrame::ShowFullScreen(bool show, long style)
         return false;
 
     wxWindow* const bar[] = {
-        m_frameMenuBar, m_frameToolBar, m_frameStatusBar
+#if wxUSE_MENUS
+        m_frameMenuBar,
+#else
+        NULL,
+#endif
+#if wxUSE_TOOLBAR
+        m_frameToolBar,
+#else
+        NULL,
+#endif
+#if wxUSE_STATUSBAR
+        m_frameStatusBar,
+#else
+        NULL,
+#endif
     };
     const long fsNoBar[] = {
         wxFULLSCREEN_NOMENUBAR, wxFULLSCREEN_NOTOOLBAR, wxFULLSCREEN_NOSTATUSBAR
