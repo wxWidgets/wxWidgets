@@ -55,8 +55,8 @@ public:
     // implementation
     void OnChar( wxKeyEvent &event );
     
-    void GtkDisableEvents();
-    void GtkEnableEvents();
+    void GtkDisableEvents() const;
+    void GtkEnableEvents() const;
 
     int m_pos;
 
