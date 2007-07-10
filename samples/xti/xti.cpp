@@ -469,7 +469,12 @@ wxDynamicObject* CreateFrameRTTI()
     // MSVC likes to exclude from link wxGauge...
     wxENSURE_CLASS_IS_LINKED(wxGauge)
 
+#ifdef __WXMSW__
+    // under wxMSW wxGauge is simply #defined to wxGauge95
+    info = wxClassInfo::FindClass("wxGauge95");
+#else
     info = wxClassInfo::FindClass("wxGauge");
+#endif
     control = wxDynamicCast( info->CreateObject(), wxControl );
     Params[0] = wxxVariant((wxWindow*)(panel));
     Params[1] = wxxVariant(wxWindowID(baseID++));
