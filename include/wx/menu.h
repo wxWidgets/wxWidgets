@@ -514,7 +514,7 @@ public:
     virtual bool CanBeOutsideClientArea() const { return true; }
 
     // XTI helpers:
-    virtual bool Append( const wxMenuInfo *info )
+    bool AppendMenuInfo( const wxMenuInfo *info )
         { return Append( info->GetMenu(), info->GetTitle() ); }
     const wxMenuInfoList& GetMenuInfos() const;
 

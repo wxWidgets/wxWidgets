@@ -130,7 +130,7 @@ template<> void wxCollectionToVariantArray( wxMenuInfoList const &theList,
 }
 
 wxBEGIN_PROPERTIES_TABLE(wxMenuBar)
-    wxPROPERTY_COLLECTION( MenuInfos, wxMenuInfoList, wxMenuInfo*, Append, \
+    wxPROPERTY_COLLECTION( MenuInfos, wxMenuInfoList, wxMenuInfo*, AppendMenuInfo, \
                            GetMenuInfos, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
 wxEND_PROPERTIES_TABLE()
 
