@@ -28,6 +28,7 @@
             archive/ziptest.cpp
             archive/tartest.cpp
             arrays/arrays.cpp
+            base64/base64.cpp
             datetime/datetimetest.cpp
             fileconf/fileconftest.cpp
             filekind/filekind.cpp

@@ -313,6 +313,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/arcfind.cpp
     src/common/archive.cpp
     src/common/arrstr.cpp
+    src/common/base64.cpp
     src/common/clntdata.cpp
     src/common/cmdline.cpp
     src/common/config.cpp
@@ -397,6 +398,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/arrimpl.cpp
     wx/arrstr.h
     wx/atomic.h
+    wx/base64.h
     wx/beforestd.h
     wx/buffer.h
     wx/build.h

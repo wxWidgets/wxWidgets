@@ -322,6 +322,14 @@
 // Recommended setting: 1
 #define wxUSE_LONGLONG      1
 
+// Set wxUSE_BASE64 to 1, to compile in Base64 support. This is required for
+// storing binary data in wxConfig on most platforms.
+//
+// Default is 1.
+//
+// Recommended setting: 1 (but can be safely disabled if you don't use it)
+#define wxUSE_BASE64        1
+
 // Set wxUSE_(F)FILE to 1 to compile wx(F)File classes. wxFile uses low level
 // POSIX functions for file access, wxFFile uses ANSI C stdio.h functions.
 //

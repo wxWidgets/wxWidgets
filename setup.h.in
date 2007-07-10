@@ -215,6 +215,8 @@
 
 #define wxUSE_LONGLONG      0
 
+#define wxUSE_BASE64        0
+
 #define wxUSE_FILE          0
 #define wxUSE_FFILE         0
 
