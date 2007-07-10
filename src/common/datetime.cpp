@@ -90,17 +90,18 @@ const long wxDateTime::TIME_T_FACTOR = 1000l;
 
 #if wxUSE_EXTENDED_RTTI
 
-template<> void wxStringReadValue(const wxString &s , wxDateTime &data )
+template<> void wxStringReadValue(const wxString &s, wxDateTime &data )
 {
-    data.ParseFormat(s,wxT("%Y-%m-%d %H:%M:%S")) ;
+    data.ParseFormat(s,wxT("%Y-%m-%d %H:%M:%S"));
 }
 
-template<> void wxStringWriteValue(wxString &s , const wxDateTime &data )
+template<> void wxStringWriteValue(wxString &s, const wxDateTime &data )
 {
-    s = data.Format(wxT("%Y-%m-%d %H:%M:%S")) ;
+    s = data.Format(wxT("%Y-%m-%d %H:%M:%S"));
 }
 
-wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringConverter<wxDateTime>)
+wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime>, \
+                   wxFromStringConverter<wxDateTime>)
 
 #endif
 

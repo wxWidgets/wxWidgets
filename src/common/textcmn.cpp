@@ -52,8 +52,8 @@
 // ----------------------------------------------------------------------------
 
 #if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxTextCtrlStyle )
 
+WX_DEFINE_FLAGS( wxTextCtrlStyle )
 wxBEGIN_FLAGS( wxTextCtrlStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -101,21 +101,28 @@ wxBEGIN_FLAGS( wxTextCtrlStyle )
 
 wxEND_FLAGS( wxTextCtrlStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxTextCtrl, wxControl,"wx/textctrl.h")
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxTextCtrl, wxControl, "wx/textctrl.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxTextCtrl)
-    wxEVENT_PROPERTY( TextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent )
-    wxEVENT_PROPERTY( TextEnter , wxEVT_COMMAND_TEXT_ENTER , wxCommandEvent )
+    wxEVENT_PROPERTY( TextUpdated, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent )
+    wxEVENT_PROPERTY( TextEnter, wxEVT_COMMAND_TEXT_ENTER, wxCommandEvent )
 
-    wxPROPERTY( Font , wxFont , SetFont , GetFont  , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxPROPERTY( Value , wxString , SetValue, GetValue, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_FLAGS( WindowStyle , wxTextCtrlStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY( Font, wxFont, SetFont, GetFont , EMPTY_MACROVALUE, \
+                0 /*flags*/, wxT("Helpstring"), wxT("group") )
+    wxPROPERTY( Value, wxString, SetValue, GetValue, wxString(), \
+                0 /*flags*/, wxT("Helpstring"), wxT("group"))
+
+    wxPROPERTY_FLAGS( WindowStyle, wxTextCtrlStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxTextCtrl)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_6( wxTextCtrl , wxWindow* , Parent , wxWindowID , Id , wxString , Value , wxPoint , Position , wxSize , Size , long , WindowStyle)
+wxCONSTRUCTOR_6( wxTextCtrl, wxWindow*, Parent, wxWindowID, Id, \
+                 wxString, Value, wxPoint, Position, wxSize, Size, \
+                 long, WindowStyle)
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxTextCtrlBase)
 #endif

@@ -83,19 +83,27 @@ wxBEGIN_FLAGS( wxCalendarCtrlStyle )
 
 wxEND_FLAGS( wxCalendarCtrlStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxCalendarCtrl, wxControl,"wx/calctrl.h")
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxCalendarCtrl, wxControl, "wx/calctrl.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxCalendarCtrl)
-    wxEVENT_RANGE_PROPERTY( Updated , wxEVT_CALENDAR_SEL_CHANGED , wxEVT_CALENDAR_WEEKDAY_CLICKED , wxCalendarEvent )
+    wxEVENT_RANGE_PROPERTY( Updated, wxEVT_CALENDAR_SEL_CHANGED, \
+                            wxEVT_CALENDAR_WEEKDAY_CLICKED, wxCalendarEvent )
+    
     wxHIDE_PROPERTY( Children )
-    wxPROPERTY( Date,wxDateTime, SetDate , GetDate, , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_FLAGS( WindowStyle , wxCalendarCtrlStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+
+    wxPROPERTY( Date,wxDateTime, SetDate, GetDate, EMPTY_MACROVALUE, \
+                0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxPROPERTY_FLAGS( WindowStyle, wxCalendarCtrlStyle, long, \
+                      SetWindowStyleFlag, GetWindowStyleFlag, \
+                      EMPTY_MACROVALUE, 0 /*flags*/, wxT("Helpstring"), \
+                      wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxCalendarCtrl)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_6( wxCalendarCtrl , wxWindow* , Parent , wxWindowID , Id , wxDateTime , Date , wxPoint , Position , wxSize , Size , long , WindowStyle )
+wxCONSTRUCTOR_6( wxCalendarCtrl, wxWindow*, Parent, wxWindowID, Id, \
+                 wxDateTime, Date, wxPoint, Position, wxSize, Size, long, WindowStyle )
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxCalendarCtrl, wxControl)
 #endif

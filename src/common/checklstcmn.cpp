@@ -87,17 +87,20 @@ wxBEGIN_FLAGS( wxCheckListBoxStyle )
 
 wxEND_FLAGS( wxCheckListBoxStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxCheckListBox, wxListBox,"wx/checklst.h")
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxCheckListBox, wxListBox, "wx/checklst.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxCheckListBox)
-    wxEVENT_PROPERTY( Toggle , wxEVT_COMMAND_CHECKLISTBOX_TOGGLED , wxCommandEvent )
-    wxPROPERTY_FLAGS( WindowStyle , wxCheckListBoxStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , wxLB_OWNERDRAW /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxEVENT_PROPERTY( Toggle, wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEvent )
+    wxPROPERTY_FLAGS( WindowStyle, wxCheckListBoxStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, wxLB_OWNERDRAW /*flags*/, \
+                      wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxCheckListBox)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_4( wxCheckListBox , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size )
+wxCONSTRUCTOR_4( wxCheckListBox, wxWindow*, Parent, wxWindowID, Id, \
+                 wxPoint, Position, wxSize, Size )
 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)

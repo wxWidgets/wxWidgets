@@ -66,32 +66,41 @@ wxBEGIN_FLAGS( wxChoiceStyle )
 
 wxEND_FLAGS( wxChoiceStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxChoice, wxControlWithItems,"wx/choice.h")
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxChoice, wxControlWithItems, "wx/choice.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxChoice)
-    wxEVENT_PROPERTY( Select , wxEVT_COMMAND_CHOICE_SELECTED , wxCommandEvent )
+    wxEVENT_PROPERTY( Select, wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEvent )
 
-    wxPROPERTY( Font , wxFont , SetFont , GetFont  , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_COLLECTION( Choices , wxArrayString , wxString , AppendString , GetStrings , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Selection ,int, SetSelection, GetSelection, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_FLAGS( WindowStyle , wxChoiceStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY( Font, wxFont, SetFont, GetFont , EMPTY_MACROVALUE, \
+                0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxPROPERTY_COLLECTION( Choices, wxArrayString, wxString, AppendString, \
+                           GetStrings, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( Selection,int, SetSelection, GetSelection, EMPTY_MACROVALUE, \
+                0 /*flags*/, wxT("Helpstring"), wxT("group"))
+
+    /*
+        TODO PROPERTIES
+            selection (long)
+            content (list)
+                item
+    */
+
+    wxPROPERTY_FLAGS( WindowStyle, wxChoiceStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxChoice)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_4( wxChoice , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size )
+wxCONSTRUCTOR_4( wxChoice, wxWindow*, Parent, wxWindowID, Id, \
+                 wxPoint, Position, wxSize, Size )
 #else
 
 IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControlWithItems)
 
 #endif
-/*
-    TODO PROPERTIES
-        selection (long)
-        content (list)
-            item
-*/
+
 
 // ============================================================================
 // implementation

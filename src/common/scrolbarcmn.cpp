@@ -65,22 +65,31 @@ wxBEGIN_FLAGS( wxScrollBarStyle )
 
 wxEND_FLAGS( wxScrollBarStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxScrollBar, wxControl,"wx/scrolbar.h")
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxScrollBar, wxControl, "wx/scrolbar.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxScrollBar)
-    wxEVENT_RANGE_PROPERTY( Scroll , wxEVT_SCROLL_TOP , wxEVT_SCROLL_CHANGED , wxScrollEvent )
+    wxEVENT_RANGE_PROPERTY( Scroll, wxEVT_SCROLL_TOP, \
+                            wxEVT_SCROLL_CHANGED, wxScrollEvent )
 
-    wxPROPERTY( ThumbPosition , int , SetThumbPosition, GetThumbPosition, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Range , int , SetRange, GetRange, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( ThumbSize , int , SetThumbSize, GetThumbSize, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( PageSize , int , SetPageSize, GetPageSize, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_FLAGS( WindowStyle , wxScrollBarStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY( ThumbPosition, int, SetThumbPosition, GetThumbPosition, 0, \
+                0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( Range, int, SetRange, GetRange, 0, \
+                0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( ThumbSize, int, SetThumbSize, GetThumbSize, 0, \
+                0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( PageSize, int, SetPageSize, GetPageSize, 0, \
+                0 /*flags*/, wxT("Helpstring"), wxT("group"))
+
+    wxPROPERTY_FLAGS( WindowStyle, wxScrollBarStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxScrollBar)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_5( wxScrollBar , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
+wxCONSTRUCTOR_5( wxScrollBar, wxWindow*, Parent, wxWindowID, Id, \
+                 wxPoint, Position, wxSize, Size, long, WindowStyle )
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
 #endif

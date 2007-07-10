@@ -88,17 +88,22 @@ wxBEGIN_FLAGS( wxDialogStyle )
     wxFLAGS_MEMBER(wxMINIMIZE_BOX)
 wxEND_FLAGS( wxDialogStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxDialog, wxTopLevelWindow,"wx/dialog.h")
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxDialog, wxTopLevelWindow, "wx/dialog.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxDialog)
-    wxPROPERTY( Title, wxString, SetTitle, GetTitle, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_FLAGS( WindowStyle , wxDialogStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY( Title, wxString, SetTitle, GetTitle, wxString(), \
+                0 /*flags*/, wxT("Helpstring"), wxT("group"))
+
+    wxPROPERTY_FLAGS( WindowStyle, wxDialogStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxDialog)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_6( wxDialog , wxWindow* , Parent , wxWindowID , Id , wxString , Title , wxPoint , Position , wxSize , Size , long , WindowStyle)
+wxCONSTRUCTOR_6( wxDialog, wxWindow*, Parent, wxWindowID, Id, \
+                 wxString, Title, wxPoint, Position, wxSize, Size, long, WindowStyle)
 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)

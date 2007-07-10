@@ -33,8 +33,8 @@
 // ----------------------------------------------------------------------------
 
 #if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxSpinCtrlStyle )
 
+WX_DEFINE_FLAGS( wxSpinCtrlStyle )
 wxBEGIN_FLAGS( wxSpinCtrlStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -67,35 +67,40 @@ wxBEGIN_FLAGS( wxSpinCtrlStyle )
     wxFLAGS_MEMBER(wxSP_VERTICAL)
     wxFLAGS_MEMBER(wxSP_ARROW_KEYS)
     wxFLAGS_MEMBER(wxSP_WRAP)
-
 wxEND_FLAGS( wxSpinCtrlStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinCtrl, wxControl,"wx/spinbut.h")
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinCtrl, wxControl, "wx/spinbut.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxSpinCtrl)
-    wxEVENT_RANGE_PROPERTY( Spin , wxEVT_SCROLL_TOP , wxEVT_SCROLL_CHANGED , wxSpinEvent )
-    wxEVENT_PROPERTY( Updated , wxEVT_COMMAND_SPINCTRL_UPDATED , wxCommandEvent )
-    wxEVENT_PROPERTY( TextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent )
-    wxEVENT_PROPERTY( TextEnter , wxEVT_COMMAND_TEXT_ENTER , wxCommandEvent )
+    wxEVENT_RANGE_PROPERTY( Spin, wxEVT_SCROLL_TOP, wxEVT_SCROLL_CHANGED, wxSpinEvent )
 
-    wxPROPERTY( ValueString , wxString , SetValue , GetValue , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) ;
-    wxPROPERTY( Value , int , SetValue, GetValue, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxEVENT_PROPERTY( Updated, wxEVT_COMMAND_SPINCTRL_UPDATED, wxCommandEvent )
+    wxEVENT_PROPERTY( TextUpdated, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent )
+    wxEVENT_PROPERTY( TextEnter, wxEVT_COMMAND_TEXT_ENTER, wxCommandEvent )
 
+    wxPROPERTY( ValueString, wxString, SetValue, GetValue, \
+                EMPTY_MACROVALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group")) ;
+    wxPROPERTY( Value, int, SetValue, GetValue, 0, 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group"))
 /*
-    wxPROPERTY( Min , int , SetMin, GetMin, 0, 0 /*flags , wxT("Helpstring") , wxT("group") )
-    wxPROPERTY( Max , int , SetMax, GetMax, 0 , 0 /*flags , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY( Min, int, SetMin, GetMin, 0, 0 /*flags, wxT("Helpstring"), wxT("group") )
+    wxPROPERTY( Max, int, SetMax, GetMax, 0, 0 /*flags, wxT("Helpstring"), wxT("group"))
 */
-    wxPROPERTY_FLAGS( WindowStyle , wxSpinCtrlStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-/*
-    TODO PROPERTIES
-        style wxSP_ARROW_KEYS
-*/
+    wxPROPERTY_FLAGS( WindowStyle, wxSpinCtrlStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      wxT("Helpstring"), wxT("group")) // style
+    /*
+        TODO PROPERTIES
+            style wxSP_ARROW_KEYS
+    */
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxSpinCtrl)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_6( wxSpinCtrl , wxWindow* , Parent , wxWindowID , Id , wxString , ValueString , wxPoint , Position , wxSize , Size , long , WindowStyle )
+wxCONSTRUCTOR_6( wxSpinCtrl, wxWindow*, Parent, wxWindowID, Id, \
+                 wxString, ValueString, wxPoint, Position, \
+                 wxSize, Size, long, WindowStyle )
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
 #endif

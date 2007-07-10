@@ -66,17 +66,25 @@ IMPLEMENT_DYNAMIC_CLASS_XTI(wxGenericDirCtrl, wxControl,"wx/dirctrl.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxGenericDirCtrl)
     wxHIDE_PROPERTY( Children )
-    wxPROPERTY( DefaultPath , wxString , SetDefaultPath , GetDefaultPath  , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Filter , wxString , SetFilter , GetFilter  , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxPROPERTY( DefaultFilter , int , SetFilterIndex, GetFilterIndex, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxPROPERTY_FLAGS( WindowStyle, wxGenericDirCtrlStyle, long, SetWindowStyleFlag, GetWindowStyleFlag, EMPTY_MACROVALUE , 0, wxT("Helpstring"), wxT("group") )
+
+    wxPROPERTY( DefaultPath, wxString, SetDefaultPath, GetDefaultPath, \
+                EMPTY_MACROVALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( Filter, wxString, SetFilter, GetFilter, EMPTY_MACROVALUE, \
+                0 /*flags*/, wxT("Helpstring"), wxT("group") )
+    wxPROPERTY( DefaultFilter, int, SetFilterIndex, GetFilterIndex, \
+                EMPTY_MACROVALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group") )
+
+    wxPROPERTY_FLAGS( WindowStyle, wxGenericDirCtrlStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0, wxT("Helpstring"), \
+                      wxT("group") )
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxGenericDirCtrl)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_8( wxGenericDirCtrl , wxWindow* , Parent , wxWindowID , Id , wxString , DefaultPath ,
-                 wxPoint , Position , wxSize , Size , long , WindowStyle , wxString , Filter , int , DefaultFilter )
+wxCONSTRUCTOR_8( wxGenericDirCtrl, wxWindow*, Parent, wxWindowID, Id, \
+                 wxString, DefaultPath, wxPoint, Position, wxSize, Size, \
+                 long, WindowStyle, wxString, Filter, int, DefaultFilter )
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxGenericDirCtrl, wxControl)
 #endif

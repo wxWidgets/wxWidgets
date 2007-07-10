@@ -74,23 +74,23 @@ wxEND_FLAGS( wxButtonStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxButton, wxControl, "wx/button.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxButton)
-    wxEVENT_PROPERTY( Click , wxEVT_COMMAND_BUTTON_CLICKED , wxCommandEvent)
+    wxEVENT_PROPERTY( Click, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEvent)
 
-    wxPROPERTY( Font , wxFont , SetFont , GetFont  , EMPTY_MACROVALUE, \
-                0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Label, wxString , SetLabel, GetLabel, wxString(), \
-                0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+    wxPROPERTY( Font, wxFont, SetFont, GetFont , EMPTY_MACROVALUE, \
+                0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( Label, wxString, SetLabel, GetLabel, wxString(), \
+                0 /*flags*/, wxT("Helpstring"), wxT("group") )
 
-    wxPROPERTY_FLAGS( WindowStyle , wxButtonStyle , long , SetWindowStyleFlag , \
-                      GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ ,     \
-                      wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY_FLAGS( WindowStyle, wxButtonStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/,     \
+                      wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxButton)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_6( wxButton , wxWindow* , Parent , wxWindowID , Id , wxString , \
-                 Label , wxPoint , Position , wxSize , Size , long , WindowStyle )
+wxCONSTRUCTOR_6( wxButton, wxWindow*, Parent, wxWindowID, Id, wxString, \
+                 Label, wxPoint, Position, wxSize, Size, long, WindowStyle )
 #else
 
 IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)

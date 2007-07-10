@@ -68,18 +68,25 @@ wxEND_FLAGS( wxCheckBoxStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxCheckBox, wxControl,"wx/checkbox.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxCheckBox)
-    wxEVENT_PROPERTY( Click , wxEVT_COMMAND_CHECKBOX_CLICKED , wxCommandEvent )
+    wxEVENT_PROPERTY( Click, wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEvent )
 
-    wxPROPERTY( Font , wxFont , SetFont , GetFont , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Value ,bool, SetValue, GetValue, EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_FLAGS( WindowStyle , wxCheckBoxStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY( Font, wxFont, SetFont, GetFont, EMPTY_MACROVALUE, \
+                0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxString(), \
+                0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( Value,bool, SetValue, GetValue, EMPTY_MACROVALUE, \
+                0 /*flags*/, wxT("Helpstring"), wxT("group"))
+
+    wxPROPERTY_FLAGS( WindowStyle, wxCheckBoxStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxCheckBox)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_6( wxCheckBox , wxWindow* , Parent , wxWindowID , Id , wxString , Label , wxPoint , Position , wxSize , Size , long , WindowStyle )
+wxCONSTRUCTOR_6( wxCheckBox, wxWindow*, Parent, wxWindowID, Id, \
+                 wxString, Label, wxPoint, Position, wxSize, Size, long, WindowStyle )
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 #endif

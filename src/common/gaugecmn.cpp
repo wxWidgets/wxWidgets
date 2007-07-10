@@ -42,6 +42,7 @@ const wxChar wxGaugeNameStr[] = wxT("gauge");
 // ----------------------------------------------------------------------------
 
 #if wxUSE_EXTENDED_RTTI
+
 WX_DEFINE_FLAGS( wxGaugeStyle )
 wxBEGIN_FLAGS( wxGaugeStyle )
     // new style border flags, we put them first to
@@ -77,27 +78,32 @@ wxBEGIN_FLAGS( wxGaugeStyle )
     wxFLAGS_MEMBER(wxGA_PROGRESSBAR)
 #endif // WXWIN_COMPATIBILITY_2_6
     wxFLAGS_MEMBER(wxGA_SMOOTH)
-
 wxEND_FLAGS( wxGaugeStyle )
 
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxGauge, wxControl, "wx/gauge.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxGauge)
-    wxPROPERTY( Value, int, SetValue, GetValue, 0, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
-    wxPROPERTY( Range, int, SetRange, GetRange, 0, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
-    wxPROPERTY( ShadowWidth, int, SetShadowWidth, GetShadowWidth, 0, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
-    wxPROPERTY( BezelFace, int, SetBezelFace, GetBezelFace, 0, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
-    wxPROPERTY_FLAGS( WindowStyle, wxGaugeStyle, long, SetWindowStyleFlag, GetWindowStyleFlag, \
-                      EMPTY_MACROVALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group")) // style
+    wxPROPERTY( Value, int, SetValue, GetValue, 0, 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( Range, int, SetRange, GetRange, 0, 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( ShadowWidth, int, SetShadowWidth, GetShadowWidth, \
+                0, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( BezelFace, int, SetBezelFace, GetBezelFace, \
+                0, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+
+    wxPROPERTY_FLAGS( WindowStyle, wxGaugeStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxGauge)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_6( wxGauge, wxWindow*, Parent, wxWindowID, Id, int, Range, wxPoint, Position, \
-                 wxSize, Size, long, WindowStyle )
+wxCONSTRUCTOR_6( wxGauge, wxWindow*, Parent, wxWindowID, Id, int, Range, \
+                 wxPoint, Position, wxSize, Size, long, WindowStyle )
 #else
-IMPLEMENT_DYNAMIC_CLASS(wxGauge95, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)
 #endif
 
 
