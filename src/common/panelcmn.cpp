@@ -39,8 +39,8 @@
 // ----------------------------------------------------------------------------
 
 #if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxPanelStyle )
 
+WX_DEFINE_FLAGS( wxPanelStyle )
 wxBEGIN_FLAGS( wxPanelStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -65,23 +65,28 @@ wxBEGIN_FLAGS( wxPanelStyle )
     wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
     wxFLAGS_MEMBER(wxWANTS_CHARS)
     wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
-    wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
+    wxFLAGS_MEMBER(wxALWAYS_SHOW_SB)
     wxFLAGS_MEMBER(wxVSCROLL)
     wxFLAGS_MEMBER(wxHSCROLL)
 
 wxEND_FLAGS( wxPanelStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxPanel, wxWindow,"wx/panel.h")
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxPanel, wxWindow, "wx/panel.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxPanel)
-    wxPROPERTY_FLAGS( WindowStyle , wxPanelStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-// style wxTAB_TRAVERSAL
+    wxPROPERTY_FLAGS( WindowStyle, wxPanelStyle, long, \
+                      SetWindowStyleFlag, GetWindowStyleFlag, \
+                      EMPTY_MACROVALUE, 0 /*flags*/, \
+                      wxT("Helpstring"), wxT("group")) // style
+    // style wxTAB_TRAVERSAL
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxPanel)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_5( wxPanel , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
+wxCONSTRUCTOR_6( wxPanel, wxWindow*, Parent, wxWindowID, Id, \
+                 wxPoint, Position, wxSize, Size, long, WindowStyle, \
+                 wxString, Name)
 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxPanel, wxWindow)

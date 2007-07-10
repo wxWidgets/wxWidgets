@@ -322,7 +322,8 @@ wxDynamicObject* CreateFrameRTTI()
     Params[1] = wxxVariant(wxWindowID(ID++));
     Params[2] = wxxVariant(wxPoint( 10, 10 ));
     Params[3] = wxxVariant(wxDefaultSize);
-    info->Create(notebook, 4, Params );
+    Params[4] = wxxVariant((long)0);
+    info->Create(notebook, 5, Params );
 
     // button
 
@@ -333,7 +334,9 @@ wxDynamicObject* CreateFrameRTTI()
     Params[1] = wxxVariant(wxWindowID(ID++));
     Params[2] = wxxVariant(wxPoint(-1,-1));
     Params[3] = wxxVariant(wxSize(-1,-1));
-    info->Create(panel, 4, Params );
+    Params[4] = wxxVariant((long)0);
+    Params[5] = wxxVariant(wxString(wxT("Hello")));
+    info->Create(panel, 6, Params );
 
     // ************** the ASSERT fails here:
     // in fact panel->GetParent() == NULL even if Params[0]
@@ -360,7 +363,9 @@ wxDynamicObject* CreateFrameRTTI()
     Params[1] = wxxVariant(wxWindowID(ID++));
     Params[2] = wxxVariant(wxPoint(-1,-1));
     Params[3] = wxxVariant(wxSize(-1,-1));
-    info->Create(panel, 4, Params );
+    Params[4] = wxxVariant((long)0);
+    Params[5] = wxxVariant(wxString(wxT("Hello")));
+    info->Create(panel, 6, Params );
     notebook->AddPage( panel, "Other Standard controls" );
 
 	wxControl* control;
@@ -428,7 +433,9 @@ wxDynamicObject* CreateFrameRTTI()
     Params[1] = wxxVariant(wxWindowID(ID++));
     Params[2] = wxxVariant(wxPoint(-1,-1));
     Params[3] = wxxVariant(wxSize(-1,-1));
-    info->Create(panel, 4, Params );
+    Params[4] = wxxVariant((long)0);
+    Params[5] = wxxVariant(wxString(wxT("Hello")));
+    info->Create(panel, 6, Params );
     notebook->AddPage( panel, "Spins and Sliders" );
 
     info = wxClassInfo::FindClass("wxSpinButton");

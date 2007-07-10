@@ -1648,13 +1648,14 @@ struct wxConstructorBridge_5 : public wxConstructorBridge
     void Create(wxObject * &o, wxxVariant *args)
     {
         Class *obj = dynamic_cast<Class*>(o);
-        obj->Create(
+        bool ret = obj->Create(
             args[0].wxTEMPLATED_MEMBER_CALL(Get , T0) ,
             args[1].wxTEMPLATED_MEMBER_CALL(Get , T1) ,
             args[2].wxTEMPLATED_MEMBER_CALL(Get , T2) ,
             args[3].wxTEMPLATED_MEMBER_CALL(Get , T3) ,
             args[4].wxTEMPLATED_MEMBER_CALL(Get , T4)
             );
+        wxASSERT(ret);
     }
 };
 
@@ -1674,7 +1675,7 @@ struct wxConstructorBridge_6 : public wxConstructorBridge
     void Create(wxObject * &o, wxxVariant *args)
     {
         Class *obj = dynamic_cast<Class*>(o);
-        obj->Create(
+        bool ret = obj->Create(
             args[0].wxTEMPLATED_MEMBER_CALL(Get , T0) ,
             args[1].wxTEMPLATED_MEMBER_CALL(Get , T1) ,
             args[2].wxTEMPLATED_MEMBER_CALL(Get , T2) ,
@@ -1682,6 +1683,7 @@ struct wxConstructorBridge_6 : public wxConstructorBridge
             args[4].wxTEMPLATED_MEMBER_CALL(Get , T4) ,
             args[5].wxTEMPLATED_MEMBER_CALL(Get , T5)
             );
+        wxASSERT(ret);
     }
 };
 
