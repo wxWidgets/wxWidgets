@@ -150,22 +150,34 @@ int wxSpinButton::GetValue() const
     return m_pos;
 }
 
+static void wxSpinButton_GtkDisableEvents( const wxSpinButton *spinctrl )
+{
+    g_signal_handlers_block_by_func( spinctrl->m_widget,
+        (gpointer)gtk_value_changed, (void*) spinctrl );
+}
+
+static void wxSpinButton_GtkEnableEvents( const wxSpinButton *spinctrl )
+{
+    g_signal_handlers_unblock_by_func( spinctrl->m_widget,
+        (gpointer)gtk_value_changed, (void*) spinctrl );
+}
+
 void wxSpinButton::SetValue( int value )
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
 
-    BlockScrollEvent();
+    wxSpinButton_GtkDisableEvents( this );
     gtk_spin_button_set_value((GtkSpinButton*)m_widget, value);
-    UnblockScrollEvent();
+    wxSpinButton_GtkEnableEvents( this );
 }
 
 void wxSpinButton::SetRange(int minVal, int maxVal)
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
 
-    BlockScrollEvent();
+    wxSpinButton_GtkDisableEvents( this );
     gtk_spin_button_set_range((GtkSpinButton*)m_widget, minVal, maxVal);
-    UnblockScrollEvent();
+    wxSpinButton_GtkEnableEvents( this );
 }
 
 void wxSpinButton::OnSize( wxSizeEvent &WXUNUSED(event) )
