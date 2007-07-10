@@ -114,6 +114,10 @@ All:
   wxLogInterposerTemp was added
 - Added support for broadcasting to UDP sockets (Andrew Vincent)
 
+All (Unix):
+
+- Added wx-config --optional-libs command line option (John Labenski)
+
 All (GUI):
 
 - Added wxH[V]ScrolledWindow (Brad Anderson, Bryan Petty)

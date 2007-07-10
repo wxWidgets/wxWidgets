@@ -119,7 +119,7 @@ that are required by the sample.
 The Windows resource specification should use the central .rc file:
 
         <win32-res>../sample.rc</win32-res>
-        
+
 Run bakefile_gen in $(wx)/build/bakefiles to regenerate the bakefiles.
 
 Finally commit $(wx)/build/bakefiles/make_dist.mk and all the other modified files.
@@ -149,7 +149,7 @@ a) Add files to files.bkl:
      Finally, define FOO_SRC and FOO_HDR to contain both
      FOO_PLATFORM_{SRC,HDR} and FOO_{SRC,HDR} (see NET_SRC definition for an
      example).
-   * Add FOO_HDR to ALL_GUI_HEADERS or ALL_BASE_HEADERS. 
+   * Add FOO_HDR to ALL_GUI_HEADERS or ALL_BASE_HEADERS.
    * If wxFoo is wxBase library (doesn't use GUI), add FOO_SRC to
      ALL_BASE_SOURCES.
 
@@ -181,8 +181,8 @@ e) Regenerate all makefiles (don't forget to run autoconf)
 
 f) Update configure.in and wx-config.in to contain information about
    the library and needed linker flags:
-   * Add "foo" to either CORE_BASE_LIBS or CORE_GUI_LIBS in configure.in so
-     that wxFoo is not treated as contrib library in monolithic build.
+   * Add "foo" to either STD_BASE_LIBS or STD_GUI_LIBS in configure.in if
+     wxFoo is not to be treated as contrib library in monolithic build.
    * If wxFoo links against additional libraries, add necessary linker
      flags and libraries to ldflags_foo and ldlibs_foo variables in
      wx-config.in (both are optional).
