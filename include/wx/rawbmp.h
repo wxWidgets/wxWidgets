@@ -650,7 +650,7 @@ struct wxPixelDataOut<wxBitmap>
 
 #if WXWIN_COMPATIBILITY_2_8
         // not needed anymore, calls to it should be simply removed
-        wxDEPRECATED( inline void UseAlpha() {} );
+        wxDEPRECATED( inline void UseAlpha() );
 #endif
 
     // private: -- see comment in the beginning of the file
@@ -693,6 +693,11 @@ public:
     {
     }
 };
+
+#if WXWIN_COMPATIBILITY_2_8
+template <class Format>
+inline void wxPixelDataOut<wxBitmap>::wxPixelDataIn<Format>::UseAlpha() {}
+#endif
 
 
 // some "predefined" pixel data classes
