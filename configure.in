@@ -420,7 +420,7 @@ dnl     - WX_ARG_WITHOUT/WX_ARG_DISABLE mirror WX_ARG_WITH/WX_ARG_ENABLE but
 dnl       should be used for the options which are enabled by default
 dnl     - WX_ARG_FEATURE is a version of WX_ARG_ENABLE which should be used for
 dnl       optional features, i.e. options which should be disabled if
-dnl       --disable-all-features is specified (WX_ARG_WITH/WX_ARG_SYS_WITH are
+dnl       --disable-all_features is specified (WX_ARG_WITH/WX_ARG_SYS_WITH are
 dnl       also affected by this)
 
 dnl ---------------------------------------------------------------------------
@@ -438,7 +438,7 @@ if test "x$VENDOR" = "x"; then
     VENDOR="custom"
 fi
 
-WX_ARG_DISABLE(all-features,[  --disable-all-features  disable all optional features to build minimal library], wxUSE_ALL_FEATURES)
+WX_ARG_DISABLE(all_features,[  --disable-all_features  disable all optional features to build minimal library], wxUSE_ALL_FEATURES)
 
 dnl ---------------------------------------------------------------------------
 dnl port selection
@@ -7131,6 +7131,7 @@ fi
 
 if test "$wxUSE_GUI" = "yes"; then
     STD_GUI_LIBS="adv core"
+    BUILT_WX_LIBS="$STD_GUI_LIBS $BUILT_WX_LIBS"
 
     if test "$wxUSE_DEBUGREPORT" = "yes" ; then
         STD_GUI_LIBS="qa $STD_GUI_LIBS"
