@@ -106,6 +106,7 @@ All (GUI):
 - Added SetBitmap/GetBitmap to wxWizard, to allow e.g. on-the-fly creation
   of bitmap to fit page height.
 - Fixed wxXPMHandler::SaveFile for images with more than 92 colors.
+- Fixed a crash in wxGrid on creation due to OnSize being called too soon.
 
 wxMSW:
 
