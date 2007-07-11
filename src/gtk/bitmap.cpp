@@ -363,6 +363,8 @@ wxBitmap wxBitmap::Rescale(int clipx, int clipy, int clipwidth, int clipheight, 
     return bmp;
 }
 
+#if wxUSE_IMAGE
+
 bool wxBitmap::CreateFromImage(const wxImage& image, int depth)
 {
     UnRef();
@@ -593,6 +595,8 @@ wxImage wxBitmap::ConvertToImage() const
     return image;
 }
 
+#endif // wxUSE_IMAGE
+
 bool wxBitmap::IsOk() const
 {
     return (m_refData != NULL) &&
@@ -692,9 +696,13 @@ bool wxBitmap::SaveFile( const wxString &name, wxBitmapType type, const wxPalett
 {
     wxCHECK_MSG( Ok(), false, wxT("invalid bitmap") );
 
+#if wxUSE_IMAGE
     // Try to save the bitmap via wxImage handlers:
     wxImage image = ConvertToImage();
     return image.Ok() && image.SaveFile(name, type);
+#else // !wxUSE_IMAGE
+    return false;
+#endif // wxUSE_IMAGE
 }
 
 bool wxBitmap::LoadFile( const wxString &name, wxBitmapType type )
@@ -712,12 +720,14 @@ bool wxBitmap::LoadFile( const wxString &name, wxBitmapType type )
             M_BMPDATA->m_mask->m_bitmap = mask;
         }
     }
+#if wxUSE_IMAGE
     else // try if wxImage can load it
     {
         wxImage image;
         if (image.LoadFile(name, type) && image.Ok())
             CreateFromImage(image, -1);
     }
+#endif // wxUSE_IMAGE
 
     return Ok();
 }
@@ -786,7 +796,7 @@ GdkPixmap *wxBitmap::GetPixmap() const
         gdk_pixbuf_render_pixmap_and_mask(M_BMPDATA->m_pixbuf,
                                           &M_BMPDATA->m_pixmap,
                                           pmask,
-                                          wxIMAGE_ALPHA_THRESHOLD);
+                                          0x80 /* alpha threshold */);
     }
 
     return M_BMPDATA->m_pixmap;
