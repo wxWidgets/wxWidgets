@@ -4188,6 +4188,7 @@ bool wxGrid::Create(wxWindow *parent, wxWindowID id,
 
     Create();
     SetInitialSize(size);
+    CalcDimensions();
 
     return true;
 }
@@ -4368,7 +4369,7 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
         // stop all processing
         m_created = false;
 
-        if (m_table) 
+        if (m_table)
         {
             m_table->SetView(0);
             if( m_ownTable )
@@ -4406,7 +4407,7 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
             // original one current cell and selection regions
             // might be invalid,
             m_selectingKeyboard = wxGridNoCellCoords;
-            m_currentCellCoords = 
+            m_currentCellCoords =
               wxGridCellCoords(wxMin(m_numRows, m_currentCellCoords.GetRow()),
                                wxMin(m_numCols, m_currentCellCoords.GetCol()));
             if (m_selectingTopLeft.GetRow() >= m_numRows ||
@@ -5974,7 +5975,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 m_winCapture->CaptureMouse();
             }
 
-            
+
         }
         else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
         {
@@ -6737,7 +6738,7 @@ int wxGrid::SendEvent( const wxEventType type,
            pos.y += GetColLabelSize();
        if ( mouseEv.GetEventObject() == GetGridColLabelWindow() )
            pos.x += GetRowLabelSize();
-       
+
        wxGridEvent gridEvt( GetId(),
                type,
                this,
@@ -6905,8 +6906,11 @@ void wxGrid::Refresh(bool eraseb, const wxRect* rect)
 
 void wxGrid::OnSize( wxSizeEvent& WXUNUSED(event) )
 {
-    // update our children window positions and scrollbars
-    CalcDimensions();
+    if (m_targetWindow != this) // check whether initialisation has been done
+    {
+        // update our children window positions and scrollbars
+        CalcDimensions();
+    }
 }
 
 void wxGrid::OnKeyDown( wxKeyEvent& event )
@@ -6934,7 +6938,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
             else if (event.GetKeyCode() == WXK_LEFT)
                 event.m_keyCode = WXK_RIGHT;
         }
-    
+
         // try local handlers
         switch ( event.GetKeyCode() )
         {
