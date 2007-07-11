@@ -41,7 +41,6 @@
 #endif
 
 // Various X11 Atoms used in this file:
-static Atom _NET_WM_ICON = 0;
 static Atom _NET_WM_STATE = 0;
 static Atom _NET_WM_STATE_FULLSCREEN = 0;
 static Atom _NET_WM_STATE_STAYS_ON_TOP = 0;
@@ -106,10 +105,13 @@ private:
 // Setting icons for window manager:
 // ----------------------------------------------------------------------------
 
+#if wxUSE_IMAGE && !wxUSE_NANOX
+
+static Atom _NET_WM_ICON = 0;
+
 void
 wxSetIconsX11(WXDisplay* display, WXWindow window, const wxIconBundle& ib)
 {
-#if !wxUSE_NANOX
     size_t size = 0;
 
     const size_t numIcons = ib.GetIconCount();
@@ -184,9 +186,9 @@ wxSetIconsX11(WXDisplay* display, WXWindow window, const wxIconBundle& ib)
                          WindowCast(window),
                          _NET_WM_ICON );
     }
-#endif // !wxUSE_NANOX
 }
 
+#endif // wxUSE_IMAGE && !wxUSE_NANOX
 
 // ----------------------------------------------------------------------------
 // Fullscreen mode:

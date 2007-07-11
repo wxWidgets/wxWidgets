@@ -32,9 +32,7 @@
 #include "wx/unix/private/epolldispatcher.h"
 #include "wx/private/selectdispatcher.h"
 
-#if wxUSE_TIMER
-    #include "wx/generic/private/timer.h"
-#endif
+#include "wx/generic/private/timer.h"
 
 #define TRACE_EVENTS _T("events")
 

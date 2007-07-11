@@ -312,10 +312,14 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
     return wxPORT_GTK;
 }
 
+#if wxUSE_TIMER
+
 wxTimerImpl *wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 {
     return new wxGTKTimerImpl(timer);
 }
+
+#endif // wxUSE_TIMER
 
 #if wxUSE_DETECT_SM
 static wxString GetSM()
@@ -483,9 +487,9 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
 wxString wxGUIAppTraits::GetDesktopEnvironment() const
 {
     wxString de = wxSystemOptions::GetOption(_T("gtk.desktop"));
+#if wxUSE_DETECT_SM
     if ( de.empty() )
     {
-#if wxUSE_DETECT_SM
         static const wxString s_SM = GetSM();
 
         if (s_SM == wxT("GnomeSM"))

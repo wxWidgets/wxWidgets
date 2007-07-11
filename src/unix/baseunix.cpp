@@ -34,9 +34,7 @@
 #include "wx/unix/execute.h"
 #include "wx/evtloop.h"
 
-#if wxUSE_TIMER
-    #include "wx/unix/private/timer.h"
-#endif // wxUSE_TIMER
+#include "wx/unix/private/timer.h"
 
 // for waitpid()
 #include <sys/types.h>

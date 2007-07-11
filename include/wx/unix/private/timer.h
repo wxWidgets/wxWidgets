@@ -11,6 +11,8 @@
 #ifndef _WX_UNIX_PRIVATE_TIMER_H_
 #define _WX_UNIX_PRIVATE_TIMER_H_
 
+#if wxUSE_TIMER
+
 #include "wx/private/timer.h"
 
 // the type used for milliseconds is large enough for microseconds too but
@@ -134,5 +136,7 @@ private:
 //
 // returns the number of microseconds since the Epoch
 extern wxUsecClock_t wxGetLocalTimeUsec();
+
+#endif // wxUSE_TIMER
 
 #endif // _WX_UNIX_PRIVATE_TIMER_H_
