@@ -133,7 +133,7 @@ pascal OSErr AEHandleRApp( const AppleEvent *event , AppleEvent *reply , SRefCon
     return wxTheApp->MacHandleAERApp( (AppleEvent*) event , reply) ;
 }
 
-pascal OSErr AEHandleGURL( const AppleEvent *event , AppleEvent *reply , long WXUNUSED(refcon) )
+pascal OSErr AEHandleGURL( const AppleEvent *event , AppleEvent *reply , SRefCon WXUNUSED(refcon) )
 {
     return wxTheApp->MacHandleAEGURL((WXEVENTREF *)event , reply) ;
 }
