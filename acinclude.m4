@@ -465,7 +465,7 @@ AC_DEFUN([WX_ARG_ENABLE],
         [
           enablestring=$4
           defaultval=$5
-          if test -z"$defaultval"; then
+          if test -z "$defaultval"; then
               if test x"$enablestring" = xdisable; then
                   defaultval=yes
               else
