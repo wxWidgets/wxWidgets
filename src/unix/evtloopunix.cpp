@@ -29,10 +29,9 @@
 #include <errno.h>
 #include "wx/thread.h"
 #include "wx/module.h"
+#include "wx/unix/private/timer.h"
 #include "wx/unix/private/epolldispatcher.h"
 #include "wx/private/selectdispatcher.h"
-
-#include "wx/generic/private/timer.h"
 
 #define TRACE_EVENTS _T("events")
 
