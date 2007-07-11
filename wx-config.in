@@ -46,14 +46,14 @@ usage()
  wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--release] [--version-full]
            [--list] [--selected-config] [--host=HOST] [--toolkit=TOOLKIT]
            [--universal[=yes|no]] [--unicode[=yes|no]] [--debug[=yes|no]]
-           [--static[=yes|no]] [--version[=VERSION]] [--basename] [--cc]
-           [--cppflags] [--cflags] [--cxxflags] [--rescomp] [--cxx]
-           [--linkdeps] [--ld] [--utility=UTIL]
+           [--static[=yes|no]] [--version[=VERSION]] [--basename]
+           [--cc] [--cxx] [--cppflags [base]] [--cxxflags [base]] [--cflags]
+           [--rescomp] [--linkdeps] [--ld] [--utility=UTIL]
            [--libs [LIBS...]] [--optional-libs [LIBS...]]
 
     wx-config returns information about the wxWidgets libraries available on
   your system.  It may be used to retrieve the information required to build
-  applications using these libraries using --cppflags, --cflags,  --cxxflags
+  applications using these libraries using --cppflags, --cxxflags, --cflags,
   and --libs options.
 
     If multiple builds of wxWidgets  are available,  you can use the options
@@ -276,11 +276,12 @@ for arg do
 
     *)
         # We validate the parameters later ...
-        if [ "$_name" = "libs" ]
-        then
+
+        if [ "$_name" = "cxxflags" ] || [ "$_name" = "cppflags" ]; then
+            cxx_parameters="${cxx_parameters:+$cxx_parameters }$arg"
+        elif [ "$_name" = "libs" ]; then
             libs_parameters="${libs_parameters:+$libs_parameters }$arg"
-        elif [ "$_name" = "optional_libs" ]
-        then
+        elif [ "$_name" = "optional_libs" ]; then
             optional_libs_parameters="${optional_libs_parameters:+$optional_libs_parameters }$arg"
         else
             # These are unattached args and signify an error
@@ -1101,6 +1102,9 @@ done
 
 [ -z "$WXDEBUG" ] || decho "  user supplied libs: '$wx_libs'"
 
+# Assume we are using the GUI, unless --libs was specified with no GUI libs
+using_gui=yes
+
 if is_monolithic; then
 
     # Only add additional info if --libs was specified and not just --optional-libs
@@ -1119,8 +1123,6 @@ if is_monolithic; then
         else
             wx_libs="$wx_libs -lwx_@TOOLCHAIN_NAME@"
         fi
-
-        using_gui=yes
     fi
 else    # MONOLITHIC = 0
 
@@ -1143,20 +1145,28 @@ else    # MONOLITHIC = 0
         fi
     fi
 
-    using_gui=no
-    for i in $wx_libs ; do
-        if match_field "$i" @STD_GUI_LIBS@ ; then
-            _guildflags="@WXCONFIG_LDFLAGS_GUI@"
-            using_gui=yes
-            break
-        fi
-        match_field "$i" @STD_BASE_LIBS@ || using_gui=yes
-    done
+    if [ -n "$output_option_libs" ]; then
+        using_gui=no
+        for i in $wx_libs ; do
+            if match_field "$i" @STD_GUI_LIBS@; then
+                _guildflags="@WXCONFIG_LDFLAGS_GUI@"
+                using_gui=yes
+                break
+            fi
+            match_field "$i" @STD_BASE_LIBS@ || using_gui=yes
+        done
+    fi
 
     if is_static; then
         link_deps=`link_deps_for $wx_libs`
     fi
     wx_libs="$_guildflags `lib_flags_for $wx_libs`"
+fi
+
+
+# If they explicitly set "--cxx(pp)flags base" then they don't want the GUI
+if [ "$cxx_parameters" = "base" ]; then
+    using_gui=no
 fi
 
 
