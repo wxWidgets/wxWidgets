@@ -4221,6 +4221,7 @@ bool wxGrid::Create(wxWindow *parent, wxWindowID id,
 
     Create();
     SetInitialSize(size);
+    CalcDimensions();
 
     return true;
 }
@@ -6953,8 +6954,11 @@ void wxGrid::Refresh(bool eraseb, const wxRect* rect)
 
 void wxGrid::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-    // update our children window positions and scrollbars
-    CalcDimensions();
+    if (m_targetWindow != this) // check whether initialisation has been done
+    {
+        // update our children window positions and scrollbars
+        CalcDimensions();
+    }
 }
 
 void wxGrid::OnKeyDown( wxKeyEvent& event )
