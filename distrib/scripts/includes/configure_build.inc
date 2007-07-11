@@ -19,45 +19,50 @@ UNICODE_OPTS="--enable-unicode"
 
 ANSI_OPTS="--enable-ansi"
 
-WXPYTHON_OPTS="--enable-monolithic \
-	--with-opengl \
-	--enable-sound \
-        --enable-mediactrl \
-	--enable-display \
-	--enable-geometry \
-	--enable-debug_flag \
-	--enable-optimise \
-	--disable-debugreport "
+WXPYTHON_OPTS="--with-opengl \
+    --enable-sound --with-sdl \
+    --with-gnomeprint \
+    --enable-graphics_ctx \
+    --enable-mediactrl \
+    --enable-display \
+    --enable-geometry \
+    --enable-debug_flag \
+    --enable-optimise \
+    --disable-debugreport "
 	
 	
 do_build(){
     OPTS=""
-    if [ "$WXPYTHON" == "1" ]; then
+    if [ "$WXPYTHON" = "1" ]; then
       OPTS="$WXPYTHON_OPTS"
     fi
     
-    if [ "$DEBUG" == "1" ]; then
+    if [ "$DEBUG" = "1" ]; then
       OPTS="$OPTS $DEBUG_OPTS "
     fi
     
-    if [ "$UNICODE" == "1" ]; then
+    if [ "$UNICODE" = "1" ]; then
       OPTS="$OPTS $UNICODE_OPTS "
     fi
     
     
     
-    if [ "$STATIC" == "1" ]; then
+    if [ "$STATIC" = "1" ]; then
       OPTS="$OPTS --enable-static"
     fi
     
     OPTS="$OPTS $OTHER_OPTS"
     
+    echo "$WXROOT/configure --prefix=$BUILDPREFIX $OPTS"
     $WXROOT/configure --prefix=$BUILDPREFIX $OPTS
     make
+    if [ $? != 0 ]; then
+        echo "wxWidgets build failed."        
+        exit $?
+    fi
     
     # build the libs wxPython needs
-    if [ "$WXPYTHON" == "1" ]; then
-      make -C contrib/src/animate
+    if [ "$WXPYTHON" = "1" ]; then
       make -C contrib/src/gizmos
       make -C contrib/src/stc
     fi
