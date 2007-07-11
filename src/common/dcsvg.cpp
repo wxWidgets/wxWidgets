@@ -15,6 +15,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_SVG
+
 #ifndef WX_PRECOMP
 #include "wx/image.h"
 #endif
@@ -711,4 +713,6 @@ void wxSVGFileDC::SetDeviceOrigin(wxCoord x, wxCoord y)
 #pragma warn .rch
 #pragma warn .ccc
 #endif
+
+#endif // wxUSE_SVG
 

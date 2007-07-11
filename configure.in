@@ -632,8 +632,9 @@ WX_ARG_FEATURE(logwin,      [  --enable-logwin         use wxLogWindow], wxUSE_L
 WX_ARG_FEATURE(logdialog,   [  --enable-logdialog      use wxLogDialog], wxUSE_LOGDIALOG)
 WX_ARG_FEATURE(webkit,      [  --enable-webkit         use wxWebKitCtrl (Mac)], wxUSE_WEBKIT)
 WX_ARG_FEATURE(richtext,    [  --enable-richtext       use wxRichTextCtrl], wxUSE_RICHTEXT)
-WX_ARG_FEATURE(graphics_ctx, [  --enable-graphics_ctx   use graphics context 2D drawing API], wxUSE_GRAPHICS_CONTEXT)
+WX_ARG_FEATURE(graphics_ctx,[  --enable-graphics_ctx   use graphics context 2D drawing API], wxUSE_GRAPHICS_CONTEXT)
 WX_ARG_FEATURE(postscript,  [  --enable-postscript     use wxPostscriptDC device context (default for gtk+)], wxUSE_POSTSCRIPT)
+WX_ARG_FEATURE(svg,         [  --enable-svg            use wxSVGFileDC device context], wxUSE_SVG)
 
 dnl ---------------------------------------------------------------------------
 dnl IPC &c
@@ -6169,18 +6170,6 @@ if test "$wxUSE_wxUSE_EXPERIMENTAL_PRINTF" = "yes"; then
   AC_DEFINE(wxUSE_EXPERIMENTAL_PRINTF)
 fi
 
-dnl ----------------------------------------------------------------
-dnl Register PostScript options for makefiles and setup.h
-dnl ----------------------------------------------------------------
-
-if test "$wxUSE_POSTSCRIPT" = "yes" ; then
-  AC_DEFINE(wxUSE_POSTSCRIPT)
-fi
-
-AC_DEFINE(wxUSE_AFM_FOR_POSTSCRIPT)
-
-AC_DEFINE(wxUSE_NORMALIZED_PS_FONTS)
-
 dnl ---------------------------------------------------------------------------
 dnl big GUI components: MDI, doc/view, printing, help, ...
 dnl ---------------------------------------------------------------------------
@@ -6236,6 +6225,17 @@ if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS printing"
 fi
 
+if test "$wxUSE_POSTSCRIPT" = "yes" ; then
+  AC_DEFINE(wxUSE_POSTSCRIPT)
+fi
+
+AC_DEFINE(wxUSE_AFM_FOR_POSTSCRIPT)
+
+AC_DEFINE(wxUSE_NORMALIZED_PS_FONTS)
+
+if test "$wxUSE_SVG" = "yes"; then
+    AC_DEFINE(wxUSE_SVG)
+fi
 
 dnl ---------------------------------------------------------------------------
 dnl wxMetafile availability

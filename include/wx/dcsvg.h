@@ -15,6 +15,8 @@
 #include "wx/string.h"
 #include "wx/dc.h"
 
+#if wxUSE_SVG
+
 #define wxSVGVersion wxT("v0100")
 
 #ifdef __BORLANDC__
@@ -190,5 +192,7 @@ private:
 private:
    DECLARE_ABSTRACT_CLASS(wxSVGFileDC)
 };
+
+#endif // wxUSE_SVG
 
 #endif // _WX_DCSVG_H_

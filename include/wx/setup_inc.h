@@ -1094,7 +1094,7 @@
                                 // Include mouse wheel support
 
 // ----------------------------------------------------------------------------
-// postscript support settings
+// wxDC classes for various output formats
 // ----------------------------------------------------------------------------
 
 // Set to 1 for PostScript device context.
@@ -1102,6 +1102,10 @@
 
 // Set to 1 to use font metric files in GetTextExtent
 #define wxUSE_AFM_FOR_POSTSCRIPT 1
+
+// Set to 1 to compile in support for wxSVGFileDC, a wxDC subclass which allows
+// to create fiels in SVG (Scalable Vector Graphics) format.
+#define wxUSE_SVG 1
 
 // ----------------------------------------------------------------------------
 // database classes

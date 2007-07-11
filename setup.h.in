@@ -493,6 +493,8 @@
 
 #define wxUSE_AFM_FOR_POSTSCRIPT 0
 
+#define wxUSE_SVG 0
+
 
 #define wxUSE_ODBC          0
 
