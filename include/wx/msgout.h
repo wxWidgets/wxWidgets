@@ -132,7 +132,7 @@ protected:
 // implementation which shows output in a message box
 // ----------------------------------------------------------------------------
 
-#if wxUSE_GUI
+#if wxUSE_GUI && wxUSE_MSGDLG
 
 class WXDLLIMPEXP_CORE wxMessageOutputMessageBox : public wxMessageOutput
 {
@@ -143,7 +143,7 @@ protected:
     virtual void Output(const wxString& str);
 };
 
-#endif // wxUSE_GUI
+#endif // wxUSE_GUI && wxUSE_MSGDLG
 
 // ----------------------------------------------------------------------------
 // implementation using the native way of outputting debug messages

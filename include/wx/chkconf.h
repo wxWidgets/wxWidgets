@@ -1742,16 +1742,6 @@
 #   endif
 #endif /* !wxUSE_IMAGLIST */
 
-#if !wxUSE_MSGDLG
-#   ifdef wxABORT_ON_CONFIG_ERROR
-        /* FIXME: should compile without it, of course, but doesn't */
-#       error "wxMessageBox is always needed"
-#   else
-#       undef wxUSE_MSGDLG
-#       define wxUSE_MSGDLG 1
-#   endif
-#endif
-
 #if wxUSE_RADIOBOX
 #   if !wxUSE_RADIOBTN
 #        ifdef wxABORT_ON_CONFIG_ERROR

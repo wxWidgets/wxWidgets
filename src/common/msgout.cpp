@@ -209,7 +209,7 @@ void wxMessageOutputLog::Output(const wxString& str)
 // wxMessageOutputMessageBox
 // ----------------------------------------------------------------------------
 
-#if wxUSE_GUI
+#if wxUSE_GUI && wxUSE_MSGDLG
 
 void wxMessageOutputMessageBox::Output(const wxString& str)
 {
