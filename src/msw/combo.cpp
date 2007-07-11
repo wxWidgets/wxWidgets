@@ -38,7 +38,10 @@
 #include "wx/combo.h"
 
 #include "wx/msw/registry.h"
+
+#if wxUSE_UXTHEME
 #include "wx/msw/uxtheme.h"
+#endif
 
 // Change to #if 1 to include tmschema.h for easier testing of theme
 // parameters.
@@ -110,17 +113,21 @@ bool wxComboCtrl::Create(wxWindow *parent,
     // Set border
     long border = style & wxBORDER_MASK;
 
+#if wxUSE_UXTHEME
     wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
+#endif
 
     if ( !border )
     {
         // For XP, have 1-width custom border, for older version use sunken
+#if wxUSE_UXTHEME
         if ( theme )
         {
             border = wxBORDER_NONE;
             m_widthCustomBorder = 1;
         }
         else
+#endif
             border = wxBORDER_SUNKEN;
 
         style = (style & ~(wxBORDER_MASK)) | border;
@@ -165,6 +172,7 @@ void wxComboCtrl::OnThemeChange()
     // API: TMT_TEXTCOLOR doesn't work neither for EDIT nor COMBOBOX
     SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
 
+#if wxUSE_UXTHEME
     wxUxThemeEngine * const theme = wxUxThemeEngine::GetIfActive();
     if ( theme )
     {
@@ -189,6 +197,7 @@ void wxComboCtrl::OnThemeChange()
 
         wxLogApiError(_T("GetThemeColor(EDIT, ETS_NORMAL, TMT_FILLCOLOR)"), hr);
     }
+#endif
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 }
@@ -201,12 +210,14 @@ void wxComboCtrl::OnResize()
     int textCtrlXAdjust;
     int textCtrlYAdjust;
 
+#if wxUSE_UXTHEME
     if ( wxUxThemeEngine::GetIfActive() )
     {
         textCtrlXAdjust = TEXTCTRLXADJUST_XP;
         textCtrlYAdjust = TEXTCTRLYADJUST_XP;
     }
     else
+#endif
     {
         textCtrlXAdjust = TEXTCTRLXADJUST_CLASSIC;
         textCtrlYAdjust = TEXTCTRLYADJUST_CLASSIC;
@@ -265,7 +276,9 @@ static void wxMSWDrawFocusRect( wxDC& dc, const wxRect& rect )
 void
 wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
 {
+#if wxUSE_UXTHEME
     wxUxThemeHandle hTheme(this, L"COMBOBOX");
+#endif
     //COLORREF cref;
 
     wxSize sz = GetClientSize();
@@ -282,6 +295,7 @@ wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
         isEnabled = IsEnabled();
         isFocused = ShouldDrawFocus();
 
+#if wxUSE_UXTHEME
         // Windows-style: for smaller size control (and for disabled background) use less spacing
         if ( hTheme )
         {
@@ -290,6 +304,7 @@ wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
             focusSpacingY = sz.y > (GetCharHeight()+2) && isEnabled ? 2 : 1;
         }
         else
+#endif
         {
             // Classic Theme
             if ( isEnabled )
@@ -417,8 +432,11 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
     wxColour bgCol = GetBackgroundColour();
     wxColour fgCol;
 
+#if wxUSE_UXTHEME
     wxUxThemeEngine* theme = NULL;
     wxUxThemeHandle hTheme(this, L"COMBOBOX");
+#endif
+
     int etsState;
 
     // area around both controls
@@ -429,6 +447,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         rect2.Inflate(1);
     }
 
+#if wxUSE_UXTHEME
     // Use theme to draw border on XP
     if ( hTheme )
     {
@@ -456,6 +475,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         fgCol = wxRGBToColour(cref);
     }
     else
+#endif
     {
         // draw regular background
         fgCol = GetForegroundColour();
@@ -471,6 +491,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 
     // Button background with theme?
     int drawButFlags = Draw_PaintBg;
+#if wxUSE_UXTHEME
     if ( hTheme && m_blankButtonBg )
     {
         RECT r;
@@ -484,6 +505,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 
         drawButFlags = 0;
     }
+#endif
 
     // Standard button rendering
     DrawButton(dc,rectb,drawButFlags);
