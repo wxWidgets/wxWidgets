@@ -9,11 +9,11 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DCSVG_H
-#define __DCSVG_H
+#ifndef _WX_DCSVG_H_
+#define _WX_DCSVG_H_
 
-#include "wx/wfstream.h"
 #include "wx/string.h"
+#include "wx/dc.h"
 
 #define wxSVGVersion wxT("v0100")
 
@@ -22,128 +22,173 @@
 #pragma warn -8066
 #endif
 
+class WXDLLIMPEXP_FWD_BASE wxFileOutputStream;
+
 class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
 {
 public:
     wxSVGFileDC (wxString f);
     wxSVGFileDC (wxString f, int Width, int Height);
     wxSVGFileDC (wxString f, int Width, int Height, float dpi);
-    
-    ~wxSVGFileDC();
 
-    bool CanDrawBitmap() const { return true; }
-    bool CanGetTextExtent() const { return true; }
+    virtual ~wxSVGFileDC();
 
-    int GetDepth() const
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::GetDepth Call not implemented")); return -1 ; }
+    virtual bool CanDrawBitmap() const { return true; }
+    virtual bool CanGetTextExtent() const { return true; }
 
-    void Clear()
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::Clear() Call not implemented \nNot sensible for an output file?")); return ; }
+    virtual int GetDepth() const
+    {
+        wxFAIL_MSG(wxT("wxSVGFILEDC::GetDepth Call not implemented"));
+        return -1;
+    }
 
-    void DestroyClippingRegion()
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::void Call not yet implemented")); return ; }
+    virtual void Clear()
+    {
+        wxFAIL_MSG(wxT("wxSVGFILEDC::Clear() Call not implemented \nNot sensible for an output file?"));
+    }
 
-    wxCoord GetCharHeight() const;
-    wxCoord GetCharWidth() const;
+    virtual void DestroyClippingRegion()
+    {
+        wxFAIL_MSG(wxT("wxSVGFILEDC::void Call not yet implemented"));
+    }
 
-    void SetClippingRegion(wxCoord  WXUNUSED(x), wxCoord  WXUNUSED(y), wxCoord  WXUNUSED(width), wxCoord  WXUNUSED(height))
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetClippingRegion not implemented")); return ; }
+    virtual wxCoord GetCharHeight() const;
+    virtual wxCoord GetCharWidth() const;
 
-    void SetPalette(const wxPalette&  WXUNUSED(palette))
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetPalette not implemented")); return ; }
+    virtual void SetClippingRegion(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
+                                   wxCoord WXUNUSED(w), wxCoord WXUNUSED(h))
+    {
+        wxFAIL_MSG(wxT("wxSVGFILEDC::SetClippingRegion not implemented"));
+    }
 
-    void GetClippingBox(wxCoord *WXUNUSED(x), wxCoord *WXUNUSED(y), wxCoord * WXUNUSED(width), wxCoord * WXUNUSED(height))
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::GetClippingBox not implemented")); return ; }
+    virtual void SetPalette(const wxPalette&  WXUNUSED(palette))
+    {
+        wxFAIL_MSG(wxT("wxSVGFILEDC::SetPalette not implemented"));
+    }
 
-    void SetLogicalFunction(int  WXUNUSED(function))
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetLogicalFunction Call not implemented")); return ; }
+    virtual void GetClippingBox(wxCoord *WXUNUSED(x), wxCoord *WXUNUSED(y),
+                                wxCoord *WXUNUSED(w), wxCoord *WXUNUSED(h))
+    {
+        wxFAIL_MSG(wxT("wxSVGFILEDC::GetClippingBox not implemented"));
+    }
 
-    int GetLogicalFunction() const
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::GetLogicalFunction() not implemented")); return wxCOPY ; }
+    virtual void SetLogicalFunction(int WXUNUSED(function))
+    {
+        wxFAIL_MSG(wxT("wxSVGFILEDC::SetLogicalFunction Call not implemented"));
+    }
 
-    void SetBackground( const wxBrush &brush ) ;
-    void SetBackgroundMode( int mode ) ;
-    void SetBrush(const wxBrush& brush) ;
-    void SetFont(const wxFont& font) ;
-    void SetPen(const wxPen& pen)  ;
-          
-    bool IsOk() const {return m_OK;}
+    virtual int GetLogicalFunction() const
+    {
+        wxFAIL_MSG(wxT("wxSVGFILEDC::GetLogicalFunction() not implemented"));
+        return -1;
+    }
 
-    // these need to be overridden as wxPostscriptDC inherits
-    // from the platform dependent wxDC and this we'd call
-    // e.g. wxMSW specific code here.
+    virtual void SetBackground( const wxBrush &brush );
+    virtual void SetBackgroundMode( int mode );
+    virtual void SetBrush(const wxBrush& brush);
+    virtual void SetFont(const wxFont& font);
+    virtual void SetPen(const wxPen& pen);
+
+    virtual bool IsOk() const {return m_OK;}
+
     virtual void SetMapMode( int mode );
     virtual void SetUserScale( double x, double y );
     virtual void SetLogicalScale( double x, double y );
     virtual void SetLogicalOrigin( wxCoord x, wxCoord y );
     virtual void SetDeviceOrigin( wxCoord x, wxCoord y );
-    void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
+    virtual void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
 
 private:
-        bool DoGetPixel(wxCoord, wxCoord, class wxColour *) const
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::DoGetPixel Call not implemented")); return true; }
+   virtual bool DoGetPixel(wxCoord, wxCoord, wxColour *) const
+   {
+       wxFAIL_MSG(wxT("wxSVGFILEDC::DoGetPixel Call not implemented"));
+       return true;
+   }
 
-        virtual bool DoBlit(wxCoord, wxCoord, wxCoord, wxCoord, class wxDC *,
-            wxCoord, wxCoord, int = wxCOPY, bool = 0, int = -1, int = -1) ;
+   virtual bool DoBlit(wxCoord, wxCoord, wxCoord, wxCoord, wxDC *,
+                       wxCoord, wxCoord, int = wxCOPY,
+                       bool = 0, int = -1, int = -1);
 
-        void DoCrossHair(wxCoord, wxCoord)
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::CrossHair Call not implemented")); return  ; }
+   virtual void DoCrossHair(wxCoord, wxCoord)
+   {
+       wxFAIL_MSG(wxT("wxSVGFILEDC::CrossHair Call not implemented"));
+   }
 
-        void DoDrawArc(wxCoord, wxCoord, wxCoord, wxCoord, wxCoord, wxCoord);
+   virtual void DoDrawArc(wxCoord, wxCoord, wxCoord, wxCoord, wxCoord, wxCoord);
 
-        void DoDrawBitmap(const class wxBitmap &, wxCoord, wxCoord, bool = 0) ;
+   virtual void DoDrawBitmap(const wxBitmap &, wxCoord, wxCoord, bool = 0);
 
-        void DoDrawCheckMark(wxCoord x, wxCoord y, wxCoord width, wxCoord height) ;
+   virtual void DoDrawCheckMark(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
 
-        void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height) ;
+   virtual void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
 
-        void DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea) ;
+   virtual void DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
+                                  double sa, double ea);
 
-        void DoDrawIcon(const class wxIcon &, wxCoord, wxCoord) ;
+   virtual void DoDrawIcon(const wxIcon &, wxCoord, wxCoord);
 
-        void DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2) ;
+   virtual void DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
 
-        void DoDrawLines(int n, wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0) ;
+   virtual void DoDrawLines(int n, wxPoint points[],
+                            wxCoord xoffset = 0, wxCoord yoffset = 0);
 
-        void DoDrawPoint(wxCoord, wxCoord) ;
+   virtual void DoDrawPoint(wxCoord, wxCoord);
 
-        void DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset,int fillStyle) ;
+   virtual void DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset,int fillStyle);
 
-        void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height) ;
+   virtual void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
 
-        void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle) ;
+   virtual void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
+                                  double angle);
 
-        void DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius = 20)  ;
+   virtual void DoDrawRoundedRectangle(wxCoord x, wxCoord y,
+                                       wxCoord w, wxCoord h,
+                                       double radius = 20) ;
 
-        void DoDrawText(const wxString& text, wxCoord x, wxCoord y);
+   virtual void DoDrawText(const wxString& text, wxCoord x, wxCoord y);
 
-        bool DoFloodFill(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), const wxColour& WXUNUSED(col),
-                             int WXUNUSED(style) = wxFLOOD_SURFACE)
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::DoFloodFill Call not implemented")); return false ; }
+   virtual bool DoFloodFill(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
+                            const wxColour& WXUNUSED(col),
+                            int WXUNUSED(style) = wxFLOOD_SURFACE)
+   {
+       wxFAIL_MSG(wxT("wxSVGFILEDC::DoFloodFill Call not implemented"));
+       return false;
+   }
 
-        void DoGetSize(int * x, int *y) const { *x = m_width; *y = m_height ; return ; }
+   virtual void DoGetSize(int * x, int *y) const
+   {
+       if ( x )
+           *x = m_width;
+       if ( y )
+           *y = m_height;
+   }
 
-        void DoGetTextExtent(const wxString& string, wxCoord *w, wxCoord *h, wxCoord *descent = NULL, wxCoord *externalLeading = NULL, const wxFont *font = NULL) const ;
+   virtual void DoGetTextExtent(const wxString& string, wxCoord *w, wxCoord *h,
+                                wxCoord *descent = NULL,
+                                wxCoord *externalLeading = NULL,
+                                const wxFont *font = NULL) const;
 
-        void DoSetClippingRegionAsRegion(const class wxRegion &)
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::DoSetClippingRegionAsRegion Call not yet implemented")); return  ; }
+   virtual void DoSetClippingRegionAsRegion(const wxRegion& WXUNUSED(region))
+   {
+       wxFAIL_MSG(wxT("wxSVGFILEDC::DoSetClippingRegionAsRegion Call not yet implemented"));
+   }
 
-       void Init (wxString f, int Width, int Height, float dpi);
+   void Init (wxString f, int Width, int Height, float dpi);
 
-       void NewGraphics();
-       
-       void write( const wxString &s );
+   void NewGraphics();
+
+   void write( const wxString &s );
 
 private:
-    wxFileOutputStream *m_outfile;
-    wxString            m_filename;
-    int                 m_sub_images; // number of png format images we have
-    bool                m_OK;
-    bool                m_graphics_changed;
-    int                 m_width, m_height;
-    
+   wxFileOutputStream *m_outfile;
+   wxString            m_filename;
+   int                 m_sub_images; // number of png format images we have
+   bool                m_OK;
+   bool                m_graphics_changed;
+   int                 m_width, m_height;
+
 private:
-    DECLARE_ABSTRACT_CLASS(wxSVGFileDC)
+   DECLARE_ABSTRACT_CLASS(wxSVGFileDC)
 };
 
-#endif      // __DCSVG_H
+#endif // _WX_DCSVG_H_

@@ -16,11 +16,11 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+#include "wx/image.h"
 #endif
 
 #include "wx/dcsvg.h"
-#include "wx/image.h"
+#include "wx/wfstream.h"
 
 #define wxSVG_DEBUG FALSE
 // or TRUE to see the calls being executed
@@ -711,3 +711,4 @@ void wxSVGFileDC::SetDeviceOrigin(wxCoord x, wxCoord y)
 #pragma warn .rch
 #pragma warn .ccc
 #endif
+
