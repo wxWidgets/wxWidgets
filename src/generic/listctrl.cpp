@@ -5000,6 +5000,9 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     if ( !wxControl::Create( parent, id, pos, size, style, validator, name ) )
         return false;
 
+    // this window itself shouldn't get the focus, only m_mainWin should
+    SetCanFocus(false);
+
     // don't create the inner window with the border
     style &= ~wxBORDER_MASK;
 
