@@ -2555,8 +2555,7 @@ void wxWindowGTK::PostCreation()
         g_signal_connect (gcombo->entry, "size_request",
                           G_CALLBACK (wxgtk_combo_size_request_callback),
                           this);
-    }
-    else
+    } else
 #endif // wxUSE_COMBOBOX
 #ifdef GTK_IS_FILE_CHOOSER_BUTTON
     if (!gtk_check_version(2,6,0) && GTK_IS_FILE_CHOOSER_BUTTON(m_widget))
@@ -2565,9 +2564,9 @@ void wxWindowGTK::PostCreation()
         // then that control won't be sized properly when placed inside sizers
         // (this can be tested removing this elseif and running XRC or WIDGETS samples)
         // FIXME: what should be done here ?
-    }
+    } else
 #endif
-    else if ( !IsTopLevel() ) // top level windows use their own callback
+    if ( !IsTopLevel() ) // top level windows use their own callback
     {
         // This is needed if we want to add our windows into native
         // GTK controls, such as the toolbar. With this callback, the
