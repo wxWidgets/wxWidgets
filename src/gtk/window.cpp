@@ -424,6 +424,8 @@ void wxgtk_window_size_request_callback(GtkWidget *widget,
 }
 }
 
+#if wxUSE_COMBOBOX
+
 extern "C" {
 static
 void wxgtk_combo_size_request_callback(GtkWidget *widget,
@@ -458,6 +460,8 @@ void wxgtk_combo_size_request_callback(GtkWidget *widget,
     requisition->height = entry_req.height;
 }
 }
+
+#endif // wxUSE_COMBOBOX
 
 //-----------------------------------------------------------------------------
 // "expose_event" of m_wxwindow
@@ -2543,6 +2547,7 @@ void wxWindowGTK::PostCreation()
                           G_CALLBACK (gtk_window_size_callback), this);
     }
 
+#if wxUSE_COMBOBOX
     if (GTK_IS_COMBO(m_widget))
     {
         GtkCombo *gcombo = GTK_COMBO(m_widget);
@@ -2551,8 +2556,10 @@ void wxWindowGTK::PostCreation()
                           G_CALLBACK (wxgtk_combo_size_request_callback),
                           this);
     }
+    else
+#endif // wxUSE_COMBOBOX
 #ifdef GTK_IS_FILE_CHOOSER_BUTTON
-    else if (!gtk_check_version(2,6,0) && GTK_IS_FILE_CHOOSER_BUTTON(m_widget))
+    if (!gtk_check_version(2,6,0) && GTK_IS_FILE_CHOOSER_BUTTON(m_widget))
     {
         // If we connect to the "size_request" signal of a GtkFileChooserButton
         // then that control won't be sized properly when placed inside sizers
@@ -3179,11 +3186,13 @@ void wxWindowGTK::SetFocus()
     {
         if (GTK_IS_CONTAINER(m_widget))
         {
+#if wxUSE_RADIOBTN
             if (IsKindOf(CLASSINFO(wxRadioButton)))
             {
                 gtk_widget_grab_focus (m_widget);
                 return;
             }
+#endif // wxUSE_RADIOBTN
 
             gtk_widget_child_focus( m_widget, GTK_DIR_TAB_FORWARD );
         }
