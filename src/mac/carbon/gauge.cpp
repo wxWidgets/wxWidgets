@@ -15,8 +15,6 @@
 
 #include "wx/gauge.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)
-
 #include "wx/mac/uma.h"
 
 bool wxGauge::Create( wxWindow *parent,

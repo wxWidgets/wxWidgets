@@ -27,8 +27,6 @@
 // for modal dialogs
 wxList wxModalDialogs;
 
-IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
-
 void wxDialog::Init()
 {
     m_isModalStyle = false;

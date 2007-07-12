@@ -19,8 +19,6 @@
 
 #include "wx/mac/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
-
 wxColour::wxColour(const RGBColor& col)
 {
     FromRGBColor((WXCOLORREF *)&col);

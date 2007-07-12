@@ -36,8 +36,6 @@ BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
 //  EVT_CLOSE(wxFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
-
 #define WX_MAC_STATUSBAR_HEIGHT 18
 
 // ----------------------------------------------------------------------------

@@ -17,9 +17,7 @@
 #include "wx/mac/uma.h"
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent)
-
 
 wxSpinButton::wxSpinButton()
    : wxSpinButtonBase()

@@ -22,9 +22,6 @@
 
 #include "wx/mac/uma.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
-
-
 bool wxButton::Create(wxWindow *parent,
     wxWindowID id,
     const wxString& lbl,

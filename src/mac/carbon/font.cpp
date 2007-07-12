@@ -30,10 +30,6 @@
 #include <ATSUnicode.h>
 #endif
 
-
-IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
-
-
 class WXDLLEXPORT wxFontRefData: public wxGDIRefData
 {
     friend class WXDLLEXPORT wxFont;

@@ -24,9 +24,6 @@
 
 extern MenuHandle NewUniqueMenu() ;
 
-IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
-
-
 wxChoice::~wxChoice()
 {
     if ( HasClientObjectData() )

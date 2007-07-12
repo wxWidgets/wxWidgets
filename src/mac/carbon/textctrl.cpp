@@ -329,8 +329,6 @@ private :
 };
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxTextCtrlBase)
-
 BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_ERASE_BACKGROUND( wxTextCtrl::OnEraseBackground )
     EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
