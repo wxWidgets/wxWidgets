@@ -16,7 +16,6 @@
 #endif // WX_PRECOMP
 
 #include "wx/cocoa/NSMenu.h"
-#include "wx/cocoa/ObjcPose.h"
 
 #import <Foundation/NSNotification.h>
 #include "wx/cocoa/objc/NSMenu.h"

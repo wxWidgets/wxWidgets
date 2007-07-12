@@ -86,8 +86,6 @@
     #include "wx/app.h"
 #endif // WX_PRECOMP
 
-#include "wx/cocoa/ObjcPose.h"
-
 #import <AppKit/NSComboBox.h>
 #import <Foundation/NSNotification.h>
 #import <Foundation/NSString.h>

@@ -23,7 +23,6 @@
     #include "wx/menuitem.h"
 #endif // WX_PRECOMP
 
-#include "wx/cocoa/ObjcPose.h"
 #include "wx/cocoa/NSWindow.h"
 
 #import <Foundation/NSNotification.h>
