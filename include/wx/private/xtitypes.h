@@ -40,7 +40,7 @@ public:
     // returns true if the member has been found and sets the int value
     // pointed to accordingly (if ptr != null )
     // if not found returns false, value left unchanged
-    bool HasEnumMemberValue( const wxChar *name , int *value = NULL ) const;
+    bool HasEnumMemberValue( const wxChar *name, int *value = NULL ) const;
 
     // returns the value of the member, if not found in debug mode an
     // assert is issued, in release 0 is returned
@@ -67,26 +67,26 @@ private:
 #define wxBEGIN_ENUM( e ) \
     wxEnumMemberData s_enumDataMembers##e[] = {
 
-#define wxENUM_MEMBER( v ) { wxT(#v), v } ,
+#define wxENUM_MEMBER( v ) { wxT(#v), v },
 
 #define wxEND_ENUM( e )                                                 \
-        { NULL , 0 } };                                                 \
+        { NULL, 0 } };                                                 \
     wxEnumData s_enumData##e( s_enumDataMembers##e );                   \
     wxEnumData *wxGetEnumData(e) { return &s_enumData##e; }             \
-    template<> void wxStringReadValue(const wxString& s , e &data )     \
+    template<> void wxStringReadValue(const wxString& s, e &data )     \
         { data = (e) s_enumData##e.GetEnumMemberValue(s); }             \
-    template<> void wxStringWriteValue(wxString &s , const e &data )    \
+    template<> void wxStringWriteValue(wxString &s, const e &data )    \
         { s = s_enumData##e.GetEnumMemberName((int)data); }             \
-    void FromLong##e( long data , wxxVariant& result )                  \
+    void FromLong##e( long data, wxxVariant& result )                  \
         { result = wxxVariant((e)data); }                               \
-    void ToLong##e( const wxxVariant& data , long &result )             \
-        { result = (long) data.wxTEMPLATED_MEMBER_CALL(Get , e); }      \
+    void ToLong##e( const wxxVariant& data, long &result )             \
+        { result = (long) data.wxTEMPLATED_MEMBER_CALL(Get, e); }      \
                                                                         \
     wxTO_STRING_IMP( e )                                                \
     wxFROM_STRING_IMP( e )                                              \
-    wxEnumTypeInfo s_typeInfo##e(wxT_ENUM , &s_enumData##e ,            \
-            &wxTO_STRING( e ) , &wxFROM_STRING( e ) , &ToLong##e ,      \
-            &FromLong##e , typeid(e).name() );
+    wxEnumTypeInfo s_typeInfo##e(wxT_ENUM, &s_enumData##e,            \
+            &wxTO_STRING( e ), &wxFROM_STRING( e ), &ToLong##e,      \
+            &FromLong##e, typeid(e).name() );
 
 
 // ----------------------------------------------------------------------------
@@ -111,7 +111,7 @@ private:
 //  wxENUM_MEMBER( Strawberry )
 // wxEND_ENUM( wxFlavor )
 //
-// wxIMPLEMENT_SET_STREAMING( wxCoupe , wxFlavor )
+// wxIMPLEMENT_SET_STREAMING( wxCoupe, wxFlavor )
 //
 // implementation note: no partial specialization for streaming, but a delegation 
 //                      to a different class
@@ -119,22 +119,22 @@ private:
 // ----------------------------------------------------------------------------
 
 // in order to remove dependancy on string tokenizer
-void WXDLLIMPEXP_BASE wxSetStringToArray( const wxString &s , wxArrayString &array );
+void WXDLLIMPEXP_BASE wxSetStringToArray( const wxString &s, wxArrayString &array );
 
 template<typename e>
-void wxSetFromString(const wxString &s , wxBitset<e> &data )
+void wxSetFromString(const wxString &s, wxBitset<e> &data )
 {
     wxEnumData* edata = wxGetEnumData((e) 0);
     data.reset();
 
     wxArrayString array;
-    wxSetStringToArray( s , array );
+    wxSetStringToArray( s, array );
     wxString flag;
     for ( int i = 0; i < array.Count(); ++i )
     {
         flag = array[i];
         int ivalue;
-        if ( edata->HasEnumMemberValue( flag , &ivalue ) )
+        if ( edata->HasEnumMemberValue( flag, &ivalue ) )
         {
             data.set( (e) ivalue );
         }
@@ -142,7 +142,7 @@ void wxSetFromString(const wxString &s , wxBitset<e> &data )
 }
 
 template<typename e>
-void wxSetToString( wxString &s , const wxBitset<e> &data )
+void wxSetToString( wxString &s, const wxBitset<e> &data )
 {
     wxEnumData* edata = wxGetEnumData((e) 0);
     int count = edata->GetEnumCount();
@@ -155,41 +155,41 @@ void wxSetToString( wxString &s , const wxBitset<e> &data )
         {
             // this could also be done by the templated calls
             if ( !s.empty() )
-                s +=wxT("|");
+                s += wxT("|");
             s += edata->GetEnumMemberNameByIndex(i);
         }
     }
 }
 
 #define wxIMPLEMENT_SET_STREAMING(SetName,e)                                    \
-    template<> void wxStringReadValue(const wxString &s , wxBitset<e> &data )   \
-        { wxSetFromString( s , data ); }                                        \
-    template<> void wxStringWriteValue( wxString &s , const wxBitset<e> &data ) \
-        { wxSetToString( s , data ); }                                          \
-    void FromLong##SetName( long data , wxxVariant& result )                    \
+    template<> void wxStringReadValue(const wxString &s, wxBitset<e> &data )   \
+        { wxSetFromString( s, data ); }                                        \
+    template<> void wxStringWriteValue( wxString &s, const wxBitset<e> &data ) \
+        { wxSetToString( s, data ); }                                          \
+    void FromLong##SetName( long data, wxxVariant& result )                    \
         { result = wxxVariant(SetName((unsigned long)data)); }                  \
-    void ToLong##SetName( const wxxVariant& data , long &result )               \
-        { result = (long) data.wxTEMPLATED_MEMBER_CALL(Get , SetName).to_ulong(); } \
+    void ToLong##SetName( const wxxVariant& data, long &result )               \
+        { result = (long) data.wxTEMPLATED_MEMBER_CALL(Get, SetName).to_ulong(); } \
     wxTO_STRING_IMP( SetName )                                                  \
     wxFROM_STRING_IMP( SetName )                                                \
-    wxEnumTypeInfo s_typeInfo##SetName(wxT_SET , &s_enumData##e ,               \
-            &wxTO_STRING( SetName ) , &wxFROM_STRING( SetName ) ,               \
-            &ToLong##SetName , &FromLong##SetName, typeid(SetName).name() );
+    wxEnumTypeInfo s_typeInfo##SetName(wxT_SET, &s_enumData##e,               \
+            &wxTO_STRING( SetName ), &wxFROM_STRING( SetName ),               \
+            &ToLong##SetName, &FromLong##SetName, typeid(SetName).name() );
 
 template<typename e>
-void wxFlagsFromString(const wxString &s , e &data )
+void wxFlagsFromString(const wxString &s, e &data )
 {
     wxEnumData* edata = wxGetEnumData((e*) 0);
     data.m_data = 0;
 
     wxArrayString array;
-    wxSetStringToArray( s , array );
+    wxSetStringToArray( s, array );
     wxString flag;
     for ( size_t i = 0; i < array.Count(); ++i )
     {
         flag = array[i];
         int ivalue;
-        if ( edata->HasEnumMemberValue( flag , &ivalue ) )
+        if ( edata->HasEnumMemberValue( flag, &ivalue ) )
         {
             data.m_data |= ivalue;
         }
@@ -197,7 +197,7 @@ void wxFlagsFromString(const wxString &s , e &data )
 }
 
 template<typename e>
-void wxFlagsToString( wxString &s , const e& data )
+void wxFlagsToString( wxString &s, const e& data )
 {
     wxEnumData* edata = wxGetEnumData((e*) 0);
     int count = edata->GetEnumCount();
@@ -223,24 +223,24 @@ void wxFlagsToString( wxString &s , const e& data )
 #define wxBEGIN_FLAGS( e ) \
     wxEnumMemberData s_enumDataMembers##e[] = {
 
-#define wxFLAGS_MEMBER( v ) { wxT(#v), v } ,
+#define wxFLAGS_MEMBER( v ) { wxT(#v), v },
 
 #define wxEND_FLAGS( e )                                                \
-        { NULL , 0 } };                                                 \
+        { NULL, 0 } };                                                 \
     wxEnumData s_enumData##e( s_enumDataMembers##e );                   \
     wxEnumData *wxGetEnumData(e*) { return &s_enumData##e; }            \
-    template<>  void wxStringReadValue(const wxString &s , e &data )    \
-        { wxFlagsFromString<e>( s , data ); }                           \
-    template<>  void wxStringWriteValue( wxString &s , const e& data )  \
-        { wxFlagsToString<e>( s , data ); }                             \
-    void FromLong##e( long data , wxxVariant& result )                  \
+    template<>  void wxStringReadValue(const wxString &s, e &data )    \
+        { wxFlagsFromString<e>( s, data ); }                           \
+    template<>  void wxStringWriteValue( wxString &s, const e& data )  \
+        { wxFlagsToString<e>( s, data ); }                             \
+    void FromLong##e( long data, wxxVariant& result )                  \
         { result = wxxVariant(e(data)); }                               \
-    void ToLong##e( const wxxVariant& data , long &result )             \
-        { result = (long) data.wxTEMPLATED_MEMBER_CALL(Get , e).m_data; } \
+    void ToLong##e( const wxxVariant& data, long &result )             \
+        { result = (long) data.wxTEMPLATED_MEMBER_CALL(Get, e).m_data; } \
     wxTO_STRING_IMP( e )                                                \
     wxFROM_STRING_IMP( e )                                              \
-    wxEnumTypeInfo s_typeInfo##e(wxT_SET , &s_enumData##e ,             \
-            &wxTO_STRING( e ) , &wxFROM_STRING( e ) , &ToLong##e ,      \
+    wxEnumTypeInfo s_typeInfo##e(wxT_SET, &s_enumData##e,             \
+            &wxTO_STRING( e ), &wxFROM_STRING( e ), &ToLong##e,      \
             &FromLong##e, typeid(e).name() );
 
 // ----------------------------------------------------------------------------
@@ -271,7 +271,7 @@ enum wxTypeKind
     wxT_ENUM,
     wxT_CUSTOM,     // user defined type (e.g. wxPoint)
 
-    wxT_LAST_SIMPLE_TYPE_KIND = wxT_CUSTOM ,
+    wxT_LAST_SIMPLE_TYPE_KIND = wxT_CUSTOM,
 
     wxT_OBJECT_PTR, // object reference
     wxT_OBJECT,     // embedded object
@@ -285,13 +285,13 @@ enum wxTypeKind
 class WXDLLIMPEXP_BASE wxxVariant;
 class WXDLLIMPEXP_BASE wxTypeInfo;
 
-WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxTypeInfo* , wxTypeInfoMap , class WXDLLIMPEXP_BASE );
+WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxTypeInfo*, wxTypeInfoMap, class WXDLLIMPEXP_BASE );
 
 class WXDLLIMPEXP_BASE wxTypeInfo
 {
 public:
-    typedef void (*converterToString_t)( const wxxVariant& data , wxString &result );
-    typedef void (*converterFromString_t)( const wxString& data , wxxVariant &result );
+    typedef void (*converterToString_t)( const wxxVariant& data, wxString &result );
+    typedef void (*converterFromString_t)( const wxString& data, wxxVariant &result );
 
     wxTypeInfo(wxTypeKind kind,
                converterToString_t to = NULL, converterFromString_t from = NULL,
@@ -335,19 +335,19 @@ public:
     bool HasStringConverters() const { return m_toString != NULL && m_fromString != NULL; }
 
     // convert a wxxVariant holding data of this type into a string
-    void ConvertToString( const wxxVariant& data , wxString &result ) const
+    void ConvertToString( const wxxVariant& data, wxString &result ) const
     { 
         if ( m_toString ) 
-            (*m_toString)( data , result ); 
+            (*m_toString)( data, result ); 
         else 
             wxLogError( wxGetTranslation(_T("String conversions not supported")) ); 
     }
 
     // convert a string into a wxxVariant holding the corresponding data in this type
-    void ConvertFromString( const wxString& data , wxxVariant &result ) const
+    void ConvertFromString( const wxString& data, wxxVariant &result ) const
     { 
         if( m_fromString ) 
-            (*m_fromString)( data , result ); 
+            (*m_fromString)( data, result ); 
         else 
             wxLogError( wxGetTranslation(_T("String conversions not supported")) ); 
     }
@@ -384,32 +384,32 @@ private:
 class WXDLLIMPEXP_BASE wxBuiltInTypeInfo : public wxTypeInfo
 {
 public:
-    wxBuiltInTypeInfo( wxTypeKind kind , converterToString_t to = NULL , 
-                       converterFromString_t from = NULL , 
+    wxBuiltInTypeInfo( wxTypeKind kind, converterToString_t to = NULL, 
+                       converterFromString_t from = NULL, 
                        const wxString &name = wxEmptyString ) :
-            wxTypeInfo( kind , to , from , name )
-       { wxASSERT_MSG( GetKind() < wxT_SET , wxT("Illegal Kind for Base Type") ); }
+            wxTypeInfo( kind, to, from, name )
+       { wxASSERT_MSG( GetKind() < wxT_SET, wxT("Illegal Kind for Base Type") ); }
 
 #if wxUSE_UNICODE
-    wxBuiltInTypeInfo( wxTypeKind kind , converterToString_t to , 
-                       converterFromString_t from  , const char *name  ) :
-            wxTypeInfo( kind , to , from , name )
-       { wxASSERT_MSG( GetKind() < wxT_SET , wxT("Illegal Kind for Base Type") ); }
+    wxBuiltInTypeInfo( wxTypeKind kind, converterToString_t to, 
+                       converterFromString_t from , const char *name  ) :
+            wxTypeInfo( kind, to, from, name )
+       { wxASSERT_MSG( GetKind() < wxT_SET, wxT("Illegal Kind for Base Type") ); }
 #endif
 };
 
 class WXDLLIMPEXP_BASE wxCustomTypeInfo : public wxTypeInfo
 {
 public:
-    wxCustomTypeInfo( const wxString &name , converterToString_t to , 
+    wxCustomTypeInfo( const wxString &name, converterToString_t to, 
                       converterFromString_t from ) :
-            wxTypeInfo( wxT_CUSTOM , to , from , name )
+            wxTypeInfo( wxT_CUSTOM, to, from, name )
        {}
 
 #if wxUSE_UNICODE
-    wxCustomTypeInfo( const char *name  , converterToString_t to , 
+    wxCustomTypeInfo( const char *name , converterToString_t to, 
                       converterFromString_t from ) :
-            wxTypeInfo( wxT_CUSTOM , to , from , name )
+            wxTypeInfo( wxT_CUSTOM, to, from, name )
        {}
 #endif
 };
@@ -417,26 +417,26 @@ public:
 class WXDLLIMPEXP_BASE wxEnumTypeInfo : public wxTypeInfo
 {
 public:
-    typedef void (*converterToLong_t)( const wxxVariant& data , long &result );
-    typedef void (*converterFromLong_t)( long data , wxxVariant &result );
+    typedef void (*converterToLong_t)( const wxxVariant& data, long &result );
+    typedef void (*converterFromLong_t)( long data, wxxVariant &result );
 
-    wxEnumTypeInfo( wxTypeKind kind , wxEnumData* enumInfo , converterToString_t to ,
-                    converterFromString_t from , converterToLong_t toLong ,
-                    converterFromLong_t fromLong , const wxString &name  ) :
-        wxTypeInfo( kind , to , from , name ) , m_toLong( toLong ) , m_fromLong( fromLong )
+    wxEnumTypeInfo( wxTypeKind kind, wxEnumData* enumInfo, converterToString_t to,
+                    converterFromString_t from, converterToLong_t toLong,
+                    converterFromLong_t fromLong, const wxString &name  ) :
+        wxTypeInfo( kind, to, from, name ), m_toLong( toLong ), m_fromLong( fromLong )
     { 
-        wxASSERT_MSG( kind == wxT_ENUM || kind == wxT_SET ,
+        wxASSERT_MSG( kind == wxT_ENUM || kind == wxT_SET,
                       wxT("Illegal Kind for Enum Type")); 
         m_enumInfo = enumInfo; 
     }
 
 #if wxUSE_UNICODE
-    wxEnumTypeInfo( wxTypeKind kind , wxEnumData* enumInfo , converterToString_t to ,
-                    converterFromString_t from , converterToLong_t toLong ,
-                    converterFromLong_t fromLong , const char * name ) :
-        wxTypeInfo( kind , to , from , name ) , m_toLong( toLong ) , m_fromLong( fromLong )
+    wxEnumTypeInfo( wxTypeKind kind, wxEnumData* enumInfo, converterToString_t to,
+                    converterFromString_t from, converterToLong_t toLong,
+                    converterFromLong_t fromLong, const char * name ) :
+        wxTypeInfo( kind, to, from, name ), m_toLong( toLong ), m_fromLong( fromLong )
     {
-        wxASSERT_MSG( kind == wxT_ENUM || kind == wxT_SET , 
+        wxASSERT_MSG( kind == wxT_ENUM || kind == wxT_SET, 
                       wxT("Illegal Kind for Enum Type")); 
         m_enumInfo = enumInfo; 
     }
@@ -444,19 +444,19 @@ public:
     const wxEnumData* GetEnumData() const { return m_enumInfo; }
 
     // convert a wxxVariant holding data of this type into a long
-    void ConvertToLong( const wxxVariant& data , long &result ) const
+    void ConvertToLong( const wxxVariant& data, long &result ) const
     { 
         if( m_toLong ) 
-            (*m_toLong)( data , result ); 
+            (*m_toLong)( data, result ); 
         else 
             wxLogError( wxGetTranslation(_T("Long Conversions not supported")) ); 
     }
 
     // convert a long into a wxxVariant holding the corresponding data in this type
-    void ConvertFromLong( long data , wxxVariant &result ) const
+    void ConvertFromLong( long data, wxxVariant &result ) const
     { 
         if( m_fromLong ) 
-            (*m_fromLong)( data , result ); 
+            (*m_fromLong)( data, result ); 
         else 
             wxLogError( wxGetTranslation(_T("Long Conversions not supported")) ); 
     }
@@ -471,13 +471,13 @@ private:
 class WXDLLIMPEXP_BASE wxClassTypeInfo : public wxTypeInfo
 {
 public:
-    wxClassTypeInfo( wxTypeKind kind , wxClassInfo* classInfo , 
-                     converterToString_t to = NULL , converterFromString_t from = NULL , 
+    wxClassTypeInfo( wxTypeKind kind, wxClassInfo* classInfo, 
+                     converterToString_t to = NULL, converterFromString_t from = NULL, 
                      const wxString &name = wxEmptyString);
 
 #if wxUSE_UNICODE
-    wxClassTypeInfo( wxTypeKind kind , wxClassInfo* classInfo , converterToString_t to ,
-                     converterFromString_t from  , const char *name );
+    wxClassTypeInfo( wxTypeKind kind, wxClassInfo* classInfo, converterToString_t to,
+                     converterFromString_t from , const char *name );
 #endif
 
     const wxClassInfo *GetClassInfo() const { return m_classInfo; }
@@ -489,15 +489,15 @@ private:
 class WXDLLIMPEXP_BASE wxCollectionTypeInfo : public wxTypeInfo
 {
 public:
-    wxCollectionTypeInfo( const wxString &elementName , converterToString_t to ,
-                          converterFromString_t from  , const wxString &name) :
-            wxTypeInfo( wxT_COLLECTION , to , from , name )
+    wxCollectionTypeInfo( const wxString &elementName, converterToString_t to,
+                          converterFromString_t from , const wxString &name) :
+            wxTypeInfo( wxT_COLLECTION, to, from, name )
        { m_elementTypeName = elementName; m_elementType = NULL; }
 
 #if wxUSE_UNICODE
-    wxCollectionTypeInfo( const char *elementName , converterToString_t to , 
-                          converterFromString_t from  , const char *name ) :
-            wxTypeInfo( wxT_COLLECTION , to , from , name )
+    wxCollectionTypeInfo( const char *elementName, converterToString_t to, 
+                          converterFromString_t from , const char *name ) :
+            wxTypeInfo( wxT_COLLECTION, to, from, name )
        { m_elementTypeName = wxString::FromAscii( elementName ); m_elementType = NULL; }
 #endif
 
@@ -518,11 +518,11 @@ private:
 class WXDLLIMPEXP_BASE wxDelegateTypeInfo : public wxTypeInfo
 {
 public:
-    wxDelegateTypeInfo( int eventType , wxClassInfo* eventClass , 
-                        converterToString_t to = NULL , 
+    wxDelegateTypeInfo( int eventType, wxClassInfo* eventClass, 
+                        converterToString_t to = NULL, 
                         converterFromString_t from = NULL );
-    wxDelegateTypeInfo( int eventType , int lastEventType, wxClassInfo* eventClass , 
-                        converterToString_t to = NULL , converterFromString_t from = NULL );
+    wxDelegateTypeInfo( int eventType, int lastEventType, wxClassInfo* eventClass, 
+                        converterToString_t to = NULL, converterFromString_t from = NULL );
 
     int GetEventType() const { return m_eventType; }
     int GetLastEventType() const { return m_lastEventType; }
@@ -541,21 +541,21 @@ template<typename T> const wxTypeInfo* wxGetTypeInfo( T * ) \
 // wxPoint is such a custom type
 
 #if wxUSE_FUNC_TEMPLATE_POINTER
-    #define wxCUSTOM_TYPE_INFO( e , toString , fromString ) \
-        wxCustomTypeInfo s_typeInfo##e(typeid(e).name() , &toString , &fromString);
+    #define wxCUSTOM_TYPE_INFO( e, toString, fromString ) \
+        wxCustomTypeInfo s_typeInfo##e(typeid(e).name(), &toString, &fromString);
 #else
-    #define wxCUSTOM_TYPE_INFO( e , toString , fromString )             \
-        void ToString##e( const wxxVariant& data , wxString &result )   \
+    #define wxCUSTOM_TYPE_INFO( e, toString, fromString )             \
+        void ToString##e( const wxxVariant& data, wxString &result )   \
             { toString(data, result); }                                 \
-        void FromString##e( const wxString& data , wxxVariant &result ) \
+        void FromString##e( const wxString& data, wxxVariant &result ) \
             { fromString(data, result); }                               \
-        wxCustomTypeInfo s_typeInfo##e(typeid(e).name() ,               \
-                                       &ToString##e , &FromString##e);
+        wxCustomTypeInfo s_typeInfo##e(typeid(e).name(),               \
+                                       &ToString##e, &FromString##e);
 #endif
 
-#define wxCOLLECTION_TYPE_INFO( element , collection )                      \
-    wxCollectionTypeInfo s_typeInfo##collection( typeid(element).name() ,   \
-                                NULL , NULL , typeid(collection).name() );
+#define wxCOLLECTION_TYPE_INFO( element, collection )                      \
+    wxCollectionTypeInfo s_typeInfo##collection( typeid(element).name(),   \
+                                NULL, NULL, typeid(collection).name() );
 
 // sometimes a compiler invents specializations that are nowhere called, 
 // use this macro to satisfy the refs, currently we don't have to play 

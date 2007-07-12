@@ -58,8 +58,8 @@ class WXDLLIMPEXP_BASE wxxVariant
 {
 public:
     wxxVariant() { m_data = NULL; }
-    wxxVariant( wxxVariantData* data , const wxString& name = wxEmptyString ) 
-        : m_data(data) , m_name(name) {}
+    wxxVariant( wxxVariantData* data, const wxString& name = wxEmptyString ) 
+        : m_data(data), m_name(name) {}
     wxxVariant( const wxxVariant &d ) 
         { 
             if ( d.m_data ) 
@@ -69,7 +69,7 @@ public:
             m_name = d.m_name; 
         }
 
-    template<typename T> wxxVariant( const T& data , const wxString& name = wxEmptyString ) :
+    template<typename T> wxxVariant( const T& data, const wxString& name = wxEmptyString ) :
             m_data(new wxxVariantDataT<T>(data) ), m_name(name) {}
 
     ~wxxVariant() { delete m_data; }
@@ -77,8 +77,9 @@ public:
     // get a ref to the stored data
     template<typename T> T& Get(wxTEMPLATED_MEMBER_FIX(T))
     {
-        wxxVariantDataT<T> *dataptr = dynamic_cast<wxxVariantDataT<T>*> (m_data);
-        wxASSERT_MSG( dataptr , 
+        wxxVariantDataT<T> *dataptr = 
+            dynamic_cast<wxxVariantDataT<T>*> (m_data);
+        wxASSERT_MSG( dataptr, 
             wxString::Format(wxT("Cast to %s not possible"), typeid(T).name()) );
         return dataptr->Get();
     }
@@ -86,8 +87,9 @@ public:
     // get a ref to the stored data
     template<typename T> const T& Get(wxTEMPLATED_MEMBER_FIX(T)) const
     {
-        const wxxVariantDataT<T> *dataptr = dynamic_cast<const wxxVariantDataT<T>*> (m_data);
-        wxASSERT_MSG( dataptr , 
+        const wxxVariantDataT<T> *dataptr = 
+            dynamic_cast<const wxxVariantDataT<T>*> (m_data);
+        wxASSERT_MSG( dataptr, 
             wxString::Format(wxT("Cast to %s not possible"), typeid(T).name()) );
         return dataptr->Get();
     }
@@ -96,7 +98,8 @@ public:
 
     template<typename T> bool HasData(wxTEMPLATED_MEMBER_FIX(T)) const
     {
-        const wxxVariantDataT<T> *dataptr = dynamic_cast<const wxxVariantDataT<T>*> (m_data);
+        const wxxVariantDataT<T> *dataptr = 
+            dynamic_cast<const wxxVariantDataT<T>*> (m_data);
         return dataptr != NULL;
     }
 
@@ -115,7 +118,7 @@ public:
         return *this;
     }
 
-    // gets the stored data casted to a wxObject* , returning NULL if cast is not possible
+    // gets the stored data casted to a wxObject*, returning NULL if cast is not possible
     wxObject* GetAsObject();
 
     // get the typeinfo of the stored object
@@ -132,7 +135,7 @@ public:
         if (!GetTypeInfo())
             return wxEmptyString;
         wxString s;
-        GetTypeInfo()->ConvertToString( *this , s );
+        GetTypeInfo()->ConvertToString( *this, s );
         return s;
     }
 
@@ -150,17 +153,17 @@ WX_DECLARE_OBJARRAY_WITH_DECL(wxxVariant, wxxVariantArray, class WXDLLIMPEXP_BAS
 // templated streaming, every type must have their specialization for these methods
 
 template<typename T>
-void wxStringReadValue( const wxString &s , T &data );
+void wxStringReadValue( const wxString &s, T &data );
 
 template<typename T>
-void wxStringWriteValue( wxString &s , const T &data);
+void wxStringWriteValue( wxString &s, const T &data);
 
 template<typename T>
 void wxToStringConverter( const wxxVariant &v, wxString &s wxTEMPLATED_FUNCTION_FIX(T)) \
-    { wxStringWriteValue( s , v.wxTEMPLATED_MEMBER_CALL(Get , T) ); }
+    { wxStringWriteValue( s, v.wxTEMPLATED_MEMBER_CALL(Get, T) ); }
 
 template<typename T>
 void wxFromStringConverter( const wxString &s, wxxVariant &v wxTEMPLATED_FUNCTION_FIX(T)) \
-    { T d; wxStringReadValue( s , d ); v = wxxVariant(d); }
+    { T d; wxStringReadValue( s, d ); v = wxxVariant(d); }
 
 #endif
