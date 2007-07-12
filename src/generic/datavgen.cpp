@@ -1998,11 +1998,13 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 		  dc.SetBrush( wxNullBrush );
 		  if( node->HasChildren() )
 	         {
-	             dc.DrawRoundedRectangle( expander_x,expander_y,expander_width,expander_width, 1.0);
-	             dc.DrawLine( expander_x + 2 , expander_y + expander_width/2, expander_x + expander_width - 2, expander_y + expander_width/2 );
-
-		      if( !node->IsOpen() )
-		          dc.DrawLine( expander_x + expander_width/2, expander_y + 2, expander_x + expander_width/2, expander_y + expander_width -2 );
+	             //dc.DrawRoundedRectangle( expander_x,expander_y,expander_width,expander_width, 1.0);
+	             //dc.DrawLine( expander_x + 2 , expander_y + expander_width/2, expander_x + expander_width - 2, expander_y + expander_width/2 );
+                    wxRect rect( expander_x , expander_y, expander_width, expander_width);
+		      if( node->IsOpen() )
+                        wxRendererNative::Get().DrawTreeItemButton( this, dc, rect, wxCONTROL_EXPANDED );
+                    else
+                        wxRendererNative::Get().DrawTreeItemButton( this, dc, rect );
 		  }
 		  else
 		  {
