@@ -58,6 +58,92 @@ inline Type* wxCFRetain(Type *r)
     return r;
 }
 
+template <class refType>
+class wxCFRef;
+
+/*! @class wxCFWeakRef
+    @templatefield  refType     The CF reference type (e.g. CFStringRef, CFRunLoopRef, etc.)
+                                It should already be a pointer.  This is different from
+                                shared_ptr where the template parameter is the pointee type.
+    @discussion Wraps a raw pointer without any retain or release.
+                Provides a way to get what amounts to a raw pointer from a wxCFRef without
+                using a raw pointer.  Unlike a raw pointer, constructing a wxCFRef from this
+                class will cause it to be retained because it is assumed that a wxCFWeakRef
+                does not own its pointer.
+*/
+template <class refType>
+class wxCFWeakRef
+{
+    template <class refTypeA, class otherRefType>
+    friend wxCFWeakRef<refTypeA> static_cfref_cast(const wxCFRef<otherRefType> &otherRef);
+public:
+    /*! @method     wxCFWeakRef
+        @abstract   Creates a NULL reference
+    */
+    wxCFWeakRef()
+    :   m_ptr(NULL)
+    {}
+
+    // Default copy constructor is fine.
+    // Default destructor is fine but we'll set NULL to avoid bugs
+    ~wxCFWeakRef()
+    {   m_ptr = NULL; }
+
+    // Do not implement a raw-pointer constructor.
+
+    /*! @method     wxCFWeakRef
+        @abstract   Copies another ref holder where its type can be converted to ours
+        @templatefield otherRefType     Any type held by another wxCFWeakRef.
+        @param otherRef The other weak ref holder to copy.
+        @discussion This is merely a copy or implicit cast.
+    */
+    template <class otherRefType>
+    wxCFWeakRef(const wxCFWeakRef<otherRefType>& otherRef)
+    :   m_ptr(otherRef.get()) // Implicit conversion from otherRefType to refType should occur
+    {}
+
+    /*! @method     wxCFWeakRef
+        @abstract   Copies a strong ref holder where its type can be converted to ours
+        @templatefield otherRefType     Any type held by a wxCFRef.
+        @param otherRef The strong ref holder to copy.
+        @discussion This ref is merely a pointer copy, the strong ref still holds the pointer.
+    */
+    template <class otherRefType>
+    wxCFWeakRef(const wxCFRef<otherRefType>& otherRef)
+    :   m_ptr(otherRef.get()) // Implicit conversion from otherRefType to refType should occur
+    {}
+
+    /*! @method     get
+        @abstract   Explicit conversion to the underlying pointer type
+        @discussion Allows the caller to explicitly get the underlying pointer.
+    */
+    refType get() const
+    {   return m_ptr; }
+
+    /*! @method     operator refType
+        @abstract   Implicit conversion to the underlying pointer type
+        @discussion Allows the ref to be used in CF function calls.
+    */
+    operator refType() const
+    {   return m_ptr; }
+
+protected:
+    /*! @method     wxCFWeakRef
+        @abstract   Constructs a weak reference to the raw pointer
+        @templatefield otherType    Any type.
+        @param p        The raw pointer to assume ownership of.  May be NULL.
+        @discussion This method is private so that the friend static_cfref_cast can use it
+    */
+    template <class otherType>
+    explicit wxCFWeakRef(otherType *p)
+    :   m_ptr(p) // Implicit conversion from otherType* to refType should occur.
+    {}
+
+    /*! @var m_ptr      The raw pointer.
+    */
+    refType m_ptr;
+};
+
 /*! @class wxCFRef
     @templatefield  refType     The CF reference type (e.g. CFStringRef, CFRunLoopRef, etc.)
                                 It should already be a pointer.  This is different from
@@ -111,6 +197,19 @@ public:
     */
     template <class otherRefType>
     wxCFRef(const wxCFRef<otherRefType>& otherRef)
+    :   m_ptr(wxCFRetain(otherRef.get())) // Implicit conversion from otherRefType to refType should occur
+    {}
+
+    /*! @method     wxCFRef
+        @abstract   Copies a weak ref holder where its type can be converted to ours
+        @templatefield otherRefType     Any type held by a wxCFWeakRef.
+        @param otherRef The weak ref holder to copy.
+        @discussion Ownership will be taken by this newly created ref. That is,
+                    the object will be explicitly retained by this new ref.
+                    Ownership is most likely shared with some other ref as well.
+    */
+    template <class otherRefType>
+    wxCFRef(const wxCFWeakRef<otherRefType>& otherRef)
     :   m_ptr(wxCFRetain(otherRef.get())) // Implicit conversion from otherRefType to refType should occur
     {}
 
@@ -225,21 +324,26 @@ inline wxCFRef<Type*> wxCFRefFromGet(Type *p)
 }
 
 /*! @function   static_cfref_cast
-    @abstract   Works like static_cast but from one wxCFRef to another
+    @abstract   Works like static_cast but with a wxCFRef as the argument.
     @param  refType     Template parameter.  The destination raw pointer type
     @param  otherRef    Normal parameter.  The source wxCFRef<> object.
-    @discussion This is modeled after shared_ptr's static_pointer_cast.  Just as wxCFRef is
+    @discussion This is intended to be a clever way to make static_cast work while allowing
+                the return value to be converted to either a strong ref or a raw pointer
+                while ensuring that the retain count is updated appropriately.
+
+                This is modeled after shared_ptr's static_pointer_cast.  Just as wxCFRef is
                 parameterized on a pointer to an opaque type so is this class.  Note that
                 this differs from shared_ptr which is parameterized on the pointee type.
+
                 FIXME: Anybody got a better name?
 */
 template <class refType, class otherRefType>
-inline wxCFRef<refType> static_cfref_cast(const wxCFRef<otherRefType> &otherRef);
+inline wxCFWeakRef<refType> static_cfref_cast(const wxCFRef<otherRefType> &otherRef);
 
 template <class refType, class otherRefType>
-inline wxCFRef<refType> static_cfref_cast(const wxCFRef<otherRefType> &otherRef)
+inline wxCFWeakRef<refType> static_cfref_cast(const wxCFRef<otherRefType> &otherRef)
 {
-    return wxCFRef<refType>(static_cast<refType>(wxCFRetain(otherRef.get())));
+    return wxCFWeakRef<refType>(static_cast<refType>(otherRef.get()));
 }
 
 /*! @function   CFRelease
