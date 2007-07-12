@@ -88,7 +88,7 @@ wxBase64Decode(void *dst_, size_t dstLen,
         PAD
     };
 
-    static const char decode[256] =
+    static const unsigned char decode[256] =
     {
         WSP,INV,INV,INV,INV,INV,INV,INV,INV,WSP,WSP,INV,WSP,WSP,INV,INV,
         INV,INV,INV,INV,INV,INV,INV,INV,INV,INV,INV,INV,INV,INV,INV,INV,
@@ -118,7 +118,7 @@ wxBase64Decode(void *dst_, size_t dstLen,
     const char *p;
     for ( p = src; srcLen; p++, srcLen-- )
     {
-        const char c = decode[(int)*p];     // cast just to suppress warnings
+        const unsigned char c = decode[(int)*p]; // cast to suppress warnings
         switch ( c )
         {
             case WSP:
