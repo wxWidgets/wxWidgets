@@ -36,6 +36,8 @@
 #include "wx/frame.h"
 #include "wx/notebook.h"
 #include "wx/event.h"
+#include "wx/spinbutt.h"
+#include "wx/spinctrl.h"
 
 #include "wx/xtistrm.h"
 #include "wx/xtixml.h"
@@ -458,6 +460,8 @@ wxDynamicObject* CreateFrameRTTI()
     wxASSERT( info->Create(panel, 6, Params ));
     notebook->AddPage( panel, "Spins and Sliders" );
 
+    wxENSURE_CLASS_IS_LINKED(wxSpinButton);
+
     info = wxClassInfo::FindClass("wxSpinButton");
     wxASSERT( info );
     control = wxDynamicCast( info->CreateObject(), wxControl );
@@ -467,6 +471,8 @@ wxDynamicObject* CreateFrameRTTI()
     Params[3] = wxxVariant(wxSize(-1,-1));
     Params[4] = wxxVariant((long)wxSP_VERTICAL | wxSP_ARROW_KEYS);
     wxASSERT( info->Create(control, 5, Params ));
+
+    wxENSURE_CLASS_IS_LINKED(wxSpinCtrl);
 
     info = wxClassInfo::FindClass("wxSpinCtrl");
     wxASSERT( info );

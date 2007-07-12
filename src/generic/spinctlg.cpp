@@ -134,8 +134,6 @@ BEGIN_EVENT_TABLE(wxSpinCtrlButton, wxSpinButton)
     EVT_SPIN(wxID_ANY, wxSpinCtrlButton::OnSpinButton)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
-
 // ============================================================================
 // implementation
 // ============================================================================
