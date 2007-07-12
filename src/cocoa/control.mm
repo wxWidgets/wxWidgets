@@ -30,15 +30,130 @@
 }
 
 - (void)drawRect: (NSRect)rect;
+- (void)mouseDown:(NSEvent *)theEvent;
+- (void)mouseDragged:(NSEvent *)theEvent;
+- (void)mouseUp:(NSEvent *)theEvent;
+- (void)mouseMoved:(NSEvent *)theEvent;
+- (void)mouseEntered:(NSEvent *)theEvent;
+- (void)mouseExited:(NSEvent *)theEvent;
+- (void)rightMouseDown:(NSEvent *)theEvent;
+- (void)rightMouseDragged:(NSEvent *)theEvent;
+- (void)rightMouseUp:(NSEvent *)theEvent;
+- (void)otherMouseDown:(NSEvent *)theEvent;
+- (void)otherMouseDragged:(NSEvent *)theEvent;
+- (void)otherMouseUp:(NSEvent *)theEvent;
+- (void)resetCursorRects;
 @end // wxNonControlNSControl
 
 @implementation wxNonControlNSControl : NSControl
+
+- (BOOL)acceptsFirstMouse:(NSEvent *)theEvent
+{
+    bool acceptsFirstMouse = false;
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if(!win || !win->Cocoa_acceptsFirstMouse(acceptsFirstMouse, theEvent))
+        acceptsFirstMouse = [super acceptsFirstMouse:theEvent];
+    return acceptsFirstMouse;
+}
+
 - (void)drawRect: (NSRect)rect
 {
     wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
     if( !win || !win->Cocoa_drawRect(rect) )
         [super drawRect:rect];
 }
+
+- (void)mouseDown:(NSEvent *)theEvent
+{
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_mouseDown(theEvent) )
+        [super mouseDown:theEvent];
+}
+
+- (void)mouseDragged:(NSEvent *)theEvent
+{
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_mouseDragged(theEvent) )
+        [super mouseDragged:theEvent];
+}
+
+- (void)mouseUp:(NSEvent *)theEvent
+{
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_mouseUp(theEvent) )
+        [super mouseUp:theEvent];
+}
+
+- (void)mouseMoved:(NSEvent *)theEvent
+{
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_mouseMoved(theEvent) )
+        [super mouseMoved:theEvent];
+}
+
+- (void)mouseEntered:(NSEvent *)theEvent
+{
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_mouseEntered(theEvent) )
+        [super mouseEntered:theEvent];
+}
+
+- (void)mouseExited:(NSEvent *)theEvent
+{
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_mouseExited(theEvent) )
+        [super mouseExited:theEvent];
+}
+
+- (void)rightMouseDown:(NSEvent *)theEvent
+{
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_rightMouseDown(theEvent) )
+        [super rightMouseDown:theEvent];
+}
+
+- (void)rightMouseDragged:(NSEvent *)theEvent
+{
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_rightMouseDragged(theEvent) )
+        [super rightMouseDragged:theEvent];
+}
+
+- (void)rightMouseUp:(NSEvent *)theEvent
+{
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_rightMouseUp(theEvent) )
+        [super rightMouseUp:theEvent];
+}
+
+- (void)otherMouseDown:(NSEvent *)theEvent
+{
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_otherMouseDown(theEvent) )
+        [super otherMouseDown:theEvent];
+}
+
+- (void)otherMouseDragged:(NSEvent *)theEvent
+{
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_otherMouseDragged(theEvent) )
+        [super otherMouseDragged:theEvent];
+}
+
+- (void)otherMouseUp:(NSEvent *)theEvent
+{
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_otherMouseUp(theEvent) )
+        [super otherMouseUp:theEvent];
+}
+
+- (void)resetCursorRects
+{
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_resetCursorRects() )
+        [super resetCursorRects];
+}
+
 @end // wxNonControlNSControl
 
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)

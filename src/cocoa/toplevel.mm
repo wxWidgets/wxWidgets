@@ -33,8 +33,8 @@
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
 
-#import <AppKit/NSView.h>
-#import <AppKit/NSWindow.h>
+#include "wx/cocoa/objc/NSView.h"
+#include "wx/cocoa/objc/NSWindow.h"
 #import <AppKit/NSPanel.h>
 // ----------------------------------------------------------------------------
 // globals
@@ -131,10 +131,18 @@ bool wxTopLevelWindowCocoa::Create(wxWindow *parent,
 
     m_cocoaNSWindow = NULL;
     m_cocoaNSView = NULL;
+    // NOTE: We may need to deal with the contentView becoming a wx NSView as well.
+    NSWindow *newWindow;
+    // Create a WXNSPanel or a WXNSWindow depending on what type of window is desired.
     if(style & wxFRAME_TOOL_WINDOW)
-        SetNSWindow([[NSPanel alloc] initWithContentRect:cocoaRect styleMask:cocoaStyle backing:NSBackingStoreBuffered defer:NO]);
+        newWindow = [[WXNSPanel alloc] initWithContentRect:cocoaRect styleMask:cocoaStyle backing:NSBackingStoreBuffered defer:NO];
     else
-        SetNSWindow([[NSWindow alloc] initWithContentRect:cocoaRect styleMask:cocoaStyle backing:NSBackingStoreBuffered defer:NO]);
+        newWindow = [[WXNSWindow alloc] initWithContentRect:cocoaRect styleMask:cocoaStyle backing:NSBackingStoreBuffered defer:NO];
+    // Make sure the default content view is a WXNSView
+    [newWindow setContentView: [[WXNSView alloc] initWithFrame: [[newWindow contentView] frame]]];
+    // Associate the window and view
+    SetNSWindow(newWindow);
+
     // NOTE: SetNSWindow has retained the Cocoa object for this object.
     // Because we do not release on close, the following release matches the
     // above alloc and thus the retain count will be 1.
@@ -188,6 +196,8 @@ void wxTopLevelWindowCocoa::SetNSWindow(WX_NSWindow cocoaNSWindow)
     [cocoaNSWindow retain];
     [m_cocoaNSWindow release];
     m_cocoaNSWindow = cocoaNSWindow;
+    // NOTE: We are no longer using posing so we won't get events on the
+    // window's view unless it was explicitly created as the wx view class.
     if(m_cocoaNSWindow)
         SetNSView([m_cocoaNSWindow contentView]);
     else

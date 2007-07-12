@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/cocoa/objc/NSView.h
-// Purpose:     wxPoserNSView class
+// Purpose:     WXNSView class
 // Author:      David Elliott
 // Modified by:
 // Created:     2007/04/20 (move from NSView.mm)
@@ -15,9 +15,9 @@
 #import <AppKit/NSView.h>
 
 // ============================================================================
-// @class wxPoserNSView
+// @class WXNSView
 // ============================================================================
-@interface wxPoserNSView : NSView
+@interface WXNSView : NSView
 {
 }
 
@@ -35,6 +35,6 @@
 - (void)otherMouseDragged:(NSEvent *)theEvent;
 - (void)otherMouseUp:(NSEvent *)theEvent;
 - (void)resetCursorRects;
-@end // wxPoserNSView
+@end // WXNSView
 
 #endif //ndef __WX_COCOA_OBJC_NSVIEW_H__

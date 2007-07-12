@@ -170,7 +170,7 @@ void wxFrame::CocoaReplaceView(WX_NSView oldView, WX_NSView newView)
 void wxFrame::UpdateFrameNSView()
 {
     if(!m_frameNSView)
-    {
+    {	// NOTE: We only need a plain NSView here since we don't associate it with ourselves.
         m_frameNSView = [[NSView alloc] initWithFrame:[[m_cocoaNSWindow contentView] frame]];
         [m_cocoaNSWindow setContentView: m_frameNSView];
         [m_frameNSView addSubview:m_cocoaNSView];

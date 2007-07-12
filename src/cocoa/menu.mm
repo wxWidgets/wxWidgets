@@ -29,7 +29,7 @@
 #include "wx/cocoa/string.h"
 
 #import <Foundation/NSString.h>
-#import <AppKit/NSMenu.h>
+#include "wx/cocoa/objc/NSMenu.h"
 
 #if wxUSE_MENUS
 
@@ -46,7 +46,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 bool wxMenu::Create(const wxString& title, long style)
 {
     wxAutoNSAutoreleasePool pool;
-    m_cocoaNSMenu = [[NSMenu alloc] initWithTitle: wxNSStringWithWxString(title)];
+    m_cocoaNSMenu = [[WXNSMenu alloc] initWithTitle: wxNSStringWithWxString(title)];
     AssociateNSMenu(m_cocoaNSMenu);
     return true;
 }

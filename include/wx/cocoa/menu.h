@@ -73,6 +73,8 @@ private:
 // ========================================================================
 // wxMenuBar
 // ========================================================================
+// NOTE: wxCocoaNSMenu subclass is not needed but cannot be removed due to
+// ABI compatibility issues.  It is removed in trunk (2.9)
 class WXDLLEXPORT wxMenuBar : public wxMenuBarBase, public wxCocoaNSMenu
 {
 public:
