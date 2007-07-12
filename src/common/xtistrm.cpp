@@ -156,7 +156,8 @@ void wxWriter::WriteAllProperties( const wxObject * obj, const wxClassInfo* ci,
     for ( int i = 0; i < ci->GetCreateParamCount(); ++i )
     {
         wxString name = ci->GetCreateParamName(i);
-        const wxPropertyInfo* prop = map.find(name)->second;
+        wxPropertyInfoMap::const_iterator iter = map.find(name);
+        const wxPropertyInfo* prop = iter == map.end() ? NULL : iter->second;
         if ( prop )
         {
             WriteOneProperty( obj, prop->GetDeclaringClass(), prop, persister, data );
