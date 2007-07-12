@@ -96,7 +96,11 @@ wxBEGIN_FLAGS( wxListCtrlStyle )
     wxFLAGS_MEMBER(wxLC_VIRTUAL)
 wxEND_FLAGS( wxListCtrlStyle )
 
+#if defined(__WXGTK__)
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxListCtrl, wxGenericListCtrl, "wx/listctrl.h")
+#else
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxListCtrl, wxControl, "wx/listctrl.h")
+#endif
 
 wxBEGIN_PROPERTIES_TABLE(wxListCtrl)
     wxEVENT_PROPERTY( TextUpdated, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent )
@@ -114,7 +118,7 @@ wxCONSTRUCTOR_5( wxListCtrl, wxWindow*, Parent, wxWindowID, Id, \
 
 /*
  TODO : Expose more information of a list's layout etc. via appropriate objects 
-        (à la NotebookPageInfo)
+        (ï¿½ la NotebookPageInfo)
 */
 
 #endif // wxUSE_LISTCTRL
