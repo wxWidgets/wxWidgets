@@ -78,9 +78,11 @@ protected:
   // read/write
   bool DoReadString(const wxString& key, wxString *pStr) const;
   bool DoReadLong(const wxString& key, long *plResult) const;
+  bool DoReadBinary(const wxString& key, wxMemoryBuffer *buf) const;
 
   bool DoWriteString(const wxString& key, const wxString& szValue);
   bool DoWriteLong(const wxString& key, long lValue);
+  bool DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf);
 
 private:
   // helpers

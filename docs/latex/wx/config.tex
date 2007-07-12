@@ -716,6 +716,11 @@ not found, {\it b} is not changed.
 Reads a bool value, returning \true if the value was found. If the value was
 not found, {\it defaultVal} is used instead.
 
+\constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{wxMemoryBuffer*}{ buf}}
+
+Reads a binary block, returning \true if the value was found. If the value was
+not found, {\it buf} is not changed.
+
 \pythonnote{In place of a single overloaded method name, wxPython
 implements the following methods:\par
 \indented{2cm}{\begin{twocollist}
@@ -805,6 +810,8 @@ value}}
 \func{bool}{Write}{\param{const wxString\& }{ key}, \param{double}{ value}}
 
 \func{bool}{Write}{\param{const wxString\& }{ key}, \param{bool}{ value}}
+
+\func{bool}{Write}{\param{const wxString\& }{ key}, \param{const wxMemoryBuffer\&}{ buf}}
 
 These functions write the specified value to the config file and return \true on success.
 

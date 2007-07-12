@@ -17,6 +17,7 @@
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/object.h"
+#include "wx/base64.h"
 
 class WXDLLIMPEXP_FWD_BASE wxArrayString;
 
@@ -177,6 +178,11 @@ public:
   bool Read(const wxString& key, bool* val) const;
   bool Read(const wxString& key, bool* val, bool defVal) const;
 
+    // read a binary data block
+  bool Read(const wxString& key, wxMemoryBuffer* data) const
+   { return DoReadBinary(key, data); }
+   // no default version since it does not make sense for binary data
+
   // convenience functions returning directly the value (we don't have them for
   // int/double/bool as there would be ambiguities with the long one then)
   wxString Read(const wxString& key,
@@ -201,6 +207,9 @@ public:
 
   bool Write(const wxString& key, bool value)
     { return DoWriteBool(key, value); }
+
+  bool Write(const wxString& key, const wxMemoryBuffer& buf)
+    { return DoWriteBinary(key, buf); }
 
   // we have to provide a separate version for C strings as otherwise they
   // would be converted to bool and not to wxString as expected!
@@ -273,12 +282,14 @@ protected:
   virtual bool DoReadInt(const wxString& key, int *pi) const;
   virtual bool DoReadDouble(const wxString& key, double* val) const;
   virtual bool DoReadBool(const wxString& key, bool* val) const;
+  virtual bool DoReadBinary(const wxString& key, wxMemoryBuffer* buf) const = 0;
 
   virtual bool DoWriteString(const wxString& key, const wxString& value) = 0;
   virtual bool DoWriteLong(const wxString& key, long value) = 0;
   virtual bool DoWriteInt(const wxString& key, int value);
   virtual bool DoWriteDouble(const wxString& key, double value);
   virtual bool DoWriteBool(const wxString& key, bool value);
+  virtual bool DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf) = 0;
 
 private:
   // are we doing automatic environment variable expansion?

@@ -42,6 +42,8 @@
 #include  "wx/fileconf.h"
 #include  "wx/filefn.h"
 
+#include "wx/base64.h"
+
 #include  "wx/stdpaths.h"
 
 #if defined(__WXMAC__)
@@ -916,6 +918,18 @@ bool wxFileConfig::DoReadLong(const wxString& key, long *pl) const
     return str.ToLong(pl);
 }
 
+bool wxFileConfig::DoReadBinary(const wxString& key, wxMemoryBuffer* buf) const
+{
+    wxCHECK_MSG( buf, false, _T("NULL buffer") );
+
+    wxString str;
+    if ( !Read(key, &str) )
+        return false;
+
+    *buf = wxBase64Decode(str);
+    return true;
+}
+
 bool wxFileConfig::DoWriteString(const wxString& key, const wxString& szValue)
 {
     wxConfigPathChanger     path(this, key);
@@ -979,6 +993,11 @@ bool wxFileConfig::DoWriteString(const wxString& key, const wxString& szValue)
 bool wxFileConfig::DoWriteLong(const wxString& key, long lValue)
 {
   return Write(key, wxString::Format(_T("%ld"), lValue));
+}
+
+bool wxFileConfig::DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf)
+{
+  return Write(key, wxBase64Encode(buf));
 }
 
 bool wxFileConfig::Flush(bool /* bCurrentOnly */)
