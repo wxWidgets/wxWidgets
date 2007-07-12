@@ -2843,9 +2843,9 @@ The clipboard must have previously been opened for this call to succeed.
 
 \membersection{wxBase64Decode}\label{wxbase64decode}
 
-\func{size\_t}{wxBase64Decode}{\param{void *}{dst}, \param{size\_t}{dstLen},\\
-\param{const char * }{src}, \param{size\_t }{srcLen = wxNO\_LEN},\\
-\param{wxBase64DecodeMode }{mode = wxBase64DecodeMode\_Strict},\\
+\func{size\_t}{wxBase64Decode}{\param{void *}{dst}, \param{size\_t }{dstLen}, 
+\param{const char * }{src}, \param{size\_t }{srcLen = wxNO\_LEN}, 
+\param{wxBase64DecodeMode }{mode = wxBase64DecodeMode\_Strict}, 
 \param{size\_t }{*posErr = \NULL}}
 
 \func{wxMemoryBuffer}{wxBase64Decode}{\\
@@ -2906,10 +2906,10 @@ buffer to be passed to \helpref{wxBase64Decode}{wxbase64decode}.
 
 \membersection{wxBase64Encode}\label{wxbase64encode}
 
-\func{size\_t}{wxBase64Encode}{\param{char *}{dst}, \param{size\_t}{dstLen},\\
+\func{size\_t}{wxBase64Encode}{\param{char *}{dst}, \param{size\_t }{dstLen}, 
 \param{const void *}{src}, \param{size\_t }{srcLen}}
 
-\func{wxString}{wxBase64Encode}{\param{const void *}{src}, \param{size\_t}{srcLen}}
+\func{wxString}{wxBase64Encode}{\param{const void *}{src}, \param{size\_t }{srcLen}}
 
 \func{wxString}{wxBase64Encode}{\param{const wxMemoryBuffer\& }{buf}}
 
@@ -2939,7 +2939,7 @@ size.}
 
 \membersection{wxBase64EncodedSize}\label{wxbase64encodedsize}
 
-\func{size\_t}{wxBase64EncodedSize}{\param{size\_t}{len}}
+\func{size\_t}{wxBase64EncodedSize}{\param{size\_t }{len}}
 
 Returns the length of the string with base64 representation of a buffer of
 specified size \arg{len}. This can be useful for allocating the buffer passed
@@ -3100,7 +3100,9 @@ Generates an integer identifier unique to this run of the program.
 \membersection{wxON\_BLOCK\_EXIT}\label{wxonblockexit}
 
 \func{}{wxON\_BLOCK\_EXIT0}{\param{}{func}}
+
 \func{}{wxON\_BLOCK\_EXIT1}{\param{}{func}, \param{}{p1}}
+
 \func{}{wxON\_BLOCK\_EXIT2}{\param{}{func}, \param{}{p1}, \param{}{p2}}
 
 This family of macros allows to ensure that the global function \arg{func}
@@ -3128,7 +3130,9 @@ details.
 \membersection{wxON\_BLOCK\_EXIT\_OBJ}\label{wxonblockexitobj}
 
 \func{}{wxON\_BLOCK\_EXIT\_OBJ0}{\param{}{obj}, \param{}{method}}
+
 \func{}{wxON\_BLOCK\_EXIT\_OBJ1}{\param{}{obj}, \param{}{method}, \param{}{p1}}
+
 \func{}{wxON\_BLOCK\_EXIT\_OBJ2}{\param{}{obj}, \param{}{method}, \param{}{p1}, \param{}{p2}}
 
 This family of macros is similar to \helpref{wxON\_BLOCK\_EXIT}{wxonblockexit}
