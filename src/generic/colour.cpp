@@ -22,7 +22,6 @@
     #include "wx/gdicmn.h"
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 
 // Colour
 

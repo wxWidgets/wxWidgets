@@ -39,8 +39,6 @@
 
 #include "wx/tokenzr.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
-
 
 // ----------------------------------------------------------------------------
 // constants

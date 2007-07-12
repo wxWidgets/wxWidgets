@@ -20,8 +20,6 @@
 
 #include "wx/encinfo.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
-
 void wxFontRefData::Init(int size, int family, int style, int weight, bool underlined, const wxString& faceName, wxFontEncoding encoding)
 {
     m_family = family;

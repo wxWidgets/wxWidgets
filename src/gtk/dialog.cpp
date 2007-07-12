@@ -37,8 +37,6 @@ int g_openDialogs;
 // wxDialog
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxDialog,wxTopLevelWindow)
-
 void wxDialog::Init()
 {
     m_returnCode = 0;

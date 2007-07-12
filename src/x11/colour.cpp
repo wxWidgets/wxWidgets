@@ -141,8 +141,6 @@ void wxColourRefData::AllocColour( WXColormap cmap )
 
 #define SHIFT (8*(sizeof(short int)-sizeof(char)))
 
-IMPLEMENT_DYNAMIC_CLASS(wxColour,wxGDIObject)
-
 wxColour::~wxColour()
 {
 }

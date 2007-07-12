@@ -69,8 +69,6 @@ extern wxList wxModelessWindows;  // Frames and modeless dialogs
 
 #define wxUSE_INVISIBLE_RESIZE 1
 
-IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
-
 wxDialog::wxDialog()
 {
     m_modalShowing = false;

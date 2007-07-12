@@ -246,7 +246,7 @@ MyFrame::MyFrame(const wxString& title)
 //  	WX_HANDLER( ButtonClickHandler, wxCommandEvent )
 //  WX_END_HANDLERS_TABLE()
 //  
-//  WX_CONSTRUCTOR_5( MyXTIFrame, wxWindow*, Parent, wxWindowID, Id, \
+//  WX_CONSTRUCTOR_5( MyXTIFrame, wxWindow*, Parent, wxWindowID, Id,
 //                    wxString, Title, wxPoint, Position, wxSize, Size )
 //  
 //  BEGIN_EVENT_TABLE(MyXTIFrame, wxFrame)

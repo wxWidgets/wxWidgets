@@ -9,9 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// for compilers that support precompilation, includes "wx.h".
-#include "wx/wxprec.h"
-
 // ============================================================================
 // declarations
 // ============================================================================
@@ -19,6 +16,9 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
+
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
 
 #ifdef __VMS
 #pragma message disable nosimpint
@@ -44,7 +44,6 @@
 
 #include "wx/x11/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 
 // ----------------------------------------------------------------------------
 // constants
