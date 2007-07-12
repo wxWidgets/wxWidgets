@@ -17,7 +17,20 @@
 #ifndef _WX_MAC_COREFOUNDATION_CFREF_H__
 #define _WX_MAC_COREFOUNDATION_CFREF_H__
 
-#include <CoreFoundation/CFBase.h>
+// #include <CoreFoundation/CFBase.h>
+/* Don't include CFBase.h such that this header can be included from public
+ * headers with minimal namespace pollution.
+ * Note that Darwin CF uses extern for CF_EXPORT.  If we need this on Win32
+ * or non-Darwin Mac OS we'll need to define the appropriate __declspec.
+ */
+extern "C" {
+typedef const void *CFTypeRef;
+extern /* CF_EXPORT */
+CFTypeRef CFRetain(CFTypeRef cf);
+extern /* CF_EXPORT */
+void CFRelease(CFTypeRef cf);
+} // extern "C"
+
 
 /*! @function   wxCFRelease
     @abstract   A CFRelease variant that checks for NULL before releasing.
