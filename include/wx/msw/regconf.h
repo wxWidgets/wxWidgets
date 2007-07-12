@@ -18,7 +18,7 @@
 
 #include "wx/object.h"
 #include "wx/confbase.h"
-#include "buffer.h"
+#include "wx/buffer.h"
 
 // ----------------------------------------------------------------------------
 // wxRegConfig
