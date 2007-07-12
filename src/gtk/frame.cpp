@@ -202,8 +202,7 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
     {
 #if wxUSE_MENUS_NATIVE
         // menu bar
-        if (m_frameMenuBar &&
-            GTK_WIDGET_VISIBLE(m_frameMenuBar->m_widget) && !m_menuBarDetached)
+        if (HasVisibleMenubar() && !m_menuBarDetached)
         {
             *height -= m_menuBarHeight;
         }
@@ -319,24 +318,25 @@ void wxFrame::GtkOnSize()
         // m_mainWidget holds the menubar, the toolbar and the client
         // area, which is represented by m_wxwindow.
 
+        int menubarHeight = 0;
 #if wxUSE_MENUS_NATIVE
-        if (m_frameMenuBar && m_frameMenuBar->IsShown())
+        if (HasVisibleMenubar())
         {
             int xx = m_miniEdge;
             int yy = m_miniEdge + m_miniTitle;
             int ww = m_width  - 2*m_miniEdge;
             if (ww < 0)
                 ww = 0;
-            int hh = m_menuBarHeight;
-            if (m_menuBarDetached) hh = wxPLACE_HOLDER;
+            menubarHeight = m_menuBarHeight;
+            if (m_menuBarDetached) menubarHeight = wxPLACE_HOLDER;
             m_frameMenuBar->m_x = xx;
             m_frameMenuBar->m_y = yy;
             m_frameMenuBar->m_width = ww;
-            m_frameMenuBar->m_height = hh;
+            m_frameMenuBar->m_height = menubarHeight;
             gtk_pizza_set_size( GTK_PIZZA(m_mainWidget),
                                   m_frameMenuBar->m_widget,
-                                  xx, yy, ww, hh );
-            client_area_y_offset += hh;
+                                  xx, yy, ww, menubarHeight);
+            client_area_y_offset += menubarHeight;
         }
 #endif // wxUSE_MENUS_NATIVE
 
@@ -345,16 +345,7 @@ void wxFrame::GtkOnSize()
             (m_frameToolBar->m_widget->parent == m_mainWidget))
         {
             int xx = m_miniEdge;
-            int yy = m_miniEdge + m_miniTitle;
-#if wxUSE_MENUS_NATIVE
-            if (m_frameMenuBar)
-            {
-                if (!m_menuBarDetached)
-                    yy += m_menuBarHeight;
-                else
-                    yy += wxPLACE_HOLDER;
-            }
-#endif // wxUSE_MENUS_NATIVE
+            int yy = m_miniEdge + m_miniTitle + menubarHeight;
 
             m_frameToolBar->m_x = xx;
             m_frameToolBar->m_y = yy;
@@ -589,6 +580,10 @@ void wxFrame::UpdateMenuBarSize()
     GtkUpdateSize();
 }
 
+bool wxFrame::HasVisibleMenubar() const
+{
+    return m_frameMenuBar && m_frameMenuBar->IsShown();
+}
 #endif // wxUSE_MENUS_NATIVE
 
 #if wxUSE_TOOLBAR

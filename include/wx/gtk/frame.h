@@ -58,7 +58,7 @@ public:
                                          long style = wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE,
                                          wxWindowID id = 0,
                                          const wxString& name = wxStatusLineNameStr);
-                                         
+
     void SetStatusBar(wxStatusBar *statbar);
 #endif // wxUSE_STATUSBAR
 
@@ -68,7 +68,7 @@ public:
                                      const wxString& name = wxToolBarNameStr);
     void SetToolBar(wxToolBar *toolbar);
 #endif // wxUSE_TOOLBAR
-    
+
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     wxPoint GetClientAreaOrigin() const { return wxPoint(0, 0); }
 
@@ -95,14 +95,15 @@ protected:
     virtual void DoGetClientSize( int *width, int *height ) const;
 
 #if wxUSE_MENUS_NATIVE
-
     virtual void DetachMenuBar();
     virtual void AttachMenuBar(wxMenuBar *menubar);
+    // Whether frame has a menubar showing
+    //   (needed to deal with perverted MDI menubar handling)
+    virtual bool HasVisibleMenubar() const;
 
 public:
     // Menu size is dynamic now, call this whenever it might change.
     void UpdateMenuBarSize();
-
 #endif // wxUSE_MENUS_NATIVE
 
 private:

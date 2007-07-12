@@ -63,6 +63,7 @@ public:
 
 protected:
     void Init();
+    virtual bool HasVisibleMenubar() const;
 
 private:
     friend class wxMDIChildFrame;

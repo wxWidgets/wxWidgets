@@ -292,6 +292,18 @@ void wxMDIParentFrame::ActivatePrevious()
       gtk_notebook_prev_page( GTK_NOTEBOOK(m_clientWindow->m_widget) );
 }
 
+bool wxMDIParentFrame::HasVisibleMenubar() const
+{
+    if (wxFrame::HasVisibleMenubar())
+        return true;
+
+    wxMDIChildFrame* active_child_frame = GetActiveChild();
+    wxMenuBar* menubar = NULL;
+    if (active_child_frame)
+        menubar = active_child_frame->m_menuBar;
+    return menubar && menubar->IsShown();
+}
+
 //-----------------------------------------------------------------------------
 // wxMDIChildFrame
 //-----------------------------------------------------------------------------
