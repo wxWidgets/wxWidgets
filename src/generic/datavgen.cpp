@@ -2343,7 +2343,7 @@ public:
     	{
     	    if( current == row)
     	    {
-	        ret = node->GetItem() ;
+               ret = node->GetItem() ;
                return DoJob::OK;
            }
            current ++;
@@ -2432,12 +2432,12 @@ void wxDataViewMainWindow::OnExpanding( unsigned int row )
     {
         if( node->HasChildren())
             if( !node->IsOpen())
-           {
+            {
                node->ToggleOpen();
                m_count = -1;
                Refresh();
                //RefreshRows(row,GetLastVisibleRow());
-           }
+            }
     }
 }
 
@@ -2481,16 +2481,16 @@ public:
     virtual ~ItemToRowJob(){};
 
     virtual int operator() ( wxDataViewTreeNode * node)
-        {
-            ret ++;
-            if( node->GetItem() == item )
-               return DoJob::OK;
+    {
+         ret ++;
+         if( node->GetItem() == item )
+             return DoJob::OK;
 
-           if( node->IsOpen())
-               return DoJob::CONT;
-           else
-               return DoJob::IGR;
-        }
+         if( node->IsOpen())
+             return DoJob::CONT;
+         else
+             return DoJob::IGR;
+    }
 
     //the row number is begin from zero
     int GetResult(){ return ret -1 ; }
@@ -2750,7 +2750,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         bool expander = false;
         wxDataViewTreeNode * node = GetTreeNodeByRow(current);
         if( node!=NULL && node->HasChildren() )
-       {
+        {
             int indent = node->GetIndentLevel();
             indent = GetOwner()->GetIndent()*indent;
             wxRect rect( xpos + indent + EXPANDER_MARGIN, current * m_lineHeight + EXPANDER_MARGIN, m_lineHeight-2*EXPANDER_MARGIN,m_lineHeight-2*EXPANDER_MARGIN);
