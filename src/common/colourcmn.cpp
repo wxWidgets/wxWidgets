@@ -39,19 +39,34 @@ bool wxColourBase::FromString(const wxString& str)
     if ( str.empty() )
         return false;       // invalid or empty string
 
-    if ( wxStrncmp(str, wxT("RGB"), 3) == 0 ||
-         wxStrncmp(str, wxT("rgb"), 3) == 0 )
+    if ( wxStrnicmp(str, wxT("RGB"), 3) == 0 )
     {
         // CSS-like RGB specification
-        // according to http://www.w3.org/TR/REC-CSS2/syndata.html#color-units
+        // according to http://www.w3.org/TR/css3-color/#colorunits
         // values outside 0-255 range are allowed but should be clipped
-        int red, green, blue;
-        if (wxSscanf(str.wx_str() + 3, wxT("(%d, %d, %d)"), &red, &green, &blue) != 3)
-            return false;
+        int red, green, blue,
+            alpha = wxALPHA_OPAQUE;
+        if ( str.length() > 3 && (str[3] == wxT('a') || str[3] == wxT('A')) )
+        {
+            float a;
+            // TODO: use locale-independent function
+            if ( wxSscanf(str.wx_str() + 4, wxT("( %d , %d , %d , %f )"),
+                                                &red, &green, &blue, &a) != 4 )
+                return false;
 
-        Set((unsigned char)wxClip(red,0,255),
-            (unsigned char)wxClip(green,0,255),
-            (unsigned char)wxClip(blue,0,255));
+            alpha = wxRound(a * 255);
+        }
+        else // no 'a' following "rgb"
+        {
+            if ( wxSscanf(str.wx_str() + 3, wxT("( %d , %d , %d )"),
+                                                &red, &green, &blue) != 3 )
+                return false;
+        }
+
+        Set((unsigned char)wxClip(red, 0, 255),
+            (unsigned char)wxClip(green, 0, 255),
+            (unsigned char)wxClip(blue, 0, 255),
+            (unsigned char)wxClip(alpha, 0, 255));
     }
     else if ( str[0] == wxT('#') && wxStrlen(str) == 7 )
     {
@@ -88,23 +103,46 @@ wxString wxColourBase::GetAsString(long flags) const
 {
     wxString colName;
 
-    if (flags & wxC2S_NAME)
-        colName = wxTheColourDatabase->FindName((const wxColour &)(*this)).MakeLower();
+    const bool isOpaque = Alpha() == wxALPHA_OPAQUE;
 
-    if ( colName.empty() && (flags & wxC2S_CSS_SYNTAX) )
+    // we can't use the name format if the colour is not opaque as the alpha
+    // information would be lost
+    if ( (flags & wxC2S_NAME) && isOpaque )
     {
-        // no name for this colour; return it in CSS syntax
-        colName.Printf(wxT("rgb(%d, %d, %d)"),
-                       Red(), Green(), Blue());
-    }
-    else if ( colName.empty() && (flags & wxC2S_HTML_SYNTAX) )
-    {
-        // no name for this colour; return it in HTML syntax
-        colName.Printf(wxT("#%02X%02X%02X"),
-                       Red(), Green(), Blue());
+        colName = wxTheColourDatabase->FindName(
+                    wx_static_cast(const wxColour &, *this)).MakeLower();
     }
 
-    // this function always returns a non-empty string
+    if ( colName.empty() )
+    {
+        const int red = Red(),
+                  blue = Blue(),
+                  green = Green();
+
+        if ( flags & wxC2S_CSS_SYNTAX )
+        {
+            // no name for this colour; return it in CSS syntax
+            if ( isOpaque )
+            {
+                colName.Printf(wxT("rgb(%d, %d, %d)"), red, green, blue);
+            }
+            else // use rgba() form
+            {
+                // TODO: use locale-independent function
+                colName.Printf(wxT("rgba(%d, %d, %d, %.3f)"),
+                               red, green, blue, Alpha() / 255.);
+            }
+        }
+        else if ( flags & wxC2S_HTML_SYNTAX )
+        {
+            wxASSERT_MSG( isOpaque, "alpha is lost in HTML syntax" );
+
+            // no name for this colour; return it in HTML syntax
+            colName.Printf(wxT("#%02X%02X%02X"), red, green, blue);
+        }
+    }
+
+    // this function should alway returns a non-empty string
     wxASSERT_MSG(!colName.empty(),
                  wxT("Invalid wxColour -> wxString conversion flags"));
 
