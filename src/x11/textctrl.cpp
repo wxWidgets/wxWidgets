@@ -131,8 +131,6 @@ WX_DEFINE_OBJARRAY(wxSourceLineArray);
 //  wxTextCtrl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxTextCtrlBase)
-
 BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_PAINT(wxTextCtrl::OnPaint)
     EVT_ERASE_BACKGROUND(wxTextCtrl::OnEraseBackground)

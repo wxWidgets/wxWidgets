@@ -287,8 +287,6 @@ static void wxInsertChildInNotebook( wxNotebook* parent, wxWindow* child )
 // wxNotebook
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxNotebook,wxControl)
-
 BEGIN_EVENT_TABLE(wxNotebook, wxControl)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
 END_EVENT_TABLE()

@@ -27,8 +27,6 @@
 
 #include "wx/os2/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
-
 extern void  wxAssociateWinWithHandle( HWND         hWnd
                                       ,wxWindowOS2* pWin
                                      );

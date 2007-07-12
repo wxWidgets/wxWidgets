@@ -168,8 +168,6 @@ static wxWindow*                    gpWinBeingCreated = NULL;
 // method
 #ifdef __WXUNIVERSAL__
     IMPLEMENT_ABSTRACT_CLASS(wxWindowOS2, wxWindowBase)
-#else // __WXPM__
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
 #endif // __WXUNIVERSAL__/__WXPM__
 
 BEGIN_EVENT_TABLE(wxWindowOS2, wxWindowBase)

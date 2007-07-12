@@ -187,8 +187,6 @@ static void wxgtk_text_draw( GtkWidget *widget, GdkRectangle *rect)
 //  wxTextCtrl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxTextCtrlBase)
-
 BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_CHAR(wxTextCtrl::OnChar)
 

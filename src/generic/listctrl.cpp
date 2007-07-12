@@ -30,8 +30,6 @@
     IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
     IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
     IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
-
-    IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxGenericListCtrl)
 #endif
 
 #ifndef WX_PRECOMP

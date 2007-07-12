@@ -38,7 +38,6 @@
 #endif
 #include "wx/motif/private.h"
 
-    IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 
 static void wxListBoxCallback(Widget w,
                               XtPointer clientData,

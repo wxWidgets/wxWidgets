@@ -619,8 +619,6 @@ gtk_text_exposed_callback( GtkWidget *widget, GdkEventExpose *event, wxTextCtrl 
 //  wxTextCtrl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxTextCtrlBase)
-
 BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_CHAR(wxTextCtrl::OnChar)
 

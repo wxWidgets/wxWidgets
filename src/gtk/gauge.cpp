@@ -20,8 +20,6 @@
 // wxGauge
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)
-
 bool wxGauge::Create( wxWindow *parent,
                       wxWindowID id,
                       int range,

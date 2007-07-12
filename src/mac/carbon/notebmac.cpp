@@ -30,10 +30,6 @@
 // check that the page index is valid
 #define IS_VALID_PAGE(nPage) ((nPage) < GetPageCount())
 
-#include "wx/listimpl.cpp"
-
-WX_DEFINE_LIST( wxNotebookPageInfoList )
-
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING)
 

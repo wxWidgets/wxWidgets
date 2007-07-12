@@ -447,13 +447,7 @@ gtk_listbox_realized_callback( GtkWidget *m_widget, wxListBox *win )
 }
 
 //-----------------------------------------------------------------------------
-// wxListBox
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxListBox,wxControl)
-
-// ----------------------------------------------------------------------------
-// construction
+// wxListBox - construction
 // ----------------------------------------------------------------------------
 
 wxListBox::wxListBox()
@@ -892,7 +886,7 @@ wxString wxListBox::GetRealLabel(GList *item) const
     str = wxString( label->label );
 
 #if wxUSE_CHECKLISTBOX
-    // checklistboxes have "[±] " prepended to their lables, remove it
+    // checklistboxes have "[ï¿½] " prepended to their lables, remove it
     //
     // NB: 4 below is the length of wxCHECKLBOX_STRING from wx/gtk1/checklst.h
     if ( m_hasCheckBoxes )

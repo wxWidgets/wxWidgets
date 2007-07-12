@@ -63,25 +63,24 @@ static void wxTextWindowGainFocusProc(Widget w, XtPointer clientData, XmAnyCallb
 static void wxTextWindowLoseFocusProc(Widget w, XtPointer clientData, XmAnyCallbackStruct *cbs);
 static void wxTextWindowActivateProc(Widget w, XtPointer clientData, XmAnyCallbackStruct *ptr);
 
-    IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxTextCtrlBase)
 
-    BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
-        EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
-        EVT_CHAR(wxTextCtrl::OnChar)
-
+BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
+    EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
+    EVT_CHAR(wxTextCtrl::OnChar)
+    
     EVT_MENU(wxID_CUT, wxTextCtrl::OnCut)
     EVT_MENU(wxID_COPY, wxTextCtrl::OnCopy)
     EVT_MENU(wxID_PASTE, wxTextCtrl::OnPaste)
     EVT_MENU(wxID_UNDO, wxTextCtrl::OnUndo)
     EVT_MENU(wxID_REDO, wxTextCtrl::OnRedo)
-
+    
     EVT_UPDATE_UI(wxID_CUT, wxTextCtrl::OnUpdateCut)
     EVT_UPDATE_UI(wxID_COPY, wxTextCtrl::OnUpdateCopy)
     EVT_UPDATE_UI(wxID_PASTE, wxTextCtrl::OnUpdatePaste)
     EVT_UPDATE_UI(wxID_UNDO, wxTextCtrl::OnUpdateUndo)
     EVT_UPDATE_UI(wxID_REDO, wxTextCtrl::OnUpdateRedo)
 
-    END_EVENT_TABLE()
+END_EVENT_TABLE()
 
 // ============================================================================
 // implementation

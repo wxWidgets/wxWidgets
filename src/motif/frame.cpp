@@ -97,8 +97,6 @@ BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
     EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
-
 // ============================================================================
 // implementation
 // ============================================================================

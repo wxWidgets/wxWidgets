@@ -92,10 +92,6 @@ wxBEGIN_PROPERTIES_TABLE(wxRadioBox)
     wxPROPERTY_FLAGS( WindowStyle , wxRadioBoxStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
-#endif
-
 /*
     selection
     content
@@ -103,6 +99,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
         dimension
         item
 */
+
+#endif
 
 
 // ----------------------------------------------------------------------------

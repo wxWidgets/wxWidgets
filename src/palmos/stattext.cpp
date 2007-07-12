@@ -28,8 +28,6 @@
 
 #include <Field.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
-
 bool wxStaticText::Create(wxWindow *parent,
                           wxWindowID id,
                           const wxString& label,

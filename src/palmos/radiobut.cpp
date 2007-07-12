@@ -43,9 +43,6 @@
 // wxRadioButton creation
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
-
-
 void wxRadioButton::Init()
 {
     m_radioStyle = pushButtonCtl;

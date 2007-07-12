@@ -775,10 +775,8 @@ void ConvertToOS2ListCol (
 } // end of ConvertToOS2ListCol
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
 IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
-
 IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
 
 BEGIN_EVENT_TABLE(wxListCtrl, wxControl)

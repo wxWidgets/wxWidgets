@@ -98,8 +98,6 @@ wxMenu *wxCurrentPopupMenu = NULL;
 // method
 #ifdef __WXUNIVERSAL__
     IMPLEMENT_ABSTRACT_CLASS(wxWindowPalm, wxWindowBase)
-#else // __WXPalm__
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
 #endif // __WXUNIVERSAL__/__WXPalm__
 
 BEGIN_EVENT_TABLE(wxWindowPalm, wxWindowBase)

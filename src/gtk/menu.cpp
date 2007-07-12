@@ -136,8 +136,6 @@ static void gtk_menu_close_callback( GtkWidget *widget, wxMenuBar *menubar )
 // wxMenuBar
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMenuBar,wxWindow)
-
 void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long style)
 {
     m_style = style;
@@ -679,8 +677,6 @@ static void gtk_menu_nolight_callback( GtkWidget *widget, wxMenu *menu )
 // wxMenuItem
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
-
 wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
                                 int id,
                                 const wxString& name,
@@ -977,8 +973,6 @@ bool wxMenuItem::IsChecked() const
 //-----------------------------------------------------------------------------
 // wxMenu
 //-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 
 void wxMenu::Init()
 {

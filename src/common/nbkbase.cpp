@@ -39,6 +39,9 @@
 // XTI
 // ----------------------------------------------------------------------------
 
+#include "wx/listimpl.cpp"
+WX_DEFINE_LIST( wxNotebookPageInfoList )
+
 wxDEFINE_FLAGS( wxNotebookStyle )
 wxBEGIN_FLAGS( wxNotebookStyle )
     // new style border flags, we put them first to

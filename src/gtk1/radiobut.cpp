@@ -60,8 +60,6 @@ void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioButton *r
 // wxRadioButton
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxRadioButton,wxControl)
-
 bool wxRadioButton::Create( wxWindow *parent,
                             wxWindowID id,
                             const wxString& label,
