@@ -18,7 +18,10 @@
 #if wxUSE_SVG
 
 #ifndef WX_PRECOMP
-#include "wx/image.h"
+    #include "wx/dcmemory.h"
+    #include "wx/dcscreen.h"
+    #include "wx/icon.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/dcsvg.h"
