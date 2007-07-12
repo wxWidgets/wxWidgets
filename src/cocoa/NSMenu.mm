@@ -19,18 +19,11 @@
 #include "wx/cocoa/ObjcPose.h"
 
 #import <Foundation/NSNotification.h>
-#import <AppKit/NSMenu.h>
+#include "wx/cocoa/objc/NSMenu.h"
 
 // ============================================================================
 // @class wxPoserNSMenu
 // ============================================================================
-@interface wxPoserNSMenu : NSMenu
-{
-}
-
-- (void)dealloc;
-
-@end // wxPoserNSMenu
 
 WX_IMPLEMENT_POSER(wxPoserNSMenu);
 @implementation wxPoserNSMenu : NSMenu
