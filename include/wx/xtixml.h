@@ -20,9 +20,9 @@
 
 class WXDLLIMPEXP_XML wxXmlNode;
 
-class WXDLLIMPEXP_XML wxXmlWriter : public wxWriter
+class WXDLLIMPEXP_XML wxXmlWriter: public wxWriter
 {
-public :
+public:
 
     wxXmlWriter( wxXmlNode * parent );
     virtual ~wxXmlWriter();
@@ -46,7 +46,7 @@ public :
 
     // start of writing an object having the passed in ID
     virtual void DoBeginWriteObject(const wxObject *object, 
-        const wxClassInfo *classInfo, int objectID , wxxVariantArray &metadata );
+        const wxClassInfo *classInfo, int objectID, wxxVariantArray &metadata );
 
     // end of writing an toplevel object name param is used for unique 
     // identification within the container
@@ -73,9 +73,9 @@ public :
 
     // writes a delegate in the stream format
     virtual void DoWriteDelegate( const wxObject *object,  
-        const wxClassInfo* classInfo , const wxPropertyInfo *propInfo ,
-        const wxObject *eventSink , int sinkObjectID , 
-        const wxClassInfo* eventSinkClassInfo , const wxHandlerInfo* handlerIndo );
+        const wxClassInfo* classInfo, const wxPropertyInfo *propInfo,
+        const wxObject *eventSink, int sinkObjectID, 
+        const wxClassInfo* eventSinkClassInfo, const wxHandlerInfo* handlerIndo );
 
 private:
     struct wxXmlWriterInternal;
@@ -86,7 +86,7 @@ private:
 wxXmlReader handles streaming in a class from XML
 */
 
-class WXDLLIMPEXP_XML wxXmlReader : public wxReader
+class WXDLLIMPEXP_XML wxXmlReader: public wxReader
 {
 public:
     wxXmlReader(wxXmlNode *parent) { m_parent = parent; }
@@ -95,14 +95,13 @@ public:
     // Reads a component from XML.  The return value is the root object ID, which can
     // then be used to ask the depersister about that object
 
-    virtual int ReadObject( const wxString &name , wxDepersister *depersist );
+    virtual int ReadObject( const wxString &name, wxDepersister *depersist );
 
-private :
+private:
     int ReadComponent(wxXmlNode *parent, wxDepersister *callbacks);
 
     // read the content of this node (simple type) and return the corresponding value
-    wxxVariant ReadValue(wxXmlNode *Node,
-        const wxTypeInfo *type );
+    wxxVariant ReadValue(wxXmlNode *Node, const wxTypeInfo *type );
 
     wxXmlNode * m_parent;
 };
