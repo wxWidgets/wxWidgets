@@ -39,7 +39,6 @@
 // ============================================================================
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
-IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
 
 // ----------------------------------------------------------------------------
 // creation

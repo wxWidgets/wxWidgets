@@ -40,8 +40,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
-
 bool wxSpinButton::Create(
   wxWindow*                         pParent
 , wxWindowID                        vId

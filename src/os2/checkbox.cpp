@@ -27,7 +27,6 @@
 // macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapCheckBox, wxCheckBox)
 
 extern void  wxAssociateWinWithHandle( HWND         hWnd

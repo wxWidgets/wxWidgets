@@ -65,8 +65,6 @@ gtk_frame_size_allocate (GtkWidget     *widget,
 // wxStaticBox
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
-
 wxStaticBox::wxStaticBox()
 {
 }

@@ -242,7 +242,6 @@ bool wxArrowButton::Create( wxSpinButton* parent,
 // wxSpinButton
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 
 static void CalcSizes( const wxPoint& pt, const wxSize& sz,

@@ -22,8 +22,6 @@
 // wxStaticBox
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
-
 wxStaticBox::wxStaticBox()
 {
 }
