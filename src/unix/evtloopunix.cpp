@@ -144,7 +144,7 @@ wxConsoleEventLoop::wxConsoleEventLoop()
                     &m_wakeupPipe,
                     wxFDIO_INPUT
                   );
-};
+}
 
 //-----------------------------------------------------------------------------
 // events dispatch and loop handling
