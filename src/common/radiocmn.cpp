@@ -48,7 +48,7 @@
 
 // TODO: wxCONSTRUCTOR
 #if 0 // wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxRadioBoxStyle )
+wxDEFINE_FLAGS( wxRadioBoxStyle )
 
 wxBEGIN_FLAGS( wxRadioBoxStyle )
     // new style border flags, we put them first to

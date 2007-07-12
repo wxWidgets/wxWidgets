@@ -41,7 +41,7 @@
 #include "wx/hashmap.h"
 
 #if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxListCtrlStyle )
+wxDEFINE_FLAGS( wxListCtrlStyle )
 
 wxBEGIN_FLAGS( wxListCtrlStyle )
     // new style border flags, we put them first to

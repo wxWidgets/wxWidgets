@@ -32,9 +32,7 @@
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxStaticBoxStyle )
-
+wxDEFINE_FLAGS( wxStaticBoxStyle )
 wxBEGIN_FLAGS( wxStaticBoxStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -62,14 +60,16 @@ wxBEGIN_FLAGS( wxStaticBoxStyle )
     wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
     wxFLAGS_MEMBER(wxVSCROLL)
     wxFLAGS_MEMBER(wxHSCROLL)
-
 wxEND_FLAGS( wxStaticBoxStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticBox, wxControl,"wx/statbox.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticBox, wxControl, "wx/statbox.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxStaticBox)
-    wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_FLAGS( WindowStyle , wxStaticBoxStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxString(), 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group"))
+    wxPROPERTY_FLAGS( WindowStyle, wxStaticBoxStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      wxT("Helpstring"), wxT("group")) // style
 /*
     TODO PROPERTIES :
         label
@@ -79,9 +79,8 @@ wxEND_PROPERTIES_TABLE()
 wxBEGIN_HANDLERS_TABLE(wxStaticBox)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_6( wxStaticBox , wxWindow* , Parent , wxWindowID , Id , wxString , Label , wxPoint , Position , wxSize , Size , long , WindowStyle )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
-#endif
+wxCONSTRUCTOR_6( wxStaticBox, wxWindow*, Parent, wxWindowID, Id, \
+                 wxString, Label, wxPoint, Position, wxSize, Size, \
+                 long, WindowStyle )
 
 #endif // wxUSE_STATBOX

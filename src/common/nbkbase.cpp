@@ -39,9 +39,7 @@
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxNotebookStyle )
-
+wxDEFINE_FLAGS( wxNotebookStyle )
 wxBEGIN_FLAGS( wxNotebookStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -78,11 +76,10 @@ wxBEGIN_FLAGS( wxNotebookStyle )
     wxFLAGS_MEMBER(wxBK_BOTTOM)
     wxFLAGS_MEMBER(wxNB_NOPAGETHEME)
     wxFLAGS_MEMBER(wxNB_FLAT)
-
 wxEND_FLAGS( wxNotebookStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxNotebook, wxControl, "wx/notebook.h")
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxNotebookPageInfo, wxObject, "wx/notebook.h" )
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxNotebook, wxControl, "wx/notebook.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxNotebookPageInfo, wxObject, "wx/notebook.h" )
 
 wxCOLLECTION_TYPE_INFO( wxNotebookPageInfo *, wxNotebookPageInfoList );
 
@@ -127,10 +124,6 @@ wxEND_HANDLERS_TABLE()
 wxCONSTRUCTOR_4( wxNotebookPageInfo, wxNotebookPage*, Page, \
                  wxString, Text, bool, Selected, int, ImageId )
 
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
-IMPLEMENT_DYNAMIC_CLASS(wxNotebookPageInfo, wxObject )
-#endif
 
 
 // XTI accessors:

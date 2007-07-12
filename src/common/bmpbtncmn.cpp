@@ -30,9 +30,7 @@
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-
-WX_DEFINE_FLAGS( wxBitmapButtonStyle )
+wxDEFINE_FLAGS( wxBitmapButtonStyle )
 wxBEGIN_FLAGS( wxBitmapButtonStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -68,7 +66,7 @@ wxBEGIN_FLAGS( wxBitmapButtonStyle )
     wxFLAGS_MEMBER(wxBU_BOTTOM)
 wxEND_FLAGS( wxBitmapButtonStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxBitmapButton, wxButton, "wx/bmpbuttn.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxBitmapButton, wxButton, "wx/bmpbuttn.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxBitmapButton)
     wxPROPERTY_FLAGS( WindowStyle, wxBitmapButtonStyle, long, \
@@ -82,10 +80,6 @@ wxEND_HANDLERS_TABLE()
 
 wxCONSTRUCTOR_5( wxBitmapButton, wxWindow*, Parent, wxWindowID, Id, \
                  wxBitmap, Bitmap, wxPoint, Position, wxSize, Size )
-
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
-#endif
 
 /*
 TODO PROPERTIES :

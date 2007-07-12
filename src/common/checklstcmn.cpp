@@ -45,9 +45,7 @@
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxCheckListBoxStyle )
-
+wxDEFINE_FLAGS( wxCheckListBoxStyle )
 wxBEGIN_FLAGS( wxCheckListBoxStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -87,7 +85,7 @@ wxBEGIN_FLAGS( wxCheckListBoxStyle )
 
 wxEND_FLAGS( wxCheckListBoxStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxCheckListBox, wxListBox, "wx/checklst.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxCheckListBox, wxListBox, "wx/checklst.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxCheckListBox)
     wxEVENT_PROPERTY( Toggle, wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEvent )
@@ -102,8 +100,5 @@ wxEND_HANDLERS_TABLE()
 wxCONSTRUCTOR_4( wxCheckListBox, wxWindow*, Parent, wxWindowID, Id, \
                  wxPoint, Position, wxSize, Size )
 
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
-#endif
 
 #endif

@@ -46,9 +46,7 @@
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxDialogStyle )
-
+wxDEFINE_FLAGS( wxDialogStyle )
 wxBEGIN_FLAGS( wxDialogStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -88,7 +86,7 @@ wxBEGIN_FLAGS( wxDialogStyle )
     wxFLAGS_MEMBER(wxMINIMIZE_BOX)
 wxEND_FLAGS( wxDialogStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxDialog, wxTopLevelWindow, "wx/dialog.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxDialog, wxTopLevelWindow, "wx/dialog.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxDialog)
     wxPROPERTY( Title, wxString, SetTitle, GetTitle, wxString(), \
@@ -104,10 +102,6 @@ wxEND_HANDLERS_TABLE()
 
 wxCONSTRUCTOR_6( wxDialog, wxWindow*, Parent, wxWindowID, Id, \
                  wxString, Title, wxPoint, Position, wxSize, Size, long, WindowStyle)
-
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
-#endif
 
 
 // ----------------------------------------------------------------------------

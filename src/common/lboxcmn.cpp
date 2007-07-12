@@ -41,9 +41,7 @@
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxListBoxStyle )
-
+wxDEFINE_FLAGS( wxListBoxStyle )
 wxBEGIN_FLAGS( wxListBoxStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -79,28 +77,31 @@ wxBEGIN_FLAGS( wxListBoxStyle )
     wxFLAGS_MEMBER(wxLB_ALWAYS_SB)
     wxFLAGS_MEMBER(wxLB_NEEDED_SB)
     wxFLAGS_MEMBER(wxLB_SORT)
-
 wxEND_FLAGS( wxListBoxStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxListBox, wxControlWithItems,"wx/listbox.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxListBox, wxControlWithItems, "wx/listbox.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxListBox)
-    wxEVENT_PROPERTY( Select , wxEVT_COMMAND_LISTBOX_SELECTED , wxCommandEvent )
-    wxEVENT_PROPERTY( DoubleClick , wxEVT_COMMAND_LISTBOX_DOUBLECLICKED , wxCommandEvent )
+    wxEVENT_PROPERTY( Select, wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEvent )
+    wxEVENT_PROPERTY( DoubleClick, wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEvent )
 
-    wxPROPERTY( Font , wxFont , SetFont , GetFont  , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_COLLECTION( Choices , wxArrayString , wxString , AppendString , GetStrings, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxPROPERTY( Selection ,int, SetSelection, GetSelection, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxPROPERTY_FLAGS( WindowStyle , wxListBoxStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY( Font, wxFont, SetFont, GetFont , EMPTY_MACROVALUE, 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group"))
+    wxPROPERTY_COLLECTION( Choices, wxArrayString, wxString, AppendString, \
+                           GetStrings, 0 /*flags*/, wxT("Helpstring"), wxT("group") )
+    wxPROPERTY( Selection, int, SetSelection, GetSelection, EMPTY_MACROVALUE, \
+                0 /*flags*/, wxT("Helpstring"), wxT("group") )
+
+    wxPROPERTY_FLAGS( WindowStyle, wxListBoxStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxListBox)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_4( wxListBox , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControlWithItems)
-#endif
+wxCONSTRUCTOR_4( wxListBox, wxWindow*, Parent, wxWindowID, Id, \
+                 wxPoint, Position, wxSize, Size )
 
 /*
 TODO PROPERTIES

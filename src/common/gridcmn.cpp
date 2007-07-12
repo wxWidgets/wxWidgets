@@ -38,9 +38,7 @@
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxGridStyle )
-
+wxDEFINE_FLAGS( wxGridStyle )
 wxBEGIN_FLAGS( wxGridStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -68,26 +66,25 @@ wxBEGIN_FLAGS( wxGridStyle )
     wxFLAGS_MEMBER(wxALWAYS_SHOW_SB)
     wxFLAGS_MEMBER(wxVSCROLL)
     wxFLAGS_MEMBER(wxHSCROLL)
-
 wxEND_FLAGS( wxGridStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxGrid, wxScrolledWindow,"wx/grid.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxGrid, wxScrolledWindow, "wx/grid.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxGrid)
     wxHIDE_PROPERTY( Children )
-    wxPROPERTY_FLAGS( WindowStyle , wxGridStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY_FLAGS( WindowStyle, wxGridStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxGrid)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_5( wxGrid , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
+wxCONSTRUCTOR_5( wxGrid, wxWindow*, Parent, wxWindowID, Id, wxPoint, Position, \
+                 wxSize, Size, long, WindowStyle )
 
 /*
  TODO : Expose more information of a list's layout, etc. via appropriate objects (e.g., NotebookPageInfo)
 */
-#else
-IMPLEMENT_DYNAMIC_CLASS( wxGrid, wxScrolledWindow )
-#endif
 
 #endif // wxUSE_GRID

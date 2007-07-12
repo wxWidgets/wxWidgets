@@ -38,9 +38,7 @@
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-
-WX_DEFINE_FLAGS( wxPanelStyle )
+wxDEFINE_FLAGS( wxPanelStyle )
 wxBEGIN_FLAGS( wxPanelStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -68,10 +66,9 @@ wxBEGIN_FLAGS( wxPanelStyle )
     wxFLAGS_MEMBER(wxALWAYS_SHOW_SB)
     wxFLAGS_MEMBER(wxVSCROLL)
     wxFLAGS_MEMBER(wxHSCROLL)
-
 wxEND_FLAGS( wxPanelStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxPanel, wxWindow, "wx/panel.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxPanel, wxWindow, "wx/panel.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxPanel)
     wxPROPERTY_FLAGS( WindowStyle, wxPanelStyle, long, \
@@ -88,6 +85,4 @@ wxCONSTRUCTOR_6( wxPanel, wxWindow*, Parent, wxWindowID, Id, \
                  wxPoint, Position, wxSize, Size, long, WindowStyle, \
                  wxString, Name)
 
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxPanel, wxWindow)
-#endif
+

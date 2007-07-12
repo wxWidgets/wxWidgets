@@ -460,7 +460,7 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// Dynamic class macros
+// DECLARE class macros
 // ----------------------------------------------------------------------------
 
 #define _DECLARE_DYNAMIC_CLASS(name)                        \
@@ -474,27 +474,35 @@ private:
         virtual wxClassInfo *GetClassInfo() const           \
             { return &name::ms_classInfo; }
 
-#define DECLARE_DYNAMIC_CLASS(name)                         \
+#define wxDECLARE_DYNAMIC_CLASS(name)                       \
     static wxConstructorBridge* ms_constructor;             \
     static const wxChar * ms_constructorProperties[];       \
     static const int ms_constructorPropertiesCount;         \
     _DECLARE_DYNAMIC_CLASS(name)
 
-#define DECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)               \
-    DECLARE_NO_ASSIGN_CLASS(name)                           \
-    DECLARE_DYNAMIC_CLASS(name)
+#define wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)             \
+    wxDECLARE_NO_ASSIGN_CLASS(name)                         \
+    wxDECLARE_DYNAMIC_CLASS(name)
 
-#define DECLARE_DYNAMIC_CLASS_NO_COPY(name)                 \
-    DECLARE_NO_COPY_CLASS(name)                             \
-    DECLARE_DYNAMIC_CLASS(name)
+#define wxDECLARE_DYNAMIC_CLASS_NO_COPY(name)               \
+    wxDECLARE_NO_COPY_CLASS(name)                           \
+    wxDECLARE_DYNAMIC_CLASS(name)
 
-#define DECLARE_ABSTRACT_CLASS(name)    _DECLARE_DYNAMIC_CLASS(name)
-#define DECLARE_CLASS(name)             DECLARE_DYNAMIC_CLASS(name)
+#define wxDECLARE_ABSTRACT_CLASS(name)    _DECLARE_DYNAMIC_CLASS(name)
+#define wxDECLARE_CLASS(name)             wxDECLARE_DYNAMIC_CLASS(name)
+
+#if WXWIN_COMPATIBILITY_2_8
+    #define DECLARE_DYNAMIC_CLASS(name)             wxDECLARE_DYNAMIC_CLASS(name)
+    #define DECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)   wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)
+    #define DECLARE_DYNAMIC_CLASS_NO_COPY(name)     wxDECLARE_DYNAMIC_CLASS_NO_COPY(name)
+    #define DECLARE_ABSTRACT_CLASS(name)            wxDECLARE_ABSTRACT_CLASS(name)
+    #define DECLARE_CLASS(name)                     wxDECLARE_CLASS(name)
+#endif
 
 
-// -----------------------------------
-// for concrete classes
-// -----------------------------------
+// ----------------------------------------------------------------------------
+// IMPLEMENT class macros for concrete classes
+// ----------------------------------------------------------------------------
 
 // Single inheritance with one base class
 
@@ -539,7 +547,7 @@ private:
         wxVariantOfPtrToObjectConverter##name, wxVariantToObjectConverter##name,         \
         wxObjectToVariantConverter##name, callback);
 
-#define IMPLEMENT_DYNAMIC_CLASS_WITH_COPY( name, basename )                     \
+#define wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY( name, basename )                   \
     _IMPLEMENT_DYNAMIC_CLASS_WITH_COPY( name, basename, "", NULL )              \
     _TYPEINFO_CLASSES(name, NULL, NULL)                                         \
     const wxPropertyInfo *name::GetPropertiesStatic()                           \
@@ -548,7 +556,7 @@ private:
         { return (wxHandlerInfo*) NULL; }                                       \
     wxCONSTRUCTOR_DUMMY( name )
 
-#define IMPLEMENT_DYNAMIC_CLASS( name, basename )                               \
+#define wxIMPLEMENT_DYNAMIC_CLASS( name, basename )                             \
     _IMPLEMENT_DYNAMIC_CLASS( name, basename, "", NULL )                        \
     _TYPEINFO_CLASSES(name, NULL, NULL)                                         \
     wxPropertyInfo *name::GetPropertiesStatic()                                 \
@@ -557,19 +565,19 @@ private:
         { return (wxHandlerInfo*) NULL; }                                       \
     wxCONSTRUCTOR_DUMMY( name )
 
-#define IMPLEMENT_DYNAMIC_CLASS_XTI( name, basename, unit )                     \
+#define wxIMPLEMENT_DYNAMIC_CLASS_XTI( name, basename, unit )                   \
     _IMPLEMENT_DYNAMIC_CLASS( name, basename, unit, NULL )                      \
     _TYPEINFO_CLASSES(name, NULL, NULL)
 
-#define IMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK( name, basename, unit, callback )  \
+#define wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK( name, basename, unit, callback )\
     _IMPLEMENT_DYNAMIC_CLASS( name, basename, unit, &callback )                 \
     _TYPEINFO_CLASSES(name, NULL, NULL)
 
-#define IMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI( name, basename, unit )           \
+#define wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI( name, basename, unit )         \
     _IMPLEMENT_DYNAMIC_CLASS_WITH_COPY( name, basename, unit, NULL  )           \
     _TYPEINFO_CLASSES(name, NULL, NULL)
 
-#define IMPLEMENT_DYNAMIC_CLASS_WITH_COPY_AND_STREAMERS_XTI( name, basename,    \
+#define wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY_AND_STREAMERS_XTI( name, basename,  \
                                                              unit, toString,    \
                                                              fromString )       \
     _IMPLEMENT_DYNAMIC_CLASS_WITH_COPY( name, basename, unit, NULL  )           \
@@ -577,7 +585,7 @@ private:
 
 // this is for classes that do not derive from wxObject, there are no creators for these
 
-#define IMPLEMENT_DYNAMIC_CLASS_NO_WXOBJECT_NO_BASE_XTI( name, unit )           \
+#define wxIMPLEMENT_DYNAMIC_CLASS_NO_WXOBJECT_NO_BASE_XTI( name, unit )         \
     const wxClassInfo* name::ms_classParents[] = { NULL };                      \
     wxClassInfo name::ms_classInfo(name::ms_classParents, wxEmptyString,        \
             wxT(#name), (int) sizeof(name), (wxObjectConstructorFn) 0,          \
@@ -587,7 +595,7 @@ private:
 
 // this is for subclasses that still do not derive from wxObject
 
-#define IMPLEMENT_DYNAMIC_CLASS_NO_WXOBJECT_XTI( name, basename, unit )             \
+#define wxIMPLEMENT_DYNAMIC_CLASS_NO_WXOBJECT_XTI( name, basename, unit )           \
     const wxClassInfo* name::ms_classParents[] = { &basename::ms_classInfo, NULL }; \
     wxClassInfo name::ms_classInfo(name::ms_classParents, wxEmptyString,            \
             wxT(#name), (int) sizeof(name), (wxObjectConstructorFn) 0,              \
@@ -614,21 +622,27 @@ private:
         wxVariantOfPtrToObjectConverter##name, NULL, wxObjectToVariantConverter##name,  \
         callback);
 
-#define IMPLEMENT_DYNAMIC_CLASS2( name, basename, basename2)                        \
+#define wxIMPLEMENT_DYNAMIC_CLASS2( name, basename, basename2)                      \
     _IMPLEMENT_DYNAMIC_CLASS2( name, basename, basename2, "", NULL)                 \
     _TYPEINFO_CLASSES(name, NULL, NULL)                                             \
     wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL; }  \
     wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL; }      \
     wxCONSTRUCTOR_DUMMY( name )
 
-#define IMPLEMENT_DYNAMIC_CLASS2_XTI( name, basename, basename2, unit) \
-    _IMPLEMENT_DYNAMIC_CLASS2( name, basename, basename2, unit, NULL)  \
+#define wxIMPLEMENT_DYNAMIC_CLASS2_XTI( name, basename, basename2, unit) \
+    _IMPLEMENT_DYNAMIC_CLASS2( name, basename, basename2, unit, NULL)    \
     _TYPEINFO_CLASSES(name, NULL, NULL)
 
+#if WXWIN_COMPATIBILITY_2_8
+    #define IMPLEMENT_DYNAMIC_CLASS_WITH_COPY    wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY
+    #define IMPLEMENT_DYNAMIC_CLASS              wxIMPLEMENT_DYNAMIC_CLASS
+    #define IMPLEMENT_DYNAMIC_CLASS2             wxIMPLEMENT_DYNAMIC_CLASS2
+#endif
 
-// -----------------------------------
-// for abstract classes
-// -----------------------------------
+
+// ----------------------------------------------------------------------------
+// IMPLEMENT class macros for abstract classes
+// ----------------------------------------------------------------------------
 
 // Single inheritance with one base class
 
@@ -649,23 +663,30 @@ private:
         wxObjectToVariantConverter##name);                                         \
     _TYPEINFO_CLASSES(name, NULL, NULL)
 
-#define IMPLEMENT_ABSTRACT_CLASS( name, basename )                              \
+#define wxIMPLEMENT_ABSTRACT_CLASS( name, basename )                              \
     _IMPLEMENT_ABSTRACT_CLASS( name, basename )                                 \
     wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL; }  \
     wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL; }
 
 // Multiple inheritance with two base classes
 
-#define IMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2)                   \
+#define wxIMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2)                   \
     wxClassInfo name::ms_classInfo(wxT(#name), wxT(#basename1),                 \
                                    wxT(#basename2), (int) sizeof(name),         \
                                    (wxObjectConstructorFn) 0);
 
-#define IMPLEMENT_CLASS IMPLEMENT_ABSTRACT_CLASS
-#define IMPLEMENT_CLASS2 IMPLEMENT_ABSTRACT_CLASS2
+#define wxIMPLEMENT_CLASS wxIMPLEMENT_ABSTRACT_CLASS
+#define wxIMPLEMENT_CLASS2 wxIMPLEMENT_ABSTRACT_CLASS2
 
 #define wxBEGIN_EVENT_TABLE( a, b ) BEGIN_EVENT_TABLE( a, b )
 #define wxEND_EVENT_TABLE() END_EVENT_TABLE()
+
+#if WXWIN_COMPATIBILITY_2_8
+    #define IMPLEMENT_ABSTRACT_CLASS    wxIMPLEMENT_ABSTRACT_CLASS
+    #define IMPLEMENT_ABSTRACT_CLASS2   wxIMPLEMENT_ABSTRACT_CLASS2
+    #define IMPLEMENT_CLASS             wxIMPLEMENT_CLASS
+    #define IMPLEMENT_CLASS2            wxIMPLEMENT_CLASS2
+#endif
 
 
 // --------------------------------------------------------------------------

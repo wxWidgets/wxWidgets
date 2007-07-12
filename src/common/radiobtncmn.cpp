@@ -37,9 +37,7 @@
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxRadioButtonStyle )
-
+wxDEFINE_FLAGS( wxRadioButtonStyle )
 wxBEGIN_FLAGS( wxRadioButtonStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -69,26 +67,28 @@ wxBEGIN_FLAGS( wxRadioButtonStyle )
     wxFLAGS_MEMBER(wxHSCROLL)
 
     wxFLAGS_MEMBER(wxRB_GROUP)
-
 wxEND_FLAGS( wxRadioButtonStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxRadioButton, wxControl,"wx/radiobut.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxRadioButton, wxControl, "wx/radiobut.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxRadioButton)
-    wxEVENT_PROPERTY( Click , wxEVT_COMMAND_RADIOBUTTON_SELECTED , wxCommandEvent )
-    wxPROPERTY( Font , wxFont , SetFont , GetFont  , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxPROPERTY( Value ,bool, SetValue, GetValue, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    wxPROPERTY_FLAGS( WindowStyle , wxRadioButtonStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxEVENT_PROPERTY( Click, wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEvent )
+    wxPROPERTY( Font, wxFont, SetFont, GetFont , EMPTY_MACROVALUE, 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxString(), 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group") )
+    wxPROPERTY( Value,bool, SetValue, GetValue, EMPTY_MACROVALUE, 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group") )
+    wxPROPERTY_FLAGS( WindowStyle, wxRadioButtonStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxRadioButton)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_6( wxRadioButton , wxWindow* , Parent , wxWindowID , Id , wxString , Label , wxPoint , Position , wxSize , Size , long , WindowStyle )
+wxCONSTRUCTOR_6( wxRadioButton, wxWindow*, Parent, wxWindowID, Id, \
+                 wxString, Label, wxPoint, Position, wxSize, Size, long, WindowStyle )
 
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
-#endif
 
 #endif // wxUSE_RADIOBTN

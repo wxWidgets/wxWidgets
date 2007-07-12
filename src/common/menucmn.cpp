@@ -56,12 +56,12 @@ WX_DEFINE_LIST( wxMenuInfoList )
 
 #if wxUSE_EXTENDED_RTTI
 
-WX_DEFINE_FLAGS( wxMenuStyle )
+wxDEFINE_FLAGS( wxMenuStyle )
 wxBEGIN_FLAGS( wxMenuStyle )
     wxFLAGS_MEMBER(wxMENU_TEAROFF)
 wxEND_FLAGS( wxMenuStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxMenu, wxEvtHandler, "wx/menu.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxMenu, wxEvtHandler, "wx/menu.h")
 wxCOLLECTION_TYPE_INFO( wxMenuItem *, wxMenuItemList ) ;
 
 template<> void wxCollectionToVariantArray( wxMenuItemList const &theList,
@@ -89,7 +89,7 @@ wxEND_HANDLERS_TABLE()
 
 wxDIRECT_CONSTRUCTOR_2( wxMenu, wxString, Title, long, MenuStyle  )
 
-WX_DEFINE_FLAGS( wxMenuBarStyle )
+wxDEFINE_FLAGS( wxMenuBarStyle )
 
 wxBEGIN_FLAGS( wxMenuBarStyle )
     wxFLAGS_MEMBER(wxMB_DOCKABLE)
@@ -103,10 +103,10 @@ bool wxMenuBarStreamingCallback( const wxObject *WXUNUSED(object), wxWriter *,
     return true;
 }
 
-IMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuBar, wxWindow, "wx/menu.h", \
-                                     wxMenuBarStreamingCallback)
+wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuBar, wxWindow, "wx/menu.h", \
+                                       wxMenuBarStreamingCallback)
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxMenuInfo, wxObject, "wx/menu.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxMenuInfo, wxObject, "wx/menu.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxMenuInfo)
     wxREADONLY_PROPERTY( Menu, wxMenu*, GetMenu, EMPTY_MACROVALUE, \
@@ -175,8 +175,8 @@ wxBEGIN_ENUM( wxItemKind )
     wxENUM_MEMBER( wxITEM_RADIO )
 wxEND_ENUM( wxItemKind )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuItem, wxObject, "wx/menuitem.h", \
-                                     wxMenuItemStreamingCallback)
+wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuItem, wxObject, "wx/menuitem.h", \
+                                       wxMenuItemStreamingCallback)
 
 wxBEGIN_PROPERTIES_TABLE(wxMenuItem)
     wxPROPERTY( Parent,wxMenu*, SetMenu, GetMenu, EMPTY_MACROVALUE, \

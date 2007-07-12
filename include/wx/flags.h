@@ -78,8 +78,8 @@ public:
         return s;
     }
 
-    // bitwise exclusive-or operator, returns a new bitset that has all bits set that are set either in
-    // bitset2 or in this bitset but not in both
+    // bitwise exclusive-or operator, returns a new bitset that has all bits set  
+    // that are set either in bitset2 or in this bitset but not in both
     wxBitset operator ^(const wxBitset &bitset2) const // difference
     {
         wxBitset<T> s;
@@ -87,8 +87,8 @@ public:
         return s;
     }
 
-    // bitwise and operator, returns a new bitset that has all bits set that are set both in
-    // bitset2 and in this bitset
+    // bitwise and operator, returns a new bitset that has all bits set that are 
+    // set both in bitset2 and in this bitset
     wxBitset operator &(const wxBitset &bitset2) const // intersection
     {
         wxBitset<T> s;
@@ -153,7 +153,7 @@ private :
     unsigned long m_data;
 };
 
-#define WX_DEFINE_FLAGS( flags ) \
+#define wxDEFINE_FLAGS( flags ) \
     class WXDLLEXPORT flags \
     {\
     public : \
@@ -161,5 +161,9 @@ private :
         long m_data ;\
         bool operator ==(const flags &rhs) const { return m_data == rhs.m_data; }\
     } ;
+
+#if WXWIN_COMPATIBILITY_2_8
+    #define WX_DEFINE_FLAGS     wxDEFINE_FLAGS
+#endif
 
 #endif

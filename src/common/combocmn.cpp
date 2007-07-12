@@ -44,9 +44,7 @@
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxComboBoxStyle )
-
+wxDEFINE_FLAGS( wxComboBoxStyle )
 wxBEGIN_FLAGS( wxComboBoxStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -82,7 +80,7 @@ wxBEGIN_FLAGS( wxComboBoxStyle )
 
 wxEND_FLAGS( wxComboBoxStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxComboBox, wxChoice, "wx/combobox.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxComboBox, wxChoice, "wx/combobox.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxComboBox)
     wxEVENT_PROPERTY( Select, wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEvent )
@@ -109,11 +107,6 @@ wxEND_HANDLERS_TABLE()
 wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
                  wxString, Value, wxPoint, Position, wxSize, Size )
 
-#else
-
-IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxChoice)
-
-#endif
 
 
 // constants

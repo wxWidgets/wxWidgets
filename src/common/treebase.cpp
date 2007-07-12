@@ -59,9 +59,7 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_TREE_ITEM_MENU)
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxTreeCtrlStyle )
-
+wxDEFINE_FLAGS( wxTreeCtrlStyle )
 wxBEGIN_FLAGS( wxTreeCtrlStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -106,24 +104,26 @@ wxBEGIN_FLAGS( wxTreeCtrlStyle )
     wxFLAGS_MEMBER(wxTR_EXTENDED)
 #endif
     wxFLAGS_MEMBER(wxTR_DEFAULT_STYLE)
-
 wxEND_FLAGS( wxTreeCtrlStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxTreeCtrl, wxControl,"wx/treectrl.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxTreeCtrl, wxControl, "wx/treectrl.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxTreeCtrl)
-    wxEVENT_PROPERTY( TextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent )
-    wxEVENT_RANGE_PROPERTY( TreeEvent , wxEVT_COMMAND_TREE_BEGIN_DRAG , wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK , wxTreeEvent )
-    wxPROPERTY_FLAGS( WindowStyle , wxTreeCtrlStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxEVENT_PROPERTY( TextUpdated, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent )
+    wxEVENT_RANGE_PROPERTY( TreeEvent, wxEVT_COMMAND_TREE_BEGIN_DRAG, \
+                            wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK, wxTreeEvent )
+
+    wxPROPERTY_FLAGS( WindowStyle, wxTreeCtrlStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxTreeCtrl)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_5( wxTreeCtrl , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxControl)
-#endif
+wxCONSTRUCTOR_5( wxTreeCtrl, wxWindow*, Parent, wxWindowID, Id, \
+                 wxPoint, Position, wxSize, Size, long, WindowStyle )
+
 
 // ----------------------------------------------------------------------------
 // Tree event

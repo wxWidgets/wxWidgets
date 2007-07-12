@@ -37,9 +37,7 @@
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxSpinButtonStyle )
-
+wxDEFINE_FLAGS( wxSpinButtonStyle )
 wxBEGIN_FLAGS( wxSpinButtonStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -72,26 +70,29 @@ wxBEGIN_FLAGS( wxSpinButtonStyle )
     wxFLAGS_MEMBER(wxSP_VERTICAL)
     wxFLAGS_MEMBER(wxSP_ARROW_KEYS)
     wxFLAGS_MEMBER(wxSP_WRAP)
-
 wxEND_FLAGS( wxSpinButtonStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinButton, wxControl,"wx/spinbut.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinButton, wxControl, "wx/spinbut.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxSpinButton)
-    wxEVENT_RANGE_PROPERTY( Spin , wxEVT_SCROLL_TOP , wxEVT_SCROLL_CHANGED , wxSpinEvent )
+    wxEVENT_RANGE_PROPERTY( Spin, wxEVT_SCROLL_TOP, wxEVT_SCROLL_CHANGED, wxSpinEvent )
 
-    wxPROPERTY( Value , int , SetValue, GetValue, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Min , int , SetMin, GetMin, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Max , int , SetMax, GetMax, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_FLAGS( WindowStyle , wxSpinButtonStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY( Value, int, SetValue, GetValue, 0, 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( Min, int, SetMin, GetMin, 0, 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( Max, int, SetMax, GetMax, 0, 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group"))
+
+    wxPROPERTY_FLAGS( WindowStyle, wxSpinButtonStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxSpinButton)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_5( wxSpinButton , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
-#endif
+wxCONSTRUCTOR_5( wxSpinButton, wxWindow*, Parent, wxWindowID, Id, \
+                 wxPoint, Position, wxSize, Size, long, WindowStyle )
 
 #endif // wxUSE_SPINBTN

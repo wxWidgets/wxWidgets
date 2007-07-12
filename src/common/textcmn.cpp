@@ -51,9 +51,7 @@
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-
-WX_DEFINE_FLAGS( wxTextCtrlStyle )
+wxDEFINE_FLAGS( wxTextCtrlStyle )
 wxBEGIN_FLAGS( wxTextCtrlStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -98,10 +96,9 @@ wxBEGIN_FLAGS( wxTextCtrlStyle )
     wxFLAGS_MEMBER(wxTE_DONTWRAP)
     wxFLAGS_MEMBER(wxTE_CHARWRAP)
     wxFLAGS_MEMBER(wxTE_WORDWRAP)
-
 wxEND_FLAGS( wxTextCtrlStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxTextCtrl, wxControl, "wx/textctrl.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxTextCtrl, wxControl, "wx/textctrl.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxTextCtrl)
     wxEVENT_PROPERTY( TextUpdated, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent )
@@ -123,9 +120,6 @@ wxEND_HANDLERS_TABLE()
 wxCONSTRUCTOR_6( wxTextCtrl, wxWindow*, Parent, wxWindowID, Id, \
                  wxString, Value, wxPoint, Position, wxSize, Size, \
                  long, WindowStyle)
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxTextCtrlBase)
-#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxTextUrlEvent, wxCommandEvent)
 

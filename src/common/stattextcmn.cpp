@@ -52,9 +52,7 @@ const wxChar *wxMarkupEntities[][wxMARKUP_ENTITY_MAX] =
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxStaticTextStyle )
-
+wxDEFINE_FLAGS( wxStaticTextStyle )
 wxBEGIN_FLAGS( wxStaticTextStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -87,23 +85,23 @@ wxBEGIN_FLAGS( wxStaticTextStyle )
     wxFLAGS_MEMBER(wxALIGN_LEFT)
     wxFLAGS_MEMBER(wxALIGN_RIGHT)
     wxFLAGS_MEMBER(wxALIGN_CENTRE)
-
 wxEND_FLAGS( wxStaticTextStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticText, wxControl,"wx/stattext.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticText, wxControl, "wx/stattext.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxStaticText)
-    wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_FLAGS( WindowStyle , wxStaticTextStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxString(), 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group"))
+    wxPROPERTY_FLAGS( WindowStyle, wxStaticTextStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxStaticText)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_6( wxStaticText , wxWindow* , Parent , wxWindowID , Id , wxString , Label , wxPoint , Position , wxSize , Size , long , WindowStyle )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
-#endif
+wxCONSTRUCTOR_6( wxStaticText, wxWindow*, Parent, wxWindowID, Id, \
+                 wxString, Label, wxPoint, Position, wxSize, Size, long, WindowStyle )
 
 
 // ----------------------------------------------------------------------------

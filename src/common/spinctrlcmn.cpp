@@ -32,9 +32,7 @@
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-
-WX_DEFINE_FLAGS( wxSpinCtrlStyle )
+wxDEFINE_FLAGS( wxSpinCtrlStyle )
 wxBEGIN_FLAGS( wxSpinCtrlStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -69,7 +67,7 @@ wxBEGIN_FLAGS( wxSpinCtrlStyle )
     wxFLAGS_MEMBER(wxSP_WRAP)
 wxEND_FLAGS( wxSpinCtrlStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinCtrl, wxControl, "wx/spinbut.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinCtrl, wxControl, "wx/spinbut.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxSpinCtrl)
     wxEVENT_RANGE_PROPERTY( Spin, wxEVT_SCROLL_TOP, wxEVT_SCROLL_CHANGED, wxSpinEvent )
@@ -101,8 +99,5 @@ wxEND_HANDLERS_TABLE()
 wxCONSTRUCTOR_6( wxSpinCtrl, wxWindow*, Parent, wxWindowID, Id, \
                  wxString, ValueString, wxPoint, Position, \
                  wxSize, Size, long, WindowStyle )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
-#endif
 
 #endif // wxUSE_SPINCTRL

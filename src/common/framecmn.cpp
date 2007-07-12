@@ -56,9 +56,7 @@ END_EVENT_TABLE()
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxFrameStyle )
-
+wxDEFINE_FLAGS( wxFrameStyle )
 wxBEGIN_FLAGS( wxFrameStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -106,27 +104,28 @@ wxBEGIN_FLAGS( wxFrameStyle )
     wxFLAGS_MEMBER(wxFRAME_FLOAT_ON_PARENT)
 
     wxFLAGS_MEMBER(wxFRAME_SHAPED)
-
 wxEND_FLAGS( wxFrameStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxFrame, wxTopLevelWindow,"wx/frame.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxFrame, wxTopLevelWindow, "wx/frame.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxFrame)
-    wxEVENT_PROPERTY( Menu , wxEVT_COMMAND_MENU_SELECTED , wxCommandEvent)
+    wxEVENT_PROPERTY( Menu, wxEVT_COMMAND_MENU_SELECTED, wxCommandEvent)
 
-    wxPROPERTY( Title,wxString, SetTitle, GetTitle, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_FLAGS( WindowStyle , wxFrameStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-    wxPROPERTY( MenuBar , wxMenuBar * , SetMenuBar , GetMenuBar , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY( Title,wxString, SetTitle, GetTitle, wxString(), 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group"))
+    wxPROPERTY_FLAGS( WindowStyle, wxFrameStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      wxT("Helpstring"), wxT("group")) // style
+    wxPROPERTY( MenuBar, wxMenuBar *, SetMenuBar, GetMenuBar, EMPTY_MACROVALUE, \
+                0 /*flags*/, wxT("Helpstring"), wxT("group"))
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxFrame)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_6( wxFrame , wxWindow* , Parent , wxWindowID , Id , wxString , Title , wxPoint , Position , wxSize , Size , long , WindowStyle)
+wxCONSTRUCTOR_6( wxFrame, wxWindow*, Parent, wxWindowID, Id, wxString, Title, \
+                 wxPoint, Position, wxSize, Size, long, WindowStyle)
 
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
-#endif
 
 // ----------------------------------------------------------------------------
 // construction/destruction

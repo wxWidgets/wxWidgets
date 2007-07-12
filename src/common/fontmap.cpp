@@ -52,7 +52,10 @@
 
 #include "wx/encconv.h"
 
-#if wxUSE_EXTENDED_RTTI
+
+// ----------------------------------------------------------------------------
+// XTI
+// ----------------------------------------------------------------------------
 
 wxBEGIN_ENUM( wxFontEncoding )
     wxENUM_MEMBER( wxFONTENCODING_SYSTEM )
@@ -106,7 +109,7 @@ wxBEGIN_ENUM( wxFontEncoding )
     wxENUM_MEMBER( wxFONTENCODING_EUC_JP )
     wxENUM_MEMBER( wxFONTENCODING_UNICODE )
 wxEND_ENUM( wxFontEncoding )
-#endif
+
 
 // ----------------------------------------------------------------------------
 // constants

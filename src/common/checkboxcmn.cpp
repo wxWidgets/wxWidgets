@@ -32,9 +32,7 @@
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxCheckBoxStyle )
-
+wxDEFINE_FLAGS( wxCheckBoxStyle )
 wxBEGIN_FLAGS( wxCheckBoxStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -65,7 +63,7 @@ wxBEGIN_FLAGS( wxCheckBoxStyle )
 
 wxEND_FLAGS( wxCheckBoxStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxCheckBox, wxControl,"wx/checkbox.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxCheckBox, wxControl, "wx/checkbox.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxCheckBox)
     wxEVENT_PROPERTY( Click, wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEvent )
@@ -87,8 +85,6 @@ wxEND_HANDLERS_TABLE()
 
 wxCONSTRUCTOR_6( wxCheckBox, wxWindow*, Parent, wxWindowID, Id, \
                  wxString, Label, wxPoint, Position, wxSize, Size, long, WindowStyle )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
-#endif
+
 
 #endif // wxUSE_CHECKBOX

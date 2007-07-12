@@ -2925,14 +2925,20 @@ typedef const void* WXWidget;
 /*  macro to define a class without copy ctor nor assignment operator */
 /*  --------------------------------------------------------------------------- */
 
-#define DECLARE_NO_COPY_CLASS(classname)        \
+#define wxDECLARE_NO_COPY_CLASS(classname)      \
     private:                                    \
         classname(const classname&);            \
         classname& operator=(const classname&);
 
-#define DECLARE_NO_ASSIGN_CLASS(classname)      \
+#define wxDECLARE_NO_ASSIGN_CLASS(classname)    \
     private:                                    \
         classname& operator=(const classname&);
+
+#if WXWIN_COMPATIBILITY_2_8
+    #define DECLARE_NO_ASSIGN_CLASS(name)   wxDECLARE_NO_ASSIGN_CLASS(name)
+    #define DECLARE_NO_COPY_CLASS(name)     wxDECLARE_NO_COPY_CLASS(name)
+#endif
+
 
 /*  --------------------------------------------------------------------------- */
 /*  If a manifest is being automatically generated, add common controls 6 to it */

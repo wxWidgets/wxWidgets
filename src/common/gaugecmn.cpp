@@ -41,9 +41,7 @@ const wxChar wxGaugeNameStr[] = wxT("gauge");
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-
-WX_DEFINE_FLAGS( wxGaugeStyle )
+wxDEFINE_FLAGS( wxGaugeStyle )
 wxBEGIN_FLAGS( wxGaugeStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -80,7 +78,7 @@ wxBEGIN_FLAGS( wxGaugeStyle )
     wxFLAGS_MEMBER(wxGA_SMOOTH)
 wxEND_FLAGS( wxGaugeStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxGauge, wxControl, "wx/gauge.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxGauge, wxControl, "wx/gauge.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxGauge)
     wxPROPERTY( Value, int, SetValue, GetValue, 0, 0 /*flags*/, \
@@ -102,9 +100,7 @@ wxEND_HANDLERS_TABLE()
 
 wxCONSTRUCTOR_6( wxGauge, wxWindow*, Parent, wxWindowID, Id, int, Range, \
                  wxPoint, Position, wxSize, Size, long, WindowStyle )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)
-#endif
+
 
 
 // ----------------------------------------------------------------------------

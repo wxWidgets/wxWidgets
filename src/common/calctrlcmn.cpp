@@ -42,9 +42,7 @@
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxCalendarCtrlStyle )
-
+wxDEFINE_FLAGS( wxCalendarCtrlStyle )
 wxBEGIN_FLAGS( wxCalendarCtrlStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -83,7 +81,7 @@ wxBEGIN_FLAGS( wxCalendarCtrlStyle )
 
 wxEND_FLAGS( wxCalendarCtrlStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxCalendarCtrl, wxControl, "wx/calctrl.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxCalendarCtrl, wxControl, "wx/calctrl.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxCalendarCtrl)
     wxEVENT_RANGE_PROPERTY( Updated, wxEVT_CALENDAR_SEL_CHANGED, \
@@ -104,8 +102,6 @@ wxEND_HANDLERS_TABLE()
 
 wxCONSTRUCTOR_6( wxCalendarCtrl, wxWindow*, Parent, wxWindowID, Id, \
                  wxDateTime, Date, wxPoint, Position, wxSize, Size, long, WindowStyle )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxCalendarCtrl, wxControl)
-#endif
+
 
 #endif // wxUSE_CALENDARCTRL

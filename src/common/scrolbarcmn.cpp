@@ -29,9 +29,7 @@
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxScrollBarStyle )
-
+wxDEFINE_FLAGS( wxScrollBarStyle )
 wxBEGIN_FLAGS( wxScrollBarStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -62,10 +60,9 @@ wxBEGIN_FLAGS( wxScrollBarStyle )
 
     wxFLAGS_MEMBER(wxSB_HORIZONTAL)
     wxFLAGS_MEMBER(wxSB_VERTICAL)
-
 wxEND_FLAGS( wxScrollBarStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxScrollBar, wxControl, "wx/scrolbar.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxScrollBar, wxControl, "wx/scrolbar.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxScrollBar)
     wxEVENT_RANGE_PROPERTY( Scroll, wxEVT_SCROLL_TOP, \
@@ -90,8 +87,5 @@ wxEND_HANDLERS_TABLE()
 
 wxCONSTRUCTOR_5( wxScrollBar, wxWindow*, Parent, wxWindowID, Id, \
                  wxPoint, Position, wxSize, Size, long, WindowStyle )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
-#endif
 
 #endif // wxUSE_SCROLLBAR

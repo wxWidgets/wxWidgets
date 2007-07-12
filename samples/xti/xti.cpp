@@ -496,10 +496,15 @@ bool SaveFrameRTTI(const wxString &testFileName, wxDynamicObject *frame)
                                     "TestXTI", "This is the content");
     xml.SetRoot(root);
 
-    // write the given wxObject into the XML document
+    // setup the XTI writer and persister
     wxXmlWriter writer(root);
     MyDesignerPersister persister(frame);
-//    writer.WriteObject( frame, frame->GetClassInfo(), &persister, wxString("myTestFrame") );
+    
+    // write the given wxObject into the XML document
+    wxxVariantArray empty;
+    writer.WriteObject( frame, frame->GetClassInfo(), &persister, 
+                        wxString("myTestFrame"), empty );
+
     return xml.Save(testFileName);
 }
 

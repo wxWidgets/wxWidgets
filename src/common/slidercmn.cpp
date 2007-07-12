@@ -33,9 +33,7 @@
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxSliderStyle )
-
+wxDEFINE_FLAGS( wxSliderStyle )
 wxBEGIN_FLAGS( wxSliderStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -75,30 +73,37 @@ wxBEGIN_FLAGS( wxSliderStyle )
     wxFLAGS_MEMBER(wxSL_BOTH)
     wxFLAGS_MEMBER(wxSL_SELRANGE)
     wxFLAGS_MEMBER(wxSL_INVERSE)
-
 wxEND_FLAGS( wxSliderStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxSlider, wxControl,"wx/slider.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxSlider, wxControl, "wx/slider.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxSlider)
-    wxEVENT_RANGE_PROPERTY( Scroll , wxEVT_SCROLL_TOP , wxEVT_SCROLL_CHANGED , wxScrollEvent )
-    wxEVENT_PROPERTY( Updated , wxEVT_COMMAND_SLIDER_UPDATED , wxCommandEvent )
+    wxEVENT_RANGE_PROPERTY( Scroll, wxEVT_SCROLL_TOP, wxEVT_SCROLL_CHANGED, wxScrollEvent )
+    wxEVENT_PROPERTY( Updated, wxEVT_COMMAND_SLIDER_UPDATED, wxCommandEvent )
 
-    wxPROPERTY( Value , int , SetValue, GetValue , 0, 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Minimum , int , SetMin, GetMin, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( Maximum , int , SetMax, GetMax, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( PageSize , int , SetPageSize, GetLineSize, 1 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( LineSize , int , SetLineSize, GetLineSize, 1 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY( ThumbLength , int , SetThumbLength, GetThumbLength, 1 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    wxPROPERTY_FLAGS( WindowStyle , wxSliderStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY( Value, int, SetValue, GetValue, 0, 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( Minimum, int, SetMin, GetMin, 0, 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( Maximum, int, SetMax, GetMax, 0, 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( PageSize, int, SetPageSize, GetLineSize, 1, 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( LineSize, int, SetLineSize, GetLineSize, 1, 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( ThumbLength, int, SetThumbLength, GetThumbLength, 1, 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group"))
+
+    wxPROPERTY_FLAGS( WindowStyle, wxSliderStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxSlider)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_8( wxSlider , wxWindow* , Parent , wxWindowID , Id , int , Value , int , Minimum , int , Maximum , wxPoint , Position , wxSize , Size , long , WindowStyle )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
-#endif
+wxCONSTRUCTOR_8( wxSlider, wxWindow*, Parent, wxWindowID, Id, int, Value, \
+                 int, Minimum, int, Maximum, wxPoint, Position, wxSize, Size, \
+                 long, WindowStyle )
 
 #endif // wxUSE_SLIDER

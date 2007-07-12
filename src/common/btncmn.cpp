@@ -33,9 +33,7 @@
 // XTI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-
-WX_DEFINE_FLAGS( wxButtonStyle )
+wxDEFINE_FLAGS( wxButtonStyle )
 wxBEGIN_FLAGS( wxButtonStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -71,7 +69,7 @@ wxBEGIN_FLAGS( wxButtonStyle )
     wxFLAGS_MEMBER(wxBU_EXACTFIT)
 wxEND_FLAGS( wxButtonStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxButton, wxControl, "wx/button.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxButton, wxControl, "wx/button.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxButton)
     wxEVENT_PROPERTY( Click, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEvent)
@@ -91,11 +89,6 @@ wxEND_HANDLERS_TABLE()
 
 wxCONSTRUCTOR_6( wxButton, wxWindow*, Parent, wxWindowID, Id, wxString, \
                  Label, wxPoint, Position, wxSize, Size, long, WindowStyle )
-#else
-
-IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
-
-#endif      // wxUSE_EXTENDED_RTTI
 
 
 

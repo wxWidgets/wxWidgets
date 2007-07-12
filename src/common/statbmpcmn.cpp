@@ -32,9 +32,7 @@
 // XTI
 // ---------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxStaticBitmapStyle )
-
+wxDEFINE_FLAGS( wxStaticBitmapStyle )
 wxBEGIN_FLAGS( wxStaticBitmapStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -65,20 +63,20 @@ wxBEGIN_FLAGS( wxStaticBitmapStyle )
 
 wxEND_FLAGS( wxStaticBitmapStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticBitmap, wxControl,"wx/statbmp.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticBitmap, wxControl, "wx/statbmp.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxStaticBitmap)
-    wxPROPERTY_FLAGS( WindowStyle , wxStaticBitmapStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY_FLAGS( WindowStyle, wxStaticBitmapStyle, long, \
+                      SetWindowStyleFlag, GetWindowStyleFlag, \
+                      EMPTY_MACROVALUE, 0 /*flags*/, wxT("Helpstring"), \
+                      wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxStaticBitmap)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_5( wxStaticBitmap, wxWindow* , Parent , wxWindowID , Id , wxBitmap, Bitmap, wxPoint , Position , wxSize , Size )
-
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
-#endif
+wxCONSTRUCTOR_5( wxStaticBitmap, wxWindow*, Parent, wxWindowID, Id, \
+                 wxBitmap, Bitmap, wxPoint, Position, wxSize, Size )
 
 /*
     TODO PROPERTIES :

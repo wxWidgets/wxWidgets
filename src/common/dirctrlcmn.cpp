@@ -24,9 +24,7 @@
 // XTI
 //-----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxGenericDirCtrlStyle )
-
+wxDEFINE_FLAGS( wxGenericDirCtrlStyle )
 wxBEGIN_FLAGS( wxGenericDirCtrlStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -59,10 +57,9 @@ wxBEGIN_FLAGS( wxGenericDirCtrlStyle )
     wxFLAGS_MEMBER(wxDIRCTRL_3D_INTERNAL)
     wxFLAGS_MEMBER(wxDIRCTRL_SELECT_FIRST)
     wxFLAGS_MEMBER(wxDIRCTRL_SHOW_FILTERS)
-
 wxEND_FLAGS( wxGenericDirCtrlStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxGenericDirCtrl, wxControl,"wx/dirctrl.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxGenericDirCtrl, wxControl, "wx/dirctrl.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxGenericDirCtrl)
     wxHIDE_PROPERTY( Children )
@@ -85,8 +82,5 @@ wxEND_HANDLERS_TABLE()
 wxCONSTRUCTOR_8( wxGenericDirCtrl, wxWindow*, Parent, wxWindowID, Id, \
                  wxString, DefaultPath, wxPoint, Position, wxSize, Size, \
                  long, WindowStyle, wxString, Filter, int, DefaultFilter )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxGenericDirCtrl, wxControl)
-#endif
 
 #endif // wxUSE_DIRDLG || wxUSE_FILEDLG

@@ -51,9 +51,7 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_CACHE_HINT)
 // XTI
 // -----------------------------------------------------------------------------
 
-#if wxUSE_EXTENDED_RTTI
-WX_DEFINE_FLAGS( wxListCtrlStyle )
-
+wxDEFINE_FLAGS( wxListCtrlStyle )
 wxBEGIN_FLAGS( wxListCtrlStyle )
     // new style border flags, we put them first to
     // use them for streaming out
@@ -96,27 +94,27 @@ wxBEGIN_FLAGS( wxListCtrlStyle )
     wxFLAGS_MEMBER(wxLC_SORT_ASCENDING)
     wxFLAGS_MEMBER(wxLC_SORT_DESCENDING)
     wxFLAGS_MEMBER(wxLC_VIRTUAL)
-
 wxEND_FLAGS( wxListCtrlStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxListCtrl, wxControl,"wx/listctrl.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxListCtrl, wxControl, "wx/listctrl.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxListCtrl)
-    wxEVENT_PROPERTY( TextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent )
+    wxEVENT_PROPERTY( TextUpdated, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent )
 
-    wxPROPERTY_FLAGS( WindowStyle , wxListCtrlStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY_FLAGS( WindowStyle, wxListCtrlStyle, long, SetWindowStyleFlag, \
+                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxListCtrl)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_5( wxListCtrl , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
+wxCONSTRUCTOR_5( wxListCtrl, wxWindow*, Parent, wxWindowID, Id, \
+                 wxPoint, Position, wxSize, Size, long, WindowStyle )
 
 /*
- TODO : Expose more information of a list's layout etc. via appropriate objects (à la NotebookPageInfo)
+ TODO : Expose more information of a list's layout etc. via appropriate objects 
+        (à la NotebookPageInfo)
 */
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxControl)
-#endif
 
 #endif // wxUSE_LISTCTRL
