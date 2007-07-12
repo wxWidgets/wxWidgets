@@ -1517,29 +1517,28 @@ void wxHtmlWindow::SelectAll()
 #endif // wxUSE_CLIPBOARD
 
 
+//-----------------------------------------------------------------------------
+// XTI
+//-----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxHtmlProcessor,wxObject)
-
-#if wxUSE_EXTENDED_RTTI
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxHtmlWindow, wxScrolledWindow,"wx/html/htmlwin.h")
+wxIMPLEMENT_ABSTRACT_CLASS(wxHtmlProcessor, wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxHtmlWindow, wxScrolledWindow, "wx/html/htmlwin.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxHtmlWindow)
 /*
     TODO PROPERTIES
-        style , wxHW_SCROLLBAR_AUTO
-        borders , (dimension)
-        url , string
-        htmlcode , string
+        style, wxHW_SCROLLBAR_AUTO
+        borders, (dimension)
+        url, string
+        htmlcode, string
 */
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxHtmlWindow)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_5( wxHtmlWindow , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
-#else
-IMPLEMENT_DYNAMIC_CLASS(wxHtmlWindow,wxScrolledWindow)
-#endif
+wxCONSTRUCTOR_5( wxHtmlWindow, wxWindow*, Parent, wxWindowID, Id, \
+                 wxPoint, Position, wxSize, Size, long, WindowStyle )
 
 BEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
     EVT_SIZE(wxHtmlWindow::OnSize)
