@@ -57,6 +57,8 @@ static const int PADDING_RIGHTLEFT = 3;
 // the cell padding on the top/bottom
 static const int PADDING_TOPBOTTOM = 1;
 
+// the expander space margin
+static const int EXPANDER_MARGIN = 4;
 
 bool operator == ( const wxDataViewItem & left, const wxDataViewItem & right )
 {
@@ -284,8 +286,20 @@ public:
     void SetItem( wxDataViewItem & item ) { this->item = item; }
 
     unsigned int GetChildrenNumber() { return children.GetCount(); }
+    int GetIndentLevel()
+    {
+        int ret = 0 ;
+	 wxDataViewTreeNode * node = this;
+	 while( node->GetParent()->GetParent() != NULL )
+	 {
+	     node = node->GetParent();
+	     ret ++;
+	 }
+	 return ret;
+    }
 
     bool IsOpen() { return open; } 
+    void ToggleOpen(){ open = !open; }
     bool HasChildren() { return children.GetCount() != 0; }
 private:
     wxDataViewTreeNode * parent;
@@ -346,8 +360,9 @@ public:
     int GetCountPerPage() const;
     int GetEndOfLastCol() const;
     unsigned int GetFirstVisibleRow() const;
-    unsigned int GetLastVisibleRow() const;
-    unsigned int GetRowCount() const;
+    //I change this method to un const because in the tree view, the displaying number of the tree are changing along with the expanding/collapsing of the tree nodes
+    unsigned int GetLastVisibleRow();
+    unsigned int GetRowCount() ;
 
     void Select( const wxArrayInt& aSelections );
     void SelectAllRows( bool on );
@@ -376,6 +391,14 @@ public:
     //Methods for building the mapping tree
     void BuildTree( wxDataViewModel  * model );
     void DestroyTree();
+private:
+    wxDataViewTreeNode * GetTreeNodeByRow( unsigned int row );
+    wxDataViewTreeNode * GetTreeNodeByItem( const wxDataViewItem & item ) { return NULL; }
+
+    int RecalculateCount() ;
+
+    void OnExpanding( unsigned int row );
+    void OnCollapsing( unsigned int row );
 
 private:
     wxDataViewCtrl             *m_owner;
@@ -402,9 +425,12 @@ private:
     // the pen used to draw horiz/vertical rules
     wxPen m_penRule;
 
+    // the pen used to draw the expander and the lines
+    wxPen m_penExpander;
+
     //This is the tree structure of the model
     wxDataViewTreeNode * m_root; 
-    unsigned int m_count;
+    int m_count;
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewMainWindow)
     DECLARE_EVENT_TABLE()
@@ -1620,9 +1646,12 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 
     m_penRule = wxPen(GetRuleColour(), 1, wxSOLID);
 
+    //Here I compose a pen can draw black lines, maybe there are something system colour to use
+    m_penExpander = wxPen( wxColour(0,0,0), 1, wxSOLID );
     //Some new added code to deal with the tree structure
     m_root = new wxDataViewTreeNode( NULL );
-    m_count = 0 ;
+    //Make m_count = -1 will cause the class recaculate the real displaying number of rows.
+    m_count = -1 ;
     UpdateDisplay();
 }
 
@@ -1665,7 +1694,7 @@ class DoJob
 {
 public:
     DoJob(){};
-    virtual ~DoJob(){};
+    virtual ~DoJob() { }
 
     virtual bool operator() ( wxDataViewTreeNode * node ) = 0 ;
 };
@@ -1674,27 +1703,28 @@ class ItemAddJob: public DoJob
 {
 public:
     ItemAddJob( const wxDataViewItem & parent, const wxDataViewItem & item )
-    	{ this->parent = parent ; this->item = item ; }
-    virtual ~ItemAddJob(){};
+    	{ this->parent = parent ; this->item = item; }
+    virtual ~ItemAddJob() { }
 
     virtual bool operator() ( wxDataViewTreeNode * node )
     {
         if( node->GetItem() == parent )
         {
             wxDataViewTreeNode * newnode = new wxDataViewTreeNode( node );
-	     newnode->SetItem(item);
-	     node->AppendChild( newnode);
-	     return true;
+            newnode->SetItem(item);
+            node->AppendChild( newnode);
+            return true;
         }
-	 return false;
+        return false;
     }
+    
 private:
     wxDataViewItem parent, item;
 };
 
 bool Walker( wxDataViewTreeNode * node, DoJob & func )
 {
-    if( !node->HasChildren())
+    if( node==NULL ||  !node->HasChildren())
         return false;
 
     wxDataViewTreeNodes nodes = node->GetChildren();
@@ -1710,7 +1740,6 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
     }
     return false;
 }
-
 
 
 bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxDataViewItem & item)
@@ -1814,7 +1843,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     unsigned int item_start = wxMax( 0, (update.y / m_lineHeight) );
     unsigned int item_count =
         wxMin( (int)(((update.y + update.height) / m_lineHeight) - item_start + 1),
-               (int)(m_count- item_start) );
+               (int)(GetRowCount( )- item_start) );
     unsigned int item_last = item_start + item_count;
 
     // compute which columns needs to be redrawn
@@ -1925,16 +1954,53 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         {
             // get the cell value and set it into the renderer
             wxVariant value;
-	     wxDataViewItem dataitem = GetItemByRow(item);
-            model->GetValue( value, dataitem, col->GetModelColumn());
+	     wxDataViewTreeNode * node = GetTreeNodeByRow(item);
+	     if( node == NULL )
+	         continue;
+		 
+            wxDataViewItem dataitem = node->GetItem();
+	     model->GetValue( value, dataitem, col->GetModelColumn());
             cell->SetValue( value );
 
             // update the y offset
             cell_rect.y = item * m_lineHeight;
 
-            // cannot be bigger than allocated space
+            //Draw the expander here. Please notice that I use const number for all pixel data. When the final API are determined
+            //I will change this to the data member of the class wxDataViewCtrl
+            int indent = node->GetIndentLevel();
+            if( col->GetModelColumn() == GetOwner()->GetExpanderColumn() )
+            {
+                //Calculate the indent first
+		  indent = cell_rect.x + GetOwner()->GetIndent() * indent;
+			
+                int expander_width = m_lineHeight - 2*EXPANDER_MARGIN;
+	         // change the cell_rect.x to the appropriate pos
+	         int  expander_x = indent + EXPANDER_MARGIN , expander_y = cell_rect.y + EXPANDER_MARGIN ;
+                indent = indent + m_lineHeight ;  //try to use the m_lineHeight as the expander space
+                dc.SetPen( m_penExpander );
+		  dc.SetBrush( wxNullBrush );
+		  if( node->HasChildren() )
+	         {
+	             dc.DrawRoundedRectangle( expander_x,expander_y,expander_width,expander_width, 1.0);
+	             dc.DrawLine( expander_x + 2 , expander_y + expander_width/2, expander_x + expander_width - 2, expander_y + expander_width/2 );
+
+		      if( !node->IsOpen() )
+		          dc.DrawLine( expander_x + expander_width/2, expander_y + 2, expander_x + expander_width/2, expander_y + expander_width -2 );
+		  }
+		  else
+		  {
+		      // I am wandering whether we should draw dot lines between tree nodes
+		  }
+
+		  //force the expander column to left-center align
+		  cell->SetAlignment( wxALIGN_CENTER_VERTICAL );
+            }
+            
+
+            // cannot be bigger than allocated space 
             wxSize size = cell->GetSize();
-            size.x = wxMin( size.x + 2*PADDING_RIGHTLEFT, cell_rect.width );
+	     // Because of the tree structure indent, here we should minus the width of the cell for drawing
+            size.x = wxMin( size.x + 2*PADDING_RIGHTLEFT, cell_rect.width - indent );
             size.y = wxMin( size.y + 2*PADDING_TOPBOTTOM, cell_rect.height );
 
             wxRect item_rect(cell_rect.GetTopLeft(), size);
@@ -1962,6 +2028,9 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             item_rect.width = size.x - 2 * PADDING_RIGHTLEFT;
             item_rect.height = size.y - 2 * PADDING_TOPBOTTOM;
 
+            //Here we add the tree indent
+            item_rect.x += indent;
+		   
             int state = 0;
             if (m_selection.Index(item) != wxNOT_FOUND)
                 state |= wxDATAVIEW_CELL_SELECTED;
@@ -2012,7 +2081,7 @@ unsigned int wxDataViewMainWindow::GetFirstVisibleRow() const
     return y / m_lineHeight;
 }
 
-unsigned int wxDataViewMainWindow::GetLastVisibleRow() const
+unsigned int wxDataViewMainWindow::GetLastVisibleRow() 
 {
     wxSize client_size = GetClientSize();
     m_owner->CalcUnscrolledPosition( client_size.x, client_size.y,
@@ -2021,10 +2090,18 @@ unsigned int wxDataViewMainWindow::GetLastVisibleRow() const
     return wxMin( GetRowCount()-1, ((unsigned)client_size.y/m_lineHeight)+1 );
 }
 
-unsigned int wxDataViewMainWindow::GetRowCount() const
+unsigned int wxDataViewMainWindow::GetRowCount() 
 {
+    if ( m_count == -1 )
+    {
+        m_count = RecalculateCount();
+	 int width, height;
+	 GetVirtualSize( &width, &height );
+        height = m_count * m_lineHeight;
+
+        SetVirtualSize( width, height );
+    }
     return m_count;
-    //return wx_const_cast(wxDataViewCtrl*, GetOwner())->GetModel()->GetRowCount();
 }
 
 void wxDataViewMainWindow::ChangeCurrentRow( unsigned int row )
@@ -2237,31 +2314,6 @@ wxRect wxDataViewMainWindow::GetLineRect( unsigned int row ) const
     return rect;
 }
 
-/*
-static int tree_walk_current ;
-wxDataViewTreeNode * TreeWalk( unsigned int row , wxDataViewTreeNode * node )
-{
-    wxDataViewTreeNode * ret ;
-    if( tree_walk_current == row )
-        return node;
-
-    if( node->HasChildren() && node->IsOpen())
-    {
-        wxDataViewTreeNodes nodes = node->GetChildren();
-	 int len = nodes.GetCount();
-	 int i = 0 ;
-	 for( ; i < len; i ++)
-	 {
-	     tree_walk_current ++;
-	     ret = TreeWalk( row, nodes[i] );
-	     if( ret != NULL )
-	         return ret;
-	 }
-    }
-    return NULL;
-}
-*/
-
 class RowToItemJob: public DoJob
 {
 public:
@@ -2270,16 +2322,17 @@ public:
 
     virtual bool operator() ( wxDataViewTreeNode * node )
     	{
-    	    if( current == row)
-    	    {
-	        ret = node->GetItem() ;
-               return true;
-	    }
-	    current ++;
-	    return false;
-    	}
+    	    if ( current == row)
+            {
+                ret = node->GetItem() ;
+                return true;
+            }
+            current ++;
+            return false;
+    }
 
-    wxDataViewItem GetResult(){ return ret; }
+    wxDataViewItem GetResult() { return ret; }
+    
 private:
     unsigned int row;
     int current ;
@@ -2293,22 +2346,130 @@ wxDataViewItem wxDataViewMainWindow::GetItemByRow(unsigned int row)
     return job.GetResult();
 }
 
+class RowToTreeNodeJob: public DoJob
+{
+public:
+    RowToTreeNodeJob( unsigned int row , int current ) 
+        { this->row = row; this->current = current ; ret = NULL ; }
+    virtual ~RowToTreeNodeJob() { }
+
+    virtual int operator() ( wxDataViewTreeNode * node )
+    	{
+            if( current == row)
+            {   
+                ret = node ;
+                return DoJob::OK;
+            }
+            current ++;
+            if ( node->IsOpen())
+                return DoJob::CONT;
+            else
+                return DoJob::IGR;
+        }
+
+    wxDataViewTreeNode * GetResult(){ return ret; }
+private:
+    unsigned int row;
+    int current ;
+    wxDataViewTreeNode * ret;
+};
+
+
+wxDataViewTreeNode * wxDataViewMainWindow::GetTreeNodeByRow(unsigned int row)
+{
+    RowToTreeNodeJob job( row , 0 );
+    Walker( m_root , job );
+    return job.GetResult();
+}
+
+class CountJob : public DoJob
+{
+public:
+    CountJob(){ count = 0 ; }
+    virtual ~CountJob() { }
+	
+    virtual int operator () (  wxDataViewTreeNode * node )
+    {
+        count ++;
+        if (node->IsOpen())
+            return DoJob::CONT;
+        else
+            return DoJob::IGR;
+    }
+
+    unsigned int GetResult()
+    {
+        return count ;
+    }
+private:
+    unsigned int count;
+};
+
+void wxDataViewMainWindow::OnExpanding( unsigned int row )
+{
+    wxDataViewTreeNode * node = GetTreeNodeByRow(row);
+    if( node != NULL )
+    {
+        if (node->HasChildren())
+            if (!node->IsOpen())
+            {
+                node->ToggleOpen();
+                m_count = -1;
+                Refresh();
+                // RefreshRows(row,GetLastVisibleRow());
+            }
+    }
+}
+
+void wxDataViewMainWindow::OnCollapsing(unsigned int row)
+{
+    wxDataViewTreeNode * node = GetTreeNodeByRow(row);
+    if (node != NULL)
+    {
+        if( node->HasChildren() && node->IsOpen() )
+        {
+            node->ToggleOpen();
+            m_count = -1;
+            Refresh();
+            //RefreshRows(row,GetLastVisibleRow());
+        }
+        else
+        {
+            node = node->GetParent();
+            if( node != NULL )
+            {
+                int parent = GetRowByItem( node->GetItem()) ;
+                SelectRow( row, false);
+                SelectRow(parent , true );
+                ChangeCurrentRow( parent );
+            }
+        }
+    }
+}
+
+int wxDataViewMainWindow::RecalculateCount() 
+{
+    CountJob job;
+    Walker( m_root, job );
+    return job.GetResult();
+}
+
 class ItemToRowJob : public DoJob
 {
 public:
-    ItemToRowJob(const wxDataViewItem & item){ this->item = item ; }
+    ItemToRowJob(const wxDataViewItem & item){ this->item = item ; ret = 0 ; }
     virtual ~ItemToRowJob(){};
 
     virtual bool operator() ( wxDataViewTreeNode * node)
         {
             ret ++;
             if( node->GetItem() == item )
-	        return true;
-
-	    return false;
+                return true;
+            return false;
         }
 
-    int GetResult(){ return ret; }
+    //the row number is begin from zero
+    int GetResult(){ return ret -1 ; }
 private:
     wxDataViewItem item;
     int ret;
@@ -2331,11 +2492,11 @@ unsigned int BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item, w
     while( i.IsOk() )
     {
         wxDataViewTreeNode * n = new wxDataViewTreeNode( node );
-	 n->SetItem(i);
-	 node->AppendChild(n);
-	 int num = BuildTreeHelper( model, i, n) + 1;
-	 sum += num ;
-	 i = model->GetNextSibling( i );
+        n->SetItem(i);
+        node->AppendChild(n);
+        int num = BuildTreeHelper( model, i, n) + 1;
+        sum += num ;
+        i = model->GetNextSibling( i );
     }
     return sum;
 }
@@ -2344,7 +2505,8 @@ void wxDataViewMainWindow::BuildTree(wxDataViewModel * model)
 {
     //First we define a invalid item to fetch the top-level elements
     wxDataViewItem item;
-    m_count = BuildTreeHelper( model, item, m_root);
+    BuildTreeHelper( model, item, m_root);
+    m_count = -1 ;
 }
 
 void DestroyTreeHelper( wxDataViewTreeNode * node )
@@ -2352,9 +2514,9 @@ void DestroyTreeHelper( wxDataViewTreeNode * node )
     if( node->HasChildren() )
     {
         int len = node->GetChildrenNumber();
-	 int i = 0 ;
-	 wxDataViewTreeNodes nodes = node->GetChildren();
-	 for( ; i < len; i ++ )
+        int i = 0 ;
+        wxDataViewTreeNodes nodes = node->GetChildren();
+        for( ; i < len; i ++ )
         {
             DestroyTreeHelper(nodes[i]);
         }
@@ -2403,7 +2565,13 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
             if ( m_currentRow < GetRowCount() - 1 )
                 OnArrowChar( m_currentRow + 1, event );
             break;
-
+        //Add the process for tree expanding/collapsing
+        case WXK_LEFT:
+	     OnCollapsing(m_currentRow);
+	     break;
+	 case WXK_RIGHT:
+	     OnExpanding( m_currentRow);
+	     break;
         case WXK_END:
             if (!IsEmpty())
                 OnArrowChar( GetRowCount() - 1, event );
@@ -2554,7 +2722,28 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             SelectRow( m_lineSelectSingleOnUp, true );
         }
 
-        if (m_lastOnSame)
+        //Process the event of user clicking the expander
+	 bool expander = false;
+	 wxDataViewTreeNode * node = GetTreeNodeByRow(current);
+	 if( node!=NULL && node->HasChildren() )
+	 {
+	     int indent = node->GetIndentLevel();
+	     indent = GetOwner()->GetIndent()*indent;
+	     wxRect rect( xpos + indent + EXPANDER_MARGIN, current * m_lineHeight + EXPANDER_MARGIN, m_lineHeight-2*EXPANDER_MARGIN,m_lineHeight-2*EXPANDER_MARGIN);
+	     if( rect.Contains( x, y) )
+	     {
+	         expander = true;
+		  node->ToggleOpen();
+		  m_count = -1;   //make the current row number fail
+                
+		  Refresh();
+		  //int last_row = GetLastVisibleRow();
+		  //RefreshRows( current, last_row );
+	     }
+	 }
+
+        //If the user click the expander, we do not do editing even if the column with expander are editable
+        if (m_lastOnSame && !expander )
         {
             if ((col == m_currentCol) && (current == m_currentRow) &&
                 (cell->GetMode() == wxDATAVIEW_CELL_EDITABLE) )
@@ -2810,6 +2999,18 @@ void wxDataViewCtrl::OnColumnChange()
 
     m_clientArea->UpdateDisplay();
 }
+
+void wxDataViewCtrl::DoSetExpanderColumn()
+{
+    m_clientArea->UpdateDisplay();
+}
+
+void wxDataViewCtrl::DoSetIndent()
+{
+    m_clientArea->UpdateDisplay();
+}
+
+
 /********************************************************************
 void wxDataViewCtrl::SetSelection( int row )
 {

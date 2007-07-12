@@ -42,7 +42,94 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxDataViewCtrl;
+//-----------------------------------------------------------------------------
+// wxGtkTreeModelNode
+//-----------------------------------------------------------------------------
+
+class wxGtkTreeModelNode;
+WX_DEFINE_ARRAY_PTR( wxGtkTreeModelNode*, wxGtkTreeModelNodes );
+
+class wxGtkTreeModelNode
+{
+public:
+    wxGtkTreeModelNode( wxGtkTreeModelNode* parent )
+    { 
+        m_parent = parent; 
+    }
+    
+    ~wxGtkTreeModelNode()
+    { 
+        size_t count = m_children.GetCount();
+        size_t i;
+        for (i = 0; i < count; i++)
+        {
+            wxGtkTreeModelNode *child = m_children[i];
+            delete child;
+        }
+    }
+
+    wxGtkTreeModelNode* GetParent() 
+        { return m_parent; }
+    wxGtkTreeModelNodes &GetChildren() 
+        { return m_children; }
+    wxGtkTreeModelNode* GetNthChild( unsigned int n ) 
+        { return m_children.Item( n ); }
+    void Insert( wxGtkTreeModelNode* child, unsigned int n) 
+        { m_children.Insert( child, n); }
+    void Append( wxGtkTreeModelNode* child ) 
+        { m_children.Add( child ); }
+
+    unsigned int GetChildCount() { return m_children.GetCount(); }
+
+    wxDataViewItem &GetItem() { return m_item; }
+    void SetItem( wxDataViewItem& item ) { m_item = item; }
+
+    bool HasChildren() { return m_hasChildren; }
+    void SetHasChildren( bool has ) { m_hasChildren = has; }
+    
+private:
+    wxGtkTreeModelNode  *m_parent;
+    wxGtkTreeModelNodes  m_children; 
+    wxDataViewItem       m_item; 
+    bool                 m_hasChildren;
+};
+
+
+extern "C" {
+typedef struct _GtkWxTreeModel       GtkWxTreeModel;
+}
+
+class wxGtkTreeModel
+{
+public:
+    wxGtkTreeModel( wxDataViewModel *wx_model, GtkWxTreeModel *gtk_model )
+    { 
+        m_wx_model = wx_model; 
+        m_gtk_model = gtk_model; 
+        m_root = NULL; 
+        InitTree();
+    }
+    
+    ~wxGtkTreeModel();
+    
+    gboolean get_iter( GtkTreeIter *iter, GtkTreePath *path );
+    GtkTreePath *get_path( GtkTreeIter *iter);
+    gboolean iter_next( GtkTreeIter *iter );
+    gboolean iter_children( GtkTreeIter *iter, GtkTreeIter *parent);
+    gboolean iter_has_child( GtkTreeIter *iter );
+    gint iter_n_children( GtkTreeIter *iter );
+    gboolean iter_nth_child( GtkTreeIter *iter, GtkTreeIter *parent, gint n );
+    gboolean iter_parent( GtkTreeIter *iter, GtkTreeIter *child );
+    
+protected:
+    void InitTree();
+    wxGtkTreeModelNode *FindNode( GtkTreeIter *iter );
+    
+private:
+    wxGtkTreeModelNode   *m_root;
+    wxDataViewModel      *m_wx_model;
+    GtkWxTreeModel       *m_gtk_model;
+};
 
 //-----------------------------------------------------------------------------
 // data
@@ -65,7 +152,6 @@ extern "C" {
 
 GType         gtk_wx_tree_model_get_type         (void);
 
-typedef struct _GtkWxTreeModel       GtkWxTreeModel;
 typedef struct _GtkWxTreeModelClass  GtkWxTreeModelClass;
 
 struct _GtkWxTreeModel
@@ -2298,6 +2384,14 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
     gtk_tree_view_append_column( GTK_TREE_VIEW(m_treeview), column );
 
     return true;
+}
+
+void wxDataViewCtrl::DoSetExpanderColumn()
+{
+}
+
+void wxDataViewCtrl::DoSetIndent()
+{
 }
 
 void wxDataViewCtrl::GtkDisableSelectionEvents()

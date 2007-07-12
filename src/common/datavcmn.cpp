@@ -372,6 +372,8 @@ wxDataViewCtrlBase::wxDataViewCtrlBase()
     m_model = NULL;
     m_cols.DeleteContents( true );
     m_eventNotifier = NULL;
+    m_expander_column = 0;
+    m_indent = 8;
 }
 
 wxDataViewCtrlBase::~wxDataViewCtrlBase()

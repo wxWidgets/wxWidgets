@@ -410,13 +410,29 @@ public:
     virtual bool ClearColumns();
     virtual wxDataViewColumn* GetColumn( unsigned int pos );
 
+    void SetExpanderColumn( unsigned int col )
+        { m_expander_column = col ; DoSetExpanderColumn(); }
+    unsigned int GetExpanderColumn() const 
+        { return m_expander_column; }
+
+    void SetIndent( int indent )
+        { m_indent = indent ; DoSetIndent(); }
+    int GetIndent() const 
+        { return m_indent; } 
+
     // TODO selection code
+
+protected:
+    virtual void DoSetExpanderColumn() = 0 ;
+    virtual void DoSetIndent() = 0;
 
 private:
     wxDataViewModel        *m_model;
     wxList                  m_cols;
     wxDataViewEventModelNotifier *m_eventNotifier;
-    
+    unsigned int m_expander_column;
+    int m_indent ;
+	
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCtrlBase)
 };

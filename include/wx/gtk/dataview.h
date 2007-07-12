@@ -312,13 +312,18 @@ public:
     
     GtkWidget *GtkGetTreeView() { return m_treeview; }
     wxWindow *GetMainWindow() { return (wxWindow*) this; }
-    
+
+protected:
+    virtual void DoSetExpanderColumn();
+    virtual void DoSetIndent();
+
 private:
     friend class wxDataViewCtrlDC;
     friend class wxDataViewColumn;
     friend class wxGtkDataViewModelNotifier;
     GtkWidget               *m_treeview;
     wxDataViewModelNotifier *m_notifier;
+
     
     virtual void OnInternalIdle();
     

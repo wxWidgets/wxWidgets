@@ -349,6 +349,9 @@ public:
     virtual bool AssociateModel( wxDataViewModel *model );
     virtual bool AppendColumn( wxDataViewColumn *col );
 
+    virtual void DoSetExpanderColumn();
+    virtual void DoSetIndent();
+
 /********************selection code*********************
     virtual void SetSelection( int row ); // -1 for unselect
     virtual void SetSelectionRange( unsigned int from, unsigned int to );
