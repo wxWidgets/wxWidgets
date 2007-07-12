@@ -371,7 +371,6 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
     wxRect r = wxRectFromPRectangle(rc);
     wxBitmap bmp(r.width, r.height, 32);
     wxAlphaPixelData pixData(bmp);
-    pixData.UseAlpha();
 
     // Set the fill pixels
     ColourDesired cdf(fill.AsLong());
