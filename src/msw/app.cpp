@@ -548,7 +548,7 @@ wxApp::~wxApp()
 // wxApp idle handling
 // ----------------------------------------------------------------------------
 
-void wxApp::OnIdle(wxIdleEvent& event)
+void wxApp::OnIdle(wxIdleEvent& WXUNUSED(event))
 {
 #if wxUSE_DC_CACHEING
     // automated DC cache management: clear the cached DCs and bitmap
