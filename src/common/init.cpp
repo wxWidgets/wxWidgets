@@ -220,6 +220,9 @@ static void FreeConvertedArgs()
 static bool DoCommonPreInit()
 {
 #if wxUSE_LOG
+    // Reset logging in case we were cleaned up and are being reinitialized.
+    wxLog::DoCreateOnDemand();
+
     // install temporary log sink: we can't use wxLogGui before wxApp is
     // constructed and if we use wxLogStderr, all messages during
     // initialization simply disappear under Windows
