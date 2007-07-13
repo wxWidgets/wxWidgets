@@ -157,6 +157,7 @@ private:
 @interface wxDummyNSView : NSView
 - (NSView *)hitTest:(NSPoint)aPoint;
 @end
+WX_DECLARE_GET_OBJC_CLASS(wxDummyNSView,NSView)
 
 @implementation wxDummyNSView : NSView
 - (NSView *)hitTest:(NSPoint)aPoint
@@ -165,6 +166,7 @@ private:
 }
 
 @end
+WX_IMPLEMENT_GET_OBJC_CLASS(wxDummyNSView,NSView)
 
 // ========================================================================
 // wxWindowCocoaHider
@@ -174,7 +176,7 @@ wxWindowCocoaHider::wxWindowCocoaHider(wxWindow *owner)
 {
     wxASSERT(owner);
     wxASSERT(owner->GetNSViewForHiding());
-    m_dummyNSView = [[wxDummyNSView alloc]
+    m_dummyNSView = [[WX_GET_OBJC_CLASS(wxDummyNSView) alloc]
         initWithFrame:[owner->GetNSViewForHiding() frame]];
     [m_dummyNSView setAutoresizingMask: [owner->GetNSViewForHiding() autoresizingMask]];
     AssociateNSView(m_dummyNSView);
@@ -211,6 +213,7 @@ bool wxWindowCocoaHider::Cocoa_drawRect(const NSRect& rect)
 @interface wxFlippedNSClipView : NSClipView
 - (BOOL)isFlipped;
 @end
+WX_DECLARE_GET_OBJC_CLASS(wxFlippedNSClipView,NSClipView)
 
 @implementation wxFlippedNSClipView : NSClipView
 - (BOOL)isFlipped
@@ -219,6 +222,7 @@ bool wxWindowCocoaHider::Cocoa_drawRect(const NSRect& rect)
 }
 
 @end
+WX_IMPLEMENT_GET_OBJC_CLASS(wxFlippedNSClipView,NSClipView)
 
 // ========================================================================
 // wxWindowCocoaScrollView
@@ -235,7 +239,7 @@ wxWindowCocoaScrollView::wxWindowCocoaScrollView(wxWindow *owner)
 
     /* Replace the default NSClipView with a flipped one.  This ensures
        scrolling is "pinned" to the top-left instead of bottom-right. */
-    NSClipView *flippedClip = [[wxFlippedNSClipView alloc]
+    NSClipView *flippedClip = [[WX_GET_OBJC_CLASS(wxFlippedNSClipView) alloc]
         initWithFrame: [[m_cocoaNSScrollView contentView] frame]];
     [m_cocoaNSScrollView setContentView:flippedClip];
     [flippedClip release];
@@ -340,7 +344,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID winid,
 
     // TODO: create the window
     m_cocoaNSView = NULL;
-    SetNSView([[WXNSView alloc] initWithFrame: MakeDefaultNSRect(size)]);
+    SetNSView([[WX_GET_OBJC_CLASS(WXNSView) alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
 
     if (m_parent)

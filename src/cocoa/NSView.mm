@@ -22,6 +22,7 @@
     #include "wx/window.h"
 #endif // WX_PRECOMP
 
+#include "wx/cocoa/objc/objc_uniquifying.h"
 #include "wx/cocoa/NSView.h"
 
 #import <Foundation/NSNotification.h>
@@ -166,19 +167,19 @@ void wxCocoaNSView::DisassociateNSView(WX_NSView cocoaNSView)
 }
 
 @end // implementation WXNSView
+WX_IMPLEMENT_GET_OBJC_CLASS(WXNSView,NSView)
+
+// ============================================================================
+// @class wxNSViewNotificationObserver
+// ============================================================================
 
 @interface wxNSViewNotificationObserver : NSObject
 {
 }
 
-// FIXME: Initializing like this is a really bad idea.  If for some reason
-// we ever require posing as an NSObject we won't be able to since an instance
-// will have already been created here.  Of course, catching messages for
-// NSObject seems like a LOT of overkill, so I doubt we ever will anyway!
-void *wxCocoaNSView::sm_cocoaObserver = [[wxNSViewNotificationObserver alloc] init];
-
 - (void)notificationFrameChanged: (NSNotification *)notification;
 @end // interface wxNSViewNotificationObserver
+WX_DECLARE_GET_OBJC_CLASS(wxNSViewNotificationObserver,NSObject)
 
 @implementation wxNSViewNotificationObserver : NSObject
 
@@ -190,4 +191,7 @@ void *wxCocoaNSView::sm_cocoaObserver = [[wxNSViewNotificationObserver alloc] in
 }
 
 @end // implementation wxNSViewNotificationObserver
+WX_IMPLEMENT_GET_OBJC_CLASS(wxNSViewNotificationObserver,NSObject)
+
+void *wxCocoaNSView::sm_cocoaObserver = [[WX_GET_OBJC_CLASS(wxNSViewNotificationObserver) alloc] init];
 

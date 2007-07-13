@@ -42,7 +42,7 @@
 bool      wxApp::sm_isEmbedded = false; // Normally we're not a plugin
 
 // wxNSApplicationObserver singleton.
-static wxObjcAutoRefFromAlloc<wxNSApplicationObserver*> sg_cocoaAppObserver = [[wxNSApplicationObserver alloc] init];
+static wxObjcAutoRefFromAlloc<wxNSApplicationObserver*> sg_cocoaAppObserver = [[WX_GET_OBJC_CLASS(wxNSApplicationObserver) alloc] init];
 
 // The following two are supposed to be wxApp members but because of 2.8 ABI compatibility
 // we must make them static.  No problem since wxApp is a singleton anyway.
@@ -68,6 +68,7 @@ wxPoseAsInitializer *wxPoseAsInitializer::sm_first = NULL;
 }
 
 @end // implementation wxNSApplicationDelegate : NSObject
+WX_IMPLEMENT_GET_OBJC_CLASS(wxNSApplicationDelegate,NSObject)
 
 // ========================================================================
 // wxNSApplicationObserver
@@ -105,6 +106,7 @@ wxPoseAsInitializer *wxPoseAsInitializer::sm_first = NULL;
 }
 
 @end // implementation wxNSApplicationObserver : NSObject
+WX_IMPLEMENT_GET_OBJC_CLASS(wxNSApplicationObserver,NSObject)
 
 // ========================================================================
 // wxApp
@@ -223,7 +225,7 @@ bool wxApp::OnInitGui()
     if(!sm_isEmbedded)
     {
         // Enable response to application delegate messages
-        m_cocoaAppDelegate = [[wxNSApplicationDelegate alloc] init];
+        m_cocoaAppDelegate = [[WX_GET_OBJC_CLASS(wxNSApplicationDelegate) alloc] init];
         [m_cocoaApp setDelegate:m_cocoaAppDelegate];
     }
 

@@ -12,6 +12,8 @@
 #ifndef __WX_COCOA_OBJC_NSVIEW_H__
 #define __WX_COCOA_OBJC_NSVIEW_H__
 
+#include "wx/cocoa/objc/objc_uniquifying.h"
+
 #import <AppKit/NSView.h>
 
 // ============================================================================
@@ -36,5 +38,6 @@
 - (void)otherMouseUp:(NSEvent *)theEvent;
 - (void)resetCursorRects;
 @end // WXNSView
+WX_DECLARE_GET_OBJC_CLASS(WXNSView,NSView)
 
 #endif //ndef __WX_COCOA_OBJC_NSVIEW_H__

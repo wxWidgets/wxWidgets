@@ -18,6 +18,7 @@
 #endif
 
 #include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/objc/objc_uniquifying.h"
 
 #import <AppKit/NSControl.h>
 #import <AppKit/NSCell.h>
@@ -44,6 +45,7 @@
 - (void)otherMouseUp:(NSEvent *)theEvent;
 - (void)resetCursorRects;
 @end // wxNonControlNSControl
+WX_DECLARE_GET_OBJC_CLASS(wxNonControlNSControl,NSControl)
 
 @implementation wxNonControlNSControl : NSControl
 
@@ -155,6 +157,7 @@
 }
 
 @end // wxNonControlNSControl
+WX_IMPLEMENT_GET_OBJC_CLASS(wxNonControlNSControl,NSControl)
 
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
 BEGIN_EVENT_TABLE(wxControl, wxControlBase)
@@ -170,7 +173,7 @@ bool wxControl::Create(wxWindow *parent, wxWindowID winid,
         return false;
     wxLogTrace(wxTRACE_COCOA,wxT("Created control with id=%d"),GetId());
     m_cocoaNSView = NULL;
-    SetNSControl([[wxNonControlNSControl alloc] initWithFrame: MakeDefaultNSRect(size)]);
+    SetNSControl([[WX_GET_OBJC_CLASS(wxNonControlNSControl) alloc] initWithFrame: MakeDefaultNSRect(size)]);
     // NOTE: YES we want to release this (to match the alloc).
     // DoAddChild(this) will retain us again since addSubView doesn't.
     [m_cocoaNSView release];

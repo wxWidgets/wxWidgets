@@ -36,6 +36,7 @@
 #include "wx/cocoa/objc/NSView.h"
 #include "wx/cocoa/objc/NSWindow.h"
 #import <AppKit/NSPanel.h>
+
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -139,7 +140,7 @@ bool wxTopLevelWindowCocoa::Create(wxWindow *parent,
     else
         newWindow = [[WXNSWindow alloc] initWithContentRect:cocoaRect styleMask:cocoaStyle backing:NSBackingStoreBuffered defer:NO];
     // Make sure the default content view is a WXNSView
-    [newWindow setContentView: [[WXNSView alloc] initWithFrame: [[newWindow contentView] frame]]];
+    [newWindow setContentView: [[WX_GET_OBJC_CLASS(WXNSView) alloc] initWithFrame: [[newWindow contentView] frame]]];
     // Associate the window and view
     SetNSWindow(newWindow);
 
