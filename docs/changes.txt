@@ -199,6 +199,7 @@ wxMSW:
 - Added msw.font.no-proof-quality system option, see manual for description
 - Fix appearance of notebook with non-top tabs under Windows Vista
 - Fixed bug with symbol resolving in wxStackWalker (Axel Gembe)
+- Fixed showing busy cursor for disabled windows and during wxExecute()
 
 wxGTK:
 

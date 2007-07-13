@@ -3810,63 +3810,56 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
 {
 #ifndef __WXMICROWIN__
     // the logic is as follows:
-    // -1. don't set cursor for non client area, including but not limited to
-    //     the title bar, scrollbars, &c
-    //  0. allow the user to override default behaviour by using EVT_SET_CURSOR
-    //  1. if we have the cursor set it unless wxIsBusy()
-    //  2. if we're a top level window, set some cursor anyhow
-    //  3. if wxIsBusy(), set the busy cursor, otherwise the global one
-
-    if ( nHitTest != HTCLIENT )
-    {
-        return false;
-    }
+    //  0. if we're busy, set the busy cursor (even for non client elements)
+    //  1. don't set custom cursor for non client area of enabled windows
+    //  2. ask user EVT_SET_CURSOR handler for the cursor
+    //  3. if still no cursor but we're in a TLW, set the global cursor
 
     HCURSOR hcursor = 0;
+    if ( wxIsBusy() )
+    {
+        hcursor = wxGetCurrentBusyCursor();
+    }
+    else // not busy
+    {
+        if ( nHitTest != HTCLIENT )
+            return false;
 
-    // first ask the user code - it may wish to set the cursor in some very
-    // specific way (for example, depending on the current position)
-    POINT pt;
+        // first ask the user code - it may wish to set the cursor in some very
+        // specific way (for example, depending on the current position)
+        POINT pt;
 #ifdef __WXWINCE__
-    if ( !::GetCursorPosWinCE(&pt))
+        if ( !::GetCursorPosWinCE(&pt))
 #else
-    if ( !::GetCursorPos(&pt) )
+        if ( !::GetCursorPos(&pt) )
 #endif
-    {
-        wxLogLastError(wxT("GetCursorPos"));
-    }
-
-    int x = pt.x,
-        y = pt.y;
-    ScreenToClient(&x, &y);
-    wxSetCursorEvent event(x, y);
-
-    bool processedEvtSetCursor = GetEventHandler()->ProcessEvent(event);
-    if ( processedEvtSetCursor && event.HasCursor() )
-    {
-        hcursor = GetHcursorOf(event.GetCursor());
-    }
-
-    if ( !hcursor )
-    {
-        bool isBusy = wxIsBusy();
-
-        // the test for processedEvtSetCursor is here to prevent using m_cursor
-        // if the user code caught EVT_SET_CURSOR() and returned nothing from
-        // it - this is a way to say that our cursor shouldn't be used for this
-        // point
-        if ( !processedEvtSetCursor && m_cursor.Ok() )
         {
-            hcursor = GetHcursorOf(m_cursor);
+            wxLogLastError(wxT("GetCursorPos"));
         }
 
-        if ( !GetParent() )
+        int x = pt.x,
+            y = pt.y;
+        ScreenToClient(&x, &y);
+        wxSetCursorEvent event(x, y);
+
+        bool processedEvtSetCursor = GetEventHandler()->ProcessEvent(event);
+        if ( processedEvtSetCursor && event.HasCursor() )
         {
-            if ( isBusy )
+            hcursor = GetHcursorOf(event.GetCursor());
+        }
+
+        if ( !hcursor )
+        {
+            // the test for processedEvtSetCursor is here to prevent using
+            // m_cursor if the user code caught EVT_SET_CURSOR() and returned
+            // nothing from it - this is a way to say that our cursor shouldn't
+            // be used for this point
+            if ( !processedEvtSetCursor && m_cursor.Ok() )
             {
-                hcursor = wxGetCurrentBusyCursor();
+                hcursor = GetHcursorOf(m_cursor);
             }
-            else if ( !hcursor )
+
+            if ( !hcursor && !GetParent() )
             {
                 const wxCursor *cursor = wxGetGlobalCursor();
                 if ( cursor && cursor->Ok() )
@@ -3877,10 +3870,9 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
         }
     }
 
+
     if ( hcursor )
     {
-//        wxLogDebug("HandleSetCursor: Setting cursor %ld", (long) hcursor);
-
         ::SetCursor(hcursor);
 
         // cursor set, stop here
