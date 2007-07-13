@@ -151,11 +151,11 @@
 // (Windows 9x doesn't support it and the programs compiled in Unicode mode
 // will not run under 9x -- but see wxUSE_UNICODE_MSLU below).
 //
-// Default is 1
+// Default is 0 (but only because of makefiles)
 //
 // Recommended setting: 1
 #ifndef wxUSE_UNICODE
-    #define wxUSE_UNICODE 1
+    #define wxUSE_UNICODE 0
 #endif
 
 // Setting wxUSE_WCHAR_T to 1 gives you some degree of Unicode support without
