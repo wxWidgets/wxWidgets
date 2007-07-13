@@ -77,6 +77,9 @@ Changes in behaviour which may result in compilation errors
 
 - Removed insecure wxGets() and wxTmpnam() functions.
 
+- Removed global GetLine() function from wx/protocol/protocol.h, use
+  wxProtocol::ReadLine() instead.
+
 
 Deprecated methods and their replacements
 -----------------------------------------
