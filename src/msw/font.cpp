@@ -476,7 +476,8 @@ int wxNativeFontInfo::GetPointSize() const
     //        for printing!
     const int ppInch = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
 
-    return (int) (((72.0*(double)abs(lf.lfHeight)) / (double) ppInch) + 0.5);
+    // BC++ 2007 doesn't provide abs(long) overload, hence the cast
+    return (int) (((72.0*abs((int)lf.lfHeight)) / (double) ppInch) + 0.5);
 }
 
 wxSize wxNativeFontInfo::GetPixelSize() const
