@@ -360,6 +360,22 @@ bool wxIniConfig::DoWriteLong(const wxString& szKey, long lValue)
   return Write(szKey, wxString::Format(_T("%ld"), lValue));
 }
 
+bool wxIniConfig::DoReadBinary(const wxString& WXUNUSED(key),
+                               wxMemoryBuffer * WXUNUSED(buf)) const
+{
+    wxFAIL_MSG("not implemented");
+
+    return false;
+}
+
+bool wxIniConfig::DoWriteBinary(const wxString& WXUNUSED(key),
+                                const wxMemoryBuffer& WXUNUSED(buf))
+{
+    wxFAIL_MSG("not implemented");
+
+    return false;
+}
+
 bool wxIniConfig::Flush(bool /* bCurrentOnly */)
 {
   // this is just the way it works
