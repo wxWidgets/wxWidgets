@@ -2570,16 +2570,33 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 
 <set var="WEB_LOWLEVEL_SRC" hints="files">
+    src/generic/caret.cpp
+    src/generic/colour.cpp
     src/generic/icon.cpp
+    src/generic/regiong.cpp
     src/web/app.cpp
+    src/web/bitmap.cpp
+    src/web/brush.cpp
+    src/web/cursor.cpp
+    src/web/dc.cpp
+    src/web/dcclient.cpp
+    src/web/dcmemory.cpp
+    src/web/dcscreen.cpp
     src/web/evtloop.cpp
+    src/web/font.cpp
+    src/web/pen.cpp
+    src/web/popupwin.cpp
+    src/web/toplevel.cpp
+    src/web/window.cpp
 </set>
 <set var="WEB_LOWLEVEL_HDR" hints="files">
+    wx/generic/caret.h
+    wx/generic/colour.h
     wx/generic/icon.h
+    wx/generic/region.h
     wx/web/app.h
     wx/web/bitmap.h
     wx/web/brush.h
-    wx/web/colour.h
     wx/web/cursor.h
     wx/web/dc.h
     wx/web/dcclient.h
@@ -2588,7 +2605,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/web/font.h
     wx/web/pen.h
     wx/web/popupwin.h
-    wx/web/region.h
     wx/web/toplevel.h
     wx/web/window.h
 </set>

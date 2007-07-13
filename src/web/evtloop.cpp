@@ -4,6 +4,9 @@
 #include "wx/evtloop.h"
 #include "wx/log.h"
 #include "wx/ptr_scpd.h"
+#include "wx/window.h"
+
+#include "json/json.h"
 
 #include <fcntl.h>
 #include <errno.h>
@@ -24,10 +27,91 @@ public:
     void SetKeepLooping(bool keepLooping) { m_keepLooping = keepLooping; }
     int GetKeepLooping() const { return m_keepLooping; }
 
+    bool DispatchJson(wxString& events);
+    wxEvent* JsonToWxEvent(json_object* jevt);
+    void JsonToWxKeyEvent(json_object* jevt, wxKeyEvent& wxevt);
+    wxWindow* GetEventWindow(json_object* jevt);
+
 private:
     int m_exitcode;
     bool m_keepLooping;
 };
+
+
+bool wxEventLoopImpl::DispatchJson(wxString& events) {
+    json_object *root = json_tokener_parse(events.char_str());
+    wxEvent* wxevt = NULL;
+    wxWindow* win = NULL;
+
+    if (is_error(root)) {
+        //TODO error - failed to parse JSON
+        return false;
+    }
+
+    if (json_type_array != json_object_get_type(root)) {
+        //TODO error - JSON in wrong format
+        return false;
+    }
+
+    int len = json_object_array_length(root);
+    for (int i = 0; i < len; ++i) {
+        json_object *jevt = json_object_array_get_idx(root, i);
+        if (jevt == NULL ) {
+            //TODO error - array index skipped
+            continue;
+        }
+        wxevt = JsonToWxEvent(jevt);
+        if (wxevt == NULL) {
+            //TODO error - failed to parse event
+            continue;
+        }
+        win = GetEventWindow(jevt);
+        if (win == NULL) {
+            //TODO error - event does not contain window data
+            continue;
+        }
+        win->GetEventHandler()->ProcessEvent(*wxevt);
+        delete wxevt;
+    }
+    return true;
+}
+
+
+wxEvent* wxEventLoopImpl::JsonToWxEvent(json_object* jevt) {
+    wxEvent* wxevt = NULL;
+    json_object* type = json_object_object_get(jevt, "eventType");
+    int evtType = json_object_get_int(type);
+    if (evtType == wxEVT_KEY_DOWN || //corresponding to Javascript onKeyDown
+        evtType == wxEVT_KEY_UP || //corresponding to Javascript onKeyUp
+        evtType == wxEVT_CHAR) //corresponding to Javascript onKeyPress
+    {
+        wxevt = new wxKeyEvent(evtType);
+        JsonToWxKeyEvent(jevt, *(wxKeyEvent*)wxevt);
+    }
+    return wxevt;
+}
+
+void wxEventLoopImpl::JsonToWxKeyEvent(json_object* jevt, wxKeyEvent& wxevt) {
+    wxevt.m_shiftDown = json_object_get_boolean(
+                            json_object_object_get(jevt, "shiftDown"));
+    wxevt.m_controlDown = json_object_get_boolean(
+                            json_object_object_get(jevt, "controlDown"));
+    wxevt.m_metaDown = json_object_get_boolean(
+                            json_object_object_get(jevt, "metaDown"));
+    wxevt.m_altDown = json_object_get_boolean(
+                            json_object_object_get(jevt, "altDown"));
+    wxevt.m_keyCode = json_object_get_int(
+                            json_object_object_get(jevt, "keyCode"));
+    wxevt.m_x = json_object_get_int(
+                            json_object_object_get(jevt, "x"));
+    wxevt.m_y = json_object_get_int(
+                            json_object_object_get(jevt, "y"));
+}
+
+wxWindow* wxEventLoopImpl::GetEventWindow(json_object* jevt) {
+    wxWindow* win = NULL;
+    return win;
+}
         
 wxDEFINE_TIED_SCOPED_PTR_TYPE(wxEventLoopImpl)
 
@@ -96,7 +180,7 @@ bool wxGUIEventLoop::Pending() const {
 bool wxGUIEventLoop::Dispatch() {
     wxCHECK_MSG( !IsRunning(), false, _T("can't call Dispatch() if not running") );
     FILE* fd = fopen(wxTheApp->m_requestFifoPath, "r");
-    if (fd < 0) {
+    if (NULL == fd) {
         // can't open request fifo, time to panic
 #if wxUSE_LOG
         wxLogSysError("Unable to open request FIFO for dispatch '%s'", wxTheApp->m_requestFifoPath);
@@ -118,5 +202,6 @@ bool wxGUIEventLoop::Dispatch() {
         wxLogSysError("Unable to close request FIFO for dispatch '%s'", wxTheApp->m_requestFifoPath);
 #endif // wxUSE_LOG
     }
+    m_impl->DispatchJson(req);
     return m_impl->GetKeepLooping();
 }

@@ -21,6 +21,7 @@ public:
 
 private:
     friend class wxGUIEventLoop;
+    friend class wxWindowDC;
     wxString m_sessionId;
     wxString m_remoteIp;
     wxString m_requestFifoPath;

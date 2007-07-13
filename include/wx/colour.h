@@ -146,7 +146,7 @@ protected:
 #elif defined(__WXPM__)
     #include "wx/os2/colour.h"
 #elif defined(__WXWEB__)
-    #include "wx/web/colour.h"
+    #include "wx/generic/colour.h"
 #endif
 
 #define wxColor wxColour

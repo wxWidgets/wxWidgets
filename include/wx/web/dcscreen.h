@@ -3,7 +3,7 @@
 
 #include "wx/dc.h"
 
-class WXDLLEXPORT wxScreenDC: public wxDC {
+class WXDLLEXPORT wxScreenDC: public wxPaintDC {
 public:
     wxScreenDC();
     ~wxScreenDC();
