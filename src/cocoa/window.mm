@@ -39,6 +39,18 @@
 #import <AppKit/NSBezierPath.h>
 #endif //def WXCOCOA_FILL_DUMMY_VIEW
 
+/* NSComparisonResult is typedef'd as an enum pre-Leopard but typedef'd as
+ * NSInteger post-Leopard.  Pre-Leopard the Cocoa toolkit expects a function
+ * returning int and not NSComparisonResult.  Post-Leopard the Cocoa toolkit
+ * expects a function returning the new non-enum NSComparsionResult.
+ * Hence we create a typedef named CocoaWindowCompareFunctionResult.
+ */
+#if defined(NSINTEGER_DEFINED)
+typedef NSComparisonResult CocoaWindowCompareFunctionResult;
+#else
+typedef int CocoaWindowCompareFunctionResult;
+#endif
+
 // A category for methods that are only present in Panther's SDK
 @interface NSView(wxNSViewPrePantherCompatibility)
 - (void)getRectsBeingDrawn:(const NSRect **)rects count:(int *)count;
@@ -446,7 +458,7 @@ bool wxWindowCocoa::Cocoa_drawRect(const NSRect &rect)
 
     // Set m_updateRegion
     const NSRect *rects = &rect; // The bounding box of the region
-    int countRects = 1;
+    NSInteger countRects = 1;
     // Try replacing the larger rectangle with a list of smaller ones:
     if ([GetNSView() respondsToSelector:@selector(getRectsBeingDrawn:count:)])
         [GetNSView() getRectsBeingDrawn:&rects count:&countRects];
@@ -951,7 +963,7 @@ bool wxWindow::SetFont(const wxFont& font)
     return true;
 }
 
-static int CocoaRaiseWindowCompareFunction(id first, id second, void *target)
+static CocoaWindowCompareFunctionResult CocoaRaiseWindowCompareFunction(id first, id second, void *target)
 {
     // first should be ordered higher
     if(first==target)
@@ -972,7 +984,7 @@ void wxWindow::Raise()
         context: nsview];
 }
 
-static int CocoaLowerWindowCompareFunction(id first, id second, void *target)
+static CocoaWindowCompareFunctionResult CocoaLowerWindowCompareFunction(id first, id second, void *target)
 {
     // first should be ordered lower
     if(first==target)

@@ -15,7 +15,12 @@
 #include "wx/hashmap.h"
 #include "wx/cocoa/ObjcAssociate.h"
 
+#if defined(__LP64__) || defined(NS_BUILD_32_LIKE_64)
+typedef struct CGRect NSRect;
+#else
 typedef struct _NSRect NSRect;
+#endif
+
 class wxWindow;
 
 WX_DECLARE_OBJC_HASHMAP(NSView);
