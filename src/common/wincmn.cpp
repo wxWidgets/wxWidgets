@@ -203,6 +203,8 @@ wxBEGIN_PROPERTIES_TABLE(wxWindow)
                 wxT("Helpstring"), wxT("group")) // size
     wxPROPERTY( WindowStyle, long, SetWindowStyleFlag, GetWindowStyleFlag, \
                 EMPTY_MACROVALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group")) // style
+    wxPROPERTY( Name,wxString, SetName, GetName, wxEmptyString, 0 /*flags*/, \
+                wxT("Helpstring"), wxT("group") )
 
     // Then all relations of the object graph
 
@@ -222,6 +224,7 @@ wxBEGIN_PROPERTIES_TABLE(wxWindow)
                 wxT("Helpstring"), wxT("group"))
     wxPROPERTY( Shown, bool, Show, IsShown, wxxVariant((bool)true), 0 /*flags*/, \
                 wxT("Helpstring"), wxT("group"))
+
 #if 0
     // possible property candidates (not in xrc) or not valid in all subclasses
     wxPROPERTY( Title,wxString, SetTitle, GetTitle, wxEmptyString )
