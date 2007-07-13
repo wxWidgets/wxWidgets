@@ -97,6 +97,9 @@ public:
 
     void OnClear(wxCommandEvent& event);
 
+    void OnBeginBusyCursor(wxCommandEvent& event);
+    void OnEndBusyCursor(wxCommandEvent& event);
+
     void OnSyncExec(wxCommandEvent& event);
     void OnSyncNoEventsExec(wxCommandEvent& event);
     void OnAsyncExec(wxCommandEvent& event);
@@ -300,6 +303,8 @@ enum
     Exec_Quit = 100,
     Exec_Kill,
     Exec_ClearLog,
+    Exec_BeginBusyCursor,
+    Exec_EndBusyCursor,
     Exec_SyncExec = 200,
     Exec_SyncNoEventsExec,
     Exec_AsyncExec,
@@ -333,6 +338,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Exec_Quit,  MyFrame::OnQuit)
     EVT_MENU(Exec_Kill,  MyFrame::OnKill)
     EVT_MENU(Exec_ClearLog,  MyFrame::OnClear)
+    EVT_MENU(Exec_BeginBusyCursor,  MyFrame::OnBeginBusyCursor)
+    EVT_MENU(Exec_EndBusyCursor,  MyFrame::OnEndBusyCursor)
 
     EVT_MENU(Exec_SyncExec, MyFrame::OnSyncExec)
     EVT_MENU(Exec_SyncNoEventsExec, MyFrame::OnSyncNoEventsExec)
@@ -432,8 +439,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(Exec_Kill, _T("&Kill process...\tCtrl-K"),
                      _T("Kill a process by PID"));
     menuFile->AppendSeparator();
-    menuFile->Append(Exec_ClearLog, _T("&Clear log\tCtrl-C"),
+    menuFile->Append(Exec_ClearLog, _T("&Clear log\tCtrl-L"),
                      _T("Clear the log window"));
+    menuFile->AppendSeparator();
+    menuFile->Append(Exec_BeginBusyCursor, _T("Show &busy cursor\tCtrl-C"));
+    menuFile->Append(Exec_EndBusyCursor, _T("Show &normal cursor\tShift-Ctrl-C"));
     menuFile->AppendSeparator();
     menuFile->Append(Exec_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
@@ -504,6 +514,16 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnClear(wxCommandEvent& WXUNUSED(event))
 {
     m_lbox->Clear();
+}
+
+void MyFrame::OnBeginBusyCursor(wxCommandEvent& WXUNUSED(event))
+{
+    wxBeginBusyCursor();
+}
+
+void MyFrame::OnEndBusyCursor(wxCommandEvent& WXUNUSED(event))
+{
+    wxEndBusyCursor();
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
