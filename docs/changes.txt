@@ -200,6 +200,7 @@ wxMSW:
 - Fix appearance of notebook with non-top tabs under Windows Vista
 - Fixed bug with symbol resolving in wxStackWalker (Axel Gembe)
 - Fixed showing busy cursor for disabled windows and during wxExecute()
+- Set the string of wxEVT_COMMAND_CHECKLISTBOX_TOGGLED events (Luca Cappa)
 
 wxGTK:
 

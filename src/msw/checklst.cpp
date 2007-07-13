@@ -251,6 +251,7 @@ void wxCheckListBoxItem::SendEvent()
     wxCommandEvent event(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, m_pParent->GetId());
     event.SetInt(m_nIndex);
     event.SetEventObject(m_pParent);
+    event.SetString(m_pParent->GetString(m_nIndex));
     m_pParent->ProcessCommand(event);
 }
 
