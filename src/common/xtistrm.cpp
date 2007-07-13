@@ -164,7 +164,7 @@ void wxWriter::WriteAllProperties( const wxObject * obj, const wxClassInfo* ci,
         }
         else
         {
-            wxLogError( _("Create Parameter not found in declared RTTI Parameters") );
+            wxLogError( _("Create Parameter %s not found in declared RTTI Parameters"), name.c_str() );
         }
         map.erase( name );
     }
