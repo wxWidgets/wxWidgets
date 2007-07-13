@@ -24,7 +24,7 @@
 
 #if defined(__WXGTK20__)
     // for testing
-    // #define wxUSE_GENERICDATAVIEWCTRL 1
+    #define wxUSE_GENERICDATAVIEWCTRL 1
 #elif defined(__WXMAC__)
 #else
     #define wxUSE_GENERICDATAVIEWCTRL 1
@@ -83,7 +83,7 @@ private:
     wxUint32 m_id;
 };
 
-bool operator == ( const wxDataViewItem& left, const wxDataViewItem& right );
+bool operator == (const wxDataViewItem &left, const wxDataViewItem &right);
 
 // ---------------------------------------------------------
 // wxDataViewModel
@@ -112,11 +112,8 @@ public:
 
     // define hierachy
     virtual bool HasChildren( const wxDataViewItem &item ) const = 0;
-    virtual int GetChildCount( const wxDataViewItem &item ) const = 0;
-    virtual wxDataViewItem GetParent( const wxDataViewItem &child ) const = 0;
     virtual wxDataViewItem GetFirstChild( const wxDataViewItem &parent ) const = 0;
     virtual wxDataViewItem GetNextSibling( const wxDataViewItem &item ) const = 0;
-    virtual wxDataViewItem GetNthChild(  const wxDataViewItem &parent, unsigned int n ) const = 0;
 
     // delegated notifiers
     virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );

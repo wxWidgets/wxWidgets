@@ -26,8 +26,14 @@
 const wxChar wxDataViewCtrlNameStr[] = wxT("dataviewCtrl");
 
 
+bool operator == (const wxDataViewItem &left, const wxDataViewItem &right)
+{
+    return (left.GetID() == right.GetID() );
+}
+
+
 // ---------------------------------------------------------
-// wxDataViewListModel
+// wxDataViewModel
 // ---------------------------------------------------------
 
 wxDataViewModel::wxDataViewModel()

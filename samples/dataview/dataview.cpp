@@ -145,33 +145,6 @@ public:
         return ((ID == 1) || (ID == 2) || (ID == 5) || (ID == 0));
     }
     
-    virtual int GetChildCount( const wxDataViewItem &item ) const
-    {
-        int ID = item.GetID();
-        switch (ID)
-        {
-            case 0: return 1;
-            case 1: return 2;
-            case 2: return 2;
-            case 5: return 2;
-        }
-        return 0;
-    }
-    virtual wxDataViewItem GetParent( const wxDataViewItem &child ) const
-    {
-        int ID = child.GetID();
-        switch (ID)
-        {
-            case 2:
-            case 5: return wxDataViewItem( 1 );
-            case 3:
-            case 4: return wxDataViewItem( 2 );
-            case 6:
-            case 7: return wxDataViewItem( 5 );
-        }
-        
-        return wxDataViewItem(0);
-    }
     virtual wxDataViewItem GetFirstChild( const wxDataViewItem &parent ) const
     {
         int ID = parent.GetID();
@@ -197,42 +170,6 @@ public:
         
         return wxDataViewItem(0);
     } 
-    virtual wxDataViewItem GetNthChild(  const wxDataViewItem &parent, unsigned int n ) const
-    {
-        if (!parent.IsOk())
-        { 
-            // root node
-            if (n == 0)
-                return wxDataViewItem( 1 );
-                
-            return wxDataViewItem( 0 );
-        }
-    
-        int ID = parent.GetID();
-        switch (ID)
-        {
-            case 1:
-            {
-                if (n == 0) return wxDataViewItem( 2 );
-                else if (n == 1) return wxDataViewItem( 5 );
-            }
-            break;
-            case 2: 
-            {
-                if (n == 0) return wxDataViewItem( 3 );
-                else if (n == 1) return wxDataViewItem( 4 );
-            }
-            break;
-            case 5:
-            {
-                if (n == 0) return wxDataViewItem( 6 );
-                else if (n == 1) return wxDataViewItem( 7 );
-            }
-            break;
-        }
-    
-        return wxDataViewItem(0);
-    }
 };
 
 // -------------------------------------
