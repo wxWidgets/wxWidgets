@@ -43,6 +43,7 @@
 #include "wx/xtixml.h"
 #include "wx/txtstrm.h"
 #include "wx/wfstream.h"
+#include "wx/spinctrl.h"
 
 #include "classlist.h"
 
@@ -301,8 +302,9 @@ wxDynamicObject* CreateFrameRTTI()
 {
     // set up the RTTI info for a class (MyXTIFrame) which
     // is not defined anywhere in this program
-    wxDynamicClassInfo *dyninfo = 
-        new wxDynamicClassInfo(wxT("myxtiframe.h"),
+    wxDynamicClassInfo *dyninfo = dynamic_cast< wxDynamicClassInfo *>( wxClassInfo::FindClass(wxT("MyXTIFrame"))) ;
+    if ( dyninfo == NULL )
+        dyninfo = new wxDynamicClassInfo(wxT("myxtiframe.h"),
                             wxT("MyXTIFrame"), 
                             CLASSINFO(wxFrame) );
 
@@ -487,6 +489,8 @@ wxDynamicObject* CreateFrameRTTI()
 
     // MSVC likes to exclude from link wxGauge...
     wxENSURE_CLASS_IS_LINKED(wxGauge)
+    wxENSURE_CLASS_IS_LINKED(wxCheckBox)
+    wxENSURE_CLASS_IS_LINKED(wxSpinCtrl)
 
 #ifdef __WXMSW__
     // under wxMSW wxGauge is simply #defined to wxGauge95
