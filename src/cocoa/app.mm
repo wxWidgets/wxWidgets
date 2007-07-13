@@ -39,6 +39,8 @@
 #import <Foundation/NSNotification.h>
 #import <AppKit/NSCell.h>
 
+bool      wxApp::sm_isEmbedded = false; // Normally we're not a plugin
+
 // wxNSApplicationObserver singleton.
 static wxObjcAutoRefFromAlloc<wxNSApplicationObserver*> sg_cocoaAppObserver = [[wxNSApplicationObserver alloc] init];
 
@@ -154,10 +156,13 @@ void wxApp::CleanUp()
     wxDC::CocoaShutdownTextSystem();
     wxMenuBarManager::DestroyInstance();
 
-    [m_cocoaApp setDelegate:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:sg_cocoaAppObserver];
-    [m_cocoaAppDelegate release];
-    m_cocoaAppDelegate = NULL;
+    if(!sm_isEmbedded)
+    {
+        [m_cocoaApp setDelegate:nil];
+        [m_cocoaAppDelegate release];
+        m_cocoaAppDelegate = NULL;
+    }
 
     wxAppBase::CleanUp();
 
@@ -215,9 +220,12 @@ bool wxApp::OnInitGui()
     // Create the app using the sharedApplication method
     m_cocoaApp = [NSApplication sharedApplication];
 
-    // Enable response to application delegate messages
-    m_cocoaAppDelegate = [[wxNSApplicationDelegate alloc] init];
-    [m_cocoaApp setDelegate:m_cocoaAppDelegate];
+    if(!sm_isEmbedded)
+    {
+        // Enable response to application delegate messages
+        m_cocoaAppDelegate = [[wxNSApplicationDelegate alloc] init];
+        [m_cocoaApp setDelegate:m_cocoaAppDelegate];
+    }
 
     // Enable response to "delegate" messages on the notification observer
     [[NSNotificationCenter defaultCenter] addObserver:sg_cocoaAppObserver
@@ -245,7 +253,8 @@ bool wxApp::OnInitGui()
         selector:@selector(controlTintChanged:)
         name:NSControlTintDidChangeNotification object:nil];
 
-    wxMenuBarManager::CreateInstance();
+    if(!sm_isEmbedded)
+        wxMenuBarManager::CreateInstance();
 
     wxDC::CocoaInitializeTextSystem();
     return true;
