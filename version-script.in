@@ -34,6 +34,7 @@
         *wxAuiNotebook*SetNormalFont*;
         *wxAuiNotebook*SetSelectedFont*;
         *wxDocument*GetUserReadableName*;
+        *wxLog*DoCreateOnDemand*;
         *wxLogChain*DetachOldLog*;
         *wxMemoryFSHandler*AddFileWithMimeType*;
         *wxMetafileDC*DoGetTextExtent*;

@@ -176,9 +176,11 @@ public:
     // Set log level.  Log messages with level > logLevel will not be logged.
     static void SetLogLevel(wxLogLevel logLevel) { ms_logLevel = logLevel; }
 
+#if wxABI_VERSION >= 20805 /* 2.8.5+ only */
     // should GetActiveTarget() try to create a new log object if the
     // current is NULL?
     static void DontCreateOnDemand();
+#endif
 
     // Make GetActiveTarget() create a new log object again.
     static void DoCreateOnDemand();
