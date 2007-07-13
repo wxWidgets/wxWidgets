@@ -12,6 +12,11 @@
 #ifndef _WX_COCOA_APP_H_
 #define _WX_COCOA_APP_H_
 
+typedef struct __CFRunLoopObserver * CFRunLoopObserverRef;
+typedef const struct __CFString * CFStringRef;
+
+#include "wx/mac/corefoundation/cfref.h"
+
 // ========================================================================
 // wxApp
 // ========================================================================
@@ -26,7 +31,10 @@ class WXDLLEXPORT wxApp: public wxAppBase
 // ------------------------------------------------------------------------
 public:
     wxApp();
-    virtual ~wxApp() {}
+// ABI compatibility warning: This was implemented inline.  wxCocoa apps
+// compiled against < 2.8.5 won't call the new implementation which cleans up
+// the CFRunLoop idle observer.  Fortunately, Cleanup does that in 2.8.
+    virtual ~wxApp();
 
 // ------------------------------------------------------------------------
 // Cocoa specifics
@@ -37,6 +45,9 @@ public:
     virtual void CocoaDelegate_applicationDidBecomeActive();
     virtual void CocoaDelegate_applicationWillResignActive();
     virtual void CocoaDelegate_applicationDidResignActive();
+    /* The following two cannot be virtual due to 2.8 ABI compatibility */
+    /*virtual*/ void CocoaDelegate_applicationWillUpdate();
+    /*virtual*/ void CF_ObserveMainRunLoopBeforeWaiting(CFRunLoopObserverRef observer, int activity);
 protected:
     WX_NSApplication m_cocoaApp;
     struct objc_object *m_cocoaAppDelegate;
