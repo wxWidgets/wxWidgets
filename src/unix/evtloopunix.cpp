@@ -175,7 +175,7 @@ void wxConsoleEventLoop::OnNextIteration()
         timeout = wxFDIODispatcher::TIMEOUT_INFINITE;
     }
 
-    m_dispatcher->RunLoop(timeout);
+    m_dispatcher->Dispatch(timeout);
 
 #if wxUSE_TIMER
     wxTimerScheduler::Get().NotifyExpired();
