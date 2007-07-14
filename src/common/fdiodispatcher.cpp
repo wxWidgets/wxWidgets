@@ -78,18 +78,13 @@ bool wxMappedFDIODispatcher::ModifyFD(int fd, wxFDIOHandler *handler, int flags)
     return true;
 }
 
-bool wxMappedFDIODispatcher::UnregisterFD(int fd, int flags)
+bool wxMappedFDIODispatcher::UnregisterFD(int fd)
 {
     wxFDIOHandlerMap::iterator i = m_handlers.find(fd);
-    if( i == m_handlers.end())
+    if ( i == m_handlers.end() )
       return false;
 
-    i->second.flags &= ~flags;
-    if ( !i->second.flags )
-    {
-        // this handler is not registered for anything any more, get rid of it
-        m_handlers.erase(i);
-    }
+    m_handlers.erase(i);
 
     return true;
 }

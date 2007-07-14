@@ -38,9 +38,9 @@ public:
 
     // same as SetFD() except it unsets the bits set in the flags for the given
     // fd
-    bool ClearFD(int fd, int flags)
+    bool ClearFD(int fd)
     {
-        return SetFD(fd, wxFDIO_ALL & ~flags);
+        return SetFD(fd, 0);
     }
 
 
@@ -88,7 +88,7 @@ public:
     // implement pure virtual methods of the base class
     virtual bool RegisterFD(int fd, wxFDIOHandler *handler, int flags = wxFDIO_ALL);
     virtual bool ModifyFD(int fd, wxFDIOHandler *handler, int flags = wxFDIO_ALL);
-    virtual bool UnregisterFD(int fd, int flags = wxFDIO_ALL);
+    virtual bool UnregisterFD(int fd);
     virtual void RunLoop(int timeout = TIMEOUT_INFINITE);
 
 protected:

@@ -180,13 +180,24 @@ void GSocketGUIFunctionsTableConcrete::Uninstall_Callback(GSocket *socket,
       return;
 
   wxGSocketIOHandler * const
-      handler = (wxGSocketIOHandler*)dispatcher->UnregisterFD(fd, flag);
+      handler = wx_static_cast(wxGSocketIOHandler *, dispatcher->FindHandler(fd));
   if ( handler )
   {
       handler->RemoveFlag(flag);
 
       if ( !handler->GetFlags() )
+      {
+          dispatcher->UnregisterFD(fd);
           delete handler;
+      }
+      else
+      {
+          dispatcher->ModifyFD(fd, handler, handler->GetFlags());
+      }
+  }
+  else
+  {
+      dispatcher->UnregisterFD(fd);
   }
 }
 

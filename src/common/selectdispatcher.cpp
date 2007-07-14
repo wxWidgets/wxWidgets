@@ -184,9 +184,12 @@ bool wxSelectDispatcher::ModifyFD(int fd, wxFDIOHandler *handler, int flags)
     return m_sets.SetFD(fd, flags);
 }
 
-bool wxSelectDispatcher::UnregisterFD(int fd, int flags)
+bool wxSelectDispatcher::UnregisterFD(int fd)
 {
-    m_sets.ClearFD(fd, flags);
+    m_sets.ClearFD(fd);
+
+    if ( !wxMappedFDIODispatcher::UnregisterFD(fd) )
+        return false;
 
     // remove the handler if we don't need it any more
     if ( !m_sets.HasFD(fd) )

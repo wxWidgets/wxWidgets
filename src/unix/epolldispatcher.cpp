@@ -120,7 +120,7 @@ bool wxEpollDispatcher::ModifyFD(int fd, wxFDIOHandler* handler, int flags)
     return true;
 }
 
-bool wxEpollDispatcher::UnregisterFD(int fd, int flags)
+bool wxEpollDispatcher::UnregisterFD(int fd)
 {
     epoll_event ev;
     ev.events = 0;
