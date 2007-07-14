@@ -19,7 +19,9 @@
 class WXDLLEXPORT wxConsoleAppTraits : public wxConsoleAppTraitsBase
 {
 public:
+#if wxUSE_CONSOLE_EVENTLOOP
     virtual wxEventLoopBase *CreateEventLoop();
+#endif // wxUSE_CONSOLE_EVENTLOOP
     virtual bool CreateEndProcessPipe(wxExecuteData& execData);
     virtual bool IsWriteFDOfEndProcessPipe(wxExecuteData& execData, int fd);
     virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData& execData);

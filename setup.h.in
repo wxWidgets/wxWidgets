@@ -217,6 +217,8 @@
 
 #define wxUSE_BASE64        0
 
+#define wxUSE_CONSOLE_EVENTLOOP 0
+
 #define wxUSE_FILE          0
 #define wxUSE_FFILE         0
 
@@ -543,6 +545,12 @@
 
 
 /* --- end common options --- */
+
+/*
+ * Unix-specific options
+ */
+#define wxUSE_SELECT_DISPATCHER 0
+#define wxUSE_EPOLL_DISPATCHER 0
 
 /* for some features we don't have dedicated configure switches, so just choose
  * the common values automatically */

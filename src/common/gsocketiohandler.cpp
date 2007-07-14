@@ -19,7 +19,7 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_SOCKETS
+#if wxUSE_SOCKETS && wxUSE_SELECT_DISPATCHER
 
 #include "wx/private/gsocketiohandler.h"
 #include "wx/unix/private.h"

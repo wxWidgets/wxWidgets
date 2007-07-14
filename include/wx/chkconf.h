@@ -35,6 +35,10 @@
 #  include "wx/x11/chkconf.h"
 #endif
 
+#ifdef __UNIX__
+#   include "wx/unix/chkconf.h"
+#endif
+
 #ifdef __WXUNIVERSAL__
 #   include "wx/univ/chkconf.h"
 #endif
@@ -82,6 +86,14 @@
 
    please keep the options in alphabetical order!
  */
+
+#ifndef wxUSE_CONSOLE_EVENTLOOP
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_CONSOLE_EVENTLOOP must be defined."
+#   else
+#       define wxUSE_CONSOLE_EVENTLOOP 0
+#   endif
+#endif /* !defined(wxUSE_CONSOLE_EVENTLOOP) */
 
 #ifndef wxUSE_CRASHREPORT
     /* this one is special: as currently it is Windows-only, don't force it

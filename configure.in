@@ -433,7 +433,7 @@ dnl     - WX_ARG_WITHOUT/WX_ARG_DISABLE mirror WX_ARG_WITH/WX_ARG_ENABLE but
 dnl       should be used for the options which are enabled by default
 dnl     - WX_ARG_FEATURE is a version of WX_ARG_ENABLE which should be used for
 dnl       optional features, i.e. options which should be disabled if
-dnl       --disable-all_features is specified (WX_ARG_WITH/WX_ARG_SYS_WITH are
+dnl       --disable-all-features is specified (WX_ARG_WITH/WX_ARG_SYS_WITH are
 dnl       also affected by this)
 
 dnl ---------------------------------------------------------------------------
@@ -451,7 +451,7 @@ if test "x$VENDOR" = "x"; then
     VENDOR="custom"
 fi
 
-WX_ARG_DISABLE(all_features,[  --disable-all_features  disable all optional features to build minimal library], wxUSE_ALL_FEATURES)
+WX_ARG_DISABLE(all-features,[  --disable-all-features  disable all optional features to build minimal library], wxUSE_ALL_FEATURES)
 
 dnl ---------------------------------------------------------------------------
 dnl port selection
@@ -575,6 +575,10 @@ WX_ARG_FEATURE(ole,           [  --enable-ole            use OLE classes (Win32 
 WX_ARG_FEATURE(dataobj,       [  --enable-dataobj        use data object classes], wxUSE_DATAOBJ)
 
 WX_ARG_FEATURE(ipc,           [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
+
+WX_ARG_FEATURE(baseevtloop,   [  --enable-base-evtloop   use event loop in console programs too], wxUSE_CONSOLE_EVENTLOOP)
+WX_ARG_FEATURE(epoolloop,     [  --enable-epool-loop     use wxEpollDispatcher class (Linux only)], wxUSE_EPOLL_DISPATCHER)
+WX_ARG_FEATURE(selectloop,    [  --enable-select-loop    use wxSelectDispatcher class], wxUSE_SELECT_DISPATCHER)
 
 dnl please keep the settings below in alphabetical order
 WX_ARG_FEATURE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
@@ -1439,9 +1443,6 @@ dnl POSIX needs this for select(), but old systems don't have it
 if test "$USE_UNIX" = 1 ; then
     AC_CHECK_HEADER([sys/select.h],,, [AC_INCLUDES_DEFAULT()])
 fi
-
-dnl defines HAVE_SYS_EPOLL_H - for epoll mainloop implementation in wxbase
-AC_CHECK_HEADERS(sys/epoll.h)
 
 dnl ---------------------------------------------------------------------------
 dnl Checks for compiler characteristics
@@ -5691,6 +5692,29 @@ fi
 
 if test "$wxUSE_OBJC_UNIQUIFYING" = "yes"; then
   AC_DEFINE(wxUSE_OBJC_UNIQUIFYING)
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl console event loop stuff
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_CONSOLE_EVENTLOOP" = "yes"; then
+    AC_DEFINE(wxUSE_CONSOLE_EVENTLOOP)
+
+    if test "$wxUSE_UNIX" = "yes"; then
+        if test "$wxUSE_SELECT_DISPATCHER" = "yes"; then
+            AC_DEFINE(wxUSE_SELECT_DISPATCHER);
+        fi
+
+        if test "$wxUSE_EPOLL_DISPATCHER" = "yes"; then
+            AC_CHECK_HEADERS(sys/epoll.h)
+            if test "$ac_cv_header_sys_epoll_h" = "yes"; then
+                AC_DEFINE(wxUSE_EPOLL_DISPATCHER)
+            else
+                AC_MSG_WARN([sys/epoll.h not available, wxEpollDispatcher disabled])
+            fi
+        fi
+    fi
 fi
 
 dnl ---------------------------------------------------------------------------

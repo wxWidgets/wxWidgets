@@ -19,7 +19,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/evtloop.h"
+#if wxUSE_CONSOLE_EVENTLOOP
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -27,6 +27,7 @@
 #endif
 
 #include <errno.h>
+#include "wx/evtloop.h"
 #include "wx/thread.h"
 #include "wx/module.h"
 #include "wx/unix/private/timer.h"
@@ -34,10 +35,6 @@
 #include "wx/private/selectdispatcher.h"
 
 #define TRACE_EVENTS _T("events")
-
-//this code should not be compiled when GUI is defined
-//(monolithic build issue)
-#if !wxUSE_GUI
 
 // ===========================================================================
 // wxEventLoop::PipeIOHandler implementation
@@ -128,13 +125,13 @@ wxConsoleEventLoop::wxConsoleEventLoop()
         return;
     }
 
-#ifdef HAVE_SYS_EPOLL_H
+#ifdef wxUSE_EPOLL_DISPATCHER
     m_dispatcher = wxEpollDispatcher::Get();
     if ( !m_dispatcher )
-#endif // HAVE_SYS_EPOLL_H
-    {
+#endif // wxUSE_EPOLL_DISPATCHER
+#if wxUSE_SELECT_DISPATCHER
         m_dispatcher = wxSelectDispatcher::Get();
-    }
+#endif // wxUSE_WCHAR_T
 
     wxCHECK_RET( m_dispatcher, _T("failed to create IO dispatcher") );
 
@@ -194,4 +191,4 @@ void wxConsoleEventLoop::OnNextIteration()
     wxTheApp->CheckSignal();
 }
 
-#endif // !wxUSE_GUI
+#endif // wxUSE_CONSOLE_EVENTLOOP

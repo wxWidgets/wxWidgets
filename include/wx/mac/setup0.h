@@ -331,6 +331,16 @@
 // Recommended setting: 1 (but can be safely disabled if you don't use it)
 #define wxUSE_BASE64        1
 
+// Set this to 1 to be able to use wxEventLoop even in console applications
+// (i.e. using base library only, without GUI). This is mostly useful for
+// processing socket events but is also necessary to use timers in console
+// applications
+//
+// Default is 1.
+//
+// Recommended setting: 1 (but can be safely disabled if you don't use it)
+#define wxUSE_CONSOLE_EVENTLOOP 1
+
 // Set wxUSE_(F)FILE to 1 to compile wx(F)File classes. wxFile uses low level
 // POSIX functions for file access, wxFFile uses ANSI C stdio.h functions.
 //

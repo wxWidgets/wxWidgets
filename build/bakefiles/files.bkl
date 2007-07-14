@@ -76,6 +76,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/unix/app.h
     wx/unix/apptbase.h
     wx/unix/apptrait.h
+    wx/unix/chkconf.h
     wx/unix/execute.h
     wx/unix/evtloop.h
     wx/unix/mimetype.h
@@ -224,6 +225,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/unix/app.h
     wx/unix/apptbase.h
     wx/unix/apptrait.h
+    wx/unix/chkconf.h
     wx/unix/evtloop.h
     wx/unix/stdpaths.h
 </set>

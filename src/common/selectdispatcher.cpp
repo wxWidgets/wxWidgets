@@ -19,6 +19,8 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_SELECT_DISPATCHER
+
 #include "wx/private/selectdispatcher.h"
 #include "wx/module.h"
 #include "wx/timer.h"
@@ -290,3 +292,4 @@ private:
 
 IMPLEMENT_DYNAMIC_CLASS(wxSelectDispatcherModule, wxModule)
 
+#endif // wxUSE_SELECT_DISPATCHER

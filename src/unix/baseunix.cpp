@@ -95,8 +95,11 @@ wxTimerImpl *wxConsoleAppTraits::CreateTimerImpl(wxTimer *timer)
 
 #endif // wxUSE_TIMER
 
+#if wxUSE_CONSOLE_EVENTLOOP
+
 wxEventLoopBase *wxConsoleAppTraits::CreateEventLoop()
 {
     return new wxEventLoop();
 }
 
+#endif // wxUSE_CONSOLE_EVENTLOOP

@@ -13,7 +13,7 @@
 
 #include "wx/defs.h"
 
-#ifdef HAVE_SYS_EPOLL_H
+#ifdef wxUSE_EPOLL_DISPATCHER
 
 #include "wx/private/fdiodispatcher.h"
 
@@ -42,6 +42,6 @@ private:
     int m_epollDescriptor;
 };
 
-#endif // HAVE_SYS_EPOLL_H
+#endif // wxUSE_EPOLL_DISPATCHER
 
 #endif // _WX_PRIVATE_SOCKETEVTDISPATCH_H_

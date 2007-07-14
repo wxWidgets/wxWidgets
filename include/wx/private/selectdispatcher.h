@@ -13,6 +13,8 @@
 
 #include "wx/defs.h"
 
+#if wxUSE_SELECT_DISPATCHER
+
 #include <sys/types.h>
 
 #include "wx/private/fdiodispatcher.h"
@@ -111,5 +113,6 @@ private:
     int m_maxFD;
 };
 
+#endif // wxUSE_SELECT_DISPATCHER
 
 #endif // _WX_PRIVATE_SOCKETEVTDISPATCH_H_

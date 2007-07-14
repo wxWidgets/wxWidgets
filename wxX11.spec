@@ -262,6 +262,7 @@ wx/zstream.h
 wx/unix/app.h
 wx/unix/apptbase.h
 wx/unix/apptrait.h
+wx/unix/chkconf.h
 wx/unix/execute.h
 wx/unix/evtloop.h
 wx/unix/mimetype.h

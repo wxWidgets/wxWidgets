@@ -19,7 +19,7 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef HAVE_SYS_EPOLL_H
+#ifdef wxUSE_EPOLL_DISPATCHER
 
 #include "wx/unix/private/epolldispatcher.h"
 #include "wx/unix/private.h"
@@ -210,4 +210,4 @@ public:
 
 IMPLEMENT_DYNAMIC_CLASS(wxEpollDispatcherModule, wxModule)
 
-#endif // HAVE_SYS_EPOLL_H
+#endif // wxUSE_EPOLL_DISPATCHER
