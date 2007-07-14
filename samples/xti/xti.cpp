@@ -113,7 +113,7 @@ enum
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_Persist, MyFrame::OnPersist)
     EVT_MENU(Minimal_Depersist, MyFrame::OnDepersist)
-    EVT_MENU(Minimal_Depersist, MyFrame::OnGenerateCode)
+    EVT_MENU(Minimal_GenerateCode, MyFrame::OnGenerateCode)
     EVT_MENU(Minimal_DumpClasses, MyFrame::OnDumpClasses)
     EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
@@ -125,6 +125,8 @@ IMPLEMENT_APP(MyApp)
 // implementation
 // ============================================================================
 
+void RegisterFrameRTTI();
+
 // ----------------------------------------------------------------------------
 // the application class
 // ----------------------------------------------------------------------------
@@ -133,6 +135,8 @@ bool MyApp::OnInit()
 {
     if ( !wxApp::OnInit() )
         return false;
+
+    RegisterFrameRTTI();
 
     // create the main application window
     MyFrame *frame = new MyFrame(_T("Extended RTTI sample"));
@@ -290,29 +294,35 @@ private:
     wxDynamicObject *m_frame;
 };
 
-// sometimes MSVC linker optimizes the final EXE even in debug mode
-// pruning the object files which he "thinks" are useless;
+// sometimes linkers (at least MSVC and GCC ones) optimize the final EXE 
+// even in debug mode pruning the object files which he "thinks" are useless;
 // thus the classes defined in those files won't be available in the XTI
 // table and the program will fail to allocate them.
 // The following macro implements a simple hack to ensure that a given
-// class is linked by MSVC.
+// class is linked in.
 #define wxENSURE_CLASS_IS_LINKED(x)     { x test; }
 
-wxDynamicObject* CreateFrameRTTI()
+void RegisterFrameRTTI()
 {
     // set up the RTTI info for a class (MyXTIFrame) which
     // is not defined anywhere in this program
-    wxDynamicClassInfo *dyninfo = dynamic_cast< wxDynamicClassInfo *>( wxClassInfo::FindClass(wxT("MyXTIFrame"))) ;
+    wxDynamicClassInfo *dyninfo = 
+        dynamic_cast< wxDynamicClassInfo *>( wxClassInfo::FindClass(wxT("MyXTIFrame"))) ;
     if ( dyninfo == NULL )
+    {
         dyninfo = new wxDynamicClassInfo(wxT("myxtiframe.h"),
                             wxT("MyXTIFrame"), 
                             CLASSINFO(wxFrame) );
 
-    // this class has a property named "Button" and the relative handler:
-    dyninfo->AddProperty("Button", wxGetTypeInfo((wxButton**) NULL));
-    dyninfo->AddHandler("ButtonClickHandler", 
-        NULL /* no instance of the handler method */, CLASSINFO( wxEvent ) );
+        // this class has a property named "Button" and the relative handler:
+        dyninfo->AddProperty("Button", wxGetTypeInfo((wxButton**) NULL));
+        dyninfo->AddHandler("ButtonClickHandler", 
+            NULL /* no instance of the handler method */, CLASSINFO( wxEvent ) );
+    }
+}
 
+wxDynamicObject* CreateFrameRTTI()
+{
     int baseID = 100;
     wxxVariant Params[10];
 
@@ -571,7 +581,11 @@ bool GenerateFrameRTTICode(const wxString &inFileName, const wxString &outFileNa
     // read the XML file using the wxCodeDepersister
     wxCodeDepersister Callbacks(&tos);
     wxXmlReader Reader(root);
-    return Reader.ReadObject( wxString("myTestFrame"), &Callbacks ) == 1;
+
+    // ReadObject will return the ID of the object read??
+    Reader.ReadObject( wxString("myTestFrame"), &Callbacks );
+
+    return true;
 }
 
 
@@ -597,7 +611,8 @@ void MyFrame::OnPersist(wxCommandEvent& WXUNUSED(event))
 
     // ask the user where to save it
     wxFileDialog dlg(this, wxT("Where should the frame be saved?"),
-                    wxEmptyString, wxT("test.xml"), wxT("XML files (*.xml)|*.xml"), wxFD_SAVE);
+                     wxEmptyString, wxT("test.xml"), wxT("XML files (*.xml)|*.xml"), 
+                     wxFD_SAVE);
     if (dlg.ShowModal() == wxID_CANCEL)
         return;
 
@@ -616,7 +631,8 @@ void MyFrame::OnDepersist(wxCommandEvent& WXUNUSED(event))
 {
     // ask the user which file to load
     wxFileDialog dlg(this, wxT("Which file contains the frame to depersist?"),
-                     wxEmptyString, wxEmptyString, wxT("XML files (*.xml)|*.xml"), wxFD_OPEN);
+                     wxEmptyString, wxT("test.xml"), wxT("XML files (*.xml)|*.xml"), 
+                     wxFD_OPEN);
     if (dlg.ShowModal() == wxID_CANCEL)
         return;
 
@@ -645,14 +661,16 @@ void MyFrame::OnGenerateCode(wxCommandEvent& WXUNUSED(event))
 {
     // ask the user which file to load
     wxFileDialog dlg(this, wxT("Which file contains the frame to work on?"),
-                    wxEmptyString, wxT("test.xml"), wxT("XML files (*.xml)|*.xml"), wxFD_OPEN);
+                     wxEmptyString, wxT("test.xml"), wxT("XML files (*.xml)|*.xml"), 
+                     wxFD_OPEN);
     if (dlg.ShowModal() == wxID_CANCEL)
         return;
 
     // ask the user which file to load
     wxFileDialog dlg2(this, wxT("Where should the C++ code be saved?"),
-                    wxEmptyString, wxT("test.cpp"), wxT("Source files (*.cpp)|*.cpp"), wxFD_OPEN);
-    if (dlg.ShowModal() == wxID_CANCEL)
+                      wxEmptyString, wxT("test.cpp"), wxT("Source files (*.cpp)|*.cpp"), 
+                      wxFD_SAVE);
+    if (dlg2.ShowModal() == wxID_CANCEL)
         return;
 
     if (!GenerateFrameRTTICode(dlg.GetPath(), dlg2.GetPath()))
