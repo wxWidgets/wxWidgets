@@ -237,6 +237,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
         fn.AssignDir(defaultDir);
 
     // set the initial file name and/or directory
+    fn.MakeAbsolute(); // GTK+ needs absolute path
     const wxString dir = fn.GetPath();
     if ( !dir.empty() )
     {
