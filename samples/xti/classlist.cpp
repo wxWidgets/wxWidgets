@@ -10,6 +10,10 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+ 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
@@ -21,10 +25,11 @@
 #include "wx/wx.h"
 #endif
 
-// includes
-
 #include "classlist.h"
 
+#if !wxUSE_EXTENDED_RTTI
+    #error This sample requires XTI (eXtended RTTI) enabled
+#endif
 
 // IMPLEMENT_DYNAMIC_CLASS( ClassListDialog, wxDialog )  -- see the header
 BEGIN_EVENT_TABLE( ClassListDialog, wxDialog )

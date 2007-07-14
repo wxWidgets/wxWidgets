@@ -21,7 +21,7 @@
 
 class WXDLLIMPEXP_BASE wxObject;
 
-#define DECLARE_CLASS_INFO_ITERATORS()                                       \
+#define wxDECLARE_CLASS_INFO_ITERATORS()                                     \
     class WXDLLIMPEXP_BASE const_iterator                                    \
     {                                                                        \
         typedef wxHashTable_Node Node;                                       \
@@ -52,11 +52,29 @@ class WXDLLIMPEXP_BASE wxObject;
     static const_iterator begin_classinfo();                                 \
     static const_iterator end_classinfo();
 
-#if wxUSE_EXTENDED_RTTI
+// based on the value of wxUSE_EXTENDED_RTTI symbol,
+// only one of the RTTI system will be compiled:
+// - the "old" one (defined by rtti.h) or
+// - the "new" one (defined by xti.h)
 #include "wx/xti.h"
-#else
 #include "wx/rtti.h"
-#endif // !wxUSE_EXTENDED_RTTI
+
+// provide macro name aliases for backward compatibility
+#if WXWIN_COMPATIBILITY_2_8
+    #define DECLARE_DYNAMIC_CLASS(name)             wxDECLARE_DYNAMIC_CLASS(name)
+    #define DECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)   wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)
+    #define DECLARE_DYNAMIC_CLASS_NO_COPY(name)     wxDECLARE_DYNAMIC_CLASS_NO_COPY(name)
+    #define DECLARE_ABSTRACT_CLASS(name)            wxDECLARE_ABSTRACT_CLASS(name)
+    #define DECLARE_CLASS(name)                     wxDECLARE_CLASS(name)
+    #define IMPLEMENT_DYNAMIC_CLASS_WITH_COPY(n,b)  wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY(n,b)
+    #define IMPLEMENT_DYNAMIC_CLASS(n,b)            wxIMPLEMENT_DYNAMIC_CLASS(n,b)
+    #define IMPLEMENT_DYNAMIC_CLASS2(n,b1,b2)       wxIMPLEMENT_DYNAMIC_CLASS2(n,b1,b2)
+    #define IMPLEMENT_ABSTRACT_CLASS(n,b)           wxIMPLEMENT_ABSTRACT_CLASS(n,b)
+    #define IMPLEMENT_ABSTRACT_CLASS2(n,b1,b2)      wxIMPLEMENT_ABSTRACT_CLASS2(n,b1,b2)
+    #define IMPLEMENT_CLASS(n,b)                    wxIMPLEMENT_CLASS(n,b)
+    #define IMPLEMENT_CLASS2(n,b1,b2)               wxIMPLEMENT_CLASS2(n,b1,b2)
+#endif
+
 
 
 // -----------------------------------

@@ -31,6 +31,7 @@
 
 #include "wx/notebook.h"
 
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -86,11 +87,13 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxNotebookPageInfo, wxObject, "wx/notebook.h" )
 
 wxCOLLECTION_TYPE_INFO( wxNotebookPageInfo *, wxNotebookPageInfoList );
 
+#if wxUSE_EXTENDED_RTTI
 template<> void wxCollectionToVariantArray( wxNotebookPageInfoList const &theList,
                                             wxxVariantArray &value)
 {
     wxListCollectionToVariantArray<wxNotebookPageInfoList::compatibility_iterator>( theList, value );
 }
+#endif
 
 wxBEGIN_PROPERTIES_TABLE(wxNotebook)
     wxEVENT_PROPERTY( PageChanging, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEvent )

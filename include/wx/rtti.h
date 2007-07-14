@@ -92,7 +92,8 @@ public:
                  ( m_baseInfo2 && m_baseInfo2->IsKindOf(info) ) );
     }
 
-    DECLARE_CLASS_INFO_ITERATORS()
+    wxDECLARE_CLASS_INFO_ITERATORS()
+
 private:
     const wxChar            *m_className;
     int                      m_objectSize;
@@ -125,24 +126,24 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
 // Dynamic class macros
 // ----------------------------------------------------------------------------
 
-#define DECLARE_ABSTRACT_CLASS(name)                                          \
+#define wxDECLARE_ABSTRACT_CLASS(name)                                          \
     public:                                                                   \
         static wxClassInfo ms_classInfo;                                      \
         virtual wxClassInfo *GetClassInfo() const;
 
-#define DECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)                                 \
+#define wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)                                 \
     DECLARE_NO_ASSIGN_CLASS(name)                                             \
     DECLARE_DYNAMIC_CLASS(name)
 
-#define DECLARE_DYNAMIC_CLASS_NO_COPY(name)                                   \
+#define wxDECLARE_DYNAMIC_CLASS_NO_COPY(name)                                   \
     DECLARE_NO_COPY_CLASS(name)                                               \
     DECLARE_DYNAMIC_CLASS(name)
 
-#define DECLARE_DYNAMIC_CLASS(name)                                           \
+#define wxDECLARE_DYNAMIC_CLASS(name)                                           \
     DECLARE_ABSTRACT_CLASS(name)                                              \
     static wxObject* wxCreateObject();
 
-#define DECLARE_CLASS(name) DECLARE_DYNAMIC_CLASS(name)
+#define wxDECLARE_CLASS(name) DECLARE_DYNAMIC_CLASS(name)
 
 
 // common part of the macros below
@@ -167,13 +168,13 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
 // -----------------------------------
 
     // Single inheritance with one base class
-#define IMPLEMENT_DYNAMIC_CLASS(name, basename)                               \
+#define wxIMPLEMENT_DYNAMIC_CLASS(name, basename)                               \
     wxIMPLEMENT_CLASS_COMMON1(name, basename, name::wxCreateObject)           \
     wxObject* name::wxCreateObject()                                          \
         { return new name; }
 
     // Multiple inheritance with two base classes
-#define IMPLEMENT_DYNAMIC_CLASS2(name, basename1, basename2)                  \
+#define wxIMPLEMENT_DYNAMIC_CLASS2(name, basename1, basename2)                  \
     wxIMPLEMENT_CLASS_COMMON2(name, basename1, basename2,                     \
                               name::wxCreateObject)                           \
     wxObject* name::wxCreateObject()                                          \
@@ -185,16 +186,134 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
 
     // Single inheritance with one base class
 
-#define IMPLEMENT_ABSTRACT_CLASS(name, basename)                              \
+#define wxIMPLEMENT_ABSTRACT_CLASS(name, basename)                              \
     wxIMPLEMENT_CLASS_COMMON1(name, basename, NULL)
 
     // Multiple inheritance with two base classes
 
-#define IMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2)                 \
+#define wxIMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2)                 \
     wxIMPLEMENT_CLASS_COMMON2(name, basename1, basename2, NULL)
 
-#define IMPLEMENT_CLASS IMPLEMENT_ABSTRACT_CLASS
-#define IMPLEMENT_CLASS2 IMPLEMENT_ABSTRACT_CLASS2
+#define wxIMPLEMENT_CLASS IMPLEMENT_ABSTRACT_CLASS
+#define wxIMPLEMENT_CLASS2 IMPLEMENT_ABSTRACT_CLASS2
+
+
+// -----------------------------------
+// XTI-compatible macros
+// -----------------------------------
+
+#include "wx/flags.h"
+
+// these macros only do something when wxUSE_EXTENDED_RTTI=1
+// (and in that case they are defined by xti.h); however to avoid
+// to be forced to wrap these macros (in user's source files) with
+//
+//  #if wxUSE_EXTENDED_RTTI
+//  ...
+//  #endif
+//
+// blocks, we define them here as empty.
+
+#define EMPTY_MACROVALUE /**/
+
+#define wxBEGIN_ENUM( e ) EMPTY_MACROVALUE
+#define wxENUM_MEMBER( v ) EMPTY_MACROVALUE
+#define wxEND_ENUM( e ) EMPTY_MACROVALUE
+
+#define wxBEGIN_FLAGS( e ) EMPTY_MACROVALUE
+#define wxFLAGS_MEMBER( v ) EMPTY_MACROVALUE
+#define wxEND_FLAGS( e ) EMPTY_MACROVALUE
+
+#define wxHANDLER(name,eventClassType) EMPTY_MACROVALUE
+#define wxBEGIN_HANDLERS_TABLE(theClass) EMPTY_MACROVALUE
+#define wxEND_HANDLERS_TABLE() EMPTY_MACROVALUE
+
+#define wxIMPLEMENT_DYNAMIC_CLASS_XTI(n, b, unit) EMPTY_MACROVALUE
+
+#define wxIMPLEMENT_DYNAMIC_CLASS_XTI( name, basename, unit ) EMPTY_MACROVALUE
+#define wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK( name, basename, unit, callback ) \
+        EMPTY_MACROVALUE
+
+#define wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI( name, basename, unit ) EMPTY_MACROVALUE
+
+#define wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY_AND_STREAMERS_XTI( name, basename,  \
+                                                             unit, toString,    \
+                                                             fromString ) EMPTY_MACROVALUE
+#define wxIMPLEMENT_DYNAMIC_CLASS_NO_WXOBJECT_NO_BASE_XTI( name, unit ) EMPTY_MACROVALUE
+#define wxIMPLEMENT_DYNAMIC_CLASS_NO_WXOBJECT_XTI( name, basename, unit ) EMPTY_MACROVALUE
+
+#define wxIMPLEMENT_DYNAMIC_CLASS2_XTI( name, basename, basename2, unit) EMPTY_MACROVALUE
+
+#define wxCONSTRUCTOR_0(klass) \
+    EMPTY_MACROVALUE
+#define wxCONSTRUCTOR_DUMMY(klass) \
+    EMPTY_MACROVALUE
+#define wxDIRECT_CONSTRUCTOR_0(klass) \
+    EMPTY_MACROVALUE
+#define wxCONSTRUCTOR_1(klass,t0,v0) \
+    EMPTY_MACROVALUE
+#define wxDIRECT_CONSTRUCTOR_1(klass,t0,v0) \
+    EMPTY_MACROVALUE
+#define wxCONSTRUCTOR_2(klass,t0,v0,t1,v1) \
+    EMPTY_MACROVALUE
+#define wxDIRECT_CONSTRUCTOR_2(klass,t0,v0,t1,v1) \
+    EMPTY_MACROVALUE
+#define wxCONSTRUCTOR_3(klass,t0,v0,t1,v1,t2,v2) \
+    EMPTY_MACROVALUE
+#define wxDIRECT_CONSTRUCTOR_3(klass,t0,v0,t1,v1,t2,v2) \
+    EMPTY_MACROVALUE
+#define wxCONSTRUCTOR_4(klass,t0,v0,t1,v1,t2,v2,t3,v3) \
+    EMPTY_MACROVALUE
+#define wxDIRECT_CONSTRUCTOR_4(klass,t0,v0,t1,v1,t2,v2,t3,v3) \
+    EMPTY_MACROVALUE
+#define wxCONSTRUCTOR_5(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4) \
+    EMPTY_MACROVALUE
+#define wxDIRECT_CONSTRUCTOR_5(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4) \
+    EMPTY_MACROVALUE
+#define wxCONSTRUCTOR_6(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5) \
+    EMPTY_MACROVALUE
+#define wxDIRECT_CONSTRUCTOR_6(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5) \
+    EMPTY_MACROVALUE
+#define wxCONSTRUCTOR_7(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6) \
+    EMPTY_MACROVALUE
+#define wxDIRECT_CONSTRUCTOR_7(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6) \
+    EMPTY_MACROVALUE
+#define wxCONSTRUCTOR_8(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6,t7,v7) \
+    EMPTY_MACROVALUE
+#define wxDIRECT_CONSTRUCTOR_8(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6,t7,v7) \
+    EMPTY_MACROVALUE
+
+#define wxSETTER( property, Klass, valueType, setterMethod ) EMPTY_MACROVALUE
+#define wxGETTER( property, Klass, valueType, gettermethod ) EMPTY_MACROVALUE
+#define wxADDER( property, Klass, valueType, addermethod ) EMPTY_MACROVALUE
+#define wxCOLLECTION_GETTER( property, Klass, valueType, gettermethod ) EMPTY_MACROVALUE
+
+#define wxBEGIN_PROPERTIES_TABLE(theClass) EMPTY_MACROVALUE
+#define wxEND_PROPERTIES_TABLE() EMPTY_MACROVALUE
+#define wxHIDE_PROPERTY( pname ) EMPTY_MACROVALUE
+
+#define wxPROPERTY( pname, type, setter, getter, defaultValue, flags, help, group) \
+    EMPTY_MACROVALUE
+
+#define wxPROPERTY_FLAGS( pname, flags, type, setter, getter,defaultValue,    \
+                          pflags, help, group) EMPTY_MACROVALUE
+
+#define wxREADONLY_PROPERTY( pname, type, getter,defaultValue, flags, help, group) \
+    wxGETTER( pname, class_t, type, getter ) EMPTY_MACROVALUE
+
+#define wxREADONLY_PROPERTY_FLAGS( pname, flags, type, getter,defaultValue,    \
+                                   pflags, help, group)  EMPTY_MACROVALUE
+
+#define wxPROPERTY_COLLECTION( pname, colltype, addelemtype, adder, getter,    \
+                               flags, help, group )  EMPTY_MACROVALUE
+
+#define wxREADONLY_PROPERTY_COLLECTION( pname, colltype, addelemtype, getter,   \
+                                        flags, help, group) EMPTY_MACROVALUE
+#define wxEVENT_PROPERTY( name, eventType, eventClass ) EMPTY_MACROVALUE
+
+#define wxEVENT_RANGE_PROPERTY( name, eventType, lastEventType, eventClass ) EMPTY_MACROVALUE
+
+#define wxIMPLEMENT_PROPERTY(name, type) EMPTY_MACROVALUE
 
 #endif // !wxUSE_EXTENDED_RTTI
 #endif // _WX_RTTIH__

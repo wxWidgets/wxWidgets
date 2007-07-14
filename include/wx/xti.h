@@ -33,6 +33,9 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/defs.h"
+
+#if wxUSE_EXTENDED_RTTI
+
 #include "wx/memory.h"
 #include "wx/flags.h"
 #include "wx/string.h"
@@ -277,7 +280,7 @@ public:
         return false;
     }
 
-    DECLARE_CLASS_INFO_ITERATORS()
+    wxDECLARE_CLASS_INFO_ITERATORS()
 
     // if there is a callback registered with that class it will be called
     // before this object will be written to disk, it can veto streaming out
@@ -491,14 +494,6 @@ private:
 #define wxDECLARE_ABSTRACT_CLASS(name)    _DECLARE_DYNAMIC_CLASS(name)
 #define wxDECLARE_CLASS(name)             wxDECLARE_DYNAMIC_CLASS(name)
 
-#if WXWIN_COMPATIBILITY_2_8
-    #define DECLARE_DYNAMIC_CLASS(name)             wxDECLARE_DYNAMIC_CLASS(name)
-    #define DECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)   wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)
-    #define DECLARE_DYNAMIC_CLASS_NO_COPY(name)     wxDECLARE_DYNAMIC_CLASS_NO_COPY(name)
-    #define DECLARE_ABSTRACT_CLASS(name)            wxDECLARE_ABSTRACT_CLASS(name)
-    #define DECLARE_CLASS(name)                     wxDECLARE_CLASS(name)
-#endif
-
 
 // ----------------------------------------------------------------------------
 // IMPLEMENT class macros for concrete classes
@@ -633,11 +628,6 @@ private:
     _IMPLEMENT_DYNAMIC_CLASS2( name, basename, basename2, unit, NULL)    \
     _TYPEINFO_CLASSES(name, NULL, NULL)
 
-#if WXWIN_COMPATIBILITY_2_8
-    #define IMPLEMENT_DYNAMIC_CLASS_WITH_COPY    wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY
-    #define IMPLEMENT_DYNAMIC_CLASS              wxIMPLEMENT_DYNAMIC_CLASS
-    #define IMPLEMENT_DYNAMIC_CLASS2             wxIMPLEMENT_DYNAMIC_CLASS2
-#endif
 
 
 // ----------------------------------------------------------------------------
@@ -663,30 +653,24 @@ private:
         wxObjectToVariantConverter##name);                                         \
     _TYPEINFO_CLASSES(name, NULL, NULL)
 
-#define wxIMPLEMENT_ABSTRACT_CLASS( name, basename )                              \
+#define wxIMPLEMENT_ABSTRACT_CLASS( name, basename )                            \
     _IMPLEMENT_ABSTRACT_CLASS( name, basename )                                 \
     wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL; }  \
     wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL; }
 
 // Multiple inheritance with two base classes
 
-#define wxIMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2)                   \
+#define wxIMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2)                 \
     wxClassInfo name::ms_classInfo(wxT(#name), wxT(#basename1),                 \
                                    wxT(#basename2), (int) sizeof(name),         \
                                    (wxObjectConstructorFn) 0);
 
-#define wxIMPLEMENT_CLASS wxIMPLEMENT_ABSTRACT_CLASS
-#define wxIMPLEMENT_CLASS2 wxIMPLEMENT_ABSTRACT_CLASS2
+#define wxIMPLEMENT_CLASS( n, b )          wxIMPLEMENT_ABSTRACT_CLASS( n, b )
+#define wxIMPLEMENT_CLASS2( n, b1, b2 )    wxIMPLEMENT_ABSTRACT_CLASS2( n, b1, b2 )
 
 #define wxBEGIN_EVENT_TABLE( a, b ) BEGIN_EVENT_TABLE( a, b )
 #define wxEND_EVENT_TABLE() END_EVENT_TABLE()
 
-#if WXWIN_COMPATIBILITY_2_8
-    #define IMPLEMENT_ABSTRACT_CLASS    wxIMPLEMENT_ABSTRACT_CLASS
-    #define IMPLEMENT_ABSTRACT_CLASS2   wxIMPLEMENT_ABSTRACT_CLASS2
-    #define IMPLEMENT_CLASS             wxIMPLEMENT_CLASS
-    #define IMPLEMENT_CLASS2            wxIMPLEMENT_CLASS2
-#endif
 
 
 // --------------------------------------------------------------------------
@@ -713,4 +697,5 @@ template<typename collection_t> void wxArrayCollectionToVariantArray(
     }
 }
 
+#endif  // wxUSE_EXTENDED_RTTI
 #endif // _WX_XTIH__
