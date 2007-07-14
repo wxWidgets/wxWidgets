@@ -92,6 +92,14 @@ wxEpollDispatcher::wxEpollDispatcher(int epollDescriptor)
     m_epollDescriptor = epollDescriptor;
 }
 
+wxEpollDispatcher::~wxEpollDispatcher()
+{
+    if ( close(m_epollDescriptor) != 0 )
+    {
+        wxLogSysError(_("Error closing epoll descriptor"));
+    }
+}
+
 bool wxEpollDispatcher::RegisterFD(int fd, wxFDIOHandler* handler, int flags)
 {
     epoll_event ev;
