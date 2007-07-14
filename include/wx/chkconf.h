@@ -10,6 +10,8 @@
  */
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
+#ifndef _WX_CHKCONF_H_
+#define _WX_CHKCONF_H_
 
 /*
    Platform-specific checking.
@@ -1854,3 +1856,5 @@
 #endif /* wxUSE_VARIANT */
 
 #endif /* wxUSE_GUI */
+
+#endif /* _WX_CHKCONF_H_ */
