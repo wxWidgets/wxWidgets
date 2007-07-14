@@ -19,8 +19,6 @@
     #include "wx/dcclient.h"
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
-
 /*
  * wxStaticBitmap
  */

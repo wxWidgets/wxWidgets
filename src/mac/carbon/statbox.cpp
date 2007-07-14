@@ -16,9 +16,6 @@
 #include "wx/statbox.h"
 #include "wx/mac/uma.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
-
-
 bool wxStaticBox::Create( wxWindow *parent,
     wxWindowID id,
     const wxString& label,
@@ -32,7 +29,7 @@ bool wxStaticBox::Create( wxWindow *parent,
     if ( !wxControl::Create( parent, id, pos, size, style, wxDefaultValidator, name ) )
         return false;
 
-    m_label = label;
+    m_labelOrig = m_label = label;
 
     Rect bounds = wxMacGetBoundsForControl( this, pos, size );
 

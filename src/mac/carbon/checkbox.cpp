@@ -17,7 +17,6 @@
 #include "wx/mac/uma.h"
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapCheckBox, wxCheckBox)
 
 
@@ -36,7 +35,7 @@ bool wxCheckBox::Create(wxWindow *parent,
     if ( !wxCheckBoxBase::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
-    m_label = label ;
+    m_labelOrig = m_label = label ;
 
     SInt32 maxValue = 1 /* kControlCheckboxCheckedValue */;
     if (style & wxCHK_3STATE)

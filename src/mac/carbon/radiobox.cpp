@@ -22,9 +22,6 @@
 
 #include "wx/mac/uma.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
-
-
 BEGIN_EVENT_TABLE(wxRadioBox, wxControl)
     EVT_RADIOBUTTON( wxID_ANY , wxRadioBox::OnRadioButton )
 END_EVENT_TABLE()
@@ -107,7 +104,7 @@ bool wxRadioBox::Create( wxWindow *parent,
 
     SetMajorDim( majorDim == 0 ? n : majorDim, style );
 
-    m_label = label;
+    m_labelOrig = m_label = label;
 
     Rect bounds = wxMacGetBoundsForControl( this, pos, size );
     if ( bounds.right <= bounds.left )

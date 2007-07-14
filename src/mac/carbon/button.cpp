@@ -40,7 +40,7 @@ bool wxButton::Create(wxWindow *parent,
     if ( !wxButtonBase::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
-    m_label = label ;
+    m_labelOrig = m_label = label ;
 
     OSStatus err;
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
