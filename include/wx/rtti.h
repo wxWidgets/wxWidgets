@@ -220,15 +220,17 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
 #define wxENUM_MEMBER( v ) EMPTY_MACROVALUE
 #define wxEND_ENUM( e ) EMPTY_MACROVALUE
 
+#define wxIMPLEMENT_SET_STREAMING(SetName,e) EMPTY_MACROVALUE
+
 #define wxBEGIN_FLAGS( e ) EMPTY_MACROVALUE
 #define wxFLAGS_MEMBER( v ) EMPTY_MACROVALUE
 #define wxEND_FLAGS( e ) EMPTY_MACROVALUE
 
+#define wxCOLLECTION_TYPE_INFO( element, collection ) EMPTY_MACROVALUE
+
 #define wxHANDLER(name,eventClassType) EMPTY_MACROVALUE
 #define wxBEGIN_HANDLERS_TABLE(theClass) EMPTY_MACROVALUE
 #define wxEND_HANDLERS_TABLE() EMPTY_MACROVALUE
-
-#define wxIMPLEMENT_DYNAMIC_CLASS_XTI(n, b, unit) EMPTY_MACROVALUE
 
 #define wxIMPLEMENT_DYNAMIC_CLASS_XTI( name, basename, unit ) EMPTY_MACROVALUE
 #define wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK( name, basename, unit, callback ) \
