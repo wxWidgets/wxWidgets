@@ -318,7 +318,10 @@ void wxFrame::GtkOnSize()
         // m_mainWidget holds the menubar, the toolbar and the client
         // area, which is represented by m_wxwindow.
 
+#if wxUSE_MENUS_NATIVE
         int menubarHeight = 0;
+#endif
+
 #if wxUSE_MENUS_NATIVE
         if (HasVisibleMenubar())
         {
@@ -345,7 +348,11 @@ void wxFrame::GtkOnSize()
             (m_frameToolBar->m_widget->parent == m_mainWidget))
         {
             int xx = m_miniEdge;
-            int yy = m_miniEdge + m_miniTitle + menubarHeight;
+            int yy = m_miniEdge + m_miniTitle
+#if wxUSE_MENUS_NATIVE
+                        + menubarHeight
+#endif
+                        ;
 
             m_frameToolBar->m_x = xx;
             m_frameToolBar->m_y = yy;
