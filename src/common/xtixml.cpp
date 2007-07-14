@@ -252,6 +252,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
         // No class name.  Eek. FIXME: error handling
         return wxInvalidObjectID;
     }
+
     classInfo = wxClassInfo::FindClass(className);
     if ( classInfo == NULL )
     {
@@ -271,6 +272,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
         return wxInvalidObjectID;
     }
     objectID = atoi( ObjectIdString.ToAscii() );
+
     // is this object already has been streamed in, return it here
     if ( HasObjectClassInfo( objectID ) )
     {
@@ -286,7 +288,8 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
     wxXmlProperty *xp = node->GetProperties();
     while ( xp )
     {
-        if ( xp->GetName() != wxString(wxT("class")) && xp->GetName() != wxString(wxT("id")) )
+        if ( xp->GetName() != wxString(wxT("class")) && 
+             xp->GetName() != wxString(wxT("id")) )
         {
             metadata.Add( new wxxVariant( xp->GetValue(), xp->GetName() ) );
         }
