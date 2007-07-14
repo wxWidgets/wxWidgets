@@ -1626,7 +1626,7 @@ bool wxCreateDIB(long xSize, long ySize, long bitsPerPixel,
    // this value must be 1, 4, 8 or 24 so PixelDepth can only be
    lpDIBheader->bmiHeader.biBitCount = (WORD)(bitsPerPixel);
    lpDIBheader->bmiHeader.biCompression = BI_RGB;
-   lpDIBheader->bmiHeader.biSizeImage = (xSize * abs(ySize) * bitsPerPixel) >> 3;
+   lpDIBheader->bmiHeader.biSizeImage = (xSize * abs((int)ySize) * bitsPerPixel) >> 3;
    lpDIBheader->bmiHeader.biClrUsed = 256;
 
 
