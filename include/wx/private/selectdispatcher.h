@@ -76,14 +76,8 @@ private:
 class WXDLLIMPEXP_BASE wxSelectDispatcher : public wxMappedFDIODispatcher
 {
 public:
-    // returns the unique instance of this class, the pointer shouldn't be
-    // deleted and is normally never NULL
-    static wxSelectDispatcher *Get();
-
-    // if we have any registered handlers, check for any pending events to them
-    // and dispatch them -- this is used from wxX11 and wxDFB event loops
-    // implementation
-    static void DispatchPending();
+    // creates an instance of this class, the caller takes ownership of it
+    static wxSelectDispatcher *Create();
 
     // implement pure virtual methods of the base class
     virtual bool RegisterFD(int fd, wxFDIOHandler *handler, int flags = wxFDIO_ALL);
@@ -92,6 +86,7 @@ public:
     virtual void Dispatch(int timeout = TIMEOUT_INFINITE);
 
 protected:
+    // ctor is not public, use Create()
     wxSelectDispatcher();
 
 private:

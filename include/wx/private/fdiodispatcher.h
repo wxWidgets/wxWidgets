@@ -45,6 +45,18 @@ class WXDLLIMPEXP_BASE wxFDIODispatcher
 public:
     enum { TIMEOUT_INFINITE = -1 };
 
+    // return the global dispatcher to be used for IO events, can be NULL only
+    // if wxSelectDispatcher wasn't compiled into the library at all as
+    // creating it never fails
+    //
+    // don't delete the returned pointer
+    static wxFDIODispatcher *Get();
+
+    // if we have any registered handlers, check for any pending events to them
+    // and dispatch them -- this is used from wxX11 and wxDFB event loops
+    // implementation
+    static void DispatchPending();
+
     // register handler for the given descriptor with the dispatcher, return
     // true on success or false on error
     virtual bool RegisterFD(int fd, wxFDIOHandler *handler, int flags) = 0;

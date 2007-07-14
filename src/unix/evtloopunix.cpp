@@ -125,15 +125,9 @@ wxConsoleEventLoop::wxConsoleEventLoop()
         return;
     }
 
-#ifdef wxUSE_EPOLL_DISPATCHER
-    m_dispatcher = wxEpollDispatcher::Get();
+    m_dispatcher = wxFDIODispatcher::Get();
     if ( !m_dispatcher )
-#endif // wxUSE_EPOLL_DISPATCHER
-#if wxUSE_SELECT_DISPATCHER
-        m_dispatcher = wxSelectDispatcher::Get();
-#endif // wxUSE_WCHAR_T
-
-    wxCHECK_RET( m_dispatcher, _T("failed to create IO dispatcher") );
+        return;
 
     m_dispatcher->RegisterFD
                   (

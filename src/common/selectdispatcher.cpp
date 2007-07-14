@@ -22,7 +22,6 @@
 #if wxUSE_SELECT_DISPATCHER
 
 #include "wx/private/selectdispatcher.h"
-#include "wx/module.h"
 #include "wx/unix/private.h"
 
 #ifndef WX_PRECOMP
@@ -132,26 +131,10 @@ void wxSelectSets::Handle(int fd, wxFDIOHandler& handler) const
 // wxSelectDispatcher
 // ----------------------------------------------------------------------------
 
-static wxSelectDispatcher *gs_selectDispatcher = NULL;
-
 /* static */
-wxSelectDispatcher *wxSelectDispatcher::Get()
+wxSelectDispatcher *wxSelectDispatcher::Create()
 {
-    if ( !gs_selectDispatcher )
-    {
-        // the dispatcher should be only created from one thread so it should
-        // be ok to use a global without any protection here
-        gs_selectDispatcher = new wxSelectDispatcher;
-    }
-
-    return gs_selectDispatcher;
-}
-
-/* static */
-void wxSelectDispatcher::DispatchPending()
-{
-    if ( gs_selectDispatcher )
-        gs_selectDispatcher->Dispatch(0);
+    return new wxSelectDispatcher;
 }
 
 wxSelectDispatcher::wxSelectDispatcher()
@@ -263,21 +246,5 @@ void wxSelectDispatcher::Dispatch(int timeout)
             ProcessSets(sets);
     }
 }
-
-// ----------------------------------------------------------------------------
-// wxSelectDispatcherModule
-// ----------------------------------------------------------------------------
-
-class wxSelectDispatcherModule : public wxModule
-{
-public:
-    virtual bool OnInit() { return true; }
-    virtual void OnExit() { wxDELETE(gs_selectDispatcher); }
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxSelectDispatcherModule)
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxSelectDispatcherModule, wxModule)
 
 #endif // wxUSE_SELECT_DISPATCHER

@@ -20,6 +20,7 @@
 
 #ifndef __GSOCKET_STANDALONE__
 #include "wx/defs.h"
+#include "wx/private/gsocketiohandler.h"
 #endif
 
 #if defined(__VISAGECPP__)
@@ -520,6 +521,8 @@ GSocket::GSocket()
   int i;
 
   m_fd                  = INVALID_SOCKET;
+  m_handler             = NULL;
+
   for (i=0;i<GSOCK_MAX_EVENT;i++)
   {
     m_cbacks[i]         = NULL;
@@ -564,6 +567,8 @@ GSocket::~GSocket()
 
   /* Per-socket GUI-specific cleanup */
   gs_gui_functions->Destroy_Socket(this);
+
+  delete m_handler;
 
   /* Destroy private addresses */
   if (m_local)

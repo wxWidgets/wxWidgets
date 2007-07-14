@@ -23,7 +23,6 @@
 
 #include "wx/unix/private/epolldispatcher.h"
 #include "wx/unix/private.h"
-#include "wx/module.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -34,8 +33,6 @@
 #include <errno.h>
 
 #define wxEpollDispatcher_Trace wxT("epolldispatcher")
-
-static wxEpollDispatcher *gs_epollDispatcher = NULL;
 
 // ============================================================================
 // implementation
@@ -75,13 +72,24 @@ static uint32_t GetEpollMask(int flags, int fd)
 // wxEpollDispatcher
 // ----------------------------------------------------------------------------
 
-wxEpollDispatcher::wxEpollDispatcher()
+/* static */
+wxEpollDispatcher *wxEpollDispatcher::Create()
 {
-    m_epollDescriptor = epoll_create(1024);
-    if ( m_epollDescriptor == -1 )
+    int epollDescriptor = epoll_create(1024);
+    if ( epollDescriptor == -1 )
     {
         wxLogSysError(_("Failed to create epoll descriptor"));
+        return NULL;
     }
+
+    return new wxEpollDispatcher(epollDescriptor);
+}
+
+wxEpollDispatcher::wxEpollDispatcher(int epollDescriptor)
+{
+    wxASSERT_MSG( epollDescriptor != -1, _T("invalid descriptor") );
+
+    m_epollDescriptor = epollDescriptor;
 }
 
 bool wxEpollDispatcher::RegisterFD(int fd, wxFDIOHandler* handler, int flags)
@@ -174,38 +182,5 @@ void wxEpollDispatcher::Dispatch(int timeout)
             handler->OnExceptionWaiting();
     }
 }
-
-/* static */
-wxEpollDispatcher *wxEpollDispatcher::Get()
-{
-    if ( !gs_epollDispatcher )
-    {
-        gs_epollDispatcher = new wxEpollDispatcher;
-        if ( !gs_epollDispatcher->IsOk() )
-        {
-            delete gs_epollDispatcher;
-            gs_epollDispatcher = NULL;
-        }
-    }
-
-    return gs_epollDispatcher;
-}
-
-// ----------------------------------------------------------------------------
-// wxEpollDispatcherModule
-// ----------------------------------------------------------------------------
-
-class wxEpollDispatcherModule : public wxModule
-{
-public:
-    wxEpollDispatcherModule() { }
-
-    virtual bool OnInit() { return true; }
-    virtual void OnExit() { wxDELETE(gs_epollDispatcher); }
-
-    DECLARE_DYNAMIC_CLASS(wxEpollDispatcherModule)
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxEpollDispatcherModule, wxModule)
 
 #endif // wxUSE_EPOLL_DISPATCHER

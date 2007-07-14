@@ -24,13 +24,55 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/module.h"
 #endif //WX_PRECOMP
 
 #include "wx/private/fdiodispatcher.h"
 
+#include "wx/private/selectdispatcher.h"
+#ifdef __UNIX__
+    #include "wx/unix/private/epolldispatcher.h"
+#endif
+
+wxFDIODispatcher *gs_dispatcher = NULL;
+
 // ============================================================================
 // implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxFDIODispatcher
+// ----------------------------------------------------------------------------
+
+/* static */
+wxFDIODispatcher *wxFDIODispatcher::Get()
+{
+    if ( !gs_dispatcher )
+    {
+#ifdef wxUSE_EPOLL_DISPATCHER
+        gs_dispatcher = wxEpollDispatcher::Create();
+        if ( !gs_dispatcher )
+#endif // wxUSE_EPOLL_DISPATCHER
+#if wxUSE_SELECT_DISPATCHER
+            gs_dispatcher = wxSelectDispatcher::Create();
+#endif // wxUSE_WCHAR_T
+    }
+
+    wxASSERT_MSG( gs_dispatcher, _T("failed to create any IO dispatchers") );
+
+    return gs_dispatcher;
+}
+
+/* static */
+void wxFDIODispatcher::DispatchPending()
+{
+    if ( gs_dispatcher )
+        gs_dispatcher->Dispatch(0);
+}
+
+// ----------------------------------------------------------------------------
+// wxMappedFDIODispatcher
+// ----------------------------------------------------------------------------
 
 wxFDIOHandler *wxMappedFDIODispatcher::FindHandler(int fd) const
 {
@@ -89,3 +131,18 @@ bool wxMappedFDIODispatcher::UnregisterFD(int fd)
     return true;
 }
 
+// ----------------------------------------------------------------------------
+// wxSelectDispatcherModule
+// ----------------------------------------------------------------------------
+
+class wxFDIODispatcherModule : public wxModule
+{
+public:
+    virtual bool OnInit() { return true; }
+    virtual void OnExit() { wxDELETE(gs_dispatcher); }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxFDIODispatcherModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxFDIODispatcherModule, wxModule)
