@@ -65,8 +65,8 @@ private:
         while (node)
         {
             if (node->GetName() == _T("object")
-                && node->GetPropVal(_T("class"),&classValue)
-                && node->GetPropVal(_T("name"),&nameValue))
+                && node->GetAttribute(_T("class"),&classValue)
+                && node->GetAttribute(_T("name"),&nameValue))
             {
                 m_wdata.Add(XRCWidgetData(nameValue,classValue));
             }
@@ -409,8 +409,8 @@ wxArrayString XmlResApp::PrepareTempFiles()
                 wxString classValue,nameValue;
                 while(node){
                     if(node->GetName() == _T("object")
-                     && node->GetPropVal(_T("class"),&classValue)
-                     && node->GetPropVal(_T("name"),&nameValue)){
+                     && node->GetAttribute(_T("class"),&classValue)
+                     && node->GetAttribute(_T("name"),&nameValue)){
 
                       aXRCWndClassData.Add(
                         XRCWndClassData(nameValue,classValue,node)
@@ -444,7 +444,7 @@ static bool NodeContainsFilename(wxXmlNode *node)
    // wxBitmapButton:
    wxXmlNode *parent = node->GetParent();
    if (parent != NULL &&
-       parent->GetPropVal(_T("class"), _T("")) == _T("wxBitmapButton") &&
+       parent->GetAttribute(_T("class"), _T("")) == _T("wxBitmapButton") &&
        (name == _T("focus") ||
         name == _T("disabled") ||
         name == _T("selected")))
@@ -453,7 +453,7 @@ static bool NodeContainsFilename(wxXmlNode *node)
    // wxBitmap or wxIcon toplevel resources:
    if ( name == _T("object") )
    {
-       wxString klass = node->GetPropVal(_T("class"), wxEmptyString);
+       wxString klass = node->GetAttribute(_T("class"), wxEmptyString);
        if (klass == _T("wxBitmap") ||
                klass == _T("wxIcon") ||
                 klass == _T("data") )
@@ -463,7 +463,7 @@ static bool NodeContainsFilename(wxXmlNode *node)
    // URLs in wxHtmlWindow:
    if ( name == _T("url") &&
         parent != NULL &&
-        parent->GetPropVal(_T("class"), _T("")) == _T("wxHtmlWindow") )
+        parent->GetAttribute(_T("class"), _T("")) == _T("wxHtmlWindow") )
    {
        // FIXME: this is wrong for e.g. http:// URLs
        return true;
@@ -917,7 +917,7 @@ wxArrayString XmlResApp::FindStrings(wxXmlNode *node)
             // ...and known to contain translatable string
         {
             if (!flagGettext ||
-                node->GetPropVal(_T("translate"), _T("1")) != _T("0"))
+                node->GetAttribute(_T("translate"), _T("1")) != _T("0"))
             {
                 arr.Add(ConvertText(n->GetContent()));
             }

@@ -29,7 +29,7 @@
 #endif
 
 class WXDLLIMPEXP_FWD_XML wxXmlNode;
-class WXDLLIMPEXP_FWD_XML wxXmlProperty;
+class WXDLLIMPEXP_FWD_XML wxXmlAttribute;
 class WXDLLIMPEXP_FWD_XML wxXmlDocument;
 class WXDLLIMPEXP_FWD_XML wxXmlIOHandler;
 class WXDLLIMPEXP_FWD_BASE wxInputStream;
@@ -60,33 +60,38 @@ enum wxXmlNodeType
 // Example: in <img src="hello.gif" id="3"/> "src" is property with value
 //          "hello.gif" and "id" is prop. with value "3".
 
-class WXDLLIMPEXP_XML wxXmlProperty
+class WXDLLIMPEXP_XML wxXmlAttribute
 {
 public:
-    wxXmlProperty() : m_next(NULL) {}
-    wxXmlProperty(const wxString& name, const wxString& value,
-                  wxXmlProperty *next = NULL)
+    wxXmlAttribute() : m_next(NULL) {}
+    wxXmlAttribute(const wxString& name, const wxString& value,
+                  wxXmlAttribute *next = NULL)
             : m_name(name), m_value(value), m_next(next) {}
-    virtual ~wxXmlProperty() {}
+    virtual ~wxXmlAttribute() {}
 
     wxString GetName() const { return m_name; }
     wxString GetValue() const { return m_value; }
-    wxXmlProperty *GetNext() const { return m_next; }
+    wxXmlAttribute *GetNext() const { return m_next; }
 
     void SetName(const wxString& name) { m_name = name; }
     void SetValue(const wxString& value) { m_value = value; }
-    void SetNext(wxXmlProperty *next) { m_next = next; }
+    void SetNext(wxXmlAttribute *next) { m_next = next; }
 
 private:
     wxString m_name;
     wxString m_value;
-    wxXmlProperty *m_next;
+    wxXmlAttribute *m_next;
 };
 
+#if WXWIN_COMPATIBILITY_2_8
+    // NB: #define is used instead of typedef so that forward declarations
+    //     continue to work
+    #define wxXmlProperty wxXmlAttribute
+#endif
 
 
-// Represents node in XML document. Node has name and may have content
-// and properties. Most common node types are wxXML_TEXT_NODE (name and props
+// Represents node in XML document. Node has name and may have content and
+// attributes. Most common node types are wxXML_TEXT_NODE (name and attributes
 // are irrelevant) and wxXML_ELEMENT_NODE (e.g. in <title>hi</title> there is
 // element with name="title", irrelevant content and one child (wxXML_TEXT_NODE
 // with content="hi").
@@ -97,17 +102,17 @@ private:
 class WXDLLIMPEXP_XML wxXmlNode
 {
 public:
-    wxXmlNode() : m_properties(NULL), m_parent(NULL),
-                  m_children(NULL), m_next(NULL) {}
+    wxXmlNode()
+        : m_attrs(NULL), m_parent(NULL), m_children(NULL), m_next(NULL) {}
     wxXmlNode(wxXmlNode *parent, wxXmlNodeType type,
               const wxString& name, const wxString& content = wxEmptyString,
-              wxXmlProperty *props = NULL, wxXmlNode *next = NULL);
+              wxXmlAttribute *attrs = NULL, wxXmlNode *next = NULL);
     virtual ~wxXmlNode();
 
     // copy ctor & operator=. Note that this does NOT copy syblings
     // and parent pointer, i.e. m_parent and m_next will be NULL
     // after using copy ctor and are never unmodified by operator=.
-    // On the other hand, it DOES copy children and properties.
+    // On the other hand, it DOES copy children and attributes.
     wxXmlNode(const wxXmlNode& node);
     wxXmlNode& operator=(const wxXmlNode& node);
 
@@ -117,8 +122,10 @@ public:
     virtual void AddChild(wxXmlNode *child);
     virtual bool InsertChild(wxXmlNode *child, wxXmlNode *before_node);
     virtual bool RemoveChild(wxXmlNode *child);
-    virtual void AddProperty(const wxString& name, const wxString& value);
-    virtual bool DeleteProperty(const wxString& name);
+    virtual void AddAttribute(const wxString& name, const wxString& value)
+        { AddProperty(name, value); }
+    virtual bool DeleteAttribute(const wxString& name)
+        { return DeleteProperty(name); }
 
     // access methods:
     wxXmlNodeType GetType() const { return m_type; }
@@ -139,11 +146,11 @@ public:
     wxXmlNode *GetNext() const { return m_next; }
     wxXmlNode *GetChildren() const { return m_children; }
 
-    wxXmlProperty *GetProperties() const { return m_properties; }
-    bool GetPropVal(const wxString& propName, wxString *value) const;
-    wxString GetPropVal(const wxString& propName,
-                        const wxString& defaultVal) const;
-    bool HasProp(const wxString& propName) const;
+    wxXmlAttribute *GetAttributes() const { return m_attrs; }
+    bool GetAttribute(const wxString& attrName, wxString *value) const;
+    wxString GetAttribute(const wxString& attrName,
+                         const wxString& defaultVal) const;
+    bool HasAttribute(const wxString& attrName) const;
 
     void SetType(wxXmlNodeType type) { m_type = type; }
     void SetName(const wxString& name) { m_name = name; }
@@ -153,18 +160,66 @@ public:
     void SetNext(wxXmlNode *next) { m_next = next; }
     void SetChildren(wxXmlNode *child) { m_children = child; }
 
-    void SetProperties(wxXmlProperty *prop) { m_properties = prop; }
-    virtual void AddProperty(wxXmlProperty *prop);
+    void SetAttributes(wxXmlAttribute *attr) { m_attrs = attr; }
+    virtual void AddAttribute(wxXmlAttribute *attr)
+        { AddProperty(attr); }
+
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED( inline wxXmlAttribute *GetProperties() const );
+    wxDEPRECATED( inline bool GetPropVal(const wxString& propName,
+                                         wxString *value) const );
+    wxDEPRECATED( inline wxString GetPropVal(const wxString& propName,
+                                             const wxString& defaultVal) const );
+    wxDEPRECATED( inline bool HasProp(const wxString& propName) const );
+
+    wxDEPRECATED( inline void SetProperties(wxXmlAttribute *prop) );
+#endif // WXWIN_COMPATIBILITY_2_8
+
+    // The following three functions are backward compatibility, but because
+    // they were virtual, we must make it possible to override them. This
+    // is done by calling e.g. AddProperty() from AddAttribute(), so we have
+    // to keep AddProperty() even if 2.8 compatibility is off. To prevent
+    // old code from compiling in that case, we make them private and
+    // non-virtual. (This can be removed when WXWIN_COMPATIBILITY_2_8 is
+    // removed, we'll have just *Attribute versions then.)
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED_BUT_USED_INTERNALLY(
+        virtual void AddProperty(const wxString& name, const wxString& value) );
+    wxDEPRECATED_BUT_USED_INTERNALLY(
+        virtual bool DeleteProperty(const wxString& name) );
+    wxDEPRECATED_BUT_USED_INTERNALLY(
+        virtual void AddProperty(wxXmlAttribute *attr) );
+#else
+private:
+    void AddProperty(const wxString& name, const wxString& value);
+    bool DeleteProperty(const wxString& name);
+    void AddProperty(wxXmlAttribute *attr);
+#endif // WXWIN_COMPATIBILITY_2_8/!WXWIN_COMPATIBILITY_2_8
 
 private:
     wxXmlNodeType m_type;
     wxString m_name;
     wxString m_content;
-    wxXmlProperty *m_properties;
+    wxXmlAttribute *m_attrs;
     wxXmlNode *m_parent, *m_children, *m_next;
 
     void DoCopy(const wxXmlNode& node);
 };
+
+#if WXWIN_COMPATIBILITY_2_8
+inline wxXmlAttribute *wxXmlNode::GetProperties() const
+    { return GetAttributes(); }
+inline bool wxXmlNode::GetPropVal(const wxString& propName,
+                                  wxString *value) const
+    { return GetAttribute(propName, value); }
+inline wxString wxXmlNode::GetPropVal(const wxString& propName,
+                                      const wxString& defaultVal) const
+    { return GetAttribute(propName, defaultVal); }
+inline bool wxXmlNode::HasProp(const wxString& propName) const
+    { return HasAttribute(propName); }
+inline void wxXmlNode::SetProperties(wxXmlAttribute *prop)
+    { SetAttributes(prop); }
+#endif // WXWIN_COMPATIBILITY_2_8
 
 
 

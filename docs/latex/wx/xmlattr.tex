@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Name:        xmlnode.tex
-%% Purpose:     wxXmlProperty documentation
+%% Purpose:     wxXmlAttribute documentation
 %% Author:      Francesco Montorsi
 %% Created:     2006-04-18
 %% RCS-ID:      $Id$
@@ -8,7 +8,7 @@
 %% License:     wxWindows license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{\class{wxXmlProperty}}\label{wxxmlproperty}
+\section{\class{wxXmlAttribute}}\label{wxxmlattribute}
 
 Represents a node property.
 
@@ -30,53 +30,53 @@ No base class
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
-\membersection{wxXmlProperty::wxXmlProperty}\label{wxxmlpropertywxxmlproperty}
+\membersection{wxXmlAttribute::wxXmlAttribute}\label{wxxmlattributewxxmlattribute}
 
-\func{}{wxXmlProperty}{\void}
+\func{}{wxXmlAttribute}{\void}
 
 
-\func{}{wxXmlProperty}{\param{const wxString\& }{name}, \param{const wxString\& }{value}, \param{wxXmlProperty* }{next = NULL}}
+\func{}{wxXmlAttribute}{\param{const wxString\& }{name}, \param{const wxString\& }{value}, \param{wxXmlAttribute* }{next = NULL}}
 
 Creates the property with given {\it name} and {\it value}.
 If {\it next} is not NULL, then sets it as sibling of this property.
 
-\membersection{wxXmlProperty::\destruct{wxXmlProperty}}\label{wxxmlpropertydtor}
+\membersection{wxXmlAttribute::\destruct{wxXmlAttribute}}\label{wxxmlattributedtor}
 
-\func{}{\destruct{wxXmlProperty}}{\void}
+\func{}{\destruct{wxXmlAttribute}}{\void}
 
 The virtual destructor.
 
-\membersection{wxXmlProperty::GetName}\label{wxxmlpropertygetname}
+\membersection{wxXmlAttribute::GetName}\label{wxxmlattributegetname}
 
 \constfunc{wxString}{GetName}{\void}
 
 Returns the name of this property.
 
-\membersection{wxXmlProperty::GetNext}\label{wxxmlpropertygetnext}
+\membersection{wxXmlAttribute::GetNext}\label{wxxmlattributegetnext}
 
-\constfunc{wxXmlProperty*}{GetNext}{\void}
+\constfunc{wxXmlAttribute*}{GetNext}{\void}
 
 Returns the sibling of this property or NULL if there are no siblings.
 
-\membersection{wxXmlProperty::GetValue}\label{wxxmlpropertygetvalue}
+\membersection{wxXmlAttribute::GetValue}\label{wxxmlattributegetvalue}
 
 \constfunc{wxString}{GetValue}{\void}
 
 Returns the value of this property.
 
-\membersection{wxXmlProperty::SetName}\label{wxxmlpropertysetname}
+\membersection{wxXmlAttribute::SetName}\label{wxxmlattributesetname}
 
 \func{void}{SetName}{\param{const wxString\& }{name}}
 
 Sets the name of this property.
 
-\membersection{wxXmlProperty::SetNext}\label{wxxmlpropertysetnext}
+\membersection{wxXmlAttribute::SetNext}\label{wxxmlattributesetnext}
 
-\func{void}{SetNext}{\param{wxXmlProperty* }{next}}
+\func{void}{SetNext}{\param{wxXmlAttribute* }{next}}
 
 Sets the sibling of this property.
 
-\membersection{wxXmlProperty::SetValue}\label{wxxmlpropertysetvalue}
+\membersection{wxXmlAttribute::SetValue}\label{wxxmlattributesetvalue}
 
 \func{void}{SetValue}{\param{const wxString\& }{value}}
 

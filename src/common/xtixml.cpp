@@ -94,7 +94,7 @@ void wxXmlWriter::DoBeginWriteTopLevelEntry( const wxString &name )
 {
     wxXmlNode *pnode;
     pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("entry"));
-    pnode->AddProperty(wxString(wxT("name")), name);
+    pnode->AddAttribute(wxString(wxT("name")), name);
     m_data->m_current->AddChild(pnode) ;
     m_data->Push( pnode ) ;
 }
@@ -108,12 +108,12 @@ void wxXmlWriter::DoBeginWriteObject(const wxObject *WXUNUSED(object), const wxC
 {
     wxXmlNode *pnode;
     pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("object"));
-    pnode->AddProperty(wxT("class"), wxString(classInfo->GetClassName()));
-    pnode->AddProperty(wxT("id"), wxString::Format( wxT("%d") , objectID ) );
+    pnode->AddAttribute(wxT("class"), wxString(classInfo->GetClassName()));
+    pnode->AddAttribute(wxT("id"), wxString::Format( wxT("%d") , objectID ) );
 
     for ( size_t i = 0 ; i < metadata.GetCount() ; ++i )
     {
-        pnode->AddProperty( metadata[i].GetName() , metadata[i].GetAsString() ) ;
+        pnode->AddAttribute( metadata[i].GetName() , metadata[i].GetAsString() ) ;
     }
     m_data->m_current->AddChild(pnode) ;
     m_data->Push( pnode ) ;
@@ -148,7 +148,7 @@ void wxXmlWriter::DoBeginWriteProperty(const wxPropertyInfo *pi )
 {
     wxXmlNode *pnode;
     pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("prop") );
-    pnode->AddProperty(wxT("name"), pi->GetName() );
+    pnode->AddAttribute(wxT("name"), pi->GetName() );
     m_data->m_current->AddChild(pnode) ;
     m_data->Push( pnode ) ;
 }
@@ -165,7 +165,7 @@ void wxXmlWriter::DoWriteRepeatedObject( int objectID )
 {
     wxXmlNode *pnode;
     pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("object"));
-    pnode->AddProperty(wxString(wxT("href")), wxString::Format( wxT("%d") , objectID ) );
+    pnode->AddAttribute(wxString(wxT("href")), wxString::Format( wxT("%d") , objectID ) );
     m_data->m_current->AddChild(pnode) ;
 }
 
@@ -220,7 +220,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
     if (!children)
     {
         // check for a null object or href
-        if (node->GetPropVal(wxT("href") , &ObjectIdString ) )
+        if (node->GetAttribute(wxT("href") , &ObjectIdString ) )
         {
             objectID = atoi( ObjectIdString.ToAscii() ) ;
             if ( HasObjectClassInfo( objectID ) )
@@ -233,12 +233,12 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                 return wxInvalidObjectID ;
             }
         }
-        if ( !node->GetPropVal(wxT("id") , &ObjectIdString ) )
+        if ( !node->GetAttribute(wxT("id") , &ObjectIdString ) )
         {
             return wxNullObjectID;
         }
     }
-    if (!node->GetPropVal(wxT("class"), &className))
+    if (!node->GetAttribute(wxT("class"), &className))
     {
         // No class name.  Eek. FIXME: error handling
         return wxInvalidObjectID;
@@ -255,7 +255,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
         wxLogError(_("objects cannot have XML Text Nodes") ) ;
         return wxInvalidObjectID;
     }
-    if (!node->GetPropVal(wxT("id"), &ObjectIdString))
+    if (!node->GetAttribute(wxT("id"), &ObjectIdString))
     {
         wxLogError(_("Objects must have an id attribute") ) ;
         // No object id.  Eek. FIXME: error handling
@@ -274,7 +274,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
     SetObjectClassInfo( objectID , classInfo ) ;
 
     wxxVariantArray metadata ;
-    wxXmlProperty *xp = node->GetProperties() ;
+    wxXmlAttribute *xp = node->GetAttributes() ;
     while ( xp )
     {
         if ( xp->GetName() != wxString(wxT("class")) && xp->GetName() != wxString(wxT("id")) )
@@ -305,7 +305,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
     while( children )
     {
         wxString name ;
-        children->GetPropVal( wxT("name") , &name ) ;
+        children->GetAttribute( wxT("name") , &name ) ;
         propertyNames.push_back( (const wxChar*)name.c_str() ) ;
         propertyNodes[(const wxChar*)name.c_str()] = children->GetChildren() ;
         children = children->GetNext() ;
@@ -525,7 +525,7 @@ int wxXmlReader::ReadObject( const wxString &name , wxDepersister *callbacks)
     while ( iter )
     {
         wxString entryName ;
-        if ( iter->GetPropVal(wxT("name"), &entryName) )
+        if ( iter->GetAttribute(wxT("name"), &entryName) )
         {
             if ( entryName == name )
                 return ReadComponent( iter->GetChildren() , callbacks ) ;

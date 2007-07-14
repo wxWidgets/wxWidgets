@@ -36,12 +36,12 @@ while (child) {
         ...
 
 
-        // process properties of <tag1>
-        wxString propvalue1 = 
-            child->GetPropVal(wxT("prop1"), 
+        // process attributes of <tag1>
+        wxString attrvalue1 = 
+            child->GetAttribute(wxT("attr1"), 
                               wxT("default-value"));
-        wxString propvalue2 = 
-            child->GetPropVal(wxT("prop2"), 
+        wxString attrvalue2 = 
+            child->GetAttribute(wxT("attr2"), 
                               wxT("default-value"));
 
         ...
@@ -86,7 +86,7 @@ doc.Save(wxT("myfile2.xml"));  // myfile2.xml != myfile.xml
 
 \wxheading{See also}
 
-\helpref{wxXmlNode}{wxxmlnode}, \helpref{wxXmlProperty}{wxxmlproperty}
+\helpref{wxXmlNode}{wxxmlnode}, \helpref{wxXmlAttribute}{wxxmlattribute}
 
 
 \latexignore{\rtfignore{\wxheading{Members}}}
@@ -166,7 +166,7 @@ Returns the root node of the document.
 
 Returns the version of document.
 This is the value in the {\tt <?xml version="1.0"?>} header of the XML document.
-If the version property was not explicitely given in the header, this function
+If the version attribute was not explicitely given in the header, this function
 returns an empty string.
 
 

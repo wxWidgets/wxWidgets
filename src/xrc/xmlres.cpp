@@ -351,7 +351,7 @@ static void ProcessPlatformProperty(wxXmlNode *node)
     while (c)
     {
         isok = false;
-        if (!c->GetPropVal(wxT("platform"), &s))
+        if (!c->GetAttribute(wxT("platform"), &s))
             isok = true;
         else
         {
@@ -481,7 +481,7 @@ bool wxXmlResource::UpdateResources()
             {
                 long version;
                 int v1, v2, v3, v4;
-                wxString verstr = m_data[i].Doc->GetRoot()->GetPropVal(
+                wxString verstr = m_data[i].Doc->GetRoot()->GetAttribute(
                                       wxT("version"), wxT("0.0.0.0"));
                 if (wxSscanf(verstr.c_str(), wxT("%i.%i.%i.%i"),
                     &v1, &v2, &v3, &v4) == 4)
@@ -534,20 +534,20 @@ wxXmlNode *wxXmlResource::DoFindResource(wxXmlNode *parent,
         if ( node->GetType() == wxXML_ELEMENT_NODE &&
                  (node->GetName() == wxT("object") ||
                   node->GetName() == wxT("object_ref")) &&
-             node->GetPropVal(wxT("name"), &dummy) && dummy == name )
+             node->GetAttribute(wxT("name"), &dummy) && dummy == name )
         {
-            wxString cls(node->GetPropVal(wxT("class"), wxEmptyString));
+            wxString cls(node->GetAttribute(wxT("class"), wxEmptyString));
             if (!classname || cls == classname)
                 return node;
-            // object_ref may not have 'class' property:
+            // object_ref may not have 'class' attribute:
             if (cls.empty() && node->GetName() == wxT("object_ref"))
             {
-                wxString refName = node->GetPropVal(wxT("ref"), wxEmptyString);
+                wxString refName = node->GetAttribute(wxT("ref"), wxEmptyString);
                 if (refName.empty())
                     continue;
                 wxXmlNode* refNode = FindResource(refName, wxEmptyString, true);
                 if (refNode &&
-                    refNode->GetPropVal(wxT("class"), wxEmptyString) == classname)
+                    refNode->GetAttribute(wxT("class"), wxEmptyString) == classname)
                 {
                     return node;
                 }
@@ -601,34 +601,35 @@ wxXmlNode *wxXmlResource::FindResource(const wxString& name,
 
 static void MergeNodes(wxXmlNode& dest, wxXmlNode& with)
 {
-    // Merge properties:
-    for (wxXmlProperty *prop = with.GetProperties(); prop; prop = prop->GetNext())
+    // Merge attributes:
+    for ( wxXmlAttribute *attr = with.GetAttributes();
+          attr; attr = attr->GetNext() )
     {
-        wxXmlProperty *dprop;
-        for (dprop = dest.GetProperties(); dprop; dprop = dprop->GetNext())
+        wxXmlAttribute *dattr;
+        for (dattr = dest.GetAttributes(); dattr; dattr = dattr->GetNext())
         {
 
-            if ( dprop->GetName() == prop->GetName() )
+            if ( dattr->GetName() == attr->GetName() )
             {
-                dprop->SetValue(prop->GetValue());
+                dattr->SetValue(attr->GetValue());
                 break;
             }
         }
 
-        if ( !dprop )
-            dest.AddProperty(prop->GetName(), prop->GetValue());
+        if ( !dattr )
+            dest.AddAttribute(attr->GetName(), attr->GetValue());
    }
 
     // Merge child nodes:
     for (wxXmlNode* node = with.GetChildren(); node; node = node->GetNext())
     {
-        wxString name = node->GetPropVal(wxT("name"), wxEmptyString);
+        wxString name = node->GetAttribute(wxT("name"), wxEmptyString);
         wxXmlNode *dnode;
 
         for (dnode = dest.GetChildren(); dnode; dnode = dnode->GetNext() )
         {
             if ( dnode->GetName() == node->GetName() &&
-                 dnode->GetPropVal(wxT("name"), wxEmptyString) == name &&
+                 dnode->GetAttribute(wxT("name"), wxEmptyString) == name &&
                  dnode->GetType() == node->GetType() )
             {
                 MergeNodes(*dnode, *node);
@@ -639,7 +640,7 @@ static void MergeNodes(wxXmlNode& dest, wxXmlNode& with)
         if ( !dnode )
         {
             static const wxChar *AT_END = wxT("end");
-            wxString insert_pos = node->GetPropVal(wxT("insert_at"), AT_END);
+            wxString insert_pos = node->GetAttribute(wxT("insert_at"), AT_END);
             if ( insert_pos == AT_END )
             {
                 dest.AddChild(new wxXmlNode(*node));
@@ -664,7 +665,7 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
     // handling of referenced resource
     if ( node->GetName() == wxT("object_ref") )
     {
-        wxString refName = node->GetPropVal(wxT("ref"), wxEmptyString);
+        wxString refName = node->GetAttribute(wxT("ref"), wxEmptyString);
         wxXmlNode* refNode = FindResource(refName, wxEmptyString, true);
 
         if ( !refNode )
@@ -705,7 +706,7 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
 
     wxLogError(_("No handler found for XML node '%s', class '%s'!"),
                node->GetName().c_str(),
-               node->GetPropVal(wxT("class"), wxEmptyString).c_str());
+               node->GetAttribute(wxT("class"), wxEmptyString).c_str());
     return NULL;
 }
 
@@ -759,10 +760,10 @@ wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent
     wxWindow *myParentAW = m_parentAsWindow;
 
     m_instance = instance;
-    if (!m_instance && node->HasProp(wxT("subclass")) &&
+    if (!m_instance && node->HasAttribute(wxT("subclass")) &&
         !(m_resource->GetFlags() & wxXRC_NO_SUBCLASSING))
     {
-        wxString subclass = node->GetPropVal(wxT("subclass"), wxEmptyString);
+        wxString subclass = node->GetAttribute(wxT("subclass"), wxEmptyString);
         if (!subclass.empty())
         {
             for (wxXmlSubclassFactoriesList::compatibility_iterator i = wxXmlResource::ms_subclassFactories->GetFirst();
@@ -775,7 +776,7 @@ wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent
 
             if (!m_instance)
             {
-                wxString name = node->GetPropVal(wxT("name"), wxEmptyString);
+                wxString name = node->GetAttribute(wxT("name"), wxEmptyString);
                 wxLogError(_("Subclass '%s' not found for resource '%s', not subclassing!"),
                            subclass.c_str(), name.c_str());
             }
@@ -783,7 +784,7 @@ wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent
     }
 
     m_node = node;
-    m_class = node->GetPropVal(wxT("class"), wxEmptyString);
+    m_class = node->GetAttribute(wxT("class"), wxEmptyString);
     m_parent = parent;
     m_parentAsWindow = wxDynamicCast(m_parent, wxWindow);
 
@@ -922,7 +923,7 @@ wxString wxXmlResourceHandler::GetText(const wxString& param, bool translate)
     if (m_resource->GetFlags() & wxXRC_USE_LOCALE)
     {
         if (translate && parNode &&
-            parNode->GetPropVal(wxT("translate"), wxEmptyString) != wxT("0"))
+            parNode->GetAttribute(wxT("translate"), wxEmptyString) != wxT("0"))
         {
             return wxGetTranslation(str2, m_resource->GetDomain());
         }
@@ -986,7 +987,7 @@ int wxXmlResourceHandler::GetID()
 
 wxString wxXmlResourceHandler::GetName()
 {
-    return m_node->GetPropVal(wxT("name"), wxT("-1"));
+    return m_node->GetAttribute(wxT("name"), wxT("-1"));
 }
 
 
@@ -1068,7 +1069,7 @@ wxColour wxXmlResourceHandler::GetColour(const wxString& param, const wxColour& 
         if (clr.Ok())
             return clr;
 
-        wxLogError(_("XRC resource: Incorrect colour specification '%s' for property '%s'."),
+        wxLogError(_("XRC resource: Incorrect colour specification '%s' for attribute '%s'."),
                    v.c_str(), param.c_str());
         return wxNullColour;
     }
@@ -1086,10 +1087,10 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
     wxXmlNode *bmpNode = GetParamNode(param);
     if ( bmpNode )
     {
-        wxString sid = bmpNode->GetPropVal(wxT("stock_id"), wxEmptyString);
+        wxString sid = bmpNode->GetAttribute(wxT("stock_id"), wxEmptyString);
         if ( !sid.empty() )
         {
-            wxString scl = bmpNode->GetPropVal(wxT("stock_client"), wxEmptyString);
+            wxString scl = bmpNode->GetAttribute(wxT("stock_client"), wxEmptyString);
             if (scl.empty())
                 scl = defaultArtClient;
             else
@@ -1195,7 +1196,7 @@ wxXmlNode *wxXmlResourceHandler::GetParamNode(const wxString& param)
 
 bool wxXmlResourceHandler::IsOfClass(wxXmlNode *node, const wxString& classname)
 {
-    return node->GetPropVal(wxT("class"), wxEmptyString) == classname;
+    return node->GetAttribute(wxT("class"), wxEmptyString) == classname;
 }
 
 

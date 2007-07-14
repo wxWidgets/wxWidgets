@@ -103,12 +103,12 @@ bool wxOwnerDrawnComboBoxXmlHandler::CanHandle(wxXmlNode *node)
 #else
 
 //  Avoid GCC bug - this fails on certain GCC 3.3 and 3.4 builds for an unknown reason
-//  it is believed to be related to the fact IsOfClass is inline, and node->GetPropVal
+//  it is believed to be related to the fact IsOfClass is inline, and node->GetAttribute
 //  gets passed an invalid "this" pointer. On 2.7, the function is out of line, so the
 //  above should work fine. This code is left in here so this file can easily be used
 //  in a version backported to 2.6. All we are doing here is expanding the macro
 
-    bool fOurClass = node->GetPropVal(wxT("class"), wxEmptyString) == wxT("wxOwnerDrawnComboBox");
+    bool fOurClass = node->GetAttribute(wxT("class"), wxEmptyString) == wxT("wxOwnerDrawnComboBox");
     return (fOurClass ||
           (m_insideBox && node->GetName() == wxT("item")));
 #endif

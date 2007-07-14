@@ -87,13 +87,13 @@ protected:
 static inline void
 HexProperty(wxXmlNode *node, const wxChar *name, unsigned long value)
 {
-    node->AddProperty(name, wxString::Format(_T("%08lx"), value));
+    node->AddAttribute(name, wxString::Format(_T("%08lx"), value));
 }
 
 static inline void
 NumProperty(wxXmlNode *node, const wxChar *name, unsigned long value)
 {
-    node->AddProperty(name, wxString::Format(_T("%lu"), value));
+    node->AddAttribute(name, wxString::Format(_T("%lu"), value));
 }
 
 static inline void
@@ -129,13 +129,13 @@ void XmlStackWalker::OnStackFrame(const wxStackFrame& frame)
     wxString func = frame.GetName();
     if ( !func.empty() )
     {
-        nodeFrame->AddProperty(_T("function"), func);
+        nodeFrame->AddAttribute(_T("function"), func);
         HexProperty(nodeFrame, _T("offset"), frame.GetOffset());
     }
 
     if ( frame.HasSourceLocation() )
     {
-        nodeFrame->AddProperty(_T("file"), frame.GetFileName());
+        nodeFrame->AddAttribute(_T("file"), frame.GetFileName());
         NumProperty(nodeFrame, _T("line"), frame.GetLine());
     }
 
@@ -348,7 +348,7 @@ void wxDebugReport::AddAll(Context context)
 
 bool wxDebugReport::DoAddSystemInfo(wxXmlNode *nodeSystemInfo)
 {
-    nodeSystemInfo->AddProperty(_T("description"), wxGetOsDescription());
+    nodeSystemInfo->AddAttribute(_T("description"), wxGetOsDescription());
 
     return true;
 }
@@ -371,7 +371,7 @@ bool wxDebugReport::DoAddLoadedModules(wxXmlNode *nodeModules)
         if ( path.empty() )
             path = info.GetName();
         if ( !path.empty() )
-            nodeModule->AddProperty(_T("path"), path);
+            nodeModule->AddAttribute(_T("path"), path);
 
         void *addr = NULL;
         size_t len = 0;
@@ -384,7 +384,7 @@ bool wxDebugReport::DoAddLoadedModules(wxXmlNode *nodeModules)
         wxString ver = info.GetVersion();
         if ( !ver.empty() )
         {
-            nodeModule->AddProperty(_T("version"), ver);
+            nodeModule->AddAttribute(_T("version"), ver);
         }
     }
 
@@ -402,7 +402,7 @@ bool wxDebugReport::DoAddExceptionInfo(wxXmlNode *nodeContext)
     nodeContext->AddChild(nodeExc);
 
     HexProperty(nodeExc, _T("code"), c.code);
-    nodeExc->AddProperty(_T("name"), c.GetExceptionString());
+    nodeExc->AddAttribute(_T("name"), c.GetExceptionString());
     HexProperty(nodeExc, _T("address"), wxPtrToUInt(c.addr));
 
 #ifdef __INTEL__
@@ -445,8 +445,8 @@ bool wxDebugReport::AddContext(wxDebugReport::Context ctx)
     wxXmlDocument xmldoc;
     wxXmlNode *nodeRoot = new wxXmlNode(wxXML_ELEMENT_NODE, _T("report"));
     xmldoc.SetRoot(nodeRoot);
-    nodeRoot->AddProperty(_T("version"), _T("1.0"));
-    nodeRoot->AddProperty(_T("kind"), ctx == Context_Current ? _T("user")
+    nodeRoot->AddAttribute(_T("version"), _T("1.0"));
+    nodeRoot->AddAttribute(_T("kind"), ctx == Context_Current ? _T("user")
                                                              : _T("exception"));
 
     // add system information

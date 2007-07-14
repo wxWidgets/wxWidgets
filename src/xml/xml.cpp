@@ -49,9 +49,9 @@ static bool wxIsWhiteOnly(const wxString& buf);
 
 wxXmlNode::wxXmlNode(wxXmlNode *parent,wxXmlNodeType type,
                      const wxString& name, const wxString& content,
-                     wxXmlProperty *props, wxXmlNode *next)
+                     wxXmlAttribute *attrs, wxXmlNode *next)
     : m_type(type), m_name(name), m_content(content),
-      m_properties(props), m_parent(parent),
+      m_attrs(attrs), m_parent(parent),
       m_children(NULL), m_next(next)
 {
     if (m_parent)
@@ -69,7 +69,7 @@ wxXmlNode::wxXmlNode(wxXmlNode *parent,wxXmlNodeType type,
 wxXmlNode::wxXmlNode(wxXmlNodeType type, const wxString& name,
                      const wxString& content)
     : m_type(type), m_name(name), m_content(content),
-      m_properties(NULL), m_parent(NULL),
+      m_attrs(NULL), m_parent(NULL),
       m_children(NULL), m_next(NULL)
 {}
 
@@ -89,8 +89,8 @@ wxXmlNode::~wxXmlNode()
         delete c;
     }
 
-    wxXmlProperty *p, *p2;
-    for (p = m_properties; p; p = p2)
+    wxXmlAttribute *p, *p2;
+    for (p = m_attrs; p; p = p2)
     {
         p2 = p->GetNext();
         delete p;
@@ -99,7 +99,7 @@ wxXmlNode::~wxXmlNode()
 
 wxXmlNode& wxXmlNode::operator=(const wxXmlNode& node)
 {
-    wxDELETE(m_properties);
+    wxDELETE(m_attrs);
     wxDELETE(m_children);
     DoCopy(node);
     return *this;
@@ -119,49 +119,49 @@ void wxXmlNode::DoCopy(const wxXmlNode& node)
         n = n->GetNext();
     }
 
-    m_properties = NULL;
-    wxXmlProperty *p = node.m_properties;
+    m_attrs = NULL;
+    wxXmlAttribute *p = node.m_attrs;
     while (p)
     {
-       AddProperty(p->GetName(), p->GetValue());
+       AddAttribute(p->GetName(), p->GetValue());
        p = p->GetNext();
     }
 }
 
-bool wxXmlNode::HasProp(const wxString& propName) const
+bool wxXmlNode::HasAttribute(const wxString& attrName) const
 {
-    wxXmlProperty *prop = GetProperties();
+    wxXmlAttribute *attr = GetAttributes();
 
-    while (prop)
+    while (attr)
     {
-        if (prop->GetName() == propName) return true;
-        prop = prop->GetNext();
+        if (attr->GetName() == attrName) return true;
+        attr = attr->GetNext();
     }
 
     return false;
 }
 
-bool wxXmlNode::GetPropVal(const wxString& propName, wxString *value) const
+bool wxXmlNode::GetAttribute(const wxString& attrName, wxString *value) const
 {
-    wxXmlProperty *prop = GetProperties();
+    wxXmlAttribute *attr = GetAttributes();
 
-    while (prop)
+    while (attr)
     {
-        if (prop->GetName() == propName)
+        if (attr->GetName() == attrName)
         {
-            *value = prop->GetValue();
+            *value = attr->GetValue();
             return true;
         }
-        prop = prop->GetNext();
+        attr = attr->GetNext();
     }
 
     return false;
 }
 
-wxString wxXmlNode::GetPropVal(const wxString& propName, const wxString& defaultVal) const
+wxString wxXmlNode::GetAttribute(const wxString& attrName, const wxString& defaultVal) const
 {
     wxString tmp;
-    if (GetPropVal(propName, &tmp))
+    if (GetAttribute(attrName, &tmp))
         return tmp;
 
     return defaultVal;
@@ -248,48 +248,48 @@ bool wxXmlNode::RemoveChild(wxXmlNode *child)
 
 void wxXmlNode::AddProperty(const wxString& name, const wxString& value)
 {
-    AddProperty(new wxXmlProperty(name, value, NULL));
+    AddProperty(new wxXmlAttribute(name, value, NULL));
 }
 
-void wxXmlNode::AddProperty(wxXmlProperty *prop)
+void wxXmlNode::AddProperty(wxXmlAttribute *attr)
 {
-    if (m_properties == NULL)
-        m_properties = prop;
+    if (m_attrs == NULL)
+        m_attrs = attr;
     else
     {
-        wxXmlProperty *p = m_properties;
+        wxXmlAttribute *p = m_attrs;
         while (p->GetNext()) p = p->GetNext();
-        p->SetNext(prop);
+        p->SetNext(attr);
     }
 }
 
 bool wxXmlNode::DeleteProperty(const wxString& name)
 {
-    wxXmlProperty *prop;
+    wxXmlAttribute *attr;
 
-    if (m_properties == NULL)
+    if (m_attrs == NULL)
         return false;
 
-    else if (m_properties->GetName() == name)
+    else if (m_attrs->GetName() == name)
     {
-        prop = m_properties;
-        m_properties = prop->GetNext();
-        prop->SetNext(NULL);
-        delete prop;
+        attr = m_attrs;
+        m_attrs = attr->GetNext();
+        attr->SetNext(NULL);
+        delete attr;
         return true;
     }
 
     else
     {
-        wxXmlProperty *p = m_properties;
+        wxXmlAttribute *p = m_attrs;
         while (p->GetNext())
         {
             if (p->GetNext()->GetName() == name)
             {
-                prop = p->GetNext();
-                p->SetNext(prop->GetNext());
-                prop->SetNext(NULL);
-                delete prop;
+                attr = p->GetNext();
+                p->SetNext(attr->GetNext());
+                attr->SetNext(NULL);
+                delete attr;
                 return true;
             }
             p = p->GetNext();
@@ -469,7 +469,7 @@ static void StartElementHnd(void *userData, const char *name, const char **atts)
     const char **a = atts;
     while (*a)
     {
-        node->AddProperty(CharToString(ctx->conv, a[0]), CharToString(ctx->conv, a[1]));
+        node->AddAttribute(CharToString(ctx->conv, a[0]), CharToString(ctx->conv, a[1]));
         a += 2;
     }
     if (ctx->root == NULL)
@@ -750,7 +750,7 @@ static void OutputNode(wxOutputStream& stream, wxXmlNode *node, int indent,
                        wxMBConv *convMem, wxMBConv *convFile, int indentstep)
 {
     wxXmlNode *n, *prev;
-    wxXmlProperty *prop;
+    wxXmlAttribute *attr;
 
     switch (node->GetType())
     {
@@ -768,14 +768,14 @@ static void OutputNode(wxOutputStream& stream, wxXmlNode *node, int indent,
             OutputString(stream, wxT("<"));
             OutputString(stream, node->GetName());
 
-            prop = node->GetProperties();
-            while (prop)
+            attr = node->GetAttributes();
+            while (attr)
             {
-                OutputString(stream, wxT(" ") + prop->GetName() +  wxT("=\""));
-                OutputStringEnt(stream, prop->GetValue(), convMem, convFile,
+                OutputString(stream, wxT(" ") + attr->GetName() +  wxT("=\""));
+                OutputStringEnt(stream, attr->GetValue(), convMem, convFile,
                                 XML_ESCAPE_QUOTES);
                 OutputString(stream, wxT("\""));
-                prop = prop->GetNext();
+                attr = attr->GetNext();
             }
 
             if (node->GetChildren())

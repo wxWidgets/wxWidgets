@@ -109,10 +109,10 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
         wxString str = GetNodeContent(m_node);
 
         wxString tooltip;
-        m_node->GetPropVal(wxT("tooltip"), &tooltip);
+        m_node->GetAttribute(wxT("tooltip"), &tooltip);
 
         wxString helptext;
-        bool hasHelptext = m_node->GetPropVal(wxT("helptext"), &helptext);
+        bool hasHelptext = m_node->GetAttribute(wxT("helptext"), &helptext);
 
         if (m_resource->GetFlags() & wxXRC_USE_LOCALE)
         {

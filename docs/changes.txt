@@ -92,6 +92,9 @@ Deprecated methods and their replacements
 - wxDocManager::MakeDefaultName() replaced by MakeNewDocumentName() and
   wxDocument::GetPrintableName() with GetUserReadableName() which are simpler
   to use
+- wxXmlProperty class was renamed to wxXmlAttribute in order to use standard
+  terminology. Corresponding wxXmlNode methods were renamed to use
+  "Attribute" instead of "Property" or "Prop" in their names.
 
 
 Major new features in this release
