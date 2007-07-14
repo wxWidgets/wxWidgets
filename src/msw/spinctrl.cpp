@@ -362,7 +362,10 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
 wxSpinCtrl::~wxSpinCtrl()
 {
-    ms_allSpins.Remove(this);
+    if (ms_allSpins.Index(this) != wxNOT_FOUND)
+        ms_allSpins.Remove(this);
+    //else: "this" may not be in the list when wxSpinCtrl default ctor is used
+    //      but Create() is never called
 
     // This removes spurious memory leak reporting
     if (ms_allSpins.GetCount() == 0)
