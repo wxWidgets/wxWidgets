@@ -330,16 +330,13 @@ bool wxAppConsoleBase::Dispatch()
 
 bool wxAppConsoleBase::HasPendingEvents() const
 {
-    // ensure that we're the only thread to modify the pending events list
     wxENTER_CRIT_SECT( *wxPendingEventsLocker );
 
-    if ( !wxPendingEvents )
-    {
-        wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
-        return false;
-    }
+    bool has = wxPendingEvents && !wxPendingEvents->IsEmpty();
+
     wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
-    return true;
+
+    return has;
 }
 
 /* static */
@@ -357,27 +354,27 @@ void wxAppConsoleBase::ProcessPendingEvents()
         return;
 #endif
 
-    if ( !HasPendingEvents() )
-        return;
-
     wxENTER_CRIT_SECT( *wxPendingEventsLocker );
 
-    // iterate until the list becomes empty
-    wxList::compatibility_iterator node = wxPendingEvents->GetFirst();
-    while (node)
+    if (wxPendingEvents)
     {
-        wxEvtHandler *handler = (wxEvtHandler *)node->GetData();
-        wxPendingEvents->Erase(node);
+        // iterate until the list becomes empty
+        wxList::compatibility_iterator node = wxPendingEvents->GetFirst();
+        while (node)
+        {
+            wxEvtHandler *handler = (wxEvtHandler *)node->GetData();
+            wxPendingEvents->Erase(node);
 
-        // In ProcessPendingEvents(), new handlers might be add
-        // and we can safely leave the critical section here.
-        wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
+            // In ProcessPendingEvents(), new handlers might be add
+            // and we can safely leave the critical section here.
+            wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
 
-        handler->ProcessPendingEvents();
+            handler->ProcessPendingEvents();
 
-        wxENTER_CRIT_SECT( *wxPendingEventsLocker );
+            wxENTER_CRIT_SECT( *wxPendingEventsLocker );
 
-        node = wxPendingEvents->GetFirst();
+            node = wxPendingEvents->GetFirst();
+        }
     }
 
     wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
