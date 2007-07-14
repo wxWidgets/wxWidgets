@@ -138,6 +138,7 @@ public:
             "Ninth symphony", "Ludwig van Beethoven", "1824" ) );
         m_classical->Append( new MyMusicModelNode( m_classical, GetNewId(), 
             "German Requiem", "Johannes Brahms", "1868" ) );
+        m_classicalMusicIsKnownToControl = false;
     }
     
     void AddToClassical( const wxString &title, const wxString &artist, const wxString &year )
@@ -147,11 +148,13 @@ public:
             new MyMusicModelNode( m_classical, GetNewId(), title, artist, year );
         m_classical->Append( child_node );
         
-        // notify control
-        wxDataViewItem child( child_node->GetID() );
-        wxDataViewItem parent( m_classical->GetID() );
-        wxPrintf( "parent id %d\n", m_classical->GetID() );
-        ItemAdded( parent, child );
+        if (m_classicalMusicIsKnownToControl)
+        {
+            // notify control
+            wxDataViewItem child( child_node->GetID() );
+            wxDataViewItem parent( m_classical->GetID() );
+            ItemAdded( parent, child );
+        }
     }
     
     virtual unsigned int GetColumnCount() const
@@ -208,6 +211,12 @@ public:
             
         if (node->GetChildCount() == 0)
             return wxDataViewItem( 0 );
+           
+        if (node == m_classical)
+        {
+            MyMusicModel *model = (MyMusicModel*)(const MyMusicModel*) this;
+            model->m_classicalMusicIsKnownToControl = true;
+        }
         
         MyMusicModelNode *first_child = node->GetChildren().Item( 0 );
         return wxDataViewItem( first_child->GetID() );
@@ -265,6 +274,7 @@ private:
     MyMusicModelNode*   m_root;
     MyMusicModelNode*   m_pop;
     MyMusicModelNode*   m_classical;
+    bool                m_classicalMusicIsKnownToControl;
     wxUint32            m_idCounter;
 };
 
