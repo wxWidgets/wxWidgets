@@ -5703,7 +5703,7 @@ if test "$wxUSE_CONSOLE_EVENTLOOP" = "yes"; then
 
     if test "$wxUSE_UNIX" = "yes"; then
         if test "$wxUSE_SELECT_DISPATCHER" = "yes"; then
-            AC_DEFINE(wxUSE_SELECT_DISPATCHER);
+            AC_DEFINE(wxUSE_SELECT_DISPATCHER)
         fi
 
         if test "$wxUSE_EPOLL_DISPATCHER" = "yes"; then
