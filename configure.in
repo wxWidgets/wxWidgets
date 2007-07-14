@@ -663,7 +663,9 @@ dnl ---------------------------------------------------------------------------
 dnl optional GUI controls (in alphabetical order except the first one)
 dnl ---------------------------------------------------------------------------
 
-WX_ARG_FEATURE(controls,    [  --enable-controls       use all usual controls], wxUSE_CONTROLS)
+dnl don't set DEFAULT_wxUSE_XXX below if the option is not specified
+DEFAULT_wxUSE_CONTROLS=none
+WX_ARG_DISABLE(controls,    [  --disable-controls      disable compilation of all standard controls], wxUSE_CONTROLS)
 
 dnl even with --enable-controls, some may be disabled by giving
 dnl --disable-<control> later on the command line - but by default all will be
