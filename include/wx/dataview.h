@@ -24,7 +24,7 @@
 
 #if defined(__WXGTK20__)
     // for testing
-    #define wxUSE_GENERICDATAVIEWCTRL 1
+    // #define wxUSE_GENERICDATAVIEWCTRL 1
 #elif defined(__WXMAC__)
 #else
     #define wxUSE_GENERICDATAVIEWCTRL 1
@@ -418,6 +418,7 @@ public:
         { return m_indent; } 
 
     // TODO selection code
+    virtual wxDataViewItem GetSelection() = 0;
 
 protected:
     virtual void DoSetExpanderColumn() = 0 ;

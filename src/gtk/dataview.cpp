@@ -116,9 +116,12 @@ public:
     
     wxDataViewModel* GetDataViewModel() { return m_wx_model; }
     GtkWxTreeModel* GetOwner()          { return m_owner; }
+
+    bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
     
 protected:
     void InitTree();
+    wxGtkTreeModelNode *FindNode( const wxDataViewItem &item );
     wxGtkTreeModelNode *FindNode( GtkTreeIter *iter );
     void BuildBranch( wxGtkTreeModelNode *branch );
     
@@ -602,6 +605,13 @@ void wxGtkTreeModel::BuildBranch( wxGtkTreeModelNode *node )
     }
 }
 
+bool wxGtkTreeModel::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )
+{
+    wxGtkTreeModelNode *parent_node = FindNode( parent );
+    parent_node->Append( new wxGtkTreeModelNode( parent_node, item ) );
+    return true;
+}
+
 gboolean wxGtkTreeModel::get_iter( GtkTreeIter *iter, GtkTreePath *path )
 {
     int depth = gtk_tree_path_get_depth( path );
@@ -634,7 +644,7 @@ GtkTreePath *wxGtkTreeModel::get_path( GtkTreeIter *iter )
     while (node->GetParent())
     {
         wxGtkTreeModelNode *parent = node->GetParent();
-        int pos = parent->GetChildren().Index( parent );
+        int pos = parent->GetChildren().Index( node );
         
         gtk_tree_path_prepend_index( retval, pos );
 
@@ -772,6 +782,20 @@ wxGtkTreeModelNode *wxGtkTreeModel::FindNode( GtkTreeIter *iter )
     if (!result)
     {
         wxPrintf( "Not found %d\n", (int) iter->user_data );
+        char *crash = NULL;
+        *crash = 0;
+    }
+    
+    return result;
+}
+
+wxGtkTreeModelNode *wxGtkTreeModel::FindNode( const wxDataViewItem &item )
+{
+    wxGtkTreeModelNode *result = wxGtkTreeModel_FindNode( m_root, item );
+    
+    if (!result)
+    {
+        wxPrintf( "Not found %d\n", (int) item.GetID() );
         char *crash = NULL;
         *crash = 0;
     }
@@ -1177,6 +1201,8 @@ wxGtkDataViewModelNotifier::~wxGtkDataViewModelNotifier()
 
 bool wxGtkDataViewModelNotifier::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
+    m_wxgtk_model->model->ItemAdded( parent, item );
+
     GtkTreeIter iter;
     iter.stamp = m_wxgtk_model->stamp;
     iter.user_data = (gpointer) item.GetID();
@@ -2454,6 +2480,26 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
     gtk_tree_view_append_column( GTK_TREE_VIEW(m_treeview), column );
 
     return true;
+}
+
+wxDataViewItem wxDataViewCtrl::GetSelection()
+{
+    GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
+    
+    if (m_windowStyle & wxDV_MULTIPLE)
+    {
+    }
+    else
+    {
+        GtkTreeIter iter;
+        if (gtk_tree_selection_get_selected( selection, NULL, &iter ))
+        {
+            wxDataViewItem item( (wxUint32) iter.user_data );
+            return item;
+        }
+    }
+    
+    return wxDataViewItem(0);
 }
 
 void wxDataViewCtrl::DoSetExpanderColumn()

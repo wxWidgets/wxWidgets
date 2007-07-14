@@ -57,11 +57,102 @@ Implement this data model
         7:  German Requiem      Johannes Brahms      1868
 */
 
+
+
+class MyMusicModelNode;
+WX_DEFINE_ARRAY_PTR( MyMusicModelNode*, MyMusicModelNodes );
+
+class MyMusicModelNode
+{
+public:
+    MyMusicModelNode( MyMusicModelNode* parent, const wxUint32 id,
+                      const wxString &title, const wxString &artist, const wxString &year )
+    { 
+        m_parent = parent; 
+        m_id = id;
+        m_title = title;
+        m_artist = artist;
+        m_year = year;
+        m_isContainer = false;
+    }
+    
+    MyMusicModelNode( MyMusicModelNode* parent, const wxUint32 id,
+                      const wxString &branch )
+    { 
+        m_parent = parent; 
+        m_id = id;
+        m_title = branch;
+        m_isContainer = true;
+    }
+    
+    ~MyMusicModelNode()
+    { 
+        size_t count = m_children.GetCount();
+        size_t i;
+        for (i = 0; i < count; i++)
+        {
+            MyMusicModelNode *child = m_children[i];
+            delete child;
+        }
+    }
+
+    wxUint32 GetID()                                      { return m_id; }
+    bool IsContainer()                                    { return m_isContainer; }
+
+    MyMusicModelNode* GetParent()                         { return m_parent; }
+    MyMusicModelNodes &GetChildren()                      { return m_children; }
+    MyMusicModelNode* GetNthChild( unsigned int n )       { return m_children.Item( n ); }
+    void Insert( MyMusicModelNode* child, unsigned int n) { m_children.Insert( child, n); }
+    void Append( MyMusicModelNode* child )                { m_children.Add( child ); }
+    unsigned int GetChildCount()                          { return m_children.GetCount(); }
+
+public:
+    wxString            m_title;
+    wxString            m_artist;
+    wxString            m_year;
+    
+private:
+    MyMusicModelNode   *m_parent;
+    MyMusicModelNodes   m_children; 
+    wxUint32            m_id;
+    bool                m_isContainer;
+};
+
  
 class MyMusicModel: public wxDataViewModel
 {
 public:
-    MyMusicModel() {}
+    MyMusicModel() 
+    {
+        m_idCounter = 0;
+        m_root = new MyMusicModelNode( NULL, GetNewId(), "My Music" );
+        m_pop = new MyMusicModelNode( m_root, GetNewId(), "Pop music" );
+        m_root->Append( m_pop );
+        m_pop->Append( new MyMusicModelNode( m_pop, GetNewId(), 
+            "You are not alone", "Michael Jackson", "1995" ) );
+        m_pop->Append( new MyMusicModelNode( m_pop, GetNewId(), 
+            "Take a bow", "Madonna", "1994" ) );
+        m_classical = new MyMusicModelNode( m_root, GetNewId(), "Classical music" );
+        m_root->Append( m_classical );
+        m_classical->Append( new MyMusicModelNode( m_classical, GetNewId(), 
+            "Ninth symphony", "Ludwig van Beethoven", "1824" ) );
+        m_classical->Append( new MyMusicModelNode( m_classical, GetNewId(), 
+            "German Requiem", "Johannes Brahms", "1868" ) );
+    }
+    
+    void AddToClassical( const wxString &title, const wxString &artist, const wxString &year )
+    {
+        // add to data
+        MyMusicModelNode *child_node = 
+            new MyMusicModelNode( m_classical, GetNewId(), title, artist, year );
+        m_classical->Append( child_node );
+        
+        // notify control
+        wxDataViewItem child( child_node->GetID() );
+        wxDataViewItem parent( m_classical->GetID() );
+        wxPrintf( "parent id %d\n", m_classical->GetID() );
+        ItemAdded( parent, child );
+    }
     
     virtual unsigned int GetColumnCount() const
     {
@@ -76,100 +167,105 @@ public:
     virtual void GetValue( wxVariant &variant, 
                            const wxDataViewItem &item, unsigned int col ) const
     {
-        variant = wxString("");
-        int ID = item.GetID();
-        switch (ID)
+        MyMusicModelNode *node = FindNode( item );
+        switch (col)
         {
-            case 1: if (col == 0) variant = wxString("My Music"); break;
-            case 2: if (col == 0) variant = wxString("Pop music"); break;
-            case 5: if (col == 0) variant = wxString("Classical music"); break;
-            case 3:
-            {
-                switch (col)
-                {
-                    case 0: variant = wxString("You are not alone"); break;
-                    case 1: variant = wxString("Michael Jackson"); break;
-                    case 2: variant = wxString("1995");
-                }
-            }
-            break;
-            case 4:
-            {
-                switch (col)
-                {
-                    case 0: variant = wxString("Take a bow"); break;
-                    case 1: variant = wxString("Madonna"); break;
-                    case 2: variant = wxString("1994");
-                }
-            }
-            break;
-            case 6:
-            {
-                switch (col)
-                {
-                    case 0: variant = wxString("Ninth symphony"); break;
-                    case 1: variant = wxString("Ludwig v. Beethoven"); break;
-                    case 2: variant = wxString("1824");
-                }
-            }
-            break;
-            case 7:
-            {
-                switch (col)
-                {
-                    case 0: variant = wxString("German requiem"); break;
-                    case 1: variant = wxString("Johannes Brahms"); break;
-                    case 2: variant = wxString("1868");
-                }
-            }
-            break;
+            case 0: variant = node->m_title; break;
+            case 1: variant = node->m_artist; break;
+            case 2: variant = node->m_year; break;
+            default: wxLogError( "MyMusicModel::GetValue: wrong column" );
         }
-            
     }
 
     virtual bool SetValue( const wxVariant &variant, 
                            const wxDataViewItem &item, unsigned int col )
     {
-        // readonly
-        return true;
+        MyMusicModelNode *node = FindNode( item );
+        switch (col)
+        {
+            case 0: node->m_title = variant.GetString(); break;
+            case 1: node->m_artist  = variant.GetString(); break;
+            case 2: node->m_year  = variant.GetString(); break;
+            default: wxLogError( "MyMusicModel::SetValue: wrong column" );
+        }
     }
 
-    /*****************************************************************
-    If wxDataViewItem is not valid in the two methods I quote above
-    then it means "return the child item from the invisible root".
-    ******************************************************************/
-    
     virtual bool HasChildren( const wxDataViewItem &item ) const
     {
-        int ID = item.GetID();
-        return ((ID == 1) || (ID == 2) || (ID == 5) || (ID == 0));
+        if (item.GetID() == 0)
+            return true;
+    
+        MyMusicModelNode *node = FindNode( item );
+        return node->IsContainer();
     }
     
     virtual wxDataViewItem GetFirstChild( const wxDataViewItem &parent ) const
     {
-        int ID = parent.GetID();
-        switch (ID)
-        {
-            case 0: return wxDataViewItem( 1 );
-            case 1: return wxDataViewItem( 2 );
-            case 2: return wxDataViewItem( 3 );
-            case 5: return wxDataViewItem( 6 );
-        }
+        if (parent.GetID() == 0)
+            return wxDataViewItem( m_root->GetID() );
         
-        return wxDataViewItem(0);
+        MyMusicModelNode *node = FindNode( parent );
+            
+        if (node->GetChildCount() == 0)
+            return wxDataViewItem( 0 );
+        
+        MyMusicModelNode *first_child = node->GetChildren().Item( 0 );
+        return wxDataViewItem( first_child->GetID() );
     }
+    
     virtual wxDataViewItem GetNextSibling( const wxDataViewItem &item ) const
     {
-        int ID = item.GetID();
-        switch (ID)
-        {
-            case 2: return wxDataViewItem( 5 );
-            case 3: return wxDataViewItem( 4 );
-            case 6: return wxDataViewItem( 7 );
-        }
-        
-        return wxDataViewItem(0);
+        MyMusicModelNode *node = FindNode( item );
+        MyMusicModelNode *parent = node->GetParent();
+        if (!parent)
+            return wxDataViewItem(0);
+
+        int pos = parent->GetChildren().Index( node );
+        if (pos == wxNOT_FOUND)
+            return wxDataViewItem(0);
+            
+        if (pos == parent->GetChildCount()-1)
+            return wxDataViewItem(0);
+            
+        node = parent->GetChildren().Item( pos+1 );
+        return wxDataViewItem( node->GetID() );
     } 
+    
+private:
+    wxUint32 GetNewId() { m_idCounter++; return m_idCounter; }
+    
+    MyMusicModelNode *FindNodeRec( MyMusicModelNode *node, const wxDataViewItem &item ) const
+    {
+        if (node->GetID() == item.GetID())
+            return node;
+    
+        size_t count = node->GetChildCount();
+        size_t i;
+        for (i = 0; i < count; i++)
+        {
+            MyMusicModelNode *child = node->GetChildren().Item( i );
+            MyMusicModelNode *node2 = FindNodeRec( child, item );
+            if (node2)
+                return node2;
+        }
+        return NULL;
+    }
+    
+    MyMusicModelNode *FindNode( const wxDataViewItem &item ) const
+    {
+        if (item.GetID() == 0)
+            return NULL;
+            
+        if (!m_root)
+            return NULL;
+            
+        return FindNodeRec( m_root, item );
+    }
+
+    MyMusicModelNode*   m_root;
+    MyMusicModelNode*   m_pop;
+    MyMusicModelNode*   m_classical;
+    wxUint32            m_idCounter;
 };
 
 // -------------------------------------
@@ -195,9 +291,12 @@ public:
 public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+    void OnAdd(wxCommandEvent& event);
 
 private:
     wxDataViewCtrl* m_dataview;
+    wxTextCtrl    * m_log;
+    wxObjectDataPtr<MyMusicModel> m_model;
 
 private:
     DECLARE_EVENT_TABLE()
@@ -216,7 +315,7 @@ bool MyApp::OnInit(void)
 
     // build the first frame
     MyFrame *frame = 
-        new MyFrame(NULL, wxT("wxDataViewCtrl feature test"), 10, 10, 800, 340);
+        new MyFrame(NULL, wxT("wxDataViewCtrl feature test"), 10, 10, 700, 440);
     frame->Show(true);
 
     SetTopWindow(frame);
@@ -238,11 +337,14 @@ enum
     // file menu
     ID_ABOUT = wxID_ABOUT,
     ID_EXIT = wxID_EXIT,
+    
+    ID_ADD = 100,
 };
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU( ID_ABOUT, MyFrame::OnAbout )
     EVT_MENU( ID_EXIT, MyFrame::OnQuit )
+    EVT_BUTTON( ID_ADD, MyFrame::OnAdd )
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
@@ -263,11 +365,13 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     SetMenuBar(menu_bar);
     CreateStatusBar();
 
+    wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
+
     m_dataview = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition,
                                      wxDefaultSize );
 
-    wxObjectDataPtr<MyMusicModel> model(new MyMusicModel);
-    m_dataview->AssociateModel( model.get() );
+    m_model = new MyMusicModel;
+    m_dataview->AssociateModel( m_model.get() );
 
     m_dataview->AppendTextColumn( "Title", 0, wxDATAVIEW_CELL_INERT, 200, 
                                      DEFAULT_ALIGN, wxDATAVIEW_COL_SORTABLE );
@@ -275,11 +379,44 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
                                      DEFAULT_ALIGN, wxDATAVIEW_COL_SORTABLE );
     m_dataview->AppendTextColumn( "Year", 2, wxDATAVIEW_CELL_INERT, 50,
                                      DEFAULT_ALIGN );
+
+    main_sizer->Add( m_dataview, 2, wxGROW );
+    
+    wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
+    
+    button_sizer->Add( new wxButton( this, ID_ADD, "Add Mozart"), 0, wxALL, 10 );
+    
+    main_sizer->Add( button_sizer, 0, 0, 0 );
+    
+    m_log = new wxTextCtrl( this, -1, "", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+    
+    main_sizer->Add( m_log, 1, wxGROW );
+    
+    SetSizer( main_sizer );
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 {
     Close(true);
+}
+
+void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event) )
+{
+#if 0
+    // ignore selection, do something better later
+    wxDataViewItem item = m_dataview->GetSelection();
+    if (item.IsOk())
+    {
+        if (m_model->HasChildren(item))
+        {
+        }
+        else
+        {
+        }
+    }
+#endif    
+  
+    m_model->AddToClassical( "Kleine Nachtmusik", "Wolfgang Mozart", "1787" );
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )

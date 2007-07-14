@@ -304,6 +304,9 @@ public:
 
     virtual bool AssociateModel( wxDataViewModel *model );
     virtual bool AppendColumn( wxDataViewColumn *col );
+
+    virtual wxDataViewItem GetSelection();
+
     
     // selection code
 
