@@ -23,7 +23,6 @@
 
 #include "wx/private/selectdispatcher.h"
 #include "wx/module.h"
-#include "wx/timer.h"
 #include "wx/unix/private.h"
 
 #ifndef WX_PRECOMP
@@ -152,7 +151,7 @@ wxSelectDispatcher *wxSelectDispatcher::Get()
 void wxSelectDispatcher::DispatchPending()
 {
     if ( gs_selectDispatcher )
-        gs_selectDispatcher->RunLoop(0);
+        gs_selectDispatcher->Dispatch(0);
 }
 
 wxSelectDispatcher::wxSelectDispatcher()
@@ -229,53 +228,39 @@ void wxSelectDispatcher::ProcessSets(const wxSelectSets& sets)
     }
 }
 
-void wxSelectDispatcher::RunLoop(int timeout)
+void wxSelectDispatcher::Dispatch(int timeout)
 {
     struct timeval tv,
-                  *ptv = NULL;
+                  *ptv;
     if ( timeout != TIMEOUT_INFINITE )
     {
         ptv = &tv;
         tv.tv_sec = 0;
         tv.tv_usec = timeout*1000;
     }
-
-    for ( ;; )
+    else // no timeout
     {
-        wxSelectSets sets = m_sets;
+        ptv = NULL;
+    }
 
-        wxStopWatch sw;
-        if ( ptv && timeout )
-          sw.Start(ptv->tv_usec/10);
+    wxSelectSets sets = m_sets;
 
-        const int ret = sets.Select(m_maxFD + 1, ptv);
-        switch ( ret )
-        {
-            case -1:
-                // continue if we were interrupted by a signal, else bail out
-                if ( errno != EINTR )
-                {
-                    wxLogSysError(_("Failed to monitor I/O channels"));
-                    return;
-                }
-                break;
+    const int ret = sets.Select(m_maxFD + 1, ptv);
+    switch ( ret )
+    {
+        case -1:
+            if ( errno != EINTR )
+            {
+                wxLogSysError(_("Failed to monitor I/O channels"));
+            }
+            break;
 
-            case 0:
-                // timeout expired without anything happening
-                return;
+        case 0:
+            // timeout expired without anything happening
+            break;
 
-            default:
-                ProcessSets(sets);
-        }
-
-        if ( ptv )
-        {
-            timeout -= sw.Time();
-            if ( timeout <= 0 )
-                break;
-
-            ptv->tv_usec = timeout*1000;
-        }
+        default:
+            ProcessSets(sets);
     }
 }
 

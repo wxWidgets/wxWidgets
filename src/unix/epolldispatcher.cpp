@@ -135,7 +135,7 @@ bool wxEpollDispatcher::UnregisterFD(int fd)
     return true;
 }
 
-void wxEpollDispatcher::RunLoop(int timeout)
+void wxEpollDispatcher::Dispatch(int timeout)
 {
     epoll_event events[16];
 
@@ -168,11 +168,9 @@ void wxEpollDispatcher::RunLoop(int timeout)
 
         if ( p->events & EPOLLIN )
             handler->OnReadWaiting();
-
-        if ( p->events & EPOLLOUT )
+        else if ( p->events & EPOLLOUT )
             handler->OnWriteWaiting();
-
-        if ( p->events & (EPOLLERR | EPOLLHUP) )
+        else if ( p->events & (EPOLLERR | EPOLLHUP) )
             handler->OnExceptionWaiting();
     }
 }
