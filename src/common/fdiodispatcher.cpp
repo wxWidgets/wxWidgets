@@ -49,7 +49,7 @@ wxFDIODispatcher *wxFDIODispatcher::Get()
 {
     if ( !gs_dispatcher )
     {
-#ifdef wxUSE_EPOLL_DISPATCHER
+#if wxUSE_EPOLL_DISPATCHER
         gs_dispatcher = wxEpollDispatcher::Create();
         if ( !gs_dispatcher )
 #endif // wxUSE_EPOLL_DISPATCHER
