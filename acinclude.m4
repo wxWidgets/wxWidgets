@@ -350,6 +350,10 @@ AC_DEFUN([WX_ARG_CACHE_FLUSH],
           mv ${wx_arg_cache_file}.tmp ${wx_arg_cache_file}
         ])
 
+dnl return the name of the variable to store the value of the given
+dnl WX_ARG_WITH/ENABLE option
+AC_DEFUN([WX_ARG_CACHE_NAME],)
+
 dnl this macro checks for a three-valued command line --with argument:
 dnl   possible arguments are 'yes', 'no', 'sys', or 'builtin'
 dnl usage: WX_ARG_SYS_WITH(option, helpmessage, variable-name)
@@ -364,13 +368,13 @@ AC_DEFUN([WX_ARG_SYS_WITH],
           AC_ARG_WITH($1, [$2],
                       [
                         if test "$withval" = yes; then
-                          ac_cv_use_$1='$3=yes'
+                          AS_TR_SH(wx_cv_use_$1)='$3=yes'
                         elif test "$withval" = no; then
-                          ac_cv_use_$1='$3=no'
+                          AS_TR_SH(wx_cv_use_$1)='$3=no'
                         elif test "$withval" = sys; then
-                          ac_cv_use_$1='$3=sys'
+                          AS_TR_SH(wx_cv_use_$1)='$3=sys'
                         elif test "$withval" = builtin; then
-                          ac_cv_use_$1='$3=builtin'
+                          AS_TR_SH(wx_cv_use_$1)='$3=builtin'
                         else
                           AC_MSG_ERROR([Invalid value for --with-$1: should be yes, no, sys, or builtin])
                         fi
@@ -383,12 +387,12 @@ AC_DEFUN([WX_ARG_SYS_WITH],
                           no_cache=1
                         fi
 
-                        ac_cv_use_$1='$3=${'DEFAULT_$3":-$wxUSE_ALL_FEATURES}"
+                        AS_TR_SH(wx_cv_use_$1)='$3=${'DEFAULT_$3":-$wxUSE_ALL_FEATURES}"
                       ])
 
-          eval "$ac_cv_use_$1"
+          eval "$AS_TR_SH(wx_cv_use_$1)"
           if test "$no_cache" != 1; then
-            echo $ac_cv_use_$1 >> ${wx_arg_cache_file}.tmp
+            echo $AS_TR_SH(wx_cv_use_$1) >> ${wx_arg_cache_file}.tmp
           fi
 
           if test "$$3" = yes; then
@@ -414,9 +418,9 @@ AC_DEFUN([WX_ARG_WITH],
           AC_ARG_WITH($1, [$2],
                       [
                         if test "$withval" = yes; then
-                          ac_cv_use_$1='$3=yes'
+                          AS_TR_SH(wx_cv_use_$1)='$3=yes'
                         else
-                          ac_cv_use_$1='$3=no'
+                          AS_TR_SH(wx_cv_use_$1)='$3=no'
                         fi
                       ],
                       [
@@ -427,12 +431,12 @@ AC_DEFUN([WX_ARG_WITH],
                           no_cache=1
                         fi
 
-                        ac_cv_use_$1='$3=${'DEFAULT_$3":-$wxUSE_ALL_FEATURES}"
+                        AS_TR_SH(wx_cv_use_$1)='$3=${'DEFAULT_$3":-$wxUSE_ALL_FEATURES}"
                       ])
 
-          eval "$ac_cv_use_$1"
+          eval "$AS_TR_SH(wx_cv_use_$1)"
           if test "$no_cache" != 1; then
-            echo $ac_cv_use_$1 >> ${wx_arg_cache_file}.tmp
+            echo $AS_TR_SH(wx_cv_use_$1) >> ${wx_arg_cache_file}.tmp
           fi
 
           if test x"$withstring" = xwithout; then
@@ -478,9 +482,9 @@ AC_DEFUN([WX_ARG_ENABLE],
           AC_ARG_ENABLE($1, [$2],
                         [
                           if test "$enableval" = yes; then
-                            ac_cv_use_$1='$3=yes'
+                            AS_TR_SH(wx_cv_use_$1)='$3=yes'
                           else
-                            ac_cv_use_$1='$3=no'
+                            AS_TR_SH(wx_cv_use_$1)='$3=no'
                           fi
                         ],
                         [
@@ -491,12 +495,12 @@ AC_DEFUN([WX_ARG_ENABLE],
                             no_cache=1
                           fi
 
-                          ac_cv_use_$1='$3=${'DEFAULT_$3":-$defaultval}"
+                          AS_TR_SH(wx_cv_use_$1)='$3=${'DEFAULT_$3":-$defaultval}"
                         ])
 
-          eval "$ac_cv_use_$1"
+          eval "$AS_TR_SH(wx_cv_use_$1)"
           if test "$no_cache" != 1; then
-            echo $ac_cv_use_$1 >> ${wx_arg_cache_file}.tmp
+            echo $AS_TR_SH(wx_cv_use_$1) >> ${wx_arg_cache_file}.tmp
           fi
 
           if test x"$enablestring" = xdisable; then
