@@ -122,6 +122,9 @@ private:
 class MyMusicModel: public wxDataViewModel
 {
 public:
+
+    // constructor
+
     MyMusicModel() 
     {
         m_idCounter = 0;
@@ -141,6 +144,8 @@ public:
         m_classicalMusicIsKnownToControl = false;
     }
     
+    // helper methods to change the model
+
     void AddToClassical( const wxString &title, const wxString &artist, const wxString &year )
     {
         // add to data
@@ -156,6 +161,18 @@ public:
             ItemAdded( parent, child );
         }
     }
+
+    void Delete( const wxDataViewItem &item )
+    {
+        MyMusicModelNode *node = FindNode( item );
+        node->GetParent()->GetChildren().Remove( node );
+        delete node;
+        
+        // notify control
+        ItemDeleted( item );
+    }
+    
+    // implementation of base class virtuals to define model
     
     virtual unsigned int GetColumnCount() const
     {
@@ -302,6 +319,7 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnAdd(wxCommandEvent& event);
+    void OnDelete(wxCommandEvent& event);
 
 private:
     wxDataViewCtrl* m_dataview;
@@ -349,12 +367,14 @@ enum
     ID_EXIT = wxID_EXIT,
     
     ID_ADD = 100,
+    ID_DELETE = 101,
 };
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU( ID_ABOUT, MyFrame::OnAbout )
     EVT_MENU( ID_EXIT, MyFrame::OnQuit )
     EVT_BUTTON( ID_ADD, MyFrame::OnAdd )
+    EVT_BUTTON( ID_DELETE, MyFrame::OnDelete )
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
@@ -395,6 +415,7 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
     
     button_sizer->Add( new wxButton( this, ID_ADD, "Add Mozart"), 0, wxALL, 10 );
+    button_sizer->Add( new wxButton( this, ID_DELETE, "Delete selected"), 0, wxALL, 10 );
     
     main_sizer->Add( button_sizer, 0, 0, 0 );
     
@@ -410,22 +431,15 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
     Close(true);
 }
 
-void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event) )
+void MyFrame::OnDelete(wxCommandEvent& WXUNUSED(event) )
 {
-#if 0
-    // ignore selection, do something better later
     wxDataViewItem item = m_dataview->GetSelection();
     if (item.IsOk())
-    {
-        if (m_model->HasChildren(item))
-        {
-        }
-        else
-        {
-        }
-    }
-#endif    
-  
+        m_model->Delete( item );
+}
+
+void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event) )
+{
     m_model->AddToClassical( "Kleine Nachtmusik", "Wolfgang Mozart", "1787" );
 }
 

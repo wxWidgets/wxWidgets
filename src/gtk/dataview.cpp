@@ -118,6 +118,7 @@ public:
     GtkWxTreeModel* GetOwner()          { return m_owner; }
 
     bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
+    bool ItemDeleted( const wxDataViewItem &item );
     
 protected:
     void InitTree();
@@ -609,6 +610,16 @@ bool wxGtkTreeModel::ItemAdded( const wxDataViewItem &parent, const wxDataViewIt
 {
     wxGtkTreeModelNode *parent_node = FindNode( parent );
     parent_node->Append( new wxGtkTreeModelNode( parent_node, item ) );
+    return true;
+}
+
+bool wxGtkTreeModel::ItemDeleted( const wxDataViewItem &item )
+{
+    wxGtkTreeModelNode *node = FindNode( item );
+    wxGtkTreeModelNode *parent = node->GetParent();
+    parent->GetChildren().Remove( node );
+    delete node;
+
     return true;
 }
 
@@ -1228,6 +1239,8 @@ bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &item )
         GTK_TREE_MODEL(m_wxgtk_model), path );
     gtk_tree_path_free (path);
 
+    m_wxgtk_model->model->ItemDeleted( item );
+    
     return true;
 }
 
