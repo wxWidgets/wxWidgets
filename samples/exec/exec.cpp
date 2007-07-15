@@ -747,9 +747,12 @@ void MyFrame::OnExecWithRedirect(wxCommandEvent& WXUNUSED(event))
 
     if ( sync )
     {
+        wxLogStatus( _T("'%s' is running please wait..."), cmd.c_str() );
+
         wxArrayString output, errors;
         int code = wxExecute(cmd, output, errors);
-        wxLogStatus(_T("command '%s' terminated with exit code %d."),
+
+        wxLogStatus(_T("Command '%s' terminated with exit code %d."),
                     cmd.c_str(), code);
 
         if ( code != -1 )
