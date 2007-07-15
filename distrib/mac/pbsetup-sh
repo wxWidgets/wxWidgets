@@ -49,16 +49,13 @@ if [ "${1}/../include/wx/mac/setup0.h" -nt "${1}/../include/wx/mac/setup.h" ] ; 
     echo "${0}:${LINENO}: warning: edit or replace \"include/wx/mac/setup.h\" to integrate changes"
 fi
 #
-# Copy user setup.h to build setup.h if newer or non existant
+# Copy user setup.h to build setup.h if the latter doesn't exist or is older
 #
-if [ ! -f "${2}/include/wx/setup.h" ] ; then
+if [ ! -f "${2}/include/wx/setup.h" -o \
+     "${1}/../include/wx/mac/setup.h" -nt "${2}/include/wx/setup.h" ] ; then 
     cp "${1}/../include/wx/mac/setup.h" "${2}/include/wx/setup.h"
-else
-    if [ "${1}/../include/wx/mac/setup.h" -nt "${2}/include/wx/setup.h" ] ; then
-        cp "${1}/../include/wx/mac/setup.h" "${2}/include/wx/setup.h"
+    if [ ! -f "${2}/include/wx/setup.h" ] ; then
+        echo "${0}:${LINENO}: error: unable to create target setup file \"${2}/include/wx/setup.h\""
+        exit 1
     fi
-fi
-if [ ! -f "${2}/include/wx/setup.h" ] ; then
-    echo "${0}:${LINENO}: error: unable to create target setup file \"${2}/include/wx/setup.h\""
-    exit 1
 fi
