@@ -186,17 +186,17 @@ wxString wxFileSelector(const wxChar *title,
     // suitable filter.
 
     wxString filter2;
-    if ( defaultExtension && !filter )
+    if ( !wxIsEmpty(defaultExtension) && wxIsEmpty(filter) )
         filter2 = wxString(wxT("*.")) + defaultExtension;
-    else if ( filter )
+    else if ( !wxIsEmpty(filter) )
         filter2 = filter;
 
     wxString defaultDirString;
-    if (defaultDir)
+    if (!wxIsEmpty(defaultDir))
         defaultDirString = defaultDir;
 
     wxString defaultFilenameString;
-    if (defaultFileName)
+    if (!wxIsEmpty(defaultFileName))
         defaultFilenameString = defaultFileName;
 
     wxFileDialog fileDialog(parent, title, defaultDirString,
@@ -249,10 +249,10 @@ wxString wxFileSelectorEx(const wxChar *title,
 
 {
     wxFileDialog fileDialog(parent,
-                            title ? title : wxEmptyString,
-                            defaultDir ? defaultDir : wxEmptyString,
-                            defaultFileName ? defaultFileName : wxEmptyString,
-                            filter ? filter : wxEmptyString,
+                            !wxIsEmpty(title) ? title : wxEmptyString,
+                            !wxIsEmpty(defaultDir) ? defaultDir : wxEmptyString,
+                            !wxIsEmpty(defaultFileName) ? defaultFileName : wxEmptyString,
+                            !wxIsEmpty(filter) ? filter : wxEmptyString,
                             flags, wxPoint(x, y));
 
     wxString filename;
@@ -287,7 +287,7 @@ static wxString wxDefaultFileSelector(bool load,
 
     wxString wild;
     const wxChar *ext = extension;
-    if ( ext )
+    if ( !wxIsEmpty(ext) )
     {
         if ( *ext == wxT('.') )
             ext++;

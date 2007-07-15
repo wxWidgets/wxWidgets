@@ -117,6 +117,11 @@ static bool KeyExists(WXHKEY hRootKey, const wxChar *szKey);
 static const wxChar *GetFullName(const wxRegKey *pKey,
                                const wxChar *szValue = NULL);
 
+static inline const wxChar *RegValueStr(const wxChar *szValue)
+{
+    return wxIsEmpty(szValue) ? NULL : szValue;
+}
+
 // ============================================================================
 // implementation of wxRegKey class
 // ============================================================================
@@ -475,7 +480,7 @@ bool wxRegKey::CopyValue(const wxChar *szValue,
                          wxRegKey& keyDst,
                          const wxChar *szValueNew)
 {
-    if ( !szValueNew ) {
+    if ( wxIsEmpty(szValueNew) ) {
         // by default, use the same name
         szValueNew = szValue;
     }
@@ -714,7 +719,7 @@ bool wxRegKey::DeleteValue(const wxChar *szValue)
     if ( !Open() )
         return false;
 
-    m_dwLastError = RegDeleteValue((HKEY) m_hKey, WXSTRINGCAST szValue);
+    m_dwLastError = RegDeleteValue((HKEY) m_hKey, RegValueStr(szValue));
 
     // deleting a value which doesn't exist is not considered an error
     if ( (m_dwLastError != ERROR_SUCCESS) &&
@@ -742,7 +747,7 @@ bool wxRegKey::HasValue(const wxChar *szValue) const
         return false;
 
     LONG dwRet = ::RegQueryValueEx((HKEY) m_hKey,
-                                   WXSTRINGCAST szValue,
+                                   RegValueStr(szValue),
                                    RESERVED,
                                    NULL, NULL, NULL);
     return dwRet == ERROR_SUCCESS;
@@ -790,7 +795,7 @@ wxRegKey::ValueType wxRegKey::GetValueType(const wxChar *szValue) const
       return Type_None;
 
     DWORD dwType;
-    m_dwLastError = RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
+    m_dwLastError = RegQueryValueEx((HKEY) m_hKey, RegValueStr(szValue), RESERVED,
                                     &dwType, NULL, NULL);
     if ( m_dwLastError != ERROR_SUCCESS ) {
       wxLogSysError(m_dwLastError, _("Can't read value of key '%s'"),
@@ -804,7 +809,7 @@ wxRegKey::ValueType wxRegKey::GetValueType(const wxChar *szValue) const
 bool wxRegKey::SetValue(const wxChar *szValue, long lValue)
 {
   if ( CONST_CAST Open() ) {
-    m_dwLastError = RegSetValueEx((HKEY) m_hKey, szValue, (DWORD) RESERVED, REG_DWORD,
+    m_dwLastError = RegSetValueEx((HKEY) m_hKey, RegValueStr(szValue), (DWORD) RESERVED, REG_DWORD,
                                   (RegString)&lValue, sizeof(lValue));
     if ( m_dwLastError == ERROR_SUCCESS )
       return true;
@@ -820,7 +825,7 @@ bool wxRegKey::QueryValue(const wxChar *szValue, long *plValue) const
   if ( CONST_CAST Open(Read) ) {
     DWORD dwType, dwSize = sizeof(DWORD);
     RegString pBuf = (RegString)plValue;
-    m_dwLastError = RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
+    m_dwLastError = RegQueryValueEx((HKEY) m_hKey, RegValueStr(szValue), RESERVED,
                                     &dwType, pBuf, &dwSize);
     if ( m_dwLastError != ERROR_SUCCESS ) {
       wxLogSysError(m_dwLastError, _("Can't read value of key '%s'"),
@@ -846,7 +851,7 @@ bool wxRegKey::SetValue(const wxChar *szValue,const wxMemoryBuffer& buffer)
   return false;
 #else
   if ( CONST_CAST Open() ) {
-    m_dwLastError = RegSetValueEx((HKEY) m_hKey, szValue, (DWORD) RESERVED, REG_BINARY,
+    m_dwLastError = RegSetValueEx((HKEY) m_hKey, RegValueStr(szValue), (DWORD) RESERVED, REG_BINARY,
                                   (RegBinary)buffer.GetData(),buffer.GetDataLen());
     if ( m_dwLastError == ERROR_SUCCESS )
       return true;
@@ -863,14 +868,14 @@ bool wxRegKey::QueryValue(const wxChar *szValue, wxMemoryBuffer& buffer) const
   if ( CONST_CAST Open(Read) ) {
     // first get the type and size of the data
     DWORD dwType, dwSize;
-    m_dwLastError = RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
+    m_dwLastError = RegQueryValueEx((HKEY) m_hKey, RegValueStr(szValue), RESERVED,
                                       &dwType, NULL, &dwSize);
 
     if ( m_dwLastError == ERROR_SUCCESS ) {
         if ( dwSize ) {
             const RegBinary pBuf = (RegBinary)buffer.GetWriteBuf(dwSize);
             m_dwLastError = RegQueryValueEx((HKEY) m_hKey,
-                                            WXSTRINGCAST szValue,
+                                            RegValueStr(szValue),
                                             RESERVED,
                                             &dwType,
                                             pBuf,
@@ -903,7 +908,9 @@ bool wxRegKey::QueryValue(const wxChar *szValue,
 
         // first get the type and size of the data
         DWORD dwType=REG_NONE, dwSize=0;
-        m_dwLastError = RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
+        m_dwLastError = RegQueryValueEx((HKEY) m_hKey,
+                                        RegValueStr(szValue),
+                                        RESERVED,
                                         &dwType, NULL, &dwSize);
         if ( m_dwLastError == ERROR_SUCCESS )
         {
@@ -916,7 +923,7 @@ bool wxRegKey::QueryValue(const wxChar *szValue,
             else
             {
                 m_dwLastError = RegQueryValueEx((HKEY) m_hKey,
-                                                WXSTRINGCAST szValue,
+                                                RegValueStr(szValue),
                                                 RESERVED,
                                                 &dwType,
                                                 (RegString)(wxChar*)wxStringBuffer(strValue, dwSize),
@@ -966,7 +973,8 @@ bool wxRegKey::QueryValue(const wxChar *szValue,
 bool wxRegKey::SetValue(const wxChar *szValue, const wxString& strValue)
 {
   if ( CONST_CAST Open() ) {
-      m_dwLastError = RegSetValueEx((HKEY) m_hKey, szValue, (DWORD) RESERVED, REG_SZ,
+      m_dwLastError = RegSetValueEx((HKEY) m_hKey, RegValueStr(szValue),
+                                    (DWORD) RESERVED, REG_SZ,
                                     (RegString)strValue.c_str(),
                                     (strValue.Len() + 1)*sizeof(wxChar));
       if ( m_dwLastError == ERROR_SUCCESS )
