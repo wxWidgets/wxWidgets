@@ -307,6 +307,8 @@ void wxGUIEventLoop::WakeUp()
 
 #else // !wxUSE_GUI
 
+#if wxUSE_CONSOLE_EVENTLOOP
+
 void wxConsoleEventLoop::OnNextIteration()
 {
     if ( wxTheApp )
@@ -339,5 +341,7 @@ bool wxConsoleEventLoop::Dispatch()
 
     return !m_shouldExit;
 }
+
+#endif // wxUSE_CONSOLE_EVENTLOOP
 
 #endif //wxUSE_GUI
