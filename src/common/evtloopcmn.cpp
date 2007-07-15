@@ -37,7 +37,7 @@
 wxEventLoopBase *wxEventLoopBase::ms_activeLoop = NULL;
 
 // wxEventLoopManual is unused in the other ports
-#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXDFB__) || (defined(__UNIX__) && !wxUSE_GUI)
+#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXDFB__) || (defined(__UNIX__) && wxUSE_BASE)
 
 // ============================================================================
 // wxEventLoopManual implementation
