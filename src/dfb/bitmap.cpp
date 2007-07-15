@@ -203,6 +203,27 @@ static wxIDirectFBSurfacePtr CreateSurfaceForImage(const wxImage& image)
                                    DSPF_RGB24);
 }
 
+static bool ConvertSurfaceToFormat(wxIDirectFBSurfacePtr& surface,
+                                   DFBSurfacePixelFormat format)
+{
+    if ( surface->GetPixelFormat() == format )
+        return true;
+
+    int w, h;
+    surface->GetSize(&w, &h);
+    wxIDirectFBSurfacePtr s = CreateSurfaceWithFormat(w, h, format);
+    if ( !s )
+        return false;
+
+    if ( !s->SetBlittingFlags(DSBLIT_NOFX) )
+        return false;
+    if ( !s->Blit(surface->GetRaw(), NULL, 0, 0) )
+        return false;
+
+    surface = s;
+    return true;
+}
+
 static DFBSurfacePixelFormat DepthToFormat(int depth)
 {
     switch ( depth )
@@ -392,8 +413,11 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
     else
         format = DSPF_RGB24;
 
-    // requested format is not what this bitmap uses
-    if ( format != M_BITMAP->m_surface->GetPixelFormat() )
+    // convert the bitmap into format compatible with requested raw access;
+    // note that we don't bother converting the bitmap back in UngetRawData(),
+    // as unpacked formats (RGB24, RGB32) are the common case and converting
+    // between them while blitting is fast enough (FIXME?)
+    if ( !ConvertSurfaceToFormat(M_BITMAP->m_surface, format) )
         return NULL;
 
     void *bits = NULL;
