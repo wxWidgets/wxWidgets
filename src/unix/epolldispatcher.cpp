@@ -31,6 +31,7 @@
 
 #include <sys/epoll.h>
 #include <errno.h>
+#include <unistd.h>
 
 #define wxEpollDispatcher_Trace wxT("epolldispatcher")
 
