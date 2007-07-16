@@ -1651,6 +1651,7 @@ void wxBoxSizer::RecalcSizes()
 
     wxPoint pt( m_position );
 
+    int stretchable = m_stretchable;
     wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
     while (node)
     {
@@ -1667,7 +1668,9 @@ void wxBoxSizer::RecalcSizes()
                 {
                     // Because of at least one visible item has non-zero
                     // proportion then m_stretchable is not zero
-                    height = (delta * item->GetProportion()) / m_stretchable;
+                    height = (delta * item->GetProportion()) / stretchable;
+                    delta -= height;
+                    stretchable -= item->GetProportion();
                 }
 
                 wxPoint child_pos( pt );
@@ -1693,7 +1696,9 @@ void wxBoxSizer::RecalcSizes()
                 {
                     // Because of at least one visible item has non-zero
                     // proportion then m_stretchable is not zero
-                    width = (delta * item->GetProportion()) / m_stretchable;
+                    width = (delta * item->GetProportion()) / stretchable;
+                    delta -= width;
+                    stretchable -= item->GetProportion();
                 }
 
                 wxPoint child_pos( pt );
