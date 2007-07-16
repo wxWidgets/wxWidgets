@@ -12,7 +12,7 @@
 
 #include "wx/unix/pipe.h"
 
-class WXDLLIMPEXP_BASE wxProcess;
+class WXDLLIMPEXP_FWD_BASE wxProcess;
 class wxStreamTempInputBuffer;
 
 // if pid > 0, the execution is async and the data is freed in the callback

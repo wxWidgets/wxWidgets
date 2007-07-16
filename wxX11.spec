@@ -141,6 +141,8 @@ wx/apptrait.h
 wx/archive.h
 wx/arrimpl.cpp
 wx/arrstr.h
+wx/atomic.h
+wx/base64.h
 wx/beforestd.h
 wx/buffer.h
 wx/build.h
@@ -153,6 +155,7 @@ wx/config.h
 wx/convauto.h
 wx/containr.h
 wx/cpp.h
+wx/crt.h
 wx/datetime.h
 wx/datstrm.h
 wx/dde.h
@@ -249,6 +252,7 @@ wx/wfstream.h
 wx/wx.h
 wx/wxchar.h
 wx/wxcrt.h
+wx/wxcrtbase.h
 wx/wxcrtvararg.h
 wx/wxprec.h
 wx/xti.h
@@ -258,6 +262,7 @@ wx/zstream.h
 wx/unix/app.h
 wx/unix/apptbase.h
 wx/unix/apptrait.h
+wx/unix/chkconf.h
 wx/unix/execute.h
 wx/unix/evtloop.h
 wx/unix/mimetype.h

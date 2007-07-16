@@ -116,7 +116,10 @@ wxPrinterDC::wxPrinterDC(const wxString& driver_name,
     {
         if ( !driver_name.empty() && !device_name.empty() && !file.empty() )
         {
-            m_hDC = (WXHDC) CreateDC(driver_name, device_name, file, NULL);
+            m_hDC = (WXHDC) CreateDC(driver_name.wx_str(),
+                                     device_name.wx_str(),
+                                     file.fn_str(),
+                                     NULL);
         }
         else // we don't have all parameters, ask the user
         {
@@ -178,14 +181,14 @@ bool wxPrinterDC::StartDoc(const wxString& message)
 {
     DOCINFO docinfo;
     docinfo.cbSize = sizeof(DOCINFO);
-    docinfo.lpszDocName = (const wxChar*)message;
+    docinfo.lpszDocName = message.wx_str();
 
     wxString filename(m_printData.GetFilename());
 
     if (filename.empty())
         docinfo.lpszOutput = NULL;
     else
-        docinfo.lpszOutput = (const wxChar *) filename;
+        docinfo.lpszOutput = filename.wx_str();
 
     docinfo.lpszDatatype = NULL;
     docinfo.fwType = 0;
@@ -323,7 +326,7 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
 
     DEVMODE *lpDevMode = hDevMode ? (DEVMODE *)::GlobalLock(hDevMode) : NULL;
 
-    HDC hDC = ::CreateDC(NULL, deviceName, NULL, lpDevMode);
+    HDC hDC = ::CreateDC(NULL, deviceName.wx_str(), NULL, lpDevMode);
     if ( !hDC )
         wxLogLastError(_T("CreateDC(printer)"));
 

@@ -733,11 +733,6 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
 
         if ( isNone )
         {
-            img.SetMask(true);
-            img.SetMaskColour(255, 0, 255);
-            clr_data.R =
-            clr_data.B = 255;
-            clr_data.G = 0;
             hasMask = true;
             maskKey = key;
         }
@@ -745,22 +740,23 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
         clr_tbl[key] = clr_data;
     }
 
-    /*
-     *  Modify colour entries with RGB = (255,0,255) to (255,0,254) if
-     *  mask colour is present (so that existing pixels with (255,0,255)
-     *  magenta colour are not incorrectly made transparent):
-     */
+    // deal with the mask: we must replace pseudo-colour "None" with the mask
+    // colour (which can be any colour not otherwise used in the image)
     if (hasMask)
     {
-        for (it = clr_tbl.begin(); it != clr_tbl.end(); ++it)
+        unsigned char r, g, b;
+        if ( !img.FindFirstUnusedColour(&r, &g, &b) )
         {
-            if (it->second.R == 255 && it->second.G == 0 &&
-                it->second.B == 255 &&
-                it->first != maskKey)
-            {
-                it->second.B = 254;
-            }
+            wxLogError(_("XPM: no colors left to use for mask!"));
+            return wxNullImage;
         }
+
+        clr_tbl[maskKey].R = r;
+        clr_tbl[maskKey].G = g;
+        clr_tbl[maskKey].B = b;
+
+        img.SetMask(true);
+        img.SetMaskColour(r, g, b);
     }
 
     /*

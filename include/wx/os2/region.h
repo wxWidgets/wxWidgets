@@ -75,7 +75,7 @@ protected:
     virtual bool DoOffset(wxCoord x, wxCoord y);
     virtual bool DoCombine(const wxRegion& region, wxRegionOp op);
 
-    friend class WXDLLEXPORT wxRegionIterator;
+    friend class WXDLLIMPEXP_FWD_CORE wxRegionIterator;
     DECLARE_DYNAMIC_CLASS(wxRegion);
 
 }; // end of CLASS wxRegion

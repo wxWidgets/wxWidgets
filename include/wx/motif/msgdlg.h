@@ -13,38 +13,32 @@
 #ifndef _WX_MSGBOXDLG_H_
 #define _WX_MSGBOXDLG_H_
 
-#include "wx/defs.h"
-#include "wx/dialog.h"
-
 // ----------------------------------------------------------------------------
 // Message box dialog
 // ----------------------------------------------------------------------------
 
-WXDLLEXPORT_DATA(extern const wxChar) wxMessageBoxCaptionStr[];
-
-class WXDLLEXPORT wxMessageDialog: public wxDialog, public wxMessageDialogBase
+class WXDLLEXPORT wxMessageDialog : public wxMessageDialogBase
 {
-    DECLARE_DYNAMIC_CLASS(wxMessageDialog)
-
 public:
     wxMessageDialog(wxWindow *parent,
-        const wxString& message,
-        const wxString& caption = wxMessageBoxCaptionStr,
-        long style = wxOK | wxCENTRE,
-        const wxPoint& pos = wxDefaultPosition);
+                    const wxString& message,
+                    const wxString& caption = wxMessageBoxCaptionStr,
+                    long style = wxOK | wxCENTRE,
+                    const wxPoint& WXUNUSED(pos) = wxDefaultPosition)
+        : wxMessageDialogBase(parent, message, caption, style)
+    {
+    }
 
-    int ShowModal();
+    virtual int ShowModal();
 
     // implementation only from now on
     // called by the Motif callback
     void SetResult(long result) { m_result = result; }
 
 protected:
-    wxString    m_caption;
-    wxString    m_message;
-    wxWindow *  m_parent;
     long        m_result;
+
+    DECLARE_DYNAMIC_CLASS(wxMessageDialog)
 };
 
-#endif
-// _WX_MSGBOXDLG_H_
+#endif // _WX_MSGBOXDLG_H_

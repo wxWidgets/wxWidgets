@@ -186,6 +186,7 @@ bool wxStaticText::SetFont(const wxFont& font)
 
 void wxStaticText::DoSetLabel(const wxString& label)
 {
+    m_labelOrig = label;
     m_label = RemoveMnemonics(label);
 
     wxMacCFStringHolder str( m_label, m_font.GetEncoding() );

@@ -109,7 +109,6 @@ cd ..
 
 cd common
 md \wxmsw_dist\wxMSW\src\common
-copy glob.inc \wxmsw_dist\wxMSW\src\common
 copy lexer.l \wxmsw_dist\wxMSW\src\common
 copy parser.y \wxmsw_dist\wxMSW\src\common
 copy *.c \wxmsw_dist\wxMSW\src\common

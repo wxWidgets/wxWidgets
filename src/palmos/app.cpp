@@ -39,7 +39,7 @@
     #include "wx/dialog.h"
     #include "wx/msgdlg.h"
     #include "wx/intl.h"
-    #include "wx/wxchar.h"
+    #include "wx/crt.h"
     #include "wx/log.h"
     #include "wx/module.h"
 #endif
@@ -125,7 +125,7 @@ wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
     return new wxPalmOSTimerImpl(timer);
 };
 
-wxEventLoop* wxGUIAppTraits::CreateEventLoop()
+wxEventLoopBase* wxGUIAppTraits::CreateEventLoop()
 {
     return new wxEventLoop;
 }
@@ -142,7 +142,6 @@ int wxApp::m_nCmdShow = 0;
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 
 BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
-    EVT_IDLE(wxApp::OnIdle)
     EVT_END_SESSION(wxApp::OnEndSession)
     EVT_QUERY_END_SESSION(wxApp::OnQueryEndSession)
 END_EVENT_TABLE()
@@ -244,11 +243,6 @@ wxApp::~wxApp()
 // ----------------------------------------------------------------------------
 // wxApp idle handling
 // ----------------------------------------------------------------------------
-
-void wxApp::OnIdle(wxIdleEvent& event)
-{
-    wxAppBase::OnIdle(event);
-}
 
 void wxApp::WakeUpIdle()
 {

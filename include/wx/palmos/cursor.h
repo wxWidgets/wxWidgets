@@ -14,7 +14,7 @@
 
 #include "wx/palmos/gdiimage.h"
 
-class WXDLLEXPORT wxImage;
+class WXDLLIMPEXP_FWD_CORE wxImage;
 
 // Cursor
 class WXDLLEXPORT wxCursor : public wxGDIImage

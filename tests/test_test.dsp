@@ -443,6 +443,14 @@ SOURCE=.\arrays\arrays.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\thread\atomic.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\base64\base64.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\streams\bstream.cpp
 # End Source File
 # Begin Source File
@@ -590,6 +598,10 @@ SOURCE=.\uris\uris.cpp
 # Begin Source File
 
 SOURCE=.\strings\vararg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\vectors\vectors.cpp
 # End Source File
 # Begin Source File
 

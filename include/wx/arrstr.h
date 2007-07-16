@@ -42,10 +42,11 @@ public:
 
     wxArrayString() { }
     wxArrayString(const wxArrayString& a) : wxArrayStringBase(a) { }
-    wxArrayString(size_t sz, const wxChar** a);
+    wxArrayString(size_t sz, const char** a);
+    wxArrayString(size_t sz, const wchar_t** a);
     wxArrayString(size_t sz, const wxString* a);
 
-    int Index(const wxChar* sz, bool bCase = true, bool bFromEnd = false) const;
+    int Index(const wxString& str, bool bCase = true, bool bFromEnd = false) const;
 
     void Sort(bool reverseOrder = false);
     void Sort(CompareFunction function);
@@ -75,7 +76,7 @@ public:
             Add(src[n]);
     }
 
-    int Index(const wxChar* sz, bool bCase = true, bool bFromEnd = false) const;
+    int Index(const wxString& str, bool bCase = true, bool bFromEnd = false) const;
 };
 
 #else // if !wxUSE_STL
@@ -104,7 +105,8 @@ public:
     //     supported it...
   wxArrayString(int autoSort) { Init(autoSort != 0); }
     // C string array ctor
-  wxArrayString(size_t sz, const wxChar** a);
+  wxArrayString(size_t sz, const char** a);
+  wxArrayString(size_t sz, const wchar_t** a);
     // wxString string array ctor
   wxArrayString(size_t sz, const wxString* a);
     // copy ctor
@@ -158,7 +160,7 @@ public:
     // bFromEnd is false or from end otherwise. If bCase, comparison is case
     // sensitive (default). Returns index of the first item matched or
     // wxNOT_FOUND
-  int  Index (const wxChar *sz, bool bCase = true, bool bFromEnd = false) const;
+  int  Index (const wxString& str, bool bCase = true, bool bFromEnd = false) const;
     // add new element at the end (if the array is not sorted), return its
     // index
   size_t Add(const wxString& str, size_t nInsert = 1);
@@ -167,7 +169,7 @@ public:
     // expand the array to have count elements
   void SetCount(size_t count);
     // remove first item matching this value
-  void Remove(const wxChar *sz);
+  void Remove(const wxString& sz);
     // remove item by index
   void RemoveAt(size_t nIndex, size_t nRemove = 1);
 

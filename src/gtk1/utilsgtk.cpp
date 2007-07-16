@@ -203,7 +203,7 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
     return wxPORT_GTK;
 }
 
-wxEventLoop* wxGUIAppTraits::CreateEventLoop()
+wxEventLoopBase* wxGUIAppTraits::CreateEventLoop()
 {
     return new wxEventLoop;
 }
@@ -215,14 +215,3 @@ void wxGUIAppTraits::SetLocale()
 }
 #endif
 
-wxString
-wxGUIAppTraits::GetStandardCmdLineOptions(wxArrayString& names,
-                                          wxArrayString& desc) const
-{
-    wxString usage;
-
-    wxUnusedVar(names);
-    wxUnusedVar(desc);
-
-    return usage;
-}

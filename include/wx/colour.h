@@ -16,7 +16,7 @@
 #include "wx/gdiobj.h"
 
 
-class WXDLLEXPORT wxColour;
+class WXDLLIMPEXP_FWD_CORE wxColour;
 
 // the standard wxColour constructors;
 // this macro avoids to repeat these lines across all colour.h files, since
@@ -27,8 +27,9 @@ class WXDLLEXPORT wxColour;
               ChannelType alpha = wxALPHA_OPAQUE )                            \
         { Set(red, green, blue, alpha); }                                     \
     wxColour( unsigned long colRGB ) { Set(colRGB); }                         \
-    wxColour(const wxString &colourName) { Set(colourName); }                 \
-    wxColour(const wxChar *colourName) { Set(colourName); }
+    wxColour(const wxString& colourName) { Set(colourName); }                 \
+    wxColour(const char *colourName) { Set(colourName); }                     \
+    wxColour(const wchar_t *colourName) { Set(colourName); }
 
 
 // flags for wxColour -> wxString conversion (see wxColour::GetAsString)
@@ -74,9 +75,6 @@ public:
         { InitRGBA(red,green,blue, alpha); }
 
     // implemented in colourcmn.cpp
-    bool Set(const wxChar *str)
-        { return FromString(str); }
-
     bool Set(const wxString &str)
         { return FromString(str); }
 
@@ -120,7 +118,7 @@ protected:
     virtual void
     InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a) = 0;
 
-    virtual bool FromString(const wxChar *s);
+    virtual bool FromString(const wxString& s);
 };
 
 

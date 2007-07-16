@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/dfb/nonownedwnd.h
-// Purpose:     declares wxNonTopLevelWindow class
+// Purpose:     declares wxNonOwnedWindow class
 // Author:      Vaclav Slavik
 // Modified by:
 // Created:     2006-12-24
@@ -87,6 +87,10 @@ protected:
     // focus is different from wx: only shown TLWs can have it and not any
     // wxWindows as in wx
     void SetDfbFocus();
+
+    // overriden in wxTopLevelWindowDFB, there's no common handling for wxTLW
+    // and wxPopupWindow to be done here
+    virtual void HandleFocusEvent(const wxDFBWindowEvent& WXUNUSED(event_)) {}
 
 private:
     // do queued painting in idle time

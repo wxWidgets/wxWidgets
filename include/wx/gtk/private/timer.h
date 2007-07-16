@@ -10,6 +10,8 @@
 #ifndef _WX_GTK_PRIVATE_TIMER_H_
 #define _WX_GTK_PRIVATE_TIMER_H_
 
+#if wxUSE_TIMER
+
 #include "wx/private/timer.h"
 
 //-----------------------------------------------------------------------------
@@ -28,5 +30,7 @@ public:
 protected:
     int m_sourceId;
 };
+
+#endif // wxUSE_TIMER
 
 #endif // _WX_GTK_PRIVATE_TIMER_H_

@@ -45,7 +45,7 @@ public:
     virtual wxString GetLocalDataDir() const;
     virtual wxString GetUserDataDir() const;
     virtual wxString GetPluginsDir() const;
-    virtual wxString GetLocalizedResourcesDir(const wxChar *lang,
+    virtual wxString GetLocalizedResourcesDir(const wxString& lang,
                                               ResourceCat category) const;
 
 private:

@@ -38,7 +38,9 @@
 #include "wx/combo.h"
 
 #include "wx/msw/registry.h"
+#if wxUSE_UXTHEME
 #include "wx/msw/uxtheme.h"
+#endif
 
 // Change to #if 1 to include tmschema.h for easier testing of theme
 // parameters.
@@ -159,10 +161,13 @@ bool wxComboCtrl::Create(wxWindow *parent,
     // Set border
     long border = style & wxBORDER_MASK;
 
+#if wxUSE_UXTHEME
     wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
+#endif
 
     if ( !border )
     {
+#if wxUSE_UXTHEME
         if ( theme )
         {
             // For XP, have 1-width custom border, for older version use sunken
@@ -170,6 +175,7 @@ bool wxComboCtrl::Create(wxWindow *parent,
             m_widthCustomBorder = 1;
         }
         else
+#endif
             border = wxBORDER_SUNKEN;
 
         style = (style & ~(wxBORDER_MASK)) | border;
@@ -186,11 +192,13 @@ bool wxComboCtrl::Create(wxWindow *parent,
                            name) )
         return false;
 
+#if wxUSE_UXTHEME
     if ( theme )
     {
         if ( ::wxGetWinVersion() >= wxWinVersion_Vista )
             m_iFlags |= wxCC_BUTTON_STAYS_DOWN |wxCC_BUTTON_COVERS_BORDER;
     }
+#endif
 
     if ( style & wxCC_STD_BUTTON )
         m_iFlags |= wxCC_POPUP_ON_MOUSE_UP;
@@ -220,6 +228,7 @@ void wxComboCtrl::OnThemeChange()
     // API: TMT_TEXTCOLOR doesn't work neither for EDIT nor COMBOBOX
     SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
 
+#if wxUSE_UXTHEME
     wxUxThemeEngine * const theme = wxUxThemeEngine::GetIfActive();
     if ( theme )
     {
@@ -244,6 +253,7 @@ void wxComboCtrl::OnThemeChange()
 
         wxLogApiError(_T("GetThemeColor(EDIT, ETS_NORMAL, TMT_FILLCOLOR)"), hr);
     }
+#endif
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 }
@@ -256,12 +266,14 @@ void wxComboCtrl::OnResize()
     int textCtrlXAdjust;
     int textCtrlYAdjust;
 
+#if wxUSE_UXTHEME
     if ( wxUxThemeEngine::GetIfActive() )
     {
         textCtrlXAdjust = TEXTCTRLXADJUST_XP;
         textCtrlYAdjust = TEXTCTRLYADJUST_XP;
     }
     else
+#endif
     {
         textCtrlXAdjust = TEXTCTRLXADJUST_CLASSIC;
         textCtrlYAdjust = TEXTCTRLYADJUST_CLASSIC;
@@ -320,7 +332,9 @@ static void wxMSWDrawFocusRect( wxDC& dc, const wxRect& rect )
 void
 wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
 {
+#if wxUSE_UXTHEME
     wxUxThemeHandle hTheme(this, L"COMBOBOX");
+#endif
 
     wxSize sz = GetClientSize();
     bool isEnabled;
@@ -336,6 +350,7 @@ wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
         isEnabled = IsEnabled();
         doDrawFocusRect = ShouldDrawFocus();
 
+#if wxUSE_UXTHEME
         // Windows-style: for smaller size control (and for disabled background) use less spacing
         if ( hTheme )
         {
@@ -344,6 +359,7 @@ wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
             focusSpacingY = sz.y > (GetCharHeight()+2) && isEnabled ? 2 : 1;
         }
         else
+#endif
         {
             // Classic Theme
             if ( isEnabled )
@@ -464,11 +480,13 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
     HDC hDc = GetHdcOf(dc);
     HWND hWnd = GetHwndOf(this);
 
+#if wxUSE_UXTHEME
     wxUxThemeEngine* theme = NULL;
     wxUxThemeHandle hTheme(this, L"COMBOBOX");
 
     if ( hTheme )
         theme = wxUxThemeEngine::GetIfActive();
+#endif
 
     wxRect borderRect(0,0,sz.x,sz.y);
 
@@ -480,6 +498,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 
     int drawButFlags = 0;
 
+#if wxUSE_UXTHEME
     if ( hTheme )
     {
         const bool useVistaComboBox = ::wxGetWinVersion() >= wxWinVersion_Vista;
@@ -624,6 +643,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         }
     }
     else
+#endif
     {
         // Windows 2000 and earlier
         drawButFlags = Button_PaintBackground;
@@ -819,8 +839,10 @@ bool wxComboCtrl::AnimateShow( const wxRect& rect, int flags )
 
 wxCoord wxComboCtrl::GetNativeTextIndent() const
 {
+#if wxUSE_UXTHEME
     if ( wxUxThemeEngine::GetIfActive() )
         return NATIVE_TEXT_INDENT_XP;
+#endif
     return NATIVE_TEXT_INDENT_CLASSIC;
 }
 
@@ -847,8 +869,10 @@ bool wxComboCtrl::IsKeyPopupToggle(const wxKeyEvent& event) const
             // popup but Alt-arrow does
             if ( event.AltDown() ||
                     ( !isPopupShown &&
-                      HasFlag(wxCB_READONLY) &&
-                      !wxUxThemeEngine::GetIfActive()
+                      HasFlag(wxCB_READONLY)
+#if wxUSE_UXTHEME
+                      && !wxUxThemeEngine::GetIfActive()
+#endif
                     ) )
             {
                 return true;

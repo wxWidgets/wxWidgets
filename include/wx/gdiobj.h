@@ -20,7 +20,7 @@
 // the same native GDI object
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGDIRefData: public wxObjectRefData { };
+class WXDLLIMPEXP_FWD_CORE wxGDIRefData: public wxObjectRefData { };
 
 // ----------------------------------------------------------------------------
 // wxGDIObject

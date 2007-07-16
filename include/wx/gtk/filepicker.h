@@ -36,7 +36,8 @@
                                                                               \
     virtual bool Destroy()                                                    \
     {                                                                         \
-        m_dialog->Destroy();                                                  \
+        if (m_dialog)                                                         \
+            m_dialog->Destroy();                                              \
         return wxButton::Destroy();                                           \
     }                                                                         \
                                                                               \

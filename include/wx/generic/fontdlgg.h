@@ -20,7 +20,7 @@
 
 #ifdef __WXWINCE__
 #define USE_SPINCTRL_FOR_POINT_SIZE 1
-class WXDLLEXPORT wxSpinEvent;
+class WXDLLIMPEXP_FWD_CORE wxSpinEvent;
 #else
 #define USE_SPINCTRL_FOR_POINT_SIZE 0
 #endif
@@ -29,10 +29,10 @@ class WXDLLEXPORT wxSpinEvent;
  * FONT DIALOG
  */
 
-class WXDLLEXPORT wxChoice;
-class WXDLLEXPORT wxText;
-class WXDLLEXPORT wxCheckBox;
-class WXDLLEXPORT wxFontPreviewer;
+class WXDLLIMPEXP_FWD_CORE wxChoice;
+class WXDLLIMPEXP_FWD_CORE wxText;
+class WXDLLIMPEXP_FWD_CORE wxCheckBox;
+class WXDLLIMPEXP_FWD_CORE wxFontPreviewer;
 
 enum
 {
@@ -103,13 +103,6 @@ private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxGenericFontDialog)
 };
-
-WXDLLEXPORT const wxChar *wxFontFamilyIntToString(int family);
-WXDLLEXPORT const wxChar *wxFontWeightIntToString(int weight);
-WXDLLEXPORT const wxChar *wxFontStyleIntToString(int style);
-WXDLLEXPORT int wxFontFamilyStringToInt(wxChar *family);
-WXDLLEXPORT int wxFontWeightStringToInt(wxChar *weight);
-WXDLLEXPORT int wxFontStyleStringToInt(wxChar *style);
 
 #if WXWIN_COMPATIBILITY_2_6
     // deprecated, for backwards compatibility only

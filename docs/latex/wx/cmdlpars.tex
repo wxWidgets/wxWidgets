@@ -168,8 +168,8 @@ or, if you use the default constructor, you can do it later by calling
 \helpref{SetCmdLine}{wxcmdlineparsersetcmdline}.
 
 The same holds for command line description: it can be specified either in
-the constructor (\helpref{without command line}{wxcmdlineparserwxcmdlineparserdesc} or 
-\helpref{together with it}{wxcmdlineparserwxcmdlineparserdescargc}) or
+the constructor (\helpref{without\ command\ line}{wxcmdlineparserwxcmdlineparser} or 
+\helpref{together\ with\ it}{wxcmdlineparserwxcmdlineparserdescargc}) or
 constructed later using either \helpref{SetDesc}{wxcmdlineparsersetdesc} or
 combination of \helpref{AddSwitch}{wxcmdlineparseraddswitch}, 
 \helpref{AddOption}{wxcmdlineparseraddoption} and 
@@ -246,6 +246,8 @@ command line or false if they were not specified.
 
 Default constructor. You must use 
 \helpref{SetCmdLine}{wxcmdlineparsersetcmdline} later.
+
+\membersection{wxCmdLineParser::wxCmdLineParser}\label{wxcmdlineparserwxcmdlineparserdescargc}
 
 \func{}{wxCmdLineParser}{\param{int }{argc}, \param{char** }{argv}}
 

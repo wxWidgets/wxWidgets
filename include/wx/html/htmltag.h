@@ -17,8 +17,8 @@
 #include "wx/object.h"
 #include "wx/arrstr.h"
 
-class WXDLLIMPEXP_CORE wxColour;
-class WXDLLIMPEXP_HTML wxHtmlEntitiesParser;
+class WXDLLIMPEXP_FWD_CORE wxColour;
+class WXDLLIMPEXP_FWD_HTML wxHtmlEntitiesParser;
 
 //-----------------------------------------------------------------------------
 // wxHtmlTagsCache
@@ -105,7 +105,8 @@ public:
     // (like sscanf() does)
     // NOTE: unlike scanf family, this function only accepts
     //       *one* parameter !
-    int ScanParam(const wxString& par, const wxChar *format, void *param) const;
+    int ScanParam(const wxString& par, const char *format, void *param) const;
+    int ScanParam(const wxString& par, const wchar_t *format, void *param) const;
 
     // Returns string containing all params.
     wxString GetAllParams() const;

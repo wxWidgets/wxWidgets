@@ -107,7 +107,9 @@ bool wxCheckForInterrupt(wxWindow *wnd)
 #ifndef __WXMICROWIN__
 wxChar *wxLoadUserResource(const wxString& resourceName, const wxString& resourceType)
 {
-    HRSRC hResource = ::FindResource(wxGetInstance(), resourceName, resourceType);
+    HRSRC hResource = ::FindResource(wxGetInstance(),
+                                     resourceName.wx_str(),
+                                     resourceType.wx_str());
     if ( hResource == 0 )
         return NULL;
 

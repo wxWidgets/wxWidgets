@@ -24,15 +24,57 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/module.h"
 #endif //WX_PRECOMP
 
 #include "wx/private/fdiodispatcher.h"
+
+#include "wx/private/selectdispatcher.h"
+#ifdef __UNIX__
+    #include "wx/unix/private/epolldispatcher.h"
+#endif
+
+wxFDIODispatcher *gs_dispatcher = NULL;
 
 // ============================================================================
 // implementation
 // ============================================================================
 
-wxFDIOHandler *wxFDIODispatcher::FindHandler(int fd) const
+// ----------------------------------------------------------------------------
+// wxFDIODispatcher
+// ----------------------------------------------------------------------------
+
+/* static */
+wxFDIODispatcher *wxFDIODispatcher::Get()
+{
+    if ( !gs_dispatcher )
+    {
+#if wxUSE_EPOLL_DISPATCHER
+        gs_dispatcher = wxEpollDispatcher::Create();
+        if ( !gs_dispatcher )
+#endif // wxUSE_EPOLL_DISPATCHER
+#if wxUSE_SELECT_DISPATCHER
+            gs_dispatcher = wxSelectDispatcher::Create();
+#endif // wxUSE_WCHAR_T
+    }
+
+    wxASSERT_MSG( gs_dispatcher, _T("failed to create any IO dispatchers") );
+
+    return gs_dispatcher;
+}
+
+/* static */
+void wxFDIODispatcher::DispatchPending()
+{
+    if ( gs_dispatcher )
+        gs_dispatcher->Dispatch(0);
+}
+
+// ----------------------------------------------------------------------------
+// wxMappedFDIODispatcher
+// ----------------------------------------------------------------------------
+
+wxFDIOHandler *wxMappedFDIODispatcher::FindHandler(int fd) const
 {
     const wxFDIOHandlerMap::const_iterator it = m_handlers.find(fd);
 
@@ -40,7 +82,7 @@ wxFDIOHandler *wxFDIODispatcher::FindHandler(int fd) const
 }
 
 
-bool wxFDIODispatcher::RegisterFD(int fd, wxFDIOHandler *handler, int flags)
+bool wxMappedFDIODispatcher::RegisterFD(int fd, wxFDIOHandler *handler, int flags)
 {
     wxUnusedVar(flags);
 
@@ -63,7 +105,7 @@ bool wxFDIODispatcher::RegisterFD(int fd, wxFDIOHandler *handler, int flags)
     return true;
 }
 
-bool wxFDIODispatcher::ModifyFD(int fd, wxFDIOHandler *handler, int flags)
+bool wxMappedFDIODispatcher::ModifyFD(int fd, wxFDIOHandler *handler, int flags)
 {
     wxUnusedVar(flags);
 
@@ -78,20 +120,29 @@ bool wxFDIODispatcher::ModifyFD(int fd, wxFDIOHandler *handler, int flags)
     return true;
 }
 
-wxFDIOHandler *wxFDIODispatcher::UnregisterFD(int fd, int flags)
+bool wxMappedFDIODispatcher::UnregisterFD(int fd)
 {
     wxFDIOHandlerMap::iterator i = m_handlers.find(fd);
-    wxCHECK_MSG( i != m_handlers.end(), NULL,
-                    _T("unregistering unregistered handler?") );
+    if ( i == m_handlers.end() )
+      return false;
 
-    wxFDIOHandler * const handler = i->second.handler;
-    i->second.flags &= ~flags;
-    if ( !i->second.flags )
-    {
-        // this handler is not registered for anything any more, get rid of it
-        m_handlers.erase(i);
-    }
+    m_handlers.erase(i);
 
-    return handler;
+    return true;
 }
 
+// ----------------------------------------------------------------------------
+// wxSelectDispatcherModule
+// ----------------------------------------------------------------------------
+
+class wxFDIODispatcherModule : public wxModule
+{
+public:
+    virtual bool OnInit() { return true; }
+    virtual void OnExit() { wxDELETE(gs_dispatcher); }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxFDIODispatcherModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxFDIODispatcherModule, wxModule)

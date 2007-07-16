@@ -39,6 +39,7 @@ ctags --totals --c++-kinds=+px --language-force=c++ \
 	include/wx/xml/*.h \
 	include/wx/xrc/*.h \
 	include/wx/unix/*.h \
+	include/wx/unix/private/*.h \
 	src/aui/*.cpp \
 	src/common/*.cpp \
 	src/generic/*.cpp \

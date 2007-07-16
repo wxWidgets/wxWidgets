@@ -22,9 +22,9 @@
 // wxSound: simple audio playback class
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxSoundBackend;
-class WXDLLIMPEXP_ADV wxSound;
-class WXDLLIMPEXP_BASE wxDynamicLibrary;
+class WXDLLIMPEXP_FWD_ADV wxSoundBackend;
+class WXDLLIMPEXP_FWD_ADV wxSound;
+class WXDLLIMPEXP_FWD_BASE wxDynamicLibrary;
 
 /// Sound data, as loaded from .wav file:
 class WXDLLIMPEXP_ADV wxSoundData

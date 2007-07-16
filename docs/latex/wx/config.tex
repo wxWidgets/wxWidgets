@@ -378,7 +378,11 @@ this is not present, but required, the application name will be used instead.}
 \docparam{style}{Can be one of wxCONFIG\_USE\_LOCAL\_FILE and
 wxCONFIG\_USE\_GLOBAL\_FILE. The style interpretation depends on the config
 class and is ignored by some implementations. For wxFileConfig, these styles
-determine whether a local or global config file is created or used. If the
+determine whether a local or global config file is created or used: if
+wxCONFIG\_USE\_GLOBAL\_FILE is used, then settings are read from the global
+config file and if wxCONFIG\_USE\_LOCAL\_FILE is used, settings are read from
+and written to local config file (if they are both set, global file is read
+first, then local file, overwriting global settings). If the
 flag is present but the parameter is empty, the parameter will be set to a
 default. If the parameter is present but the style flag not, the relevant flag
 will be added to the style. For wxRegConfig, thie GLOBAL flag refers to HKLM
@@ -712,6 +716,11 @@ not found, {\it b} is not changed.
 Reads a bool value, returning \true if the value was found. If the value was
 not found, {\it defaultVal} is used instead.
 
+\constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{wxMemoryBuffer*}{ buf}}
+
+Reads a binary block, returning \true if the value was found. If the value was
+not found, {\it buf} is not changed.
+
 \pythonnote{In place of a single overloaded method name, wxPython
 implements the following methods:\par
 \indented{2cm}{\begin{twocollist}
@@ -801,6 +810,8 @@ value}}
 \func{bool}{Write}{\param{const wxString\& }{ key}, \param{double}{ value}}
 
 \func{bool}{Write}{\param{const wxString\& }{ key}, \param{bool}{ value}}
+
+\func{bool}{Write}{\param{const wxString\& }{ key}, \param{const wxMemoryBuffer\&}{ buf}}
 
 These functions write the specified value to the config file and return \true on success.
 

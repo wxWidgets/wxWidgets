@@ -12,7 +12,7 @@
 #ifndef _WX_UNIV_RADIOBOX_H_
 #define _WX_UNIV_RADIOBOX_H_
 
-class WXDLLEXPORT wxRadioButton;
+class WXDLLIMPEXP_FWD_CORE wxRadioButton;
 
 #include "wx/statbox.h"
 #include "wx/dynarray.h"

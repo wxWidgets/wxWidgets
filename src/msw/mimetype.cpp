@@ -25,6 +25,7 @@
     #include "wx/string.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/crt.h"
     #if wxUSE_GUI
         #include "wx/icon.h"
         #include "wx/msgdlg.h"
@@ -199,7 +200,7 @@ bool wxFileTypeImpl::EnsureExtKeyExists()
 // get the command to use
 // ----------------------------------------------------------------------------
 
-wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
+wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
 {
     // suppress possible error messages
     wxLogNull nolog;

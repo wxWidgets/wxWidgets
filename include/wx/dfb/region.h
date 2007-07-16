@@ -58,7 +58,7 @@ protected:
     virtual bool DoXor(const wxRegion& region);
 
 
-    friend class WXDLLIMPEXP_CORE wxRegionIterator;
+    friend class WXDLLIMPEXP_FWD_CORE wxRegionIterator;
 
     DECLARE_DYNAMIC_CLASS(wxRegion);
 };

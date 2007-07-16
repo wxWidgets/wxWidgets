@@ -215,6 +215,10 @@
 
 #define wxUSE_LONGLONG      0
 
+#define wxUSE_BASE64        0
+
+#define wxUSE_CONSOLE_EVENTLOOP 0
+
 #define wxUSE_FILE          0
 #define wxUSE_FFILE         0
 
@@ -325,7 +329,7 @@
 #define wxUSE_DATAVIEWCTRL  0
 #define wxUSE_DATEPICKCTRL  0
 #define wxUSE_DIRPICKERCTRL 0
-#define wxUSE_EDITABLELISTBOX   0
+#define wxUSE_EDITABLELISTBOX 0
 #define wxUSE_FILEPICKERCTRL 0
 #define wxUSE_FONTPICKERCTRL 0
 #define wxUSE_GAUGE         0
@@ -491,6 +495,8 @@
 
 #define wxUSE_AFM_FOR_POSTSCRIPT 0
 
+#define wxUSE_SVG 0
+
 
 #define wxUSE_ODBC          0
 
@@ -539,6 +545,12 @@
 
 
 /* --- end common options --- */
+
+/*
+ * Unix-specific options
+ */
+#define wxUSE_SELECT_DISPATCHER 0
+#define wxUSE_EPOLL_DISPATCHER 0
 
 /* for some features we don't have dedicated configure switches, so just choose
  * the common values automatically */
@@ -632,6 +644,11 @@
  * Define if your compiler has __gnu_cxx::hash_map/hash_set
  */
 #undef HAVE_GNU_CXX_HASH_MAP
+
+/*
+ * Define if the compiler supports simple visibility declarations.
+ */
+#undef HAVE_VISIBILITY
 
 /*
  * The built-in regex supports advanced REs in additional to POSIX's basic
@@ -751,6 +768,11 @@
  * wxWebKitCtrl
  */
 #define wxUSE_WEBKIT 0
+
+/*
+ * Objective-C class name uniquifying
+ */
+#define wxUSE_OBJC_UNIQUIFYING 0
 
 /*
  * The const keyword is being introduced more in wxWindows.
@@ -908,6 +930,9 @@
 /* Define if you have wcslen function  */
 #undef HAVE_WCSLEN
 
+/* Define if you have wcsdup function  */
+#undef HAVE_WCSDUP
+
 /* Define if you have wcstoull() and wcstoll() */
 #undef HAVE_WCSTOULL
 
@@ -940,6 +965,9 @@
 
 /* Define if size_t on your machine is the same type as unsigned long. */
 #undef wxSIZE_T_IS_ULONG
+
+/* Define if wchar_t is distinct type in your compiler. */
+#undef wxWCHAR_T_IS_REAL_TYPE
 
 /* Define if you have the dlopen function.  */
 #undef HAVE_DLOPEN

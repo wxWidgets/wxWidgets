@@ -224,10 +224,10 @@ typedef enum
 // All functions return an indication of success, failure, or not implemented.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxAccessible;
-class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxPoint;
-class WXDLLEXPORT wxRect;
+class WXDLLIMPEXP_FWD_CORE wxAccessible;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxPoint;
+class WXDLLIMPEXP_FWD_CORE wxRect;
 class WXDLLEXPORT wxAccessibleBase : public wxObject
 {
     DECLARE_NO_COPY_CLASS(wxAccessibleBase)

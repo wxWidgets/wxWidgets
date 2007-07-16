@@ -363,482 +363,43 @@ dnl NB: see also DEFAULT_wxUSE<toolkit> variables defined above
 
 WX_ARG_CACHE_INIT
 
-dnl useful to test the compilation with minimum options, define as 0 for normal
-dnl usage
-DEBUG_CONFIGURE=0
-if test $DEBUG_CONFIGURE = 1; then
-  DEFAULT_wxUSE_UNIVERSAL=no
-  DEFAULT_wxUSE_STL=no
-  DEFAULT_wxUSE_EXTENDED_RTTI=no
+dnl it's only necessary to list the options which should be disabled by
+dnl default, all the rest have default value of "yes" (or, rather, of
+dnl wxUSE_ALL_FEATURES which is the only which has to be set to "yes" by
+dnl default)
+DEFAULT_wxUSE_ALL_FEATURES=yes
 
-  DEFAULT_wxUSE_NANOX=no
+DEFAULT_wxUSE_STD_IOSTREAM=$DEFAULT_STD_FLAG
+DEFAULT_wxUSE_STD_STRING=$DEFAULT_STD_FLAG
 
-  DEFAULT_wxUSE_THREADS=yes
+dnl libraries disabled by default
+DEFAULT_wxUSE_DMALLOC=no
+DEFAULT_wxUSE_LIBGNOMEVFS=no
+DEFAULT_wxUSE_LIBHILDON=no
+DEFAULT_wxUSE_LIBMSPACK=no
+DEFAULT_wxUSE_LIBSDL=no
+DEFAULT_wxUSE_ODBC=no
+DEFAULT_wxUSE_OPENGL=no
 
-  DEFAULT_wxUSE_SHARED=${DEFAULT_wxUSE_SHARED:-yes}
-  DEFAULT_wxUSE_OPTIMISE=no
-  DEFAULT_wxUSE_PROFILE=no
-  DEFAULT_wxUSE_NO_DEPS=no
-  DEFAULT_wxUSE_VARARG_MACROS=no
-  DEFAULT_wxUSE_NO_RTTI=no
-  DEFAULT_wxUSE_NO_EXCEPTIONS=no
-  DEFAULT_wxUSE_UNIVERSAL_BINARY=no
-  DEFAULT_wxUSE_RPATH=yes
-  DEFAULT_wxUSE_PERMISSIVE=no
-  DEFAULT_wxUSE_DEBUG_FLAG=yes
-  DEFAULT_wxUSE_DEBUG_INFO=yes
-  DEFAULT_wxUSE_DEBUG_GDB=yes
-  DEFAULT_wxUSE_MEM_TRACING=no
-  DEFAULT_wxUSE_DEBUG_CONTEXT=no
-  DEFAULT_wxUSE_DMALLOC=no
-  DEFAULT_wxUSE_APPLE_IEEE=no
+dnl features disabled by default
+DEFAULT_wxUSE_ACCESSIBILITY=no
+DEFAULT_wxUSE_DATAVIEWCTRL=no
+DEFAULT_wxUSE_GRAPHICS_CONTEXT=no
+DEFAULT_wxUSE_MEDIACTRL=no
+DEFAULT_wxUSE_TAB_DIALOG=no
 
-  DEFAULT_wxUSE_EXCEPTIONS=no
-  DEFAULT_wxUSE_LOG=yes
-  DEFAULT_wxUSE_LOGWINDOW=no
-  DEFAULT_wxUSE_LOGGUI=no
-  DEFAULT_wxUSE_LOGDIALOG=no
+DEFAULT_wxUSE_UNICODE_UTF8=auto
+DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
 
-  DEFAULT_wxUSE_GUI=yes
-  DEFAULT_wxUSE_CONTROLS=no
+DEFAULT_wxUSE_OFFICIAL_BUILD=no
 
-  DEFAULT_wxUSE_REGEX=no
-  DEFAULT_wxUSE_XML=no
-  DEFAULT_wxUSE_EXPAT=no
-  DEFAULT_wxUSE_ZLIB=no
-  DEFAULT_wxUSE_LIBPNG=no
-  DEFAULT_wxUSE_LIBJPEG=no
-  DEFAULT_wxUSE_LIBTIFF=no
-  DEFAULT_wxUSE_LIBXPM=no
-  DEFAULT_wxUSE_LIBMSPACK=no
-  DEFAULT_wxUSE_LIBSDL=no
-  DEFAULT_wxUSE_LIBGNOMEPRINT=no
-  DEFAULT_wxUSE_LIBGNOMEVFS=no
-  DEFAULT_wxUSE_LIBHILDON=no
-  DEFAULT_wxUSE_ODBC=no
-  DEFAULT_wxUSE_OPENGL=no
+dnl Applicable only when --with-gtk was used:
+DEFAULT_wxUSE_GTK2=yes
 
-  DEFAULT_wxUSE_ON_FATAL_EXCEPTION=no
-  DEFAULT_wxUSE_STACKWALKER=no
-  DEFAULT_wxUSE_DEBUGREPORT=no
-  DEFAULT_wxUSE_SNGLINST_CHECKER=no
-  DEFAULT_wxUSE_STD_IOSTREAM=no
-  DEFAULT_wxUSE_STD_STRING=no
-  DEFAULT_wxUSE_CMDLINE_PARSER=no
-  DEFAULT_wxUSE_DATETIME=no
-  DEFAULT_wxUSE_TIMER=no
-  DEFAULT_wxUSE_STOPWATCH=no
-  DEFAULT_wxUSE_FILE=no
-  DEFAULT_wxUSE_FFILE=no
-  DEFAULT_wxUSE_STDPATHS=no
-  DEFAULT_wxUSE_TEXTBUFFER=no
-  DEFAULT_wxUSE_TEXTFILE=no
-  DEFAULT_wxUSE_SOUND=no
-  DEFAULT_wxUSE_MEDIACTRL=no
-  DEFAULT_wxUSE_GSTREAMER8=no
-  DEFAULT_wxUSE_PRINTF_POS_PARAMS=no
-  DEFAULT_wxUSE_INTL=no
-  DEFAULT_wxUSE_CONFIG=no
-  DEFAULT_wxUSE_FONTMAP=no
-  DEFAULT_wxUSE_STREAMS=no
-  DEFAULT_wxUSE_SOCKETS=no
-  DEFAULT_wxUSE_OLE=no
-  DEFAULT_wxUSE_DATAOBJ=no
-  DEFAULT_wxUSE_DIALUP_MANAGER=no
-  DEFAULT_wxUSE_JOYSTICK=no
-  DEFAULT_wxUSE_DYNLIB_CLASS=no
-  DEFAULT_wxUSE_DYNAMIC_LOADER=no
-  DEFAULT_wxUSE_LONGLONG=no
-  DEFAULT_wxUSE_GEOMETRY=no
-
-  DEFAULT_wxUSE_AFM_FOR_POSTSCRIPT=no
-  DEFAULT_wxUSE_NORMALIZED_PS_FONTS=no
-  DEFAULT_wxUSE_POSTSCRIPT=no
-
-  DEFAULT_wxUSE_CLIPBOARD=no
-  DEFAULT_wxUSE_TOOLTIPS=no
-  DEFAULT_wxUSE_DRAG_AND_DROP=no
-  DEFAULT_wxUSE_DRAGIMAGE=no
-  DEFAULT_wxUSE_SPLINES=no
-  DEFAULT_wxUSE_MOUSEWHEEL=no
-
-  DEFAULT_wxUSE_MDI=no
-  DEFAULT_wxUSE_MDI_ARCHITECTURE=no
-  DEFAULT_wxUSE_DOC_VIEW_ARCHITECTURE=no
-  DEFAULT_wxUSE_PRINTING_ARCHITECTURE=no
-
-  DEFAULT_wxUSE_CONSTRAINTS=no
-  DEFAULT_wxUSE_IPC=no
-  DEFAULT_wxUSE_HELP=no
-  DEFAULT_wxUSE_MS_HTML_HELP=no
-  DEFAULT_wxUSE_WXHTML_HELP=no
-  DEFAULT_wxUSE_TREELAYOUT=no
-  DEFAULT_wxUSE_METAFILE=no
-  DEFAULT_wxUSE_MIMETYPE=no
-  DEFAULT_wxUSE_SYSTEM_OPTIONS=no
-  DEFAULT_wxUSE_PROTOCOL=no
-  DEFAULT_wxUSE_PROTOCOL_HTTP=no
-  DEFAULT_wxUSE_PROTOCOL_FTP=no
-  DEFAULT_wxUSE_PROTOCOL_FILE=no
-  DEFAULT_wxUSE_URL=no
-  DEFAULT_wxUSE_VARIANT=no
-
-  DEFAULT_wxUSE_ABOUTDLG=no
-  DEFAULT_wxUSE_COMMONDLGS=no
-  DEFAULT_wxUSE_CHOICEDLG=no
-  DEFAULT_wxUSE_COLOURDLG=no
-  DEFAULT_wxUSE_DIRDLG=no
-  DEFAULT_wxUSE_FILEDLG=no
-  DEFAULT_wxUSE_FINDREPLDLG=no
-  DEFAULT_wxUSE_FONTDLG=no
-  DEFAULT_wxUSE_MSGDLG=no
-  DEFAULT_wxUSE_NUMBERDLG=no
-  DEFAULT_wxUSE_TEXTDLG=no
-  DEFAULT_wxUSE_SPLASH=no
-  DEFAULT_wxUSE_STARTUP_TIPS=no
-  DEFAULT_wxUSE_PROGRESSDLG=no
-  DEFAULT_wxUSE_WIZARDDLG=no
-
-  DEFAULT_wxUSE_MENUS=no
-  DEFAULT_wxUSE_MINIFRAME=no
-  DEFAULT_wxUSE_HTML=no
-  DEFAULT_wxUSE_RICHTEXT=no
-  DEFAULT_wxUSE_XRC=no
-  DEFAULT_wxUSE_AUI=no
-  DEFAULT_wxUSE_STC=no
-  DEFAULT_wxUSE_WEBKIT=no
-  DEFAULT_wxUSE_FILESYSTEM=no
-  DEFAULT_wxUSE_FS_INET=no
-  DEFAULT_wxUSE_FS_ZIP=no
-  DEFAULT_wxUSE_FS_ARCHIVE=no
-  DEFAULT_wxUSE_BUSYINFO=no
-  DEFAULT_wxUSE_ARCHIVE_STREAMS=no
-  DEFAULT_wxUSE_ZIPSTREAM=no
-  DEFAULT_wxUSE_TARSTREAM=no
-  DEFAULT_wxUSE_VALIDATORS=no
-
-  DEFAULT_wxUSE_ACCEL=no
-  DEFAULT_wxUSE_ANIMATIONCTRL=no
-  DEFAULT_wxUSE_BUTTON=no
-  DEFAULT_wxUSE_BMPBUTTON=no
-  DEFAULT_wxUSE_BITMAPCOMBOBOX=no
-  DEFAULT_wxUSE_CALCTRL=no
-  DEFAULT_wxUSE_CARET=no
-  DEFAULT_wxUSE_CHECKBOX=no
-  DEFAULT_wxUSE_CHECKLST=no
-  DEFAULT_wxUSE_CHOICE=no
-  DEFAULT_wxUSE_CHOICEBOOK=no
-  DEFAULT_wxUSE_COLLPANE=no
-  DEFAULT_wxUSE_COLOURPICKERCTRL=no
-  DEFAULT_wxUSE_COMBOBOX=no
-  DEFAULT_wxUSE_COMBOCTRL=no
-  DEFAULT_wxUSE_DATEPICKCTRL=no
-  DEFAULT_wxUSE_DISPLAY=no
-  DEFAULT_wxUSE_DETECT_SM=no
-  DEFAULT_wxUSE_DIRPICKERCTRL=no
-  DEFAULT_wxUSE_EDITABLELISTBOX=no
-  DEFAULT_wxUSE_FILEPICKERCTRL=no
-  DEFAULT_wxUSE_FONTPICKERCTRL=no
-  DEFAULT_wxUSE_GAUGE=no
-  DEFAULT_wxUSE_GRAPHICS_CONTEXT=no
-  DEFAULT_wxUSE_GRID=no
-  DEFAULT_wxUSE_HYPERLINKCTRL=no
-  DEFAULT_wxUSE_DATAVIEWCTRL=no
-  DEFAULT_wxUSE_IMAGLIST=no
-  DEFAULT_wxUSE_LISTBOOK=no
-  DEFAULT_wxUSE_LISTBOX=no
-  DEFAULT_wxUSE_LISTCTRL=no
-  DEFAULT_wxUSE_NOTEBOOK=no
-  DEFAULT_wxUSE_ODCOMBOBOX=no
-  DEFAULT_wxUSE_RADIOBOX=no
-  DEFAULT_wxUSE_RADIOBTN=no
-  DEFAULT_wxUSE_SASH=no
-  DEFAULT_wxUSE_SCROLLBAR=no
-  DEFAULT_wxUSE_SEARCHCTRL=no
-  DEFAULT_wxUSE_SLIDER=no
-  DEFAULT_wxUSE_SPINBTN=no
-  DEFAULT_wxUSE_SPINCTRL=no
-  DEFAULT_wxUSE_SPLITTER=no
-  DEFAULT_wxUSE_STATBMP=no
-  DEFAULT_wxUSE_STATBOX=no
-  DEFAULT_wxUSE_STATLINE=no
-  DEFAULT_wxUSE_STATTEXT=no
-  DEFAULT_wxUSE_STATUSBAR=yes
-  DEFAULT_wxUSE_TAB_DIALOG=no
-  DEFAULT_wxUSE_TEXTCTRL=no
-  DEFAULT_wxUSE_TOGGLEBTN=no
-  DEFAULT_wxUSE_TOOLBAR=no
-  DEFAULT_wxUSE_TOOLBAR_NATIVE=no
-  DEFAULT_wxUSE_TREEBOOK=no
-  DEFAULT_wxUSE_TOOLBOOK=no
-  DEFAULT_wxUSE_TREECTRL=no
-  DEFAULT_wxUSE_POPUPWIN=no
-  DEFAULT_wxUSE_TIPWINDOW=no
-
-  DEFAULT_wxUSE_UNICODE=no
-  DEFAULT_wxUSE_UNICODE_MSLU=no
-  DEFAULT_wxUSE_UNICODE_UTF8=auto
-  DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
-  DEFAULT_wxUSE_WCSRTOMBS=no
-
-  DEFAULT_wxUSE_PALETTE=no
-  DEFAULT_wxUSE_IMAGE=no
-  DEFAULT_wxUSE_GIF=no
-  DEFAULT_wxUSE_PCX=no
-  DEFAULT_wxUSE_TGA=no
-  DEFAULT_wxUSE_PNM=no
-  DEFAULT_wxUSE_IFF=no
-  DEFAULT_wxUSE_XPM=no
-  DEFAULT_wxUSE_ICO_CUR=no
-  DEFAULT_wxUSE_ACCESSIBILITY=no
-
-  DEFAULT_wxUSE_MONOLITHIC=no
-  DEFAULT_wxUSE_PLUGINS=no
-  DEFAULT_wxUSE_OFFICIAL_BUILD=no
-else
-  DEFAULT_wxUSE_UNIVERSAL=no
-  DEFAULT_wxUSE_STL=no
-  DEFAULT_wxUSE_EXTENDED_RTTI=no
-
-  DEFAULT_wxUSE_NANOX=no
-
-  DEFAULT_wxUSE_THREADS=yes
-
-  DEFAULT_wxUSE_SHARED=${DEFAULT_wxUSE_SHARED:-yes}
-  DEFAULT_wxUSE_OPTIMISE=yes
-  DEFAULT_wxUSE_PROFILE=no
-  DEFAULT_wxUSE_NO_DEPS=no
-  DEFAULT_wxUSE_VARARG_MACROS=yes
-  DEFAULT_wxUSE_NO_RTTI=no
-  DEFAULT_wxUSE_NO_EXCEPTIONS=no
-  DEFAULT_wxUSE_UNIVERSAL_BINARY=no
-  DEFAULT_wxUSE_RPATH=yes
-  DEFAULT_wxUSE_PERMISSIVE=no
-  DEFAULT_wxUSE_DEBUG_FLAG=no
-  DEFAULT_wxUSE_DEBUG_INFO=no
-  DEFAULT_wxUSE_DEBUG_GDB=no
-  DEFAULT_wxUSE_MEM_TRACING=no
-  DEFAULT_wxUSE_DEBUG_CONTEXT=no
-  DEFAULT_wxUSE_DMALLOC=no
-  DEFAULT_wxUSE_APPLE_IEEE=yes
-
-  DEFAULT_wxUSE_EXCEPTIONS=yes
-  DEFAULT_wxUSE_LOG=yes
-  DEFAULT_wxUSE_LOGWINDOW=yes
-  DEFAULT_wxUSE_LOGGUI=yes
-  DEFAULT_wxUSE_LOGDIALOG=yes
-
-  DEFAULT_wxUSE_GUI=yes
-
-  DEFAULT_wxUSE_REGEX=yes
-  DEFAULT_wxUSE_XML=yes
-  DEFAULT_wxUSE_EXPAT=yes
-  DEFAULT_wxUSE_ZLIB=yes
-  DEFAULT_wxUSE_LIBPNG=yes
-  DEFAULT_wxUSE_LIBJPEG=yes
-  DEFAULT_wxUSE_LIBTIFF=yes
-  DEFAULT_wxUSE_LIBXPM=yes
-  DEFAULT_wxUSE_LIBMSPACK=yes
-  DEFAULT_wxUSE_LIBSDL=no
-  DEFAULT_wxUSE_LIBGNOMEPRINT=yes
-  DEFAULT_wxUSE_LIBGNOMEVFS=no
-  DEFAULT_wxUSE_LIBHILDON=no
-  DEFAULT_wxUSE_ODBC=no
-  DEFAULT_wxUSE_OPENGL=no
-
-  DEFAULT_wxUSE_ON_FATAL_EXCEPTION=yes
-  DEFAULT_wxUSE_STACKWALKER=yes
-  DEFAULT_wxUSE_DEBUGREPORT=yes
-  DEFAULT_wxUSE_SNGLINST_CHECKER=yes
-  DEFAULT_wxUSE_STD_IOSTREAM=$DEFAULT_STD_FLAG
-  DEFAULT_wxUSE_STD_STRING=$DEFAULT_STD_FLAG
-  DEFAULT_wxUSE_CMDLINE_PARSER=yes
-  DEFAULT_wxUSE_DATETIME=yes
-  DEFAULT_wxUSE_TIMER=yes
-  DEFAULT_wxUSE_STOPWATCH=yes
-  DEFAULT_wxUSE_FILE=yes
-  DEFAULT_wxUSE_FFILE=yes
-  DEFAULT_wxUSE_STDPATHS=yes
-  DEFAULT_wxUSE_TEXTBUFFER=yes
-  DEFAULT_wxUSE_TEXTFILE=yes
-  DEFAULT_wxUSE_SOUND=yes
-  DEFAULT_wxUSE_MEDIACTRL=no
-  DEFAULT_wxUSE_GSTREAMER8=no
-  DEFAULT_wxUSE_PRINTF_POS_PARAMS=yes
-  DEFAULT_wxUSE_INTL=yes
-  DEFAULT_wxUSE_CONFIG=yes
-  DEFAULT_wxUSE_FONTMAP=yes
-  DEFAULT_wxUSE_STREAMS=yes
-  DEFAULT_wxUSE_SOCKETS=yes
-  DEFAULT_wxUSE_OLE=yes
-  DEFAULT_wxUSE_DATAOBJ=yes
-  DEFAULT_wxUSE_DIALUP_MANAGER=yes
-  DEFAULT_wxUSE_JOYSTICK=yes
-  DEFAULT_wxUSE_DYNLIB_CLASS=yes
-  DEFAULT_wxUSE_DYNAMIC_LOADER=yes
-  DEFAULT_wxUSE_LONGLONG=yes
-  DEFAULT_wxUSE_GEOMETRY=yes
-
-  DEFAULT_wxUSE_AFM_FOR_POSTSCRIPT=yes
-  DEFAULT_wxUSE_NORMALIZED_PS_FONTS=yes
-  DEFAULT_wxUSE_POSTSCRIPT=yes
-
-  DEFAULT_wxUSE_CLIPBOARD=yes
-  DEFAULT_wxUSE_TOOLTIPS=yes
-  DEFAULT_wxUSE_DRAG_AND_DROP=yes
-  DEFAULT_wxUSE_DRAGIMAGE=yes
-  DEFAULT_wxUSE_SPLINES=yes
-  DEFAULT_wxUSE_MOUSEWHEEL=yes
-
-  DEFAULT_wxUSE_MDI=yes
-  DEFAULT_wxUSE_MDI_ARCHITECTURE=yes
-  DEFAULT_wxUSE_DOC_VIEW_ARCHITECTURE=yes
-  DEFAULT_wxUSE_PRINTING_ARCHITECTURE=yes
-
-  DEFAULT_wxUSE_CONSTRAINTS=yes
-  DEFAULT_wxUSE_IPC=yes
-  DEFAULT_wxUSE_HELP=yes
-  DEFAULT_wxUSE_MS_HTML_HELP=yes
-  DEFAULT_wxUSE_WXHTML_HELP=yes
-  DEFAULT_wxUSE_TREELAYOUT=yes
-  DEFAULT_wxUSE_METAFILE=yes
-  DEFAULT_wxUSE_MIMETYPE=yes
-  DEFAULT_wxUSE_SYSTEM_OPTIONS=yes
-  DEFAULT_wxUSE_PROTOCOL=yes
-  DEFAULT_wxUSE_PROTOCOL_HTTP=yes
-  DEFAULT_wxUSE_PROTOCOL_FTP=yes
-  DEFAULT_wxUSE_PROTOCOL_FILE=yes
-  DEFAULT_wxUSE_URL=yes
-  DEFAULT_wxUSE_VARIANT=yes
-
-  DEFAULT_wxUSE_ABOUTDLG=yes
-  DEFAULT_wxUSE_COMMONDLGS=yes
-  DEFAULT_wxUSE_CHOICEDLG=yes
-  DEFAULT_wxUSE_COLOURDLG=yes
-  DEFAULT_wxUSE_DIRDLG=yes
-  DEFAULT_wxUSE_FILEDLG=yes
-  DEFAULT_wxUSE_FINDREPLDLG=yes
-  DEFAULT_wxUSE_FONTDLG=yes
-  DEFAULT_wxUSE_MSGDLG=yes
-  DEFAULT_wxUSE_NUMBERDLG=yes
-  DEFAULT_wxUSE_TEXTDLG=yes
-  DEFAULT_wxUSE_SPLASH=yes
-  DEFAULT_wxUSE_STARTUP_TIPS=yes
-  DEFAULT_wxUSE_PROGRESSDLG=yes
-  DEFAULT_wxUSE_WIZARDDLG=yes
-
-  DEFAULT_wxUSE_MENUS=yes
-  DEFAULT_wxUSE_MINIFRAME=yes
-  DEFAULT_wxUSE_HTML=yes
-  DEFAULT_wxUSE_RICHTEXT=yes
-  DEFAULT_wxUSE_XRC=yes
-  DEFAULT_wxUSE_AUI=yes
-  DEFAULT_wxUSE_STC=yes
-  DEFAULT_wxUSE_WEBKIT=yes
-  DEFAULT_wxUSE_FILESYSTEM=yes
-  DEFAULT_wxUSE_FS_INET=yes
-  DEFAULT_wxUSE_FS_ZIP=yes
-  DEFAULT_wxUSE_FS_ARCHIVE=yes
-  DEFAULT_wxUSE_BUSYINFO=yes
-  DEFAULT_wxUSE_ARCHIVE_STREAMS=yes
-  DEFAULT_wxUSE_ZIPSTREAM=yes
-  DEFAULT_wxUSE_TARSTREAM=yes
-  DEFAULT_wxUSE_VALIDATORS=yes
-
-  DEFAULT_wxUSE_ACCEL=yes
-  DEFAULT_wxUSE_ANIMATIONCTRL=yes
-  DEFAULT_wxUSE_BUTTON=yes
-  DEFAULT_wxUSE_BMPBUTTON=yes
-  DEFAULT_wxUSE_BITMAPCOMBOBOX=yes
-  DEFAULT_wxUSE_CALCTRL=yes
-  DEFAULT_wxUSE_CARET=yes
-  DEFAULT_wxUSE_CHECKBOX=yes
-  DEFAULT_wxUSE_CHECKLST=yes
-  DEFAULT_wxUSE_CHOICE=yes
-  DEFAULT_wxUSE_CHOICEBOOK=yes
-  DEFAULT_wxUSE_COLLPANE=yes
-  DEFAULT_wxUSE_COLOURPICKERCTRL=yes
-  DEFAULT_wxUSE_COMBOBOX=yes
-  DEFAULT_wxUSE_COMBOCTRL=yes
-  DEFAULT_wxUSE_DATEPICKCTRL=yes
-  DEFAULT_wxUSE_DISPLAY=yes
-  DEFAULT_wxUSE_DETECT_SM=yes
-  DEFAULT_wxUSE_DIRPICKERCTRL=yes
-  DEFAULT_wxUSE_EDITABLELISTBOX=yes
-  DEFAULT_wxUSE_FILEPICKERCTRL=yes
-  DEFAULT_wxUSE_FONTPICKERCTRL=yes
-  DEFAULT_wxUSE_GAUGE=yes
-  DEFAULT_wxUSE_GRID=yes
-  DEFAULT_wxUSE_GRAPHICS_CONTEXT=no
-  DEFAULT_wxUSE_HYPERLINKCTRL=yes
-  DEFAULT_wxUSE_DATAVIEWCTRL=no
-  DEFAULT_wxUSE_IMAGLIST=yes
-  DEFAULT_wxUSE_LISTBOOK=yes
-  DEFAULT_wxUSE_LISTBOX=yes
-  DEFAULT_wxUSE_LISTCTRL=yes
-  DEFAULT_wxUSE_NOTEBOOK=yes
-  DEFAULT_wxUSE_ODCOMBOBOX=yes
-  DEFAULT_wxUSE_RADIOBOX=yes
-  DEFAULT_wxUSE_RADIOBTN=yes
-  DEFAULT_wxUSE_SASH=yes
-  DEFAULT_wxUSE_SCROLLBAR=yes
-  DEFAULT_wxUSE_SEARCHCTRL=yes
-  DEFAULT_wxUSE_SLIDER=yes
-  DEFAULT_wxUSE_SPINBTN=yes
-  DEFAULT_wxUSE_SPINCTRL=yes
-  DEFAULT_wxUSE_SPLITTER=yes
-  DEFAULT_wxUSE_STATBMP=yes
-  DEFAULT_wxUSE_STATBOX=yes
-  DEFAULT_wxUSE_STATLINE=yes
-  DEFAULT_wxUSE_STATTEXT=yes
-  DEFAULT_wxUSE_STATUSBAR=yes
-  DEFAULT_wxUSE_TAB_DIALOG=no
-  DEFAULT_wxUSE_TEXTCTRL=yes
-  DEFAULT_wxUSE_TOGGLEBTN=yes
-  DEFAULT_wxUSE_TOOLBAR=yes
-  DEFAULT_wxUSE_TOOLBAR_NATIVE=yes
-  DEFAULT_wxUSE_TREEBOOK=yes
-  DEFAULT_wxUSE_TOOLBOOK=yes
-  DEFAULT_wxUSE_TREECTRL=yes
-  DEFAULT_wxUSE_POPUPWIN=yes
-  DEFAULT_wxUSE_TIPWINDOW=yes
-
-  DEFAULT_wxUSE_UNICODE=no
-  DEFAULT_wxUSE_UNICODE_MSLU=yes
-  DEFAULT_wxUSE_UNICODE_UTF8=auto
-  DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
-  DEFAULT_wxUSE_WCSRTOMBS=no
-
-  DEFAULT_wxUSE_PALETTE=yes
-  DEFAULT_wxUSE_IMAGE=yes
-  DEFAULT_wxUSE_GIF=yes
-  DEFAULT_wxUSE_PCX=yes
-  DEFAULT_wxUSE_TGA=yes
-  DEFAULT_wxUSE_IFF=no  dnl why is this set to "no"?
-  DEFAULT_wxUSE_PNM=yes
-  DEFAULT_wxUSE_XPM=yes
-  DEFAULT_wxUSE_ICO_CUR=yes
-  DEFAULT_wxUSE_ACCESSIBILITY=no
-
-  DEFAULT_wxUSE_MONOLITHIC=no
-  DEFAULT_wxUSE_PLUGINS=no
-  DEFAULT_wxUSE_OFFICIAL_BUILD=no
-
-  dnl Applicable only when --with-gtk was used:
-  DEFAULT_wxUSE_GTK2=yes
-fi
+dnl Always default to no. Only special cases require this.
+DEFAULT_wxUSE_OBJC_UNIQUIFYING=no
 
 
-dnl WX_ARG_WITH should be used to select whether an external package will be
-dnl used or not, to configure compile-time features of this package itself,
-dnl use WX_ARG_ENABLE instead
-
-dnl ============================
-dnl external package dependecies
-dnl ============================
-
-dnl these options use AC_ARG_WITH and not WX_ARG_WITH on purpose - we cache
-dnl these values manually
 for toolkit in `echo $ALL_TOOLKITS`; do
   LINE=`grep "wxUSE_$toolkit=" ${wx_arg_cache_file}`
   if test "x$LINE" != "x" ; then
@@ -853,22 +414,59 @@ for toolkit in `echo $ALL_TOOLKITS`; do
   fi
 done
 
+dnl ===========================
+dnl deal with configure options
+dnl ===========================
+
+dnl we use several macros here:
+dnl     - AC_ARG_WITH/AC_ARG_ENABLE are the standard autoconf macros, see
+dnl       autoconf manual for details about them
+dnl     - WX_ARG_WITH/WX_ARG_ENABLE are their wx counterparts which perform
+dnl       the caching of the command line options and also use DEFAULT_foo
+dnl       variable as the default value for "foo" if neither --enable-foo nor
+dnl       --disable-foo is specified
+dnl     - WX_ARG_SYS_WITH is a special version of WX_ARG_WITH which allows
+dnl       to choose not only whether an external library is used but also if we
+dnl       use the copy of it included with wxWidgets or an already installed
+dnl       system version
+dnl     - WX_ARG_WITHOUT/WX_ARG_DISABLE mirror WX_ARG_WITH/WX_ARG_ENABLE but
+dnl       should be used for the options which are enabled by default
+dnl     - WX_ARG_FEATURE is a version of WX_ARG_ENABLE which should be used for
+dnl       optional features, i.e. options which should be disabled if
+dnl       --disable-all-features is specified (WX_ARG_WITH/WX_ARG_SYS_WITH are
+dnl       also affected by this)
+
 dnl ---------------------------------------------------------------------------
-dnl --disable-gui will build only non-GUI part of wxWidgets: check for this
-dnl first to disable many other switches if it's given
-dnl
-dnl NB: this is still in testing stage, don't use if you don't know what you're
-dnl     doing
+dnl global build options
 dnl ---------------------------------------------------------------------------
 
-WX_ARG_ENABLE(gui,         [  --enable-gui            use GUI classes], wxUSE_GUI)
+WX_ARG_DISABLE(gui,        [  --disable-gui           don't build GUI parts of the library], wxUSE_GUI)
 WX_ARG_ENABLE(monolithic,  [  --enable-monolithic     build wxWidgets as single library], wxUSE_MONOLITHIC)
 WX_ARG_ENABLE(plugins,     [  --enable-plugins        build parts of wxWidgets as loadable components], wxUSE_PLUGINS)
-WX_ARG_WITH(subdirs,       [  --without-subdirs       don't generate makefiles for samples/demos/...], wxWITH_SUBDIRS, without)
+WX_ARG_WITHOUT(subdirs,    [  --without-subdirs       don't generate makefiles for samples/demos/...], wxWITH_SUBDIRS)
+AC_ARG_WITH(flavour,       [  --with-flavour=NAME     specify a name to identify this build], [WX_FLAVOUR="$withval"])
+WX_ARG_ENABLE(official_build,  [  --enable-official_build official build of wxWidgets (win32 DLL only)], wxUSE_OFFICIAL_BUILD)
+AC_ARG_ENABLE(vendor,  [  --enable-vendor=VENDOR  vendor name (win32 DLL only)], [VENDOR="$enableval"])
+if test "x$VENDOR" = "x"; then
+    VENDOR="custom"
+fi
+
+WX_ARG_DISABLE(all-features,[  --disable-all-features  disable all optional features to build minimal library], wxUSE_ALL_FEATURES)
+
+dnl ---------------------------------------------------------------------------
+dnl port selection
+dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_GUI" = "yes"; then
 
 WX_ARG_ENABLE(universal,   [  --enable-universal      use wxWidgets GUI controls instead of native ones], wxUSE_UNIVERSAL)
+if test "$wxUSE_UNIVERSAL" = "yes"; then
+    AC_ARG_WITH(themes,    [  --with-themes=all|list  use only the specified comma-separated list of wxUniversal themes], [wxUNIV_THEMES="$withval"])
+fi
+
+dnl we use AC_ARG_WITH and not WX_ARG_WITH for the toolkit options as they
+dnl shouldn't default to wxUSE_ALL_FEATURES, and we don't need to cache them
+dnl automatically
 AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 2 (default), 1 or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(mac,           [  --with-mac              use Mac OS X], [wxUSE_MAC="$withval" CACHE_MAC=1 TOOLKIT_GIVEN=1])
@@ -885,38 +483,44 @@ WX_ARG_ENABLE(nanox,       [  --enable-nanox          use NanoX], wxUSE_NANOX)
 AC_ARG_ENABLE(gtk2,        [  --disable-gtk2          use GTK+ 1.2 instead of 2.0], [wxUSE_GTK2="$enableval"])
 WX_ARG_ENABLE(gpe,         [  --enable-gpe            use GNOME PDA Environment features if possible], wxUSE_GPE)
 
+dnl ---------------------------------------------------------------------------
+dnl external libraries
+dnl ---------------------------------------------------------------------------
+
 WX_ARG_SYS_WITH(libpng,    [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
 WX_ARG_SYS_WITH(libjpeg,   [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
 WX_ARG_SYS_WITH(libtiff,   [  --with-libtiff          use libtiff (TIFF file format)], wxUSE_LIBTIFF)
 WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file format)], wxUSE_LIBXPM)
 WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help files loading)], wxUSE_LIBMSPACK)
-WX_ARG_WITH(sdl,           [  --with-sdl              use SDL for audio on Unix], wxUSE_LIBSDL)
-WX_ARG_WITH(gnomeprint,    [  --with-gnomeprint       use GNOME print for printing under GNOME], wxUSE_LIBGNOMEPRINT)
+WX_ARG_WITHOUT(gnomeprint, [  --without-gnomeprint    don't use GNOME printing libraries], wxUSE_LIBGNOMEPRINT)
 WX_ARG_WITH(gnomevfs,      [  --with-gnomevfs         use GNOME VFS for associating MIME types], wxUSE_LIBGNOMEVFS)
 WX_ARG_WITH(hildon,        [  --with-hildon           use Hildon framework for Nokia 770], wxUSE_LIBHILDON)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
-
-if test "$wxUSE_UNIVERSAL" = "yes"; then
-    AC_ARG_WITH(themes,        [  --with-themes=all|list  use only the specified comma-separated list of wxUniversal themes], [wxUNIV_THEMES="$withval"])
-fi
 
 fi
 dnl for GUI only
 
 WX_ARG_WITH(dmalloc,       [  --with-dmalloc          use dmalloc library (http://dmalloc.com/)], wxUSE_DMALLOC)
+WX_ARG_WITH(sdl,           [  --with-sdl              use SDL for audio on Unix], wxUSE_LIBSDL)
 WX_ARG_SYS_WITH(regex,     [  --with-regex            enable support for wxRegEx class], wxUSE_REGEX)
 WX_ARG_SYS_WITH(zlib,      [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
 WX_ARG_SYS_WITH(odbc,      [  --with-odbc             use the IODBC and wxODBC classes], wxUSE_ODBC)
 WX_ARG_SYS_WITH(expat,     [  --with-expat            enable XML support using expat parser], wxUSE_EXPAT)
 
 dnl ---------------------------------------------------------------------------
-dnl compile options
+dnl global compile options
 dnl ---------------------------------------------------------------------------
 
-WX_ARG_ENABLE(shared,      [  --enable-shared         create shared library code], wxUSE_SHARED)
-WX_ARG_ENABLE(optimise,    [  --enable-optimise       create optimised code], wxUSE_OPTIMISE)
+WX_ARG_DISABLE(shared,     [  --disable-shared        create static library instead of shared], wxUSE_SHARED)
+WX_ARG_DISABLE(optimise,   [  --disable-optimise      create optimised code], wxUSE_OPTIMISE)
 WX_ARG_ENABLE(debug,       [  --enable-debug          same as debug_flag and debug_info], wxUSE_DEBUG)
 WX_ARG_ENABLE(stl,         [  --enable-stl            use STL for containers], wxUSE_STL)
+WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
+WX_ARG_ENABLE(std_string,    [  --enable-std_string     use standard C++ string classes], wxUSE_STD_STRING)
+WX_ARG_DISABLE(unicode,      [  --disable-unicode       compile without Unicode support], wxUSE_UNICODE)
+WX_ARG_ENABLE(mslu,          [  --enable-mslu           use MS Layer for Unicode on Windows 9x (Win32 only)], wxUSE_UNICODE_MSLU)
+WX_ARG_ENABLE_PARAM(utf8,    [  --enable-utf8           use UTF-8 representation for strings (Unix only)], wxUSE_UNICODE_UTF8)
+WX_ARG_ENABLE(utf8only,      [  --enable-utf8only      only support UTF-8 locales in UTF-8 build (Unix only)], wxUSE_UNICODE_UTF8_LOCALE)
 WX_ARG_ENABLE(extended_rtti, [  --enable-extended_rtti  use extended RTTI (XTI)], wxUSE_EXTENDED_RTTI)
 if test "$USE_OS2" = "1"; then
     DEFAULT_wxUSE_OMF=no
@@ -943,139 +547,129 @@ WX_ARG_ENABLE(no_rtti,       [  --enable-no_rtti        create code without RTTI
 WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without C++ exceptions handling], wxUSE_NO_EXCEPTIONS)
 WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregarding strict ANSI], wxUSE_PERMISSIVE)
 WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without dependency information], wxUSE_NO_DEPS)
-WX_ARG_ENABLE(vararg_macros, [  --disable-vararg_macros don't use vararg macros, even if they are supported], wxUSE_VARARG_MACROS)
+WX_ARG_DISABLE(vararg_macros,[  --disable-vararg_macros don't use vararg macros, even if they are supported], wxUSE_VARARG_MACROS)
 WX_ARG_ENABLE_PARAM(universal_binary, [[  --enable-universal_binary[=SDK] create Mac PowerPC and Intel Universal binary (not yet working)]], wxUSE_UNIVERSAL_BINARY)
 
-WX_ARG_ENABLE(compat26,      [  --enable-compat26       enable wxWidgets 2.6 compatibility], WXWIN_COMPATIBILITY_2_6, enable)
-WX_ARG_ENABLE(compat28,      [  --disable-compat28      disable wxWidgets 2.8 compatibility], WXWIN_COMPATIBILITY_2_8, disable)
+WX_ARG_ENABLE(compat26,      [  --enable-compat26       enable wxWidgets 2.6 compatibility], WXWIN_COMPATIBILITY_2_6)
+WX_ARG_DISABLE(compat28,     [  --disable-compat28      disable wxWidgets 2.8 compatibility], WXWIN_COMPATIBILITY_2_8)
 
-WX_ARG_ENABLE(rpath,         [  --disable-rpath         disable use of rpath for uninstalled builds], wxUSE_RPATH)
+WX_ARG_DISABLE(rpath,        [  --disable-rpath         disable use of rpath for uninstalled builds], wxUSE_RPATH)
 
+WX_ARG_ENABLE(objc_uniquifying,[  --enable-objc_uniquifying enable Objective-C class name uniquifying], wxUSE_OBJC_UNIQUIFYING)
+
+WX_ARG_DISABLE(visibility,   [  --disable-visibility    disable use of ELF symbols visibility even if supported], wxUSE_VISIBILITY)
 
 dnl ---------------------------------------------------------------------------
-dnl (small) optional non GUI classes
+dnl optional non GUI features
 dnl ---------------------------------------------------------------------------
 
-WX_ARG_ENABLE(intl,          [  --enable-intl           use internationalization system], wxUSE_INTL)
-WX_ARG_ENABLE(config,        [  --enable-config         use wxConfig (and derived) classes], wxUSE_CONFIG)
+WX_ARG_FEATURE(intl,          [  --enable-intl           use internationalization system], wxUSE_INTL)
+WX_ARG_FEATURE(config,        [  --enable-config         use wxConfig (and derived) classes], wxUSE_CONFIG)
 
-WX_ARG_ENABLE(protocols,     [  --enable-protocols      use wxProtocol and derived classes], wxUSE_PROTOCOL)
-WX_ARG_ENABLE(ftp,           [  --enable-ftp            use wxFTP (requires wxProtocol], wxUSE_PROTOCOL_FTP)
-WX_ARG_ENABLE(http,          [  --enable-http           use wxHTTP (requires wxProtocol], wxUSE_PROTOCOL_HTTP)
-WX_ARG_ENABLE(fileproto,     [  --enable-fileproto      use wxFileProto class (requires wxProtocol], wxUSE_PROTOCOL_FILE)
-WX_ARG_ENABLE(sockets,       [  --enable-sockets        use socket/network classes], wxUSE_SOCKETS)
-WX_ARG_ENABLE(ole,           [  --enable-ole            use OLE classes (Win32 only)], wxUSE_OLE)
-WX_ARG_ENABLE(dataobj,       [  --enable-dataobj        use data object classes], wxUSE_DATAOBJ)
+WX_ARG_FEATURE(protocols,     [  --enable-protocols      use wxProtocol and derived classes], wxUSE_PROTOCOL)
+WX_ARG_FEATURE(ftp,           [  --enable-ftp            use wxFTP (requires wxProtocol], wxUSE_PROTOCOL_FTP)
+WX_ARG_FEATURE(http,          [  --enable-http           use wxHTTP (requires wxProtocol], wxUSE_PROTOCOL_HTTP)
+WX_ARG_FEATURE(fileproto,     [  --enable-fileproto      use wxFileProto class (requires wxProtocol], wxUSE_PROTOCOL_FILE)
+WX_ARG_FEATURE(sockets,       [  --enable-sockets        use socket/network classes], wxUSE_SOCKETS)
+WX_ARG_FEATURE(ole,           [  --enable-ole            use OLE classes (Win32 only)], wxUSE_OLE)
+WX_ARG_FEATURE(dataobj,       [  --enable-dataobj        use data object classes], wxUSE_DATAOBJ)
 
-WX_ARG_ENABLE(ipc,           [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
+WX_ARG_FEATURE(ipc,           [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
+
+WX_ARG_FEATURE(baseevtloop,   [  --enable-base-evtloop   use event loop in console programs too], wxUSE_CONSOLE_EVENTLOOP)
+WX_ARG_FEATURE(epoolloop,     [  --enable-epool-loop     use wxEpollDispatcher class (Linux only)], wxUSE_EPOLL_DISPATCHER)
+WX_ARG_FEATURE(selectloop,    [  --enable-select-loop    use wxSelectDispatcher class], wxUSE_SELECT_DISPATCHER)
 
 dnl please keep the settings below in alphabetical order
-WX_ARG_ENABLE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
-WX_ARG_ENABLE(arcstream,     [  --enable-arcstream      use wxArchive streams], wxUSE_ARCHIVE_STREAMS)
-WX_ARG_ENABLE(backtrace,     [  --enable-backtrace      use wxStackWalker class for getting backtraces], wxUSE_STACKWALKER)
-WX_ARG_ENABLE(catch_segvs,   [  --enable-catch_segvs    catch signals in wxApp::OnFatalException (Unix only)], wxUSE_ON_FATAL_EXCEPTION)
-WX_ARG_ENABLE(cmdline,       [  --enable-cmdline        use wxCmdLineParser class], wxUSE_CMDLINE_PARSER)
-WX_ARG_ENABLE(datetime,      [  --enable-datetime       use wxDateTime class], wxUSE_DATETIME)
-WX_ARG_ENABLE(debugreport,   [  --enable-debugreport    use wxDebugReport class], wxUSE_DEBUGREPORT)
-WX_ARG_ENABLE(dialupman,     [  --enable-dialupman      use dialup network classes], wxUSE_DIALUP_MANAGER)
-WX_ARG_ENABLE(dynlib,        [  --enable-dynlib         use wxLibrary class for DLL loading], wxUSE_DYNLIB_CLASS)
-WX_ARG_ENABLE(dynamicloader, [  --enable-dynamicloader  use (new) wxDynamicLibrary class], wxUSE_DYNAMIC_LOADER)
-WX_ARG_ENABLE(exceptions,    [  --enable-exceptions     build exception-safe library], wxUSE_EXCEPTIONS)
-WX_ARG_ENABLE(ffile,         [  --enable-ffile          use wxFFile class], wxUSE_FFILE)
-WX_ARG_ENABLE(file,          [  --enable-file           use wxFile class], wxUSE_FILE)
-WX_ARG_ENABLE(filesystem,    [  --enable-filesystem     use virtual file systems classes], wxUSE_FILESYSTEM)
-WX_ARG_ENABLE(fontmap,       [  --enable-fontmap        use font encodings conversion classes], wxUSE_FONTMAP)
-WX_ARG_ENABLE(fs_archive,    [  --enable-fs_archive     use virtual archive filesystems], wxUSE_FS_ARCHIVE)
-WX_ARG_ENABLE(fs_inet,       [  --enable-fs_inet        use virtual HTTP/FTP filesystems], wxUSE_FS_INET)
-WX_ARG_ENABLE(fs_zip,        [  --enable-fs_zip         now replaced by fs_archive], wxUSE_FS_ZIP)
-WX_ARG_ENABLE(geometry,      [  --enable-geometry       use geometry class], wxUSE_GEOMETRY)
-WX_ARG_ENABLE(log,           [  --enable-log            use logging system], wxUSE_LOG)
-WX_ARG_ENABLE(longlong,      [  --enable-longlong       use wxLongLong class], wxUSE_LONGLONG)
-WX_ARG_ENABLE(mimetype,      [  --enable-mimetype       use wxMimeTypesManager], wxUSE_MIMETYPE)
-WX_ARG_ENABLE(mslu,          [  --enable-mslu           use MS Layer for Unicode on Windows 9x (Win32 only)], wxUSE_UNICODE_MSLU)
-WX_ARG_ENABLE_PARAM(utf8,          [  --enable-utf8           use UTF-8 representation for strings (Unix only)], wxUSE_UNICODE_UTF8)
-WX_ARG_ENABLE(utf8only,      [  --enable-utf8only      only support UTF-8 locales in UTF-8 build (Unix only)], wxUSE_UNICODE_UTF8_LOCALE)
-WX_ARG_ENABLE(snglinst,      [  --enable-snglinst       use wxSingleInstanceChecker class], wxUSE_SNGLINST_CHECKER)
-WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
-WX_ARG_ENABLE(std_string,    [  --enable-std_string     use standard C++ string classes], wxUSE_STD_STRING)
-WX_ARG_ENABLE(stdpaths,      [  --enable-stdpaths       use wxStandardPaths class], wxUSE_STDPATHS)
-WX_ARG_ENABLE(stopwatch,     [  --enable-stopwatch      use wxStopWatch class], wxUSE_STOPWATCH)
-WX_ARG_ENABLE(streams,       [  --enable-streams        use wxStream etc classes], wxUSE_STREAMS)
-WX_ARG_ENABLE(system_options,[  --enable-sysoptions     use wxSystemOptions], wxUSE_SYSTEM_OPTIONS)
-WX_ARG_ENABLE(tarstream,     [  --enable-tarstream      use wxTar streams], wxUSE_TARSTREAM)
-WX_ARG_ENABLE(textbuf,       [  --enable-textbuf        use wxTextBuffer class], wxUSE_TEXTBUFFER)
-WX_ARG_ENABLE(textfile,      [  --enable-textfile       use wxTextFile class], wxUSE_TEXTFILE)
-WX_ARG_ENABLE(timer,         [  --enable-timer          use wxTimer class], wxUSE_TIMER)
-WX_ARG_ENABLE(unicode,       [  --enable-unicode        compile wxString with Unicode support], wxUSE_UNICODE)
-WX_ARG_ENABLE(sound,         [  --enable-sound          use wxSound class], wxUSE_SOUND)
-WX_ARG_ENABLE(mediactrl,     [  --enable-mediactrl      use wxMediaCtrl class], wxUSE_MEDIACTRL)
-WX_ARG_ENABLE(gstreamer8,    [  --enable-gstreamer8     force GStreamer 0.8 instead of 0.10 with the wxMediaCtrl class on unix], wxUSE_GSTREAMER8)
-WX_ARG_ENABLE(printfposparam,[  --enable-printfposparam use wxVsnprintf() which supports positional parameters], wxUSE_PRINTF_POS_PARAMS)
-WX_ARG_ENABLE(zipstream,     [  --enable-zipstream      use wxZip streams], wxUSE_ZIPSTREAM)
+WX_ARG_FEATURE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
+WX_ARG_FEATURE(arcstream,     [  --enable-arcstream      use wxArchive streams], wxUSE_ARCHIVE_STREAMS)
+WX_ARG_FEATURE(base64,        [  --enable-base64         use base64 encoding/decoding functions], wxUSE_BASE64)
+WX_ARG_FEATURE(backtrace,     [  --enable-backtrace      use wxStackWalker class for getting backtraces], wxUSE_STACKWALKER)
+WX_ARG_FEATURE(catch_segvs,   [  --enable-catch_segvs    catch signals in wxApp::OnFatalException (Unix only)], wxUSE_ON_FATAL_EXCEPTION)
+WX_ARG_FEATURE(cmdline,       [  --enable-cmdline        use wxCmdLineParser class], wxUSE_CMDLINE_PARSER)
+WX_ARG_FEATURE(datetime,      [  --enable-datetime       use wxDateTime class], wxUSE_DATETIME)
+WX_ARG_FEATURE(debugreport,   [  --enable-debugreport    use wxDebugReport class], wxUSE_DEBUGREPORT)
+WX_ARG_FEATURE(dialupman,     [  --enable-dialupman      use dialup network classes], wxUSE_DIALUP_MANAGER)
+WX_ARG_FEATURE(dynlib,        [  --enable-dynlib         use wxLibrary class for DLL loading], wxUSE_DYNLIB_CLASS)
+WX_ARG_FEATURE(dynamicloader, [  --enable-dynamicloader  use (new) wxDynamicLibrary class], wxUSE_DYNAMIC_LOADER)
+WX_ARG_FEATURE(exceptions,    [  --enable-exceptions     build exception-safe library], wxUSE_EXCEPTIONS)
+WX_ARG_FEATURE(ffile,         [  --enable-ffile          use wxFFile class], wxUSE_FFILE)
+WX_ARG_FEATURE(file,          [  --enable-file           use wxFile class], wxUSE_FILE)
+WX_ARG_FEATURE(filesystem,    [  --enable-filesystem     use virtual file systems classes], wxUSE_FILESYSTEM)
+WX_ARG_FEATURE(fontmap,       [  --enable-fontmap        use font encodings conversion classes], wxUSE_FONTMAP)
+WX_ARG_FEATURE(fs_archive,    [  --enable-fs_archive     use virtual archive filesystems], wxUSE_FS_ARCHIVE)
+WX_ARG_FEATURE(fs_inet,       [  --enable-fs_inet        use virtual HTTP/FTP filesystems], wxUSE_FS_INET)
+WX_ARG_FEATURE(fs_zip,        [  --enable-fs_zip         now replaced by fs_archive], wxUSE_FS_ZIP)
+WX_ARG_FEATURE(geometry,      [  --enable-geometry       use geometry class], wxUSE_GEOMETRY)
+WX_ARG_FEATURE(log,           [  --enable-log            use logging system], wxUSE_LOG)
+WX_ARG_FEATURE(longlong,      [  --enable-longlong       use wxLongLong class], wxUSE_LONGLONG)
+WX_ARG_FEATURE(mimetype,      [  --enable-mimetype       use wxMimeTypesManager], wxUSE_MIMETYPE)
+WX_ARG_FEATURE(snglinst,      [  --enable-snglinst       use wxSingleInstanceChecker class], wxUSE_SNGLINST_CHECKER)
+WX_ARG_FEATURE(stdpaths,      [  --enable-stdpaths       use wxStandardPaths class], wxUSE_STDPATHS)
+WX_ARG_FEATURE(stopwatch,     [  --enable-stopwatch      use wxStopWatch class], wxUSE_STOPWATCH)
+WX_ARG_FEATURE(streams,       [  --enable-streams        use wxStream etc classes], wxUSE_STREAMS)
+WX_ARG_FEATURE(system_options,[  --enable-sysoptions     use wxSystemOptions], wxUSE_SYSTEM_OPTIONS)
+WX_ARG_FEATURE(tarstream,     [  --enable-tarstream      use wxTar streams], wxUSE_TARSTREAM)
+WX_ARG_FEATURE(textbuf,       [  --enable-textbuf        use wxTextBuffer class], wxUSE_TEXTBUFFER)
+WX_ARG_FEATURE(textfile,      [  --enable-textfile       use wxTextFile class], wxUSE_TEXTFILE)
+WX_ARG_FEATURE(timer,         [  --enable-timer          use wxTimer class], wxUSE_TIMER)
+WX_ARG_FEATURE(sound,         [  --enable-sound          use wxSound class], wxUSE_SOUND)
+WX_ARG_FEATURE(mediactrl,     [  --enable-mediactrl      use wxMediaCtrl class], wxUSE_MEDIACTRL)
+WX_ARG_FEATURE(gstreamer8,    [  --enable-gstreamer8     force GStreamer 0.8 instead of 0.10 with the wxMediaCtrl class on unix], wxUSE_GSTREAMER8)
+WX_ARG_FEATURE(printfposparam,[  --enable-printfposparam use wxVsnprintf() which supports positional parameters], wxUSE_PRINTF_POS_PARAMS)
+WX_ARG_FEATURE(zipstream,     [  --enable-zipstream      use wxZip streams], wxUSE_ZIPSTREAM)
 
-WX_ARG_ENABLE(url,           [  --enable-url            use wxURL class], wxUSE_URL)
-WX_ARG_ENABLE(variant,       [  --enable-variant        use wxVariant class], wxUSE_VARIANT)
-WX_ARG_ENABLE(protocol,      [  --enable-protocol       use wxProtocol class], wxUSE_PROTOCOL)
-WX_ARG_ENABLE(protocol_http, [  --enable-protocol-http  HTTP support in wxProtocol], wxUSE_PROTOCOL_HTTP)
-WX_ARG_ENABLE(protocol_ftp,  [  --enable-protocol-ftp   FTP support in wxProtocol], wxUSE_PROTOCOL_FTP)
-WX_ARG_ENABLE(protocol_file, [  --enable-protocol-file  FILE support in wxProtocol], wxUSE_PROTOCOL_FILE)
+WX_ARG_FEATURE(url,           [  --enable-url            use wxURL class], wxUSE_URL)
+WX_ARG_FEATURE(variant,       [  --enable-variant        use wxVariant class], wxUSE_VARIANT)
+WX_ARG_FEATURE(protocol,      [  --enable-protocol       use wxProtocol class], wxUSE_PROTOCOL)
+WX_ARG_FEATURE(protocol_http, [  --enable-protocol-http  HTTP support in wxProtocol], wxUSE_PROTOCOL_HTTP)
+WX_ARG_FEATURE(protocol_ftp,  [  --enable-protocol-ftp   FTP support in wxProtocol], wxUSE_PROTOCOL_FTP)
+WX_ARG_FEATURE(protocol_file, [  --enable-protocol-file  FILE support in wxProtocol], wxUSE_PROTOCOL_FILE)
 
-
-dnl ---------------------------------------------------------------------------
-dnl "big" options (i.e. those which change a lot of things throughout the library)
-dnl ---------------------------------------------------------------------------
-
-WX_ARG_ENABLE(threads,     [  --enable-threads        use threads], wxUSE_THREADS)
+WX_ARG_FEATURE(threads,     [  --enable-threads        use threads], wxUSE_THREADS)
 
 if test "$wxUSE_GUI" = "yes"; then
 
 dnl ---------------------------------------------------------------------------
-dnl "big" GUI options
+dnl optional "big" GUI features
 dnl ---------------------------------------------------------------------------
 
-WX_ARG_ENABLE(docview,     [  --enable-docview        use document view architecture], wxUSE_DOC_VIEW_ARCHITECTURE)
-WX_ARG_ENABLE(help,        [  --enable-help           use help subsystem], wxUSE_HELP)
-WX_ARG_ENABLE(mshtmlhelp,  [  --enable-mshtmlhelp     use MS HTML Help (win32)], wxUSE_MS_HTML_HELP)
-WX_ARG_ENABLE(html,        [  --enable-html           use wxHTML sub-library], wxUSE_HTML)
-WX_ARG_ENABLE(htmlhelp,    [  --enable-htmlhelp       use wxHTML-based help], wxUSE_WXHTML_HELP)
-WX_ARG_ENABLE(xrc,         [  --enable-xrc            use XRC resources sub-library], wxUSE_XRC)
-WX_ARG_ENABLE(aui,         [  --enable-aui            use AUI docking library], wxUSE_AUI)
-WX_ARG_ENABLE(stc,         [  --enable-stc            use wxStyledTextCtrl library], wxUSE_STC)
-WX_ARG_ENABLE(constraints, [  --enable-constraints    use layout-constraints system], wxUSE_CONSTRAINTS)
-WX_ARG_ENABLE(printarch,   [  --enable-printarch      use printing architecture], wxUSE_PRINTING_ARCHITECTURE)
-WX_ARG_ENABLE(mdi,         [  --enable-mdi            use multiple document interface architecture], wxUSE_MDI)
-WX_ARG_ENABLE(mdidoc,      [  --enable-mdidoc         use docview architecture with MDI], wxUSE_MDI_ARCHITECTURE)
-WX_ARG_ENABLE(loggui,      [  --enable-loggui         use standard GUI logger], wxUSE_LOGGUI)
-WX_ARG_ENABLE(logwin,      [  --enable-logwin         use wxLogWindow], wxUSE_LOGWINDOW)
-WX_ARG_ENABLE(logdialog,   [  --enable-logdialog      use wxLogDialog], wxUSE_LOGDIALOG)
-WX_ARG_ENABLE(webkit,      [  --enable-webkit         use wxWebKitCtrl (Mac)], wxUSE_WEBKIT)
-WX_ARG_ENABLE(richtext,    [  --enable-richtext       use wxRichTextCtrl], wxUSE_RICHTEXT)
-WX_ARG_ENABLE(graphics_ctx, [  --enable-graphics_ctx   use graphics context 2D drawing API], wxUSE_GRAPHICS_CONTEXT)
-
-dnl ---------------------------------------------------------------------------
-dnl PostScript options
-dnl ---------------------------------------------------------------------------
-WX_ARG_ENABLE(postscript,  [  --enable-postscript     use wxPostscriptDC device context (default for gtk+)], wxUSE_POSTSCRIPT)
-
-dnl VZ: these options seem to be always on, if someone wants to change it please do
-dnl WX_ARG_ENABLE(PS-normalized,    [  --enable-PS-normalized  use normalized PS fonts], dnl             wxUSE_NORMALIZED_PS_FONTS)
-dnl WX_ARG_ENABLE(afmfonts,        [  --enable-afmfonts       use Adobe Font Metric Font table], dnl             wxUSE_AFM_FOR_POSTSCRIPT)
+WX_ARG_FEATURE(docview,     [  --enable-docview        use document view architecture], wxUSE_DOC_VIEW_ARCHITECTURE)
+WX_ARG_FEATURE(help,        [  --enable-help           use help subsystem], wxUSE_HELP)
+WX_ARG_FEATURE(mshtmlhelp,  [  --enable-mshtmlhelp     use MS HTML Help (win32)], wxUSE_MS_HTML_HELP)
+WX_ARG_FEATURE(html,        [  --enable-html           use wxHTML sub-library], wxUSE_HTML)
+WX_ARG_FEATURE(htmlhelp,    [  --enable-htmlhelp       use wxHTML-based help], wxUSE_WXHTML_HELP)
+WX_ARG_FEATURE(xrc,         [  --enable-xrc            use XRC resources sub-library], wxUSE_XRC)
+WX_ARG_FEATURE(aui,         [  --enable-aui            use AUI docking library], wxUSE_AUI)
+WX_ARG_FEATURE(stc,         [  --enable-stc            use wxStyledTextCtrl library], wxUSE_STC)
+WX_ARG_FEATURE(constraints, [  --enable-constraints    use layout-constraints system], wxUSE_CONSTRAINTS)
+WX_ARG_FEATURE(printarch,   [  --enable-printarch      use printing architecture], wxUSE_PRINTING_ARCHITECTURE)
+WX_ARG_FEATURE(mdi,         [  --enable-mdi            use multiple document interface architecture], wxUSE_MDI)
+WX_ARG_FEATURE(mdidoc,      [  --enable-mdidoc         use docview architecture with MDI], wxUSE_MDI_ARCHITECTURE)
+WX_ARG_FEATURE(loggui,      [  --enable-loggui         use standard GUI logger], wxUSE_LOGGUI)
+WX_ARG_FEATURE(logwin,      [  --enable-logwin         use wxLogWindow], wxUSE_LOGWINDOW)
+WX_ARG_FEATURE(logdialog,   [  --enable-logdialog      use wxLogDialog], wxUSE_LOGDIALOG)
+WX_ARG_FEATURE(webkit,      [  --enable-webkit         use wxWebKitCtrl (Mac)], wxUSE_WEBKIT)
+WX_ARG_FEATURE(richtext,    [  --enable-richtext       use wxRichTextCtrl], wxUSE_RICHTEXT)
+WX_ARG_FEATURE(graphics_ctx,[  --enable-graphics_ctx   use graphics context 2D drawing API], wxUSE_GRAPHICS_CONTEXT)
+WX_ARG_FEATURE(postscript,  [  --enable-postscript     use wxPostscriptDC device context (default for gtk+)], wxUSE_POSTSCRIPT)
+WX_ARG_FEATURE(svg,         [  --enable-svg            use wxSVGFileDC device context], wxUSE_SVG)
 
 dnl ---------------------------------------------------------------------------
 dnl IPC &c
 dnl ---------------------------------------------------------------------------
 
-WX_ARG_ENABLE(clipboard,   [  --enable-clipboard      use wxClipboard class], wxUSE_CLIPBOARD)
-WX_ARG_ENABLE(dnd,         [  --enable-dnd            use Drag'n'Drop classes], wxUSE_DRAG_AND_DROP)
-WX_ARG_ENABLE(metafile,    [  --enable-metafile       use win32 metafiles], wxUSE_METAFILE)
-
-dnl WX_ARG_ENABLE(treelayout,  [  --enable-treelayout     use wxTreeLayout class], wxUSE_TREELAYOUT)
+WX_ARG_FEATURE(clipboard,   [  --enable-clipboard      use wxClipboard class], wxUSE_CLIPBOARD)
+WX_ARG_FEATURE(dnd,         [  --enable-dnd            use Drag'n'Drop classes], wxUSE_DRAG_AND_DROP)
+WX_ARG_FEATURE(metafile,    [  --enable-metafile       use win32 metafiles], wxUSE_METAFILE)
 
 dnl ---------------------------------------------------------------------------
 dnl optional GUI controls (in alphabetical order except the first one)
 dnl ---------------------------------------------------------------------------
 
-WX_ARG_ENABLE(controls,    [  --enable-controls       use all usual controls], wxUSE_CONTROLS)
+dnl don't set DEFAULT_wxUSE_XXX below if the option is not specified
+DEFAULT_wxUSE_CONTROLS=none
+WX_ARG_DISABLE(controls,    [  --disable-controls      disable compilation of all standard controls], wxUSE_CONTROLS)
 
 dnl even with --enable-controls, some may be disabled by giving
 dnl --disable-<control> later on the command line - but by default all will be
@@ -1188,139 +782,118 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_TIPWINDOW=no
 fi
 
-WX_ARG_ENABLE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
-WX_ARG_ENABLE(animatectrl, [  --enable-animatectrl    use wxAnimationCtrl class], wxUSE_ANIMATIONCTRL)
-WX_ARG_ENABLE(button,      [  --enable-button         use wxButton class], wxUSE_BUTTON)
-WX_ARG_ENABLE(bmpbutton,   [  --enable-bmpbutton      use wxBitmapButton class], wxUSE_BMPBUTTON)
-WX_ARG_ENABLE(bmpcombobox, [  --enable-bmpcombobox    use wxBitmapComboBox class], wxUSE_BITMAPCOMBOBOX)
-WX_ARG_ENABLE(calendar,    [  --enable-calendar       use wxCalendarCtrl class], wxUSE_CALCTRL)
-WX_ARG_ENABLE(caret,       [  --enable-caret          use wxCaret class], wxUSE_CARET)
-WX_ARG_ENABLE(checkbox,    [  --enable-checkbox       use wxCheckBox class], wxUSE_CHECKBOX)
-WX_ARG_ENABLE(checklst,    [  --enable-checklst       use wxCheckListBox (listbox with checkboxes) class], wxUSE_CHECKLST)
-WX_ARG_ENABLE(choice,      [  --enable-choice         use wxChoice class], wxUSE_CHOICE)
-WX_ARG_ENABLE(choicebook,  [  --enable-choicebook     use wxChoicebook class], wxUSE_CHOICEBOOK)
-WX_ARG_ENABLE(collpane,    [  --enable-collpane       use wxCollapsiblePane class], wxUSE_COLLPANE)
-WX_ARG_ENABLE(colourpicker,[  --enable-colourpicker   use wxColourPickerCtrl class], wxUSE_COLOURPICKERCTRL)
-WX_ARG_ENABLE(combobox,    [  --enable-combobox       use wxComboBox class], wxUSE_COMBOBOX)
-WX_ARG_ENABLE(comboctrl,   [  --enable-comboctrl      use wxComboCtrl class], wxUSE_COMBOCTRL)
-WX_ARG_ENABLE(datepick,    [  --enable-datepick       use wxDatePickerCtrl class], wxUSE_DATEPICKCTRL)
-WX_ARG_ENABLE(dirpicker,   [  --enable-dirpicker      use wxDirPickerCtrl class], wxUSE_DIRPICKERCTRL)
-WX_ARG_ENABLE(display,     [  --enable-display        use wxDisplay class], wxUSE_DISPLAY)
-WX_ARG_ENABLE(detect_sm,   [  --enable-detect_sm      use code to detect X11 session manager], wxUSE_DETECT_SM)
-WX_ARG_ENABLE(editablebox, [  --enable-editablebox    use wxEditableListBox class], wxUSE_EDITABLELISTBOX)
-WX_ARG_ENABLE(filepicker,  [  --enable-filepicker     use wxFilePickerCtrl class], wxUSE_FILEPICKERCTRL)
-WX_ARG_ENABLE(fontpicker,  [  --enable-fontpicker     use wxFontPickerCtrl class], wxUSE_FONTPICKERCTRL)
-WX_ARG_ENABLE(gauge,       [  --enable-gauge          use wxGauge class], wxUSE_GAUGE)
-WX_ARG_ENABLE(grid,        [  --enable-grid           use wxGrid class], wxUSE_GRID)
-WX_ARG_ENABLE(dataviewctrl,[  --enable-dataviewctrl   use wxDataViewCtrl class], wxUSE_DATAVIEWCTRL)
-WX_ARG_ENABLE(hyperlink,   [  --enable-hyperlink      use wxHyperlinkCtrl class], wxUSE_HYPERLINKCTRL)
-WX_ARG_ENABLE(imaglist,    [  --enable-imaglist       use wxImageList class], wxUSE_IMAGLIST)
-WX_ARG_ENABLE(listbook,    [  --enable-listbook       use wxListbook class], wxUSE_LISTBOOK)
-WX_ARG_ENABLE(listbox,     [  --enable-listbox        use wxListBox class], wxUSE_LISTBOX)
-WX_ARG_ENABLE(listctrl,    [  --enable-listctrl       use wxListCtrl class], wxUSE_LISTCTRL)
-WX_ARG_ENABLE(notebook,    [  --enable-notebook       use wxNotebook class], wxUSE_NOTEBOOK)
-WX_ARG_ENABLE(odcombobox,  [  --enable-odcombobox     use wxOwnerDrawnComboBox class], wxUSE_ODCOMBOBOX)
-WX_ARG_ENABLE(radiobox,    [  --enable-radiobox       use wxRadioBox class], wxUSE_RADIOBOX)
-WX_ARG_ENABLE(radiobtn,    [  --enable-radiobtn       use wxRadioButton class], wxUSE_RADIOBTN)
-WX_ARG_ENABLE(sash,        [  --enable-sash           use wxSashWindow class], wxUSE_SASH)
-WX_ARG_ENABLE(scrollbar,   [  --enable-scrollbar      use wxScrollBar class and scrollable windows], wxUSE_SCROLLBAR)
-WX_ARG_ENABLE(searchctrl,  [  --enable-searchctrl     use wxSearchCtrl class], wxUSE_SEARCHCTRL)
-WX_ARG_ENABLE(slider,      [  --enable-slider         use wxSlider class], wxUSE_SLIDER)
-WX_ARG_ENABLE(spinbtn,     [  --enable-spinbtn        use wxSpinButton class], wxUSE_SPINBTN)
-WX_ARG_ENABLE(spinctrl,    [  --enable-spinctrl       use wxSpinCtrl class], wxUSE_SPINCTRL)
-WX_ARG_ENABLE(splitter,    [  --enable-splitter       use wxSplitterWindow class], wxUSE_SPLITTER)
-WX_ARG_ENABLE(statbmp,     [  --enable-statbmp        use wxStaticBitmap class], wxUSE_STATBMP)
-WX_ARG_ENABLE(statbox,     [  --enable-statbox        use wxStaticBox class], wxUSE_STATBOX)
-WX_ARG_ENABLE(statline,    [  --enable-statline       use wxStaticLine class], wxUSE_STATLINE)
-WX_ARG_ENABLE(stattext,    [  --enable-stattext       use wxStaticText class], wxUSE_STATTEXT)
-WX_ARG_ENABLE(statusbar,   [  --enable-statusbar      use wxStatusBar class], wxUSE_STATUSBAR)
-WX_ARG_ENABLE(tabdialog,   [  --enable-tabdialog      use wxTabControl class], wxUSE_TAB_DIALOG)
-WX_ARG_ENABLE(textctrl,    [  --enable-textctrl       use wxTextCtrl class], wxUSE_TEXTCTRL)
-WX_ARG_ENABLE(togglebtn,   [  --enable-togglebtn      use wxToggleButton class], wxUSE_TOGGLEBTN)
-WX_ARG_ENABLE(toolbar,     [  --enable-toolbar        use wxToolBar class], wxUSE_TOOLBAR)
-WX_ARG_ENABLE(tbarnative,  [  --enable-tbarnative     use native wxToolBar class], wxUSE_TOOLBAR_NATIVE)
-WX_ARG_ENABLE(treebook,    [  --enable-treebook       use wxTreebook class], wxUSE_TREEBOOK)
-WX_ARG_ENABLE(toolbook,    [  --enable-toolbook       use wxToolbook class], wxUSE_TOOLBOOK)
-WX_ARG_ENABLE(treectrl,    [  --enable-treectrl       use wxTreeCtrl class], wxUSE_TREECTRL)
-WX_ARG_ENABLE(tipwindow,   [  --enable-tipwindow      use wxTipWindow class], wxUSE_TIPWINDOW)
-WX_ARG_ENABLE(popupwin,    [  --enable-popupwin       use wxPopUpWindow class], wxUSE_POPUPWIN)
+WX_ARG_FEATURE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
+WX_ARG_FEATURE(animatectrl, [  --enable-animatectrl    use wxAnimationCtrl class], wxUSE_ANIMATIONCTRL)
+WX_ARG_FEATURE(button,      [  --enable-button         use wxButton class], wxUSE_BUTTON)
+WX_ARG_FEATURE(bmpbutton,   [  --enable-bmpbutton      use wxBitmapButton class], wxUSE_BMPBUTTON)
+WX_ARG_FEATURE(bmpcombobox, [  --enable-bmpcombobox    use wxBitmapComboBox class], wxUSE_BITMAPCOMBOBOX)
+WX_ARG_FEATURE(calendar,    [  --enable-calendar       use wxCalendarCtrl class], wxUSE_CALCTRL)
+WX_ARG_FEATURE(caret,       [  --enable-caret          use wxCaret class], wxUSE_CARET)
+WX_ARG_FEATURE(checkbox,    [  --enable-checkbox       use wxCheckBox class], wxUSE_CHECKBOX)
+WX_ARG_FEATURE(checklst,    [  --enable-checklst       use wxCheckListBox (listbox with checkboxes) class], wxUSE_CHECKLST)
+WX_ARG_FEATURE(choice,      [  --enable-choice         use wxChoice class], wxUSE_CHOICE)
+WX_ARG_FEATURE(choicebook,  [  --enable-choicebook     use wxChoicebook class], wxUSE_CHOICEBOOK)
+WX_ARG_FEATURE(collpane,    [  --enable-collpane       use wxCollapsiblePane class], wxUSE_COLLPANE)
+WX_ARG_FEATURE(colourpicker,[  --enable-colourpicker   use wxColourPickerCtrl class], wxUSE_COLOURPICKERCTRL)
+WX_ARG_FEATURE(combobox,    [  --enable-combobox       use wxComboBox class], wxUSE_COMBOBOX)
+WX_ARG_FEATURE(comboctrl,   [  --enable-comboctrl      use wxComboCtrl class], wxUSE_COMBOCTRL)
+WX_ARG_FEATURE(datepick,    [  --enable-datepick       use wxDatePickerCtrl class], wxUSE_DATEPICKCTRL)
+WX_ARG_FEATURE(dirpicker,   [  --enable-dirpicker      use wxDirPickerCtrl class], wxUSE_DIRPICKERCTRL)
+WX_ARG_FEATURE(display,     [  --enable-display        use wxDisplay class], wxUSE_DISPLAY)
+WX_ARG_FEATURE(detect_sm,   [  --enable-detect_sm      use code to detect X11 session manager], wxUSE_DETECT_SM)
+WX_ARG_FEATURE(editablebox, [  --enable-editablebox    use wxEditableListBox class], wxUSE_EDITABLELISTBOX)
+WX_ARG_FEATURE(filepicker,  [  --enable-filepicker     use wxFilePickerCtrl class], wxUSE_FILEPICKERCTRL)
+WX_ARG_FEATURE(fontpicker,  [  --enable-fontpicker     use wxFontPickerCtrl class], wxUSE_FONTPICKERCTRL)
+WX_ARG_FEATURE(gauge,       [  --enable-gauge          use wxGauge class], wxUSE_GAUGE)
+WX_ARG_FEATURE(grid,        [  --enable-grid           use wxGrid class], wxUSE_GRID)
+WX_ARG_FEATURE(dataviewctrl,[  --enable-dataviewctrl   use wxDataViewCtrl class], wxUSE_DATAVIEWCTRL)
+WX_ARG_FEATURE(hyperlink,   [  --enable-hyperlink      use wxHyperlinkCtrl class], wxUSE_HYPERLINKCTRL)
+WX_ARG_FEATURE(imaglist,    [  --enable-imaglist       use wxImageList class], wxUSE_IMAGLIST)
+WX_ARG_FEATURE(listbook,    [  --enable-listbook       use wxListbook class], wxUSE_LISTBOOK)
+WX_ARG_FEATURE(listbox,     [  --enable-listbox        use wxListBox class], wxUSE_LISTBOX)
+WX_ARG_FEATURE(listctrl,    [  --enable-listctrl       use wxListCtrl class], wxUSE_LISTCTRL)
+WX_ARG_FEATURE(notebook,    [  --enable-notebook       use wxNotebook class], wxUSE_NOTEBOOK)
+WX_ARG_FEATURE(odcombobox,  [  --enable-odcombobox     use wxOwnerDrawnComboBox class], wxUSE_ODCOMBOBOX)
+WX_ARG_FEATURE(radiobox,    [  --enable-radiobox       use wxRadioBox class], wxUSE_RADIOBOX)
+WX_ARG_FEATURE(radiobtn,    [  --enable-radiobtn       use wxRadioButton class], wxUSE_RADIOBTN)
+WX_ARG_FEATURE(sash,        [  --enable-sash           use wxSashWindow class], wxUSE_SASH)
+WX_ARG_FEATURE(scrollbar,   [  --enable-scrollbar      use wxScrollBar class and scrollable windows], wxUSE_SCROLLBAR)
+WX_ARG_FEATURE(searchctrl,  [  --enable-searchctrl     use wxSearchCtrl class], wxUSE_SEARCHCTRL)
+WX_ARG_FEATURE(slider,      [  --enable-slider         use wxSlider class], wxUSE_SLIDER)
+WX_ARG_FEATURE(spinbtn,     [  --enable-spinbtn        use wxSpinButton class], wxUSE_SPINBTN)
+WX_ARG_FEATURE(spinctrl,    [  --enable-spinctrl       use wxSpinCtrl class], wxUSE_SPINCTRL)
+WX_ARG_FEATURE(splitter,    [  --enable-splitter       use wxSplitterWindow class], wxUSE_SPLITTER)
+WX_ARG_FEATURE(statbmp,     [  --enable-statbmp        use wxStaticBitmap class], wxUSE_STATBMP)
+WX_ARG_FEATURE(statbox,     [  --enable-statbox        use wxStaticBox class], wxUSE_STATBOX)
+WX_ARG_FEATURE(statline,    [  --enable-statline       use wxStaticLine class], wxUSE_STATLINE)
+WX_ARG_FEATURE(stattext,    [  --enable-stattext       use wxStaticText class], wxUSE_STATTEXT)
+WX_ARG_FEATURE(statusbar,   [  --enable-statusbar      use wxStatusBar class], wxUSE_STATUSBAR)
+WX_ARG_FEATURE(tabdialog,   [  --enable-tabdialog      use wxTabControl class], wxUSE_TAB_DIALOG)
+WX_ARG_FEATURE(textctrl,    [  --enable-textctrl       use wxTextCtrl class], wxUSE_TEXTCTRL)
+WX_ARG_FEATURE(togglebtn,   [  --enable-togglebtn      use wxToggleButton class], wxUSE_TOGGLEBTN)
+WX_ARG_FEATURE(toolbar,     [  --enable-toolbar        use wxToolBar class], wxUSE_TOOLBAR)
+WX_ARG_FEATURE(tbarnative,  [  --enable-tbarnative     use native wxToolBar class], wxUSE_TOOLBAR_NATIVE)
+WX_ARG_FEATURE(treebook,    [  --enable-treebook       use wxTreebook class], wxUSE_TREEBOOK)
+WX_ARG_FEATURE(toolbook,    [  --enable-toolbook       use wxToolbook class], wxUSE_TOOLBOOK)
+WX_ARG_FEATURE(treectrl,    [  --enable-treectrl       use wxTreeCtrl class], wxUSE_TREECTRL)
+WX_ARG_FEATURE(tipwindow,   [  --enable-tipwindow      use wxTipWindow class], wxUSE_TIPWINDOW)
+WX_ARG_FEATURE(popupwin,    [  --enable-popupwin       use wxPopUpWindow class], wxUSE_POPUPWIN)
 
 dnl ---------------------------------------------------------------------------
 dnl common dialogs
 dnl ---------------------------------------------------------------------------
 
-WX_ARG_ENABLE(commondlg,   [  --enable-commondlg      use all common dialogs], wxUSE_COMMONDLGS)
-WX_ARG_ENABLE(aboutdlg,    [  --enable-aboutdlg       use wxAboutBox], wxUSE_ABOUTDLG)
-WX_ARG_ENABLE(choicedlg,   [  --enable-choicedlg      use wxChoiceDialog], wxUSE_CHOICEDLG)
-WX_ARG_ENABLE(coldlg,      [  --enable-coldlg         use wxColourDialog], wxUSE_COLOURDLG)
-WX_ARG_ENABLE(filedlg,     [  --enable-filedlg        use wxFileDialog], wxUSE_FILEDLG)
-WX_ARG_ENABLE(finddlg,     [  --enable-finddlg        use wxFindReplaceDialog], wxUSE_FINDREPLDLG)
-WX_ARG_ENABLE(fontdlg,     [  --enable-fontdlg        use wxFontDialog], wxUSE_FONTDLG)
-WX_ARG_ENABLE(dirdlg,      [  --enable-dirdlg         use wxDirDialog], wxUSE_DIRDLG)
-WX_ARG_ENABLE(msgdlg,      [  --enable-msgdlg         use wxMessageDialog], wxUSE_MSGDLG)
-WX_ARG_ENABLE(numberdlg,   [  --enable-numberdlg      use wxNumberEntryDialog], wxUSE_NUMBERDLG)
-WX_ARG_ENABLE(splash,      [  --enable-splash         use wxSplashScreen], wxUSE_SPLASH)
-WX_ARG_ENABLE(textdlg,     [  --enable-textdlg        use wxTextDialog], wxUSE_TEXTDLG)
-WX_ARG_ENABLE(tipdlg,      [  --enable-tipdlg         use startup tips], wxUSE_STARTUP_TIPS)
-WX_ARG_ENABLE(progressdlg, [  --enable-progressdlg    use wxProgressDialog], wxUSE_PROGRESSDLG)
-WX_ARG_ENABLE(wizarddlg,   [  --enable-wizarddlg      use wxWizard], wxUSE_WIZARDDLG)
+WX_ARG_FEATURE(commondlg,   [  --enable-commondlg      use all common dialogs], wxUSE_COMMONDLGS)
+WX_ARG_FEATURE(aboutdlg,    [  --enable-aboutdlg       use wxAboutBox], wxUSE_ABOUTDLG)
+WX_ARG_FEATURE(choicedlg,   [  --enable-choicedlg      use wxChoiceDialog], wxUSE_CHOICEDLG)
+WX_ARG_FEATURE(coldlg,      [  --enable-coldlg         use wxColourDialog], wxUSE_COLOURDLG)
+WX_ARG_FEATURE(filedlg,     [  --enable-filedlg        use wxFileDialog], wxUSE_FILEDLG)
+WX_ARG_FEATURE(finddlg,     [  --enable-finddlg        use wxFindReplaceDialog], wxUSE_FINDREPLDLG)
+WX_ARG_FEATURE(fontdlg,     [  --enable-fontdlg        use wxFontDialog], wxUSE_FONTDLG)
+WX_ARG_FEATURE(dirdlg,      [  --enable-dirdlg         use wxDirDialog], wxUSE_DIRDLG)
+WX_ARG_FEATURE(msgdlg,      [  --enable-msgdlg         use wxMessageDialog], wxUSE_MSGDLG)
+WX_ARG_FEATURE(numberdlg,   [  --enable-numberdlg      use wxNumberEntryDialog], wxUSE_NUMBERDLG)
+WX_ARG_FEATURE(splash,      [  --enable-splash         use wxSplashScreen], wxUSE_SPLASH)
+WX_ARG_FEATURE(textdlg,     [  --enable-textdlg        use wxTextDialog], wxUSE_TEXTDLG)
+WX_ARG_FEATURE(tipdlg,      [  --enable-tipdlg         use startup tips], wxUSE_STARTUP_TIPS)
+WX_ARG_FEATURE(progressdlg, [  --enable-progressdlg    use wxProgressDialog], wxUSE_PROGRESSDLG)
+WX_ARG_FEATURE(wizarddlg,   [  --enable-wizarddlg      use wxWizard], wxUSE_WIZARDDLG)
 
 dnl ---------------------------------------------------------------------------
 dnl misc GUI options
 dnl ---------------------------------------------------------------------------
 
-WX_ARG_ENABLE(menus,       [  --enable-menus          use wxMenu/wxMenuBar/wxMenuItem classes], wxUSE_MENUS)
-WX_ARG_ENABLE(miniframe,   [  --enable-miniframe      use wxMiniFrame class], wxUSE_MINIFRAME)
-WX_ARG_ENABLE(tooltips,    [  --enable-tooltips       use wxToolTip class], wxUSE_TOOLTIPS)
-WX_ARG_ENABLE(splines,     [  --enable-splines        use spline drawing code], wxUSE_SPLINES)
-WX_ARG_ENABLE(mousewheel,  [  --enable-mousewheel     use mousewheel], wxUSE_MOUSEWHEEL)
-WX_ARG_ENABLE(validators,  [  --enable-validators     use wxValidator and derived classes], wxUSE_VALIDATORS)
-WX_ARG_ENABLE(busyinfo,    [  --enable-busyinfo       use wxBusyInfo], wxUSE_BUSYINFO)
-WX_ARG_ENABLE(joystick,    [  --enable-joystick       use wxJoystick], wxUSE_JOYSTICK)
-WX_ARG_ENABLE(metafile,    [  --enable-metafiles      use wxMetaFile (Win32 only)], wxUSE_METAFILE)
-WX_ARG_ENABLE(dragimage,   [  --enable-dragimage      use wxDragImage], wxUSE_DRAGIMAGE)
-WX_ARG_ENABLE(accessibility,[  --enable-accessibility  enable accessibility support], wxUSE_ACCESSIBILITY)
+WX_ARG_FEATURE(menus,       [  --enable-menus          use wxMenu/wxMenuBar/wxMenuItem classes], wxUSE_MENUS)
+WX_ARG_FEATURE(miniframe,   [  --enable-miniframe      use wxMiniFrame class], wxUSE_MINIFRAME)
+WX_ARG_FEATURE(tooltips,    [  --enable-tooltips       use wxToolTip class], wxUSE_TOOLTIPS)
+WX_ARG_FEATURE(splines,     [  --enable-splines        use spline drawing code], wxUSE_SPLINES)
+WX_ARG_FEATURE(mousewheel,  [  --enable-mousewheel     use mousewheel], wxUSE_MOUSEWHEEL)
+WX_ARG_FEATURE(validators,  [  --enable-validators     use wxValidator and derived classes], wxUSE_VALIDATORS)
+WX_ARG_FEATURE(busyinfo,    [  --enable-busyinfo       use wxBusyInfo], wxUSE_BUSYINFO)
+WX_ARG_FEATURE(joystick,    [  --enable-joystick       use wxJoystick], wxUSE_JOYSTICK)
+WX_ARG_FEATURE(metafile,    [  --enable-metafiles      use wxMetaFile (Win32 only)], wxUSE_METAFILE)
+WX_ARG_FEATURE(dragimage,   [  --enable-dragimage      use wxDragImage], wxUSE_DRAGIMAGE)
+WX_ARG_FEATURE(accessibility,[  --enable-accessibility  enable accessibility support], wxUSE_ACCESSIBILITY)
 
 if test "$wxUSE_MSW" = "1"; then
-    WX_ARG_ENABLE(dccache, [  --enable-dccache        cache temporary wxDC objects (Win32 only)], wxUSE_DC_CACHEING)
+    WX_ARG_FEATURE(dccache, [  --enable-dccache        cache temporary wxDC objects (Win32 only)], wxUSE_DC_CACHEING)
 fi
 
 dnl ---------------------------------------------------------------------------
 dnl support for image formats that do not rely on external library
 dnl ---------------------------------------------------------------------------
 
-WX_ARG_ENABLE(palette,     [  --enable-palette        use wxPalette class], wxUSE_PALETTE)
-WX_ARG_ENABLE(image,       [  --enable-image          use wxImage class], wxUSE_IMAGE)
-WX_ARG_ENABLE(gif,         [  --enable-gif            use gif images (GIF file format)], wxUSE_GIF)
-WX_ARG_ENABLE(pcx,         [  --enable-pcx            use pcx images (PCX file format)], wxUSE_PCX)
-WX_ARG_ENABLE(tga,         [  --enable-tga            use tga images (TGA file format)], wxUSE_TGA)
-WX_ARG_ENABLE(iff,         [  --enable-iff            use iff images (IFF file format)], wxUSE_IFF)
-WX_ARG_ENABLE(pnm,         [  --enable-pnm            use pnm images (PNM file format)], wxUSE_PNM)
-WX_ARG_ENABLE(xpm,         [  --enable-xpm            use xpm images (XPM file format)], wxUSE_XPM)
-WX_ARG_ENABLE(ico_cur,     [  --enable-icocur         use Windows ICO and CUR formats], wxUSE_ICO_CUR)
+WX_ARG_FEATURE(palette,     [  --enable-palette        use wxPalette class], wxUSE_PALETTE)
+WX_ARG_FEATURE(image,       [  --enable-image          use wxImage class], wxUSE_IMAGE)
+WX_ARG_FEATURE(gif,         [  --enable-gif            use gif images (GIF file format)], wxUSE_GIF)
+WX_ARG_FEATURE(pcx,         [  --enable-pcx            use pcx images (PCX file format)], wxUSE_PCX)
+WX_ARG_FEATURE(tga,         [  --enable-tga            use tga images (TGA file format)], wxUSE_TGA)
+WX_ARG_FEATURE(iff,         [  --enable-iff            use iff images (IFF file format)], wxUSE_IFF)
+WX_ARG_FEATURE(pnm,         [  --enable-pnm            use pnm images (PNM file format)], wxUSE_PNM)
+WX_ARG_FEATURE(xpm,         [  --enable-xpm            use xpm images (XPM file format)], wxUSE_XPM)
+WX_ARG_FEATURE(ico_cur,     [  --enable-icocur         use Windows ICO and CUR formats], wxUSE_ICO_CUR)
 
 fi
-
-dnl ---------------------------------------------------------------------------
-dnl flavour support
-dnl ---------------------------------------------------------------------------
-
-dnl Should this be --enable?  I flip-flopped a couple of times and this seems
-dnl in the spirit if not the letter, we have gtk-prefix and the like in this group.
-dnl It doesn't actually change anything but the output file names.
-AC_ARG_WITH(flavour,       [  --with-flavour=NAME     specify a name to identify this build], [WX_FLAVOUR="$withval"])
-
-dnl ---------------------------------------------------------------------------
-dnl some win32 settings
-dnl ---------------------------------------------------------------------------
-
-WX_ARG_ENABLE(official_build,  [  --enable-official_build official build of wxWidgets (win32 DLL only)], wxUSE_OFFICIAL_BUILD)
-AC_ARG_ENABLE(vendor,  [  --enable-vendor=VENDOR  vendor name (win32 DLL only)], [VENDOR="$enableval"])
-if test "x$VENDOR" = "x"; then
-    VENDOR="custom"
-fi
-
-
 dnl for GUI only
 
 dnl cache the options values before (may be) aborting below
@@ -1483,7 +1056,7 @@ AC_PROG_RANLIB
 
 dnl ar command
 dnl   defines AR with the appropriate command
-dnl 
+dnl
 dnl For Sun CC AC_BAKEFILE below sets AR to the compiler itself.
 if test "x$SUNCXX" != xyes; then
     AC_CHECK_TOOL(AR, ar)
@@ -1870,9 +1443,6 @@ dnl POSIX needs this for select(), but old systems don't have it
 if test "$USE_UNIX" = 1 ; then
     AC_CHECK_HEADER([sys/select.h],,, [AC_INCLUDES_DEFAULT()])
 fi
-
-dnl defines HAVE_SYS_EPOLL_H - for epoll mainloop implementation in wxbase
-AC_CHECK_HEADERS(sys/epoll.h)
 
 dnl ---------------------------------------------------------------------------
 dnl Checks for compiler characteristics
@@ -3095,26 +2665,21 @@ if test "$wxUSE_GUI" = "yes"; then
                 wx_cv_lib_gtk=
                 if test "x$wxGTK_VERSION" != "x1"
                 then
-                    dnl The gthread.pc that ships with solaris returns '-mt',
+                    dnl The gthread.pc that ships with Solaris returns '-mt',
                     dnl it's correct for Sun CC, but gcc requires '-pthreads'.
                     dnl So disable the compile check and remove the -mt below.
                     case "${host}" in
                         *-*-solaris2* )
                             if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
-                            enable_gtktest=no
+                                enable_gtktest=no
                             fi
                     esac
 
                     AM_PATH_GTK_2_0(2.0.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
 
-                    dnl Remove the '-mt' for gcc on solaris
+                    dnl Solaris also requires -lX11 for static lib
                     case "${host}" in
                         *-*-solaris2* )
-                            if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
-                                GTK_CFLAGS=`echo $GTK_CFLAGS | sed 's/-mt//'`
-                                GTK_LIBS=`echo $GTK_LIBS | sed 's/-mt//'`
-                            fi
-                            dnl solaris also requires -lX11 for static lib
                             if test "$wxUSE_SHARED" != "yes"; then
                                 GTK_LIBS="$GTK_LIBS -lX11"
                             fi
@@ -3855,6 +3420,11 @@ if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_UTF8" = "auto" ; then
         wxUSE_UNICODE_UTF8=yes
     elif test "$TOOLKIT" = "GTK" -a "$WXGTK20" = "1" ; then
         wxUSE_UNICODE_UTF8=yes
+    elif test "$USE_OS2" = "1" ; then
+        dnl wide char support is quite incomplete in libc;
+        dnl UTF-8 might actually work when evaluating/setting
+        dnl code pages correctly, even for ports other than GTK20.
+        wxUSE_UNICODE_UTF8=yes
     else
         wxUSE_UNICODE_UTF8=no
     fi
@@ -4123,6 +3693,17 @@ if test "$wxUSE_SHARED" = "yes"; then
     dnl use versioned symbols if available on the platform
     WX_VERSIONED_SYMBOLS([\$(wx_top_builddir)/version-script])
 
+    dnl test for GCC's visibility support (sets CFLAGS_VISIBILITY, which is
+    dnl assigned to CFLAGS and CXXFLAGS below)
+    if test "$wxUSE_VISIBILITY" != "no"; then
+        WX_VISIBILITY
+    fi
+
+    dnl test for Sun CC which can be used under both Solaris and Linux
+    if test "x$SUNCXX" = xyes; then
+        SAMPLES_RPATH_FLAG="-R\$(wx_top_builddir)/lib"
+        WXCONFIG_RPATH="-R\$libdir"
+    else
     case "${host}" in
       *-*-linux* | *-*-gnu* )
         SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
@@ -4130,41 +3711,39 @@ if test "$wxUSE_SHARED" = "yes"; then
         ;;
 
       *-*-solaris2* )
-        if test "$GCC" = yes ; then
-            dnl newer versions of gcc need -isystem to compile X headers on
-            dnl Solaris (which use old style C syntax)
-            CPPFLAGS="-isystem /usr/openwin/include $CPPFLAGS"
+        dnl here we know that Sun CC is not used as we tested for it above,
+        dnl hence we must be using gcc
 
-            dnl gcc may use Sun's ld, in which case -rpath gives a confusing
-            dnl error message. We have to try both -Wl,-rpath and -Wl,-R:
-            saveLdflags="$LDFLAGS"
-            LDFLAGS="$saveLdflags -Wl,-rpath,/"
-            AC_MSG_CHECKING([if the linker accepts -rpath])
-            AC_TRY_LINK(
-                [],[],
-                [
-                    AC_MSG_RESULT([yes])
-                    SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
-                    WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
-                ],[
-                    AC_MSG_RESULT([no])
-                    AC_MSG_CHECKING([if the linker accepts -R])
-                    LDFLAGS="$saveLdflags -Wl,-R,/"
-                    AC_TRY_LINK(
-                        [],[],
-                        [
-                            AC_MSG_RESULT([yes])
-                            SAMPLES_RPATH_FLAG="-Wl,-R,\$(wx_top_builddir)/lib"
-                            WXCONFIG_RPATH="-Wl,-R,\$libdir"
-                        ],[
-                            AC_MSG_RESULT([no])
-                        ])
-                ])
-            LDFLAGS="$saveLdflags"
-        else
-            SAMPLES_RPATH_FLAG="-R\$(wx_top_builddir)/lib"
-            WXCONFIG_RPATH="-R\$libdir"
-        fi
+        dnl newer versions of gcc need -isystem to compile X headers on
+        dnl Solaris (which use old style C syntax)
+        CPPFLAGS="-isystem /usr/openwin/include $CPPFLAGS"
+
+        dnl gcc may use Sun's ld, in which case -rpath gives a confusing
+        dnl error message. We have to try both -Wl,-rpath and -Wl,-R:
+        saveLdflags="$LDFLAGS"
+        LDFLAGS="$saveLdflags -Wl,-rpath,/"
+        AC_MSG_CHECKING([if the linker accepts -rpath])
+        AC_TRY_LINK(
+            [],[],
+            [
+                AC_MSG_RESULT([yes])
+                SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
+                WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
+            ],[
+                AC_MSG_RESULT([no])
+                AC_MSG_CHECKING([if the linker accepts -R])
+                LDFLAGS="$saveLdflags -Wl,-R,/"
+                AC_TRY_LINK(
+                    [],[],
+                    [
+                        AC_MSG_RESULT([yes])
+                        SAMPLES_RPATH_FLAG="-Wl,-R,\$(wx_top_builddir)/lib"
+                        WXCONFIG_RPATH="-Wl,-R,\$libdir"
+                    ],[
+                        AC_MSG_RESULT([no])
+                    ])
+            ])
+        LDFLAGS="$saveLdflags"
       ;;
 
       *-*-darwin* )
@@ -4196,6 +3775,7 @@ EOF
         ;;
 
     esac
+    fi
 
     if test $wxUSE_RPATH = "no"; then
         SAMPLES_RPATH_FLAG=''
@@ -4403,6 +3983,30 @@ else
     fi
 fi
 
+AC_CACHE_CHECK([if wchar_t is separate type],
+    wx_cv_wchar_t_is_separate_type,
+    AC_TRY_COMPILE([#include <wchar.h>],
+        [
+            return 0; }
+
+            struct Foo { void foo(wchar_t);
+                         void foo(unsigned short);
+                         void foo(unsigned int);
+                         void foo(unsigned long); };
+
+            int bar() {
+        ],
+        wx_cv_wchar_t_is_separate_type=yes,
+        wx_cv_wchar_t_is_separate_type=no
+    )
+)
+
+if test "$wx_cv_wchar_t_is_separate_type" = "yes"; then
+    AC_DEFINE(wxWCHAR_T_IS_REAL_TYPE, 1)
+else
+    AC_DEFINE(wxWCHAR_T_IS_REAL_TYPE, 0)
+fi
+
 AC_LANG_POP() dnl C++
 
 dnl ---------------------------------------------------------------------------
@@ -4459,6 +4063,8 @@ if test "$wxUSE_WCHAR_T" = "yes"; then
     if test "$WCSLEN_FOUND" = 1; then
         AC_DEFINE(HAVE_WCSLEN)
     fi
+
+    AC_CHECK_FUNCS([wcsdup])
 
     dnl On HP-UX aCC need this define to find mbstrtowcs() &c
     dnl Can't be used for g++ since the mbstate_t in wchar.h can conflict
@@ -5010,7 +4616,7 @@ fi
 dnl check for uname (POSIX) and gethostname (BSD)
 WX_CHECK_FUNCS(uname,,,[#include <sys/utsname.h>])
 if test "$wx_cv_func_uname" != yes; then
-    WX_CHECK_FUNCS(gethostname)  
+    WX_CHECK_FUNCS(gethostname)
 fi
 
 WX_CHECK_FUNCS(strtok_r, [], [], [#define _REENTRANT])
@@ -5102,13 +4708,15 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
         dnl with the convention that anything starting with '-' is a cpp flag
         dnl while anything else is a library (i.e. there is an implicit "-l")
         THREAD_OPTS="-pthread"
+        if test "x$SUNCXX" = xyes; then
+            THREAD_OPTS="-mt lthread $THREAD_OPTS"
+        fi
+
         case "${host}" in
           *-*-solaris2* | *-*-sunos4* )
                 if test "x$GCC" = "xyes"; then
                     dnl Solaris/gcc combination use this one for some reason
                     THREAD_OPTS="-pthreads $THREAD_OPTS"
-                else
-                    THREAD_OPTS="-mt $THREAD_OPTS"
                 fi
                 ;;
           *-*-freebsd*)
@@ -5253,6 +4861,10 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
       dnl wouldn't be found by it
       AC_CACHE_CHECK([for pthread_cleanup_push/pop], wx_cv_func_pthread_cleanup,
       [
+        dnl C compiler may treat pthread_cleanup_push() as an undeclared
+        dnl function and not give a warning even if it's unavailable, so use
+        dnl the C++ one for this test
+        AC_LANG_PUSH(C++)
         AC_TRY_COMPILE([#include <pthread.h>
                void ThreadCleanupFunc(void *p);
             ],
@@ -5266,6 +4878,7 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
                wx_cv_func_pthread_cleanup=no
             ]
         )
+        AC_LANG_POP()
       ])
       if test "x$wx_cv_func_pthread_cleanup" = "xyes"; then
         AC_DEFINE(wxHAVE_PTHREAD_CLEANUP)
@@ -6065,6 +5678,10 @@ if test "$wxUSE_GEOMETRY" = "yes"; then
   AC_DEFINE(wxUSE_GEOMETRY)
 fi
 
+if test "$wxUSE_BASE64" = "yes"; then
+  AC_DEFINE(wxUSE_BASE64)
+fi
+
 if test "$wxUSE_STREAMS" = "yes" ; then
   AC_DEFINE(wxUSE_STREAMS)
 fi
@@ -6073,6 +5690,32 @@ if test "$wxUSE_PRINTF_POS_PARAMS" = "yes"; then
   AC_DEFINE(wxUSE_PRINTF_POS_PARAMS)
 fi
 
+if test "$wxUSE_OBJC_UNIQUIFYING" = "yes"; then
+  AC_DEFINE(wxUSE_OBJC_UNIQUIFYING)
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl console event loop stuff
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_CONSOLE_EVENTLOOP" = "yes"; then
+    AC_DEFINE(wxUSE_CONSOLE_EVENTLOOP)
+
+    if test "$wxUSE_UNIX" = "yes"; then
+        if test "$wxUSE_SELECT_DISPATCHER" = "yes"; then
+            AC_DEFINE(wxUSE_SELECT_DISPATCHER)
+        fi
+
+        if test "$wxUSE_EPOLL_DISPATCHER" = "yes"; then
+            AC_CHECK_HEADERS(sys/epoll.h)
+            if test "$ac_cv_header_sys_epoll_h" = "yes"; then
+                AC_DEFINE(wxUSE_EPOLL_DISPATCHER)
+            else
+                AC_MSG_WARN([sys/epoll.h not available, wxEpollDispatcher disabled])
+            fi
+        fi
+    fi
+fi
 
 dnl ---------------------------------------------------------------------------
 dnl time/date functions
@@ -6080,8 +5723,7 @@ dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_DATETIME" = "yes"; then
     dnl check for strptime and for its declaration as some systems lack it
-    dnl FIXME: use WX_CHECK_FUNCS instead
-    AC_CHECK_FUNCS(strptime)
+    AC_CHECK_FUNC(strptime)
     if test "$ac_cv_func_strptime" = "yes"; then
         AC_CACHE_CHECK([for strptime declaration], wx_cv_func_strptime_decl,
             [
@@ -6103,6 +5745,40 @@ if test "$wxUSE_DATETIME" = "yes"; then
     fi
     if test "$wx_cv_func_strptime_decl" = "yes"; then
         AC_DEFINE(HAVE_STRPTIME_DECL)
+    else
+        wx_strptime_decl="extern char *strptime(const char *, const char *, struct tm *);"
+    fi
+    if test "$ac_cv_func_strptime" = "yes"; then
+        dnl strptime() behaviour doesn't conform to POSIX under Mac OS X <
+        dnl 10.5 and possibly other BSD variants, check that strptime() we
+        dnl have fails to parse format when the string doesn't match it instea
+        dnl of just stopping immediately and returning non-NULL
+        AC_CACHE_CHECK([whether strptime() fails on invalid strings],
+            wx_cv_func_strptime_ok,
+            [AC_RUN_IFELSE(
+                [
+                    #include <stdlib.h>
+                    #include <time.h>
+                    #include "confdefs.h"
+
+                    $wx_strptime_decl
+
+                    int main()
+                    {
+                        struct tm t;
+                        return !!strptime("", "%x", &t);
+                    }
+                ],
+                wx_cv_func_strptime_ok=yes,
+                wx_cv_func_strptime_ok=no,
+                dnl be pessimistic when cross-compiling
+                wx_cv_func_strptime_ok=no
+            )]
+        )
+
+        if test "$wx_cv_func_strptime_ok" = "yes"; then
+            AC_DEFINE(HAVE_STRPTIME)
+        fi
     fi
 
     dnl check for timezone variable
@@ -6345,7 +6021,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                        wx_cv_type_getsockopt5,
             [
                 dnl Note that the rules for compatibility of pointers
-                dnl are somewhat different between C and C++, so code 
+                dnl are somewhat different between C and C++, so code
                 dnl that fails in C++ may not even give a warning about
                 dnl converting between incompatible pointer types in C.
                 dnl So this test needs to be done in C++ mode.
@@ -6537,18 +6213,6 @@ if test "$wxUSE_wxUSE_EXPERIMENTAL_PRINTF" = "yes"; then
   AC_DEFINE(wxUSE_EXPERIMENTAL_PRINTF)
 fi
 
-dnl ----------------------------------------------------------------
-dnl Register PostScript options for makefiles and setup.h
-dnl ----------------------------------------------------------------
-
-if test "$wxUSE_POSTSCRIPT" = "yes" ; then
-  AC_DEFINE(wxUSE_POSTSCRIPT)
-fi
-
-AC_DEFINE(wxUSE_AFM_FOR_POSTSCRIPT)
-
-AC_DEFINE(wxUSE_NORMALIZED_PS_FONTS)
-
 dnl ---------------------------------------------------------------------------
 dnl big GUI components: MDI, doc/view, printing, help, ...
 dnl ---------------------------------------------------------------------------
@@ -6604,6 +6268,17 @@ if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS printing"
 fi
 
+if test "$wxUSE_POSTSCRIPT" = "yes" ; then
+  AC_DEFINE(wxUSE_POSTSCRIPT)
+fi
+
+AC_DEFINE(wxUSE_AFM_FOR_POSTSCRIPT)
+
+AC_DEFINE(wxUSE_NORMALIZED_PS_FONTS)
+
+if test "$wxUSE_SVG" = "yes"; then
+    AC_DEFINE(wxUSE_SVG)
+fi
 
 dnl ---------------------------------------------------------------------------
 dnl wxMetafile availability
@@ -7433,16 +7108,6 @@ if test "$wxUSE_MEDIACTRL" = "yes"; then
 
 
         if test "$wxUSE_GSTREAMER" = "yes"; then
-            dnl system gstreamer package is compiled with Sun CC and outputs
-            dnl CC-specific "-mt" in its flags, remove it for gcc compilation
-            case "${host}" in
-                *-*-solaris2* )
-                    if "$GCC" = yes; then
-                        GST_CFLAGS=`echo $GST_CFLAGS | sed 's/-mt//'`
-                        GST_LIBS=`echo $GST_LIBS | sed 's/-mt//'`
-                    fi
-            esac
-
             CPPFLAGS="$GST_CFLAGS $CPPFLAGS"
             LIBS="$GST_LIBS $LIBS"
 
@@ -7490,38 +7155,60 @@ dnl ---------------------------------------------------------------------------
 dnl define variables with all built libraries for wx-config
 dnl ---------------------------------------------------------------------------
 
-CORE_BASE_LIBS="net base"
-CORE_GUI_LIBS="adv core"
+STD_BASE_LIBS="base"
+STD_GUI_LIBS=""
+BUILT_WX_LIBS="base"
+ALL_WX_LIBS="xrc stc gl media dbgrid qa html adv core odbc xml net base"
 
-if test "$wxUSE_XML" = "yes" ; then
-    CORE_BASE_LIBS="xml $CORE_BASE_LIBS"
+if test "$wxUSE_SOCKETS" = "yes" ; then
+    STD_BASE_LIBS="net $STD_BASE_LIBS"
+    BUILT_WX_LIBS="net $BUILT_WX_LIBS"
 fi
 if test "$wxUSE_ODBC" != "no" ; then
-    CORE_BASE_LIBS="odbc $CORE_BASE_LIBS"
-    CORE_GUI_LIBS="dbgrid $CORE_GUI_LIBS"
+    BUILT_WX_LIBS="odbc $BUILT_WX_LIBS"
 fi
-if test "$wxUSE_HTML" = "yes" ; then
-    CORE_GUI_LIBS="html $CORE_GUI_LIBS"
-fi
-if test "$wxUSE_DEBUGREPORT" = "yes" ; then
-    CORE_GUI_LIBS="qa $CORE_GUI_LIBS"
-fi
-if test "$wxUSE_XRC" = "yes" ; then
-    CORE_GUI_LIBS="xrc $CORE_GUI_LIBS"
-fi
-if test "$wxUSE_AUI" = "yes" ; then
-    CORE_GUI_LIBS="aui $CORE_GUI_LIBS"
-fi
-if test "$wxUSE_STC" = "yes" ; then
-    CORE_GUI_LIBS="stc $CORE_GUI_LIBS"
+if test "$wxUSE_XML" = "yes" ; then
+    STD_BASE_LIBS="xml $STD_BASE_LIBS"
+    BUILT_WX_LIBS="xml $BUILT_WX_LIBS"
 fi
 
-if test "$wxUSE_GUI" != "yes"; then
-    CORE_GUI_LIBS=""
+if test "$wxUSE_GUI" = "yes"; then
+    STD_GUI_LIBS="adv core"
+    BUILT_WX_LIBS="$STD_GUI_LIBS $BUILT_WX_LIBS"
+
+    if test "$wxUSE_DEBUGREPORT" = "yes" ; then
+        STD_GUI_LIBS="qa $STD_GUI_LIBS"
+        BUILT_WX_LIBS="qa $BUILT_WX_LIBS"
+    fi
+    if test "$wxUSE_ODBC" != "no" ; then
+        BUILT_WX_LIBS="dbgrid $BUILT_WX_LIBS"
+    fi
+    if test "$wxUSE_HTML" = "yes" ; then
+        STD_GUI_LIBS="html $STD_GUI_LIBS"
+        BUILT_WX_LIBS="html $BUILT_WX_LIBS"
+    fi
+    if test "$wxUSE_MEDIACTRL" = "yes" ; then
+        BUILT_WX_LIBS="media $BUILT_WX_LIBS"
+    fi
+    if test "$wxUSE_OPENGL" = "yes" ; then
+        BUILT_WX_LIBS="gl $BUILT_WX_LIBS"
+    fi
+    if test "$wxUSE_AUI" = "yes" ; then
+        BUILT_WX_LIBS="aui $BUILT_WX_LIBS"
+    fi
+    if test "$wxUSE_STC" = "yes" ; then
+        BUILT_WX_LIBS="stc $BUILT_WX_LIBS"
+    fi
+    if test "$wxUSE_XRC" = "yes" ; then
+        STD_GUI_LIBS="xrc $STD_GUI_LIBS"
+        BUILT_WX_LIBS="xrc $BUILT_WX_LIBS"
+    fi
 fi
 
-AC_SUBST(CORE_BASE_LIBS)
-AC_SUBST(CORE_GUI_LIBS)
+AC_SUBST(ALL_WX_LIBS)
+AC_SUBST(BUILT_WX_LIBS)
+AC_SUBST(STD_BASE_LIBS)
+AC_SUBST(STD_GUI_LIBS)
 
 dnl ---------------------------------------------------------------------------
 dnl Output the makefiles and such from the results found above
@@ -7975,6 +7662,43 @@ fi
 
 dnl TOOLCHAIN_DEFS should be used for both wx and client code
 WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS $TOOLCHAIN_DEFS"
+
+
+dnl Sun cc is compatible with gcc and so either of them can use the C
+dnl libraries built with the other, i.e. gcc can be used to build wxGTK under
+dnl Solaris where GTK+ is compiled using cc and cc can be used under Linux
+dnl where GTK+ is built with gcc
+dnl
+dnl However the compiler options are not compatible at all and in particular
+dnl gcc doesn't like cc -mt option and cc doesn't like -pthread. We simply
+dnl filter them out as we already have the correct options for multithreaded
+dnl programs if we're using threads (and if we don't, it shouldn't matter)
+case "${host}" in
+    *-*-solaris2* )
+        dnl system packages are compiled with Sun CC and so pkg-config outputs
+        dnl CC-specific "-mt" flag, remove it when using gcc
+        if "$GCC" = yes; then
+            CPPFLAGS=`echo $CPPFLAGS | sed 's/-mt//'`
+            LIBS=`echo $LIBS | sed 's/-mt//'`
+            EXTRALIBS_GUI=`echo $EXTRALIBS_GUI | sed 's/-mt//'`
+        fi
+        ;;
+
+    *-*-linux* )
+        dnl OTOH when using Sun CC under Linux, the flags contain gcc-specific
+        dnl -pthreads which Sun CC doesn't know about
+        if test "x$SUNCXX" = xyes; then
+            CPPFLAGS=`echo $CPPFLAGS | sed 's/-pthread//'`
+            LIBS=`echo $LIBS | sed 's/-pthread//'`
+            EXTRALIBS_GUI=`echo $EXTRALIBS_GUI | sed 's/-pthread//'`
+        fi
+        ;;
+esac
+
+dnl Add visibility support flags to CFLAGS/CXXFLAGS - do it this late so that
+dnl it doesn't affect compilation checks above
+CFLAGS="$CFLAGS $CFLAGS_VISIBILITY"
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_VISIBILITY"
 
 dnl for convenience, sort the samples in alphabetical order
 dnl

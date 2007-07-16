@@ -78,10 +78,6 @@ Constructor.
 
 \func{static void}{AddFile}{\param{const wxString\& }{filename}, \param{const wxBitmap\& }{bitmap}, \param{long }{type}}
 
-\func{static void}{AddFile}{\param{const wxString\& }{filename}, \param{const wxString\& }{textdata}}
-
-\func{static void}{AddFile}{\param{const wxString\& }{filename}, \param{const void* }{binarydata}, \param{size\_t }{size}}
-
 Add file to list of files stored in memory. Stored 
 data (bitmap, text or raw data)
 will be copied into private memory stream and available under 
@@ -92,6 +88,26 @@ Note that you must use a \arg{type} value (aka image format)
 that wxWidgets can save (e.g. JPG, PNG, see \helpref{wxImage
 documentation}{wximage})!
 
+\wxheading{See also}
+
+\helpref{AddFileWithMimeType}{wxmemoryfshandleraddfilewithmimetype}
+
+
+\membersection{wxMemoryFSHandler::AddFileWithMimeType}\label{wxmemoryfshandleraddfilewithmimetype}
+
+\func{static void}{AddFileWithMimeType}{\param{const wxString\& }{filename}, \param{const wxString\& }{textdata}, \param{const wxString\& }{mimetype}}
+
+\func{static void}{AddFileWithMimeType}{\param{const wxString\& }{filename}, \param{const void* }{binarydata}, \param{size\_t }{size}, \param{const wxString\& }{mimetype}}
+
+Like \helpref{AddFile}{wxmemoryfshandleraddfile}, but lets you explicitly
+specify added file's MIME type. This version should be used whenever you know
+the MIME type, because it makes accessing the files faster.
+
+\newsince{2.8.5}
+
+\wxheading{See also}
+
+\helpref{AddFile}{wxmemoryfshandleraddfile}
 
 \membersection{wxMemoryFSHandler::RemoveFile}\label{wxmemoryfshandlerremovefile}
 

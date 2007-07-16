@@ -14,9 +14,9 @@
 
 #if wxUSE_DRAGIMAGE
 
-class WXDLLEXPORT wxRect;
-class WXDLLEXPORT wxMemoryDC;
-class WXDLLEXPORT wxDC;
+class WXDLLIMPEXP_FWD_CORE wxRect;
+class WXDLLIMPEXP_FWD_CORE wxMemoryDC;
+class WXDLLIMPEXP_FWD_CORE wxDC;
 
 #if defined(__WXMSW__)
 #   if defined(__WXUNIVERSAL__)

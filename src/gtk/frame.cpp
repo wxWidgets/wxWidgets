@@ -119,55 +119,45 @@ static void gtk_toolbar_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidge
 // InsertChild for wxFrame
 //-----------------------------------------------------------------------------
 
+#if wxUSE_TOOLBAR
+
 /* Callback for wxFrame. This very strange beast has to be used because
  * C++ has no virtual methods in a constructor. We have to emulate a
  * virtual function here as wxWidgets requires different ways to insert
  * a child in container classes. */
 
-static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
+static void wxInsertChildInFrame(wxWindow* parent, wxWindow* child)
 {
     wxASSERT( GTK_IS_WIDGET(child->m_widget) );
 
-    if (!parent->m_insertInClientArea)
-    {
-        // These are outside the client area
-        wxFrame* frame = (wxFrame*) parent;
-        gtk_pizza_put( GTK_PIZZA(frame->m_mainWidget),
-                         child->m_widget,
-                         child->m_x,
-                         child->m_y,
-                         child->m_width,
-                         child->m_height );
+    // These are outside the client area
+    wxFrame* frame = wx_static_cast(wxFrame*, parent);
+    gtk_pizza_put( GTK_PIZZA(frame->m_mainWidget),
+                     child->m_widget,
+                     child->m_x,
+                     child->m_y,
+                     child->m_width,
+                     child->m_height );
 
 #if wxUSE_TOOLBAR_NATIVE
-        // We connect to these events for recalculating the client area
-        // space when the toolbar is floating
-        if (wxIS_KIND_OF(child,wxToolBar))
-        {
-            wxToolBar *toolBar = (wxToolBar*) child;
-            if (toolBar->GetWindowStyle() & wxTB_DOCKABLE)
-            {
-                g_signal_connect (toolBar->m_widget, "child_attached",
-                                  G_CALLBACK (gtk_toolbar_attached_callback),
-                                  parent);
-                g_signal_connect (toolBar->m_widget, "child_detached",
-                                  G_CALLBACK (gtk_toolbar_detached_callback),
-                                  parent);
-            }
-        }
-#endif // wxUSE_TOOLBAR
-    }
-    else
+    // We connect to these events for recalculating the client area
+    // space when the toolbar is floating
+    if (wxIS_KIND_OF(child,wxToolBar))
     {
-        // These are inside the client area
-        gtk_pizza_put( GTK_PIZZA(parent->m_wxwindow),
-                         child->m_widget,
-                         child->m_x,
-                         child->m_y,
-                         child->m_width,
-                         child->m_height );
+        if (child->HasFlag(wxTB_DOCKABLE))
+        {
+            g_signal_connect (child->m_widget, "child_attached",
+                              G_CALLBACK (gtk_toolbar_attached_callback),
+                              parent);
+            g_signal_connect (child->m_widget, "child_detached",
+                              G_CALLBACK (gtk_toolbar_detached_callback),
+                              parent);
+        }
     }
+#endif // wxUSE_TOOLBAR_NATIVE
 }
+
+#endif // wxUSE_TOOLBAR
 
 // ----------------------------------------------------------------------------
 // wxFrame creation
@@ -178,6 +168,7 @@ void wxFrame::Init()
     m_menuBarDetached = false;
     m_toolBarDetached = false;
     m_menuBarHeight = 2;
+    m_fsSaveFlag = 0;
 }
 
 bool wxFrame::Create( wxWindow *parent,
@@ -188,11 +179,7 @@ bool wxFrame::Create( wxWindow *parent,
                       long style,
                       const wxString &name )
 {
-    bool rt = wxTopLevelWindow::Create(parent, id, title, pos, sizeOrig,
-                                       style, name);
-    m_insertCallback = (wxInsertChildFunction) wxInsertChildInFrame;
-
-    return rt;
+    return wxFrameBase::Create(parent, id, title, pos, sizeOrig, style, name);
 }
 
 wxFrame::~wxFrame()
@@ -209,52 +196,39 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-    wxTopLevelWindow::DoGetClientSize( width, height );
+    wxFrameBase::DoGetClientSize(width, height);
 
     if (height)
     {
 #if wxUSE_MENUS_NATIVE
         // menu bar
-        if (m_frameMenuBar && !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOMENUBAR) != 0))
+        if (HasVisibleMenubar() && !m_menuBarDetached)
         {
-            if (!m_menuBarDetached)
-                (*height) -= m_menuBarHeight;
-            else
-                (*height) -= wxPLACE_HOLDER;
+            *height -= m_menuBarHeight;
         }
 #endif // wxUSE_MENUS_NATIVE
 
 #if wxUSE_STATUSBAR
         // status bar
-        if (m_frameStatusBar && m_frameStatusBar->IsShown() &&
-            !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOSTATUSBAR) != 0))
-            (*height) -= wxSTATUS_HEIGHT;
+        if (m_frameStatusBar && GTK_WIDGET_VISIBLE(m_frameStatusBar->m_widget))
+            *height -= wxSTATUS_HEIGHT;
 #endif // wxUSE_STATUSBAR
     }
 
 #if wxUSE_TOOLBAR
     // tool bar
-    if (m_frameToolBar && m_frameToolBar->IsShown())
+    if (m_frameToolBar &&
+        GTK_WIDGET_VISIBLE(m_frameToolBar->m_widget) && !m_toolBarDetached)
     {
-        if (m_toolBarDetached)
+        if (m_frameToolBar->IsVertical())
         {
-            if (height != NULL)
-                *height -= wxPLACE_HOLDER;
+            if (width)
+                *width -= m_frameToolBar->GetSize().x;
         }
         else
         {
-            int x, y;
-            m_frameToolBar->GetSize( &x, &y );
-            if ( m_frameToolBar->IsVertical() )
-            {
-                if (width != NULL)
-                    *width -= x;
-            }
-            else
-            {
-                if (height != NULL)
-                    *height -= y;
-            }
+            if (height)
+                *height -= m_frameToolBar->GetSize().y;
         }
     }
 #endif // wxUSE_TOOLBAR
@@ -265,53 +239,53 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
         *height = 0;
 }
 
-void wxFrame::DoSetClientSize( int width, int height )
+bool wxFrame::ShowFullScreen(bool show, long style)
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
+    if (!wxFrameBase::ShowFullScreen(show, style))
+        return false;
 
-#if wxUSE_MENUS_NATIVE
-        // menu bar
-        if (m_frameMenuBar && !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOMENUBAR) != 0))
-        {
-            if (!m_menuBarDetached)
-                height += m_menuBarHeight;
-            else
-                height += wxPLACE_HOLDER;
-        }
-#endif // wxUSE_MENUS_NATIVE
-
-#if wxUSE_STATUSBAR
-        // status bar
-        if (m_frameStatusBar && m_frameStatusBar->IsShown() &&
-            !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOSTATUSBAR) != 0))
-            height += wxSTATUS_HEIGHT;
+    wxWindow* const bar[] = {
+#if wxUSE_MENUS
+        m_frameMenuBar,
+#else
+        NULL,
 #endif
-
 #if wxUSE_TOOLBAR
-        // tool bar
-        if (m_frameToolBar && m_frameToolBar->IsShown())
+        m_frameToolBar,
+#else
+        NULL,
+#endif
+#if wxUSE_STATUSBAR
+        m_frameStatusBar,
+#else
+        NULL,
+#endif
+    };
+    const long fsNoBar[] = {
+        wxFULLSCREEN_NOMENUBAR, wxFULLSCREEN_NOTOOLBAR, wxFULLSCREEN_NOSTATUSBAR
+    };
+    for (int i = 0; i < 3; i++)
+    {
+        if (show)
         {
-            if (m_toolBarDetached)
+            if (bar[i] && (style & fsNoBar[i]))
             {
-                height += wxPLACE_HOLDER;
-            }
-            else
-            {
-                int x, y;
-                m_frameToolBar->GetSize( &x, &y );
-                if ( m_frameToolBar->IsVertical() )
-                {
-                    width += x;
-                }
+                if (bar[i]->IsShown())
+                    bar[i]->Show(false);
                 else
-                {
-                    height += y;
-                }
+                    style &= ~fsNoBar[i];
             }
         }
-#endif
+        else
+        {
+            if (bar[i] && (m_fsSaveFlag & fsNoBar[i]))
+                bar[i]->Show(true);
+        }
+    }
+    if (show)
+        m_fsSaveFlag = style;
 
-    wxTopLevelWindow::DoSetClientSize( width, height );
+    return true;
 }
 
 void wxFrame::GtkOnSize()
@@ -345,33 +319,27 @@ void wxFrame::GtkOnSize()
         // area, which is represented by m_wxwindow.
 
 #if wxUSE_MENUS_NATIVE
-        if (m_frameMenuBar && !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOMENUBAR) != 0))
+        int menubarHeight = 0;
+#endif
+
+#if wxUSE_MENUS_NATIVE
+        if (HasVisibleMenubar())
         {
-            if (!GTK_WIDGET_VISIBLE(m_frameMenuBar->m_widget))
-                gtk_widget_show( m_frameMenuBar->m_widget );
             int xx = m_miniEdge;
             int yy = m_miniEdge + m_miniTitle;
             int ww = m_width  - 2*m_miniEdge;
             if (ww < 0)
                 ww = 0;
-            int hh = m_menuBarHeight;
-            if (m_menuBarDetached) hh = wxPLACE_HOLDER;
+            menubarHeight = m_menuBarHeight;
+            if (m_menuBarDetached) menubarHeight = wxPLACE_HOLDER;
             m_frameMenuBar->m_x = xx;
             m_frameMenuBar->m_y = yy;
             m_frameMenuBar->m_width = ww;
-            m_frameMenuBar->m_height = hh;
+            m_frameMenuBar->m_height = menubarHeight;
             gtk_pizza_set_size( GTK_PIZZA(m_mainWidget),
                                   m_frameMenuBar->m_widget,
-                                  xx, yy, ww, hh );
-            client_area_y_offset += hh;
-        }
-        else
-        {
-            if (m_frameMenuBar)
-            {
-                if (GTK_WIDGET_VISIBLE(m_frameMenuBar->m_widget))
-                    gtk_widget_hide( m_frameMenuBar->m_widget );
-            }
+                                  xx, yy, ww, menubarHeight);
+            client_area_y_offset += menubarHeight;
         }
 #endif // wxUSE_MENUS_NATIVE
 
@@ -380,16 +348,11 @@ void wxFrame::GtkOnSize()
             (m_frameToolBar->m_widget->parent == m_mainWidget))
         {
             int xx = m_miniEdge;
-            int yy = m_miniEdge + m_miniTitle;
+            int yy = m_miniEdge + m_miniTitle
 #if wxUSE_MENUS_NATIVE
-            if (m_frameMenuBar)
-            {
-                if (!m_menuBarDetached)
-                    yy += m_menuBarHeight;
-                else
-                    yy += wxPLACE_HOLDER;
-            }
-#endif // wxUSE_MENUS_NATIVE
+                        + menubarHeight
+#endif
+                        ;
 
             m_frameToolBar->m_x = xx;
             m_frameToolBar->m_y = yy;
@@ -466,12 +429,8 @@ void wxFrame::GtkOnSize()
     }
 
 #if wxUSE_STATUSBAR
-    if (m_frameStatusBar && m_frameStatusBar->IsShown() &&
-        !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOSTATUSBAR) != 0))
+    if (m_frameStatusBar && m_frameStatusBar->IsShown())
     {
-        if (!GTK_WIDGET_VISIBLE(m_frameStatusBar->m_widget))
-            gtk_widget_show( m_frameStatusBar->m_widget );
-
         int xx = 0 + m_miniEdge;
         int yy = m_height - wxSTATUS_HEIGHT - m_miniEdge - client_area_y_offset;
         int ww = m_width - 2*m_miniEdge;
@@ -485,14 +444,6 @@ void wxFrame::GtkOnSize()
         gtk_pizza_set_size( GTK_PIZZA(m_wxwindow),
                             m_frameStatusBar->m_widget,
                             xx, yy, ww, hh );
-    }
-    else
-    {
-        if (m_frameStatusBar)
-        {
-            if (GTK_WIDGET_VISIBLE(m_frameStatusBar->m_widget))
-                gtk_widget_hide( m_frameStatusBar->m_widget );
-        }
     }
 #endif // wxUSE_STATUSBAR
 
@@ -636,6 +587,10 @@ void wxFrame::UpdateMenuBarSize()
     GtkUpdateSize();
 }
 
+bool wxFrame::HasVisibleMenubar() const
+{
+    return m_frameMenuBar && m_frameMenuBar->IsShown();
+}
 #endif // wxUSE_MENUS_NATIVE
 
 #if wxUSE_TOOLBAR
@@ -644,11 +599,10 @@ wxToolBar* wxFrame::CreateToolBar( long style, wxWindowID id, const wxString& na
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-    m_insertInClientArea = false;
-
+    InsertChildFunction save = m_insertCallback;
+    m_insertCallback = wxInsertChildInFrame;
     m_frameToolBar = wxFrameBase::CreateToolBar( style, id, name );
-
-    m_insertInClientArea = true;
+    m_insertCallback = save;
 
     GtkUpdateSize();
 

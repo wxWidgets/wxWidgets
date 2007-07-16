@@ -13,8 +13,8 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDC;
-class WXDLLEXPORT wxMemoryDC;
+class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxMemoryDC;
 
 class MGLDevCtx;
 struct bitmap_t;

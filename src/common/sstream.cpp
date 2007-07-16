@@ -38,25 +38,18 @@
 
 // TODO:  Do we want to include the null char in the stream?  If so then
 // just add +1 to m_len in the ctor 
-wxStringInputStream::wxStringInputStream(const wxString& s) 
+wxStringInputStream::wxStringInputStream(const wxString& s)
 #if wxUSE_UNICODE
-    : m_str(s), m_buf(wxMBConvUTF8().cWX2MB(s).release()), m_len(strlen(m_buf))
+    // FIXME-UTF8: use wxCharBufferWithLength if we have it
+    : m_str(s), m_buf(s.utf8_str()), m_len(strlen(m_buf))
 #else
-    : m_str(s), m_buf((char*)(const char*)s.c_str()), m_len(s.length())
+    : m_str(s), m_buf(s.mb_str()), m_len(s.length())
 #endif
 {
 #if wxUSE_UNICODE
-    wxASSERT_MSG(m_buf != NULL, _T("Could not convert string to UTF8!"));
+    wxASSERT_MSG(m_buf.data() != NULL, _T("Could not convert string to UTF8!"));
 #endif
     m_pos = 0;
-}
-
-wxStringInputStream::~wxStringInputStream()
-{
-#if wxUSE_UNICODE
-    // Note: wx[W]CharBuffer uses malloc()/free()
-    free(m_buf);
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -126,7 +119,7 @@ size_t wxStringInputStream::OnSysRead(void *buffer, size_t size)
         size = sizeMax;
     }
 
-    memcpy(buffer, m_buf + m_pos, size);
+    memcpy(buffer, m_buf.data() + m_pos, size);
     m_pos += size;
 
     return size;

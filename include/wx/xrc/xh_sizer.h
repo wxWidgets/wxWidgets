@@ -18,7 +18,7 @@
 #include "wx/sizer.h"
 #include "wx/gbsizer.h"
 
-class WXDLLEXPORT wxSizer;
+class WXDLLIMPEXP_FWD_CORE wxSizer;
 
 class WXDLLIMPEXP_XRC wxSizerXmlHandler : public wxXmlResourceHandler
 {

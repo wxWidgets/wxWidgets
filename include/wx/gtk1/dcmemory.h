@@ -17,7 +17,7 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxMemoryDC;
+class WXDLLIMPEXP_FWD_CORE wxMemoryDC;
 
 //-----------------------------------------------------------------------------
 // wxMemoryDC

@@ -78,10 +78,10 @@
 #include "wx/dlimpexp.h"
 #include "wx/fontenc.h"
 
-class WXDLLEXPORT wxFont;
-class WXDLLEXPORT wxWindow;
-class WXDLLIMPEXP_BASE wxString;
-class WXDLLEXPORT wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxFont;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_BASE wxString;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
 
 // ---------------------------------------------------------------------------
 // private constants

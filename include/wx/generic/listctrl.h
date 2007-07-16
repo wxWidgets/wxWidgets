@@ -13,10 +13,10 @@
 
 #include "wx/textctrl.h"
 
-class WXDLLIMPEXP_CORE wxImageList;
+class WXDLLIMPEXP_FWD_CORE wxImageList;
 
 #if wxUSE_DRAG_AND_DROP
-class WXDLLEXPORT wxDropTarget;
+class WXDLLIMPEXP_FWD_CORE wxDropTarget;
 #endif
 
 // ----------------------------------------------------------------------------
@@ -28,8 +28,8 @@ class WXDLLEXPORT wxDropTarget;
 // internal classes
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxListHeaderWindow;
-class WXDLLEXPORT wxListMainWindow;
+class WXDLLIMPEXP_FWD_CORE wxListHeaderWindow;
+class WXDLLIMPEXP_FWD_CORE wxListMainWindow;
 
 //-----------------------------------------------------------------------------
 // wxListCtrl
@@ -233,7 +233,7 @@ protected:
     virtual wxListItemAttr *OnGetItemAttr(long item) const;
 
     // it calls our OnGetXXX() functions
-    friend class WXDLLEXPORT wxListMainWindow;
+    friend class WXDLLIMPEXP_FWD_CORE wxListMainWindow;
 
 private:
     // create the header window

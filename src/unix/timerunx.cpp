@@ -18,6 +18,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_TIMER
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/module.h"
@@ -159,6 +161,11 @@ void wxTimerScheduler::NotifyExpired()
         wxUnixTimerImpl * const timer = s->m_timer;
         if ( timer->IsOneShot() )
         {
+            // the timer needs to be stopped but don't call its Stop() from
+            // here as it would attempt to remove the timer from our list and
+            // we had already done it, so we just need to reset its state
+            timer->MarkStopped();
+
             // don't need it any more
             delete s;
         }
@@ -248,4 +255,6 @@ wxUsecClock_t wxGetLocalTimeUsec()
 
     return wxGetLocalTimeMillis() * 1000L;
 }
+
+#endif // wxUSE_TIMER
 

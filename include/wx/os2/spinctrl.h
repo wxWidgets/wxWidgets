@@ -14,7 +14,7 @@
 
 #include "wx/spinbutt.h"    // the base class
 #include "wx/dynarray.h"
-class WXDLLEXPORT wxSpinCtrl;
+class WXDLLIMPEXP_FWD_CORE wxSpinCtrl;
 WX_DEFINE_EXPORTED_ARRAY_PTR(wxSpinCtrl *, wxArraySpins);
 
 // ----------------------------------------------------------------------------

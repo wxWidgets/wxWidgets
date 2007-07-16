@@ -10,8 +10,8 @@
 #ifndef _WX_GTK_BRUSH_H_
 #define _WX_GTK_BRUSH_H_
 
-class WXDLLIMPEXP_CORE wxBitmap;
-class WXDLLIMPEXP_CORE wxColour;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxColour;
 
 //-----------------------------------------------------------------------------
 // wxBrush

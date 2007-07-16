@@ -34,8 +34,10 @@
 #import <Foundation/NSNotification.h>
 #import <AppKit/NSCell.h>
 
+bool      wxApp::sm_isEmbedded = false; // Normally we're not a plugin
+
 // wxNSApplicationObserver singleton.
-static wxObjcAutoRefFromAlloc<wxNSApplicationObserver*> sg_cocoaAppObserver = [[wxNSApplicationObserver alloc] init];
+static wxObjcAutoRefFromAlloc<wxNSApplicationObserver*> sg_cocoaAppObserver = [[WX_GET_OBJC_CLASS(wxNSApplicationObserver) alloc] init];
 
 // ========================================================================
 // wxNSApplicationDelegate
@@ -51,6 +53,7 @@ static wxObjcAutoRefFromAlloc<wxNSApplicationObserver*> sg_cocoaAppObserver = [[
 }
 
 @end // implementation wxNSApplicationDelegate : NSObject
+WX_IMPLEMENT_GET_OBJC_CLASS(wxNSApplicationDelegate,NSObject)
 
 // ========================================================================
 // wxNSApplicationObserver
@@ -88,6 +91,7 @@ static wxObjcAutoRefFromAlloc<wxNSApplicationObserver*> sg_cocoaAppObserver = [[
 }
 
 @end // implementation wxNSApplicationObserver : NSObject
+WX_IMPLEMENT_GET_OBJC_CLASS(wxNSApplicationObserver,NSObject)
 
 // ========================================================================
 // wxApp
@@ -97,11 +101,6 @@ static wxObjcAutoRefFromAlloc<wxNSApplicationObserver*> sg_cocoaAppObserver = [[
 // wxApp Static member initialization
 // ----------------------------------------------------------------------------
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
-BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
-    EVT_IDLE(wxAppBase::OnIdle)
-//    EVT_END_SESSION(wxApp::OnEndSession)
-//    EVT_QUERY_END_SESSION(wxApp::OnQueryEndSession)
-END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // wxApp initialization/cleanup
@@ -135,10 +134,13 @@ void wxApp::CleanUp()
     wxDC::CocoaShutdownTextSystem();
     wxMenuBarManager::DestroyInstance();
 
-    [m_cocoaApp setDelegate:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:m_cocoaAppDelegate];
-    [m_cocoaAppDelegate release];
-    m_cocoaAppDelegate = NULL;
+    [[NSNotificationCenter defaultCenter] removeObserver:sg_cocoaAppObserver];
+    if(!sm_isEmbedded)
+    {
+        [m_cocoaApp setDelegate:nil];
+        [m_cocoaAppDelegate release];
+        m_cocoaAppDelegate = NULL;
+    }
 
     wxAppBase::CleanUp();
 }
@@ -186,9 +188,12 @@ bool wxApp::OnInitGui()
     // Create the app using the sharedApplication method
     m_cocoaApp = [NSApplication sharedApplication];
 
-    // Enable response to application delegate messages
-    m_cocoaAppDelegate = [[wxNSApplicationDelegate alloc] init];
-    [m_cocoaApp setDelegate:m_cocoaAppDelegate];
+    if(!sm_isEmbedded)
+    {
+        // Enable response to application delegate messages
+        m_cocoaAppDelegate = [[WX_GET_OBJC_CLASS(wxNSApplicationDelegate) alloc] init];
+        [m_cocoaApp setDelegate:m_cocoaAppDelegate];
+    }
 
     // Enable response to "delegate" messages on the notification observer
     [[NSNotificationCenter defaultCenter] addObserver:sg_cocoaAppObserver
@@ -216,7 +221,8 @@ bool wxApp::OnInitGui()
         selector:@selector(controlTintChanged:)
         name:NSControlTintDidChangeNotification object:nil];
 
-    wxMenuBarManager::CreateInstance();
+    if(!sm_isEmbedded)
+        wxMenuBarManager::CreateInstance();
 
     wxDC::CocoaInitializeTextSystem();
     return true;

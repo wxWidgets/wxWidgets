@@ -22,16 +22,15 @@
 #include "wx/init.h"        // we must declare wxEntry()
 #include "wx/intl.h"        // for wxLayoutDirection
 
-class WXDLLIMPEXP_BASE wxAppConsole;
-class WXDLLIMPEXP_BASE wxAppTraits;
-class WXDLLIMPEXP_BASE wxCmdLineParser;
-class WXDLLIMPEXP_BASE wxEventLoop;
-class WXDLLIMPEXP_BASE wxLog;
-class WXDLLIMPEXP_BASE wxMessageOutput;
+class WXDLLIMPEXP_FWD_BASE wxAppConsole;
+class WXDLLIMPEXP_FWD_BASE wxAppTraits;
+class WXDLLIMPEXP_FWD_BASE wxCmdLineParser;
+class WXDLLIMPEXP_FWD_BASE wxEventLoopBase;
+class WXDLLIMPEXP_FWD_BASE wxLog;
+class WXDLLIMPEXP_FWD_BASE wxMessageOutput;
 
 #if wxUSE_GUI
-    class WXDLLEXPORT wxEventLoop;
-    struct WXDLLIMPEXP_CORE wxVideoMode;
+    struct WXDLLIMPEXP_FWD_CORE wxVideoMode;
 #endif
 
 // ----------------------------------------------------------------------------
@@ -52,15 +51,15 @@ enum
 };
 
 // ----------------------------------------------------------------------------
-// wxAppConsole: wxApp for non-GUI applications
+// wxAppConsoleBase: wxApp for non-GUI applications
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxAppConsole : public wxEvtHandler
+class WXDLLIMPEXP_BASE wxAppConsoleBase : public wxEvtHandler
 {
 public:
     // ctor and dtor
-    wxAppConsole();
-    virtual ~wxAppConsole();
+    wxAppConsoleBase();
+    virtual ~wxAppConsoleBase();
 
 
     // the virtual functions which may/must be overridden in the derived class
@@ -198,10 +197,10 @@ public:
                              wxEvent& event) const;
 
     // Called when an unhandled C++ exception occurs inside OnRun(): note that
-    // the exception type is lost by now, so if you really want to handle the
-    // exception you should override OnRun() and put a try/catch around
-    // MainLoop() call there or use OnExceptionInMainLoop()
-    virtual void OnUnhandledException() { }
+    // the main event loop has already terminated by now and the program will
+    // exit, if you need to really handle the exceptions you need to override
+    // OnExceptionInMainLoop()
+    virtual void OnUnhandledException();
 #endif // wxUSE_EXCEPTIONS
 
     // event processing functions
@@ -209,11 +208,7 @@ public:
 
     // return true if we're running event loop, i.e. if the events can
     // (already) be dispatched
-    static bool IsMainLoopRunning()
-    {
-        const wxAppConsole * const app = GetInstance();
-        return app && app->m_mainLoop != NULL;
-    }
+    static bool IsMainLoopRunning();
 
     // process all events in the wxPendingEvents list -- it is necessary to
     // call this function to process posted events. This happens during each
@@ -327,7 +322,7 @@ protected:
 
     // create main loop from AppTraits or return NULL if
     // there is no main loop implementation
-    wxEventLoop *CreateMainLoop();
+    wxEventLoopBase *CreateMainLoop();
 
     // application info (must be set from the user code)
     wxString m_vendorName,      // vendor name (ACME Inc)
@@ -340,12 +335,19 @@ protected:
 
     // the main event loop of the application (may be NULL if the loop hasn't
     // been started yet or has already terminated)
-    wxEventLoop *m_mainLoop;
+    wxEventLoopBase *m_mainLoop;
 
     // the application object is a singleton anyhow, there is no sense in
     // copying it
-    DECLARE_NO_COPY_CLASS(wxAppConsole)
+    DECLARE_NO_COPY_CLASS(wxAppConsoleBase)
 };
+
+#if defined(__UNIX__)
+    #include "wx/unix/app.h"
+#else
+    // this has to be a class and not a typedef as we forward declare it
+    class wxAppConsole : public wxAppConsoleBase { };
+#endif
 
 // ----------------------------------------------------------------------------
 // wxAppBase: the common part of wxApp implementations for all platforms
@@ -495,10 +497,6 @@ public:
     wxDEPRECATED( bool Initialized() );
 #endif // WXWIN_COMPATIBILITY_2_6
 
-    // perform standard OnIdle behaviour, ensure that this is always called
-    void OnIdle(wxIdleEvent& event);
-
-
 protected:
     // delete all objects in wxPendingDelete list
     void DeletePendingObjects();
@@ -538,46 +536,40 @@ protected:
     inline bool wxAppBase::Initialized() { return true; }
 #endif // WXWIN_COMPATIBILITY_2_6
 
-#endif // wxUSE_GUI
-
 // ----------------------------------------------------------------------------
 // now include the declaration of the real class
 // ----------------------------------------------------------------------------
 
-#if wxUSE_GUI
-    #if defined(__WXPALMOS__)
-        #include "wx/palmos/app.h"
-    #elif defined(__WXMSW__)
-        #include "wx/msw/app.h"
-    #elif defined(__WXMOTIF__)
-        #include "wx/motif/app.h"
-    #elif defined(__WXMGL__)
-        #include "wx/mgl/app.h"
-    #elif defined(__WXDFB__)
-        #include "wx/dfb/app.h"
-    #elif defined(__WXGTK20__)
-        #include "wx/gtk/app.h"
-    #elif defined(__WXGTK__)
-        #include "wx/gtk1/app.h"
-    #elif defined(__WXX11__)
-        #include "wx/x11/app.h"
-    #elif defined(__WXMAC__)
-        #include "wx/mac/app.h"
-    #elif defined(__WXCOCOA__)
-        #include "wx/cocoa/app.h"
-    #elif defined(__WXPM__)
-        #include "wx/os2/app.h"
-    #endif
+#if defined(__WXPALMOS__)
+    #include "wx/palmos/app.h"
+#elif defined(__WXMSW__)
+    #include "wx/msw/app.h"
+#elif defined(__WXMOTIF__)
+    #include "wx/motif/app.h"
+#elif defined(__WXMGL__)
+    #include "wx/mgl/app.h"
+#elif defined(__WXDFB__)
+    #include "wx/dfb/app.h"
+#elif defined(__WXGTK20__)
+    #include "wx/gtk/app.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk1/app.h"
+#elif defined(__WXX11__)
+    #include "wx/x11/app.h"
+#elif defined(__WXMAC__)
+    #include "wx/mac/app.h"
+#elif defined(__WXCOCOA__)
+    #include "wx/cocoa/app.h"
+#elif defined(__WXPM__)
+    #include "wx/os2/app.h"
+#endif
+
 #else // !GUI
-    // wxApp is defined in core and we cannot define another one in wxBase,
-    // so we create a different class and typedef it to wxApp instead
-    #if defined(__UNIX__)
-        #include "wx/unix/app.h"
-        class wxApp : public wxAppConsoleUnix { };
-    #else
-        // allow using just wxApp (instead of wxAppConsole) in console programs
-        class wxApp : public wxAppConsole { };
-    #endif
+
+// wxApp is defined in core and we cannot define another one in wxBase,
+// so use the preprocessor to allow using wxApp in console programs too
+#define wxApp wxAppConsole
+
 #endif // GUI/!GUI
 
 // ----------------------------------------------------------------------------

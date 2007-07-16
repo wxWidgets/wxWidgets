@@ -13,6 +13,10 @@
 
 #include "wx/defs.h"
 
+#if wxUSE_SELECT_DISPATCHER
+
+#include <sys/types.h>
+
 #include "wx/private/fdiodispatcher.h"
 
 // helper class storing all the select() fd sets
@@ -34,9 +38,9 @@ public:
 
     // same as SetFD() except it unsets the bits set in the flags for the given
     // fd
-    bool ClearFD(int fd, int flags)
+    bool ClearFD(int fd)
     {
-        return SetFD(fd, wxFDIO_ALL & ~flags);
+        return SetFD(fd, 0);
     }
 
 
@@ -69,25 +73,20 @@ private:
     static Callback ms_handlers[Max];
 };
 
-class WXDLLIMPEXP_BASE wxSelectDispatcher : public wxFDIODispatcher
+class WXDLLIMPEXP_BASE wxSelectDispatcher : public wxMappedFDIODispatcher
 {
 public:
-    // returns the unique instance of this class, the pointer shouldn't be
-    // deleted and is normally never NULL
-    static wxSelectDispatcher *Get();
-
-    // if we have any registered handlers, check for any pending events to them
-    // and dispatch them -- this is used from wxX11 and wxDFB event loops
-    // implementation
-    static void DispatchPending();
+    // creates an instance of this class, the caller takes ownership of it
+    static wxSelectDispatcher *Create();
 
     // implement pure virtual methods of the base class
     virtual bool RegisterFD(int fd, wxFDIOHandler *handler, int flags = wxFDIO_ALL);
     virtual bool ModifyFD(int fd, wxFDIOHandler *handler, int flags = wxFDIO_ALL);
-    virtual wxFDIOHandler *UnregisterFD(int fd, int flags = wxFDIO_ALL);
-    virtual void RunLoop(int timeout = TIMEOUT_INFINITE);
+    virtual bool UnregisterFD(int fd);
+    virtual void Dispatch(int timeout = TIMEOUT_INFINITE);
 
 protected:
+    // ctor is not public, use Create()
     wxSelectDispatcher();
 
 private:
@@ -109,5 +108,6 @@ private:
     int m_maxFD;
 };
 
+#endif // wxUSE_SELECT_DISPATCHER
 
 #endif // _WX_PRIVATE_SOCKETEVTDISPATCH_H_

@@ -18,12 +18,12 @@
 
 #include "wx/cpp.h"
 #include "wx/chartype.h"
-#include "wx/wxcrt.h"
 #include "wx/strconv.h"
 #include "wx/buffer.h"
+#include "wx/unichar.h"
 
-class WXDLLIMPEXP_BASE wxCStrData;
-class WXDLLIMPEXP_BASE wxString;
+class WXDLLIMPEXP_FWD_BASE wxCStrData;
+class WXDLLIMPEXP_FWD_BASE wxString;
 
 // ----------------------------------------------------------------------------
 // WX_DEFINE_VARARG_FUNC* macros
@@ -46,6 +46,9 @@ class WXDLLIMPEXP_BASE wxString;
 //     under an UTF-8 locale
 //   * wchar_t* if wxUSE_UNICODE_WCHAR or if wxUSE_UNICODE_UTF8 and the current
 //     locale is not UTF-8
+//
+// Note that wxFormatString *must* be used for the format parameter of these
+// functions, otherwise the implementation won't work correctly.
 //
 // Parameters:
 // [ there are examples in square brackets showing values of the parameters
@@ -111,11 +114,12 @@ class WXDLLIMPEXP_BASE wxString;
 // wxFormatString
 // ----------------------------------------------------------------------------
 
-// This class should be used for format string argument of the functions
+// This class must be used for format string argument of the functions
 // defined using WX_DEFINE_VARARG_FUNC_* macros. It converts the string to
 // char* or wchar_t* for passing to implementation function efficiently (i.e.
 // without keeping the converted string in memory for longer than necessary,
-// like c_str())
+// like c_str()). It also converts format string to the correct form that
+// accounts for string changes done by wxArgNormalizer<>
 //
 // Note that this class can _only_ be used for function arguments!
 class WXDLLIMPEXP_BASE wxFormatString
@@ -138,7 +142,13 @@ public:
     operator const char*() const
         { return wx_const_cast(wxFormatString*, this)->AsChar(); }
 private:
+    // InputAsChar() returns the value converted passed to ctor, only converted
+    // to char, while AsChar() takes the the string returned by InputAsChar()
+    // and does format string conversion on it as well (and similarly for
+    // ..AsWChar() below)
+    const char* InputAsChar();
     const char* AsChar();
+    wxCharBuffer m_convertedChar;
 #endif // !wxUSE_UNICODE_WCHAR
 
 #if wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
@@ -146,12 +156,23 @@ public:
     operator const wchar_t*() const
         { return wx_const_cast(wxFormatString*, this)->AsWChar(); }
 private:
+    const wchar_t* InputAsWChar();
     const wchar_t* AsWChar();
+    wxWCharBuffer m_convertedWChar;
 #endif // wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
 
 private:
+#ifdef __VISUALC__
+    // "struct 'ConvertedBuffer<T>' needs to have dll-interface to be used by
+    // clients of class 'wxString'" - this is private, we don't care
+    #pragma warning (disable:4251)
+#endif
     wxCharBuffer  m_char;
     wxWCharBuffer m_wchar;
+#ifdef __VISUALC__
+    #pragma warning (default:4251)
+#endif
+
     // NB: we can use a pointer here, because wxFormatString is only used
     //     as function argument, so it has shorter life than the string
     //     passed to the ctor
@@ -417,6 +438,45 @@ WX_ARG_NORMALIZER_FORWARD(std::string, const std::string&);
 WX_ARG_NORMALIZER_FORWARD(wxStdWideString, const wxStdWideString&);
 
 #endif // wxUSE_STD_STRING
+
+
+// versions for wxUniChar, wxUniCharRef:
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+template<>
+struct wxArgNormalizerWchar<const wxUniChar&>
+{
+    wxArgNormalizerWchar(const wxUniChar& s) : m_value(s) {}
+
+    // FIXME-UTF8: use wchar_t once ANSI build is removed
+    wxChar get() const { return m_value; }
+
+    wxChar m_value;
+};
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+template<>
+struct wxArgNormalizerUtf8<const wxUniChar&>
+{
+    wxArgNormalizerUtf8(const wxUniChar& s) : m_value(s.AsUTF8()) {}
+
+    const wxStringCharType *get() const { return m_value; }
+
+    wxUniChar::Utf8CharBuffer m_value;
+};
+#endif // wxUSE_UNICODE_UTF8
+
+WX_ARG_NORMALIZER_FORWARD(wxUniChar, const wxUniChar&);
+WX_ARG_NORMALIZER_FORWARD(const wxUniCharRef&, const wxUniChar&);
+WX_ARG_NORMALIZER_FORWARD(wxUniCharRef, const wxUniChar&);
+// convert char/wchar_t to wxUniChar to get output in the right encoding:
+WX_ARG_NORMALIZER_FORWARD(char, const wxUniChar&);
+WX_ARG_NORMALIZER_FORWARD(const char&, const wxUniChar&);
+WX_ARG_NORMALIZER_FORWARD(unsigned char, const wxUniChar&);
+WX_ARG_NORMALIZER_FORWARD(const unsigned char&, const wxUniChar&);
+WX_ARG_NORMALIZER_FORWARD(wchar_t, const wxUniChar&);
+WX_ARG_NORMALIZER_FORWARD(const wchar_t&, const wxUniChar&);
 
 
 #undef WX_ARG_NORMALIZER_FORWARD

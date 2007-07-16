@@ -337,10 +337,15 @@ void wxFontMapperBase::Reset()
 // config usage customisation
 // ----------------------------------------------------------------------------
 
+
+static wxString gs_defaultConfigPath(FONTMAPPER_ROOT_PATH);
+
 /* static */
-const wxChar *wxFontMapperBase::GetDefaultConfigPath()
+const wxString& wxFontMapperBase::GetDefaultConfigPath()
 {
-    return FONTMAPPER_ROOT_PATH;
+    // NB: we return const wxString& and not wxString for compatibility
+    //     with 2.8 that returned const wxChar*
+    return gs_defaultConfigPath;
 }
 
 void wxFontMapperBase::SetConfigPath(const wxString& prefix)

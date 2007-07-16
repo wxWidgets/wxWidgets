@@ -23,11 +23,11 @@
 // Metafile and metafile device context classes
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMetafile;
+class WXDLLIMPEXP_FWD_CORE wxMetafile;
 
 class WXDLLEXPORT wxMetafileRefData: public wxGDIRefData
 {
-    friend class WXDLLEXPORT wxMetafile;
+    friend class WXDLLIMPEXP_FWD_CORE wxMetafile;
 public:
     wxMetafileRefData();
     virtual ~wxMetafileRefData();

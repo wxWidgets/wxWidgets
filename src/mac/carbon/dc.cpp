@@ -2139,48 +2139,4 @@ void wxDC::MacInstallBrush() const
     m_macFontInstalled = false ;
 }
 
-// ---------------------------------------------------------------------------
-// coordinates transformations
-// ---------------------------------------------------------------------------
-
-wxCoord wxDC::DeviceToLogicalX(wxCoord x) const
-{
-    return XDEV2LOG(x);
-}
-
-wxCoord wxDC::DeviceToLogicalY(wxCoord y) const
-{
-    return YDEV2LOG(y);
-}
-
-wxCoord wxDC::DeviceToLogicalXRel(wxCoord x) const
-{
-    return XDEV2LOGREL(x);
-}
-
-wxCoord wxDC::DeviceToLogicalYRel(wxCoord y) const
-{
-    return YDEV2LOGREL(y);
-}
-
-wxCoord wxDC::LogicalToDeviceX(wxCoord x) const
-{
-    return XLOG2DEV(x);
-}
-
-wxCoord wxDC::LogicalToDeviceY(wxCoord y) const
-{
-    return YLOG2DEV(y);
-}
-
-wxCoord wxDC::LogicalToDeviceXRel(wxCoord x) const
-{
-    return XLOG2DEVREL(x);
-}
-
-wxCoord wxDC::LogicalToDeviceYRel(wxCoord y) const
-{
-    return YLOG2DEVREL(y);
-}
-
 #endif // !wxMAC_USE_CORE_GRAPHICS

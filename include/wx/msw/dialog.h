@@ -16,10 +16,10 @@
 
 extern WXDLLEXPORT_DATA(const wxChar) wxDialogNameStr[];
 
-class WXDLLEXPORT wxDialogModalData;
+class WXDLLIMPEXP_FWD_CORE wxDialogModalData;
 
 #if wxUSE_TOOLBAR && (defined(__SMARTPHONE__) || defined(__POCKETPC__))
-class WXDLLEXPORT wxToolBar;
+class WXDLLIMPEXP_FWD_CORE wxToolBar;
 extern WXDLLEXPORT_DATA(const wxChar) wxToolBarNameStr[];
 #endif
 

@@ -52,7 +52,7 @@ public:
 
     bool Create(const wxString& name)
     {
-        m_hMutex = ::CreateMutex(NULL, FALSE, name);
+        m_hMutex = ::CreateMutex(NULL, FALSE, name.wx_str());
         if ( !m_hMutex )
         {
             wxLogLastError(_T("CreateMutex"));

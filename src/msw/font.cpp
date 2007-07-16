@@ -39,6 +39,10 @@
 #include "wx/fontutil.h"
 #include "wx/fontmap.h"
 
+#ifndef __WXWINCE__
+    #include "wx/sysopt.h"
+#endif
+
 #include "wx/tokenzr.h"
 
 #if wxUSE_EXTENDED_RTTI
@@ -453,12 +457,16 @@ void wxNativeFontInfo::Init()
 {
     wxZeroMemory(lf);
 
-    // we get better font quality if we use this instead of DEFAULT_QUALITY
-    // apparently without any drawbacks
+    // we get better font quality if we use PROOF_QUALITY instead of
+    // DEFAULT_QUALITY but some fonts (e.g. "Terminal 6pt") are not available
+    // then so we allow to set a global option to choose between quality and
+    // wider font selection
 #ifdef __WXWINCE__
     lf.lfQuality = CLEARTYPE_QUALITY;
 #else
-    lf.lfQuality = PROOF_QUALITY;
+    lf.lfQuality = wxSystemOptions::GetOptionInt(_T("msw.font.no-proof-quality"))
+                    ? DEFAULT_QUALITY
+                    : PROOF_QUALITY;
 #endif
 }
 
@@ -468,7 +476,8 @@ int wxNativeFontInfo::GetPointSize() const
     //        for printing!
     const int ppInch = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
 
-    return (int) (((72.0*(double)abs(lf.lfHeight)) / (double) ppInch) + 0.5);
+    // BC++ 2007 doesn't provide abs(long) overload, hence the cast
+    return (int) (((72.0*abs((int)lf.lfHeight)) / (double) ppInch) + 0.5);
 }
 
 wxSize wxNativeFontInfo::GetPixelSize() const

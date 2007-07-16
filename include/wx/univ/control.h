@@ -12,9 +12,9 @@
 #ifndef _WX_UNIV_CONTROL_H_
 #define _WX_UNIV_CONTROL_H_
 
-class WXDLLEXPORT wxControlRenderer;
-class WXDLLEXPORT wxInputHandler;
-class WXDLLEXPORT wxRenderer;
+class WXDLLIMPEXP_FWD_CORE wxControlRenderer;
+class WXDLLIMPEXP_FWD_CORE wxInputHandler;
+class WXDLLIMPEXP_FWD_CORE wxRenderer;
 
 // we must include it as most/all control classes derive their handlers from
 // it

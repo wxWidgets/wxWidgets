@@ -14,7 +14,7 @@
 #include "wx/object.h"
 #include "wx/gdicmn.h"
 
-class WXDLLIMPEXP_CORE wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
 
 //-----------------------------------------------------------------------------
 // wxCursor

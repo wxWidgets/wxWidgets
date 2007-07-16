@@ -98,6 +98,9 @@ wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
 //
 
 #if !defined(wxUSE_NO_MANIFEST) || (wxUSE_NO_MANIFEST == 0)
+
+// Visual Studio 2005 generates the manifest automatically and so we
+// shouldn't include it in the resources manually: 
 #if !defined(WX_MSC_FULL_VER) || WX_MSC_FULL_VER < 140040130
 
 // see "about isolated applications" topic in MSDN
@@ -116,4 +119,5 @@ wxMANIFEST_ID 24 "wx/msw/wx.manifest"
 #endif
 
 #endif // !defined(WX_MSC_FULL_VER) || WX_MSC_FULL_VER < 140040130
+
 #endif // !defined(wxUSE_NO_MANIFEST) || (wxUSE_NO_MANIFEST == 0)

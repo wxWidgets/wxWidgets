@@ -25,7 +25,6 @@ typedef const struct __CFString * CFStringRef;
 class WXDLLEXPORT wxApp: public wxAppBase
 {
     DECLARE_DYNAMIC_CLASS(wxApp)
-    DECLARE_EVENT_TABLE()
 // ------------------------------------------------------------------------
 // initialization
 // ------------------------------------------------------------------------
@@ -74,6 +73,8 @@ public:
     bool IsInAssert() const { return m_isInAssert; }
 #endif // __WXDEBUG__
 
+    // Set true _before_ initializing wx to force embedded mode (no app delegate, etc.)
+    static bool sm_isEmbedded;
 private:
 #ifdef __WXDEBUG__
     bool m_isInAssert;

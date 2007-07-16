@@ -20,10 +20,10 @@
 #include "wx/window.h"
 
 
-class WXDLLIMPEXP_HTML wxHtmlWindowInterface;
-class WXDLLIMPEXP_HTML wxHtmlLinkInfo;
-class WXDLLIMPEXP_HTML wxHtmlCell;
-class WXDLLIMPEXP_HTML wxHtmlContainerCell;
+class WXDLLIMPEXP_FWD_HTML wxHtmlWindowInterface;
+class WXDLLIMPEXP_FWD_HTML wxHtmlLinkInfo;
+class WXDLLIMPEXP_FWD_HTML wxHtmlCell;
+class WXDLLIMPEXP_FWD_HTML wxHtmlContainerCell;
 
 
 // wxHtmlSelection is data holder with information about text selection.

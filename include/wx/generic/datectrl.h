@@ -12,11 +12,11 @@
 #ifndef _WX_GENERIC_DATECTRL_H_
 #define _WX_GENERIC_DATECTRL_H_
 
-class WXDLLIMPEXP_ADV wxCalendarDateAttr;
-class WXDLLIMPEXP_ADV wxCalendarCtrl;
-class WXDLLIMPEXP_ADV wxCalendarEvent;
-class WXDLLIMPEXP_ADV wxComboCtrl;
-class WXDLLIMPEXP_ADV wxCalendarComboPopup;
+class WXDLLIMPEXP_FWD_ADV wxCalendarDateAttr;
+class WXDLLIMPEXP_FWD_ADV wxCalendarCtrl;
+class WXDLLIMPEXP_FWD_ADV wxCalendarEvent;
+class WXDLLIMPEXP_FWD_ADV wxComboCtrl;
+class WXDLLIMPEXP_FWD_ADV wxCalendarComboPopup;
 
 class WXDLLIMPEXP_ADV wxDatePickerCtrlGeneric : public wxDatePickerCtrlBase
 {
@@ -58,7 +58,7 @@ public:
                       const wxDateTime& upperdate = wxDefaultDateTime);
 
     // extra methods available only in this (generic) implementation
-    bool SetFormat(const wxChar *fmt);
+    bool SetFormat(const wxString& fmt);
     wxCalendarCtrl *GetCalendar() const { return m_cal; }
 
 

@@ -17,7 +17,12 @@
 // ========================================================================
 // wxToolBar
 // ========================================================================
+#if defined(__LP64__) || defined(NS_BUILD_32_LIKE_64)
+typedef struct CGPoint NSPoint;
+#else
 typedef struct _NSPoint NSPoint;
+#endif
+
 class wxToolBarTool;
 
 class wxToolBar : public wxToolBarBase

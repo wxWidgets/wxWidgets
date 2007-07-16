@@ -2275,7 +2275,7 @@ void wxWindowMac::GetTextExtent(const wxString& string, int *x, int *y,
         fontToUse = &m_font;
 
     wxClientDC dc( (wxWindowMac*) this ) ;
-    long lx,ly,ld,le ;
+    wxCoord lx,ly,ld,le ;
     dc.GetTextExtent( string , &lx , &ly , &ld, &le, (wxFont *)fontToUse ) ;
     if ( externalLeading )
         *externalLeading = le ;
@@ -2657,11 +2657,11 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         {
             wxRect rc( x, y, w, h );
             if (rect->Intersects( rc ))
-                child->SetSize( x + dx, y + dy, w, h );
+                child->SetSize( x + dx, y + dy, w, h, wxSIZE_AUTO|wxSIZE_ALLOW_MINUS_ONE );
         }
         else
         {
-            child->SetSize( x + dx, y + dy, w, h );
+            child->SetSize( x + dx, y + dy, w, h, wxSIZE_AUTO|wxSIZE_ALLOW_MINUS_ONE );
         }
     }
 }
@@ -2726,7 +2726,7 @@ void wxWindowMac::OnSetFocus( wxFocusEvent& event )
         Rect rect ;
 
         m_peer->GetRect( &rect ) ;
-        // auf den umgebenden Rahmen zurck
+        // auf den umgebenden Rahmen zur�ck
         InsetRect( &rect, -1 , -1 ) ;
 
         wxTopLevelWindowMac* top = MacGetTopLevelWindow();

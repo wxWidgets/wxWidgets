@@ -15,8 +15,8 @@
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"
 
-class WXDLLEXPORT wxColour;
-class WXDLLEXPORT wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxColour;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
 
 // ========================================================================
 // wxPen
@@ -61,7 +61,7 @@ public:
     wxBitmap *GetStipple() const;
 
     WX_NSColor GetNSColor();
-    int GetCocoaLineDash(const float **pattern);
+    int GetCocoaLineDash(const CGFloat **pattern);
 };
 
 #endif // __WX_COCOA_PEN_H__

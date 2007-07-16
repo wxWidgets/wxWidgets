@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_RAWBMP_H_BASE_
-#define _WX_RAWBMP_H_BASE_
+#ifndef _WX_RAWBMP_H_
+#define _WX_RAWBMP_H_
 
 #include "wx/image.h"
 
@@ -166,6 +166,11 @@ typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
 #elif defined(__WXGTK__)
     // Under GTK+ 2.X we use GdkPixbuf, which is standard RGB or RGBA
     typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxNativePixelFormat;
+
+    #define wxPIXEL_FORMAT_ALPHA 3
+#elif defined(__WXDFB__)
+    // Under DirectFB, RGB components are reversed, they're in BGR order
+    typedef wxPixelFormat<unsigned char, 24, 2, 1, 0> wxNativePixelFormat;
 
     #define wxPIXEL_FORMAT_ALPHA 3
 #endif
@@ -525,7 +530,7 @@ struct wxPixelDataOut<wxBitmap>
             {
                 m_ptr = NULL;
             }
-            
+
             // return true if this iterator is valid
             bool IsOk() const { return m_ptr != NULL; }
 
@@ -631,11 +636,22 @@ struct wxPixelDataOut<wxBitmap>
         // dtor unlocks the bitmap
         ~wxPixelDataIn()
         {
-            m_bmp.UngetRawData(*this);
+            if ( m_pixels.IsOk() )
+            {
+#if defined(__WXMSW__) || defined(__WXMAC__)
+                // this is a hack to mark wxBitmap as using alpha channel
+                if ( Format::HasAlpha )
+                    m_bmp.UseAlpha();
+#endif
+                m_bmp.UngetRawData(*this);
+            }
+            // else: don't call UngetRawData() if GetRawData() failed
         }
 
-        // call this to indicate that we should use the alpha channel
-        void UseAlpha() { m_bmp.UseAlpha(); }
+#if WXWIN_COMPATIBILITY_2_8
+        // not needed anymore, calls to it should be simply removed
+        wxDEPRECATED( inline void UseAlpha() );
+#endif
 
     // private: -- see comment in the beginning of the file
 
@@ -656,6 +672,7 @@ struct wxPixelDataOut<wxBitmap>
         }
     };
 };
+
 #endif //wxUSE_GUI
 
 template <class Image, class PixelFormat = wxPixelFormatFor<Image> >
@@ -676,6 +693,11 @@ public:
     {
     }
 };
+
+#if WXWIN_COMPATIBILITY_2_8
+template <class Format>
+inline void wxPixelDataOut<wxBitmap>::wxPixelDataIn<Format>::UseAlpha() {}
+#endif
 
 
 // some "predefined" pixel data classes
@@ -709,5 +731,4 @@ struct wxPixelIterator : public wxPixelData<Image, PixelFormat>::Iterator
 {
 };
 
-#endif // _WX_RAWBMP_H_BASE_
-
+#endif // _WX_RAWBMP_H_

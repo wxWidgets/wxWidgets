@@ -67,6 +67,7 @@ private:
         CPPUNIT_TEST( GetGroups );
         CPPUNIT_TEST( HasEntry );
         CPPUNIT_TEST( HasGroup );
+        CPPUNIT_TEST( Binary );
         CPPUNIT_TEST( Save );
         CPPUNIT_TEST( DeleteEntry );
         CPPUNIT_TEST( DeleteGroup );
@@ -85,6 +86,7 @@ private:
     void GetGroups();
     void HasEntry();
     void HasGroup();
+    void Binary();
     void Save();
     void DeleteEntry();
     void DeleteGroup();
@@ -263,6 +265,30 @@ void FileConfigTestCase::HasGroup()
     CPPUNIT_ASSERT( !fc.HasGroup(_T("root//subgroup")) );
     CPPUNIT_ASSERT( !fc.HasGroup(_T("foot/subgroup")) );
     CPPUNIT_ASSERT( !fc.HasGroup(_T("foot")) );
+}
+
+void FileConfigTestCase::Binary()
+{
+    wxStringInputStream sis(
+        "[root]\n"
+        "binary=Zm9vCg==\n"
+    );
+    wxFileConfig fc(sis);
+
+    wxMemoryBuffer buf;
+    fc.Read("/root/binary", &buf);
+
+    CPPUNIT_ASSERT( memcmp("foo\n", buf.GetData(), buf.GetDataLen()) == 0 );
+
+    buf.SetDataLen(0);
+    buf.AppendData("\0\1\2", 3);
+    fc.Write("/root/012", buf);
+    wxVERIFY_FILECONFIG(
+        "[root]\n"
+        "binary=Zm9vCg==\n"
+        "012=AAEC\n",
+        fc
+    );
 }
 
 void FileConfigTestCase::Save()

@@ -18,7 +18,7 @@
  * This class helps to reparent a specific window
  */
 
-class WXDLLIMPEXP_CORE wxAdoptedWindow;
+class WXDLLIMPEXP_FWD_CORE wxAdoptedWindow;
 class WXDLLIMPEXP_CORE wxReparenter: public wxObject
 {
 public:

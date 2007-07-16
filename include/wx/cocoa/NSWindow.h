@@ -17,8 +17,8 @@
 
 WX_DECLARE_OBJC_HASHMAP(NSWindow);
 
-class WXDLLEXPORT wxMenuBar;
-class WXDLLEXPORT wxTopLevelWindowCocoa;
+class WXDLLIMPEXP_FWD_CORE wxMenuBar;
+class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowCocoa;
 
 DECLARE_WXCOCOA_OBJC_CLASS(NSMenuItem);
 DECLARE_WXCOCOA_OBJC_CLASS(wxNSWindowDelegate);

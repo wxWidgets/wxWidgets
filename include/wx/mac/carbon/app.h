@@ -21,11 +21,11 @@
 typedef struct __CFRunLoopSource * CFRunLoopSourceRef;
 #endif
 
-class WXDLLEXPORT wxFrame;
-class WXDLLEXPORT wxWindowMac;
-class WXDLLEXPORT wxApp ;
-class WXDLLEXPORT wxKeyEvent;
-class WXDLLEXPORT wxLog;
+class WXDLLIMPEXP_FWD_CORE wxFrame;
+class WXDLLIMPEXP_FWD_CORE wxWindowMac;
+class WXDLLIMPEXP_FWD_CORE wxApp ;
+class WXDLLIMPEXP_FWD_CORE wxKeyEvent;
+class WXDLLIMPEXP_FWD_CORE wxLog;
 
 // Force an exit from main loop
 void WXDLLEXPORT wxExit();

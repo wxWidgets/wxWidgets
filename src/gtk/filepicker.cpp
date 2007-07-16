@@ -105,7 +105,8 @@ wxFileButton::~wxFileButton()
     // GtkFileChooserDialog associated with m_dialog.
     // Thus we have to set its m_widget to NULL to avoid
     // double destruction on same widget
-    m_dialog->m_widget = NULL;
+    if (m_dialog)
+        m_dialog->m_widget = NULL;
 }
 
 void wxFileButton::OnDialogOK(wxCommandEvent& ev)
@@ -126,7 +127,8 @@ void wxFileButton::OnDialogOK(wxCommandEvent& ev)
 void wxFileButton::SetPath(const wxString &str)
 {
     m_path = str;
-    UpdateDialogPath(m_dialog);
+    if (m_dialog)
+        UpdateDialogPath(m_dialog);
 }
 
 #endif      // wxUSE_FILEPICKERCTRL && defined(__WXGTK26__)
@@ -249,7 +251,8 @@ wxDirButton::~wxDirButton()
     // GtkFileChooserDialog associated with m_dialog.
     // Thus we have to set its m_widget to NULL to avoid
     // double destruction on same widget
-    m_dialog->m_widget = NULL;
+    if (m_dialog)
+        m_dialog->m_widget = NULL;
 }
 
 void wxDirButton::SetPath(const wxString &str)
@@ -263,7 +266,8 @@ void wxDirButton::SetPath(const wxString &str)
     // general with all wxWidgets control-manipulation functions which do not send events).
     m_bIgnoreNextChange = true;
 
-    UpdateDialogPath(m_dialog);
+    if (m_dialog)
+        UpdateDialogPath(m_dialog);
 }
 
 #endif      // wxUSE_DIRPICKERCTRL && defined(__WXGTK26__)

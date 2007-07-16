@@ -10,7 +10,7 @@
 #ifndef _WX_GENERIC_ACCEL_H_
 #define _WX_GENERIC_ACCEL_H_
 
-class WXDLLEXPORT wxKeyEvent;
+class WXDLLIMPEXP_FWD_CORE wxKeyEvent;
 
 // ----------------------------------------------------------------------------
 // wxAcceleratorTable

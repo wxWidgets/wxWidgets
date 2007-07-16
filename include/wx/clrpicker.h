@@ -20,7 +20,7 @@
 #include "wx/pickerbase.h"
 
 
-class WXDLLIMPEXP_CORE wxColourPickerEvent;
+class WXDLLIMPEXP_FWD_CORE wxColourPickerEvent;
 
 extern WXDLLEXPORT_DATA(const wxChar) wxColourPickerWidgetNameStr[];
 extern WXDLLEXPORT_DATA(const wxChar) wxColourPickerCtrlNameStr[];

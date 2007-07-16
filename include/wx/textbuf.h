@@ -132,7 +132,7 @@ public:
     wxTextFileType GuessType() const;
 
     // get the name of the buffer
-    const wxChar *GetName() const { return m_strBufferName.c_str(); }
+    const wxString& GetName() const { return m_strBufferName; }
 
     // add/remove lines
     // ----------------

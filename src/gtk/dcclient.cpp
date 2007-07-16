@@ -448,17 +448,22 @@ void wxGTKWindowImplDC::DoGetSize( int* width, int* height ) const
     m_owner->GetSize(width, height);
 }
 
-extern bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
-                          const wxColour & col, int style);
-
 bool wxGTKWindowImplDC::DoFloodFill(wxCoord x, wxCoord y,
                              const wxColour& col, int style)
 {
+#if wxUSE_IMAGE
+    extern bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
+                              const wxColour & col, int style);
+
     return wxDoFloodFill(this, x, y, col, style);
+#else
+    return false;
+#endif
 }
 
 bool wxGTKWindowImplDC::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const
 {
+#if wxUSE_IMAGE
     // Generic (and therefore rather inefficient) method.
     // Could be improved.
     wxMemoryDC memdc;
@@ -470,6 +475,9 @@ bool wxGTKWindowImplDC::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) cons
     wxImage image = bitmap.ConvertToImage();
     col->Set(image.GetRed(0, 0), image.GetGreen(0, 0), image.GetBlue(0, 0));
     return true;
+#else // !wxUSE_IMAGE
+    return false;
+#endif // wxUSE_IMAGE/!wxUSE_IMAGE
 }
 
 void wxGTKWindowImplDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
@@ -1113,13 +1121,12 @@ void wxGTKWindowImplDC::DoDrawBitmap( const wxBitmap &bitmap,
     if ((w != ww) || (h != hh))
         use_bitmap = use_bitmap.Rescale( 0, 0, ww, hh, ww, hh );
 
-#if !GTK_CHECK_VERSION(2,2,0)
     // NB: We can't render pixbufs with GTK+ < 2.2, we need to use pixmaps code.
     //     Pixbufs-based bitmaps with alpha channel don't have a mask, so we
     //     have to call GetPixmap() here -- it converts the pixbuf into pixmap
     //     and also creates the mask as a side-effect:
-    use_bitmap.GetPixmap();
-#endif
+    if (gtk_check_version(2,2,0))
+        use_bitmap.GetPixmap();
 
     // apply mask if any
     GdkBitmap *mask = (GdkBitmap *) NULL;
@@ -1620,6 +1627,7 @@ void wxGTKWindowImplDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
 void wxGTKWindowImplDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, double angle )
 {
+#if wxUSE_IMAGE
     if (!m_window || text.empty())
         return;
 
@@ -1718,6 +1726,7 @@ void wxGTKWindowImplDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCo
     // update the bounding box
     CalcBoundingBox(x + minX, y + minY);
     CalcBoundingBox(x + maxX, y + maxY);
+#endif // wxUSE_IMAGE
 }
 
 void wxGTKWindowImplDC::DoGetTextExtent(const wxString &string,

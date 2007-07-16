@@ -12,19 +12,14 @@
 #include "wx/log.h"
 #include "wx/evtloop.h"
 
-//this code should not be compiled when GUI is defined
-//(monolithic build issue)
-#if !wxUSE_GUI
-
 #include <signal.h>
 #include <unistd.h>
 
-bool wxAppConsoleUnix::Initialize(int& argc, wxChar** argv)
+// use unusual names for arg[cv] to avoid clashes with wxApp members with the
+// same names
+bool wxAppConsole::Initialize(int& argc_, wxChar** argv_)
 {
-    if ( !wxAppConsole::Initialize(argc,argv) )
-        return false;
-
-    if ( !m_mainLoop->IsOk() )
+    if ( !wxAppConsoleBase::Initialize(argc_, argv_) )
         return false;
 
     sigemptyset(&m_signalsCaught);
@@ -32,9 +27,9 @@ bool wxAppConsoleUnix::Initialize(int& argc, wxChar** argv)
     return true;
 }
 
-void wxAppConsoleUnix::HandleSignal(int signal)
+void wxAppConsole::HandleSignal(int signal)
 {
-    wxAppConsoleUnix * const app = wxTheApp;
+    wxAppConsole * const app = wxTheApp;
     if ( !app )
         return;
 
@@ -42,7 +37,7 @@ void wxAppConsoleUnix::HandleSignal(int signal)
     app->WakeUpIdle();
 }
 
-void wxAppConsoleUnix::CheckSignal()
+void wxAppConsole::CheckSignal()
 {
     for ( SignalHandlerHash::iterator it = m_signalHandlerHash.begin();
           it != m_signalHandlerHash.end();
@@ -57,13 +52,23 @@ void wxAppConsoleUnix::CheckSignal()
     }
 }
 
-bool wxAppConsoleUnix::SetSignalHandler(int signal, SignalHandler handler)
+// the type of the signal handlers we use is "void(*)(int)" while the real
+// signal handlers are extern "C" and so have incompatible type and at least
+// Sun CC warns about it, so use explicit casts to suppress these warnings as
+// they should be harmless
+extern "C"
 {
-    const bool install = handler != SIG_DFL && handler != SIG_IGN;
+    typedef void (*SignalHandler_t)(int);
+}
+
+bool wxAppConsole::SetSignalHandler(int signal, SignalHandler handler)
+{
+    const bool install = (SignalHandler_t)handler != SIG_DFL &&
+                         (SignalHandler_t)handler != SIG_IGN;
 
     struct sigaction sa;
     memset(&sa, 0, sizeof(sa));
-    sa.sa_handler = &wxAppConsoleUnix::HandleSignal;
+    sa.sa_handler = (SignalHandler_t)&wxAppConsole::HandleSignal;
     sa.sa_flags = SA_RESTART;
     int res = sigaction(signal, &sa, 0);
     if ( res != 0 )
@@ -80,4 +85,3 @@ bool wxAppConsoleUnix::SetSignalHandler(int signal, SignalHandler handler)
     return true;
 }
 
-#endif // !wxUSE_GUI

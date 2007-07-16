@@ -14,7 +14,7 @@
 
 #include "wx/button.h"      // for wxStdButtonInputHandler
 
-class WXDLLEXPORT wxToolBarTool;
+class WXDLLIMPEXP_FWD_CORE wxToolBarTool;
 
 // ----------------------------------------------------------------------------
 // the actions supported by this control

@@ -19,7 +19,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/evtloop.h"
+#if wxUSE_CONSOLE_EVENTLOOP
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -27,17 +27,14 @@
 #endif
 
 #include <errno.h>
+#include "wx/evtloop.h"
 #include "wx/thread.h"
 #include "wx/module.h"
-#include "wx/generic/private/timer.h"
+#include "wx/unix/private/timer.h"
 #include "wx/unix/private/epolldispatcher.h"
 #include "wx/private/selectdispatcher.h"
 
 #define TRACE_EVENTS _T("events")
-
-//this code should not be compiled when GUI is defined
-//(monolithic build issue)
-#if !wxUSE_GUI
 
 // ===========================================================================
 // wxEventLoop::PipeIOHandler implementation
@@ -128,15 +125,9 @@ wxConsoleEventLoop::wxConsoleEventLoop()
         return;
     }
 
-#ifdef HAVE_SYS_EPOLL_H
-    m_dispatcher = wxEpollDispatcher::Get();
+    m_dispatcher = wxFDIODispatcher::Get();
     if ( !m_dispatcher )
-#endif // HAVE_SYS_EPOLL_H
-    {
-        m_dispatcher = wxSelectDispatcher::Get();
-    }
-
-    wxCHECK_RET( m_dispatcher, _T("failed to create IO dispatcher") );
+        return;
 
     m_dispatcher->RegisterFD
                   (
@@ -144,7 +135,7 @@ wxConsoleEventLoop::wxConsoleEventLoop()
                     &m_wakeupPipe,
                     wxFDIO_INPUT
                   );
-};
+}
 
 //-----------------------------------------------------------------------------
 // events dispatch and loop handling
@@ -184,7 +175,7 @@ void wxConsoleEventLoop::OnNextIteration()
         timeout = wxFDIODispatcher::TIMEOUT_INFINITE;
     }
 
-    m_dispatcher->RunLoop(timeout);
+    m_dispatcher->Dispatch(timeout);
 
 #if wxUSE_TIMER
     wxTimerScheduler::Get().NotifyExpired();
@@ -194,4 +185,4 @@ void wxConsoleEventLoop::OnNextIteration()
     wxTheApp->CheckSignal();
 }
 
-#endif // !wxUSE_GUI
+#endif // wxUSE_CONSOLE_EVENTLOOP

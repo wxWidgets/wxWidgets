@@ -34,7 +34,7 @@
 #define wxWIZARD_EX_HELPBUTTON   0x00000010
 
 // forward declarations
-class WXDLLIMPEXP_ADV wxWizard;
+class WXDLLIMPEXP_FWD_ADV wxWizard;
 
 // ----------------------------------------------------------------------------
 // wxWizardPage is one of the wizards screen: it must know what are the

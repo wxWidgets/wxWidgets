@@ -13,6 +13,7 @@
 #define _WX_HASHMAP_H_
 
 #include "wx/string.h"
+#include "wx/wxcrt.h"
 
 #if (defined(HAVE_EXT_HASH_MAP) || defined(HAVE_HASH_MAP)) \
     && (defined(HAVE_GNU_CXX_HASH_MAP) || defined(HAVE_STD_HASH_MAP))
@@ -143,8 +144,6 @@ public: \
         value_type m_value; \
     }; \
  \
-    CLASSEXP Iterator; \
-    friend CLASSEXP Iterator; \
 protected: \
     static void DeleteNode( _wxHashTable_NodeBase* node ) \
     { \
@@ -185,6 +184,7 @@ public: \
             m_node = next ? next : GetNextNode(); \
         } \
     }; \
+    friend class Iterator; \
  \
 public: \
     CLASSEXP iterator : public Iterator \

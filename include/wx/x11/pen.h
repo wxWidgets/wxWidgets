@@ -19,9 +19,9 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxPen;
-class WXDLLIMPEXP_CORE wxColour;
-class WXDLLIMPEXP_CORE wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxPen;
+class WXDLLIMPEXP_FWD_CORE wxColour;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
 
 typedef char wxX11Dash;
 

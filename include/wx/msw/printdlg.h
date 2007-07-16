@@ -19,7 +19,7 @@
 #include "wx/prntbase.h"
 #include "wx/printdlg.h"
 
-class WXDLLEXPORT wxDC;
+class WXDLLIMPEXP_FWD_CORE wxDC;
 
 //----------------------------------------------------------------------------
 // wxWindowsPrintNativeData

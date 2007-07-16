@@ -19,10 +19,10 @@
     WX_DEFINE_EXPORTED_ARRAY_PTR(wxAcceleratorEntry *, wxAcceleratorArray);
 #endif // wxUSE_ACCEL
 
-class WXDLLEXPORT wxFrame;
+class WXDLLIMPEXP_FWD_CORE wxFrame;
 
 #if defined(__WXWINCE__) && wxUSE_TOOLBAR
-class WXDLLEXPORT wxToolBar;
+class WXDLLIMPEXP_FWD_CORE wxToolBar;
 #endif
 
 #include "wx/arrstr.h"

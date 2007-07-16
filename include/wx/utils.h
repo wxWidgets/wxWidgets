@@ -23,8 +23,8 @@
     #include "wx/gdicmn.h"
 #endif
 
-class WXDLLIMPEXP_BASE wxArrayString;
-class WXDLLIMPEXP_BASE wxArrayInt;
+class WXDLLIMPEXP_FWD_BASE wxArrayString;
+class WXDLLIMPEXP_FWD_BASE wxArrayInt;
 
 // need this for wxGetDiskSpace() as we can't, unfortunately, forward declare
 // wxLongLong
@@ -46,10 +46,10 @@ class WXDLLIMPEXP_BASE wxArrayInt;
 // Forward declaration
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxProcess;
-class WXDLLIMPEXP_CORE wxFrame;
-class WXDLLIMPEXP_CORE wxWindow;
-class WXDLLIMPEXP_CORE wxWindowList;
+class WXDLLIMPEXP_FWD_CORE wxProcess;
+class WXDLLIMPEXP_FWD_CORE wxFrame;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxWindowList;
 
 // ----------------------------------------------------------------------------
 // Macros
@@ -290,6 +290,7 @@ WXDLLIMPEXP_BASE int wxHexToDec(const wxString& buf);
 
 // Convert decimal integer to 2-character hex string
 WXDLLIMPEXP_BASE void wxDecToHex(int dec, wxChar *buf);
+WXDLLIMPEXP_BASE void wxDecToHex(int dec, char* ch1, char* ch2);
 WXDLLIMPEXP_BASE wxString wxDecToHex(int dec);
 
 // ----------------------------------------------------------------------------
@@ -456,10 +457,30 @@ WXDLLIMPEXP_BASE bool wxHandleFatalExceptions(bool doit = true);
 WXDLLIMPEXP_BASE bool wxGetEnv(const wxString& var, wxString *value);
 
 // set the env var name to the given value, return true on success
-WXDLLIMPEXP_BASE bool wxSetEnv(const wxString& var, const wxChar *value);
+WXDLLIMPEXP_BASE bool wxSetEnv(const wxString& var, const wxString& value);
 
 // remove the env var from environment
-inline bool wxUnsetEnv(const wxString& var) { return wxSetEnv(var, NULL); }
+WXDLLIMPEXP_BASE bool wxUnsetEnv(const wxString& var);
+
+#if WXWIN_COMPATIBILITY_2_8
+inline bool wxSetEnv(const wxString& var, const char *value)
+    { return wxSetEnv(var, wxString(value)); }
+inline bool wxSetEnv(const wxString& var, const wchar_t *value)
+    { return wxSetEnv(var, wxString(value)); }
+template<typename T>
+inline bool wxSetEnv(const wxString& var, const wxCharTypeBuffer<T>& value)
+    { return wxSetEnv(var, wxString(value)); }
+inline bool wxSetEnv(const wxString& var, const wxCStrData& value)
+    { return wxSetEnv(var, wxString(value)); }
+
+// this one is for passing NULL directly - don't use it, use wxUnsetEnv instead
+wxDEPRECATED( inline bool wxSetEnv(const wxString& var, int value) );
+inline bool wxSetEnv(const wxString& var, int value)
+{
+    wxASSERT_MSG( value == 0, "using non-NULL integer as string?" );
+    return wxUnsetEnv(var);
+}
+#endif // WXWIN_COMPATIBILITY_2_8
 
 // ----------------------------------------------------------------------------
 // Network and username functions.
@@ -553,7 +574,7 @@ wxDEPRECATED(
 );
 
 #if wxUSE_ACCEL
-class WXDLLEXPORT wxAcceleratorEntry;
+class WXDLLIMPEXP_FWD_CORE wxAcceleratorEntry;
 
 // use wxAcceleratorEntry::Create() or FromString() methods instead
 wxDEPRECATED(
@@ -665,7 +686,7 @@ void WXDLLEXPORT wxGetMousePosition( int* x, int* y );
 #if defined(__X__) || defined(__WXGTK__)
 
 #ifdef __WXGTK__
-    void *wxGetDisplay();
+    WXDLLIMPEXP_CORE void *wxGetDisplay();
 #endif
 
 #ifdef __X__

@@ -58,7 +58,8 @@ ACLOCAL_SOURCES = \
   build/aclocal/gtk-2.0.m4 \
   build/aclocal/gtk.m4 \
   build/aclocal/pkg.m4 \
-  build/aclocal/sdl.m4
+  build/aclocal/sdl.m4 \
+  build/aclocal/visibility.m4
 
 # Run aclocal whenever acinclude or one of our local m4s is updated.
 aclocal.m4: configure.in acinclude.m4 $(ACLOCAL_SOURCES)

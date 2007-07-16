@@ -38,7 +38,7 @@ SHARED := 0
 WXUNIV := 0
 
 # Compile Unicode build of wxWidgets? [0,1]
-UNICODE := 0
+UNICODE := 1
 
 # Use MSLU library when building Unicode version. [0,1]
 MSLU := 0

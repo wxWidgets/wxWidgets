@@ -60,11 +60,6 @@ static const int PADDING_TOPBOTTOM = 1;
 // the expander space margin
 static const int EXPANDER_MARGIN = 4;
 
-bool operator == ( const wxDataViewItem & left, const wxDataViewItem & right )
-{
-    return left.GetID() == right.GetID();
-}
-
 //-----------------------------------------------------------------------------
 // wxDataViewHeaderWindow
 //-----------------------------------------------------------------------------
@@ -366,6 +361,8 @@ public:
     //I change this method to un const because in the tree view, the displaying number of the tree are changing along with the expanding/collapsing of the tree nodes
     unsigned int GetLastVisibleRow();
     unsigned int GetRowCount() ;
+
+    wxDataViewItem GetSelection();
 
     void Select( const wxArrayInt& aSelections );
     void SelectAllRows( bool on );
@@ -1719,8 +1716,8 @@ public:
 class ItemAddJob: public DoJob
 {
 public:
-    ItemAddJob( const wxDataViewItem & parent, const wxDataViewItem & item )
-    	{ this->parent = parent ; this->item = item ; }
+    ItemAddJob( const wxDataViewItem & parent, const wxDataViewItem & item, int * count )
+    	{ this->parent = parent ; this->item = item ; m_count = count; }
     virtual ~ItemAddJob(){};
 
     virtual int operator() ( wxDataViewTreeNode * node )
@@ -1731,11 +1728,14 @@ public:
             wxDataViewTreeNode * newnode = new wxDataViewTreeNode( node );
             newnode->SetItem(item);
             node->AppendChild( newnode);
+            *m_count = -1;
             return OK;
         }
         return CONT;
     }
+
 private:
+    int * m_count;
     wxDataViewItem parent, item;
 };
 
@@ -1769,7 +1769,7 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
 
 bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxDataViewItem & item)
 {
-    ItemAddJob job( parent, item); 
+    ItemAddJob job( parent, item, &m_count); 
     Walker( m_root , job);
     UpdateDisplay();
     return true;
@@ -1778,7 +1778,7 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
 class ItemDeleteJob: public DoJob
 {
 public:
-    ItemDeleteJob( const wxDataViewItem & item ) { m_item = item; }
+    ItemDeleteJob( const wxDataViewItem & item, int * count ) { m_item = item; m_count = count; }
     virtual ~ItemDeleteJob(){}
     virtual int operator() ( wxDataViewTreeNode * node )
     {
@@ -1786,18 +1786,20 @@ public:
         {
             node->GetParent()->GetChildren().Remove( node );
             delete node;
+            *m_count = -1;
             return DoJob::OK;
         }
         return DoJob::CONT;
     }
 
 private:
+    int * m_count;
     wxDataViewItem m_item;
 };
 
 bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem & item)
 {
-    ItemDeleteJob job( item);
+    ItemDeleteJob job( item, &m_count);
     Walker( m_root, job);
     UpdateDisplay();
     return true;
@@ -2936,6 +2938,13 @@ void wxDataViewMainWindow::OnKillFocus( wxFocusEvent &event )
     event.Skip();
 }
 
+wxDataViewItem wxDataViewMainWindow::GetSelection()
+{
+    if( m_selection.GetCount() != 1 )
+        return wxDataViewItem();
+    return GetItemByRow( m_selection.Item( 0 ) );
+}
+
 //-----------------------------------------------------------------------------
 // wxDataViewCtrl
 //-----------------------------------------------------------------------------
@@ -3065,6 +3074,10 @@ void wxDataViewCtrl::DoSetIndent()
     m_clientArea->UpdateDisplay();
 }
 
+wxDataViewItem wxDataViewCtrl::GetSelection() 
+{
+    return m_clientArea->GetSelection();
+}
 
 /********************************************************************
 void wxDataViewCtrl::SetSelection( int row )

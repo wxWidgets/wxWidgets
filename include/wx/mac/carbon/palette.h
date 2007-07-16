@@ -15,13 +15,13 @@
 #include "wx/colour.h"
 #include "wx/gdiobj.h"
 
-class WXDLLEXPORT wxPalette;
+class WXDLLIMPEXP_FWD_CORE wxPalette;
 
 class WXDLLEXPORT wxPaletteRefData: public wxGDIRefData
 {
     DECLARE_NO_COPY_CLASS(wxPaletteRefData)
 
-    friend class WXDLLEXPORT wxPalette;
+    friend class WXDLLIMPEXP_FWD_CORE wxPalette;
 public:
     wxPaletteRefData();
     virtual ~wxPaletteRefData();

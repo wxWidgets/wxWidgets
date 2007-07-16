@@ -18,8 +18,8 @@
 // forward declarations
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxToolTip;
-class WXDLLIMPEXP_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxToolTip;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 //-----------------------------------------------------------------------------
 // wxToolTip
@@ -50,7 +50,7 @@ public:
     // this just sets the given tooltip for the specified widget
     //
     // tip must be already UTF-8 encoded
-    static void Apply(GtkWidget *w, const wxCharBuffer& tip);
+    static void Apply(GtkWidget *w, const gchar *tip);
 
 private:
     wxString     m_text;

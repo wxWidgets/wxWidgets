@@ -230,7 +230,7 @@ private:
 
 #if wxUSE_VARIANT
 // Convert variants
-class WXDLLIMPEXP_BASE wxVariant;
+class WXDLLIMPEXP_FWD_BASE wxVariant;
 
 WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant);
 WXDLLEXPORT bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant);

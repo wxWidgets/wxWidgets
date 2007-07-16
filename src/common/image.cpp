@@ -39,12 +39,12 @@
 #define HAS_FILE_STREAMS (wxUSE_STREAMS && (wxUSE_FILE || wxUSE_FFILE))
 
 #if HAS_FILE_STREAMS
-    #if wxUSE_FILE
-        typedef wxFileInputStream wxImageFileInputStream;
-        typedef wxFileOutputStream wxImageFileOutputStream;
-    #elif wxUSE_FFILE
+    #if wxUSE_FFILE
         typedef wxFFileInputStream wxImageFileInputStream;
         typedef wxFFileOutputStream wxImageFileOutputStream;
+    #elif wxUSE_FILE
+        typedef wxFileInputStream wxImageFileInputStream;
+        typedef wxFileOutputStream wxImageFileOutputStream;
     #endif // wxUSE_FILE/wxUSE_FFILE
 #endif // HAS_FILE_STREAMS
 
@@ -675,13 +675,13 @@ wxImage wxImage::ResampleBicubic(int width, int height) const
     for ( int dsty = 0; dsty < height; dsty++ )
     {
         // We need to calculate the source pixel to interpolate from - Y-axis
-        double srcpixy = dsty * M_IMGDATA->m_height / height;
+        double srcpixy = double(dsty * M_IMGDATA->m_height) / height;
         double dy = srcpixy - (int)srcpixy;
 
         for ( int dstx = 0; dstx < width; dstx++ )
         {
             // X-axis of pixel to interpolate from
-            double srcpixx = dstx * M_IMGDATA->m_width / width;
+            double srcpixx = double(dstx * M_IMGDATA->m_width) / width;
             double dx = srcpixx - (int)srcpixx;
 
             // Sums for each color channel
@@ -1665,7 +1665,9 @@ void wxImage::SetAlpha( unsigned char *alpha, bool static_data )
         alpha = (unsigned char *)malloc(M_IMGDATA->m_width*M_IMGDATA->m_height);
     }
 
-    free(M_IMGDATA->m_alpha);
+    if( !M_IMGDATA->m_staticAlpha )
+        free(M_IMGDATA->m_alpha);
+
     M_IMGDATA->m_alpha = alpha;
     M_IMGDATA->m_staticAlpha = static_data;
 }
@@ -1898,8 +1900,11 @@ bool wxImage::ConvertAlphaToMask(unsigned char threshold)
         }
     }
 
-    free(M_IMGDATA->m_alpha);
+    if( !M_IMGDATA->m_staticAlpha )
+        free(M_IMGDATA->m_alpha);
+
     M_IMGDATA->m_alpha = NULL;
+    M_IMGDATA->m_staticAlpha = false;
 
     return true;
 }
@@ -2231,7 +2236,7 @@ bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int ind
 
     if (stream.IsSeekable() && !handler->CanRead(stream))
     {
-        wxLogError(_("Image file is not of type %s."), (const wxChar*) mimetype);
+        wxLogError(_("Image file is not of type %s."), mimetype);
         return false;
     }
     else

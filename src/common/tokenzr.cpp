@@ -28,6 +28,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/arrstr.h"
+    #include "wx/crt.h"
 #endif
 
 // Required for wxIs... functions

@@ -99,10 +99,27 @@ On IPV6 implementations, ::
 Returns true on success, false if something went wrong.
 
 %
+% BroadcastAddress
+%
+
+\membersection{wxIPaddress::BroadcastAddress}\label{wxipaddressbroadcastaddress}
+
+\func{virtual bool}{BroadcastAddress}{\void}
+
+Internally, this is the same as setting the IP address
+to {\bf INADDR\_BROADCAST}.
+
+On IPV4 implementations, 255.255.255.255
+
+\wxheading{Return value}
+
+Returns true on success, false if something went wrong.
+
+%
 % LocalHost
 %
 
-\membersection{wxIPaddress::LocalHost}\label{wxIPaddresslocalhost}
+\membersection{wxIPaddress::LocalHost}\label{wxipaddresslocalhost}
 
 \func{virtual bool}{LocalHost}{\void}
 
@@ -116,7 +133,7 @@ On IPV6 implementations, ::1
 
 Returns true on success, false if something went wrong.
 
-\membersection{wxIPaddress::IsLocalHost}\label{wxIPaddressislocalhost}
+\membersection{wxIPaddress::IsLocalHost}\label{wxipaddressislocalhost}
 
 \func{virtual bool}{IsLocalHost}{\void}
 

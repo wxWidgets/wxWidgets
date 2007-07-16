@@ -10,6 +10,8 @@
  */
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
+#ifndef _WX_CHKCONF_H_
+#define _WX_CHKCONF_H_
 
 /*
    Platform-specific checking.
@@ -33,6 +35,10 @@
 #  include "wx/motif/chkconf.h"
 #elif defined(__WXX11__)
 #  include "wx/x11/chkconf.h"
+#endif
+
+#ifdef __UNIX__
+#   include "wx/unix/chkconf.h"
 #endif
 
 #ifdef __WXUNIVERSAL__
@@ -82,6 +88,14 @@
 
    please keep the options in alphabetical order!
  */
+
+#ifndef wxUSE_CONSOLE_EVENTLOOP
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_CONSOLE_EVENTLOOP must be defined."
+#   else
+#       define wxUSE_CONSOLE_EVENTLOOP 0
+#   endif
+#endif /* !defined(wxUSE_CONSOLE_EVENTLOOP) */
 
 #ifndef wxUSE_CRASHREPORT
     /* this one is special: as currently it is Windows-only, don't force it
@@ -1742,16 +1756,6 @@
 #   endif
 #endif /* !wxUSE_IMAGLIST */
 
-#if !wxUSE_MSGDLG
-#   ifdef wxABORT_ON_CONFIG_ERROR
-        /* FIXME: should compile without it, of course, but doesn't */
-#       error "wxMessageBox is always needed"
-#   else
-#       undef wxUSE_MSGDLG
-#       define wxUSE_MSGDLG 1
-#   endif
-#endif
-
 #if wxUSE_RADIOBOX
 #   if !wxUSE_RADIOBTN
 #        ifdef wxABORT_ON_CONFIG_ERROR
@@ -1822,6 +1826,15 @@
 #   endif
 #endif /* wxUSE_SOCKETS */
 
+#if wxUSE_SVG && !wxUSE_STREAMS
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_SVG requires wxUSE_STREAMS"
+#   else
+#       undef wxUSE_SVG
+#       define wxUSE_SVG 0
+#   endif
+#endif /* wxUSE_SVG */
+
 #if !wxUSE_VARIANT
 #   if wxUSE_DATAVIEWCTRL
 #       ifdef wxABORT_ON_CONFIG_ERROR
@@ -1843,3 +1856,5 @@
 #endif /* wxUSE_VARIANT */
 
 #endif /* wxUSE_GUI */
+
+#endif /* _WX_CHKCONF_H_ */

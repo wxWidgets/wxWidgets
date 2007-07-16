@@ -27,9 +27,9 @@ extern WXDLLEXPORT_DATA(const wxChar) wxStatusLineNameStr[];
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGenericMDIParentFrame;
-class WXDLLEXPORT wxGenericMDIClientWindow;
-class WXDLLEXPORT wxGenericMDIChildFrame;
+class WXDLLIMPEXP_FWD_CORE wxGenericMDIParentFrame;
+class WXDLLIMPEXP_FWD_CORE wxGenericMDIClientWindow;
+class WXDLLIMPEXP_FWD_CORE wxGenericMDIChildFrame;
 
 //-----------------------------------------------------------------------------
 // wxGenericMDIParentFrame

@@ -32,7 +32,7 @@
 // only send the notification once and then stop the timer
 #define wxTIMER_ONE_SHOT true
 
-class WXDLLIMPEXP_BASE wxTimerImpl;
+class WXDLLIMPEXP_FWD_BASE wxTimerImpl;
 
 // the interface of wxTimer class
 class WXDLLIMPEXP_BASE wxTimer : public wxEvtHandler

@@ -115,19 +115,23 @@ Returns the blue intensity.
 
 \constfunc{wxString}{GetAsString}{\param{long}{ flags}}
 
-Converts this colour to a \helpref{wxString}{wxstring}
+Converts this colour to a \helpref{wxString}{wxstring} 
 using the given {\it flags}.
 
-The supported flags are {\bf wxC2S\_NAME}, to obtain the colour
-name (e.g. wxColour(255,0,0) -> \texttt{``red"}), {\bf wxC2S\_CSS\_SYNTAX}, to obtain
-the colour in the \texttt{``rgb(r,g,b)"} syntax
-(e.g. wxColour(255,0,0) -> \texttt{``rgb(255,0,0)"}), and {\bf wxC2S\_HTML\_SYNTAX}, to obtain
-the colour as  \texttt{``\#"} followed by 6 hexadecimal digits
-(e.g. wxColour(255,0,0) -> \texttt{``\#FF0000"}).
+The supported flags are \textbf{wxC2S\_NAME}, to obtain the colour name (e.g.
+wxColour(255,0,0) -> \texttt{``red"}), \textbf{wxC2S\_CSS\_SYNTAX}, to obtain
+the colour in the \texttt{``rgb(r,g,b)"} or \texttt{``rgba(r,g,b,a)"} syntax
+(e.g. wxColour(255,0,0,85) -> \texttt{``rgba(255,0,0,0.333)"}), and 
+\textbf{wxC2S\_HTML\_SYNTAX}, to obtain the colour as  \texttt{``\#"} followed
+by 6 hexadecimal digits (e.g. wxColour(255,0,0) -> \texttt{``\#FF0000"}).
 
-This function never fails and always returns a non-empty string.
+This function never fails and always returns a non-empty string but asserts if
+the colour has alpha channel (i.e. is non opaque) but
+\textbf{wxC2S\_CSS\_SYNTAX} (which is the only one supporting alpha) is not
+specified in flags.
 
 \newsince{2.7.0}
+
 
 \membersection{wxColour::GetPixel}\label{wxcolourgetpixel}
 
@@ -170,7 +174,11 @@ Returns the red intensity.
 
 Sets the RGB intensity values using the given values (first overload), extracting them from the packed long (second overload), using the given string (third overloard).
 
-When using third form, Set() accepts: colour names (those listed in \helpref{wxTheColourDatabase}{wxcolourdatabase}), the CSS-like \texttt{``RGB(r,g,b)"} syntax (case insensitive) and the HTML-like syntax (i.e. \texttt{``\#"} followed by 6 hexadecimal digits for red, green, blue components).
+When using third form, Set() accepts: colour names (those listed in 
+\helpref{wxTheColourDatabase}{wxcolourdatabase}), the CSS-like 
+\texttt{``rgb(r,g,b)"} or \texttt{``rgba(r,g,b,a)"} syntax (case insensitive) 
+and the HTML-like syntax (i.e. \texttt{``\#"} followed by 6 hexadecimal digits 
+for red, green, blue components).
 
 Returns \true if the conversion was successful, \false otherwise.
 

@@ -22,10 +22,10 @@
 extern WXDLLEXPORT_DATA(const wxChar) wxStatusLineNameStr[];
 extern WXDLLEXPORT_DATA(const wxChar) wxToolBarNameStr[];
 
-class WXDLLEXPORT wxFrame;
-class WXDLLEXPORT wxMenuBar;
-class WXDLLEXPORT wxStatusBar;
-class WXDLLEXPORT wxToolBar;
+class WXDLLIMPEXP_FWD_CORE wxFrame;
+class WXDLLIMPEXP_FWD_CORE wxMenuBar;
+class WXDLLIMPEXP_FWD_CORE wxStatusBar;
+class WXDLLIMPEXP_FWD_CORE wxToolBar;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -81,6 +81,11 @@ public:
 #if wxUSE_MENUS
     virtual void SetMenuBar(wxMenuBar *menubar);
     virtual wxMenuBar *GetMenuBar() const { return m_frameMenuBar; }
+
+    // find the item by id in the frame menu bar: this is an internal function
+    // and exists mainly in order to be overridden in the MDI parent frame
+    // which also looks at its active child menu bar
+    virtual const wxMenuItem *FindItemInMenuBar(int menuId) const;
 #endif // wxUSE_MENUS
 
     // process menu command: returns true if processed
@@ -185,6 +190,10 @@ protected:
 
     // test whether this window makes part of the frame
     virtual bool IsOneOfBars(const wxWindow *win) const;
+    virtual bool IsClientAreaChild(const wxWindow *child) const
+    {
+        return !IsOneOfBars(child) && wxTopLevelWindow::IsClientAreaChild(child);
+    }
 
 #if wxUSE_MENUS
     // override to update menu bar position when the frame size changes
@@ -211,9 +220,10 @@ protected:
     // something changes
     virtual void PositionStatusBar() { }
 
-    // show the help string for this menu item in the given status bar: the
-    // status bar pointer can be NULL; return true if help was shown
-    bool ShowMenuHelp(wxStatusBar *statbar, int helpid);
+    // show the help string for the given menu item using DoGiveHelp() if the
+    // given item does have a help string (as determined by FindInMenuBar()),
+    // return false if there is no help for such item
+    bool ShowMenuHelp(int helpid);
 
     wxStatusBar *m_frameStatusBar;
 #endif // wxUSE_STATUSBAR

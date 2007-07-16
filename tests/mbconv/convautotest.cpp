@@ -63,7 +63,7 @@ private:
 CPPUNIT_TEST_SUITE_REGISTRATION(ConvAutoTestCase);
 
 // also include in it's own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConvAutoTestCase, "ConvAuto");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConvAutoTestCase, "ConvAutoTestCase");
 
 // ----------------------------------------------------------------------------
 // tests

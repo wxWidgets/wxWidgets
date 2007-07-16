@@ -18,10 +18,10 @@
 #include "wx/hash.h"
 #include "wx/fontenc.h"
 
-class WXDLLIMPEXP_BASE wxMBConv;
-class WXDLLIMPEXP_HTML wxHtmlParser;
-class WXDLLIMPEXP_HTML wxHtmlTagHandler;
-class WXDLLIMPEXP_HTML wxHtmlEntitiesParser;
+class WXDLLIMPEXP_FWD_BASE wxMBConv;
+class WXDLLIMPEXP_FWD_HTML wxHtmlParser;
+class WXDLLIMPEXP_FWD_HTML wxHtmlTagHandler;
+class WXDLLIMPEXP_FWD_HTML wxHtmlEntitiesParser;
 
 class wxHtmlTextPieces;
 class wxHtmlParserState;
@@ -145,10 +145,9 @@ protected:
 
     // Adds text to the output.
     // This is called from Parse() and must be overriden in derived classes.
-    // txt is not guaranteed to be only one word. It is largest continuous part of text
-    // (= not broken by tags)
-    // NOTE : using char* because of speed improvements
-    virtual void AddText(const wxChar* txt) = 0;
+    // txt is not guaranteed to be only one word. It is largest continuous part
+    // of text (= not broken by tags)
+    virtual void AddText(const wxString& txt) = 0;
 
     // Adds tag and proceeds it. Parse() may (and usually is) called from this method.
     // This is called from Parse() and may be overriden.

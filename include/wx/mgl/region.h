@@ -63,7 +63,7 @@ protected:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxRegion);
-    friend class WXDLLEXPORT wxRegionIterator;
+    friend class WXDLLIMPEXP_FWD_CORE wxRegionIterator;
 };
 
 

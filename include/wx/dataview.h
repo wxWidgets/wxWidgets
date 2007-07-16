@@ -38,12 +38,12 @@
 // wxDataViewCtrl globals
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewItem;
-class WXDLLIMPEXP_ADV wxDataViewModel;
-class WXDLLIMPEXP_ADV wxDataViewCtrl;
-class WXDLLIMPEXP_ADV wxDataViewColumn;
-class WXDLLIMPEXP_ADV wxDataViewRenderer;
-class WXDLLIMPEXP_ADV wxDataViewModelNotifier;
+class WXDLLIMPEXP_FWD_ADV wxDataViewItem;
+class WXDLLIMPEXP_FWD_ADV wxDataViewModel;
+class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
+class WXDLLIMPEXP_FWD_ADV wxDataViewColumn;
+class WXDLLIMPEXP_FWD_ADV wxDataViewRenderer;
+class WXDLLIMPEXP_FWD_ADV wxDataViewModelNotifier;
 class                 wxDataViewEventModelNotifier;
 
 extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxDataViewCtrlNameStr[];
@@ -83,11 +83,14 @@ private:
     wxUint32 m_id;
 };
 
-bool operator == ( const wxDataViewItem & left, const wxDataViewItem & right );
+bool operator == (const wxDataViewItem &left, const wxDataViewItem &right);
 
 // ---------------------------------------------------------
 // wxDataViewModel
 // ---------------------------------------------------------
+
+typedef int (wxCALLBACK *wxDataViewModelCompare)
+    (const wxDataViewItem& item1, const wxDataViewItem& item2, unsigned int col, unsigned int option );
 
 class WXDLLIMPEXP_ADV wxDataViewModel: public wxObjectRefData
 {
@@ -109,11 +112,8 @@ public:
 
     // define hierachy
     virtual bool HasChildren( const wxDataViewItem &item ) const = 0;
-    virtual int GetChildCount( const wxDataViewItem &item ) const = 0;
-    virtual wxDataViewItem GetParent( const wxDataViewItem &child ) const = 0;
     virtual wxDataViewItem GetFirstChild( const wxDataViewItem &parent ) const = 0;
     virtual wxDataViewItem GetNextSibling( const wxDataViewItem &item ) const = 0;
-    virtual wxDataViewItem GetNthChild(  const wxDataViewItem &parent, unsigned int n ) const = 0;
 
     // delegated notifiers
     virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
@@ -125,11 +125,15 @@ public:
     void AddNotifier( wxDataViewModelNotifier *notifier );
     void RemoveNotifier( wxDataViewModelNotifier *notifier );
     
+    void SetCompareFunction( wxDataViewModelCompare func ) { m_cmpFunc = func; }
+    wxDataViewModelCompare GetCompareFunction() { return m_cmpFunc; }
+    
 protected:
     // the user should not delete this class directly: he should use DecRef() instead!
     virtual ~wxDataViewModel() { }
 
-    wxList  m_notifiers;
+    wxList                  m_notifiers;
+    wxDataViewModelCompare  m_cmpFunc;
 };
 
 // ---------------------------------------------------------
@@ -403,17 +407,20 @@ public:
     virtual bool ClearColumns();
     virtual wxDataViewColumn* GetColumn( unsigned int pos );
 
-    //Tree structure related methods
-    void SetExpanderColumn( unsigned int col ){ m_expander_column = col ; DoSetExpanderColumn(); }
-    unsigned int GetExpanderColumn() const { return m_expander_column; }
+    void SetExpanderColumn( unsigned int col )
+        { m_expander_column = col ; DoSetExpanderColumn(); }
+    unsigned int GetExpanderColumn() const 
+        { return m_expander_column; }
 
-    void SetIndent( int indent ){ m_indent = indent ; DoSetIndent(); }
-    int GetIndent( ) const { return m_indent; } 
+    void SetIndent( int indent )
+        { m_indent = indent ; DoSetIndent(); }
+    int GetIndent() const 
+        { return m_indent; } 
 
     // TODO selection code
+    virtual wxDataViewItem GetSelection() = 0;
 
 protected:
-    //These two methods are used to refresh the UI when the user change the indent/expander column
     virtual void DoSetExpanderColumn() = 0 ;
     virtual void DoSetIndent() = 0;
 

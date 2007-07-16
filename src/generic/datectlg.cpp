@@ -113,7 +113,7 @@ public:
 
         wxPoint yearPosition = yearControl->GetPosition();
 
-        SetFormat(wxT("%x"));
+        SetFormat("%x");
 
         width = yearPosition.x + yearSize.x+2+CALBORDER/2;
         if (width < calSize.x-4)
@@ -181,7 +181,7 @@ public:
 
         if ( !s.empty() )
         {
-            pDt->ParseFormat(s, m_format);
+            pDt->ParseFormat(s.c_str(), m_format);
             if ( !pDt->IsValid() )
                 return false;
         }
@@ -199,10 +199,10 @@ public:
         cev.SetEventObject(datePicker);
         cev.SetId(datePicker->GetId());
         cev.SetDate(dt);
-        GetParent()->GetEventHandler()->ProcessEvent(cev);
+        datePicker->GetEventHandler()->ProcessEvent(cev);
 
         wxDateEvent event(datePicker, dt, wxEVT_DATE_CHANGED);
-        datePicker->GetParent()->GetEventHandler()->ProcessEvent(event);
+        datePicker->GetEventHandler()->ProcessEvent(event);
     }
 
 private:
@@ -259,7 +259,7 @@ private:
         return m_combo->GetParent()->HasFlag(flag);
     }
 
-    bool SetFormat(const wxChar *fmt)
+    bool SetFormat(const wxString& fmt)
     {
         m_format.clear();
 

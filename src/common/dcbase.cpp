@@ -2172,9 +2172,9 @@ void wxDCBase::GetMultiLineTextExtent(const wxString& text,
             heightTextTotal = 0, heightLineDefault = 0, heightLine = 0;
 
     wxString curLine;
-    for ( const wxChar *pc = text; ; pc++ )
+    for ( wxString::const_iterator pc = text.begin(); ; ++pc )
     {
-        if ( *pc == _T('\n') || *pc == _T('\0') )
+        if ( pc == text.end() || *pc == _T('\n') )
         {
             if ( curLine.empty() )
             {
@@ -2205,14 +2205,13 @@ void wxDCBase::GetMultiLineTextExtent(const wxString& text,
                 heightTextTotal += heightLine;
             }
 
-            if ( *pc == _T('\n') )
+            if ( pc == text.end() )
+            {
+               break;
+            }
+            else // '\n'
             {
                curLine.clear();
-            }
-            else
-            {
-               // the end of string
-               break;
             }
         }
         else
@@ -2303,7 +2302,7 @@ void wxDCBase::DrawLabel(const wxString& text,
     wxString curLine;
     for ( wxString::const_iterator pc = text.begin(); ; ++pc )
     {
-        if ( *pc == _T('\n') || pc == text.end() )
+        if ( pc == text.end() || *pc == _T('\n') )
         {
             int xRealStart = x; // init it here to avoid compielr warnings
 

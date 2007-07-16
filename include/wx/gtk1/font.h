@@ -16,11 +16,11 @@
 // classes
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDC;
-class WXDLLIMPEXP_CORE wxPaintDC;
-class WXDLLIMPEXP_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxPaintDC;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 
-class WXDLLIMPEXP_CORE wxFont;
+class WXDLLIMPEXP_FWD_CORE wxFont;
 
 // ----------------------------------------------------------------------------
 // wxFont

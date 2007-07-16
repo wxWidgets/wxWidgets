@@ -26,13 +26,20 @@
 const wxChar wxDataViewCtrlNameStr[] = wxT("dataviewCtrl");
 
 
+bool operator == (const wxDataViewItem &left, const wxDataViewItem &right)
+{
+    return (left.GetID() == right.GetID() );
+}
+
+
 // ---------------------------------------------------------
-// wxDataViewListModel
+// wxDataViewModel
 // ---------------------------------------------------------
 
 wxDataViewModel::wxDataViewModel()
 {
     m_notifiers.DeleteContents( true );
+    m_cmpFunc = NULL;
 }
 
 bool wxDataViewModel::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )

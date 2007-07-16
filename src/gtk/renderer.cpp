@@ -97,7 +97,7 @@ public:
 private:
     // FIXME: shouldn't we destroy these windows somewhere?
 
-    // used by DrawHeaderButton and DrawPushButton
+    // used by DrawPushButton and DrawDropArrow
     static GtkWidget *GetButtonWidget();
 
     // used by DrawTreeItemButton()
@@ -105,6 +105,9 @@ private:
 
     // used by DrawCheckBox()
     static GtkWidget *GetCheckButtonWidget();
+
+    // Used by DrawHeaderButton
+    static GtkWidget *GetHeaderButtonWidget();
 };
 
 // ============================================================================
@@ -177,6 +180,28 @@ wxRendererGTK::GetTreeWidget()
     return s_tree;
 }
 
+
+// This one just gets the button used by the column header.  Although it's
+// still a gtk_button the themes will typically differentiate and draw them
+// differently if the button is in a treeview.
+GtkWidget *
+wxRendererGTK::GetHeaderButtonWidget()
+{
+    static GtkWidget *s_button = NULL;
+    
+    if ( !s_button )
+    {
+        // Get the dummy tree widget, give it a column, and then use the
+        // widget in the column header for the rendering code.
+        GtkWidget* treewidget = GetTreeWidget();
+        GtkTreeViewColumn*  column = gtk_tree_view_column_new();
+        gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
+        s_button = column->button;
+    }
+
+    return s_button;
+}
+
 // ----------------------------------------------------------------------------
 // list/tree controls drawing
 // ----------------------------------------------------------------------------
@@ -190,8 +215,8 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
                                 wxHeaderButtonParams* params)
 {
 
-    GtkWidget *button = GetButtonWidget();
-
+    GtkWidget *button = GetHeaderButtonWidget();
+    
     GdkWindow* gdk_window = dc.GetGDKWindow();
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );

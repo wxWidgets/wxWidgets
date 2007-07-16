@@ -24,7 +24,7 @@
 
 #include "wx/defs.h"        // everybody should include this
 #include "wx/chartype.h"    // for wxChar
-#include "wx/wxcrt.h"       // for wxStrlen() etc.
+#include "wx/wxcrtbase.h"   // for wxStrlen() etc.
 
 #include <stdlib.h>
 
@@ -198,6 +198,7 @@ public:
         typedef ptr_type pointer;                                             \
         typedef int difference_type;                                          \
                                                                               \
+        iterator_name() : m_ptr(NULL) { }                                     \
         iterator_name(pointer ptr) : m_ptr(ptr) { }                           \
                                                                               \
         reference operator*() const { return *m_ptr; }                        \
@@ -256,16 +257,16 @@ public:
         /* for wxStringImpl use only */                                       \
         operator pointer() const { return m_ptr; }                            \
                                                                               \
-        friend class WXDLLIMPEXP_BASE wxStringImpl;                           \
+        friend class wxStringImpl;                                            \
                                                                               \
         pointer m_ptr
 
   // we need to declare const_iterator in wxStringImpl scope, the friend
   // declaration inside iterator class itself is not enough, or at least not
   // for g++ 3.4 (g++ 4 is ok)
-  class const_iterator;
+  class WXDLLIMPEXP_FWD_BASE const_iterator;
 
-  class iterator
+  class WXDLLIMPEXP_BASE iterator
   {
     WX_DEFINE_STRINGIMPL_ITERATOR(iterator,
                                   wxStringCharType&,
@@ -274,7 +275,7 @@ public:
     friend class const_iterator;
   };
 
-  class const_iterator
+  class WXDLLIMPEXP_BASE const_iterator
   {
   public:
       const_iterator(iterator i) : m_ptr(i.m_ptr) { }
@@ -401,7 +402,7 @@ public:
     { ConcatSelf(str.length(), str.c_str()); return *this; }
     // append first n (or all if n == npos) characters of sz
   wxStringImpl& append(const wxStringCharType *sz)
-    { ConcatSelf(Strsize(sz), sz); return *this; }
+    { ConcatSelf(wxStrlen(sz), sz); return *this; }
   wxStringImpl& append(const wxStringCharType *sz, size_t n)
     { ConcatSelf(n, sz); return *this; }
     // append n copies of ch
@@ -418,7 +419,7 @@ public:
     { clear(); return append(str, pos, n); }
     // same as `= first n (or all if n == npos) characters of sz'
   wxStringImpl& assign(const wxStringCharType *sz)
-    { clear(); return append(sz, Strsize(sz)); }
+    { clear(); return append(sz, wxStrlen(sz)); }
   wxStringImpl& assign(const wxStringCharType *sz, size_t n)
     { clear(); return append(sz, n); }
     // same as `= n copies of ch'
@@ -546,14 +547,7 @@ public:
   void DoUngetWriteBuf();
   void DoUngetWriteBuf(size_t nLen);
 
-private:
-#if wxUSE_UNICODE_UTF8
-  static size_t Strsize(const wxStringCharType *s) { return strlen(s); }
-#else
-  static size_t Strsize(const wxStringCharType *s) { return wxStrlen(s); }
-#endif
-
-  friend class WXDLLIMPEXP_BASE wxString;
+  friend class WXDLLIMPEXP_FWD_BASE wxString;
 };
 
 #endif // !wxUSE_STL_BASED_WXSTRING

@@ -155,9 +155,9 @@
 // (Windows 9x doesn't support it and the programs compiled in Unicode mode
 // will not run under 9x -- but see wxUSE_UNICODE_MSLU below).
 //
-// Default is 0
+// Default is 0 (but only because of makefiles)
 //
-// Recommended setting: 0 (unless you only plan to use Windows NT/2000/XP)
+// Recommended setting: 1
 #ifndef wxUSE_UNICODE
     #define wxUSE_UNICODE 0
 #endif
@@ -321,6 +321,24 @@
 //
 // Recommended setting: 1
 #define wxUSE_LONGLONG      1
+
+// Set wxUSE_BASE64 to 1, to compile in Base64 support. This is required for
+// storing binary data in wxConfig on most platforms.
+//
+// Default is 1.
+//
+// Recommended setting: 1 (but can be safely disabled if you don't use it)
+#define wxUSE_BASE64        1
+
+// Set this to 1 to be able to use wxEventLoop even in console applications
+// (i.e. using base library only, without GUI). This is mostly useful for
+// processing socket events but is also necessary to use timers in console
+// applications
+//
+// Default is 1.
+//
+// Recommended setting: 1 (but can be safely disabled if you don't use it)
+#define wxUSE_CONSOLE_EVENTLOOP 1
 
 // Set wxUSE_(F)FILE to 1 to compile wx(F)File classes. wxFile uses low level
 // POSIX functions for file access, wxFFile uses ANSI C stdio.h functions.
@@ -638,6 +656,7 @@
 #define wxUSE_DATAVIEWCTRL  1   // wxDataViewCtrl
 #define wxUSE_DATEPICKCTRL  1   // wxDatePickerCtrl
 #define wxUSE_DIRPICKERCTRL 1   // wxDirPickerCtrl
+#define wxUSE_EDITABLELISTBOX 1 // wxEditableListBox
 #define wxUSE_FILEPICKERCTRL 1  // wxFilePickerCtrl
 #define wxUSE_FONTPICKERCTRL 1  // wxFontPickerCtrl
 #define wxUSE_GAUGE         1   // wxGauge
@@ -1089,7 +1108,7 @@
                                 // Include mouse wheel support
 
 // ----------------------------------------------------------------------------
-// postscript support settings
+// wxDC classes for various output formats
 // ----------------------------------------------------------------------------
 
 // Set to 1 for PostScript device context.
@@ -1097,6 +1116,10 @@
 
 // Set to 1 to use font metric files in GetTextExtent
 #define wxUSE_AFM_FOR_POSTSCRIPT 1
+
+// Set to 1 to compile in support for wxSVGFileDC, a wxDC subclass which allows
+// to create fiels in SVG (Scalable Vector Graphics) format.
+#define wxUSE_SVG 1
 
 // ----------------------------------------------------------------------------
 // database classes

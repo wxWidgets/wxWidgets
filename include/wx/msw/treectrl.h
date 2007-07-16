@@ -32,7 +32,7 @@
 // fwd decl
 class  WXDLLEXPORT wxImageList;
 class  WXDLLEXPORT wxDragImage;
-struct WXDLLEXPORT wxTreeViewItem;
+struct WXDLLIMPEXP_FWD_CORE wxTreeViewItem;
 
 #if WXWIN_COMPATIBILITY_2_6
     // NB: all the following flags are for compatbility only and will be removed in the

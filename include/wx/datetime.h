@@ -27,9 +27,9 @@
 
 #include "wx/longlong.h"
 
-class WXDLLIMPEXP_BASE wxDateTime;
-class WXDLLIMPEXP_BASE wxTimeSpan;
-class WXDLLIMPEXP_BASE wxDateSpan;
+class WXDLLIMPEXP_FWD_BASE wxDateTime;
+class WXDLLIMPEXP_FWD_BASE wxTimeSpan;
+class WXDLLIMPEXP_FWD_BASE wxDateSpan;
 
 #include "wx/dynarray.h"
 
@@ -125,7 +125,7 @@ WXDLLIMPEXP_BASE struct tm *wxGmtime_r(const time_t*, struct tm*);
 // argument for arguments of type wxDateTime; it is also returned by all
 // functions returning wxDateTime on failure (this is why it is also called
 // wxInvalidDateTime)
-class WXDLLIMPEXP_BASE wxDateTime;
+class WXDLLIMPEXP_FWD_BASE wxDateTime;
 
 extern WXDLLIMPEXP_DATA_BASE(const wxChar*) wxDefaultDateTimeFormat;
 extern WXDLLIMPEXP_DATA_BASE(const wxChar*) wxDefaultTimeSpanFormat;
@@ -1042,7 +1042,7 @@ public:
         // default, they will not change if they had valid values or will
         // default to Today() otherwise)
     const wxChar *ParseFormat(const wxChar *date,
-                              const wxChar *format = wxDefaultDateTimeFormat,
+                              const wxString& format = wxDefaultDateTimeFormat,
                               const wxDateTime& dateDef = wxDefaultDateTime);
         // parse a string containing the date/time in "free" format, this
         // function will try to make an educated guess at the string contents
@@ -1057,7 +1057,7 @@ public:
         // argument corresponds to the preferred date and time representation
         // for the current locale) and returns the string containing the
         // resulting text representation
-    wxString Format(const wxChar *format = wxDefaultDateTimeFormat,
+    wxString Format(const wxString& format = wxDefaultDateTimeFormat,
                     const TimeZone& tz = Local) const;
         // preferred date representation for the current locale
     wxString FormatDate() const { return Format(_T("%x")); }
@@ -1294,7 +1294,7 @@ public:
         // resulting text representation. Notice that only some of format
         // specifiers valid for wxDateTime are valid for wxTimeSpan: hours,
         // minutes and seconds make sense, but not "PM/AM" string for example.
-    wxString Format(const wxChar *format = wxDefaultTimeSpanFormat) const;
+    wxString Format(const wxString& format = wxDefaultTimeSpanFormat) const;
 
     // implementation
     // ------------------------------------------------------------------------
@@ -1487,7 +1487,7 @@ WX_DECLARE_USER_EXPORTED_OBJARRAY(wxDateTime, wxDateTimeArray, WXDLLIMPEXP_BASE)
 //     virtual methods to work with the holidays they correspond to.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxDateTimeHolidayAuthority;
+class WXDLLIMPEXP_FWD_BASE wxDateTimeHolidayAuthority;
 WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxDateTimeHolidayAuthority *,
                               wxHolidayAuthoritiesArray,
                               class WXDLLIMPEXP_BASE);
@@ -1676,7 +1676,7 @@ inline time_t wxDateTime::GetTicks() const
         return (time_t)-1;
     }
 
-    return (time_t)((m_time / (long)TIME_T_FACTOR).GetLo())+WX_TIME_BASE_OFFSET ;
+    return (time_t)((m_time / (long)TIME_T_FACTOR).ToLong()) + WX_TIME_BASE_OFFSET;
 }
 
 inline bool wxDateTime::SetToLastWeekDay(WeekDay weekday,

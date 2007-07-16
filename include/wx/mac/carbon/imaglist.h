@@ -15,9 +15,9 @@
 #include "wx/list.h"
 #include "wx/icon.h"
 
-class WXDLLEXPORT wxDC;
-class WXDLLEXPORT wxBitmap;
-class WXDLLEXPORT wxColour;
+class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxColour;
 
 class WXDLLEXPORT wxImageList: public wxObject
 {

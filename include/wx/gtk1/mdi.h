@@ -22,9 +22,9 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxMDIParentFrame;
-class WXDLLIMPEXP_CORE wxMDIClientWindow;
-class WXDLLIMPEXP_CORE wxMDIChildFrame;
+class WXDLLIMPEXP_FWD_CORE wxMDIParentFrame;
+class WXDLLIMPEXP_FWD_CORE wxMDIClientWindow;
+class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
 
 //-----------------------------------------------------------------------------
 // global data

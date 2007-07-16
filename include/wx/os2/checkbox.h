@@ -15,7 +15,7 @@
 #include "wx/control.h"
 
 // Checkbox item (single checkbox)
-class WXDLLEXPORT wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLEXPORT wxCheckBox : public wxCheckBoxBase
 {
  public:

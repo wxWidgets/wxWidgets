@@ -21,4 +21,13 @@
 #   error "wxFileConfig is required by wxDFB port"
 #endif
 
+#if wxUSE_SOCKETS && !wxUSE_SELECT_DISPATCHER
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxSocket requires wxSelectDispatcher in wxDFB"
+#   else
+#       undef wxUSE_SELECT_DISPATCHER
+#       define wxUSE_SELECT_DISPATCHER 1
+#   endif
+#endif
+
 #endif /* _WX_DFB_CHKCONF_H_ */

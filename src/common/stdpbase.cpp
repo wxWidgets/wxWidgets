@@ -24,8 +24,6 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_STDPATHS
-
 #ifndef WX_PRECOMP
     #include "wx/app.h"
 #endif //WX_PRECOMP
@@ -126,5 +124,3 @@ wxString wxStandardPathsBase::AppendAppName(const wxString& dir)
 
     return subdir;
 }
-
-#endif // wxUSE_STDPATHS

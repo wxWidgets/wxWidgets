@@ -42,6 +42,8 @@
 #include  "wx/fileconf.h"
 #include  "wx/filefn.h"
 
+#include "wx/base64.h"
+
 #include  "wx/stdpaths.h"
 
 #if defined(__WXMAC__)
@@ -222,12 +224,12 @@ public:
   bool  IsEmpty() const { return Entries().IsEmpty() && Groups().IsEmpty(); }
 
   // find entry/subgroup (NULL if not found)
-  wxFileConfigGroup *FindSubgroup(const wxChar *szName) const;
-  wxFileConfigEntry *FindEntry   (const wxChar *szName) const;
+  wxFileConfigGroup *FindSubgroup(const wxString& name) const;
+  wxFileConfigEntry *FindEntry   (const wxString& name) const;
 
   // delete entry/subgroup, return false if doesn't exist
-  bool DeleteSubgroupByName(const wxChar *szName);
-  bool DeleteEntry(const wxChar *szName);
+  bool DeleteSubgroupByName(const wxString& name);
+  bool DeleteEntry(const wxString& name);
 
   // create new entry/subgroup returning pointer to newly created element
   wxFileConfigGroup *AddSubgroup(const wxString& strName);
@@ -536,15 +538,16 @@ wxFileConfig::~wxFileConfig()
 
 void wxFileConfig::Parse(const wxTextBuffer& buffer, bool bLocal)
 {
-  const wxChar *pStart;
-  const wxChar *pEnd;
-  wxString strLine;
 
   size_t nLineCount = buffer.GetLineCount();
 
   for ( size_t n = 0; n < nLineCount; n++ )
   {
-    strLine = buffer[n];
+    wxString strLine = buffer[n];
+    // FIXME-UTF8: rewrite using iterators, without this buffer
+    wxWxCharBuffer buf(strLine.c_str());
+    const wxChar *pStart;
+    const wxChar *pEnd;
 
     // add the line to linked list
     if ( bLocal )
@@ -560,7 +563,7 @@ void wxFileConfig::Parse(const wxTextBuffer& buffer, bool bLocal)
 
 
     // skip leading spaces
-    for ( pStart = strLine; wxIsspace(*pStart); pStart++ )
+    for ( pStart = buf; wxIsspace(*pStart); pStart++ )
       ;
 
     // skip blank/comment lines
@@ -915,6 +918,18 @@ bool wxFileConfig::DoReadLong(const wxString& key, long *pl) const
     return str.ToLong(pl);
 }
 
+bool wxFileConfig::DoReadBinary(const wxString& key, wxMemoryBuffer* buf) const
+{
+    wxCHECK_MSG( buf, false, _T("NULL buffer") );
+
+    wxString str;
+    if ( !Read(key, &str) )
+        return false;
+
+    *buf = wxBase64Decode(str.ToAscii());
+    return true;
+}
+
 bool wxFileConfig::DoWriteString(const wxString& key, const wxString& szValue)
 {
     wxConfigPathChanger     path(this, key);
@@ -978,6 +993,11 @@ bool wxFileConfig::DoWriteString(const wxString& key, const wxString& szValue)
 bool wxFileConfig::DoWriteLong(const wxString& key, long lValue)
 {
   return Write(key, wxString::Format(_T("%ld"), lValue));
+}
+
+bool wxFileConfig::DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf)
+{
+  return Write(key, wxBase64Encode(buf));
 }
 
 bool wxFileConfig::Flush(bool /* bCurrentOnly */)
@@ -1059,7 +1079,7 @@ bool wxFileConfig::Save(wxOutputStream& os, const wxMBConv& conv)
 bool wxFileConfig::RenameEntry(const wxString& oldName,
                                const wxString& newName)
 {
-    wxASSERT_MSG( !wxStrchr(oldName, wxCONFIG_PATH_SEPARATOR),
+    wxASSERT_MSG( oldName.find(wxCONFIG_PATH_SEPARATOR) == wxString::npos,
                    _T("RenameEntry(): paths are not supported") );
 
     // check that the entry exists
@@ -1148,7 +1168,8 @@ bool wxFileConfig::DeleteAll()
 
   if ( m_fnLocalFile.IsOk() )
   {
-      if ( m_fnLocalFile.FileExists() && wxRemove(m_fnLocalFile.GetFullPath()) == -1 )
+      if ( m_fnLocalFile.FileExists() &&
+           !wxRemoveFile(m_fnLocalFile.GetFullPath()) )
       {
           wxLogSysError(_("can't delete user configuration file '%s'"),
                         m_fnLocalFile.GetFullPath().c_str());
@@ -1548,7 +1569,7 @@ wxString wxFileConfigGroup::GetFullName() const
 
 // use binary search because the array is sorted
 wxFileConfigEntry *
-wxFileConfigGroup::FindEntry(const wxChar *szName) const
+wxFileConfigGroup::FindEntry(const wxString& name) const
 {
   size_t i,
        lo = 0,
@@ -1561,9 +1582,9 @@ wxFileConfigGroup::FindEntry(const wxChar *szName) const
     pEntry = m_aEntries[i];
 
     #if wxCONFIG_CASE_SENSITIVE
-      res = wxStrcmp(pEntry->Name(), szName);
+      res = pEntry->Name().compare(name);
     #else
-      res = wxStricmp(pEntry->Name(), szName);
+      res = pEntry->Name().CmpNoCase(name);
     #endif
 
     if ( res > 0 )
@@ -1578,7 +1599,7 @@ wxFileConfigGroup::FindEntry(const wxChar *szName) const
 }
 
 wxFileConfigGroup *
-wxFileConfigGroup::FindSubgroup(const wxChar *szName) const
+wxFileConfigGroup::FindSubgroup(const wxString& name) const
 {
   size_t i,
        lo = 0,
@@ -1591,9 +1612,9 @@ wxFileConfigGroup::FindSubgroup(const wxChar *szName) const
     pGroup = m_aSubgroups[i];
 
     #if wxCONFIG_CASE_SENSITIVE
-      res = wxStrcmp(pGroup->Name(), szName);
+      res = pGroup->Name().compare(name);
     #else
-      res = wxStricmp(pGroup->Name(), szName);
+      res = pGroup->Name().CmpNoCase(name);
     #endif
 
     if ( res > 0 )
@@ -1644,9 +1665,9 @@ wxFileConfigGroup *wxFileConfigGroup::AddSubgroup(const wxString& strName)
   delete several of them.
  */
 
-bool wxFileConfigGroup::DeleteSubgroupByName(const wxChar *szName)
+bool wxFileConfigGroup::DeleteSubgroupByName(const wxString& name)
 {
-    wxFileConfigGroup * const pGroup = FindSubgroup(szName);
+    wxFileConfigGroup * const pGroup = FindSubgroup(name);
 
     return pGroup ? DeleteSubgroup(pGroup) : false;
 }
@@ -1765,9 +1786,9 @@ bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
     return true;
 }
 
-bool wxFileConfigGroup::DeleteEntry(const wxChar *szName)
+bool wxFileConfigGroup::DeleteEntry(const wxString& name)
 {
-  wxFileConfigEntry *pEntry = FindEntry(szName);
+  wxFileConfigEntry *pEntry = FindEntry(name);
   if ( !pEntry )
   {
       // entry doesn't exist, nothing to do
@@ -1920,18 +1941,18 @@ void wxFileConfigEntry::SetValue(const wxString& strValue, bool bUser)
 int CompareEntries(wxFileConfigEntry *p1, wxFileConfigEntry *p2)
 {
 #if wxCONFIG_CASE_SENSITIVE
-    return wxStrcmp(p1->Name(), p2->Name());
+    return p1->Name().compare(p2->Name());
 #else
-    return wxStricmp(p1->Name(), p2->Name());
+    return p1->Name().CmpNoCase(p2->Name());
 #endif
 }
 
 int CompareGroups(wxFileConfigGroup *p1, wxFileConfigGroup *p2)
 {
 #if wxCONFIG_CASE_SENSITIVE
-    return wxStrcmp(p1->Name(), p2->Name());
+    return p1->Name().compare(p2->Name());
 #else
-    return wxStricmp(p1->Name(), p2->Name());
+    return p1->Name().CmpNoCase(p2->Name());
 #endif
 }
 

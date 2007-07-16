@@ -19,11 +19,10 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef HAVE_SYS_EPOLL_H
+#ifdef wxUSE_EPOLL_DISPATCHER
 
 #include "wx/unix/private/epolldispatcher.h"
 #include "wx/unix/private.h"
-#include "wx/module.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -34,8 +33,6 @@
 #include <errno.h>
 
 #define wxEpollDispatcher_Trace wxT("epolldispatcher")
-
-static wxEpollDispatcher *gs_epollDispatcher = NULL;
 
 // ============================================================================
 // implementation
@@ -75,20 +72,36 @@ static uint32_t GetEpollMask(int flags, int fd)
 // wxEpollDispatcher
 // ----------------------------------------------------------------------------
 
-wxEpollDispatcher::wxEpollDispatcher()
+/* static */
+wxEpollDispatcher *wxEpollDispatcher::Create()
 {
-    m_epollDescriptor = epoll_create(1024);
-    if ( m_epollDescriptor == -1 )
+    int epollDescriptor = epoll_create(1024);
+    if ( epollDescriptor == -1 )
     {
         wxLogSysError(_("Failed to create epoll descriptor"));
+        return NULL;
+    }
+
+    return new wxEpollDispatcher(epollDescriptor);
+}
+
+wxEpollDispatcher::wxEpollDispatcher(int epollDescriptor)
+{
+    wxASSERT_MSG( epollDescriptor != -1, _T("invalid descriptor") );
+
+    m_epollDescriptor = epollDescriptor;
+}
+
+wxEpollDispatcher::~wxEpollDispatcher()
+{
+    if ( close(m_epollDescriptor) != 0 )
+    {
+        wxLogSysError(_("Error closing epoll descriptor"));
     }
 }
 
 bool wxEpollDispatcher::RegisterFD(int fd, wxFDIOHandler* handler, int flags)
 {
-    if ( !wxFDIODispatcher::RegisterFD(fd, handler, flags) )
-        return false;
-
     epoll_event ev;
     ev.events = GetEpollMask(flags, fd);
     ev.data.ptr = handler;
@@ -107,9 +120,6 @@ bool wxEpollDispatcher::RegisterFD(int fd, wxFDIOHandler* handler, int flags)
 
 bool wxEpollDispatcher::ModifyFD(int fd, wxFDIOHandler* handler, int flags)
 {
-    if ( !wxFDIODispatcher::ModifyFD(fd, handler, flags) )
-        return false;
-
     epoll_event ev;
     ev.events = GetEpollMask(flags, fd);
     ev.data.ptr = handler;
@@ -126,12 +136,8 @@ bool wxEpollDispatcher::ModifyFD(int fd, wxFDIOHandler* handler, int flags)
     return true;
 }
 
-wxFDIOHandler *wxEpollDispatcher::UnregisterFD(int fd, int flags)
+bool wxEpollDispatcher::UnregisterFD(int fd)
 {
-    wxFDIOHandler * const handler = wxFDIODispatcher::UnregisterFD(fd, flags);
-    if ( !handler )
-        return NULL;
-
     epoll_event ev;
     ev.events = 0;
     ev.data.ptr = NULL;
@@ -142,10 +148,10 @@ wxFDIOHandler *wxEpollDispatcher::UnregisterFD(int fd, int flags)
                       fd, m_epollDescriptor);
     }
 
-    return handler;
+    return true;
 }
 
-void wxEpollDispatcher::RunLoop(int timeout)
+void wxEpollDispatcher::Dispatch(int timeout)
 {
     epoll_event events[16];
 
@@ -178,46 +184,11 @@ void wxEpollDispatcher::RunLoop(int timeout)
 
         if ( p->events & EPOLLIN )
             handler->OnReadWaiting();
-
-        if ( p->events & EPOLLOUT )
+        else if ( p->events & EPOLLOUT )
             handler->OnWriteWaiting();
-
-        if ( p->events & (EPOLLERR | EPOLLHUP) )
+        else if ( p->events & (EPOLLERR | EPOLLHUP) )
             handler->OnExceptionWaiting();
     }
 }
 
-/* static */
-wxEpollDispatcher *wxEpollDispatcher::Get()
-{
-    if ( !gs_epollDispatcher )
-    {
-        gs_epollDispatcher = new wxEpollDispatcher;
-        if ( !gs_epollDispatcher->IsOk() )
-        {
-            delete gs_epollDispatcher;
-            gs_epollDispatcher = NULL;
-        }
-    }
-
-    return gs_epollDispatcher;
-}
-
-// ----------------------------------------------------------------------------
-// wxEpollDispatcherModule
-// ----------------------------------------------------------------------------
-
-class wxEpollDispatcherModule : public wxModule
-{
-public:
-    wxEpollDispatcherModule() { }
-
-    virtual bool OnInit() { return true; }
-    virtual void OnExit() { wxDELETE(gs_epollDispatcher); }
-
-    DECLARE_DYNAMIC_CLASS(wxEpollDispatcherModule)
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxEpollDispatcherModule, wxModule)
-
-#endif // HAVE_SYS_EPOLL_H
+#endif // wxUSE_EPOLL_DISPATCHER

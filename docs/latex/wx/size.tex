@@ -198,13 +198,13 @@ Sets the width.
 Assignment operator.
 
 
-\constfunc{bool}{operator $==$}{\param{const wxSize\& }{sz}}
+\func{bool}{operator $==$}{\param{const wxSize\& }{s1}, \param{const wxSize\& }{s2}}
 
-\constfunc{bool}{operator $!=$}{\param{const wxSize\& }{sz}}
+\func{bool}{operator $!=$}{\param{const wxSize\& }{s1}, \param{const wxSize\& }{s2}}
 
-\func{wxSize}{operator $+$}{\param{const wxSize\& }{sz}}
+\func{wxSize}{operator $+$}{\param{const wxSize\& }{s1}, \param{const wxSize\& }{s2}}
 
-\func{wxSize}{operator $-$}{\param{const wxSize\& }{sz}}
+\func{wxSize}{operator $-$}{\param{const wxSize\& }{s1}, \param{const wxSize\& }{s2}}
 
 \func{wxSize\&}{operator $+=$}{\param{const wxSize\& }{sz}}
 
@@ -213,9 +213,11 @@ Assignment operator.
 Operators for comparison, sum and subtraction between \helpref{wxSize}{wxsize} objects.
 
 
-\func{wxSize}{operator $/$}{\param{int }{factor}}
+\func{wxSize}{operator $/$}{\param{const wxSize\& }{sz}, \param{int }{factor}}
 
-\func{wxSize}{operator $*$}{\param{int }{factor}}
+\func{wxSize}{operator $*$}{\param{const wxSize\& }{sz}, \param{int }{factor}}
+
+\func{wxSize}{operator $*$}{\param{int }{factor}, \param{const wxSize\& }{sz}}
 
 \func{wxSize\&}{operator $/=$}{\param{int }{factor}}
 

@@ -61,6 +61,8 @@ protected:
     // common part of all ctors
     void Init();
 
+    virtual void HandleFocusEvent(const wxDFBWindowEvent& event_);
+
 protected:
     wxString      m_title;
 

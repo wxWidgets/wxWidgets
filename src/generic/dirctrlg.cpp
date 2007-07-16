@@ -93,6 +93,8 @@
     #include "dos.h"
 #endif
 
+extern WXDLLEXPORT_DATA(const wxChar) wxFileSelectorDefaultWildcardStr[];
+
 // If compiled under Windows, this macro can cause problems
 #ifdef GetFirstChild
 #undef GetFirstChild
@@ -470,7 +472,6 @@ wxBEGIN_FLAGS( wxGenericDirCtrlStyle )
     wxFLAGS_MEMBER(wxDIRCTRL_DIR_ONLY)
     wxFLAGS_MEMBER(wxDIRCTRL_3D_INTERNAL)
     wxFLAGS_MEMBER(wxDIRCTRL_SELECT_FIRST)
-    wxFLAGS_MEMBER(wxDIRCTRL_SHOW_FILTERS)
 
 wxEND_FLAGS( wxGenericDirCtrlStyle )
 
@@ -564,27 +565,17 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     else
         treeStyle |= wxBORDER_SUNKEN;
 
-    long filterStyle = 0;
-    if ((style & wxDIRCTRL_3D_INTERNAL) == 0)
-        filterStyle |= wxNO_BORDER;
-    else
-        filterStyle |= wxBORDER_SUNKEN;
-
     m_treeCtrl = CreateTreeCtrl(this, wxID_TREECTRL,
                                 wxPoint(0,0), GetClientSize(), treeStyle);
 
-    if (!filter.empty() && (style & wxDIRCTRL_SHOW_FILTERS))
-        m_filterListCtrl = new wxDirFilterListCtrl(this, wxID_FILTERLISTCTRL, wxDefaultPosition, wxDefaultSize, filterStyle);
+    if (!filter.empty())
+        m_filterListCtrl = new wxDirFilterListCtrl(this, wxID_FILTERLISTCTRL);
 
     m_defaultPath = dir;
     m_filter = filter;
 
     if (m_filter.empty())
-#ifdef __UNIX__
-        m_filter = wxT("*");
-#else
-        m_filter = wxT("*.*");
-#endif
+        m_filter = wxFileSelectorDefaultWildcardStr;
 
     SetFilterIndex(defaultFilter);
 
@@ -1182,6 +1173,14 @@ void wxGenericDirCtrl::SetFilter(const wxString& filter)
 {
     m_filter = filter;
 
+    if (!filter.empty() && !m_filterListCtrl)
+        m_filterListCtrl = new wxDirFilterListCtrl(this, wxID_FILTERLISTCTRL);
+    else if (filter.empty() && m_filterListCtrl)
+    {
+        m_filterListCtrl->Destroy();
+        m_filterListCtrl = NULL;
+    }
+
     wxString f, d;
     if (ExtractWildcard(m_filter, m_currentFilter, f, d))
         m_currentFilterStr = f;
@@ -1191,6 +1190,10 @@ void wxGenericDirCtrl::SetFilter(const wxString& filter)
 #else
         m_currentFilterStr = wxT("*.*");
 #endif
+    // current filter index is meaningless after filter change, set it to zero
+    SetFilterIndex(0);
+    if (m_filterListCtrl)
+        m_filterListCtrl->FillFilterList(m_filter, 0);
 }
 
 // Extract description and actual filter from overall filter string
@@ -1267,12 +1270,21 @@ BEGIN_EVENT_TABLE(wxDirFilterListCtrl, wxChoice)
     EVT_CHOICE(wxID_ANY, wxDirFilterListCtrl::OnSelFilter)
 END_EVENT_TABLE()
 
-bool wxDirFilterListCtrl::Create(wxGenericDirCtrl* parent, const wxWindowID id,
-              const wxPoint& pos,
-              const wxSize& size,
-              long style)
+bool wxDirFilterListCtrl::Create(wxGenericDirCtrl* parent,
+                                 const wxWindowID id,
+                                 const wxPoint& pos,
+                                 const wxSize& size,
+                                 long style)
 {
     m_dirCtrl = parent;
+
+    // by default our border style is determined by the style of our parent
+    if ( !(style & wxBORDER_MASK) )
+    {
+        style |= parent->HasFlag(wxDIRCTRL_3D_INTERNAL) ? wxBORDER_SUNKEN
+                                                        : wxBORDER_NONE;
+    }
+
     return wxChoice::Create(parent, id, pos, size, 0, NULL, style);
 }
 

@@ -17,8 +17,8 @@
 
 #if wxUSE_STREAMS
 
-class WXDLLIMPEXP_BASE wxTextInputStream;
-class WXDLLIMPEXP_BASE wxTextOutputStream;
+class WXDLLIMPEXP_FWD_BASE wxTextInputStream;
+class WXDLLIMPEXP_FWD_BASE wxTextOutputStream;
 
 typedef wxTextInputStream& (*__wxTextInputManip)(wxTextInputStream&);
 typedef wxTextOutputStream& (*__wxTextOutputManip)(wxTextOutputStream&);
@@ -127,7 +127,6 @@ public:
 
     wxTextOutputStream& PutChar(wxChar c);
 
-    wxTextOutputStream& operator<<(const wxChar *string);
     wxTextOutputStream& operator<<(const wxString& string);
     wxTextOutputStream& operator<<(char c);
 #if wxUSE_UNICODE && wxWCHAR_T_IS_REAL_TYPE

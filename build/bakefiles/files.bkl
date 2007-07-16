@@ -76,6 +76,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/unix/app.h
     wx/unix/apptbase.h
     wx/unix/apptrait.h
+    wx/unix/chkconf.h
     wx/unix/execute.h
     wx/unix/evtloop.h
     wx/unix/mimetype.h
@@ -108,7 +109,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/utilsexc.cpp
 </set>
 <set var="BASE_AND_GUI_WIN32_SRC" hints="files">
-    src/msw/evtloopmsw.cpp
+    src/msw/evtloop.cpp
     src/msw/main.cpp
     src/msw/mslu.cpp
     src/msw/volume.cpp
@@ -153,12 +154,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_COREFOUNDATION_SRC" hints="files">
     src/mac/corefoundation/cfstring.cpp
     src/mac/corefoundation/stdpaths_cf.cpp
+    src/mac/corefoundation/strconv_cf.cpp
     src/mac/corefoundation/utilsexc_base.cpp
 </set>
 <set var="BASE_COREFOUNDATION_HDR" hints="files">
     wx/mac/corefoundation/cfstring.h
     wx/mac/corefoundation/hid.h
     wx/mac/corefoundation/stdpaths.h
+    wx/mac/corefoundation/private/strconv_cf.h
 </set>
 
 <!-- Base files used by Carbon on OS X and CarbonLib (not true Classic) -->
@@ -222,6 +225,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/unix/app.h
     wx/unix/apptbase.h
     wx/unix/apptrait.h
+    wx/unix/chkconf.h
     wx/unix/evtloop.h
     wx/unix/stdpaths.h
 </set>
@@ -311,6 +315,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/arcfind.cpp
     src/common/archive.cpp
     src/common/arrstr.cpp
+    src/common/base64.cpp
     src/common/clntdata.cpp
     src/common/cmdline.cpp
     src/common/config.cpp
@@ -394,6 +399,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/archive.h
     wx/arrimpl.cpp
     wx/arrstr.h
+    wx/atomic.h
+    wx/base64.h
     wx/beforestd.h
     wx/buffer.h
     wx/build.h
@@ -406,6 +413,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/convauto.h
     wx/containr.h
     wx/cpp.h
+    wx/crt.h
     wx/datetime.h
     wx/datstrm.h
     wx/dde.h
@@ -502,6 +510,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/wx.h
     wx/wxchar.h
     wx/wxcrt.h
+    wx/wxcrtbase.h
     wx/wxcrtvararg.h
     wx/wxprec.h
     wx/xti.h

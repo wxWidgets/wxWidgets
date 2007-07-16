@@ -18,7 +18,7 @@ struct wxGtkIMData;
 // callback definition for inserting a window (internal)
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxWindowGTK;
+class WXDLLIMPEXP_FWD_CORE wxWindowGTK;
 typedef void (*wxInsertChildFunction)( wxWindowGTK*, wxWindowGTK* );
 
 //-----------------------------------------------------------------------------

@@ -66,7 +66,7 @@
 #include "wx/univ/inphand.h"
 #include "wx/univ/colschem.h"
 
-class WXDLLEXPORT wxGTKMenuGeometryInfo;
+class wxGTKMenuGeometryInfo;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -925,7 +925,7 @@ void wxGTKRenderer::DrawFrameWithLabel(wxDC& dc,
 }
 
 // ----------------------------------------------------------------------------
-// check/radion buttons
+// check/radio buttons
 // ----------------------------------------------------------------------------
 
 void wxGTKRenderer::DrawCheckItemBitmap(wxDC& dc,
@@ -1573,7 +1573,7 @@ void wxGTKRenderer::DrawSliderThumb(wxDC& dc,
 // ----------------------------------------------------------------------------
 
 // wxGTKMenuGeometryInfo: the wxMenuGeometryInfo used by wxGTKRenderer
-class WXDLLEXPORT wxGTKMenuGeometryInfo : public wxMenuGeometryInfo
+class wxGTKMenuGeometryInfo : public wxMenuGeometryInfo
 {
 public:
     virtual wxSize GetSize() const { return m_size; }

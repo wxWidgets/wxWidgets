@@ -13,6 +13,8 @@
 
 #include "wx/dfb/dfbptr.h"
 
+class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
+
 wxDFB_DECLARE_INTERFACE(IDirectFBSurface);
 
 //-----------------------------------------------------------------------------
@@ -69,6 +71,12 @@ public:
 
     static void InitStandardHandlers();
 
+    // raw bitmap access support functions
+    void *GetRawData(wxPixelDataBase& data, int bpp);
+    void UngetRawData(wxPixelDataBase& data);
+
+    bool HasAlpha() const;
+
     // implementation:
     virtual void SetHeight(int height);
     virtual void SetWidth(int width);
@@ -81,6 +89,8 @@ protected:
     // ref counting code
     virtual wxObjectRefData *CreateRefData() const;
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+
+    bool CreateWithFormat(int width, int height, int dfbFormat);
 
     DECLARE_DYNAMIC_CLASS(wxBitmap)
 };

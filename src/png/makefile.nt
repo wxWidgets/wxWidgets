@@ -1,0 +1,68 @@
+#
+# File:		makefile.nt
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds winpng.lib library for Windows 3.1
+
+# Change WXDIR or WXWIN to wherever wxWindows is found
+WXDIR = $(WXWIN)
+WXLIB = $(WXDIR)\lib\wx.lib
+WXINC = $(WXDIR)\include
+
+WINPNGDIR = ..\png
+WINPNGINC = $(WINPNGDIR)
+WINPNGLIB = ..\..\lib\winpng.lib
+
+INC = /I..\zlib
+
+FINAL=1
+
+# Set this to nothing if your compiler is MS C++ 7
+ZOPTION=
+
+!ifndef FINAL
+FINAL=0
+!endif
+
+PRECOMP=/YuWX.H 
+
+!if "$(FINAL)" == "0"
+OPT = /Od
+CPPFLAGS= /W4 /Zi /MD /GX- $(ZOPTION) $(OPT) /Dwx_msw $(INC) # $(PRECOMP) /Fp$(WXDIR)\src\msw\wx.pch
+CFLAGS= /W4 /Zi /MD /GX- /Od /Dwx_msw $(INC)
+LINKFLAGS=/NOD /CO /ONERROR:NOEXE
+!else
+# /Ox for real FINAL version
+OPT = /O2
+CPPFLAGS= /W4 /MD /GX- /Dwx_msw $(INC) # $(PRECOMP) /Fp$(WXDIR)\src\msw\wx.pch
+CFLAGS= /W4 /MD /GX- /Dwx_msw $(INC)
+LINKFLAGS=/NOD /ONERROR:NOEXE
+!endif
+
+OBJECTS = png.obj pngread.obj pngrtran.obj pngrutil.obj \
+ pngpread.obj pngtrans.obj pngwrite.obj pngwtran.obj pngwutil.obj \
+ pngerror.obj pngmem.obj pngwio.obj pngrio.obj pngget.obj pngset.obj
+
+all:    $(WINPNGLIB)
+
+$(WINPNGLIB):      $(OBJECTS)
+        erase $(WINPNGLIB)
+        lib @<<
+-out:$(WINPNGLIB)
+$(OBJECTS)
+<<
+
+.c.obj:
+  cl -DWIN32 $(OPT) $(CFLAGS) /c $*.c
+
+clean:
+        erase *.obj
+        erase *.exe
+        erase *.lib
+
+cleanall:	clean

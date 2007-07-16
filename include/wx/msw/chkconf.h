@@ -264,8 +264,8 @@
     #if wxUSE_ACTIVEX
         #undef wxUSE_ACTIVEX
         #define wxUSE_ACTIVEX 0
-    #endif // wxUSE_ACTIVEX
-#endif // __WINE__
+    #endif /* wxUSE_ACTIVEX */
+#endif /* __WINE__ */
 
 
 /* check settings consistency for MSW-specific ones */

@@ -49,11 +49,6 @@ wxDataFormat::wxDataFormat( wxDataFormatId vType )
     SetType( vType );
 }
 
-wxDataFormat::wxDataFormat( const wxChar *zId )
-{
-    SetId( zId );
-}
-
 wxDataFormat::wxDataFormat( const wxString& rId )
 {
     SetId( rId );
@@ -137,7 +132,7 @@ void wxDataFormat::SetId( NativeFormat format )
     }
 }
 
-void wxDataFormat::SetId( const wxChar* zId )
+void wxDataFormat::SetId( const wxString& zId )
 {
     m_type = wxDF_PRIVATE;
     m_id = zId;

@@ -397,7 +397,6 @@ public:
                 wxLogError(_T("Failed to gain raw access to bitmap data"));
                 return;
             }
-            data.UseAlpha();
             wxAlphaPixelData::Iterator p(data);
             for ( int y = 0; y < SIZE; ++y )
             {
@@ -421,7 +420,6 @@ public:
             return;
         }
 
-        data.UseAlpha();
         wxAlphaPixelData::Iterator p(data);
 
         for ( int y = 0; y < REAL_SIZE; ++y )

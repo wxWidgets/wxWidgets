@@ -19,8 +19,8 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxToggleButton;
-class WXDLLIMPEXP_CORE wxToggleBitmapButton;
+class WXDLLIMPEXP_FWD_CORE wxToggleButton;
+class WXDLLIMPEXP_FWD_CORE wxToggleBitmapButton;
 
 //-----------------------------------------------------------------------------
 // global data

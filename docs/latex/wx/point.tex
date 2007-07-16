@@ -56,13 +56,13 @@ y member.
 Assignment operator.
 
 
-\func{bool}{operator $==$}{\param{const wxPoint\& }{pt}}
+\func{bool}{operator $==$}{\param{const wxPoint\& }{p1}, \param{const wxPoint\& }{p2}}
 
-\func{bool}{operator $!=$}{\param{const wxPoint\& }{pt}}
+\func{bool}{operator $!=$}{\param{const wxPoint\& }{p1}, \param{const wxPoint\& }{p2}}
 
-\func{wxPoint}{operator $+$}{\param{const wxPoint\& }{pt}}
+\func{wxPoint}{operator $+$}{\param{const wxPoint\& }{p1}, \param{const wxPoint\& }{p2}}
 
-\func{wxPoint}{operator $-$}{\param{const wxPoint\& }{pt}}
+\func{wxPoint}{operator $-$}{\param{const wxPoint\& }{p1}, \param{const wxPoint\& }{p2}}
 
 \func{wxPoint\&}{operator $+=$}{\param{const wxPoint\& }{pt}}
 
@@ -71,14 +71,18 @@ Assignment operator.
 Operators for comparison, sum and subtraction between \helpref{wxPoint}{wxpoint} objects.
 
 
-\func{wxPoint}{operator $+$}{\param{const wxSize\& }{sz}}
+\func{wxPoint}{operator $+$}{\param{const wxPoint\& }{pt}, \param{const wxSize\& }{sz}}
 
-\func{wxPoint}{operator $-$}{\param{const wxSize\& }{sz}}
+\func{wxPoint}{operator $-$}{\param{const wxPoint\& }{pt}, \param{const wxSize\& }{sz}}
+
+\func{wxPoint}{operator $+$}{\param{const wxSize\& }{sz}, \param{const wxPoint\& }{pt}}
+
+\func{wxPoint}{operator $-$}{\param{const wxSize\& }{sz}, \param{const wxPoint\& }{pt}}
 
 \func{wxPoint\&}{operator $+=$}{\param{const wxSize\& }{sz}}
 
 \func{wxPoint\&}{operator $-=$}{\param{const wxSize\& }{sz}}
- 
+
 Operators for sum and subtraction between a \helpref{wxPoint}{wxpoint} object and a
 \helpref{wxSize}{wxsize} object.
 

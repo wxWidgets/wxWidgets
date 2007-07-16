@@ -206,7 +206,7 @@ public:
 
 private:
     // implement sink functions
-    virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t)
+    virtual void DoLog(wxLogLevel level, const wxString& str, time_t t)
     {
         // don't put trace messages into listbox or we can get into infinite
         // recursion
@@ -215,20 +215,20 @@ private:
             if ( m_logOld )
             {
                 // cast is needed to call protected method
-                ((LboxLogger *)m_logOld)->DoLog(level, szString, t);
+                ((LboxLogger *)m_logOld)->DoLog(level, str, t);
             }
         }
         else
         {
-            wxLog::DoLog(level, szString, t);
+            wxLog::DoLog(level, str, t);
         }
     }
 
-    virtual void DoLogString(const wxChar *szString, time_t WXUNUSED(t))
+    virtual void DoLogString(const wxString& str, time_t WXUNUSED(t))
     {
         wxString msg;
         TimeStamp(&msg);
-        msg += szString;
+        msg += str;
 
         #ifdef __WXUNIVERSAL__
             m_lbox->AppendAndEnsureVisible(msg);

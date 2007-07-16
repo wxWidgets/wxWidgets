@@ -19,7 +19,7 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_SOCKETS
+#if wxUSE_SOCKETS && wxUSE_SELECT_DISPATCHER
 
 #include "wx/private/gsocketiohandler.h"
 #include "wx/unix/private.h"
@@ -127,14 +127,21 @@ void GSocketGUIFunctionsTableConcrete::Install_Callback(GSocket *socket,
     default: return;
   }
 
-  wxSelectDispatcher * const dispatcher = wxSelectDispatcher::Get();
+  wxFDIODispatcher * const dispatcher = wxFDIODispatcher::Get();
   if ( !dispatcher )
       return;
 
-  wxGSocketIOHandler *
-      handler = (wxGSocketIOHandler*)dispatcher->FindHandler(fd);
-  if ( !handler )
+  wxGSocketIOHandler *& handler = socket->m_handler;
+
+  // we should register the new handlers but modify the existing ones in place
+  bool registerHandler;
+  if ( handler )
   {
+      registerHandler = false;
+  }
+  else // no existing handler
+  {
+      registerHandler = true;
       handler = new wxGSocketIOHandler(socket);
   }
 
@@ -149,7 +156,10 @@ void GSocketGUIFunctionsTableConcrete::Install_Callback(GSocket *socket,
       handler->AddFlag(wxFDIO_OUTPUT);
   }
 
-  dispatcher->RegisterFD(fd, handler, handler->GetFlags());
+  if ( registerHandler )
+      dispatcher->RegisterFD(fd, handler, handler->GetFlags());
+  else
+      dispatcher->ModifyFD(fd, handler, handler->GetFlags());
 }
 
 void GSocketGUIFunctionsTableConcrete::Uninstall_Callback(GSocket *socket,
@@ -175,18 +185,28 @@ void GSocketGUIFunctionsTableConcrete::Uninstall_Callback(GSocket *socket,
 
   const wxFDIODispatcherEntryFlags flag = c == 0 ? wxFDIO_INPUT : wxFDIO_OUTPUT;
 
-  wxSelectDispatcher * const dispatcher = wxSelectDispatcher::Get();
+  wxFDIODispatcher * const dispatcher = wxFDIODispatcher::Get();
   if ( !dispatcher )
       return;
 
-  wxGSocketIOHandler * const
-      handler = (wxGSocketIOHandler*)dispatcher->UnregisterFD(fd, flag);
+  wxGSocketIOHandler *& handler = socket->m_handler;
   if ( handler )
   {
       handler->RemoveFlag(flag);
 
       if ( !handler->GetFlags() )
+      {
+          dispatcher->UnregisterFD(fd);
           delete handler;
+      }
+      else
+      {
+          dispatcher->ModifyFD(fd, handler, handler->GetFlags());
+      }
+  }
+  else
+  {
+      dispatcher->UnregisterFD(fd);
   }
 }
 

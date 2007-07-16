@@ -11,8 +11,9 @@
 #ifndef _WX_UNIX_EVTLOOP_H_
 #define _WX_UNIX_EVTLOOP_H_
 
+#if wxUSE_CONSOLE_EVENTLOOP
+
 #include "wx/private/fdiodispatcher.h"
-#include "wx/unix/private/timer.h"
 #include "wx/unix/pipe.h"
 
 // ----------------------------------------------------------------------------
@@ -67,5 +68,7 @@ private:
 
     DECLARE_NO_COPY_CLASS(wxConsoleEventLoop)
 };
+
+#endif // wxUSE_CONSOLE_EVENTLOOP
 
 #endif // _WX_UNIX_EVTLOOP_H_

@@ -34,12 +34,12 @@
 extern const gchar *wx_pango_version_check(int major, int minor, int micro);
 
 #if wxUSE_UNICODE
-    #define wxGTK_CONV(s) wxConvUTF8.cWX2MB((s))
+    #define wxGTK_CONV(s) s.utf8_str()
     #define wxGTK_CONV_ENC(s, enc) wxGTK_CONV((s))
     #define wxGTK_CONV_FONT(s, font) wxGTK_CONV((s))
     #define wxGTK_CONV_SYS(s) wxGTK_CONV((s))
 
-    #define wxGTK_CONV_BACK(s) wxConvUTF8.cMB2WX((s))
+    #define wxGTK_CONV_BACK(s) wxString::FromUTF8(s)
     #define wxGTK_CONV_BACK_ENC(s, enc) wxGTK_CONV_BACK(s)
     #define wxGTK_CONV_BACK_FONT(s, font) wxGTK_CONV_BACK(s)
     #define wxGTK_CONV_BACK_SYS(s) wxGTK_CONV_BACK(s)

@@ -768,11 +768,11 @@ bool wxDisplayImplMultimon::ChangeMode(const wxVideoMode& mode)
     // do change the mode
     switch ( pfnChangeDisplaySettingsEx
              (
-                GetName(),      // display name
-                pDevMode,       // dev mode or NULL to reset
-                NULL,           // reserved
+                GetName().wx_str(), // display name
+                pDevMode,           // dev mode or NULL to reset
+                NULL,               // reserved
                 flags,
-                NULL            // pointer to video parameters (not used)
+                NULL                // pointer to video parameters (not used)
              ) )
     {
         case DISP_CHANGE_SUCCESSFUL:

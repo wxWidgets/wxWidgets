@@ -358,7 +358,7 @@ MyFrame::MyFrame(const wxString& title)
     m_logWin->SetEditable(false);
     wxLogTextCtrl* logger = new wxLogTextCtrl( m_logWin );
     m_logOld = logger->SetActiveTarget( logger );
-    logger->SetTimestamp( NULL );
+    logger->DisableTimestamp();
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( button1, 0, wxALL, 5 );

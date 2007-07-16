@@ -73,10 +73,6 @@ wxHashTable *wxWidgetHashTable = NULL;
 
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 
-BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
-    EVT_IDLE(wxAppBase::OnIdle)
-END_EVENT_TABLE()
-
 #ifdef __WXDEBUG__
 extern "C"
 {

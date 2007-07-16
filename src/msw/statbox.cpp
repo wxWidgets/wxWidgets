@@ -500,13 +500,13 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
         if ( !rtl )
         {
             RECT rc2 = { x, 0, x + width, y };
-            ::DrawText(hdc, label, label.length(), &rc2,
+            ::DrawText(hdc, label.wx_str(), label.length(), &rc2,
                        DT_SINGLELINE | DT_VCENTER);
         }
         else // RTL
         {
             RECT rc2 = { x, 0, x - width, y };
-            ::DrawText(hdc, label, label.length(), &rc2,
+            ::DrawText(hdc, label.wx_str(), label.length(), &rc2,
                        DT_SINGLELINE | DT_VCENTER | DT_RTLREADING);
         }
     }

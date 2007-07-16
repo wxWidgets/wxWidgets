@@ -20,12 +20,12 @@
 // wxTheme
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxArtProvider;
-class WXDLLEXPORT wxColourScheme;
-class WXDLLEXPORT wxInputConsumer;
-class WXDLLEXPORT wxInputHandler;
-class WXDLLEXPORT wxRenderer;
-struct WXDLLEXPORT wxThemeInfo;
+class WXDLLIMPEXP_FWD_CORE wxArtProvider;
+class WXDLLIMPEXP_FWD_CORE wxColourScheme;
+class WXDLLIMPEXP_FWD_CORE wxInputConsumer;
+class WXDLLIMPEXP_FWD_CORE wxInputHandler;
+class WXDLLIMPEXP_FWD_CORE wxRenderer;
+struct WXDLLIMPEXP_FWD_CORE wxThemeInfo;
 
 class WXDLLEXPORT wxTheme
 {
@@ -73,7 +73,7 @@ private:
 
     // the current theme
     static wxTheme *ms_theme;
-    friend struct WXDLLEXPORT wxThemeInfo;
+    friend struct wxThemeInfo;
 };
 
 // ----------------------------------------------------------------------------

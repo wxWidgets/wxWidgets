@@ -12,7 +12,7 @@
 
 #include "wx/bitmap.h"
 
-class WXDLLIMPEXP_CORE wxGTKRadioButtonInfo;
+class WXDLLIMPEXP_FWD_CORE wxGTKRadioButtonInfo;
 
 #include "wx/list.h"
 
@@ -132,7 +132,7 @@ public:
     void GtkDisableEvents();
     void GtkEnableEvents();
 #if wxUSE_TOOLTIPS
-    void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
+    void ApplyToolTip( GtkTooltips *tips, const gchar *tip );
 #endif // wxUSE_TOOLTIPS
 
     virtual void OnInternalIdle();

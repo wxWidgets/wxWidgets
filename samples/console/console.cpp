@@ -27,6 +27,7 @@
 #include "wx/log.h"
 #include "wx/apptrait.h"
 #include "wx/platinfo.h"
+#include "wx/wxchar.h"
 
 // without this pragma, the stupid compiler precompiles #defines below so that
 // changing them doesn't "take place" later!
@@ -2958,6 +2959,7 @@ void TestTimer()
         virtual void Notify()
         {
             wxPrintf(_T("%d"), m_num++);
+            fflush(stdout);
 
             if ( m_num == 10 )
             {
@@ -2976,6 +2978,11 @@ void TestTimer()
     };
 
     wxEventLoop loop;
+
+    wxTimer timer1;
+    timer1.Start(100, true /* one shot */);
+    timer1.Stop();
+    timer1.Start(100, true /* one shot */);
 
     MyTimer timer;
     timer.Start(500);

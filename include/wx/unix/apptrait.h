@@ -19,7 +19,9 @@
 class WXDLLEXPORT wxConsoleAppTraits : public wxConsoleAppTraitsBase
 {
 public:
-    virtual wxEventLoop *CreateEventLoop();
+#if wxUSE_CONSOLE_EVENTLOOP
+    virtual wxEventLoopBase *CreateEventLoop();
+#endif // wxUSE_CONSOLE_EVENTLOOP
     virtual bool CreateEndProcessPipe(wxExecuteData& execData);
     virtual bool IsWriteFDOfEndProcessPipe(wxExecuteData& execData, int fd);
     virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData& execData);
@@ -34,7 +36,7 @@ public:
 class WXDLLEXPORT wxGUIAppTraits : public wxGUIAppTraitsBase
 {
 public:
-    virtual wxEventLoop *CreateEventLoop();
+    virtual wxEventLoopBase *CreateEventLoop();
     virtual bool CreateEndProcessPipe(wxExecuteData& execData);
     virtual bool IsWriteFDOfEndProcessPipe(wxExecuteData& execData, int fd);
     virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData& execData);
@@ -43,7 +45,7 @@ public:
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
 #endif
 
-#if defined(__WXMAC__) || defined(__WXCOCOA__)
+#if (defined(__WXMAC__) || defined(__WXCOCOA__)) && wxUSE_STDPATHS
     virtual wxStandardPathsBase& GetStandardPaths();
 #endif
     virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;

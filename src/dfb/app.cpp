@@ -28,10 +28,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 
-BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
-    EVT_IDLE(wxAppBase::OnIdle)
-END_EVENT_TABLE()
-
 wxApp::wxApp()
 {
 }
@@ -156,7 +152,7 @@ void wxApp::WakeUpIdle()
         wxMutexGuiEnter();
 #endif
 
-    wxEventLoop * const loop = wxEventLoop::GetActive();
+    wxEventLoopBase * const loop = wxEventLoop::GetActive();
     if ( loop )
         loop->WakeUp();
 
@@ -190,7 +186,8 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     wxLog::Suspend();
 
-    wxEventLoop * const loop = wxEventLoop::GetActive();
+    wxEventLoop * const
+        loop = wx_static_cast(wxEventLoop *, wxEventLoop::GetActive());
     if ( loop )
         loop->Yield();
 

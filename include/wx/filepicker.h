@@ -19,8 +19,8 @@
 #include "wx/pickerbase.h"
 #include "wx/filename.h"
 
-class WXDLLIMPEXP_CORE wxDialog;
-class WXDLLIMPEXP_CORE wxFileDirPickerEvent;
+class WXDLLIMPEXP_FWD_CORE wxDialog;
+class WXDLLIMPEXP_FWD_CORE wxFileDirPickerEvent;
 
 extern WXDLLEXPORT_DATA(const wxChar) wxFilePickerWidgetLabel[];
 extern WXDLLEXPORT_DATA(const wxChar) wxFilePickerWidgetNameStr[];

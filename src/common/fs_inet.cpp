@@ -107,7 +107,6 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
     {
         wxInputStream *s = url.GetInputStream();
         wxString content = url.GetProtocol().GetContentType();
-        if (content == wxEmptyString) content = GetMimeTypeFromExt(location);
         if (s)
         {
             wxString tmpfile =

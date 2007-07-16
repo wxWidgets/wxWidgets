@@ -34,7 +34,7 @@
 #ifdef __WXWINCE__
 #include "wx/msw/wince/missing.h"
 
-int wxOpen(const wxChar *filename, int oflag, int WXUNUSED(pmode))
+int wxCRT_Open(const wxChar *filename, int oflag, int WXUNUSED(pmode))
 {
     DWORD access = 0;
     DWORD shareMode = 0;
@@ -97,7 +97,7 @@ int wxOpen(const wxChar *filename, int oflag, int WXUNUSED(pmode))
     return fd;
 }
 
-int wxAccess(const wxChar *name, int WXUNUSED(how))
+int wxCRT_Access(const wxChar *name, int WXUNUSED(how))
 {
     HANDLE fileHandle = ::CreateFile(name, 0, FILE_SHARE_DELETE | FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
         OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);

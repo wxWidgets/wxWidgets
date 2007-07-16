@@ -70,10 +70,10 @@ typedef unsigned long wxLogLevel;
 // ----------------------------------------------------------------------------
 
 #if wxUSE_GUI
-    class WXDLLIMPEXP_CORE wxTextCtrl;
-    class WXDLLIMPEXP_CORE wxLogFrame;
-    class WXDLLIMPEXP_CORE wxFrame;
-    class WXDLLIMPEXP_CORE wxWindow;
+    class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
+    class WXDLLIMPEXP_FWD_CORE wxLogFrame;
+    class WXDLLIMPEXP_FWD_CORE wxFrame;
+    class WXDLLIMPEXP_FWD_CORE wxWindow;
 #endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
@@ -133,7 +133,7 @@ public:
 
     // static sink function - see DoLog() for function to overload in the
     // derived classes
-    static void OnLog(wxLogLevel level, const wxChar *szString, time_t t);
+    static void OnLog(wxLogLevel level, const wxString& szString, time_t t);
 
     // message buffering
 
@@ -181,6 +181,9 @@ public:
     // current is NULL?
     static void DontCreateOnDemand();
 
+    // Make GetActiveTarget() create a new log object again.
+    static void DoCreateOnDemand();
+
     // log the count of repeating messages instead of logging the messages
     // multiple times
     static void SetRepetitionCounting(bool bRepetCounting = true)
@@ -205,10 +208,13 @@ public:
     // get string trace masks
     static const wxArrayString &GetTraceMasks() { return ms_aTraceMasks; }
 
-    // sets the timestamp string: this is used as strftime() format string
-    // for the log targets which add time stamps to the messages - set it
-    // to NULL to disable time stamping completely.
-    static void SetTimestamp(const wxChar *ts) { ms_timestamp = ts; }
+    // sets the time stamp string format: this is used as strftime() format
+    // string for the log targets which add time stamps to the messages; set
+    // it to empty string to disable time stamping completely.
+    static void SetTimestamp(const wxString& ts) { ms_timestamp = ts; }
+
+    // disable time stamping of log messages
+    static void DisableTimestamp() { SetTimestamp(wxEmptyString); }
 
 
     // accessors
@@ -220,13 +226,13 @@ public:
     static wxTraceMask GetTraceMask() { return ms_ulTraceMask; }
 
     // is this trace mask in the list?
-    static bool IsAllowedTraceMask(const wxChar *mask);
+    static bool IsAllowedTraceMask(const wxString& mask);
 
     // return the current loglevel limit
     static wxLogLevel GetLogLevel() { return ms_logLevel; }
 
     // get the current timestamp format string (may be NULL)
-    static const wxChar *GetTimestamp() { return ms_timestamp; }
+    static const wxString& GetTimestamp() { return ms_timestamp; }
 
 
     // helpers
@@ -252,11 +258,48 @@ protected:
 
     // default DoLog() prepends the time stamp and a prefix corresponding
     // to the message to szString and then passes it to DoLogString()
-    virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t);
+    virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
+#if WXWIN_COMPATIBILITY_2_8
+    // these shouldn't be used by new code
+    wxDEPRECATED_BUT_USED_INTERNALLY(
+        virtual void DoLog(wxLogLevel level, const char *szString, time_t t)
+    );
+
+    wxDEPRECATED_BUT_USED_INTERNALLY(
+        virtual void DoLog(wxLogLevel level, const wchar_t *wzString, time_t t)
+    );
+#endif // WXWIN_COMPATIBILITY_2_8
+
+    void LogString(const wxString& szString, time_t t)
+        { DoLogString(szString, t); }
 
     // default DoLogString does nothing but is not pure virtual because if
     // you override DoLog() you might not need it at all
-    virtual void DoLogString(const wxChar *szString, time_t t);
+    virtual void DoLogString(const wxString& szString, time_t t);
+#if WXWIN_COMPATIBILITY_2_8
+    // these shouldn't be used by new code
+    virtual void DoLogString(const char *WXUNUSED(szString),
+                             time_t WXUNUSED(t)) {}
+    virtual void DoLogString(const wchar_t *WXUNUSED(szString),
+                             time_t WXUNUSED(t)) {}
+#endif // WXWIN_COMPATIBILITY_2_8
+
+    // this macro should be used in the derived classes to avoid warnings about
+    // hiding the other DoLog() overloads when overriding DoLog(wxString) --
+    // but don't use it with MSVC which doesn't give this warning but does give
+    // warning when a deprecated function is overridden
+#if WXWIN_COMPATIBILITY_2_8 && !defined(__VISUALC__)
+    #define wxSUPPRESS_DOLOG_HIDE_WARNING()                                   \
+        virtual void DoLog(wxLogLevel, const char *, time_t) { }              \
+        virtual void DoLog(wxLogLevel, const wchar_t *, time_t) { }
+
+    #define wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()                             \
+        virtual void DoLogString(const char *, time_t) { }                    \
+        virtual void DoLogString(const wchar_t *, time_t) { }
+#else
+    #define wxSUPPRESS_DOLOG_HIDE_WARNING()
+    #define wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
+#endif
 
     // log a line containing the number of times the previous message was
     // repeated
@@ -286,7 +329,7 @@ private:
 
     // format string for strftime(), if NULL, time stamping log messages is
     // disabled
-    static const wxChar *ms_timestamp;
+    static wxString    ms_timestamp;
 
     static wxTraceMask ms_ulTraceMask;   // controls wxLogTrace behaviour
     static wxArrayString ms_aTraceMasks; // more powerful filter for wxLogTrace
@@ -310,8 +353,11 @@ public:
     virtual void Flush();
 
 protected:
-    virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t);
-    virtual void DoLogString(const wxChar *szString, time_t t);
+    virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
+    virtual void DoLogString(const wxString& szString, time_t t);
+
+    wxSUPPRESS_DOLOG_HIDE_WARNING()
+    wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
 
 private:
     wxString m_str;
@@ -329,7 +375,9 @@ public:
 
 protected:
     // implement sink function
-    virtual void DoLogString(const wxChar *szString, time_t t);
+    virtual void DoLogString(const wxString& szString, time_t t);
+
+    wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
 
     FILE *m_fp;
 
@@ -347,7 +395,9 @@ public:
 
 protected:
     // implement sink function
-    virtual void DoLogString(const wxChar *szString, time_t t);
+    virtual void DoLogString(const wxString& szString, time_t t);
+
+    wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
 
     // using ptr here to avoid including <iostream.h> from this file
     wxSTD ostream *m_ostr;
@@ -416,9 +466,14 @@ public:
     // override base class version to flush the old logger as well
     virtual void Flush();
 
+    // call to avoid destroying the old log target
+    void DetachOldLog() { m_logOld = NULL; }
+
 protected:
     // pass the chain to the old logger if needed
-    virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t);
+    virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
+
+    wxSUPPRESS_DOLOG_HIDE_WARNING()
 
 private:
     // the current log target
@@ -434,13 +489,28 @@ private:
 };
 
 // a chain log target which uses itself as the new logger
-class WXDLLIMPEXP_BASE wxLogPassThrough : public wxLogChain
+
+#define wxLogPassThrough wxLogInterposer
+
+class WXDLLIMPEXP_BASE wxLogInterposer : public wxLogChain
 {
 public:
-    wxLogPassThrough();
+    wxLogInterposer();
 
 private:
-    DECLARE_NO_COPY_CLASS(wxLogPassThrough)
+    DECLARE_NO_COPY_CLASS(wxLogInterposer)
+};
+
+// a temporary interposer which doesn't destroy the old log target
+// (calls DetachOldLog)
+
+class WXDLLIMPEXP_BASE wxLogInterposerTemp : public wxLogChain
+{
+public:
+    wxLogInterposerTemp();
+
+private:
+    DECLARE_NO_COPY_CLASS(wxLogInterposerTemp)
 };
 
 #if wxUSE_GUI
@@ -614,7 +684,7 @@ DECLARE_LOG_FUNCTION(Status);
 
 #if wxUSE_GUI
     // this one is the same as previous except that it allows to explicitly
-    class WXDLLEXPORT wxFrame;
+    class WXDLLIMPEXP_FWD_CORE wxFrame;
     // specify the frame to which the output should go
     DECLARE_LOG_FUNCTION2_EXP(Status, wxFrame *, pFrame, WXDLLIMPEXP_CORE);
 #endif // wxUSE_GUI
@@ -711,13 +781,13 @@ wxSafeShowMessage(const wxString& title, const wxString& text);
 #ifdef __VISUALC__
     #define wxLogApiError(api, rc)                                            \
         wxLogDebug(wxT("%s(%d): '%s' failed with error 0x%08lx (%s)."),       \
-                   __TFILE__, __LINE__, api,                                  \
+                   __FILE__, __LINE__, api,                                   \
                    (long)rc, wxSysErrorMsg(rc))
 #else // !VC++
     #define wxLogApiError(api, rc)                                            \
         wxLogDebug(wxT("In file %s at line %d: '%s' failed with ")            \
                    wxT("error 0x%08lx (%s)."),                                \
-                   __TFILE__, __LINE__, api,                                  \
+                   __FILE__, __LINE__, api,                                   \
                    (long)rc, wxSysErrorMsg(rc))
 #endif // VC++/!VC++
 

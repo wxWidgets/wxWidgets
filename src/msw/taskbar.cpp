@@ -143,10 +143,11 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
         notifyData.hIcon = GetHiconOf(icon);
     }
 
+    // set NIF_TIP even for an empty tooltip: otherwise it would be impossible
+    // to remove an existing tooltip using this function
+    notifyData.uFlags |= NIF_TIP;
     if ( !tooltip.empty() )
     {
-        notifyData.uFlags |= NIF_TIP;
-//        lstrcpyn(notifyData.szTip, tooltip.c_str(), WXSIZEOF(notifyData.szTip));
         wxStrncpy(notifyData.szTip, tooltip.c_str(), WXSIZEOF(notifyData.szTip));
     }
 
@@ -171,6 +172,7 @@ bool wxTaskBarIcon::RemoveIcon()
     return Shell_NotifyIcon(NIM_DELETE, &notifyData) != 0;
 }
 
+#if wxUSE_MENUS
 bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
 {
     wxASSERT_MSG( m_win != NULL, _T("taskbar icon not initialized") );
@@ -206,6 +208,7 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
 
     return rval;
 }
+#endif // wxUSE_MENUS
 
 void wxTaskBarIcon::RegisterWindowMessages()
 {

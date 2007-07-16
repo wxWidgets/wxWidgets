@@ -19,9 +19,9 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_SELECT_DISPATCHER
+
 #include "wx/private/selectdispatcher.h"
-#include "wx/module.h"
-#include "wx/timer.h"
 #include "wx/unix/private.h"
 
 #ifndef WX_PRECOMP
@@ -79,7 +79,7 @@ bool wxSelectSets::HasFD(int fd) const
 {
     for ( int n = 0; n < Max; n++ )
     {
-        if ( wxFD_ISSET(fd, &m_fds[n]) )
+        if ( wxFD_ISSET(fd, (fd_set*) &m_fds[n]) )
             return true;
     }
 
@@ -98,7 +98,7 @@ bool wxSelectSets::SetFD(int fd, int flags)
             wxLogTrace(wxSelectDispatcher_Trace,
                        _T("Registered fd %d for %s events"), fd, ms_names[n]);
         }
-        else if ( wxFD_ISSET(fd, &m_fds[n]) )
+        else if ( wxFD_ISSET(fd,  (fd_set*) &m_fds[n]) )
         {
             wxFD_CLR(fd, &m_fds[n]);
             wxLogTrace(wxSelectDispatcher_Trace,
@@ -118,7 +118,7 @@ void wxSelectSets::Handle(int fd, wxFDIOHandler& handler) const
 {
     for ( int n = 0; n < Max; n++ )
     {
-        if ( wxFD_ISSET(fd, &m_fds[n]) )
+        if ( wxFD_ISSET(fd, (fd_set*) &m_fds[n]) )
         {
             wxLogTrace(wxSelectDispatcher_Trace,
                        _T("Got %s event on fd %d"), ms_names[n], fd);
@@ -131,26 +131,10 @@ void wxSelectSets::Handle(int fd, wxFDIOHandler& handler) const
 // wxSelectDispatcher
 // ----------------------------------------------------------------------------
 
-static wxSelectDispatcher *gs_selectDispatcher = NULL;
-
 /* static */
-wxSelectDispatcher *wxSelectDispatcher::Get()
+wxSelectDispatcher *wxSelectDispatcher::Create()
 {
-    if ( !gs_selectDispatcher )
-    {
-        // the dispatcher should be only created from one thread so it should
-        // be ok to use a global without any protection here
-        gs_selectDispatcher = new wxSelectDispatcher;
-    }
-
-    return gs_selectDispatcher;
-}
-
-/* static */
-void wxSelectDispatcher::DispatchPending()
-{
-    if ( gs_selectDispatcher )
-        gs_selectDispatcher->RunLoop(0);
+    return new wxSelectDispatcher;
 }
 
 wxSelectDispatcher::wxSelectDispatcher()
@@ -160,7 +144,7 @@ wxSelectDispatcher::wxSelectDispatcher()
 
 bool wxSelectDispatcher::RegisterFD(int fd, wxFDIOHandler *handler, int flags)
 {
-    if ( !wxFDIODispatcher::RegisterFD(fd, handler, flags) )
+    if ( !wxMappedFDIODispatcher::RegisterFD(fd, handler, flags) )
         return false;
 
     if ( !m_sets.SetFD(fd, flags) )
@@ -174,7 +158,7 @@ bool wxSelectDispatcher::RegisterFD(int fd, wxFDIOHandler *handler, int flags)
 
 bool wxSelectDispatcher::ModifyFD(int fd, wxFDIOHandler *handler, int flags)
 {
-    if ( !wxFDIODispatcher::ModifyFD(fd, handler, flags) )
+    if ( !wxMappedFDIODispatcher::ModifyFD(fd, handler, flags) )
         return false;
 
     wxASSERT_MSG( fd <= m_maxFD, _T("logic error: registered fd > m_maxFD?") );
@@ -182,11 +166,12 @@ bool wxSelectDispatcher::ModifyFD(int fd, wxFDIOHandler *handler, int flags)
     return m_sets.SetFD(fd, flags);
 }
 
-wxFDIOHandler *wxSelectDispatcher::UnregisterFD(int fd, int flags)
+bool wxSelectDispatcher::UnregisterFD(int fd)
 {
-    wxFDIOHandler * const handler = wxFDIODispatcher::UnregisterFD(fd, flags);
+    m_sets.ClearFD(fd);
 
-    m_sets.ClearFD(fd, flags);
+    if ( !wxMappedFDIODispatcher::UnregisterFD(fd) )
+        return false;
 
     // remove the handler if we don't need it any more
     if ( !m_sets.HasFD(fd) )
@@ -205,7 +190,7 @@ wxFDIOHandler *wxSelectDispatcher::UnregisterFD(int fd, int flags)
         }
     }
 
-    return handler;
+    return true;
 }
 
 void wxSelectDispatcher::ProcessSets(const wxSelectSets& sets)
@@ -226,69 +211,40 @@ void wxSelectDispatcher::ProcessSets(const wxSelectSets& sets)
     }
 }
 
-void wxSelectDispatcher::RunLoop(int timeout)
+void wxSelectDispatcher::Dispatch(int timeout)
 {
     struct timeval tv,
-                  *ptv = NULL;
+                  *ptv;
     if ( timeout != TIMEOUT_INFINITE )
     {
         ptv = &tv;
         tv.tv_sec = 0;
         tv.tv_usec = timeout*1000;
     }
-
-    for ( ;; )
+    else // no timeout
     {
-        wxSelectSets sets = m_sets;
+        ptv = NULL;
+    }
 
-        wxStopWatch sw;
-        if ( ptv && timeout )
-          sw.Start(ptv->tv_usec/10);
+    wxSelectSets sets = m_sets;
 
-        const int ret = sets.Select(m_maxFD + 1, ptv);
-        switch ( ret )
-        {
-            case -1:
-                // continue if we were interrupted by a signal, else bail out
-                if ( errno != EINTR )
-                {
-                    wxLogSysError(_("Failed to monitor I/O channels"));
-                    return;
-                }
-                break;
+    const int ret = sets.Select(m_maxFD + 1, ptv);
+    switch ( ret )
+    {
+        case -1:
+            if ( errno != EINTR )
+            {
+                wxLogSysError(_("Failed to monitor I/O channels"));
+            }
+            break;
 
-            case 0:
-                // timeout expired without anything happening
-                return;
+        case 0:
+            // timeout expired without anything happening
+            break;
 
-            default:
-                ProcessSets(sets);
-        }
-
-        if ( ptv )
-        {
-            timeout -= sw.Time();
-            if ( timeout <= 0 )
-                break;
-
-            ptv->tv_usec = timeout*1000;
-        }
+        default:
+            ProcessSets(sets);
     }
 }
 
-// ----------------------------------------------------------------------------
-// wxSelectDispatcherModule
-// ----------------------------------------------------------------------------
-
-class wxSelectDispatcherModule : public wxModule
-{
-public:
-    virtual bool OnInit() { return true; }
-    virtual void OnExit() { wxDELETE(gs_selectDispatcher); }
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxSelectDispatcherModule)
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxSelectDispatcherModule, wxModule)
-
+#endif // wxUSE_SELECT_DISPATCHER

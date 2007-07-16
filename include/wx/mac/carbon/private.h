@@ -1175,8 +1175,8 @@ void wxMacMemoryBufferReleaseProc(void *info, const void *data, size_t size);
 
 class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
 {
-    friend class WXDLLEXPORT wxIcon;
-    friend class WXDLLEXPORT wxCursor;
+    friend class WXDLLIMPEXP_FWD_CORE wxIcon;
+    friend class WXDLLIMPEXP_FWD_CORE wxCursor;
 public:
     wxBitmapRefData(int width , int height , int depth);
     wxBitmapRefData();

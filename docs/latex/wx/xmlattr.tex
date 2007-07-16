@@ -1,0 +1,84 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        xmlnode.tex
+%% Purpose:     wxXmlAttribute documentation
+%% Author:      Francesco Montorsi
+%% Created:     2006-04-18
+%% RCS-ID:      $Id: xmlattr.tex 47450 2007-07-14 10:07:41Z VS $
+%% Copyright:   (c) 2006 Francesco Montorsi
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxXmlAttribute}}\label{wxxmlattribute}
+
+Represents a node property.
+
+Example: in {\tt <img src="hello.gif" id="3"/>}, {\tt ``src"} is property with value
+{\tt ``hello.gif"} and {\tt ``id"} is a property with value {\tt ``3"}.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/xml/xml.h>
+
+\wxheading{See also}
+
+\helpref{wxXmlDocument}{wxxmldocument}, \helpref{wxXmlNode}{wxxmlnode}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxXmlAttribute::wxXmlAttribute}\label{wxxmlattributewxxmlattribute}
+
+\func{}{wxXmlAttribute}{\void}
+
+
+\func{}{wxXmlAttribute}{\param{const wxString\& }{name}, \param{const wxString\& }{value}, \param{wxXmlAttribute* }{next = NULL}}
+
+Creates the property with given {\it name} and {\it value}.
+If {\it next} is not NULL, then sets it as sibling of this property.
+
+\membersection{wxXmlAttribute::\destruct{wxXmlAttribute}}\label{wxxmlattributedtor}
+
+\func{}{\destruct{wxXmlAttribute}}{\void}
+
+The virtual destructor.
+
+\membersection{wxXmlAttribute::GetName}\label{wxxmlattributegetname}
+
+\constfunc{wxString}{GetName}{\void}
+
+Returns the name of this property.
+
+\membersection{wxXmlAttribute::GetNext}\label{wxxmlattributegetnext}
+
+\constfunc{wxXmlAttribute*}{GetNext}{\void}
+
+Returns the sibling of this property or NULL if there are no siblings.
+
+\membersection{wxXmlAttribute::GetValue}\label{wxxmlattributegetvalue}
+
+\constfunc{wxString}{GetValue}{\void}
+
+Returns the value of this property.
+
+\membersection{wxXmlAttribute::SetName}\label{wxxmlattributesetname}
+
+\func{void}{SetName}{\param{const wxString\& }{name}}
+
+Sets the name of this property.
+
+\membersection{wxXmlAttribute::SetNext}\label{wxxmlattributesetnext}
+
+\func{void}{SetNext}{\param{wxXmlAttribute* }{next}}
+
+Sets the sibling of this property.
+
+\membersection{wxXmlAttribute::SetValue}\label{wxxmlattributesetvalue}
+
+\func{void}{SetValue}{\param{const wxString\& }{value}}
+
+Sets the value of this property.
+

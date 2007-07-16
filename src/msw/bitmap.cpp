@@ -1582,57 +1582,6 @@ bool wxBitmapHandler::SaveFile(wxBitmap *WXUNUSED(bitmap),
 }
 
 // ----------------------------------------------------------------------------
-// DIB functions
-// ----------------------------------------------------------------------------
-
-#ifndef __WXMICROWIN__
-bool wxCreateDIB(long xSize, long ySize, long bitsPerPixel,
-                 HPALETTE hPal, LPBITMAPINFO* lpDIBHeader)
-{
-   unsigned long   i, headerSize;
-
-   // Allocate space for a DIB header
-   headerSize = (sizeof(BITMAPINFOHEADER) + (256 * sizeof(PALETTEENTRY)));
-   LPBITMAPINFO lpDIBheader = (BITMAPINFO *) malloc(headerSize);
-   LPPALETTEENTRY lpPe = (PALETTEENTRY *)((BYTE*)lpDIBheader + sizeof(BITMAPINFOHEADER));
-
-   GetPaletteEntries(hPal, 0, 256, lpPe);
-
-   memset(lpDIBheader, 0x00, sizeof(BITMAPINFOHEADER));
-
-   // Fill in the static parts of the DIB header
-   lpDIBheader->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-   lpDIBheader->bmiHeader.biWidth = xSize;
-   lpDIBheader->bmiHeader.biHeight = ySize;
-   lpDIBheader->bmiHeader.biPlanes = 1;
-
-   // this value must be 1, 4, 8 or 24 so PixelDepth can only be
-   lpDIBheader->bmiHeader.biBitCount = (WORD)(bitsPerPixel);
-   lpDIBheader->bmiHeader.biCompression = BI_RGB;
-   lpDIBheader->bmiHeader.biSizeImage = (xSize * abs(ySize) * bitsPerPixel) >> 3;
-   lpDIBheader->bmiHeader.biClrUsed = 256;
-
-
-   // Initialize the DIB palette
-   for (i = 0; i < 256; i++) {
-      lpDIBheader->bmiColors[i].rgbReserved = lpPe[i].peFlags;
-      lpDIBheader->bmiColors[i].rgbRed = lpPe[i].peRed;
-      lpDIBheader->bmiColors[i].rgbGreen = lpPe[i].peGreen;
-      lpDIBheader->bmiColors[i].rgbBlue = lpPe[i].peBlue;
-   }
-
-   *lpDIBHeader = lpDIBheader;
-
-   return true;
-}
-
-void wxFreeDIB(LPBITMAPINFO lpDIBHeader)
-{
-    free(lpDIBHeader);
-}
-#endif
-
-// ----------------------------------------------------------------------------
 // global helper functions implemented here
 // ----------------------------------------------------------------------------
 

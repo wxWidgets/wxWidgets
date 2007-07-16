@@ -29,9 +29,9 @@
 #include <stdarg.h>
 
 // fwd decls
-class WXDLLIMPEXP_BASE wxIconLocation;
-class WXDLLIMPEXP_BASE wxFileTypeImpl;
-class WXDLLIMPEXP_BASE wxMimeTypesManagerImpl;
+class WXDLLIMPEXP_FWD_BASE wxIconLocation;
+class WXDLLIMPEXP_FWD_BASE wxFileTypeImpl;
+class WXDLLIMPEXP_FWD_BASE wxMimeTypesManagerImpl;
 
 // these constants define the MIME informations source under UNIX and are used
 // by wxMimeTypesManager::Initialize()
@@ -151,8 +151,9 @@ public:
     //               const wxString& openCmd,
     //               const wxString& printCmd,
     //               const wxString& desc,
-    //               // the other parameters form a NULL terminated list of
-    //               // extensions
+    //               // the other parameters form a list of extensions for this
+    //               // file type and should be terminated with wxNullPtr (not
+    //               // just NULL!)
     //               ...);
     WX_DEFINE_VARARG_FUNC_CTOR(wxFileTypeInfo,
                                // NB: these are not format strings, using
@@ -283,7 +284,7 @@ WX_DECLARE_USER_EXPORTED_OBJARRAY(wxFileTypeInfo, wxArrayFileTypeInfo,
 
 class WXDLLIMPEXP_BASE wxFileType
 {
-friend class WXDLLIMPEXP_BASE wxMimeTypesManagerImpl;  // it has access to m_impl
+friend class WXDLLIMPEXP_FWD_BASE wxMimeTypesManagerImpl;  // it has access to m_impl
 
 public:
     // An object of this class must be passed to Get{Open|Print}Command. The

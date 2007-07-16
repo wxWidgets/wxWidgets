@@ -29,6 +29,7 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/crt.h"
 #endif
 
 #ifdef __WINDOWS__

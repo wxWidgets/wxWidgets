@@ -12,7 +12,7 @@
 #ifndef _WX_TABCTRL_H_
 #define _WX_TABCTRL_H_
 
-class WXDLLIMPEXP_CORE wxImageList;
+class WXDLLIMPEXP_FWD_CORE wxImageList;
 
 // extern WXDLLEXPORT_DATA(const wxChar) wxToolBarNameStr[];
 

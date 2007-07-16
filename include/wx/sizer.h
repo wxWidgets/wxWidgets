@@ -20,10 +20,10 @@
 // classes
 //---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxButton;
-class WXDLLEXPORT wxBoxSizer;
-class WXDLLEXPORT wxSizerItem;
-class WXDLLEXPORT wxSizer;
+class WXDLLIMPEXP_FWD_CORE wxButton;
+class WXDLLIMPEXP_FWD_CORE wxBoxSizer;
+class WXDLLIMPEXP_FWD_CORE wxSizerItem;
+class WXDLLIMPEXP_FWD_CORE wxSizer;
 
 #ifndef wxUSE_BORDER_BY_DEFAULT
     #ifdef __SMARTPHONE__
@@ -853,7 +853,7 @@ private:
 
 #if wxUSE_STATBOX
 
-class WXDLLEXPORT wxStaticBox;
+class WXDLLIMPEXP_FWD_CORE wxStaticBox;
 
 class WXDLLEXPORT wxStaticBoxSizer: public wxBoxSizer
 {

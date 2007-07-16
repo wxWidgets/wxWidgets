@@ -25,8 +25,8 @@
 #ifndef _WX_RENDERER_H_
 #define _WX_RENDERER_H_
 
-class WXDLLEXPORT wxDC;
-class WXDLLEXPORT wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 #include "wx/gdicmn.h" // for wxPoint
 #include "wx/colour.h"

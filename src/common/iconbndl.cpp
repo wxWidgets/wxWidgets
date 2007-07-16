@@ -54,7 +54,7 @@ public:
 protected:
     wxIconArray m_icons;
 
-    friend class WXDLLEXPORT wxIconBundle;
+    friend class wxIconBundle;
 };
 
 // ============================================================================

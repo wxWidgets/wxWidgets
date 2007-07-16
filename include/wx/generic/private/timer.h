@@ -7,9 +7,10 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef _WX_GENERIC_PRIVATE_TIMER_H_
 #define _WX_GENERIC_PRIVATE_TIMER_H_
+
+#if wxUSE_TIMER
 
 #include "wx/private/timer.h"
 
@@ -39,5 +40,7 @@ protected:
 private:
     wxTimerDesc *m_desc;
 };
+
+#endif // wxUSE_TIMER
 
 #endif // _WX_GENERIC_PRIVATE_TIMER_H_

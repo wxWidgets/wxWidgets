@@ -32,18 +32,6 @@
 
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
 
-wxMessageDialog::wxMessageDialog( wxWindow*       WXUNUSED(pParent),
-                                  const wxString& rsMessage,
-                                  const wxString& rsCaption,
-                                  long            lStyle,
-                                  const wxPoint&  WXUNUSED(pPos) )
-{
-    m_sCaption     = rsCaption;
-    m_sMessage     = rsMessage;
-    m_pParent      = NULL; // pParent;
-    SetMessageDialogStyle(lStyle);
-} // end of wxMessageDialog::wxMessageDialog
-
 int wxMessageDialog::ShowModal()
 {
     HWND                            hWnd = 0;
@@ -63,8 +51,8 @@ int wxMessageDialog::ShowModal()
             wxTheApp->Dispatch();
     }
 
-    if (m_pParent)
-        hWnd = (HWND) m_pParent->GetHWND();
+    if (m_parent)
+        hWnd = (HWND) m_parent->GetHWND();
     else
         hWnd = HWND_DESKTOP;
     if (lStyle & wxYES_NO)
@@ -109,8 +97,8 @@ int wxMessageDialog::ShowModal()
 
     ULONG                           ulAns = ::WinMessageBox( hWnd
                                                             ,hWnd
-                                                            ,m_sMessage.c_str()
-                                                            ,m_sCaption.c_str()
+                                                            ,GetFullMessage().c_str()
+                                                            ,m_caption.c_str()
                                                             ,0L
                                                             ,ulStyle);
     switch (ulAns)

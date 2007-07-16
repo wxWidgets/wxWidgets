@@ -20,8 +20,8 @@
 // forward declarations
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxWindowBase;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 
 // ----------------------------------------------------------------------------
 // headers we have to include

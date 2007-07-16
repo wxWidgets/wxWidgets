@@ -36,6 +36,19 @@ None
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
+\membersection{wxAppTraits::CreateConfig}\label{wxapptraitscreateconfig}
+
+\func{virtual wxConfigBase *}{CreateConfig}{\void}
+
+Called by wxWidgets to create the default configuration object for the
+application. The default version creates a registry-based 
+\helpref{wxRegConfig}{wxconfigbase} class under MSW and 
+\helpref{wxFileConfig}{wxfileconfig} under all other platforms. The 
+\helpref{wxApp}{wxapp} \helpref{GetAppName()}{wxappgetappname} and 
+\helpref{GetVendorName()}{wxappgetvendorname} methods are used to determine the
+registry key or file name.
+
+
 \membersection{wxAppTraits::CreateFontMapper}\label{wxapptraitscreatefontmapper}
 
 \func{virtual wxFontMapper *}{CreateFontMapper}{\void}

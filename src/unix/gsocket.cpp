@@ -20,6 +20,7 @@
 
 #ifndef __GSOCKET_STANDALONE__
 #include "wx/defs.h"
+#include "wx/private/gsocketiohandler.h"
 #endif
 
 #if defined(__VISAGECPP__)
@@ -520,6 +521,8 @@ GSocket::GSocket()
   int i;
 
   m_fd                  = INVALID_SOCKET;
+  m_handler             = NULL;
+
   for (i=0;i<GSOCK_MAX_EVENT;i++)
   {
     m_cbacks[i]         = NULL;
@@ -533,6 +536,8 @@ GSocket::GSocket()
   m_gui_dependent       = NULL;
   m_non_blocking        = false;
   m_reusable            = false;
+  m_broadcast           = false;
+  m_dobind              = true;
   m_timeout             = 10*60*1000;
                                 /* 10 minutes * 60 sec * 1000 millisec */
   m_establishing        = false;
@@ -562,6 +567,8 @@ GSocket::~GSocket()
 
   /* Per-socket GUI-specific cleanup */
   gs_gui_functions->Destroy_Socket(this);
+
+  delete m_handler;
 
   /* Destroy private addresses */
   if (m_local)
@@ -903,6 +910,26 @@ bool GSocket::SetReusable()
     return false;
 }
 
+bool GSocket::SetBroadcast()
+{
+    /* socket must not be in use/already bound */
+    if (m_fd == INVALID_SOCKET) {
+        m_broadcast = true;
+        return true;
+    }
+    return false;
+}
+
+bool GSocket::DontDoBind()
+{
+    /* socket must not be in use/already bound */
+    if (m_fd == INVALID_SOCKET) {
+        m_dobind = false;
+        return true;
+    }
+    return false;
+}
+
 /* Client specific parts */
 
 /* GSocket_Connect:
@@ -1119,19 +1146,25 @@ GSocketError GSocket::SetNonOriented()
 #endif
   }
 
-  /* Bind to the local address,
-   * and retrieve the actual address bound.
-   */
-  if ((bind(m_fd, m_local->m_addr, m_local->m_len) != 0) ||
-      (getsockname(m_fd,
-                   m_local->m_addr,
-                   (WX_SOCKLEN_T *) &m_local->m_len) != 0))
+  if (m_broadcast)
   {
-    Close();
-    m_error = GSOCK_IOERR;
-    return GSOCK_IOERR;
+    setsockopt(m_fd, SOL_SOCKET, SO_BROADCAST, (const char*)&arg, sizeof(arg));
   }
-
+  if (m_dobind)
+  {
+      /* Bind to the local address,
+       * and retrieve the actual address bound.
+       */
+      if ((bind(m_fd, m_local->m_addr, m_local->m_len) != 0) ||
+          (getsockname(m_fd,
+                       m_local->m_addr,
+                       (WX_SOCKLEN_T *) &m_local->m_len) != 0))
+      {
+        Close();
+        m_error = GSOCK_IOERR;
+        return GSOCK_IOERR;
+      }
+  }
   return GSOCK_NOERROR;
 }
 
@@ -1751,6 +1784,12 @@ void GSocket::Detected_Read()
     {
       CALL_CALLBACK(this, GSOCK_CONNECTION);
     }
+    else if (num == 0)
+    {
+      /* graceful shutdown */
+      CALL_CALLBACK(this, GSOCK_LOST);
+      Shutdown();
+    }
     else
     {
       /* Do not throw a lost event in cases where the socket isn't really lost */
@@ -2060,6 +2099,12 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   }
 
   return GSOCK_NOERROR;
+}
+
+
+GSocketError GAddress_INET_SetBroadcastAddress(GAddress *address)
+{
+  return GAddress_INET_SetHostAddress(address, INADDR_BROADCAST);
 }
 
 GSocketError GAddress_INET_SetAnyAddress(GAddress *address)

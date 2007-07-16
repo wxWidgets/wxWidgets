@@ -29,6 +29,8 @@
 
 #if wxUSE_WCHAR_T
 
+class WXDLLIMPEXP_FWD_BASE wxString;
+
 // the error value returned by wxMBConv methods
 #define wxCONV_FAILED ((size_t)-1)
 
@@ -199,7 +201,7 @@ public:
 class WXDLLIMPEXP_BASE wxConvBrokenFileNames : public wxMBConv
 {
 public:
-    wxConvBrokenFileNames(const wxChar *charset);
+    wxConvBrokenFileNames(const wxString& charset);
     wxConvBrokenFileNames(const wxConvBrokenFileNames& conv)
         : wxMBConv(),
           m_conv(conv.m_conv ? conv.m_conv->Clone() : NULL)
@@ -222,6 +224,10 @@ public:
         // cast needed to call a private function
         return m_conv->GetMBNulLen();
     }
+
+#if wxUSE_UNICODE_UTF8
+    virtual bool IsUTF8() const { return m_conv->IsUTF8(); }
+#endif
 
     virtual wxMBConv *Clone() const { return new wxConvBrokenFileNames(*this); }
 
@@ -383,7 +389,7 @@ class WXDLLIMPEXP_BASE wxCSConv : public wxMBConv
 public:
     // we can be created either from charset name or from an encoding constant
     // but we can't have both at once
-    wxCSConv(const wxChar *charset);
+    wxCSConv(const wxString& charset);
     wxCSConv(wxFontEncoding encoding);
 
     wxCSConv(const wxCSConv& conv);
@@ -398,6 +404,10 @@ public:
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
     virtual size_t GetMBNulLen() const;
+
+#if wxUSE_UNICODE_UTF8
+    virtual bool IsUTF8() const;
+#endif
 
     virtual wxMBConv *Clone() const { return new wxCSConv(*this); }
 
@@ -418,12 +428,12 @@ private:
 
     // set the name (may be only called when m_name == NULL), makes copy of
     // charset string
-    void SetName(const wxChar *charset);
+    void SetName(const char *charset);
 
 
     // note that we can't use wxString here because of compilation
     // dependencies: we're included from wx/string.h
-    wxChar *m_name;
+    char *m_name;
     wxFontEncoding m_encoding;
 
     // use CreateConvIfNeeded() before accessing m_convReal!
@@ -511,12 +521,6 @@ extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI;
 // ----------------------------------------------------------------------------
 
 // filenames are multibyte on Unix and widechar on Windows
-#if defined(__UNIX__) || defined(__WXMAC__)
-    #define wxMBFILES 1
-#else
-    #define wxMBFILES 0
-#endif
-
 #if wxMBFILES && wxUSE_UNICODE
     #define wxFNCONV(name) wxConvFileName->cWX2MB(name)
     #define wxFNSTRINGCAST wxMBSTRINGCAST

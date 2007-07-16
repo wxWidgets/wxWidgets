@@ -20,8 +20,8 @@
 #include "wx/palette.h"
 #include "wx/window.h"
 
-class WXDLLIMPEXP_GL wxGLCanvas;
-class WXDLLIMPEXP_GL wxGLContext;
+class WXDLLIMPEXP_FWD_GL wxGLCanvas;
+class WXDLLIMPEXP_FWD_GL wxGLContext;
 
 // ----------------------------------------------------------------------------
 // Constants for attributes list
@@ -115,7 +115,7 @@ public:
 
     // call glcolor() for the colour with the given name, return false if
     // colour not found
-    bool SetColour(const wxChar *colour);
+    bool SetColour(const wxString& colour);
 
 
 

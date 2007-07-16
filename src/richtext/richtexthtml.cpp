@@ -394,7 +394,7 @@ void wxRichTextHTMLHandler::WriteImage(wxRichTextImage* image, wxOutputStream& s
         if (image->GetImage().Ok())
         {        
             wxString ext(image->GetImageBlock().GetExtension());
-            wxString tempFilename(wxString::Format(wxT("image%d.%s"), sm_fileCounter, (const wxChar*) ext));
+            wxString tempFilename(wxString::Format(wxT("image%d.%s"), sm_fileCounter, ext));
             wxMemoryFSHandler::AddFile(tempFilename, image->GetImage(), image->GetImageBlock().GetImageType());
             
             m_imageLocations.Add(tempFilename);
@@ -420,7 +420,7 @@ void wxRichTextHTMLHandler::WriteImage(wxRichTextImage* image, wxOutputStream& s
                 tempDir = wxFileName::GetTempDir();
             
             wxString ext(image->GetImageBlock().GetExtension());
-            wxString tempFilename(wxString::Format(wxT("%s/image%d.%s"), (const wxChar*) tempDir, sm_fileCounter, (const wxChar*) ext));
+            wxString tempFilename(wxString::Format(wxT("%s/image%d.%s"), tempDir, sm_fileCounter, ext));
             image->GetImageBlock().Write(tempFilename);
             
             m_imageLocations.Add(tempFilename);

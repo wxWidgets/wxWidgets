@@ -23,6 +23,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_BUTTON
+
 #ifndef WX_PRECOMP
     #include "wx/button.h"
     #include "wx/toplevel.h"
@@ -42,3 +44,4 @@ wxWindow *wxButtonBase::SetDefault()
     return tlw->SetDefaultItem(this);
 }
 
+#endif // wxUSE_BUTTON

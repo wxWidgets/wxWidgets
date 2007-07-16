@@ -30,16 +30,16 @@
 // forward declarations
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxList;
+class WXDLLIMPEXP_FWD_BASE wxList;
 
 #if wxUSE_GUI
-    class WXDLLIMPEXP_CORE wxDC;
-    class WXDLLIMPEXP_CORE wxMenu;
-    class WXDLLIMPEXP_CORE wxWindow;
-    class WXDLLIMPEXP_CORE wxWindowBase;
+    class WXDLLIMPEXP_FWD_CORE wxDC;
+    class WXDLLIMPEXP_FWD_CORE wxMenu;
+    class WXDLLIMPEXP_FWD_CORE wxWindow;
+    class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 #endif // wxUSE_GUI
 
-class WXDLLIMPEXP_BASE wxEvtHandler;
+class WXDLLIMPEXP_FWD_BASE wxEvtHandler;
 
 // ----------------------------------------------------------------------------
 // Event types
@@ -411,7 +411,7 @@ protected:
 
 private:
     // it needs to access our m_propagationLevel
-    friend class WXDLLIMPEXP_BASE wxPropagateOnce;
+    friend class WXDLLIMPEXP_FWD_BASE wxPropagateOnce;
 
     DECLARE_ABSTRACT_CLASS(wxEvent)
 };
@@ -2285,8 +2285,10 @@ public:
     // Clear table
     void Clear();
 
+#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING 
     // Clear all tables
     static void ClearAll();
+#endif // __WXDEBUG__ && wxUSE_MEMORY_TRACING
 
 protected:
     // Init the hash table with the entries of the static event table.
@@ -2335,12 +2337,12 @@ public:
     virtual bool ProcessEvent(wxEvent& event);
 
     // add an event to be processed later
-    virtual void AddPendingEvent(wxEvent& event);
+    virtual void AddPendingEvent(const wxEvent& event);
 
     void ProcessPendingEvents();
 
 #if wxUSE_THREADS
-    bool ProcessThreadEvent(wxEvent& event);
+    bool ProcessThreadEvent(const wxEvent& event);
 #endif
 
     // Dynamic association of a member function handler with the event handler,
@@ -2496,7 +2498,7 @@ private:
 
 // Post a message to the given eventhandler which will be processed during the
 // next event loop iteration
-inline void wxPostEvent(wxEvtHandler *dest, wxEvent& event)
+inline void wxPostEvent(wxEvtHandler *dest, const wxEvent& event)
 {
     wxCHECK_RET( dest, wxT("need an object to post event to in wxPostEvent") );
 

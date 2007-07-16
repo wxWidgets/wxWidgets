@@ -110,11 +110,11 @@ enum wxMutexType
 };
 
 // forward declarations
-class WXDLLIMPEXP_BASE wxThreadHelper;
-class WXDLLIMPEXP_BASE wxConditionInternal;
-class WXDLLIMPEXP_BASE wxMutexInternal;
-class WXDLLIMPEXP_BASE wxSemaphoreInternal;
-class WXDLLIMPEXP_BASE wxThreadInternal;
+class WXDLLIMPEXP_FWD_BASE wxThreadHelper;
+class WXDLLIMPEXP_FWD_BASE wxConditionInternal;
+class WXDLLIMPEXP_FWD_BASE wxMutexInternal;
+class WXDLLIMPEXP_FWD_BASE wxSemaphoreInternal;
+class WXDLLIMPEXP_FWD_BASE wxThreadInternal;
 
 // ----------------------------------------------------------------------------
 // A mutex object is a synchronization object whose state is set to signaled
@@ -693,8 +693,8 @@ inline bool wxIsMainThread() { return wxThread::IsMain(); }
 #else // !wxUSE_THREADS
 
 // no thread support
-inline void WXDLLIMPEXP_BASE wxMutexGuiEnter() { }
-inline void WXDLLIMPEXP_BASE wxMutexGuiLeave() { }
+inline void wxMutexGuiEnter() { }
+inline void wxMutexGuiLeave() { }
 
 // macros for entering/leaving critical sections which may be used without
 // having to take them inside "#if wxUSE_THREADS"

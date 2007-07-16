@@ -339,7 +339,7 @@ void wxToolTip::Add(WXHWND hWnd)
                 while (token.length())
                 {
                     SIZE sz;
-                    if ( !::GetTextExtentPoint32(hdc, token, token.length(), &sz) )
+                    if ( !::GetTextExtentPoint32(hdc, token.wx_str(), token.length(), &sz) )
                     {
                         wxLogLastError(wxT("GetTextExtentPoint32"));
                     }

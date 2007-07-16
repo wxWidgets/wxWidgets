@@ -19,13 +19,6 @@ struct wxGtkIMData;
 WX_DEFINE_EXPORTED_ARRAY_PTR(GdkWindow *, wxArrayGdkWindows);
 
 //-----------------------------------------------------------------------------
-// callback definition for inserting a window (internal)
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxWindowGTK;
-typedef void (*wxInsertChildFunction)( wxWindowGTK*, wxWindowGTK* );
-
-//-----------------------------------------------------------------------------
 // wxWindowGTK
 //-----------------------------------------------------------------------------
 
@@ -61,7 +54,6 @@ public:
     virtual void Lower();
 
     virtual bool Show( bool show = true );
-    virtual void DoEnable( bool enable );
 
     virtual void SetWindowStyleFlag( long style );
 
@@ -217,14 +209,9 @@ public:
     PangoContext   *GtkGetPangoDefaultContext();
 
 #if wxUSE_TOOLTIPS
-    virtual void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
+    // applies tooltip to the widget (tip must be UTF-8 encoded)
+    virtual void ApplyToolTip( GtkTooltips *tips, const gchar *tip );
 #endif // wxUSE_TOOLTIPS
-
-    // Called from GTK signal handlers. it indicates that
-    // the layouting functions have to be called later on
-    // (i.e. in idle time, implemented in OnInternalIdle() ).
-    void GtkUpdateSize() { m_sizeSet = false; }
-
 
     // Called when a window should delay showing itself
     // until idle time. This partly mimmicks defered
@@ -278,10 +265,6 @@ public:
     // horizontal/vertical scroll position
     double m_scrollPos[ScrollDir_Max];
 
-    // if true, don't notify about adjustment change (without resetting the
-    // flag, so this has to be done manually)
-    bool m_blockValueChanged[ScrollDir_Max];
-
     // return the scroll direction index corresponding to the given orientation
     // (which is wxVERTICAL or wxHORIZONTAL)
     static ScrollDir ScrollDirFromOrient(int orient)
@@ -304,7 +287,6 @@ public:
     bool                 m_nativeSizeEvent:1;   // wxGLCanvas sends wxSizeEvent upon "alloc_size"
     bool                 m_hasScrolling:1;
     bool                 m_hasVMT:1;
-    bool                 m_sizeSet:1;
     bool                 m_resizing:1;
     bool                 m_hasFocus:1;          // true if == FindFocus()
     bool                 m_isScrolling:1;       // dragging scrollbar thumb?
@@ -319,12 +301,13 @@ public:
 
     bool                 m_showOnIdle:1;        // postpone showing the window until idle
 
+protected:
     // C++ has no virtual methods in the constrcutor of any class but we need
     // different methods of inserting a child window into a wxFrame,
     // wxMDIFrame, wxNotebook etc. this is the callback that will get used.
-    wxInsertChildFunction  m_insertCallback;
+    typedef void (*InsertChildFunction)(wxWindowGTK*, wxWindowGTK*);
+    InsertChildFunction m_insertCallback;
 
-protected:
     // implement the base class pure virtuals
     virtual void DoClientToScreen( int *x, int *y ) const;
     virtual void DoScreenToClient( int *x, int *y ) const;
@@ -336,6 +319,7 @@ protected:
                            int sizeFlags = wxSIZE_AUTO);
     virtual void DoSetClientSize(int width, int height);
     virtual void DoMoveWindow(int x, int y, int width, int height);
+    virtual void DoEnable(bool enable);
 
 #if wxUSE_MENUS_NATIVE
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );

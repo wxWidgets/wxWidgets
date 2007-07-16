@@ -2348,9 +2348,9 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
         wxMessageBox(msg, _T("wxWidgets information"),
                      wxICON_INFORMATION | wxOK,
                      (wxWindow *)this);
+#endif // wxUSE_MSGDLG
     }
     else
-#endif // wxUSE_MSGDLG
     {
         event.Skip();
     }

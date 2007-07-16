@@ -179,10 +179,7 @@ public:
     virtual wxDC* PrintDialog(wxWindow *parent);
     virtual bool Setup(wxWindow *parent);
 
-    GnomePrintContext *GetPrintContext() { return m_gpc; }
-
 private:
-    GnomePrintContext *m_gpc;
     bool               m_native_preview;
 
 private:
@@ -197,7 +194,6 @@ private:
 class wxGnomePrintDC: public wxDC
 {
 public:
-    wxGnomePrintDC( wxGnomePrinter *printer );
     wxGnomePrintDC( const wxPrintData& data );
     virtual ~wxGnomePrintDC();
 
@@ -262,8 +258,8 @@ protected:
     void DoGetSize(int* width, int* height) const;
     void DoGetSizeMM(int *width, int *height) const;
 
+    void SetPrintData(const wxPrintData& data);
     wxPrintData& GetPrintData() { return m_printData; }
-    void SetPrintData(const wxPrintData& data) { m_printData = data; }
 
 private:
     static float ms_PSScaleFactor;
@@ -280,9 +276,8 @@ private:
 
     int                     m_deviceOffsetY;
 
-    wxGnomePrinter         *m_printer;
     GnomePrintContext      *m_gpc;
-    GnomePrintJob*          m_job; // only used and destroyed when created with wxPrintData
+    GnomePrintJob*          m_job;
 
     void makeEllipticalPath(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 

@@ -150,39 +150,39 @@ private:
 
 // File selector - backward compatibility
 WXDLLEXPORT wxString
-wxFileSelector(const wxChar *message = wxFileSelectorPromptStr,
-               const wxChar *default_path = NULL,
-               const wxChar *default_filename = NULL,
-               const wxChar *default_extension = NULL,
-               const wxChar *wildcard = wxFileSelectorDefaultWildcardStr,
+wxFileSelector(const wxString& message = wxFileSelectorPromptStr,
+               const wxString& default_path = wxEmptyString,
+               const wxString& default_filename = wxEmptyString,
+               const wxString& default_extension = wxEmptyString,
+               const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
                int flags = 0,
                wxWindow *parent = NULL,
                int x = wxDefaultCoord, int y = wxDefaultCoord);
 
 // An extended version of wxFileSelector
 WXDLLEXPORT wxString
-wxFileSelectorEx(const wxChar *message = wxFileSelectorPromptStr,
-                 const wxChar *default_path = NULL,
-                 const wxChar *default_filename = NULL,
+wxFileSelectorEx(const wxString& message = wxFileSelectorPromptStr,
+                 const wxString& default_path = wxEmptyString,
+                 const wxString& default_filename = wxEmptyString,
                  int *indexDefaultExtension = NULL,
-                 const wxChar *wildcard = wxFileSelectorDefaultWildcardStr,
+                 const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
                  int flags = 0,
                  wxWindow *parent = NULL,
                  int x = wxDefaultCoord, int y = wxDefaultCoord);
 
 // Ask for filename to load
 WXDLLEXPORT wxString
-wxLoadFileSelector(const wxChar *what,
-                   const wxChar *extension,
-                   const wxChar *default_name = (const wxChar *)NULL,
-                   wxWindow *parent = (wxWindow *) NULL);
+wxLoadFileSelector(const wxString& what,
+                   const wxString& extension,
+                   const wxString& default_name = wxEmptyString,
+                   wxWindow *parent = NULL);
 
 // Ask for filename to save
 WXDLLEXPORT wxString
-wxSaveFileSelector(const wxChar *what,
-                   const wxChar *extension,
-                   const wxChar *default_name = (const wxChar *) NULL,
-                   wxWindow *parent = (wxWindow *) NULL);
+wxSaveFileSelector(const wxString& what,
+                   const wxString& extension,
+                   const wxString& default_name = wxEmptyString,
+                   wxWindow *parent = NULL);
 
 
 #if defined (__WXUNIVERSAL__)

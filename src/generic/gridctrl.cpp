@@ -76,7 +76,7 @@ wxString wxGridCellDateTimeRenderer::GetString(const wxGrid& grid, int row, int 
     if (!hasDatetime )
     {
         text = table->GetValue(row, col);
-        hasDatetime = (val.ParseFormat( text, m_iformat, m_dateDef ) != (wxChar *)NULL) ;
+        hasDatetime = (val.ParseFormat(text.c_str(), m_iformat, m_dateDef) != (wxChar *)NULL) ;
     }
 
     if ( hasDatetime )
@@ -292,12 +292,8 @@ wxGridCellAutoWrapStringEditor::Create(wxWindow* parent,
                                        wxWindowID id,
                                        wxEvtHandler* evtHandler)
 {
-  m_control = new wxTextCtrl(parent, id, wxEmptyString,
-                             wxDefaultPosition, wxDefaultSize,
-                             wxTE_MULTILINE | wxTE_RICH);
-
-
-  wxGridCellEditor::Create(parent, id, evtHandler);
+  wxGridCellTextEditor::DoCreate(parent, id, evtHandler,
+                                 wxTE_MULTILINE | wxTE_RICH);
 }
 
 void

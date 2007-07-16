@@ -26,8 +26,8 @@
     #include "wx/msw/wrapwin.h"
 #endif
 
-class WXDLLIMPEXP_BASE wxArrayString;
-struct WXDLLEXPORT wxNativeEncodingInfo;
+class WXDLLIMPEXP_FWD_BASE wxArrayString;
+struct WXDLLIMPEXP_FWD_CORE wxNativeEncodingInfo;
 
 #if defined(_WX_X_FONTLIKE)
 

@@ -10,8 +10,8 @@
 #ifndef __GTKCHOICEH__
 #define __GTKCHOICEH__
 
-class WXDLLIMPEXP_BASE wxSortedArrayString;
-class WXDLLIMPEXP_BASE wxArrayString;
+class WXDLLIMPEXP_FWD_BASE wxSortedArrayString;
+class WXDLLIMPEXP_FWD_BASE wxArrayString;
 
 //-----------------------------------------------------------------------------
 // wxChoice

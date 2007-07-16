@@ -133,7 +133,7 @@ pascal OSErr AEHandleRApp( const AppleEvent *event , AppleEvent *reply , SRefCon
     return wxTheApp->MacHandleAERApp( (AppleEvent*) event , reply) ;
 }
 
-pascal OSErr AEHandleGURL( const AppleEvent *event , AppleEvent *reply , long WXUNUSED(refcon) )
+pascal OSErr AEHandleGURL( const AppleEvent *event , AppleEvent *reply , SRefCon WXUNUSED(refcon) )
 {
     return wxTheApp->MacHandleAEGURL((WXEVENTREF *)event , reply) ;
 }
@@ -1136,12 +1136,7 @@ wxApp::wxApp()
 
 void wxApp::OnIdle(wxIdleEvent& event)
 {
-    wxAppBase::OnIdle(event);
-
-    // If they are pending events, we must process them: pending events are
-    // either events to the threads other than main or events posted with
-    // wxPostEvent() functions
-    wxMacProcessNotifierAndPendingEvents();
+    wxMacProcessNotifierEvents();
 
   if (!wxMenuBar::MacGetInstalledMenuBar() && wxMenuBar::MacGetCommonMenuBar())
     wxMenuBar::MacGetCommonMenuBar()->MacInstallMenuBar();
@@ -1195,6 +1190,15 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
         return false;
     }
+
+#if wxUSE_THREADS
+    // Yielding from a non-gui thread needs to bail out, otherwise we end up
+    // possibly sending events in the thread too.
+    if ( !wxThread::IsMain() )
+    {
+        return true;
+    }
+#endif // wxUSE_THREADS
 
     s_inYield = true;
 

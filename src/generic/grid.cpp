@@ -642,21 +642,29 @@ void wxGridCellTextEditor::Create(wxWindow* parent,
                                   wxWindowID id,
                                   wxEvtHandler* evtHandler)
 {
-    m_control = new wxTextCtrl(parent, id, wxEmptyString,
-                               wxDefaultPosition, wxDefaultSize
+    DoCreate(parent, id, evtHandler);
+}
+
+void wxGridCellTextEditor::DoCreate(wxWindow* parent,
+                                    wxWindowID id,
+                                    wxEvtHandler* evtHandler,
+                                    long style)
+{
 #if defined(__WXMSW__)
-                               ,
-                               wxTE_PROCESS_ENTER |
-                               wxTE_PROCESS_TAB |
-                               wxTE_AUTO_SCROLL |
-                               wxNO_BORDER
+    style |= wxTE_PROCESS_ENTER |
+             wxTE_PROCESS_TAB |
+             wxTE_AUTO_SCROLL |
+             wxNO_BORDER;
 #endif
-                              );
+
+    m_control = new wxTextCtrl(parent, id, wxEmptyString,
+                               wxDefaultPosition, wxDefaultSize,
+                               style);
 
     // set max length allowed in the textctrl, if the parameter was set
-    if (m_maxChars != 0)
+    if ( m_maxChars != 0 )
     {
-        ((wxTextCtrl*)m_control)->SetMaxLength(m_maxChars);
+        Text()->SetMaxLength(m_maxChars);
     }
 
     wxGridCellEditor::Create(parent, id, evtHandler);
@@ -4213,6 +4221,7 @@ bool wxGrid::Create(wxWindow *parent, wxWindowID id,
 
     Create();
     SetInitialSize(size);
+    CalcDimensions();
 
     return true;
 }
@@ -6945,8 +6954,11 @@ void wxGrid::Refresh(bool eraseb, const wxRect* rect)
 
 void wxGrid::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-    // update our children window positions and scrollbars
-    CalcDimensions();
+    if (m_targetWindow != this) // check whether initialisation has been done
+    {
+        // update our children window positions and scrollbars
+        CalcDimensions();
+    }
 }
 
 void wxGrid::OnKeyDown( wxKeyEvent& event )
@@ -10268,10 +10280,7 @@ wxGridCellEditor * wxGrid::GetDefaultEditorForType(const wxString& typeName) con
     int index = m_typeRegistry->FindOrCloneDataType(typeName);
     if ( index == wxNOT_FOUND )
     {
-        wxString errStr;
-
-        errStr.Printf(wxT("Unknown data type name [%s]"), typeName.c_str());
-        wxFAIL_MSG(errStr.c_str());
+        wxFAIL_MSG(wxString::Format(wxT("Unknown data type name [%s]"), typeName.c_str()));
 
         return NULL;
     }
@@ -10284,10 +10293,7 @@ wxGridCellRenderer * wxGrid::GetDefaultRendererForType(const wxString& typeName)
     int index = m_typeRegistry->FindOrCloneDataType(typeName);
     if ( index == wxNOT_FOUND )
     {
-        wxString errStr;
-
-        errStr.Printf(wxT("Unknown data type name [%s]"), typeName.c_str());
-        wxFAIL_MSG(errStr.c_str());
+        wxFAIL_MSG(wxString::Format(wxT("Unknown data type name [%s]"), typeName.c_str()));
 
         return NULL;
     }

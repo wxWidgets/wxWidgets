@@ -58,13 +58,7 @@ wxDataFormat::wxDataFormat( wxDataFormatId type )
     SetType( type );
 }
 
-wxDataFormat::wxDataFormat( const wxChar *id )
-{
-    PrepareFormats();
-    SetId( id );
-}
-
-wxDataFormat::wxDataFormat( const wxString &id )
+void wxDataFormat::InitFromString( const wxString &id )
 {
     PrepareFormats();
     SetId( id );
@@ -138,12 +132,11 @@ void wxDataFormat::SetId( NativeFormat format )
         m_type = wxDF_PRIVATE;
 }
 
-void wxDataFormat::SetId( const wxChar *id )
+void wxDataFormat::SetId( const wxString& id )
 {
     PrepareFormats();
     m_type = wxDF_PRIVATE;
-    wxString tmp( id );
-    m_format = gdk_atom_intern( (const char*) tmp.ToAscii(), FALSE );
+    m_format = gdk_atom_intern( id.ToAscii(), FALSE );
 }
 
 void wxDataFormat::PrepareFormats()
@@ -283,9 +276,8 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
                 // function to unescape the 8-bit strings pointed to
                 // by buf, but this does the same in wx code.
                 wxString filename_unicode = wxURI::Unescape(filename.c_str() + lenPrefix);
-                wxCharBuffer filename_8bit = wxConvISO8859_1.cWX2MB( filename_unicode );
-                filename_unicode = wxConvFileName->cMB2WX( filename_8bit );
-                AddFile( filename_unicode );
+                wxCharBuffer filename_8bit = filename_unicode.mb_str(wxConvISO8859_1);
+                AddFile(wxString(filename_8bit, *wxConvFileName));
                 filename.Empty();
             }
             else if ( !filename.empty() )

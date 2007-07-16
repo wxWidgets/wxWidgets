@@ -245,12 +245,12 @@ WXColor *wxColour::GetColor() const
     return (WXColor*) &M_COLDATA->m_color;
 }
 
-bool wxColour::FromString(const wxChar *name)
+bool wxColour::FromString(const wxString& name)
 {
     Display *dpy = wxGlobalDisplay();
     WXColormap colormap = wxTheApp->GetMainColormap( dpy );
     XColor xcol;
-    if ( XParseColor( dpy, (Colormap)colormap, wxConvertWX2MB(name), &xcol ) )
+    if ( XParseColor( dpy, (Colormap)colormap, name.mbc_str(), &xcol ) )
     {
         UnRef();
 

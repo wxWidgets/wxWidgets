@@ -16,8 +16,8 @@
 
 DECLARE_WXCOCOA_OBJC_CLASS(wxMDIParentFrameObserver);
 
-class WXDLLEXPORT wxMDIChildFrame;
-class WXDLLEXPORT wxMDIClientWindow;
+class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
+class WXDLLIMPEXP_FWD_CORE wxMDIClientWindow;
 
 WX_DECLARE_LIST(wxMDIChildFrame, wxCocoaMDIChildFrameList);
 
@@ -26,7 +26,7 @@ WX_DECLARE_LIST(wxMDIChildFrame, wxCocoaMDIChildFrameList);
 // ========================================================================
 class WXDLLEXPORT wxMDIParentFrame: public wxFrame
 {
-    friend class WXDLLEXPORT wxMDIChildFrame;
+    friend class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
 // ------------------------------------------------------------------------
@@ -98,7 +98,7 @@ protected:
 // ========================================================================
 class WXDLLEXPORT wxMDIChildFrame: public wxFrame
 {
-    friend class WXDLLEXPORT wxMDIParentFrame;
+    friend class WXDLLIMPEXP_FWD_CORE wxMDIParentFrame;
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxMDIChildFrame)
 // ------------------------------------------------------------------------

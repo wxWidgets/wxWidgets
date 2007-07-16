@@ -83,6 +83,8 @@ private:
 
 #else // !wxUSE_GUI
 
+#if wxUSE_CONSOLE_EVENTLOOP
+
 class WXDLLIMPEXP_BASE wxConsoleEventLoop : public wxMSWEventLoopBase
 {
 public:
@@ -95,6 +97,8 @@ public:
 protected:
     virtual void OnNextIteration();
 };
+
+#endif // wxUSE_CONSOLE_EVENTLOOP
 
 #endif // wxUSE_GUI/!wxUSE_GUI
 

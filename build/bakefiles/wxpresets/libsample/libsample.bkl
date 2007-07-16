@@ -3,38 +3,35 @@
 
 <makefile>
 
-    <include file="presets/wx.bkl"/>
-
-
     <!-- a typical nice feature which wxpresets make available to wx-based programs
-         is to allow the user to build with different configurations the same project;
-         this is achieved in fundamental steps:
+         is to allow the user to build with different configurations those programs;
+         this is achieved in few fundamental steps:
 
           1) set a different BUILDDIR for different build configurations
           2) set different output dirs for the libraries built with a
              different shared/static setting
-          3) set different output names for the libraries built with a
-             different unicode/debug setting
-
-         the following line does step #1:
+          3) set different output names for the libraries built with
+             different unicode/ansi and release/debug settings
     -->
+    <include file="presets/wx.bkl"/>
+
+    <!-- the following line implements step #1: -->
     <set-wxlike-builddir/>
 
-    <!-- through the use of the 'wx-lib' and 'wxlike' template, we'll get
-         the ability to compile against any wxWidgets build using the same
-         configuration of that wxWidgets build.
+    <!-- through the use of the 'wx-lib' and 'wxlike' templates, we'll get
+         the ability to compile against any wxWidgets build using, for our
+         program, the same configuration of the selected wxWidgets build.
     -->
     <template id="my" template="wx-lib,wxlike">
-
-        <!-- wxlike-libdirname does step #2 (see initial comment) -->
-        <wxlike-libdirname/>
+        <!-- wxlike-dirname implements step #2 (see initial comment) -->
+        <wxlike-dirname>lib</wxlike-dirname>
 
         <sources>libsample.cpp</sources>
     </template>
 
 
     <lib id="static" template="my" cond="WX_SHARED=='0'">
-        <!-- wxlike-libname does step #3 (see initial comment) -->
+        <!-- wxlike-libname implements step #3 (see initial comment) -->
         <wxlike-libname prefix='sample'>test</wxlike-libname>
     </lib>
 

@@ -11,6 +11,8 @@
 #ifndef _WX_UNIX_PRIVATE_TIMER_H_
 #define _WX_UNIX_PRIVATE_TIMER_H_
 
+#if wxUSE_TIMER
+
 #include "wx/private/timer.h"
 
 // the type used for milliseconds is large enough for microseconds too but
@@ -31,10 +33,17 @@ public:
     virtual bool Start(int milliseconds = -1, bool oneShot = false);
     virtual void Stop();
 
+    // for wxTimerScheduler only: resets the internal flag indicating that the
+    // timer is running
+    void MarkStopped()
+    {
+        wxASSERT_MSG( m_isRunning, _T("stopping non-running timer?") );
+
+        m_isRunning = false;
+    }
+
 private:
     bool m_isRunning;
-
-    friend class wxTimerScheduler;
 };
 
 // ----------------------------------------------------------------------------
@@ -127,5 +136,7 @@ private:
 //
 // returns the number of microseconds since the Epoch
 extern wxUsecClock_t wxGetLocalTimeUsec();
+
+#endif // wxUSE_TIMER
 
 #endif // _WX_UNIX_PRIVATE_TIMER_H_

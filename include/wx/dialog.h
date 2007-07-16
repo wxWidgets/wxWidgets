@@ -13,11 +13,10 @@
 #define _WX_DIALOG_H_BASE_
 
 #include "wx/defs.h"
-#include "wx/containr.h"
 #include "wx/toplevel.h"
 
-class WXDLLEXPORT wxSizer;
-class WXDLLEXPORT wxStdDialogButtonSizer;
+class WXDLLIMPEXP_FWD_CORE wxSizer;
+class WXDLLIMPEXP_FWD_CORE wxStdDialogButtonSizer;
 
 #define wxDIALOG_NO_PARENT      0x0001  // Don't make owned by apps top window
 
@@ -141,7 +140,6 @@ private:
 
     DECLARE_NO_COPY_CLASS(wxDialogBase)
     DECLARE_EVENT_TABLE()
-    WX_DECLARE_CONTROL_CONTAINER();
 };
 
 

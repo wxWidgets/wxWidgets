@@ -23,7 +23,7 @@
 #endif
 
 
-class WXDLLEXPORT wxPrintNativeDataBase;
+class WXDLLIMPEXP_FWD_CORE wxPrintNativeDataBase;
 
 
 class WXDLLEXPORT wxColourData: public wxObject

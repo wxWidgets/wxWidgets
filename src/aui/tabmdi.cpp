@@ -179,13 +179,13 @@ void wxAuiMDIParentFrame::SetChildMenuBar(wxAuiMDIChildFrame* pChild)
         // No Child, set Our menu bar back.
         if (m_pMyMenuBar)
             SetMenuBar(m_pMyMenuBar);
-             else
+        else
             SetMenuBar(GetMenuBar());
 
         // Make sure we know our menu bar is in use
         m_pMyMenuBar = NULL;
     }
-     else
+    else
     {
         if (pChild->GetMenuBar() == NULL)
             return;
@@ -314,7 +314,7 @@ void wxAuiMDIParentFrame::AddWindowMenu(wxMenuBar *pMenuBar)
         int pos = pMenuBar->FindMenu(wxGetStockLabel(wxID_HELP,wxSTOCK_NOFLAGS));
         if (pos == wxNOT_FOUND)
             pMenuBar->Append(m_pWindowMenu, _("&Window"));
-             else
+        else
             pMenuBar->Insert(pos, m_pWindowMenu, _("&Window"));
     }
 }
@@ -366,7 +366,7 @@ void wxAuiMDIParentFrame::Tile(wxOrientation orient)
     {
         client_window->Split(cur_idx, wxLEFT);
     }
-     else if (orient == wxHORIZONTAL)
+    else if (orient == wxHORIZONTAL)
     {
         client_window->Split(cur_idx, wxTOP);
     }
@@ -446,10 +446,10 @@ bool wxAuiMDIChildFrame::Create(wxAuiMDIParentFrame* parent,
 
     // create the window off-screen to prevent flicker
     wxPanel::Create(pClientWindow,
-		    id,
-		    wxPoint(cli_size.x+1, cli_size.y+1),
-		    size,
-		    wxNO_BORDER, name);
+                    id,
+                    wxPoint(cli_size.x+1, cli_size.y+1),
+                    size,
+                    wxNO_BORDER, name);
 
     DoShow(false);
 

@@ -142,7 +142,7 @@ typedef unsigned int wxMarkerType;
 
 class WXDLLIMPEXP_BASE wxMemStruct {
 
-friend class WXDLLIMPEXP_BASE wxDebugContext; // access to the m_next pointer for list traversal.
+friend class WXDLLIMPEXP_FWD_BASE wxDebugContext; // access to the m_next pointer for list traversal.
 
 public:
 public:

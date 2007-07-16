@@ -27,10 +27,10 @@
 // included wx/menu.h
 #include "wx/menuitem.h"
 
-class WXDLLEXPORT wxMenu;
-class WXDLLEXPORT wxMenuBarBase;
-class WXDLLEXPORT wxMenuBar;
-class WXDLLEXPORT wxMenuItem;
+class WXDLLIMPEXP_FWD_CORE wxMenu;
+class WXDLLIMPEXP_FWD_CORE wxMenuBarBase;
+class WXDLLIMPEXP_FWD_CORE wxMenuBar;
+class WXDLLIMPEXP_FWD_CORE wxMenuItem;
 
 // pseudo template list classes
 WX_DECLARE_EXPORTED_LIST(wxMenu, wxMenuList);

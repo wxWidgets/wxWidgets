@@ -514,7 +514,7 @@ bool wxGetDiskSpace(const wxString& WXUNUSED_IN_WINCE(path),
         ULARGE_INTEGER bytesFree, bytesTotal;
 
         // may pass the path as is, GetDiskFreeSpaceEx() is smart enough
-        if ( !pGetDiskFreeSpaceEx(path,
+        if ( !pGetDiskFreeSpaceEx(path.fn_str(),
                                   &bytesFree,
                                   &bytesTotal,
                                   NULL) )
@@ -564,7 +564,7 @@ bool wxGetDiskSpace(const wxString& WXUNUSED_IN_WINCE(path),
 
         // FIXME: this is wrong, we should extract the root drive from path
         //        instead, but this is the job for wxFileName...
-        if ( !::GetDiskFreeSpace(path,
+        if ( !::GetDiskFreeSpace(path.fn_str(),
                                  &lSectorsPerCluster,
                                  &lBytesPerSector,
                                  &lNumberOfFreeClusters,
@@ -608,7 +608,7 @@ bool wxGetEnv(const wxString& WXUNUSED_IN_WINCE(var),
     return false;
 #else // Win32
     // first get the size of the buffer
-    DWORD dwRet = ::GetEnvironmentVariable(var, NULL, 0);
+    DWORD dwRet = ::GetEnvironmentVariable(var.wx_str(), NULL, 0);
     if ( !dwRet )
     {
         // this means that there is no such variable
@@ -617,7 +617,8 @@ bool wxGetEnv(const wxString& WXUNUSED_IN_WINCE(var),
 
     if ( value )
     {
-        (void)::GetEnvironmentVariable(var, wxStringBuffer(*value, dwRet),
+        (void)::GetEnvironmentVariable(var.wx_str(),
+                                       wxStringBuffer(*value, dwRet),
                                        dwRet);
     }
 
@@ -625,8 +626,8 @@ bool wxGetEnv(const wxString& WXUNUSED_IN_WINCE(var),
 #endif // WinCE/32
 }
 
-bool wxSetEnv(const wxString& WXUNUSED_IN_WINCE(var),
-              const wxChar *WXUNUSED_IN_WINCE(value))
+bool wxDoSetEnv(const wxString& WXUNUSED_IN_WINCE(var),
+                const wxChar *WXUNUSED_IN_WINCE(value))
 {
     // some compilers have putenv() or _putenv() or _wputenv() but it's better
     // to always use Win32 function directly instead of dealing with them
@@ -634,7 +635,7 @@ bool wxSetEnv(const wxString& WXUNUSED_IN_WINCE(var),
     // no environment variables under CE
     return false;
 #else
-    if ( !::SetEnvironmentVariable(var, value) )
+    if ( !::SetEnvironmentVariable(var.wx_str(), value) )
     {
         wxLogLastError(_T("SetEnvironmentVariable"));
 
@@ -643,6 +644,16 @@ bool wxSetEnv(const wxString& WXUNUSED_IN_WINCE(var),
 
     return true;
 #endif
+}
+
+bool wxSetEnv(const wxString& variable, const wxString& value)
+{
+    return wxDoSetEnv(variable, value.wx_str());
+}
+
+bool wxUnsetEnv(const wxString& variable)
+{
+    return wxDoSetEnv(variable, NULL);
 }
 
 // ----------------------------------------------------------------------------
@@ -1444,7 +1455,7 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
     return (long) ret;
 }
 
-extern long wxCharsetToCodepage(const wxChar *name)
+extern long wxCharsetToCodepage(const char *name)
 {
     // first get the font encoding for this charset
     if ( !name )
@@ -1463,7 +1474,7 @@ extern long wxCharsetToCodepage(const wxChar *name)
 #include "wx/msw/registry.h"
 
 // this should work if Internet Exploiter is installed
-extern long wxCharsetToCodepage(const wxChar *name)
+extern long wxCharsetToCodepage(const char *name)
 {
     if (!name)
         return GetACP();

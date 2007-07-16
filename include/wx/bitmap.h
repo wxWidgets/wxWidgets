@@ -20,12 +20,12 @@
 #include "wx/gdicmn.h"  // for wxBitmapType
 #include "wx/colour.h"
 
-class WXDLLEXPORT wxBitmap;
-class WXDLLEXPORT wxBitmapHandler;
-class WXDLLEXPORT wxIcon;
-class WXDLLEXPORT wxImage;
-class WXDLLEXPORT wxMask;
-class WXDLLEXPORT wxPalette;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxBitmapHandler;
+class WXDLLIMPEXP_FWD_CORE wxIcon;
+class WXDLLIMPEXP_FWD_CORE wxImage;
+class WXDLLIMPEXP_FWD_CORE wxMask;
+class WXDLLIMPEXP_FWD_CORE wxPalette;
 
 // ----------------------------------------------------------------------------
 // wxVariant support
@@ -140,7 +140,9 @@ public:
     virtual int GetWidth() const = 0;
     virtual int GetDepth() const = 0;
 
+#if wxUSE_IMAGE
     virtual wxImage ConvertToImage() const = 0;
+#endif // wxUSE_IMAGE
 
     virtual wxMask *GetMask() const = 0;
     virtual void SetMask(wxMask *mask) = 0;

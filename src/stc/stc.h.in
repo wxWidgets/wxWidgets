@@ -17,8 +17,8 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __stc_h__
-#define __stc_h__
+#ifndef _WX_STC_STC_H_
+#define _WX_STC_STC_H_
 
 #include "wx/defs.h"
 
@@ -516,32 +516,6 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_AUTOCOMP_SELECTION(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_SELECTION     id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
 #endif
 
-//----------------------------------------------------------------------
-// Utility functions used within wxSTC
-
-#ifndef SWIG
-#if wxUSE_UNICODE
-
-WXDLLIMPEXP_STC wxString stc2wx(const char* str);
-WXDLLIMPEXP_STC wxString stc2wx(const char* str, size_t len);
-WXDLLIMPEXP_STC const wxWX2MBbuf wx2stc(const wxString& str);
-
-#else // not UNICODE
-
-inline wxString stc2wx(const char* str) {
-    return wxString(str);
-}
-inline wxString stc2wx(const char* str, size_t len) {
-    return wxString(str, len);
-}
-inline const wxWX2MBbuf wx2stc(const wxString& str) {
-    return str.mbc_str();
-}
-
-#endif // UNICODE
-#endif // SWIG
-
-//----------------------------------------------------------------------
-#endif
-
 #endif // wxUSE_STC
+
+#endif // _WX_STC_STC_H_

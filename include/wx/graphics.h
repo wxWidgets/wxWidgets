@@ -17,16 +17,16 @@
 #include "wx/geometry.h"
 #include "wx/dynarray.h"
 
-class WXDLLIMPEXP_CORE wxWindowDC;
-class WXDLLIMPEXP_CORE wxMemoryDC;
-class WXDLLIMPEXP_CORE wxGraphicsContext;
-class WXDLLIMPEXP_CORE wxGraphicsPath;
-class WXDLLIMPEXP_CORE wxGraphicsMatrix;
-class WXDLLIMPEXP_CORE wxGraphicsFigure;
-class WXDLLIMPEXP_CORE wxGraphicsRenderer;
-class WXDLLIMPEXP_CORE wxGraphicsPen;
-class WXDLLIMPEXP_CORE wxGraphicsBrush;
-class WXDLLIMPEXP_CORE wxGraphicsFont;
+class WXDLLIMPEXP_FWD_CORE wxWindowDC;
+class WXDLLIMPEXP_FWD_CORE wxMemoryDC;
+class WXDLLIMPEXP_FWD_CORE wxGraphicsContext;
+class WXDLLIMPEXP_FWD_CORE wxGraphicsPath;
+class WXDLLIMPEXP_FWD_CORE wxGraphicsMatrix;
+class WXDLLIMPEXP_FWD_CORE wxGraphicsFigure;
+class WXDLLIMPEXP_FWD_CORE wxGraphicsRenderer;
+class WXDLLIMPEXP_FWD_CORE wxGraphicsPen;
+class WXDLLIMPEXP_FWD_CORE wxGraphicsBrush;
+class WXDLLIMPEXP_FWD_CORE wxGraphicsFont;
 
 /*
  * notes about the graphics context apis

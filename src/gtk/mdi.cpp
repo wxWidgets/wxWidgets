@@ -292,6 +292,18 @@ void wxMDIParentFrame::ActivatePrevious()
       gtk_notebook_prev_page( GTK_NOTEBOOK(m_clientWindow->m_widget) );
 }
 
+bool wxMDIParentFrame::HasVisibleMenubar() const
+{
+    if (wxFrame::HasVisibleMenubar())
+        return true;
+
+    wxMDIChildFrame* active_child_frame = GetActiveChild();
+    wxMenuBar* menubar = NULL;
+    if (active_child_frame)
+        menubar = active_child_frame->m_menuBar;
+    return menubar && menubar->IsShown();
+}
+
 //-----------------------------------------------------------------------------
 // wxMDIChildFrame
 //-----------------------------------------------------------------------------
@@ -353,16 +365,6 @@ void wxMDIChildFrame::DoSetSize( int x, int y, int width, int height, int sizeFl
     wxWindow::DoSetSize( x, y, width, height, sizeFlags );
 }
 
-void wxMDIChildFrame::DoSetClientSize(int width, int height)
-{
-    wxWindow::DoSetClientSize( width, height );
-}
-
-void wxMDIChildFrame::DoGetClientSize( int *width, int *height ) const
-{
-    wxWindow::DoGetClientSize( width, height );
-}
-
 void wxMDIChildFrame::AddChild( wxWindowBase *child )
 {
     wxWindow::AddChild(child);
@@ -408,7 +410,7 @@ void wxMDIChildFrame::OnMenuHighlight( wxMenuEvent& event )
 {
 #if wxUSE_STATUSBAR
     wxMDIParentFrame *mdi_frame = (wxMDIParentFrame*)m_parent->GetParent();
-    if ( !ShowMenuHelp(mdi_frame->GetStatusBar(), event.GetMenuId()) )
+    if ( !ShowMenuHelp(event.GetMenuId()) )
     {
         // we don't have any help text for this item, but may be the MDI frame
         // does?
@@ -434,7 +436,7 @@ void wxMDIChildFrame::SetTitle( const wxString &title )
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxWindow *win )
+static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxMDIChildFrame *win )
 {
     if ((win->m_x == alloc->x) &&
         (win->m_y == alloc->y) &&
@@ -453,9 +455,10 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
 // InsertChild callback for wxMDIClientWindow
 //-----------------------------------------------------------------------------
 
-static void wxInsertChildInMDI( wxMDIClientWindow* parent, wxMDIChildFrame* child )
+static void wxInsertChildInMDI(wxWindow* parent, wxWindow* child)
 {
-    wxString s = child->GetTitle();
+    wxMDIChildFrame* child_frame = wx_static_cast(wxMDIChildFrame*, child);
+    wxString s = child_frame->GetTitle();
     if (s.IsNull()) s = _("MDI child");
 
     GtkWidget *label_widget = gtk_label_new( s.mbc_str() );
@@ -468,9 +471,9 @@ static void wxInsertChildInMDI( wxMDIClientWindow* parent, wxMDIChildFrame* chil
 
     gtk_notebook_append_page( notebook, child->m_widget, label_widget );
 
-    child->m_page = (GtkNotebookPage*) (g_list_last(notebook->children)->data);
+    child_frame->m_page = (GtkNotebookPage*) (g_list_last(notebook->children)->data);
 
-    wxMDIParentFrame *parent_frame = (wxMDIParentFrame*) parent->GetParent();
+    wxMDIParentFrame *parent_frame = wx_static_cast(wxMDIParentFrame*, parent->GetParent());
     parent_frame->m_justInserted = true;
 }
 
@@ -496,7 +499,7 @@ wxMDIClientWindow::~wxMDIClientWindow()
 
 bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, long style )
 {
-    m_insertCallback = (wxInsertChildFunction)wxInsertChildInMDI;
+    m_insertCallback = wxInsertChildInMDI;
 
     if (!PreCreation( parent, wxDefaultPosition, wxDefaultSize ) ||
         !CreateBase( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, wxT("wxMDIClientWindow") ))

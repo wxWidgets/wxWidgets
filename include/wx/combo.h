@@ -46,8 +46,8 @@
 #include "wx/renderer.h" // this is needed for wxCONTROL_XXX flags
 #include "wx/bitmap.h" // wxBitmap used by-value
 
-class WXDLLIMPEXP_CORE wxTextCtrl;
-class WXDLLEXPORT wxComboPopup;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxComboPopup;
 
 //
 // New window styles for wxComboCtrlBase
@@ -484,7 +484,7 @@ protected:
 
     // Standard textctrl positioning routine. Just give it platform-dependant
     // textctrl coordinate adjustment.
-    void PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust );
+    virtual void PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust );
 
     // event handlers
     void OnSizeEvent( wxSizeEvent& event );

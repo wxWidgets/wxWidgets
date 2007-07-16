@@ -15,8 +15,8 @@
 
 #include "wx/bitmap.h"
 
-class WXDLLEXPORT wxSearchButton;
-class WXDLLEXPORT wxSearchTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxSearchButton;
+class WXDLLIMPEXP_FWD_CORE wxSearchTextCtrl;
 
 // ----------------------------------------------------------------------------
 // wxSearchCtrl is a combination of wxTextCtrl and wxSearchButton

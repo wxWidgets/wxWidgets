@@ -309,27 +309,17 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
       ;;
 
       *-*-linux* )
-        if test "x$GCC" != "xyes"; then
-            AC_CACHE_CHECK([for Intel compiler], bakefile_cv_prog_icc,
-            [
-                AC_TRY_COMPILE([],
-                    [
-                        #ifndef __INTEL_COMPILER
-                        This is not ICC
-                        #endif
-                    ],
-                    bakefile_cv_prog_icc=yes,
-                    bakefile_cv_prog_icc=no
-                )
-            ])
-            if test "$bakefile_cv_prog_icc" = "yes"; then
-                PIC_FLAG="-KPIC"
-            fi
+        if test "$INTELCC" = "yes"; then
+            PIC_FLAG="-KPIC"
+        elif test "x$SUNCXX" = "xyes"; then
+            SHARED_LD_CC="${CC} -G -o"
+            SHARED_LD_CXX="${CXX} -G -o"
+            PIC_FLAG="-KPIC"
         fi
       ;;
 
       *-*-solaris2* )
-        if test "x$GCC" != xyes ; then
+        if test "x$SUNCXX" = xyes ; then
             SHARED_LD_CC="${CC} -G -o"
             SHARED_LD_CXX="${CXX} -G -o"
             PIC_FLAG="-KPIC"
@@ -500,7 +490,11 @@ AC_DEFUN([AC_BAKEFILE_SHARED_VERSIONS],
 
     case "${BAKEFILE_HOST}" in
       *-*-linux* | *-*-freebsd* | *-*-k*bsd*-gnu )
-        SONAME_FLAG="-Wl,-soname,"
+        if test "x$SUNCXX" = "xyes"; then
+            SONAME_FLAG="-h "
+        else
+            SONAME_FLAG="-Wl,-soname,"
+        fi
         USE_SOVERSION=1
         USE_SOVERLINUX=1
         USE_SOSYMLINKS=1

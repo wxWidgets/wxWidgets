@@ -15,6 +15,8 @@
 #include "wx/setup.h"
 #endif
 
+class wxGSocketIOHandler;
+
 #if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
 
 #ifndef __GSOCKET_STANDALONE__
@@ -23,7 +25,7 @@
 #include "gsocket.h"
 #endif
 
-class GSocketGUIFunctionsTableConcrete: public GSocketGUIFunctionsTable
+class GSocketGUIFunctionsTableConcrete : public GSocketGUIFunctionsTable
 {
 public:
     virtual bool OnInit();
@@ -52,6 +54,8 @@ public:
     GSocketError SetServer();
     GSocket *WaitConnection();
     bool SetReusable();
+    bool SetBroadcast();
+    bool DontDoBind();
     GSocketError Connect(GSocketStream stream);
     GSocketError SetNonOriented();
     int Read(char *buffer, int size);
@@ -82,6 +86,7 @@ public:
     /* DFE: We can't protect these data member until the GUI code is updated */
     /* protected: */
   int m_fd;
+  wxGSocketIOHandler *m_handler;
   GAddress *m_local;
   GAddress *m_peer;
   GSocketError m_error;
@@ -91,6 +96,8 @@ public:
   bool m_stream;
   bool m_establishing;
   bool m_reusable;
+  bool m_broadcast;
+  bool m_dobind;
   unsigned long m_timeout;
 
   /* Callbacks */

@@ -28,6 +28,7 @@
 #include "wx/aui/framemanager.h"
 #include "wx/aui/dockart.h"
 #include "wx/aui/floatpane.h"
+#include "wx/aui/tabmdi.h"
 
 #ifndef WX_PRECOMP
     #include "wx/panel.h"
@@ -151,7 +152,7 @@ public:
             wxRect rect(upd.GetRect());
             dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
 
-            upd++;
+            ++upd;
         }
     }
 
@@ -769,6 +770,17 @@ void wxAuiManager::SetManagedWindow(wxWindow* wnd)
                 wxAuiPaneInfo().Name(wxT("mdiclient")).
                 CenterPane().PaneBorder(false));
     }
+    else if (m_frame->IsKindOf(CLASSINFO(wxAuiMDIParentFrame)))
+    {
+        wxAuiMDIParentFrame* mdi_frame = (wxAuiMDIParentFrame*)m_frame;
+        wxAuiMDIClientWindow* client_window = mdi_frame->GetClientWindow();
+        wxASSERT_MSG(client_window, wxT("Client window is NULL!"));
+
+        AddPane(client_window,
+                wxAuiPaneInfo().Name(wxT("mdiclient")).
+                CenterPane().PaneBorder(false));
+    }
+
 #endif
 
     UpdateHintWindowConfig();
@@ -2292,21 +2304,21 @@ void wxAuiManager::Update()
             p.window->SetSize(1,1);
 
 
-	        // the following block is a workaround for bug #1531361
-	        // (see wxWidgets sourceforge page).  On wxGTK (only), when
-	        // a frame is shown/hidden, a move event unfortunately
-	        // also gets fired.  Because we may be dragging around
-	        // a pane, we need to cancel that action here to prevent
-	        // a spurious crash.
-	        if (m_action_window == p.frame)
-	        {
-		        if (wxWindow::GetCapture() == m_frame)
+            // the following block is a workaround for bug #1531361
+            // (see wxWidgets sourceforge page).  On wxGTK (only), when
+            // a frame is shown/hidden, a move event unfortunately
+            // also gets fired.  Because we may be dragging around
+            // a pane, we need to cancel that action here to prevent
+            // a spurious crash.
+            if (m_action_window == p.frame)
+            {
+                if (wxWindow::GetCapture() == m_frame)
                     m_frame->ReleaseMouse();
                 m_action = actionNone;
-		        m_action_window = NULL;
-	        }
+                m_action_window = NULL;
+            }
 
-	        // hide the frame
+            // hide the frame
             if (p.frame->IsShown())
                 p.frame->Show(false);
 
@@ -2762,16 +2774,11 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
 
             return ProcessDockResult(target, drop);
         }
-        else
-        {
-            m_skipping = false;
-        }
 
-        if (!m_skipping)
-        {
-            m_last_rect = part->dock->rect;
-            m_last_rect.Inflate( 15, 15 );
-        }
+        m_skipping = false;
+
+        m_last_rect = part->dock->rect;
+        m_last_rect.Inflate( 15, 15 );
 
         drop.Dock().
              Direction(part->dock->dock_direction).
@@ -3061,6 +3068,7 @@ void wxAuiManager::ShowHint(const wxRect& rect)
             m_hint_fadeamt = 0;
 
         m_hint_wnd->SetSize(rect);
+        m_hint_wnd->SetTransparent(m_hint_fadeamt);
 
         if (!m_hint_wnd->IsShown())
             m_hint_wnd->Show();
@@ -3070,7 +3078,6 @@ void wxAuiManager::ShowHint(const wxRect& rect)
         if (m_action == actionDragFloatingPane && m_action_window)
             m_action_window->SetFocus();
 
-        m_hint_wnd->SetTransparent(m_hint_fadeamt);
         m_hint_wnd->Raise();
 
 
@@ -3209,6 +3216,7 @@ wxRect wxAuiManager::CalculateHintRect(wxWindow* pane_window,
     wxAuiDockUIPartArray uiparts;
     wxAuiPaneInfo hint = GetPane(pane_window);
     hint.name = wxT("__HINT__");
+    hint.PaneBorder(true);
     hint.Show();
 
     if (!hint.IsOk())
@@ -3358,27 +3366,24 @@ void wxAuiManager::OnFloatingPaneMoving(wxWindow* wnd, wxDirection dir)
     // no hint for toolbar floating windows
     if (pane.IsToolbar() && m_action == actionDragFloatingPane)
     {
-        if (m_action == actionDragFloatingPane)
-        {
-            wxAuiDockInfoArray docks;
-            wxAuiPaneInfoArray panes;
-            wxAuiDockUIPartArray uiparts;
-            wxAuiPaneInfo hint = pane;
+        wxAuiDockInfoArray docks;
+        wxAuiPaneInfoArray panes;
+        wxAuiDockUIPartArray uiparts;
+        wxAuiPaneInfo hint = pane;
 
-            CopyDocksAndPanes(docks, panes, m_docks, m_panes);
+        CopyDocksAndPanes(docks, panes, m_docks, m_panes);
 
-            // find out where the new pane would be
-            if (!DoDrop(docks, panes, hint, client_pt))
-                return;
-            if (hint.IsFloating())
-                return;
+        // find out where the new pane would be
+        if (!DoDrop(docks, panes, hint, client_pt))
+            return;
+        if (hint.IsFloating())
+            return;
 
-            pane = hint;
-            m_action = actionDragToolbarPane;
-            m_action_window = pane.window;
+        pane = hint;
+        m_action = actionDragToolbarPane;
+        m_action_window = pane.window;
 
-            Update();
-        }
+        Update();
 
         return;
     }
@@ -3540,6 +3545,10 @@ void wxAuiManager::OnFloatingPaneActivated(wxWindow* wnd)
 
 void wxAuiManager::OnRender(wxAuiManagerEvent& evt)
 {
+    // if the frame is about to be deleted, don't bother
+    if (!m_frame || wxPendingDelete.Member(m_frame))
+        return;
+
     wxDC* dc = evt.GetDC();
 
 #ifdef __WXMAC__

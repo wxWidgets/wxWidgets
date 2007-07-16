@@ -24,7 +24,7 @@
  * The Mac dialog for printing
  */
 
-class WXDLLEXPORT wxDC;
+class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLEXPORT wxMacPrintDialog: public wxPrintDialogBase
 {
 public:
@@ -74,7 +74,7 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacPageSetupDialog)
 };
 
-class WXDLLEXPORT wxTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
 /*
 * wxMacPageMarginsDialog

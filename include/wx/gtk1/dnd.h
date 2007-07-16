@@ -23,13 +23,13 @@
 // classes
 //-------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 
-class WXDLLIMPEXP_CORE wxDropTarget;
-class WXDLLIMPEXP_CORE wxTextDropTarget;
-class WXDLLIMPEXP_CORE wxFileDropTarget;
+class WXDLLIMPEXP_FWD_CORE wxDropTarget;
+class WXDLLIMPEXP_FWD_CORE wxTextDropTarget;
+class WXDLLIMPEXP_FWD_CORE wxFileDropTarget;
 
-class WXDLLIMPEXP_CORE wxDropSource;
+class WXDLLIMPEXP_FWD_CORE wxDropSource;
 
 // ----------------------------------------------------------------------------
 // macros

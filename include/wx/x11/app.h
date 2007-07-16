@@ -23,12 +23,12 @@
 // forward declarations
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFrame;
-class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxApp;
-class WXDLLEXPORT wxKeyEvent;
-class WXDLLEXPORT wxLog;
-class WXDLLEXPORT wxXVisualInfo;
+class WXDLLIMPEXP_FWD_CORE wxFrame;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxApp;
+class WXDLLIMPEXP_FWD_CORE wxKeyEvent;
+class WXDLLIMPEXP_FWD_CORE wxLog;
+class WXDLLIMPEXP_FWD_CORE wxXVisualInfo;
 
 // ----------------------------------------------------------------------------
 // the wxApp class for wxX11 - see wxAppBase for more details
@@ -106,7 +106,6 @@ protected:
     long                  m_maxRequestSize;
 
     DECLARE_DYNAMIC_CLASS(wxApp)
-    DECLARE_EVENT_TABLE()
 };
 
 #endif // _WX_X11_APP_H_

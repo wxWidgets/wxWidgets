@@ -12,7 +12,7 @@
 #ifndef _WX_MENU_H_
 #define _WX_MENU_H_
 
-class WXDLLEXPORT wxFrame;
+class WXDLLIMPEXP_FWD_CORE wxFrame;
 
 #include "wx/arrstr.h"
 

@@ -192,11 +192,11 @@ wxCharBuffer wxConvertToGTK(const wxString& s, wxFontEncoding enc)
     wxWCharBuffer wbuf;
     if ( enc == wxFONTENCODING_SYSTEM || enc == wxFONTENCODING_DEFAULT )
     {
-        wbuf = wxConvUI->cMB2WC(s);
+        wbuf = wxConvUI->cMB2WC(s.c_str());
     }
     else // another encoding, use generic conversion class
     {
-        wbuf = wxCSConv(enc).cMB2WC(s);
+        wbuf = wxCSConv(enc).cMB2WC(s.c_str());
     }
 
     if ( !wbuf && !s.empty() )
@@ -207,7 +207,7 @@ wxCharBuffer wxConvertToGTK(const wxString& s, wxFontEncoding enc)
         // we choose ISO8859-1 here arbitrarily, it's just the most common
         // encoding probably and, also importantly here, conversion from it
         // never fails as it's done internally by wxCSConv
-        wbuf = wxCSConv(wxFONTENCODING_ISO8859_1).cMB2WC(s);
+        wbuf = wxCSConv(wxFONTENCODING_ISO8859_1).cMB2WC(s.c_str());
     }
 
     return wxConvUTF8.cWC2MB(wbuf);
@@ -217,7 +217,7 @@ wxCharBuffer wxConvertFromGTK(const wxString& s, wxFontEncoding enc)
 {
     // this conversion should never fail as GTK+ always uses UTF-8 internally
     // so there are no complications here
-    const wxWCharBuffer wbuf(wxConvUTF8.cMB2WC(s));
+    const wxWCharBuffer wbuf(wxConvUTF8.cMB2WC(s.c_str()));
     if ( enc == wxFONTENCODING_SYSTEM )
         return wxConvUI->cWC2MB(wbuf);
 
@@ -312,10 +312,14 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
     return wxPORT_GTK;
 }
 
+#if wxUSE_TIMER
+
 wxTimerImpl *wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 {
     return new wxGTKTimerImpl(timer);
 }
+
+#endif // wxUSE_TIMER
 
 #if wxUSE_DETECT_SM
 static wxString GetSM()
@@ -364,7 +368,7 @@ static wxString GetSM()
 // wxGUIAppTraits
 //-----------------------------------------------------------------------------
 
-wxEventLoop *wxGUIAppTraits::CreateEventLoop()
+wxEventLoopBase *wxGUIAppTraits::CreateEventLoop()
 {
     return new wxEventLoop();
 }
@@ -483,9 +487,9 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
 wxString wxGUIAppTraits::GetDesktopEnvironment() const
 {
     wxString de = wxSystemOptions::GetOption(_T("gtk.desktop"));
+#if wxUSE_DETECT_SM
     if ( de.empty() )
     {
-#if wxUSE_DETECT_SM
         static const wxString s_SM = GetSM();
 
         if (s_SM == wxT("GnomeSM"))

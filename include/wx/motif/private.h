@@ -16,11 +16,11 @@
 #include "X11/Xlib.h"
 #include "wx/evtloop.h"
 
-class WXDLLEXPORT wxFont;
-class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxSize;
-class WXDLLEXPORT wxBitmap;
-class WXDLLEXPORT wxColour;
+class WXDLLIMPEXP_FWD_CORE wxFont;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxSize;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxColour;
 
 #include "wx/x11/privx.h"
 

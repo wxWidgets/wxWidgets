@@ -67,6 +67,7 @@ include/wx/private/*.h
 include/wx/protocol/*.h
 include/wx/wx_setup.vms
 include/wx/unix/*.h
+include/wx/unix/private/*.h
 lib/dummy
 
 include/wx/msw/*.h

@@ -12,6 +12,8 @@
 #ifndef _WX_COCOA_NSAPPLICATION_H__
 #define _WX_COCOA_NSAPPLICATION_H__
 
+#include "wx/cocoa/objc/objc_uniquifying.h"
+
 // ========================================================================
 // wxNSApplicationDelegate
 // ========================================================================
@@ -32,6 +34,7 @@
 // Delegate methods
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication;
 @end // interface wxNSApplicationDelegate : NSObject
+WX_DECLARE_GET_OBJC_CLASS(wxNSApplicationDelegate,NSObject)
 
 // ========================================================================
 // wxNSApplicationObserver
@@ -60,5 +63,6 @@
 // Other notifications
 - (void)controlTintChanged:(NSNotification *)notification;
 @end // interface wxNSApplicationObserver : NSObject
+WX_DECLARE_GET_OBJC_CLASS(wxNSApplicationObserver,NSObject)
 
 #endif //ndef _WX_COCOA_NSAPPLICATION_H__

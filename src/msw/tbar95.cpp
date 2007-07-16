@@ -1523,6 +1523,9 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
     RECT rect = wxGetClientRect(GetHwnd());
     HDC hdc = GetHdcOf((*event.GetDC()));
 
+    int majorVersion, minorVersion;
+    wxGetOsVersion(& majorVersion, & minorVersion);
+
 #if wxUSE_UXTHEME
     // we may need to draw themed colour so that we appear correctly on
     // e.g. notebook page under XP with themes but only do it if the parent
@@ -1543,6 +1546,30 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
                 wxLogApiError(_T("DrawThemeParentBackground(toolbar)"), hr);
         }
     }
+
+    // Only draw a rebar theme on Vista, since it doesn't jive so well with XP
+    if ( !UseBgCol() && majorVersion >= 6 )
+    {
+        wxUxThemeEngine *theme = wxUxThemeEngine::GetIfActive();
+        if ( theme )
+        {
+            wxUxThemeHandle hTheme(this, L"REBAR");
+
+            RECT r;
+            wxRect rect = GetClientRect();
+            wxCopyRectToRECT(rect, r);
+
+            HRESULT hr = theme->DrawThemeBackground(hTheme, hdc, 0, 0, & r, NULL);
+            if ( hr == S_OK )
+                return;
+
+            // it can also return S_FALSE which seems to simply say that it
+            // didn't draw anything but no error really occurred
+            if ( FAILED(hr) )
+                wxLogApiError(_T("DrawThemeParentBackground(toolbar)"), hr);
+        }
+    }
+
 #endif // wxUSE_UXTHEME
 
     if ( UseBgCol() || (GetMSWToolbarStyle() & TBSTYLE_TRANSPARENT) )
@@ -1627,6 +1654,10 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
         // no controls, nothing to erase
         return false;
 
+    wxSize clientSize = GetClientSize();
+    int majorVersion, minorVersion;
+    wxGetOsVersion(& majorVersion, & minorVersion);
+
     // prepare the DC on which we'll be drawing
     wxClientDC dc(this);
     dc.SetBrush(wxBrush(GetBackgroundColour(), wxSOLID));
@@ -1696,20 +1727,53 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
                 // does it intersect the control?
                 wxRect rectItem;
                 wxCopyRECTToRect(r, rectItem);
-                if ( rectCtrl.Intersects(rectItem) )
+                if ( rectCtrl.Intersects(rectItem) || (staticText && rectStaticText.Intersects(rectItem)))
                 {
                     // yes, do erase it!
-                    dc.DrawRectangle(rectItem);
 
+                    bool haveRefreshed = false;
+
+#if wxUSE_UXTHEME
+                    if ( !UseBgCol() && !GetParent()->UseBgCol() )
+                    {
+                        // Don't use DrawThemeBackground
+                    }
+                    else if ( !UseBgCol() && majorVersion >= 6 )
+                    {
+                        wxUxThemeEngine *theme = wxUxThemeEngine::GetIfActive();
+                        if ( theme )
+                        {
+                            wxUxThemeHandle hTheme(this, L"REBAR");
+
+                            RECT clipRect = r;
+
+                            // Draw the whole background since the pattern may be position sensitive;
+                            // but clip it to the area of interest.
+                            r.left = 0;
+                            r.right = clientSize.x;
+                            r.top = 0;
+                            r.bottom = clientSize.y;
+
+                            HRESULT hr = theme->DrawThemeBackground(hTheme, (HDC) dc.GetHDC(), 0, 0, & r, & clipRect);
+                            if ( hr == S_OK )
+                                haveRefreshed = true;
+                        }
+                    }
+#endif
+
+                    if (!haveRefreshed)
+                        dc.DrawRectangle(rectItem);
+                }
+
+                if ( rectCtrl.Intersects(rectItem) )
+                {
                     // Necessary in case we use a no-paint-on-size
                     // style in the parent: the controls can disappear
                     control->Refresh(false);
-                }
+				}
+
                 if ( staticText && rectStaticText.Intersects(rectItem) )
                 {
-                    // yes, do erase it!
-                    dc.DrawRectangle(rectItem);
-
                     // Necessary in case we use a no-paint-on-size
                     // style in the parent: the controls can disappear
                     staticText->Refresh(false);

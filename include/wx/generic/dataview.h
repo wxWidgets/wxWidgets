@@ -21,9 +21,9 @@
 // classes
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewCtrl;
-class WXDLLIMPEXP_ADV wxDataViewMainWindow;
-class WXDLLIMPEXP_ADV wxDataViewHeaderWindow;
+class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
+class WXDLLIMPEXP_FWD_ADV wxDataViewMainWindow;
+class WXDLLIMPEXP_FWD_ADV wxDataViewHeaderWindow;
 
 // ---------------------------------------------------------
 // wxDataViewRenderer
@@ -351,6 +351,8 @@ public:
 
     virtual void DoSetExpanderColumn();
     virtual void DoSetIndent();
+
+    virtual wxDataViewItem GetSelection() ;
 
 /********************selection code*********************
     virtual void SetSelection( int row ); // -1 for unselect

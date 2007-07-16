@@ -87,6 +87,10 @@ void PointTestCase::Operators()
     p6 = p2; p6 = p2 - s;
     CPPUNIT_ASSERT( p3 == p5 );
     CPPUNIT_ASSERT( p4 == p6 );
+    p5 = p2; p5 = s + p2;
+    p6 = p2; p6 = s - p2;
+    CPPUNIT_ASSERT( p3 == p5 );
+    CPPUNIT_ASSERT( p4 == -p6 );
     p5 = p2; p5 += s;
     p6 = p2; p6 -= s;
     CPPUNIT_ASSERT( p3 == p5 );

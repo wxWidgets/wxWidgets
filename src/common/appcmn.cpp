@@ -138,15 +138,14 @@ void wxAppBase::CleanUp()
     delete wxTheColourDatabase;
     wxTheColourDatabase = NULL;
 
-    delete wxPendingEvents;
-    wxPendingEvents = NULL;
-
 #if wxUSE_THREADS
     #if wxUSE_VALIDATORS
         // If we don't do the following, we get an apparent memory leak.
         ((wxEvtHandler&) wxDefaultValidator).ClearEventLocker();
     #endif // wxUSE_VALIDATORS
 #endif // wxUSE_THREADS
+
+    wxAppConsole::CleanUp();
 }
 
 // ----------------------------------------------------------------------------
@@ -366,6 +365,9 @@ void wxAppBase::DeletePendingObjects()
 // Returns true if more time is needed.
 bool wxAppBase::ProcessIdle()
 {
+    // process pending wx events before sending idle events
+    ProcessPendingEvents();
+
     wxIdleEvent event;
     bool needMore = false;
     wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
@@ -377,7 +379,16 @@ bool wxAppBase::ProcessIdle()
         node = node->GetNext();
     }
 
-    needMore = wxAppConsole::ProcessIdle();
+    if (wxAppConsole::ProcessIdle())
+        needMore = true;
+
+    // 'Garbage' collection of windows deleted with Close().
+    DeletePendingObjects();
+
+#if wxUSE_LOG
+    // flush the logged messages if any
+    wxLog::FlushActive();
+#endif
 
     wxUpdateUIEvent::ResetUpdateTime();
 
@@ -412,27 +423,6 @@ bool wxAppBase::SendIdleEvents(wxWindow* win, wxIdleEvent& event)
     }
 
     return needMore;
-}
-
-void wxAppBase::OnIdle(wxIdleEvent& WXUNUSED(event))
-{
-    // If there are pending events, we must process them: pending events
-    // are either events to the threads other than main or events posted
-    // with wxPostEvent() functions
-    // GRG: I have moved this here so that all pending events are processed
-    //   before starting to delete any objects. This behaves better (in
-    //   particular, wrt wxPostEvent) and is coherent with wxGTK's current
-    //   behaviour. Changed Feb/2000 before 2.1.14
-    ProcessPendingEvents();
-
-    // 'Garbage' collection of windows deleted with Close().
-    DeletePendingObjects();
-
-#if wxUSE_LOG
-    // flush the logged messages if any
-    wxLog::FlushActive();
-#endif // wxUSE_LOG
-
 }
 
 // ----------------------------------------------------------------------------

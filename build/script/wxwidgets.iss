@@ -34,7 +34,14 @@ Compression=lzma
 SolidCompression=yes
 
 [Files]
-Source: "C:\wx\inno\wxWidgets\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+; source files
+Source: "C:\wx\inno\wxWidgets\*"; DestDir: "{app}"; Excludes: ".cvsignore,cocoa,dfb,mac,gtk,gtk1,mgl,motif,msdos,os2,palmos,wxWindows.xcod*,x11,contrib,debian,distrib,docs,misc,tests,wxPython,*.pch,*.pch++,*.pchmm"; Flags: ignoreversion recursesubdirs createallsubdirs
+; docs and helpfile
+Source: "C:\wx\inno\wxWidgets\docs\htmlhelp\*"; DestDir: "{app}\docs\htmlhelp\";  Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\wx\inno\wxWidgets\docs\licence.txt"; DestDir: "{app}\docs\";  Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\wx\inno\wxWidgets\docs\readme.txt"; DestDir: "{app}\docs\";  Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\wx\inno\wxWidgets\docs\changes.txt"; DestDir: "{app}\docs\";  Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\wx\inno\wxWidgets\docs\msw\install.txt"; DestDir: "{app}\docs\msw";  Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [INI]

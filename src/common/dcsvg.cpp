@@ -15,12 +15,17 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_SVG
+
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/dcmemory.h"
+    #include "wx/dcscreen.h"
+    #include "wx/icon.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/dcsvg.h"
-#include "wx/image.h"
+#include "wx/wfstream.h"
 
 #define wxSVG_DEBUG FALSE
 // or TRUE to see the calls being executed
@@ -711,3 +716,6 @@ void wxSVGFileDC::SetDeviceOrigin(wxCoord x, wxCoord y)
 #pragma warn .rch
 #pragma warn .ccc
 #endif
+
+#endif // wxUSE_SVG
+

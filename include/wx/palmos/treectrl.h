@@ -26,7 +26,7 @@
 // fwd decl
 class  WXDLLEXPORT wxImageList;
 class  WXDLLEXPORT wxDragImage;
-struct WXDLLEXPORT wxTreeViewItem;
+struct WXDLLIMPEXP_FWD_CORE wxTreeViewItem;
 
 // hash storing attributes for our items
 WX_DECLARE_EXPORTED_VOIDPTR_HASH_MAP(wxTreeItemAttr *, wxMapTreeAttr);

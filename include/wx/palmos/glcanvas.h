@@ -19,7 +19,7 @@
 
 #include <GL/gl.h>
 
-class WXDLLIMPEXP_GL wxGLCanvas;     /* forward reference */
+class WXDLLIMPEXP_FWD_GL wxGLCanvas;     /* forward reference */
 
 class WXDLLIMPEXP_GL wxGLContext: public wxObject
 {
@@ -35,7 +35,7 @@ public:
 
     void SetCurrent();
 
-    void SetColour(const wxChar *colour);
+    void SetColour(const wxString& colour);
 
     void SwapBuffers();
 

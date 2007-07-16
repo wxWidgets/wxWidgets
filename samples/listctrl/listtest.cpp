@@ -130,7 +130,7 @@ END_EVENT_TABLE()
 IMPLEMENT_APP(MyApp)
 
 // number of items in list/report view
-static const int NUM_ITEMS = 30;
+static const int NUM_ITEMS = 10;
 
 // number of items in icon/small icon view
 static const int NUM_ICONS = 9;
@@ -165,14 +165,11 @@ bool MyApp::OnInit()
 
 // My frame constructor
 MyFrame::MyFrame(const wxChar *title)
-       : wxFrame(NULL, wxID_ANY, title)
+       : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(600, 500))
 {
     m_listCtrl = NULL;
     m_logWindow = NULL;
     m_smallVirtual = false;
-
-    if (wxSystemSettings::GetScreenType() > wxSYS_SCREEN_SMALL)
-        SetSize(wxSize(450, 340));
 
     // Give it an icon
     SetIcon( wxICON(mondrian) );
@@ -264,14 +261,14 @@ MyFrame::MyFrame(const wxChar *title)
     m_panel = new wxPanel(this, wxID_ANY);
     m_logWindow = new wxTextCtrl(m_panel, wxID_ANY, wxEmptyString,
                                  wxDefaultPosition, wxDefaultSize,
-                                 wxTE_MULTILINE | wxSUNKEN_BORDER);
+                                 wxTE_READONLY | wxTE_MULTILINE | wxSUNKEN_BORDER);
 
     m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_logWindow));
 
     RecreateList(wxLC_REPORT | wxLC_SINGLE_SEL);
 
 #if wxUSE_STATUSBAR
-    CreateStatusBar(3);
+    CreateStatusBar();
 #endif // wxUSE_STATUSBAR
 }
 

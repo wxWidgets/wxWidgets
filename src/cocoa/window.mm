@@ -22,7 +22,9 @@
 
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
+#include "wx/cocoa/trackingrectmanager.h"
 
+#import <Foundation/NSRunLoop.h>
 #include "wx/cocoa/objc/NSView.h"
 #import <AppKit/NSEvent.h>
 #import <AppKit/NSScrollView.h>
@@ -38,6 +40,18 @@
 #ifdef WXCOCOA_FILL_DUMMY_VIEW
 #import <AppKit/NSBezierPath.h>
 #endif //def WXCOCOA_FILL_DUMMY_VIEW
+
+/* NSComparisonResult is typedef'd as an enum pre-Leopard but typedef'd as
+ * NSInteger post-Leopard.  Pre-Leopard the Cocoa toolkit expects a function
+ * returning int and not NSComparisonResult.  Post-Leopard the Cocoa toolkit
+ * expects a function returning the new non-enum NSComparsionResult.
+ * Hence we create a typedef named CocoaWindowCompareFunctionResult.
+ */
+#if defined(NSINTEGER_DEFINED)
+typedef NSComparisonResult CocoaWindowCompareFunctionResult;
+#else
+typedef int CocoaWindowCompareFunctionResult;
+#endif
 
 // A category for methods that are only present in Panther's SDK
 @interface NSView(wxNSViewPrePantherCompatibility)
@@ -110,6 +124,7 @@ protected:
     wxWindowCocoa *m_owner;
     WX_NSView m_dummyNSView;
     virtual void Cocoa_FrameChanged(void);
+    virtual void Cocoa_synthesizeMouseMoved(void) {}
 #ifdef WXCOCOA_FILL_DUMMY_VIEW
     virtual bool Cocoa_drawRect(const NSRect& rect);
 #endif //def WXCOCOA_FILL_DUMMY_VIEW
@@ -135,6 +150,7 @@ protected:
     wxWindowCocoa *m_owner;
     WX_NSScrollView m_cocoaNSScrollView;
     virtual void Cocoa_FrameChanged(void);
+    virtual void Cocoa_synthesizeMouseMoved(void) {}
 private:
     wxWindowCocoaScrollView();
 };
@@ -145,6 +161,7 @@ private:
 @interface wxDummyNSView : NSView
 - (NSView *)hitTest:(NSPoint)aPoint;
 @end
+WX_DECLARE_GET_OBJC_CLASS(wxDummyNSView,NSView)
 
 @implementation wxDummyNSView : NSView
 - (NSView *)hitTest:(NSPoint)aPoint
@@ -153,6 +170,7 @@ private:
 }
 
 @end
+WX_IMPLEMENT_GET_OBJC_CLASS(wxDummyNSView,NSView)
 
 // ========================================================================
 // wxWindowCocoaHider
@@ -162,7 +180,7 @@ wxWindowCocoaHider::wxWindowCocoaHider(wxWindow *owner)
 {
     wxASSERT(owner);
     wxASSERT(owner->GetNSViewForHiding());
-    m_dummyNSView = [[wxDummyNSView alloc]
+    m_dummyNSView = [[WX_GET_OBJC_CLASS(wxDummyNSView) alloc]
         initWithFrame:[owner->GetNSViewForHiding() frame]];
     [m_dummyNSView setAutoresizingMask: [owner->GetNSViewForHiding() autoresizingMask]];
     AssociateNSView(m_dummyNSView);
@@ -199,6 +217,7 @@ bool wxWindowCocoaHider::Cocoa_drawRect(const NSRect& rect)
 @interface wxFlippedNSClipView : NSClipView
 - (BOOL)isFlipped;
 @end
+WX_DECLARE_GET_OBJC_CLASS(wxFlippedNSClipView,NSClipView)
 
 @implementation wxFlippedNSClipView : NSClipView
 - (BOOL)isFlipped
@@ -207,6 +226,7 @@ bool wxWindowCocoaHider::Cocoa_drawRect(const NSRect& rect)
 }
 
 @end
+WX_IMPLEMENT_GET_OBJC_CLASS(wxFlippedNSClipView,NSClipView)
 
 // ========================================================================
 // wxWindowCocoaScrollView
@@ -223,7 +243,7 @@ wxWindowCocoaScrollView::wxWindowCocoaScrollView(wxWindow *owner)
 
     /* Replace the default NSClipView with a flipped one.  This ensures
        scrolling is "pinned" to the top-left instead of bottom-right. */
-    NSClipView *flippedClip = [[wxFlippedNSClipView alloc]
+    NSClipView *flippedClip = [[WX_GET_OBJC_CLASS(wxFlippedNSClipView) alloc]
         initWithFrame: [[m_cocoaNSScrollView contentView] frame]];
     [m_cocoaNSScrollView setContentView:flippedClip];
     [flippedClip release];
@@ -313,6 +333,7 @@ void wxWindowCocoa::Init()
     m_wxCocoaScrollView = NULL;
     m_isBeingDeleted = false;
     m_isInPaint = false;
+    m_visibleTrackingRectManager = NULL;
 }
 
 // Constructor
@@ -327,7 +348,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID winid,
 
     // TODO: create the window
     m_cocoaNSView = NULL;
-    SetNSView([[WXNSView alloc] initWithFrame: MakeDefaultNSRect(size)]);
+    SetNSView([[WX_GET_OBJC_CLASS(WXNSView) alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
 
     if (m_parent)
@@ -373,6 +394,10 @@ void wxWindowCocoa::CocoaRemoveFromParent(void)
 
 void wxWindowCocoa::SetNSView(WX_NSView cocoaNSView)
 {
+    // Clear the visible area tracking rect if we have one.
+    delete m_visibleTrackingRectManager;
+    m_visibleTrackingRectManager = NULL;
+
     bool need_debug = cocoaNSView || m_cocoaNSView;
     if(need_debug) wxLogTrace(wxTRACE_COCOA_RetainRelease,wxT("wxWindowCocoa=%p::SetNSView [m_cocoaNSView=%p retainCount]=%d"),this,m_cocoaNSView,[m_cocoaNSView retainCount]);
     DisassociateNSView(m_cocoaNSView);
@@ -445,7 +470,7 @@ bool wxWindowCocoa::Cocoa_drawRect(const NSRect &rect)
 
     // Set m_updateRegion
     const NSRect *rects = &rect; // The bounding box of the region
-    int countRects = 1;
+    NSInteger countRects = 1;
     // Try replacing the larger rectangle with a list of smaller ones:
     if ([GetNSView() respondsToSelector:@selector(getRectsBeingDrawn:count:)])
         [GetNSView() getRectsBeingDrawn:&rects count:&countRects];
@@ -491,18 +516,65 @@ bool wxWindowCocoa::Cocoa_mouseMoved(WX_NSEvent theEvent)
 {
     wxMouseEvent event(wxEVT_MOTION);
     InitMouseEvent(event,theEvent);
-    wxLogTrace(wxTRACE_COCOA,wxT("Mouse Drag @%d,%d"),event.m_x,event.m_y);
+    wxLogTrace(wxTRACE_COCOA,wxT("wxWindow=%p::Cocoa_mouseMoved @%d,%d"),this,event.m_x,event.m_y);
     return GetEventHandler()->ProcessEvent(event);
+}
+
+void wxWindowCocoa::Cocoa_synthesizeMouseMoved()
+{
+    wxMouseEvent event(wxEVT_MOTION);
+    NSWindow *window = [GetNSView() window];
+    NSPoint locationInWindow = [window mouseLocationOutsideOfEventStream];
+    NSPoint cocoaPoint = [m_cocoaNSView convertPoint:locationInWindow fromView:nil];
+
+    NSPoint pointWx = CocoaTransformBoundsToWx(cocoaPoint);
+    // FIXME: Should we be adjusting for client area origin?
+    const wxPoint &clientorigin = GetClientAreaOrigin();
+    event.m_x = (wxCoord)pointWx.x - clientorigin.x;
+    event.m_y = (wxCoord)pointWx.y - clientorigin.y;
+
+    // TODO: Handle shift, control, alt, meta flags
+    event.SetEventObject(this);
+    event.SetId(GetId());
+
+    wxLogTrace(wxTRACE_COCOA,wxT("wxwin=%p Synthesized Mouse Moved @%d,%d"),this,event.m_x,event.m_y);
+    GetEventHandler()->ProcessEvent(event);
 }
 
 bool wxWindowCocoa::Cocoa_mouseEntered(WX_NSEvent theEvent)
 {
-    return false;
+    if(m_visibleTrackingRectManager != NULL && m_visibleTrackingRectManager->IsOwnerOfEvent(theEvent))
+    {
+        m_visibleTrackingRectManager->BeginSynthesizingEvents();
+
+        // Although we synthesize the mouse moved events we don't poll for them but rather send them only when
+        // some other event comes in.  That other event is (guess what) mouse moved events that will be sent
+        // to the NSWindow which will forward them on to the first responder.  We are not likely to be the
+        // first responder, so the mouseMoved: events are effectively discarded.
+        [[GetNSView() window] setAcceptsMouseMovedEvents:YES];
+
+        wxMouseEvent event(wxEVT_ENTER_WINDOW);
+        InitMouseEvent(event,theEvent);
+        wxLogTrace(wxTRACE_COCOA,wxT("wxwin=%p Mouse Entered @%d,%d"),this,event.m_x,event.m_y);
+        return GetEventHandler()->ProcessEvent(event);
+    }
+    else
+        return false;
 }
 
 bool wxWindowCocoa::Cocoa_mouseExited(WX_NSEvent theEvent)
 {
-    return false;
+    if(m_visibleTrackingRectManager != NULL && m_visibleTrackingRectManager->IsOwnerOfEvent(theEvent))
+    {
+        m_visibleTrackingRectManager->StopSynthesizingEvents();
+
+        wxMouseEvent event(wxEVT_LEAVE_WINDOW);
+        InitMouseEvent(event,theEvent);
+        wxLogTrace(wxTRACE_COCOA,wxT("wxwin=%p Mouse Exited @%d,%d"),this,event.m_x,event.m_y);
+        return GetEventHandler()->ProcessEvent(event);
+    }
+    else
+        return false;
 }
 
 bool wxWindowCocoa::Cocoa_mouseDown(WX_NSEvent theEvent)
@@ -572,7 +644,9 @@ bool wxWindowCocoa::Cocoa_otherMouseUp(WX_NSEvent theEvent)
 
 void wxWindowCocoa::Cocoa_FrameChanged(void)
 {
-    wxLogTrace(wxTRACE_COCOA,wxT("Cocoa_FrameChanged"));
+    wxLogTrace(wxTRACE_COCOA,wxT("wxWindow=%p::Cocoa_FrameChanged"),this);
+    if(m_visibleTrackingRectManager != NULL)
+        m_visibleTrackingRectManager->RebuildTrackingRect();
     wxSizeEvent event(GetSize(), m_windowId);
     event.SetEventObject(this);
     GetEventHandler()->ProcessEvent(event);
@@ -580,12 +654,34 @@ void wxWindowCocoa::Cocoa_FrameChanged(void)
 
 bool wxWindowCocoa::Cocoa_resetCursorRects()
 {
+    wxLogTrace(wxTRACE_COCOA,wxT("wxWindow=%p::Cocoa_resetCursorRects"),this);
+    if(m_visibleTrackingRectManager != NULL)
+        m_visibleTrackingRectManager->RebuildTrackingRect();
+
     if(!m_cursor.GetNSCursor())
         return false;
 
     [GetNSView() addCursorRect: [GetNSView() visibleRect]  cursor: m_cursor.GetNSCursor()];
 
     return true;
+}
+
+bool wxWindowCocoa::Cocoa_viewDidMoveToWindow()
+{
+    wxLogTrace(wxTRACE_COCOA,wxT("wxWindow=%p::viewDidMoveToWindow"),this);
+    // Set up new tracking rects.  I am reasonably sure the new window must be set before doing this.
+    if(m_visibleTrackingRectManager != NULL)
+        m_visibleTrackingRectManager->BuildTrackingRect();
+    return false;
+}
+
+bool wxWindowCocoa::Cocoa_viewWillMoveToWindow(WX_NSWindow newWindow)
+{
+    wxLogTrace(wxTRACE_COCOA,wxT("wxWindow=%p::viewWillMoveToWindow:%p"),this, newWindow);
+    // Clear tracking rects.  It is imperative this be done before the new window is set.
+    if(m_visibleTrackingRectManager != NULL)
+        m_visibleTrackingRectManager->ClearTrackingRect();
+    return false;
 }
 
 bool wxWindow::Close(bool force)
@@ -927,15 +1023,78 @@ bool wxWindow::SetFont(const wxFont& font)
     return true;
 }
 
-static int CocoaRaiseWindowCompareFunction(id first, id second, void *target)
+#if 0 // these are used when debugging the algorithm.
+static char const * const comparisonresultStrings[] =
+{   "<"
+,   "=="
+,   ">"
+};
+#endif
+
+class CocoaWindowCompareContext
 {
+    DECLARE_NO_COPY_CLASS(CocoaWindowCompareContext)
+public:
+    CocoaWindowCompareContext(); // Not implemented
+    CocoaWindowCompareContext(NSView *target, NSArray *subviews)
+    {
+        m_target = target;
+        // Cocoa sorts subviews in-place.. make a copy
+        m_subviews = [subviews copy];
+    }
+    ~CocoaWindowCompareContext()
+    {   // release the copy
+        [m_subviews release];
+    }
+    NSView* target()
+    {   return m_target; }
+    NSArray* subviews()
+    {   return m_subviews; }
+    /* Helper function that returns the comparison based off of the original ordering */
+    CocoaWindowCompareFunctionResult CompareUsingOriginalOrdering(id first, id second)
+    {
+        NSUInteger firstI = [m_subviews indexOfObjectIdenticalTo:first];
+        NSUInteger secondI = [m_subviews indexOfObjectIdenticalTo:second];
+        // NOTE: If either firstI or secondI is NSNotFound then it will be NSIntegerMax and thus will
+        // likely compare higher than the other view which is reasonable considering the only way that
+        // can happen is if the subview was added after our call to subviews but before the call to
+        // sortSubviewsUsingFunction:context:.  Thus we don't bother checking.  Particularly because
+        // that case should never occur anyway because that would imply a multi-threaded GUI call
+        // which is a big no-no with Cocoa.
+
+        // Subviews are ordered from back to front meaning one that is already lower will have an lower index.
+        NSComparisonResult result = (firstI < secondI)
+            ?   NSOrderedAscending /* -1 */
+            :   (firstI > secondI)
+                ?   NSOrderedDescending /* 1 */
+                :   NSOrderedSame /* 0 */;
+
+#if 0 // Enable this if you need to debug the algorithm.
+        NSLog(@"%@ [%d] %s %@ [%d]\n", first, firstI, comparisonresultStrings[result+1], second, secondI);
+#endif
+        return result;
+    }
+private:
+    /* The subview we are trying to Raise or Lower */
+    NSView *m_target;
+    /* A copy of the original array of subviews */
+    NSArray *m_subviews;
+};
+
+/* Causes Cocoa to raise the target view to the top of the Z-Order by telling the sort function that
+ * the target view is always higher than every other view.  When comparing two views neither of
+ * which is the target, it returns the correct response based on the original ordering
+ */
+static CocoaWindowCompareFunctionResult CocoaRaiseWindowCompareFunction(id first, id second, void *ctx)
+{
+    CocoaWindowCompareContext *compareContext = (CocoaWindowCompareContext*)ctx;
     // first should be ordered higher
-    if(first==target)
+    if(first==compareContext->target())
         return NSOrderedDescending;
     // second should be ordered higher
-    if(second==target)
+    if(second==compareContext->target())
         return NSOrderedAscending;
-    return NSOrderedSame;
+    return compareContext->CompareUsingOriginalOrdering(first,second);
 }
 
 // Raise the window to the top of the Z order
@@ -943,29 +1102,47 @@ void wxWindow::Raise()
 {
 //    wxAutoNSAutoreleasePool pool;
     NSView *nsview = GetNSViewForSuperview();
-    [[nsview superview] sortSubviewsUsingFunction:
+    NSView *superview = [nsview superview];
+    CocoaWindowCompareContext compareContext(nsview, [superview subviews]);
+
+    [superview sortSubviewsUsingFunction:
             CocoaRaiseWindowCompareFunction
-        context: nsview];
+        context: &compareContext];
 }
 
-static int CocoaLowerWindowCompareFunction(id first, id second, void *target)
+/* Causes Cocoa to lower the target view to the bottom of the Z-Order by telling the sort function that
+ * the target view is always lower than every other view.  When comparing two views neither of
+ * which is the target, it returns the correct response based on the original ordering
+ */
+static CocoaWindowCompareFunctionResult CocoaLowerWindowCompareFunction(id first, id second, void *ctx)
 {
+    CocoaWindowCompareContext *compareContext = (CocoaWindowCompareContext*)ctx;
     // first should be ordered lower
-    if(first==target)
+    if(first==compareContext->target())
         return NSOrderedAscending;
     // second should be ordered lower
-    if(second==target)
+    if(second==compareContext->target())
         return NSOrderedDescending;
-    return NSOrderedSame;
+    return compareContext->CompareUsingOriginalOrdering(first,second);
 }
 
 // Lower the window to the bottom of the Z order
 void wxWindow::Lower()
 {
     NSView *nsview = GetNSViewForSuperview();
-    [[nsview superview] sortSubviewsUsingFunction:
+    NSView *superview = [nsview superview];
+    CocoaWindowCompareContext compareContext(nsview, [superview subviews]);
+
+#if 0
+    NSLog(@"Target:\n%@\n", nsview);
+    NSLog(@"Before:\n%@\n", compareContext.subviews());
+#endif
+    [superview sortSubviewsUsingFunction:
             CocoaLowerWindowCompareFunction
-        context: nsview];
+        context: &compareContext];
+#if 0
+    NSLog(@"After:\n%@\n", [superview subviews]);
+#endif
 }
 
 bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
@@ -1032,3 +1209,89 @@ wxWindow* wxFindWindowAtPointer(wxPoint& pt)
     pt = wxGetMousePosition();
     return NULL;
 }
+
+
+// ========================================================================
+// wxCocoaTrackingRectManager
+// ========================================================================
+
+wxCocoaTrackingRectManager::wxCocoaTrackingRectManager(wxWindow *window)
+:   m_window(window)
+{
+    m_isTrackingRectActive = false;
+    m_runLoopObserver = NULL;
+    BuildTrackingRect();
+}
+
+void wxCocoaTrackingRectManager::ClearTrackingRect()
+{
+    if(m_isTrackingRectActive)
+    {
+        [m_window->GetNSView() removeTrackingRect:m_trackingRectTag];
+        m_isTrackingRectActive = false;
+    }
+    // If we were doing periodic events we need to clear those too
+    StopSynthesizingEvents();
+}
+
+void wxCocoaTrackingRectManager::StopSynthesizingEvents()
+{
+    if(m_runLoopObserver != NULL)
+    {
+        CFRunLoopRemoveObserver([[NSRunLoop currentRunLoop] getCFRunLoop], m_runLoopObserver, kCFRunLoopCommonModes);
+        CFRelease(m_runLoopObserver);
+        m_runLoopObserver = NULL;
+    }
+}
+
+void wxCocoaTrackingRectManager::BuildTrackingRect()
+{
+    wxASSERT_MSG(!m_isTrackingRectActive, wxT("Tracking rect was not cleared"));
+    if([m_window->GetNSView() window] != nil)
+    {
+        m_trackingRectTag = [m_window->GetNSView() addTrackingRect:[m_window->GetNSView() visibleRect] owner:m_window->GetNSView() userData:NULL assumeInside:NO];
+        m_isTrackingRectActive = true;
+    }
+}
+
+static NSPoint s_lastScreenMouseLocation = NSZeroPoint;
+
+static void SynthesizeMouseMovedEvent(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info)
+{
+    NSPoint screenMouseLocation = [NSEvent mouseLocation];
+    if(screenMouseLocation.x != s_lastScreenMouseLocation.x || screenMouseLocation.y != s_lastScreenMouseLocation.y)
+    {
+        wxCocoaNSView *win = reinterpret_cast<wxCocoaNSView*>(info);
+        win->Cocoa_synthesizeMouseMoved();
+    }
+}
+
+void wxCocoaTrackingRectManager::BeginSynthesizingEvents()
+{
+    CFRunLoopObserverContext observerContext =
+    {   0
+    ,   static_cast<wxCocoaNSView*>(m_window)
+    ,   NULL
+    ,   NULL
+    ,   NULL
+    };
+    m_runLoopObserver = CFRunLoopObserverCreate(kCFAllocatorDefault, kCFRunLoopBeforeWaiting, TRUE, 0, SynthesizeMouseMovedEvent, &observerContext);
+    CFRunLoopAddObserver([[NSRunLoop currentRunLoop] getCFRunLoop], m_runLoopObserver, kCFRunLoopCommonModes);
+}
+
+void wxCocoaTrackingRectManager::RebuildTrackingRect()
+{
+    ClearTrackingRect();
+    BuildTrackingRect();
+}
+
+wxCocoaTrackingRectManager::~wxCocoaTrackingRectManager()
+{
+    ClearTrackingRect();
+}
+
+bool wxCocoaTrackingRectManager::IsOwnerOfEvent(NSEvent *anEvent)
+{
+    return m_isTrackingRectActive && (m_trackingRectTag == [anEvent trackingNumber]);
+}
+

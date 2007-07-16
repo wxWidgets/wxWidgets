@@ -66,22 +66,22 @@
 // forward declarations
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxCaret;
-class WXDLLEXPORT wxControl;
-class WXDLLEXPORT wxCursor;
-class WXDLLEXPORT wxDC;
-class WXDLLEXPORT wxDropTarget;
-class WXDLLEXPORT wxItemResource;
-class WXDLLEXPORT wxLayoutConstraints;
-class WXDLLEXPORT wxResourceTable;
-class WXDLLEXPORT wxSizer;
-class WXDLLEXPORT wxToolTip;
-class WXDLLEXPORT wxWindowBase;
-class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxScrollHelper;
+class WXDLLIMPEXP_FWD_CORE wxCaret;
+class WXDLLIMPEXP_FWD_CORE wxControl;
+class WXDLLIMPEXP_FWD_CORE wxCursor;
+class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxDropTarget;
+class WXDLLIMPEXP_FWD_CORE wxItemResource;
+class WXDLLIMPEXP_FWD_CORE wxLayoutConstraints;
+class WXDLLIMPEXP_FWD_CORE wxResourceTable;
+class WXDLLIMPEXP_FWD_CORE wxSizer;
+class WXDLLIMPEXP_FWD_CORE wxToolTip;
+class WXDLLIMPEXP_FWD_CORE wxWindowBase;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxScrollHelper;
 
 #if wxUSE_ACCESSIBILITY
-class WXDLLEXPORT wxAccessible;
+class WXDLLIMPEXP_FWD_CORE wxAccessible;
 #endif
 
 // ----------------------------------------------------------------------------
@@ -582,17 +582,35 @@ public:
         // this class clients and take into account the current window state
     virtual bool AcceptsFocus() const { return true; }
 
-        // can this window have focus right now?
-    bool CanAcceptFocus() const { return AcceptsFocus() && IsShown() && IsEnabled(); }
+        // can this window or one of its children accept focus?
+        //
+        // usually it's the same as AcceptsFocus() but is overridden for
+        // container windows
+    virtual bool AcceptsFocusRecursively() const { return AcceptsFocus(); }
 
         // can this window be given focus by keyboard navigation? if not, the
         // only way to give it focus (provided it accepts it at all) is to
         // click it
     virtual bool AcceptsFocusFromKeyboard() const { return AcceptsFocus(); }
 
+
+        // this is mostly a helper for the various functions using it below
+    bool CanBeFocused() const { return IsShown() && IsEnabled(); }
+
+        // can this window itself have focus?
+    bool IsFocusable() const { return AcceptsFocus() && CanBeFocused(); }
+
+        // can this window have focus right now?
+        //
+        // if this method returns true, it means that calling SetFocus() will
+        // put focus either to this window or one of its children, if you need
+        // to know whether this window accepts focus itself, use IsFocusable()
+    bool CanAcceptFocus() const
+        { return AcceptsFocusRecursively() && CanBeFocused(); }
+
         // can this window be assigned focus from keyboard right now?
     bool CanAcceptFocusFromKeyboard() const
-        { return AcceptsFocusFromKeyboard() && CanAcceptFocus(); }
+        { return AcceptsFocusFromKeyboard() && CanBeFocused(); }
 
         // call this when the return value of AcceptsFocus() changes
     virtual void SetCanFocus(bool WXUNUSED(canFocus)) { }
@@ -640,6 +658,11 @@ public:
         // implementation mostly
     virtual void AddChild( wxWindowBase *child );
     virtual void RemoveChild( wxWindowBase *child );
+
+    // returns true if the child is in the client area of the window, i.e. is
+    // not scrollbar, toolbar etc.
+    virtual bool IsClientAreaChild(const wxWindow *WXUNUSED(child)) const
+        { return true; }
 
     // looking for windows
     // -------------------
@@ -1471,7 +1494,7 @@ private:
     static int ms_lastControlId;
 
     // the stack of windows which have captured the mouse
-    static struct WXDLLEXPORT wxWindowNext *ms_winCaptureNext;
+    static struct WXDLLIMPEXP_FWD_CORE wxWindowNext *ms_winCaptureNext;
     // the window that currently has mouse capture
     static wxWindow *ms_winCaptureCurrent;
     // indicates if execution is inside CaptureMouse/ReleaseMouse

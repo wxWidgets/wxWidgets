@@ -43,7 +43,7 @@
 #endif
 
 #include "wx/filefn.h"
-#include "wx/wxchar.h"
+#include "wx/crt.h"
 
 #include <stdio.h>
 #include <string.h>

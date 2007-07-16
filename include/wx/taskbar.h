@@ -18,7 +18,7 @@
 
 #include "wx/event.h"
 
-class WXDLLIMPEXP_ADV wxTaskBarIconEvent;
+class WXDLLIMPEXP_FWD_ADV wxTaskBarIconEvent;
 
 // ----------------------------------------------------------------------------
 // wxTaskBarIconBase: define wxTaskBarIcon interface

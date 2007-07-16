@@ -20,8 +20,8 @@
 
 class WXDLLIMPEXP_CORE wxWindow : public wxWindowBase
 {
-    friend class WXDLLEXPORT wxDC;
-    friend class WXDLLEXPORT wxWindowDC;
+    friend class WXDLLIMPEXP_FWD_CORE wxDC;
+    friend class WXDLLIMPEXP_FWD_CORE wxWindowDC;
 
 public:
     wxWindow() { Init(); }

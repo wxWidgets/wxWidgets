@@ -1979,7 +1979,7 @@ void wxWindowMSW::GetTextExtent(const wxString& string,
 
     SIZE sizeRect;
     TEXTMETRIC tm;
-    ::GetTextExtentPoint32(hdc, string, string.length(), &sizeRect);
+    ::GetTextExtentPoint32(hdc, string.wx_str(), string.length(), &sizeRect);
     GetTextMetrics(hdc, &tm);
 
     if ( x )
@@ -2742,7 +2742,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                     // problems, so don't do it for them (unnecessary anyhow)
                     if ( !win->IsOfStandardClass() )
                     {
-                        if ( message == WM_LBUTTONDOWN && win->CanAcceptFocus() )
+                        if ( message == WM_LBUTTONDOWN && win->IsFocusable() )
                             win->SetFocus();
                     }
                 }
@@ -3151,6 +3151,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             break;
 #endif
 
+#if wxUSE_MENUS
         case WM_MENUCHAR:
             // we're only interested in our own menus, not MF_SYSMENU
             if ( HIWORD(wParam) == MF_POPUP )
@@ -3164,6 +3165,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 }
             }
             break;
+#endif // wxUSE_MENUS
 
 #ifndef __WXWINCE__
         case WM_POWERBROADCAST:
@@ -3369,8 +3371,8 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     m_hWnd = (WXHWND)::CreateWindowEx
                        (
                         extendedStyle,
-                        className,
-                        title ? title : (const wxChar*)m_windowName.c_str(),
+                        className.wx_str(),
+                        title ? title : m_windowName.wx_str(),
                         style,
                         x, y, w, h,
                         (HWND)MSWGetParent(),
@@ -3490,7 +3492,7 @@ bool wxWindowMSW::HandleTooltipNotify(WXUINT code,
                     (
                         CP_ACP,
                         0,                      // no flags
-                        ttip,
+                        ttip.wx_str(),
                         tipLength,
                         buf,
                         WXSIZEOF(buf) - 1
@@ -3808,63 +3810,56 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
 {
 #ifndef __WXMICROWIN__
     // the logic is as follows:
-    // -1. don't set cursor for non client area, including but not limited to
-    //     the title bar, scrollbars, &c
-    //  0. allow the user to override default behaviour by using EVT_SET_CURSOR
-    //  1. if we have the cursor set it unless wxIsBusy()
-    //  2. if we're a top level window, set some cursor anyhow
-    //  3. if wxIsBusy(), set the busy cursor, otherwise the global one
-
-    if ( nHitTest != HTCLIENT )
-    {
-        return false;
-    }
+    //  0. if we're busy, set the busy cursor (even for non client elements)
+    //  1. don't set custom cursor for non client area of enabled windows
+    //  2. ask user EVT_SET_CURSOR handler for the cursor
+    //  3. if still no cursor but we're in a TLW, set the global cursor
 
     HCURSOR hcursor = 0;
+    if ( wxIsBusy() )
+    {
+        hcursor = wxGetCurrentBusyCursor();
+    }
+    else // not busy
+    {
+        if ( nHitTest != HTCLIENT )
+            return false;
 
-    // first ask the user code - it may wish to set the cursor in some very
-    // specific way (for example, depending on the current position)
-    POINT pt;
+        // first ask the user code - it may wish to set the cursor in some very
+        // specific way (for example, depending on the current position)
+        POINT pt;
 #ifdef __WXWINCE__
-    if ( !::GetCursorPosWinCE(&pt))
+        if ( !::GetCursorPosWinCE(&pt))
 #else
-    if ( !::GetCursorPos(&pt) )
+        if ( !::GetCursorPos(&pt) )
 #endif
-    {
-        wxLogLastError(wxT("GetCursorPos"));
-    }
-
-    int x = pt.x,
-        y = pt.y;
-    ScreenToClient(&x, &y);
-    wxSetCursorEvent event(x, y);
-
-    bool processedEvtSetCursor = GetEventHandler()->ProcessEvent(event);
-    if ( processedEvtSetCursor && event.HasCursor() )
-    {
-        hcursor = GetHcursorOf(event.GetCursor());
-    }
-
-    if ( !hcursor )
-    {
-        bool isBusy = wxIsBusy();
-
-        // the test for processedEvtSetCursor is here to prevent using m_cursor
-        // if the user code caught EVT_SET_CURSOR() and returned nothing from
-        // it - this is a way to say that our cursor shouldn't be used for this
-        // point
-        if ( !processedEvtSetCursor && m_cursor.Ok() )
         {
-            hcursor = GetHcursorOf(m_cursor);
+            wxLogLastError(wxT("GetCursorPos"));
         }
 
-        if ( !GetParent() )
+        int x = pt.x,
+            y = pt.y;
+        ScreenToClient(&x, &y);
+        wxSetCursorEvent event(x, y);
+
+        bool processedEvtSetCursor = GetEventHandler()->ProcessEvent(event);
+        if ( processedEvtSetCursor && event.HasCursor() )
         {
-            if ( isBusy )
+            hcursor = GetHcursorOf(event.GetCursor());
+        }
+
+        if ( !hcursor )
+        {
+            // the test for processedEvtSetCursor is here to prevent using
+            // m_cursor if the user code caught EVT_SET_CURSOR() and returned
+            // nothing from it - this is a way to say that our cursor shouldn't
+            // be used for this point
+            if ( !processedEvtSetCursor && m_cursor.Ok() )
             {
-                hcursor = wxGetCurrentBusyCursor();
+                hcursor = GetHcursorOf(m_cursor);
             }
-            else if ( !hcursor )
+
+            if ( !hcursor && !GetParent() )
             {
                 const wxCursor *cursor = wxGetGlobalCursor();
                 if ( cursor && cursor->Ok() )
@@ -3875,10 +3870,9 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
         }
     }
 
+
     if ( hcursor )
     {
-//        wxLogDebug("HandleSetCursor: Setting cursor %ld", (long) hcursor);
-
         ::SetCursor(hcursor);
 
         // cursor set, stop here
@@ -5195,6 +5189,7 @@ bool wxWindowMSW::HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam)
     return GetEventHandler()->ProcessEvent(event);
 }
 
+#if wxUSE_MENUS
 int wxWindowMSW::HandleMenuChar(int WXUNUSED_IN_WINCE(chAccel),
                                 WXLPARAM WXUNUSED_IN_WINCE(lParam))
 {
@@ -5229,7 +5224,7 @@ int wxWindowMSW::HandleMenuChar(int WXUNUSED_IN_WINCE(chAccel),
                 //  menu creation code
                 wxMenuItem *item = (wxMenuItem*)mii.dwItemData;
 
-                const wxChar *p = wxStrchr(item->GetText(), _T('&'));
+                const wxChar *p = wxStrchr(item->GetText().wx_str(), _T('&'));
                 while ( p++ )
                 {
                     if ( *p == _T('&') )
@@ -5276,6 +5271,7 @@ bool wxWindowMSW::HandleClipboardEvent( WXUINT nMsg )
 
     return GetEventHandler()->ProcessEvent(evt);
 }
+#endif // wxUSE_MENUS
 
 // ---------------------------------------------------------------------------
 // joystick

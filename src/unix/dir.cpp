@@ -132,7 +132,7 @@ bool wxDirData::Read(wxString *filename)
             return false;
 
 #if wxUSE_UNICODE
-        de_d_name = wxConvFileName->cMB2WC( de->d_name );
+        de_d_name = wxString(de->d_name, *wxConvFileName);
 #else
         de_d_name = de->d_name;
 #endif

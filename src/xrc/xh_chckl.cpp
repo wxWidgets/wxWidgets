@@ -72,7 +72,7 @@ wxObject *wxCheckListBoxXmlHandler::DoCreateResource()
                { n = n->GetNext(); continue; }
 
             // checking boolean is a bit ugly here (see GetBool() )
-            wxString v = n->GetPropVal(wxT("checked"), wxEmptyString);
+            wxString v = n->GetAttribute(wxT("checked"), wxEmptyString);
             v.MakeLower();
             if (v == wxT("1"))
                 control->Check( i, true );

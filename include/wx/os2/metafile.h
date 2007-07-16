@@ -30,11 +30,11 @@
 #define wxMetaFile wxMetafile
 #define wxMetaFileDC wxMetafileDC
 
-class WXDLLEXPORT wxMetafile;
+class WXDLLIMPEXP_FWD_CORE wxMetafile;
 
 class WXDLLEXPORT wxMetafileRefData: public wxGDIRefData
 {
-    friend class WXDLLEXPORT wxMetafile;
+    friend class WXDLLIMPEXP_FWD_CORE wxMetafile;
 public:
     wxMetafileRefData(void);
     virtual ~wxMetafileRefData(void);

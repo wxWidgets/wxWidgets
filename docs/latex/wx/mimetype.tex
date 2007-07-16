@@ -51,6 +51,7 @@ No base class.
 
 \latexignore{\rtfignore{\wxheading{Function groups}}}
 
+
 \membersection{Helper functions}\label{mimehelperfunctions}
 
 All of these functions are static (i.e. don't need a wxMimeTypesManager object
@@ -60,6 +61,7 @@ types using wxString functions.
 
 \helpref{IsOfType}{wxmimetypesmanagerisoftype}
 
+
 \membersection{Constructor and destructor}\label{mimeconstructordestructor}
 
 NB: You won't normally need to use more than one wxMimeTypesManager object in a
@@ -68,15 +70,17 @@ program.
 \helpref{wxMimeTypesManager}{wxmimetypesmanagerctor}\\
 \helpref{\destruct{wxMimeTypesManager}}{wxmimetypesmanagerdtor}
 
+
 \membersection{Query database}\label{mimequerydatabase}
 
 These functions are the heart of this class: they allow to find a \helpref{file type}{wxfiletype} object
 from either file extension or MIME type.
 If the function is successful, it returns a pointer to the wxFileType object
-which {\bf must} be deleted by the caller, otherwise NULL will be returned.
+which {\bf must} be deleted by the caller, otherwise \NULL will be returned.
 
 \helpref{GetFileTypeFromMimeType}{wxmimetypesmanagergetfiletypefrommimetype}\\
 \helpref{GetFileTypeFromExtension}{wxmimetypesmanagergetfiletypefromextension}
+
 
 \membersection{Initialization functions}\label{wxmimetypesmanagerinit}
 
@@ -95,6 +99,7 @@ information in either mailcap(5) or mime.types(5) format.
 
 }}
 
+
 \membersection{wxMimeTypesManager::wxMimeTypesManager}\label{wxmimetypesmanagerctor}
 
 \func{}{wxMimeTypesManager}{\void}
@@ -103,11 +108,13 @@ Constructor puts the object in the "working" state, no additional initialization
 are needed - but \helpref{ReadXXX}{wxmimetypesmanagerinit} may be used to load
 additional mailcap/mime.types files.
 
+
 \membersection{wxMimeTypesManager::\destruct{wxMimeTypesManager}}\label{wxmimetypesmanagerdtor}
 
 \func{}{\destruct{wxMimeTypesManager}}{\void}
 
 Destructor is not virtual, so this class should not be derived from.
+
 
 \membersection{wxMimeTypesManager::AddFallbacks}\label{wxmimetypesmanageraddfallbacks}
 
@@ -120,21 +127,27 @@ and extensions that might not be present in the system MIME database.
 
 Please see the typetest sample for an example of using it.
 
+
 \membersection{wxMimeTypesManager::GetFileTypeFromExtension}\label{wxmimetypesmanagergetfiletypefromextension}
 
 \func{wxFileType*}{GetFileTypeFromExtension}{\param{const wxString\&}{ extension}}
 
 Gather information about the files with given extension and return the
-corresponding \helpref{wxFileType}{wxfiletype} object or NULL if the extension
+corresponding \helpref{wxFileType}{wxfiletype} object or \NULL if the extension
 is unknown.
+
+The \arg{extension} parameter may have, or not, the leading dot, if it has it,
+it is stripped automatically. It must not however be empty.
+
 
 \membersection{wxMimeTypesManager::GetFileTypeFromMimeType}\label{wxmimetypesmanagergetfiletypefrommimetype}
 
 \func{wxFileType*}{GetFileTypeFromMimeType}{\param{const wxString\&}{ mimeType}}
 
 Gather information about the files with given MIME type and return the
-corresponding \helpref{wxFileType}{wxfiletype} object or NULL if the MIME type
+corresponding \helpref{wxFileType}{wxfiletype} object or \NULL if the MIME type
 is unknown.
+
 
 \membersection{wxMimeTypesManager::IsOfType}\label{wxmimetypesmanagerisoftype}
 
@@ -147,6 +160,7 @@ same as {\it wildcard} or if it has the same category and the subtype of
 
 The comparison don by this function is case insensitive so it is not
 necessary to convert the strings to the same case before calling it.
+
 
 \membersection{wxMimeTypesManager::ReadMailcap}\label{wxmimetypesmanagerreadmailcap}
 
@@ -164,6 +178,7 @@ will not happen if this parameter is set to true (default is false).
 
 The return value is true if there were no errors in the file or false
 otherwise.
+
 
 \membersection{wxMimeTypesManager::ReadMimeTypes}\label{wxmimetypesmanagerreadmimetypes}
 

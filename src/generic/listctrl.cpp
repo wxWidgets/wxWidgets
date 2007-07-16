@@ -2160,16 +2160,17 @@ bool wxListTextCtrlWrapper::AcceptChanges()
 {
     const wxString value = m_text->GetValue();
 
-    if ( value == m_startValue )
-        // nothing changed, always accept
-        return true;
-
+    // notice that we should always call OnRenameAccept() to generate the "end
+    // label editing" event, even if the user hasn't really changed anything
     if ( !m_owner->OnRenameAccept(m_itemEdited, value) )
+    {
         // vetoed by the user
         return false;
+    }
 
-    // accepted, do rename the item
-    m_owner->SetItemText(m_itemEdited, value);
+    // accepted, do rename the item (unless nothing changed)
+    if ( value != m_startValue )
+        m_owner->SetItemText(m_itemEdited, value);
 
     return true;
 }
@@ -2448,6 +2449,20 @@ wxRect wxListMainWindow::GetLineLabelRect(size_t line) const
 {
     if ( !InReportView() )
         return GetLine(line)->m_gi->m_rectLabel;
+
+    int image_x = 0;
+    wxListLineData *data = GetLine(line);
+    wxListItemDataList::compatibility_iterator node = data->m_items.GetFirst();
+    if (node)
+    {
+        wxListItemData *item = node->GetData();
+        if ( item->HasImage() )
+        {
+            int ix, iy;
+            GetImageSize( item->GetImage(), ix, iy );
+            image_x = 3 + ix + IMAGE_MARGIN_IN_REPORT_MODE;
+        }
+    }
 
     wxRect rect;
     rect.x = HEADER_OFFSET_X;
@@ -2771,8 +2786,9 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             wxPen pen(GetRuleColour(), 1, wxSOLID);
             wxSize clientSize = GetClientSize();
 
-            // Don't draw the first one
-            for ( size_t i = visibleFrom + 1; i <= visibleTo; i++ )
+            size_t i = visibleFrom;
+            if (i == 0) i = 1; // Don't draw the first one
+            for ( ; i <= visibleTo; i++ )
             {
                 dc.SetPen(pen);
                 dc.SetBrush( *wxTRANSPARENT_BRUSH );
@@ -2806,8 +2822,10 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             {
                 int colWidth = GetColumnWidth(col);
                 x += colWidth;
-                dc.DrawLine(x - dev_x - 2, firstItemRect.GetY() - 1 - dev_y,
-                            x - dev_x - 2, lastItemRect.GetBottom() + 1 - dev_y);
+                int x_pos = x - dev_x;
+                if (col < GetColumnCount()-1) x_pos -= 2;
+                dc.DrawLine(x_pos, firstItemRect.GetY() - 1 - dev_y,
+                            x_pos, lastItemRect.GetBottom() + 1 - dev_y);
             }
         }
     }
@@ -3139,7 +3157,15 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
                 (hitResult == wxLIST_HITTEST_ONITEMLABEL) &&
                 HasFlag(wxLC_EDIT_LABELS) )
             {
-                m_renameTimer->Start( 100, true );
+                if (InReportView())
+                {
+                    wxRect label = GetLineLabelRect( current );
+                    if (label.Contains( x, y ))
+                        m_renameTimer->Start( 250, true );
+
+                }
+                else
+                    m_renameTimer->Start( 250, true );
             }
         }
 
@@ -3307,7 +3333,8 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
     else // !shift
     {
         // all previously selected items are unselected unless ctrl is held
-        if ( !event.ControlDown() )
+        // in a multiselection control
+        if ( !event.ControlDown() || IsSingleSel() )
             HighlightAll(false);
 
         ChangeCurrent(newCurrent);
@@ -3315,10 +3342,9 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
         // refresh the old focus to remove it
         RefreshLine( oldCurrent );
 
-        if ( !event.ControlDown() )
-        {
+        // in single selection mode we must always have a selected item
+        if ( !event.ControlDown() || IsSingleSel() )
             HighlightLine( m_current, true );
-        }
     }
 
     RefreshLine( m_current );
@@ -3498,17 +3524,19 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
         case WXK_SPACE:
             if ( IsSingleSel() )
             {
-                SendNotify( m_current, wxEVT_COMMAND_LIST_ITEM_ACTIVATED );
-
-                if ( IsHighlighted(m_current) )
+                if ( event.ControlDown() )
                 {
-                    // don't unselect the item in single selection mode
-                    break;
+                    ReverseHighlight(m_current);
                 }
-                //else: select it in ReverseHighlight() below if unselected
+                else // normal space press
+                {
+                    SendNotify( m_current, wxEVT_COMMAND_LIST_ITEM_ACTIVATED );
+                }
             }
-
-            ReverseHighlight(m_current);
+            else // multiple selection
+            {
+                ReverseHighlight(m_current);
+            }
             break;
 
         case WXK_RETURN:
@@ -4783,6 +4811,11 @@ int LINKAGEMODE list_ctrl_compare_func_1( wxListLineData **arg1, wxListLineData 
 
 void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 {
+    // selections won't make sense any more after sorting the items so reset
+    // them
+    HighlightAll(false);
+    ResetCurrent();
+
     list_ctrl_compare_func_2 = fn;
     list_ctrl_compare_data = data;
     m_lines.Sort( list_ctrl_compare_func_1 );
@@ -4795,16 +4828,16 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 
 void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
 {
-    // update our idea of which lines are shown when we redraw the window the
-    // next time
-    ResetVisibleLinesRange();
-
     // FIXME
 #if ( defined(__WXGTK__) || defined(__WXMAC__) ) && !defined(__WXUNIVERSAL__)
     wxScrolledWindow::OnScroll(event);
 #else
     HandleOnScroll( event );
 #endif
+
+    // update our idea of which lines are shown when we redraw the window the
+    // next time
+    ResetVisibleLinesRange();
 
     if ( event.GetOrientation() == wxHORIZONTAL && HasHeader() )
     {
@@ -4966,6 +4999,9 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
 
     if ( !wxControl::Create( parent, id, pos, size, style, validator, name ) )
         return false;
+
+    // this window itself shouldn't get the focus, only m_mainWin should
+    SetCanFocus(false);
 
     // don't create the inner window with the border
     style &= ~wxBORDER_MASK;

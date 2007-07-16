@@ -88,7 +88,8 @@ CallHtmlHelpFunction(wxWindow *win, const wxChar *str, UINT uint, DWORD dword)
 {
     HTMLHELP htmlHelp = GetHtmlHelpFunction();
 
-    return htmlHelp && htmlHelp(GetSuitableHWND(win), str, uint, dword);
+    return htmlHelp &&
+           htmlHelp(GetSuitableHWND(win), str, uint, dword);
 }
 
 IMPLEMENT_DYNAMIC_CLASS(wxCHMHelpController, wxHelpControllerBase)
@@ -116,7 +117,8 @@ bool wxCHMHelpController::DisplayContents()
 
     wxString str = GetValidFilename(m_helpFile);
 
-    return CallHtmlHelpFunction(GetParentWindow(), str, HH_DISPLAY_TOPIC, 0L);
+    return CallHtmlHelpFunction(GetParentWindow(),
+                                str.wx_str(), HH_DISPLAY_TOPIC, 0L);
 }
 
 // Use topic or HTML filename
@@ -131,7 +133,8 @@ bool wxCHMHelpController::DisplaySection(const wxString& section)
     if ( section.Find(wxT(".htm")) != wxNOT_FOUND )
     {
         // interpret as a file name
-        return CallHtmlHelpFunction(GetParentWindow(), str, HH_DISPLAY_TOPIC,
+        return CallHtmlHelpFunction(GetParentWindow(),
+                                    str.wx_str(), HH_DISPLAY_TOPIC,
                                     wxPtrToUInt(section.c_str()));
     }
 
@@ -146,8 +149,8 @@ bool wxCHMHelpController::DisplaySection(int section)
 
     wxString str = GetValidFilename(m_helpFile);
 
-    return CallHtmlHelpFunction(GetParentWindow(), str, HH_HELP_CONTEXT,
-                                (DWORD)section);
+    return CallHtmlHelpFunction(GetParentWindow(),
+                                str.wx_str(), HH_HELP_CONTEXT, (DWORD)section);
 }
 
 bool wxCHMHelpController::DisplayContextPopup(int contextId)
@@ -171,7 +174,8 @@ bool wxCHMHelpController::DisplayContextPopup(int contextId)
     popup.pszFont = NULL;
     popup.pszText = NULL;
 
-    return CallHtmlHelpFunction(GetParentWindow(), str, HH_DISPLAY_TEXT_POPUP,
+    return CallHtmlHelpFunction(GetParentWindow(),
+                                str.wx_str(), HH_DISPLAY_TEXT_POPUP,
                                 wxPtrToUInt(&popup));
 }
 
@@ -195,7 +199,7 @@ bool wxCHMHelpController::ShowContextHelpPopup(const wxString& text,
     popup.clrBackground = (COLORREF)-1;
     popup.rcMargins.top = popup.rcMargins.left = popup.rcMargins.right = popup.rcMargins.bottom = -1;
     popup.pszFont = NULL;
-    popup.pszText = (const wxChar*) text;
+    popup.pszText = text.wx_str();
 
     return CallHtmlHelpFunction(window, NULL, HH_DISPLAY_TEXT_POPUP,
                                 wxPtrToUInt(&popup));
@@ -224,7 +228,8 @@ bool wxCHMHelpController::KeywordSearch(const wxString& k,
     link.pszWindow =    NULL ;
     link.fIndexOnFail = TRUE ;
 
-    return CallHtmlHelpFunction(GetParentWindow(), str, HH_KEYWORD_LOOKUP,
+    return CallHtmlHelpFunction(GetParentWindow(),
+                                str.wx_str(), HH_KEYWORD_LOOKUP,
                                 wxPtrToUInt(&link));
 }
 

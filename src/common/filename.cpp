@@ -75,6 +75,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
+    #include "wx/crt.h"
 #endif
 
 #include "wx/filename.h"
@@ -138,7 +139,9 @@
 #endif
 
 
+#if wxUSE_LONGLONG
 wxULongLong wxInvalidSize = (unsigned)-1;
+#endif // wxUSE_LONGLONG
 
 
 // ----------------------------------------------------------------------------
@@ -162,7 +165,7 @@ public:
     {
         m_hFile = ::CreateFile
                     (
-                     filename,                      // name
+                     filename.fn_str(),             // name
                      mode == Read ? GENERIC_READ    // access mask
                                   : GENERIC_WRITE,
                      FILE_SHARE_READ |              // sharing mode
@@ -649,7 +652,7 @@ static int wxOpenWithDeleteOnClose(const wxString& filename)
     DWORD attributes = FILE_ATTRIBUTE_TEMPORARY |
                        FILE_FLAG_DELETE_ON_CLOSE;
 
-    HANDLE h = ::CreateFile(filename, access, 0, NULL,
+    HANDLE h = ::CreateFile(filename.fn_str(), access, 0, NULL,
                             disposition, attributes, NULL);
 
     return wxOpenOSFHandle(h, wxO_BINARY);
@@ -744,7 +747,8 @@ static wxString wxCreateTempImpl(
     }
 
 #elif defined(__WINDOWS__) && !defined(__WXMICROWIN__)
-    if ( !::GetTempFileName(dir, name, 0, wxStringBuffer(path, MAX_PATH + 1)) )
+    if ( !::GetTempFileName(dir.fn_str(), name.fn_str(), 0,
+                            wxStringBuffer(path, MAX_PATH + 1)) )
     {
         wxLogLastError(_T("GetTempFileName"));
 
@@ -767,7 +771,7 @@ static wxString wxCreateTempImpl(
     path += _T("XXXXXX");
 
     // we need to copy the path to the buffer in which mkstemp() can modify it
-    wxCharBuffer buf( wxConvFile.cWX2MB( path ) );
+    wxCharBuffer buf(path.fn_str());
 
     // cast is safe because the string length doesn't change
     int fdTemp = mkstemp( (char*)(const char*) buf );
@@ -1801,13 +1805,13 @@ wxString wxFileName::GetShortPath() const
     wxString path(GetFullPath());
 
 #if defined(__WXMSW__) && defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
-    DWORD sz = ::GetShortPathName(path, NULL, 0);
+    DWORD sz = ::GetShortPathName(path.fn_str(), NULL, 0);
     if ( sz != 0 )
     {
         wxString pathOut;
         if ( ::GetShortPathName
                (
-                path,
+                path.fn_str(),
                 wxStringBuffer(pathOut, sz),
                 sz
                ) != 0 )
@@ -1865,12 +1869,12 @@ wxString wxFileName::GetLongPath() const
 
     if ( s_pfnGetLongPathName )
     {
-        DWORD dwSize = (*s_pfnGetLongPathName)(path, NULL, 0);
+        DWORD dwSize = (*s_pfnGetLongPathName)(path.fn_str(), NULL, 0);
         if ( dwSize > 0 )
         {
             if ( (*s_pfnGetLongPathName)
                  (
-                  path,
+                  path.fn_str(),
                   wxStringBuffer(pathOut, dwSize),
                   dwSize
                  ) != 0 )
@@ -1920,7 +1924,7 @@ wxString wxFileName::GetLongPath() const
             continue;
         }
 
-        hFind = ::FindFirstFile(tmpPath, &findFileData);
+        hFind = ::FindFirstFile(tmpPath.fn_str(), &findFileData);
         if (hFind == INVALID_HANDLE_VALUE)
         {
             // Error: most likely reason is that path doesn't exist, so
@@ -2315,6 +2319,8 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
 // file size functions
 // ----------------------------------------------------------------------------
 
+#if wxUSE_LONGLONG
+
 /* static */
 wxULongLong wxFileName::GetSize(const wxString &filename)
 {
@@ -2383,6 +2389,7 @@ wxString wxFileName::GetHumanReadableSize(const wxString &failmsg, int precision
     return GetHumanReadableSize(GetSize(), failmsg, precision);
 }
 
+#endif // wxUSE_LONGLONG
 
 // ----------------------------------------------------------------------------
 // Mac-specific functions

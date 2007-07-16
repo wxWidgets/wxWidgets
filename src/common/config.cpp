@@ -37,6 +37,7 @@
 
 #if wxUSE_CONFIG && ((wxUSE_FILE && wxUSE_TEXTFILE) || wxUSE_CONFIG_NATIVE)
 
+#include "wx/apptrait.h"
 #include "wx/file.h"
 
 #include <stdlib.h>
@@ -53,6 +54,22 @@ bool          wxConfigBase::ms_bAutoCreate = true;
 // ============================================================================
 // implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxAppTraitsBase
+// ----------------------------------------------------------------------------
+
+wxConfigBase *wxAppTraitsBase::CreateConfig()
+{
+    return new
+    #if defined(__WXMSW__) && wxUSE_CONFIG_NATIVE
+        wxRegConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
+    #elif defined(__WXPALMOS__) && wxUSE_CONFIG_NATIVE
+        wxPrefConfig(wxTheApp->GetAppName());
+    #else // either we're under Unix or wish to use files even under Windows
+        wxFileConfig(wxTheApp->GetAppName());
+    #endif
+}
 
 // ----------------------------------------------------------------------------
 // wxConfigBase
@@ -87,14 +104,10 @@ wxConfigBase *wxConfigBase::Set(wxConfigBase *pConfig)
 wxConfigBase *wxConfigBase::Create()
 {
   if ( ms_bAutoCreate && ms_pConfig == NULL ) {
-    ms_pConfig =
-    #if defined(__WXMSW__) && wxUSE_CONFIG_NATIVE
-        new wxRegConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
-    #elif defined(__WXPALMOS__) && wxUSE_CONFIG_NATIVE
-        new wxPrefConfig(wxTheApp->GetAppName());
-    #else // either we're under Unix or wish to use files even under Windows
-      new wxFileConfig(wxTheApp->GetAppName());
-    #endif
+    wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    wxCHECK_MSG( traits, NULL, _T("create wxApp before calling this") );
+
+    ms_pConfig = traits->CreateConfig();
   }
 
   return ms_pConfig;
@@ -251,7 +264,7 @@ wxConfigPathChanger::wxConfigPathChanger(const wxConfigBase *pContainer,
 
         /* JACS: work around a memory bug that causes an assert
            when using wxRegConfig, related to reference-counting.
-           Can be reproduced by removing (const wxChar*) below and
+           Can be reproduced by removing .wc_str() below and
            adding the following code to the config sample OnInit under
            Windows:
 
@@ -260,7 +273,7 @@ wxConfigPathChanger::wxConfigPathChanger(const wxConfigBase *pContainer,
            int value;
            pConfig->Read(_T("MainWindowX"), & value);
         */
-        m_strOldPath = (const wxChar*) m_pContainer->GetPath();
+        m_strOldPath = m_pContainer->GetPath().wc_str();
         if ( *m_strOldPath.c_str() != wxCONFIG_PATH_SEPARATOR )
           m_strOldPath += wxCONFIG_PATH_SEPARATOR;
         m_pContainer->SetPath(strPath);
@@ -386,19 +399,20 @@ wxString wxExpandEnvVars(const wxString& str)
           wxString strVarName(str.c_str() + n + 1, m - n - 1);
 
 #ifdef __WXWINCE__
-          const wxChar *pszValue = NULL;
+          const bool expanded = false;
 #else
           // NB: use wxGetEnv instead of wxGetenv as otherwise variables
           //     set through wxSetEnv may not be read correctly!
-          const wxChar *pszValue = NULL;
+          bool expanded = false;
           wxString tmp;
           if (wxGetEnv(strVarName, &tmp))
-              pszValue = tmp;
-#endif
-          if ( pszValue != NULL ) {
-            strResult += pszValue;
+          {
+              strResult += tmp;
+              expanded = true;
           }
-          else {
+          else
+#endif
+          {
             // variable doesn't exist => don't change anything
             #ifdef  __WXMSW__
               if ( bracket != Bracket_Windows )
@@ -424,7 +438,7 @@ wxString wxExpandEnvVars(const wxString& str)
             }
             else {
               // skip closing bracket unless the variables wasn't expanded
-              if ( pszValue == NULL )
+              if ( !expanded )
                 strResult << (wxChar)bracket;
               m++;
             }
@@ -453,21 +467,21 @@ wxString wxExpandEnvVars(const wxString& str)
 }
 
 // this function is used to properly interpret '..' in path
-void wxSplitPath(wxArrayString& aParts, const wxChar *sz)
+void wxSplitPath(wxArrayString& aParts, const wxString& path)
 {
   aParts.clear();
 
   wxString strCurrent;
-  const wxChar *pc = sz;
+  wxString::const_iterator pc = path.begin();
   for ( ;; ) {
-    if ( *pc == wxT('\0') || *pc == wxCONFIG_PATH_SEPARATOR ) {
+    if ( pc == path.end() || *pc == wxCONFIG_PATH_SEPARATOR ) {
       if ( strCurrent == wxT(".") ) {
         // ignore
       }
       else if ( strCurrent == wxT("..") ) {
         // go up one level
         if ( aParts.size() == 0 )
-          wxLogWarning(_("'%s' has extra '..', ignored."), sz);
+          wxLogWarning(_("'%s' has extra '..', ignored."), path);
         else
           aParts.erase(aParts.end() - 1);
 
@@ -480,12 +494,12 @@ void wxSplitPath(wxArrayString& aParts, const wxChar *sz)
       //else:
         // could log an error here, but we prefer to ignore extra '/'
 
-      if ( *pc == wxT('\0') )
+      if ( pc == path.end() )
         break;
     }
     else
       strCurrent += *pc;
 
-    pc++;
+    ++pc;
   }
 }

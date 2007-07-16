@@ -23,9 +23,9 @@
 
 #include "wx/log.h"
 
-class WXDLLEXPORT wxFont;
-class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxWindowBase;
+class WXDLLIMPEXP_FWD_CORE wxFont;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 
 // ---------------------------------------------------------------------------
 // private constants
@@ -692,7 +692,7 @@ public:
     {
         if ( IsRegistered() )
         {
-            if ( !::UnregisterClass(m_clsname, wxhInstance) )
+            if ( !::UnregisterClass(m_clsname.wx_str(), wxhInstance) )
             {
                 wxLogLastError(_T("UnregisterClass"));
             }

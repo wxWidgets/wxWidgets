@@ -27,16 +27,32 @@
 #include "wx/mimetype.h"
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
+#include "wx/uri.h"
 #include "wx/private/fileback.h"
 
+// ----------------------------------------------------------------------------
+// wxFSFile
+// ----------------------------------------------------------------------------
 
-//--------------------------------------------------------------------------------
+const wxString& wxFSFile::GetMimeType() const
+{
+    if ( m_MimeType.empty() && !m_Location.empty() )
+    {
+        wxConstCast(this, wxFSFile)->m_MimeType =
+            wxFileSystemHandler::GetMimeTypeFromExt(m_Location);
+    }
+
+    return m_MimeType;
+}
+
+// ----------------------------------------------------------------------------
 // wxFileSystemHandler
-//--------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxFileSystemHandler, wxObject)
 
 
+/* static */
 wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 {
     wxString ext, mime;
@@ -69,27 +85,27 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
                            wxEmptyString,
                            wxEmptyString,
                            _T("JPEG image (from fallback)"),
-                           _T("jpg"), _T("jpeg"), _T("JPG"), _T("JPEG"), 0),
+                           _T("jpg"), _T("jpeg"), _T("JPG"), _T("JPEG"), wxNullPtr),
             wxFileTypeInfo(_T("image/gif"),
                            wxEmptyString,
                            wxEmptyString,
                            _T("GIF image (from fallback)"),
-                           _T("gif"), _T("GIF"), 0),
+                           _T("gif"), _T("GIF"), wxNullPtr),
             wxFileTypeInfo(_T("image/png"),
                            wxEmptyString,
                            wxEmptyString,
                            _T("PNG image (from fallback)"),
-                           _T("png"), _T("PNG"), 0),
+                           _T("png"), _T("PNG"), wxNullPtr),
             wxFileTypeInfo(_T("image/bmp"),
                            wxEmptyString,
                            wxEmptyString,
                            _T("windows bitmap image (from fallback)"),
-                           _T("bmp"), _T("BMP"), 0),
+                           _T("bmp"), _T("BMP"), wxNullPtr),
             wxFileTypeInfo(_T("text/html"),
                            wxEmptyString,
                            wxEmptyString,
                            _T("HTML document (from fallback)"),
-                           _T("htm"), _T("html"), _T("HTM"), _T("HTML"), 0),
+                           _T("htm"), _T("html"), _T("HTM"), _T("HTML"), wxNullPtr),
             // must terminate the table with this!
             wxFileTypeInfo()
         };
@@ -123,7 +139,8 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 
 
 
-wxString wxFileSystemHandler::GetProtocol(const wxString& location) const
+/* static */
+wxString wxFileSystemHandler::GetProtocol(const wxString& location)
 {
     wxString s = wxEmptyString;
     int i, l = location.length();
@@ -138,7 +155,8 @@ wxString wxFileSystemHandler::GetProtocol(const wxString& location) const
 }
 
 
-wxString wxFileSystemHandler::GetLeftLocation(const wxString& location) const
+/* static */
+wxString wxFileSystemHandler::GetLeftLocation(const wxString& location)
 {
     int i;
     bool fnd = false;
@@ -150,7 +168,8 @@ wxString wxFileSystemHandler::GetLeftLocation(const wxString& location) const
     return wxEmptyString;
 }
 
-wxString wxFileSystemHandler::GetRightLocation(const wxString& location) const
+/* static */
+wxString wxFileSystemHandler::GetRightLocation(const wxString& location)
 {
     int i, l = location.length();
     int l2 = l + 1;
@@ -166,7 +185,8 @@ wxString wxFileSystemHandler::GetRightLocation(const wxString& location) const
     else return location.Mid(i + 1, l2 - i - 2);
 }
 
-wxString wxFileSystemHandler::GetAnchor(const wxString& location) const
+/* static */
+wxString wxFileSystemHandler::GetAnchor(const wxString& location)
 {
     wxChar c;
     int l = location.length();
@@ -215,10 +235,10 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
 
     // we need to check whether we can really read from this file, otherwise
     // wxFSFile is not going to work
-#if wxUSE_FILE
-    wxFileInputStream *is = new wxFileInputStream(fullpath);
-#elif wxUSE_FFILE
+#if wxUSE_FFILE
     wxFFileInputStream *is = new wxFFileInputStream(fullpath);
+#elif wxUSE_FILE
+    wxFileInputStream *is = new wxFileInputStream(fullpath);
 #else
 #error One of wxUSE_FILE or wxUSE_FFILE must be set to 1 for wxFSHandler to work
 #endif
@@ -230,7 +250,7 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
 
     return new wxFSFile(is,
                         right,
-                        GetMimeTypeFromExt(location),
+                        wxEmptyString,
                         GetAnchor(location)
 #if wxUSE_DATETIME
                         ,wxDateTime(wxFileModificationTime(fullpath))
@@ -499,16 +519,19 @@ wxString wxFileSystem::FindNext()
 }
 
 bool wxFileSystem::FindFileInPath(wxString *pStr,
-                                  const wxChar *path,
-                                  const wxChar *basename)
+                                  const wxString& path,
+                                  const wxString& basename)
 {
     // we assume that it's not empty
-    wxCHECK_MSG( !wxIsEmpty(basename), false,
+    wxCHECK_MSG( !basename.empty(), false,
                 _T("empty file name in wxFileSystem::FindFileInPath"));
 
+    wxString name;
     // skip path separator in the beginning of the file name if present
-    if ( wxIsPathSeparator(*basename) )
-       basename++;
+    if ( wxIsPathSeparator(basename[0u]) )
+        name = basename.substr(1);
+    else
+        name = basename;
 
     wxStringTokenizer tokenizer(path, wxPATH_SEP);
     while ( tokenizer.HasMoreTokens() )
@@ -516,7 +539,7 @@ bool wxFileSystem::FindFileInPath(wxString *pStr,
         wxString strFile = tokenizer.GetNextToken();
         if ( !wxEndsWithPathSeparator(strFile) )
             strFile += wxFILE_SEP_PATH;
-        strFile += basename;
+        strFile += name;
 
         wxFSFile *file = OpenFile(strFile);
         if ( file )
@@ -591,8 +614,7 @@ wxFileName wxFileSystem::URLToFileName(const wxString& url)
         path = path.Mid(2);
 #endif
 
-    path.Replace(wxT("%25"), wxT("%"));
-    path.Replace(wxT("%3A"), wxT(":"));
+    path = wxURI::Unescape(path);
 
 #ifdef __WXMSW__
     // file urls either start with a forward slash (local harddisk),
@@ -639,7 +661,8 @@ wxString wxFileSystem::FileNameToURL(const wxFileName& filename)
 #endif
 
     url.Replace(g_nativePathString, g_unixPathString);
-    url.Replace(wxT("%"), wxT("%25"));
+    url.Replace(wxT("%"), wxT("%25")); // '%'s must be replaced first!
+    url.Replace(wxT("#"), wxT("%23"));
     url.Replace(wxT(":"), wxT("%3A"));
     url = wxT("file:") + url;
     return url;

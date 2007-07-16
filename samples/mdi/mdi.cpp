@@ -267,11 +267,6 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
     subframe->SetMenuBar(menu_bar);
 #endif // wxUSE_MENUS
 
-#if wxUSE_STATUSBAR
-    subframe->CreateStatusBar();
-    subframe->SetStatusText(title);
-#endif // wxUSE_STATUSBAR
-
     int width, height;
     subframe->GetClientSize(&width, &height);
     MyCanvas *canvas = new MyCanvas(subframe, wxPoint(0, 0), wxSize(width, height));

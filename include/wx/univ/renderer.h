@@ -30,27 +30,27 @@
 
 #include "wx/renderer.h"
 
-class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxDC;
-class WXDLLEXPORT wxCheckListBox;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxCheckListBox;
 
 #if wxUSE_LISTBOX
-    class WXDLLEXPORT wxListBox;
+    class WXDLLIMPEXP_FWD_CORE wxListBox;
 #endif // wxUSE_LISTBOX
 
 #if wxUSE_MENUS
-   class WXDLLEXPORT wxMenu;
-   class WXDLLEXPORT wxMenuGeometryInfo;
+   class WXDLLIMPEXP_FWD_CORE wxMenu;
+   class WXDLLIMPEXP_FWD_CORE wxMenuGeometryInfo;
 #endif // wxUSE_MENUS
 
-class WXDLLEXPORT wxScrollBar;
+class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 
 #if wxUSE_TEXTCTRL
-    class WXDLLEXPORT wxTextCtrl;
+    class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 #endif
 
 #if wxUSE_GAUGE
-    class WXDLLEXPORT wxGauge;
+    class WXDLLIMPEXP_FWD_CORE wxGauge;
 #endif // wxUSE_GAUGE
 
 #include "wx/string.h"

@@ -121,7 +121,7 @@ values:
 next to it. Clicking the dropdown arrow sends a wxEVT\_COMMAND\_TOOL\_DROPDOWN\_CLICKED
 event and may also display the menu previously associated with the item with 
 \helpref{wxToolBar::SetDropdownMenu}{wxtoolbarsetdropdownmenu}. Currently this
-type of tools is only supported under MSW.}
+type of tools is supported under MSW and GTK.}
 \end{twocollist}
 
 \wxheading{See also}
@@ -350,7 +350,7 @@ deletes the tool at the specified position and not the one with the given id.
 
 \membersection{wxToolBar::EnableTool}\label{wxtoolbarenabletool}
 
-\func{void}{EnableTool}{\param{int }{toolId}, \param{const bool}{ enable}}
+\func{void}{EnableTool}{\param{int }{toolId}, \param{bool}{ enable}}
 
 Enables or disables the tool.
 
@@ -898,7 +898,7 @@ Sets the default separator size. The default value is 5.
 
 \membersection{wxToolBar::ToggleTool}\label{wxtoolbartoggletool}
 
-\func{void}{ToggleTool}{\param{int }{toolId}, \param{const bool}{ toggle}}
+\func{void}{ToggleTool}{\param{int }{toolId}, \param{bool}{ toggle}}
 
 Toggles a tool on or off. This does not cause any event to get emitted.
 

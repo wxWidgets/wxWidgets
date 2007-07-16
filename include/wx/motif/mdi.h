@@ -23,14 +23,14 @@ but wxMDIChildFrame::GetParent should return the parent frame.
 #include "wx/frame.h"
 #include "wx/notebook.h"
 
-class WXDLLEXPORT wxMDIClientWindow;
-class WXDLLEXPORT wxMDIChildFrame;
+class WXDLLIMPEXP_FWD_CORE wxMDIClientWindow;
+class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
 
 class WXDLLEXPORT wxMDIParentFrame: public wxFrame
 {
     DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
 
-        friend class WXDLLEXPORT wxMDIChildFrame;
+        friend class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
 public:
 
     wxMDIParentFrame();

@@ -24,7 +24,7 @@
 // ----------------------------------------------------------------------------
 
 // this one if used by wxPaintDC only
-struct WXDLLEXPORT wxPaintDCInfo;
+struct WXDLLIMPEXP_FWD_CORE wxPaintDCInfo;
 
 WX_DECLARE_EXPORTED_OBJARRAY(wxPaintDCInfo, wxArrayDCInfo);
 

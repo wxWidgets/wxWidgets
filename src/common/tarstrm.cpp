@@ -829,8 +829,8 @@ wxTarNumber wxTarInputStream::GetHeaderNumber(int id) const
 
     if ((value = GetExtendedHeader(m_hdr->Name(id))) != wxEmptyString) {
         wxTarNumber n = 0;
-        const wxChar *p = value;
-        while (*p == ' ')
+        wxString::const_iterator p = value.begin();
+        while (*p == ' ' && p != value.end())
             p++;
         while (isdigit(*p))
             n = n * 10 + (*p++ - '0');

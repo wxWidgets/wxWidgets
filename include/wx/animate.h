@@ -21,7 +21,7 @@
 #include "wx/timer.h"
 #include "wx/bitmap.h"
 
-class WXDLLIMPEXP_ADV wxAnimation;
+class WXDLLIMPEXP_FWD_ADV wxAnimation;
 
 extern WXDLLIMPEXP_DATA_ADV(wxAnimation) wxNullAnimation;
 extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxAnimationCtrlNameStr[];

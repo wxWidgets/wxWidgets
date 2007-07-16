@@ -277,10 +277,14 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
         m_scrollHelper->HandleOnMouseLeave((wxMouseEvent &)event);
     }
 #if wxUSE_MOUSEWHEEL
+    // Use GTK's own scroll wheel handling in GtkScrolledWindow
+#ifndef __WXGTK20__
     else if ( evType == wxEVT_MOUSEWHEEL )
     {
         m_scrollHelper->HandleOnMouseWheel((wxMouseEvent &)event);
+        return true;
     }
+#endif
 #endif // wxUSE_MOUSEWHEEL
     else if ( evType == wxEVT_CHAR )
     {
@@ -467,22 +471,6 @@ wxWindow *wxScrollHelper::GetTargetWindow() const
 {
     return m_targetWindow;
 }
-
-#ifdef __WXMAC__
-static bool wxScrolledWindowHasChildren(wxWindow* win)
-{
-    wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
-    while ( node )
-    {
-        wxWindow* child = node->GetData();
-        if ( !child->IsKindOf(CLASSINFO(wxScrollBar)) )
-            return true;
-
-        node = node->GetNext();
-    }
-    return false;
-}
-#endif
 
 // ----------------------------------------------------------------------------
 // scrolling implementation itself

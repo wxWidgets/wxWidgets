@@ -39,8 +39,8 @@
     #define wxHAS_TEXT_WINDOW_STREAM 0
 #endif
 
-class WXDLLEXPORT wxTextCtrl;
-class WXDLLEXPORT wxTextCtrlBase;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrlBase;
 
 // ----------------------------------------------------------------------------
 // wxTextCtrl types

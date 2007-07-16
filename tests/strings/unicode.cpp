@@ -95,7 +95,7 @@ private:
 CPPUNIT_TEST_SUITE_REGISTRATION( UnicodeTestCase );
 
 // also include in it's own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( UnicodeTestCase, "Unicode" );
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( UnicodeTestCase, "UnicodeTestCase" );
 
 UnicodeTestCase::UnicodeTestCase()
 {

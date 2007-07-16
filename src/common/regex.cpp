@@ -32,6 +32,7 @@
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/intl.h"
+    #include "wx/crt.h"
 #endif //WX_PRECOMP
 
 // FreeBSD, Watcom and DMars require this, CW doesn't have nor need it.
@@ -56,7 +57,11 @@
 #ifdef __REG_NOFRONT
 #   define WXREGEX_USING_BUILTIN
 #   define WXREGEX_IF_NEED_LEN(x) ,x
-#   define WXREGEX_CHAR(x) x
+#   if wxUSE_UNICODE
+#       define WXREGEX_CHAR(x) (x).wc_str()
+#   else
+#       define WXREGEX_CHAR(x) (x).mb_str()
+#   endif
 #else
 #   ifdef HAVE_RE_SEARCH
 #       define WXREGEX_IF_NEED_LEN(x) ,x
@@ -67,7 +72,7 @@
 #   if wxUSE_UNICODE
 #       define WXREGEX_CONVERT_TO_MB
 #   endif
-#   define WXREGEX_CHAR(x) wxConvertWX2MB(x)
+#   define WXREGEX_CHAR(x) (x).mb_str()
 #   define wx_regfree regfree
 #   define wx_regerror regerror
 #endif
@@ -293,8 +298,11 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
     // compile it
 #ifdef WXREGEX_USING_BUILTIN
     bool conv = true;
-    int errorcode = wx_re_comp(&m_RegEx, expr, expr.length(), flagsRE);
+    // FIXME-UTF8: use wc_str() after removing ANSI build
+    int errorcode = wx_re_comp(&m_RegEx, expr.c_str(), expr.length(), flagsRE);
 #else
+    // FIXME-UTF8: this is potentially broken, we shouldn't even try it
+    //             and should always use builtin regex library (or PCRE?)
     const wxWX2MBbuf conv = expr.mbc_str();
     int errorcode = conv ? regcomp(&m_RegEx, conv, flagsRE) : REG_BADPAT;
 #endif
@@ -505,7 +513,11 @@ int wxRegExImpl::Replace(wxString *text,
     // note that "^" shouldn't match after the first call to Matches() so we
     // use wxRE_NOTBOL to prevent it from happening
     while ( (!maxMatches || countRepl < maxMatches) &&
+#ifndef WXREGEX_CONVERT_TO_MB
             Matches(textstr + matchStart,
+#else
+            Matches(textstr.data() + matchStart,
+#endif 
                     countRepl ? wxRE_NOTBOL : 0
                     WXREGEX_IF_NEED_LEN(textlen - matchStart)) )
     {
@@ -551,7 +563,12 @@ int wxRegExImpl::Replace(wxString *text,
                     }
                     else
                     {
+#ifndef WXREGEX_CONVERT_TO_MB
                         textNew += wxString(textstr + matchStart + start,
+#else
+                        textNew += wxString(textstr.data() + matchStart +
+					    start,
+#endif
                                             *wxConvCurrent, len);
 
                         mayHaveBackrefs = true;
@@ -581,7 +598,8 @@ int wxRegExImpl::Replace(wxString *text,
 #ifndef WXREGEX_CONVERT_TO_MB
         result.append(*text, matchStart, start);
 #else
-        result.append(wxString(textstr + matchStart, *wxConvCurrent, start));
+        result.append(wxString(textstr.data() + matchStart, *wxConvCurrent, 
+			       start));
 #endif
         matchStart += start;
         result.append(textNew);
@@ -594,7 +612,7 @@ int wxRegExImpl::Replace(wxString *text,
 #ifndef WXREGEX_CONVERT_TO_MB
     result.append(*text, matchStart, wxString::npos);
 #else
-    result.append(wxString(textstr + matchStart, *wxConvCurrent));
+    result.append(wxString(textstr.data() + matchStart, *wxConvCurrent));
 #endif
     *text = result;
 

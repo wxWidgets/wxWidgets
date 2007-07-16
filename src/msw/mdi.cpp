@@ -199,7 +199,7 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
   msflags &= ~WS_HSCROLL;
 
   if ( !wxWindow::MSWCreate(wxMDIFrameClassName,
-                            title,
+                            title.wx_str(),
                             pos, size,
                             msflags,
                             exflags) )
@@ -313,6 +313,17 @@ void wxMDIParentFrame::DoMenuUpdates(wxMenu* menu)
     {
         wxFrameBase::DoMenuUpdates(menu);
     }
+}
+
+const wxMenuItem *wxMDIParentFrame::FindItemInMenuBar(int menuId) const
+{
+    const wxMenuItem *item = wxFrame::FindItemInMenuBar(menuId);
+    if ( !item && m_currentChild )
+    {
+        item = m_currentChild->FindItemInMenuBar(menuId);
+    }
+
+    return item;
 }
 
 void wxMDIParentFrame::UpdateClientSize()
@@ -473,24 +484,6 @@ WXLRESULT wxMDIParentFrame::MSWWindowProc(WXUINT message,
 
             // we erase background ourselves
             rc = true;
-            break;
-
-        case WM_MENUSELECT:
-            {
-                WXWORD item, flags;
-                WXHMENU hmenu;
-                UnpackMenuSelect(wParam, lParam, &item, &flags, &hmenu);
-
-                if ( m_parentFrameActive )
-                {
-                    processed = HandleMenuSelect(item, flags, hmenu);
-                }
-                else if (m_currentChild)
-                {
-                    processed = m_currentChild->
-                        HandleMenuSelect(item, flags, hmenu);
-                }
-            }
             break;
 
         case WM_SIZE:
@@ -718,7 +711,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
   mcs.szClass = style & wxFULL_REPAINT_ON_RESIZE
                     ? wxMDIChildFrameClassName
                     : wxMDIChildFrameClassNameNoRedraw;
-  mcs.szTitle = title;
+  mcs.szTitle = title.wx_str();
   mcs.hOwner = wxGetInstance();
   if (x != wxDefaultCoord)
       mcs.x = x;
@@ -778,6 +771,10 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 
 wxMDIChildFrame::~wxMDIChildFrame()
 {
+    // if we hadn't been created, there is nothing to destroy
+    if ( !m_hWnd )
+        return;
+
     // will be destroyed by DestroyChildren() but reset them before calling it
     // to avoid using dangling pointers if a callback comes in the meanwhile
 #if wxUSE_TOOLBAR
@@ -1391,7 +1388,11 @@ static void MDISetMenu(wxWindow *win, HMENU hmenuFrame, HMENU hmenuWindow)
                             (WPARAM)hmenuFrame,
                             (LPARAM)hmenuWindow) )
         {
-            wxLogLastError(_T("SendMessage(WM_MDISETMENU)"));
+#ifdef __WXDEBUG__
+            DWORD err = ::GetLastError();
+            if ( err )
+                wxLogApiError(_T("SendMessage(WM_MDISETMENU)"), err);
+#endif // __WXDEBUG__
         }
     }
 
@@ -1429,14 +1430,14 @@ static void InsertWindowMenu(wxWindow *win, WXHMENU menu, HMENU subMenu)
             {
                 success = true;
                 ::InsertMenu(hmenu, i, MF_BYPOSITION | MF_POPUP | MF_STRING,
-                             (UINT)subMenu, _("&Window"));
+                             (UINT)subMenu, _("&Window").wx_str());
                 break;
             }
         }
 
         if ( !success )
         {
-            ::AppendMenu(hmenu, MF_POPUP, (UINT)subMenu, _("&Window"));
+            ::AppendMenu(hmenu, MF_POPUP, (UINT)subMenu, _("&Window").wx_str());
         }
     }
 

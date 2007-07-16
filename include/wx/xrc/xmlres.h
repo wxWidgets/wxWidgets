@@ -17,6 +17,7 @@
 
 #include "wx/string.h"
 #include "wx/dynarray.h"
+#include "wx/arrstr.h"
 #include "wx/datetime.h"
 #include "wx/list.h"
 #include "wx/gdicmn.h"
@@ -29,17 +30,17 @@
 
 #include "wx/xml/xml.h"
 
-class WXDLLEXPORT wxMenu;
-class WXDLLEXPORT wxMenuBar;
-class WXDLLEXPORT wxDialog;
-class WXDLLEXPORT wxPanel;
-class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxFrame;
-class WXDLLEXPORT wxToolBar;
+class WXDLLIMPEXP_FWD_CORE wxMenu;
+class WXDLLIMPEXP_FWD_CORE wxMenuBar;
+class WXDLLIMPEXP_FWD_CORE wxDialog;
+class WXDLLIMPEXP_FWD_CORE wxPanel;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxFrame;
+class WXDLLIMPEXP_FWD_CORE wxToolBar;
 
-class WXDLLIMPEXP_XRC wxXmlResourceHandler;
-class WXDLLIMPEXP_XRC wxXmlSubclassFactory;
-class WXDLLIMPEXP_XRC wxXmlSubclassFactoriesList;
+class WXDLLIMPEXP_FWD_XRC wxXmlResourceHandler;
+class WXDLLIMPEXP_FWD_XRC wxXmlSubclassFactory;
+class WXDLLIMPEXP_FWD_XRC wxXmlSubclassFactoriesList;
 class wxXmlResourceModule;
 
 
@@ -225,7 +226,11 @@ public:
     // with a number. If value_if_not_found == wxID_NONE, the number is obtained via
     // wxWindow::NewControlId(). Otherwise value_if_not_found is used.
     // Macro XRCID(name) is provided for convenient use in event tables.
-    static int GetXRCID(const wxChar *str_id, int value_if_not_found = wxID_NONE);
+    static int GetXRCID(const wxString& str_id, int value_if_not_found = wxID_NONE)
+        { return DoGetXRCID(str_id.mb_str(), value_if_not_found); }
+
+    // version for internal use only
+    static int DoGetXRCID(const char *str_id, int value_if_not_found = wxID_NONE);
 
     // Returns version information (a.b.c.d = d+ 256*c + 256^2*b + 256^3*a).
     long GetVersion() const { return m_version; }
@@ -318,7 +323,7 @@ private:
 //    END_EVENT_TABLE()
 
 #define XRCID(str_id) \
-    wxXmlResource::GetXRCID(wxT(str_id))
+    wxXmlResource::DoGetXRCID(str_id)
 
 
 // This macro returns pointer to particular control in dialog

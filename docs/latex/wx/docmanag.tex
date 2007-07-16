@@ -320,16 +320,14 @@ The bottom line: if you're not deriving from Initialize, forget it and
 construct wxDocManager with no arguments.
 
 
-\membersection{wxDocManager::MakeDefaultName}\label{wxdocmanagermakedefaultname}
+\membersection{wxDocManager::MakeNewDocumentName}\label{wxdocmanagermakenewdocumentname}
 
-\func{bool}{MakeDefaultName}{\param{const wxString\& }{buf}}
+\func{wxString}{MakeNewDocumentName}{\void}
 
-Copies a suitable default name into {\it buf}. This is implemented by
-appending an integer counter to the string {\bf unnamed} and incrementing
-the counter.
-
-\perlnote{In wxPerl this function must return the modified name rather
-than just modifying the argument.}
+Return a string containing a suitable default name for a new document. By
+default this is implemented by appending an integer counter to the string
+{\bf unnamed} but can be overridden in the derived classes to do something more
+appropriate.
 
 
 \membersection{wxDocManager::OnCreateFileHistory}\label{wxdocmanageroncreatefilehistory}

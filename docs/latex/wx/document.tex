@@ -153,16 +153,13 @@ in many cases a document will only have a single view.
 
 See also: \helpref{GetViews}{wxdocumentgetviews}
 
-\membersection{wxDocument::GetPrintableName}\label{wxdocumentgetprintablename}
+\membersection{wxDocument::GetUserReadableName}\label{wxdocumentgetuserreadablentablename}
 
-\constfunc{virtual void}{GetPrintableName}{\param{wxString\& }{name}}
+\constfunc{virtual wxString}{GetUserReadableName}{\void}
 
-Copies a suitable document name into the supplied {\it name} buffer. The default
-function uses the title, or if there is no title, uses the filename; or if no
-filename, the string {\bf unnamed}. 
-
-\perlnote{In wxPerl this function must return the modified name rather
-than just modifying the argument.}
+Return the document name suitable to be shown to the user. The default
+implementation uses the document title, if any, of the name part of the
+document filename if it was set or, otherwise, the string {\bf unnamed}.
 
 \membersection{wxDocument::GetTitle}\label{wxdocumentgettitle}
 

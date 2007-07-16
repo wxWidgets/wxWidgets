@@ -142,11 +142,11 @@
 // doesn't support it and the programs compiled in Unicode mode will not run
 // under 9x).
 //
-// Default is 0
+// Default is 1
 //
-// Recommended setting: 0 (unless you only plan to use Windows NT/2000/XP)
+// Recommended setting: 1
 #ifndef wxUSE_UNICODE
-    #define wxUSE_UNICODE 0
+    #define wxUSE_UNICODE 1
 #endif
 
 // Set wxUSE_UNICODE_MSLU to 1 if you want to compile wxWidgets in Unicode mode

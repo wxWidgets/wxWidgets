@@ -12,7 +12,7 @@
 #ifndef _WX_UNIV_BUTTON_H_
 #define _WX_UNIV_BUTTON_H_
 
-class WXDLLEXPORT wxInputHandler;
+class WXDLLIMPEXP_FWD_CORE wxInputHandler;
 
 #include "wx/bitmap.h"
 

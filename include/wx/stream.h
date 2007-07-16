@@ -21,9 +21,9 @@
 #include "wx/string.h"
 #include "wx/filefn.h"  // for wxFileOffset, wxInvalidOffset and wxSeekMode
 
-class WXDLLIMPEXP_BASE wxStreamBase;
-class WXDLLIMPEXP_BASE wxInputStream;
-class WXDLLIMPEXP_BASE wxOutputStream;
+class WXDLLIMPEXP_FWD_BASE wxStreamBase;
+class WXDLLIMPEXP_FWD_BASE wxInputStream;
+class WXDLLIMPEXP_FWD_BASE wxOutputStream;
 
 typedef wxInputStream& (*__wxInputManip)(wxInputStream&);
 typedef wxOutputStream& (*__wxOutputManip)(wxOutputStream&);
@@ -354,12 +354,12 @@ public:
     virtual const wxChar * const *GetProtocols(wxStreamProtocolType type
                                                = wxSTREAM_PROTOCOL) const = 0;
 
-    bool CanHandle(const wxChar *protocol,
+    bool CanHandle(const wxString& protocol,
                    wxStreamProtocolType type
                    = wxSTREAM_PROTOCOL) const;
 
 protected:
-    wxString::size_type FindExtension(const wxChar *location) const;
+    wxString::size_type FindExtension(const wxString& location) const;
 
     DECLARE_ABSTRACT_CLASS(wxFilterClassFactoryBase)
 };
@@ -374,7 +374,7 @@ public:
     virtual wxFilterInputStream  *NewStream(wxInputStream *stream)  const = 0;
     virtual wxFilterOutputStream *NewStream(wxOutputStream *stream) const = 0;
 
-    static const wxFilterClassFactory *Find(const wxChar *protocol,
+    static const wxFilterClassFactory *Find(const wxString& protocol,
                                             wxStreamProtocolType type
                                             = wxSTREAM_PROTOCOL);
 

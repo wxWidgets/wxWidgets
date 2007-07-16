@@ -897,16 +897,12 @@ bool wxGetUserName(wxChar *buf, int sz)
 
 bool wxIsPlatform64Bit()
 {
-    wxString machine = wxGetCommandOutput(wxT("uname -m"));
+    const wxString machine = wxGetCommandOutput(wxT("uname -m"));
 
-    // NOTE: these tests are not 100% reliable!
-    return machine.Contains(wxT("AMD64")) ||
-           machine.Contains(wxT("IA64")) ||
-           machine.Contains(wxT("x64")) ||
-           machine.Contains(wxT("X64")) ||
-           machine.Contains(wxT("alpha")) ||
-           machine.Contains(wxT("hppa64")) ||
-           machine.Contains(wxT("ppc64"));
+    // the test for "64" is obviously not 100% reliable but seems to work fine
+    // in practice
+    return machine.Contains(wxT("64")) ||
+                machine.Contains(wxT("alpha"));
 }
 
 // these functions are in mac/utils.cpp for wxMac
@@ -917,7 +913,8 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
     // get OS version
     int major, minor;
     wxString release = wxGetCommandOutput(wxT("uname -r"));
-    if ( release.empty() || wxSscanf(release, wxT("%d.%d"), &major, &minor) != 2 )
+    if ( release.empty() ||
+         wxSscanf(release.c_str(), wxT("%d.%d"), &major, &minor) != 2 )
     {
         // failed to get version string or unrecognized format
         major =
@@ -1051,7 +1048,7 @@ bool wxGetDiskSpace(const wxString& path, wxDiskspaceSize_t *pTotal, wxDiskspace
 bool wxGetEnv(const wxString& var, wxString *value)
 {
     // wxGetenv is defined as getenv()
-    wxChar *p = wxGetenv(var);
+    char *p = wxGetenv(var);
     if ( !p )
         return false;
 
@@ -1063,13 +1060,10 @@ bool wxGetEnv(const wxString& var, wxString *value)
     return true;
 }
 
-bool wxSetEnv(const wxString& variable, const wxChar *value)
+static bool wxDoSetEnv(const wxString& variable, const char *value)
 {
 #if defined(HAVE_SETENV)
-    return setenv(variable.mb_str(),
-                  value ? (const char *)wxString(value).mb_str()
-                        : NULL,
-                  1 /* overwrite */) == 0;
+    return setenv(variable.mb_str(), value, 1 /* overwrite */) == 0;
 #elif defined(HAVE_PUTENV)
     wxString s = variable;
     if ( value )
@@ -1086,6 +1080,16 @@ bool wxSetEnv(const wxString& variable, const wxChar *value)
 #else // no way to set an env var
     return false;
 #endif
+}
+
+bool wxSetEnv(const wxString& variable, const wxString& value)
+{
+    return wxDoSetEnv(variable, value.mb_str());
+}
+
+bool wxUnsetEnv(const wxString& variable)
+{
+    return wxDoSetEnv(variable, NULL);
 }
 
 // ----------------------------------------------------------------------------

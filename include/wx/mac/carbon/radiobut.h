@@ -54,7 +54,7 @@ public:
 
 // Not implemented
 #if 0
-class WXDLLEXPORT wxBitmap ;
+class WXDLLIMPEXP_FWD_CORE wxBitmap ;
 
 WXDLLEXPORT_DATA(extern const wxChar) wxBitmapRadioButtonNameStr[];
 

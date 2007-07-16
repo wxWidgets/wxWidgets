@@ -92,16 +92,16 @@ public:
     int           m_miniEdge,
                   m_miniTitle;
     GtkWidget    *m_mainWidget;
-    bool          m_insertInClientArea;  /* not from within OnCreateXXX */
 
     bool          m_fsIsShowing;         /* full screen */
     long          m_fsSaveGdkFunc, m_fsSaveGdkDecor;
-    long          m_fsSaveFlag;
     wxRect        m_fsSaveFrame;
 
     // m_windowStyle translated to GDK's terms
     long          m_gdkFunc,
                   m_gdkDecor;
+
+    bool m_sizeSet;
 
     // private gtk_timeout_add result for mimicing wxUSER_ATTENTION_INFO and
     // wxUSER_ATTENTION_ERROR difference, -2 for no hint, -1 for ERROR hint, rest for GtkTimeout handle.
@@ -116,12 +116,13 @@ public:
     // return the full size of the window without WM decorations
     void GTKDoGetSize(int *width, int *height) const;
 
+    void GtkUpdateSize() { m_sizeSet = false; }
+
 protected:
     // common part of all ctors
     void Init();
 
-    // move the window to the specified location and resize it: this is called
-    // from both DoSetSize() and DoSetClientSize()
+    // move the window to the specified location and resize it
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
     // take into account WM decorations here
@@ -131,11 +132,10 @@ protected:
                            int sizeFlags = wxSIZE_AUTO);
 
     // override these methods to take into account tool/menu/statusbars
-    virtual void DoSetClientSize(int width, int height);
     virtual void DoGetClientSize(int *width, int *height) const;
 
     // this method takes the size of the window not taking account of
-    // decorations and is used by both DoSetSize() and DoSetClientSize()
+    // decorations
     void GTKDoSetSize(int width, int height);
 
 

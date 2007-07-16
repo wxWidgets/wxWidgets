@@ -1105,6 +1105,12 @@ wxSocketServer::wxSocketServer(const wxSockAddress& addr_man,
     if (GetFlags() & wxSOCKET_REUSEADDR) {
         m_socket->SetReusable();
     }
+    if (GetFlags() & wxSOCKET_BROADCAST) {
+        m_socket->SetBroadcast();
+    }
+    if (GetFlags() & wxSOCKET_NOBIND) {
+        m_socket->DontDoBind();
+    }
 
     if (m_socket->SetServer() != GSOCK_NOERROR)
     {
@@ -1275,6 +1281,14 @@ bool wxSocketClient::DoConnect(wxSockAddress& addr_man, wxSockAddress* local, bo
   {
     m_socket->SetReusable();
   }
+  if (GetFlags() & wxSOCKET_BROADCAST)
+  {
+    m_socket->SetBroadcast();
+  }
+  if (GetFlags() & wxSOCKET_NOBIND)
+  {
+    m_socket->DontDoBind();
+  }
 
   // If no local address was passed and one has been set, use the one that was Set
   if (!local && m_localAddress.GetAddress())
@@ -1354,6 +1368,14 @@ wxDatagramSocket::wxDatagramSocket( const wxSockAddress& addr,
     if (flags & wxSOCKET_REUSEADDR)
     {
         m_socket->SetReusable();
+    }
+    if (GetFlags() & wxSOCKET_BROADCAST)
+    {
+        m_socket->SetBroadcast();
+    }
+    if (GetFlags() & wxSOCKET_NOBIND)
+    {
+        m_socket->DontDoBind();
     }
     if ( m_socket->SetNonOriented() != GSOCK_NOERROR )
     {

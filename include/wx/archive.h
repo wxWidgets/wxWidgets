@@ -347,7 +347,7 @@ public:
     wxMBConv& GetConv() const
         { if (m_pConv) return *m_pConv; else return wxConvLocal; }
 
-    static const wxArchiveClassFactory *Find(const wxChar *protocol,
+    static const wxArchiveClassFactory *Find(const wxString& protocol,
                                              wxStreamProtocolType type
                                              = wxSTREAM_PROTOCOL);
 

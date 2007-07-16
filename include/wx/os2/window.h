@@ -34,7 +34,7 @@
 // forward declarations
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxButton;
+class WXDLLIMPEXP_FWD_CORE wxButton;
 
 // ---------------------------------------------------------------------------
 // wxWindow declaration for OS/2 PM

@@ -1429,8 +1429,6 @@ wxString wxRichTextParagraphLayoutBox::GetTextForRange(const wxRichTextRange& ra
         wxRichTextObject* child = node->GetData();
         if (!child->GetRange().IsOutside(range))
         {
-//            if (lineCount > 0)
-//                text += wxT("\n");
             wxRichTextRange childRange = range;
             childRange.LimitTo(child->GetRange());
 
@@ -1438,7 +1436,7 @@ wxString wxRichTextParagraphLayoutBox::GetTextForRange(const wxRichTextRange& ra
 
             text += childText;
 
-            if (childRange.GetEnd() == child->GetRange().GetEnd())
+            if ((childRange.GetEnd() == child->GetRange().GetEnd()) && node->GetNext())
                 text += wxT("\n");
 
             lineCount ++;
@@ -3152,7 +3150,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     int lineSpacing = 0;
 
     // Let's assume line spacing of 10 is normal, 15 is 1.5, 20 is 2, etc.
-    if (attr.GetLineSpacing() > 10 && attr.GetFont().Ok())
+    if (attr.GetLineSpacing() != 10 && attr.GetFont().Ok())
     {
         dc.SetFont(attr.GetFont());
         lineSpacing = (ConvertTenthsMMToPixels(dc, dc.GetCharHeight()) * attr.GetLineSpacing())/10;
@@ -7902,7 +7900,7 @@ wxTextAttrEx wxTextAttrEx::CombineEx(const wxTextAttrEx& attr,
 
 IMPLEMENT_CLASS(wxRichTextFileHandler, wxObject)
 
-#if wxUSE_STREAMS
+#if wxUSE_FFILE && wxUSE_STREAMS
 bool wxRichTextFileHandler::LoadFile(wxRichTextBuffer *buffer, const wxString& filename)
 {
     wxFFileInputStream stream(filename);
@@ -7920,7 +7918,7 @@ bool wxRichTextFileHandler::SaveFile(wxRichTextBuffer *buffer, const wxString& f
 
     return false;
 }
-#endif // wxUSE_STREAMS
+#endif // wxUSE_FFILE && wxUSE_STREAMS
 
 /// Can we handle this filename (if using files)? By default, checks the extension.
 bool wxRichTextFileHandler::CanHandle(const wxString& filename) const
@@ -8175,16 +8173,33 @@ bool wxRichTextImageBlock::Load(wxImage& image)
 // Write data in hex to a stream
 bool wxRichTextImageBlock::WriteHex(wxOutputStream& stream)
 {
-    wxString hex;
-    int i;
-    for (i = 0; i < (int) m_dataSize; i++)
+    const int bufSize = 512;
+    char buf[bufSize+1];
+
+    int left = m_dataSize;
+    int n, i, j;
+    j = 0;
+    while (left > 0)
     {
-        hex = wxDecToHex(m_data[i]);
-        wxCharBuffer buf = hex.ToAscii();
+        if (left*2 > bufSize)
+        {
+            n = bufSize; left -= (bufSize/2);
+        }
+        else
+        {
+            n = left*2; left = 0;
+        }
 
-        stream.Write((const char*) buf, hex.length());
+        char* b = buf;
+        for (i = 0; i < (n/2); i++)
+        {
+            wxDecToHex(m_data[j], b, b+1);
+            b += 2; j ++;
+        }
+
+        buf[n] = 0;
+        stream.Write((const char*) buf, n);
     }
-
     return true;
 }
 
@@ -8196,7 +8211,7 @@ bool wxRichTextImageBlock::ReadHex(wxInputStream& stream, int length, int imageT
     if (m_data)
         delete[] m_data;
 
-    wxString str(wxT("  "));
+    wxChar str[2];
     m_data = new unsigned char[dataSize];
     int i;
     for (i = 0; i < dataSize; i ++)

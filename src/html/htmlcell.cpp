@@ -386,6 +386,16 @@ void wxHtmlWordCell::Split(const wxDC& dc,
     wxPoint pt2 = (selTo == wxDefaultPosition) ?
                    wxPoint(m_Width, wxDefaultCoord) : selTo - GetAbsPos();
 
+    // if the selection is entirely within this cell, make sure pt1 < pt2 in
+    // order to make the rest of this function simpler:
+    if ( selFrom != wxDefaultPosition && selTo != wxDefaultPosition &&
+         selFrom.x > selTo.x )
+    {
+        wxPoint tmp = pt1;
+        pt1 = pt2;
+        pt2 = tmp;
+    }
+
     unsigned len = m_Word.length();
     unsigned i = 0;
     pos1 = 0;
@@ -398,19 +408,26 @@ void wxHtmlWordCell::Split(const wxDC& dc,
         pt2.x = m_Width;
 
     // before selection:
+    // (include character under caret only if in first half of width)
 #ifdef __WXMAC__
     // implementation using PartialExtents to support fractional widths
     wxArrayInt widths ;
     dc.GetPartialTextExtents(m_Word,widths) ;
     while( i < len && pt1.x >= widths[i] )
         i++ ;
-#else // __WXMAC__
+    if ( i < len )
+    {
+        int charW = (i > 0) ? widths[i] - widths[i-1] : widths[i];
+        if ( widths[i] - pt1.x < charW/2 )
+            i++;
+    }
+#else // !__WXMAC__
     wxCoord charW, charH;
     while ( pt1.x > 0 && i < len )
     {
         dc.GetTextExtent(m_Word[i], &charW, &charH);
         pt1.x -= charW;
-        if ( pt1.x >= 0 )
+        if ( pt1.x >= -charW/2 )
         {
             pos1 += charW;
             i++;
@@ -419,18 +436,25 @@ void wxHtmlWordCell::Split(const wxDC& dc,
 #endif // __WXMAC__/!__WXMAC__
 
     // in selection:
+    // (include character under caret only if in first half of width)
     unsigned j = i;
 #ifdef __WXMAC__
     while( j < len && pt2.x >= widths[j] )
         j++ ;
-#else // __WXMAC__
+    if ( j < len )
+    {
+        int charW = (j > 0) ? widths[j] - widths[j-1] : widths[j];
+        if ( widths[j] - pt2.x < charW/2 )
+            j++;
+    }
+#else // !__WXMAC__
     pos2 = pos1;
     pt2.x -= pos2;
     while ( pt2.x > 0 && j < len )
     {
         dc.GetTextExtent(m_Word[j], &charW, &charH);
         pt2.x -= charW;
-        if ( pt2.x >= 0 )
+        if ( pt2.x >= -charW/2 )
         {
             pos2 += charW;
             j++;
@@ -1501,8 +1525,15 @@ void wxHtmlWidgetCell::Draw(wxDC& WXUNUSED(dc),
         c = c->GetParent();
     }
 
-    ((wxScrolledWindow*)(m_Wnd->GetParent()))->GetViewStart(&stx, &sty);
-    m_Wnd->SetSize(absx - wxHTML_SCROLL_STEP * stx, absy  - wxHTML_SCROLL_STEP * sty, m_Width, m_Height);
+    wxScrolledWindow *scrolwin =
+        wxDynamicCast(m_Wnd->GetParent(), wxScrolledWindow);
+    wxCHECK_RET( scrolwin,
+                 _T("widget cells can only be placed in wxHtmlWindow") );
+
+    scrolwin->GetViewStart(&stx, &sty);
+    m_Wnd->SetSize(absx - wxHTML_SCROLL_STEP * stx,
+                   absy  - wxHTML_SCROLL_STEP * sty,
+                   m_Width, m_Height);
 }
 
 
