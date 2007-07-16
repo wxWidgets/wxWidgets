@@ -19,7 +19,7 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef wxUSE_EPOLL_DISPATCHER
+#if wxUSE_EPOLL_DISPATCHER
 
 #include "wx/unix/private/epolldispatcher.h"
 #include "wx/unix/private.h"
