@@ -263,6 +263,7 @@ public:
               open = true;
 	   else
 	   	open = false;
+          hasChildren = false;
 	}
     //I don't know what I need to do in the destructure
     ~wxDataViewTreeNode()
@@ -270,7 +271,7 @@ public:
 
     wxDataViewTreeNode * GetParent() { return parent; }
     void SetParent( wxDataViewTreeNode * parent ) { this->parent = parent; }
-    wxDataViewTreeNodes  GetChildren() { return children; }
+    wxDataViewTreeNodes &  GetChildren() { return children; }
     void SetChildren( wxDataViewTreeNodes  children ) { this->children = children; }
 
     wxDataViewTreeNode * GetChild( unsigned int n ) { return children.Item( n ); }
@@ -295,12 +296,14 @@ public:
 
     bool IsOpen() { return open; } 
     void ToggleOpen(){ open = !open; }
-    bool HasChildren() { return children.GetCount() != 0; }
+    bool HasChildren() { return hasChildren; }
+    void SetHasChildren( bool has ){ hasChildren = has; }
 private:
     wxDataViewTreeNode * parent;
     wxDataViewTreeNodes  children; 
     wxDataViewItem  item; 
     bool open;
+    bool hasChildren;
 };
 
 //-----------------------------------------------------------------------------
@@ -359,6 +362,8 @@ public:
     unsigned int GetLastVisibleRow();
     unsigned int GetRowCount() ;
 
+    wxDataViewItem GetSelection();
+
     void Select( const wxArrayInt& aSelections );
     void SelectAllRows( bool on );
     void SelectRow( unsigned int row, bool on );
@@ -388,7 +393,8 @@ public:
     void DestroyTree();
 private:
     wxDataViewTreeNode * GetTreeNodeByRow( unsigned int row );
-    wxDataViewTreeNode * GetTreeNodeByItem( const wxDataViewItem & item ){};
+    //We did not need this temporarily
+    //wxDataViewTreeNode * GetTreeNodeByItem( const wxDataViewItem & item );
 
     int RecalculateCount() ;
 
@@ -1586,6 +1592,9 @@ void wxDataViewRenameTimer::Notify()
 // wxDataViewMainWindow
 //-----------------------------------------------------------------------------
 
+//The tree building helper, declared firstly
+void BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item, wxDataViewTreeNode * node);
+
 int LINKAGEMODE wxDataViewSelectionCmp( unsigned int row1, unsigned int row2 )
 {
     if (row1 > row2) return 1;
@@ -1645,6 +1654,8 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     m_penExpander = wxPen( wxColour(0,0,0), 1, wxSOLID );
     //Some new added code to deal with the tree structure
     m_root = new wxDataViewTreeNode( NULL );
+    m_root->SetHasChildren(true);
+
     //Make m_count = -1 will cause the class recaculate the real displaying number of rows.
     m_count = -1 ;
     UpdateDisplay();
@@ -1705,22 +1716,26 @@ public:
 class ItemAddJob: public DoJob
 {
 public:
-    ItemAddJob( const wxDataViewItem & parent, const wxDataViewItem & item )
-    	{ this->parent = parent ; this->item = item ; }
+    ItemAddJob( const wxDataViewItem & parent, const wxDataViewItem & item, int * count )
+    	{ this->parent = parent ; this->item = item ; m_count = count; }
     virtual ~ItemAddJob(){};
 
     virtual int operator() ( wxDataViewTreeNode * node )
     {
         if( node->GetItem() == parent )
         {
+            node->SetHasChildren( true );
             wxDataViewTreeNode * newnode = new wxDataViewTreeNode( node );
             newnode->SetItem(item);
             node->AppendChild( newnode);
+            *m_count = -1;
             return OK;
         }
         return CONT;
     }
+
 private:
+    int * m_count;
     wxDataViewItem parent, item;
 };
 
@@ -1752,25 +1767,48 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
     return false;
 }
 
-
-
 bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxDataViewItem & item)
 {
-    ItemAddJob job( parent, item); 
+    ItemAddJob job( parent, item, &m_count); 
     Walker( m_root , job);
     UpdateDisplay();
     return true;
 }
 
+class ItemDeleteJob: public DoJob
+{
+public:
+    ItemDeleteJob( const wxDataViewItem & item, int * count ) { m_item = item; m_count = count; }
+    virtual ~ItemDeleteJob(){}
+    virtual int operator() ( wxDataViewTreeNode * node )
+    {
+        if( node->GetItem() == m_item )
+        {
+            node->GetParent()->GetChildren().Remove( node );
+            delete node;
+            *m_count = -1;
+            return DoJob::OK;
+        }
+        return DoJob::CONT;
+    }
+
+private:
+    int * m_count;
+    wxDataViewItem m_item;
+};
+
 bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem & item)
 {
+    ItemDeleteJob job( item, &m_count);
+    Walker( m_root, job);
     UpdateDisplay();
     return true;
 }
 
 bool wxDataViewMainWindow::ItemChanged(const wxDataViewItem & item)
 {
-    UpdateDisplay();
+    unsigned int row = GetRowByItem(item);
+    RefreshRow( row );
     return true;
 }
 
@@ -1785,12 +1823,14 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
 
     return true;
 */
-    UpdateDisplay();
+    unsigned int row = GetRowByItem(item);
+    RefreshRow( row );
     return true;
 }
 
 bool wxDataViewMainWindow::Cleared()
 {
+    DestroyTree();
     UpdateDisplay();
     return true;
 }
@@ -2336,7 +2376,7 @@ public:
 
     virtual int operator() ( wxDataViewTreeNode * node )
     	{
-    	    if( current == row)
+    	    if( current == static_cast<int>(row))
     	    {
                ret = node->GetItem() ;
                return DoJob::OK;
@@ -2370,7 +2410,7 @@ public:
 
     virtual int operator() ( wxDataViewTreeNode * node )
     {
-        if( current == row)
+        if( current == static_cast<int>(row))
     	 {
             ret = node ;
             return DoJob::OK;
@@ -2429,9 +2469,11 @@ void wxDataViewMainWindow::OnExpanding( unsigned int row )
             if( !node->IsOpen())
             {
                node->ToggleOpen();
+               //Here I build the children of current node
+               if( node->GetChildrenNumber() == 0 )
+                   BuildTreeHelper(GetOwner()->GetModel(), node->GetItem(), node);
                m_count = -1;
                Refresh();
-               //RefreshRows(row,GetLastVisibleRow());
             }
     }
 }
@@ -2501,23 +2543,21 @@ unsigned int wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item)
     return job.GetResult();
 }
 
-unsigned int BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item, wxDataViewTreeNode * node)
+void BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item, wxDataViewTreeNode * node)
 {
-    int sum = 0 ;
     if( !model->HasChildren( item ) )
-        return 0;
+        return ;
     
     wxDataViewItem i = model->GetFirstChild( item );
     while( i.IsOk() )
     {
         wxDataViewTreeNode * n = new wxDataViewTreeNode( node );
         n->SetItem(i);
+        n->SetHasChildren( model->HasChildren( i )) ;
         node->AppendChild(n);
-        int num = BuildTreeHelper( model, i, n) + 1;
-        sum += num ;
+        //BuildTreeHelper( model, i, n) ;        
         i = model->GetNextSibling( i );
     }
-    return sum;
 }
 
 void wxDataViewMainWindow::BuildTree(wxDataViewModel * model)
@@ -2752,12 +2792,10 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             if( rect.Contains( x, y) )
             {
                 expander = true;
-                node->ToggleOpen();
-                m_count = -1;   //make the current row number fail
-                
-                Refresh();
-                //int last_row = GetLastVisibleRow();
-                //RefreshRows( current, last_row );
+                if( node->IsOpen() )
+                    OnCollapsing(current);
+                else
+                    OnExpanding( current );
             }
         }
 
@@ -2900,6 +2938,13 @@ void wxDataViewMainWindow::OnKillFocus( wxFocusEvent &event )
     event.Skip();
 }
 
+wxDataViewItem wxDataViewMainWindow::GetSelection()
+{
+    if( m_selection.GetCount() != 1 )
+        return wxDataViewItem();
+    return GetItemByRow( m_selection.Item( 0 ) );
+}
+
 //-----------------------------------------------------------------------------
 // wxDataViewCtrl
 //-----------------------------------------------------------------------------
@@ -3029,6 +3074,10 @@ void wxDataViewCtrl::DoSetIndent()
     m_clientArea->UpdateDisplay();
 }
 
+wxDataViewItem wxDataViewCtrl::GetSelection() 
+{
+    return m_clientArea->GetSelection();
+}
 
 /********************************************************************
 void wxDataViewCtrl::SetSelection( int row )

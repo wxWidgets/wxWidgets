@@ -52,26 +52,26 @@ public:
 
     virtual bool Activate( wxRect WXUNUSED(cell),
                            wxDataViewModel *WXUNUSED(model),
-                           const wxDataViewItem & item, 
+                           const wxDataViewItem & WXUNUSED(item), 
                            unsigned int WXUNUSED(col) )
                            { return false; }
 
     virtual bool LeftClick( wxPoint WXUNUSED(cursor),
                             wxRect WXUNUSED(cell),
                             wxDataViewModel *WXUNUSED(model),
-                            const wxDataViewItem & item, 
+                            const wxDataViewItem & WXUNUSED(item), 
                             unsigned int WXUNUSED(col) )
                             { return false; }
     virtual bool RightClick( wxPoint WXUNUSED(cursor),
                              wxRect WXUNUSED(cell),
                              wxDataViewModel *WXUNUSED(model),
-                             const wxDataViewItem & item, 
+                             const wxDataViewItem & WXUNUSED(item), 
                              unsigned int WXUNUSED(col) )
                              { return false; }
     virtual bool StartDrag( wxPoint WXUNUSED(cursor),
                             wxRect WXUNUSED(cell),
                             wxDataViewModel *WXUNUSED(model),
-                            const wxDataViewItem & item, 
+                            const wxDataViewItem & WXUNUSED(item), 
                             unsigned int WXUNUSED(col) )
                             { return false; }
 
@@ -351,6 +351,8 @@ public:
 
     virtual void DoSetExpanderColumn();
     virtual void DoSetIndent();
+
+    virtual wxDataViewItem GetSelection() ;
 
 /********************selection code*********************
     virtual void SetSelection( int row ); // -1 for unselect
