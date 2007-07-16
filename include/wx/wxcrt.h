@@ -771,11 +771,24 @@ inline double wxStrtod(const wxCharTypeBuffer<T>& nptr, T **endptr)
 // to be ever used, but it still has to compile).
 template<typename T> struct wxStrtoxCharType {};
 template<> struct wxStrtoxCharType<char**>
-    { typedef const char* Type; };
+{
+    typedef const char* Type;
+    static char** AsPointer(char **p) { return p; }
+};
 template<> struct wxStrtoxCharType<wchar_t**>
-    { typedef const wchar_t* Type; };
+{
+    typedef const wchar_t* Type;
+    static wchar_t** AsPointer(wchar_t **p) { return p; }
+};
 template<> struct wxStrtoxCharType<int>
-    { typedef const char* Type; /* this one is never used */ };
+{
+    typedef const char* Type; /* this one is never used */
+    static char** AsPointer(int WXUNUSED_UNLESS_DEBUG(p))
+    {
+        wxASSERT_MSG( p == 0, "passing non-NULL int is invalid" );
+        return NULL;
+    }
+};
 
 template<typename T>
 inline double wxStrtod(const wxString& nptr, T endptr)
@@ -792,7 +805,8 @@ inline double wxStrtod(const wxString& nptr, T endptr)
         // note that it is important to use c_str() here and not mb_str() or
         // wc_str(), because we store the pointer into (possibly converted)
         // buffer in endptr and so it must be valid even when wxStrtod() returns
-        return wxStrtod((typename wxStrtoxCharType<T>::Type)nptr.c_str(), endptr);
+        return wxStrtod((typename wxStrtoxCharType<T>::Type)nptr.c_str(),
+                        wxStrtoxCharType<T>::AsPointer(endptr));
     }
 }
 template<typename T>
@@ -816,7 +830,8 @@ inline double wxStrtod(const wxCStrData& nptr, T endptr)
             return name(nptr.wx_str(), (wxStringCharType**)NULL, base);       \
         else                                                                  \
             return name((typename wxStrtoxCharType<T>::Type)nptr.c_str(),     \
-                        endptr, base);                                        \
+                        wxStrtoxCharType<T>::AsPointer(endptr),               \
+                        base);                                                \
     }                                                                         \
     template<typename T>                                                      \
     inline rettype name(const wxCStrData& nptr, T endptr, int base)           \
