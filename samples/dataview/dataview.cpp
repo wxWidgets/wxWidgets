@@ -156,8 +156,8 @@ public:
         if (m_classicalMusicIsKnownToControl)
         {
             // notify control
-            wxDataViewItem child( child_node->GetID() );
-            wxDataViewItem parent( m_classical->GetID() );
+            wxDataViewItem child( (void*) child_node->GetID() );
+            wxDataViewItem parent( (void*) m_classical->GetID() );
             ItemAdded( parent, child );
         }
     }
@@ -222,7 +222,7 @@ public:
     virtual wxDataViewItem GetFirstChild( const wxDataViewItem &parent ) const
     {
         if (parent.GetID() == 0)
-            return wxDataViewItem( m_root->GetID() );
+            return wxDataViewItem( (void*) m_root->GetID() );
         
         MyMusicModelNode *node = FindNode( parent );
             
@@ -236,7 +236,7 @@ public:
         }
         
         MyMusicModelNode *first_child = node->GetChildren().Item( 0 );
-        return wxDataViewItem( first_child->GetID() );
+        return wxDataViewItem( (void*) first_child->GetID() );
     }
     
     virtual wxDataViewItem GetNextSibling( const wxDataViewItem &item ) const
@@ -254,7 +254,7 @@ public:
             return wxDataViewItem(0);
             
         node = parent->GetChildren().Item( pos+1 );
-        return wxDataViewItem( node->GetID() );
+        return wxDataViewItem( (void*) node->GetID() );
     } 
     
 private:
@@ -262,7 +262,7 @@ private:
     
     MyMusicModelNode *FindNodeRec( MyMusicModelNode *node, const wxDataViewItem &item ) const
     {
-        if (node->GetID() == item.GetID())
+        if (node->GetID() == (wxUint32) item.GetID())
             return node;
     
         size_t count = node->GetChildCount();

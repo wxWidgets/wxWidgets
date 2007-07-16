@@ -1693,6 +1693,7 @@ void wxDataViewMainWindow::OnRenameTimer()
     GetOwner()->CalcScrolledPosition( labelRect.x, labelRect.y,
                                      &labelRect.x, &labelRect.y);
 
+    // TODO get wxDataViewItem from m_currentRow
     m_currentCol->GetRenderer()->StartEditing( m_currentRow, labelRect );
 }
 
