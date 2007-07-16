@@ -65,22 +65,20 @@ WX_DEFINE_ARRAY_PTR( MyMusicModelNode*, MyMusicModelNodes );
 class MyMusicModelNode
 {
 public:
-    MyMusicModelNode( MyMusicModelNode* parent, const wxUint32 id,
+    MyMusicModelNode( MyMusicModelNode* parent, 
                       const wxString &title, const wxString &artist, const wxString &year )
     { 
         m_parent = parent; 
-        m_id = id;
         m_title = title;
         m_artist = artist;
         m_year = year;
         m_isContainer = false;
     }
     
-    MyMusicModelNode( MyMusicModelNode* parent, const wxUint32 id,
+    MyMusicModelNode( MyMusicModelNode* parent,
                       const wxString &branch )
     { 
         m_parent = parent; 
-        m_id = id;
         m_title = branch;
         m_isContainer = true;
     }
@@ -96,7 +94,6 @@ public:
         }
     }
 
-    wxUint32 GetID()                                      { return m_id; }
     bool IsContainer()                                    { return m_isContainer; }
 
     MyMusicModelNode* GetParent()                         { return m_parent; }
@@ -114,7 +111,6 @@ public:
 private:
     MyMusicModelNode   *m_parent;
     MyMusicModelNodes   m_children; 
-    wxUint32            m_id;
     bool                m_isContainer;
 };
 
@@ -127,19 +123,18 @@ public:
 
     MyMusicModel() 
     {
-        m_idCounter = 0;
-        m_root = new MyMusicModelNode( NULL, GetNewId(), "My Music" );
-        m_pop = new MyMusicModelNode( m_root, GetNewId(), "Pop music" );
+        m_root = new MyMusicModelNode( NULL, "My Music" );
+        m_pop = new MyMusicModelNode( m_root, "Pop music" );
         m_root->Append( m_pop );
-        m_pop->Append( new MyMusicModelNode( m_pop, GetNewId(), 
+        m_pop->Append( new MyMusicModelNode( m_pop, 
             "You are not alone", "Michael Jackson", "1995" ) );
-        m_pop->Append( new MyMusicModelNode( m_pop, GetNewId(), 
+        m_pop->Append( new MyMusicModelNode( m_pop, 
             "Take a bow", "Madonna", "1994" ) );
-        m_classical = new MyMusicModelNode( m_root, GetNewId(), "Classical music" );
+        m_classical = new MyMusicModelNode( m_root, "Classical music" );
         m_root->Append( m_classical );
-        m_classical->Append( new MyMusicModelNode( m_classical, GetNewId(), 
+        m_classical->Append( new MyMusicModelNode( m_classical, 
             "Ninth symphony", "Ludwig van Beethoven", "1824" ) );
-        m_classical->Append( new MyMusicModelNode( m_classical, GetNewId(), 
+        m_classical->Append( new MyMusicModelNode( m_classical, 
             "German Requiem", "Johannes Brahms", "1868" ) );
         m_classicalMusicIsKnownToControl = false;
     }
@@ -150,21 +145,21 @@ public:
     {
         // add to data
         MyMusicModelNode *child_node = 
-            new MyMusicModelNode( m_classical, GetNewId(), title, artist, year );
+            new MyMusicModelNode( m_classical, title, artist, year );
         m_classical->Append( child_node );
         
         if (m_classicalMusicIsKnownToControl)
         {
             // notify control
-            wxDataViewItem child( (void*) child_node->GetID() );
-            wxDataViewItem parent( (void*) m_classical->GetID() );
+            wxDataViewItem child( (void*) child_node );
+            wxDataViewItem parent( (void*) m_classical );
             ItemAdded( parent, child );
         }
     }
 
     void Delete( const wxDataViewItem &item )
     {
-        MyMusicModelNode *node = FindNode( item );
+        MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
         node->GetParent()->GetChildren().Remove( node );
         delete node;
         
@@ -187,7 +182,7 @@ public:
     virtual void GetValue( wxVariant &variant, 
                            const wxDataViewItem &item, unsigned int col ) const
     {
-        MyMusicModelNode *node = FindNode( item );
+        MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
         switch (col)
         {
             case 0: variant = node->m_title; break;
@@ -200,7 +195,7 @@ public:
     virtual bool SetValue( const wxVariant &variant, 
                            const wxDataViewItem &item, unsigned int col )
     {
-        MyMusicModelNode *node = FindNode( item );
+        MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
         switch (col)
         {
             case 0: node->m_title = variant.GetString(); break;
@@ -212,20 +207,19 @@ public:
 
     virtual bool HasChildren( const wxDataViewItem &item ) const
     {
-        if (item.GetID() == 0)
+        MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
+        if (!node)
             return true;
     
-        MyMusicModelNode *node = FindNode( item );
         return node->IsContainer();
     }
     
     virtual wxDataViewItem GetFirstChild( const wxDataViewItem &parent ) const
     {
-        if (parent.GetID() == 0)
-            return wxDataViewItem( (void*) m_root->GetID() );
+        MyMusicModelNode *node = (MyMusicModelNode*) parent.GetID();
+        if (!node)
+            return wxDataViewItem( (void*) m_root );
         
-        MyMusicModelNode *node = FindNode( parent );
-            
         if (node->GetChildCount() == 0)
             return wxDataViewItem( 0 );
            
@@ -236,12 +230,12 @@ public:
         }
         
         MyMusicModelNode *first_child = node->GetChildren().Item( 0 );
-        return wxDataViewItem( (void*) first_child->GetID() );
+        return wxDataViewItem( (void*) first_child );
     }
     
     virtual wxDataViewItem GetNextSibling( const wxDataViewItem &item ) const
     {
-        MyMusicModelNode *node = FindNode( item );
+        MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
         MyMusicModelNode *parent = node->GetParent();
         if (!parent)
             return wxDataViewItem(0);
@@ -254,45 +248,14 @@ public:
             return wxDataViewItem(0);
             
         node = parent->GetChildren().Item( pos+1 );
-        return wxDataViewItem( (void*) node->GetID() );
+        return wxDataViewItem( (void*) node );
     } 
     
 private:
-    wxUint32 GetNewId() { m_idCounter++; return m_idCounter; }
-    
-    MyMusicModelNode *FindNodeRec( MyMusicModelNode *node, const wxDataViewItem &item ) const
-    {
-        if (node->GetID() == (wxUint32) item.GetID())
-            return node;
-    
-        size_t count = node->GetChildCount();
-        size_t i;
-        for (i = 0; i < count; i++)
-        {
-            MyMusicModelNode *child = node->GetChildren().Item( i );
-            MyMusicModelNode *node2 = FindNodeRec( child, item );
-            if (node2)
-                return node2;
-        }
-        return NULL;
-    }
-    
-    MyMusicModelNode *FindNode( const wxDataViewItem &item ) const
-    {
-        if (item.GetID() == 0)
-            return NULL;
-            
-        if (!m_root)
-            return NULL;
-            
-        return FindNodeRec( m_root, item );
-    }
-
     MyMusicModelNode*   m_root;
     MyMusicModelNode*   m_pop;
     MyMusicModelNode*   m_classical;
     bool                m_classicalMusicIsKnownToControl;
-    wxUint32            m_idCounter;
 };
 
 // -------------------------------------
