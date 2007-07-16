@@ -361,6 +361,11 @@ bool wxWindow::DoDrawBackground(wxDC& dc)
     wxWindow * const parent = GetParent();
     if ( HasTransparentBackground() && !UseBgCol() && parent )
     {
+        // DirectFB paints the parent first, then its child windows, so by
+        // the time this code is called, parent's background was already
+        // drawn and there's no point in (imperfectly!) duplicating the work
+        // here:
+#ifndef __WXDFB__
         wxASSERT( !IsTopLevel() );
 
         wxPoint pos = GetPosition();
@@ -383,6 +388,7 @@ bool wxWindow::DoDrawBackground(wxDC& dc)
 
         // Restore DC logical origin
         dc.SetLogicalOrigin( org_x, org_y );
+#endif // !__WXDFB__
     }
     else
     {
