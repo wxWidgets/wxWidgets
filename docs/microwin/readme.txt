@@ -1,6 +1,10 @@
 wxMicroWindows port
 ===================
 
+Warning: As of 2007-07-17 this port probably doesn't build any more.
+         Please don't expect it to work out of the box currently.
+
+
 Julian Smart 2001-12-08
 
 This is a port of wxWidgets to MicroWindows, under Linux.
@@ -62,8 +66,10 @@ wxMicroWindows:
 
 - Download wxMSW 2.3.4 or greater, or get it from CVS
 
-- Copy include/wx/msw/setup_microwin.h to include/wx/setup.h if
-  include/wx/setup.h doesn't exist
+- Many settings in include/wx/setup.h have to be disabled. As contents
+  of this file keeps changing, it's impossible to say what exactly should be
+  disabled but it probably makes sense to disable as much as possible
+  initially, make sure that the build works and then add features as needed.
 
 - EITHER:
 
