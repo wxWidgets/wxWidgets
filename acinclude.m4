@@ -413,6 +413,14 @@ dnl usage: WX_ARG_WITH(option, helpmessage, variable-name, [withstring])
 AC_DEFUN([WX_ARG_WITH],
         [
           withstring=$4
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
           AC_MSG_CHECKING([for --${withstring:-with}-$1])
           no_cache=0
           AC_ARG_WITH($1, [$2],
@@ -431,7 +439,7 @@ AC_DEFUN([WX_ARG_WITH],
                           no_cache=1
                         fi
 
-                        AS_TR_SH(wx_cv_use_$1)='$3=${'DEFAULT_$3":-$wxUSE_ALL_FEATURES}"
+                        AS_TR_SH(wx_cv_use_$1)='$3=${'DEFAULT_$3":-$defaultval}"
                       ])
 
           eval "$AS_TR_SH(wx_cv_use_$1)"

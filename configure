@@ -3126,6 +3126,14 @@ echo "${ECHO_T}$result" >&6; }
 
 
           withstring=without
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
           { echo "$as_me:$LINENO: checking for --${withstring:-with}-subdirs" >&5
 echo $ECHO_N "checking for --${withstring:-with}-subdirs... $ECHO_C" >&6; }
           no_cache=0
@@ -3148,7 +3156,7 @@ else
                           no_cache=1
                         fi
 
-                        wx_cv_use_subdirs='wxWITH_SUBDIRS=${'DEFAULT_wxWITH_SUBDIRS":-$wxUSE_ALL_FEATURES}"
+                        wx_cv_use_subdirs='wxWITH_SUBDIRS=${'DEFAULT_wxWITH_SUBDIRS":-$defaultval}"
 
 fi
 
@@ -3786,6 +3794,14 @@ echo "$as_me: error: Invalid value for --with-libxpm: should be yes, no, sys, or
 
 
           withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
           { echo "$as_me:$LINENO: checking for --${withstring:-with}-libmspack" >&5
 echo $ECHO_N "checking for --${withstring:-with}-libmspack... $ECHO_C" >&6; }
           no_cache=0
@@ -3808,7 +3824,7 @@ else
                           no_cache=1
                         fi
 
-                        wx_cv_use_libmspack='wxUSE_LIBMSPACK=${'DEFAULT_wxUSE_LIBMSPACK":-$wxUSE_ALL_FEATURES}"
+                        wx_cv_use_libmspack='wxUSE_LIBMSPACK=${'DEFAULT_wxUSE_LIBMSPACK":-$defaultval}"
 
 fi
 
@@ -3833,6 +3849,14 @@ echo "${ECHO_T}$result" >&6; }
 
 
           withstring=without
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
           { echo "$as_me:$LINENO: checking for --${withstring:-with}-gnomeprint" >&5
 echo $ECHO_N "checking for --${withstring:-with}-gnomeprint... $ECHO_C" >&6; }
           no_cache=0
@@ -3855,7 +3879,7 @@ else
                           no_cache=1
                         fi
 
-                        wx_cv_use_gnomeprint='wxUSE_LIBGNOMEPRINT=${'DEFAULT_wxUSE_LIBGNOMEPRINT":-$wxUSE_ALL_FEATURES}"
+                        wx_cv_use_gnomeprint='wxUSE_LIBGNOMEPRINT=${'DEFAULT_wxUSE_LIBGNOMEPRINT":-$defaultval}"
 
 fi
 
@@ -3880,6 +3904,14 @@ echo "${ECHO_T}$result" >&6; }
 
 
           withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
           { echo "$as_me:$LINENO: checking for --${withstring:-with}-gnomevfs" >&5
 echo $ECHO_N "checking for --${withstring:-with}-gnomevfs... $ECHO_C" >&6; }
           no_cache=0
@@ -3902,7 +3934,7 @@ else
                           no_cache=1
                         fi
 
-                        wx_cv_use_gnomevfs='wxUSE_LIBGNOMEVFS=${'DEFAULT_wxUSE_LIBGNOMEVFS":-$wxUSE_ALL_FEATURES}"
+                        wx_cv_use_gnomevfs='wxUSE_LIBGNOMEVFS=${'DEFAULT_wxUSE_LIBGNOMEVFS":-$defaultval}"
 
 fi
 
@@ -3927,6 +3959,14 @@ echo "${ECHO_T}$result" >&6; }
 
 
           withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
           { echo "$as_me:$LINENO: checking for --${withstring:-with}-hildon" >&5
 echo $ECHO_N "checking for --${withstring:-with}-hildon... $ECHO_C" >&6; }
           no_cache=0
@@ -3949,7 +3989,7 @@ else
                           no_cache=1
                         fi
 
-                        wx_cv_use_hildon='wxUSE_LIBHILDON=${'DEFAULT_wxUSE_LIBHILDON":-$wxUSE_ALL_FEATURES}"
+                        wx_cv_use_hildon='wxUSE_LIBHILDON=${'DEFAULT_wxUSE_LIBHILDON":-$defaultval}"
 
 fi
 
@@ -3974,6 +4014,14 @@ echo "${ECHO_T}$result" >&6; }
 
 
           withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
           { echo "$as_me:$LINENO: checking for --${withstring:-with}-opengl" >&5
 echo $ECHO_N "checking for --${withstring:-with}-opengl... $ECHO_C" >&6; }
           no_cache=0
@@ -3996,7 +4044,7 @@ else
                           no_cache=1
                         fi
 
-                        wx_cv_use_opengl='wxUSE_OPENGL=${'DEFAULT_wxUSE_OPENGL":-$wxUSE_ALL_FEATURES}"
+                        wx_cv_use_opengl='wxUSE_OPENGL=${'DEFAULT_wxUSE_OPENGL":-$defaultval}"
 
 fi
 
@@ -4024,6 +4072,14 @@ fi
 
 
           withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
           { echo "$as_me:$LINENO: checking for --${withstring:-with}-dmalloc" >&5
 echo $ECHO_N "checking for --${withstring:-with}-dmalloc... $ECHO_C" >&6; }
           no_cache=0
@@ -4046,7 +4102,7 @@ else
                           no_cache=1
                         fi
 
-                        wx_cv_use_dmalloc='wxUSE_DMALLOC=${'DEFAULT_wxUSE_DMALLOC":-$wxUSE_ALL_FEATURES}"
+                        wx_cv_use_dmalloc='wxUSE_DMALLOC=${'DEFAULT_wxUSE_DMALLOC":-$defaultval}"
 
 fi
 
@@ -4071,6 +4127,14 @@ echo "${ECHO_T}$result" >&6; }
 
 
           withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
           { echo "$as_me:$LINENO: checking for --${withstring:-with}-sdl" >&5
 echo $ECHO_N "checking for --${withstring:-with}-sdl... $ECHO_C" >&6; }
           no_cache=0
@@ -4093,7 +4157,7 @@ else
                           no_cache=1
                         fi
 
-                        wx_cv_use_sdl='wxUSE_LIBSDL=${'DEFAULT_wxUSE_LIBSDL":-$wxUSE_ALL_FEATURES}"
+                        wx_cv_use_sdl='wxUSE_LIBSDL=${'DEFAULT_wxUSE_LIBSDL":-$defaultval}"
 
 fi
 
