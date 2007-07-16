@@ -1693,8 +1693,8 @@ void wxDataViewMainWindow::OnRenameTimer()
     GetOwner()->CalcScrolledPosition( labelRect.x, labelRect.y,
                                      &labelRect.x, &labelRect.y);
 
-    // TODO get wxDataViewItem from m_currentRow
-    m_currentCol->GetRenderer()->StartEditing( m_currentRow, labelRect );
+    wxDataViewItem item = GetItemByRow( m_currentRow );
+    m_currentCol->GetRenderer()->StartEditing( item, labelRect );
 }
 
 //------------------------------------------------------------------
@@ -2755,13 +2755,13 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         {
             if (cell->GetMode() == wxDATAVIEW_CELL_ACTIVATABLE)
             {
+                wxDataViewItem item = GetItemByRow(current);
                 wxVariant value;
-                model->GetValue( value, col->GetModelColumn(), current );
+                model->GetValue( value, item, col->GetModelColumn() );
                 cell->SetValue( value );
                 wxRect cell_rect( xpos, current * m_lineHeight,
                                   col->GetWidth(), m_lineHeight );
-		  wxDataViewItem dataitem = GetItemByRow(current);
-                cell->Activate( cell_rect, model, dataitem, col->GetModelColumn() );
+                cell->Activate( cell_rect, model, item, col->GetModelColumn() );
             }
             return;
         }
