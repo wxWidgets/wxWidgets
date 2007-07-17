@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/private/xtihandler.h
+// Name:        wx/xtihandler.h
 // Purpose:     XTI handlers
 // Author:      Stefan Csomor
 // Modified by: Francesco Montorsi
@@ -13,6 +13,23 @@
 #ifndef _XTIHANDLER_H_
 #define _XTIHANDLER_H_
 
+#include "wx/defs.h"
+
+#if wxUSE_EXTENDED_RTTI
+
+#include "wx/string.h"
+
+class WXDLLIMPEXP_BASE wxObject;
+class WXDLLIMPEXP_BASE wxClassInfo;
+class WXDLLIMPEXP_BASE wxDynamicClassInfo;
+class WXDLLIMPEXP_BASE wxHashTable;
+class WXDLLIMPEXP_BASE wxHashTable_Node;
+class WXDLLIMPEXP_BASE wxObjectRefData;
+class WXDLLIMPEXP_BASE wxEvent;
+class WXDLLIMPEXP_BASE wxEvtHandler;
+
+typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
+
 // ----------------------------------------------------------------------------
 // Handler Info
 //
@@ -22,9 +39,10 @@
 class WXDLLIMPEXP_BASE wxHandlerInfo
 {
     friend class WXDLLIMPEXP_BASE wxDynamicClassInfo;
+
 public:
     wxHandlerInfo(wxHandlerInfo* &iter,
-                   wxClassInfo* itsClass,
+                  wxClassInfo* itsClass,
                   const wxString& name,
                   wxObjectEventFunction address,
                   const wxClassInfo* eventClassInfo) :
@@ -85,4 +103,5 @@ private:
 #define wxEND_HANDLERS_TABLE() \
     return first; }
 
-#endif
+#endif      // wxUSE_EXTENDED_RTTI
+#endif      // _XTIHANDLER_H_

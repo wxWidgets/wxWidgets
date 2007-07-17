@@ -38,6 +38,17 @@
 
 using namespace std;
 
+
+wxString wxxVariant::GetAsString() const
+{
+    if (!GetTypeInfo())
+        return wxEmptyString;
+    wxString s;
+    GetTypeInfo()->ConvertToString( *this, s );
+    return s;
+}
+
+
 // ----------------------------------------------------------------------------
 // Enum Support
 // ----------------------------------------------------------------------------

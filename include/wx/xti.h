@@ -37,94 +37,15 @@
 #if wxUSE_EXTENDED_RTTI
 
 #include "wx/memory.h"
-#include "wx/flags.h"
 #include "wx/string.h"
-#include "wx/arrstr.h"
-#include "wx/hashmap.h"
-#include "wx/log.h"
-#include "wx/intl.h"
 
-#include <typeinfo>
+// include definitions of other XTI structures
 
-class WXDLLIMPEXP_BASE wxObject;
-class WXDLLIMPEXP_BASE wxClassInfo;
-class WXDLLIMPEXP_BASE wxDynamicClassInfo;
-class WXDLLIMPEXP_BASE wxHashTable;
-class WXDLLIMPEXP_BASE wxHashTable_Node;
-class WXDLLIMPEXP_BASE wxObjectRefData;
-class WXDLLIMPEXP_BASE wxEvent;
-class WXDLLIMPEXP_BASE wxEvtHandler;
-
-typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
-
-
-// ----------------------------------------------------------------------------
-// workarounds for dummy compilers
-// ----------------------------------------------------------------------------
-
-// we will move this later to defs.h
-
-#if defined(__GNUC__) && !wxCHECK_GCC_VERSION( 3, 4 )
-    // GCC <= 3.4 has buggy template support
-#  define wxUSE_MEMBER_TEMPLATES 0
-#endif
-
-#if defined(_MSC_VER) && _MSC_VER <= 1200
-    // MSVC <= 6.0 has buggy template support
-#  define wxUSE_MEMBER_TEMPLATES 0
-#  define wxUSE_FUNC_TEMPLATE_POINTER 0
-#endif
-
-#ifndef wxUSE_MEMBER_TEMPLATES
-#  define wxUSE_MEMBER_TEMPLATES 1
-#endif
-
-#ifndef wxUSE_FUNC_TEMPLATE_POINTER
-#  define wxUSE_FUNC_TEMPLATE_POINTER 1
-#endif
-
-#if wxUSE_MEMBER_TEMPLATES
-#  define wxTEMPLATED_MEMBER_CALL( method, type ) method<type>()
-#  define wxTEMPLATED_MEMBER_FIX( type )
-#else
-#  define wxTEMPLATED_MEMBER_CALL( method, type ) method((type*)NULL)
-#  define wxTEMPLATED_MEMBER_FIX( type ) type* =NULL
-#endif
-
-#if defined(_MSC_VER) && _MSC_VER <= 1200
-#  define wxTEMPLATED_FUNCTION_FIX( type ), wxTEMPLATED_MEMBER_FIX(type)
-#  define wxINFUNC_CLASS_TYPE_FIX( type ) typedef type type;
-#else
-#  define wxTEMPLATED_FUNCTION_FIX( type )
-#  define wxINFUNC_CLASS_TYPE_FIX( type )
-#endif
-
-#define EMPTY_MACROVALUE /**/
-
-#if wxUSE_FUNC_TEMPLATE_POINTER
-#  define wxTO_STRING(type) wxToStringConverter<type>
-#  define wxTO_STRING_IMP(type)
-#  define wxFROM_STRING(type) wxFromStringConverter<type>
-#  define wxFROM_STRING_IMP(type)
-#else
-#  define wxTO_STRING(type) ToString##type
-#  define wxTO_STRING_IMP(type) \
-    inline void ToString##type( const wxxVariant& data, wxString &result ) \
-        { wxToStringConverter<type>(data, result); }
-
-#  define wxFROM_STRING(type) FromString##type
-#  define wxFROM_STRING_IMP(type) \
-    inline void FromString##type( const wxString& data, wxxVariant &result ) \
-        { wxFromStringConverter<type>(data, result); }
-#endif
-
-// include (private!) definitions of other XTI structures
-
-#include "wx/private/xtitypes.h"
-#include "wx/private/xvariant.h"
-#include "wx/private/xtictor.h"
-#include "wx/private/xtiprop.h"
-#include "wx/private/xtihandler.h"
+#include "wx/xtitypes.h"
+#include "wx/xvariant.h"
+#include "wx/xtictor.h"
+#include "wx/xtiprop.h"
+#include "wx/xtihandler.h"
 
 
 // ----------------------------------------------------------------------------
@@ -252,7 +173,7 @@ public:
         { return m_objectConstructor; }
     const wxClassInfo         *GetNext() const 
         { return m_next; }
-    
+
     // statics:
 
     static void                CleanUp();
@@ -311,7 +232,7 @@ public:
             wxLogError( _("Illegal Parameter Count for Create Method") );
             return false;
         }
-        
+
         return m_constructor->Create( object, Params );
     }
 

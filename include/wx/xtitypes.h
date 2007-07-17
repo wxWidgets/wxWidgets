@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/private/xtitypes.h
+// Name:        wx/xtitypes.h
 // Purpose:     enum, set, basic types support
 // Author:      Stefan Csomor
 // Modified by: Francesco Montorsi
@@ -12,6 +12,20 @@
 
 #ifndef _XTITYPES_H_
 #define _XTITYPES_H_
+
+#include "wx/defs.h"
+
+#if wxUSE_EXTENDED_RTTI
+
+#include "wx/string.h"
+#include "wx/hashmap.h"
+#include "wx/arrstr.h"
+#include "wx/flags.h"
+#include "wx/intl.h"
+#include "wx/log.h"
+#include <typeinfo>
+
+class WXDLLIMPEXP_BASE wxClassInfo;
 
 // ----------------------------------------------------------------------------
 // Enum Support
@@ -564,4 +578,5 @@ template<typename T> const wxTypeInfo* wxGetTypeInfo( T * ) \
 
 #define wxILLEGAL_TYPE_SPECIALIZATION( a )
 
+#endif      // wxUSE_EXTENDED_RTTI
 #endif      // _XTITYPES_H_

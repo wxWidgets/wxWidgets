@@ -12,13 +12,20 @@
 #ifndef _WX_XTIXMLH__
 #define _WX_XTIXMLH__
 
-#include "wx/wx.h"
+#include "wx/defs.h"
 
 #if wxUSE_EXTENDED_RTTI
 
+#include "wx/string.h"
 #include "wx/xtistrm.h"
 
 class WXDLLIMPEXP_XML wxXmlNode;
+class WXDLLIMPEXP_BASE wxPropertyInfo;
+class WXDLLIMPEXP_BASE wxObject;
+class WXDLLIMPEXP_BASE wxClassInfo;
+class WXDLLIMPEXP_BASE wxxVariantArray;
+class WXDLLIMPEXP_BASE wxHandlerInfo;
+class WXDLLIMPEXP_BASE wxDepersister;
 
 class WXDLLIMPEXP_XML wxXmlWriter: public wxWriter
 {

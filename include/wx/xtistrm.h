@@ -12,9 +12,12 @@
 #ifndef _WX_XTISTRMH__
 #define _WX_XTISTRMH__
 
-#include "wx/wx.h"
+#include "wx/defs.h"
 
 #if wxUSE_EXTENDED_RTTI
+
+#include "wx/string.h"
+#include "wx/object.h"
 
 const int wxInvalidObjectID = -2;
 const int wxNullObjectID = -3;
@@ -38,6 +41,12 @@ const int wxNullObjectID = -3;
 
 class WXDLLIMPEXP_BASE wxWriter;
 class WXDLLIMPEXP_BASE wxReader;
+class WXDLLIMPEXP_BASE wxClassInfo;
+class WXDLLIMPEXP_BASE wxxVariantArray;
+class WXDLLIMPEXP_BASE wxPropertyInfo;
+class WXDLLIMPEXP_BASE wxxVariant;
+class WXDLLIMPEXP_BASE wxWriter;
+class WXDLLIMPEXP_BASE wxHandlerInfo;
 
 class WXDLLIMPEXP_BASE wxPersister
 {

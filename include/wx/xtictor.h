@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/private/xtictor.h
+// Name:        wx/xtictor.h
 // Purpose:     XTI constructors
 // Author:      Stefan Csomor
 // Modified by: Francesco Montorsi
@@ -12,6 +12,22 @@
 
 #ifndef _XTICTOR_H_
 #define _XTICTOR_H_
+
+#include "wx/defs.h"
+
+#if wxUSE_EXTENDED_RTTI
+
+#include "wx/string.h"
+#include "wx/xvariant.h"
+
+class WXDLLIMPEXP_BASE wxObject;
+class WXDLLIMPEXP_BASE wxClassInfo;
+class WXDLLIMPEXP_BASE wxDynamicClassInfo;
+class WXDLLIMPEXP_BASE wxHashTable;
+class WXDLLIMPEXP_BASE wxHashTable_Node;
+class WXDLLIMPEXP_BASE wxObjectRefData;
+class WXDLLIMPEXP_BASE wxEvent;
+class WXDLLIMPEXP_BASE wxEvtHandler;
 
 // ----------------------------------------------------------------------------
 // Constructor Bridges
@@ -500,4 +516,5 @@ struct wxDirectConstructorBridge_8 : public wxDirectConstructorBrigde
         { wxT(#v0), wxT(#v1), wxT(#v2), wxT(#v3), wxT(#v4), wxT(#v5), wxT(#v6), wxT(#v7) }; \
     const int klass::ms_constructorPropertiesCount = 8;
 
+#endif      // wxUSE_EXTENDED_RTTI
 #endif      // _XTICTOR_H_

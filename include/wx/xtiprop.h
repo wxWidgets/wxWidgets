@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/private/xtiprop.h
+// Name:        wx/xtiprop.h
 // Purpose:     XTI properties
 // Author:      Stefan Csomor
 // Modified by: Francesco Montorsi
@@ -12,6 +12,25 @@
 
 #ifndef _XTIPROP_H_
 #define _XTIPROP_H_
+
+#include "wx/defs.h"
+
+#if wxUSE_EXTENDED_RTTI
+
+#include "wx/string.h"
+#include "wx/xvariant.h"
+#include "wx/intl.h"
+#include "wx/log.h"
+#include "wx/xtitypes.h"
+
+class WXDLLIMPEXP_BASE wxObject;
+class WXDLLIMPEXP_BASE wxClassInfo;
+class WXDLLIMPEXP_BASE wxDynamicClassInfo;
+class WXDLLIMPEXP_BASE wxHashTable;
+class WXDLLIMPEXP_BASE wxHashTable_Node;
+class WXDLLIMPEXP_BASE wxObjectRefData;
+class WXDLLIMPEXP_BASE wxEvent;
+class WXDLLIMPEXP_BASE wxEvtHandler;
 
 // ----------------------------------------------------------------------------
 // Property Support
@@ -571,4 +590,5 @@ public: \
   void  Set##name( type const & p) { m_##name = p; } \
   type const & Get##name() const  { return m_##name; }
 
+#endif      // wxUSE_EXTENDED_RTTI
 #endif      // _XTIPROP_H_

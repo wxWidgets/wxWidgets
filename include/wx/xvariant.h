@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/private/xvariant.h
+// Name:        wx/xvariant.h
 // Purpose:     wxxVariant - to be merged with wxVariant
 // Author:      Stefan Csomor
 // Modified by: Francesco Montorsi
@@ -12,6 +12,13 @@
 
 #ifndef _XVARIANT_H_
 #define _XVARIANT_H_
+
+#include "wx/defs.h"
+#include "wx/string.h"
+#include <typeinfo>
+
+class WXDLLIMPEXP_BASE wxTypeInfo;
+class WXDLLIMPEXP_BASE wxObject;
 
 // ----------------------------------------------------------------------------
 // wxxVariant as typesafe data holder
@@ -130,14 +137,7 @@ public:
     }
 
     // returns this value as string
-    wxString GetAsString() const
-    {
-        if (!GetTypeInfo())
-            return wxEmptyString;
-        wxString s;
-        GetTypeInfo()->ConvertToString( *this, s );
-        return s;
-    }
+    wxString GetAsString() const;
 
     const wxString& GetName() const { return m_name; }
 
