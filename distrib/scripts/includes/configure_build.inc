@@ -28,7 +28,8 @@ WXPYTHON_OPTS="--with-opengl \
     --enable-geometry \
     --enable-debug_flag \
     --enable-optimise \
-    --disable-debugreport "
+    --disable-debugreport \
+    --enable-monolithic"
 	
 	
 do_build(){
