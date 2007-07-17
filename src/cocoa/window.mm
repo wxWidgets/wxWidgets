@@ -380,6 +380,9 @@ wxWindow::~wxWindow()
 
 void wxWindowCocoa::CocoaAddChild(wxWindowCocoa *child)
 {
+    // Pool here due to lack of one during wx init phase
+    wxAutoNSAutoreleasePool pool;
+
     NSView *childView = child->GetNSViewForSuperview();
 
     wxASSERT(childView);
@@ -1246,6 +1249,9 @@ void wxCocoaTrackingRectManager::StopSynthesizingEvents()
 
 void wxCocoaTrackingRectManager::BuildTrackingRect()
 {
+    // Pool here due to lack of one during wx init phase
+    wxAutoNSAutoreleasePool pool;
+
     wxASSERT_MSG(!m_isTrackingRectActive, wxT("Tracking rect was not cleared"));
     if([m_window->GetNSView() window] != nil)
     {
