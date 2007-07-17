@@ -368,7 +368,7 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
 
     m_dataview->AppendTextColumn( "Title", 0, wxDATAVIEW_CELL_INERT, 200, 
                                      DEFAULT_ALIGN, wxDATAVIEW_COL_SORTABLE );
-    m_dataview->AppendTextColumn( "Artist", 1, wxDATAVIEW_CELL_INERT, 200,
+    m_dataview->AppendTextColumn( "Artist", 1, wxDATAVIEW_CELL_EDITABLE, 200,
                                      DEFAULT_ALIGN, wxDATAVIEW_COL_SORTABLE );
     m_dataview->AppendTextColumn( "Year", 2, wxDATAVIEW_CELL_INERT, 50,
                                      DEFAULT_ALIGN );

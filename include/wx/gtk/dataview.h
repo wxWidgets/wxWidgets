@@ -20,6 +20,7 @@
 // --------------------------------------------------------- 
 
 class WXDLLIMPEXP_FWD_CORE wxDataViewCtrl;
+class WXDLLIMPEXP_FWD_CORE wxDataViewCtrlInternal;
 
 
 // --------------------------------------------------------- 
@@ -305,16 +306,17 @@ public:
     virtual bool AssociateModel( wxDataViewModel *model );
     virtual bool AppendColumn( wxDataViewColumn *col );
 
-    virtual wxDataViewItem GetSelection();
-
-    
     // selection code
+    virtual wxDataViewItem GetSelection();
+    
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
     
-    GtkWidget *GtkGetTreeView() { return m_treeview; }
     wxWindow *GetMainWindow() { return (wxWindow*) this; }
+    
+    GtkWidget *GtkGetTreeView() { return m_treeview; }
+    wxDataViewCtrlInternal* GtkGetInternal() { return m_internal; }
 
 protected:
     virtual void DoSetExpanderColumn();
@@ -326,6 +328,7 @@ private:
     friend class wxGtkDataViewModelNotifier;
     GtkWidget               *m_treeview;
     wxDataViewModelNotifier *m_notifier;
+    wxDataViewCtrlInternal  *m_internal;
 
     
     virtual void OnInternalIdle();
