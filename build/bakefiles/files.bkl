@@ -492,6 +492,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/wxprec.h
     wx/xti.h
     wx/xtistrm.h
+    wx/xtictor.h
+    wx/xtihandler.h
+    wx/xtiprop.h
+    wx/xtitypes.h
+    wx/xvariant.h
     wx/zipstrm.h
     wx/zstream.h
 </set>
