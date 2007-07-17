@@ -218,11 +218,8 @@ wxSize wxControl::DoGetBestSize() const
     wxASSERT(GetNSControl());
     /* We can ask single-celled controls for their cell and get its size */
     NSCell *cell = nil;
-NS_DURING
-    cell = [GetNSControl() cell];
-NS_HANDLER
-    // TODO: if anything other than method not implemented, re-raise
-NS_ENDHANDLER
+    if([GetNSControl() respondsToSelector:@selector(cell)])
+        cell = [GetNSControl() cell];
     if(cell)
     {
         NSSize cellSize = [cell cellSize];
@@ -232,16 +229,10 @@ NS_ENDHANDLER
     }
 
     /* multi-celled control? size to fit, get the size, then set it back */
-    NSRect storedRect = [m_cocoaNSView frame];
-    bool didFit = false;
-NS_DURING
-    [GetNSControl() sizeToFit];
-    didFit = true;
-NS_HANDLER
-    // TODO: if anything other than method not implemented, re-raise
-NS_ENDHANDLER
-    if(didFit)
+    if([GetNSControl() respondsToSelector:@selector(sizeToFit)])
     {
+        NSRect storedRect = [m_cocoaNSView frame];
+        [GetNSControl() sizeToFit];
         NSRect cocoaRect = [m_cocoaNSView frame];
         wxSize size((int)ceil(cocoaRect.size.width),(int)ceil(cocoaRect.size.height));
         [m_cocoaNSView setFrame: storedRect];
