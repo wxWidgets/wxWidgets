@@ -3,7 +3,7 @@
 // Purpose:     wxAtomic??? unit test
 // Author:      Armel Asselin
 // Created:     2006-12-14
-// RCS-ID:      $Id: atomic.cpp 47121 2007-07-04 20:54:14Z VZ $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Armel Asselin
 ///////////////////////////////////////////////////////////////////////////////
 

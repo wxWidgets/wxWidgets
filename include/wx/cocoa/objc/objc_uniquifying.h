@@ -7,7 +7,7 @@
 // Author:      David Elliott <dfe@cox.net>
 // Modified by:
 // Created:     2007/05/15
-// RCS-ID:      $Id: objc_uniquifying.h 46226 2007-05-27 04:28:35Z DE $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Software 2000 Ltd.
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -4,7 +4,7 @@
 // Author:      
 // Modified by:
 // Created:     2007-05-18
-// RCS-ID:      $Id: databrow.h 46344 2007-06-06 23:40:24Z RR $
+// RCS-ID:      $Id$
 // Copyright:   (c)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

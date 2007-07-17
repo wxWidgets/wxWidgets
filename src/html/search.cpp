@@ -2,7 +2,7 @@
 // Name:        search.cpp
 // Purpose:     search engine
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id: search.cpp 10850 2001-07-05 18:48:48Z VZ $
+// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////

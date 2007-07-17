@@ -5721,6 +5721,48 @@ dnl ---------------------------------------------------------------------------
 dnl time/date functions
 dnl ---------------------------------------------------------------------------
 
+dnl check for gettimeofday (SVr4, BSD 4.3) and ftime (V7, BSD 4.3) for the
+dnl function to be used for high resolution timers
+AC_CHECK_FUNCS(gettimeofday ftime, break)
+
+if test "$ac_cv_func_gettimeofday" = "yes"; then
+    AC_CACHE_CHECK([whether gettimeofday takes two arguments],
+                   wx_cv_func_gettimeofday_has_2_args,
+    [
+        dnl on some _really_ old systems it takes only 1 argument
+        AC_TRY_COMPILE(
+            [
+                #include <sys/time.h>
+                #include <unistd.h>
+            ],
+            [
+                struct timeval tv;
+                gettimeofday(&tv, NULL);
+            ],
+            wx_cv_func_gettimeofday_has_2_args=yes,
+            AC_TRY_COMPILE(
+                [
+                    #include <sys/time.h>
+                    #include <unistd.h>
+                ],
+                [
+                    struct timeval tv;
+                    gettimeofday(&tv);
+                ],
+                wx_cv_func_gettimeofday_has_2_args=no,
+                [
+                    AC_MSG_WARN([failed to determine number of gettimeofday() arguments])
+                    wx_cv_func_gettimeofday_has_2_args=unknown
+                ]
+            )
+        )
+    ])
+
+    if test "$wx_cv_func_gettimeofday_has_2_args" != "yes"; then
+        AC_DEFINE(WX_GETTIMEOFDAY_NO_TZ)
+    fi
+fi
+
 if test "$wxUSE_DATETIME" = "yes"; then
     dnl check for strptime and for its declaration as some systems lack it
     AC_CHECK_FUNC(strptime)
@@ -5866,48 +5908,6 @@ if test "$wxUSE_DATETIME" = "yes"; then
 
     if test "$wx_cv_struct_tm_has_gmtoff" = "yes"; then
         AC_DEFINE(WX_GMTOFF_IN_TM)
-    fi
-
-    dnl check for gettimeofday (SVr4, BSD 4.3) and ftime (V7, BSD 4.3) for the
-    dnl function to be used for high resolution timers
-    AC_CHECK_FUNCS(gettimeofday ftime, break)
-
-    if test "$ac_cv_func_gettimeofday" = "yes"; then
-        AC_CACHE_CHECK([whether gettimeofday takes two arguments],
-                       wx_cv_func_gettimeofday_has_2_args,
-        [
-            dnl on some _really_ old systems it takes only 1 argument
-            AC_TRY_COMPILE(
-                [
-                    #include <sys/time.h>
-                    #include <unistd.h>
-                ],
-                [
-                    struct timeval tv;
-                    gettimeofday(&tv, NULL);
-                ],
-                wx_cv_func_gettimeofday_has_2_args=yes,
-                AC_TRY_COMPILE(
-                    [
-                        #include <sys/time.h>
-                        #include <unistd.h>
-                    ],
-                    [
-                        struct timeval tv;
-                        gettimeofday(&tv);
-                    ],
-                    wx_cv_func_gettimeofday_has_2_args=no,
-                    [
-                        AC_MSG_WARN([failed to determine number of gettimeofday() arguments])
-                        wx_cv_func_gettimeofday_has_2_args=unknown
-                    ]
-                )
-            )
-        ])
-
-        if test "$wx_cv_func_gettimeofday_has_2_args" != "yes"; then
-            AC_DEFINE(WX_GETTIMEOFDAY_NO_TZ)
-        fi
     fi
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS typetest"

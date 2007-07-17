@@ -424,7 +424,7 @@ wxgtk_tree_model_get_value (GtkTreeModel *tree_model,
     {
         wxVariant variant;
         g_value_init( value, G_TYPE_STRING );
-        wxDataViewItem item( (wxUint32) iter->user_data );
+        wxDataViewItem item( (void*) iter->user_data );
         model->GetValue( variant, item, (unsigned int) column );
 
         g_value_set_string( value, variant.GetString().utf8_str() );
@@ -667,7 +667,7 @@ GtkTreePath *wxGtkTreeModel::get_path( GtkTreeIter *iter )
 
 gboolean wxGtkTreeModel::iter_next( GtkTreeIter *iter )
 {
-    wxDataViewItem item( (wxUint32) iter->user_data );
+    wxDataViewItem item( (void*) iter->user_data );
     item = m_wx_model->GetNextSibling( item );
     if (!item.IsOk())
         return FALSE;
@@ -679,7 +679,7 @@ gboolean wxGtkTreeModel::iter_next( GtkTreeIter *iter )
 
 gboolean wxGtkTreeModel::iter_children( GtkTreeIter *iter, GtkTreeIter *parent )
 {
-    wxDataViewItem item( (wxUint32) parent->user_data );
+    wxDataViewItem item( (void*) parent->user_data );
     
     if (!m_wx_model->HasChildren( item ))
         return FALSE;
@@ -697,14 +697,14 @@ gboolean wxGtkTreeModel::iter_children( GtkTreeIter *iter, GtkTreeIter *parent )
 
 gboolean wxGtkTreeModel::iter_has_child( GtkTreeIter *iter )
 {
-    wxDataViewItem item( (wxUint32) iter->user_data );
+    wxDataViewItem item( (void*) iter->user_data );
     
     return m_wx_model->HasChildren( item );
 }
 
 gint wxGtkTreeModel::iter_n_children( GtkTreeIter *iter )
 {
-    wxDataViewItem item( (wxUint32) iter->user_data );
+    wxDataViewItem item( (void*) iter->user_data );
     
     if (!m_wx_model->HasChildren( item ))
         return 0;
@@ -717,8 +717,8 @@ gint wxGtkTreeModel::iter_n_children( GtkTreeIter *iter )
 
 gboolean wxGtkTreeModel::iter_nth_child( GtkTreeIter *iter, GtkTreeIter *parent, gint n )
 {
-    wxUint32 id = 0;
-    if (parent) id = (wxUint32) parent->user_data;
+    void* id = NULL;
+    if (parent) id = (void*) parent->user_data;
     wxDataViewItem item( id );
     
     if (!m_wx_model->HasChildren( item ))
@@ -739,7 +739,7 @@ gboolean wxGtkTreeModel::iter_nth_child( GtkTreeIter *iter, GtkTreeIter *parent,
 
 gboolean wxGtkTreeModel::iter_parent( GtkTreeIter *iter, GtkTreeIter *child )
 {
-    wxDataViewItem item( (wxUint32) child->user_data );
+    wxDataViewItem item( (void*) child->user_data );
     
     wxGtkTreeModelNode *node = FindNode( child );
     node = node->GetParent();
@@ -786,7 +786,7 @@ wxGtkTreeModelNode *wxGtkTreeModel::FindNode( GtkTreeIter *iter )
     if (!iter)
         return m_root;
 
-    wxDataViewItem item( (wxUint32) iter->user_data );
+    wxDataViewItem item( (void*) iter->user_data );
     
     wxGtkTreeModelNode *result = wxGtkTreeModel_FindNode( m_root, item );
     
@@ -989,10 +989,11 @@ static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
     // wxDataViewListModel *model = cell->GetOwner()->GetOwner()->GetModel();
 
     GtkTreePath *treepath = gtk_tree_path_new_from_string( path );
-    unsigned int model_row = (unsigned int)gtk_tree_path_get_indices (treepath)[0];
+    // TODO
+    wxDataViewItem item;
     gtk_tree_path_free( treepath );
 
-    cell->StartEditing( model_row, renderrect );
+    cell->StartEditing( item, renderrect );
 
     return NULL;
 }
@@ -1123,7 +1124,8 @@ gtk_wx_cell_renderer_activate(
     wxDataViewModel *model = cell->GetOwner()->GetOwner()->GetModel();
 
     GtkTreePath *treepath = gtk_tree_path_new_from_string( path );
-    unsigned int model_row = (unsigned int)gtk_tree_path_get_indices (treepath)[0];
+    // TODO
+    wxDataViewItem item;
     gtk_tree_path_free( treepath );
 
     unsigned int model_col = cell->GetOwner()->GetModelColumn();
@@ -1133,7 +1135,7 @@ gtk_wx_cell_renderer_activate(
         bool ret = false;
 
         // activated by <ENTER>
-        if (cell->Activate( renderrect, model, model_col, model_row ))
+        if (cell->Activate( renderrect, model, item, model_col ))
                     ret = true;
 
         return ret;
@@ -1147,16 +1149,16 @@ gtk_wx_cell_renderer_activate(
         bool ret = false;
         if (button_event->button == 1)
         {
-            if (cell->LeftClick( pt, renderrect, model, model_col, model_row ))
+            if (cell->LeftClick( pt, renderrect, model, item, model_col ))
                 ret = true;
             // TODO: query system double-click time
             if (button_event->time - wxrenderer->last_click < 400)
-                if (cell->Activate( renderrect, model, model_col, model_row ))
+                if (cell->Activate( renderrect, model, item, model_col ))
                     ret = true;
         }
         if (button_event->button == 3)
         {
-            if (cell->RightClick( pt, renderrect, model, model_col, model_row ))
+            if (cell->RightClick( pt, renderrect, model, item, model_col ))
                 ret = true;
         }
 
@@ -1452,13 +1454,15 @@ static void wxGtkTextRendererEditedCallback( GtkCellRendererText *renderer,
     wxDataViewModel *model = cell->GetOwner()->GetOwner()->GetModel();
 
     GtkTreePath *path = gtk_tree_path_new_from_string( arg1 );
-    unsigned int model_row = (unsigned int)gtk_tree_path_get_indices (path)[0];
+    GtkTreeIter iter;
+    // TODO    
+    wxDataViewItem item;
     gtk_tree_path_free( path );
 
     unsigned int model_col = cell->GetOwner()->GetModelColumn();
 
-    model->SetValue( value, model_col, model_row );
-    model->ValueChanged( model_col, model_row );
+    model->SetValue( value, item, model_col );
+    model->ValueChanged( item, model_col );
 }
 
 IMPLEMENT_CLASS(wxDataViewTextRenderer, wxDataViewRenderer)
@@ -1624,13 +1628,14 @@ static void wxGtkToggleRendererToggledCallback( GtkCellRendererToggle *renderer,
     wxDataViewModel *model = cell->GetOwner()->GetOwner()->GetModel();
 
     GtkTreePath *gtk_path = gtk_tree_path_new_from_string( path );
-    unsigned int model_row = (unsigned int)gtk_tree_path_get_indices (gtk_path)[0];
+    // TODO
+    wxDataViewItem item;
     gtk_tree_path_free( gtk_path );
 
     unsigned int model_col = cell->GetOwner()->GetModelColumn();
 
-    model->SetValue( value, model_col, model_row );
-    model->ValueChanged( model_col, model_row );
+    model->SetValue( value, item, model_col );
+    model->ValueChanged( item, model_col );
 }
 
 IMPLEMENT_CLASS(wxDataViewToggleRenderer, wxDataViewRenderer)
@@ -2004,7 +2009,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
 
     wxDataViewRenderer *cell = (wxDataViewRenderer*) data;
 
-    wxDataViewItem item( (wxUint32) iter->user_data );
+    wxDataViewItem item( (void*) iter->user_data );
 
     wxVariant value;
     tree_model->model->GetDataViewModel()->GetValue( value, item, cell->GetOwner()->GetModelColumn() );
@@ -2507,7 +2512,7 @@ wxDataViewItem wxDataViewCtrl::GetSelection()
         GtkTreeIter iter;
         if (gtk_tree_selection_get_selected( selection, NULL, &iter ))
         {
-            wxDataViewItem item( (wxUint32) iter.user_data );
+            wxDataViewItem item( (void*) iter.user_data );
             return item;
         }
     }

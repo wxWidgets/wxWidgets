@@ -2,7 +2,7 @@
 // Name:        src/mac/carbon/datavgen.cpp
 // Purpose:     wxDataViewCtrl native mac implementation
 // Author:      
-// Id:          $Id: dataview.cpp 46344 2007-06-06 23:40:24Z RR $
+// Id:          $Id$
 // Copyright:   (c) 2007
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

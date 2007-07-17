@@ -39,7 +39,7 @@
 #include "wx/apptrait.h"
 
 #include "wx/sckaddr.h"
-#include "wx/datetime.h"
+#include "wx/stopwatch.h"
 
 // DLL options compatibility check:
 #include "wx/build.h"
@@ -680,7 +680,7 @@ bool wxSocketBase::_Wait(long seconds,
                          wxSocketEventFlags flags)
 {
   GSocketEventFlags result;
-  long timeout;
+  long timeout; // in ms
 
   // Set this to true to interrupt ongoing waits
   m_interrupt = false;
@@ -707,8 +707,7 @@ bool wxSocketBase::_Wait(long seconds,
   // Do this at least once (important if timeout == 0, when
   // we are just polling). Also, if just polling, do not yield.
 
-  wxDateTime current_time = wxDateTime::UNow();
-  unsigned int time_limit = (current_time.GetTicks() * 1000) + current_time.GetMillisecond() + timeout;
+  const wxMilliClock_t time_limit = wxGetLocalTimeMillis() + timeout;
   bool done = false;
   bool valid_result = false;
 
@@ -752,8 +751,7 @@ bool wxSocketBase::_Wait(long seconds,
     }
 
     // Wait more?
-    current_time = wxDateTime::UNow();
-    int time_left = time_limit - ((current_time.GetTicks() * 1000) + current_time.GetMillisecond());
+    long time_left = wxMilliClockToLong(time_limit - wxGetLocalTimeMillis());
     if ((!timeout) || (time_left <= 0) || (m_interrupt))
       done = true;
     else

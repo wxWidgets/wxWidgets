@@ -194,11 +194,15 @@ public:
 protected:
   virtual bool DoReadString(const wxString& key, wxString *pStr) const;
   virtual bool DoReadLong(const wxString& key, long *pl) const;
+#if wxUSE_BASE64
   virtual bool DoReadBinary(const wxString& key, wxMemoryBuffer* buf) const;
+#endif // wxUSE_BASE64
 
   virtual bool DoWriteString(const wxString& key, const wxString& szValue);
   virtual bool DoWriteLong(const wxString& key, long lValue);
+#if wxUSE_BASE64
   virtual bool DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf);
+#endif // wxUSE_BASE64
 
 private:
   // GetXXXFileName helpers: return ('/' terminated) directory names

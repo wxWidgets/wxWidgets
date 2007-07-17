@@ -3126,6 +3126,14 @@ echo "${ECHO_T}$result" >&6; }
 
 
           withstring=without
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
           { echo "$as_me:$LINENO: checking for --${withstring:-with}-subdirs" >&5
 echo $ECHO_N "checking for --${withstring:-with}-subdirs... $ECHO_C" >&6; }
           no_cache=0
@@ -3148,7 +3156,7 @@ else
                           no_cache=1
                         fi
 
-                        wx_cv_use_subdirs='wxWITH_SUBDIRS=${'DEFAULT_wxWITH_SUBDIRS":-$wxUSE_ALL_FEATURES}"
+                        wx_cv_use_subdirs='wxWITH_SUBDIRS=${'DEFAULT_wxWITH_SUBDIRS":-$defaultval}"
 
 fi
 
@@ -3786,6 +3794,14 @@ echo "$as_me: error: Invalid value for --with-libxpm: should be yes, no, sys, or
 
 
           withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
           { echo "$as_me:$LINENO: checking for --${withstring:-with}-libmspack" >&5
 echo $ECHO_N "checking for --${withstring:-with}-libmspack... $ECHO_C" >&6; }
           no_cache=0
@@ -3808,7 +3824,7 @@ else
                           no_cache=1
                         fi
 
-                        wx_cv_use_libmspack='wxUSE_LIBMSPACK=${'DEFAULT_wxUSE_LIBMSPACK":-$wxUSE_ALL_FEATURES}"
+                        wx_cv_use_libmspack='wxUSE_LIBMSPACK=${'DEFAULT_wxUSE_LIBMSPACK":-$defaultval}"
 
 fi
 
@@ -3833,6 +3849,14 @@ echo "${ECHO_T}$result" >&6; }
 
 
           withstring=without
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
           { echo "$as_me:$LINENO: checking for --${withstring:-with}-gnomeprint" >&5
 echo $ECHO_N "checking for --${withstring:-with}-gnomeprint... $ECHO_C" >&6; }
           no_cache=0
@@ -3855,7 +3879,7 @@ else
                           no_cache=1
                         fi
 
-                        wx_cv_use_gnomeprint='wxUSE_LIBGNOMEPRINT=${'DEFAULT_wxUSE_LIBGNOMEPRINT":-$wxUSE_ALL_FEATURES}"
+                        wx_cv_use_gnomeprint='wxUSE_LIBGNOMEPRINT=${'DEFAULT_wxUSE_LIBGNOMEPRINT":-$defaultval}"
 
 fi
 
@@ -3880,6 +3904,14 @@ echo "${ECHO_T}$result" >&6; }
 
 
           withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
           { echo "$as_me:$LINENO: checking for --${withstring:-with}-gnomevfs" >&5
 echo $ECHO_N "checking for --${withstring:-with}-gnomevfs... $ECHO_C" >&6; }
           no_cache=0
@@ -3902,7 +3934,7 @@ else
                           no_cache=1
                         fi
 
-                        wx_cv_use_gnomevfs='wxUSE_LIBGNOMEVFS=${'DEFAULT_wxUSE_LIBGNOMEVFS":-$wxUSE_ALL_FEATURES}"
+                        wx_cv_use_gnomevfs='wxUSE_LIBGNOMEVFS=${'DEFAULT_wxUSE_LIBGNOMEVFS":-$defaultval}"
 
 fi
 
@@ -3927,6 +3959,14 @@ echo "${ECHO_T}$result" >&6; }
 
 
           withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
           { echo "$as_me:$LINENO: checking for --${withstring:-with}-hildon" >&5
 echo $ECHO_N "checking for --${withstring:-with}-hildon... $ECHO_C" >&6; }
           no_cache=0
@@ -3949,7 +3989,7 @@ else
                           no_cache=1
                         fi
 
-                        wx_cv_use_hildon='wxUSE_LIBHILDON=${'DEFAULT_wxUSE_LIBHILDON":-$wxUSE_ALL_FEATURES}"
+                        wx_cv_use_hildon='wxUSE_LIBHILDON=${'DEFAULT_wxUSE_LIBHILDON":-$defaultval}"
 
 fi
 
@@ -3974,6 +4014,14 @@ echo "${ECHO_T}$result" >&6; }
 
 
           withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
           { echo "$as_me:$LINENO: checking for --${withstring:-with}-opengl" >&5
 echo $ECHO_N "checking for --${withstring:-with}-opengl... $ECHO_C" >&6; }
           no_cache=0
@@ -3996,7 +4044,7 @@ else
                           no_cache=1
                         fi
 
-                        wx_cv_use_opengl='wxUSE_OPENGL=${'DEFAULT_wxUSE_OPENGL":-$wxUSE_ALL_FEATURES}"
+                        wx_cv_use_opengl='wxUSE_OPENGL=${'DEFAULT_wxUSE_OPENGL":-$defaultval}"
 
 fi
 
@@ -4024,6 +4072,14 @@ fi
 
 
           withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
           { echo "$as_me:$LINENO: checking for --${withstring:-with}-dmalloc" >&5
 echo $ECHO_N "checking for --${withstring:-with}-dmalloc... $ECHO_C" >&6; }
           no_cache=0
@@ -4046,7 +4102,7 @@ else
                           no_cache=1
                         fi
 
-                        wx_cv_use_dmalloc='wxUSE_DMALLOC=${'DEFAULT_wxUSE_DMALLOC":-$wxUSE_ALL_FEATURES}"
+                        wx_cv_use_dmalloc='wxUSE_DMALLOC=${'DEFAULT_wxUSE_DMALLOC":-$defaultval}"
 
 fi
 
@@ -4071,6 +4127,14 @@ echo "${ECHO_T}$result" >&6; }
 
 
           withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
           { echo "$as_me:$LINENO: checking for --${withstring:-with}-sdl" >&5
 echo $ECHO_N "checking for --${withstring:-with}-sdl... $ECHO_C" >&6; }
           no_cache=0
@@ -4093,7 +4157,7 @@ else
                           no_cache=1
                         fi
 
-                        wx_cv_use_sdl='wxUSE_LIBSDL=${'DEFAULT_wxUSE_LIBSDL":-$wxUSE_ALL_FEATURES}"
+                        wx_cv_use_sdl='wxUSE_LIBSDL=${'DEFAULT_wxUSE_LIBSDL":-$defaultval}"
 
 fi
 
@@ -45636,6 +45700,221 @@ echo "$as_me: WARNING: sys/epoll.h not available, wxEpollDispatcher disabled" >&
 fi
 
 
+
+
+for ac_func in gettimeofday ftime
+do
+as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for $ac_func" >&5
+echo $ECHO_N "checking for $ac_func... $ECHO_C" >&6; }
+if { as_var=$as_ac_var; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+/* Define $ac_func to an innocuous variant, in case <limits.h> declares $ac_func.
+   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+#define $ac_func innocuous_$ac_func
+
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char $ac_func (); below.
+    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+    <limits.h> exists even on freestanding compilers.  */
+
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+
+#undef $ac_func
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char $ac_func ();
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined __stub_$ac_func || defined __stub___$ac_func
+choke me
+#endif
+
+int
+main ()
+{
+return $ac_func ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  eval "$as_ac_var=yes"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	eval "$as_ac_var=no"
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+fi
+ac_res=`eval echo '${'$as_ac_var'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+if test `eval echo '${'$as_ac_var'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+ break
+fi
+done
+
+
+if test "$ac_cv_func_gettimeofday" = "yes"; then
+    { echo "$as_me:$LINENO: checking whether gettimeofday takes two arguments" >&5
+echo $ECHO_N "checking whether gettimeofday takes two arguments... $ECHO_C" >&6; }
+if test "${wx_cv_func_gettimeofday_has_2_args+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+                cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                #include <sys/time.h>
+                #include <unistd.h>
+
+int
+main ()
+{
+
+                struct timeval tv;
+                gettimeofday(&tv, NULL);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  wx_cv_func_gettimeofday_has_2_args=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                    #include <sys/time.h>
+                    #include <unistd.h>
+
+int
+main ()
+{
+
+                    struct timeval tv;
+                    gettimeofday(&tv);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  wx_cv_func_gettimeofday_has_2_args=no
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+                    { echo "$as_me:$LINENO: WARNING: failed to determine number of gettimeofday() arguments" >&5
+echo "$as_me: WARNING: failed to determine number of gettimeofday() arguments" >&2;}
+                    wx_cv_func_gettimeofday_has_2_args=unknown
+
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+fi
+{ echo "$as_me:$LINENO: result: $wx_cv_func_gettimeofday_has_2_args" >&5
+echo "${ECHO_T}$wx_cv_func_gettimeofday_has_2_args" >&6; }
+
+    if test "$wx_cv_func_gettimeofday_has_2_args" != "yes"; then
+        cat >>confdefs.h <<\_ACEOF
+#define WX_GETTIMEOFDAY_NO_TZ 1
+_ACEOF
+
+    fi
+fi
+
 if test "$wxUSE_DATETIME" = "yes"; then
         { echo "$as_me:$LINENO: checking for strptime" >&5
 echo $ECHO_N "checking for strptime... $ECHO_C" >&6; }
@@ -46217,221 +46496,6 @@ echo "${ECHO_T}$wx_cv_struct_tm_has_gmtoff" >&6; }
 #define WX_GMTOFF_IN_TM 1
 _ACEOF
 
-    fi
-
-
-
-for ac_func in gettimeofday ftime
-do
-as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
-{ echo "$as_me:$LINENO: checking for $ac_func" >&5
-echo $ECHO_N "checking for $ac_func... $ECHO_C" >&6; }
-if { as_var=$as_ac_var; eval "test \"\${$as_var+set}\" = set"; }; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-/* Define $ac_func to an innocuous variant, in case <limits.h> declares $ac_func.
-   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
-#define $ac_func innocuous_$ac_func
-
-/* System header to define __stub macros and hopefully few prototypes,
-    which can conflict with char $ac_func (); below.
-    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
-    <limits.h> exists even on freestanding compilers.  */
-
-#ifdef __STDC__
-# include <limits.h>
-#else
-# include <assert.h>
-#endif
-
-#undef $ac_func
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char $ac_func ();
-/* The GNU C library defines this for functions which it implements
-    to always fail with ENOSYS.  Some functions are actually named
-    something starting with __ and the normal name is an alias.  */
-#if defined __stub_$ac_func || defined __stub___$ac_func
-choke me
-#endif
-
-int
-main ()
-{
-return $ac_func ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext &&
-       $as_test_x conftest$ac_exeext; then
-  eval "$as_ac_var=yes"
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	eval "$as_ac_var=no"
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-fi
-ac_res=`eval echo '${'$as_ac_var'}'`
-	       { echo "$as_me:$LINENO: result: $ac_res" >&5
-echo "${ECHO_T}$ac_res" >&6; }
-if test `eval echo '${'$as_ac_var'}'` = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define `echo "HAVE_$ac_func" | $as_tr_cpp` 1
-_ACEOF
- break
-fi
-done
-
-
-    if test "$ac_cv_func_gettimeofday" = "yes"; then
-        { echo "$as_me:$LINENO: checking whether gettimeofday takes two arguments" >&5
-echo $ECHO_N "checking whether gettimeofday takes two arguments... $ECHO_C" >&6; }
-if test "${wx_cv_func_gettimeofday_has_2_args+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-
-                        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-                    #include <sys/time.h>
-                    #include <unistd.h>
-
-int
-main ()
-{
-
-                    struct timeval tv;
-                    gettimeofday(&tv, NULL);
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_compile") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest.$ac_objext; then
-  wx_cv_func_gettimeofday_has_2_args=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-                        #include <sys/time.h>
-                        #include <unistd.h>
-
-int
-main ()
-{
-
-                        struct timeval tv;
-                        gettimeofday(&tv);
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_compile") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest.$ac_objext; then
-  wx_cv_func_gettimeofday_has_2_args=no
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-
-                        { echo "$as_me:$LINENO: WARNING: failed to determine number of gettimeofday() arguments" >&5
-echo "$as_me: WARNING: failed to determine number of gettimeofday() arguments" >&2;}
-                        wx_cv_func_gettimeofday_has_2_args=unknown
-
-
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-fi
-{ echo "$as_me:$LINENO: result: $wx_cv_func_gettimeofday_has_2_args" >&5
-echo "${ECHO_T}$wx_cv_func_gettimeofday_has_2_args" >&6; }
-
-        if test "$wx_cv_func_gettimeofday_has_2_args" != "yes"; then
-            cat >>confdefs.h <<\_ACEOF
-#define WX_GETTIMEOFDAY_NO_TZ 1
-_ACEOF
-
-        fi
     fi
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS typetest"

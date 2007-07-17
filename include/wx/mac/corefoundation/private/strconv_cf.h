@@ -4,7 +4,7 @@
 // Author:      David Elliott, Ryan Norton
 // Modified by:
 // Created:     2007-07-06
-// RCS-ID:      $Id: strconv_cf.h 47224 2007-07-07 18:56:46Z DE $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Ryan Norton
 //              (c) 2007 David Elliott
 // Licence:     wxWindows licence

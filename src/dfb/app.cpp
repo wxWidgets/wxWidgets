@@ -184,7 +184,9 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     s_inYield = true;
 
+#if wxUSE_LOG
     wxLog::Suspend();
+#endif // wxUSE_LOG
 
     wxEventLoop * const
         loop = wx_static_cast(wxEventLoop *, wxEventLoop::GetActive());
@@ -196,7 +198,9 @@ bool wxApp::Yield(bool onlyIfNeeded)
     // OnUpdateUI() which is a nice (and desired) side effect)
     while ( ProcessIdle() ) {}
 
+#if wxUSE_LOG
     wxLog::Resume();
+#endif // wxUSE_LOG
 
     s_inYield = false;
 

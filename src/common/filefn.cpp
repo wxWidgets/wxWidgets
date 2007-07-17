@@ -33,6 +33,7 @@
     #include "wx/crt.h"
 #endif
 
+#include "wx/dynarray.h"
 #include "wx/file.h"
 #include "wx/filename.h"
 #include "wx/dir.h"

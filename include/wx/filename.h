@@ -27,6 +27,7 @@
 #include "wx/filefn.h"
 #include "wx/datetime.h"
 #include "wx/intl.h"
+#include "wx/longlong.h"
 
 #if wxUSE_FILE
 class WXDLLIMPEXP_FWD_BASE wxFile;

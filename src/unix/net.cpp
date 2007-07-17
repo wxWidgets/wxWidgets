@@ -4,7 +4,7 @@
 // Author:      Karsten Ballüder
 // Modified by:
 // Created:     03.10.99
-// RCS-ID:      $Id: net.cpp 3805 1999-10-03 17:26:45Z KB $
+// RCS-ID:      $Id$
 // Copyright:   (c) Karsten Ballüder
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -675,6 +675,7 @@ void wxWindowDFB::PaintWindow(const wxRect& rect)
 
     // FIXME_DFB: don't waste time rendering the area if it's fully covered
     //            by some children, go directly to rendering the children
+    //            (unless some child has HasTransparentBackground()=true!)
 
     // NB: unconditionally send wxEraseEvent, because our implementation of
     //     wxWindow::Refresh() ignores the eraseBack argument

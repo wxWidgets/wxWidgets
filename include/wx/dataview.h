@@ -68,19 +68,15 @@ extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxDataViewCtrlNameStr[];
 class WXDLLIMPEXP_ADV wxDataViewItem
 {
 public:
-    wxDataViewItem( wxUint32 id = 0 ) 
-        { m_id = id; m_reserved1 = 0; m_reserved2 = NULL; }
+    wxDataViewItem( void* id = NULL ) 
+        { m_id = id; }
     wxDataViewItem( const wxDataViewItem &item )
-        { m_id = item.m_id; m_reserved1 = item.m_reserved1; m_reserved2 = item.m_reserved2; }
-    bool IsOk() const                  { return m_id != 0; }
-    wxUint32 GetID() const             { return m_id; }
-    
-public:
-    wxUint32 m_reserved1;
-    void*    m_reserved2;
+        { m_id = item.m_id; }
+    bool IsOk() const                  { return m_id != NULL; }
+    void* GetID() const                { return m_id; }
     
 private:
-    wxUint32 m_id;
+    void* m_id;
 };
 
 bool operator == (const wxDataViewItem &left, const wxDataViewItem &right);

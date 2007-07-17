@@ -3,7 +3,7 @@
 // Purpose:     declaration of BASE64 encoding/decoding functionality
 // Author:      Charles Reimers, Vadim Zeitlin
 // Created:     2007-06-18
-// RCS-ID:      $Id: base64.h 47282 2007-07-10 01:51:43Z VZ $
+// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

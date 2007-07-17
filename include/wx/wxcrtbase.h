@@ -5,7 +5,7 @@
  * Author:      Joel Farley, Ove K�ven
  * Modified by: Vadim Zeitlin, Robert Roebling, Ron Lee
  * Created:     1998/06/12
- * RCS-ID:      $Id: wxcrtbase.h 47238 2007-07-08 19:06:03Z VS $
+ * RCS-ID:      $Id$
  * Copyright:   (c) 1998-2006 wxWidgets dev team
  * Licence:     wxWindows licence
  */

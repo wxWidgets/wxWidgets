@@ -2,7 +2,7 @@
 // Name:        wx/mac/carbon/dataview.h
 // Purpose:     wxDataViewCtrl native implementation header
 // Author:      
-// Id:          $Id: dataview.h 47254 2007-07-09 10:09:52Z VS $
+// Id:          $Id$
 // Copyright:   (c) 2007
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
