@@ -479,9 +479,9 @@ void BibEatWhiteSpace(wxString& line)
     }
 
     // Ignore end-of-line comments
-    if (line[0] == _T('%') || line[0] == _T(';') || line[0] == _T('#'))
+    if ( !line.empty() && (line[0] == _T('%') || line[0] == _T(';') || line[0] == _T('#')))
     {
-        line = wxEmptyString;
+        line.clear();
     }
 }
 
@@ -569,7 +569,7 @@ wxString BibReadToEOL(wxString& line)
         val << line[0];
         line = line.substr(1);
     }
-    if (line[0] == '"')
+    if (!line.empty() && line[0] == '"')
         line = line.substr(1);
 
     return val;
