@@ -805,7 +805,8 @@ inline double wxStrtod(const wxString& nptr, T endptr)
         // note that it is important to use c_str() here and not mb_str() or
         // wc_str(), because we store the pointer into (possibly converted)
         // buffer in endptr and so it must be valid even when wxStrtod() returns
-        return wxStrtod((typename wxStrtoxCharType<T>::Type)nptr.c_str(),
+        typedef typename wxStrtoxCharType<T>::Type CharType;
+        return wxStrtod((CharType)nptr.c_str(),
                         wxStrtoxCharType<T>::AsPointer(endptr));
     }
 }
@@ -829,9 +830,12 @@ inline double wxStrtod(const wxCStrData& nptr, T endptr)
         if ( endptr == 0 )                                                    \
             return name(nptr.wx_str(), (wxStringCharType**)NULL, base);       \
         else                                                                  \
-            return name((typename wxStrtoxCharType<T>::Type)nptr.c_str(),     \
+        {                                                                     \
+            typedef typename wxStrtoxCharType<T>::Type CharType;              \
+            return name((CharType)nptr.c_str(),                               \
                         wxStrtoxCharType<T>::AsPointer(endptr),               \
                         base);                                                \
+        }                                                                     \
     }                                                                         \
     template<typename T>                                                      \
     inline rettype name(const wxCStrData& nptr, T endptr, int base)           \
