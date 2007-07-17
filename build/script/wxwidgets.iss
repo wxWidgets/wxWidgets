@@ -2,8 +2,8 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #if GetEnv("WXW_VER") == "CVS"
-    #define INFOFILE  "C:\wx\inno\wxWidgets\BuildCVS.txt"
-    #define WX_VERSION "CVS"
+    #define INFOFILE  "C:\wx\inno\wxWidgets\BuildSVN.txt"
+    #define WX_VERSION "SVN"
 #else
     #define INFOFILE "C:\wx\inno\wxWidgets\docs\msw\install.txt"
     #define WX_VERSION GetENV("WXW_VER")
