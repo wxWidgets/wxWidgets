@@ -116,7 +116,7 @@ wxPoint wxGetMousePosition()
 bool wxGetKeyState(wxKeyCode key)
 {
     wxASSERT_MSG(key != WXK_LBUTTON && key != WXK_RBUTTON && key != WXK_MBUTTON,
-                 _T("can't use wxGetKeyState() for mouse buttons"));
+                 "can't use wxGetKeyState() for mouse buttons");
 
     return false; // FIXME
 }
@@ -131,6 +131,6 @@ void wxBell()
 
 int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
 {
-    wxFAIL_MSG( _T("wxAddProcessCallback not implemented") );
+    wxFAIL_MSG( "wxAddProcessCallback not implemented" );
     return 0;
 }

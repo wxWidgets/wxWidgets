@@ -19,7 +19,7 @@
 
 #include "wx/dfb/private.h"
 
-#define TRACE_EVENTS _T("events")
+#define TRACE_EVENTS "events"
 
 // ============================================================================
 // wxTopLevelWindowDFB
@@ -179,9 +179,9 @@ void wxTopLevelWindowDFB::HandleFocusEvent(const wxDFBWindowEvent& event_)
     const bool activate = (dfbevent.type == DWET_GOTFOCUS);
 
     wxLogTrace(TRACE_EVENTS,
-               _T("toplevel window %p ('%s') %s focus"),
+               "toplevel window %p ('%s') %s focus",
                this, GetName(),
-               activate ? _T("got") : _T("lost"));
+               activate ? "got" : "lost");
 
     wxActivateEvent event(wxEVT_ACTIVATE, activate, GetId());
     event.SetEventObject(this);
@@ -195,7 +195,7 @@ void wxTopLevelWindowDFB::HandleFocusEvent(const wxDFBWindowEvent& event_)
         if ( !focused || focused->GetTLW() != this )
         {
             wxLogTrace(TRACE_EVENTS,
-                       _T("setting wx focus to toplevel window %p ('%s')"),
+                       "setting wx focus to toplevel window %p ('%s')",
                        this, GetName());
 
             if ( CanAcceptFocus() )

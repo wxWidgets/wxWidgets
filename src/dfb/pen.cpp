@@ -42,7 +42,7 @@ public:
     {
         if ( style != wxSOLID && style != wxTRANSPARENT )
         {
-            wxFAIL_MSG( _T("only wxSOLID and wxTRANSPARENT styles are supported") );
+            wxFAIL_MSG( "only wxSOLID and wxTRANSPARENT styles are supported" );
             style = wxSOLID;
         }
 
@@ -61,14 +61,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject)
 
 wxPen::wxPen(const wxColour &colour, int width, int style)
 {
-    wxASSERT_MSG( width <= 1, _T("only width=0,1 are supported") );
+    wxASSERT_MSG( width <= 1, "only width=0,1 are supported" );
 
     m_refData = new wxPenRefData(colour, style);
 }
 
 wxPen::wxPen(const wxBitmap& WXUNUSED(stipple), int WXUNUSED(width))
 {
-    wxFAIL_MSG( _T("stipple pens not supported") );
+    wxFAIL_MSG( "stipple pens not supported" );
 
     m_refData = new wxPenRefData();
 }
@@ -87,7 +87,7 @@ void wxPen::SetColour(const wxColour &colour)
 
 void wxPen::SetDashes(int WXUNUSED(number_of_dashes), const wxDash *WXUNUSED(dash))
 {
-    wxFAIL_MSG( _T("SetDashes not implemented") );
+    wxFAIL_MSG( "SetDashes not implemented" );
 }
 
 void wxPen::SetColour(unsigned char red, unsigned char green, unsigned char blue)
@@ -98,12 +98,12 @@ void wxPen::SetColour(unsigned char red, unsigned char green, unsigned char blue
 
 void wxPen::SetCap(int WXUNUSED(capStyle))
 {
-    wxFAIL_MSG( _T("SetCap not implemented") );
+    wxFAIL_MSG( "SetCap not implemented" );
 }
 
 void wxPen::SetJoin(int WXUNUSED(joinStyle))
 {
-    wxFAIL_MSG( _T("SetJoin not implemented") );
+    wxFAIL_MSG( "SetJoin not implemented" );
 }
 
 void wxPen::SetStyle(int style)
@@ -114,17 +114,17 @@ void wxPen::SetStyle(int style)
 
 void wxPen::SetStipple(const wxBitmap& WXUNUSED(stipple))
 {
-    wxFAIL_MSG( _T("SetStipple not implemented") );
+    wxFAIL_MSG( "SetStipple not implemented" );
 }
 
 void wxPen::SetWidth(int width)
 {
-    wxASSERT_MSG( width <= 1, _T("only width=0,1 are implemented") );
+    wxASSERT_MSG( width <= 1, "only width=0,1 are implemented" );
 }
 
 int wxPen::GetDashes(wxDash **ptr) const
 {
-    wxFAIL_MSG( _T("GetDashes not implemented") );
+    wxFAIL_MSG( "GetDashes not implemented" );
 
     *ptr = NULL;
     return 0;
@@ -132,14 +132,14 @@ int wxPen::GetDashes(wxDash **ptr) const
 
 int wxPen::GetDashCount() const
 {
-    wxFAIL_MSG( _T("GetDashCount not implemented") );
+    wxFAIL_MSG( "GetDashCount not implemented" );
 
     return 0;
 }
 
 wxDash* wxPen::GetDash() const
 {
-    wxFAIL_MSG( _T("GetDash not implemented") );
+    wxFAIL_MSG( "GetDash not implemented" );
 
     return NULL;
 }
@@ -148,7 +148,7 @@ int wxPen::GetCap() const
 {
     wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
 
-    wxFAIL_MSG( _T("GetCap not implemented") );
+    wxFAIL_MSG( "GetCap not implemented" );
     return -1;
 }
 
@@ -156,7 +156,7 @@ int wxPen::GetJoin() const
 {
     wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
 
-    wxFAIL_MSG( _T("GetJoin not implemented") );
+    wxFAIL_MSG( "GetJoin not implemented" );
     return -1;
 }
 
@@ -185,7 +185,7 @@ wxBitmap *wxPen::GetStipple() const
 {
     wxCHECK_MSG( Ok(), NULL, wxT("invalid pen") );
 
-    wxFAIL_MSG( _T("GetStipple not implemented") );
+    wxFAIL_MSG( "GetStipple not implemented" );
     return NULL;
 }
 
