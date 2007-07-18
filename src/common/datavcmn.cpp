@@ -40,6 +40,7 @@ wxDataViewModel::wxDataViewModel()
 {
     m_notifiers.DeleteContents( true );
     m_sortingColumn = 0;
+    m_ascending = true;
 }
 
 bool wxDataViewModel::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )
