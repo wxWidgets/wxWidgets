@@ -59,14 +59,14 @@ void wxStringTokenizer::SetString(const wxString& str,
         // whitespace characters and as wxTOKEN_RET_EMPTY otherwise (for
         // whitespace delimiters, strtok() behaviour is better because we want
         // to count consecutive spaces as one delimiter)
-        const wxChar *p;
-        for ( p = delims.c_str(); *p; p++ )
+        wxString::const_iterator p;
+        for ( p = delims.begin(); p != delims.end(); ++p )
         {
             if ( !wxIsspace(*p) )
                 break;
         }
 
-        if ( *p )
+        if ( p != delims.end() )
         {
             // not whitespace char in delims
             mode = wxTOKEN_RET_EMPTY;
