@@ -2766,7 +2766,11 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
         case WXK_RIGHT:
             // this works the same as the down arrow except that we
             // also expand the item if it wasn't expanded yet
-            Expand(m_current);
+            if (m_current != GetRootItem() || !HasFlag(wxTR_HIDE_ROOT))
+                Expand(m_current);
+            //else: don't try to expand hidden root item (which can be the
+            //      current one when the tree is empty)
+
             // fall through
 
         case WXK_DOWN:
@@ -2775,6 +2779,9 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                 {
                     wxTreeItemIdValue cookie;
                     wxTreeItemId child = GetFirstChild( m_key_current, cookie );
+                    if ( !child )
+                        break;
+
                     DoSelectItem( child, unselect_others, extended_select );
                     m_key_current=(wxGenericTreeItem*) child.m_pItem;
                 }
