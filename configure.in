@@ -576,9 +576,9 @@ WX_ARG_FEATURE(dataobj,       [  --enable-dataobj        use data object classes
 
 WX_ARG_FEATURE(ipc,           [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
 
-WX_ARG_FEATURE(baseevtloop,   [  --enable-base-evtloop   use event loop in console programs too], wxUSE_CONSOLE_EVENTLOOP)
-WX_ARG_FEATURE(epoolloop,     [  --enable-epool-loop     use wxEpollDispatcher class (Linux only)], wxUSE_EPOLL_DISPATCHER)
-WX_ARG_FEATURE(selectloop,    [  --enable-select-loop    use wxSelectDispatcher class], wxUSE_SELECT_DISPATCHER)
+WX_ARG_FEATURE(baseevtloop,   [  --enable-baseevtloop    use event loop in console programs too], wxUSE_CONSOLE_EVENTLOOP)
+WX_ARG_FEATURE(epoolloop,     [  --enable-epoolloop      use wxEpollDispatcher class (Linux only)], wxUSE_EPOLL_DISPATCHER)
+WX_ARG_FEATURE(selectloop,    [  --enable-selectloop     use wxSelectDispatcher class], wxUSE_SELECT_DISPATCHER)
 
 dnl please keep the settings below in alphabetical order
 WX_ARG_FEATURE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
