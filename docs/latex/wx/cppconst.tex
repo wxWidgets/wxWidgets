@@ -192,9 +192,9 @@ supports files more than 4GB in size.}
 \twocolitem{\_\_WXWINDOWS\_\_}{always defined in wxWidgets applications, see
 also \helpref{wxCHECK\_VERSION}{wxcheckversion}}
 \twocolitem{\_\_WXDEBUG\_\_}{defined in debug mode, undefined in release mode}
-\twocolitem{wxUSE\_XXX}{if defined as $1$, feature XXX is active
-(the symbols of this form are always defined, use \#if and not \#ifdef to test
- for them)}
+\twocolitem{wxUSE\_XXX}{if defined as $1$, feature XXX is active, see the 
+\helpref{complete list}{wxusedef} (the symbols of this form are always defined,
+use \#if and not \#ifdef to test for them)}
 \twocolitem{WX\_PRECOMP}{is defined if precompiled headers (PCH) are in use. In
 this case, \texttt{wx/wxprec.h} includes \texttt{wx/wx.h} which, in turn,
 includes a number of wxWidgets headers thus making it unnecessary to include
