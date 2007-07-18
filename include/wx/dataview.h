@@ -85,9 +85,6 @@ bool operator == (const wxDataViewItem &left, const wxDataViewItem &right);
 // wxDataViewModel
 // ---------------------------------------------------------
 
-typedef int (wxCALLBACK *wxDataViewModelCompare)
-    (const wxDataViewItem& item1, const wxDataViewItem& item2, unsigned int col, unsigned int option );
-
 class WXDLLIMPEXP_ADV wxDataViewModel: public wxObjectRefData
 {
 public:
@@ -118,18 +115,58 @@ public:
     virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col );
     virtual bool Cleared();
 
+    // delegatd action
+    virtual void Resort();
+
     void AddNotifier( wxDataViewModelNotifier *notifier );
     void RemoveNotifier( wxDataViewModelNotifier *notifier );
     
-    void SetCompareFunction( wxDataViewModelCompare func ) { m_cmpFunc = func; }
-    wxDataViewModelCompare GetCompareFunction() { return m_cmpFunc; }
+    // default compare function
+    virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 );
+    
+    void SetSortingColumn( unsigned int col ) { m_sortingColumn = col; }
+    unsigned int GetSortingColumn() { return m_sortingColumn; }
+    void SetSortOrderAscending( bool ascending ) { m_ascending = true; }
+    bool GetSortOrderAscending() { return m_ascending; }
+    
     
 protected:
     // the user should not delete this class directly: he should use DecRef() instead!
     virtual ~wxDataViewModel() { }
 
     wxList                  m_notifiers;
-    wxDataViewModelCompare  m_cmpFunc;
+    unsigned int            m_sortingColumn;
+    bool                    m_ascending;
+};
+
+// ---------------------------------------------------------
+// wxDataViewVirtualListModel
+// ---------------------------------------------------------
+
+class wxDataViewIndexListModel: public wxDataViewModel
+{
+public:
+    wxDataViewIndexListModel();
+    ~wxDataViewIndexListModel();
+    
+    virtual unsigned int GetRowCount() = 0;
+    
+    virtual void GetValue( wxVariant &variant, 
+                           unsigned int row, unsigned int col ) const = 0;
+
+    virtual bool SetValue( const wxVariant &variant, 
+                           unsigned int row, unsigned int col ) = 0;
+    
+    void ItemPrepended();
+    void ItemInserted( unsigned int before );
+    void ItemAppended();
+    void ItemChanged( unsigned int row );
+    void ValueChanged( unsigned int row, unsigned int col );
+    
+    wxDataViewItem GetItem( unsigned int row );
+    
+    virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 );
+    
 };
 
 // ---------------------------------------------------------
@@ -147,6 +184,8 @@ public:
     virtual bool ItemChanged( const wxDataViewItem &item ) = 0;
     virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col ) = 0;
     virtual bool Cleared() = 0;
+    
+    virtual void Resort() { };
 
     void SetOwner( wxDataViewModel *owner ) { m_owner = owner; }
     wxDataViewModel *GetOwner()             { return m_owner; }

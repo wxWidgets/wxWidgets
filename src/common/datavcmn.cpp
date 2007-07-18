@@ -39,7 +39,7 @@ bool operator == (const wxDataViewItem &left, const wxDataViewItem &right)
 wxDataViewModel::wxDataViewModel()
 {
     m_notifiers.DeleteContents( true );
-    m_cmpFunc = NULL;
+    m_sortingColumn = 0;
 }
 
 bool wxDataViewModel::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )
@@ -122,6 +122,17 @@ bool wxDataViewModel::Cleared()
     return ret;
 }
 
+void wxDataViewModel::Resort()
+{
+    wxList::compatibility_iterator node = m_notifiers.GetFirst();
+    while (node)
+    {
+        wxDataViewModelNotifier* notifier = (wxDataViewModelNotifier*) node->GetData();
+        notifier->Resort();
+        node = node->GetNext();
+    }
+}
+
 void wxDataViewModel::AddNotifier( wxDataViewModelNotifier *notifier )
 {
     m_notifiers.Append( notifier );
@@ -131,6 +142,43 @@ void wxDataViewModel::AddNotifier( wxDataViewModelNotifier *notifier )
 void wxDataViewModel::RemoveNotifier( wxDataViewModelNotifier *notifier )
 {
     m_notifiers.DeleteObject( notifier );
+}
+
+int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 )
+{
+    wxVariant value1,value2;
+    GetValue( value1, item1, m_sortingColumn );
+    GetValue( value2, item2, m_sortingColumn );
+    if (value1.GetType() == wxT("string"))
+    {
+        wxString str1 = value1.GetString();
+        wxString str2 = value2.GetString();
+        return str1.Cmp( str2 );
+    }
+    if (value1.GetType() == wxT("long"))
+    {
+        long l1 = value1.GetLong();
+        long l2 = value2.GetLong();
+        return l1-l2;
+    }
+    if (value1.GetType() == wxT("double"))
+    {
+        double d1 = value1.GetDouble();
+        double d2 = value2.GetDouble();
+        if (d1 == d2) return 0;
+        if (d1 < d2) return 1;
+        return -1;
+    }
+    if (value1.GetType() == wxT("datetime"))
+    {
+        wxDateTime dt1 = value1.GetDateTime();
+        wxDateTime dt2 = value2.GetDateTime();
+        if (dt1.IsEqualTo(dt2)) return 0;
+        if (dt1.IsEarlierThan(dt2)) return 1;
+        return -1;
+    }
+
+    return 0;
 }
 
 // ---------------------------------------------------------
