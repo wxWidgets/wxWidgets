@@ -162,7 +162,26 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
     {
         wxString str1 = value1.GetString();
         wxString str2 = value2.GetString();
-        return str1.Cmp( str2 );
+        int res = str1.Cmp( str2 );
+        if (res == 0)
+        {
+            // no difference, try 0th column
+            if (m_sortingColumn != 0)
+            {
+                unsigned int temp = m_sortingColumn;
+                m_sortingColumn = 0;
+                res = Compare( item1, item2 );
+                m_sortingColumn = temp;
+            }
+            if (res == 0)
+            {
+                // still no difference, resort to desparate non-sense
+                long l1 = (long) item1.GetID();
+                long l2 = (long) item2.GetID();
+                return l1-l2;
+            }
+        }
+        return res;
     }
     if (value1.GetType() == wxT("long"))
     {
@@ -186,6 +205,8 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
         if (dt1.IsEarlierThan(dt2)) return 1;
         return -1;
     }
+    
+    
 
     return 0;
 }
