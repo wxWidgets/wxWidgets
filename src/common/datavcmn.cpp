@@ -150,6 +150,14 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
     wxVariant value1,value2;
     GetValue( value1, item1, m_sortingColumn );
     GetValue( value2, item2, m_sortingColumn );
+    
+    if (!m_ascending)
+    {
+        wxVariant temp = value1;
+        value1 = value2;
+        value2 = temp;
+    }
+    
     if (value1.GetType() == wxT("string"))
     {
         wxString str1 = value1.GetString();

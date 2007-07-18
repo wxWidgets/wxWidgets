@@ -126,7 +126,7 @@ public:
     
     void SetSortingColumn( unsigned int col ) { m_sortingColumn = col; }
     unsigned int GetSortingColumn() { return m_sortingColumn; }
-    void SetSortOrderAscending( bool ascending ) { m_ascending = true; }
+    void SetSortOrderAscending( bool ascending ) { m_ascending = ascending; }
     bool GetSortOrderAscending() { return m_ascending; }
     
     

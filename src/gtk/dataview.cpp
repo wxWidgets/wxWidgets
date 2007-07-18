@@ -56,35 +56,36 @@ class wxGtkTreeModelNode
 {
 public:
     wxGtkTreeModelNode( wxGtkTreeModelNode* parent, const wxDataViewItem &item,
-      wxDataViewModel *model ) :
-       m_children( wxGtkTreeModelNodeCmp )
+      wxDataViewModel *model )
     { 
         m_parent = parent; 
         m_item = item;
         m_model = model;
+        m_children = new wxGtkTreeModelNodes( wxGtkTreeModelNodeCmp );
     }
     
     ~wxGtkTreeModelNode()
     { 
-        size_t count = m_children.GetCount();
+        size_t count = m_children->GetCount();
         size_t i;
         for (i = 0; i < count; i++)
         {
-            wxGtkTreeModelNode *child = m_children[i];
+            wxGtkTreeModelNode *child = m_children->Item( i );
             delete child;
         }
+        delete m_children;
     }
 
     wxGtkTreeModelNode* GetParent() 
         { return m_parent; }
     wxGtkTreeModelNodes &GetChildren() 
-        { return m_children; }
+        { return *m_children; }
     wxGtkTreeModelNode* GetNthChild( unsigned int n ) 
-        { return m_children.Item( n ); }
+        { return m_children->Item( n ); }
     unsigned int Add( wxGtkTreeModelNode* child ) 
-        { return m_children.Add( child ); }
-
-    unsigned int GetChildCount() { return m_children.GetCount(); }
+        { return m_children->Add( child ); }
+        
+    unsigned int GetChildCount() { return m_children->GetCount(); }
 
     wxDataViewItem &GetItem() { return m_item; }
     wxDataViewModel *GetModel() { return m_model; }
@@ -92,9 +93,11 @@ public:
     bool HasChildren() { return m_hasChildren; }
     void SetHasChildren( bool has ) { m_hasChildren = has; }
     
+    void Resort();
+    
 private:
     wxGtkTreeModelNode  *m_parent;
-    wxGtkTreeModelNodes  m_children; 
+    wxGtkTreeModelNodes *m_children; 
     wxDataViewItem       m_item; 
     bool                 m_hasChildren;
     wxDataViewModel     *m_model;
@@ -131,6 +134,8 @@ public:
 
     bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
     bool ItemDeleted( const wxDataViewItem &item );
+    
+    void Resort();
     
 protected:
     void InitTree();
@@ -553,8 +558,6 @@ void     wxgtk_tree_model_set_sort_column_id    (GtkTreeSortable        *sortabl
 
     // TODO check for equality
     
-    return;
-    
     gtk_tree_sortable_sort_column_changed (sortable);
 
     tree_model->internal->GetDataViewModel()->SetSortingColumn( sort_column_id );
@@ -965,6 +968,7 @@ public:
     virtual bool ItemChanged( const wxDataViewItem &item );
     virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col );
     virtual bool Cleared();
+    virtual void Resort();
 
     GtkWxTreeModel      *m_wxgtk_model;
     wxDataViewModel     *m_wx_model;
@@ -1022,6 +1026,11 @@ bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &item )
     m_owner->GtkGetInternal()->ItemDeleted( item );
     
     return true;
+}
+
+void wxGtkDataViewModelNotifier::Resort()
+{
+    m_owner->GtkGetInternal()->Resort();
 }
 
 bool wxGtkDataViewModelNotifier::ItemChanged( const wxDataViewItem &item )
@@ -2070,6 +2079,33 @@ void wxDataViewColumn::SetWidth( int width )
 
 
 //-----------------------------------------------------------------------------
+// wxGtkTreeModelNode
+//-----------------------------------------------------------------------------
+
+void wxGtkTreeModelNode::Resort()
+{
+    wxGtkTreeModelNodes *new_array = new wxGtkTreeModelNodes( wxGtkTreeModelNodeCmp );
+
+    size_t pos;
+    size_t count = m_children->GetCount();
+    
+    for (pos = 0; pos < count; pos++)
+    {
+        new_array->Add( m_children->Item( 0 ) );
+        m_children->RemoveAt( 0 );
+    }
+    
+    delete m_children;
+    m_children = new_array;
+    
+    for (pos = 0; pos < count; pos++)
+    {
+        wxGtkTreeModelNode *node = m_children->Item( pos );
+        node->Resort();
+    }
+}
+
+//-----------------------------------------------------------------------------
 // wxDataViewCtrlInternal
 //-----------------------------------------------------------------------------
 
@@ -2107,6 +2143,11 @@ void wxDataViewCtrlInternal::BuildBranch( wxGtkTreeModelNode *node )
             child = m_wx_model->GetNextSibling( child );
         }
     }
+}
+
+void wxDataViewCtrlInternal::Resort()
+{
+    m_root->Resort();
 }
 
 bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )
