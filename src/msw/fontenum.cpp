@@ -30,6 +30,7 @@
     #include "wx/gdicmn.h"
     #include "wx/font.h"
     #include "wx/encinfo.h"
+    #include "wx/dynarray.h"
 #endif
 
 #include "wx/msw/private.h"
