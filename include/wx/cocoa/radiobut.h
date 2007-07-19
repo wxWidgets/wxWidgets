@@ -56,6 +56,8 @@ public:
 // ------------------------------------------------------------------------
 protected:
     virtual void Cocoa_wxNSButtonAction(void);
+private:
+    void Cocoa_DeselectOtherButtonsInTheGroup(void);
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------

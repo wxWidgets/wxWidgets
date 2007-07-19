@@ -130,7 +130,10 @@ wxRadioButton::~wxRadioButton()
 void wxRadioButton::SetValue(bool value)
 {
     if(value)
+    {
         [GetNSButton() setState: NSOnState];
+        Cocoa_DeselectOtherButtonsInTheGroup();
+    }
     else
         [GetNSButton() setState: NSOffState];
 }
@@ -142,10 +145,14 @@ bool wxRadioButton::GetValue() const
     return state==NSOnState;
 }
 
-void wxRadioButton::Cocoa_wxNSButtonAction(void)
+/**
+ * If this radio button is part of a group, this method turns off every other
+ * button in the group.  If this radio button is not part of a group, this
+ * method does absolutely nothing.
+ */
+void wxRadioButton::Cocoa_DeselectOtherButtonsInTheGroup(void)
 {
-    wxLogTrace(wxTRACE_COCOA,wxT("wxRadioButton"));
-    if(m_radioMaster && ([GetNSButton() state] == NSOnState))
+    if(m_radioMaster)
     {
         for(wxRadioButtonList::compatibility_iterator slaveNode =
                 m_radioMaster->m_radioSlaves.GetFirst();
@@ -155,6 +162,15 @@ void wxRadioButton::Cocoa_wxNSButtonAction(void)
             if(radioButton!=this)
                 radioButton->SetValue(false);
         }
+    }
+}
+
+void wxRadioButton::Cocoa_wxNSButtonAction(void)
+{
+    wxLogTrace(wxTRACE_COCOA,wxT("wxRadioButton"));
+    if([GetNSButton() state] == NSOnState)
+    {
+        Cocoa_DeselectOtherButtonsInTheGroup();
     }
     wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED, GetId());
     InitCommandEvent(event); //    event.SetEventObject(this);
