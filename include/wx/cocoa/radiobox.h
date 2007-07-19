@@ -109,6 +109,22 @@ public:
 protected:
     WX_NSMatrix GetNSMatrix() const;
     virtual wxSize DoGetBestSize() const;
+
+    int GetRowForIndex(int n) const
+    {
+        if(m_windowStyle & wxRA_SPECIFY_COLS)
+            return n / GetMajorDim();
+        else
+            return n % GetMajorDim();
+    }
+
+    int GetColumnForIndex(int n) const
+    {
+        if(m_windowStyle & wxRA_SPECIFY_COLS)
+            return n % GetMajorDim();
+        else
+            return n / GetMajorDim();
+    }
 };
 
 #endif // __WX_COCOA_RADIOBOX_H__

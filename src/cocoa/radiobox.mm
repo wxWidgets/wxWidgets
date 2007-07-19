@@ -79,7 +79,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID winid,
     NSMutableArray *allCells = [NSMutableArray arrayWithCapacity:n];
     for(int i=0; i<n; ++i)
     {
-        [currCell setTitle: wxNSStringWithWxString(choices[i])];
+        [currCell setTitle: wxNSStringWithWxString(wxStripMenuCodes(choices[i], wxStrip_Mnemonics))];
         [allCells addObject: currCell];
         [currCell release];
         // NOTE: We can still safely message currCell as the array has retained it.
@@ -92,12 +92,11 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID winid,
     // (thousands) which makes every cell in the matrix that big. Not good.
     // Be safe and initialize a text cell with an empty string.  That always works.
     currCell = [[NSCell alloc] initTextCell:@""];
+    [currCell setEnabled:NO]; // Don't allow user to select this cell
     for(int i=n; i < majorDim * minorDim; ++i)
     {
         [allCells addObject: currCell];
         // NOTE: Use the same instance.. this should work and save some heap allocations.
-        // It will, however, make the selection rather indeterminate if the user clicks
-        // on the empty space.
 #if 0
 	[currCell release];
 	currCell = [currCell copy];
@@ -143,7 +142,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID winid,
     [GetNSBox() setContentView:radioBox];
     [radioBox release]; // The NSBox retains it for us.
 
-    [GetNSBox() setTitle:wxNSStringWithWxString(title)];
+    [GetNSBox() setTitle:wxNSStringWithWxString(wxStripMenuCodes(title, wxStrip_Mnemonics))];
 //    [GetNSBox() setBorderType:NSLineBorder]; // why??
 
     SetMajorDim(majorDim, style);
@@ -170,11 +169,20 @@ WX_NSMatrix wxRadioBox::GetNSMatrix() const
     // selection
 void wxRadioBox::SetSelection(int n)
 {
+    int r = GetRowForIndex(n);
+    int c = GetColumnForIndex(n);
+    [GetNSMatrix() selectCellAtRow:r column:c];
 }
 
 int wxRadioBox::GetSelection() const
 {
-    return 0;
+    NSMatrix *radioBox = GetNSMatrix();
+    NSInteger r = [radioBox selectedRow];
+    NSInteger c = [radioBox selectedColumn];
+    if(m_windowStyle & wxRA_SPECIFY_COLS)
+        return r * GetMajorDim() + c;
+    else
+        return c * GetMajorDim() + r;
 }
 
     // string access
@@ -190,23 +198,38 @@ unsigned int wxRadioBox::GetCount() const
 
 wxString wxRadioBox::GetString(unsigned int n) const
 {
-    return wxEmptyString;
+    int r = GetRowForIndex(n);
+    int c = GetColumnForIndex(n);
+    // FIXME: Cocoa stores the mnemonic-stripped title.
+    return wxStringWithNSString([[GetNSMatrix() cellAtRow:r column:c] title]);
 }
 
 void wxRadioBox::SetString(unsigned int n, const wxString& label)
 {
+    int r = GetRowForIndex(n);
+    int c = GetColumnForIndex(n);
+    [[GetNSMatrix() cellAtRow:r column:c] setTitle:wxNSStringWithWxString(wxStripMenuCodes(label, wxStrip_Mnemonics))];
 }
 
     // change the individual radio button state
 bool wxRadioBox::Enable(unsigned int n, bool enable)
 {
-    // TODO
-    return false;
+    int r = GetRowForIndex(n);
+    int c = GetColumnForIndex(n);
+    NSCell *cell = [GetNSMatrix() cellAtRow:r column:c];
+    if(cell == nil)
+        return false;
+    bool wasEnabled = [cell isEnabled];
+    [cell setEnabled:enable];
+    return (wasEnabled && !enable) || (!wasEnabled && enable);
 }
 
 bool wxRadioBox::Show(unsigned int n, bool show)
 {
     // TODO
+    // NOTE: Cocoa has no visible state for cells so we'd need to replace the
+    // cell with a dummy one to hide it or alternatively subclass NSButtonCell
+    // and add the behavior.
     return false;
 }
 
