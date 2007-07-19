@@ -32,7 +32,23 @@
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
 BEGIN_EVENT_TABLE(wxRadioBox, wxControl)
 END_EVENT_TABLE()
-// WX_IMPLEMENT_COCOA_OWNER(wxRadioBox,NSTextField,NSControl,NSView)
+
+void wxRadioBox::AssociateNSBox(WX_NSBox cocoaObjcClass)
+{
+    NSMatrix *radioBox = [(WX_NSBox)cocoaObjcClass contentView];
+    // Associate the NSMatrix (the NSBox's contentView) with the wxCocoaNSControl MI base class.
+    AssociateNSControl(radioBox);
+    // Set the target/action.. we don't really need to unset these
+    [radioBox setTarget:wxCocoaNSControl::sm_cocoaTarget];
+    [radioBox setAction:@selector(wxNSControlAction:)];
+}
+
+void wxRadioBox::DisassociateNSBox(WX_NSBox cocoaObjcClass)
+{
+    DisassociateNSControl([(WX_NSBox)cocoaObjcClass contentView]);
+}
+
+WX_IMPLEMENT_COCOA_OWNER(wxRadioBox,NSBox,NSView,NSView)
 
 bool wxRadioBox::Create(wxWindow *parent, wxWindowID winid,
             const wxString& title,
@@ -134,13 +150,16 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID winid,
             withObject:[allCells subarrayWithRange:NSMakeRange(i*majorDim, majorDim)]];
     }
 
-    //make and set up an NSBox (TODO: Just derive from wxStaticBox)
-    SetNSView([[NSBox alloc] initWithFrame:MakeDefaultNSRect(size)]);
-    [m_cocoaNSView release];
+    NSBox *theBox = [[NSBox alloc] initWithFrame:MakeDefaultNSRect(size)];
 
     // Replace the box's content view with the NSMatrix we just created
-    [GetNSBox() setContentView:radioBox];
+    // IMPORTANT: This must be done before calling SetNSBox.
+    [theBox setContentView:radioBox];
     [radioBox release]; // The NSBox retains it for us.
+
+    SetNSBox(theBox);
+    [theBox release];
+
 
     [GetNSBox() setTitle:wxNSStringWithWxString(wxStripMenuCodes(title, wxStrip_Mnemonics))];
 //    [GetNSBox() setBorderType:NSLineBorder]; // why??
@@ -159,6 +178,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID winid,
 
 wxRadioBox::~wxRadioBox()
 {
+    DisassociateNSBox(GetNSBox());
 }
 
 WX_NSMatrix wxRadioBox::GetNSMatrix() const
@@ -238,6 +258,14 @@ wxSize wxRadioBox::DoGetBestSize() const
     // The NSBox responds to sizeToFit by sending sizeToFit to its contentView
     // which is the NSMatrix and does the right thing.
     return wxControl::DoGetBestSize();
+}
+
+void wxRadioBox::CocoaTarget_action(void)
+{
+    wxCommandEvent event(wxEVT_COMMAND_RADIOBOX_SELECTED, GetId());
+    InitCommandEvent(event);
+    event.SetInt(GetSelection()); // i.e. SetSelection.
+    Command(event);
 }
 
 #endif

@@ -22,6 +22,8 @@ class WXDLLEXPORT wxRadioBox: public wxControl, public wxRadioBoxBase// , protec
 {
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
     DECLARE_EVENT_TABLE()
+    // NOTE: We explicitly skip NSControl because our primary cocoa view is
+    // the NSBox but we want to receive action messages from the NSMatrix.
     WX_DECLARE_COCOA_OWNER(NSBox,NSView,NSView)
 // ------------------------------------------------------------------------
 // initialization
@@ -93,6 +95,7 @@ public:
 protected:
     // Static boxes cannot be enabled/disabled
     virtual void CocoaSetEnabled(bool enable) { }
+    virtual void CocoaTarget_action(void);
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
@@ -107,7 +110,12 @@ public:
     virtual void SetString(unsigned int n, const wxString& label);
     // change the individual radio button state
 protected:
+    // We don't want the typical wxCocoaNSBox behavior because our real
+    // implementation is by using an NSMatrix as the NSBox's contentView.
     WX_NSMatrix GetNSMatrix() const;
+    void AssociateNSBox(WX_NSBox theBox);
+    void DisassociateNSBox(WX_NSBox theBox);
+
     virtual wxSize DoGetBestSize() const;
 
     int GetRowForIndex(int n) const
