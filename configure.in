@@ -7240,12 +7240,7 @@ fi
 
 if test "$wxUSE_SYSTEM_OPTIONS" = "yes"; then
     AC_DEFINE(wxUSE_SYSTEM_OPTIONS)
-    if test "$TOOLKIT" = "MSW" -o "$TOOLKIT" = "GTK" -o "$TOOLKIT" = "X11" -o \
-        "$TOOLKIT" = "MOTIF" -o "$TOOLKIT" = "COCOA"; then
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS taskbar"
-    fi
 fi
-
 
 if test "$wxUSE_VALIDATORS" = "yes"; then
     AC_DEFINE(wxUSE_VALIDATORS)
@@ -7583,7 +7578,7 @@ if test "$wxUSE_GUI" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov controls dialogs drawing \
                      dynamic erase event exec font image minimal mobile \
                      mobile/wxedit mobile/styles propsize render \
-                     rotate shaped vscroll widgets"
+                     rotate shaped taskbar vscroll widgets"
 
     if test "$wxUSE_MONOLITHIC" != "yes"; then
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS console"
