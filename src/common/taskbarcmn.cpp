@@ -16,7 +16,7 @@
     #pragma hdrstop
 #endif
 
-#ifdef wxHAS_TASK_BAR_ICON
+#if wxUSE_TASKBARICON
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -51,4 +51,4 @@ void wxTaskBarIconBase::OnRightButtonDown(wxTaskBarIconEvent& WXUNUSED(event))
     }
 }
 
-#endif // defined(wxHAS_TASK_BAR_ICON)
+#endif // wxUSE_TASKBARICON

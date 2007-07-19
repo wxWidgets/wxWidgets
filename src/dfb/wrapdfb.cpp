@@ -36,7 +36,7 @@ bool wxDfbCheckReturn(DFBResult code)
         // these are programming errors, assert:
         #define DFB_ASSERT(code)                                        \
             case code:                                                  \
-                wxFAIL_MSG( _T("DirectFB error: ") _T(#code) );         \
+                wxFAIL_MSG( "DirectFB error: " _T(#code) );         \
                 return false                                            \
 
         DFB_ASSERT(DFB_DEAD);
@@ -140,7 +140,7 @@ wxIDirectFBSurface::CreateCompatible(const wxSize& sz, int flags)
             return NULL;
     }
 
-    wxCHECK_MSG( size.x > 0 && size.y > 0, NULL, _T("invalid size") );
+    wxCHECK_MSG( size.x > 0 && size.y > 0, NULL, "invalid size" );
 
     DFBSurfaceDescription desc;
     desc.flags = (DFBSurfaceDescriptionFlags)(

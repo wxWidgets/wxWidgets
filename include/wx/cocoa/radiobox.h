@@ -13,6 +13,7 @@
 #define __WX_COCOA_RADIOBOX_H__
 
 // #include "wx/cocoa/NSButton.h"
+DECLARE_WXCOCOA_OBJC_CLASS(NSMatrix);
 
 // ========================================================================
 // wxRadioBox
@@ -21,7 +22,7 @@ class WXDLLEXPORT wxRadioBox: public wxControl, public wxRadioBoxBase// , protec
 {
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
     DECLARE_EVENT_TABLE()
-//    WX_DECLARE_COCOA_OWNER(NSButton,NSControl,NSView)
+    WX_DECLARE_COCOA_OWNER(NSBox,NSView,NSView)
 // ------------------------------------------------------------------------
 // initialization
 // ------------------------------------------------------------------------
@@ -106,6 +107,7 @@ public:
     virtual void SetString(unsigned int n, const wxString& label);
     // change the individual radio button state
 protected:
+    WX_NSMatrix GetNSMatrix() const;
     virtual wxSize DoGetBestSize() const;
 };
 

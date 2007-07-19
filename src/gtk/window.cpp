@@ -3388,7 +3388,7 @@ bool wxWindowGTK::DoNavigateIn(int flags)
     }
     else // navigate inside the container
     {
-        wxWindow *parent = wxGetTopLevelParent(this);
+        wxWindow *parent = wxGetTopLevelParent((wxWindow *)this);
         wxCHECK_MSG( parent, false, _T("every window must have a TLW parent") );
 
         GtkDirectionType dir;

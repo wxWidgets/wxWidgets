@@ -756,6 +756,14 @@
 // Recommended setting: 0 (use wxNotebook)
 #define wxUSE_TAB_DIALOG    0
 
+// wxTaskBarIcon is a small notification icon shown in the system toolbar or
+// dock.
+//
+// Default is 1.
+//
+// Recommended setting: 1 (but can be set to 0 if you don't need it)
+#define wxUSE_TASKBARICON 1
+
 // wxGrid class
 //
 // Default is 1, set to 0 to cut down compilation time and binaries size if you

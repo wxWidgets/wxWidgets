@@ -1,6 +1,6 @@
 rem Uncomment the next line to set the version; used also in wxWidgets.iss
 rem SET WXW_VER=2.9.0
-if (%WXW_VER%)==() SET WXW_VER=CVS
+if (%WXW_VER%)==() SET WXW_VER=SVN
 
 echo docs building for %WXW_VER%
 
@@ -30,24 +30,24 @@ SET >>  c:\temp.log
 rem update wxwidgets (holds docs) and inno (cvs wxMSW setup.exe only)
 c:
 cd %WXWIN%
-svn cleanup
-svn up 
+svn cleanup >>  c:\temp.log
+svn up >>  c:\temp.log
 
 rem now inno
-cd \wx\inno\wxWidgets
+cd \wx\inno\wxWidgets >>  c:\temp.log
 del c*.*
 if exist include\wx\msw\setup.h del include\wx\msw\setup.h
 if exist include\wx\univ\setup.h del include\wx\univ\setup.h
-svn cleanup
-svn up 
+svn cleanup >>  c:\temp.log
+svn up >>  c:\temp.log
 dos2unix configure
 dos2unix config.guess
 dos2unix config.sub
 copy include\wx\msw\setup0.h include\wx\msw\setup.h
 copy include\wx\univ\setup0.h include\wx\univ\setup.h
-echo CVS update  >>  c:\temp.log
+echo SVN update  >>  c:\temp.log
 
-rem just build the formats not in the CVS to keep down the .#makefile...
+rem just build the formats not in the SVN to keep down the .#makefile...
 cd \wx\inno\wxWidgets\build\bakefiles
 del .bakefile_gen.state
 bakefile_gen -f dmars,dmars_smake,msevc4prj >> c:\temp.log

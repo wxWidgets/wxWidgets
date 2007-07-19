@@ -11,7 +11,7 @@
 
 #include "wx/wxprec.h"
 
-#ifdef wxHAS_TASK_BAR_ICON
+#if wxUSE_TASKBARICON
 
 #include "wx/taskbar.h"
 
@@ -521,4 +521,4 @@ bool wxTaskBarIcon::RemoveIcon()
 bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
 { return m_impl->PopupMenu(menu); }
 
-#endif // wxHAS_TASK_BAR_ICON
+#endif // wxUSE_TASKBARICON

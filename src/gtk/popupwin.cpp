@@ -110,7 +110,7 @@ gtk_dialog_realized_callback( GtkWidget * WXUNUSED(widget), wxPopupWindow *win )
  * virtual function here as wxWidgets requires different ways to insert
  * a child in container classes. */
 
-static void wxInsertChildInPopupWin(wxWindow* parent, wxWindow* child)
+static void wxInsertChildInPopupWin(wxWindowGTK* parent, wxWindowGTK* child)
 {
     gtk_pizza_put( GTK_PIZZA(parent->m_wxwindow),
                    child->m_widget,

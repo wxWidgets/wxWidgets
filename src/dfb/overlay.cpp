@@ -101,7 +101,7 @@ void wxOverlayImpl::EndDrawing(wxWindowDC *dc)
 void wxOverlayImpl::Clear(wxWindowDC *dc)
 {
     wxASSERT_MSG( IsOk(),
-                  _T("You cannot Clear an overlay that is not initialized") );
+                  "You cannot Clear an overlay that is not initialized" );
 
     m_isEmpty = true;
 }

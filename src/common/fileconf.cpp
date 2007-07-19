@@ -437,70 +437,59 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream, const wxMBConv& conv)
     m_linesTail = NULL;
 
     // read the entire stream contents in memory
-    wxString str;
+    wxWxCharBuffer cbuf;
+    static const size_t chunkLen = 1024;
+
+    wxMemoryBuffer buf(chunkLen);
+    do
     {
-        static const size_t chunkLen = 1024;
+        inStream.Read(buf.GetAppendBuf(chunkLen), chunkLen);
+        buf.UngetAppendBuf(inStream.LastRead());
 
-        wxMemoryBuffer buf(chunkLen);
-        do
+        const wxStreamError err = inStream.GetLastError();
+
+        if ( err != wxSTREAM_NO_ERROR && err != wxSTREAM_EOF )
         {
-            inStream.Read(buf.GetAppendBuf(chunkLen), chunkLen);
-            buf.UngetAppendBuf(inStream.LastRead());
-
-            const wxStreamError err = inStream.GetLastError();
-
-            if ( err != wxSTREAM_NO_ERROR && err != wxSTREAM_EOF )
-            {
-                wxLogError(_("Error reading config options."));
-                break;
-            }
+            wxLogError(_("Error reading config options."));
+            break;
         }
-        while ( !inStream.Eof() );
+    }
+    while ( !inStream.Eof() );
 
 #if wxUSE_UNICODE
-        size_t len;
-        str = conv.cMB2WC((char *)buf.GetData(), buf.GetDataLen(), &len);
-        if ( !len && buf.GetDataLen() )
-        {
-            wxLogError(_("Failed to read config options."));
-        }
-#else // !wxUSE_UNICODE
-        // no need for conversion
-        str.assign((char *)buf.GetData(), buf.GetDataLen());
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
-    }
-
-
-    // translate everything to the current (platform-dependent) line
-    // termination character
-    str = wxTextBuffer::Translate(str);
-
-    wxMemoryText memText;
-
-    // Now we can add the text to the memory text. To do this we extract line
-    // by line from the translated string, until we've reached the end.
-    //
-    // VZ: all this is horribly inefficient, we should do the translation on
-    //     the fly in one pass saving both memory and time (TODO)
-
-    const wxChar *pEOL = wxTextBuffer::GetEOL(wxTextBuffer::typeDefault);
-    const size_t EOLLen = wxStrlen(pEOL);
-
-    int posLineStart = str.Find(pEOL);
-    while ( posLineStart != -1 )
+    size_t len;
+    cbuf = conv.cMB2WC((char *)buf.GetData(), buf.GetDataLen(), &len);
+    if ( !len && buf.GetDataLen() )
     {
-        wxString line(str.Left(posLineStart));
-
-        memText.AddLine(line);
-
-        str = str.Mid(posLineStart + EOLLen);
-
-        posLineStart = str.Find(pEOL);
+        wxLogError(_("Failed to read config options."));
     }
+#else // !wxUSE_UNICODE
+    // no need for conversion
+    cbuf = wxCharBuffer::CreateNonOwned((char *)buf.GetData());
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
-    // also add whatever we have left in the translated string.
-    if ( !str.empty() )
-        memText.AddLine(str);
+
+    // now break it into lines
+    wxMemoryText memText;
+    for ( const wxChar *s = cbuf; ; ++s )
+    {
+        const wxChar *e = s;
+        while ( *e != '\0' && *e != '\n' && *e != '\r' )
+            ++e;
+
+        // notice that we throw away the original EOL kind here, maybe we
+        // should preserve it?
+        memText.AddLine(wxString(s, e));
+
+        if ( *e == '\0' )
+            break;
+
+        // skip the second EOL byte if it's a DOS one
+        if ( *e == '\r' && e[1] == '\n' )
+            ++e;
+
+        s = e;
+    }
 
     // Finally we can parse it all.
     Parse(memText, true /* local */);

@@ -64,7 +64,7 @@ static void CopySurfaceToImage(const wxIDirectFBSurfacePtr& surface,
                                wxImage& image)
 {
     wxIDirectFBSurface::Locked locked(surface, DSLF_READ);
-    wxCHECK_RET( locked.ptr, _T("failed to lock surface") );
+    wxCHECK_RET( locked.ptr, "failed to lock surface" );
 
     const unsigned width = image.GetWidth();
     const unsigned height = image.GetHeight();
@@ -191,10 +191,10 @@ CreateSurfaceWithFormat(int w, int h, DFBSurfacePixelFormat format)
 // Creates a surface that will use wxImage's pixel data (RGB only)
 static wxIDirectFBSurfacePtr CreateSurfaceForImage(const wxImage& image)
 {
-    wxCHECK_MSG( image.Ok(), NULL, _T("invalid image") );
+    wxCHECK_MSG( image.Ok(), NULL, "invalid image" );
     // FIXME_DFB: implement alpha handling by merging alpha buffer with RGB
     //            into a temporary RGBA surface
-    wxCHECK_MSG( !image.HasAlpha(), NULL, _T("alpha channel not supported") );
+    wxCHECK_MSG( !image.HasAlpha(), NULL, "alpha channel not supported" );
 
     // NB: wxImage uses RGB order of bytes while DirectFB uses BGR, so we
     //     cannot use preallocated surface that shares data with wxImage, we
@@ -300,7 +300,7 @@ bool wxBitmap::Create(const wxIDirectFBSurfacePtr& surface)
 {
     UnRef();
 
-    wxCHECK_MSG( surface, false, _T("invalid surface") );
+    wxCHECK_MSG( surface, false, "invalid surface" );
 
     m_refData = new wxBitmapRefData();
     M_BITMAP->m_surface = surface;
@@ -362,7 +362,7 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
     }
 
     // FIXME: implement mask creation from image's mask (or alpha channel?)
-    wxASSERT_MSG( !image.HasMask(), _T("image masks are ignored for now") );
+    wxASSERT_MSG( !image.HasMask(), "image masks are ignored for now" );
 }
 
 wxImage wxBitmap::ConvertToImage() const
@@ -395,7 +395,7 @@ wxImage wxBitmap::ConvertToImage() const
     }
 
     // FIXME: implement mask setting in the image
-    wxASSERT_MSG( GetMask() == NULL, _T("bitmap masks are ignored for now") );
+    wxASSERT_MSG( GetMask() == NULL, "bitmap masks are ignored for now" );
 
     return img;
 }
@@ -455,7 +455,7 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 {
     wxCHECK_RET( depth == 1, wxT("can only create mono bitmap from XBM data") );
 
-    wxFAIL_MSG( _T("not implemented") );
+    wxFAIL_MSG( "not implemented" );
 }
 
 bool wxBitmap::IsOk() const
@@ -606,14 +606,14 @@ void wxBitmap::SetHeight(int height)
 {
     AllocExclusive();
 
-    wxFAIL_MSG( _T("SetHeight not implemented") );
+    wxFAIL_MSG( "SetHeight not implemented" );
 }
 
 void wxBitmap::SetWidth(int width)
 {
     AllocExclusive();
 
-    wxFAIL_MSG( _T("SetWidth not implemented") );
+    wxFAIL_MSG( "SetWidth not implemented" );
 }
 
 void wxBitmap::SetDepth(int depth)

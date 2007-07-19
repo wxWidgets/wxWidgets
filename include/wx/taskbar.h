@@ -14,7 +14,7 @@
 
 #include "wx/defs.h"
 
-#ifdef wxHAS_TASK_BAR_ICON
+#if wxUSE_TASKBARICON
 
 #include "wx/event.h"
 
@@ -119,6 +119,6 @@ END_DECLARE_EVENT_TYPES()
 #endif
 #define EVT_TASKBAR_CLICK(fn)        wx__DECLARE_TASKBAREVT(CLICK, fn)
 
-#endif // wxHAS_TASK_BAR_ICON
+#endif // wxUSE_TASKBARICON
 
 #endif // _WX_TASKBAR_H_BASE_

@@ -21,8 +21,8 @@
 #include "wx/evtloop.h"
 #include "wx/dfb/private.h"
 
-#define TRACE_EVENTS _T("events")
-#define TRACE_PAINT  _T("paint")
+#define TRACE_EVENTS "events"
+#define TRACE_PAINT  "paint"
 
 // ============================================================================
 // globals
@@ -101,14 +101,14 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
                                  long style,
                                  const wxString &name)
 {
-    wxCHECK_MSG( pos.x >= 0 && pos.y >= 0, false, _T("invalid position") );
-    wxCHECK_MSG( size.x > 0 && size.y > 0, false, _T("invalid size") );
+    wxCHECK_MSG( pos.x >= 0 && pos.y >= 0, false, "invalid position" );
+    wxCHECK_MSG( size.x > 0 && size.y > 0, false, "invalid size" );
 
     m_tlw = this;
 
     // create DirectFB window:
     wxIDirectFBDisplayLayerPtr layer(wxIDirectFB::Get()->GetDisplayLayer());
-    wxCHECK_MSG( layer, false, _T("no display layer") );
+    wxCHECK_MSG( layer, false, "no display layer" );
 
     DFBWindowDescription desc;
     desc.flags = (DFBWindowDescriptionFlags)
@@ -307,7 +307,7 @@ void wxNonOwnedWindow::HandleQueuedPaintRequests()
             continue; // nothing to refresh
 
         wxLogTrace(TRACE_PAINT,
-                   _T("%p ('%s'): processing paint request [%i,%i,%i,%i]"),
+                   "%p ('%s'): processing paint request [%i,%i,%i,%i]",
                    this, GetName().c_str(),
                    clipped.x, clipped.y, clipped.GetRight(), clipped.GetBottom());
 
@@ -346,7 +346,7 @@ void wxNonOwnedWindow::HandleQueuedPaintRequests()
     GetDfbSurface()->FlipToFront(rptr);
 
     wxLogTrace(TRACE_PAINT,
-               _T("%p ('%s'): processed %i paint requests, flipped surface: [%i,%i,%i,%i]"),
+               "%p ('%s'): processed %i paint requests, flipped surface: [%i,%i,%i,%i]",
                this, GetName().c_str(),
                requestsCount,
                paintedRect.x, paintedRect.y,
@@ -362,7 +362,7 @@ void wxNonOwnedWindow::DoRefreshRect(const wxRect& rect)
         return;
 
     wxLogTrace(TRACE_PAINT,
-               _T("%p ('%s'): [TLW] refresh rect [%i,%i,%i,%i]"),
+               "%p ('%s'): [TLW] refresh rect [%i,%i,%i,%i]",
                this, GetName().c_str(),
                rect.x, rect.y, rect.GetRight(), rect.GetBottom());
 
@@ -402,9 +402,9 @@ struct InsideDFBFocusHandlerSetter
 
 void wxNonOwnedWindow::SetDfbFocus()
 {
-    wxCHECK_RET( IsShown(), _T("cannot set focus to hidden window") );
+    wxCHECK_RET( IsShown(), "cannot set focus to hidden window" );
     wxASSERT_MSG( FindFocus() && FindFocus()->GetTLW() == this,
-                  _T("setting DirectFB focus to unexpected window") );
+                  "setting DirectFB focus to unexpected window" );
 
     // Don't set DirectFB focus if we're called from HandleFocusEvent() on
     // this window, because we already have the focus in that case. Not only
@@ -450,7 +450,7 @@ void wxNonOwnedWindow::HandleDFBWindowEvent(const wxDFBWindowEvent& event_)
     if ( gs_dfbWindowsMap.find(event.window_id) == gs_dfbWindowsMap.end() )
     {
         wxLogTrace(TRACE_EVENTS,
-                   _T("received event for unknown DirectFB window, ignoring"));
+                   "received event for unknown DirectFB window, ignoring");
         return;
     }
 
@@ -465,12 +465,12 @@ void wxNonOwnedWindow::HandleDFBWindowEvent(const wxDFBWindowEvent& event_)
             if ( !recipient )
             {
                 wxLogTrace(TRACE_EVENTS,
-                           _T("ignoring event: no recipient window"));
+                           "ignoring event: no recipient window");
                 return;
             }
 
             wxCHECK_RET( recipient && recipient->GetTLW() == tlw,
-                         _T("event recipient not in TLW which received the event") );
+                         "event recipient not in TLW which received the event" );
 
             recipient->HandleKeyEvent(event_);
             break;
@@ -486,7 +486,7 @@ void wxNonOwnedWindow::HandleDFBWindowEvent(const wxDFBWindowEvent& event_)
 
         case DWET_NONE:
         case DWET_ALL:
-            wxFAIL_MSG( _T("invalid event type") );
+            wxFAIL_MSG( "invalid event type" );
             break;
 
         default:

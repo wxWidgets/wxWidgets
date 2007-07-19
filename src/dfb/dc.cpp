@@ -60,7 +60,7 @@ wxDC::wxDC(const wxIDirectFBSurfacePtr& surface)
 void wxDC::DFBInit(const wxIDirectFBSurfacePtr& surface)
 {
     m_ok = (surface != NULL);
-    wxCHECK_RET( surface != NULL, _T("invalid surface") );
+    wxCHECK_RET( surface != NULL, "invalid surface" );
 
     m_surface = surface;
 
@@ -86,7 +86,7 @@ void wxDC::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
     wxSize size(GetSize());
 
     wxASSERT_MSG( !m_clipping,
-                  _T("narrowing clipping region not implemented yet") );
+                  "narrowing clipping region not implemented yet" );
 
     // NB: We intersect the clipping rectangle with surface's area here because
     //     DirectFB will return an error if you try to set clipping rectangle
@@ -161,9 +161,9 @@ bool wxDC::DoFloodFill(wxCoord x, wxCoord y,
 
 bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 {
-    wxCHECK_MSG( col, false, _T("NULL colour parameter in wxDC::GetPixel"));
+    wxCHECK_MSG( col, false, "NULL colour parameter in wxDC::GetPixel");
 
-    wxFAIL_MSG( _T("GetPixel not implemented") );
+    wxFAIL_MSG( "GetPixel not implemented" );
     return false;
 }
 
@@ -171,7 +171,7 @@ void wxDC::DoCrossHair(wxCoord x, wxCoord y)
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
-    wxFAIL_MSG( _T("CrossHair not implemented") );
+    wxFAIL_MSG( "CrossHair not implemented" );
 }
 
 void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
@@ -220,7 +220,7 @@ void wxDC::DoDrawArc(wxCoord x1, wxCoord y1,
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
-    wxFAIL_MSG( _T("DrawArc not implemented") );
+    wxFAIL_MSG( "DrawArc not implemented" );
 }
 
 void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
@@ -239,7 +239,7 @@ void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffs
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
-    wxFAIL_MSG( _T("DrawPolygon not implemented") );
+    wxFAIL_MSG( "DrawPolygon not implemented" );
 }
 
 void wxDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
@@ -247,7 +247,7 @@ void wxDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
     // TODO: impl. using DirectDB's DrawLines
-    wxFAIL_MSG( _T("DrawLines not implemented") );
+    wxFAIL_MSG( "DrawLines not implemented" );
 }
 
 void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
@@ -294,21 +294,21 @@ void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
-    wxFAIL_MSG( _T("DrawRoundedRectangle not implemented") );
+    wxFAIL_MSG( "DrawRoundedRectangle not implemented" );
 }
 
 void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
-    wxFAIL_MSG( _T("DrawElipse not implemented") );
+    wxFAIL_MSG( "DrawElipse not implemented" );
 }
 
 void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
-    wxFAIL_MSG( _T("DrawElipticArc not implemented") );
+    wxFAIL_MSG( "DrawElipticArc not implemented" );
 }
 
 void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
@@ -351,7 +351,7 @@ void wxDC::DoDrawRotatedText(const wxString& text,
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
-    wxFAIL_MSG( _T("DrawRotatedText not implemented") );
+    wxFAIL_MSG( "DrawRotatedText not implemented" );
 }
 
 // ---------------------------------------------------------------------------
@@ -381,7 +381,7 @@ void wxDC::SetPalette(const wxPalette& WXUNUSED(palette))
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
-    wxFAIL_MSG( _T("SetPalette not implemented") );
+    wxFAIL_MSG( "SetPalette not implemented" );
 }
 #endif // wxUSE_PALETTE
 
@@ -429,7 +429,7 @@ void wxDC::SetLogicalFunction(int function)
     // NB: we could also support XOR, but for blitting only (via DSBLIT_XOR);
     //     and possibly others via SetSrc/DstBlendFunction()
     wxASSERT_MSG( function == wxCOPY,
-                  _T("only wxCOPY logical function supported") );
+                  "only wxCOPY logical function supported" );
 
     m_logicalFunction = function;
 }
@@ -567,12 +567,12 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
                   int rop, bool useMask,
                   wxCoord xsrcMask, wxCoord ysrcMask)
 {
-    wxCHECK_MSG( Ok(), false, _T("invalid dc") );
-    wxCHECK_MSG( source, false, _T("invalid source dc") );
+    wxCHECK_MSG( Ok(), false, "invalid dc" );
+    wxCHECK_MSG( source, false, "invalid source dc" );
 
     // NB: we could also support XOR here (via DSBLIT_XOR)
     //     and possibly others via SetSrc/DstBlendFunction()
-    wxCHECK_MSG( rop == wxCOPY, false, _T("only wxCOPY function supported") );
+    wxCHECK_MSG( rop == wxCOPY, false, "only wxCOPY function supported" );
 
     // transform the source DC coords to the device ones
     xsrc = source->LogicalToDeviceX(xsrc);
@@ -580,7 +580,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
 
     // FIXME_DFB: use the mask origin when drawing transparently
     wxASSERT_MSG( xsrcMask == -1 && ysrcMask == -1,
-                  _T("non-default source mask offset not implemented") );
+                  "non-default source mask offset not implemented" );
 #if 0
     if (xsrcMask == -1 && ysrcMask == -1)
     {
@@ -640,13 +640,13 @@ void wxDC::DoDrawSubBitmap(const wxBitmap &bmp,
 
     // NB: we could also support XOR here (via DSBLIT_XOR)
     //     and possibly others via SetSrc/DstBlendFunction()
-    wxCHECK_RET( rop == wxCOPY, _T("only wxCOPY function supported") );
+    wxCHECK_RET( rop == wxCOPY, "only wxCOPY function supported" );
 
     if ( bmp.GetDepth() == 1 )
     {
         // Mono bitmaps are handled in special way -- all 1s are drawn in
         // foreground colours, all 0s in background colour.
-        wxFAIL_MSG( _T("drawing mono bitmaps not implemented") );
+        wxFAIL_MSG( "drawing mono bitmaps not implemented" );
         return;
     }
 
@@ -656,7 +656,7 @@ void wxDC::DoDrawSubBitmap(const wxBitmap &bmp,
         //            applicable because DirectFB doesn't implement ROPs; OTOH,
         //            it has blitting modes that can be useful; finally, see
         //            DFB's SetSrcBlendFunction() and SetSrcColorKey()
-        wxFAIL_MSG( _T("drawing bitmaps with masks not implemented") );
+        wxFAIL_MSG( "drawing bitmaps with masks not implemented" );
         return;
     }
 
@@ -677,7 +677,7 @@ bool wxDC::DoBlitFromSurface(const wxIDirectFBSurfacePtr& src,
     src->GetSize(&srcsize.x, &srcsize.y);
     if ( !wxRect(srcx, srcy, w, h).Intersects(wxRect(srcsize)) )
     {
-        wxLogDebug(_T("Blitting from area outside of the source surface, caller code needs fixing."));
+        wxLogDebug("Blitting from area outside of the source surface, caller code needs fixing.");
         return false;
     }
 

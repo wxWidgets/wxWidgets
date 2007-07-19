@@ -37,8 +37,8 @@
 #include "wx/dfb/private.h"
 #include "wx/private/overlay.h"
 
-#define TRACE_EVENTS _T("events")
-#define TRACE_PAINT  _T("paint")
+#define TRACE_EVENTS "events"
+#define TRACE_PAINT  "paint"
 
 // ===========================================================================
 // implementation
@@ -138,10 +138,10 @@ bool wxWindowDFB::Create(wxWindow *parent,
 
 wxIDirectFBSurfacePtr wxWindowDFB::ObtainDfbSurface() const
 {
-    wxCHECK_MSG( m_parent, NULL, _T("parentless window?") );
+    wxCHECK_MSG( m_parent, NULL, "parentless window?" );
 
     wxIDirectFBSurfacePtr parentSurface(m_parent->GetDfbSurface());
-    wxCHECK_MSG( parentSurface, NULL, _T("invalid parent surface") );
+    wxCHECK_MSG( parentSurface, NULL, "invalid parent surface" );
 
     wxRect r(GetRect());
     AdjustForParentClientOrigin(r.x, r.y, 0);
@@ -155,7 +155,7 @@ wxIDirectFBSurfacePtr wxWindowDFB::GetDfbSurface()
     if ( !m_surface )
     {
         m_surface = ObtainDfbSurface();
-        wxASSERT_MSG( m_surface, _T("invalid DirectFB surface") );
+        wxASSERT_MSG( m_surface, "invalid DirectFB surface" );
     }
 
     return m_surface;
@@ -224,7 +224,7 @@ void wxWindowDFB::SetFocus()
 void wxWindowDFB::DFBKillFocus()
 {
     wxCHECK_RET( gs_focusedWindow == this,
-                 _T("killing focus on window that doesn't have it") );
+                 "killing focus on window that doesn't have it" );
 
     gs_focusedWindow = NULL;
 
@@ -269,13 +269,13 @@ bool wxWindowDFB::Show(bool show)
 // Raise the window to the top of the Z order
 void wxWindowDFB::Raise()
 {
-    wxFAIL_MSG( _T("Raise() not implemented") );
+    wxFAIL_MSG( "Raise() not implemented" );
 }
 
 // Lower the window to the bottom of the Z order
 void wxWindowDFB::Lower()
 {
-    wxFAIL_MSG( _T("Lower() not implemented") );
+    wxFAIL_MSG( "Lower() not implemented" );
 }
 
 void wxWindowDFB::DoCaptureMouse()
@@ -338,7 +338,7 @@ void wxWindowDFB::WarpPointer(int x, int y)
     if ( y >= h ) y = h-1;
 
     wxIDirectFBDisplayLayerPtr layer(wxIDirectFB::Get()->GetDisplayLayer());
-    wxCHECK_RET( layer, _T("no display layer") );
+    wxCHECK_RET( layer, "no display layer" );
 
     layer->WarpCursor(x, y);
 }
@@ -350,7 +350,7 @@ bool wxWindowDFB::Reparent(wxWindowBase *parent)
         return false;
 
 #warning "implement this"
-    wxFAIL_MSG( _T("reparenting not yet implemented") );
+    wxFAIL_MSG( "reparenting not yet implemented" );
 
     return true;
 }
@@ -374,7 +374,7 @@ void wxWindowDFB::DoGetPosition(int *x, int *y) const
 
 static wxPoint GetScreenPosOfClientOrigin(const wxWindowDFB *win)
 {
-    wxCHECK_MSG( win, wxPoint(0, 0), _T("no window provided") );
+    wxCHECK_MSG( win, wxPoint(0, 0), "no window provided" );
 
     wxPoint pt(win->GetPosition() + win->GetClientAreaOrigin());
 
@@ -612,7 +612,7 @@ void wxWindowDFB::DoRefreshWindow()
 void wxWindowDFB::DoRefreshRect(const wxRect& rect)
 {
     wxWindow *parent = GetParent();
-    wxCHECK_RET( parent, _T("no parent") );
+    wxCHECK_RET( parent, "no parent" );
 
     // don't overlap outside of the window (NB: 'rect' is in window coords):
     wxRect r(rect);
@@ -621,7 +621,7 @@ void wxWindowDFB::DoRefreshRect(const wxRect& rect)
         return;
 
     wxLogTrace(TRACE_PAINT,
-               _T("%p ('%s'): refresh rect [%i,%i,%i,%i]"),
+               "%p ('%s'): refresh rect [%i,%i,%i,%i]",
                this, GetName().c_str(),
                rect.x, rect.y, rect.GetRight(), rect.GetBottom());
 
@@ -653,7 +653,7 @@ void wxWindowDFB::Freeze()
 
 void wxWindowDFB::Thaw()
 {
-    wxASSERT_MSG( IsFrozen(), _T("Thaw() without matching Freeze()") );
+    wxASSERT_MSG( IsFrozen(), "Thaw() without matching Freeze()" );
 
     if ( --m_frozenness == 0 )
     {
@@ -664,10 +664,10 @@ void wxWindowDFB::Thaw()
 
 void wxWindowDFB::PaintWindow(const wxRect& rect)
 {
-    wxCHECK_RET( !IsFrozen() && IsShown(), _T("shouldn't be called") );
+    wxCHECK_RET( !IsFrozen() && IsShown(), "shouldn't be called" );
 
     wxLogTrace(TRACE_PAINT,
-               _T("%p ('%s'): painting region [%i,%i,%i,%i]"),
+               "%p ('%s'): painting region [%i,%i,%i,%i]",
                this, GetName().c_str(),
                rect.x, rect.y, rect.GetRight(), rect.GetBottom());
 
@@ -695,7 +695,7 @@ void wxWindowDFB::PaintWindow(const wxRect& rect)
     }
     else
     {
-        wxLogTrace(TRACE_PAINT, _T("%p ('%s'): not sending wxNcPaintEvent"),
+        wxLogTrace(TRACE_PAINT, "%p ('%s'): not sending wxNcPaintEvent",
                    this, GetName().c_str());
     }
 
@@ -708,7 +708,7 @@ void wxWindowDFB::PaintWindow(const wxRect& rect)
     }
     else
     {
-        wxLogTrace(TRACE_PAINT, _T("%p ('%s'): not sending wxPaintEvent"),
+        wxLogTrace(TRACE_PAINT, "%p ('%s'): not sending wxPaintEvent",
                    this, GetName().c_str());
     }
 
@@ -793,7 +793,7 @@ void wxWindowDFB::AddOverlay(wxOverlayImpl *overlay)
 
 void wxWindowDFB::RemoveOverlay(wxOverlayImpl *overlay)
 {
-    wxCHECK_RET( m_overlays, _T("no overlays to remove") );
+    wxCHECK_RET( m_overlays, "no overlays to remove" );
 
     m_overlays->Remove(overlay);
 
@@ -958,7 +958,7 @@ static long GetTranslatedKeyCode(DFBInputDeviceKeyIdentifier key_id)
 
         case DIKI_KEYDEF_END:
         case DIKI_NUMBER_OF_KEYS:
-            wxFAIL_MSG( _T("invalid key_id value") );
+            wxFAIL_MSG( "invalid key_id value" );
             return 0;
     }
 
@@ -1006,8 +1006,8 @@ void wxWindowDFB::HandleKeyEvent(const wxDFBWindowEvent& event_)
     const DFBWindowEvent& e = event_;
 
     wxLogTrace(TRACE_EVENTS,
-               _T("handling key %s event for window %p ('%s')"),
-               e.type == DWET_KEYUP ? _T("up") : _T("down"),
+               "handling key %s event for window %p ('%s')",
+               e.type == DWET_KEYUP ? "up" : "down",
                this, GetName().c_str());
 
     // fill in wxKeyEvent fields:
@@ -1090,6 +1090,6 @@ wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {
-    wxFAIL_MSG( _T("wxFindWindowAtPoint not implemented") );
+    wxFAIL_MSG( "wxFindWindowAtPoint not implemented" );
     return NULL;
 }

@@ -916,6 +916,14 @@
 #   endif
 #endif /* !defined(wxUSE_TAB_DIALOG) */
 
+#ifndef wxUSE_TASKBARICON
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_TASKBARICON must be defined."
+#   else
+#       define wxUSE_TASKBARICON 0
+#   endif
+#endif /* !defined(wxUSE_TASKBARICON) */
+
 #ifndef wxUSE_TEXTCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_TEXTCTRL must be defined."

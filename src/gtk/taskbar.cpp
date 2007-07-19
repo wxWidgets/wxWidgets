@@ -12,6 +12,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_TASKBARICON
+
 #include "wx/gtk/taskbarpriv.h"
 
 #ifndef WX_PRECOMP
@@ -144,3 +146,5 @@ bool wxTaskBarIconAreaBase::DoPopupMenu( wxMenu *menu, int x, int y )
 
 #endif // __WXGTK20__
 #endif // GTK_CHECK_VERSION(2, 1, 0)
+
+#endif // wxUSE_TASKBARICON

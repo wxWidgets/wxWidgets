@@ -31,7 +31,7 @@
 #include "wx/dfb/private.h"
 #include "wx/nonownedwnd.h"
 
-#define TRACE_EVENTS _T("events")
+#define TRACE_EVENTS "events"
 
 // ===========================================================================
 // implementation
@@ -76,14 +76,14 @@ wxIDirectFBEventBufferPtr wxGUIEventLoop::GetDirectFBEventBuffer()
 
 bool wxGUIEventLoop::Pending() const
 {
-    wxCHECK_MSG( ms_buffer, false, _T("invalid event buffer") );
+    wxCHECK_MSG( ms_buffer, false, "invalid event buffer" );
 
     return ms_buffer->HasEvent();
 }
 
 bool wxGUIEventLoop::Dispatch()
 {
-    wxCHECK_MSG( ms_buffer, false, _T("invalid event buffer") );
+    wxCHECK_MSG( ms_buffer, false, "invalid event buffer" );
 
     // NB: we don't block indefinitely waiting for an event, but instead
     //     time out after a brief period in order to make sure that
@@ -128,7 +128,7 @@ bool wxGUIEventLoop::Dispatch()
 
 void wxGUIEventLoop::WakeUp()
 {
-    wxCHECK_RET( ms_buffer, _T("invalid event buffer") );
+    wxCHECK_RET( ms_buffer, "invalid event buffer" );
 
     ms_buffer->WakeUp();
 }
@@ -179,7 +179,7 @@ void wxGUIEventLoop::HandleDFBEvent(const wxDFBEvent& event)
 #endif
         {
             wxLogTrace(TRACE_EVENTS,
-                       _T("ignoring event of unsupported class %i"),
+                       "ignoring event of unsupported class %i",
                        (int)event.GetClass());
         }
     }
