@@ -4576,7 +4576,7 @@ dnl check for timegm() used by datetime.cpp
 AC_CHECK_FUNCS(timegm)
 
 dnl look for a function to modify the environment
-AC_CHECK_FUNCS(putenv setenv, break)
+AC_CHECK_FUNCS(setenv putenv, break)
 
 HAVE_SOME_SLEEP_FUNC=0
 if test "$USE_BEOS" = 1; then
