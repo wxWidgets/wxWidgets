@@ -26,6 +26,7 @@
 #ifndef WX_PRECOMP
     #include "wx/scrolbar.h"
     #include "wx/menu.h"
+    #include "wx/timer.h"
 #endif // WX_PRECOMP
 
 #include "wx/textbuf.h"
