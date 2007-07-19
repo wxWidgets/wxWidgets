@@ -167,6 +167,31 @@ public:
         ItemDeleted( item );
     }
     
+    // override sorting to always sort branches ascendingly
+    
+    int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 )
+    {
+        if (HasChildren(item1) && HasChildren(item2))
+        {
+            wxVariant value1,value2;
+            GetValue( value1, item1, 0 );
+            GetValue( value2, item2, 0 );
+
+            wxString str1 = value1.GetString();
+            wxString str2 = value2.GetString();
+            int res = str1.Cmp( str2 );
+            if (res) return res;
+            
+            // items must be different
+            unsigned long litem1 = (unsigned long) item1.GetID();    
+            unsigned long litem2 = (unsigned long) item2.GetID();    
+
+            return litem1-litem2;
+        }
+        
+        return wxDataViewModel::Compare( item1, item2 );
+    }
+
     // implementation of base class virtuals to define model
     
     virtual unsigned int GetColumnCount() const

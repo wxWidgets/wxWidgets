@@ -147,10 +147,19 @@ void wxDataViewModel::RemoveNotifier( wxDataViewModelNotifier *notifier )
 
 int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 )
 {
+    // sort branches before leaves
+    bool item1_has_children = HasChildren(item1);
+    bool item2_has_children = HasChildren(item2);
+    
+    if (item1_has_children && !item2_has_children)
+        return 1;
+    if (item2_has_children && !item1_has_children)
+        return -1;
+    
     wxVariant value1,value2;
     GetValue( value1, item1, m_sortingColumn );
     GetValue( value2, item2, m_sortingColumn );
-    
+
     if (!m_ascending)
     {
         wxVariant temp = value1;
@@ -163,52 +172,37 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
         wxString str1 = value1.GetString();
         wxString str2 = value2.GetString();
         int res = str1.Cmp( str2 );
-        if (res == 0)
-        {
-            // no difference, try 0th column
-            if (m_sortingColumn != 0)
-            {
-                unsigned int temp = m_sortingColumn;
-                m_sortingColumn = 0;
-                res = Compare( item1, item2 );
-                m_sortingColumn = temp;
-            }
-            if (res == 0)
-            {
-                // still no difference, resort to desparate non-sense
-                long l1 = (long) item1.GetID();
-                long l2 = (long) item2.GetID();
-                return l1-l2;
-            }
-        }
-        return res;
-    }
+        if (res) return res;
+    } else
     if (value1.GetType() == wxT("long"))
     {
         long l1 = value1.GetLong();
         long l2 = value2.GetLong();
-        return l1-l2;
-    }
+        long res = l1-l2;
+        if (res) return res;
+    } else
     if (value1.GetType() == wxT("double"))
     {
         double d1 = value1.GetDouble();
         double d2 = value2.GetDouble();
-        if (d1 == d2) return 0;
         if (d1 < d2) return 1;
-        return -1;
-    }
+        if (d1 > d2) return -1;
+    } else
     if (value1.GetType() == wxT("datetime"))
     {
         wxDateTime dt1 = value1.GetDateTime();
         wxDateTime dt2 = value2.GetDateTime();
-        if (dt1.IsEqualTo(dt2)) return 0;
         if (dt1.IsEarlierThan(dt2)) return 1;
-        return -1;
+        if (dt2.IsEarlierThan(dt1)) return -11;
     }
-    
-    
 
-    return 0;
+    // items must be different
+    unsigned long litem1 = (unsigned long) item1.GetID();    
+    unsigned long litem2 = (unsigned long) item2.GetID();    
+
+    if (!m_ascending)
+        return litem2-litem1;
+    return litem1-litem2;
 }
 
 // ---------------------------------------------------------
