@@ -2304,6 +2304,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
 	wx/gtk/button.h \
 	wx/gtk/checkbox.h \
 	wx/gtk/checklst.h \
+	wx/gtk/chkconf.h \
 	wx/gtk/collpane.h \
 	wx/gtk/colordlg.h \
 	wx/gtk/choice.h \
