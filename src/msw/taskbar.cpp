@@ -17,6 +17,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_TASKBARICON
+
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/frame.h"
@@ -288,3 +290,6 @@ long wxTaskBarIcon::WindowProc(unsigned int msg,
 
     return 0;
 }
+
+#endif // wxUSE_TASKBARICON
+
