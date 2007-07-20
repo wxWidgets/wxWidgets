@@ -142,6 +142,8 @@ public:
     virtual void SetFocus();
     // Warp the pointer the given position
     virtual void WarpPointer(int x_pos, int y_pos) ;
+    // Change the window's cursor
+    virtual bool SetCursor( const wxCursor &cursor );
     // Send the window a refresh event
     virtual void Refresh(bool eraseBack = true, const wxRect *rect = NULL);
     // Set/get the window's font

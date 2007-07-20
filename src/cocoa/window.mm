@@ -669,6 +669,15 @@ bool wxWindowCocoa::Cocoa_resetCursorRects()
     return true;
 }
 
+bool wxWindowCocoa::SetCursor(const wxCursor &cursor)
+{
+    if(!wxWindowBase::SetCursor(cursor))
+        return false;
+    // Invalidate the cursor rects so the cursor will change
+    [[GetNSView() window] invalidateCursorRectsForView:GetNSView()];
+    return true;
+}
+
 bool wxWindowCocoa::Cocoa_viewDidMoveToWindow()
 {
     wxLogTrace(wxTRACE_COCOA,wxT("wxWindow=%p::viewDidMoveToWindow"),this);
