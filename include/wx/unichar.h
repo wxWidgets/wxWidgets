@@ -137,8 +137,27 @@ public:
 
 
 private:
-    static value_type From8bit(char c);
-    static char To8bit(value_type c);
+    // notice that we implement these functions inline for 7-bit ASCII
+    // characters purely for performance reasons
+    static value_type From8bit(char c)
+    {
+        if ( (unsigned char)c < 0x80 )
+            return c;
+
+        return FromHi8bit(c);
+    }
+
+    static char To8bit(value_type c)
+    {
+        if ( c < 0x80 )
+            return c;
+
+        return ToHi8bit(c);
+    }
+
+    // helpers of the functions above called to deal with non-ASCII chars
+    static value_type FromHi8bit(char c);
+    static char ToHi8bit(value_type c);
 
 private:
     value_type m_value;
