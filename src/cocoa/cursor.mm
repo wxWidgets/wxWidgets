@@ -2,10 +2,12 @@
 // Name:        src/cocoa/cursor.mm
 // Purpose:     wxCursor class for wxCocoa
 // Author:      Ryan Norton
+//              David Elliott
 // Modified by:
 // Created:     2004-10-05
 // RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
+//              2007, Software 2000 Ltd.
 // Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -29,6 +31,11 @@ typedef struct tagClassicCursor
     wxUint16 mask[16];
     wxInt16 hotspot[2];
 }ClassicCursor;
+
+///////////////////////////////////////////////////////////////////////////
+// This is a direct copy from src/mac/carbon/cursor.cpp and should be
+// changed to use common code if we plan on keeping it this way.
+// Note that this is basically an array of classic 'CURS' resources.
 
 const short kwxCursorBullseye = 0 ;
 const short kwxCursorBlank = 1 ;
@@ -172,6 +179,17 @@ ClassicCursor gMacCursors[kwxCursorLast+1] =
 
 } ;
 
+// End of data copied from src/mac/carbon/cursor.cpp
+///////////////////////////////////////////////////////////////////////////
+
+/* wxStockCursor
+ * Returns a newly allocated (i.e. retainCount == 1) NSCursor based on the
+ * classic Mac OS cursor data in this source file.  This allows us to
+ * implement the "stock" wxWidgets cursors which aren't present in Cocoa.
+ * FIXME: This function should be static.
+ * FIXME: This function should use "Alloc" in preference to "Get" to follow
+ * the proper Cocoa naming conventions.
+ */
 NSCursor* wxGetStockCursor( short sIndex )
 {
     ClassicCursor* pCursor = &gMacCursors[sIndex];
@@ -180,42 +198,50 @@ NSCursor* wxGetStockCursor( short sIndex )
     //identical mask that is 1 for on and 0 for off
     NSImage *theImage = [[NSImage alloc] initWithSize:NSMakeSize(16.0,16.0)];
 
-    //NSCursor takes an NSImage takes a number of Representations - here
-    //we need only one for the raw data
-    NSBitmapImageRep *theRep =
-    [[NSBitmapImageRep alloc]
-      initWithBitmapDataPlanes: nil  // Allocate the buffer for us :)
-      pixelsWide: 16
-      pixelsHigh: 16
-      bitsPerSample: 1
-      samplesPerPixel: 2
-      hasAlpha: YES                  // Well, more like a mask...
-      isPlanar: NO
-      colorSpaceName: NSCalibratedWhiteColorSpace // Normal B/W - 0 black 1 white
-      bytesPerRow: 0     // I don't care - figure it out for me :)
-      bitsPerPixel: 2];  // bitsPerSample * samplesPerPixel
+    NSBitmapImageRep *theRep = [[NSBitmapImageRep alloc]
+        initWithBitmapDataPlanes: NULL  // Tell Cocoa to allocate the planes for us.
+        pixelsWide: 16      // All classic cursors are 16x16
+        pixelsHigh: 16
+        bitsPerSample: 1    // All classic cursors are bitmaps with bitmasks
+        samplesPerPixel: 2  // Sample 0:image 1:mask
+        hasAlpha: YES       // Identify last sample as a mask
+        isPlanar: YES       // Use a separate array for each sample
+        colorSpaceName: NSCalibratedWhiteColorSpace // 0.0=black 1.0=white
+        bytesPerRow: 2      // Rows in each plane are on 2-byte boundaries (no pad)
+        bitsPerPixel: 1];   // same as bitsPerSample since data is planar
+    // XXX: Should we use NSDeviceWhiteColorSpace? Does it matter?
+    
+    // Ensure that Cocoa allocated 2 and only 2 of the 5 possible planes
+    unsigned char *planes[5];
+    [theRep getBitmapDataPlanes:planes];
+    wxASSERT(planes[0] != NULL);
+    wxASSERT(planes[1] != NULL);
+    wxASSERT(planes[2] == NULL);
+    wxASSERT(planes[3] == NULL);
+    wxASSERT(planes[4] == NULL);
 
-    //unsigned int is better to put data in then a void*
-    //note that working with bitfields would be a lot better here -
-    //but since it breaks some compilers...
-    wxUint32 *data = (wxUint32 *)[theRep bitmapData];
+    // NOTE1: The Cursor's bits field is white=0 black=1.. thus the bitwise-not
+    // Why not use NSCalibratedBlackColorSpace?  Because that reverses the
+    // sense of the alpha (mask) plane.
+    // NOTE2: The mask data is 0=off 1=on
+    // NOTE3: Cocoa asks for "premultiplied" color planes.  Since we have a
+    // 1-bit color plane and a 1-bit alpha plane we can just do a bitwise-and
+    // on the two.  The original cursor bitmaps have 0 (white actually) for
+    // any masked-off pixels.  Therefore every masked-off pixel would be wrong
+    // since we bit-flip all of the picture bits.  In practice, Cocoa doesn't
+    // seem to care, but we are following the documentation.
 
-    //traverse through the bitmap data
-    for (int i = 0; i < 16; ++i)
+    // Fill in the color (black/white) plane
+    for(int i=0; i<16; ++i)
     {
-        //bit alpha bit alpha ... :D
-
-        //Notice the = instead of |= -
-        //this is to avoid doing a memset earlier
-        data[i] = 0;
-
-        //do the rest of those bits and alphas :)
-        for (int shift = 0; shift < 32; ++shift)
-        {
-            const int bit = 1 << (shift >> 1);
-            data[i] |= ( !!( (pCursor->mask[i] & bit) ) ) << shift;
-            data[i] |= ( !( (pCursor->bits[i] & bit) ) ) << ++shift;
-        }
+        planes[0][2*i  ] = (~pCursor->bits[i] & pCursor->mask[i]) >> 8 & 0xff;
+        planes[0][2*i+1] = (~pCursor->bits[i] & pCursor->mask[i]) & 0xff;
+    }
+    // Fill in the alpha (i.e. mask) plane
+    for(int i=0; i<16; ++i)
+    {
+        planes[1][2*i  ] = pCursor->mask[i] >> 8 & 0xff;
+        planes[1][2*i+1] = pCursor->mask[i] & 0xff;
     }
 
     //add the representation (data) to the image
