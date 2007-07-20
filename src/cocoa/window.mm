@@ -595,6 +595,15 @@ void wxWindowCocoa::Cocoa_FrameChanged(void)
     GetEventHandler()->ProcessEvent(event);
 }
 
+bool wxWindowCocoa::SetCursor(const wxCursor &cursor)
+{
+    if(!wxWindowBase::SetCursor(cursor))
+        return false;
+    // Invalidate the cursor rects so the cursor will change
+    [[GetNSView() window] invalidateCursorRectsForView:GetNSView()];
+    return true;
+}
+
 bool wxWindowCocoa::Cocoa_resetCursorRects()
 {
     if(!m_cursor.GetNSCursor())
