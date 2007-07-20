@@ -2307,7 +2307,7 @@ gboolean wxDataViewCtrlInternal::iter_children( GtkTreeIter *iter, GtkTreeIter *
 {
     wxDataViewItem item( (void*) parent->user_data );
     
-    if (!m_wx_model->HasChildren( item ))
+    if (!m_wx_model->IsContainer( item ))
         return FALSE;
         
     wxGtkTreeModelNode *parent_node = FindNode( parent );
@@ -2327,7 +2327,7 @@ gboolean wxDataViewCtrlInternal::iter_children( GtkTreeIter *iter, GtkTreeIter *
 gboolean wxDataViewCtrlInternal::iter_has_child( GtkTreeIter *iter )
 {
     wxDataViewItem item( (void*) iter->user_data );
-    bool res = m_wx_model->HasChildren( item );
+    bool res = m_wx_model->IsContainer( item );
     
     if (!res)
         return FALSE;
@@ -2342,7 +2342,7 @@ gint wxDataViewCtrlInternal::iter_n_children( GtkTreeIter *iter )
 {
     wxDataViewItem item( (void*) iter->user_data );
     
-    if (!m_wx_model->HasChildren( item ))
+    if (!m_wx_model->IsContainer( item ))
         return 0;
     
     wxGtkTreeModelNode *parent_node = FindNode( iter );
@@ -2359,7 +2359,7 @@ gboolean wxDataViewCtrlInternal::iter_nth_child( GtkTreeIter *iter, GtkTreeIter 
     if (parent) id = (void*) parent->user_data;
     wxDataViewItem item( id );
     
-    if (!m_wx_model->HasChildren( item ))
+    if (!m_wx_model->IsContainer( item ))
         return FALSE;
     
     wxGtkTreeModelNode *parent_node = FindNode( parent );

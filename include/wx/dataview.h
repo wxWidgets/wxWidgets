@@ -104,7 +104,8 @@ public:
                            const wxDataViewItem &item, unsigned int col ) = 0;
 
     // define hierachy
-    virtual bool HasChildren( const wxDataViewItem &item ) const = 0;
+    virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const = 0;
+    virtual bool IsContainer( const wxDataViewItem &item ) const = 0;
     virtual wxDataViewItem GetFirstChild( const wxDataViewItem &parent ) const = 0;
     virtual wxDataViewItem GetNextSibling( const wxDataViewItem &item ) const = 0;
 

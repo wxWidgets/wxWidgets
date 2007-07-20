@@ -171,7 +171,7 @@ public:
     
     int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 )
     {
-        if (HasChildren(item1) && HasChildren(item2))
+        if (IsContainer(item1) && IsContainer(item2))
         {
             wxVariant value1,value2;
             GetValue( value1, item1, 0 );
@@ -230,12 +230,29 @@ public:
         }
     }
 
-    virtual bool HasChildren( const wxDataViewItem &item ) const
+    virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const
     {
+        // the invisble root node has no parent
+        if (!item.IsOk())
+            return wxDataViewItem(0);
+            
         MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
-        if (!node)
+        
+        // "MyMusic" also has no parent
+        if (node == m_root)
+            return wxDataViewItem(0);
+            
+        return wxDataViewItem( (void*) node->GetParent() );
+    }
+
+    virtual bool IsContainer( const wxDataViewItem &item ) const
+    {
+        // the invisble root node can have children (in
+        // our model always "MyMusic")
+        if (!item.IsOk())
             return true;
     
+        MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
         return node->IsContainer();
     }
     
@@ -261,14 +278,19 @@ public:
     virtual wxDataViewItem GetNextSibling( const wxDataViewItem &item ) const
     {
         MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
-        MyMusicModelNode *parent = node->GetParent();
-        if (!parent)
+        
+        // "MyMusic" has no siblings in our model
+        if (node == m_root)
             return wxDataViewItem(0);
 
+        MyMusicModelNode *parent = node->GetParent();
         int pos = parent->GetChildren().Index( node );
+        
+        // Something went wrong
         if (pos == wxNOT_FOUND)
             return wxDataViewItem(0);
             
+        // No more children
         if (pos == parent->GetChildCount()-1)
             return wxDataViewItem(0);
             

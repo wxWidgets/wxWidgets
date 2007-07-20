@@ -148,12 +148,12 @@ void wxDataViewModel::RemoveNotifier( wxDataViewModelNotifier *notifier )
 int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 )
 {
     // sort branches before leaves
-    bool item1_has_children = HasChildren(item1);
-    bool item2_has_children = HasChildren(item2);
+    bool item1_is_container = IsContainer(item1);
+    bool item2_is_container = IsContainer(item2);
     
-    if (item1_has_children && !item2_has_children)
+    if (item1_is_container && !item2_is_container)
         return 1;
-    if (item2_has_children && !item1_has_children)
+    if (item2_is_container && !item1_is_container)
         return -1;
     
     wxVariant value1,value2;
