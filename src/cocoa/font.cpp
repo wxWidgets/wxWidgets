@@ -60,7 +60,10 @@ int wxFont::GetPointSize() const
 
 bool wxFont::GetUnderlined() const
 {
-    return false;
+    if(M_FONTDATA)
+        return M_FONTDATA->m_underlined;
+    else
+        return false;
 }
 
 int wxFont::GetStyle() const
