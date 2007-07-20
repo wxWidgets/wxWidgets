@@ -589,8 +589,8 @@ AC_DEFUN([AC_FUNC_FSEEKO],
 [_AC_SYS_LARGEFILE_MACRO_VALUE(_LARGEFILE_SOURCE, 1,
    [ac_cv_sys_largefile_source],
    [Define to 1 to make fseeko visible on some hosts (e.g. glibc 2.2).],
-   [@%:@include <sys/types.h> /* for off_t */
-     #include <stdio.h>],
+   [[#include <sys/types.h> /* for off_t */
+     #include <stdio.h>]],
    [[int (*fp) (FILE *, off_t, int) = fseeko;
      return fseeko (stdin, 0, 0) && fp (stdin, 0, 0);]])
 
@@ -801,7 +801,7 @@ AC_DEFUN([AC_FUNC_GETMNTENT],
 # -lseq on Dynix/PTX, -lgen on Unixware.
 AC_SEARCH_LIBS(getmntent, [sun seq gen],
 	       [ac_cv_func_getmntent=yes
-		AC_DEFINE([HAVE_GETMNTENT], [],
+		AC_DEFINE([HAVE_GETMNTENT], [1],
 			  [Define to 1 if you have the `getmntent' function.])],
 	       [ac_cv_func_getmntent=no])
 ])
