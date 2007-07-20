@@ -1031,8 +1031,8 @@ void wxWindow::DoSetVirtualSize( int x, int y )
 
 bool wxWindow::SetFont(const wxFont& font)
 {
-    // TODO
-    return true;
+    // FIXME: We may need to handle wx font inheritance.
+    return wxWindowBase::SetFont(font);
 }
 
 #if 0 // these are used when debugging the algorithm.

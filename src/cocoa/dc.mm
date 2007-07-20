@@ -315,10 +315,24 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     NSPoint layoutLocation = [sm_cocoaNSLayoutManager locationForGlyphAtIndex:0];
     layoutLocation.x = 0.0;
     layoutLocation.y *= -1.0;
+
+    // Save the location as is for underlining
+    NSPoint underlineLocation = layoutLocation;
+
+    // Offset the location by the baseline for drawing the glyphs.
     layoutLocation.y += [[sm_cocoaNSLayoutManager typesetter] baselineOffsetInLayoutManager:sm_cocoaNSLayoutManager glyphIndex:0];
+
     if(m_backgroundMode==wxSOLID)
         [sm_cocoaNSLayoutManager drawBackgroundForGlyphRange:glyphRange  atPoint:NSZeroPoint];
     [sm_cocoaNSLayoutManager drawGlyphsForGlyphRange:glyphRange  atPoint:layoutLocation];
+
+    int underlineStyle = GetFont().GetUnderlined() ? NSUnderlineStyleSingle : NSUnderlineStyleNone;
+    NSRange lineGlyphRange;
+    NSRect lineRect = [sm_cocoaNSLayoutManager lineFragmentRectForGlyphAtIndex:0 effectiveRange:&lineGlyphRange];
+
+    [sm_cocoaNSLayoutManager underlineGlyphRange:glyphRange underlineType:underlineStyle
+        lineFragmentRect:lineRect lineFragmentGlyphRange:lineGlyphRange
+        containerOrigin:underlineLocation];
 
     [context restoreGraphicsState];
 }
@@ -384,6 +398,11 @@ bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 
 void wxDC::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord xc, wxCoord yc)
 {
+}
+
+void wxDC::SetFont(const wxFont& font)
+{
+    m_font = font;
 }
 
 void wxDC::SetPen(const wxPen& pen)
