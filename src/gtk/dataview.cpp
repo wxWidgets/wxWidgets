@@ -2312,6 +2312,9 @@ gboolean wxDataViewCtrlInternal::iter_children( GtkTreeIter *iter, GtkTreeIter *
         
     wxGtkTreeModelNode *parent_node = FindNode( parent );
     BuildBranch( parent_node );
+    
+    if (parent_node->GetChildren().GetCount() == 0)
+        return FALSE;
         
     wxGtkTreeModelNode *first_child_node = parent_node->GetChildren().Item( 0 );
     
@@ -2324,8 +2327,15 @@ gboolean wxDataViewCtrlInternal::iter_children( GtkTreeIter *iter, GtkTreeIter *
 gboolean wxDataViewCtrlInternal::iter_has_child( GtkTreeIter *iter )
 {
     wxDataViewItem item( (void*) iter->user_data );
+    bool res = m_wx_model->HasChildren( item );
     
-    return m_wx_model->HasChildren( item );
+    if (!res)
+        return FALSE;
+    
+    wxGtkTreeModelNode *node = FindNode( iter );
+    BuildBranch( node );
+    
+    return (node->GetChildren().GetCount() > 0);
 }
 
 gint wxDataViewCtrlInternal::iter_n_children( GtkTreeIter *iter )
