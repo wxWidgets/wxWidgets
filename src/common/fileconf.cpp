@@ -1960,47 +1960,66 @@ int CompareGroups(wxFileConfigGroup *p1, wxFileConfigGroup *p2)
 // undo FilterOutValue
 static wxString FilterInValue(const wxString& str)
 {
-  wxString strResult;
-  strResult.Alloc(str.Len());
+    wxString strResult;
+    if ( str.empty() )
+        return strResult;
 
-  bool bQuoted = !str.empty() && str[0] == '"';
+    strResult.reserve(str.length());
 
-  for ( size_t n = bQuoted ? 1 : 0; n < str.Len(); n++ ) {
-    if ( str[n] == wxT('\\') ) {
-      switch ( str[++n].GetValue() ) {
-        case wxT('n'):
-          strResult += wxT('\n');
-          break;
+    wxString::const_iterator i = str.begin();
+    const bool bQuoted = *i == '"';
+    if ( bQuoted )
+        ++i;
 
-        case wxT('r'):
-          strResult += wxT('\r');
-          break;
+    for ( const wxString::const_iterator end = str.end(); i != end; ++i )
+    {
+        if ( *i == wxT('\\') )
+        {
+            if ( ++i == end )
+            {
+                wxLogWarning(_("trailing backslash ignored in '%s'"), str.c_str());
+                break;
+            }
 
-        case wxT('t'):
-          strResult += wxT('\t');
-          break;
+            switch ( (*i).GetValue() )
+            {
+                case wxT('n'):
+                    strResult += wxT('\n');
+                    break;
 
-        case wxT('\\'):
-          strResult += wxT('\\');
-          break;
+                case wxT('r'):
+                    strResult += wxT('\r');
+                    break;
 
-        case wxT('"'):
-          strResult += wxT('"');
-          break;
-      }
+                case wxT('t'):
+                    strResult += wxT('\t');
+                    break;
+
+                case wxT('\\'):
+                    strResult += wxT('\\');
+                    break;
+
+                case wxT('"'):
+                    strResult += wxT('"');
+                    break;
+            }
+        }
+        else // not a backslash
+        {
+            if ( *i != wxT('"') || !bQuoted )
+            {
+                strResult += *i;
+            }
+            else if ( i != end - 1 )
+            {
+                wxLogWarning(_("unexpected \" at position %d in '%s'."),
+                             i - str.begin(), str.c_str());
+            }
+            //else: it's the last quote of a quoted string, ok
+        }
     }
-    else {
-      if ( str[n] != wxT('"') || !bQuoted )
-        strResult += str[n];
-      else if ( n != str.Len() - 1 ) {
-        wxLogWarning(_("unexpected \" at position %d in '%s'."),
-                     n, str.c_str());
-      }
-      //else: it's the last quote of a quoted string, ok
-    }
-  }
 
-  return strResult;
+    return strResult;
 }
 
 // quote the string before writing it to file
