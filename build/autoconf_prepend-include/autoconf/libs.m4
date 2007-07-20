@@ -1,7 +1,7 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Checking for libraries.
 # Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-# 2002 Free Software Foundation, Inc.
+# 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,8 +15,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-# 02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
 
 # As a special exception, the Free Software Foundation gives unlimited
 # permission to copy, distribute and modify the configure scripts that
@@ -67,24 +67,29 @@
 # --------------------------------------------------------
 # Search for a library defining FUNC, if it's not already available.
 AC_DEFUN([AC_SEARCH_LIBS],
-[AC_CACHE_CHECK([for library containing $1], [ac_cv_search_$1],
+[AS_VAR_PUSHDEF([ac_Search], [ac_cv_search_$1])dnl
+AC_CACHE_CHECK([for library containing $1], [ac_Search],
 [ac_func_search_save_LIBS=$LIBS
-ac_cv_search_$1=no
-AC_LINK_IFELSE([AC_LANG_CALL([], [$1])],
-	       [ac_cv_search_$1="none required"])
-if test "$ac_cv_search_$1" = no; then
-  for ac_lib in $2; do
+AC_LANG_CONFTEST([AC_LANG_CALL([], [$1])])
+for ac_lib in '' $2; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
     LIBS="-l$ac_lib $5 $ac_func_search_save_LIBS"
-    AC_LINK_IFELSE([AC_LANG_CALL([], [$1])],
-		   [ac_cv_search_$1="-l$ac_lib"
-break])
-  done
-fi
+  fi
+  AC_LINK_IFELSE([], [AS_VAR_SET([ac_Search], [$ac_res])])
+  AS_VAR_SET_IF([ac_Search], [break])dnl
+done
+AS_VAR_SET_IF([ac_Search], , [AS_VAR_SET([ac_Search], [no])])dnl
+rm conftest.$ac_ext
 LIBS=$ac_func_search_save_LIBS])
-AS_IF([test "$ac_cv_search_$1" != no],
-  [test "$ac_cv_search_$1" = "none required" || LIBS="$ac_cv_search_$1 $LIBS"
+ac_res=AS_VAR_GET([ac_Search])
+AS_IF([test "$ac_res" != no],
+  [test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
   $3],
       [$4])dnl
+AS_VAR_POPDEF([ac_Search])dnl
 ])
 
 
@@ -118,14 +123,14 @@ AC_DEFUN([AC_CHECK_LIB],
 AS_LITERAL_IF([$1],
 	      [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$1_$2])],
 	      [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$1''_$2])])dnl
-AC_CACHE_CHECK([for $2 in -l$1], ac_Lib,
+AC_CACHE_CHECK([for $2 in -l$1], [ac_Lib],
 [ac_check_lib_save_LIBS=$LIBS
 LIBS="-l$1 $5 $LIBS"
 AC_LINK_IFELSE([AC_LANG_CALL([], [$2])],
-	       [AS_VAR_SET(ac_Lib, yes)],
-	       [AS_VAR_SET(ac_Lib, no)])
+	       [AS_VAR_SET([ac_Lib], [yes])],
+	       [AS_VAR_SET([ac_Lib], [no])])
 LIBS=$ac_check_lib_save_LIBS])
-AS_IF([test AS_VAR_GET(ac_Lib) = yes],
+AS_IF([test AS_VAR_GET([ac_Lib]) = yes],
       [m4_default([$3], [AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$1))
   LIBS="-l$1 $LIBS"
 ])],
@@ -137,8 +142,8 @@ AS_VAR_POPDEF([ac_Lib])dnl
 # AH_CHECK_LIB(LIBNAME)
 # ---------------------
 m4_define([AH_CHECK_LIB],
-[AH_TEMPLATE(AS_TR_CPP(HAVE_LIB$1),
-	     [Define to 1 if you have the `]$1[' library (-l]$1[).])])
+[AH_TEMPLATE(AS_TR_CPP([HAVE_LIB$1]),
+	     [Define to 1 if you have the `$1' library (-l$1).])])
 
 
 # AC_HAVE_LIBRARY(LIBRARY,
@@ -180,21 +185,27 @@ m4_popdef([AC_Lib_Name])dnl
 # Internal subroutine of _AC_PATH_X.
 # Set ac_x_includes and/or ac_x_libraries.
 m4_define([_AC_PATH_X_XMKMF],
-[rm -fr conftest.dir
+[AC_ARG_VAR(XMKMF, [Path to xmkmf, Makefile generator for X Window System])dnl
+rm -f -r conftest.dir
 if mkdir conftest.dir; then
   cd conftest.dir
-  # Make sure to not put "make" in the Imakefile rules, since we grep it out.
   cat >Imakefile <<'_ACEOF'
-acfindx:
-	@echo 'ac_im_incroot="${INCROOT}"; ac_im_usrlibdir="${USRLIBDIR}"; ac_im_libdir="${LIBDIR}"'
+incroot:
+	@echo incroot='${INCROOT}'
+usrlibdir:
+	@echo usrlibdir='${USRLIBDIR}'
+libdir:
+	@echo libdir='${LIBDIR}'
 _ACEOF
-  if (xmkmf) >/dev/null 2>/dev/null && test -f Makefile; then
+  if (export CC; ${XMKMF-xmkmf}) >/dev/null 2>/dev/null && test -f Makefile; then
     # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
-    eval `${MAKE-make} acfindx 2>/dev/null | grep -v make`
+    for ac_var in incroot usrlibdir libdir; do
+      eval "ac_im_$ac_var=\`\${MAKE-make} $ac_var 2>/dev/null | sed -n 's/^$ac_var=//p'\`"
+    done
     # Open Windows xmkmf reportedly sets LIBDIR instead of USRLIBDIR.
     for ac_extension in a so sl; do
-      if test ! -f $ac_im_usrlibdir/libX11.$ac_extension &&
-	 test -f $ac_im_libdir/libX11.$ac_extension; then
+      if test ! -f "$ac_im_usrlibdir/libX11.$ac_extension" &&
+	 test -f "$ac_im_libdir/libX11.$ac_extension"; then
 	ac_im_usrlibdir=$ac_im_libdir; break
       fi
     done
@@ -202,7 +213,7 @@ _ACEOF
     # bogus both because they are the default anyway, and because
     # using them would break gcc on systems where it needs fixed includes.
     case $ac_im_incroot in
-	/usr/include) ;;
+	/usr/include) ac_x_includes= ;;
 	*) test -f "$ac_im_incroot/X11/Xos.h" && ac_x_includes=$ac_im_incroot;;
     esac
     case $ac_im_usrlibdir in
@@ -211,7 +222,7 @@ _ACEOF
     esac
   fi
   cd ..
-  rm -fr conftest.dir
+  rm -f -r conftest.dir
 fi
 ])# _AC_PATH_X_XMKMF
 
@@ -259,13 +270,13 @@ ac_x_header_dirs='
 /usr/openwin/share/include'
 
 if test "$ac_x_includes" = no; then
-  # Guess where to find include files, by looking for a specified header file.
+  # Guess where to find include files, by looking for Xlib.h.
   # First, try using that file with no special directory specified.
-  AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <X11/Intrinsic.h>])],
+  AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <X11/Xlib.h>])],
 [# We can compile using X headers with no special include directory.
 ac_x_includes=],
 [for ac_dir in $ac_x_header_dirs; do
-  if test -r "$ac_dir/X11/Intrinsic.h"; then
+  if test -r "$ac_dir/X11/Xlib.h"; then
     ac_x_includes=$ac_dir
     break
   fi
@@ -277,9 +288,9 @@ if test "$ac_x_libraries" = no; then
   # See if we find them without any special options.
   # Don't add to $LIBS permanently.
   ac_save_LIBS=$LIBS
-  LIBS="-lXt $LIBS"
-  AC_LINK_IFELSE([AC_LANG_PROGRAM([@%:@include <X11/Intrinsic.h>],
-				  [XtMalloc (0)])],
+  LIBS="-lX11 $LIBS"
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([@%:@include <X11/Xlib.h>],
+				  [XrmInitialize ()])],
 		 [LIBS=$ac_save_LIBS
 # We can link X programs with no special library path.
 ac_x_libraries=],
@@ -288,7 +299,7 @@ for ac_dir in `echo "$ac_x_includes $ac_x_header_dirs" | sed s/include/lib/g`
 do
   # Don't even attempt the hair of trying to link an X program!
   for ac_extension in a so sl; do
-    if test -r $ac_dir/libXt.$ac_extension; then
+    if test -r "$ac_dir/libX11.$ac_extension"; then
       ac_x_libraries=$ac_dir
       break 2
     fi
@@ -307,14 +318,16 @@ AC_DEFUN([_AC_PATH_X],
 ac_x_includes=no ac_x_libraries=no
 _AC_PATH_X_XMKMF
 _AC_PATH_X_DIRECT
-if test "$ac_x_includes" = no || test "$ac_x_libraries" = no; then
-  # Didn't find X anywhere.  Cache the known absence of X.
-  ac_cv_have_x="have_x=no"
-else
-  # Record where we found X for the cache.
-  ac_cv_have_x="have_x=yes \
-		ac_x_includes=$ac_x_includes ac_x_libraries=$ac_x_libraries"
-fi])dnl
+case $ac_x_includes,$ac_x_libraries in #(
+  no,* | *,no | *\'*)
+    # Didn't find X, or a directory has "'" in its name.
+    ac_cv_have_x="have_x=no";; #(
+  *)
+    # Record where we found X for the cache.
+    ac_cv_have_x="have_x=yes\
+	ac_x_includes='$ac_x_includes'\
+	ac_x_libraries='$ac_x_libraries'"
+esac])dnl
 ])
 
 
@@ -331,23 +344,19 @@ m4_divert_once([HELP_BEGIN], [
 X features:
   --x-includes=DIR    X include files are in DIR
   --x-libraries=DIR   X library files are in DIR])dnl
+AC_MSG_CHECKING([for X])
 
-if test "x$ac_path_x_has_been_run" != xyes; then
-  AC_MSG_CHECKING([for X])
-
-ac_path_x_has_been_run=yes
 AC_ARG_WITH(x, [  --with-x                use the X Window System])
 # $have_x is `yes', `no', `disabled', or empty when we do not yet know.
 if test "x$with_x" = xno; then
   # The user explicitly disabled X.
   have_x=disabled
 else
-  if test "x$x_includes" != xNONE && test "x$x_libraries" != xNONE; then
-    # Both variables are already set.
-    have_x=yes
-  else
-    _AC_PATH_X
-  fi
+  case $x_includes,$x_libraries in #(
+    *\'*) AC_MSG_ERROR([Cannot use X directory names containing ']);; #(
+    *,NONE | NONE,*) _AC_PATH_X;; #(
+    *) have_x=yes;;
+  esac
   eval "$ac_cv_have_x"
 fi # $with_x != no
 
@@ -359,16 +368,12 @@ else
   test "x$x_includes" = xNONE && x_includes=$ac_x_includes
   test "x$x_libraries" = xNONE && x_libraries=$ac_x_libraries
   # Update the cache value to reflect the command line values.
-  ac_cv_have_x="have_x=yes \
-		ac_x_includes=$x_includes ac_x_libraries=$x_libraries"
-  # It might be that x_includes is empty (headers are found in the
-  # standard search path. Then output the corresponding message
-  ac_out_x_includes=$x_includes
-  test "x$x_includes" = x && ac_out_x_includes="in standard search path"
-  AC_MSG_RESULT([libraries $x_libraries, headers $ac_out_x_includes])
+  ac_cv_have_x="have_x=yes\
+	ac_x_includes='$x_includes'\
+	ac_x_libraries='$x_libraries'"
+  AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
 fi
-
-fi])# AC_PATH_X
+])# AC_PATH_X
 
 
 
@@ -390,29 +395,22 @@ else
   # It would also be nice to do this for all -L options, not just this one.
   if test -n "$x_libraries"; then
     X_LIBS="$X_LIBS -L$x_libraries"
-dnl FIXME: banish uname from this macro!
     # For Solaris; some versions of Sun CC require a space after -R and
     # others require no space.  Words are not sufficient . . . .
-    case `(uname -sr) 2>/dev/null` in
-    "SunOS 5"*)
-      AC_MSG_CHECKING([whether -R must be followed by a space])
-      ac_xsave_LIBS=$LIBS; LIBS="$LIBS -R$x_libraries"
-      AC_LINK_IFELSE([AC_LANG_PROGRAM()], ac_R_nospace=yes, ac_R_nospace=no)
-      if test $ac_R_nospace = yes; then
-	AC_MSG_RESULT([no])
-	X_LIBS="$X_LIBS -R$x_libraries"
-      else
-	LIBS="$ac_xsave_LIBS -R $x_libraries"
-	AC_LINK_IFELSE([AC_LANG_PROGRAM()], ac_R_space=yes, ac_R_space=no)
-	if test $ac_R_space = yes; then
-	  AC_MSG_RESULT([yes])
-	  X_LIBS="$X_LIBS -R $x_libraries"
-	else
-	  AC_MSG_RESULT([neither works])
-	fi
-      fi
-      LIBS=$ac_xsave_LIBS
-    esac
+    AC_MSG_CHECKING([whether -R must be followed by a space])
+    ac_xsave_LIBS=$LIBS; LIBS="$LIBS -R$x_libraries"
+    ac_xsave_[]_AC_LANG_ABBREV[]_werror_flag=$ac_[]_AC_LANG_ABBREV[]_werror_flag
+    ac_[]_AC_LANG_ABBREV[]_werror_flag=yes
+    AC_LINK_IFELSE([AC_LANG_PROGRAM()],
+      [AC_MSG_RESULT([no])
+       X_LIBS="$X_LIBS -R$x_libraries"],
+      [LIBS="$ac_xsave_LIBS -R $x_libraries"
+       AC_LINK_IFELSE([AC_LANG_PROGRAM()],
+	 [AC_MSG_RESULT([yes])
+	  X_LIBS="$X_LIBS -R $x_libraries"],
+	 [AC_MSG_RESULT([neither works])])])
+    ac_[]_AC_LANG_ABBREV[]_werror_flag=$ac_xsave_[]_AC_LANG_ABBREV[]_werror_flag
+    LIBS=$ac_xsave_LIBS
   fi
 
   # Check for system-dependent libraries X programs must link with.
