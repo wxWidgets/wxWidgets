@@ -2,10 +2,12 @@
 // Name:        src/cocoa/cursor.mm
 // Purpose:     wxCursor class for wxCocoa
 // Author:      Ryan Norton
+//              David Elliott
 // Modified by:
 // Created:     2004-10-05
 // RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
+//              2007, Software 2000 Ltd.
 // Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -15,11 +17,13 @@
 
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
+    #include "wx/log.h"
 #endif //WX_PRECOMP
 
 #import <AppKit/NSCursor.h>
 #import <AppKit/NSImage.h>
 #include "wx/cocoa/string.h"
+#include "wx/cocoa/autorelease.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxBitmap)
 
@@ -29,6 +33,11 @@ typedef struct tagClassicCursor
     wxUint16 mask[16];
     wxInt16 hotspot[2];
 }ClassicCursor;
+
+///////////////////////////////////////////////////////////////////////////
+// This is a direct copy from src/mac/carbon/cursor.cpp and should be
+// changed to use common code if we plan on keeping it this way.
+// Note that this is basically an array of classic 'CURS' resources.
 
 const short kwxCursorBullseye = 0 ;
 const short kwxCursorBlank = 1 ;
@@ -172,7 +181,15 @@ ClassicCursor gMacCursors[kwxCursorLast+1] =
 
 } ;
 
-NSCursor* wxGetStockCursor( short sIndex )
+// End of data copied from src/mac/carbon/cursor.cpp
+///////////////////////////////////////////////////////////////////////////
+
+/* NSCursorCreateWithPrivateId
+ * Returns a newly allocated (i.e. retainCount == 1) NSCursor based on the
+ * classic Mac OS cursor data in this source file.  This allows us to
+ * implement the "stock" wxWidgets cursors which aren't present in Cocoa.
+ */
+static inline NSCursor* NSCursorCreateWithPrivateId(short sIndex)
 {
     ClassicCursor* pCursor = &gMacCursors[sIndex];
 
@@ -180,42 +197,50 @@ NSCursor* wxGetStockCursor( short sIndex )
     //identical mask that is 1 for on and 0 for off
     NSImage *theImage = [[NSImage alloc] initWithSize:NSMakeSize(16.0,16.0)];
 
-    //NSCursor takes an NSImage takes a number of Representations - here
-    //we need only one for the raw data
-    NSBitmapImageRep *theRep =
-    [[NSBitmapImageRep alloc]
-      initWithBitmapDataPlanes: nil  // Allocate the buffer for us :)
-      pixelsWide: 16
-      pixelsHigh: 16
-      bitsPerSample: 1
-      samplesPerPixel: 2
-      hasAlpha: YES                  // Well, more like a mask...
-      isPlanar: NO
-      colorSpaceName: NSCalibratedWhiteColorSpace // Normal B/W - 0 black 1 white
-      bytesPerRow: 0     // I don't care - figure it out for me :)
-      bitsPerPixel: 2];  // bitsPerSample * samplesPerPixel
+    NSBitmapImageRep *theRep = [[NSBitmapImageRep alloc]
+        initWithBitmapDataPlanes: NULL  // Tell Cocoa to allocate the planes for us.
+        pixelsWide: 16      // All classic cursors are 16x16
+        pixelsHigh: 16
+        bitsPerSample: 1    // All classic cursors are bitmaps with bitmasks
+        samplesPerPixel: 2  // Sample 0:image 1:mask
+        hasAlpha: YES       // Identify last sample as a mask
+        isPlanar: YES       // Use a separate array for each sample
+        colorSpaceName: NSCalibratedWhiteColorSpace // 0.0=black 1.0=white
+        bytesPerRow: 2      // Rows in each plane are on 2-byte boundaries (no pad)
+        bitsPerPixel: 1];   // same as bitsPerSample since data is planar
+    // XXX: Should we use NSDeviceWhiteColorSpace? Does it matter?
+    
+    // Ensure that Cocoa allocated 2 and only 2 of the 5 possible planes
+    unsigned char *planes[5];
+    [theRep getBitmapDataPlanes:planes];
+    wxASSERT(planes[0] != NULL);
+    wxASSERT(planes[1] != NULL);
+    wxASSERT(planes[2] == NULL);
+    wxASSERT(planes[3] == NULL);
+    wxASSERT(planes[4] == NULL);
 
-    //unsigned int is better to put data in then a void*
-    //note that working with bitfields would be a lot better here -
-    //but since it breaks some compilers...
-    wxUint32 *data = (wxUint32 *)[theRep bitmapData];
+    // NOTE1: The Cursor's bits field is white=0 black=1.. thus the bitwise-not
+    // Why not use NSCalibratedBlackColorSpace?  Because that reverses the
+    // sense of the alpha (mask) plane.
+    // NOTE2: The mask data is 0=off 1=on
+    // NOTE3: Cocoa asks for "premultiplied" color planes.  Since we have a
+    // 1-bit color plane and a 1-bit alpha plane we can just do a bitwise-and
+    // on the two.  The original cursor bitmaps have 0 (white actually) for
+    // any masked-off pixels.  Therefore every masked-off pixel would be wrong
+    // since we bit-flip all of the picture bits.  In practice, Cocoa doesn't
+    // seem to care, but we are following the documentation.
 
-    //traverse through the bitmap data
-    for (int i = 0; i < 16; ++i)
+    // Fill in the color (black/white) plane
+    for(int i=0; i<16; ++i)
     {
-        //bit alpha bit alpha ... :D
-
-        //Notice the = instead of |= -
-        //this is to avoid doing a memset earlier
-        data[i] = 0;
-
-        //do the rest of those bits and alphas :)
-        for (int shift = 0; shift < 32; ++shift)
-        {
-            const int bit = 1 << (shift >> 1);
-            data[i] |= ( !!( (pCursor->mask[i] & bit) ) ) << shift;
-            data[i] |= ( !( (pCursor->bits[i] & bit) ) ) << ++shift;
-        }
+        planes[0][2*i  ] = (~pCursor->bits[i] & pCursor->mask[i]) >> 8 & 0xff;
+        planes[0][2*i+1] = (~pCursor->bits[i] & pCursor->mask[i]) & 0xff;
+    }
+    // Fill in the alpha (i.e. mask) plane
+    for(int i=0; i<16; ++i)
+    {
+        planes[1][2*i  ] = pCursor->mask[i] >> 8 & 0xff;
+        planes[1][2*i+1] = pCursor->mask[i] & 0xff;
     }
 
     //add the representation (data) to the image
@@ -232,6 +257,13 @@ NSCursor* wxGetStockCursor( short sIndex )
 
     //return the new cursor
     return theCursor;
+}
+
+// TODO: Remove in trunk.. needed for 2.8
+NSCursor* wxGetStockCursor( short sIndex )
+{
+    wxLogDebug("Please do not call wxGetStockCursor.");
+    return NSCursorCreateWithPrivateId(sIndex);
 }
 
 wxCursorRefData::wxCursorRefData() :
@@ -283,133 +315,129 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
     [theImage release];
 }
 
-// Cursors by stock number
-wxCursor::wxCursor(int cursor_type)
+// Returns a system cursor given the NSCursor class method selector or
+// nil if NSCursor does not respond to the message.
+// For example, OS X before 10.3 won't respond to pointingHandCursor.
+static inline NSCursor* GetSystemCursorWithSelector(SEL cursorSelector)
 {
-  m_refData = new wxCursorRefData;
+    if([NSCursor respondsToSelector: cursorSelector])
+        return [NSCursor performSelector: cursorSelector];
+    else
+        return nil;
+}
 
-  switch (cursor_type)
-  {
-    case wxCURSOR_IBEAM:
-      M_CURSORDATA->m_hCursor = [[NSCursor IBeamCursor] retain];
-      break;
-    case wxCURSOR_ARROW:
-      M_CURSORDATA->m_hCursor = [[NSCursor arrowCursor] retain];
-      break;
-/* TODO:
-    case wxCURSOR_COPY_ARROW:
-        M_CURSORDATA->m_themeCursor = kThemeCopyArrowCursor ;
-        break;
-    case wxCURSOR_WAIT:
-        M_CURSORDATA->m_themeCursor = kThemeWatchCursor ;
-        break;
-    case wxCURSOR_CROSS:
-        M_CURSORDATA->m_themeCursor = kThemeCrossCursor;
-        break;
-    case wxCURSOR_SIZENWSE:
-        {
-            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorSizeNWSE);
-        }
-        break;
-*/
-    case wxCURSOR_SIZENESW:
-        {
-            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorSizeNESW);
-        }
-        break;
-/* TODO:
-    case wxCURSOR_SIZEWE:
-        {
-            M_CURSORDATA->m_themeCursor = kThemeResizeLeftRightCursor;
-        }
-        break;
-*/
-    case wxCURSOR_SIZENS:
-        {
-            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorSizeNS);
-        }
-        break;
-    case wxCURSOR_SIZING:
-        {
-            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorSize);
-        }
-        break;
-/* TODO:
-    case wxCURSOR_HAND:
-        {
-            M_CURSORDATA->m_themeCursor = kThemePointingHandCursor;
-        }
-        break;
-*/
-    case wxCURSOR_BULLSEYE:
-        {
-            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorBullseye);
-        }
-        break;
-    case wxCURSOR_PENCIL:
-        {
-            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorPencil);
-        }
-        break;
-    case wxCURSOR_MAGNIFIER:
-        {
-            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorMagnifier);
-        }
-        break;
-    case wxCURSOR_NO_ENTRY:
-        {
-            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorNoEntry);
-        }
-        break;
-/*  TODO:
-    case wxCURSOR_WATCH:
-        {
-            M_CURSORDATA->m_themeCursor = kThemeWatchCursor;
-            break;
-        }
-*/
-    case wxCURSOR_PAINT_BRUSH:
-        {
-            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorPaintBrush);
-            break;
-        }
-    case wxCURSOR_POINT_LEFT:
-        {
-            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorPointLeft);
-            break;
-        }
-    case wxCURSOR_POINT_RIGHT:
-        {
-            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorPointRight);
-            break;
-        }
-    case wxCURSOR_QUESTION_ARROW:
-        {
-            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorQuestionArrow);
-            break;
-        }
-    case wxCURSOR_BLANK:
-        {
-            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorBlank);
-            break;
-        }
-    case wxCURSOR_RIGHT_ARROW:
-        {
-            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorRightArrow);
-            break;
-        }
-    case wxCURSOR_SPRAYCAN:
-        {
-            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorRoller);
-            break;
-        }
-    case wxCURSOR_CHAR:
-    case wxCURSOR_LEFT_BUTTON:
-    case wxCURSOR_RIGHT_BUTTON:
-    case wxCURSOR_MIDDLE_BUTTON:
-    default:
-        break;
+// Please maintain order as if this were an array keyed on wxStockCursor
+static inline SEL GetCursorSelectorForStockCursor(int stock_cursor_id)
+{
+    switch(stock_cursor_id)
+    {
+    case wxCURSOR_ARROW:            return @selector(arrowCursor);
+    case wxCURSOR_RIGHT_ARROW:      break;
+    case wxCURSOR_BULLSEYE:         break;
+    case wxCURSOR_CHAR:             break;
+    case wxCURSOR_CROSS:            return @selector(crosshairCursor);
+    case wxCURSOR_HAND:             return @selector(pointingHandCursor);
+    case wxCURSOR_IBEAM:            return @selector(IBeamCursor);
+    case wxCURSOR_LEFT_BUTTON:      break;
+    case wxCURSOR_MAGNIFIER:        break;
+    case wxCURSOR_MIDDLE_BUTTON:    break;
+    case wxCURSOR_NO_ENTRY:         break;
+    case wxCURSOR_PAINT_BRUSH:      break;
+    case wxCURSOR_PENCIL:           break;
+    case wxCURSOR_POINT_LEFT:       break;
+    case wxCURSOR_POINT_RIGHT:      break;
+    case wxCURSOR_QUESTION_ARROW:   break;
+    case wxCURSOR_RIGHT_BUTTON:     break;
+    case wxCURSOR_SIZENESW:         break;
+    case wxCURSOR_SIZENS:           return @selector(resizeUpDownCursor);
+    case wxCURSOR_SIZENWSE:         break;
+    case wxCURSOR_SIZEWE:           return @selector(resizeLeftRightCursor);
+    case wxCURSOR_SIZING:           break;
+    case wxCURSOR_SPRAYCAN:         break;
+    case wxCURSOR_WAIT:             break;
+    case wxCURSOR_WATCH:            break;
+    case wxCURSOR_BLANK:            break;
+    case wxCURSOR_ARROWWAIT:        break;
+    default:                        break;
     }
+    return NULL;
+}
+
+// Please maintain order as if this were an array keyed on wxStockCursor
+static inline int GetPrivateCursorIdForStockCursor(int stock_cursor_id)
+{
+    switch(stock_cursor_id)
+    {
+    case wxCURSOR_ARROW:            break;  // NSCursor
+    case wxCURSOR_RIGHT_ARROW:      return kwxCursorRightArrow;
+    case wxCURSOR_BULLSEYE:         return kwxCursorBullseye;
+    case wxCURSOR_CHAR:             break;
+    case wxCURSOR_CROSS:            break;  // NSCursor
+    case wxCURSOR_HAND:             break;  // NSCursor (OS X >= 10.3)
+    case wxCURSOR_IBEAM:            break;  // NSCursor
+    case wxCURSOR_LEFT_BUTTON:      break;
+    case wxCURSOR_MAGNIFIER:        return kwxCursorMagnifier;
+    case wxCURSOR_MIDDLE_BUTTON:    break;
+    case wxCURSOR_NO_ENTRY:         return kwxCursorNoEntry;
+    case wxCURSOR_PAINT_BRUSH:      return kwxCursorPaintBrush;
+    case wxCURSOR_PENCIL:           return kwxCursorPencil;
+    case wxCURSOR_POINT_LEFT:       return kwxCursorPointLeft;
+    case wxCURSOR_POINT_RIGHT:      return kwxCursorPointRight;
+    case wxCURSOR_QUESTION_ARROW:   return kwxCursorQuestionArrow;
+    case wxCURSOR_RIGHT_BUTTON:     break;
+    case wxCURSOR_SIZENESW:         return kwxCursorSizeNESW;
+    case wxCURSOR_SIZENS:           return kwxCursorSizeNS;  // also NSCursor
+    case wxCURSOR_SIZENWSE:         return kwxCursorSizeNWSE;
+    case wxCURSOR_SIZEWE:           break;  // NSCursor
+    case wxCURSOR_SIZING:           return kwxCursorSize;
+    case wxCURSOR_SPRAYCAN:         return kwxCursorRoller;
+    case wxCURSOR_WAIT:             break;
+    case wxCURSOR_WATCH:            break;
+    case wxCURSOR_BLANK:            return kwxCursorBlank;
+    case wxCURSOR_ARROWWAIT:        break;
+    default:                        break;
+    }
+    return -1;
+}
+
+// Cursors by stock number (enum wxStockCursor)
+wxCursor::wxCursor(int stock_cursor_id)
+{
+    m_refData = new wxCursorRefData;
+
+    M_CURSORDATA->m_hCursor = nil;
+    
+    wxCHECK_RET( stock_cursor_id > wxCURSOR_NONE && stock_cursor_id < wxCURSOR_MAX,
+            wxT("invalid cursor id in wxCursor() ctor") );
+
+    // Stage 1: Try a system cursor
+    SEL cursorSelector;
+    if( (cursorSelector = GetCursorSelectorForStockCursor(stock_cursor_id)) != NULL)
+    {
+        M_CURSORDATA->m_hCursor = [GetSystemCursorWithSelector(cursorSelector) retain];
+    }
+
+    // TODO: Provide a pointing hand for OS X < 10.3 if desired
+
+    // Stage 2: Try one of the 'CURS'-style cursors
+    if(M_CURSORDATA->m_hCursor == nil)
+    {
+        int privateId;
+        if( (privateId = GetPrivateCursorIdForStockCursor(stock_cursor_id)) >= 0)
+        {   // wxGetStockCursor is not a get method but an alloc method.
+            M_CURSORDATA->m_hCursor = NSCursorCreateWithPrivateId(privateId);
+        }
+    }
+
+    // Stage 3: Give up, complain, and use a normal arrow
+    if(M_CURSORDATA->m_hCursor == nil)
+    {
+        wxLogDebug("Could not find suitable cursor for wxStockCursor = %d.  Using normal pointer.", stock_cursor_id);
+        M_CURSORDATA->m_hCursor = [[NSCursor arrowCursor] retain];
+    }
+
+    // This should never happen as the arrowCursor should always exist.
+    wxASSERT(M_CURSORDATA->m_hCursor != nil);
 }
 
 wxCursor::~wxCursor()
