@@ -15,6 +15,22 @@
 #define _WX_MSW_CHKCONF_H_
 
 /* ensure that MSW-specific settings are defined */
+#ifndef wxUSE_ACTIVEX
+#    ifdef wxABORT_ON_CONFIG_ERROR
+#        error "wxUSE_ACTIVEX must be defined."
+#    else
+#        define wxUSE_ACTIVEX 0
+#    endif
+#endif /* !defined(wxUSE_ACTIVEX) */
+
+#ifndef wxUSE_CRASHREPORT
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_CRASHREPORT must be defined."
+#   else
+#       define wxUSE_CRASHREPORT 0
+#   endif
+#endif /* !defined(wxUSE_CRASHREPORT) */
+
 #ifndef wxUSE_DC_CACHEING
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_DC_CACHEING must be defined"
@@ -23,27 +39,61 @@
 #   endif
 #endif /* wxUSE_DC_CACHEING */
 
+#ifndef wxUSE_DIALUP_MANAGER
+#    ifdef wxABORT_ON_CONFIG_ERROR
+#        error "wxUSE_DIALUP_MANAGER must be defined."
+#    else
+#        define wxUSE_DIALUP_MANAGER 0
+#    endif
+#endif /* !defined(wxUSE_DIALUP_MANAGER) */
 
-/*
- * disable the settings which don't work for some compilers
- */
+#ifndef wxUSE_MS_HTML_HELP
+#    ifdef wxABORT_ON_CONFIG_ERROR
+#        error "wxUSE_MS_HTML_HELP must be defined."
+#    else
+#        define wxUSE_MS_HTML_HELP 0
+#    endif
+#endif /* !defined(wxUSE_MS_HTML_HELP) */
 
-/*
- * If using PostScript-in-MSW in Univ, must enable PostScript
- */
-#if defined(__WXUNIVERSAL__) && wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW && !wxUSE_POSTSCRIPT
-#   undef wxUSE_POSTSCRIPT
-#   define wxUSE_POSTSCRIPT 1
-#endif
+#ifndef wxUSE_OLE
+#    ifdef wxABORT_ON_CONFIG_ERROR
+#        error "wxUSE_OLE must be defined."
+#    else
+#        define wxUSE_OLE 0
+#    endif
+#endif /* !defined(wxUSE_OLE) */
 
-#ifndef wxUSE_NORLANDER_HEADERS
-#   if ( wxCHECK_WATCOM_VERSION(1,0) || defined(__WINE__) ) || \
-       ((defined(__MINGW32__) || defined(__CYGWIN__)) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95))))
-#       define wxUSE_NORLANDER_HEADERS 1
-#   else
-#       define wxUSE_NORLANDER_HEADERS 0
-#   endif
-#endif
+#ifndef wxUSE_OLE_AUTOMATION
+#    ifdef wxABORT_ON_CONFIG_ERROR
+#        error "wxUSE_OLE_AUTOMATION must be defined."
+#    else
+#        define wxUSE_OLE_AUTOMATION 0
+#    endif
+#endif /* !defined(wxUSE_OLE_AUTOMATION) */
+
+#ifndef wxUSE_UNICODE_MSLU
+#    ifdef wxABORT_ON_CONFIG_ERROR
+#        error "wxUSE_UNICODE_MSLU must be defined."
+#    else
+#        define wxUSE_UNICODE_MSLU 0
+#    endif
+#endif  /* wxUSE_UNICODE_MSLU */
+
+#ifndef wxUSE_UXTHEME
+#    ifdef wxABORT_ON_CONFIG_ERROR
+#        error "wxUSE_UXTHEME must be defined."
+#    else
+#        define wxUSE_UXTHEME 0
+#    endif
+#endif  /* wxUSE_UXTHEME */
+
+#ifndef wxUSE_UXTHEME_AUTO
+#    ifdef wxABORT_ON_CONFIG_ERROR
+#        error "wxUSE_UXTHEME_AUTO must be defined."
+#    else
+#        define wxUSE_UXTHEME_AUTO 0
+#    endif
+#endif  /* wxUSE_UXTHEME_AUTO */
 
 /*
  * We don't want to give an error if wxUSE_UNICODE_MSLU is enabled but
@@ -57,13 +107,18 @@
 #   define wxUSE_UNICODE_MSLU 0
 #endif
 
+
 /*
- * Don't use MSLU if compiling with Wine
+ * disable the settings which don't work for some compilers
  */
 
-#if wxUSE_UNICODE_MSLU && defined(__WINE__)
-#   undef wxUSE_UNICODE_MSLU
-#   define wxUSE_UNICODE_MSLU 0
+#ifndef wxUSE_NORLANDER_HEADERS
+#   if ( wxCHECK_WATCOM_VERSION(1,0) || defined(__WINE__) ) || \
+       ((defined(__MINGW32__) || defined(__CYGWIN__)) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95))))
+#       define wxUSE_NORLANDER_HEADERS 1
+#   else
+#       define wxUSE_NORLANDER_HEADERS 0
+#   endif
 #endif
 
 /*
@@ -189,86 +244,34 @@
 #endif
 
 
-/* check that MSW-specific options are defined too */
-#ifndef wxUSE_ACTIVEX
-#    ifdef wxABORT_ON_CONFIG_ERROR
-#        error "wxUSE_ACTIVEX must be defined."
-#    else
-#        define wxUSE_ACTIVEX 0
-#    endif
-#endif /* !defined(wxUSE_ACTIVEX) */
-
-#ifndef wxUSE_DIALUP_MANAGER
-#    ifdef wxABORT_ON_CONFIG_ERROR
-#        error "wxUSE_DIALUP_MANAGER must be defined."
-#    else
-#        define wxUSE_DIALUP_MANAGER 0
-#    endif
-#endif /* !defined(wxUSE_DIALUP_MANAGER) */
-
-#ifndef wxUSE_MS_HTML_HELP
-#    ifdef wxABORT_ON_CONFIG_ERROR
-#        error "wxUSE_MS_HTML_HELP must be defined."
-#    else
-#        define wxUSE_MS_HTML_HELP 0
-#    endif
-#endif /* !defined(wxUSE_MS_HTML_HELP) */
-
-#ifndef wxUSE_OLE
-#    ifdef wxABORT_ON_CONFIG_ERROR
-#        error "wxUSE_OLE must be defined."
-#    else
-#        define wxUSE_OLE 0
-#    endif
-#endif /* !defined(wxUSE_OLE) */
-
-#ifndef wxUSE_OLE_AUTOMATION
-#    ifdef wxABORT_ON_CONFIG_ERROR
-#        error "wxUSE_OLE_AUTOMATION must be defined."
-#    else
-#        define wxUSE_OLE_AUTOMATION 0
-#    endif
-#endif /* !defined(wxUSE_OLE_AUTOMATION) */
-
-#ifndef wxUSE_UNICODE_MSLU
-#    ifdef wxABORT_ON_CONFIG_ERROR
-#        error "wxUSE_UNICODE_MSLU must be defined."
-#    else
-#        define wxUSE_UNICODE_MSLU 0
-#    endif
-#endif  /* wxUSE_UNICODE_MSLU */
-
-#ifndef wxUSE_UXTHEME
-#    ifdef wxABORT_ON_CONFIG_ERROR
-#        error "wxUSE_UXTHEME must be defined."
-#    else
-#        define wxUSE_UXTHEME 0
-#    endif
-#endif  /* wxUSE_UXTHEME */
-
-#ifndef wxUSE_UXTHEME_AUTO
-#    ifdef wxABORT_ON_CONFIG_ERROR
-#        error "wxUSE_UXTHEME_AUTO must be defined."
-#    else
-#        define wxUSE_UXTHEME_AUTO 0
-#    endif
-#endif  /* wxUSE_UXTHEME_AUTO */
-
 
 /*
    un/redefine the options which we can't compile (after checking that they're
    defined
  */
 #ifdef __WINE__
-    /* apparently it doesn't compile under Wine, remove it/when it does */
-    #if wxUSE_ACTIVEX
-        #undef wxUSE_ACTIVEX
-        #define wxUSE_ACTIVEX 0
-    #endif /* wxUSE_ACTIVEX */
+#   if wxUSE_ACTIVEX
+#       undef wxUSE_ACTIVEX
+#       define wxUSE_ACTIVEX 0
+#   endif /* wxUSE_ACTIVEX */
+
+#   if wxUSE_UNICODE_MSLU
+#       undef wxUSE_UNICODE_MSLU
+#       define wxUSE_UNICODE_MSLU 0
+#   endif /* wxUSE_UNICODE_MSLU */
 #endif /* __WINE__ */
 
 
 /* check settings consistency for MSW-specific ones */
+#if wxUSE_CRASHREPORT && !wxUSE_ON_FATAL_EXCEPTION
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_CRASHREPORT requires wxUSE_ON_FATAL_EXCEPTION"
+#   else
+#       undef wxUSE_CRASHREPORT
+#       define wxUSE_CRASHREPORT 0
+#   endif
+#endif /* wxUSE_CRASHREPORT */
+
 #if !wxUSE_VARIANT
 #   if wxUSE_ACTIVEX
 #       ifdef wxABORT_ON_CONFIG_ERROR
@@ -374,5 +377,10 @@
 #       endif
 #   endif
 #endif /* !wxUSE_ACTIVEX */
+
+#if defined(__WXUNIVERSAL__) && wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW && !wxUSE_POSTSCRIPT
+#   undef wxUSE_POSTSCRIPT
+#   define wxUSE_POSTSCRIPT 1
+#endif
 
 #endif /* _WX_MSW_CHKCONF_H_ */

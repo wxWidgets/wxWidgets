@@ -578,7 +578,9 @@
 
 #define wxUSE_UTF8_LOCALE_ONLY 0
 
+/* wxMSW-only options */
 #define wxUSE_DC_CACHEING 0
+#define wxUSE_CRASHREPORT 0
 
 #define wxUSE_GADGETS 0
 

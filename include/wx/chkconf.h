@@ -76,16 +76,6 @@
 #   endif
 #endif /* !defined(wxUSE_CONSOLE_EVENTLOOP) */
 
-#ifndef wxUSE_CRASHREPORT
-    /* this one is special: as currently it is Windows-only, don't force it
-       to be defined on other platforms */
-#   if defined(wxABORT_ON_CONFIG_ERROR) && defined(__WXMSW__)
-#       error "wxUSE_CRASHREPORT must be defined."
-#   else
-#       define wxUSE_CRASHREPORT 0
-#   endif
-#endif /* !defined(wxUSE_CRASHREPORT) */
-
 #ifndef wxUSE_DYNLIB_CLASS
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_DYNLIB_CLASS must be defined."
@@ -1031,15 +1021,6 @@
 #       endif
 #   endif
 #endif /* wxUSE_ARCHIVE_STREAMS */
-
-#if wxUSE_CRASHREPORT && !wxUSE_ON_FATAL_EXCEPTION
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_CRASHREPORT requires wxUSE_ON_FATAL_EXCEPTION"
-#   else
-#       undef wxUSE_CRASHREPORT
-#       define wxUSE_CRASHREPORT 0
-#   endif
-#endif /* wxUSE_CRASHREPORT */
 
 #if wxUSE_PROTOCOL_FILE || wxUSE_PROTOCOL_FTP || wxUSE_PROTOCOL_HTTP
 #   if !wxUSE_PROTOCOL
