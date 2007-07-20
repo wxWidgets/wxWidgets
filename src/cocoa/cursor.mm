@@ -259,13 +259,6 @@ static inline NSCursor* NSCursorCreateWithPrivateId(short sIndex)
     return theCursor;
 }
 
-// TODO: Remove in trunk.. needed for 2.8
-NSCursor* wxGetStockCursor( short sIndex )
-{
-    wxLogDebug("Please do not call wxGetStockCursor.");
-    return NSCursorCreateWithPrivateId(sIndex);
-}
-
 wxCursorRefData::wxCursorRefData() :
     m_width(32), m_height(32), m_hCursor(nil)
 {
@@ -424,7 +417,7 @@ wxCursor::wxCursor(int stock_cursor_id)
     {
         int privateId;
         if( (privateId = GetPrivateCursorIdForStockCursor(stock_cursor_id)) >= 0)
-        {   // wxGetStockCursor is not a get method but an alloc method.
+        {
             M_CURSORDATA->m_hCursor = NSCursorCreateWithPrivateId(privateId);
         }
     }
