@@ -1424,7 +1424,7 @@ AC_CHECK_HEADERS(stdlib.h fnmatch.h langinfo.h malloc.h unistd.h wchar.h,,, [AC_
 
 dnl maybe wchar_t is in wcstr.h if we don't have wchar.h?
 if test "$ac_cv_header_wchar_h" != "yes"; then
-    AC_CHECK_HEADER(wcstr.h,,, [AC_INCLUDES_DEFAULT()])
+    AC_CHECK_HEADERS([wcstr.h],,, [AC_INCLUDES_DEFAULT()])
 fi
 
 case "${host}" in
@@ -1442,7 +1442,7 @@ esac
 
 dnl POSIX needs this for select(), but old systems don't have it
 if test "$USE_UNIX" = 1 ; then
-    AC_CHECK_HEADER([sys/select.h],,, [AC_INCLUDES_DEFAULT()])
+    AC_CHECK_HEADERS([sys/select.h],,, [AC_INCLUDES_DEFAULT()])
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -2604,7 +2604,7 @@ if test "$USE_WIN32" = 1 ; then
     WIN32INSTALL=win32install
 
     dnl pbt.h is missing on Wine at least
-    AC_CHECK_HEADER(pbt.h,, [AC_DEFINE(NEED_PBT_H)], [ ])
+    AC_CHECK_HEADER([pbt.h],, [AC_DEFINE(NEED_PBT_H)], [ ])
 fi
 
 if test "$wxUSE_GUI" = "yes"; then
@@ -3439,8 +3439,8 @@ dnl do this after test for X11 above so that we have a chance of finding Xlib.h
 if test "$wxUSE_GUI" = "yes"; then
     if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_PM" != 1; then
         dnl defines HAVE_X11_XKBLIB_H
-        AC_CHECK_HEADER(X11/Xlib.h,,, [ ])
-        AC_CHECK_HEADER([X11/XKBlib.h],,,
+        AC_CHECK_HEADERS([X11/Xlib.h],,, [ ])
+        AC_CHECK_HEADERS([X11/XKBlib.h],,,
                          [
                           #if HAVE_X11_XLIB_H
                             #include <X11/Xlib.h>
@@ -3523,7 +3523,7 @@ dnl ---------------------------------------------------------------------------
             WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],Xxf86vm)
             if test "$ac_find_libraries" != "" ; then
                 AC_MSG_RESULT([yes])
-                AC_CHECK_HEADER([X11/extensions/xf86vmode.h],
+                AC_CHECK_HEADERS([X11/extensions/xf86vmode.h],
                                  [
                                   GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXxf86vm"
                                  ],
@@ -4885,7 +4885,7 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
         AC_DEFINE(wxHAVE_PTHREAD_CLEANUP)
       fi
 
-      AC_CHECK_HEADER(sched.h,,, [AC_INCLUDES_DEFAULT()])
+      AC_CHECK_HEADERS(sched.h,,, [AC_INCLUDES_DEFAULT()])
       if test "$ac_cv_header_sched_h" = "yes"; then
           AC_CHECK_FUNC(sched_yield,
             AC_DEFINE(HAVE_SCHED_YIELD),
@@ -6161,7 +6161,7 @@ if test "$wxUSE_GUI" = "yes" -a "$wxUSE_JOYSTICK" = "yes"; then
             dnl can't be compiled because of an error and with the default
             dnl AC_CHECK_HEADER semantics we'd still detect it in this case and
             dnl build would fail later
-            AC_CHECK_HEADER(linux/joystick.h, [wxUSE_JOYSTICK=yes],, [AC_INCLUDES_DEFAULT()])
+            AC_CHECK_HEADERS([linux/joystick.h], [wxUSE_JOYSTICK=yes],, [AC_INCLUDES_DEFAULT()])
         fi
     fi
 
