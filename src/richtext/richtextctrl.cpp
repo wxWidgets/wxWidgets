@@ -2039,7 +2039,7 @@ wxRichTextCtrl::HitTest(const wxPoint& pt,
         return wxTE_HT_BEFORE;
     else if ((hit & wxRICHTEXT_HITTEST_AFTER) && (hit & wxRICHTEXT_HITTEST_OUTSIDE))
         return wxTE_HT_BEYOND;
-    else if (hit & wxRICHTEXT_HITTEST_BEFORE|wxRICHTEXT_HITTEST_AFTER)
+    else if (hit & (wxRICHTEXT_HITTEST_BEFORE|wxRICHTEXT_HITTEST_AFTER))
         return wxTE_HT_ON_TEXT;
 
     return wxTE_HT_UNKNOWN;
