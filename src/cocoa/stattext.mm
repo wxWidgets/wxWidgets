@@ -44,7 +44,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID winid,
     m_cocoaNSView = NULL;
     SetNSTextField([[NSTextField alloc] initWithFrame:MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
-    [GetNSTextField() setStringValue:wxNSStringWithWxString(label)];
+    [GetNSTextField() setStringValue:wxNSStringWithWxString(wxStripMenuCodes(label, wxStrip_Mnemonics))];
 //    [GetNSTextField() setBordered: NO];
     [GetNSTextField() setBezeled: NO];
     [GetNSTextField() setEditable: NO];
@@ -70,7 +70,7 @@ wxStaticText::~wxStaticText()
 
 void wxStaticText::SetLabel(const wxString& label)
 {
-    [GetNSTextField() setStringValue:wxNSStringWithWxString(label)];
+    [GetNSTextField() setStringValue:wxNSStringWithWxString(wxStripMenuCodes(label, wxStrip_Mnemonics))];
     NSRect oldFrameRect = [GetNSTextField() frame];
     NSView *superview = [GetNSTextField() superview];
     wxLogTrace(wxTRACE_COCOA_Window_Size, wxT("wxStaticText::SetLabel Old Position: (%d,%d)"), GetPosition().x, GetPosition().y);
