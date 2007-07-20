@@ -61,6 +61,9 @@ public:
 
     // Enables the control
     virtual void CocoaSetEnabled(bool enable);
+
+    wxString GetLabel() const;
+    void SetLabel(const wxString& label);
 protected:
     virtual wxSize DoGetBestSize() const;
 };

@@ -17,6 +17,7 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/cocoa/string.h"
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/objc/objc_uniquifying.h"
 
@@ -30,6 +31,7 @@
 {
 }
 
+- (id)initWithFrame: (NSRect)frameRect;
 - (void)drawRect: (NSRect)rect;
 - (void)mouseDown:(NSEvent *)theEvent;
 - (void)mouseDragged:(NSEvent *)theEvent;
@@ -48,6 +50,19 @@
 WX_DECLARE_GET_OBJC_CLASS(wxNonControlNSControl,NSControl)
 
 @implementation wxNonControlNSControl : NSControl
+
+- (id)initWithFrame: (NSRect)frameRect
+{
+    if( (self = [super initWithFrame:frameRect]) == nil)
+        return nil;
+    // NSControl by default has no cell as it is semi-abstract.
+    // Provide a normal NSCell for the sole purpose of making
+    // setStringValue/stringValue work for labels in 2.8.
+    NSCell *newCell = [[NSCell alloc] initTextCell:@""];
+    [self setCell:newCell];
+    [newCell release];
+    return self;
+}
 
 - (BOOL)acceptsFirstMouse:(NSEvent *)theEvent
 {
@@ -233,3 +248,25 @@ void wxControl::CocoaSetEnabled(bool enable)
 {
     [GetNSControl() setEnabled: enable];
 }
+
+wxString wxControl::GetLabel() const
+{
+    if([GetNSControl() isKindOfClass:[WX_GET_OBJC_CLASS(wxNonControlNSControl) class]])
+    {
+        return wxStringWithNSString([GetNSControl() stringValue]);
+    }
+    else
+        return wxControlBase::GetLabel();
+}
+
+void wxControl::SetLabel(const wxString& label)
+{
+    wxControlBase::SetLabel(label);
+    // wx 2.8 hack: we need somewhere to stuff the label for
+    // platform-independent subclasses of wxControl.
+    if([GetNSControl() isKindOfClass:[WX_GET_OBJC_CLASS(wxNonControlNSControl) class]])
+    {
+        [GetNSControl() setStringValue:wxNSStringWithWxString(label)];
+    }
+}
+
