@@ -113,15 +113,10 @@ wxDirDialog::wxDirDialog(wxWindow* parent, const wxString& title,
         if (parent)
             gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
 
-        if (HasFlag(wxDD_DIR_MUST_EXIST))
-            gtk_action = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
-        else
-            gtk_action = GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER;
-
         m_widget = gtk_file_chooser_dialog_new(
                        wxGTK_CONV(m_message),
                        gtk_parent,
-                       gtk_action,
+                       GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                        GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
                        NULL);
