@@ -364,7 +364,6 @@ dnl giving configure --disable-all-features option)
 AC_DEFUN([WX_ARG_SYS_WITH],
         [
           AC_MSG_CHECKING([for --with-$1])
-          no_cache=0
           AC_ARG_WITH($1, [$2],
                       [
                         if test "$withval" = yes; then
@@ -378,21 +377,20 @@ AC_DEFUN([WX_ARG_SYS_WITH],
                         else
                           AC_MSG_ERROR([Invalid value for --with-$1: should be yes, no, sys, or builtin])
                         fi
+                        cache=yes
                       ],
                       [
                         LINE=`grep "^$3=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
-                        else
-                          no_cache=1
                         fi
 
                         AS_TR_SH(wx_cv_use_$1)='$3=${'DEFAULT_$3":-$wxUSE_ALL_FEATURES}"
                       ])
 
           eval "$AS_TR_SH(wx_cv_use_$1)"
-          if test "$no_cache" != 1; then
-            echo $AS_TR_SH(wx_cv_use_$1) >> ${wx_arg_cache_file}.tmp
+          if test "x$cache" = xyes; then
+            echo "$3=$$3" >> ${wx_arg_cache_file}.tmp
           fi
 
           if test "$$3" = yes; then
@@ -422,7 +420,6 @@ AC_DEFUN([WX_ARG_WITH],
               fi
           fi
           AC_MSG_CHECKING([for --${withstring:-with}-$1])
-          no_cache=0
           AC_ARG_WITH($1, [$2],
                       [
                         if test "$withval" = yes; then
@@ -430,21 +427,20 @@ AC_DEFUN([WX_ARG_WITH],
                         else
                           AS_TR_SH(wx_cv_use_$1)='$3=no'
                         fi
+                        cache=yes
                       ],
                       [
                         LINE=`grep "^$3=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
-                        else
-                          no_cache=1
                         fi
 
                         AS_TR_SH(wx_cv_use_$1)='$3=${'DEFAULT_$3":-$defaultval}"
                       ])
 
           eval "$AS_TR_SH(wx_cv_use_$1)"
-          if test "$no_cache" != 1; then
-            echo $AS_TR_SH(wx_cv_use_$1) >> ${wx_arg_cache_file}.tmp
+          if test "x$cache" != xyes; then
+            echo "$3=$$3" >> ${wx_arg_cache_file}.tmp
           fi
 
           if test x"$withstring" = xwithout; then
@@ -486,7 +482,6 @@ AC_DEFUN([WX_ARG_ENABLE],
           fi
 
           AC_MSG_CHECKING([for --${enablestring:-enable}-$1])
-          no_cache=0
           AC_ARG_ENABLE($1, [$2],
                         [
                           if test "$enableval" = yes; then
@@ -494,21 +489,20 @@ AC_DEFUN([WX_ARG_ENABLE],
                           else
                             AS_TR_SH(wx_cv_use_$1)='$3=no'
                           fi
+                          cache=yes
                         ],
                         [
                           LINE=`grep "^$3=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
-                          else
-                            no_cache=1
                           fi
 
                           AS_TR_SH(wx_cv_use_$1)='$3=${'DEFAULT_$3":-$defaultval}"
                         ])
 
           eval "$AS_TR_SH(wx_cv_use_$1)"
-          if test "$no_cache" != 1; then
-            echo $AS_TR_SH(wx_cv_use_$1) >> ${wx_arg_cache_file}.tmp
+          if test "x$cache" = xyes; then
+            echo "$3=$$3" >> ${wx_arg_cache_file}.tmp
           fi
 
           if test x"$enablestring" = xdisable; then
@@ -549,25 +543,23 @@ AC_DEFUN([WX_ARG_ENABLE_PARAM],
         [
           enablestring=$4
           AC_MSG_CHECKING([for --${enablestring:-enable}-$1])
-          no_cache=0
           AC_ARG_ENABLE($1, [$2],
                         [
                           wx_cv_use_$1="$3='$enableval'"
+                          cache=yes
                         ],
                         [
                           LINE=`grep "^$3=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
-                          else
-                            no_cache=1
                           fi
 
                           wx_cv_use_$1='$3='$DEFAULT_$3
                         ])
 
           eval "$wx_cv_use_$1"
-          if test "$no_cache" != 1; then
-            echo $wx_cv_use_$1 >> ${wx_arg_cache_file}.tmp
+          if test "x$cache" = xyes; then
+            echo "$3=$$3" >> ${wx_arg_cache_file}.tmp
           fi
 
           AC_MSG_RESULT([$$3])
