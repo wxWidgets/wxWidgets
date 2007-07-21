@@ -91,14 +91,15 @@ wxTimerImpl *wxConsoleAppTraits::CreateTimerImpl(wxTimer *timer)
 
 #endif // wxUSE_TIMER
 
-#if wxUSE_CONSOLE_EVENTLOOP
-
 wxEventLoopBase *wxConsoleAppTraits::CreateEventLoop()
 {
+#if wxUSE_CONSOLE_EVENTLOOP
     return new wxEventLoop();
+#else // !wxUSE_CONSOLE_EVENTLOOP
+    return NULL;
+#endif // wxUSE_CONSOLE_EVENTLOOP/!wxUSE_CONSOLE_EVENTLOOP
 }
 
-#endif // wxUSE_CONSOLE_EVENTLOOP
 
 WXDWORD wxConsoleAppTraits::WaitForThread(WXHANDLE hThread)
 {
