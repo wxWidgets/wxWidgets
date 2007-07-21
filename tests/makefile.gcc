@@ -34,8 +34,9 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_ziptest.o \
 	$(OBJS)\test_tartest.o \
 	$(OBJS)\test_arrays.o \
+	$(OBJS)\test_base64.o \
+	$(OBJS)\test_fileconf.o \
 	$(OBJS)\test_datetimetest.o \
-	$(OBJS)\test_fileconftest.o \
 	$(OBJS)\test_filekind.o \
 	$(OBJS)\test_filenametest.o \
 	$(OBJS)\test_filesystest.o \
@@ -86,7 +87,8 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_test.o \
 	$(OBJS)\test_gui_rect.o \
 	$(OBJS)\test_gui_size.o \
-	$(OBJS)\test_gui_point.o
+	$(OBJS)\test_gui_point.o \
+	$(OBJS)\test_gui_config.o
 PRINTFBENCH_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -330,10 +332,13 @@ $(OBJS)\test_tartest.o: ./archive/tartest.cpp
 $(OBJS)\test_arrays.o: ./arrays/arrays.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\test_datetimetest.o: ./datetime/datetimetest.cpp
+$(OBJS)\test_base64.o: ./base64/base64.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\test_fileconftest.o: ./fileconf/fileconftest.cpp
+$(OBJS)\test_fileconf.o: ./config/fileconf.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_datetimetest.o: ./datetime/datetimetest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_filekind.o: ./filekind/filekind.cpp
@@ -463,6 +468,9 @@ $(OBJS)\test_gui_size.o: ./geometry/size.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_point.o: ./geometry/point.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_config.o: ./config/config.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\printfbench_dummy.o: ./dummy.cpp

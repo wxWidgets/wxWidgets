@@ -239,8 +239,9 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_ziptest.obj &
 	$(OBJS)\test_tartest.obj &
 	$(OBJS)\test_arrays.obj &
+	$(OBJS)\test_base64.obj &
+	$(OBJS)\test_fileconf.obj &
 	$(OBJS)\test_datetimetest.obj &
-	$(OBJS)\test_fileconftest.obj &
 	$(OBJS)\test_filekind.obj &
 	$(OBJS)\test_filenametest.obj &
 	$(OBJS)\test_filesystest.obj &
@@ -290,7 +291,8 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_test.obj &
 	$(OBJS)\test_gui_rect.obj &
 	$(OBJS)\test_gui_size.obj &
-	$(OBJS)\test_gui_point.obj
+	$(OBJS)\test_gui_point.obj &
+	$(OBJS)\test_gui_config.obj
 PRINTFBENCH_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
@@ -385,10 +387,13 @@ $(OBJS)\test_tartest.obj :  .AUTODEPEND .\archive\tartest.cpp
 $(OBJS)\test_arrays.obj :  .AUTODEPEND .\arrays\arrays.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_datetimetest.obj :  .AUTODEPEND .\datetime\datetimetest.cpp
+$(OBJS)\test_base64.obj :  .AUTODEPEND .\base64\base64.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_fileconftest.obj :  .AUTODEPEND .\fileconf\fileconftest.cpp
+$(OBJS)\test_fileconf.obj :  .AUTODEPEND .\config\fileconf.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_datetimetest.obj :  .AUTODEPEND .\datetime\datetimetest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_filekind.obj :  .AUTODEPEND .\filekind\filekind.cpp
@@ -518,6 +523,9 @@ $(OBJS)\test_gui_size.obj :  .AUTODEPEND .\geometry\size.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_point.obj :  .AUTODEPEND .\geometry\point.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_config.obj :  .AUTODEPEND .\config\config.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\printfbench_dummy.obj :  .AUTODEPEND .\dummy.cpp
