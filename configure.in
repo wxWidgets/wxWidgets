@@ -6182,6 +6182,10 @@ dnl ---------------------------------------------------------------------------
 dnl String stuff
 dnl ---------------------------------------------------------------------------
 
+if test "$wxUSE_FONTENUM" = "yes" ; then
+  AC_DEFINE(wxUSE_FONTENUM)
+fi
+
 if test "$wxUSE_FONTMAP" = "yes" ; then
   AC_DEFINE(wxUSE_FONTMAP)
 fi
