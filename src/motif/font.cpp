@@ -61,7 +61,7 @@ public:
 #endif
 #if !wxMOTIF_USE_RENDER_TABLE
     WXFontList          m_fontList;     // Motif XmFontList
-#else // if wxUSE_RENDER_TABLE
+#else // if wxMOTIF_USE_RENDER_TABLE
     WXRenderTable       m_renderTable;  // Motif XmRenderTable
     WXRendition         m_rendition;    // Motif XmRendition
 #endif
@@ -147,7 +147,7 @@ wxXFont::~wxXFont()
     if (m_fontList)
         XmFontListFree ((XmFontList) m_fontList);
     m_fontList = NULL;
-#else // if wxUSE_RENDER_TABLE
+#else // if wxMOTIF_USE_RENDER_TABLE
     if (m_renderTable)
         XmRenderTableFree ((XmRenderTable) m_renderTable);
     m_renderTable = NULL;

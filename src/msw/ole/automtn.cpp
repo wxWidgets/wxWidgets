@@ -54,7 +54,7 @@
 
 #if wxUSE_DATETIME
 #include "wx/datetime.h"
-#endif // wxUSE_TIMEDATE
+#endif // wxUSE_DATETIME
 
 static void ClearVariant(VARIANTARG *pvarg) ;
 static void ReleaseVariant(VARIANTARG *pvarg) ;

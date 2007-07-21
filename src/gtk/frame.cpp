@@ -384,7 +384,7 @@ void wxFrame::GtkOnSize()
                 yy = GetClientSize().y;
 #if wxUSE_MENUS_NATIVE
                 yy += m_menuBarHeight;
-#endif // wxUSE_MENU_NATIVE
+#endif // wxUSE_MENUS_NATIVE
                 m_frameToolBar->m_x = xx;
                 m_frameToolBar->m_y = yy;
                 ww = m_width - 2*m_miniEdge;

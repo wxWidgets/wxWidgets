@@ -257,4 +257,4 @@ bool wxToggleButton::Create( wxWindow* parent, wxWindowID id,
     return true;
 }
 
-#endif // wxUSE_TOGGLEBUTTON
+#endif // wxUSE_TOGGLEBTN
