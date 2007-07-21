@@ -556,35 +556,52 @@
 #define wxUSE_SELECT_DISPATCHER 0
 #define wxUSE_EPOLL_DISPATCHER 0
 
-/* for some features we don't have dedicated configure switches, so just choose
- * the common values automatically */
-#if (defined(__WIN32__) && !defined(__WXUNIVERSAL__)) || defined(__WXPM__)
-#define wxUSE_OWNER_DRAWN 1
-#else
-#define wxUSE_OWNER_DRAWN 0
-#endif
-
-#if defined(__WIN32__) && !defined(__WINE__) && !defined(__GNUWIN32_OLD__)
-#define wxUSE_RICHEDIT 1
-#define wxUSE_RICHEDIT2 1
-#else
-#define wxUSE_RICHEDIT 0
-#define wxUSE_RICHEDIT2 0
-#endif
-
-#define wxUSE_INKEDIT 0
-
-#define wxUSE_UNICODE_MSLU 0
-
 #define wxUSE_UNICODE_UTF8 0
-
 #define wxUSE_UTF8_LOCALE_ONLY 0
 
-/* wxMSW-only options */
+/* --- start MSW options --- */
+
+#ifndef wxUSE_UNICODE_MSLU
+    #define wxUSE_UNICODE_MSLU 0
+#endif
+
+#define wxUSE_MFC           0
+
+#define wxUSE_OLE           0
+
+#define wxUSE_OLE_AUTOMATION 0
+
+#define wxUSE_ACTIVEX 0
+
 #define wxUSE_DC_CACHEING 0
+
+#define wxUSE_WXDIB 0
+
+#define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 0
+
+#define wxUSE_RICHEDIT  0
+
+#define wxUSE_RICHEDIT2 0
+
+#define wxUSE_OWNER_DRAWN 0
+
+#define wxUSE_UXTHEME           0
+
+#define wxUSE_UXTHEME_AUTO      0
+
+#define wxUSE_INKEDIT  0
+
+
+#define wxUSE_DATEPICKCTRL_GENERIC 0
+
+
 #define wxUSE_CRASHREPORT 0
 
-#define wxUSE_GADGETS 0
+
+
+#define wxUSE_BITMAP_MESSAGE         0
+
+/* --- end MSW options --- */
 
 /*
  * Supports bool type
