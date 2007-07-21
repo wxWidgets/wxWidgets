@@ -262,13 +262,11 @@ These function are the core of wxConfigBase class: they allow you to read and
 write config file data. All {\it Read} function take a default value which
 will be returned if the specified key is not found in the config file.
 
-Currently, only two types of data are supported: string and long (but it might
-change in the near future). To work with other types: for {\it int} or {\it
-bool} you can work with function taking/returning {\it long} and just use the
-casts. Better yet, just use {\it long} for all variables which you're going to
-save in the config file: chances are that {\tt sizeof(bool) == sizeof(int) == sizeof(long)} anyhow on your system. For {\it float}, {\it double} and, in
-general, any other type you'd have to translate them to/from string
-representation and use string functions.
+Currently, supported types of data are:
+\helpref{wxString}{wxstring}, {\it long}, {\it double}, {\it bool},
+\helpref{wxColour}{wxcolour} and any other types,
+for which functions \helpref{wxToString}{wxtostring}
+and \helpref{wxFromString}{wxfromstring} are defined.
 
 Try not to read long values into string variables and vice versa: although it
 just might work with wxFileConfig, you will get a system error with
@@ -721,6 +719,23 @@ not found, {\it defaultVal} is used instead.
 Reads a binary block, returning \true if the value was found. If the value was
 not found, {\it buf} is not changed.
 
+\constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{T*}{ value}}
+
+Reads a value of type T, for which function
+\helpref{wxFromString}{wxfromstring} is defined,
+returning \true if the value was found.
+If the value was not found, {\it value} is not changed.
+
+\constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{T*}{ value},
+                       \param{T const\& }{ defaultVal}}
+
+Reads a value of type T, for which function
+\helpref{wxFromString}{wxfromstring} is defined,
+returning \true if the value was found.
+If the value was not found, {\it defaultVal} is used instead.
+
+bool Read(const wxString& key, T* value) const;
+
 \pythonnote{In place of a single overloaded method name, wxPython
 implements the following methods:\par
 \indented{2cm}{\begin{twocollist}
@@ -813,7 +828,11 @@ value}}
 
 \func{bool}{Write}{\param{const wxString\& }{ key}, \param{const wxMemoryBuffer\&}{ buf}}
 
-These functions write the specified value to the config file and return \true on success.
+\func{bool}{Write}{\param{const wxString\& }{ key}, \param{const T\&}{ buf}}
+
+These functions write the specified value to the config file and return \true
+on success. In the last one, function \helpref{wxToString}{wxtostring} must be
+defined for type {\it T}.
 
 \pythonnote{In place of a single overloaded method name, wxPython
 implements the following methods:\par
