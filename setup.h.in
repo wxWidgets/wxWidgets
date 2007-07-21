@@ -270,6 +270,8 @@
 
 #define wxUSE_JOYSTICK            0
 
+#define wxUSE_FONTENUM 0
+
 #define wxUSE_FONTMAP 0
 
 #define wxUSE_MIMETYPE 0

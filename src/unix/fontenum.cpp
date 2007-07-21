@@ -20,6 +20,8 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_FONTENUM
+
 #include "wx/fontenum.h"
 
 #ifndef WX_PRECOMP
@@ -360,3 +362,5 @@ bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
 }
 
 #endif // !wxUSE_PANGO
+
+#endif // wxUSE_FONTENUM

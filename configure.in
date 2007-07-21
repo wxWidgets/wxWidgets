@@ -596,6 +596,7 @@ WX_ARG_FEATURE(exceptions,    [  --enable-exceptions     build exception-safe li
 WX_ARG_FEATURE(ffile,         [  --enable-ffile          use wxFFile class], wxUSE_FFILE)
 WX_ARG_FEATURE(file,          [  --enable-file           use wxFile class], wxUSE_FILE)
 WX_ARG_FEATURE(filesystem,    [  --enable-filesystem     use virtual file systems classes], wxUSE_FILESYSTEM)
+WX_ARG_FEATURE(fontenum,      [  --enable-fontenum       use wxFontEnumerator class], wxUSE_FONTENUM)
 WX_ARG_FEATURE(fontmap,       [  --enable-fontmap        use font encodings conversion classes], wxUSE_FONTMAP)
 WX_ARG_FEATURE(fs_archive,    [  --enable-fs_archive     use virtual archive filesystems], wxUSE_FS_ARCHIVE)
 WX_ARG_FEATURE(fs_inet,       [  --enable-fs_inet        use virtual HTTP/FTP filesystems], wxUSE_FS_INET)

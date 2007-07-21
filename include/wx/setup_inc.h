@@ -487,6 +487,9 @@
 // Joystick support class
 #define wxUSE_JOYSTICK            1
 
+// wxFontEnumerator class
+#define wxUSE_FONTENUM 1
+
 // wxFontMapper class
 #define wxUSE_FONTMAP 1
 

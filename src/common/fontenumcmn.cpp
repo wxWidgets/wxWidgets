@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_FONTENUM
+
 #include "wx/fontenum.h"
 
 // ============================================================================
@@ -129,3 +131,5 @@ bool wxFontEnumerator::EnumerateEncodingsUTF8(const wxString& facename)
     return true;
 }
 #endif // wxHAS_UTF8_FONTS
+
+#endif // wxUSE_FONTENUM
