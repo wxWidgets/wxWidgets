@@ -3261,6 +3261,15 @@ Find the deepest window at the mouse pointer position, returning the window
 and current pointer position in screen coordinates.
 
 
+\membersection{wxFromString}\label{wxfromstring}
+
+\func{bool} {wxFromString}{\param{const wxString\& }{str},
+                           \param{wxColourBase* }{col}}
+
+Converts string to the type of the second argument. Returns \true on success.
+See also: \helpref{wxToString}{wxtostring}.
+
+
 \membersection{::wxGetActiveWindow}\label{wxgetactivewindow}
 
 \func{wxWindow *}{wxGetActiveWindow}{\void}
@@ -3574,6 +3583,14 @@ class name internally. Example of using the macro:
 \end{verbatim}
 
 Notice that there should be no semicolon after this macro.
+
+
+\membersection{wxToString}\label{wxtostring}
+
+\func{wxString} {wxToString}{\param{const wxColourBase\& }{col}}
+
+Converts its argument to string.
+See also: \helpref{wxFromString}{wxfromstring}.
 
 
 \membersection{wxULL}\label{wxull}

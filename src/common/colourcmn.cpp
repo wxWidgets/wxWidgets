@@ -163,3 +163,25 @@ void wxColourBase::InitFromName(const wxString& col)
 }
 
 #endif // WXWIN_COMPATIBILITY_2_6
+
+// wxColour <-> wxString utilities, used by wxConfig
+wxString wxToString(const wxColourBase& col)
+{
+    return col.IsOk() ? col.GetAsString(wxC2S_CSS_SYNTAX)
+                      : wxString();
+}
+
+bool wxFromString(const wxString& str, wxColourBase *col)
+{
+    wxCHECK_MSG( col, false, _T("NULL output parameter") );
+
+    if ( str.empty() )
+    {
+        *col = wxNullColour;
+        return true;
+    }
+
+    return col->Set(str);
+}
+
+
