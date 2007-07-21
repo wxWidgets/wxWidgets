@@ -289,9 +289,8 @@ wxObjectRefData *wxBitmap::CloneRefData(const wxObjectRefData *dataOrig) const
     return m_refData;
 }
 
-#ifdef __WIN32__
-
-bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon)
+bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon,
+                                    wxBitmapTransparency transp)
 {
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     // it may be either HICON or HCURSOR
@@ -317,31 +316,51 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon)
 
     refData->m_hBitmap = (WXHBITMAP)iconInfo.hbmColor;
 
-#if wxUSE_WXDIB
-    // If the icon is 32 bits per pixel then it may have alpha channel data,
-    // although there are some icons that are 32 bpp but have no alpha... So
-    // convert to a DIB and manually check the 4th byte for each pixel.
-    BITMAP bm;
-    if ( ::GetObject(iconInfo.hbmColor, sizeof(BITMAP), (LPVOID)&bm)
-         && bm.bmBitsPixel == 32)
+    switch ( transp )
     {
-        wxDIB dib(iconInfo.hbmColor);
-        if (dib.IsOk())
-        {
-            unsigned char* pixels = dib.GetData();
-            for (int idx=0; idx<w*h*4; idx+=4)
+        default:
+            wxFAIL_MSG( _T("unknown wxBitmapTransparency value") );
+
+        case wxBitmapTransparency_None:
+            // nothing to do, refData->m_hasAlpha is false by default
+            break;
+
+        case wxBitmapTransparency_Auto:
+#if wxUSE_WXDIB
+            // If the icon is 32 bits per pixel then it may have alpha channel
+            // data, although there are some icons that are 32 bpp but have no
+            // alpha... So convert to a DIB and manually check the 4th byte for
+            // each pixel.
             {
-                if (pixels[idx+3] != 0)
+                BITMAP bm;
+                if ( ::GetObject(iconInfo.hbmColor, sizeof(bm), &bm) &&
+                        (bm.bmBitsPixel == 32) )
                 {
-                    // If there is an alpha byte that is non-zero then set the
-                    // alpha flag and bail out of the loop.
-                    refData->m_hasAlpha = true;
-                    break;
+                    wxDIB dib(iconInfo.hbmColor);
+                    if (dib.IsOk())
+                    {
+                        const unsigned char* pixels = dib.GetData();
+                        for (int idx = 0; idx < w*h*4; idx+=4)
+                        {
+                            if (pixels[idx+3] != 0)
+                            {
+                                // If there is an alpha byte that is non-zero
+                                // then set the alpha flag and stop checking
+                                refData->m_hasAlpha = true;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
-        }
+            break;
+#endif // wxUSE_WXDIB
+
+        case wxBitmapTransparency_Always:
+            refData->m_hasAlpha = true;
+            break;
     }
-#endif
+
     if ( !refData->m_hasAlpha )
     {
         // the mask returned by GetIconInfo() is inverted compared to the usual
@@ -353,32 +372,30 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon)
     ::DeleteObject(iconInfo.hbmMask);
 
     return true;
-#else
+#else // __WXMICROWIN__ || __WXWINCE__
     wxUnusedVar(icon);
     return false;
-#endif
+#endif // !__WXWINCE__/__WXWINCE__
 }
 
-#endif // Win32
-
-bool wxBitmap::CopyFromCursor(const wxCursor& cursor)
+bool wxBitmap::CopyFromCursor(const wxCursor& cursor, wxBitmapTransparency transp)
 {
     UnRef();
 
     if ( !cursor.Ok() )
         return false;
 
-    return CopyFromIconOrCursor(cursor);
+    return CopyFromIconOrCursor(cursor, transp);
 }
 
-bool wxBitmap::CopyFromIcon(const wxIcon& icon)
+bool wxBitmap::CopyFromIcon(const wxIcon& icon, wxBitmapTransparency transp)
 {
     UnRef();
 
     if ( !icon.Ok() )
         return false;
 
-    return CopyFromIconOrCursor(icon);
+    return CopyFromIconOrCursor(icon, transp);
 }
 
 #ifndef NEVER_USE_DIB

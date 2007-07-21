@@ -30,6 +30,15 @@ class WXDLLIMPEXP_FWD_CORE wxMask;
 class WXDLLIMPEXP_FWD_CORE wxPalette;
 class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 
+// What kind of transparency should a bitmap copied from an icon or cursor
+// have?
+enum wxBitmapTransparency
+{
+  wxBitmapTransparency_Auto,    // default: copy alpha if the source has it
+  wxBitmapTransparency_None,    // never create alpha
+  wxBitmapTransparency_Always   // always use alpha
+};
+
 // ----------------------------------------------------------------------------
 // wxBitmap: a mono or colour bitmap
 // ----------------------------------------------------------------------------
@@ -80,7 +89,11 @@ public:
 
     // we must have this, otherwise icons are silently copied into bitmaps using
     // the copy ctor but the resulting bitmap is invalid!
-    wxBitmap(const wxIcon& icon) { CopyFromIcon(icon); }
+    wxBitmap(const wxIcon& icon,
+             wxBitmapTransparency transp = wxBitmapTransparency_Auto)
+    {
+        CopyFromIcon(icon, transp);
+    }
 
     wxBitmap& operator=(const wxIcon& icon)
     {
@@ -106,10 +119,12 @@ public:
     wxBitmap GetSubBitmap( const wxRect& rect ) const;
 
     // copies the contents and mask of the given (colour) icon to the bitmap
-    bool CopyFromIcon(const wxIcon& icon);
+    bool CopyFromIcon(const wxIcon& icon,
+                      wxBitmapTransparency transp = wxBitmapTransparency_Auto);
 
     // copies the contents and mask of the given cursor to the bitmap
-    bool CopyFromCursor(const wxCursor& cursor);
+    bool CopyFromCursor(const wxCursor& cursor,
+                        wxBitmapTransparency transp = wxBitmapTransparency_Auto);
 
 #if wxUSE_WXDIB
     // copies from a device independent bitmap
@@ -175,7 +190,9 @@ protected:
 
 private:
     // common part of CopyFromIcon/CopyFromCursor for Win32
-    bool CopyFromIconOrCursor(const wxGDIImage& icon);
+    bool
+    CopyFromIconOrCursor(const wxGDIImage& icon,
+                         wxBitmapTransparency transp = wxBitmapTransparency_Auto);
 
 
     DECLARE_DYNAMIC_CLASS(wxBitmap)
