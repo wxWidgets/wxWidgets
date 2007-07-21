@@ -115,6 +115,7 @@ wxMSW:
 - Added msw.font.no-proof-quality system option, see manual for description.
 - Fix appearance of notebook with non-top tabs under Windows Vista.
 - Fixed bug with symbol resolving in wxStackWalker (Axel Gembe).
+- Fixed showing busy cursor for disabled windows and during wxExecute()
 
 wxGTK:
 
@@ -138,6 +139,10 @@ wxMac:
 
 - Fixed ability of non-native/installed toolbars to have controls,
   in native toolbar compilation mode.
+
+wxMotif:
+
+- Fix crash when using wxStaticBox with empty label
 
 
 2.8.4

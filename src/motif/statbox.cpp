@@ -94,6 +94,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
                         wxDefaultValidator, name ) )
         return false;
 
+    m_labelWidget = (WXWidget) 0;
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
     m_mainWidget = XtVaCreateManagedWidget ("staticboxframe",
