@@ -108,7 +108,6 @@ wxDirDialog::wxDirDialog(wxWindow* parent, const wxString& title,
             return;
         }
 
-        GtkFileChooserAction gtk_action;
         GtkWindow* gtk_parent = NULL;
         if (parent)
             gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
