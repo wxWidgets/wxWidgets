@@ -3077,10 +3077,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
     fi
 
     if test "$wxUSE_MOTIF" = 1; then
-        if test "$wxUSE_UNICODE" = "yes"; then
-            AC_MSG_ERROR([Unicode configuration not supported with Motif])
-        fi
-
         AC_MSG_CHECKING(for Motif/Lesstif headers)
         WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, Xm/Xm.h)
         if test "$ac_find_includes" != "" ; then

@@ -260,6 +260,60 @@ bool wxApp::OnInitGui()
     if ( clsname.empty() )
         clsname = _T("wx");
 
+    // FIXME-UTF8: This code is taken from wxGTK and duplicated here. This
+    //             is just a temporary fix to make wxX11 compile in Unicode
+    //             build, the real fix is to change Initialize()'s signature
+    //             to use char* on Unix.
+#if wxUSE_UNICODE
+    // XtOpenDisplay() wants char*, not wchar_t*, so convert
+    int i;
+    char **argvX11 = new char *[argc + 1];
+    for ( i = 0; i < argc; i++ )
+    {
+        argvX11[i] = strdup(wxConvLibc.cWX2MB(argv[i]));
+    }
+
+    argvX11[argc] = NULL;
+
+    int argcX11 = argc;
+
+    Display *dpy = XtOpenDisplay((XtAppContext) wxTheApp->m_appContext,
+        (String)NULL,
+        appname.c_str(),
+        clsname.c_str(),
+        NULL, 0,    // no options
+# if XtSpecificationRelease < 5
+        (Cardinal*) &argcX11,
+# else
+        &argcX11,
+# endif
+        argvX11);
+
+    if ( argcX11 != argc )
+    {
+        // we have to drop the parameters which were consumed by X11+
+        for ( i = 0; i < argcX11; i++ )
+        {
+            while ( strcmp(wxConvLibc.cWX2MB(argv[i]), argvX11[i]) != 0 )
+            {
+                memmove(argv + i, argv + i + 1, (argc - i)*sizeof(*argv));
+            }
+        }
+
+        argc = argcX11;
+    }
+    //else: XtOpenDisplay() didn't modify our parameters
+
+    // free our copy
+    for ( i = 0; i < argcX11; i++ )
+    {
+        free(argvX11[i]);
+    }
+
+    delete [] argvX11;
+
+#else // ANSI
+
     Display *dpy = XtOpenDisplay((XtAppContext) wxTheApp->m_appContext,
         (String)NULL,
         appname.c_str(),
@@ -271,6 +325,8 @@ bool wxApp::OnInitGui()
         &argc,
 # endif
         argv);
+
+#endif // Unicode/ANSI
 
     if (!dpy) {
          // if you don't log to stderr, nothing will be shown...

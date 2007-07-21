@@ -128,8 +128,11 @@ extern XColor itemColors[5] ;
 // ----------------------------------------------------------------------------
 
 wxString wxXmStringToString( const XmString& xmString );
-XmString wxStringToXmString( const wxString& string );
 XmString wxStringToXmString( const char* string );
+inline XmString wxStringToXmString( const wxCharBuffer& string )
+    { return wxStringToXmString(string.data()); }
+inline XmString wxStringToXmString( const wxString& string )
+    { return wxStringToXmString((const char*)string.mb_str()); }
 
 // XmString made easy to use in wxWidgets (and has an added benefit of
 // cleaning up automatically)
@@ -144,6 +147,11 @@ public:
     wxXmString(const char* str)
     {
         Init(str);
+    }
+
+    wxXmString(const wchar_t* str)
+    {
+        Init(wxConvLibc.cWC2MB(str));
     }
 
     wxXmString(const wxString& str)

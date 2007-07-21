@@ -122,7 +122,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
     Widget listWidget =
         XmCreateScrolledList(parentWidget,
-                             wxConstCast(name.mb_str(), char), args, count);
+                             name.char_str(), args, count);
 
     m_mainWidget = (WXWidget) listWidget;
 

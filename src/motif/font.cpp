@@ -550,7 +550,7 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
     int count = 0;
 
 #if wxMOTIF_NEW_FONT_HANDLING
-    wxChar* fontSpec = wxStrdup( xFontSpec.mb_str() );
+    char* fontSpec = wxStrdup(xFontSpec.mb_str());
     XtSetArg( args[count], XmNfontName, fontSpec ); ++count;
     XtSetArg( args[count], XmNfontType, XmFONT_IS_FONTSET ); ++count;
 #else

@@ -629,7 +629,8 @@ void wxWindow::Lower()
 
 void wxWindow::SetLabel(const wxString& label)
 {
-    XtVaSetValues((Widget)GetMainWidget(), XmNtitle, label.mb_str(), NULL);
+    XtVaSetValues((Widget)GetMainWidget(), XmNtitle,
+                  (const char*)label.mb_str(), NULL);
 }
 
 wxString wxWindow::GetLabel() const
