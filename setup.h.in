@@ -740,11 +740,6 @@
 #define wxUSE_OPENGL 0
 
 /*
- * Set to 1 to compile MS Windows XP theme engine support
- */
-#define wxUSE_UXTHEME 0
-
-/*
  * Work around a bug in GNU libc 5.x wcstombs() implementation.
  *
  * Note that you must link your programs with libc.a if you enable this and you
@@ -764,12 +759,6 @@
  * Use wxGetResource & wxWriteResource (change .Xdefaults)
  */
 #define wxUSE_X_RESOURCES 0
-/*
- * Use OLE and OLE Automation (MSW only)
- */
-#define wxUSE_OLE 0
-#define wxUSE_OLE_AUTOMATION 0
-#define wxUSE_ACTIVEX 0
 
 /*
  * Use MS HTML Help via libmspack (Unix)
