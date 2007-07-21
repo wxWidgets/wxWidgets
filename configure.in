@@ -876,10 +876,6 @@ WX_ARG_FEATURE(metafile,    [  --enable-metafiles      use wxMetaFile (Win32 onl
 WX_ARG_FEATURE(dragimage,   [  --enable-dragimage      use wxDragImage], wxUSE_DRAGIMAGE)
 WX_ARG_FEATURE(accessibility,[  --enable-accessibility  enable accessibility support], wxUSE_ACCESSIBILITY)
 
-if test "$wxUSE_MSW" = "1"; then
-    WX_ARG_FEATURE(dccache, [  --enable-dccache        cache temporary wxDC objects (Win32 only)], wxUSE_DC_CACHEING)
-fi
-
 dnl ---------------------------------------------------------------------------
 dnl support for image formats that do not rely on external library
 dnl ---------------------------------------------------------------------------
@@ -893,6 +889,13 @@ WX_ARG_FEATURE(iff,         [  --enable-iff            use iff images (IFF file 
 WX_ARG_FEATURE(pnm,         [  --enable-pnm            use pnm images (PNM file format)], wxUSE_PNM)
 WX_ARG_FEATURE(xpm,         [  --enable-xpm            use xpm images (XPM file format)], wxUSE_XPM)
 WX_ARG_FEATURE(ico_cur,     [  --enable-icocur         use Windows ICO and CUR formats], wxUSE_ICO_CUR)
+
+dnl ---------------------------------------------------------------------------
+dnl wxMSW-only options
+dnl ---------------------------------------------------------------------------
+
+WX_ARG_FEATURE(dccache,     [  --enable-dccache        cache temporary wxDC objects (Win32 only)], wxUSE_DC_CACHEING)
+WX_ARG_FEATURE(uxtheme,     [  --enable-uxtheme        enable support for Windows XP themed look (Win32 only)], wxUSE_UXTHEME)
 
 fi
 dnl for GUI only
@@ -6794,10 +6797,6 @@ if test "$wxUSE_ACCESSIBILITY" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS access"
 fi
 
-if test "$wxUSE_DC_CACHEING" = "yes"; then
-    AC_DEFINE(wxUSE_DC_CACHEING)
-fi
-
 if test "$wxUSE_DRAGIMAGE" = "yes"; then
     AC_DEFINE(wxUSE_DRAGIMAGE)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dragimag"
@@ -7035,6 +7034,23 @@ if test "$wxUSE_WIZARDDLG" = "yes"; then
     AC_DEFINE(wxUSE_WIZARDDLG)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS wizard"
 fi
+
+dnl ---------------------------------------------------------------------------
+dnl wxMSW-only options
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_MSW" = 1 ; then
+
+if test "$wxUSE_DC_CACHEING" = "yes"; then
+    AC_DEFINE(wxUSE_DC_CACHEING)
+fi
+
+if test "$wxUSE_UXTHEME" = "yes"; then
+    AC_DEFINE(wxUSE_UXTHEME)
+fi
+
+fi
+dnl wxUSE_MSW = 1
 
 dnl ---------------------------------------------------------------------------
 dnl wxGraphicsContext
