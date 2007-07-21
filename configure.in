@@ -897,6 +897,7 @@ dnl ---------------------------------------------------------------------------
 
 WX_ARG_FEATURE(dccache,     [  --enable-dccache        cache temporary wxDC objects (Win32 only)], wxUSE_DC_CACHEING)
 WX_ARG_FEATURE(uxtheme,     [  --enable-uxtheme        enable support for Windows XP themed look (Win32 only)], wxUSE_UXTHEME)
+WX_ARG_FEATURE(wxdib,       [  --enable-wxdib          compile wxDIB class (Win32 only)], wxUSE_DIB)
 
 fi
 dnl for GUI only
@@ -7052,6 +7053,10 @@ fi
 
 if test "$wxUSE_UXTHEME" = "yes"; then
     AC_DEFINE(wxUSE_UXTHEME)
+fi
+
+if test "$wxUSE_DIB" = "yes"; then
+    AC_DEFINE(wxUSE_WXDIB)
 fi
 
 fi

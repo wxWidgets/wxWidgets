@@ -1848,6 +1848,7 @@ Optional Features:
   --enable-icocur         use Windows ICO and CUR formats
   --enable-dccache        cache temporary wxDC objects (Win32 only)
   --enable-uxtheme        enable support for Windows XP themed look (Win32 only)
+  --enable-wxdib          compile wxDIB class (Win32 only)
   --disable-largefile     omit support for large files
   --disable-gtktest       do not try to compile and run a test GTK+ program
   --disable-gtktest       Do not try to compile and run a test GTK program
@@ -15339,6 +15340,59 @@ fi
             fi
           else
             result=$wxUSE_UXTHEME
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-wxdib" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-wxdib... $ECHO_C" >&6; }
+          # Check whether --enable-wxdib was given.
+if test "${enable_wxdib+set}" = set; then
+  enableval=$enable_wxdib;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_wxdib='wxUSE_DIB=yes'
+                          else
+                            wx_cv_use_wxdib='wxUSE_DIB=no'
+                          fi
+                          cache=yes
+
+else
+
+                          LINE=`grep "^wxUSE_DIB=" ${wx_arg_cache_file}`
+                          if test "x$LINE" != x ; then
+                            eval "DEFAULT_$LINE"
+                          fi
+
+                          wx_cv_use_wxdib='wxUSE_DIB=${'DEFAULT_wxUSE_DIB":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_wxdib"
+          if test "x$cache" = xyes; then
+            echo "wxUSE_DIB=$wxUSE_DIB" >> ${wx_arg_cache_file}.tmp
+          fi
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_DIB = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_DIB
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -48532,6 +48586,13 @@ fi
 if test "$wxUSE_UXTHEME" = "yes"; then
     cat >>confdefs.h <<\_ACEOF
 #define wxUSE_UXTHEME 1
+_ACEOF
+
+fi
+
+if test "$wxUSE_DIB" = "yes"; then
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_WXDIB 1
 _ACEOF
 
 fi

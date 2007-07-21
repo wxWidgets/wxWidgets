@@ -1243,6 +1243,7 @@
 
 /* --- end common options --- */
 
+/* --- start MSW options --- */
 // ----------------------------------------------------------------------------
 // Windows-only settings
 // ----------------------------------------------------------------------------
@@ -1381,6 +1382,8 @@
 
 // Define 1 to use bitmap messages.
 #define wxUSE_BITMAP_MESSAGE         1
+
+/* --- end MSW options --- */
 
 #endif // _WX_SETUP_H_
 
