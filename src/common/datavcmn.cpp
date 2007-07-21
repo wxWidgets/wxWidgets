@@ -206,6 +206,131 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
 }
 
 // ---------------------------------------------------------
+// wxDataViewIndexListModel
+// ---------------------------------------------------------
+
+wxDataViewIndexListModel::wxDataViewIndexListModel( unsigned int initial_size )
+{
+    // build initial index
+    unsigned int i;
+    for (i = 1; i < initial_size+1; i++)
+        m_hash.Add( (void*) i );
+    m_lastIndex = initial_size + 1;
+}
+
+wxDataViewIndexListModel::~wxDataViewIndexListModel()
+{
+}
+
+void wxDataViewIndexListModel::RowPrepended()
+{
+    unsigned int id = m_lastIndex++;
+    m_hash.Insert( (void*) id, 0 );
+    wxDataViewItem item( (void*) id );
+    ItemAdded( wxDataViewItem(0), item );
+}
+
+void wxDataViewIndexListModel::RowInserted( unsigned int before )
+{
+    unsigned int id = m_lastIndex++;
+    m_hash.Insert( (void*) id, before );
+    wxDataViewItem item( (void*) id );
+    ItemAdded( wxDataViewItem(0), item );
+}
+
+void wxDataViewIndexListModel::RowAppended()
+{
+    unsigned int id = m_lastIndex++;
+    m_hash.Add( (void*) id );
+    wxDataViewItem item( (void*) id );
+    ItemAdded( wxDataViewItem(0), item );
+}
+
+void wxDataViewIndexListModel::RowDeleted( unsigned int row )
+{
+    wxDataViewItem item( m_hash[row] );
+    m_hash.RemoveAt( row );
+    wxDataViewModel::ItemDeleted( item );
+}
+
+void wxDataViewIndexListModel::RowChanged( unsigned int row )
+{
+    wxDataViewModel::ItemChanged( GetItem(row) );
+}
+
+void wxDataViewIndexListModel::RowValueChanged( unsigned int row, unsigned int col )
+{
+    wxDataViewModel::ValueChanged( GetItem(row), col );
+}
+
+unsigned int wxDataViewIndexListModel::GetRow( const wxDataViewItem &item ) const
+{
+    // assert for not found
+    return (unsigned int) m_hash.Index( item.GetID() );
+}
+
+wxDataViewItem wxDataViewIndexListModel::GetItem( unsigned int row ) const
+{
+    return wxDataViewItem( m_hash[row] );
+}
+
+int wxDataViewIndexListModel::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 )
+{
+    return GetRow(item1) - GetRow(item2);
+}
+
+void wxDataViewIndexListModel::GetValue( wxVariant &variant, 
+                           const wxDataViewItem &item, unsigned int col ) const
+{
+    return GetValue( variant, GetRow(item), col );
+}
+
+bool wxDataViewIndexListModel::SetValue( const wxVariant &variant, 
+                           const wxDataViewItem &item, unsigned int col )
+{
+    return SetValue( variant, GetRow(item), col );
+}
+
+wxDataViewItem wxDataViewIndexListModel::GetParent( const wxDataViewItem &item ) const
+{
+    return wxDataViewItem(0);
+}
+
+bool wxDataViewIndexListModel::IsContainer( const wxDataViewItem &item ) const
+{
+    // only the invisible root item has children
+    if (!item.IsOk())
+        return true;
+        
+    return false;
+}
+
+wxDataViewItem wxDataViewIndexListModel::GetFirstChild( const wxDataViewItem &parent ) const
+{
+    if (!parent.IsOk())
+    {
+        if (m_hash.GetCount() == 0)
+            return wxDataViewItem(0);
+    
+        return wxDataViewItem( m_hash[0]);
+    }
+    
+    return wxDataViewItem(0);
+}
+
+wxDataViewItem wxDataViewIndexListModel::GetNextSibling( const wxDataViewItem &item ) const
+{
+    if (!item.IsOk())
+        return wxDataViewItem(0);
+        
+    int pos = m_hash.Index( item.GetID() );
+    if ((pos == wxNOT_FOUND) || (pos == m_hash.GetCount()-1))
+        return wxDataViewItem(0);
+        
+    return wxDataViewItem( m_hash[pos+1] );
+}
+
+// ---------------------------------------------------------
 // wxDataViewRendererBase
 // ---------------------------------------------------------
 

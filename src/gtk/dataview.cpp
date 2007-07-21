@@ -118,6 +118,7 @@ public:
     
     ~wxGtkTreeModelNode()
     { 
+        g_model = m_internal->GetDataViewModel();
         size_t count = m_children->GetCount();
         size_t i;
         for (i = 0; i < count; i++)
@@ -130,17 +131,20 @@ public:
 
     unsigned int AddNode( wxGtkTreeModelNode* child ) 
         { 
+            g_model = m_internal->GetDataViewModel();
             m_nodes.Add( child );
             return m_children->Add( child->GetItem().GetID() );
         }
         
     unsigned int AddLeave( void* id )
         {
+            g_model = m_internal->GetDataViewModel();
             return m_children->Add( id );
         }
         
     void DeleteChild( void* id )
         {
+            g_model = m_internal->GetDataViewModel();
             size_t pos;
             size_t count = m_children->GetCount();
             for (pos = 0; pos < count; pos++)
@@ -2131,6 +2135,8 @@ void wxDataViewColumn::SetWidth( int width )
 
 void wxGtkTreeModelNode::Resort()
 {
+    g_model = m_internal->GetDataViewModel();
+    
     size_t child_count = GetChildCount();
     if (child_count == 0)
         return;
@@ -2272,6 +2278,8 @@ bool wxDataViewCtrlInternal::ItemDeleted( const wxDataViewItem &item )
 
 gboolean wxDataViewCtrlInternal::get_iter( GtkTreeIter *iter, GtkTreePath *path )
 {
+    g_model = m_wx_model;
+    
     int depth = gtk_tree_path_get_depth( path );
 
     wxGtkTreeModelNode *node = m_root;
@@ -2312,6 +2320,8 @@ gboolean wxDataViewCtrlInternal::get_iter( GtkTreeIter *iter, GtkTreePath *path 
 
 GtkTreePath *wxDataViewCtrlInternal::get_path( GtkTreeIter *iter )
 {
+    g_model = m_wx_model;
+    
     GtkTreePath *retval = gtk_tree_path_new ();
     void *id = iter->user_data;    
     
@@ -2330,6 +2340,8 @@ GtkTreePath *wxDataViewCtrlInternal::get_path( GtkTreeIter *iter )
 
 GtkTreePath *wxDataViewCtrlInternal::get_path_safe( GtkTreeIter *iter )
 {
+    g_model = m_wx_model;
+    
     GtkTreePath *retval = gtk_tree_path_new ();
     void *id = iter->user_data;    
     
@@ -2355,6 +2367,8 @@ GtkTreePath *wxDataViewCtrlInternal::get_path_safe( GtkTreeIter *iter )
 
 gboolean wxDataViewCtrlInternal::iter_next( GtkTreeIter *iter )
 {
+    g_model = m_wx_model;
+    
     wxGtkTreeModelNode *parent = FindParentNode( iter );
     unsigned int pos = parent->GetChildren().Index( iter->user_data );
     
@@ -2369,6 +2383,8 @@ gboolean wxDataViewCtrlInternal::iter_next( GtkTreeIter *iter )
 
 gboolean wxDataViewCtrlInternal::iter_children( GtkTreeIter *iter, GtkTreeIter *parent )
 {
+    g_model = m_wx_model;
+    
     wxDataViewItem item( (void*) parent->user_data );
     
     if (!m_wx_model->IsContainer( item ))
@@ -2388,6 +2404,8 @@ gboolean wxDataViewCtrlInternal::iter_children( GtkTreeIter *iter, GtkTreeIter *
 
 gboolean wxDataViewCtrlInternal::iter_has_child( GtkTreeIter *iter )
 {
+    g_model = m_wx_model;
+    
     wxDataViewItem item( (void*) iter->user_data );
     bool is_container = m_wx_model->IsContainer( item );
     
@@ -2402,6 +2420,8 @@ gboolean wxDataViewCtrlInternal::iter_has_child( GtkTreeIter *iter )
 
 gint wxDataViewCtrlInternal::iter_n_children( GtkTreeIter *iter )
 {
+    g_model = m_wx_model;
+    
     wxDataViewItem item( (void*) iter->user_data );
     
     if (!m_wx_model->IsContainer( item ))
@@ -2417,6 +2437,8 @@ gint wxDataViewCtrlInternal::iter_n_children( GtkTreeIter *iter )
 
 gboolean wxDataViewCtrlInternal::iter_nth_child( GtkTreeIter *iter, GtkTreeIter *parent, gint n )
 {
+    g_model = m_wx_model;
+    
     void* id = NULL;
     if (parent) id = (void*) parent->user_data;
     wxDataViewItem item( id );
@@ -2437,6 +2459,8 @@ gboolean wxDataViewCtrlInternal::iter_nth_child( GtkTreeIter *iter, GtkTreeIter 
 
 gboolean wxDataViewCtrlInternal::iter_parent( GtkTreeIter *iter, GtkTreeIter *child )
 {
+    g_model = m_wx_model;
+
     wxGtkTreeModelNode *node = FindParentNode( child );
     if (!node)
         return FALSE;

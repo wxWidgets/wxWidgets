@@ -141,13 +141,16 @@ protected:
 };
 
 // ---------------------------------------------------------
-// wxDataViewVirtualListModel
+// wxDataViewIndexListModel
 // ---------------------------------------------------------
+
+// use hash map later
+WX_DEFINE_ARRAY_PTR( void*, wxDataViewItemHash );
 
 class wxDataViewIndexListModel: public wxDataViewModel
 {
 public:
-    wxDataViewIndexListModel();
+    wxDataViewIndexListModel( unsigned int initial_size = 0 );
     ~wxDataViewIndexListModel();
     
     virtual unsigned int GetRowCount() = 0;
@@ -158,16 +161,36 @@ public:
     virtual bool SetValue( const wxVariant &variant, 
                            unsigned int row, unsigned int col ) = 0;
     
-    void ItemPrepended();
-    void ItemInserted( unsigned int before );
-    void ItemAppended();
-    void ItemChanged( unsigned int row );
-    void ValueChanged( unsigned int row, unsigned int col );
+    void RowPrepended();
+    void RowInserted( unsigned int before );
+    void RowAppended();
+    void RowDeleted( unsigned int row );
+    void RowChanged( unsigned int row );
+    void RowValueChanged( unsigned int row, unsigned int col );
     
-    wxDataViewItem GetItem( unsigned int row );
+    // convert to/from row/wxDataViewItem
+    
+    unsigned int GetRow( const wxDataViewItem &item ) const;
+    wxDataViewItem GetItem( unsigned int row ) const;
+    
+    // compare based on index
     
     virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 );
+
+    // implement base methods
+
+    virtual void GetValue( wxVariant &variant, 
+                           const wxDataViewItem &item, unsigned int col ) const;
+    virtual bool SetValue( const wxVariant &variant, 
+                           const wxDataViewItem &item, unsigned int col );
+    virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const;
+    virtual bool IsContainer( const wxDataViewItem &item ) const;
+    virtual wxDataViewItem GetFirstChild( const wxDataViewItem &parent ) const;
+    virtual wxDataViewItem GetNextSibling( const wxDataViewItem &item ) const;
     
+private:
+    wxDataViewItemHash m_hash;
+    unsigned int m_lastIndex;
 };
 
 // ---------------------------------------------------------
