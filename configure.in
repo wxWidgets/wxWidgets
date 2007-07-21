@@ -896,6 +896,7 @@ dnl wxMSW-only options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_FEATURE(dccache,     [  --enable-dccache        cache temporary wxDC objects (Win32 only)], wxUSE_DC_CACHEING)
+WX_ARG_FEATURE(ps-in-msw,   [  --enable-ps-in-msw      use PS printing in wxMSW (Win32 only)], wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
 WX_ARG_FEATURE(regkey,      [  --enable-regkey         use wxRegKey class (Win32 only)], wxUSE_REGKEY)
 WX_ARG_FEATURE(uxtheme,     [  --enable-uxtheme        enable support for Windows XP themed look (Win32 only)], wxUSE_UXTHEME)
 WX_ARG_FEATURE(wxdib,       [  --enable-wxdib          use wxDIB class (Win32 only)], wxUSE_DIB)
@@ -7058,6 +7059,10 @@ fi
 
 if test "$wxUSE_REGKEY" = "yes"; then
     AC_DEFINE(wxUSE_REGKEY)
+fi
+
+if test "$wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW" = "yes"; then
+    AC_DEFINE(wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
 fi
 
 if test "$wxUSE_UXTHEME" = "yes"; then
