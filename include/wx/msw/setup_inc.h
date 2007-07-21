@@ -113,10 +113,6 @@
 // Set to 1 to compile MS Windows XP theme engine support
 #define wxUSE_UXTHEME           1
 
-// Set to 1 to auto-adapt to MS Windows XP themes where possible
-// (notably, wxNotebook pages)
-#define wxUSE_UXTHEME_AUTO      1
-
 // Set to 1 to use InkEdit control (Tablet PC), if available
 #define wxUSE_INKEDIT  0
 

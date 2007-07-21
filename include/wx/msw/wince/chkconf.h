@@ -63,8 +63,6 @@
 
 #undef wxUSE_UXTHEME
 #define wxUSE_UXTHEME 0
-#undef wxUSE_UXTHEME_AUTO
-#define wxUSE_UXTHEME_AUTO 0
 
 #undef wxUSE_UNICODE_MSLU
 #define wxUSE_UNICODE_MSLU 0

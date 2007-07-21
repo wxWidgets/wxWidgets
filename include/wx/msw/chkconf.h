@@ -87,14 +87,6 @@
 #    endif
 #endif  /* wxUSE_UXTHEME */
 
-#ifndef wxUSE_UXTHEME_AUTO
-#    ifdef wxABORT_ON_CONFIG_ERROR
-#        error "wxUSE_UXTHEME_AUTO must be defined."
-#    else
-#        define wxUSE_UXTHEME_AUTO 0
-#    endif
-#endif  /* wxUSE_UXTHEME_AUTO */
-
 /*
  * We don't want to give an error if wxUSE_UNICODE_MSLU is enabled but
  * wxUSE_UNICODE is not as this would make it impossible to simply set the
