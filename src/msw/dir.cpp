@@ -201,7 +201,7 @@ bool wxDirData::Read(wxString *filename)
 
         if ( err != ERROR_FILE_NOT_FOUND && err != ERROR_NO_MORE_FILES )
         {
-            wxLogSysError(err, _("Can not enumerate files in directory '%s'"),
+            wxLogSysError(err, wxString(_("Can not enumerate files in directory '%s'")),
                           m_dirname.c_str());
         }
 #endif // __WIN32__

@@ -158,7 +158,7 @@ bool wxGetHostName(wxChar *WXUNUSED_IN_WINCE(buf),
 // get full hostname (with domain name if possible)
 bool wxGetFullHostName(wxChar *buf, int maxSize)
 {
-#if !defined( __WXMICROWIN__) && wxUSE_DYNAMIC_LOADER && wxUSE_SOCKETS
+#if !defined( __WXMICROWIN__) && wxUSE_DYNLIB_CLASS && wxUSE_SOCKETS
     // TODO should use GetComputerNameEx() when available
 
     // we don't want to always link with Winsock DLL as we might not use it at
@@ -1176,7 +1176,7 @@ bool wxIsPlatform64Bit()
 {
 #if defined(_WIN64)
     return true;  // 64-bit programs run only on Win64
-#else // Win32
+#elif wxUSE_DYNLIB_CLASS // Win32
     // 32-bit programs run on both 32-bit and 64-bit Windows so check
     typedef BOOL (WINAPI *IsWow64Process_t)(HANDLE, BOOL *);
 
@@ -1192,6 +1192,8 @@ bool wxIsPlatform64Bit()
     //else: running under a system without Win64 support
 
     return wow64 != FALSE;
+#else
+    return false;
 #endif // Win64/Win32
 }
 
