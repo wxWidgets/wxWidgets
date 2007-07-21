@@ -286,7 +286,7 @@ bool wxGetUserName(wxChar *buf, int maxSize)
 {
     wxCHECK_MSG( buf && ( maxSize > 0 ), false,
                     _T("empty buffer in wxGetUserName") );
-#if defined(__WXWINCE__)
+#if defined(__WXWINCE__) && wxUSE_REGKEY
     wxLogNull noLog;
     wxRegKey key(wxRegKey::HKCU, wxT("ControlPanel\\Owner"));
     if(!key.Open(wxRegKey::Read))
@@ -1483,6 +1483,7 @@ extern long wxCharsetToCodepage(const char *name)
 
     long CP = -1;
 
+#if wxUSE_REGKEY
     wxString path(wxT("MIME\\Database\\Charset\\"));
     wxString cn(name);
 
@@ -1508,6 +1509,7 @@ extern long wxCharsetToCodepage(const char *name)
             !key.QueryValue(wxT("AliasForCharset"), cn))
             break;
     }
+#endif // wxUSE_REGKEY
 
     return CP;
 }

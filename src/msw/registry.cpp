@@ -19,6 +19,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_REGKEY
+
 #ifndef WX_PRECOMP
     #include "wx/msw/wrapwin.h"
     #include "wx/string.h"
@@ -1444,3 +1446,5 @@ inline const wxChar *RegValueStr(const wxString& szValue)
 {
     return szValue.empty() ? (const wxChar*)NULL : szValue.wx_str();
 }
+
+#endif // wxUSE_REGKEY

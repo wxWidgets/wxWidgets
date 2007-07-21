@@ -579,6 +579,8 @@
 
 #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 0
 
+#define wxUSE_REGKEY 0
+
 #define wxUSE_RICHEDIT  0
 
 #define wxUSE_RICHEDIT2 0

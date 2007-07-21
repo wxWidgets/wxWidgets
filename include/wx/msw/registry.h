@@ -12,6 +12,10 @@
 #ifndef _WX_MSW_REGISTRY_H_
 #define _WX_MSW_REGISTRY_H_
 
+#include "wx/defs.h"
+
+#if wxUSE_REGKEY
+
 class WXDLLIMPEXP_FWD_BASE wxOutputStream;
 
 // ----------------------------------------------------------------------------
@@ -241,6 +245,8 @@ private:
 
   DECLARE_NO_COPY_CLASS(wxRegKey)
 };
+
+#endif // wxUSE_REGKEY
 
 #endif // _WX_MSW_REGISTRY_H_
 
