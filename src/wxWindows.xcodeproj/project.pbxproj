@@ -1079,6 +1079,8 @@
 		40AF915307C8C912006A6D3C /* tif_extension.c in Sources */ = {isa = PBXBuildFile; fileRef = 40AF915107C8C912006A6D3C /* tif_extension.c */; };
 		40AF915607C8C912006A6D3C /* tif_color.c in Sources */ = {isa = PBXBuildFile; fileRef = 40AF915007C8C912006A6D3C /* tif_color.c */; };
 		40AF915707C8C912006A6D3C /* tif_extension.c in Sources */ = {isa = PBXBuildFile; fileRef = 40AF915107C8C912006A6D3C /* tif_extension.c */; };
+		40C8A9B10C5345B0006D5BE9 /* utilscocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40C8A9B00C5345B0006D5BE9 /* utilscocoa.mm */; };
+		40C8A9B20C5345B0006D5BE9 /* utilscocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 40C8A9B00C5345B0006D5BE9 /* utilscocoa.mm */; };
 		40CDE8D20982505E00E8156D /* evtloopcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40CDE8D00982505E00E8156D /* evtloopcmn.cpp */; };
 		40CDE8D40982505E00E8156D /* evtloopcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40CDE8D00982505E00E8156D /* evtloopcmn.cpp */; };
 		40CDE8DA098250AB00E8156D /* evtloop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40CDE8D9098250AB00E8156D /* evtloop.cpp */; };
@@ -1314,6 +1316,7 @@
 		40AF913507C8BD1F006A6D3C /* combobox.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = combobox.cpp; sourceTree = "<group>"; };
 		40AF915007C8C912006A6D3C /* tif_color.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tif_color.c; sourceTree = "<group>"; };
 		40AF915107C8C912006A6D3C /* tif_extension.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tif_extension.c; sourceTree = "<group>"; };
+		40C8A9B00C5345B0006D5BE9 /* utilscocoa.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = utilscocoa.mm; path = ../../wxSVN28_/src/mac/carbon/utilscocoa.mm; sourceTree = SOURCE_ROOT; };
 		40CDE8D00982505E00E8156D /* evtloopcmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = evtloopcmn.cpp; sourceTree = "<group>"; };
 		40CDE8D9098250AB00E8156D /* evtloop.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = evtloop.cpp; sourceTree = "<group>"; };
 		40DCE34F06C744C90000D83E /* gsocket.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = gsocket.cpp; sourceTree = "<group>"; };
@@ -3165,6 +3168,7 @@
 				F5A8620401FA022C0175ACA7 /* toplevel.cpp */,
 				F5A8620601FA022C0175ACA7 /* uma.cpp */,
 				F5A8620701FA022C0175ACA7 /* utils.cpp */,
+				40C8A9B00C5345B0006D5BE9 /* utilscocoa.mm */,
 				F5A8620801FA022C0175ACA7 /* utilsexc.cpp */,
 				F5A8620A01FA022C0175ACA7 /* window.cpp */,
 			);
@@ -3937,6 +3941,7 @@
 				61048A650B2756CB009C253D /* srchctrl.cpp in Sources */,
 				61048BE90B27B7D0009C253D /* srchctlg.cpp in Sources */,
 				408443F20B3274EF00485940 /* srchcmn.cpp in Sources */,
+				40C8A9B10C5345B0006D5BE9 /* utilscocoa.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4480,6 +4485,7 @@
 				61048A660B2756CB009C253D /* srchctrl.cpp in Sources */,
 				61048BEA0B27B7D0009C253D /* srchctlg.cpp in Sources */,
 				408443F10B3274EF00485940 /* srchcmn.cpp in Sources */,
+				40C8A9B20C5345B0006D5BE9 /* utilscocoa.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
