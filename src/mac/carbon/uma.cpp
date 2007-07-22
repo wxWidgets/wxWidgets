@@ -214,7 +214,7 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEn
             macKey = 0 ;
             glyph = kMenuF1Glyph + ( key - WXK_F1 ) ;
             if ( key >= WXK_F13 )
-                glyph += 13 ;
+                glyph += 12 ;
         }
         else
         {
