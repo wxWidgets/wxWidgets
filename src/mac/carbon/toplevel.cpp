@@ -255,11 +255,15 @@ void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
     UInt32 modifiers = cEvent.GetParameter<UInt32>(kEventParamKeyModifiers, typeUInt32) ;
     Point screenMouseLocation = cEvent.GetParameter<Point>(kEventParamMouseLocation) ;
 
-    // this parameter are not given for all events
+    // these parameters are not given for all events
     EventMouseButton button = 0 ;
     UInt32 clickCount = 0 ;
+    UInt32 mouseChord = 0;
+
     cEvent.GetParameter<EventMouseButton>( kEventParamMouseButton, typeMouseButton , &button ) ;
     cEvent.GetParameter<UInt32>( kEventParamClickCount, typeUInt32 , &clickCount ) ;
+    // the chord is the state of the buttons pressed currently
+    cEvent.GetParameter<UInt32>( kEventParamMouseChord, typeUInt32 , &mouseChord ) ;
 
     wxevent.m_x = screenMouseLocation.h;
     wxevent.m_y = screenMouseLocation.v;
@@ -298,29 +302,20 @@ void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
     else if ( g_lastButton == kEventMouseButtonSecondary && g_lastButtonWasFakeRight )
         button = g_lastButton ;
 
-    // determine the correct down state, wx does not want a 'down' for a mouseUp event,
-    // while mac delivers this button
-    if ( button != 0 && cEvent.GetKind() != kEventMouseUp )
-    {
-        switch ( button )
-        {
-            case kEventMouseButtonPrimary :
-                wxevent.m_leftDown = true ;
-                break ;
+    // Adjust the chord mask to remove the primary button and add the
+    // secondary button.  It is possible that the secondary button is
+    // already pressed, e.g. on a mouse connected to a laptop, but this
+    // possibility is ignored here:
+    if( thisButtonIsFakeRight && ( mouseChord & 1U ) )
+        mouseChord = ((mouseChord & ~1U) | 2U);
 
-            case kEventMouseButtonSecondary :
-                wxevent.m_rightDown = true ;
-                break ;
-
-            case kEventMouseButtonTertiary :
-                wxevent.m_middleDown = true ;
-                break ;
-
-            default:
-                break ;
-        }
-    }
-
+    if(mouseChord & 1U) 
+        wxevent.m_leftDown = true ;
+    if(mouseChord & 2U) 
+        wxevent.m_rightDown = true ;
+    if(mouseChord & 4U) 
+        wxevent.m_middleDown = true ;
+    
     // translate into wx types
     switch ( cEvent.GetKind() )
     {
@@ -364,21 +359,25 @@ void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
             }
             break ;
 
-     case kEventMouseWheelMoved :
-        {
-            wxevent.SetEventType( wxEVT_MOUSEWHEEL ) ;
+         case kEventMouseWheelMoved :
+            {
+                wxevent.SetEventType( wxEVT_MOUSEWHEEL ) ;
 
-            // EventMouseWheelAxis axis = cEvent.GetParameter<EventMouseWheelAxis>(kEventParamMouseWheelAxis, typeMouseWheelAxis) ;
-            SInt32 delta = cEvent.GetParameter<SInt32>(kEventParamMouseWheelDelta, typeSInt32) ;
+                // EventMouseWheelAxis axis = cEvent.GetParameter<EventMouseWheelAxis>(kEventParamMouseWheelAxis, typeMouseWheelAxis) ;
+                SInt32 delta = cEvent.GetParameter<SInt32>(kEventParamMouseWheelDelta, typeSInt32) ;
 
-            wxevent.m_wheelRotation = delta;
-            wxevent.m_wheelDelta = 1;
-            wxevent.m_linesPerAction = 1;
-        }
-        break ;
-
-        default :
+                wxevent.m_wheelRotation = delta;
+                wxevent.m_wheelDelta = 1;
+                wxevent.m_linesPerAction = 1;
+            }
+            break ;
+        case kEventMouseEntered :
+        case kEventMouseExited :
+        case kEventMouseDragged :
+        case kEventMouseMoved :
             wxevent.SetEventType( wxEVT_MOTION ) ;
+            break;
+        default :
             break ;
     }
 }
