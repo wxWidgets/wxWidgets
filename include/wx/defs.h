@@ -1128,9 +1128,7 @@ typedef float wxFloat32;
     typedef double wxFloat64;
 #endif
 
-#if defined( __WXMAC__ )  && !defined( __POWERPC__ )
-    typedef long double wxDouble;
-#else
+#if defined( __WXMAC__ ) 
     typedef double wxDouble;
 #endif
 
