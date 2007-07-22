@@ -63,3 +63,13 @@
     #pragma warning(disable:4786)
 #endif // VC++ < 7
 
+/**
+    GCC's visibility support is broken for libstdc++ in some older versions
+    (namely Debian/Ubuntu's GCC 4.1, see
+    https://bugs.launchpad.net/ubuntu/+source/gcc-4.1/+bug/109262). We fix it
+    here by mimicking newer versions' behaviour of using default visibility
+    for libstdc++ code.
+ */
+#if defined(HAVE_VISIBILITY) && defined(HAVE_BROKEN_LIBSTDCXX_VISIBILITY)
+    #pragma GCC visibility push(default)
+#endif

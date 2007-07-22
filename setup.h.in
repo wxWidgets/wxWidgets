@@ -674,6 +674,11 @@
 #undef HAVE_VISIBILITY
 
 /*
+ * Define if compiler's visibility support in libstdc++ is broken
+ */
+#undef HAVE_BROKEN_LIBSTDCXX_VISIBILITY
+
+/*
  * The built-in regex supports advanced REs in additional to POSIX's basic
  * and extended. Your system regex probably won't support this, and in this
  * case WX_NO_REGEX_ADVANCED should be defined.

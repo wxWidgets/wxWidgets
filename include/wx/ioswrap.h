@@ -11,11 +11,15 @@
 
 #if wxUSE_STD_IOSTREAM
 
+#include "wx/beforestd.h"
+
 #if wxUSE_IOSTREAMH
 #   include <iostream.h>
 #else
 #   include <iostream>
 #endif
+
+#include "wx/afterstd.h"
 
 #ifdef __WXMSW__
 #   include "wx/msw/winundef.h"
