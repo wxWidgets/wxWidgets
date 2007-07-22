@@ -3788,6 +3788,48 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
     fi
 
     if test "$wxUSE_WEB" = 1; then
+        TOOLKIT_INCLUDE=""
+        GUI_TK_LIBRARY="-ljson"
+
+        AC_MSG_CHECKING(for JSON-C headers)
+        save_CFLAGS=$CFLAGS
+        CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
+
+        AC_TRY_COMPILE([
+                        #include <json/json.h>
+                       ],
+                       [
+                        struct json_object* obj;
+                       ],
+                       [
+                        AC_MSG_RESULT(found in default search path)
+                       ],
+                       [
+                        AC_MSG_RESULT(no)
+                        AC_MSG_ERROR(please set CPPFLAGS to contain the location of json/json.h)
+                       ])
+
+        AC_MSG_CHECKING(for JSON-C library)
+        save_LIBS="$LIBS"
+        LIBS="$GUI_TK_LIBRARY $LIBS"
+
+        AC_TRY_LINK([
+                     #include <json/json.h>
+                    ],
+                    [
+                     struct json_object* obj = json_object_new_object();
+                    ],
+                    [
+                     AC_MSG_RESULT(found in default search path)
+                    ],
+                    [
+                     AC_MSG_RESULT(no)
+                     AC_MSG_ERROR(please set LDFLAGS to contain the location of libjson)
+                    ])
+
+        CFLAGS=$save_CFLAGS
+        LIBS="$save_LIBS"
+        
         TOOLKIT=WEB
         GUIDIST=WEB_DIST
     fi
@@ -6926,7 +6968,7 @@ if test "$wxUSE_FONTPICKERCTRL" = "yes"; then
 fi
 
 if test "$wxUSE_DISPLAY" = "yes"; then
-    if test "$wxUSE_DFB" = 1 -o "$wxUSE_MGL" = 1; then
+    if test "$wxUSE_DFB" = 1 -o "$wxUSE_MGL" = 1 -o "$wxUSE_WEB" = 1; then
         AC_MSG_WARN([wxDisplay not yet supported under $TOOLKIT... disabled])
         wxUSE_DISPLAY=no
     else

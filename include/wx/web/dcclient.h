@@ -1,10 +1,6 @@
 #ifndef __WX_DCCLIENT_H__
 #define __WX_DCCLIENT_H__
 
-#include "wx/dc.h"
-
-class WXDLLEXPORT wxWindow;
-
 class WXDLLEXPORT wxWindowDC : public wxDC {
 public:
     wxWindowDC();
@@ -28,14 +24,7 @@ public:
     virtual void SetBrush(const wxBrush& brush);
     virtual void SetBackground(const wxBrush& brush);
     virtual void SetBackgroundMode(int mode);
-    virtual void SetMapMode(int mode);
-    virtual void SetUserScale(double x, double y);
-    virtual void SetLogicalScale(double x, double y);
-    virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
-    virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
-    virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
     virtual void SetLogicalFunction(int function);
-
 
 protected:
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
@@ -97,8 +86,10 @@ protected:
     // true if successful, false otherwise
     virtual bool FlushEvalBuffer();
 
-private:
+protected:
     wxString m_evalBuf;
+    wxWindow* m_window;
+    wxWindow* m_owner;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxWindowDC)
@@ -108,15 +99,17 @@ class WXDLLEXPORT wxClientDC : public wxWindowDC {
 public:
     wxClientDC();
     wxClientDC(wxWindow *window);
+    virtual ~wxClientDC();
 
 private:
     DECLARE_DYNAMIC_CLASS(wxClientDC)
 };
 
-class WXDLLEXPORT wxPaintDC : public wxWindowDC {
+class WXDLLEXPORT wxPaintDC : public wxClientDC {
 public:
     wxPaintDC();
     wxPaintDC(wxWindow *window);
+    virtual ~wxPaintDC();
 
 private:
     DECLARE_DYNAMIC_CLASS(wxPaintDC)

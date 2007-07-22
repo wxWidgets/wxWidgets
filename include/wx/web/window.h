@@ -44,6 +44,14 @@ public:
 
     virtual bool SetCursor(const wxCursor &cursor);
     virtual bool SetFont(const wxFont &font);
+    virtual void SetScrollbar(int orient, int pos, int thumbVisible,
+                              int range, bool refresh = true);
+    virtual void SetScrollPos(int orient, int pos, bool refresh = true);
+
+    virtual int GetScrollPos(int orient) const;
+    virtual int GetScrollThumb(int orient) const;
+    virtual int GetScrollRange(int orient) const;
+    virtual void ScrollWindow(int dx, int dy, const wxRect* rect = (wxRect *) NULL);
 
     virtual int GetCharHeight() const;
     virtual int GetCharWidth() const;
@@ -67,12 +75,10 @@ public:
     virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags);
     virtual void DoSetClientSize(int width, int height);
     virtual void DoMoveWindow(int x, int y, int width, int height);
-    virtual bool DoPopupMenu(wxMenu *menu, int x, int y);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxWindowWeb)
     DECLARE_NO_COPY_CLASS(wxWindowWeb)
-    DECLARE_EVENT_TABLE()
 };
 
 

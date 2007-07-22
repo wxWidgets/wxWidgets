@@ -1,24 +1,21 @@
 #ifndef __WX_BRUSH_H__
 #define __WX_BRUSH_H__
 
-#include "wx/brush.h"
-#include "wx/string.h"
-
-class WXDLLEXPORT wxColour;
-class WXDLLEXPORT wxBitmap;
-
 class WXDLLEXPORT wxBrush: public wxBrushBase
 {
 public:
-    wxBrush() {}
+    wxBrush();
     wxBrush(const wxColour &colour, int style = wxSOLID);
     wxBrush(const wxBitmap &stippleBitmap);
-    ~wxBrush() {}
+    virtual ~wxBrush();
+
+    bool operator==(const wxBrush& brush) const;
+    bool operator!=(const wxBrush& brush) const;
 
     wxColour &GetColour() const;
     wxBitmap *GetStipple() const;
     int GetStyle() const;
-    bool IsHatch() const;
+    bool IsOk() const { return Ok(); }
     bool Ok() const;
 
     void SetColour(const wxColour& colour);
@@ -27,7 +24,10 @@ public:
     void SetStyle(int style);
     void SetStipple(const wxBitmap& stipple);
 
-private:
+protected:
+    virtual wxObjectRefData* CreateRefData() const;
+    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const;
+    
     DECLARE_DYNAMIC_CLASS(wxBrush)
 };
 

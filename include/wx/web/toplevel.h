@@ -1,8 +1,6 @@
 #ifndef __WX_TOPLEVEL_H__
 #define __WX_TOPLEVEL_H__
 
-class WXDLLEXPORT wxMenuItem; //HACK for wx/frame.h, why isn't this line included there?
-
 class wxTopLevelWindowWeb : public wxTopLevelWindowBase {
 public:
     wxTopLevelWindowWeb();

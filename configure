@@ -31906,6 +31906,134 @@ echo "${ECHO_T}none" >&6; }
     fi
 
     if test "$wxUSE_WEB" = 1; then
+        TOOLKIT_INCLUDE=""
+        GUI_TK_LIBRARY="-ljson"
+
+        { echo "$as_me:$LINENO: checking for JSON-C headers" >&5
+echo $ECHO_N "checking for JSON-C headers... $ECHO_C" >&6; }
+        save_CFLAGS=$CFLAGS
+        CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
+
+        cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                        #include <json/json.h>
+
+int
+main ()
+{
+
+                        struct json_object* obj;
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+
+                        { echo "$as_me:$LINENO: result: found in default search path" >&5
+echo "${ECHO_T}found in default search path" >&6; }
+
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+                        { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+                        { { echo "$as_me:$LINENO: error: please set CPPFLAGS to contain the location of json/json.h" >&5
+echo "$as_me: error: please set CPPFLAGS to contain the location of json/json.h" >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+        { echo "$as_me:$LINENO: checking for JSON-C library" >&5
+echo $ECHO_N "checking for JSON-C library... $ECHO_C" >&6; }
+        save_LIBS="$LIBS"
+        LIBS="$GUI_TK_LIBRARY $LIBS"
+
+        cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                     #include <json/json.h>
+
+int
+main ()
+{
+
+                     struct json_object* obj = json_object_new_object();
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+
+                     { echo "$as_me:$LINENO: result: found in default search path" >&5
+echo "${ECHO_T}found in default search path" >&6; }
+
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+                     { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+                     { { echo "$as_me:$LINENO: error: please set LDFLAGS to contain the location of libjson" >&5
+echo "$as_me: error: please set LDFLAGS to contain the location of libjson" >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+
+        CFLAGS=$save_CFLAGS
+        LIBS="$save_LIBS"
+
         TOOLKIT=WEB
         GUIDIST=WEB_DIST
     fi
@@ -44882,7 +45010,7 @@ _ACEOF
 fi
 
 if test "$wxUSE_DISPLAY" = "yes"; then
-    if test "$wxUSE_DFB" = 1 -o "$wxUSE_MGL" = 1; then
+    if test "$wxUSE_DFB" = 1 -o "$wxUSE_MGL" = 1 -o "$wxUSE_WEB" = 1; then
         { echo "$as_me:$LINENO: WARNING: wxDisplay not yet supported under $TOOLKIT... disabled" >&5
 echo "$as_me: WARNING: wxDisplay not yet supported under $TOOLKIT... disabled" >&2;}
         wxUSE_DISPLAY=no

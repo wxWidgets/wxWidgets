@@ -1,18 +1,42 @@
-// Copyright (c) 2007 John Wilmes
+///////////////////////////////////////////////////////////////////////////////
+// Name:        src/web/evtloop.cpp
+// Purpose:     implements wxEventLoop for wxWeb
+// Author:      Vadim Zeitlin
+// Modified by:
+// Created:     10.07.01
+// RCS-ID:      $Id: evtloop.cpp 46029 2007-05-14 23:43:39Z VZ $
+// Copyright:   (c) 2001 Vadim Zeitlin, John Wilmes
+// License:     wxWindows licence
+///////////////////////////////////////////////////////////////////////////////
 
-#include "wx/app.h"
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include "wx/evtloop.h"
-#include "wx/log.h"
 #include "wx/ptr_scpd.h"
-#include "wx/window.h"
 
-#include "json/json.h"
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/log.h"
+    #include "wx/window.h"
+#endif // WX_PRECOMP
+
+
+#include <json/json.h>
 
 #include <fcntl.h>
 #include <errno.h>
 
 //TODO redefine, put somewhere else
 #define BUFFER_SIZE 1024
+
+// ----------------------------------------------------------------------------
+// wxEventLoopImpl
+// ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxEventLoopImpl {
 public:
@@ -112,8 +136,17 @@ wxWindow* wxEventLoopImpl::GetEventWindow(json_object* jevt) {
     wxWindow* win = NULL;
     return win;
 }
-        
+
+// ============================================================================
+// wxEventLoop implementation
+// ============================================================================
+
 wxDEFINE_TIED_SCOPED_PTR_TYPE(wxEventLoopImpl)
+
+wxGUIEventLoop::~wxGUIEventLoop()
+{
+    wxASSERT_MSG(!m_impl, _T("should have been deleted in Run()"));
+}
 
 int wxGUIEventLoop::Run() {
     // event loops are not recursive, you need to create another loop

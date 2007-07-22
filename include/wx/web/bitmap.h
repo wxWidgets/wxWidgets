@@ -56,12 +56,6 @@ public:
     virtual bool SaveFile(const wxString &name, wxBitmapType type, const wxPalette *palette = (wxPalette *) NULL) const;
     virtual bool LoadFile(const wxString &name, wxBitmapType type = wxBITMAP_TYPE_RESOURCE);
 
-#if wxUSE_PALETTE
-    virtual wxPalette *GetPalette() const;
-    virtual void SetPalette(const wxPalette& palette);
-#endif // wxUSE_PALETTE
-
-
     virtual bool CopyFromIcon(const wxIcon& icon);
 
     static void InitStandardHandlers();

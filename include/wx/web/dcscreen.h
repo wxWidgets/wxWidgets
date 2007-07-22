@@ -16,5 +16,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxScreenDC)
 };
 
-#endif
-    // __WX_DCSCREEN_H__
+#endif // __WX_DCSCREEN_H__

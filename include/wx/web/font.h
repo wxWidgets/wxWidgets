@@ -23,9 +23,10 @@ public:
                 const wxString& face = wxEmptyString,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
+    bool Create(const wxString& fontname);
     bool Create(const wxNativeFontInfo& fontinfo);
 
-    ~wxFont();
+    virtual ~wxFont();
 
     virtual int GetPointSize() const;
     virtual int GetFamily() const;
@@ -34,7 +35,6 @@ public:
     virtual wxString GetFaceName() const;
     virtual bool GetUnderlined() const;
     virtual wxFontEncoding GetEncoding() const;
-    virtual bool IsFixedWidth() const;
     virtual const wxNativeFontInfo *GetNativeFontInfo() const;
 
     virtual void SetPointSize(int pointSize);
@@ -44,6 +44,12 @@ public:
     virtual bool SetFaceName(const wxString& faceName);
     virtual void SetUnderlined(bool underlined);
     virtual void SetEncoding(wxFontEncoding encoding);
+
+protected:
+    virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info);
+
+    virtual wxObjectRefData* CreateRefData() const;
+    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxFont)

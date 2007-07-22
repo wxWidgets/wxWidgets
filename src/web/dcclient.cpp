@@ -1,17 +1,84 @@
-// Copyright (c) 2007 John Wilmes
+/////////////////////////////////////////////////////////////////////////////
+// Name:        src/web/dcclient.cpp
+// Purpose:     wxClientDC class
+// Author:      Julian Smart, Robert Roebling, John Wilmes
+// Modified by:
+// Created:     01/02/97
+// RCS-ID:      $Id: dcclient.cpp 45851 2007-05-05 21:34:26Z VZ $
+// Copyright:   (c) Julian Smart, Robert Roebling, John Wilmes
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
 
-#include "wx/app.h"
-#include "wx/defs.h"
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include "wx/dcclient.h"
-#include "wx/gdicmn.h"
-#include "wx/log.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/window.h"
+    #include "wx/dcmemory.h"
+    #include "wx/math.h"
+    #include "wx/image.h"
+    #include "wx/module.h"
+#endif
+
+// ----------------------------------------------------------------------------
+// wxWindowDC
+// ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
 
 wxWindowDC::wxWindowDC() {
 }
 
+wxWindowDC::wxWindowDC(wxWindow* window) {
+    m_window = window;
+}
+
 wxWindowDC::~wxWindowDC() {
+}
+
+bool wxWindowDC::CanDrawBitmap() const {
+    return true;
+}
+
+bool wxWindowDC::CanGetTextExtent() const {
+    return true;
+}
+
+wxCoord wxWindowDC::GetCharHeight() const {
+    return 0;
+}
+
+wxCoord wxWindowDC::GetCharWidth() const {
+    return 0;
+}
+
+int wxWindowDC::GetDepth() const {
+    return 0;
+}
+
+wxSize wxWindowDC::GetPPI() const {
+    return wxSize();
+}
+
+void wxWindowDC::SetBackground(const wxBrush& brush) {
+}
+
+void wxWindowDC::SetBackgroundMode(int mode) {
+}
+
+void wxWindowDC::SetBrush(const wxBrush& brush) {
+}
+
+void wxWindowDC::SetFont(const wxFont& font) {
+}
+
+void wxWindowDC::SetLogicalFunction(int function) {
+}
+
+void wxWindowDC::SetPen(const wxPen& pen) {
 }
 
 void wxWindowDC::ClientEval(const wxString& cmd) {
@@ -51,6 +118,12 @@ bool wxWindowDC::FlushEvalBuffer() {
 #endif //wxUSE_LOG
     }
     return true;
+}
+
+void wxWindowDC::Clear() {
+}
+
+void wxWindowDC::DestroyClippingRegion() {
 }
 
 bool wxWindowDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
@@ -203,4 +276,39 @@ void wxWindowDC::DoGetTextExtent(const wxString&,
                                  wxCoord* descent,
                                  wxCoord* externalLeading,
                                  const wxFont* theFont) const {
+}
+
+//-----------------------------------------------------------------------------
+// wxClientDC
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
+
+wxClientDC::wxClientDC() {
+}
+
+wxClientDC::wxClientDC( wxWindow *window )
+          : wxWindowDC( window )
+{
+    wxCHECK_RET(window, _T("NULL window in wxClientDC::wxClientDC"));
+}
+
+wxClientDC::~wxClientDC() {
+}
+
+// ----------------------------------------------------------------------------
+// wxPaintDC
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxClientDC)
+
+wxPaintDC::wxPaintDC() {
+}
+
+wxPaintDC::wxPaintDC(wxWindow* window)
+  : wxClientDC(window)
+{
+}
+
+wxPaintDC::~wxPaintDC() {
 }

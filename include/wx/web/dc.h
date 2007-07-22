@@ -4,10 +4,12 @@
 class WXDLLEXPORT wxDC : public wxDCBase {
 public:
     wxDC();
-    ~wxDC();
+    virtual ~wxDC();
+
+    virtual void DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxDC)
+    DECLARE_ABSTRACT_CLASS(wxDC)
 };
 
 #endif // _WX_DC_H_

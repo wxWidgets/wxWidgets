@@ -1,11 +1,6 @@
 #ifndef __WX_APP_H__
 #define __WX_APP_H__
 
-#include "wx/app.h"
-#include "wx/gdicmn.h"
-#include "wx/event.h"
-#include "wx/string.h"
-
 class WXDLLEXPORT wxApp: public wxAppBase
 {
 public:

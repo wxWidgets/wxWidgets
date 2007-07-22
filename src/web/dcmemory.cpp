@@ -10,3 +10,5 @@ wxMemoryDC::wxMemoryDC() {
 wxMemoryDC::~wxMemoryDC() {
 }
 
+void wxMemoryDC::DoSelect(const wxBitmap& bmp) {
+}

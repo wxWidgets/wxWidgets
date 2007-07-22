@@ -2109,6 +2109,7 @@ COND_TOOLKIT_WEB_LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
 	wx/generic/colour.h \
 	wx/generic/icon.h \
+	wx/generic/imaglist.h \
 	wx/generic/region.h \
 	wx/web/app.h \
 	wx/web/bitmap.h \
@@ -4238,9 +4239,11 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS = 
 COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS =  \
+	monodll_gsocketiohandler.o \
 	monodll_caret.o \
 	monodll_colour.o \
 	monodll_icon.o \
+	monodll_imaglist.o \
 	monodll_regiong.o \
 	monodll_app.o \
 	monodll_bitmap.o \
@@ -4252,10 +4255,15 @@ COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_dcscreen.o \
 	monodll_evtloop.o \
 	monodll_font.o \
+	monodll_fontenum.o \
+	monodll_fontutil.o \
 	monodll_pen.o \
 	monodll_popupwin.o \
+	monodll_region.o \
+	monodll_settings.o \
 	monodll_toplevel.o \
-	monodll_window.o
+	monodll_window.o \
+	monodll_utils.o
 @COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_app.o \
@@ -5087,9 +5095,11 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_1 = 
 COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_1 =  \
+	monodll_gsocketiohandler.o \
 	monodll_caret.o \
 	monodll_colour.o \
 	monodll_icon.o \
+	monodll_imaglist.o \
 	monodll_regiong.o \
 	monodll_app.o \
 	monodll_bitmap.o \
@@ -5101,10 +5111,15 @@ COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_dcscreen.o \
 	monodll_evtloop.o \
 	monodll_font.o \
+	monodll_fontenum.o \
+	monodll_fontutil.o \
 	monodll_pen.o \
 	monodll_popupwin.o \
+	monodll_region.o \
+	monodll_settings.o \
 	monodll_toplevel.o \
-	monodll_window.o
+	monodll_window.o \
+	monodll_utils.o
 @COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_1)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_app.o \
@@ -6114,9 +6129,11 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_2 = 
 COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_2 =  \
+	monolib_gsocketiohandler.o \
 	monolib_caret.o \
 	monolib_colour.o \
 	monolib_icon.o \
+	monolib_imaglist.o \
 	monolib_regiong.o \
 	monolib_app.o \
 	monolib_bitmap.o \
@@ -6128,10 +6145,15 @@ COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_dcscreen.o \
 	monolib_evtloop.o \
 	monolib_font.o \
+	monolib_fontenum.o \
+	monolib_fontutil.o \
 	monolib_pen.o \
 	monolib_popupwin.o \
+	monolib_region.o \
+	monolib_settings.o \
 	monolib_toplevel.o \
-	monolib_window.o
+	monolib_window.o \
+	monolib_utils.o
 @COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_2)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_app.o \
@@ -6964,9 +6986,11 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_3 = 
 COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_3 =  \
+	monolib_gsocketiohandler.o \
 	monolib_caret.o \
 	monolib_colour.o \
 	monolib_icon.o \
+	monolib_imaglist.o \
 	monolib_regiong.o \
 	monolib_app.o \
 	monolib_bitmap.o \
@@ -6978,10 +7002,15 @@ COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_dcscreen.o \
 	monolib_evtloop.o \
 	monolib_font.o \
+	monolib_fontenum.o \
+	monolib_fontutil.o \
 	monolib_pen.o \
 	monolib_popupwin.o \
+	monolib_region.o \
+	monolib_settings.o \
 	monolib_toplevel.o \
-	monolib_window.o
+	monolib_window.o \
+	monolib_utils.o
 @COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_3)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_app.o \
@@ -8259,9 +8288,11 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_4 = 
 COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_4 =  \
+	coredll_gsocketiohandler.o \
 	coredll_caret.o \
 	coredll_colour.o \
 	coredll_icon.o \
+	coredll_imaglist.o \
 	coredll_regiong.o \
 	coredll_app.o \
 	coredll_bitmap.o \
@@ -8273,10 +8304,15 @@ COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_dcscreen.o \
 	coredll_evtloop.o \
 	coredll_font.o \
+	coredll_fontenum.o \
+	coredll_fontutil.o \
 	coredll_pen.o \
 	coredll_popupwin.o \
+	coredll_region.o \
+	coredll_settings.o \
 	coredll_toplevel.o \
-	coredll_window.o
+	coredll_window.o \
+	coredll_utils.o
 @COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_4)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_app.o \
@@ -9109,9 +9145,11 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_5 = 
 COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_5 =  \
+	coredll_gsocketiohandler.o \
 	coredll_caret.o \
 	coredll_colour.o \
 	coredll_icon.o \
+	coredll_imaglist.o \
 	coredll_regiong.o \
 	coredll_app.o \
 	coredll_bitmap.o \
@@ -9123,10 +9161,15 @@ COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_dcscreen.o \
 	coredll_evtloop.o \
 	coredll_font.o \
+	coredll_fontenum.o \
+	coredll_fontutil.o \
 	coredll_pen.o \
 	coredll_popupwin.o \
+	coredll_region.o \
+	coredll_settings.o \
 	coredll_toplevel.o \
-	coredll_window.o
+	coredll_window.o \
+	coredll_utils.o
 @COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_5)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_app.o \
@@ -9754,9 +9797,11 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_6 = 
 COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_6 =  \
+	corelib_gsocketiohandler.o \
 	corelib_caret.o \
 	corelib_colour.o \
 	corelib_icon.o \
+	corelib_imaglist.o \
 	corelib_regiong.o \
 	corelib_app.o \
 	corelib_bitmap.o \
@@ -9768,10 +9813,15 @@ COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_dcscreen.o \
 	corelib_evtloop.o \
 	corelib_font.o \
+	corelib_fontenum.o \
+	corelib_fontutil.o \
 	corelib_pen.o \
 	corelib_popupwin.o \
+	corelib_region.o \
+	corelib_settings.o \
 	corelib_toplevel.o \
-	corelib_window.o
+	corelib_window.o \
+	corelib_utils.o
 @COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_6)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_app.o \
@@ -10604,9 +10654,11 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_7 = 
 COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_7 =  \
+	corelib_gsocketiohandler.o \
 	corelib_caret.o \
 	corelib_colour.o \
 	corelib_icon.o \
+	corelib_imaglist.o \
 	corelib_regiong.o \
 	corelib_app.o \
 	corelib_bitmap.o \
@@ -10618,10 +10670,15 @@ COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_dcscreen.o \
 	corelib_evtloop.o \
 	corelib_font.o \
+	corelib_fontenum.o \
+	corelib_fontutil.o \
 	corelib_pen.o \
 	corelib_popupwin.o \
+	corelib_region.o \
+	corelib_settings.o \
 	corelib_toplevel.o \
-	corelib_window.o
+	corelib_window.o \
+	corelib_utils.o
 @COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_7)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_app.o \
@@ -14763,6 +14820,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_utils.o: $(srcdir)/src/dfb/utils.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/utils.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@monodll_utils.o: $(srcdir)/src/web/utils.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/web/utils.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_utils.o: $(srcdir)/src/motif/utils.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/utils.cpp
 
@@ -15000,6 +15060,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@monodll_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_imaglist.o: $(srcdir)/src/msw/imaglist.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/imaglist.cpp
 
@@ -15051,6 +15114,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_fontenum.o: $(srcdir)/src/dfb/fontenum.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/fontenum.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@monodll_fontenum.o: $(srcdir)/src/web/fontenum.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/web/fontenum.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_fontenum.o: $(srcdir)/src/mac/carbon/fontenum.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/fontenum.cpp
 
@@ -15080,6 +15146,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_fontutil.o: $(srcdir)/src/mgl/fontutil.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/fontutil.cpp
+
+@COND_TOOLKIT_WEB_USE_GUI_1@monodll_fontutil.o: $(srcdir)/src/web/fontutil.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/web/fontutil.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_fontutil.o: $(srcdir)/src/mac/carbon/fontutil.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/fontutil.cpp
@@ -15702,6 +15771,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_region.o: $(srcdir)/src/dfb/region.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/region.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@monodll_region.o: $(srcdir)/src/web/region.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/web/region.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_region.o: $(srcdir)/src/mac/carbon/region.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/region.cpp
 
@@ -15746,6 +15818,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_settings.o: $(srcdir)/src/dfb/settings.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/settings.cpp
+
+@COND_TOOLKIT_WEB_USE_GUI_1@monodll_settings.o: $(srcdir)/src/web/settings.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/web/settings.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_settings.o: $(srcdir)/src/motif/settings.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/settings.cpp
@@ -16079,6 +16154,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
+
+@COND_TOOLKIT_WEB_USE_GUI_1@monodll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_nanox.o: $(srcdir)/src/x11/nanox.c $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/x11/nanox.c
@@ -19110,6 +19188,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_utils.o: $(srcdir)/src/dfb/utils.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/utils.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@monolib_utils.o: $(srcdir)/src/web/utils.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/web/utils.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_utils.o: $(srcdir)/src/motif/utils.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/utils.cpp
 
@@ -19347,6 +19428,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@monolib_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_imaglist.o: $(srcdir)/src/msw/imaglist.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/imaglist.cpp
 
@@ -19398,6 +19482,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_fontenum.o: $(srcdir)/src/dfb/fontenum.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/fontenum.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@monolib_fontenum.o: $(srcdir)/src/web/fontenum.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/web/fontenum.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_fontenum.o: $(srcdir)/src/mac/carbon/fontenum.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/fontenum.cpp
 
@@ -19427,6 +19514,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_fontutil.o: $(srcdir)/src/mgl/fontutil.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/fontutil.cpp
+
+@COND_TOOLKIT_WEB_USE_GUI_1@monolib_fontutil.o: $(srcdir)/src/web/fontutil.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/web/fontutil.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_fontutil.o: $(srcdir)/src/mac/carbon/fontutil.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/fontutil.cpp
@@ -20049,6 +20139,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_region.o: $(srcdir)/src/dfb/region.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/region.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@monolib_region.o: $(srcdir)/src/web/region.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/web/region.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_region.o: $(srcdir)/src/mac/carbon/region.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/region.cpp
 
@@ -20093,6 +20186,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_settings.o: $(srcdir)/src/dfb/settings.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/settings.cpp
+
+@COND_TOOLKIT_WEB_USE_GUI_1@monolib_settings.o: $(srcdir)/src/web/settings.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/web/settings.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_settings.o: $(srcdir)/src/motif/settings.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/settings.cpp
@@ -20426,6 +20522,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
+
+@COND_TOOLKIT_WEB_USE_GUI_1@monolib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_nanox.o: $(srcdir)/src/x11/nanox.c $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/x11/nanox.c
@@ -24129,6 +24228,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_utils.o: $(srcdir)/src/dfb/utils.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/utils.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@coredll_utils.o: $(srcdir)/src/web/utils.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/web/utils.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_utils.o: $(srcdir)/src/motif/utils.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/utils.cpp
 
@@ -24195,6 +24297,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@coredll_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_imaglist.o: $(srcdir)/src/msw/imaglist.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/imaglist.cpp
 
@@ -24246,6 +24351,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_fontenum.o: $(srcdir)/src/dfb/fontenum.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/fontenum.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@coredll_fontenum.o: $(srcdir)/src/web/fontenum.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/web/fontenum.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_fontenum.o: $(srcdir)/src/mac/carbon/fontenum.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/fontenum.cpp
 
@@ -24275,6 +24383,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_fontutil.o: $(srcdir)/src/mgl/fontutil.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/fontutil.cpp
+
+@COND_TOOLKIT_WEB_USE_GUI_1@coredll_fontutil.o: $(srcdir)/src/web/fontutil.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/web/fontutil.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_fontutil.o: $(srcdir)/src/mac/carbon/fontutil.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/fontutil.cpp
@@ -24897,6 +25008,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_region.o: $(srcdir)/src/dfb/region.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/region.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@coredll_region.o: $(srcdir)/src/web/region.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/web/region.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_region.o: $(srcdir)/src/mac/carbon/region.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/region.cpp
 
@@ -24941,6 +25055,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_settings.o: $(srcdir)/src/dfb/settings.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/settings.cpp
+
+@COND_TOOLKIT_WEB_USE_GUI_1@coredll_settings.o: $(srcdir)/src/web/settings.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/web/settings.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_settings.o: $(srcdir)/src/motif/settings.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/settings.cpp
@@ -25301,6 +25418,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
+
+@COND_TOOLKIT_WEB_USE_GUI_1@coredll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
 
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_nanox.o: $(srcdir)/src/x11/nanox.c $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $(srcdir)/src/x11/nanox.c
@@ -27138,6 +27258,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_utils.o: $(srcdir)/src/dfb/utils.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/utils.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@corelib_utils.o: $(srcdir)/src/web/utils.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/web/utils.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_utils.o: $(srcdir)/src/motif/utils.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/utils.cpp
 
@@ -27204,6 +27327,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@corelib_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_imaglist.o: $(srcdir)/src/msw/imaglist.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/imaglist.cpp
 
@@ -27255,6 +27381,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_fontenum.o: $(srcdir)/src/dfb/fontenum.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/fontenum.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@corelib_fontenum.o: $(srcdir)/src/web/fontenum.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/web/fontenum.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_fontenum.o: $(srcdir)/src/mac/carbon/fontenum.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/fontenum.cpp
 
@@ -27284,6 +27413,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_fontutil.o: $(srcdir)/src/mgl/fontutil.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/fontutil.cpp
+
+@COND_TOOLKIT_WEB_USE_GUI_1@corelib_fontutil.o: $(srcdir)/src/web/fontutil.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/web/fontutil.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_fontutil.o: $(srcdir)/src/mac/carbon/fontutil.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/fontutil.cpp
@@ -27906,6 +28038,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_region.o: $(srcdir)/src/dfb/region.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/region.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@corelib_region.o: $(srcdir)/src/web/region.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/web/region.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_region.o: $(srcdir)/src/mac/carbon/region.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/region.cpp
 
@@ -27950,6 +28085,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_settings.o: $(srcdir)/src/dfb/settings.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/settings.cpp
+
+@COND_TOOLKIT_WEB_USE_GUI_1@corelib_settings.o: $(srcdir)/src/web/settings.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/web/settings.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_settings.o: $(srcdir)/src/motif/settings.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/settings.cpp
@@ -28310,6 +28448,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
+
+@COND_TOOLKIT_WEB_USE_GUI_1@corelib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
 
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_nanox.o: $(srcdir)/src/x11/nanox.c $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $(srcdir)/src/x11/nanox.c
