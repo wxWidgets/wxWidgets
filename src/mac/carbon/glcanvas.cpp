@@ -63,10 +63,6 @@ wxGLContext::wxGLContext(wxGLCanvas *win, const wxGLContext *other)
                                     other ? other->m_aglContext : NULL);
     if ( !m_aglContext )
         wxLogAGLError("aglCreateContext");
-
-    return;
-    if ( !aglEnable(m_aglContext, AGL_BUFFER_RECT) )
-        wxLogAGLError("aglEnable(AGL_BUFFER_RECT)");
 }
 
 wxGLContext::~wxGLContext()
@@ -364,6 +360,9 @@ void wxGLCanvas::SetViewport()
 
     if ( !aglSetInteger(context, AGL_BUFFER_RECT, parms) )
         wxLogAGLError("aglSetInteger(AGL_BUFFER_RECT)");
+
+    if ( !aglEnable(context, AGL_BUFFER_RECT) )
+        wxLogAGLError("aglEnable(AGL_BUFFER_RECT)");
 
     if ( !aglUpdateContext(context) )
         wxLogAGLError("aglUpdateContext");
