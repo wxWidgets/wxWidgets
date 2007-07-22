@@ -40,6 +40,8 @@
 		4086D109063BBC5C00D4CD53 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
 		4086D10B063BBC5C00D4CD53 /* System.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA60173504D423C000000080 /* System.framework */; };
 		409F03A10977B97B00D1030F /* libwx_mac_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 409F039A0977B96200D1030F /* libwx_mac_static.a */; };
+		40C8A9AB0C53458D006D5BE9 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40C8A9AA0C53458D006D5BE9 /* QuickTime.framework */; };
+		40C8A9AC0C53458D006D5BE9 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40C8A9AA0C53458D006D5BE9 /* QuickTime.framework */; };
 		40F017470A306CAD00AC9076 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40F017460A306CAD00AC9076 /* AppKit.framework */; };
 		40F017480A306CAD00AC9076 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40F017460A306CAD00AC9076 /* AppKit.framework */; };
 /* End PBXBuildFile section */
@@ -97,6 +99,7 @@
 		20286C33FDCF999611CA2CEA /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		4086D0EF063BBC5B00D4CD53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
 		409F03930977B96200D1030F /* wxWindows.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = wxWindows.xcodeproj; path = ../../src/wxWindows.xcodeproj; sourceTree = SOURCE_ROOT; };
+		40C8A9AA0C53458D006D5BE9 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		40F017460A306CAD00AC9076 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		CA60173504D423C000000080 /* System.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = System.framework; path = /System/Library/Frameworks/System.framework; sourceTree = "<absolute>"; };
 		F591E05701FCC5DE01000133 /* minimal.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = minimal.cpp; sourceTree = SOURCE_ROOT; };
@@ -116,6 +119,7 @@
 				1842CAFD085664390032BCF7 /* OpenGL.framework in Frameworks */,
 				1842CAFE085664390032BCF7 /* WebKit.framework in Frameworks */,
 				40F017470A306CAD00AC9076 /* AppKit.framework in Frameworks */,
+				40C8A9AB0C53458D006D5BE9 /* QuickTime.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +135,7 @@
 				1842CB01085664390032BCF7 /* OpenGL.framework in Frameworks */,
 				1842CB02085664390032BCF7 /* WebKit.framework in Frameworks */,
 				40F017480A306CAD00AC9076 /* AppKit.framework in Frameworks */,
+				40C8A9AC0C53458D006D5BE9 /* QuickTime.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -178,6 +183,7 @@
 		20286C32FDCF999611CA2CEA /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				40C8A9AA0C53458D006D5BE9 /* QuickTime.framework */,
 				40F017460A306CAD00AC9076 /* AppKit.framework */,
 				20286C33FDCF999611CA2CEA /* Carbon.framework */,
 				CA60173504D423C000000080 /* System.framework */,
