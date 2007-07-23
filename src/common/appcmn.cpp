@@ -456,8 +456,10 @@ wxMessageOutput *wxGUIAppTraitsBase::CreateMessageOutput()
     // wxMessageOutputMessageBox doesn't work under Motif
     #ifdef __WXMOTIF__
         return new wxMessageOutputLog;
-    #else
+    #elif wxUSE_MSGDLG
         return new wxMessageOutputMessageBox;
+    #else
+        return new wxMessageOutputStderr;
     #endif
 #endif // __UNIX__/!__UNIX__
 }

@@ -147,10 +147,19 @@ void wxDataViewModel::RemoveNotifier( wxDataViewModelNotifier *notifier )
 
 int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 )
 {
+    // sort branches before leaves
+    bool item1_is_container = IsContainer(item1);
+    bool item2_is_container = IsContainer(item2);
+    
+    if (item1_is_container && !item2_is_container)
+        return 1;
+    if (item2_is_container && !item1_is_container)
+        return -1;
+    
     wxVariant value1,value2;
     GetValue( value1, item1, m_sortingColumn );
     GetValue( value2, item2, m_sortingColumn );
-    
+
     if (!m_ascending)
     {
         wxVariant temp = value1;
@@ -163,52 +172,162 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
         wxString str1 = value1.GetString();
         wxString str2 = value2.GetString();
         int res = str1.Cmp( str2 );
-        if (res == 0)
-        {
-            // no difference, try 0th column
-            if (m_sortingColumn != 0)
-            {
-                unsigned int temp = m_sortingColumn;
-                m_sortingColumn = 0;
-                res = Compare( item1, item2 );
-                m_sortingColumn = temp;
-            }
-            if (res == 0)
-            {
-                // still no difference, resort to desparate non-sense
-                long l1 = (long) item1.GetID();
-                long l2 = (long) item2.GetID();
-                return l1-l2;
-            }
-        }
-        return res;
-    }
+        if (res) return res;
+    } else
     if (value1.GetType() == wxT("long"))
     {
         long l1 = value1.GetLong();
         long l2 = value2.GetLong();
-        return l1-l2;
-    }
+        long res = l1-l2;
+        if (res) return res;
+    } else
     if (value1.GetType() == wxT("double"))
     {
         double d1 = value1.GetDouble();
         double d2 = value2.GetDouble();
-        if (d1 == d2) return 0;
         if (d1 < d2) return 1;
-        return -1;
-    }
+        if (d1 > d2) return -1;
+    } else
     if (value1.GetType() == wxT("datetime"))
     {
         wxDateTime dt1 = value1.GetDateTime();
         wxDateTime dt2 = value2.GetDateTime();
-        if (dt1.IsEqualTo(dt2)) return 0;
         if (dt1.IsEarlierThan(dt2)) return 1;
-        return -1;
+        if (dt2.IsEarlierThan(dt1)) return -11;
+    }
+
+    // items must be different
+    unsigned long litem1 = (unsigned long) item1.GetID();    
+    unsigned long litem2 = (unsigned long) item2.GetID();    
+
+    if (!m_ascending)
+        return litem2-litem1;
+    return litem1-litem2;
+}
+
+// ---------------------------------------------------------
+// wxDataViewIndexListModel
+// ---------------------------------------------------------
+
+wxDataViewIndexListModel::wxDataViewIndexListModel( unsigned int initial_size )
+{
+    // build initial index
+    unsigned int i;
+    for (i = 1; i < initial_size+1; i++)
+        m_hash.Add( (void*) i );
+    m_lastIndex = initial_size + 1;
+}
+
+wxDataViewIndexListModel::~wxDataViewIndexListModel()
+{
+}
+
+void wxDataViewIndexListModel::RowPrepended()
+{
+    unsigned int id = m_lastIndex++;
+    m_hash.Insert( (void*) id, 0 );
+    wxDataViewItem item( (void*) id );
+    ItemAdded( wxDataViewItem(0), item );
+}
+
+void wxDataViewIndexListModel::RowInserted( unsigned int before )
+{
+    unsigned int id = m_lastIndex++;
+    m_hash.Insert( (void*) id, before );
+    wxDataViewItem item( (void*) id );
+    ItemAdded( wxDataViewItem(0), item );
+}
+
+void wxDataViewIndexListModel::RowAppended()
+{
+    unsigned int id = m_lastIndex++;
+    m_hash.Add( (void*) id );
+    wxDataViewItem item( (void*) id );
+    ItemAdded( wxDataViewItem(0), item );
+}
+
+void wxDataViewIndexListModel::RowDeleted( unsigned int row )
+{
+    wxDataViewItem item( m_hash[row] );
+    m_hash.RemoveAt( row );
+    wxDataViewModel::ItemDeleted( item );
+}
+
+void wxDataViewIndexListModel::RowChanged( unsigned int row )
+{
+    wxDataViewModel::ItemChanged( GetItem(row) );
+}
+
+void wxDataViewIndexListModel::RowValueChanged( unsigned int row, unsigned int col )
+{
+    wxDataViewModel::ValueChanged( GetItem(row), col );
+}
+
+unsigned int wxDataViewIndexListModel::GetRow( const wxDataViewItem &item ) const
+{
+    // assert for not found
+    return (unsigned int) m_hash.Index( item.GetID() );
+}
+
+wxDataViewItem wxDataViewIndexListModel::GetItem( unsigned int row ) const
+{
+    return wxDataViewItem( m_hash[row] );
+}
+
+int wxDataViewIndexListModel::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 )
+{
+    return GetRow(item1) - GetRow(item2);
+}
+
+void wxDataViewIndexListModel::GetValue( wxVariant &variant, 
+                           const wxDataViewItem &item, unsigned int col ) const
+{
+    return GetValue( variant, GetRow(item), col );
+}
+
+bool wxDataViewIndexListModel::SetValue( const wxVariant &variant, 
+                           const wxDataViewItem &item, unsigned int col )
+{
+    return SetValue( variant, GetRow(item), col );
+}
+
+wxDataViewItem wxDataViewIndexListModel::GetParent( const wxDataViewItem &item ) const
+{
+    return wxDataViewItem(0);
+}
+
+bool wxDataViewIndexListModel::IsContainer( const wxDataViewItem &item ) const
+{
+    // only the invisible root item has children
+    if (!item.IsOk())
+        return true;
+        
+    return false;
+}
+
+wxDataViewItem wxDataViewIndexListModel::GetFirstChild( const wxDataViewItem &parent ) const
+{
+    if (!parent.IsOk())
+    {
+        if (m_hash.GetCount() == 0)
+            return wxDataViewItem(0);
+    
+        return wxDataViewItem( m_hash[0]);
     }
     
-    
+    return wxDataViewItem(0);
+}
 
-    return 0;
+wxDataViewItem wxDataViewIndexListModel::GetNextSibling( const wxDataViewItem &item ) const
+{
+    if (!item.IsOk())
+        return wxDataViewItem(0);
+        
+    int pos = m_hash.Index( item.GetID() );
+    if ((pos == wxNOT_FOUND) || (pos == m_hash.GetCount()-1))
+        return wxDataViewItem(0);
+        
+    return wxDataViewItem( m_hash[pos+1] );
 }
 
 // ---------------------------------------------------------

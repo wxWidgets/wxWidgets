@@ -270,6 +270,8 @@
 
 #define wxUSE_JOYSTICK            0
 
+#define wxUSE_FONTENUM 0
+
 #define wxUSE_FONTMAP 0
 
 #define wxUSE_MIMETYPE 0
@@ -554,33 +556,52 @@
 #define wxUSE_SELECT_DISPATCHER 0
 #define wxUSE_EPOLL_DISPATCHER 0
 
-/* for some features we don't have dedicated configure switches, so just choose
- * the common values automatically */
-#if (defined(__WIN32__) && !defined(__WXUNIVERSAL__)) || defined(__WXPM__)
-#define wxUSE_OWNER_DRAWN 1
-#else
-#define wxUSE_OWNER_DRAWN 0
-#endif
-
-#if defined(__WIN32__) && !defined(__WINE__) && !defined(__GNUWIN32_OLD__)
-#define wxUSE_RICHEDIT 1
-#define wxUSE_RICHEDIT2 1
-#else
-#define wxUSE_RICHEDIT 0
-#define wxUSE_RICHEDIT2 0
-#endif
-
-#define wxUSE_INKEDIT 0
-
-#define wxUSE_UNICODE_MSLU 0
-
 #define wxUSE_UNICODE_UTF8 0
-
 #define wxUSE_UTF8_LOCALE_ONLY 0
+
+/* --- start MSW options --- */
+
+#ifndef wxUSE_UNICODE_MSLU
+    #define wxUSE_UNICODE_MSLU 0
+#endif
+
+#define wxUSE_MFC           0
+
+#define wxUSE_OLE           0
+
+#define wxUSE_OLE_AUTOMATION 0
+
+#define wxUSE_ACTIVEX 0
 
 #define wxUSE_DC_CACHEING 0
 
-#define wxUSE_GADGETS 0
+#define wxUSE_WXDIB 0
+
+#define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 0
+
+#define wxUSE_REGKEY 0
+
+#define wxUSE_RICHEDIT  0
+
+#define wxUSE_RICHEDIT2 0
+
+#define wxUSE_OWNER_DRAWN 0
+
+#define wxUSE_UXTHEME           0
+
+#define wxUSE_INKEDIT  0
+
+
+#define wxUSE_DATEPICKCTRL_GENERIC 0
+
+
+#define wxUSE_CRASHREPORT 0
+
+
+
+#define wxUSE_BITMAP_MESSAGE         0
+
+/* --- end MSW options --- */
 
 /*
  * Supports bool type
@@ -653,6 +674,11 @@
 #undef HAVE_VISIBILITY
 
 /*
+ * Define if compiler's visibility support in libstdc++ is broken
+ */
+#undef HAVE_BROKEN_LIBSTDCXX_VISIBILITY
+
+/*
  * The built-in regex supports advanced REs in additional to POSIX's basic
  * and extended. Your system regex probably won't support this, and in this
  * case WX_NO_REGEX_ADVANCED should be defined.
@@ -719,17 +745,6 @@
 #define wxUSE_OPENGL 0
 
 /*
- * Set to 1 to compile MS Windows XP theme engine support
- */
-#define wxUSE_UXTHEME 1
-
-/*
- *  Set to 1 to auto-adapt to MS Windows XP themes where possible
- * (notably, wxNotebook pages)
- */
-#define wxUSE_UXTHEME_AUTO 1
-
-/*
  * Work around a bug in GNU libc 5.x wcstombs() implementation.
  *
  * Note that you must link your programs with libc.a if you enable this and you
@@ -749,12 +764,6 @@
  * Use wxGetResource & wxWriteResource (change .Xdefaults)
  */
 #define wxUSE_X_RESOURCES 0
-/*
- * Use OLE and OLE Automation (MSW only)
- */
-#define wxUSE_OLE 0
-#define wxUSE_OLE_AUTOMATION 0
-#define wxUSE_ACTIVEX 0
 
 /*
  * Use MS HTML Help via libmspack (Unix)
@@ -1188,11 +1197,6 @@
 /* we need to define wxUSE_XPM_IN_MSW for MSW compilation for compatibility
    with wx/msw/setup.h */
 #define wxUSE_XPM_IN_MSW wxUSE_XPM
-
-/* Set to 0 to disable PostScript print/preview architecture code under Windows
-  (just use Windows printing).
- */
-#define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
 
 /* When using an external jpeg library and the Windows headers already define
  * boolean, define to the type used by the jpeg library for boolean.  */

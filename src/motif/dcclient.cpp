@@ -1134,11 +1134,11 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 #if wxMOTIF_NEW_FONT_HANDLING
             XmbDrawString((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(), fset, (GC) m_gcBacking,
             XLOG2DEV_2 (x), YLOG2DEV_2 (y) + ascent,
-                        wxConstCast(text.mb_str(), char), slen);
+                        text.mb_str(), slen);
 #else
             XDrawString((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(), (GC) m_gcBacking,
             XLOG2DEV_2 (x), YLOG2DEV_2 (y) + ascent,
-                        wxConstCast(text.mb_str(), char), slen);
+                        text.mb_str(), slen);
 #endif
     }
 

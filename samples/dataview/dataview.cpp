@@ -167,6 +167,31 @@ public:
         ItemDeleted( item );
     }
     
+    // override sorting to always sort branches ascendingly
+    
+    int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 )
+    {
+        if (IsContainer(item1) && IsContainer(item2))
+        {
+            wxVariant value1,value2;
+            GetValue( value1, item1, 0 );
+            GetValue( value2, item2, 0 );
+
+            wxString str1 = value1.GetString();
+            wxString str2 = value2.GetString();
+            int res = str1.Cmp( str2 );
+            if (res) return res;
+            
+            // items must be different
+            unsigned long litem1 = (unsigned long) item1.GetID();    
+            unsigned long litem2 = (unsigned long) item2.GetID();    
+
+            return litem1-litem2;
+        }
+        
+        return wxDataViewModel::Compare( item1, item2 );
+    }
+
     // implementation of base class virtuals to define model
     
     virtual unsigned int GetColumnCount() const
@@ -205,12 +230,29 @@ public:
         }
     }
 
-    virtual bool HasChildren( const wxDataViewItem &item ) const
+    virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const
     {
+        // the invisble root node has no parent
+        if (!item.IsOk())
+            return wxDataViewItem(0);
+            
         MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
-        if (!node)
+        
+        // "MyMusic" also has no parent
+        if (node == m_root)
+            return wxDataViewItem(0);
+            
+        return wxDataViewItem( (void*) node->GetParent() );
+    }
+
+    virtual bool IsContainer( const wxDataViewItem &item ) const
+    {
+        // the invisble root node can have children (in
+        // our model always "MyMusic")
+        if (!item.IsOk())
             return true;
     
+        MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
         return node->IsContainer();
     }
     
@@ -236,39 +278,108 @@ public:
     virtual wxDataViewItem GetNextSibling( const wxDataViewItem &item ) const
     {
         MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
-        MyMusicModelNode *parent = node->GetParent();
-        if (!parent)
+        
+        // "MyMusic" has no siblings in our model
+        if (node == m_root)
             return wxDataViewItem(0);
 
+        MyMusicModelNode *parent = node->GetParent();
         int pos = parent->GetChildren().Index( node );
+        
+        // Something went wrong
         if (pos == wxNOT_FOUND)
             return wxDataViewItem(0);
             
+        // No more children
         if (pos == parent->GetChildCount()-1)
             return wxDataViewItem(0);
             
         node = parent->GetChildren().Item( pos+1 );
         return wxDataViewItem( (void*) node );
     } 
-
-    virtual wxDataViewItem GetParent( const wxDataViewItem & item ) const
-    {
-        MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
-        if (!node)
-            return wxDataViewItem( 0 );
-    
-        node = node->GetParent();
-        if(!node)
-            return wxDataViewItem( 0 );
-
-        return wxDataViewItem( node );
-    }
     
 private:
     MyMusicModelNode*   m_root;
     MyMusicModelNode*   m_pop;
     MyMusicModelNode*   m_classical;
     bool                m_classicalMusicIsKnownToControl;
+};
+
+class MyListModel: public wxDataViewIndexListModel
+{
+public:
+    MyListModel() : 
+        wxDataViewIndexListModel( 100 )
+    {
+        unsigned int i;
+        for (i = 0; i < 100; i++)
+        {
+            wxString str;
+            str.Printf( "row number %d", i );
+            m_array.Add( str );
+        }
+    }
+    
+    // helper methods to change the model
+
+    void Prepend( const wxString &text )
+    {
+        m_array.Insert( text, 0 );
+        RowPrepended();
+    }
+
+    void DeleteItem( const wxDataViewItem &item )
+    {
+        unsigned int row = GetRow( item );
+        m_array.RemoveAt( row );
+        RowDeleted( row );
+    }
+
+    // implementation of base class virtuals to define model
+    
+    virtual unsigned int GetColumnCount() const
+    {
+        return 2;
+    }
+
+    virtual wxString GetColumnType( unsigned int col ) const
+    {
+        return "string";
+    }
+    
+    virtual unsigned int GetRowCount()
+    {
+        return m_array.GetCount();
+    }
+    
+    virtual void GetValue( wxVariant &variant, 
+                           unsigned int row, unsigned int col ) const
+    {
+        if (col==0)
+        {
+            variant = m_array[ row ];
+        }
+        else
+        {
+            wxString str;
+            str.Printf( "row %d col %d", row, col );
+            variant = str;
+        }
+    }
+
+    virtual bool SetValue( const wxVariant &variant, 
+                           unsigned int row, unsigned int col )
+    {
+        if (col == 0)
+        {
+            m_array[row] = variant.GetString();
+            return true;
+        }
+    
+        return false;
+    }
+    
+    wxArrayString    m_array;
 };
 
 // -------------------------------------
@@ -294,13 +405,21 @@ public:
 public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-    void OnAdd(wxCommandEvent& event);
-    void OnDelete(wxCommandEvent& event);
+    
+    void OnAddMozart(wxCommandEvent& event);
+    void OnDeleteMusic(wxCommandEvent& event);
+    
+    void OnPrependList(wxCommandEvent& event);
+    void OnDeleteList(wxCommandEvent& event);
 
 private:
-    wxDataViewCtrl* m_dataview;
+    wxDataViewCtrl* m_musicCtrl;
+    wxObjectDataPtr<MyMusicModel> m_music_model;
+    
+    wxDataViewCtrl* m_listCtrl;
+    wxObjectDataPtr<MyListModel> m_list_model;
+    
     wxTextCtrl    * m_log;
-    wxObjectDataPtr<MyMusicModel> m_model;
 
 private:
     DECLARE_EVENT_TABLE()
@@ -342,15 +461,20 @@ enum
     ID_ABOUT = wxID_ABOUT,
     ID_EXIT = wxID_EXIT,
     
-    ID_ADD = 100,
-    ID_DELETE = 101,
+    ID_ADD_MOZART       = 100,
+    ID_DELETE_MUSIC     = 101,
+     
+    ID_PREPEND_LIST     = 200,
+    ID_DELETE_LIST      = 201
 };
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU( ID_ABOUT, MyFrame::OnAbout )
     EVT_MENU( ID_EXIT, MyFrame::OnQuit )
-    EVT_BUTTON( ID_ADD, MyFrame::OnAdd )
-    EVT_BUTTON( ID_DELETE, MyFrame::OnDelete )
+    EVT_BUTTON( ID_ADD_MOZART, MyFrame::OnAddMozart )
+    EVT_BUTTON( ID_DELETE_MUSIC, MyFrame::OnDeleteMusic )
+    EVT_BUTTON( ID_PREPEND_LIST, MyFrame::OnPrependList )
+    EVT_BUTTON( ID_DELETE_LIST, MyFrame::OnDeleteList )
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
@@ -373,27 +497,53 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
 
     wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
 
-    m_dataview = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition,
-                                     wxDefaultSize );
+    wxBoxSizer *data_sizer = new wxBoxSizer( wxHORIZONTAL );
 
-    m_model = new MyMusicModel;
-    m_dataview->AssociateModel( m_model.get() );
+    // MyMusic
 
-    m_dataview->AppendTextColumn( "Title", 0, wxDATAVIEW_CELL_INERT, 200, 
+    m_musicCtrl = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition,
+                                    wxDefaultSize );
+
+    m_music_model = new MyMusicModel;
+    m_musicCtrl->AssociateModel( m_music_model.get() );
+
+    m_musicCtrl->AppendTextColumn( "Title", 0, wxDATAVIEW_CELL_INERT, 200, 
                                      DEFAULT_ALIGN, wxDATAVIEW_COL_SORTABLE );
-    m_dataview->AppendTextColumn( "Artist", 1, wxDATAVIEW_CELL_EDITABLE, 200,
+    m_musicCtrl->AppendTextColumn( "Artist", 1, wxDATAVIEW_CELL_EDITABLE, 200,
                                      DEFAULT_ALIGN, wxDATAVIEW_COL_SORTABLE );
-    m_dataview->AppendTextColumn( "Year", 2, wxDATAVIEW_CELL_INERT, 50,
+    m_musicCtrl->AppendTextColumn( "Year", 2, wxDATAVIEW_CELL_INERT, 50,
                                      DEFAULT_ALIGN );
 
-    main_sizer->Add( m_dataview, 2, wxGROW );
+    data_sizer->Add( m_musicCtrl, 3, wxGROW );
+    
+#if 1   
+    
+    // MyList
+    
+    m_listCtrl = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition,
+                                     wxDefaultSize ); 
+    
+    m_list_model = new MyListModel;
+    m_listCtrl->AssociateModel( m_list_model.get() );
+    
+    m_listCtrl->AppendTextColumn( "editable string", 0, wxDATAVIEW_CELL_EDITABLE, 120 );
+    m_listCtrl->AppendTextColumn( "index", 1, wxDATAVIEW_CELL_INERT, 120 );
+    
+    data_sizer->Add( m_listCtrl, 2, wxGROW );
+ 
+#endif   
+
+    main_sizer->Add( data_sizer, 2, wxGROW );
     
     wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
     
-    button_sizer->Add( new wxButton( this, ID_ADD, "Add Mozart"), 0, wxALL, 10 );
-    button_sizer->Add( new wxButton( this, ID_DELETE, "Delete selected"), 0, wxALL, 10 );
+    button_sizer->Add( new wxButton( this, ID_ADD_MOZART, "Add Mozart"), 0, wxALL, 10 );
+    button_sizer->Add( new wxButton( this, ID_DELETE_MUSIC, "Delete selected"), 0, wxALL, 10 );
+    button_sizer->Add( 10, 10, 1 );
+    button_sizer->Add( new wxButton( this, ID_PREPEND_LIST, "Prepend"), 0, wxALL, 10 );
+    button_sizer->Add( new wxButton( this, ID_DELETE_LIST, "Delete selected"), 0, wxALL, 10 );
     
-    main_sizer->Add( button_sizer, 0, 0, 0 );
+    main_sizer->Add( button_sizer, 0, wxGROW, 0 );
     
     m_log = new wxTextCtrl( this, -1, "", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
     
@@ -407,16 +557,28 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
     Close(true);
 }
 
-void MyFrame::OnDelete(wxCommandEvent& WXUNUSED(event) )
+void MyFrame::OnAddMozart(wxCommandEvent& WXUNUSED(event) )
 {
-    wxDataViewItem item = m_dataview->GetSelection();
-    if (item.IsOk())
-        m_model->Delete( item );
+    m_music_model->AddToClassical( "Kleine Nachtmusik", "Wolfgang Mozart", "1787" );
 }
 
-void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event) )
+void MyFrame::OnDeleteMusic(wxCommandEvent& WXUNUSED(event) )
 {
-    m_model->AddToClassical( "Kleine Nachtmusik", "Wolfgang Mozart", "1787" );
+    wxDataViewItem item = m_musicCtrl->GetSelection();
+    if (item.IsOk())
+        m_music_model->Delete( item );
+}
+
+void MyFrame::OnPrependList( wxCommandEvent& WXUNUSED(event) )
+{
+    m_list_model->Prepend( "Test" );
+}
+
+void MyFrame::OnDeleteList( wxCommandEvent& WXUNUSED(event) )
+{
+    wxDataViewItem item = m_listCtrl->GetSelection();
+    if (item.IsOk())
+        m_list_model->DeleteItem( item );
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )

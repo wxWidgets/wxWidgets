@@ -16,6 +16,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_MSGDLG
+
 #include "wx/msgdlg.h"
 
 #ifndef WX_PRECOMP
@@ -132,3 +134,5 @@ int wxMessageDialog::ShowModal()
     }
     return ans;
 }
+
+#endif // wxUSE_MSGDLG

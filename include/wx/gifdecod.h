@@ -105,6 +105,6 @@ private:
     DECLARE_NO_COPY_CLASS(wxGIFDecoder)
 };
 
-#endif // wxUSE_STREAM && wxUSE_GIF
+#endif // wxUSE_STREAMS && wxUSE_GIF
 
 #endif // _WX_GIFDECOD_H_

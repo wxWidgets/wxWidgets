@@ -312,7 +312,7 @@ bool wxClipboard::AddData( wxDataObject *data )
         wxString id = dfarr[i].GetId();
 
         while( ( retval = XmClipboardCopy( xdisplay, xwindow, itemId,
-                                           wxConstCast(id.mb_str(), char),
+                                           id.char_str(),
                                            NULL, size, i, &data_id ) )
                == XmClipboardLocked );
 
@@ -461,7 +461,7 @@ bool wxClipboard::GetData( wxDataObject& data )
     wxString id = chosenFormat.GetId();
 
     while( ( retval = XmClipboardInquireLength( xdisplay, xwindow,
-                                                wxConstCast(id.mb_str(), char),
+                                                id.char_str(),
                                                 &length ) )
            == XmClipboardLocked );
     if( retval != XmClipboardSuccess )
@@ -470,7 +470,7 @@ bool wxClipboard::GetData( wxDataObject& data )
     wxCharBuffer buf(length);
 
     while( ( retval = XmClipboardRetrieve( xdisplay, xwindow,
-                                           wxConstCast(id.mb_str(), char),
+                                           id.char_str(),
                                            (XtPointer)buf.data(),
                                            length, &dummy1, &dummy2 ) )
            == XmClipboardLocked );

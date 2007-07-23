@@ -122,6 +122,11 @@ protected:
 };
 
 
+// wxColour <-> wxString utilities, used by wxConfig, defined in colourcmn.cpp
+WXDLLIMPEXP_CORE wxString wxToString(const wxColourBase& col);
+WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxColourBase* col);
+
+
 
 #if defined(__WXPALMOS__)
     #include "wx/generic/colour.h"

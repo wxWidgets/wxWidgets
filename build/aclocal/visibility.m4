@@ -60,6 +60,30 @@ AC_DEFUN([WX_VISIBILITY],
     AC_MSG_RESULT([$wx_cv_cc_visibility])
     if test $wx_cv_cc_visibility = yes; then
       AC_DEFINE([HAVE_VISIBILITY])
+
+      dnl Debian/Ubuntu's gcc 4.1 is affected:
+      dnl https://bugs.launchpad.net/ubuntu/+source/gcc-4.1/+bug/109262
+      AC_MSG_CHECKING([for broken libstdc++ visibility])
+      AC_CACHE_VAL(wx_cv_cc_broken_libstdcxx_visibility, [
+        wx_save_CXXFLAGS="$CXXFLAGS"
+        CXXFLAGS="$CXXFLAGS $CXXFLAGS_VISIBILITY"
+        AC_LANG_PUSH(C++)
+        AC_TRY_LINK(
+          [
+            #include <string>
+          ],
+          [
+            std::string x;
+          ],
+          wx_cv_cc_broken_libstdcxx_visibility=no,
+          wx_cv_cc_broken_libstdcxx_visibility=yes)
+        AC_LANG_POP()
+        CXXFLAGS="$wx_save_CXXFLAGS"])
+      AC_MSG_RESULT([$wx_cv_cc_broken_libstdcxx_visibility])
+      if test $wx_cv_cc_broken_libstdcxx_visibility = yes; then
+        AC_DEFINE([HAVE_BROKEN_LIBSTDCXX_VISIBILITY])
+      fi
+
     else
       CFLAGS_VISIBILITY=""
       CXXFLAGS_VISIBILITY=""

@@ -14,36 +14,15 @@
 #define _WX_CHKCONF_H_
 
 /*
-   Platform-specific checking.
+   This file has the following sections:
+    1. checks that all wxUSE_XXX symbols we use are defined
+     a) first the non-GUI ones
+     b) then the GUI-only ones
+    2. platform-specific checks done in the platform headers
+    3. generic consistency checks
+     a) first the non-GUI ones
+     b) then the GUI-only ones
  */
-
-#if defined(__WXPALMOS__)
-#  include "wx/palmos/chkconf.h"
-#elif defined(__WXWINCE__)
-#  include "wx/msw/wince/chkconf.h"
-#elif defined(__WXMSW__)
-#  include "wx/msw/chkconf.h"
-#elif defined(__WXMAC__)
-#  include "wx/mac/chkconf.h"
-#elif defined(__OS2__)
-#  include "wx/os2/chkconf.h"
-#elif defined(__WXMGL__)
-#  include "wx/mgl/chkconf.h"
-#elif defined(__WXDFB__)
-#  include "wx/dfb/chkconf.h"
-#elif defined(__WXMOTIF__)
-#  include "wx/motif/chkconf.h"
-#elif defined(__WXX11__)
-#  include "wx/x11/chkconf.h"
-#endif
-
-#ifdef __UNIX__
-#   include "wx/unix/chkconf.h"
-#endif
-
-#ifdef __WXUNIVERSAL__
-#   include "wx/univ/chkconf.h"
-#endif
 
 /*
    this global setting determines what should we do if the setting FOO
@@ -84,7 +63,7 @@
 
 
 /*
-   tests for non GUI features
+   Section 1a: tests for non GUI features.
 
    please keep the options in alphabetical order!
  */
@@ -96,16 +75,6 @@
 #       define wxUSE_CONSOLE_EVENTLOOP 0
 #   endif
 #endif /* !defined(wxUSE_CONSOLE_EVENTLOOP) */
-
-#ifndef wxUSE_CRASHREPORT
-    /* this one is special: as currently it is Windows-only, don't force it
-       to be defined on other platforms */
-#   if defined(wxABORT_ON_CONFIG_ERROR) && defined(__WXMSW__)
-#       error "wxUSE_CRASHREPORT must be defined."
-#   else
-#       define wxUSE_CRASHREPORT 0
-#   endif
-#endif /* !defined(wxUSE_CRASHREPORT) */
 
 #ifndef wxUSE_DYNLIB_CLASS
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -323,7 +292,7 @@
 #endif /* wxUSE_VARIANT */
 
 /*
-   all these tests are for GUI only
+   Section 1b: all these tests are for GUI only.
 
    please keep the options in alphabetical order!
  */
@@ -991,7 +960,44 @@
 #endif /* wxUSE_GUI */
 
 /*
-   check consistency of the settings
+   Section 2: platform-specific checks.
+
+   This must be done after checking that everything is defined as the platform
+   checks use wxUSE_XXX symbols in #if tests.
+ */
+
+#if defined(__WXPALMOS__)
+#  include "wx/palmos/chkconf.h"
+#elif defined(__WXWINCE__)
+#  include "wx/msw/wince/chkconf.h"
+#elif defined(__WXMSW__)
+#  include "wx/msw/chkconf.h"
+#elif defined(__WXGTK__)
+#  include "wx/gtk/chkconf.h"
+#elif defined(__WXMAC__)
+#  include "wx/mac/chkconf.h"
+#elif defined(__OS2__)
+#  include "wx/os2/chkconf.h"
+#elif defined(__WXMGL__)
+#  include "wx/mgl/chkconf.h"
+#elif defined(__WXDFB__)
+#  include "wx/dfb/chkconf.h"
+#elif defined(__WXMOTIF__)
+#  include "wx/motif/chkconf.h"
+#elif defined(__WXX11__)
+#  include "wx/x11/chkconf.h"
+#endif
+
+#ifdef __UNIX__
+#   include "wx/unix/chkconf.h"
+#endif
+
+#ifdef __WXUNIVERSAL__
+#   include "wx/univ/chkconf.h"
+#endif
+
+/*
+   Section 3a: check consistency of the non-GUI settings.
  */
 
 #if WXWIN_COMPATIBILITY_2_6
@@ -1015,15 +1021,6 @@
 #       endif
 #   endif
 #endif /* wxUSE_ARCHIVE_STREAMS */
-
-#if wxUSE_CRASHREPORT && !wxUSE_ON_FATAL_EXCEPTION
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_CRASHREPORT requires wxUSE_ON_FATAL_EXCEPTION"
-#   else
-#       undef wxUSE_CRASHREPORT
-#       define wxUSE_CRASHREPORT 0
-#   endif
-#endif /* wxUSE_CRASHREPORT */
 
 #if wxUSE_PROTOCOL_FILE || wxUSE_PROTOCOL_FTP || wxUSE_PROTOCOL_HTTP
 #   if !wxUSE_PROTOCOL
@@ -1230,7 +1227,9 @@
 #   endif
 #endif /* wxUSE_TARSTREAM */
 
-/* the rest of the tests is for the GUI settings only */
+/*
+   Section 3b: the tests for the GUI settings only.
+ */
 #if wxUSE_GUI
 
 #if wxUSE_BUTTON || \
@@ -1372,40 +1371,6 @@
 #       define wxUSE_GRAPHICS_CONTEXT 0
 #   endif
 #endif /* wxUSE_GRAPHICS_CONTEXT */
-
-
-/* wxGTK-specific dependencies */
-#ifdef __WXGTK__
-#   ifndef __WXUNIVERSAL__
-#       if wxUSE_MDI_ARCHITECTURE && !wxUSE_MENUS
-#           ifdef wxABORT_ON_CONFIG_ERROR
-#               error "MDI requires wxUSE_MENUS in wxGTK"
-#           else
-#               undef wxUSE_MENUS
-#               define wxUSE_MENUS 1
-#           endif
-#       endif
-#   endif /* !__WXUNIVERSAL__ */
-
-#   if wxUSE_JOYSTICK
-#       if !wxUSE_THREADS
-#           ifdef wxABORT_ON_CONFIG_ERROR
-#               error "wxJoystick requires threads in wxGTK"
-#           else
-#               undef wxUSE_JOYSTICK
-#               define wxUSE_JOYSTICK 0
-#           endif
-#       endif
-#   endif
-#endif /* wxGTK && !wxUniv */
-
-/* Hopefully we can emulate these dialogs in due course */
-#if defined(__SMARTPHONE__) && defined(__WXWINCE__)
-#   ifdef wxUSE_COLOURDLG
-#       undef wxUSE_COLOURDLG
-#       define wxUSE_COLOURDLG 0
-#   endif
-#endif /* __SMARTPHONE__ && __WXWINCE__ */
 
 
 /* generic controls dependencies */

@@ -2631,7 +2631,7 @@ unsigned int wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item)
 
 void BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item, wxDataViewTreeNode * node)
 {
-    if( !model->HasChildren( item ) )
+    if( !model->IsContainer( item ) )
         return ;
     
     wxDataViewItem i = model->GetFirstChild( item );
@@ -2639,7 +2639,7 @@ void BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item, wxDataVie
     {
         wxDataViewTreeNode * n = new wxDataViewTreeNode( node );
         n->SetItem(i);
-        n->SetHasChildren( model->HasChildren( i )) ;
+        n->SetHasChildren( model->IsContainer( i )) ;
         node->AppendChild(n);
         //BuildTreeHelper( model, i, n) ;        
         i = model->GetNextSibling( i );

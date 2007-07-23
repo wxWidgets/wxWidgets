@@ -72,6 +72,6 @@ private:
 };
 
 
-#endif  // wxUSE_STREAM && wxUSE_ICO_CUR
+#endif  // wxUSE_STREAMS && wxUSE_ICO_CUR
 
 #endif  // _WX_ANIDECOD_H

@@ -3414,6 +3414,17 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
                 int src_idx = evt.GetSelection();
                 wxWindow* src_page = src_tabs->GetWindowFromIdx(src_idx);
 
+                // Check that it's not an impossible parent relationship
+                wxWindow* p = nb;
+                while (p && !p->IsTopLevel())
+                {
+                    if (p == src_page)
+                    {
+                        return;
+                    }
+                    p = p->GetParent();
+                }
+
                 // get main index of the page
                 int main_idx = m_tabs.GetIdxFromWindow(src_page);
                 wxCHECK_RET( main_idx != wxNOT_FOUND, _T("no source page?") );
@@ -3700,7 +3711,7 @@ void wxAuiNotebook::OnTabButton(wxCommandEvent& command_evt)
             // page selection to determine which page to close
             selection = GetSelection();
         }
-        
+
         if (selection != -1)
         {
             wxWindow* close_wnd = tabs->GetWindowFromIdx(selection);

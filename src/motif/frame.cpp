@@ -452,8 +452,8 @@ void wxFrame::SetTitle(const wxString& title)
 
     if( !title.empty() )
         XtVaSetValues( (Widget)m_frameShell,
-                       XmNtitle, title.mb_str(),
-                       XmNiconName, title.mb_str(),
+                       XmNtitle, (const char*)title.mb_str(),
+                       XmNiconName, (const char*)title.mb_str(),
                        NULL );
 }
 

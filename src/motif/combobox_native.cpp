@@ -196,7 +196,7 @@ void wxComboBox::SetValue(const wxString& value)
     m_inSetValue = true;
 
     XtVaSetValues( GetXmText(this),
-                   XmNvalue, value.mb_str(),
+                   XmNvalue, (const char*)value.mb_str(),
                    NULL);
 
     m_inSetValue = false;
@@ -341,7 +341,7 @@ wxTextPos wxComboBox::GetLastPosition() const
 void wxComboBox::Replace(long from, long to, const wxString& value)
 {
     XmTextReplace( GetXmText(this), (XmTextPosition)from, (XmTextPosition)to,
-                   wxConstCast(value.mb_str(), char) );
+                   value.char_str() );
 }
 
 void wxComboBox::Remove(long from, long to)

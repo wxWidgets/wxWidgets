@@ -82,15 +82,24 @@ bool wxConsoleAppTraits::DoMessageFromThreadWait()
     return true;
 }
 
+#if wxUSE_TIMER
+
 wxTimerImpl *wxConsoleAppTraits::CreateTimerImpl(wxTimer *timer)
 {
     return new wxMSWTimerImpl(timer);
 }
 
+#endif // wxUSE_TIMER
+
 wxEventLoopBase *wxConsoleAppTraits::CreateEventLoop()
 {
+#if wxUSE_CONSOLE_EVENTLOOP
     return new wxEventLoop();
+#else // !wxUSE_CONSOLE_EVENTLOOP
+    return NULL;
+#endif // wxUSE_CONSOLE_EVENTLOOP/!wxUSE_CONSOLE_EVENTLOOP
 }
+
 
 WXDWORD wxConsoleAppTraits::WaitForThread(WXHANDLE hThread)
 {

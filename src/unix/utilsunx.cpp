@@ -20,12 +20,18 @@
 
 #include "wx/utils.h"
 
+#define USE_PUTENV (!defined(HAVE_SETENV) && defined(HAVE_PUTENV))
+
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/wxcrtvararg.h"
+    #if USE_PUTENV
+        #include "wx/module.h"
+        #include "wx/hashmap.h"
+    #endif
 #endif
 
 #include "wx/apptrait.h"
@@ -1045,6 +1051,35 @@ bool wxGetDiskSpace(const wxString& path, wxDiskspaceSize_t *pTotal, wxDiskspace
 // env vars
 // ----------------------------------------------------------------------------
 
+#if USE_PUTENV
+
+WX_DECLARE_STRING_HASH_MAP(char *, wxEnvVars);
+
+static wxEnvVars gs_envVars;
+
+class wxSetEnvModule : public wxModule
+{
+public:
+    virtual bool OnInit() { return true; }
+    virtual void OnExit()
+    {
+        for ( wxEnvVars::const_iterator i = gs_envVars.begin();
+              i != gs_envVars.end();
+              ++i )
+        {
+            free(i->second);
+        }
+
+        gs_envVars.clear();
+    }
+
+    DECLARE_DYNAMIC_CLASS(wxSetEnvModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxSetEnvModule, wxModule)
+
+#endif // USE_PUTENV
+
 bool wxGetEnv(const wxString& var, wxString *value)
 {
     // wxGetenv is defined as getenv()
@@ -1072,9 +1107,20 @@ static bool wxDoSetEnv(const wxString& variable, const char *value)
     // transform to ANSI
     const wxWX2MBbuf p = s.mb_str();
 
-    // the string will be free()d by libc
     char *buf = (char *)malloc(strlen(p) + 1);
     strcpy(buf, p);
+
+    // store the string to free() it later
+    wxEnvVars::iterator i = gs_envVars.find(variable);
+    if ( i != gs_envVars.end() )
+    {
+        free(i->second);
+        i->second = buf;
+    }
+    else // this variable hadn't been set before
+    {
+        gs_envVars[variable] = buf;
+    }
 
     return putenv(buf) == 0;
 #else // no way to set an env var

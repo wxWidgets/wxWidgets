@@ -18,7 +18,11 @@
 // Enables an application to influence the wxWidgets implementation
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxSystemOptions : public wxObject
+class
+#if wxUSE_SYSTEM_OPTIONS
+WXDLLIMPEXP_BASE
+#endif
+wxSystemOptions : public wxObject
 {
 public:
     wxSystemOptions() { }

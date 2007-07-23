@@ -183,14 +183,14 @@ void wxApp::WakeUpIdle()
 #if wxUSE_THREADS
     if (!wxThread::IsMain())
         wxMutexGuiEnter();
-#endif // wxUSE_THREADS_
+#endif // wxUSE_THREADS
 
     wxapp_install_idle_handler();
 
 #if wxUSE_THREADS
     if (!wxThread::IsMain())
         wxMutexGuiLeave();
-#endif // wxUSE_THREADS_
+#endif // wxUSE_THREADS
 }
 
 //-----------------------------------------------------------------------------

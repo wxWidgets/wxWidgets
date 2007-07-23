@@ -141,6 +141,6 @@ protected:
 };
 
 
-#endif  // wxUSE_STREAM
+#endif  // wxUSE_STREAMS
 #endif  // _WX_ANIMDECOD_H
 

@@ -485,7 +485,7 @@ SOURCE=.\streams\fileback.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\fileconf\fileconftest.cpp
+SOURCE=.\config\fileconf.cpp
 # End Source File
 # Begin Source File
 

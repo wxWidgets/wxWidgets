@@ -11,6 +11,8 @@
 #ifndef _WX_MSW_PRIVATE_TIMER_H_
 #define _WX_MSW_PRIVATE_TIMER_H_
 
+#if wxUSE_TIMER
+
 #include "wx/private/timer.h"
 
 class WXDLLIMPEXP_BASE wxMSWTimerImpl : public wxTimerImpl
@@ -26,5 +28,7 @@ public:
 protected:
     unsigned long m_id;
 };
+
+#endif // wxUSE_TIMER
 
 #endif // _WX_TIMERH_

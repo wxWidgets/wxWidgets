@@ -491,6 +491,9 @@
 // Joystick support class
 #define wxUSE_JOYSTICK            1
 
+// wxFontEnumerator class
+#define wxUSE_FONTENUM 1
+
 // wxFontMapper class
 #define wxUSE_FONTMAP 1
 
@@ -1240,6 +1243,7 @@
 
 /* --- end common options --- */
 
+/* --- start MSW options --- */
 // ----------------------------------------------------------------------------
 // Windows-only settings
 // ----------------------------------------------------------------------------
@@ -1299,7 +1303,7 @@
 #define wxUSE_DC_CACHEING 1
 
 // Set this to 1 to enable wxDIB class used internally for manipulating
-// wxBitmao data.
+// wxBitmap data.
 //
 // Default is 1, set it to 0 only if you don't use wxImage neither
 //
@@ -1309,6 +1313,13 @@
 // Set to 0 to disable PostScript print/preview architecture code under Windows
 // (just use Windows printing).
 #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
+
+// Set this to 1 to compile in wxRegKey class.
+//
+// Default is 1
+//
+// Recommended setting: 1, this is used internally by wx in a few places
+#define wxUSE_REGKEY 1
 
 // Set this to 1 to use RICHEDIT controls for wxTextCtrl with style wxTE_RICH
 // which allows to put more than ~32Kb of text in it even under Win9x (NT
@@ -1337,10 +1348,6 @@
 
 // Set to 1 to compile MS Windows XP theme engine support
 #define wxUSE_UXTHEME           1
-
-// Set to 1 to auto-adapt to MS Windows XP themes where possible
-// (notably, wxNotebook pages)
-#define wxUSE_UXTHEME_AUTO      1
 
 // Set to 1 to use InkEdit control (Tablet PC), if available
 #define wxUSE_INKEDIT  0
@@ -1378,6 +1385,8 @@
 
 // Define 1 to use bitmap messages.
 #define wxUSE_BITMAP_MESSAGE         1
+
+/* --- end MSW options --- */
 
 #endif // _WX_SETUP_H_
 

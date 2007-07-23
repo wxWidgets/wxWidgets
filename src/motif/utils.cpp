@@ -601,11 +601,6 @@ wxString wxXmStringToString( const XmString& xmString )
     return wxEmptyString;
 }
 
-XmString wxStringToXmString( const wxString& str )
-{
-    return wxStringToXmString(str.mb_str());
-}
-
 XmString wxStringToXmString( const char* str )
 {
     return XmStringCreateLtoR((char *)str, XmSTRING_DEFAULT_CHARSET);

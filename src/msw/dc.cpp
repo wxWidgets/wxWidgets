@@ -205,6 +205,8 @@ private:
     DECLARE_NO_COPY_CLASS(StretchBltModeChanger)
 };
 
+#if wxUSE_DYNLIB_CLASS
+
 // helper class to cache dynamically loaded libraries and not attempt reloading
 // them if it fails
 class wxOnceOnlyDLLLoader
@@ -243,6 +245,8 @@ private:
 
 static wxOnceOnlyDLLLoader wxGDI32DLL(_T("gdi32"));
 static wxOnceOnlyDLLLoader wxMSIMG32DLL(_T("msimg32"));
+
+#endif // wxUSE_DYNLIB_CLASS
 
 // ===========================================================================
 // implementation
@@ -2673,6 +2677,8 @@ void wxDC::DoGradientFillLinear (const wxRect& rect,
     wxDCBase::DoGradientFillLinear(rect, initialColour, destColour, nDirection);
 }
 
+#if wxUSE_DYNLIB_CLASS
+
 static DWORD wxGetDCLayout(HDC hdc)
 {
     typedef DWORD (WINAPI *GetLayout_t)(HDC);
@@ -2715,3 +2721,17 @@ void wxDC::SetLayoutDirection(wxLayoutDirection dir)
 
     pfnSetLayout(GetHdc(), layout);
 }
+
+#else // !wxUSE_DYNLIB_CLASS
+
+// we can't provide RTL support without dynamic loading, so stub it out
+wxLayoutDirection wxDC::GetLayoutDirection() const
+{
+    return wxLayout_Default;
+}
+
+void wxDC::SetLayoutDirection(wxLayoutDirection WXUNUSED(dir))
+{
+}
+
+#endif // wxUSE_DYNLIB_CLASS/!wxUSE_DYNLIB_CLASS

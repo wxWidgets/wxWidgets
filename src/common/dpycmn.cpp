@@ -205,7 +205,7 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
     return m_impl->ChangeMode(mode);
 }
 
-#endif // wxUSE_DIRECTDRAW
+#endif // wxUSE_DISPLAY
 
 // ----------------------------------------------------------------------------
 // static functions implementation

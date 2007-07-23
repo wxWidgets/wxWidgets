@@ -24,7 +24,7 @@
   #pragma hdrstop
 #endif
 
-#if wxUSE_FONTMAP
+#if wxUSE_FONTENUM
 
 #ifndef WX_PRECOMP
     #include "wx/gdicmn.h"
@@ -289,4 +289,4 @@ int CALLBACK wxFontEnumeratorProc(LPLOGFONT lplf, LPTEXTMETRIC lptm,
 }
 #endif
 
-#endif // wxUSE_FONTMAP
+#endif // wxUSE_FONTENUM

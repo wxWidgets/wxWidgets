@@ -1084,6 +1084,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/button.h
     wx/gtk/checkbox.h
     wx/gtk/checklst.h
+    wx/gtk/chkconf.h
     wx/gtk/collpane.h
     wx/gtk/colordlg.h
     wx/gtk/choice.h

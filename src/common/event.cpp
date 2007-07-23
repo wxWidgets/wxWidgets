@@ -34,6 +34,7 @@
     #include "wx/module.h"
 
     #if wxUSE_GUI
+        #include "wx/window.h"
         #include "wx/control.h"
         #include "wx/dc.h"
         #include "wx/textctrl.h"

@@ -166,7 +166,7 @@ public:
   bool Read(const wxString& key, long *pl) const;
   bool Read(const wxString& key, long *pl, long defVal) const;
 
-    // read an int
+    // read an int (wrapper around `long' version)
   bool Read(const wxString& key, int *pi) const;
   bool Read(const wxString& key, int *pi, int defVal) const;
 
@@ -185,11 +185,44 @@ public:
    // no default version since it does not make sense for binary data
 #endif // wxUSE_BASE64
 
+
+  // read other types, for which wxFromString is defined
+  template <typename T>
+  bool Read(const wxString& key, T* value) const
+  {
+      wxString s;
+      if ( !Read(key, &s) )
+          return false;
+      return wxFromString(s, value);
+  }
+
+  template <typename T>
+  bool Read(const wxString& key, T* value, const T& defVal) const
+  {
+      const bool found = Read(key, value);
+      if ( !found )
+      {
+          if (IsRecordingDefaults())
+              ((wxConfigBase *)this)->Write(key, defVal);
+          *value = defVal;
+      }
+      return found;
+  }
+
   // convenience functions returning directly the value (we don't have them for
   // int/double/bool as there would be ambiguities with the long one then)
   wxString Read(const wxString& key,
                 const wxString& defVal = wxEmptyString) const
     { wxString s; (void)Read(key, &s, defVal); return s; }
+
+  // we have to provide a separate version for C strings as otherwise the
+  // template Read() would be used
+  wxString Read(const wxString& key, const char* defVal) const
+    { return Read(key, wxString(defVal)); }
+#if wxUSE_WCHAR_T
+  wxString Read(const wxString& key, const wchar_t* defVal) const
+    { return Read(key, wxString(defVal)); }
+#endif
 
   long Read(const wxString& key, long defVal) const
     { long l; (void)Read(key, &l, defVal); return l; }
@@ -200,9 +233,6 @@ public:
 
   bool Write(const wxString& key, long value)
     { return DoWriteLong(key, value); }
-
-  bool Write(const wxString& key, int value)
-    { return DoWriteInt(key, value); }
 
   bool Write(const wxString& key, double value)
     { return DoWriteDouble(key, value); }
@@ -219,10 +249,40 @@ public:
   // would be converted to bool and not to wxString as expected!
   bool Write(const wxString& key, const char *value)
     { return Write(key, wxString(value)); }
+  bool Write(const wxString& key, const unsigned char *value)
+    { return Write(key, wxString(value)); }
 #if wxUSE_WCHAR_T
   bool Write(const wxString& key, const wchar_t *value)
     { return Write(key, wxString(value)); }
 #endif
+
+
+  // we also have to provide specializations for other types which we want to
+  // handle using the specialized DoWriteXXX() instead of the generic template
+  // version below
+  bool Write(const wxString& key, short value)
+    { return DoWriteLong(key, value); }
+
+  bool Write(const wxString& key, unsigned short value)
+    { return DoWriteLong(key, value); }
+
+  bool Write(const wxString& key, unsigned int value)
+    { return DoWriteLong(key, value); }
+
+  bool Write(const wxString& key, int value)
+    { return DoWriteLong(key, value); }
+
+  bool Write(const wxString& key, unsigned long value)
+    { return DoWriteLong(key, value); }
+
+  bool Write(const wxString& key, float value)
+    { return DoWriteDouble(key, value); }
+
+
+  // for other types, use wxToString()
+  template <typename T>
+  bool Write(const wxString& key, T const& value)
+    { return Write(key, wxToString(value)); }
 
   // permanently writes all changes
   virtual bool Flush(bool bCurrentOnly = false) = 0;
@@ -283,7 +343,6 @@ protected:
   // do read/write the values of different types
   virtual bool DoReadString(const wxString& key, wxString *pStr) const = 0;
   virtual bool DoReadLong(const wxString& key, long *pl) const = 0;
-  virtual bool DoReadInt(const wxString& key, int *pi) const;
   virtual bool DoReadDouble(const wxString& key, double* val) const;
   virtual bool DoReadBool(const wxString& key, bool* val) const;
 #if wxUSE_BASE64
@@ -292,7 +351,6 @@ protected:
 
   virtual bool DoWriteString(const wxString& key, const wxString& value) = 0;
   virtual bool DoWriteLong(const wxString& key, long value) = 0;
-  virtual bool DoWriteInt(const wxString& key, int value);
   virtual bool DoWriteDouble(const wxString& key, double value);
   virtual bool DoWriteBool(const wxString& key, bool value);
 #if wxUSE_BASE64

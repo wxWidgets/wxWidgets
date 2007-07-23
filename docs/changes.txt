@@ -106,6 +106,7 @@ Major new features in this release
 
 All:
 
+- Added support for user-defined types to wxConfig (Marcin Wojdyr)
 - Added wxJoin() and wxSplit() functions (Francesco Montorsi)
 - Added wxMutex::LockTimeout() (Aleksandr Napylov)
 - Added wxMemoryInputStream(wxInputStream&) ctor (Stas Sergeev)

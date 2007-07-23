@@ -156,29 +156,32 @@ wxConfigBase *wxConfigBase::Create()
 
 IMPLEMENT_READ_FOR_TYPE(String, wxString, const wxString&, ExpandEnvVars)
 IMPLEMENT_READ_FOR_TYPE(Long, long, long, long)
-IMPLEMENT_READ_FOR_TYPE(Int, int, int, int)
 IMPLEMENT_READ_FOR_TYPE(Double, double, double, double)
 IMPLEMENT_READ_FOR_TYPE(Bool, bool, bool, bool)
 
 #undef IMPLEMENT_READ_FOR_TYPE
 
-// the DoReadXXX() for the other types have implementation in the base class
-// but can be overridden in the derived ones
-bool wxConfigBase::DoReadInt(const wxString& key, int *pi) const
+// int is stored as long
+bool wxConfigBase::Read(const wxString& key, int *pi) const
 {
-    wxCHECK_MSG( pi, false, _T("wxConfig::Read(): NULL parameter") );
-
-    long l;
-    if ( !DoReadLong(key, &l) )
-        return false;
-
-    wxASSERT_MSG( l < INT_MAX, _T("overflow in wxConfig::DoReadInt") );
-
+    long l = *pi;
+    bool r = Read(key, &l);
+    wxASSERT_MSG( l < INT_MAX, _T("int overflow in wxConfig::Read") );
     *pi = (int)l;
-
-    return true;
+    return r;
 }
 
+bool wxConfigBase::Read(const wxString& key, int *pi, int defVal) const
+{
+    long l = *pi;
+    bool r = Read(key, &l, defVal);
+    wxASSERT_MSG( l < INT_MAX, _T("int overflow in wxConfig::Read") );
+    *pi = (int)l;
+    return r;
+}
+
+// the DoReadXXX() for the other types have implementation in the base class
+// but can be overridden in the derived ones
 bool wxConfigBase::DoReadBool(const wxString& key, bool* val) const
 {
     wxCHECK_MSG( val, false, _T("wxConfig::Read(): NULL parameter") );
@@ -223,11 +226,6 @@ wxString wxConfigBase::ExpandEnvVars(const wxString& str) const
 bool wxConfigBase::DoWriteDouble(const wxString& key, double val)
 {
     return DoWriteString(key, wxString::Format(_T("%g"), val));
-}
-
-bool wxConfigBase::DoWriteInt(const wxString& key, int value)
-{
-    return DoWriteLong(key, (long)value);
 }
 
 bool wxConfigBase::DoWriteBool(const wxString& key, bool value)

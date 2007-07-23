@@ -1128,11 +1128,7 @@ typedef float wxFloat32;
     typedef double wxFloat64;
 #endif
 
-#if defined( __WXMAC__ )  && !defined( __POWERPC__ )
-    typedef long double wxDouble;
-#else
-    typedef double wxDouble;
-#endif
+typedef double wxDouble;
 
 /*
     Some (non standard) compilers typedef wchar_t as an existing type instead

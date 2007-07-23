@@ -147,4 +147,4 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
 }
 
 #endif
-    // wxUSE_SPINCTN
+    // wxUSE_SPINBTN

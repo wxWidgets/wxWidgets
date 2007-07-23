@@ -12,7 +12,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_FONTMAP
+#if wxUSE_FONTENUM
 
 #include "wx/fontenum.h"
 
@@ -37,20 +37,20 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
     //
     // From Apple's QA 1471 http://developer.apple.com/qa/qa2006/qa1471.html
     //
-    
+
     ATSFontFamilyIterator theFontFamilyIterator = NULL;
     ATSFontFamilyRef theATSFontFamilyRef = 0;
     OSStatus status = noErr;
-    
+
     wxArrayString fontFamilies ;
-    
+
     // Create the iterator
     status = ATSFontFamilyIteratorCreate(kATSFontContextLocal, nil,nil,
                                          kATSOptionFlagsUnRestrictedScope,
                                          &theFontFamilyIterator );
-    
+
     wxUint32 macEncoding = wxMacGetSystemEncFromFontEnc(encoding) ;
-    
+
     while (status == noErr)
     {
         // Get the next font in the iteration.
@@ -76,7 +76,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
                 if ( fontFamiliyEncoding != macEncoding )
                     continue ;
             }
-            
+
             // TODO: determine fixed widths ...
 
             CFStringRef theName = NULL;
@@ -94,13 +94,13 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
         }
     }
     ATSFontFamilyIteratorRelease(&theFontFamilyIterator);
-    
+
     for ( size_t i = 0 ; i < fontFamilies.Count() ; ++i )
     {
         if ( OnFacename( fontFamilies[i] ) == false )
             break ;
     }
-    
+
     return true;
 }
 
@@ -111,4 +111,4 @@ bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
     return true;
 }
 
-#endif // wxUSE_FONTMAP
+#endif // wxUSE_FONTENUM

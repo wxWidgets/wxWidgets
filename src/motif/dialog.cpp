@@ -155,7 +155,7 @@ bool wxDialog::XmDoCreateTLW(wxWindow* parent,
     XtSetArg (args[1], XmNautoUnmanage, False);
     Widget dialogShell =
         XmCreateBulletinBoardDialog( parentWidget,
-                                     wxConstCast(name.mb_str(), char),
+                                     name.char_str(),
                                      args, 2);
     m_mainWidget = (WXWidget) dialogShell;
 
@@ -236,9 +236,9 @@ void wxDialog::SetTitle(const wxString& title)
     {
         wxXmString str( title );
         XtVaSetValues( (Widget)m_mainWidget,
-                       XmNtitle, title.mb_str(),
+                       XmNtitle, (const char*)title.mb_str(),
                        XmNdialogTitle, str(),
-                       XmNiconName, title.mb_str(),
+                       XmNiconName, (const char*)title.mb_str(),
                        NULL );
     }
 }

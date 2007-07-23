@@ -492,6 +492,9 @@
 // Joystick support class
 #define wxUSE_JOYSTICK            1
 
+// wxFontEnumerator class
+#define wxUSE_FONTENUM 1
+
 // wxFontMapper class
 #define wxUSE_FONTMAP 1
 
@@ -1283,6 +1286,9 @@
 // native toolbar does not support embedding controls yet, please test by setting to 1
 #define wxMAC_USE_NATIVE_TOOLBAR 0
 
+// make sure we have the proper dispatcher for the console event loop
+#define wxUSE_SELECT_DISPATCHER 1
+#define wxUSE_EPOLL_DISPATCHER 0
 
 
 

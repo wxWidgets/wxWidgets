@@ -106,6 +106,8 @@ public:
     virtual void SetTitle( const wxString& title);
     virtual wxString GetTitle() const;
 
+    // Default button (item)
+    wxWindow *SetDefaultItem(wxWindow *win);
 
 // Things I may/may not do
 //    virtual void SetIcons(const wxIconBundle& icons);

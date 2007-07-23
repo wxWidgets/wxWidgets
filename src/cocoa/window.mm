@@ -666,6 +666,15 @@ bool wxWindowCocoa::Cocoa_resetCursorRects()
     return true;
 }
 
+bool wxWindowCocoa::SetCursor(const wxCursor &cursor)
+{
+    if(!wxWindowBase::SetCursor(cursor))
+        return false;
+    // Invalidate the cursor rects so the cursor will change
+    [[GetNSView() window] invalidateCursorRectsForView:GetNSView()];
+    return true;
+}
+
 bool wxWindowCocoa::Cocoa_viewDidMoveToWindow()
 {
     wxLogTrace(wxTRACE_COCOA,wxT("wxWindow=%p::viewDidMoveToWindow"),this);
@@ -1019,8 +1028,8 @@ void wxWindow::DoSetVirtualSize( int x, int y )
 
 bool wxWindow::SetFont(const wxFont& font)
 {
-    // TODO
-    return true;
+    // FIXME: We may need to handle wx font inheritance.
+    return wxWindowBase::SetFont(font);
 }
 
 #if 0 // these are used when debugging the algorithm.

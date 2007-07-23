@@ -138,14 +138,14 @@ bool wxTextCtrl::Create(wxWindow *parent,
             XtSetArg (args[count], (String) wxFont::GetFontTag(),
                       m_font.GetFontType( XtDisplay(parentWidget) ) ); ++count;
         XtSetArg (args[count], XmNwordWrap, wantWordWrap); ++count;
-        XtSetArg (args[count], XmNvalue, value.mb_str()); ++count;
+        XtSetArg (args[count], XmNvalue, (const char*)value.mb_str()); ++count;
         XtSetArg (args[count], XmNeditable,
                   style & wxTE_READONLY ? False : True); ++count;
         XtSetArg (args[count], XmNeditMode, XmMULTI_LINE_EDIT ); ++count;
 
         m_mainWidget =
             (WXWidget) XmCreateScrolledText(parentWidget,
-                                            wxConstCast(name.mb_str(), char),
+                                            name.char_str(),
                                             args, count);
 
         XtManageChild ((Widget) m_mainWidget);
@@ -154,11 +154,11 @@ bool wxTextCtrl::Create(wxWindow *parent,
     {
         m_mainWidget = (WXWidget)XtVaCreateManagedWidget
                                  (
-                                  wxConstCast(name.mb_str(), char),
+                                  name.mb_str(),
                                   xmTextWidgetClass,
                                   parentWidget,
                                   wxFont::GetFontTag(), m_font.GetFontType( XtDisplay(parentWidget) ),
-                                  XmNvalue, value.mb_str(),
+                                  XmNvalue, (const char*)value.mb_str(),
                                   XmNeditable, (style & wxTE_READONLY) ?
                                       False : True,
                                   NULL
@@ -243,7 +243,7 @@ void wxTextCtrl::DoSetValue(const wxString& text, int flags)
 {
     m_inSetValue = true;
 
-    XmTextSetString ((Widget) m_mainWidget, wxConstCast(text.mb_str(), char));
+    XmTextSetString ((Widget) m_mainWidget, text.char_str());
     XtVaSetValues ((Widget) m_mainWidget,
                    XmNcursorPosition, text.length(),
                    NULL);
@@ -364,7 +364,7 @@ wxTextPos wxTextCtrl::GetLastPosition() const
 void wxTextCtrl::Replace(long from, long to, const wxString& value)
 {
     XmTextReplace ((Widget) m_mainWidget, (XmTextPosition) from, (XmTextPosition) to,
-        wxConstCast(value.mb_str(), char));
+        value.char_str());
 }
 
 void wxTextCtrl::Remove(long from, long to)
@@ -387,7 +387,7 @@ void wxTextCtrl::WriteText(const wxString& text)
 {
     long textPosition = GetInsertionPoint() + text.length();
     XmTextInsert ((Widget) m_mainWidget, GetInsertionPoint(),
-                  wxConstCast(text.mb_str(), char));
+                  text.char_str());
     XtVaSetValues ((Widget) m_mainWidget, XmNcursorPosition, textPosition, NULL);
     SetInsertionPoint(textPosition);
     XmTextShowPosition ((Widget) m_mainWidget, textPosition);
@@ -398,7 +398,7 @@ void wxTextCtrl::AppendText(const wxString& text)
 {
     wxTextPos textPosition = GetLastPosition() + text.length();
     XmTextInsert ((Widget) m_mainWidget, GetLastPosition(),
-                  wxConstCast(text.mb_str(), char));
+                  text.char_str());
     XtVaSetValues ((Widget) m_mainWidget, XmNcursorPosition, textPosition, NULL);
     SetInsertionPoint(textPosition);
     XmTextShowPosition ((Widget) m_mainWidget, textPosition);

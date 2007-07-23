@@ -51,7 +51,7 @@ WX_DEFINE_LIST(wxXCursorList)
 
 class WXDLLEXPORT wxCursorRefData: public wxObjectRefData
 {
-    friend class WXDLLEXPORT wxCursor;
+    friend class wxCursor;
 public:
     wxCursorRefData();
     virtual ~wxCursorRefData();
@@ -259,7 +259,7 @@ wxCursor::wxCursor(const wxString& name, long flags, int hotSpotX, int hotSpotY)
     int screen_num =  DefaultScreen (dpy);
 
     int value = XReadBitmapFile (dpy, RootWindow (dpy, screen_num),
-                                 wxConstCast(name.mb_str(), char),
+                                 name.mb_str(),
                                  &w, &h, &pixmap, &hotX, &hotY);
 
     if (value == BitmapSuccess)

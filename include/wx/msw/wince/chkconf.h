@@ -63,12 +63,9 @@
 
 #undef wxUSE_UXTHEME
 #define wxUSE_UXTHEME 0
-#undef wxUSE_UXTHEME_AUTO
-#define wxUSE_UXTHEME_AUTO 0
 
 #undef wxUSE_UNICODE_MSLU
 #define wxUSE_UNICODE_MSLU 0
-
 
 // Disable features which don't make sense for MS Smartphones
 // (due to pointer device usage, limited controls or dialogs, file system)
@@ -84,6 +81,9 @@
 
     #undef wxUSE_COLOURPICKERCTRL
     #define wxUSE_COLOURPICKERCTRL 0
+
+    #undef wxUSE_COLOURDLG
+    #define wxUSE_COLOURDLG 0
 #endif // __SMARTPHONE__
 
 #endif // _WX_MSW_WINCE_CHKCONF_H_

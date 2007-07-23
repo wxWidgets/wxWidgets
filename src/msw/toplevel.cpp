@@ -1087,7 +1087,7 @@ void wxTopLevelWindowMSW::RequestUserAttention(int flags)
     // provide FlashWindowEx() declaration, so try to detect whether we have
     // real headers for WINVER 0x0500 by checking for existence of a symbol not
     // declated in MSVC6 header
-#if defined(FLASHW_STOP) && defined(VK_XBUTTON1)
+#if defined(FLASHW_STOP) && defined(VK_XBUTTON1) && wxUSE_DYNLIB_CLASS
     // available in the headers, check if it is supported by the system
     typedef BOOL (WINAPI *FlashWindowEx_t)(FLASHWINFO *pfwi);
     FlashWindowEx_t s_pfnFlashWindowEx = NULL;
@@ -1133,6 +1133,7 @@ void wxTopLevelWindowMSW::RequestUserAttention(int flags)
 
 bool wxTopLevelWindowMSW::SetTransparent(wxByte alpha)
 {
+#if wxUSE_DYNLIB_CLASS
     typedef DWORD (WINAPI *PSETLAYEREDWINDOWATTR)(HWND, DWORD, BYTE, DWORD);
     static PSETLAYEREDWINDOWATTR pSetLayeredWindowAttributes = NULL;
 
@@ -1144,6 +1145,7 @@ bool wxTopLevelWindowMSW::SetTransparent(wxByte alpha)
     }
     if ( pSetLayeredWindowAttributes == NULL )
         return false;
+#endif // wxUSE_DYNLIB_CLASS
 
     LONG exstyle = GetWindowLong(GetHwnd(), GWL_EXSTYLE);
 
@@ -1155,11 +1157,16 @@ bool wxTopLevelWindowMSW::SetTransparent(wxByte alpha)
         return true;
     }
 
+#if wxUSE_DYNLIB_CLASS
     // Otherwise, set the layered style if needed and set the alpha value
     if ((exstyle & WS_EX_LAYERED) == 0 )
         SetWindowLong(GetHwnd(), GWL_EXSTYLE, exstyle | WS_EX_LAYERED);
 
-    return pSetLayeredWindowAttributes(GetHwnd(), 0, (BYTE)alpha, LWA_ALPHA) != 0;
+    if ( pSetLayeredWindowAttributes(GetHwnd(), 0, (BYTE)alpha, LWA_ALPHA) )
+        return true;
+#endif // wxUSE_DYNLIB_CLASS
+
+    return false;
 }
 
 bool wxTopLevelWindowMSW::CanSetTransparent()

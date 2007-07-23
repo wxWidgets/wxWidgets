@@ -307,6 +307,7 @@ bool wxDIB::Save(const wxString& filename)
 {
     wxCHECK_MSG( m_handle, false, _T("wxDIB::Save(): invalid object") );
 
+#if wxUSE_FILE
     wxFile file(filename, wxFile::write);
     bool ok = file.IsOpened();
     if ( ok )
@@ -335,6 +336,9 @@ bool wxDIB::Save(const wxString& filename)
                         file.Write(ds.dsBm.bmBits, sizeImage) == sizeImage;
         }
     }
+#else // !wxUSE_FILE
+    bool ok = false;
+#endif // wxUSE_FILE/!wxUSE_FILE
 
     if ( !ok )
     {
