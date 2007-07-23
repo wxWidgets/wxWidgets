@@ -107,6 +107,7 @@ public:
     virtual bool HasChildren( const wxDataViewItem &item ) const = 0;
     virtual wxDataViewItem GetFirstChild( const wxDataViewItem &parent ) const = 0;
     virtual wxDataViewItem GetNextSibling( const wxDataViewItem &item ) const = 0;
+    virtual wxDataViewItem GetParent( const wxDataViewItem & item ) const = 0;
 
     // delegated notifiers
     virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );

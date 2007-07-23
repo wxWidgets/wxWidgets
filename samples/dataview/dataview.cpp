@@ -250,6 +250,19 @@ public:
         node = parent->GetChildren().Item( pos+1 );
         return wxDataViewItem( (void*) node );
     } 
+
+    virtual wxDataViewItem GetParent( const wxDataViewItem & item ) const
+    {
+        MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
+        if (!node)
+            return wxDataViewItem( 0 );
+    
+        node = node->GetParent();
+        if(!node)
+            return wxDataViewItem( 0 );
+
+        return wxDataViewItem( node );
+    }
     
 private:
     MyMusicModelNode*   m_root;
