@@ -310,6 +310,7 @@ protected:
 
     virtual bool        MacIsChildOfClientArea( const wxWindow* child ) const ;
 
+    bool                MacHasScrollBarCorner() const;
     void                MacCreateScrollBars( long style ) ;
     void                MacRepositionScrollBars() ;
     void                MacUpdateControlFont() ;
