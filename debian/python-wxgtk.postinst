@@ -2,15 +2,14 @@
 
 set -e
 
-WXPYTHONDIR="/=WXPYDIR"
+WXPYTHONDIR="=WXPYDIR"
+PYVERS="=PYVERS"
 
-if [ "$1" = "configure" ]; then
-	=PY /usr/lib/=PY/compileall.py -q ${WXPYTHONDIR}
-	=PY -O /usr/lib/=PY/compileall.py -q ${WXPYTHONDIR}
-fi
-
-update-alternatives --install /usr/lib/=PY/site-packages/wx.pth  wx.pth	\
-			      /usr/lib/wx/python/wx=V.pth        =PRIO
+for PY in $PYVERS; do
+    update-alternatives --install /usr/lib/python$PY/site-packages/wx.pth  \
+	wx-python$PY.pth	                                           \
+	/usr/lib/wx/python$PY/wx=V.pth       =PRIO
+done
 
 #DEBHELPER#
 

@@ -1,3 +1,39 @@
+wxwidgets2.8 (2.8.4.2-0) unstable; urgency=low
+
+  * Pacakges now support all Python versions in `pyversions -r`
+  * Added colour normalization to PNM image handler (Ray Johnston).
+  * Fixed selecting part of word from right to left in wxHTML (Michael Hieke).
+  * Selecting text in wxHTML with character precision was made easier, it's
+    enough to select half of a character (Michael Hieke).
+  * Significantly improved startup times of XRC-based applications using
+    embedded resources on Unix (requires resources recompilation).
+  * Fixed freeing of "static" alpha data in wxImage (Axel Gembe).
+  * Added tab mouse click events to wxAuiNotebook (Ben Williams).
+  * Option for middle-click tab close in wxAuiNotebook (Ben Williams).
+  * Added wxAuiNotebook::SetFont, GetTabCtrlHeight, GetHeightForPageHeight.
+  * Added SetBitmap/GetBitmap to wxWizard, to allow e.g. on-the-fly creation
+    of bitmap to fit page height.
+  * Fixed wxXPMHandler::SaveFile for images with more than 92 colors.
+  * Fixed a crash in wxGrid on creation due to OnSize being called too soon.
+  * Fixed missing key events in wxGTK1 build.
+  * Setting foreground colour of single line wxTextCtrl now works.
+  * More work on setting defaults in GNOME print dialogs.
+  * Also made landscape printing work as per wxMSW.
+  * Add support for (rectangular) clipping in GNOME print backend.
+  * Speed up wxBitmap::Rescale().
+  * Add right button event for wxToolbar's tools (Tim Kosse).
+  * Made wxWindow::SetScrollPos and wxScrollbar::SetThumbPos
+    not emit any event.
+  * Correct hyperactive mouse wheel support.
+  * Correct grid line mode in wxListCtrl.
+  * Don't unconditionally add wxCAPTION style to wxMiniFrame.
+  * Fixed crash in file and dir pickers for GTK+ < 2.6 if compiled
+    with GTK+ >= 2.6.
+  * Generate wxEVT_COMMAND_LIST_END_LABEL_EDIT event even if label didn't change
+
+
+ -- Robin Dunn <robin@alldunn.com>  Thu, 19 Jul 2007 15:42:23 -0700
+
 wxwidgets2.8 (2.8.4.0-0) unstable; urgency=low
 
   * Fix bug in wxFileConfig when recreating a group (Steven Van Ingelgem)

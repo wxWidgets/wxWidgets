@@ -2,10 +2,9 @@
 
 set -e
 
-PACKAGE="python-wxgtk=V"
-dpkg --listfiles $PACKAGE | awk '$0~/\.py$/ {print $0"c\n" $0"o"}' | xargs rm -f >&2
-
-update-alternatives --remove wx.pth /usr/lib/wx/python/wx=V.pth
+for PY in =PYVERS; do
+    update-alternatives --remove wx-python$PY.pth /usr/lib/wx/python$PY/wx=V.pth
+done
 
 #DEBHELPER#
 
