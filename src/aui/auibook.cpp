@@ -2068,13 +2068,13 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
     if (m_is_dragging)
     {
         m_is_dragging = false;
-        
+
         wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, m_windowId);
         evt.SetSelection(GetIdxFromWindow(m_click_tab));
         evt.SetOldSelection(evt.GetSelection());
         evt.SetEventObject(this);
         GetEventHandler()->ProcessEvent(evt);
-         
+
         return;
     }
 
@@ -2719,9 +2719,9 @@ bool wxAuiNotebook::DeletePage(size_t page_idx)
 {
     if (page_idx >= m_tabs.GetPageCount())
         return false;
-        
+
     wxWindow* wnd = m_tabs.GetWindowFromIdx(page_idx);
-    
+
     // hide the window in advance, as this will
     // prevent flicker
     ShowWnd(wnd, false);
@@ -2755,7 +2755,7 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
     wxWindow* active_wnd = NULL;
     if (m_curpage >= 0)
         active_wnd = m_tabs.GetWindowFromIdx(m_curpage);
-    
+
     // save pointer of window being deleted
     wxWindow* wnd = m_tabs.GetWindowFromIdx(page_idx);
     wxWindow* new_active = NULL;
@@ -2763,7 +2763,7 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
     // make sure we found the page
     if (!wnd)
         return false;
-        
+
     // find out which onscreen tab ctrl owns this tab
     wxAuiTabCtrl* ctrl;
     int ctrl_idx;
@@ -2784,15 +2784,15 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
     if (is_active_in_split)
     {
         int ctrl_new_page_count = (int)ctrl->GetPageCount();
-        
+
         if (ctrl_idx >= ctrl_new_page_count)
             ctrl_idx = ctrl_new_page_count-1;
-        
+
         if (ctrl_idx >= 0 && ctrl_idx < (int)ctrl->GetPageCount())
         {
             // set new page as active in the tab split
             ctrl->SetActivePage(ctrl_idx);
-            
+
             // if the page deleted was the current page for the
             // entire tab control, then record the window
             // pointer of the new active page for activation
@@ -2808,25 +2808,25 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
         new_active = active_wnd;
     }
 
-    
+
     if (!new_active)
     {
         // we haven't yet found a new page to active,
         // so select the next page from the main tab
         // catalogue
-        
+
         if (page_idx < m_tabs.GetPageCount())
         {
             new_active = m_tabs.GetPage(page_idx).window;
         }
-        
+
         if (!new_active && m_tabs.GetPageCount() > 0)
         {
             new_active = m_tabs.GetPage(0).window;
         }
     }
 
-    
+
     RemoveEmptyTabFrames();
 
     // set new active pane
@@ -2835,7 +2835,7 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
         m_curpage = -1;
         SetSelection(m_tabs.GetIdxFromWindow(new_active));
     }
-    
+
     return true;
 }
 
@@ -3426,6 +3426,17 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
                 int src_idx = evt.GetSelection();
                 wxWindow* src_page = src_tabs->GetWindowFromIdx(src_idx);
 
+                // Check that it's not an impossible parent relationship
+                wxWindow* p = nb;
+                while (p && !p->IsTopLevel())
+                {
+                    if (p == src_page)
+                    {
+                        return;
+                    }
+                    p = p->GetParent();
+                }
+
                 // get main index of the page
                 int main_idx = m_tabs.GetIdxFromWindow(src_page);
 
@@ -3628,7 +3639,7 @@ void wxAuiNotebook::RemoveEmptyTabFrames()
             // window closing, refreshs are pending
             if (!wxPendingDelete.Member(tab_frame->m_tabs))
                 wxPendingDelete.Append(tab_frame->m_tabs);
-                
+
             tab_frame->m_tabs = NULL;
 
             delete tab_frame;
@@ -3667,7 +3678,7 @@ void wxAuiNotebook::OnChildFocus(wxChildFocusEvent& evt)
     // was hidden.  In the bug, the focus would return to the notebook
     // child, which would then enter this handler and call
     // SetSelection, which is not desired turn tab dragging.
-    
+
     wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
     size_t i, pane_count = all_panes.GetCount();
     for (i = 0; i < pane_count; ++i)
@@ -3708,7 +3719,7 @@ void wxAuiNotebook::OnTabButton(wxCommandEvent& command_evt)
             // page selection to determine which page to close
             selection = GetSelection();
         }
-        
+
         if (selection != -1)
         {
             wxWindow* close_wnd = tabs->GetWindowFromIdx(selection);
@@ -3754,7 +3765,7 @@ void wxAuiNotebook::OnTabMiddleUp(wxCommandEvent& evt)
     // click should act like a tab close action.  However, first
     // give the owner an opportunity to handle the middle up event
     // for custom action
-    
+
     wxAuiTabCtrl* tabs = (wxAuiTabCtrl*)evt.GetEventObject();
     wxWindow* wnd = tabs->GetWindowFromIdx(evt.GetSelection());
 
@@ -3765,11 +3776,11 @@ void wxAuiNotebook::OnTabMiddleUp(wxCommandEvent& evt)
         return;
     if (!e.IsAllowed())
         return;
- 
+
     // check if we are supposed to close on middle-up
     if ((m_flags & wxAUI_NB_MIDDLE_CLICK_CLOSE) == 0)
         return;
-    
+
     // simulate the user pressing the close button on the tab
     evt.SetInt(wxAUI_BUTTON_CLOSE);
     OnTabButton(evt);
