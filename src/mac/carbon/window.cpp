@@ -2510,7 +2510,7 @@ void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
 
     Rect rect ;
     bool hasFocus = m_peer->NeedsFocusRect() && m_peer->HasFocus() ;
-    bool hasBothScrollbars = (m_hScrollBar && m_hScrollBar->IsShown()) && (m_vScrollBar && m_vScrollBar->IsShown()) ;
+    bool hasScrollCorner = MacHasScrollBarCorner() ;
 
     // back to the surrounding frame rectangle
     m_peer->GetRect( &rect ) ;
@@ -2548,9 +2548,9 @@ void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
         }
 
         m_peer->GetRect( &rect ) ;
-        if ( hasBothScrollbars )
+        if ( hasScrollCorner )
         {
-            int size = m_hScrollBar->GetWindowVariant() == wxWINDOW_VARIANT_NORMAL ? 16 : 12 ;
+            int size = (m_hScrollBar == NULL ? m_vScrollBar : m_hScrollBar ) ->GetWindowVariant() == wxWINDOW_VARIANT_NORMAL ? 16 : 12 ;
             CGRect cgrect = CGRectMake( rect.right - size , rect.bottom - size , size , size ) ;
             CGPoint cgpoint = CGPointMake( rect.right - size , rect.bottom - size ) ;
             HIThemeGrowBoxDrawInfo info ;
@@ -3162,20 +3162,83 @@ WXWindow wxWindowMac::MacGetTopLevelWindowRef() const
     return NULL ;
 }
 
+bool wxWindowMac::MacHasScrollBarCorner() const
+{
+    /* Returns whether the scroll bars in a wxScrolledWindow should be
+     * shortened. Scroll bars should be shortened if either:
+     *
+     * - both scroll bars are visible, or
+     *
+     * - there is a resize box in the parent frame's corner and this
+     *   window shares the bottom and right edge with the parent
+     *   frame.
+     */
+
+    if ( m_hScrollBar == NULL && m_vScrollBar == NULL )
+        return false;
+
+    if ( ( m_hScrollBar && m_hScrollBar->IsShown() )
+         && ( m_vScrollBar && m_vScrollBar->IsShown() ) )
+    {
+        // Both scroll bars visible
+        return true;
+    }
+    else
+    {
+        wxPoint thisWindowBottomRight = GetScreenRect().GetBottomRight();
+
+        for ( const wxWindow *win = this; win; win = win->GetParent() )
+        {
+            const wxFrame *frame = wxDynamicCast( win, wxFrame ) ;
+            if ( frame )
+            {
+                if ( frame->GetWindowStyleFlag() & wxRESIZE_BORDER ) 
+                {
+                    // Parent frame has resize handle
+                    wxPoint frameBottomRight = frame->GetScreenRect().GetBottomRight();
+
+                    // Note: allow for some wiggle room here as wxMac's
+                    // window rect calculations seem to be imprecise
+                    if ( abs( thisWindowBottomRight.x - frameBottomRight.x ) <= 2
+                        && abs( thisWindowBottomRight.y - frameBottomRight.y ) <= 2 )
+                    {
+                        // Parent frame has resize handle and shares
+                        // right bottom corner
+                        return true ;
+                    }
+                    else
+                    {
+                        // Parent frame has resize handle but doesn't
+                        // share right bottom corner
+                        return false ;
+                    }
+                }
+                else
+                {
+                    // Parent frame doesn't have resize handle
+                    return false ;
+                }
+            }
+        }
+
+        // No parent frame found
+        return false ;
+    }
+}
+
 void wxWindowMac::MacCreateScrollBars( long style )
 {
     wxASSERT_MSG( m_vScrollBar == NULL && m_hScrollBar == NULL , wxT("attempt to create window twice") ) ;
 
     if ( style & ( wxVSCROLL | wxHSCROLL ) )
     {
-        bool hasBoth = ( style & wxVSCROLL ) && ( style & wxHSCROLL ) ;
         int scrlsize = MAC_SCROLLBAR_SIZE ;
         if ( GetWindowVariant() == wxWINDOW_VARIANT_SMALL || GetWindowVariant() == wxWINDOW_VARIANT_MINI )
         {
             scrlsize = MAC_SMALL_SCROLLBAR_SIZE ;
         }
 
-        int adjust = hasBoth ? scrlsize - 1: 0 ;
+        int adjust = MacHasScrollBarCorner() ? scrlsize - 1: 0 ;
         int width, height ;
         GetClientSize( &width , &height ) ;
 
@@ -3208,9 +3271,8 @@ void wxWindowMac::MacRepositionScrollBars()
     if ( !m_hScrollBar && !m_vScrollBar )
         return ;
 
-    bool hasBoth = (m_hScrollBar && m_hScrollBar->IsShown()) && ( m_vScrollBar && m_vScrollBar->IsShown()) ;
     int scrlsize = m_hScrollBar ? m_hScrollBar->GetSize().y : ( m_vScrollBar ? m_vScrollBar->GetSize().x : MAC_SCROLLBAR_SIZE ) ;
-    int adjust = hasBoth ? scrlsize - 1 : 0 ;
+    int adjust = MacHasScrollBarCorner() ? scrlsize - 1 : 0 ;
 
     // get real client area
     int width, height ;
