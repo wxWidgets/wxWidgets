@@ -2611,7 +2611,7 @@ void wxWindowMac::SetScrollbar(int orient, int pos, int thumbVisible,
     {
         if ( m_hScrollBar )
         {
-            showScroller = ((range != 0) && (range > thumbVisible));
+            showScroller = HasFlag( wxALWAYS_SHOW_SB ) || ((range != 0) && (range > thumbVisible));
             if ( m_hScrollBar->IsShown() != showScroller )
             {
                 m_hScrollBar->Show( showScroller );
@@ -2625,7 +2625,7 @@ void wxWindowMac::SetScrollbar(int orient, int pos, int thumbVisible,
     {
         if ( m_vScrollBar )
         {
-            showScroller = ((range != 0) && (range > thumbVisible));
+            showScroller = HasFlag( wxALWAYS_SHOW_SB ) || ((range != 0) && (range > thumbVisible));
             if ( m_vScrollBar->IsShown() != showScroller )
             {
                 m_vScrollBar->Show( showScroller ) ;
@@ -3187,7 +3187,7 @@ void wxWindowMac::MacCreateScrollBars( long style )
         if ( style & wxVSCROLL )
             m_vScrollBar = new wxScrollBar((wxWindow*)this, wxID_ANY, vPoint, vSize , wxVERTICAL);
 
-        if ( style  & wxHSCROLL )
+        if ( style & wxHSCROLL )
             m_hScrollBar = new wxScrollBar((wxWindow*)this, wxID_ANY, hPoint, hSize , wxHORIZONTAL);
     }
 
