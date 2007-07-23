@@ -1254,6 +1254,11 @@ void  wxTopLevelWindowMac::MacCreateRealWindow(
     }
 #endif
 
+    HIViewRef growBoxRef = 0 ;
+    err = HIViewFindByID( HIViewGetRoot( (WindowRef)m_macWindow ), kHIViewWindowGrowBoxID, &growBoxRef  );
+    if ( err == noErr && growBoxRef != 0 )
+        HIGrowBoxViewSetTransparent( growBoxRef, true ) ;
+
     // the frame window event handler
     InstallStandardEventHandler( GetWindowEventTarget(MAC_WXHWND(m_macWindow)) ) ;
     MacInstallTopLevelWindowEventHandler() ;
