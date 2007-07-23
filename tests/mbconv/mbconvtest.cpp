@@ -861,7 +861,7 @@ void MBConvTestCase::LibcTests()
         systemMB_size,
         (const char*)systemMB_utf8, 
         systemMB_utf8_size,
-        &convLibc,
+        convLibc,
         1
         );
 
