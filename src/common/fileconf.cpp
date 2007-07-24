@@ -458,7 +458,7 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream, const wxMBConv& conv)
 
 #if wxUSE_UNICODE
     size_t len;
-    cbuf = conv.cMB2WC((char *)buf.GetData(), buf.GetDataLen(), &len);
+    cbuf = conv.cMB2WC((char *)buf.GetData(), buf.GetDataLen() + 1, &len);
     if ( !len && buf.GetDataLen() )
     {
         wxLogError(_("Failed to read config options."));
