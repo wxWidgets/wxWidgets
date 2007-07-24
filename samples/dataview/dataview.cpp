@@ -412,6 +412,10 @@ public:
     void OnPrependList(wxCommandEvent& event);
     void OnDeleteList(wxCommandEvent& event);
 
+    void OnValueChanged( wxDataViewEvent &event );
+    void OnItemAdded( wxDataViewEvent &event );
+    void OnItemDeleted( wxDataViewEvent &event );
+
 private:
     wxDataViewCtrl* m_musicCtrl;
     wxObjectDataPtr<MyMusicModel> m_music_model;
@@ -461,6 +465,8 @@ enum
     ID_ABOUT = wxID_ABOUT,
     ID_EXIT = wxID_EXIT,
     
+    ID_MUSIC_CTRL       = 50,
+    
     ID_ADD_MOZART       = 100,
     ID_DELETE_MUSIC     = 101,
      
@@ -475,11 +481,16 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_DELETE_MUSIC, MyFrame::OnDeleteMusic )
     EVT_BUTTON( ID_PREPEND_LIST, MyFrame::OnPrependList )
     EVT_BUTTON( ID_DELETE_LIST, MyFrame::OnDeleteList )
+    EVT_DATAVIEW_MODEL_ITEM_ADDED( ID_MUSIC_CTRL, MyFrame::OnItemAdded )
+    EVT_DATAVIEW_MODEL_ITEM_DELETED( ID_MUSIC_CTRL, MyFrame::OnItemDeleted )
+    EVT_DATAVIEW_MODEL_VALUE_CHANGED( ID_MUSIC_CTRL, MyFrame::OnValueChanged )
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
   wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
+    m_log = NULL;
+
     SetIcon(wxICON(sample));
 
     // build the menus:
@@ -501,7 +512,7 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
 
     // MyMusic
 
-    m_musicCtrl = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition,
+    m_musicCtrl = new wxDataViewCtrl( this, ID_MUSIC_CTRL, wxDefaultPosition,
                                     wxDefaultSize );
 
     m_music_model = new MyMusicModel;
@@ -579,6 +590,30 @@ void MyFrame::OnDeleteList( wxCommandEvent& WXUNUSED(event) )
     wxDataViewItem item = m_listCtrl->GetSelection();
     if (item.IsOk())
         m_list_model->DeleteItem( item );
+}
+
+void MyFrame::OnItemAdded( wxDataViewEvent &event )
+{
+    if (!m_log)
+        return;
+        
+    m_log->AppendText( "EVT_DATAVIEW_MODEL_ITEM_ADDED\n" );
+}
+
+void MyFrame::OnItemDeleted( wxDataViewEvent &event )
+{
+    if (!m_log)
+        return;
+        
+    m_log->AppendText( "EVT_DATAVIEW_MODEL_ITEM_DELETED\n" );
+}
+
+void MyFrame::OnValueChanged( wxDataViewEvent &event )
+{
+    if (!m_log)
+        return;
+        
+    m_log->AppendText( "EVT_DATAVIEW_MODEL_VALUE_CHANGED\n" );
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )

@@ -75,7 +75,9 @@ public:
 
     bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
     bool ItemDeleted( const wxDataViewItem &item );
-    
+    bool ItemChanged( const wxDataViewItem &item );
+    bool ValueChanged( const wxDataViewItem &item, unsigned int col );
+    bool Cleared();
     void Resort();
     
 protected:
@@ -1096,6 +1098,8 @@ bool wxGtkDataViewModelNotifier::ItemChanged( const wxDataViewItem &item )
         GTK_TREE_MODEL(m_wxgtk_model), path, &iter );
     gtk_tree_path_free (path);
 
+    m_owner->GtkGetInternal()->ItemChanged( item );
+    
     return true;
 }
 
@@ -1129,14 +1133,22 @@ bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsig
             // Redraw
             gtk_widget_queue_draw_area( GTK_WIDGET(widget),
                 cell_area.x - xdiff, ydiff + cell_area.y, cell_area.width, cell_area.height );
+                
+            m_owner->GtkGetInternal()->ValueChanged( item, model_col );
+            
+            return true;
         }
     }
 
-    return true;
+    return false;
 }
 
 bool wxGtkDataViewModelNotifier::Cleared()
 {
+    // TODO: delete everything
+
+    m_owner->GtkGetInternal()->Cleared();
+    
     return false;
 }
 
@@ -2240,6 +2252,10 @@ void wxDataViewCtrlInternal::InitTree()
 
 void wxDataViewCtrlInternal::BuildBranch( wxGtkTreeModelNode *node )
 {
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_ADDED, m_owner->GetId() );
+    event.SetEventObject( m_owner );
+    event.SetModel( m_owner->GetModel() );
+
     if (node->GetChildCount() == 0)
     {
         wxDataViewItem child = m_wx_model->GetFirstChild( node->GetItem() );
@@ -2249,6 +2265,10 @@ void wxDataViewCtrlInternal::BuildBranch( wxGtkTreeModelNode *node )
                 node->AddNode( new wxGtkTreeModelNode( node, child, this ) );
             else
                 node->AddLeave( child.GetID() );
+                
+            event.SetItem( child );
+            m_owner->GetEventHandler()->ProcessEvent( event );
+    
             child = m_wx_model->GetNextSibling( child );
         }
     }
@@ -2266,6 +2286,13 @@ bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDa
         parent_node->AddNode( new wxGtkTreeModelNode( parent_node, item, this ) );
     else
         parent_node->AddLeave( item.GetID() );
+        
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_ADDED, m_owner->GetId() );
+    event.SetEventObject( m_owner );
+    event.SetModel( m_owner->GetModel() );
+    event.SetItem( item );
+    m_owner->GetEventHandler()->ProcessEvent( event );
+
     return true;
 }
 
@@ -2273,6 +2300,46 @@ bool wxDataViewCtrlInternal::ItemDeleted( const wxDataViewItem &item )
 {
     wxGtkTreeModelNode *parent = FindParentNode( item );
     parent->DeleteChild( item.GetID() );
+    
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_DELETED, m_owner->GetId() );
+    event.SetEventObject( m_owner );
+    event.SetModel( m_owner->GetModel() );
+    event.SetItem( item );
+    m_owner->GetEventHandler()->ProcessEvent( event );
+
+    return true;
+}
+
+bool wxDataViewCtrlInternal::ItemChanged( const wxDataViewItem &item )
+{
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_CHANGED, m_owner->GetId() );
+    event.SetEventObject( m_owner );
+    event.SetModel( m_owner->GetModel() );
+    event.SetItem( item );
+    m_owner->GetEventHandler()->ProcessEvent( event );
+    
+    return true;
+}
+
+bool wxDataViewCtrlInternal::ValueChanged( const wxDataViewItem &item, unsigned int col )
+{
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_MODEL_VALUE_CHANGED, m_owner->GetId() );
+    event.SetEventObject( m_owner );
+    event.SetModel( m_owner->GetModel() );
+    event.SetColumn( col );
+    event.SetItem( item );
+    m_owner->GetEventHandler()->ProcessEvent( event );
+    
+    return true;
+}
+
+bool wxDataViewCtrlInternal::Cleared()
+{
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_MODEL_CLEARED, m_owner->GetId() );
+    event.SetEventObject( m_owner );
+    event.SetModel( m_owner->GetModel() );
+    m_owner->GetEventHandler()->ProcessEvent( event );
+    
     return true;
 }
 
