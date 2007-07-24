@@ -26,6 +26,8 @@
 #include "wx/calctrl.h"
 #include "wx/popupwin.h"
 #include "wx/icon.h"
+#include "wx/list.h"
+#include "wx/listimpl.cpp"
 
 
 #include "wx/gtk/private.h"
@@ -52,6 +54,9 @@ typedef struct _GtkWxTreeModel       GtkWxTreeModel;
 //-----------------------------------------------------------------------------
 // wxDataViewCtrlInternal
 //-----------------------------------------------------------------------------
+
+WX_DECLARE_LIST(wxDataViewItem, ItemList);
+WX_DEFINE_LIST(ItemList);
 
 class wxDataViewCtrlInternal
 {
@@ -2432,6 +2437,9 @@ gboolean wxDataViewCtrlInternal::iter_next( GtkTreeIter *iter )
     g_model = m_wx_model;
     
     wxGtkTreeModelNode *parent = FindParentNode( iter );
+    if( parent == NULL )
+        return FALSE;
+
     unsigned int pos = parent->GetChildren().Index( iter->user_data );
     
     if (pos == parent->GetChildCount()-1)
@@ -2534,30 +2542,48 @@ gboolean wxDataViewCtrlInternal::iter_parent( GtkTreeIter *iter, GtkTreeIter *ch
 }
     
 static wxGtkTreeModelNode*
-wxDataViewCtrlInternal_FindNode( wxGtkTreeModelNode *node, const wxDataViewItem &item )
+wxDataViewCtrlInternal_FindNode( wxDataViewModel * model, wxGtkTreeModelNode *treeNode, const wxDataViewItem &item )
 {
-    if (!node) return NULL;
+    if( model == NULL )
+        return NULL;
 
-    size_t count = node->GetNodesCount();
-    size_t i;
-    for (i = 0; i < count; i++)
+    ItemList list;
+    list.DeleteContents( true );
+    wxDataViewItem it( item );
+    while( it.IsOk() )
     {
-        wxGtkTreeModelNode *child = node->GetNodes().Item( i );
-        if (child->GetItem().GetID() == item.GetID())
-        {
-            // wxPrintf( "leave findnode at %d\n", i );
-            return child;
-        }
-            
-        wxGtkTreeModelNode *node2 = wxDataViewCtrlInternal_FindNode( child, item );
-        if (node2)
-        {
-            // wxPrintf( "branch findnode at %d\n", i );
-            return node2;
-        }
+        wxDataViewItem * pItem = new wxDataViewItem( it );
+        list.Insert( pItem );
+        it = model->GetParent( it );
     }
-    
-    return NULL;
+
+    wxGtkTreeModelNode * node = treeNode;
+    for( ItemList::Node * n = list.GetFirst(); n; n = n->GetNext() )
+    {
+        if( node && node->GetNodes().GetCount() != 0 )
+        {
+            int len = node->GetNodes().GetCount();
+            wxGtkTreeModelNodes nodes = node->GetNodes();
+            int j = 0;
+            for( ; j < len; j ++)
+            {
+                if( nodes[j]->GetItem() == *(n->GetData()))
+                {
+                    node = nodes[j];
+                    break;
+                }    
+            }
+
+            if( j == len )
+            {
+                return NULL;
+            }
+        }
+        else
+            return NULL;
+    }
+    return node;
+
 }
 
 wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( GtkTreeIter *iter )
@@ -2569,7 +2595,7 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( GtkTreeIter *iter )
     if (!item.IsOk())
         return m_root;
     
-    wxGtkTreeModelNode *result = wxDataViewCtrlInternal_FindNode( m_root, item );
+    wxGtkTreeModelNode *result = wxDataViewCtrlInternal_FindNode( m_wx_model, m_root, item );
     
     if (!result)
     {
@@ -2586,7 +2612,7 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( const wxDataViewItem &item
     if (!item.IsOk())
         return m_root;
 
-    wxGtkTreeModelNode *result = wxDataViewCtrlInternal_FindNode( m_root, item );
+    wxGtkTreeModelNode *result = wxDataViewCtrlInternal_FindNode( m_wx_model, m_root, item );
     
     if (!result)
     {
@@ -2599,31 +2625,56 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( const wxDataViewItem &item
 }
 
 static wxGtkTreeModelNode*
-wxDataViewCtrlInternal_FindParentNode( wxGtkTreeModelNode *node, const wxDataViewItem &item )
+wxDataViewCtrlInternal_FindParentNode( wxDataViewModel * model, wxGtkTreeModelNode *treeNode, const wxDataViewItem &item )
 {
-    size_t child_count = node->GetChildCount();
-    void *id = item.GetID();
-    const wxGtkTreeModelChildren &children = node->GetChildren();
-    size_t pos;
-    for (pos = 0; pos < child_count; pos++)
+    if( model == NULL )
+        return NULL;
+
+    ItemList list;
+    list.DeleteContents( true );
+    if( !item.IsOk() )
+        return NULL;
+
+    wxDataViewItem it( model->GetParent( item ) );
+    while( it.IsOk() )
     {
-        if (children.Item( pos ) == id)
-            return node;
+        wxDataViewItem * pItem = new wxDataViewItem( it );
+        list.Insert( pItem );
+        it = model->GetParent( it );
     }
 
-    size_t node_count = node->GetNodesCount();
-    for (pos = 0; pos < node_count; pos++)
+    wxGtkTreeModelNode * node = treeNode;
+    for( ItemList::Node * n = list.GetFirst(); n; n = n->GetNext() )
     {
-        wxGtkTreeModelNode *child = node->GetNodes().Item( pos );
-    
-        wxGtkTreeModelNode *node2 = wxDataViewCtrlInternal_FindParentNode( child, item );
-        if (node2)
+        if( node && node->GetNodes().GetCount() != 0 )
         {
-            // wxPrintf( "branch findnode at %d\n", i );
-            return node2;
+            int len = node->GetNodes().GetCount();
+            wxGtkTreeModelNodes nodes = node->GetNodes();
+            int j = 0;
+            for( ; j < len; j ++)
+            {
+                if( nodes[j]->GetItem() == *(n->GetData()))
+                {
+                    node = nodes[j];
+                    break;
+                }    
+            }
+
+            if( j == len )
+            {
+                return NULL;
+            }
         }
+        else
+            return NULL;
     }
-    
+    //Examine whether the node is item's parent node
+    int len = node->GetChildCount();
+    for( int i = 0; i < len ; i ++ )
+    {
+        if( node->GetChildren().Item( i ) == item.GetID() )
+            return node;
+    }
     return NULL;
 }
 
@@ -2636,7 +2687,7 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindParentNode( GtkTreeIter *iter )
     if (!item.IsOk())
         return NULL;
 
-    return wxDataViewCtrlInternal_FindParentNode( m_root, item );
+    return wxDataViewCtrlInternal_FindParentNode( m_wx_model, m_root, item );
 }
 
 wxGtkTreeModelNode *wxDataViewCtrlInternal::FindParentNode( const wxDataViewItem &item )
@@ -2644,7 +2695,7 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindParentNode( const wxDataViewItem
     if (!item.IsOk())
         return NULL;
 
-    return wxDataViewCtrlInternal_FindParentNode( m_root, item );
+    return wxDataViewCtrlInternal_FindParentNode( m_wx_model, m_root, item );
 }
 
 //-----------------------------------------------------------------------------
