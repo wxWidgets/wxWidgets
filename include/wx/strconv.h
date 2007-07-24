@@ -257,11 +257,31 @@ public:
 // wxMBConvUTF8 (for conversion using UTF8 encoding)
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxMBConvUTF8 : public wxMBConv
+// this is the real UTF-8 conversion class, it has to be called "strict UTF-8"
+// for compatibility reasons: the wxMBConvUTF8 class below also supports lossy
+// conversions if it is created with non default options
+class WXDLLIMPEXP_BASE wxMBConvStrictUTF8 : public wxMBConv
 {
 public:
-    // FIXME-UTF8: split this class into multiple classes, one strict and
-    //             other lossy (PUA, OCTAL mappings)
+    // compiler-generated default ctor and other methods are ok
+
+    virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
+                           const char *src, size_t srcLen = wxNO_LEN) const;
+    virtual size_t FromWChar(char *dst, size_t dstLen,
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const;
+
+    virtual wxMBConv *Clone() const { return new wxMBConvStrictUTF8(); }
+
+#if wxUSE_UNICODE_UTF8
+    // NB: other mapping modes are not, strictly speaking, UTF-8, so we can't
+    //     take the shortcut in that case
+    virtual bool IsUTF8() const { return true; }
+#endif
+};
+
+class WXDLLIMPEXP_BASE wxMBConvUTF8 : public wxMBConvStrictUTF8
+{
+public:
     enum
     {
         MAP_INVALID_UTF8_NOT = 0,
@@ -470,7 +490,7 @@ WX_DECLARE_GLOBAL_CONV(wxMBConv, wxConvLibc)
 WX_DECLARE_GLOBAL_CONV(wxCSConv, wxConvISO8859_1)
 #define wxConvISO8859_1 wxGet_wxConvISO8859_1()
 
-WX_DECLARE_GLOBAL_CONV(wxMBConvUTF8, wxConvUTF8)
+WX_DECLARE_GLOBAL_CONV(wxMBConvStrictUTF8, wxConvUTF8)
 #define wxConvUTF8 wxGet_wxConvUTF8()
 
 WX_DECLARE_GLOBAL_CONV(wxMBConvUTF7, wxConvUTF7)
