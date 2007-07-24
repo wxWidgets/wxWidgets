@@ -2252,10 +2252,6 @@ void wxDataViewCtrlInternal::InitTree()
 
 void wxDataViewCtrlInternal::BuildBranch( wxGtkTreeModelNode *node )
 {
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_ADDED, m_owner->GetId() );
-    event.SetEventObject( m_owner );
-    event.SetModel( m_owner->GetModel() );
-
     if (node->GetChildCount() == 0)
     {
         wxDataViewItem child = m_wx_model->GetFirstChild( node->GetItem() );
@@ -2265,9 +2261,8 @@ void wxDataViewCtrlInternal::BuildBranch( wxGtkTreeModelNode *node )
                 node->AddNode( new wxGtkTreeModelNode( node, child, this ) );
             else
                 node->AddLeave( child.GetID() );
-                
-            event.SetItem( child );
-            m_owner->GetEventHandler()->ProcessEvent( event );
+    
+            // Don't send any events here
     
             child = m_wx_model->GetNextSibling( child );
         }
