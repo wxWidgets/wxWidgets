@@ -42,6 +42,8 @@
 #include "wx/renderer.h"
 #include "wx/dcbuffer.h"
 #include "wx/icon.h"
+#include "wx/list.h"
+#include "wx/listimpl.cpp"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -279,7 +281,7 @@ public:
     void AppendChild( wxDataViewTreeNode * child ) { children.Add( child ); }
 
     wxDataViewItem & GetItem() { return item; }
-    void SetItem( wxDataViewItem & item ) { this->item = item; }
+    void SetItem( const wxDataViewItem & item ) { this->item = item; }
 
     unsigned int GetChildrenNumber() { return children.GetCount(); }
     int GetIndentLevel()
@@ -312,6 +314,8 @@ private:
 
 WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_SIZE_T(unsigned int, wxDataViewSelection,
                                             WXDLLIMPEXP_ADV);
+WX_DECLARE_LIST(wxDataViewItem, ItemList);
+WX_DEFINE_LIST(ItemList);
 
 class wxDataViewMainWindow: public wxWindow
 {
@@ -400,6 +404,8 @@ private:
 
     void OnExpanding( unsigned int row );
     void OnCollapsing( unsigned int row );
+
+    wxDataViewTreeNode * FindNode( const wxDataViewItem & item ); 
 
 private:
     wxDataViewCtrl             *m_owner;
@@ -1770,8 +1776,17 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
 
 bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxDataViewItem & item)
 {
-    ItemAddJob job( parent, item, &m_count); 
-    Walker( m_root , job);
+    wxDataViewTreeNode * node;
+    node = FindNode(parent);
+
+    if( node == NULL )
+        return false;
+
+    node->SetHasChildren( true );
+    wxDataViewTreeNode * newnode = new wxDataViewTreeNode( node );
+    newnode->SetItem(item);
+    node->AppendChild( newnode);
+    m_count = -1;
     UpdateDisplay();
     return true;
 }
@@ -1800,8 +1815,20 @@ private:
 
 bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem & item)
 {
-    ItemDeleteJob job( item, &m_count);
-    Walker( m_root, job);
+    wxDataViewTreeNode * node;
+    node = FindNode(item);
+
+    if( node == NULL )
+    {
+        return false;
+    }
+
+    wxDataViewTreeNode * parent = node->GetParent();
+    parent->GetChildren().Remove( node );
+    if( parent->GetChildrenNumber() == 0)
+        parent->SetHasChildren( false );
+
+    m_count = -1;
     UpdateDisplay();
     return true;
 }
@@ -2474,7 +2501,13 @@ void wxDataViewMainWindow::OnExpanding( unsigned int row )
                if( node->GetChildrenNumber() == 0 )
                    BuildTreeHelper(GetOwner()->GetModel(), node->GetItem(), node);
                m_count = -1;
-               Refresh();
+               UpdateDisplay();
+            }
+            else
+            {
+                SelectRow( row, false );
+                SelectRow( row + 1, true );
+                ChangeCurrentRow( row + 1 );
             }
     }
 }
@@ -2488,7 +2521,7 @@ void wxDataViewMainWindow::OnCollapsing(unsigned int row)
         {
             node->ToggleOpen();
             m_count = -1;
-            Refresh();
+            UpdateDisplay();
             //RefreshRows(row,GetLastVisibleRow());
          }
          else
@@ -2503,6 +2536,58 @@ void wxDataViewMainWindow::OnCollapsing(unsigned int row)
              }
          }
     }
+}
+
+wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item )
+{
+    wxDataViewModel * model = GetOwner()->GetModel();
+    if( model == NULL )
+        return NULL;
+
+    //Compose the a parent-chain of the finding item
+    ItemList list;
+    list.DeleteContents( true );
+    wxDataViewItem it( item );
+    while( it.IsOk() )
+    {
+        wxDataViewItem * pItem = new wxDataViewItem( it );
+        list.Insert( pItem );
+        it = model->GetParent( it );
+    }
+
+    //Find the item along the parent-chain. 
+    //This algorithm is designed to speed up the node-finding method
+    bool found = true;
+    wxDataViewTreeNode * node = m_root;
+    for( ItemList::Node * n = list.GetFirst(); n; n = n->GetNext() )
+    {
+        if( node->HasChildren() )
+        {
+            if( node->GetChildrenNumber() == 0 )
+                BuildTreeHelper(model, node->GetItem(), node);
+
+            int len = node->GetChildrenNumber();
+            wxDataViewTreeNodes nodes = node->GetChildren();
+            int j = 0;
+            for( ; j < len; j ++)
+            {
+                if( nodes[j]->GetItem() == *(n->GetData()))
+		  {
+                    node = nodes[j];
+                    break;
+                }    
+            }
+            // Whenever we can't find the node in any level, return NULL to indicate the item can't be found
+            if( j == len )
+            {
+                found = false;
+                return NULL;
+            }
+        }
+        else
+            return NULL;
+    }
+    return node;
 }
 
 int wxDataViewMainWindow::RecalculateCount() 
@@ -2546,7 +2631,7 @@ unsigned int wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item)
 
 void BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item, wxDataViewTreeNode * node)
 {
-    if( !model->HasChildren( item ) )
+    if( !model->IsContainer( item ) )
         return ;
     
     wxDataViewItem i = model->GetFirstChild( item );
@@ -2554,7 +2639,7 @@ void BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item, wxDataVie
     {
         wxDataViewTreeNode * n = new wxDataViewTreeNode( node );
         n->SetItem(i);
-        n->SetHasChildren( model->HasChildren( i )) ;
+        n->SetHasChildren( model->IsContainer( i )) ;
         node->AppendChild(n);
         //BuildTreeHelper( model, i, n) ;        
         i = model->GetNextSibling( i );
