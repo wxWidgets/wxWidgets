@@ -340,7 +340,7 @@ wxString::SubstrBufFromMB wxString::ConvertStr(const char *psz, size_t nLength,
         return SubstrBufFromMB("", 0);
 
     // and then to UTF-8:
-    SubstrBufFromMB buf(ConvertStr(wcBuf, wcLen, wxMBConvUTF8()));
+    SubstrBufFromMB buf(ConvertStr(wcBuf, wcLen, wxMBConvStrictUTF8()));
     // widechar -> UTF-8 conversion isn't supposed to ever fail:
     wxASSERT_MSG( buf.data, _T("conversion to UTF-8 failed") );
 
@@ -382,9 +382,12 @@ const wxCharBuffer wxString::mb_str(const wxMBConv& conv) const
 
 const wxWCharBuffer wxString::wc_str() const
 {
-    return wxMBConvUTF8().cMB2WC(m_impl.c_str(),
-                                 m_impl.length() + 1 /* size, not length */,
-                                 NULL);
+    return wxMBConvStrictUTF8().cMB2WC
+                                (
+                                    m_impl.c_str(),
+                                    m_impl.length() + 1, // size, not length
+                                    NULL
+                                );
 }
 
 const wxCharBuffer wxString::mb_str(const wxMBConv& conv) const
@@ -395,10 +398,12 @@ const wxCharBuffer wxString::mb_str(const wxMBConv& conv) const
     // FIXME-UTF8: use wc_str() here once we have buffers with length
 
     size_t wcLen;
-    wxWCharBuffer wcBuf(
-            wxMBConvUTF8().cMB2WC(m_impl.c_str(),
-                                  m_impl.length() + 1 /* size, not length */,
-                                  &wcLen));
+    wxWCharBuffer wcBuf(wxMBConvStrictUTF8().cMB2WC
+                                             (
+                                                m_impl.c_str(),
+                                                m_impl.length() + 1, // size
+                                                &wcLen
+                                             ));
     if ( !wcLen )
         return wxCharBuffer("");
 
