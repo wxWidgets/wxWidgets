@@ -354,14 +354,14 @@ const wxWCharBuffer wxMBConv::cMB2WC(const char *psz) const
     if ( psz )
     {
         // calculate the length of the buffer needed first
-        const size_t nLen = MB2WC(NULL, psz, 0);
+        const size_t nLen = ToWChar(NULL, 0, psz);
         if ( nLen != wxCONV_FAILED )
         {
             // now do the actual conversion
-            wxWCharBuffer buf(nLen /* +1 added implicitly */);
+            wxWCharBuffer buf(nLen - 1 /* +1 added implicitly */);
 
             // +1 for the trailing NULL
-            if ( MB2WC(buf.data(), psz, nLen + 1) != wxCONV_FAILED )
+            if ( ToWChar(buf.data(), nLen, psz) != wxCONV_FAILED )
                 return buf;
         }
     }
@@ -373,14 +373,11 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *pwz) const
 {
     if ( pwz )
     {
-        const size_t nLen = WC2MB(NULL, pwz, 0);
+        const size_t nLen = FromWChar(NULL, 0, pwz);
         if ( nLen != wxCONV_FAILED )
         {
-            // extra space for trailing NUL(s)
-            static const size_t extraLen = GetMaxMBNulLen();
-
-            wxCharBuffer buf(nLen + extraLen - 1);
-            if ( WC2MB(buf.data(), pwz, nLen + extraLen) != wxCONV_FAILED )
+            wxCharBuffer buf(nLen - 1);
+            if ( FromWChar(buf.data(), nLen, pwz) != wxCONV_FAILED )
                 return buf;
         }
     }
