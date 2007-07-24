@@ -529,42 +529,6 @@ void wxDataViewColumnBase::SetFlags(int flags)
 }
 
 // ---------------------------------------------------------
-// wxDataViewEventModelNotifier
-// ---------------------------------------------------------
-
-class WXDLLIMPEXP_ADV wxDataViewEventModelNotifier: public wxDataViewModelNotifier
-{
-public:
-    wxDataViewEventModelNotifier( wxDataViewCtrl *ctrl ) { m_ctrl = ctrl; }
-    
-    bool SendEvent( wxEventType event_type, const wxDataViewItem &item, unsigned int col = 0 )
-    {
-        wxDataViewEvent event( event_type, m_ctrl->GetId() );
-        event.SetEventObject( m_ctrl );
-        event.SetModel( m_ctrl->GetModel() );
-        event.SetItem( item );
-        event.SetColumn( col );
-        m_ctrl->GetEventHandler()->ProcessEvent( event );
-        return true;
-    }
-
-    virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )  
-        { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_ADDED, item ); }
-    virtual bool ItemDeleted( const wxDataViewItem &item )
-        { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_DELETED, item ); }
-    virtual bool ItemChanged( const wxDataViewItem &item )
-        { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_CHANGED, item ); }
-    virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col )
-        { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_VALUE_CHANGED, item, col ); }
-    virtual bool Cleared()      
-        { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_CLEARED, wxDataViewItem(0) ); }
-
-private:
-    wxDataViewCtrl *m_ctrl;
-};
-
-
-// ---------------------------------------------------------
 // wxDataViewCtrlBase
 // ---------------------------------------------------------
 
@@ -574,7 +538,6 @@ wxDataViewCtrlBase::wxDataViewCtrlBase()
 {
     m_model = NULL;
     m_cols.DeleteContents( true );
-    m_eventNotifier = NULL;
     m_expander_column = 0;
     m_indent = 8;
 }
@@ -588,10 +551,6 @@ wxDataViewCtrlBase::~wxDataViewCtrlBase()
 
     if (m_model)
     {
-        if (m_eventNotifier)
-            m_model->RemoveNotifier( m_eventNotifier );
-        m_eventNotifier = NULL;
-    
         m_model->DecRef();
         m_model = NULL;
     }
@@ -601,10 +560,6 @@ bool wxDataViewCtrlBase::AssociateModel( wxDataViewModel *model )
 {
     if (m_model)
     {
-        if (m_eventNotifier)
-            m_model->RemoveNotifier( m_eventNotifier );
-        m_eventNotifier = NULL;
-        
         m_model->DecRef();   // discard old model, if any
     }
 
@@ -613,8 +568,6 @@ bool wxDataViewCtrlBase::AssociateModel( wxDataViewModel *model )
     if (m_model)
     {
         m_model->IncRef(); 
-        m_eventNotifier = new wxDataViewEventModelNotifier( (wxDataViewCtrl*) this );
-        m_model->AddNotifier( m_eventNotifier );
     }
 
     return true;

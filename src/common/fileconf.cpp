@@ -458,7 +458,7 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream, const wxMBConv& conv)
 
 #if wxUSE_UNICODE
     size_t len;
-    cbuf = conv.cMB2WC((char *)buf.GetData(), buf.GetDataLen(), &len);
+    cbuf = conv.cMB2WC((char *)buf.GetData(), buf.GetDataLen() + 1, &len);
     if ( !len && buf.GetDataLen() )
     {
         wxLogError(_("Failed to read config options."));
@@ -479,7 +479,8 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream, const wxMBConv& conv)
 
         // notice that we throw away the original EOL kind here, maybe we
         // should preserve it?
-        memText.AddLine(wxString(s, e));
+        if ( e != s )
+            memText.AddLine(wxString(s, e));
 
         if ( *e == '\0' )
             break;

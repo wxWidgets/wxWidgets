@@ -1828,7 +1828,12 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem & item)
     if( parent->GetChildrenNumber() == 0)
         parent->SetHasChildren( false );
 
+    //Make the row number invalid and get a new valid one when user call GetRowCount
     m_count = -1;
+    //Change the current row to the last row if the current exceed the max row number
+    if( m_currentRow > GetRowCount() )
+        m_currentRow = m_count;
+
     UpdateDisplay();
     return true;
 }

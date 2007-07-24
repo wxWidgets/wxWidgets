@@ -531,6 +531,18 @@ WXDLLIMPEXP_BASE bool wxGetDiskSpace(const wxString& path,
                                      wxDiskspaceSize_t *pTotal = NULL,
                                      wxDiskspaceSize_t *pFree = NULL);
 
+
+
+extern "C"
+{
+typedef int (wxCMPFUNC_CONV *CMPFUNCDATA)(const void* pItem1, const void* pItem2, const void* user_data);
+}
+
+
+WXDLLIMPEXP_BASE void wxQsort(void *const pbase, size_t total_elems,
+			                   size_t size, CMPFUNCDATA cmp, const void* user_data);
+
+
 #if wxUSE_GUI // GUI only things from now on
 
 // ----------------------------------------------------------------------------
