@@ -1116,7 +1116,10 @@ void  wxTopLevelWindowMac::MacCreateRealWindow(
             HasFlag(wxTINY_CAPTION_HORIZ) ||  HasFlag(wxTINY_CAPTION_VERT)
             )
         {
-            wclass = kFloatingWindowClass ;
+            if ( HasFlag( wxSTAY_ON_TOP ) )
+                wclass = kUtilityWindowClass;
+            else
+                wclass = kFloatingWindowClass;
 
             if ( HasFlag(wxTINY_CAPTION_VERT) )
                 attr |= kWindowSideTitlebarAttribute ;
