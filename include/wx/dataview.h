@@ -82,8 +82,36 @@ private:
 bool operator == (const wxDataViewItem &left, const wxDataViewItem &right);
 
 // ---------------------------------------------------------
+// wxDataViewModelNotifier
+// ---------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewModelNotifier
+{
+public:
+    wxDataViewModelNotifier() { }
+    virtual ~wxDataViewModelNotifier() { m_owner = NULL; }
+
+    virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item ) = 0;
+    virtual bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item ) = 0;
+    virtual bool ItemChanged( const wxDataViewItem &item ) = 0;
+    virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col ) = 0;
+    virtual bool Cleared() = 0;
+    
+    virtual void Resort() { }
+
+    void SetOwner( wxDataViewModel *owner ) { m_owner = owner; }
+    wxDataViewModel *GetOwner()             { return m_owner; }
+
+private:
+    wxDataViewModel *m_owner;
+};
+
+
+// ---------------------------------------------------------
 // wxDataViewModel
 // ---------------------------------------------------------
+
+WX_DECLARE_LIST(wxDataViewModelNotifier, wxDataViewModelNotifiers );
 
 class WXDLLIMPEXP_ADV wxDataViewModel: public wxObjectRefData
 {
@@ -135,9 +163,9 @@ protected:
     // the user should not delete this class directly: he should use DecRef() instead!
     virtual ~wxDataViewModel() { }
 
-    wxList                  m_notifiers;
-    unsigned int            m_sortingColumn;
-    bool                    m_ascending;
+    wxDataViewModelNotifiers  m_notifiers;
+    unsigned int              m_sortingColumn;
+    bool                      m_ascending;
 };
 
 // ---------------------------------------------------------
@@ -192,32 +220,6 @@ private:
     wxDataViewItemHash m_hash;
     unsigned int m_lastIndex;
 };
-
-// ---------------------------------------------------------
-// wxDataViewModelNotifier
-// ---------------------------------------------------------
-
-class WXDLLIMPEXP_ADV wxDataViewModelNotifier: public wxObject
-{
-public:
-    wxDataViewModelNotifier() { }
-    virtual ~wxDataViewModelNotifier() { m_owner = NULL; }
-
-    virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item ) = 0;
-    virtual bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item ) = 0;
-    virtual bool ItemChanged( const wxDataViewItem &item ) = 0;
-    virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col ) = 0;
-    virtual bool Cleared() = 0;
-    
-    virtual void Resort() { };
-
-    void SetOwner( wxDataViewModel *owner ) { m_owner = owner; }
-    wxDataViewModel *GetOwner()             { return m_owner; }
-
-private:
-    wxDataViewModel *m_owner;
-};
-
 
 //-----------------------------------------------------------------------------
 // wxDataViewEditorCtrlEvtHandler

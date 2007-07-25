@@ -160,11 +160,12 @@ public:
     void Delete( const wxDataViewItem &item )
     {
         MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
+        wxDataViewItem parent( node->GetParent() );
         node->GetParent()->GetChildren().Remove( node );
         delete node;
         
         // notify control
-        ItemDeleted( item );
+        ItemDeleted( parent, item );
     }
     
     // override sorting to always sort branches ascendingly
@@ -577,7 +578,7 @@ void MyFrame::OnDeleteMusic(wxCommandEvent& WXUNUSED(event) )
 {
     wxDataViewItem item = m_musicCtrl->GetSelection();
     if (item.IsOk())
-        m_music_model->Delete( m_music_model->GetParent(item), item );
+        m_music_model->Delete( item );
 }
 
 void MyFrame::OnPrependList( wxCommandEvent& WXUNUSED(event) )
@@ -589,7 +590,7 @@ void MyFrame::OnDeleteList( wxCommandEvent& WXUNUSED(event) )
 {
     wxDataViewItem item = m_listCtrl->GetSelection();
     if (item.IsOk())
-        m_list_model->DeleteItem( m_list_model->GetParent(item), item );
+        m_list_model->DeleteItem( item );
 }
 
 void MyFrame::OnItemAdded( wxDataViewEvent &event )
