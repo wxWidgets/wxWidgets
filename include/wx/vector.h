@@ -14,10 +14,8 @@
 
 #include "wx/defs.h"
 
-#if 0 // wxUSE_STL
+#if wxUSE_STL
 
-// FIXME: can't do this yet, wxVector::erase() is different (takes index,
-//        not iterator)
 #include <vector>
 #define wxVector std::vector
 
@@ -29,6 +27,8 @@ class wxVector
 public:
     typedef size_t size_type;
     typedef T value_type;
+    typedef value_type* iterator;
+    typedef value_type& reference;
 
     wxVector() : m_allocsize(16), m_size(0), m_capacity(0), m_objects(0) {}
 
@@ -110,10 +110,28 @@ public:
     const value_type& back() const { return at(size() - 1); }
     value_type& back() { return at(size() - 1); }
 
-    size_type erase(size_type idx)
+    iterator begin() { return m_objects[0]; }
+    iterator end() { return m_objects[size()]; }
+
+    iterator erase(iterator first, iterator last)
     {
+        size_type idx = first - begin();
+        RemoveAt(idx, last - first);
+        return begin() + idx;
+    }
+    iterator erase(iterator it)
+    { 
+        size_type idx = it - begin();
         RemoveAt(idx);
-        return idx;
+        return begin() + idx;
+    }
+    
+    iterator insert(iterator it, const value_type& v = value_type())
+    {
+        wxCHECK2(Alloc(size() + 1), return 0);
+        size_type idx = it - begin();
+        InsertAt(new value_type(o), idx);
+        return begin() + idx;
     }
 
 private:
@@ -141,6 +159,19 @@ private:
         m_size++;
     }
 
+    void InsertAt(size_type idx, value_type *obj)
+    {
+        wxASSERT(idx <= m_size);
+        wxASSERT(m_size < m_capacity);
+        if (idx < m_size)
+            memmove(
+                m_objects + idx + 1,
+                m_objects + idx,
+                ( m_size - idx ) * sizeof(value_type*) );
+        
+        m_size++;
+    }
+
     void RemoveAt(size_type idx)
     {
         wxASSERT(idx < m_size);
@@ -149,10 +180,25 @@ private:
             memcpy(
                 m_objects + idx,
                 m_objects + idx + 1,
-                ( m_size - idx - 1 ) * sizeof(void*) );
+                ( m_size - idx - 1 ) * sizeof(value_type*) );
         m_size--;
     }
-
+    
+    void RemoveAt(size_type idx, size_type count)
+    {
+        if (count == 0)
+            return;
+        wxASSERT(idx < m_size);
+        size_type i;
+        for (i = 0; i < count; i++)
+            delete m_objects[idx+1];
+        if (idx < m_size - count)
+            memcpy(
+                m_objects + idx,
+                m_objects + idx + count,
+                ( m_size - idx - count ) * sizeof(value_type*) );
+        m_size -= count;
+    }
     bool Copy(const wxVector& vb)
     {
         clear();

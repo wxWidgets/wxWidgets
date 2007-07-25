@@ -1047,7 +1047,7 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
 
     // Going down
     if (keyCode == WXK_DOWN || keyCode == WXK_NUMPAD_DOWN ||
-        keyCode == WXK_RIGHT || keyCode == WXK_NUMPAD_DOWN ||
+        keyCode == WXK_RIGHT || keyCode == WXK_NUMPAD_RIGHT ||
         keyCode == WXK_END || keyCode == WXK_NUMPAD_END ||
         keyCode == WXK_PAGEDOWN || keyCode == WXK_NUMPAD_PAGEDOWN)
     {

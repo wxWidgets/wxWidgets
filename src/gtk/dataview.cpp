@@ -2558,7 +2558,7 @@ wxDataViewCtrlInternal_FindNode( wxDataViewModel * model, wxGtkTreeModelNode *tr
     }
 
     wxGtkTreeModelNode * node = treeNode;
-    for( ItemList::Node * n = list.GetFirst(); n; n = n->GetNext() )
+    for( ItemList::compatibility_iterator n = list.GetFirst(); n; n = n->GetNext() )
     {
         if( node && node->GetNodes().GetCount() != 0 )
         {
@@ -2644,7 +2644,7 @@ wxDataViewCtrlInternal_FindParentNode( wxDataViewModel * model, wxGtkTreeModelNo
     }
 
     wxGtkTreeModelNode * node = treeNode;
-    for( ItemList::Node * n = list.GetFirst(); n; n = n->GetNext() )
+    for( ItemList::compatibility_iterator n = list.GetFirst(); n; n = n->GetNext() )
     {
         if( node && node->GetNodes().GetCount() != 0 )
         {
@@ -2754,7 +2754,7 @@ void gtk_dataviewctrl_size_callback( GtkWidget *WXUNUSED(widget),
                                      wxDataViewCtrl *win )
 {
 
-    wxWindowList::Node *node = win->GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
     while (node)
     {
         wxWindow *child = node->GetData();

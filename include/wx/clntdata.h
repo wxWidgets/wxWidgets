@@ -200,7 +200,7 @@ public:
             if( ptr == m_vec.size() ) return;
             if( doDelete )
                 delete m_vec[ptr].data;
-            m_vec.erase( ptr );
+            m_vec.erase( m_vec.begin() + ptr );
         }
         else
         {
@@ -244,7 +244,7 @@ public:
         {
             if( doDelete )
                 delete m_vec[todel].data;
-            m_vec.erase( todel );
+            m_vec.erase( m_vec.begin() + todel );
         }
     }
 private:
