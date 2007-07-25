@@ -59,7 +59,7 @@ bool wxDataViewModel::ItemAdded( const wxDataViewItem &parent, const wxDataViewI
     return ret;
 }
 
-bool wxDataViewModel::ItemDeleted( const wxDataViewItem &item )
+bool wxDataViewModel::ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
     bool ret = true;
 
@@ -67,7 +67,7 @@ bool wxDataViewModel::ItemDeleted( const wxDataViewItem &item )
     while (node)
     {
         wxDataViewModelNotifier* notifier = (wxDataViewModelNotifier*) node->GetData();
-        if (!notifier->ItemDeleted( item ))
+        if (!notifier->ItemDeleted( parent, item ))
             ret = false;
         node = node->GetNext();
     }
@@ -250,7 +250,7 @@ void wxDataViewIndexListModel::RowDeleted( unsigned int row )
 {
     wxDataViewItem item( m_hash[row] );
     m_hash.RemoveAt( row );
-    wxDataViewModel::ItemDeleted( item );
+    wxDataViewModel::ItemDeleted( wxDataViewItem(0), item );
 }
 
 void wxDataViewIndexListModel::RowChanged( unsigned int row )

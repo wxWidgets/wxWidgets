@@ -79,7 +79,7 @@ public:
     GtkWxTreeModel* GetGtkModel()       { return m_gtk_model; }
 
     bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
-    bool ItemDeleted( const wxDataViewItem &item );
+    bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item );
     bool ItemChanged( const wxDataViewItem &item );
     bool ValueChanged( const wxDataViewItem &item, unsigned int col );
     bool Cleared();
@@ -1022,7 +1022,7 @@ public:
     ~wxGtkDataViewModelNotifier();
 
     virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
-    virtual bool ItemDeleted( const wxDataViewItem &item );
+    virtual bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item );
     virtual bool ItemChanged( const wxDataViewItem &item );
     virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col );
     virtual bool Cleared();
@@ -1069,7 +1069,7 @@ bool wxGtkDataViewModelNotifier::ItemAdded( const wxDataViewItem &parent, const 
     return true;
 }
 
-bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &item )
+bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
     GtkTreeIter iter;
     iter.stamp = m_wxgtk_model->stamp;
@@ -1081,7 +1081,7 @@ bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &item )
         GTK_TREE_MODEL(m_wxgtk_model), path );
     gtk_tree_path_free (path);
 
-    m_owner->GtkGetInternal()->ItemDeleted( item );
+    m_owner->GtkGetInternal()->ItemDeleted( parent, item );
     
     return true;
 }
@@ -2296,9 +2296,9 @@ bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDa
     return true;
 }
 
-bool wxDataViewCtrlInternal::ItemDeleted( const wxDataViewItem &item )
+bool wxDataViewCtrlInternal::ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
-    wxGtkTreeModelNode *parent = FindParentNode( item );
+    wxGtkTreeModelNode *parent = FindNode( parent );
     parent->DeleteChild( item.GetID() );
     
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_DELETED, m_owner->GetId() );
@@ -2753,7 +2753,6 @@ void gtk_dataviewctrl_size_callback( GtkWidget *WXUNUSED(widget),
                                      GtkAllocation *alloc,
                                      wxDataViewCtrl *win )
 {
-
     wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
     while (node)
     {

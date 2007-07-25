@@ -577,7 +577,7 @@ void MyFrame::OnDeleteMusic(wxCommandEvent& WXUNUSED(event) )
 {
     wxDataViewItem item = m_musicCtrl->GetSelection();
     if (item.IsOk())
-        m_music_model->Delete( item );
+        m_music_model->Delete( m_music_model->GetParent(item), item );
 }
 
 void MyFrame::OnPrependList( wxCommandEvent& WXUNUSED(event) )
@@ -589,7 +589,7 @@ void MyFrame::OnDeleteList( wxCommandEvent& WXUNUSED(event) )
 {
     wxDataViewItem item = m_listCtrl->GetSelection();
     if (item.IsOk())
-        m_list_model->DeleteItem( item );
+        m_list_model->DeleteItem( m_list_model->GetParent(item), item );
 }
 
 void MyFrame::OnItemAdded( wxDataViewEvent &event )
