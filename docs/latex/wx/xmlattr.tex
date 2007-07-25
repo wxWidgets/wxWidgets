@@ -10,10 +10,10 @@
 
 \section{\class{wxXmlAttribute}}\label{wxxmlattribute}
 
-Represents a node property.
+Represents a node attribute.
 
-Example: in {\tt <img src="hello.gif" id="3"/>}, {\tt ``src"} is property with value
-{\tt ``hello.gif"} and {\tt ``id"} is a property with value {\tt ``3"}.
+Example: in {\tt <img src="hello.gif" id="3"/>}, {\tt ``src"} is attribute with value
+{\tt ``hello.gif"} and {\tt ``id"} is a attribute with value {\tt ``3"}.
 
 \wxheading{Derived from}
 
@@ -37,8 +37,8 @@ No base class
 
 \func{}{wxXmlAttribute}{\param{const wxString\& }{name}, \param{const wxString\& }{value}, \param{wxXmlAttribute* }{next = NULL}}
 
-Creates the property with given {\it name} and {\it value}.
-If {\it next} is not NULL, then sets it as sibling of this property.
+Creates the attribute with given {\it name} and {\it value}.
+If {\it next} is not NULL, then sets it as sibling of this attribute.
 
 \membersection{wxXmlAttribute::\destruct{wxXmlAttribute}}\label{wxxmlattributedtor}
 
@@ -50,35 +50,35 @@ The virtual destructor.
 
 \constfunc{wxString}{GetName}{\void}
 
-Returns the name of this property.
+Returns the name of this attribute.
 
 \membersection{wxXmlAttribute::GetNext}\label{wxxmlattributegetnext}
 
 \constfunc{wxXmlAttribute*}{GetNext}{\void}
 
-Returns the sibling of this property or NULL if there are no siblings.
+Returns the sibling of this attribute or NULL if there are no siblings.
 
 \membersection{wxXmlAttribute::GetValue}\label{wxxmlattributegetvalue}
 
 \constfunc{wxString}{GetValue}{\void}
 
-Returns the value of this property.
+Returns the value of this attribute.
 
 \membersection{wxXmlAttribute::SetName}\label{wxxmlattributesetname}
 
 \func{void}{SetName}{\param{const wxString\& }{name}}
 
-Sets the name of this property.
+Sets the name of this attribute.
 
 \membersection{wxXmlAttribute::SetNext}\label{wxxmlattributesetnext}
 
 \func{void}{SetNext}{\param{wxXmlAttribute* }{next}}
 
-Sets the sibling of this property.
+Sets the sibling of this attribute.
 
 \membersection{wxXmlAttribute::SetValue}\label{wxxmlattributesetvalue}
 
 \func{void}{SetValue}{\param{const wxString\& }{value}}
 
-Sets the value of this property.
+Sets the value of this attribute.
 
