@@ -2298,8 +2298,8 @@ bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDa
 
 bool wxDataViewCtrlInternal::ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
-    wxGtkTreeModelNode *parent = FindNode( parent );
-    parent->DeleteChild( item.GetID() );
+    wxGtkTreeModelNode *parent_node = FindNode( parent );
+    parent_node->DeleteChild( item.GetID() );
     
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_DELETED, m_owner->GetId() );
     event.SetEventObject( m_owner );
