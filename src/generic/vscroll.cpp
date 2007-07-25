@@ -963,7 +963,20 @@ wxCoord wxVarVScrollLegacyAdaptor::OnGetLineHeight(size_t WXUNUSED(n)) const
     return -1;
 }
 
-void wxVarVScrollLegacyAdaptor::OnGetLinesHint( size_t WXUNUSED(lineMin), size_t WXUNUSED(lineMax)) const
-{ }
+void wxVarVScrollLegacyAdaptor::OnGetLinesHint(size_t WXUNUSED(lineMin),
+                                               size_t WXUNUSED(lineMax)) const
+{
+}
 
-#endif
+wxCoord wxVarVScrollLegacyAdaptor::OnGetRowHeight(size_t n) const
+{
+    return OnGetLineHeight(n);
+}
+
+void wxVarVScrollLegacyAdaptor::OnGetRowsHeightHint(size_t rowMin,
+                                                    size_t rowMax) const
+{
+    OnGetLinesHint(rowMin, rowMax);
+}
+
+#endif // WXWIN_COMPATIBILITY_2_8
