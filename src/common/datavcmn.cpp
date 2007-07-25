@@ -249,8 +249,10 @@ void wxDataViewIndexListModel::RowAppended()
 void wxDataViewIndexListModel::RowDeleted( unsigned int row )
 {
     wxDataViewItem item( m_hash[row] );
-    m_hash.RemoveAt( row );
+    //We should never delete the row first here. 
+    //After calling wxDataViewModel::ItemDeleted, can we delete the item here.
     wxDataViewModel::ItemDeleted( item );
+    m_hash.RemoveAt( row );
 }
 
 void wxDataViewIndexListModel::RowChanged( unsigned int row )

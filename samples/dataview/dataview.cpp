@@ -159,12 +159,13 @@ public:
 
     void Delete( const wxDataViewItem &item )
     {
+        // notify control
+        ItemDeleted( item );
+        
         MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
         node->GetParent()->GetChildren().Remove( node );
         delete node;
         
-        // notify control
-        ItemDeleted( item );
     }
     
     // override sorting to always sort branches ascendingly
@@ -331,8 +332,9 @@ public:
     void DeleteItem( const wxDataViewItem &item )
     {
         unsigned int row = GetRow( item );
-        m_array.RemoveAt( row );
         RowDeleted( row );
+        m_array.RemoveAt( row );
+
     }
 
     // implementation of base class virtuals to define model

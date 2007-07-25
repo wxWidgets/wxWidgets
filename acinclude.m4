@@ -380,6 +380,7 @@ AC_DEFUN([WX_ARG_SYS_WITH],
                         cache=yes
                       ],
                       [
+                        cache=no
                         LINE=`grep "^$3=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
@@ -430,6 +431,7 @@ AC_DEFUN([WX_ARG_WITH],
                         cache=yes
                       ],
                       [
+                        cache=no
                         LINE=`grep "^$3=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
@@ -439,7 +441,7 @@ AC_DEFUN([WX_ARG_WITH],
                       ])
 
           eval "$AS_TR_SH(wx_cv_use_$1)"
-          if test "x$cache" != xyes; then
+          if test "x$cache" = xyes; then
             echo "$3=$$3" >> ${wx_arg_cache_file}.tmp
           fi
 
@@ -492,6 +494,7 @@ AC_DEFUN([WX_ARG_ENABLE],
                           cache=yes
                         ],
                         [
+                          cache=no
                           LINE=`grep "^$3=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
@@ -549,6 +552,7 @@ AC_DEFUN([WX_ARG_ENABLE_PARAM],
                           cache=yes
                         ],
                         [
+                          cache=no
                           LINE=`grep "^$3=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
