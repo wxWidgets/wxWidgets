@@ -24,6 +24,7 @@
 #include "wx/cocoa/string.h"
 #include "wx/cocoa/trackingrectmanager.h"
 
+#import <Foundation/NSArray.h>
 #import <Foundation/NSRunLoop.h>
 #include "wx/cocoa/objc/NSView.h"
 #import <AppKit/NSEvent.h>

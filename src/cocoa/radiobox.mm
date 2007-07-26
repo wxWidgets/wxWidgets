@@ -24,6 +24,7 @@
 #include "wx/cocoa/string.h"
 #include "wx/cocoa/autorelease.h"
 
+#import <Foundation/NSArray.h>
 #include "wx/cocoa/objc/NSView.h"
 #import <AppKit/NSButton.h>
 #import <AppKit/NSBox.h>
