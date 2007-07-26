@@ -158,11 +158,12 @@ public:
     }
 
     void Delete( const wxDataViewItem &item )
-    {    
+    {
         MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
         wxDataViewItem parent( node->GetParent() );
         node->GetParent()->GetChildren().Remove( node );
         delete node;
+        
         // notify control
         ItemDeleted( parent, item );
     }
@@ -331,9 +332,8 @@ public:
     void DeleteItem( const wxDataViewItem &item )
     {
         unsigned int row = GetRow( item );
-        RowDeleted( row );
         m_array.RemoveAt( row );
-
+        RowDeleted( row );
     }
 
     // implementation of base class virtuals to define model
@@ -626,4 +626,5 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 
     wxAboutBox(info);
 }
+
 
