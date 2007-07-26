@@ -27,6 +27,12 @@
 #import <AppKit/NSApplication.h>
 #import <AppKit/NSWindow.h>
 
+// Declare setAppleMenu: in an NSApplication category since Tiger and later
+// releases support it but don't declare it as it's considered deprecated.
+@interface NSApplication(wxDeprecatedMethodsWeWantToUse)
+- (void)setAppleMenu:(NSMenu *)menu;
+@end
+
 // ============================================================================
 // wxMenuBarManagerObserver
 // ============================================================================
