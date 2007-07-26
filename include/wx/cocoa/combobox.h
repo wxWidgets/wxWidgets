@@ -101,6 +101,10 @@ protected:
 // Implementation
 // ------------------------------------------------------------------------
 public:
+    // FIXME: Quit deriving from wxTextCtrl
+    void Clear() // HACK
+    {   wxComboBoxBase::Clear(); }
+
     // wxCombobox methods
     virtual void SetSelection(int pos);
     // Overlapping methods
