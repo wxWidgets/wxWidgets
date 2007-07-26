@@ -226,7 +226,6 @@ wxBitmap wxWindowDC::DoGetAsBitmap(const wxRect *subrect) const
     wxBitmap bmp = wxBitmap(width, height, 32);
     wxAlphaPixelData pixData(bmp, wxPoint(0,0), wxSize(width, height));
 
-    pixData.UseAlpha();
     wxAlphaPixelData::Iterator p(pixData);
     for (int y=0; y<height; y++) {
         wxAlphaPixelData::Iterator rowStart = p;
