@@ -391,6 +391,9 @@ DEFAULT_wxUSE_TAB_DIALOG=no
 DEFAULT_wxUSE_UNICODE_UTF8=auto
 DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
 
+dnl Mac/Cocoa users need to enable building universal binaries explicitly
+DEFAULT_wxUSE_UNIVERSAL_BINARY=no
+
 DEFAULT_wxUSE_OFFICIAL_BUILD=no
 
 dnl Applicable only when --with-gtk was used:
