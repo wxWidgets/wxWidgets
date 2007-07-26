@@ -177,20 +177,11 @@ void wxListBox::DoSetFirstItem(int N)
 {
 }
 
-void wxListBox::Delete(unsigned int n)
+void wxListBox::DoDeleteOneItem(unsigned int n)
 {
 }
 
-int wxListBox::DoAppend(const wxString& item)
-{
-    return 0;
-}
-
-void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
-{
-}
-
-void wxListBox::Clear()
+void wxListBox::DoClear()
 {
 }
 
@@ -207,18 +198,9 @@ bool wxListBox::IsSelected(int N) const
     return false;
 }
 
-wxClientData* wxListBox::DoGetItemClientObject(unsigned int n) const
-{
-    return (wxClientData *)DoGetItemClientData(n);
-}
-
 void *wxListBox::DoGetItemClientData(unsigned int n) const
 {
     return (void *)NULL;
-}
-
-void wxListBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
-{
 }
 
 void wxListBox::DoSetItemClientData(unsigned int n, void *clientData)
@@ -243,11 +225,13 @@ wxString wxListBox::GetString(unsigned int n) const
     return wxEmptyString;
 }
 
-void
-wxListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
+int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
+                             unsigned int pos,
+                             void **clientData,
+                             wxClientDataType type)
 {
+    return 0;
 }
-
 void wxListBox::SetString(unsigned int n, const wxString& s)
 {
 }

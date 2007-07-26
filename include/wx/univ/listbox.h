@@ -96,8 +96,8 @@ public:
                 const wxString& name = wxListBoxNameStr);
 
     // implement the listbox interface defined by wxListBoxBase
-    virtual void Clear();
-    virtual void Delete(unsigned int n);
+    virtual void DoClear();
+    virtual void DoDeleteOneItem(unsigned int n);
 
     virtual unsigned int GetCount() const
         { return (unsigned int)m_strings->GetCount(); }
@@ -114,17 +114,19 @@ public:
 
 protected:
     virtual void DoSetSelection(int n, bool select);
-    virtual int DoAppendOnly(const wxString& item);
-    virtual int DoAppend(const wxString& item);
-    virtual void DoInsertItems(const wxArrayString& items, unsigned int pos);
-    virtual void DoSetItems(const wxArrayString& items, void **clientData);
+
+    virtual int DoInsertItems(const wxArrayStringsAdapter& items,
+                              unsigned int pos,
+                              void **clientData,
+                              wxClientDataType type);
+
+    // universal wxComboBox implementation internally uses wxListBox
+    friend class WXDLLEXPORT wxComboBox;
 
     virtual void DoSetFirstItem(int n);
 
     virtual void DoSetItemClientData(unsigned int n, void* clientData);
     virtual void* DoGetItemClientData(unsigned int n) const;
-    virtual void DoSetItemClientObject(unsigned int n, wxClientData* clientData);
-    virtual wxClientData* DoGetItemClientObject(unsigned int n) const;
 
 public:
     // override some more base class methods
@@ -202,14 +204,16 @@ protected:
     virtual void DoDraw(wxControlRenderer *renderer);
     virtual wxBorder GetDefaultBorder() const;
 
+    // special hook for wxCheckListBox which allows it to update its internal
+    // data when a new item is inserted into the listbox
+    virtual void OnItemInserted(unsigned int WXUNUSED(pos)) { }
+
+
     // common part of all ctors
     void Init();
 
     // event handlers
     void OnSize(wxSizeEvent& event);
-
-    // common part of Clear() and DoSetItems(): clears everything
-    virtual void DoClear();
 
     // refresh the given item(s) or everything
     void RefreshItems(int from, int count);

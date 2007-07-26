@@ -50,7 +50,7 @@ public:
                 const wxString& name = wxListBoxNameStr);
 
     // override base class virtuals
-    virtual void Delete(unsigned int n);
+    virtual void DoDeleteOneItem(unsigned int n);
 
     // items may be checked
     virtual bool IsChecked(unsigned int uiIndex) const;
@@ -72,20 +72,18 @@ protected:
     void OnSize(wxSizeEvent& event);
 
     // protected interface derived from wxListBox and lower classes
-    virtual int DoAppend(const wxString& item);
+    virtual int DoInsertItems(const wxArrayStringsAdapter& items,
+                              unsigned int pos,
+                              void **clientData, wxClientDataType type);
+
     virtual void* DoGetItemClientData(unsigned int n) const;
-    virtual wxClientData* DoGetItemClientObject(unsigned int n) const;
-    virtual void DoInsertItems(const wxArrayString& items, unsigned int pos);
-    virtual void DoSetFirstItem(int n);
     virtual void DoSetItemClientData(unsigned int n, void* clientData);
-    virtual void DoSetItemClientObject(unsigned int n, wxClientData* clientData);
-    virtual void DoSetItems(const wxArrayString& items, void **clientData);
+    virtual void DoSetFirstItem(int n);
     virtual void DoSetSelection(int n, bool select);
     // convert our styles to Windows
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
 private:
-
     wxArrayPtrVoid m_itemsClientData;
 
     DECLARE_EVENT_TABLE()

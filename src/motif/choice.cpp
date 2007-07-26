@@ -179,8 +179,6 @@ wxChoice::~wxChoice()
         m_mainWidget = (WXWidget) 0;
         m_buttonWidget = (WXWidget) 0;
     }
-    if ( HasClientObjectData() )
-        m_clientDataDict.DestroyData();
 }
 
 static inline wxChar* MYcopystring(const wxChar* s)
@@ -189,72 +187,78 @@ static inline wxChar* MYcopystring(const wxChar* s)
     return wxStrcpy(copy, s);
 }
 
-int wxChoice::DoInsert(const wxString& item, unsigned int pos)
+// TODO auto-sorting is not supported by the code
+int wxChoice::DoInsertItems(const wxArrayStringsAdapter& items,
+                            unsigned int pos,
+                            void **clientData, wxClientDataType type)
 {
 #ifndef XmNpositionIndex
     wxCHECK_MSG( pos == GetCount(), -1, wxT("insert not implemented"));
 #endif
-    Widget w = XtVaCreateManagedWidget (GetLabelText(item),
+
+    const unsigned int numItems = items.GetCount();
+    AllocClientData(numItems);
+    for( unsigned int i = 0; i < numItems; ++i, ++pos )
+    {
+        Widget w = XtVaCreateManagedWidget (GetLabelText(items[i]),
 #if wxUSE_GADGETS
-        xmPushButtonGadgetClass, (Widget) m_menuWidget,
+            xmPushButtonGadgetClass, (Widget) m_menuWidget,
 #else
-        xmPushButtonWidgetClass, (Widget) m_menuWidget,
+            xmPushButtonWidgetClass, (Widget) m_menuWidget,
 #endif
 #ifdef XmNpositionIndex
-        XmNpositionIndex, pos,
+            XmNpositionIndex, pos,
 #endif
-        NULL);
-
-    wxDoChangeBackgroundColour((WXWidget) w, m_backgroundColour);
-
-    if( m_font.Ok() )
-        wxDoChangeFont( w, m_font );
-
-    m_widgetArray.Insert(w, pos);
-
-    char mnem = wxFindMnemonic (item);
-    if (mnem != 0)
-        XtVaSetValues (w, XmNmnemonic, mnem, NULL);
-
-    XtAddCallback (w, XmNactivateCallback,
-                   (XtCallbackProc) wxChoiceCallback,
-                   (XtPointer) this);
-
-    if (m_noStrings == 0 && m_buttonWidget)
-    {
-        XtVaSetValues ((Widget) m_buttonWidget, XmNmenuHistory, w, NULL);
-        Widget label = XmOptionButtonGadget ((Widget) m_buttonWidget);
-        wxXmString text( item );
-        XtVaSetValues (label,
-            XmNlabelString, text(),
             NULL);
+
+        wxDoChangeBackgroundColour((WXWidget) w, m_backgroundColour);
+
+        if( m_font.Ok() )
+            wxDoChangeFont( w, m_font );
+
+        m_widgetArray.Insert(w, pos);
+
+        char mnem = wxFindMnemonic (items[i]);
+        if (mnem != 0)
+            XtVaSetValues (w, XmNmnemonic, mnem, NULL);
+
+        XtAddCallback (w, XmNactivateCallback,
+                       (XtCallbackProc) wxChoiceCallback,
+                       (XtPointer) this);
+
+        if (m_noStrings == 0 && m_buttonWidget)
+        {
+            XtVaSetValues ((Widget) m_buttonWidget, XmNmenuHistory, w, NULL);
+            Widget label = XmOptionButtonGadget ((Widget) m_buttonWidget);
+            wxXmString text( items[i] );
+            XtVaSetValues (label,
+                XmNlabelString, text(),
+                NULL);
+        }
+        // need to ditch wxStringList for wxArrayString
+        m_stringList.Insert(pos, MYcopystring(items[i]));
+        m_noStrings ++;
+
+        InsertNewItemClientData(pos, clientData, i, type);
     }
-    // need to ditch wxStringList for wxArrayString
-    m_stringList.Insert(pos, MYcopystring(item));
-    m_noStrings ++;
 
-    return pos;
+    return pos - 1;
 }
 
-int wxChoice::DoAppend(const wxString& item)
-{
-    return DoInsert(item, GetCount());
-}
-
-void wxChoice::Delete(unsigned int n)
+void wxChoice::DoDeleteOneItem(unsigned int n)
 {
     Widget w = (Widget)m_widgetArray[n];
     XtRemoveCallback(w, XmNactivateCallback, (XtCallbackProc)wxChoiceCallback,
                      (XtPointer)this);
     m_stringList.Erase(m_stringList.Item(n));
     m_widgetArray.RemoveAt(size_t(n));
-    m_clientDataDict.Delete(n, HasClientObjectData());
+    wxChoiceBase::DoDeleteOneItem(n);
 
     XtDestroyWidget(w);
     m_noStrings--;
 }
 
-void wxChoice::Clear()
+void wxChoice::DoClear()
 {
     m_stringList.Clear ();
     unsigned int i;
@@ -272,8 +276,7 @@ void wxChoice::Clear()
                        XmNmenuHistory, (Widget) NULL,
                        NULL);
 
-    if ( HasClientObjectData() )
-        m_clientDataDict.DestroyData();
+    wxChoiceBase::DoClear();
 
     m_noStrings = 0;
 }
@@ -500,27 +503,6 @@ void wxChoice::ChangeForegroundColour()
 unsigned int wxChoice::GetCount() const
 {
     return m_noStrings;
-}
-
-void wxChoice::DoSetItemClientData(unsigned int n, void* clientData)
-{
-    m_clientDataDict.Set(n, (wxClientData*)clientData, false);
-}
-
-void* wxChoice::DoGetItemClientData(unsigned int n) const
-{
-    return (void*)m_clientDataDict.Get(n);
-}
-
-void wxChoice::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
-{
-    // don't delete, wxItemContainer does that for us
-    m_clientDataDict.Set(n, clientData, false);
-}
-
-wxClientData* wxChoice::DoGetItemClientObject(unsigned int n) const
-{
-    return m_clientDataDict.Get(n);
 }
 
 void wxChoice::SetString(unsigned int WXUNUSED(n), const wxString& WXUNUSED(s))

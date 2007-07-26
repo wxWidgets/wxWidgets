@@ -126,7 +126,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 
     if ( style & wxCB_SORT )
     {
-        // if our m_strings != NULL, DoAppend() will check for it and insert
+        // if our m_strings != NULL, Append() will check for it and insert
         // items in the correct order
         m_strings = new wxSortedArrayString;
     }
@@ -158,33 +158,33 @@ wxChoice::~wxChoice()
     delete m_strings;
 }
 
-int wxChoice::DoAppend( const wxString &item )
+int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
+                            unsigned int pos,
+                            void **clientData, wxClientDataType type)
 {
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid choice control") );
 
-    GtkWidget *menu = gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) );
-
-    return GtkAddHelper(menu, GetCount(), item);
-}
-
-int wxChoice::DoInsert( const wxString &item, unsigned int pos )
-{
-    wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid choice control") );
-    wxCHECK_MSG( IsValidInsert(pos), -1, wxT("invalid index"));
-
-    if (pos == GetCount())
-        return DoAppend(item);
+    const unsigned int count = items.GetCount();
 
     GtkWidget *menu = gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) );
+
+    for ( unsigned int i = 0; i < count; ++i, ++pos )
+    {
+        int n = GtkAddHelper(menu, pos, items[i]);
+        if ( n == wxNOT_FOUND )
+            return n;
+
+        AssignNewItemClientData(n, clientData, i, type);
+    }
 
     // if the item to insert is at or before the selection, and the selection is valid
     if (((int)pos <= m_selection_hack) && (m_selection_hack != wxNOT_FOUND))
     {
-        // move the selection forward one
-        m_selection_hack++;
+        // move the selection forward
+        m_selection_hack += count;
     }
 
-    return GtkAddHelper(menu, pos, item);
+    return pos - 1;
 }
 
 void wxChoice::DoSetItemClientData(unsigned int n, void* clientData)
@@ -207,30 +207,7 @@ void* wxChoice::DoGetItemClientData(unsigned int n) const
     return node->GetData();
 }
 
-void wxChoice::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
-{
-    wxCHECK_RET( m_widget != NULL, wxT("invalid choice control") );
-
-    wxList::compatibility_iterator node = m_clientList.Item( n );
-    wxCHECK_RET( node, wxT("invalid index in wxChoice::DoSetItemClientObject") );
-
-    // wxItemContainer already deletes data for us
-
-    node->SetData( (wxObject*) clientData );
-}
-
-wxClientData* wxChoice::DoGetItemClientObject(unsigned int n) const
-{
-    wxCHECK_MSG( m_widget != NULL, (wxClientData*) NULL, wxT("invalid choice control") );
-
-    wxList::compatibility_iterator node = m_clientList.Item( n );
-    wxCHECK_MSG( node, (wxClientData *)NULL,
-                 wxT("invalid index in wxChoice::DoGetItemClientObject") );
-
-    return (wxClientData*) node->GetData();
-}
-
-void wxChoice::Clear()
+void wxChoice::DoClear()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid choice") );
 
@@ -238,18 +215,6 @@ void wxChoice::Clear()
     GtkWidget *menu = gtk_menu_new();
     gtk_option_menu_set_menu( GTK_OPTION_MENU(m_widget), menu );
 
-    if ( HasClientObjectData() )
-    {
-        // destroy the data (due to Robert's idea of using wxList<wxObject>
-        // and not wxList<wxClientData> we can't just say
-        // m_clientList.DeleteContents(true) - this would crash!
-        wxList::compatibility_iterator node = m_clientList.GetFirst();
-        while ( node )
-        {
-            delete (wxClientData *)node->GetData();
-            node = node->GetNext();
-        }
-    }
     m_clientList.Clear();
 
     if ( m_strings )
@@ -259,14 +224,9 @@ void wxChoice::Clear()
     m_selection_hack = wxNOT_FOUND;
 }
 
-void wxChoice::Delete(unsigned int n)
+void wxChoice::DoDeleteOneItem(unsigned int n)
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid choice") );
-
-    // VZ: apparently GTK+ doesn't have a built-in function to do it (not even
-    //     in 2.0), hence this dumb implementation -- still better than nothing
-    unsigned int i;
-    unsigned int count = GetCount();
 
     wxCHECK_RET( IsValid(n), _T("invalid index in wxChoice::Delete") );
 
@@ -282,56 +242,31 @@ void wxChoice::Delete(unsigned int n)
         m_selection_hack = wxNOT_FOUND;
     }
 
-    const bool hasClientData = m_clientDataItemsType != wxClientData_None;
-    const bool hasObjectData = m_clientDataItemsType == wxClientData_Object;
+    // VZ: apparently GTK+ doesn't have a built-in function to do it (not even
+    //     in 2.0), hence this dumb implementation -- still better than nothing
+    const unsigned int count = GetCount();
 
     wxList::compatibility_iterator node = m_clientList.GetFirst();
 
     wxArrayString items;
     wxArrayPtrVoid itemsData;
     items.Alloc(count);
-    for ( i = 0; i < count; i++ )
+    for ( unsigned i = 0; i < count; i++, node = node->GetNext() )
     {
         if ( i != n )
         {
             items.Add(GetString(i));
-            if ( hasClientData )
-            {
-                // also save the client data
-                itemsData.Add(node->GetData());
-            }
-        }
-        else // need to delete the client object too
-        {
-            if ( hasObjectData )
-            {
-                delete (wxClientData *)node->GetData();
-            }
-        }
-
-        if ( hasClientData )
-        {
-            node = node->GetNext();
+            itemsData.Add(node->GetData());
         }
     }
 
-    if ( hasObjectData )
-    {
-        // prevent Clear() from destroying all client data
-        m_clientDataItemsType = wxClientData_None;
-    }
+    wxChoice::DoClear();
 
-    Clear();
-
-    for ( i = 0; i < count - 1; i++ )
-    {
-        Append(items[i]);
-
-        if ( hasObjectData )
-            SetClientObject(i, (wxClientData *)itemsData[i]);
-        else if ( hasClientData )
-            SetClientData(i, itemsData[i]);
-    }
+    void ** const data = &itemsData[0];
+    if ( HasClientObjectData() )
+        Append(items, wx_reinterpret_cast(wxClientData **, data));
+    else
+        Append(items, data);
 }
 
 int wxChoice::FindString( const wxString &string, bool bCase ) const

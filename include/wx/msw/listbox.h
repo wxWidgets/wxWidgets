@@ -78,8 +78,8 @@ public:
     virtual ~wxListBox();
 
     // implement base class pure virtuals
-    virtual void Clear();
-    virtual void Delete(unsigned int n);
+    virtual void DoClear();
+    virtual void DoDeleteOneItem(unsigned int n);
 
     virtual unsigned int GetCount() const;
     virtual wxString GetString(unsigned int n) const;
@@ -135,14 +135,14 @@ public:
 
 protected:
     virtual void DoSetSelection(int n, bool select);
-    virtual int DoAppend(const wxString& item);
-    virtual void DoInsertItems(const wxArrayString& items, unsigned int pos);
-    virtual void DoSetItems(const wxArrayString& items, void **clientData);
+
+    virtual int DoInsertItems(const wxArrayStringsAdapter& items,
+                              unsigned int pos,
+                              void **clientData, wxClientDataType type);
+
     virtual void DoSetFirstItem(int n);
     virtual void DoSetItemClientData(unsigned int n, void* clientData);
     virtual void* DoGetItemClientData(unsigned int n) const;
-    virtual void DoSetItemClientObject(unsigned int n, wxClientData* clientData);
-    virtual wxClientData* DoGetItemClientObject(unsigned int n) const;
     virtual int DoListHitTest(const wxPoint& point) const;
 
     // free memory (common part of Clear() and dtor)

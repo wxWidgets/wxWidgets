@@ -70,10 +70,11 @@ public:
         const wxString& name = wxComboBoxNameStr);
 
     // implementation of wxControlWithItems
-    virtual int DoAppend(const wxString& item);
-    virtual int DoInsert(const wxString& item, unsigned int pos);
-    virtual void Delete(unsigned int n);
-    virtual void Clear();
+    virtual int DoInsertItems(const wxArrayStringsAdapter& items,
+                              unsigned int pos,
+                              void **clientData, wxClientDataType type);
+    virtual void DoDeleteOneItem(unsigned int n);
+    virtual void DoClear();
     virtual int GetSelection() const ;
     virtual void SetSelection(int n);
     virtual int FindString(const wxString& s, bool bCase = false) const;

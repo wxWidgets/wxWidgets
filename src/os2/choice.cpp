@@ -114,69 +114,62 @@ bool wxChoice::Create(
 
 wxChoice::~wxChoice()
 {
-    Free();
+    Clear();
 }
 
 // ----------------------------------------------------------------------------
 // adding/deleting items to/from the list
 // ----------------------------------------------------------------------------
 
-int wxChoice::DoAppend(
-  const wxString&                   rsItem
-)
+int wxChoice::DoInsertItems(const wxArrayStringsAdapter& items
+                           , unsigned int pos
+                           , void **clientData
+                           , wxClientDataType type
+                           )
 {
-    int                             nIndex;
+    int                             nIndex = wxNOT_FOUND;
     LONG                            nIndexType = 0;
-    if (m_windowStyle & wxCB_SORT)
+    bool                            incrementPos = false;
+    if ( IsSorted() )
         nIndexType = LIT_SORTASCENDING;
-    else
+    else if (pos == GetCount())
         nIndexType = LIT_END;
-    nIndex = (int)::WinSendMsg( GetHwnd()
-                               ,LM_INSERTITEM
-                               ,(MPARAM)nIndexType
-                               ,(MPARAM)rsItem.wx_str()
-                              );
-    return nIndex;
-} // end of wxChoice::DoAppend
-
-int wxChoice::DoInsert( const wxString& rsItem, unsigned int pos )
-{
-    wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
-    wxCHECK_MSG(IsValidInsert(pos), -1, wxT("invalid index"));
-
-    if (pos == GetCount())
-        return DoAppend(rsItem);
-
-    int  nIndex;
-    LONG nIndexType = 0;
-
-    if (m_windowStyle & wxCB_SORT)
-        nIndexType = LIT_SORTASCENDING;
     else
+    {
         nIndexType = pos;
-    nIndex = (int)::WinSendMsg( GetHwnd()
-                               ,LM_INSERTITEM
-                               ,(MPARAM)nIndexType
-                               ,(MPARAM)rsItem.wx_str()
-                              );
-    return nIndex;
-} // end of wxChoice::DoInsert
+        incrementPos = true;
+    }
 
-void wxChoice::Delete(unsigned int n)
+    const unsigned int count = items.GetCount();
+    for( unsigned int i = 0; i < count; ++i )
+    {
+        nIndex = (int)::WinSendMsg( GetHwnd()
+                                   ,LM_INSERTITEM
+                                   ,(MPARAM)nIndexType
+                                   ,(MPARAM)items[i].wx_str()
+                                  );
+        if (nIndex < 0)
+        {
+            nIndex = wxNOT_FOUND;
+            break;
+        }
+        AssignNewItemClientData(nIndex, clientData, i, type);
+
+        if (incrementPos)
+            ++nIndexType;
+    }
+    return nIndex;
+} // end of wxChoice::DoInsertAppendItemsWithData
+
+void wxChoice::DoDeleteOneItem(unsigned int n)
 {
     wxCHECK_RET( IsValid(n), wxT("invalid item index in wxChoice::Delete") );
-
-    if ( HasClientObjectData() )
-    {
-        delete GetClientObject(n);
-    }
 
     ::WinSendMsg(GetHwnd(), LM_DELETEITEM, (MPARAM)n, (MPARAM)0);
 } // end of wxChoice::Delete
 
-void wxChoice::Clear()
+void wxChoice::DoClear()
 {
-    Free();
     ::WinSendMsg(GetHwnd(), LM_DELETEALL, (MPARAM)0, (MPARAM)0);
 } // end of wxChoice::Clear
 
@@ -276,16 +269,6 @@ void* wxChoice::DoGetItemClientData(unsigned int n) const
     MRESULT rc = ::WinSendMsg(GetHwnd(), LM_QUERYITEMHANDLE, (MPARAM)n, (MPARAM)0);
     return((void*)rc);
 } // end of wxChoice::DoGetItemClientData
-
-void wxChoice::DoSetItemClientObject(unsigned int n, wxClientData* pClientData)
-{
-    DoSetItemClientData(n, pClientData);
-} // end of wxChoice::DoSetItemClientObject
-
-wxClientData* wxChoice::DoGetItemClientObject(unsigned int n) const
-{
-    return (wxClientData *)DoGetItemClientData(n);
-} // end of wxChoice::DoGetItemClientObject
 
 // ----------------------------------------------------------------------------
 // wxOS2 specific helpers
@@ -398,18 +381,5 @@ bool wxChoice::OS2Command(
     }
     return true;
 } // end of wxChoice::OS2Command
-
-void wxChoice::Free()
-{
-    if (HasClientObjectData())
-    {
-        const unsigned int nCount = GetCount();
-
-        for (unsigned int n = 0; n < nCount; n++)
-        {
-            delete GetClientObject(n);
-        }
-    }
-} // end of wxChoice::Free
 
 #endif // wxUSE_CHOICE

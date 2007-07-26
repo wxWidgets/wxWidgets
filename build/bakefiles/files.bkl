@@ -1369,6 +1369,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="MOTIF_HDR" hints="files">
     wx/generic/colrdlgg.h
+    wx/generic/ctrlsub.h
     wx/generic/dirdlgg.h
     wx/generic/fdrepdlg.h
     wx/generic/fontdlgg.h
@@ -1391,6 +1392,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/motif/colour.h
     wx/motif/combobox.h
     wx/motif/control.h
+    wx/motif/ctrlsub.h
     wx/motif/cursor.h
     wx/motif/dataform.h
     wx/motif/dataobj.h
@@ -1642,6 +1644,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/combo.h
     wx/msw/combobox.h
     wx/msw/control.h
+    wx/msw/ctrlsub.h
     wx/msw/cursor.h
     wx/msw/dc.h
     wx/msw/dcclient.h
@@ -2634,6 +2637,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="UNIV_HDR" hints="files">
     wx/generic/accel.h
+    wx/generic/ctrlsub.h
     wx/generic/dirdlgg.h
     wx/generic/fdrepdlg.h
     wx/generic/fontdlgg.h

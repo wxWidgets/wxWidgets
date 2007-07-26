@@ -41,6 +41,7 @@
 
 #include "wx/sizer.h"
 
+#include "itemcontainer.h"
 #include "widgets.h"
 #if 1
 #include "icons/combobox.xpm"
@@ -70,7 +71,8 @@ enum
     ComboPage_DeleteSel,
     ComboPage_SetValue,
     ComboPage_SetValueText,
-    ComboPage_Combo
+    ComboPage_Combo,
+    ComboPage_ContainerTests
 };
 
 // kinds of comboboxes
@@ -85,12 +87,13 @@ enum
 // ComboboxWidgetsPage
 // ----------------------------------------------------------------------------
 
-class ComboboxWidgetsPage : public WidgetsPage
+class ComboboxWidgetsPage : public ItemContainerWidgetsPage
 {
 public:
     ComboboxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
     virtual wxControl *GetWidget() const { return m_combobox; }
+    virtual wxItemContainer* GetContainer() const { return m_combobox; }
     virtual void RecreateWidget() { CreateCombo(); }
 
     // lazy creation of the content
@@ -175,6 +178,7 @@ BEGIN_EVENT_TABLE(ComboboxWidgetsPage, WidgetsPage)
     EVT_BUTTON(ComboPage_AddMany, ComboboxWidgetsPage::OnButtonAddMany)
     EVT_BUTTON(ComboPage_SetValue, ComboboxWidgetsPage::OnButtonSetValue)
     EVT_BUTTON(ComboPage_SetCurrent, ComboboxWidgetsPage::OnButtonSetCurrent)
+    EVT_BUTTON(ComboPage_ContainerTests, ItemContainerWidgetsPage::OnButtonTestItemContainer)
 
     EVT_TEXT_ENTER(ComboPage_InsertText, ComboboxWidgetsPage::OnButtonInsert)
     EVT_TEXT_ENTER(ComboPage_AddText, ComboboxWidgetsPage::OnButtonAdd)
@@ -217,7 +221,7 @@ IMPLEMENT_WIDGETS_PAGE(ComboboxWidgetsPage, _T("Combobox"),
 
 ComboboxWidgetsPage::ComboboxWidgetsPage(WidgetsBookCtrl *book,
                                          wxImageList *imaglist)
-                  : WidgetsPage(book, imaglist, combobox_xpm)
+                  : ItemContainerWidgetsPage(book, imaglist, combobox_xpm)
 {
     // init everything
     m_chkSort =
@@ -330,6 +334,9 @@ void ComboboxWidgetsPage::CreateContent()
                                             ComboPage_SetValueText,
                                             &m_textSetValue);
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+
+    btn = new wxButton(this, ComboPage_ContainerTests, _T("Run &tests"));
+    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
 
 

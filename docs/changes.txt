@@ -155,6 +155,7 @@ wxGTK:
 - Support for markup and ellipsization in wxStaticText (Francesco Montorsi)
 - Native implementation for wxHyperlinkCtrl (Francesco Montorsi)
 - Native keyboard navigation implementation
+- Added wxCB_SORT support to wxComboBox (Evgeniy Tarassov)
 - Don't overwrite primary selection with clipboard and vice versa
 - Implemented support for underlined fonts in wxStaticText.
 - wxTopLevelWindow::SetSizeHints size increments now work.

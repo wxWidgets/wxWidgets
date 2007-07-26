@@ -256,91 +256,15 @@ void wxListBox::DoSetFirstItem(int N)
     SendMessage(GetHwnd(), LB_SETTOPINDEX, (WPARAM)N, (LPARAM)0);
 }
 
-void wxListBox::Delete(unsigned int n)
+void wxListBox::DoDeleteOneItem(unsigned int n)
 {
     wxCHECK_RET( IsValid(n),
                  wxT("invalid index in wxListBox::Delete") );
-
-    // for owner drawn objects, the data is used for storing wxOwnerDrawn
-    // pointers and we shouldn't touch it
-#if !wxUSE_OWNER_DRAWN
-    if ( !(m_windowStyle & wxLB_OWNERDRAW) )
-#endif // !wxUSE_OWNER_DRAWN
-        if ( HasClientObjectData() )
-        {
-            delete GetClientObject(n);
-        }
 
     SendMessage(GetHwnd(), LB_DELETESTRING, n, 0);
     m_noItems--;
 
     SetHorizontalExtent(wxEmptyString);
-}
-
-int wxListBox::DoAppend(const wxString& item)
-{
-    int index = ListBox_AddString(GetHwnd(), item.wx_str());
-    m_noItems++;
-
-#if wxUSE_OWNER_DRAWN
-    if ( m_windowStyle & wxLB_OWNERDRAW ) {
-        wxOwnerDrawn *pNewItem = CreateLboxItem(index); // dummy argument
-        pNewItem->SetName(item);
-        m_aItems.Insert(pNewItem, index);
-        ListBox_SetItemData(GetHwnd(), index, pNewItem);
-        pNewItem->SetFont(GetFont());
-    }
-#endif // wxUSE_OWNER_DRAWN
-
-    SetHorizontalExtent(item);
-
-    return index;
-}
-
-void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
-{
-    // avoid flicker - but don't need to do this for a hidden listbox
-    bool hideAndShow = IsShown();
-    if ( hideAndShow )
-    {
-        ShowWindow(GetHwnd(), SW_HIDE);
-    }
-
-    ListBox_ResetContent(GetHwnd());
-
-    m_noItems = choices.GetCount();
-    unsigned int i;
-    for (i = 0; i < m_noItems; i++)
-    {
-        ListBox_AddString(GetHwnd(), choices[i].wx_str());
-        if ( clientData )
-        {
-            SetClientData(i, clientData[i]);
-        }
-    }
-
-#if wxUSE_OWNER_DRAWN
-    if ( m_windowStyle & wxLB_OWNERDRAW ) {
-        // first delete old items
-        WX_CLEAR_ARRAY(m_aItems);
-
-        // then create new ones
-        for ( unsigned int ui = 0; ui < m_noItems; ui++ ) {
-            wxOwnerDrawn *pNewItem = CreateLboxItem(ui);
-            pNewItem->SetName(choices[ui]);
-            m_aItems.Add(pNewItem);
-            ListBox_SetItemData(GetHwnd(), ui, pNewItem);
-        }
-    }
-#endif // wxUSE_OWNER_DRAWN
-
-    SetHorizontalExtent();
-
-    if ( hideAndShow )
-    {
-        // show the listbox back if we hid it
-        ShowWindow(GetHwnd(), SW_SHOW);
-    }
 }
 
 int wxListBox::FindString(const wxString& s, bool bCase) const
@@ -356,7 +280,7 @@ int wxListBox::FindString(const wxString& s, bool bCase) const
         return pos;
 }
 
-void wxListBox::Clear()
+void wxListBox::DoClear()
 {
     Free();
 
@@ -373,15 +297,7 @@ void wxListBox::Free()
     {
         WX_CLEAR_ARRAY(m_aItems);
     }
-    else
 #endif // wxUSE_OWNER_DRAWN
-    if ( HasClientObjectData() )
-    {
-        for ( unsigned int n = 0; n < m_noItems; n++ )
-        {
-            delete GetClientObject(n);
-        }
-    }
 }
 
 void wxListBox::DoSetSelection(int N, bool select)
@@ -407,22 +323,12 @@ bool wxListBox::IsSelected(int N) const
     return SendMessage(GetHwnd(), LB_GETSEL, N, 0) == 0 ? false : true;
 }
 
-wxClientData* wxListBox::DoGetItemClientObject(unsigned int n) const
-{
-    return (wxClientData *)DoGetItemClientData(n);
-}
-
 void *wxListBox::DoGetItemClientData(unsigned int n) const
 {
     wxCHECK_MSG( IsValid(n), NULL,
                  wxT("invalid index in wxListBox::GetClientData") );
 
     return (void *)SendMessage(GetHwnd(), LB_GETITEMDATA, n, 0);
-}
-
-void wxListBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
-{
-    DoSetItemClientData(n, clientData);
 }
 
 void wxListBox::DoSetItemClientData(unsigned int n, void *clientData)
@@ -511,35 +417,53 @@ wxString wxListBox::GetString(unsigned int n) const
     return result;
 }
 
-void
-wxListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
+int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
+                             unsigned int pos,
+                             void **clientData,
+                             wxClientDataType type)
 {
-    wxCHECK_RET( IsValidInsert(pos),
-                 wxT("invalid index in wxListBox::InsertItems") );
+    MSWAllocStorage(items, LB_INITSTORAGE);
 
-    unsigned int nItems = items.GetCount();
-    for ( unsigned int i = 0; i < nItems; i++ )
+    const bool append = pos == GetCount();
+
+    // we must use CB_ADDSTRING when appending as only it works correctly for
+    // the sorted controls
+    const unsigned msg = append ? LB_ADDSTRING : LB_INSERTSTRING;
+
+    if ( append )
+        pos = 0;
+
+    int n = wxNOT_FOUND;
+
+    const unsigned int numItems = items.GetCount();
+    for ( unsigned int i = 0; i < numItems; i++ )
     {
-        int idx = ListBox_InsertString(GetHwnd(), i + pos, items[i].wx_str());
+        n = MSWInsertOrAppendItem(pos, items[i], msg);
+        if ( n == wxNOT_FOUND )
+            return n;
+
+        if ( !append )
+            pos++;
+
+        ++m_noItems;
 
 #if wxUSE_OWNER_DRAWN
-        if ( m_windowStyle & wxLB_OWNERDRAW )
+        if ( HasFlag(wxLB_OWNERDRAW) )
         {
-            wxOwnerDrawn *pNewItem = CreateLboxItem(idx);
+            wxOwnerDrawn *pNewItem = CreateLboxItem(n);
             pNewItem->SetName(items[i]);
             pNewItem->SetFont(GetFont());
-            m_aItems.Insert(pNewItem, idx);
+            m_aItems.Insert(pNewItem, n);
 
-            ListBox_SetItemData(GetHwnd(), idx, pNewItem);
+            ListBox_SetItemData(GetHwnd(), n, pNewItem);
         }
-#else
-        wxUnusedVar(idx);
 #endif // wxUSE_OWNER_DRAWN
+        AssignNewItemClientData(n, clientData, i, type);
     }
 
-    m_noItems += nItems;
-
     SetHorizontalExtent();
+
+    return n;
 }
 
 int wxListBox::DoListHitTest(const wxPoint& point) const

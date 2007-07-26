@@ -161,8 +161,6 @@ wxComboBox::~wxComboBox()
     DetachWidget((Widget) m_mainWidget); // Removes event handlers
     XtDestroyWidget((Widget) m_mainWidget);
     m_mainWidget = (WXWidget) 0;
-    if ( HasClientObjectData() )
-        m_clientDataDict.DestroyData();
 }
 
 void wxComboBox::DoSetSize(int x, int y, int width, int WXUNUSED(height), int sizeFlags)
@@ -202,33 +200,28 @@ void wxComboBox::SetValue(const wxString& value)
     m_inSetValue = false;
 }
 
-int wxComboBox::DoAppend(const wxString& item)
+int wxComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
+                              unsigned int pos,
+                              void **clientData, wxClientDataType type)
 {
-    wxXmString str( item.c_str() );
-    XmComboBoxAddItem((Widget) m_mainWidget, str(), 0, False);
-    m_noStrings ++;
+    const unsigned int numItems = items.GetCount();
+
+    AllocClientData(numItems);
+    for ( unsigned int i = 0; i < numItems; ++i, ++pos )
+    {
+        wxXmString str( items[i].c_str() );
+        XmComboBoxAddItem((Widget) m_mainWidget, str(),
+                          GetMotifPosition(pos), False);
+        m_noStrings ++;
+        InsertNewItemClientData(pos, clientData, i, type);
+    }
+
     AdjustDropDownListSize();
 
-    return GetCount() - 1;
+    return pos - 1;
 }
 
-int wxComboBox::DoInsert(const wxString& item, unsigned int pos)
-{
-    wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
-    wxCHECK_MSG(IsValidInsert(pos), -1, wxT("invalid index"));
-
-    if (pos == GetCount())
-        return DoAppend(item);
-
-    wxXmString str( item.c_str() );
-    XmComboBoxAddItem((Widget) m_mainWidget, str(), pos+1, False);
-    m_noStrings ++;
-    AdjustDropDownListSize();
-
-    return GetCount() - 1;
-}
-
-void wxComboBox::Delete(unsigned int n)
+void wxComboBox::DoDeleteOneItem(unsigned int n)
 {
 #ifdef LESSTIF_VERSION
     XmListDeletePos (GetXmList(this), n + 1);
@@ -236,13 +229,13 @@ void wxComboBox::Delete(unsigned int n)
     XmComboBoxDeletePos((Widget) m_mainWidget, n+1);
 #endif
 
-    m_clientDataDict.Delete(n, HasClientObjectData());
+    wxControlWithItems::DoDeleteOneItem(n);
     m_noStrings--;
 
     AdjustDropDownListSize();
 }
 
-void wxComboBox::Clear()
+void wxComboBox::DoClear()
 {
 #ifdef LESSTIF_VERSION
     XmListDeleteAllItems (GetXmList(this));
@@ -253,8 +246,7 @@ void wxComboBox::Clear()
     }
 #endif
 
-    if ( HasClientObjectData() )
-        m_clientDataDict.DestroyData();
+    wxControlWithItems::DoClear();
     m_noStrings = 0;
     AdjustDropDownListSize();
 }

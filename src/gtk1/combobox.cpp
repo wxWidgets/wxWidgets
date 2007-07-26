@@ -317,7 +317,10 @@ void wxComboBox::SetFocus()
     gtk_widget_grab_focus( m_focusWidget );
 }
 
-int wxComboBox::DoAppend( const wxString &item )
+int wxComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
+                              unsigned int pos,
+                              void **clientData,
+                              wxClientDataType type)
 {
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid combobox") );
 
@@ -325,87 +328,58 @@ int wxComboBox::DoAppend( const wxString &item )
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
-    GtkWidget *list_item = gtk_list_item_new_with_label( wxGTK_CONV( item ) );
-
-    gtk_container_add( GTK_CONTAINER(list), list_item );
-
-    if (GTK_WIDGET_REALIZED(m_widget))
-    {
-        gtk_widget_realize( list_item );
-        gtk_widget_realize( GTK_BIN(list_item)->child );
-    }
-
-    // Apply current widget style to the new list_item
     GtkRcStyle *style = CreateWidgetStyle();
-    if (style)
+
+    const unsigned int count = items.GetCount();
+    for( unsigned int i = 0; i < count; ++i, ++pos )
     {
-        gtk_widget_modify_style( GTK_WIDGET( list_item ), style );
-        GtkBin *bin = GTK_BIN( list_item );
-        GtkWidget *label = GTK_WIDGET( bin->child );
-        gtk_widget_modify_style( label, style );
+        GtkWidget *
+            list_item = gtk_list_item_new_with_label( wxGTK_CONV( items[i] ) );
+
+        if ( pos == GetCount() )
+        {
+            gtk_container_add( GTK_CONTAINER(list), list_item );
+        }
+        else // insert, not append
+        {
+            GList *gitem_list = g_list_alloc ();
+            gitem_list->data = list_item;
+            gtk_list_insert_items( GTK_LIST (list), gitem_list, pos );
+        }
+
+        if (GTK_WIDGET_REALIZED(m_widget))
+        {
+            gtk_widget_realize( list_item );
+            gtk_widget_realize( GTK_BIN(list_item)->child );
+
+            if (style)
+            {
+                gtk_widget_modify_style( GTK_WIDGET( list_item ), style );
+                GtkBin *bin = GTK_BIN( list_item );
+                GtkWidget *label = GTK_WIDGET( bin->child );
+                gtk_widget_modify_style( label, style );
+            }
+
+        }
+
+        gtk_widget_show( list_item );
+
+        if ( m_clientDataList.GetCount() < GetCount() )
+            m_clientDataList.Insert( pos, (wxObject*) NULL );
+        if ( m_clientObjectList.GetCount() < GetCount() )
+            m_clientObjectList.Insert( pos, (wxObject*) NULL );
+
+        AssignNewItemClientData(pos, clientData, i, type);
+    }
+
+    if ( style )
         gtk_rc_style_unref( style );
-    }
-
-    gtk_widget_show( list_item );
-
-    const unsigned int count = GetCount();
-
-    if ( m_clientDataList.GetCount() < count )
-        m_clientDataList.Append( (wxObject*) NULL );
-    if ( m_clientObjectList.GetCount() < count )
-        m_clientObjectList.Append( (wxObject*) NULL );
 
     EnableEvents();
 
     InvalidateBestSize();
 
-    return count - 1;
-}
-
-int wxComboBox::DoInsert( const wxString &item, unsigned int pos )
-{
-    wxCHECK_MSG( !(GetWindowStyle() & wxCB_SORT), -1,
-                    wxT("can't insert into sorted list"));
-
-    wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid combobox") );
-
-    wxCHECK_MSG( IsValidInsert(pos), -1, wxT("invalid index") );
-
-    if (pos == GetCount())
-        return Append(item);
-
-    DisableEvents();
-
-    GtkWidget *list = GTK_COMBO(m_widget)->list;
-
-    GtkWidget *list_item = gtk_list_item_new_with_label( wxGTK_CONV( item ) );
-
-    GList *gitem_list = g_list_alloc ();
-    gitem_list->data = list_item;
-    gtk_list_insert_items( GTK_LIST (list), gitem_list, pos );
-
-    if (GTK_WIDGET_REALIZED(m_widget))
-    {
-        gtk_widget_realize( list_item );
-        gtk_widget_realize( GTK_BIN(list_item)->child );
-
-        ApplyWidgetStyle();
-    }
-
-    gtk_widget_show( list_item );
-
-    const unsigned int count = GetCount();
-
-    if ( m_clientDataList.GetCount() < count )
-        m_clientDataList.Insert( pos, (wxObject*) NULL );
-    if ( m_clientObjectList.GetCount() < count )
-        m_clientObjectList.Insert( pos, (wxObject*) NULL );
-
-    EnableEvents();
-
-    InvalidateBestSize();
-
-    return pos;
+    return pos - 1;
 }
 
 void wxComboBox::DoSetItemClientData(unsigned int n, void* clientData)
@@ -427,28 +401,7 @@ void* wxComboBox::DoGetItemClientData(unsigned int n) const
     return node ? node->GetData() : NULL;
 }
 
-void wxComboBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
-{
-    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
-
-    wxList::compatibility_iterator node = m_clientObjectList.Item( n );
-    if (!node) return;
-
-    // wxItemContainer already deletes data for us
-
-    node->SetData( (wxObject*) clientData );
-}
-
-wxClientData* wxComboBox::DoGetItemClientObject(unsigned int n) const
-{
-    wxCHECK_MSG( m_widget != NULL, (wxClientData*)NULL, wxT("invalid combobox") );
-
-    wxList::compatibility_iterator node = m_clientObjectList.Item( n );
-
-    return node ? (wxClientData*) node->GetData() : NULL;
-}
-
-void wxComboBox::Clear()
+void wxComboBox::DoClear()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
@@ -457,13 +410,6 @@ void wxComboBox::Clear()
     GtkWidget *list = GTK_COMBO(m_widget)->list;
     gtk_list_clear_items( GTK_LIST(list), 0, (int)GetCount() );
 
-    wxList::compatibility_iterator node = m_clientObjectList.GetFirst();
-    while (node)
-    {
-        wxClientData *cd = (wxClientData*)node->GetData();
-        if (cd) delete cd;
-        node = node->GetNext();
-    }
     m_clientObjectList.Clear();
 
     m_clientDataList.Clear();
@@ -473,7 +419,7 @@ void wxComboBox::Clear()
     InvalidateBestSize();
 }
 
-void wxComboBox::Delete(unsigned int n)
+void wxComboBox::DoDeleteOneItem(unsigned int n)
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
@@ -496,8 +442,6 @@ void wxComboBox::Delete(unsigned int n)
     wxList::compatibility_iterator node = m_clientObjectList.Item( n );
     if (node)
     {
-        wxClientData *cd = (wxClientData*)node->GetData();
-        if (cd) delete cd;
         m_clientObjectList.Erase( node );
     }
 

@@ -80,19 +80,19 @@ protected:
 // Implementation
 // ------------------------------------------------------------------------
 public:
-    virtual void Clear();
-    virtual void Delete(unsigned int n);
+    virtual void DoClear();
+    virtual void DoDelete(unsigned int n);
     virtual unsigned int GetCount() const;
     virtual wxString GetString(unsigned int) const;
     virtual void SetString(unsigned int pos, const wxString&);
     virtual int FindString(const wxString& s, bool bCase = false) const;
     virtual int GetSelection() const;
-    virtual int DoAppend(const wxString&);
-    virtual int DoInsert(const wxString&, unsigned int pos);
+    virtual int DoInsertItems(const wxArrayStringsAdapter& items,
+                              unsigned int pos,
+                              void **clientData, wxClientDataType type);
+    virtual void DoDeleteOneItem(unsigned int pos);
     virtual void DoSetItemClientData(unsigned int, void*);
     virtual void* DoGetItemClientData(unsigned int) const;
-    virtual void DoSetItemClientObject(unsigned int, wxClientData*);
-    virtual wxClientData* DoGetItemClientObject(unsigned int) const;
     virtual void SetSelection(int pos);
 protected:
     wxSortedArrayString *m_sortedStrings;

@@ -2020,36 +2020,9 @@ void wxMacDataItemBrowserControl::MacDelete( unsigned int n )
     RemoveItem( wxMacDataBrowserRootContainer, item );
 }
 
-void wxMacDataItemBrowserControl::MacInsert( unsigned int n, const wxString& text, int column )
-{
-    wxMacDataItem* newItem = CreateItem();
-    newItem->SetLabel( text );
-    if ( column != -1 )
-        newItem->SetColumn( kMinColumnId + column );
-
-    if ( m_sortOrder == SortOrder_None )
-    {
-        // increase the order of the lines to be shifted
-        unsigned int lines = MacGetCount();
-        for ( unsigned int i = n; i < lines; ++i)
-        {
-            wxMacDataItem* iter = (wxMacDataItem*) GetItemFromLine(i);
-            iter->SetOrder( iter->GetOrder() + 1 );
-        }
-
-        SInt32 frontLineOrder = 0;
-        if ( n > 0 )
-        {
-            wxMacDataItem* iter = (wxMacDataItem*) GetItemFromLine(n-1);
-            frontLineOrder = iter->GetOrder();
-        }
-        newItem->SetOrder( frontLineOrder + 1 );
-    }
-
-    AddItem( wxMacDataBrowserRootContainer, newItem );
-}
-
-void wxMacDataItemBrowserControl::MacInsert( unsigned int n, const wxArrayString& items, int column )
+void wxMacDataItemBrowserControl::MacInsert( unsigned int n,
+                                             const wxArrayStringsAdapter& items,
+                                             int column )
 {
     size_t itemsCount = items.GetCount();
     if ( itemsCount == 0 )

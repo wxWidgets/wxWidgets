@@ -42,13 +42,10 @@ public:
     wxListBoxBase() { }
     virtual ~wxListBoxBase();
 
-    void InsertItems(unsigned int nItems, const wxString *items, unsigned int pos);
+    void InsertItems(unsigned int nItems, const wxString *items, unsigned int pos)
+        { Insert(nItems, items, pos); }
     void InsertItems(const wxArrayString& items, unsigned int pos)
-        { DoInsertItems(items, pos); }
-
-    void Set(int n, const wxString* items, void **clientData = NULL);
-    void Set(const wxArrayString& items, void **clientData = NULL)
-        { DoSetItems(items, clientData); }
+        { Insert(items, pos); }
 
     // multiple selection logic
     virtual bool IsSelected(int n) const = 0;
@@ -87,8 +84,8 @@ public:
                (m_windowStyle & wxLB_EXTENDED);
     }
 
-    // return true if this listbox is sorted
-    bool IsSorted() const { return (m_windowStyle & wxLB_SORT) != 0; }
+    // override wxItemContainer::IsSorted
+    virtual bool IsSorted() const { return HasFlag( wxLB_SORT ); }
 
     // emulate selecting or deselecting the item event.GetInt() (depending on
     // event.GetExtraLong())
@@ -104,15 +101,6 @@ public:
 #endif // WXWIN_COMPATIBILITY_2_6
 
 protected:
-    // NB: due to wxGTK implementation details, DoInsert() is implemented
-    //     using DoInsertItems() and not the other way round
-    virtual int DoInsert(const wxString& item, unsigned int pos)
-        { InsertItems(1, &item, pos); return pos; }
-
-    // to be implemented in derived classes
-    virtual void DoInsertItems(const wxArrayString& items, unsigned int pos) = 0;
-    virtual void DoSetItems(const wxArrayString& items, void **clientData) = 0;
-
     virtual void DoSetFirstItem(int n) = 0;
 
     virtual void DoSetSelection(int n, bool select) = 0;
@@ -121,7 +109,7 @@ protected:
     virtual int DoListHitTest(const wxPoint& WXUNUSED(point)) const
         { return wxNOT_FOUND; }
 
-
+private:
     DECLARE_NO_COPY_CLASS(wxListBoxBase)
 };
 

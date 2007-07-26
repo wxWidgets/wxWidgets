@@ -284,10 +284,13 @@ void wxCheckListBox::Delete(unsigned int n)
     m_aItems.RemoveAt(n);
 } // end of wxCheckListBox::Delete
 
-void wxCheckListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
+int wxCheckListBox::DoInsertItems(const wxArrayStringsAdapter& items,
+                                  unsigned int pos,
+                                  void **clientData,
+                                  wxClientDataType type)
 {
     // pos is validated in wxListBox
-    wxListBox::DoInsertItems( items, pos );
+    int result = wxListBox::DoInsertItems( items, pos, clientData, type );
     unsigned int n = items.GetCount();
     for (unsigned int i = 0; i < n; i++)
     {
@@ -301,7 +304,8 @@ void wxCheckListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
                       MPFROMP(pNewItem)
                     );
     }
-} // end of wxCheckListBox::InsertItems
+    return result;
+} // end of wxCheckListBox::DoInsertItems
 
 bool wxCheckListBox::SetFont ( const wxFont& rFont )
 {

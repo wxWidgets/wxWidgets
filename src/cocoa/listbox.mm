@@ -169,33 +169,21 @@ int wxListBox::GetSelections(wxArrayInt& aSelections) const
     return [GetNSTableView() numberOfSelectedRows];
 }
 
-void wxListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
+int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items, unsigned int pos, void **clientData, wxClientDataType type)
 {
     wxAutoNSAutoreleasePool pool;
 
-    for(int i=int(items.GetCount())-1; i >= 0; i--)
+    const unsigned int numItems = items.GetCount();
+    for ( unsigned int i = 0; i < numItems; ++i, ++pos )
     {
         [m_cocoaItems insertObject: wxNSStringWithWxString(items[i])
             atIndex: pos];
-        m_itemClientData.Insert(NULL,pos);
+        m_itemClientData.Insert(NULL, pos);
+        AssignNewItemClientData(pos, clientData, i, type);
     }
-    [GetNSTableView() reloadData];
-}
 
-void wxListBox::DoSetItems(const wxArrayString& items, void **clientData)
-{
-    wxAutoNSAutoreleasePool pool;
-
-    // Remove everything
-    [m_cocoaItems removeAllObjects];
-    m_itemClientData.Clear();
-    // Provide the data
-    for(unsigned int i=0; i < items.GetCount(); i++)
-    {
-        [m_cocoaItems addObject: wxNSStringWithWxString(items[i])];
-        m_itemClientData.Add(clientData[i]);
-    }
     [GetNSTableView() reloadData];
+    return pos - 1;
 }
 
 void wxListBox::DoSetFirstItem(int n)
@@ -210,14 +198,14 @@ void wxListBox::DoSetFirstItem(int n)
 
 // pure virtuals from wxItemContainer
     // deleting items
-void wxListBox::Clear()
+void wxListBox::DoClear()
 {
     [m_cocoaItems removeAllObjects];
     m_itemClientData.Clear();
     [GetNSTableView() reloadData];
 }
 
-void wxListBox::Delete(unsigned int n)
+void wxListBox::DoDeleteOneItem(unsigned int n)
 {
     [m_cocoaItems removeObjectAtIndex:n];
     m_itemClientData.RemoveAt(n);
@@ -256,15 +244,6 @@ int wxListBox::GetSelection() const
     return [GetNSTableView() selectedRow];
 }
 
-int wxListBox::DoAppend(const wxString& item)
-{
-    wxAutoNSAutoreleasePool pool;
-    [m_cocoaItems addObject:wxNSStringWithWxString(item)];
-    [GetNSTableView() reloadData];
-    m_itemClientData.Add(NULL);
-    return [m_cocoaItems count];
-}
-
 void wxListBox::DoSetItemClientData(unsigned int n, void* clientData)
 {
     m_itemClientData[n] = clientData;
@@ -275,14 +254,4 @@ void* wxListBox::DoGetItemClientData(unsigned int n) const
     return m_itemClientData[n];
 }
 
-void wxListBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
-{
-    m_itemClientData[n] = (void*) clientData;
-}
-
-wxClientData* wxListBox::DoGetItemClientObject(unsigned int n) const
-{
-    return (wxClientData*) m_itemClientData[n];
-}
-
-#endif
+#endif // wxUSE_LISTBOX

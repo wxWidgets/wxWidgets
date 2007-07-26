@@ -216,9 +216,6 @@ END_EVENT_TABLE()
 
 wxComboBox::~wxComboBox()
 {
-    // delete client objects
-    FreeData();
-
     // delete the controls now, don't leave them alive even though they would
     // still be eventually deleted by our parent - but it will be too late, the
     // user code expects them to be gone now
@@ -386,10 +383,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 
     MacPostControlCreate(pos,size);
 
-    for ( int i = 0; i < n; i++ )
-    {
-        DoAppend( choices[ i ] );
-    }
+    Append( choices[ i ] );
 
     HIViewSetVisible( m_peer->GetControlRef(), true );
     SetSelection(0);
@@ -416,10 +410,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 
     DoSetSize(pos.x, pos.y, csize.x, csize.y);
 
-    for ( int i = 0; i < n; i++ )
-    {
-        m_choice->DoAppend( choices[ i ] );
-    }
+    m_choice->Append( n, choices );
     SetInitialSize(csize);   // Needed because it is a wxControlWithItems
 #endif
 
@@ -545,28 +536,26 @@ void wxComboBox::SetSelection(long from, long to)
     // TODO
 }
 
-int wxComboBox::DoAppend(const wxString& item)
+int wxComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
+                              unsigned int pos,
+                              void **clientData, wxClientDataType type)
 {
 #if USE_HICOMBOBOX
-    CFIndex outIndex;
-    HIComboBoxAppendTextItem( m_peer->GetControlRef(), wxMacCFStringHolder( item, m_font.GetEncoding() ), &outIndex );
-    //SetControl32BitMaximum( m_peer->GetControlRef(), GetCount() );
-    return (int) outIndex;
-#else
-    return m_choice->DoAppend( item );
-#endif
-}
-
-int wxComboBox::DoInsert(const wxString& item, unsigned int pos)
-{
-#if USE_HICOMBOBOX
-    HIComboBoxInsertTextItemAtIndex( m_peer->GetControlRef(), (CFIndex)pos, wxMacCFStringHolder(item, m_font.GetEncoding()) );
+    const unsigned int count = items.GetCount();
+    for ( unsigned int i = 0; i < count; ++i, ++pos )
+    {
+        HIComboBoxInsertTextItemAtIndex(m_peer->GetControlRef(),
+                                        (CFIndex)pos,
+                                        wxMacCFStringHolder(items[i],
+                                                            m_font.GetEncoding()));
+        AssignNewItemClientData(pos, clientData, i, type);
+    }
 
     //SetControl32BitMaximum( m_peer->GetControlRef(), GetCount() );
 
-    return pos;
+    return pos - 1;
 #else
-    return m_choice->DoInsert( item , pos );
+    return m_choice->DoInsertItems( items, pos, clientData, type );
 #endif
 }
 
@@ -588,36 +577,6 @@ void* wxComboBox::DoGetItemClientData(unsigned int n) const
 #endif
 }
 
-void wxComboBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
-{
-#if USE_HICOMBOBOX
-    return; //TODO
-#else
-    return m_choice->DoSetItemClientObject( n , clientData );
-#endif
-}
-
-wxClientData* wxComboBox::DoGetItemClientObject(unsigned int n) const
-{
-#if USE_HICOMBOBOX
-    return NULL;
-#else
-    return m_choice->DoGetItemClientObject( n );
-#endif
-}
-
-void wxComboBox::FreeData()
-{
-    if (HasClientObjectData())
-    {
-        unsigned int count = GetCount();
-        for ( unsigned int n = 0; n < count; n++ )
-        {
-            SetClientObject( n, NULL );
-        }
-    }
-}
-
 unsigned int wxComboBox::GetCount() const {
 #if USE_HICOMBOBOX
     return (unsigned int) HIComboBoxGetItemCount( m_peer->GetControlRef() );
@@ -626,21 +585,17 @@ unsigned int wxComboBox::GetCount() const {
 #endif
 }
 
-void wxComboBox::Delete(unsigned int n)
+void wxComboBox::DoDeleteOneItem(unsigned int n)
 {
 #if USE_HICOMBOBOX
     HIComboBoxRemoveItemAtIndex( m_peer->GetControlRef(), (CFIndex)n );
 #else
-    // force client object deletion
-    if( HasClientObjectData() )
-        SetClientObject( n, NULL );
     m_choice->Delete( n );
 #endif
 }
 
-void wxComboBox::Clear()
+void wxComboBox::DoClear()
 {
-    FreeData();
 #if USE_HICOMBOBOX
     for ( CFIndex i = GetCount() - 1; i >= 0; ++ i )
         verify_noerr( HIComboBoxRemoveItemAtIndex( m_peer->GetControlRef(), i ) );

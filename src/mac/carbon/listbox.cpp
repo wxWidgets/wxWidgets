@@ -87,7 +87,7 @@ bool wxListBox::Create(
 
     MacPostControlCreate( pos, size );
 
-    InsertItems( n, choices, 0 );
+    Append(n, choices);
 
    // Needed because it is a wxControlWithItems
     SetInitialSize( size );
@@ -116,36 +116,29 @@ void wxListBox::EnsureVisible(int n)
     GetPeer()->MacScrollTo( n );
 }
 
-void wxListBox::Delete(unsigned int n)
+void wxListBox::DoDeleteOneItem(unsigned int n)
 {
     wxCHECK_RET( IsValid(n), wxT("invalid index in wxListBox::Delete") );
 
     GetPeer()->MacDelete( n );
 }
 
-int wxListBox::DoAppend(const wxString& item)
+int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
+                             unsigned int pos,
+                             void **clientData,
+                             wxClientDataType type)
 {
     InvalidateBestSize();
 
-    return GetPeer()->MacAppend( item );
-}
-
-void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
-{
-    Clear();
-
-    unsigned int n = choices.GetCount();
-
-    for ( size_t i = 0; i < n; ++i )
+    GetPeer()->MacInsert( pos, items );
+    const unsigned int count = items.GetCount();
+    if ( clientData )
     {
-        if ( clientData )
-        {
-            Append( choices[i], clientData[i] );
-        }
-        else
-            Append( choices[i] );
+        for (unsigned int i = 0; i < count; ++i)
+            AssignNewItemClientData( pos + i, clientData, i, type );
     }
 
+    return pos + count - 1;
 }
 
 int wxListBox::FindString(const wxString& s, bool bCase) const
@@ -159,7 +152,7 @@ int wxListBox::FindString(const wxString& s, bool bCase) const
     return wxNOT_FOUND;
 }
 
-void wxListBox::Clear()
+void wxListBox::DoClear()
 {
     FreeData();
 }
@@ -188,20 +181,10 @@ void *wxListBox::DoGetItemClientData(unsigned int n) const
     return GetPeer()->MacGetClientData( n );
 }
 
-wxClientData *wxListBox::DoGetItemClientObject(unsigned int n) const
-{
-    return (wxClientData*)DoGetItemClientData( n );
-}
-
 void wxListBox::DoSetItemClientData(unsigned int n, void *clientData)
 {
     wxCHECK_RET( IsValid(n), wxT("invalid index in wxListBox::SetClientData") );
     GetPeer()->MacSetClientData( n , clientData);
-}
-
-void wxListBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
-{
-    DoSetItemClientData(n, clientData);
 }
 
 // Return number of selections and an array of selected integers
@@ -221,15 +204,6 @@ wxString wxListBox::GetString(unsigned int n) const
 {
     wxCHECK_MSG( IsValid(n), wxEmptyString, wxT("invalid index in wxListBox::GetString") );
     return GetPeer()->MacGetString(n);
-}
-
-void wxListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
-{
-    wxCHECK_RET( IsValidInsert(pos), wxT("invalid index in wxListBox::InsertItems") );
-
-    InvalidateBestSize();
-
-    GetPeer()->MacInsert( pos, items );
 }
 
 void wxListBox::SetString(unsigned int n, const wxString& s)

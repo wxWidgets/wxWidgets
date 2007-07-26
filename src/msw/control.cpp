@@ -35,6 +35,7 @@
     #include "wx/dcclient.h"
     #include "wx/log.h"
     #include "wx/settings.h"
+    #include "wx/ctrlsub.h"
 #endif
 
 #if wxUSE_LISTCTRL
@@ -431,6 +432,41 @@ WXHBRUSH wxControl::MSWControlColorDisabled(WXHDC pDC)
     return DoMSWControlColor(pDC,
                              wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE),
                              GetHWND());
+}
+
+// ----------------------------------------------------------------------------
+// wxControlWithItems
+// ----------------------------------------------------------------------------
+
+void wxControlWithItems::MSWAllocStorage(const wxArrayStringsAdapter& items,
+                                         unsigned wm)
+{
+    const unsigned numItems = items.GetCount();
+    unsigned long totalTextLength = numItems; // for trailing '\0' characters
+    for ( unsigned i = 0; i < numItems; ++i )
+    {
+        totalTextLength += items[i].length();
+    }
+
+    if ( SendMessage(MSWGetItemsHWND(), wm, numItems,
+                     (LPARAM)totalTextLength*sizeof(wxChar)) == LB_ERRSPACE )
+    {
+        wxLogLastError(wxT("SendMessage(XX_INITSTORAGE)"));
+    }
+}
+
+int wxControlWithItems::MSWInsertOrAppendItem(unsigned pos,
+                                              const wxString& item,
+                                              unsigned wm)
+{
+    LRESULT n = SendMessage(MSWGetItemsHWND(), wm, pos, (LPARAM)item.wx_str());
+    if ( n == CB_ERR || n == CB_ERRSPACE )
+    {
+        wxLogLastError(wxT("SendMessage(XX_ADD/INSERTSTRING)"));
+        return wxNOT_FOUND;
+    }
+
+    return n;
 }
 
 // ---------------------------------------------------------------------------

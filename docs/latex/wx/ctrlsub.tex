@@ -61,15 +61,27 @@ untyped, client data pointer with the item.
 
 \func{void}{Append}{\param{const wxArrayString\& }{strings}}
 
+\func{void}{Append}{\param{unsigned int }{n},\param{const wxString* }{strings}}
+
+\func{void}{Append}{\param{unsigned int }{n},\param{const wxString* }{strings}, \param{void **}{clientData}}
+
+\func{void}{Append}{\param{unsigned int }{n},\param{const wxString* }{strings}, \param{wxClientData **}{clientData}}
+
 Appends several items at once to the control. Notice that calling this method
-may be much faster than appending the items one by one if you need to add a lot
+is usually much faster than appending them one by one if you need to add a lot
 of items.
 
 \wxheading{Parameters}
 
 \docparam{item}{String to add.}
 
-\docparam{clientData}{Client data to associate with the item.}
+\docparam{stringsArray}{Contains items to append to the control.}
+
+\docparam{strings}{Array of strings of size \arg{n}.}
+
+\docparam{n}{Number of items in the \arg{strings} array.}
+
+\docparam{clientData}{Array of client data pointers of size \arg{n} to associate with the new items.}
 
 \wxheading{Return value}
 
@@ -242,13 +254,34 @@ Inserts the item into the list before pos, associating the given, typed or
 untyped, client data pointer with the item.
 Not valid for {\tt wxLB\_SORT} or {\tt wxCB\_SORT} styles, use Append instead.
 
+\func{void}{Insert}{\param{const wxArrayString\& }{strings}, \param{unsigned int }{pos}}
+
+\func{void}{Insert}{\param{const wxArrayString\& }{strings}, \param{unsigned int }{pos}}
+
+\func{void}{Insert}{\param{unsigned int }{n},\param{const wxString* }{strings}, \param{unsigned int }{pos}}
+
+\func{void}{Insert}{\param{unsigned int }{n},\param{const wxString* }{strings}, \param{unsigned int }{pos}, \param{void **}{clientData}}
+
+\func{void}{Insert}{\param{unsigned int }{n},\param{const wxString* }{strings}, \param{unsigned int }{pos}, \param{wxClientData **}{clientData}}
+
+Inserts several items at once into the control. Notice that calling this method
+is usually much faster than inserting them one by one if you need to insert a lot
+of items.
+
+
 \wxheading{Parameters}
 
 \docparam{item}{String to add.}
 
 \docparam{pos}{Position to insert item before, zero based.}
 
-\docparam{clientData}{Client data to associate with the item.}
+\docparam{stringsArray}{Contains items to insert into the control content}
+
+\docparam{strings}{Array of strings of size \arg{n}.}
+
+\docparam{n}{Number of items in the \arg{strings} array.}
+
+\docparam{clientData}{Array of client data pointers of size \arg{n} to associate with the new items.}
 
 \wxheading{Return value}
 
@@ -274,6 +307,53 @@ Returns {\tt true} if the control is empty or {\tt false} if it has some items.
 This is the same as \helpref{SetSelection}{wxcontrolwithitemssetselection} and
 exists only because it is slightly more natural for controls which support
 multiple selection.
+
+
+\membersection{wxControlWithItems::Set}\label{wxcontrolwithitemsset}
+
+\func{int}{Set}{\param{const wxString\& }{ item}}
+
+\func{int}{Set}{\param{const wxString\& }{ item}, \param{void *}{clientData}}
+
+\func{int}{Set}{\param{const wxString\& }{ item}, \param{wxClientData *}{clientData}}
+
+Replace control items with the (only) item specified, associating the typed or
+untyped client data pointer with it if given.
+
+\func{void}{Set}{\param{const wxArrayString\& }{stringsArray}}
+
+\func{void}{Set}{\param{unsigned int }{n},\param{const wxString* }{strings}}
+
+\func{void}{Set}{\param{unsigned int }{n},\param{const wxString* }{strings}, \param{void **}{clientData}}
+
+\func{void}{Set}{\param{unsigned int }{n},\param{const wxString* }{strings}, \param{wxClientData **}{clientData}}
+
+Replaces the current control contents with the given items. Notice that calling
+this method is much faster than appending the items one by one if you need to
+append a lot of them.
+
+\wxheading{Parameters}
+
+\docparam{item}{The single item to insert into the control.}
+
+\docparam{stringsArray}{Contains items to set as control content.}
+
+\docparam{strings}{Raw C++ array of strings. Only used in conjunction with 'n'.}
+
+\docparam{n}{Number of items passed in 'strings'. Only used in conjunction with 'strings'.}
+
+\docparam{clientData}{Client data to associate with the item(s).}
+
+\wxheading{Return value}
+
+When the control is sorted (e.g. has {\tt wxLB\_SORT} or {\tt wxCB\_SORT} style)
+the return value could be different from (GetCount() - 1).
+When setting a single item to the container, the return value is the index of the
+newly added item which may be different from the last one if the control is sorted
+(e.g. has {\tt wxLB\_SORT} or {\tt wxCB\_SORT} style).
+
+By default this method subsequently calls \helpref{Clear}{wxcontrolwithitemsclear}
+and \helpref{Append}{wxcontrolwithitemsappend}.
 
 
 \membersection{wxControlWithItems::SetClientData}\label{wxcontrolwithitemssetclientdata}
