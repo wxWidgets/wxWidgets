@@ -158,14 +158,13 @@ public:
     }
 
     void Delete( const wxDataViewItem &item )
-    {
-        // notify control
-        ItemDeleted( item );
-        
+    {    
         MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
+        wxDataViewItem parent( node->GetParent() );
         node->GetParent()->GetChildren().Remove( node );
         delete node;
-        
+        // notify control
+        ItemDeleted( parent, item );
     }
     
     // override sorting to always sort branches ascendingly

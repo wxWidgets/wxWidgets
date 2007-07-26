@@ -36,6 +36,9 @@ bool operator == (const wxDataViewItem &left, const wxDataViewItem &right)
 // wxDataViewModel
 // ---------------------------------------------------------
 
+#include <wx/listimpl.cpp>
+WX_DEFINE_LIST(wxDataViewModelNotifiers);
+
 wxDataViewModel::wxDataViewModel()
 {
     m_notifiers.DeleteContents( true );
@@ -47,29 +50,27 @@ bool wxDataViewModel::ItemAdded( const wxDataViewItem &parent, const wxDataViewI
 {
     bool ret = true;
 
-    wxList::compatibility_iterator node = m_notifiers.GetFirst();
-    while (node)
+    wxDataViewModelNotifiers::iterator iter;
+    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
     {
-        wxDataViewModelNotifier* notifier = (wxDataViewModelNotifier*) node->GetData();
+        wxDataViewModelNotifier* notifier = *iter;
         if (!notifier->ItemAdded( parent, item ))
             ret = false;
-        node = node->GetNext();
     }
 
     return ret;
 }
 
-bool wxDataViewModel::ItemDeleted( const wxDataViewItem &item )
+bool wxDataViewModel::ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
     bool ret = true;
 
-    wxList::compatibility_iterator node = m_notifiers.GetFirst();
-    while (node)
+    wxDataViewModelNotifiers::iterator iter;
+    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
     {
-        wxDataViewModelNotifier* notifier = (wxDataViewModelNotifier*) node->GetData();
-        if (!notifier->ItemDeleted( item ))
+        wxDataViewModelNotifier* notifier = *iter;
+        if (!notifier->ItemDeleted( parent, item ))
             ret = false;
-        node = node->GetNext();
     }
 
     return ret;
@@ -79,13 +80,12 @@ bool wxDataViewModel::ItemChanged( const wxDataViewItem &item )
 {
     bool ret = true;
 
-    wxList::compatibility_iterator node = m_notifiers.GetFirst();
-    while (node)
+    wxDataViewModelNotifiers::iterator iter;
+    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
     {
-        wxDataViewModelNotifier* notifier = (wxDataViewModelNotifier*) node->GetData();
+        wxDataViewModelNotifier* notifier = *iter;
         if (!notifier->ItemChanged( item ))
             ret = false;
-        node = node->GetNext();
     }
 
     return ret;
@@ -95,13 +95,12 @@ bool wxDataViewModel::ValueChanged( const wxDataViewItem &item, unsigned int col
 {
     bool ret = true;
 
-    wxList::compatibility_iterator node = m_notifiers.GetFirst();
-    while (node)
+    wxDataViewModelNotifiers::iterator iter;
+    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
     {
-        wxDataViewModelNotifier* notifier = (wxDataViewModelNotifier*) node->GetData();
+        wxDataViewModelNotifier* notifier = *iter;
         if (!notifier->ValueChanged( item, col ))
             ret = false;
-        node = node->GetNext();
     }
 
     return ret;
@@ -111,13 +110,12 @@ bool wxDataViewModel::Cleared()
 {
     bool ret = true;
 
-    wxList::compatibility_iterator node = m_notifiers.GetFirst();
-    while (node)
+    wxDataViewModelNotifiers::iterator iter;
+    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
     {
-        wxDataViewModelNotifier* notifier = (wxDataViewModelNotifier*) node->GetData();
+        wxDataViewModelNotifier* notifier = *iter;
         if (!notifier->Cleared())
             ret = false;
-        node = node->GetNext();
     }
 
     return ret;
@@ -125,18 +123,17 @@ bool wxDataViewModel::Cleared()
 
 void wxDataViewModel::Resort()
 {
-    wxList::compatibility_iterator node = m_notifiers.GetFirst();
-    while (node)
+    wxDataViewModelNotifiers::iterator iter;
+    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
     {
-        wxDataViewModelNotifier* notifier = (wxDataViewModelNotifier*) node->GetData();
+        wxDataViewModelNotifier* notifier = *iter;
         notifier->Resort();
-        node = node->GetNext();
     }
 }
 
 void wxDataViewModel::AddNotifier( wxDataViewModelNotifier *notifier )
 {
-    m_notifiers.Append( notifier );
+    m_notifiers.push_back( notifier );
     notifier->SetOwner( this );
 }
 
@@ -251,8 +248,8 @@ void wxDataViewIndexListModel::RowDeleted( unsigned int row )
     wxDataViewItem item( m_hash[row] );
     //We should never delete the row first here. 
     //After calling wxDataViewModel::ItemDeleted, can we delete the item here.
-    wxDataViewModel::ItemDeleted( item );
     m_hash.RemoveAt( row );
+    wxDataViewModel::ItemDeleted( wxDataViewItem(0), item );
 }
 
 void wxDataViewIndexListModel::RowChanged( unsigned int row )
