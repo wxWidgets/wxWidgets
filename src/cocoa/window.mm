@@ -23,6 +23,7 @@
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
 
+#import <Foundation/NSArray.h>
 #include "wx/cocoa/objc/NSView.h"
 #import <AppKit/NSEvent.h>
 #import <AppKit/NSScrollView.h>
