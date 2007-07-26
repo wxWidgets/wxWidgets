@@ -448,7 +448,7 @@ void wxControlWithItems::MSWAllocStorage(const wxArrayStringsAdapter& items,
         totalTextLength += items[i].length();
     }
 
-    if ( SendMessage(MSWGetItemsHWND(), wm, numItems,
+    if ( SendMessage((HWND)MSWGetItemsHWND(), wm, numItems,
                      (LPARAM)totalTextLength*sizeof(wxChar)) == LB_ERRSPACE )
     {
         wxLogLastError(wxT("SendMessage(XX_INITSTORAGE)"));
@@ -459,7 +459,8 @@ int wxControlWithItems::MSWInsertOrAppendItem(unsigned pos,
                                               const wxString& item,
                                               unsigned wm)
 {
-    LRESULT n = SendMessage(MSWGetItemsHWND(), wm, pos, (LPARAM)item.wx_str());
+    LRESULT n = SendMessage((HWND)MSWGetItemsHWND(), wm, pos,
+                            (LPARAM)item.wx_str());
     if ( n == CB_ERR || n == CB_ERRSPACE )
     {
         wxLogLastError(wxT("SendMessage(XX_ADD/INSERTSTRING)"));
