@@ -31,8 +31,6 @@ Note that if you compile wxWidgets in STL mode (wxUSE_STL defined as 1)
 then wxList<T> will actually derive from std::list and just add a legacy 
 compatibility layer for the old wxList class.
 
-each list type (i.e. list of ints, of wxStrings or of MyObjects). 
-
 \wxheading{Example}
 
 \begin{verbatim}
@@ -53,7 +51,6 @@ each list type (i.e. list of ints, of wxStrings or of MyObjects).
 
     #include <wx/listimpl.cpp>
     WX_DEFINE_LIST(MyList);
-
 
 
     MyList list;
@@ -116,7 +113,7 @@ unless you called DeleteContents({\tt true} ).
 
 \membersection{wxList<T>::Append}\label{wxlistappend}
 
-\func{wxList<T>::compatibility_iterator }{Append}{\param{T *}{object}}
+\func{wxList<T>::compatibility\_iterator }{Append}{\param{T *}{object}}
 
 Appends the pointer to \rtfsp{\it object} to the list.
 
@@ -137,7 +134,7 @@ The default is {\tt false}.
 
 \membersection{wxList<T>::DeleteNode}\label{wxlistdeletenode}
 
-\func{bool}{DeleteNode}{\param{const compatibility_iterator &}{iter}}
+\func{bool}{DeleteNode}{\param{const compatibility\_iterator &}{iter}}
 
 Deletes the given element refered to by {\tt iter} from the list, 
 returning {\tt true} if successful.
@@ -152,13 +149,13 @@ separately.
 
 \membersection{wxList<T>::Erase}\label{wxlisterase}
 
-\func{void}{Erase}{\param{const compatibility_iterator &}{iter}}
+\func{void}{Erase}{\param{const compatibility\_iterator &}{iter}}
 
 Removes element refered to be {\tt iter}.
 
 \membersection{wxList<T>::Find}\label{wxlistfind}
 
-\constfunc{wxList<T>::compatibility_iterator}{Find}{\param{T *}{ object}}
+\constfunc{wxList<T>::compatibility\_iterator}{Find}{\param{T *}{ object}}
 
 Returns the iterator refering to {\it object} or NULL if none found.
 
@@ -170,13 +167,13 @@ Returns the number of elements in the list.
 
 \membersection{wxList<T>::GetFirst}\label{wxlistgetfirst}
 
-\constfunc{wxList<T>::compatibility_iterator}{GetFirst}{\void}
+\constfunc{wxList<T>::compatibility\_iterator}{GetFirst}{\void}
 
 Returns the first iterator in the list (NULL if the list is empty).
 
 \membersection{wxList<T>::GetLast}\label{wxlistgetlast}
 
-\constfunc{wxList<T>::compatibility_iterator}{GetLast}{\void}
+\constfunc{wxList<T>::compatibility\_iterator}{GetLast}{\void}
 
 Returns the last iterator in the list (NULL if the list is empty).
 
@@ -189,18 +186,18 @@ Returns the index of {\it obj} within the list or {\tt wxNOT\_FOUND} if
 
 \membersection{wxList<T>::Insert}\label{wxlistinsert}
 
-\func{wxList<T>::compatibility_iterator}{Insert}{\param{T *}{object}}
+\func{wxList<T>::compatibility\_iterator}{Insert}{\param{T *}{object}}
 
 Insert object at the front of list.
 
-\func{wxList<T>::compatibility_iterator}{Insert}{\param{size\_t }{position}, \param{T *}{object}}
+\func{wxList<T>::compatibility\_iterator}{Insert}{\param{size\_t }{position}, \param{T *}{object}}
 
 Insert object before {\it position}, i.e. the index of the new item in the
 list will be equal to {\it position}. {\it position} should be less than or
 equal to \helpref{GetCount}{wxlistgetcount}; if it is equal to it, this is the
 same as calling \helpref{Append}{wxlistappend}.
 
-\func{wxList<T>::compatibility_iterator}{Insert}{\param{compatibility_iterator}{iter}, \param{T *}{object}}
+\func{wxList<T>::compatibility\_iterator}{Insert}{\param{compatibility\_iterator}{iter}, \param{T *}{object}}
 
 Inserts the object before the object refered to be {\it iter}.
 
@@ -213,20 +210,20 @@ Returns {\tt true} if the list is empty, {\tt false} otherwise.
 % Use different label name to avoid clashing with wxListItem label
 \membersection{wxList<T>::Item}\label{wxlistitemfunc}
 
-\constfunc{wxList<T>::compatibility_iterator}{Item}{\param{size\_t }{index}}
+\constfunc{wxList<T>::compatibility\_iterator}{Item}{\param{size\_t }{index}}
 
 Returns the iterator refering to the object at the given
 {\tt index} in the list.
 
 \membersection{wxList<T>::Member}\label{wxlistmember}
 
-\constfunc{wxList<T>::compatibility_iterator}{Member}{\param{T *}{ object}}
+\constfunc{wxList<T>::compatibility\_iterator}{Member}{\param{T *}{ object}}
 
 {\bf NB:} This function is deprecated, use \helpref{Find}{wxlistfind} instead.
 
 \membersection{wxList<T>::Nth}\label{wxlistnth}
 
-\constfunc{wxList<T>::compatibility_iterator}{Nth}{\param{int }{n}}
+\constfunc{wxList<T>::compatibility\_iterator}{Nth}{\param{int }{n}}
 
 {\bf NB:} This function is deprecated, use \helpref{Item}{wxlistitemfunc} instead.
 
