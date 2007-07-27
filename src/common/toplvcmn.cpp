@@ -59,7 +59,7 @@ wxTopLevelWindowBase::wxTopLevelWindowBase()
 {
     // Unlike windows, top level windows are created hidden by default.
     m_isShown = false;
-    m_winDefault = NULL;
+    m_winDefault =
     m_winTmpDefault = NULL;
 
     WX_INIT_CONTROL_CONTAINER();
@@ -67,13 +67,42 @@ wxTopLevelWindowBase::wxTopLevelWindowBase()
 
 wxTopLevelWindowBase::~wxTopLevelWindowBase()
 {
-    m_winDefault = m_winTmpDefault = NULL;
+    m_winDefault =
+    m_winTmpDefault = NULL;
 
     // don't let wxTheApp keep any stale pointers to us
     if ( wxTheApp && wxTheApp->GetTopWindow() == this )
         wxTheApp->SetTopWindow(NULL);
 
     wxTopLevelWindows.DeleteObject(this);
+
+    // delete any our top level children which are still pending for deletion
+    // immediately: this could happen if a child (e.g. a temporary dialog
+    // created with this window as parent) was Destroy()'d) while this window
+    // was deleted directly (with delete, or maybe just because it was created
+    // on the stack) immediately afterwards and before the child TLW was really
+    // destroyed -- not destroying it now would leave it alive with a dangling
+    // parent pointer and result in a crash later
+    for ( wxObjectList::iterator i = wxPendingDelete.begin();
+          i != wxPendingDelete.end();
+          )
+    {
+        wxWindow * const win = wxDynamicCast(*i, wxWindow);
+        if ( win && win->GetParent() == this )
+        {
+            wxPendingDelete.erase(i);
+
+            delete win;
+
+            // deleting it invalidated the list (and not only one node because
+            // it could have resulted in deletion of other objects to)
+            i = wxPendingDelete.begin();
+        }
+        else
+        {
+            ++i;
+        }
+    }
 
     if ( IsLastBeforeExit() )
     {
