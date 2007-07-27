@@ -591,6 +591,8 @@
 
 #define wxUSE_INKEDIT  0
 
+#define wxUSE_INICONF 0
+
 
 #define wxUSE_DATEPICKCTRL_GENERIC 0
 

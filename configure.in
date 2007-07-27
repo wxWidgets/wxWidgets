@@ -934,6 +934,7 @@ dnl wxMSW-only options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_FEATURE(dccache,     [  --enable-dccache        cache temporary wxDC objects (Win32 only)], wxUSE_DC_CACHEING)
+WX_ARG_ENABLE (iniconf,     [  --enable-iniconf        use wxIniConfig (Win32 only)], wxUSE_INICONF)
 WX_ARG_FEATURE(ps-in-msw,   [  --enable-ps-in-msw      use PS printing in wxMSW (Win32 only)], wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
 WX_ARG_FEATURE(ownerdrawn,  [  --enable-ownerdrawn     use owner drawn controls (Win32 only)], wxUSE_OWNER_DRAWN)
 WX_ARG_FEATURE(regkey,      [  --enable-regkey         use wxRegKey class (Win32 only)], wxUSE_REGKEY)
@@ -7222,6 +7223,10 @@ if test "$wxUSE_MSW" = 1 ; then
 
 if test "$wxUSE_DC_CACHEING" = "yes"; then
     AC_DEFINE(wxUSE_DC_CACHEING)
+fi
+
+if test "$wxUSE_INICONF" = "yes"; then
+    AC_DEFINE(wxUSE_INICONF)
 fi
 
 if test "$wxUSE_DIB" = "yes"; then

@@ -9,8 +9,10 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef   _INICONF_H
-#define   _INICONF_H
+#ifndef   _WX_MSW_INICONF_H_
+#define   _WX_MSW_INICONF_H_
+
+#if wxUSE_INICONF
 
 // ----------------------------------------------------------------------------
 // wxIniConfig is a wxConfig implementation which uses MS Windows INI files to
@@ -97,4 +99,6 @@ private:
   DECLARE_ABSTRACT_CLASS(wxIniConfig)
 };
 
-#endif  //_INICONF_H
+#endif // wxUSE_INICONF
+
+#endif  //_WX_MSW_INICONF_H_

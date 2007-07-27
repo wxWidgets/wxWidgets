@@ -1352,6 +1352,13 @@
 // Set to 1 to use InkEdit control (Tablet PC), if available
 #define wxUSE_INKEDIT  0
 
+// Set to 1 to enable .INI files based wxConfig implementation (wxIniConfig)
+//
+// Default is 0.
+//
+// Recommended setting: 0, nobody uses .INI files any more
+#define wxUSE_INICONF 0
+
 // ----------------------------------------------------------------------------
 // Generic versions of native controls
 // ----------------------------------------------------------------------------

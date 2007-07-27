@@ -55,6 +55,14 @@
 #    endif
 #endif /* !defined(wxUSE_MS_HTML_HELP) */
 
+#ifndef wxUSE_INICONF
+#    ifdef wxABORT_ON_CONFIG_ERROR
+#        error "wxUSE_INICONF must be defined."
+#    else
+#        define wxUSE_INICONF 0
+#    endif
+#endif /* !defined(wxUSE_INICONF) */
+
 #ifndef wxUSE_OLE
 #    ifdef wxABORT_ON_CONFIG_ERROR
 #        error "wxUSE_OLE must be defined."
