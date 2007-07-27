@@ -192,27 +192,28 @@ bool wxToolMenuBar::Create(wxWindow *parent,
     return true;
 }
 
-bool wxToolMenuBar::MSWCreateToolbar(const wxPoint& WXUNUSED(pos), const wxSize& WXUNUSED(size), wxMenuBar* menuBar)
+bool wxToolMenuBar::MSWCreateToolbar(const wxPoint& WXUNUSED(pos),
+                                     const wxSize& WXUNUSED(size),
+                                     wxMenuBar *menuBar)
 {
     SetMenuBar(menuBar);
     if (m_menuBar)
         m_menuBar->SetToolBar(this);
 
+    HWND hwndParent = GetHwndOf(GetParent());
+    wxCHECK_MSG( hwndParent, false, _T("should have valid parent HWND") );
+
 #if defined(WINCE_WITHOUT_COMMANDBAR)
     // Create the menubar.
-    SHMENUBARINFO mbi;
+    WinStruct<SHMENUBARINFO> mbi;
 
-    memset (&mbi, 0, sizeof (SHMENUBARINFO));
-    mbi.cbSize     = sizeof (SHMENUBARINFO);
-    mbi.hwndParent = (HWND) GetParent()->GetHWND();
+    mbi.hwndParent = hwndParent;
 #ifdef __SMARTPHONE__
     mbi.nToolBarId = 5002;
 #else
     mbi.nToolBarId = 5000;
 #endif
-    mbi.nBmpId     = 0;
-    mbi.cBmpImages = 0;
-    mbi.dwFlags = 0 ; // SHCMBF_EMPTYBAR;
+    mbi.dwFlags = SHCMBF_EMPTYBAR;
     mbi.hInstRes = wxGetInstance();
 
     if (!SHCreateMenuBar(&mbi))
@@ -223,7 +224,7 @@ bool wxToolMenuBar::MSWCreateToolbar(const wxPoint& WXUNUSED(pos), const wxSize&
 
     SetHWND((WXHWND) mbi.hwndMB);
 #else
-    HWND hWnd = CommandBar_Create(wxGetInstance(), (HWND) GetParent()->GetHWND(), GetId());
+    HWND hWnd = CommandBar_Create(wxGetInstance(), hwndParent, GetId());
     SetHWND((WXHWND) hWnd);
 #endif
 
