@@ -520,7 +520,7 @@ public:
 
     virtual bool ItemAdded( const wxDataViewItem & parent, const wxDataViewItem & item )
         { return m_mainWindow->ItemAdded( parent , item ); }
-    virtual bool ItemDeleted( const wxDataViewItem & item )
+    virtual bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item ) = 0;
         { return m_mainWindow->ItemDeleted( item ); }
     virtual bool ItemChanged( const wxDataViewItem & item )
         { return m_mainWindow->ItemChanged(item);  }
