@@ -11,8 +11,6 @@
 
 #include <aygshell.h>
 
-#include "wx/msw/wince/resources.h"
-
 STRINGTABLE
 BEGIN
     IDS_EMPTY   ""

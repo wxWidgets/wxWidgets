@@ -54,6 +54,7 @@
 #include <shellapi.h>
 #if defined(WINCE_WITHOUT_COMMANDBAR)
   #include <aygshell.h>
+  #include "wx/msw/wince/resources.h"
 #endif
 #include "wx/msw/wince/missing.h"
 
@@ -204,19 +205,14 @@ bool wxToolMenuBar::MSWCreateToolbar(const wxPoint& WXUNUSED(pos),
     wxCHECK_MSG( hwndParent, false, _T("should have valid parent HWND") );
 
 #if defined(WINCE_WITHOUT_COMMANDBAR)
-    // Create the menubar.
+    // create the menubar.
     WinStruct<SHMENUBARINFO> mbi;
 
     mbi.hwndParent = hwndParent;
-#ifdef __SMARTPHONE__
-    mbi.nToolBarId = 5002;
-#else
-    mbi.nToolBarId = 5000;
-#endif
-    mbi.dwFlags = SHCMBF_EMPTYBAR;
+    mbi.nToolBarId = wxIDM_SHMENU;
     mbi.hInstRes = wxGetInstance();
 
-    if (!SHCreateMenuBar(&mbi))
+    if ( !SHCreateMenuBar(&mbi) )
     {
         wxFAIL_MSG( _T("SHCreateMenuBar failed") );
         return false;
@@ -251,16 +247,14 @@ wxToolMenuBar::~wxToolMenuBar()
 // Return HMENU for the menu associated with the commandbar
 WXHMENU wxToolMenuBar::GetHMenu()
 {
-#if defined(__HANDHELDPC__)
-    return 0;
-#else
+#if !defined(__HANDHELDPC__)
     if (GetHWND())
     {
-        return (WXHMENU) (HMENU)::SendMessage((HWND) GetHWND(), SHCMBM_GETMENU, (WPARAM)0, (LPARAM)0);
+        return (WXHMENU)::SendMessage(GetHwnd(), SHCMBM_GETMENU, 0, 0);
     }
-    else
-        return 0;
 #endif
+
+    return NULL;
 }
 
 // ----------------------------------------------------------------------------
