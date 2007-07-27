@@ -394,7 +394,7 @@ public:
 
     // notifications from wxDataViewModel
     bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
-    bool ItemDeleted( const wxDataViewItem &item );
+    bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item );
     bool ItemChanged( const wxDataViewItem &item );
     bool ValueChanged( const wxDataViewItem &item, unsigned int col );
     bool Cleared();
@@ -1917,7 +1917,8 @@ private:
 
 void DestroyTreeHelper( wxDataViewTreeNode * node);
 
-bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem & item)
+bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
+                                       const wxDataViewItem& item)
 {
     g_model = GetOwner()->GetModel();
 
