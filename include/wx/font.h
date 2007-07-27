@@ -222,6 +222,12 @@ private:
     static wxFontEncoding ms_encodingDefault;
 };
 
+// wxFontBase <-> wxString utilities, used by wxConfig
+WXDLLIMPEXP_CORE wxString wxToString(const wxFontBase& font);
+WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxFontBase* font);
+
+
+
 // include the real class declaration
 #if defined(__WXPALMOS__)
     #include "wx/palmos/font.h"

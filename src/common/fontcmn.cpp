@@ -799,3 +799,26 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
 }
 
 #endif // generic or wxMSW or wxOS2
+
+
+// wxFont <-> wxString utilities, used by wxConfig
+wxString wxToString(const wxFontBase& font)
+{
+    return font.IsOk() ? font.GetNativeFontInfoDesc()
+                       : wxString();
+}
+
+bool wxFromString(const wxString& str, wxFontBase *font)
+{
+    wxCHECK_MSG( font, false, _T("NULL output parameter") );
+
+    if ( str.empty() )
+    {
+        *font = wxNullFont;
+        return true;
+    }
+
+    return font->SetNativeFontInfo(str);
+}
+
+
