@@ -417,7 +417,7 @@ MyClient::~MyClient()
 // ----------------------------------------------------------------------------
 
 void MyConnection::Log(const wxString& command, const wxString& topic,
-    const wxString& item, wxChar *data, int size, wxIPCFormat format)
+    const wxString& item, const wxChar *data, int size, wxIPCFormat format)
 {
     wxString s;
     if (topic.IsEmpty() && item.IsEmpty())
@@ -475,7 +475,7 @@ wxChar *MyConnection::Request(const wxString& item, int *size, wxIPCFormat forma
     return data;
 }
 
-bool MyConnection::Poke(const wxString& item, wxChar *data, int size, wxIPCFormat format)
+bool MyConnection::Poke(const wxString& item, const wxChar *data, int size, wxIPCFormat format)
 {
     Log(_T("Poke"), wxEmptyString, item, data, size, format);
     return wxConnection::Poke(item, data, size, format);
