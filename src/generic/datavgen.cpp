@@ -521,7 +521,7 @@ public:
     virtual bool ItemAdded( const wxDataViewItem & parent, const wxDataViewItem & item )
         { return m_mainWindow->ItemAdded( parent , item ); }
     virtual bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item )
-        { return m_mainWindow->ItemDeleted( item ); }
+        { return m_mainWindow->ItemDeleted( parent, item ); }
     virtual bool ItemChanged( const wxDataViewItem & item )
         { return m_mainWindow->ItemChanged(item);  }
     virtual bool ValueChanged( const wxDataViewItem & item , unsigned int col )
