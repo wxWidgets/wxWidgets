@@ -731,9 +731,9 @@ typedef struct
 
 /* The next 4 #defines implement a very fast in-line stack abstraction. */
 #define STACK_SIZE        (8 * sizeof(unsigned long int))
-#define PUSH(low, high)        ((void) ((top->lo = (low)), (top->hi = (high)), ++top))
-#define        POP(low, high)        ((void) (--top, (low = top->lo), (high = top->hi)))
-#define        STACK_NOT_EMPTY        (stack < top)
+#define PUSH(low, high)   ((void) ((top->lo = (low)), (top->hi = (high)), ++top))
+#define POP(low, high)    ((void) (--top, (low = top->lo), (high = top->hi)))
+#define STACK_NOT_EMPTY   (stack < top)
 
 
 /* Order size using quicksort.  This implementation incorporates
@@ -870,12 +870,12 @@ void wxQsort(void *const pbase, size_t total_elems,
      of the array to sort, and END_PTR points at the very last element in
      the array (*not* one beyond it!). */
 
-#define min(x, y) ((x) < (y) ? (x) : (y))
-
   {
     char *const end_ptr = &base_ptr[size * (total_elems - 1)];
     char *tmp_ptr = base_ptr;
-    char *thresh = min(end_ptr, base_ptr + max_thresh);
+    char *thresh = base_ptr + max_thresh;
+    if ( thresh > end_ptr )
+        thresh = end_ptr;
     register char *run_ptr;
 
     /* Find smallest element in first threshold and place it at the
