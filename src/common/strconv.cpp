@@ -2736,7 +2736,7 @@ void wxCSConv::SetName(const char *charset)
 {
     if (charset)
     {
-        m_name = strdup(charset);
+        m_name = wxStrdup(charset);
         m_deferred = true;
     }
 }

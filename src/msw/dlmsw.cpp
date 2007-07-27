@@ -139,9 +139,8 @@ HMODULE wxGetModuleHandle(const char *name, void *addr)
     }
 
     // Windows CE only has Unicode API, so even we have an ANSI string here, we
-    // still need to use GetModuleHandleW() there and so do it everywhere to
-    // avoid #ifdefs -- this code is not performance-critical anyhow...
-#ifdef __WINCE__
+    // still need to use GetModuleHandleW() there
+#ifdef __WXWINCE__
     return ::GetModuleHandleW(wxConvLibc.cMB2WC(name).data());
 #else
     return ::GetModuleHandleA((char *)name);

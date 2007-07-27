@@ -423,14 +423,17 @@ enum wxFileKind
     #define wxCRT_Lstat wxCRT_Stat
 #endif
 
-inline int wxStat(const wxString& path, wxStructStat *buf)
-    { return wxCRT_Stat(path.fn_str(), buf); }
-inline int wxLstat(const wxString& path, wxStructStat *buf)
-    { return wxCRT_Lstat(path.fn_str(), buf); }
 inline int wxAccess(const wxString& path, mode_t mode)
     { return wxCRT_Access(path.fn_str(), mode); }
 inline int wxOpen(const wxString& path, int flags, mode_t mode)
     { return wxCRT_Open(path.fn_str(), flags, mode); }
+
+// FIXME-CE: provide our own implementations of the missing CRT functions
+#ifndef __WXWINCE__
+inline int wxStat(const wxString& path, wxStructStat *buf)
+    { return wxCRT_Stat(path.fn_str(), buf); }
+inline int wxLstat(const wxString& path, wxStructStat *buf)
+    { return wxCRT_Lstat(path.fn_str(), buf); }
 inline int wxRmDir(const wxString& path)
     { return wxCRT_RmDir(path.fn_str()); }
 #ifdef __WINDOWS__
@@ -440,6 +443,7 @@ inline int wxMkDir(const wxString& path, mode_t WXUNUSED(mode) = 0)
 inline int wxMkDir(const wxString& path, mode_t mode)
     { return wxCRT_MkDir(path.fn_str(), mode); }
 #endif
+#endif // !__WXWINCE__
 
 #ifdef O_BINARY
     #define wxO_BINARY O_BINARY

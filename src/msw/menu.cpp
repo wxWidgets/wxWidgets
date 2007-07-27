@@ -759,7 +759,7 @@ void wxMenu::SetTitle(const wxString& label)
             info.fMask = MIIM_TYPE;
             info.fType = MFT_STRING;
             info.cch = m_title.length();
-            info.dwTypeData = (LPTSTR) m_title.c_str();
+            info.dwTypeData = wx_const_cast(wxChar *, m_title.wx_str());
             if ( !SetMenuItemInfo(hMenu, 0, TRUE, & info) )
             {
                 wxLogLastError(wxT("SetMenuItemInfo"));
@@ -948,7 +948,7 @@ WXHMENU wxMenuBar::Create()
             HMENU hPopupMenu = (HMENU) GetMenu(i)->GetHMenu() ;
             tbButton.dwData = (DWORD)hPopupMenu;
             wxString label = wxStripMenuCodes(GetLabelTop(i));
-            tbButton.iString = (int) label.c_str();
+            tbButton.iString = (int) label.wx_str();
 
             int position = i;
 
@@ -1077,7 +1077,7 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
     info.fMask = MIIM_TYPE;
     info.fType = MFT_STRING;
     info.cch = label.length();
-    info.dwTypeData = (LPTSTR) label.c_str();
+    info.dwTypeData = wx_const_cast(wxChar *, label.wx_str());
     if ( !SetMenuItemInfo(GetHmenu(), id, TRUE, & info) )
     {
         wxLogLastError(wxT("SetMenuItemInfo"));
@@ -1185,7 +1185,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
         HMENU hPopupMenu = (HMENU) menu->GetHMenu() ;
         tbButton.dwData = (DWORD)hPopupMenu;
         wxString label = wxStripMenuCodes(title);
-        tbButton.iString = (int) label.c_str();
+        tbButton.iString = (int) label.wx_str();
 
         tbButton.idCommand = NewControlId();
         if (!::SendMessage((HWND) GetToolBar()->GetHWND(), TB_INSERTBUTTON, pos, (LPARAM)&tbButton))
@@ -1246,7 +1246,7 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
         HMENU hPopupMenu = (HMENU) menu->GetHMenu() ;
         tbButton.dwData = (DWORD)hPopupMenu;
         wxString label = wxStripMenuCodes(title);
-        tbButton.iString = (int) label.c_str();
+        tbButton.iString = (int) label.wx_str();
 
         tbButton.idCommand = NewControlId();
         if (!::SendMessage((HWND) GetToolBar()->GetHWND(), TB_INSERTBUTTON, pos, (LPARAM)&tbButton))

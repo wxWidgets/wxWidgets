@@ -49,15 +49,13 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxListBoxNameStr);
 
-    // override base class virtuals
-    virtual void DoDeleteOneItem(unsigned int n);
-
     // items may be checked
     virtual bool IsChecked(unsigned int uiIndex) const;
     virtual void Check(unsigned int uiIndex, bool bCheck = true);
 
     // public interface derived from wxListBox and lower classes
-    virtual void Clear();
+    virtual void DoClear();
+    virtual void DoDeleteOneItem(unsigned int n);
     virtual unsigned int GetCount() const;
     virtual int GetSelection() const;
     virtual int GetSelections(wxArrayInt& aSelections) const;

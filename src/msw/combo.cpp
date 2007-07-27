@@ -474,19 +474,20 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 
     const wxRect& rectButton = m_btnArea;
     wxRect rectTextField = m_tcArea;
-    const bool isEnabled = IsEnabled();
     wxColour bgCol = GetBackgroundColour();
+
+#if wxUSE_UXTHEME
+    const bool isEnabled = IsEnabled();
 
     HDC hDc = GetHdcOf(dc);
     HWND hWnd = GetHwndOf(this);
 
-#if wxUSE_UXTHEME
     wxUxThemeEngine* theme = NULL;
     wxUxThemeHandle hTheme(this, L"COMBOBOX");
 
     if ( hTheme )
         theme = wxUxThemeEngine::GetIfActive();
-#endif
+#endif // wxUSE_UXTHEME
 
     wxRect borderRect(0,0,sz.x,sz.y);
 

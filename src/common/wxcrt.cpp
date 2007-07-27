@@ -142,6 +142,13 @@ bool WXDLLEXPORT wxOKlibc()
 
 char* wxSetlocale(int category, const char *locale)
 {
+#ifdef __WXWINCE__
+    // FIXME-CE: there is no setlocale() in CE CRT, use SetThreadLocale()?
+    wxUnusedVar(category);
+    wxUnusedVar(locale);
+
+    return NULL;
+#else // !__WXWINCE__
     char *rv = setlocale(category, locale);
     if ( locale != NULL /* setting locale, not querying */ &&
          rv /* call was successful */ )
@@ -149,6 +156,7 @@ char* wxSetlocale(int category, const char *locale)
         wxUpdateLocaleIsUtf8();
     }
     return rv;
+#endif // __WXWINCE__/!__WXWINCE__
 }
 
 // ============================================================================
@@ -1099,15 +1107,6 @@ void *calloc( size_t num, size_t size )
 
 #endif // __WXWINCE__ <= 211
 
-#ifdef __WXWINCE__
-int wxCRT_RemoveW(const wchar_t *path)
-{
-    return ::DeleteFile(path) == 0;
-}
-#endif
-
-
-
 // ============================================================================
 // wxLocaleIsUtf8
 // ============================================================================
@@ -1208,6 +1207,8 @@ int wxFputc(const wxUniChar& c, FILE *stream)
 #endif
 }
 
+#ifdef wxCRT_PerrorA
+
 void wxPerror(const wxString& s)
 {
 #ifdef wxCRT_PerrorW
@@ -1218,6 +1219,8 @@ void wxPerror(const wxString& s)
     wxCRT_PerrorA(s.mb_str());
 #endif
 }
+
+#endif // wxCRT_PerrorA
 
 wchar_t *wxFgets(wchar_t *s, int size, FILE *stream)
 {

@@ -303,8 +303,10 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size)
     // toolbar-specific post initialisation
     ::SendMessage(GetHwnd(), TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
 
+#ifdef TB_SETEXTENDEDSTYLE
     if ( wxApp::GetComCtl32Version() >= 471 )
         ::SendMessage(GetHwnd(), TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_DRAWDDARROWS);
+#endif
 
     return true;
 }

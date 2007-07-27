@@ -414,6 +414,7 @@ inline int wxStricmp_String(const wxString& s1, const T& s2)
     { return s1.CmpNoCase(s2); }
 WX_STRCMP_FUNC(wxStricmp, wxCRT_StricmpA, wxCRT_StricmpW, wxStricmp_String)
 
+#if defined(wxCRT_StrcollA) && defined(wxCRT_StrcollW)
 
 // GCC 3.3 and other compilers have a bug that causes it to fail compilation if
 // the template's implementation uses overloaded function declared later (see
@@ -446,6 +447,7 @@ inline int wxStrcoll_String(const wxString& s1, const T& s2)
 WX_STRCMP_FUNC(wxStrcoll, wxCRT_StrcollA, wxCRT_StrcollW, wxStrcoll_String)
 #endif
 
+#endif // defined(wxCRT_Strcoll[AW])
 
 template<typename T>
 inline int wxStrspn_String(const wxString& s1, const T& s2)
@@ -484,6 +486,8 @@ WX_STRCMP_FUNC(wxStrnicmp, wxCRT_StrnicmpA, wxCRT_StrnicmpW, wxStrnicmp_String)
 #undef WX_STR_FUNC
 #undef WX_STR_FUNC_NO_INVERT
 
+#if defined(wxCRT_StrxfrmA) && defined(wxCRT_StrxfrmW)
+
 inline size_t wxStrxfrm(char *dest, const char *src, size_t n)
     { return wxCRT_StrxfrmA(dest, src, n); }
 inline size_t wxStrxfrm(wchar_t *dest, const wchar_t *src, size_t n)
@@ -499,6 +503,8 @@ inline size_t wxStrxfrm(char *dest, const wxCStrData& src, size_t n)
     { return wxCRT_StrxfrmA(dest, src.AsCharBuf(), n); }
 inline size_t wxStrxfrm(wchar_t *dest, const wxCStrData& src, size_t n)
     { return wxCRT_StrxfrmW(dest, src.AsWCharBuf(), n); }
+
+#endif // defined(wxCRT_Strxfrm[AW])
 
 inline char *wxStrtok(char *str, const char *delim, char **saveptr)
     { return wxCRT_StrtokA(str, delim, saveptr); }
@@ -852,6 +858,9 @@ WX_STRTOX_FUNC(wxULongLong_t, wxStrtoull, wxCRT_StrtoullA, wxCRT_StrtoullW)
 #undef WX_STRTOX_FUNC
 
 
+// there is no command interpreter under CE, hence no system()
+#ifndef __WXWINCE__
+
 // mingw32 doesn't provide _tsystem() even though it provides other stdlib.h
 // functions in their wide versions
 #ifdef wxCRT_SystemW
@@ -860,13 +869,14 @@ inline int wxSystem(const wxString& str) { return wxCRT_SystemW(str.wc_str()); }
 inline int wxSystem(const wxString& str) { return wxCRT_SystemA(str.mb_str()); }
 #endif
 
+#endif // !__WXWINCE__/__WXWINCE__
+
 inline char* wxGetenv(const char *name) { return wxCRT_GetenvA(name); }
 inline wchar_t* wxGetenv(const wchar_t *name) { return wxCRT_GetenvW(name); }
 inline char* wxGetenv(const wxString& name) { return wxCRT_GetenvA(name.mb_str()); }
 inline char* wxGetenv(const wxCStrData& name) { return wxCRT_GetenvA(name.AsCharBuf()); }
 inline char* wxGetenv(const wxCharBuffer& name) { return wxCRT_GetenvA(name.data()); }
 inline wchar_t* wxGetenv(const wxWCharBuffer& name) { return wxCRT_GetenvW(name.data()); }
-
 
 // ----------------------------------------------------------------------------
 //                            time.h functions

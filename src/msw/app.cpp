@@ -324,9 +324,9 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 #ifdef __WXWINCE__
     wxString tmp = GetAppName();
     tmp += wxT("ClassName");
-    wxCanvasClassName = wxStrdup( tmp.c_str() );
+    wxCanvasClassName = wxStrdup( tmp.wc_str() );
     tmp += wxT("NR");
-    wxCanvasClassNameNR = wxStrdup( tmp.c_str() );
+    wxCanvasClassNameNR = wxStrdup( tmp.wc_str() );
     HWND hWnd = FindWindow( wxCanvasClassNameNR, NULL );
     if (hWnd)
     {

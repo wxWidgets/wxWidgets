@@ -34,8 +34,8 @@
 #include <wctype.h>
 #include <time.h>
 
-#ifdef __WINDOWS__
-#include <io.h>
+#if defined(__WINDOWS__) && !defined(__WXWINCE__)
+    #include <io.h>
 #endif
 
 #if defined(HAVE_STRTOK_R) && defined(__DARWIN__) && defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
@@ -132,7 +132,6 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 #define wxCRT_StrcatA    strcat
 #define wxCRT_StrchrA    strchr
 #define wxCRT_StrcmpA    strcmp
-#define wxCRT_StrcollA   strcoll
 #define wxCRT_StrcpyA    strcpy
 #define wxCRT_StrcspnA   strcspn
 #define wxCRT_StrlenA    strlen
@@ -143,12 +142,10 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 #define wxCRT_StrrchrA   strrchr
 #define wxCRT_StrspnA    strspn
 #define wxCRT_StrstrA    strstr
-#define wxCRT_StrxfrmA   strxfrm
 
 #define wxCRT_StrcatW    wcscat
 #define wxCRT_StrchrW    wcschr
 #define wxCRT_StrcmpW    wcscmp
-#define wxCRT_StrcollW   wcscoll
 #define wxCRT_StrcpyW    wcscpy
 #define wxCRT_StrcspnW   wcscspn
 #define wxCRT_StrncatW   wcsncat
@@ -158,7 +155,15 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 #define wxCRT_StrrchrW   wcsrchr
 #define wxCRT_StrspnW    wcsspn
 #define wxCRT_StrstrW    wcsstr
-#define wxCRT_StrxfrmW   wcsxfrm
+
+/* these functions are not defined under CE, at least in VC8 CRT */
+#ifndef __WXWINCE__
+    #define wxCRT_StrcollA   strcoll
+    #define wxCRT_StrxfrmA   strxfrm
+
+    #define wxCRT_StrcollW   wcscoll
+    #define wxCRT_StrxfrmW   wcsxfrm
+#endif /* __WXWINCE__ */
 
 /* Almost all compiler have strdup(), but not quite all: CodeWarrior under
    Mac and VC++ for Windows CE don't provide it; additionally, gcc under
@@ -413,7 +418,6 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
     #define wxCRT_Rename  rename
 
 #else /* Unicode filenames */
-
     /* special case: these functions are missing under Win9x with Unicows so we
        have to implement them ourselves */
     #if wxUSE_UNICODE_MSLU
@@ -426,17 +430,17 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
             #define wxCRT_Remove    wxMSLU__wremove
             #define wxCRT_Rename    wxMSLU__wrename
     #else
-        #define wxCRT_Rename   _wrename
-        #define wxCRT_Fopen    _wfopen
-        #define wxCRT_Freopen  _wfreopen
+        /* WinCE CRT doesn't provide these functions so use our own */
         #ifdef __WXWINCE__
-            /* carefully: wxCRT_Remove() must return 0 on success while
-               DeleteFile() returns 0 on error, so don't just define one as
-               the other */
-            int wxCRT_Remove(const wchar_t *path);
+            WXDLLIMPEXP_BASE int wxCRT_Rename(const wchar_t *src,
+                                              const wchar_t *dst);
+            WXDLLIMPEXP_BASE int wxCRT_Remove(const wchar_t *path);
         #else
+            #define wxCRT_Rename   _wrename
             #define wxCRT_Remove _wremove
         #endif
+        #define wxCRT_Fopen    _wfopen
+        #define wxCRT_Freopen  _wfreopen
     #endif
 
 #endif /* wxMBFILES/!wxMBFILES */
@@ -483,10 +487,15 @@ WXDLLIMPEXP_BASE int wxCRT_FputcW(wchar_t wc, FILE *stream);
 */
 #define wxTmpnam(x)         wxTmpnam_is_insecure_use_wxTempFile_instead
 
+/* FIXME-CE: provide our own perror() using ::GetLastError() */
+#ifndef __WXWINCE__
+
 #define wxCRT_PerrorA   perror
 #ifdef wxHAVE_TCHAR_SUPPORT
     #define wxCRT_PerrorW _wperror
 #endif
+
+#endif /* !__WXWINCE__ */
 
 /* -------------------------------------------------------------------------
                                   stdlib.h
@@ -495,8 +504,8 @@ WXDLLIMPEXP_BASE int wxCRT_FputcW(wchar_t wc, FILE *stream);
 /* there are no env vars at all under CE, so no _tgetenv neither */
 #ifdef __WXWINCE__
     /* can't define as inline function as this is a C file... */
-    #define wxCRT_GetenvA(name)     ((char*)NULL)
-    #define wxCRT_GetenvW(name)     ((wchar_t*)NULL)
+    #define wxCRT_GetenvA(name)     (name, NULL)
+    #define wxCRT_GetenvW(name)     (name, NULL)
 #else
     #define wxCRT_GetenvA           getenv
     #ifdef _tgetenv

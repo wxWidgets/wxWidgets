@@ -185,20 +185,17 @@ void wxCheckListBox::Check(unsigned int uiIndex, bool bCheck)
 // interface derived from wxListBox and lower classes
 // --------------------------------------------------
 
-void wxCheckListBox::Clear()
+void wxCheckListBox::DoClear()
 {
     unsigned int n = GetCount();
 
     while ( n > 0 )
     {
         n--;
-        Delete(n);
+        DoDeleteOneItem(n);
     }
 
-    m_itemsClientData.Clear();
-
-    wxCHECK_RET( n == GetCount(),
-                 _T("broken wxCheckListBox::Clear()") );
+    wxASSERT_MSG( IsEmpty(), _T("logic error in DoClear()") );
 }
 
 unsigned int wxCheckListBox::GetCount() const
@@ -267,9 +264,9 @@ int wxCheckListBox::DoInsertItems(const wxArrayStringsAdapter & items,
                                   unsigned int pos,
                                   void **clientData, wxClientDataType type)
 {
-    ListView_SetItemCount( GetHwnd(), GetCount() + count );
-
     const unsigned int count = items.GetCount();
+
+    ListView_SetItemCount( GetHwnd(), GetCount() + count );
 
     int n = wxNOT_FOUND;
 
