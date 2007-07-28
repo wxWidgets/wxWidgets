@@ -1,13 +1,13 @@
 This package was debianized by Ron Lee <ron@debian.org> on
 Sun, 13 Feb 2000 18:40:00 +1030.
 
-more information about wxWindows, as well as the source these debs
-are produced from can be found at www.wxwindows.org
+More information about wxWidgets, as well as the source these debs
+are produced from can be found at www.wxwidgets.org
 
 Note for Debian users:
 ======================
 
-Most of the core wxWindows library is licenced under the wxWindows Library
+Most of the core wxWidgets library is licenced under the wxWindows Library
 Licence (included below), however some additional features of the library
 may include source licenced under terms which do not include the exception
 permitting you to licence binary object code versions of works based on the
@@ -20,7 +20,7 @@ you wish to release your code under a licence which does not grant all of
 the same rights as the LGPL would assert but would be permitted under the
 terms of the exception, then you are strongly advised to either check the
 licencing terms of all components that these debs (and all future versions
-that you use) are built with, or build your own binaries of wxWindows which
+that you use) are built with, or build your own binaries of wxWidgets which
 include only such code as is definitely covered by the exception.
 
 You should presume that these debs will fall under the provisions of the
