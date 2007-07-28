@@ -443,6 +443,7 @@ static bool NodeContainsFilename(wxXmlNode *node)
        parent->GetPropVal(_T("class"), _T("")) == _T("wxBitmapButton") &&
        (name == _T("focus") ||
         name == _T("disabled") ||
+        name == _T("hover") ||
         name == _T("selected")))
        return true;
 
