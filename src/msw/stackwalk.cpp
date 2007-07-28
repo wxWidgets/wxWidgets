@@ -214,7 +214,7 @@ void wxStackFrame::OnGetParam()
 // wxStackWalker
 // ----------------------------------------------------------------------------
 
-void wxStackWalker::WalkFrom(const CONTEXT *pCtx, size_t skip)
+void wxStackWalker::WalkFrom(const CONTEXT *pCtx, size_t skip, size_t maxDepth)
 {
     if ( !wxDbgHelpDLL::Init() )
     {
@@ -267,7 +267,7 @@ void wxStackWalker::WalkFrom(const CONTEXT *pCtx, size_t skip)
 #endif // _M_IX86
 
     // iterate over all stack frames
-    for ( size_t nLevel = 0; ; nLevel++ )
+    for ( size_t nLevel = 0; nLevel < maxDepth; nLevel++ )
     {
         // get the next stack frame
         if ( !wxDbgHelpDLL::StackWalk
@@ -310,12 +310,12 @@ void wxStackWalker::WalkFrom(const CONTEXT *pCtx, size_t skip)
 #endif
 }
 
-void wxStackWalker::WalkFrom(const _EXCEPTION_POINTERS *ep, size_t skip)
+void wxStackWalker::WalkFrom(const _EXCEPTION_POINTERS *ep, size_t skip, size_t maxDepth)
 {
-    WalkFrom(ep->ContextRecord, skip);
+    WalkFrom(ep->ContextRecord, skip, maxDepth);
 }
 
-void wxStackWalker::WalkFromException()
+void wxStackWalker::WalkFromException(size_t maxDepth)
 {
     extern EXCEPTION_POINTERS *wxGlobalSEInformation;
 
@@ -323,7 +323,7 @@ void wxStackWalker::WalkFromException()
                  _T("wxStackWalker::WalkFromException() can only be called from wxApp::OnFatalException()") );
 
     // don't skip any frames, the first one is where we crashed
-    WalkFrom(wxGlobalSEInformation, 0);
+    WalkFrom(wxGlobalSEInformation, 0, maxDepth);
 }
 
 void wxStackWalker::Walk(size_t skip, size_t WXUNUSED(maxDepth))
@@ -396,7 +396,7 @@ wxStackWalker::WalkFrom(const _EXCEPTION_POINTERS * WXUNUSED(ep),
 {
 }
 
-void wxStackWalker::WalkFromException()
+void wxStackWalker::WalkFromException(size_t WXUNUSED(maxDepth))
 {
 }
 

@@ -94,9 +94,11 @@ Up to \arg{maxDepth} frames are walked from the innermost to the outermost one.
 
 \membersection{wxStackWalker::WalkFromException}\label{wxstackwalkerwalkfromexception}
 
-\func{void}{WalkFromException}{\void}
+\func{void}{WalkFromException}{\param{size\_t }{maxDepth = 200}}
 
 Enumerate stack frames from the location of uncaught exception.
 This method can only be called from
 \helpref{wxApp::OnFatalException()}{wxapponfatalexception}.
+
+Up to \arg{maxDepth} frames are walked from the innermost to the outermost one.
 
