@@ -367,7 +367,7 @@ int wxCRT_ScanfW(const wchar_t *format, ...)
 #else
    int ret = vwscanf(format, argptr);
 #endif
-   
+
     va_end(argptr);
 
     return ret;
@@ -841,7 +841,7 @@ extern "C" WXDLLEXPORT size_t wxCRT_StrlenW(const wchar_t *s)
 // ----------------------------------------------------------------------------
 
 #ifndef wxCRT_GetenvW
-wchar_t* WXDLLEXPORT wxCRT_GetenvW(const wchar_t *name)
+WXDLLEXPORT wchar_t* wxCRT_GetenvW(const wchar_t *name)
 {
     // NB: buffer returned by getenv() is allowed to be overwritten next
     //     time getenv() is called, so it is OK to use static string
@@ -891,7 +891,7 @@ wxCRT_StrtoullBase(const T* nptr, T** endptr, int base, T* sign)
     wxString::const_iterator end = wxstr.end();
 
     // Skip spaces
-    while ( i != end && wxIsspace(*i) ) i++;
+    while ( i != end && wxIsspace(*i) ) ++i;
 
     // Starts with sign?
     *sign = wxT(' ');
@@ -901,20 +901,20 @@ wxCRT_StrtoullBase(const T* nptr, T** endptr, int base, T* sign)
         if ( c == wxT('+') || c == wxT('-') )
         {
             *sign = c;
-            i++;
+            ++i;
         }
     }
 
     // Starts with 0x?
     if ( i != end && *i == wxT('0') )
     {
-        i++;
+        ++i;
         if ( i != end )
         {
             if ( *i == wxT('x') && (base == 16 || base == 0) )
             {
                 base = 16;
-                i++;
+                ++i;
             }
             else
             {
@@ -925,13 +925,13 @@ wxCRT_StrtoullBase(const T* nptr, T** endptr, int base, T* sign)
             }
         }
         else
-            i--;
+            --i;
     }
 
     if ( base == 0 )
         base = 10;
 
-    for ( ; i != end; i++ )
+    for ( ; i != end; ++i )
     {
         unsigned int n;
 
