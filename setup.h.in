@@ -951,9 +951,6 @@
 /* Define if wchar_t is distinct type in your compiler. */
 #undef wxWCHAR_T_IS_REAL_TYPE
 
-/* Define if you have the dlopen function.  */
-#undef HAVE_DLOPEN
-
 /* Define if you have the dlerror function.  */
 #undef HAVE_DLERROR
 
@@ -1011,9 +1008,6 @@
 /* Define if you have the mkstemp function.  */
 #undef HAVE_MKSTEMP
 
-/* Define if you have the nanosleep function.  */
-#undef HAVE_NANOSLEEP
-
 /* Define if you have the putenv function.  */
 #undef HAVE_PUTENV
 
@@ -1023,9 +1017,6 @@
 /* Define if you have the setenv function.  */
 #undef HAVE_SETENV
 
-/* Define if you have the shl_load function.  */
-#undef HAVE_SHL_LOAD
-
 /* Define if you have strtok_r function. */
 #undef HAVE_STRTOK_R
 
@@ -1034,9 +1025,6 @@
 
 /* Define if you have the uname function.  */
 #undef HAVE_UNAME
-
-/* Define if you have the usleep function.  */
-#undef HAVE_USLEEP
 
 /* Define if you have the <X11/XKBlib.h> header file.  */
 #undef HAVE_X11_XKBLIB_H
