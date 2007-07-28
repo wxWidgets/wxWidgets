@@ -166,6 +166,24 @@ void wxCocoaNSView::DisassociateNSView(WX_NSView cocoaNSView)
         [super resetCursorRects];
 }
 
+- (void)viewDidMoveToWindow
+{
+#if 0 // ABI incompatibility
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_viewDidMoveToWindow() )
+#endif
+        [super viewDidMoveToWindow];
+}
+
+- (void)viewWillMoveToWindow:(NSWindow *)newWindow
+{
+#if 0 // ABI incompatibility
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_viewWillMoveToWindow(newWindow) )
+#endif
+        [super viewWillMoveToWindow:newWindow];
+}
+
 @end // implementation WXNSView
 WX_IMPLEMENT_GET_OBJC_CLASS(WXNSView,NSView)
 
@@ -178,6 +196,7 @@ WX_IMPLEMENT_GET_OBJC_CLASS(WXNSView,NSView)
 }
 
 - (void)notificationFrameChanged: (NSNotification *)notification;
+- (void)synthesizeMouseMovedForView: (NSView *)theView;
 @end // interface wxNSViewNotificationObserver
 WX_DECLARE_GET_OBJC_CLASS(wxNSViewNotificationObserver,NSObject)
 
@@ -188,6 +207,15 @@ WX_DECLARE_GET_OBJC_CLASS(wxNSViewNotificationObserver,NSObject)
     wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa([notification object]);
     wxCHECK_RET(win,wxT("notificationFrameChanged received but no wxWindow exists"));
     win->Cocoa_FrameChanged();
+}
+
+- (void)synthesizeMouseMovedForView: (NSView *)theView
+{
+#if 0 // ABI incompatibility
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(theView);
+    wxCHECK_RET(win,wxT("synthesizeMouseMovedForView received but no wxWindow exists"));
+    win->Cocoa_synthesizeMouseMoved();
+#endif
 }
 
 @end // implementation wxNSViewNotificationObserver

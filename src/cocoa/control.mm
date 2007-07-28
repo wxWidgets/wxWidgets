@@ -19,6 +19,7 @@
 
 #include "wx/cocoa/string.h"
 #include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/trackingrectmanager.h"
 #include "wx/cocoa/objc/objc_uniquifying.h"
 
 #import <AppKit/NSControl.h>
@@ -46,6 +47,8 @@
 - (void)otherMouseDragged:(NSEvent *)theEvent;
 - (void)otherMouseUp:(NSEvent *)theEvent;
 - (void)resetCursorRects;
+- (void)viewDidMoveToWindow;
+- (void)viewWillMoveToWindow:(NSWindow *)newWindow;
 @end // wxNonControlNSControl
 WX_DECLARE_GET_OBJC_CLASS(wxNonControlNSControl,NSControl)
 
@@ -171,6 +174,24 @@ WX_DECLARE_GET_OBJC_CLASS(wxNonControlNSControl,NSControl)
         [super resetCursorRects];
 }
 
+- (void)viewDidMoveToWindow
+{
+#if 0 // ABI incompatibility
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_viewDidMoveToWindow() )
+#endif
+        [super viewDidMoveToWindow];
+}
+
+- (void)viewWillMoveToWindow:(NSWindow *)newWindow
+{
+#if 0 // ABI incompatibility
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_viewWillMoveToWindow(newWindow) )
+#endif
+        [super viewWillMoveToWindow:newWindow];
+}
+
 @end // wxNonControlNSControl
 WX_IMPLEMENT_GET_OBJC_CLASS(wxNonControlNSControl,NSControl)
 
@@ -198,6 +219,11 @@ bool wxControl::Create(wxWindow *parent, wxWindowID winid,
     if(m_parent)
         m_parent->CocoaAddChild(this);
     SetInitialFrameRect(pos,size);
+
+#if 0 // ABI incompatibility
+    // Controls should have a viewable-area tracking rect by default
+    m_visibleTrackingRectManager = new wxCocoaTrackingRectManager(this);
+#endif
 
     return true;
 }
