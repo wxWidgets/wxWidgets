@@ -20,7 +20,7 @@
     #undef wxUSE_DEBUG_NEW_ALWAYS
     #define wxUSE_DEBUG_NEW_ALWAYS      0
 
-    /* DS: Fixes compilation when wxUSE_FATAL_EXCEPTION is 1 */
+    /* DS: Fixes compilation when wxUSE_ON_FATAL_EXCEPTION is 1 */
     #ifndef wxTYPE_SA_HANDLER
         #define wxTYPE_SA_HANDLER int
     #endif

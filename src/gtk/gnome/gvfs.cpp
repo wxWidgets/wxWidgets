@@ -177,5 +177,5 @@ void wxGnomeVFSModule::OnExit()
 IMPLEMENT_DYNAMIC_CLASS(wxGnomeVFSModule, wxModule)
 
 #endif
-    // wxUSE_LIBGNOMEVS
+    // wxUSE_LIBGNOMEVFS
     // wxUSE_MIMETYPE
