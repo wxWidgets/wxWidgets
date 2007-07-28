@@ -15,6 +15,14 @@
 
 #include "widgets.h"
 
+// define a common base class for sorted and normal string arrays
+#if wxUSE_STL
+    typedef wxBaseArrayStringBase wxMaybeSortedArrayString;
+#else
+    // in non-STL build wxSortedArrayString derives from wxArrayString
+    typedef wxArrayString wxMaybeSortedArrayString;
+#endif
+
 class ItemContainerWidgetsPage : public WidgetsPage
 {
 public:
@@ -29,7 +37,7 @@ public:
 
 private:
     void StartTest(const wxString& label);
-    void EndTest(const wxArrayString& result);
+    void EndTest(const wxMaybeSortedArrayString& result);
 
     // Track client data in wxItemContainer instances
     wxClientData* CreateClientData(int value);
@@ -40,7 +48,7 @@ private:
     bool VerifyAllClientDataDestroyed();
     bool VerifyClientData(wxUIntPtr i, const wxString& str);
 
-    wxString DumpContainerData(const wxArrayString& expected) const;
+    wxString DumpContainerData(const wxMaybeSortedArrayString& expected) const;
 
     wxArrayString       m_items;
     wxSortedArrayString m_itemsSorted;

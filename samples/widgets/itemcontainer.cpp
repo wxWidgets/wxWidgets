@@ -121,7 +121,7 @@ void ItemContainerWidgetsPage::StartTest(const wxString& label)
     wxLogMessage(_T("Test - %s:"), label.c_str());
 }
 
-void ItemContainerWidgetsPage::EndTest(const wxArrayString& items)
+void ItemContainerWidgetsPage::EndTest(const wxMaybeSortedArrayString& items)
 {
     const unsigned count = m_container->GetCount();
 
@@ -177,7 +177,7 @@ void ItemContainerWidgetsPage::EndTest(const wxArrayString& items)
 }
 
 wxString
-ItemContainerWidgetsPage::DumpContainerData(const wxArrayString& expected) const
+ItemContainerWidgetsPage::DumpContainerData(const wxMaybeSortedArrayString& expected) const
 {
     wxString str;
     str << _T("Current content:\n");
@@ -238,9 +238,9 @@ void ItemContainerWidgetsPage::OnButtonTestItemContainer(wxCommandEvent&)
                  GetWidget()->GetClassInfo()->GetClassName(),
                  (m_container->IsSorted() ? "Sorted" : "Unsorted"));
 
-    const wxArrayString
-        & expected_result = m_container->IsSorted() ? m_itemsSorted
-                                                    : m_items;
+    const wxMaybeSortedArrayString&
+        expected_result = m_container->IsSorted() ? m_itemsSorted
+                                                   : m_items;
 
     StartTest(_T("Append one item"));
     wxString item = m_items[0];
