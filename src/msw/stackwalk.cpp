@@ -266,8 +266,9 @@ void wxStackWalker::WalkFrom(const CONTEXT *pCtx, size_t skip)
     #error "Need to initialize STACKFRAME on non x86"
 #endif // _M_IX86
 
-    // iterate over all stack frames
-    for ( size_t nLevel = 0; ; nLevel++ )
+    // iterate over all stack frames (but stop after 200 to avoid entering
+    // infinite loop if the stack is corrupted)
+    for ( size_t nLevel = 0; nLevel < 200; nLevel++ )
     {
         // get the next stack frame
         if ( !wxDbgHelpDLL::StackWalk
