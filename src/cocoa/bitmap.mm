@@ -364,6 +364,9 @@ bool wxBitmap::SaveFile(const wxString& filename, wxBitmapType type, const wxPal
 
 bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 {
+    // Pool here due to lack of one during wx init phase
+    wxAutoNSAutoreleasePool pool;
+
     UnRef();
     if(!icon.GetNSImage());
     [icon.GetNSImage() lockFocus];
