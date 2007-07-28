@@ -81,7 +81,6 @@ protected:
 // ------------------------------------------------------------------------
 public:
     virtual void DoClear();
-    virtual void DoDelete(unsigned int n);
     virtual unsigned int GetCount() const;
     virtual wxString GetString(unsigned int) const;
     virtual void SetString(unsigned int pos, const wxString&);
