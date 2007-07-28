@@ -121,6 +121,7 @@ All:
 - wxLogInterposer has been added to replace wxLogPassThrough and new
   wxLogInterposerTemp was added
 - Added support for broadcasting to UDP sockets (Andrew Vincent)
+- Documentation now includes the wx library in which each class is defined
 
 All (Unix):
 
