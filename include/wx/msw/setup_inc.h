@@ -146,14 +146,3 @@
 //
 // Recommended setting: 1, set to 0 if your programs never crash
 #define wxUSE_CRASHREPORT 1
-
-// ----------------------------------------------------------------------------
-// obsolete settings
-// ----------------------------------------------------------------------------
-
-// NB: all settings in this section are obsolete and should not be used/changed
-//     at all, they will disappear
-
-// Define 1 to use bitmap messages.
-#define wxUSE_BITMAP_MESSAGE         1
-

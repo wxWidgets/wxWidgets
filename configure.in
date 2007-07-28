@@ -6393,10 +6393,6 @@ if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_UTF8" = "yes"; then
     fi
 fi
 
-if test "$wxUSE_wxUSE_EXPERIMENTAL_PRINTF" = "yes"; then
-  AC_DEFINE(wxUSE_EXPERIMENTAL_PRINTF)
-fi
-
 dnl ---------------------------------------------------------------------------
 dnl big GUI components: MDI, doc/view, printing, help, ...
 dnl ---------------------------------------------------------------------------
@@ -6457,8 +6453,6 @@ if test "$wxUSE_POSTSCRIPT" = "yes" ; then
 fi
 
 AC_DEFINE(wxUSE_AFM_FOR_POSTSCRIPT)
-
-AC_DEFINE(wxUSE_NORMALIZED_PS_FONTS)
 
 if test "$wxUSE_SVG" = "yes"; then
     AC_DEFINE(wxUSE_SVG)
@@ -6781,12 +6775,6 @@ if test "$wxUSE_ODCOMBOBOX" = "yes"; then
   USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS combo"
 fi
-
-dnl if test "$wxUSE_PROPSHEET" = "yes"; then
-dnl     AC_DEFINE(wxUSE_PROPSHEET)
-dnl     USES_CONTROLS=1
-dnl     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS proplist"
-dnl fi
 
 if test "$wxUSE_RADIOBOX" = "yes"; then
     AC_DEFINE(wxUSE_RADIOBOX)

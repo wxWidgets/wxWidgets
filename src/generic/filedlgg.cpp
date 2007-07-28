@@ -1639,10 +1639,10 @@ void wxGenericFileDialog::UpdateControls()
 #endif // defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
 }
 
-#ifdef wxUSE_GENERIC_FILEDIALOG
+#ifdef wxHAS_GENERIC_FILEDIALOG
 
 IMPLEMENT_DYNAMIC_CLASS(wxFileDialog, wxGenericFileDialog)
 
-#endif // wxUSE_GENERIC_FILEDIALOG
+#endif // wxHAS_GENERIC_FILEDIALOG
 
 #endif // wxUSE_FILEDLG

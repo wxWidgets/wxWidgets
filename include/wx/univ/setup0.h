@@ -361,15 +361,6 @@
 // Recommended setting: 1
 #define wxUSE_DATETIME 1
 
-// wxUSE_TIMEDATE enables compilation of the old wxDate and wxTime classes (not
-// the same as wxDateTime!). These classes are obsolete and shouldn't be used
-// in new code
-//
-// Default is 0
-//
-// Recommended setting: 0 unless you have legacy code which uses these classes
-#define wxUSE_TIMEDATE 0
-
 // Set wxUSE_TIMER to 1 to compile wxTimer class
 //
 // Default is 1
@@ -542,20 +533,6 @@
 //
 // Recommended setting: 1
 #define wxUSE_MEDIACTRL     1
-
-// Use QuickTime
-//
-// Default is 0
-//
-// Recommended setting: 1 if you have the QT SDK installed and you need it, else 0
-#define wxUSE_QUICKTIME     0
-
-// Use DirectShow
-//
-// Default is 0
-//
-// Recommended setting: 1 if the DirectX 7 SDK is installed (highly recommended), else 0
-#define wxUSE_DIRECTSHOW    0
 
 // Use wxWidget's XRC XML-based resource system.  Recommended.
 //
@@ -764,9 +741,6 @@
 // Recommended setting: 1
 //
 #define wxUSE_GRID 1
-
-// wxProperty[Value/Form/List] classes, used by Dialog Editor
-#define wxUSE_PROPSHEET 1
 
 // wxComboCtrl and related classes: combobox with custom popup window and
 // not necessarily a listbox.
@@ -1043,9 +1017,6 @@
 // smaller library.
 #define wxUSE_RICHTEXT       1
 
-// wxTreeLayout class
-#define wxUSE_TREELAYOUT 1
-
 // ----------------------------------------------------------------------------
 // Data transfer
 // ----------------------------------------------------------------------------
@@ -1302,10 +1273,6 @@
 // ----------------------------------------------------------------------------
 // unknown settings
 // ----------------------------------------------------------------------------
-
-// If 1, enables provision of run-time type information.
-// NOW MANDATORY: don't change.
-#define wxUSE_DYNAMIC_CLASSES 1
 
 //??????
 #if defined(__WIN32__)

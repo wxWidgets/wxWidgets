@@ -167,7 +167,7 @@ typedef pid_t GPid;
 #endif
 
 
-#define WXWIN_COMPATIBILITY_2_6 1
+#define WXWIN_COMPATIBILITY_2_6 0
 
 #define WXWIN_COMPATIBILITY_2_8 1
 
@@ -503,13 +503,6 @@ typedef pid_t GPid;
 
 #define wxUSE_WXHTML_HELP 1
 
-#define wxUSE_RESOURCES   1
-
-/*
- * Use Prolog IO
- */
-#define wxUSE_PROLOGIO 1
-
 #define wxUSE_CONSTRAINTS 1
 
 
@@ -713,10 +706,6 @@ typedef pid_t GPid;
  */
 #define wxUSE_BUILTIN_IODBC 0
 /*
- * Use freetype
- */
-#define wxUSE_FREETYPE 1
-/*
  * Have glibc2
  */
 #define wxHAVE_GLIBC2 0
@@ -728,14 +717,8 @@ typedef pid_t GPid;
  * Define if you have pthread_cleanup_push/pop()
  */
 #define wxHAVE_PTHREAD_CLEANUP 1
-/*
- * Use consistent PostScript fonts for AFM and printing (!)
- */
-#define wxUSE_NORMALIZED_PS_FONTS 1
 
 /* compatibility */
-#define WX_NORMALIZED_PS_FONTS wxUSE_NORMALIZED_PS_FONTS
-
 /*
  * Use OpenGL
  */
@@ -747,32 +730,6 @@ typedef pid_t GPid;
 /* #define wxUSE_UXTHEME 1 */
 
 /*
- *  Set to 1 to auto-adapt to MS Windows XP themes where possible
- * (notably, wxNotebook pages)
- */
-/* #define wxUSE_UXTHEME_AUTO 1*/
-
-/*
- * Work around a bug in GNU libc 5.x wcstombs() implementation.
- *
- * Note that you must link your programs with libc.a if you enable this and you
- * have libc 5 (you should enable this for libc6 where wcsrtombs() is
- * thread-safe version of wcstombs()).
- */
-#define wxUSE_WCSRTOMBS 0
-
-/*
- * Use the new experimental implementation of wxString::Printf()?
- *
- * Warning: enabling this may cause internal compiler errors with gcc!
- */
-#define wxUSE_EXPERIMENTAL_PRINTF 0
-
-/*
- * Use wxGetResource & wxWriteResource (change .Xdefaults)
- */
-#define wxUSE_X_RESOURCES 1
-/*
  * Use OLE and OLE Automation (MSW only)
  */
 #define wxUSE_OLE 0
@@ -780,8 +737,6 @@ typedef pid_t GPid;
 #define wxUSE_ACTIVEX 0
 
 /* for compatibility */
-#define wxUSE_WX_RESOURCES wxUSE_RESOURCES
-
 /*
  * Use wxWindows help facility
  */
