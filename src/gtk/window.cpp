@@ -1776,6 +1776,8 @@ window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
     event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK);
     event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK);
     event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK);
+
+    // FIXME: Get these values from GTK or GDK
     event.m_linesPerAction = 3;
     event.m_wheelDelta = 120;
     if (gdk_event->direction == GDK_SCROLL_UP)
