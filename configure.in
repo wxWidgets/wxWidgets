@@ -8111,6 +8111,7 @@ echo "                                       wxWidgets 2.6      ${WXWIN_COMPATIB
 echo "                                       wxWidgets 2.8      ${WXWIN_COMPATIBILITY_2_8:-yes}"
 
 echo "  Which libraries should wxWidgets use?"
+echo "                                       STL                ${wxUSE_STL}"
 echo "                                       jpeg               ${wxUSE_LIBJPEG-none}"
 echo "                                       png                ${wxUSE_LIBPNG-none}"
 echo "                                       regex              ${wxUSE_REGEX}"
