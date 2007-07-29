@@ -98,7 +98,7 @@ public:
 
 private:
     // implement sink functions
-    virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t)
+    virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t)
     {
         // don't put trace messages into listbox or we can get into infinite
         // recursion
