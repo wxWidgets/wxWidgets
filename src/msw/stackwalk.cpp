@@ -386,13 +386,16 @@ void wxStackFrame::OnGetParam()
 // ----------------------------------------------------------------------------
 
 void
-wxStackWalker::WalkFrom(const CONTEXT * WXUNUSED(pCtx), size_t WXUNUSED(skip))
+wxStackWalker::WalkFrom(const CONTEXT * WXUNUSED(pCtx),
+                        size_t WXUNUSED(skip),
+                        size_t WXUNUSED(maxDepth))
 {
 }
 
 void
 wxStackWalker::WalkFrom(const _EXCEPTION_POINTERS * WXUNUSED(ep),
-                        size_t WXUNUSED(skip))
+                        size_t WXUNUSED(skip),
+                        size_t WXUNUSED(maxDepth))
 {
 }
 
