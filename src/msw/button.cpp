@@ -161,16 +161,14 @@ bool wxButton::Create(wxWindow *parent,
     wxString label(lbl);
     if (label.empty() && wxIsStockID(id))
     {
-        // On Windows, some buttons aren't supposed to have
-        // mnemonics, so strip them out.
-
-        label = wxGetStockLabel(id
-#if defined(__WXMSW__) || defined(__WXWINCE__)
-                                        , ( id != wxID_OK &&
-                                            id != wxID_CANCEL &&
-                                            id != wxID_CLOSE )
-#endif
-                                );
+        // On Windows, some buttons aren't supposed to have mnemonics
+        label = wxGetStockLabel
+                (
+                    id,
+                    id == wxID_OK || id == wxID_CANCEL || id == wxID_CLOSE
+                        ? wxSTOCK_NOFLAGS
+                        : wxSTOCK_WITH_MNEMONIC
+                );
     }
 
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
@@ -179,7 +177,6 @@ bool wxButton::Create(wxWindow *parent,
     WXDWORD exstyle;
     WXDWORD msStyle = MSWGetStyle(style, &exstyle);
 
-#ifdef __WIN32__
     // if the label contains several lines we must explicitly tell the button
     // about it or it wouldn't draw it correctly ("\n"s would just appear as
     // black boxes)
@@ -191,7 +188,6 @@ bool wxButton::Create(wxWindow *parent,
     {
         msStyle |= BS_MULTILINE;
     }
-#endif // __WIN32__
 
     return MSWCreateControl(_T("BUTTON"), msStyle, pos, size, label, exstyle);
 }
@@ -222,7 +218,6 @@ WXDWORD wxButton::MSWGetStyle(long style, WXDWORD *exstyle) const
     // the bottom
     msStyle |= WS_CLIPSIBLINGS;
 
-#ifdef __WIN32__
     // don't use "else if" here: weird as it is, but you may combine wxBU_LEFT
     // and wxBU_RIGHT to get BS_CENTER!
     if ( style & wxBU_LEFT )
@@ -238,7 +233,6 @@ WXDWORD wxButton::MSWGetStyle(long style, WXDWORD *exstyle) const
     if ( style & wxNO_BORDER )
         msStyle |= BS_FLAT;
 #endif // __WXWINCE__
-#endif // __WIN32__
 
     return msStyle;
 }
@@ -552,8 +546,6 @@ WXLRESULT wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 // ----------------------------------------------------------------------------
 // owner-drawn buttons support
 // ----------------------------------------------------------------------------
-
-#ifdef __WIN32__
 
 // drawing helpers
 
@@ -876,7 +868,5 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
 
     return true;
 }
-
-#endif // __WIN32__
 
 #endif // wxUSE_BUTTON
