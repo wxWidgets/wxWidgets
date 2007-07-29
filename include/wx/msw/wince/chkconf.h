@@ -41,6 +41,10 @@
 #undef wxUSE_IPC
 #define wxUSE_IPC 0
 
+// doesn't make sense for CE devices and doesn't compile anyhow
+#undef wxUSE_JOYSTICK
+#define wxUSE_JOYSTICK 0
+
 // and they're disabled for WinCE in build/bakefiles/{tiff|regex}.bkl so can't
 // be enabled here
 #undef wxUSE_LIBTIFF
