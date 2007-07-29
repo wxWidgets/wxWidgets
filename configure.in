@@ -4074,8 +4074,8 @@ if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
         RESCOMP="$REZ"
         WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL Carbon.r -o"
     else
-        POSTLINK_COMMAND="echo -n | \$(REZ) -d __DARWIN__ -t APPL ${LIBWXMACRES}"
-        RESCOMP="echo -n \| $REZ"
+        POSTLINK_COMMAND="cat /dev/null | \$(REZ) -d __DARWIN__ -t APPL ${LIBWXMACRES}"
+        RESCOMP="cat /dev/null \| $REZ"
         WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL \$libdir/$WX_RESOURCES_MACOSX_ASCII"
     fi
 
@@ -8092,7 +8092,7 @@ echo "  Should wxWidgets be compiled into single library?       ${wxUSE_MONOLITH
 
 echo "  Should wxWidgets be compiled in debug mode?             ${wxUSE_DEBUG:-no}"
 echo "  Should wxWidgets be linked as a shared library?         ${wxUSE_SHARED:-no}"
-echo -n "  Should wxWidgets support Unicode?                       ${wxUSE_UNICODE:-no}"
+echo $ECHO_N "  Should wxWidgets support Unicode?                       ${wxUSE_UNICODE:-no}$ECHO_C"
 if test "$wxUSE_UNICODE" = "yes"; then
     if test "$wxUSE_UNICODE_UTF8" = "yes"; then
         echo " (using UTF-8)"
