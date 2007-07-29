@@ -2652,6 +2652,9 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
         case WM_MBUTTONDOWN:
         case WM_MBUTTONUP:
         case WM_MBUTTONDBLCLK:
+        case WM_XBUTTONDOWN:
+        case WM_XBUTTONUP:
+        case WM_XBUTTONDBLCLK:
             {
 #ifdef __WXMICROWIN__
                 // MicroWindows seems to ignore the fact that a window is
@@ -4794,6 +4797,8 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
     event.m_leftDown = (flags & MK_LBUTTON) != 0;
     event.m_middleDown = (flags & MK_MBUTTON) != 0;
     event.m_rightDown = (flags & MK_RBUTTON) != 0;
+    event.m_aux1Down = (flags & MK_XBUTTON1) != 0;
+    event.m_aux2Down = (flags & MK_XBUTTON2) != 0;
     event.m_altDown = ::GetKeyState(VK_MENU) < 0;
 
 #ifndef __WXWINCE__
@@ -4892,8 +4897,26 @@ bool wxWindowMSW::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags)
         wxEVT_RIGHT_DCLICK,
         wxEVT_MIDDLE_DOWN,
         wxEVT_MIDDLE_UP,
-        wxEVT_MIDDLE_DCLICK
+        wxEVT_MIDDLE_DCLICK,
+        0, // this one is for wxEVT_MOTION which is not used here
+        wxEVT_AUX1_DOWN,
+        wxEVT_AUX1_UP,
+        wxEVT_AUX1_DCLICK,
+        wxEVT_AUX2_DOWN,
+        wxEVT_AUX2_UP,
+        wxEVT_AUX2_DCLICK
     };
+
+    // the same messages are used for both auxillary mouse buttons so we need
+    // to adjust the index manually
+    switch ( msg )
+    {
+        case WM_XBUTTONDOWN:
+        case WM_XBUTTONUP:
+        case WM_XBUTTONDBLCLK:
+            if ( flags & MK_XBUTTON2 )
+                msg += wxEVT_AUX2_DOWN - wxEVT_AUX1_DOWN;
+    }
 
     wxMouseEvent event(eventsMouse[msg - WM_MOUSEMOVE]);
     InitMouseEvent(event, x, y, flags);
@@ -5810,6 +5833,8 @@ wxMouseState wxGetMouseState()
     ms.SetLeftDown(wxIsKeyDown(VK_LBUTTON));
     ms.SetMiddleDown(wxIsKeyDown(VK_MBUTTON));
     ms.SetRightDown(wxIsKeyDown(VK_RBUTTON));
+    ms.SetAux1Down(wxIsKeyDown(VK_XBUTTON1));
+    ms.SetAux2Down(wxIsKeyDown(VK_XBUTTON2));
 
     ms.SetControlDown(wxIsKeyDown(VK_CONTROL));
     ms.SetShiftDown(wxIsKeyDown(VK_SHIFT));
@@ -6140,6 +6165,9 @@ const wxChar *wxGetMessageName(int message)
         case 0x0208: return wxT("WM_MBUTTONUP");
         case 0x0209: return wxT("WM_MBUTTONDBLCLK");
         case 0x020A: return wxT("WM_MOUSEWHEEL");
+        case 0x020B: return wxT("WM_XBUTTONDOWN");
+        case 0x020C: return wxT("WM_XBUTTONUP");
+        case 0x020D: return wxT("WM_XBUTTONDBLCLK");
         case 0x0210: return wxT("WM_PARENTNOTIFY");
         case 0x0211: return wxT("WM_ENTERMENULOOP");
         case 0x0212: return wxT("WM_EXITMENULOOP");

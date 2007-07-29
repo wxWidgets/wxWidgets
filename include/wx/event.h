@@ -179,6 +179,12 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_KILL_FOCUS, 113)
     DECLARE_EVENT_TYPE(wxEVT_CHILD_FOCUS, 114)
     DECLARE_EVENT_TYPE(wxEVT_MOUSEWHEEL, 115)
+    DECLARE_EVENT_TYPE(wxEVT_AUX1_DOWN, 116)
+    DECLARE_EVENT_TYPE(wxEVT_AUX1_UP, 117)
+    DECLARE_EVENT_TYPE(wxEVT_AUX1_DCLICK, 118)
+    DECLARE_EVENT_TYPE(wxEVT_AUX2_DOWN, 119)
+    DECLARE_EVENT_TYPE(wxEVT_AUX2_UP, 120)
+    DECLARE_EVENT_TYPE(wxEVT_AUX2_DCLICK, 121)
 
         // Non-client mouse events
     DECLARE_EVENT_TYPE(wxEVT_NC_LEFT_DOWN, 200)
@@ -676,7 +682,10 @@ enum
     wxMOUSE_BTN_NONE    = 0,
     wxMOUSE_BTN_LEFT    = 1,
     wxMOUSE_BTN_MIDDLE  = 2,
-    wxMOUSE_BTN_RIGHT   = 3
+    wxMOUSE_BTN_RIGHT   = 3,
+    wxMOUSE_BTN_AUX1    = 4,
+    wxMOUSE_BTN_AUX2    = 5,
+    wxMOUSE_BTN_MAX
 };
 
 class WXDLLIMPEXP_CORE wxMouseEvent : public wxEvent
@@ -725,20 +734,28 @@ public:
     bool LeftDown() const { return (m_eventType == wxEVT_LEFT_DOWN); }
     bool MiddleDown() const { return (m_eventType == wxEVT_MIDDLE_DOWN); }
     bool RightDown() const { return (m_eventType == wxEVT_RIGHT_DOWN); }
+    bool Aux1Down() const { return (m_eventType == wxEVT_AUX1_DOWN); }
+    bool Aux2Down() const { return (m_eventType == wxEVT_AUX2_DOWN); }
 
     bool LeftUp() const { return (m_eventType == wxEVT_LEFT_UP); }
     bool MiddleUp() const { return (m_eventType == wxEVT_MIDDLE_UP); }
     bool RightUp() const { return (m_eventType == wxEVT_RIGHT_UP); }
+    bool Aux1Up() const { return (m_eventType == wxEVT_AUX1_UP); }
+    bool Aux2Up() const { return (m_eventType == wxEVT_AUX2_UP); }
 
     bool LeftDClick() const { return (m_eventType == wxEVT_LEFT_DCLICK); }
     bool MiddleDClick() const { return (m_eventType == wxEVT_MIDDLE_DCLICK); }
     bool RightDClick() const { return (m_eventType == wxEVT_RIGHT_DCLICK); }
+    bool Aux1DClick() const { return (m_eventType == wxEVT_AUX1_UP); }
+    bool Aux2DClick() const { return (m_eventType == wxEVT_AUX2_UP); }
 
     // Find the current state of the mouse buttons (regardless
     // of current event type)
     bool LeftIsDown() const { return m_leftDown; }
     bool MiddleIsDown() const { return m_middleDown; }
     bool RightIsDown() const { return m_rightDown; }
+    bool Aux1IsDown() const { return m_aux1Down; }
+    bool Aux2IsDown() const { return m_aux2Down; }
 
     // True if a button is down and the mouse is moving
     bool Dragging() const
@@ -823,6 +840,8 @@ public:
     bool          m_leftDown;
     bool          m_middleDown;
     bool          m_rightDown;
+    bool          m_aux1Down;
+    bool          m_aux2Down;
 
     bool          m_controlDown;
     bool          m_shiftDown;
@@ -2882,19 +2901,31 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
 #define EVT_LEAVE_WINDOW(func) wx__DECLARE_EVT0(wxEVT_LEAVE_WINDOW, wxMouseEventHandler(func))
 #define EVT_ENTER_WINDOW(func) wx__DECLARE_EVT0(wxEVT_ENTER_WINDOW, wxMouseEventHandler(func))
 #define EVT_MOUSEWHEEL(func) wx__DECLARE_EVT0(wxEVT_MOUSEWHEEL, wxMouseEventHandler(func))
+#define EVT_MOUSE_AUX1_DOWN(func) wx__DECLARE_EVT0(wxEVT_AUX1_DOWN, wxMouseEventHandler(func))
+#define EVT_MOUSE_AUX1_UP(func) wx__DECLARE_EVT0(wxEVT_AUX1_UP, wxMouseEventHandler(func))
+#define EVT_MOUSE_AUX1_DCLICK(func) wx__DECLARE_EVT0(wxEVT_AUX1_DCLICK, wxMouseEventHandler(func))
+#define EVT_MOUSE_AUX2_DOWN(func) wx__DECLARE_EVT0(wxEVT_AUX2_DOWN, wxMouseEventHandler(func))
+#define EVT_MOUSE_AUX2_UP(func) wx__DECLARE_EVT0(wxEVT_AUX2_UP, wxMouseEventHandler(func))
+#define EVT_MOUSE_AUX2_DCLICK(func) wx__DECLARE_EVT0(wxEVT_AUX2_DCLICK, wxMouseEventHandler(func))
 
 // All mouse events
 #define EVT_MOUSE_EVENTS(func) \
     EVT_LEFT_DOWN(func) \
     EVT_LEFT_UP(func) \
+    EVT_LEFT_DCLICK(func) \
     EVT_MIDDLE_DOWN(func) \
     EVT_MIDDLE_UP(func) \
+    EVT_MIDDLE_DCLICK(func) \
     EVT_RIGHT_DOWN(func) \
     EVT_RIGHT_UP(func) \
-    EVT_MOTION(func) \
-    EVT_LEFT_DCLICK(func) \
-    EVT_MIDDLE_DCLICK(func) \
     EVT_RIGHT_DCLICK(func) \
+    EVT_MOUSE_AUX1_DOWN(func) \
+    EVT_MOUSE_AUX1_UP(func) \
+    EVT_MOUSE_AUX1_DCLICK(func) \
+    EVT_MOUSE_AUX2_DOWN(func) \
+    EVT_MOUSE_AUX2_UP(func) \
+    EVT_MOUSE_AUX2_DCLICK(func) \
+    EVT_MOTION(func) \
     EVT_LEAVE_WINDOW(func) \
     EVT_ENTER_WINDOW(func) \
     EVT_MOUSEWHEEL(func)

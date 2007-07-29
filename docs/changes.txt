@@ -150,6 +150,7 @@ All (GUI):
 - Support wxAPPLY and wxCLOSE in CreateStdDialogButtonSizer() (Marcin Wojdyr)
 - Show standard options in wxCmdLineParser usage message (Francesco Montorsi)
 - Added wxRect::operator+ (union) and * (intersection) (bdonner)
+- Added support for two auxiliary mouse buttons to wxMouseEvent (Chris Weiland)
 
 wxGTK:
 

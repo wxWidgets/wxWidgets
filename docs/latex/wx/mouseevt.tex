@@ -5,9 +5,12 @@ they include mouse buttons press and release events and mouse move events.
 
 All mouse events involving the buttons use {\tt wxMOUSE\_BTN\_LEFT} for the
 left mouse button, {\tt wxMOUSE\_BTN\_MIDDLE} for the middle one and
-{\tt wxMOUSE\_BTN\_RIGHT} for the right one. Note that not all mice have a
-middle button so a portable application should avoid relying on the events from
-it.
+{\tt wxMOUSE\_BTN\_RIGHT} for the right one. And if the system supports more
+buttons, the \texttt{wxMOUSE\_BTN\_AUX1} and \texttt{wxMOUSE\_BTN\_AUX2} events
+can also be generated. Note that not all mice have even a middle button so a
+portable application should avoid relying on the events from it (but the right
+button click can be emulated using the left mouse button with the control key
+under Mac platforms with a single button mouse).
 
 For the \texttt{wxEVT\_ENTER\_WINDOW} and \texttt{wxEVT\_LEAVE\_WINDOW} events
 purposes, the mouse is considered to be inside the window if it is in the
@@ -66,6 +69,12 @@ wouldn't get the focus.}
 \twocolitem{{\bf EVT\_RIGHT\_DOWN(func)}}{Process a wxEVT\_RIGHT\_DOWN event.}
 \twocolitem{{\bf EVT\_RIGHT\_UP(func)}}{Process a wxEVT\_RIGHT\_UP event.}
 \twocolitem{{\bf EVT\_RIGHT\_DCLICK(func)}}{Process a wxEVT\_RIGHT\_DCLICK event.}
+\twocolitem{{\bf EVT\_MOUSE\_AUX1\_DOWN(func)}}{Process a wxEVT\_MOUSE\_AUX1\_DOWN event.}
+\twocolitem{{\bf EVT\_MOUSE\_AUX1\_UP(func)}}{Process a wxEVT\_MOUSE\_AUX1\_UP event.}
+\twocolitem{{\bf EVT\_MOUSE\_AUX1\_DCLICK(func)}}{Process a wxEVT\_MOUSE\_AUX1\_DCLICK event.}
+\twocolitem{{\bf EVT\_MOUSE\_AUX2\_DOWN(func)}}{Process a wxEVT\_MOUSE\_AUX2\_DOWN event.}
+\twocolitem{{\bf EVT\_MOUSE\_AUX2\_UP(func)}}{Process a wxEVT\_MOUSE\_AUX2\_UP event.}
+\twocolitem{{\bf EVT\_MOUSE\_AUX2\_DCLICK(func)}}{Process a wxEVT\_MOUSE\_AUX2\_DCLICK event.}
 \twocolitem{{\bf EVT\_MOTION(func)}}{Process a wxEVT\_MOTION event.}
 \twocolitem{{\bf EVT\_ENTER\_WINDOW(func)}}{Process a wxEVT\_ENTER\_WINDOW event.}
 \twocolitem{{\bf EVT\_LEAVE\_WINDOW(func)}}{Process a wxEVT\_LEAVE\_WINDOW event.}
@@ -181,6 +190,12 @@ Constructor. Valid event types are:
 \item {\bf wxEVT\_RIGHT\_DOWN}
 \item {\bf wxEVT\_RIGHT\_UP}
 \item {\bf wxEVT\_RIGHT\_DCLICK}
+\item {\bf wxEVT\_MOUSE\_AUX1\_DOWN}
+\item {\bf wxEVT\_MOUSE\_AUX1\_UP}
+\item {\bf wxEVT\_MOUSE\_AUX1\_DCLICK}
+\item {\bf wxEVT\_MOUSE\_AUX2\_DOWN}
+\item {\bf wxEVT\_MOUSE\_AUX2\_UP}
+\item {\bf wxEVT\_MOUSE\_AUX2\_DCLICK}
 \item {\bf wxEVT\_MOTION}
 \item {\bf wxEVT\_MOUSEWHEEL}
 \end{itemize}
@@ -191,6 +206,64 @@ Constructor. Valid event types are:
 \func{bool}{AltDown}{\void}
 
 Returns true if the Alt key was down at the time of the event.
+
+
+\membersection{wxMouseEvent::Aux1DClick}\label{wxmouseeventaux1dclick}
+
+\constfunc{bool}{Aux1DClick}{\void}
+
+Returns true if the event was a first extra button double click.
+
+
+\membersection{wxMouseEvent::Aux1Down}\label{wxmouseeventaux1down}
+
+\constfunc{bool}{Aux1Down}{\void}
+
+Returns true if the first extra button mouse button changed to down.
+
+
+\membersection{wxMouseEvent::Aux1IsDown}\label{wxmouseeventaux1isdown}
+
+\constfunc{bool}{Aux1IsDown}{\void}
+
+Returns true if the first extra button mouse button is currently down, independent
+of the current event type.
+
+
+\membersection{wxMouseEvent::Aux1Up}\label{wxmouseeventaux1up}
+
+\constfunc{bool}{Aux1Up}{\void}
+
+Returns true if the first extra button mouse button changed to up.
+
+
+\membersection{wxMouseEvent::Aux2DClick}\label{wxmouseeventaux2dclick}
+
+\constfunc{bool}{Aux2DClick}{\void}
+
+Returns true if the event was a second extra button double click.
+
+
+\membersection{wxMouseEvent::Aux2Down}\label{wxmouseeventaux2down}
+
+\constfunc{bool}{Aux2Down}{\void}
+
+Returns true if the second extra button mouse button changed to down.
+
+
+\membersection{wxMouseEvent::Aux2IsDown}\label{wxmouseeventaux2isdown}
+
+\constfunc{bool}{Aux2IsDown}{\void}
+
+Returns true if the second extra button mouse button is currently down, independent
+of the current event type.
+
+
+\membersection{wxMouseEvent::Aux2Up}\label{wxmouseeventaux2up}
+
+\constfunc{bool}{Aux2Up}{\void}
+
+Returns true if the second extra button mouse button changed to up.
 
 
 \membersection{wxMouseEvent::Button}\label{wxmouseeventbutton}
@@ -204,6 +277,8 @@ values of {\it button} are:
 \twocolitem{{\tt wxMOUSE\_BTN\_LEFT}}{check if left button was pressed}
 \twocolitem{{\tt wxMOUSE\_BTN\_MIDDLE}}{check if middle button was pressed}
 \twocolitem{{\tt wxMOUSE\_BTN\_RIGHT}}{check if right button was pressed}
+\twocolitem{{\tt wxMOUSE\_BTN\_AUX1}}{check if the first extra button was pressed}
+\twocolitem{{\tt wxMOUSE\_BTN\_AUX2}}{check if the second extra button was pressed}
 \twocolitem{{\tt wxMOUSE\_BTN\_ANY}}{check if any button was pressed}
 \end{twocollist}
 
