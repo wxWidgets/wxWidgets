@@ -927,41 +927,41 @@ WXHMENU wxMenuBar::Create()
     if ( m_hMenu != 0 )
         return m_hMenu;
 
-    if (!GetToolBar())
-        return 0;
+    wxToolMenuBar * const bar = wx_static_cast(wxToolMenuBar *, GetToolBar());
+    if ( !bar )
+        return NULL;
 
-    HWND hCommandBar = (HWND) GetToolBar()->GetHWND();
-    HMENU hMenu = (HMENU)::SendMessage(hCommandBar, SHCMBM_GETMENU, (WPARAM)0, (LPARAM)0);
+    HWND hCommandBar = GetHwndOf(bar);
 
-    // hMenu may be zero on Windows Mobile 5. So add the menus anyway.
-    if (1) // (hMenu)
+    // notify comctl32.dll about the version of the headers we use before using
+    // any other TB_XXX messages
+    SendMessage(hCommandBar, TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
+
+    TBBUTTON tbButton;
+    wxZeroMemory(tbButton);
+    tbButton.iBitmap = I_IMAGENONE;
+    tbButton.fsState = TBSTATE_ENABLED;
+    tbButton.fsStyle = TBSTYLE_DROPDOWN |
+                       TBSTYLE_NO_DROPDOWN_ARROW |
+                       TBSTYLE_AUTOSIZE;
+
+    for ( unsigned i = 0; i < GetMenuCount(); i++ )
     {
-        TBBUTTON tbButton;
-        memset(&tbButton, 0, sizeof(TBBUTTON));
-        tbButton.iBitmap = I_IMAGENONE;
-        tbButton.fsState = TBSTATE_ENABLED;
-        tbButton.fsStyle = TBSTYLE_DROPDOWN | TBSTYLE_NO_DROPDOWN_ARROW | TBSTYLE_AUTOSIZE;
+        HMENU hPopupMenu = (HMENU) GetMenu(i)->GetHMenu();
+        tbButton.dwData = (DWORD)hPopupMenu;
+        wxString label = wxStripMenuCodes(GetLabelTop(i));
+        tbButton.iString = (int) label.wx_str();
 
-        size_t i;
-        for (i = 0; i < GetMenuCount(); i++)
+        tbButton.idCommand = NewControlId();
+        if ( !::SendMessage(hCommandBar, TB_INSERTBUTTON, i, (LPARAM)&tbButton) )
         {
-            HMENU hPopupMenu = (HMENU) GetMenu(i)->GetHMenu() ;
-            tbButton.dwData = (DWORD)hPopupMenu;
-            wxString label = wxStripMenuCodes(GetLabelTop(i));
-            tbButton.iString = (int) label.wx_str();
-
-            int position = i;
-
-            tbButton.idCommand = NewControlId();
-            if (!::SendMessage(hCommandBar, TB_INSERTBUTTON, position, (LPARAM)&tbButton))
-            {
-                wxLogLastError(wxT("TB_INSERTBUTTON"));
-            }
+            wxLogLastError(wxT("TB_INSERTBUTTON"));
         }
     }
-    m_hMenu = (WXHMENU) hMenu;
+
+    m_hMenu = bar->GetHMenu();
     return m_hMenu;
-#else
+#else // !__WXWINCE__
     if ( m_hMenu != 0 )
         return m_hMenu;
 
@@ -987,7 +987,7 @@ WXHMENU wxMenuBar::Create()
     }
 
     return m_hMenu;
-#endif
+#endif // __WXWINCE__/!__WXWINCE__
 }
 
 int wxMenuBar::MSWPositionForWxMenu(wxMenu *menu, int wxpos)
