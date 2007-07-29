@@ -1237,13 +1237,15 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
                                          T *gdk_event)
 {
     event.SetTimestamp( gdk_event->time );
-    event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
-    event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
-    event.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
-    event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK);
-    event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK);
-    event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK);
-    event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK);
+    event.m_shiftDown = gdk_event->state & GDK_SHIFT_MASK;
+    event.m_controlDown = gdk_event->state & GDK_CONTROL_MASK;
+    event.m_altDown = gdk_event->state & GDK_MOD1_MASK;
+    event.m_metaDown = gdk_event->state & GDK_MOD2_MASK;
+    event.m_leftDown = gdk_event->state & GDK_BUTTON1_MASK;
+    event.m_middleDown = gdk_event->state & GDK_BUTTON2_MASK;
+    event.m_rightDown = gdk_event->state & GDK_BUTTON3_MASK;
+    event.m_aux1Down = gdk_event->state & GDK_BUTTON4_MASK;
+    event.m_aux2Down = gdk_event->state & GDK_BUTTON5_MASK;
 
     wxPoint pt = win->GetClientAreaOrigin();
     event.m_x = (wxCoord)gdk_event->x - pt.x;
@@ -1745,29 +1747,13 @@ window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
     }
 
     wxMouseEvent event(wxEVT_MOUSEWHEEL);
-    // Can't use InitMouse macro because scroll events don't have button
-    event.SetTimestamp( gdk_event->time );
-    event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
-    event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
-    event.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
-    event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK);
-    event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK);
-    event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK);
-    event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK);
+    InitMouseEvent(win, event, gdk_event);
     event.m_linesPerAction = 3;
     event.m_wheelDelta = 120;
     if (gdk_event->direction == GDK_SCROLL_UP)
         event.m_wheelRotation = 120;
     else
         event.m_wheelRotation = -120;
-
-    wxPoint pt = win->GetClientAreaOrigin();
-    event.m_x = (wxCoord)gdk_event->x - pt.x;
-    event.m_y = (wxCoord)gdk_event->y - pt.y;
-
-    event.SetEventObject( win );
-    event.SetId( win->GetId() );
-    event.SetTimestamp( gdk_event->time );
 
     return win->GTKProcessEvent(event);
 }
@@ -1963,8 +1949,6 @@ gtk_window_leave_callback( GtkWidget *widget,
     if (gdk_event->mode != GDK_CROSSING_NORMAL) return FALSE;
 
     wxMouseEvent event( wxEVT_LEAVE_WINDOW );
-    event.SetTimestamp( gdk_event->time );
-    event.SetEventObject( win );
 
     int x = 0;
     int y = 0;
@@ -1972,17 +1956,7 @@ gtk_window_leave_callback( GtkWidget *widget,
 
     gdk_window_get_pointer( widget->window, &x, &y, &state );
 
-    event.m_shiftDown = (state & GDK_SHIFT_MASK) != 0;
-    event.m_controlDown = (state & GDK_CONTROL_MASK) != 0;
-    event.m_altDown = (state & GDK_MOD1_MASK) != 0;
-    event.m_metaDown = (state & GDK_MOD2_MASK) != 0;
-    event.m_leftDown = (state & GDK_BUTTON1_MASK) != 0;
-    event.m_middleDown = (state & GDK_BUTTON2_MASK) != 0;
-    event.m_rightDown = (state & GDK_BUTTON3_MASK) != 0;
-
-    wxPoint pt = win->GetClientAreaOrigin();
-    event.m_x = x + pt.x;
-    event.m_y = y + pt.y;
+    InitMouseEvent(win, event, gdk_event);
 
     return win->GTKProcessEvent(event);
 }
@@ -2198,6 +2172,8 @@ wxMouseState wxGetMouseState()
     ms.SetLeftDown(mask & GDK_BUTTON1_MASK);
     ms.SetMiddleDown(mask & GDK_BUTTON2_MASK);
     ms.SetRightDown(mask & GDK_BUTTON3_MASK);
+    ms.SetAux1Down(mask & GDK_BUTTON4_MASK);
+    ms.SetAux2Down(mask & GDK_BUTTON5_MASK);
 
     ms.SetControlDown(mask & GDK_CONTROL_MASK);
     ms.SetShiftDown(mask & GDK_SHIFT_MASK);
