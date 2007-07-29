@@ -162,6 +162,11 @@ protected:
     {
         wxPaintDC dc(this);
         dc.SetTextForeground(*wxWHITE);
+        wxFont font(*wxSWISS_FONT);
+        font.SetWeight(wxFONTWEIGHT_BOLD);
+        font.SetPointSize(font.GetPointSize() + 2);
+        dc.SetFont(font);
+
         dc.DrawLabel(_T("Press keys here"), GetClientRect(), wxALIGN_CENTER);
     }
 
