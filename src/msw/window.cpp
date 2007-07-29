@@ -143,6 +143,12 @@
     #define wxUSE_MOUSEEVENT_HACK 1
 #endif
 
+// not all compilers/platforms have X button related declarations (notably
+// Windows CE doesn't, and probably some old SDKs don't neither)
+#ifdef WM_XBUTTONDOWN
+    #define wxHAS_XBUTTON
+#endif
+
 // ---------------------------------------------------------------------------
 // global variables
 // ---------------------------------------------------------------------------
@@ -2652,9 +2658,11 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
         case WM_MBUTTONDOWN:
         case WM_MBUTTONUP:
         case WM_MBUTTONDBLCLK:
+#ifdef wxHAS_XBUTTON
         case WM_XBUTTONDOWN:
         case WM_XBUTTONUP:
         case WM_XBUTTONDBLCLK:
+#endif // wxHAS_XBUTTON
             {
 #ifdef __WXMICROWIN__
                 // MicroWindows seems to ignore the fact that a window is
@@ -4797,8 +4805,10 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
     event.m_leftDown = (flags & MK_LBUTTON) != 0;
     event.m_middleDown = (flags & MK_MBUTTON) != 0;
     event.m_rightDown = (flags & MK_RBUTTON) != 0;
+#ifdef wxHAS_XBUTTON
     event.m_aux1Down = (flags & MK_XBUTTON1) != 0;
     event.m_aux2Down = (flags & MK_XBUTTON2) != 0;
+#endif // wxHAS_XBUTTON
     event.m_altDown = ::GetKeyState(VK_MENU) < 0;
 
 #ifndef __WXWINCE__
@@ -4907,6 +4917,7 @@ bool wxWindowMSW::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags)
         wxEVT_AUX2_DCLICK
     };
 
+#ifdef wxHAS_XBUTTON
     // the same messages are used for both auxillary mouse buttons so we need
     // to adjust the index manually
     switch ( msg )
@@ -4917,6 +4928,7 @@ bool wxWindowMSW::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags)
             if ( flags & MK_XBUTTON2 )
                 msg += wxEVT_AUX2_DOWN - wxEVT_AUX1_DOWN;
     }
+#endif // wxHAS_XBUTTON
 
     wxMouseEvent event(eventsMouse[msg - WM_MOUSEMOVE]);
     InitMouseEvent(event, x, y, flags);
@@ -5833,8 +5845,10 @@ wxMouseState wxGetMouseState()
     ms.SetLeftDown(wxIsKeyDown(VK_LBUTTON));
     ms.SetMiddleDown(wxIsKeyDown(VK_MBUTTON));
     ms.SetRightDown(wxIsKeyDown(VK_RBUTTON));
+#ifdef wxHAS_XBUTTON
     ms.SetAux1Down(wxIsKeyDown(VK_XBUTTON1));
     ms.SetAux2Down(wxIsKeyDown(VK_XBUTTON2));
+#endif // wxHAS_XBUTTON
 
     ms.SetControlDown(wxIsKeyDown(VK_CONTROL));
     ms.SetShiftDown(wxIsKeyDown(VK_SHIFT));
