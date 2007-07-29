@@ -16,7 +16,6 @@
     <subproject id="aui" template="sub"/>
     <subproject id="calendar" template="sub"/>
     <subproject id="caret" template="sub"/>
-    <subproject id="checklst" template="sub"/>
     <subproject id="collpane" template="sub"/>
     <subproject id="config" template="sub"/>
     <subproject id="combo" template="sub"/>
@@ -32,7 +31,6 @@
     <subproject id="docvwmdi" template="sub"/>
     <subproject id="dragimag" template="sub"/>
     <subproject id="drawing" template="sub"/>
-    <subproject id="dynamic" template="sub"/>
     <subproject id="erase" template="sub"/>
     <subproject id="event" template="sub"/>
     <subproject id="exec" template="sub"/>
@@ -48,7 +46,6 @@
     <subproject id="joytest" template="sub"/>
     <subproject id="keyboard" template="sub"/>
     <subproject id="layout" template="sub"/>
-    <subproject id="listbox" template="sub"/>
     <subproject id="listctrl" template="sub"/>
     <subproject id="mdi" template="sub"/>
     <subproject id="mediaplayer" template="sub"/>
@@ -57,20 +54,16 @@
     <subproject id="minifram" template="sub"/>
     <subproject id="minimal" template="sub"/>
     <subproject id="mobile" template="sub"/>
-    <subproject id="multimon" template="sub"/>
     <subproject id="nativdlg" template="sub"/>
     <subproject id="notebook" template="sub"/>
     <subproject id="oleauto" template="sub"/>
     <subproject id="opengl" template="sub"/>
     <subproject id="ownerdrw" template="sub"/>
-    <subproject id="png" template="sub"/>
     <subproject id="popup" template="sub"/>
     <subproject id="printing" template="sub"/>
-    <subproject id="propsize" template="sub"/>
     <subproject id="regtest" template="sub"/>
     <subproject id="render" template="sub"/>
     <subproject id="richtext" template="sub"/>
-    <subproject id="rotate" template="sub"/>
     <subproject id="sashtest" template="sub"/>
     <subproject id="scroll" template="sub"/>
     <subproject id="scrollsub" template="sub"/>

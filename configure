@@ -48817,7 +48817,6 @@ if test "$wxUSE_CHECKLST" = "yes"; then
 _ACEOF
 
   USES_CONTROLS=1
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS checklst"
 fi
 
 if test "$wxUSE_COLOURPICKERCTRL" = "yes"; then
@@ -48870,7 +48869,7 @@ echo "$as_me: WARNING: wxDisplay not yet supported under $TOOLKIT... disabled" >
 #define wxUSE_DISPLAY 1
 _ACEOF
 
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS display multimon"
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS display"
     fi
 fi
 
@@ -48944,7 +48943,6 @@ if test "$wxUSE_LISTBOX" = "yes"; then
 _ACEOF
 
     USES_CONTROLS=1
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS listbox"
 fi
 
 if test "$wxUSE_LISTCTRL" = "yes"; then
@@ -49442,7 +49440,6 @@ if test "$wxUSE_MINIFRAME" = "yes"; then
 #define wxUSE_MINIFRAME 1
 _ACEOF
 
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS minifram"
 fi
 
 if test "$wxUSE_SYSTEM_OPTIONS" = "yes"; then
@@ -50131,9 +50128,9 @@ if test "$wxUSE_GUI" = "yes"; then
 
 
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov controls dialogs drawing \
-                     dynamic erase event exec font image minimal mobile \
+                     erase event exec font image minimal mobile \
                      mobile/wxedit mobile/styles propsize render \
-                     rotate shaped svg taborder vscroll widgets"
+                     shaped svg taborder vscroll widgets"
 
     if test "$wxUSE_MONOLITHIC" != "yes"; then
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS console"

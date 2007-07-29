@@ -75,17 +75,6 @@ shows how to configure the control (see the different options in the calendar
 menu) and also how to process the notifications from it.
 
 
-\subsection{Checklist sample}\label{samplechecklist}
-
-This sample demonstrates use of the \helpref{wxCheckListBox}{wxchecklistbox}
-class intercepting check, select and double click events. It also tests
-use of various methods modifying the control, such as by deleting items
-from it or inserting new ones (these functions are actually implemented in
-the parent class \helpref{wxListBox}{wxlistbox} so the sample tests that class
-as well). The layout of the dialog is created using a \helpref{wxBoxSizer}{wxboxsizer}
-demonstrating a simple dynamic layout.
-
-
 \subsection{Config sample}\label{sampleconfig}
 
 This sample demonstrates the \helpref{wxConfig}{wxconfigbase} classes in a platform
@@ -210,19 +199,6 @@ Take a look at DnDShapeDataObject class to see how you may use
 \helpref{wxDataObject}{wxdataobject} to achieve this.
 
 
-\subsection{Dynamic sample}\label{sampledynamic}
-
-This sample is a very small sample that demonstrates use of the
-\helpref{wxEvtHandler::Connect}{wxevthandlerconnect} method. This method
-should be used whenever it is not known at compile time which control
-will receive which event or which controls are actually going to be in
-a dialog or frame. This is most typically the case for any scripting
-language that would work as a wrapper for wxWidgets or programs where
-forms or similar datagrams can be created by the users.
-
-See also the \helpref{event sample}{sampleevent}
-
-
 \subsection{Event sample}\label{sampleevent}
 
 The event sample demonstrates various features of the wxWidgets events. It
@@ -230,8 +206,6 @@ shows using dynamic events and connecting/disconnecting the event handlers
 during run time and also using
 \helpref{PushEventHandler()}{wxwindowpusheventhandler} and
 \helpref{PopEventHandler()}{wxwindowpopeventhandler}.
-
-It replaces the old dynamic sample.
 
 
 \subsection{Except(ions) sample}\label{sampleexcept}
@@ -323,6 +297,9 @@ specifying the foreground and background colours with
 bitmap is then converted to a wxImage and the foreground colour (black) is
 replaced with red using \helpref{wxImage::Replace}{wximagereplace}.
 
+This sample also contains the code for testing the image rotation and resizing
+and using raw bitmap access, see the corresponding menu commands.
+
 
 \subsection{Internat(ionalization) sample}\label{sampleinternat}
 
@@ -388,15 +365,6 @@ This sample shows how to replace the default wxWidgets
 \helpref{renderer}{wxrenderernative} and also how to write a shared library
 (DLL) implementing a renderer and load and unload it during the run-time.
 
-
-
-\subsection{Rotate sample}\label{samplerotate}
-
-This is a simple example which demonstrates how to rotate an image with
-the \helpref{wxImage::Rotate}{wximagerotate} method. The rotation can
-be done without interpolation (left mouse button) which will be faster,
-or with interpolation (right mouse button) which is slower but gives
-better results.
 
 
 \subsection{Scroll subwindow sample}\label{samplescrollsub}

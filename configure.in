@@ -6664,7 +6664,6 @@ fi
 if test "$wxUSE_CHECKLST" = "yes"; then
   AC_DEFINE(wxUSE_CHECKLISTBOX)
   USES_CONTROLS=1
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS checklst"
 fi
 
 if test "$wxUSE_COLOURPICKERCTRL" = "yes"; then
@@ -6698,7 +6697,7 @@ if test "$wxUSE_DISPLAY" = "yes"; then
         wxUSE_DISPLAY=no
     else
         AC_DEFINE(wxUSE_DISPLAY)
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS display multimon"
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS display"
     fi
 fi
 
@@ -6745,7 +6744,6 @@ fi
 if test "$wxUSE_LISTBOX" = "yes"; then
     AC_DEFINE(wxUSE_LISTBOX)
     USES_CONTROLS=1
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS listbox"
 fi
 
 if test "$wxUSE_LISTCTRL" = "yes"; then
@@ -7054,7 +7052,6 @@ fi
 
 if test "$wxUSE_MINIFRAME" = "yes"; then
     AC_DEFINE(wxUSE_MINIFRAME)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS minifram"
 fi
 
 if test "$wxUSE_SYSTEM_OPTIONS" = "yes"; then
@@ -7455,9 +7452,9 @@ if test "$wxUSE_GUI" = "yes"; then
 
     dnl TODO some samples are never built so far: mfc (requires VC++)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov controls dialogs drawing \
-                     dynamic erase event exec font image minimal mobile \
+                     erase event exec font image minimal mobile \
                      mobile/wxedit mobile/styles propsize render \
-                     rotate shaped svg taborder vscroll widgets"
+                     shaped svg taborder vscroll widgets"
 
     if test "$wxUSE_MONOLITHIC" != "yes"; then
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS console"
