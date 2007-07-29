@@ -27,6 +27,7 @@
 #include "wx/bookctrl.h"
 #include "wx/artprov.h"
 #include "wx/imaglist.h"
+#include "wx/minifram.h"
 #include "wx/sysopt.h"
 
 #if wxUSE_COLOURDLG
@@ -162,10 +163,11 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
 #if USE_MODAL_PRESENTATION
     EVT_MENU(DIALOGS_MODAL,                         MyFrame::ModalDlg)
+#endif // USE_MODAL_PRESENTATION
     EVT_MENU(DIALOGS_MODELESS,                      MyFrame::ModelessDlg)
     EVT_MENU(DIALOGS_CENTRE_SCREEN,                 MyFrame::DlgCenteredScreen)
     EVT_MENU(DIALOGS_CENTRE_PARENT,                 MyFrame::DlgCenteredParent)
-#endif // USE_MODAL
+    EVT_MENU(DIALOGS_MINIFRAME,                     MyFrame::MiniFrame)
 
 #if wxUSE_STARTUP_TIPS
     EVT_MENU(DIALOGS_TIP,                           MyFrame::ShowTip)
@@ -380,14 +382,15 @@ bool MyApp::OnInit()
     menuDlg->Append(wxID_ANY,_T("&Searching"),find_menu);
 #endif // wxUSE_FINDREPLDLG
 
-#if USE_MODAL_PRESENTATION
     wxMenu *dialogs_menu = new wxMenu;
+#if USE_MODAL_PRESENTATION
     dialogs_menu->Append(DIALOGS_MODAL, _T("&Modal dialog\tCtrl-W"));
+#endif // USE_MODAL_PRESENTATION
     dialogs_menu->AppendCheckItem(DIALOGS_MODELESS, _T("Mode&less dialog\tCtrl-Z"));
     dialogs_menu->Append(DIALOGS_CENTRE_SCREEN, _T("Centered on &screen\tShift-Ctrl-1"));
     dialogs_menu->Append(DIALOGS_CENTRE_PARENT, _T("Centered on &parent\tShift-Ctrl-2"));
+    dialogs_menu->Append(DIALOGS_MINIFRAME, _T("&Mini frame"));
     menuDlg->Append(wxID_ANY, _T("&Generic dialogs"), dialogs_menu);
-#endif // USE_MODAL_PRESENTATION
 
 #if USE_SETTINGS_DIALOG
     wxMenu *sheet_menu = new wxMenu;
@@ -990,6 +993,7 @@ void MyFrame::ModalDlg(wxCommandEvent& WXUNUSED(event))
     MyModalDialog dlg(this);
     dlg.ShowModal();
 }
+#endif // USE_MODAL_PRESENTATION
 
 void MyFrame::ModelessDlg(wxCommandEvent& event)
 {
@@ -1035,7 +1039,23 @@ void MyFrame::DlgCenteredParent(wxCommandEvent& WXUNUSED(event))
     dlg.ShowModal();
 }
 
-#endif // USE_MODAL_PRESENTATION
+void MyFrame::MiniFrame(wxCommandEvent& WXUNUSED(event))
+{
+    wxFrame *frame = new wxMiniFrame(this, wxID_ANY, _T("Mini frame"),
+                                     wxDefaultPosition, wxSize(300, 100),
+                                     wxCAPTION | wxCLOSE_BOX);
+    new wxStaticText(frame,
+                     wxID_ANY,
+                     _T("Mini frames have slightly different appearance"),
+                     wxPoint(5, 5));
+    new wxStaticText(frame,
+                     wxID_ANY,
+                     _T("from the normal frames but that's the only difference."),
+                     wxPoint(5, 25));
+
+    frame->CentreOnParent();
+    frame->Show();
+}
 
 #if wxUSE_STARTUP_TIPS
 void MyFrame::ShowTip(wxCommandEvent& WXUNUSED(event))
