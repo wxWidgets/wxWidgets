@@ -29718,8 +29718,6 @@ echo "$as_me: WARNING: system png library not found or too old, will use built-i
             fi
         fi
     fi
-
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS png"
 fi
 
 
@@ -50129,7 +50127,7 @@ if test "$wxUSE_GUI" = "yes"; then
 
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov controls dialogs drawing \
                      erase event exec font image minimal mobile \
-                     mobile/wxedit mobile/styles propsize render \
+                     mobile/wxedit mobile/styles render \
                      shaped svg taborder vscroll widgets"
 
     if test "$wxUSE_MONOLITHIC" != "yes"; then
