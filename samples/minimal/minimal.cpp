@@ -183,31 +183,17 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
     Close(true);
 }
 
-class MyDialog : public wxDialog
-{
-public:
-    MyDialog(wxWindow *parent)
-        : wxDialog(parent, -1, wxString("Dialog"))
-    {
-        new wxButton(this, wxID_OK);
-
-        Connect(wxID_OK, wxEVT_COMMAND_BUTTON_CLICKED,
-                wxCommandEventHandler(MyDialog::OnOk));
-    }
-
-private:
-    void OnOk(wxCommandEvent& event)
-    {
-        wxMessageDialog *dlg = new wxMessageDialog(this, "Message");
-        dlg->ShowModal();
-        dlg->Destroy();
-
-        event.Skip();
-    }
-};
-
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    MyDialog dlg(this);
-    dlg.ShowModal();
+    wxMessageBox(wxString::Format(
+                    _T("Welcome to %s!\n")
+                    _T("\n")
+                    _T("This is the minimal wxWidgets sample\n")
+                    _T("running under %s."),
+                    wxVERSION_STRING,
+                    wxGetOsDescription().c_str()
+                 ),
+                 _T("About wxWidgets minimal sample"),
+                 wxOK | wxICON_INFORMATION,
+                 this);
 }
