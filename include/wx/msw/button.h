@@ -45,14 +45,15 @@ public:
 
     virtual wxWindow *SetDefault();
 
+    // overridden base class methods
+    virtual void SetLabel(const wxString& label);
+    virtual bool SetBackgroundColour(const wxColour &colour);
+    virtual bool SetForegroundColour(const wxColour &colour);
+
     // implementation from now on
     virtual void Command(wxCommandEvent& event);
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
     virtual bool MSWCommand(WXUINT param, WXWORD id);
-
-    // coloured buttons support
-    virtual bool SetBackgroundColour(const wxColour &colour);
-    virtual bool SetForegroundColour(const wxColour &colour);
 
     virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
@@ -78,5 +79,4 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxButton)
 };
 
-#endif
-    // _WX_BUTTON_H_
+#endif // _WX_BUTTON_H_
