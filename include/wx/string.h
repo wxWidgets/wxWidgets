@@ -2689,16 +2689,7 @@ inline wxString operator+(wchar_t ch, const wxString& string)
     { return wxUniChar(ch) + string; }
 
 
-#if wxUSE_STL_BASED_WXSTRING
-    // return an empty wxString (not very useful with wxUSE_STL == 1)
-    inline const wxString wxGetEmptyString() { return wxString(); }
-#else // !wxUSE_STL_BASED_WXSTRING
-    // return an empty wxString (more efficient than wxString() here)
-    inline const wxString& wxGetEmptyString()
-    {
-        return *(wxString *)&wxEmptyString;
-    }
-#endif // wxUSE_STL_BASED_WXSTRING/!wxUSE_STL_BASED_WXSTRING
+#define wxGetEmptyString() wxString()
 
 // ----------------------------------------------------------------------------
 // wxStringBuffer: a tiny class allowing to get a writable pointer into string
