@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/common/xti.cpp
-// Purpose:     runtime metadata information (extended class info
+// Purpose:     runtime metadata information (extended class info)
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     27/07/03
@@ -50,7 +50,7 @@ wxString wxxVariant::GetAsString() const
 
 
 // ----------------------------------------------------------------------------
-// Enum Support
+// wxEnumData
 // ----------------------------------------------------------------------------
 
 wxEnumData::wxEnumData( wxEnumMemberData* data )
@@ -318,8 +318,8 @@ wxTypeInfo *wxTypeInfo::FindType(const wxChar *typeName)
 
 #if wxUSE_UNICODE
 wxClassTypeInfo::wxClassTypeInfo( wxTypeKind kind, wxClassInfo* classInfo, 
-                                  converterToString_t to, 
-                                  converterFromString_t from, 
+                                  wxVariant2StringFnc to, 
+                                  wxString2VariantFnc from, 
                                   const char *name) :
     wxTypeInfo( kind, to, from, name)
 { 
@@ -330,8 +330,8 @@ wxClassTypeInfo::wxClassTypeInfo( wxTypeKind kind, wxClassInfo* classInfo,
 #endif
 
 wxClassTypeInfo::wxClassTypeInfo( wxTypeKind kind, wxClassInfo* classInfo, 
-                                  converterToString_t to, 
-                                  converterFromString_t from, 
+                                  wxVariant2StringFnc to, 
+                                  wxString2VariantFnc from, 
                                   const wxString &name) :
     wxTypeInfo( kind, to, from, name)
 { 
@@ -340,8 +340,8 @@ wxClassTypeInfo::wxClassTypeInfo( wxTypeKind kind, wxClassInfo* classInfo,
 }
 
 wxDelegateTypeInfo::wxDelegateTypeInfo( int eventType, wxClassInfo* eventClass, 
-                                        converterToString_t to, 
-                                        converterFromString_t from ) :
+                                        wxVariant2StringFnc to, 
+                                        wxString2VariantFnc from ) :
     wxTypeInfo ( wxT_DELEGATE, to, from, wxEmptyString )
 { 
     m_eventClass = eventClass; 
@@ -351,8 +351,8 @@ wxDelegateTypeInfo::wxDelegateTypeInfo( int eventType, wxClassInfo* eventClass,
 
 wxDelegateTypeInfo::wxDelegateTypeInfo( int eventType, int lastEventType, 
                                         wxClassInfo* eventClass, 
-                                        converterToString_t to,
-                                        converterFromString_t from ) :
+                                        wxVariant2StringFnc to,
+                                        wxString2VariantFnc from ) :
     wxTypeInfo ( wxT_DELEGATE, to, from, wxEmptyString )
 { 
     m_eventClass = eventClass; 
@@ -389,10 +389,25 @@ void wxSetStringToArray( const wxString &s, wxArrayString &array )
 }
 
 // ----------------------------------------------------------------------------
-// wxClassInfo
+// wxPropertyInfo
 // ----------------------------------------------------------------------------
 
-wxPropertyInfo::~wxPropertyInfo()
+void wxPropertyInfo::Insert(wxPropertyInfo* &iter)
+{
+    m_next = NULL;
+    if ( iter == NULL )
+        iter = this;
+    else
+    {
+        wxPropertyInfo* i = iter;
+        while( i->m_next )
+            i = i->m_next;
+
+        i->m_next = this;
+    }
+}
+
+void wxPropertyInfo::Remove()
 {
     if ( this == m_itsClass->m_firstProperty )
     {
@@ -414,7 +429,26 @@ wxPropertyInfo::~wxPropertyInfo()
     }
 }
 
-wxHandlerInfo::~wxHandlerInfo()
+// ----------------------------------------------------------------------------
+// wxHandlerInfo
+// ----------------------------------------------------------------------------
+
+void wxHandlerInfo::Insert(wxHandlerInfo* &iter)
+{
+    m_next = NULL;
+    if ( iter == NULL )
+        iter = this;
+    else
+    {
+        wxHandlerInfo* i = iter;
+        while( i->m_next )
+            i = i->m_next;
+
+        i->m_next = this;
+    }
+}
+
+void wxHandlerInfo::Remove()
 {
     if ( this == m_itsClass->m_firstHandler )
     {
@@ -435,6 +469,11 @@ wxHandlerInfo::~wxHandlerInfo()
         }
     }
 }
+
+
+// ----------------------------------------------------------------------------
+// wxClassInfo
+// ----------------------------------------------------------------------------
 
 const wxPropertyAccessor *wxClassInfo::FindAccessor(const wxChar *PropertyName) const
 {
@@ -521,7 +560,7 @@ wxObjectStreamingCallback wxClassInfo::GetStreamingCallback() const
     return retval;
 }
 
-bool wxClassInfo::BeforeWriteObject( const wxObject *obj, wxWriter *streamer, 
+bool wxClassInfo::BeforeWriteObject( const wxObject *obj, wxObjectWriter *streamer, 
                                      wxPersister *persister, wxxVariantArray &metadata) const
 {
     wxObjectStreamingCallback sb = GetStreamingCallback();

@@ -37,36 +37,36 @@
 
 using namespace std;
 
-struct wxWriter::wxWriterInternal
+struct wxObjectWriter::wxObjectWriterInternal
 {
     map< const wxObject*, int > m_writtenObjects;
     int m_nextId;
 };
 
-wxWriter::wxWriter()
+wxObjectWriter::wxObjectWriter()
 {
-    m_data = new wxWriterInternal;
+    m_data = new wxObjectWriterInternal;
     m_data->m_nextId = 0;
 }
 
-wxWriter::~wxWriter()
+wxObjectWriter::~wxObjectWriter()
 {
     delete m_data;
 }
 
-struct wxWriter::wxWriterInternalPropertiesData
+struct wxObjectWriter::wxObjectWriterInternalPropertiesData
 {
     char nothing;
 };
 
-void wxWriter::ClearObjectContext()
+void wxObjectWriter::ClearObjectContext()
 {
     delete m_data;
-    m_data = new wxWriterInternal();
+    m_data = new wxObjectWriterInternal();
     m_data->m_nextId = 0;
 }
 
-void wxWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo, 
+void wxObjectWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo, 
                            wxPersister *persister, const wxString &name, 
                            wxxVariantArray &metadata )
 {
@@ -75,7 +75,7 @@ void wxWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo,
     DoEndWriteTopLevelEntry( name );
 }
 
-void wxWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo, 
+void wxObjectWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo, 
                            wxPersister *persister, bool isEmbedded, 
                            wxxVariantArray &metadata )
 {
@@ -101,7 +101,7 @@ void wxWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo,
                 m_data->m_writtenObjects[dynobj->GetSuperClassInstance()] = oid;
 
             DoBeginWriteObject( object, classInfo, oid, metadata );
-            wxWriterInternalPropertiesData data;
+            wxObjectWriterInternalPropertiesData data;
             WriteAllProperties( object, classInfo, persister, &data );
             DoEndWriteObject( object, classInfo, oid  );
         }
@@ -109,7 +109,7 @@ void wxWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo,
     }
 }
 
-void wxWriter::FindConnectEntry(const wxEvtHandler * evSource,
+void wxObjectWriter::FindConnectEntry(const wxEvtHandler * evSource,
                                 const wxDelegateTypeInfo* dti, 
                                 const wxObject* &sink, 
                                 const wxHandlerInfo *&handler)
@@ -147,9 +147,9 @@ void wxWriter::FindConnectEntry(const wxEvtHandler * evSource,
         }
     }
 }
-void wxWriter::WriteAllProperties( const wxObject * obj, const wxClassInfo* ci, 
+void wxObjectWriter::WriteAllProperties( const wxObject * obj, const wxClassInfo* ci, 
                                    wxPersister *persister, 
-                                   wxWriterInternalPropertiesData * data )
+                                   wxObjectWriterInternalPropertiesData * data )
 {
     wxPropertyInfoMap map;
     ci->GetProperties( map );
@@ -190,9 +190,9 @@ void wxWriter::WriteAllProperties( const wxObject * obj, const wxClassInfo* ci,
     }
 }
 
-void wxWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* ci, 
+void wxObjectWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* ci, 
                                  const wxPropertyInfo* pi, wxPersister *persister, 
-                                 wxWriterInternalPropertiesData *WXUNUSED(data) )
+                                 wxObjectWriterInternalPropertiesData *WXUNUSED(data) )
 {
     if ( pi->GetFlags() & wxPROP_DONT_STREAM )
         return;
@@ -343,7 +343,7 @@ void wxWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* ci,
     }
 }
 
-int wxWriter::GetObjectID(const wxObject *obj)
+int wxObjectWriter::GetObjectID(const wxObject *obj)
 {
     if ( !IsObjectKnown( obj ) )
         return wxInvalidObjectID;
@@ -351,7 +351,7 @@ int wxWriter::GetObjectID(const wxObject *obj)
     return m_data->m_writtenObjects[obj];
 }
 
-bool wxWriter::IsObjectKnown( const wxObject *obj )
+bool wxObjectWriter::IsObjectKnown( const wxObject *obj )
 {
     return m_data->m_writtenObjects.find( obj ) != m_data->m_writtenObjects.end();
 }
@@ -361,22 +361,22 @@ bool wxWriter::IsObjectKnown( const wxObject *obj )
 // reading objects in
 // ----------------------------------------------------------------------------
 
-struct wxReader::wxReaderInternal
+struct wxObjectReader::wxObjectReaderInternal
 {
     map<int,wxClassInfo*> m_classInfos;
 };
 
-wxReader::wxReader()
+wxObjectReader::wxObjectReader()
 {
-    m_data = new wxReaderInternal;
+    m_data = new wxObjectReaderInternal;
 }
 
-wxReader::~wxReader()
+wxObjectReader::~wxObjectReader()
 {
     delete m_data;
 }
 
-wxClassInfo* wxReader::GetObjectClassInfo(int objectID)
+wxClassInfo* wxObjectReader::GetObjectClassInfo(int objectID)
 {
     if ( objectID == wxNullObjectID || objectID == wxInvalidObjectID )
     {
@@ -391,7 +391,7 @@ wxClassInfo* wxReader::GetObjectClassInfo(int objectID)
     return m_data->m_classInfos[objectID];
 }
 
-void wxReader::SetObjectClassInfo(int objectID, wxClassInfo *classInfo )
+void wxObjectReader::SetObjectClassInfo(int objectID, wxClassInfo *classInfo )
 {
     if ( objectID == wxNullObjectID || objectID == wxInvalidObjectID )
     {
@@ -406,7 +406,7 @@ void wxReader::SetObjectClassInfo(int objectID, wxClassInfo *classInfo )
     m_data->m_classInfos[objectID] = classInfo;
 }
 
-bool wxReader::HasObjectClassInfo( int objectID )
+bool wxObjectReader::HasObjectClassInfo( int objectID )
 {
     if ( objectID == wxNullObjectID || objectID == wxInvalidObjectID )
     {

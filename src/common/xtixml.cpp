@@ -59,7 +59,7 @@ wxString wxXmlGetContentFromNode( wxXmlNode *node )
         return wxEmptyString;
 }
 
-struct wxXmlWriter::wxXmlWriterInternal
+struct wxObjectXmlWriter::wxObjectXmlWriterInternal
 {
     wxXmlNode *m_root;
     wxXmlNode *m_current;
@@ -78,19 +78,19 @@ struct wxXmlWriter::wxXmlWriterInternal
     }
 };
 
-wxXmlWriter::wxXmlWriter( wxXmlNode * rootnode )
+wxObjectXmlWriter::wxObjectXmlWriter( wxXmlNode * rootnode )
 {
-    m_data = new wxXmlWriterInternal();
+    m_data = new wxObjectXmlWriterInternal();
     m_data->m_root = rootnode;
     m_data->m_current = rootnode;
 }
 
-wxXmlWriter::~wxXmlWriter()
+wxObjectXmlWriter::~wxObjectXmlWriter()
 {
     delete m_data;
 }
 
-void wxXmlWriter::DoBeginWriteTopLevelEntry( const wxString &name )
+void wxObjectXmlWriter::DoBeginWriteTopLevelEntry( const wxString &name )
 {
     wxXmlNode *pnode;
     pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("entry"));
@@ -99,12 +99,12 @@ void wxXmlWriter::DoBeginWriteTopLevelEntry( const wxString &name )
     m_data->Push( pnode );
 }
 
-void wxXmlWriter::DoEndWriteTopLevelEntry( const wxString &WXUNUSED(name) )
+void wxObjectXmlWriter::DoEndWriteTopLevelEntry( const wxString &WXUNUSED(name) )
 {
     m_data->Pop();
 }
 
-void wxXmlWriter::DoBeginWriteObject(const wxObject *WXUNUSED(object), 
+void wxObjectXmlWriter::DoBeginWriteObject(const wxObject *WXUNUSED(object), 
                                      const wxClassInfo *classInfo, 
                                      int objectID, wxxVariantArray &metadata   )
 {
@@ -122,7 +122,7 @@ void wxXmlWriter::DoBeginWriteObject(const wxObject *WXUNUSED(object),
 }
 
 // end of writing the root object
-void wxXmlWriter::DoEndWriteObject(const wxObject *WXUNUSED(object), 
+void wxObjectXmlWriter::DoEndWriteObject(const wxObject *WXUNUSED(object), 
                                    const wxClassInfo *WXUNUSED(classInfo), 
                                    int WXUNUSED(objectID) )
 {
@@ -130,12 +130,12 @@ void wxXmlWriter::DoEndWriteObject(const wxObject *WXUNUSED(object),
 }
 
 // writes a property in the stream format
-void wxXmlWriter::DoWriteSimpleType( wxxVariant &value )
+void wxObjectXmlWriter::DoWriteSimpleType( wxxVariant &value )
 {
     wxXmlAddContentToNode( m_data->m_current,value.GetAsString() );
 }
 
-void wxXmlWriter::DoBeginWriteElement()
+void wxObjectXmlWriter::DoBeginWriteElement()
 {
     wxXmlNode *pnode;
     pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("element") );
@@ -143,12 +143,12 @@ void wxXmlWriter::DoBeginWriteElement()
     m_data->Push( pnode );
 }
 
-void wxXmlWriter::DoEndWriteElement()
+void wxObjectXmlWriter::DoEndWriteElement()
 {
     m_data->Pop();
 }
 
-void wxXmlWriter::DoBeginWriteProperty(const wxPropertyInfo *pi )
+void wxObjectXmlWriter::DoBeginWriteProperty(const wxPropertyInfo *pi )
 {
     wxXmlNode *pnode;
     pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("prop") );
@@ -157,7 +157,7 @@ void wxXmlWriter::DoBeginWriteProperty(const wxPropertyInfo *pi )
     m_data->Push( pnode );
 }
 
-void wxXmlWriter::DoEndWriteProperty(const wxPropertyInfo *WXUNUSED(propInfo) )
+void wxObjectXmlWriter::DoEndWriteProperty(const wxPropertyInfo *WXUNUSED(propInfo) )
 {
     m_data->Pop();
 }
@@ -165,7 +165,7 @@ void wxXmlWriter::DoEndWriteProperty(const wxPropertyInfo *WXUNUSED(propInfo) )
 
 
 // insert an object reference to an already written object
-void wxXmlWriter::DoWriteRepeatedObject( int objectID )
+void wxObjectXmlWriter::DoWriteRepeatedObject( int objectID )
 {
     wxXmlNode *pnode;
     pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("object"));
@@ -174,7 +174,7 @@ void wxXmlWriter::DoWriteRepeatedObject( int objectID )
 }
 
 // insert a null reference
-void wxXmlWriter::DoWriteNullObject()
+void wxObjectXmlWriter::DoWriteNullObject()
 {
     wxXmlNode *pnode;
     pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("object"));
@@ -182,7 +182,7 @@ void wxXmlWriter::DoWriteNullObject()
 }
 
 // writes a delegate in the stream format
-void wxXmlWriter::DoWriteDelegate( const wxObject *WXUNUSED(object), 
+void wxObjectXmlWriter::DoWriteDelegate( const wxObject *WXUNUSED(object), 
                                    const wxClassInfo* WXUNUSED(classInfo), 
                                    const wxPropertyInfo *WXUNUSED(pi),
                                    const wxObject *eventSink, int sinkObjectID, 
@@ -212,7 +212,7 @@ as properties are always sought by typeinfo over all levels
 and create params are always toplevel class only
 */
 
-int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
+int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
 {
     wxASSERT_MSG( callbacks, wxT("Does not support reading without a Depersistor") );
     wxString className;
@@ -528,7 +528,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
     return objectID;
 }
 
-wxxVariant wxXmlReader::ReadValue(wxXmlNode *node,
+wxxVariant wxObjectXmlReader::ReadValue(wxXmlNode *node,
                                   const wxTypeInfo *type )
 {
     wxString content;
@@ -539,7 +539,7 @@ wxxVariant wxXmlReader::ReadValue(wxXmlNode *node,
     return result;
 }
 
-int wxXmlReader::ReadObject( const wxString &name, wxDepersister *callbacks)
+int wxObjectXmlReader::ReadObject( const wxString &name, wxDepersister *callbacks)
 {
     wxXmlNode *iter = m_parent->GetChildren();
     while ( iter )

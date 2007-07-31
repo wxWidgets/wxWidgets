@@ -97,7 +97,7 @@ wxEND_FLAGS( wxMenuBarStyle )
 
 // the negative id would lead the window (its superclass !) to
 // vetoe streaming out otherwise
-bool wxMenuBarStreamingCallback( const wxObject *WXUNUSED(object), wxWriter *,
+bool wxMenuBarStreamingCallback( const wxObject *WXUNUSED(object), wxObjectWriter *,
                                  wxPersister *, wxxVariantArray & )
 {
     return true;
@@ -153,7 +153,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuInfo, wxObject)
 
 #if wxUSE_EXTENDED_RTTI
 
-bool wxMenuItemStreamingCallback( const wxObject *object, wxWriter * ,
+bool wxMenuItemStreamingCallback( const wxObject *object, wxObjectWriter * ,
                                   wxPersister * , wxxVariantArray & )
 {
     const wxMenuItem * mitem = dynamic_cast<const wxMenuItem*>(object) ;

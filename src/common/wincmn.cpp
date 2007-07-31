@@ -132,7 +132,7 @@ END_EVENT_TABLE()
 // separately otherwise chaos occurs. Right now easiest is to test for negative ids, 
 // as windows with negative ids never can be recreated anyway
 
-bool wxWindowStreamingCallback( const wxObject *object, wxWriter *, 
+bool wxWindowStreamingCallback( const wxObject *object, wxObjectWriter *, 
                                 wxPersister *, wxxVariantArray & )
 {
     const wxWindow * win = dynamic_cast<const wxWindow*>(object);
