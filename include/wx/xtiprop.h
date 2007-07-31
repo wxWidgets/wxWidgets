@@ -33,18 +33,18 @@ class WXDLLIMPEXP_BASE wxEvent;
 class WXDLLIMPEXP_BASE wxEvtHandler;
 
 // ----------------------------------------------------------------------------
-// Property Support
+// Property Accessors
 //
-// wxPropertyInfo is used to inquire of the property by name.  It doesn't
-// provide access to the property, only information about it.  If you
-// want access, look at wxPropertyAccessor.
+// wxPropertySetter/Getter/CollectionGetter/CollectionAdder are all property
+// accessors which are managed by wxPropertyAccessor class which in turn is
+// handled by wxPropertyInfo.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxSetter
+class WXDLLIMPEXP_BASE wxPropertySetter
 {
 public:
-    wxSetter( const wxString name ) { m_name = name; }
-    virtual ~wxSetter() {}
+    wxPropertySetter( const wxString name ) { m_name = name; }
+    virtual ~wxPropertySetter() {}
 
     virtual void Set( wxObject *object, const wxxVariant &variantValue ) const = 0;
     const wxString& GetName() const { return m_name; }
@@ -53,11 +53,11 @@ private:
     wxString m_name;
 };
 
-class WXDLLIMPEXP_BASE wxGetter
+class WXDLLIMPEXP_BASE wxPropertyGetter
 {
 public:
-    wxGetter( const wxString name ) { m_name = name; }
-    virtual ~wxGetter() {}
+    wxPropertyGetter( const wxString name ) { m_name = name; }
+    virtual ~wxPropertyGetter() {}
 
     virtual void Get( const wxObject *object, wxxVariant& result) const = 0;
     const wxString& GetName() const { return m_name; }
@@ -66,11 +66,11 @@ private:
     wxString m_name;
 };
 
-class WXDLLIMPEXP_BASE wxCollectionGetter
+class WXDLLIMPEXP_BASE wxPropertyCollectionGetter
 {
 public:
-    wxCollectionGetter( const wxString name ) { m_name = name; }
-    virtual ~wxCollectionGetter() {}
+    wxPropertyCollectionGetter( const wxString name ) { m_name = name; }
+    virtual ~wxPropertyCollectionGetter() {}
 
     virtual void Get( const wxObject *object, wxxVariantArray& result) const = 0;
     const wxString& GetName() const { return m_name; }
@@ -82,11 +82,11 @@ private:
 template<typename coll_t> void WXDLLIMPEXP_BASE \
     wxCollectionToVariantArray( const coll_t& coll, wxxVariantArray& result );
 
-class WXDLLIMPEXP_BASE wxAdder
+class WXDLLIMPEXP_BASE wxPropertyCollectionAdder
 {
 public:
-    wxAdder( const wxString name ) { m_name = name; }
-    virtual ~wxAdder() {}
+    wxPropertyCollectionAdder( const wxString name ) { m_name = name; }
+    virtual ~wxPropertyCollectionAdder() {}
 
     virtual void Add( wxObject *object, const wxxVariant &variantValue ) const= 0;
     const wxString& GetName() const { return m_name; }
@@ -95,13 +95,13 @@ private:
     wxString m_name;
 };
 
-#define wxSETTER( property, Klass, valueType, setterMethod )            \
-class wxSetter##property : public wxSetter                              \
+#define wxPROPERTY_SETTER( property, Klass, valueType, setterMethod )            \
+class wxPropertySetter##property : public wxPropertySetter                              \
 {                                                                       \
 public:                                                                 \
     wxINFUNC_CLASS_TYPE_FIX(Klass)                                      \
-    wxSetter##property() : wxSetter( wxT(#setterMethod) ) {}            \
-    virtual ~wxSetter##property() {}                                    \
+    wxPropertySetter##property() : wxPropertySetter( wxT(#setterMethod) ) {}            \
+    virtual ~wxPropertySetter##property() {}                                    \
                                                                         \
     void Set( wxObject *object, const wxxVariant &variantValue ) const  \
     {                                                                   \
@@ -113,13 +113,13 @@ public:                                                                 \
     }                                                                                   \
 };
 
-#define wxGETTER( property, Klass, valueType, gettermethod )           \
-class wxGetter##property : public wxGetter                              \
+#define wxPROPERTY_GETTER( property, Klass, valueType, gettermethod )           \
+class wxPropertyGetter##property : public wxPropertyGetter                              \
 {                                                                       \
 public:                                                                 \
     wxINFUNC_CLASS_TYPE_FIX(Klass)                                      \
-    wxGetter##property() : wxGetter( wxT(#gettermethod) ) {}            \
-    virtual ~wxGetter##property() {}                                    \
+    wxPropertyGetter##property() : wxPropertyGetter( wxT(#gettermethod) ) {}            \
+    virtual ~wxPropertyGetter##property() {}                                    \
                                                                         \
     void Get( const wxObject *object, wxxVariant &result) const        \
     {                                                                   \
@@ -128,13 +128,13 @@ public:                                                                 \
     }                                                                   \
 };
 
-#define wxADDER( property, Klass, valueType, addermethod )             \
-class wxAdder##property : public wxAdder                                \
+#define wxPROPERTY_COLLECTION_ADDER( property, Klass, valueType, addermethod )             \
+class wxPropertyCollectionAdder##property : public wxPropertyCollectionAdder                                \
 {                                                                       \
 public:                                                                 \
     wxINFUNC_CLASS_TYPE_FIX(Klass)                                      \
-    wxAdder##property() : wxAdder( wxT(#addermethod) ) {}               \
-    virtual ~wxAdder##property() {}                                     \
+    wxPropertyCollectionAdder##property() : wxPropertyCollectionAdder( wxT(#addermethod) ) {}               \
+    virtual ~wxPropertyCollectionAdder##property() {}                                     \
                                                                         \
     void Add( wxObject *object, const wxxVariant &variantValue ) const  \
     {                                                                   \
@@ -146,13 +146,13 @@ public:                                                                 \
     }                                                                                   \
 };
 
-#define wxCOLLECTION_GETTER( property, Klass, valueType, gettermethod )    \
-class wxCollectionGetter##property : public wxCollectionGetter              \
+#define wxPROPERTY_COLLECTION_GETTER( property, Klass, valueType, gettermethod )    \
+class wxPropertyCollectionGetter##property : public wxPropertyCollectionGetter              \
 {                                                                           \
 public:                                                                     \
     wxINFUNC_CLASS_TYPE_FIX(Klass)                                          \
-    wxCollectionGetter##property() : wxCollectionGetter( wxT(#gettermethod) ) {} \
-    virtual ~wxCollectionGetter##property() {}                              \
+    wxPropertyCollectionGetter##property() : wxPropertyCollectionGetter( wxT(#gettermethod) ) {} \
+    virtual ~wxPropertyCollectionGetter##property() {}                              \
                                                                             \
     void Get( const wxObject *object, wxxVariantArray &result) const       \
     {                                                                       \
@@ -164,8 +164,8 @@ public:                                                                     \
 class WXDLLIMPEXP_BASE wxPropertyAccessor
 {
 public:
-    wxPropertyAccessor( wxSetter *setter, wxGetter *getter, 
-                        wxAdder *adder, wxCollectionGetter *collectionGetter )
+    wxPropertyAccessor( wxPropertySetter *setter, wxPropertyGetter *getter, 
+                        wxPropertyCollectionAdder *adder, wxPropertyCollectionGetter *collectionGetter )
     { m_setter = setter; m_getter = getter; m_adder = adder; 
       m_collectionGetter = collectionGetter; }
 
@@ -222,10 +222,10 @@ public:
         { return m_adder->GetName(); }
 
 protected:
-    wxSetter *m_setter;
-    wxAdder *m_adder;
-    wxGetter *m_getter;
-    wxCollectionGetter* m_collectionGetter;
+    wxPropertySetter *m_setter;
+    wxPropertyCollectionAdder *m_adder;
+    wxPropertyGetter *m_getter;
+    wxPropertyCollectionGetter* m_collectionGetter;
 };
 
 class WXDLLIMPEXP_BASE wxGenericPropertyAccessor : public wxPropertyAccessor
@@ -291,7 +291,16 @@ enum
     // don't stream out this property, needed eg to avoid streaming out children 
     // that are always created by their parents
     wxPROP_DONT_STREAM = 0x00000008,
-} ;
+};
+
+
+// ----------------------------------------------------------------------------
+// Property Support
+//
+// wxPropertyInfo is used to inquire of the property by name.  It doesn't
+// provide access to the property, only information about it.  If you
+// want access, look at wxPropertyAccessor.
+// ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_BASE wxPropertyInfo
 {
@@ -412,7 +421,8 @@ public:
         Insert(iter);
     }
 #endif
-    ~wxPropertyInfo();
+    ~wxPropertyInfo()
+        { Remove(); }
 
     // return the class this property is declared in
     const wxClassInfo*  GetDeclaringClass() const { return m_itsClass; }
@@ -455,20 +465,13 @@ public:
     wxxVariant          GetDefaultValue() const { return m_defaultValue; }
 
 private:
-    void Insert(wxPropertyInfo* &iter)
-    {
-        m_next = NULL;
-        if ( iter == NULL )
-            iter = this;
-        else
-        {
-            wxPropertyInfo* i = iter;
-            while( i->m_next )
-                i = i->m_next;
 
-            i->m_next = this;
-        }
-    }
+    // inserts this property at the end of the linked chain which begins
+    // with "iter" property.
+    void Insert(wxPropertyInfo* &iter);
+
+    // removes this property from the linked chain of the m_itsClass properties.
+    void Remove();
 
     wxClassInfo*        m_itsClass;
     wxString            m_name;
@@ -481,11 +484,12 @@ private:
     wxPropertyInfoFlags m_flags;
     wxString            m_helpString;
     wxString            m_groupString;
+    wxPropertyInfo*     m_next;
 
+    // FIXME: what's this comment about??
     // string representation of the default value
     // to be assigned by the designer to the property
     // when the component is dropped on the container.
-    wxPropertyInfo*     m_next;
 };
 
 WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo*, wxPropertyInfoMap, 
@@ -500,94 +504,93 @@ WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo*, wxPropertyInfoMap,
 #define wxEND_PROPERTIES_TABLE() \
     return first; }
 
-#define wxHIDE_PROPERTY( pname )                                            \
-    static wxPropertyInfo _propertyInfo##pname( first,                     \
-        class_t::GetClassInfoStatic(), wxT(#pname), typeid(void).name(), \
-        NULL, wxxVariant(), wxPROP_DONT_STREAM, wxEmptyString,          \
-        wxEmptyString );
-
-#define wxPROPERTY( pname, type, setter, getter, defaultValue, flags, help, group) \
-    wxSETTER( pname, class_t, type, setter )                                 \
-    static wxSetter##pname _setter##pname;                                      \
-    wxGETTER( pname, class_t, type, getter )                                 \
-    static wxGetter##pname _getter##pname;                                      \
-    static wxPropertyAccessor _accessor##pname( &_setter##pname,               \
-        &_getter##pname, NULL, NULL );                                        \
-    static wxPropertyInfo _propertyInfo##pname( first,                         \
-        class_t::GetClassInfoStatic(), wxT(#pname), typeid(type).name(),     \
-        &_accessor##pname, wxxVariant(defaultValue), flags, group, help );
-
-#define wxPROPERTY_FLAGS( pname, flags, type, setter, getter,defaultValue,    \
-                          pflags, help, group)                                    \
-    wxSETTER( pname, class_t, type, setter )                                     \
-    static wxSetter##pname _setter##pname;                                          \
-    wxGETTER( pname, class_t, type, getter )                                     \
-    static wxGetter##pname _getter##pname;                                          \
-    static wxPropertyAccessor _accessor##pname( &_setter##pname,                   \
-                                                &_getter##pname, NULL, NULL );    \
+#define wxHIDE_PROPERTY( pname )                                                      \
     static wxPropertyInfo _propertyInfo##pname( first, class_t::GetClassInfoStatic(), \
-            wxT(#pname), typeid(flags).name(),&_accessor##pname,                 \
+            wxT(#pname), typeid(void).name(), NULL, wxxVariant(), wxPROP_DONT_STREAM, \
+            wxEmptyString, wxEmptyString );
+
+#define wxPROPERTY( pname, type, setter, getter, defaultValue, flags, help, group)    \
+    wxPROPERTY_SETTER( pname, class_t, type, setter )                                 \
+    static wxPropertySetter##pname _setter##pname;                                    \
+    wxPROPERTY_GETTER( pname, class_t, type, getter )                                 \
+    static wxPropertyGetter##pname _getter##pname;                                    \
+    static wxPropertyAccessor _accessor##pname( &_setter##pname,                      \
+                                                &_getter##pname, NULL, NULL );        \
+    static wxPropertyInfo _propertyInfo##pname( first, class_t::GetClassInfoStatic(), \
+            wxT(#pname), typeid(type).name(), &_accessor##pname,                      \
+            wxxVariant(defaultValue), flags, group, help );
+
+#define wxPROPERTY_FLAGS( pname, flags, type, setter, getter,defaultValue,            \
+                          pflags, help, group)                                        \
+    wxPROPERTY_SETTER( pname, class_t, type, setter )                                 \
+    static wxPropertySetter##pname _setter##pname;                                    \
+    wxPROPERTY_GETTER( pname, class_t, type, getter )                                 \
+    static wxPropertyGetter##pname _getter##pname;                                    \
+    static wxPropertyAccessor _accessor##pname( &_setter##pname,                      \
+                                                &_getter##pname, NULL, NULL );        \
+    static wxPropertyInfo _propertyInfo##pname( first, class_t::GetClassInfoStatic(), \
+            wxT(#pname), typeid(flags).name(), &_accessor##pname,                     \
             wxxVariant(defaultValue), wxPROP_ENUM_STORE_LONG | pflags, help, group );
 
-#define wxREADONLY_PROPERTY( pname, type, getter,defaultValue, flags, help, group) \
-    wxGETTER( pname, class_t, type, getter )                                          \
-    static wxGetter##pname _getter##pname;                                               \
+#define wxREADONLY_PROPERTY( pname, type, getter,defaultValue, flags, help, group)    \
+    wxPROPERTY_GETTER( pname, class_t, type, getter )                                 \
+    static wxPropertyGetter##pname _getter##pname;                                    \
     static wxPropertyAccessor _accessor##pname( NULL, &_getter##pname, NULL, NULL );  \
-    static wxPropertyInfo _propertyInfo##pname( first, class_t::GetClassInfoStatic(),  \
-        wxT(#pname), typeid(type).name(),&_accessor##pname, wxxVariant(defaultValue), \
-        flags, help, group );
-
-#define wxREADONLY_PROPERTY_FLAGS( pname, flags, type, getter,defaultValue,    \
-                                   pflags, help, group)                           \
-    wxGETTER( pname, class_t, type, getter )                                     \
-    static wxGetter##pname _getter##pname;                                          \
-    static wxPropertyAccessor _accessor##pname( NULL, &_getter##pname, NULL, NULL ); \
     static wxPropertyInfo _propertyInfo##pname( first, class_t::GetClassInfoStatic(), \
-        wxT(#pname), typeid(flags).name(),&_accessor##pname, wxxVariant(defaultValue), \
-        wxPROP_ENUM_STORE_LONG | pflags, help, group );
+            wxT(#pname), typeid(type).name(),&_accessor##pname,                       \
+            wxxVariant(defaultValue), flags, help, group );
 
-#define wxPROPERTY_COLLECTION( pname, colltype, addelemtype, adder, getter,    \
-                               flags, help, group )                               \
-    wxADDER( pname, class_t, addelemtype, adder )                                \
-    static wxAdder##pname _adder##pname;                                            \
-    wxCOLLECTION_GETTER( pname, class_t, colltype, getter )                      \
-    static wxCollectionGetter##pname _collectionGetter##pname;                      \
-    static wxPropertyAccessor _accessor##pname( NULL, NULL,&_adder##pname,       \
-                                                &_collectionGetter##pname );        \
+#define wxREADONLY_PROPERTY_FLAGS( pname, flags, type, getter,defaultValue,           \
+                                   pflags, help, group)                               \
+    wxPROPERTY_GETTER( pname, class_t, type, getter )                                 \
+    static wxPropertyGetter##pname _getter##pname;                                    \
+    static wxPropertyAccessor _accessor##pname( NULL, &_getter##pname, NULL, NULL );  \
     static wxPropertyInfo _propertyInfo##pname( first, class_t::GetClassInfoStatic(), \
-        wxT(#pname), typeid(colltype).name(),typeid(addelemtype).name(),             \
-        &_accessor##pname, flags, help, group );
+            wxT(#pname), typeid(flags).name(),&_accessor##pname,                      \
+            wxxVariant(defaultValue), wxPROP_ENUM_STORE_LONG | pflags, help, group );
 
-#define wxREADONLY_PROPERTY_COLLECTION( pname, colltype, addelemtype, getter,   \
-                                        flags, help, group)                       \
-    wxCOLLECTION_GETTER( pname, class_t, colltype, getter )                      \
-    static wxCollectionGetter##pname _collectionGetter##pname;                      \
-    static wxPropertyAccessor _accessor##pname( NULL, NULL, NULL,                \
-                                                &_collectionGetter##pname );        \
-    static wxPropertyInfo _propertyInfo##pname( first,class_t::GetClassInfoStatic(), \
-        wxT(#pname), typeid(colltype).name(),typeid(addelemtype).name(),         \
+#define wxPROPERTY_COLLECTION( pname, colltype, addelemtype, adder, getter,           \
+                               flags, help, group )                                   \
+    wxPROPERTY_COLLECTION_ADDER( pname, class_t, addelemtype, adder )                 \
+    static wxPropertyCollectionAdder##pname _adder##pname;                            \
+    wxPROPERTY_COLLECTION_GETTER( pname, class_t, colltype, getter )                  \
+    static wxPropertyCollectionGetter##pname _collectionGetter##pname;                \
+    static wxPropertyAccessor _accessor##pname( NULL, NULL,&_adder##pname,            \
+                                                &_collectionGetter##pname );          \
+    static wxPropertyInfo _propertyInfo##pname( first, class_t::GetClassInfoStatic(), \
+            wxT(#pname), typeid(colltype).name(),typeid(addelemtype).name(),          \
+            &_accessor##pname, flags, help, group );
+
+#define wxREADONLY_PROPERTY_COLLECTION( pname, colltype, addelemtype, getter,         \
+                                        flags, help, group)                           \
+    wxPROPERTY_COLLECTION_GETTER( pname, class_t, colltype, getter )                  \
+    static wxPropertyCollectionGetter##pname _collectionGetter##pname;                \
+    static wxPropertyAccessor _accessor##pname( NULL, NULL, NULL,                     \
+                                                &_collectionGetter##pname );          \
+    static wxPropertyInfo _propertyInfo##pname( first,class_t::GetClassInfoStatic(),  \
+        wxT(#pname), typeid(colltype).name(),typeid(addelemtype).name(),              \
         &_accessor##pname, flags, help, group  );
 
 #define wxEVENT_PROPERTY( name, eventType, eventClass )                               \
-    static wxDelegateTypeInfo _typeInfo##name( eventType, CLASSINFO( eventClass ) );   \
+    static wxDelegateTypeInfo _typeInfo##name( eventType, CLASSINFO( eventClass ) );  \
     static wxPropertyInfo _propertyInfo##name( first,class_t::GetClassInfoStatic(),   \
         wxT(#name), &_typeInfo##name, NULL, wxxVariant() );
 
-#define wxEVENT_RANGE_PROPERTY( name, eventType, lastEventType, eventClass )     \
-    static wxDelegateTypeInfo _typeInfo##name( eventType, lastEventType,          \
-                                               CLASSINFO( eventClass ) );           \
-    static wxPropertyInfo _propertyInfo##name( first, class_t::GetClassInfoStatic(), \
+#define wxEVENT_RANGE_PROPERTY( name, eventType, lastEventType, eventClass )          \
+    static wxDelegateTypeInfo _typeInfo##name( eventType, lastEventType,              \
+                                               CLASSINFO( eventClass ) );             \
+    static wxPropertyInfo _propertyInfo##name( first, class_t::GetClassInfoStatic(),  \
         wxT(#name), &_typeInfo##name, NULL, wxxVariant() );
 
 // ----------------------------------------------------------------------------
 // Implementation Helper for Simple Properties
 // ----------------------------------------------------------------------------
 
-#define wxIMPLEMENT_PROPERTY(name, type) \
-private:\
-    type m_##name; \
-public: \
-  void  Set##name( type const & p) { m_##name = p; } \
+#define wxIMPLEMENT_PROPERTY(name, type)                \
+private:                                                \
+    type m_##name;                                      \
+public:                                                 \
+  void  Set##name( type const & p) { m_##name = p; }    \
   type const & Get##name() const  { return m_##name; }
 
 #endif      // wxUSE_EXTENDED_RTTI

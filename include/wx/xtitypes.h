@@ -304,11 +304,11 @@ WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxTypeInfo*, wxTypeInfoMap, class WXDLLIMP
 class WXDLLIMPEXP_BASE wxTypeInfo
 {
 public:
-    typedef void (*converterToString_t)( const wxxVariant& data, wxString &result );
-    typedef void (*converterFromString_t)( const wxString& data, wxxVariant &result );
+    typedef void (*wxVariant2StringFnc)( const wxxVariant& data, wxString &result );
+    typedef void (*wxString2VariantFnc)( const wxString& data, wxxVariant &result );
 
     wxTypeInfo(wxTypeKind kind,
-               converterToString_t to = NULL, converterFromString_t from = NULL,
+               wxVariant2StringFnc to = NULL, wxString2VariantFnc from = NULL,
                const wxString &name = wxEmptyString):
             m_toString(to), m_fromString(from), m_kind(kind), m_name(name)
     {
@@ -316,7 +316,7 @@ public:
     }
 #if wxUSE_UNICODE
     wxTypeInfo(wxTypeKind kind,
-               converterToString_t to, converterFromString_t from,
+               wxVariant2StringFnc to, wxString2VariantFnc from,
                const char *name):
             m_toString(to), m_fromString(from), m_kind(kind), 
             m_name(wxString::FromAscii(name))
@@ -373,7 +373,7 @@ public:
         { return FindType( wxString::FromAscii(typeName) ); }
 #endif
     static wxTypeInfo *FindType(const wxChar *typeName);
-    static wxTypeInfo *FindType(const wxString typeName)
+    static wxTypeInfo *FindType(const wxString& typeName)
         {
 #if wxUSE_UNICODE
             return FindType( typeName.wchar_str() );
@@ -386,8 +386,8 @@ private:
     void Register();
     void Unregister();
 
-    converterToString_t m_toString;
-    converterFromString_t m_fromString;
+    wxVariant2StringFnc m_toString;
+    wxString2VariantFnc m_fromString;
 
     static wxTypeInfoMap*      ms_typeTable;
 
@@ -398,15 +398,15 @@ private:
 class WXDLLIMPEXP_BASE wxBuiltInTypeInfo : public wxTypeInfo
 {
 public:
-    wxBuiltInTypeInfo( wxTypeKind kind, converterToString_t to = NULL, 
-                       converterFromString_t from = NULL, 
+    wxBuiltInTypeInfo( wxTypeKind kind, wxVariant2StringFnc to = NULL, 
+                       wxString2VariantFnc from = NULL, 
                        const wxString &name = wxEmptyString ) :
             wxTypeInfo( kind, to, from, name )
        { wxASSERT_MSG( GetKind() < wxT_SET, wxT("Illegal Kind for Base Type") ); }
 
 #if wxUSE_UNICODE
-    wxBuiltInTypeInfo( wxTypeKind kind, converterToString_t to, 
-                       converterFromString_t from , const char *name  ) :
+    wxBuiltInTypeInfo( wxTypeKind kind, wxVariant2StringFnc to, 
+                       wxString2VariantFnc from , const char *name  ) :
             wxTypeInfo( kind, to, from, name )
        { wxASSERT_MSG( GetKind() < wxT_SET, wxT("Illegal Kind for Base Type") ); }
 #endif
@@ -415,14 +415,14 @@ public:
 class WXDLLIMPEXP_BASE wxCustomTypeInfo : public wxTypeInfo
 {
 public:
-    wxCustomTypeInfo( const wxString &name, converterToString_t to, 
-                      converterFromString_t from ) :
+    wxCustomTypeInfo( const wxString &name, wxVariant2StringFnc to, 
+                      wxString2VariantFnc from ) :
             wxTypeInfo( wxT_CUSTOM, to, from, name )
        {}
 
 #if wxUSE_UNICODE
-    wxCustomTypeInfo( const char *name , converterToString_t to, 
-                      converterFromString_t from ) :
+    wxCustomTypeInfo( const char *name , wxVariant2StringFnc to, 
+                      wxString2VariantFnc from ) :
             wxTypeInfo( wxT_CUSTOM, to, from, name )
        {}
 #endif
@@ -434,8 +434,8 @@ public:
     typedef void (*converterToLong_t)( const wxxVariant& data, long &result );
     typedef void (*converterFromLong_t)( long data, wxxVariant &result );
 
-    wxEnumTypeInfo( wxTypeKind kind, wxEnumData* enumInfo, converterToString_t to,
-                    converterFromString_t from, converterToLong_t toLong,
+    wxEnumTypeInfo( wxTypeKind kind, wxEnumData* enumInfo, wxVariant2StringFnc to,
+                    wxString2VariantFnc from, converterToLong_t toLong,
                     converterFromLong_t fromLong, const wxString &name  ) :
         wxTypeInfo( kind, to, from, name ), m_toLong( toLong ), m_fromLong( fromLong )
     { 
@@ -445,8 +445,8 @@ public:
     }
 
 #if wxUSE_UNICODE
-    wxEnumTypeInfo( wxTypeKind kind, wxEnumData* enumInfo, converterToString_t to,
-                    converterFromString_t from, converterToLong_t toLong,
+    wxEnumTypeInfo( wxTypeKind kind, wxEnumData* enumInfo, wxVariant2StringFnc to,
+                    wxString2VariantFnc from, converterToLong_t toLong,
                     converterFromLong_t fromLong, const char * name ) :
         wxTypeInfo( kind, to, from, name ), m_toLong( toLong ), m_fromLong( fromLong )
     {
@@ -486,12 +486,12 @@ class WXDLLIMPEXP_BASE wxClassTypeInfo : public wxTypeInfo
 {
 public:
     wxClassTypeInfo( wxTypeKind kind, wxClassInfo* classInfo, 
-                     converterToString_t to = NULL, converterFromString_t from = NULL, 
+                     wxVariant2StringFnc to = NULL, wxString2VariantFnc from = NULL, 
                      const wxString &name = wxEmptyString);
 
 #if wxUSE_UNICODE
-    wxClassTypeInfo( wxTypeKind kind, wxClassInfo* classInfo, converterToString_t to,
-                     converterFromString_t from , const char *name );
+    wxClassTypeInfo( wxTypeKind kind, wxClassInfo* classInfo, wxVariant2StringFnc to,
+                     wxString2VariantFnc from , const char *name );
 #endif
 
     const wxClassInfo *GetClassInfo() const { return m_classInfo; }
@@ -503,14 +503,14 @@ private:
 class WXDLLIMPEXP_BASE wxCollectionTypeInfo : public wxTypeInfo
 {
 public:
-    wxCollectionTypeInfo( const wxString &elementName, converterToString_t to,
-                          converterFromString_t from , const wxString &name) :
+    wxCollectionTypeInfo( const wxString &elementName, wxVariant2StringFnc to,
+                          wxString2VariantFnc from , const wxString &name) :
             wxTypeInfo( wxT_COLLECTION, to, from, name )
        { m_elementTypeName = elementName; m_elementType = NULL; }
 
 #if wxUSE_UNICODE
-    wxCollectionTypeInfo( const char *elementName, converterToString_t to, 
-                          converterFromString_t from , const char *name ) :
+    wxCollectionTypeInfo( const char *elementName, wxVariant2StringFnc to, 
+                          wxString2VariantFnc from , const char *name ) :
             wxTypeInfo( wxT_COLLECTION, to, from, name )
        { m_elementTypeName = wxString::FromAscii( elementName ); m_elementType = NULL; }
 #endif
@@ -533,10 +533,10 @@ class WXDLLIMPEXP_BASE wxDelegateTypeInfo : public wxTypeInfo
 {
 public:
     wxDelegateTypeInfo( int eventType, wxClassInfo* eventClass, 
-                        converterToString_t to = NULL, 
-                        converterFromString_t from = NULL );
+                        wxVariant2StringFnc to = NULL, 
+                        wxString2VariantFnc from = NULL );
     wxDelegateTypeInfo( int eventType, int lastEventType, wxClassInfo* eventClass, 
-                        converterToString_t to = NULL, converterFromString_t from = NULL );
+                        wxVariant2StringFnc to = NULL, wxString2VariantFnc from = NULL );
 
     int GetEventType() const { return m_eventType; }
     int GetLastEventType() const { return m_lastEventType; }

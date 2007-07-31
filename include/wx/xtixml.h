@@ -27,12 +27,12 @@ class WXDLLIMPEXP_BASE wxxVariantArray;
 class WXDLLIMPEXP_BASE wxHandlerInfo;
 class WXDLLIMPEXP_BASE wxDepersister;
 
-class WXDLLIMPEXP_XML wxXmlWriter: public wxWriter
+class WXDLLIMPEXP_XML wxObjectXmlWriter: public wxObjectWriter
 {
 public:
 
-    wxXmlWriter( wxXmlNode * parent );
-    virtual ~wxXmlWriter();
+    wxObjectXmlWriter( wxXmlNode * parent );
+    virtual ~wxObjectXmlWriter();
 
     //
     // streaming callbacks
@@ -85,19 +85,19 @@ public:
         const wxClassInfo* eventSinkClassInfo, const wxHandlerInfo* handlerIndo );
 
 private:
-    struct wxXmlWriterInternal;
-    wxXmlWriterInternal* m_data;
+    struct wxObjectXmlWriterInternal;
+    wxObjectXmlWriterInternal* m_data;
 };
 
 /*
-wxXmlReader handles streaming in a class from XML
+wxObjectXmlReader handles streaming in a class from XML
 */
 
-class WXDLLIMPEXP_XML wxXmlReader: public wxReader
+class WXDLLIMPEXP_XML wxObjectXmlReader: public wxObjectReader
 {
 public:
-    wxXmlReader(wxXmlNode *parent) { m_parent = parent; }
-    virtual ~wxXmlReader() {}
+    wxObjectXmlReader(wxXmlNode *parent) { m_parent = parent; }
+    virtual ~wxObjectXmlReader() {}
 
     // Reads a component from XML.  The return value is the root object ID, which can
     // then be used to ask the depersister about that object

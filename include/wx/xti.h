@@ -36,30 +36,29 @@
 
 #if wxUSE_EXTENDED_RTTI
 
-#include "wx/memory.h"
-#include "wx/string.h"
-
 // include definitions of other XTI structures
-
-#include "wx/xtitypes.h"
 #include "wx/xvariant.h"
+#include "wx/xtitypes.h"
 #include "wx/xtictor.h"
 #include "wx/xtiprop.h"
 #include "wx/xtihandler.h"
-
 
 // ----------------------------------------------------------------------------
 // wxClassInfo
 // ----------------------------------------------------------------------------
 
+class WXDLLIMPEXP_BASE wxObject;
+class WXDLLIMPEXP_BASE wxxVariant;
+class WXDLLIMPEXP_BASE wxxVariantArray;
+
 typedef wxObject *(*wxObjectConstructorFn)(void);
 typedef wxObject* (*wxVariantToObjectConverter)( wxxVariant &data );
 typedef wxxVariant (*wxObjectToVariantConverter)( wxObject* );
 
-class WXDLLIMPEXP_BASE wxWriter;
+class WXDLLIMPEXP_BASE wxObjectWriter;
 class WXDLLIMPEXP_BASE wxPersister;
 
-typedef bool (*wxObjectStreamingCallback) ( const wxObject *, wxWriter *, \
+typedef bool (*wxObjectStreamingCallback) ( const wxObject *, wxObjectWriter *, \
                                             wxPersister *, wxxVariantArray & );
 
 class WXDLLIMPEXP_BASE wxClassInfo
@@ -76,7 +75,7 @@ public:
         wxObjectConstructorFn ctor,
         wxPropertyInfo *_Props,
         wxHandlerInfo *_Handlers,
-        wxConstructorBridge* _Constructor,
+        wxObjectCreateAdapter* _Constructor,
         const wxChar ** _ConstructorProperties,
         const int _ConstructorPropertiesCount,
         wxVariantToObjectConverter _PtrConverter1,
@@ -208,7 +207,7 @@ public:
     // this object by returning false, if this class has not registered a
     // callback, the search will go up the inheritance tree if no callback has
     // been registered true will be returned by default
-    bool BeforeWriteObject( const wxObject *obj, wxWriter *streamer, \
+    bool BeforeWriteObject( const wxObject *obj, wxObjectWriter *streamer, \
                             wxPersister *persister, wxxVariantArray &metadata) const;
 
     // gets the streaming callback from this class or any superclass
@@ -306,7 +305,7 @@ private:
     const wxClassInfo**      m_parents;
     const wxChar*            m_unitName;
 
-    wxConstructorBridge*     m_constructor;
+    wxObjectCreateAdapter*     m_constructor;
     const wxChar **          m_constructorProperties;
     const int                m_constructorPropertiesCount;
     wxVariantToObjectConverter m_variantOfPtrToObjectConverter;
@@ -399,7 +398,7 @@ private:
             { return &name::ms_classInfo; }
 
 #define wxDECLARE_DYNAMIC_CLASS(name)                       \
-    static wxConstructorBridge* ms_constructor;             \
+    static wxObjectCreateAdapter* ms_constructor;           \
     static const wxChar * ms_constructorProperties[];       \
     static const int ms_constructorPropertiesCount;         \
     _DECLARE_DYNAMIC_CLASS(name)

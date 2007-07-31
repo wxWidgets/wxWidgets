@@ -39,13 +39,13 @@ const int wxNullObjectID = -3;
 // or modify the value before it is streamed-out.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxWriter;
-class WXDLLIMPEXP_BASE wxReader;
+class WXDLLIMPEXP_BASE wxObjectWriter;
+class WXDLLIMPEXP_BASE wxObjectReader;
 class WXDLLIMPEXP_BASE wxClassInfo;
 class WXDLLIMPEXP_BASE wxxVariantArray;
 class WXDLLIMPEXP_BASE wxPropertyInfo;
 class WXDLLIMPEXP_BASE wxxVariant;
-class WXDLLIMPEXP_BASE wxWriter;
+class WXDLLIMPEXP_BASE wxObjectWriter;
 class WXDLLIMPEXP_BASE wxHandlerInfo;
 
 class WXDLLIMPEXP_BASE wxPersister
@@ -54,7 +54,7 @@ public:
     virtual ~wxPersister() {}
 
     // will be called before an object is written, may veto by returning false
-    virtual bool BeforeWriteObject( wxWriter *WXUNUSED(writer), 
+    virtual bool BeforeWriteObject( wxObjectWriter *WXUNUSED(writer), 
                                     const wxObject *WXUNUSED(object), 
                                     const wxClassInfo *WXUNUSED(classInfo), 
                                     wxxVariantArray &WXUNUSED(metadata)) 
@@ -62,7 +62,7 @@ public:
 
     // will be called after this object has been written, may be 
     // needed for adjusting stacks
-    virtual void AfterWriteObject( wxWriter *WXUNUSED(writer), 
+    virtual void AfterWriteObject( wxObjectWriter *WXUNUSED(writer), 
                                    const wxObject *WXUNUSED(object), 
                                    const wxClassInfo *WXUNUSED(classInfo) ) 
         {}
@@ -70,7 +70,7 @@ public:
     // will be called before a property gets written, may change the value, 
     // eg replace a concrete wxSize by wxSize( wxDefaultCoord, wxDefaultCoord ) 
     // or veto writing that property at all by returning false
-    virtual bool BeforeWriteProperty( wxWriter *WXUNUSED(writer), 
+    virtual bool BeforeWriteProperty( wxObjectWriter *WXUNUSED(writer), 
                                       const wxObject *WXUNUSED(object), 
                                       const wxPropertyInfo *WXUNUSED(propInfo), 
                                       wxxVariant &WXUNUSED(value) )  
@@ -79,7 +79,7 @@ public:
     // will be called before a property gets written, may change the value, 
     // eg replace a concrete wxSize by wxSize( wxDefaultCoord, wxDefaultCoord ) 
     // or veto writing that property at all by returning false
-    virtual bool BeforeWriteProperty( wxWriter *WXUNUSED(writer), 
+    virtual bool BeforeWriteProperty( wxObjectWriter *WXUNUSED(writer), 
                                       const wxObject *WXUNUSED(object), 
                                       const wxPropertyInfo *WXUNUSED(propInfo), 
                                       wxxVariantArray &WXUNUSED(value) )  
@@ -87,12 +87,12 @@ public:
 
     // will be called after a property has been written out, may be needed 
     // for adjusting stacks
-    virtual void AfterWriteProperty( wxWriter *WXUNUSED(writer), 
+    virtual void AfterWriteProperty( wxObjectWriter *WXUNUSED(writer), 
                                      const wxPropertyInfo *WXUNUSED(propInfo) ) 
         {}
 
     // will be called before this delegate gets written
-    virtual bool BeforeWriteDelegate( wxWriter *WXUNUSED(writer), 
+    virtual bool BeforeWriteDelegate( wxObjectWriter *WXUNUSED(writer), 
                                       const wxObject *WXUNUSED(object),  
                                       const wxClassInfo* WXUNUSED(classInfo), 
                                       const wxPropertyInfo *WXUNUSED(propInfo),
@@ -100,7 +100,7 @@ public:
                                       const wxHandlerInfo* &WXUNUSED(handlerInfo) ) 
         { return true; }
 
-    virtual void AfterWriteDelegate( wxWriter *WXUNUSED(writer), 
+    virtual void AfterWriteDelegate( wxObjectWriter *WXUNUSED(writer), 
                                      const wxObject *WXUNUSED(object), 
                                      const wxClassInfo* WXUNUSED(classInfo), 
                                      const wxPropertyInfo *WXUNUSED(propInfo),
@@ -109,11 +109,11 @@ public:
         { }
 };
 
-class WXDLLIMPEXP_BASE wxWriter: public wxObject
+class WXDLLIMPEXP_BASE wxObjectWriter: public wxObject
 {
 public:
-    wxWriter();
-    virtual ~wxWriter();
+    wxObjectWriter();
+    virtual ~wxObjectWriter();
 
     // with this call you start writing out a new top-level object
     void WriteObject(const wxObject *object, const wxClassInfo *classInfo, 
@@ -178,18 +178,18 @@ public:
                                   const wxHandlerInfo* handlerIndo ) = 0;
 
 private:
-    struct wxWriterInternal;
-    wxWriterInternal* m_data;
+    struct wxObjectWriterInternal;
+    wxObjectWriterInternal* m_data;
 
-    struct wxWriterInternalPropertiesData;
+    struct wxObjectWriterInternalPropertiesData;
 
     void WriteAllProperties( const wxObject * obj, const wxClassInfo* ci, 
                              wxPersister *persister, 
-                             wxWriterInternalPropertiesData * data );
+                             wxObjectWriterInternalPropertiesData * data );
 
     void WriteOneProperty( const wxObject *obj, const wxClassInfo* ci, 
                            const wxPropertyInfo* pi, wxPersister *persister,
-                           wxWriterInternalPropertiesData *data );
+                           wxObjectWriterInternalPropertiesData *data );
 
     void WriteObject(const wxObject *object, const wxClassInfo *classInfo, 
                      wxPersister *persister, bool isEmbedded, wxxVariantArray &metadata );
@@ -207,18 +207,18 @@ Streaming callbacks for depersisting XML to code, or running objects
 class WXDLLIMPEXP_BASE wxDepersister;
 
 /*
-wxReader handles streaming in a class from a arbitrary format. 
+wxObjectReader handles streaming in a class from a arbitrary format. 
 While walking through it issues calls out to interfaces to depersist 
 the guts from the underlying storage format.
 */
 
-class WXDLLIMPEXP_BASE wxReader: public wxObject
+class WXDLLIMPEXP_BASE wxObjectReader: public wxObject
 {
 public:
-    wxReader();
-    virtual ~wxReader();
+    wxObjectReader();
+    virtual ~wxObjectReader();
 
-    // the only thing wxReader knows about is the class info by object ID
+    // the only thing wxObjectReader knows about is the class info by object ID
     wxClassInfo *GetObjectClassInfo(int objectID);
     bool HasObjectClassInfo( int objectID );
     void SetObjectClassInfo(int objectID, wxClassInfo* classInfo);
@@ -231,8 +231,8 @@ public:
     virtual int ReadObject( const wxString &name, wxDepersister *depersist ) = 0;
 
 private:
-    struct wxReaderInternal;
-    wxReaderInternal *m_data;
+    struct wxObjectReaderInternal;
+    wxObjectReaderInternal *m_data;
 };
 
 // This abstract class matches the allocate-init/create model of creation of objects.

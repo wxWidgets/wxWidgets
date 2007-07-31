@@ -35,17 +35,17 @@ class WXDLLIMPEXP_BASE wxEvtHandler;
 
 // A constructor bridge allows to call a ctor with an arbitrary number
 // or parameters during runtime
-class WXDLLIMPEXP_BASE wxConstructorBridge
+class WXDLLIMPEXP_BASE wxObjectCreateAdapter
 {
 public:
-    virtual ~wxConstructorBridge() { }
+    virtual ~wxObjectCreateAdapter() { }
     virtual bool Create(wxObject * &o, wxxVariant *args) = 0;
 };
 
 // a direct constructor bridge calls the operator new for this class and
 // passes all params to the constructor. Needed for classes that cannot be
 // instantiated using alloc-create semantics
-class WXDLLIMPEXP_BASE wxDirectConstructorBrigde : public wxConstructorBridge
+class WXDLLIMPEXP_BASE wxDirectConstructorBrigde : public wxObjectCreateAdapter
 {
 public:
     virtual bool Create(wxObject * &o, wxxVariant *args) = 0;
@@ -59,7 +59,7 @@ public:
 // no params
 
 template<typename Class>
-struct wxConstructorBridge_0 : public wxConstructorBridge
+struct wxObjectCreateAdapter_0 : public wxObjectCreateAdapter
 {
     bool Create(wxObject * &o, wxxVariant *)
     {
@@ -68,7 +68,7 @@ struct wxConstructorBridge_0 : public wxConstructorBridge
     }
 };
 
-struct wxConstructorBridge_Dummy : public wxConstructorBridge
+struct wxObjectCreateAdapter_Dummy : public wxObjectCreateAdapter
 {
     bool Create(wxObject *&, wxxVariant *)
     {
@@ -77,14 +77,14 @@ struct wxConstructorBridge_Dummy : public wxConstructorBridge
 };
 
 #define wxCONSTRUCTOR_0(klass) \
-    wxConstructorBridge_0<klass> constructor##klass; \
-    wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
+    wxObjectCreateAdapter_0<klass> constructor##klass; \
+    wxObjectCreateAdapter* klass::ms_constructor = &constructor##klass; \
     const wxChar *klass::ms_constructorProperties[] = { NULL }; \
     const int klass::ms_constructorPropertiesCount = 0;
 
 #define wxCONSTRUCTOR_DUMMY(klass) \
-    wxConstructorBridge_Dummy constructor##klass; \
-    wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
+    wxObjectCreateAdapter_Dummy constructor##klass; \
+    wxObjectCreateAdapter* klass::ms_constructor = &constructor##klass; \
     const wxChar *klass::ms_constructorProperties[] = { NULL }; \
     const int klass::ms_constructorPropertiesCount = 0;
 
@@ -102,7 +102,7 @@ struct wxDirectConstructorBridge_0 : public wxDirectConstructorBrigde
 
 #define wxDIRECT_CONSTRUCTOR_0(klass) \
     wxDirectConstructorBridge_0<klass> constructor##klass; \
-    wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
+    wxObjectCreateAdapter* klass::ms_constructor = &constructor##klass; \
     const wxChar *klass::ms_constructorProperties[] = { NULL }; \
     const int klass::ms_constructorPropertiesCount = 0;
 
@@ -110,7 +110,7 @@ struct wxDirectConstructorBridge_0 : public wxDirectConstructorBrigde
 // 1 param
 
 template<typename Class, typename T0>
-struct wxConstructorBridge_1 : public wxConstructorBridge
+struct wxObjectCreateAdapter_1 : public wxObjectCreateAdapter
 {
     bool Create(wxObject * &o, wxxVariant *args)
     {
@@ -122,8 +122,8 @@ struct wxConstructorBridge_1 : public wxConstructorBridge
 };
 
 #define wxCONSTRUCTOR_1(klass,t0,v0) \
-    wxConstructorBridge_1<klass,t0> constructor##klass; \
-    wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
+    wxObjectCreateAdapter_1<klass,t0> constructor##klass; \
+    wxObjectCreateAdapter* klass::ms_constructor = &constructor##klass; \
     const wxChar *klass::ms_constructorProperties[] = { wxT(#v0) }; \
     const int klass::ms_constructorPropertiesCount = 1;
 
@@ -143,7 +143,7 @@ struct wxDirectConstructorBridge_1 : public wxDirectConstructorBrigde
 
 #define wxDIRECT_CONSTRUCTOR_1(klass,t0,v0) \
     wxDirectConstructorBridge_1<klass,t0,t1> constructor##klass; \
-    wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
+    wxObjectCreateAdapter* klass::ms_constructor = &constructor##klass; \
     const wxChar *klass::ms_constructorProperties[] = { wxT(#v0) }; \
     const int klass::ms_constructorPropertiesCount = 1;
 
@@ -152,7 +152,7 @@ struct wxDirectConstructorBridge_1 : public wxDirectConstructorBrigde
 
 template<typename Class,
 typename T0, typename T1>
-struct wxConstructorBridge_2 : public wxConstructorBridge
+struct wxObjectCreateAdapter_2 : public wxObjectCreateAdapter
 {
     bool Create(wxObject * &o, wxxVariant *args)
     {
@@ -165,8 +165,8 @@ struct wxConstructorBridge_2 : public wxConstructorBridge
 };
 
 #define wxCONSTRUCTOR_2(klass,t0,v0,t1,v1) \
-    wxConstructorBridge_2<klass,t0,t1> constructor##klass; \
-    wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
+    wxObjectCreateAdapter_2<klass,t0,t1> constructor##klass; \
+    wxObjectCreateAdapter* klass::ms_constructor = &constructor##klass; \
     const wxChar *klass::ms_constructorProperties[] = { wxT(#v0), wxT(#v1)  }; \
     const int klass::ms_constructorPropertiesCount = 2;
 
@@ -188,7 +188,7 @@ struct wxDirectConstructorBridge_2 : public wxDirectConstructorBrigde
 
 #define wxDIRECT_CONSTRUCTOR_2(klass,t0,v0,t1,v1) \
     wxDirectConstructorBridge_2<klass,t0,t1> constructor##klass; \
-    wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
+    wxObjectCreateAdapter* klass::ms_constructor = &constructor##klass; \
     const wxChar *klass::ms_constructorProperties[] = { wxT(#v0), wxT(#v1)  }; \
     const int klass::ms_constructorPropertiesCount = 2;
 
@@ -197,7 +197,7 @@ struct wxDirectConstructorBridge_2 : public wxDirectConstructorBrigde
 
 template<typename Class,
 typename T0, typename T1, typename T2>
-struct wxConstructorBridge_3 : public wxConstructorBridge
+struct wxObjectCreateAdapter_3 : public wxObjectCreateAdapter
 {
     bool Create(wxObject * &o, wxxVariant *args)
     {
@@ -211,8 +211,8 @@ struct wxConstructorBridge_3 : public wxConstructorBridge
 };
 
 #define wxCONSTRUCTOR_3(klass,t0,v0,t1,v1,t2,v2) \
-    wxConstructorBridge_3<klass,t0,t1,t2> constructor##klass; \
-    wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
+    wxObjectCreateAdapter_3<klass,t0,t1,t2> constructor##klass; \
+    wxObjectCreateAdapter* klass::ms_constructor = &constructor##klass; \
     const wxChar *klass::ms_constructorProperties[] = { wxT(#v0), wxT(#v1), wxT(#v2)  }; \
     const int klass::ms_constructorPropertiesCount = 3;
 
@@ -235,7 +235,7 @@ struct wxDirectConstructorBridge_3 : public wxDirectConstructorBrigde
 
 #define wxDIRECT_CONSTRUCTOR_3(klass,t0,v0,t1,v1,t2,v2) \
     wxDirectConstructorBridge_3<klass,t0,t1,t2> constructor##klass; \
-    wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
+    wxObjectCreateAdapter* klass::ms_constructor = &constructor##klass; \
     const wxChar *klass::ms_constructorProperties[] = { wxT(#v0), wxT(#v1), wxT(#v2) }; \
     const int klass::ms_constructorPropertiesCount = 3;
 
@@ -244,7 +244,7 @@ struct wxDirectConstructorBridge_3 : public wxDirectConstructorBrigde
 
 template<typename Class,
 typename T0, typename T1, typename T2, typename T3>
-struct wxConstructorBridge_4 : public wxConstructorBridge
+struct wxObjectCreateAdapter_4 : public wxObjectCreateAdapter
 {
     bool Create(wxObject * &o, wxxVariant *args)
     {
@@ -259,8 +259,8 @@ struct wxConstructorBridge_4 : public wxConstructorBridge
 };
 
 #define wxCONSTRUCTOR_4(klass,t0,v0,t1,v1,t2,v2,t3,v3) \
-    wxConstructorBridge_4<klass,t0,t1,t2,t3> constructor##klass; \
-    wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
+    wxObjectCreateAdapter_4<klass,t0,t1,t2,t3> constructor##klass; \
+    wxObjectCreateAdapter* klass::ms_constructor = &constructor##klass; \
     const wxChar *klass::ms_constructorProperties[] = \
         { wxT(#v0), wxT(#v1), wxT(#v2), wxT(#v3)  }; \
     const int klass::ms_constructorPropertiesCount = 4;
@@ -285,7 +285,7 @@ struct wxDirectConstructorBridge_4 : public wxDirectConstructorBrigde
 
 #define wxDIRECT_CONSTRUCTOR_4(klass,t0,v0,t1,v1,t2,v2,t3,v3) \
     wxDirectConstructorBridge_4<klass,t0,t1,t2,t3> constructor##klass; \
-    wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
+    wxObjectCreateAdapter* klass::ms_constructor = &constructor##klass; \
     const wxChar *klass::ms_constructorProperties[] = \
         { wxT(#v0), wxT(#v1), wxT(#v2), wxT(#v3)  }; \
     const int klass::ms_constructorPropertiesCount = 4;
@@ -295,7 +295,7 @@ struct wxDirectConstructorBridge_4 : public wxDirectConstructorBrigde
 
 template<typename Class,
 typename T0, typename T1, typename T2, typename T3, typename T4>
-struct wxConstructorBridge_5 : public wxConstructorBridge
+struct wxObjectCreateAdapter_5 : public wxObjectCreateAdapter
 {
     bool Create(wxObject * &o, wxxVariant *args)
     {
@@ -311,8 +311,8 @@ struct wxConstructorBridge_5 : public wxConstructorBridge
 };
 
 #define wxCONSTRUCTOR_5(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4) \
-    wxConstructorBridge_5<klass,t0,t1,t2,t3,t4> constructor##klass; \
-    wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
+    wxObjectCreateAdapter_5<klass,t0,t1,t2,t3,t4> constructor##klass; \
+    wxObjectCreateAdapter* klass::ms_constructor = &constructor##klass; \
     const wxChar *klass::ms_constructorProperties[] = \
         { wxT(#v0), wxT(#v1), wxT(#v2), wxT(#v3), wxT(#v4)  }; \
     const int klass::ms_constructorPropertiesCount = 5;
@@ -338,7 +338,7 @@ struct wxDirectConstructorBridge_5 : public wxDirectConstructorBrigde
 
 #define wxDIRECT_CONSTRUCTOR_5(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4) \
     wxDirectConstructorBridge_5<klass,t0,t1,t2,t3,t4> constructor##klass; \
-    wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
+    wxObjectCreateAdapter* klass::ms_constructor = &constructor##klass; \
     const wxChar *klass::ms_constructorProperties[] = \
         { wxT(#v0), wxT(#v1), wxT(#v2), wxT(#v3), wxT(#v4) }; \
     const int klass::ms_constructorPropertiesCount = 5;
@@ -348,7 +348,7 @@ struct wxDirectConstructorBridge_5 : public wxDirectConstructorBrigde
 
 template<typename Class,
 typename T0, typename T1, typename T2, typename T3, typename T4, typename T5>
-struct wxConstructorBridge_6 : public wxConstructorBridge
+struct wxObjectCreateAdapter_6 : public wxObjectCreateAdapter
 {
     bool Create(wxObject * &o, wxxVariant *args)
     {
@@ -365,8 +365,8 @@ struct wxConstructorBridge_6 : public wxConstructorBridge
 };
 
 #define wxCONSTRUCTOR_6(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5) \
-    wxConstructorBridge_6<klass,t0,t1,t2,t3,t4,t5> constructor##klass; \
-    wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
+    wxObjectCreateAdapter_6<klass,t0,t1,t2,t3,t4,t5> constructor##klass; \
+    wxObjectCreateAdapter* klass::ms_constructor = &constructor##klass; \
     const wxChar *klass::ms_constructorProperties[] = \
         { wxT(#v0), wxT(#v1), wxT(#v2), wxT(#v3), wxT(#v4), wxT(#v5)  }; \
     const int klass::ms_constructorPropertiesCount = 6;
@@ -393,7 +393,7 @@ struct wxDirectConstructorBridge_6 : public wxDirectConstructorBrigde
 
 #define wxDIRECT_CONSTRUCTOR_6(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5) \
     wxDirectConstructorBridge_6<klass,t0,t1,t2,t3,t4,t5> constructor##klass; \
-    wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
+    wxObjectCreateAdapter* klass::ms_constructor = &constructor##klass; \
     const wxChar *klass::ms_constructorProperties[] = { wxT(#v0), wxT(#v1), \
         wxT(#v2), wxT(#v3), wxT(#v4), wxT(#v5)  }; \
     const int klass::ms_constructorPropertiesCount = 6;
@@ -403,7 +403,7 @@ struct wxDirectConstructorBridge_6 : public wxDirectConstructorBrigde
 
 template<typename Class,
 typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
-struct wxConstructorBridge_7 : public wxConstructorBridge
+struct wxObjectCreateAdapter_7 : public wxObjectCreateAdapter
 {
     bool Create(wxObject * &o, wxxVariant *args)
     {
@@ -421,8 +421,8 @@ struct wxConstructorBridge_7 : public wxConstructorBridge
 };
 
 #define wxCONSTRUCTOR_7(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6) \
-    wxConstructorBridge_7<klass,t0,t1,t2,t3,t4,t5,t6> constructor##klass; \
-    wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
+    wxObjectCreateAdapter_7<klass,t0,t1,t2,t3,t4,t5,t6> constructor##klass; \
+    wxObjectCreateAdapter* klass::ms_constructor = &constructor##klass; \
     const wxChar *klass::ms_constructorProperties[] = { wxT(#v0), wxT(#v1), \
         wxT(#v2), wxT(#v3), wxT(#v4), wxT(#v5), wxT(#v6) }; \
     const int klass::ms_constructorPropertiesCount = 7;
@@ -450,7 +450,7 @@ struct wxDirectConstructorBridge_7 : public wxDirectConstructorBrigde
 
 #define wxDIRECT_CONSTRUCTOR_7(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6) \
     wxDirectConstructorBridge_7<klass,t0,t1,t2,t3,t4,t5,t6> constructor##klass; \
-    wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
+    wxObjectCreateAdapter* klass::ms_constructor = &constructor##klass; \
     const wxChar *klass::ms_constructorProperties[] = \
         { wxT(#v0), wxT(#v1), wxT(#v2), wxT(#v3), wxT(#v4), wxT(#v5), wxT(#v6) }; \
     const int klass::ms_constructorPropertiesCount = 7;
@@ -461,7 +461,7 @@ struct wxDirectConstructorBridge_7 : public wxDirectConstructorBrigde
 template<typename Class,
 typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, \
 typename T6, typename T7>
-struct wxConstructorBridge_8 : public wxConstructorBridge
+struct wxObjectCreateAdapter_8 : public wxObjectCreateAdapter
 {
     bool Create(wxObject * &o, wxxVariant *args)
     {
@@ -480,8 +480,8 @@ struct wxConstructorBridge_8 : public wxConstructorBridge
 };
 
 #define wxCONSTRUCTOR_8(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6,t7,v7) \
-    wxConstructorBridge_8<klass,t0,t1,t2,t3,t4,t5,t6,t7> constructor##klass; \
-    wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
+    wxObjectCreateAdapter_8<klass,t0,t1,t2,t3,t4,t5,t6,t7> constructor##klass; \
+    wxObjectCreateAdapter* klass::ms_constructor = &constructor##klass; \
     const wxChar *klass::ms_constructorProperties[] = \
         { wxT(#v0), wxT(#v1), wxT(#v2), wxT(#v3), wxT(#v4), wxT(#v5), wxT(#v6), wxT(#v7) }; \
     const int klass::ms_constructorPropertiesCount = 8;
@@ -511,7 +511,7 @@ struct wxDirectConstructorBridge_8 : public wxDirectConstructorBrigde
 
 #define wxDIRECT_CONSTRUCTOR_8(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6,t7,v7) \
     wxDirectConstructorBridge_8<klass,t0,t1,t2,t3,t4,t5,t6,t7> constructor##klass; \
-    wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
+    wxObjectCreateAdapter* klass::ms_constructor = &constructor##klass; \
     const wxChar *klass::ms_constructorProperties[] = \
         { wxT(#v0), wxT(#v1), wxT(#v2), wxT(#v3), wxT(#v4), wxT(#v5), wxT(#v6), wxT(#v7) }; \
     const int klass::ms_constructorPropertiesCount = 8;

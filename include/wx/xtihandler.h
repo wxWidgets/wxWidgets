@@ -51,20 +51,11 @@ public:
             m_eventClassInfo(eventClassInfo),
             m_itsClass(itsClass)
        {
-           m_next = NULL;
-           if ( iter == NULL )
-               iter = this;
-           else
-           {
-               wxHandlerInfo* i = iter;
-               while( i->m_next )
-                   i = i->m_next;
-
-               i->m_next = this;
-           }
+            Insert(iter);
        }
 
-    ~wxHandlerInfo();
+    ~wxHandlerInfo()
+        { Remove(); }
 
     // return the name of this handler
     const wxString& GetName() const { return m_name; }
@@ -82,16 +73,24 @@ public:
     const wxClassInfo*   GetDeclaringClass() const { return m_itsClass; }
 
 private:
+
+    // inserts this handler at the end of the linked chain which begins
+    // with "iter" handler.
+    void Insert(wxHandlerInfo* &iter);
+
+    // removes this handler from the linked chain of the m_itsClass handlers.
+    void Remove();
+
+    wxClassInfo*          m_itsClass;
     wxObjectEventFunction m_eventFunction;
     wxString              m_name;
     const wxClassInfo*    m_eventClassInfo;
     wxHandlerInfo*        m_next;
-    wxClassInfo*          m_itsClass;
 };
 
 #define wxHANDLER(name,eventClassType)                                               \
-    static wxHandlerInfo _handlerInfo##name( first, class_t::GetClassInfoStatic(), \
-                    wxT(#name), (wxObjectEventFunction) (wxEventFunction) &name,   \
+    static wxHandlerInfo _handlerInfo##name( first, class_t::GetClassInfoStatic(),   \
+                    wxT(#name), (wxObjectEventFunction) (wxEventFunction) &name,     \
                     CLASSINFO( eventClassType ) );
 
 #define wxBEGIN_HANDLERS_TABLE(theClass)          \
