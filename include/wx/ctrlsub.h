@@ -425,7 +425,7 @@ private:
 #elif defined(__WXMOTIF__)
     #include "wx/motif/ctrlsub.h"
 #else
-    class wxControlWithItems : public wxControlWithItemsBase
+    class WXDLLEXPORT wxControlWithItems : public wxControlWithItemsBase
     {
     public:
         wxControlWithItems() { }
