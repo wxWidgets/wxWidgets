@@ -259,7 +259,7 @@ MyFrame::MyFrame(const wxString& title)
 //  BEGIN_EVENT_TABLE(MyXTIFrame, wxFrame)
 //  END_EVENT_TABLE()
 
-// the following class "persists" (i.e. saves) a wxFrame into a wxWriter
+// the following class "persists" (i.e. saves) a wxFrame into a wxObjectWriter
 
 class MyDesignerPersister : public wxPersister
 {
@@ -269,7 +269,7 @@ public:
         m_frame = frame;
     }
 
-    virtual bool BeforeWriteDelegate( wxWriter *WXUNUSED(writer),
+    virtual bool BeforeWriteDelegate( wxObjectWriter *WXUNUSED(writer),
                                     const wxObject *object,  
                                     const wxClassInfo* WXUNUSED(classInfo), 
                                     const wxPropertyInfo *propInfo, 
@@ -300,6 +300,12 @@ private:
 // table and the program will fail to allocate them.
 // The following macro implements a simple hack to ensure that a given
 // class is linked in.
+//
+// TODO: in wx/link.h there are already similar macros (also more "optimized":
+//       don't need the creation of fake object) which however require to use
+//       the wxFORCE_LINK_THIS_MODULE() macro inside the source files corresponding
+//       to the class being discarded.
+//
 #define wxENSURE_CLASS_IS_LINKED(x)     { x test; }
 
 void RegisterFrameRTTI()
@@ -307,7 +313,7 @@ void RegisterFrameRTTI()
     // set up the RTTI info for a class (MyXTIFrame) which
     // is not defined anywhere in this program
     wxDynamicClassInfo *dyninfo = 
-        dynamic_cast< wxDynamicClassInfo *>( wxClassInfo::FindClass(wxT("MyXTIFrame"))) ;
+        dynamic_cast< wxDynamicClassInfo *>( wxClassInfo::FindClass(wxT("MyXTIFrame")));
     if ( dyninfo == NULL )
     {
         dyninfo = new wxDynamicClassInfo(wxT("myxtiframe.h"),
@@ -531,7 +537,7 @@ bool SaveFrameRTTI(const wxString &testFileName, wxDynamicObject *frame)
     xml.SetRoot(root);
 
     // setup the XTI writer and persister
-    wxXmlWriter writer(root);
+    wxObjectXmlWriter writer(root);
     MyDesignerPersister persister(frame);
 
     // write the given wxObject into the XML document
@@ -555,7 +561,7 @@ wxDynamicObject* LoadFrameRTTI(const wxString &fileName)
 
     // now depersist the wxFrame we saved into it using wxRuntimeDepersister
     wxRuntimeDepersister Callbacks;
-    wxXmlReader Reader( root );
+    wxObjectXmlReader Reader( root );
     int obj = Reader.ReadObject( wxString("myTestFrame"), &Callbacks );
     return (wxDynamicObject*)Callbacks.GetObject( obj );
 }
@@ -580,7 +586,7 @@ bool GenerateFrameRTTICode(const wxString &inFileName, const wxString &outFileNa
 
     // read the XML file using the wxCodeDepersister
     wxCodeDepersister Callbacks(&tos);
-    wxXmlReader Reader(root);
+    wxObjectXmlReader Reader(root);
 
     // ReadObject will return the ID of the object read??
     Reader.ReadObject( wxString("myTestFrame"), &Callbacks );
