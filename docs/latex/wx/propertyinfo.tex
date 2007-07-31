@@ -1,0 +1,177 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        propertyinfo.tex
+%% Purpose:     wxPropertyInfo documentation
+%% Author:      Francesco Montorsi
+%% Created:     2007-7-30
+%% RCS-ID:      $Id: xmldocument.tex 43656 2006-11-26 18:41:43Z RR $
+%% Copyright:   (c) 2007 Francesco Montorsi
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{\class{wxPropertyInfo}}\label{wxpropertyinfo}
+
+This class describes a \helpref{wxObject}{wxobject}'s property.
+
+There are two types of properties: normal and event properties.
+The former properties describe the GUI and non-GUI modifiable aspects of the class.
+(e.g. they are values that would be shown in a GUI designer).
+The latter ones are event sources (eg 'Click') against which handlers (event sinks) can be connected.
+
+Properties are identified by a name and can be associated with a (short) help string and with a group name
+(for objects with many properties).
+
+Properties can be accessed through the \helpref{wxPropertyAccessor}{wxpropertyaccessor} class and
+are tied to a specific \helpref{wxClassInfo}{wxclassinfo}.
+
+To cycle on the properties of a wxClassInfo, which are organized as a linked list, you'll typically do:
+
+\begin{verbatim}
+wxClassInfo *info = wxClassInfo::FindClass(wxT("myClass"))
+for (prop = info->GetFirstProperty();
+     prop;
+     prop = prop->GetNext())
+{
+    // elaborate this property...
+    ... prop->GetName(); ...
+}
+\end{verbatim}
+
+Each property has also a \it{type} associated with it (e.g. the \tt{font} property of a \tt{wxWindow}
+object will have a {wxFont} type info), described by the \helpref{wxTypeInfo}{wxtypeinfo} class.
+
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/xtiprop.h>
+
+\wxheading{Library}
+
+\helpref{wxCore}{librarieslist}
+
+\wxheading{See also}
+
+\helpref{wxClassInfo}{wxclassinfo}, \helpref{wxTypeInfo}{wxtypeinfo}, \helpref{XTI overview}{runtimeclassoverview}
+
+\wxheading{Data structures}
+
+{\small
+\begin{verbatim}
+enum 
+{
+    // will be removed in future releases
+    wxPROP_DEPRECATED       = 0x00000001,
+
+    // object graph property, will be streamed with priority (after constructor properties)
+    wxPROP_OBJECT_GRAPH     = 0x00000002,
+
+    // this will only be streamed out and in as enum/set, the internal representation 
+    // is still a long
+    wxPROP_ENUM_STORE_LONG  = 0x00000004,
+
+    // don't stream out this property, needed eg to avoid streaming out children 
+    // that are always created by their parents
+    wxPROP_DONT_STREAM = 0x00000008,
+};
+\end{verbatim}
+}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxPropertyInfo::wxPropertyInfo}\label{wxpropertyinfowxpropertyinfo}
+
+\func{}{wxPropertyInfo}{\param{wxPropertyInfo*\& }{iter}, \param{wxClassInfo* }{itsClass}, \param{const wxString\& }{name}, \param{wxDelegateTypeInfo* }{type}, \param{wxPropertyAccessor* }{accessor}, \param{wxxVariant }{dv}, \param{wxPropertyInfoFlags }{flags = 0}, \param{const wxString\& }{helpString = wxEmptyString}, \param{const wxString\& }{groupString = wxEmptyString}}
+
+\func{}{wxPropertyInfo}{\param{wxPropertyInfo*\& }{iter}, \param{wxClassInfo* }{itsClass}, \param{const wxString\& }{name}, \param{const wxString\& }{collectionTypeName}, \param{const wxString\& }{elementTypeName}, \param{wxPropertyAccessor* }{accessor}, \param{wxPropertyInfoFlags }{flags = 0}, \param{const wxString\& }{helpString = wxEmptyString}, \param{const wxString\& }{groupString = wxEmptyString}}
+
+\func{}{wxPropertyInfo}{\param{wxPropertyInfo*\& }{iter}, \param{wxClassInfo* }{itsClass}, \param{const wxString\& }{name}, \param{const wxString\& }{typeName}, \param{wxPropertyAccessor* }{accessor}, \param{wxxVariant }{dv}, \param{wxPropertyInfoFlags }{flags = 0}, \param{const wxString\& }{helpString = wxEmptyString}, \param{const wxString\& }{groupString = wxEmptyString}}
+
+Constructor. Adds the initialized property to a linked list of \arg{itsClass} properties 
+whose first element is \arg{iter}.
+
+Very likely you'll never use this constructor directly but will instead use one of the wxWidgets
+macros as shown in the \helpref{XTI overview}{runtimeclassoverview}.
+
+
+\membersection{wxPropertyInfo::\destruct{wxPropertyInfo}}\label{wxpropertyinfodtor}
+
+\func{}{\destruct{wxPropertyInfo}}{\void}
+
+Removes this property from the linked list of properties belonging to the class which owns this property.
+
+
+\membersection{wxPropertyInfo::GetAccessor}\label{wxpropertyinfogetaccessor}
+
+\constfunc{wxPropertyAccessor*}{GetAccessor}{\void}
+
+Returns the accessor for this property.
+
+
+\membersection{wxPropertyInfo::GetCollectionElementTypeInfo}\label{wxpropertyinfogetcollectionelementtypeinfo}
+
+\constfunc{const wxTypeInfo *}{GetCollectionElementTypeInfo}{\void}
+
+Returns the element type info of this property. If this property is not a collection returns \NULL.
+
+
+\membersection{wxPropertyInfo::GetDeclaringClass}\label{wxpropertyinfogetdeclaringclass}
+
+\constfunc{const wxClassInfo*}{GetDeclaringClass}{\void}
+
+Returns the class this property is declared in.
+
+
+\membersection{wxPropertyInfo::GetDefaultValue}\label{wxpropertyinfogetdefaultvalue}
+
+\constfunc{wxxVariant}{GetDefaultValue}{\void}
+
+Returns the default value of this property; its kind maybe \tt{wxT\_VOID} if it is not valid.
+
+
+\membersection{wxPropertyInfo::GetFlags}\label{wxpropertyinfogetflags}
+
+\constfunc{wxPropertyInfoFlags}{GetFlags}{\void}
+
+Returns the flags of this property (i.e. a combination of the \tt{wxPROP_*} values listed above).
+
+
+\membersection{wxPropertyInfo::GetGroupString}\label{wxpropertyinfogetgroupstring}
+
+\constfunc{const wxString\&}{GetGroupString}{\void}
+
+Returns the name of the group to which this property belongs.
+
+
+\membersection{wxPropertyInfo::GetHelpString}\label{wxpropertyinfogethelpstring}
+
+\constfunc{const wxString\&}{GetHelpString}{\void}
+
+Returns the short help string of this property.
+
+
+\membersection{wxPropertyInfo::GetName}\label{wxpropertyinfogetname}
+
+\constfunc{const wxString\&}{GetName}{\void}
+
+Returns the name of this property.
+
+
+\membersection{wxPropertyInfo::GetNext}\label{wxpropertyinfogetnext}
+
+\constfunc{wxPropertyInfo*}{GetNext}{\void}
+
+Returns the next property for the \helpref{wxClassInfo}{wxclassinfo} object which
+owns this property (see \helpref{GetDeclaringClass}{wxpropertyinfogetdeclaringclass}).
+Returns \NULL if this is the last property of this class.
+
+
+\membersection{wxPropertyInfo::GetTypeInfo}\label{wxpropertyinfogettypeinfo}
+
+\constfunc{const wxTypeInfo *}{GetTypeInfo}{\void}
+
+Returns the type info of this property.

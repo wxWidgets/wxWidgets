@@ -1,0 +1,159 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        typeinfo.tex
+%% Purpose:     wxTypeInfo documentation
+%% Author:      Francesco Montorsi
+%% Created:     2007-7-30
+%% RCS-ID:      $Id: xmldocument.tex 43656 2006-11-26 18:41:43Z RR $
+%% Copyright:   (c) 2007 Francesco Montorsi
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{\class{wxTypeInfo}}\label{wxtypeinfo}
+
+This class (or better, its derived classes) characterizes the type associated with a 
+\helpref{wxObject}{wxobject}'s property represented by \helpref{wxPropertyInfo}{wxpropertyinfo}.
+
+The first characterization is done by the \tt{wxTypeKind} enumeration. 
+All enum values up to and including wxT_CUSTOM represent so called \it{simple} types. 
+These cannot be divided any further; they can just be converted to and from \helpref{wxString}{wxstring}s.
+
+Other \tt{wxTypeKind}s can instead be splitted recursively into smaller parts until
+the \it{simple} types are reached.
+
+Each wxTypeInfo is univocally identified by its name.
+
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/xtitypes.h>
+
+\wxheading{Library}
+
+\helpref{wxCore}{librarieslist}
+
+\wxheading{See also}
+
+\helpref{wxClassInfo}{wxclassinfo}, \helpref{wxPropertyInfo}{wxpropertyinfo}, \helpref{XTI overview}{runtimeclassoverview}
+
+\wxheading{Data structures}
+
+{\small
+\begin{verbatim}
+enum wxTypeKind
+{
+    wxT_VOID = 0,   // unknown type
+    wxT_BOOL,
+    wxT_CHAR,
+    wxT_UCHAR,
+    wxT_INT,
+    wxT_UINT,
+    wxT_LONG,
+    wxT_ULONG,
+    wxT_FLOAT,
+    wxT_DOUBLE,
+    wxT_STRING,     // must be wxString
+    wxT_SET,        // must be wxBitset<> template
+    wxT_ENUM,
+    wxT_CUSTOM,     // user defined type (e.g. wxPoint)
+
+    wxT_OBJECT_PTR, // object reference
+    wxT_OBJECT,     // embedded object
+    wxT_COLLECTION, // collection
+
+    wxT_DELEGATE    // for connecting against an event source
+};
+\end{verbatim}
+}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxTypeInfo::wxTypeInfo}\label{wxtypeinfowxtypeinfo}
+
+\func{}{wxTypeInfo}{\param{wxTypeKind }{kind}, \param{wxVariant2StringFnc }{to = NULL}, \param{wxString2VariantFnc }{from = NULL}, \param{const wxString\& }{name = wxEmptyString}}
+
+Constructor. Registers the type named \arg{name} into the internal table of RTTI types.
+If there is already another type registered with the same name, it's overwritten.
+
+
+\membersection{wxTypeInfo::\destruct{wxTypeInfo}}\label{wxtypeinfodtor}
+
+\func{}{\destruct{wxTypeInfo}}{\void}
+
+Unregisters this type from the internal table of RTTI types.
+
+
+\membersection{wxTypeInfo::ConvertFromString}\label{wxtypeinfoconvertfromstring}
+
+\constfunc{void}{ConvertFromString}{\param{const wxString\& }{data}, \param{wxxVariant\& }{result}}
+
+Converts a string into a \helpref{wxxVariant}{wxvariant} holding the corresponding data under the form
+of the \it{type} associated with this wxTypeInfo instance.
+
+\membersection{wxTypeInfo::ConvertToString}\label{wxtypeinfoconverttostring}
+
+\constfunc{void}{ConvertToString}{\param{const wxxVariant\& }{data}, \param{wxString\& }{result}}
+
+Converts a \helpref{wxxVariant}{wxxvariant} holding data under the form
+of the \it{type} associated with this wxTypeInfo instance into a string.
+
+
+\membersection{wxTypeInfo::FindType}\label{wxtypeinfofindtype}
+
+\func{static wxTypeInfo*}{FindType}{\param{const wxChar* }{typeName}}
+
+\func{static wxTypeInfo*}{FindType}{\param{const wxString\& }{typeName}}
+
+Search in the internal table of RTTI types the first one named as \arg{typeName} and
+returns a pointer to its representation.
+
+
+\membersection{wxTypeInfo::GetKind}\label{wxtypeinfogetkind}
+
+\constfunc{wxTypeKind}{GetKind}{\void}
+
+Returns the kind associated with this type (one of the \tt{wxT\_} constants; see above).
+
+
+\membersection{wxTypeInfo::GetTypeName}\label{wxtypeinfogettypename}
+
+\constfunc{const wxString\&}{GetTypeName}{\void}
+
+Returns the unique name of this type.
+
+
+\membersection{wxTypeInfo::HasStringConverters}\label{wxtypeinfohasstringconverters}
+
+\constfunc{bool}{HasStringConverters}{\void}
+
+Can the content of this type be converted to and from \helpref{wxString}{wxstring}s ?
+
+
+\membersection{wxTypeInfo::IsCustomType}\label{wxtypeinfoiscustomtype}
+
+\constfunc{bool}{IsCustomType}{\void}
+
+Is this type a custom type?
+This is a shortcut to the \tt{GetKind() == wxT_CUSTOM} test.
+
+
+\membersection{wxTypeInfo::IsDelegateType}\label{wxtypeinfoisdelegatetype}
+
+\constfunc{bool}{IsDelegateType}{\void}
+
+Is this type a delegate type?
+This is a shortcut to the \tt{GetKind() == wxT_DELEGATE} test.
+
+
+\membersection{wxTypeInfo::IsObjectType}\label{wxtypeinfoisobjecttype}
+
+\constfunc{bool}{IsObjectType}{\void}
+
+Is this type an object type?
+This is a shortcut to the \tt{GetKind() == wxT_OBJECT} test.
