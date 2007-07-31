@@ -475,6 +475,49 @@ void wxHandlerInfo::Remove()
 // wxClassInfo
 // ----------------------------------------------------------------------------
 
+bool wxClassInfo::Create(wxObject *object, int ParamCount, wxxVariant *Params) const
+{
+    if ( ParamCount != m_constructorPropertiesCount )
+    {
+        // FIXME: shouldn't we just return false and let the caller handle it?
+        wxLogError( _("Illegal Parameter Count for Create Method") );
+        return false;
+    }
+
+    return m_constructor->Create( object, Params );
+}
+
+wxObject *wxClassInfo::ConstructObject(int ParamCount, wxxVariant *Params) const
+{
+    if ( ParamCount != m_constructorPropertiesCount )
+    {
+        // FIXME: shouldn't we just return NULL and let the caller handle this case?
+        wxLogError( _("Illegal Parameter Count for ConstructObject Method") );
+        return NULL;
+    }
+
+    wxObject *object = NULL;
+    if (!m_constructor->Create( object, Params ))
+        return NULL;
+    return object;
+}
+
+bool wxClassInfo::IsKindOf(const wxClassInfo *info) const
+{
+    if ( info != 0 )
+    {
+        if ( info == this )
+            return true;
+
+        for ( int i = 0; m_parents[i]; ++ i )
+        {
+            if ( m_parents[i]->IsKindOf( info ) )
+                return true;
+        }
+    }
+    return false;
+}
+
 const wxPropertyAccessor *wxClassInfo::FindAccessor(const wxChar *PropertyName) const
 {
     const wxPropertyInfo* info = FindPropertyInfo( PropertyName );

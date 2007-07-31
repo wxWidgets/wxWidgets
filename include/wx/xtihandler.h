@@ -46,10 +46,10 @@ public:
                   const wxString& name,
                   wxObjectEventFunction address,
                   const wxClassInfo* eventClassInfo) :
+            m_itsClass(itsClass),
             m_eventFunction(address),
             m_name(name),
-            m_eventClassInfo(eventClassInfo),
-            m_itsClass(itsClass)
+            m_eventClassInfo(eventClassInfo)
        {
             Insert(iter);
        }

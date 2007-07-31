@@ -136,19 +136,7 @@ public:
     wxObject *CreateObject() const { return AllocateObject(); }
 
     // direct construction call for classes that cannot construct instances via alloc/create
-    wxObject *ConstructObject(int ParamCount, wxxVariant *Params) const
-    {
-        if ( ParamCount != m_constructorPropertiesCount )
-        {
-            // FIXME: shouldn't we just return NULL and let the caller handle this case?
-            wxLogError( _("Illegal Parameter Count for ConstructObject Method") );
-            return NULL;
-        }
-        wxObject *object = NULL;
-        if (!m_constructor->Create( object, Params ))
-            return NULL;
-        return object;
-    }
+    wxObject *ConstructObject(int ParamCount, wxxVariant *Params) const;
 
     bool NeedsDirectConstruction() const 
         { return dynamic_cast<wxDirectConstructorBrigde*>( m_constructor) != NULL; }
@@ -184,21 +172,7 @@ public:
     // Climb upwards through inheritance hierarchy.
     // Dual inheritance is catered for.
 
-    bool IsKindOf(const wxClassInfo *info) const
-    {
-        if ( info != 0 )
-        {
-            if ( info == this )
-                return true;
-
-            for ( int i = 0; m_parents[i]; ++ i )
-            {
-                if ( m_parents[i]->IsKindOf( info ) )
-                    return true;
-            }
-        }
-        return false;
-    }
+    bool IsKindOf(const wxClassInfo *info) const;
 
     wxDECLARE_CLASS_INFO_ITERATORS()
 
@@ -223,17 +197,7 @@ public:
 
     // Call the Create upon an instance of the class, in the end the object is fully
     // initialized
-    virtual bool Create (wxObject *object, int ParamCount, wxxVariant *Params) const
-    {
-        if ( ParamCount != m_constructorPropertiesCount )
-        {
-            // FIXME: shouldn't we just return false and let the caller handle it?
-            wxLogError( _("Illegal Parameter Count for Create Method") );
-            return false;
-        }
-
-        return m_constructor->Create( object, Params );
-    }
+    virtual bool Create (wxObject *object, int ParamCount, wxxVariant *Params) const;
 
     // get number of parameters for constructor
     virtual int GetCreateParamCount() const 

@@ -290,7 +290,7 @@ enum
 
     // don't stream out this property, needed eg to avoid streaming out children 
     // that are always created by their parents
-    wxPROP_DONT_STREAM = 0x00000008,
+    wxPROP_DONT_STREAM      = 0x00000008
 };
 
 
