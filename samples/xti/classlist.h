@@ -20,8 +20,6 @@
 #include "wx/choicebk.h"
 #include "wx/treectrl.h"
 
-class wxTreeCtrl;
-
 // ----------------------------------------------------------------------------
 // IDs
 // ----------------------------------------------------------------------------
@@ -31,6 +29,8 @@ class wxTreeCtrl;
 #define ID_PANEL 10007
 #define ID_TREECTRL 10008
 #define ID_TEXTCTRL 10004
+#define ID_SHOW_ONLY_XTI 10005
+#define ID_SHOW_PROPERTIES_RECURSIVELY 10002
 #define SYMBOL_CLASSLISTDIALOG_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX
 #define SYMBOL_CLASSLISTDIALOG_TITLE _("wxWidgets class list")
 #define SYMBOL_CLASSLISTDIALOG_IDNAME wxID_ANY
@@ -69,29 +69,39 @@ public:
     // Destructor
     ~ClassListDialog();
 
-    // Initialises member variables
+public:     // misc
+
     void Init();
-
-    // Creates the controls and sizers
     void CreateControls();
-
     void InitControls();
+
+    void UpdateClassInfo(const wxString &itemName);
+    void UpdateFilterText();
+    bool IsToDiscard(const wxString &classname) const;
+
     int AddClassesWithParent(const wxClassInfo *parent, const wxTreeItemId &id);
 
 public:     // event handlers
 
     void OnListboxSelected( wxCommandEvent& event );
     void OnTreectrlSelChanged( wxTreeEvent& event );
+    void OnChoiceBookPageChange( wxChoicebookEvent& event );
+    void OnShowOnlyXTICheckbox( wxCommandEvent& event );
+    void OnShowRecursiveInfoCheckbox( wxCommandEvent& event );
 
     // Should we show tooltips?
     static bool ShowToolTips();
 
 protected:
+    wxChoicebook* m_pChoiceBook;
     wxStaticText* m_pClassCountText;
     wxListBox* m_pRawListBox;
     wxTreeCtrl* m_pParentTreeCtrl;
     wxListBox* m_pSizeListBox;
     wxTextCtrl* m_pTextCtrl;
+
+    int m_nTotalCount;   // number of classes in wxXTI system
+    int m_nCount;       // number of shown classes
 };
 
 #endif
