@@ -147,6 +147,12 @@ public:
         { return m_parents[0] ? m_parents[0]->GetClassName() : NULL; }
     const wxChar       *GetBaseClassName2() const
         { return (m_parents[0] && m_parents[1]) ? m_parents[1]->GetClassName() : NULL; }
+
+    const wxClassInfo  *GetBaseClass1() const
+        { return m_parents[0]; }
+    const wxClassInfo  *GetBaseClass2() const
+        { return m_parents[0] ? m_parents[1] : NULL; }
+
     const wxChar       *GetIncludeName() const 
         { return m_unitName; }
     const wxClassInfo **GetParents() const 
