@@ -262,7 +262,7 @@ static inline NSCursor* NSCursorCreateWithPrivateId(short sIndex)
 // TODO: Remove in trunk.. needed for 2.8
 NSCursor* wxGetStockCursor( short sIndex )
 {
-    wxLogDebug("Please do not call wxGetStockCursor.");
+    wxLogDebug(wxT("Please do not call wxGetStockCursor."));
     return NSCursorCreateWithPrivateId(sIndex);
 }
 
@@ -432,7 +432,7 @@ wxCursor::wxCursor(int stock_cursor_id)
     // Stage 3: Give up, complain, and use a normal arrow
     if(M_CURSORDATA->m_hCursor == nil)
     {
-        wxLogDebug("Could not find suitable cursor for wxStockCursor = %d.  Using normal pointer.", stock_cursor_id);
+        wxLogDebug(wxT("Could not find suitable cursor for wxStockCursor = %d.  Using normal pointer."), stock_cursor_id);
         M_CURSORDATA->m_hCursor = [[NSCursor arrowCursor] retain];
     }
 
