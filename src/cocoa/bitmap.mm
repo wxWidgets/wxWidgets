@@ -538,7 +538,7 @@ wxMask::~wxMask()
 bool wxMask::Create(const wxBitmap& bitmap)
 {
 // TODO
-    wxLogDebug("Cannot yet create a mask from a mono bitmap");
+    wxLogDebug(wxT("Cannot yet create a mask from a mono bitmap"));
     return FALSE;
 }
 
@@ -547,7 +547,7 @@ bool wxMask::Create(const wxBitmap& bitmap)
 bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
 {
 // TODO
-    wxLogDebug("Cannot yet create a mask from a palette bitmap");
+    wxLogDebug(wxT("Cannot yet create a mask from a palette bitmap"));
     return FALSE;
 }
 
