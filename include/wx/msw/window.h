@@ -317,6 +317,8 @@ public:
     bool HandleSize(int x, int y, WXUINT flag);
     bool HandleSizing(wxRect& rect);
     bool HandleGetMinMaxInfo(void *mmInfo);
+    bool HandleEnterSizeMove();
+    bool HandleExitSizeMove();
 
     bool HandleShow(bool show, int status);
     bool HandleActivate(int flag, bool minimized, WXHWND activate);

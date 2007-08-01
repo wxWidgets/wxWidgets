@@ -275,13 +275,15 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_UPDATE_UI, 440)
     DECLARE_EVENT_TYPE(wxEVT_SIZING, 441)
     DECLARE_EVENT_TYPE(wxEVT_MOVING, 442)
-    DECLARE_EVENT_TYPE(wxEVT_HIBERNATE, 443)
+    DECLARE_EVENT_TYPE(wxEVT_MOVE_START, 443)
+    DECLARE_EVENT_TYPE(wxEVT_MOVE_END, 444)
+    DECLARE_EVENT_TYPE(wxEVT_HIBERNATE, 445)
     // more power events follow -- see wx/power.h
 
         // Clipboard events
-    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_COPY, 444)
-    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_CUT, 445)
-    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_PASTE, 446)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_COPY, 446)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_CUT, 447)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_PASTE, 448)
 
         // Generic command events
         // Note: a click is a higher-level event than button down/up
@@ -826,7 +828,7 @@ public:
     // Returns the configured number of lines (or whatever) to be scrolled per
     // wheel action.  Defaults to one.
     int GetLinesPerAction() const { return m_linesPerAction; }
-    
+
     // Is the system set to do page scrolling?
     bool IsPageScroll() const { return ((unsigned int)m_linesPerAction == UINT_MAX); }
 
@@ -847,7 +849,7 @@ public:
     bool          m_shiftDown;
     bool          m_altDown;
     bool          m_metaDown;
-    
+
     int           m_wheelAxis;
     int           m_wheelRotation;
     int           m_wheelDelta;
@@ -2304,7 +2306,7 @@ public:
     // Clear table
     void Clear();
 
-#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING 
+#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
     // Clear all tables
     static void ClearAll();
 #endif // __WXDEBUG__ && wxUSE_MEMORY_TRACING
@@ -2846,6 +2848,8 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
 #define EVT_SIZING(func)  wx__DECLARE_EVT0(wxEVT_SIZING, wxSizeEventHandler(func))
 #define EVT_MOVE(func)  wx__DECLARE_EVT0(wxEVT_MOVE, wxMoveEventHandler(func))
 #define EVT_MOVING(func)  wx__DECLARE_EVT0(wxEVT_MOVING, wxMoveEventHandler(func))
+#define EVT_MOVE_START(func)  wx__DECLARE_EVT0(wxEVT_MOVE_START, wxMoveEventHandler(func))
+#define EVT_MOVE_END(func)  wx__DECLARE_EVT0(wxEVT_MOVE_END, wxMoveEventHandler(func))
 #define EVT_CLOSE(func)  wx__DECLARE_EVT0(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(func))
 #define EVT_END_SESSION(func)  wx__DECLARE_EVT0(wxEVT_END_SESSION, wxCloseEventHandler(func))
 #define EVT_QUERY_END_SESSION(func)  wx__DECLARE_EVT0(wxEVT_QUERY_END_SESSION, wxCloseEventHandler(func))

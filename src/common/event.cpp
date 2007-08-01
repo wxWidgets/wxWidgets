@@ -113,7 +113,7 @@ const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] =
 // the memory leaks when using it, however this breaks re-initializing the
 // library (i.e. repeated calls to wxInitialize/wxUninitialize) because the
 // event tables won't be rebuilt the next time, so disable this by default
-#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING 
+#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
 
 class wxEventTableEntryModule: public wxModule
 {
@@ -257,6 +257,8 @@ DEFINE_EVENT_TYPE(wxEVT_SIZE)
 DEFINE_EVENT_TYPE(wxEVT_SIZING)
 DEFINE_EVENT_TYPE(wxEVT_MOVE)
 DEFINE_EVENT_TYPE(wxEVT_MOVING)
+DEFINE_EVENT_TYPE(wxEVT_MOVE_START)
+DEFINE_EVENT_TYPE(wxEVT_MOVE_END)
 DEFINE_EVENT_TYPE(wxEVT_CLOSE_WINDOW)
 DEFINE_EVENT_TYPE(wxEVT_END_SESSION)
 DEFINE_EVENT_TYPE(wxEVT_QUERY_END_SESSION)
@@ -861,7 +863,7 @@ void wxEventHashTable::Clear()
     m_size = 0;
 }
 
-#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING 
+#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
 
 // Clear all tables
 void wxEventHashTable::ClearAll()
@@ -1037,7 +1039,7 @@ wxEvtHandler::wxEvtHandler()
     m_eventsLocker = new wxCriticalSection;
 #  endif
 #endif
-    
+
     // no client data (yet)
     m_clientData = NULL;
     m_clientDataType = wxClientData_None;
@@ -1163,7 +1165,7 @@ void wxEvtHandler::ProcessPendingEvents()
     // pending events
     wxCHECK_RET( m_pendingEvents,
                  wxT("Please call wxApp::ProcessPendingEvents() instead") );
-    
+
     wxENTER_CRIT_SECT( Lock() );
 
     // we leave the loop once we have processed all events that were present at
@@ -1506,7 +1508,7 @@ wxEventBlocker::wxEventBlocker(wxWindow *win, wxEventType type)
 wxEventBlocker::~wxEventBlocker()
 {
     wxEvtHandler *popped = m_window->PopEventHandler(false);
-    wxCHECK_RET(popped == this, 
+    wxCHECK_RET(popped == this,
         wxT("Don't push other event handlers into a window managed by wxEventBlocker!"));
 }
 

@@ -2543,6 +2543,18 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             }
             break;
 
+        case WM_ENTERSIZEMOVE:
+            {
+                processed = HandleEnterSizeMove();
+            }
+            break;
+
+        case WM_EXITSIZEMOVE:
+            {
+                processed = HandleExitSizeMove();
+            }
+            break;
+
         case WM_SIZING:
             {
                 LPRECT pRect = (LPRECT)lParam;
@@ -4561,6 +4573,24 @@ bool wxWindowMSW::HandleMoving(wxRect& rect)
     if (rc)
         rect = event.GetRect();
     return rc;
+}
+
+bool wxWindowMSW::HandleEnterSizeMove()
+{
+    wxMoveEvent event(wxPoint(), m_windowId);
+    event.SetEventType(wxEVT_MOVE_START);
+    event.SetEventObject(this);
+
+    return GetEventHandler()->ProcessEvent(event);
+}
+
+bool wxWindowMSW::HandleExitSizeMove()
+{
+    wxMoveEvent event(wxPoint(), m_windowId);
+    event.SetEventType(wxEVT_MOVE_END);
+    event.SetEventObject(this);
+
+    return GetEventHandler()->ProcessEvent(event);
 }
 
 bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
