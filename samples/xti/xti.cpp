@@ -43,6 +43,7 @@
 #include "wx/xtixml.h"
 #include "wx/txtstrm.h"
 #include "wx/wfstream.h"
+#include "wx/sstream.h"
 #include "wx/spinctrl.h"
 
 #include "classlist.h"
@@ -679,8 +680,32 @@ void MyFrame::OnGenerateCode(wxCommandEvent& WXUNUSED(event))
     if (dlg2.ShowModal() == wxID_CANCEL)
         return;
 
+    // do generate code
     if (!GenerateFrameRTTICode(dlg.GetPath(), dlg2.GetPath()))
+    {
         wxLogError(wxT("Could not generate the code for the frame!"));
+        return;
+    }
+
+    // show the generated code
+    {
+        wxFileInputStream f(dlg2.GetPath());
+        wxStringOutputStream str;
+        f.Read(str);
+
+        wxDialog dlg(this, wxID_ANY, wxT("Generated code"), 
+                     wxDefaultPosition, wxDefaultSize,
+                     wxRESIZE_BORDER|wxDEFAULT_DIALOG_STYLE);
+        wxPanel *panel = new wxPanel(&dlg);
+        wxSizer *sz = new wxBoxSizer(wxVERTICAL);
+        sz->Add(new wxTextCtrl(panel, wxID_ANY, str.GetString(), 
+                               wxDefaultPosition, wxDefaultSize, 
+                               wxTE_MULTILINE|wxTE_READONLY|wxTE_DONTWRAP),
+                1, wxGROW|wxALL, 5);
+        sz->Add(new wxButton(panel, wxID_OK), 0, wxALIGN_RIGHT|wxALL, 5);
+        panel->SetSizerAndFit(sz);
+        dlg.ShowModal();
+    }
 }
 
 void MyFrame::OnDumpClasses(wxCommandEvent& WXUNUSED(event))
