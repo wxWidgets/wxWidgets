@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        classlist.cpp
-// Purpose:     wxClassListDialog implementation
+// Purpose:     ClassListDialog implementation
 // Author:      Francesco Montorsi
 // Modified by: 
 // Created:     03/06/2007 14:49:55
@@ -33,18 +33,13 @@
 
 // IMPLEMENT_DYNAMIC_CLASS( ClassListDialog, wxDialog )  -- see the header
 BEGIN_EVENT_TABLE( ClassListDialog, wxDialog )
-
-////@begin ClassListDialog event table entries
     EVT_LISTBOX( ID_LISTBOX, ClassListDialog::OnListboxSelected )
-
     EVT_TREE_SEL_CHANGED( ID_TREECTRL, ClassListDialog::OnTreectrlSelChanged )
-
-////@end ClassListDialog event table entries
 END_EVENT_TABLE()
 
 
 // ----------------------------------------------------------------------------
-// wxClassListDialog
+// ClassListDialog
 // ----------------------------------------------------------------------------
 
 ClassListDialog::ClassListDialog()
@@ -82,18 +77,15 @@ ClassListDialog::~ClassListDialog()
 
 void ClassListDialog::Init()
 {
-////@begin ClassListDialog member initialisation
     m_pClassCountText = NULL;
     m_pRawListBox = NULL;
     m_pParentTreeCtrl = NULL;
     m_pSizeListBox = NULL;
     m_pTextCtrl = NULL;
-////@end ClassListDialog member initialisation
 }
 
 void ClassListDialog::CreateControls()
-{    
-////@begin ClassListDialog content construction
+{
     ClassListDialog* itemDialog1 = this;
 
     wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxVERTICAL);
@@ -155,8 +147,6 @@ void ClassListDialog::CreateControls()
     itemStdDialogButtonSizer17->AddButton(itemButton19);
 
     itemStdDialogButtonSizer17->Realize();
-
-////@end ClassListDialog content construction
 
     InitControls();
 }
@@ -243,27 +233,9 @@ void ClassListDialog::InitControls()
         wxString::Format(wxT("There are %d classes registered in wxXTI."), arr.GetCount()));
 }
 
-wxBitmap ClassListDialog::GetBitmapResource( const wxString& name )
-{
-    // Bitmap retrieval
-////@begin ClassListDialog bitmap retrieval
-    wxUnusedVar(name);
-    return wxNullBitmap;
-////@end ClassListDialog bitmap retrieval
-}
-
-wxIcon ClassListDialog::GetIconResource( const wxString& name )
-{
-    // Icon retrieval
-////@begin ClassListDialog icon retrieval
-    wxUnusedVar(name);
-    return wxNullIcon;
-////@end ClassListDialog icon retrieval
-}
-
 
 // ----------------------------------------------------------------------------
-// wxClassListDialog - event handlers
+// ClassListDialog - event handlers
 // ----------------------------------------------------------------------------
 
 // defined later
