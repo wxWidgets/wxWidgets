@@ -46,10 +46,10 @@ public:
                   const wxString& name,
                   wxObjectEventFunction address,
                   const wxClassInfo* eventClassInfo) :
-            m_itsClass(itsClass),
             m_eventFunction(address),
             m_name(name),
-            m_eventClassInfo(eventClassInfo)
+            m_eventClassInfo(eventClassInfo),
+            m_itsClass(itsClass)
        {
             Insert(iter);
        }
@@ -81,11 +81,11 @@ private:
     // removes this handler from the linked chain of the m_itsClass handlers.
     void Remove();
 
-    wxClassInfo*          m_itsClass;
     wxObjectEventFunction m_eventFunction;
     wxString              m_name;
     const wxClassInfo*    m_eventClassInfo;
     wxHandlerInfo*        m_next;
+    wxClassInfo*          m_itsClass;
 };
 
 #define wxHANDLER(name,eventClassType)                                               \
