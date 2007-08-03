@@ -347,6 +347,30 @@ public:
             parent->ChangeSubTreeCount(num);
     }
 
+    void Resort()
+    {
+        wxDataViewTreeNodes nds = nodes;
+        wxDataViewTreeLeaves lvs = leaves;
+        nodes.Empty();
+        leaves.Empty();
+		
+        int len = nds.GetCount();
+        if(len > 0)
+        {
+            for(int i = 0; i < len; i ++)
+                nodes.Add(nds[i]);
+            for(int i = 0; i < len; i ++)
+                nodes[i]->Resort();
+        }
+
+        len = lvs.GetCount();
+        if(len > 0)
+        {
+            for(int i = 0; i < len; i++)
+                leaves.Add(lvs[i]);
+        }
+    }
+
 private:
     wxDataViewTreeNode * parent;
     wxDataViewTreeNodes  nodes;
@@ -398,6 +422,8 @@ public:
     bool ItemChanged( const wxDataViewItem &item );
     bool ValueChanged( const wxDataViewItem &item, unsigned int col );
     bool Cleared();
+    void Resort()
+        { g_model = GetOwner()->GetModel(); m_root->Resort(); UpdateDisplay(); }
 
     void SetOwner( wxDataViewCtrl* owner ) { m_owner = owner; }
     wxDataViewCtrl *GetOwner() { return m_owner; }
@@ -528,6 +554,8 @@ public:
         { return m_mainWindow->ValueChanged( item, col ); }
     virtual bool Cleared()
         { return m_mainWindow->Cleared(); }
+    virtual void Resort()
+    	 { return m_mainWindow->Resort(); }
 
     wxDataViewMainWindow    *m_mainWindow;
 };
@@ -1149,6 +1177,7 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
     // add the updated array of columns to the header control
     unsigned int cols = GetOwner()->GetColumnCount();
     unsigned int added = 0;
+    wxDataViewModel * model = GetOwner()->GetModel();
     for (unsigned int i = 0; i < cols; i++)
     {
         wxDataViewColumn *col = GetColumn( i );
@@ -1282,6 +1311,30 @@ bool wxDataViewHeaderWindowMSW::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARA
         case HDN_ITEMCLICK:
             {
                 unsigned int idx = GetColumnIdxFromHeader(nmHDR);
+                wxDataViewModel * model = GetOwner()->GetModel();
+
+                if(nmHDR->iButton == 0)
+                {
+                    wxDataViewColumn *col = GetColumn(idx);
+                    if(col->IsSortable())
+                    {
+                        if(model && model->GetSortingColumn() == idx)
+                        {
+                            bool order = col->IsSortOrderAscending();
+                            col->SetSortOrder(!order);
+                            model->SetSortOrderAscending(!order);
+                        }
+                        else if(model)
+                        {
+                            model->SetSortingColumn(idx);
+                            model->SetSortOrderAscending(true);
+                        }
+                    }
+                    UpdateDisplay();
+                    if(model)
+                        model->Resort();
+                }
+
                 wxEventType evt = nmHDR->iButton == 0 ?
                         wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK :
                         wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK;
@@ -1923,8 +1976,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
     g_model = GetOwner()->GetModel();
 
     wxDataViewTreeNode * node;
-    wxDataViewItem parent_item = g_model->GetParent( item );
-    node = FindNode(parent_item);
+    node = FindNode(parent);
 
     if( node == NULL || node->GetChildren().Index( item.GetID() ) == wxNOT_FOUND )
     {
