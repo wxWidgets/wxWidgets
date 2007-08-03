@@ -22,12 +22,13 @@ using \texttt{#if} and not \texttt{#ifdef}.
 \begin{twocollist}\itemsep=0pt
 \twocolitem{wxUSE\_ABOUTDLG}{Use \helpref{wxAboutDialogInfo}{wxaboutdialoginfo} class.}
 \twocolitem{wxUSE\_ACCEL}{Use \helpref{wxAcceleratorTable}{wxacceleratortable}/Entry classes and support for them in \helpref{wxMenu}{wxmenu}(Bar).}
+\twocolitem{wxUSE\_AFM\_FOR\_POSTSCRIPT}{In \helpref{wxPostScriptDC}{wxpostscriptdc} class use AFM (adobe font metrics) file for character widths.}
 \twocolitem{wxUSE\_ANIMATIONCTRL}{Use \helpref{wxAnimationCtrl}{wxanimationctrl} class.}
 \twocolitem{wxUSE\_APPLE\_IEEE}{IEEE Extended to/from double routines; see src/common/extended.c file.}
 \twocolitem{wxUSE\_ARCHIVE\_STREAMS}{Enable streams for archive formats.}
 \twocolitem{wxUSE\_AUI}{Use AUI (dockable windows) library.}
 \twocolitem{wxUSE\_BASE64}{Enables Base64 support.}
-\twocolitem{wxUSE\_BITMAPCOMBOBOX}{}
+\twocolitem{wxUSE\_BITMAPCOMBOBOX}{Use \helpref{wxBitmapComboBox}{wxbitmapcombobox} class.}
 \twocolitem{wxUSE\_BMPBUTTON}{Use \helpref{wxBitmapButton}{wxbitmapbutton} class.}
 \twocolitem{wxUSE\_BUSYINFO}{Use \helpref{wxBusyInfo}{wxbusyinfo} class.}
 \twocolitem{wxUSE\_BUTTON}{Use \helpref{wxButton}{wxbutton} class.}
@@ -50,14 +51,13 @@ using \texttt{#if} and not \texttt{#ifdef}.
 \twocolitem{wxUSE\_CONSOLE\_EVENTLOOP}{Enable event loop in console programs.}
 \twocolitem{wxUSE\_CONSTRAINTS}{Use \helpref{wxLayoutConstraints}{wxlayoutconstraints}}
 \twocolitem{wxUSE\_CONTROLS}{If set to $0$, no classes deriving from \helpref{wxControl}{wxcontrol} can be used.}
-\twocolitem{wxUSE\_CRASHREPORT}{Use wxCrashReport class.}
 \twocolitem{wxUSE\_DATAOBJ}{Use \helpref{wxDataObject}{wxdataobject} and related classes.}
 \twocolitem{wxUSE\_DATAVIEWCTRL}{Use \helpref{wxDataViewCtrl}{wxdataviewctrl} class.}
 \twocolitem{wxUSE\_DATEPICKCTRL}{Use \helpref{wxDatePickerCtrl}{wxdatepickerctrl} class.}
 \twocolitem{wxUSE\_DATETIME}{Use \helpref{wxDateTime}{wxdatetime} and related classes.}
 \twocolitem{wxUSE\_DBGHELP}{Use wxDbgHelpDLL class.}
 \twocolitem{wxUSE\_DEBUG\_CONTEXT}{Use \helpref{wxDebugContext}{wxdebugcontext} class.}
-\twocolitem{wxUSE\_DEBUG\_NEW\_ALWAYS}{See wx/object.h file.}
+\twocolitem{wxUSE\_DEBUG\_NEW\_ALWAYS}{See \helpref{Debugging overview}{wxdebugcontextoverview}}
 \twocolitem{wxUSE\_DEBUGREPORT}{Use \helpref{wxDebugReport}{wxdebugreport} class.}
 \twocolitem{wxUSE\_DIALUP\_MANAGER}{Use \helpref{wxDialUpManager}{wxdialupmanager} and related classes.}
 \twocolitem{wxUSE\_DIRDLG}{Use \helpref{wxDirDialog}{wxdirdialog} class.}
@@ -69,23 +69,23 @@ using \texttt{#if} and not \texttt{#ifdef}.
 \twocolitem{wxUSE\_DYNAMIC\_LOADER}{Use wxPluginManager and related classes. Requires \helpref{wxDynamicLibrary}{wxdynamiclibrary}}
 \twocolitem{wxUSE\_DYNLIB\_CLASS}{Use \helpref{wxDynamicLibrary}{wxdynamiclibrary}}
 \twocolitem{wxUSE\_EDITABLELISTBOX}{Use \helpref{wxEditableListBox}{wxeditablelistbox} class.}
-\twocolitem{wxUSE\_EXCEPTIONS}{}
+\twocolitem{wxUSE\_EXCEPTIONS}{Use \helpref{exception handling}{exceptionsoverview}.}
 \twocolitem{wxUSE\_EXPAT}{enable XML support using expat parser.}
 \twocolitem{wxUSE\_EXTENDED\_RTTI}{Use extended RTTI, see also \helpref{Runtime class information (RTTI)}{runtimeclassoverview}}
 \twocolitem{wxUSE\_FFILE}{Use \helpref{wxFFile}{wxffile} class.}
 \twocolitem{wxUSE\_FILE}{Use \helpref{wxFile}{wxfile} class.}
 \twocolitem{wxUSE\_FILECONFIG}{Use \helpref{wxFileConfig}{wxfileconfig} class.}
 \twocolitem{wxUSE\_FILEDLG}{Use \helpref{wxFileDialog}{wxfiledialog} class.}
-\twocolitem{wxUSE\_FONTENUM}{Use \helpref{wxFontEnumerator}{wxfontenumerator} class.}
 \twocolitem{wxUSE\_FILEPICKERCTRL}{Use \helpref{wxFilePickerCtrl}{wxfilepickerctrl} class.}
-\twocolitem{wxUSE\_FS\_ARCHIVE}{Use virtual archive filesystems like wxArchiveFSHandler in \helpref{wxFileSystem}{wxfilesystem} class.}
-\twocolitem{wxUSE\_FS\_INET}{Use virtual HTTP/FTP filesystems like wxInternetFSHandler in \helpref{wxFileSystem}{wxfilesystem} class.}
-\twocolitem{wxUSE\_FS\_ZIP}{Please use wxUSE\_FS\_ARCHIVE instead.}
 \twocolitem{wxUSE\_FILESYSTEM}{Use \helpref{wxFileSystem}{wxfilesystem} and related classes.}
 \twocolitem{wxUSE\_FINDREPLDLG}{Use \helpref{wxFindReplaceDialog}{wxfindreplacedialog} class.}
 \twocolitem{wxUSE\_FONTDLG}{Use \helpref{wxFontDialog}{wxfontdialog} class.}
+\twocolitem{wxUSE\_FONTENUM}{Use \helpref{wxFontEnumerator}{wxfontenumerator} class.}
 \twocolitem{wxUSE\_FONTMAP}{Use \helpref{wxFontMapper}{wxfontmapper} class.}
 \twocolitem{wxUSE\_FONTPICKERCTRL}{Use \helpref{wxFontPickerCtrl}{wxfontpickerctrl} class.}
+\twocolitem{wxUSE\_FS\_ARCHIVE}{Use virtual archive filesystems like wxArchiveFSHandler in \helpref{wxFileSystem}{wxfilesystem} class.}
+\twocolitem{wxUSE\_FS\_INET}{Use virtual HTTP/FTP filesystems like wxInternetFSHandler in \helpref{wxFileSystem}{wxfilesystem} class.}
+\twocolitem{wxUSE\_FS\_ZIP}{Please use wxUSE\_FS\_ARCHIVE instead.}
 \twocolitem{wxUSE\_FSVOLUME}{Use wxFSVolume class.}
 \twocolitem{wxUSE\_GAUGE}{Use \helpref{wxGauge}{wxgauge} class.}
 \twocolitem{wxUSE\_GENERIC\_DRAGIMAGE}{Used in wxDragImage sample.}
@@ -93,7 +93,7 @@ using \texttt{#if} and not \texttt{#ifdef}.
 \twocolitem{wxUSE\_GEOMETRY}{Use common geometry classes}
 \twocolitem{wxUSE\_GIF}{Use GIF \helpref{wxImageHandler}{wximagehandler}}
 \twocolitem{wxUSE\_GLCANVAS}{Enables OpenGL support.}
-\twocolitem{wxUSE\_GLOBAL\_MEMORY\_OPERATORS}{Override global operators \texttt{new} and \texttt{delete}}
+\twocolitem{wxUSE\_GLOBAL\_MEMORY\_OPERATORS}{Override global operators \texttt{new} and \texttt{delete} to use wxWidgets memory leak detection}
 \twocolitem{wxUSE\_GRAPHICS\_CONTEXT}{Use \helpref{wxGraphicsContext}{wxgraphicscontext} and related classes.}
 \twocolitem{wxUSE\_GRID}{Use \helpref{wxGrid}{wxgrid} and related classes.}
 \twocolitem{wxUSE\_GUI}{Use the GUI classes; if set to $0$ only non-GUI classes are available.}
@@ -126,12 +126,14 @@ using \texttt{#if} and not \texttt{#ifdef}.
 \twocolitem{wxUSE\_MDI}{Use \helpref{wxMDIParentFrame}{wxmdiparentframe} and \helpref{wxMDIChildFrame}{wxmdichildframe}}
 \twocolitem{wxUSE\_MDI\_ARCHITECTURE}{Use MDI-based document-view classes.}
 \twocolitem{wxUSE\_MEDIACTRL}{Use \helpref{wxMediaCtrl}{wxmediactrl}.}
+\twocolitem{wxUSE\_MEMORY\_TRACING}{Use wxWidgets memory leak detection, not recommended if using another memory debugging tool.}
 \twocolitem{wxUSE\_MENUS}{Use \helpref{wxMenu}{wxmenu} and related classes.}
 \twocolitem{wxUSE\_METAFILE}{Use \helpref{wxMetaFile}{wxmetafile} and related classes.}
 \twocolitem{wxUSE\_MIMETYPE}{Use \helpref{wxFileType}{wxfiletype} class.}
 \twocolitem{wxUSE\_MINIFRAME}{Use \helpref{wxMiniFrame}{wxminiframe} class.}
 \twocolitem{wxUSE\_MOUSEWHEEL}{Support mouse wheel events.}
 \twocolitem{wxUSE\_MSGDLG}{Use wxMessageOutput class.}
+\twocolitem{wxUSE\_NATIVE\_STATUSBAR}{Use native \helpref{wxStatusBar}{wxstatusbar} class.}
 \twocolitem{wxUSE\_NOTEBOOK}{Use \helpref{wxNotebook}{wxnotebook} and related classes.}
 \twocolitem{wxUSE\_NUMBERDLG}{Use wxNumberEntryDialog class.}
 \twocolitem{wxUSE\_ODBC}{Use ODBC classes.}
@@ -198,6 +200,7 @@ using \texttt{#if} and not \texttt{#ifdef}.
 \twocolitem{wxUSE\_TIPWINDOW}{Use \helpref{wxTipWindow}{wxtipwindow} class.}
 \twocolitem{wxUSE\_TOGGLEBTN}{Use \helpref{wxToggleButton}{wxtogglebutton} class.}
 \twocolitem{wxUSE\_TOOLBAR}{Use \helpref{wxToolBar}{wxtoolbar} class.}
+\twocolitem{wxUSE\_TOOLBAR\_NATIVE}{Use native \helpref{wxToolBar}{wxtoolbar} class.}
 \twocolitem{wxUSE\_TOOLBOOK}{Use \helpref{wxToolbook}{wxtoolbook} class.}
 \twocolitem{wxUSE\_TOOLTIPS}{Use \helpref{wxToolTip}{wxtooltip} class.}
 \twocolitem{wxUSE\_TREEBOOK}{Use \helpref{wxTreebook}{wxtreebook} class.}
@@ -281,6 +284,7 @@ using \texttt{#if} and not \texttt{#ifdef}.
 \twocolitem{wxUSE\_COMBOCTRL\_POPUP\_ANIMATION}{See wx/msw/combo.h file.}
 \twocolitem{wxUSE\_COMCTL32\_SAFELY}{See src/msw/treectrl.cpp file.}
 \twocolitem{wxUSE\_COMMON\_DIALOGS}{Enable use of windows common dialogs from header commdlg.h; example PRINTDLG.}
+\twocolitem{wxUSE\_CRASHREPORT}{Use wxCrashReport class.}
 \twocolitem{wxUSE\_DATEPICKCTRL\_GENERIC}{Use generic \helpref{wxDatePickerCtrl}{wxdatepickerctrl} implementation in addition to the native one.}
 \twocolitem{wxUSE\_DC\_CACHEING}{cache temporary \helpref{wxDC}{wxdc} objects.}
 \twocolitem{wxUSE\_DIRECTDRAW}{Enable use of the system include file ddraw.h.}

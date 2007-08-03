@@ -63,9 +63,8 @@ c) update configure.in
 3. Documentation
 ----------------
 
-Currently wxUSE_XXXs are not documented, except for a few important global ones
-which are in docs/latex/wx/cppconst.tex. So normally there is nothing to do
-(but this could change in the future).
+Currently wxUSE_XXXs are documented in docs/latex/wx/wxusedef.tex and a few 
+important global ones are in docs/latex/wx/cppconst.tex.
 
 
 === EOF ===
