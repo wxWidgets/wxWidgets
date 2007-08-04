@@ -72,9 +72,9 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
 //  (including even MSC) inline them just like we do right in their
 //  headers.
 //
-#if wxUSE_UNICODE
-    #include <string.h> //for mem funcs
+#include <string.h>
 
+#if wxUSE_UNICODE
     //implement our own wmem variants
     inline wxChar* wxTmemchr(const wxChar* s, wxChar c, size_t l)
     {
@@ -114,27 +114,21 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
 
         return szRet;
     }
+#endif /* wxUSE_UNICODE */
 
-    // and trivial wrappers for char* versions:
-    inline char* wxTmemchr(const char* s, char c, size_t len)
-        { return (char*)memchr(s, c, len); }
-    inline int wxTmemcmp(const char* sz1, const char* sz2, size_t len)
-        { return memcmp(sz1, sz2, len); }
-    inline char* wxTmemcpy(char* szOut, const char* szIn, size_t len)
-        { return (char*)memcpy(szOut, szIn, len); }
-    inline char* wxTmemmove(char* szOut, const char* szIn, size_t len)
-        { return (char*)memmove(szOut, szIn, len); }
-    inline char* wxTmemset(char* szOut, const char cIn, size_t len)
-        { return (char*)memset(szOut, cIn, len); }
-
-#else /* !wxUSE_UNICODE */
-    #define wxTmemchr memchr
-    #define wxTmemcmp memcmp
-    #define wxTmemcpy memcpy
-    #define wxTmemmove memmove
-    #define wxTmemset memset
-#endif /* wxUSE_UNICODE/!wxUSE_UNICODE */
-
+// provide trivial wrappers for char* versions for both ANSI and Unicode builds
+// (notice that these intentionally return "char *" and not "void *" unlike the
+// standard memxxx() for symmetry with the wide char versions):
+inline char* wxTmemchr(const char* s, char c, size_t len)
+    { return (char*)memchr(s, c, len); }
+inline int wxTmemcmp(const char* sz1, const char* sz2, size_t len)
+    { return memcmp(sz1, sz2, len); }
+inline char* wxTmemcpy(char* szOut, const char* szIn, size_t len)
+    { return (char*)memcpy(szOut, szIn, len); }
+inline char* wxTmemmove(char* szOut, const char* szIn, size_t len)
+    { return (char*)memmove(szOut, szIn, len); }
+inline char* wxTmemset(char* szOut, const char cIn, size_t len)
+    { return (char*)memset(szOut, cIn, len); }
 
 
 // ============================================================================
@@ -160,7 +154,7 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
 // ----------------------------------------------------------------------------
 
 // NB: we can't provide const wchar_t* (= wxChar*) overload, because calling
-//     wxSetlocale(category, NULL) -- which is a common thing to do --would be
+//     wxSetlocale(category, NULL) -- which is a common thing to do -- would be
 //     ambiguous
 WXDLLIMPEXP_BASE char* wxSetlocale(int category, const char *locale);
 inline char* wxSetlocale(int category, const wxCharBuffer& locale)

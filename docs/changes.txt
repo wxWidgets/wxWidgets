@@ -71,9 +71,12 @@ Changes in behaviour which may result in compilation errors
 
 - Virtual wxHtmlParser::AddText() takes wxString, not wxChar*, argument now.
 
-- Funtions that took wxChar* arguments that could by NULL in wxWidgets 2.8.
+- Functions that took wxChar* arguments that could by NULL in wxWidgets 2.8.
   are deprecated and passing NULL to them won't compile anymore, wxEmptyString
   must be used instead.
+
+- wxTmemxxx() functions take either wxChar* or char*, not void*: use memxxx()
+  with void pointers.
 
 - Removed insecure wxGets() and wxTmpnam() functions.
 
