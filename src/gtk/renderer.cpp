@@ -110,6 +110,27 @@ private:
     static GtkWidget *GetHeaderButtonWidget();
 };
 
+GdkWindow* wxGetGdkWindowForDC(wxWindow* win, wxDC& dc)
+{
+    // The way to get a GdkWindow* from a wxWindow is to use 
+    // GTK_PIZZA(win->m_wxwindow)->bin_window, but this approach
+    // won't work when drawing to a wxMemoryDC as it has its own
+    // GdkWindow* for its bitmap. wxWindowDC's GetGDKWindow() was
+    // designed to create a solution for all DCs, but we can't
+    // implement it with wxGCDC since it doesn't retain its wxWindow. 
+    // So, to work around this, we use GetGDKWindow whenever possible
+    // and use bin_window for wxGCDC. 
+    GdkWindow* gdk_window = NULL;
+    if ( dc.IsKindOf( CLASSINFO(wxGCDC) ) )
+        gdk_window = GTK_PIZZA(win->m_wxwindow)->bin_window;    
+    else
+       gdk_window = dc.GetGDKWindow();
+    wxASSERT_MSG( gdk_window,
+                  wxT("cannot use wxRendererNative on wxDC of this type") );
+    
+    return gdk_window;
+}
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -217,9 +238,7 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
 
     GtkWidget *button = GetHeaderButtonWidget();
     
-    GdkWindow* gdk_window = dc.GetGDKWindow();
-    wxASSERT_MSG( gdk_window,
-                  wxT("cannot use wxRendererNative on wxDC of this type") );
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
 
     int x_diff = 0;
     if (win->GetLayoutDirection() == wxLayout_RightToLeft)
@@ -247,9 +266,7 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
 {
     GtkWidget *tree = GetTreeWidget();
 
-    GdkWindow* gdk_window = dc.GetGDKWindow();
-    wxASSERT_MSG( gdk_window,
-                  wxT("cannot use wxRendererNative on wxDC of this type") );
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
 
     GtkStateType state;
     if ( flags & wxCONTROL_CURRENT )
@@ -330,9 +347,7 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
         return;
     }
 
-    GdkWindow* gdk_window = dc.GetGDKWindow();
-    wxASSERT_MSG( gdk_window,
-                  wxT("cannot use wxRendererNative on wxDC of this type") );
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
 
     wxCoord full_size = GetGtkSplitterFullSize();
 
@@ -382,21 +397,14 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
 }
 
 void
-wxRendererGTK::DrawDropArrow(wxWindow *WXUNUSED(win),
+wxRendererGTK::DrawDropArrow(wxWindow *win,
                              wxDC& dc,
                              const wxRect& rect,
                              int flags)
 {
     GtkWidget *button = GetButtonWidget();
 
-    // If we give GTK_PIZZA(win->m_wxwindow)->bin_window as
-    // a window for gtk_paint_xxx function, then it won't
-    // work for wxMemoryDC. So that is why we assume wxDC
-    // is wxWindowDC (wxClientDC, wxMemoryDC and wxPaintDC
-    // are derived from it) and use its m_window.
-    GdkWindow* gdk_window = dc.GetGDKWindow();
-    wxASSERT_MSG( gdk_window,
-                  wxT("cannot use wxRendererNative on wxDC of this type") );
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
 
     // draw arrow so that there is even space horizontally
     // on both sides
@@ -449,17 +457,14 @@ wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
 }
 
 void
-wxRendererGTK::DrawCheckBox(wxWindow *WXUNUSED(win),
+wxRendererGTK::DrawCheckBox(wxWindow *win,
                             wxDC& dc,
                             const wxRect& rect,
                             int flags )
 {
     GtkWidget *button = GetCheckButtonWidget();
 
-    // for reason why we do this, see DrawDropArrow
-    GdkWindow* gdk_window = dc.GetGDKWindow();
-    wxASSERT_MSG( gdk_window,
-                  wxT("cannot use wxRendererNative on wxDC of this type") );
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
 
     GtkStateType state;
 
@@ -488,17 +493,14 @@ wxRendererGTK::DrawCheckBox(wxWindow *WXUNUSED(win),
 }
 
 void
-wxRendererGTK::DrawPushButton(wxWindow *WXUNUSED(win),
+wxRendererGTK::DrawPushButton(wxWindow* win,
                               wxDC& dc,
                               const wxRect& rect,
                               int flags)
 {
     GtkWidget *button = GetButtonWidget();
 
-    // for reason why we do this, see DrawDropArrow
-    GdkWindow* gdk_window = dc.GetGDKWindow();
-    wxASSERT_MSG( gdk_window,
-                  wxT("cannot use wxRendererNative on wxDC of this type") );
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
 
     // draw button
     GtkStateType state;
@@ -531,9 +533,7 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
                                      const wxRect& rect,
                                      int flags )
 {
-    GdkWindow* gdk_window = dc.GetGDKWindow();
-    wxASSERT_MSG( gdk_window,
-                  wxT("cannot use wxRendererNative on wxDC of this type") );
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
 
     int x_diff = 0;
     if (win->GetLayoutDirection() == wxLayout_RightToLeft)
