@@ -1,6 +1,8 @@
 wxwidgets2.8 (2.8.4.2-0) unstable; urgency=low
 
   * Pacakges now support all Python versions in `pyversions -r`
+  * If the system Python supports it a debug wxPython package is built that
+    can be installed side-by-side with the non-debug package 	
   * Added colour normalization to PNM image handler (Ray Johnston).
   * Fixed selecting part of word from right to left in wxHTML (Michael Hieke).
   * Selecting text in wxHTML with character precision was made easier, it's

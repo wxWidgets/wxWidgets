@@ -29,15 +29,36 @@ endif
 
 
 # Find the python version(s) to build for
-PYVERS := $(shell pyversions -vr || pyversions -vs)
+PYVERS := $(shell pyversions -vr 2> /dev/null || pyversions -vs 2> /dev/null)
 ifeq ($(strip $(PYVERS)),)
     PYVERS := $(shell python -c 'import sys; print sys.version[:3]')
     NO_PYCENTRAL = 1
     PY_BUILD_DEPS = python$(PYVERS), python$(PYVERS)-dbg, python$(PYVERS)-dev
 else
     DEB_PYTHON_SYSTEM=pycentral
-    PY_BUILD_DEPS = python-all, python-all-dbg, python-all-dev, python-central
+    PY_BUILD_DEPS = python-all, python-all-dev, python-dbg, python-central
 endif
+
+
+# The python-dbg on Dapper had a configuration bug that makes trying
+# to use distutils with it error out.  The problem seems to be that
+# the exec_prefix was set wrong.  Try to detect that so we can skip
+# building the py -dbg pacakge there.
+ifeq (/usr, $(shell python-dbg -c "import sys;print sys.exec_prefix" 2> /dev/null))
+
+    # Also check if this python will put the _d on the end of the 
+    # extension modules as this is needed to allow them to be installed 
+    # side-by-side with the non-debug package.  Ubuntu appears to be 
+    # handling this by adding a sys.pydebug attribute that is checked for
+    # in distutils to know which config dir to use.  We can use the same 
+    # thing here, but there should probably be a safer way to do it.
+    ifeq (True, $(shell python-dbg -c "import sys; print hasattr(sys,'pydebug') and sys.pydebug" 2> /dev/null))
+
+        # This means it is ok to try and build the dbg wxPython package
+        PY_DBG_OK = 1
+    endif
+endif
+
 
 # If another source package is to supply the common binary packages
 # for a particular Debian release, then define this variable to indicate
@@ -192,8 +213,13 @@ package_headers_msw     := wx$(release)-headers-msw
 extra_packages := $(package_msw_dev) $(package_msw_dbg) $(package_headers_msw)
 
 ifdef DEBIAN_WX_DEFAULT_VERSION
-  extra_packages += $(common_packages)
+    extra_packages += $(common_packages)
 endif
+
+ifndef PY_DBG_OK
+    extra_packages += $(package_gtk_dbg_py)
+endif
+
 
 
 #---------------------------------------------------------------------------
@@ -234,7 +260,11 @@ objdirs := $(objdir_wxbase_shared) $(objdir_wxbase_debug)                  \
 build_arch_stamps = build-wxbase-shared-stamp build-wxbase-debug-stamp    \
                     build-gtk-shared-stamp build-gtk-shared-contrib-stamp \
                     build-gtk-debug-stamp build-gtk-debug-contrib-stamp   \
-                    build-i18n-stamp build-gtk-py-stamp build-gtk-dbg-py-stamp
+                    build-i18n-stamp build-gtk-py-stamp 
+
+ifdef PY_DBG_OK
+    build_arch_stamps += build-gtk-dbg-py-stamp
+endif
 
 build_indep_stamps = build-examples-stamp build-doc-stamp
 
@@ -247,12 +277,17 @@ build_stamps := $(build_stamps_native) $(build_cross_stamps)
 
 #---------------------------------------------------------------------------
 # Install targets:
+
 install_all_arch = install-wxbase-lib install-wxbase-dev install-wxbase-dbg	\
                    install-gtk-lib install-gtk-dev install-gtk-dbg        	\
-                   install-headers install-i18n install-gtk-py install-gtk-dbg-py
+                   install-headers install-i18n install-gtk-py 
 
 ifndef DEBIAN_WX_DEFAULT_VERSION
-  install_all_arch += install-common
+    install_all_arch += install-common
+endif
+
+ifdef PY_DBG_OK
+    install_all_arch += install-gtk-dbg-py
 endif
 
 install_all_indep = install-examples install-doc
@@ -1020,6 +1055,7 @@ endif
 	dh_builddeb -i
 
 
+binary-arch: DH_OPTIONS=$(addprefix -N,$(extra_packages))
 binary-arch: build_arch install_arch
 	dh_testdir -a
 	dh_testroot -a
@@ -1027,10 +1063,12 @@ binary-arch: build_arch install_arch
 	dh_installchangelogs -a
 	dh_installexamples -a
 	dh_installmenu -a
-
+ifdef PY_DBG_OK
 	rm -rf debian/$(package_gtk_dbg_py)/usr/share/doc/$(package_gtk_dbg_py)
 	ln -s $(package_gtk_py_lib) debian/$(package_gtk_dbg_py)/usr/share/doc/$(package_gtk_dbg_py)
-
+else
+	rm -rf debian/$(package_gtk_dbg_py)
+endif
 ifdef NO_PYCENTRAL
 	dh_python -a
 else
@@ -1050,7 +1088,7 @@ endif
 	dh_makeshlibs -N$(package_gtk_py_lib) -N$(package_gtk_dbg_py) -V
 	dh_installdeb -a
 	dh_shlibdeps -ldebian/$(package_wxbase_lib)/usr/lib:debian/$(package_wxbase_dbg)/usr/lib:debian/$(package_gtk_lib)/usr/lib:debian/$(package_gtk_dbg)/usr/lib
-	dh_gencontrol -a
+	dh_gencontrol -a 
 	dh_md5sums -a
 	dh_builddeb -a
 
