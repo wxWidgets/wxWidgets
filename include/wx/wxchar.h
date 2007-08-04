@@ -1308,9 +1308,8 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
     //  (including even MSC) inline them just like we do right in their
     //  headers.
     //
+    #include <string.h>
     #if wxUSE_UNICODE
-        #include <string.h> //for mem funcs
-
         //implement our own wmem variants
         inline wxChar* wxTmemchr(const wxChar* s, wxChar c, size_t l)
         {
@@ -1350,13 +1349,29 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 
             return szRet;
         }
-
     #else /* !wxUSE_UNICODE */
-    #   define wxTmemchr memchr
-    #   define wxTmemcmp memcmp
-    #   define wxTmemcpy memcpy
-    #   define wxTmemmove memmove
-    #   define wxTmemset memset
+        #if wxABI_VERSION >= 20805
+            // for compatibility with earlier versions, these functions take
+            // "void *" but in the next wx version they will take "char *" so
+            // don't use them with void pointers (use the standard memxxx()
+            // with them)
+            inline char* wxTmemchr(const void* s, int c, size_t len)
+                { return (char*)memchr(s, c, len); }
+            inline int wxTmemcmp(const void* sz1, const void* sz2, size_t len)
+                { return memcmp(sz1, sz2, len); }
+            inline char* wxTmemcpy(void* szOut, const void* szIn, size_t len)
+                { return (char*)memcpy(szOut, szIn, len); }
+            inline char* wxTmemmove(void* szOut, const void* szIn, size_t len)
+                { return (char*)memmove(szOut, szIn, len); }
+            inline char* wxTmemset(void* szOut, int c, size_t len)
+                { return (char*)memset(szOut, c, len); }
+        #else
+        #   define wxTmemchr memchr
+        #   define wxTmemcmp memcmp
+        #   define wxTmemcpy memcpy
+        #   define wxTmemmove memmove
+        #   define wxTmemset memset
+        #endif
     #endif /* wxUSE_UNICODE/!wxUSE_UNICODE */
 
 #endif /*__cplusplus*/
