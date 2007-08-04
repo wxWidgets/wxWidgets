@@ -774,9 +774,13 @@ This is a convenience method useful when storing binary data in wxString.
 
 \func{static wxString }{FromAscii}{\param{const char*}{ s}}
 
+\func{static wxString }{FromAscii}{\param{const unsigned char*}{ s}}
+
 \func{static wxString }{FromAscii}{\param{const char*}{ s}, \param{size\_t}{ len}}
 
-\func{static wxString }{FromAscii}{\param{const char}{ c}}
+\func{static wxString }{FromAscii}{\param{const unsigned char*}{ s}, \param{size\_t}{ len}}
+
+\func{static wxString }{FromAscii}{\param{char}{ c}}
 
 Converts the string or character from an ASCII, 7-bit form
 to the native wxString representation. Most useful when using

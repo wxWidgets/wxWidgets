@@ -1238,17 +1238,24 @@ public:
     // the behaviour of these functions with the strings containing anything
     // else than 7 bit ASCII characters is undefined, use at your own risk.
 #if wxUSE_UNICODE
-    static wxString FromAscii(const char *ascii, size_t len);  // string
-    static wxString FromAscii(const char *ascii);  // string
-    static wxString FromAscii(const char ascii);   // char
+    static wxString FromAscii(const char *ascii, size_t len);
+    static wxString FromAscii(const char *ascii);
+    static wxString FromAscii(char ascii);
     const wxCharBuffer ToAscii() const;
 #else // ANSI
     static wxString FromAscii(const char *ascii) { return wxString( ascii ); }
     static wxString FromAscii(const char *ascii, size_t len)
         { return wxString( ascii, len ); }
-    static wxString FromAscii(const char ascii) { return wxString( ascii ); }
+    static wxString FromAscii(char ascii) { return wxString( ascii ); }
     const char *ToAscii() const { return c_str(); }
 #endif // Unicode/!Unicode
+
+    // also provide unsigned char overloads as signed/unsigned doesn't matter
+    // for 7 bit ASCII characters
+    static wxString FromAscii(const unsigned char *ascii)
+        { return FromAscii((const char *)ascii); }
+    static wxString FromAscii(const unsigned char *ascii, size_t len)
+        { return FromAscii((const char *)ascii, len); }
 
     // conversion to/from UTF-8:
 #if wxUSE_UNICODE_UTF8
