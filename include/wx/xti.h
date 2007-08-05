@@ -69,20 +69,19 @@ class WXDLLIMPEXP_BASE wxClassInfo
 
 public:
     wxClassInfo(const wxClassInfo **_Parents,
-        const wxChar *_UnitName,
-        const wxChar *_ClassName,
-        int size,
-        wxObjectConstructorFn ctor,
-        wxPropertyInfo *_Props,
-        wxHandlerInfo *_Handlers,
-        wxObjectCreateAdapter* _Constructor,
-        const wxChar ** _ConstructorProperties,
-        const int _ConstructorPropertiesCount,
-        wxVariantToObjectConverter _PtrConverter1,
-        wxVariantToObjectConverter _Converter2,
-        wxObjectToVariantConverter _Converter3,
-        wxObjectStreamingCallback _streamingCallback = NULL
-        ) :
+                const wxChar *_UnitName,
+                const wxChar *_ClassName,
+                int size,
+                wxObjectConstructorFn ctor,
+                wxPropertyInfo *_Props,
+                wxHandlerInfo *_Handlers,
+                wxObjectCreateAdapter* _Constructor,
+                const wxChar ** _ConstructorProperties,
+                const int _ConstructorPropertiesCount,
+                wxVariantToObjectConverter _PtrConverter1,
+                wxVariantToObjectConverter _Converter2,
+                wxObjectToVariantConverter _Converter3,
+                wxObjectStreamingCallback _streamingCallback = NULL) :
             m_className(_ClassName),
             m_objectSize(size),
             m_objectConstructor(ctor),
@@ -122,6 +121,35 @@ public:
             m_streamingCallback(NULL)
     {
         sm_first = this;
+        Register();
+    }
+
+    // ctor compatible with old RTTI system
+    wxClassInfo(const wxChar *_ClassName,
+                const wxClassInfo *_Parent1,
+                const wxClassInfo *_Parent2,
+                int size,
+                wxObjectConstructorFn ctor) :
+            m_className(className),
+            m_objectSize(size),
+            m_objectConstructor(ctor),
+            m_next(sm_first),
+            m_firstProperty(NULL),
+            m_firstHandler(NULL),
+            m_parents(NULL),
+            m_unitName(_UnitName),
+            m_constructor(NULL),
+            m_constructorProperties(NULL),
+            m_constructorPropertiesCount(0),
+            m_variantOfPtrToObjectConverter(NULL),
+            m_variantToObjectConverter(NULL),
+            m_objectToVariantConverter(NULL),
+            m_streamingCallback(NULL)
+    {
+        sm_first = this;
+        m_parents[0] = _Parent1;
+        m_parents[1] = _Parent2;
+        m_parents[2] = NULL;
         Register();
     }
 
@@ -257,31 +285,31 @@ public:
 private:
     const wxChar            *m_className;
     int                      m_objectSize;
-    wxObjectConstructorFn    m_objectConstructor;
+    wxObjectConstructorFn     m_objectConstructor;
 
     // class info object live in a linked list:
     // pointers to its head and the next element in it
 
     static wxClassInfo      *sm_first;
-    wxClassInfo             *m_next;
+    wxClassInfo              *m_next;
 
     static wxHashTable      *sm_classTable;
 
 protected:
-    wxPropertyInfo *         m_firstProperty;
-    wxHandlerInfo *          m_firstHandler;
+    wxPropertyInfo *          m_firstProperty;
+    wxHandlerInfo *           m_firstHandler;
 
 private:
-    const wxClassInfo**      m_parents;
-    const wxChar*            m_unitName;
+    const wxClassInfo**       m_parents;
+    const wxChar*             m_unitName;
 
     wxObjectCreateAdapter*     m_constructor;
-    const wxChar **          m_constructorProperties;
-    const int                m_constructorPropertiesCount;
+    const wxChar **           m_constructorProperties;
+    const int                 m_constructorPropertiesCount;
     wxVariantToObjectConverter m_variantOfPtrToObjectConverter;
     wxVariantToObjectConverter m_variantToObjectConverter;
     wxObjectToVariantConverter m_objectToVariantConverter;
-    wxObjectStreamingCallback m_streamingCallback;
+    wxObjectStreamingCallback  m_streamingCallback;
 
     const wxPropertyAccessor *FindAccessor (const wxChar *propertyName) const;
 
@@ -352,8 +380,9 @@ private:
     wxDynamicClassInfoInternal* m_data;
 };
 
+
 // ----------------------------------------------------------------------------
-// DECLARE class macros
+// wxDECLARE class macros
 // ----------------------------------------------------------------------------
 
 #define _DECLARE_DYNAMIC_CLASS(name)                        \
@@ -384,9 +413,11 @@ private:
 #define wxDECLARE_ABSTRACT_CLASS(name)    _DECLARE_DYNAMIC_CLASS(name)
 #define wxDECLARE_CLASS(name)             wxDECLARE_DYNAMIC_CLASS(name)
 
+#define wxCLASSINFO(name)                 (&name::ms_classInfo)
+
 
 // ----------------------------------------------------------------------------
-// IMPLEMENT class macros for concrete classes
+// wxIMPLEMENT class macros for concrete classes
 // ----------------------------------------------------------------------------
 
 // Single inheritance with one base class
@@ -521,7 +552,7 @@ private:
 
 
 // ----------------------------------------------------------------------------
-// IMPLEMENT class macros for abstract classes
+// wxIMPLEMENT class macros for abstract classes
 // ----------------------------------------------------------------------------
 
 // Single inheritance with one base class
