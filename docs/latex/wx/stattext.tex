@@ -106,12 +106,15 @@ label text is needed.
 
 \membersection{wxStaticText::GetLabelText}\label{wxstatictextgetlabeltext}
 
-\constfunc{const wxString\&}{GetLabelText}{\void}
+\constfunc{wxString}{GetLabelText}{\void}
 
-Returns the control's label or the given \arg{label} string for the static
-version without the mnemonics characters (if any) and without the markup
-(if the control has \texttt{wxST\_MARKUP} style).
+\func{static wxString}{GetLabelText}{\param{const wxString\& }{label}}
 
+The first form returns the control's label without the mnemonics characters (if any) 
+and without the markup (if the control has \texttt{wxST\_MARKUP} style).
+
+The second (static) version returns the given \arg{label} string without the mnemonics 
+characters (if any) and without the markup.
 
 
 \membersection{wxStaticText::SetLabel}\label{wxstatictextsetlabel}
