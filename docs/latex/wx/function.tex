@@ -2907,6 +2907,44 @@ cannot be used with this function currently.
 <wx/utils.h>
 
 
+
+
+\membersection{wxFORCE\_LINK\_THIS\_MODULE}\label{wxforcelinkthismodule}
+
+\func{}{wxFORCE\_LINK\_THIS\_MODULE}{moduleName}
+
+This macro can be used in conjunction with the
+\helpref{wxFORCE\_LINK\_MODULE}{wxforcelinkmodule} macro to force
+the linker to include in its output a specific object file.
+
+In particular, you should use this macro in the source file which you want
+to force for inclusion. The \tt{moduleName} needs to be a name not already
+in use in other \tt{wxFORCE\_LINK\_THIS\_MODULE} macros, but is not required
+to be e.g. the same name of the source file (even if it's a good choice).
+
+\wxheading{Include files}
+
+<wx/link.h>
+
+
+\membersection{wxFORCE\_LINK\_MODULE}\label{wxforcelinkmodule}
+
+\func{}{wxFORCE\_LINK\_MODULE}{moduleName}
+
+This macro can be used in conjunction with the
+\helpref{wxFORCE\_LINK\_THIS\_MODULE}{wxforcelinkthismodule} macro to force
+the linker to include in its output a specific object file.
+
+In particular, you should use this macro in a source file which you know
+for sure is linked in the output (e.g. the source file containing the "main()"
+of your app). The \tt{moduleName} is the name of the module you want to forcefully link
+(i.e. the name you used in the relative \helpref{wxFORCE\_LINK\_THIS\_MODULE}{wxforcelinkthismodule} macro.
+
+\wxheading{Include files}
+
+<wx/link.h>
+
+
 \membersection{wxIMPLEMENT\_APP}\label{wximplementapp}
 
 \func{}{wxIMPLEMENT\_APP}{className}
@@ -4969,3 +5007,32 @@ Removes the variable {\it var} from the environment.
 function.
 
 Returns \true on success.
+
+
+
+
+
+\section{Event macros}\label{eventmacros}
+
+The functions in this section deal with getting the current time and sleeping
+for the specified time interval.
+
+
+\membersection{wxBEGIN\_EVENT\_TABLE}\label{wxbegineventtable}
+
+\func{}{wxBEGIN\_EVENT\_TABLE}{className, baseClassName}
+
+Marks the beginning of the table of registered event handlers for \tt{className}.
+After using the various \tt{EVT_*} macros (see the 
+\helpref{event handling overview}{eventhandlingoverview}), use the
+\helpref{wxEND\_EVENT\_TABLE}{wxendeventstable} macro 
+to mark the end of the table.
+
+
+\membersection{wxEND\_EVENT\_TABLE}\label{wxendeventtable}
+
+\func{}{wxEND\_EVENT\_TABLE}{}
+
+Marks the end of the table of registered event handlers for some class.
+See \helpref{wxBEGIN\_EVENT\_TABLE}{wxbegineventtable}.
+

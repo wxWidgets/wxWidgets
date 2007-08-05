@@ -182,11 +182,13 @@ in wxMediaBackend correspond to those in wxMediaCtrl except for CreateControl
 which does the actual creation of the control, in cases where a custom control
 is not needed you may simply call wxControl::Create.
 
-You need to make sure to use the DECLARE\_CLASS and IMPLEMENT\_CLASS macros.
+You need to make sure to use the \helpref{wxDECLARE\_CLASS}{wxdeclareclass} and 
+\helpref{wxIMPLEMENT\_CLASS}{wximplementclass} macros.
 
 The only real tricky part is that you need to make sure the file in compiled
 in, which if there are just backends in there will not happen and you may need
-to use a force link hack (see http://www.wxwidgets.org/wiki/index.php/RTTI).
+to use a force link hack (see \helpref{wxFORCE\_LINK\_THIS\_MODULE}{wxforcelinkthismodule}
+and \helpref{wxFORCE\_LINK\_MODULE}{wxforcelinkmodule} macros).
 
 This is a rather simple example of how to create a backend in the
 \helpref{wxActiveXContainer}{wxactivexcontainer} documentation.
