@@ -9,7 +9,7 @@
 %% License:     wxWindows license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Functions}\label{functions}
+\chapter{Functions and macros}\label{functions}
 \setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
 \setfooter{\thepage}{}{}{}{}{\thepage}
 
@@ -19,18 +19,6 @@ the corresponding topic.
 
 \section{Alphabetical functions and macros list}\label{functionsalphabetically}
 
-\helpref{CLASSINFO}{classinfo}\\
-\helpref{DECLARE\_ABSTRACT\_CLASS}{declareabstractclass}\\
-\helpref{DECLARE\_APP}{declareapp}\\
-\helpref{DECLARE\_CLASS}{declareclass}\\
-\helpref{DECLARE\_DYNAMIC\_CLASS}{declaredynamicclass}\\
-\helpref{IMPLEMENT\_ABSTRACT\_CLASS2}{implementabstractclass2}\\
-\helpref{IMPLEMENT\_ABSTRACT\_CLASS}{implementabstractclass}\\
-\helpref{IMPLEMENT\_APP}{implementapp}\\
-\helpref{IMPLEMENT\_CLASS2}{implementclass2}\\
-\helpref{IMPLEMENT\_CLASS}{implementclass}\\
-\helpref{IMPLEMENT\_DYNAMIC\_CLASS2}{implementdynamicclass2}\\
-\helpref{IMPLEMENT\_DYNAMIC\_CLASS}{implementdynamicclass}\\
 \helpref{wxAboutBox}{wxaboutbox}\\
 \helpref{wxASSERT}{wxassert}\\
 \helpref{wxASSERT\_MIN\_BITSIZE}{wxassertminbitsize}\\
@@ -48,6 +36,7 @@ the corresponding topic.
 \helpref{wxCHECK\_VERSION}{wxcheckversion}\\
 \helpref{wxCHECK\_VERSION\_FULL}{wxcheckversionfull}\\
 \helpref{wxCHECK\_W32API\_VERSION}{wxcheckw32apiversion}\\
+\helpref{wxCLASSINFO}{wxclassinfo}\\
 \helpref{wxClientDisplayRect}{wxclientdisplayrect}\\
 \helpref{wxClipboardOpen}{functionwxclipboardopen}\\
 \helpref{wxCloseClipboard}{wxcloseclipboard}\\
@@ -66,6 +55,10 @@ the corresponding topic.
 \helpref{wxCRITICAL\_SECTION}{wxcriticalsectionmacro}\\ % wxcs already taken!
 \helpref{wxDDECleanUp}{wxddecleanup}\\
 \helpref{wxDDEInitialize}{wxddeinitialize}\\
+\helpref{wxDECLARE\_ABSTRACT\_CLASS}{wxdeclareabstractclass}\\
+\helpref{wxDECLARE\_APP}{wxdeclareapp}\\
+\helpref{wxDECLARE\_CLASS}{wxdeclareclass}\\
+\helpref{wxDECLARE\_DYNAMIC\_CLASS}{wxdeclaredynamicclass}\\
 \helpref{wxDROP\_ICON}{wxdropicon}\\
 \helpref{wxDebugMsg}{wxdebugmsg}\\
 \helpref{WXDEBUG\_NEW}{debugnew}\\
@@ -162,6 +155,13 @@ the corresponding topic.
 \helpref{wxGetenv}{wxgetenvmacro}\\
 \helpref{wxHandleFatalExceptions}{wxhandlefatalexceptions}\\
 \helpref{wxICON}{wxiconmacro}\\
+\helpref{wxIMPLEMENT\_ABSTRACT\_CLASS2}{wximplementabstractclass2}\\
+\helpref{wxIMPLEMENT\_ABSTRACT\_CLASS}{wximplementabstractclass}\\
+\helpref{wxIMPLEMENT\_APP}{wximplementapp}\\
+\helpref{wxIMPLEMENT\_CLASS2}{wximplementclass2}\\
+\helpref{wxIMPLEMENT\_CLASS}{wximplementclass}\\
+\helpref{wxIMPLEMENT\_DYNAMIC\_CLASS2}{wximplementdynamicclass2}\\
+\helpref{wxIMPLEMENT\_DYNAMIC\_CLASS}{wximplementdynamicclass}\\
 \helpref{wxINTXX\_SWAP\_ALWAYS}{intswapalways}\\
 \helpref{wxINTXX\_SWAP\_ON\_BE}{intswaponbe}\\
 \helpref{wxINTXX\_SWAP\_ON\_LE}{intswaponle}\\
@@ -985,6 +985,10 @@ threads.
 
 \section{File functions}\label{filefunctions}
 
+These functions perform miscellaneous operations related to files.
+However you should strive to use the appropriate classes, instead of the
+global functions, whenever possible.
+
 \wxheading{Include files}
 
 <wx/filefn.h>
@@ -1612,6 +1616,8 @@ if successful, \false otherwise.
 
 
 \section{String functions}\label{stringfunctions}
+
+Some string-related functions. You will rarely use these ones; rather use \helpref{wxString}{wxstring}.
 
 \membersection{::wxGetTranslation}\label{wxgettranslation}
 
@@ -2701,9 +2707,12 @@ Sets the translation (from the top left corner) for PostScript output. The defau
 
 \section{Clipboard functions}\label{clipsboard}
 
-These clipboard functions are implemented for Windows only. The use of these functions
-is deprecated and the code is no longer maintained. Use the \helpref{wxClipboard}{wxclipboard}
-class instead.
+
+{\bf NB:} These routines are deprecated and should no longer be used!
+Use the \helpref{wxClipboard}{wxclipboard} class instead.
+
+These clipboard functions are implemented for Windows only. 
+
 
 \wxheading{Include files}
 
@@ -2815,7 +2824,7 @@ Passes data to the clipboard.
 The clipboard must have previously been opened for this call to succeed.
 
 
-\section{Miscellaneous functions}\label{miscellany}
+\section{Miscellaneous functions and macros}\label{miscellany}
 
 
 \membersection{wxCONCAT}\label{wxconcat}
@@ -2823,6 +2832,26 @@ The clipboard must have previously been opened for this call to succeed.
 \func{}{wxCONCAT}{\param{}{x}, \param{}{y}}
 
 This macro returns the concatenation of two tokens \arg{x} and \arg{y}.
+
+
+\membersection{wxDECLARE\_APP}\label{wxdeclareapp}
+
+\func{}{wxDECLARE\_APP}{className}
+
+This is used in headers to create a forward declaration of the
+\helpref{wxGetApp}{wxgetapp} function implemented by
+\helpref{wxIMPLEMENT\_APP}{wximplementapp}. It creates the declaration
+{\tt className\& wxGetApp(void)}.
+
+Example:
+
+\begin{verbatim}
+  wxDECLARE_APP(MyApp)
+\end{verbatim}
+
+\wxheading{Include files}
+
+<wx/app.h>
 
 
 \membersection{wxDYNLIB\_FUNCTION}\label{wxdynlibfunction}
@@ -2876,6 +2905,24 @@ cannot be used with this function currently.
 \wxheading{Include files}
 
 <wx/utils.h>
+
+
+\membersection{wxIMPLEMENT\_APP}\label{wximplementapp}
+
+\func{}{wxIMPLEMENT\_APP}{className}
+
+This is used in the application class implementation file to make the application class 
+known to wxWidgets for dynamic construction. You use this as:
+
+\begin{verbatim}
+  wxIMPLEMENT_APP(MyApp)
+\end{verbatim}
+
+See also \helpref{wxDECLARE\_APP}{wxdeclareapp}.
+
+\wxheading{Include files}
+
+<wx/app.h>
 
 
 \membersection{wxLL}\label{wxll}
@@ -3520,245 +3567,295 @@ data in big-endian format.
 
 
 
-\section{RTTI functions}\label{rttimacros}
-
-wxWidgets uses its own RTTI ("run-time type identification") system which
-predates the current standard C++ RTTI and so is kept for backwards
-compatibility reasons but also because it allows some things which the
-standard RTTI doesn't directly support (such as creating a class from its
-name).
-
-The standard C++ RTTI can be used in the user code without any problems and in
-general you shouldn't need to use the functions and the macros in this section
-unless you are thinking of modifying or adding any wxWidgets classes.
-
-\wxheading{See also}
-
-\helpref{RTTI overview}{runtimeclassoverview}
 
 
-\membersection{CLASSINFO}\label{classinfo}
 
-\func{wxClassInfo *}{CLASSINFO}{className}
 
-Returns a pointer to the wxClassInfo object associated with this class.
+
+
+
+
+
+
+
+\section{XTI macros}\label{rttimacros}
+
+wxWidgets uses its own eXtended Type Information (XTI) system which extends
+the standard C++ Run Time Type Information (RTTI) system. 
+
+It uses a set of macros to describe the metadata associated with a certain class.
+These macros are widely used in wxWidgets sources and the user can use them also
+in his sources to describe his own classes.
+See the \helpref{XTI overview}{runtimeclassoverview} for more info.
 
 \wxheading{Include files}
 
 <wx/object.h>
 
 
-\membersection{DECLARE\_ABSTRACT\_CLASS}\label{declareabstractclass}
+\membersection{::wxCreateDynamicObject}\label{wxcreatedynamicobject}
 
-\func{}{DECLARE\_ABSTRACT\_CLASS}{className}
+\func{wxObject *}{wxCreateDynamicObject}{\param{const wxString\& }{className}}
+
+Creates and returns an object of the given class, if the class has been
+registered with the dynamic class system using \tt{wxDECLARE...} and \tt{wxIMPLEMENT...} macros.
+
+
+\membersection{wxCLASSINFO}\label{classinfo}
+
+\func{wxClassInfo *}{wxCLASSINFO}{className}
+
+Returns a pointer to the wxClassInfo object associated with classes of type \tt{className}.
+
+
+\membersection{wxDECLARE\_ABSTRACT\_CLASS}\label{wxdeclareabstractclass}
+
+\func{}{wxDECLARE\_ABSTRACT\_CLASS}{className}
 
 Used inside a class declaration to declare that the class should be
 made known to the class hierarchy, but objects of this class cannot be created
-dynamically. The same as DECLARE\_CLASS.
+dynamically (because they are abstract, that is, contain one or more abstract
+virtual function). 
+The same as \helpref{wxDECLARE\_CLASS}{wxdeclareclass}.
 
 Example:
 
 \begin{verbatim}
-class wxCommand: public wxObject
+class MyClass : public wxObject
 {
-  DECLARE_ABSTRACT_CLASS(wxCommand)
+  wxDECLARE_ABSTRACT_CLASS(MyClass)
 
- private:
-  ...
- public:
-  ...
+public:
+   ...
 };
 \end{verbatim}
 
-\wxheading{Include files}
 
-<wx/object.h>
+\membersection{wxDECLARE\_CLASS}\label{wxdeclareclass}
 
-
-\membersection{DECLARE\_APP}\label{declareapp}
-
-\func{}{DECLARE\_APP}{className}
-
-This is used in headers to create a forward declaration of the
-\helpref{wxGetApp}{wxgetapp} function implemented by
-\helpref{IMPLEMENT\_APP}{implementapp}. It creates the declaration
-{\tt className\& wxGetApp(void)}.
-
-Example:
-
-\begin{verbatim}
-  DECLARE_APP(MyApp)
-\end{verbatim}
-
-\wxheading{Include files}
-
-<wx/app.h>
-
-
-\membersection{DECLARE\_CLASS}\label{declareclass}
-
-\func{}{DECLARE\_CLASS}{className}
+\func{}{wxDECLARE\_CLASS}{className}
 
 Used inside a class declaration to declare that the class should be
 made known to the class hierarchy, but objects of this class cannot be created
-dynamically. The same as DECLARE\_ABSTRACT\_CLASS.
-
-\wxheading{Include files}
-
-<wx/object.h>
+dynamically. The same as \helpref{wxDECLARE\_ABSTRACT\_CLASS}{wxdeclareabstractclass}.
 
 
-\membersection{DECLARE\_DYNAMIC\_CLASS}\label{declaredynamicclass}
+\membersection{wxDECLARE\_DYNAMIC\_CLASS}\label{wxdeclaredynamicclass}
 
-\func{}{DECLARE\_DYNAMIC\_CLASS}{className}
+\func{}{wxDECLARE\_DYNAMIC\_CLASS}{className}
 
 Used inside a class declaration to make the class known to wxWidgets RTTI
 system and also declare that the objects of this class should be dynamically
-creatable from run-time type information. Notice that this implies that the
+creatable from run-time type information. 
+
+Notice that this implies that the
 class should have a default constructor, if this is not the case consider using
-\helpref{DECLARE\_CLASS}{declareclass}.
+\helpref{wxDECLARE\_CLASS}{wxdeclareclass}.
 
 Example:
 
 \begin{verbatim}
-class wxFrame: public wxWindow
+class MyClass: public wxWindow
 {
-  DECLARE_DYNAMIC_CLASS(wxFrame)
+  wxDECLARE_DYNAMIC_CLASS(MyClass)
 
- private:
-  const wxString& frameTitle;
- public:
+public:
   ...
 };
 \end{verbatim}
 
-\wxheading{Include files}
 
-<wx/object.h>
+\membersection{wxDECLARE\_DYNAMIC\_CLASS\_NO\_ASSIGN}\label{wxdeclaredynamicclassnoassign}
 
+\func{}{wxDECLARE\_DYNAMIC\_CLASS\_NO\_ASSIGN}{className}
 
-\membersection{IMPLEMENT\_ABSTRACT\_CLASS}\label{implementabstractclass}
+Like the \helpref{wxDECLARE\_DYNAMIC\_CLASS}{wxdeclaredynamicclass}
+macro but also declares \tt{className} as a class whose \tt{operator=} is private
+and thus cannot be used. 
 
-\func{}{IMPLEMENT\_ABSTRACT\_CLASS}{className, baseClassName}
+This is very useful to avoid that the user tries to assign to a variable 
+of type \tt{className} some other class instance of the same type, when
+this is not a logically-correct operation.
 
-Used in a C++ implementation file to complete the declaration of
-a class that has run-time type information. The same as IMPLEMENT\_CLASS.
+Beware however that the copy constructor is still available using this macro.
+Use the \helpref{wxDECLARE\_DYNAMIC\_CLASS\_NO\_COPY}{wxdeclaredynamicclassnocopy} 
+macro if you want to avoid that.
 
 Example:
 
 \begin{verbatim}
-IMPLEMENT_ABSTRACT_CLASS(wxCommand, wxObject)
+class MyEvent: public wxCommandEvent
+{
+  wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(MyEvent)
 
-wxCommand::wxCommand(void)
+public:
+  ...
+};
+
+...
+  MyEvent x, y;
+  x = y;         // compiler error! MyEvent instances are events
+                 // and thus it makes no much sense operator= for them!
+                
+  MyEvent z(y);  // compiles fine
+...
+
+\end{verbatim}
+
+
+\membersection{wxDECLARE\_DYNAMIC\_CLASS\_NO\_COPY}\label{wxdeclaredynamicclassnocopy}
+
+\func{}{wxDECLARE\_DYNAMIC\_CLASS\_NO\_COPY}{className}
+
+Like the \helpref{wxDECLARE\_DYNAMIC\_CLASS}{wxdeclaredynamicclass}
+macro but also declares \tt{className} as a class whose \tt{operator=} 
+and the copy constructor are private and thus cannot be used. 
+
+This is very useful to avoid that the user tries to copy to a variable 
+of type \tt{className} some other class instance of the same type, when
+this is not a logically-correct operation.
+
+Example:
+
+\begin{verbatim}
+class MyWindow: public wxWindow
+{
+  wxDECLARE_DYNAMIC_CLASS_NO_COPY(MyWindow)
+
+public:
+  ...
+};
+
+...
+  MyWindow x, y;
+  x = y;        // compiler error! MyWindow instances are windows
+                // and thus it makes no sense operator== for them!
+                
+  MyWindow z(y);  // compiler error! same comment as above.
+...
+
+\end{verbatim}
+
+
+
+\membersection{wxIMPLEMENT\_ABSTRACT\_CLASS}\label{wximplementabstractclass}
+
+\func{}{wxIMPLEMENT\_ABSTRACT\_CLASS}{className, baseClassName}
+
+Used in a C++ implementation file to complete the 
+declaration of a class that has the
+\helpref{wxDECLARE\_ABSTRACT\_CLASS}{wxdeclareabstractclass}
+macro in its definition.
+ 
+The same as \helpref{wxIMPLEMENT\_CLASS}{wximplementclass}.
+
+Example:
+
+\begin{verbatim}
+wxIMPLEMENT_ABSTRACT_CLASS(MyClass, wxObject)
+
+MyClass::MyClass()
 {
 ...
 }
 \end{verbatim}
 
-\wxheading{Include files}
 
-<wx/object.h>
+\membersection{wxIMPLEMENT\_ABSTRACT\_CLASS2}\label{wximplementabstractclass2}
 
-
-\membersection{IMPLEMENT\_ABSTRACT\_CLASS2}\label{implementabstractclass2}
-
-\func{}{IMPLEMENT\_ABSTRACT\_CLASS2}{className, baseClassName1, baseClassName2}
+\func{}{wxIMPLEMENT\_ABSTRACT\_CLASS2}{className, baseClassName1, baseClassName2}
 
 Used in a C++ implementation file to complete the declaration of
-a class that has run-time type information and two base classes. The same as IMPLEMENT\_CLASS2.
+a class that has the 
+\helpref{wxDECLARE\_ABSTRACT\_CLASS2}{wxdeclareabstractclass2}
+macro in its definition and has two base classes. 
 
-\wxheading{Include files}
-
-<wx/object.h>
-
-
-\membersection{IMPLEMENT\_APP}\label{implementapp}
-
-\func{}{IMPLEMENT\_APP}{className}
-
-This is used in the application class implementation file to make the application class known to
-wxWidgets for dynamic construction. You use this instead of
-
-Old form:
-
-\begin{verbatim}
-  MyApp myApp;
-\end{verbatim}
-
-New form:
-
-\begin{verbatim}
-  IMPLEMENT_APP(MyApp)
-\end{verbatim}
-
-See also \helpref{DECLARE\_APP}{declareapp}.
-
-\wxheading{Include files}
-
-<wx/app.h>
+The same as \helpref{wxIMPLEMENT\_CLASS2}{wximplementclass2}.
 
 
-\membersection{IMPLEMENT\_CLASS}\label{implementclass}
+\membersection{wxIMPLEMENT\_CLASS}\label{wximplementclass}
 
-\func{}{IMPLEMENT\_CLASS}{className, baseClassName}
+\func{}{wxIMPLEMENT\_CLASS}{className, baseClassName}
 
 Used in a C++ implementation file to complete the declaration of
-a class that has run-time type information. The same as IMPLEMENT\_ABSTRACT\_CLASS.
+a class that has the
+\helpref{wxDECLARE\_CLASS}{wxdeclareclass}
+macro in its definition.
 
-\wxheading{Include files}
-
-<wx/object.h>
+The same as \helpref{wxIMPLEMENT\_ABSTRACT\_CLASS}{wximplementabstractclass}.
 
 
-\membersection{IMPLEMENT\_CLASS2}\label{implementclass2}
+\membersection{wxIMPLEMENT\_CLASS2}\label{wximplementclass2}
 
-\func{}{IMPLEMENT\_CLASS2}{className, baseClassName1, baseClassName2}
+\func{}{wxIMPLEMENT\_CLASS2}{className, baseClassName1, baseClassName2}
 
 Used in a C++ implementation file to complete the declaration of a
-class that has run-time type information and two base classes. The
-same as IMPLEMENT\_ABSTRACT\_CLASS2.
+class that has the
+\helpref{wxDECLARE\_CLASS2}{wxdeclareclass2}
+macro in its definition and has two base classes.
 
-\wxheading{Include files}
-
-<wx/object.h>
+The same as \helpref{wxIMPLEMENT\_ABSTRACT\_CLASS2}{wximplementabstractclass2}.
 
 
-\membersection{IMPLEMENT\_DYNAMIC\_CLASS}\label{implementdynamicclass}
+\membersection{wxIMPLEMENT\_DYNAMIC\_CLASS}\label{wximplementdynamicclass}
 
-\func{}{IMPLEMENT\_DYNAMIC\_CLASS}{className, baseClassName}
+\func{}{wxIMPLEMENT\_DYNAMIC\_CLASS}{className, baseClassName}
 
 Used in a C++ implementation file to complete the declaration of
-a class that has run-time type information, and whose instances
-can be created dynamically.
+a class that has the
+\helpref{wxDECLARE\_DYNAMIC\_CLASS}{wxdeclaredynamicclass}
+macro in its definition, and whose instances can be created dynamically.
 
 Example:
 
 \begin{verbatim}
-IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
+wxIMPLEMENT_DYNAMIC_CLASS(MyClass, wxObject)
 
-wxFrame::wxFrame(void)
+MyClass::MyClass()
 {
 ...
 }
 \end{verbatim}
 
-\wxheading{Include files}
 
-<wx/object.h>
+\membersection{wxIMPLEMENT\_DYNAMIC\_CLASS\_XTI}\label{wximplementdynamicclassxti}
+
+\func{}{wxIMPLEMENT\_DYNAMIC\_CLASS\_XTI}{className, baseClassName, headerFile}
+
+Like \helpref{wxIMPLEMENT\_DYNAMIC\_CLASS}{wximplementdynamicclass} but with two
+differences: this macro also takes the header name containing the class definition and,
+more important, when you use this macro you'll need also to define the properties, the
+handlers and the constructor using respectively the
+\helpref{wxPROPERTY}{wxproperty}, \helpref{wxHANDLER}{wxhandler} and
+\helpref{wxCONSTRUCTOR\_N}{wxconstructorn} macros.
+
+For a full example see the \helpref{XTI overview}{runtimeclassoverview}.
 
 
-\membersection{IMPLEMENT\_DYNAMIC\_CLASS2}\label{implementdynamicclass2}
+\membersection{wxIMPLEMENT\_DYNAMIC\_CLASS2}\label{wximplementdynamicclass2}
 
-\func{}{IMPLEMENT\_DYNAMIC\_CLASS2}{className, baseClassName1, baseClassName2}
+\func{}{wxIMPLEMENT\_DYNAMIC\_CLASS2}{className, baseClassName1, baseClassName2}
 
 Used in a C++ implementation file to complete the declaration of
-a class that has run-time type information, and whose instances
-can be created dynamically. Use this for classes derived from two
-base classes.
+a class that has the
+\helpref{wxDECLARE\_DYNAMIC\_CLASS2}{wxdeclaredynamicclass2}
+macro in its definition, and whose instances can be created dynamically. 
 
-\wxheading{Include files}
+Use this for classes derived from two base classes.
 
-<wx/object.h>
+
+\membersection{wxIMPLEMENT\_DYNAMIC\_CLASS2\_XTI}\label{wximplementdynamicclass2xti}
+
+\func{}{wxIMPLEMENT\_DYNAMIC\_CLASS2\_XTI}{className, baseClassName1, baseClassName2, headerFile}
+
+Like \helpref{wxIMPLEMENT\_DYNAMIC\_CLASS2}{wximplementdynamicclass2} but with two
+differences: this macro also takes the header name containing the class definition and,
+more important, when you use this macro you'll need also to define the properties, the
+handlers and the constructor using respectively the
+\helpref{wxPROPERTY}{wxproperty}, \helpref{wxHANDLER}{wxhandler} and
+\helpref{wxCONSTRUCTOR\_N}{wxconstructorn} macros.
+
+For a full example see the \helpref{XTI overview}{runtimeclassoverview}.
 
 
 \membersection{wxConstCast}\label{wxconstcast}
@@ -3773,32 +3870,6 @@ supports {\it const\_cast} or into an old, C-style cast, otherwise.
 \helpref{wx\_const\_cast}{wxconstcastraw}\\
 \helpref{wxDynamicCast}{wxdynamiccast}\\
 \helpref{wxStaticCast}{wxstaticcast}
-
-
-\membersection{::wxCreateDynamicObject}\label{wxcreatedynamicobject}
-
-\func{wxObject *}{wxCreateDynamicObject}{\param{const wxString\& }{className}}
-
-Creates and returns an object of the given class, if the class has been
-registered with the dynamic class system using DECLARE... and IMPLEMENT... macros.
-
-
-\membersection{WXDEBUG\_NEW}\label{debugnew}
-
-\func{}{WXDEBUG\_NEW}{arg}
-
-This is defined in debug mode to be call the redefined new operator
-with filename and line number arguments. The definition is:
-
-\begin{verbatim}
-#define WXDEBUG_NEW new(__FILE__,__LINE__)
-\end{verbatim}
-
-In non-debug mode, this is defined as the normal new operator.
-
-\wxheading{Include files}
-
-<wx/object.h>
 
 
 \membersection{wxDynamicCast}\label{wxdynamiccast}
@@ -3816,16 +3887,16 @@ returned.
 Example:
 
 \begin{verbatim}
-    wxWindow *win = wxWindow::FindFocus();
-    wxTextCtrl *text = wxDynamicCast(win, wxTextCtrl);
-    if ( text )
-    {
-        // a text control has the focus...
-    }
-    else
-    {
-        // no window has the focus or it is not a text control
-    }
+wxWindow *win = wxWindow::FindFocus();
+wxTextCtrl *text = wxDynamicCast(win, wxTextCtrl);
+if ( text )
+{
+    // a text control has the focus...
+}
+else
+{
+    // no window has the focus or it is not a text control
+}
 \end{verbatim}
 
 \wxheading{See also}
@@ -3871,7 +3942,22 @@ result of executing an equivalent of {\tt static\_cast<classname *>(ptr)}.
 
 Same as \texttt{const\_cast<T>(x)} if the compiler supports const cast or
 \texttt{(T)x} for old compilers. Unlike \helpref{wxConstCast}{wxconstcast},
-the cast it to the type \arg{T} and not to \texttt{T *} and also the order of
+the cast is to the type \arg{T} and not to \texttt{T *} and also the order of
+arguments is the same as for the standard cast.
+
+\wxheading{See also}
+
+\helpref{wx\_reinterpret\_cast}{wxreinterpretcastraw},\\
+\helpref{wx\_static\_cast}{wxstaticcastraw}
+
+
+\membersection{wx\_dynamic\_cast}\label{wxdynamiccastraw}
+
+\func{T}{wx\_dynamic\_cast}{T, x}
+
+Same as \texttt{dynamic\_cast<T>(x)} if the compiler supports dynamic cast or
+\texttt{(T)x} for old compilers. Unlike \helpref{wxDynamicCast}{wxdynamiccast},
+the cast is to the type \arg{T} and not to \texttt{T *} and also the order of
 arguments is the same as for the standard cast.
 
 \wxheading{See also}
@@ -3920,6 +4006,210 @@ casts which possibly result in a truncation of an integer value more readable.
 \wxheading{See also}
 
 \helpref{wx\_static\_cast}{wxstaticcastraw}
+
+
+\membersection{wxBEGIN\_HANDLERS\_TABLE}\label{wxbeginhandlerstable}
+
+\func{}{wxBEGIN\_HANDLERS\_TABLE}{className}
+
+Marks the beginning of the table of registered handlers for \tt{className}.
+After using the \helpref{wxHANDLER}{wxhandler} macros, use the
+\helpref{wxEND\_HANDLERS\_TABLE}{wxendhandlerstable} macro 
+to mark the end of the table.
+
+For a full example see the \helpref{XTI overview}{runtimeclassoverview}.
+
+
+\membersection{wxHANDLER}\label{wxhandler}
+
+\func{}{wxHANDLER}{className, eventClassType}
+
+To be used inside the \helpref{wxBEGIN\_HANDLERS\_TABLE}{wxbeginhandlerstable}
+and \helpref{wxEND\_HANDLERS\_TABLE}{wxendhandlerstable} macros.
+Declares an handler for \tt{className} for events of type \tt{eventClassType}.
+
+For a full example see the \helpref{XTI overview}{runtimeclassoverview}.
+
+
+\membersection{wxEND\_HANDLERS\_TABLE}\label{wxendhandlerstable}
+
+\func{}{wxEND\_HANDLERS\_TABLE}{}
+
+Marks the end of the table of registered handlers for some class.
+See \helpref{wxBEGIN\_HANDLERS\_TABLE}{wxbeginhandlerstable}.
+
+For a full example see the \helpref{XTI overview}{runtimeclassoverview}.
+
+
+\membersection{wxCONSTRUCTOR\_N}\label{wxconstructorn}
+
+\func{}{wxCONSTRUCTOR\_0}{className}\\
+\func{}{wxCONSTRUCTOR\_1}{className, type0, var0}\\
+\func{}{wxCONSTRUCTOR\_2}{className, type0, var0, type1, var1}\\
+\func{}{wxCONSTRUCTOR\_3}{className, type0, var0, type1, var1, type2, var2}\\
+...\\
+\func{}{wxCONSTRUCTOR\_N}{className, type0, var0, type1, var1, ..., typeN, varN}
+
+Declares that class \tt{className} has a default constructor (i.e. a constructor which takes
+no parameters) and a \tt{Create} function with a certain number \tt{N} of parameters. 
+
+For each parameter of the constructor the \tt{type} argument identifies the type (e.g.
+\tt{int}, \tt{float}, \tt{const wxString&}, \tt{SomeOtherClass}, ...) of that parameter
+and the \tt{var} argument identifies the name of that parameter (e.g. \tt{flags}, \tt{position},
+\tt{size}, \tt{name}, ...).
+
+This macro allows the \helpref{wxClassInfo}{wxclassinfo} instance relative to
+\tt{className} to allocate at runtime (using \tt{new}) and then \tt{Create()} 
+instances of \tt{className}.
+
+If the class has no \tt{Create()} function and/or does not support the allocate-create
+semantic, rather use \helpref{wxDIRECT\_CONSTRUCTOR\_N}{wxdirectconstructorn}.
+
+Note that you can use a single \tt{wxCONSTRUCTOR\_N} or \tt{wxDIRECT\_CONSTRUCTOR\_N} macro
+for each class.
+
+For a full example see the \helpref{XTI overview}{runtimeclassoverview}.
+
+
+\membersection{wxDIRECT\_CONSTRUCTOR\_N}\label{wxdirectconstructorn}
+
+\func{}{wxDIRECT\_CONSTRUCTOR\_0}{className}\\
+\func{}{wxDIRECT\_CONSTRUCTOR\_1}{className, type0, var0}\\
+\func{}{wxDIRECT\_CONSTRUCTOR\_2}{className, type0, var0, type1, var1}\\
+\func{}{wxDIRECT\_CONSTRUCTOR\_3}{className, type0, var0, type1, var1, type2, var2}\\
+...\\
+\func{}{wxDIRECT\_CONSTRUCTOR\_N}{className, type0, var0, type1, var1, ..., typeN, varN}
+
+Like \helpref{wxCONSTRUCTOR\_N}{wxconstructorn} macros but these macros declare a constructor
+for \tt{className} which directly takes \tt{N} parameters.
+
+These macros are useful for classes which must be initialized directly in allocation stage.
+
+Note that you can use a single \tt{wxCONSTRUCTOR\_N} or \tt{wxDIRECT\_CONSTRUCTOR\_N} macro
+for each class.
+
+For a full example see the \helpref{XTI overview}{runtimeclassoverview}.
+
+
+\membersection{wxBEGIN\_PROPERTIES\_TABLE}\label{wxbeginpropertiestable}
+
+\func{}{wxBEGIN\_PROPERTIES\_TABLE}{className}
+
+Marks the beginning of the table of registered properties for \tt{className}.
+After using the \helpref{wxPROPERTY}{wxproperty} macros, use the
+\helpref{wxEND\_PROPERTIES\_TABLE}{wxendpropertiestable} macro 
+to mark the end of the table.
+
+For a full example see the \helpref{XTI overview}{runtimeclassoverview}.
+
+
+\membersection{wxPROPERTY}\label{wxproperty}
+
+\func{}{wxPROPERTY}{propName, propType, setter, getter, defaultValue, flags, helpString, groupString}
+
+To be used inside the \helpref{wxBEGIN\_PROPERTIES\_TABLE}{wxbeginpropertiestable}
+and \helpref{wxEND\_PROPERTIES\_TABLE}{wxendpropertiestable} macros.
+
+Declares a property named \tt{propName} of type \tt{propType}, which can be
+changed using the \tt{setter} function, retrieved using the \tt{getter} function
+and with given \tt{defaultValue}.
+
+You can associate to this property also some \tt{flags} (see \helpref{wxPropertyInfo}{wxpropertyinfo}
+for the list of \tt{wxPROP_*} possible values), an \tt{helpString} which describes briefly what
+the property represents and a \tt{groupString} which can be used for grouping properties of elements
+with lots of them.
+
+For a full example see the \helpref{XTI overview}{runtimeclassoverview}.
+
+
+\membersection{wxPROPERTY\_FLAGS}\label{wxpropertyflags}
+
+\func{}{wxPROPERTY\_FLAGS}{propName, flagsEnumName, flagsType, setter, getter, defaultValue, flags, helpString, groupString}
+
+Like \helpref{wxPROPERTY}{wxproperty} macro but declares a property whose value
+is an OR-combination of the enumeration values of \tt{flagsEnumName}.
+
+The \tt{flagsType} argument indicates the size of the field which is used to hold
+the OR-combination; typically this is a \tt{long} type.
+
+For a full example see the \helpref{XTI overview}{runtimeclassoverview}.
+
+
+\membersection{wxEND\_PROPERTIES\_TABLE}\label{wxendpropertiestable}
+
+\func{}{wxEND\_PROPERTIES\_TABLE}{}
+
+Marks the end of the table of registered handlers for some class.
+See \helpref{wxBEGIN\_PROPERTIES\_TABLE}{wxbeginpropertiestable}.
+
+For a full example see the \helpref{XTI overview}{runtimeclassoverview}.
+
+
+\membersection{wxBEGIN\_ENUM}\label{wxbeginenum}
+
+\func{}{wxBEGIN\_ENUM}{enumName}
+
+Marks the beginning of the table of possible enumeration values for \tt{enumName}.
+After using the \helpref{wxENUM\_MEMBER}{wxenummember} macros, use the
+\helpref{wxEND\_ENUM}{wxendenum} macro to mark the end of the table.
+
+For a full example see the \helpref{XTI overview}{runtimeclassoverview}.
+
+
+\membersection{wxENUM\_MEMBER}\label{wxenummember}
+
+\func{}{wxENUM\_MEMBER}{value}
+
+Declares an enumeration value named \tt{value}.
+
+
+\membersection{wxEND\_ENUM}\label{wxendenum}
+
+\func{}{wxEND\_ENUM}{enumName}
+
+Marks the end of the table of possible enumeration values for \tt{enumName}.
+
+For a full example see the \helpref{XTI overview}{runtimeclassoverview}.
+
+
+\membersection{wxBEGIN\_FLAGS}\label{wxbeginflags}
+
+\func{}{wxBEGIN\_FLAGS}{flagsName}
+
+Marks the beginning of the table of possible flags for \tt{flagsName}.
+After using the \helpref{wxFLAGS\_MEMBER}{wxflagsmember} macros, use the
+\helpref{wxEND\_FLAGS}{wxendflags} macro to mark the end of the table.
+
+For a full example see the \helpref{XTI overview}{runtimeclassoverview}.
+
+
+\membersection{wxFLAGS\_MEMBER}\label{wxflagsmember}
+
+\func{}{wxFLAGS\_MEMBER}{value}
+
+Declares a flag value named \tt{value}.
+
+
+\membersection{wxEND\_FLAGS}\label{wxendflags}
+
+\func{}{wxEND\_FLAGS}{flagsName}
+
+Marks the end of the table of possible flags for \tt{flagsName}.
+
+For a full example see the \helpref{XTI overview}{runtimeclassoverview}.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 \section{Log functions}\label{logfunctions}
@@ -4501,6 +4791,24 @@ This macro is identical to \helpref{wxCOMPILE\_TIME\_ASSERT2}{wxcompiletimeasser
 except that it allows you to specify a unique {\it name} for the struct
 internally defined by this macro to avoid getting the compilation errors
 described \helpref{above}{wxcompiletimeassert}.
+
+
+\membersection{WXDEBUG\_NEW}\label{debugnew}
+
+\func{}{WXDEBUG\_NEW}{arg}
+
+This is defined in debug mode to be call the redefined new operator
+with filename and line number arguments. The definition is:
+
+\begin{verbatim}
+#define WXDEBUG_NEW new(__FILE__,__LINE__)
+\end{verbatim}
+
+In non-debug mode, this is defined as the normal new operator.
+
+\wxheading{Include files}
+
+<wx/object.h>
 
 
 \membersection{wxFAIL}\label{wxfail}
