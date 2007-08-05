@@ -26,24 +26,6 @@
 #include "wx/xti.h"
 #include "wx/rtti.h"
 
-// provide macro name aliases for backward compatibility
-#if WXWIN_COMPATIBILITY_2_8
-    #define DECLARE_DYNAMIC_CLASS(name)             wxDECLARE_DYNAMIC_CLASS(name)
-    #define DECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)   wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)
-    #define DECLARE_DYNAMIC_CLASS_NO_COPY(name)     wxDECLARE_DYNAMIC_CLASS_NO_COPY(name)
-    #define DECLARE_ABSTRACT_CLASS(name)            wxDECLARE_ABSTRACT_CLASS(name)
-    #define DECLARE_CLASS(name)                     wxDECLARE_CLASS(name)
-    #define IMPLEMENT_DYNAMIC_CLASS_WITH_COPY(n,b)  wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY(n,b)
-    #define IMPLEMENT_DYNAMIC_CLASS(n,b)            wxIMPLEMENT_DYNAMIC_CLASS(n,b)
-    #define IMPLEMENT_DYNAMIC_CLASS2(n,b1,b2)       wxIMPLEMENT_DYNAMIC_CLASS2(n,b1,b2)
-    #define IMPLEMENT_ABSTRACT_CLASS(n,b)           wxIMPLEMENT_ABSTRACT_CLASS(n,b)
-    #define IMPLEMENT_ABSTRACT_CLASS2(n,b1,b2)      wxIMPLEMENT_ABSTRACT_CLASS2(n,b1,b2)
-    #define IMPLEMENT_CLASS(n,b)                    wxIMPLEMENT_CLASS(n,b)
-    #define IMPLEMENT_CLASS2(n,b1,b2)               wxIMPLEMENT_CLASS2(n,b1,b2)
-#endif
-
-
-
 // -----------------------------------
 // for pluggable classes
 // -----------------------------------
@@ -83,71 +65,33 @@ name##PluginSentinel  m_pluginsentinel;
 
 #endif  // wxUSE_NESTED_CLASSES
 
-#define DECLARE_PLUGGABLE_CLASS(name) \
- DECLARE_DYNAMIC_CLASS(name) _DECLARE_DL_SENTINEL(name, WXDLLEXPORT)
-#define DECLARE_ABSTRACT_PLUGGABLE_CLASS(name)  \
- DECLARE_ABSTRACT_CLASS(name) _DECLARE_DL_SENTINEL(name, WXDLLEXPORT)
+#define wxDECLARE_PLUGGABLE_CLASS(name) \
+ wxDECLARE_DYNAMIC_CLASS(name) _DECLARE_DL_SENTINEL(name, WXDLLEXPORT)
+#define wxDECLARE_ABSTRACT_PLUGGABLE_CLASS(name)  \
+ wxDECLARE_ABSTRACT_CLASS(name) _DECLARE_DL_SENTINEL(name, WXDLLEXPORT)
 
-#define DECLARE_USER_EXPORTED_PLUGGABLE_CLASS(name, usergoo) \
- DECLARE_DYNAMIC_CLASS(name) _DECLARE_DL_SENTINEL(name, usergoo)
-#define DECLARE_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS(name, usergoo)  \
- DECLARE_ABSTRACT_CLASS(name) _DECLARE_DL_SENTINEL(name, usergoo)
+#define wxDECLARE_USER_EXPORTED_PLUGGABLE_CLASS(name, usergoo) \
+ wxDECLARE_DYNAMIC_CLASS(name) _DECLARE_DL_SENTINEL(name, usergoo)
+#define wxDECLARE_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS(name, usergoo)  \
+ wxDECLARE_ABSTRACT_CLASS(name) _DECLARE_DL_SENTINEL(name, usergoo)
 
-#define IMPLEMENT_PLUGGABLE_CLASS(name, basename) \
- IMPLEMENT_DYNAMIC_CLASS(name, basename) _IMPLEMENT_DL_SENTINEL(name)
-#define IMPLEMENT_PLUGGABLE_CLASS2(name, basename1, basename2)  \
- IMPLEMENT_DYNAMIC_CLASS2(name, basename1, basename2) _IMPLEMENT_DL_SENTINEL(name)
-#define IMPLEMENT_ABSTRACT_PLUGGABLE_CLASS(name, basename) \
- IMPLEMENT_ABSTRACT_CLASS(name, basename) _IMPLEMENT_DL_SENTINEL(name)
-#define IMPLEMENT_ABSTRACT_PLUGGABLE_CLASS2(name, basename1, basename2)  \
- IMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2) _IMPLEMENT_DL_SENTINEL(name)
+#define wxIMPLEMENT_PLUGGABLE_CLASS(name, basename) \
+ wxIMPLEMENT_DYNAMIC_CLASS(name, basename) _IMPLEMENT_DL_SENTINEL(name)
+#define wxIMPLEMENT_PLUGGABLE_CLASS2(name, basename1, basename2)  \
+ wxIMPLEMENT_DYNAMIC_CLASS2(name, basename1, basename2) _IMPLEMENT_DL_SENTINEL(name)
+#define wxIMPLEMENT_ABSTRACT_PLUGGABLE_CLASS(name, basename) \
+ wxIMPLEMENT_ABSTRACT_CLASS(name, basename) _IMPLEMENT_DL_SENTINEL(name)
+#define wxIMPLEMENT_ABSTRACT_PLUGGABLE_CLASS2(name, basename1, basename2)  \
+ wxIMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2) _IMPLEMENT_DL_SENTINEL(name)
 
-#define IMPLEMENT_USER_EXPORTED_PLUGGABLE_CLASS(name, basename) \
- IMPLEMENT_PLUGGABLE_CLASS(name, basename)
-#define IMPLEMENT_USER_EXPORTED_PLUGGABLE_CLASS2(name, basename1, basename2)  \
- IMPLEMENT_PLUGGABLE_CLASS2(name, basename1, basename2)
-#define IMPLEMENT_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS(name, basename) \
- IMPLEMENT_ABSTRACT_PLUGGABLE_CLASS(name, basename)
-#define IMPLEMENT_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS2(name, basename1, basename2)  \
- IMPLEMENT_ABSTRACT_PLUGGABLE_CLASS2(name, basename1, basename2)
-
-#define CLASSINFO(name) (&name::ms_classInfo)
-
-#define wxIS_KIND_OF(obj, className) obj->IsKindOf(&className::ms_classInfo)
-
-// Just seems a bit nicer-looking (pretend it's not a macro)
-#define wxIsKindOf(obj, className) obj->IsKindOf(&className::ms_classInfo)
-
-// this cast does some more checks at compile time as it uses static_cast
-// internally
-//
-// note that it still has different semantics from dynamic_cast<> and so can't
-// be replaced by it as long as there are any compilers not supporting it
-#define wxDynamicCast(obj, className) \
-    ((className *) wxCheckDynamicCast( \
-        wx_const_cast(wxObject *, wx_static_cast(const wxObject *, \
-          wx_const_cast(className *, wx_static_cast(const className *, obj)))), \
-        &className::ms_classInfo))
-
-// The 'this' pointer is always true, so use this version
-// to cast the this pointer and avoid compiler warnings.
-#define wxDynamicCastThis(className) \
-     (IsKindOf(&className::ms_classInfo) ? (className *)(this) : (className *)0)
-
-#ifdef __WXDEBUG__
-inline void* wxCheckCast(void *ptr)
-{
-    wxASSERT_MSG( ptr, _T("wxStaticCast() used incorrectly") );
-    return ptr;
-}
-#define wxStaticCast(obj, className) \
- ((className *)wxCheckCast(wxDynamicCast(obj, className)))
-
-#else  // !__WXDEBUG__
-#define wxStaticCast(obj, className) \
-    wx_const_cast(className *, wx_static_cast(const className *, obj))
-
-#endif  // __WXDEBUG__
+#define wxIMPLEMENT_USER_EXPORTED_PLUGGABLE_CLASS(name, basename) \
+ wxIMPLEMENT_PLUGGABLE_CLASS(name, basename)
+#define wxIMPLEMENT_USER_EXPORTED_PLUGGABLE_CLASS2(name, basename1, basename2)  \
+ wxIMPLEMENT_PLUGGABLE_CLASS2(name, basename1, basename2)
+#define wxIMPLEMENT_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS(name, basename) \
+ wxIMPLEMENT_ABSTRACT_PLUGGABLE_CLASS(name, basename)
+#define wxIMPLEMENT_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS2(name, basename1, basename2)  \
+ wxIMPLEMENT_ABSTRACT_PLUGGABLE_CLASS2(name, basename1, basename2)
 
 // ----------------------------------------------------------------------------
 // set up memory debugging macros
@@ -461,5 +405,63 @@ private :
 #else // !__WXDEBUG__
     #define WXDEBUG_NEW new
 #endif // __WXDEBUG__/!__WXDEBUG__
+
+
+// ----------------------------------------------------------------------------
+// macro name aliases for backward compatibility (with wx < 3.0.0)
+// ----------------------------------------------------------------------------
+
+#define DECLARE_DYNAMIC_CLASS(name)             wxDECLARE_DYNAMIC_CLASS(name)
+#define DECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)   wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)
+#define DECLARE_DYNAMIC_CLASS_NO_COPY(name)     wxDECLARE_DYNAMIC_CLASS_NO_COPY(name)
+#define DECLARE_ABSTRACT_CLASS(name)            wxDECLARE_ABSTRACT_CLASS(name)
+#define DECLARE_CLASS(name)                     wxDECLARE_CLASS(name)
+#define IMPLEMENT_DYNAMIC_CLASS_WITH_COPY(n,b)  wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY(n,b)
+#define IMPLEMENT_DYNAMIC_CLASS(n,b)            wxIMPLEMENT_DYNAMIC_CLASS(n,b)
+#define IMPLEMENT_DYNAMIC_CLASS2(n,b1,b2)       wxIMPLEMENT_DYNAMIC_CLASS2(n,b1,b2)
+#define IMPLEMENT_ABSTRACT_CLASS(n,b)           wxIMPLEMENT_ABSTRACT_CLASS(n,b)
+#define IMPLEMENT_ABSTRACT_CLASS2(n,b1,b2)      wxIMPLEMENT_ABSTRACT_CLASS2(n,b1,b2)
+#define IMPLEMENT_CLASS(n,b)                    wxIMPLEMENT_CLASS(n,b)
+#define IMPLEMENT_CLASS2(n,b1,b2)               wxIMPLEMENT_CLASS2(n,b1,b2)
+#define CLASSINFO(name)                         wxCLASSINFO(name)
+
+#define wxIS_KIND_OF(obj, className) obj->IsKindOf(&className::ms_classInfo)
+
+// Just seems a bit nicer-looking (pretend it's not a macro)
+#define wxIsKindOf(obj, className) obj->IsKindOf(&className::ms_classInfo)
+
+// this cast does some more checks at compile time as it uses static_cast
+// internally
+//
+// note that it still has different semantics from dynamic_cast<> and so can't
+// be replaced by it as long as there are any compilers not supporting it
+#define wxDynamicCast(obj, className) \
+    ((className *) wxCheckDynamicCast( \
+        wx_const_cast(wxObject *, wx_static_cast(const wxObject *, \
+          wx_const_cast(className *, wx_static_cast(const className *, obj)))), \
+        &className::ms_classInfo))
+
+// The 'this' pointer is always true, so use this version
+// to cast the this pointer and avoid compiler warnings.
+#define wxDynamicCastThis(className) \
+     (IsKindOf(&className::ms_classInfo) ? (className *)(this) : (className *)0)
+
+#define wxConstCast(obj, className) wx_const_cast(className *, obj)
+
+#ifdef __WXDEBUG__
+inline void* wxCheckCast(void *ptr)
+{
+    wxASSERT_MSG( ptr, _T("wxStaticCast() used incorrectly") );
+    return ptr;
+}
+#define wxStaticCast(obj, className) \
+ ((className *)wxCheckCast(wxDynamicCast(obj, className)))
+
+#else  // !__WXDEBUG__
+#define wxStaticCast(obj, className) \
+    wx_const_cast(className *, wx_static_cast(const className *, obj))
+
+#endif  // __WXDEBUG__
+
 
 #endif // _WX_OBJECTH__

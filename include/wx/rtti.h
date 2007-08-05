@@ -147,7 +147,7 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
 
 
 // common part of the macros below
-#define wxIMPLEMENT_CLASS_COMMON(name, basename, baseclsinfo2, func)          \
+#define _IMPLEMENT_CLASS_COMMON(name, basename, baseclsinfo2, func)          \
     wxClassInfo name::ms_classInfo(wxT(#name),                                \
             &basename::ms_classInfo,                                          \
             baseclsinfo2,                                                     \
@@ -158,23 +158,23 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
         { return &name::ms_classInfo; }
 
 #define wxIMPLEMENT_CLASS_COMMON1(name, basename, func)                       \
-    wxIMPLEMENT_CLASS_COMMON(name, basename, NULL, func)
+    _IMPLEMENT_CLASS_COMMON(name, basename, NULL, func)
 
 #define wxIMPLEMENT_CLASS_COMMON2(name, basename1, basename2, func)           \
-    wxIMPLEMENT_CLASS_COMMON(name, basename1, &basename2::ms_classInfo, func)
+    _IMPLEMENT_CLASS_COMMON(name, basename1, &basename2::ms_classInfo, func)
 
 // -----------------------------------
 // for concrete classes
 // -----------------------------------
 
     // Single inheritance with one base class
-#define wxIMPLEMENT_DYNAMIC_CLASS(name, basename)                               \
+#define wxIMPLEMENT_DYNAMIC_CLASS(name, basename)                             \
     wxIMPLEMENT_CLASS_COMMON1(name, basename, name::wxCreateObject)           \
     wxObject* name::wxCreateObject()                                          \
         { return new name; }
 
     // Multiple inheritance with two base classes
-#define wxIMPLEMENT_DYNAMIC_CLASS2(name, basename1, basename2)                  \
+#define wxIMPLEMENT_DYNAMIC_CLASS2(name, basename1, basename2)                \
     wxIMPLEMENT_CLASS_COMMON2(name, basename1, basename2,                     \
                               name::wxCreateObject)                           \
     wxObject* name::wxCreateObject()                                          \
