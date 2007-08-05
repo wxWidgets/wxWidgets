@@ -153,19 +153,19 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuInfo, wxObject)
 
 #if wxUSE_EXTENDED_RTTI
 
-bool wxMenuItemStreamingCallback( const wxObject *object, wxObjectWriter * ,
-                                  wxPersister * , wxxVariantArray & )
+bool wxMenuItemStreamingCallback( const wxObject *object, wxObjectWriter *,
+                                  wxPersister *, wxxVariantArray & )
 {
-    const wxMenuItem * mitem = dynamic_cast<const wxMenuItem*>(object) ;
+    const wxMenuItem * mitem = dynamic_cast<const wxMenuItem*>(object);
     if ( mitem->GetMenu() && !mitem->GetMenu()->GetTitle().empty() )
     {
         // we don't stream out the first two items for menus with a title,
         // they will be reconstructed
         if ( mitem->GetMenu()->FindItemByPosition(0) == mitem ||
              mitem->GetMenu()->FindItemByPosition(1) == mitem )
-            return false ;
+            return false;
     }
-    return true ;
+    return true;
 }
 
 wxBEGIN_ENUM( wxItemKind )
@@ -179,9 +179,9 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuItem, wxObject, "wx/menuitem.h", \
                                        wxMenuItemStreamingCallback)
 
 wxBEGIN_PROPERTIES_TABLE(wxMenuItem)
-    wxPROPERTY( Parent,wxMenu*, SetMenu, GetMenu, EMPTY_MACROVALUE, \
+    wxPROPERTY( Parent, wxMenu*, SetMenu, GetMenu, EMPTY_MACROVALUE, \
                 0 /*flags*/, wxT("Helpstring"), wxT("group") )
-    wxPROPERTY( Id,int, SetId, GetId, EMPTY_MACROVALUE, \
+    wxPROPERTY( Id, int, SetId, GetId, EMPTY_MACROVALUE, \
                 0 /*flags*/, wxT("Helpstring"), wxT("group") )
     wxPROPERTY( Text, wxString, SetText, GetText, wxString(), \
                 0 /*flags*/, wxT("Helpstring"), wxT("group") )
@@ -192,11 +192,11 @@ wxBEGIN_PROPERTIES_TABLE(wxMenuItem)
     wxPROPERTY( SubMenu, wxMenu*, SetSubMenu, GetSubMenu, EMPTY_MACROVALUE, \
                 0 /*flags*/, wxT("Helpstring"), wxT("group") )
     wxPROPERTY( Enabled, bool, Enable, IsEnabled, wxxVariant((bool)true), \
-                0 /*flags*/, wxT("Helpstring"), wxT("group"))
+                0 /*flags*/, wxT("Helpstring"), wxT("group") )
     wxPROPERTY( Checked, bool, Check, IsChecked, wxxVariant((bool)false), \
-                0 /*flags*/, wxT("Helpstring"), wxT("group"))
+                0 /*flags*/, wxT("Helpstring"), wxT("group") )
     wxPROPERTY( Checkable, bool, SetCheckable, IsCheckable, wxxVariant((bool)false), \
-                0 /*flags*/, wxT("Helpstring"), wxT("group"))
+                0 /*flags*/, wxT("Helpstring"), wxT("group") )
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxMenuItem)
