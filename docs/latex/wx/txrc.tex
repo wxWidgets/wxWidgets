@@ -320,7 +320,7 @@ This is the XML file (resource.xrc) for the XRC sample.
           <object class="wxStaticText">
             <label>fdgdfgdfgdfg</label>
           </object>
-          <style>wxSUNKEN_BORDER</style>
+          <style>wxBORDER\_SUNKEN</style>
         </object>
         <flag>wxALIGN_CENTER</flag>
       </object>
@@ -379,7 +379,7 @@ This is the XML file (resource.xrc) for the XRC sample.
       <object class="sizeritem" name="dfgdfg">
         <object class="wxTextCtrl">
           <size>200,200d</size>
-          <style>wxTE_MULTILINE|wxSUNKEN_BORDER</style>
+          <style>wxTE_MULTILINE|wxBORDER_SUNKEN</style>
           <value>Hello, this is an ordinary multiline\n         textctrl....</value>
         </object>
         <option>1</option>
@@ -544,7 +544,7 @@ IMPLEMENT_DYNAMIC_CLASS(MyControlXmlHandler, wxXmlResourceHandler)
 MyControlXmlHandler::MyControlXmlHandler()
 {
     // this call adds support for all wxWindows class styles
-    // (e.g. wxSIMPLE_BORDER, wxSUNKEN_BORDER, wxWS_EX_* etc etc)
+    // (e.g. wxBORDER_SIMPLE, wxBORDER_SUNKEN, wxWS_EX_* etc etc)
     AddWindowStyles();
 
     // if MyControl class supports e.g. MYCONTROL_DEFAULT_STYLE
