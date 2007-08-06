@@ -142,4 +142,12 @@ void wxCheckBox::SetLabel(const wxString& s)
     wxAutoNSAutoreleasePool pool;
     CocoaSetLabelForObject(s, GetNSButton());
 }
-#endif
+
+wxString wxCheckBox::GetLabel() const
+{
+    wxAutoNSAutoreleasePool pool;
+    return wxStringWithNSString([GetNSButton() title]);
+
+}
+
+#endif // wxUSE_CHECKBOX

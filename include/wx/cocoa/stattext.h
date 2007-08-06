@@ -52,8 +52,8 @@ protected:
 // Implementation
 // ------------------------------------------------------------------------
 public:
-    void SetLabel(const wxString& label);
+    virtual void SetLabel(const wxString& label);
+    virtual wxString GetLabel() const;
 };
 
-#endif
-    // __WX_COCOA_STATTEXT_H__
+#endif // __WX_COCOA_STATTEXT_H__
