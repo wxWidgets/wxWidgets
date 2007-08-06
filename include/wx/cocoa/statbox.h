@@ -41,6 +41,9 @@ public:
             long style = 0, const wxString& name = wxStaticBoxNameStr);
     virtual ~wxStaticBox();
 
+    virtual void SetLabel(const wxString& label);
+    virtual wxString GetLabel() const;
+
 // ------------------------------------------------------------------------
 // Cocoa callbacks
 // ------------------------------------------------------------------------

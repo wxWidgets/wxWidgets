@@ -37,7 +37,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID winid,
         return false;
     m_cocoaNSView = NULL;
     SetNSBox([[NSBox alloc] initWithFrame:MakeDefaultNSRect(size)]);
-    [GetNSBox() setTitle:wxNSStringWithWxString(GetLabelText(title))];
+    CocoaSetLabelForObject(title, GetNSBox());
     if(m_parent)
         m_parent->CocoaAddChild(this);
     SetInitialFrameRect(pos,size);
@@ -63,3 +63,16 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
     if(nextBorder > *borderOther)
         *borderOther = nextBorder;
 }
+
+void wxStaticBox::SetLabel(const wxString& label)
+{
+   wxAutoNSAutoreleasePool pool;
+   CocoaSetLabelForObject(label, GetNSBox());
+}
+
+wxString wxStaticBox::GetLabel() const
+{
+   wxAutoNSAutoreleasePool pool;
+   return wxStringWithNSString([GetNSBox() title]);
+}
+

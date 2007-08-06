@@ -19,6 +19,7 @@
 
 #include "wx/cocoa/string.h"
 #include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/string.h"
 #include "wx/cocoa/trackingrectmanager.h"
 #include "wx/cocoa/objc/objc_uniquifying.h"
 
@@ -273,6 +274,11 @@ bool wxControl::ProcessCommand(wxCommandEvent& event)
 void wxControl::CocoaSetEnabled(bool enable)
 {
     [GetNSControl() setEnabled: enable];
+}
+
+/*static*/ void wxControl::CocoaSetLabelForObject(const wxString& label, struct objc_object *aView)
+{
+    [aView setTitle:wxNSStringWithWxString(GetLabelText(label))];
 }
 
 wxString wxControl::GetLabel() const

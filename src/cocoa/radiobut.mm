@@ -77,7 +77,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID winid,
     SetNSButton([[NSButton alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
     [GetNSButton() setButtonType: NSRadioButton];
-    [GetNSButton() setTitle:wxNSStringWithWxString(label)];
+    CocoaSetLabelForObject(label, GetNSButton());
     // If it's the first in a group, it should be selected
     if(style&wxRB_GROUP)
         [GetNSButton() setState: NSOnState];
