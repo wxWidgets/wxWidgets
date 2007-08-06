@@ -2657,7 +2657,7 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
 // N.B. In GNU-WIN32, you *have* to take the address of a member function
 // (use &) or the compiler crashes...
 
-#define DECLARE_EVENT_TABLE() \
+#define wxDECLARE_EVENT_TABLE() \
     private: \
         static const wxEventTableEntry sm_eventTableEntries[]; \
     protected: \
@@ -2670,7 +2670,7 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
 //       sm_eventTable before using it in GetEventTable() or the compiler gives
 //       E2233 (see http://groups.google.com/groups?selm=397dcc8a%241_2%40dnews)
 
-#define BEGIN_EVENT_TABLE(theClass, baseClass) \
+#define wxBEGIN_EVENT_TABLE(theClass, baseClass) \
     const wxEventTable theClass::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass::sm_eventTableEntries[0] }; \
     const wxEventTable *theClass::GetEventTable() const \
@@ -2680,7 +2680,7 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
         { return theClass::sm_eventHashTable; } \
     const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 
-#define BEGIN_EVENT_TABLE_TEMPLATE1(theClass, baseClass, T1) \
+#define wxBEGIN_EVENT_TABLE_TEMPLATE1(theClass, baseClass, T1) \
     template<typename T1> \
     const wxEventTable theClass<T1>::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass<T1>::sm_eventTableEntries[0] }; \
@@ -2695,7 +2695,7 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     template<typename T1> \
     const wxEventTableEntry theClass<T1>::sm_eventTableEntries[] = { \
 
-#define BEGIN_EVENT_TABLE_TEMPLATE2(theClass, baseClass, T1, T2) \
+#define wxBEGIN_EVENT_TABLE_TEMPLATE2(theClass, baseClass, T1, T2) \
     template<typename T1, typename T2> \
     const wxEventTable theClass<T1, T2>::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass<T1, T2>::sm_eventTableEntries[0] }; \
@@ -2710,7 +2710,7 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     template<typename T1, typename T2> \
     const wxEventTableEntry theClass<T1, T2>::sm_eventTableEntries[] = { \
 
-#define BEGIN_EVENT_TABLE_TEMPLATE3(theClass, baseClass, T1, T2, T3) \
+#define wxBEGIN_EVENT_TABLE_TEMPLATE3(theClass, baseClass, T1, T2, T3) \
     template<typename T1, typename T2, typename T3> \
     const wxEventTable theClass<T1, T2, T3>::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass<T1, T2, T3>::sm_eventTableEntries[0] }; \
@@ -2725,7 +2725,7 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     template<typename T1, typename T2, typename T3> \
     const wxEventTableEntry theClass<T1, T2, T3>::sm_eventTableEntries[] = { \
 
-#define BEGIN_EVENT_TABLE_TEMPLATE4(theClass, baseClass, T1, T2, T3, T4) \
+#define wxBEGIN_EVENT_TABLE_TEMPLATE4(theClass, baseClass, T1, T2, T3, T4) \
     template<typename T1, typename T2, typename T3, typename T4> \
     const wxEventTable theClass<T1, T2, T3, T4>::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass<T1, T2, T3, T4>::sm_eventTableEntries[0] }; \
@@ -2740,7 +2740,7 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     template<typename T1, typename T2, typename T3, typename T4> \
     const wxEventTableEntry theClass<T1, T2, T3, T4>::sm_eventTableEntries[] = { \
 
-#define BEGIN_EVENT_TABLE_TEMPLATE5(theClass, baseClass, T1, T2, T3, T4, T5) \
+#define wxBEGIN_EVENT_TABLE_TEMPLATE5(theClass, baseClass, T1, T2, T3, T4, T5) \
     template<typename T1, typename T2, typename T3, typename T4, typename T5> \
     const wxEventTable theClass<T1, T2, T3, T4, T5>::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass<T1, T2, T3, T4, T5>::sm_eventTableEntries[0] }; \
@@ -2755,7 +2755,7 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     template<typename T1, typename T2, typename T3, typename T4, typename T5> \
     const wxEventTableEntry theClass<T1, T2, T3, T4, T5>::sm_eventTableEntries[] = { \
 
-#define BEGIN_EVENT_TABLE_TEMPLATE7(theClass, baseClass, T1, T2, T3, T4, T5, T6, T7) \
+#define wxBEGIN_EVENT_TABLE_TEMPLATE7(theClass, baseClass, T1, T2, T3, T4, T5, T6, T7) \
     template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7> \
     const wxEventTable theClass<T1, T2, T3, T4, T5, T6, T7>::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass<T1, T2, T3, T4, T5, T6, T7>::sm_eventTableEntries[0] }; \
@@ -2770,7 +2770,7 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7> \
     const wxEventTableEntry theClass<T1, T2, T3, T4, T5, T6, T7>::sm_eventTableEntries[] = { \
 
-#define BEGIN_EVENT_TABLE_TEMPLATE8(theClass, baseClass, T1, T2, T3, T4, T5, T6, T7, T8) \
+#define wxBEGIN_EVENT_TABLE_TEMPLATE8(theClass, baseClass, T1, T2, T3, T4, T5, T6, T7, T8) \
     template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8> \
     const wxEventTable theClass<T1, T2, T3, T4, T5, T6, T7, T8>::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass<T1, T2, T3, T4, T5, T6, T7, T8>::sm_eventTableEntries[0] }; \
@@ -2785,7 +2785,7 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8> \
     const wxEventTableEntry theClass<T1, T2, T3, T4, T5, T6, T7, T8>::sm_eventTableEntries[] = { \
 
-#define END_EVENT_TABLE() DECLARE_EVENT_TABLE_ENTRY( wxEVT_NULL, 0, 0, 0, 0 ) };
+#define wxEND_EVENT_TABLE() DECLARE_EVENT_TABLE_ENTRY( wxEVT_NULL, 0, 0, 0, 0 ) };
 
 /*
  * Event table macros
@@ -3065,5 +3065,14 @@ extern WXDLLIMPEXP_BASE wxList *wxPendingEvents;
 WXDLLIMPEXP_CORE wxWindow* wxFindFocusDescendant(wxWindow* ancestor);
 
 #endif // wxUSE_GUI
+
+
+// ----------------------------------------------------------------------------
+// Compatibility macro aliases
+// ----------------------------------------------------------------------------
+
+#define DECLARE_EVENT_TABLE()          wxDECLARE_EVENT_TABLE()
+#define BEGIN_EVENT_TABLE( a, b )      wxBEGIN_EVENT_TABLE( a, b )
+#define END_EVENT_TABLE()              wxEND_EVENT_TABLE()
 
 #endif // _WX_EVENT_H__

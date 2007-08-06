@@ -589,8 +589,6 @@ private:
 #define wxIMPLEMENT_CLASS( n, b )          wxIMPLEMENT_ABSTRACT_CLASS( n, b )
 #define wxIMPLEMENT_CLASS2( n, b1, b2 )    wxIMPLEMENT_ABSTRACT_CLASS2( n, b1, b2 )
 
-#define wxBEGIN_EVENT_TABLE( a, b ) BEGIN_EVENT_TABLE( a, b )
-#define wxEND_EVENT_TABLE() END_EVENT_TABLE()
 
 
 
