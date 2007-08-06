@@ -53,7 +53,7 @@
 #    define WXIMPORT __declspec(dllimport)
 #elif defined(HAVE_VISIBILITY)
 #    define WXEXPORT __attribute__ ((visibility("default")))
-#    define WXIMPORT
+#    define WXIMPORT __attribute__ ((visibility("default")))
 #endif
 
 /* for other platforms/compilers we don't anything */
