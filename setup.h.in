@@ -594,6 +594,11 @@
 #undef HAVE_STATIC_CAST
 
 /*
+ * Define if your compiler supports dynamic_cast<>()
+ */
+#undef HAVE_DYNAMIC_CAST
+
+/*
  * Define if your compiler has C99 va_copy
  */
 #undef HAVE_VA_COPY

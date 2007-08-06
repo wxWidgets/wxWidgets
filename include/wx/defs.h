@@ -326,6 +326,12 @@ typedef int wxWindowID;
     #define wx_reinterpret_cast(t, x) ((t)(x))
 #endif
 
+#ifdef HAVE_DYNAMIC_CAST
+    #define wx_dynamic_cast(t, x) dynamic_cast<t>(x)
+#else
+    #define wx_dynamic_cast(t, x) ((t)(x))
+#endif
+
 /*
    This one is a wx invention: like static cast but used when we intentionally
    truncate from a larger to smaller type, static_cast<> can't be used for it
@@ -366,8 +372,6 @@ typedef int wxWindowID;
     #define wx_truncate_cast(t, x) ((t)(x))
 #endif
 
-/* for consistency with wxStatic/DynamicCast defined in wx/object.h */
-#define wxConstCast(obj, className) wx_const_cast(className *, obj)
 
 #ifndef HAVE_STD_WSTRING
     #if defined(__VISUALC__) && (__VISUALC__ >= 1100)

@@ -2097,8 +2097,7 @@ dnl check whether C++ compiler supports C++ casts
 AC_CXX_CONST_CAST
 AC_CXX_REINTERPRET_CAST
 AC_CXX_STATIC_CAST
-dnl we don't use HAVE_DYNAMIC_CAST anywhere right now...
-dnl AC_CXX_DYNAMIC_CAST
+AC_CXX_DYNAMIC_CAST
 
 dnl With Sun CC, temporaries have block scope by default. This flag is needed
 dnl to get the expression scope behaviour that conforms to the standard.
