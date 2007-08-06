@@ -245,7 +245,7 @@ private:
 
 class WXDLLIMPEXP_BASE wxObject
 {
-    DECLARE_ABSTRACT_CLASS(wxObject)
+    wxDECLARE_ABSTRACT_CLASS(wxObject)
 
 public:
     wxObject() { m_refData = NULL; }
