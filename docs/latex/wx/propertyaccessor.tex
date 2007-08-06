@@ -1,0 +1,103 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        propertyaccessor.tex
+%% Purpose:     wxPropertyAccessor documentation
+%% Author:      Francesco Montorsi
+%% Created:     2007-7-30
+%% RCS-ID:      $Id: xmldocument.tex 43656 2006-11-26 18:41:43Z RR $
+%% Copyright:   (c) 2007 Francesco Montorsi
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{\class{wxPropertyAccessor}}\label{wxpropertyaccessor}
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<include\wx\xtiprop.h>
+
+\wxheading{Data structures}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxPropertyAccessor::wxPropertyAccessor}\label{wxpropertyaccessorwxpropertyaccessor}
+
+\func{}{wxPropertyAccessor}{\param{wxPropertySetter* }{setter}, \param{wxPropertyGetter* }{getter}, \param{wxPropertyCollectionAdder* }{adder}, \param{wxPropertyCollectionGetter* }{collectionGetter}}
+
+
+\membersection{wxPropertyAccessor::\destruct{wxPropertyAccessor}}\label{wxpropertyaccessordtor}
+
+\func{}{\destruct{wxPropertyAccessor}}{\void}
+
+
+\membersection{wxPropertyAccessor::AddToPropertyCollection}\label{wxpropertyaccessoraddtopropertycollection}
+
+\constfunc{void}{AddToPropertyCollection}{\param{wxObject* }{object}, \param{const wxxVariant\& }{value}}
+
+Adding an element to a collection property
+
+
+\membersection{wxPropertyAccessor::GetAdderName}\label{wxpropertyaccessorgetaddername}
+
+\constfunc{const wxString\&}{GetAdderName}{\void}
+
+
+\membersection{wxPropertyAccessor::GetCollectionGetterName}\label{wxpropertyaccessorgetcollectiongettername}
+
+\constfunc{const wxString\&}{GetCollectionGetterName}{\void}
+
+
+\membersection{wxPropertyAccessor::GetGetterName}\label{wxpropertyaccessorgetgettername}
+
+\constfunc{const wxString\&}{GetGetterName}{\void}
+
+
+\membersection{wxPropertyAccessor::GetProperty}\label{wxpropertyaccessorgetproperty}
+
+\constfunc{void}{GetProperty}{\param{const wxObject* }{object}, \param{wxxVariant\& }{result}}
+
+Getting a simple property (non-collection)
+
+
+\membersection{wxPropertyAccessor::GetPropertyCollection}\label{wxpropertyaccessorgetpropertycollection}
+
+\constfunc{void}{GetPropertyCollection}{\param{const wxObject* }{obj}, \param{wxxVariantArray\& }{result}}
+
+Getting a collection property
+
+
+\membersection{wxPropertyAccessor::GetSetterName}\label{wxpropertyaccessorgetsettername}
+
+\constfunc{const wxString\&}{GetSetterName}{\void}
+
+
+\membersection{wxPropertyAccessor::HasAdder}\label{wxpropertyaccessorhasadder}
+
+\constfunc{bool}{HasAdder}{\void}
+
+
+\membersection{wxPropertyAccessor::HasCollectionGetter}\label{wxpropertyaccessorhascollectiongetter}
+
+\constfunc{bool}{HasCollectionGetter}{\void}
+
+
+\membersection{wxPropertyAccessor::HasGetter}\label{wxpropertyaccessorhasgetter}
+
+\constfunc{bool}{HasGetter}{\void}
+
+
+\membersection{wxPropertyAccessor::HasSetter}\label{wxpropertyaccessorhassetter}
+
+\constfunc{bool}{HasSetter}{\void}
+
+
+\membersection{wxPropertyAccessor::SetProperty}\label{wxpropertyaccessorsetproperty}
+
+\constfunc{void}{SetProperty}{\param{wxObject* }{object}, \param{const wxxVariant\& }{value}}
+
+Setting a simple property (non-collection)
+
