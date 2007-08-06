@@ -3068,6 +3068,7 @@ COND_USE_GUI_1_WXUNIV_1_GUI_CORE_HEADERS =  \
 	wx/univ/stdrend.h \
 	wx/univ/textctrl.h \
 	wx/univ/theme.h \
+	wx/univ/tglbtn.h \
 	wx/univ/toolbar.h \
 	wx/univ/toplevel.h \
 	wx/univ/window.h
