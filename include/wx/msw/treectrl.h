@@ -210,6 +210,9 @@ public:
     void SetState(const wxTreeItemId& node, int state);
     int GetState(const wxTreeItemId& node);
 
+    // returns true if the platform should explicitly apply a theme border
+    virtual bool CanApplyThemeBorder() const { return false; }
+
 protected:
     // SetImageList helper
     void SetAnyImageList(wxImageList *imageList, int which);

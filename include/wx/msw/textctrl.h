@@ -170,6 +170,9 @@ public:
 
     virtual bool AcceptsFocus() const;
 
+    // returns true if the platform should explicitly apply a theme border
+    virtual bool CanApplyThemeBorder() const;
+
     // callbacks
     void OnDropFiles(wxDropFilesEvent& event);
     void OnChar(wxKeyEvent& event); // Process 'enter' if required

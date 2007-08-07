@@ -83,6 +83,8 @@ public:
     // we should let background show through the slider (and its labels)
     virtual bool HasTransparentBackground() { return true; }
 
+    // returns true if the platform should explicitly apply a theme border
+    virtual bool CanApplyThemeBorder() const { return false; }
 
     void Command(wxCommandEvent& event);
     virtual bool MSWOnScroll(int orientation, WXWORD wParam,

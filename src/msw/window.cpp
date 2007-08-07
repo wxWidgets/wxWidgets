@@ -121,6 +121,18 @@
 #endif
 #endif
 
+#if wxUSE_UXTHEME
+    #include "wx/msw/uxtheme.h"
+    #define EP_EDITTEXT         1
+    #define ETS_NORMAL          1
+    #define ETS_HOT             2
+    #define ETS_SELECTED        3
+    #define ETS_DISABLED        4
+    #define ETS_FOCUSED         5
+    #define ETS_READONLY        6
+    #define ETS_ASSIST          7
+#endif
+
 #if defined(TME_LEAVE) && defined(WM_MOUSELEAVE) && wxUSE_DYNLIB_CLASS
     #define HAVE_TRACKMOUSEEVENT
 #endif // everything needed for TrackMouseEvent()
@@ -1274,6 +1286,27 @@ void wxWindowMSW::MSWUpdateStyle(long flagsOld, long exflagsOld)
     }
 }
 
+wxBorder wxWindowMSW::GetDefaultBorderForControl() const
+{
+    // we want to automatically give controls a sunken style (confusingly,
+    // it may not really mean sunken at all as we map it to WS_EX_CLIENTEDGE
+    // which is not sunken at all under Windows XP -- rather, just the default)
+
+#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
+    return wxBORDER_SIMPLE;
+#else
+#if wxUSE_UXTHEME
+    if (CanApplyThemeBorder())
+    {
+        wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
+        if (theme)
+            return wxBORDER_THEME;
+    }
+#endif
+    return wxBORDER_SUNKEN;
+#endif
+}
+
 WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
 {
     // translate common wxWidgets styles to Windows ones
@@ -1328,6 +1361,7 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
 
             case wxBORDER_NONE:
             case wxBORDER_SIMPLE:
+            case wxBORDER_THEME:
                 break;
 
             case wxBORDER_STATIC:
@@ -1343,9 +1377,9 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
                 style &= ~WS_BORDER;
                 break;
 
-            case wxBORDER_DOUBLE:
-                *exstyle |= WS_EX_DLGMODALFRAME;
-                break;
+//            case wxBORDER_DOUBLE:
+//                *exstyle |= WS_EX_DLGMODALFRAME;
+//                break;
         }
 
         // wxUniv doesn't use Windows dialog navigation functions at all
@@ -2542,7 +2576,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 }
             }
             break;
-
+#if 0
         case WM_ENTERSIZEMOVE:
             {
                 processed = HandleEnterSizeMove();
@@ -2554,7 +2588,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 processed = HandleExitSizeMove();
             }
             break;
-
+#endif
         case WM_SIZING:
             {
                 LPRECT pRect = (LPRECT)lParam;
@@ -3199,6 +3233,94 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             }
             break;
 #endif // __WXWINCE__
+
+#if wxUSE_UXTHEME
+        // If we want the default themed border then we need to draw it ourselves
+        case WM_NCCALCSIZE:
+            {
+                wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
+                if (theme && GetBorder() == wxBORDER_THEME)
+                {
+                    // first ask the widget to calculate the border size
+                    rc.result = MSWDefWindowProc(message, wParam, lParam);
+                    processed = true;
+
+                    // now alter the client size making room for drawing a themed border
+                    NCCALCSIZE_PARAMS *csparam = NULL;
+                    RECT rect;
+                    if (wParam)
+                    {
+                        csparam = (NCCALCSIZE_PARAMS*)lParam;
+                        rect = csparam->rgrc[0];
+                    }
+                    else
+                    {
+                        rect = *((RECT*)lParam);
+                    }
+                    wxUxThemeHandle hTheme(this, L"EDIT");
+                    RECT rcClient = { 0, 0, 0, 0 };
+                    wxClientDC dc(this);
+
+                    if (theme->GetThemeBackgroundContentRect(
+                            hTheme, GetHdcOf(dc), EP_EDITTEXT, ETS_NORMAL,
+                            &rect, &rcClient) == S_OK)
+                    {
+                        InflateRect(&rcClient, -1, -1);
+                        if (wParam)
+                            csparam->rgrc[0] = rcClient;
+                        else
+                            *((RECT*)lParam) = rcClient;
+                        rc.result = WVR_REDRAW;
+                    }
+                }
+            }
+            break;
+
+        case WM_NCPAINT:
+            {
+                wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
+                if (theme && GetBorder() == wxBORDER_THEME)
+                {
+                    // first ask the widget to paint its non-client area, such as scrollbars, etc.
+                    rc.result = MSWDefWindowProc(message, wParam, lParam);
+                    processed = true;
+
+                    wxUxThemeHandle hTheme(this, L"EDIT");
+                    wxWindowDC dc(this);
+
+                    // Clip the DC so that you only draw on the non-client area
+                    RECT rcBorder;
+                    wxCopyRectToRECT(GetSize(), rcBorder);
+
+                    RECT rcClient;
+                    theme->GetThemeBackgroundContentRect(
+                        hTheme, GetHdcOf(dc), EP_EDITTEXT, ETS_NORMAL, &rcBorder, &rcClient);
+                    InflateRect(&rcClient, -1, -1);
+
+                    ::ExcludeClipRect(GetHdcOf(dc), rcClient.left, rcClient.top,
+                                      rcClient.right, rcClient.bottom);
+
+                    // Make sure the background is in a proper state
+                    if (theme->IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
+                    {
+                        theme->DrawThemeParentBackground(GetHwnd(), GetHdcOf(dc), &rcBorder);
+                    }
+
+                    // Draw the border
+                    int nState;
+                    if ( !IsEnabled() )
+                        nState = ETS_DISABLED;
+                    // should we check this?
+                    //else if ( ::GetWindowLong(GetHwnd(), GWL_STYLE) & ES_READONLY)
+                    //    nState = ETS_READONLY;
+                    else
+                        nState = ETS_NORMAL;
+                    theme->DrawThemeBackground(hTheme, GetHdcOf(dc), EP_EDITTEXT, nState, &rcBorder, NULL);
+                }
+            }
+            break;
+
+#endif // wxUSE_UXTHEME
 
         default:
             // try a custom message handler

@@ -580,12 +580,7 @@ public:
         m_value = -1;
     }
 
-    virtual bool Create( wxWindow* parent )
-    {
-        return wxRichTextStyleListBox::Create(parent, wxID_ANY,
-                                  wxPoint(0,0), wxDefaultSize,
-                                  wxSIMPLE_BORDER);
-    }
+    virtual bool Create( wxWindow* parent );
 
     virtual wxWindow *GetControl() { return this; }
 

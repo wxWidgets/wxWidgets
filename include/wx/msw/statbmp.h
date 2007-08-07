@@ -54,6 +54,9 @@ public:
 
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
+    // returns true if the platform should explicitly apply a theme border
+    virtual bool CanApplyThemeBorder() const { return false; }
+
 protected:
     virtual wxBorder GetDefaultBorder() const;
     virtual wxSize DoGetBestSize() const;

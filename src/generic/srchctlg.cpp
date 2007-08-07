@@ -325,6 +325,12 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
     style &= ~wxBORDER_MASK;
 #ifdef __WXGTK__
     style |= wxBORDER_SUNKEN;
+#elif defined(__WXMSW__)
+    // Don't set the style explicitly, let GetDefaultBorder() work it out, unless
+    // we will get a sunken border (e.g. on Windows 200) in which case we must
+    // override with a simple border.
+    if (GetDefaultBorder() == wxBORDER_SUNKEN)
+        style |= wxBORDER_SIMPLE;
 #else
     style |= wxBORDER_SIMPLE;
 #endif

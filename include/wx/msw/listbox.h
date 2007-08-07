@@ -133,6 +133,9 @@ public:
         return GetCompositeControlsDefaultAttributes(variant);
     }
 
+    // returns true if the platform should explicitly apply a theme border
+    virtual bool CanApplyThemeBorder() const { return false; }
+
 protected:
     virtual void DoSetSelection(int n, bool select);
 

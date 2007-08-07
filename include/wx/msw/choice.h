@@ -85,6 +85,9 @@ public:
     virtual bool MSWShouldPreProcessMessage(WXMSG *pMsg);
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
+    // returns true if the platform should explicitly apply a theme border
+    virtual bool CanApplyThemeBorder() const { return false; }
+
 protected:
     // common part of all ctors
     void Init() { m_lastAcceptedSelection = wxID_NONE; }

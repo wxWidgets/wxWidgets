@@ -433,6 +433,11 @@ public:
     // check if a native double-buffering applies for this window
     virtual bool IsDoubleBuffered() const;
 
+    // this allows you to implement standard control borders without
+    // repeating the code in different classes that are not derived from
+    // wxControl
+    virtual wxBorder GetDefaultBorderForControl() const;
+
     // synthesize a wxEVT_LEAVE_WINDOW event and set m_mouseInWindow to false
     void GenerateMouseLeave();
 
