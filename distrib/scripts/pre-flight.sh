@@ -9,7 +9,6 @@ echo "temp dir is $WX_TEMP_DIR"
 
 START_DIR="$PWD"
 SCRIPTDIR=${START_DIR}/scripts
-WX_WEB_DIR=$WX_TEMP_DIR/wxWebSite
 WX_SRC_DIR=$WX_TEMP_DIR/wxWidgets
 
 CURDATE=`date -I`
@@ -21,25 +20,15 @@ fi
 
 cd $WX_TEMP_DIR
 
-# just do an update if we started a build but it failed somewhere
-if [ ! -d $WX_WEB_DIR ]; then  
-  cvs -d:pserver:anoncvs:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets login
-  echo "Grabbing wxWebSite sources..."
-  cvs -d:pserver:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets checkout wxWebSite
-else
-    cd $WX_WEB_DIR
-    cvs update -d -P
-fi
 
 if [ ! -d $WX_SRC_DIR ]; then
   cd $WX_TEMP_DIR
-  cvs -d:pserver:anoncvs:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets login
   echo "Grabbing wx CVS with tag $BUILD_TAG"
-  cvs -d:pserver:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets checkout -r $BUILD_TAG wxWidgets
+  svn up https://svn.wxwidgets.org/svn/wx/wxWidgets/branches/WX_2_8_BRANCH/ wxWidgets
   cd $WX_SRC_DIR
 else
     cd $WX_SRC_DIR
-    cvs update -d -P
+    svn up
 fi
 #copy setup0.h setup.h for msw
 rm include/wx/msw/setup.h
@@ -81,8 +70,8 @@ export SCRIPTDIR=${SCRIPTDIR}
 rm -rf $APPDIR/deliver/*
 rm -rf $START_DIR/$DIST_DIR/*
 
-
-tar czf $START_DIR/$DIST_DIR/wxWidgets-snapshot-$BUILD_VERSION.tar.gz $WX_TEMP_DIR
+# no general tarball for 2.8 branch
+#tar czf $START_DIR/$DIST_DIR/wxWidgets-snapshot-$BUILD_VERSION.tar.gz $WX_TEMP_DIR
 
 #export DESTDIR=$STAGING_DIR
 cp $SCRIPTDIR/create_archives.sh $APPDIR/distrib/scripts
