@@ -353,13 +353,14 @@ public:
         wxDataViewTreeLeaves lvs = leaves;
         nodes.Empty();
         leaves.Empty();
-		
+
         int len = nds.GetCount();
         if(len > 0)
         {
-            for(int i = 0; i < len; i ++)
+			int i;
+            for(i = 0; i < len; i ++)
                 nodes.Add(nds[i]);
-            for(int i = 0; i < len; i ++)
+            for(i = 0; i < len; i ++)
                 nodes[i]->Resort();
         }
 
@@ -555,7 +556,7 @@ public:
     virtual bool Cleared()
         { return m_mainWindow->Cleared(); }
     virtual void Resort()
-    	 { return m_mainWindow->Resort(); }
+    	 { m_mainWindow->Resort(); }
 
     wxDataViewMainWindow    *m_mainWindow;
 };
@@ -1987,7 +1988,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
     node->GetChildren().Remove( item.GetID() );
     if( GetOwner()->GetModel()->IsContainer( item ) )
     {
-        wxDataViewTreeNode * n ;
+        wxDataViewTreeNode * n = NULL;
         wxDataViewTreeNodes nodes = node->GetNodes();
         int len = nodes.GetCount();
         for( int i = 0 ; i < len; i ++)
@@ -1998,6 +1999,10 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
                 break;
             }
         }
+
+        if (!n)
+            return false;
+
         node->GetNodes().Remove( n );
         sub -= n->GetSubTreeCount();
         DestroyTreeHelper(n);
