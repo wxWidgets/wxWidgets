@@ -30,6 +30,10 @@
 
 #include "wx/image.h"
 
+#if defined(__WXMSW__) && wxUSE_UXTHEME
+#include "wx/msw/uxtheme.h"
+#endif
+
 #define WXMAX(a,b) ((a)>(b)?(a):(b))
 
 // ----------------------------------------------------------------------------
@@ -321,11 +325,16 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name)
 {
-#ifdef __WXGTK__
-    if ( !wxTextCtrlBase::Create(parent, id, pos, size, wxSUNKEN_BORDER | (style & ~wxBORDER_MASK), validator, name) )
-#else
-    if ( !wxTextCtrlBase::Create(parent, id, pos, size, wxSIMPLE_BORDER | (style & ~wxBORDER_MASK), validator, name) )
+	int borderStyle = wxBORDER_SIMPLE;
+
+#if defined(__WXMSW__) && wxUSE_UXTHEME && !(defined(__POCKETPC__) || defined(__SMARTPHONE__))
+    if (wxUxThemeEngine::GetIfActive())
+        borderStyle = wxBORDER_THEME;
+#elif defined(__WXGTK__)
+    borderStyle = wxBORDER_SUNKEN;
 #endif
+
+    if ( !wxTextCtrlBase::Create(parent, id, pos, size, borderStyle | (style & ~wxBORDER_MASK), validator, name) )
     {
         return false;
     }
