@@ -880,6 +880,7 @@ typedef pid_t GPid;
 /* Define if you have the setenv function.  */
 #   if __CRTL_VER >= 70000000
 #define HAVE_SETENV 1
+#define HAVE_UNSETENV 1
 #else
 #undef HAVE_SETENV
 #endif

@@ -4606,6 +4606,9 @@ AC_CHECK_FUNCS(timegm)
 
 dnl look for a function to modify the environment
 AC_CHECK_FUNCS(setenv putenv, break)
+if test "$ac_cv_func_setenv" = "yes"; then
+    AC_CHECK_FUNCS(unsetenv)
+fi
 
 HAVE_SOME_SLEEP_FUNC=0
 if test "$USE_BEOS" = 1; then
