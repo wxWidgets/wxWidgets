@@ -1098,10 +1098,6 @@ if test "$CXX" = "g++" -a "$GXX" != "yes"; then
     AC_MSG_ERROR([C++ compiler is needed to build wxWidgets])
 fi
 
-dnl ranlib command
-dnl   defines RANLIB with the appropriate command
-AC_PROG_RANLIB
-
 dnl ar command
 dnl   defines AR with the appropriate command
 dnl
@@ -1112,21 +1108,6 @@ if test "x$SUNCXX" != xyes; then
         AC_MSG_ERROR([ar is needed to build wxWidgets])
     fi
 fi
-
-dnl install checks
-dnl   defines INSTALL with the appropriate command
-AC_PROG_INSTALL
-
-dnl   make install path absolute (if not already);
-dnl   will fail with (some) MSDOS paths
-case ${INSTALL} in
-  /* ) # Absolute
-     ;;
-  ?:* ) # Drive letter, considered as absolute.
-     ;;
-  *)
-     INSTALL=`pwd`/${INSTALL} ;;
-esac
 
 retest_macosx_linking=no
 
@@ -1277,91 +1258,6 @@ case "${host}" in
     *)
         ;;
 esac
-
-dnl strip command
-dnl   defines STRIP as strip or nothing (true) if not found
-AC_CHECK_TOOL(STRIP, strip, true)
-
-dnl Win32 tools
-if test "$wxUSE_WINE" = "yes"; then
-    AC_CHECK_TOOL(WINDRES, wrc)
-    RESCOMP="$WINDRES"
-else
-    case "${host}" in
-    *-*-cygwin* | *-*-mingw32* )
-        dnl Bakefile CVS (as of 2005-11-24) now detects windres properly
-        dnl ... maybe it does, but it does not make it available here
-        dnl anymore, so do it ourselves still.
-        AC_CHECK_TOOL(WINDRES, windres)
-        RESCOMP="$WINDRES"
-        AC_CHECK_TOOL(DLLTOOL, dlltool)
-        ;;
-    esac
-fi
-
-dnl does make support "-include" (only GNU make does AFAIK)?
-AC_CACHE_CHECK([if make is GNU make], wx_cv_prog_makeisgnu,
-[
-    if ( ${SHELL-sh} -c "${MAKE-make} --version" 2> /dev/null |
-            $EGREP -s GNU > /dev/null); then
-        wx_cv_prog_makeisgnu="yes"
-    else
-        wx_cv_prog_makeisgnu="no"
-    fi
-])
-
-if test "x$wx_cv_prog_makeisgnu" = "xyes"; then
-    IF_GNU_MAKE=""
-else
-    IF_GNU_MAKE="#"
-fi
-
-AC_SUBST(IF_GNU_MAKE)
-
-dnl we don't need to check for VPATH support in GNU make - it does have it
-if test "x$wx_cv_prog_makeisgnu" != "xyes"; then
-dnl check if VPATH works
-AC_CACHE_CHECK([if make supports VPATH], wx_cv_prog_makevpath, [
-dnl create Makefile
-cat - << EOF > confMake
-check : file
-	cp \$? \$@
-	cp \$? final_file
-EOF
-
-if test ! -d sub ; then
-  mkdir sub
-fi
-echo dummy > sub/file
-${MAKE-make} -f confMake VPATH=sub 2>&5 > /dev/null
-RESULT=$?
-rm -f sub/file check final_file confMake
-rmdir sub
-if test "$RESULT" = 0; then
-  wx_cv_prog_makevpath="yes"
-else
-  wx_cv_prog_makevpath="no"
-fi
-])
-
-if test "x$wx_cv_prog_makevpath" != "xyes"; then
-AC_MSG_ERROR([
-You need a make-utility that is able to use the variable
-VPATH correctly.
-If your version of make does not support VPATH correctly,
-please install GNU-make (possibly as gmake), and start
-configure with the following command:
-export MAKE=gmake; ./configure  for sh-type shells
-setenv MAKE gmake; ./configure  for csh-type shells
-Also please do remember to use gmake in this case every time
-you are trying to compile.
-])
-fi dnl make without VPATH
-fi dnl not GNU make
-
-dnl needed for making link to setup.h
-AC_PROG_LN_S
-
 
 dnl ------------------------------------------------------------------------
 dnl Platform specific tests
@@ -7768,6 +7664,17 @@ then
 fi
 
 AC_BAKEFILE([m4_include(autoconf_inc.m4)])
+
+dnl make install path absolute (if not already);
+dnl will fail with (some) MSDOS paths
+case ${INSTALL} in
+  /* ) # Absolute
+     ;;
+  ?:* ) # Drive letter, considered as absolute.
+     ;;
+  *)
+     INSTALL=`pwd`/${INSTALL} ;;
+esac
 
 dnl find out if the compiler supports PCH
 dnl
