@@ -10,9 +10,6 @@
 #ifndef _WX_SAMPLE_WIDGETS_ITEMCONTAINER_H_
 #define _WX_SAMPLE_WIDGETS_ITEMCONTAINER_H_
 
-// for compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
 #include "widgets.h"
 
 // define a common base class for sorted and normal string arrays
