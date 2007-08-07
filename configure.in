@@ -3946,50 +3946,6 @@ dnl to not typedef Point and thus fix the problem.
     AC_LANG_RESTORE
 fi
 
-if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
-    dnl base name of the resource file for wxMac must be the same
-    dnl as library installation base name (-install_name)
-    WX_RESOURCES_MACOSX_ASCII="libwx_${TOOLCHAIN_NAME}.${wx_release_number}.r"
-    WX_RESOURCES_MACOSX_DATA="libwx_${TOOLCHAIN_NAME}.${wx_release_number}.rsrc"
-
-    dnl add the resources target for wxMac
-    LIBWXMACRES="\$(wx_top_builddir)/lib/${WX_RESOURCES_MACOSX_ASCII}"
-
-    AC_CHECK_PROG(REZ, Rez, Rez, /Developer/Tools/Rez)
-    AC_CHECK_PROG(DEREZ, DeRez, DeRez, /Developer/Tools/DeRez)
-    AC_CHECK_PROG(SETFILE, SetFile, SetFile, /Developer/Tools/SetFile)
-
-    MACSETFILE="\$(SETFILE)"
-
-    dnl resources are bundled both with shared library and applications
-    dnl since the carb resource *must* be included in the application
-    if test "$wxUSE_MAC" = 1; then
-        POSTLINK_COMMAND="\$(REZ) -d __DARWIN__ -t APPL Carbon.r -o"
-        RESCOMP="$REZ"
-        WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL Carbon.r -o"
-    else
-        POSTLINK_COMMAND="cat /dev/null | \$(REZ) -d __DARWIN__ -t APPL ${LIBWXMACRES}"
-        RESCOMP="cat /dev/null \| $REZ"
-        WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL \$libdir/$WX_RESOURCES_MACOSX_ASCII"
-    fi
-
-else
-    dnl default value is to (silently) do nothing in the makefile
-    MACSETFILE="@true"
-
-    if test "$wxUSE_PM" = 1; then
-        RESCOMP="emxbind"
-        WXCONFIG_RESFLAGS="-ep"
-
-        dnl Is this one really used anywhere for pm?
-        POSTLINK_COMMAND="$RESCOMP $WXCONFIG_RESFLAGS"
-    else
-        POSTLINK_COMMAND="@true"
-    fi
-
-fi
-
-
 dnl ---------------------------------------------------------------------------
 dnl Checks for typedefs
 dnl ---------------------------------------------------------------------------
@@ -7675,6 +7631,60 @@ case ${INSTALL} in
   *)
      INSTALL=`pwd`/${INSTALL} ;;
 esac
+
+if test "$wxUSE_GUI" = "yes"; then
+
+if test "$wxUSE_MSW" = 1 ; then
+    if test "x$WINDRES" = "x"; then
+        AC_MSG_ERROR([Required windres program not found])
+    fi
+
+    RESCOMP="$WINDRES"
+fi
+
+if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
+    dnl base name of the resource file for wxMac must be the same
+    dnl as library installation base name (-install_name)
+    WX_RESOURCES_MACOSX_ASCII="libwx_${TOOLCHAIN_NAME}.${wx_release_number}.r"
+    WX_RESOURCES_MACOSX_DATA="libwx_${TOOLCHAIN_NAME}.${wx_release_number}.rsrc"
+
+    dnl add the resources target for wxMac
+    LIBWXMACRES="\$(wx_top_builddir)/lib/${WX_RESOURCES_MACOSX_ASCII}"
+
+    AC_CHECK_PROG(DEREZ, DeRez, DeRez, /Developer/Tools/DeRez)
+
+    MACSETFILE="\$(SETFILE)"
+
+    dnl resources are bundled both with shared library and applications
+    dnl since the carb resource *must* be included in the application
+    if test "$wxUSE_MAC" = 1; then
+        POSTLINK_COMMAND="\$(REZ) -d __DARWIN__ -t APPL Carbon.r -o"
+        RESCOMP="$REZ"
+        WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL Carbon.r -o"
+    else
+        POSTLINK_COMMAND="cat /dev/null | \$(REZ) -d __DARWIN__ -t APPL ${LIBWXMACRES}"
+        RESCOMP="cat /dev/null \| $REZ"
+        WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL \$libdir/$WX_RESOURCES_MACOSX_ASCII"
+    fi
+
+else
+    dnl default value is to (silently) do nothing in the makefile
+    MACSETFILE="@true"
+
+    if test "$wxUSE_PM" = 1; then
+        RESCOMP="emxbind"
+        WXCONFIG_RESFLAGS="-ep"
+
+        dnl Is this one really used anywhere for pm?
+        POSTLINK_COMMAND="$RESCOMP $WXCONFIG_RESFLAGS"
+    else
+        POSTLINK_COMMAND="@true"
+    fi
+fi
+
+fi
+dnl wxUSE_GUI = 1
+
 
 dnl find out if the compiler supports PCH
 dnl
