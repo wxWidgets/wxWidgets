@@ -25,16 +25,9 @@ if [ `basename $1` = "config.guess" ] ; then
     exit 1
 fi
 
-entries=`dirname $1`/CVS/Entries
-if [ ! -f $entries ]; then
-    echo "CVS entries file \"$entries\" not found." >&2
-    exit 3
-fi
+if  svn proplist $1 | grep -q "eol-style"  ; then
+    exit 0
+fi    
 
-# we look for -kb in the last field, optionally followed by tag name
-re="^/`basename $1`/.*/-kb/\(T[^/]*\)\{0,1\}$"
-if grep -q "$re" $entries; then
-    exit 1
-fi
-
-exit 0
+#either not a svn file or not one with eol-style
+exit 3
