@@ -1,0 +1,259 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        styledtextevent.tex
+%% Purpose:     wxStyledTextEvent documentation
+%% Author:      Francesco Montorsi
+%% Created:     2007-08-07
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2006 Francesco Montorsi
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxStyledTextEvent}}\label{wxstyledtextevent}
+
+The type of events sent from \helpref{wxStyledTextCtrl}{wxstyledtextctrl}.
+
+TODO
+
+\wxheading{Derived from}
+
+\helpref{wxCommandEvent}{wxcommandevent}
+
+\wxheading{Include files}
+
+<wx/stc/stc.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxStyledTextEvent::wxStyledTextEvent}\label{wxstyledtexteventwxstyledtextevent}
+
+\func{}{wxStyledTextEvent}{\param{wxEventType }{commandType = 0}, \param{int }{id = 0}}
+
+
+\func{}{wxStyledTextEvent}{\param{const wxStyledTextEvent\& }{event}}
+
+
+\membersection{wxStyledTextEvent::\destruct{wxStyledTextEvent}}\label{wxstyledtexteventdtor}
+
+\func{}{\destruct{wxStyledTextEvent}}{\void}
+
+
+\membersection{wxStyledTextEvent::Clone}\label{wxstyledtexteventclone}
+
+\constfunc{wxEvent*}{Clone}{\void}
+
+
+\membersection{wxStyledTextEvent::GetAlt}\label{wxstyledtexteventgetalt}
+
+\constfunc{bool}{GetAlt}{\void}
+
+
+\membersection{wxStyledTextEvent::GetControl}\label{wxstyledtexteventgetcontrol}
+
+\constfunc{bool}{GetControl}{\void}
+
+
+\membersection{wxStyledTextEvent::GetDragAllowMove}\label{wxstyledtexteventgetdragallowmove}
+
+\func{bool}{GetDragAllowMove}{\void}
+
+
+\membersection{wxStyledTextEvent::GetDragResult}\label{wxstyledtexteventgetdragresult}
+
+\func{wxDragResult}{GetDragResult}{\void}
+
+
+\membersection{wxStyledTextEvent::GetDragText}\label{wxstyledtexteventgetdragtext}
+
+\func{wxString}{GetDragText}{\void}
+
+
+\membersection{wxStyledTextEvent::GetFoldLevelNow}\label{wxstyledtexteventgetfoldlevelnow}
+
+\constfunc{int}{GetFoldLevelNow}{\void}
+
+
+\membersection{wxStyledTextEvent::GetFoldLevelPrev}\label{wxstyledtexteventgetfoldlevelprev}
+
+\constfunc{int}{GetFoldLevelPrev}{\void}
+
+
+\membersection{wxStyledTextEvent::GetKey}\label{wxstyledtexteventgetkey}
+
+\constfunc{int}{GetKey}{\void}
+
+
+\membersection{wxStyledTextEvent::GetLParam}\label{wxstyledtexteventgetlparam}
+
+\constfunc{int}{GetLParam}{\void}
+
+
+\membersection{wxStyledTextEvent::GetLength}\label{wxstyledtexteventgetlength}
+
+\constfunc{int}{GetLength}{\void}
+
+
+\membersection{wxStyledTextEvent::GetLine}\label{wxstyledtexteventgetline}
+
+\constfunc{int}{GetLine}{\void}
+
+
+\membersection{wxStyledTextEvent::GetLinesAdded}\label{wxstyledtexteventgetlinesadded}
+
+\constfunc{int}{GetLinesAdded}{\void}
+
+
+\membersection{wxStyledTextEvent::GetListType}\label{wxstyledtexteventgetlisttype}
+
+\constfunc{int}{GetListType}{\void}
+
+
+\membersection{wxStyledTextEvent::GetMargin}\label{wxstyledtexteventgetmargin}
+
+\constfunc{int}{GetMargin}{\void}
+
+
+\membersection{wxStyledTextEvent::GetMessage}\label{wxstyledtexteventgetmessage}
+
+\constfunc{int}{GetMessage}{\void}
+
+
+\membersection{wxStyledTextEvent::GetModificationType}\label{wxstyledtexteventgetmodificationtype}
+
+\constfunc{int}{GetModificationType}{\void}
+
+
+\membersection{wxStyledTextEvent::GetModifiers}\label{wxstyledtexteventgetmodifiers}
+
+\constfunc{int}{GetModifiers}{\void}
+
+
+\membersection{wxStyledTextEvent::GetPosition}\label{wxstyledtexteventgetposition}
+
+\constfunc{int}{GetPosition}{\void}
+
+
+\membersection{wxStyledTextEvent::GetShift}\label{wxstyledtexteventgetshift}
+
+\constfunc{bool}{GetShift}{\void}
+
+
+\membersection{wxStyledTextEvent::GetText}\label{wxstyledtexteventgettext}
+
+\constfunc{wxString}{GetText}{\void}
+
+
+\membersection{wxStyledTextEvent::GetWParam}\label{wxstyledtexteventgetwparam}
+
+\constfunc{int}{GetWParam}{\void}
+
+
+\membersection{wxStyledTextEvent::GetX}\label{wxstyledtexteventgetx}
+
+\constfunc{int}{GetX}{\void}
+
+
+\membersection{wxStyledTextEvent::GetY}\label{wxstyledtexteventgety}
+
+\constfunc{int}{GetY}{\void}
+
+
+\membersection{wxStyledTextEvent::SetDragAllowMove}\label{wxstyledtexteventsetdragallowmove}
+
+\func{void}{SetDragAllowMove}{\param{bool }{val}}
+
+
+\membersection{wxStyledTextEvent::SetDragResult}\label{wxstyledtexteventsetdragresult}
+
+\func{void}{SetDragResult}{\param{wxDragResult }{val}}
+
+
+\membersection{wxStyledTextEvent::SetDragText}\label{wxstyledtexteventsetdragtext}
+
+\func{void}{SetDragText}{\param{const wxString\& }{val}}
+
+
+\membersection{wxStyledTextEvent::SetFoldLevelNow}\label{wxstyledtexteventsetfoldlevelnow}
+
+\func{void}{SetFoldLevelNow}{\param{int }{val}}
+
+
+\membersection{wxStyledTextEvent::SetFoldLevelPrev}\label{wxstyledtexteventsetfoldlevelprev}
+
+\func{void}{SetFoldLevelPrev}{\param{int }{val}}
+
+
+\membersection{wxStyledTextEvent::SetKey}\label{wxstyledtexteventsetkey}
+
+\func{void}{SetKey}{\param{int }{k}}
+
+
+\membersection{wxStyledTextEvent::SetLParam}\label{wxstyledtexteventsetlparam}
+
+\func{void}{SetLParam}{\param{int }{val}}
+
+
+\membersection{wxStyledTextEvent::SetLength}\label{wxstyledtexteventsetlength}
+
+\func{void}{SetLength}{\param{int }{len}}
+
+
+\membersection{wxStyledTextEvent::SetLine}\label{wxstyledtexteventsetline}
+
+\func{void}{SetLine}{\param{int }{val}}
+
+
+\membersection{wxStyledTextEvent::SetLinesAdded}\label{wxstyledtexteventsetlinesadded}
+
+\func{void}{SetLinesAdded}{\param{int }{num}}
+
+
+\membersection{wxStyledTextEvent::SetListType}\label{wxstyledtexteventsetlisttype}
+
+\func{void}{SetListType}{\param{int }{val}}
+
+
+\membersection{wxStyledTextEvent::SetMargin}\label{wxstyledtexteventsetmargin}
+
+\func{void}{SetMargin}{\param{int }{val}}
+
+
+\membersection{wxStyledTextEvent::SetMessage}\label{wxstyledtexteventsetmessage}
+
+\func{void}{SetMessage}{\param{int }{val}}
+
+
+\membersection{wxStyledTextEvent::SetModificationType}\label{wxstyledtexteventsetmodificationtype}
+
+\func{void}{SetModificationType}{\param{int }{t}}
+
+
+\membersection{wxStyledTextEvent::SetModifiers}\label{wxstyledtexteventsetmodifiers}
+
+\func{void}{SetModifiers}{\param{int }{m}}
+
+
+\membersection{wxStyledTextEvent::SetPosition}\label{wxstyledtexteventsetposition}
+
+\func{void}{SetPosition}{\param{int }{pos}}
+
+
+\membersection{wxStyledTextEvent::SetText}\label{wxstyledtexteventsettext}
+
+\func{void}{SetText}{\param{const wxString\& }{t}}
+
+
+\membersection{wxStyledTextEvent::SetWParam}\label{wxstyledtexteventsetwparam}
+
+\func{void}{SetWParam}{\param{int }{val}}
+
+
+\membersection{wxStyledTextEvent::SetX}\label{wxstyledtexteventsetx}
+
+\func{void}{SetX}{\param{int }{val}}
+
+
+\membersection{wxStyledTextEvent::SetY}\label{wxstyledtexteventsety}
+
+\func{void}{SetY}{\param{int }{val}}
+
