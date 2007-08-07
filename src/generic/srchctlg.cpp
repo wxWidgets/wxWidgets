@@ -540,7 +540,7 @@ void wxSearchCtrl::LayoutControls(int x, int y, int width, int height)
         searchMargin = 0;
         cancelMargin = 0;
     }
-    wxCoord textWidth = width - sizeSearch.x - sizeCancel.x - searchMargin - cancelMargin;
+    wxCoord textWidth = width - sizeSearch.x - sizeCancel.x - searchMargin - cancelMargin - 1;
 
     // position the subcontrols inside the client area
 
@@ -1178,7 +1178,7 @@ void wxSearchCtrl::RecalcBitmaps()
             m_cancelBitmap.GetWidth() != bitmapHeight
             )
         {
-            m_cancelBitmap = RenderCancelBitmap(bitmapHeight-BORDER,bitmapHeight-BORDER); // square
+            m_cancelBitmap = RenderCancelBitmap(bitmapHeight-BORDER-1,bitmapHeight-BORDER-1); // square
             m_cancelButton->SetBitmapLabel(m_cancelBitmap);
         }
         // else this bitmap was set by user, don't alter
