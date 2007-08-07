@@ -1101,7 +1101,10 @@ static bool wxDoSetEnv(const wxString& variable, const char *value)
     if ( !value )
     {
 #ifdef HAVE_UNSETENV
-        return unsetenv(variable.mb_str()) == 0;
+        // don't test unsetenv() return value: it's void on some systems (at
+        // least Darwin)
+        unsetenv(variable.mb_str());
+        return;
 #else
         value = ""; // we can't pass NULL to setenv()
 #endif
