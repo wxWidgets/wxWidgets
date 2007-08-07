@@ -145,6 +145,17 @@ bool wxRadioButton::GetValue() const
     return state==NSOnState;
 }
 
+void wxRadioButton::SetLabel(const wxString& label)
+{
+    wxAutoNSAutoreleasePool pool;
+    CocoaSetLabelForObject(label, GetNSButton());
+}
+
+wxString wxRadioButton::GetLabel() const 
+{    
+    return wxStringWithNSString([GetNSButton() title]);
+}
+
 /**
  * If this radio button is part of a group, this method turns off every other
  * button in the group.  If this radio button is not part of a group, this
