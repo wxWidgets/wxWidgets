@@ -333,7 +333,7 @@ inline const void *wxListCastElementToVoidPtr(const wxString& str)
         ~liT() { Clear(); }                                                   \
                                                                               \
         /* It needs access to our EmptyList */                                \
-        friend decl compatibility_iterator;                                   \
+        friend class compatibility_iterator;                                  \
     }
 
 #define WX_DECLARE_LIST(elementtype, listname)                              \
@@ -491,7 +491,7 @@ class WXDLLIMPEXP_FWD_BASE wxList;
 
 class WXDLLIMPEXP_BASE wxListBase : public wxObject
 {
-friend class WXDLLIMPEXP_FWD_BASE wxNodeBase; // should be able to call DetachNode()
+friend class wxNodeBase; // should be able to call DetachNode()
 friend class wxHashTableBase;   // should be able to call untyped Find()
 
 public:
