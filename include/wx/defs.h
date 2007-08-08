@@ -1407,7 +1407,7 @@ enum wxBorder
     wxBORDER_RAISED = 0x04000000,
     wxBORDER_SUNKEN = 0x08000000,
     wxBORDER_DOUBLE = 0x10000000, /* deprecated */
-    wxBORDER_THEME  = 0x10000000,
+    wxBORDER_THEME  = wxBORDER_DEFAULT,
 
     /*  a mask to extract border style from the combination of flags */
     wxBORDER_MASK   = 0x1f200000

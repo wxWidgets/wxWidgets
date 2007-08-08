@@ -108,8 +108,9 @@ class wxHtmlHelpHashData : public wxObject
 class wxHtmlHelpHtmlWindow : public wxHtmlWindow
 {
 public:
-    wxHtmlHelpHtmlWindow(wxHtmlHelpWindow *win, wxWindow *parent)
-        : wxHtmlWindow(parent), m_Window(win)
+    wxHtmlHelpHtmlWindow(wxHtmlHelpWindow *win, wxWindow *parent, wxWindowID id = wxID_ANY,
+                         const wxPoint& pos = wxDefaultPosition, const wxSize& sz = wxDefaultSize, long style = wxHW_DEFAULT_STYLE)
+        : wxHtmlWindow(parent, id, pos, sz, style), m_Window(win)
     {
         SetStandardFonts();
     }
@@ -361,6 +362,14 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
 
     wxSizer *navigSizer = NULL;
 
+#ifdef __WXMSW__
+    wxBorder htmlWindowBorder = GetDefaultBorder();
+    if (htmlWindowBorder == wxBORDER_SUNKEN)
+    	htmlWindowBorder = wxBORDER_SIMPLE;
+#else
+    wxBorder htmlWindowBorder = wxBORDER_SIMPLE;
+#endif
+
     if (helpStyle & (wxHF_CONTENTS | wxHF_INDEX | wxHF_SEARCH))
     {
         // traditional help controller; splitter window with html page on the
@@ -369,7 +378,7 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
 
         topWindowSizer->Add(m_Splitter, 1, wxEXPAND);
 
-        m_HtmlWin = new wxHtmlHelpHtmlWindow(this, m_Splitter);
+        m_HtmlWin = new wxHtmlHelpHtmlWindow(this, m_Splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_DEFAULT_STYLE|htmlWindowBorder);
         m_NavigPan = new wxPanel(m_Splitter, wxID_ANY);
         m_NavigNotebook = new wxNotebook(m_NavigPan, wxID_HTML_NOTEBOOK,
                                          wxDefaultPosition, wxDefaultSize);
@@ -382,7 +391,7 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
     else
     {
         // only html window, no notebook with index,contents etc
-        m_HtmlWin = new wxHtmlWindow(this);
+        m_HtmlWin = new wxHtmlWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_DEFAULT_STYLE|htmlWindowBorder);
         topWindowSizer->Add(m_HtmlWin, 1, wxEXPAND);
     }
 

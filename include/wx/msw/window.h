@@ -438,6 +438,9 @@ public:
     // wxControl
     virtual wxBorder GetDefaultBorderForControl() const;
 
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const;
+
     // synthesize a wxEVT_LEAVE_WINDOW event and set m_mouseInWindow to false
     void GenerateMouseLeave();
 

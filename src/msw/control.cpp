@@ -226,11 +226,6 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
 // various accessors
 // ----------------------------------------------------------------------------
 
-wxBorder wxControl::GetDefaultBorder() const
-{
-	return GetDefaultBorderForControl();
-}
-
 WXDWORD wxControl::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     long msStyle = wxWindow::MSWGetStyle(style, exstyle);
