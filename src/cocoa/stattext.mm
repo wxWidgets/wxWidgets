@@ -50,6 +50,15 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID winid,
     [GetNSTextField() setEditable: NO];
     [GetNSTextField() setDrawsBackground: NO];
 
+    NSTextAlignment alignStyle;
+    if (style & wxALIGN_RIGHT)
+        alignStyle = NSRightTextAlignment;
+    else if (style & wxALIGN_CENTRE)
+        alignStyle = NSCenterTextAlignment;
+    else // default to wxALIGN_LEFT because it is 0 and can't be tested
+        alignStyle = NSLeftTextAlignment;
+    [GetNSControl() setAlignment:(NSTextAlignment)alignStyle];
+
     [GetNSControl() sizeToFit];
     // Round-up to next integer size
     NSRect nsrect = [m_cocoaNSView frame];
