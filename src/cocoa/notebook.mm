@@ -147,6 +147,23 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID winid,
         return false;
     m_cocoaNSView = NULL;
     SetNSTabView([[NSTabView alloc] initWithFrame:MakeDefaultNSRect(size)]);
+
+    do
+    {
+        NSTabViewType tabViewType;
+        if(style & wxNB_TOP)
+            tabViewType = NSTopTabsBezelBorder;
+        else if(style & wxNB_LEFT)
+            tabViewType = NSLeftTabsBezelBorder;
+        else if(style & wxNB_RIGHT)
+            tabViewType = NSRightTabsBezelBorder;
+        else if(style & wxNB_BOTTOM)
+            tabViewType = NSBottomTabsBezelBorder;
+        else
+            break;
+        [GetNSTabView() setTabViewType:tabViewType];
+    } while(0);
+
     if(m_parent)
         m_parent->CocoaAddChild(this);
     SetInitialFrameRect(pos,size);
