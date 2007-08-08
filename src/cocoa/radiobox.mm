@@ -167,6 +167,11 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID winid,
 
     SetMajorDim(majorDim, style);
 
+    // Set the selection to the first item if we have any items.
+    // This is for parity with other wx ports which do the same thing.
+    if(n > 0)
+        SetSelection(0);
+
     if(m_parent)
         m_parent->CocoaAddChild(this);
 
