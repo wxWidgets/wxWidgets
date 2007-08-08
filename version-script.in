@@ -40,6 +40,7 @@
         *wxLogChain*DetachOldLog*;
         *wxMemoryFSHandler*AddFileWithMimeType*;
         *wxMetafileDC*DoGetTextExtent*;
+        *wxWindowMSW*GetThemedBorderStyle*;
         *wxWizard*GetBitmap*;
         *wxWizard*SetBitmap*;
 };

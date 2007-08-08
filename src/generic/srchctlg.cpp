@@ -30,10 +30,6 @@
 
 #include "wx/image.h"
 
-#if defined(__WXMSW__) && wxUSE_UXTHEME
-#include "wx/msw/uxtheme.h"
-#endif
-
 #define WXMAX(a,b) ((a)>(b)?(a):(b))
 
 // ----------------------------------------------------------------------------
@@ -327,9 +323,10 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
 {
 	int borderStyle = wxBORDER_SIMPLE;
 
-#if defined(__WXMSW__) && wxUSE_UXTHEME && !(defined(__POCKETPC__) || defined(__SMARTPHONE__))
-    if (wxUxThemeEngine::GetIfActive())
-        borderStyle = wxBORDER_THEME;
+#if defined(__WXMSW__)
+    borderStyle = GetThemedBorderStyle();
+    if (borderStyle == wxBORDER_SUNKEN)
+        borderStyle = wxBORDER_SIMPLE;
 #elif defined(__WXGTK__)
     borderStyle = wxBORDER_SUNKEN;
 #endif

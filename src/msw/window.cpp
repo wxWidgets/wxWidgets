@@ -1425,6 +1425,19 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     return style;
 }
 
+// Helper for getting an appropriate theme style for the application. Unnecessary in
+// 2.9 and above.
+wxBorder wxWindowMSW::GetThemedBorderStyle() const
+{
+#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
+    return wxBORDER_SIMPLE
+#elif wxUSE_UXTHEME
+    if (wxUxThemeEngine::GetIfActive())
+        return wxBORDER_THEME;
+#endif
+    return wxBORDER_SUNKEN;
+}
+
 // Setup background and foreground colours correctly
 void wxWindowMSW::SetupColours()
 {

@@ -219,6 +219,12 @@ public:
     // created yet)
     void MSWUpdateStyle(long flagsOld, long exflagsOld);
 
+#if wxABI_VERSION >= 20805
+    // Helper for getting an appropriate theme style for the application. Unnecessary in
+    // 2.9 and above.
+	wxBorder GetThemedBorderStyle() const;
+#endif
+
     // translate wxWidgets coords into Windows ones suitable to be passed to
     // ::CreateWindow()
     //
