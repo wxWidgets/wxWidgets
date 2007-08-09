@@ -923,7 +923,8 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
             // I believe this to be the correct action, until
             // wxToolBar::GetBestSize() is fixed.  Is this assumption
             // correct?
-            pinfo.best_size.y++;
+            // commented out by JACS 2007-9-08 after having added a pixel in wxMSW's wxToolBar::DoGetBestSize()
+            // pinfo.best_size.y++;
         }
 
         if (pinfo.min_size != wxDefaultSize)

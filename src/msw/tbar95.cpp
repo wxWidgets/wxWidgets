@@ -405,8 +405,16 @@ wxSize wxToolBar::DoGetBestSize() const
         sizeBest.y = size.cy;
     }
 
-    if (!IsVertical() && !(GetWindowStyle() & wxTB_NODIVIDER))
-        sizeBest.y += 1;
+    if (!IsVertical())
+    {
+        // Without the extra height, DoGetBestSize can report a size that's
+        // smaller than the actual window, causing windows to overlap slightly
+        // in some circumstances, leading to missing borders (especially noticeable
+        // in AUI layouts).
+        if (!(GetWindowStyle() & wxTB_NODIVIDER))
+            sizeBest.y += 2;
+        sizeBest.y ++;
+	}
 
     CacheBestSize(sizeBest);
 
