@@ -121,9 +121,11 @@ GdkWindow* wxGetGdkWindowForDC(wxWindow* win, wxDC& dc)
     // So, to work around this, we use GetGDKWindow whenever possible
     // and use bin_window for wxGCDC. 
     GdkWindow* gdk_window = NULL;
+#if wxUSE_GRAPHICS_CONTEXT
     if ( dc.IsKindOf( CLASSINFO(wxGCDC) ) )
         gdk_window = GTK_PIZZA(win->m_wxwindow)->bin_window;    
     else
+#endif
        gdk_window = dc.GetGDKWindow();
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );

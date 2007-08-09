@@ -303,6 +303,10 @@ bool wxTextCtrl::Create(wxWindow *parent,
 #ifdef __WXWINCE__
     if ((style & wxBORDER_MASK) == 0)
         style |= wxBORDER_SIMPLE;
+#else
+    // Standard text control already handles theming
+    if ((style & (wxTE_RICH|wxTE_RICH2)) && ((style & wxBORDER_MASK) == wxBORDER_DEFAULT))
+        style |= wxBORDER_THEME;
 #endif
 
     // base initialization

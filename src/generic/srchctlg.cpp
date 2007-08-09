@@ -30,6 +30,10 @@
 
 #include "wx/image.h"
 
+#if defined(__WXMSW__) && wxUSE_UXTHEME
+#include "wx/msw/uxtheme.h"
+#endif
+
 #define WXMAX(a,b) ((a)>(b)?(a):(b))
 
 // ----------------------------------------------------------------------------
@@ -321,11 +325,16 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name)
 {
-#ifdef __WXGTK__
-    if ( !wxTextCtrlBase::Create(parent, id, pos, size, wxSUNKEN_BORDER | (style & ~wxBORDER_MASK), validator, name) )
-#else
-    if ( !wxTextCtrlBase::Create(parent, id, pos, size, wxSIMPLE_BORDER | (style & ~wxBORDER_MASK), validator, name) )
+	int borderStyle = wxBORDER_SIMPLE;
+
+#if defined(__WXMSW__) && wxUSE_UXTHEME && !(defined(__POCKETPC__) || defined(__SMARTPHONE__))
+    if (wxUxThemeEngine::GetIfActive())
+        borderStyle = wxBORDER_THEME;
+#elif defined(__WXGTK__)
+    borderStyle = wxBORDER_SUNKEN;
 #endif
+
+    if ( !wxTextCtrlBase::Create(parent, id, pos, size, borderStyle | (style & ~wxBORDER_MASK), validator, name) )
     {
         return false;
     }
@@ -527,7 +536,7 @@ void wxSearchCtrl::LayoutControls(int x, int y, int width, int height)
         searchMargin = 0;
         cancelMargin = 0;
     }
-    wxCoord textWidth = width - sizeSearch.x - sizeCancel.x - searchMargin - cancelMargin;
+    wxCoord textWidth = width - sizeSearch.x - sizeCancel.x - searchMargin - cancelMargin - 1;
 
     // position the subcontrols inside the client area
 
@@ -1165,7 +1174,7 @@ void wxSearchCtrl::RecalcBitmaps()
             m_cancelBitmap.GetWidth() != bitmapHeight
             )
         {
-            m_cancelBitmap = RenderCancelBitmap(bitmapHeight-BORDER,bitmapHeight-BORDER); // square
+            m_cancelBitmap = RenderCancelBitmap(bitmapHeight-BORDER-1,bitmapHeight-BORDER-1); // square
             m_cancelButton->SetBitmapLabel(m_cancelBitmap);
         }
         // else this bitmap was set by user, don't alter
