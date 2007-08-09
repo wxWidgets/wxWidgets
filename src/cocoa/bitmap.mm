@@ -125,6 +125,16 @@ wxBitmap::wxBitmap(int w, int h, int d)
     (void)Create(w, h, d);
 }
 
+wxBitmap::wxBitmap(NSImage* cocoaNSImage)
+{
+    (void) Create(cocoaNSImage);
+}
+
+wxBitmap::wxBitmap(NSBitmapImageRep* cocoaNSBitmapImageRep)
+{
+    (void) Create(cocoaNSBitmapImageRep);
+}
+
 wxBitmap::wxBitmap(const void* data, wxBitmapType type, int width, int height, int depth)
 {
     (void) Create(data, type, width, height, depth);
@@ -346,6 +356,33 @@ bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
         return false;
     *this = wxBitmap(image);
     return true;
+}
+
+bool wxBitmap::Create(NSImage* cocoaNSImage)
+{
+    wxAutoNSAutoreleasePool pool;
+    NSBitmapImageRep *bitmapImageRep = [NSBitmapImageRep imageRepWithData:[cocoaNSImage TIFFRepresentation]];
+    return Create(bitmapImageRep);
+}
+
+bool wxBitmap::Create(NSBitmapImageRep *imageRep)
+{
+    UnRef();
+    m_refData = new wxBitmapRefData;
+    if(imageRep != nil)
+    {
+        M_BITMAPDATA->m_width = [imageRep pixelsWide];
+        M_BITMAPDATA->m_height = [imageRep pixelsHigh];
+        M_BITMAPDATA->m_depth = [imageRep bitsPerPixel];
+        M_BITMAPDATA->m_ok = true;
+        M_BITMAPDATA->m_numColors = 0;
+        M_BITMAPDATA->m_quality = 0;
+        M_BITMAPDATA->m_cocoaNSBitmapImageRep = [imageRep retain];
+        M_BITMAPDATA->m_bitmapMask = NULL;
+        return true;
+    }
+    else
+        return false;
 }
 
 bool wxBitmap::Create(const void* data, wxBitmapType type, int width, int height, int depth)
