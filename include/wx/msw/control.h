@@ -71,6 +71,9 @@ public:
     // default style for the control include WS_TABSTOP if it AcceptsFocus()
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const;
+
 protected:
     // return default best size (doesn't really make any sense, override this)
     virtual wxSize DoGetBestSize() const;

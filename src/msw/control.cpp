@@ -243,6 +243,11 @@ wxSize wxControl::DoGetBestSize() const
     return wxSize(DEFAULT_ITEM_WIDTH, DEFAULT_ITEM_HEIGHT);
 }
 
+wxBorder wxControl::GetDefaultBorder() const
+{
+	return GetDefaultBorderForControl();
+}
+
 // This is a helper for all wxControls made with UPDOWN native control.
 // In wxMSW it was only wxSpinCtrl derived from wxSpinButton but in
 // WinCE of Smartphones this happens also for native wxTextCtrl,

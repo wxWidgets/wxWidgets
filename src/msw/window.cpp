@@ -1286,11 +1286,6 @@ void wxWindowMSW::MSWUpdateStyle(long flagsOld, long exflagsOld)
     }
 }
 
-wxBorder wxWindowMSW::GetDefaultBorder() const
-{
-	return GetDefaultBorderForControl();
-}
-
 wxBorder wxWindowMSW::GetDefaultBorderForControl() const
 {
     // we want to automatically give controls a sunken style (confusingly,
@@ -1310,6 +1305,11 @@ wxBorder wxWindowMSW::GetDefaultBorderForControl() const
 #endif
     return wxBORDER_SUNKEN;
 #endif
+}
+
+wxBorder wxWindowMSW::GetDefaultBorder() const
+{
+	return GetDefaultBorderForControl();
 }
 
 WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
