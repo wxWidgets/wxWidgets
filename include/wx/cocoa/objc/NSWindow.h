@@ -12,6 +12,8 @@
 #import <AppKit/NSWindow.h>
 #import <AppKit/NSPanel.h>
 
+#include "wx/cocoa/objc/objc_uniquifying.h"
+
 // ============================================================================
 // @class WXNSWindow
 // ============================================================================
@@ -22,6 +24,7 @@
 - (BOOL)canBecomeKeyWindow;
 - (BOOL)canBecomeMainWindow;
 @end // WXNSWindow
+WX_DECLARE_GET_OBJC_CLASS(WXNSWindow,NSWindow)
 
 // ============================================================================
 // @class WXNSPanel
@@ -33,4 +36,5 @@
 - (BOOL)canBecomeKeyWindow;
 - (BOOL)canBecomeMainWindow;
 @end // WXNSPanel
+WX_DECLARE_GET_OBJC_CLASS(WXNSPanel,NSPanel)
 

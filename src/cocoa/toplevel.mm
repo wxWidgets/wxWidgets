@@ -138,9 +138,9 @@ bool wxTopLevelWindowCocoa::Create(wxWindow *parent,
     NSWindow *newWindow;
     // Create a WXNSPanel or a WXNSWindow depending on what type of window is desired.
     if(style & wxFRAME_TOOL_WINDOW)
-        newWindow = [[WXNSPanel alloc] initWithContentRect:cocoaRect styleMask:cocoaStyle backing:NSBackingStoreBuffered defer:NO];
+        newWindow = [[WX_GET_OBJC_CLASS(WXNSPanel) alloc] initWithContentRect:cocoaRect styleMask:cocoaStyle backing:NSBackingStoreBuffered defer:NO];
     else
-        newWindow = [[WXNSWindow alloc] initWithContentRect:cocoaRect styleMask:cocoaStyle backing:NSBackingStoreBuffered defer:NO];
+        newWindow = [[WX_GET_OBJC_CLASS(WXNSWindow) alloc] initWithContentRect:cocoaRect styleMask:cocoaStyle backing:NSBackingStoreBuffered defer:NO];
     // Make sure the default content view is a WXNSView
     [newWindow setContentView: [[WX_GET_OBJC_CLASS(WXNSView) alloc] initWithFrame: [[newWindow contentView] frame]]];
     // Associate the window and view

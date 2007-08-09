@@ -209,6 +209,7 @@ wxMenuBar* wxCocoaNSWindow::GetAppMenuBar(wxCocoaNSWindow *win)
 }
 
 @end // implementation WXNSWindow
+WX_IMPLEMENT_GET_OBJC_CLASS(WXNSWindow,NSWindow)
 
 // ============================================================================
 // @class WXNSPanel
@@ -234,3 +235,4 @@ wxMenuBar* wxCocoaNSWindow::GetAppMenuBar(wxCocoaNSWindow *win)
 }
 
 @end // implementation WXNSPanel
+WX_IMPLEMENT_GET_OBJC_CLASS(WXNSPanel,NSPanel)
