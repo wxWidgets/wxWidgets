@@ -102,8 +102,8 @@ public:
     bool CreateFromImage(const wxImage& image, int depth=-1);
 
     virtual bool Create(int width, int height, int depth = -1);
-    virtual bool Create(NSImage* cocoaNSImage);
-    virtual bool Create(NSBitmapImageRep* cocoaNSBitmapImageRep);
+    bool Create(NSImage* cocoaNSImage);
+    bool Create(NSBitmapImageRep* cocoaNSBitmapImageRep);
     virtual bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_BMP_RESOURCE);
     virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const;
