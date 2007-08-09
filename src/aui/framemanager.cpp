@@ -524,7 +524,7 @@ wxAuiManager::~wxAuiManager()
             delete pinfo.window;
     }
 #endif
-    
+
     delete m_art;
 }
 
@@ -929,7 +929,8 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
             // I believe this to be the correct action, until
             // wxToolBar::GetBestSize() is fixed.  Is this assumption
             // correct?
-            pinfo.best_size.y++;
+            // commented out by JACS 2007-9-08 after having added a pixel in wxMSW's wxToolBar::DoGetBestSize()
+            // pinfo.best_size.y++;
         }
 
         if (pinfo.min_size != wxDefaultSize)
@@ -3566,7 +3567,7 @@ void wxAuiManager::OnRender(wxAuiManagerEvent& evt)
     // if the frame is about to be deleted, don't bother
     if (!m_frame || wxPendingDelete.Member(m_frame))
 	    return;
-        
+
     wxDC* dc = evt.GetDC();
 
 #ifdef __WXMAC__
