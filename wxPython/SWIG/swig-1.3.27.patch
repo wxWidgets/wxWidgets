@@ -1,0 +1,310 @@
+Index: Doc/Manual/Python.html
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Doc/Manual/Python.html,v
+retrieving revision 1.31
+diff -u -4 -r1.31 Python.html
+--- Doc/Manual/Python.html	6 Oct 2005 21:49:58 -0000	1.31
++++ Doc/Manual/Python.html	28 Jun 2006 22:22:00 -0000
+@@ -4461,10 +4461,10 @@
+ <H2><a name="Python_nn65"></a>26.10 Docstring Features</H2>
+ 
+ 
+ <p>
+-Usign docstrings in Python code is becoming more and more important
+-ans more tools are coming on the scene that take advantage of them,
++Using docstrings in Python code is becoming more and more important
++and more tools are coming on the scene that take advantage of them,
+ everything from full-blown documentaiton generators to class browsers
+ and popup call-tips in Python-aware IDEs.  Given the way that SWIG
+ generates the proxy code by default, your users will normally get
+ something like <tt>"function_name(*args)"</tt> in the popup calltip of
+Index: Lib/swig.swg
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Lib/swig.swg,v
+retrieving revision 1.49
+diff -u -4 -r1.49 swig.swg
+--- Lib/swig.swg	15 Oct 2005 00:15:30 -0000	1.49
++++ Lib/swig.swg	28 Jun 2006 22:22:00 -0000
+@@ -51,9 +51,9 @@
+ 
+ #define %nodefault       %feature("nodefault","1")
+ #define %default         %feature("nodefault","0")
+ #define %clearnodefault  %feature("nodefault","")
+-#define %makedefault     %cleardefault
++#define %makedefault     %clearnodefault
+ 
+ /* the %exception directive */
+ 
+ #ifdef SWIGCSHARP
+Index: Lib/swiginit.swg
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Lib/swiginit.swg,v
+retrieving revision 1.5
+diff -u -4 -r1.5 swiginit.swg
+--- Lib/swiginit.swg	12 Sep 2005 23:25:03 -0000	1.5
++++ Lib/swiginit.swg	28 Jun 2006 22:22:00 -0000
+@@ -40,14 +40,19 @@
+ **/
+ 
+ #ifdef __cplusplus
+ extern "C" {
++#if 0
++} /* c-mode */
++#endif
++#endif
++
++#if 0
++#define SWIGRUNTIME_DEBUG
+ #endif
+ 
+ SWIGRUNTIME void
+ SWIG_InitializeModule(void *clientdata) {
+-  swig_type_info *type, *ret;
+-  swig_cast_info *cast;
+   size_t i;
+   swig_module_info *module_head;
+   static int init_run = 0;
+ 
+@@ -71,18 +76,35 @@
+     SWIG_SetModule(clientdata, &swig_module);
+   }
+ 		 
+   /* Now work on filling in swig_module.types */
++#ifdef SWIGRUNTIME_DEBUG
++  printf("SWIG_InitializeModule: size %d\n", swig_module.size);
++#endif
+   for (i = 0; i < swig_module.size; ++i) {
+-    type = 0;
++    swig_type_info *type = 0;
++    swig_type_info *ret;
++    swig_cast_info *cast;
++  
++#ifdef SWIGRUNTIME_DEBUG
++    printf("SWIG_InitializeModule: type %d %s\n", i, swig_module.type_initial[i]->name);
++#endif
+ 
+     /* if there is another module already loaded */
+     if (swig_module.next != &swig_module) {
+       type = SWIG_MangledTypeQueryModule(swig_module.next, &swig_module, swig_module.type_initial[i]->name);
+     }
+     if (type) {
+       /* Overwrite clientdata field */
+-      if (swig_module.type_initial[i]->clientdata) type->clientdata = swig_module.type_initial[i]->clientdata;
++#ifdef SWIGRUNTIME_DEBUG
++      printf("SWIG_InitializeModule: found type %s\n", type->name);
++#endif
++      if (swig_module.type_initial[i]->clientdata) {
++	type->clientdata = swig_module.type_initial[i]->clientdata;
++#ifdef SWIGRUNTIME_DEBUG
++      printf("SWIG_InitializeModule: found and overwrite type %s \n", type->name);
++#endif
++      }
+     } else {
+       type = swig_module.type_initial[i];
+     }
+ 
+@@ -91,31 +113,66 @@
+     while (cast->type) {
+     
+       /* Don't need to add information already in the list */
+       ret = 0;
++#ifdef SWIGRUNTIME_DEBUG
++      printf("SWIG_InitializeModule: look cast %s\n", cast->type->name);
++#endif
+       if (swig_module.next != &swig_module) {
+         ret = SWIG_MangledTypeQueryModule(swig_module.next, &swig_module, cast->type->name);
++#ifdef SWIGRUNTIME_DEBUG
++	if (ret) printf("SWIG_InitializeModule: found cast %s\n", ret->name);
++#endif
+       }
+-      if (ret && type == swig_module.type_initial[i]) {
+-        cast->type = ret;
+-        ret = 0;
++      if (ret) {
++	if (type == swig_module.type_initial[i]) {
++#ifdef SWIGRUNTIME_DEBUG
++	  printf("SWIG_InitializeModule: skip old type %s\n", ret->name);
++#endif
++	  cast->type = ret;
++	  ret = 0;
++	} else {
++	  /* Check for casting already in the list */
++	  swig_cast_info *ocast = SWIG_TypeCheck(ret->name, type);
++#ifdef SWIGRUNTIME_DEBUG
++	  if (ocast) printf("SWIG_InitializeModule: skip old cast %s\n", ret->name);
++#endif
++	  if (!ocast) ret = 0;
++	}
+       }
+-      
++
+       if (!ret) {
++#ifdef SWIGRUNTIME_DEBUG
++	printf("SWIG_InitializeModule: adding cast %s\n", cast->type->name);
++#endif
+         if (type->cast) {
+           type->cast->prev = cast;
+           cast->next = type->cast;
+         }
+         type->cast = cast;
+       }
+-
+       cast++;
+     }
+-
+     /* Set entry in modules->types array equal to the type */
+     swig_module.types[i] = type;
+   }
+   swig_module.types[i] = 0;
++
++#ifdef SWIGRUNTIME_DEBUG
++  printf("**** SWIG_InitializeModule: Cast List ******\n");
++  for (i = 0; i < swig_module.size; ++i) {
++    int j = 0;
++    swig_cast_info *cast = swig_module.cast_initial[i];
++    printf("SWIG_InitializeModule: type %d %s\n", i, swig_module.type_initial[i]->name);
++    while (cast->type) {
++      printf("SWIG_InitializeModule: cast type %s\n", cast->type->name);
++      cast++;
++      ++j;
++    }
++  printf("---- Total casts: %d\n",j);
++  }
++  printf("**** SWIG_InitializeModule: Cast List ******\n");
++#endif
+ }
+ 
+ /* This function will propagate the clientdata field of type to
+ * any new swig_type_info structures that have been added into the list
+@@ -145,6 +202,9 @@
+   }
+ }
+ 
+ #ifdef __cplusplus
++#if 0
++{ /* c-mode */
++#endif
+ }
+ #endif
+Index: Source/Modules/python.cxx
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Source/Modules/python.cxx,v
+retrieving revision 1.107
+diff -u -4 -r1.107 python.cxx
+--- Source/Modules/python.cxx	7 Oct 2005 13:17:41 -0000	1.107
++++ Source/Modules/python.cxx	28 Jun 2006 22:22:01 -0000
+@@ -36,9 +36,8 @@
+ static  File         *f_directors_h = 0;
+ static  File         *f_init = 0;
+ static  File         *f_shadow_py = 0;
+ static  String       *f_shadow = 0;
+-static  String       *f_shadow_imports = 0;
+ static  String       *f_shadow_stubs = 0;
+ 
+ static  String       *methods;
+ static  String       *class_name;
+@@ -322,9 +321,8 @@
+       }
+       Delete(filen); filen = NULL;
+ 
+       f_shadow = NewString("");
+-      f_shadow_imports = NewString("");
+       f_shadow_stubs = NewString("");
+ 
+       Swig_register_filebyname("shadow",f_shadow);
+       Swig_register_filebyname("python",f_shadow);
+@@ -343,8 +341,10 @@
+       if (mod_docstring && Len(mod_docstring)) {
+         Printv(f_shadow, "\n\"\"\"\n", mod_docstring, "\n\"\"\"\n", NIL);
+         Delete(mod_docstring); mod_docstring = NULL;
+       }
++
++      Printf(f_shadow,"\nimport %s\n\n", module);
+       
+       /* if (!modern) */
+       /* always needed, a class can be forced to be no-modern, such as an exception */
+       { 
+@@ -445,10 +445,8 @@
+     Printf(f_wrappers,"}\n");
+     Printf(f_wrappers,"#endif\n");
+ 
+     if (shadow) {
+-      Printf(f_shadow_imports,"\nimport %s\n", module);
+-      Printv(f_shadow_py, f_shadow_imports, "\n",NIL);
+       Printv(f_shadow_py, f_shadow, "\n",NIL);
+       Printv(f_shadow_py, f_shadow_stubs, "\n",NIL);
+ 
+       Close(f_shadow_py);
+@@ -507,12 +505,9 @@
+         }
+ 
+         // finally, output the name of the imported module
+ 	Printf(import, "%s\n", modname);
+-
+-	if (!Strstr(f_shadow_imports, import)) {
+-	  Printf(f_shadow_imports, "%s", import);
+-	}
++	Printf(f_shadow, "%s", import);
+ 	Delete(import);
+       }
+     }
+     return Language::importDirective(n);
+@@ -774,10 +769,15 @@
+         
+       // Do the param type too?
+       if (showTypes) {
+         type =  SwigType_base(type);
+-	lookup = Swig_symbol_clookup(type, 0);
+-	if (lookup) type = Getattr(lookup, "sym:name");
++        SwigType* qt = SwigType_typedef_resolve_all(type);
++        if (SwigType_isenum(qt))
++          type = NewString("int");
++        else {
++          lookup = Swig_symbol_clookup(type, 0);
++          if (lookup) type = Getattr(lookup, "sym:name");
++        }
+         Printf(doc, "%s ", type);
+       }
+ 
+       if (name) {
+Index: Lib/python/pyinit.swg
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Lib/python/pyinit.swg,v
+retrieving revision 1.19
+diff -u -4 -r1.19 pyinit.swg
+--- Lib/python/pyinit.swg	17 Jun 2005 19:12:20 -0000	1.19
++++ Lib/python/pyinit.swg	28 Jun 2006 22:22:01 -0000
+@@ -214,13 +214,13 @@
+ 		       swig_type_info **types,
+ 		       swig_type_info **types_initial) {
+   size_t i;
+   for (i = 0; methods[i].ml_name; ++i) {
+-    char *c = methods[i].ml_doc;
++    const char *c = methods[i].ml_doc;
+     if (c && (c = strstr(c, "swig_ptr: "))) {
+       int j;
+       swig_const_info *ci = 0;
+-      char *name = c + 10;
++      const char *name = c + 10;
+       for (j = 0; const_table[j].type; ++j) {
+ 	if (strncmp(const_table[j].name, name, 
+ 		    strlen(const_table[j].name)) == 0) {
+ 	  ci = &(const_table[j]);
+Index: Lib/python/pyrun.swg
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Lib/python/pyrun.swg,v
+retrieving revision 1.73
+diff -u -4 -r1.73 pyrun.swg
+--- Lib/python/pyrun.swg	23 Aug 2005 10:55:05 -0000	1.73
++++ Lib/python/pyrun.swg	28 Jun 2006 22:22:01 -0000
+@@ -635,9 +635,9 @@
+   if (pyobj && !obj) {    
+     obj = pyobj;
+     if (PyCFunction_Check(obj)) {
+       /* here we get the method pointer for callbacks */
+-      char *doc = (((PyCFunctionObject *)obj) -> m_ml -> ml_doc);
++      const char *doc = (((PyCFunctionObject *)obj) -> m_ml -> ml_doc);
+       c = doc ? strstr(doc, "swig_ptr: ") : 0;
+       if (c) {
+ 	c = ty ? SWIG_UnpackVoidPtr(c + 10, &vptr, ty->name) : 0;
+ 	if (!c) goto type_error;

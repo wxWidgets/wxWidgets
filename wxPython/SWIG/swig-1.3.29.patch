@@ -1,0 +1,254 @@
+Index: Makefile.in
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Makefile.in,v
+retrieving revision 1.103
+diff -u -4 -r1.103 Makefile.in
+--- Makefile.in	10 Mar 2006 22:54:02 -0000	1.103
++++ Makefile.in	5 Jul 2006 00:50:18 -0000
+@@ -21,9 +21,9 @@
+ 
+ source:
+ 	@cd $(SOURCE) && $(MAKE)
+ 
+-libfiles: Lib/swigwarn.swg
++libfiles: $(srcdir)/Lib/swigwarn.swg
+ 
+ .PHONY: source libfiles
+ 
+ #####################################################################
+@@ -339,9 +339,9 @@
+ #####################################################################
+ # Update the Lib/swigwarn.swg file
+ #####################################################################
+ 
+-Lib/swigwarn.swg: Source/Include/swigwarn.h
++$(srcdir)/Lib/swigwarn.swg: $(srcdir)/Source/Include/swigwarn.h
+ 	echo "/* Automatically generated file containing all the swig warning codes.  */" > $@
+ 	echo "/* Do not modify this file by hand, change 'Source/Include/swigwarn.h'  */" >> $@
+ 	echo  "/* and use the command 'make Lib/swigwarn.swg' instead.                 */" >> $@
+ 	echo >> $@; echo >> $@
+Index: Lib/typemaps/exception.swg
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Lib/typemaps/exception.swg,v
+retrieving revision 1.8
+diff -u -4 -r1.8 exception.swg
+--- Lib/typemaps/exception.swg	7 Mar 2006 00:14:10 -0000	1.8
++++ Lib/typemaps/exception.swg	5 Jul 2006 00:50:18 -0000
+@@ -12,9 +12,9 @@
+ 
+ /* macros for error manipulation */
+ #define %nullref_fmt()                     "invalid null reference "		   
+ #define %varfail_fmt(_type,_name)          "in variable '"`_name`"' of type '"`_type`"'"
+-#define %argfail_fmt(_type,_name,_argn)    "in method '" `_name` "', argument " `_argn`" of type '" `_type`"'"
++#define %argfail_fmt(_type,_name,_argn)    "in method '" `_name` "', expected argument " `_argn`" of type '" `_type`"'"
+ #define %outfail_fmt(_type)                "in output value of type '"_type"'"	   
+ #define %argnullref_fmt(_type,_name,_argn) %nullref_fmt() %argfail_fmt(_type, _name, _argn)  
+ #define %varnullref_fmt(_type,_name)       %nullref_fmt() %varfail_fmt(_type, _name)  		   
+ #define %outnullref_fmt(_type)             %nullref_fmt() %outfail_fmt(_type)         
+Index: Source/Modules/python.cxx
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Source/Modules/python.cxx,v
+retrieving revision 1.203
+diff -u -4 -r1.203 python.cxx
+--- Source/Modules/python.cxx	16 Mar 2006 01:46:50 -0000	1.203
++++ Source/Modules/python.cxx	5 Jul 2006 00:50:19 -0000
+@@ -39,9 +39,8 @@
+ static  File         *f_directors_h = 0;
+ static  File         *f_init = 0;
+ static  File         *f_shadow_py = 0;
+ static  String       *f_shadow = 0;
+-static  String       *f_shadow_imports = 0;
+ static  String       *f_shadow_stubs = 0;
+ 
+ static  String       *methods;
+ static  String       *class_name;
+@@ -669,9 +668,8 @@
+       }
+       Delete(filen); filen = NULL;
+ 
+       f_shadow = NewString("");
+-      f_shadow_imports = NewString("");
+       f_shadow_stubs = NewString("");
+ 
+       Swig_register_filebyname("shadow",f_shadow);
+       Swig_register_filebyname("python",f_shadow);
+@@ -817,12 +815,8 @@
+     Printf(f_wrappers,"}\n");
+     Printf(f_wrappers,"#endif\n");
+ 
+     if (shadow) {
+-      /*
+-      Printf(f_shadow_imports,"\nimport %s\n", module);
+-      Printv(f_shadow_py, f_shadow_imports, "\n",NIL);
+-      */
+       Printv(f_shadow_py, f_shadow, "\n",NIL);
+       Printv(f_shadow_py, f_shadow_stubs, "\n",NIL);
+ 
+       Close(f_shadow_py);
+@@ -882,14 +876,11 @@
+         }
+ 
+         // finally, output the name of the imported module
+ 	if (shadowimport) {
+-	  if (!options || (!Getattr(options, "noshadow") && !Getattr(options, "noproxy"))) {	    
+-	    Printf(import, "_%s\n", modname);
+-	    if (!Strstr(f_shadow_imports, import)) {
+-	      Printf(f_shadow, "import %s\n", modname);
+-	      Printv(f_shadow_imports, import, NULL);
+-	    }
++	  if (!options || (!Getattr(options, "noshadow") && !Getattr(options, "noproxy"))) {
++            Printf(import, "%s\n", modname);
++            Printf(f_shadow, "%s", import);
+ 	  }
+ 	}
+ 	
+ 	Delete(import);
+@@ -1154,10 +1145,15 @@
+         
+       // Do the param type too?
+       if (showTypes) {
+         type =  SwigType_base(type);
+-	lookup = Swig_symbol_clookup(type, 0);
+-	if (lookup) type = Getattr(lookup, "sym:name");
++        SwigType* qt = SwigType_typedef_resolve_all(type);
++        if (SwigType_isenum(qt))
++          type = NewString("int");
++        else {
++          lookup = Swig_symbol_clookup(type, 0);
++          if (lookup) type = Getattr(lookup, "sym:name");
++        }
+         Printf(doc, "%s ", type);
+       }
+ 
+       if (name) {
+@@ -2793,10 +2789,10 @@
+ 	  Printf(f_shadow_file,"%s.%s = new_instancemethod(%s.%s,None,%s)\n", 
+ 		 class_name, symname, module, Swig_name_member(class_name,symname), class_name);
+ 	}
+       }
+-      Printf(f_shadow_file,"%s_swigregister = %s.%s_swigregister\n", class_name, module, class_name);
+-      Printf(f_shadow_file,"%s_swigregister(%s)\n", class_name, class_name,0);
++
++      Printf(f_shadow_file,"%s.%s_swigregister(%s)\n", module, class_name, class_name);
+       
+       shadow_indent = 0;
+       Printf(f_shadow_file,"%s\n", f_shadow_stubs);
+       Clear(f_shadow_stubs);
+Index: Source/Swig/misc.c
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Source/Swig/misc.c,v
+retrieving revision 1.57
+diff -u -4 -r1.57 misc.c
+--- Source/Swig/misc.c	6 Mar 2006 22:51:00 -0000	1.57
++++ Source/Swig/misc.c	5 Jul 2006 00:50:19 -0000
+@@ -899,8 +899,26 @@
+ }
+ #endif
+ 
+ 
++
++/* -----------------------------------------------------------------------------
++ * Swig_string_wxpy()
++ *
++ * Drop a leading 'wx' for all wxNames, except for wxEVT*
++ * ----------------------------------------------------------------------------- */
++String *Swig_string_wxpy(String *s) {
++  String* ns = NewStringEmpty();
++  char* cptr = Char(s);
++  if (cptr[0] == 'w' && cptr[1] == 'x') {
++    if ( ! (cptr[2] == 'E' && cptr[3] == 'V' && cptr[4] == 'T')) {
++      ns = NewString(&cptr[2]);
++    }
++  }
++  return ns;
++}
++
++
+ /* -----------------------------------------------------------------------------
+  * Swig_init()
+  *
+  * Initialize the SWIG core
+@@ -928,8 +946,11 @@
+   DohEncoding("undercase", Swig_string_ucase);
+   DohEncoding("firstuppercase", Swig_string_first_upper);
+   DohEncoding("firstlowercase", Swig_string_first_lower);
+ 
++  /* wxPython's rename encoder */
++  DohEncoding("wxpy", Swig_string_wxpy);
++
+   /* Initialize the swig keys */
+   Swig_keys_init();
+ 
+   /* Initialize typemaps */
+Index: Lib/python/pyinit.swg
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Lib/python/pyinit.swg,v
+retrieving revision 1.32
+diff -u -4 -r1.32 pyinit.swg
+--- Lib/python/pyinit.swg	2 Feb 2006 23:48:56 -0000	1.32
++++ Lib/python/pyinit.swg	5 Jul 2006 00:50:19 -0000
+@@ -225,13 +225,13 @@
+ 		       swig_type_info **types,
+ 		       swig_type_info **types_initial) {
+   size_t i;
+   for (i = 0; methods[i].ml_name; ++i) {
+-    char *c = methods[i].ml_doc;
++    const char *c = methods[i].ml_doc;
+     if (c && (c = strstr(c, "swig_ptr: "))) {
+       int j;
+       swig_const_info *ci = 0;
+-      char *name = c + 10;
++      const char *name = c + 10;
+       for (j = 0; const_table[j].type; ++j) {
+ 	if (strncmp(const_table[j].name, name, 
+ 		    strlen(const_table[j].name)) == 0) {
+ 	  ci = &(const_table[j]);
+Index: Lib/python/pyrun.swg
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Lib/python/pyrun.swg,v
+retrieving revision 1.141
+diff -u -4 -r1.141 pyrun.swg
+--- Lib/python/pyrun.swg	7 Mar 2006 00:35:17 -0000	1.141
++++ Lib/python/pyrun.swg	5 Jul 2006 00:50:19 -0000
+@@ -11,8 +11,12 @@
+  * ----------------------------------------------------------------------------- */
+ 
+ /* Common SWIG API */
+ 
++#if PY_VERSION_HEX < 0x02050000
++typedef int Py_ssize_t;
++#endif
++
+ /* for raw pointers */
+ #define SWIG_Python_ConvertPtr(obj, pptr, type, flags)  SWIG_Python_ConvertPtrAndOwn(obj, pptr, type, flags, 0)
+ #define SWIG_ConvertPtr(obj, pptr, type, flags)         SWIG_Python_ConvertPtr(obj, pptr, type, flags)
+ #define SWIG_ConvertPtrAndOwn(obj,pptr,type,flags,own)  SWIG_Python_ConvertPtrAndOwn(obj, pptr, type, flags, own)
+@@ -1074,9 +1078,9 @@
+   } else {
+     void *vptr = 0;
+     
+     /* here we get the method pointer for callbacks */
+-    char *doc = (((PyCFunctionObject *)obj) -> m_ml -> ml_doc);
++    const char *doc = (((PyCFunctionObject *)obj) -> m_ml -> ml_doc);
+     const char *desc = doc ? strstr(doc, "swig_ptr: ") : 0;
+     if (desc) {
+       desc = ty ? SWIG_UnpackVoidPtr(desc + 10, &vptr, ty->name) : 0;
+       if (!desc) return SWIG_ERROR;
+Index: Lib/python/pystrings.swg
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Lib/python/pystrings.swg,v
+retrieving revision 1.27
+diff -u -4 -r1.27 pystrings.swg
+--- Lib/python/pystrings.swg	23 Feb 2006 21:43:33 -0000	1.27
++++ Lib/python/pystrings.swg	5 Jul 2006 00:50:19 -0000
+@@ -5,9 +5,9 @@
+ SWIGINTERN int
+ SWIG_AsCharPtrAndSize(PyObject *obj, char** cptr, size_t* psize, int *alloc)
+ {
+   if (PyString_Check(obj)) {
+-    char *cstr; int len;
++    char *cstr; Py_ssize_t len;
+     PyString_AsStringAndSize(obj, &cstr, &len);
+     if (cptr)  {
+       if (alloc) {
+ 	/* 

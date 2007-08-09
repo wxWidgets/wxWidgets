@@ -1,0 +1,146 @@
+<?xml version="1.0" ?>
+<resource>
+  <object class="wxPanel" name="MyPanel">
+    <object class="wxGridBagSizer">
+      <vgap>0</vgap>
+      <hgap>0</hgap>
+      <object class="sizeritem">
+        <cellpos>0,0</cellpos>
+	<cellspan>4,1</cellspan>
+        <object class="wxFlexGridSizer">
+          <cols>2</cols>
+          <rows>0</rows>
+          <vgap>0</vgap>
+          <hgap>0</hgap>
+          <object class="sizeritem">
+            <flag>wxTOP|wxLEFT|wxRIGHT|wxALL|wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL</flag>
+            <border>5</border>
+            <object class="wxStaticText" name="ID_TEXT">
+              <label>Name:</label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <flag>wxTOP|wxLEFT|wxRIGHT|wxEXPAND|wxGROW|wxALIGN_CENTRE_VERTICAL</flag>
+            <border>5</border>
+            <object class="wxTextCtrl" name="ID_NameField">
+              <size>100,-1</size>
+              <value></value>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
+            <border>5</border>
+            <object class="wxStaticText" name="ID_TEXT">
+              <label>Address:</label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
+            <border>5</border>
+            <object class="wxTextCtrl" name="ID_Addr1Field">
+              <size>100,-1</size>
+              <value></value>
+            </object>
+          </object>
+          <object class="spacer">
+            <size>20,20</size>
+          </object>
+          <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
+            <border>5</border>
+            <object class="wxTextCtrl" name="ID_TEXTCTRL">
+              <size>100,-1</size>
+              <value></value>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
+            <border>5</border>
+            <object class="wxStaticText" name="ID_TEXT">
+              <label>City, State, Zip:</label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+            <border>5</border>
+            <object class="wxBoxSizer">
+              <orient>wxHORIZONTAL</orient>
+              <object class="sizeritem">
+                <flag>wxALIGN_CENTRE|wxLEFT|wxTOP</flag>
+                <border>5</border>
+                <object class="wxTextCtrl" name="ID_CityField">
+                  <size>100,-1</size>
+                  <value></value>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <flag>wxALIGN_CENTRE|wxLEFT|wxTOP</flag>
+                <border>5</border>
+                <object class="wxTextCtrl" name="ID_StateField">
+                  <size>30,-1</size>
+                  <value></value>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <flag>wxALIGN_CENTRE|wxLEFT|wxRIGHT|wxTOP</flag>
+                <border>5</border>
+                <object class="wxTextCtrl" name="ID_ZipField">
+                  <size>50,-1</size>
+                  <value></value>
+                </object>
+              </object>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <border>5</border>
+            <object class="wxStaticText" name="ID_TEXT">
+              <label>Phone:</label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
+            <border>5</border>
+            <object class="wxTextCtrl" name="ID_PhoneField">
+              <size>100,-1</size>
+              <value></value>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <border>5</border>
+            <object class="wxStaticText" name="ID_TEXT">
+              <label>Email:</label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
+            <border>5</border>
+            <object class="wxTextCtrl" name="ID_EmailField">
+              <size>100,-1</size>
+              <value></value>
+            </object>
+          </object>
+        </object>
+      </object>
+      <object class="spacer">
+        <flag>wxALIGN_CENTRE|wxALL</flag>
+        <border>5</border>
+        <size>20,20</size>
+	<cellpos>0,1</cellpos>
+      </object>
+      <object class="sizeritem">
+        <cellpos>1,2</cellpos>
+	<object class="wxButton" name="wxID_OK">
+	  <label>Save</label>
+        </object>
+      </object>
+      <object class="sizeritem">
+        <cellpos>2,2</cellpos>
+	<object class="wxButton" name="wxID_CANCEL">
+	  <label>Cancel</label>
+        </object>
+      </object>
+    </object>
+  </object>
+</resource>

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+distrib/all/build-all daily $* 2>&1 | tee tmp/daily.log

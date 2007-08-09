@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=XRCed
+Comment=wxPython XRC resource editor
+Exec=xrced
+Icon=XRCed.png
+Terminal=false
+Type=Application
+Categories=Application;Development;

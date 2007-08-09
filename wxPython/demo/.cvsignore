@@ -1,0 +1,14 @@
+*.pyc
+.DS_Store
+._demo.py
+.emacs.desktop
+.gdb_history
+.setup
+.setup.bat
+.setup.sh
+b.bat
+hangman_dict.txt
+mimetypes_wdr
+setup.bat
+test.out
+tmphtml.txt

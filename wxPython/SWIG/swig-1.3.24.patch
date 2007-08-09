@@ -1,0 +1,201 @@
+? .configure
+? .emacs.desktop
+? .test
+? mytests
+? switch_cvs.py
+? Source/Modules/mystuff
+Index: Doc/Manual/Python.html
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Doc/Manual/Python.html,v
+retrieving revision 1.20
+diff -u -4 -r1.20 Python.html
+--- Doc/Manual/Python.html	25 Oct 2004 20:42:08 -0000	1.20
++++ Doc/Manual/Python.html	15 Apr 2005 23:11:25 -0000
+@@ -3869,10 +3869,10 @@
+ 
+ <H2><a name="Python_nn65"></a>26.10 Docstring Features</H2>
+ 
+ 
+-Usign docstrings in Python code is becoming more and more important
+-ans more tools are coming on the scene that take advantage of them,
++Using docstrings in Python code is becoming more and more important
++and more tools are coming on the scene that take advantage of them,
+ everything from full-blown documentaiton generators to class browsers
+ and popup call-tips in Python-aware IDEs.  Given the way that SWIG
+ generates the proxy code by default, your users will normally get
+ something like <tt>"function_name(*args)"</tt> in the popup calltip of
+Index: Lib/python/pyrun.swg
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Lib/python/pyrun.swg,v
+retrieving revision 1.53
+diff -u -4 -r1.53 pyrun.swg
+--- Lib/python/pyrun.swg	11 Dec 2004 23:38:44 -0000	1.53
++++ Lib/python/pyrun.swg	15 Apr 2005 23:11:25 -0000
+@@ -455,9 +455,10 @@
+ 	} else {
+ 	  PyErr_Format(PyExc_TypeError, "a '%s' is expected, '%s' is received",
+ 		       type, otype);
+ 	}
+-	Py_DECREF(str);
++	if (str)
++          Py_DECREF(str);
+ 	return;
+       }
+     }   
+     PyErr_Format(PyExc_TypeError, "a '%s' is expected", type);
+Index: Source/Modules/python.cxx
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Source/Modules/python.cxx,v
+retrieving revision 1.81
+diff -u -4 -r1.81 python.cxx
+--- Source/Modules/python.cxx	13 Dec 2004 22:12:47 -0000	1.81
++++ Source/Modules/python.cxx	15 Apr 2005 23:11:26 -0000
+@@ -74,9 +74,9 @@
+      -modern         - Use modern python features only, without compatibility code\n\
+      -apply          - Use apply() in proxy classes\n\
+      -new_vwm        - New value wrapper mode, use only when everything else fails \n\
+      -new_repr       - Use more informative version of __repr__ in proxy classes\n\
+-     -old_repr       - Use shorter ald old version of __repr__ in proxy classes\n\
++     -old_repr       - Use shorter and old version of __repr__ in proxy classes\n\
+      -noexcept       - No automatic exception handling\n\
+      -noh            - Don't generate the output header file\n\
+      -noproxy        - Don't generate proxy classes \n\n";
+ 
+@@ -749,10 +749,15 @@
+         
+       // Do the param type too?
+       if (showTypes) {
+         type =  SwigType_base(type);
+-	lookup = Swig_symbol_clookup(type, 0);
+-	if (lookup) type = Getattr(lookup, "sym:name");
++        SwigType* qt = SwigType_typedef_resolve_all(type);
++        if (SwigType_isenum(qt))
++          type = NewString("int");
++        else {
++          lookup = Swig_symbol_clookup(type, 0);
++          if (lookup) type = Getattr(lookup, "sym:name");
++        }
+         Printf(doc, "%s ", type);
+       }
+ 
+       if (name) {
+@@ -853,13 +858,19 @@
+         }
+         
+         switch ( ad_type ) {
+         case AUTODOC_CLASS:
+-	  if (CPlusPlus) {
+-	    Printf(doc, "Proxy of C++ %s class", class_name);
+-	  } else {
+-	    Printf(doc, "Proxy of C %s struct", class_name);
+-	  }
++          {
++            // Only do the autodoc if there isn't a docstring for the class
++            String* str = Getattr(n, "feature:docstring");
++            if  (str == NULL || Len(str) == 0) {
++              if (CPlusPlus) {
++                Printf(doc, "Proxy of C++ %s class", class_name);
++              } else {
++                Printf(doc, "Proxy of C %s struct", class_name);
++              }
++            }
++          }
+ 	  break;
+         case AUTODOC_CTOR:
+           if ( Strcmp(class_name, symname) == 0) {
+             String* paramList = make_autodocParmList(n, showTypes);
+@@ -1027,10 +1038,12 @@
+       Printf(methods,"\t { (char *)\"%s\", (PyCFunction) %s, METH_VARARGS | METH_KEYWORDS, ", name, function);
+     
+     if (n && Getattr(n,"feature:callback")) {
+       if (have_docstring(n)) {
++        String* ds = docstring(n, AUTODOC_FUNC, "", false);
++        Replaceall(ds, "\n", "\\n");
+ 	Printf(methods,"(char *)\"%s\\nswig_ptr: %s\"",
+-	       docstring(n, AUTODOC_FUNC, "", false),
++	       ds,
+ 	       Getattr(n,"feature:callback:name"));
+       } else {
+ 	Printf(methods,"(char *)\"swig_ptr: %s\"",Getattr(n,"feature:callback:name"));
+       }
+@@ -1950,11 +1963,13 @@
+ 	  Printf(f_shadow, modern ? "(object)" : "(_object)");
+ 	}
+       }
+       Printf(f_shadow,":\n");
+-      if ( have_docstring(n) ) 
+-          Printv(f_shadow, tab4, docstring(n, AUTODOC_CLASS, tab4), "\n", NIL);
+-      
++      if ( have_docstring(n) ) {
++        String* str = docstring(n, AUTODOC_CLASS, tab4);
++        if (str != NULL && Len(str)) 
++          Printv(f_shadow, tab4, str, "\n", NIL);
++      }
+       if (!modern) {
+         Printv(f_shadow,tab4,"__swig_setmethods__ = {}\n",NIL);
+         if (Len(base_class)) {
+           Printf(f_shadow,"%sfor _s in [%s]: __swig_setmethods__.update(_s.__swig_setmethods__)\n",tab4,base_class);
+@@ -2139,11 +2154,11 @@
+ 	  Replaceall(pycode,"$action", pyaction);
+ 	  Delete(pyaction);
+ 	  Printv(f_shadow,pycode,"\n",NIL);
+ 	} else {
+-	  Printv(f_shadow, tab4, "def ", symname, "(*args", (allow_kwargs ? ", **kwargs" : ""), "): ", NIL);
++	  Printv(f_shadow, tab4, "def ", symname, "(*args", (allow_kwargs ? ", **kwargs" : ""), "):", NIL);
+ 	  if (!have_addtofunc(n)) {
+-	    Printv(f_shadow, "return ", funcCallHelper(Swig_name_member(class_name,symname), allow_kwargs), "\n", NIL);
++	    Printv(f_shadow, " return ", funcCallHelper(Swig_name_member(class_name,symname), allow_kwargs), "\n", NIL);
+ 	  } else {
+             Printv(f_shadow, "\n", NIL);
+             if ( have_docstring(n) )
+               Printv(f_shadow, tab8, docstring(n, AUTODOC_METHOD, tab8), "\n", NIL);
+@@ -2175,12 +2190,9 @@
+       return SWIG_OK;
+     }
+     
+     if (shadow) {
+-      //
+-      // static + autodoc/prepend/append + def args not working!!!, disable by now
+-      //
+-      if (0 && !classic && !Getattr(n,"feature:python:callback") && have_addtofunc(n)) {
++      if ( !classic && !Getattr(n,"feature:python:callback") && have_addtofunc(n)) {
+         int kw = (check_kwargs(n) && !Getattr(n,"sym:overloaded")) ? 1 : 0;
+         Printv(f_shadow, tab4, "def ", symname, "(*args", (kw ? ", **kwargs" : ""), "):\n", NIL);
+         if ( have_docstring(n) )
+           Printv(f_shadow, tab8, docstring(n, AUTODOC_STATICFUNC, tab8), "\n", NIL);
+Index: Source/Swig/cwrap.c
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Source/Swig/cwrap.c,v
+retrieving revision 1.51
+diff -u -4 -r1.51 cwrap.c
+--- Source/Swig/cwrap.c	4 Dec 2004 08:33:02 -0000	1.51
++++ Source/Swig/cwrap.c	15 Apr 2005 23:11:26 -0000
+@@ -172,17 +172,26 @@
+       tycode = SwigType_type(type);
+       if (tycode == T_REFERENCE) {
+ 	if (pvalue) {
+ 	  SwigType *tvalue;
+-	  String *defname, *defvalue, *rvalue;
++	  String *defname, *defvalue, *rvalue, *qvalue;
+ 	  rvalue = SwigType_typedef_resolve_all(pvalue);
++	  qvalue = SwigType_typedef_qualified(rvalue);
+ 	  defname = NewStringf("%s_defvalue", lname);
+ 	  tvalue = Copy(type);
+ 	  SwigType_del_reference(tvalue);
+-	  defvalue = NewStringf("%s = %s", SwigType_lstr(tvalue,defname), rvalue);
++	  tycode = SwigType_type(tvalue);
++	  if (tycode != T_USER) {
++	    /* plain primitive type, we copy the the def value */
++	    defvalue = NewStringf("%s = %s", SwigType_lstr(tvalue,defname),qvalue);
++	  } else {
++	    /* user type, we copy the reference value */
++	    defvalue = NewStringf("%s = %s",SwigType_str(type,defname),qvalue);
++	  }
+ 	  Wrapper_add_localv(w,defname, defvalue, NIL);
+ 	  Delete(tvalue);
+ 	  Delete(rvalue);
++	  Delete(qvalue);
+ 	  Delete(defname);
+ 	  Delete(defvalue);
+ 	}
+       }  else if (!pvalue && ((tycode == T_POINTER) || (tycode == T_STRING))) {

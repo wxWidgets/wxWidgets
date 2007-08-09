@@ -1,0 +1,695 @@
+0.9.5 (12/23/2005)
+-------------------
+
+Applied a series of enhancments by Franz Steinaeusler, Adi Sieker, and
+Sebastian Haase, up until their 7-31-2005 version.  (Their next
+version broke some existing functionality, and added some confusing
+hacks, and I didn't feel that the incremental gains were worth the
+loss at that point so I stopped at 7-31-2005.)
+
+Their changes include the following:
+
+* The Autocomplete and Calltip windows can now be opened manually with
+  Ctrl-Space and Ctrl-Shift-Space.
+
+* In the stand alone PyCrust app the various option settings, window
+  size and position, and etc. are saved and restored at the next run.
+
+* Added a help dialog bound to the F1 key that shows the key bindings.
+
+* Added a new text completion function that suggests words from the
+  history.  Bound to Shift-Return.
+
+* F11 will toggle the maximized state of the frame.
+
+* switched to Bind() from wx.EVT_*().
+
+* Display of line numbers can be toggled.
+
+* F12 toggles a "free edit" mode of the shell buffer.  This mode is
+  useful, for example, if you would like to remove some output or
+  errors or etc. from the buffer before doing a copy/paste.  The free
+  edit mode is designated by the use of a red, non-flashing caret.
+
+* Ctrl-Shift-F will fold/unfold (hide/show) the selected lines.
+
+
+
+On top of these changes I (Robin Dunn) added the following:
+
+* General code cleanup and fixes.
+
+* Use wx.StandardPaths to determine the location of the config files.
+
+* Remove Orbtech attributions from the UI, they've been there long
+  enough.
+
+* Use wx.SP_LIVE_UPDATE on crust and filling windows.
+
+* Extended the saving of the config info and other new features to the
+  PyShell app too.  Additionally, other apps that embed a PyCrust or a
+  PyShell can pass their own wx.Config object and have the Py code
+  save/restore its settings to/from there.
+
+* All of the classes with config info get an opportunity to save/load
+  their own settings instead of putting all the save/load code in one
+  place that then has to reach all over the place to do anything.
+
+* Enable editing of the startup python code, which will either be the
+  file pointed to by PYTHONSTARTUP or a file in the config dir if
+  PYTHONSTARTUP is not set in the environment.
+
+* Added an option to skip the running of the startup code when 
+  PyShell or PyCrust starts.
+
+* PyCrust adds a pp(item) function to the shell's namespace that
+  pretty prints the item in the Display tab of the notebook.  Added
+  code to raise that tab when pp() is called.
+
+* Added an option for whether to insert text for function parameters
+  when popping up the call tip.
+
+* Added Find and Find-Next functions that use the wx.FindReplaceDialog.
+
+
+
+
+
+
+0.9.4 (1/25/2004 to //2004)
+------------------------------
+
+Removed wxd decorators in favor of new SWIG-generated docstrings.
+
+Removed docs tabs from crust interface:
+* wxPython Docs
+* wxSTC Docs
+
+Fixed Calltip tab refresh problem on Windows.
+
+shell.autoCompleteAutoHide added with default of False.
+
+Changed default namespace of Shell to __main__.__dict__, instead of an
+empty dictionary.
+
+
+0.9.3 (9/25/2003 to 1/24/2004)
+------------------------------
+
+Fun and games with dynamic renaming.  Details of any other changes
+were lost in the confusion.  I'll try to do better in the future.
+
+
+0.9.2 (5/3/2003 to 9/25/2003)
+-----------------------------
+
+Changed to the new prefix-less "wx" package::
+
+    import wx
+
+instead of::
+
+    from wxPython import wx
+
+Fixed typo in ``PyWrap.py``::
+
+    if __name__ == '__main__':
+        main(sys.argv)
+
+should have been::
+
+    if __name__ == '__main__':
+        main()
+
+Added pretty-print Display tab to Crust, based on suggestion from
+Jason Whitlark.
+
+Improved ``Can*`` checks in ``EditWindow``, since STC is too lenient,
+particularly when it is set to read-only but returns True for
+CanPaste() (seems like an STC bug to me)::
+
+    def CanCopy(self):
+        """Return True if text is selected and can be copied."""
+        return self.GetSelectionStart() != self.GetSelectionEnd()
+
+    def CanCut(self):
+        """Return True if text is selected and can be cut."""
+        return self.CanCopy() and self.CanEdit()
+
+    def CanEdit(self):
+        """Return True if editing should succeed."""
+        return not self.GetReadOnly()
+
+    def CanPaste(self):
+        """Return True if pasting should succeed."""
+        return stc.StyledTextCtrl.CanPaste(self) and self.CanEdit()
+
+
+0.9.1 (3/21/2003 to 5/2/2003)
+-----------------------------
+
+PyCrust is dead!  Long live Py!
+
+* Renamed ``PyCrust`` package to ``py``.
+* Moved code to wxPython's CVS repository.
+
+Fixed bug in ``introspect.py`` on introspecting objects occurring
+immediately after a secondary prompt, like this::
+
+    >>> l = [1, 2, 3]
+    >>> for n in range(3):
+    ...     l.  <-- failed to popup autocomplete list
+
+Added documentation files:
+
+* PyManual.txt
+* wxPythonManual.txt
+* wxPythonPackage.txt
+* wxPythonExamples.txt
+
+Added PyAlaMode and PyAlaCarte code editors.
+
+Major refactoring to support ``editor`` and ``shell`` from the same
+base.
+
+Renamed program files:
+
+* ``PyCrustApp.py`` to ``PyCrust.py``
+* ``PyFillingApp.py`` to ``PyFilling.py``
+* ``PyShellApp.py`` to ``PyShell.py``
+* ``wrap.py`` to ``PyWrap.py``
+
+Removed disabling of autocomplete for lists of 2000 items or more.
+The current implementation of wxSTC can now handle lists this big.
+
+Improved handling of ``sys.path`` to mimic the standard Python shell.
+
+
+0.9 (2/27/2003 to 3/20/2003)
+----------------------------
+
+Added fontIncrease, fontDecrease, fontDefault signals, receivers and
+keybindings::
+
+    Ctrl+]            Increase font size.
+    Ctrl+[            Decrease font size.
+    Ctrl+=            Default font size.
+
+Continued enhancement of the decorator capability to provide better
+documentation and docstrings for wxPython classes and functions.
+
+Introduced new tabbed interface:
+
+* Namespace
+* Calltip
+* Session
+* Dispatcher
+* wxPython Docs
+* wxSTC Docs
+
+``Filling.tree`` now expands tuples as well as lists.  (It should have
+done this all along, I just never noticed this omission before.)
+
+Added this True/False test to all modules::
+
+    try:
+        True
+    except NameError:
+        True = 1==1
+        False = 1==0
+
+Added ``wxd`` directory with decoration classes.
+
+
+0.8.2 (1/5/2003 to 2/26/2003)
+-----------------------------
+
+Wrapped ``sys.ps1``, ``sys.ps2``, and ``sys.ps3`` in ``str()``.
+(Thanks, Kieran Holland.)
+
+Fixed minor things found by PyChecker.
+
+Changed locals to use ``__main__.__dict__`` and added code to clean up
+the namespace, making it as close to the regular Python environment as
+possible.  This solves the problem of pickling and unpickling
+instances of classes defined in the shell.
+
+Made ``shell.PasteAndRun()`` a little more forgiving when it finds a
+ps2 prompt line with no trailing space, such when you copy code from a
+web page.
+
+Improved autocomplete behavior by adding these to shell::
+
+    self.AutoCompSetAutoHide(False)
+    self.AutoCompStops(' .,;:([)]}\'"\\<>%^&+-=*/|`')
+
+Added ``decor`` directory, ``decorator.py``, ``stcDecor.py``, and
+``stcConstants.py``.  These all serve the purpose of adding docstrings
+to existing wxPython classes, in particular the ``wxStyledTextCtrl``.
+
+Added ``wrap.py``, a command line utility for running a wxPython app
+with additional runtime-tools loaded, such as PyCrust (the only tool
+at this point).
+
+Flushed the clipboard Cut/Copy operations so that selections will
+exist in the clipboard even after PyCrust has been closed.
+
+Improved the suppression of docstrings for simple data types appearing
+in the namespace viewer.
+
+Better handling of autocompletion with numeric types; no
+autocompletion when typing a dot after an integer.  If the
+autocompletion is desired, type a space before the dot::
+
+    func = 3 .
+
+More Filling!!! The namespace tree is now dynamically updated.
+
+
+0.8.1 (12/20/2002 to 12/25/2002)
+--------------------------------
+
+Improved keyboard handling with Autocomplete active.  You can now use
+Enter as well as Tab to select an item from the list.
+
+Disabled autocomplete for lists of 2000 items or more.  The current
+implementation of wxSTC can't handle lists this big.
+
+Changed ``filling`` to always display docstrings for objects.  This is
+useful for objects whose docstrings have been decorated, rather than
+coming directly from the source code.  (Hmmm.  Sounds like someone is
+doing some decorating.  I wonder where that would be helpful? <wink>)
+
+Fixed handling of icon.  Added ``images.py`` file.
+
+
+0.8 (10/29/2002 to 12/16/2002)
+------------------------------
+
+Added "help" to startup banner info.
+
+Made all ``wx`` and ``stc`` imports explicit.  No more ``import *``.
+
+Replaced use of the ``wx`` module's ``true`` and ``false`` with
+Python's ``True`` and ``False``.
+
+Changed ``introspect.getRoot()`` to use ``tokenize`` module.  This
+does a slightly better job than the previous parsing routine and the
+code is clearer.
+
+Improved handling of whitespace and empty types during introspection.
+
+Fixed cut/copy clipboard problem under Linux.  (Robin Dunn rocks!!!)
+
+Added shell.about() which works like this::
+
+    >>> shell.about()
+    PyCrust Version: 0.8
+    Shell Revision: 1.80
+    Interpreter Revision: 1.15
+    Python Version: 2.2.2
+    wxPython Version: 2.3.3.1
+    Platform: linux2
+
+Added copy plus and paste plus to shell menu.
+
+Moved shell menu from ``shell.py`` to ``shellmenu.py``.
+
+Added ``sys.stdin.readlines()`` support.
+
+Added ``time.sleep()`` in ``readline()`` and ``OnIdle()`` event
+handler to free up the CPU.
+
+
+0.7.2 (2/22/2002 to 8/27/2002)
+------------------------------
+
+Tweaked ``getAttributeNames()`` to pick up a few more attributes::
+
+    '__bases__', '__class__', '__dict__', '__name__', 'func_closure',
+    'func_code', 'func_defaults', 'func_dict', 'func_doc',
+    'func_globals', 'func_name'
+
+Added a tests directory and unit tests.
+
+Improved support for empty types in the shell: ``[]``, ``()`` and
+``{}`` as far as when call tips and autocompletion are available.
+
+Added support for the other triple string - ``''''''``.
+
+Refactored ``introspect.py`` to improve testability.
+
+Improved call tips for unbound methods by leaving the "self"
+parameter, since unbound methods require an instance be passed.
+
+Fixed call tip bug where a tip was displayed when a "(" was typed
+after an object that wasn't callable.
+
+Fixed ``getAllAttributeNames`` when ``str(object)`` fails.
+
+Added brace highlighting.  (Thank you, Kevin Altis.)
+
+Fixed problem displaying unicode objects in ``PyFilling``.
+
+Changed how ``filling.py`` checks for expandable objects.  Lists are
+now expandable objects.
+
+Made the key handling more robust when there is an active text
+selection that includes text prior to the last primary prompt.  Thanks
+to Raul Cota for pointing this out.
+
+Fixed wxSTC problem with brace highlighting and non-us keyboards.
+(Thank you for the patch, Jean-Michel Fauth.)
+
+Added ``busy = wxBusyCursor()`` to key points in ``shell`` and
+``filling``.
+
+Added ``OnCloseWindow`` handler to ``ShellFrame`` and ``CrustFrame``.
+
+Default to ``SetWrapMode(1)`` for shell and namespace viewer.
+
+Added ``shell.wrap()`` and ``shell.zoom()``.
+
+Added autoCompleteKeys hooks for Raul Cota.
+
+Cleaned up various little key handling bugs.
+
+Changed input methods to get values from shell, rather than dialog
+boxes.  Renamed ``readIn`` to ``readline`` and ``readRaw`` to
+``raw_input``.
+
+
+0.7.1 (12/12/2001 to 2/21/2002)
+-------------------------------
+
+Fixed ``OnChar()`` issues effecting European keyboards, as reported by
+Jean-Michel Fauth.
+
+Fixed ``introspect.py`` issue with xmlrpc objects reported by Kevin
+Altis.
+
+Fixed some introspect/PyFilling issues with regard to Python 2.2.
+
+Fixed font background color as reported by Keith J. Farmer.  (Thanks)
+
+Fixed problem with call tips and autocompletion inside multiline
+commands as report by Kevin Altis.
+
+Improved ``OnKeyDown`` handling of cut/copy/paste operations based on
+feedback from Syver Enstad.  (Thanks)
+
+Added a ``shell.help()`` method to display some help info.
+
+Changed sort of items in the namespace viewer to case insensitive.
+
+Changed ``attributes.sort(lambda x, y: cmp(x.upper(), y.upper()))`` in
+advance of an upcoming fix to an autocompletion matching bug in wxSTC.
+
+Improved support for ZODB by allowing namespace drilldown into BTrees.
+
+Added ``shell.PasteAndRun()`` to support pasting multiple commands into
+the shell from the clipboard.  Ctrl+Shift+V or v.
+
+Enter now always processes a command (or copies down a previous one.)
+To insert a line break, press Ctrl+Enter.
+
+Escape key clears the current, unexecuted command.
+
+History retrieval changed to replace current command.  Added new keys
+to insert from history - Shift+Up and Shift+Down.
+
+Better call tips on objects with ``__call__`` methods.
+
+Improved call tip positioning calculation.
+
+
+0.7 (10/15/2001 to 12/11/2001)
+------------------------------
+
+Changed how command history retrieval functions work.  Added Alt-P,
+Alt-N as keybindings for Retrieve-Previous, Retrieve-Next.
+
+Added full support for multi-line commands, similar to IDLE.
+
+Changed ``introspect.getAttributeNames()`` to do a case insensitive
+sort.
+
+Changed Cut/Copy/Paste to deal with prompts intelligently.  Cut and
+Copy remove all prompts.  Paste can handle prompted or not-prompted
+text.
+
+Added ``CopyWithPrompts()`` method attached to Ctrl-Shift-C for those
+times when you really do want all the prompts left intact.
+
+Improved handling of the shell's read-only zone.
+
+Changed ``CrustFrame.__init__`` parameter spec to include all
+parameters allowed by a ``wxFrame``.
+
+Changed ``FillingText`` to be read-only.
+
+Renamed ``PyCrust.py`` to ``PyCrustApp.py`` to eliminate
+package/module name conflicts that kept you from doing ``from PyCrust
+import shell`` inside files located in the ``PyCrust`` directory.
+
+Renamed ``PyFilling.py`` to ``PyFillingApp.py`` and ``PyShell.py`` to
+``PyShellApp.py`` to maintain consistency.
+
+Removed the ``__date__`` property from all modules.
+
+Fixed bug in ``introspect.getCallTip()``, reported by Kevin Altis.
+
+
+0.6.1 (9/19/2001 to 10/12/2001)
+-------------------------------
+
+Changed ``Shell.run()`` to always position to the end of existing
+text, as suggested by Raul Cota.
+
+Changed ``introspect.getAllAttributeNames()`` to break circular
+references in ``object.__class__``, which occurs in Zope/ZODB
+extension classes.
+
+Changed ``filling.FillingTree.getChildren()`` to introspect extension
+classes.
+
+Fixed minor bugs in ``introspect.getCallTip()`` that were interfering
+with call tips for Zope/ZODB extension class methods.
+
+In preparation for wxPython 2.3.2, added code to fix a font sizing
+problem.  Versions of wxPython prior to 2.3.2 had a sizing bug on Win
+platform where the font was 2 points larger than what was specified.
+
+Added a hack to ``introspect.getAllAttributeNames()`` to "wake up"
+ZODB objects that are asleep - in a "ghost" state.  Otherwise it
+returns incomplete info.
+
+
+0.6 (8/21/2001 to 9/12/2001)
+----------------------------
+
+Added ``PyFilling.py`` and ``filling.py``.
+
+``PyShell.py`` and ``PyFilling.py`` can now be run standalone, as well
+as ``PyCrust.py``.
+
+Added ``crust.py`` and moved some code from ``PyCrust.py`` to it.
+
+Added command history retrieval features submitted by Richie Hindle.
+
+Changed ``shell.write()`` to replace line endings with OS-specific
+endings.  Changed ``shell.py`` and ``interpreter.py`` to use
+``os.linesep`` in strings having hardcoded line endings.
+
+Added ``shell.redirectStdin()``, ``shell.redirectStdout()`` and
+``shell.redirectStderr()`` to allow the surrounding app to toggle
+requests that the specified ``sys.std*`` be redirected to the shell.
+These can also be run from within the shell itself, of course.
+
+The shell now adds the current working directory "." to the search
+path::
+
+    sys.path.insert(0, os.curdir)
+
+Added support for distutils installations.
+
+
+0.5.4 (8/17/2001 to 8/20/2001)
+------------------------------
+
+Changed default font size under Linux to::
+
+    'size'   : 12,
+    'lnsize' : 10,
+
+Changed ``Shell`` to expect a parameter referencing an Interpreter
+class, rather than an intepreter instance, to facilitate subclassing
+of Interpreter, which effectively broke when the Editor class was
+eliminated.
+
+Fixed ``PyCrustAlaCarte.py``, which had been broken by previous
+changes.
+
+Created ``InterpreterAlaCarte`` class as an example for use in the
+demo.
+
+Split ``PyCrust.py`` into ``PyCrust.py`` and ``PyShell.py`` in
+anticipation of ``PyFilling.py``.
+
+
+0.5.3 (8/16/2001)
+-----------------
+
+Added patch to ``PyCrust.py`` to fix wxPython bug::
+
+    wxID_SELECTALL = NewId() # This *should* be defined by wxPython.
+
+
+0.5.2 (8/14/2001 to 8/15/2001)
+------------------------------
+
+Shortened module names by dropping "PyCrust" as a prefix.
+
+Changed ``version`` to ``VERSION`` in ``version`` module.
+
+Added Options menu to PyCrust application.
+
+Eliminated the Editor class (and editor module) by merging with Shell.
+This means that Shell "is a" wxStyledTextCtrl rather than "has a".
+There just wasn't enough non-gui code to justify the separation.
+Plus, Shell will be much easier for gui toolkits/designers to deal
+with now.
+
+
+0.5.1 (8/10/2001 to 8/14/2001)
+------------------------------
+
+Added ``introspect`` module.
+
+Moved some functionality from ``PyCrustInterp`` to ``introspect``.
+
+Changed ``introspect.getRoot()`` to no longer remove whitespace from
+the command.  This was a remnant of a previous approach that, when
+left as part of the current approach, turned out to be a really bad
+thing.
+
+Changed ``introspect.getRoot()`` to allow commands of ``''``, ``""``,
+``""""""``, ``[]``, ``()``, and ``{}`` to pass through.  This allows
+you to type them, followed by a dot, and get autocomplete options on
+them.
+
+Changed ``introspect.getRoot()`` to identify some situations where
+strings shouldn't be considered roots.  For example::
+
+    >>> import PyCrust  # To illustrate the potential problem.
+    >>> len('PyCrust.py')
+
+Typing the dot at the end of "PyCrust" in the second line above should
+NOT result in an autocompletion list because "PyCrust" is part of a
+string in this context, not a reference to the PyCrust module object.
+Similar reasoning applies to call tips.  For example::
+
+    >>> len('dir(')
+
+Typing the left paren at the end of "dir" should NOT result in a call
+tip.
+
+Both features now behave properly in the examples given.  However,
+there is still the case where whitespace precedes the potential root
+and that is NOT handled properly.  For example::
+
+    >>> len('this is a dir(')
+
+and::
+
+    >>> len('This is PyCrust.py')
+
+More code needs to be written to handle more complex situations.
+
+Added ``locals=None`` parameter to ``Shell.__init__()``.
+
+Added support for magic attribute retrieval.  Users can change this
+with::
+
+    >>> shell.editor.autoCompleteIncludeMagic = 0
+
+Added the ability to set filters on auto completion to exclude
+attributes prefixed with a single or double underscore.  Users can
+exclude one or the other or both with::
+
+    >>> shell.editor.autoCompleteExcludeSingle = 1
+    >>> shell.editor.autoCompleteExcludeDouble = 1
+
+
+0.5 (8/8/2001)
+--------------
+
+Mostly just a final version change before creating a release.
+
+
+0.4 (8/4/2001 to 8/7/2001)
+--------------------------
+
+Changed version/revision handling.
+
+Fixed bugs.
+
+
+0.3 (8/2/2001 to 8/3/2001)
+--------------------------
+
+Removed lots of cruft.
+
+Added lots of docstrings.
+
+Imported to CVS repository at SourceForge.
+
+Added call tips.
+
+
+0.2 (7/30/2001 to 8/2/2001)
+---------------------------
+
+Renamed several files.
+
+Added command autocompletion.
+
+Added menus to PyCrust.py: File, Edit and Help.
+
+Added sample applications: ``PyCrustAlaCarte.py``,
+``PyCrustAlaMode.py``, and ``PyCrustMinimus.py``.
+
+
+0.1 (7/1/2001 to 7/19/2001)
+---------------------------
+
+Added basic syntax coloring much like Boa.
+
+Added read-only logging much like IDLE.
+
+Can retrieve a previous command by putting the cursor back on that
+line and hitting enter.
+
+Stdin and raw_input operate properly so you can now do ``help()`` and
+``license()`` without hanging.
+
+Redefined "quit", "exit", and "close" to display a better-than-nothing
+response.
+
+Home key honors the prompt.
+
+Created SourceForge account, but nothing was posted.
+
+
+In the beginning, there was pie... (7/1/2001)
+---------------------------------------------
+
+Blame it all on IDLE, Boa and PythonWin.  I was using all three, got
+frustrated with their dissimilarities, and began to let everyone know
+how I felt.  At the same time, Scintilla looked like an interesting
+tool to build a shell around.  And while I didn't receive much in the
+way of positive feedback, let alone encouragement, I just couldn't let
+go of the idea of a Scintilla-based Python shell.  Then the PythonCard
+project got to the point where they were talking about including a
+shell in their development environment.  That was all the incentive I
+needed.  PyCrust had to happen...

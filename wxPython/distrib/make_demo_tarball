@@ -1,0 +1,44 @@
+#!/bin/bash
+#----------------------------------------------------------------------
+
+if [ ! -d wxPython ]; then
+    echo "Please run this script from the root wxPython directory."
+    exit 1
+fi
+
+VERSION=`python -c "import setup;print setup.VERSION"`
+BUILD=_build_
+
+mkdir -p $BUILD
+mkdir $BUILD/wxPython-$VERSION
+
+cp -R demo $BUILD/wxPython-$VERSION
+cp -R samples $BUILD/wxPython-$VERSION
+
+# do some cleanup
+rm -rf `find $BUILD/wxPython-$VERSION -name CVS`
+rm -rf `find $BUILD/wxPython-$VERSION -name .svn`
+rm -f `find  $BUILD/wxPython-$VERSION -name "*.pyc"`
+rm -f `find  $BUILD/wxPython-$VERSION -name "*.pyo"`
+rm -f `find  $BUILD/wxPython-$VERSION -name ".setup*"`
+rm -f `find  $BUILD/wxPython-$VERSION -name .cvsignore`
+rm -f `find  $BUILD/wxPython-$VERSION -name "core.[0-9]*"`
+rm -f `find  $BUILD/wxPython-$VERSION -name "core"`
+rm -f `find  $BUILD/wxPython-$VERSION -name wxPython`
+rm -f `find  $BUILD/wxPython-$VERSION -name "*.o"`
+rm -f `find  $BUILD/wxPython-$VERSION -name "*.so"`
+rm -f `find  $BUILD/wxPython-$VERSION -name "*~"`
+rm -f `find  $BUILD/wxPython-$VERSION -name ".#*"`
+rm -f `find  $BUILD/wxPython-$VERSION -name "b"`
+
+cd $BUILD
+
+tar cvf ../dist/wxPython-demo-$VERSION.tar wxPython-$VERSION
+bzip2 -9 -f ../dist/wxPython-demo-$VERSION.tar
+
+cd ..
+rm -r $BUILD
+
+
+
+

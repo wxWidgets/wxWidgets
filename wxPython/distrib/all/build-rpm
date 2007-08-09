@@ -1,0 +1,101 @@
+#!/bin/bash
+#----------------------------------------------------------------------
+
+set -o errexit
+
+
+coHost=$1
+host=$2
+reltag=$3
+pyver=$4
+
+if [ $buildansi = yes ]; then
+    CHARTYPE=both
+else
+    CHARTYPE=unicode
+fi
+
+
+function TestOnline {
+    local host=$1
+    local message=$2
+
+    if ping -q -c1 -w1 $host > /dev/null; then
+	return 0
+    else
+	return 1
+    fi
+}
+
+
+if [ $skiprpm != yes ]; then
+
+    startedCoHost=no
+    hostAvailable=no
+
+    # test if the target machine is online
+    if TestOnline $host; then 
+	hostAvailable=yes
+    else
+	# Attempt to start the host via it's coLinux host, if there is one
+	if [ $coHost != none -a $startcohost == yes ]; then 
+	    if TestOnline $coHost; then
+		echo "Attempting to start $host via coLinux on $coHost..."
+		ssh $coHost "/c/coLinux/VMs/$host.bat -d > /dev/null 2>&1 &"
+
+		# Give it time to boot and be ready for conenctions,
+		# and then test with ssh, limiting retries.
+		for x in `seq 36`; do
+		    sleep 5
+		    echo "checking..."
+		    if ssh root@$host "true" >/dev/null 2>&1; then
+			# success! the host is ready so we can break out of the loop
+			break;
+		    fi
+		done
+		
+                # test if the host is ready
+		if TestOnline $host; then
+		    echo "coLinux start of $host on $coHost successful."
+		    startedCoHost=yes
+		    hostAvailable=yes
+		fi
+	    else
+		echo "The $coHost machine is offline, unable to start coLinux for $host"
+	    fi
+	fi
+    fi
+
+    if [ $hostAvailable = yes ]; then
+	echo "The $host machine is online, build continuing..."
+    else
+	echo "The $host machine is **OFFLINE**, skipping the binary RPM build."
+	exit 0
+    fi
+
+
+    echo "Copying source files and build script..."
+    ssh root@$host "mkdir -p $LINUX_BUILD && rm -rf $LINUX_BUILD/*"
+    scp $STAGING_DIR/wxPython-src* $STAGING_DIR/wxPython.spec\
+	distrib/all/do-build-rpm \
+	root@$host:$LINUX_BUILD
+    
+    echo "Running build script on $host..."
+    cmd=./do-build-rpm
+    ssh root@$host "cd $LINUX_BUILD && $cmd $reltag $skipclean $VERSION $pyver $CHARTYPE"
+    
+    echo "Fetching the results..."
+    scp "root@$host:$LINUX_BUILD/wxPython*.i[0-9]86.rpm"  $STAGING_DIR
+    ssh root@$host "rm $LINUX_BUILD/wxPython*.i[0-9]86.rpm"
+
+
+    if [ $startedCoHost = yes ]; then
+	echo "Halting $host on $coHost..."
+	ssh root@$host "/sbin/halt"
+	sleep 10
+    fi
+    sleep 30
+
+    echo "Done!"
+fi
+

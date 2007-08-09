@@ -1,0 +1,20 @@
+
+nmake -f makefile.vc BUILD=release %$
+
+REM pushd %WXWIN%\contrib\build\xrc
+REM nmake -f makefile.vc BUILD=release %$
+
+pushd %WXWIN%\utils\wxrc
+nmake -f makefile.vc BUILD=release %$
+copy vc_msw\wxrc.exe %WXWIN%\lib\vc_dll\wxrc.exe
+
+
+pushd %WXWIN%\utils\tex2rtf\src
+nmake -f makefile.vc BUILD=release %$
+copy vc_msw\tex2rtf.exe %WXWIN%\lib\vc_dll\tex2rtf.exe
+
+popd
+popd
+
+
+

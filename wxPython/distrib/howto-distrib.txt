@@ -1,0 +1,170 @@
+How to make a wxPython distribution
+===================================
+
+This file documents all the steps that need to be taken to make a full
+dsitribution of wxPython, building source and binary packages for
+Linux, Windows and OSX.  Much of this info is just "notes to self" and
+are specific to my machines and their custom setup, and may not be
+entirly applicable to others.  If other folks are able to glean some
+useful information from this then that is wonderful, but is not the
+main intent of this document...
+
+
+
+Preflight Checklist
+-------------------
+
+* Ensure that the version info in wxPython/config.py is correct.
+
+* Ensure that all build machines are up to date with CVS, they should
+  have the same versions of all the wxWidgets files if possible.  (Use
+  a CVS tag if this is an official release.)
+
+* Ensure that all SWIG files have been regnerated, by doing a "b 23 t"
+  in wxPython, and then "b 23".  Check CVS status again, committing
+  changes and updating on other build machines as neccessary.  This
+  includes build scripts too, so as tweaks are made in the various
+  processes below be sure to check in the scripts.
+
+* Make the wxPython metadata XML file and ensure that it is committed 
+  to CVS.  On Xavier do:
+
+       docs/bin/simplify.py
+
+* Ensure that docs/CHANGES.txt and docs/MigrationGuide.txt are
+  updated, accurate and checked in to CVS.
+
+* Regenerate the html versions of the ReST docs in wxPython/docs, and
+  check in to CVS.  On Xavier do:
+
+       cd wxPython/docs
+       docutils-buildhtml	 
+
+
+
+Windows  (build env is on Cyclops)
+----------------------------------
+
+* Do a clean build of the ansi and unicode hybrid versions of
+  wxWidgets:
+
+	cd wx/build/msw
+	.make both-hybrid clean
+	.make both-hybrid
+
+* Build the tools. This btm script makes a static release version of
+  wxWidgets, and then builds copies of wxrc.exe and tex2rtf.exe
+  linking with that lib, placing them in wx/lib/vc_dll, (which you
+  should have on the PATH.)
+
+       .make_tools.btm
+
+* Make the .mo files
+
+       cd wx/locale
+       makemo.py
+
+* Make the HTMLHelp files.  In the wx\wxPython directory run: 
+
+	distrib\makedocs.bat
+
+* Clean any old wxPython builds:
+
+	del /sx build build.unicode
+
+* Build all four versions of wxPython installers:
+
+	 b 23 a
+
+* Build the -devel .zip file:
+
+	dsitrib\makedev.bat $(VERSION)
+
+* Copy the all the files created in wx\wxPython\dist to the file
+  server at s:\Development\wxPython\dist\$(VERSION)
+
+
+
+Linux
+-----
+
+The distribution build for Linux is split across two machines, one to
+create the source archives and another to build the binaries.  On the
+primary development box (Xavier) do the following steps from the
+wx/wxPython dir:
+
+* Clean out any former RPM build dirs, and any former dist files:
+
+	rm -r _build_rpm
+	rm dist/*
+
+
+* Make the demo tarball:
+       
+       distrib/makedemo
+
+* Make the docs tarball:
+
+       distrib/makedocs
+
+* Make the source tarball:
+
+       distrib/makerpm 2.3 skipclean skiprpm
+
+* Make the four SRPMs:
+
+       distrib/makerpm 2.2 skipclean skipcopy skiptar srpm
+       distrib/makerpm 2.3 skipclean skipcopy skiptar srpm
+       distrib/makerpm 2.2 skipclean skipcopy skiptar srpm gtk2
+       distrib/makerpm 2.3 skipclean skipcopy skiptar srpm gtk2
+
+* Copy all the files created in wx/wxPython/dist to the file server at
+  /stuff/Development/wxPython/dist/$(VERSION)
+
+
+
+* The second half of the build process for Linux (building the binary
+  RPMs) is performed on a fairly raw (uncustomized, only used for
+  these builds, etc.) RedHat 9 machine.  This is done to make the RPMs
+  as generic as possible, ensuring that there are no dependencies on
+  non-standard libs and such that may be on my main development
+  machine.  There are RH-9 VMware VMs both on Cyclops and on Xavier
+  that are setup to do this, with both Python 2.2 and 2.3 installed,
+  gtk+1.2 and gtk+2 devel libs, etc. As the root user, do the
+  following:
+
+     mkdir /tmp/build
+     cd /tmp/build
+     SRCDIR=/stuff/Development/wxPython/dist/$(VERSION)
+     for srpm in $SRCDIR/*.src.rpm; do
+	 myrpmbuild --rebuild $srpm
+     done
+
+* Copy the resulting RPMs to /stuff/Development/wxPython/dist/$(VERSION)
+
+
+
+
+Mac OSX
+-------
+
+The Mac OSX build uses the tarball created on Linux, so it must be
+created first and in place on the file server.  There are currently
+two builds made of wxPythonOSX, one for Panther and Apple's version of
+Python, and one for Jaguar and a self-installed MacPythonOSX.  
+
+* On BigMac run the following as root:
+
+     cd wx/wxPython
+     distrib/mac/wxPythonOSX/build panther
+
+* On Whopper run the following as root: 
+
+     cd wx/wxPython
+     distrib/mac/wxPythonOSX/build jaguar
+
+* Copy the resulting disk image files in wx/wxPython/dist on each
+  machine to /stuff/Development/wxPython/dist/$(VERSION) on the file
+  server. 
+
+

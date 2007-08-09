@@ -1,0 +1,30 @@
+Each of the leaf items in the tree is a separate demo.  Click and learn!
+Use the source Luke!
+Many of the demos have some helpful overview text associated with them.  Simply click on the first tab in the notebook control after selecting the demo.  You can switch back and forth to the demo page as often as you like.
+You can also view the source code for each demo by clicking on the second notebook tab.
+This demo is a teaching tool.  The source code for each sample can be modified and you can see the results immediately!
+Be sure to subscribe to the mail list.  Go to http://wxpython.org/maillist.php today!
+The wxPyWiki is a place where wxPython users can help other users, and is a colaborative documentation system.  See http://wiki.wxpython.org.
+You shouldn't pee on an electric fence!
+The whole world is a tuxedo and you are a pair of brown shoes.
+Cold hands, no gloves.
+Learn to pause -- or nothing worthwhile can catch up to you.
+Don't kiss an elephant on the lips today.
+Grief can take care of itself; but to get the full value of a joy you must have somebody to divide it with. -- Mark Twain
+Stay away from hurricanes for a while.
+Beware of a dark-haired man with a loud tie.
+Don't ask Robin what these quotes mean, he doesn't remember.
+Your lucky number has been disconnected.
+You single-handedly fought your way into this hopeless mess.
+A few hours grace before the madness begins again.
+Your fly might be open (but don't check it just now).
+Never commit yourself!  Let someone else commit you.
+Noise proves nothing.  Often a hen who has merely laid an egg cackles as if she laid an asteroid.   -- Mark Twain
+The very ink with which all history is written is merely fluid prejudice.   -- Mark Twain
+Excellent time to become a missing person.
+Stay away from flying saucers today.
+Look afar and see the end from the beginning.
+Tomorrow, this will be part of the unchangeable past but fortunately, it can still be changed today.
+It has long been an axiom of mine that the little things are infinitely the most important.  -- Sir Arthur Conan Doyle
+I don't know half of you half as well as I should like; and I like less than half of you half as well as you deserve.  -- J. R. R. Tolkien
+You are only young once, but you can stay immature indefinitely.

@@ -1,0 +1,103 @@
+#!/bin/bash
+# ---------------------------------------------------------------------------
+# Build the wxPython source RPMs on a Linux box.  This is normally called 
+# from build-all but it should be able to be used standalone too...
+# 
+# The command line must have the following parameters:
+#
+#    1. the path of the build dir.  The src RPMs will be here when we start
+#       and the binary RPMs will be left here when we're done.
+#    2. skipclean flag (yes|no)
+#    3. the VERSION
+#    4. the remaining args are the versions of Python to build for
+#
+# ---------------------------------------------------------------------------
+
+set -o errexit
+#set -o xtrace
+
+echo "-=-=-=-  Hello from $HOSTNAME  -=-=-=-"
+
+if [ $# -lt 5 ]; then
+    echo "Usage: $0 WXDIR DESTDIR SKIPCLEAN VERSION PYVER CHARTYPE"
+    exit 1
+fi
+
+RELEASE=$1
+SKIPCLEAN=$2
+VERSION=$3
+PYVER=$4
+CHARTYPE=$5
+
+rpmtop=_rpm_top
+
+if which rpmbuild > /dev/null 2>&1; then
+    RPMBUILD=rpmbuild
+else
+    RPMBUILD=rpm
+fi
+
+
+function DoRPMBuild {
+    # $1 : python version
+    # $2 : port
+    # $3 : unicode
+
+    echo "-=-=-=-=-=-=-=-=-=-=-"
+    echo $1 $2 $3 
+    echo "-=-=-=-=-=-=-=-=-=-=-"
+
+    $RPMBUILD --define "_topdir $PWD/$rpmtop" \
+	--define "_tmppath $PWD/$rpmtop/tmp" \
+	--define "release ${RELEASE}_py$1" \
+	--define "pyver $1" \
+	--define "port $2" \
+	--define "unicode $3" \
+	-bb wxPython.spec
+
+    if [ $? != 0 ]; then
+	return $?
+    fi
+}
+
+
+
+echo "*** Setting up RPM build dirs"
+for dir in SPECS BUILD RPMS SOURCES SRPMS tmp; do
+    if [ ! -d $rpmtop/$dir ]; then
+	mkdir -p $rpmtop/$dir
+    fi
+done
+
+cp wxPython-src-$VERSION.tar.bz2 $rpmtop/SOURCES
+
+echo "************************************************" 
+echo "Building the RPMs for Python $PYVER, $CHARTYPE"
+
+## for now let's just do the gtk2 builds
+##if [ $CHARTYPE = both -o $CHARTYPE = ansi ]; then
+##    DoRPMBuild $ver gtk  0
+##fi
+
+if [ $CHARTYPE = both -o $CHARTYPE = ansi ]; then
+    DoRPMBuild $PYVER gtk2 0
+fi
+if [ $CHARTYPE = both -o $CHARTYPE = unicode ]; then
+    DoRPMBuild $PYVER gtk2 1
+fi
+
+
+echo "*** Moving RPMs to ."
+find $rpmtop -name "*.rpm"
+mv -f `find $rpmtop -name "*.rpm"` .
+
+
+if [ $SKIPCLEAN != yes ]; then 
+    echo "*** Cleaning up $rpmtop"
+    rm -rf $rpmtop
+
+    echo "Cleaning up..."
+    rm *.spec *.tar.bz2
+fi
+
+echo "-=-=-=-  Goodbye!  -=-=-=-"

@@ -1,0 +1,1040 @@
+=====================
+ The wxPython Manual
+=====================
+
+--------------------------------------------
+ A guide to wxPython for Python programmers
+--------------------------------------------
+
+:Author: Patrick K. O'Brien
+:Contact: pobrien@orbtech.com
+:Organization: Orbtech_
+:Date: $Date$
+:Revision: $Revision$
+:License: wxWindows Free Documentation Licence, Version 3
+
+.. _Orbtech: http://www.orbtech.com/
+
+.. contents::
+
+
+Introduction
+============
+
+This is a guide to the wxPython GUI toolkit, written **by** a Python
+programmer **for** his fellow Python programmers.  It began as a
+simple translation of the wxWidgets documentation (which is written
+for C++ programmers), and evolved from there.  And while there's
+nothing wrong with C++...
+
+Okay, you got me there.  I hate C++.  That's why I use Python.  If you
+like C++, go read the wxWidgets documentation.  If you'd rather read a
+guide that's written with Python programmers in mind, keep reading
+this one.  If you like it, feel free to send me freshly roasted coffee
+beans, dark chocolate, and large denomination currency.  Better yet,
+buy huge quantities of my wxPython book (written with Robin Dunn) and
+send one to each of your friends, relatives, and coworkers.
+
+
+What is wxPython?
+=================
+
+wxPython is a GUI toolkit for the Python programming language.  It
+allows Python programmers to create programs with a robust, highly
+functional graphical user interface, simply and easily.  It is
+implemented as a Python extension module (native code) that wraps the
+popular wxWidgets cross platform GUI library, which is written in C++.
+
+Like Python and wxWidgets, wxPython is Open Source, which means that
+it is free for anyone to use and the source code is available for
+anyone to look at and modify.  And anyone can contribute fixes or
+enhnacments to the project.
+
+wxPython is a cross-platform toolkit.  This means that the same
+program will run on multiple platforms without modification.
+Currently supported platforms are 32-bit Microsoft Windows, most Unix
+or unix-like systems, and Macintosh OS X.
+
+Since the language is Python, wxPython programs are simple, easy to
+write and easy to understand.
+
+
+wxPython requirements
+=====================
+
+To make use of wxPython, you currently need one of the following
+setups.
+
+MS-Windows
+----------
+
+* A 486 or higher PC running MS Windows. 
+* At least ?? MB of disk space. 
+
+Linux or Unix
+-------------
+
+* Almost any C++ compiler, including GNU C++ (EGCS 1.1.1 or above).
+* Almost any Unix workstation, and one of: GTK+ 1.2, GTK+ 2.0, Motif
+  1.2 or higher, Lesstif.
+* At least ?? MB of disk space. 
+
+Mac OS X
+--------
+
+* A PowerPC Mac running Mac OS X 10.x. 
+* At least ?? MB of disk space.
+
+
+What is wxWidgets?
+==================
+
+wxWidgets is a C++ framework providing GUI (Graphical User Interface)
+and other facilities on more than one platform.  Version 2 currently
+supports all desktop versions of MS Windows, Unix with GTK+, Unix with
+Motif, and MacOS.  An OS/2 port is in progress.
+
+wxWidgets was originally developed at the Artificial Intelligence
+Applications Institute, University of Edinburgh, for internal use, and
+was first made publicly available in 1992.  Version 2 is a vastly
+improved version written and maintained by Julian Smart, Robert
+Roebling, Vadim Zeitlin, Vaclav Slavik and many others.
+
+Please note that in the following, "MS Windows" often refers to all
+platforms related to Microsoft Windows, including 16-bit and 32-bit
+variants, unless otherwise stated.  All trademarks are acknowledged.
+
+
+Why another cross-platform development tool?
+============================================
+
+wxWidgets was developed to provide a cheap and flexible way to
+maximize investment in GUI application development.  While a number of
+commercial class libraries already existed for cross-platform
+development, none met all of the following criteria:
+
+* low price
+* source availability
+* simplicity of programming
+* support for a wide range of compilers
+
+Since wxWidgets was started, several other free or almost-free GUI
+frameworks have emerged.  However, none has the range of features,
+flexibility, documentation and the well-established development team
+that wxWidgets has.
+
+As open source software, wxWidgets has benefited from comments, ideas,
+bug fixes, enhancements and the sheer enthusiasm of users.  This gives
+wxWidgets a certain advantage over its commercial competitors (and
+over free libraries without an independent development team), plus a
+robustness against the transience of one individual or company.  This
+openness and availability of source code is especially important when
+the future of thousands of lines of application code may depend upon
+the longevity of the underlying class library.
+
+Version 2 goes much further than previous versions in terms of
+generality and features, allowing applications to be produced that are
+often indistinguishable from those produced using single-platform
+toolkits such as Motif, GTK+ and MFC.
+
+The importance of using a platform-independent class library cannot be
+overstated, since GUI application development is very time-consuming,
+and sustained popularity of particular GUIs cannot be guaranteed.
+Code can very quickly become obsolete if it addresses the wrong
+platform or audience.  wxWidgets helps to insulate the programmer from
+these winds of change.  Although wxWidgets may not be suitable for
+every application (such as an OLE-intensive program), it provides
+access to most of the functionality a GUI program normally requires,
+plus many extras such as network programming, PostScript output, and
+HTML rendering; and it can of course be extended as needs dictate.  As
+a bonus, it provides a far cleaner and easier programming interface
+than the native APIs.  Programmers may find it worthwhile to use
+wxWidgets even if they are developing on only one platform.
+
+It is impossible to sum up the functionality of wxWidgets in a few
+paragraphs, but here are some of the benefits:
+
+* Low cost (free, in fact!) 
+* You get the source. 
+* Available on a variety of popular platforms. 
+* Works with almost all popular C++ compilers and Python. 
+* Over 50 example programs. 
+* Over 1000 pages of printable and on-line documentation. 
+* Includes Tex2RTF, to allow you to produce your own documentation in
+  Windows Help, HTML and Word RTF formats.
+* Simple-to-use, object-oriented API. 
+* Flexible event system. 
+* Graphics calls include lines, rounded rectangles, splines,
+  polylines, etc.
+* Constraint-based and sizer-based layouts. 
+* Print/preview and document/view architectures. 
+* Toolbar, notebook, tree control, advanced list control classes. 
+* PostScript generation under Unix, normal MS Windows printing on the
+  PC.
+* MDI (Multiple Document Interface) support. 
+* Can be used to create DLLs under Windows, dynamic libraries on Unix. 
+* Common dialogs for file browsing, printing, colour selection, etc. 
+* Under MS Windows, support for creating metafiles and copying them to
+  the clipboard.
+* An API for invoking help from applications. 
+* Ready-to-use HTML window (supporting a subset of HTML). 
+* Dialog Editor for building dialogs. 
+* Network support via a family of socket and protocol classes. 
+* Support for platform independent image processing. 
+* Built-in support for many file formats (BMP, PNG, JPEG, GIF, XPM,
+  PNM, PCX).
+
+
+wxPython Overview
+=================
+
+To set a wxPython application going, you will need to derive an App
+class and override App.OnInit.
+
+An application must have a top-level Frame or Dialog window.  Each
+frame may contain one or more instances of classes such as Panel,
+SplitterWindow or other windows and controls.
+
+A frame can have a MenuBar, a ToolBar, a status line, and an Icon for
+when the frame is iconized.
+
+A Panel is used to place controls (classes derived from Control) which
+are used for user interaction.  Examples of controls are Button,
+CheckBox, Choice, ListBox, RadioBox, Slider.
+
+Instances of Dialog can also be used for controls, and they have the
+advantage of not requiring a separate frame.
+
+Instead of creating a dialog box and populating it with items, it is
+possible to choose one of the convenient common dialog classes, such
+as MessageDialog and FileDialog.
+
+You never draw directly onto a window.  Instead, you use a device
+context (DC).  DC is the base for ClientDC, PaintDC, MemoryDC,
+PostScriptDC, MemoryDC, MetafileDC and PrinterDC.  If your drawing
+functions have DC as a parameter, you can pass any of these DCs to the
+function, and thus use the same code to draw to several different
+devices.  You can draw using the member functions of DC, such as
+DC.DrawLine and DC.DrawText.  Control colour on a window (Colour) with
+brushes (Brush) and pens (Pen).
+
+.. To intercept events, you add a DECLARE_EVENT_TABLE macro to the
+   window class declaration, and put a BEGIN_EVENT_TABLE
+   ... END_EVENT_TABLE block in the implementation file. Between these
+   macros, you add event macros which map the event (such as a mouse
+   click) to a member function. These might override predefined event
+   handlers such as for KeyEvent and MouseEvent.
+
+Most modern applications will have an on-line, hypertext help system;
+for this, you need Help and the HelpController class to control
+Help.
+
+GUI applications aren't all graphical wizardry.  You'll also need
+lists and hash tables.  But since you're working with Python, you
+should use the ones Python provides (list, tuple, dict), rather than
+the wxWidgets versions.  Same goes for the database related classes.
+The basic rule of thumb is this: If you can do it directly in Python,
+you probably should.  If there is a reason not to use a Python data
+type, wxPython will provide a wrapper for the wxWidgets class.
+
+You will undoubtedly need some platform-independent file functions,
+and you may find it handy to maintain and search a list of paths using
+PathList. There's a miscellany of operating system and other
+functions.
+
+See also Classes by Category for a list of classes.
+
+
+Utilities and libraries supplied with wxPython
+==============================================
+
+In addition to the core wxWidgets library, a number of further
+libraries and utilities are supplied with each distribution.
+
+[Need to list these.]
+
+
+Creating and deleting wxPython objects
+======================================
+
+[This section needs to be reviewed.]
+
+.. In general, classes derived from wxWindow must dynamically
+   allocated with new and deleted with delete. If you delete a window,
+   all of its children and descendants will be automatically deleted,
+   so you don't need to delete these descendants explicitly.
+
+.. When deleting a frame or dialog, use Destroy rather than delete so
+   that the wxWidgets delayed deletion can take effect. This waits
+   until idle time (when all messages have been processed) to actually
+   delete the window, to avoid problems associated with the GUI
+   sending events to deleted windows.
+
+.. If you decide to allocate a C++ array of objects (such as wxBitmap)
+   that may be cleaned up by wxWidgets, make sure you delete the array
+   explicitly before wxWidgets has a chance to do so on exit, since
+   calling delete on array members will cause memory problems.
+
+.. wxColour can be created statically: it is not automatically cleaned
+   up and is unlikely to be shared between other objects; it is
+   lightweight enough for copies to be made.
+
+.. Beware of deleting objects such as a wxPen or wxBitmap if they are
+   still in use. Windows is particularly sensitive to this: so make
+   sure you make calls like wxDC::SetPen(wxNullPen) or
+   wxDC::SelectObject(wxNullBitmap) before deleting a drawing object
+   that may be in use. Code that doesn't do this will probably work
+   fine on some platforms, and then fail under Windows.
+
+
+App overview
+============
+
+Classes: wx.App
+
+Application initialization
+--------------------------
+
+The OnInit method defined for a class derived from wx.App will usually
+create a top window as a bare minimum.
+
+OnInit must return a boolean value to indicate whether processing
+should continue (True) or not (False).  You call App.SetTopWindow to
+let wxPython know about the top window.
+
+An application closes by destroying all windows.  Because all frames
+must be destroyed for the application to exit, it is advisable to use
+parent frames wherever possible when creating new frames, so that
+deleting the top level frame will automatically delete child frames.
+The alternative is to explicitly delete child frames in the top-level
+frame's CloseEvent handler.
+
+In emergencies the wx.Exit() function can be called to kill the
+application, however, normally the application shuts down
+automatically, see below.
+
+An example of defining an application follows::
+
+    import wx
+
+    from frame import Frame
+
+    class App(wx.App):
+        """Application class."""
+
+        def OnInit(self):
+            self.frame = Frame()
+            self.frame.Show()
+            self.SetTopWindow(self.frame)
+            return True
+
+    def main():
+        app = App()
+        app.MainLoop()
+
+    if __name__ == '__main__':
+        main()
+
+
+Application shutdown
+-------------------- 
+
+The application normally shuts down when the last of its top level
+windows is closed.  This is normally the expected behaviour and means
+that it is enough to call Close() in response to the "Exit" menu
+command if your program has a single top level window.  If this
+behaviour is not desirable, App.SetExitOnFrameDelete can be called to
+change it.  Note that such logic doesn't apply for the windows shown
+before the program enters the main loop: in other words, you can
+safely show a dialog from App.OnInit and not be afraid that your
+application terminates when this dialog -- which is the last top level
+window for the moment -- is closed.
+
+Another aspect of the application shutdown is the OnExit which is
+called when the application exits but before wxPython cleans up its
+internal structures.  You should delete all wxPython objects that you
+created by the time OnExit finishes.
+
+For example, this code may crash:
+
+[Need examples of objects needing cleanup to keep app from crashing.]
+
+
+Sizer overview
+==============
+
+Classes: wx.Sizer, wx.GridSizer, wx.FlexGridSizer, wx.BoxSizer,
+wx.StaticBoxSizer, wx.NotebookSizer, wx.CreateButtonSizer
+
+==============  ======================================================
+
+Sizer           Abstract base class.
+
+GridSizer       A sizer for laying out windows in a grid with all 
+                fields having the same size.
+
+FlexGridSizer   A sizer for laying out windows in a flexible grid.
+
+BoxSizer        A sizer for laying out windows in a row or column.
+
+StaticBoxSizer  Same as BoxSizer, but with a surrounding static box.
+
+NotebookSizer   Sizer to use with the Notebook control.
+
+==============  ======================================================
+
+Sizers, as represented by the wx.Sizer class and its descendants in
+the wxPython class hierarchy, have become the method of choice to
+define the layout of controls in dialogs in wxPython because of their
+ability to create visually appealing dialogs independent of the
+platform, taking into account the differences in size and style of the
+individual controls.  Editors such as wxDesigner, wxrcedit, XRCed and
+wxWorkshop create dialogs based exclusively on sizers, practically
+forcing the user to create platform independent layouts without
+compromises.
+
+
+The idea behind sizers
+----------------------
+
+The layout algorithm used by sizers in wxPython is closely related to
+layout systems in other GUI toolkits, such as Java's AWT, the GTK
+toolkit or the Qt toolkit.  It is based upon the idea of individual
+subwindows reporting their minimal required size and their ability to
+get stretched if the size of the parent window has changed.  This will
+most often mean that the programmer does not set the start-up size of
+a dialog, the dialog will rather be assigned a sizer and this sizer
+will be queried about the recommended size.  This sizer in turn will
+query its children (which can be normal windows, empty space or other
+sizers) so that a hierarchy of sizers can be constructed.  Note that
+wx.Sizer does not derive from wx.Window and thus does not interfere
+with tab ordering and requires very few resources compared to a real
+window on screen.
+
+What makes sizers so well fitted for use in wxPython is the fact that
+every control reports its own minimal size and the algorithm can
+handle differences in font sizes or different window (dialog item)
+sizes on different platforms without problems.  For example, if the
+standard font as well as the overall design of Linux/GTK widgets
+requires more space than on Windows, the initial dialog size will
+automatically be bigger on Linux/GTK than on Windows.
+
+There are currently five different kinds of sizers available in
+wxPython.  Each represents either a certain way to lay out dialog items
+in a dialog or it fulfils a special task such as wrapping a static box
+around a dialog item (or another sizer).  These sizers will be
+discussed one by one in the text below.
+
+
+Common features
+---------------
+
+All sizers are containers, that is, they are used to lay out one
+dialog item (or several dialog items), which they contain.  Such items
+are sometimes referred to as the children of the sizer.  Independent
+of how the individual sizers lay out their children, all children have
+certain features in common:
+
+
+A minimal size
+~~~~~~~~~~~~~~
+
+This minimal size is usually identical to the initial size of the
+controls and may either be set explicitly in the size field of the
+control constructor or may be calculated by wxPython, typically by
+setting the height and/or the width of the item to -1.  Note that only
+some controls can calculate their size (such as a checkbox) whereas
+others (such as a listbox) don't have any natural width or height and
+thus require an explicit size.  Some controls can calculate their
+height, but not their width (e.g. a single line text control):
+
+[Need graphics]
+
+
+A border
+~~~~~~~~
+
+The border is just empty space and is used to separate dialog items in
+a dialog.  This border can either be all around, or at any combination
+of sides such as only above and below the control.  The thickness of
+this border must be set explicitly, typically 5 points.  The following
+samples show dialogs with only one dialog item (a button) and a border
+of 0, 5, and 10 pixels around the button:
+
+[Need graphics]
+
+
+An alignment
+~~~~~~~~~~~~
+
+Often, a dialog item is given more space than its minimal size plus
+its border.  Depending on what flags are used for the respective dialog
+item, the dialog item can be made to fill out the available space
+entirely, i.e. it will grow to a size larger than the minimal size, or
+it will be moved to either the centre of the available space or to
+either side of the space.  The following sample shows a listbox and
+three buttons in a horizontal box sizer; one button is centred, one is
+aligned at the top, one is aligned at the bottom:
+
+[Need graphics]
+
+
+A stretch factor
+~~~~~~~~~~~~~~~~
+
+If a sizer contains more than one child and it is offered more space
+than its children and their borders need, the question arises how to
+distribute the surplus space among the children.  For this purpose, a
+stretch factor may be assigned to each child, where the default value
+of 0 indicates that the child will not get more space than its
+requested minimum size.  A value of more than zero is interpreted in
+relation to the sum of all stretch factors in the children of the
+respective sizer, i.e. if two children get a stretch factor of 1, they
+will get half the extra space each independent of whether one control
+has a minimal sizer inferior to the other or not.  The following
+sample shows a dialog with three buttons, the first one has a stretch
+factor of 1 and thus gets stretched, whereas the other two buttons
+have a stretch factor of zero and keep their initial width:
+
+[Need graphics]
+
+Within wxDesigner, this stretch factor gets set from the Option menu.
+
+
+BoxSizer
+--------
+
+BoxSizer can lay out its children either vertically or horizontally,
+depending on what flag is being used in its constructor.  When using a
+vertical sizer, each child can be centered, aligned to the right or
+aligned to the left.  Correspondingly, when using a horizontal sizer,
+each child can be centered, aligned at the bottom or aligned at the
+top.  The stretch factor described in the last paragraph is used for
+the main orientation, i.e. when using a horizontal box sizer, the
+stretch factor determines how much the child can be stretched
+horizontally.  The following sample shows the same dialog as in the
+last sample, only the box sizer is a vertical box sizer now:
+
+[Need graphics]
+
+
+StaticBoxSizer
+--------------
+
+StaticBoxSixer is the same as a BoxSizer, but surrounded by a static
+box.  Here is a sample:
+
+[Need graphics]
+
+
+GridSizer
+---------
+
+GridSizer is a two-dimensional sizer.  All children are given the same
+size, which is the minimal size required by the biggest child, in this
+case the text control in the left bottom border.  Either the number of
+columns or the number or rows is fixed and the grid sizer will grow in
+the respectively other orientation if new children are added:
+
+[Need graphics]
+
+
+FlexGridSizer
+-------------
+
+Another two-dimensional sizer derived from GridSizer.  The width of
+each column and the height of each row are calculated individually
+according the minimal requirements from the respectively biggest
+child.  Additionally, columns and rows can be declared to be
+stretchable if the sizer is assigned a size different from that which
+it requested.  The following sample shows the same dialog as the one
+above, but using a flex grid sizer:
+
+[Need graphics]
+
+
+NotebookSizer
+-------------
+
+NotebookSizer can be used with notebooks.  It calculates the size of
+each notebook page and sets the size of the notebook to the size of
+the biggest page plus some extra space required for the notebook tabs
+and decorations.
+
+[Need graphics]
+
+
+Programming with BoxSizer
+-------------------------
+
+The basic idea behind a BoxSizer is that windows will most often be
+laid out in rather simple basic geometry, typically in a row or a
+column or several hierarchies of either.
+
+As an example, we will construct a dialog that will contain a text
+field at the top and two buttons at the bottom.  This can be seen as a
+top-hierarchy column with the text at the top and buttons at the
+bottom and a low-hierarchy row with an OK button to the left and a
+Cancel button to the right.  In many cases (particularly dialogs under
+Unix and normal frames) the main window will be resizable by the user
+and this change of size will have to get propagated to its children.
+In our case, we want the text area to grow with the dialog, whereas
+the button shall have a fixed size.  In addition, there will be a thin
+border around all controls to make the dialog look nice and - to make
+matter worse - the buttons shall be centred as the width of the dialog
+changes.
+
+It is the unique feature of a box sizer, that it can grow in both
+directions (height and width) but can distribute its growth in the
+main direction (horizontal for a row) unevenly among its children.  In
+our example case, the vertical sizer is supposed to propagate all its
+height changes to only the text area, not to the button area.  This is
+determined by the proportion parameter when adding a window (or
+another sizer) to a sizer.  It is interpreted as a weight factor,
+i.e. it can be zero, indicating that the window may not be resized at
+all, or above zero.  If several windows have a value above zero, the
+value is interpreted relative to the sum of all weight factors of the
+sizer, so when adding two windows with a value of 1, they will both
+get resized equally much and each half as much as the sizer owning
+them.
+
+Then what do we do when a column sizer changes its width?  This
+behaviour is controlled by flags (the second parameter of the Add()
+function): zero or no flag indicates that the window will preserve it
+is original size, wx.GROW flag (same as wx.EXPAND) forces the window
+to grow with the sizer, and wx.SHAPED flag tells the window to change
+it is size proportionally, preserving original aspect ratio.  When
+wx.GROW flag is not used, the item can be aligned within available
+space.  wx.ALIGN_LEFT, wx.ALIGN_TOP, wx.ALIGN_RIGHT, wx.ALIGN_BOTTOM,
+wx.ALIGN_CENTER_HORIZONTAL and wx.ALIGN_CENTER_VERTICAL do what they
+say.  wx.ALIGN_CENTRE (same as wx.ALIGN_CENTER) is defined as
+(``wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL``).  Default
+alignment is ``wx.ALIGN_LEFT | wx.ALIGN_TOP``.
+
+As mentioned above, any window belonging to a sizer may have border,
+and it can be specified which of the four sides may have this border,
+using the wx.TOP, wx.LEFT, wx.RIGHT and wx.BOTTOM constants or wx.ALL
+for all directions (and you may also use wx.NORTH, wx.WEST etc
+instead).  These flags can be used in combination with the alignment
+flags above as the second parameter of the Add() method using the
+binary or operator (``|``).  The sizer of the border also must be made
+known, and it is the third parameter in the Add() method.  This means,
+that the entire behaviour of a sizer and its children can be
+controlled by the three parameters of the Add() method.
+
+[Show code and graphic here.]
+
+
+Programming with GridSizer
+--------------------------
+
+GridSizer is a sizer which lays out its children in a two-dimensional
+table with all table fields having the same size, i.e. the width of
+each field is the width of the widest child, the height of each field
+is the height of the tallest child.
+
+[Show code and graphic here.]
+
+
+Programming with FlexGridSizer
+------------------------------
+
+FlexGridSizer is a sizer which lays out its children in a
+two-dimensional table with all table fields in one row having the same
+height and all fields in one column having the same width, but all
+rows or all columns are not necessarily the same height or width as in
+the GridSizer.
+
+[Show code and graphic here.]
+
+
+Programming with NotebookSizer
+------------------------------
+
+NotebookSizer is a specialized sizer to make sizers work in connection
+with using notebooks.  This sizer is different from any other sizer as
+you must not add any children to it - instead, it queries the notebook
+class itself.  The only thing this sizer does is to determine the size
+of the biggest page of the notebook and report an adjusted minimal
+size to a more toplevel sizer.
+
+In order to query the size of notebook page, this page needs to have
+its own sizer, otherwise the NotebookSizer will ignore it.  Notebook
+pages get their sizer by assigning one to them using SetSizer() and
+setting the auto-layout option to True using SetAutoLayout().  Here is
+one example showing how to add a notebook page that the notebook sizer
+is aware of:
+
+[Show code and graphic here.]
+
+
+Programming with StaticBoxSizer
+-------------------------------
+
+StaticBoxSizer is a sizer derived from BoxSizer but adds a static box
+around the sizer.  Note that this static box has to be created
+separately.
+
+[Show code and graphic here.]
+
+
+Dialog.CreateButtonSizer
+------------------------
+
+As a convenience, the Dialog class has a CreateButtonSizer(flags)
+method that can be used to create a standard button sizer in which
+standard buttons are displayed.  The following flags can be passed to
+this method:
+
+=============  =======================================================
+wx.YES_NO      add Yes/No subpanel
+wx.YES         return wx.ID_YES
+wx.NO          return wx.ID_NO
+wx.NO_DEFAULT  make the wx.NO button the default, otherwise wx.YES or 
+               wx.OK button will be default
+wx.OK          return wx.ID_OK
+wx.CANCEL      return wx.ID_CANCEL
+wx.HELP        return wx.ID_HELP
+wx.FORWARD     return wx.ID_FORWARD  
+wx.BACKWARD    return wx.ID_BACKWARD 
+wx.SETUP       return wx.ID_SETUP    
+wx.MORE        return wx.ID_MORE     
+=============  =======================================================
+
+
+Date and time classes overview
+==============================
+
+wxPython provides a set of powerful classes to work with dates and
+times.  Some of the supported features of the DateTime class are:
+
+=============  =======================================================
+
+Wide range     The range of supported dates goes from about 4714 B.C. to
+               some 480 million years in the future.
+
+Precision      Not using floating point calculations anywhere ensures that
+               the date calculations don't suffer from rounding
+               errors.
+
+Many features  Not only all usual calculations with dates are
+               supported, but also more exotic week and year day
+               calculations, work day testing, standard astronomical
+               functions, conversion to and from strings in either
+               strict or free format.
+
+
+Efficiency     Objects of DateTime are small (8 bytes) and working
+               with them is fast
+
+=============  =======================================================
+
+
+All date/time classes at a glance
+---------------------------------
+
+There are 3 main classes: except DateTime itself which represents an
+absolute moment in time, there are also two classes - TimeSpan and
+DateSpan which represent the intervals of time.
+
+There are also helper classes which are used together with DateTime:
+DateTimeHolidayAuthority which is used to determine whether a given
+date is a holiday or not and DateTimeWorkDays which is a derivation of
+this class for which (only) Saturdays and Sundays are the holidays.
+See more about these classes in the discussion of the holidays.
+
+
+DateTime characteristics
+------------------------
+
+DateTime stores the time as a signed number of milliseconds since the
+Epoch which is fixed, by convention, to Jan 1, 1970 - however this is
+not visible to the class users (in particular, dates prior to the
+Epoch are handled just as well (or as bad) as the dates after it).
+But it does mean that the best resolution which can be achieved with
+this class is 1 millisecond.
+
+The size of DateTime object is 8 bytes because it is represented as a
+64 bit integer.  The resulting range of supported dates is thus
+approximatively 580 million years, but due to the current limitations
+in the Gregorian calendar support, only dates from Nov 24, 4714BC are
+supported (this is subject to change if there is sufficient interest
+in doing it).
+
+Finally, the internal representation is time zone independent (always
+in GMT) and the time zones only come into play when a date is broken
+into year/month/day components. See more about timezones below.
+
+Currently, the only supported calendar is Gregorian one (which is used
+even for the dates prior to the historic introduction of this calendar
+which was first done on Oct 15, 1582 but is, generally speaking,
+country, and even region, dependent).  Future versions will probably
+have Julian calendar support as well and support for other calendars
+(Maya, Hebrew, Chinese...) is not ruled out.
+
+
+Difference between DateSpan and TimeSpan
+----------------------------------------
+
+While there is only one logical way to represent an absolute moment in
+the time (and hence only one DateTime class), there are at least two
+methods to describe a time interval.
+
+First, there is the direct and self-explaining way implemented by
+TimeSpan: it is just a difference in milliseconds between two moments
+in time.  Adding or subtracting such an interval to DateTime is always
+well-defined and is a fast operation.
+
+But in daily life other, calendar-dependent time interval
+specifications are used.  For example, 'one month later' is commonly
+used.  However, it is clear that this is not the same as TimeSpan of
+60*60*24*31 seconds because 'one month later' Feb 15 is Mar 15 and not
+Mar 17 or Mar 16 (depending on whether the year is leap or not).
+
+This is why there is another class for representing such intervals
+called DateSpan.  It handles these sort of operations in the most
+natural way possible, but note that manipulating with intervals of
+this kind is not always well-defined.  Consider, for example, Jan 31 +
+'1 month': this will give Feb 28 (or 29), i.e. the last day of
+February and not the non-existent Feb 31.  Of course, this is what is
+usually wanted, but you still might be surprised to notice that now
+subtracting back the same interval from Feb 28 will result in Jan 28
+and not Jan 31 we started with!
+
+So, unless you plan to implement some kind of natural language parsing
+in the program, you should probably use TimeSpan instead of DateSpan
+(which is also more efficient).  However, DateSpan may be very useful
+in situations when you do need to understand what 'in a month' means
+(of course, it is just DateTime.Now() + DateSpan.Month()).
+
+
+Date arithmetics
+----------------
+
+Many different operations may be performed with the dates, however not
+all of them make sense.  For example, multiplying a date by a number
+is an invalid operation, even though multiplying either of the time
+span classes by a number is perfectly valid.
+
+Here is what can be done:
+
+==============  ======================================================
+
+Addition        a TimeSpan or DateSpan can be added to DateTime resulting in
+                a new DateTime object and also 2 objects of the same
+                span class can be added together giving another object
+                of the same class.
+
+
+Subtraction     the same types of operations as above are allowed and,
+                additionally, a difference between two DateTime
+                objects can be taken and this will yield TimeSpan.
+
+Multiplication  a TimeSpan or DateSpan object can be multiplied by an
+                integer number resulting in an object of the same
+                type.
+
+
+Unary minus     a TimeSpan or DateSpan object may finally be negated
+                giving an interval of the same magnitude but of
+                opposite time direction.
+
+==============  ======================================================
+
+
+Time zone considerations
+------------------------
+
+Although the time is always stored internally in GMT, you will usually
+work in the local time zone.  Because of this, all DateTime
+constructors and setters which take the broken down date assume that
+these values are for the local time zone.  Thus, DateTime(1,
+DateTime.Jan, 1970) will not correspond to the DateTime Epoch unless
+you happen to live in the UK.
+
+All methods returning the date components (year, month, day, hour,
+minute, second...) will also return the correct values for the local
+time zone by default.  So, generally, doing the natural things will
+lead to natural and correct results.
+
+If you only want to do this, you may safely skip the rest of this
+section.  However, if you want to work with different time zones, you
+should read it to the end.
+
+In this (rare) case, you are still limited to the local time zone when
+constructing DateTime objects, i.e. there is no way to construct a
+DateTime corresponding to the given date in, say, Pacific Standard
+Time.  To do it, you will need to call ToTimezone or MakeTimezone
+methods to adjust the date for the target time zone.  There are also
+special versions of these functions ToGMT and MakeGMT for the most
+common case - when the date should be constructed in GMT.
+
+You also can just retrieve the value for some time zone without
+converting the object to it first.  For this you may pass TimeZone
+argument to any of the methods which are affected by the time zone
+(all methods getting date components and the date formatting ones, for
+example).  In particular, the Format() family of methods accepts a
+TimeZone parameter and this allows to simply print time in any time
+zone.
+
+To see how to do it, the last issue to address is how to construct a
+TimeZone object which must be passed to all these methods. First of
+all, you may construct it manually by specifying the time zone offset
+in seconds from GMT, but usually you will just use one of the symbolic
+time zone names and let the conversion constructor do the
+job. I.e. you would just write
+
+wxDateTime dt(...whatever...);
+printf("The time is %s in local time zone", dt.FormatTime().c_str());
+printf("The time is %s in GMT", dt.FormatTime(wxDateTime::GMT).c_str());
+
+
+Daylight saving time (DST)
+--------------------------
+
+DST (a.k.a. 'summer time') handling is always a delicate task which is
+better left to the operating system which is supposed to be configured
+by the administrator to behave correctly.  Unfortunately, when doing
+calculations with date outside of the range supported by the standard
+library, we are forced to deal with these issues ourselves.
+
+Several functions are provided to calculate the beginning and end of
+DST in the given year and to determine whether it is in effect at the
+given moment or not, but they should not be considered as absolutely
+correct because, first of all, they only work more or less correctly
+for only a handful of countries (any information about other ones
+appreciated!) and even for them the rules may perfectly well change in
+the future.
+
+The time zone handling methods use these functions too, so they are
+subject to the same limitations.
+
+
+DateTime and Holidays
+---------------------
+
+[TODO]
+
+
+Classes by category
+===================
+
+Not done yet.
+
+
+ID constants
+============
+
+wxPython provides the following predefined ID constants:
+
+ID_ABORT
+ID_ABOUT
+ID_ANY
+ID_APPLY
+ID_BACKWARD
+ID_CANCEL
+ID_CLEAR
+ID_CLOSE
+ID_CLOSE_ALL
+ID_CONTEXT_HELP
+ID_COPY
+ID_CUT
+ID_DEFAULT
+ID_DUPLICATE
+ID_EXIT
+ID_FILE1
+ID_FILE2
+ID_FILE3
+ID_FILE4
+ID_FILE5
+ID_FILE6
+ID_FILE7
+ID_FILE8
+ID_FILE9
+ID_FILTERLISTCTRL
+ID_FIND
+ID_FORWARD
+ID_HELP
+ID_HELP_COMMANDS
+ID_HELP_CONTENTS
+ID_HELP_CONTEXT
+ID_HELP_PROCEDURES
+ID_IGNORE
+ID_MORE
+ID_NEW
+ID_NO
+ID_NOTOALL
+ID_OK
+ID_OPEN
+ID_PASTE
+ID_PREVIEW
+ID_PRINT
+ID_PRINT_SETUP
+ID_REDO
+ID_RESET
+ID_RETRY
+ID_REVERT
+ID_SAVE
+ID_SAVEAS
+ID_SELECTALL
+ID_SEPARATOR
+ID_SETUP
+ID_STATIC
+ID_TREECTRL
+ID_UNDO
+ID_YES
+ID_YESTOALL
+
+
+Source document
+===============
+
+The source document is named wxPythonManual.txt and can be found by
+clicking the link at the bottom of this page (assuming you are viewing
+the html file).  It is written using a fantastic formatting convention
+called reStructuredText.  The wxPythonManual.html file is created
+using the Docutils utilities, which can turn reStructuredText
+documents into html, xml, pdf, and even OpenOffice files.
+
+
+Submitting changes to the source document
+=========================================
+
+Some items in the source text file look like this::
+
+    .. This is text from the wxWidgets documentation that needs to be
+       translated into something appropriate for the wxPython version.
+       The two dots followed by uniformly indented text turns this
+       paragraph into a reStructuredText comment, so it doesn't appear
+       in any output file, such as the html file.
+
+They have been commented out and are awaiting editorial review and a
+rewrite so that they make sense in the context of wxPython.  Feel free
+to send me suggestions for rewording these, or any other parts of this
+document that you think need improving.  I will be eternally grateful
+to you and will show my gratitude by adding your name to the list of
+contributors.  (Contributors who also send me gifts of coffee,
+chocolate, or currency will have their names listed in bold.)
+
+
+Contributors
+============
+
+Individuals who contributed to this documentation (in order by last
+name):
+
+* Robin Dunn
+* Patrick K. O'Brien
+* Robert Roebling
+* Julian Smart
+* Vadim Zeitlin
+
+
+License
+=======
+
+This document began as a translation of the wxWidgets documentation.
+As such, it adheres to the same license, which is provided here:
+
+.. include:: ../licence/licendoc.txt
+   :literal:

@@ -1,0 +1,2 @@
+Flash needs the following GUID for its event interface
+{D27CDB6D-AE6D-11CF-96B8-444553540000}

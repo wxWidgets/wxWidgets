@@ -1,0 +1,4 @@
+#!/usr/bin/env python
+
+from wx.py.PyWrap import main
+main()

@@ -1,0 +1,169 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+//#include "afxres.h"
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+#include <winuser.rh>
+#include <commctrl.rh>
+#include <dde.rh>
+#include <winnt.rh>
+#include <dlgs.h>
+#include <winver.h>
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+/*
+WXDISABLE_BUTTON_BITMAP BITMAP  MOVEABLE PURE   "wx/msw/disable.bmp"
+WXBITMAP_STD_COLOURS    BITMAP  MOVEABLE PURE   "wx/msw/colours.bmp"
+TICK_BMP                BITMAP  MOVEABLE PURE   "wx/msw/tick.bmp"
+PLOT_ZOT_BMP            BITMAP  MOVEABLE PURE   "wx/msw/plot_zot.bmp"
+PLOT_ZIN_BMP            BITMAP  MOVEABLE PURE   "wx/msw/plot_zin.bmp"
+PLOT_UP_BMP             BITMAP  MOVEABLE PURE   "wx/msw/plot_up.bmp"
+PLOT_SHR_BMP            BITMAP  MOVEABLE PURE   "wx/msw/plot_shr.bmp"
+PLOT_ENL_BMP            BITMAP  MOVEABLE PURE   "wx/msw/plot_enl.bmp"
+PLOT_DWN_BMP            BITMAP  MOVEABLE PURE   "wx/msw/plot_dwn.bmp"
+CROSS_BMP               BITMAP  MOVEABLE PURE   "wx/msw/cross.bmp"
+*/
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+/*
+WXCURSOR_WATCH          CURSOR  DISCARDABLE     "wx\\msw\\watch1.cur"
+WXCURSOR_SIZING         CURSOR  DISCARDABLE     "wx/msw/size.cur"
+WXCURSOR_ROLLER         CURSOR  DISCARDABLE     "wx/msw/roller.cur"
+WXCURSOR_QARROW         CURSOR  DISCARDABLE     "wx/msw/query.cur"
+WXCURSOR_PRIGHT         CURSOR  DISCARDABLE     "wx/msw/pntright.cur"
+WXCURSOR_PLEFT          CURSOR  DISCARDABLE     "wx/msw/pntleft.cur"
+WXCURSOR_PENCIL         CURSOR  DISCARDABLE     "wx/msw/pencil.cur"
+WXCURSOR_PBRUSH         CURSOR  DISCARDABLE     "wx/msw/pbrush.cur"
+WXCURSOR_NO_ENTRY       CURSOR  DISCARDABLE     "wx/msw/noentry.cur"
+WXCURSOR_MAGNIFIER      CURSOR  DISCARDABLE     "wx/msw/magnif1.cur"
+WXCURSOR_HAND           CURSOR  DISCARDABLE     "wx/msw/hand.cur"
+WXCURSOR_BULLSEYE       CURSOR  DISCARDABLE     "wx/msw/bullseye.cur"
+WXCURSOR_BLANK          CURSOR  DISCARDABLE     "wx/msw/blank.cur"
+*/
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+WXRESIZEABLEDIALOG DIALOG DISCARDABLE  34, 22, 144, 75
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+BEGIN
+END
+
+WXNOCAPTIONDIALOG DIALOG DISCARDABLE  34, 22, 144, 75
+STYLE WS_POPUP
+BEGIN
+END
+
+WXCAPTIONDIALOG DIALOG DISCARDABLE  34, 22, 144, 75
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dummy dialog"
+BEGIN
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+WXIE                    ICON    DISCARDABLE     "wxIE.ico"
+/*
+WXICON_WARNING          ICON    DISCARDABLE     "wx\\msw\\warning.ico"
+WXICON_TIP              ICON    DISCARDABLE     "wx/msw/tip.ico"
+WXICON_QUESTION         ICON    DISCARDABLE     "wx/msw/question.ico"
+WXICON_INFO             ICON    DISCARDABLE     "wx/msw/info.ico"
+WXICON_ERROR            ICON    DISCARDABLE     "wx/msw/error.ico"
+*/
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+WXWINDOWMENU MENU DISCARDABLE 
+BEGIN
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "&Cascade",                    4002
+        MENUITEM "Tile &Horizontally",          4001
+        MENUITEM "Tile &Vertically",            4005
+        MENUITEM "",                            65535
+        MENUITEM "&Arrange Icons",              4003
+        MENUITEM "&Next",                       4004
+    END
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

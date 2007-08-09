@@ -1,0 +1,7 @@
+Middle-Mouse-Click on the tab for an open file will close the file.
+Ctrl-Space in any editor does code completion.
+Right-Mouse-Click in Outline window allows you to change display sorting.
+In an editor, you can add line markers via Ctrl-M and jump to the next marker with F4 or previous marker with Shift-F4.
+In an editor. you can use the numpad + and - keys to toggle folding.
+Breakpoints for the debugger can be set while the process is running.
+A split window can be closed by dragging the sash to one of its borders.

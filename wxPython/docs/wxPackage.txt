@@ -1,0 +1,168 @@
+=========================
+ The wxPython wx Package
+=========================
+
+--------------------------------------------------
+ Or, how to survive the new wx namespace changes.
+--------------------------------------------------
+
+:Author: Patrick K. O'Brien
+:Author: Robin Dunn
+:Contact: pobrien@orbtech.com
+:Organization: Orbtech_
+:Date: $Date$
+:Revision: $Revision$
+
+.. _Orbtech: http://www.orbtech.com/
+
+.. contents::
+
+
+Introduction
+============
+
+In the begining there was Python, and Python had modules, and Python
+was good.  But after a time Guido looked on Python and saw that Python
+needed organizational assistance, and so Guido took code from Python's
+side and created Packages and then Python was very good.  About this
+time wxPython was reborn, and wxPython used Packages, but being young
+and trying to use a new technology wxPython did not know how to use
+Packages effectivly.  wxPython was good, but dreamed of being much
+better...
+
+Now many years later, after tons of code reorganization and build
+hacking wxPython has reached that goal.  In version 2.4.1 a prototype
+of this new structure was introduced that dynamically built at import
+time a new toplevel package named simply "wx" that contained all the
+items from wxPython.wx but with the names edited to remove the wx
+prefix.  Now in 2.5 the final phase of that switcheroo has been
+completed and the *real* classes, functions and constants are now
+located in the wx package, leaving some compatibility modules in
+wxPython.wx.  This document should answer all the questions you might
+have concerning the new wx package.  Please also take a look at the
+`2.5 Migration Guide`_ to see notes about other big differences in
+this release.
+
+.. _2.5 Migration Guide: MigrationGuide.html
+
+Why change anything?
+====================
+
+This change is being made for a couple of reasons.  The first reason
+is to discourage the use of ``import *``, which is a dangerous
+technique that can create name conflicts and bloated namespaces.
+
+The second reason is to remove what some perceive to be a "wart."  For
+example, the following code is rather ugly in that the "wx" prefix on
+the wxFrame class name is no longer useful when you're using the wx
+module prefix::
+
+    from wxPython import wx
+
+    class Frame(wx.wxFrame)
+
+The new wx package allows you to write code like this, instead::
+
+    import wx
+
+    class Frame(wx.Frame)
+
+The third reason is that the wxWindows project has considered doing
+the same thing (implement a new wx namespace and drop the "wx" prefix)
+and we want wxPython to lead the way.
+
+
+What does the new wx package do?
+================================
+
+As mentioned in the Introduction, wxPython 2.4.1 introduced a way of
+getting to this new syntax as quickly as possible.  It would import
+the old names (like "wxFrame") from the old package and then create new
+names in the wx package  without the wx prefix, (like "Frame".)
+Starting with wxPython 2.5 the renaming is moved up to the wxPython
+build step, so the real classes and etc. are actually named with the
+new name (like "Frame") and are located in the new wx package.
+
+For compatibility the old wxPython package still exists, but now it is
+populated with modules that simply import the new names and then
+"reverse-renames" them to the old names.  It probably sounds a bit
+complicated, but it is mostly automated and so it  doesn't cause
+problems in most cases.
+
+
+Will any of this effect my existing code?
+=========================================
+
+No.  Your existing code will continue to work and be supported for
+some time.  It will be up to you to decide when to switch to the new
+syntax.  But all new documentation and code examples will use the new
+syntax.  So don't wait too long.  You wouldn't want anyone calling you
+old-fashioned, would you?
+
+When you import from wxPython.wx and use a class with the old name,
+such as wxButton, you are actually using the wx.Button class.  I
+expect that the vast majority of the existing code should work fine
+using this scheme.  The only things that may cause problems is if your
+old code is depending on some of the implemtation details, or if you
+are using other things that have changed in the API.  See the
+`Migration Guide`_ for more details.
+
+.. _Migration Guide: MigrationGuide.html
+
+
+What about all the other modules, like grid, html, and stc?
+===========================================================
+
+There's more to the old wxPython than just the wxPython.wx module.
+And we've got those extra modules covered as well.  Each of those
+modules (as well as the lib subpackage) has been moved to the new wx
+package and reverse-renamers have been placed in the wxPython package
+as needed.
+
+
+How do I use this new wx package?
+=================================
+
+The wx package is automatically created when you install wxPython
+version 2.4.1 or higher.  So all you have to do is::
+
+    import wx
+
+
+What are the issues with converting old code to use the new wx package?
+======================================================================= 
+
+Obviously, you need to change your import statements from::
+
+    from wxPython import wx
+
+or::
+
+    from wxPython.wx import *
+
+to::
+
+    import wx
+
+Then you need to refer to wx attributes without a "wx" prefix, such
+as::
+
+    class MyFrame(wx.Frame):
+
+In most cases, existing code can be modified with a simple search and
+replace.
+
+
+
+Where can I find example programs using the new wx syntax?
+==========================================================
+
+The wxPython demo application and most of the sample apps have been
+converted to use the new ``import wx`` style of programming with
+wxPython, so there are lots of examples to look at and to play with.
+Here is one of them, it is the ``simple`` sample.
+
+
+.. include:: ../samples/simple/simple.py
+   :literal:
+

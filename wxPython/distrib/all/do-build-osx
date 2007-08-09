@@ -1,0 +1,577 @@
+#!/bin/bash
+# ---------------------------------------------------------------------------
+# Build wxWidgets and wxPython on a OSX box.  This is normally called
+# remotely from build-all but it should be able to be used standalone
+# too...
+# 
+# The command line must have the following parameters:
+#
+#    1. the path to the base of the wx source tree
+#    2. the path of where to put the resulting installers
+#    3. skipclean flag (yes|no)
+#    4. the VERSION
+#    5. the version of Python to build for
+#    6. the character type (ansi|unicode|both)
+#
+# ---------------------------------------------------------------------------
+
+set -o errexit
+set -o xtrace
+
+echo "-=-=-=-  Hello from $HOSTNAME  -=-=-=-"
+
+if [ $# -lt 6 ]; then
+    echo "Usage: $0 WXDIR DESTDIR SKIPCLEAN VERSION PYVER CHARTYPE [FLAGS]"
+    exit 1
+fi
+
+WXDIR=$1
+DESTDIR=$2
+SKIPCLEAN=$3
+VERSION=$4
+PYVER=$5
+CHARTYPE=$6
+
+
+#export PATH=/sw/bin:/usr/local/bin:$PATH
+export PATH=/sw/bin:/sw/sbin:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin:.:/usr/X11R6/bin
+
+# untar the source 
+echo "Unarchiving wxPython-src-$VERSION.tar.bz2"
+cd $DESTDIR
+tar xjf wxPython-src-$VERSION.tar.bz2
+rm wxPython-src-$VERSION.tar.bz2
+
+
+cd $WXDIR/wxPython
+export TARBALLDIR=$DESTDIR
+mkdir -p dist
+
+
+#----------------------------------------------------------------------
+# Do a universal build of wxWidgets and wxPython.  This is a
+# simplified version of parts of the old distrib/mac/wxPythonOSX/build 
+# script.
+
+OSX_VERSION=`sw_vers -productVersion`
+OSX_VERSION=${OSX_VERSION:0:4}
+TAG=universal
+PYTHON=`which python$PYVER`
+PYTHONW=`which pythonw$PYVER`
+SHORTVER=${VERSION:0:3}
+PYPREFIX=`$PYTHON -c "import sys; print sys.exec_prefix"`
+PYLIB=$PYPREFIX/lib/python$PYVER
+
+# Test if the python we are using is the System installed framework 
+# or one that was installed by the user.  This changes where the 
+# site-packages (or its alias) is located in the installer tree.
+APPLE_PYTHON=no
+if [ -e /Library/Python/$PYVER ] && [ `dirname $PYTHON` == "/usr/bin" ]; then
+    APPLE_PYTHON=yes
+fi
+
+
+TARBALL=$TARBALLDIR/wxPython-src-$VERSION.tar.bz2
+
+if [ ! -e $TARBALLDIR/wxPython-demo-$VERSION.tar.bz2 ]; then 
+    echo "-------------------------------------------------------"
+    echo " WARNING:  Demo tarball not found, will skip building "
+    echo "           the Demo app bundle and etc."
+    echo " $TARBALLDIR/wxPython-demo-$VERSION.tar.bz2"
+    echo "-------------------------------------------------------"
+fi
+
+if [ ! -e $TARBALLDIR/wxPython-docs-$VERSION.tar.bz2 ]; then
+    echo "-------------------------------------------------------"
+    echo " WARNING:  Docs tarball not found, will skip building "
+    echo "           the the wxDocsViewer app bundle and etc."
+    echo " $TARBALLDIR/wxPython-docs-$VERSION.tar.bz2"
+    echo "-------------------------------------------------------"
+fi
+
+
+
+
+
+function do_universal_build {
+
+    CTYPE=$1
+    if [ $CTYPE = unicode ]; then 
+        PYUNICODEOPT=1
+    else
+        PYUNICODEOPT=0
+    fi
+
+    SITEPACKAGES=$PYLIB/site-packages
+    PREFIX=/usr/local/lib/wxPython-$CTYPE-$VERSION
+    BINPREFIX=/usr/local/bin
+    WXROOT=$WXDIR
+    TMPDIR=$DESTDIR/_build_
+    BUILDROOT=$TMPDIR/build
+    INSTALLROOT=$TMPDIR/install-root
+    INSTALLAPPS=$TMPDIR/install-apps
+
+    DMGDIR=$TMPDIR/dmg
+    DMGROOT=$DMGDIR/root
+    DMGAPPS=$DMGDIR/apps
+
+    PROGDIR=$WXDIR/wxPython/distrib/mac
+    RESOURCEDIR=$PROGDIR/resources
+
+
+    # Setup build dirs
+    mkdir -p $BUILDROOT
+    mkdir -p $INSTALLROOT
+    mkdir -p $INSTALLAPPS
+
+    rm -rf $DMGDIR
+    mkdir -p $DMGROOT
+    mkdir -p $DMGAPPS/Docs
+    mkdir -p $DMGAPPS/Samples
+
+    pushd $BUILDROOT
+
+
+    #-----------------------------------------------------------------
+    # Build and install wxWidgets
+    export WXROOT
+    export BUILDPREFIX=$PREFIX
+    export INSTALLDIR=$INSTALLROOT$PREFIX
+    $WXDIR/distrib/scripts/mac/macbuild-lipo wxpython $CTYPE
+
+    # relink wx-config with a relative link
+    cd $INSTALLROOT$PREFIX/bin
+    rm wx-config
+    ln -s ../lib/wx/config/* wx-config
+
+    #-----------------------------------------------------------------
+    # Now wxPython.  Build ppc, then i386
+    ARCH=ppc
+    export CXX="g++-3.3 -DMAC_OS_X_VERSION_MAX_ALLOWED=1030"
+    export CC="gcc-3.3 -DMAC_OS_X_VERSION_MAX_ALLOWED=1030"
+    export MACOSX_DEPLOYMENT_TARGET=10.3
+    mkdir -p $INSTALLROOT/$ARCH
+    mkdir -p $BUILDROOT/$ARCH
+        
+    echo "Building wxPython for PPC..."
+    cd $WXROOT/wxPython
+    $PYTHON setup.py \
+        UNICODE=$PYUNICODEOPT \
+        NO_SCRIPTS=1 \
+        EP_ADD_OPTS=1 \
+        WX_CONFIG="$INSTALLROOT/$PREFIX/bin/wx-config --prefix=$INSTALLROOT$PREFIX" \
+        BUILD_BASE=$BUILDROOT/$ARCH/wxPython \
+        ARCH="$ARCH" \
+        build
+        
+    ARCH=i386
+    export CXX="g++-4.0 -arch i386"
+    export CC="gcc-4.0 -arch i386"
+    export MACOSX_DEPLOYMENT_TARGET=10.4
+    mkdir -p $INSTALLROOT/$ARCH
+    mkdir -p $BUILDROOT/$ARCH
+        
+    echo "Building wxPython for Intel..."        
+    cd $WXROOT/wxPython
+    $PYTHON setup.py \
+        UNICODE=$PYUNICODEOPT \
+        NO_SCRIPTS=1 \
+        EP_ADD_OPTS=1 \
+        WX_CONFIG="$INSTALLROOT/$PREFIX/bin/wx-config --prefix=$INSTALLROOT$PREFIX" \
+        BUILD_BASE=$BUILDROOT/$ARCH/wxPython \
+        ARCH="$ARCH" \
+        build
+
+
+
+    #-----------------------------------------------------------------
+    # Install the two builds of wxPython
+
+    ARCH=ppc
+    export CXX="g++-3.3 -DMAC_OS_X_VERSION_MAX_ALLOWED=1030"
+    export CC="gcc-3.3 -DMAC_OS_X_VERSION_MAX_ALLOWED=1030"
+    export MACOSX_DEPLOYMENT_TARGET=10.3
+    cd $WXROOT/wxPython
+    $PYTHON setup.py \
+        UNICODE=$PYUNICODEOPT \
+        NO_SCRIPTS=1 \
+        EP_ADD_OPTS=1 \
+        WX_CONFIG="$INSTALLROOT$PREFIX/bin/wx-config --prefix=$INSTALLROOT$PREFIX" \
+        BUILD_BASE=$BUILDROOT/$ARCH/wxPython \
+        install \
+        --root=$INSTALLROOT/$ARCH
+
+    ARCH=i386
+    export CXX="g++-4.0 -arch i386"
+    export CC="gcc-4.0 -arch i386"
+    export MACOSX_DEPLOYMENT_TARGET=10.4
+    cd $WXROOT/wxPython
+    $PYTHON setup.py \
+        UNICODE=$PYUNICODEOPT \
+        NO_SCRIPTS=1 \
+        EP_ADD_OPTS=1 \
+        WX_CONFIG="$INSTALLROOT$PREFIX/bin/wx-config --prefix=$INSTALLROOT$PREFIX" \
+        BUILD_BASE=$BUILDROOT/$ARCH/wxPython \
+        install \
+        --root=$INSTALLROOT/$ARCH
+
+    # Lipo them together
+    echo "Lipoing $INSTALLROOT/ppc and $INSTALLROOT/i386..."
+    $PYTHON $WXROOT/distrib/scripts/mac/lipo-dir.py $INSTALLROOT/ppc $INSTALLROOT/i386 $INSTALLROOT
+    
+    rm -rf $INSTALLROOT/ppc $INSTALLROOT/i386
+
+
+    # Apple's Python Framework (such as what comes with Panther)
+    # sym-links the site-packages dir in the framework to
+    # /Library/Python/$PYVER so we need to move the files so they are
+    # installed in the physical location, not the virtual one.
+    if [ $APPLE_PYTHON == yes ]; then
+        if [ -e $INSTALLROOT/Library/Python/$PYVER ]; then
+            rm -r $INSTALLROOT/Library/Python/$PYVER
+        fi          
+        mkdir -p $INSTALLROOT/Library/Python/$PYVER
+        mv $INSTALLROOT/$SITEPACKAGES/* $INSTALLROOT/Library/Python/$PYVER
+        rm -r $INSTALLROOT/System
+        SITEPACKAGES=/Library/Python/$PYVER
+    fi
+    PKGDIR=`cat $INSTALLROOT$SITEPACKAGES/wx.pth`
+
+    # install wxPython's tool scripts
+    mkdir -p $INSTALLROOT$BINPREFIX
+    cd $WXROOT/wxPython/scripts
+    $PYTHON CreateMacScripts.py $INSTALLROOT $BINPREFIX
+
+
+    # Remove the .pyc/.pyo files they just take up space and can be recreated
+    # during the install.
+    pushd $WXROOT/wxPython
+    $PYTHON $WXROOT/wxPython/distrib/mac/zappycfiles.py $INSTALLROOT > /dev/null
+    popd
+
+    # Set premissions for files in $INSTALLROOT
+    if [ "$UID" = "0" ]; then
+        chown -R root:admin $INSTALLROOT
+        chmod -R g+w        $INSTALLROOT
+    fi
+
+
+
+    #-----------------------------------------------------------------
+    # Make the Installer package and disk image
+
+    # first some resource files
+    cat > $RESOURCEDIR/Welcome.txt <<EOF
+Welcome!
+
+This Installer package will install the wxPython $CTYPE runtime $VERSION for the Universal version of MacPython-OSX $PYVER.  This includes:
+
+    * The wxPython extension modules and library packages
+    * The wxWidgets shared libraries and headers
+    * Some command line tool scripts, installed to /usr/local/bin.
+
+You must install onto your current boot disk, even though the installer does not enforce this, otherwise things will not work.
+
+You can install more than one version of the wxPython runtime if you desire.  The most recently installed version will be the default wxPython, but you can choose another by setting the PYTHONPATH or by using the wxversion module.  See http://wiki.wxpython.org/index.cgi/MultiVersionInstalls for more details.
+
+Build date:   `date`
+EOF
+
+    # make the preflight script
+    cat > $RESOURCEDIR/preflight <<EOF
+#!/bin/sh
+# Cleanup any old install of the wxPython package
+rm -rf \$2$SITEPACKAGES/wxPython
+rm -rf \$2$SITEPACKAGES/wx
+rm -rf \$2$SITEPACKAGES/$PKGDIR
+exit 0
+EOF
+    chmod +x $RESOURCEDIR/preflight
+
+    # make the postflight script
+    cat > $RESOURCEDIR/postflight <<EOF
+#!/bin/sh -e
+
+# Compile the .py files in the wxPython pacakge
+COMPILE=\$2$PYLIB/compileall.py
+if [ ! -e \$COMPILE ]; then
+    COMPILE=\$2$PYLIB/compileall.pyc
+fi
+if [ -e \$COMPILE ]; then 
+    $PYTHON    \$COMPILE \$2$SITEPACKAGES/$PKGDIR
+    $PYTHON -O \$COMPILE \$2$SITEPACKAGES/$PKGDIR
+fi
+
+# and all of the wxPython pacakge should be group writable
+chgrp -R admin \$2$SITEPACKAGES/$PKGDIR
+chmod -R g+w \$2$SITEPACKAGES/$PKGDIR
+
+EOF
+
+    # On Tiger the structure of the user installable dir changed
+    # slightly.  Since we are installing the files as if it were
+    # Panther then we need this little tweak to make it compatible.
+    if [ $APPLE_PYTHON == yes ]; then
+        cat >> $RESOURCEDIR/postflight <<EOF
+# Add a .pth file for Tiger so our wx.pth can be found before the default wx from Apple
+if [ -e \$2$SITEPACKAGES/site-packages ]; then
+    echo "import site; site.addsitedir('$SITEPACKAGES')" > \$2$SITEPACKAGES/site-packages/00-compat-wx-path.pth
+fi
+EOF
+    fi
+
+cat >> $RESOURCEDIR/postflight <<EOF
+exit 0
+EOF
+    chmod +x $RESOURCEDIR/postflight
+
+
+
+    # Build the main Installer Package...
+    PKGNAME=wxPython${SHORTVER}-osx-$CTYPE-$TAG-py$PYVER
+    rm -rf $PKGNAME.pkg
+    $PYTHON $PROGDIR/buildpkg.py \
+        --Title=$PKGNAME \
+        --Version=$VERSION \
+        --Description="wxPython $CTYPE runtime $VERSION for the Universal version of MacPython-OSX $PYVER" \
+        --NeedsAuthorization="YES" \
+        --Relocatable="NO" \
+        --InstallOnly="YES" \
+        $INSTALLROOT \
+        $RESOURCEDIR
+
+    mv $PKGNAME.pkg $DMGROOT/$PKGNAME.pkg
+
+    rm $RESOURCEDIR/postflight
+    rm $RESOURCEDIR/preflight
+    rm $RESOURCEDIR/Welcome.txt
+
+
+    cat > "$DMGROOT/README 1st.txt" <<EOF
+Welcome to wxPython!
+
+This disk image contains the following items:
+
+    wxPython${SHORTVER}-osx-$CTYPE-$VERSION-$TAG
+
+        This Installer contains the wxPython runtime, built using the
+        $CTYPE build of the wxWidgets library.  It includes the
+        Python modules and extension modules for wxPython, as well as
+        the wxWidgets libraries.
+
+        It is possible to have more than one version of the runtime
+        installed at once if you wish.  The most recently installed
+        version will be the default wxPython, but you can choose
+        another by setting the PYTHONPATH or by using the wxversion
+        module.  For more details see:
+        http://wiki.wxpython.org/index.cgi/MultiVersionInstalls 
+
+
+    uninstall_wxPython.py
+
+        A simple tool to help you manage your installed versions of
+        wxPython.  It will allow you to choose from the currently
+        installed wxPython packages and to select one for
+        uninstallation.  It is a text-mode tool so you can either run
+        it from a Terminal command line, or you can open it with
+        PythonLauncher and let it create a Terminal to run it in.
+
+        NOTE: If you have versions prior to 2.5.3.1 installed, please
+        do run this uninstall tool to remove the older version.
+
+EOF
+
+
+    cp $PROGDIR/uninstall_wxPython.py $DMGROOT
+
+    # Make a disk image to hold these files
+    dmgname=wxPython${SHORTVER}-osx-$CTYPE-$VERSION-$TAG-py$PYVER
+    $PROGDIR/makedmg $DMGROOT $DMGDIR $dmgname
+
+    echo Moving $DMGDIR/$dmgname.dmg to $DESTDIR
+    mv $DMGDIR/$dmgname.dmg  $DESTDIR/$dmgname.dmg
+
+
+
+    #-----------------------------------------------------------------
+    # Now create app bundles for the demo, docs, and tools and make
+    # another disk image to hold it all.
+
+    cat > "$DMGAPPS/README 1st.txt" <<EOF
+Welcome to wxPython!
+
+On this disk image you will find Demo, Tools, Docs, and etc. for
+wxPython $VERSION.  
+
+Everything here is optional and you can drag them out of the disk
+image and drop them wherever you want.  You will need to have an
+installed wxPython runtime to be able to use any of them.
+
+
+   wxPython Demo        An application bundle version of the demo.
+                        (This has it's own copy of the demo sources 
+                        within the bundle so you can move the whole 
+                        bundle around as needed.)
+
+   XRCed                An application for editing wxPython resource
+                        files  (XRC files.)
+
+   PyCrust              An application that provides an interactive
+                        Python shell and also namespace inspectors.
+
+
+
+   Docs/wxDocsViewer    An application that allows you to view the
+                        wxWidgets documentation.
+
+   Docs/licence         License files.
+
+   Docs/other           A few readmes, change log, etc.
+
+
+   Samples/samples      Several small sample applications that
+                        demonstrate how to use wxPython.
+
+   Samples/demo         A copy of the wxPython demo source code,
+                        just open the folder and run demo.pyw.
+
+Happy Hacking!
+EOF
+
+#   PyAlaMode            An extension of PyCrust that includes source
+#                        file editing capabilities.
+
+
+    # wxDocs
+    if [ ! -e $TARBALLDIR/wxPython-docs-$VERSION.tar.bz2 ]; then
+        cat > "$DMGAPPS/Docs/Build ERROR.txt" <<EOF
+
+The wxPython-docs tarball was not found when building this disk image!
+
+EOF
+
+    else
+        pushd $BUILDROOT
+        tar xjvf $TARBALLDIR/wxPython-docs-$VERSION.tar.bz2
+        popd
+
+        # Make an app to launch viewdocs.py
+        $PYTHONW $PROGDIR/buildapp.py \
+            --builddir=$DMGAPPS/Docs \
+            --name=wxDocsViewer \
+            --mainprogram=$BUILDROOT/wxPython-$VERSION/docs/viewdocs.py \
+            --iconfile=$PROGDIR/Info.icns \
+            build
+
+        cp $BUILDROOT/wxPython-$VERSION/docs/*.zip $DMGAPPS/Docs/wxDocsViewer.app/Contents/Resources
+
+        cat > "$DMGAPPS/Docs/README 1st.txt" <<EOF
+
+The wxDocsViewer application needs to be copied to your Desktop (or
+someplace else you have write access to) before you can run it, so it
+can cache some indexes within its bundle.
+
+EOF
+
+    fi
+
+    # license files, docs, etc.
+    pushd $DMGAPPS/Docs
+    cp -pR $WXDIR/wxPython/licence   .
+    cp -pR $WXDIR/wxPython/docs      .
+    rm -rf docs/bin
+    rm -rf docs/xml-raw
+    mv docs other
+    popd
+
+
+    if [ ! -e $TARBALLDIR/wxPython-demo-$VERSION.tar.bz2 ]; then
+        cat > "$DMGAPPS/Samples/Build ERROR.txt" <<EOF
+
+The wxPython-$VERSION-demo tarball was not found when building this disk image!
+
+EOF
+        cp "$DMGAPPS/Samples/Build ERROR.txt" $DMGAPPS
+
+    else
+
+        # Copy the demo and samples to the disk image from the tarball
+        pushd $DMGAPPS/Samples
+        tar xjvf $TARBALLDIR/wxPython-demo-$VERSION.tar.bz2
+        mv wxPython-$VERSION/* .
+        rm -rf wxPython-$VERSION
+        rm -f demo/b demo/.setup.sh
+        mv demo/demo.py demo/demo.pyw
+        popd
+
+        # Make an app bundle to run the demo
+        $PYTHONW $PROGDIR/buildapp.py \
+            --builddir=$DMGAPPS \
+            --name="wxPython Demo" \
+            --mainprogram=$DMGAPPS/Samples/demo/demo.pyw \
+            --iconfile=$PROGDIR/RunDemo.icns \
+            build
+        cp -pR $DMGAPPS/Samples/demo/* "$DMGAPPS/wxPython Demo.app/Contents/Resources"
+    fi
+
+
+    # Make an app bundle to launch PyCrust
+    $PYTHONW $PROGDIR/buildapp.py \
+        --builddir=$DMGAPPS \
+        --name=PyCrust \
+        --mainprogram=$INSTALLROOT$BINPREFIX/pycrust.py \
+        --iconfile=$PROGDIR/PieShell.icns \
+        build
+
+## TODO: PyAlaMode needs tweaked to be able to run from a bundle.  It
+## needs to know to ignore command line parameters and etc...
+#      # and PyAlaMode
+#      $PYTHONW $PROGDIR/buildapp.py \
+#       --builddir=$DMGAPPS \
+#       --name=PyAlaMode \
+#       --mainprogram=$INSTALLROOT$BINPREFIX/pyalamode.py \
+#       --iconfile=$PROGDIR/PieShell.icns \
+#       build
+
+    # Make an app to launch XRCed
+    $PYTHONW $PROGDIR/buildapp.py \
+        --builddir=$DMGAPPS \
+        --name=XRCed \
+        --mainprogram=$INSTALLROOT$BINPREFIX/xrced.py \
+        --iconfile=$PROGDIR/XRCed.icns \
+        build
+
+
+    # and then finally make a disk image containing everything
+    dmgname=wxPython${SHORTVER}-osx-docs-demos-$VERSION-$TAG-py$PYVER
+    $PROGDIR/makedmg $DMGAPPS $DMGDIR $dmgname
+
+    echo Moving $DMGDIR/$dmgname.dmg to $DESTDIR
+    mv $DMGDIR/$dmgname.dmg  $DESTDIR/$dmgname.dmg
+
+
+    rm -r $TMPDIR || true
+}
+
+
+
+if [ $CHARTYPE = both ]; then
+    do_universal_build ansi 
+    do_universal_build unicode 
+else
+    do_universal_build $CHARTYPE 
+fi
+
+
+#----------------------------------------------------------------------
+
+
+if [ $SKIPCLEAN != yes ]; then 
+    echo "Cleaning up..."
+    cd $DESTDIR
+    rm -r $WXDIR || true
+    rm wxPython-docs-$VERSION.tar.bz2 || true
+    rm wxPython-demo-$VERSION.tar.bz2 || true
+fi
+
+echo "-=-=-=-  Goodbye!  -=-=-=-"

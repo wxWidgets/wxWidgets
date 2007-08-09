@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=PyShell
+Comment=GUI Python Shell
+Exec=pyshell
+Icon=PyCrust.png
+Terminal=false
+Type=Application
+Categories=Application;Development;

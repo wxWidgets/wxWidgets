@@ -1,0 +1,211 @@
+===============
+ The Py Manual
+===============
+
+-------------------------
+ Py - Served Fresh Daily 
+-------------------------
+
+:Author: Patrick K. O'Brien
+:Contact: pobrien@orbtech.com
+:Organization: Orbtech_
+:Date: $Date$
+:Revision: $Revision$
+
+.. _Orbtech: http://www.orbtech.com/
+
+.. contents::
+
+
+Introduction
+============
+
+This document will show you how to use the Py programs and the Py
+library of Python source code modules.  Py is the new name for the
+project that began as PyCrust.  Py is officially part of wxPython_,
+and includes PyCrust, so PyCrust is no longer distributed separately.
+
+.. _wxPython: http://www.wxpython.org/
+
+
+Developer Reference
+===================
+
+Source code documentation for developers is available at:
+
+http://www.orbtech.com/www/wx/epydoc/public/wx.py-module.html
+
+
+What is Py?
+===========
+
+Besides being `a delicious dessert`_, Py is the name for a collection
+of whimsically-named Python programs and modules that began as the
+PyCrust project.  So Py is really several things: a set of standalone
+programs, including the original PyCrust program, a library of Python
+source code modules that can be used in your own programs, and as many
+examples of bad "pie" puns as I can come up with.  (If you're going to
+do something, you might as well do it all the way, right?)  Py uses
+Python and wxPython, so it works equally well on Windows, Linux and
+Mac OS X.
+
+.. _a delicious dessert: http://www.wikipedia.org/wiki/Pie
+
+
+PyCrust is dead! Long live Py!
+==============================
+
+This project began with a program I created called PyCrust - an
+interactive, graphical Python shell, developed using the wxPython GUI
+toolkit.  For about two years, PyCrust was hosted on SourceForge_.
+Shortly after I created PyCrust, the wxPython folks started including
+it in their distribution.  As the PyCrust project grew, it reached a
+point where I thought the original PyCrust name was too confining.  I
+was using the PyCrust code base to develop programs that weren't just
+Python shells any more.
+
+Around that same time, the wxPython folks asked me if I'd be willing
+to move all my wxPython-related projects into the `wxPython CVS
+repository`_, and become part of the wxPython_/wxWidgets_ developer team.
+I decided the time was right to restructure the PyCrust project.
+During the move, the PyCrust package was renamed to "py" (lowercase
+"p") and the collection of programs and modules as a whole became
+known as "Py" (with a capital "P").
+
+.. _wxPython CVS repository: http://cvs.wxWidgets.org
+.. _SourceForge: http://www.sf.net/projects/pycrust/
+.. _wxWidgets: http://www.wxWidgets.org/
+
+The original goal of PyCrust was to be the best interactive, graphical
+Python shell (of course, I claimed it was the "flakiest" Python
+shell).  And that was all I wanted it to be.  But little by little I
+found myself developing a wider variety of tools for wxPython
+applications.  Eventually I'll create a debugger (PySlice, perhaps)
+and whatever else is needed to one day become a complete wxPython
+application development environment (PyFactory?).  In the mean time,
+PyCrust is still the flakiest Python shell, and the other Py programs
+are equally tasty.
+
+At this point, Py has standalone programs that include Python code
+editors (PyAlaCarte and PyAlaMode), interactive Python shells (PyCrust
+and PyShell), and a runtime wrapper (PyWrap).  The runtime wrapper
+utility provides you with runtime introspection capabilities for your
+wxPython programs without having to include PyCrust or PyShell in your
+program, and without having to alter one line of your source code.
+
+Py also contains a collection of modules that you can use in your own
+wxPython applications to provide similar services, either for your own
+use during development, or as an interface for users of your programs.
+These modules are the same ones used by all the Py programs.  
+
+
+Py standalone programs
+======================
+
+These are the standalone applications in the Py collection:
+
+* PyAlaCarte
+* PyAlaMode
+* PyCrust
+* PyFilling
+* PyShell
+* PyWrap
+
+
+PyAlaCarte
+==========
+
+PyAlaCarte is a Python source code editor.  It is designed to have a
+simple, single-file interface.  As a standalone application, it is
+good for simple, short editing tasks.  But it is really meant to be
+more of an example of how to embed the Py editor into a wxPython
+application.
+
+
+PyAlaMode
+=========
+
+PyAlaMode is a Python source code editor.  
+
+
+PyCrust
+=======
+
+PyCrust is an interactive, Python shell.  But it's more than just a
+shell.  It includes a tabbed notebook containing a namespace tree
+(PyFilling), and several other things.
+
+
+PyFilling
+=========
+
+PyFilling is a namespace viewer.  It isn't really useful as a
+standalone program, but it does illustrate how to make use of the
+underlying ``filling`` module.
+
+
+PyShell
+=======
+
+PyShell is an interactive, Python shell.  It shares the same base code
+as PyCrust, but doesn't have any of the extra features that appear in
+the PyCrust notebook interface.
+
+.. figure:: screenshots/PyShell.png
+
+   PyShell running on Mandrake Linux.
+
+
+PyWrap
+======
+
+PyWrap is a runtime utility that lets you run an existing wxPython
+program with a PyCrust frame at the same time.  Inside the PyCrust
+shell namespace, the local variable ``app`` is assigned to your
+application instance.  In this way you can introspect your entire
+application within the PyCrust shell, as well as the PyFilling
+namespace viewer.  
+
+
+Py modules
+==========
+
+Py was designed to be modular.  That means graphical code is kept
+separate from non-graphical code, and many of the Py modules can be
+used by other programs.  Likewise, other programs can supply some of
+the modules needed by Py.  For example, you could supply a customized
+interpreter module and plug it in to the PyCrust standalone
+application.  As long as it supports the minimum functionality
+required, PyCrust will work just as well with your interpreter as with
+its default interpreter.
+
+
+Projects using Py
+=================
+
+* `Conflict Solver`_
+* Gnumed_
+* PyGist
+* PythonCard_
+* RPy_
+* SciPy_
+* Sim42_
+* wxGasp_
+
+.. _Conflict Solver: http://conflictsolver.sourceforge.net/
+.. _Gnumed: http://www.gnumed.org/
+.. _PythonCard: http://www.pythoncard.org/
+.. _RPy: http://rpy.sourceforge.net/
+.. _SciPy: http://www.scipy.org/
+.. _Sim42: http://www.sim42.org/
+.. _wxGasp: http://linus.yorktown.arlington.k12.va.us/CS/APCSC/student_sites/David_Mayo/wxGasp
+
+
+History of changes
+==================
+
+This section lists all the changes that have been made to the Py
+programs and modules, since the beginning.
+
+.. include:: ../wx/py/CHANGES.txt
+
