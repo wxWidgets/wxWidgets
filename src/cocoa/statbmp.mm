@@ -37,9 +37,12 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID winid,
     wxAutoNSAutoreleasePool pool;
     if(!CreateControl(parent,winid,pos,size,style,wxDefaultValidator,name))
         return false;
-    m_cocoaNSView = NULL;
     SetNSView([[NSImageView alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
+
+    [GetNSImageView() setImage:bitmap.GetNSImage(true)];
+    m_bitmap = bitmap;
+
     if(m_parent)
         m_parent->CocoaAddChild(this);
     SetInitialFrameRect(pos,size);
@@ -57,9 +60,11 @@ void wxStaticBitmap::SetIcon(const wxIcon& icon)
 
 void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
 {
+    [GetNSImageView() setImage:bitmap.GetNSImage(true)];
+    m_bitmap = bitmap;
 }
 
 wxBitmap wxStaticBitmap::GetBitmap() const
 {
-    return wxNullBitmap;
+    return m_bitmap;
 }
