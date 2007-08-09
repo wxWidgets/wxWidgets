@@ -49,6 +49,19 @@ bool wxButton::Create(wxWindow *parent, wxWindowID winid,
 
     [GetNSButton() setBezelStyle:NSRoundedBezelStyle];
     CocoaSetLabelForObject(label, GetNSButton());
+
+    do
+    {
+        NSTextAlignment mode;
+        if ((style & wxBU_LEFT) && !(style & wxBU_RIGHT))
+            mode = NSLeftTextAlignment;
+        else if ((style & wxBU_RIGHT) && !(style & wxBU_LEFT))
+            mode = NSRightTextAlignment;
+        else
+            break;
+        [GetNSControl() setAlignment:mode];
+    } while(0);
+
     [GetNSControl() sizeToFit];
 
     if(m_parent)
