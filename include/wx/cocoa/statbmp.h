@@ -12,7 +12,7 @@
 #ifndef __WX_COCOA_STATBMP_H__
 #define __WX_COCOA_STATBMP_H__
 
-// #include "wx/cocoa/NSxxx.h"
+DECLARE_WXCOCOA_OBJC_CLASS(NSImageView);
 
 // ========================================================================
 // wxStaticBitmap
@@ -46,6 +46,11 @@ public:
 // ------------------------------------------------------------------------
 // Cocoa specifics
 // ------------------------------------------------------------------------
+    WX_NSImageView GetNSImageView() { return (WX_NSImageView)m_cocoaNSView; }
+#if 0 // ABI incompatibility
+    wxBitmap m_bitmap;
+#endif
+
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------

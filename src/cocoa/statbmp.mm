@@ -37,9 +37,14 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID winid,
     wxAutoNSAutoreleasePool pool;
     if(!CreateControl(parent,winid,pos,size,style,wxDefaultValidator,name))
         return false;
-    m_cocoaNSView = NULL;
     SetNSView([[NSImageView alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
+
+    [GetNSImageView() setImage:bitmap.GetNSImage(true)];
+#if 0 // ABI incompatibility
+    m_bitmap = bitmap;
+#endif
+
     if(m_parent)
         m_parent->CocoaAddChild(this);
     SetInitialFrameRect(pos,size);
@@ -57,9 +62,18 @@ void wxStaticBitmap::SetIcon(const wxIcon& icon)
 
 void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
 {
+    [GetNSImageView() setImage:bitmap.GetNSImage(true)];
+#if 0 // ABI incompatibility
+    m_bitmap = bitmap;
+#endif
 }
 
 wxBitmap wxStaticBitmap::GetBitmap() const
 {
+#if 0 // ABI incompatibility
+    return m_bitmap;
+#else
+    // TODO: We can try to fake it and make a wxBitmap from the NSImage the control has.
     return wxNullBitmap;
+#endif
 }
