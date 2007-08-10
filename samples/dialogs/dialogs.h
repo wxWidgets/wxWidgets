@@ -263,10 +263,11 @@ public:
 
 #if USE_MODAL_PRESENTATION
     void ModalDlg(wxCommandEvent& event);
+#endif // USE_MODAL_PRESENTATION
     void ModelessDlg(wxCommandEvent& event);
     void DlgCenteredScreen(wxCommandEvent& event);
     void DlgCenteredParent(wxCommandEvent& event);
-#endif // USE_MODAL_PRESENTATION
+    void MiniFrame(wxCommandEvent& event);
 
 #if wxUSE_PROGRESSDLG
     void ShowProgress(wxCommandEvent& event);
@@ -364,6 +365,7 @@ enum
     DIALOGS_MODELESS,
     DIALOGS_CENTRE_SCREEN,
     DIALOGS_CENTRE_PARENT,
+    DIALOGS_MINIFRAME,
     DIALOGS_MODELESS_BTN,
     DIALOGS_PROGRESS,
     DIALOGS_ABOUTDLG_SIMPLE,

@@ -391,6 +391,9 @@ DEFAULT_wxUSE_TAB_DIALOG=no
 DEFAULT_wxUSE_UNICODE_UTF8=auto
 DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
 
+dnl Mac/Cocoa users need to enable building universal binaries explicitly
+DEFAULT_wxUSE_UNIVERSAL_BINARY=no
+
 DEFAULT_wxUSE_OFFICIAL_BUILD=no
 
 dnl Applicable only when --with-gtk was used:
@@ -507,6 +510,41 @@ WX_ARG_SYS_WITH(zlib,      [  --with-zlib             use zlib for LZW compressi
 WX_ARG_SYS_WITH(odbc,      [  --with-odbc             use the IODBC and wxODBC classes], wxUSE_ODBC)
 WX_ARG_SYS_WITH(expat,     [  --with-expat            enable XML support using expat parser], wxUSE_EXPAT)
 
+AC_MSG_CHECKING([for --with-macosx-sdk])
+AC_ARG_WITH(macosx-sdk,    [  --with-macosx-sdk=PATH  use an OS X SDK at PATH], [
+        wxUSE_MACOSX_SDK=$withval
+        wx_cv_use_macosx_sdk="wxUSE_MACOSX_SDK=$withval"
+        echo "wxUSE_MACOSX_SDK=$wxUSE_MACOSX_SDK" >> ${wx_arg_cache_file}.tmp
+    ], [
+        # NOTE: Empty string on purpose so that --without-macosx-sdk (thus no)
+        # will override --enable-universal_binary's automatic SDK usage.
+        wxUSE_MACOSX_SDK=
+        LINE=`grep "^wxUSE_MACOSX_SDK=" ${wx_arg_cache_file}`
+        if test "x$LINE" != x ; then
+            eval "$LINE"
+            echo "$LINE" >> ${wx_arg_cache_file}.tmp
+        fi
+    ])
+AC_MSG_RESULT([$wxUSE_MACOSX_SDK])
+
+AC_MSG_CHECKING([for --with-macosx-version-min])
+AC_ARG_WITH(macosx-version-min,    [  --with-macosx-version-min=VER   build binaries which require at least this OS X version], [
+        wxUSE_MACOSX_VERSION_MIN=$withval
+        wx_cv_use_macosx_version_min="wxUSE_MACOSX_VERSION_MIN=$withval"
+        echo "wxUSE_MACOSX_VERSION_MIN=$wxUSE_MACOSX_VERSION_MIN" >> ${wx_arg_cache_file}.tmp
+    ], [
+        # default "yes" because when not using an SDK it means the same as no
+        # but when using an SDK it means to use the SDK version
+        wxUSE_MACOSX_VERSION_MIN=yes
+        # See if there is a value in the cache
+        LINE=`grep "^wxUSE_MACOSX_VERSION_MIN=" ${wx_arg_cache_file}`
+        if test "x$LINE" != x ; then
+            eval "$LINE"
+            echo "$LINE" >> ${wx_arg_cache_file}.tmp
+        fi
+    ])
+AC_MSG_RESULT([$wxUSE_MACOSX_VERSION_MIN])
+
 dnl ---------------------------------------------------------------------------
 dnl global compile options
 dnl ---------------------------------------------------------------------------
@@ -548,7 +586,7 @@ WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without C++ 
 WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregarding strict ANSI], wxUSE_PERMISSIVE)
 WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without dependency information], wxUSE_NO_DEPS)
 WX_ARG_DISABLE(vararg_macros,[  --disable-vararg_macros don't use vararg macros, even if they are supported], wxUSE_VARARG_MACROS)
-WX_ARG_ENABLE_PARAM(universal_binary, [[  --enable-universal_binary[=SDK] create Mac PowerPC and Intel Universal binary (not yet working)]], wxUSE_UNIVERSAL_BINARY)
+WX_ARG_ENABLE_PARAM(universal_binary, [[  --enable-universal_binary  create Mac PowerPC and Intel Universal binary (not yet working)]], wxUSE_UNIVERSAL_BINARY)
 
 WX_ARG_ENABLE(compat26,      [  --enable-compat26       enable wxWidgets 2.6 compatibility], WXWIN_COMPATIBILITY_2_6)
 WX_ARG_DISABLE(compat28,     [  --disable-compat28      disable wxWidgets 2.8 compatibility], WXWIN_COMPATIBILITY_2_8)
@@ -896,6 +934,7 @@ dnl wxMSW-only options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_FEATURE(dccache,     [  --enable-dccache        cache temporary wxDC objects (Win32 only)], wxUSE_DC_CACHEING)
+WX_ARG_ENABLE(iniconf,      [  --enable-iniconf        use wxIniConfig (Win32 only)], wxUSE_INICONF)
 WX_ARG_FEATURE(ps-in-msw,   [  --enable-ps-in-msw      use PS printing in wxMSW (Win32 only)], wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
 WX_ARG_FEATURE(ownerdrawn,  [  --enable-ownerdrawn     use owner drawn controls (Win32 only)], wxUSE_OWNER_DRAWN)
 WX_ARG_FEATURE(regkey,      [  --enable-regkey         use wxRegKey class (Win32 only)], wxUSE_REGKEY)
@@ -1059,10 +1098,6 @@ if test "$CXX" = "g++" -a "$GXX" != "yes"; then
     AC_MSG_ERROR([C++ compiler is needed to build wxWidgets])
 fi
 
-dnl ranlib command
-dnl   defines RANLIB with the appropriate command
-AC_PROG_RANLIB
-
 dnl ar command
 dnl   defines AR with the appropriate command
 dnl
@@ -1074,20 +1109,141 @@ if test "x$SUNCXX" != xyes; then
     fi
 fi
 
-dnl install checks
-dnl   defines INSTALL with the appropriate command
-AC_PROG_INSTALL
+retest_macosx_linking=no
 
-dnl   make install path absolute (if not already);
-dnl   will fail with (some) MSDOS paths
-case ${INSTALL} in
-  /* ) # Absolute
-     ;;
-  ?:* ) # Drive letter, considered as absolute.
-     ;;
-  *)
-     INSTALL=`pwd`/${INSTALL} ;;
-esac
+dnl Support the old --enable-universal_binary in case anyone was using it.
+#if test "$wxUSE_MAC" = 1; then
+    if test "x$wxUSE_UNIVERSAL_BINARY" != xno ; then
+        dnl --enable-universal_binary uses a default SDK (currently 10.4u)
+        dnl --enable-universal_binary=SDK names a path to an SDK
+        if test "x$wxUSE_UNIVERSAL_BINARY" == xyes; then
+            # Implicitly turn on the new --with-macosx-sdk using the default
+            # SDK which provides the behavior this option has always had.
+            if test "x$wxUSE_MACOSX_SDK" = "x"; then
+                AC_MSG_WARN([Enabling default SDK due to --enable-universal_binary.])
+                AC_MSG_WARN([If you don't want this, specify --without-macosx-sdk])
+                wxUSE_MACOSX_SDK=yes
+            fi
+        else
+            # Complain to user if he specified an argument to --enable-universal_binary
+            # and also 1) specified --with-macosx-sdk using the default (yes) or
+            # 2) specified --with-macosx-sdk using a path or 3) specified
+            # --without-macosx-sdk (no).
+            if test "x$wxUSE_MACOSX_SDK" != "x" ; then
+                AC_MSG_FAILURE([Please specify the new --with-macosx-sdk=PATH and do not specify an arg to --enable-universal_binary])
+            else
+                # Put the SDK path into the wxUSE_MACOSX_SDK.  We don't have to
+                # special-case the empty string because the below test simply
+                # converts "no" to the empty string anyway.
+                wxUSE_MACOSX_SDK="$wxUSE_UNIVERSAL_BINARY"
+                dnl Warn about deprecated usage.
+                AC_MSG_WARN([Please use --with-macosx-sdk=PATH and --enable-universal_binary without an argument])
+            fi
+        fi
+        dnl FIXME: I think it would be better to put this into CC, CXX, and LD rather than the flags.
+        OSX_UNIV_OPTS="-arch ppc -arch i386"
+        CXXFLAGS="$OSX_UNIV_OPTS $CXXFLAGS"
+        CFLAGS="$OSX_UNIV_OPTS $CFLAGS"
+        LDFLAGS="$OSX_UNIV_OPTS $LDFLAGS"
+        dnl NOTE: Only the compiler driver needs arch flags.  The link editor
+        dnl is incapable of using them but the compiler driver (which we use
+        dnl as LD when building dynamic libraries) uses them to invoke the
+        dnl real ld multiple times.  If we moved to libtool -dynamic we would
+        dnl need no arch flags because libtool automatically invokes ld for
+        dnl every architecture found in the fat input files.
+        dnl
+        dnl For static library builds, AR/RANLIB automatically create proper
+        dnl fat archives although AR is unable to update them once RANLIB has
+        dnl made them into proper fat archives.  Fortunately, our link process
+        dnl simply removes the .a file before using ar to create a new one.
+        dnl If we did move to libtool -static we still wouldn't need arch flags
+        dnl because libtool automatically figures it out based on input.
+        retest_macosx_linking=yes
+
+        dnl HACK: PCH could be made to work by precompiling for each architecture into separate directories
+        dnl and including all architecture directories with each compiler invocation.
+        dnl That would require a major rework of Bakefile and at the same time it would be nice to have
+        dnl Objective-C++ precompiled headers.
+        AC_MSG_WARN([Disabling precompiled headers due to universal binary build.])
+        bk_use_pch=no
+    fi
+#fi
+
+dnl Set up the Mac OS X SDK.  We do this early so configure tests will occur
+dnl with the SDK in place.
+dnl NOTE: We clobber wxUSE_MACOSX_SDK with the SDK path
+if test "x$wxUSE_MACOSX_SDK" = "xno"; then
+    wxUSE_MACOSX_SDK=
+elif test "x$wxUSE_MACOSX_SDK" = "xyes"; then
+    # TODO: Search for most recent SDK and use it.
+    wxUSE_MACOSX_SDK="/Developer/SDKs/MacOSX10.4u.sdk"
+fi
+
+
+if test "x$wxUSE_MACOSX_SDK" != "x"; then
+    AC_MSG_CHECKING([for SDK directory $wxUSE_MACOSX_SDK])
+    if ! test -d "$wxUSE_MACOSX_SDK"; then
+        AC_MSG_FAILURE([not found])
+    else
+        AC_MSG_RESULT([exists])
+    fi
+    MACOSX_SDK_OPTS="-isysroot $wxUSE_MACOSX_SDK"
+    eval "CC=\"$CC $MACOSX_SDK_OPTS\""
+    eval "CXX=\"$CXX $MACOSX_SDK_OPTS\""
+    eval "LD=\"$LD $MACOSX_SDK_OPTS\""
+    retest_macosx_linking=yes
+    dnl NOTE: When libtool is used in lieu of AR/RANLIB (i.e. in static mode)
+    dnl the syslibroot makes no difference.  We aren't using libtool now but
+    dnl if we ever did, be aware that you don't need to worry about it.
+fi
+
+dnl Set up the deployment target
+dnl No   : Don't specify a min version even if using an SDK
+dnl Yes  : Use the version from the SDK if used, otherwise same as no
+dnl Param: Use the specified version
+if test "x$wxUSE_MACOSX_VERSION_MIN" = "xno"; then
+    wxUSE_MACOSX_VERSION_MIN=
+elif test "x$wxUSE_MACOSX_VERSION_MIN" = "xyes"; then
+    if test "x$wxUSE_MACOSX_SDK" != "x"; then
+        AC_MSG_CHECKING([SDK deployment version])
+dnl We need to quote the next line where we don't need macros and do need [] in the regex
+[
+        MACOSX_SDK_PLIST_VERSION_MIN=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" buildSettings | grep '^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}[^"]*"\{0,1\}; *$' | sed 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/'`
+]
+        if test "x$MACOSX_SDK_PLIST_VERSION_MIN" != "x"; then
+            wxUSE_MACOSX_VERSION_MIN=$MACOSX_SDK_PLIST_VERSION_MIN
+            AC_MSG_RESULT([$wxUSE_MACOSX_VERSION_MIN])
+        else
+            AC_MSG_WARN([Could not determine deployment target from SDKSettings.plist])
+            wxUSE_MACOSX_VERSION_MIN=
+        fi
+    else
+        wxUSE_MACOSX_VERSION_MIN=
+    fi
+fi
+
+if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
+    MACOSX_VERSION_MIN_OPTS="-mmacosx-version-min=$wxUSE_MACOSX_VERSION_MIN"
+    eval "CC=\"$CC $MACOSX_VERSION_MIN_OPTS\""
+    eval "CXX=\"$CXX $MACOSX_VERSION_MIN_OPTS\""
+    eval "LD=\"$LD $MACOSX_VERSION_MIN_OPTS\""
+    retest_macosx_linking=yes
+fi
+
+dnl If either an SDK or a version option was added, make sure that we can
+dnl still compile and link both C and C++.  If we didn't do this, then most
+dnl of the remaining tests would fail.
+if test "x$retest_macosx_linking" = "xyes"; then
+    AC_LANG_PUSH(C)
+    AC_MSG_CHECKING([if C compiler works with SDK/version options])
+    AC_TRY_LINK([],[],[AC_MSG_RESULT([yes])],[AC_MSG_FAILURE([no.  Try a different SDK]); exit 1])
+    AC_LANG_POP()
+
+    AC_LANG_PUSH(C++)
+    AC_MSG_CHECKING([if C++ compiler works with SDK/version options])
+    AC_TRY_LINK([],[],[AC_MSG_RESULT([yes])],[AC_MSG_FAILURE([no.  Try a different SDK]); exit 1])
+    AC_LANG_POP()
+fi
 
 
 case "${host}" in
@@ -1102,91 +1258,6 @@ case "${host}" in
     *)
         ;;
 esac
-
-dnl strip command
-dnl   defines STRIP as strip or nothing (true) if not found
-AC_CHECK_TOOL(STRIP, strip, true)
-
-dnl Win32 tools
-if test "$wxUSE_WINE" = "yes"; then
-    AC_CHECK_TOOL(WINDRES, wrc)
-    RESCOMP="$WINDRES"
-else
-    case "${host}" in
-    *-*-cygwin* | *-*-mingw32* )
-        dnl Bakefile CVS (as of 2005-11-24) now detects windres properly
-        dnl ... maybe it does, but it does not make it available here
-        dnl anymore, so do it ourselves still.
-        AC_CHECK_TOOL(WINDRES, windres)
-        RESCOMP="$WINDRES"
-        AC_CHECK_TOOL(DLLTOOL, dlltool)
-        ;;
-    esac
-fi
-
-dnl does make support "-include" (only GNU make does AFAIK)?
-AC_CACHE_CHECK([if make is GNU make], wx_cv_prog_makeisgnu,
-[
-    if ( ${SHELL-sh} -c "${MAKE-make} --version" 2> /dev/null |
-            $EGREP -s GNU > /dev/null); then
-        wx_cv_prog_makeisgnu="yes"
-    else
-        wx_cv_prog_makeisgnu="no"
-    fi
-])
-
-if test "x$wx_cv_prog_makeisgnu" = "xyes"; then
-    IF_GNU_MAKE=""
-else
-    IF_GNU_MAKE="#"
-fi
-
-AC_SUBST(IF_GNU_MAKE)
-
-dnl we don't need to check for VPATH support in GNU make - it does have it
-if test "x$wx_cv_prog_makeisgnu" != "xyes"; then
-dnl check if VPATH works
-AC_CACHE_CHECK([if make supports VPATH], wx_cv_prog_makevpath, [
-dnl create Makefile
-cat - << EOF > confMake
-check : file
-	cp \$? \$@
-	cp \$? final_file
-EOF
-
-if test ! -d sub ; then
-  mkdir sub
-fi
-echo dummy > sub/file
-${MAKE-make} -f confMake VPATH=sub 2>&5 > /dev/null
-RESULT=$?
-rm -f sub/file check final_file confMake
-rmdir sub
-if test "$RESULT" = 0; then
-  wx_cv_prog_makevpath="yes"
-else
-  wx_cv_prog_makevpath="no"
-fi
-])
-
-if test "x$wx_cv_prog_makevpath" != "xyes"; then
-AC_MSG_ERROR([
-You need a make-utility that is able to use the variable
-VPATH correctly.
-If your version of make does not support VPATH correctly,
-please install GNU-make (possibly as gmake), and start
-configure with the following command:
-export MAKE=gmake; ./configure  for sh-type shells
-setenv MAKE gmake; ./configure  for csh-type shells
-Also please do remember to use gmake in this case every time
-you are trying to compile.
-])
-fi dnl make without VPATH
-fi dnl not GNU make
-
-dnl needed for making link to setup.h
-AC_PROG_LN_S
-
 
 dnl ------------------------------------------------------------------------
 dnl Platform specific tests
@@ -2351,8 +2422,6 @@ if test "$wxUSE_LIBPNG" != "no" ; then
             fi
         fi
     fi
-
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS png"
 fi
 
 dnl ------------------------------------------------------------------------
@@ -3653,7 +3722,7 @@ if test "$wxUSE_OPENGL" = "yes"; then
                         AC_MSG_RESULT([no])
                     fi
                 fi
-            ])
+            ],, [ ])
         ],
         [],
         [ ])
@@ -3876,50 +3945,6 @@ dnl to not typedef Point and thus fix the problem.
     )
     AC_LANG_RESTORE
 fi
-
-if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
-    dnl base name of the resource file for wxMac must be the same
-    dnl as library installation base name (-install_name)
-    WX_RESOURCES_MACOSX_ASCII="libwx_${TOOLCHAIN_NAME}.${wx_release_number}.r"
-    WX_RESOURCES_MACOSX_DATA="libwx_${TOOLCHAIN_NAME}.${wx_release_number}.rsrc"
-
-    dnl add the resources target for wxMac
-    LIBWXMACRES="\$(wx_top_builddir)/lib/${WX_RESOURCES_MACOSX_ASCII}"
-
-    AC_CHECK_PROG(REZ, Rez, Rez, /Developer/Tools/Rez)
-    AC_CHECK_PROG(DEREZ, DeRez, DeRez, /Developer/Tools/DeRez)
-    AC_CHECK_PROG(SETFILE, SetFile, SetFile, /Developer/Tools/SetFile)
-
-    MACSETFILE="\$(SETFILE)"
-
-    dnl resources are bundled both with shared library and applications
-    dnl since the carb resource *must* be included in the application
-    if test "$wxUSE_MAC" = 1; then
-        POSTLINK_COMMAND="\$(REZ) -d __DARWIN__ -t APPL Carbon.r -o"
-        RESCOMP="$REZ"
-        WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL Carbon.r -o"
-    else
-        POSTLINK_COMMAND="echo -n | \$(REZ) -d __DARWIN__ -t APPL ${LIBWXMACRES}"
-        RESCOMP="echo -n \| $REZ"
-        WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL \$libdir/$WX_RESOURCES_MACOSX_ASCII"
-    fi
-
-else
-    dnl default value is to (silently) do nothing in the makefile
-    MACSETFILE="@true"
-
-    if test "$wxUSE_PM" = 1; then
-        RESCOMP="emxbind"
-        WXCONFIG_RESFLAGS="-ep"
-
-        dnl Is this one really used anywhere for pm?
-        POSTLINK_COMMAND="$RESCOMP $WXCONFIG_RESFLAGS"
-    else
-        POSTLINK_COMMAND="@true"
-    fi
-
-fi
-
 
 dnl ---------------------------------------------------------------------------
 dnl Checks for typedefs
@@ -4581,6 +4606,9 @@ AC_CHECK_FUNCS(timegm)
 
 dnl look for a function to modify the environment
 AC_CHECK_FUNCS(setenv putenv, break)
+if test "$ac_cv_func_setenv" = "yes"; then
+    AC_CHECK_FUNCS(unsetenv)
+fi
 
 HAVE_SOME_SLEEP_FUNC=0
 if test "$USE_BEOS" = 1; then
@@ -5712,7 +5740,7 @@ if test "$wxUSE_CONSOLE_EVENTLOOP" = "yes"; then
         fi
 
         if test "$wxUSE_EPOLL_DISPATCHER" = "yes"; then
-            AC_CHECK_HEADERS(sys/epoll.h)
+            AC_CHECK_HEADERS(sys/epoll.h,,, [AC_INCLUDES_DEFAULT()])
             if test "$ac_cv_header_sys_epoll_h" = "yes"; then
                 AC_DEFINE(wxUSE_EPOLL_DISPATCHER)
             else
@@ -6218,10 +6246,6 @@ if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_UTF8" = "yes"; then
     fi
 fi
 
-if test "$wxUSE_wxUSE_EXPERIMENTAL_PRINTF" = "yes"; then
-  AC_DEFINE(wxUSE_EXPERIMENTAL_PRINTF)
-fi
-
 dnl ---------------------------------------------------------------------------
 dnl big GUI components: MDI, doc/view, printing, help, ...
 dnl ---------------------------------------------------------------------------
@@ -6282,8 +6306,6 @@ if test "$wxUSE_POSTSCRIPT" = "yes" ; then
 fi
 
 AC_DEFINE(wxUSE_AFM_FOR_POSTSCRIPT)
-
-AC_DEFINE(wxUSE_NORMALIZED_PS_FONTS)
 
 if test "$wxUSE_SVG" = "yes"; then
     AC_DEFINE(wxUSE_SVG)
@@ -6495,7 +6517,6 @@ fi
 if test "$wxUSE_CHECKLST" = "yes"; then
   AC_DEFINE(wxUSE_CHECKLISTBOX)
   USES_CONTROLS=1
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS checklst"
 fi
 
 if test "$wxUSE_COLOURPICKERCTRL" = "yes"; then
@@ -6529,7 +6550,7 @@ if test "$wxUSE_DISPLAY" = "yes"; then
         wxUSE_DISPLAY=no
     else
         AC_DEFINE(wxUSE_DISPLAY)
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS display multimon"
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS display"
     fi
 fi
 
@@ -6576,7 +6597,6 @@ fi
 if test "$wxUSE_LISTBOX" = "yes"; then
     AC_DEFINE(wxUSE_LISTBOX)
     USES_CONTROLS=1
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS listbox"
 fi
 
 if test "$wxUSE_LISTCTRL" = "yes"; then
@@ -6606,12 +6626,6 @@ if test "$wxUSE_ODCOMBOBOX" = "yes"; then
   USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS combo"
 fi
-
-dnl if test "$wxUSE_PROPSHEET" = "yes"; then
-dnl     AC_DEFINE(wxUSE_PROPSHEET)
-dnl     USES_CONTROLS=1
-dnl     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS proplist"
-dnl fi
 
 if test "$wxUSE_RADIOBOX" = "yes"; then
     AC_DEFINE(wxUSE_RADIOBOX)
@@ -6891,7 +6905,6 @@ fi
 
 if test "$wxUSE_MINIFRAME" = "yes"; then
     AC_DEFINE(wxUSE_MINIFRAME)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS minifram"
 fi
 
 if test "$wxUSE_SYSTEM_OPTIONS" = "yes"; then
@@ -7048,6 +7061,10 @@ if test "$wxUSE_MSW" = 1 ; then
 
 if test "$wxUSE_DC_CACHEING" = "yes"; then
     AC_DEFINE(wxUSE_DC_CACHEING)
+fi
+
+if test "$wxUSE_INICONF" = "yes"; then
+    AC_DEFINE(wxUSE_INICONF)
 fi
 
 if test "$wxUSE_DIB" = "yes"; then
@@ -7288,9 +7305,9 @@ if test "$wxUSE_GUI" = "yes"; then
 
     dnl TODO some samples are never built so far: mfc (requires VC++)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov controls dialogs drawing \
-                     dynamic erase event exec font image minimal mobile \
-                     mobile/wxedit mobile/styles propsize render \
-                     rotate shaped svg taborder vscroll widgets"
+                     erase event exec font image minimal mobile \
+                     mobile/wxedit mobile/styles render \
+                     shaped svg taborder vscroll widgets"
 
     if test "$wxUSE_MONOLITHIC" != "yes"; then
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS console"
@@ -7558,32 +7575,6 @@ if test "$wxUSE_WINE" = "yes"; then
     BAKEFILE_FORCE_PLATFORM=win32
 fi
 
-dnl ---------------------------------------------------------------------------
-dnl Add Universal binary support
-dnl Note we don't do this earlier because adding these cpp/ld flags could
-dnl cause configure tests to fail.
-dnl ---------------------------------------------------------------------------
-if test "$wxUSE_MAC" = 1 ; then
-    if test "x$wxUSE_UNIVERSAL_BINARY" != xno ; then
-        dnl --enable-universal_binary uses a default SDK (currently 10.4u)
-        dnl --enable-universal_binary=SDK names a path to an SDK
-        if test "x$wxUSE_UNIVERSAL_BINARY" == xyes; then
-            OSX_UNIV_OPTS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk"
-        else
-            dnl '' would mean universal with no SDK, which may be the case if
-            dnl the compiler uses a sysroot by default
-            OSX_UNIV_OPTS=${wxUSE_UNIVERSAL_BINARY:+"-isysroot '$wxUSE_UNIVERSAL_BINARY'"}
-        fi
-        OSX_UNIV_OPTS="$OSX_UNIV_OPTS -arch ppc -arch i386"
-        CXXFLAGS="$OSX_UNIV_OPTS $CXXFLAGS"
-        CFLAGS="$OSX_UNIV_OPTS $CFLAGS"
-        LDFLAGS="$OSX_UNIV_OPTS $LDFLAGS"
-        bk_use_pch=no
-    fi
-    # TODO: where do we add "-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk" for libtool (static builds only)?
-    #       The makefile currently uses AR and RANLIB, which libtool apparently supercedes.
-fi
-
 dnl gcc 3.4 has a pch bug which truncates wide character constants in headers.
 dnl Hopefully for a non-unicode build there aren't any wide constants in
 dnl headers, but for a unicode build it's best to disable pch.
@@ -7632,6 +7623,71 @@ then
 fi
 
 AC_BAKEFILE([m4_include(autoconf_inc.m4)])
+
+dnl make install path absolute (if not already);
+dnl will fail with (some) MSDOS paths
+case ${INSTALL} in
+  /* ) # Absolute
+     ;;
+  ?:* ) # Drive letter, considered as absolute.
+     ;;
+  *)
+     INSTALL=`pwd`/${INSTALL} ;;
+esac
+
+if test "$wxUSE_GUI" = "yes"; then
+
+if test "$wxUSE_MSW" = 1 ; then
+    if test "x$WINDRES" = "x"; then
+        AC_MSG_ERROR([Required windres program not found])
+    fi
+
+    RESCOMP="$WINDRES"
+fi
+
+if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
+    dnl base name of the resource file for wxMac must be the same
+    dnl as library installation base name (-install_name)
+    WX_RESOURCES_MACOSX_ASCII="libwx_${TOOLCHAIN_NAME}.${wx_release_number}.r"
+    WX_RESOURCES_MACOSX_DATA="libwx_${TOOLCHAIN_NAME}.${wx_release_number}.rsrc"
+
+    dnl add the resources target for wxMac
+    LIBWXMACRES="\$(wx_top_builddir)/lib/${WX_RESOURCES_MACOSX_ASCII}"
+
+    AC_CHECK_PROG(DEREZ, DeRez, DeRez, /Developer/Tools/DeRez)
+
+    MACSETFILE="\$(SETFILE)"
+
+    dnl resources are bundled both with shared library and applications
+    dnl since the carb resource *must* be included in the application
+    if test "$wxUSE_MAC" = 1; then
+        POSTLINK_COMMAND="\$(REZ) -d __DARWIN__ -t APPL Carbon.r -o"
+        RESCOMP="$REZ"
+        WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL Carbon.r -o"
+    else
+        POSTLINK_COMMAND="cat /dev/null | \$(REZ) -d __DARWIN__ -t APPL ${LIBWXMACRES}"
+        RESCOMP="cat /dev/null \| $REZ"
+        WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL \$libdir/$WX_RESOURCES_MACOSX_ASCII"
+    fi
+
+else
+    dnl default value is to (silently) do nothing in the makefile
+    MACSETFILE="@true"
+
+    if test "$wxUSE_PM" = 1; then
+        RESCOMP="emxbind"
+        WXCONFIG_RESFLAGS="-ep"
+
+        dnl Is this one really used anywhere for pm?
+        POSTLINK_COMMAND="$RESCOMP $WXCONFIG_RESFLAGS"
+    else
+        POSTLINK_COMMAND="@true"
+    fi
+fi
+
+fi
+dnl wxUSE_GUI = 1
+
 
 dnl find out if the compiler supports PCH
 dnl
@@ -7954,7 +8010,7 @@ echo "  Should wxWidgets be compiled into single library?       ${wxUSE_MONOLITH
 
 echo "  Should wxWidgets be compiled in debug mode?             ${wxUSE_DEBUG:-no}"
 echo "  Should wxWidgets be linked as a shared library?         ${wxUSE_SHARED:-no}"
-echo -n "  Should wxWidgets support Unicode?                       ${wxUSE_UNICODE:-no}"
+echo $ECHO_N "  Should wxWidgets support Unicode?                       ${wxUSE_UNICODE:-no}$ECHO_C"
 if test "$wxUSE_UNICODE" = "yes"; then
     if test "$wxUSE_UNICODE_UTF8" = "yes"; then
         echo " (using UTF-8)"
@@ -7970,6 +8026,7 @@ echo "                                       wxWidgets 2.6      ${WXWIN_COMPATIB
 echo "                                       wxWidgets 2.8      ${WXWIN_COMPATIBILITY_2_8:-yes}"
 
 echo "  Which libraries should wxWidgets use?"
+echo "                                       STL                ${wxUSE_STL}"
 echo "                                       jpeg               ${wxUSE_LIBJPEG-none}"
 echo "                                       png                ${wxUSE_LIBPNG-none}"
 echo "                                       regex              ${wxUSE_REGEX}"

@@ -562,19 +562,19 @@ bool wxSimpleHtmlListBox::Create(wxWindow *parent, wxWindowID id,
 #if wxUSE_VALIDATORS
     SetValidator(validator);
 #endif
-    for (int i=0; i<n; i++)
-        Append(choices[i]);
+
+    Append(n, choices);
 
     return true;
 }
 
 bool wxSimpleHtmlListBox::Create(wxWindow *parent, wxWindowID id,
-                                    const wxPoint& pos,
-                                    const wxSize& size,
-                                    const wxArrayString& choices,
-                                    long style,
-                                    const wxValidator& validator,
-                                    const wxString& name)
+                                 const wxPoint& pos,
+                                 const wxSize& size,
+                                 const wxArrayString& choices,
+                                 long style,
+                                 const wxValidator& validator,
+                                 const wxString& name)
 {
     if (!wxHtmlListBox::Create(parent, id, pos, size, style, name))
         return false;
@@ -582,6 +582,7 @@ bool wxSimpleHtmlListBox::Create(wxWindow *parent, wxWindowID id,
 #if wxUSE_VALIDATORS
     SetValidator(validator);
 #endif
+
     Append(choices);
 
     return true;
@@ -589,53 +590,46 @@ bool wxSimpleHtmlListBox::Create(wxWindow *parent, wxWindowID id,
 
 wxSimpleHtmlListBox::~wxSimpleHtmlListBox()
 {
-    wxASSERT(m_items.GetCount() == m_HTMLclientData.GetCount());
-    if (HasClientObjectData())
-    {
-        // clear the array of client data objects
-        for (size_t i=0; i<m_items.GetCount(); i++)
-            delete DoGetItemClientObject(i);
-    }
-
-    m_items.Clear();
-    m_HTMLclientData.Clear();
+    wxItemContainer::Clear();
 }
 
-void wxSimpleHtmlListBox::Clear()
+void wxSimpleHtmlListBox::DoClear()
 {
+    wxASSERT(m_items.GetCount() == m_HTMLclientData.GetCount());
+
     m_items.Clear();
     m_HTMLclientData.Clear();
+
     UpdateCount();
 }
 
-void wxSimpleHtmlListBox::Delete(unsigned int n)
+void wxSimpleHtmlListBox::DoDeleteOneItem(unsigned int n)
 {
     m_items.RemoveAt(n);
+
     m_HTMLclientData.RemoveAt(n);
+
     UpdateCount();
 }
 
-void wxSimpleHtmlListBox::Append(const wxArrayString& strings)
+int wxSimpleHtmlListBox::DoInsertItems(const wxArrayStringsAdapter& items,
+                                       unsigned int pos,
+                                       void **clientData,
+                                       wxClientDataType type)
 {
-    // append all given items at once
-    WX_APPEND_ARRAY(m_items, strings);
-    m_HTMLclientData.Add(NULL, strings.GetCount());
-    UpdateCount();
-}
+    const unsigned int count = items.GetCount();
 
-int wxSimpleHtmlListBox::DoAppend(const wxString& item)
-{
-    m_items.Add(item);
-    m_HTMLclientData.Add(NULL);
-    UpdateCount();
-    return GetCount()-1;
-}
+    m_items.Insert(wxEmptyString, pos, count);
+    m_HTMLclientData.Insert(NULL, pos, count);
 
-int wxSimpleHtmlListBox::DoInsert(const wxString& item, unsigned int pos)
-{
-    m_items.Insert(item, pos);
-    m_HTMLclientData.Insert(NULL, pos);
+    for ( unsigned int i = 0; i < count; ++i, ++pos )
+    {
+        m_items[pos] = items[i];
+        AssignNewItemClientData(pos, clientData, i, type);
+    }
+
     UpdateCount();
+
     return pos;
 }
 
@@ -644,7 +638,7 @@ void wxSimpleHtmlListBox::SetString(unsigned int n, const wxString& s)
     wxCHECK_RET( IsValid(n),
                  wxT("invalid index in wxSimpleHtmlListBox::SetString") );
 
-    m_items[n]=s; 
+    m_items[n]=s;
     RefreshRow(n);
 }
 

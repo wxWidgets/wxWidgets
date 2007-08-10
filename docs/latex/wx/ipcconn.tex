@@ -84,7 +84,7 @@ mainly for backwards compatibility.
 
 \membersection{wxConnection::Advise}\label{wxconnectionadvise}
 
-\func{bool}{Advise}{\param{const wxString\& }{item}, \param{char* }{data}, \param{int}{ size = -1}, \param{wxIPCFormat}{ format = wxCF\_TEXT}}
+\func{bool}{Advise}{\param{const wxString\& }{item}, \param{const char* }{data}, \param{int}{ size = -1}, \param{wxIPCFormat}{ format = wxCF\_TEXT}}
 
 Called by the server application to advise the client of a change
 in the data associated with the given item. Causes the client
@@ -148,7 +148,7 @@ accept the given data.
 
 \membersection{wxConnection::OnRequest}\label{wxconnectiononrequest}
 
-\func{virtual char*}{OnRequest}{\param{const wxString\& }{topic}, \param{const wxString\& }{item}, \param{int *}{size}, \param{wxIPCFormat}{ format}}
+\func{virtual const char*}{OnRequest}{\param{const wxString\& }{topic}, \param{const wxString\& }{item}, \param{int *}{size}, \param{wxIPCFormat}{ format}}
 
 Message sent to the server application when the client calls 
 \helpref{wxConnection::Request}{wxconnectionrequest}. The
@@ -176,7 +176,7 @@ this doesn't have much meaning in practice.
 
 \membersection{wxConnection::Poke}\label{wxconnectionpoke}
 
-\func{bool}{Poke}{\param{const wxString\& }{item}, \param{char* }{data}, \param{int}{ size = -1}, \param{wxIPCFormat}{ format = wxCF\_TEXT}}
+\func{bool}{Poke}{\param{const wxString\& }{item}, \param{const char* }{data}, \param{int}{ size = -1}, \param{wxIPCFormat}{ format = wxCF\_TEXT}}
 
 Called by the client application to poke data into the server.
 Can be used to transfer arbitrary data to the server. Causes the

@@ -161,11 +161,16 @@ public:
     {
         MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
         wxDataViewItem parent( node->GetParent() );
-        node->GetParent()->GetChildren().Remove( node );
-        delete node;
         
         // notify control
         ItemDeleted( parent, item );
+        //We must delete the node after we call ItemDeleted
+        //The reason is that:
+        //When we use wxSortedArray, the array find a node through binary search for speed.
+        //And when the array is searching for some node, it call the model's compare function.
+        //The compare function need the node to be compared. So we should delete the node later, here.
+        node->GetParent()->GetChildren().Remove( node );
+        delete node;
     }
     
     // override sorting to always sort branches ascendingly
@@ -626,5 +631,4 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 
     wxAboutBox(info);
 }
-
 

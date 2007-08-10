@@ -117,8 +117,8 @@ public:
     virtual bool CanRedo() const;
 
     // wxControlWithItems methods
-    virtual void Clear();
-    virtual void Delete(unsigned int n);
+    virtual void DoClear();
+    virtual void DoDeleteOneItem(unsigned int n);
     virtual unsigned int GetCount() const;
     virtual wxString GetString(unsigned int n) const;
     virtual void SetString(unsigned int n, const wxString& s);
@@ -143,12 +143,12 @@ public:
     }
 
 protected:
-    virtual int DoAppend(const wxString& item);
-    virtual int DoInsert(const wxString& item, unsigned int pos);
+    virtual int DoInsertItems(const wxArrayStringsAdapter& items,
+                              unsigned int pos,
+                              void **clientData, wxClientDataType type);
+
     virtual void DoSetItemClientData(unsigned int n, void* clientData);
     virtual void* DoGetItemClientData(unsigned int n) const;
-    virtual void DoSetItemClientObject(unsigned int n, wxClientData* clientData);
-    virtual wxClientData* DoGetItemClientObject(unsigned int n) const;
 
     // common part of all ctors
     void Init();

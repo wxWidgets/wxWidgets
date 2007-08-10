@@ -66,19 +66,23 @@ AC_DEFUN([WX_VISIBILITY],
       AC_MSG_CHECKING([for broken libstdc++ visibility])
       AC_CACHE_VAL(wx_cv_cc_broken_libstdcxx_visibility, [
         wx_save_CXXFLAGS="$CXXFLAGS"
+        wx_save_LDFLAGS="$LDFLAGS"
         CXXFLAGS="$CXXFLAGS $CXXFLAGS_VISIBILITY"
+        LDFLAGS="$LDFLAGS -shared -fPIC"
         AC_LANG_PUSH(C++)
         AC_TRY_LINK(
           [
             #include <string>
           ],
           [
-            std::string x;
+            std::string s("hello");
+            return s.length();
           ],
           wx_cv_cc_broken_libstdcxx_visibility=no,
           wx_cv_cc_broken_libstdcxx_visibility=yes)
         AC_LANG_POP()
-        CXXFLAGS="$wx_save_CXXFLAGS"])
+        CXXFLAGS="$wx_save_CXXFLAGS"
+        LDFLAGS="$wx_save_LDFLAGS"])
       AC_MSG_RESULT([$wx_cv_cc_broken_libstdcxx_visibility])
       if test $wx_cv_cc_broken_libstdcxx_visibility = yes; then
         AC_DEFINE([HAVE_BROKEN_LIBSTDCXX_VISIBILITY])

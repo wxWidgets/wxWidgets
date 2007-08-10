@@ -1646,7 +1646,7 @@ bool wxSetWorkingDirectory(const wxString& d)
 #if defined(__OS2__)
     if (d[1] == ':')
     {
-        ::DosSetDefaultDisk(1 + wxToupper(d[0]) - _T('A'));
+        ::DosSetDefaultDisk(wxToupper(d[0]) - _T('A') + 1);
 	// do not call DosSetCurrentDir when just changing drive,
 	// since it requires e.g. "d:." instead of "d:"!
 	if (d.length() == 2)

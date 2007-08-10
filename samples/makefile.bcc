@@ -44,7 +44,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret checklst collpane config combo console controls dataview db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer memcheck menu minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png popup printing propsize regtest render richtext rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc
+all: access animate artprov aui calendar caret collpane config combo console controls dataview db dialogs dialup display dnd docview docvwmdi dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer memcheck menu minifram minimal mobile nativdlg notebook oleauto opengl ownerdrw popup printing regtest render richtext sashtest scroll scrollsub shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -74,10 +74,6 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>caret.bat
 	call caret.bat
 	@del caret.bat
-	@echo cd checklst >checklst.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>checklst.bat
-	call checklst.bat
-	@del checklst.bat
 	@echo cd collpane >collpane.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>collpane.bat
 	call collpane.bat
@@ -138,10 +134,6 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>drawing.bat
 	call drawing.bat
 	@del drawing.bat
-	@echo cd dynamic >dynamic.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>dynamic.bat
-	call dynamic.bat
-	@del dynamic.bat
 	@echo cd erase >erase.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>erase.bat
 	call erase.bat
@@ -202,10 +194,6 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>layout.bat
 	call layout.bat
 	@del layout.bat
-	@echo cd listbox >listbox.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>listbox.bat
-	call listbox.bat
-	@del listbox.bat
 	@echo cd listctrl >listctrl.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>listctrl.bat
 	call listctrl.bat
@@ -238,10 +226,6 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>mobile.bat
 	call mobile.bat
 	@del mobile.bat
-	@echo cd multimon >multimon.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>multimon.bat
-	call multimon.bat
-	@del multimon.bat
 	@echo cd nativdlg >nativdlg.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>nativdlg.bat
 	call nativdlg.bat
@@ -262,10 +246,6 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>ownerdrw.bat
 	call ownerdrw.bat
 	@del ownerdrw.bat
-	@echo cd png >png.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>png.bat
-	call png.bat
-	@del png.bat
 	@echo cd popup >popup.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>popup.bat
 	call popup.bat
@@ -274,10 +254,6 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>printing.bat
 	call printing.bat
 	@del printing.bat
-	@echo cd propsize >propsize.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>propsize.bat
-	call propsize.bat
-	@del propsize.bat
 	@echo cd regtest >regtest.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>regtest.bat
 	call regtest.bat
@@ -290,10 +266,6 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>richtext.bat
 	call richtext.bat
 	@del richtext.bat
-	@echo cd rotate >rotate.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>rotate.bat
-	call rotate.bat
-	@del rotate.bat
 	@echo cd sashtest >sashtest.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>sashtest.bat
 	call sashtest.bat
@@ -415,12 +387,6 @@ caret:
 	call caret.bat
 	@del caret.bat
 
-checklst: 
-	@echo cd checklst >checklst.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>checklst.bat
-	call checklst.bat
-	@del checklst.bat
-
 collpane: 
 	@echo cd collpane >collpane.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>collpane.bat
@@ -510,12 +476,6 @@ drawing:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>drawing.bat
 	call drawing.bat
 	@del drawing.bat
-
-dynamic: 
-	@echo cd dynamic >dynamic.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>dynamic.bat
-	call dynamic.bat
-	@del dynamic.bat
 
 erase: 
 	@echo cd erase >erase.bat
@@ -607,12 +567,6 @@ layout:
 	call layout.bat
 	@del layout.bat
 
-listbox: 
-	@echo cd listbox >listbox.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>listbox.bat
-	call listbox.bat
-	@del listbox.bat
-
 listctrl: 
 	@echo cd listctrl >listctrl.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>listctrl.bat
@@ -661,12 +615,6 @@ mobile:
 	call mobile.bat
 	@del mobile.bat
 
-multimon: 
-	@echo cd multimon >multimon.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>multimon.bat
-	call multimon.bat
-	@del multimon.bat
-
 nativdlg: 
 	@echo cd nativdlg >nativdlg.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>nativdlg.bat
@@ -697,12 +645,6 @@ ownerdrw:
 	call ownerdrw.bat
 	@del ownerdrw.bat
 
-png: 
-	@echo cd png >png.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>png.bat
-	call png.bat
-	@del png.bat
-
 popup: 
 	@echo cd popup >popup.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>popup.bat
@@ -714,12 +656,6 @@ printing:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>printing.bat
 	call printing.bat
 	@del printing.bat
-
-propsize: 
-	@echo cd propsize >propsize.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>propsize.bat
-	call propsize.bat
-	@del propsize.bat
 
 regtest: 
 	@echo cd regtest >regtest.bat
@@ -738,12 +674,6 @@ richtext:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>richtext.bat
 	call richtext.bat
 	@del richtext.bat
-
-rotate: 
-	@echo cd rotate >rotate.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>rotate.bat
-	call rotate.bat
-	@del rotate.bat
 
 sashtest: 
 	@echo cd sashtest >sashtest.bat

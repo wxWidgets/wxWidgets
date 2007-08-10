@@ -120,17 +120,17 @@ public:
         return begin() + idx;
     }
     iterator erase(iterator it)
-    { 
+    {
         size_type idx = it - begin();
         RemoveAt(idx);
         return begin() + idx;
     }
-    
+
     iterator insert(iterator it, const value_type& v = value_type())
     {
         wxCHECK2(Alloc(size() + 1), return 0);
         size_type idx = it - begin();
-        InsertAt(new value_type(o), idx);
+        InsertAt(new value_type(v), idx);
         return begin() + idx;
     }
 
@@ -168,7 +168,7 @@ private:
                 m_objects + idx + 1,
                 m_objects + idx,
                 ( m_size - idx ) * sizeof(value_type*) );
-        
+
         m_size++;
     }
 
@@ -183,7 +183,7 @@ private:
                 ( m_size - idx - 1 ) * sizeof(value_type*) );
         m_size--;
     }
-    
+
     void RemoveAt(size_type idx, size_type count)
     {
         if (count == 0)

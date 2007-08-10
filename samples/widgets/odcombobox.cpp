@@ -45,6 +45,7 @@
 #include "wx/odcombo.h"
 
 
+#include "itemcontainer.h"
 #include "widgets.h"
 
 #include "icons/odcombobox.xpm"
@@ -76,7 +77,8 @@ enum
     ODComboPage_Delete,
     ODComboPage_DeleteText,
     ODComboPage_DeleteSel,
-    ODComboPage_Combo
+    ODComboPage_Combo,
+    ODComboPage_ContainerTests
 };
 
 
@@ -84,12 +86,13 @@ enum
 // ODComboboxWidgetsPage
 // ----------------------------------------------------------------------------
 
-class ODComboboxWidgetsPage : public WidgetsPage
+class ODComboboxWidgetsPage : public ItemContainerWidgetsPage
 {
 public:
     ODComboboxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
     virtual wxControl *GetWidget() const { return m_combobox; }
+    virtual wxItemContainer* GetContainer() const { return m_combobox; }
     virtual void RecreateWidget() { CreateCombo(); }
 
     // lazy creation of the content
@@ -188,6 +191,7 @@ BEGIN_EVENT_TABLE(ODComboboxWidgetsPage, WidgetsPage)
     EVT_BUTTON(ODComboPage_Add, ODComboboxWidgetsPage::OnButtonAdd)
     EVT_BUTTON(ODComboPage_AddSeveral, ODComboboxWidgetsPage::OnButtonAddSeveral)
     EVT_BUTTON(ODComboPage_AddMany, ODComboboxWidgetsPage::OnButtonAddMany)
+    EVT_BUTTON(ODComboPage_ContainerTests, ItemContainerWidgetsPage::OnButtonTestItemContainer)
 
     EVT_TEXT_ENTER(ODComboPage_InsertText, ODComboboxWidgetsPage::OnButtonInsert)
     EVT_TEXT_ENTER(ODComboPage_AddText, ODComboboxWidgetsPage::OnButtonAdd)
@@ -296,7 +300,7 @@ IMPLEMENT_WIDGETS_PAGE(ODComboboxWidgetsPage, _T("OwnerDrawnCombobox"),
 
 ODComboboxWidgetsPage::ODComboboxWidgetsPage(WidgetsBookCtrl *book,
                                              wxImageList *imaglist)
-                  : WidgetsPage(book, imaglist, odcombobox_xpm)
+                  : ItemContainerWidgetsPage(book, imaglist, odcombobox_xpm)
 {
     // init everything
     m_chkSort =
@@ -393,6 +397,9 @@ void ODComboboxWidgetsPage::CreateContent()
     wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY,
         _T("&Change combobox contents"));
     wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
+
+    btn = new wxButton(this, ODComboPage_ContainerTests, _T("Run &tests"));
+    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
     sizerRow = CreateSizerWithTextAndLabel(_T("Current selection"),
                                            ODComboPage_CurText,

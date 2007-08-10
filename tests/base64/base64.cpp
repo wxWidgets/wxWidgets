@@ -59,7 +59,7 @@ static void generateRandomData(void* buff, size_t len)
 
 static void generateGibberish(void* buff, size_t len)
 {
-    static const unsigned char cb64[] = 
+    static const unsigned char cb64[] =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
     unsigned char *cbuff = (unsigned char *)buff;
@@ -129,7 +129,7 @@ void Base64TestCase::EncodeDecodeEmpty()
     CPPUNIT_ASSERT(resultmt.empty());
 
     bufmt = wxBase64Decode(resultmt);
-    CPPUNIT_ASSERT_EQUAL(0u, bufmt.GetDataLen());
+    WX_ASSERT_SIZET_EQUAL(0, bufmt.GetDataLen());
 }
 
 void Base64TestCase::EncodeDecodeA()
@@ -138,7 +138,7 @@ void Base64TestCase::EncodeDecodeA()
     CPPUNIT_ASSERT_EQUAL(wxString("QQ=="), str);
 
     wxMemoryBuffer buf = wxBase64Decode(str);
-    CPPUNIT_ASSERT_EQUAL(1u, buf.GetDataLen());
+    WX_ASSERT_SIZET_EQUAL(1, buf.GetDataLen());
     CPPUNIT_ASSERT_EQUAL('A', *(char *)buf.GetData());
 }
 
@@ -148,7 +148,7 @@ void Base64TestCase::EncodeDecodeAB()
     CPPUNIT_ASSERT_EQUAL(wxString("QUI="), str);
 
     wxMemoryBuffer buf = wxBase64Decode(str);
-    CPPUNIT_ASSERT_EQUAL(2u, buf.GetDataLen());
+    WX_ASSERT_SIZET_EQUAL(2, buf.GetDataLen());
     CPPUNIT_ASSERT_EQUAL('A', buf[0]);
     CPPUNIT_ASSERT_EQUAL('B', buf[1]);
 }
@@ -159,7 +159,7 @@ void Base64TestCase::EncodeDecodeABC()
     CPPUNIT_ASSERT_EQUAL(wxString("QUJD"), str);
 
     wxMemoryBuffer buf = wxBase64Decode(str);
-    CPPUNIT_ASSERT_EQUAL(3u, buf.GetDataLen());
+    WX_ASSERT_SIZET_EQUAL(3, buf.GetDataLen());
     CPPUNIT_ASSERT_EQUAL('A', buf[0]);
     CPPUNIT_ASSERT_EQUAL('B', buf[1]);
     CPPUNIT_ASSERT_EQUAL('C', buf[2]);
@@ -171,7 +171,7 @@ void Base64TestCase::EncodeDecodeABCD()
     CPPUNIT_ASSERT_EQUAL(wxString("QUJDRA=="), str);
 
     wxMemoryBuffer buf = wxBase64Decode(str);
-    CPPUNIT_ASSERT_EQUAL(4u, buf.GetDataLen());
+    WX_ASSERT_SIZET_EQUAL(4, buf.GetDataLen());
     CPPUNIT_ASSERT_EQUAL('A', buf[0]);
     CPPUNIT_ASSERT_EQUAL('B', buf[1]);
     CPPUNIT_ASSERT_EQUAL('C', buf[2]);

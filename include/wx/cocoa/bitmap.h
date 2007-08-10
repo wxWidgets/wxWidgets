@@ -43,6 +43,9 @@ public:
     // Construct a mask from a mono bitmap (copies the bitmap).
     wxMask(const wxBitmap& bitmap);
 
+    // Copy constructor
+    wxMask(const wxMask& src);
+
     virtual ~wxMask();
 
     bool Create(const wxBitmap& bitmap, const wxColour& colour);

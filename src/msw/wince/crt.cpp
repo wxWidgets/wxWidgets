@@ -70,3 +70,13 @@ char *getenv(const char * WXUNUSED(name))
     return NULL;
 }
 
+int wxCRT_Rename(const wchar_t *src, const wchar_t *dst)
+{
+    return ::MoveFile(src, dst) ? 0 : -1;
+}
+
+int wxCRT_Remove(const wchar_t *path)
+{
+    return ::DeleteFile(path) ? 0 : -1;
+}
+

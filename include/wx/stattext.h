@@ -58,6 +58,9 @@ public:
 
     // public utilities (symmetric to those in wxControl about mnemonics):
 
+    // get the string without mnemonic characters ('&') and without markup
+    static wxString GetLabelText(const wxString& label);
+
     // removes the markup accepted by wxStaticText when wxST_MARKUP is used,
     // and then returns the cleaned string
     static wxString RemoveMarkup(const wxString& str);

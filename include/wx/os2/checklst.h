@@ -72,7 +72,9 @@ protected:
     virtual wxOwnerDrawn* CreateItem(size_t n);
     virtual long          OS2OnMeasure(WXMEASUREITEMSTRUCT* pItem);
 
-    virtual void DoInsertItems(const wxArrayString& items, unsigned int pos);
+    virtual int DoInsertItems(const wxArrayStringsAdapter & items,
+                              unsigned int pos,
+                              void **clientData, wxClientDataType type);
 
     //
     // Pressing space or clicking the check box toggles the item

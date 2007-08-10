@@ -268,35 +268,19 @@ public:
 
     virtual void SetString(unsigned int n, const wxString& s);
 
-    virtual void Clear();
-    virtual void Delete(unsigned int n);
-
-    // override default unoptimized wxItemContainer::Append() function
-    void Append(const wxArrayString& strings);
-
-    // since we override one Append() overload, we need to overload all others too
-    int Append(const wxString& item)
-        { return wxItemContainer::Append(item); }
-    int Append(const wxString& item, void *clientData)
-        { return wxItemContainer::Append(item, clientData); }
-    int Append(const wxString& item, wxClientData *clientData)
-        { return wxItemContainer::Append(item, clientData); }
-
+    virtual void DoClear();
+    virtual void DoDeleteOneItem(unsigned int n);
 
 protected:
-
-    virtual int DoAppend(const wxString& item);
-    virtual int DoInsert(const wxString& item, unsigned int pos);
+    virtual int DoInsertItems(const wxArrayStringsAdapter & items,
+                              unsigned int pos,
+                              void **clientData, wxClientDataType type);
 
     virtual void DoSetItemClientData(unsigned int n, void *clientData)
         { m_HTMLclientData[n] = clientData; }
 
     virtual void *DoGetItemClientData(unsigned int n) const
         { return m_HTMLclientData[n]; }
-    virtual void DoSetItemClientObject(unsigned int n, wxClientData *clientData)
-        { m_HTMLclientData[n] = (void *)clientData; }
-    virtual wxClientData *DoGetItemClientObject(unsigned int n) const
-        { return (wxClientData *)m_HTMLclientData[n]; }
 
     // calls wxHtmlListBox::SetItemCount() and RefreshAll()
     void UpdateCount();

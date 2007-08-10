@@ -78,10 +78,8 @@ public:
                 const wxString& name = wxChoiceNameStr);
 
     // implement base class pure virtuals
-    virtual int DoAppend(const wxString& item);
-    virtual int DoInsert(const wxString& item, unsigned int pos);
-    virtual void Delete(unsigned int n);
-    virtual void Clear() ;
+    virtual void DoDeleteOneItem(unsigned int n);
+    virtual void DoClear();
 
     virtual unsigned int GetCount() const;
     virtual int GetSelection() const;
@@ -100,10 +98,14 @@ public:
     virtual bool MSWCommand(WXUINT param, WXWORD id);
 
 protected:
+    virtual int DoInsertItems(const wxArrayStringsAdapter& items,
+                              unsigned int pos,
+                              void **clientData, wxClientDataType type);
+
     virtual void DoSetItemClientData(unsigned int n, void* clientData);
     virtual void* DoGetItemClientData(unsigned int n) const;
-    virtual void DoSetItemClientObject(unsigned int n, wxClientData* clientData);
-    virtual wxClientData* DoGetItemClientObject(unsigned int n) const;
+
+    virtual WXHWND MSWGetItemsHWND() const { return m_hwndBuddy; }
 
     // MSW implementation
     virtual void DoGetPosition(int *x, int *y) const;
@@ -121,9 +123,6 @@ protected:
                        long style,
                        const wxValidator& validator,
                        const wxString& name);
-
-    // free all memory we have (used by Clear() and dtor)
-    void Free();
 
     // the data for the "buddy" list
     WXHWND     m_hwndBuddy;

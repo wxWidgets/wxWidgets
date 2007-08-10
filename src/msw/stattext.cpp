@@ -120,6 +120,7 @@ WXDWORD wxStaticText::MSWGetStyle(long style, WXDWORD *exstyle) const
     else
         msStyle |= SS_LEFT;
 
+#ifdef SS_ENDELLIPSIS
     // this style is necessary to receive mouse events
     // Win NT and later have the SS_ENDELLIPSIS style which is useful to us:
     if (wxGetOsVersion() == wxOS_WINDOWS_NT)
@@ -130,6 +131,7 @@ WXDWORD wxStaticText::MSWGetStyle(long style, WXDWORD *exstyle) const
         if ( style & wxST_ELLIPSIZE_END )
             msStyle |= SS_ENDELLIPSIS;
     }
+#endif // SS_ENDELLIPSIS
 
     msStyle |= SS_NOTIFY;
 
@@ -194,6 +196,7 @@ void wxStaticText::DoSetSize(int x, int y, int w, int h, int sizeFlags)
     // note: we first need to set the size and _then_ call UpdateLabel
     wxStaticTextBase::DoSetSize(x, y, w, h, sizeFlags);
 
+#ifdef SS_ENDELLIPSIS
     // do we need to ellipsize the contents?
     long styleReal = ::GetWindowLong(GetHwnd(), GWL_STYLE);
     if ( !(styleReal & SS_ENDELLIPSIS) )
@@ -203,6 +206,7 @@ void wxStaticText::DoSetSize(int x, int y, int w, int h, int sizeFlags)
         UpdateLabel();
     }
     //else: we don't or the OS will do it for us
+#endif // SS_ENDELLIPSIS
 
     // we need to refresh the window after changing its size as the standard
     // control doesn't always update itself properly
@@ -211,6 +215,7 @@ void wxStaticText::DoSetSize(int x, int y, int w, int h, int sizeFlags)
 
 void wxStaticText::SetLabel(const wxString& label)
 {
+#ifdef SS_ENDELLIPSIS
     long styleReal = ::GetWindowLong(GetHwnd(), GWL_STYLE);
     if ( HasFlag(wxST_ELLIPSIZE_END) &&
           wxGetOsVersion() == wxOS_WINDOWS_NT )
@@ -231,15 +236,18 @@ void wxStaticText::SetLabel(const wxString& label)
         styleReal &= ~SS_ENDELLIPSIS;
         ::SetWindowLong(GetHwnd(), GWL_STYLE, styleReal);
     }
+#endif // SS_ENDELLIPSIS
 
     // this call will save the label in m_labelOrig and set it into this window
     // (through wxWindow::SetLabel)
     m_labelOrig = label;
 
-    if ((styleReal & SS_ENDELLIPSIS) == 0)
-        DoSetLabel(GetEllipsizedLabelWithoutMarkup());
-    else
+#ifdef SS_ENDELLIPSIS
+    if ( styleReal & SS_ENDELLIPSIS )
         DoSetLabel(RemoveMarkup(label));
+    else
+#endif // SS_ENDELLIPSIS
+        DoSetLabel(GetEllipsizedLabelWithoutMarkup());
 
     // adjust the size of the window to fit to the label unless autoresizing is
     // disabled

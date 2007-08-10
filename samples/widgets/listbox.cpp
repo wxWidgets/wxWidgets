@@ -44,6 +44,7 @@
 
 #include "wx/checklst.h"
 
+#include "itemcontainer.h"
 #include "widgets.h"
 
 #include "icons/listbox.xpm"
@@ -66,19 +67,21 @@ enum
     ListboxPage_Delete,
     ListboxPage_DeleteText,
     ListboxPage_DeleteSel,
-    ListboxPage_Listbox
+    ListboxPage_Listbox,
+    ListboxPage_ContainerTests
 };
 
 // ----------------------------------------------------------------------------
 // ListboxWidgetsPage
 // ----------------------------------------------------------------------------
 
-class ListboxWidgetsPage : public WidgetsPage
+class ListboxWidgetsPage : public ItemContainerWidgetsPage
 {
 public:
     ListboxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
     virtual wxControl *GetWidget() const { return m_lbox; }
+    virtual wxItemContainer* GetContainer() const { return m_lbox; }
     virtual void RecreateWidget() { CreateLbox(); }
 
     // lazy creation of the content
@@ -177,6 +180,7 @@ BEGIN_EVENT_TABLE(ListboxWidgetsPage, WidgetsPage)
     EVT_BUTTON(ListboxPage_Add, ListboxWidgetsPage::OnButtonAdd)
     EVT_BUTTON(ListboxPage_AddSeveral, ListboxWidgetsPage::OnButtonAddSeveral)
     EVT_BUTTON(ListboxPage_AddMany, ListboxWidgetsPage::OnButtonAddMany)
+    EVT_BUTTON(ListboxPage_ContainerTests, ItemContainerWidgetsPage::OnButtonTestItemContainer)
 
     EVT_TEXT_ENTER(ListboxPage_AddText, ListboxWidgetsPage::OnButtonAdd)
     EVT_TEXT_ENTER(ListboxPage_DeleteText, ListboxWidgetsPage::OnButtonDelete)
@@ -214,7 +218,7 @@ IMPLEMENT_WIDGETS_PAGE(ListboxWidgetsPage, _T("Listbox"),
 
 ListboxWidgetsPage::ListboxWidgetsPage(WidgetsBookCtrl *book,
                                        wxImageList *imaglist)
-                  : WidgetsPage(book, imaglist, listbox_xpm)
+                  : ItemContainerWidgetsPage(book, imaglist, listbox_xpm)
 {
     // init everything
     m_radioSelMode = (wxRadioBox *)NULL;
@@ -313,6 +317,9 @@ void ListboxWidgetsPage::CreateContent()
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
     btn = new wxButton(this, ListboxPage_Clear, _T("&Clear"));
+    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+
+    btn = new wxButton(this, ListboxPage_ContainerTests, _T("Run &tests"));
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
     // right pane

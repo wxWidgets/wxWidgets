@@ -23,6 +23,10 @@ this class stores various settings in it.
 
 <wx/html/htmprint.h>
 
+\wxheading{Library}
+
+\helpref{wxHtml}{librarieslist}
+
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -37,6 +41,26 @@ Constructor.
 \docparam{name}{Name of the printing object. Used by preview frames and setup dialogs.}
 
 \docparam{parentWindow}{pointer to the window that will own the preview frame and setup dialogs. May be NULL.}
+
+\membersection{wxHtmlEasyPrinting::GetParentWindow}\label{wxhtmleasyprintinggetparentwindow}
+
+\constfunc{wxWindow*}{GetParentWindow}{\void}
+
+Gets the parent window for dialogs.
+
+\membersection{wxHtmlEasyPrinting::GetPrintData}\label{wxhtmleasyprintinggetprintdata}
+
+\func{wxPrintData*}{GetPrintData}{\void}
+
+Returns pointer to \helpref{wxPrintData}{wxprintdata} instance used by this class. You can
+set its parameters (via SetXXXX methods).
+
+\membersection{wxHtmlEasyPrinting::GetPageSetupData}\label{wxhtmleasyprintinggetpagesetupdata}
+
+\func{wxPageSetupDialogData*}{GetPageSetupData}{\void}
+
+Returns a pointer to \helpref{wxPageSetupDialogData}{wxpagesetupdialogdata} instance used by 
+this class. You can set its parameters (via SetXXXX methods).
 
 \membersection{wxHtmlEasyPrinting::PreviewFile}\label{wxhtmleasyprintingpreviewfile}
 
@@ -132,17 +156,9 @@ Set page footer. The following macros can be used inside it:
 
 \docparam{pg}{one of wxPAGE\_ODD, wxPAGE\_EVEN and wxPAGE\_ALL constants.}
 
-\membersection{wxHtmlEasyPrinting::GetPrintData}\label{wxhtmleasyprintinggetprintdata}
+\membersection{wxHtmlEasyPrinting::SetParentWindow}\label{wxhtmleasyprintingsetparentwindow}
 
-\func{wxPrintData*}{GetPrintData}{\void}
+\func{void}{SetParentWindow}{\param{wxWindow*}{ window}}
 
-Returns pointer to \helpref{wxPrintData}{wxprintdata} instance used by this class. You can
-set its parameters (via SetXXXX methods).
-
-\membersection{wxHtmlEasyPrinting::GetPageSetupData}\label{wxhtmleasyprintinggetpagesetupdata}
-
-\func{wxPageSetupDialogData*}{GetPageSetupData}{\void}
-
-Returns a pointer to \helpref{wxPageSetupDialogData}{wxpagesetupdialogdata} instance used by 
-this class. You can set its parameters (via SetXXXX methods).
+Sets the parent window for dialogs.
 

@@ -480,6 +480,10 @@ SOURCE=.\checkbox.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\choice.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\clrpicker.cpp
 # End Source File
 # Begin Source File
@@ -513,6 +517,10 @@ SOURCE=.\gauge.cpp
 # Begin Source File
 
 SOURCE=.\hyperlnk.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\itemcontainer.cpp
 # End Source File
 # Begin Source File
 

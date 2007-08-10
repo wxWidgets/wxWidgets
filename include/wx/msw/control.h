@@ -72,9 +72,6 @@ public:
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
 protected:
-    // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const;
-
     // return default best size (doesn't really make any sense, override this)
     virtual wxSize DoGetBestSize() const;
 

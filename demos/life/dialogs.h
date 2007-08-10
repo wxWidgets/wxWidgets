@@ -12,18 +12,6 @@
 #ifndef _LIFE_DIALOGS_H_
 #define _LIFE_DIALOGS_H_
 
-// for compilers that support precompilation, includes "wx/wx.h"
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
-// for all others, include the necessary headers
-#ifndef WX_PRECOMP
-    #include "wx/wx.h"
-#endif
-
 #include "life.h"
 #include "game.h"
 

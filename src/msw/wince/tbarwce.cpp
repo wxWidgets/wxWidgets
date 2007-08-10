@@ -54,6 +54,7 @@
 #include <shellapi.h>
 #if defined(WINCE_WITHOUT_COMMANDBAR)
   #include <aygshell.h>
+  #include "wx/msw/wince/resources.h"
 #endif
 #include "wx/msw/wince/missing.h"
 
@@ -192,30 +193,26 @@ bool wxToolMenuBar::Create(wxWindow *parent,
     return true;
 }
 
-bool wxToolMenuBar::MSWCreateToolbar(const wxPoint& WXUNUSED(pos), const wxSize& WXUNUSED(size), wxMenuBar* menuBar)
+bool wxToolMenuBar::MSWCreateToolbar(const wxPoint& WXUNUSED(pos),
+                                     const wxSize& WXUNUSED(size),
+                                     wxMenuBar *menuBar)
 {
     SetMenuBar(menuBar);
     if (m_menuBar)
         m_menuBar->SetToolBar(this);
 
-#if defined(WINCE_WITHOUT_COMMANDBAR)
-    // Create the menubar.
-    SHMENUBARINFO mbi;
+    HWND hwndParent = GetHwndOf(GetParent());
+    wxCHECK_MSG( hwndParent, false, _T("should have valid parent HWND") );
 
-    memset (&mbi, 0, sizeof (SHMENUBARINFO));
-    mbi.cbSize     = sizeof (SHMENUBARINFO);
-    mbi.hwndParent = (HWND) GetParent()->GetHWND();
-#ifdef __SMARTPHONE__
-    mbi.nToolBarId = 5002;
-#else
-    mbi.nToolBarId = 5000;
-#endif
-    mbi.nBmpId     = 0;
-    mbi.cBmpImages = 0;
-    mbi.dwFlags = 0 ; // SHCMBF_EMPTYBAR;
+#if defined(WINCE_WITHOUT_COMMANDBAR)
+    // create the menubar.
+    WinStruct<SHMENUBARINFO> mbi;
+
+    mbi.hwndParent = hwndParent;
+    mbi.nToolBarId = wxIDM_SHMENU;
     mbi.hInstRes = wxGetInstance();
 
-    if (!SHCreateMenuBar(&mbi))
+    if ( !SHCreateMenuBar(&mbi) )
     {
         wxFAIL_MSG( _T("SHCreateMenuBar failed") );
         return false;
@@ -223,7 +220,7 @@ bool wxToolMenuBar::MSWCreateToolbar(const wxPoint& WXUNUSED(pos), const wxSize&
 
     SetHWND((WXHWND) mbi.hwndMB);
 #else
-    HWND hWnd = CommandBar_Create(wxGetInstance(), (HWND) GetParent()->GetHWND(), GetId());
+    HWND hWnd = CommandBar_Create(wxGetInstance(), hwndParent, GetId());
     SetHWND((WXHWND) hWnd);
 #endif
 
@@ -250,16 +247,14 @@ wxToolMenuBar::~wxToolMenuBar()
 // Return HMENU for the menu associated with the commandbar
 WXHMENU wxToolMenuBar::GetHMenu()
 {
-#if defined(__HANDHELDPC__)
-    return 0;
-#else
+#if !defined(__HANDHELDPC__)
     if (GetHWND())
     {
-        return (WXHMENU) (HMENU)::SendMessage((HWND) GetHWND(), SHCMBM_GETMENU, (WPARAM)0, (LPARAM)0);
+        return (WXHMENU)::SendMessage(GetHwnd(), SHCMBM_GETMENU, 0, 0);
     }
-    else
-        return 0;
 #endif
+
+    return NULL;
 }
 
 // ----------------------------------------------------------------------------
@@ -404,7 +399,7 @@ bool wxToolMenuBar::Realize()
                     const wxString& label = tool->GetLabel();
                     if ( !label.empty() )
                     {
-                        button.iString = (int)label.c_str();
+                        button.iString = (int)label.wx_str();
                     }
                 }
 

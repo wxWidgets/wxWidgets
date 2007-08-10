@@ -241,6 +241,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
                          long style, const wxValidator& validator,
                          const wxString& name )
 {
+    m_strings = NULL;
     m_ignoreNextUpdate = false;
     m_prevSelection = 0;
 
@@ -251,21 +252,15 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
         return false;
     }
 
+    if(HasFlag(wxCB_SORT))
+        m_strings = new wxSortedArrayString();
+
 #ifdef __WXGTK24__
     if (!gtk_check_version(2,4,0))
     {
         m_widget = gtk_combo_box_entry_new_text();
-        GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
 
         gtk_entry_set_editable( GTK_ENTRY( GTK_BIN(m_widget)->child ), TRUE );
-
-        for (int i = 0; i < n; i++)
-        {
-            gtk_combo_box_append_text( combobox,  wxGTK_CONV( choices[i] ) );
-
-            m_clientDataList.Append( (wxObject*)NULL );
-            m_clientObjectList.Append( (wxObject*)NULL );
-        }
     }
     else
 #endif
@@ -288,22 +283,9 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
         if (style & wxNO_BORDER)
             g_object_set (combo->entry, "has-frame", FALSE, NULL );
-
-        GtkWidget *list = combo->list;
-
-        for (int i = 0; i < n; i++)
-        {
-            GtkWidget *list_item = gtk_list_item_new_with_label( wxGTK_CONV( choices[i] ) );
-
-            m_clientDataList.Append( (wxObject*)NULL );
-            m_clientObjectList.Append( (wxObject*)NULL );
-
-            gtk_container_add( GTK_CONTAINER(list), list_item );
-
-            gtk_widget_show( list_item );
-        }
     }
 
+    Append(n, choices);
 
     m_parent->DoAddChild( this );
 
@@ -372,16 +354,9 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
 wxComboBox::~wxComboBox()
 {
-    wxList::compatibility_iterator node = m_clientObjectList.GetFirst();
-    while (node)
-    {
-        wxClientData *cd = (wxClientData*)node->GetData();
-        if (cd) delete cd;
-        node = node->GetNext();
-    }
-    m_clientObjectList.Clear();
+    Clear();
 
-    m_clientDataList.Clear();
+    delete m_strings;
 }
 
 void wxComboBox::SetFocus()
@@ -395,15 +370,36 @@ void wxComboBox::SetFocus()
     gtk_widget_grab_focus( m_focusWidget );
 }
 
-int wxComboBox::DoAppend( const wxString &item )
+int wxComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
+                              unsigned int pos,
+                              void **clientData, wxClientDataType type)
 {
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid combobox") );
+
+    wxASSERT_MSG( !IsSorted() || (pos == GetCount()),
+                 _T("In a sorted combobox data could only be appended"));
+
+    const int count = items.GetCount();
+
+    int n = wxNOT_FOUND;
 
 #ifdef __WXGTK24__
     if (!gtk_check_version(2,4,0))
     {
         GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
-        gtk_combo_box_append_text( combobox,  wxGTK_CONV( item ) );
+        for( int i = 0; i < count; ++i )
+        {
+            n = pos + i;
+            // If sorted, use this wxSortedArrayStrings to determine
+            // the right insertion point
+            if(m_strings)
+                n = m_strings->Add(items[i]);
+
+            gtk_combo_box_insert_text( combobox, n, wxGTK_CONV( items[i] ) );
+
+            m_clientData.Insert( NULL, n );
+            AssignNewItemClientData(n, clientData, i, type);
+        }
     }
     else
 #endif
@@ -411,141 +407,54 @@ int wxComboBox::DoAppend( const wxString &item )
         DisableEvents();
 
         GtkWidget *list = GTK_COMBO(m_widget)->list;
-        GtkWidget *list_item = gtk_list_item_new_with_label( wxGTK_CONV( item ) );
-
-        gtk_container_add( GTK_CONTAINER(list), list_item );
-
-        if (GTK_WIDGET_REALIZED(m_widget))
+        for( int i = 0; i < count; ++i )
         {
-            gtk_widget_realize( list_item );
-            gtk_widget_realize( GTK_BIN(list_item)->child );
-        }
+            n = pos + i;
+            // If sorted, use this wxSortedArrayStrings to determine
+            // the right insertion point
+            if(m_strings)
+                n = m_strings->Add(items[i]);
 
-        // Apply current widget style to the new list_item
-        GtkRcStyle *style = CreateWidgetStyle();
-        if (style)
-        {
-            gtk_widget_modify_style(list_item, style);
-            GtkBin *bin = GTK_BIN( list_item );
-            GtkWidget *label = bin->child;
-            gtk_widget_modify_style( label, style );
-            gtk_rc_style_unref( style );
-        }
+            GtkWidget *list_item = gtk_list_item_new_with_label( wxGTK_CONV( items[i] ) );
 
-        gtk_widget_show( list_item );
+            // TODO construct a list with all items and call gtk_list_insert_items once?
+            GList *gitem_list = g_list_alloc ();
+            gitem_list->data = list_item;
+            gtk_list_insert_items( GTK_LIST (list), gitem_list, n );
+
+            m_clientData.Insert( NULL, n );
+            AssignNewItemClientData(n, clientData, i, type);
+
+            if (GTK_WIDGET_REALIZED(m_widget))
+            {
+                gtk_widget_realize( list_item );
+                gtk_widget_realize( GTK_BIN(list_item)->child );
+
+                ApplyWidgetStyle();
+            }
+
+            gtk_widget_show( list_item );
+        }
 
         EnableEvents();
     }
 
-    const unsigned int count = GetCount();
-
-    if ( m_clientDataList.GetCount() < count )
-        m_clientDataList.Append( (wxObject*) NULL );
-    if ( m_clientObjectList.GetCount() < count )
-        m_clientObjectList.Append( (wxObject*) NULL );
-
     InvalidateBestSize();
 
-    return count - 1;
-}
-
-int wxComboBox::DoInsert(const wxString &item, unsigned int pos)
-{
-    wxCHECK_MSG( !(GetWindowStyle() & wxCB_SORT), -1,
-                    wxT("can't insert into sorted list"));
-
-    wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid combobox") );
-    wxCHECK_MSG( IsValidInsert(pos), -1, wxT("invalid index") );
-
-    unsigned int count = GetCount();
-
-    if (pos == count)
-        return Append(item);
-
-#ifdef __WXGTK24__
-    if (!gtk_check_version(2,4,0))
-    {
-        GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
-        gtk_combo_box_insert_text( combobox, pos, wxGTK_CONV( item ) );
-    }
-    else
-#endif
-    {
-        DisableEvents();
-
-        GtkWidget *list = GTK_COMBO(m_widget)->list;
-        GtkWidget *list_item = gtk_list_item_new_with_label( wxGTK_CONV( item ) );
-
-        GList *gitem_list = g_list_alloc ();
-        gitem_list->data = list_item;
-        gtk_list_insert_items( GTK_LIST (list), gitem_list, pos );
-
-        if (GTK_WIDGET_REALIZED(m_widget))
-        {
-            gtk_widget_realize( list_item );
-            gtk_widget_realize( GTK_BIN(list_item)->child );
-
-            ApplyWidgetStyle();
-        }
-
-        gtk_widget_show( list_item );
-
-        EnableEvents();
-    }
-
-    count = GetCount();
-
-    if ( m_clientDataList.GetCount() < count )
-        m_clientDataList.Insert( pos, (wxObject*) NULL );
-    if ( m_clientObjectList.GetCount() < count )
-        m_clientObjectList.Insert( pos, (wxObject*) NULL );
-
-    InvalidateBestSize();
-
-    return pos;
+    return n;
 }
 
 void wxComboBox::DoSetItemClientData(unsigned int n, void* clientData)
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
-
-    wxList::compatibility_iterator node = m_clientDataList.Item( n );
-    if (!node) return;
-
-    node->SetData( (wxObject*) clientData );
+    m_clientData[n] = clientData;
 }
 
 void* wxComboBox::DoGetItemClientData(unsigned int n) const
 {
-    wxCHECK_MSG( m_widget != NULL, NULL, wxT("invalid combobox") );
-
-    wxList::compatibility_iterator node = m_clientDataList.Item( n );
-
-    return node ? node->GetData() : NULL;
+    return m_clientData[n];
 }
 
-void wxComboBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
-{
-    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
-
-    wxList::compatibility_iterator node = m_clientObjectList.Item( n );
-    if (!node) return;
-
-    // wxItemContainer already deletes data for us
-
-    node->SetData( (wxObject*) clientData );
-}
-
-wxClientData* wxComboBox::DoGetItemClientObject(unsigned int n) const
-{
-    wxCHECK_MSG( m_widget != NULL, (wxClientData*)NULL, wxT("invalid combobox") );
-
-    wxList::compatibility_iterator node = m_clientObjectList.Item( n );
-
-    return node ? (wxClientData*) node->GetData() : NULL;
-}
-
-void wxComboBox::Clear()
+void wxComboBox::DoClear()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
@@ -566,23 +475,17 @@ void wxComboBox::Clear()
         gtk_list_clear_items( GTK_LIST(list), 0, GetCount() );
     }
 
-    wxList::compatibility_iterator node = m_clientObjectList.GetFirst();
-    while (node)
-    {
-        wxClientData *cd = (wxClientData*)node->GetData();
-        delete cd;
-        node = node->GetNext();
-    }
-    m_clientObjectList.Clear();
+    m_clientData.Clear();
 
-    m_clientDataList.Clear();
+    if(m_strings)
+        m_strings->Clear();
 
     EnableEvents();
 
     InvalidateBestSize();
 }
 
-void wxComboBox::Delete(unsigned int n)
+void wxComboBox::DoDeleteOneItem(unsigned int n)
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
@@ -616,17 +519,9 @@ void wxComboBox::Delete(unsigned int n)
         EnableEvents();
     }
 
-    wxList::compatibility_iterator node = m_clientObjectList.Item( n );
-    if (node)
-    {
-        wxClientData *cd = (wxClientData*)node->GetData();
-        if (cd) delete cd;
-        m_clientObjectList.Erase( node );
-    }
-
-    node = m_clientDataList.Item( n );
-    if (node)
-        m_clientDataList.Erase( node );
+    m_clientData.RemoveAt( n );
+    if(m_strings)
+        m_strings->RemoveAt( n );
 
     InvalidateBestSize();
 }
@@ -946,7 +841,7 @@ void wxComboBox::SetValue( const wxString& value )
 
     wxString tmp;
     if (!value.IsNull()) tmp = value;
-    
+
     DisableEvents();
     gtk_entry_set_text( entry, wxGTK_CONV( tmp ) );
     EnableEvents();

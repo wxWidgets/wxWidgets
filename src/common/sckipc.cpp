@@ -443,7 +443,7 @@ wxChar *wxTCPConnection::Request (const wxString& item, int *size, wxIPCFormat f
   }
 }
 
-bool wxTCPConnection::Poke (const wxString& item, wxChar *data, int size, wxIPCFormat format)
+bool wxTCPConnection::Poke (const wxString& item, const wxChar *data, int size, wxIPCFormat format)
 {
   if (!m_sock->IsConnected())
     return false;
@@ -499,7 +499,7 @@ bool wxTCPConnection::StopAdvise (const wxString& item)
 
 // Calls that SERVER can make
 bool wxTCPConnection::Advise (const wxString& item,
-                              wxChar *data, int size, wxIPCFormat format)
+                              const wxChar *data, int size, wxIPCFormat format)
 {
   if (!m_sock->IsConnected())
     return false;
@@ -648,7 +648,7 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
     format = (wxIPCFormat)codeci->Read8();
 
     int user_size = -1;
-    wxChar *user_data = connection->OnRequest (topic_name, item, &user_size, format);
+    const wxChar *user_data = connection->OnRequest (topic_name, item, &user_size, format);
 
     if (user_data)
     {

@@ -9,6 +9,7 @@
             bmpcombobox.cpp
             button.cpp
             checkbox.cpp
+            choice.cpp
             clrpicker.cpp
             combobox.cpp
             datepick.cpp
@@ -18,6 +19,7 @@
             fontpicker.cpp
             gauge.cpp
             hyperlnk.cpp
+            itemcontainer.cpp
             listbox.cpp
             notebook.cpp
             odcombobox.cpp

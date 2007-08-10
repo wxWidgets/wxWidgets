@@ -233,6 +233,9 @@ public:
     // we don't want focus for ourselves
     virtual bool AcceptsFocus() const { return false; }
 
+    // returns true if the platform should explicitly apply a theme border
+    virtual bool CanApplyThemeBorder() const { return false; }
+
 protected:
     // flags for DoSetSelection()
     enum

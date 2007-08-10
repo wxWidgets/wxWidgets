@@ -344,13 +344,13 @@ void wxComboBox::SetEditable(bool editable)
 // wxComboBox methods forwarded to wxListBox
 // ----------------------------------------------------------------------------
 
-void wxComboBox::Clear()
+void wxComboBox::DoClear()
 {
     GetLBox()->Clear();
     if ( GetTextCtrl() ) GetTextCtrl()->SetValue(wxEmptyString);
 }
 
-void wxComboBox::Delete(unsigned int n)
+void wxComboBox::DoDeleteOneItem(unsigned int n)
 {
     wxCHECK_RET( IsValid(n), _T("invalid index in wxComboBox::Delete") );
 
@@ -410,21 +410,11 @@ int wxComboBox::GetSelection() const
 #endif
 }
 
-int wxComboBox::DoAppend(const wxString& item)
+int wxComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
+                              unsigned int pos,
+                              void **clientData, wxClientDataType type)
 {
-    return GetLBox()->Append(item);
-}
-
-int wxComboBox::DoInsert(const wxString& item, unsigned int pos)
-{
-    wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
-    wxCHECK_MSG(IsValidInsert(pos), -1, wxT("invalid index"));
-
-    if (pos == GetCount())
-        return DoAppend(item);
-
-    GetLBox()->Insert(item, pos);
-    return pos;
+    return GetLBox()->DoInsertItems(items, pos, clientData, type);
 }
 
 void wxComboBox::DoSetItemClientData(unsigned int n, void* clientData)
@@ -435,16 +425,6 @@ void wxComboBox::DoSetItemClientData(unsigned int n, void* clientData)
 void *wxComboBox::DoGetItemClientData(unsigned int n) const
 {
     return GetLBox()->GetClientData(n);
-}
-
-void wxComboBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
-{
-    GetLBox()->SetClientObject(n, clientData);
-}
-
-wxClientData* wxComboBox::DoGetItemClientObject(unsigned int n) const
-{
-    return GetLBox()->GetClientObject(n);
 }
 
 bool wxComboBox::IsEditable() const

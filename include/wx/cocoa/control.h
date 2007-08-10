@@ -63,6 +63,15 @@ public:
     virtual void CocoaSetEnabled(bool enable);
 protected:
     virtual wxSize DoGetBestSize() const;
+
+    // Provides a common implementation of title setting which strips mnemonics
+    // and then calls setTitle: with the stripped string.  May be implemented
+    // to call setTitleWithMnemonic: on OpenStep-compatible systems.  Only
+    // intended for use by views or cells which implement at least setTitle:
+    // and possibly setTitleWithMnemonic: such as NSBox and NSButton or NSCell
+    // classes, for example as used by wxRadioBox.  Not usable with classes like
+    // NSTextField which expect setStringValue:.
+    static void CocoaSetLabelForObject(const wxString& labelWithWxMnemonic, struct objc_object *anObject);
 };
 
 #endif

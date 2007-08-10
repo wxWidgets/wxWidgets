@@ -160,7 +160,7 @@ void wxFontEnumeratorHelper::DoEnumerate()
 
 #ifdef __WXWINCE__
     ::EnumFontFamilies(hDC,
-                       m_facename.empty() ? NULL : m_facename.c_str(),
+                       m_facename.empty() ? NULL : m_facename.wx_str(),
                        (wxFONTENUMPROC)wxFontEnumeratorProc,
                        (LPARAM)this) ;
 #else // __WIN32__

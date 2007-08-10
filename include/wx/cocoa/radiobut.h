@@ -64,6 +64,8 @@ private:
 public:
     virtual void SetValue(bool);
     virtual bool GetValue() const;
+    virtual void SetLabel(const wxString& label);
+    virtual wxString GetLabel() const;
 protected:
     wxRadioButtonList m_radioSlaves;
     wxRadioButton *m_radioMaster;

@@ -35,6 +35,7 @@
     #include "wx/dcclient.h"
     #include "wx/log.h"
     #include "wx/settings.h"
+    #include "wx/ctrlsub.h"
 #endif
 
 #if wxUSE_LISTCTRL
@@ -224,18 +225,6 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
 // ----------------------------------------------------------------------------
 // various accessors
 // ----------------------------------------------------------------------------
-
-wxBorder wxControl::GetDefaultBorder() const
-{
-    // we want to automatically give controls a sunken style (confusingly,
-    // it may not really mean sunken at all as we map it to WS_EX_CLIENTEDGE
-    // which is not sunken at all under Windows XP -- rather, just the default)
-#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
-    return wxBORDER_SIMPLE;
-#else
-    return wxBORDER_SUNKEN;
-#endif
-}
 
 WXDWORD wxControl::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
@@ -431,6 +420,42 @@ WXHBRUSH wxControl::MSWControlColorDisabled(WXHDC pDC)
     return DoMSWControlColor(pDC,
                              wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE),
                              GetHWND());
+}
+
+// ----------------------------------------------------------------------------
+// wxControlWithItems
+// ----------------------------------------------------------------------------
+
+void wxControlWithItems::MSWAllocStorage(const wxArrayStringsAdapter& items,
+                                         unsigned wm)
+{
+    const unsigned numItems = items.GetCount();
+    unsigned long totalTextLength = numItems; // for trailing '\0' characters
+    for ( unsigned i = 0; i < numItems; ++i )
+    {
+        totalTextLength += items[i].length();
+    }
+
+    if ( SendMessage((HWND)MSWGetItemsHWND(), wm, numItems,
+                     (LPARAM)totalTextLength*sizeof(wxChar)) == LB_ERRSPACE )
+    {
+        wxLogLastError(wxT("SendMessage(XX_INITSTORAGE)"));
+    }
+}
+
+int wxControlWithItems::MSWInsertOrAppendItem(unsigned pos,
+                                              const wxString& item,
+                                              unsigned wm)
+{
+    LRESULT n = SendMessage((HWND)MSWGetItemsHWND(), wm, pos,
+                            (LPARAM)item.wx_str());
+    if ( n == CB_ERR || n == CB_ERRSPACE )
+    {
+        wxLogLastError(wxT("SendMessage(XX_ADD/INSERTSTRING)"));
+        return wxNOT_FOUND;
+    }
+
+    return n;
 }
 
 // ---------------------------------------------------------------------------

@@ -47,6 +47,9 @@ public:
     virtual bool SetForegroundColour(const wxColour& colour);
     virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
 
+    // returns true if the platform should explicitly apply a theme border
+    virtual bool CanApplyThemeBorder() const { return false; }
+
 protected:
     virtual wxSize DoGetBestSize() const;
 

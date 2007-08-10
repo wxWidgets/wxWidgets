@@ -425,7 +425,7 @@ wxCursor::wxCursor(int stock_cursor_id)
     // Stage 3: Give up, complain, and use a normal arrow
     if(M_CURSORDATA->m_hCursor == nil)
     {
-        wxLogDebug("Could not find suitable cursor for wxStockCursor = %d.  Using normal pointer.", stock_cursor_id);
+        wxLogDebug(wxT("Could not find suitable cursor for wxStockCursor = %d.  Using normal pointer."), stock_cursor_id);
         M_CURSORDATA->m_hCursor = [[NSCursor arrowCursor] retain];
     }
 

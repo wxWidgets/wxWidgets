@@ -591,6 +591,8 @@
 
 #define wxUSE_INKEDIT  0
 
+#define wxUSE_INICONF 0
+
 
 #define wxUSE_DATEPICKCTRL_GENERIC 0
 
@@ -716,10 +718,6 @@
  */
 #define wxUSE_BUILTIN_IODBC 0
 /*
- * Use freetype
- */
-#define wxUSE_FREETYPE 0
-/*
  * Have glibc2
  */
 #define wxHAVE_GLIBC2 0
@@ -731,39 +729,12 @@
  * Define if you have pthread_cleanup_push/pop()
  */
 #undef wxHAVE_PTHREAD_CLEANUP
-/*
- * Use consistent PostScript fonts for AFM and printing (!)
- */
-#define wxUSE_NORMALIZED_PS_FONTS 0
 
 /* compatibility */
-#define WX_NORMALIZED_PS_FONTS wxUSE_NORMALIZED_PS_FONTS
-
 /*
  * Use OpenGL
  */
 #define wxUSE_OPENGL 0
-
-/*
- * Work around a bug in GNU libc 5.x wcstombs() implementation.
- *
- * Note that you must link your programs with libc.a if you enable this and you
- * have libc 5 (you should enable this for libc6 where wcsrtombs() is
- * thread-safe version of wcstombs()).
- */
-#define wxUSE_WCSRTOMBS 0
-
-/*
- * Use the new experimental implementation of wxString::Printf()?
- *
- * Warning: enabling this may cause internal compiler errors with gcc!
- */
-#define wxUSE_EXPERIMENTAL_PRINTF 0
-
-/*
- * Use wxGetResource & wxWriteResource (change .Xdefaults)
- */
-#define wxUSE_X_RESOURCES 0
 
 /*
  * Use MS HTML Help via libmspack (Unix)
@@ -980,9 +951,6 @@
 /* Define if wchar_t is distinct type in your compiler. */
 #undef wxWCHAR_T_IS_REAL_TYPE
 
-/* Define if you have the dlopen function.  */
-#undef HAVE_DLOPEN
-
 /* Define if you have the dlerror function.  */
 #undef HAVE_DLERROR
 
@@ -1040,9 +1008,6 @@
 /* Define if you have the mkstemp function.  */
 #undef HAVE_MKSTEMP
 
-/* Define if you have the nanosleep function.  */
-#undef HAVE_NANOSLEEP
-
 /* Define if you have the putenv function.  */
 #undef HAVE_PUTENV
 
@@ -1051,9 +1016,6 @@
 
 /* Define if you have the setenv function.  */
 #undef HAVE_SETENV
-
-/* Define if you have the shl_load function.  */
-#undef HAVE_SHL_LOAD
 
 /* Define if you have strtok_r function. */
 #undef HAVE_STRTOK_R
@@ -1064,8 +1026,8 @@
 /* Define if you have the uname function.  */
 #undef HAVE_UNAME
 
-/* Define if you have the usleep function.  */
-#undef HAVE_USLEEP
+/* Define if you have the unsetenv function.  */
+#undef HAVE_UNSETENV
 
 /* Define if you have the <X11/XKBlib.h> header file.  */
 #undef HAVE_X11_XKBLIB_H

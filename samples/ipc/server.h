@@ -70,14 +70,14 @@ public:
     ~MyConnection();
 
     virtual bool OnExecute(const wxString& topic, wxChar *data, int size, wxIPCFormat format);
-    virtual wxChar *OnRequest(const wxString& topic, const wxString& item, int *size, wxIPCFormat format);
+    virtual const wxChar *OnRequest(const wxString& topic, const wxString& item, int *size, wxIPCFormat format);
     virtual bool OnPoke(const wxString& topic, const wxString& item, wxChar *data, int size, wxIPCFormat format);
     virtual bool OnStartAdvise(const wxString& topic, const wxString& item);
     virtual bool OnStopAdvise(const wxString& topic, const wxString& item);
-    virtual bool Advise(const wxString& item, wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
+    virtual bool Advise(const wxString& item, const wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
     virtual bool OnDisconnect();
 protected:
-    void Log(const wxString& command, const wxString& topic, const wxString& item, wxChar *data, int size, wxIPCFormat format);
+    void Log(const wxString& command, const wxString& topic, const wxString& item, const wxChar *data, int size, wxIPCFormat format);
 public:
     wxString        m_sAdvise;
 protected:

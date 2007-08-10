@@ -71,9 +71,12 @@ Changes in behaviour which may result in compilation errors
 
 - Virtual wxHtmlParser::AddText() takes wxString, not wxChar*, argument now.
 
-- Funtions that took wxChar* arguments that could by NULL in wxWidgets 2.8.
+- Functions that took wxChar* arguments that could by NULL in wxWidgets 2.8.
   are deprecated and passing NULL to them won't compile anymore, wxEmptyString
   must be used instead.
+
+- wxTmemxxx() functions take either wxChar* or char*, not void*: use memxxx()
+  with void pointers.
 
 - Removed insecure wxGets() and wxTmpnam() functions.
 
@@ -121,6 +124,7 @@ All:
 - wxLogInterposer has been added to replace wxLogPassThrough and new
   wxLogInterposerTemp was added
 - Added support for broadcasting to UDP sockets (Andrew Vincent)
+- Documentation now includes the wx library in which each class is defined
 
 All (Unix):
 
@@ -149,12 +153,14 @@ All (GUI):
 - Support wxAPPLY and wxCLOSE in CreateStdDialogButtonSizer() (Marcin Wojdyr)
 - Show standard options in wxCmdLineParser usage message (Francesco Montorsi)
 - Added wxRect::operator+ (union) and * (intersection) (bdonner)
+- Added support for two auxiliary mouse buttons to wxMouseEvent (Chris Weiland)
 
 wxGTK:
 
 - Support for markup and ellipsization in wxStaticText (Francesco Montorsi)
 - Native implementation for wxHyperlinkCtrl (Francesco Montorsi)
 - Native keyboard navigation implementation
+- Added wxCB_SORT support to wxComboBox (Evgeniy Tarassov)
 - Don't overwrite primary selection with clipboard and vice versa
 - Implemented support for underlined fonts in wxStaticText.
 - wxTopLevelWindow::SetSizeHints size increments now work.

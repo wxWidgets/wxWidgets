@@ -16,7 +16,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_CONFIG
+#if wxUSE_INICONF
 
 #ifndef   WX_PRECOMP
     #include "wx/msw/wrapwin.h"
@@ -471,4 +471,4 @@ bool wxIniConfig::RenameGroup(const wxString& WXUNUSED(oldName),
     return false;
 }
 
-#endif // wxUSE_CONFIG
+#endif // wxUSE_INICONF

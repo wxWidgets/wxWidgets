@@ -263,6 +263,8 @@ void wxDatePickerCtrl::SetValue(const wxDateTime& dt)
         m_date.ResetTime();
 }
 
+#include <iostream>
+
 wxDateTime wxDatePickerCtrl::GetValue() const
 {
 #ifdef __WXDEBUG__

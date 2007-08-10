@@ -9,6 +9,9 @@
 // License:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+// Windows CE dummy menu for SHCreateMenuBar()
+#define wxIDM_SHMENU             40000
+
 #define IDM_LEFT                 40001
 #define IDM_RIGHT                40002
 #define IDM_ITEM                 40003
@@ -22,4 +25,3 @@
 #define IDR_MENUBAR_LEFT_MENU    40031
 #define IDR_MENUBAR_RIGHT_MENU   40032
 #define IDR_MENUBAR_BOTH_MENUS   40033
-

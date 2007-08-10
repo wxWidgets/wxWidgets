@@ -97,7 +97,7 @@ public:
     virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col ) = 0;
     virtual bool Cleared() = 0;
     
-    virtual void Resort() { }
+    virtual void Resort() = 0;
 
     void SetOwner( wxDataViewModel *owner ) { m_owner = owner; }
     wxDataViewModel *GetOwner()             { return m_owner; }

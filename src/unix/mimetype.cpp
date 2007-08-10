@@ -156,9 +156,6 @@ protected:
     }
 };
 
-// in case we're compiling in non-GUI mode
-class WXDLLEXPORT wxIcon;
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -2613,8 +2610,7 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
             Field_Type,
             Field_OpenCmd,
             Field_Other
-        }
-        currentToken = Field_Type;
+        } currentToken = Field_Type;
 
         // the flags and field values on the current line
         MailcapLineData data;

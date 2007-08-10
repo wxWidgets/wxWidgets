@@ -43,33 +43,6 @@ wxListBoxBase::~wxListBoxBase()
 }
 
 // ----------------------------------------------------------------------------
-// adding items
-// ----------------------------------------------------------------------------
-
-void wxListBoxBase::InsertItems(unsigned int nItems, const wxString *items, unsigned int pos)
-{
-    wxArrayString aItems;
-    for ( unsigned int n = 0; n < nItems; n++ )
-    {
-        aItems.Add(items[n]);
-    }
-
-    DoInsertItems(aItems, pos);
-}
-
-
-void wxListBoxBase::Set(int nItems, const wxString* items, void **clientData)
-{
-    wxArrayString aItems;
-    for ( int n = 0; n < nItems; n++ )
-    {
-        aItems.Add(items[n]);
-    }
-
-    DoSetItems(aItems, clientData);
-}
-
-// ----------------------------------------------------------------------------
 // selection
 // ----------------------------------------------------------------------------
 

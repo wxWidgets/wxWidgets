@@ -84,14 +84,11 @@ public:
         return GetStdInputHandler(handlerDef);
     }
 
+protected:
     // override all methods which add/delete items to update m_checks array as
     // well
-    virtual void Delete(unsigned int n);
-
-protected:
-    virtual int DoAppend(const wxString& item);
-    virtual void DoInsertItems(const wxArrayString& items, unsigned int pos);
-    virtual void DoSetItems(const wxArrayString& items, void **clientData);
+    virtual void OnItemInserted(unsigned int pos);
+    virtual void DoDeleteOneItem(unsigned int n);
     virtual void DoClear();
 
     // draw the check items instead of the usual ones

@@ -124,7 +124,7 @@ private:
     static bool ms_lastShowHidden;    // did we show hidden files?
 };
 
-#ifdef wxUSE_GENERIC_FILEDIALOG
+#ifdef wxHAS_GENERIC_FILEDIALOG
 
 class WXDLLEXPORT wxFileDialog: public wxGenericFileDialog
 {
@@ -146,7 +146,7 @@ private:
      DECLARE_DYNAMIC_CLASS(wxFileDialog)
 };
 
-#endif // wxUSE_GENERIC_FILEDIALOG
+#endif // wxHAS_GENERIC_FILEDIALOG
 
 //-----------------------------------------------------------------------------
 //  wxFileData - a class to hold the file info for the wxFileCtrl

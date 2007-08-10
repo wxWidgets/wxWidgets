@@ -24,6 +24,7 @@
 #include "wx/cocoa/string.h"
 #include "wx/cocoa/autorelease.h"
 
+#import <Foundation/NSArray.h>
 #include "wx/cocoa/objc/NSView.h"
 #import <AppKit/NSButton.h>
 #import <AppKit/NSBox.h>
@@ -95,7 +96,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID winid,
     NSMutableArray *allCells = [NSMutableArray arrayWithCapacity:n];
     for(int i=0; i<n; ++i)
     {
-        [currCell setTitle: wxNSStringWithWxString(wxStripMenuCodes(choices[i], wxStrip_Mnemonics))];
+        CocoaSetLabelForObject(choices[i], currCell);
         [allCells addObject: currCell];
         [currCell release];
         // NOTE: We can still safely message currCell as the array has retained it.
@@ -161,10 +162,15 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID winid,
     [theBox release];
 
 
-    [GetNSBox() setTitle:wxNSStringWithWxString(wxStripMenuCodes(title, wxStrip_Mnemonics))];
+    CocoaSetLabelForObject(title, GetNSBox());
 //    [GetNSBox() setBorderType:NSLineBorder]; // why??
 
     SetMajorDim(majorDim, style);
+
+    // Set the selection to the first item if we have any items.
+    // This is for parity with other wx ports which do the same thing.
+    if(n > 0)
+        SetSelection(0);
 
     if(m_parent)
         m_parent->CocoaAddChild(this);
@@ -228,7 +234,7 @@ void wxRadioBox::SetString(unsigned int n, const wxString& label)
 {
     int r = GetRowForIndex(n);
     int c = GetColumnForIndex(n);
-    [[GetNSMatrix() cellAtRow:r column:c] setTitle:wxNSStringWithWxString(wxStripMenuCodes(label, wxStrip_Mnemonics))];
+    CocoaSetLabelForObject(label, [GetNSMatrix() cellAtRow:r column:c]);
 }
 
     // change the individual radio button state

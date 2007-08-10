@@ -364,6 +364,9 @@ bool wxBitmap::SaveFile(const wxString& filename, wxBitmapType type, const wxPal
 
 bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 {
+    // Pool here due to lack of one during wx init phase
+    wxAutoNSAutoreleasePool pool;
+
     UnRef();
     if(!icon.GetNSImage());
     [icon.GetNSImage() lockFocus];
@@ -519,6 +522,13 @@ wxMask::wxMask(const wxBitmap& bitmap)
     Create(bitmap);
 }
 
+// Copy constructor
+wxMask::wxMask(const wxMask& src)
+:   wxObject(src)
+,   m_cocoaNSBitmapImageRep([src.m_cocoaNSBitmapImageRep retain])
+{
+}
+
 wxMask::~wxMask()
 {
     [m_cocoaNSBitmapImageRep release];
@@ -528,6 +538,7 @@ wxMask::~wxMask()
 bool wxMask::Create(const wxBitmap& bitmap)
 {
 // TODO
+    wxLogDebug(wxT("Cannot yet create a mask from a mono bitmap"));
     return FALSE;
 }
 
@@ -536,6 +547,7 @@ bool wxMask::Create(const wxBitmap& bitmap)
 bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
 {
 // TODO
+    wxLogDebug(wxT("Cannot yet create a mask from a palette bitmap"));
     return FALSE;
 }
 
@@ -639,6 +651,14 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
     else if([srcBitmapRep bitsPerPixel]==32 && [srcBitmapRep bitsPerSample]==8 && [srcBitmapRep samplesPerPixel]==4 && [srcBitmapRep hasAlpha]==YES)
     {
         wxPixelData<wxBitmap,wxAlphaPixelFormat> pixelData(const_cast<wxBitmap&>(bitmap));
+        wxCHECK_MSG(wxMask_CreateFromBitmapData(pixelData, colour, dstData),
+            false, wxT("Unable to access raw data"));
+    }
+    else if([srcBitmapRep bitsPerPixel]==8 && [srcBitmapRep bitsPerSample]==8 && [srcBitmapRep samplesPerPixel]==1 && [srcBitmapRep hasAlpha]==NO)
+    // 8-bpp Grayscale, no alpha
+    {   // Force all RGB to access the same grayscale component
+        typedef wxPixelFormat<unsigned char,8,0,0,0> PixelFormat;
+        wxPixelData<wxBitmap,PixelFormat> pixelData(const_cast<wxBitmap&>(bitmap));
         wxCHECK_MSG(wxMask_CreateFromBitmapData(pixelData, colour, dstData),
             false, wxT("Unable to access raw data"));
     }

@@ -146,46 +146,16 @@ void wxCheckListBox::Check(unsigned int item, bool check)
 // methods forwarded to wxListBox
 // ----------------------------------------------------------------------------
 
-void wxCheckListBox::Delete(unsigned int n)
+void wxCheckListBox::DoDeleteOneItem(unsigned int n)
 {
-    wxCHECK_RET( IsValid(n), _T("invalid index in wxListBox::Delete") );
-
-    wxListBox::Delete(n);
+    wxListBox::DoDeleteOneItem(n);
 
     m_checks.RemoveAt(n);
 }
 
-int wxCheckListBox::DoAppend(const wxString& item)
+void wxCheckListBox::OnItemInserted(unsigned int pos)
 {
-    int pos = wxListBox::DoAppend(item);
-
-    // the item is initially unchecked
     m_checks.Insert(false, pos);
-
-    return pos;
-}
-
-void wxCheckListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
-{
-    wxListBox::DoInsertItems(items, pos);
-
-    unsigned int count = items.GetCount();
-    for ( unsigned int n = 0; n < count; n++ )
-    {
-        m_checks.Insert(false, pos + n);
-    }
-}
-
-void wxCheckListBox::DoSetItems(const wxArrayString& items, void **clientData)
-{
-    // call it first as it does DoClear()
-    wxListBox::DoSetItems(items, clientData);
-
-    unsigned int count = items.GetCount();
-    for ( unsigned int n = 0; n < count; n++ )
-    {
-        m_checks.Add(false);
-    }
 }
 
 void wxCheckListBox::DoClear()

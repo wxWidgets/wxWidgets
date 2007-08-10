@@ -91,12 +91,12 @@ private:
 };
 
 #define WX_LIST_SORTFUNCTION( elT, f ) wxList_SortFunction<elT>(f)
-#define VC6_WORKAROUND(elT, liT, decl)
+#define WX_LIST_VC6_WORKAROUND(elT, liT, decl)
 
 #else // if defined( __VISUALC__ ) && __VISUALC__ < 1300 // == VC6
 
 #define WX_LIST_SORTFUNCTION( elT, f ) std::greater<elT>( f )
-#define VC6_WORKAROUND(elT, liT, decl)                                        \
+#define WX_LIST_VC6_WORKAROUND(elT, liT, decl)                                \
     decl liT;                                                                 \
                                                                               \
     /* Workaround for broken VC6 STL incorrectly requires a std::greater<> */ \
@@ -164,7 +164,7 @@ inline const void *wxListCastElementToVoidPtr(const wxString& str)
         static void DeleteFunction( _WX_LIST_ITEM_TYPE_##liT X );             \
     };                                                                        \
                                                                               \
-    VC6_WORKAROUND(elT, liT, decl)                                            \
+    WX_LIST_VC6_WORKAROUND(elT, liT, decl)                                    \
     decl liT : public std::list<elT>                                          \
     {                                                                         \
     private:                                                                  \
@@ -333,7 +333,7 @@ inline const void *wxListCastElementToVoidPtr(const wxString& str)
         ~liT() { Clear(); }                                                   \
                                                                               \
         /* It needs access to our EmptyList */                                \
-        friend decl compatibility_iterator;                                   \
+        friend class compatibility_iterator;                                  \
     }
 
 #define WX_DECLARE_LIST(elementtype, listname)                              \
@@ -491,7 +491,7 @@ class WXDLLIMPEXP_FWD_BASE wxList;
 
 class WXDLLIMPEXP_BASE wxListBase : public wxObject
 {
-friend class WXDLLIMPEXP_FWD_BASE wxNodeBase; // should be able to call DetachNode()
+friend class wxNodeBase; // should be able to call DetachNode()
 friend class wxHashTableBase;   // should be able to call untyped Find()
 
 public:

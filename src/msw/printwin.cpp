@@ -75,7 +75,7 @@ LONG APIENTRY _EXPORT wxAbortProc(HDC hPr, int Code);
 wxWindowsPrinter::wxWindowsPrinter(wxPrintDialogData *data)
                 : wxPrinterBase(data)
 {
-    m_lpAbortProc = (WXFARPROC) MakeProcInstance((FARPROC) wxAbortProc, wxGetInstance());
+    m_lpAbortProc = (WXFARPROC)wxAbortProc;
 }
 
 wxWindowsPrinter::~wxWindowsPrinter()

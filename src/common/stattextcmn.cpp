@@ -155,6 +155,14 @@ wxString wxStaticTextBase::GetLabelText() const
 }
 
 /*static*/
+wxString wxStaticTextBase::GetLabelText(const wxString& label)
+{
+    // remove markup
+    wxString ret = RemoveMarkup(label);
+    return RemoveMnemonics(ret);
+}
+
+/*static*/
 wxString wxStaticTextBase::RemoveMarkup(const wxString& text)
 {
     // strip out of "text" the markup for platforms which don't support it natively

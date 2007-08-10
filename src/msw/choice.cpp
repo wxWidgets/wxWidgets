@@ -211,62 +211,55 @@ WXDWORD wxChoice::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 wxChoice::~wxChoice()
 {
-    Free();
+    Clear();
 }
 
 // ----------------------------------------------------------------------------
 // adding/deleting items to/from the list
 // ----------------------------------------------------------------------------
 
-int wxChoice::DoAppend(const wxString& item)
+int wxChoice::DoInsertItems(const wxArrayStringsAdapter& items,
+                            unsigned int pos,
+                            void **clientData, wxClientDataType type)
 {
-    int n = (int)SendMessage(GetHwnd(), CB_ADDSTRING, 0,
-                             (LPARAM)item.wx_str());
-    if ( n == CB_ERR )
+    MSWAllocStorage(items, CB_INITSTORAGE);
+
+    const bool append = pos == GetCount();
+
+    // use CB_ADDSTRING when appending at the end to make sure the control is
+    // resorted if it has wxCB_SORT style
+    const unsigned msg = append ? CB_ADDSTRING : CB_INSERTSTRING;
+
+    if ( append )
+        pos = 0;
+
+    int n = wxNOT_FOUND;
+    const unsigned numItems = items.GetCount();
+    for ( unsigned i = 0; i < numItems; ++i )
     {
-        wxLogLastError(wxT("SendMessage(CB_ADDSTRING)"));
-    }
-    else // ok
-    {
-        // we need to refresh our size in order to have enough space for the
-        // newly added items
-        if ( !IsFrozen() )
-            UpdateVisibleHeight();
+        n = MSWInsertOrAppendItem(pos, items[i], msg);
+        if ( n == wxNOT_FOUND )
+            return n;
+
+        if ( !append )
+            pos++;
+
+        AssignNewItemClientData(n, clientData, i, type);
     }
 
+    // we need to refresh our size in order to have enough space for the
+    // newly added items
+    if ( !IsFrozen() )
+        UpdateVisibleHeight();
+
     InvalidateBestSize();
+
     return n;
 }
 
-int wxChoice::DoInsert(const wxString& item, unsigned int pos)
-{
-    wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
-    wxCHECK_MSG(IsValidInsert(pos), -1, wxT("invalid index"));
-
-    int n = (int)SendMessage(GetHwnd(), CB_INSERTSTRING, pos,
-                             (LPARAM)item.wx_str());
-    if ( n == CB_ERR )
-    {
-        wxLogLastError(wxT("SendMessage(CB_INSERTSTRING)"));
-    }
-    else // ok
-    {
-        if ( !IsFrozen() )
-            UpdateVisibleHeight();
-    }
-
-    InvalidateBestSize();
-    return n;
-}
-
-void wxChoice::Delete(unsigned int n)
+void wxChoice::DoDeleteOneItem(unsigned int n)
 {
     wxCHECK_RET( IsValid(n), wxT("invalid item index in wxChoice::Delete") );
-
-    if ( HasClientObjectData() )
-    {
-        delete GetClientObject(n);
-    }
 
     SendMessage(GetHwnd(), CB_DELETESTRING, n, 0);
 
@@ -276,28 +269,14 @@ void wxChoice::Delete(unsigned int n)
     InvalidateBestSize();
 }
 
-void wxChoice::Clear()
+void wxChoice::DoClear()
 {
-    Free();
-
     SendMessage(GetHwnd(), CB_RESETCONTENT, 0, 0);
 
     if ( !IsFrozen() )
         UpdateVisibleHeight();
 
     InvalidateBestSize();
-}
-
-void wxChoice::Free()
-{
-    if ( HasClientObjectData() )
-    {
-        unsigned int count = GetCount();
-        for ( unsigned int n = 0; n < count; n++ )
-        {
-            delete GetClientObject(n);
-        }
-    }
 }
 
 // ----------------------------------------------------------------------------
@@ -454,16 +433,6 @@ void* wxChoice::DoGetItemClientData(unsigned int n) const
     }
 
     return (void *)rc;
-}
-
-void wxChoice::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
-{
-    DoSetItemClientData(n, clientData);
-}
-
-wxClientData* wxChoice::DoGetItemClientObject(unsigned int n) const
-{
-    return (wxClientData *)DoGetItemClientData(n);
 }
 
 // ----------------------------------------------------------------------------

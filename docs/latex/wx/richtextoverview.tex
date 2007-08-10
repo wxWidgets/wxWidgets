@@ -70,7 +70,7 @@ The following code is taken from the sample, and adds text and styles to a rich 
 
 {\small
 \begin{verbatim}
-    wxRichTextCtrl* richTextCtrl = new wxRichTextCtrl(splitter, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(200, 200), wxVSCROLL|wxHSCROLL|wxNO_BORDER|wxWANTS_CHARS);
+    wxRichTextCtrl* richTextCtrl = new wxRichTextCtrl(splitter, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(200, 200), wxVSCROLL|wxHSCROLL|wxBORDER_NONE|wxWANTS_CHARS);
 
     wxFont textFont = wxFont(12, wxROMAN, wxNORMAL, wxNORMAL);
     wxFont boldFont = wxFont(12, wxROMAN, wxNORMAL, wxBOLD);

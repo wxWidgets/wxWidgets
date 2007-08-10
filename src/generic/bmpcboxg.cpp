@@ -176,23 +176,86 @@ wxBitmap wxBitmapComboBox::GetItemBitmap(unsigned int n) const
     return *GetBitmapPtr(n);
 }
 
+int wxBitmapComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
+                                    unsigned int pos,
+                                    void **clientData, wxClientDataType type)
+{
+    const unsigned int numItems = items.GetCount();
+    const unsigned int countNew = GetCount() + numItems;
+
+    m_bitmaps.Alloc(countNew);
+
+    for ( unsigned int i = 0; i < numItems; ++i )
+    {
+        m_bitmaps.Insert(new wxBitmap(wxNullBitmap), pos + i);
+    }
+
+    const int index = wxOwnerDrawnComboBox::DoInsertItems(items, pos,
+                                                          clientData, type);
+
+    if ( index == wxNOT_FOUND )
+    {
+        for ( int i = countNew - GetCount(); i > 0; --i )
+        {
+            wxBitmap *bmp = GetBitmapPtr(pos);
+            m_bitmaps.RemoveAt(pos);
+            delete bmp;
+        }
+    }
+    return index;
+}
+
+int wxBitmapComboBox::Append(const wxString& item, const wxBitmap& bitmap)
+{
+    const int n = wxOwnerDrawnComboBox::Append(item);
+    if(n != wxNOT_FOUND)
+        SetItemBitmap(n, bitmap);
+    return n;
+}
+
+int wxBitmapComboBox::Append(const wxString& item, const wxBitmap& bitmap,
+                             void *clientData)
+{
+    const int n = wxOwnerDrawnComboBox::Append(item, clientData);
+    if(n != wxNOT_FOUND)
+        SetItemBitmap(n, bitmap);
+    return n;
+}
+
+int wxBitmapComboBox::Append(const wxString& item, const wxBitmap& bitmap,
+                             wxClientData *clientData)
+{
+    const int n = wxOwnerDrawnComboBox::Append(item, clientData);
+    if(n != wxNOT_FOUND)
+        SetItemBitmap(n, bitmap);
+    return n;
+}
+
+int wxBitmapComboBox::Insert(const wxString& item,
+                             const wxBitmap& bitmap,
+                             unsigned int pos)
+{
+    const int n = wxOwnerDrawnComboBox::Insert(item, pos);
+    if(n != wxNOT_FOUND)
+        SetItemBitmap(n, bitmap);
+    return n;
+}
+
 int wxBitmapComboBox::Insert(const wxString& item, const wxBitmap& bitmap,
                              unsigned int pos, void *clientData)
 {
-    int n = DoInsertWithImage(item, bitmap, pos);
-    if ( n != wxNOT_FOUND )
-        SetClientData(n, clientData);
-
+    const int n = wxOwnerDrawnComboBox::Insert(item, pos, clientData);
+    if(n != wxNOT_FOUND)
+        SetItemBitmap(n, bitmap);
     return n;
 }
 
 int wxBitmapComboBox::Insert(const wxString& item, const wxBitmap& bitmap,
                              unsigned int pos, wxClientData *clientData)
 {
-    int n = DoInsertWithImage(item, bitmap, pos);
-    if ( n != wxNOT_FOUND )
-        SetClientObject(n, clientData);
-
+    const int n = wxOwnerDrawnComboBox::Insert(item, pos, clientData);
+    if(n != wxNOT_FOUND)
+        SetItemBitmap(n, bitmap);
     return n;
 }
 
@@ -227,67 +290,9 @@ bool wxBitmapComboBox::OnAddBitmap(const wxBitmap& bitmap)
     return true;
 }
 
-bool wxBitmapComboBox::DoInsertBitmap(const wxBitmap& bitmap, unsigned int pos)
+void wxBitmapComboBox::DoClear()
 {
-    if ( !OnAddBitmap(bitmap) )
-        return false;
-
-    // NB: We must try to set the image before DoInsert or
-    //     DoAppend because OnMeasureItem might be called
-    //     before it returns.
-    m_bitmaps.Insert( new wxBitmap(bitmap), pos);
-
-    return true;
-}
-
-int wxBitmapComboBox::DoAppendWithImage(const wxString& item, const wxBitmap& image)
-{
-    unsigned int pos = m_bitmaps.size();
-
-    if ( !DoInsertBitmap(image, pos) )
-        return wxNOT_FOUND;
-
-    int index = wxOwnerDrawnComboBox::DoAppend(item);
-
-    if ( index < 0 )
-        index = m_bitmaps.size();
-
-    // Need to re-check the index incase DoAppend sorted
-    if ( (unsigned int) index != pos )
-    {
-        wxBitmap* bmp = GetBitmapPtr(pos);
-        m_bitmaps.RemoveAt(pos);
-        m_bitmaps.Insert(bmp, index);
-    }
-
-    return index;
-}
-
-int wxBitmapComboBox::DoInsertWithImage(const wxString& item,
-                                        const wxBitmap& image,
-                                        unsigned int pos)
-{
-    wxCHECK_MSG( IsValidInsert(pos), wxNOT_FOUND, wxT("invalid item index") );
-
-    if ( !DoInsertBitmap(image, pos) )
-        return wxNOT_FOUND;
-
-    return wxOwnerDrawnComboBox::DoInsert(item, pos);
-}
-
-int wxBitmapComboBox::DoAppend(const wxString& item)
-{
-    return DoAppendWithImage(item, wxNullBitmap);
-}
-
-int wxBitmapComboBox::DoInsert(const wxString& item, unsigned int pos)
-{
-    return DoInsertWithImage(item, wxNullBitmap, pos);
-}
-
-void wxBitmapComboBox::Clear()
-{
-    wxOwnerDrawnComboBox::Clear();
+    wxOwnerDrawnComboBox::DoClear();
 
     unsigned int i;
 
@@ -302,9 +307,9 @@ void wxBitmapComboBox::Clear()
     DetermineIndent();
 }
 
-void wxBitmapComboBox::Delete(unsigned int n)
+void wxBitmapComboBox::DoDeleteOneItem(unsigned int n)
 {
-    wxOwnerDrawnComboBox::Delete(n);
+    wxOwnerDrawnComboBox::DoDeleteOneItem(n);
     delete GetBitmapPtr(n);
     m_bitmaps.RemoveAt(n);
 }

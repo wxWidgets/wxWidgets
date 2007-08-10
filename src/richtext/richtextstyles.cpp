@@ -822,7 +822,7 @@ bool wxRichTextStyleListCtrl::Create(wxWindow* parent, wxWindowID id, const wxPo
 
     bool showSelector = ((style & wxRICHTEXTSTYLELIST_HIDE_TYPE_SELECTOR) == 0);
 
-    m_styleListBox = new wxRichTextStyleListBox(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, showSelector ? wxSIMPLE_BORDER : wxNO_BORDER);
+    m_styleListBox = new wxRichTextStyleListBox(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, showSelector ? wxBORDER_DEFAULT : wxBORDER_NONE);
 
     wxBoxSizer* boxSizer = new wxBoxSizer(wxVERTICAL);
 
@@ -837,7 +837,7 @@ bool wxRichTextStyleListCtrl::Create(wxWindow* parent, wxWindowID id, const wxPo
         m_styleChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, choices);
 
         boxSizer->Add(m_styleListBox, 1, wxALL|wxEXPAND, 5);
-        boxSizer->Add(m_styleChoice, 0, wxALL|wxEXPAND, 5);
+        boxSizer->Add(m_styleChoice, 0, wxLEFT|wxRIGHT|wxBOTTOM|wxEXPAND, 5);
     }
     else
     {
@@ -997,6 +997,17 @@ BEGIN_EVENT_TABLE(wxRichTextStyleComboPopup, wxRichTextStyleListBox)
     EVT_MOTION(wxRichTextStyleComboPopup::OnMouseMove)
     EVT_LEFT_DOWN(wxRichTextStyleComboPopup::OnMouseClick)
 END_EVENT_TABLE()
+
+bool wxRichTextStyleComboPopup::Create( wxWindow* parent )
+{
+	int borderStyle = GetDefaultBorder();
+	if (borderStyle == wxBORDER_SUNKEN)
+	    borderStyle = wxBORDER_SIMPLE;
+
+    return wxRichTextStyleListBox::Create(parent, wxID_ANY,
+                                  wxPoint(0,0), wxDefaultSize,
+                                  borderStyle);
+}
 
 void wxRichTextStyleComboPopup::SetStringValue( const wxString& s )
 {

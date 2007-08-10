@@ -121,6 +121,18 @@
 #endif
 #endif
 
+#if wxUSE_UXTHEME
+    #include "wx/msw/uxtheme.h"
+    #define EP_EDITTEXT         1
+    #define ETS_NORMAL          1
+    #define ETS_HOT             2
+    #define ETS_SELECTED        3
+    #define ETS_DISABLED        4
+    #define ETS_FOCUSED         5
+    #define ETS_READONLY        6
+    #define ETS_ASSIST          7
+#endif
+
 #if defined(TME_LEAVE) && defined(WM_MOUSELEAVE) && wxUSE_DYNLIB_CLASS
     #define HAVE_TRACKMOUSEEVENT
 #endif // everything needed for TrackMouseEvent()
@@ -141,6 +153,12 @@
     #define wxUSE_MOUSEEVENT_HACK 0
 #else
     #define wxUSE_MOUSEEVENT_HACK 1
+#endif
+
+// not all compilers/platforms have X button related declarations (notably
+// Windows CE doesn't, and probably some old SDKs don't neither)
+#ifdef WM_XBUTTONDOWN
+    #define wxHAS_XBUTTON
 #endif
 
 // ---------------------------------------------------------------------------
@@ -1268,6 +1286,32 @@ void wxWindowMSW::MSWUpdateStyle(long flagsOld, long exflagsOld)
     }
 }
 
+wxBorder wxWindowMSW::GetDefaultBorder() const
+{
+	return GetDefaultBorderForControl();
+}
+
+wxBorder wxWindowMSW::GetDefaultBorderForControl() const
+{
+    // we want to automatically give controls a sunken style (confusingly,
+    // it may not really mean sunken at all as we map it to WS_EX_CLIENTEDGE
+    // which is not sunken at all under Windows XP -- rather, just the default)
+
+#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
+    return wxBORDER_SIMPLE;
+#else
+#if wxUSE_UXTHEME
+    if (CanApplyThemeBorder())
+    {
+        wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
+        if (theme)
+            return wxBORDER_THEME;
+    }
+#endif
+    return wxBORDER_SUNKEN;
+#endif
+}
+
 WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
 {
     // translate common wxWidgets styles to Windows ones
@@ -1315,10 +1359,8 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
 
         switch ( border )
         {
-            default:
-            case wxBORDER_DEFAULT:
-                wxFAIL_MSG( _T("unknown border style") );
-                // fall through
+            case wxBORDER_DEFAULT: // also wxBORDER_THEME
+                break;
 
             case wxBORDER_NONE:
             case wxBORDER_SIMPLE:
@@ -1337,9 +1379,13 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
                 style &= ~WS_BORDER;
                 break;
 
-            case wxBORDER_DOUBLE:
-                *exstyle |= WS_EX_DLGMODALFRAME;
+            default:
+                wxFAIL_MSG( _T("unknown border style") );
                 break;
+
+//            case wxBORDER_DOUBLE:
+//                *exstyle |= WS_EX_DLGMODALFRAME;
+//                break;
         }
 
         // wxUniv doesn't use Windows dialog navigation functions at all
@@ -2536,7 +2582,19 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 }
             }
             break;
+#if 0
+        case WM_ENTERSIZEMOVE:
+            {
+                processed = HandleEnterSizeMove();
+            }
+            break;
 
+        case WM_EXITSIZEMOVE:
+            {
+                processed = HandleExitSizeMove();
+            }
+            break;
+#endif
         case WM_SIZING:
             {
                 LPRECT pRect = (LPRECT)lParam;
@@ -2652,6 +2710,11 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
         case WM_MBUTTONDOWN:
         case WM_MBUTTONUP:
         case WM_MBUTTONDBLCLK:
+#ifdef wxHAS_XBUTTON
+        case WM_XBUTTONDOWN:
+        case WM_XBUTTONUP:
+        case WM_XBUTTONDBLCLK:
+#endif // wxHAS_XBUTTON
             {
 #ifdef __WXMICROWIN__
                 // MicroWindows seems to ignore the fact that a window is
@@ -3176,6 +3239,94 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             }
             break;
 #endif // __WXWINCE__
+
+#if wxUSE_UXTHEME
+        // If we want the default themed border then we need to draw it ourselves
+        case WM_NCCALCSIZE:
+            {
+                wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
+                if (theme && GetBorder() == wxBORDER_THEME)
+                {
+                    // first ask the widget to calculate the border size
+                    rc.result = MSWDefWindowProc(message, wParam, lParam);
+                    processed = true;
+
+                    // now alter the client size making room for drawing a themed border
+                    NCCALCSIZE_PARAMS *csparam = NULL;
+                    RECT rect;
+                    if (wParam)
+                    {
+                        csparam = (NCCALCSIZE_PARAMS*)lParam;
+                        rect = csparam->rgrc[0];
+                    }
+                    else
+                    {
+                        rect = *((RECT*)lParam);
+                    }
+                    wxUxThemeHandle hTheme(this, L"EDIT");
+                    RECT rcClient = { 0, 0, 0, 0 };
+                    wxClientDC dc(this);
+
+                    if (theme->GetThemeBackgroundContentRect(
+                            hTheme, GetHdcOf(dc), EP_EDITTEXT, ETS_NORMAL,
+                            &rect, &rcClient) == S_OK)
+                    {
+                        InflateRect(&rcClient, -1, -1);
+                        if (wParam)
+                            csparam->rgrc[0] = rcClient;
+                        else
+                            *((RECT*)lParam) = rcClient;
+                        rc.result = WVR_REDRAW;
+                    }
+                }
+            }
+            break;
+
+        case WM_NCPAINT:
+            {
+                wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
+                if (theme && GetBorder() == wxBORDER_THEME)
+                {
+                    // first ask the widget to paint its non-client area, such as scrollbars, etc.
+                    rc.result = MSWDefWindowProc(message, wParam, lParam);
+                    processed = true;
+
+                    wxUxThemeHandle hTheme(this, L"EDIT");
+                    wxWindowDC dc(this);
+
+                    // Clip the DC so that you only draw on the non-client area
+                    RECT rcBorder;
+                    wxCopyRectToRECT(GetSize(), rcBorder);
+
+                    RECT rcClient;
+                    theme->GetThemeBackgroundContentRect(
+                        hTheme, GetHdcOf(dc), EP_EDITTEXT, ETS_NORMAL, &rcBorder, &rcClient);
+                    InflateRect(&rcClient, -1, -1);
+
+                    ::ExcludeClipRect(GetHdcOf(dc), rcClient.left, rcClient.top,
+                                      rcClient.right, rcClient.bottom);
+
+                    // Make sure the background is in a proper state
+                    if (theme->IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
+                    {
+                        theme->DrawThemeParentBackground(GetHwnd(), GetHdcOf(dc), &rcBorder);
+                    }
+
+                    // Draw the border
+                    int nState;
+                    if ( !IsEnabled() )
+                        nState = ETS_DISABLED;
+                    // should we check this?
+                    //else if ( ::GetWindowLong(GetHwnd(), GWL_STYLE) & ES_READONLY)
+                    //    nState = ETS_READONLY;
+                    else
+                        nState = ETS_NORMAL;
+                    theme->DrawThemeBackground(hTheme, GetHdcOf(dc), EP_EDITTEXT, nState, &rcBorder, NULL);
+                }
+            }
+            break;
+
+#endif // wxUSE_UXTHEME
 
         default:
             // try a custom message handler
@@ -4552,6 +4703,24 @@ bool wxWindowMSW::HandleMoving(wxRect& rect)
     return rc;
 }
 
+bool wxWindowMSW::HandleEnterSizeMove()
+{
+    wxMoveEvent event(wxPoint(), m_windowId);
+    event.SetEventType(wxEVT_MOVE_START);
+    event.SetEventObject(this);
+
+    return GetEventHandler()->ProcessEvent(event);
+}
+
+bool wxWindowMSW::HandleExitSizeMove()
+{
+    wxMoveEvent event(wxPoint(), m_windowId);
+    event.SetEventType(wxEVT_MOVE_END);
+    event.SetEventObject(this);
+
+    return GetEventHandler()->ProcessEvent(event);
+}
+
 bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
 {
 #if USE_DEFERRED_SIZING
@@ -4794,6 +4963,10 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
     event.m_leftDown = (flags & MK_LBUTTON) != 0;
     event.m_middleDown = (flags & MK_MBUTTON) != 0;
     event.m_rightDown = (flags & MK_RBUTTON) != 0;
+#ifdef wxHAS_XBUTTON
+    event.m_aux1Down = (flags & MK_XBUTTON1) != 0;
+    event.m_aux2Down = (flags & MK_XBUTTON2) != 0;
+#endif // wxHAS_XBUTTON
     event.m_altDown = ::GetKeyState(VK_MENU) < 0;
 
 #ifndef __WXWINCE__
@@ -4892,8 +5065,28 @@ bool wxWindowMSW::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags)
         wxEVT_RIGHT_DCLICK,
         wxEVT_MIDDLE_DOWN,
         wxEVT_MIDDLE_UP,
-        wxEVT_MIDDLE_DCLICK
+        wxEVT_MIDDLE_DCLICK,
+        0, // this one is for wxEVT_MOTION which is not used here
+        wxEVT_AUX1_DOWN,
+        wxEVT_AUX1_UP,
+        wxEVT_AUX1_DCLICK,
+        wxEVT_AUX2_DOWN,
+        wxEVT_AUX2_UP,
+        wxEVT_AUX2_DCLICK
     };
+
+#ifdef wxHAS_XBUTTON
+    // the same messages are used for both auxillary mouse buttons so we need
+    // to adjust the index manually
+    switch ( msg )
+    {
+        case WM_XBUTTONDOWN:
+        case WM_XBUTTONUP:
+        case WM_XBUTTONDBLCLK:
+            if ( flags & MK_XBUTTON2 )
+                msg += wxEVT_AUX2_DOWN - wxEVT_AUX1_DOWN;
+    }
+#endif // wxHAS_XBUTTON
 
     wxMouseEvent event(eventsMouse[msg - WM_MOUSEMOVE]);
     InitMouseEvent(event, x, y, flags);
@@ -5810,6 +6003,10 @@ wxMouseState wxGetMouseState()
     ms.SetLeftDown(wxIsKeyDown(VK_LBUTTON));
     ms.SetMiddleDown(wxIsKeyDown(VK_MBUTTON));
     ms.SetRightDown(wxIsKeyDown(VK_RBUTTON));
+#ifdef wxHAS_XBUTTON
+    ms.SetAux1Down(wxIsKeyDown(VK_XBUTTON1));
+    ms.SetAux2Down(wxIsKeyDown(VK_XBUTTON2));
+#endif // wxHAS_XBUTTON
 
     ms.SetControlDown(wxIsKeyDown(VK_CONTROL));
     ms.SetShiftDown(wxIsKeyDown(VK_SHIFT));
@@ -6140,6 +6337,9 @@ const wxChar *wxGetMessageName(int message)
         case 0x0208: return wxT("WM_MBUTTONUP");
         case 0x0209: return wxT("WM_MBUTTONDBLCLK");
         case 0x020A: return wxT("WM_MOUSEWHEEL");
+        case 0x020B: return wxT("WM_XBUTTONDOWN");
+        case 0x020C: return wxT("WM_XBUTTONUP");
+        case 0x020D: return wxT("WM_XBUTTONDBLCLK");
         case 0x0210: return wxT("WM_PARENTNOTIFY");
         case 0x0211: return wxT("WM_ENTERMENULOOP");
         case 0x0212: return wxT("WM_EXITMENULOOP");

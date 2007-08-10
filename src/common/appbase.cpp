@@ -665,7 +665,7 @@ GSocketGUIFunctionsTable* wxConsoleAppTraitsBase::GetSocketGUIFunctionsTable()
 #if wxUSE_INTL
 void wxAppTraitsBase::SetLocale()
 {
-    setlocale(LC_ALL, "");
+    wxSetlocale(LC_ALL, "");
     wxUpdateLocaleIsUtf8();
 }
 #endif

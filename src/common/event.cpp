@@ -113,7 +113,7 @@ const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] =
 // the memory leaks when using it, however this breaks re-initializing the
 // library (i.e. repeated calls to wxInitialize/wxUninitialize) because the
 // event tables won't be rebuilt the next time, so disable this by default
-#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING 
+#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
 
 class wxEventTableEntryModule: public wxModule
 {
@@ -197,6 +197,12 @@ DEFINE_EVENT_TYPE(wxEVT_SET_FOCUS)
 DEFINE_EVENT_TYPE(wxEVT_KILL_FOCUS)
 DEFINE_EVENT_TYPE(wxEVT_CHILD_FOCUS)
 DEFINE_EVENT_TYPE(wxEVT_MOUSEWHEEL)
+DEFINE_EVENT_TYPE(wxEVT_AUX1_DOWN)
+DEFINE_EVENT_TYPE(wxEVT_AUX1_UP)
+DEFINE_EVENT_TYPE(wxEVT_AUX1_DCLICK)
+DEFINE_EVENT_TYPE(wxEVT_AUX2_DOWN)
+DEFINE_EVENT_TYPE(wxEVT_AUX2_UP)
+DEFINE_EVENT_TYPE(wxEVT_AUX2_DCLICK)
 
 // Non-client mouse events
 DEFINE_EVENT_TYPE(wxEVT_NC_LEFT_DOWN)
@@ -251,6 +257,8 @@ DEFINE_EVENT_TYPE(wxEVT_SIZE)
 DEFINE_EVENT_TYPE(wxEVT_SIZING)
 DEFINE_EVENT_TYPE(wxEVT_MOVE)
 DEFINE_EVENT_TYPE(wxEVT_MOVING)
+DEFINE_EVENT_TYPE(wxEVT_MOVE_START)
+DEFINE_EVENT_TYPE(wxEVT_MOVE_END)
 DEFINE_EVENT_TYPE(wxEVT_CLOSE_WINDOW)
 DEFINE_EVENT_TYPE(wxEVT_END_SESSION)
 DEFINE_EVENT_TYPE(wxEVT_QUERY_END_SESSION)
@@ -518,6 +526,8 @@ wxMouseEvent::wxMouseEvent(wxEventType commandType)
     m_leftDown = false;
     m_rightDown = false;
     m_middleDown = false;
+    m_aux1Down = false;
+    m_aux2Down = false;
     m_x = 0;
     m_y = 0;
     m_wheelRotation = 0;
@@ -536,6 +546,8 @@ void wxMouseEvent::Assign(const wxMouseEvent& event)
     m_leftDown = event.m_leftDown;
     m_middleDown = event.m_middleDown;
     m_rightDown = event.m_rightDown;
+    m_aux1Down = event.m_aux1Down;
+    m_aux2Down = event.m_aux2Down;
 
     m_controlDown = event.m_controlDown;
     m_shiftDown = event.m_shiftDown;
@@ -558,7 +570,8 @@ bool wxMouseEvent::ButtonDClick(int but) const
             // fall through
 
         case wxMOUSE_BTN_ANY:
-            return (LeftDClick() || MiddleDClick() || RightDClick());
+            return (LeftDClick() || MiddleDClick() || RightDClick() ||
+                    Aux1DClick() || Aux2DClick());
 
         case wxMOUSE_BTN_LEFT:
             return LeftDClick();
@@ -568,6 +581,12 @@ bool wxMouseEvent::ButtonDClick(int but) const
 
         case wxMOUSE_BTN_RIGHT:
             return RightDClick();
+
+        case wxMOUSE_BTN_AUX1:
+            return Aux1DClick();
+
+        case wxMOUSE_BTN_AUX2:
+            return Aux2DClick();
     }
 }
 
@@ -581,7 +600,8 @@ bool wxMouseEvent::ButtonDown(int but) const
             // fall through
 
         case wxMOUSE_BTN_ANY:
-            return (LeftDown() || MiddleDown() || RightDown());
+            return (LeftDown() || MiddleDown() || RightDown() ||
+                    Aux1Down() || Aux2Down());
 
         case wxMOUSE_BTN_LEFT:
             return LeftDown();
@@ -591,6 +611,12 @@ bool wxMouseEvent::ButtonDown(int but) const
 
         case wxMOUSE_BTN_RIGHT:
             return RightDown();
+
+        case wxMOUSE_BTN_AUX1:
+            return Aux1Down();
+
+        case wxMOUSE_BTN_AUX2:
+            return Aux2Down();
     }
 }
 
@@ -604,7 +630,8 @@ bool wxMouseEvent::ButtonUp(int but) const
             // fall through
 
         case wxMOUSE_BTN_ANY:
-            return (LeftUp() || MiddleUp() || RightUp());
+            return (LeftUp() || MiddleUp() || RightUp() ||
+                    Aux1Up() || Aux2Up());
 
         case wxMOUSE_BTN_LEFT:
             return LeftUp();
@@ -614,6 +641,12 @@ bool wxMouseEvent::ButtonUp(int but) const
 
         case wxMOUSE_BTN_RIGHT:
             return RightUp();
+
+        case wxMOUSE_BTN_AUX1:
+            return Aux1Up();
+
+        case wxMOUSE_BTN_AUX2:
+            return Aux2Up();
     }
 }
 
@@ -639,6 +672,12 @@ bool wxMouseEvent::Button(int but) const
 
         case wxMOUSE_BTN_RIGHT:
             return RightDown() || RightUp() || RightDClick();
+
+        case wxMOUSE_BTN_AUX1:
+           return Aux1Down() || Aux1Up() || Aux1DClick();
+
+        case wxMOUSE_BTN_AUX2:
+           return Aux2Down() || Aux2Up() || Aux2DClick();
     }
 }
 
@@ -651,7 +690,7 @@ bool wxMouseEvent::ButtonIsDown(int but) const
             // fall through
 
         case wxMOUSE_BTN_ANY:
-            return LeftIsDown() || MiddleIsDown() || RightIsDown();
+            return LeftIsDown() || MiddleIsDown() || RightIsDown() || Aux1Down() || Aux2Down();
 
         case wxMOUSE_BTN_LEFT:
             return LeftIsDown();
@@ -661,12 +700,18 @@ bool wxMouseEvent::ButtonIsDown(int but) const
 
         case wxMOUSE_BTN_RIGHT:
             return RightIsDown();
+
+        case wxMOUSE_BTN_AUX1:
+            return Aux1IsDown();
+
+        case wxMOUSE_BTN_AUX2:
+            return Aux2IsDown();
     }
 }
 
 int wxMouseEvent::GetButton() const
 {
-    for ( int i = 1; i <= 3; i++ )
+    for ( int i = 1; i < wxMOUSE_BTN_MAX; i++ )
     {
         if ( Button(i) )
         {
@@ -818,7 +863,7 @@ void wxEventHashTable::Clear()
     m_size = 0;
 }
 
-#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING 
+#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
 
 // Clear all tables
 void wxEventHashTable::ClearAll()
@@ -994,7 +1039,7 @@ wxEvtHandler::wxEvtHandler()
     m_eventsLocker = new wxCriticalSection;
 #  endif
 #endif
-    
+
     // no client data (yet)
     m_clientData = NULL;
     m_clientDataType = wxClientData_None;
@@ -1120,7 +1165,7 @@ void wxEvtHandler::ProcessPendingEvents()
     // pending events
     wxCHECK_RET( m_pendingEvents,
                  wxT("Please call wxApp::ProcessPendingEvents() instead") );
-    
+
     wxENTER_CRIT_SECT( Lock() );
 
     // we leave the loop once we have processed all events that were present at
@@ -1463,7 +1508,7 @@ wxEventBlocker::wxEventBlocker(wxWindow *win, wxEventType type)
 wxEventBlocker::~wxEventBlocker()
 {
     wxEvtHandler *popped = m_window->PopEventHandler(false);
-    wxCHECK_RET(popped == this, 
+    wxCHECK_RET(popped == this,
         wxT("Don't push other event handlers into a window managed by wxEventBlocker!"));
 }
 

@@ -103,8 +103,8 @@ public:
     //
     // Implement base class pure virtuals
     //
-    virtual void          Clear(void);
-    virtual void          Delete(unsigned int n);
+    virtual void          DoClear(void);
+    virtual void          DoDeleteOneItem(unsigned int n);
 
     virtual unsigned int  GetCount() const;
     virtual wxString      GetString(unsigned int n) const;
@@ -115,18 +115,10 @@ public:
     virtual int           GetSelection(void) const;
     virtual int           GetSelections(wxArrayInt& raSelections) const;
 
-    virtual int           DoAppend(const wxString& rsItem);
-    virtual void          DoInsertItems( const wxArrayString& raItems, unsigned int rPos );
-    virtual void          DoSetItems( const wxArrayString& raItems
-                                     ,void **              ppClientData
-                                    );
-
     virtual void          DoSetFirstItem(int n);
 
     virtual void          DoSetItemClientData(unsigned int n, void* pClientData);
     virtual void*         DoGetItemClientData(unsigned int n) const;
-    virtual void          DoSetItemClientObject(unsigned int n, wxClientData* pClientData);
-    virtual wxClientData* DoGetItemClientObject(unsigned int n) const;
 
     //
     // wxCheckListBox support
@@ -160,7 +152,14 @@ protected:
     wxListBoxItemsArray             m_aItems;
 #endif
 
-private:
+    //
+    // Implement base wxItemContainer virtuals
+    //
+    virtual int           DoInsertItems(const wxArrayStringsAdapter& items,
+                                        unsigned int pos,
+                                        void **clientData,
+                                        wxClientDataType type);
+
     DECLARE_DYNAMIC_CLASS(wxListBox)
 }; // end of wxListBox
 

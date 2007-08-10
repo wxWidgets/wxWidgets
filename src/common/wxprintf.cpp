@@ -60,23 +60,6 @@ using namespace std ;
 
 #if !defined(wxCRT_VsnprintfW) || !defined(wxCRT_VsnprintfA)
 
-// wxUSE_STRUTILS says our wxCRT_VsnprintfW implementation to use or not to
-// use wxStrlen and wxStrncpy functions over one-char processing loops.
-//
-// Some benchmarking revealed that wxUSE_STRUTILS == 1 has the following
-// effects:
-// -> on Windows:
-//     when in ANSI mode, this setting does not change almost anything
-//     when in Unicode mode, it gives ~ 50% of slowdown !
-// -> on Linux:
-//     both in ANSI and Unicode mode it gives ~ 60% of speedup !
-//
-#if defined(WIN32) && wxUSE_UNICODE
-#define wxUSE_STRUTILS      0
-#else
-#define wxUSE_STRUTILS      1
-#endif
-
 // some limits of our implementation
 #define wxMAX_SVNPRINTF_ARGUMENTS         64
 #define wxMAX_SVNPRINTF_FLAGBUFFER_LEN    32

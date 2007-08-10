@@ -374,6 +374,8 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon,
     return true;
 #else // __WXMICROWIN__ || __WXWINCE__
     wxUnusedVar(icon);
+    wxUnusedVar(transp);
+
     return false;
 #endif // !__WXWINCE__/__WXWINCE__
 }

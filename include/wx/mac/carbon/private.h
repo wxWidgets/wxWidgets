@@ -824,8 +824,7 @@ class wxMacListControl
 {
 public:
     virtual void            MacDelete( unsigned int n ) = 0;
-    virtual void            MacInsert( unsigned int n, const wxString& item, int column = -1 ) = 0;
-    virtual void            MacInsert( unsigned int n, const wxArrayString& items, int column = -1 ) = 0;
+    virtual void            MacInsert( unsigned int n, const wxArrayStringsAdapter& items, int column = -1 ) = 0;
     // returns index of newly created line
     virtual int             MacAppend( const wxString& item ) = 0;
     virtual void            MacSetString( unsigned int n, const wxString& item ) = 0;
@@ -975,8 +974,7 @@ public :
     // add and remove
 
     virtual void            MacDelete( unsigned int n );
-    virtual void            MacInsert( unsigned int n, const wxString& item, int column = -1 );
-    virtual void            MacInsert( unsigned int n, const wxArrayString& items, int column = -1 );
+    virtual void            MacInsert( unsigned int n, const wxArrayStringsAdapter& items, int column = -1 );
     virtual int             MacAppend( const wxString& item );
     virtual void            MacClear();
 

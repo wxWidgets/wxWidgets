@@ -317,6 +317,8 @@ public:
     bool HandleSize(int x, int y, WXUINT flag);
     bool HandleSizing(wxRect& rect);
     bool HandleGetMinMaxInfo(void *mmInfo);
+    bool HandleEnterSizeMove();
+    bool HandleExitSizeMove();
 
     bool HandleShow(bool show, int status);
     bool HandleActivate(int flag, bool minimized, WXHWND activate);
@@ -430,6 +432,14 @@ public:
 
     // check if a native double-buffering applies for this window
     virtual bool IsDoubleBuffered() const;
+
+    // this allows you to implement standard control borders without
+    // repeating the code in different classes that are not derived from
+    // wxControl
+    virtual wxBorder GetDefaultBorderForControl() const;
+
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const;
 
     // synthesize a wxEVT_LEAVE_WINDOW event and set m_mouseInWindow to false
     void GenerateMouseLeave();

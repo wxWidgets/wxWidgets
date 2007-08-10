@@ -18,7 +18,7 @@
 class WXDLLIMPEXP_CORE wxComboBox : public wxControl, public wxComboBoxBase
 {
 public:
-    inline wxComboBox() {}
+    inline wxComboBox() { m_strings = NULL; }
     inline wxComboBox(wxWindow *parent, wxWindowID id,
            const wxString& value = wxEmptyString,
            const wxPoint& pos = wxDefaultPosition,
@@ -71,8 +71,8 @@ public:
     wxString GetStringSelection() const; // not a virtual in parent class
 
     // From wxItemContainer:
-    virtual void Clear();
-    virtual void Delete(unsigned int n);
+    virtual void DoClear();
+    virtual void DoDeleteOneItem(unsigned int n);
 
     // From wxBomboBoxBase:
     virtual wxString GetValue() const;
@@ -125,10 +125,9 @@ public:
     void OnUpdateDelete(wxUpdateUIEvent& event);
     void OnUpdateSelectAll(wxUpdateUIEvent& event);
 
-    bool     m_ignoreNextUpdate:1;
-    wxList   m_clientDataList;
-    wxList   m_clientObjectList;
-    int      m_prevSelection;
+    bool           m_ignoreNextUpdate:1;
+    wxArrayPtrVoid m_clientData;
+    int            m_prevSelection;
 
     void DisableEvents();
     void EnableEvents();
@@ -145,13 +144,12 @@ protected:
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
     // From wxItemContainer:
-    virtual int DoAppend(const wxString& item);
-    virtual int DoInsert(const wxString& item, unsigned int pos);
-
+    virtual int DoInsertItems(const wxArrayStringsAdapter& items,
+                              unsigned int pos,
+                              void **clientData, wxClientDataType type);
     virtual void DoSetItemClientData(unsigned int n, void* clientData);
     virtual void* DoGetItemClientData(unsigned int n) const;
-    virtual void DoSetItemClientObject(unsigned int n, wxClientData* clientData);
-    virtual wxClientData* DoGetItemClientObject(unsigned int n) const;
+    virtual bool IsSorted() const { return HasFlag(wxCB_SORT); }
 
     // From wxControl:
     virtual wxSize DoGetBestSize() const;
@@ -161,6 +159,10 @@ protected:
     virtual bool UseGTKStyleBase() const { return true; }
 
 private:
+    // this array is only used for controls with wxCB_SORT style, so only
+    // allocate it if it's needed (hence using pointer)
+    wxSortedArrayString *m_strings;
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxComboBox)
     DECLARE_EVENT_TABLE()
 };

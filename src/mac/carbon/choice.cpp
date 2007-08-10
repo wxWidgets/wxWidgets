@@ -50,11 +50,14 @@ bool wxChoice::Create(wxWindow *parent,
     const wxValidator& validator,
     const wxString& name )
 {
-    wxCArrayString chs( choices );
-
     return Create(
-        parent, id, pos, size, chs.GetCount(), chs.GetStrings(),
+        parent, id, pos, size, 0, NULL,
         style, validator, name );
+
+    Append( choices );
+
+    if ( !choices.empty() )
+        SetSelection( 0 );
 }
 
 bool wxChoice::Create(wxWindow *parent,
@@ -91,10 +94,7 @@ bool wxChoice::Create(wxWindow *parent,
         m_strings = wxArrayString( 1 );
 #endif
 
-    for ( int i = 0; i < n; i++ )
-    {
-        Append( choices[i] );
-    }
+    Append(n, choices);
 
     // Set the first item as being selected
     if (n > 0)
@@ -109,54 +109,45 @@ bool wxChoice::Create(wxWindow *parent,
 // ----------------------------------------------------------------------------
 // adding/deleting items to/from the list
 // ----------------------------------------------------------------------------
-int wxChoice::DoAppend( const wxString& item )
+
+int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
+                            unsigned int pos,
+                            void **clientData, wxClientDataType type)
 {
+    const unsigned int numItems = items.GetCount();
+    for( unsigned int i = 0; i < numItems; ++i, ++pos )
+    {
+        unsigned int idx;
+
 #if wxUSE_STL
-    wxArrayString::iterator insertPoint;
-    unsigned int index;
+        if ( IsSorted() )
+        {
+            wxArrayString::iterator
+                insertPoint = std::lower_bound( m_strings.begin(), m_strings.end(), items[i] );
+            idx = insertPoint - m_strings.begin();
+            m_strings.insert( insertPoint, items[i] );
+        }
+        else
+#endif // wxUSE_STL
+        {
+            idx = pos;
+            m_strings.Insert( items[i], idx );
+        }
 
-    if (GetWindowStyle() & wxCB_SORT)
-    {
-        insertPoint = std::lower_bound( m_strings.begin(), m_strings.end(), item );
-        index = insertPoint - m_strings.begin();
+        UMAInsertMenuItem(MAC_WXHMENU( m_macPopUpMenuHandle ),
+                          items[i],
+                          m_font.GetEncoding(),
+                          idx);
+        m_datas.Insert( NULL, idx );
+        AssignNewItemClientData(idx, clientData, i, type);
     }
-    else
-    {
-        insertPoint = m_strings.end();
-        index = m_strings.size();
-    }
 
-    m_strings.insert( insertPoint, item );
-#else
-    unsigned int index = m_strings.Add( item );
-#endif
-
-    m_datas.Insert( NULL , index );
-    UMAInsertMenuItem( MAC_WXHMENU( m_macPopUpMenuHandle ), item, m_font.GetEncoding(), index );
-    DoSetItemClientData( index, NULL );
     m_peer->SetMaximum( GetCount() );
 
-    return index;
+    return pos - 1;
 }
 
-int wxChoice::DoInsert( const wxString& item, unsigned int pos )
-{
-    wxCHECK_MSG( !(GetWindowStyle() & wxCB_SORT), -1, wxT("wxChoice::DoInsert: can't insert into sorted list") );
-    wxCHECK_MSG( IsValidInsert(pos), -1, wxT("wxChoice::DoInsert: invalid index") );
-
-    if (pos == GetCount())
-        return DoAppend( item );
-
-    UMAInsertMenuItem( MAC_WXHMENU( m_macPopUpMenuHandle ), item, m_font.GetEncoding(), pos );
-    m_strings.Insert( item, pos );
-    m_datas.Insert( NULL, pos );
-    DoSetItemClientData( pos, NULL );
-    m_peer->SetMaximum( GetCount() );
-
-    return pos;
-}
-
-void wxChoice::Delete(unsigned int n)
+void wxChoice::DoDeleteOneItem(unsigned int n)
 {
     wxCHECK_RET( IsValid(n) , wxT("wxChoice::Delete: invalid index") );
 
@@ -169,9 +160,8 @@ void wxChoice::Delete(unsigned int n)
     m_peer->SetMaximum( GetCount() ) ;
 }
 
-void wxChoice::Clear()
+void wxChoice::DoClear()
 {
-    FreeData();
     for ( unsigned int i = 0 ; i < GetCount() ; i++ )
     {
         ::DeleteMenuItem( MAC_WXHMENU(m_macPopUpMenuHandle) , 1 ) ;
@@ -180,18 +170,6 @@ void wxChoice::Clear()
     m_strings.Empty() ;
     m_datas.Empty() ;
     m_peer->SetMaximum( 0 ) ;
-}
-
-void wxChoice::FreeData()
-{
-    if ( HasClientObjectData() )
-    {
-        unsigned int count = GetCount();
-        for ( unsigned int n = 0; n < count; n++ )
-        {
-            delete GetClientObject( n );
-        }
-    }
 }
 
 // ----------------------------------------------------------------------------
@@ -220,7 +198,7 @@ int wxChoice::FindString( const wxString& s, bool bCase ) const
 {
 #if !wxUSE_STL
     // Avoid assert for non-default args passed to sorted array Index
-    if ( HasFlag(wxCB_SORT) )
+    if ( IsSorted() )
         bCase = true;
 #endif
 
@@ -259,16 +237,6 @@ void * wxChoice::DoGetItemClientData(unsigned int n) const
     wxCHECK_MSG( IsValid(n), NULL, wxT("wxChoice::DoGetClientData: invalid index") );
 
     return (void *)m_datas[n];
-}
-
-void wxChoice::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
-{
-    DoSetItemClientData(n, clientData);
-}
-
-wxClientData* wxChoice::DoGetItemClientObject(unsigned int n) const
-{
-    return (wxClientData*)DoGetItemClientData( n ) ;
 }
 
 wxInt32 wxChoice::MacControlHit( WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) )

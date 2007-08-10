@@ -206,18 +206,10 @@ wxPenRefData::~wxPenRefData()
 // wxPenRefData HPEN management
 // ----------------------------------------------------------------------------
 
-#ifdef wxHAVE_EXT_CREATE_PEN
-
 static int ConvertPenStyle(int style)
 {
     switch ( style )
     {
-        case wxDOT:
-            return PS_DOT;
-
-        case wxDOT_DASH:
-            return PS_DASHDOT;
-
         case wxSHORT_DASH:
         case wxLONG_DASH:
             return PS_DASH;
@@ -225,12 +217,19 @@ static int ConvertPenStyle(int style)
         case wxTRANSPARENT:
             return PS_NULL;
 
-        case wxUSER_DASH:
-            return PS_USERSTYLE;
-
         default:
             wxFAIL_MSG( _T("unknown pen style") );
             // fall through
+
+#ifdef wxHAVE_EXT_CREATE_PEN
+        case wxDOT:
+            return PS_DOT;
+
+        case wxDOT_DASH:
+            return PS_DASHDOT;
+
+        case wxUSER_DASH:
+            return PS_USERSTYLE;
 
         case wxSTIPPLE:
         case wxBDIAGONAL_HATCH:
@@ -240,9 +239,13 @@ static int ConvertPenStyle(int style)
         case wxHORIZONTAL_HATCH:
         case wxVERTICAL_HATCH:
         case wxSOLID:
+#endif // wxHAVE_EXT_CREATE_PEN
+
             return PS_SOLID;
     }
 }
+
+#ifdef wxHAVE_EXT_CREATE_PEN
 
 static int ConvertJoinStyle(int join)
 {

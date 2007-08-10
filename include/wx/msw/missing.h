@@ -231,6 +231,10 @@ typedef struct wxtagNMLVCUSTOMDRAW_ {
     #define HDN_GETDISPINFOW (HDN_FIRST-29)
 #endif
 
+#ifndef HDS_HOTTRACK
+    #define HDS_HOTTRACK 4
+#endif
+
  /*
   * In addition to the above, the following are required for several compilers.
   */
@@ -347,10 +351,6 @@ typedef struct _OSVERSIONINFOEX {
 
 #ifndef NMHEADER
     #define NMHEADER HD_NOTIFY
-#endif
-
-#ifndef HDS_HOTTRACK
-    #define HDS_HOTTRACK 4
 #endif
 
 #ifndef HDS_FULLDRAG

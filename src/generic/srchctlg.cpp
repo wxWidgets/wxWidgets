@@ -325,6 +325,12 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
     style &= ~wxBORDER_MASK;
 #ifdef __WXGTK__
     style |= wxBORDER_SUNKEN;
+#elif defined(__WXMSW__)
+    // Don't set the style explicitly, let GetDefaultBorder() work it out, unless
+    // we will get a sunken border (e.g. on Windows 200) in which case we must
+    // override with a simple border.
+    if (GetDefaultBorder() == wxBORDER_SUNKEN)
+        style |= wxBORDER_SIMPLE;
 #else
     style |= wxBORDER_SIMPLE;
 #endif
@@ -534,7 +540,7 @@ void wxSearchCtrl::LayoutControls(int x, int y, int width, int height)
         searchMargin = 0;
         cancelMargin = 0;
     }
-    wxCoord textWidth = width - sizeSearch.x - sizeCancel.x - searchMargin - cancelMargin;
+    wxCoord textWidth = width - sizeSearch.x - sizeCancel.x - searchMargin - cancelMargin - 1;
 
     // position the subcontrols inside the client area
 
@@ -1172,7 +1178,7 @@ void wxSearchCtrl::RecalcBitmaps()
             m_cancelBitmap.GetWidth() != bitmapHeight
             )
         {
-            m_cancelBitmap = RenderCancelBitmap(bitmapHeight-BORDER,bitmapHeight-BORDER); // square
+            m_cancelBitmap = RenderCancelBitmap(bitmapHeight-BORDER-1,bitmapHeight-BORDER-1); // square
             m_cancelButton->SetBitmapLabel(m_cancelBitmap);
         }
         // else this bitmap was set by user, don't alter

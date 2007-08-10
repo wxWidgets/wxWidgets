@@ -58,7 +58,7 @@ using namespace std ;
 #endif
 
 #if wxUSE_WCHAR_T
-size_t WXDLLEXPORT wxMB2WC(wchar_t *buf, const char *psz, size_t n)
+WXDLLIMPEXP_BASE size_t wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 {
   // assume that we have mbsrtowcs() too if we have wcsrtombs()
 #ifdef HAVE_WCSRTOMBS
@@ -91,7 +91,7 @@ size_t WXDLLEXPORT wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 #endif
 }
 
-size_t WXDLLEXPORT wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
+WXDLLIMPEXP_BASE size_t wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
 {
 #ifdef HAVE_WCSRTOMBS
   mbstate_t mbstate;
@@ -119,7 +119,7 @@ size_t WXDLLEXPORT wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
 }
 #endif // wxUSE_WCHAR_T
 
-bool WXDLLEXPORT wxOKlibc()
+WXDLLIMPEXP_BASE bool wxOKlibc()
 {
 #if wxUSE_WCHAR_T && defined(__UNIX__) && defined(__GLIBC__) && !defined(__WINE__)
   // glibc 2.0 uses UTF-8 even when it shouldn't
@@ -142,6 +142,13 @@ bool WXDLLEXPORT wxOKlibc()
 
 char* wxSetlocale(int category, const char *locale)
 {
+#ifdef __WXWINCE__
+    // FIXME-CE: there is no setlocale() in CE CRT, use SetThreadLocale()?
+    wxUnusedVar(category);
+    wxUnusedVar(locale);
+
+    return NULL;
+#else // !__WXWINCE__
     char *rv = setlocale(category, locale);
     if ( locale != NULL /* setting locale, not querying */ &&
          rv /* call was successful */ )
@@ -149,6 +156,7 @@ char* wxSetlocale(int category, const char *locale)
         wxUpdateLocaleIsUtf8();
     }
     return rv;
+#endif // __WXWINCE__/!__WXWINCE__
 }
 
 // ============================================================================
@@ -359,7 +367,7 @@ int wxCRT_ScanfW(const wchar_t *format, ...)
 #else
    int ret = vwscanf(format, argptr);
 #endif
-   
+
     va_end(argptr);
 
     return ret;
@@ -696,7 +704,7 @@ int wxVsnprintf(wchar_t *str, size_t size, const wxString& format, va_list argpt
 
 #ifdef wxNEED_WX_MBSTOWCS
 
-WXDLLEXPORT size_t wxMbstowcs (wchar_t * out, const char * in, size_t outlen)
+WXDLLIMPEXP_BASE size_t wxMbstowcs (wchar_t * out, const char * in, size_t outlen)
 {
     if (!out)
     {
@@ -718,7 +726,7 @@ WXDLLEXPORT size_t wxMbstowcs (wchar_t * out, const char * in, size_t outlen)
     return in - origin;
 }
 
-WXDLLEXPORT size_t wxWcstombs (char * out, const wchar_t * in, size_t outlen)
+WXDLLIMPEXP_BASE size_t wxWcstombs (char * out, const wchar_t * in, size_t outlen)
 {
     if (!out)
     {
@@ -743,14 +751,14 @@ WXDLLEXPORT size_t wxWcstombs (char * out, const wchar_t * in, size_t outlen)
 #endif // wxNEED_WX_MBSTOWCS
 
 #ifndef wxCRT_StrdupA
-WXDLLEXPORT char *wxCRT_StrdupA(const char *s)
+WXDLLIMPEXP_BASE char *wxCRT_StrdupA(const char *s)
 {
     return strcpy((char *)malloc(strlen(s) + 1), s);
 }
 #endif // wxCRT_StrdupA
 
 #ifndef wxCRT_StrdupW
-WXDLLEXPORT wchar_t * wxCRT_StrdupW(const wchar_t *pwz)
+WXDLLIMPEXP_BASE wchar_t * wxCRT_StrdupW(const wchar_t *pwz)
 {
   size_t size = (wxWcslen(pwz) + 1) * sizeof(wchar_t);
   wchar_t *ret = (wchar_t *) malloc(size);
@@ -760,7 +768,7 @@ WXDLLEXPORT wchar_t * wxCRT_StrdupW(const wchar_t *pwz)
 #endif // wxCRT_StrdupW
 
 #ifndef wxCRT_StricmpA
-int WXDLLEXPORT wxCRT_StricmpA(const char *psz1, const char *psz2)
+WXDLLIMPEXP_BASE int wxCRT_StricmpA(const char *psz1, const char *psz2)
 {
   register char c1, c2;
   do {
@@ -772,7 +780,7 @@ int WXDLLEXPORT wxCRT_StricmpA(const char *psz1, const char *psz2)
 #endif // !defined(wxCRT_StricmpA)
 
 #ifndef wxCRT_StricmpW
-int WXDLLEXPORT wxCRT_StricmpW(const wchar_t *psz1, const wchar_t *psz2)
+WXDLLIMPEXP_BASE int wxCRT_StricmpW(const wchar_t *psz1, const wchar_t *psz2)
 {
   register wchar_t c1, c2;
   do {
@@ -784,7 +792,7 @@ int WXDLLEXPORT wxCRT_StricmpW(const wchar_t *psz1, const wchar_t *psz2)
 #endif // !defined(wxCRT_StricmpW)
 
 #ifndef wxCRT_StrnicmpA
-int WXDLLEXPORT wxCRT_StrnicmpA(const char *s1, const char *s2, size_t n)
+WXDLLIMPEXP_BASE int wxCRT_StrnicmpA(const char *s1, const char *s2, size_t n)
 {
   // initialize the variables just to suppress stupid gcc warning
   register char c1 = 0, c2 = 0;
@@ -798,7 +806,7 @@ int WXDLLEXPORT wxCRT_StrnicmpA(const char *s1, const char *s2, size_t n)
 #endif // !defined(wxCRT_StrnicmpA)
 
 #ifndef wxCRT_StrnicmpW
-int WXDLLEXPORT wxCRT_StrnicmpW(const wchar_t *s1, const wchar_t *s2, size_t n)
+WXDLLIMPEXP_BASE int wxCRT_StrnicmpW(const wchar_t *s1, const wchar_t *s2, size_t n)
 {
   // initialize the variables just to suppress stupid gcc warning
   register wchar_t c1 = 0, c2 = 0;
@@ -818,7 +826,7 @@ int WXDLLEXPORT wxCRT_StrnicmpW(const wchar_t *s1, const wchar_t *s2, size_t n)
 // this (and wxCRT_StrncmpW below) are extern "C" because they are needed
 // by regex code, the rest isn't needed, so it's not declared as extern "C"
 #ifndef wxCRT_StrlenW
-extern "C" WXDLLEXPORT size_t wxCRT_StrlenW(const wchar_t *s)
+extern "C" WXDLLIMPEXP_BASE size_t wxCRT_StrlenW(const wchar_t *s)
 {
     size_t n = 0;
     while ( *s++ )
@@ -833,7 +841,7 @@ extern "C" WXDLLEXPORT size_t wxCRT_StrlenW(const wchar_t *s)
 // ----------------------------------------------------------------------------
 
 #ifndef wxCRT_GetenvW
-wchar_t* WXDLLEXPORT wxCRT_GetenvW(const wchar_t *name)
+WXDLLIMPEXP_BASE wchar_t* wxCRT_GetenvW(const wchar_t *name)
 {
     // NB: buffer returned by getenv() is allowed to be overwritten next
     //     time getenv() is called, so it is OK to use static string
@@ -845,7 +853,7 @@ wchar_t* WXDLLEXPORT wxCRT_GetenvW(const wchar_t *name)
 #endif // !wxCRT_GetenvW
 
 #ifndef wxCRT_StrftimeW
-WXDLLEXPORT size_t
+WXDLLIMPEXP_BASE size_t
 wxCRT_StrftimeW(wchar_t *s, size_t maxsize, const wchar_t *fmt, const struct tm *tm)
 {
     if ( !maxsize )
@@ -883,7 +891,7 @@ wxCRT_StrtoullBase(const T* nptr, T** endptr, int base, T* sign)
     wxString::const_iterator end = wxstr.end();
 
     // Skip spaces
-    while ( i != end && wxIsspace(*i) ) i++;
+    while ( i != end && wxIsspace(*i) ) ++i;
 
     // Starts with sign?
     *sign = wxT(' ');
@@ -893,20 +901,20 @@ wxCRT_StrtoullBase(const T* nptr, T** endptr, int base, T* sign)
         if ( c == wxT('+') || c == wxT('-') )
         {
             *sign = c;
-            i++;
+            ++i;
         }
     }
 
     // Starts with 0x?
     if ( i != end && *i == wxT('0') )
     {
-        i++;
+        ++i;
         if ( i != end )
         {
             if ( *i == wxT('x') && (base == 16 || base == 0) )
             {
                 base = 16;
-                i++;
+                ++i;
             }
             else
             {
@@ -917,13 +925,13 @@ wxCRT_StrtoullBase(const T* nptr, T** endptr, int base, T* sign)
             }
         }
         else
-            i--;
+            --i;
     }
 
     if ( base == 0 )
         base = 10;
 
-    for ( ; i != end; i++ )
+    for ( ; i != end; ++i )
     {
         unsigned int n;
 
@@ -1099,15 +1107,6 @@ void *calloc( size_t num, size_t size )
 
 #endif // __WXWINCE__ <= 211
 
-#ifdef __WXWINCE__
-int wxCRT_RemoveW(const wchar_t *path)
-{
-    return ::DeleteFile(path) == 0;
-}
-#endif
-
-
-
 // ============================================================================
 // wxLocaleIsUtf8
 // ============================================================================
@@ -1208,6 +1207,8 @@ int wxFputc(const wxUniChar& c, FILE *stream)
 #endif
 }
 
+#ifdef wxCRT_PerrorA
+
 void wxPerror(const wxString& s)
 {
 #ifdef wxCRT_PerrorW
@@ -1218,6 +1219,8 @@ void wxPerror(const wxString& s)
     wxCRT_PerrorA(s.mb_str());
 #endif
 }
+
+#endif // wxCRT_PerrorA
 
 wchar_t *wxFgets(wchar_t *s, int size, FILE *stream)
 {

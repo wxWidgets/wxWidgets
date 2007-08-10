@@ -1,26 +1,15 @@
 #include <commctrl.h>
+#include "wx/msw/wince/resources.h"
 
 #ifdef WIN32_PLATFORM_WFSP
     #include "wx/msw/wince/smartphone.rc"
-#else
+#else // !smartphone
 
-// Dummy menubar/toolbar for WinCE
-
-5000 RCDATA DISCARDABLE
+// Dummy empty menubar/toolbar for WinCE
+wxIDM_SHMENU RCDATA DISCARDABLE
 BEGIN
-  // Popup menu name
-  5000,
-  // Count of items to put on the menu
+  wxIDM_SHMENU,
   0
 END
 
-5000 MENU DISCARDABLE
-BEGIN
-    POPUP "Dummy"
-    BEGIN
-    MENUITEM "Dummy" 99
-    END
-END
-
-#endif
-
+#endif // smartphone/!smartphone

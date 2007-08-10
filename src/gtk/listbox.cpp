@@ -205,6 +205,7 @@ static void gtk_tree_entry_destroy_cb(GtkTreeEntry* entry,
 //-----------------------------------------------------------------------------
 // Sorting callback (standard CmpNoCase return value)
 //-----------------------------------------------------------------------------
+#include <iostream>
 
 extern "C" {
 static gint gtk_listbox_sort_callback(GtkTreeModel *model,
@@ -228,8 +229,8 @@ static gint gtk_listbox_sort_callback(GtkTreeModel *model,
 
     //We compare collate keys here instead of calling g_utf8_collate
     //as it is rather slow (and even the docs reccommend this)
-    int ret = strcasecmp(gtk_tree_entry_get_collate_key(entry),
-                         gtk_tree_entry_get_collate_key(entry2));
+    int ret = strcmp(gtk_tree_entry_get_collate_key(entry),
+                     gtk_tree_entry_get_collate_key(entry2));
 
     g_object_unref (entry);
     g_object_unref (entry2);
@@ -258,8 +259,8 @@ static gboolean gtk_listbox_searchequal_callback(GtkTreeModel* model,
     wxCHECK_MSG(entry, 0, wxT("Could not get entry"));
     wxGtkString keycollatekey(g_utf8_collate_key(key, -1));
 
-    int ret = strcasecmp(keycollatekey,
-                         gtk_tree_entry_get_collate_key(entry));
+    int ret = strcmp(keycollatekey,
+                     gtk_tree_entry_get_collate_key(entry));
 
     g_object_unref (entry);
 
@@ -396,7 +397,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     gtk_tree_selection_set_mode( selection, mode );
 
     // Handle sortable stuff
-    if(style & wxLB_SORT)
+    if(HasFlag(wxLB_SORT))
     {
         // Setup sorting in ascending (wx) order
         gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(m_liststore),
@@ -418,7 +419,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     gtk_widget_show( GTK_WIDGET(m_treeview) );
     m_focusWidget = GTK_WIDGET(m_treeview);
 
-    wxListBox::DoInsertItems(wxArrayString(n, choices), 0); // insert initial items
+    Append(n, choices); // insert initial items
 
     // generate dclick events
     g_signal_connect_after(m_treeview, "row-activated",
@@ -443,35 +444,30 @@ wxListBox::~wxListBox()
 // adding items
 // ----------------------------------------------------------------------------
 
-void wxListBox::GtkInsertItems(const wxArrayString& items,
-                               void** clientData, unsigned int pos)
+int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
+                             unsigned int pos,
+                             void **clientData,
+                             wxClientDataType type)
 {
-    wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
+    wxCHECK_MSG( m_treeview != NULL, wxNOT_FOUND, wxT("invalid listbox") );
 
     InvalidateBestSize();
 
-    // Create and set column ids and GValues
-
-    unsigned int nNum = items.GetCount();
-    unsigned int nCurCount = wxListBox::GetCount();
-    wxASSERT_MSG(pos <= nCurCount, wxT("Invalid index passed to wxListBox"));
-
     GtkTreeIter* pIter = NULL; // append by default
     GtkTreeIter iter;
-    if (pos != nCurCount)
+    if ( pos != GetCount() )
     {
-        wxCHECK_RET( GtkGetIteratorFor(pos, &iter),
+        wxCHECK_MSG( GtkGetIteratorFor(pos, &iter), wxNOT_FOUND,
                      wxT("internal wxListBox error in insertion") );
 
         pIter = &iter;
     }
 
-    for (unsigned int i = 0; i < nNum; ++i)
+    const unsigned int numItems = items.GetCount();
+    for ( unsigned int i = 0; i < numItems; ++i )
     {
-        wxString label = items[i];
-
         GtkTreeEntry* entry = gtk_tree_entry_new();
-        gtk_tree_entry_set_label(entry, wxGTK_CONV(label));
+        gtk_tree_entry_set_label(entry, wxGTK_CONV(items[i]));
         gtk_tree_entry_set_destroy_func(entry,
                 (GtkTreeEntryDestroy)gtk_tree_entry_destroy_cb,
                             this);
@@ -486,49 +482,18 @@ void wxListBox::GtkInsertItems(const wxArrayString& items,
 
         g_object_unref (entry);
     }
-}
 
-void wxListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
-{
-    wxCHECK_RET( IsValidInsert(pos), wxT("invalid index in wxListBox::InsertItems") );
+    if ( !HasClientData() )
+        m_clientDataItemsType = type;
 
-    GtkInsertItems(items, NULL, pos);
-}
-
-int wxListBox::DoAppend( const wxString& item )
-{
-    wxCHECK_MSG( m_treeview != NULL, -1, wxT("invalid listbox") );
-
-    InvalidateBestSize();
-
-    GtkTreeEntry* entry = gtk_tree_entry_new();
-    gtk_tree_entry_set_label( entry, wxGTK_CONV(item) );
-    gtk_tree_entry_set_destroy_func(entry,
-                (GtkTreeEntryDestroy)gtk_tree_entry_destroy_cb,
-                            this);
-
-    GtkTreeIter itercur;
-    gtk_list_store_insert_before( m_liststore, &itercur, NULL );
-
-    GtkSetItem(itercur, entry);
-
-    g_object_unref (entry);
-
-    return GtkGetIndexFor(itercur);
-}
-
-void wxListBox::DoSetItems( const wxArrayString& items,
-                            void **clientData)
-{
-    Clear();
-    GtkInsertItems(items, clientData, 0);
+    return pos + numItems - 1;
 }
 
 // ----------------------------------------------------------------------------
 // deleting items
 // ----------------------------------------------------------------------------
 
-void wxListBox::Clear()
+void wxListBox::DoClear()
 {
     wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
 
@@ -537,7 +502,7 @@ void wxListBox::Clear()
     gtk_list_store_clear( m_liststore ); /* well, THAT was easy :) */
 }
 
-void wxListBox::Delete(unsigned int n)
+void wxListBox::DoDeleteOneItem(unsigned int n)
 {
     wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
 
@@ -632,11 +597,6 @@ void* wxListBox::DoGetItemClientData(unsigned int n) const
     return userdata;
 }
 
-wxClientData* wxListBox::DoGetItemClientObject(unsigned int n) const
-{
-    return (wxClientData*) wxListBox::DoGetItemClientData(n);
-}
-
 void wxListBox::DoSetItemClientData(unsigned int n, void* clientData)
 {
     wxCHECK_RET( IsValid(n),
@@ -647,12 +607,6 @@ void wxListBox::DoSetItemClientData(unsigned int n, void* clientData)
 
     gtk_tree_entry_set_userdata( entry, clientData );
     g_object_unref (entry);
-}
-
-void wxListBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
-{
-    // wxItemContainer already deletes data for us
-    wxListBox::DoSetItemClientData(n, (void*) clientData);
 }
 
 // ----------------------------------------------------------------------------

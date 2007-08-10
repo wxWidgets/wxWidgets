@@ -212,6 +212,7 @@ public:
     wxMouseState()
         : m_x(0), m_y(0),
           m_leftDown(false), m_middleDown(false), m_rightDown(false),
+          m_aux1Down(false), m_aux2Down(false),
           m_controlDown(false), m_shiftDown(false), m_altDown(false),
           m_metaDown(false)
     {}
@@ -222,6 +223,8 @@ public:
     bool        LeftDown()    { return m_leftDown; }
     bool        MiddleDown()  { return m_middleDown; }
     bool        RightDown()   { return m_rightDown; }
+    bool        Aux1Down()    { return m_aux1Down; }
+    bool        Aux2Down()    { return m_aux2Down; }
 
     bool        ControlDown() { return m_controlDown; }
     bool        ShiftDown()   { return m_shiftDown; }
@@ -242,6 +245,8 @@ public:
     void        SetLeftDown(bool down)   { m_leftDown = down; }
     void        SetMiddleDown(bool down) { m_middleDown = down; }
     void        SetRightDown(bool down)  { m_rightDown = down; }
+    void        SetAux1Down(bool down)   { m_aux1Down = down; }
+    void        SetAux2Down(bool down)   { m_aux2Down = down; }
 
     void        SetControlDown(bool down) { m_controlDown = down; }
     void        SetShiftDown(bool down)   { m_shiftDown = down; }
@@ -255,6 +260,8 @@ private:
     bool        m_leftDown : 1;
     bool        m_middleDown : 1;
     bool        m_rightDown : 1;
+    bool        m_aux1Down : 1;
+    bool        m_aux2Down : 1;
 
     bool        m_controlDown : 1;
     bool        m_shiftDown : 1;

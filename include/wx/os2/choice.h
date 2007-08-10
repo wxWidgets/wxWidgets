@@ -93,8 +93,8 @@ public:
     //
     // Implement base class virtuals
     //
-    virtual void     Delete(unsigned int n);
-    virtual void     Clear(void);
+    virtual void     DoDeleteOneItem(unsigned int n);
+    virtual void     DoClear(void);
 
     virtual unsigned int GetCount() const;
     virtual int      GetSelection(void) const;
@@ -115,12 +115,13 @@ public:
                                   );
 
 protected:
-    virtual int           DoAppend(const wxString& rsItem);
-    virtual int           DoInsert(const wxString& rsItem, unsigned int pos);
+    virtual int           DoInsertItems(const wxArrayStringsAdapter& items,
+                                        unsigned int pos,
+                                        void **clientData,
+                                        wxClientDataType type);
+
     virtual void          DoSetItemClientData(unsigned int n, void* pClientData);
     virtual void*         DoGetItemClientData(unsigned int n) const;
-    virtual void          DoSetItemClientObject(unsigned int n, wxClientData* pClientData);
-    virtual wxClientData* DoGetItemClientObject(unsigned int n) const;
     virtual wxSize        DoGetBestSize(void) const;
     virtual void          DoSetSize( int nX
                                     ,int nY

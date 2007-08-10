@@ -285,9 +285,9 @@ void MyServer::Advise()
     if (CanAdvise())
     {
         wxString s = wxDateTime::Now().Format();
-        m_connection->Advise(m_connection->m_sAdvise, (wxChar *)s.c_str());
+        m_connection->Advise(m_connection->m_sAdvise, s.c_str());
         s = wxDateTime::Now().FormatTime() + _T(" ") + wxDateTime::Now().FormatDate();
-        m_connection->Advise(m_connection->m_sAdvise, (wxChar *)s.c_str(), (s.Length() + 1) * sizeof(wxChar));
+        m_connection->Advise(m_connection->m_sAdvise, s.c_str(), (s.Length() + 1) * sizeof(wxChar));
 
 #if wxUSE_DDE_FOR_IPC
         wxLogMessage(_T("DDE Advise type argument cannot be wxIPC_PRIVATE. The client will receive it as wxIPC_TEXT, and receive the correct no of bytes, but not print a correct log entry."));
@@ -327,25 +327,25 @@ bool MyConnection::OnPoke(const wxString& topic,
     return wxConnection::OnPoke(topic, item, data, size, format);
 }
 
-wxChar *MyConnection::OnRequest(const wxString& topic,
+const wxChar *MyConnection::OnRequest(const wxString& topic,
     const wxString& item, int * size, wxIPCFormat format)
 {
-    wxChar *data;
+    const wxChar *data;
     if (item == _T("Date"))
     {
         m_sRequestDate = wxDateTime::Now().Format();
-        data = (wxChar *)m_sRequestDate.c_str();
+        data = m_sRequestDate.c_str();
         *size = -1;
     }    
     else if (item == _T("Date+len"))
     {
         m_sRequestDate = wxDateTime::Now().FormatTime() + _T(" ") + wxDateTime::Now().FormatDate();
-        data = (wxChar *)m_sRequestDate.c_str();
+        data = m_sRequestDate.c_str();
         *size = (m_sRequestDate.Length() + 1) * sizeof(wxChar);
     }    
     else if (item == _T("bytes[3]"))
     {
-        data = (wxChar *)m_achRequestBytes;
+        data = m_achRequestBytes;
         m_achRequestBytes[0] = '1'; m_achRequestBytes[1] = '2'; m_achRequestBytes[2] = '3';
         *size = 3;
     }
@@ -379,7 +379,7 @@ bool MyConnection::OnStopAdvise(const wxString& topic,
 }
 
 void MyConnection::Log(const wxString& command, const wxString& topic,
-    const wxString& item, wxChar *data, int size, wxIPCFormat format)
+    const wxString& item, const wxChar *data, int size, wxIPCFormat format)
 {
     wxString s;
     if (topic.IsEmpty() && item.IsEmpty())
@@ -407,7 +407,7 @@ void MyConnection::Log(const wxString& command, const wxString& topic,
         wxLogMessage(_T("%s[invalid data],%d)"), s.c_str(), size);
 }
 
-bool MyConnection::Advise(const wxString& item, wxChar *data, int size, wxIPCFormat format)
+bool MyConnection::Advise(const wxString& item, const wxChar *data, int size, wxIPCFormat format)
 {
     Log(_T("Advise"), _T(""), item, data, size, format);
     return wxConnection::Advise(item, data, size, format);

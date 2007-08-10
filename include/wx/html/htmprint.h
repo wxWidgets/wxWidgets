@@ -256,6 +256,11 @@ public:
             // return page setting data objects.
             // (You can set their parameters.)
 
+    wxWindow* GetParentWindow() const { return m_ParentWindow; }
+            // get the parent window
+    void SetParentWindow(wxWindow* window) { m_ParentWindow = window; }
+            // set the parent window
+
 protected:
     virtual wxHtmlPrintout *CreatePrintout();
     virtual bool DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *printout2);

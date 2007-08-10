@@ -301,11 +301,6 @@ bool wxTextCtrl::Create(wxWindow *parent,
                         const wxValidator& validator,
                         const wxString& name)
 {
-#ifdef __WXWINCE__
-    if ((style & wxBORDER_MASK) == 0)
-        style |= wxBORDER_SIMPLE;
-#endif
-
     // base initialization
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return false;
@@ -314,6 +309,17 @@ bool wxTextCtrl::Create(wxWindow *parent,
         return false;
 
     return true;
+}
+
+// returns true if the platform should explicitly apply a theme border
+bool wxTextCtrl::CanApplyThemeBorder() const
+{
+#ifdef __WXWINCE__
+    return false;
+#else
+    // Standard text control already handles theming
+    return ((GetWindowStyle() & (wxTE_RICH|wxTE_RICH2)) != 0);
+#endif
 }
 
 bool wxTextCtrl::MSWCreateText(const wxString& value,
