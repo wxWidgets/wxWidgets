@@ -149,7 +149,7 @@ bool wxTopLevelWindowCocoa::Create(wxWindow *parent,
         [m_cocoaNSWindow setExcludedFromWindowsMenu: YES];
     if(style & wxSTAY_ON_TOP)
         [m_cocoaNSWindow setLevel:NSFloatingWindowLevel];
-    [m_cocoaNSWindow setTitle:wxNSStringWithWxString(title)];
+    SetTitle(title);
     return true;
 }
 
@@ -341,13 +341,12 @@ void wxTopLevelWindowCocoa::OnCloseWindow(wxCloseEvent& event)
 
 void wxTopLevelWindowCocoa::SetTitle( const wxString& WXUNUSED(title))
 {
-    // TODO
+    [m_cocoaNSWindow setTitle:wxNSStringWithWxString(title)];
 }
 
 wxString wxTopLevelWindowCocoa::GetTitle() const
 {
-    // TODO
-    return wxEmptyString;
+    return wxStringWithNSString([m_cocoaNSWindow title]);
 }
 
 wxWindow* wxTopLevelWindowCocoa::SetDefaultItem(wxWindow *win)
