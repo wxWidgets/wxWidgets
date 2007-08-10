@@ -2,7 +2,7 @@
 // Name:        src/cocoa/scrolbar.mm
 // Purpose:     wxScrollBar
 // Author:      David Elliott
-// Modified by:
+// Modified by: Mark Oxenham
 // Created:     2004/04/25
 // RCS-ID:      $Id$
 // Copyright:   (c) 2004 David Elliott
@@ -26,17 +26,63 @@ BEGIN_EVENT_TABLE(wxScrollBar, wxScrollBarBase)
 END_EVENT_TABLE()
 WX_IMPLEMENT_COCOA_OWNER(wxScrollBar,NSScroller,NSControl,NSView)
 
+inline NSControlSize AdjustDimension(
+                int             &pos,
+                wxSize          &size,
+                int             (wxSize::*GetDimension)() const,
+                void            (wxSize::*SetDimension)(int))
+{
+    NSControlSize controlSize = NSRegularControlSize;
+    const int dimension = (size.*GetDimension)();
+
+    if ((size.GetHeight() == -1) || (size.GetWidth() == -1) || (dimension >= 15)) 
+    {
+        (size.*SetDimension)(15);
+    }
+    else
+    {
+        (size.*SetDimension)(11);
+        controlSize = NSSmallControlSize;
+    }
+
+    pos += (dimension - (size.*GetDimension)() + 1) / 2;
+
+    return (controlSize);
+}
+
 bool wxScrollBar::Create(wxWindow *parent, wxWindowID winid,
             const wxPoint& pos, const wxSize& size, long style,
             const wxValidator& validator, const wxString& name)
 {
-    if(!CreateControl(parent,winid,pos,size,style,validator,name))
+    NSControlSize controlSize = NSRegularControlSize;
+    wxSize adjustedSize(size);
+    wxPoint adjustedPos(pos);
+
+    if ((style & wxSB_HORIZONTAL) && ((size.GetHeight() != wxDefaultCoord) || (size.GetHeight() == -1)))
+    {
+        controlSize = AdjustDimension(adjustedPos.y, adjustedSize, &wxSize::GetHeight, &wxSize::SetHeight);
+    }
+    else if ((style & wxSB_VERTICAL) && (size.GetWidth() != wxDefaultCoord || (size.GetWidth() == -1)))
+    {
+        controlSize = AdjustDimension(adjustedPos.x, adjustedSize, &wxSize::GetWidth, &wxSize::SetWidth);
+    }
+
+    if(!CreateControl(parent,winid,adjustedPos,adjustedSize,style,validator,name))
         return false;
-    SetNSScroller([[NSScroller alloc] initWithFrame: MakeDefaultNSRect(size)]);
+    SetNSScroller([[NSScroller alloc] initWithFrame: MakeDefaultNSRect(adjustedSize)]);
     [m_cocoaNSView release];
     if(m_parent)
         m_parent->CocoaAddChild(this);
-    SetInitialFrameRect(pos,size);
+    SetInitialFrameRect(adjustedPos,adjustedSize);
+
+    BOOL nsEnabled = [GetNSScroller() isEnabled];
+
+    if (IsEnabled() != (nsEnabled != NO))
+    {
+        [GetNSScroller() setEnabled: !nsEnabled];
+    }
+
+    [GetNSScroller() setControlSize: controlSize];
 
     return true;
 }
