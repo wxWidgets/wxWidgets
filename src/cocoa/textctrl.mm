@@ -59,6 +59,10 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID winid,
     if(m_parent)
         m_parent->CocoaAddChild(this);
     SetInitialFrameRect(pos,size);
+
+    [(NSTextField*)m_cocoaNSView setTarget: sm_cocoaTarget];
+    [(NSTextField*)m_cocoaNSView setAction:@selector(wxNSControlAction:)];
+    
     return true;
 }
 
@@ -69,6 +73,19 @@ wxTextCtrl::~wxTextCtrl()
 
 void wxTextCtrl::Cocoa_didChangeText(void)
 {
+}
+
+void wxTextCtrl::CocoaTarget_action(void)
+{
+    // NSTextField only sends the action message on enter key press and thus
+    // we send the appropriate event type.
+    wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, GetId());
+
+    // See wxTextCtrlBase::SendTextUpdatedEvent for why we don't set the string.
+    //event.SetString(GetValue());
+
+    event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(event);
 }
 
 void wxTextCtrl::AppendText(wxString const&)
