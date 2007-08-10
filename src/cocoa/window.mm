@@ -1140,13 +1140,13 @@ wxString wxWindow::GetLabel() const
 int wxWindow::GetCharHeight() const
 {
     // TODO
-    return 0;
+    return 10;
 }
 
 int wxWindow::GetCharWidth() const
 {
     // TODO
-    return 0;
+    return 5;
 }
 
 void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
