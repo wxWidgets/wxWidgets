@@ -135,11 +135,23 @@ static void GetTooltipColors()
 {
     GtkTooltips* tooltips = gtk_tooltips_new();
     gtk_tooltips_force_window(tooltips);
-    gtk_widget_ensure_style(tooltips->tip_window);
-    GdkColor c = tooltips->tip_window->style->bg[GTK_STATE_NORMAL];
-    gs_objects.m_colTooltip = wxColor(c);
-    c = tooltips->tip_window->style->fg[GTK_STATE_NORMAL];
-    gs_objects.m_colTooltipText = wxColor(c);
+
+    // FIXME: In 2.11.6 tip_window is private and always NULL so
+    // we need to do something different if there is no window.
+    // See https://sourceforge.net/tracker/index.php?func=detail&aid=1767485&group_id=9863&atid=109863
+    if (tooltips->tip_window)
+    {
+        gtk_widget_ensure_style(tooltips->tip_window);
+        GdkColor c = tooltips->tip_window->style->bg[GTK_STATE_NORMAL];
+        gs_objects.m_colTooltip = wxColor(c);
+        c = tooltips->tip_window->style->fg[GTK_STATE_NORMAL];
+        gs_objects.m_colTooltipText = wxColor(c);
+    }
+    else
+    {
+        gs_objects.m_colTooltipText = wxColour(255, 255, 128); // FIXME
+    }
+
     gtk_object_sink((GtkObject*)tooltips);
 }
 
@@ -509,7 +521,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
             // since that is what the API wants. But the values
             // are much bigger under GNOME than under Windows and
             // just seem to much in many cases to be useful.
-            // drag_threshold *= 2;   
+            // drag_threshold *= 2;
 
             return drag_threshold;
 
