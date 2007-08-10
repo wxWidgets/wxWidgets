@@ -57,13 +57,9 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID winid,
     if (parent)
         parent->AddChild(this);
 
-    NSRect cocoaRect = NSMakeRect(300,300,200,200);
+    unsigned int cocoaStyle = NSWindowStyleForWxStyle(style);
 
-    unsigned int cocoaStyle = 0;
-    cocoaStyle |= NSTitledWindowMask;
-    cocoaStyle |= NSClosableWindowMask;
-    cocoaStyle |= NSMiniaturizableWindowMask;
-    cocoaStyle |= NSResizableWindowMask;
+    NSRect cocoaRect = MakeInitialNSWindowContentRect(pos,size,cocoaStyle);
 
     m_cocoaNSWindow = NULL;
     SetNSPanel([[NSPanel alloc] initWithContentRect:cocoaRect styleMask:cocoaStyle backing:NSBackingStoreBuffered defer:NO]);

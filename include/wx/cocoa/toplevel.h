@@ -80,6 +80,7 @@ protected:
     static wxCocoaNSWindowHash sm_cocoaHash;
     virtual void CocoaReplaceView(WX_NSView oldView, WX_NSView newView);
     static unsigned int NSWindowStyleForWxStyle(long style);
+    static NSRect MakeInitialNSWindowContentRect(const wxPoint& pos, const wxSize& size, unsigned int cocoaStyleMask);
 
     static wxTopLevelWindowCocoa *sm_cocoaDeactivateWindow;
 // ------------------------------------------------------------------------
