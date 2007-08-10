@@ -34,6 +34,7 @@
 #import <Foundation/NSException.h>
 #import <AppKit/NSApplication.h>
 #import <AppKit/NSWindow.h>
+#import <AppKit/NSScreen.h>
 
 // Turn this on to paint green over the dummy views for debugging
 #undef WXCOCOA_FILL_DUMMY_VIEW
@@ -59,6 +60,10 @@ typedef int CocoaWindowCompareFunctionResult;
 - (void)getRectsBeingDrawn:(const NSRect **)rects count:(int *)count;
 @end
 
+// ========================================================================
+// Helper functions for converting to/from wxWidgets coordinates and a
+// specified NSView's coordinate system.
+// ========================================================================
 NSPoint CocoaTransformNSViewBoundsToWx(NSView *nsview, NSPoint pointBounds)
 {
     wxCHECK_MSG(nsview, pointBounds, wxT("Need to have a Cocoa view to do translation"));
@@ -109,6 +114,149 @@ NSRect CocoaTransformNSViewWxToBounds(NSView *nsview, NSRect rectWx)
     ,   rectWx.size.width
     ,   rectWx.size.height
     );
+}
+
+// ============================================================================
+// Screen coordinate helpers
+// ============================================================================
+
+/*
+General observation about Cocoa screen coordinates:
+It is documented that the first object of the [NSScreen screens] array is the screen with the menubar.
+
+It is not documented (but true as far as I can tell) that (0,0) in Cocoa screen coordinates is always
+the BOTTOM-right corner of this screen.  Recall that Cocoa uses cartesian coordinates so y-increase is up.
+
+It isn't clearly documented but visibleFrame returns a rectangle in screen coordinates, not a rectangle
+relative to that screen's frame.  The only real way to test this is to configure two screens one atop
+the other such that the menubar screen is on top.  The Dock at the bottom of the screen will then
+eat into the visibleFrame of screen 1 by incrementing it's y-origin.  Thus if you arrange two
+1920x1200 screens top/bottom then screen 1 (the bottom screen) will have frame origin (0,-1200) and
+visibleFrame origin (0,-1149) which is exactly 51 pixels higher than the full frame origin.
+
+In wxCocoa, we somewhat arbitrarily declare that wx (0,0) is the TOP-left of screen 0's frame (the entire screen).
+However, this isn't entirely arbitrary because the Quartz Display Services (CGDisplay) uses this same scheme.
+This works out nicely because wxCocoa's wxDisplay is implemented using Quartz Display Services instead of NSScreen.
+*/
+
+namespace { // file namespace
+
+class wxCocoaPrivateScreenCoordinateTransformer
+{
+    DECLARE_NO_COPY_CLASS(wxCocoaPrivateScreenCoordinateTransformer)
+public:
+    wxCocoaPrivateScreenCoordinateTransformer();
+    ~wxCocoaPrivateScreenCoordinateTransformer();
+    wxPoint OriginInWxDisplayCoordinatesForRectInCocoaScreenCoordinates(NSRect windowFrame);
+    NSPoint OriginInCocoaScreenCoordinatesForRectInWxDisplayCoordinates(wxCoord x, wxCoord y, wxCoord width, wxCoord height, bool keepOriginVisible);
+
+protected:
+    NSScreen *m_screenZero;
+    NSRect m_screenZeroFrame;
+};
+
+// NOTE: This is intended to be a short-lived object.  A future enhancment might
+// make it a global and reconfigure it upon some notification that the screen layout
+// has changed.
+inline wxCocoaPrivateScreenCoordinateTransformer::wxCocoaPrivateScreenCoordinateTransformer()
+{
+    NSArray *screens = [NSScreen screens];
+
+    [screens retain];
+
+    m_screenZero = nil;
+    if(screens != nil && [screens count] > 0)
+        m_screenZero = [[screens objectAtIndex:0] retain];
+
+    [screens release];
+
+    if(m_screenZero != nil)
+        m_screenZeroFrame = [m_screenZero frame];
+    else
+    {
+        wxLogWarning(wxT("Can't translate to/from wx screen coordinates and Cocoa screen coordinates"));
+        // Just blindly assume 1024x768 so that at least we can sort of flip things around into
+        // Cocoa coordinates.
+        // NOTE: Theoretically this case should never happen anyway.
+        m_screenZeroFrame = NSMakeRect(0,0,1024,768);
+    }
+}
+
+inline wxCocoaPrivateScreenCoordinateTransformer::~wxCocoaPrivateScreenCoordinateTransformer()
+{
+    [m_screenZero release];
+    m_screenZero = nil;
+}
+
+inline wxPoint wxCocoaPrivateScreenCoordinateTransformer::OriginInWxDisplayCoordinatesForRectInCocoaScreenCoordinates(NSRect windowFrame)
+{
+    // x and y are in wx screen coordinates which we're going to arbitrarily define such that
+    // (0,0) is the TOP-left of screen 0 (the one with the menubar)
+    // NOTE WELL: This means that (0,0) is _NOT_ an appropriate position for a window.
+
+    wxPoint theWxOrigin;
+
+    // Working in Cocoa's screen coordinates we must realize that the x coordinate we want is
+    // the distance between the left side (origin.x) of the window's frame and the left side of
+    // screen zero's frame.
+    theWxOrigin.x = windowFrame.origin.x - m_screenZeroFrame.origin.x;
+
+    // Working in Cocoa's screen coordinates we must realize that the y coordinate we want is
+    // actually the distance between the top-left of the screen zero frame and the top-left
+    // of the window's frame.
+
+    theWxOrigin.y = (m_screenZeroFrame.origin.y + m_screenZeroFrame.size.height) - (windowFrame.origin.y + windowFrame.size.height);
+
+    return theWxOrigin;
+}
+
+inline NSPoint wxCocoaPrivateScreenCoordinateTransformer::OriginInCocoaScreenCoordinatesForRectInWxDisplayCoordinates(wxCoord x, wxCoord y, wxCoord width, wxCoord height, bool keepOriginVisible)
+{
+    NSPoint theCocoaOrigin;
+
+    // The position is in wx screen coordinates which we're going to arbitrarily define such that
+    // (0,0) is the TOP-left of screen 0 (the one with the menubar)
+
+    // NOTE: The usable rectangle is smaller and hence we have the keepOriginVisible flag
+    // which will move the origin downward and/or left as necessary if the origin is
+    // inside the screen0 rectangle (i.e. x/y >= 0 in wx coordinates) and outside the
+    // visible frame (i.e. x/y < the top/left of the screen0 visible frame in wx coordinates)
+    // We don't munge origin coordinates < 0 because it actually is possible that the menubar is on
+    // the top of the bottom screen and thus that origin is completely valid!
+    if(keepOriginVisible && (m_screenZero != nil))
+    {
+        // Do al of this in wx coordinates because it's far simpler since we're dealing with top/left points
+        wxPoint visibleOrigin = OriginInWxDisplayCoordinatesForRectInCocoaScreenCoordinates([m_screenZero visibleFrame]);
+        if(x >= 0 && x < visibleOrigin.x)
+            x = visibleOrigin.x;
+        if(y >= 0 && y < visibleOrigin.y)
+            y = visibleOrigin.y;
+    }
+
+    // The x coordinate is simple as it's just relative to screen zero's frame
+    theCocoaOrigin.x = m_screenZeroFrame.origin.x + x;
+    // Working in Cocoa's coordinates think to start at the bottom of screen zero's frame and add
+    // the height of that rect which gives us the coordinate for the top of the visible rect.  Now realize that
+    // the wx coordinates are flipped so if y is say 10 then we want to be 10 pixels down from that and thus
+    // we subtract y.  But then we still need to take into account the size of the window which is h and subtract
+    // that to get the bottom-left origin of the rectangle.
+    theCocoaOrigin.y = m_screenZeroFrame.origin.y + m_screenZeroFrame.size.height - y - height;
+
+    return theCocoaOrigin;
+}
+
+} // namespace
+
+wxPoint wxWindowCocoa::OriginInWxDisplayCoordinatesForRectInCocoaScreenCoordinates(NSRect windowFrame)
+{
+    wxCocoaPrivateScreenCoordinateTransformer transformer;
+    return transformer.OriginInWxDisplayCoordinatesForRectInCocoaScreenCoordinates(windowFrame);
+}
+
+NSPoint wxWindowCocoa::OriginInCocoaScreenCoordinatesForRectInWxDisplayCoordinates(wxCoord x, wxCoord y, wxCoord width, wxCoord height, bool keepOriginVisible)
+{
+    wxCocoaPrivateScreenCoordinateTransformer transformer;
+    return transformer.OriginInCocoaScreenCoordinatesForRectInWxDisplayCoordinates(x,y,width,height,keepOriginVisible);
 }
 
 // ========================================================================
@@ -909,12 +1057,49 @@ void wxWindow::DoReleaseMouse()
 
 void wxWindow::DoScreenToClient(int *x, int *y) const
 {
-    // TODO
+    // Point in cocoa screen coordinates:
+    NSPoint cocoaScreenPoint = OriginInCocoaScreenCoordinatesForRectInWxDisplayCoordinates(x!=NULL?*x:0, y!=NULL?*y:0, 0, 0, false);
+    NSView *clientView = const_cast<wxWindow*>(this)->GetNSView();
+    NSWindow *theWindow = [clientView window];
+
+    // Point in window's base coordinate system:
+    NSPoint windowPoint = [theWindow convertScreenToBase:cocoaScreenPoint];
+    // Point in view's bounds coordinate system
+    NSPoint boundsPoint = [clientView convertPoint:windowPoint fromView:nil];
+    // Point in wx client coordinates:
+    NSPoint theWxClientPoint = CocoaTransformNSViewBoundsToWx(clientView, boundsPoint);
+    if(x!=NULL)
+        *x = theWxClientPoint.x;
+    if(y!=NULL)
+        *y = theWxClientPoint.y;
 }
 
 void wxWindow::DoClientToScreen(int *x, int *y) const
 {
-    // TODO
+    // Point in wx client coordinates
+    NSPoint theWxClientPoint = NSMakePoint(x!=NULL?*x:0, y!=NULL?*y:0);
+
+    NSView *clientView = const_cast<wxWindow*>(this)->GetNSView();
+
+    // Point in the view's bounds coordinate system
+    NSPoint boundsPoint = CocoaTransformNSViewWxToBounds(clientView, theWxClientPoint);
+
+    // Point in the window's base coordinate system
+    NSPoint windowPoint = [clientView convertPoint:boundsPoint toView:nil];
+
+    NSWindow *theWindow = [clientView window];
+    // Point in Cocoa's screen coordinates
+    NSPoint screenPoint = [theWindow convertBaseToScreen:windowPoint];
+
+    // Act as though this was the origin of a 0x0 rectangle
+    NSRect screenPointRect = NSMakeRect(screenPoint.x, screenPoint.y, 0, 0);
+
+    // Convert that rectangle to wx coordinates
+    wxPoint theWxScreenPoint = OriginInWxDisplayCoordinatesForRectInCocoaScreenCoordinates(screenPointRect);
+    if(*x)
+        *x = theWxScreenPoint.x;
+    if(*y)
+        *y = theWxScreenPoint.y;
 }
 
 // Get size *available for subwindows* i.e. excluding menu bar etc.

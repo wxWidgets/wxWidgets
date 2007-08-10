@@ -18,6 +18,22 @@
     #import <Foundation/NSGeometry.h>
 #endif //def __OBJC__
 
+// We can only import Foundation/NSGeometry.h from Objective-C code but it's
+// nice to be able to use NSPoint and NSRect in the declarations of helper
+// methods so we must define them as opaque structs identically to the way
+// they are defined by the real header.
+// NOTE: We specifically use these regardless of C++ or Objective-C++ mode so
+// the compiler will complain if we got the definitions wrong.  In regular
+// C++ mode there is no way to know if we got the definitons right so
+// we depend on at least one Objective-C++ file including this header.
+#if defined(__LP64__) || defined(NS_BUILD_32_LIKE_64)
+typedef struct CGPoint NSPoint;
+typedef struct CGRect NSRect;
+#else
+typedef struct _NSPoint NSPoint;
+typedef struct _NSRect NSRect;
+#endif
+
 DECLARE_WXCOCOA_OBJC_CLASS(NSAffineTransform);
 
 class wxWindowCocoaHider;
@@ -129,6 +145,8 @@ protected:
     NSPoint CocoaTransformWxToBounds(NSPoint pointWx);
     NSRect CocoaTransformWxToBounds(NSRect rectWx);
 #endif //def __OBJC__
+    static wxPoint OriginInWxDisplayCoordinatesForRectInCocoaScreenCoordinates(NSRect windowFrame);
+    static NSPoint OriginInCocoaScreenCoordinatesForRectInWxDisplayCoordinates(wxCoord x, wxCoord y, wxCoord width, wxCoord height, bool keepOriginVisible);
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------

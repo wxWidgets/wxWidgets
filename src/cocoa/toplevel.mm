@@ -86,6 +86,23 @@ unsigned int wxTopLevelWindowCocoa::NSWindowStyleForWxStyle(long style)
     return styleMask;
 }
 
+NSRect wxTopLevelWindowCocoa::MakeInitialNSWindowContentRect(const wxPoint& pos, const wxSize& size, unsigned int cocoaStyleMask)
+{
+    // Arbitrarily use (100,100) as the origin when default coords are given.
+    wxCoord x = pos.x!=wxDefaultCoord ? pos.x : 100;
+    wxCoord y = pos.y!=wxDefaultCoord ? pos.y : 100;
+
+    wxCoord w = WidthDefault(size.x);
+    wxCoord h = HeightDefault(size.y);
+
+    NSPoint cocoaOrigin = OriginInCocoaScreenCoordinatesForRectInWxDisplayCoordinates(x,y,w,h,true);
+
+    return [NSWindow
+            contentRectForFrameRect:NSMakeRect(cocoaOrigin.x,cocoaOrigin.y,w,h)
+            styleMask:cocoaStyleMask];
+
+}
+
 bool wxTopLevelWindowCocoa::Create(wxWindow *parent,
                                  wxWindowID winid,
                                  const wxString& title,
@@ -107,30 +124,7 @@ bool wxTopLevelWindowCocoa::Create(wxWindow *parent,
     if(style & wxFRAME_TOOL_WINDOW)
         cocoaStyle |= NSUtilityWindowMask;
 
-    // Create frame and check and handle default position and size
-    int realx,
-        realy;
-
-    // WX has no set default position - the carbon port caps the low
-    // end at 20, 50.  Here we do the same, except instead of setting
-    // it to 20 and 50, we set it to 100 and 100 if the values are too low
-    if (pos.x < 20)
-        realx = 100;
-    else
-        realx = pos.x;
-
-    if (pos.y < 50)
-        realy = 100;
-    else
-        realy = pos.y;
-
-    int realw = WidthDefault(size.x);
-    int realh = HeightDefault(size.y);
-
-    // NOTE: y-origin needs to be flipped.
-    NSRect cocoaRect = [NSWindow
-                        contentRectForFrameRect:NSMakeRect(realx,realy,realw,realh)
-                        styleMask:cocoaStyle];
+    NSRect cocoaRect = MakeInitialNSWindowContentRect(pos,size,cocoaStyle);
 
     m_cocoaNSWindow = NULL;
     m_cocoaNSView = NULL;
@@ -407,7 +401,9 @@ void wxTopLevelWindowCocoa::DoMoveWindow(int x, int y, int width, int height)
 {
     wxLogTrace(wxTRACE_COCOA_TopLevelWindow_Size,wxT("wxTopLevelWindow=%p::DoMoveWindow(%d,%d,%d,%d)"),this,x,y,width,height);
 
-    NSRect cocoaRect = NSMakeRect(x,y,width,height);
+    NSPoint cocoaOrigin = OriginInCocoaScreenCoordinatesForRectInWxDisplayCoordinates(x,y,width,height,false);
+
+    NSRect cocoaRect = NSMakeRect(cocoaOrigin.x,cocoaOrigin.y,width,height);
     [m_cocoaNSWindow setFrame: cocoaRect display:NO];
 }
 
@@ -423,10 +419,14 @@ void wxTopLevelWindowCocoa::DoGetSize(int *w, int *h) const
 
 void wxTopLevelWindowCocoa::DoGetPosition(int *x, int *y) const
 {
-    NSRect cocoaRect = [m_cocoaNSWindow frame];
-    if(x)
-        *x=(int)cocoaRect.origin.x;
-    if(y)
-        *y=(int)cocoaRect.origin.y;
-    wxLogTrace(wxTRACE_COCOA_TopLevelWindow_Size,wxT("wxTopLevelWindow=%p::DoGetPosition = (%d,%d)"),this,(int)cocoaRect.origin.x,(int)cocoaRect.origin.y);
+    NSRect windowFrame = [m_cocoaNSWindow frame];
+    
+    wxPoint theWxOrigin = OriginInWxDisplayCoordinatesForRectInCocoaScreenCoordinates(windowFrame);
+
+    if(*x)
+        *x = theWxOrigin.x;
+    if(*y)
+        *y = theWxOrigin.y;
+    
+    wxLogTrace(wxTRACE_COCOA_TopLevelWindow_Size,wxT("wxTopLevelWindow=%p::DoGetPosition = (%d,%d)"),this,(int)theWxOrigin.x,(int)theWxOrigin.y);
 }
