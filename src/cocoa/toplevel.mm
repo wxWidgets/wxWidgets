@@ -339,7 +339,7 @@ void wxTopLevelWindowCocoa::OnCloseWindow(wxCloseEvent& event)
 // wxTopLevelWindowCocoa misc
 // ----------------------------------------------------------------------------
 
-void wxTopLevelWindowCocoa::SetTitle( const wxString& WXUNUSED(title))
+void wxTopLevelWindowCocoa::SetTitle(const wxString& title)
 {
     [m_cocoaNSWindow setTitle:wxNSStringWithWxString(title)];
 }
