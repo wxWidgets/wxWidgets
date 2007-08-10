@@ -2,7 +2,7 @@
 // Name:        src/cocoa/NSSlider.mm
 // Purpose:     wxCocoaNSSlider class
 // Author:      Mark Oxenham
-// Modified by:
+// Modified by: David Elliott
 // Created:     2007/08/10
 // RCS-ID:      $Id$
 // Copyright:   (c) 2007 Software 2000 Ltd. All rights reserved.
@@ -15,13 +15,12 @@
     #include "wx/log.h"
 #endif // WX_PRECOMP
 
-#include "wx/cocoa/ObjcPose.h"
 #include "wx/cocoa/NSSlider.h"
 
 #import <Foundation/NSNotification.h>
 #import <Foundation/NSString.h>
 #import <AppKit/NSEvent.h>
-#import <AppKit/NSSlider.h>
+#include "wx/cocoa/objc/NSSlider.h"
 
 WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSSlider)
 
@@ -135,14 +134,17 @@ WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSSlider)
 @end // implementation wxNSSliderTarget
 
 // ============================================================================
-// @class wxPoserNSSlider
+// @class WXNSSlider
 // ============================================================================
 
-@interface wxPoserNSSlider : NSSlider
-@end
 
-WX_IMPLEMENT_POSER(wxPoserNSSlider);
-@implementation wxPoserNSSlider : NSSlider
+@implementation WXNSSlider : NSSlider
+
+// Override to ensure that WXNSSlider gets created with a WXNSSliderCell
++ (Class)cellClass
+{
+    return [WX_GET_OBJC_CLASS(WXNSSliderCell) class];
+}
 
 - (void)keyDown:(NSEvent *)theEvent
 {
@@ -224,20 +226,17 @@ WX_IMPLEMENT_POSER(wxPoserNSSlider);
 }
 
 @end
+WX_IMPLEMENT_GET_OBJC_CLASS(WXNSSlider,NSSlider)
 
 // ============================================================================
-// @class wxPoserNSSliderCell
+// @class WXNSSliderCell
 // ============================================================================
 
 #define kwxNSSliderStartTracking    @"wxNSSliderStartTracking"
 #define kwxNSSliderContinueTracking @"wxNSSliderContinueTracking"
 #define kwxNSSliderStopTracking     @"wxNSSliderStopTracking"
 
-@interface wxPoserNSSliderCell : NSSliderCell
-@end
-
-WX_IMPLEMENT_POSER(wxPoserNSSliderCell);
-@implementation wxPoserNSSliderCell : NSSliderCell
+@implementation WXNSSliderCell : NSSliderCell
 - (BOOL)startTrackingAt:(NSPoint)startPoint inView:(NSView *)controlView
 {
     BOOL result = [super startTrackingAt:startPoint inView:controlView];
@@ -258,6 +257,7 @@ WX_IMPLEMENT_POSER(wxPoserNSSliderCell);
     [[NSNotificationCenter defaultCenter] postNotificationName:kwxNSSliderStopTracking object:controlView];
 }
 @end
+WX_IMPLEMENT_GET_OBJC_CLASS(WXNSSliderCell,NSSliderCell)
 
 // ============================================================================
 // @class wxNSSliderNotificationObserver

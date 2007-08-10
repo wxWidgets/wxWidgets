@@ -21,7 +21,7 @@
     #include "wx/app.h"
 #endif //WX_PRECOMP
 
-#import <AppKit/NSSlider.h>
+#include "wx/cocoa/objc/NSSlider.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
     BEGIN_EVENT_TABLE(wxSlider, wxSliderBase)
@@ -67,7 +67,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID winid,
     
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
-    SetNSView([[NSSlider alloc] initWithFrame: MakeDefaultNSRect(size)]);
+    SetNSView([[WX_GET_OBJC_CLASS(WXNSSlider) alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
     
     if(m_parent)

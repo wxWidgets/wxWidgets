@@ -2177,6 +2177,7 @@ COND_TOOLKIT_COCOA_GUI_HDR =  \
 	wx/cocoa/NSMenu.h \
 	wx/cocoa/NSPanel.h \
 	wx/cocoa/NSScroller.h \
+	wx/cocoa/NSSlider.h \
 	wx/cocoa/NSTabView.h \
 	wx/cocoa/NSTableView.h \
 	wx/cocoa/NSTextField.h \
@@ -2519,6 +2520,7 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 @COND_TOOLKIT_MAC@GUI_HDR = $(COND_TOOLKIT_MAC_GUI_HDR)
 COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/generic/colrdlgg.h \
+	wx/generic/ctrlsub.h \
 	wx/generic/dirdlgg.h \
 	wx/generic/fdrepdlg.h \
 	wx/generic/fontdlgg.h \
@@ -2541,6 +2543,7 @@ COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/motif/colour.h \
 	wx/motif/combobox.h \
 	wx/motif/control.h \
+	wx/motif/ctrlsub.h \
 	wx/motif/cursor.h \
 	wx/motif/dataform.h \
 	wx/motif/dataobj.h \
@@ -2600,6 +2603,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/combo.h \
 	wx/msw/combobox.h \
 	wx/msw/control.h \
+	wx/msw/ctrlsub.h \
 	wx/msw/cursor.h \
 	wx/msw/dc.h \
 	wx/msw/dcclient.h \
@@ -2792,6 +2796,7 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/combo.h \
 	wx/msw/combobox.h \
 	wx/msw/control.h \
+	wx/msw/ctrlsub.h \
 	wx/msw/cursor.h \
 	wx/msw/dc.h \
 	wx/msw/dcclient.h \
@@ -3025,6 +3030,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 @COND_USE_GUI_1_WXUNIV_0@GUI_CORE_HEADERS = $(GUI_HDR)
 COND_USE_GUI_1_WXUNIV_1_GUI_CORE_HEADERS =  \
 	wx/generic/accel.h \
+	wx/generic/ctrlsub.h \
 	wx/generic/dirdlgg.h \
 	wx/generic/fdrepdlg.h \
 	wx/generic/fontdlgg.h \
@@ -4341,6 +4347,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_NSMenu.o \
 	monodll_NSPanel.o \
 	monodll_NSScroller.o \
+	monodll_NSSlider.o \
 	monodll_NSTabView.o \
 	monodll_NSTableView.o \
 	monodll_NSTextField.o \
@@ -6184,6 +6191,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_NSMenu.o \
 	monolib_NSPanel.o \
 	monolib_NSScroller.o \
+	monolib_NSSlider.o \
 	monolib_NSTabView.o \
 	monolib_NSTableView.o \
 	monolib_NSTextField.o \
@@ -8303,6 +8311,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_NSMenu.o \
 	coredll_NSPanel.o \
 	coredll_NSScroller.o \
+	coredll_NSSlider.o \
 	coredll_NSTabView.o \
 	coredll_NSTableView.o \
 	coredll_NSTextField.o \
@@ -9758,6 +9767,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_NSMenu.o \
 	corelib_NSPanel.o \
 	corelib_NSScroller.o \
+	corelib_NSSlider.o \
 	corelib_NSTabView.o \
 	corelib_NSTableView.o \
 	corelib_NSTextField.o \
@@ -13879,6 +13889,9 @@ monodll_NSPanel.o: $(srcdir)/src/cocoa/NSPanel.mm $(MONODLL_ODEP)
 
 monodll_NSScroller.o: $(srcdir)/src/cocoa/NSScroller.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/NSScroller.mm
+
+monodll_NSSlider.o: $(srcdir)/src/cocoa/NSSlider.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/NSSlider.mm
 
 monodll_NSTabView.o: $(srcdir)/src/cocoa/NSTabView.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/NSTabView.mm
@@ -18196,6 +18209,9 @@ monolib_NSPanel.o: $(srcdir)/src/cocoa/NSPanel.mm $(MONOLIB_ODEP)
 
 monolib_NSScroller.o: $(srcdir)/src/cocoa/NSScroller.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/NSScroller.mm
+
+monolib_NSSlider.o: $(srcdir)/src/cocoa/NSSlider.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/NSSlider.mm
 
 monolib_NSTabView.o: $(srcdir)/src/cocoa/NSTabView.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/NSTabView.mm
@@ -23840,6 +23856,9 @@ coredll_NSPanel.o: $(srcdir)/src/cocoa/NSPanel.mm $(COREDLL_ODEP)
 coredll_NSScroller.o: $(srcdir)/src/cocoa/NSScroller.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/cocoa/NSScroller.mm
 
+coredll_NSSlider.o: $(srcdir)/src/cocoa/NSSlider.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/cocoa/NSSlider.mm
+
 coredll_NSTabView.o: $(srcdir)/src/cocoa/NSTabView.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/cocoa/NSTabView.mm
 
@@ -26794,6 +26813,9 @@ corelib_NSPanel.o: $(srcdir)/src/cocoa/NSPanel.mm $(CORELIB_ODEP)
 
 corelib_NSScroller.o: $(srcdir)/src/cocoa/NSScroller.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/cocoa/NSScroller.mm
+
+corelib_NSSlider.o: $(srcdir)/src/cocoa/NSSlider.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/cocoa/NSSlider.mm
 
 corelib_NSTabView.o: $(srcdir)/src/cocoa/NSTabView.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/cocoa/NSTabView.mm

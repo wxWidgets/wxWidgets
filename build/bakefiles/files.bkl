@@ -2407,6 +2407,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/NSMenu.mm
     src/cocoa/NSPanel.mm
     src/cocoa/NSScroller.mm
+    src/cocoa/NSSlider.mm
     src/cocoa/NSTabView.mm
     src/cocoa/NSTableView.mm
     src/cocoa/NSTextField.mm
@@ -2497,6 +2498,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/NSMenu.h
     wx/cocoa/NSPanel.h
     wx/cocoa/NSScroller.h
+    wx/cocoa/NSSlider.h
     wx/cocoa/NSTabView.h
     wx/cocoa/NSTableView.h
     wx/cocoa/NSTextField.h
