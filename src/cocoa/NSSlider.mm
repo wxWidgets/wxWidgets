@@ -240,63 +240,35 @@ WX_IMPLEMENT_GET_OBJC_CLASS(WXNSSlider,NSSlider)
 - (BOOL)startTrackingAt:(NSPoint)startPoint inView:(NSView *)controlView
 {
     BOOL result = [super startTrackingAt:startPoint inView:controlView];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kwxNSSliderStartTracking object:controlView];
+
+    wxCocoaNSSlider *slider = wxCocoaNSSlider::GetFromCocoa(controlView);
+    if(slider)
+        slider->CocoaNotification_startTracking(NULL);
+
     return result;
 }
 
 - (BOOL)continueTracking:(NSPoint)lastPoint at:(NSPoint)currentPoint inView:(NSView *)controlView
 {
     BOOL result = [super continueTracking:lastPoint at:currentPoint inView:controlView];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kwxNSSliderContinueTracking object:controlView];
+
+    wxCocoaNSSlider *slider = wxCocoaNSSlider::GetFromCocoa(controlView);
+    if(slider)
+        slider->CocoaNotification_continueTracking(NULL);
+
     return result;
 }
 
 - (void)stopTracking:(NSPoint)lastPoint at:(NSPoint)stopPoint inView:(NSView *)controlView mouseIsUp:(BOOL)flag
 {
     [super stopTracking:lastPoint at:stopPoint inView:controlView mouseIsUp:flag];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kwxNSSliderStopTracking object:controlView];
+
+    wxCocoaNSSlider *slider = wxCocoaNSSlider::GetFromCocoa(controlView);
+    if(slider)
+        slider->CocoaNotification_stopTracking(NULL);
 }
 @end
 WX_IMPLEMENT_GET_OBJC_CLASS(WXNSSliderCell,NSSliderCell)
-
-// ============================================================================
-// @class wxNSSliderNotificationObserver
-// ============================================================================
-@interface wxNSSliderNotificationObserver : NSObject
-{
-}
-
-struct objc_object *wxCocoaNSSlider::sm_cocoaObserver = [[wxNSSliderNotificationObserver alloc] init];
-
-- (void)startTracking: (NSNotification *)notification;
-- (void)continueTracking: (NSNotification *)notification;
-- (void)stopTracking: (NSNotification *)notification;
-@end // interface wxNSSliderNotificationObserver
-
-@implementation wxNSSliderNotificationObserver : NSObject
-
-- (void)startTracking: (NSNotification *)notification;
-{
-    wxCocoaNSSlider *slider = wxCocoaNSSlider::GetFromCocoa([notification object]);
-    wxCHECK_RET(slider,wxT("startTracking received but no wxSlider exists"));
-    slider->CocoaNotification_startTracking(notification);
-}
-
-- (void)continueTracking: (NSNotification *)notification;
-{
-    wxCocoaNSSlider *slider = wxCocoaNSSlider::GetFromCocoa([notification object]);
-    wxCHECK_RET(slider,wxT("continueTracking received but no wxSlider exists"));
-    slider->CocoaNotification_continueTracking(notification);
-}
-
-- (void)stopTracking: (NSNotification *)notification;
-{
-    wxCocoaNSSlider *slider = wxCocoaNSSlider::GetFromCocoa([notification object]);
-    wxCHECK_RET(slider,wxT("stopTracking received but no wxSlider exists"));
-    slider->CocoaNotification_stopTracking(notification);
-}
-
-@end // implementation wxNSSliderNotificationObserver
 
 // ============================================================================
 // class wxCocoaNSSlider
@@ -309,9 +281,6 @@ void wxCocoaNSSlider::AssociateNSSlider(WX_NSSlider cocoaNSSlider)
     if(cocoaNSSlider)
     {
         sm_cocoaHash.insert(wxCocoaNSSliderHash::value_type(cocoaNSSlider,this));
-        [[NSNotificationCenter defaultCenter] addObserver:(id)sm_cocoaObserver selector:@selector(startTracking:) name:kwxNSSliderStartTracking object:cocoaNSSlider];
-        [[NSNotificationCenter defaultCenter] addObserver:(id)sm_cocoaObserver selector:@selector(continueTracking:) name:kwxNSSliderContinueTracking object:cocoaNSSlider];
-        [[NSNotificationCenter defaultCenter] addObserver:(id)sm_cocoaObserver selector:@selector(stopTracking:) name:kwxNSSliderStopTracking object:cocoaNSSlider];
         [cocoaNSSlider setTarget:sm_cocoaTarget];
     }
 }
@@ -321,8 +290,5 @@ void wxCocoaNSSlider::DisassociateNSSlider(WX_NSSlider cocoaNSSlider)
     if(cocoaNSSlider)
     {
         sm_cocoaHash.erase(cocoaNSSlider);
-        [[NSNotificationCenter defaultCenter] removeObserver:(id)sm_cocoaObserver name:kwxNSSliderStartTracking object:cocoaNSSlider];
-        [[NSNotificationCenter defaultCenter] removeObserver:(id)sm_cocoaObserver name:kwxNSSliderContinueTracking object:cocoaNSSlider];
-        [[NSNotificationCenter defaultCenter] removeObserver:(id)sm_cocoaObserver name:kwxNSSliderStopTracking object:cocoaNSSlider];
     }
 }
