@@ -187,7 +187,8 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 
 #if !wxUSE_UNICODE
 
-wxCharBuffer wxConvertToGTK(const wxString& s, wxFontEncoding enc)
+WXDLLIMPEXP_CORE wxCharBuffer
+wxConvertToGTK(const wxString& s, wxFontEncoding enc)
 {
     wxWCharBuffer wbuf;
     if ( enc == wxFONTENCODING_SYSTEM || enc == wxFONTENCODING_DEFAULT )
@@ -213,7 +214,8 @@ wxCharBuffer wxConvertToGTK(const wxString& s, wxFontEncoding enc)
     return wxConvUTF8.cWC2MB(wbuf);
 }
 
-wxCharBuffer wxConvertFromGTK(const wxString& s, wxFontEncoding enc)
+WXDLLIMPEXP_CORE wxCharBuffer
+wxConvertFromGTK(const wxString& s, wxFontEncoding enc)
 {
     // this conversion should never fail as GTK+ always uses UTF-8 internally
     // so there are no complications here
