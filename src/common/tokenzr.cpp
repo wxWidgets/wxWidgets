@@ -260,10 +260,11 @@ wxString wxStringTokenizer::GetNextToken()
         {
             // in wxTOKEN_RET_DELIMS mode we return the delimiter character
             // with token, otherwise leave it out
+            wxString::const_iterator tokenEnd(pos);
             if ( m_mode == wxTOKEN_RET_DELIMS )
-                ++pos;
+                ++tokenEnd;
 
-            token.assign(m_pos, pos);
+            token.assign(m_pos, tokenEnd);
 
             // skip the token and the trailing delimiter
             m_pos = pos + 1;
