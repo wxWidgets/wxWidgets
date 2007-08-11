@@ -175,7 +175,7 @@ inline void wxMenuItemBase::SetName(const wxString &str)
 inline wxString wxMenuItemBase::GetName() const
     { return GetItemLabel(); }
 inline wxString wxMenuItemBase::GetLabel() const
-    { return GetLabelFromText(m_text); }
+    { return GetLabelText(m_text); }
 inline const wxString& wxMenuItemBase::GetText() const { return m_text; }
 inline void wxMenuItemBase::SetText(const wxString& text) { SetItemLabel(text); }
 #endif // WXWIN_COMPATIBILITY_2_8
