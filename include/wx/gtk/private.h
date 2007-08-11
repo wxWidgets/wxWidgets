@@ -47,11 +47,11 @@ extern const gchar *wx_pango_version_check(int major, int minor, int micro);
     #include "wx/font.h"
 
     // convert the text between the given encoding and UTF-8 used by wxGTK
-    extern wxCharBuffer
+    extern WXDLLIMPEXP_CORE wxCharBuffer
     wxConvertToGTK(const wxString& s,
                    wxFontEncoding enc = wxFONTENCODING_SYSTEM);
 
-    extern wxCharBuffer
+    extern WXDLLIMPEXP_CORE wxCharBuffer
     wxConvertFromGTK(const wxString& s,
                      wxFontEncoding enc = wxFONTENCODING_SYSTEM);
 
