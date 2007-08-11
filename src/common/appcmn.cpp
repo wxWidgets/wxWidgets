@@ -433,7 +433,9 @@ bool wxAppBase::SendIdleEvents(wxWindow* win, wxIdleEvent& event)
 
 wxLog *wxGUIAppTraitsBase::CreateLogTarget()
 {
-#if wxUSE_LOGGUI
+// DE: One day I'll remove this but right now the generic dialog used for this
+// just doesn't work right at all on wxCocoa.
+#if wxUSE_LOGGUI && !defined(__WXCOCOA__)
     return new wxLogGui;
 #else
     // we must have something!
