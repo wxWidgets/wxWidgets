@@ -1027,7 +1027,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
     }
     else if (mitem->GetBitmap().Ok())
     {
-        text = mitem->GetItemLabel();
+        text = mitem->wxMenuItembase::GetItemLabel();
         const wxBitmap *bitmap = &mitem->GetBitmap();
 
         // TODO
@@ -1040,7 +1040,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
     else // a normal item
     {
         // text has "_" instead of "&" after mitem->SetItemLabel() so don't use it
-        text =  mitem->GetItemLabel() ;
+        text =  mitem->wxMenuItemBase::GetItemLabel() ;
 
         switch ( mitem->GetKind() )
         {

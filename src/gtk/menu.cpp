@@ -1082,7 +1082,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
     GtkWidget *menuItem;
 
     // cache some data used later
-    wxString text = mitem->GetItemLabel();
+    wxString text = mitem->wxMenuItemBase::GetItemLabel();
     int id = mitem->GetId();
     bool isstock = wxIsStockID(id);
     const char *stockid = NULL;
