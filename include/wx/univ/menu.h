@@ -155,8 +155,8 @@ public:
     virtual void EnableTop(size_t pos, bool enable);
     virtual bool IsEnabledTop(size_t pos) const;
 
-    virtual void SetLabelTop(size_t pos, const wxString& label);
-    virtual wxString GetLabelTop(size_t pos) const;
+    virtual void SetMenuLabel(size_t pos, const wxString& label);
+    virtual wxString GetMenuLabel(size_t pos) const;
 
     virtual void Attach(wxFrame *frame);
     virtual void Detach();

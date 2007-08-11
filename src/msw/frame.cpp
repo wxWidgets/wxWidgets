@@ -398,7 +398,7 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
     if( menubar->GetMenuCount() == 1 )
     {
         autoMenu = wxTopLevelWindowMSW::ButtonMenu::DuplicateMenu(menubar->GetMenu(0));
-        SetRightMenu(wxID_ANY, menubar->GetLabelTop(0), autoMenu);
+        SetRightMenu(wxID_ANY, menubar->GetMenuLabel(0), autoMenu);
     }
     else
     {
@@ -407,7 +407,7 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
         for( size_t n = 0; n < menubar->GetMenuCount(); n++ )
         {
             wxMenu *item = menubar->GetMenu(n);
-            wxString label = menubar->GetLabelTop(n);
+            wxString label = menubar->GetMenuLabel(n);
             wxMenu *new_item = wxTopLevelWindowMSW::ButtonMenu::DuplicateMenu(item);
             autoMenu->Append(wxID_ANY, label, new_item);
         }

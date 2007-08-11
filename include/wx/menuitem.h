@@ -60,16 +60,23 @@ public:
 
     // the item's text (or name)
     //
-    // NB: the item's text includes the accelerators and mnemonics info (if
+    // NB: the item's label includes the accelerators and mnemonics info (if
     //     any), i.e. it may contain '&' or '_' or "\t..." and thus is
-    //     different from the item's label which only contains the text shown
-    //     in the menu
-    virtual void SetText(const wxString& str);
-    wxString GetLabel() const { return GetLabelFromText(m_text); }
-    const wxString& GetText() const { return m_text; }
+    //     different from the item's text which only contains the text shown
+    //     in the menu. This used to be called SetText.
+    virtual void SetItemLabel(const wxString& str);
 
-    // get the label from text (implemented in platform-specific code)
-    static wxString GetLabelFromText(const wxString& text);
+    // return the item label including any mnemonics and accelerators.
+    // This used to be called GetText.
+    virtual wxString GetItemLabel() const { return m_text; }
+
+    // return just the text of the item label, without any mnemonics
+    // This used to be called GetLabel.
+    virtual wxString GetItemLabelText() const { return GetLabelText(m_text); }
+
+    // return just the text part of the given label (implemented in platform-specific code)
+    // This used to be called GetLabelFromText.
+    static wxString GetLabelText(const wxString& label);
 
     // what kind of menu item we are
     wxItemKind GetKind() const { return m_kind; }
@@ -111,7 +118,19 @@ public:
 #if WXWIN_COMPATIBILITY_2_8
     // compatibility only, use new functions in the new code
     wxDEPRECATED( void SetName(const wxString& str) );
-    wxDEPRECATED( const wxString& GetName() const );
+    wxDEPRECATED( wxString GetName() const );
+
+    // Now use GetItemLabelText
+    wxDEPRECATED( wxString GetLabel() const ) ;
+
+    // Now use GetItemLabel
+    wxDEPRECATED( const wxString& GetText() const );
+
+    // Now use GetLabelText to strip the accelerators
+    wxDEPRECATED( static wxString GetLabelFromText(const wxString& text) );
+
+    // Now use SetItemLabel
+    wxDEPRECATED( virtual void SetText(const wxString& str) );
 #endif // WXWIN_COMPATIBILITY_2_8
 
     static wxMenuItem *New(wxMenu *parentMenu,
@@ -152,9 +171,13 @@ private:
 
 #if WXWIN_COMPATIBILITY_2_8
 inline void wxMenuItemBase::SetName(const wxString &str)
-    { SetText(str); }
-inline const wxString& wxMenuItemBase::GetName() const
-    { return GetText(); }
+    { SetItemLabel(str); }
+inline wxString wxMenuItemBase::GetName() const
+    { return GetItemLabel(); }
+inline wxString wxMenuItemBase::GetLabel() const
+    { return GetLabelFromText(m_text); }
+inline const wxString& wxMenuItemBase::GetText() const { return m_text; }
+inline void wxMenuItemBase::SetText(const wxString& text) { SetItemLabel(text); }
 #endif // WXWIN_COMPATIBILITY_2_8
 
 // ----------------------------------------------------------------------------

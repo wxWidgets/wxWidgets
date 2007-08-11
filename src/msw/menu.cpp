@@ -227,7 +227,7 @@ const wxMenuInfoList& wxMenuBar::GetMenuInfos() const
     for( size_t i = 0 ; i < GetMenuCount() ; ++i )
     {
         wxMenuInfo* info = new wxMenuInfo() ;
-        info->Create( const_cast<wxMenuBar*>(this)->GetMenu(i) , GetLabelTop(i) ) ;
+        info->Create( const_cast<wxMenuBar*>(this)->GetMenu(i) , GetMenuLabel(i) ) ;
         list->Append( info ) ;
     }
     return m_menuInfos ;
@@ -331,7 +331,7 @@ void wxMenu::UpdateAccel(wxMenuItem *item)
         }
 
         // find the (new) accel for this item
-        wxAcceleratorEntry *accel = wxAcceleratorEntry::Create(item->GetText());
+        wxAcceleratorEntry *accel = wxAcceleratorEntry::Create(item->GetItemLabel());
         if ( accel )
             accel->m_command = item->GetId();
 
@@ -404,7 +404,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 
 
     // prepare to insert the item in the menu
-    wxString itemText = pItem->GetText();
+    wxString itemText = pItem->GetItemLabel();
     LPCTSTR pData = NULL;
     if ( pos == (size_t)-1 )
     {
@@ -545,7 +545,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         flags |= MF_STRING;
 
 #ifdef __WXWINCE__
-        itemText = wxMenuItem::GetLabelFromText(itemText);
+        itemText = wxMenuItem::GetLabelText(itemText);
 #endif
 
         pData = (wxChar*)itemText.wx_str();
@@ -949,7 +949,7 @@ WXHMENU wxMenuBar::Create()
     {
         HMENU hPopupMenu = (HMENU) GetMenu(i)->GetHMenu();
         tbButton.dwData = (DWORD)hPopupMenu;
-        wxString label = wxStripMenuCodes(GetLabelTop(i));
+        wxString label = wxStripMenuCodes(GetMenuLabel(i));
         tbButton.iString = (int) label.wx_str();
 
         tbButton.idCommand = NewControlId();
@@ -1036,7 +1036,7 @@ void wxMenuBar::EnableTop(size_t pos, bool enable)
     Refresh();
 }
 
-void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
+void wxMenuBar::SetMenuLabel(size_t pos, const wxString& label)
 {
     wxCHECK_RET( pos < GetMenuCount(), wxT("invalid menu index") );
 
@@ -1094,12 +1094,12 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
     Refresh();
 }
 
-wxString wxMenuBar::GetLabelTop(size_t pos) const
+wxString wxMenuBar::GetMenuLabel(size_t pos) const
 {
     wxCHECK_MSG( pos < GetMenuCount(), wxEmptyString,
-                 wxT("invalid menu index in wxMenuBar::GetLabelTop") );
+                 wxT("invalid menu index in wxMenuBar::GetMenuLabel") );
 
-    return wxMenuItem::GetLabelFromText(m_titles[pos]);
+    return m_titles[pos];
 }
 
 // ---------------------------------------------------------------------------

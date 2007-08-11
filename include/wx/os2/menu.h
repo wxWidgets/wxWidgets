@@ -226,10 +226,10 @@ public:
     virtual void        EnableTop( size_t nPos
                                   ,bool   bFlag
                                  );
-    virtual void        SetLabelTop( size_t          nPos
+    virtual void        SetMenuLabel( size_t          nPos
                                     ,const wxString& rLabel
                                    );
-    virtual wxString    GetLabelTop(size_t nPos) const;
+    virtual wxString    GetMenuLabel(size_t nPos) const;
 
     //
     // Implementation from now on

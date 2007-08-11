@@ -4,7 +4,7 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2002/12/13
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) 2002 David Elliott
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ protected:
 // ------------------------------------------------------------------------
 public:
     // override base class virtuals to update the item appearance on screen
-    virtual void SetText(const wxString& text);
+    virtual void SetItemLabel(const wxString& text);
     virtual void SetCheckable(bool checkable);
 
     virtual void Enable(bool enable = TRUE);

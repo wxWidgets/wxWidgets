@@ -159,7 +159,7 @@ bool wxMenuItem::IsChecked() const
 }
 
 /* static */
-wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
+wxString wxMenuItemBase::GetLabelText(const wxString& text)
 {
     return wxStripMenuCodes(text);
 }
@@ -190,7 +190,7 @@ void wxMenuItem::Check(bool check)
 {
 }
 
-void wxMenuItem::SetText(const wxString& text)
+void wxMenuItem::SetItemLabel(const wxString& text)
 {
 }
 

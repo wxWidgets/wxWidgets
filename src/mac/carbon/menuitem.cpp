@@ -233,13 +233,13 @@ void wxMenuItem::Check(bool bDoCheck)
     }
 }
 
-void wxMenuItem::SetText(const wxString& text)
+void wxMenuItem::SetItemLabel(const wxString& text)
 {
     // don't do anything if label didn't change
     if ( m_text == text )
         return;
 
-    wxMenuItemBase::SetText(text);
+    wxMenuItemBase::SetItemLabel(text);
 
     UpdateItemText() ;
 }
@@ -273,7 +273,7 @@ void wxMenuItem::SetRadioGroupEnd(int end)
 // ----------------------------------------------------------------------------
 
 /* static */
-wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
+wxString wxMenuItemBase::GetLabelText(const wxString& text)
 {
     return wxStripMenuCodes(text);
 }

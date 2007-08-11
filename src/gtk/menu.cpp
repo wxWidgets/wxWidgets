@@ -90,6 +90,40 @@ static wxString wxReplaceUnderscore( const wxString& title )
     return str;
 }
 
+static wxString wxConvertFromGTKToWXLabel(const wxString& gtkLabel)
+{
+    wxString label;
+    for ( const wxChar *pc = gtkLabel.c_str(); *pc; pc++ )
+    {
+        // '_' is the escape character for GTK+.
+
+        if ( *pc == wxT('_') && *(pc+1) == wxT('_'))
+        {
+            // An underscore was escaped.
+            label += wxT('_');
+            pc++;
+        }
+        else if ( *pc == wxT('_') )
+        {
+            // Convert GTK+ hotkey symbol to wxWidgets/Windows standard
+            label += wxT('&');
+        }
+        else if ( *pc == wxT('&') )
+        {
+            // Double the ampersand to escape it as far as wxWidgets is concerned
+            label += wxT("&&");
+        }
+        else
+        {
+            // don't remove ampersands '&' since if we have them in the menu title
+            // it means that they were doubled to indicate "&" instead of accelerator
+            label += *pc;
+        }
+    }
+
+    return label;
+}
+
 //-----------------------------------------------------------------------------
 // activate message from GTK
 //-----------------------------------------------------------------------------
@@ -419,7 +453,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
 static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString, const wxString &itemString )
 {
-    if (wxMenuItem::GetLabelFromText(menu->GetTitle()) == wxMenuItem::GetLabelFromText(menuString))
+    if (wxMenuItem::GetLabelText(wxConvertFromGTKToWXLabel(menu->GetTitle())) == wxMenuItem::GetLabelText(menuString))
     {
         int res = menu->FindItem( itemString );
         if (res != wxNOT_FOUND)
@@ -504,7 +538,7 @@ void wxMenuBar::EnableTop( size_t pos, bool flag )
         gtk_widget_set_sensitive( menu->m_owner, flag );
 }
 
-wxString wxMenuBar::GetLabelTop( size_t pos ) const
+wxString wxMenuBar::GetMenuLabel( size_t pos ) const
 {
     wxMenuList::compatibility_iterator node = m_menus.Item( pos );
 
@@ -512,26 +546,10 @@ wxString wxMenuBar::GetLabelTop( size_t pos ) const
 
     wxMenu* menu = node->GetData();
 
-    wxString label;
-    wxString text( menu->GetTitle() );
-    for ( const wxChar *pc = text.c_str(); *pc; pc++ )
-    {
-        if ( *pc == wxT('_') )
-        {
-            // '_' is the escape character for GTK+
-            continue;
-        }
-
-        // don't remove ampersands '&' since if we have them in the menu title
-        // it means that they were doubled to indicate "&" instead of accelerator
-
-        label += *pc;
-    }
-
-    return label;
+    return wxConvertFromGTKToWXLabel(menu->GetTitle());
 }
 
-void wxMenuBar::SetLabelTop( size_t pos, const wxString& label )
+void wxMenuBar::SetMenuLabel( size_t pos, const wxString& label )
 {
     wxMenuList::compatibility_iterator node = m_menus.Item( pos );
 
@@ -728,8 +746,19 @@ wxMenuItem::~wxMenuItem()
 
 // return the menu item text without any menu accels
 /* static */
-wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
+
+// TODO: this is now wrong, because it will be used by public APIs
+// to convert from label-with-wxWidgets-hotkeys to plain text,
+// and this function converts from GTK+ hotkeys to plain text.
+
+wxString wxMenuItemBase::GetLabelText(const wxString& text)
 {
+    // The argument to this function will now always be in wxWidgets standard label
+    // format, not GTK+ format, so we do what the other ports do.
+
+    return wxStripMenuCodes(text);
+
+#if 0
     wxString label;
 
     for ( const wxChar *pc = text.c_str(); *pc; pc++ )
@@ -763,12 +792,18 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
         label += *pc;
     }
 
-    // wxPrintf( wxT("GetLabelFromText(): text %s label %s\n"), text.c_str(), label.c_str() );
+    // wxPrintf( wxT("GetLabelText(): text %s label %s\n"), text.c_str(), label.c_str() );
 
     return label;
+#endif
 }
 
-void wxMenuItem::SetText( const wxString& str )
+wxString wxMenuItem::GetItemLabel() const
+{
+    return wxConvertFromGTKToWXLabel(m_text);
+}
+
+void wxMenuItem::SetItemLabel( const wxString& str )
 {
     // cache some data which must be used later
     bool isstock = wxIsStockID(GetId());
@@ -863,7 +898,7 @@ void wxMenuItem::SetText( const wxString& str )
 }
 
 // NOTE: this function is different from the similar functions GTKProcessMnemonics()
-//       implemented in control.cpp and from wxMenuItemBase::GetLabelFromText...
+//       implemented in control.cpp and from wxMenuItemBase::GetLabelText...
 //       so there's no real code duplication
 wxString wxMenuItem::GTKProcessMenuItemLabel(const wxString& str, wxString *hotKey)
 {
@@ -1022,7 +1057,7 @@ wxMenu::~wxMenu()
        // see wxMenu::Init
        gtk_widget_unref( m_menu );
        g_object_unref( m_accel );
-       
+
        // if the menu is inserted in another menu at this time, there was
        // one more reference to it:
        if ( m_owner )
@@ -1047,7 +1082,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
     GtkWidget *menuItem;
 
     // cache some data used later
-    wxString text = mitem->GetText();
+    wxString text = mitem->GetItemLabel();
     int id = mitem->GetId();
     bool isstock = wxIsStockID(id);
     const char *stockid = NULL;
@@ -1113,7 +1148,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
     }
     else // a normal item
     {
-        // NB: 'text' variable has "_" instead of "&" after mitem->SetText()
+        // NB: 'text' variable has "_" instead of "&" after mitem->SetItemLabel()
         //     so don't use it
 
         switch ( mitem->GetKind() )
@@ -1161,7 +1196,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
     GdkModifierType accel_mods;
     wxCharBuffer buf = wxGTK_CONV_SYS( GetGtkHotKey(*mitem) );
 
-    // wxPrintf( wxT("item: %s hotkey %s\n"), mitem->GetText().c_str(), GetGtkHotKey(*mitem).c_str() );
+    // wxPrintf( wxT("item: %s hotkey %s\n"), mitem->GetItemLabel().c_str(), GetGtkHotKey(*mitem).c_str() );
     if (buf[(size_t)0] != '\0')
     {
         gtk_accelerator_parse( (const char*) buf, &accel_key, &accel_mods);

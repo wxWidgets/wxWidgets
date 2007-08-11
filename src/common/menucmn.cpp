@@ -71,7 +71,7 @@ wxMenuItemBase::wxMenuItemBase(wxMenu *parentMenu,
     if (m_id == wxID_SEPARATOR)
         m_kind = wxITEM_SEPARATOR;
 
-    SetText(text);
+    SetItemLabel(text);
     SetHelp(help);
 }
 
@@ -84,7 +84,7 @@ wxMenuItemBase::~wxMenuItemBase()
 
 wxAcceleratorEntry *wxMenuItemBase::GetAccel() const
 {
-    return wxAcceleratorEntry::Create(GetText());
+    return wxAcceleratorEntry::Create(GetItemLabel());
 }
 
 void wxMenuItemBase::SetAccel(wxAcceleratorEntry *accel)
@@ -96,12 +96,12 @@ void wxMenuItemBase::SetAccel(wxAcceleratorEntry *accel)
         text += accel->ToString();
     }
 
-    SetText(text);
+    SetItemLabel(text);
 }
 
 #endif // wxUSE_ACCEL
 
-void wxMenuItemBase::SetText(const wxString& str)
+void wxMenuItemBase::SetItemLabel(const wxString& str)
 {
     m_text = str;
 
@@ -124,6 +124,13 @@ void wxMenuItemBase::SetHelp(const wxString& str)
         m_help = wxGetStockHelpString(GetId());
     }
 }
+
+#if WXWIN_COMPATIBILITY_2_8
+wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
+{
+    return GetLabelText(text);
+}
+#endif
 
 bool wxMenuBase::ms_locked = true;
 
@@ -283,7 +290,7 @@ bool wxMenuBase::DoDestroy(wxMenuItem *item)
 // Finds the item id matching the given string, wxNOT_FOUND if not found.
 int wxMenuBase::FindItem(const wxString& text) const
 {
-    wxString label = wxMenuItem::GetLabelFromText(text);
+    wxString label = wxMenuItem::GetLabelText(text);
     for ( wxMenuItemList::compatibility_iterator node = m_items.GetFirst();
           node;
           node = node->GetNext() )
@@ -545,7 +552,7 @@ void wxMenuBase::SetLabel( int id, const wxString &label )
 
     wxCHECK_RET( item, wxT("wxMenu::SetLabel: no such item") );
 
-    item->SetText(label);
+    item->SetItemLabel(label);
 }
 
 wxString wxMenuBase::GetLabel( int id ) const
@@ -554,7 +561,7 @@ wxString wxMenuBase::GetLabel( int id ) const
 
     wxCHECK_MSG( item, wxEmptyString, wxT("wxMenu::GetLabel: no such item") );
 
-    return item->GetText();
+    return item->GetItemLabel();
 }
 
 void wxMenuBase::SetHelpString( int id, const wxString& helpString )
@@ -665,14 +672,14 @@ wxMenu *wxMenuBarBase::Remove(size_t pos)
 
 int wxMenuBarBase::FindMenu(const wxString& title) const
 {
-    wxString label = wxMenuItem::GetLabelFromText(title);
+    wxString label = wxMenuItem::GetLabelText(title);
 
     size_t count = GetMenuCount();
     for ( size_t i = 0; i < count; i++ )
     {
-        wxString title2 = GetLabelTop(i);
+        wxString title2 = GetMenuLabel(i);
         if ( (title2 == title) ||
-             (wxMenuItem::GetLabelFromText(title2) == label) )
+             (wxMenuItem::GetLabelText(title2) == label) )
         {
             // found
             return (int)i;
@@ -723,13 +730,13 @@ wxMenuItem *wxMenuBarBase::FindItem(int id, wxMenu **menu) const
 
 int wxMenuBarBase::FindMenuItem(const wxString& menu, const wxString& item) const
 {
-    wxString label = wxMenuItem::GetLabelFromText(menu);
+    wxString label = wxMenuItem::GetLabelText(menu);
 
     int i = 0;
     wxMenuList::compatibility_iterator node;
     for ( node = m_menus.GetFirst(); node; node = node->GetNext(), i++ )
     {
-        if ( label == wxMenuItem::GetLabelFromText(GetLabelTop(i)) )
+        if ( label == wxMenuItem::GetLabelText(GetMenuLabel(i)) )
             return node->GetData()->FindItem(item);
     }
 
@@ -783,7 +790,7 @@ void wxMenuBarBase::SetLabel(int id, const wxString& label)
 
     wxCHECK_RET( item, wxT("wxMenuBar::SetLabel(): no such item") );
 
-    item->SetText(label);
+    item->SetItemLabel(label);
 }
 
 wxString wxMenuBarBase::GetLabel(int id) const
@@ -793,7 +800,7 @@ wxString wxMenuBarBase::GetLabel(int id) const
     wxCHECK_MSG( item, wxEmptyString,
                  wxT("wxMenuBar::GetLabel(): no such item") );
 
-    return item->GetText();
+    return item->GetItemLabel();
 }
 
 void wxMenuBarBase::SetHelpString(int id, const wxString& helpString)

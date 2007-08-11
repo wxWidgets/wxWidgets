@@ -852,7 +852,7 @@ bool wxMenuBar::Enable(bool enable)
     return true;
 }
 
-void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
+void wxMenuBar::SetMenuLabel(size_t pos, const wxString& label)
 {
     wxCHECK_RET( pos < GetMenuCount(), wxT("invalid menu index") );
 
@@ -870,10 +870,10 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
     }
 }
 
-wxString wxMenuBar::GetLabelTop(size_t pos) const
+wxString wxMenuBar::GetMenuLabel(size_t pos) const
 {
     wxCHECK_MSG( pos < GetMenuCount(), wxEmptyString,
-                 wxT("invalid menu index in wxMenuBar::GetLabelTop") );
+                 wxT("invalid menu index in wxMenuBar::GetMenuLabel") );
 
     return m_titles[pos];
 }

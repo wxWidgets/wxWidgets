@@ -4,7 +4,7 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2002/12/09
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) 2002 David Elliott
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -102,8 +102,8 @@ public:
     virtual void EnableTop(size_t pos, bool enable);
     virtual bool IsEnabledTop(size_t pos) const;
 
-    virtual void SetLabelTop(size_t pos, const wxString& label);
-    virtual wxString GetLabelTop(size_t pos) const;
+    virtual void SetMenuLabel(size_t pos, const wxString& label);
+    virtual wxString GetMenuLabel(size_t pos) const;
 
     virtual void Attach(wxFrame *frame);
     virtual void Detach();

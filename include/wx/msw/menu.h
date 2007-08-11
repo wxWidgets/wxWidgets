@@ -163,8 +163,8 @@ public:
     virtual wxMenu *Remove(size_t pos);
 
     virtual void EnableTop( size_t pos, bool flag );
-    virtual void SetLabelTop( size_t pos, const wxString& label );
-    virtual wxString GetLabelTop( size_t pos ) const;
+    virtual void SetMenuLabel( size_t pos, const wxString& label );
+    virtual wxString GetMenuLabel( size_t pos ) const;
 
     // implementation from now on
     WXHMENU Create();

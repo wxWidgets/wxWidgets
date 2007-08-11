@@ -152,7 +152,7 @@ const wxMenuInfoList& wxMenuBar::GetMenuInfos() const
     for( size_t i = 0 ; i < GetMenuCount() ; ++i )
     {
         wxMenuInfo* info = new wxMenuInfo() ;
-        info->Create( const_cast<wxMenuBar*>(this)->GetMenu(i) , GetLabelTop(i) ) ;
+        info->Create( const_cast<wxMenuBar*>(this)->GetMenu(i) , GetMenuLabel(i) ) ;
         list->Append( info ) ;
     }
     return m_menuInfos ;
@@ -372,11 +372,11 @@ void wxMenuBar::EnableTop(size_t pos, bool enable)
     // Palm OS does not have support for grayed or disabled items
 }
 
-void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
+void wxMenuBar::SetMenuLabel(size_t pos, const wxString& label)
 {
     wxCHECK_RET( pos < GetMenuCount(), wxT("invalid menu index") );
 
-    m_titles[pos]=wxStripMenuCodes(label);
+    m_titles[pos] = label;
 
     if ( !IsAttached() )
     {
@@ -387,12 +387,12 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
     Refresh();
 }
 
-wxString wxMenuBar::GetLabelTop(size_t pos) const
+wxString wxMenuBar::GetMenuLabel(size_t pos) const
 {
     wxCHECK_MSG( pos < GetMenuCount(), wxEmptyString,
-                 wxT("invalid menu index in wxMenuBar::GetLabelTop") );
+                 wxT("invalid menu index in wxMenuBar::GetMenuLabel") );
 
-    return wxMenuItem::GetLabelFromText(m_titles[pos]);
+    return m_titles[pos];
 }
 
 // ---------------------------------------------------------------------------
@@ -405,7 +405,7 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
     if ( !menuOld )
         return NULL;
 
-    m_titles[pos]=wxStripMenuCodes(title);
+    m_titles[pos] = title;
 
     if ( IsAttached() )
     {
@@ -421,7 +421,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
     if ( !wxMenuBarBase::Insert(pos, menu, title) )
         return false;
 
-    m_titles.Insert(wxStripMenuCodes(title), pos);
+    m_titles.Insert(title, pos);
 
     if ( IsAttached() )
     {
@@ -437,7 +437,7 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
     if ( !wxMenuBarBase::Append(menu, title) )
         return false;
 
-    m_titles.Add(wxStripMenuCodes(title));
+    m_titles.Add(title);
 
     if(IsAttached())
     {

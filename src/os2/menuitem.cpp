@@ -180,7 +180,7 @@ bool wxMenuItem::IsChecked() const
     return (uFlag & MIA_CHECKED) == MIA_CHECKED ;
 } // end of wxMenuItem::IsChecked
 
-wxString wxMenuItemBase::GetLabelFromText(
+wxString wxMenuItemBase::GetLabelText(
   const wxString&                   rsText
 )
 {
@@ -199,7 +199,7 @@ wxString wxMenuItemBase::GetLabelFromText(
         sLabel += *zPc;
     }
     return sLabel;
-} // end of wxMenuItemBase::GetLabelFromText
+} // end of wxMenuItemBase::GetLabelText
 
 //
 // Radio group stuff
@@ -363,7 +363,7 @@ void wxMenuItem::Check(
     wxMenuItemBase::Check(bCheck);
 } // end of wxMenuItem::Check
 
-void wxMenuItem::SetText( const wxString& rText )
+void wxMenuItem::SetItemLabel( const wxString& rText )
 {
     //
     // Don't do anything if label didn't change
@@ -374,7 +374,7 @@ void wxMenuItem::SetText( const wxString& rText )
         return;
 
     // wxMenuItemBase will do stock ID checks
-    wxMenuItemBase::SetText(sText);
+    wxMenuItemBase::SetItemLabel(sText);
 
     // m_text could now be different from 'text' if we are a stock menu item,
     // so use only m_text below

@@ -64,7 +64,7 @@ public:
     //
     // Override base class virtuals
     //
-    virtual void SetText(const wxString& rStrName);
+    virtual void SetItemLabel(const wxString& rStrName);
     virtual void SetCheckable(bool bCheckable);
 
     virtual void Enable(bool bDoEnable = true);

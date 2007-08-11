@@ -215,11 +215,11 @@ bool wxMenuBar::IsEnabledTop(size_t pos) const
     return false;
 }
 
-void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
+void wxMenuBar::SetMenuLabel(size_t pos, const wxString& label)
 {
 }
 
-wxString wxMenuBar::GetLabelTop(size_t pos) const
+wxString wxMenuBar::GetMenuLabel(size_t pos) const
 {
     wxMenu *menu = GetMenu(pos);
     int itemindex = [m_cocoaNSMenu indexOfItemWithSubmenu:menu->GetNSMenu()];

@@ -28,7 +28,8 @@ public:
     virtual ~wxMenuItem();
 
     // implement base class virtuals
-    virtual void SetText( const wxString& str );
+    virtual void SetItemLabel( const wxString& str );
+    virtual wxString GetItemLabel() const;
     virtual void Enable( bool enable = TRUE );
     virtual void Check( bool check = TRUE );
     virtual bool IsChecked() const;
@@ -72,7 +73,6 @@ private:
 
     DECLARE_DYNAMIC_CLASS(wxMenuItem)
 };
-
 
 #endif
         //__GTKMENUITEMH__

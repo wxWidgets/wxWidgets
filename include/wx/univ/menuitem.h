@@ -29,7 +29,7 @@ public:
     virtual ~wxMenuItem();
 
     // override base class virtuals to update the item appearance on screen
-    virtual void SetText(const wxString& text);
+    virtual void SetItemLabel(const wxString& text);
     virtual void SetCheckable(bool checkable);
 
     virtual void Enable(bool enable = true);
@@ -94,7 +94,7 @@ protected:
     // the bitmaps (may be invalid, then they're not used)
     wxBitmap m_bmpChecked,
              m_bmpUnchecked,
-             m_bmpDisabled; 
+             m_bmpDisabled;
 
     // the positions of the first and last items of the radio group this item
     // belongs to or -1: start is the radio group start and is valid for all

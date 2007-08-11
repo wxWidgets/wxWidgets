@@ -1153,7 +1153,7 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
 wxChar *wxStripMenuCodes(const wxChar *in, wxChar *out)
 {
 #if wxUSE_MENUS
-    wxString s = wxMenuItem::GetLabelFromText(in);
+    wxString s = wxMenuItem::GetLabelText(in);
 #else
     wxString str(in);
     wxString s = wxStripMenuCodes(str);

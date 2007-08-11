@@ -237,6 +237,9 @@ public:
     void SetLabel(int itemid, const wxString& label);
     wxString GetLabel(int itemid) const;
 
+    //  Returns the stripped label
+    wxString GetLabelText(int itemid) const { return wxMenuItem::GetLabelText(GetLabel(itemid)); }
+
     virtual void SetHelpString(int itemid, const wxString& helpString);
     virtual wxString GetHelpString(int itemid) const;
 
@@ -424,8 +427,11 @@ public:
     virtual bool IsEnabledTop(size_t WXUNUSED(pos)) const { return true; }
 
     // get or change the label of the menu at given position
-    virtual void SetLabelTop(size_t pos, const wxString& label) = 0;
-    virtual wxString GetLabelTop(size_t pos) const = 0;
+    virtual void SetMenuLabel(size_t pos, const wxString& label) = 0;
+    virtual wxString GetMenuLabel(size_t pos) const = 0;
+
+    // get the stripped label of the menu at given position
+    virtual wxString GetMenuLabelText(size_t pos) const { return wxMenuItem::GetLabelText(GetMenuLabel(pos)); }
 
     // item search
     // -----------
@@ -490,6 +496,12 @@ public:
 
     virtual bool CanBeOutsideClientArea() const { return true; }
 
+#if WXWIN_COMPATIBILITY_2_8
+    // get or change the label of the menu at given position
+    wxDEPRECATED( void SetLabelTop(size_t pos, const wxString& label) );
+    wxDEPRECATED( wxString GetLabelTop(size_t pos) const );
+#endif
+
 protected:
     // the list of all our menus
     wxMenuList m_menus;
@@ -499,6 +511,19 @@ protected:
 
     DECLARE_NO_COPY_CLASS(wxMenuBarBase)
 };
+
+#if WXWIN_COMPATIBILITY_2_8
+// get or change the label of the menu at given position
+void wxMenuBarBase::SetLabelTop(size_t pos, const wxString& label)
+{
+    SetMenuLabel(pos, label);
+}
+
+wxString wxMenuBarBase::GetLabelTop(size_t pos) const
+{
+    return GetMenuLabel(pos);
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // include the real class declaration

@@ -43,7 +43,7 @@ public:
     // implementation only from now on
     // -------------------------------
 
-      int    MacGetIndexFromId( int id ) ; 
+      int    MacGetIndexFromId( int id ) ;
       int    MacGetIndexFromItem( wxMenuItem *pItem ) ;
       void MacEnableMenu( bool bDoEnable ) ;
       // MacOS needs to know about submenus somewhere within this menu
@@ -119,8 +119,8 @@ public:
     virtual wxMenuItem* FindItem( int id, wxMenu **menu = NULL ) const;
 
     virtual void EnableTop( size_t pos, bool flag );
-    virtual void SetLabelTop( size_t pos, const wxString& label );
-    virtual wxString GetLabelTop( size_t pos ) const;
+    virtual void SetMenuLabel( size_t pos, const wxString& label );
+    virtual wxString GetMenuLabel( size_t pos ) const;
     virtual bool Enable( bool enable = TRUE );
     // for virtual function hiding
     virtual void Enable( int itemid, bool enable )

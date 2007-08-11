@@ -207,7 +207,7 @@ bool wxMenuItem::IsChecked() const
 }
 
 /* static */
-wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
+wxString wxMenuItemBase::GetLabelText(const wxString& text)
 {
     return wxStripMenuCodes(text);
 }
@@ -337,7 +337,7 @@ void wxMenuItem::Check(bool check)
     wxMenuItemBase::Check(check);
 }
 
-void wxMenuItem::SetText(const wxString& txt)
+void wxMenuItem::SetItemLabel(const wxString& txt)
 {
     wxString text = txt;
 
@@ -346,7 +346,7 @@ void wxMenuItem::SetText(const wxString& txt)
         return;
 
     // wxMenuItemBase will do stock ID checks
-    wxMenuItemBase::SetText(text);
+    wxMenuItemBase::SetItemLabel(text);
 
     // m_text could now be different from 'text' if we are a stock menu item,
     // so use only m_text below

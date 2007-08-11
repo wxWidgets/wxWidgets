@@ -33,7 +33,7 @@ public:
     virtual ~wxMenuItem();
 
     // accessors (some more are inherited from wxOwnerDrawn or are below)
-    virtual void SetText(const wxString& label);
+    virtual void SetItemLabel(const wxString& label);
     virtual void Enable(bool enable = true);
     virtual void Check(bool check = true);
     // included SetBitmap and GetBitmap as copied from the GTK include file

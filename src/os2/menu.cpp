@@ -847,7 +847,7 @@ void wxMenuBar::EnableTop(
     Refresh();
 } // end of wxMenuBar::EnableTop
 
-void wxMenuBar::SetLabelTop(
+void wxMenuBar::SetMenuLabel(
   size_t                            nPos
 , const wxString&                   rLabel
 )
@@ -884,16 +884,16 @@ void wxMenuBar::SetLabelTop(
         wxLogLastError(wxT("ModifyMenu"));
     }
     Refresh();
-} // end of wxMenuBar::SetLabelTop
+} // end of wxMenuBar::SetMenuLabel
 
-wxString wxMenuBar::GetLabelTop(
+wxString wxMenuBar::GetMenuLabel(
   size_t                            nPos
 ) const
 {
     wxCHECK_MSG( nPos < GetMenuCount(), wxEmptyString,
-                 wxT("invalid menu index in wxMenuBar::GetLabelTop") );
+                 wxT("invalid menu index in wxMenuBar::GetMenuLabel") );
     return m_titles[nPos];
-} // end of wxMenuBar::GetLabelTop
+} // end of wxMenuBar::GetMenuLabel
 
 // ---------------------------------------------------------------------------
 // wxMenuBar construction

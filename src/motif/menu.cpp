@@ -221,7 +221,7 @@ void wxMenuBar::EnableTop(size_t WXUNUSED(pos), bool WXUNUSED(flag))
 //  wxLogWarning("wxMenuBar::EnableTop not yet implemented.");
 }
 
-void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
+void wxMenuBar::SetMenuLabel(size_t pos, const wxString& label)
 {
     wxMenu *menu = GetMenu(pos);
     if ( !menu )
@@ -236,26 +236,14 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
                       XmNlabelString, label_str(),
                       NULL);
     }
+    m_titles[i] = label;
 }
 
-wxString wxMenuBar::GetLabelTop(size_t pos) const
+wxString wxMenuBar::GetMenuLabel(size_t pos) const
 {
-    wxMenu *menu = GetMenu(pos);
-    if ( menu )
-    {
-        Widget w = (Widget)menu->GetButtonWidget();
-        if (w)
-        {
-            XmString text;
-            XtVaGetValues(w,
-                          XmNlabelString, &text,
-                          NULL);
-
-            return wxXmStringToString( text );
-        }
-    }
-
-    return wxEmptyString;
+    wxCHECK_MSG( pos < GetMenuCount(), wxEmptyString,
+                 wxT("invalid menu index in wxMenuBar::GetMenuLabel") );
+    return m_titles[pos];
 }
 
 bool wxMenuBar::Append(wxMenu * menu, const wxString& title)

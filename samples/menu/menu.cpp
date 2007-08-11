@@ -719,7 +719,7 @@ void MyFrame::OnGetLabelMenu(wxCommandEvent& WXUNUSED(event))
     wxCHECK_RET( count, _T("no last menu?") );
 
     wxLogMessage(_T("The label of the last menu item is '%s'"),
-                 mbar->GetLabelTop(count - 1).c_str());
+                 mbar->GetMenuLabel(count - 1).c_str());
 }
 
 #if wxUSE_TEXTDLG
@@ -734,13 +734,13 @@ void MyFrame::OnSetLabelMenu(wxCommandEvent& WXUNUSED(event))
                      (
                         _T("Enter new label: "),
                         _T("Change last menu text"),
-                        mbar->GetLabelTop(count - 1),
+                        mbar->GetMenuLabel(count - 1),
                         this
                      );
 
     if ( !label.empty() )
     {
-        mbar->SetLabelTop(count - 1, label);
+        mbar->SetMenuLabel(count - 1, label);
     }
 }
 
@@ -874,14 +874,14 @@ void MyFrame::OnSetLabelMenuItem(wxCommandEvent& WXUNUSED(event))
                          (
                             _T("Enter new label: "),
                             _T("Change last menu item text"),
-                            item->GetLabel(),
+                            item->GetItemLabel(),
                             this
                          );
         label.Replace( _T("\\t"), _T("\t") );
 
         if ( !label.empty() )
         {
-            item->SetText(label);
+            item->SetItemLabel(label);
         }
     }
 }

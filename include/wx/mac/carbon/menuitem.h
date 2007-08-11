@@ -35,7 +35,7 @@ public:
     virtual ~wxMenuItem();
 
     // override base class virtuals
-    virtual void SetText(const wxString& strName);
+    virtual void SetItemLabel(const wxString& strName);
 
     virtual void Enable(bool bDoEnable = true);
     virtual void Check(bool bDoCheck = true);

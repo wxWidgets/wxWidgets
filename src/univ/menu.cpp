@@ -1516,7 +1516,7 @@ wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
 }
 
 /* static */
-wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
+wxString wxMenuItemBase::GetLabelText(const wxString& text)
 {
     return wxStripMenuCodes(text);
 }
@@ -1538,13 +1538,13 @@ void wxMenuItem::UpdateAccelInfo()
     m_strAccel = m_text.AfterFirst(_T('\t'));
 }
 
-void wxMenuItem::SetText(const wxString& text)
+void wxMenuItem::SetItemLabel(const wxString& text)
 {
     if ( text != m_text )
     {
         // first call the base class version to change m_text
         // (and also check if we don't have a stock menu item)
-        wxMenuItemBase::SetText(text);
+        wxMenuItemBase::SetItemLabel(text);
 
         UpdateAccelInfo();
 
@@ -1820,9 +1820,9 @@ bool wxMenuBar::IsEnabledTop(size_t pos) const
     return m_menuInfos[pos].IsEnabled();
 }
 
-void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
+void wxMenuBar::SetMenuLabel(size_t pos, const wxString& label)
 {
-    wxCHECK_RET( pos < GetCount(), _T("invalid index in EnableTop") );
+    wxCHECK_RET( pos < GetCount(), _T("invalid index in SetMenuLabel") );
 
     if ( label != m_menuInfos[pos].GetLabel() )
     {
@@ -1833,9 +1833,9 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
     //else: nothing to do
 }
 
-wxString wxMenuBar::GetLabelTop(size_t pos) const
+wxString wxMenuBar::GetMenuLabel(size_t pos) const
 {
-    wxCHECK_MSG( pos < GetCount(), wxEmptyString, _T("invalid index in GetLabelTop") );
+    wxCHECK_MSG( pos < GetCount(), wxEmptyString, _T("invalid index in GetMenuLabel") );
 
     return m_menuInfos[pos].GetLabel();
 }
@@ -1960,7 +1960,7 @@ wxSize wxMenuBar::DoGetBestClientSize() const
     {
         wxClientDC dc(wxConstCast(this, wxMenuBar));
         dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-        dc.GetTextExtent(GetLabelTop(0), &size.x, &size.y);
+        dc.GetTextExtent(GetMenuLabel(0), &size.x, &size.y);
 
         // adjust for the renderer we use
         size = GetRenderer()->GetMenuBarItemSize(size);
