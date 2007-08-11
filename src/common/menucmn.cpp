@@ -307,7 +307,7 @@ int wxMenuBase::FindItem(const wxString& text) const
         // name just like the ordinary items
         if ( !item->IsSeparator() )
         {
-            if ( item->GetLabel() == label )
+            if ( item->GetItemLabelText() == label )
                 return item->GetId();
         }
     }
@@ -838,5 +838,19 @@ void wxMenuBarBase::UpdateMenus( void )
         }
     }
 }
+
+#if WXWIN_COMPATIBILITY_2_8
+// get or change the label of the menu at given position
+void wxMenuBarBase::SetLabelTop(size_t pos, const wxString& label)
+{
+    SetMenuLabel(pos, label);
+}
+
+wxString wxMenuBarBase::GetLabelTop(size_t pos) const
+{
+    return GetMenuLabel(pos);
+}
+#endif
+
 
 #endif // wxUSE_MENUS

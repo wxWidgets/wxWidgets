@@ -858,8 +858,9 @@ void MyFrame::OnGetLabelMenuItem(wxCommandEvent& WXUNUSED(event))
 
     if ( item )
     {
+        wxString label = item->GetItemLabel();
         wxLogMessage(_T("The label of the last menu item is '%s'"),
-                     item->GetLabel().c_str());
+                     label.c_str());
     }
 }
 

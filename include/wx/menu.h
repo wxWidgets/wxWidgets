@@ -512,19 +512,6 @@ protected:
     DECLARE_NO_COPY_CLASS(wxMenuBarBase)
 };
 
-#if WXWIN_COMPATIBILITY_2_8
-// get or change the label of the menu at given position
-void wxMenuBarBase::SetLabelTop(size_t pos, const wxString& label)
-{
-    SetMenuLabel(pos, label);
-}
-
-wxString wxMenuBarBase::GetLabelTop(size_t pos) const
-{
-    return GetMenuLabel(pos);
-}
-#endif
-
 // ----------------------------------------------------------------------------
 // include the real class declaration
 // ----------------------------------------------------------------------------
