@@ -67,5 +67,8 @@
 #include "wx/xrc/xh_bmpcbox.h"
 #include "wx/xrc/xh_animatctrl.h"
 #include "wx/xrc/xh_collpane.h"
+#if wxABI_VERSION >= 20805
+#include "wx/xrc/xh_propdlg.h"
+#endif
 
 #endif // _WX_XH_ALL_H_

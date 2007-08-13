@@ -107,6 +107,7 @@ All (GUI):
   of bitmap to fit page height.
 - Fixed wxXPMHandler::SaveFile for images with more than 92 colors.
 - Fixed a crash in wxGrid on creation due to OnSize being called too soon.
+- Added XRC handler for wxPropertySheetDialog (Sander Berents).
 
 wxMSW:
 
