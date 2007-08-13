@@ -747,10 +747,6 @@ wxMenuItem::~wxMenuItem()
 // return the menu item text without any menu accels
 /* static */
 
-// TODO: this is now wrong, because it will be used by public APIs
-// to convert from label-with-wxWidgets-hotkeys to plain text,
-// and this function converts from GTK+ hotkeys to plain text.
-
 wxString wxMenuItemBase::GetLabelText(const wxString& text)
 {
     // The argument to this function will now always be in wxWidgets standard label
