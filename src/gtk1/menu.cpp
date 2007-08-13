@@ -794,7 +794,10 @@ wxString wxMenuItemBase::GetLabelText(const wxString& text)
 
 wxString wxMenuItem::GetItemLabel() const
 {
-    return wxConvertFromGTKToWXLabel(m_text);
+    wxString label = wxConvertFromGTKToWXLabel(m_text);
+    if (!m_hotKey.IsEmpty())
+        label = label + wxT("\t") + m_hotKey;
+    return label;
 }
 
 void wxMenuItem::SetItemLabel( const wxString& string )
