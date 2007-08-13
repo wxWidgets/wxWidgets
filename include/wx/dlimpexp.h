@@ -16,7 +16,10 @@
 #ifndef _WX_DLIMPEXP_H_
 #define _WX_DLIMPEXP_H_
 
-#if defined(__WINDOWS__)
+#if defined(HAVE_VISIBILITY)
+#    define WXEXPORT __attribute__ ((visibility("default")))
+#    define WXIMPORT __attribute__ ((visibility("default")))
+#elif defined(__WINDOWS__)
     /*
        __declspec works in BC++ 5 and later, Watcom C++ 11.0 and later as well
        as VC++ and gcc
@@ -51,9 +54,6 @@
 #elif defined(__CYGWIN__)
 #    define WXEXPORT __declspec(dllexport)
 #    define WXIMPORT __declspec(dllimport)
-#elif defined(HAVE_VISIBILITY)
-#    define WXEXPORT __attribute__ ((visibility("default")))
-#    define WXIMPORT __attribute__ ((visibility("default")))
 #endif
 
 /* for other platforms/compilers we don't anything */

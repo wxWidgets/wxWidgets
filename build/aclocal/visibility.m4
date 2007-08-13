@@ -43,7 +43,12 @@ AC_DEFUN([WX_VISIBILITY],
          #if defined(__GNUC__) && __GNUC__ < 4
          error this gcc is too old;
          #endif
-          
+
+         /* visibility only makes sense for ELF shared libs: */
+         #if !defined(__ELF__) && !defined(__APPLE__)
+         error this platform has no visibility;
+         #endif
+
          extern __attribute__((__visibility__("hidden"))) int hiddenvar;
          extern __attribute__((__visibility__("default"))) int exportedvar;
          extern __attribute__((__visibility__("hidden"))) int hiddenfunc (void);
