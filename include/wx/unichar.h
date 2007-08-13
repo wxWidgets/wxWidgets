@@ -141,18 +141,26 @@ private:
     // characters purely for performance reasons
     static value_type From8bit(char c)
     {
+#if wxUSE_UNICODE
         if ( (unsigned char)c < 0x80 )
             return c;
 
         return FromHi8bit(c);
+#else
+        return c;
+#endif
     }
 
     static char To8bit(value_type c)
     {
+#if wxUSE_UNICODE
         if ( c < 0x80 )
             return c;
 
         return ToHi8bit(c);
+#else
+        return c;
+#endif
     }
 
     // helpers of the functions above called to deal with non-ASCII chars
