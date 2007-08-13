@@ -153,6 +153,32 @@ Returns the help string associated with the menu item.
 Returns the menu item identifier.
 
 
+\membersection{wxMenuItem::GetItemLabel}\label{wxmenuitemgetitemlabel}
+
+\constfunc{wxString}{GetItemLabel}{\void}
+
+Returns the text associated with the menu item including any accelerator
+characters that were passed to the constructor or SetItemLabel.
+
+\wxheading{See also}
+
+\helpref{GetItemLabelText}{wxmenuitemgetitemlabeltext}, 
+\helpref{GetLabelText}{wxmenuitemgetlabeltext}
+
+
+\membersection{wxMenuItem::GetItemLabelText}\label{wxmenuitemgetitemlabeltext}
+
+\constfunc{wxString}{GetItemLabelText}{\void}
+
+Returns the text associated with the menu item, without any accelerator
+characters.
+
+\wxheading{See also}
+
+\helpref{GetItemLabel}{wxmenuitemgetitemlabel}, 
+\helpref{GetLabelText}{wxmenuitemgetlabeltext}
+
+
 \membersection{wxMenuItem::GetKind}\label{wxmenuitemgetkind}
 
 \constfunc{wxItemKind}{GetKind}{\void}
@@ -168,10 +194,30 @@ Returns the item kind, one of {\tt wxITEM\_SEPARATOR}, {\tt wxITEM\_NORMAL},
 Returns the text associated with the menu item without any accelerator
 characters it might contain.
 
+This function is deprecated in favour of \helpref{GetItemLabelText}{wxmenuitemgetitemlabeltext}.
+
 \wxheading{See also}
 
 \helpref{GetText}{wxmenuitemgettext}, 
 \helpref{GetLabelFromText}{wxmenuitemgetlabelfromtext}
+
+\membersection{wxMenuItem::GetLabelText}\label{wxmenuitemgetlabeltext}
+
+\func{static wxString}{GetLabelText}{\param{const wxString\& }{text}}
+
+Strips all accelerator characters and mnemonics from the given {\it text}.
+For example,
+
+\begin{verbatim}
+wxMenuItem::GetLabelFromText("&Hello\tCtrl-H");
+\end{verbatim}
+
+will return just {\tt "Hello"}.
+
+\wxheading{See also}
+
+\helpref{GetItemLabelText}{wxmenuitemgetitemlabeltext}, 
+\helpref{GetItemLabel}{wxmenuitemgetitemlabel}
 
 
 \membersection{wxMenuItem::GetLabelFromText}\label{wxmenuitemgetlabelfromtext}
@@ -186,6 +232,8 @@ wxMenuItem::GetLabelFromText("&Hello\tCtrl-H");
 \end{verbatim}
 
 will return just {\tt "Hello"}.
+
+This function is deprecated; please use \helpref{wxMenuItem::GetLabelText}{wxmenuitemgetlabeltext} instead.
 
 \wxheading{See also}
 
@@ -214,7 +262,7 @@ Returns the menu this menu item is in, or NULL if this menu item is not attached
 Returns the text associated with the menu item.
 
 {\bf NB:} this function is deprecated, please use 
-\helpref{GetText}{wxmenuitemgettext} or \helpref{GetLabel}{wxmenuitemgetlabel} 
+\helpref{GetItemLabel}{wxmenuitemgetitemlabel} or \helpref{GetItemLabelText}{wxmenuitemgetitemlabeltext} 
 instead.
 
 
@@ -224,6 +272,8 @@ instead.
 
 Returns the text associated with the menu item, such as it was passed to the
 wxMenuItem constructor, i.e. with any accelerator characters it may contain.
+
+This function is deprecated in favour of \helpref{GetItemLabel}{wxmenuitemgetitemlabel}.
 
 \wxheading{See also}
 
@@ -318,6 +368,13 @@ Sets the font associated with the menu item (Windows only).
 Sets the help string.
 
 
+\membersection{wxMenuItem::SetItemLabel}\label{wxmenuitemsetitemlabel}
+
+\func{void}{SetItemLabel}{\param{const wxString\& }{label}}
+
+Sets the label associated with the menu item.
+
+
 \membersection{wxMenuItem::SetMarginWidth}\label{wxmenuitemsetmarginwidth}
 
 \constfunc{void}{SetMarginWidth}{\param{int}{ width}}
@@ -344,6 +401,8 @@ Sets the submenu of this menu item.
 \func{void}{SetText}{\param{const wxString\& }{text}}
 
 Sets the text associated with the menu item.
+
+This function is deprecated in favour of \helpref{SetItemLabel}{wxmenuitemsetitemlabel}.
 
 
 \membersection{wxMenuItem::SetTextColour}\label{wxmenuitemsettextcolour}

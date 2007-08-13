@@ -435,8 +435,26 @@ The item label, or the empty string if the item was not found.
 
 \wxheading{See also}
 
-\helpref{wxMenu::SetLabel}{wxmenusetlabel}
+\helpref{wxMenu::GetLabelText}{wxmenugetlabeltext}, \helpref{wxMenu::SetLabel}{wxmenusetlabel}
 
+
+\membersection{wxMenu::GetLabelText}\label{wxmenugetlabeltext}
+
+\constfunc{wxString}{GetLabelText}{\param{int}{ id}}
+
+Returns a menu item label, without any of the original mnemonics and accelerators.
+
+\wxheading{Parameters}
+
+\docparam{id}{The menu item identifier.}
+
+\wxheading{Return value}
+
+The item label, or the empty string if the item was not found.
+
+\wxheading{See also}
+
+\helpref{wxMenu::GetLabel}{wxmenugetlabel}, \helpref{wxMenu::SetLabel}{wxmenusetlabel}
 
 \membersection{wxMenu::GetMenuItemCount}\label{wxmenugetmenuitemcount}
 
@@ -462,7 +480,7 @@ Returns the title of the menu.
 \wxheading{Remarks}
 
 This is relevant only to popup menus, use 
-\helpref{wxMenuBar::GetLabelTop}{wxmenubargetlabeltop} for the menus in the
+\helpref{wxMenuBar::GetMenuLabel}{wxmenubargetmenulabel} for the menus in the
 menubar.
 
 \wxheading{See also}
@@ -962,6 +980,8 @@ The menu label, or the empty string if the menu was not found.
 
 Use only after the menubar has been associated with a frame.
 
+This function is deprecated in favour of \helpref{GetMenuLabel}{wxmenubargetmenulabel} and \helpref{GetMenuLabelText}{wxmenubargetmenulabeltext}.
+
 \wxheading{See also}
 
 \helpref{wxMenuBar::SetLabelTop}{wxmenubarsetlabeltop}
@@ -979,6 +999,56 @@ Returns the menu at {\it menuIndex} (zero-based).
 \constfunc{size\_t}{GetMenuCount}{\void}
 
 Returns the number of menus in this menubar.
+
+
+\membersection{wxMenuBar::GetMenuLabel}\label{wxmenubargetmenulabel}
+
+\constfunc{wxString}{GetMenuLabel}{\param{int}{ pos}}
+
+Returns the label of a top-level menu. Note that the returned string
+includes the accelerator characters that have been specified in the menu
+title string during its construction.
+
+\wxheading{Parameters}
+
+\docparam{pos}{Position of the menu on the menu bar, starting from zero.}
+
+\wxheading{Return value}
+
+The menu label, or the empty string if the menu was not found.
+
+\wxheading{Remarks}
+
+Use only after the menubar has been associated with a frame.
+
+\wxheading{See also}
+
+\helpref{wxMenuBar::GetMenuLabelText}{wxmenubargetmenulabeltext}, \helpref{wxMenuBar::SetMenuLabel}{wxmenubarsetmenulabel}
+
+
+\membersection{wxMenuBar::GetMenuLabelText}\label{wxmenubargetmenulabeltext}
+
+\constfunc{wxString}{GetMenuLabelText}{\param{int}{ pos}}
+
+Returns the label of a top-level menu. Note that the returned string does not
+include any accelerator characters that may have been specified in the menu
+title string during its construction.
+
+\wxheading{Parameters}
+
+\docparam{pos}{Position of the menu on the menu bar, starting from zero.}
+
+\wxheading{Return value}
+
+The menu label, or the empty string if the menu was not found.
+
+\wxheading{Remarks}
+
+Use only after the menubar has been associated with a frame.
+
+\wxheading{See also}
+
+\helpref{wxMenuBar::GetMenuLabel}{wxmenubargetmenulabel}, \helpref{wxMenuBar::SetMenuLabel}{wxmenubarsetmenulabel}
 
 
 \membersection{wxMenuBar::Insert}\label{wxmenubarinsert}
@@ -1137,7 +1207,30 @@ Sets the label of a top-level menu.
 
 Use only after the menubar has been associated with a frame.
 
+This function has been deprecated in favour of \helpref{SetMenuLabel}{wxmenubarsetmenulabel}.
+
 \wxheading{See also}
 
 \helpref{wxMenuBar::GetLabelTop}{wxmenubargetlabeltop}
+
+
+\membersection{wxMenuBar::SetMenuLabel}\label{wxmenubarsetmenulabel}
+
+\func{void}{SetMenuLabel}{\param{int}{ pos}, \param{const wxString\& }{label}}
+
+Sets the label of a top-level menu.
+
+\wxheading{Parameters}
+
+\docparam{pos}{The position of a menu on the menu bar, starting from zero.}
+
+\docparam{label}{The menu label.}
+
+\wxheading{Remarks}
+
+Use only after the menubar has been associated with a frame.
+
+\wxheading{See also}
+
+\helpref{wxMenuBar::GetMenuLabel}{wxmenubargetmenulabel}, \helpref{wxMenuBar::GetMenuLabelText}{wxmenubargetmenulabeltext}
 
