@@ -798,9 +798,9 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
     }
 
     // wxPrintf( wxT("GetLabelFromText(): text %s label %s\n"), text.c_str(), label.c_str() );
-#endif
 
     return label;
+#endif
 }
 
 void wxMenuItem::SetText( const wxString& string )
