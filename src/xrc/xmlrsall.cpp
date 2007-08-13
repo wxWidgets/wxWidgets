@@ -44,6 +44,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_BMPBUTTON
     AddHandler(new wxBitmapButtonXmlHandler);
 #endif
+#if wxUSE_BOOKCTRL
+    AddHandler(new wxPropertySheetDialogXmlHandler);
+#endif
 #if wxUSE_BUTTON
     AddHandler(new wxStdDialogButtonSizerXmlHandler);
     AddHandler(new wxButtonXmlHandler);
