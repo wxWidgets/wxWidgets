@@ -53,17 +53,16 @@ typedef SInt32 SRefCon;
 
 #if wxUSE_GUI
 
-#include "wx/hashmap.h"
-
 #include "wx/mac/private.h"
 
 WX_DEFINE_ARRAY_SIZE_T(size_t,wxArrayDataBrowserItemID);
 
 // ============================================================================
-// DataBrowser Wrapper
+// wxMacDataBrowserTableViewControl
 // ============================================================================
 //
-// basing on DataBrowserItemIDs
+// this is a wrapper class for the Mac OS X data browser environment,
+// it covers all general data brower functionality,
 //
 
 // data browser's property IDs have a reserved ID range from 0 - 1023
@@ -127,18 +126,18 @@ public:
 // column handling
 //
   OSStatus GetColumnCount   (UInt32* numColumns) const;
-  OSStatus GetColumnID      (DataBrowserTableViewColumnIndex position, DataBrowserTableViewColumnID* id);
-  OSStatus GetFreePropertyID(DataBrowserPropertyID* id) const; // this method returns a property id that is valid and currently not used; if it cannot be found 'errDataBrowerPropertyNotSupported' is returned
-  OSStatus GetPropertyColumn(DataBrowserPropertyID propertyID, DataBrowserTableViewColumnIndex* index) const;
+  OSStatus GetColumnIndex   (DataBrowserPropertyID propertyID, DataBrowserTableViewColumnIndex* index) const; // returns for the passed property the corresponding column index
+  OSStatus GetFreePropertyID(DataBrowserPropertyID* propertyID) const; // this method returns a property id that is valid and currently not used; if it cannot be found 'errDataBrowerPropertyNotSupported' is returned
   OSStatus GetPropertyFlags (DataBrowserPropertyID propertyID, DataBrowserPropertyFlags *flags ) const;
+  OSStatus GetPropertyID    (DataBrowserTableViewColumnIndex index, DataBrowserTableViewColumnID* propertyId); // returns for the passed column index the corresponding property ID
 
   OSStatus IsUsedPropertyID(DataBrowserPropertyID propertyID) const; // checks if passed property id is used by the control; no error is returned if the id exists
 
-  OSStatus RemoveColumn(DataBrowserTableViewColumnIndex position);
+  OSStatus RemoveColumn(DataBrowserTableViewColumnIndex index);
 
-  OSStatus SetColumnPosition  (DataBrowserPropertyID column, DataBrowserTableViewColumnIndex position);
-  OSStatus SetDisclosureColumn(DataBrowserPropertyID property, Boolean expandableRows );
-  OSStatus SetPropertyFlags   (DataBrowserPropertyID property, DataBrowserPropertyFlags flags );
+  OSStatus SetColumnIndex     (DataBrowserPropertyID propertyID, DataBrowserTableViewColumnIndex index);
+  OSStatus SetDisclosureColumn(DataBrowserPropertyID propertyID, Boolean expandableRows=true);
+  OSStatus SetPropertyFlags   (DataBrowserPropertyID propertyID, DataBrowserPropertyFlags flags);
 
 //
 // item handling
@@ -199,10 +198,10 @@ public:
 // item sorting
 //
   OSStatus GetSortOrder   (DataBrowserSortOrder* order) const;
-  OSStatus GetSortProperty(DataBrowserPropertyID* column) const;
+  OSStatus GetSortProperty(DataBrowserPropertyID* propertyID) const;
 
   OSStatus SetSortOrder   (DataBrowserSortOrder  order);
-  OSStatus SetSortProperty(DataBrowserPropertyID column);
+  OSStatus SetSortProperty(DataBrowserPropertyID propertyID);
 
 protected :
 //
@@ -225,8 +224,13 @@ private:
 };
 
 // ============================================================================
-// Databrowser class for the list view control
+// wxMacDataBrowserListViewControl
 // ============================================================================
+//
+// this class is a wrapper for a list view which incorporates all general
+// data browser functionality of the inherited table view control class;
+// the term list view is in this case Mac OS X specific and is not related
+// to any wxWidget naming conventions
 //
 class wxMacDataBrowserListViewControl : public wxMacDataBrowserTableViewControl
 {
@@ -249,38 +253,19 @@ private:
 
 
 // ============================================================================
-// Databrowser class for the data view list control model
+// wxMacDataViewDataBrowserListViewControl
 // ============================================================================
 //
-
+// internal interface class between wxDataViewCtrl (wxWidget) and the data
+// browser (Mac OS X)
 //
-// Hash maps used by the data browser for the data view model
-//
-WX_DECLARE_HASH_MAP(DataBrowserItemID,unsigned long,wxIntegerHash,wxIntegerEqual,ItemIDRowNumberHashMap); // stores for each item ID the model's row number
-
 class wxMacDataViewDataBrowserListViewControl : public wxMacDataBrowserListViewControl
 {
 public:
 //
 // constructors / destructor
+//
   wxMacDataViewDataBrowserListViewControl(wxWindow* peer, wxPoint const& pos, wxSize const& size, long style);
-
-//
-// item ID and model matching
-//
-  void ClearItemIDRowPairs(void); // removes all ID row pairs
-
-  bool DeleteItemIDRowPair(DataBrowserItemID itemID); // if the id has been removed, 'true' is returned, 'false' is returned if the id did not exist or another error occurred
-
-  bool GetRowIndex(unsigned long& rowIndex, DataBrowserItemID itemID) const; // returns 'true' and the rowIndex if the id has been found in the map, otherwise 'false' is returned and rowIndex remains untouched
-
-  bool InsertItemIDRowPair(DataBrowserItemID itemID, unsigned long rowIndex); // the pair will only be inserted if the item ID does not exist before the call
-
-  void RenumberItemIDRowIndices         (unsigned int* newIndices);        // for each item ID - row index pair the row index is changed
-  void RenumberItemIDRowIndicesDeletion (unsigned long decreaseFromIndex); // decreases all row indices by one that are equal or larger than 'decreaseFromIndex'
-  void RenumberItemIDRowIndicesInsertion(unsigned long increaseFromIndex); // increases all row indices by one that are equal or larger than 'increaseFromIndex'
-
-  void ReverseRowIndexNumbering(void); // reverses the order of the indices
 
 protected:
 //
@@ -292,10 +277,6 @@ protected:
   virtual OSStatus DataBrowserGetSetItemDataProc  (DataBrowserItemID itemID, DataBrowserPropertyID property, DataBrowserItemDataRef itemData, Boolean getValue);
 
 private:
-//
-// variables
-//
-  ItemIDRowNumberHashMap m_itemIDRowNumberMap; // contains for each data browser ID the corresponding line number in the model
 };
 
 typedef wxMacDataViewDataBrowserListViewControl* wxMacDataViewDataBrowserListViewControlPointer;

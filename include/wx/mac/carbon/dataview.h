@@ -128,22 +128,22 @@ public:
 // 
   virtual bool Render(wxRect cell, wxDC* dc, int state) = 0;
 
-  virtual bool Activate(wxRect WXUNUSED(cell), wxDataViewListModel *WXUNUSED(model), unsigned int WXUNUSED(col), unsigned int WXUNUSED(row))
+  virtual bool Activate(wxRect WXUNUSED(cell), wxDataViewModel *WXUNUSED(model), unsigned int WXUNUSED(col), unsigned int WXUNUSED(row))
   {
     return false;
   }
 
-  virtual bool LeftClick(wxPoint WXUNUSED(cursor), wxRect WXUNUSED(cell), wxDataViewListModel *WXUNUSED(model), unsigned int WXUNUSED(col), unsigned int WXUNUSED(row))
+  virtual bool LeftClick(wxPoint WXUNUSED(cursor), wxRect WXUNUSED(cell), wxDataViewModel *WXUNUSED(model), unsigned int WXUNUSED(col), unsigned int WXUNUSED(row))
   {
     return false;
   }
 
-  virtual bool RightClick(wxPoint WXUNUSED(cursor), wxRect WXUNUSED(cell), wxDataViewListModel *WXUNUSED(model), unsigned int WXUNUSED(col), unsigned int WXUNUSED(row))
+  virtual bool RightClick(wxPoint WXUNUSED(cursor), wxRect WXUNUSED(cell), wxDataViewModel *WXUNUSED(model), unsigned int WXUNUSED(col), unsigned int WXUNUSED(row))
   {
     return false;
   }
 
-  virtual bool StartDrag(wxPoint WXUNUSED(cursor), wxRect WXUNUSED(cell), wxDataViewListModel *WXUNUSED(model), unsigned int WXUNUSED(col), unsigned int WXUNUSED(row))
+  virtual bool StartDrag(wxPoint WXUNUSED(cursor), wxRect WXUNUSED(cell), wxDataViewModel *WXUNUSED(model), unsigned int WXUNUSED(col), unsigned int WXUNUSED(row))
   {
     return false;
   }
@@ -471,46 +471,43 @@ private:
 // ---------------------------------------------------------
 // wxDataViewCtrl
 // ---------------------------------------------------------
-
 class WXDLLIMPEXP_ADV wxDataViewCtrl: public wxDataViewCtrlBase
 {
 public:
  // Constructors / destructor:
-    wxDataViewCtrl()
-    {
-      this->Init();
-    }
-    wxDataViewCtrl(wxWindow *parent, wxWindowID id, wxPoint const& pos = wxDefaultPosition, wxSize const& size = wxDefaultSize, long style = 0,
-                   wxValidator const& validator = wxDefaultValidator)
-    {
-      this->Init();
-      this->Create(parent, id, pos, size, style, validator );
-    }
+  wxDataViewCtrl()
+  {
+    this->Init();
+  }
+  wxDataViewCtrl(wxWindow *parent, wxWindowID id, wxPoint const& pos = wxDefaultPosition, wxSize const& size = wxDefaultSize, long style = 0,
+                 wxValidator const& validator = wxDefaultValidator)
+  {
+    this->Init();
+    this->Create(parent, id, pos, size, style, validator );
+  }
 
-    bool Create(wxWindow *parent, wxWindowID id, wxPoint const& pos=wxDefaultPosition, wxSize const& size=wxDefaultSize, long style=0,
-                wxValidator const& validator=wxDefaultValidator);
+ // explicit control creation
+  bool Create(wxWindow *parent, wxWindowID id, wxPoint const& pos=wxDefaultPosition, wxSize const& size=wxDefaultSize, long style=0,
+              wxValidator const& validator=wxDefaultValidator);
 
-    virtual bool AppendColumn(wxDataViewColumn* columnPtr);
+ // inherited methods from 'wxDataViewCtrlBase':
+  virtual bool AppendColumn(wxDataViewColumn* columnPtr);
 
-    virtual bool AssociateModel(wxDataViewListModel* model);
+  virtual bool AssociateModel(wxDataViewModel* model);
 
-    virtual void SetSelection( int row ); // -1 for unselect
-    virtual void SetSelectionRange( unsigned int from, unsigned int to );
-    virtual void SetSelections( const wxArrayInt& aSelections);
-    virtual void Unselect( unsigned int row );
-    
-    virtual bool IsSelected( unsigned int row ) const;
-    virtual int GetSelection() const;
-    virtual int GetSelections(wxArrayInt& aSelections) const;
-
-    virtual wxControl* GetMainWindow(void) // should disappear as it is not of any use for the native implementation
-    {
-      return this;
-    }
+  virtual wxControl* GetMainWindow(void) // should disappear as it is not of any use for the native implementation
+  {
+    return this;
+  }
+  
+  virtual wxDataViewItem GetSelection(void);
 
 //
 // implementation
 //
+
+  // adds all children of the passed parent to the control; if 'parentItem' is invalid the root(s) is/are added:
+  void AddChildrenLevel(wxDataViewItem const& parentItem);
 
  // with CG, we need to get the context from an kEventControlDraw event
  // unfortunately, the DataBrowser callbacks don't provide the context
@@ -525,11 +522,11 @@ public:
     return this->m_cgContext;
   }
 
- // reverts the sorting order of the hash map if wxDataViewColumn data and control data do not match;
- // wxDataViewColumn data will NOT be updated
-  void ReverseSorting(DataBrowserPropertyID columnID);
-
 protected:
+ // inherited methods from wxDataViewCtrlBase:
+  virtual void DoSetExpanderColumn(void);
+  virtual void DoSetIndent(void);
+
  // event handling:
   void OnSize(wxSizeEvent &event);
 
@@ -541,7 +538,7 @@ private:
 // variables
 //
 
-  wxDataViewListModelNotifier* m_NotifierPtr; // the notifier is NOT owned by this class but by the associated model
+  wxDataViewModelNotifier* m_NotifierPtr; // the notifier is NOT owned by this class but by the associated model
 
   void* m_cgContext; // pointer to core graphics context
 
