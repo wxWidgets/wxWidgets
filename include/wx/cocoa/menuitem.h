@@ -4,7 +4,7 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2002/12/13
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) 2002 David Elliott
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -94,6 +94,14 @@ protected:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxMenuItem)
+
+public:
+
+#if wxABI_VERSION >= 20805
+    // return the item label including any mnemonics and accelerators.
+    // This used to be called GetText.
+    wxString GetItemLabel() const { return GetText(); }
+#endif
 };
 
 #endif // _WX_COCOA_MENUITEM_H_

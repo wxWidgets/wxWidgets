@@ -4,7 +4,7 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2002/12/09
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) 2002 David Elliott
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -183,6 +183,14 @@ private:
     bool m_shouldShowMenu;
 
     DECLARE_DYNAMIC_CLASS(wxMenuBar)
+
+public:
+
+#if wxABI_VERSION >= 20805
+    // Gets the original label at the top-level of the menubar
+    wxString GetMenuLabel(size_t pos) const;
+#endif
+
 };
 
 #endif // _WX_COCOA_MENU_H_

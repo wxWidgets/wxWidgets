@@ -108,6 +108,10 @@ All (GUI):
 - Fixed wxXPMHandler::SaveFile for images with more than 92 colors.
 - Fixed a crash in wxGrid on creation due to OnSize being called too soon.
 - Added XRC handler for wxPropertySheetDialog (Sander Berents).
+- API consistency fixes: added wxMenuBar::SetMenuLabel, wxMenuBar::GetMenuLabel,
+  wxMenuBar::GetMenuLabelText, wxMenu::GetLabelText, wxMenuItem::SetItemLabel,
+  wxMenuItem::GetItemLabel, wxMenuItem::GetItemLabelText, wxMenuItem::GetLabelText.
+  Retrieval of labels with and without mnemonics/accelerators is now possible.
 
 wxMSW:
 

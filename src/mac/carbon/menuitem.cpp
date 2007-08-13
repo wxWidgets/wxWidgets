@@ -66,10 +66,10 @@ void wxMenuItem::UpdateItemBitmap()
     DoUpdateItemBitmap( mhandle, index );
 }
 
-void wxMenuItem::DoUpdateItemBitmap( WXHMENU menu, wxUint16 index) 
+void wxMenuItem::DoUpdateItemBitmap( WXHMENU menu, wxUint16 index)
 {
     MenuHandle mhandle = (MenuHandle) menu;
-    
+
     if ( mhandle == NULL || index == 0)
         return ;
 
@@ -83,7 +83,7 @@ void wxMenuItem::DoUpdateItemBitmap( WXHMENU menu, wxUint16 index)
             if ( info.contentType == kControlContentIconRef )
                 SetMenuItemIconHandle( mhandle , index ,
                     kMenuIconRefType , (Handle) info.u.iconRef ) ;
-			else if ( info.contentType == kControlContentCGImageRef )
+            else if ( info.contentType == kControlContentCGImageRef )
                SetMenuItemIconHandle( mhandle , index ,
                     kMenuCGImageRefType , (Handle) info.u.imageRef ) ;
         }

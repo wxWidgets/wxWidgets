@@ -63,6 +63,15 @@ private:
     wxBitmap  m_bitmap; // Bitmap for menuitem, if any
 
     DECLARE_DYNAMIC_CLASS(wxMenuItem)
+
+public:
+
+#if wxABI_VERSION >= 20805
+    // return the item label including any mnemonics and accelerators.
+    // This used to be called GetText.
+    wxString GetItemLabel() const { return GetText(); }
+#endif
+
 };
 
 #endif  // _WX_MOTIF_MENUITEM_H

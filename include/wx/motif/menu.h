@@ -170,6 +170,13 @@ public:
     wxFont        m_font;
 
     DECLARE_DYNAMIC_CLASS(wxMenuBar)
+
+public:
+
+#if wxABI_VERSION >= 20805
+    // Gets the original label at the top-level of the menubar
+    wxString GetMenuLabel(size_t pos) const;
+#endif
 };
 
 #endif // _WX_MOTIF_MENU_H_

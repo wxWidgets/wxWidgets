@@ -375,6 +375,14 @@ protected:
     static bool      ms_locked;
 
     DECLARE_NO_COPY_CLASS(wxMenuBase)
+
+public:
+
+#if wxABI_VERSION >= 20805
+    //  Returns the stripped label
+    wxString GetLabelText(int itemid) const { return wxMenuItem::GetLabelFromText(GetLabel(itemid)); }
+#endif
+
 };
 
 // ----------------------------------------------------------------------------
@@ -496,6 +504,21 @@ protected:
     wxFrame *m_menuBarFrame;
 
     DECLARE_NO_COPY_CLASS(wxMenuBarBase)
+
+public:
+
+#if wxABI_VERSION >= 20805
+    // Replacement for SetLabelTop
+    void SetMenuLabel(size_t pos, const wxString& label) { SetLabelTop(pos, label); }
+
+    // Gets the original label at the top-level of the menubar
+    // Implemented per port, since we can't have virtual functions in the stable branch.
+    // wxString GetMenuLabel(size_t pos) const;
+
+    // Get the text only, from the label at the top-level of the menubar
+    wxString GetMenuLabelText(size_t pos) const;
+#endif
+
 };
 
 // ----------------------------------------------------------------------------

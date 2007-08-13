@@ -227,6 +227,13 @@ wxString wxMenuBar::GetLabelTop(size_t pos) const
     return wxStringWithNSString([[m_cocoaNSMenu itemAtIndex:itemindex] title]);
 }
 
+// Gets the original label at the top-level of the menubar
+wxString wxMenuBar::GetMenuLabel(size_t pos) const
+{
+    // TODO: restore the original mnemonics
+    return GetLabelTop(pos);
+}
+
 void wxMenuBar::Attach(wxFrame *frame)
 {
     wxMenuBarBase::Attach(frame);

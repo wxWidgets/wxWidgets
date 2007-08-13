@@ -892,8 +892,18 @@ wxString wxMenuBar::GetLabelTop(
 {
     wxCHECK_MSG( nPos < GetMenuCount(), wxEmptyString,
                  wxT("invalid menu index in wxMenuBar::GetLabelTop") );
-    return m_titles[nPos];
+    return wxStripMenuCodes(m_titles[nPos]);
 } // end of wxMenuBar::GetLabelTop
+
+// Gets the original label at the top-level of the menubar
+wxString wxMenuBar::GetMenuLabel(size_t pos) const
+{
+    wxCHECK_MSG( pos < GetMenuCount(), wxEmptyString,
+                 wxT("invalid menu index in wxMenuBar::GetMenuLabel") );
+
+    return m_titles[pos];
+}
+
 
 // ---------------------------------------------------------------------------
 // wxMenuBar construction

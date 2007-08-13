@@ -47,7 +47,7 @@ public:
     // implementation only from now on
     // -------------------------------
 
-      int    MacGetIndexFromId( int id ) ; 
+      int    MacGetIndexFromId( int id ) ;
       int    MacGetIndexFromItem( wxMenuItem *pItem ) ;
       void MacEnableMenu( bool bDoEnable ) ;
       // MacOS needs to know about submenus somewhere within this menu
@@ -160,6 +160,13 @@ private:
   static wxMenuBar*            s_macCommonMenuBar ;
 
     DECLARE_DYNAMIC_CLASS(wxMenuBar)
+
+public:
+
+#if wxABI_VERSION >= 20805
+    // Gets the original label at the top-level of the menubar
+    wxString GetMenuLabel(size_t pos) const;
+#endif
 };
 
 #endif // _WX_MENU_H_

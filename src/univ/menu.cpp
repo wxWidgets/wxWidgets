@@ -67,6 +67,8 @@ public:
 
     void SetLabel(const wxString& text)
     {
+        m_originalLabel = text;
+
         // remember the accel char (may be -1 if none)
         m_indexAccel = wxControl::FindAccelIndex(text, &m_label);
 
@@ -79,6 +81,7 @@ public:
     // accessors
 
     const wxString& GetLabel() const { return m_label; }
+    const wxString& GetOriginalLabel() const { return m_originalLabel; }
     bool IsEnabled() const { return m_isEnabled; }
     wxCoord GetWidth(wxMenuBar *menubar) const
     {
@@ -105,6 +108,7 @@ private:
     }
 
     wxString m_label;
+    wxString m_originalLabel;
     wxCoord m_width;
     int m_indexAccel;
     bool m_isEnabled;
@@ -1822,9 +1826,9 @@ bool wxMenuBar::IsEnabledTop(size_t pos) const
 
 void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
 {
-    wxCHECK_RET( pos < GetCount(), _T("invalid index in EnableTop") );
+    wxCHECK_RET( pos < GetCount(), _T("invalid index in SetLabelTop") );
 
-    if ( label != m_menuInfos[pos].GetLabel() )
+    if ( label != m_menuInfos[pos].GetOriginalLabel() )
     {
         m_menuInfos[pos].SetLabel(label);
 
@@ -1839,6 +1843,16 @@ wxString wxMenuBar::GetLabelTop(size_t pos) const
 
     return m_menuInfos[pos].GetLabel();
 }
+
+// Gets the original label at the top-level of the menubar
+wxString wxMenuBar::GetMenuLabel(size_t pos) const
+{
+    wxCHECK_MSG( pos < GetMenuCount(), wxEmptyString,
+                 wxT("invalid menu index in wxMenuBar::GetMenuLabel") );
+
+    return m_menuInfos[pos].GetOriginalLabel();
+}
+
 
 // ----------------------------------------------------------------------------
 // wxMenuBar drawing

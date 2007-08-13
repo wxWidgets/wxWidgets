@@ -445,6 +445,11 @@ void wxMenuItemBase::SetHelp(const wxString& str)
     }
 }
 
+wxString wxMenuItemBase::GetLabelText(const wxString& label)
+{
+    return GetLabelFromText(label);
+}
+
 bool wxMenuBase::ms_locked = true;
 
 // ----------------------------------------------------------------------------
@@ -1151,5 +1156,12 @@ void wxMenuBarBase::UpdateMenus( void )
         }
     }
 }
+
+// Get the text only, from the label
+wxString wxMenuBarBase::GetMenuLabelText(size_t pos) const
+{
+    return wxMenuItem::GetLabelText(((wxMenuBar*)this)->GetMenuLabel(pos));
+}
+
 
 #endif // wxUSE_MENUS

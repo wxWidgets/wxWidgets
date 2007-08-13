@@ -65,6 +65,7 @@ public:
     //     different from the item's label which only contains the text shown
     //     in the menu
     virtual void SetText(const wxString& str);
+
     wxString GetLabel() const { return GetLabelFromText(m_text); }
     const wxString& GetText() const { return m_text; }
 
@@ -146,6 +147,26 @@ private:
     // declare them ourselves - but don't implement as they shouldn't be used
     wxMenuItemBase(const wxMenuItemBase& item);
     wxMenuItemBase& operator=(const wxMenuItemBase& item);
+
+public:
+
+#if wxABI_VERSION >= 20805
+    // Sets the label. This function replaces SetText.
+    void SetItemLabel(const wxString& str) { SetText(str); }
+
+    // return the item label including any mnemonics and accelerators.
+    // This used to be called GetText.
+    // We can't implement this in the base class (no new virtuals in stable branch)
+    // wxString GetItemLabel() const;
+
+    // return just the text of the item label, without any mnemonics
+    // This used to be called GetLabel.
+    wxString GetItemLabelText() const { return GetLabelText(m_text); }
+
+    // return just the text part of the given label. In 2.9 and up, this is implemented in
+    // platform-specific code, but is now implemented in terms of GetLabelFromText.
+    static wxString GetLabelText(const wxString& label);
+#endif
 };
 
 // ----------------------------------------------------------------------------

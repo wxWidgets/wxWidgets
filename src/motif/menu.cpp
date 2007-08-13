@@ -234,6 +234,8 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
     if ( !menu )
         return;
 
+    m_titles[pos] = label;
+
     Widget w = (Widget)menu->GetButtonWidget();
     if (w)
     {
@@ -247,6 +249,8 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
 
 wxString wxMenuBar::GetLabelTop(size_t pos) const
 {
+    return wxStripMenuCodes(m_titles[pos]);
+#if 0
     wxMenu *menu = GetMenu(pos);
     if ( menu )
     {
@@ -263,7 +267,18 @@ wxString wxMenuBar::GetLabelTop(size_t pos) const
     }
 
     return wxEmptyString;
+#endif
 }
+
+// Gets the original label at the top-level of the menubar
+wxString wxMenuBar::GetMenuLabel(size_t pos) const
+{
+    wxCHECK_MSG( pos < GetMenuCount(), wxEmptyString,
+                 wxT("invalid menu index in wxMenuBar::GetMenuLabel") );
+
+    return m_titles[pos];
+}
+
 
 bool wxMenuBar::Append(wxMenu * menu, const wxString& title)
 {

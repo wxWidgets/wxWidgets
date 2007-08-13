@@ -433,7 +433,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                     !pItem->GetBackgroundColour().Ok() &&
                         !pItem->GetFont().Ok() )
         {
-            // try to use InsertMenuItem() as it's guaranteed to look correct      
+            // try to use InsertMenuItem() as it's guaranteed to look correct
             // while our owner-drawn code is not
 
             // first compile-time check
@@ -441,7 +441,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 #if defined(MIIM_BITMAP) && (_WIN32_WINNT >= 0x0500)
             WinStruct<wxMENUITEMINFO_> mii;
             if ( wxGetWinVersion() >= wxWinVersion_98 )
-            { 
+            {
                 mii.fMask = MIIM_STRING | MIIM_DATA | MIIM_BITMAP;
                 if ( pItem->IsCheckable() )
                 {
@@ -1084,6 +1084,15 @@ wxString wxMenuBar::GetLabelTop(size_t pos) const
                  wxT("invalid menu index in wxMenuBar::GetLabelTop") );
 
     return wxMenuItem::GetLabelFromText(m_titles[pos]);
+}
+
+// Gets the original label at the top-level of the menubar
+wxString wxMenuBar::GetMenuLabel(size_t pos) const
+{
+    wxCHECK_MSG( pos < GetMenuCount(), wxEmptyString,
+                 wxT("invalid menu index in wxMenuBar::GetMenuLabel") );
+
+    return m_titles[pos];
 }
 
 // ---------------------------------------------------------------------------

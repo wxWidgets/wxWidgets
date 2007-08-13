@@ -117,6 +117,15 @@ private:
     bool                            m_bIsRadioGroupStart;
 
     DECLARE_DYNAMIC_CLASS(wxMenuItem)
+
+public:
+
+#if wxABI_VERSION >= 20805
+    // return the item label including any mnemonics and accelerators.
+    // This used to be called GetText.
+    wxString GetItemLabel() const { return GetText(); }
+#endif
+
 }; // end of CLASS wxMenuItem
 
 #endif  //_MENUITEM_H

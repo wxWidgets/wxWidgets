@@ -39,6 +39,14 @@
         *wxLog*DoCreateOnDemand*;
         *wxLogChain*DetachOldLog*;
         *wxMemoryFSHandler*AddFileWithMimeType*;
+        *wxMenuBar*GetMenuLabel*;
+        *wxMenuBarBase*SetMenuLabel*;
+        *wxMenuBarBase*GetMenuLabelText*;
+        *wxMenuBase*GetLabelText*;
+        *wxMenuItemBase*SetItemLabel*;
+        *wxMenuItemBase*GetItemLabelText*;
+        *wxMenuItemBase*GetLabelText*;
+        *wxMenuItem*GetItemLabel*;
         *wxMetafileDC*DoGetTextExtent*;
         *wxWindowMSW*GetThemedBorderStyle*;
         *wxWizard*GetBitmap*;
