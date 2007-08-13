@@ -619,6 +619,13 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
     #define WX_WATCOM_ONLY_CODE( x )
 #endif
 
+#if defined(__WATCOMC__) || defined(__MINGW32__)
+    // Mingw has similar problem with wxLogSysError:
+    #define WX_WATCOM_OR_MINGW_ONLY_CODE( x )  x
+#else
+    #define WX_WATCOM_OR_MINGW_ONLY_CODE( x )
+#endif
+
 // log functions do nothing at all
 #define DECLARE_LOG_FUNCTION(level)                                         \
     WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 1, (const wxString&))           \
@@ -632,7 +639,7 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 
 #define DECLARE_LOG_FUNCTION2_EXP(level, argclass, arg, expdecl)            \
     WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 2, (argclass, const wxString&)) \
-    WX_WATCOM_ONLY_CODE(                                                    \
+    WX_WATCOM_OR_MINGW_ONLY_CODE(                                           \
         WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 2, (argclass, const char*)) \
         WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 2, (argclass, const wchar_t*)) \
         WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 2, (argclass, const wxCStrData&)) \
