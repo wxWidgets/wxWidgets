@@ -342,14 +342,16 @@ public:
     // We have to implement the version without template arguments manually
     // because of the StringReturnType<> hack, although WX_DEFINE_VARARG_FUNC
     // normally does it itself. It has to be a template so that we can use
-    // the hack, even though there's no real template parameter:
-    struct FormatDummyArg {} ;
-
+    // the hack, even though there's no real template parameter. We can't move
+    // it to wxStrig, because it would shadow these versions of Format() then.
     template<typename T>
     inline static typename StringReturnType<T>::type
-    Format(const wxFormatString& fmt, FormatDummyArg dummy = FormatDummyArg())
+    Format(const T& fmt)
     {
-        return DoFormatWchar(fmt);
+        // NB: this doesn't compile if T is not (some form of) a string;
+        //     this makes Format's prototype equivalent to
+        //     Format(const wxFormatString& fmt)
+        return DoFormatWchar(wxFormatString(fmt));
     }
 
     // int Printf(const wxString& format, ...);
