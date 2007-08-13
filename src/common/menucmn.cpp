@@ -848,7 +848,7 @@ void wxMenuBarBase::SetLabelTop(size_t pos, const wxString& label)
 
 wxString wxMenuBarBase::GetLabelTop(size_t pos) const
 {
-    return GetMenuLabel(pos);
+    return GetMenuLabelText(pos);
 }
 #endif
 
