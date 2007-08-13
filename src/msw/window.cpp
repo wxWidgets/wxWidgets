@@ -1309,7 +1309,7 @@ wxBorder wxWindowMSW::GetDefaultBorderForControl() const
 
 wxBorder wxWindowMSW::GetDefaultBorder() const
 {
-	return GetDefaultBorderForControl();
+    return GetDefaultBorderForControl();
 }
 
 WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
@@ -5417,7 +5417,7 @@ int wxWindowMSW::HandleMenuChar(int WXUNUSED_IN_WINCE(chAccel),
                 //  menu creation code
                 wxMenuItem *item = (wxMenuItem*)mii.dwItemData;
 
-                const wxChar *p = wxStrchr(item->GetText().wx_str(), _T('&'));
+                const wxChar *p = wxStrchr(item->GetItemLabel().wx_str(), _T('&'));
                 while ( p++ )
                 {
                     if ( *p == _T('&') )
