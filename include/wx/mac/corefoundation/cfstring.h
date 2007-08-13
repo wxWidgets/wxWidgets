@@ -18,21 +18,22 @@
     #include <CFString.h>
 #endif
 
+#include "wx/dlimpexp.h"
 #include "wx/fontenc.h"
 
 class WXDLLIMPEXP_FWD_BASE wxString;
 
-void wxMacConvertNewlines13To10( wxString *data ) ;
-void wxMacConvertNewlines10To13( wxString *data ) ;
+WXDLLIMPEXP_BASE void wxMacConvertNewlines13To10( wxString *data ) ;
+WXDLLIMPEXP_BASE void wxMacConvertNewlines10To13( wxString *data ) ;
 
-void wxMacConvertNewlines13To10( char * data ) ;
-void wxMacConvertNewlines10To13( char * data ) ;
+WXDLLIMPEXP_BASE void wxMacConvertNewlines13To10( char * data ) ;
+WXDLLIMPEXP_BASE void wxMacConvertNewlines10To13( char * data ) ;
 
-wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding) ;
-wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding) ;
-void wxMacWakeUp() ;
+WXDLLIMPEXP_BASE wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding) ;
+WXDLLIMPEXP_BASE wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding) ;
+WXDLLIMPEXP_BASE void wxMacWakeUp() ;
 
-class wxMacCFStringHolder
+class WXDLLIMPEXP_BASE wxMacCFStringHolder
 {
 public:
     wxMacCFStringHolder()
@@ -88,7 +89,7 @@ private:
 
 // corresponding class for holding UniChars (native unicode characters)
 
-class wxMacUniCharBuffer
+class WXDLLIMPEXP_BASE wxMacUniCharBuffer
 {
 public :
     wxMacUniCharBuffer( const wxString &str ) ;

@@ -18,8 +18,8 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls, bool isEmbedded) ;
 void UMACleanupToolbox() ;
 long UMAGetSystemVersion() ;
 
-bool UMASystemIsInitialized() ;
-void UMASetSystemIsInitialized(bool val);
+WXDLLIMPEXP_BASE bool UMASystemIsInitialized();
+WXDLLIMPEXP_BASE void UMASetSystemIsInitialized(bool val);
 
 // process manager
 

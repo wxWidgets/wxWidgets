@@ -28,7 +28,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 // wxNotebook
 // ----------------------------------------------------------------------------
 
-class wxNotebook : public wxNotebookBase
+class WXDLLIMPEXP_CORE wxNotebook : public wxNotebookBase
 {
 public:
   // ctors

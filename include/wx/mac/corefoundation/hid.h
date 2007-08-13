@@ -54,7 +54,7 @@ extern "C" {
 // Quite good, as is the sample program associated with it
 // (Depite the author's protests!).
 // ---------------------------------------------------------------------------
-class wxHIDDevice
+class WXDLLIMPEXP_CORE wxHIDDevice
 {
 public:
     wxHIDDevice() : m_ppDevice(NULL), m_ppQueue(NULL), m_pCookies(NULL) {}
@@ -100,7 +100,7 @@ protected:
 // Semi-simple implementation that opens a connection to the first
 // keyboard of the machine. Used in wxGetKeyState.
 // ---------------------------------------------------------------------------
-class wxHIDKeyboard : public wxHIDDevice
+class WXDLLIMPEXP_CORE wxHIDKeyboard : public wxHIDDevice
 {
 public:
     static int GetCount();

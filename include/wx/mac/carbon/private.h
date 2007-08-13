@@ -202,16 +202,16 @@ bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec);
 #endif // wxUSE_GUI
 
 // filefn.h
-WXDLLEXPORT wxString wxMacFSSpec2MacFilename( const FSSpec *spec );
-WXDLLEXPORT void wxMacFilename2FSSpec( const wxString &path , FSSpec *spec );
+WXDLLIMPEXP_BASE wxString wxMacFSSpec2MacFilename( const FSSpec *spec );
+WXDLLIMPEXP_BASE void wxMacFilename2FSSpec( const wxString &path , FSSpec *spec );
 
 // utils.h
-WXDLLEXPORT wxString wxMacFindFolderNoSeparator(short vRefNum,
-                                                OSType folderType,
-                                                Boolean createFolder);
-WXDLLEXPORT wxString wxMacFindFolder(short vRefNum,
-                                     OSType folderType,
-                                     Boolean createFolder);
+WXDLLIMPEXP_BASE wxString wxMacFindFolderNoSeparator(short vRefNum,
+                                                     OSType folderType,
+                                                     Boolean createFolder);
+WXDLLIMPEXP_BASE wxString wxMacFindFolder(short vRefNum,
+                                          OSType folderType,
+                                          Boolean createFolder);
 
 template<typename T> EventParamType wxMacGetEventParamType() { wxFAIL_MSG( wxT("Unknown Param Type") ); return 0; }
 template<> inline EventParamType wxMacGetEventParamType<RgnHandle>() { return typeQDRgnHandle; }
@@ -1313,14 +1313,14 @@ UPP Get##x()                                \
 void wxMacSetupConverters();
 void wxMacCleanupConverters();
 
-void wxMacStringToPascal( const wxString&from , StringPtr to );
-wxString wxMacMakeStringFromPascal( ConstStringPtr from );
+WXDLLIMPEXP_BASE void wxMacStringToPascal( const wxString&from , StringPtr to );
+WXDLLIMPEXP_BASE wxString wxMacMakeStringFromPascal( ConstStringPtr from );
 
 // filefn.cpp
 
-wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent = NULL );
-OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef );
-wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname );
+WXDLLIMPEXP_BASE wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent = NULL );
+WXDLLIMPEXP_BASE OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef );
+WXDLLIMPEXP_BASE wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname );
 
 #if wxUSE_GUI
 
