@@ -1430,7 +1430,7 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
 wxBorder wxWindowMSW::GetThemedBorderStyle() const
 {
 #if defined(__POCKETPC__) || defined(__SMARTPHONE__)
-    return wxBORDER_SIMPLE
+    return wxBORDER_SIMPLE;
 #elif wxUSE_UXTHEME
     if (wxUxThemeEngine::GetIfActive())
         return wxBORDER_THEME;

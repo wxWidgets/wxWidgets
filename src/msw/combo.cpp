@@ -693,8 +693,10 @@ bool wxComboCtrl::AnimateShow( const wxRect& rect, int flags )
 
 wxCoord wxComboCtrl::GetNativeTextIndent() const
 {
+#if wxUSE_UXTHEME
     if ( wxUxThemeEngine::GetIfActive() )
         return NATIVE_TEXT_INDENT_XP;
+#endif
     return NATIVE_TEXT_INDENT_CLASSIC;
 }
 
@@ -721,8 +723,11 @@ bool wxComboCtrl::IsKeyPopupToggle(const wxKeyEvent& event) const
             // popup but Alt-arrow does
             if ( event.AltDown() ||
                     ( !isPopupShown &&
-                      HasFlag(wxCB_READONLY) &&
+                      HasFlag(wxCB_READONLY)
+#if wxUSE_UXTHEME
+					  &&
                       !wxUxThemeEngine::GetIfActive()
+#endif
                     ) )
             {
                 return true;
