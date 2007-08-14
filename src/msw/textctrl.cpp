@@ -502,6 +502,14 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
     }
 #endif // wxUSE_RICHEDIT
 
+#ifndef __WXWINCE__
+    // Without this, if we pass the size in the constructor and then don't change it,
+    // the themed borders will be drawn incorrectly.
+    SetWindowPos(GetHwnd(), NULL, 0, 0, 0, 0,
+                SWP_NOZORDER|SWP_NOMOVE|SWP_NOSIZE|SWP_NOACTIVATE|
+                SWP_FRAMECHANGED);
+#endif
+
     return true;
 }
 
