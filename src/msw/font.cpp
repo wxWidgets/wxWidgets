@@ -440,7 +440,7 @@ int wxNativeFontInfo::GetPointSize() const
     //        for printing!
     const int ppInch = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
 
-    return (int) (((72.0*(double)abs(lf.lfHeight)) / (double) ppInch) + 0.5);
+    return (int) (((72.0*(double)abs((int) lf.lfHeight)) / (double) ppInch) + 0.5);
 }
 
 wxSize wxNativeFontInfo::GetPixelSize() const
