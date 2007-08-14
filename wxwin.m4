@@ -122,7 +122,7 @@ dnl wx_ver_ok=yes if it is:
 AC_DEFUN([_WX_PRIVATE_CHECK_VERSION],
 [
     wx_ver_ok=""
-    if test "x$WX_VERSION_FULL" != x ; then
+    if test "x$WX_VERSION" != x ; then
       if test $wx_config_major_version -gt $1; then
         wx_ver_ok=yes
       else
@@ -202,7 +202,7 @@ AC_DEFUN([WX_CONFIG_CHECK],
   fi
 
   if test "$WX_CONFIG_PATH" != "no" ; then
-    WX_VERSION_FULL=""
+    WX_VERSION=""
 
     min_wx_version=ifelse([$1], ,2.2.1,$1)
     if test -z "$5" ; then
@@ -215,12 +215,12 @@ AC_DEFUN([WX_CONFIG_CHECK],
     dnl an error when it's used with --version below
     WX_CONFIG_WITH_ARGS="$WX_CONFIG_PATH $wx_config_args $5"
 
-    WX_VERSION_FULL=`$WX_CONFIG_WITH_ARGS --version 2>/dev/null`
-    wx_config_major_version=`echo $WX_VERSION_FULL | \
+    WX_VERSION=`$WX_CONFIG_WITH_ARGS --version 2>/dev/null`
+    wx_config_major_version=`echo $WX_VERSION | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
-    wx_config_minor_version=`echo $WX_VERSION_FULL | \
+    wx_config_minor_version=`echo $WX_VERSION | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
-    wx_config_micro_version=`echo $WX_VERSION_FULL | \
+    wx_config_micro_version=`echo $WX_VERSION | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
 
     wx_requested_major_version=`echo $min_wx_version | \
@@ -235,7 +235,7 @@ AC_DEFUN([WX_CONFIG_CHECK],
                               [$wx_requested_micro_version])
 
     if test -n "$wx_ver_ok"; then
-      AC_MSG_RESULT(yes (version $WX_VERSION_FULL))
+      AC_MSG_RESULT(yes (version $WX_VERSION))
       WX_LIBS=`$WX_CONFIG_WITH_ARGS --libs $4`
 
       dnl is this even still appropriate?  --static is a real option now
@@ -308,11 +308,11 @@ AC_DEFUN([WX_CONFIG_CHECK],
 
     else
 
-       if test "x$WX_VERSION_FULL" = x; then
+       if test "x$WX_VERSION" = x; then
           dnl no wx-config at all
           AC_MSG_RESULT(no)
        else
-          AC_MSG_RESULT(no (version $WX_VERSION_FULL is not new enough))
+          AC_MSG_RESULT(no (version $WX_VERSION is not new enough))
        fi
 
        WX_CFLAGS=""
@@ -369,7 +369,7 @@ AC_DEFUN([WX_CONFIG_CHECK],
   AC_SUBST(WX_CXXFLAGS_ONLY)
   AC_SUBST(WX_LIBS)
   AC_SUBST(WX_LIBS_STATIC)
-  AC_SUBST(WX_VERSION_FULL)
+  AC_SUBST(WX_VERSION)
   AC_SUBST(WX_RESCOMP)
 
   dnl need to export also WX_VERSION_MINOR and WX_VERSION_MAJOR symbols
@@ -804,7 +804,7 @@ AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
 
             AC_MSG_ERROR([
     Cannot detect the wxWidgets configuration for the selected wxWidgets build
-    since its version is $WX_VERSION_FULL < 2.6.0; please install a newer
+    since its version is $WX_VERSION < 2.6.0; please install a newer
     version of wxWidgets.
                          ])
         fi
@@ -998,7 +998,7 @@ AC_DEFUN([WX_STANDARD_OPTIONS_SUMMARY_MSG],
         WX_BOOLOPT_SUMMARY([WX_DEBUG],   ["  - DEBUG build"],  ["  - RELEASE build"])
         WX_BOOLOPT_SUMMARY([WX_UNICODE], ["  - UNICODE mode"], ["  - ANSI mode"])
         WX_BOOLOPT_SUMMARY([WX_SHARED],  ["  - SHARED mode"],  ["  - STATIC mode"])
-        echo "  - VERSION: $WX_VERSION_FULL"
+        echo "  - VERSION: $WX_VERSION"
         echo "  - PORT: $WX_PORT"
     ])
 
