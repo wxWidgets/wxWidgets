@@ -15,6 +15,28 @@
 #ifndef __WX_COCOA_OBJC_CLASS_H__
 #define __WX_COCOA_OBJC_CLASS_H__
 
+/* A note about this header:
+Nothing in here is guaranteed to exist in future versions of wxCocoa. There
+are other ways of adding Objective-C classes at runtime and a future wxCocoa
+might use these instead of this ugly hack.  You may use this header file in
+your own wxCocoa code if you need your own Objective-C classes to be
+unqiuified.
+
+You cannot turn this on for 64-bit mode. It will not compile due to opaque
+Objective-C data structures and it is not needed because it is a workaround
+for a bug that does not exist in the 64-bit runtime.
+
+You should not use this when wxCocoa is built as a dynamic library.  This has
+only been tested for the case when wxCocoa is built as a static library and
+statically linked to user code to form a loadable bundle (e.g. a Cocoa plugin).
+It forces each plugin (when multiple wxCocoa-using plugins are used) to use
+its own internal Objective-C classes which is desirable when wxCocoa is
+statically linked to the rest of the code.
+
+Do not use uniquifying on your principal class.  That one should be named
+differently for different bundles.
+ */
+
 #if wxUSE_OBJC_UNIQUIFYING
 
 // objc_getClass and stuff

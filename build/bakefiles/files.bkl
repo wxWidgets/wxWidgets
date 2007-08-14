@@ -2562,6 +2562,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/tooltip.h
     wx/cocoa/toplevel.h
     wx/cocoa/window.h
+    <!-- Semi-private headers -->
+    wx/cocoa/objc/objc_uniquifying.h
     <!-- Generic implementations used by wxCocoa: -->
     wx/generic/caret.h
     wx/generic/fdrepdlg.h
