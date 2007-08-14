@@ -319,6 +319,14 @@
 #   endif
 #endif /* !defined(wxUSE_ACCEL) */
 
+#ifndef wxUSE_ACCESSIBILITY
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_ACCESSIBILITY must be defined."
+#   else
+#       define wxUSE_ACCESSIBILITY 0
+#   endif
+#endif /* !defined(wxUSE_ACCESSIBILITY) */
+
 #ifndef wxUSE_ANIMATIONCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_ANIMATIONCTRL must be defined."
@@ -1231,6 +1239,15 @@
    Section 3b: the tests for the GUI settings only.
  */
 #if wxUSE_GUI
+
+#if wxUSE_ACCESSIBILITY && !defined(__WXMSW__)
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_ACCESSIBILITY is currently only supported under wxMSW"
+#   else
+#       undef wxUSE_ACCESSIBILITY
+#       define wxUSE_ACCESSIBILITY 0
+#   endif
+#endif /* wxUSE_ACCESSIBILITY */
 
 #if wxUSE_BUTTON || \
     wxUSE_CALENDARCTRL || \
