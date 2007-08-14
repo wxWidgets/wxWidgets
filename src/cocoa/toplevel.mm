@@ -385,16 +385,22 @@ void wxTopLevelWindowCocoa::CocoaSetWxWindowSize(int width, int height)
 {
     // Set the NSView size by setting the frame size to enclose it
     unsigned int styleMask = [m_cocoaNSWindow styleMask];
-    NSRect frameRect = [m_cocoaNSWindow frame];
+    NSRect oldFrameRect = [m_cocoaNSWindow frame];
     NSRect contentRect = [NSWindow
-        contentRectForFrameRect: frameRect
+        contentRectForFrameRect: oldFrameRect
         styleMask: styleMask];
     contentRect.size.width = width;
     contentRect.size.height = height;
-    frameRect = [NSWindow
+    NSRect newFrameRect = [NSWindow
         frameRectForContentRect: contentRect
         styleMask: styleMask];
-    [m_cocoaNSWindow setFrame: frameRect display: NO];
+
+    // Cocoa uses +y is up but wxWidgets uses +y is down.  We want an increase/decrease in height
+    // to not effect where the top of the window is placed so we set the new y origin relative the
+    // old one taking the height change into account.
+    newFrameRect.origin.y = oldFrameRect.origin.y + oldFrameRect.size.height - newFrameRect.size.height;
+    
+    [m_cocoaNSWindow setFrame: newFrameRect display: NO];
 }
 
 void wxTopLevelWindowCocoa::DoMoveWindow(int x, int y, int width, int height)
