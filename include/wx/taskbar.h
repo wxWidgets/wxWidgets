@@ -35,6 +35,9 @@ public:
     virtual bool RemoveIcon() = 0;
     virtual bool PopupMenu(wxMenu *menu) = 0;
 
+    // delayed destruction (similarly to wxWindow::Destroy())
+    void Destroy();
+
 protected:
     // creates menu to be displayed when user clicks on the icon
     virtual wxMenu *CreatePopupMenu() { return NULL; }

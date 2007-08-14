@@ -20,8 +20,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/list.h"
     #include "wx/menu.h"
 #endif
+
+extern WXDLLIMPEXP_DATA_CORE(wxList) wxPendingDelete;
 
 // DLL options compatibility check:
 WX_CHECK_BUILD_OPTIONS("wxAdvanced")
@@ -49,6 +52,11 @@ void wxTaskBarIconBase::OnRightButtonDown(wxTaskBarIconEvent& WXUNUSED(event))
         PopupMenu(menu);
         delete menu;
     }
+}
+
+void wxTaskBarIconBase::Destroy()
+{
+    wxPendingDelete.Append(this);
 }
 
 #endif // wxUSE_TASKBARICON
