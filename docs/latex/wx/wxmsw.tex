@@ -24,6 +24,32 @@ MinGW32 tool chain.
 For further information, please see the files in docs/msw
 in the distribution.
 
+\subsection{Themed borders on Windows}\label{wxmswthemedborders}
+
+Starting with wxWidgets 2.8.5, you can specify the wxBORDER\_THEME style to have wxWidgets
+use a themed border. Using the default XP theme, this is a thin 1-pixel blue border,
+with an extra 1-pixel border in the window client background colour (usually white) to
+separate the client area's scrollbars from the border.
+
+If you don't specify a border style for a wxTextCtrl in rich edit mode, wxWidgets now gives
+the control themed borders automatically, where previously they would take the Windows 95-style
+sunken border. Other native controls such as wxTextCtrl in non-rich edit mode, and wxComboBox,
+already paint themed borders where appropriate. To use themed borders on other windows, such
+as wxPanel, pass the wxBORDER\_THEME style.
+
+Note that in wxWidgets 2.9 and above, wxBORDER\_THEME is defined to be 0 and it is not necessary
+to pass the border style explicitly: wxWidgets will deduce the correct border style itself if there
+is none supplied. Because of the requirements of binary compatibility, this automatic border
+capability could not be put into wxWidgets 2.8 except for built-in, native controls. In 2.8, the border
+must be specified for custom controls and windows. However, to make it easier to decide
+what style should be passed, you can use (on Windows only) the function wxWindow::GetThemedBorderStyle()
+and it will return a suitable style for the current version of Windows. On Windows CE,
+wxBORDER\_SIMPLE will be returned; on Windows 95/98/NT/2K, wxBORDER\_SUNKEN will be
+returned, and on XP and above where theming is turned on, wxBORDER\_THEME will be returned.
+This function does not exist in wxWidgets 2.9 and is not part of the official API.
+
+wxBORDER\_THEME has no effect on platforms other than Windows.
+
 \subsection{wxWinCE}\label{wxwince}
 
 wxWinCE is the name given to wxMSW when compiled on Windows CE devices;
