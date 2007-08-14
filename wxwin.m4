@@ -211,7 +211,9 @@ AC_DEFUN([WX_CONFIG_CHECK],
       AC_MSG_CHECKING([for wxWidgets version >= $min_wx_version ($5)])
     fi
 
-    WX_CONFIG_WITH_ARGS="$WX_CONFIG_PATH $wx_config_args $5 $4"
+    dnl don't add the libraries ($4) to this variable as this would result in
+    dnl an error when it's used with --version below
+    WX_CONFIG_WITH_ARGS="$WX_CONFIG_PATH $wx_config_args $5"
 
     WX_VERSION_FULL=`$WX_CONFIG_WITH_ARGS --version 2>/dev/null`
     wx_config_major_version=`echo $WX_VERSION_FULL | \
@@ -233,16 +235,15 @@ AC_DEFUN([WX_CONFIG_CHECK],
                               [$wx_requested_micro_version])
 
     if test -n "$wx_ver_ok"; then
-
       AC_MSG_RESULT(yes (version $WX_VERSION_FULL))
-      WX_LIBS=`$WX_CONFIG_WITH_ARGS --libs`
+      WX_LIBS=`$WX_CONFIG_WITH_ARGS --libs $4`
 
       dnl is this even still appropriate?  --static is a real option now
       dnl and WX_CONFIG_WITH_ARGS is likely to contain it if that is
       dnl what the user actually wants, making this redundant at best.
       dnl For now keep it in case anyone actually used it in the past.
       AC_MSG_CHECKING([for wxWidgets static library])
-      WX_LIBS_STATIC=`$WX_CONFIG_WITH_ARGS --static --libs 2>/dev/null`
+      WX_LIBS_STATIC=`$WX_CONFIG_WITH_ARGS --static --libs $4 2>/dev/null`
       if test "x$WX_LIBS_STATIC" = "x"; then
         AC_MSG_RESULT(no)
       else
@@ -287,7 +288,7 @@ AC_DEFUN([WX_CONFIG_CHECK],
 
       if test "x$wx_has_cppflags" = x ; then
          dnl no choice but to define all flags like CFLAGS
-         WX_CFLAGS=`$WX_CONFIG_WITH_ARGS --cflags`
+         WX_CFLAGS=`$WX_CONFIG_WITH_ARGS --cflags $4`
          WX_CPPFLAGS=$WX_CFLAGS
          WX_CXXFLAGS=$WX_CFLAGS
 
@@ -295,9 +296,9 @@ AC_DEFUN([WX_CONFIG_CHECK],
          WX_CXXFLAGS_ONLY=$WX_CFLAGS
       else
          dnl we have CPPFLAGS included in CFLAGS included in CXXFLAGS
-         WX_CPPFLAGS=`$WX_CONFIG_WITH_ARGS --cppflags`
-         WX_CXXFLAGS=`$WX_CONFIG_WITH_ARGS --cxxflags`
-         WX_CFLAGS=`$WX_CONFIG_WITH_ARGS --cflags`
+         WX_CPPFLAGS=`$WX_CONFIG_WITH_ARGS --cppflags $4`
+         WX_CXXFLAGS=`$WX_CONFIG_WITH_ARGS --cxxflags $4`
+         WX_CFLAGS=`$WX_CONFIG_WITH_ARGS --cflags $4`
 
          WX_CFLAGS_ONLY=`echo $WX_CFLAGS | sed "s@^$WX_CPPFLAGS *@@"`
          WX_CXXFLAGS_ONLY=`echo $WX_CXXFLAGS | sed "s@^$WX_CFLAGS *@@"`
