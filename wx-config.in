@@ -305,7 +305,7 @@ check_yesno_option static linkage '-static'
 
 # Display error for unknown input parameters
 if [ $input_parameters ]; then
-    echo "Extra unknown input parameters : $input_parameters"
+    decho "Extra unknown input parameters : $input_parameters"
     exit 1
 fi
 
