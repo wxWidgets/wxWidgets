@@ -24,6 +24,43 @@ MinGW32 tool chain.
 For further information, please see the files in docs/msw
 in the distribution.
 
+\subsection{Themed borders on Windows}\label{wxmswthemedborders}
+
+Starting with wxWidgets 2.8.5, you can specify the wxBORDER\_THEME style to have wxWidgets
+use a themed border. Using the default XP theme, this is a thin 1-pixel blue border,
+with an extra 1-pixel border in the window client background colour (usually white) to
+separate the client area's scrollbars from the border.
+
+If you don't specify a border style for a wxTextCtrl in rich edit mode, wxWidgets now gives
+the control themed borders automatically, where previously they would take the Windows 95-style
+sunken border. Other native controls such as wxTextCtrl in non-rich edit mode, and wxComboBox,
+already paint themed borders where appropriate. To use themed borders on other windows, such
+as wxPanel, pass the wxBORDER\_THEME style, or pass no border style.
+
+Note that in wxWidgets 2.9 and above, wxBORDER\_THEME is defined to be 0 and it is not necessary
+to pass the border style explicitly: wxWidgets will deduce the correct border style itself if there
+is none supplied. Because of the requirements of binary compatibility, this automatic border
+capability could not be put into wxWidgets 2.8 except for built-in, native controls. So in 2.8, the border
+must be specified for custom controls and windows.
+
+Since specifying wxBORDER\_THEME is defined as 0 and is the equivalent of abstaining on the
+border style decision, on non-Windows platforms a suitable border style will be chosen.
+This is not to be confused with specifying wxBORDER\_NONE, which says that there should
+definitely be {\it no} border.
+
+\wxheading{More detail on border implementation}
+
+The way that wxMSW decides whether to apply a themed border is as follows.
+The theming code calls wxWindow::GetBorder() to obtain a border. If no border style has been
+passed to the window constructor, GetBorder() calls GetDefaultBorder() for this window.
+The implementation of wxWindow::GetDefaultBorder() on wxMSW calls wxWindow::CanApplyThemeBorder()
+which is a virtual function that tells wxWidgets whether a control can have a theme
+applied explicitly (some native controls already paint a theme in which case we should not
+apply it ourselves). Note that wxPanel is an exception to this rule because in many cases
+we wish to create a window with no border (for example, notebook pages). So wxPanel
+overrides GetDefaultBorder() in order to call the generic wxWindowBase::GetDefaultBorder(),
+returning wxBORDER\_NONE.
+
 \subsection{wxWinCE}\label{wxwince}
 
 wxWinCE is the name given to wxMSW when compiled on Windows CE devices;
