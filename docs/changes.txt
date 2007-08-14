@@ -109,85 +109,85 @@ Major new features in this release
 
 All:
 
-- Added support for user-defined types to wxConfig (Marcin Wojdyr)
-- Added wxJoin() and wxSplit() functions (Francesco Montorsi)
-- Added wxMutex::LockTimeout() (Aleksandr Napylov)
-- Added wxMemoryInputStream(wxInputStream&) ctor (Stas Sergeev)
-- Implemented wxMemoryInputStream::CanRead()
-- Added wxEXEC_BLOCK flag (Hank Schultz)
-- Add support for wxStream-derived classes to wxRTTI (Stas Sergeev)
-- Added wxStreamBuffer::Truncate() (Stas Sergeev)
-- Allow using  wxEventLoop in console applications (Lukasz Michalski)
-- Added functions for Base64 en/decoding (Charles Reimers)
-- Added support for binary data to wxConfig (Charles Reimers)
-- Added functions for atomically inc/decrementing integers (Armel Asselin)
+- Added support for user-defined types to wxConfig (Marcin Wojdyr).
+- Added wxJoin() and wxSplit() functions (Francesco Montorsi).
+- Added wxMutex::LockTimeout() (Aleksandr Napylov).
+- Added wxMemoryInputStream(wxInputStream&) ctor (Stas Sergeev).
+- Implemented wxMemoryInputStream::CanRead().
+- Added wxEXEC_BLOCK flag (Hank Schultz).
+- Add support for wxStream-derived classes to wxRTTI (Stas Sergeev).
+- Added wxStreamBuffer::Truncate() (Stas Sergeev).
+- Allow using  wxEventLoop in console applications (Lukasz Michalski).
+- Added functions for Base64 en/decoding (Charles Reimers).
+- Added support for binary data to wxConfig (Charles Reimers).
+- Added functions for atomically inc/decrementing integers (Armel Asselin).
 - wxLogInterposer has been added to replace wxLogPassThrough and new
-  wxLogInterposerTemp was added
-- Added support for broadcasting to UDP sockets (Andrew Vincent)
-- Documentation now includes the wx library in which each class is defined
+  wxLogInterposerTemp was added.
+- Added support for broadcasting to UDP sockets (Andrew Vincent).
+- Documentation now includes the wx library in which each class is defined.
 
 All (Unix):
 
-- Added wx-config --optional-libs command line option (John Labenski)
+- Added wx-config --optional-libs command line option (John Labenski).
 
 All (GUI):
 
-- Added wxH[V]ScrolledWindow (Brad Anderson, Bryan Petty)
-- Added wxDC::StretchBlit() for wxMac and wxMSW (Vince Harron)
-- Added support for drop down toolbar buttons (Tim Kosse)
-- Added support for labels for toolbar controls (Vince Harron)
-- Added wxMessageDialog::SetMessage() and SetExtendedMessage()
-- Added wxEventBlocker class (Francesco Montorsi).
-- Added wxFile/DirPickerCtrl::Get/SetFile/DirName() (Francesco Montorsi).
+- Added wxH[V]ScrolledWindow (Brad Anderson, Bryan Petty).
+- Added wxDC::StretchBlit() for wxMac and wxMSW (Vince Harron).
+- Added support for drop down toolbar buttons (Tim Kosse).
+- Added support for labels for toolbar controls (Vince Harron).
+- Added wxMessageDialog::SetMessage() and SetExtendedMessage().
+- Added wxEventBlocker class (Francesco Montorsi)..
+- Added wxFile/DirPickerCtrl::Get/SetFile/DirName() (Francesco Montorsi)..
 - Added wxSizerFlags::Top() and Bottom().
 - Slovak translation added.
 - Fixed tab-related drawing and hit-testing bugs in wxRichTextCtrl.
 - Implemented background colour in wxRichTextCtrl.
 - Fixed crashes in helpview when opening a file.
-- Set locale to the default in all ports, not just wxGTK
-- Added wxJoystick::GetButtonState/Position() (Frank C Szczerba)
-- Added wxGridUpdateLocker helper class (Evgeniy Tarassov)
-- Support wxGRID_AUTOSIZE in wxGrid::SetRow/ColLabelSize() (Evgeniy Tarassov)
-- Added wxWindow::NavigateIn() in addition to existing Navigate()
-- Add support for <data> tags to wxrc
-- Support wxAPPLY and wxCLOSE in CreateStdDialogButtonSizer() (Marcin Wojdyr)
-- Show standard options in wxCmdLineParser usage message (Francesco Montorsi)
-- Added wxRect::operator+ (union) and * (intersection) (bdonner)
-- Added support for two auxiliary mouse buttons to wxMouseEvent (Chris Weiland)
+- Set locale to the default in all ports, not just wxGTK.
+- Added wxJoystick::GetButtonState/Position() (Frank C Szczerba).
+- Added wxGridUpdateLocker helper class (Evgeniy Tarassov).
+- Support wxGRID_AUTOSIZE in wxGrid::SetRow/ColLabelSize() (Evgeniy Tarassov).
+- Added wxWindow::NavigateIn() in addition to existing Navigate().
+- Add support for <data> tags to wxrc.
+- Support wxAPPLY and wxCLOSE in CreateStdDialogButtonSizer() (Marcin Wojdyr).
+- Show standard options in wxCmdLineParser usage message (Francesco Montorsi).
+- Added wxRect::operator+ (union) and * (intersection) (bdonner).
+- Added support for two auxiliary mouse buttons to wxMouseEvent (Chris Weiland).
 
 wxGTK:
 
-- Support for markup and ellipsization in wxStaticText (Francesco Montorsi)
-- Native implementation for wxHyperlinkCtrl (Francesco Montorsi)
-- Native keyboard navigation implementation
-- Added wxCB_SORT support to wxComboBox (Evgeniy Tarassov)
-- Don't overwrite primary selection with clipboard and vice versa
+- Support for markup and ellipsization in wxStaticText (Francesco Montorsi).
+- Native implementation for wxHyperlinkCtrl (Francesco Montorsi).
+- Native keyboard navigation implementation.
+- Added wxCB_SORT support to wxComboBox (Evgeniy Tarassov).
+- Don't overwrite primary selection with clipboard and vice versa.
 - Implemented support for underlined fonts in wxStaticText.
 - wxTopLevelWindow::SetSizeHints size increments now work.
 - wxTopLevelWindow::GetSize() returns the size including the WM decorations.
 - wxTopLevelWindow::GetClientSize() returns 0x0 when the window is minimized.
 - Added support for colour cursors (Pascal Monasse).
-- Pass current control text to EVT_TEXT handler for wxSpinCtrl (John Ratliff)
-- Added gtk.tlw.can-set-transparency system option
+- Pass current control text to EVT_TEXT handler for wxSpinCtrl (John Ratliff).
+- Added gtk.tlw.can-set-transparency system option.
 
 wxMac:
 
-- Better IconRef support (Alan Shouls)
-- Added support for changing button labels in wxMessageDialog (Gareth Simpson)
-- Fix duplicate (empty) help menu in non-English programs (Andreas Jacobs)
-- Allow accelerators to be used with buttons too (Ryan Wilcox)
-- Support resource forks in wxCopyFile() (Hank Schultz)
+- Better IconRef support (Alan Shouls).
+- Added support for changing button labels in wxMessageDialog (Gareth Simpson).
+- Fix duplicate (empty) help menu in non-English programs (Andreas Jacobs).
+- Allow accelerators to be used with buttons too (Ryan Wilcox).
+- Support resource forks in wxCopyFile() (Hank Schultz).
 
 wxMSW:
 
 - Fixed infinite loop in wxThread::Wait() in console applications.
 - Return the restored window size from GetSize() when window is minimized.
-- wxCheckListBox now looks more natively, especially under XP (Marcin Malich)
+- wxCheckListBox now looks more native, especially under XP (Marcin Malich).
 
 wxX11:
 
-- Added mouse wheel support (David Hart)
-- Make Enter key activate the default button (David Hart)
+- Added mouse wheel support (David Hart).
+- Make Enter key activate the default button (David Hart).
 
 
 2.8.5
