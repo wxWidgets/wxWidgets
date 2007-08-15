@@ -20,6 +20,7 @@
 
 #include "wx/cocoa/mbarman.h"
 #include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/objc/objc_uniquifying.h"
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSNotification.h>
@@ -51,6 +52,7 @@
 - (void)windowWillClose: (NSNotification *)notification;
 #endif // 0
 @end // interface wxMenuBarManagerObserver : NSObject
+WX_DECLARE_GET_OBJC_CLASS(wxMenuBarManagerObserver,NSObject)
 
 @implementation wxMenuBarManagerObserver : NSObject
 - (id)init
@@ -100,6 +102,7 @@
 #endif // 0
 
 @end // implementation wxMenuBarManagerObserver : NSObject
+WX_IMPLEMENT_GET_OBJC_CLASS(wxMenuBarManagerObserver,NSObject)
 
 // ============================================================================
 // wxMenuBarManager
@@ -108,7 +111,7 @@ wxMenuBarManager *wxMenuBarManager::sm_mbarmanInstance = NULL;
 
 wxMenuBarManager::wxMenuBarManager()
 {
-    m_observer = [[wxMenuBarManagerObserver alloc]
+    m_observer = [[WX_GET_OBJC_CLASS(wxMenuBarManagerObserver) alloc]
             initWithWxMenuBarManager:this];
     [[NSNotificationCenter defaultCenter] addObserver:m_observer
             selector:@selector(windowDidBecomeKey:)

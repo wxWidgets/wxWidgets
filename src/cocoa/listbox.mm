@@ -98,7 +98,7 @@ The listbox contents are sorted in alphabetical order.
     [GetNSTableView() setHeaderView: nil];
 
     // Set up the data source
-    m_cocoaDataSource = [[wxCocoaNSTableDataSource alloc] init];
+    m_cocoaDataSource = [[WX_GET_OBJC_CLASS(wxCocoaNSTableDataSource) alloc] init];
     [GetNSTableView() setDataSource:m_cocoaDataSource];
 
     // Add the single column

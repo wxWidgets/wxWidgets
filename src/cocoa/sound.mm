@@ -23,6 +23,8 @@
 #include "wx/cocoa/string.h"
 #include "wx/cocoa/log.h"
 
+#include "wx/cocoa/objc/objc_uniquifying.h"
+
 #import <AppKit/NSSound.h>
 #import <Foundation/NSData.h>
 
@@ -39,6 +41,7 @@ static bool s_loopCurrentSound = false;
 // Delegate methods
 - (void)sound:(NSSound *)theSound didFinishPlaying:(BOOL)finishedPlaying;
 @end // interface wxNSSoundDelegate : NSObject
+WX_DECLARE_GET_OBJC_CLASS(wxNSSoundDelegate,NSObject)
 
 @implementation wxNSSoundDelegate : NSObject
 
@@ -66,8 +69,9 @@ static bool s_loopCurrentSound = false;
 }
 
 @end // wxNSSoundDelegate
+WX_IMPLEMENT_GET_OBJC_CLASS(wxNSSoundDelegate,NSObject)
 
-const wxObjcAutoRefFromAlloc<struct objc_object*> wxSound::sm_cocoaDelegate = [[wxNSSoundDelegate alloc] init];
+const wxObjcAutoRefFromAlloc<struct objc_object*> wxSound::sm_cocoaDelegate = [[WX_GET_OBJC_CLASS(wxNSSoundDelegate) alloc] init];
 
 // ------------------------------------------------------------------
 //          wxSound

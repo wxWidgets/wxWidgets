@@ -25,6 +25,8 @@
 #include "wx/cocoa/private/timer.h"
 #include "wx/cocoa/autorelease.h"
 
+#include "wx/cocoa/objc/objc_uniquifying.h"
+
 #import <Foundation/NSTimer.h>
 
 // ========================================================================
@@ -40,6 +42,7 @@
 - (wxCocoaTimerImpl*)timer;
 - (void)onNotify:(NSTimer *)theTimer;
 @end // interface wxNSTimerData : NSObject
+WX_DECLARE_GET_OBJC_CLASS(wxNSTimerData,NSObject)
 
 @implementation wxNSTimerData : NSObject
 - (id)init
@@ -68,6 +71,7 @@
     m_timer->Notify();
 }
 @end
+WX_IMPLEMENT_GET_OBJC_CLASS(wxNSTimerData,NSObject)
 
 // ----------------------------------------------------------------------------
 // wxCocoaTimerImpl
@@ -89,7 +93,7 @@ bool wxCocoaTimerImpl::Start(int millisecs, bool oneShot)
 
     wxAutoNSAutoreleasePool thePool;
 
-    wxNSTimerData *timerData = [[wxNSTimerData alloc] initWithWxTimer:this];
+    wxNSTimerData *timerData = [[WX_GET_OBJC_CLASS(wxNSTimerData) alloc] initWithWxTimer:this];
     m_cocoaNSTimer =     [[NSTimer
             scheduledTimerWithTimeInterval: millisecs / 1000.0 //seconds
             target:     timerData

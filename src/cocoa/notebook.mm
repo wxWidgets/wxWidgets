@@ -21,6 +21,7 @@
 
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
+#include "wx/cocoa/objc/objc_uniquifying.h"
 
 #import <AppKit/NSTabView.h>
 #import <AppKit/NSTabViewItem.h>
@@ -48,6 +49,7 @@
 - (NSImage*)image;
 - (void)setImage:(NSImage*)image;
 @end // interface WXCTabViewImageItem : NSTabViewItem
+WX_DECLARE_GET_OBJC_CLASS(WXCTabViewImageItem,NSTabViewItem)
 
 @implementation WXCTabViewImageItem : NSTabViewItem
 - (id)init
@@ -120,6 +122,7 @@
 }
 
 @end // implementation WXCTabViewImageItem : NSTabViewItem
+WX_IMPLEMENT_GET_OBJC_CLASS(WXCTabViewImageItem,NSTabViewItem)
 
 // ========================================================================
 // wxNotebookEvent
@@ -218,7 +221,7 @@ bool wxNotebook::InsertPage( size_t pos,
 {
     wxAutoNSAutoreleasePool pool;
     m_pages.Insert(page,pos);
-    NSTabViewItem *tvitem = [[WXCTabViewImageItem alloc] initWithIdentifier:nil];
+    NSTabViewItem *tvitem = [[WX_GET_OBJC_CLASS(WXCTabViewImageItem) alloc] initWithIdentifier:nil];
     [tvitem setLabel: wxNSStringWithWxString(title)];
     const wxBitmap *bmp = (imageId!=-1)?m_imageList->GetBitmapPtr(imageId):NULL;
     if(bmp)

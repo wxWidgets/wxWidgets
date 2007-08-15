@@ -15,6 +15,8 @@
 
 #include "wx/cocoa/NSTabView.h"
 
+#include "wx/cocoa/objc/objc_uniquifying.h"
+
 #include <AppKit/NSTabView.h>
 
 // ============================================================================
@@ -27,6 +29,7 @@
 - (void)tabView:(NSTabView*)tabView didSelectTabViewItem:(NSTabViewItem*)tabViewItem;
 - (BOOL)tabView:(NSTabView*)tabView shouldSelectTabViewItem:(NSTabViewItem*)tabViewItem;
 @end // interface wxNSTabViewDelegate : NSObject
+WX_DECLARE_GET_OBJC_CLASS(wxNSTabViewDelegate,NSObject)
 
 @implementation wxNSTabViewDelegate : NSObject
 - (void)tabView:(NSTabView*)tabView didSelectTabViewItem:(NSTabViewItem*)tabViewItem
@@ -45,13 +48,14 @@
 }
 
 @end // implementation wxNSTabViewDelegate : NSObject
+WX_IMPLEMENT_GET_OBJC_CLASS(wxNSTabViewDelegate,NSObject)
 
 // ============================================================================
 // class wxCocoaNSTabView
 // ============================================================================
 WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSTabView)
 
-wxObjcAutoRefFromAlloc<struct objc_object*> wxCocoaNSTabView::sm_cocoaDelegate = [[wxNSTabViewDelegate alloc] init];
+wxObjcAutoRefFromAlloc<struct objc_object*> wxCocoaNSTabView::sm_cocoaDelegate = [[WX_GET_OBJC_CLASS(wxNSTabViewDelegate) alloc] init];
 
 void wxCocoaNSTabView::AssociateNSTabView(WX_NSTabView cocoaNSTabView)
 {

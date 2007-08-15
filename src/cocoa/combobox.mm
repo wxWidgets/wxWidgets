@@ -80,6 +80,8 @@
 
 #include "wx/combobox.h"
 
+#include "wx/cocoa/objc/objc_uniquifying.h"
+
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/log.h"
@@ -132,6 +134,7 @@ void wxCocoaNSComboBox::DisassociateNSComboBox(WX_NSComboBox cocoaNSComboBox)
 - (void)comboBoxWillDismiss:(NSNotification *)notification;
 - (void)comboBoxWillPopUp:(NSNotification *)notification;
 @end // wxPoserNSComboBox
+WX_DECLARE_GET_OBJC_CLASS(wxPoserNSComboBox,NSComboBox)
 
 //WX_IMPLEMENT_POSER(wxPoserNSComboBox);
 @implementation wxPoserNSComboBox : NSComboBox
@@ -158,6 +161,7 @@ void wxCocoaNSComboBox::DisassociateNSComboBox(WX_NSComboBox cocoaNSComboBox)
 }
 
 @end // implementation wxPoserNSComboBox
+WX_IMPLEMENT_GET_OBJC_CLASS(wxPoserNSComboBox,NSComboBox)
 
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
@@ -198,7 +202,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID winid,
         return false;
 
     m_cocoaNSView = NULL;
-    SetNSComboBox([[wxPoserNSComboBox alloc] initWithFrame:MakeDefaultNSRect(size)]);
+    SetNSComboBox([[WX_GET_OBJC_CLASS(wxPoserNSComboBox) alloc] initWithFrame:MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
     [GetNSTextField() setStringValue:wxNSStringWithWxString(value.c_str())];
     [GetNSControl() sizeToFit];

@@ -31,6 +31,8 @@
 
 #include "wx/cocoa/string.h"
 
+#include "wx/cocoa/objc/objc_uniquifying.h"
+
 #import <Foundation/Foundation.h>
 #import <AppKit/NSWorkspace.h>
 
@@ -104,6 +106,7 @@ protected:
 -(id)init:(void*)handle processIdentifier:(long)pid;
 - (void)termHandler:(NSNotification *)aNotification;
 @end
+WX_DECLARE_GET_OBJC_CLASS(wxTaskHandler,NSObject)
 
 @implementation wxTaskHandler : NSObject
 
@@ -135,6 +138,7 @@ protected:
 }
 
 @end
+WX_IMPLEMENT_GET_OBJC_CLASS(wxTaskHandler,NSObject)
 
 long wxExecute(const wxString& command,
                int sync,
@@ -179,7 +183,7 @@ long wxExecute(const wxString& command,
 
     if(sync & wxEXEC_ASYNC)
     {
-        [[wxTaskHandler alloc]init:handle
+        [[WX_GET_OBJC_CLASS(wxTaskHandler) alloc]init:handle
                               processIdentifier:[theTask processIdentifier]];
 
         return 0;

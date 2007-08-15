@@ -15,6 +15,8 @@
 
 #include "wx/mdi.h"
 
+#include "wx/cocoa/objc/objc_uniquifying.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
 #endif // WX_PRECOMP
@@ -44,6 +46,7 @@ WX_DECLARE_HASH_MAP(int, wxMDIChildFrame*, wxIntegerHash, wxIntegerEqual, wxIntM
 - (id)initWithWxMDIParentFrame: (wxMDIParentFrame *)mdiParent;
 - (void)windowDidBecomeMain: (NSNotification *)notification;
 @end // interface wxMDIParentFrameObserver : NSObject
+WX_DECLARE_GET_OBJC_CLASS(wxMDIParentFrameObserver,NSObject)
 
 @implementation wxMDIParentFrameObserver : NSObject
 - (id)init
@@ -67,6 +70,7 @@ WX_DECLARE_HASH_MAP(int, wxMDIChildFrame*, wxIntegerHash, wxIntegerEqual, wxIntM
 }
 
 @end // implementation wxMDIParentFrameObserver : NSObject
+WX_IMPLEMENT_GET_OBJC_CLASS(wxMDIParentFrameObserver,NSObject)
 
 // ========================================================================
 // wxMDIParentFrame
@@ -79,7 +83,7 @@ void wxMDIParentFrame::Init()
 {
     m_clientWindow = NULL;
     m_currentChild = NULL;
-    m_observer = [[wxMDIParentFrameObserver alloc]
+    m_observer = [[WX_GET_OBJC_CLASS(wxMDIParentFrameObserver) alloc]
             initWithWxMDIParentFrame:this];
     [[NSNotificationCenter defaultCenter] addObserver:m_observer
             selector:@selector(windowDidBecomeMain:)

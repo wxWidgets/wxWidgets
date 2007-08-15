@@ -14,6 +14,8 @@
     #include "wx/log.h"
 #endif // WX_PRECOMP
 
+#include "wx/cocoa/objc/objc_uniquifying.h"
+
 #include "wx/cocoa/NSScroller.h"
 #import <AppKit/NSScroller.h>
 
@@ -28,6 +30,7 @@ WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSScroller)
 
 - (void)wxNSScrollerAction: (id)sender;
 @end // wxNSScrollerTarget
+WX_DECLARE_GET_OBJC_CLASS(wxNSScrollerTarget,NSObject)
 
 @implementation wxNSScrollerTarget : NSObject
 - (void)wxNSScrollerAction: (id)sender
@@ -38,11 +41,12 @@ WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSScroller)
 }
 
 @end // implementation wxNSScrollerTarget
+WX_IMPLEMENT_GET_OBJC_CLASS(wxNSScrollerTarget,NSObject)
 
 // ============================================================================
 // class wxCocoaNSScroller
 // ============================================================================
-const wxObjcAutoRefFromAlloc<struct objc_object*> wxCocoaNSScroller::sm_cocoaTarget = [[wxNSScrollerTarget alloc] init];
+const wxObjcAutoRefFromAlloc<struct objc_object*> wxCocoaNSScroller::sm_cocoaTarget = [[WX_GET_OBJC_CLASS(wxNSScrollerTarget) alloc] init];
 
 void wxCocoaNSScroller::AssociateNSScroller(WX_NSScroller cocoaNSScroller)
 {

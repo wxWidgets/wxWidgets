@@ -53,4 +53,5 @@ WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSTableView)
 }
 
 @end // implementation wxCocoaNSTableDataSource
+WX_IMPLEMENT_GET_OBJC_CLASS(wxCocoaNSTableDataSource,NSObject)
 
