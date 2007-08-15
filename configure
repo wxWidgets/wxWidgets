@@ -967,6 +967,7 @@ Optional Features:
   --disable-compat26      disable wxWidgets 2.6 compatibility
   --disable-rpath         disable use of rpath for uninstalled builds
   --enable-objc_uniquifying enable Objective-C class name uniquifying
+  --enable-abi-incompatible-features Enables features that break ABI compatibility
   --enable-intl           use internationalization system
   --enable-config         use wxConfig (and derived) classes
   --enable-protocols      use wxProtocol and derived classes
@@ -4654,6 +4655,53 @@ fi;
           fi
 
           if test "$wxUSE_OBJC_UNIQUIFYING" = yes; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+          else
+            echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+          fi
+
+
+if test "x$wxUSE_SHARED" = "xno"; then
+    DEFAULT_wxUSE_ABI_INCOMPATIBLE_FEATURES=yes
+else
+    DEFAULT_wxUSE_ABI_INCOMPATIBLE_FEATURES=no
+fi
+
+          enablestring=
+          echo "$as_me:$LINENO: checking for --${enablestring:-enable}-abi-incompatible-features" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-abi-incompatible-features... $ECHO_C" >&6
+          no_cache=0
+          # Check whether --enable-abi-incompatible-features or --disable-abi-incompatible-features was given.
+if test "${enable_abi_incompatible_features+set}" = set; then
+  enableval="$enable_abi_incompatible_features"
+
+                          if test "$enableval" = yes; then
+                            wx_cv_use_abi_incompatible_features='wxUSE_ABI_INCOMPATIBLE_FEATURES=yes'
+                          else
+                            wx_cv_use_abi_incompatible_features='wxUSE_ABI_INCOMPATIBLE_FEATURES=no'
+                          fi
+
+else
+
+                          LINE=`grep "wxUSE_ABI_INCOMPATIBLE_FEATURES" ${wx_arg_cache_file}`
+                          if test "x$LINE" != x ; then
+                            eval "DEFAULT_$LINE"
+                          else
+                            no_cache=1
+                          fi
+
+                          wx_cv_use_abi_incompatible_features='wxUSE_ABI_INCOMPATIBLE_FEATURES='$DEFAULT_wxUSE_ABI_INCOMPATIBLE_FEATURES
+
+fi;
+
+          eval "$wx_cv_use_abi_incompatible_features"
+          if test "$no_cache" != 1; then
+            echo $wx_cv_use_abi_incompatible_features >> ${wx_arg_cache_file}.tmp
+          fi
+
+          if test "$wxUSE_ABI_INCOMPATIBLE_FEATURES" = yes; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
           else
@@ -42203,6 +42251,13 @@ fi
 if test "$wxUSE_OBJC_UNIQUIFYING" = "yes"; then
   cat >>confdefs.h <<\_ACEOF
 #define wxUSE_OBJC_UNIQUIFYING 1
+_ACEOF
+
+fi
+
+if test "$wxUSE_ABI_INCOMPATIBLE_FEATURES" = "yes"; then
+  cat >>confdefs.h <<\_ACEOF
+#define wxUSE_ABI_INCOMPATIBLE_FEATURES 1
 _ACEOF
 
 fi

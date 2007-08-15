@@ -753,6 +753,11 @@
 #define wxUSE_OBJC_UNIQUIFYING 0
 
 /*
+ * ABI incompatible features
+ */
+#define wxUSE_ABI_INCOMPATIBLE_FEATURES 0
+
+/*
  * The const keyword is being introduced more in wxWindows.
  * You can use this setting to maintain backward compatibility.
  * If 0: will use const wherever possible.

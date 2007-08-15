@@ -56,6 +56,11 @@
 #   define wxUSE_GUI 1
 #endif /* !defined(wxUSE_GUI) */
 
+/* Turn off wxUSE_ABI_INCOMPATIBLE_FEATURES if not specified. */
+#if !defined(wxUSE_ABI_INCOMPATIBLE_FEATURES)
+#   define wxUSE_ABI_INCOMPATIBLE_FEATURES 0
+#endif /* !defined(wxUSE_ABI_INCOMPATIBLE_FEATURES) */
+
 /*
     If we're compiling without support for threads/exceptions we have to
     disable the corresponding features.

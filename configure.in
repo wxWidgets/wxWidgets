@@ -947,6 +947,14 @@ WX_ARG_ENABLE(rpath,         [  --disable-rpath         disable use of rpath for
 
 WX_ARG_ENABLE(objc_uniquifying,[  --enable-objc_uniquifying enable Objective-C class name uniquifying], wxUSE_OBJC_UNIQUIFYING)
 
+dnl If user didn't specify --enable/disable-abi-incompatible-features then set it based on wxUSE_SHARED
+if test "x$wxUSE_SHARED" = "xno"; then
+    DEFAULT_wxUSE_ABI_INCOMPATIBLE_FEATURES=yes
+else
+    DEFAULT_wxUSE_ABI_INCOMPATIBLE_FEATURES=no
+fi
+WX_ARG_ENABLE(abi-incompatible-features,[  --enable-abi-incompatible-features Enables features that break ABI compatibility], wxUSE_ABI_INCOMPATIBLE_FEATURES)
+
 dnl ---------------------------------------------------------------------------
 dnl (small) optional non GUI classes
 dnl ---------------------------------------------------------------------------
@@ -6087,6 +6095,10 @@ fi
 
 if test "$wxUSE_OBJC_UNIQUIFYING" = "yes"; then
   AC_DEFINE(wxUSE_OBJC_UNIQUIFYING)
+fi
+
+if test "$wxUSE_ABI_INCOMPATIBLE_FEATURES" = "yes"; then
+  AC_DEFINE(wxUSE_ABI_INCOMPATIBLE_FEATURES)
 fi
 
 dnl ---------------------------------------------------------------------------
