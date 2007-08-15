@@ -1905,12 +1905,24 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
     if( node==NULL ||  !node->HasChildren())
         return false;
 
+    switch( func( node ) )
+    {
+        case DoJob::OK :
+            return true ;
+        case DoJob::IGR:
+            return false;
+        case DoJob::CONT:
+            default:
+                ;
+    }
+
     wxDataViewTreeNodes nodes = node->GetNodes();
     wxDataViewTreeLeaves leaves = node->GetChildren();
 
     int len_nodes = nodes.GetCount();
     int len = leaves.GetCount();
     int i = 0, nodes_i = 0;
+
     for( ; i < len ; i ++ )
     {
         void * n = leaves[i];
@@ -1918,17 +1930,6 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
         {
             wxDataViewTreeNode * nd = nodes[nodes_i];
             nodes_i++;
-
-            switch( func( nd ) )
-            {
-                case DoJob::OK :
-                    return true ;
-                case DoJob::IGR:
-                    continue;
-                case DoJob::CONT:
-                default:
-                    ;
-            }
 
             if( Walker( nd , func ) )
                 return true;
@@ -2647,7 +2648,17 @@ public:
             return  DoJob::IGR;
         }
         else
+        {
+            //If the current has no child node, we can find the desired item of the row number directly.
+            //This if can speed up finding in some case, and will has a very good effect when it comes to list view
+            if( node->GetNodes().GetCount() == 0)
+            {
+                int index = static_cast<int>(row) - current - 1;
+                ret = node->GetChildren().Item( index );
+                return DoJob::OK;
+            }
             return DoJob::CONT;
+        }
     }
 
     virtual int operator() ( void * n )
@@ -2669,7 +2680,7 @@ private:
 
 wxDataViewItem wxDataViewMainWindow::GetItemByRow(unsigned int row)
 {
-    RowToItemJob job( row, -1 );
+    RowToItemJob job( row, -2 );
     Walker( m_root , job );
     return job.GetResult();
 }
@@ -2703,8 +2714,20 @@ public:
         else
         {
             parent = node;
+            //If the current has no child node, we can find the desired item of the row number directly.
+            //This if can speed up finding in some case, and will has a very good effect when it comes to list view
+            if( node->GetNodes().GetCount() == 0)
+            {
+                int index = static_cast<int>(row) - current - 1;
+                void * n = node->GetChildren().Item( index );
+                ret = new wxDataViewTreeNode( parent ) ;
+                ret->SetItem( wxDataViewItem( n ));
+                ret->SetHasChildren(false);
+                return DoJob::OK;
+            }
             return DoJob::CONT;
         }
+
 
     }
 
@@ -2732,7 +2755,7 @@ private:
 
 wxDataViewTreeNode * wxDataViewMainWindow::GetTreeNodeByRow(unsigned int row)
 {
-    RowToTreeNodeJob job( row , -1, m_root );
+    RowToTreeNodeJob job( row , -2, m_root );
     Walker( m_root , job );
     return job.GetResult();
 }
@@ -2890,6 +2913,7 @@ public:
     { this->item = item ; ret = 0 ; nd = node ; }
     virtual ~ItemToRowJob(){};
 
+    //Maybe binary search will help to speed up this process
     virtual int operator() ( wxDataViewTreeNode * node)
     {
          ret ++;
