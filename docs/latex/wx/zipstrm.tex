@@ -10,7 +10,8 @@ for details.
 
 \wxheading{Derived from}
 
-\helpref{wxArchiveClassFactory}{wxarchiveclassfactory}
+\helpref{wxArchiveClassFactory}{wxarchiveclassfactory}\\
+\helpref{wxObject}{wxobject}
 
 \wxheading{Include files}
 
@@ -40,7 +41,8 @@ Holds the meta-data for an entry in a zip.
 
 \wxheading{Derived from}
 
-\helpref{wxArchiveEntry}{wxarchiveentry}
+\helpref{wxArchiveEntry}{wxarchiveentry}\\
+\helpref{wxObject}{wxobject}
 
 \wxheading{Include files}
 
@@ -446,7 +448,10 @@ wxZipInputStream::SeekI() always returns wxInvalidOffset.
 
 \wxheading{Derived from}
 
-\helpref{wxArchiveInputStream}{wxarchiveinputstream}
+\helpref{wxArchiveInputStream}{wxarchiveinputstream}\\
+\helpref{wxFilterInputStream}{wxfilterinputstream}\\
+\helpref{wxInputStream}{wxinputstream}\\
+\helpref{wxStreamBase}{wxstreambase}
 
 \wxheading{Include files}
 
@@ -610,7 +615,10 @@ entry and begins the next.
 
 \wxheading{Derived from}
 
-\helpref{wxArchiveOutputStream}{wxarchiveoutputstream}
+\helpref{wxArchiveOutputStream}{wxarchiveoutputstream}\\
+\helpref{wxFilterOutputStream}{wxfilteroutputstream}\\
+\helpref{wxOutputStream}{wxoutputstream}\\
+\helpref{wxStreamBase}{wxstreambase}
 
 \wxheading{Include files}
 
