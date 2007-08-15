@@ -111,7 +111,7 @@ protected:
     void InitMouseEvent(wxMouseEvent &event, WX_NSEvent cocoaEvent);
     virtual wxWindow* GetWxWindow() const;
     virtual void Cocoa_FrameChanged(void);
-#if 0 // ABI incompatibility
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
     virtual void Cocoa_synthesizeMouseMoved(void);
 #else
     void Cocoa_synthesizeMouseMoved(void);
@@ -130,7 +130,7 @@ protected:
     virtual bool Cocoa_otherMouseDragged(WX_NSEvent theEvent);
     virtual bool Cocoa_otherMouseUp(WX_NSEvent theEvent);
     virtual bool Cocoa_resetCursorRects();
-#if 0 // ABI incompatibility
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
     virtual bool Cocoa_viewDidMoveToWindow();
     virtual bool Cocoa_viewWillMoveToWindow(WX_NSWindow newWindow);
 #endif
@@ -139,7 +139,7 @@ protected:
     wxWindowCocoaHider *m_cocoaHider;
     wxWindowCocoaScrollView *m_wxCocoaScrollView;
     bool m_isInPaint;
-#if 0 // ABI incompatibility
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
     wxCocoaTrackingRectManager *m_visibleTrackingRectManager;
 #endif
     static wxWindow *sm_capturedWindow;

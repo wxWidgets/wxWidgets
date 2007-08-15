@@ -37,7 +37,7 @@ public:
     virtual wxWindow* GetWxWindow() const
     {   return NULL; }
     virtual void Cocoa_FrameChanged(void) = 0;
-#if 0 // ABI incompatibility
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
     virtual void Cocoa_synthesizeMouseMoved(void) = 0;
 #endif
     virtual bool Cocoa_acceptsFirstMouse(bool &acceptsFirstMouse, WX_NSEvent theEvent)
@@ -70,7 +70,7 @@ public:
     {   return false; }
     virtual bool Cocoa_resetCursorRects()
     {   return false; }
-#if 0 // ABI incompatibility
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
     virtual bool Cocoa_viewDidMoveToWindow()
     {   return false; }
     virtual bool Cocoa_viewWillMoveToWindow(WX_NSWindow newWindow)

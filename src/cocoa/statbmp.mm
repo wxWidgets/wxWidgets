@@ -41,7 +41,7 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID winid,
     [m_cocoaNSView release];
 
     [GetNSImageView() setImage:bitmap.GetNSImage(true)];
-#if 0 // ABI incompatibility
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
     m_bitmap = bitmap;
 #endif
 
@@ -63,14 +63,14 @@ void wxStaticBitmap::SetIcon(const wxIcon& icon)
 void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
 {
     [GetNSImageView() setImage:bitmap.GetNSImage(true)];
-#if 0 // ABI incompatibility
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
     m_bitmap = bitmap;
 #endif
 }
 
 wxBitmap wxStaticBitmap::GetBitmap() const
 {
-#if 0 // ABI incompatibility
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
     return m_bitmap;
 #else
     // TODO: We can try to fake it and make a wxBitmap from the NSImage the control has.

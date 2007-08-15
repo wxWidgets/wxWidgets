@@ -273,7 +273,9 @@ protected:
     wxWindowCocoa *m_owner;
     WX_NSView m_dummyNSView;
     virtual void Cocoa_FrameChanged(void);
-//    virtual void Cocoa_synthesizeMouseMoved(void) {}
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
+    virtual void Cocoa_synthesizeMouseMoved(void) {}
+#endif
 #ifdef WXCOCOA_FILL_DUMMY_VIEW
     virtual bool Cocoa_drawRect(const NSRect& rect);
 #endif //def WXCOCOA_FILL_DUMMY_VIEW
@@ -299,7 +301,9 @@ protected:
     wxWindowCocoa *m_owner;
     WX_NSScrollView m_cocoaNSScrollView;
     virtual void Cocoa_FrameChanged(void);
-//    virtual void Cocoa_synthesizeMouseMoved(void) {}
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
+    virtual void Cocoa_synthesizeMouseMoved(void) {}
+#endif
 private:
     wxWindowCocoaScrollView();
 };
@@ -483,7 +487,7 @@ void wxWindowCocoa::Init()
     m_isBeingDeleted = false;
     m_isInPaint = false;
     m_shouldBeEnabled = true;
-#if 0 // ABI incompatibility
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
     m_visibleTrackingRectManager = NULL;
 #endif
 }
@@ -549,7 +553,7 @@ void wxWindowCocoa::CocoaRemoveFromParent(void)
 
 void wxWindowCocoa::SetNSView(WX_NSView cocoaNSView)
 {
-#if 0 // ABI incompatibility
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
     // Clear the visible area tracking rect if we have one.
     delete m_visibleTrackingRectManager;
     m_visibleTrackingRectManager = NULL;
@@ -700,7 +704,7 @@ void wxWindowCocoa::Cocoa_synthesizeMouseMoved()
 
 bool wxWindowCocoa::Cocoa_mouseEntered(WX_NSEvent theEvent)
 {
-#if 0 // ABI incompatibility
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
     if(m_visibleTrackingRectManager != NULL && m_visibleTrackingRectManager->IsOwnerOfEvent(theEvent))
     {
         m_visibleTrackingRectManager->BeginSynthesizingEvents();
@@ -723,7 +727,7 @@ bool wxWindowCocoa::Cocoa_mouseEntered(WX_NSEvent theEvent)
 
 bool wxWindowCocoa::Cocoa_mouseExited(WX_NSEvent theEvent)
 {
-#if 0 // ABI incompatibility
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
     if(m_visibleTrackingRectManager != NULL && m_visibleTrackingRectManager->IsOwnerOfEvent(theEvent))
     {
         m_visibleTrackingRectManager->StopSynthesizingEvents();
@@ -806,7 +810,7 @@ bool wxWindowCocoa::Cocoa_otherMouseUp(WX_NSEvent theEvent)
 void wxWindowCocoa::Cocoa_FrameChanged(void)
 {
     wxLogTrace(wxTRACE_COCOA,wxT("wxWindow=%p::Cocoa_FrameChanged"),this);
-#if 0 // ABI incompatibility
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
     if(m_visibleTrackingRectManager != NULL)
         m_visibleTrackingRectManager->RebuildTrackingRect();
 #endif
@@ -827,7 +831,7 @@ bool wxWindowCocoa::SetCursor(const wxCursor &cursor)
 bool wxWindowCocoa::Cocoa_resetCursorRects()
 {
     wxLogTrace(wxTRACE_COCOA,wxT("wxWindow=%p::Cocoa_resetCursorRects"),this);
-#if 0 // ABI incompatibility
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
     if(m_visibleTrackingRectManager != NULL)
         m_visibleTrackingRectManager->RebuildTrackingRect();
 #endif
@@ -840,7 +844,7 @@ bool wxWindowCocoa::Cocoa_resetCursorRects()
     return true;
 }
 
-#if 0 // ABI incompatibility
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
 bool wxWindowCocoa::Cocoa_viewDidMoveToWindow()
 {
     wxLogTrace(wxTRACE_COCOA,wxT("wxWindow=%p::viewDidMoveToWindow"),this);
@@ -1497,7 +1501,7 @@ static NSPoint s_lastScreenMouseLocation = NSZeroPoint;
 
 static void SynthesizeMouseMovedEvent(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info)
 {
-#if 0 // ABI incompatibility
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
     NSPoint screenMouseLocation = [NSEvent mouseLocation];
     if(screenMouseLocation.x != s_lastScreenMouseLocation.x || screenMouseLocation.y != s_lastScreenMouseLocation.y)
     {

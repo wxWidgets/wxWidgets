@@ -177,7 +177,7 @@ WX_DECLARE_GET_OBJC_CLASS(wxNonControlNSControl,NSControl)
 
 - (void)viewDidMoveToWindow
 {
-#if 0 // ABI incompatibility
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
     wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
     if( !win || !win->Cocoa_viewDidMoveToWindow() )
 #endif
@@ -186,7 +186,7 @@ WX_DECLARE_GET_OBJC_CLASS(wxNonControlNSControl,NSControl)
 
 - (void)viewWillMoveToWindow:(NSWindow *)newWindow
 {
-#if 0 // ABI incompatibility
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
     wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
     if( !win || !win->Cocoa_viewWillMoveToWindow(newWindow) )
 #endif
@@ -221,7 +221,7 @@ bool wxControl::Create(wxWindow *parent, wxWindowID winid,
         m_parent->CocoaAddChild(this);
     SetInitialFrameRect(pos,size);
 
-#if 0 // ABI incompatibility
+#if wxUSE_ABI_INCOMPATIBLE_FEATURES
     // Controls should have a viewable-area tracking rect by default
     m_visibleTrackingRectManager = new wxCocoaTrackingRectManager(this);
 #endif
