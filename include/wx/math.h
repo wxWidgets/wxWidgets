@@ -132,8 +132,15 @@
     extern "C" {
 #endif
     /* functions from common/extended.c */
-    extern wxFloat64 ConvertFromIeeeExtended(const wxInt8 *bytes);
-    extern void ConvertToIeeeExtended(wxFloat64 num, wxInt8 *bytes);
+    WXDLLEXPORT wxFloat64 wxConvertFromIeeeExtended(const wxInt8 *bytes);
+    WXDLLEXPORT void wxConvertToIeeeExtended(wxFloat64 num, wxInt8 *bytes);
+
+    /* use wxConvertFromIeeeExtended() and wxConvertToIeeeExtended() instead */
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED( WXDLLEXPORT wxFloat64 ConvertFromIeeeExtended(const wxInt8 *bytes) );
+    wxDEPRECATED( WXDLLEXPORT void ConvertToIeeeExtended(wxFloat64 num, wxInt8 *bytes) );
+#endif // WXWIN_COMPATIBILITY_2_8
+
 #ifdef __cplusplus
     }
 #endif

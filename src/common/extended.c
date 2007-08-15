@@ -105,7 +105,7 @@
  * and a 64-bit mantissa, with no hidden bit.
  ****************************************************************/
 
-wxFloat64 ConvertFromIeeeExtended(const wxInt8 *bytes)
+WXDLLEXPORT wxFloat64 wxConvertFromIeeeExtended(const wxInt8 *bytes)
 {
     wxFloat64 f;
     wxInt32 expon;
@@ -145,7 +145,7 @@ wxFloat64 ConvertFromIeeeExtended(const wxInt8 *bytes)
 /****************************************************************/
 
 
-void ConvertToIeeeExtended(wxFloat64 num, wxInt8 *bytes)
+WXDLLEXPORT void wxConvertToIeeeExtended(wxFloat64 num, wxInt8 *bytes)
 {
     wxInt32 sign;
     wxInt32 expon;
@@ -191,6 +191,16 @@ void ConvertToIeeeExtended(wxFloat64 num, wxInt8 *bytes)
     bytes[9] = loMant;
 }
 
+#if WXWIN_COMPATIBILITY_2_8
+WXDLLEXPORT wxFloat64 ConvertFromIeeeExtended(const wxInt8 *bytes)
+{
+    return wxConvertFromIeeeExtended(bytes);
+}
 
+WXDLLEXPORT void ConvertToIeeeExtended(wxFloat64 num, wxInt8 *bytes)
+{
+    wxConvertToIeeeExtended(num, bytes);
+}
+#endif // WXWIN_COMPATIBILITY_2_8
 
 #endif /* wxUSE_APPLE_IEEE */
