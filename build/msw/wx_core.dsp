@@ -7726,6 +7726,10 @@ SOURCE=..\..\include\wx\msw\control.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\ctrlsub.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\cursor.h
 # End Source File
 # Begin Source File
@@ -8257,6 +8261,10 @@ SOURCE=..\..\include\wx\generic\combo.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\ctrlsub.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\dataview.h
 # End Source File
 # Begin Source File
@@ -8554,6 +8562,10 @@ SOURCE=..\..\include\wx\univ\stdrend.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\univ\textctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\tglbtn.h
 # End Source File
 # Begin Source File
 
@@ -9594,6 +9606,10 @@ SOURCE=..\..\include\wx\xrc\xh_odcombo.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\xrc\xh_panel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_propdlg.h
 # End Source File
 # Begin Source File
 
