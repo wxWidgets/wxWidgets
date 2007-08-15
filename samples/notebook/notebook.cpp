@@ -430,7 +430,6 @@ void MyFrame::RecreateBook()
 
     if ( m_multi && m_type == Type_Notebook )
         flags |= wxNB_MULTILINE;
-    flags |= wxDOUBLE_BORDER;
 
     wxBookCtrlBase *oldBook = m_bookCtrl;
 
