@@ -352,7 +352,7 @@ static const int gs_metricsMap[] =
     -1, -1, -1, -1,
 #endif
     SM_CYHSCROLL,
-    SM_CXVSCROLL,
+    SM_CXHSCROLL,
     SM_CXVSCROLL,
     SM_CYVSCROLL,
 #ifdef SM_CYVTHUMB
