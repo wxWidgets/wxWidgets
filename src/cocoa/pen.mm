@@ -24,7 +24,6 @@
 // ========================================================================
 class WXDLLEXPORT wxPenRefData: public wxGDIRefData
 {
-    friend class WXDLLEXPORT wxPen;
 public:
     wxPenRefData(const wxColour& colour = wxNullColour,
         int width = 1, int style = wxSOLID,
@@ -79,6 +78,9 @@ protected:
     static const CGFloat scm_patternShortDash[];
     static const int scm_countDotDash;
     static const CGFloat scm_patternDotDash[];
+
+    friend class WXDLLIMPEXP_FWD_CORE wxPen;
+
 private:
     // Don't allow assignment
     wxPenRefData& operator=(const wxPenRefData& data);
