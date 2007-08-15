@@ -97,7 +97,7 @@ protected:
 // implementation of wxListBox
 // ============================================================================
 
-IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControlWithItems)
 
 BEGIN_EVENT_TABLE(wxListBox, wxListBoxBase)
     EVT_SIZE(wxListBox::OnSize)

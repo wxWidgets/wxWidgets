@@ -24,7 +24,7 @@
 
 extern MenuHandle NewUniqueMenu() ;
 
-IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControlWithItems)
 
 
 wxChoice::~wxChoice()

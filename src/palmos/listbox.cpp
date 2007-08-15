@@ -95,7 +95,7 @@ wxEND_HANDLERS_TABLE()
 
 wxCONSTRUCTOR_4( wxListBox , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size )
 #else
-IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControlWithItems)
 #endif
 
 // ============================================================================

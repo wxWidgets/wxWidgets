@@ -450,7 +450,7 @@ gtk_listbox_realized_callback( GtkWidget *m_widget, wxListBox *win )
 // wxListBox
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxListBox,wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControlWithItems)
 
 // ----------------------------------------------------------------------------
 // construction

@@ -29,7 +29,7 @@
 #import <AppKit/NSTableView.h>
 #import <AppKit/NSTableColumn.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControlWithItems)
 BEGIN_EVENT_TABLE(wxListBox, wxListBoxBase)
 END_EVENT_TABLE()
 WX_IMPLEMENT_COCOA_OWNER(wxListBox,NSTableView,NSControl,NSView)

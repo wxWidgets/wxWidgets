@@ -24,7 +24,7 @@
     #include "wx/dcclient.h"
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControlWithItems)
 
 BEGIN_EVENT_TABLE(wxListBox, wxControl)
 END_EVENT_TABLE()

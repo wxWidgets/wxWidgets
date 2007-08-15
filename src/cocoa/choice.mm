@@ -29,7 +29,7 @@
 #import <Foundation/NSNotification.h>
 #import <Foundation/NSDictionary.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControlWithItems)
 BEGIN_EVENT_TABLE(wxChoice, wxChoiceBase)
 END_EVENT_TABLE()
 // WX_IMPLEMENT_COCOA_OWNER(wxChoice,NSButton,NSControl,NSView)

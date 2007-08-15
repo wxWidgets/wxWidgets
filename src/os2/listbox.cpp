@@ -38,7 +38,7 @@
     #include  "wx/ownerdrw.h"
 #endif
 
-  IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControlWithItems)
 
 // ============================================================================
 // list box item declaration and implementation
