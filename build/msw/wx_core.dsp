@@ -8549,6 +8549,10 @@ SOURCE=..\..\include\wx\univ\textctrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\univ\tglbtn.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\univ\theme.h
 # End Source File
 # Begin Source File
@@ -9570,6 +9574,10 @@ SOURCE=..\..\include\wx\xrc\xh_odcombo.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\xrc\xh_panel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_propdlg.h
 # End Source File
 # Begin Source File
 

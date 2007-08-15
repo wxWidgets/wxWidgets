@@ -1110,6 +1110,10 @@ SOURCE=..\..\include\wx\xrc\xh_panel.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_propdlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_radbt.h
 # End Source File
 # Begin Source File
@@ -1327,6 +1331,10 @@ SOURCE=..\..\src\xrc\xh_odcombo.cpp
 # Begin Source File
 
 SOURCE=..\..\src\xrc\xh_panel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xrc\xh_propdlg.cpp
 # End Source File
 # Begin Source File
 
