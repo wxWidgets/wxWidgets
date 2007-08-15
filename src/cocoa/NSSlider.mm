@@ -24,119 +24,29 @@
 
 WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSSlider)
 
-// ============================================================================
-// @class wxNSSliderTarget
-// ============================================================================
-@interface wxNSSliderTarget : NSObject
+class wxCocoaNSSliderLastSelectorChanger
 {
-}
-
-- (void)wxNSSliderUpArrowKeyDown: (id)sender;
-- (void)wxNSSliderDownArrowKeyDown: (id)sender;
-- (void)wxNSSliderLeftArrowKeyDown: (id)sender;
-- (void)wxNSSliderRightArrowKeyDown: (id)sender;
-- (void)wxNSSliderPageUpKeyDown: (id)sender;
-- (void)wxNSSliderPageDownKeyDown: (id)sender;
-- (void)wxNSSliderMoveUp: (id)sender;
-- (void)wxNSSliderMoveDown: (id)sender;
-- (void)wxNSSliderMoveLeft: (id)sender;
-- (void)wxNSSliderMoveRight: (id)sender;
-- (void)wxNSSliderPageUp: (id)sender;
-- (void)wxNSSliderPageDown: (id)sender;
-@end // wxNSSliderTarget
-
-@implementation wxNSSliderTarget : NSObject
-
-- (void)wxNSSliderUpArrowKeyDown: (id)sender
-{
-    wxCocoaNSSlider *slider = wxCocoaNSSlider::GetFromCocoa(sender);
-    wxCHECK_RET(slider,wxT("wxNSSliderUpArrowKeyDown received without associated wx object"));
-    slider->Cocoa_wxNSSliderUpArrowKeyDown();
-}
-
-- (void)wxNSSliderDownArrowKeyDown: (id)sender
-{
-    wxCocoaNSSlider *slider = wxCocoaNSSlider::GetFromCocoa(sender);
-    wxCHECK_RET(slider,wxT("wxNSSliderDownArrowKeyDown received without associated wx object"));
-    slider->Cocoa_wxNSSliderDownArrowKeyDown();
-}
-
-- (void)wxNSSliderLeftArrowKeyDown: (id)sender
-{
-    wxCocoaNSSlider *slider = wxCocoaNSSlider::GetFromCocoa(sender);
-    wxCHECK_RET(slider,wxT("wxNSSliderLeftArrowKeyDown received without associated wx object"));
-    slider->Cocoa_wxNSSliderLeftArrowKeyDown();
-}
-
-- (void)wxNSSliderRightArrowKeyDown: (id)sender
-{
-    wxCocoaNSSlider *slider = wxCocoaNSSlider::GetFromCocoa(sender);
-    wxCHECK_RET(slider,wxT("wxNSSliderRightArrowKeyDown received without associated wx object"));
-    slider->Cocoa_wxNSSliderRightArrowKeyDown();
-}
-
-- (void)wxNSSliderPageUpKeyDown: (id)sender
-{
-    wxCocoaNSSlider *slider = wxCocoaNSSlider::GetFromCocoa(sender);
-    wxCHECK_RET(slider,wxT("wxNSSliderPageUpKeyDown received without associated wx object"));
-    slider->Cocoa_wxNSSliderPageUpKeyDown();
-}
-
-- (void)wxNSSliderPageDownKeyDown: (id)sender
-{
-    wxCocoaNSSlider *slider = wxCocoaNSSlider::GetFromCocoa(sender);
-    wxCHECK_RET(slider,wxT("wxNSSliderPageDownKeyDown received without associated wx object"));
-    slider->Cocoa_wxNSSliderPageDownKeyDown();
-}
-
-- (void)wxNSSliderMoveUp: (id)sender
-{
-    wxCocoaNSSlider *slider = wxCocoaNSSlider::GetFromCocoa(sender);
-    wxCHECK_RET(slider,wxT("wxNSSliderMoveUp received without associated wx object"));
-    slider->Cocoa_wxNSSliderMoveUp();
-}
-
-- (void)wxNSSliderMoveDown: (id)sender
-{
-    wxCocoaNSSlider *slider = wxCocoaNSSlider::GetFromCocoa(sender);
-    wxCHECK_RET(slider,wxT("wxNSSliderMoveDown received without associated wx object"));
-    slider->Cocoa_wxNSSliderMoveDown();
-}
-
-- (void)wxNSSliderMoveLeft: (id)sender
-{
-    wxCocoaNSSlider *slider = wxCocoaNSSlider::GetFromCocoa(sender);
-    wxCHECK_RET(slider,wxT("wxNSSliderMoveLeft received without associated wx object"));
-    slider->Cocoa_wxNSSliderMoveLeft();
-}
-
-- (void)wxNSSliderMoveRight: (id)sender
-{
-    wxCocoaNSSlider *slider = wxCocoaNSSlider::GetFromCocoa(sender);
-    wxCHECK_RET(slider,wxT("wxNSSliderMoveRight received without associated wx object"));
-    slider->Cocoa_wxNSSliderMoveRight();
-}
-
-- (void)wxNSSliderPageUp: (id)sender
-{
-    wxCocoaNSSlider *slider = wxCocoaNSSlider::GetFromCocoa(sender);
-    wxCHECK_RET(slider,wxT("wxNSSliderPageUp received without associated wx object"));
-    slider->Cocoa_wxNSSliderPageUp();
-}
-
-- (void)wxNSSliderPageDown: (id)sender
-{
-    wxCocoaNSSlider *slider = wxCocoaNSSlider::GetFromCocoa(sender);
-    wxCHECK_RET(slider,wxT("wxNSSliderPageDown received without associated wx object"));
-    slider->Cocoa_wxNSSliderPageDown();
-}
-
-@end // implementation wxNSSliderTarget
+public:
+    wxCocoaNSSliderLastSelectorChanger(SEL newSelector)
+    {
+        m_savedResponderSelector = wxCocoaNSSlider::sm_lastResponderSelector;
+        wxCocoaNSSlider::sm_lastResponderSelector = newSelector;
+    }
+    ~wxCocoaNSSliderLastSelectorChanger()
+    {
+        wxCocoaNSSlider::sm_lastResponderSelector = m_savedResponderSelector;
+    }
+private:
+    SEL m_savedResponderSelector;
+// Don't allow any default or copy construction
+    wxCocoaNSSliderLastSelectorChanger();
+    wxCocoaNSSliderLastSelectorChanger(const wxCocoaNSSliderLastSelectorChanger&);
+    void operator=(const wxCocoaNSSliderLastSelectorChanger&);
+};
 
 // ============================================================================
 // @class WXNSSlider
 // ============================================================================
-
 
 @implementation WXNSSlider : NSSlider
 
@@ -146,83 +56,53 @@ WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSSlider)
     return [WX_GET_OBJC_CLASS(WXNSSliderCell) class];
 }
 
+// The following methods are all NSResponder methods which NSSlider responds
+// to in order to change its state and send the action message.  We override
+// them simply to record which one was called.  This allows code listening
+// only for the action message to determine what caused the action.
+// Note that this is perfectly fine being a global because Cocoa processes
+// events synchronously and only in the main thread.
+
 - (void)keyDown:(NSEvent *)theEvent
 {
-    SEL originalAction = [self action];
-    SEL newAction = originalAction;
-    NSString *theEventCharacters = [theEvent charactersIgnoringModifiers];
-
-    if ([theEventCharacters length] == 1)
-    {
-        switch ([theEventCharacters characterAtIndex:0])
-        {
-            case NSUpArrowFunctionKey:      newAction = @selector(wxNSSliderUpArrowKeyDown:);       break;
-            case NSDownArrowFunctionKey:    newAction = @selector(wxNSSliderDownArrowKeyDown:);     break;
-            case NSLeftArrowFunctionKey:    newAction = @selector(wxNSSliderLeftArrowKeyDown:);     break;
-            case NSRightArrowFunctionKey:   newAction = @selector(wxNSSliderRightArrowKeyDown:);    break;
-            case NSPageUpFunctionKey:       newAction = @selector(wxNSSliderPageUpKeyDown:);        break;
-            case NSPageDownFunctionKey:     newAction = @selector(wxNSSliderPageDownKeyDown:);      break;
-            default:                                                                                break;
-        }
-    }
-
-    [self setAction:newAction];
+    wxCocoaNSSliderLastSelectorChanger savedSelector(_cmd);
     [super keyDown:theEvent];
-    [self setAction:originalAction];
 }
 
 - (void)moveUp:(id)sender
 {
-    SEL originalAction = [self action];
-
-    [self setAction:@selector(wxNSSliderMoveUp:)];
+    wxCocoaNSSliderLastSelectorChanger savedSelector(_cmd);
     [super moveUp:sender];
-    [self setAction:originalAction];
 }
 
 - (void)moveDown:(id)sender
 {
-    SEL originalAction = [self action];
-
-    [self setAction:@selector(wxNSSliderMoveDown:)];
+    wxCocoaNSSliderLastSelectorChanger savedSelector(_cmd);
     [super moveDown:sender];
-    [self setAction:originalAction];
 }
 
 - (void)moveLeft:(id)sender
 {
-    SEL originalAction = [self action];
-
-    [self setAction:@selector(wxNSSliderMoveLeft:)];
+    wxCocoaNSSliderLastSelectorChanger savedSelector(_cmd);
     [super moveLeft:sender];
-    [self setAction:originalAction];
 }
 
 - (void)moveRight:(id)sender
 {
-    SEL originalAction = [self action];
-
-    [self setAction:@selector(wxNSSliderMoveRight:)];
+    wxCocoaNSSliderLastSelectorChanger savedSelector(_cmd);
     [super moveRight:sender];
-    [self setAction:originalAction];
 }
 
 - (void)pageUp:(id)sender
 {
-    SEL originalAction = [self action];
-
-    [self setAction:@selector(wxNSSliderPageUp:)];
+    wxCocoaNSSliderLastSelectorChanger savedSelector(_cmd);
     [super pageUp:sender];
-    [self setAction:originalAction];
 }
 
 - (void)pageDown:(id)sender
 {
-    SEL originalAction = [self action];
-
-    [self setAction:@selector(wxNSSliderPageDown:)];
+    wxCocoaNSSliderLastSelectorChanger savedSelector(_cmd);
     [super pageDown:sender];
-    [self setAction:originalAction];
 }
 
 @end
@@ -231,10 +111,6 @@ WX_IMPLEMENT_GET_OBJC_CLASS(WXNSSlider,NSSlider)
 // ============================================================================
 // @class WXNSSliderCell
 // ============================================================================
-
-#define kwxNSSliderStartTracking    @"wxNSSliderStartTracking"
-#define kwxNSSliderContinueTracking @"wxNSSliderContinueTracking"
-#define kwxNSSliderStopTracking     @"wxNSSliderStopTracking"
 
 @implementation WXNSSliderCell : NSSliderCell
 - (BOOL)startTrackingAt:(NSPoint)startPoint inView:(NSView *)controlView
@@ -273,15 +149,14 @@ WX_IMPLEMENT_GET_OBJC_CLASS(WXNSSliderCell,NSSliderCell)
 // ============================================================================
 // class wxCocoaNSSlider
 // ============================================================================
-const wxObjcAutoRefFromAlloc<struct objc_object*> wxCocoaNSSlider::sm_cocoaTarget = [[wxNSSliderTarget alloc] init];
 
+SEL wxCocoaNSSlider::sm_lastResponderSelector;
 
 void wxCocoaNSSlider::AssociateNSSlider(WX_NSSlider cocoaNSSlider)
 {
     if(cocoaNSSlider)
     {
         sm_cocoaHash.insert(wxCocoaNSSliderHash::value_type(cocoaNSSlider,this));
-        [cocoaNSSlider setTarget:sm_cocoaTarget];
     }
 }
 

@@ -2,7 +2,7 @@
 // Name:        wx/cocoa/NSSlider.h
 // Purpose:     wxCocoaNSSlider class
 // Author:      Mark Oxenham
-// Modified by:
+// Modified by: David Elliott
 // Created:     2007/08/10
 // RCS-ID:      $Id$
 // Copyright:   (c) 2007 Software 2000 Ltd. All rights reserved.
@@ -20,34 +20,28 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSSlider);
 
 WX_DECLARE_OBJC_HASHMAP(NSSlider);
 
+// For when we're not in Objective-C mode:
+typedef struct objc_selector    *SEL;    
+
+class wxCocoaNSSliderLastSelectorChanger;
+
 class wxCocoaNSSlider
 {
+    friend class wxCocoaNSSliderLastSelectorChanger;
     WX_DECLARE_OBJC_INTERFACE_HASHMAP(NSSlider);
 public:
     void AssociateNSSlider(WX_NSSlider cocoaNSSlider);
     void DisassociateNSSlider(WX_NSSlider cocoaNSSlider);
 
-    virtual void Cocoa_wxNSSliderUpArrowKeyDown(void) = 0;
-    virtual void Cocoa_wxNSSliderDownArrowKeyDown(void) = 0;
-    virtual void Cocoa_wxNSSliderLeftArrowKeyDown(void) = 0;
-    virtual void Cocoa_wxNSSliderRightArrowKeyDown(void) = 0;
-    virtual void Cocoa_wxNSSliderPageUpKeyDown(void) = 0;
-    virtual void Cocoa_wxNSSliderPageDownKeyDown(void) = 0;
-    virtual void Cocoa_wxNSSliderMoveUp(void) = 0;
-    virtual void Cocoa_wxNSSliderMoveDown(void) = 0;
-    virtual void Cocoa_wxNSSliderMoveLeft(void) = 0;
-    virtual void Cocoa_wxNSSliderMoveRight(void) = 0;
-    virtual void Cocoa_wxNSSliderPageUp(void) = 0;
-    virtual void Cocoa_wxNSSliderPageDown(void) = 0;
     virtual void CocoaNotification_startTracking(WX_NSNotification notification) = 0;
     virtual void CocoaNotification_continueTracking(WX_NSNotification notification) = 0;
     virtual void CocoaNotification_stopTracking(WX_NSNotification notification) = 0;
-    virtual ~wxCocoaNSSlider() { }
 
+    static SEL GetLastResponderSelector()
+    {   return sm_lastResponderSelector; }
 protected:
-    static const wxObjcAutoRefFromAlloc<struct objc_object*> sm_cocoaTarget;
-    static struct objc_object *sm_cocoaObserver;
-
+    virtual ~wxCocoaNSSlider() { }
+    static SEL sm_lastResponderSelector;
 };
 
 #endif

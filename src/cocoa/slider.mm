@@ -21,7 +21,10 @@
     #include "wx/app.h"
 #endif //WX_PRECOMP
 
+#import <Foundation/NSString.h>
 #include "wx/cocoa/objc/NSSlider.h"
+#import <AppKit/NSEvent.h>
+#import <AppKit/NSWindow.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
     BEGIN_EVENT_TABLE(wxSlider, wxSliderBase)
@@ -85,11 +88,64 @@ wxSlider::~wxSlider()
     DisassociateNSSlider(GetNSSlider());
 }
 
+void wxSlider::AssociateNSSlider(WX_NSSlider theSlider)
+{
+    wxCocoaNSSlider::AssociateNSSlider(theSlider);
+    // Set the target/action.. we don't really need to unset these
+    [theSlider setTarget:wxCocoaNSControl::sm_cocoaTarget];
+    [theSlider setAction:@selector(wxNSControlAction:)];
+}
+
 void wxSlider::ProcessEventType(wxEventType commandType)
 {
     wxScrollEvent event(commandType, GetId(), GetValue(), HasFlag(wxSL_VERTICAL)?wxVERTICAL:wxHORIZONTAL);
     event.SetEventObject(this);
     GetEventHandler()->ProcessEvent(event);
+}
+
+static inline wxEventType wxSliderEventTypeForKeyFromEvent(NSEvent *theEvent)
+{
+    NSString *theEventCharacters = [theEvent charactersIgnoringModifiers];
+
+    if ([theEventCharacters length] == 1)
+    {
+        switch ([theEventCharacters characterAtIndex:0])
+        {
+            case NSUpArrowFunctionKey:
+            case NSRightArrowFunctionKey:   return wxEVT_SCROLL_PAGEDOWN;
+            case NSDownArrowFunctionKey:
+            case NSLeftArrowFunctionKey:    return wxEVT_SCROLL_PAGEUP;
+            case NSPageUpFunctionKey:       return wxEVT_SCROLL_BOTTOM;
+            case NSPageDownFunctionKey:     return wxEVT_SCROLL_TOP;
+        }
+    }
+    // Overload wxEVT_ANY to mean we can't determine the event type.
+    return wxEVT_ANY;
+}
+
+void wxSlider::CocoaTarget_action()
+{
+    wxEventType sliderEventType;
+    SEL theSelector = wxCocoaNSSlider::GetLastResponderSelector();
+    
+    if(         theSelector == @selector(moveUp:)
+            ||  theSelector == @selector(moveRight:))
+        sliderEventType = wxEVT_SCROLL_PAGEDOWN;
+    else if(    theSelector == @selector(moveDown:)
+            ||  theSelector == @selector(moveLeft:))
+        sliderEventType = wxEVT_SCROLL_PAGEUP;
+    else if(    theSelector == @selector(pageUp:))
+        sliderEventType = wxEVT_SCROLL_BOTTOM;
+    else if(    theSelector == @selector(pageDown:))
+        sliderEventType = wxEVT_SCROLL_TOP;
+    else if(    theSelector == @selector(keyDown:))
+        // This case should ideally never be reached.
+        sliderEventType = wxSliderEventTypeForKeyFromEvent([[GetNSSlider() window] currentEvent]);
+    else
+        // Don't generate an event.
+        return;
+    if(sliderEventType != wxEVT_ANY)
+        ProcessEventType(sliderEventType);
 }
 
 void wxSlider::CocoaNotification_startTracking(WX_NSNotification notification)
