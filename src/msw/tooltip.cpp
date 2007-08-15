@@ -191,6 +191,18 @@ void wxToolTip::SetDelay(long milliseconds)
                             TTDT_INITIAL, milliseconds);
 }
 
+void wxToolTip::SetAutoPop(long milliseconds)
+{
+    SendTooltipMessageToAll(ms_hwndTT, TTM_SETDELAYTIME,
+                            TTDT_AUTOPOP, milliseconds);
+}
+
+void wxToolTip::SetReshow(long milliseconds)
+{
+    SendTooltipMessageToAll(ms_hwndTT, TTM_SETDELAYTIME,
+                            TTDT_RESHOW, milliseconds);
+}
+
 // ---------------------------------------------------------------------------
 // implementation helpers
 // ---------------------------------------------------------------------------

@@ -33,6 +33,10 @@ public:
     // globally change the tooltip parameters
     static void Enable( bool flag );
     static void SetDelay( long msecs );
+        // set the delay after which the tooltip disappears or how long the tooltip remains visible
+    static void SetAutoPop(long msecs);
+        // set the delay between subsequent tooltips to appear
+    static void SetReshow(long msecs);
 
     // get/set the tooltip text
     void SetTip( const wxString &tip );

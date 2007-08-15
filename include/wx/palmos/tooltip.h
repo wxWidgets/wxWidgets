@@ -33,6 +33,10 @@ public:
     static void Enable(bool flag);
         // set the delay after which the tooltip appears
     static void SetDelay(long milliseconds);
+        // set the delay after which the tooltip disappears or how long the tooltip remains visible
+    static void SetAutoPop(long milliseconds);
+        // set the delay between subsequent tooltips to appear
+    static void SetReshow(long milliseconds);
 
     // implementation only from now on
     // -------------------------------

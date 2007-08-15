@@ -146,6 +146,14 @@ void wxToolTip::SetDelay( long msecs )
     s_ToolTipDelay = msecs ;
 }
 
+void wxToolTip::SetAutoPop( long WXUNUSED(msecs) )
+{
+}
+
+void wxToolTip::SetReshow( long WXUNUSED(msecs) )
+{
+}
+
 void wxToolTip::RelayEvent( wxWindow *win , wxMouseEvent &event )
 {
     if ( s_ShowToolTips )

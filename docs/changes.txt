@@ -154,6 +154,7 @@ All (GUI):
 - Show standard options in wxCmdLineParser usage message (Francesco Montorsi).
 - Added wxRect::operator+ (union) and * (intersection) (bdonner).
 - Added support for two auxiliary mouse buttons to wxMouseEvent (Chris Weiland).
+- Added wxToolTip::SetAutoPop() and SetReshow() (Jan Knepper)
 - Added wxTaskBarIcon::Destroy()
 
 wxGTK:

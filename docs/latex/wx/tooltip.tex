@@ -3,8 +3,10 @@
 This class holds information about a tooltip associated with a window
 (see \helpref{wxWindow::SetToolTip}{wxwindowsettooltip}).
 
-The two static methods, \helpref{wxToolTip::Enable}{wxtooltipenable} and
-\helpref{wxToolTip::SetDelay}{wxtooltipsetdelay} can be used to globally
+The four static methods, \helpref{wxToolTip::Enable}{wxtooltipenable},
+\helpref{wxToolTip::SetDelay}{wxtooltipsetdelay} 
+\helpref(wxToolTip::SetAutoPop)(wxtooltipsetautopop) and 
+\helpref(wxToolTip::SetReshow)(wxtooltipsetreshow) can be used to globally
 alter tooltips behaviour.
 
 \wxheading{Derived from}
@@ -38,6 +40,21 @@ May not be supported on all platforms (eg. wxCocoa).
 Set the delay after which the tooltip appears.
 
 May not be supported on all platforms (eg. wxCocoa).
+
+\membersection{wxToolTip::SetAutoPop}\label{wxtooltipsetautopop}
+
+\func{static void}{SetAutoPop}{\param{long }{msecs}}
+
+Set the delay after which the tooltip disappears or how long a
+tooltip remains visible.
+May not be supported on all platforms (eg. wxCocoa, GTK, Palmos).
+
+\membersection{wxToolTip::SetReshow}\label{wxtooltipsetreshow}
+
+\func{static void}{SetReshow}{\param{long }{msecs}}
+
+Set the delay between subsequent tooltips to appear.
+May not be supported on all platforms (eg. wxCocoa, GTK, Palmos).
 
 \membersection{wxToolTip::wxToolTip}\label{wxtooltipwxtooltip}
 

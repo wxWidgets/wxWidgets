@@ -79,4 +79,12 @@ void wxToolTip::SetDelay( long msecs )
     gtk_tooltips_set_delay( ss_tooltips, (int)msecs );
 }
 
+void wxToolTip::SetAutoPop( long WXUNUSED(msecs) )
+{
+}
+
+void wxToolTip::SetReshow( long WXUNUSED(msecs) )
+{
+}
+
 #endif

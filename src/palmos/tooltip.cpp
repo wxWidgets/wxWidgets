@@ -99,6 +99,14 @@ void wxToolTip::SetDelay(long milliseconds)
 {
 }
 
+void wxToolTip::SetAutoPop( long WXUNUSED(milliseconds) )
+{
+}
+
+void wxToolTip::SetReshow( long WXUNUSED(milliseconds) )
+{
+}
+
 // ---------------------------------------------------------------------------
 // implementation helpers
 // ---------------------------------------------------------------------------
