@@ -112,6 +112,13 @@ int wxDialog::ShowModal()
        return GetReturnCode();
     }
 
+    // release the mouse if it's currently captured as the window having it
+    // will be disabled when this dialog is shown -- but will still keep the
+    // capture making it impossible to do anything in the modal dialog itself
+    wxWindow * const win = wxWindow::GetCapture();
+    if ( win )
+        win->GTKReleaseMouseAndNotify();
+
     // use the apps top level window as parent if none given unless explicitly
     // forbidden
     if ( !GetParent() && !(GetWindowStyleFlag() & wxDIALOG_NO_PARENT) )

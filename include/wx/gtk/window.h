@@ -178,6 +178,10 @@ public:
     // there is also the exception of wxMenuBar)
     virtual bool GTKNeedsParent() const { return !IsTopLevel(); }
 
+    // This is called when capture is taken from the window. It will 
+    // fire off capture lost events.
+    void GTKReleaseMouseAndNotify();
+
 protected:
     // Override GTKWidgetNeedsMnemonic and return true if your
     // needs to set its mnemonic widget, such as for a

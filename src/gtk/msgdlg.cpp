@@ -137,6 +137,12 @@ void wxMessageDialog::GTKCreateMsgDialog()
 
 int wxMessageDialog::ShowModal()
 {
+    // break the mouse capture as it would interfere with modal dialog (see
+    // wxDialog::ShowModal)
+    wxWindow * const win = wxWindow::GetCapture();
+    if ( win )
+        win->GTKReleaseMouseAndNotify();
+
     if ( !m_widget )
     {
         GTKCreateMsgDialog();
