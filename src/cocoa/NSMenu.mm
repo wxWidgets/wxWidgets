@@ -35,6 +35,7 @@
 }
 
 @end // WXNSMenu
+WX_IMPLEMENT_GET_OBJC_CLASS(WXNSMenu,NSMenu)
 
 // ============================================================================
 // @class wxNSMenuNotificationObserver
@@ -43,14 +44,13 @@
 {
 }
 
-struct objc_object *wxCocoaNSMenu::sm_cocoaObserver = [[wxNSMenuNotificationObserver alloc] init];
-
 - (void)menuDidAddItem: (NSNotification *)notification;
 - (void)menuDidChangeItem: (NSNotification *)notification;
 - (void)menuDidRemoveItem: (NSNotification *)notification;
 - (void)menuDidSendAction: (NSNotification *)notification;
 - (void)menuWillSendAction: (NSNotification *)notification;
 @end // interface wxNSMenuNotificationObserver
+WX_DECLARE_GET_OBJC_CLASS(wxNSMenuNotificationObserver,NSObject)
 
 @implementation wxNSMenuNotificationObserver : NSObject
 
@@ -90,11 +90,14 @@ struct objc_object *wxCocoaNSMenu::sm_cocoaObserver = [[wxNSMenuNotificationObse
 }
 
 @end // implementation wxNSMenuNotificationObserver
+WX_IMPLEMENT_GET_OBJC_CLASS(wxNSMenuNotificationObserver,NSObject)
 
 // ========================================================================
 // wxCocoaNSMenu
 // ========================================================================
 WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSMenu)
+
+struct objc_object *wxCocoaNSMenu::sm_cocoaObserver = [[WX_GET_OBJC_CLASS(wxNSMenuNotificationObserver) alloc] init];
 
 void wxCocoaNSMenu::AssociateNSMenu(WX_NSMenu cocoaNSMenu, unsigned int flags)
 {

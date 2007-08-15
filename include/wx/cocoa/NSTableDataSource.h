@@ -12,6 +12,8 @@
 #ifndef __WX_COCOA_NSTABLEDATASOURCE_H__
 #define __WX_COCOA_NSTABLEDATASOURCE_H__
 
+#include "wx/cocoa/objc/objc_uniquifying.h"
+
 #import <Foundation/NSObject.h>
 
 // ============================================================================
@@ -28,5 +30,6 @@
     objectValueForTableColumn: (NSTableColumn *)tableColumn
     row: (int)rowIndex;
 @end // wxCocoaNSTableDataSource
+WX_DECLARE_GET_OBJC_CLASS(wxCocoaNSTableDataSource,NSObject)
 
 #endif // _WX_COCOA_NSTABLEDATASOURCE_H_

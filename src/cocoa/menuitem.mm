@@ -23,6 +23,8 @@
 
 #include "wx/menuitem.h"
 
+#include "wx/cocoa/objc/objc_uniquifying.h"
+
 #ifndef WX_PRECOMP
     #include "wx/menu.h"
     #include "wx/utils.h"
@@ -53,6 +55,7 @@
 - (void)wxMenuItemAction: (id)sender;
 - (BOOL)validateMenuItem: (id)menuItem;
 @end //interface wxNSMenuItemTarget
+WX_DECLARE_GET_OBJC_CLASS(wxNSMenuItemTarget,NSObject)
 
 @implementation wxNSMenuItemTarget : NSObject
 
@@ -74,6 +77,7 @@
 }
 
 @end //implementation wxNSMenuItemTarget
+WX_IMPLEMENT_GET_OBJC_CLASS(wxNSMenuItemTarget,NSObject)
 
 // ============================================================================
 // wxMenuItemCocoa implementation
@@ -81,7 +85,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 wxMenuItemCocoaHash wxMenuItemCocoa::sm_cocoaHash;
 
-wxObjcAutoRefFromAlloc<struct objc_object *> wxMenuItemCocoa::sm_cocoaTarget = [[wxNSMenuItemTarget alloc] init];
+wxObjcAutoRefFromAlloc<struct objc_object *> wxMenuItemCocoa::sm_cocoaTarget = [[WX_GET_OBJC_CLASS(wxNSMenuItemTarget) alloc] init];
 
 // ----------------------------------------------------------------------------
 // wxMenuItemBase

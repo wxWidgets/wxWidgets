@@ -46,7 +46,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 bool wxMenu::Create(const wxString& title, long style)
 {
     wxAutoNSAutoreleasePool pool;
-    m_cocoaNSMenu = [[WXNSMenu alloc] initWithTitle: wxNSStringWithWxString(title)];
+    m_cocoaNSMenu = [[WX_GET_OBJC_CLASS(WXNSMenu) alloc] initWithTitle: wxNSStringWithWxString(title)];
     AssociateNSMenu(m_cocoaNSMenu);
     return true;
 }

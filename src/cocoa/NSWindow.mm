@@ -25,6 +25,8 @@
 
 #include "wx/cocoa/NSWindow.h"
 
+#include "wx/cocoa/objc/objc_uniquifying.h"
+
 #import <Foundation/NSNotification.h>
 #import <Foundation/NSString.h>
 #include "wx/cocoa/objc/NSWindow.h"
@@ -53,6 +55,7 @@
 - (void)wxMenuItemAction: (NSMenuItem *)menuItem;
 - (BOOL)validateMenuItem: (NSMenuItem *)menuItem;
 @end //interface wxNSWindowDelegate
+WX_DECLARE_GET_OBJC_CLASS(wxNSWindowDelegate,NSObject)
 
 @implementation wxNSWindowDelegate : NSObject
 
@@ -141,6 +144,7 @@
 }
 
 @end //implementation wxNSWindowDelegate
+WX_IMPLEMENT_GET_OBJC_CLASS(wxNSWindowDelegate,NSObject)
 
 // ============================================================================
 // class wxCocoaNSWindow
@@ -151,7 +155,7 @@ WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSWindow)
 wxCocoaNSWindow::wxCocoaNSWindow(wxTopLevelWindowCocoa *tlw)
 :   m_wxTopLevelWindowCocoa(tlw)
 {
-    m_cocoaDelegate = [[wxNSWindowDelegate alloc] init];
+    m_cocoaDelegate = [[WX_GET_OBJC_CLASS(wxNSWindowDelegate) alloc] init];
     [m_cocoaDelegate setWxCocoaInterface: this];
 }
 
