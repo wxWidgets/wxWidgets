@@ -672,13 +672,6 @@ private:
 
 
 // And the same for fixed arguments, _not_ normalizing it:
-// FIXME-UTF8: this works, but uses wxString's implicit conversion to wxChar*
-//             for the 'format' argument (which is const wxString&) _if_ the
-//             implementation function has C sting argument; we need to
-//             have wxFixedArgNormalizer<T> here that will pass everything
-//             as-is except for wxString (for which wx_str() would be used),
-//             but OTOH, we don't want to do that if the implementation takes
-//             wxString argument
 #define _WX_VARARG_PASS_FIXED(i)        f##i
 
 #if wxUSE_UNICODE_UTF8
