@@ -1383,9 +1383,9 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
                 wxFAIL_MSG( _T("unknown border style") );
                 break;
 
-//            case wxBORDER_DOUBLE:
-//                *exstyle |= WS_EX_DLGMODALFRAME;
-//                break;
+            case wxBORDER_DOUBLE:
+                *exstyle |= WS_EX_DLGMODALFRAME;
+                break;
         }
 
         // wxUniv doesn't use Windows dialog navigation functions at all
