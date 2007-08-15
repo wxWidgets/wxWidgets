@@ -211,8 +211,7 @@ public:
   }
 #endif
 
-  // convenience functions returning directly the value (we don't have them for
-  // int/double/bool as there would be ambiguities with the long one then)
+  // convenience functions returning directly the value 
   wxString Read(const wxString& key,
                 const wxString& defVal = wxEmptyString) const
     { wxString s; (void)Read(key, &s, defVal); return s; }
@@ -226,10 +225,25 @@ public:
     { return Read(key, wxString(defVal)); }
 #endif
 
-  long Read(const wxString& key, long defVal) const
+  long ReadLong(const wxString& key, long defVal) const
     { long l; (void)Read(key, &l, defVal); return l; }
 
-    // write the value (return true on success)
+  double ReadDouble(const wxString& key, double defVal) const
+    { double d; (void)Read(key, &d, defVal); return d; }
+
+  bool ReadBool(const wxString& key, bool defVal) const
+    { bool b; (void)Read(key, &b, defVal); return b; }
+
+  template <typename T>
+  T ReadObject(const wxString& key, T const& defVal) const
+    { T t; (void)Read(key, &t, defVal); return t; }
+
+  // for compatibility with wx 2.8
+  long Read(const wxString& key, long defVal) const
+    { return ReadLong(key, defVal); }
+
+
+  // write the value (return true on success)
   bool Write(const wxString& key, const wxString& value)
     { return DoWriteString(key, value); }
 

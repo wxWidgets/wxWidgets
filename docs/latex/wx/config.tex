@@ -53,7 +53,7 @@ Here is how you would typically use this class:
 
   // another example: using default values and the full path instead of just
   // key name: if the key is not found , the value 17 is returned
-  long value = config->Read("/LastRun/CalculatedValues/MaxValue", 17);
+  long value = config->ReadLong("/LastRun/CalculatedValues/MaxValue", 17);
   ...
   ...
   ...
@@ -141,10 +141,10 @@ sensible!):
   conf->Write("../GroupEntry", 2);
   conf->SetPath("..");
 
-  wxASSERT( conf->Read("Subgroup/SubgroupEntry", 0l) == 3 );
+  wxASSERT( conf->ReadLong("Subgroup/SubgroupEntry", 0) == 3 );
 
   // use absolute path: it is allowed, too
-  wxASSERT( conf->Read("/RootEntry", 0l) == 1 );
+  wxASSERT( conf->ReadLong("/RootEntry", 0) == 1 );
 \end{verbatim}
 
 {\it Warning}: it is probably a good idea to always restore the path to its
@@ -174,7 +174,7 @@ doesn't save and restore the path):
     foo(config);
 
     // we're reading "/Foo/Data/Test" here! -1 will probably be returned...
-    wxASSERT( config->Read("Test", -1) == 17 );
+    wxASSERT( config->ReadLong("Test", -1) == 17 );
   }
 \end{verbatim}
 
@@ -670,28 +670,6 @@ not found, {\it l} is not changed.
 Reads a long value, returning \true if the value was found. If the value was
 not found, {\it defaultVal} is used instead.
 
-\constfunc{long }{Read}{\param{const wxString\& }{key}, \param{long}{ defaultVal}}
-
-Reads a long value from the key and returns it. {\it defaultVal} is returned
-if the key is not found.
-
-NB: writing
-
-{\small
-\begin{verbatim}
-    conf->Read("key", 0);
-\end{verbatim}
-}
-
-won't work because the call is ambiguous: compiler can not choose between two
-{\it Read} functions. Instead, write:
-
-{\small
-\begin{verbatim}
-    conf->Read("key", 0l);
-\end{verbatim}
-}
-
 \constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{double*}{ d}}
 
 Reads a double value, returning \true if the value was found. If the value was
@@ -753,6 +731,39 @@ implements the following methods:\par
 \twocolitem{{\bf ReadBool(key, default=0)}}{Returns a boolean}
 \end{twocollist}
 }}
+
+
+\membersection{wxConfigBase::ReadBool}\label{wxconfigbasereadbool}
+
+\constfunc{long }{ReadBool}{\param{const wxString\& }{key}, \param{bool}{ defaultVal}}
+
+Reads a bool value from the key and returns it. {\it defaultVal} is returned
+if the key is not found.
+
+
+\membersection{wxConfigBase::ReadDouble}\label{wxconfigbasereaddouble}
+
+\constfunc{long }{ReadDouble}{\param{const wxString\& }{key}, \param{double}{ defaultVal}}
+
+Reads a double value from the key and returns it. {\it defaultVal} is returned
+if the key is not found.
+
+
+\membersection{wxConfigBase::ReadLong}\label{wxconfigbasereadlong}
+
+\constfunc{long }{ReadLong}{\param{const wxString\& }{key}, \param{long}{ defaultVal}}
+
+Reads a long value from the key and returns it. {\it defaultVal} is returned
+if the key is not found.
+
+
+\membersection{wxConfigBase::ReadObject}\label{wxconfigbasereadobject}
+
+\constfunc{T }{ReadObject}{\param{const wxString\& }{key}, \param{T const&}{ defaultVal}}
+
+Reads a value of type T, for which function
+\helpref{wxFromString}{wxfromstring} is defined, from the key and returns it. 
+{\it defaultVal} is returned if the key is not found.
 
 
 \membersection{wxConfigBase::RenameEntry}\label{wxconfigbaserenameentry}

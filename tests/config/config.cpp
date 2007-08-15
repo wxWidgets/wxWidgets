@@ -95,18 +95,31 @@ void ConfigTestCase::ReadWriteLocalTest()
     CPPUNIT_ASSERT( r );
     CPPUNIT_ASSERT_EQUAL( long1, 234L );
 
+    CPPUNIT_ASSERT( config->ReadLong(wxT("long1"), 0) == 234 );
+
+    double double1;
+    r = config->Read(wxT("double1"), &double1);
+    CPPUNIT_ASSERT( r );
+    CPPUNIT_ASSERT_EQUAL( double1, 345.67 );
+
+    CPPUNIT_ASSERT( config->ReadDouble(wxT("double1"), 0) == double1 );
+
     bool bool1;
-    r = config->Read(wxT("foo"), &bool1);
+    r = config->Read(wxT("foo"), &bool1); // there is no "foo" key
     CPPUNIT_ASSERT( !r );
 
     r = config->Read(wxT("bool1"), &bool1);
     CPPUNIT_ASSERT( r );
     CPPUNIT_ASSERT_EQUAL( bool1, true );
 
+    CPPUNIT_ASSERT( config->ReadBool(wxT("bool1"), false) == bool1 );
+
     wxColour color1;
     r = config->Read(wxT("color1"), &color1);
     CPPUNIT_ASSERT( r );
     CPPUNIT_ASSERT( color1 == wxColour(11,22,33,44) );
+
+    CPPUNIT_ASSERT( config->ReadObject(wxT("color1"), wxNullColour) == color1 );
 
     config->DeleteAll();
     delete config;
