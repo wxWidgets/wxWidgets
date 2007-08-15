@@ -215,6 +215,7 @@ wxMSW:
 - Fixed bug with symbol resolving in wxStackWalker (Axel Gembe)
 - Fixed showing busy cursor for disabled windows and during wxExecute()
 - Set the string of wxEVT_COMMAND_CHECKLISTBOX_TOGGLED events (Luca Cappa)
+- Fix problems with timers on SMP machines in wxAnimationCtrl (Gennady)
 
 wxGTK:
 
