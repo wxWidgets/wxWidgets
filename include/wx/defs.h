@@ -2945,35 +2945,8 @@ typedef const void* WXWidget;
 /*  included before or after wxWidgets classes, and therefore must be */
 /*  disabled here before any significant wxWidgets headers are included. */
 #ifdef __WXMSW__
-#ifdef GetClassInfo
-#undef GetClassInfo
-#endif
-
-#ifdef GetClassName
-#undef GetClassName
-#endif
-
-#ifdef DrawText
-#undef DrawText
-#endif
-
-#ifdef GetCharWidth
-#undef GetCharWidth
-#endif
-
-#ifdef StartDoc
-#undef StartDoc
-#endif
-
-#ifdef FindWindow
-#undef FindWindow
-#endif
-
-#ifdef FindResource
-#undef FindResource
-#endif
-#endif
-  /*  __WXMSW__ */
+#include "wx/msw/winundef.h"
+#endif /* __WXMSW__ */
 
 
 /*  include the feature test macros */
