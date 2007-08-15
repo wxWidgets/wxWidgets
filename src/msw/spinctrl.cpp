@@ -318,7 +318,12 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     WXDWORD exStyle = 0;
     WXDWORD msStyle = MSWGetStyle(GetWindowStyle(), & exStyle) ;
 
-    // calculate the sizes: the size given is the toal size for both controls
+    // this control is used for numeric entry so normally using these flags by
+    // default shouldn't be a problem, if it is we can always add a style such
+    // as wxSP_NON_NUMERIC later
+    msStyle |= ES_RIGHT | ES_NUMBER;
+
+    // calculate the sizes: the size given is the total size for both controls
     // and we need to fit them both in the given width (height is the same)
     wxSize sizeText(size), sizeBtn(size);
     sizeBtn.x = wxSpinButton::DoGetBestSize().x;
