@@ -21,6 +21,8 @@
 
 #if wxUSE_DATETIME
 
+#include "wx/datetime.h"
+
 // the default renderer for the cells containing Time and dates..
 class WXDLLIMPEXP_ADV wxGridCellDateTimeRenderer : public wxGridCellStringRenderer
 {
