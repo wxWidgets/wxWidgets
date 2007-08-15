@@ -2505,7 +2505,7 @@ wxMenuGeometryInfo *wxWin32Renderer::GetMenuGeometry(wxWindow *win,
             h = heightText;
 
             wxCoord widthLabel;
-            dc.GetTextExtent(item->GetLabel(), &widthLabel, NULL);
+            dc.GetTextExtent(item->GetItemLabelText(), &widthLabel, NULL);
             if ( widthLabel > widthLabelMax )
             {
                 widthLabelMax = widthLabel;
