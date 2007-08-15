@@ -73,11 +73,18 @@ public:
     bool GTKOnTargetReceived(const wxDataFormat& format);
 
 private:
+    // the data object for the specific selection
+    wxDataObject *& Data(Kind kind)
+    {
+        return kind == Primary ? m_dataPrimary : m_dataClipboard;
+    }
+
     // the data object we're currently using
     wxDataObject *& Data()
     {
-        return m_usePrimary ? m_dataPrimary : m_dataClipboard;
+        return Data(m_usePrimary ? Primary : Clipboard);
     }
+
 
     // set or unset selection ownership
     bool SetSelectionOwner(bool set = true);

@@ -409,7 +409,7 @@ GdkAtom wxClipboard::GTKGetClipboardAtom() const
 
 void wxClipboard::GTKClearData(Kind kind)
 {
-    wxDataObject *&data = Data();
+    wxDataObject *&data = Data(kind);
     if ( data )
     {
         delete data;
