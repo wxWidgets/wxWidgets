@@ -894,7 +894,7 @@ bool wxToolBar::Realize()
                                 DoToggleTool(tool, true);
                             }
                         }
-                        else if (tool->IsToggled())
+                        else if ( tool->IsToggled() )
                         {
                             wxToolBarToolsList::compatibility_iterator nodePrev = node->GetPrevious();
                             int prevIndex = i - 1;
@@ -908,7 +908,7 @@ bool wxToolBar::Realize()
                                 if ( tool->Toggle(false) )
                                     DoToggleTool(tool, false);
 
-                                prevButton.fsState = TBSTATE_ENABLED;
+                                prevButton.fsState &= TBSTATE_CHECKED;
                                 nodePrev = nodePrev->GetPrevious();
                                 prevIndex--;
                             }
