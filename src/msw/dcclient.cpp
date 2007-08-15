@@ -247,7 +247,7 @@ wxPaintDC::wxPaintDC(wxWindow *canvas)
 
     // the HDC can have a clipping box (which we didn't set), make sure our
     // DoGetClippingBox() checks for it
-    //m_clipping = true;
+    m_clipping = true;
 }
 
 wxPaintDC::~wxPaintDC()
