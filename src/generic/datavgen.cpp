@@ -1872,34 +1872,6 @@ public:
     virtual int operator() ( void * n ) = 0;
 };
 
-#if 0
-class ItemAddJob: public DoJob
-{
-public:
-    ItemAddJob( const wxDataViewItem & parent, const wxDataViewItem & item, int * count )
-    	{ this->parent = parent ; this->item = item ; m_count = count; }
-    virtual ~ItemAddJob(){};
-
-    virtual int operator() ( wxDataViewTreeNode * node )
-    {
-        if( node->GetItem() == parent )
-        {
-            node->SetHasChildren( true );
-            wxDataViewTreeNode * newnode = new wxDataViewTreeNode( node );
-            newnode->SetItem(item);
-            node->AppendChild( newnode);
-            *m_count = -1;
-            return OK;
-        }
-        return CONT;
-    }
-
-private:
-    int * m_count;
-    wxDataViewItem parent, item;
-};
-#endif
-
 bool Walker( wxDataViewTreeNode * node, DoJob & func )
 {
     if( node==NULL ||  !node->HasChildren())
@@ -1977,30 +1949,6 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
     UpdateDisplay();
     return true;
 }
-
-#if 0
-class ItemDeleteJob: public DoJob
-{
-public:
-    ItemDeleteJob( const wxDataViewItem & item, int * count ) { m_item = item; m_count = count; }
-    virtual ~ItemDeleteJob(){}
-    virtual int operator() ( wxDataViewTreeNode * node )
-    {
-        if( node->GetItem() == m_item )
-        {
-            node->GetParent()->GetChildren().Remove( node );
-            delete node;
-            *m_count = -1;
-            return DoJob::OK;
-        }
-        return DoJob::CONT;
-    }
-
-private:
-    int * m_count;
-    wxDataViewItem m_item;
-};
-#endif
 
 void DestroyTreeHelper( wxDataViewTreeNode * node);
 
@@ -2760,31 +2708,6 @@ wxDataViewTreeNode * wxDataViewMainWindow::GetTreeNodeByRow(unsigned int row)
     return job.GetResult();
 }
 
-#if 0
-class CountJob : public DoJob
-{
-public:
-    CountJob(){ count = 0 ; }
-    virtual ~CountJob(){};
-
-    virtual int operator () (  wxDataViewTreeNode * node )
-    {
-         count ++;
-         if ( node->IsOpen())
-             return DoJob::CONT;
-         else
-             return DoJob::IGR;
-    }
-
-    unsigned int GetResult()
-    {
-        return count ;
-    }
-private:
-    unsigned int count;
-};
-#endif
-
 void wxDataViewMainWindow::OnExpanding( unsigned int row )
 {
     wxDataViewTreeNode * node = GetTreeNodeByRow(row);
@@ -2877,23 +2800,6 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
             if( index == wxNOT_FOUND )
                 return NULL;
             node = nodes[index];
-#if 0
-            int j = 0;
-            for( ; j < len; j ++)
-            {
-                if( nodes[j]->GetItem() == *(n->GetData()))
-		  {
-                    node = nodes[j];
-                    break;
-                }
-            }
-            // Whenever we can't find the node in any level, return NULL to indicate the item can't be found
-            if( j == len )
-            {
-                found = false;
-                return NULL;
-            }
-#endif
         }
         else
             return NULL;
