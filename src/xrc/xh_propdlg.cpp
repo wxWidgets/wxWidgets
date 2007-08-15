@@ -22,10 +22,12 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/sizer.h"
+    #include "wx/frame.h"
 #endif
 
 #include "wx/bookctrl.h"
 #include "wx/propdlg.h"
+#include "wx/imaglist.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxPropertySheetDialogXmlHandler, wxXmlResourceHandler)
 
