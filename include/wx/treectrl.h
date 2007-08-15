@@ -290,13 +290,13 @@ public:
 
         // expand this item
     virtual void Expand(const wxTreeItemId& item) = 0;
-        // expand the item and all its childs and thats childs
+        // expand the item and all its children recursively
     void ExpandAllChildren(const wxTreeItemId& item);
         // expand all items
     void ExpandAll();
         // collapse the item without removing its children
     virtual void Collapse(const wxTreeItemId& item) = 0;
-        // collapse the item and all its childs and thats childs
+        // collapse the item and all its children
     void CollapseAllChildren(const wxTreeItemId& item);
         // collapse all items
     void CollapseAll();
