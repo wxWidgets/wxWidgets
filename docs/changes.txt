@@ -122,6 +122,7 @@ wxMSW:
 - Fixed bug with symbol resolving in wxStackWalker (Axel Gembe).
 - Fixed showing busy cursor for disabled windows and during wxExecute()
 - Added wxBORDER_THEME, used automatically by wxTextCtrl in wxTE_RICH[2] mode.
+- Fix problems with timers on SMP machines in wxAnimationCtrl (Gennady)
 
 wxGTK:
 
