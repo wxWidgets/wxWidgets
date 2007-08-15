@@ -238,10 +238,16 @@ wxPaintDC::wxPaintDC(wxWindow *canvas)
             ms_cache.Add(new wxPaintDCInfo(m_canvas, this));
     }
 
-    // (re)set the DC parameters.
     // Note: at this point m_hDC can be NULL under MicroWindows, when dragging.
-    if (GetHDC())
-        InitDC();
+    if (!GetHDC())
+        return;
+
+    // (re)set the DC parameters.
+    InitDC();
+
+    // the HDC can have a clipping box (which we didn't set), make sure our
+    // DoGetClippingBox() checks for it
+    //m_clipping = true;
 }
 
 wxPaintDC::~wxPaintDC()
