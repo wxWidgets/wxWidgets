@@ -19,7 +19,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(wxMDIParentFrameObserver);
 class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
 class WXDLLIMPEXP_FWD_CORE wxMDIClientWindow;
 
-WX_DECLARE_LIST(wxMDIChildFrame, wxCocoaMDIChildFrameList);
+WX_DECLARE_EXPORTED_LIST(wxMDIChildFrame, wxCocoaMDIChildFrameList);
 
 // ========================================================================
 // wxMDIParentFrame

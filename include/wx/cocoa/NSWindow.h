@@ -23,7 +23,7 @@ class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowCocoa;
 DECLARE_WXCOCOA_OBJC_CLASS(NSMenuItem);
 DECLARE_WXCOCOA_OBJC_CLASS(wxNSWindowDelegate);
 
-class wxCocoaNSWindow
+class WXDLLIMPEXP_CORE wxCocoaNSWindow
 {
 /* NSWindow is a rather special case and requires some extra attention */
     WX_DECLARE_OBJC_INTERFACE_HASHMAP(NSWindow)

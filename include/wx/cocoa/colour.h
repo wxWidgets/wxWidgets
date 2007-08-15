@@ -50,7 +50,6 @@ public:
     virtual ~wxColour();
 
     // accessors
-    bool Ok() const { return IsOk(); }
     bool IsOk() const { return m_cocoaNSColor; }
     WX_NSColor GetNSColor() { return m_cocoaNSColor; }
 

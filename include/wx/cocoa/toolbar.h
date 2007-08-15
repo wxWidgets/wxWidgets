@@ -25,7 +25,7 @@ typedef struct _NSPoint NSPoint;
 
 class wxToolBarTool;
 
-class wxToolBar : public wxToolBarBase
+class WXDLLIMPEXP_CORE wxToolBar : public wxToolBarBase
 {
     DECLARE_DYNAMIC_CLASS(wxToolBar)
 // ------------------------------------------------------------------------
