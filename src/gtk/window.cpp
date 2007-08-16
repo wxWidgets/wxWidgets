@@ -2111,6 +2111,7 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
 // "grab_broken" 
 //-----------------------------------------------------------------------------
 
+#ifdef __WXGTK210__
 static void
 gtk_window_grab_broken( GtkWidget *m_widget,
                         GdkEventGrabBroken *event,
@@ -2124,6 +2125,7 @@ gtk_window_grab_broken( GtkWidget *m_widget,
         win->GetEventHandler()->ProcessEvent( evt );
     }
 }
+#endif
 
 
 } // extern "C"
@@ -2540,16 +2542,26 @@ void wxWindowGTK::PostCreation()
         // Catch native resize events
         g_signal_connect (m_wxwindow, "size_allocate",
                           G_CALLBACK (gtk_window_size_callback), this);
-        // Make sure we can notify the app when mouse capture is lost
-        g_signal_connect (m_wxwindow, "grab_broken_event",
+#ifdef __WXGTK210__
+        if (!gtk_check_version(2,8,0))
+        {
+            // Make sure we can notify the app when mouse capture is lost
+            g_signal_connect (m_wxwindow, "grab_broken_event",
                           G_CALLBACK (gtk_window_grab_broken), this);
+        }
+#endif
     }
 
     if ( connect_widget != m_wxwindow )
     {
-        // Make sure we can notify app code when mouse capture is lost
-        g_signal_connect (connect_widget, "grab_broken_event",
+#ifdef __WXGTK210__
+        if (!gtk_check_version(2,8,0))
+        {
+            // Make sure we can notify app code when mouse capture is lost
+            g_signal_connect (connect_widget, "grab_broken_event",
                         G_CALLBACK (gtk_window_grab_broken), this);
+        }
+#endif
     }
 
 #if wxUSE_COMBOBOX
