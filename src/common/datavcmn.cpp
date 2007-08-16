@@ -43,7 +43,6 @@ wxDataViewModel::wxDataViewModel()
 {
     m_notifiers.DeleteContents( true );
     m_sortingColumn = 0;
-    m_ascending = true;
 }
 
 bool wxDataViewModel::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )
@@ -157,13 +156,6 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
     GetValue( value1, item1, m_sortingColumn );
     GetValue( value2, item2, m_sortingColumn );
 
-    if (!m_ascending)
-    {
-        wxVariant temp = value1;
-        value1 = value2;
-        value2 = temp;
-    }
-
     if (value1.GetType() == wxT("string"))
     {
         wxString str1 = value1.GetString();
@@ -197,8 +189,6 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
     unsigned long litem1 = (unsigned long) item1.GetID();
     unsigned long litem2 = (unsigned long) item2.GetID();
 
-    if (!m_ascending)
-        return litem2-litem1;
     return litem1-litem2;
 }
 

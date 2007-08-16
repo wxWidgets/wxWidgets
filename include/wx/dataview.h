@@ -155,9 +155,6 @@ public:
     
     void SetSortingColumn( unsigned int col ) { m_sortingColumn = col; }
     unsigned int GetSortingColumn() { return m_sortingColumn; }
-    void SetSortOrderAscending( bool ascending ) { m_ascending = ascending; }
-    bool GetSortOrderAscending() { return m_ascending; }
-    
     
 protected:
     // the user should not delete this class directly: he should use DecRef() instead!
@@ -165,7 +162,6 @@ protected:
 
     wxDataViewModelNotifiers  m_notifiers;
     unsigned int              m_sortingColumn;
-    bool                      m_ascending;
 };
 
 // ---------------------------------------------------------
