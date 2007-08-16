@@ -35,6 +35,11 @@
 #include "wx/mac/carbon/private.h"
 #endif
 
+#ifdef __WXGTK__
+#include <gtk/gtk.h>
+#include "wx/gtk/win_gtk.h"
+#endif
+
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(wxAuiNotebookPageArray)
 WX_DEFINE_OBJARRAY(wxAuiTabContainerButtonArray)
@@ -125,9 +130,9 @@ static void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags
                   wxT("cannot draw focus rectangle on wxDC of this type") );
 
     GtkStateType state;
-    if (flags & wxCONTROL_SELECTED)
-        state = GTK_STATE_SELECTED;
-    else
+    //if (flags & wxCONTROL_SELECTED)
+    //    state = GTK_STATE_SELECTED;
+    //else
         state = GTK_STATE_NORMAL;
 
     gtk_paint_focus( win->m_widget->style,
