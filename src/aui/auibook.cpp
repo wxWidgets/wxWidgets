@@ -2201,13 +2201,6 @@ void wxAuiTabCtrl::OnSize(wxSizeEvent& evt)
 
 void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
 {
-    // Set the focus
-    if (FindFocus() != this)
-    {
-        SetFocus();
-        Refresh();
-    }
-
     CaptureMouse();
     m_click_pt = wxDefaultPosition;
     m_is_dragging = false;
@@ -3237,13 +3230,23 @@ int wxAuiNotebook::GetSelection() const
 // SetSelection() sets the currently active page
 size_t wxAuiNotebook::SetSelection(size_t new_page)
 {
-    // don't change the page unless necessary
-    if ((int)new_page == m_curpage)
-        return m_curpage;
-
     wxWindow* wnd = m_tabs.GetWindowFromIdx(new_page);
     if (!wnd)
         return m_curpage;
+
+    // don't change the page unless necessary;
+    // however, clicking again on a tab should give it the focus.
+    if ((int)new_page == m_curpage)
+    {
+        wxAuiTabCtrl* ctrl;
+        int ctrl_idx;
+        if (FindTab(wnd, &ctrl, &ctrl_idx))
+        {
+            if (FindFocus() != ctrl)
+                ctrl->SetFocus();
+        }
+        return m_curpage;
+    }
 
     wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
     evt.SetSelection(new_page);
@@ -3287,9 +3290,10 @@ size_t wxAuiNotebook::SetSelection(size_t new_page)
                 tabctrl->Refresh();
             }
 
-            // We should set focus to the tab control if not already focused.
-            if (ctrl->IsShownOnScreen() && FindFocus() != ctrl)
-                ctrl->SetFocus();
+            // Set the focus to the page if we're not currently focused on the tab.
+            // This is Firefox-like behaviour.
+            if (wnd->IsShownOnScreen() && FindFocus() != ctrl)
+                wnd->SetFocus();
 
             return old_curpage;
         }
