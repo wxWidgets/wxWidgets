@@ -14,6 +14,8 @@
 
 #include <CoreFoundation/CFRunLoop.h>
 
+#define wxTRACE_COCOA_TrackingRect wxT("COCOA_TrackingRect")
+
 class wxCocoaTrackingRectManager
 {
     DECLARE_NO_COPY_CLASS(wxCocoaTrackingRectManager)
@@ -30,7 +32,6 @@ protected:
     wxWindow *m_window;
     bool m_isTrackingRectActive;
     int m_trackingRectTag;
-    CFRunLoopObserverRef m_runLoopObserver;
 private:
     wxCocoaTrackingRectManager();
 };
