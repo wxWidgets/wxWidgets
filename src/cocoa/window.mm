@@ -23,6 +23,7 @@
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
 #include "wx/cocoa/trackingrectmanager.h"
+#include "wx/mac/corefoundation/cfref.h"
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSRunLoop.h>
@@ -42,6 +43,9 @@
 #ifdef WXCOCOA_FILL_DUMMY_VIEW
 #import <AppKit/NSBezierPath.h>
 #endif //def WXCOCOA_FILL_DUMMY_VIEW
+
+// STL list used by wxCocoaMouseMovedEventSynthesizer
+#include <list>
 
 /* NSComparisonResult is typedef'd as an enum pre-Leopard but typedef'd as
  * NSInteger post-Leopard.  Pre-Leopard the Cocoa toolkit expects a function
@@ -1410,6 +1414,124 @@ wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 
 
 // ========================================================================
+// wxCocoaMouseMovedEventSynthesizer
+// ========================================================================
+
+/* This class registers one run loop observer to cover all windows registered with it.
+ *  It will register the observer when the first view is registerd and unregister the
+ * observer when the last view is unregistered.
+ * It is instantiated as a static s_mouseMovedSynthesizer in this file although there
+ * is no reason it couldn't be instantiated multiple times.
+ */
+class wxCocoaMouseMovedEventSynthesizer
+{
+    DECLARE_NO_COPY_CLASS(wxCocoaMouseMovedEventSynthesizer)
+public:
+    wxCocoaMouseMovedEventSynthesizer()
+    {   m_lastScreenMouseLocation = NSZeroPoint;
+    }
+    ~wxCocoaMouseMovedEventSynthesizer();
+    void RegisterWxCocoaView(wxCocoaNSView *aView);
+    void UnregisterWxCocoaView(wxCocoaNSView *aView);
+    void SynthesizeMouseMovedEvent();
+    
+protected:
+    void AddRunLoopObserver();
+    void RemoveRunLoopObserver();
+    wxCFRef<CFRunLoopObserverRef> m_runLoopObserver;
+    std::list<wxCocoaNSView*> m_registeredViews;
+    NSPoint m_lastScreenMouseLocation;
+    static void SynthesizeMouseMovedEvent(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info);
+};
+
+void wxCocoaMouseMovedEventSynthesizer::RegisterWxCocoaView(wxCocoaNSView *aView)
+{
+    m_registeredViews.push_back(aView);
+    wxLogTrace(wxTRACE_COCOA_TrackingRect, wxT("Registered wxCocoaNSView=%p"), aView);
+
+    if(!m_registeredViews.empty() && m_runLoopObserver == NULL)
+    {
+        AddRunLoopObserver();
+    }
+}
+
+void wxCocoaMouseMovedEventSynthesizer::UnregisterWxCocoaView(wxCocoaNSView *aView)
+{
+    m_registeredViews.remove(aView);
+    wxLogTrace(wxTRACE_COCOA_TrackingRect, wxT("Unregistered wxCocoaNSView=%p"), aView);
+    if(m_registeredViews.empty() && m_runLoopObserver != NULL)
+    {
+        RemoveRunLoopObserver();
+    }
+}
+
+wxCocoaMouseMovedEventSynthesizer::~wxCocoaMouseMovedEventSynthesizer()
+{
+    if(!m_registeredViews.empty())
+    {
+        // This means failure to clean up so we report on it as a debug message.
+        wxLogDebug(wxT("There are still %d wxCocoaNSView registered to receive mouse moved events at static destruction time"), m_registeredViews.size());
+        m_registeredViews.clear();
+    }
+    if(m_runLoopObserver != NULL)
+    {
+        // This should not occur unless m_registeredViews was not empty since the last object unregistered should have done this.
+        wxLogDebug(wxT("Removing run loop observer during static destruction time."));
+        RemoveRunLoopObserver();
+    }
+}
+
+void wxCocoaMouseMovedEventSynthesizer::SynthesizeMouseMovedEvent(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info)
+{
+    reinterpret_cast<wxCocoaMouseMovedEventSynthesizer*>(info)->SynthesizeMouseMovedEvent();
+}
+
+void wxCocoaMouseMovedEventSynthesizer::AddRunLoopObserver()
+{
+    CFRunLoopObserverContext observerContext =
+    {   0
+    ,   this
+    ,   NULL
+    ,   NULL
+    ,   NULL
+    };
+    m_runLoopObserver.reset(CFRunLoopObserverCreate(kCFAllocatorDefault, kCFRunLoopBeforeWaiting, TRUE, 0, SynthesizeMouseMovedEvent, &observerContext));
+    CFRunLoopAddObserver([[NSRunLoop currentRunLoop] getCFRunLoop], m_runLoopObserver, kCFRunLoopCommonModes);
+    wxLogTrace(wxTRACE_COCOA_TrackingRect, wxT("Added tracking rect run loop observer"));
+}
+
+void wxCocoaMouseMovedEventSynthesizer::RemoveRunLoopObserver()
+{
+    CFRunLoopRemoveObserver([[NSRunLoop currentRunLoop] getCFRunLoop], m_runLoopObserver, kCFRunLoopCommonModes);
+    m_runLoopObserver.reset();
+    wxLogTrace(wxTRACE_COCOA_TrackingRect, wxT("Removed tracking rect run loop observer"));
+}
+
+void wxCocoaMouseMovedEventSynthesizer::SynthesizeMouseMovedEvent()
+{
+    NSPoint screenMouseLocation = [NSEvent mouseLocation];
+    // Checking the last mouse location is done for a few reasons:
+    // 1. We are observing every iteration of the event loop so we'd be sending out a lot of extraneous events
+    //    telling the app the mouse moved when the user hit a key for instance.
+    // 2. When handling the mouse moved event, user code can do something to the view which will cause Cocoa to
+    //    call resetCursorRects.  Cocoa does this by using a delayed notification which means the event loop gets
+    //    pumped once which would mean that if we didn't check the mouse location we'd get into a never-ending
+    //    loop causing the tracking rectangles to constantly be reset.
+    if(screenMouseLocation.x != m_lastScreenMouseLocation.x || screenMouseLocation.y != m_lastScreenMouseLocation.y)
+    {
+        m_lastScreenMouseLocation = screenMouseLocation;
+        wxLogTrace(wxTRACE_COCOA_TrackingRect, wxT("Synthesizing mouse moved at screen (%f,%f)"), screenMouseLocation.x, screenMouseLocation.y);
+        for(std::list<wxCocoaNSView*>::iterator i = m_registeredViews.begin(); i != m_registeredViews.end(); ++i)
+        {
+            (*i)->Cocoa_synthesizeMouseMoved();
+        }
+    }
+}
+
+// Singleton used for all views:
+static wxCocoaMouseMovedEventSynthesizer s_mouseMovedSynthesizer;
+
+// ========================================================================
 // wxCocoaTrackingRectManager
 // ========================================================================
 
@@ -1417,7 +1539,6 @@ wxCocoaTrackingRectManager::wxCocoaTrackingRectManager(wxWindow *window)
 :   m_window(window)
 {
     m_isTrackingRectActive = false;
-    m_runLoopObserver = NULL;
     BuildTrackingRect();
 }
 
@@ -1434,12 +1555,7 @@ void wxCocoaTrackingRectManager::ClearTrackingRect()
 
 void wxCocoaTrackingRectManager::StopSynthesizingEvents()
 {
-    if(m_runLoopObserver != NULL)
-    {
-        CFRunLoopRemoveObserver([[NSRunLoop currentRunLoop] getCFRunLoop], m_runLoopObserver, kCFRunLoopCommonModes);
-        CFRelease(m_runLoopObserver);
-        m_runLoopObserver = NULL;
-    }
+    s_mouseMovedSynthesizer.UnregisterWxCocoaView(m_window);
 }
 
 void wxCocoaTrackingRectManager::BuildTrackingRect()
@@ -1455,29 +1571,9 @@ void wxCocoaTrackingRectManager::BuildTrackingRect()
     }
 }
 
-static NSPoint s_lastScreenMouseLocation = NSZeroPoint;
-
-static void SynthesizeMouseMovedEvent(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info)
-{
-    NSPoint screenMouseLocation = [NSEvent mouseLocation];
-    if(screenMouseLocation.x != s_lastScreenMouseLocation.x || screenMouseLocation.y != s_lastScreenMouseLocation.y)
-    {
-        wxCocoaNSView *win = reinterpret_cast<wxCocoaNSView*>(info);
-        win->Cocoa_synthesizeMouseMoved();
-    }
-}
-
 void wxCocoaTrackingRectManager::BeginSynthesizingEvents()
 {
-    CFRunLoopObserverContext observerContext =
-    {   0
-    ,   static_cast<wxCocoaNSView*>(m_window)
-    ,   NULL
-    ,   NULL
-    ,   NULL
-    };
-    m_runLoopObserver = CFRunLoopObserverCreate(kCFAllocatorDefault, kCFRunLoopBeforeWaiting, TRUE, 0, SynthesizeMouseMovedEvent, &observerContext);
-    CFRunLoopAddObserver([[NSRunLoop currentRunLoop] getCFRunLoop], m_runLoopObserver, kCFRunLoopCommonModes);
+    s_mouseMovedSynthesizer.RegisterWxCocoaView(m_window);
 }
 
 void wxCocoaTrackingRectManager::RebuildTrackingRect()
