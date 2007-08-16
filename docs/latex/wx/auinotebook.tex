@@ -70,6 +70,12 @@ Constructor. Creates a wxAuiNotebok control.
 
 Adds a page.  If the {\it select} parameter is true, calling this will generate a page change event.
 
+\membersection{wxAuiNotebook::AdvanceSelection}\label{wxauinotebookadvanceselection}
+
+\func{void}{AdvanceSelection}{\param{bool }{forward = true}}
+
+Sets the selection to the next or previous page.
+
 \membersection{wxAuiNotebook::Create}\label{wxauinotebookcreate}
 
 \func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}}
@@ -233,7 +239,10 @@ the page that will be split off.  This page will also become the active page aft
 split.  The \arg{direction} argument specifies where the pane should go, it should be one
 of the following: wxTOP, wxBOTTOM, wxLEFT, or wxRIGHT.
 
+\membersection{wxAuiNotebook::ShowWindowMenu}\label{wxauinotebookshowwindowmenu}
 
+\func{bool}{ShowWindowMenu}{\void}
 
-
+Shows the window menu for the active tab control associated with this notebook,
+and returns \true if a selection was made.
 

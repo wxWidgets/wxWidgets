@@ -31,6 +31,8 @@
 #include "wx/aui/tabmdi.h"
 #include "wx/dcbuffer.h"
 
+#include "wx/renderer.h"
+
 #ifdef __WXMAC__
 #include "wx/mac/carbon/private.h"
 #endif
@@ -51,7 +53,6 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_DOWN)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN)
-
 
 IMPLEMENT_CLASS(wxAuiNotebook, wxControl)
 IMPLEMENT_CLASS(wxAuiTabCtrl, wxControl)
@@ -487,10 +488,10 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
         close_button_width = m_active_close_bmp.GetWidth();
     }
 
-
+    int bitmap_offset = 0;
     if (page.bitmap.IsOk())
     {
-        int bitmap_offset = tab_x + 8;
+        bitmap_offset = tab_x + 8;
 
         // draw bitmap
         dc.DrawBitmap(page.bitmap,
@@ -500,6 +501,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
 
         text_offset = bitmap_offset + page.bitmap.GetWidth();
         text_offset += 3; // bitmap padding
+
     }
     else
     {
@@ -516,8 +518,30 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
                 text_offset,
                 drawn_tab_yoff + (drawn_tab_height)/2 - (texty/2) - 1);
 
+    // draw focus rectangle
+    if (page.active && (wnd->FindFocus() == wnd))
+    {
+        wxRect focusRectText(text_offset, (drawn_tab_yoff + (drawn_tab_height)/2 - (texty/2) - 1),
+            selected_textx, selected_texty);
 
+        wxRect focusRect;
+        wxRect focusRectBitmap;
 
+        if (page.bitmap.IsOk())
+            focusRectBitmap = wxRect(bitmap_offset, drawn_tab_yoff + (drawn_tab_height/2) - (page.bitmap.GetHeight()/2),
+                                            page.bitmap.GetWidth(), page.bitmap.GetHeight());
+
+        if (page.bitmap.IsOk() && draw_text.IsEmpty())
+            focusRect = focusRectBitmap;
+        else if (!page.bitmap.IsOk() && !draw_text.IsEmpty())
+            focusRect = focusRectText;
+        else if (page.bitmap.IsOk() && !draw_text.IsEmpty())
+            focusRect = focusRectText.Union(focusRectBitmap);
+
+        focusRect.Inflate(2, 2);
+
+        wxRendererNative::Get().DrawFocusRect(wnd, dc, focusRect, 0);
+    }
 
     // draw close button if necessary
     if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
@@ -660,7 +684,6 @@ void wxAuiDefaultTabArt::DrawButton(wxDC& dc,
 
     *out_rect = rect;
 }
-
 
 int wxAuiDefaultTabArt::ShowDropDown(wxWindow* wnd,
                                      const wxAuiNotebookPageArray& pages,
@@ -992,6 +1015,17 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
                  (tab_y + tab_height)/2 - (texty/2) + 1);
 
 
+    // draw focus rectangle
+    if (page.active && (wnd->FindFocus() == wnd))
+    {
+        wxRect focusRect(text_offset, ((tab_y + tab_height)/2 - (texty/2) + 1),
+            selected_textx, selected_texty);
+
+        focusRect.Inflate(2, 2);
+
+        wxRendererNative::Get().DrawFocusRect(wnd, dc, focusRect, 0);
+    }
+
     // draw close button if necessary
     if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
     {
@@ -1114,7 +1148,6 @@ void wxAuiSimpleTabArt::DrawButton(wxDC& dc,
 
     *out_rect = rect;
 }
-
 
 int wxAuiSimpleTabArt::ShowDropDown(wxWindow* wnd,
                                     const wxAuiNotebookPageArray& pages,
@@ -1823,6 +1856,163 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
                  &dc, 0, 0);
 }
 
+// Is the tab visible?
+bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWindow* wnd)
+{
+    if (!dc || !dc->IsOk())
+        return false;
+
+    size_t i;
+    size_t page_count = m_pages.GetCount();
+    size_t button_count = m_buttons.GetCount();
+
+    // Hasn't been rendered yet; assume it's visible
+    if (m_tab_close_buttons.GetCount() < page_count)
+        return true;
+
+    // First check if both buttons are disabled - if so, there's no need to
+    // check further for visibility.
+    int arrowButtonVisibleCount = 0;
+    for (i = 0; i < button_count; ++i)
+    {
+        wxAuiTabContainerButton& button = m_buttons.Item(i);
+        if (button.id == wxAUI_BUTTON_LEFT ||
+            button.id == wxAUI_BUTTON_RIGHT)
+        {
+            if ((button.cur_state & wxAUI_BUTTON_STATE_HIDDEN) == 0)
+                arrowButtonVisibleCount ++;
+        }
+    }
+
+    // Tab must be visible
+    if (arrowButtonVisibleCount == 0)
+        return true;
+
+    // If tab is less than the given offset, it must be invisible by definition
+    if (tabPage < tabOffset)
+        return false;
+
+    // draw buttons
+    int left_buttons_width = 0;
+    int right_buttons_width = 0;
+
+    int offset = 0;
+
+    // calculate size of the buttons on the right side
+    offset = m_rect.x + m_rect.width;
+    for (i = 0; i < button_count; ++i)
+    {
+        wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
+
+        if (button.location != wxRIGHT)
+            continue;
+        if (button.cur_state & wxAUI_BUTTON_STATE_HIDDEN)
+            continue;
+
+        offset -= button.rect.GetWidth();
+        right_buttons_width += button.rect.GetWidth();
+    }
+
+    offset = 0;
+
+    // calculate size of the buttons on the left side
+    for (i = 0; i < button_count; ++i)
+    {
+        wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
+
+        if (button.location != wxLEFT)
+            continue;
+        if (button.cur_state & wxAUI_BUTTON_STATE_HIDDEN)
+            continue;
+
+        offset += button.rect.GetWidth();
+        left_buttons_width += button.rect.GetWidth();
+    }
+
+    offset = left_buttons_width;
+
+    if (offset == 0)
+        offset += m_art->GetIndentSize();
+
+    wxRect active_rect;
+
+    wxRect rect = m_rect;
+    rect.y = 0;
+    rect.height = m_rect.height;
+
+    // See if the given page is visible at the given tab offset (effectively scroll position)
+    for (i = tabOffset; i < page_count; ++i)
+    {
+        wxAuiNotebookPage& page = m_pages.Item(i);
+        wxAuiTabContainerButton& tab_button = m_tab_close_buttons.Item(i);
+
+        // determine if a close button is on this tab
+        if ((m_flags & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0 ||
+            ((m_flags & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0 && page.active))
+        {
+            if (tab_button.cur_state == wxAUI_BUTTON_STATE_HIDDEN)
+            {
+                tab_button.id = wxAUI_BUTTON_CLOSE;
+                tab_button.cur_state = wxAUI_BUTTON_STATE_NORMAL;
+                tab_button.location = wxCENTER;
+            }
+        }
+        else
+        {
+            tab_button.cur_state = wxAUI_BUTTON_STATE_HIDDEN;
+        }
+
+        rect.x = offset;
+        rect.width = m_rect.width - right_buttons_width - offset - 2;
+
+        if (rect.width <= 0)
+            return false; // haven't found the tab, and we've run out of space, so return false
+
+        int x_extent = 0;
+        wxSize size = m_art->GetTabSize(*dc,
+                            wnd,
+                            page.caption,
+                            page.bitmap,
+                            page.active,
+                            tab_button.cur_state,
+                            &x_extent);
+
+        offset += x_extent;
+
+        if (i == (size_t) tabPage)
+        {
+            // If not all of the tab is visible, and supposing there's space to display it all,
+            // we could do better so we return false.
+            if (((m_rect.width - right_buttons_width - offset - 2) <= 0) && ((m_rect.width - right_buttons_width - left_buttons_width) > x_extent))
+                return false;
+            else
+                return true;
+        }
+    }
+
+    // Shouldn't really get here, but if it does, assume the tab is visible to prevent
+    // further looping in calling code.
+    return true;
+}
+
+// Make the tab visible if it wasn't already
+void wxAuiTabContainer::MakeTabVisible(int tabPage, wxWindow* win)
+{
+    wxClientDC dc(win);
+    if (!IsTabVisible(tabPage, GetTabOffset(), & dc, win))
+    {
+        int i;
+        for (i = 0; i < (int) m_pages.GetCount(); i++)
+        {
+            if (IsTabVisible(tabPage, i, & dc, win))
+            {
+                SetTabOffset(i);
+                win->Refresh();
+                return;
+            }
+        }
+    }
+}
 
 // TabHitTest() tests if a tab was hit, passing the window pointer
 // back if that condition was fulfilled.  The function returns
@@ -1966,6 +2156,9 @@ BEGIN_EVENT_TABLE(wxAuiTabCtrl, wxControl)
     EVT_MOTION(wxAuiTabCtrl::OnMotion)
     EVT_LEAVE_WINDOW(wxAuiTabCtrl::OnLeaveWindow)
     EVT_AUINOTEBOOK_BUTTON(wxID_ANY, wxAuiTabCtrl::OnButton)
+    EVT_SET_FOCUS(wxAuiTabCtrl::OnSetFocus)
+    EVT_KILL_FOCUS(wxAuiTabCtrl::OnKillFocus)
+    EVT_CHAR(wxAuiTabCtrl::OnChar)
 END_EVENT_TABLE()
 
 
@@ -2008,6 +2201,13 @@ void wxAuiTabCtrl::OnSize(wxSizeEvent& evt)
 
 void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
 {
+    // Set the focus
+    if (FindFocus() != this)
+    {
+        SetFocus();
+        Refresh();
+    }
+
     CaptureMouse();
     m_click_pt = wxDefaultPosition;
     m_is_dragging = false;
@@ -2265,6 +2465,127 @@ void wxAuiTabCtrl::OnButton(wxAuiNotebookEvent& event)
     }
 }
 
+void wxAuiTabCtrl::OnSetFocus(wxFocusEvent& WXUNUSED(event))
+{
+    Refresh();
+}
+
+void wxAuiTabCtrl::OnKillFocus(wxFocusEvent& WXUNUSED(event))
+{
+    Refresh();
+}
+
+void wxAuiTabCtrl::OnChar(wxKeyEvent& event)
+{
+    if (GetActivePage() == -1)
+    {
+        event.Skip();
+        return;
+    }
+
+    // We can't leave tab processing to the system; on Windows, tabs and keys
+    // get eaten by the system and not processed properly if we specify both
+    // wxTAB_TRAVERSAL and wxWANTS_CHARS. And if we specify just wxTAB_TRAVERSAL,
+    // we don't key arrow key events.
+
+    int key = event.GetKeyCode();
+
+    if (key == WXK_NUMPAD_PAGEUP)
+        key = WXK_PAGEUP;
+    if (key == WXK_NUMPAD_PAGEDOWN)
+        key = WXK_PAGEDOWN;
+    if (key == WXK_NUMPAD_HOME)
+        key = WXK_HOME;
+    if (key == WXK_NUMPAD_END)
+        key = WXK_END;
+    if (key == WXK_NUMPAD_LEFT)
+        key = WXK_LEFT;
+    if (key == WXK_NUMPAD_RIGHT)
+        key = WXK_RIGHT;
+
+    if (key == WXK_TAB || key == WXK_PAGEUP || key == WXK_PAGEDOWN)
+    {
+        bool bCtrlDown = event.ControlDown();
+        bool bShiftDown = event.ShiftDown();
+
+        bool bForward = (key == WXK_TAB && !bShiftDown) || (key == WXK_PAGEDOWN);
+        bool bWindowChange = (key == WXK_PAGEUP) || (key == WXK_PAGEDOWN) || bCtrlDown;
+        bool bFromTab = (key == WXK_TAB);
+
+        wxAuiNotebook* nb = wxDynamicCast(GetParent(), wxAuiNotebook);
+        if (!nb)
+        {
+            event.Skip();
+            return;
+        }
+
+        wxNavigationKeyEvent keyEvent;
+        keyEvent.SetDirection(bForward);
+        keyEvent.SetWindowChange(bWindowChange);
+        keyEvent.SetFromTab(bFromTab);
+        keyEvent.SetEventObject(nb);
+
+        if (!nb->GetEventHandler()->ProcessEvent(keyEvent))
+        {
+            // Not processed? Do an explicit tab into the page.
+            wxWindow* win = GetWindowFromIdx(GetActivePage());
+            if (win)
+                win->SetFocus();
+        }
+        return;
+    }
+
+    if (m_pages.GetCount() < 2)
+    {
+        event.Skip();
+        return;
+    }
+
+    int newPage = -1;
+
+    if (key == WXK_RIGHT)
+    {
+        if (m_pages.GetCount() > 1)
+        {
+            if (GetActivePage() == -1)
+                newPage = 0;
+            else if (GetActivePage() < (int) (m_pages.GetCount() - 1))
+                newPage = GetActivePage() + 1;
+        }
+    }
+    else if (key == WXK_LEFT)
+    {
+        if (m_pages.GetCount() > 1)
+        {
+            if (GetActivePage() == -1)
+                newPage = (int) (m_pages.GetCount() - 1);
+            else if (GetActivePage() > 0)
+                newPage = GetActivePage() - 1;
+        }
+    }
+    else if (key == WXK_HOME)
+    {
+        newPage = 0;
+    }
+    else if (key == WXK_END)
+    {
+        newPage = (int) (m_pages.GetCount() - 1);
+    }
+    else
+        event.Skip();
+
+    if (newPage != -1)
+    {
+        wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
+        e.SetSelection(newPage);
+        e.SetOldSelection(newPage);
+        e.SetEventObject(this);
+        this->GetEventHandler()->ProcessEvent(e);
+    }
+    else
+        event.Skip();
+}
+
 // wxTabFrame is an interesting case.  It's important that all child pages
 // of the multi-notebook control are all actually children of that control
 // (and not grandchildren).  wxTabFrame facilitates this.  There is one
@@ -2397,6 +2718,7 @@ BEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
     EVT_COMMAND_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
                       wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP,
                       wxAuiNotebook::OnTabRightUp)
+    EVT_NAVIGATION_KEY(wxAuiNotebook::OnNavigationKey)
 END_EVENT_TABLE()
 
 wxAuiNotebook::wxAuiNotebook()
@@ -2947,7 +3269,7 @@ size_t wxAuiNotebook::SetSelection(size_t new_page)
             DoSizing();
             ctrl->DoShowHide();
 
-
+            ctrl->MakeTabVisible(ctrl_idx, ctrl);
 
             // set fonts
             wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
@@ -2965,7 +3287,9 @@ size_t wxAuiNotebook::SetSelection(size_t new_page)
                 tabctrl->Refresh();
             }
 
-            wnd->SetFocus();
+            // We should set focus to the tab control if not already focused.
+            if (ctrl->IsShownOnScreen() && FindFocus() != ctrl)
+                ctrl->SetFocus();
 
             return old_curpage;
         }
@@ -3049,7 +3373,7 @@ wxAuiTabCtrl* wxAuiNotebook::GetActiveTabCtrl()
                                         m_tab_id_counter++,
                                         wxDefaultPosition,
                                         wxDefaultSize,
-                                        wxNO_BORDER);
+                                        wxNO_BORDER|wxWANTS_CHARS);
     tabframe->m_tabs->SetFlags(m_flags);
     tabframe->m_tabs->SetArtProvider(m_tabs.GetArtProvider()->Clone());
     m_mgr.AddPane(tabframe,
@@ -3132,7 +3456,7 @@ void wxAuiNotebook::Split(size_t page, int direction)
                                         m_tab_id_counter++,
                                         wxDefaultPosition,
                                         wxDefaultSize,
-                                        wxNO_BORDER);
+                                        wxNO_BORDER|wxWANTS_CHARS);
     new_tabs->m_tabs->SetArtProvider(m_tabs.GetArtProvider()->Clone());
     new_tabs->m_tabs->SetFlags(m_flags);
     dest_tabs = new_tabs->m_tabs;
@@ -3519,7 +3843,7 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
                                                 m_tab_id_counter++,
                                                 wxDefaultPosition,
                                                 wxDefaultSize,
-                                                wxNO_BORDER);
+                                                wxNO_BORDER|wxWANTS_CHARS);
             new_tabs->m_tabs->SetArtProvider(m_tabs.GetArtProvider()->Clone());
             new_tabs->m_tabs->SetFlags(m_flags);
 
@@ -3693,6 +4017,80 @@ void wxAuiNotebook::OnChildFocus(wxChildFocusEvent& evt)
     }
 }
 
+void wxAuiNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
+{
+    if ( event.IsWindowChange() ) {
+        // change pages
+        // FIXME: the problem with this is that if we have a split notebook,
+        // we selection may go all over the place.
+        AdvanceSelection(event.GetDirection());
+    }
+    else {
+        // we get this event in 3 cases
+        //
+        // a) one of our pages might have generated it because the user TABbed
+        // out from it in which case we should propagate the event upwards and
+        // our parent will take care of setting the focus to prev/next sibling
+        //
+        // or
+        //
+        // b) the parent panel wants to give the focus to us so that we
+        // forward it to our selected page. We can't deal with this in
+        // OnSetFocus() because we don't know which direction the focus came
+        // from in this case and so can't choose between setting the focus to
+        // first or last panel child
+        //
+        // or
+        //
+        // c) we ourselves (see MSWTranslateMessage) generated the event
+        //
+        wxWindow * const parent = GetParent();
+
+        // the wxObject* casts are required to avoid MinGW GCC 2.95.3 ICE
+        const bool isFromParent = event.GetEventObject() == (wxObject*) parent;
+        const bool isFromSelf = event.GetEventObject() == (wxObject*) this;
+
+        if ( isFromParent || isFromSelf )
+        {
+            // no, it doesn't come from child, case (b) or (c): forward to a
+            // page but only if direction is backwards (TAB) or from ourselves,
+            if ( GetSelection() != wxNOT_FOUND &&
+                    (!event.GetDirection() || isFromSelf) )
+            {
+                // so that the page knows that the event comes from it's parent
+                // and is being propagated downwards
+                event.SetEventObject(this);
+
+                wxWindow *page = GetPage(GetSelection());
+                if ( !page->GetEventHandler()->ProcessEvent(event) )
+                {
+                    page->SetFocus();
+                }
+                //else: page manages focus inside it itself
+            }
+            else // otherwise set the focus to the notebook itself
+            {
+                SetFocus();
+            }
+        }
+        else
+        {
+            // it comes from our child, case (a), pass to the parent, but only
+            // if the direction is forwards. Otherwise set the focus to the
+            // notebook itself. The notebook is always the 'first' control of a
+            // page.
+            if ( !event.GetDirection() )
+            {
+                SetFocus();
+            }
+            else if ( parent )
+            {
+                event.SetCurrentFocus(this);
+                parent->GetEventHandler()->ProcessEvent(event);
+            }
+        }
+    }
+}
 
 void wxAuiNotebook::OnTabButton(wxCommandEvent& command_evt)
 {
@@ -3857,5 +4255,53 @@ int wxAuiNotebook::GetHeightForPageHeight(int pageHeight)
     return tabCtrlHeight + pageHeight + decorHeight;
 }
 
+// Advances the selection, generation page selection events
+void wxAuiNotebook::AdvanceSelection(bool forward)
+{
+    if (GetPageCount() <= 1)
+        return;
+
+    int currentSelection = GetSelection();
+
+    if (forward)
+    {
+        if (currentSelection == (int) (GetPageCount() - 1))
+            return;
+        else if (currentSelection == -1)
+            currentSelection = 0;
+        else
+            currentSelection ++;
+    }
+    else
+    {
+        if (currentSelection <= 0)
+            return;
+        else
+            currentSelection --;
+    }
+
+    SetSelection(currentSelection);
+}
+
+// Shows the window menu
+bool wxAuiNotebook::ShowWindowMenu()
+{
+    wxAuiTabCtrl* tabCtrl = GetActiveTabCtrl();
+
+    int idx = tabCtrl->GetArtProvider()->ShowDropDown(tabCtrl, tabCtrl->GetPages(), tabCtrl->GetActivePage());
+
+    if (idx != -1)
+    {
+        wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, tabCtrl->GetId());
+        e.SetSelection(idx);
+        e.SetOldSelection(tabCtrl->GetActivePage());
+        e.SetEventObject(tabCtrl);
+        GetEventHandler()->ProcessEvent(e);
+
+        return true;
+    }
+    else
+        return false;
+}
 
 #endif // wxUSE_AUI

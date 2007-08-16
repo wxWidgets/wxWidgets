@@ -416,6 +416,12 @@ public:
     size_t GetTabOffset() const;
     void SetTabOffset(size_t offset);
 
+    // Is the tab visible?
+    bool IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWindow* wnd);
+
+    // Make the tab visible if it wasn't already
+    void MakeTabVisible(int tabPage, wxWindow* win);
+
 protected:
 
     virtual void Render(wxDC* dc, wxWindow* wnd);
@@ -446,9 +452,7 @@ public:
 
     ~wxAuiTabCtrl();
 
-#if wxABI_VERSION >= 20805
     bool IsDragging() const { return m_is_dragging; }
-#endif
 
 protected:
 
@@ -464,7 +468,9 @@ protected:
     void OnMotion(wxMouseEvent& evt);
     void OnLeaveWindow(wxMouseEvent& evt);
     void OnButton(wxAuiNotebookEvent& evt);
-
+    void OnSetFocus(wxFocusEvent& event);
+    void OnKillFocus(wxFocusEvent& event);
+    void OnChar(wxKeyEvent& event);
 
 protected:
 
@@ -560,6 +566,18 @@ public:
     // Gets the height of the notebook for a given page height
     int GetHeightForPageHeight(int pageHeight);
 
+    // Advances the selection, generation page selection events
+    void AdvanceSelection(bool forward = true);
+
+    // Shows the window menu
+    bool ShowWindowMenu();
+
+    // we do have multiple pages
+    virtual bool HasMultiplePages() const { return true; }
+
+    // we don't want focus for ourselves
+    virtual bool AcceptsFocus() const { return false; }
+
 protected:
 
     // these can be overridden
@@ -592,6 +610,7 @@ protected:
     void OnTabMiddleUp(wxCommandEvent& evt);
     void OnTabRightDown(wxCommandEvent& evt);
     void OnTabRightUp(wxCommandEvent& evt);
+    void OnNavigationKey(wxNavigationKeyEvent& event);
 
     // set selection to the given window (which must be non-NULL and be one of
     // our pages, otherwise an assert is raised)
@@ -675,7 +694,6 @@ typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN, winid, wxAuiNotebookEventHandler(fn))
 #define EVT_AUINOTEBOOK_TAB_RIGHT_UP(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP, winid, wxAuiNotebookEventHandler(fn))
-
 #else
 
 // wxpython/swig event work
@@ -687,7 +705,6 @@ typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
 %constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_END_DRAG;
 %constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION;
 %constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND;
-
 %pythoncode {
     EVT_AUINOTEBOOK_PAGE_CLOSE = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, 1 )
     EVT_AUINOTEBOOK_PAGE_CHANGED = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, 1 )
@@ -697,6 +714,8 @@ typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
     EVT_AUINOTEBOOK_END_DRAG = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, 1 )
     EVT_AUINOTEBOOK_DRAG_MOTION = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, 1 )
     EVT_AUINOTEBOOK_ALLOW_DND = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND, 1 )
+    EVT_AUINOTEBOOK_NAVIGATE_FORWARD = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_NAVIGATE_FORWARD, 1 )
+    EVT_AUINOTEBOOK_NAVIGATE_BACK = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_NAVIGATE_BACK, 1 )
 }
 #endif
 
