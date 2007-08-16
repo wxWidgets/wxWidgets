@@ -509,8 +509,8 @@ public:
                                    const wxRect& rect,
                                    int flags)
         { m_renderer->DrawButtonSurface(dc, col, rect, flags); }
-    virtual void DrawFocusRect(wxDC& dc, const wxRect& rect, int flags = 0)
-        { m_renderer->DrawFocusRect(dc, rect, flags); }
+    virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0)
+        { m_renderer->DrawFocusRect(win, dc, rect, flags); }
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,
