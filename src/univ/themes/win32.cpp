@@ -2053,7 +2053,7 @@ void wxWin32Renderer::DrawSliderShaft(wxDC& dc,
     */
 
     if (flags & wxCONTROL_FOCUSED) {
-        DrawFocusRect(dc, rectOrig);
+        DrawFocusRect(NULL, dc, rectOrig);
     }
 
     wxRect rect = GetSliderShaftRect(rectOrig, lenThumb, orient, style);

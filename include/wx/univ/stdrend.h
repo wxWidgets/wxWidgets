@@ -38,7 +38,8 @@ public:
                                    int flags);
 
 
-    virtual void DrawFocusRect(wxDC& dc, const wxRect& rect, int flags = 0);
+    virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0);
+
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,

@@ -136,6 +136,15 @@ rectangle of a drop down button which arrow matches the size you need.
 \arg{flags} may have the \texttt{wxCONTROL\_PRESSED} or \texttt{wxCONTROL\_CURRENT} bit set.
 
 
+\membersection{wxRendererNative::DrawFocusRect}\label{wxrenderernativedrawfocusrect}
+
+\func{void}{DrawFocusRect}{\param{wxWindow* }{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags = 0}}
+
+Draw a focus rectangle using the specified rectangle.
+\helpref{wxListCtrl}{wxlistctrl}. The only supported flags is 
+\texttt{wxCONTROL\_SELECTED} for items which are selected.
+
+
 \membersection{wxRendererNative::DrawHeaderButton}\label{wxrenderernativedrawheaderbutton}
 
 \func{int}{DrawHeaderButton}{\param{wxWindow* }{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags = 0}, \param{wxHeaderSortIconType }{sortArrow = wxHDR\_SORT\_ICON\_NONE}, \param{wxHeaderButtonParams* }{params = NULL}}

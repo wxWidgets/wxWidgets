@@ -199,7 +199,7 @@ void wxStdRenderer::DrawButtonSurface(wxDC& dc,
 // ----------------------------------------------------------------------------
 
 void
-wxStdRenderer::DrawFocusRect(wxDC& dc, const wxRect& rect, int WXUNUSED(flags))
+wxStdRenderer::DrawFocusRect(wxWindow* WXUNUSED(win), wxDC& dc, const wxRect& rect, int WXUNUSED(flags))
 {
     // draw the pixels manually because the "dots" in wxPen with wxDOT style
     // may be short traits and not really dots
@@ -290,7 +290,7 @@ void wxStdRenderer::DrawButtonLabel(wxDC& dc,
     {
         rectLabel.Inflate(-1);
 
-        DrawFocusRect(dc, rectLabel);
+        DrawFocusRect(NULL, dc, rectLabel);
     }
 }
 
@@ -632,7 +632,7 @@ void wxStdRenderer::DrawItem(wxDC& dc,
 
     if ( flags & wxCONTROL_FOCUSED )
     {
-        DrawFocusRect(dc, rect, flags);
+        DrawFocusRect(NULL, dc, rect, flags);
     }
 }
 

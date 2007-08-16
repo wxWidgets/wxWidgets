@@ -92,6 +92,8 @@ public:
                                        const wxRect& rect,
                                        int flags = 0);
 
+    virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0);
+
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
 private:
@@ -188,7 +190,7 @@ GtkWidget *
 wxRendererGTK::GetHeaderButtonWidget()
 {
     static GtkWidget *s_button = NULL;
-    
+
     if ( !s_button )
     {
         // Get the dummy tree widget, give it a column, and then use the
@@ -216,7 +218,7 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
 {
 
     GtkWidget *button = GetHeaderButtonWidget();
-    
+
     GdkWindow* gdk_window = dc.GetGDKWindow();
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
@@ -576,4 +578,28 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
                          rect.width,
                          rect.height );
     }
+}
+
+void wxRendererGTK::DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
+{
+    GdkWindow* gdk_window = dc.GetGDKWindow();
+    wxASSERT_MSG( gdk_window,
+                  wxT("cannot use wxRendererNative on wxDC of this type") );
+
+    GtkStateType state;
+    if (flags & wxCONTROL_SELECTED)
+        state = GTK_STATE_SELECTED;
+    else
+        state = GTK_STATE_NORMAL;
+
+    gtk_paint_focus( win->m_widget->style,
+                     gdk_window,
+                     state,
+                     NULL,
+                     win->m_wxwindow,
+                     NULL,
+                     dc.LogicalToDeviceX(rect.x),
+                     dc.LogicalToDeviceY(rect.y),
+                     rect.width,
+                     rect.height );
 }

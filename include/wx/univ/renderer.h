@@ -90,12 +90,6 @@ public:
                                    const wxRect& rect,
                                    int flags) = 0;
 
-
-    // draw the focus rectangle around the label contained in the given rect
-    //
-    // only wxCONTROL_SELECTED makes sense in flags here
-    virtual void DrawFocusRect(wxDC& dc, const wxRect& rect, int flags = 0) = 0;
-
     // draw the label inside the given rectangle with the specified alignment
     // and optionally emphasize the character with the given index
     virtual void DrawLabel(wxDC& dc,

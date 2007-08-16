@@ -115,6 +115,7 @@ public:
                                 const wxRect& rect,
                                 int flags = 0);
 
+    virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0);
 private:
     DECLARE_NO_COPY_CLASS(wxRendererMSW)
 };
@@ -274,6 +275,14 @@ wxRendererMSW::DrawPushButton(wxWindow * WXUNUSED(win),
     wxCopyRectToRECT(rect, rc);
 
     ::DrawFrameControl(GetHdcOf(dc), &rc, DFC_BUTTON, style);
+}
+
+void wxRendererMSW::DrawFocusRect(wxWindow* WXUNUSED(win), wxDC& dc, const wxRect& rect, int WXUNUSED(flags))
+{
+    RECT rc;
+    wxCopyRectToRECT(rect, rc);
+
+    ::DrawFocusRect(GetHdcOf(dc), &rc);
 }
 
 // ============================================================================

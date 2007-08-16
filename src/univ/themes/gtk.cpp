@@ -85,7 +85,7 @@ public:
     wxGTKRenderer(const wxColourScheme *scheme);
 
     // wxRenderer methods
-    virtual void DrawFocusRect(wxDC& dc, const wxRect& rect, int flags = 0);
+    virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0);
     virtual void DrawTextBorder(wxDC& dc,
                                 wxBorder border,
                                 const wxRect& rect,
@@ -814,7 +814,7 @@ void wxGTKRenderer::DrawSunkenBorder(wxDC& dc, wxRect *rect)
 }
 
 void
-wxGTKRenderer::DrawFocusRect(wxDC& dc, const wxRect& rect, int WXUNUSED(flags))
+wxGTKRenderer::DrawFocusRect(wxWindow* WXUNUSED(win), wxDC& dc, const wxRect& rect, int WXUNUSED(flags))
 {
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
     wxRect rectFocus = rect;
