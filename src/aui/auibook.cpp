@@ -162,9 +162,13 @@ static void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags
 
     dc.SetPen(*wxBLACK_PEN);
 
+#ifdef __WXMAC__
+    dc.SetLogicalFunction(wxCOPY);
+#else
     // this seems to be closer than what Windows does than wxINVERT although
     // I'm still not sure if it's correct
     dc.SetLogicalFunction(wxAND_REVERSE);
+#endif
 
     wxCoord z;
     for ( z = x1 + 1; z < x2; z += 2 )
