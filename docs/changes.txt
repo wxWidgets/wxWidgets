@@ -112,6 +112,8 @@ All (GUI):
   wxMenuBar::GetMenuLabelText, wxMenu::GetLabelText, wxMenuItem::SetItemLabel,
   wxMenuItem::GetItemLabel, wxMenuItem::GetItemLabelText, wxMenuItem::GetLabelText.
   Retrieval of labels with and without mnemonics/accelerators is now possible.
+- Added AdvanceSelection, ShowWindowMenu functions and keyboard handling to
+  wxAuiNotebook.
 
 wxMSW:
 

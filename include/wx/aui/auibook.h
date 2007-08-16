@@ -416,6 +416,14 @@ public:
     size_t GetTabOffset() const;
     void SetTabOffset(size_t offset);
 
+    // JACS
+    // Is the tab visible?
+    bool IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWindow* wnd);
+
+    // JACS
+    // Make the tab visible if it wasn't already
+    void MakeTabVisible(int tabPage, wxWindow* win);
+
 protected:
 
     virtual void Render(wxDC* dc, wxWindow* wnd);
@@ -462,6 +470,9 @@ protected:
     void OnMiddleUp(wxMouseEvent& evt);
     void OnRightDown(wxMouseEvent& evt);
     void OnRightUp(wxMouseEvent& evt);
+    void OnSetFocus(wxFocusEvent& event);
+    void OnKillFocus(wxFocusEvent& event);
+    void OnChar(wxKeyEvent& event);
 #endif
     void OnMotion(wxMouseEvent& evt);
     void OnLeaveWindow(wxMouseEvent& evt);
@@ -564,6 +575,12 @@ public:
 
     // Gets the height of the notebook for a given page height
     int GetHeightForPageHeight(int pageHeight);
+
+    // Advances the selection, generation page selection events
+    void AdvanceSelection(bool forward = true);
+
+    // Shows the window menu
+    bool ShowWindowMenu();
 #endif
 
 protected:
@@ -599,6 +616,7 @@ protected:
     void OnTabMiddleUp(wxCommandEvent& evt);
     void OnTabRightDown(wxCommandEvent& evt);
     void OnTabRightUp(wxCommandEvent& evt);
+    void OnNavigationKey(wxNavigationKeyEvent& event);
 #endif
 
 protected:

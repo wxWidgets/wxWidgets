@@ -27,12 +27,29 @@
 # public symbols added in 2.8.5 (please keep in alphabetical order):
 @WX_VERSION_TAG@.5 {
     global:
+        *wxAuiTabContainer*IsTabVisible*;
+        *wxAuiTabContainer*MakeTabVisible*;
+        *wxAuiTabCtrl*IsDragging*;
+        *wxAuiTabCtrl*OnChar*;
+        *wxAuiTabCtrl*OnKillFocus*;
+        *wxAuiTabCtrl*OnMiddleDown*;
+        *wxAuiTabCtrl*OnMiddleUp*;
+        *wxAuiTabCtrl*OnRightDown*;
+        *wxAuiTabCtrl*OnRightUp*;
+        *wxAuiTabCtrl*OnSetFocus*;
+        *wxAuiNotebook*AdvanceSelection*;
         *wxAuiNotebook*GetHeightForPageHeight*;
         *wxAuiNotebook*GetTabCtrlHeight*;
+        *wxAuiNotebook*OnTabMiddleDown*;
+        *wxAuiNotebook*OnTabMiddleUp*;
+        *wxAuiNotebook*OnTabRightDown*;
+        *wxAuiNotebook*OnTabRightUp*;
+        *wxAuiNotebook*OnNavigationKey*;
         *wxAuiNotebook*SetFont*;
         *wxAuiNotebook*SetMeasuringFont*;
         *wxAuiNotebook*SetNormalFont*;
         *wxAuiNotebook*SetSelectedFont*;
+        *wxAuiNotebook*ShowWindowMenu*;
         *wxDocument*GetUserReadableName*;
         *wxHtmlEasyPrinting*GetParentWindow*;
         *wxHtmlEasyPrinting*SetParentWindow*;
