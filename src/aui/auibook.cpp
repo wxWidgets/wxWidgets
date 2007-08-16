@@ -124,7 +124,7 @@ static void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags
 
     ::DrawFocusRect(GetHdcOf(dc), &rc);
 
-#elif __WXGTK20__
+#elif defined(__WXGTK20__)
     GdkWindow* gdk_window = dc.GetGDKWindow();
     wxASSERT_MSG( gdk_window,
                   wxT("cannot draw focus rectangle on wxDC of this type") );
@@ -160,7 +160,7 @@ static void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags
             x2 = rect.GetRight(),
             y2 = rect.GetBottom();
 
-    dc.SetPen(m_penBlack);
+    dc.SetPen(*wxBLACK_PEN);
 
     // this seems to be closer than what Windows does than wxINVERT although
     // I'm still not sure if it's correct
