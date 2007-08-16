@@ -176,6 +176,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_xh_slidr.obj &
 	$(OBJS)\monodll_xh_spin.obj &
 	$(OBJS)\monodll_xh_split.obj &
+	$(OBJS)\monodll_xh_srchctrl.obj &
 	$(OBJS)\monodll_xh_statbar.obj &
 	$(OBJS)\monodll_xh_stbmp.obj &
 	$(OBJS)\monodll_xh_stbox.obj &
@@ -818,6 +819,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_xh_slidr.obj &
 	$(OBJS)\monolib_xh_spin.obj &
 	$(OBJS)\monolib_xh_split.obj &
+	$(OBJS)\monolib_xh_srchctrl.obj &
 	$(OBJS)\monolib_xh_statbar.obj &
 	$(OBJS)\monolib_xh_stbmp.obj &
 	$(OBJS)\monolib_xh_stbox.obj &
@@ -4070,6 +4072,7 @@ XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_xh_slidr.obj &
 	$(OBJS)\xrcdll_xh_spin.obj &
 	$(OBJS)\xrcdll_xh_split.obj &
+	$(OBJS)\xrcdll_xh_srchctrl.obj &
 	$(OBJS)\xrcdll_xh_statbar.obj &
 	$(OBJS)\xrcdll_xh_stbmp.obj &
 	$(OBJS)\xrcdll_xh_stbox.obj &
@@ -4136,6 +4139,7 @@ XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_xh_slidr.obj &
 	$(OBJS)\xrclib_xh_spin.obj &
 	$(OBJS)\xrclib_xh_split.obj &
+	$(OBJS)\xrclib_xh_srchctrl.obj &
 	$(OBJS)\xrclib_xh_statbar.obj &
 	$(OBJS)\xrclib_xh_stbmp.obj &
 	$(OBJS)\xrclib_xh_stbox.obj &
@@ -6322,6 +6326,9 @@ $(OBJS)\monodll_xh_spin.obj :  .AUTODEPEND ..\..\src\xrc\xh_spin.cpp
 $(OBJS)\monodll_xh_split.obj :  .AUTODEPEND ..\..\src\xrc\xh_split.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_xh_srchctrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_srchctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_xh_statbar.obj :  .AUTODEPEND ..\..\src\xrc\xh_statbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -8488,6 +8495,9 @@ $(OBJS)\monolib_xh_spin.obj :  .AUTODEPEND ..\..\src\xrc\xh_spin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_split.obj :  .AUTODEPEND ..\..\src\xrc\xh_split.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_srchctrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_srchctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_statbar.obj :  .AUTODEPEND ..\..\src\xrc\xh_statbar.cpp
@@ -13992,6 +14002,9 @@ $(OBJS)\xrcdll_xh_spin.obj :  .AUTODEPEND ..\..\src\xrc\xh_spin.cpp
 $(OBJS)\xrcdll_xh_split.obj :  .AUTODEPEND ..\..\src\xrc\xh_split.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
+$(OBJS)\xrcdll_xh_srchctrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_srchctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+
 $(OBJS)\xrcdll_xh_statbar.obj :  .AUTODEPEND ..\..\src\xrc\xh_statbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
@@ -14161,6 +14174,9 @@ $(OBJS)\xrclib_xh_spin.obj :  .AUTODEPEND ..\..\src\xrc\xh_spin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_split.obj :  .AUTODEPEND ..\..\src\xrc\xh_split.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_srchctrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_srchctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_statbar.obj :  .AUTODEPEND ..\..\src\xrc\xh_statbar.cpp

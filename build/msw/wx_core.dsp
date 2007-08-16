@@ -9645,6 +9645,10 @@ SOURCE=..\..\include\wx\xrc\xh_split.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_srchctrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_statbar.h
 # End Source File
 # Begin Source File

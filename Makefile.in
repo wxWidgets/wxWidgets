@@ -1536,6 +1536,7 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_slidr.o \
 	xrcdll_xh_spin.o \
 	xrcdll_xh_split.o \
+	xrcdll_xh_srchctrl.o \
 	xrcdll_xh_statbar.o \
 	xrcdll_xh_stbmp.o \
 	xrcdll_xh_stbox.o \
@@ -1599,6 +1600,7 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_slidr.o \
 	xrclib_xh_spin.o \
 	xrclib_xh_split.o \
+	xrclib_xh_srchctrl.o \
 	xrclib_xh_statbar.o \
 	xrclib_xh_stbmp.o \
 	xrclib_xh_stbox.o \
@@ -3346,6 +3348,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_slidr.h \
 	wx/xrc/xh_spin.h \
 	wx/xrc/xh_split.h \
+	wx/xrc/xh_srchctrl.h \
 	wx/xrc/xh_statbar.h \
 	wx/xrc/xh_stbmp.h \
 	wx/xrc/xh_stbox.h \
@@ -3711,6 +3714,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xh_slidr.o \
 	monodll_xh_spin.o \
 	monodll_xh_split.o \
+	monodll_xh_srchctrl.o \
 	monodll_xh_statbar.o \
 	monodll_xh_stbmp.o \
 	monodll_xh_stbox.o \
@@ -5555,6 +5559,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xh_slidr.o \
 	monolib_xh_spin.o \
 	monolib_xh_split.o \
+	monolib_xh_srchctrl.o \
 	monolib_xh_statbar.o \
 	monolib_xh_stbmp.o \
 	monolib_xh_stbox.o \
@@ -14193,6 +14198,9 @@ monodll_xh_spin.o: $(srcdir)/src/xrc/xh_spin.cpp $(MONODLL_ODEP)
 monodll_xh_split.o: $(srcdir)/src/xrc/xh_split.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_split.cpp
 
+monodll_xh_srchctrl.o: $(srcdir)/src/xrc/xh_srchctrl.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_srchctrl.cpp
+
 monodll_xh_statbar.o: $(srcdir)/src/xrc/xh_statbar.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_statbar.cpp
 
@@ -18515,6 +18523,9 @@ monolib_xh_spin.o: $(srcdir)/src/xrc/xh_spin.cpp $(MONOLIB_ODEP)
 
 monolib_xh_split.o: $(srcdir)/src/xrc/xh_split.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_split.cpp
+
+monolib_xh_srchctrl.o: $(srcdir)/src/xrc/xh_srchctrl.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_srchctrl.cpp
 
 monolib_xh_statbar.o: $(srcdir)/src/xrc/xh_statbar.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_statbar.cpp
@@ -30516,6 +30527,9 @@ xrcdll_xh_spin.o: $(srcdir)/src/xrc/xh_spin.cpp $(XRCDLL_ODEP)
 xrcdll_xh_split.o: $(srcdir)/src/xrc/xh_split.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_split.cpp
 
+xrcdll_xh_srchctrl.o: $(srcdir)/src/xrc/xh_srchctrl.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_srchctrl.cpp
+
 xrcdll_xh_statbar.o: $(srcdir)/src/xrc/xh_statbar.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_statbar.cpp
 
@@ -30683,6 +30697,9 @@ xrclib_xh_spin.o: $(srcdir)/src/xrc/xh_spin.cpp $(XRCLIB_ODEP)
 
 xrclib_xh_split.o: $(srcdir)/src/xrc/xh_split.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_split.cpp
+
+xrclib_xh_srchctrl.o: $(srcdir)/src/xrc/xh_srchctrl.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_srchctrl.cpp
 
 xrclib_xh_statbar.o: $(srcdir)/src/xrc/xh_statbar.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_statbar.cpp

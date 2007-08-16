@@ -1214,6 +1214,7 @@ XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_xh_slidr.obj \
 	$(OBJS)\xrcdll_xh_spin.obj \
 	$(OBJS)\xrcdll_xh_split.obj \
+	$(OBJS)\xrcdll_xh_srchctrl.obj \
 	$(OBJS)\xrcdll_xh_statbar.obj \
 	$(OBJS)\xrcdll_xh_stbmp.obj \
 	$(OBJS)\xrcdll_xh_stbox.obj \
@@ -1283,6 +1284,7 @@ XRCLIB_OBJECTS =  \
 	$(OBJS)\xrclib_xh_slidr.obj \
 	$(OBJS)\xrclib_xh_spin.obj \
 	$(OBJS)\xrclib_xh_split.obj \
+	$(OBJS)\xrclib_xh_srchctrl.obj \
 	$(OBJS)\xrclib_xh_statbar.obj \
 	$(OBJS)\xrclib_xh_stbmp.obj \
 	$(OBJS)\xrclib_xh_stbox.obj \
@@ -1654,6 +1656,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_xh_slidr.obj \
 	$(OBJS)\monodll_xh_spin.obj \
 	$(OBJS)\monodll_xh_split.obj \
+	$(OBJS)\monodll_xh_srchctrl.obj \
 	$(OBJS)\monodll_xh_statbar.obj \
 	$(OBJS)\monodll_xh_stbmp.obj \
 	$(OBJS)\monodll_xh_stbox.obj \
@@ -2291,6 +2294,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_xh_slidr.obj \
 	$(OBJS)\monolib_xh_spin.obj \
 	$(OBJS)\monolib_xh_split.obj \
+	$(OBJS)\monolib_xh_srchctrl.obj \
 	$(OBJS)\monolib_xh_statbar.obj \
 	$(OBJS)\monolib_xh_stbmp.obj \
 	$(OBJS)\monolib_xh_stbox.obj \
@@ -4539,7 +4543,7 @@ clean:
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib
 	cd ..\..\samples
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
-	cd $(MAKEDIR)
+	cd "$(MAKEDIR)"
 
 setup_h: $(SETUPHDIR)\wx ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup.h $(SETUPHDIR)\wx\setup.h $(SETUPHDIR)\wx\msw\rcdefs.h
 
@@ -4892,7 +4896,7 @@ wxgl: $(____wxgl_namedll_DEP) $(____wxgl_namelib_DEP)
 sub_samples: 
 	cd ..\..\samples
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
-	cd $(MAKEDIR)
+	cd "$(MAKEDIR)"
 
 $(LIBDIRNAME): 
 	if not exist $(LIBDIRNAME) mkdir $(LIBDIRNAME)
@@ -6251,6 +6255,9 @@ $(OBJS)\monodll_xh_spin.obj: ..\..\src\xrc\xh_spin.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
 $(OBJS)\monodll_xh_split.obj: ..\..\src\xrc\xh_split.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
+
+$(OBJS)\monodll_xh_srchctrl.obj: ..\..\src\xrc\xh_srchctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
 $(OBJS)\monodll_xh_statbar.obj: ..\..\src\xrc\xh_statbar.cpp
@@ -8319,6 +8326,9 @@ $(OBJS)\monolib_xh_spin.obj: ..\..\src\xrc\xh_spin.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_xh_split.obj: ..\..\src\xrc\xh_split.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
+
+$(OBJS)\monolib_xh_srchctrl.obj: ..\..\src\xrc\xh_srchctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_xh_statbar.obj: ..\..\src\xrc\xh_statbar.cpp
@@ -13523,6 +13533,9 @@ $(OBJS)\xrcdll_xh_spin.obj: ..\..\src\xrc\xh_spin.cpp
 $(OBJS)\xrcdll_xh_split.obj: ..\..\src\xrc\xh_split.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCDLL_CXXFLAGS) $**
 
+$(OBJS)\xrcdll_xh_srchctrl.obj: ..\..\src\xrc\xh_srchctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(XRCDLL_CXXFLAGS) $**
+
 $(OBJS)\xrcdll_xh_statbar.obj: ..\..\src\xrc\xh_statbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCDLL_CXXFLAGS) $**
 
@@ -13692,6 +13705,9 @@ $(OBJS)\xrclib_xh_spin.obj: ..\..\src\xrc\xh_spin.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCLIB_CXXFLAGS) $**
 
 $(OBJS)\xrclib_xh_split.obj: ..\..\src\xrc\xh_split.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(XRCLIB_CXXFLAGS) $**
+
+$(OBJS)\xrclib_xh_srchctrl.obj: ..\..\src\xrc\xh_srchctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCLIB_CXXFLAGS) $**
 
 $(OBJS)\xrclib_xh_statbar.obj: ..\..\src\xrc\xh_statbar.cpp

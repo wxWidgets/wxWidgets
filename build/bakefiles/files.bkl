@@ -3032,6 +3032,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_slidr.cpp
     src/xrc/xh_spin.cpp
     src/xrc/xh_split.cpp
+    src/xrc/xh_srchctrl.cpp
     src/xrc/xh_statbar.cpp
     src/xrc/xh_stbmp.cpp
     src/xrc/xh_stbox.cpp
@@ -3092,6 +3093,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_slidr.h
     wx/xrc/xh_spin.h
     wx/xrc/xh_split.h
+    wx/xrc/xh_srchctrl.h
     wx/xrc/xh_statbar.h
     wx/xrc/xh_stbmp.h
     wx/xrc/xh_stbox.h

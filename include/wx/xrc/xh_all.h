@@ -56,6 +56,7 @@
 #include "wx/xrc/xh_slidr.h"
 #include "wx/xrc/xh_spin.h"
 #include "wx/xrc/xh_split.h"
+#include "wx/xrc/xh_srchctrl.h"
 #include "wx/xrc/xh_statbar.h"
 #include "wx/xrc/xh_stbox.h"
 #include "wx/xrc/xh_stbmp.h"
