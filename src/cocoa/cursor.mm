@@ -393,9 +393,25 @@ static inline int GetPrivateCursorIdForStockCursor(int stock_cursor_id)
     return -1;
 }
 
+// Keep an array of stock cursors so they can share wxCursorRefData and thus
+// wxObject::IsSameAs will return true.
+// They will obviously be destroyed at static destruction time which should
+// theoretically be fine.
+static wxCursor s_stockCursors[wxCURSOR_MAX];
+
 // Cursors by stock number (enum wxStockCursor)
 wxCursor::wxCursor(int stock_cursor_id)
 {
+    // We default-constructed wxObject so our m_refData == NULL
+    if(stock_cursor_id >= 0 && stock_cursor_id < wxCURSOR_MAX)
+    {
+        // Attempt to reference an existing stock cursor
+        Ref(s_stockCursors[stock_cursor_id]);
+    }
+    // If we succeeded in getting an existing stock cursor, we're done.
+    if(m_refData != NULL)
+        return;
+
     m_refData = new wxCursorRefData;
 
     M_CURSORDATA->m_hCursor = nil;
@@ -431,6 +447,13 @@ wxCursor::wxCursor(int stock_cursor_id)
 
     // This should never happen as the arrowCursor should always exist.
     wxASSERT(M_CURSORDATA->m_hCursor != nil);
+
+    // Store ourself as the new stock cursor for this ID so that future
+    // calls will share the same ref data.
+    if(stock_cursor_id >= 0 && stock_cursor_id < wxCURSOR_MAX)
+    {
+        s_stockCursors[stock_cursor_id] = *this;
+    }
 }
 
 wxCursor::~wxCursor()
