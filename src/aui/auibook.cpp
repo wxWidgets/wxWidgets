@@ -31,6 +31,10 @@
 #include "wx/aui/tabmdi.h"
 #include "wx/dcbuffer.h"
 
+#ifdef __WXMSW__
+#include  "wx/msw/private.h"
+#endif
+
 #ifdef __WXMAC__
 #include "wx/mac/carbon/private.h"
 #endif
