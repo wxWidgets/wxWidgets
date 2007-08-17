@@ -2,16 +2,16 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #if GetEnv("WXW_VER") == "CVS"
-    #define INFOFILE  "C:\wx\inno\wxWidgets\BuildCVS.txt"
-    #define SETUPFILENAME  "wxMSW-cvs-Setup"
-    #define WX_VERSION "CVS"
+    #define INFOFILE  "C:\wx\inno\wxWidgets\BuildSVN.txt"
+    #define WX_VERSION "SVN28b"
 #else
     #define INFOFILE "C:\wx\inno\wxWidgets\docs\msw\install.txt"
-    #define SETUPFILENAME  "wxMSW-" + GetENV("WXW_VER") + "-Setup"
     #define WX_VERSION GetENV("WXW_VER")
 #endif
 
+#define SETUPFILENAME  "wxMSW-" + GetENV("WXW_VER") + "-Setup"
 
+#define INNODIR "C:\wx\inno\wxw28b"
 
 [Setup]
 AppName=wxWidgets
@@ -24,17 +24,24 @@ DefaultDirName={sd}\wxWidgets-{#WX_VERSION}
 DefaultGroupName=wxWidgets {#WX_VERSION}
 UsePreviousAppDir=no
 DisableProgramGroupPage=yes
-LicenseFile=C:\wx\inno\wxWidgets\docs\licence.txt
-InfoBeforeFile=C:\wx\inno\wxWidgets\docs\readme.txt
+LicenseFile={#INNODIR}\docs\licence.txt
+InfoBeforeFile={#INNODIR}\docs\readme.txt
 InfoAfterFile={#INFOFILE}
-OutputDir=c:\daily
+OutputDir=c:\daily28b
 OutputBaseFilename={#SETUPFILENAME}
-SetupIconFile=C:\wx\inno\wxWidgets\art\wxwin.ico
+SetupIconFile={#INNODIR}\art\wxwin.ico
 Compression=lzma
 SolidCompression=yes
 
 [Files]
-Source: "C:\wx\inno\wxWidgets\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+; source files
+Source: "{#INNODIR}\*"; DestDir: "{app}"; Excludes: ".cvsignore,cocoa,dfb,mac,gtk,gtk1,mgl,motif,msdos,os2,palmos,wxWindows.xcod*,x11,debian,distrib,docs,misc,tests,wxPython,*.pch,*.pch++,*.pchmm"; Flags: ignoreversion recursesubdirs createallsubdirs
+; docs and helpfile
+Source: "{#INNODIR}\docs\htmlhelp\*"; DestDir: "{app}\docs\htmlhelp\";  Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#INNODIR}\docs\licence.txt"; DestDir: "{app}\docs\";  Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#INNODIR}\docs\readme.txt"; DestDir: "{app}\docs\";  Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#INNODIR}\docs\changes.txt"; DestDir: "{app}\docs\";  Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#INNODIR}\docs\msw\install.txt"; DestDir: "{app}\docs\msw";  Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [INI]
