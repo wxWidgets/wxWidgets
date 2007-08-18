@@ -1076,6 +1076,10 @@ int wxListCtrl::GetCountPerPage() const
 
     if (m_dbImpl)
     {
+        UInt16 height = 1;
+        m_dbImpl->GetDefaultRowHeight( &height );
+        if (height > 0)
+            return GetClientSize().y / height;
     }
 
     return 1;
@@ -3097,7 +3101,7 @@ void wxMacDataBrowserListCtrlControl::UpdateState(wxMacDataItem* dataItem, wxLis
     bool isSelectedState = (listItem->GetState() == wxLIST_STATE_SELECTED);
 
     // toggle the selection state if wxListInfo state and actual state don't match.
-    if ( isSelected != isSelectedState )
+    if ( listItem->GetMask() & wxLIST_MASK_STATE && isSelected != isSelectedState )
     {
         DataBrowserSetOption options = kDataBrowserItemsAdd;
         if (!isSelectedState)
