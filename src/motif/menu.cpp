@@ -236,7 +236,7 @@ void wxMenuBar::SetMenuLabel(size_t pos, const wxString& label)
                       XmNlabelString, label_str(),
                       NULL);
     }
-    m_titles[i] = label;
+    m_titles[pos] = label;
 }
 
 wxString wxMenuBar::GetMenuLabel(size_t pos) const
