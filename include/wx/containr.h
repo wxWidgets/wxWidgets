@@ -42,7 +42,10 @@ public:
         // do accept focus initially, we'll stop doing it if/when any children
         // are added
         m_acceptsFocus = true;
+        m_inSetFocus = false;
+        m_winLastFocused = NULL;
     }
+    virtual ~wxControlContainerBase() {}
 
     void SetContainerWindow(wxWindow *winParent)
     {
@@ -50,6 +53,10 @@ public:
 
         m_winParent = winParent;
     }
+
+    // should be called from SetFocus(), returns false if we did nothing with
+    // the focus and the default processing should take place
+    bool DoSetFocus();
 
     // should be called when we decide that we should [stop] accepting focus
     void SetCanFocus(bool acceptsFocus);
@@ -70,6 +77,9 @@ public:
     void UpdateCanFocus() { SetCanFocus(!HasAnyFocusableChildren()); }
 
 protected:
+    // set the focus to the child which had it the last time
+    virtual bool SetFocusToChild();
+
     // return true if we have any children accepting focus
     bool HasAnyFocusableChildren() const;
 
@@ -80,6 +90,13 @@ private:
     // value returned by AcceptsFocus(), should be changed using SetCanFocus()
     // only
     bool m_acceptsFocus;
+
+    // a guard against infinite recursion
+    bool m_inSetFocus;
+
+    // the child which had the focus last time this panel was activated
+    wxWindow *m_winLastFocused;
+
 };
 
 // common part of WX_DECLARE_CONTROL_CONTAINER in the native and generic cases,
@@ -90,6 +107,7 @@ public:                                                                       \
     virtual bool AcceptsFocusRecursively() const;                             \
     virtual void AddChild(wxWindowBase *child);                               \
     virtual void RemoveChild(wxWindowBase *child);                            \
+    virtual void SetFocus();                                                  \
     void SetFocusIgnoringChildren();                                          \
     void AcceptFocus(bool acceptFocus)                                        \
     {                                                                         \
@@ -118,6 +136,12 @@ protected:                                                                    \
         return m_container.AcceptsFocusRecursively();                         \
     }                                                                         \
                                                                               \
+    void classname::SetFocus()                                                \
+    {                                                                         \
+        if ( !m_container.DoSetFocus() )                                      \
+            basename::SetFocus();                                             \
+    }                                                                         \
+                                                                              \
     bool classname::AcceptsFocus() const                                      \
     {                                                                         \
         return m_container.AcceptsFocus();                                    \
@@ -133,6 +157,9 @@ protected:                                                                    \
 // this must be a real class as we forward-declare it elsewhere
 class WXDLLEXPORT wxControlContainer : public wxControlContainerBase
 {
+protected:
+    // set the focus to the child which had it the last time
+    virtual bool SetFocusToChild();
 };
 
 #define WX_EVENT_TABLE_CONTROL_CONTAINER(classname)
@@ -174,29 +201,14 @@ public:
     void HandleOnFocus(wxFocusEvent& event);
     void HandleOnWindowDestroy(wxWindowBase *child);
 
-    // should be called from SetFocus(), returns false if we did nothing with
-    // the focus and the default processing should take place
-    bool DoSetFocus();
-
     // called from OnChildFocus() handler, i.e. when one of our (grand)
     // children gets the focus
     void SetLastFocus(wxWindow *win);
 
 protected:
-    // set the focus to the child which had it the last time
-    bool SetFocusToChild();
-
-    // the child which had the focus last time this panel was activated
-    wxWindow *m_winLastFocused;
-
-    // a guard against infinite recursion
-    bool m_inSetFocus;
 
     DECLARE_NO_COPY_CLASS(wxControlContainer)
 };
-
-// this function is for wxWidgets internal use only
-extern bool wxSetFocusToChild(wxWindow *win, wxWindow **child);
 
 // ----------------------------------------------------------------------------
 // macros which may be used by the classes wishing to implement TAB navigation
@@ -210,8 +222,7 @@ extern bool wxSetFocusToChild(wxWindow *win, wxWindow **child);
 public:                                                                       \
     void OnNavigationKey(wxNavigationKeyEvent& event);                        \
     void OnFocus(wxFocusEvent& event);                                        \
-    virtual void OnChildFocus(wxChildFocusEvent& event);                      \
-    virtual void SetFocus()
+    virtual void OnChildFocus(wxChildFocusEvent& event)
 
 // implement the event table entries for wxControlContainer
 #define WX_EVENT_TABLE_CONTROL_CONTAINER(classname) \
@@ -237,12 +248,6 @@ public:                                                                       \
         m_container.HandleOnNavigationKey(event);                             \
     }                                                                         \
                                                                               \
-    void classname::SetFocus()                                                \
-    {                                                                         \
-        if ( !m_container.DoSetFocus() )                                      \
-            basename::SetFocus();                                             \
-    }                                                                         \
-                                                                              \
     void classname::SetFocusIgnoringChildren()                                \
     {                                                                         \
         basename::SetFocus();                                                 \
@@ -259,5 +264,8 @@ public:                                                                       \
     } 
 
 #endif // wxHAS_NATIVE_TAB_TRAVERSAL/!wxHAS_NATIVE_TAB_TRAVERSAL
+
+// this function is for wxWidgets internal use only
+extern bool wxSetFocusToChild(wxWindow *win, wxWindow **child);
 
 #endif // _WX_CONTAINR_H_

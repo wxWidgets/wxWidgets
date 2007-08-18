@@ -1440,11 +1440,6 @@ gtk_window_button_press_callback( GtkWidget *widget,
 
     g_lastButtonNumber = gdk_event->button;
 
-    if (win->m_wxwindow && (g_focusWindow != win) && win->IsFocusable())
-    {
-        gtk_widget_grab_focus( win->m_wxwindow );
-    }
-
     // GDK sends surplus button down events
     // before a double click event. We
     // need to filter these out.
@@ -1576,9 +1571,9 @@ gtk_window_button_press_callback( GtkWidget *widget,
         return TRUE;
 
     if ((event_type == wxEVT_LEFT_DOWN) && !win->IsOfStandardClass() && 
-        (g_focusWindow != win) && win->IsFocusable())
+        (g_focusWindow != win) /* && win->IsFocusable() */)
     {
-        gtk_widget_grab_focus( win->m_wxwindow );
+        win->SetFocus();
     }
 
     if (event_type == wxEVT_RIGHT_DOWN)
@@ -1870,7 +1865,9 @@ gtk_window_focus_out_callback( GtkWidget *widget,
         // Disable default focus handling for custom windows
         // since the default GTK+ handler issues a repaint
         if ( has_wxwindow )
+	{
             return TRUE;
+	}
     }
 
     // continue with normal processing

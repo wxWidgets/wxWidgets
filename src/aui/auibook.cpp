@@ -2168,6 +2168,7 @@ wxAuiTabCtrl::wxAuiTabCtrl(wxWindow* parent,
                            const wxSize& size,
                            long style) : wxControl(parent, id, pos, size, style)
 {
+    SetName(wxT("wxAuiTabCtrl"));
     m_click_pt = wxDefaultPosition;
     m_is_dragging = false;
     m_hover_button = NULL;
@@ -2712,7 +2713,11 @@ BEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
                       wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP,
                       wxAuiNotebook::OnTabRightUp)
     EVT_NAVIGATION_KEY(wxAuiNotebook::OnNavigationKey)
+
+    WX_EVENT_TABLE_CONTROL_CONTAINER(wxAuiNotebook)
 END_EVENT_TABLE()
+
+WX_DELEGATE_TO_CONTROL_CONTAINER(wxAuiNotebook, wxControl)
 
 wxAuiNotebook::wxAuiNotebook()
 {
@@ -2754,6 +2759,10 @@ bool wxAuiNotebook::Create(wxWindow* parent,
 // code called by all constructors
 void wxAuiNotebook::InitNotebook(long style)
 {
+    WX_INIT_CONTROL_CONTAINER();
+    // SetCanFocus(false);
+
+    SetName(wxT("wxAuiNotebook"));
     m_curpage = -1;
     m_tab_id_counter = wxAuiBaseTabCtrlId;
     m_dummy_wnd = NULL;

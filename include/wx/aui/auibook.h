@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 // Name:        wx/aui/auibook.h
 // Purpose:     wxaui: wx advanced user interface - notebook
 // Author:      Benjamin I. Williams
@@ -576,7 +576,7 @@ public:
     virtual bool HasMultiplePages() const { return true; }
 
     // we don't want focus for ourselves
-    virtual bool AcceptsFocus() const { return false; }
+    // virtual bool AcceptsFocus() const { return false; }
 
 protected:
 
@@ -641,6 +641,9 @@ protected:
     DECLARE_CLASS(wxAuiNotebook)
     DECLARE_EVENT_TABLE()
 #endif
+
+    WX_DECLARE_CONTROL_CONTAINER();
+
 };
 
 

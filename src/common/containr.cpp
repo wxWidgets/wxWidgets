@@ -77,6 +77,52 @@ bool wxControlContainerBase::HasAnyFocusableChildren() const
     return false;
 }
 
+bool wxControlContainerBase::DoSetFocus()
+{
+    wxLogTrace(TRACE_FOCUS, _T("SetFocus on wxPanel 0x%p."),
+               m_winParent->GetHandle());
+
+    if (m_inSetFocus)
+        return true;
+
+    // when the panel gets the focus we move the focus to either the last
+    // window that had the focus or the first one that can get it unless the
+    // focus had been already set to some other child
+
+    wxWindow *win = wxWindow::FindFocus();
+    while ( win )
+    {
+        if ( win == m_winParent )
+        {
+            // our child already has focus, don't take it away from it
+            return true;
+        }
+
+        if ( win->IsTopLevel() )
+        {
+            // don't look beyond the first top level parent - useless and
+            // unnecessary
+            break;
+        }
+
+        win = win->GetParent();
+    }
+
+    // protect against infinite recursion:
+    m_inSetFocus = true;
+
+    bool ret = SetFocusToChild();
+
+    m_inSetFocus = false;
+
+    return ret;
+}
+
+bool wxControlContainerBase::SetFocusToChild()
+{
+    return wxSetFocusToChild(m_winParent, &m_winLastFocused);
+}
+
 #ifndef wxHAS_NATIVE_TAB_TRAVERSAL
 
 // ----------------------------------------------------------------------------
@@ -86,7 +132,6 @@ bool wxControlContainerBase::HasAnyFocusableChildren() const
 wxControlContainer::wxControlContainer()
 {
     m_winLastFocused = NULL;
-    m_inSetFocus = false;
 }
 
 void wxControlContainer::SetLastFocus(wxWindow *win)
@@ -552,47 +597,6 @@ void wxControlContainer::HandleOnWindowDestroy(wxWindowBase *child)
 // focus handling
 // ----------------------------------------------------------------------------
 
-bool wxControlContainer::DoSetFocus()
-{
-    wxLogTrace(TRACE_FOCUS, _T("SetFocus on wxPanel 0x%p."),
-               m_winParent->GetHandle());
-
-    if (m_inSetFocus)
-        return true;
-
-    // when the panel gets the focus we move the focus to either the last
-    // window that had the focus or the first one that can get it unless the
-    // focus had been already set to some other child
-
-    wxWindow *win = wxWindow::FindFocus();
-    while ( win )
-    {
-        if ( win == m_winParent )
-        {
-            // our child already has focus, don't take it away from it
-            return true;
-        }
-
-        if ( win->IsTopLevel() )
-        {
-            // don't look beyond the first top level parent - useless and
-            // unnecessary
-            break;
-        }
-
-        win = win->GetParent();
-    }
-
-    // protect against infinite recursion:
-    m_inSetFocus = true;
-
-    bool ret = SetFocusToChild();
-
-    m_inSetFocus = false;
-
-    return ret;
-}
-
 void wxControlContainer::HandleOnFocus(wxFocusEvent& event)
 {
     wxLogTrace(TRACE_FOCUS, _T("OnFocus on wxPanel 0x%p, name: %s"),
@@ -604,10 +608,17 @@ void wxControlContainer::HandleOnFocus(wxFocusEvent& event)
     event.Skip();
 }
 
+
+#else
+  // wxHAS_NATIVE_TAB_TRAVERSAL
+
 bool wxControlContainer::SetFocusToChild()
 {
-    return wxSetFocusToChild(m_winParent, &m_winLastFocused);
+    return wxSetFocusToChild(m_winParent, NULL);
 }
+
+
+#endif // !wxHAS_NATIVE_TAB_TRAVERSAL
 
 // ----------------------------------------------------------------------------
 // SetFocusToChild(): this function is used by wxPanel but also by wxFrame in
@@ -617,10 +628,10 @@ bool wxControlContainer::SetFocusToChild()
 bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
 {
     wxCHECK_MSG( win, false, _T("wxSetFocusToChild(): invalid window") );
-    wxCHECK_MSG( childLastFocused, false,
-                 _T("wxSetFocusToChild(): NULL child poonter") );
+    //    wxCHECK_MSG( childLastFocused, false,
+    //             _T("wxSetFocusToChild(): NULL child poonter") );
 
-    if ( *childLastFocused )
+    if ( childLastFocused && *childLastFocused )
     {
         // It might happen that the window got reparented
         if ( (*childLastFocused)->GetParent() == win )
@@ -670,7 +681,8 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
                        _T("SetFocusToChild() => first child (0x%p)."),
                        child->GetHandle());
 
-            *childLastFocused = child;
+            if (childLastFocused)
+                *childLastFocused = child;
             child->SetFocusFromKbd();
             return true;
         }
@@ -679,4 +691,3 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
     return false;
 }
 
-#endif // !wxHAS_NATIVE_TAB_TRAVERSAL
