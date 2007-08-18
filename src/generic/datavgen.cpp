@@ -2,7 +2,7 @@
 // Name:        src/generic/datavgen.cpp
 // Purpose:     wxDataViewCtrl generic implementation
 // Author:      Robert Roebling
-// Modified by: Francesco Montorsi, Guru Kathiresan, Otto Wyss
+// Modified by: Francesco Montorsi, Guru Kathiresan, Otto Wyss, Bo Yang
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
@@ -1191,6 +1191,7 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
         hdi.cxy = col->GetWidth();
         hdi.cchTextMax = sizeof(hdi.pszText)/sizeof(hdi.pszText[0]);
         hdi.fmt = HDF_LEFT | HDF_STRING;
+        //hdi.fmt &= ~(HDF_SORTDOWN|HDF_SORTUP);
 
         //sorting support
         if(model && model->GetSortingColumn() == i)
@@ -1198,6 +1199,7 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
             //The Microsoft Comctrl32.dll 6.0 support SORTUP/SORTDOWN, but they are not default
             //see http://msdn2.microsoft.com/en-us/library/ms649534.aspx for more detail
             //hdi.fmt |= model->GetSortOrderAscending()? HDF_SORTUP:HDF_SORTDOWN;
+            ;
         }
 
         // lParam is reserved for application's use:
@@ -1660,7 +1662,8 @@ void wxGenericDataViewHeaderWindow::OnMouse( wxMouseEvent &event )
                     wxDataViewColumn *col = GetColumn(m_column);
                     if(col->IsSortable())
                     {
-                        if(model && model->GetSortingColumn() == m_column)
+                        unsigned int colnum = model->GetSortingColumn();
+                        if(model && static_cast<int>(colnum) == m_column)
                         {
                             bool order = col->IsSortOrderAscending();
                             col->SetSortOrder(!order);
@@ -2006,9 +2009,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
 bool wxDataViewMainWindow::ItemChanged(const wxDataViewItem & item)
 {
     g_model = GetOwner()->GetModel();
-
-    unsigned int row = GetRowByItem(item);
-    RefreshRow( row );
+    g_model->Resort();
     return true;
 }
 
@@ -2024,9 +2025,7 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
     return true;
 */
     g_model = GetOwner()->GetModel();
-
-    unsigned int row = GetRowByItem(item);
-    RefreshRow( row );
+    g_model->Resort();
     return true;
 }
 
@@ -2791,7 +2790,6 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
             if( node->GetChildrenNumber() == 0 )
                 BuildTreeHelper(model, node->GetItem(), node);
 
-            int len = node->GetNodeNumber();
             wxDataViewTreeNodes nodes = node->GetNodes();
             //The wxSortedArray search a node in binary search, so using Item() is more efficient
             wxDataViewTreeNode temp;
