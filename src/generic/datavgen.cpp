@@ -266,14 +266,14 @@ public:
     wxDataViewTreeNode( wxDataViewTreeNode * parent )
         :leaves( wxGenericTreeModelItemCmp ),
          nodes(wxGenericTreeModelNodeCmp)
-    	{ this->parent = parent;
+        { this->parent = parent;
           if( parent == NULL )
               open = true;
-	   else
-	   	open = false;
+       else
+        open = false;
           hasChildren = false;
           subTreeCount  = 0;
-	}
+    }
     //I don't know what I need to do in the destructure
     ~wxDataViewTreeNode()
     {
@@ -300,13 +300,13 @@ public:
     int GetIndentLevel()
     {
         int ret = 0 ;
-	 wxDataViewTreeNode * node = this;
-	 while( node->GetParent()->GetParent() != NULL )
-	 {
-	     node = node->GetParent();
-	     ret ++;
-	 }
-	 return ret;
+     wxDataViewTreeNode * node = this;
+     while( node->GetParent()->GetParent() != NULL )
+     {
+         node = node->GetParent();
+         ret ++;
+     }
+     return ret;
     }
 
     bool IsOpen()
@@ -357,7 +357,7 @@ public:
         int len = nds.GetCount();
         if(len > 0)
         {
-			int i;
+            int i;
             for(i = 0; i < len; i ++)
                 nodes.Add(nds[i]);
             for(i = 0; i < len; i ++)
@@ -556,7 +556,7 @@ public:
     virtual bool Cleared()
         { return m_mainWindow->Cleared(); }
     virtual void Resort()
-    	 { m_mainWindow->Resort(); }
+         { m_mainWindow->Resort(); }
 
     wxDataViewMainWindow    *m_mainWindow;
 };
@@ -1323,12 +1323,12 @@ bool wxDataViewHeaderWindowMSW::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARA
                         {
                             bool order = col->IsSortOrderAscending();
                             col->SetSortOrder(!order);
-                            model->SetSortOrderAscending(!order);
+                            // model->SetSortOrderAscending(!order);
                         }
                         else if(model)
                         {
                             model->SetSortingColumn(idx);
-                            model->SetSortOrderAscending(true);
+                            // model->SetSortOrderAscending(true);
                         }
                     }
                     UpdateDisplay();
@@ -1845,7 +1845,7 @@ class ItemAddJob: public DoJob
 {
 public:
     ItemAddJob( const wxDataViewItem & parent, const wxDataViewItem & item, int * count )
-    	{ this->parent = parent ; this->item = item ; m_count = count; }
+        { this->parent = parent ; this->item = item ; m_count = count; }
     virtual ~ItemAddJob(){};
 
     virtual int operator() ( wxDataViewTreeNode * node )
@@ -2229,14 +2229,14 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         {
             // get the cell value and set it into the renderer
             wxVariant value;
-	     wxDataViewTreeNode * node = GetTreeNodeByRow(item);
-	     if( node == NULL )
-	     {
-	         continue;
-	     }
+         wxDataViewTreeNode * node = GetTreeNodeByRow(item);
+         if( node == NULL )
+         {
+             continue;
+         }
 
             wxDataViewItem dataitem = node->GetItem();
-	     model->GetValue( value, dataitem, col->GetModelColumn());
+         model->GetValue( value, dataitem, col->GetModelColumn());
             cell->SetValue( value );
 
             // update the y offset
@@ -2604,7 +2604,7 @@ public:
     {
         current ++;
         if( current == static_cast<int>(row))
-    	 {
+         {
             ret = node->GetItem() ;
             return DoJob::OK;
         }
@@ -2622,7 +2622,7 @@ public:
     {
         current ++;
         if( current == static_cast<int>(row))
-    	 {
+         {
             ret = wxDataViewItem( n ) ;
             return DoJob::OK;
         }
@@ -2658,7 +2658,7 @@ public:
     {
         current ++;
         if( current == static_cast<int>(row))
-    	 {
+         {
             ret = node ;
             return DoJob::OK;
         }
@@ -2680,7 +2680,7 @@ public:
     {
         current ++;
         if( current == static_cast<int>(row))
-    	 {
+         {
             ret = new wxDataViewTreeNode( parent ) ;
             ret->SetItem( wxDataViewItem( n ));
             ret->SetHasChildren(false);
@@ -2820,7 +2820,7 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
             for( ; j < len; j ++)
             {
                 if( nodes[j]->GetItem() == *(n->GetData()))
-		  {
+          {
                     node = nodes[j];
                     break;
                 }
@@ -3007,11 +3007,11 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
             break;
         //Add the process for tree expanding/collapsing
         case WXK_LEFT:
-	     OnCollapsing(m_currentRow);
-	     break;
-	 case WXK_RIGHT:
-	     OnExpanding( m_currentRow);
-	     break;
+         OnCollapsing(m_currentRow);
+         break;
+     case WXK_RIGHT:
+         OnExpanding( m_currentRow);
+         break;
         case WXK_END:
             if (!IsEmpty())
                 OnArrowChar( GetRowCount() - 1, event );
