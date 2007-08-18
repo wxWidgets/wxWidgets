@@ -2557,7 +2557,6 @@ void wxAuiTabCtrl::OnButton(wxAuiNotebookEvent& event)
     }
 }
 
-// JACS
 void wxAuiTabCtrl::OnSetFocus(wxFocusEvent& WXUNUSED(event))
 {
     Refresh();
@@ -2568,7 +2567,6 @@ void wxAuiTabCtrl::OnKillFocus(wxFocusEvent& WXUNUSED(event))
     Refresh();
 }
 
-// JACS
 void wxAuiTabCtrl::OnChar(wxKeyEvent& event)
 {
     if (GetActivePage() == -1)
@@ -4381,8 +4379,6 @@ void wxAuiNotebook::AdvanceSelection(bool forward)
 
     SetSelection(currentSelection);
 }
-
-// JACS
 
 // Shows the window menu
 bool wxAuiNotebook::ShowWindowMenu()

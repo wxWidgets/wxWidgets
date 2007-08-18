@@ -416,11 +416,9 @@ public:
     size_t GetTabOffset() const;
     void SetTabOffset(size_t offset);
 
-    // JACS
     // Is the tab visible?
     bool IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWindow* wnd);
 
-    // JACS
     // Make the tab visible if it wasn't already
     void MakeTabVisible(int tabPage, wxWindow* win);
 
