@@ -711,7 +711,7 @@ bool wxWindowCocoa::Cocoa_mouseEntered(WX_NSEvent theEvent)
 
         wxMouseEvent event(wxEVT_ENTER_WINDOW);
         InitMouseEvent(event,theEvent);
-        wxLogTrace(wxTRACE_COCOA,wxT("wxwin=%p Mouse Entered @%d,%d"),this,event.m_x,event.m_y);
+        wxLogTrace(wxTRACE_COCOA_TrackingRect,wxT("wxwin=%p Mouse Entered TR#%d @%d,%d"),this,[theEvent trackingNumber], event.m_x,event.m_y);
         return GetEventHandler()->ProcessEvent(event);
     }
     else
@@ -726,7 +726,7 @@ bool wxWindowCocoa::Cocoa_mouseExited(WX_NSEvent theEvent)
 
         wxMouseEvent event(wxEVT_LEAVE_WINDOW);
         InitMouseEvent(event,theEvent);
-        wxLogTrace(wxTRACE_COCOA,wxT("wxwin=%p Mouse Exited @%d,%d"),this,event.m_x,event.m_y);
+        wxLogTrace(wxTRACE_COCOA_TrackingRect,wxT("wxwin=%p Mouse Exited TR#%d @%d,%d"),this,[theEvent trackingNumber],event.m_x,event.m_y);
         return GetEventHandler()->ProcessEvent(event);
     }
     else
@@ -1412,10 +1412,11 @@ wxWindow* wxFindWindowAtPointer(wxPoint& pt)
     return NULL;
 }
 
-
 // ========================================================================
 // wxCocoaMouseMovedEventSynthesizer
 // ========================================================================
+
+#define wxTRACE_COCOA_MouseMovedSynthesizer wxT("COCOA_MouseMovedSynthesizer")
 
 /* This class registers one run loop observer to cover all windows registered with it.
  *  It will register the observer when the first view is registerd and unregister the
@@ -1447,7 +1448,7 @@ protected:
 void wxCocoaMouseMovedEventSynthesizer::RegisterWxCocoaView(wxCocoaNSView *aView)
 {
     m_registeredViews.push_back(aView);
-    wxLogTrace(wxTRACE_COCOA_TrackingRect, wxT("Registered wxCocoaNSView=%p"), aView);
+    wxLogTrace(wxTRACE_COCOA_MouseMovedSynthesizer, wxT("Registered wxCocoaNSView=%p"), aView);
 
     if(!m_registeredViews.empty() && m_runLoopObserver == NULL)
     {
@@ -1458,7 +1459,7 @@ void wxCocoaMouseMovedEventSynthesizer::RegisterWxCocoaView(wxCocoaNSView *aView
 void wxCocoaMouseMovedEventSynthesizer::UnregisterWxCocoaView(wxCocoaNSView *aView)
 {
     m_registeredViews.remove(aView);
-    wxLogTrace(wxTRACE_COCOA_TrackingRect, wxT("Unregistered wxCocoaNSView=%p"), aView);
+    wxLogTrace(wxTRACE_COCOA_MouseMovedSynthesizer, wxT("Unregistered wxCocoaNSView=%p"), aView);
     if(m_registeredViews.empty() && m_runLoopObserver != NULL)
     {
         RemoveRunLoopObserver();
@@ -1568,6 +1569,7 @@ void wxCocoaTrackingRectManager::ClearTrackingRect()
     {
         [m_window->GetNSView() removeTrackingRect:m_trackingRectTag];
         m_isTrackingRectActive = false;
+        wxLogTrace(wxTRACE_COCOA_TrackingRect, wxT("%s@%p: Removed tracking rect #%d"), m_window->GetClassInfo()->GetClassName(), m_window, m_trackingRectTag);
     }
     // If we were doing periodic events we need to clear those too
     StopSynthesizingEvents();
@@ -1584,10 +1586,14 @@ void wxCocoaTrackingRectManager::BuildTrackingRect()
     wxAutoNSAutoreleasePool pool;
 
     wxASSERT_MSG(!m_isTrackingRectActive, wxT("Tracking rect was not cleared"));
-    if([m_window->GetNSView() window] != nil)
+
+    NSView *theView = m_window->GetNSView();
+
+    if([theView window] != nil)
     {
-        m_trackingRectTag = [m_window->GetNSView() addTrackingRect:[m_window->GetNSView() visibleRect] owner:m_window->GetNSView() userData:NULL assumeInside:NO];
+        m_trackingRectTag = [theView addTrackingRect:[theView visibleRect] owner:theView userData:NULL assumeInside:NO];
         m_isTrackingRectActive = true;
+        wxLogTrace(wxTRACE_COCOA_TrackingRect, wxT("%s@%p: Added tracking rect #%d"), m_window->GetClassInfo()->GetClassName(), m_window, m_trackingRectTag);
     }
 }
 
