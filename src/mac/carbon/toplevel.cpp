@@ -57,6 +57,9 @@
 // constants
 // ----------------------------------------------------------------------------
 
+// unified title and toolbar constant - not in Tiger headers, so we duplicate it here
+#define kWindowUnifiedTitleAndToolbarAttribute (1 << 7)
+
 // trace mask for activation tracing messages
 static const wxChar *TRACE_ACTIVATE = _T("activation");
 
@@ -1248,6 +1251,13 @@ void  wxTopLevelWindowMac::MacCreateRealWindow(
     }
 #endif
 
+#if TARGET_API_MAC_OSX
+    if ( m_macWindow != NULL )
+    {
+        MacSetUnifiedAppearance( true ) ;
+    }
+#endif
+
     // the frame window event handler
     InstallStandardEventHandler( GetWindowEventTarget(MAC_WXHWND(m_macWindow)) ) ;
     MacInstallTopLevelWindowEventHandler() ;
@@ -1460,8 +1470,14 @@ void wxTopLevelWindowMac::SetExtraStyle(long exStyle)
     if ( m_macWindow != NULL )
     {
         bool metal = GetExtraStyle() & wxFRAME_EX_METAL ;
+
         if ( MacGetMetalAppearance() != metal )
+        {
+            if ( MacGetUnifiedAppearance() )
+                MacSetUnifiedAppearance( !metal ) ;
+            
             MacSetMetalAppearance( metal ) ;
+        }
     }
 #endif
 }
@@ -1529,6 +1545,9 @@ void wxTopLevelWindowMac::DoGetClientSize( int *width, int *height ) const
 void wxTopLevelWindowMac::MacSetMetalAppearance( bool set )
 {
 #if TARGET_API_MAC_OSX
+    if ( MacGetUnifiedAppearance() )
+        MacSetUnifiedAppearance( false ) ;
+    
     MacChangeWindowAttributes( set ? kWindowMetalAttribute : kWindowNoAttributes ,
         set ? kWindowNoAttributes : kWindowMetalAttribute ) ;
 #endif
@@ -1539,8 +1558,39 @@ bool wxTopLevelWindowMac::MacGetMetalAppearance() const
 #if TARGET_API_MAC_OSX
     return MacGetWindowAttributes() & kWindowMetalAttribute ;
 #else
-    return false ;
+    return false;
 #endif
+}
+
+void wxTopLevelWindowMac::MacSetUnifiedAppearance( bool set )
+{
+#if TARGET_API_MAC_OSX
+    if ( UMAGetSystemVersion() >= 0x1040 )
+    {
+        if ( MacGetMetalAppearance() )
+            MacSetMetalAppearance( false ) ;
+        
+        MacChangeWindowAttributes( set ? kWindowUnifiedTitleAndToolbarAttribute : kWindowNoAttributes ,
+            set ? kWindowNoAttributes : kWindowUnifiedTitleAndToolbarAttribute) ;
+        
+        // For some reason, Tiger uses white as the background color for this appearance,
+        // while most apps using it use the typical striped background. Restore that behavior
+        // for wx. 
+        // TODO: Determine if we need this on Leopard as well. (should be harmless either way,
+        // though)
+        SetBackgroundColour( wxSYS_COLOUR_WINDOW ) ;
+    }
+#endif
+}
+
+bool wxTopLevelWindowMac::MacGetUnifiedAppearance() const
+{
+#if TARGET_API_MAC_OSX
+    if ( UMAGetSystemVersion() >= 0x1040 )
+        return MacGetWindowAttributes() & kWindowUnifiedTitleAndToolbarAttribute ;
+    else
+#endif
+        return false;
 }
 
 void wxTopLevelWindowMac::MacChangeWindowAttributes( wxUint32 attributesToSet , wxUint32 attributesToClear )
