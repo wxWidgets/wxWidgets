@@ -1495,7 +1495,27 @@ void wxCocoaMouseMovedEventSynthesizer::AddRunLoopObserver()
     ,   NULL
     ,   NULL
     };
-    m_runLoopObserver.reset(CFRunLoopObserverCreate(kCFAllocatorDefault, kCFRunLoopBeforeWaiting, TRUE, 0, SynthesizeMouseMovedEvent, &observerContext));
+
+    // The kCFRunLoopExit observation point is used such that we hook the run loop after it has already decided that
+    // it is going to exit which is generally for the purpose of letting the event loop process the next Cocoa event.
+
+    // Executing our procedure within the run loop (e.g. kCFRunLoopBeforeWaiting which was used before) results
+    // in our observer procedure being called before the run loop has decided that it is going to return control to
+    // the Cocoa event loop.  One major problem is uncovered by the wxGenericHyperlinkCtrl (consider this to be "user
+    // code") which changes the window's cursor and thus causes the cursor rectangle's to be invalidated.
+
+    // Cocoa implements this invalidation using a delayed notification scheme whereby the resetCursorRects method
+    // won't be called until the CFRunLoop gets around to it.  If the CFRunLoop has not yet exited then it will get
+    // around to it before letting the event loop do its work.  This has some very odd effects on the way the
+    // newly created tracking rects function.  In particular, we will often miss the mouseExited: message if the
+    // user flicks the mouse quickly enough such that the mouse is already outside of the tracking rect by the
+    // time the new one is built.
+
+    // Observing from the kCFRunLoopExit point gives Cocoa's event loop an opportunity to chew some events before it cedes
+    // control back to the CFRunLoop, thus causing the delayed notifications to fire at an appropriate time and
+    // the mouseExited: message to be sent properly.
+
+    m_runLoopObserver.reset(CFRunLoopObserverCreate(kCFAllocatorDefault, kCFRunLoopExit, TRUE, 0, SynthesizeMouseMovedEvent, &observerContext));
     CFRunLoopAddObserver([[NSRunLoop currentRunLoop] getCFRunLoop], m_runLoopObserver, kCFRunLoopCommonModes);
     wxLogTrace(wxTRACE_COCOA_TrackingRect, wxT("Added tracking rect run loop observer"));
 }
