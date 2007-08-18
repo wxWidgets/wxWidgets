@@ -104,6 +104,7 @@ public:
     virtual void MacInstallTopLevelWindowEventHandler() ;
 
     bool MacGetMetalAppearance() const ;
+    bool MacGetUnifiedAppearance() const ;
 
     void MacChangeWindowAttributes( wxUint32 attributesToSet , wxUint32 attributesToClear ) ;
     wxUint32 MacGetWindowAttributes() const ;
@@ -141,6 +142,7 @@ private :
     // This is because the ExtraStyle flags get out of sync with the metal appearance and the metal
     // logic & checks cease to work as expected. To set the metal appearance, use SetExtraStyle.
     void MacSetMetalAppearance( bool on ) ;
+    void MacSetUnifiedAppearance( bool on ) ;
 
     WXEVENTHANDLERREF    m_macEventHandler ;
 
