@@ -2684,7 +2684,7 @@ const int wxAuiBaseTabCtrlId = 5380;
 
 BEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
     EVT_SIZE(wxAuiNotebook::OnSize)
-    EVT_CHILD_FOCUS(wxAuiNotebook::OnChildFocus)
+    EVT_CHILD_FOCUS(wxAuiNotebook::OnChildFocusNotebook)
     EVT_COMMAND_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
                       wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING,
                       wxAuiNotebook::OnTabClicked)
@@ -2712,9 +2712,14 @@ BEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
     EVT_COMMAND_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
                       wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP,
                       wxAuiNotebook::OnTabRightUp)
-    EVT_NAVIGATION_KEY(wxAuiNotebook::OnNavigationKey)
+    EVT_NAVIGATION_KEY(wxAuiNotebook::OnNavigationKeyNotebook)
 
+#ifdef wxHAS_NATIVE_TAB_TRAVERSAL
     WX_EVENT_TABLE_CONTROL_CONTAINER(wxAuiNotebook)
+#else
+    // Avoid clash with container event handler functions
+    EVT_SET_FOCUS(wxAuiNotebook::OnFocus)
+#endif
 END_EVENT_TABLE()
 
 WX_DELEGATE_TO_CONTROL_CONTAINER(wxAuiNotebook, wxControl)
@@ -4000,7 +4005,7 @@ void wxAuiNotebook::RemoveEmptyTabFrames()
     m_mgr.Update();
 }
 
-void wxAuiNotebook::OnChildFocus(wxChildFocusEvent& evt)
+void wxAuiNotebook::OnChildFocusNotebook(wxChildFocusEvent& evt)
 {
     // if we're dragging a tab, don't change the current selection.
     // This code prevents a bug that used to happen when the hint window
@@ -4030,7 +4035,7 @@ void wxAuiNotebook::OnChildFocus(wxChildFocusEvent& evt)
     }
 }
 
-void wxAuiNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
+void wxAuiNotebook::OnNavigationKeyNotebook(wxNavigationKeyEvent& event)
 {
     if ( event.IsWindowChange() ) {
         // change pages

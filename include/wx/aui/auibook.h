@@ -598,7 +598,7 @@ protected:
 
 protected:
 
-    void OnChildFocus(wxChildFocusEvent& evt);
+    void OnChildFocusNotebook(wxChildFocusEvent& evt);
     void OnRender(wxAuiManagerEvent& evt);
     void OnSize(wxSizeEvent& evt);
     void OnTabClicked(wxCommandEvent& evt);
@@ -610,7 +610,7 @@ protected:
     void OnTabMiddleUp(wxCommandEvent& evt);
     void OnTabRightDown(wxCommandEvent& evt);
     void OnTabRightUp(wxCommandEvent& evt);
-    void OnNavigationKey(wxNavigationKeyEvent& event);
+    void OnNavigationKeyNotebook(wxNavigationKeyEvent& event);
 
     // set selection to the given window (which must be non-NULL and be one of
     // our pages, otherwise an assert is raised)
