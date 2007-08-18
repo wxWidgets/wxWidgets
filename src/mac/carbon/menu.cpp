@@ -107,7 +107,7 @@ void wxInsertMenuItemsInMenu(wxMenu* menu, MenuRef wm, MenuItemIndex insertAfter
         else
         {
             wxAcceleratorEntry*
-                entry = wxAcceleratorEntry::Create( item->GetText() ) ;
+                entry = wxAcceleratorEntry::Create( item->GetItemLabel() ) ;
 
             MenuItemIndex winListPos = (MenuItemIndex)-1;
             OSStatus err = GetIndMenuItemWithCommandID(wm,
@@ -119,7 +119,7 @@ void wxInsertMenuItemsInMenu(wxMenu* menu, MenuRef wm, MenuItemIndex insertAfter
                 // a separator is to know if we've added menu items to the menu
                 // before the separator.
                 newItems = true;
-                UMAInsertMenuItem(wm, wxStripMenuCodes(item->GetText()) , wxFont::GetDefaultEncoding(), insertAfter, entry);
+                UMAInsertMenuItem(wm, wxStripMenuCodes(item->GetItemLabel()) , wxFont::GetDefaultEncoding(), insertAfter, entry);
                 SetMenuItemCommandID( wm , insertAfter+1 , wxIdToMacCommand ( item->GetId() ) ) ;
                 SetMenuItemRefCon( wm , insertAfter+1 , (URefCon) item ) ;
             }
@@ -227,9 +227,9 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 pSubMenu->MacBeforeDisplay( true ) ;
 
             if ( pos == (size_t)-1 )
-                UMAAppendSubMenuItem(MAC_WXHMENU(m_hMenu), wxStripMenuCodes(pItem->GetText()), wxFont::GetDefaultEncoding(), pSubMenu->m_macMenuId);
+                UMAAppendSubMenuItem(MAC_WXHMENU(m_hMenu), wxStripMenuCodes(pItem->GetItemLabel()), wxFont::GetDefaultEncoding(), pSubMenu->m_macMenuId);
             else
-                UMAInsertSubMenuItem(MAC_WXHMENU(m_hMenu), wxStripMenuCodes(pItem->GetText()), wxFont::GetDefaultEncoding(), pos, pSubMenu->m_macMenuId);
+                UMAInsertSubMenuItem(MAC_WXHMENU(m_hMenu), wxStripMenuCodes(pItem->GetItemLabel()), wxFont::GetDefaultEncoding(), pos, pSubMenu->m_macMenuId);
 
             pItem->UpdateItemBitmap() ;
             pItem->UpdateItemStatus() ;
@@ -744,7 +744,7 @@ void wxMenuBar::MacInstallMenuBar()
                     else
                     {
                         wxAcceleratorEntry*
-                            entry = wxAcceleratorEntry::Create( item->GetText() ) ;
+                            entry = wxAcceleratorEntry::Create( item->GetItemLabel() ) ;
 
                         if ( item->GetId() == wxApp::s_macAboutMenuItemId )
                         {
@@ -754,7 +754,7 @@ void wxMenuBar::MacInstallMenuBar()
                         {
                             if ( helpMenuHandle )
                             {
-                                UMAAppendMenuItem(helpMenuHandle, wxStripMenuCodes(item->GetText()) , wxFont::GetDefaultEncoding(), entry);
+                                UMAAppendMenuItem(helpMenuHandle, wxStripMenuCodes(item->GetItemLabel()) , wxFont::GetDefaultEncoding(), entry);
                                 SetMenuItemCommandID( helpMenuHandle , CountMenuItems(helpMenuHandle) , wxIdToMacCommand ( item->GetId() ) ) ;
                                 SetMenuItemRefCon( helpMenuHandle , CountMenuItems(helpMenuHandle) , (URefCon) item ) ;
                             }
@@ -812,8 +812,8 @@ void wxMenuBar::MacInstallMenuBar()
         if ( aboutMenuItem )
         {
             wxAcceleratorEntry*
-                entry = wxAcceleratorEntry::Create( aboutMenuItem->GetText() ) ;
-            UMASetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , wxStripMenuCodes ( aboutMenuItem->GetText() ) , wxFont::GetDefaultEncoding() );
+                entry = wxAcceleratorEntry::Create( aboutMenuItem->GetItemLabel() ) ;
+            UMASetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , wxStripMenuCodes ( aboutMenuItem->GetItemLabel() ) , wxFont::GetDefaultEncoding() );
             UMAEnableMenuItem( GetMenuHandle( kwxMacAppleMenuId ) , 1 , true );
             SetMenuItemCommandID( GetMenuHandle( kwxMacAppleMenuId ) , 1 , kHICommandAbout ) ;
             SetMenuItemRefCon(GetMenuHandle( kwxMacAppleMenuId ) , 1 , (URefCon)aboutMenuItem ) ;
