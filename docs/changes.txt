@@ -111,7 +111,8 @@ All (GUI):
 - API consistency fixes: added wxMenuBar::SetMenuLabel, wxMenuBar::GetMenuLabel,
   wxMenuBar::GetMenuLabelText, wxMenu::GetLabelText, wxMenuItem::SetItemLabel,
   wxMenuItem::GetItemLabel, wxMenuItem::GetItemLabelText, wxMenuItem::GetLabelText.
-  Retrieval of labels with and without mnemonics/accelerators is now possible.
+  Get...Label functions get the raw label with mnemonics and accelerators,
+  and Get...LabelText function get the text only without mnemonics/accelerators.
 - Added AdvanceSelection, ShowWindowMenu functions and keyboard handling to
   wxAuiNotebook.
 
