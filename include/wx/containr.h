@@ -86,6 +86,9 @@ protected:
     // the parent window we manage the children for
     wxWindow *m_winParent;
 
+    // the child which had the focus last time this panel was activated
+    wxWindow *m_winLastFocused;
+
 private:
     // value returned by AcceptsFocus(), should be changed using SetCanFocus()
     // only
@@ -93,10 +96,6 @@ private:
 
     // a guard against infinite recursion
     bool m_inSetFocus;
-
-    // the child which had the focus last time this panel was activated
-    wxWindow *m_winLastFocused;
-
 };
 
 // common part of WX_DECLARE_CONTROL_CONTAINER in the native and generic cases,
@@ -261,7 +260,7 @@ public:                                                                       \
     void classname::OnFocus(wxFocusEvent& event)                              \
     {                                                                         \
         m_container.HandleOnFocus(event);                                     \
-    } 
+    }
 
 #endif // wxHAS_NATIVE_TAB_TRAVERSAL/!wxHAS_NATIVE_TAB_TRAVERSAL
 
