@@ -371,7 +371,7 @@ public:
     virtual void UnselectAll();
 
     virtual void EnsureVisible( int row );
-    virtual void EnsureVisible( const wxDataViewItem & item );
+    virtual void EnsureVisible( const wxDataViewItem & item, wxDataViewColumn *column = NULL );
 
     virtual wxDataViewItem GetItemByRow( unsigned int row ) const;
     virtual int GetRowByItem( const wxDataViewItem & item ) const;

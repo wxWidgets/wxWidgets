@@ -315,7 +315,7 @@ public:
     virtual void SelectAll();
     virtual void UnselectAll();
 
-    virtual void EnsureVisible( const wxDataViewItem & item );
+    virtual void EnsureVisible( const wxDataViewItem & item, wxDataViewColumn *column = NULL );
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);

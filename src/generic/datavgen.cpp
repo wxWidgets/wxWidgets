@@ -3622,7 +3622,7 @@ void wxDataViewCtrl::EnsureVisible( int row )
     m_clientArea->ScrollTo( row );
 }
 
-void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item )
+void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, wxDataViewColumn *column )
 {
     int row = m_clientArea->GetRowByItem(item);
     if( row >= 0 )

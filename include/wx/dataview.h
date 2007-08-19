@@ -484,7 +484,8 @@ public:
     virtual void SelectAll() = 0;
     virtual void UnselectAll() = 0;
 
-    virtual void EnsureVisible( const wxDataViewItem & item ) = 0;
+    virtual void EnsureVisible( const wxDataViewItem & item,
+                                wxDataViewColumn *column = NULL ) = 0;
 
 protected:
     virtual void DoSetExpanderColumn() = 0 ;

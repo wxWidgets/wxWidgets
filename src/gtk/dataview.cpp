@@ -3033,8 +3033,13 @@ void wxDataViewCtrl::UnselectAll()
 {
 }
 
-void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item )
+void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, wxDataViewColumn *column )
 {
+    GtkTreeIter iter;
+    iter.user_data = (gpointer) item.GetID();
+    GtkTreePath *path = m_internal->get_path( &iter );
+    gtk_tree_view_scroll_to_cell( GTK_TREE_VIEW(m_treeview), path, NULL, false, 0.0, 0.0 );
+    gtk_tree_path_free( path );
 }
 
 void wxDataViewCtrl::DoSetExpanderColumn()
