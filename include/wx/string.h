@@ -2644,8 +2644,8 @@ private:
 #endif // wxUSE_UNICODE_UTF8
 
   friend class WXDLLIMPEXP_FWD_BASE wxCStrData;
-  friend class wxImplStringBuffer;
-  friend class wxImplStringBufferLength;
+  friend class wxStringInternalBuffer;
+  friend class wxStringInternalBufferLength;
 };
 
 #ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
@@ -2707,16 +2707,16 @@ inline wxString operator+(wchar_t ch, const wxString& string)
 #if !wxUSE_STL_BASED_WXSTRING
 // string buffer for direct access to string data in their native
 // representation:
-class wxImplStringBuffer
+class wxStringInternalBuffer
 {
 public:
     typedef wxStringCharType CharType;
 
-    wxImplStringBuffer(wxString& str, size_t lenWanted = 1024)
+    wxStringInternalBuffer(wxString& str, size_t lenWanted = 1024)
         : m_str(str), m_buf(NULL)
         { m_buf = m_str.DoGetWriteBuf(lenWanted); }
 
-    ~wxImplStringBuffer() { m_str.DoUngetWriteBuf(); }
+    ~wxStringInternalBuffer() { m_str.DoUngetWriteBuf(); }
 
     operator wxStringCharType*() const { return m_buf; }
 
@@ -2724,22 +2724,22 @@ private:
     wxString&         m_str;
     wxStringCharType *m_buf;
 
-    DECLARE_NO_COPY_CLASS(wxImplStringBuffer)
+    DECLARE_NO_COPY_CLASS(wxStringInternalBuffer)
 };
 
-class wxImplStringBufferLength
+class wxStringInternalBufferLength
 {
 public:
     typedef wxStringCharType CharType;
 
-    wxImplStringBufferLength(wxString& str, size_t lenWanted = 1024)
+    wxStringInternalBufferLength(wxString& str, size_t lenWanted = 1024)
         : m_str(str), m_buf(NULL), m_len(0), m_lenSet(false)
     {
         m_buf = m_str.DoGetWriteBuf(lenWanted);
         wxASSERT(m_buf != NULL);
     }
 
-    ~wxImplStringBufferLength()
+    ~wxStringInternalBufferLength()
     {
         wxASSERT(m_lenSet);
         m_str.DoUngetWriteBuf(m_len);
@@ -2754,7 +2754,7 @@ private:
     size_t            m_len;
     bool              m_lenSet;
 
-    DECLARE_NO_COPY_CLASS(wxImplStringBufferLength)
+    DECLARE_NO_COPY_CLASS(wxStringInternalBufferLength)
 };
 
 #endif // !wxUSE_STL_BASED_WXSTRING
@@ -2834,30 +2834,30 @@ public:
 };
 
 #if wxUSE_STL_BASED_WXSTRING
-class wxImplStringBuffer : public wxStringTypeBufferBase<wxStringCharType>
+class wxStringInternalBuffer : public wxStringTypeBufferBase<wxStringCharType>
 {
 public:
-    wxImplStringBuffer(wxString& str, size_t lenWanted = 1024)
+    wxStringInternalBuffer(wxString& str, size_t lenWanted = 1024)
         : wxStringTypeBufferBase<wxStringCharType>(str, lenWanted) {}
-    ~wxImplStringBuffer()
+    ~wxStringInternalBuffer()
         { m_str.m_impl.assign(m_buf.data()); }
 
-    DECLARE_NO_COPY_CLASS(wxImplStringBuffer)
+    DECLARE_NO_COPY_CLASS(wxStringInternalBuffer)
 };
 
-class wxImplStringBufferLength : public wxStringTypeBufferLengthBase<wxStringCharType>
+class wxStringInternalBufferLength : public wxStringTypeBufferLengthBase<wxStringCharType>
 {
 public:
-    wxImplStringBufferLength(wxString& str, size_t lenWanted = 1024)
+    wxStringInternalBufferLength(wxString& str, size_t lenWanted = 1024)
         : wxStringTypeBufferLengthBase<wxStringCharType>(str, lenWanted) {}
 
-    ~wxImplStringBufferLength()
+    ~wxStringInternalBufferLength()
     {
         wxASSERT(m_lenSet);
         m_str.m_impl.assign(m_buf.data(), m_len);
     }
 
-    DECLARE_NO_COPY_CLASS(wxImplStringBufferLength)
+    DECLARE_NO_COPY_CLASS(wxStringInternalBufferLength)
 };
 #endif // wxUSE_STL_BASED_WXSTRING
 
@@ -2866,8 +2866,8 @@ public:
 typedef wxStringTypeBuffer<wxChar>        wxStringBuffer;
 typedef wxStringTypeBufferLength<wxChar>  wxStringBufferLength;
 #else // if !wxUSE_STL_BASED_WXSTRING && !wxUSE_UNICODE_UTF8
-typedef wxImplStringBuffer                wxStringBuffer;
-typedef wxImplStringBufferLength          wxStringBufferLength;
+typedef wxStringInternalBuffer                wxStringBuffer;
+typedef wxStringInternalBufferLength          wxStringBufferLength;
 #endif // !wxUSE_STL_BASED_WXSTRING && !wxUSE_UNICODE_UTF8
 
 // ---------------------------------------------------------------------------

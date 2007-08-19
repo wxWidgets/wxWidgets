@@ -986,7 +986,7 @@ wxString wxString::FromAscii(const char *ascii, size_t len)
     wxString res;
 
     {
-        wxImplStringBuffer buf(res, len);
+        wxStringInternalBuffer buf(res, len);
         wxStringCharType *dest = buf;
 
         for ( ; len > 0; --len )
@@ -1644,7 +1644,7 @@ int wxString::PrintfV(const wxString& format, va_list argptr)
     #if wxUSE_STL_BASED_WXSTRING
         typedef wxStringTypeBuffer<char> Utf8Buffer;
     #else
-        typedef wxImplStringBuffer Utf8Buffer;
+        typedef wxStringInternalBuffer Utf8Buffer;
     #endif
 #endif
 
