@@ -2733,8 +2733,60 @@ wxdataview_row_activated_callback( GtkTreeView* treeview, GtkTreePath *path,
     dv->GetEventHandler()->ProcessEvent( event );
 }
 
+static gboolean
+wxdataview_test_expand_row_callback( GtkTreeView* treeview, GtkTreeIter* iter,
+                                     GtkTreePath *path, wxDataViewCtrl *dv )
+{
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, dv->GetId() );
+
+    wxDataViewItem item( (void*) iter->user_data );;
+    event.SetItem( item );
+    event.SetModel( dv->GetModel() );
+    dv->GetEventHandler()->ProcessEvent( event );
+  
+    return !event.IsAllowed();
+}
+
+static void
+wxdataview_row_expanded_callback( GtkTreeView* treeview, GtkTreeIter* iter,
+                                  GtkTreePath *path, wxDataViewCtrl *dv )
+{
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED, dv->GetId() );
+
+    wxDataViewItem item( (void*) iter->user_data );;
+    event.SetItem( item );
+    event.SetModel( dv->GetModel() );
+    dv->GetEventHandler()->ProcessEvent( event );
+}
+
+static gboolean
+wxdataview_test_collapse_row_callback( GtkTreeView* treeview, GtkTreeIter* iter,
+                                       GtkTreePath *path, wxDataViewCtrl *dv )
+{
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING, dv->GetId() );
+
+    wxDataViewItem item( (void*) iter->user_data );;
+    event.SetItem( item );
+    event.SetModel( dv->GetModel() );
+    dv->GetEventHandler()->ProcessEvent( event );
+    
+    return !event.IsAllowed();
+}
+
+static void
+wxdataview_row_collapsed_callback( GtkTreeView* treeview, GtkTreeIter* iter,
+                                   GtkTreePath *path, wxDataViewCtrl *dv )
+{
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED, dv->GetId() );
+
+    wxDataViewItem item( (void*) iter->user_data );;
+    event.SetItem( item );
+    event.SetModel( dv->GetModel() );
+    dv->GetEventHandler()->ProcessEvent( event );
+}
+
 //-----------------------------------------------------------------------------
-// wxDataViewCtrl
+    // wxDataViewCtrl
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -2867,8 +2919,20 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
 
     GtkEnableSelectionEvents();
 
-    g_signal_connect_after (m_treeview, "row_activated",
+    g_signal_connect_after (m_treeview, "row-activated",
                             G_CALLBACK (wxdataview_row_activated_callback), this);
+
+    g_signal_connect (m_treeview, "test-collapse-row",
+                            G_CALLBACK (wxdataview_test_collapse_row_callback), this);
+
+    g_signal_connect_after (m_treeview, "row-collapsed",
+                            G_CALLBACK (wxdataview_row_collapsed_callback), this);
+
+    g_signal_connect (m_treeview, "test-expand-row",
+                            G_CALLBACK (wxdataview_test_expand_row_callback), this);
+                            
+    g_signal_connect_after (m_treeview, "row-expanded",
+                            G_CALLBACK (wxdataview_row_expanded_callback), this);
 
     return true;
 }
@@ -2937,6 +3001,40 @@ wxDataViewItem wxDataViewCtrl::GetSelection()
     }
     
     return wxDataViewItem(0);
+}
+
+int wxDataViewCtrl::GetSelections( wxDataViewItemArray & sel ) const
+{
+    return 0;
+}
+
+void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )
+{
+}
+
+void wxDataViewCtrl::Select( const wxDataViewItem & item )
+{
+}
+
+void wxDataViewCtrl::Unselect( const wxDataViewItem & item )
+{
+}
+
+bool wxDataViewCtrl::IsSelected( const wxDataViewItem & item ) const
+{
+    return false;
+}
+
+void wxDataViewCtrl::SelectAll()
+{
+}
+
+void wxDataViewCtrl::UnselectAll()
+{
+}
+
+void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item )
+{
 }
 
 void wxDataViewCtrl::DoSetExpanderColumn()
