@@ -341,41 +341,44 @@ inline wxObject *wxCheckDynamicCast(wxObject *obj, wxClassInfo *classInfo)
     return obj && obj->GetClassInfo()->IsKindOf(classInfo) ? obj : NULL;
 }
 
+// ----------------------------------------------------------------------------
+// wxDynamicObject
+// ----------------------------------------------------------------------------
+
 #if wxUSE_EXTENDED_RTTI
 class WXDLLIMPEXP_BASE wxDynamicObject : public wxObject
 {
-    friend class WXDLLIMPEXP_BASE wxDynamicClassInfo ;
+    friend class WXDLLIMPEXP_BASE wxDynamicClassInfo;
+
 public:
     // instantiates this object with an instance of its superclass
-    wxDynamicObject(wxObject* superClassInstance, const wxDynamicClassInfo *info) ;
+    wxDynamicObject(wxObject* superClassInstance, const wxDynamicClassInfo *info);
     virtual ~wxDynamicObject();
 
     void SetProperty (const wxChar *propertyName, const wxxVariant &value);
-    wxxVariant GetProperty (const wxChar *propertyName) const ;
+    wxxVariant GetProperty (const wxChar *propertyName) const;
 
     // get the runtime identity of this object
     wxClassInfo *GetClassInfo() const
     {
-#ifdef _MSC_VER
-        return (wxClassInfo*) m_classInfo;
-#else
         wxDynamicClassInfo *nonconst = wx_const_cast(wxDynamicClassInfo *, m_classInfo);
         return wx_static_cast(wxClassInfo *, nonconst);
-#endif
     }
 
     wxObject* GetSuperClassInstance() const
     {
-        return m_superClassInstance ;
+        return m_superClassInstance;
     }
-private :
+
+private:
+
     // removes an existing runtime-property
-    void RemoveProperty( const wxChar *propertyName ) ;
+    void RemoveProperty( const wxChar *propertyName );
 
     // renames an existing runtime-property
-    void RenameProperty( const wxChar *oldPropertyName , const wxChar *newPropertyName ) ;
+    void RenameProperty( const wxChar *oldPropertyName, const wxChar *newPropertyName );
 
-    wxObject *m_superClassInstance ;
+    wxObject *m_superClassInstance;
     const wxDynamicClassInfo *m_classInfo;
     struct wxDynamicObjectInternal;
     wxDynamicObjectInternal *m_data;
@@ -415,14 +418,14 @@ private :
 #define DECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)   wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)
 #define DECLARE_DYNAMIC_CLASS_NO_COPY(name)     wxDECLARE_DYNAMIC_CLASS_NO_COPY(name)
 #define DECLARE_ABSTRACT_CLASS(name)            wxDECLARE_ABSTRACT_CLASS(name)
-#define DECLARE_CLASS(name)                     wxDECLARE_CLASS(name)
+#define DECLARE_CLASS(name)                     wxDECLARE_ABSTRACT_CLASS(name)
 #define IMPLEMENT_DYNAMIC_CLASS_WITH_COPY(n,b)  wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY(n,b)
 #define IMPLEMENT_DYNAMIC_CLASS(n,b)            wxIMPLEMENT_DYNAMIC_CLASS(n,b)
 #define IMPLEMENT_DYNAMIC_CLASS2(n,b1,b2)       wxIMPLEMENT_DYNAMIC_CLASS2(n,b1,b2)
 #define IMPLEMENT_ABSTRACT_CLASS(n,b)           wxIMPLEMENT_ABSTRACT_CLASS(n,b)
 #define IMPLEMENT_ABSTRACT_CLASS2(n,b1,b2)      wxIMPLEMENT_ABSTRACT_CLASS2(n,b1,b2)
-#define IMPLEMENT_CLASS(n,b)                    wxIMPLEMENT_CLASS(n,b)
-#define IMPLEMENT_CLASS2(n,b1,b2)               wxIMPLEMENT_CLASS2(n,b1,b2)
+#define IMPLEMENT_CLASS(n,b)                    wxIMPLEMENT_ABSTRACT_CLASS(n,b)
+#define IMPLEMENT_CLASS2(n,b1,b2)               wxIMPLEMENT_ABSTRACT_CLASS2(n,b1,b2)
 #define CLASSINFO(name)                         wxCLASSINFO(name)
 
 #define wxIS_KIND_OF(obj, className) obj->IsKindOf(&className::ms_classInfo)
