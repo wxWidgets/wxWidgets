@@ -29,8 +29,9 @@
 #include "wx/xml/xml.h"
 #include "wx/tokenzr.h"
 #include "wx/txtstrm.h"
-
 #include "wx/xtistrm.h"
+
+// STL headers
 
 #include "wx/beforestd.h"
 #include <map>
@@ -40,9 +41,12 @@
 
 using namespace std;
 
-//
-// XML Streaming
-//
+
+
+
+// ----------------------------------------------------------------------------
+// wxObjectXmlWriter
+// ----------------------------------------------------------------------------
 
 // convenience functions
 
@@ -121,7 +125,6 @@ void wxObjectXmlWriter::DoBeginWriteObject(const wxObject *WXUNUSED(object),
     m_data->Push( pnode );
 }
 
-// end of writing the root object
 void wxObjectXmlWriter::DoEndWriteObject(const wxObject *WXUNUSED(object), 
                                    const wxClassInfo *WXUNUSED(classInfo), 
                                    int WXUNUSED(objectID) )
@@ -129,7 +132,6 @@ void wxObjectXmlWriter::DoEndWriteObject(const wxObject *WXUNUSED(object),
     m_data->Pop();
 }
 
-// writes a property in the stream format
 void wxObjectXmlWriter::DoWriteSimpleType( wxxVariant &value )
 {
     wxXmlAddContentToNode( m_data->m_current,value.GetAsString() );
@@ -162,9 +164,6 @@ void wxObjectXmlWriter::DoEndWriteProperty(const wxPropertyInfo *WXUNUSED(propIn
     m_data->Pop();
 }
 
-
-
-// insert an object reference to an already written object
 void wxObjectXmlWriter::DoWriteRepeatedObject( int objectID )
 {
     wxXmlNode *pnode;
@@ -173,7 +172,6 @@ void wxObjectXmlWriter::DoWriteRepeatedObject( int objectID )
     m_data->m_current->AddChild(pnode);
 }
 
-// insert a null reference
 void wxObjectXmlWriter::DoWriteNullObject()
 {
     wxXmlNode *pnode;
@@ -181,7 +179,6 @@ void wxObjectXmlWriter::DoWriteNullObject()
     m_data->m_current->AddChild(pnode);
 }
 
-// writes a delegate in the stream format
 void wxObjectXmlWriter::DoWriteDelegate( const wxObject *WXUNUSED(object), 
                                    const wxClassInfo* WXUNUSED(classInfo), 
                                    const wxPropertyInfo *WXUNUSED(pi),
@@ -196,14 +193,9 @@ void wxObjectXmlWriter::DoWriteDelegate( const wxObject *WXUNUSED(object),
     }
 }
 
-// ----------------------------------------------------------------------------
-// reading objects in
-// ----------------------------------------------------------------------------
-
-
 
 // ----------------------------------------------------------------------------
-// reading xml in
+// wxObjectXmlReader
 // ----------------------------------------------------------------------------
 
 /*
@@ -212,7 +204,7 @@ as properties are always sought by typeinfo over all levels
 and create params are always toplevel class only
 */
 
-int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
+int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxObjectWriterCallback *callbacks)
 {
     wxASSERT_MSG( callbacks, wxT("Does not support reading without a Depersistor") );
     wxString className;
@@ -341,7 +333,7 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
             {
                 createParamOids[i] = ReadComponent( prop, callbacks );
                 createClassInfos[i] = 
-                    dynamic_cast<const wxClassTypeInfo*>(pi->GetTypeInfo())->GetClassInfo();
+                    wx_dynamic_cast(const wxClassTypeInfo*, pi->GetTypeInfo())->GetClassInfo();
             }
             else
             {
@@ -350,7 +342,7 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                 if( pi->GetFlags() & wxPROP_ENUM_STORE_LONG )
                 {
                     const wxEnumTypeInfo *eti = 
-                        dynamic_cast<const wxEnumTypeInfo*>( pi->GetTypeInfo() );
+                        wx_dynamic_cast(const wxEnumTypeInfo*, pi->GetTypeInfo() );
                     if ( eti )
                     {
                         long realval;
@@ -380,7 +372,7 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
             {
                 createParamOids[i] = wxNullObjectID;
                 createClassInfos[i] = 
-                    dynamic_cast<const wxClassTypeInfo*>(pi->GetTypeInfo())->GetClassInfo();
+                    wx_dynamic_cast(const wxClassTypeInfo*, pi->GetTypeInfo())->GetClassInfo();
             }
             else
             {
@@ -415,7 +407,7 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                 if ( pi->GetTypeInfo()->GetKind() == wxT_COLLECTION )
                 {
                     const wxCollectionTypeInfo* collType = 
-                        dynamic_cast< const wxCollectionTypeInfo* >( pi->GetTypeInfo() );
+                        wx_dynamic_cast( const wxCollectionTypeInfo*, pi->GetTypeInfo() );
                     const wxTypeInfo * elementType = collType->GetElementType();
                     while( prop )
                     {
@@ -503,7 +495,7 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                     if( pi->GetFlags() & wxPROP_ENUM_STORE_LONG )
                     {
                         const wxEnumTypeInfo *eti = 
-                            dynamic_cast<const wxEnumTypeInfo*>( pi->GetTypeInfo() );
+                            wx_dynamic_cast(const wxEnumTypeInfo*, pi->GetTypeInfo() );
                         if ( eti )
                         {
                             long realval;
@@ -539,7 +531,7 @@ wxxVariant wxObjectXmlReader::ReadValue(wxXmlNode *node,
     return result;
 }
 
-int wxObjectXmlReader::ReadObject( const wxString &name, wxDepersister *callbacks)
+int wxObjectXmlReader::ReadObject( const wxString &name, wxObjectWriterCallback *callbacks)
 {
     wxXmlNode *iter = m_parent->GetChildren();
     while ( iter )
