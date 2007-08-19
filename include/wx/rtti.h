@@ -214,108 +214,108 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
 //
 // blocks, we define them here as empty.
 
-#define EMPTY_MACROVALUE /**/
+#define wxEMPTY_PARAMETER_VALUE /**/
 
-#define wxBEGIN_ENUM( e ) EMPTY_MACROVALUE
-#define wxENUM_MEMBER( v ) EMPTY_MACROVALUE
-#define wxEND_ENUM( e ) EMPTY_MACROVALUE
+#define wxBEGIN_ENUM( e ) wxEMPTY_PARAMETER_VALUE
+#define wxENUM_MEMBER( v ) wxEMPTY_PARAMETER_VALUE
+#define wxEND_ENUM( e ) wxEMPTY_PARAMETER_VALUE
 
-#define wxIMPLEMENT_SET_STREAMING(SetName,e) EMPTY_MACROVALUE
+#define wxIMPLEMENT_SET_STREAMING(SetName,e) wxEMPTY_PARAMETER_VALUE
 
-#define wxBEGIN_FLAGS( e ) EMPTY_MACROVALUE
-#define wxFLAGS_MEMBER( v ) EMPTY_MACROVALUE
-#define wxEND_FLAGS( e ) EMPTY_MACROVALUE
+#define wxBEGIN_FLAGS( e ) wxEMPTY_PARAMETER_VALUE
+#define wxFLAGS_MEMBER( v ) wxEMPTY_PARAMETER_VALUE
+#define wxEND_FLAGS( e ) wxEMPTY_PARAMETER_VALUE
 
-#define wxCOLLECTION_TYPE_INFO( element, collection ) EMPTY_MACROVALUE
+#define wxCOLLECTION_TYPE_INFO( element, collection ) wxEMPTY_PARAMETER_VALUE
 
-#define wxHANDLER(name,eventClassType) EMPTY_MACROVALUE
-#define wxBEGIN_HANDLERS_TABLE(theClass) EMPTY_MACROVALUE
-#define wxEND_HANDLERS_TABLE() EMPTY_MACROVALUE
+#define wxHANDLER(name,eventClassType) wxEMPTY_PARAMETER_VALUE
+#define wxBEGIN_HANDLERS_TABLE(theClass) wxEMPTY_PARAMETER_VALUE
+#define wxEND_HANDLERS_TABLE() wxEMPTY_PARAMETER_VALUE
 
-#define wxIMPLEMENT_DYNAMIC_CLASS_XTI( name, basename, unit ) EMPTY_MACROVALUE
+#define wxIMPLEMENT_DYNAMIC_CLASS_XTI( name, basename, unit ) wxEMPTY_PARAMETER_VALUE
 #define wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK( name, basename, unit, callback ) \
-        EMPTY_MACROVALUE
+        wxEMPTY_PARAMETER_VALUE
 
-#define wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI( name, basename, unit ) EMPTY_MACROVALUE
+#define wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI( name, basename, unit ) wxEMPTY_PARAMETER_VALUE
 
 #define wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY_AND_STREAMERS_XTI( name, basename,  \
                                                              unit, toString,    \
-                                                             fromString ) EMPTY_MACROVALUE
-#define wxIMPLEMENT_DYNAMIC_CLASS_NO_WXOBJECT_NO_BASE_XTI( name, unit ) EMPTY_MACROVALUE
-#define wxIMPLEMENT_DYNAMIC_CLASS_NO_WXOBJECT_XTI( name, basename, unit ) EMPTY_MACROVALUE
+                                                             fromString ) wxEMPTY_PARAMETER_VALUE
+#define wxIMPLEMENT_DYNAMIC_CLASS_NO_WXOBJECT_NO_BASE_XTI( name, unit ) wxEMPTY_PARAMETER_VALUE
+#define wxIMPLEMENT_DYNAMIC_CLASS_NO_WXOBJECT_XTI( name, basename, unit ) wxEMPTY_PARAMETER_VALUE
 
-#define wxIMPLEMENT_DYNAMIC_CLASS2_XTI( name, basename, basename2, unit) EMPTY_MACROVALUE
+#define wxIMPLEMENT_DYNAMIC_CLASS2_XTI( name, basename, basename2, unit) wxEMPTY_PARAMETER_VALUE
 
 #define wxCONSTRUCTOR_0(klass) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 #define wxCONSTRUCTOR_DUMMY(klass) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 #define wxDIRECT_CONSTRUCTOR_0(klass) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 #define wxCONSTRUCTOR_1(klass,t0,v0) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 #define wxDIRECT_CONSTRUCTOR_1(klass,t0,v0) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 #define wxCONSTRUCTOR_2(klass,t0,v0,t1,v1) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 #define wxDIRECT_CONSTRUCTOR_2(klass,t0,v0,t1,v1) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 #define wxCONSTRUCTOR_3(klass,t0,v0,t1,v1,t2,v2) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 #define wxDIRECT_CONSTRUCTOR_3(klass,t0,v0,t1,v1,t2,v2) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 #define wxCONSTRUCTOR_4(klass,t0,v0,t1,v1,t2,v2,t3,v3) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 #define wxDIRECT_CONSTRUCTOR_4(klass,t0,v0,t1,v1,t2,v2,t3,v3) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 #define wxCONSTRUCTOR_5(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 #define wxDIRECT_CONSTRUCTOR_5(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 #define wxCONSTRUCTOR_6(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 #define wxDIRECT_CONSTRUCTOR_6(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 #define wxCONSTRUCTOR_7(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 #define wxDIRECT_CONSTRUCTOR_7(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 #define wxCONSTRUCTOR_8(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6,t7,v7) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 #define wxDIRECT_CONSTRUCTOR_8(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6,t7,v7) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 
-#define wxSETTER( property, Klass, valueType, setterMethod ) EMPTY_MACROVALUE
-#define wxGETTER( property, Klass, valueType, gettermethod ) EMPTY_MACROVALUE
-#define wxADDER( property, Klass, valueType, addermethod ) EMPTY_MACROVALUE
-#define wxCOLLECTION_GETTER( property, Klass, valueType, gettermethod ) EMPTY_MACROVALUE
+#define wxSETTER( property, Klass, valueType, setterMethod ) wxEMPTY_PARAMETER_VALUE
+#define wxGETTER( property, Klass, valueType, gettermethod ) wxEMPTY_PARAMETER_VALUE
+#define wxADDER( property, Klass, valueType, addermethod ) wxEMPTY_PARAMETER_VALUE
+#define wxCOLLECTION_GETTER( property, Klass, valueType, gettermethod ) wxEMPTY_PARAMETER_VALUE
 
-#define wxBEGIN_PROPERTIES_TABLE(theClass) EMPTY_MACROVALUE
-#define wxEND_PROPERTIES_TABLE() EMPTY_MACROVALUE
-#define wxHIDE_PROPERTY( pname ) EMPTY_MACROVALUE
+#define wxBEGIN_PROPERTIES_TABLE(theClass) wxEMPTY_PARAMETER_VALUE
+#define wxEND_PROPERTIES_TABLE() wxEMPTY_PARAMETER_VALUE
+#define wxHIDE_PROPERTY( pname ) wxEMPTY_PARAMETER_VALUE
 
 #define wxPROPERTY( pname, type, setter, getter, defaultValue, flags, help, group) \
-    EMPTY_MACROVALUE
+    wxEMPTY_PARAMETER_VALUE
 
 #define wxPROPERTY_FLAGS( pname, flags, type, setter, getter,defaultValue,    \
-                          pflags, help, group) EMPTY_MACROVALUE
+                          pflags, help, group) wxEMPTY_PARAMETER_VALUE
 
 #define wxREADONLY_PROPERTY( pname, type, getter,defaultValue, flags, help, group) \
-    wxGETTER( pname, class_t, type, getter ) EMPTY_MACROVALUE
+    wxGETTER( pname, class_t, type, getter ) wxEMPTY_PARAMETER_VALUE
 
 #define wxREADONLY_PROPERTY_FLAGS( pname, flags, type, getter,defaultValue,    \
-                                   pflags, help, group)  EMPTY_MACROVALUE
+                                   pflags, help, group)  wxEMPTY_PARAMETER_VALUE
 
 #define wxPROPERTY_COLLECTION( pname, colltype, addelemtype, adder, getter,    \
-                               flags, help, group )  EMPTY_MACROVALUE
+                               flags, help, group )  wxEMPTY_PARAMETER_VALUE
 
 #define wxREADONLY_PROPERTY_COLLECTION( pname, colltype, addelemtype, getter,   \
-                                        flags, help, group) EMPTY_MACROVALUE
-#define wxEVENT_PROPERTY( name, eventType, eventClass ) EMPTY_MACROVALUE
+                                        flags, help, group) wxEMPTY_PARAMETER_VALUE
+#define wxEVENT_PROPERTY( name, eventType, eventClass ) wxEMPTY_PARAMETER_VALUE
 
-#define wxEVENT_RANGE_PROPERTY( name, eventType, lastEventType, eventClass ) EMPTY_MACROVALUE
+#define wxEVENT_RANGE_PROPERTY( name, eventType, lastEventType, eventClass ) wxEMPTY_PARAMETER_VALUE
 
-#define wxIMPLEMENT_PROPERTY(name, type) EMPTY_MACROVALUE
+#define wxIMPLEMENT_PROPERTY(name, type) wxEMPTY_PARAMETER_VALUE
 
 #endif // !wxUSE_EXTENDED_RTTI
 #endif // _WX_RTTIH__
