@@ -306,9 +306,16 @@ public:
     virtual bool AssociateModel( wxDataViewModel *model );
     virtual bool AppendColumn( wxDataViewColumn *col );
 
-    // selection code
     virtual wxDataViewItem GetSelection();
-    
+    virtual int GetSelections( wxDataViewItemArray & sel ) const;
+    virtual void SetSelections( const wxDataViewItemArray & sel );
+    virtual void Select( const wxDataViewItem & item );
+    virtual void Unselect( const wxDataViewItem & item );
+    virtual bool IsSelected( const wxDataViewItem & item ) const;
+    virtual void SelectAll();
+    virtual void UnselectAll();
+
+    virtual void EnsureVisible( const wxDataViewItem & item );
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
