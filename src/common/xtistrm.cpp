@@ -29,13 +29,19 @@
 #include "wx/tokenzr.h"
 #include "wx/txtstrm.h"
 
+// STL headers:
+
 #include "wx/beforestd.h"
 #include <map>
 #include <vector>
 #include <string>
 #include "wx/afterstd.h"
-
 using namespace std;
+
+
+// ----------------------------------------------------------------------------
+// wxObjectWriter
+// ----------------------------------------------------------------------------
 
 struct wxObjectWriter::wxObjectWriterInternal
 {
@@ -67,7 +73,7 @@ void wxObjectWriter::ClearObjectContext()
 }
 
 void wxObjectWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo, 
-                           wxPersister *persister, const wxString &name, 
+                           wxObjectReaderCallback *persister, const wxString &name, 
                            wxxVariantArray &metadata )
 {
     DoBeginWriteTopLevelEntry( name );
@@ -76,7 +82,7 @@ void wxObjectWriter::WriteObject(const wxObject *object, const wxClassInfo *clas
 }
 
 void wxObjectWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo, 
-                           wxPersister *persister, bool isEmbedded, 
+                           wxObjectReaderCallback *persister, bool isEmbedded, 
                            wxxVariantArray &metadata )
 {
     if ( !classInfo->BeforeWriteObject( object, this, persister, metadata) )
@@ -96,7 +102,7 @@ void wxObjectWriter::WriteObject(const wxObject *object, const wxClassInfo *clas
 
             // in case this object is a wxDynamicObject we also have to insert is superclass
             // instance with the same id, so that object relations are streamed out correctly
-            const wxDynamicObject* dynobj = dynamic_cast<const wxDynamicObject *>( object );
+            const wxDynamicObject* dynobj = wx_dynamic_cast(const wxDynamicObject*, object);
             if ( !isEmbedded && dynobj )
                 m_data->m_writtenObjects[dynobj->GetSuperClassInstance()] = oid;
 
@@ -110,7 +116,7 @@ void wxObjectWriter::WriteObject(const wxObject *object, const wxClassInfo *clas
 }
 
 void wxObjectWriter::FindConnectEntry(const wxEvtHandler * evSource,
-                                const wxDelegateTypeInfo* dti, 
+                                const wxEventSourceTypeInfo* dti, 
                                 const wxObject* &sink, 
                                 const wxHandlerInfo *&handler)
 {
@@ -148,7 +154,7 @@ void wxObjectWriter::FindConnectEntry(const wxEvtHandler * evSource,
     }
 }
 void wxObjectWriter::WriteAllProperties( const wxObject * obj, const wxClassInfo* ci, 
-                                   wxPersister *persister, 
+                                   wxObjectReaderCallback *persister, 
                                    wxObjectWriterInternalPropertiesData * data )
 {
     wxPropertyInfoMap map;
@@ -191,15 +197,15 @@ void wxObjectWriter::WriteAllProperties( const wxObject * obj, const wxClassInfo
 }
 
 void wxObjectWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* ci, 
-                                 const wxPropertyInfo* pi, wxPersister *persister, 
+                                 const wxPropertyInfo* pi, wxObjectReaderCallback *persister, 
                                  wxObjectWriterInternalPropertiesData *WXUNUSED(data) )
 {
     if ( pi->GetFlags() & wxPROP_DONT_STREAM )
         return;
 
     // make sure that we are picking the correct object for accessing the property
-    const wxDynamicObject* dynobj = dynamic_cast< const wxDynamicObject* > (obj );
-    if ( dynobj && (dynamic_cast<const wxDynamicClassInfo*>(ci) == NULL) )
+    const wxDynamicObject* dynobj = wx_dynamic_cast(const wxDynamicObject*, obj );
+    if ( dynobj && (wx_dynamic_cast(const wxDynamicClassInfo*, ci) == NULL) )
         obj = dynobj->GetSuperClassInstance();
 
     if ( pi->GetTypeInfo()->GetKind() == wxT_COLLECTION )
@@ -207,7 +213,7 @@ void wxObjectWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* c
         wxxVariantArray data;
         pi->GetAccessor()->GetPropertyCollection(obj, data);
         const wxTypeInfo * elementType = 
-            dynamic_cast< const wxCollectionTypeInfo* >( pi->GetTypeInfo() )->GetElementType();
+            wx_dynamic_cast( const wxCollectionTypeInfo*, pi->GetTypeInfo() )->GetElementType();
         for ( size_t i = 0; i < data.GetCount(); ++i )
         {
             if ( i == 0 )
@@ -218,7 +224,7 @@ void wxObjectWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* c
             if ( persister->BeforeWriteProperty( this, obj, pi, value ) )
             {
                 const wxClassTypeInfo* cti = 
-                    dynamic_cast< const wxClassTypeInfo* > ( elementType );
+                    wx_dynamic_cast( const wxClassTypeInfo*, elementType );
                 if ( cti )
                 {
                     const wxClassInfo* pci = cti->GetClassInfo();
@@ -239,14 +245,14 @@ void wxObjectWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* c
    }
     else
     {
-        const wxDelegateTypeInfo* dti = 
-            dynamic_cast< const wxDelegateTypeInfo* > ( pi->GetTypeInfo() );
+        const wxEventSourceTypeInfo* dti = 
+            wx_dynamic_cast( const wxEventSourceTypeInfo* , pi->GetTypeInfo() );
         if ( dti )
         {
             const wxObject* sink = NULL;
             const wxHandlerInfo *handler = NULL;
 
-            const wxEvtHandler * evSource = dynamic_cast<const wxEvtHandler *>(obj);
+            const wxEvtHandler * evSource = wx_dynamic_cast(const wxEvtHandler *, obj);
             if ( evSource )
             {
                 FindConnectEntry( evSource, dti, sink, handler );
@@ -286,7 +292,7 @@ void wxObjectWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* c
             if ( pi->GetFlags() & wxPROP_ENUM_STORE_LONG )
             {
                 const wxEnumTypeInfo *eti = 
-                    dynamic_cast<const wxEnumTypeInfo*>( pi->GetTypeInfo() );
+                    wx_dynamic_cast(const wxEnumTypeInfo*,  pi->GetTypeInfo() );
                 if ( eti )
                 {
                     eti->ConvertFromLong( value.wxTEMPLATED_MEMBER_CALL(Get, long), value );
@@ -307,7 +313,7 @@ void wxObjectWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* c
 
             // avoid streaming out null objects
             const wxClassTypeInfo* cti = 
-                dynamic_cast< const wxClassTypeInfo* > ( pi->GetTypeInfo() );
+                wx_dynamic_cast( const wxClassTypeInfo* , pi->GetTypeInfo() );
 
             if ( cti && value.GetAsObject() == NULL )
                 return;
@@ -358,7 +364,7 @@ bool wxObjectWriter::IsObjectKnown( const wxObject *obj )
 
 
 // ----------------------------------------------------------------------------
-// reading objects in
+// wxObjectReader
 // ----------------------------------------------------------------------------
 
 struct wxObjectReader::wxObjectReaderInternal
@@ -429,10 +435,10 @@ and create params are always toplevel class only
 
 
 // ----------------------------------------------------------------------------
-// wxRuntimeDepersister - depersisting to memory
+// wxObjectRuntimeReaderCallback - depersisting to memory
 // ----------------------------------------------------------------------------
 
-struct wxRuntimeDepersister::wxRuntimeDepersisterInternal
+struct wxObjectRuntimeReaderCallback::wxObjectRuntimeReaderCallbackInternal
 {
     map<int,wxObject *> m_objects;
 
@@ -459,17 +465,17 @@ struct wxRuntimeDepersister::wxRuntimeDepersisterInternal
     }
 };
 
-wxRuntimeDepersister::wxRuntimeDepersister()
+wxObjectRuntimeReaderCallback::wxObjectRuntimeReaderCallback()
 {
-    m_data = new wxRuntimeDepersisterInternal();
+    m_data = new wxObjectRuntimeReaderCallbackInternal();
 }
 
-wxRuntimeDepersister::~wxRuntimeDepersister()
+wxObjectRuntimeReaderCallback::~wxObjectRuntimeReaderCallback()
 {
     delete m_data;
 }
 
-void wxRuntimeDepersister::AllocateObject(int objectID, wxClassInfo *classInfo,
+void wxObjectRuntimeReaderCallback::AllocateObject(int objectID, wxClassInfo *classInfo,
                                           wxxVariantArray &WXUNUSED(metadata))
 {
     wxObject *O;
@@ -477,7 +483,7 @@ void wxRuntimeDepersister::AllocateObject(int objectID, wxClassInfo *classInfo,
     m_data->SetObject(objectID, O);
 }
 
-void wxRuntimeDepersister::CreateObject(int objectID,
+void wxObjectRuntimeReaderCallback::CreateObject(int objectID,
                                         const wxClassInfo *classInfo,
                                         int paramCount,
                                         wxxVariant *params,
@@ -495,7 +501,7 @@ void wxRuntimeDepersister::CreateObject(int objectID,
             o = m_data->GetObject(objectIdValues[i]);
             // if this is a dynamic object and we are asked for another class
             // than wxDynamicObject we cast it down manually.
-            wxDynamicObject *dyno = dynamic_cast< wxDynamicObject * > (o);
+            wxDynamicObject *dyno = wx_dynamic_cast( wxDynamicObject *, o);
             if ( dyno!=NULL && (objectClassInfos[i] != dyno->GetClassInfo()) )
             {
                 o = dyno->GetSuperClassInstance();
@@ -506,7 +512,7 @@ void wxRuntimeDepersister::CreateObject(int objectID,
     classInfo->Create(o, paramCount, params);
 }
 
-void wxRuntimeDepersister::ConstructObject(int objectID,
+void wxObjectRuntimeReaderCallback::ConstructObject(int objectID,
                                         const wxClassInfo *classInfo,
                                         int paramCount,
                                         wxxVariant *params,
@@ -523,7 +529,7 @@ void wxRuntimeDepersister::ConstructObject(int objectID,
             o = m_data->GetObject(objectIdValues[i]);
             // if this is a dynamic object and we are asked for another class
             // than wxDynamicObject we cast it down manually.
-            wxDynamicObject *dyno = dynamic_cast< wxDynamicObject * > (o);
+            wxDynamicObject *dyno = wx_dynamic_cast( wxDynamicObject *, o);
             if ( dyno!=NULL && (objectClassInfos[i] != dyno->GetClassInfo()) )
             {
                 o = dyno->GetSuperClassInstance();
@@ -536,14 +542,14 @@ void wxRuntimeDepersister::ConstructObject(int objectID,
 }
 
 
-void wxRuntimeDepersister::DestroyObject(int objectID, wxClassInfo *WXUNUSED(classInfo))
+void wxObjectRuntimeReaderCallback::DestroyObject(int objectID, wxClassInfo *WXUNUSED(classInfo))
 {
     wxObject *o;
     o = m_data->GetObject(objectID);
     delete o;
 }
 
-void wxRuntimeDepersister::SetProperty(int objectID,
+void wxObjectRuntimeReaderCallback::SetProperty(int objectID,
                                        const wxClassInfo *classInfo,
                                        const wxPropertyInfo* propertyInfo,
                                        const wxxVariant &value)
@@ -553,7 +559,7 @@ void wxRuntimeDepersister::SetProperty(int objectID,
     classInfo->SetProperty( o, propertyInfo->GetName(), value );
 }
 
-void wxRuntimeDepersister::SetPropertyAsObject(int objectID,
+void wxObjectRuntimeReaderCallback::SetPropertyAsObject(int objectID,
                                                const wxClassInfo *classInfo,
                                                const wxPropertyInfo* propertyInfo,
                                                int valueObjectId)
@@ -562,11 +568,11 @@ void wxRuntimeDepersister::SetPropertyAsObject(int objectID,
     o = m_data->GetObject(objectID);
     valo = m_data->GetObject(valueObjectId);
     const wxClassInfo* valClassInfo = 
-        (dynamic_cast<const wxClassTypeInfo*>(propertyInfo->GetTypeInfo()))->GetClassInfo();
+        (wx_dynamic_cast(const wxClassTypeInfo*,propertyInfo->GetTypeInfo()))->GetClassInfo();
 
     // if this is a dynamic object and we are asked for another class
     // than wxDynamicObject we cast it down manually.
-    wxDynamicObject *dynvalo = dynamic_cast< wxDynamicObject * > (valo);
+    wxDynamicObject *dynvalo = wx_dynamic_cast( wxDynamicObject *, valo);
     if ( dynvalo!=NULL  && (valClassInfo != dynvalo->GetClassInfo()) )
     {
         valo = dynvalo->GetSuperClassInstance();
@@ -576,7 +582,7 @@ void wxRuntimeDepersister::SetPropertyAsObject(int objectID,
                             valClassInfo->InstanceToVariant(valo) );
 }
 
-void wxRuntimeDepersister::SetConnect(int eventSourceObjectID,
+void wxObjectRuntimeReaderCallback::SetConnect(int eventSourceObjectID,
                                       const wxClassInfo *WXUNUSED(eventSourceClassInfo),
                                       const wxPropertyInfo *delegateInfo,
                                       const wxClassInfo *WXUNUSED(eventSinkClassInfo),
@@ -584,14 +590,14 @@ void wxRuntimeDepersister::SetConnect(int eventSourceObjectID,
                                       int eventSinkObjectID )
 {
     wxEvtHandler *ehsource = 
-        dynamic_cast< wxEvtHandler* >( m_data->GetObject( eventSourceObjectID ) );
+        wx_dynamic_cast( wxEvtHandler* , m_data->GetObject( eventSourceObjectID ) );
     wxEvtHandler *ehsink = 
-        dynamic_cast< wxEvtHandler *>(m_data->GetObject(eventSinkObjectID) );
+        wx_dynamic_cast( wxEvtHandler *,m_data->GetObject(eventSinkObjectID) );
 
     if ( ehsource && ehsink )
     {
-        const wxDelegateTypeInfo *delegateTypeInfo = 
-            dynamic_cast<const wxDelegateTypeInfo*>(delegateInfo->GetTypeInfo());
+        const wxEventSourceTypeInfo *delegateTypeInfo = 
+            wx_dynamic_cast(const wxEventSourceTypeInfo*,delegateInfo->GetTypeInfo());
         if( delegateTypeInfo && delegateTypeInfo->GetLastEventType() == -1 )
         {
             ehsource->Connect( -1, delegateTypeInfo->GetEventType(),
@@ -611,13 +617,12 @@ void wxRuntimeDepersister::SetConnect(int eventSourceObjectID,
     }
 }
 
-wxObject *wxRuntimeDepersister::GetObject(int objectID)
+wxObject *wxObjectRuntimeReaderCallback::GetObject(int objectID)
 {
     return m_data->GetObject( objectID );
 }
 
-// adds an element to a property collection
-void wxRuntimeDepersister::AddToPropertyCollection( int objectID,
+void wxObjectRuntimeReaderCallback::AddToPropertyCollection( int objectID,
                                                    const wxClassInfo *classInfo,
                                                    const wxPropertyInfo* propertyInfo,
                                                    const wxxVariant &value)
@@ -627,8 +632,7 @@ void wxRuntimeDepersister::AddToPropertyCollection( int objectID,
     classInfo->AddToPropertyCollection( o, propertyInfo->GetName(), value );
 }
 
-// sets the corresponding property (value is an object)
-void wxRuntimeDepersister::AddToPropertyCollectionAsObject(int objectID,
+void wxObjectRuntimeReaderCallback::AddToPropertyCollectionAsObject(int objectID,
                                                            const wxClassInfo *classInfo,
                                                            const wxPropertyInfo* propertyInfo,
                                                            int valueObjectId)
@@ -637,13 +641,13 @@ void wxRuntimeDepersister::AddToPropertyCollectionAsObject(int objectID,
     o = m_data->GetObject(objectID);
     valo = m_data->GetObject(valueObjectId);
     const wxCollectionTypeInfo * collectionTypeInfo = 
-        dynamic_cast< const wxCollectionTypeInfo * >(propertyInfo->GetTypeInfo() );
+        wx_dynamic_cast( const wxCollectionTypeInfo *, propertyInfo->GetTypeInfo() );
     const wxClassInfo* valClassInfo = 
-        (dynamic_cast<const wxClassTypeInfo*>(collectionTypeInfo->GetElementType()))->GetClassInfo();
+        (wx_dynamic_cast(const wxClassTypeInfo*,collectionTypeInfo->GetElementType()))->GetClassInfo();
 
     // if this is a dynamic object and we are asked for another class
     // than wxDynamicObject we cast it down manually.
-    wxDynamicObject *dynvalo = dynamic_cast< wxDynamicObject * > (valo);
+    wxDynamicObject *dynvalo = wx_dynamic_cast( wxDynamicObject *, valo);
     if ( dynvalo!=NULL  && (valClassInfo != dynvalo->GetClassInfo()) )
     {
         valo = dynvalo->GetSuperClassInstance();
@@ -653,246 +657,9 @@ void wxRuntimeDepersister::AddToPropertyCollectionAsObject(int objectID,
                                         valClassInfo->InstanceToVariant(valo) );
 }
 
-// ----------------------------------------------------------------------------
-// wxCodeDepersister - depersisting to code
-// ----------------------------------------------------------------------------
-
-struct wxCodeDepersister::wxCodeDepersisterInternal
-{
-#if wxUSE_UNICODE
-    map<int,wstring> m_objectNames;
-#else
-    map<int,string> m_objectNames;
-#endif
-
-    void SetObjectName(int objectID, const wxString &name )
-    {
-        if ( m_objectNames.find(objectID) != m_objectNames.end() )
-        {
-            wxLogError( _("Passing a already registered object to SetObjectName") );
-            return ;
-        }
-        m_objectNames[objectID] = (const wxChar *)name;
-    }
-
-    wxString GetObjectName( int objectID )
-    {
-        if ( objectID == wxNullObjectID )
-            return wxT("NULL");
-
-        if ( m_objectNames.find(objectID) == m_objectNames.end() )
-        {
-            wxLogError( _("Passing an unkown object to GetObject") );
-            return wxEmptyString;
-        }
-        return wxString( m_objectNames[objectID].c_str() );
-    }
-};
-
-wxCodeDepersister::wxCodeDepersister(wxTextOutputStream *out)
-: m_fp(out)
-{
-    m_data = new wxCodeDepersisterInternal;
-}
-
-wxCodeDepersister::~wxCodeDepersister()
-{
-    delete m_data;
-}
-
-void wxCodeDepersister::AllocateObject(int objectID, wxClassInfo *classInfo,
-                                       wxxVariantArray &WXUNUSED(metadata))
-{
-    wxString objectName = wxString::Format( wxT("LocalObject_%d"), objectID );
-    m_fp->WriteString( wxString::Format( wxT("\t%s *%s = new %s;\n"),
-        classInfo->GetClassName(),
-        objectName.c_str(),
-        classInfo->GetClassName()) );
-    m_data->SetObjectName( objectID, objectName );
-}
-
-void wxCodeDepersister::DestroyObject(int objectID, wxClassInfo *WXUNUSED(classInfo))
-{
-    m_fp->WriteString( wxString::Format( wxT("\tdelete %s;\n"),
-        m_data->GetObjectName( objectID).c_str() ) );
-}
-
-wxString wxCodeDepersister::ValueAsCode( const wxxVariant &param )
-{
-    wxString value;
-    const wxTypeInfo* type = param.GetTypeInfo();
-    if ( type->GetKind() == wxT_CUSTOM )
-    {
-        const wxCustomTypeInfo* cti = dynamic_cast<const wxCustomTypeInfo*>(type);
-        if ( cti )
-        {
-            value.Printf( wxT("%s(%s)"), cti->GetTypeName().c_str(),
-                          param.GetAsString().c_str() );
-        }
-        else
-        {
-            wxLogError ( _("Internal error, illegal wxCustomTypeInfo") );
-        }
-    }
-    else if ( type->GetKind() == wxT_STRING )
-    {
-        value.Printf( wxT("\"%s\""),param.GetAsString().c_str() );
-    }
-    else
-    {
-        value.Printf( wxT("%s"), param.GetAsString().c_str() );
-    }
-    return value;
-}
-
-void wxCodeDepersister::CreateObject(int objectID,
-                                     const wxClassInfo *WXUNUSED(classInfo),
-                                     int paramCount,
-                                     wxxVariant *params,
-                                     int *objectIDValues,
-                                     const wxClassInfo **WXUNUSED(objectClassInfos),
-                                     wxxVariantArray &WXUNUSED(metadata)
-                                     )
-{
-    int i;
-    m_fp->WriteString( wxString::Format( wxT("\t%s->Create("), 
-                       m_data->GetObjectName(objectID).c_str() ) );
-    for (i = 0; i < paramCount; i++)
-    {
-        if ( objectIDValues[i] != wxInvalidObjectID )
-        {
-            wxString str = 
-                wxString::Format( wxT("%s"), 
-                                  m_data->GetObjectName( objectIDValues[i] ).c_str() );
-            m_fp->WriteString( str );
-        }
-        else
-        {
-            m_fp->WriteString( 
-                wxString::Format( wxT("%s"), ValueAsCode(params[i]).c_str() ) );
-        }
-        if (i < paramCount - 1)
-            m_fp->WriteString( wxT(", "));
-    }
-    m_fp->WriteString( wxT(");\n") );
-}
-
-void wxCodeDepersister::ConstructObject(int objectID,
-                                     const wxClassInfo *classInfo,
-                                     int paramCount,
-                                     wxxVariant *params,
-                                     int *objectIDValues,
-                                     const wxClassInfo **WXUNUSED(objectClassInfos),
-                                     wxxVariantArray &WXUNUSED(metadata)
-                                     )
-{
-    wxString objectName = wxString::Format( wxT("LocalObject_%d"), objectID );
-    m_fp->WriteString( wxString::Format( wxT("\t%s *%s = new %s("),
-        classInfo->GetClassName(),
-        objectName.c_str(),
-        classInfo->GetClassName()) );
-    m_data->SetObjectName( objectID, objectName );
-
-    int i;
-    for (i = 0; i < paramCount; i++)
-    {
-        if ( objectIDValues[i] != wxInvalidObjectID )
-            m_fp->WriteString( wxString::Format( wxT("%s"), 
-                               m_data->GetObjectName( objectIDValues[i] ).c_str() ) );
-        else
-        {
-            m_fp->WriteString( 
-                wxString::Format( wxT("%s"), ValueAsCode(params[i]).c_str() ) );
-        }
-        if (i < paramCount - 1)
-            m_fp->WriteString( wxT(", ") );
-    }
-    m_fp->WriteString( wxT(");\n") );
-}
-
-void wxCodeDepersister::SetProperty(int objectID,
-                                    const wxClassInfo *WXUNUSED(classInfo),
-                                    const wxPropertyInfo* propertyInfo,
-                                    const wxxVariant &value)
-{
-    m_fp->WriteString( wxString::Format( wxT("\t%s->%s(%s);\n"),
-        m_data->GetObjectName(objectID).c_str(),
-        propertyInfo->GetAccessor()->GetSetterName().c_str(),
-        ValueAsCode(value).c_str()) );
-}
-
-void wxCodeDepersister::SetPropertyAsObject(int objectID,
-                                            const wxClassInfo *WXUNUSED(classInfo),
-                                            const wxPropertyInfo* propertyInfo,
-                                            int valueObjectId)
-{
-    if ( propertyInfo->GetTypeInfo()->GetKind() == wxT_OBJECT )
-        m_fp->WriteString( wxString::Format( wxT("\t%s->%s(*%s);\n"),
-        m_data->GetObjectName(objectID).c_str(),
-        propertyInfo->GetAccessor()->GetSetterName().c_str(),
-        m_data->GetObjectName( valueObjectId).c_str() ) );
-    else
-        m_fp->WriteString( wxString::Format( wxT("\t%s->%s(%s);\n"),
-        m_data->GetObjectName(objectID).c_str(),
-        propertyInfo->GetAccessor()->GetSetterName().c_str(),
-        m_data->GetObjectName( valueObjectId).c_str() ) );
-}
-
-void wxCodeDepersister::AddToPropertyCollection( int objectID,
-                                                const wxClassInfo *WXUNUSED(classInfo),
-                                                const wxPropertyInfo* propertyInfo,
-                                                const wxxVariant &value)
-{
-    m_fp->WriteString( wxString::Format( wxT("\t%s->%s(%s);\n"),
-        m_data->GetObjectName(objectID).c_str(),
-        propertyInfo->GetAccessor()->GetAdderName().c_str(),
-        ValueAsCode(value).c_str()) );
-}
-
-// sets the corresponding property (value is an object)
-void wxCodeDepersister::
-    AddToPropertyCollectionAsObject(int WXUNUSED(objectID),
-                                    const wxClassInfo *WXUNUSED(classInfo),
-                                    const wxPropertyInfo* WXUNUSED(propertyInfo),
-                                    int WXUNUSED(valueObjectId))
-{
-    // TODO
-}
-
-void wxCodeDepersister::SetConnect(int eventSourceObjectID,
-                                   const wxClassInfo *WXUNUSED(eventSourceClassInfo),
-                                   const wxPropertyInfo *delegateInfo,
-                                   const wxClassInfo *eventSinkClassInfo,
-                                   const wxHandlerInfo* handlerInfo,
-                                   int eventSinkObjectID )
-{
-    wxString ehsource = m_data->GetObjectName( eventSourceObjectID );
-    wxString ehsink = m_data->GetObjectName(eventSinkObjectID);
-    wxString ehsinkClass = eventSinkClassInfo->GetClassName();
-    const wxDelegateTypeInfo *delegateTypeInfo = 
-        dynamic_cast<const wxDelegateTypeInfo*>(delegateInfo->GetTypeInfo());
-    if ( delegateTypeInfo )
-    {
-        int eventType = delegateTypeInfo->GetEventType();
-        wxString handlerName = handlerInfo->GetName();
-
-        wxString code =
-            wxString::Format( 
-                wxT("\t%s->Connect( %s->GetId(), %d, ")
-                wxT("(wxObjectEventFunction)(wxEventFunction) & %s::%s, NULL, %s );"),
-                ehsource.c_str(), ehsource.c_str(), eventType, ehsinkClass.c_str(),
-                handlerName.c_str(), ehsink.c_str() );
-
-        m_fp->WriteString( code );
-    }
-    else
-    {
-        wxLogError(_("delegate has no type info"));
-    }
-}
-
+#if TEST_XVARIANT
 #include "wx/arrimpl.cpp"
-
 WX_DEFINE_OBJARRAY(wxxVariantArray);
+#endif
 
 #endif // wxUSE_EXTENDED_RTTI
