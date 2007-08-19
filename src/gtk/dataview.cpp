@@ -632,7 +632,7 @@ void     wxgtk_tree_model_set_sort_column_id  (GtkTreeSortable        *sortable,
 
     wxDataViewCtrl *dv = tree_model->internal->GetOwner();    
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, dv->GetId() );
-    // event.SetDataViewColumn( column );
+    // TODO event.SetDataViewColumn( column );
     event.SetModel( dv->GetModel() );
     dv->GetEventHandler()->ProcessEvent( event );
 }
@@ -2720,7 +2720,7 @@ wxdataview_selection_changed_callback( GtkTreeSelection* selection, wxDataViewCt
         return;
 
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_SELECTED, dv->GetId() );
-    // TODO: item
+    event.SetItem( dv->GetSelection() );
     event.SetModel( dv->GetModel() );
     dv->GetEventHandler()->ProcessEvent( event );
 }
@@ -2995,6 +2995,22 @@ wxDataViewItem wxDataViewCtrl::GetSelection()
     
     if (m_windowStyle & wxDV_MULTIPLE)
     {
+        // Report the first one
+        GtkTreeModel *model;
+        GList *list = gtk_tree_selection_get_selected_rows( selection, &model );
+    
+        if (list)
+        {
+            GtkTreePath *path = (GtkTreePath*) list->data;
+            GtkTreeIter iter;
+            m_internal->get_iter( &iter, path );
+            
+            // delete list
+            g_list_foreach( list, (GFunc) gtk_tree_path_free, NULL );
+            g_list_free( list );
+            
+            return wxDataViewItem( (void*) iter.user_data );
+        }
     }
     else
     {
@@ -3011,32 +3027,124 @@ wxDataViewItem wxDataViewCtrl::GetSelection()
 
 int wxDataViewCtrl::GetSelections( wxDataViewItemArray & sel ) const
 {
+    sel.Clear();
+
+    GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
+    if (HasFlag(wxDV_MULTIPLE))
+    {
+        GtkTreeModel *model;
+        GList *list = gtk_tree_selection_get_selected_rows( selection, &model );
+
+        int count = 0;
+        while (list)
+        {
+            GtkTreePath *path = (GtkTreePath*) list->data;
+            
+            GtkTreeIter iter;
+            m_internal->get_iter( &iter, path );
+
+            sel.Add( wxDataViewItem( (void*) iter.user_data ) );
+
+            list = g_list_next( list );
+            count++;
+        }
+
+        // delete list
+        g_list_foreach( list, (GFunc) gtk_tree_path_free, NULL );
+        g_list_free( list );
+
+        return count;
+    }
+    else
+    {
+        GtkTreeModel *model;
+        GtkTreeIter iter;
+        gboolean has_selection = gtk_tree_selection_get_selected( selection, &model, &iter );
+        if (has_selection)
+        {
+            sel.Add( wxDataViewItem( (void*) iter.user_data) );
+            return 1;
+        }
+    }
+
     return 0;
 }
 
 void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )
 {
+    GtkDisableSelectionEvents();
+    
+    GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
+
+    gtk_tree_selection_unselect_all( selection );
+    
+    size_t i;
+    for (i = 0; i < sel.GetCount(); i++)
+    {
+        GtkTreeIter iter;
+        iter.user_data = (gpointer) sel[i].GetID();
+        gtk_tree_selection_select_iter( selection, &iter );
+    }
+    
+    GtkEnableSelectionEvents();
 }
 
 void wxDataViewCtrl::Select( const wxDataViewItem & item )
 {
+    GtkDisableSelectionEvents();
+
+    GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
+
+    GtkTreeIter iter;
+    iter.user_data = (gpointer) item.GetID();
+    gtk_tree_selection_select_iter( selection, &iter );
+
+    GtkEnableSelectionEvents();
 }
 
 void wxDataViewCtrl::Unselect( const wxDataViewItem & item )
 {
+    GtkDisableSelectionEvents();
+
+    GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
+
+    GtkTreeIter iter;
+    iter.user_data = (gpointer) item.GetID();
+    gtk_tree_selection_unselect_iter( selection, &iter );
+
+    GtkEnableSelectionEvents();
 }
 
 bool wxDataViewCtrl::IsSelected( const wxDataViewItem & item ) const
 {
-    return false;
+    GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
+
+    GtkTreeIter iter;
+    iter.user_data = (gpointer) item.GetID();
+    
+    return gtk_tree_selection_iter_is_selected( selection, &iter );
 }
 
 void wxDataViewCtrl::SelectAll()
 {
+    GtkDisableSelectionEvents();
+    
+    GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
+    
+    gtk_tree_selection_select_all( selection );
+    
+    GtkEnableSelectionEvents();
 }
 
 void wxDataViewCtrl::UnselectAll()
 {
+    GtkDisableSelectionEvents();
+    
+    GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
+    
+    gtk_tree_selection_unselect_all( selection );
+    
+    GtkEnableSelectionEvents();
 }
 
 void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, wxDataViewColumn *column )
@@ -3059,15 +3167,15 @@ void wxDataViewCtrl::DoSetIndent()
 void wxDataViewCtrl::GtkDisableSelectionEvents()
 {
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
-    g_signal_connect_after (selection, "changed",
-                            G_CALLBACK (wxdataview_selection_changed_callback), this);
+    g_signal_handlers_disconnect_by_func( selection,
+                            (gpointer) (wxdataview_selection_changed_callback), this);
 }
 
 void wxDataViewCtrl::GtkEnableSelectionEvents()
 {
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
-    g_signal_handlers_disconnect_by_func( selection,
-                            (gpointer) (wxdataview_selection_changed_callback), this);
+    g_signal_connect_after (selection, "changed",
+                            G_CALLBACK (wxdataview_selection_changed_callback), this);
 }
 
 // static

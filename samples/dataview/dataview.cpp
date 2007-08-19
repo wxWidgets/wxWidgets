@@ -429,6 +429,7 @@ public:
     void OnExpanded( wxDataViewEvent &event );
     void OnCollapsing( wxDataViewEvent &event );
     void OnCollapsed( wxDataViewEvent &event );
+    void OnSelected( wxDataViewEvent &event );
     
     void OnHeaderClick( wxDataViewEvent &event );
     void OnHeaderRightClick( wxDataViewEvent &event );
@@ -464,7 +465,7 @@ bool MyApp::OnInit(void)
 
     // build the first frame
     MyFrame *frame = 
-        new MyFrame(NULL, wxT("wxDataViewCtrl feature test"), 10, 10, 700, 440);
+        new MyFrame(NULL, wxT("wxDataViewCtrl feature test"), 40, 40, 700, 440);
     frame->Show(true);
 
     SetTopWindow(frame);
@@ -516,6 +517,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_DATAVIEW_ITEM_EXPANDED(ID_MUSIC_CTRL, MyFrame::OnExpanded)
     EVT_DATAVIEW_ITEM_COLLAPSING(ID_MUSIC_CTRL, MyFrame::OnCollapsing)
     EVT_DATAVIEW_ITEM_COLLAPSED(ID_MUSIC_CTRL, MyFrame::OnCollapsed)
+    EVT_DATAVIEW_ITEM_SELECTED(ID_MUSIC_CTRL, MyFrame::OnSelected)
     
     EVT_DATAVIEW_COLUMN_HEADER_CLICK(ID_MUSIC_CTRL, MyFrame::OnHeaderClick)
     EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED(ID_MUSIC_CTRL, MyFrame::OnHeaderRightClick)
@@ -667,6 +669,14 @@ void MyFrame::OnActivated( wxDataViewEvent &event )
         return;
 
     wxLogMessage("wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, Item Id: %d;  Column: %d", event.GetItem().GetID(), event.GetColumn());
+}
+
+void MyFrame::OnSelected( wxDataViewEvent &event )
+{
+    if(!m_log)
+        return;
+
+    wxLogMessage("wxEVT_COMMAND_DATAVIEW_ITEM_SELECTED, Item Id: %d", event.GetItem().GetID() );
 }
 
 void MyFrame::OnExpanding( wxDataViewEvent &event )
