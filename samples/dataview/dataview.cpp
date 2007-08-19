@@ -2,7 +2,7 @@
 // Name:        dataview.cpp
 // Purpose:     wxDataViewCtrl wxWidgets sample
 // Author:      Robert Roebling
-// Modified by: Francesco Montorsi
+// Modified by: Francesco Montorsi, Bo Yang
 // Created:     06/01/06
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
@@ -146,6 +146,7 @@ public:
         // add to data
         MyMusicModelNode *child_node = 
             new MyMusicModelNode( m_classical, title, artist, year );
+        
         m_classical->Append( child_node );
         
         if (m_classicalMusicIsKnownToControl)
@@ -164,6 +165,11 @@ public:
         
         // notify control
         ItemDeleted( parent, item );
+        //We must delete the node after we call ItemDeleted
+        //The reason is that:
+        //When we use wxSortedArray, the array find a node through binary search for speed.
+        //And when the array is searching for some node, it call the model's compare function.
+        //The compare function need the node to be compared. So we should delete the node later, here.
         node->GetParent()->GetChildren().Remove( node );
         delete node;
     }
@@ -417,6 +423,13 @@ public:
     void OnValueChanged( wxDataViewEvent &event );
     void OnItemAdded( wxDataViewEvent &event );
     void OnItemDeleted( wxDataViewEvent &event );
+    void OnActivated( wxDataViewEvent &event );
+    void OnHeaderClick( wxDataViewEvent &event );
+    void OnHeaderRightClick( wxDataViewEvent &event );
+    void OnSorted( wxDataViewEvent &event );
+
+    void OnRightClick( wxMouseEvent &event );
+    void OnGoto( wxCommandEvent &event);
 
 private:
     wxDataViewCtrl* m_musicCtrl;
@@ -426,6 +439,7 @@ private:
     wxObjectDataPtr<MyListModel> m_list_model;
     
     wxTextCtrl    * m_log;
+    wxLog *m_logOld;
 
 private:
     DECLARE_EVENT_TABLE()
@@ -473,7 +487,8 @@ enum
     ID_DELETE_MUSIC     = 101,
      
     ID_PREPEND_LIST     = 200,
-    ID_DELETE_LIST      = 201
+    ID_DELETE_LIST      = 201,
+    ID_GOTO                  = 202
 };
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -483,9 +498,16 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_DELETE_MUSIC, MyFrame::OnDeleteMusic )
     EVT_BUTTON( ID_PREPEND_LIST, MyFrame::OnPrependList )
     EVT_BUTTON( ID_DELETE_LIST, MyFrame::OnDeleteList )
+    EVT_BUTTON( ID_GOTO, MyFrame::OnGoto)
     EVT_DATAVIEW_MODEL_ITEM_ADDED( ID_MUSIC_CTRL, MyFrame::OnItemAdded )
     EVT_DATAVIEW_MODEL_ITEM_DELETED( ID_MUSIC_CTRL, MyFrame::OnItemDeleted )
     EVT_DATAVIEW_MODEL_VALUE_CHANGED( ID_MUSIC_CTRL, MyFrame::OnValueChanged )
+    EVT_DATAVIEW_MODEL_ITEM_CHANGED( ID_MUSIC_CTRL, MyFrame::OnValueChanged )
+    EVT_DATAVIEW_ITEM_ACTIVATED(ID_MUSIC_CTRL, MyFrame::OnActivated )
+    EVT_DATAVIEW_COLUMN_HEADER_CLICK(ID_MUSIC_CTRL, MyFrame::OnHeaderClick)
+    EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED(ID_MUSIC_CTRL, MyFrame::OnHeaderRightClick)
+    EVT_DATAVIEW_COLUMN_SORTED(ID_MUSIC_CTRL, MyFrame::OnSorted)
+    EVT_RIGHT_UP(MyFrame::OnRightClick)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
@@ -515,7 +537,7 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     // MyMusic
 
     m_musicCtrl = new wxDataViewCtrl( this, ID_MUSIC_CTRL, wxDefaultPosition,
-                                    wxDefaultSize );
+                                    wxDefaultSize, wxDV_MULTIPLE );
 
     m_music_model = new MyMusicModel;
     m_musicCtrl->AssociateModel( m_music_model.get() );
@@ -534,7 +556,7 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     // MyList
     
     m_listCtrl = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition,
-                                     wxDefaultSize ); 
+                                     wxDefaultSize, wxDV_MULTIPLE ); 
     
     m_list_model = new MyListModel;
     m_listCtrl->AssociateModel( m_list_model.get() );
@@ -555,11 +577,14 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     button_sizer->Add( 10, 10, 1 );
     button_sizer->Add( new wxButton( this, ID_PREPEND_LIST, "Prepend"), 0, wxALL, 10 );
     button_sizer->Add( new wxButton( this, ID_DELETE_LIST, "Delete selected"), 0, wxALL, 10 );
+    button_sizer->Add( new wxButton( this, ID_GOTO, "Goto 50"), 0, wxALL, 10 );
     
     main_sizer->Add( button_sizer, 0, wxGROW, 0 );
     
     m_log = new wxTextCtrl( this, -1, "", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
-    
+    m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_log));
+    wxLogMessage("This is the log window");
+
     main_sizer->Add( m_log, 1, wxGROW );
     
     SetSizer( main_sizer );
@@ -577,9 +602,11 @@ void MyFrame::OnAddMozart(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnDeleteMusic(wxCommandEvent& WXUNUSED(event) )
 {
-    wxDataViewItem item = m_musicCtrl->GetSelection();
-    if (item.IsOk())
-        m_music_model->Delete( item );
+    wxDataViewItemArray items;
+    int len = m_musicCtrl->GetSelections( items );
+    for( int i = 0; i < len; i ++ )
+        if (items[i].IsOk())
+            m_music_model->Delete( items[i] );
 }
 
 void MyFrame::OnPrependList( wxCommandEvent& WXUNUSED(event) )
@@ -589,9 +616,11 @@ void MyFrame::OnPrependList( wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnDeleteList( wxCommandEvent& WXUNUSED(event) )
 {
-    wxDataViewItem item = m_listCtrl->GetSelection();
-    if (item.IsOk())
-        m_list_model->DeleteItem( item );
+    wxDataViewItemArray items;
+    int len = m_listCtrl->GetSelections( items );
+    for( int i = 0; i < len; i ++ )
+        if (items[i].IsOk())
+            m_list_model->DeleteItem( items[i] );
 }
 
 void MyFrame::OnItemAdded( wxDataViewEvent &event )
@@ -599,7 +628,7 @@ void MyFrame::OnItemAdded( wxDataViewEvent &event )
     if (!m_log)
         return;
         
-    m_log->AppendText( "EVT_DATAVIEW_MODEL_ITEM_ADDED\n" );
+    wxLogMessage("wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_ADDED, Item Id: %d",event.GetItem().GetID());
 }
 
 void MyFrame::OnItemDeleted( wxDataViewEvent &event )
@@ -607,7 +636,7 @@ void MyFrame::OnItemDeleted( wxDataViewEvent &event )
     if (!m_log)
         return;
         
-    m_log->AppendText( "EVT_DATAVIEW_MODEL_ITEM_DELETED\n" );
+    wxLogMessage( "EVT_DATAVIEW_MODEL_ITEM_DELETED, Item Id: %d", event.GetItem().GetID() );
 }
 
 void MyFrame::OnValueChanged( wxDataViewEvent &event )
@@ -615,7 +644,52 @@ void MyFrame::OnValueChanged( wxDataViewEvent &event )
     if (!m_log)
         return;
         
-    m_log->AppendText( "EVT_DATAVIEW_MODEL_VALUE_CHANGED\n" );
+    wxLogMessage( "EVT_DATAVIEW_MODEL_VALUE_CHANGED, Item Id: %d;  Column: %d", event.GetItem().GetID(), event.GetColumn() );
+}
+
+void MyFrame::OnActivated( wxDataViewEvent &event )
+{
+    if(!m_log)
+        return;
+
+    wxLogMessage("wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, Item Id: %d;  Column: %d", event.GetItem().GetID(), event.GetColumn());
+}
+
+void MyFrame::OnHeaderClick( wxDataViewEvent &event )
+{
+    if(!m_log)
+        return;
+
+    wxLogMessage("wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, Column: %d", event.GetColumn());
+}
+
+void MyFrame::OnHeaderRightClick( wxDataViewEvent &event )
+{
+    if(!m_log)
+        return;
+
+    wxLogMessage("wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, Column: %d", event.GetColumn());
+}
+
+void MyFrame::OnSorted( wxDataViewEvent &event )
+{
+    if(!m_log)
+        return;
+
+    wxLogMessage("wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, Column: %d", event.GetColumn());
+}
+
+void MyFrame::OnRightClick( wxMouseEvent &event )
+{
+    if(!m_log)
+        return;
+
+    wxLogMessage("wxEVT_MOUSE_RIGHT_UP, Click Point is X: %d, Y: %d", event.GetX(), event.GetY());
+}
+
+void MyFrame::OnGoto( wxCommandEvent &event)
+{
+    m_listCtrl->EnsureVisible(50);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )

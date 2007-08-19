@@ -2,6 +2,7 @@
 // Name:        wx/generic/dataview.h
 // Purpose:     wxDataViewCtrl generic implementation header
 // Author:      Robert Roebling
+// Modified By: Bo Yang
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
@@ -352,18 +353,29 @@ public:
     virtual void DoSetExpanderColumn();
     virtual void DoSetIndent();
 
-    virtual wxDataViewItem GetSelection() ;
+    virtual int GetSelections( wxDataViewItemArray & sel ) const;
+    virtual void SetSelections( const wxDataViewItemArray & sel );
+    virtual void Select( const wxDataViewItem & item );
+    virtual void Unselect( const wxDataViewItem & item );
+    virtual bool IsSelected( const wxDataViewItem & item ) const;
 
-/********************selection code*********************
-    virtual void SetSelection( int row ); // -1 for unselect
-    virtual void SetSelectionRange( unsigned int from, unsigned int to );
-    virtual void SetSelections( const wxArrayInt& aSelections);
-    virtual void Unselect( unsigned int row );
-    
-    virtual bool IsSelected( unsigned int row ) const;
-    virtual int GetSelection() const;
-    virtual int GetSelections(wxArrayInt& aSelections) const;
-*****************************************************/
+    virtual int GetSelections( wxArrayInt & sel ) const; 
+    virtual void SetSelections( const wxArrayInt & sel );
+    virtual void Select( int row );
+    virtual void Unselect( int row );
+    virtual bool IsSelected( int row ) const;
+    virtual void SelectRange( int from, int to );
+    virtual void UnselectRange( int from, int to );
+
+    virtual void SelectAll();
+    virtual void UnselectAll();
+
+    virtual void EnsureVisible( int row );
+    virtual void EnsureVisible( const wxDataViewItem & item );
+
+    virtual wxDataViewItem GetItemByRow( unsigned int row ) const;
+    virtual int GetRowByItem( const wxDataViewItem & item ) const;
+
 
 public:     // utility functions not part of the API
 
