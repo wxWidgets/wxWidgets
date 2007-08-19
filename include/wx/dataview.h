@@ -2,7 +2,7 @@
 // Name:        wx/dataview.h
 // Purpose:     wxDataViewCtrl base classes
 // Author:      Robert Roebling
-// Modified by:
+// Modified by: Bo Yang
 // Created:     08.01.06
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
@@ -21,6 +21,7 @@
 #include "wx/bitmap.h"
 #include "wx/variant.h"
 #include "wx/listctrl.h"
+#include "wx/dynarray.h"
 
 #if defined(__WXGTK20__)
     // for testing
@@ -402,6 +403,8 @@ protected:
 // wxDataViewCtrlBase
 // ---------------------------------------------------------
 
+WX_DECLARE_OBJARRAY(wxDataViewItem, wxDataViewItemArray);
+
 #define wxDV_SINGLE                  0x0000     // for convenience
 #define wxDV_MULTIPLE                0x0001     // can select multiple items
 
@@ -478,8 +481,29 @@ public:
     int GetIndent() const 
         { return m_indent; } 
 
-    // TODO selection code
-    virtual wxDataViewItem GetSelection() = 0;
+    //Selection Code
+    virtual int GetSelections( wxDataViewItemArray & sel ) const = 0;
+    virtual void SetSelections( const wxDataViewItemArray & sel ) = 0;
+    virtual void Select( const wxDataViewItem & item ) = 0;
+    virtual void Unselect( const wxDataViewItem & item ) = 0;
+    virtual bool IsSelected( const wxDataViewItem & item ) const = 0;
+
+    virtual int GetSelections( wxArrayInt & sel ) const = 0; 
+    virtual void SetSelections( const wxArrayInt & sel ) = 0;
+    virtual void Select( int row ) = 0;
+    virtual void Unselect( int row ) = 0;
+    virtual bool IsSelected( int row ) const = 0;
+    virtual void SelectRange( int from, int to ) = 0;
+    virtual void UnselectRange( int from, int to ) = 0;
+
+    virtual void SelectAll() = 0;
+    virtual void UnselectAll() = 0;
+
+    virtual void EnsureVisible( int row ) = 0;
+    virtual void EnsureVisible( const wxDataViewItem & item ) = 0;
+
+    virtual wxDataViewItem GetItemByRow( unsigned int row ) const = 0;
+    virtual int GetRowByItem( const wxDataViewItem & item ) const = 0;
 
 protected:
     virtual void DoSetExpanderColumn() = 0 ;

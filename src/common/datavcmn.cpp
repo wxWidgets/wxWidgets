@@ -36,7 +36,7 @@ bool operator == (const wxDataViewItem &left, const wxDataViewItem &right)
 // wxDataViewModel
 // ---------------------------------------------------------
 
-#include <wx/listimpl.cpp>
+#include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxDataViewModelNotifiers);
 
 wxDataViewModel::wxDataViewModel()
@@ -528,6 +528,9 @@ void wxDataViewColumnBase::SetFlags(int flags)
 // ---------------------------------------------------------
 // wxDataViewCtrlBase
 // ---------------------------------------------------------
+
+#include "wx/arrimpl.cpp"
+WX_DEFINE_OBJARRAY(wxDataViewItemArray);
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewCtrlBase, wxControl)
 
