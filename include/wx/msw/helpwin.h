@@ -20,7 +20,7 @@
 
 class WXDLLEXPORT wxWinHelpController: public wxHelpControllerBase
 {
-    DECLARE_CLASS(wxWinHelpController)
+    DECLARE_DYNAMIC_CLASS(wxWinHelpController)
 
 public:
     wxWinHelpController(wxWindow* parentWindow = NULL): wxHelpControllerBase(parentWindow) {}
