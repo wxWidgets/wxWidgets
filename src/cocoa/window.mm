@@ -811,8 +811,21 @@ void wxWindowCocoa::Cocoa_FrameChanged(void)
 bool wxWindowCocoa::Cocoa_resetCursorRects()
 {
     wxLogTrace(wxTRACE_COCOA,wxT("wxWindow=%p::Cocoa_resetCursorRects"),this);
+
+    // When we are called there may be a queued tracking rect event (mouse entered or exited) and
+    // we won't know it.  A specific example is wxGenericHyperlinkCtrl changing the cursor from its
+    // mouse exited event.  If the control happens to share the edge with its parent window which is
+    // also tracking mouse events then Cocoa receives two mouse exited events from the window server.
+    // The first one will cause wxGenericHyperlinkCtrl to call wxWindow::SetCursor which will
+    // invaildate the cursor rect causing Cocoa to schedule cursor rect reset with the run loop
+    // which willl in turn call us before exiting for the next user event.
+
+    // If we are the parent window then rebuilding our tracking rectangle will cause us to miss
+    // our mouse exited event because the already queued event will have the old tracking rect
+    // tag.  The simple solution is to only rebuild our tracking rect if we need to.
+
     if(m_visibleTrackingRectManager != NULL)
-        m_visibleTrackingRectManager->RebuildTrackingRect();
+        m_visibleTrackingRectManager->RebuildTrackingRectIfNeeded();
 
     if(!m_cursor.GetNSCursor())
         return false;
@@ -1591,8 +1604,12 @@ void wxCocoaTrackingRectManager::BuildTrackingRect()
 
     if([theView window] != nil)
     {
-        m_trackingRectTag = [theView addTrackingRect:[theView visibleRect] owner:theView userData:NULL assumeInside:NO];
+        NSRect visibleRect = [theView visibleRect];
+
+        m_trackingRectTag = [theView addTrackingRect:visibleRect owner:theView userData:NULL assumeInside:NO];
+        m_trackingRectInWindowCoordinates = [theView convertRect:visibleRect toView:nil];
         m_isTrackingRectActive = true;
+
         wxLogTrace(wxTRACE_COCOA_TrackingRect, wxT("%s@%p: Added tracking rect #%d"), m_window->GetClassInfo()->GetClassName(), m_window, m_trackingRectTag);
     }
 }
@@ -1600,6 +1617,21 @@ void wxCocoaTrackingRectManager::BuildTrackingRect()
 void wxCocoaTrackingRectManager::BeginSynthesizingEvents()
 {
     s_mouseMovedSynthesizer.RegisterWxCocoaView(m_window);
+}
+
+void wxCocoaTrackingRectManager::RebuildTrackingRectIfNeeded()
+{
+    if(m_isTrackingRectActive)
+    {
+        NSView *theView = m_window->GetNSView();
+        NSRect currentRect = [theView convertRect:[theView visibleRect] toView:nil];
+        if(NSEqualRects(m_trackingRectInWindowCoordinates,currentRect))
+        {
+            wxLogTrace(wxTRACE_COCOA_TrackingRect, wxT("Ignored request to rebuild TR#%d"), m_trackingRectTag);
+            return;
+        }
+    }
+    RebuildTrackingRect();
 }
 
 void wxCocoaTrackingRectManager::RebuildTrackingRect()
