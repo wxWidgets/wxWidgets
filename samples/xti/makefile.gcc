@@ -29,7 +29,8 @@ XTI_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) $(GCCFLAGS) \
 XTI_OBJECTS =  \
 	$(OBJS)\xti_sample_rc.o \
 	$(OBJS)\xti_xti.o \
-	$(OBJS)\xti_classlist.o
+	$(OBJS)\xti_classlist.o \
+	$(OBJS)\xti_codereadercallback.o
 
 ### Conditionally set variables: ###
 
@@ -231,6 +232,9 @@ $(OBJS)\xti_xti.o: ./xti.cpp
 	$(CXX) -c -o $@ $(XTI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\xti_classlist.o: ./classlist.cpp
+	$(CXX) -c -o $@ $(XTI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\xti_codereadercallback.o: ./codereadercallback.cpp
 	$(CXX) -c -o $@ $(XTI_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all clean

@@ -52,7 +52,8 @@ XTI_OBJECTS =  \
 	$(__xti___win32rc) \
 	$(__xti_os2_lib_res) \
 	xti_xti.o \
-	xti_classlist.o
+	xti_classlist.o \
+	xti_codereadercallback.o
 
 ### Conditionally set variables: ###
 
@@ -192,6 +193,9 @@ xti_xti.o: $(srcdir)/xti.cpp
 
 xti_classlist.o: $(srcdir)/classlist.cpp
 	$(CXXC) -c -o $@ $(XTI_CXXFLAGS) $(srcdir)/classlist.cpp
+
+xti_codereadercallback.o: $(srcdir)/codereadercallback.cpp
+	$(CXXC) -c -o $@ $(XTI_CXXFLAGS) $(srcdir)/codereadercallback.cpp
 
 
 # Include dependency info, if present:

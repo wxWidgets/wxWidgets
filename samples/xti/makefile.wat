@@ -229,7 +229,8 @@ XTI_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
 	$(CXXFLAGS)
 XTI_OBJECTS =  &
 	$(OBJS)\xti_xti.obj &
-	$(OBJS)\xti_classlist.obj
+	$(OBJS)\xti_classlist.obj &
+	$(OBJS)\xti_codereadercallback.obj
 
 
 all : $(OBJS)
@@ -267,5 +268,8 @@ $(OBJS)\xti_xti.obj :  .AUTODEPEND .\xti.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XTI_CXXFLAGS) $<
 
 $(OBJS)\xti_classlist.obj :  .AUTODEPEND .\classlist.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XTI_CXXFLAGS) $<
+
+$(OBJS)\xti_codereadercallback.obj :  .AUTODEPEND .\codereadercallback.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XTI_CXXFLAGS) $<
 
