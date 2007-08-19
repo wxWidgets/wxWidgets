@@ -40,7 +40,7 @@ void wxApp::Exit() {
 }
 
 bool wxApp::Initialize(int& argc, wxChar **argv) {
-    if (argc < 5) {
+    if (argc < 7) {
         return false;
     }
     if (!wxAppBase::Initialize(argc, argv)) {
@@ -50,7 +50,9 @@ bool wxApp::Initialize(int& argc, wxChar **argv) {
     m_remoteIp = argv[2];
     m_requestFifoPath = argv[3];
     m_responseFifoPath = argv[4];
-    return true;
+    m_resourcePath = argv[5];
+    m_resourceUrl = argv[5];
+    return WriteTemplate();
 }
 
 void wxApp::WakeUpIdle() {
@@ -142,4 +144,48 @@ bool wxApp::Yield(bool onlyIfNeeded) {
 
     wxIsInsideYield = false;
     return true;
+}
+
+bool wxApp::WriteTemplate() {
+     FILE* fd = fopen(m_responseFifoPath, "w");
+     if (NULL == fd) {
+         //can't open response FIFO, even though we should block until someone
+         //reads
+ #if wxUSE_LOG
+         wxLogSysError("Unable to open response FIFO to write application template '%s'",
+                      m_responseFifoPath);
+ #endif //wxUSE_LOG
+         return false;
+     }
+     if (EOF == fputs(GetTemplate(), fd)) {
+         //can't write to response FIFO, even though it was successfully opened
+ #if wxUSE_LOG
+         wxLogSysError("Unable to write to response FIFO to write application template at '%s'",
+                      m_responseFifoPath);
+ #endif //wxUSE_LOG
+         return false;
+     }
+     if (EOF == fclose(fd)) {
+         //can't close response FIFO
+ #if wxUSE_LOG
+         wxLogSysError("Unable to close response FIFO to write application template at '%s'",
+                      m_responseFifoPath);
+ #endif //wxUSE_LOG
+     }
+     return true;
+}
+
+wxString wxApp::GetTemplate() {
+    //TODO
+    wxString tpl;
+    tpl.Append("<html><head><title>");
+    return tpl;
+}
+
+const wxString& wxApp::GetResourcePath() const {
+    return m_resourcePath;
+}
+
+const wxString& wxApp::GetResourceUrl() const {
+    return m_resourceUrl;
 }

@@ -1,23 +1,15 @@
 #ifndef __WX_DCCLIENT_H__
 #define __WX_DCCLIENT_H__
 
-class WXDLLEXPORT wxWindowDC : public wxDC {
+#include "wx/dcmemory.h"
+
+class WXDLLEXPORT wxWindowDC : public wxMemoryDC {
 public:
     wxWindowDC();
     virtual ~wxWindowDC();
     wxWindowDC(wxWindow *window);
 
     virtual void Clear();
-
-    virtual void DestroyClippingRegion();
-
-    virtual wxCoord GetCharHeight() const;
-    virtual wxCoord GetCharWidth() const;
-    virtual int GetDepth() const;
-    virtual wxSize GetPPI() const;
-
-    virtual bool CanDrawBitmap() const;
-    virtual bool CanGetTextExtent() const;
 
     virtual void SetFont(const wxFont& font);
     virtual void SetPen(const wxPen& pen);
@@ -29,8 +21,6 @@ public:
 protected:
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              int style = wxFLOOD_SURFACE);
-
-    virtual bool DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const;
 
     virtual void DoDrawPoint(wxCoord x, wxCoord y);
     virtual void DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
@@ -65,20 +55,11 @@ protected:
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
                                      wxCoord width, wxCoord height);
 
-    virtual void DoGetSize(int *width, int *height) const;
-    virtual void DoGetSizeMM(int* width, int* height) const;
-
     virtual void DoDrawLines(int n, wxPoint points[],
                              wxCoord xoffset, wxCoord yoffset);
     virtual void DoDrawPolygon(int n, wxPoint points[],
                                wxCoord xoffset, wxCoord yoffset,
                                int fillStyle = wxODDEVEN_RULE);
-
-    virtual void DoGetTextExtent(const wxString&,
-                                 wxCoord* x, wxCoord* y,
-                                 wxCoord* descent = NULL,
-                                 wxCoord* externalLeading = NULL,
-                                 const wxFont* theFont = NULL) const;
 
     // Implementation
     // doesn't eval right away, just adds the command to a buffer
@@ -89,7 +70,6 @@ protected:
 protected:
     wxString m_evalBuf;
     wxWindow* m_window;
-    wxWindow* m_owner;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxWindowDC)

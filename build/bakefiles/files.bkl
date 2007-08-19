@@ -2595,6 +2595,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/web/toplevel.cpp
     src/web/window.cpp
     src/web/utils.cpp
+    src/web/webutils.cpp
 </set>
 <set var="WEB_LOWLEVEL_HDR" hints="files">
     wx/generic/caret.h
@@ -2615,6 +2616,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/web/popupwin.h
     wx/web/toplevel.h
     wx/web/window.h
+    wx/web/private/utils.h
 </set>
 
 

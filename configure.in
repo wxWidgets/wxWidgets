@@ -3789,8 +3789,49 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
     if test "$wxUSE_WEB" = 1; then
         TOOLKIT_INCLUDE=""
-        GUI_TK_LIBRARY="-ljson"
+        GUI_TK_LIBRARY="-ljson -lMagick++"
 
+        AC_MSG_CHECKING(for Magick++ headers)
+        save_CFLAGS=$CFLAGS
+        CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
+
+        AC_LANG_PUSH(C++)
+        AC_TRY_COMPILE([
+                        #include <Magick++.h>
+                       ],
+                       [
+                        Magick::Image *image;
+                       ],
+                       [
+                        AC_MSG_RESULT(found in default search path)
+                       ],
+                       [
+                        AC_MSG_RESULT(no)
+                        AC_MSG_ERROR(please set CPPFLAGS to contain the location of Magick++.h)
+                       ])
+
+        AC_MSG_CHECKING(for Magick++ library)
+        save_LIBS="$LIBS"
+        LIBS="$GUI_TK_LIBRARY $LIBS"
+
+        AC_TRY_LINK([
+                     #include <Magick++.h>
+                    ],
+                    [
+                     Magick::Image image;
+                    ],
+                    [
+                     AC_MSG_RESULT(found in default search path)
+                    ],
+                    [
+                     AC_MSG_RESULT(no)
+                     AC_MSG_ERROR(please set LDFLAGS to contain the location of libMagick++)
+                    ])
+        AC_LANG_POP() dnl C++
+
+        CFLAGS=$save_CFLAGS
+        LIBS="$save_LIBS"
+        
         AC_MSG_CHECKING(for JSON-C headers)
         save_CFLAGS=$CFLAGS
         CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"

@@ -1,6 +1,8 @@
 #ifndef __WX_BITMAP_H__
 #define __WX_BITMAP_H__
 
+#include <Magick++.h>
+
 class WXDLLEXPORT wxMask: public wxObject {
 public:
     wxMask();
@@ -46,8 +48,7 @@ public:
 
 #if wxUSE_IMAGE
     virtual wxImage ConvertToImage() const;
-#endif // wxUSE_IMAGE
-
+#endif // wxUSE_IMAGE 
     virtual wxMask *GetMask() const;
     virtual void SetMask(wxMask *mask);
 
@@ -65,10 +66,14 @@ public:
     virtual void SetDepth(int depth);
 
 protected:
-    bool CreateFromXpm(const char **bits);
-    void SetMonoPalette(const wxColour& fg, const wxColour& bg);
+    Magick::Image GetMagickImage() const;
+    void SetMagickImage(const Magick::Image& image);
+
+    virtual wxObjectRefData* CreateRefData() const;
+    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const;
 
 private:
+    friend class wxMemoryDC;
     DECLARE_DYNAMIC_CLASS(wxBitmap)
 };
 

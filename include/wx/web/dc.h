@@ -7,7 +7,7 @@ public:
     virtual ~wxDC();
 
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
-
+    
 private:
     DECLARE_ABSTRACT_CLASS(wxDC)
 };

@@ -2123,7 +2123,8 @@ COND_TOOLKIT_WEB_LOWLEVEL_HDR =  \
 	wx/web/pen.h \
 	wx/web/popupwin.h \
 	wx/web/toplevel.h \
-	wx/web/window.h
+	wx/web/window.h \
+	wx/web/private/utils.h
 @COND_TOOLKIT_WEB@LOWLEVEL_HDR = $(COND_TOOLKIT_WEB_LOWLEVEL_HDR)
 COND_TOOLKIT_WINCE_LOWLEVEL_HDR =  \
 	wx/msw/popupwin.h \
@@ -4263,7 +4264,8 @@ COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_settings.o \
 	monodll_toplevel.o \
 	monodll_window.o \
-	monodll_utils.o
+	monodll_utils.o \
+	monodll_webutils.o
 @COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_app.o \
@@ -5119,7 +5121,8 @@ COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_settings.o \
 	monodll_toplevel.o \
 	monodll_window.o \
-	monodll_utils.o
+	monodll_utils.o \
+	monodll_webutils.o
 @COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_1)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_app.o \
@@ -6153,7 +6156,8 @@ COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_settings.o \
 	monolib_toplevel.o \
 	monolib_window.o \
-	monolib_utils.o
+	monolib_utils.o \
+	monolib_webutils.o
 @COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_2)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_app.o \
@@ -7010,7 +7014,8 @@ COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_settings.o \
 	monolib_toplevel.o \
 	monolib_window.o \
-	monolib_utils.o
+	monolib_utils.o \
+	monolib_webutils.o
 @COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_3)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_app.o \
@@ -8312,7 +8317,8 @@ COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_settings.o \
 	coredll_toplevel.o \
 	coredll_window.o \
-	coredll_utils.o
+	coredll_utils.o \
+	coredll_webutils.o
 @COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_4)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_app.o \
@@ -9169,7 +9175,8 @@ COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_settings.o \
 	coredll_toplevel.o \
 	coredll_window.o \
-	coredll_utils.o
+	coredll_utils.o \
+	coredll_webutils.o
 @COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_5)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_app.o \
@@ -9821,7 +9828,8 @@ COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_settings.o \
 	corelib_toplevel.o \
 	corelib_window.o \
-	corelib_utils.o
+	corelib_utils.o \
+	corelib_webutils.o
 @COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_6)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_app.o \
@@ -10678,7 +10686,8 @@ COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_settings.o \
 	corelib_toplevel.o \
 	corelib_window.o \
-	corelib_utils.o
+	corelib_utils.o \
+	corelib_webutils.o
 @COND_TOOLKIT_WEB@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_WEB___LOWLEVEL_SRC_OBJECTS_7)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_app.o \
@@ -16203,6 +16212,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WEB_USE_GUI_1@monodll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@monodll_webutils.o: $(srcdir)/src/web/webutils.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/web/webutils.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_accel.o: $(srcdir)/src/generic/accel.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
 
@@ -20570,6 +20582,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WEB_USE_GUI_1@monolib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
+
+@COND_TOOLKIT_WEB_USE_GUI_1@monolib_webutils.o: $(srcdir)/src/web/webutils.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/web/webutils.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_accel.o: $(srcdir)/src/generic/accel.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
@@ -25467,6 +25482,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WEB_USE_GUI_1@coredll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
 
+@COND_TOOLKIT_WEB_USE_GUI_1@coredll_webutils.o: $(srcdir)/src/web/webutils.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/web/webutils.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_accel.o: $(srcdir)/src/generic/accel.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
 
@@ -28496,6 +28514,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_WEB_USE_GUI_1@corelib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
+
+@COND_TOOLKIT_WEB_USE_GUI_1@corelib_webutils.o: $(srcdir)/src/web/webutils.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WEB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/web/webutils.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_accel.o: $(srcdir)/src/generic/accel.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/accel.cpp

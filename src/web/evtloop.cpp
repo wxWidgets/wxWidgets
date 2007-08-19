@@ -54,6 +54,7 @@ public:
     bool DispatchJson(wxString& events);
     wxEvent* JsonToWxEvent(json_object* jevt);
     void JsonToWxKeyEvent(json_object* jevt, wxKeyEvent& wxevt);
+    void JsonToWxMouseEvent(json_object* jevt, wxMouseEvent& wxevt);
     wxWindow* GetEventWindow(json_object* jevt);
 
 private:
@@ -111,30 +112,76 @@ wxEvent* wxEventLoopImpl::JsonToWxEvent(json_object* jevt) {
     {
         wxevt = new wxKeyEvent(evtType);
         JsonToWxKeyEvent(jevt, *(wxKeyEvent*)wxevt);
+    } else if (evtType == wxEVT_LEFT_DOWN ||
+               evtType == wxEVT_LEFT_UP ||
+               evtType == wxEVT_MIDDLE_DOWN ||
+               evtType == wxEVT_MIDDLE_UP ||
+               evtType == wxEVT_RIGHT_UP ||
+               evtType == wxEVT_RIGHT_DOWN ||
+               evtType == wxEVT_LEFT_DCLICK ||
+               evtType == wxEVT_MIDDLE_DCLICK ||
+               evtType == wxEVT_RIGHT_DCLICK ||
+               evtType == wxEVT_MOTION) {
+        wxevt = new wxMouseEvent(evtType);
+        JsonToWxMouseEvent(jevt, *(wxMouseEvent*)wxevt);
     }
+
     return wxevt;
 }
 
 void wxEventLoopImpl::JsonToWxKeyEvent(json_object* jevt, wxKeyEvent& wxevt) {
-    wxevt.m_shiftDown = json_object_get_boolean(
-                            json_object_object_get(jevt, "shiftDown"));
-    wxevt.m_controlDown = json_object_get_boolean(
-                            json_object_object_get(jevt, "controlDown"));
-    wxevt.m_metaDown = json_object_get_boolean(
-                            json_object_object_get(jevt, "metaDown"));
+    //State
+    json_object* state = json_object_object_get(jevt, "eventState");
     wxevt.m_altDown = json_object_get_boolean(
-                            json_object_object_get(jevt, "altDown"));
+                            json_object_object_get(state, "altDown"));
+    wxevt.m_controlDown = json_object_get_boolean(
+                            json_object_object_get(state, "controlDown"));
+    wxevt.m_metaDown = json_object_get_boolean(
+                            json_object_object_get(state, "metaDown"));
+    wxevt.m_shiftDown = json_object_get_boolean(
+                            json_object_object_get(state, "shiftDown"));
+    wxevt.m_x = json_object_get_int(
+                            json_object_object_get(state, "x"));
+    wxevt.m_y = json_object_get_int(
+                            json_object_object_get(state, "y"));
+
+    //Key
     wxevt.m_keyCode = json_object_get_int(
                             json_object_object_get(jevt, "keyCode"));
+}
+
+void wxEventLoopImpl::JsonToWxMouseEvent(json_object* jevt, wxMouseEvent& wxevt) {
+    //State
+    json_object* state = json_object_object_get(jevt, "eventState");
+    wxevt.m_altDown = json_object_get_boolean(
+                            json_object_object_get(state, "altDown"));
+    wxevt.m_controlDown = json_object_get_boolean(
+                            json_object_object_get(state, "controlDown"));
+    wxevt.m_metaDown = json_object_get_boolean(
+                            json_object_object_get(state, "metaDown"));
+    wxevt.m_shiftDown = json_object_get_boolean(
+                            json_object_object_get(state, "shiftDown"));
+    wxevt.m_leftDown = json_object_get_boolean(
+                            json_object_object_get(state, "leftDown"));
+    wxevt.m_middleDown = json_object_get_boolean(
+                            json_object_object_get(state, "middleDown"));
+    wxevt.m_rightDown = json_object_get_boolean(
+                            json_object_object_get(state, "rightDown"));
     wxevt.m_x = json_object_get_int(
-                            json_object_object_get(jevt, "x"));
+                            json_object_object_get(state, "x"));
     wxevt.m_y = json_object_get_int(
-                            json_object_object_get(jevt, "y"));
+                            json_object_object_get(state, "y"));
+
 }
 
 wxWindow* wxEventLoopImpl::GetEventWindow(json_object* jevt) {
-    wxWindow* win = NULL;
-    return win;
+    json_object* state = json_object_object_get(jevt, "eventState");
+    wxPoint pt;
+    pt.x = json_object_get_int(
+                            json_object_object_get(state, "x"));
+    pt.y = json_object_get_int(
+                            json_object_object_get(state, "y"));
+    return wxFindWindowAtPoint(pt);
 }
 
 // ============================================================================
