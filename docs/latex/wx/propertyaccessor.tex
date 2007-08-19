@@ -11,13 +11,25 @@
 
 \section{\class{wxPropertyAccessor}}\label{wxpropertyaccessor}
 
+This class allows the user to set and retrieve a \helpref{wxPropertyInfo}{wxpropertyinfo} 
+declared in a \helpref{wxClassInfo}{wxclassinfo} object.
+
+The main functions are \helpref{SetProperty}{wxpropertyaccessorsetproperty},
+\helpref{GetProperty}{wxpropertyaccessorgetproperty} (for setting/getting a normal property)
+and \helpref{AddToPropertyCollection}{wxpropertyaccessoraddtopropertycollection},
+\helpref{GetPropertyCollection}{wxpropertyaccessorgetpropertycollection} (for adding elements
+or retrieving them from "collections" - i.e. arrays).
+
+FIXME: should we document this class or rather say the user to use wxClassInfo direct
+methods for setting/getting props & other stuff??
+
 \wxheading{Derived from}
 
 No base class
 
 \wxheading{Include files}
 
-<include\wx\xtiprop.h>
+<wx/xtiprop.h>
 
 \wxheading{Data structures}
 
@@ -28,17 +40,15 @@ No base class
 
 \func{}{wxPropertyAccessor}{\param{wxPropertySetter* }{setter}, \param{wxPropertyGetter* }{getter}, \param{wxPropertyCollectionAdder* }{adder}, \param{wxPropertyCollectionGetter* }{collectionGetter}}
 
-
-\membersection{wxPropertyAccessor::\destruct{wxPropertyAccessor}}\label{wxpropertyaccessordtor}
-
-\func{}{\destruct{wxPropertyAccessor}}{\void}
+Constructor. You don't need to call this explicitely as \helpref{XTI macros}{rttimacros}
+will do it for you.
 
 
 \membersection{wxPropertyAccessor::AddToPropertyCollection}\label{wxpropertyaccessoraddtopropertycollection}
 
 \constfunc{void}{AddToPropertyCollection}{\param{wxObject* }{object}, \param{const wxxVariant\& }{value}}
 
-Adding an element to a collection property
+Adds to \arg{object} an element of value \arg{value} to a collection property.
 
 
 \membersection{wxPropertyAccessor::GetAdderName}\label{wxpropertyaccessorgetaddername}
@@ -99,5 +109,5 @@ Getting a collection property
 
 \constfunc{void}{SetProperty}{\param{wxObject* }{object}, \param{const wxxVariant\& }{value}}
 
-Setting a simple property (non-collection)
+Sets a property on \arg{object} of value \arg{value}.
 

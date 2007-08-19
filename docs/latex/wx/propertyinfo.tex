@@ -24,6 +24,10 @@ Properties are identified by a name and can be associated with a (short) help st
 Properties can be accessed through the \helpref{wxPropertyAccessor}{wxpropertyaccessor} class and
 are tied to a specific \helpref{wxClassInfo}{wxclassinfo}.
 
+FIXME: should we rather point to the wxClassInfo's property direct accessors??
+
+FIXME: difference between collection and simple properties
+
 To cycle on the properties of a wxClassInfo, which are organized as a linked list, you'll typically do:
 
 \begin{verbatim}
@@ -38,7 +42,8 @@ for (prop = info->GetFirstProperty();
 \end{verbatim}
 
 Each property has also a \it{type} associated with it (e.g. the \tt{font} property of a \tt{wxWindow}
-object will have a {wxFont} type info), described by the \helpref{wxTypeInfo}{wxtypeinfo} class.
+object will have a \helpref{wxFont}{wxfont} type info), described by the \helpref{wxTypeInfo}{wxtypeinfo} class.
+
 
 
 \wxheading{Derived from}
@@ -63,17 +68,17 @@ No base class
 \begin{verbatim}
 enum 
 {
-    // will be removed in future releases
+    // this property will be removed in future releases
     wxPROP_DEPRECATED       = 0x00000001,
 
-    // object graph property, will be streamed with priority (after constructor properties)
+    // object graph property: will be streamed with priority (after constructor properties)
     wxPROP_OBJECT_GRAPH     = 0x00000002,
 
-    // this will only be streamed out and in as enum/set, the internal representation 
+    // this property will only be streamed in and out as enum/set, the internal representation 
     // is still a long
     wxPROP_ENUM_STORE_LONG  = 0x00000004,
 
-    // don't stream out this property, needed eg to avoid streaming out children 
+    // don't stream out this property, needed e.g. to avoid streaming out children 
     // that are always created by their parents
     wxPROP_DONT_STREAM      = 0x00000008
 };
