@@ -36,7 +36,7 @@ the corresponding topic.
 \helpref{wxCHECK\_VERSION}{wxcheckversion}\\
 \helpref{wxCHECK\_VERSION\_FULL}{wxcheckversionfull}\\
 \helpref{wxCHECK\_W32API\_VERSION}{wxcheckw32apiversion}\\
-\helpref{wxCLASSINFO}{wxclassinfo}\\
+\helpref{wxCLASSINFO}{wxclassinfomacro}\\
 \helpref{wxClientDisplayRect}{wxclientdisplayrect}\\
 \helpref{wxClipboardOpen}{functionwxclipboardopen}\\
 \helpref{wxCloseClipboard}{wxcloseclipboard}\\
@@ -57,7 +57,6 @@ the corresponding topic.
 \helpref{wxDDEInitialize}{wxddeinitialize}\\
 \helpref{wxDECLARE\_ABSTRACT\_CLASS}{wxdeclareabstractclass}\\
 \helpref{wxDECLARE\_APP}{wxdeclareapp}\\
-\helpref{wxDECLARE\_CLASS}{wxdeclareclass}\\
 \helpref{wxDECLARE\_DYNAMIC\_CLASS}{wxdeclaredynamicclass}\\
 \helpref{wxDROP\_ICON}{wxdropicon}\\
 \helpref{wxDebugMsg}{wxdebugmsg}\\
@@ -158,8 +157,6 @@ the corresponding topic.
 \helpref{wxIMPLEMENT\_ABSTRACT\_CLASS2}{wximplementabstractclass2}\\
 \helpref{wxIMPLEMENT\_ABSTRACT\_CLASS}{wximplementabstractclass}\\
 \helpref{wxIMPLEMENT\_APP}{wximplementapp}\\
-\helpref{wxIMPLEMENT\_CLASS2}{wximplementclass2}\\
-\helpref{wxIMPLEMENT\_CLASS}{wximplementclass}\\
 \helpref{wxIMPLEMENT\_DYNAMIC\_CLASS2}{wximplementdynamicclass2}\\
 \helpref{wxIMPLEMENT\_DYNAMIC\_CLASS}{wximplementdynamicclass}\\
 \helpref{wxINTXX\_SWAP\_ALWAYS}{intswapalways}\\
@@ -3639,7 +3636,7 @@ Creates and returns an object of the given class, if the class has been
 registered with the dynamic class system using \tt{wxDECLARE...} and \tt{wxIMPLEMENT...} macros.
 
 
-\membersection{wxCLASSINFO}\label{classinfo}
+\membersection{wxCLASSINFO}\label{wxclassinfomacro}
 
 \func{wxClassInfo *}{wxCLASSINFO}{className}
 
@@ -3653,8 +3650,10 @@ Returns a pointer to the wxClassInfo object associated with classes of type \tt{
 Used inside a class declaration to declare that the class should be
 made known to the class hierarchy, but objects of this class cannot be created
 dynamically (because they are abstract, that is, contain one or more abstract
-virtual function). 
-The same as \helpref{wxDECLARE\_CLASS}{wxdeclareclass}.
+virtual function).
+
+If you use this macro, you'll also need to use one of the \tt{wxIMPLEMENT_ABSTRACT_*} macros
+in the C++ source file.
 
 Example:
 
@@ -3669,15 +3668,6 @@ public:
 \end{verbatim}
 
 
-\membersection{wxDECLARE\_CLASS}\label{wxdeclareclass}
-
-\func{}{wxDECLARE\_CLASS}{className}
-
-Used inside a class declaration to declare that the class should be
-made known to the class hierarchy, but objects of this class cannot be created
-dynamically. The same as \helpref{wxDECLARE\_ABSTRACT\_CLASS}{wxdeclareabstractclass}.
-
-
 \membersection{wxDECLARE\_DYNAMIC\_CLASS}\label{wxdeclaredynamicclass}
 
 \func{}{wxDECLARE\_DYNAMIC\_CLASS}{className}
@@ -3688,7 +3678,10 @@ creatable from run-time type information.
 
 Notice that this implies that the
 class should have a default constructor, if this is not the case consider using
-\helpref{wxDECLARE\_CLASS}{wxdeclareclass}.
+\helpref{wxDECLARE\_ABSTRACT\_CLASS}{wxdeclareabstractclass}.
+
+If you use this macro, you'll also need to use one of the \tt{wxIMPLEMENT_DYNAMIC_*} macros
+in the C++ source file.
 
 Example:
 
@@ -3696,7 +3689,7 @@ Example:
 class MyClass: public wxWindow
 {
   wxDECLARE_DYNAMIC_CLASS(MyClass)
-
+}
 public:
   ...
 };
@@ -3718,6 +3711,9 @@ this is not a logically-correct operation.
 Beware however that the copy constructor is still available using this macro.
 Use the \helpref{wxDECLARE\_DYNAMIC\_CLASS\_NO\_COPY}{wxdeclaredynamicclassnocopy} 
 macro if you want to avoid that.
+
+If you use this macro, you'll also need to use one of the \tt{wxIMPLEMENT_DYNAMIC_*} macros
+in the C++ source file.
 
 Example:
 
@@ -3753,6 +3749,9 @@ This is very useful to avoid that the user tries to copy to a variable
 of type \tt{className} some other class instance of the same type, when
 this is not a logically-correct operation.
 
+If you use this macro, you'll also need to use one of the \tt{wxIMPLEMENT_DYNAMIC_*} macros
+in the C++ source file.
+
 Example:
 
 \begin{verbatim}
@@ -3780,12 +3779,8 @@ public:
 
 \func{}{wxIMPLEMENT\_ABSTRACT\_CLASS}{className, baseClassName}
 
-Used in a C++ implementation file to complete the 
-declaration of a class that has the
-\helpref{wxDECLARE\_ABSTRACT\_CLASS}{wxdeclareabstractclass}
-macro in its definition.
- 
-The same as \helpref{wxIMPLEMENT\_CLASS}{wximplementclass}.
+Used in a C++ implementation file to complete the declaration of a class that has the
+\helpref{wxDECLARE\_ABSTRACT\_CLASS}{wxdeclareabstractclass} macro in its definition.
 
 Example:
 
@@ -3804,35 +3799,8 @@ MyClass::MyClass()
 \func{}{wxIMPLEMENT\_ABSTRACT\_CLASS2}{className, baseClassName1, baseClassName2}
 
 Used in a C++ implementation file to complete the declaration of
-a class that has the 
-\helpref{wxDECLARE\_ABSTRACT\_CLASS2}{wxdeclareabstractclass2}
+a class that has the \helpref{wxDECLARE\_ABSTRACT\_CLASS}{wxdeclareabstractclass}
 macro in its definition and has two base classes. 
-
-The same as \helpref{wxIMPLEMENT\_CLASS2}{wximplementclass2}.
-
-
-\membersection{wxIMPLEMENT\_CLASS}\label{wximplementclass}
-
-\func{}{wxIMPLEMENT\_CLASS}{className, baseClassName}
-
-Used in a C++ implementation file to complete the declaration of
-a class that has the
-\helpref{wxDECLARE\_CLASS}{wxdeclareclass}
-macro in its definition.
-
-The same as \helpref{wxIMPLEMENT\_ABSTRACT\_CLASS}{wximplementabstractclass}.
-
-
-\membersection{wxIMPLEMENT\_CLASS2}\label{wximplementclass2}
-
-\func{}{wxIMPLEMENT\_CLASS2}{className, baseClassName1, baseClassName2}
-
-Used in a C++ implementation file to complete the declaration of a
-class that has the
-\helpref{wxDECLARE\_CLASS2}{wxdeclareclass2}
-macro in its definition and has two base classes.
-
-The same as \helpref{wxIMPLEMENT\_ABSTRACT\_CLASS2}{wximplementabstractclass2}.
 
 
 \membersection{wxIMPLEMENT\_DYNAMIC\_CLASS}\label{wximplementdynamicclass}
@@ -3840,8 +3808,7 @@ The same as \helpref{wxIMPLEMENT\_ABSTRACT\_CLASS2}{wximplementabstractclass2}.
 \func{}{wxIMPLEMENT\_DYNAMIC\_CLASS}{className, baseClassName}
 
 Used in a C++ implementation file to complete the declaration of
-a class that has the
-\helpref{wxDECLARE\_DYNAMIC\_CLASS}{wxdeclaredynamicclass}
+a class that has the \helpref{wxDECLARE\_DYNAMIC\_CLASS}{wxdeclaredynamicclass}
 macro in its definition, and whose instances can be created dynamically.
 
 Example:
@@ -3875,8 +3842,7 @@ For a full example see the \helpref{XTI overview}{runtimeclassoverview}.
 \func{}{wxIMPLEMENT\_DYNAMIC\_CLASS2}{className, baseClassName1, baseClassName2}
 
 Used in a C++ implementation file to complete the declaration of
-a class that has the
-\helpref{wxDECLARE\_DYNAMIC\_CLASS2}{wxdeclaredynamicclass2}
+a class that has the \helpref{wxDECLARE\_DYNAMIC\_CLASS}{wxdeclaredynamicclass}
 macro in its definition, and whose instances can be created dynamically. 
 
 Use this for classes derived from two base classes.
