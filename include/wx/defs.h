@@ -1333,8 +1333,6 @@ typedef float wxFloat32;
 #  define wxINFUNC_CLASS_TYPE_FIX( type )
 #endif
 
-#define EMPTY_MACROVALUE /**/
-
 #if wxUSE_FUNC_TEMPLATE_POINTER
 #  define wxTO_STRING(type) wxToStringConverter<type>
 #  define wxTO_STRING_IMP(type)
