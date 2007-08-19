@@ -151,17 +151,14 @@ public:
     void RemoveNotifier( wxDataViewModelNotifier *notifier );
     
     // default compare function
-    virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 );
-    
-    void SetSortingColumn( unsigned int col ) { m_sortingColumn = col; }
-    unsigned int GetSortingColumn() { return m_sortingColumn; }
+    virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2, 
+                         unsigned int column, bool ascending );
     
 protected:
     // the user should not delete this class directly: he should use DecRef() instead!
     virtual ~wxDataViewModel() { }
 
     wxDataViewModelNotifiers  m_notifiers;
-    unsigned int              m_sortingColumn;
 };
 
 // ---------------------------------------------------------
@@ -199,7 +196,8 @@ public:
     
     // compare based on index
     
-    virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 );
+    virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2, 
+                         unsigned int column, bool ascending );
 
     // implement base methods
 

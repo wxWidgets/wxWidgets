@@ -89,6 +89,9 @@ public:
     
     void SetSortOrder( GtkSortType sort_order ) { m_sort_order = sort_order; }
     GtkSortType GetSortOrder()                  { return m_sort_order; }
+
+    void SetSortColumn( unsigned int column )   { m_sort_column = column; }
+    unsigned int GetSortColumn()                { return m_sort_column; }
     
 protected:
     void InitTree();
@@ -104,6 +107,7 @@ private:
     GtkWxTreeModel       *m_gtk_model;
     wxDataViewCtrl       *m_owner;
     GtkSortType           m_sort_order;
+    unsigned int          m_sort_column;
 };
 
 
@@ -208,9 +212,9 @@ private:
 
 int LINKAGEMODE wxGtkTreeModelNodeCmp( void* id1, void* id2 )
 {
-    int ret = g_internal->GetDataViewModel()->Compare( id1, id2 );
-    if (g_internal->GetSortOrder() == GTK_SORT_DESCENDING)
-        return -ret;
+    int ret = g_internal->GetDataViewModel()->Compare( id1, id2, 
+        g_internal->GetSortColumn(), (g_internal->GetSortOrder() == GTK_SORT_ASCENDING) );
+        
     return ret;
 }
 
@@ -599,7 +603,7 @@ gboolean wxgtk_tree_model_get_sort_column_id    (GtkTreeSortable        *sortabl
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (sortable), FALSE);
 
     if (sort_column_id)
-        *sort_column_id = tree_model->internal->GetDataViewModel()->GetSortingColumn();
+        *sort_column_id = tree_model->internal->GetSortColumn();
         
     if (order)
         *order = tree_model->internal->GetSortOrder();
@@ -614,11 +618,11 @@ void     wxgtk_tree_model_set_sort_column_id  (GtkTreeSortable        *sortable,
     GtkWxTreeModel *tree_model = (GtkWxTreeModel *) sortable;
     g_return_if_fail (GTK_IS_WX_TREE_MODEL (sortable) );
 
-    if ((sort_column_id == (gint) tree_model->internal->GetDataViewModel()->GetSortingColumn()) &&
+    if ((sort_column_id == (gint) tree_model->internal->GetSortColumn()) &&
         (order == tree_model->internal->GetSortOrder()))
         return;
     
-    tree_model->internal->GetDataViewModel()->SetSortingColumn( sort_column_id );
+    tree_model->internal->SetSortColumn( sort_column_id );
     
     tree_model->internal->SetSortOrder( order );
     
@@ -2239,6 +2243,7 @@ wxDataViewCtrlInternal::wxDataViewCtrlInternal( wxDataViewCtrl *owner,
     m_gtk_model = gtk_model; 
     m_root = NULL; 
     m_sort_order = GTK_SORT_ASCENDING;
+    m_sort_column = 0;
     InitTree();
 }
     

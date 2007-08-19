@@ -42,7 +42,6 @@ WX_DEFINE_LIST(wxDataViewModelNotifiers);
 wxDataViewModel::wxDataViewModel()
 {
     m_notifiers.DeleteContents( true );
-    m_sortingColumn = 0;
 }
 
 bool wxDataViewModel::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )
@@ -141,7 +140,8 @@ void wxDataViewModel::RemoveNotifier( wxDataViewModelNotifier *notifier )
     m_notifiers.DeleteObject( notifier );
 }
 
-int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 )
+int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
+                              unsigned int column, bool ascending )
 {
     // sort branches before leaves
     bool item1_is_container = IsContainer(item1);
@@ -153,8 +153,15 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
         return -1;
 
     wxVariant value1,value2;
-    GetValue( value1, item1, m_sortingColumn );
-    GetValue( value2, item2, m_sortingColumn );
+    GetValue( value1, item1, column );
+    GetValue( value2, item2, column );
+
+    if (!ascending)
+    {
+        wxVariant temp = value1;
+        value1 = value2;
+        value2 = temp;
+    }
 
     if (value1.GetType() == wxT("string"))
     {
@@ -188,6 +195,9 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
     // items must be different
     unsigned long litem1 = (unsigned long) item1.GetID();
     unsigned long litem2 = (unsigned long) item2.GetID();
+    
+    if (!ascending)
+        return litem2-litem2;
 
     return litem1-litem2;
 }
@@ -261,9 +271,13 @@ wxDataViewItem wxDataViewIndexListModel::GetItem( unsigned int row ) const
     return wxDataViewItem( m_hash[row] );
 }
 
-int wxDataViewIndexListModel::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 )
+int wxDataViewIndexListModel::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
+                                       unsigned int column, bool ascending )
 {
-    return GetRow(item1) - GetRow(item2);
+    if (ascending)
+        return GetRow(item1) - GetRow(item2);
+    
+    return GetRow(item2) - GetRow(item1);
 }
 
 void wxDataViewIndexListModel::GetValue( wxVariant &variant,

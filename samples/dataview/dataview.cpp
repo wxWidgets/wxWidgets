@@ -170,7 +170,8 @@ public:
     
     // override sorting to always sort branches ascendingly
     
-    int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 )
+    int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2, 
+                 unsigned int column, bool ascending )
     {
         if (IsContainer(item1) && IsContainer(item2))
         {
@@ -190,7 +191,7 @@ public:
             return litem1-litem2;
         }
         
-        return wxDataViewModel::Compare( item1, item2 );
+        return wxDataViewModel::Compare( item1, item2, column, ascending );
     }
 
     // implementation of base class virtuals to define model
