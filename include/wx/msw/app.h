@@ -102,7 +102,7 @@ wxEntry(HINSTANCE hInstance,
         wxCmdLineArgType pCmdLine = NULL,
         int nCmdShow = SW_SHOWNORMAL);
 
-#define IMPLEMENT_WXWIN_MAIN \
+#define wxIMPLEMENT_WXWIN_MAIN \
     extern "C" int WINAPI WinMain(HINSTANCE hInstance,                    \
                                   HINSTANCE hPrevInstance,                \
                                   wxCmdLineArgType lpCmdLine,             \
