@@ -35055,9 +35055,7 @@ fi
 
 
 if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_UTF8" = "auto" ; then
-    if test "$TOOLKIT" = "DFB" ; then
-        wxUSE_UNICODE_UTF8=yes
-    elif test "$TOOLKIT" = "GTK" -a "$WXGTK20" = "1" ; then
+    if test "$USE_UNIX" = "1" -a "$wxUSE_DARWIN" != "1" ; then
         wxUSE_UNICODE_UTF8=yes
     elif test "$USE_OS2" = "1" ; then
                                 wxUSE_UNICODE_UTF8=yes
