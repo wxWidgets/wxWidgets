@@ -1018,9 +1018,12 @@ void wxTextCtrl::DoSetValue( const wxString &value, int flags )
         return;
     }
 
-    void* blockWidget = IsMultiLine() ? (void*)m_buffer : (void*)m_text;
-    g_signal_handlers_block_by_func(blockWidget,
-        (gpointer)gtk_text_changed_callback, this);
+    if ( !(flags & SetValue_SendEvent) )
+    {
+        g_signal_handlers_block_by_func(GetTextObject(),
+            (gpointer)gtk_text_changed_callback, this);
+    }
+
     if ( IsMultiLine() )
     {
         gtk_text_buffer_set_text( m_buffer, buffer, strlen(buffer) );
@@ -1033,12 +1036,16 @@ void wxTextCtrl::DoSetValue( const wxString &value, int flags )
                                        &start, &end);
         }
     }
-    else
+    else // single line
     {
         gtk_entry_set_text( GTK_ENTRY(m_text), buffer );
     }
-    g_signal_handlers_unblock_by_func(blockWidget,
-        (gpointer)gtk_text_changed_callback, this);
+
+    if ( !(flags & SetValue_SendEvent) )
+    {
+        g_signal_handlers_unblock_by_func(GetTextObject(),
+            (gpointer)gtk_text_changed_callback, this);
+    }
                     
     // This was added after discussion on the list
     SetInsertionPoint(0);
