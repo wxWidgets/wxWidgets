@@ -839,7 +839,15 @@ bool wxWindowCocoa::SetCursor(const wxCursor &cursor)
 {
     if(!wxWindowBase::SetCursor(cursor))
         return false;
+
+    // Set up the cursor rect so that invalidateCursorRectsForView: will destroy it.
+    // If we don't do this then Cocoa thinks (rightly) that we don't have any cursor
+    // rects and thus won't ever call resetCursorRects.
+    [GetNSView() addCursorRect: [GetNSView() visibleRect]  cursor: m_cursor.GetNSCursor()];
+
     // Invalidate the cursor rects so the cursor will change
+    // Note that it is not enough to remove the old one (if any) and add the new one.
+    // For the rects to work properly, Cocoa itself must call resetCursorRects.
     [[GetNSView() window] invalidateCursorRectsForView:GetNSView()];
     return true;
 }
