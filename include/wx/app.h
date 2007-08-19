@@ -618,7 +618,7 @@ public:
         int main(int argc, char **argv) { return wxEntry(argc, argv); }
 
 // port-specific header could have defined it already in some special way
-#ifndef IMPLEMENT_WXWIN_MAIN
+#ifndef wxIMPLEMENT_WXWIN_MAIN
     #define wxIMPLEMENT_WXWIN_MAIN wxIMPLEMENT_WXWIN_MAIN_CONSOLE
 #endif // defined(IMPLEMENT_WXWIN_MAIN)
 
