@@ -66,11 +66,13 @@
 
 #if wxUSE_STD_IOSTREAM
     #include "wx/ioswrap.h"
+    #include "wx/beforestd.h"
     #if wxUSE_IOSTREAMH
         #include <fstream.h>
     #else
         #include <fstream>
     #endif
+    #include "wx/afterstd.h"
 #else
     #include "wx/wfstream.h"
 #endif
