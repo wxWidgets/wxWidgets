@@ -461,6 +461,9 @@ int DumpProperties(const wxClassInfo *info, wxString& infostr, bool recursive)
         infostr << DumpPropertyInfo(prop, 4);
     }
 
+    if (pcount == 0)
+        infostr << _T("\n None");
+
     if (recursive)
     {
         const wxClassInfo **parent = info->GetParents();
@@ -492,6 +495,9 @@ int DumpHandlers(const wxClassInfo *info, wxString& infostr, bool recursive)
         infostr << _T("\n\n  [") << hcount+1 << _T("] Handler: ") << h->GetName();
         infostr << DumpHandlerInfo(h, 4);
     }
+
+    if (hcount == 0)
+        infostr << _T("\n None");
 
     if (recursive)
     {
@@ -543,7 +549,7 @@ wxString DumpClassInfo(const wxClassInfo *info, bool recursive)
     int hcount = DumpHandlers(info, infostr, recursive);
 
     if (pcount+hcount == 0)
-        infostr << _T("\n no advanced info\n");
+        infostr << _T("\n\n no advanced info\n");
     else
     {
         infostr << _T("\n\n Total count of properties: ") << pcount;
