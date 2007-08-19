@@ -27,6 +27,11 @@
 #include <string.h>
 #include <stdarg.h>
 
+#include "wx/cocoa/string.h"
+
+#import <Foundation/NSURL.h>
+#import <AppKit/NSWorkspace.h>
+
 void wxDisplaySize(int *width, int *height)
 {
     // TODO
@@ -91,6 +96,28 @@ void wxBell()
 {
     // TODO
 }
+
+#include "wx/private/browserhack28.h"
+
+// Private helper method for wxLaunchDefaultBrowser
+static bool wxCocoaLaunchDefaultBrowser(const wxString& url, int flags)
+{
+    // NOTE: We ignore the flags
+    return [[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString:wxNSStringWithWxString(url)]] != NO;
+}
+
+// For this to work the linker (particularly the static one) must link in this object file and the C++
+// runtime must call the static initializer.  It is basically guaranteed that the linker won't throw us
+// away because some of the wxGUIAppTraits virtual methods are implemented in this file.
+static class DoFixLaunchDefaultBrowser
+{
+public:
+    DoFixLaunchDefaultBrowser()
+    {
+        // Tell the base library we can launch a default browser better.
+        wxSetLaunchDefaultBrowserImpl(&wxCocoaLaunchDefaultBrowser);
+    }
+} s_launchDefaultBrowserFixer;
 
 #if 0
 // DFE: These aren't even implemented by wxGTK, and no wxWidgets code calls

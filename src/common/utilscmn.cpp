@@ -725,22 +725,22 @@ long wxExecute(const wxString& command,
 // Launch default browser
 // ----------------------------------------------------------------------------
 
-bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
+#include "wx/private/browserhack28.h"
+
+static bool wxLaunchDefaultBrowserBaseImpl(const wxString& url, int flags);
+
+// Use wxLaunchDefaultBrowserBaseImpl by default
+static wxLaunchDefaultBrowserImpl_t s_launchBrowserImpl = &wxLaunchDefaultBrowserBaseImpl;
+
+// Function the GUI library can call to provide a better implementation
+WXDLLIMPEXP_BASE void wxSetLaunchDefaultBrowserImpl(wxLaunchDefaultBrowserImpl_t newImpl)
+{
+    s_launchBrowserImpl = newImpl!=NULL ? newImpl : &wxLaunchDefaultBrowserBaseImpl;
+}
+
+static bool wxLaunchDefaultBrowserBaseImpl(const wxString& url, int flags)
 {
     wxUnusedVar(flags);
-
-    // set the scheme of url to http if it does not have one
-    // RR: This doesn't work if the url is just a local path
-    wxString url(urlOrig);
-    wxURI uri(url);
-    if ( !uri.HasScheme() )
-    {
-        if (wxFileExists(urlOrig))
-            url.Prepend( wxT("file://") );
-        else
-            url.Prepend(wxT("http://"));
-    }
-
 
 #if defined(__WXMSW__)
 
@@ -923,6 +923,25 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
     wxLogError(_T("No default application configured for HTML files."));
 
 #endif // !wxUSE_MIMETYPE && !__WXMSW__
+    return false;
+}
+
+bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
+{
+    // set the scheme of url to http if it does not have one
+    // RR: This doesn't work if the url is just a local path
+    wxString url(urlOrig);
+    wxURI uri(url);
+    if ( !uri.HasScheme() )
+    {
+        if (wxFileExists(urlOrig))
+            url.Prepend( wxT("file://") );
+        else
+            url.Prepend(wxT("http://"));
+    }
+
+    if(s_launchBrowserImpl(url, flags))
+        return true;
 
     wxLogSysError(_T("Failed to open URL \"%s\" in default browser."),
                   url.c_str());

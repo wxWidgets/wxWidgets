@@ -65,6 +65,7 @@
         *wxMenuItemBase*GetLabelText*;
         *wxMenuItem*GetItemLabel*;
         *wxMetafileDC*DoGetTextExtent*;
+        *wxSetLaunchDefaultBrowserImpl*;
         *wxWindowMSW*GetThemedBorderStyle*;
         *wxWizard*GetBitmap*;
         *wxWizard*SetBitmap*;
