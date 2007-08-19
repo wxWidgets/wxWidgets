@@ -629,6 +629,12 @@ void     wxgtk_tree_model_set_sort_column_id  (GtkTreeSortable        *sortable,
     gtk_tree_sortable_sort_column_changed (sortable);
     
     tree_model->internal->GetDataViewModel()->Resort();
+
+    wxDataViewCtrl *dv = tree_model->internal->GetOwner();    
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, dv->GetId() );
+    // event.SetDataViewColumn( column );
+    event.SetModel( dv->GetModel() );
+    dv->GetEventHandler()->ProcessEvent( event );
 }
 
 void     wxgtk_tree_model_set_sort_func         (GtkTreeSortable        *sortable,
@@ -1842,7 +1848,7 @@ gtk_dataview_header_button_press_callback( GtkWidget *widget,
         event.SetDataViewColumn( column );
         event.SetModel( dv->GetModel() );
         if (dv->GetEventHandler()->ProcessEvent( event ))
-            return TRUE;
+            return FALSE;
     }
 
     return FALSE;
