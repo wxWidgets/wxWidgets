@@ -77,15 +77,14 @@ wxBEGIN_PROPERTIES_TABLE(wxMenu)
                 0 /*flags*/, wxT("Helpstring"), wxT("group") )
 
     wxREADONLY_PROPERTY_FLAGS( MenuStyle, wxMenuStyle, long, GetStyle, \
-                               EMPTY_MACROVALUE, 0 /*flags*/, wxT("Helpstring"), \
+                               wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, wxT("Helpstring"), \
                                wxT("group")) // style
 
     wxPROPERTY_COLLECTION( MenuItems, wxMenuItemList, wxMenuItem*, Append, \
                            GetMenuItems, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxMenu)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxMenu)
 
 wxDIRECT_CONSTRUCTOR_2( wxMenu, wxString, Title, long, MenuStyle  )
 
@@ -98,7 +97,7 @@ wxEND_FLAGS( wxMenuBarStyle )
 // the negative id would lead the window (its superclass !) to
 // vetoe streaming out otherwise
 bool wxMenuBarStreamingCallback( const wxObject *WXUNUSED(object), wxObjectWriter *,
-                                 wxPersister *, wxxVariantArray & )
+                                 wxObjectReaderCallback *, wxxVariantArray & )
 {
     return true;
 }
@@ -109,15 +108,14 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuBar, wxWindow, "wx/menu.h", \
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxMenuInfo, wxObject, "wx/menu.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxMenuInfo)
-    wxREADONLY_PROPERTY( Menu, wxMenu*, GetMenu, EMPTY_MACROVALUE, \
+    wxREADONLY_PROPERTY( Menu, wxMenu*, GetMenu, wxEMPTY_PARAMETER_VALUE, \
                          0 /*flags*/, wxT("Helpstring"), wxT("group"))
 
     wxREADONLY_PROPERTY( Title, wxString, GetTitle, wxString(), \
                          0 /*flags*/, wxT("Helpstring"), wxT("group"))
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxMenuInfo)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxMenuInfo)
 
 wxCONSTRUCTOR_2( wxMenuInfo, wxMenu*, Menu, wxString, Title )
 
@@ -134,8 +132,7 @@ wxBEGIN_PROPERTIES_TABLE(wxMenuBar)
                            GetMenuInfos, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxMenuBar)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxMenuBar)
 
 wxCONSTRUCTOR_DUMMY( wxMenuBar )
 
@@ -154,9 +151,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuInfo, wxObject)
 #if wxUSE_EXTENDED_RTTI
 
 bool wxMenuItemStreamingCallback( const wxObject *object, wxObjectWriter *,
-                                  wxPersister *, wxxVariantArray & )
+                                  wxObjectReaderCallback *, wxxVariantArray & )
 {
-    const wxMenuItem * mitem = dynamic_cast<const wxMenuItem*>(object);
+    const wxMenuItem * mitem = wx_dynamic_cast(const wxMenuItem*, object);
     if ( mitem->GetMenu() && !mitem->GetMenu()->GetTitle().empty() )
     {
         // we don't stream out the first two items for menus with a title,
@@ -179,17 +176,17 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuItem, wxObject, "wx/menuitem.h", \
                                        wxMenuItemStreamingCallback)
 
 wxBEGIN_PROPERTIES_TABLE(wxMenuItem)
-    wxPROPERTY( Parent, wxMenu*, SetMenu, GetMenu, EMPTY_MACROVALUE, \
+    wxPROPERTY( Parent, wxMenu*, SetMenu, GetMenu, wxEMPTY_PARAMETER_VALUE, \
                 0 /*flags*/, wxT("Helpstring"), wxT("group") )
-    wxPROPERTY( Id, int, SetId, GetId, EMPTY_MACROVALUE, \
+    wxPROPERTY( Id, int, SetId, GetId, wxEMPTY_PARAMETER_VALUE, \
                 0 /*flags*/, wxT("Helpstring"), wxT("group") )
     wxPROPERTY( Text, wxString, SetText, GetText, wxString(), \
                 0 /*flags*/, wxT("Helpstring"), wxT("group") )
     wxPROPERTY( Help, wxString, SetHelp, GetHelp, wxString(), \
                 0 /*flags*/, wxT("Helpstring"), wxT("group") )
-    wxREADONLY_PROPERTY( Kind, wxItemKind, GetKind, EMPTY_MACROVALUE, \
+    wxREADONLY_PROPERTY( Kind, wxItemKind, GetKind, wxEMPTY_PARAMETER_VALUE, \
                          0 /*flags*/, wxT("Helpstring"), wxT("group") )
-    wxPROPERTY( SubMenu, wxMenu*, SetSubMenu, GetSubMenu, EMPTY_MACROVALUE, \
+    wxPROPERTY( SubMenu, wxMenu*, SetSubMenu, GetSubMenu, wxEMPTY_PARAMETER_VALUE, \
                 0 /*flags*/, wxT("Helpstring"), wxT("group") )
     wxPROPERTY( Enabled, bool, Enable, IsEnabled, wxxVariant((bool)true), \
                 0 /*flags*/, wxT("Helpstring"), wxT("group") )
@@ -199,8 +196,7 @@ wxBEGIN_PROPERTIES_TABLE(wxMenuItem)
                 0 /*flags*/, wxT("Helpstring"), wxT("group") )
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxMenuItem)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxMenuItem)
 
 wxDIRECT_CONSTRUCTOR_6( wxMenuItem, wxMenu*, Parent, int, Id, wxString, \
                         Text, wxString, Help, wxItemKind, Kind, wxMenu*, SubMenu )

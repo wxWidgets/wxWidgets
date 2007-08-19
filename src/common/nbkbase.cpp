@@ -103,18 +103,17 @@ wxBEGIN_PROPERTIES_TABLE(wxNotebook)
                            AddPageInfo, GetPageInfos, 0 /*flags*/, wxT("Helpstring"), \
                            wxT("group"))
     wxPROPERTY_FLAGS( WindowStyle, wxNotebookStyle, long, SetWindowStyleFlag, \
-                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
                       wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxNotebook)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxNotebook)
 
 wxCONSTRUCTOR_5( wxNotebook, wxWindow*, Parent, wxWindowID, Id, \
                  wxPoint, Position, wxSize, Size, long, WindowStyle)
 
 wxBEGIN_PROPERTIES_TABLE(wxNotebookPageInfo)
-    wxREADONLY_PROPERTY( Page, wxNotebookPage*, GetPage, EMPTY_MACROVALUE, \
+    wxREADONLY_PROPERTY( Page, wxNotebookPage*, GetPage, wxEMPTY_PARAMETER_VALUE, \
                          0 /*flags*/, wxT("Helpstring"), wxT("group"))
     wxREADONLY_PROPERTY( Text, wxString, GetText, wxString(), 0 /*flags*/, \
                          wxT("Helpstring"), wxT("group"))
@@ -124,8 +123,7 @@ wxBEGIN_PROPERTIES_TABLE(wxNotebookPageInfo)
                          wxT("Helpstring"), wxT("group"))
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxNotebookPageInfo)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxNotebookPageInfo)
 
 wxCONSTRUCTOR_4( wxNotebookPageInfo, wxNotebookPage*, Page, \
                  wxString, Text, bool, Selected, int, ImageId )

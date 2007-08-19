@@ -47,8 +47,7 @@ wxIMPLEMENT_DYNAMIC_CLASS2_XTI(wxOwnerDrawnComboBox, wxComboCtrl, \
 wxBEGIN_PROPERTIES_TABLE(wxOwnerDrawnComboBox)
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxOwnerDrawnComboBox)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxOwnerDrawnComboBox)
 
 wxCONSTRUCTOR_5( wxOwnerDrawnComboBox , wxWindow* , Parent , wxWindowID , \
                  Id , wxString , Value , wxPoint , Position , wxSize , Size )

@@ -95,12 +95,11 @@ wxBEGIN_PROPERTIES_TABLE(wxSlider)
                 wxT("Helpstring"), wxT("group"))
 
     wxPROPERTY_FLAGS( WindowStyle, wxSliderStyle, long, SetWindowStyleFlag, \
-                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
                       wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxSlider)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxSlider)
 
 wxCONSTRUCTOR_8( wxSlider, wxWindow*, Parent, wxWindowID, Id, int, Value, \
                  int, Minimum, int, Maximum, wxPoint, Position, wxSize, Size, \

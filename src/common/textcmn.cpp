@@ -104,18 +104,17 @@ wxBEGIN_PROPERTIES_TABLE(wxTextCtrl)
     wxEVENT_PROPERTY( TextUpdated, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent )
     wxEVENT_PROPERTY( TextEnter, wxEVT_COMMAND_TEXT_ENTER, wxCommandEvent )
 
-    wxPROPERTY( Font, wxFont, SetFont, GetFont , EMPTY_MACROVALUE, \
+    wxPROPERTY( Font, wxFont, SetFont, GetFont , wxEMPTY_PARAMETER_VALUE, \
                 0 /*flags*/, wxT("Helpstring"), wxT("group") )
     wxPROPERTY( Value, wxString, SetValue, GetValue, wxString(), \
                 0 /*flags*/, wxT("Helpstring"), wxT("group"))
 
     wxPROPERTY_FLAGS( WindowStyle, wxTextCtrlStyle, long, SetWindowStyleFlag, \
-                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
                       wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxTextCtrl)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxTextCtrl)
 
 wxCONSTRUCTOR_6( wxTextCtrl, wxWindow*, Parent, wxWindowID, Id, \
                  wxString, Value, wxPoint, Position, wxSize, Size, \

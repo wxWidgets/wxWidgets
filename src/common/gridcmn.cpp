@@ -73,12 +73,11 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxGrid, wxScrolledWindow, "wx/grid.h")
 wxBEGIN_PROPERTIES_TABLE(wxGrid)
     wxHIDE_PROPERTY( Children )
     wxPROPERTY_FLAGS( WindowStyle, wxGridStyle, long, SetWindowStyleFlag, \
-                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
                       wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxGrid)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxGrid)
 
 wxCONSTRUCTOR_5( wxGrid, wxWindow*, Parent, wxWindowID, Id, wxPoint, Position, \
                  wxSize, Size, long, WindowStyle )

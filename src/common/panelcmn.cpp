@@ -73,13 +73,12 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxPanel, wxWindow, "wx/panel.h")
 wxBEGIN_PROPERTIES_TABLE(wxPanel)
     wxPROPERTY_FLAGS( WindowStyle, wxPanelStyle, long, \
                       SetWindowStyleFlag, GetWindowStyleFlag, \
-                      EMPTY_MACROVALUE, 0 /*flags*/, \
+                      wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
                       wxT("Helpstring"), wxT("group")) // style
     // style wxTAB_TRAVERSAL
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxPanel)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxPanel)
 
 wxCONSTRUCTOR_6( wxPanel, wxWindow*, Parent, wxWindowID, Id, \
                  wxPoint, Position, wxSize, Size, long, WindowStyle, \

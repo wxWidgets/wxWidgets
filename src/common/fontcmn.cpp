@@ -88,7 +88,7 @@ wxBEGIN_PROPERTIES_TABLE(wxFont)
                 wxT("Helpstring"), wxT("group")) // wxFontWeight
     wxPROPERTY( Underlined, bool, SetUnderlined, GetUnderlined, false, 0 /*flags*/, \
                 wxT("Helpstring"), wxT("group"))
-    wxPROPERTY( Face, wxString, SetFaceName, GetFaceName, EMPTY_MACROVALUE, \
+    wxPROPERTY( Face, wxString, SetFaceName, GetFaceName, wxEMPTY_PARAMETER_VALUE, \
                 0 /*flags*/, wxT("Helpstring"), wxT("group"))
     wxPROPERTY( Encoding, wxFontEncoding, SetEncoding, GetEncoding, \
                 wxFONTENCODING_DEFAULT, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
@@ -97,8 +97,7 @@ wxEND_PROPERTIES_TABLE()
 wxCONSTRUCTOR_6( wxFont, int, Size, int, Family, int, Style, int, Weight, \
                  bool, Underlined, wxString, Face )
 
-wxBEGIN_HANDLERS_TABLE(wxFont)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxFont)
 
 
 // ----------------------------------------------------------------------------

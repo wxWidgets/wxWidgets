@@ -85,12 +85,11 @@ wxBEGIN_PROPERTIES_TABLE(wxSpinButton)
                 wxT("Helpstring"), wxT("group"))
 
     wxPROPERTY_FLAGS( WindowStyle, wxSpinButtonStyle, long, SetWindowStyleFlag, \
-                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
                       wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxSpinButton)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxSpinButton)
 
 wxCONSTRUCTOR_5( wxSpinButton, wxWindow*, Parent, wxWindowID, Id, \
                  wxPoint, Position, wxSize, Size, long, WindowStyle )

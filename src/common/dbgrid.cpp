@@ -172,8 +172,8 @@ wxDbGridTableBase::~wxDbGridTableBase()
     //Can't check for update here as
 
     //FIXME: should i remove m_ColInfo and m_data from m_attrProvider if a wxDbGridAttrProvider
-//    if ((provider = dynamic_cast<wxDbGridCellAttrProvider *>(GetAttrProvider())))
-     // Using C casting for now until we can support dynamic_cast with wxWidgets
+//    if ((provider = wx_dynamic_cast<wxDbGridCellAttrProvider *>(GetAttrProvider())))
+     // Using C casting for now until we can support wx_dynamic_cast with wxWidgets
     provider = (wxDbGridCellAttrProvider *)(GetAttrProvider());
     if (provider)
     {
@@ -226,9 +226,9 @@ bool wxDbGridTableBase::AssignDbTable(wxDbTable *tab, int count, bool takeOwners
     }
     m_keys.Empty();
     m_data = tab;
-    //FIXME: Remove dynamic_cast before sumision to wxwin
-//    if ((provider = dynamic_cast<wxDbGridCellAttrProvider *> (GetAttrProvider())))
-     // Using C casting for now until we can support dynamic_cast with wxWidgets
+    //FIXME: Remove wx_dynamic_cast before sumision to wxwin
+//    if ((provider = wx_dynamic_cast<wxDbGridCellAttrProvider *> (GetAttrProvider())))
+     // Using C casting for now until we can support wx_dynamic_cast with wxWidgets
     provider = (wxDbGridCellAttrProvider *)(GetAttrProvider());
     if (provider)
     {
@@ -546,7 +546,7 @@ void wxDbGridTableBase::SetValueAsCustom(int row, int col, const wxString& typeN
             (sqltype == SQL_C_TIME) ||
             (sqltype == SQL_C_TIMESTAMP))
         {
-            //FIXME: you can't dynamic_cast from (void *)
+            //FIXME: you can't wx_dynamic_cast from (void *)
             //wxDateTime *date = wxDynamicCast(value, wxDateTime);
             wxDateTime *date = (wxDateTime *)value;
             if (!date)

@@ -74,18 +74,17 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxButton, wxControl, "wx/button.h")
 wxBEGIN_PROPERTIES_TABLE(wxButton)
     wxEVENT_PROPERTY( Click, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEvent )
 
-    wxPROPERTY( Font, wxFont, SetFont, GetFont, EMPTY_MACROVALUE, \
+    wxPROPERTY( Font, wxFont, SetFont, GetFont, wxEMPTY_PARAMETER_VALUE, \
                 0 /*flags*/, wxT("The font associated with the button label"), wxT("group"))
     wxPROPERTY( Label, wxString, SetLabel, GetLabel, wxString(), \
                 0 /*flags*/, wxT("The button label"), wxT("group") )
 
     wxPROPERTY_FLAGS( WindowStyle, wxButtonStyle, long, SetWindowStyleFlag, \
-                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/,     \
+                      GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/,     \
                       wxT("The button style"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxButton)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxButton)
 
 wxCONSTRUCTOR_6( wxButton, wxWindow*, Parent, wxWindowID, Id, wxString, \
                  Label, wxPoint, Position, wxSize, Size, long, WindowStyle )

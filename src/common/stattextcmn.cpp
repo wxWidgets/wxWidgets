@@ -93,12 +93,11 @@ wxBEGIN_PROPERTIES_TABLE(wxStaticText)
     wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxString(), 0 /*flags*/, \
                 wxT("Helpstring"), wxT("group"))
     wxPROPERTY_FLAGS( WindowStyle, wxStaticTextStyle, long, SetWindowStyleFlag, \
-                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
                       wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxStaticText)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxStaticText)
 
 wxCONSTRUCTOR_6( wxStaticText, wxWindow*, Parent, wxWindowID, Id, \
                  wxString, Label, wxPoint, Position, wxSize, Size, long, WindowStyle )

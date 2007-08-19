@@ -65,19 +65,14 @@ wxEND_FLAGS( wxStaticBoxStyle )
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticBox, wxControl, "wx/statbox.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxStaticBox)
-    wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxString(), 0 /*flags*/, \
+    wxPROPERTY( Label, wxString, SetLabel, GetLabel, wxString(), 0 /*flags*/, \
                 wxT("Helpstring"), wxT("group"))
     wxPROPERTY_FLAGS( WindowStyle, wxStaticBoxStyle, long, SetWindowStyleFlag, \
-                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
                       wxT("Helpstring"), wxT("group")) // style
-/*
-    TODO PROPERTIES :
-        label
-*/
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxStaticBox)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxStaticBox)
 
 wxCONSTRUCTOR_6( wxStaticBox, wxWindow*, Parent, wxWindowID, Id, \
                  wxString, Label, wxPoint, Position, wxSize, Size, \

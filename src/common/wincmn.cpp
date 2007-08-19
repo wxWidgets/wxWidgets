@@ -133,9 +133,9 @@ END_EVENT_TABLE()
 // as windows with negative ids never can be recreated anyway
 
 bool wxWindowStreamingCallback( const wxObject *object, wxObjectWriter *, 
-                                wxPersister *, wxxVariantArray & )
+                                wxObjectReaderCallback *, wxxVariantArray & )
 {
-    const wxWindow * win = dynamic_cast<const wxWindow*>(object);
+    const wxWindow * win = wx_dynamic_cast(const wxWindow*, object);
     if ( win && win->GetId() < 0 )
         return false;
     return true;
@@ -193,7 +193,7 @@ wxBEGIN_PROPERTIES_TABLE(wxWindow)
     wxEVENT_PROPERTY( Destroy, wxEVT_DESTROY, wxWindowDestroyEvent )
     // Always constructor Properties first
 
-    wxREADONLY_PROPERTY( Parent,wxWindow*, GetParent, EMPTY_MACROVALUE, \
+    wxREADONLY_PROPERTY( Parent,wxWindow*, GetParent, wxEMPTY_PARAMETER_VALUE, \
                          0 /*flags*/, wxT("Helpstring"), wxT("group"))
     wxPROPERTY( Id,wxWindowID, SetId, GetId, -1 /*wxID_ANY*/, 0 /*flags*/, \
                 wxT("Helpstring"), wxT("group") )
@@ -202,7 +202,7 @@ wxBEGIN_PROPERTIES_TABLE(wxWindow)
     wxPROPERTY( Size,wxSize, SetSize, GetSize, wxDefaultSize, 0 /*flags*/, \
                 wxT("Helpstring"), wxT("group")) // size
     wxPROPERTY( WindowStyle, long, SetWindowStyleFlag, GetWindowStyleFlag, \
-                EMPTY_MACROVALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group")) // style
+                wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group")) // style
     wxPROPERTY( Name,wxString, SetName, GetName, wxEmptyString, 0 /*flags*/, \
                 wxT("Helpstring"), wxT("group") )
 
@@ -214,12 +214,12 @@ wxBEGIN_PROPERTIES_TABLE(wxWindow)
 
    // and finally all other properties
 
-    wxPROPERTY( ExtraStyle, long, SetExtraStyle, GetExtraStyle, EMPTY_MACROVALUE, \
+    wxPROPERTY( ExtraStyle, long, SetExtraStyle, GetExtraStyle, wxEMPTY_PARAMETER_VALUE, \
                 0 /*flags*/, wxT("Helpstring"), wxT("group")) // extstyle
     wxPROPERTY( BackgroundColour, wxColour, SetBackgroundColour, GetBackgroundColour, \
-                EMPTY_MACROVALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group")) // bg
+                wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group")) // bg
     wxPROPERTY( ForegroundColour, wxColour, SetForegroundColour, GetForegroundColour, \
-                EMPTY_MACROVALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group")) // fg
+                wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group")) // fg
     wxPROPERTY( Enabled, bool, Enable, IsEnabled, wxxVariant((bool)true), 0 /*flags*/, \
                 wxT("Helpstring"), wxT("group"))
     wxPROPERTY( Shown, bool, Show, IsShown, wxxVariant((bool)true), 0 /*flags*/, \
@@ -240,8 +240,7 @@ wxBEGIN_PROPERTIES_TABLE(wxWindow)
 #endif
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxWindow)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxWindow)
 
 wxCONSTRUCTOR_DUMMY(wxWindow)
 

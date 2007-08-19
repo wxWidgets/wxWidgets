@@ -65,19 +65,18 @@ wxBEGIN_PROPERTIES_TABLE(wxGenericDirCtrl)
     wxHIDE_PROPERTY( Children )
 
     wxPROPERTY( DefaultPath, wxString, SetDefaultPath, GetDefaultPath, \
-                EMPTY_MACROVALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
-    wxPROPERTY( Filter, wxString, SetFilter, GetFilter, EMPTY_MACROVALUE, \
+                wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+    wxPROPERTY( Filter, wxString, SetFilter, GetFilter, wxEMPTY_PARAMETER_VALUE, \
                 0 /*flags*/, wxT("Helpstring"), wxT("group") )
     wxPROPERTY( DefaultFilter, int, SetFilterIndex, GetFilterIndex, \
-                EMPTY_MACROVALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group") )
+                wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group") )
 
     wxPROPERTY_FLAGS( WindowStyle, wxGenericDirCtrlStyle, long, SetWindowStyleFlag, \
-                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0, wxT("Helpstring"), \
+                      GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0, wxT("Helpstring"), \
                       wxT("group") )
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxGenericDirCtrl)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxGenericDirCtrl)
 
 wxCONSTRUCTOR_8( wxGenericDirCtrl, wxWindow*, Parent, wxWindowID, Id, \
                  wxString, DefaultPath, wxPoint, Position, wxSize, Size, \

@@ -77,7 +77,7 @@ wxBEGIN_PROPERTIES_TABLE(wxSpinCtrl)
     wxEVENT_PROPERTY( TextEnter, wxEVT_COMMAND_TEXT_ENTER, wxCommandEvent )
 
     wxPROPERTY( ValueString, wxString, SetValue, GetValue, \
-                EMPTY_MACROVALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group")) ;
+                wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group")) ;
     wxPROPERTY( Value, int, SetValue, GetValue, 0, 0 /*flags*/, \
                 wxT("Helpstring"), wxT("group"))
 /*
@@ -85,7 +85,7 @@ wxBEGIN_PROPERTIES_TABLE(wxSpinCtrl)
     wxPROPERTY( Max, int, SetMax, GetMax, 0, 0 /*flags, wxT("Helpstring"), wxT("group"))
 */
     wxPROPERTY_FLAGS( WindowStyle, wxSpinCtrlStyle, long, SetWindowStyleFlag, \
-                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
                       wxT("Helpstring"), wxT("group")) // style
     /*
         TODO PROPERTIES
@@ -93,8 +93,7 @@ wxBEGIN_PROPERTIES_TABLE(wxSpinCtrl)
     */
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxSpinCtrl)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxSpinCtrl)
 
 wxCONSTRUCTOR_6( wxSpinCtrl, wxWindow*, Parent, wxWindowID, Id, \
                  wxString, ValueString, wxPoint, Position, \

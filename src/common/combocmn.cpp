@@ -87,22 +87,21 @@ wxBEGIN_PROPERTIES_TABLE(wxComboBox)
     wxEVENT_PROPERTY( TextEnter, wxEVT_COMMAND_TEXT_ENTER, wxCommandEvent )
 
     // TODO DELEGATES
-    wxPROPERTY( Font, wxFont, SetFont, GetFont, EMPTY_MACROVALUE, \
+    wxPROPERTY( Font, wxFont, SetFont, GetFont, wxEMPTY_PARAMETER_VALUE, \
                 0 /*flags*/, wxT("Helpstring"), wxT("group"))
     wxPROPERTY_COLLECTION( Choices, wxArrayString, wxString, AppendString, \
                            GetStrings, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
-    wxPROPERTY( Value,wxString, SetValue, GetValue, EMPTY_MACROVALUE, \
+    wxPROPERTY( Value,wxString, SetValue, GetValue, wxEMPTY_PARAMETER_VALUE, \
                 0 /*flags*/, wxT("Helpstring"), wxT("group"))
-    wxPROPERTY( Selection,int, SetSelection, GetSelection, EMPTY_MACROVALUE, \
+    wxPROPERTY( Selection,int, SetSelection, GetSelection, wxEMPTY_PARAMETER_VALUE, \
                 0 /*flags*/, wxT("Helpstring"), wxT("group"))
 
     wxPROPERTY_FLAGS( WindowStyle, wxComboBoxStyle, long, SetWindowStyleFlag, \
-                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
                       wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxComboBox)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxComboBox)
 
 wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
                  wxString, Value, wxPoint, Position, wxSize, Size )

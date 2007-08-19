@@ -89,16 +89,15 @@ wxBEGIN_PROPERTIES_TABLE(wxCalendarCtrl)
     
     wxHIDE_PROPERTY( Children )
 
-    wxPROPERTY( Date,wxDateTime, SetDate, GetDate, EMPTY_MACROVALUE, \
+    wxPROPERTY( Date,wxDateTime, SetDate, GetDate, wxEMPTY_PARAMETER_VALUE, \
                 0 /*flags*/, wxT("Helpstring"), wxT("group"))
     wxPROPERTY_FLAGS( WindowStyle, wxCalendarCtrlStyle, long, \
                       SetWindowStyleFlag, GetWindowStyleFlag, \
-                      EMPTY_MACROVALUE, 0 /*flags*/, wxT("Helpstring"), \
+                      wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, wxT("Helpstring"), \
                       wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxCalendarCtrl)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxCalendarCtrl)
 
 wxCONSTRUCTOR_6( wxCalendarCtrl, wxWindow*, Parent, wxWindowID, Id, \
                  wxDateTime, Date, wxPoint, Position, wxSize, Size, long, WindowStyle )

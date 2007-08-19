@@ -106,12 +106,11 @@ wxBEGIN_PROPERTIES_TABLE(wxListCtrl)
     wxEVENT_PROPERTY( TextUpdated, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent )
 
     wxPROPERTY_FLAGS( WindowStyle, wxListCtrlStyle, long, SetWindowStyleFlag, \
-                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
                       wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxListCtrl)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxListCtrl)
 
 wxCONSTRUCTOR_5( wxListCtrl, wxWindow*, Parent, wxWindowID, Id, \
                  wxPoint, Position, wxSize, Size, long, WindowStyle )

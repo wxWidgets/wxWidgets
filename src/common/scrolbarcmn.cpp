@@ -78,12 +78,11 @@ wxBEGIN_PROPERTIES_TABLE(wxScrollBar)
                 0 /*flags*/, wxT("Helpstring"), wxT("group"))
 
     wxPROPERTY_FLAGS( WindowStyle, wxScrollBarStyle, long, SetWindowStyleFlag, \
-                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
                       wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxScrollBar)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxScrollBar)
 
 wxCONSTRUCTOR_5( wxScrollBar, wxWindow*, Parent, wxWindowID, Id, \
                  wxPoint, Position, wxSize, Size, long, WindowStyle )

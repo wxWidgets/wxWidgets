@@ -61,21 +61,20 @@ wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY_AND_STREAMERS_XTI( wxColour, wxObject,  \
         "wx/colour.h",  &wxTO_STRING( wxColour ), &wxFROM_STRING( wxColour ))
 
 wxBEGIN_PROPERTIES_TABLE(wxColour)
-    wxREADONLY_PROPERTY( Red, unsigned char, Red, EMPTY_MACROVALUE, \
+    wxREADONLY_PROPERTY( Red, unsigned char, Red, wxEMPTY_PARAMETER_VALUE, \
                          0 /*flags*/, wxT("Helpstring"), wxT("group"))
-    wxREADONLY_PROPERTY( Green, unsigned char, Green, EMPTY_MACROVALUE, \
+    wxREADONLY_PROPERTY( Green, unsigned char, Green, wxEMPTY_PARAMETER_VALUE, \
                          0 /*flags*/, wxT("Helpstring"), wxT("group"))
-    wxREADONLY_PROPERTY( Blue, unsigned char, Blue, EMPTY_MACROVALUE, \
+    wxREADONLY_PROPERTY( Blue, unsigned char, Blue, wxEMPTY_PARAMETER_VALUE, \
                          0 /*flags*/, wxT("Helpstring"), wxT("group"))
 wxEND_PROPERTIES_TABLE()
 
 wxDIRECT_CONSTRUCTOR_3( wxColour, unsigned char, Red, \
                         unsigned char, Green, unsigned char, Blue )
 
-wxBEGIN_HANDLERS_TABLE(wxColour)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxColour)
 #else
-IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 #endif
 
 

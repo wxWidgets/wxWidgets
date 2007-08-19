@@ -114,14 +114,13 @@ wxBEGIN_PROPERTIES_TABLE(wxFrame)
     wxPROPERTY( Title,wxString, SetTitle, GetTitle, wxString(), 0 /*flags*/, \
                 wxT("Helpstring"), wxT("group"))
     wxPROPERTY_FLAGS( WindowStyle, wxFrameStyle, long, SetWindowStyleFlag, \
-                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
                       wxT("Helpstring"), wxT("group")) // style
-    wxPROPERTY( MenuBar, wxMenuBar *, SetMenuBar, GetMenuBar, EMPTY_MACROVALUE, \
+    wxPROPERTY( MenuBar, wxMenuBar *, SetMenuBar, GetMenuBar, wxEMPTY_PARAMETER_VALUE, \
                 0 /*flags*/, wxT("Helpstring"), wxT("group"))
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxFrame)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxFrame)
 
 wxCONSTRUCTOR_6( wxFrame, wxWindow*, Parent, wxWindowID, Id, wxString, Title, \
                  wxPoint, Position, wxSize, Size, long, WindowStyle)

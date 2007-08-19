@@ -68,19 +68,13 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticLine, wxControl, "wx/statline.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxStaticLine)
     wxPROPERTY_FLAGS( WindowStyle, wxStaticLineStyle, long, SetWindowStyleFlag, \
-                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
                       wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxStaticLine)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxStaticLine)
 
 wxCONSTRUCTOR_5( wxStaticLine, wxWindow*, Parent, wxWindowID, Id, \
                  wxPoint, Position, wxSize, Size, long, WindowStyle)
-
-/*
-    TODO PROPERTIES :
-        style (wxLI_HORIZONTAL)
-*/
 
 #endif // wxUSE_STATLINE

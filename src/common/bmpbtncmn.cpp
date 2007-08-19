@@ -71,12 +71,11 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxBitmapButton, wxButton, "wx/bmpbuttn.h")
 wxBEGIN_PROPERTIES_TABLE(wxBitmapButton)
     wxPROPERTY_FLAGS( WindowStyle, wxBitmapButtonStyle, long, \
                       SetWindowStyleFlag, GetWindowStyleFlag, \
-                      EMPTY_MACROVALUE, 0 /*flags*/, wxT("Helpstring"), \
+                      wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, wxT("Helpstring"), \
                       wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxBitmapButton)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxBitmapButton)
 
 wxCONSTRUCTOR_5( wxBitmapButton, wxWindow*, Parent, wxWindowID, Id, \
                  wxBitmap, Bitmap, wxPoint, Position, wxSize, Size )

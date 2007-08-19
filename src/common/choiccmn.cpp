@@ -70,11 +70,11 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxChoice, wxControlWithItems, "wx/choice.h")
 wxBEGIN_PROPERTIES_TABLE(wxChoice)
     wxEVENT_PROPERTY( Select, wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEvent )
 
-    wxPROPERTY( Font, wxFont, SetFont, GetFont , EMPTY_MACROVALUE, \
+    wxPROPERTY( Font, wxFont, SetFont, GetFont , wxEMPTY_PARAMETER_VALUE, \
                 0 /*flags*/, wxT("Helpstring"), wxT("group"))
     wxPROPERTY_COLLECTION( Choices, wxArrayString, wxString, AppendString, \
                            GetStrings, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
-    wxPROPERTY( Selection,int, SetSelection, GetSelection, EMPTY_MACROVALUE, \
+    wxPROPERTY( Selection,int, SetSelection, GetSelection, wxEMPTY_PARAMETER_VALUE, \
                 0 /*flags*/, wxT("Helpstring"), wxT("group"))
 
     /*
@@ -85,12 +85,11 @@ wxBEGIN_PROPERTIES_TABLE(wxChoice)
     */
 
     wxPROPERTY_FLAGS( WindowStyle, wxChoiceStyle, long, SetWindowStyleFlag, \
-                      GetWindowStyleFlag, EMPTY_MACROVALUE, 0 /*flags*/, \
+                      GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
                       wxT("Helpstring"), wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxChoice)
-wxEND_HANDLERS_TABLE()
+wxEMPTY_HANDLERS_TABLE(wxChoice)
 
 wxCONSTRUCTOR_4( wxChoice, wxWindow*, Parent, wxWindowID, Id, \
                  wxPoint, Position, wxSize, Size )
