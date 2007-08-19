@@ -721,7 +721,7 @@ bool wxWindowCocoa::Cocoa_mouseEntered(WX_NSEvent theEvent)
 
         wxMouseEvent event(wxEVT_ENTER_WINDOW);
         InitMouseEvent(event,theEvent);
-        wxLogTrace(wxTRACE_COCOA,wxT("wxwin=%p Mouse Entered @%d,%d"),this,event.m_x,event.m_y);
+        wxLogTrace(wxTRACE_COCOA_TrackingRect,wxT("wxwin=%p Mouse Entered TR#%d @%d,%d"),this,[theEvent trackingNumber], event.m_x,event.m_y);
         return GetEventHandler()->ProcessEvent(event);
     }
     else
@@ -738,7 +738,7 @@ bool wxWindowCocoa::Cocoa_mouseExited(WX_NSEvent theEvent)
 
         wxMouseEvent event(wxEVT_LEAVE_WINDOW);
         InitMouseEvent(event,theEvent);
-        wxLogTrace(wxTRACE_COCOA,wxT("wxwin=%p Mouse Exited @%d,%d"),this,event.m_x,event.m_y);
+        wxLogTrace(wxTRACE_COCOA_TrackingRect,wxT("wxwin=%p Mouse Exited TR#%d @%d,%d"),this,[theEvent trackingNumber],event.m_x,event.m_y);
         return GetEventHandler()->ProcessEvent(event);
     }
     else
@@ -836,8 +836,21 @@ bool wxWindowCocoa::Cocoa_resetCursorRects()
 {
     wxLogTrace(wxTRACE_COCOA,wxT("wxWindow=%p::Cocoa_resetCursorRects"),this);
 #if wxUSE_ABI_INCOMPATIBLE_FEATURES
+
+    // When we are called there may be a queued tracking rect event (mouse entered or exited) and
+    // we won't know it.  A specific example is wxGenericHyperlinkCtrl changing the cursor from its
+    // mouse exited event.  If the control happens to share the edge with its parent window which is
+    // also tracking mouse events then Cocoa receives two mouse exited events from the window server.
+    // The first one will cause wxGenericHyperlinkCtrl to call wxWindow::SetCursor which will
+    // invaildate the cursor rect causing Cocoa to schedule cursor rect reset with the run loop
+    // which willl in turn call us before exiting for the next user event.
+
+    // If we are the parent window then rebuilding our tracking rectangle will cause us to miss
+    // our mouse exited event because the already queued event will have the old tracking rect
+    // tag.  The simple solution is to only rebuild our tracking rect if we need to.
+
     if(m_visibleTrackingRectManager != NULL)
-        m_visibleTrackingRectManager->RebuildTrackingRect();
+        m_visibleTrackingRectManager->RebuildTrackingRectIfNeeded();
 #endif
 
     if(!m_cursor.GetNSCursor())
@@ -1454,10 +1467,11 @@ wxWindow* wxFindWindowAtPointer(wxPoint& pt)
     return NULL;
 }
 
-
 // ========================================================================
 // wxCocoaMouseMovedEventSynthesizer
 // ========================================================================
+
+#define wxTRACE_COCOA_MouseMovedSynthesizer wxT("COCOA_MouseMovedSynthesizer")
 
 /* This class registers one run loop observer to cover all windows registered with it.
  *  It will register the observer when the first view is registerd and unregister the
@@ -1489,7 +1503,7 @@ protected:
 void wxCocoaMouseMovedEventSynthesizer::RegisterWxCocoaView(wxCocoaNSView *aView)
 {
     m_registeredViews.push_back(aView);
-    wxLogTrace(wxTRACE_COCOA_TrackingRect, wxT("Registered wxCocoaNSView=%p"), aView);
+    wxLogTrace(wxTRACE_COCOA_MouseMovedSynthesizer, wxT("Registered wxCocoaNSView=%p"), aView);
 
     if(!m_registeredViews.empty() && m_runLoopObserver == NULL)
     {
@@ -1500,7 +1514,7 @@ void wxCocoaMouseMovedEventSynthesizer::RegisterWxCocoaView(wxCocoaNSView *aView
 void wxCocoaMouseMovedEventSynthesizer::UnregisterWxCocoaView(wxCocoaNSView *aView)
 {
     m_registeredViews.remove(aView);
-    wxLogTrace(wxTRACE_COCOA_TrackingRect, wxT("Unregistered wxCocoaNSView=%p"), aView);
+    wxLogTrace(wxTRACE_COCOA_MouseMovedSynthesizer, wxT("Unregistered wxCocoaNSView=%p"), aView);
     if(m_registeredViews.empty() && m_runLoopObserver != NULL)
     {
         RemoveRunLoopObserver();
@@ -1592,6 +1606,7 @@ void wxCocoaTrackingRectManager::ClearTrackingRect()
     {
         [m_window->GetNSView() removeTrackingRect:m_trackingRectTag];
         m_isTrackingRectActive = false;
+        wxLogTrace(wxTRACE_COCOA_TrackingRect, wxT("%s@%p: Removed tracking rect #%d"), m_window->GetClassInfo()->GetClassName(), m_window, m_trackingRectTag);
     }
     // If we were doing periodic events we need to clear those too
     StopSynthesizingEvents();
@@ -1608,16 +1623,39 @@ void wxCocoaTrackingRectManager::BuildTrackingRect()
     wxAutoNSAutoreleasePool pool;
 
     wxASSERT_MSG(!m_isTrackingRectActive, wxT("Tracking rect was not cleared"));
-    if([m_window->GetNSView() window] != nil)
+
+    NSView *theView = m_window->GetNSView();
+
+    if([theView window] != nil)
     {
-        m_trackingRectTag = [m_window->GetNSView() addTrackingRect:[m_window->GetNSView() visibleRect] owner:m_window->GetNSView() userData:NULL assumeInside:NO];
+        NSRect visibleRect = [theView visibleRect];
+
+        m_trackingRectTag = [theView addTrackingRect:visibleRect owner:theView userData:NULL assumeInside:NO];
+        m_trackingRectInWindowCoordinates = [theView convertRect:visibleRect toView:nil];
         m_isTrackingRectActive = true;
+
+        wxLogTrace(wxTRACE_COCOA_TrackingRect, wxT("%s@%p: Added tracking rect #%d"), m_window->GetClassInfo()->GetClassName(), m_window, m_trackingRectTag);
     }
 }
 
 void wxCocoaTrackingRectManager::BeginSynthesizingEvents()
 {
     s_mouseMovedSynthesizer.RegisterWxCocoaView(m_window);
+}
+
+void wxCocoaTrackingRectManager::RebuildTrackingRectIfNeeded()
+{
+    if(m_isTrackingRectActive)
+    {
+        NSView *theView = m_window->GetNSView();
+        NSRect currentRect = [theView convertRect:[theView visibleRect] toView:nil];
+        if(NSEqualRects(m_trackingRectInWindowCoordinates,currentRect))
+        {
+            wxLogTrace(wxTRACE_COCOA_TrackingRect, wxT("Ignored request to rebuild TR#%d"), m_trackingRectTag);
+            return;
+        }
+    }
+    RebuildTrackingRect();
 }
 
 void wxCocoaTrackingRectManager::RebuildTrackingRect()

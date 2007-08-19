@@ -23,6 +23,7 @@ public:
     wxCocoaTrackingRectManager(wxWindow *window);
     void ClearTrackingRect();
     void BuildTrackingRect();
+    void RebuildTrackingRectIfNeeded();
     void RebuildTrackingRect();
     bool IsOwnerOfEvent(NSEvent *anEvent);
     ~wxCocoaTrackingRectManager();
@@ -32,6 +33,7 @@ protected:
     wxWindow *m_window;
     bool m_isTrackingRectActive;
     int m_trackingRectTag;
+    NSRect m_trackingRectInWindowCoordinates;
 private:
     wxCocoaTrackingRectManager();
 };
