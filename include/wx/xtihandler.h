@@ -99,8 +99,12 @@ private:
         typedef theClass class_t;                 \
         static wxHandlerInfo* first = NULL;
 
-#define wxEND_HANDLERS_TABLE() \
+#define wxEND_HANDLERS_TABLE()                    \
     return first; }
+
+#define wxEMPTY_HANDLERS_TABLE(theClass)          \
+    wxBEGIN_HANDLERS_TABLE(theClass)              \
+    wxEND_HANDLERS_TABLE()
 
 #endif      // wxUSE_EXTENDED_RTTI
 #endif      // _XTIHANDLER_H_
