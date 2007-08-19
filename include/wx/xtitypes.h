@@ -31,7 +31,7 @@ class WXDLLIMPEXP_BASE wxClassInfo;
 // Enum Support
 //
 // In the header files XTI requires no change from pure c++ code, however in the
-// implementation, an enum needs to be enumerated eg :
+// implementation, an enum needs to be enumerated eg:
 //
 // wxBEGIN_ENUM( wxFlavor )
 //   wxENUM_MEMBER( Vanilla )
@@ -529,13 +529,13 @@ private:
 
 // a delegate is an exposed event source
 
-class WXDLLIMPEXP_BASE wxDelegateTypeInfo : public wxTypeInfo
+class WXDLLIMPEXP_BASE wxEventSourceTypeInfo : public wxTypeInfo
 {
 public:
-    wxDelegateTypeInfo( int eventType, wxClassInfo* eventClass, 
+    wxEventSourceTypeInfo( int eventType, wxClassInfo* eventClass, 
                         wxVariant2StringFnc to = NULL, 
                         wxString2VariantFnc from = NULL );
-    wxDelegateTypeInfo( int eventType, int lastEventType, wxClassInfo* eventClass, 
+    wxEventSourceTypeInfo( int eventType, int lastEventType, wxClassInfo* eventClass, 
                         wxVariant2StringFnc to = NULL, wxString2VariantFnc from = NULL );
 
     int GetEventType() const { return m_eventType; }

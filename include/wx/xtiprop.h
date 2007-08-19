@@ -357,7 +357,7 @@ public:
     wxPropertyInfo(wxPropertyInfo* &iter,
                    wxClassInfo* itsClass,
                    const wxString& name,
-                   wxDelegateTypeInfo* type,
+                   wxEventSourceTypeInfo* type,
                    wxPropertyAccessor *accessor,
                    wxxVariant dv,
                    wxPropertyInfoFlags flags = 0,
@@ -572,12 +572,12 @@ WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo*, wxPropertyInfoMap,
         &_accessor##pname, flags, help, group  );
 
 #define wxEVENT_PROPERTY( name, eventType, eventClass )                               \
-    static wxDelegateTypeInfo _typeInfo##name( eventType, CLASSINFO( eventClass ) );  \
+    static wxEventSourceTypeInfo _typeInfo##name( eventType, CLASSINFO( eventClass ) );  \
     static wxPropertyInfo _propertyInfo##name( first,class_t::GetClassInfoStatic(),   \
         wxT(#name), &_typeInfo##name, NULL, wxxVariant() );
 
 #define wxEVENT_RANGE_PROPERTY( name, eventType, lastEventType, eventClass )          \
-    static wxDelegateTypeInfo _typeInfo##name( eventType, lastEventType,              \
+    static wxEventSourceTypeInfo _typeInfo##name( eventType, lastEventType,              \
                                                CLASSINFO( eventClass ) );             \
     static wxPropertyInfo _propertyInfo##name( first, class_t::GetClassInfoStatic(),  \
         wxT(#name), &_typeInfo##name, NULL, wxxVariant() );

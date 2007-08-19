@@ -32,7 +32,7 @@ const int wxNullObjectID = -3;
 
 
 // ----------------------------------------------------------------------------
-// wxPersister
+// wxObjectReaderCallback
 //
 // This class will be asked during the streaming-out process about every single
 // property or object instance. It can veto streaming out by returning false
@@ -48,10 +48,10 @@ class WXDLLIMPEXP_BASE wxxVariant;
 class WXDLLIMPEXP_BASE wxObjectWriter;
 class WXDLLIMPEXP_BASE wxHandlerInfo;
 
-class WXDLLIMPEXP_BASE wxPersister
+class WXDLLIMPEXP_BASE wxObjectReaderCallback
 {
 public:
-    virtual ~wxPersister() {}
+    virtual ~wxObjectReaderCallback() {}
 
     // will be called before an object is written, may veto by returning false
     virtual bool BeforeWriteObject( wxObjectWriter *WXUNUSED(writer), 
@@ -117,7 +117,7 @@ public:
 
     // with this call you start writing out a new top-level object
     void WriteObject(const wxObject *object, const wxClassInfo *classInfo, 
-                     wxPersister *persister, const wxString &name, 
+                     wxObjectReaderCallback *persister, const wxString &name, 
                      wxxVariantArray &WXUNUSED(metadata));
 
     // Managing the object identity table a.k.a context
@@ -184,18 +184,18 @@ private:
     struct wxObjectWriterInternalPropertiesData;
 
     void WriteAllProperties( const wxObject * obj, const wxClassInfo* ci, 
-                             wxPersister *persister, 
+                             wxObjectReaderCallback *persister, 
                              wxObjectWriterInternalPropertiesData * data );
 
     void WriteOneProperty( const wxObject *obj, const wxClassInfo* ci, 
-                           const wxPropertyInfo* pi, wxPersister *persister,
+                           const wxPropertyInfo* pi, wxObjectReaderCallback *persister,
                            wxObjectWriterInternalPropertiesData *data );
 
     void WriteObject(const wxObject *object, const wxClassInfo *classInfo, 
-                     wxPersister *persister, bool isEmbedded, wxxVariantArray &metadata );
+                     wxObjectReaderCallback *persister, bool isEmbedded, wxxVariantArray &metadata );
 
     void FindConnectEntry(const wxEvtHandler * evSource,
-                          const wxDelegateTypeInfo* dti, const wxObject* &sink, 
+                          const wxEventSourceTypeInfo* dti, const wxObject* &sink, 
                           const wxHandlerInfo *&handler);
 };
 
@@ -204,7 +204,7 @@ private:
 Streaming callbacks for depersisting XML to code, or running objects
 */
 
-class WXDLLIMPEXP_BASE wxDepersister;
+class WXDLLIMPEXP_BASE wxObjectWriterCallback;
 
 /*
 wxObjectReader handles streaming in a class from a arbitrary format. 
@@ -228,7 +228,7 @@ public:
     // then be used to ask the depersister about that object
     // if there was a problem you will get back wxInvalidObjectID and the current
     // error log will carry the problems encoutered
-    virtual int ReadObject( const wxString &name, wxDepersister *depersist ) = 0;
+    virtual int ReadObject( const wxString &name, wxObjectWriterCallback *depersist ) = 0;
 
 private:
     struct wxObjectReaderInternal;
@@ -240,10 +240,10 @@ private:
 // When generating code, these will just create statements of C++
 // code to create the objects.
 
-class WXDLLIMPEXP_BASE wxDepersister
+class WXDLLIMPEXP_BASE wxObjectWriterCallback
 {
 public:
-    virtual ~wxDepersister() {}
+    virtual ~wxObjectWriterCallback() {}
 
     // allocate the new object on the heap, that object will have the passed in ID
     virtual void AllocateObject(int objectID, wxClassInfo *classInfo, 
@@ -313,18 +313,19 @@ public:
 };
 
 /*
-wxRuntimeDepersister implements the callbacks that will depersist
+wxObjectRuntimeReaderCallback implements the callbacks that will depersist
 an object into a running memory image, as opposed to writing
 C++ initialization code to bring the object to life.
 */
 
-class WXDLLIMPEXP_BASE wxRuntimeDepersister: public wxDepersister
+class WXDLLIMPEXP_BASE wxObjectRuntimeReaderCallback: public wxObjectWriterCallback
 {
-    struct wxRuntimeDepersisterInternal;
-    wxRuntimeDepersisterInternal * m_data;
+    struct wxObjectRuntimeReaderCallbackInternal;
+    wxObjectRuntimeReaderCallbackInternal * m_data;
+
 public:
-    wxRuntimeDepersister();
-    virtual ~wxRuntimeDepersister();
+    wxObjectRuntimeReaderCallback();
+    virtual ~wxObjectRuntimeReaderCallback();
 
     // returns the object having the corresponding ID fully constructed
     wxObject *GetObject(int objectID);
@@ -362,93 +363,6 @@ public:
     // destroy the heap-allocated object having the ID objectID, this may be 
     // used if an object is embedded in another object and set via value semantics, 
     // so the intermediate object can be destroyed after safely
-    virtual void DestroyObject(int objectID, wxClassInfo *classInfo);
-
-    // set the corresponding property
-    virtual void SetProperty(int objectID,
-        const wxClassInfo *classInfo,
-        const wxPropertyInfo* propertyInfo,
-        const wxxVariant &variantValue);
-
-    // sets the corresponding property (value is an object)
-    virtual void SetPropertyAsObject(int objectId,
-        const wxClassInfo *classInfo,
-        const wxPropertyInfo* propertyInfo,
-        int valueObjectId);
-
-    // adds an element to a property collection
-    virtual void AddToPropertyCollection( int objectID,
-        const wxClassInfo *classInfo,
-        const wxPropertyInfo* propertyInfo,
-        const wxxVariant &VariantValue);
-
-    // sets the corresponding property (value is an object)
-    virtual void AddToPropertyCollectionAsObject(int objectID,
-        const wxClassInfo *classInfo,
-        const wxPropertyInfo* propertyInfo,
-        int valueObjectId);
-
-    // sets the corresponding event handler
-    virtual void SetConnect(int eventSourceObjectID,
-        const wxClassInfo *eventSourceClassInfo,
-        const wxPropertyInfo *delegateInfo,
-        const wxClassInfo *eventSinkClassInfo,
-        const wxHandlerInfo* handlerInfo,
-        int eventSinkObjectID );
-};
-
-/*
-wxDepersisterCode implements the callbacks that will depersist
-an object into a C++ initialization function. this will move to
-a utility lib soon
-*/
-
-class WXDLLIMPEXP_BASE wxTextOutputStream;
-
-class WXDLLIMPEXP_BASE wxCodeDepersister: public wxDepersister
-{
-private:
-    struct wxCodeDepersisterInternal;
-    wxCodeDepersisterInternal * m_data;
-    wxTextOutputStream *m_fp;
-    wxString ValueAsCode( const wxxVariant &param );
-public:
-    wxCodeDepersister(wxTextOutputStream *out);
-    virtual ~wxCodeDepersister();
-
-    // allocate the new object on the heap, that object will have the passed in ID
-    virtual void AllocateObject(int objectID, wxClassInfo *classInfo,
-        wxxVariantArray &metadata);
-
-    // initialize the already allocated object having the ID objectID 
-    // with the Create method creation parameters which are objects are 
-    // having their Ids passed in objectIDValues having objectId <> wxInvalidObjectID
-
-    virtual void CreateObject(int objectID,
-        const wxClassInfo *classInfo,
-        int paramCount,
-        wxxVariant *variantValues,
-        int *objectIDValues,
-        const wxClassInfo **objectClassInfos,
-        wxxVariantArray &metadata
-        );
-
-     // construct the new object on the heap, that object will have the 
-    // passed in ID (for objects that don't support allocate-create type 
-    // of creation) creation parameters which are objects are having their 
-    // Ids passed in objectIDValues having objectId <> wxInvalidObjectID
-
-    virtual void ConstructObject(int objectID,
-        const wxClassInfo *classInfo,
-        int paramCount,
-        wxxVariant *VariantValues,
-        int *objectIDValues,
-        const wxClassInfo **objectClassInfos,
-        wxxVariantArray &metadata);
-
-    // destroy the heap-allocated object having the ID objectID, this may 
-    // be used if an object is embedded in another object and set via value 
-    // semantics, so the intermediate object can be destroyed after safely
     virtual void DestroyObject(int objectID, wxClassInfo *classInfo);
 
     // set the corresponding property

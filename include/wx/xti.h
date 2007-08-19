@@ -56,10 +56,10 @@ typedef wxObject* (*wxVariantToObjectConverter)( wxxVariant &data );
 typedef wxxVariant (*wxObjectToVariantConverter)( wxObject* );
 
 class WXDLLIMPEXP_BASE wxObjectWriter;
-class WXDLLIMPEXP_BASE wxPersister;
+class WXDLLIMPEXP_BASE wxObjectReaderCallback;
 
 typedef bool (*wxObjectStreamingCallback) ( const wxObject *, wxObjectWriter *, \
-                                            wxPersister *, wxxVariantArray & );
+                                            wxObjectReaderCallback *, wxxVariantArray & );
 
 class WXDLLIMPEXP_BASE wxClassInfo
 {
@@ -75,7 +75,7 @@ public:
                 wxObjectConstructorFn ctor,
                 wxPropertyInfo *_Props,
                 wxHandlerInfo *_Handlers,
-                wxObjectCreateAdapter* _Constructor,
+                wxObjectAllocatorAndCreator* _Constructor,
                 const wxChar ** _ConstructorProperties,
                 const int _ConstructorPropertiesCount,
                 wxVariantToObjectConverter _PtrConverter1,
@@ -167,7 +167,7 @@ public:
     wxObject *ConstructObject(int ParamCount, wxxVariant *Params) const;
 
     bool NeedsDirectConstruction() const 
-        { return dynamic_cast<wxDirectConstructorBrigde*>( m_constructor) != NULL; }
+        { return wx_dynamic_cast(wxObjectAllocator*, m_constructor) != NULL; }
 
     const wxChar       *GetClassName() const 
         { return m_className; }
@@ -216,7 +216,7 @@ public:
     // callback, the search will go up the inheritance tree if no callback has
     // been registered true will be returned by default
     bool BeforeWriteObject( const wxObject *obj, wxObjectWriter *streamer, \
-                            wxPersister *persister, wxxVariantArray &metadata) const;
+                            wxObjectReaderCallback *persister, wxxVariantArray &metadata) const;
 
     // gets the streaming callback from this class or any superclass
     wxObjectStreamingCallback GetStreamingCallback() const;
@@ -270,13 +270,13 @@ public:
     virtual const wxPropertyInfo *FindPropertyInfo (const wxChar *PropertyName) const;
 
     // find handler by name
-    virtual const wxHandlerInfo *FindHandlerInfo (const wxChar *PropertyName) const;
+    virtual const wxHandlerInfo *FindHandlerInfo (const wxChar *handlerName) const;
 
     // find property by name
     virtual wxPropertyInfo *FindPropertyInfoInThisClass (const wxChar *PropertyName) const;
 
     // find handler by name
-    virtual wxHandlerInfo *FindHandlerInfoInThisClass (const wxChar *PropertyName) const;
+    virtual wxHandlerInfo *FindHandlerInfoInThisClass (const wxChar *handlerName) const;
 
     // puts all the properties of this class and its superclasses in the map, 
     // as long as there is not yet an entry with the same name (overriding mechanism)
@@ -303,7 +303,7 @@ private:
     const wxClassInfo**       m_parents;
     const wxChar*             m_unitName;
 
-    wxObjectCreateAdapter*     m_constructor;
+    wxObjectAllocatorAndCreator*     m_constructor;
     const wxChar **           m_constructorProperties;
     const int                 m_constructorPropertiesCount;
     wxVariantToObjectConverter m_variantOfPtrToObjectConverter;
@@ -325,7 +325,7 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
 
 
 // ----------------------------------------------------------------------------
-// wxDynamicObject
+// wxDynamicClassInfo
 // ----------------------------------------------------------------------------
 
 // this object leads to having a pure runtime-instantiation
@@ -397,7 +397,7 @@ private:
             { return &name::ms_classInfo; }
 
 #define wxDECLARE_DYNAMIC_CLASS(name)                       \
-    static wxObjectCreateAdapter* ms_constructor;           \
+    static wxObjectAllocatorAndCreator* ms_constructor;           \
     static const wxChar * ms_constructorProperties[];       \
     static const int ms_constructorPropertiesCount;         \
     _DECLARE_DYNAMIC_CLASS(name)
@@ -411,8 +411,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(name)
 
 #define wxDECLARE_ABSTRACT_CLASS(name)    _DECLARE_DYNAMIC_CLASS(name)
-#define wxDECLARE_CLASS(name)             wxDECLARE_DYNAMIC_CLASS(name)
-
 #define wxCLASSINFO(name)                 (&name::ms_classInfo)
 
 
@@ -434,7 +432,7 @@ private:
     wxObject* wxVariantOfPtrToObjectConverter##name ( wxxVariant &data )        \
         { return data.wxTEMPLATED_MEMBER_CALL(Get, name*); }                    \
     wxxVariant wxObjectToVariantConverter##name ( wxObject *data )              \
-        { return wxxVariant( dynamic_cast<name*> (data)  ); }                   \
+        { return wxxVariant( wx_dynamic_cast(name*, data)  ); }                 \
                                                                                 \
     const wxClassInfo* name::ms_classParents[] =                                \
         { &basename::ms_classInfo, NULL };                                      \
@@ -453,7 +451,7 @@ private:
     wxObject* wxVariantOfPtrToObjectConverter##name ( wxxVariant &data )            \
         { return data.wxTEMPLATED_MEMBER_CALL(Get, name*); }                        \
     wxxVariant wxObjectToVariantConverter##name ( wxObject *data )                  \
-        { return wxxVariant( dynamic_cast<name*> (data)  ); }                       \
+        { return wxxVariant( wx_dynamic_cast(name*, data)  ); }                     \
                                                                                     \
     const wxClassInfo* name::ms_classParents[] = { &basename::ms_classInfo,NULL };  \
     wxClassInfo name::ms_classInfo(name::ms_classParents, wxT(unit),                \
@@ -527,7 +525,7 @@ private:
     wxObject* wxVariantOfPtrToObjectConverter##name ( wxxVariant &data )             \
         { return data.wxTEMPLATED_MEMBER_CALL(Get, name*); }                         \
     wxxVariant wxObjectToVariantConverter##name ( wxObject *data )                   \
-        { return wxxVariant( dynamic_cast<name*> (data)  ); }                        \
+        { return wxxVariant( wx_dynamic_cast(name*, data)  ); }                      \
                                                                                      \
     const wxClassInfo* name::ms_classParents[] =                                     \
         { &basename::ms_classInfo,&basename2::ms_classInfo, NULL };                  \
@@ -563,7 +561,7 @@ private:
     wxObject* wxVariantOfPtrToObjectConverter##name ( wxxVariant &data )        \
         { return data.wxTEMPLATED_MEMBER_CALL(Get, name*); }                    \
     wxxVariant wxObjectToVariantConverter##name ( wxObject *data )              \
-        { return wxxVariant( dynamic_cast<name*> (data)  ); }                   \
+        { return wxxVariant( wx_dynamic_cast(name*, data)  ); }                 \
                                                                                 \
     const wxClassInfo* name::ms_classParents[] =                                \
         { &basename::ms_classInfo,NULL };                                       \
@@ -585,10 +583,6 @@ private:
     wxClassInfo name::ms_classInfo(wxT(#name), wxT(#basename1),                 \
                                    wxT(#basename2), (int) sizeof(name),         \
                                    (wxObjectConstructorFn) 0);
-
-#define wxIMPLEMENT_CLASS( n, b )          wxIMPLEMENT_ABSTRACT_CLASS( n, b )
-#define wxIMPLEMENT_CLASS2( n, b1, b2 )    wxIMPLEMENT_ABSTRACT_CLASS2( n, b1, b2 )
-
 
 
 

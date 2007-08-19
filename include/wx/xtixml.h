@@ -25,7 +25,7 @@ class WXDLLIMPEXP_BASE wxObject;
 class WXDLLIMPEXP_BASE wxClassInfo;
 class WXDLLIMPEXP_BASE wxxVariantArray;
 class WXDLLIMPEXP_BASE wxHandlerInfo;
-class WXDLLIMPEXP_BASE wxDepersister;
+class WXDLLIMPEXP_BASE wxObjectWriterCallback;
 
 class WXDLLIMPEXP_XML wxObjectXmlWriter: public wxObjectWriter
 {
@@ -102,10 +102,10 @@ public:
     // Reads a component from XML.  The return value is the root object ID, which can
     // then be used to ask the depersister about that object
 
-    virtual int ReadObject( const wxString &name, wxDepersister *depersist );
+    virtual int ReadObject( const wxString &name, wxObjectWriterCallback *depersist );
 
 private:
-    int ReadComponent(wxXmlNode *parent, wxDepersister *callbacks);
+    int ReadComponent(wxXmlNode *parent, wxObjectWriterCallback *callbacks);
 
     // read the content of this node (simple type) and return the corresponding value
     wxxVariant ReadValue(wxXmlNode *Node, const wxTypeInfo *type );
