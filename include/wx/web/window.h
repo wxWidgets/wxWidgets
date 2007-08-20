@@ -76,7 +76,19 @@ public:
     virtual void DoSetClientSize(int width, int height);
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
+protected:
+    virtual void EvalInClient(const wxString& cmd);
+    virtual wxString FlushClientEvalBuffer();
+
+protected:
+    wxString m_label;
+    wxString m_evalBuffer;
+    bool m_flushPending;
+
 private:
+    friend class wxWindowDC;
+    friend class wxApp;
+
     DECLARE_DYNAMIC_CLASS(wxWindowWeb)
     DECLARE_NO_COPY_CLASS(wxWindowWeb)
 };

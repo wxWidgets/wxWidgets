@@ -6,7 +6,32 @@
 #include "wx/brush.h"
 #include "wx/font.h"
 #include "wx/gdicmn.h"
+#include "wx/dynarray.h"
+#include "wx/utils.h"
+#include "wx/event.h"
 #include <Magick++.h>
+
+WX_DEFINE_ARRAY_INT(int, WebKeyArray);
+
+class WebStateManager {
+private:
+    WebStateManager() {}
+
+public:
+    WebKeyArray m_keysPressed;
+    wxMouseState m_mouseState;
+
+public:
+    static void Initialize();
+    static void UpdateKeyState(const wxKeyEvent& evt);
+    static void UpdateMouseState(const wxMouseEvent& evt);
+    static bool GetKeyState(wxKeyCode key);
+    static wxMouseState GetMouseState() {return wsm->m_mouseState; }
+    static void GetMousePosition(int* x, int* y);
+
+protected:
+    static WebStateManager* wsm;
+};
 
 Magick::Color GetMagickColor(const wxColour& wxcol);
 
@@ -14,13 +39,15 @@ wxColour GetWxColour(const Magick::Color& mcol);
 
 char * GetMagick(wxBitmapType type);
 
-wxString GetJsonPoints(int n, wxPoint points[]);
+wxString GetJsonPointsString(int n, wxPoint points[]);
 
-wxString GetJsonBrush(const wxBrush& brush);
+wxString GetJsonColourString(const wxColour& col);
 
-wxString GetJsonPen(const wxPen& pen);
+wxString GetJsonBrushString(const wxBrush& brush);
 
-wxString GetJsonFont(const wxFont& font);
+wxString GetJsonPenString(const wxPen& pen);
+
+wxString GetJsonFontString(const wxFont& font);
 
 Magick::LineCap GetMagickCap(int cap);
 

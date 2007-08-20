@@ -6,8 +6,10 @@
 class WXDLLEXPORT wxWindowDC : public wxMemoryDC {
 public:
     wxWindowDC();
-    virtual ~wxWindowDC();
     wxWindowDC(wxWindow *window);
+    virtual ~wxWindowDC();
+
+    bool Create(wxWindow *window);
 
     virtual void Clear();
 
@@ -62,10 +64,7 @@ protected:
                                int fillStyle = wxODDEVEN_RULE);
 
     // Implementation
-    // doesn't eval right away, just adds the command to a buffer
-    virtual void ClientEval(const wxString& cmd);
-    // true if successful, false otherwise
-    virtual bool FlushEvalBuffer();
+    virtual wxString BuildClientCommand(const wxString& cmd);
 
 protected:
     wxString m_evalBuf;

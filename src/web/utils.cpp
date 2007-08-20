@@ -33,6 +33,7 @@
 #include "wx/evtloop.h"
 #include "wx/unix/execute.h"
 #include "wx/unix/private/timer.h"
+#include "wx/web/private/utils.h"
 
 // ----------------------------------------------------------------------------
 // wxExecute stuff
@@ -79,26 +80,22 @@ wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer* timer) {
 // ----------------------------------------------------------------------------
 
 bool wxGetKeyState(wxKeyCode key) {
-    //TODO
-    return false;
+    return WebStateManager::GetKeyState(key);
 }
 
 wxMouseState wxGetMouseState() {
-    //TODO
-    wxMouseState ms;
-    return ms;
+    return WebStateManager::GetMouseState();
 }
 
 wxPoint wxGetMousePosition() {
-    //TODO
-    return wxPoint(0,0);
+    wxPoint pt;
+    WebStateManager::GetMousePosition(&pt.x, &pt.y);
+    return pt;
 }
 
 void wxGetMousePosition( int* x, int* y )
 {
-    wxPoint p = wxGetMousePosition();
-    *x = p.x;
-    *y = p.y;
+    WebStateManager::GetMousePosition(x, y);
 };
 
 // Return true if we have a colour display
@@ -114,7 +111,7 @@ int wxDisplayDepth()
 {
     //TODO
     //same approach as above
-    return 16;
+    return 32;
 }
 
 void wxDisplaySize(int *width, int *height)

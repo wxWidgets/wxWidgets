@@ -1,14 +1,21 @@
 // Copyright (c) 2007 John Wilmes
 
 #include "wx/app.h"
+#include "wx/window.h"
 #include "wx/evtloop.h"
 #include "wx/log.h"
+#include "wx/arrimpl.cpp"
 #include <string.h>
 #include <sys/file.h>
 #include <fcntl.h>
 #include <errno.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
+
+WX_DEFINE_OBJARRAY(wxResourceFileArray)
+WX_DEFINE_OBJARRAY(wxWindowArray)
+
+const char* wxApp::DEFAULT_CANVAS_ID = "MainCanvas";
 
 BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
     EVT_IDLE(wxAppBase::OnIdle)
@@ -33,6 +40,7 @@ void wxApp::CleanUp() {
         wxLogSysError("Unable to remove FIFO during cleanup at '%s'", m_requestFifoPath);
 #endif //wxUSE_LOG
     }
+    //TODO delete resource files
 }
 
 void wxApp::Exit() {
@@ -83,8 +91,8 @@ void wxApp::WakeUpIdle() {
         wxExit();
         return;
     }
-    //TODO: figure out the appropriate real wakeup message
-    char * wakeupMsg = "Wakeup message";
+    //TODO: get rid of magic string
+    char * wakeupMsg = "123";
     if (-1 == write(fd, wakeupMsg, strlen(wakeupMsg))) {
         int e = errno;
         close(fd);
@@ -175,11 +183,61 @@ bool wxApp::WriteTemplate() {
      return true;
 }
 
-wxString wxApp::GetTemplate() {
-    //TODO
+void wxApp::FlushBuffers() {
+    wxString buffer;
+    while (!m_flushTargets.IsEmpty()) {
+        wxWindowWeb** next = m_flushTargets.Detach(m_flushTargets.GetCount()-1);
+        buffer += (*next)->FlushClientEvalBuffer();
+    }
+    // This method should be called exactly once per request, so we can assume
+    // that someone is listening on the other end of the FIFO, and not bother
+    // with open/O_NONBLOCK
+    FILE* fd = fopen(m_responseFifoPath, "w");
+    if (NULL == fd) {
+        //can't open response FIFO, even though we should block until someone
+        //reads
+#if wxUSE_LOG
+        wxLogSysError("Unable to open response FIFO to flush eval buffer at '%s'",
+                      m_responseFifoPath);
+#endif //wxUSE_LOG
+        return;
+    }
+    if (EOF == fputs(buffer.fn_str(), fd)) {
+        //can't write to response FIFO, even though it was successfully opened
+#if wxUSE_LOG
+        wxLogSysError("Unable to write to response FIFO to flush eval buffer at '%s'",
+                      m_responseFifoPath);
+#endif //wxUSE_LOG
+        return;
+    }
+    if (EOF == fclose(fd)) {
+        //can't close response FIFO
+#if wxUSE_LOG
+        wxLogSysError("Unable to close response FIFO to flush eval buffer at '%s'",
+                      m_responseFifoPath);
+#endif //wxUSE_LOG
+    }
+
+}
+
+void wxApp::RequestFlush(wxWindowWeb* win) {
+    m_flushTargets.Add(win);
+}
+
+wxString wxApp::GetTemplate() const {
     wxString tpl;
-    tpl.Append("<html><head><title>");
+    //TODO - do something with the title
+    tpl.Printf("<html><head><title>%s</title>"
+               "<script type=\"text/javascript\" src=\"%s\"></script><script type=\"text/javascript\"><!--"
+                "   App.initialize(\"%s\", \"%s\");"
+                "--></script><noscript>%s</noscript></head><body><div id=\"%s\"></div></body></html>",
+              GetTitle(), "scriptUrl", "appUrl", DEFAULT_CANVAS_ID, GetNoScript(), DEFAULT_CANVAS_ID);
     return tpl;
+}
+
+wxString wxApp::GetNoScript() const {
+    return "<b>This page requires Javascript in order to function</b>"
+           "<p>Please enable Javascript and reload this page in order to continue</p>";
 }
 
 const wxString& wxApp::GetResourcePath() const {
@@ -188,4 +246,11 @@ const wxString& wxApp::GetResourcePath() const {
 
 const wxString& wxApp::GetResourceUrl() const {
     return m_resourceUrl;
+}
+
+wxString wxApp::GetResourceFile() {
+    wxString file;
+    file.Printf("%d", wxNewId());
+    m_resourceFiles.Add(file);
+    return file;
 }

@@ -22,6 +22,15 @@ private:
 class WXDLLEXPORT wxBitmapHandler : public wxBitmapHandlerBase {
 public:
     wxBitmapHandler();
+    wxBitmapHandler(const wxString& name, const wxString& ext, wxBitmapType type);
+
+    bool LoadFile(wxBitmap *bitmap, const wxString& name, long WXUNUSED(flags)
+             int WXUNUSED(desiredWidth), int WXUNUSED(desiredHeight));
+    bool SaveFile(const wxBitmap *bitmap, const wxString& name,
+             wxBitmapType type, const wxPalette *palette = NULL);
+    bool Create(wxBitmap *bitmap, const void* data, long WXUNUSED(flags),
+           int WXUNUSED(width), int WXUNUSED(height), int WXUNUSED(depth) = 1);
+
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmapHandler)
 };
@@ -67,6 +76,7 @@ public:
 
 protected:
     Magick::Image GetMagickImage() const;
+    Magick::Image* GetMagickImagePtr() const;
     void SetMagickImage(const Magick::Image& image);
 
     virtual wxObjectRefData* CreateRefData() const;

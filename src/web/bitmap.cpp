@@ -51,10 +51,12 @@ wxMask::~wxMask()
 bool wxMask::Create( const wxBitmap& bitmap,
                      const wxColour& colour )
 {
+    return false;
 }
 
 bool wxMask::Create( const wxBitmap& bitmap )
 {
+    return false;
 }
 
 //-----------------------------------------------------------------------------
@@ -254,6 +256,10 @@ Magick::Image wxBitmap::GetMagickImage() const {
     return M_BMPDATA->m_image;
 }
 
+Magick::Image* wxBitmap::GetMagickImagePtr() const {
+    return &M_BMPDATA->m_image;
+}
+
 void wxBitmap::SetMagickImage(const Magick::Image& image)
 {
     if (!m_refData)
@@ -289,9 +295,42 @@ wxObjectRefData* wxBitmap::CloneRefData(const wxObjectRefData* data) const
 // wxBitmapHandler
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandler, wxBitmapHandlerBase)
+IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxBitmapHandlerBase)
+
+wxBitmapHandler::wxBitmapHandler() {
+}
+
+wxBitmapHandler::wxBitmapHandler(const wxString& name,
+                                 const wxString& ext, wxBitmapType type)
+{
+    SetName(name);
+    SetExtension(ext);
+    SetType(type);
+}
+
+bool wxBitmapHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long WXUNUSED(flags)
+                               int WXUNUSED(desiredWidth), int WXUNUSED(desiredHeight))
+{
+    return bitmap->LoadFile(name, GetType());
+}
+
+bool wxBitmapHandler::SaveFile(const wxBitmap *bitmap, const wxString& name,
+                               wxBitmapType type, const wxPalette *palette)
+{
+    return bitmap->SaveFile(name, type);
+}
+
+bool wxBitmapHandler::Create(wxBitmap *bitmap, const void* data, long WXUNUSED(flags),
+                             int WXUNUSED(width), int WXUNUSED(height), int WXUNUSED(depth))
+{
+    //TODO
+    return false;
+}
 
 /* static */ void wxBitmap::InitStandardHandlers()
 {
-    // TODO
+    AddHandler(new wxBitmapHandler("BMP", "bmp", wxBITMAP_TYPE_BMP));
+    AddHandler(new wxBitmapHandler("GIF", "gif", wxBITMAP_TYPE_GIF));
+    AddHandler(new wxBitmapHandler("PNG", "png", wxBITMAP_TYPE_PNG));
+    AddHandler(new wxBitmapHandler("XPM", "xpm", wxBITMAP_TYPE_XPM));
 }

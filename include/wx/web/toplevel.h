@@ -1,6 +1,12 @@
 #ifndef __WX_TOPLEVEL_H__
 #define __WX_TOPLEVEL_H__
 
+/* WARNING: right now we assume there is ONLY ONE top level window
+ * TODO: fix this
+ *       - modify wxWindowDC so that it sends enough information so that the
+ *       client can select the appropriate window/canvas to draw to
+ */
+
 class wxTopLevelWindowWeb : public wxTopLevelWindowBase {
 public:
     wxTopLevelWindowWeb();

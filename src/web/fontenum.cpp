@@ -10,10 +10,12 @@
 bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
                                           bool fixedWidthOnly)
 {
+    //TODO
     return false;
 }
 
 bool wxFontEnumerator::EnumerateEncodings(const wxString& facename)
 {
+    //TODO
     return false;
 }

@@ -35,9 +35,14 @@
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
 
 wxMemoryDC::wxMemoryDC() {
+    m_image = new Magick::Image();
 }
 
 wxMemoryDC::~wxMemoryDC() {
+    if (m_image != NULL)
+    {
+        delete m_image;
+    }
 }
 
 bool wxMemoryDC::CanDrawBitmap() const {
@@ -70,11 +75,20 @@ wxSize wxMemoryDC::GetPPI() const {
 
 void wxMemoryDC::SetBackground(const wxBrush& brush) {
     m_background = brush;
-    m_image.backgroundColor(GetMagickColor(brush.GetColour()));
+    m_image->backgroundColor(GetMagickColor(brush.GetColour()));
 }
 
 void wxMemoryDC::SetBackgroundMode(int mode) {
-    //TODO unimplemented
+    if (mode == wxSOLID) {
+        m_image->modifyImage();
+        Magick::DrawableTextUnderColor tc(m_image->backgroundColor());
+        m_image->draw(tc);
+    } else if (mode == wxTRANSPARENT) {
+        m_image->modifyImage();
+        Magick::Color invalid;
+        Magick::DrawableTextUnderColor tc(invalid);
+        m_image->draw(tc);
+    }
 }
 
 void wxMemoryDC::SetBrush(const wxBrush& brush) {
@@ -91,46 +105,46 @@ void wxMemoryDC::SetLogicalFunction(int function) {
 
 void wxMemoryDC::SetPen(const wxPen& pen) {
     m_pen = pen;
-    m_image.strokeColor(GetMagickColor(m_pen.GetColour()));
-    m_image.strokeLineCap(GetMagickCap(m_pen.GetCap()));
-    m_image.strokeLineJoin(GetMagickJoin(m_pen.GetJoin()));
-    m_image.strokeWidth(m_pen.GetWidth());
+    m_image->strokeColor(GetMagickColor(m_pen.GetColour()));
+    m_image->strokeLineCap(GetMagickCap(m_pen.GetCap()));
+    m_image->strokeLineJoin(GetMagickJoin(m_pen.GetJoin()));
+    m_image->strokeWidth(m_pen.GetWidth());
 }
 
 void wxMemoryDC::Clear() {
-    m_image.erase();
+    m_image->erase();
 }
 
 bool wxMemoryDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              int style) {
-    m_image.modifyImage();
+    m_image->modifyImage();
     if (style == wxFLOOD_SURFACE) {
         wxColour current;
         wxCHECK_MSG(GetPixel(x, y, &current), false, "invalid target");
         if (current == col) {
-            m_image.floodFillColor(x, y, GetMagickColor(m_brush.GetColour()));
+            m_image->floodFillColor(x, y, GetMagickColor(m_brush.GetColour()));
         }
     } else if (style == wxFLOOD_BORDER) {
-        m_image.floodFillColor(x, y, GetMagickColor(m_brush.GetColour()), GetMagickColor(col));
+        m_image->floodFillColor(x, y, GetMagickColor(m_brush.GetColour()), GetMagickColor(col));
     }
     return true;
 }
 
 bool wxMemoryDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const {
     //TODO do bounds checking?
-    col = new wxColour(GetWxColour(m_image.pixelColor(x, y)));
+    col = new wxColour(GetWxColour(m_image->pixelColor(x, y)));
     return true;
 }
 
 void wxMemoryDC::DoDrawPoint(wxCoord x, wxCoord y) {
-    m_image.modifyImage();
-    m_image.pixelColor(x, y, GetMagickColor(m_pen.GetColour()));
+    m_image->modifyImage();
+    m_image->pixelColor(x, y, GetMagickColor(m_pen.GetColour()));
 }
 
 void wxMemoryDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2) {
-    m_image.modifyImage();
+    m_image->modifyImage();
     Magick::DrawableLine line(x1, y1, x2, y2);
-    m_image.draw(line);
+    m_image->draw(line);
 }
 
 void wxMemoryDC::DoDrawArc(wxCoord x1, wxCoord y1,
@@ -141,13 +155,16 @@ void wxMemoryDC::DoDrawArc(wxCoord x1, wxCoord y1,
 
 void wxMemoryDC::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                                    double sa, double ea) {
-    //TODO unimplemented
+    m_image->modifyImage();
+    Magick::DrawableEllipse ellipse(x, y, w / 2.0, h / 2.0, sa, ea);
+    m_image->draw(ellipse);
+    
 }
 
 void wxMemoryDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord w, wxCoord h) {
-    m_image.modifyImage();
+    m_image->modifyImage();
     Magick::DrawableRectangle rect(x, y, x+w, y-h);
-    m_image.draw(rect);
+    m_image->draw(rect);
 }
 
 void wxMemoryDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
@@ -157,7 +174,9 @@ void wxMemoryDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
 }
 
 void wxMemoryDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord w, wxCoord h) {
-    //TODO unimplemented
+    m_image->modifyImage();
+    Magick::DrawableEllipse ellipse(x, y, w / 2.0, h / 2.0, 0.0, 2.0 * 3.141592654);
+    m_image->draw(ellipse);
 }
 
 void wxMemoryDC::DoCrossHair(wxCoord x, wxCoord y) {
@@ -165,20 +184,20 @@ void wxMemoryDC::DoCrossHair(wxCoord x, wxCoord y) {
 }
 
 void wxMemoryDC::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y) {
-    m_image.modifyImage();
-    m_image.composite(icon.GetMagickImage(), x, y, Magick::OverCompositeOp);
+    m_image->modifyImage();
+    m_image->composite(icon.GetMagickImage(), x, y, Magick::OverCompositeOp);
 }
 
 void wxMemoryDC::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
                               bool useMask) {
-    m_image.modifyImage();
-    m_image.composite(bmp.GetMagickImage(), x, y, Magick::OverCompositeOp);
+    m_image->modifyImage();
+    m_image->composite(bmp.GetMagickImage(), x, y, Magick::OverCompositeOp);
 }
 
 void wxMemoryDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y) {
-    m_image.modifyImage();
+    m_image->modifyImage();
     Magick::DrawableText dta(x, y, (const char*)text.c_str());
-    m_image.draw(dta);
+    m_image->draw(dta);
 }
 
 void wxMemoryDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
@@ -186,10 +205,10 @@ void wxMemoryDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
     Magick::DrawableRotation rot1(angle);
     Magick::DrawableText dta(x, y, (const char*)text.c_str());
     Magick::DrawableRotation rot2(-1.0 * angle);
-    m_image.modifyImage();
-    m_image.draw(rot1);
-    m_image.draw(dta);
-    m_image.draw(rot2);
+    m_image->modifyImage();
+    m_image->draw(rot1);
+    m_image->draw(dta);
+    m_image->draw(rot2);
 }
 
 bool wxMemoryDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
@@ -202,10 +221,10 @@ bool wxMemoryDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord hei
     } catch (...) {
         return false;
     }
-    Magick::Image comp = memdc->m_image;
+    Magick::Image comp = *memdc->m_image;
     comp.modifyImage();
     comp.crop(Magick::Geometry(width, height, xsrc, ysrc));
-    m_image.composite(comp, xdest, ydest, GetMagickCompositeOp(rop));
+    m_image->composite(comp, xdest, ydest, GetMagickCompositeOp(rop));
     return true;
 }
 
@@ -229,12 +248,40 @@ void wxMemoryDC::DoGetSizeMM(int* width, int* height) const {
 void wxMemoryDC::DoDrawLines(int n, wxPoint points[],
                              wxCoord xoffset, wxCoord yoffset) {
     //TODO unimplemented
+    if (n < 2) {
+        //TODO error
+        return;
+    }
+    if (n == 2) {
+        DoDrawLine(xoffset + points[0].x, yoffset + points[0].y,
+                   xoffset + points[1].x, yoffset + points[1].y);
+        return;
+    }
+    m_image->modifyImage();
+    std::list<Magick::Coordinate> coords;
+    for (int i = 0; i < n; ++i) {
+        Magick::Coordinate c(points[i].x, points[i].y);
+        coords.push_back(c);
+    }
+    Magick::DrawablePolyline poly(coords);
+    m_image->draw(poly);
 }
 
 void wxMemoryDC::DoDrawPolygon(int n, wxPoint points[],
                                wxCoord xoffset, wxCoord yoffset,
                                int fillStyle) {
-    //TODO unimplemented
+    if (n < 3) {
+        //TODO error
+        return;
+    }
+    m_image->modifyImage();
+    std::list<Magick::Coordinate> coords;
+    for (int i = 0; i < n; ++i) {
+        Magick::Coordinate c(points[i].x, points[i].y);
+        coords.push_back(c);
+    }
+    Magick::DrawablePolygon poly(coords);
+    m_image->draw(poly);
 }
 
 void wxMemoryDC::DoGetTextExtent(const wxString&,
@@ -246,5 +293,5 @@ void wxMemoryDC::DoGetTextExtent(const wxString&,
 }
 
 void wxMemoryDC::DoSelect(const wxBitmap& bmp) {
-    //TODO unimplemented
+    m_image = bmp.GetMagickImagePtr();
 }

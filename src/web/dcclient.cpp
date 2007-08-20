@@ -29,103 +29,86 @@
 // wxWindowDC
 // ----------------------------------------------------------------------------
 
+/*TODO determine our subregion of the toplevel window
+ * on flush, surround drawing commands with translation/scaling/clipping to the
+ * appropriate region
+ */
 IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxMemoryDC)
 
 wxWindowDC::wxWindowDC() {
+    //TODO -> should this be rendered? where?
+    Create(NULL);
 }
 
 wxWindowDC::wxWindowDC(wxWindow* window) {
-    m_window = window;
+    Create(window);
+}
+
+bool wxWindowDC::Create(wxWindow* window) {
+    if (window) {
+        m_window = window;
+        return true;
+    }
+    return false;
 }
 
 wxWindowDC::~wxWindowDC() {
+    //TODO guarantee we flush
 }
 
 void wxWindowDC::SetBackground(const wxBrush& brush) {
     wxString cmd;
-    cmd.Printf(wxT("SetBackground('%s')"), GetJsonBrush(brush));
-    ClientEval(cmd);
+    cmd.Printf(wxT("SetBackground('%s')"), GetJsonBrushString(brush));
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::SetBackground(brush);
 }
 
 void wxWindowDC::SetBackgroundMode(int mode) {
     wxString cmd;
     cmd.Printf(wxT("SetBackgroundMode('%d')"), mode);
-    ClientEval(cmd);
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::SetBackgroundMode(mode);
 }
 
 void wxWindowDC::SetBrush(const wxBrush& brush) {
     wxString cmd;
-    cmd.Printf(wxT("SetBrush('%s')"), GetJsonBrush(brush));
-    ClientEval(cmd);
+    cmd.Printf(wxT("SetBrush('%s')"), GetJsonBrushString(brush));
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::SetBrush(brush);
 }
 
 void wxWindowDC::SetFont(const wxFont& font) {
     wxString cmd;
-    cmd.Printf(wxT("SetFont('%s')"), GetJsonFont(font));
-    ClientEval(cmd);
+    cmd.Printf(wxT("SetFont('%s')"), GetJsonFontString(font));
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::SetFont(font);
 }
 
 void wxWindowDC::SetLogicalFunction(int function) {
     wxString cmd;
     cmd.Printf(wxT("SetLogicalFunction('%d')"), function);
-    ClientEval(cmd);
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::SetLogicalFunction(function);
 }
 
 void wxWindowDC::SetPen(const wxPen& pen) {
     wxString cmd;
-    cmd.Printf(wxT("SetPen('%s')"), GetJsonPen(pen));
-    ClientEval(cmd);
+    cmd.Printf(wxT("SetPen('%s')"), GetJsonPenString(pen));
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::SetPen(pen);
 }
 
-void wxWindowDC::ClientEval(const wxString& cmd) {
-    m_evalBuf.Append("App.getDC().");
-    m_evalBuf.Append(cmd);
-    m_evalBuf.Append(";\n");
-}
-
-bool wxWindowDC::FlushEvalBuffer() {
-    // This method should be called exactly once per request, so we can assume
-    // that someone is listening on the other end of the FIFO, and not bother
-    // with open/O_NONBLOCK
-    FILE* fd = fopen(wxTheApp->m_responseFifoPath, "w");
-    if (NULL == fd) {
-        //can't open response FIFO, even though we should block until someone
-        //reads
-#if wxUSE_LOG
-        wxLogSysError("Unable to open response FIFO to flush eval buffer at '%s'",
-                     wxTheApp->m_responseFifoPath);
-#endif //wxUSE_LOG
-        return false;
-    }
-    if (EOF == fputs(m_evalBuf.fn_str(), fd)) {
-        //can't write to response FIFO, even though it was successfully opened
-#if wxUSE_LOG
-        wxLogSysError("Unable to write to response FIFO to flush eval buffer at '%s'",
-                     wxTheApp->m_responseFifoPath);
-#endif //wxUSE_LOG
-        return false;
-    }
-    m_evalBuf.Empty(); //Don't clear, we'll need the memory soon enough
-    if (EOF == fclose(fd)) {
-        //can't close response FIFO
-#if wxUSE_LOG
-        wxLogSysError("Unable to close response FIFO to flush eval buffer at '%s'",
-                     wxTheApp->m_responseFifoPath);
-#endif //wxUSE_LOG
-    }
-    return true;
+wxString wxWindowDC::BuildClientCommand(const wxString& cmd) {
+    wxString clcmd = "App.getDC().";
+    clcmd += cmd;
+    clcmd += ";\n";
+    return clcmd;
 }
 
 void wxWindowDC::Clear() {
     wxString cmd;
     cmd.Printf(wxT("Clear()"));
-    ClientEval(cmd);
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::Clear();
 }
 
@@ -133,22 +116,22 @@ bool wxWindowDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              int style) {
     wxString cmd;
     cmd.Printf(wxT("FloodFill(%d, %d, '%s', %d)"),
-               x, y, col.GetAsString(), style);
-    ClientEval(cmd);
+               x, y, GetJsonColourString(col), style);
+    m_window->EvalInClient(BuildClientCommand(cmd));
     return true;
 }
 
 void wxWindowDC::DoDrawPoint(wxCoord x, wxCoord y) {
     wxString cmd;
     cmd.Printf(wxT("DrawPoint(%d, %d)"), x, y);
-    ClientEval(cmd);
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::DoDrawPoint(x, y);
 }
 
 void wxWindowDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2) {
     wxString cmd;
     cmd.Printf(wxT("DrawLine(%d, %d, %d, %d)"), x1, y1, x2, y2);
-    ClientEval(cmd);
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::DoDrawLine(x1, y1, x2, y2);
 }
 
@@ -158,7 +141,7 @@ void wxWindowDC::DoDrawArc(wxCoord x1, wxCoord y1,
     wxString cmd;
     cmd.Printf(wxT("DrawLine(%d, %d, %d, %d, %d, %d)"),
                x1, y1, x2, y2, xc, yc);
-    ClientEval(cmd);
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::DoDrawArc(x1, y1, x2, y2, xc, yc);
 }
 
@@ -167,14 +150,14 @@ void wxWindowDC::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
     wxString cmd;
     cmd.Printf(wxT("DrawEllipticArc(%d, %d, %d, %d, %f, %f)"),
                x, y, w, h, sa, ea);
-    ClientEval(cmd);
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::DoDrawEllipticArc(x, y, w, h, sa, ea);
 }
 
 void wxWindowDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord w, wxCoord h) {
     wxString cmd;
     cmd.Printf(wxT("DrawRectangle(%d, %d, %d, %d)"), x, y, w, h);
-    ClientEval(cmd);
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::DoDrawRectangle(x, y, w, h);
 }
 
@@ -184,47 +167,47 @@ void wxWindowDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
     wxString cmd;
     cmd.Printf(wxT("DrawRoundedRectangle(%d, %d, %d, %d, %f)"),
                x, y, w, h, r);
-    ClientEval(cmd);
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::DoDrawRoundedRectangle(x, y, w, h, r);
 }
 
 void wxWindowDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord w, wxCoord h) {
     wxString cmd;
     cmd.Printf(wxT("DrawEllipse(%d, %d, %d, %d)"), x, y, w, h);
-    ClientEval(cmd);
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::DoDrawEllipse(x, y, w, h);
 }
 
 void wxWindowDC::DoCrossHair(wxCoord x, wxCoord y) {
     wxString cmd;
     cmd.Printf(wxT("CrossHair(%d, %d)"), x, y);
-    ClientEval(cmd);
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::DoCrossHair(x, y);
 }
 
 void wxWindowDC::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y) {
-    wxString file = wxString::Format("%d.bmp", wxNewId());
+    wxString file = wxTheApp->GetResourceFile();
     icon.SaveFile(wxTheApp->GetResourcePath() + file, wxBITMAP_TYPE_BMP);
     wxString cmd;
     cmd.Printf(wxT("DrawBitmap('%s', %d, %d)"), wxTheApp->GetResourceUrl() + file, x, y);
-    ClientEval(cmd);
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::DoDrawIcon(icon, x, y);
 }
 
 void wxWindowDC::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
                               bool useMask) {
-    wxString file = wxString::Format("%d.bmp", wxNewId());
+    wxString file = wxTheApp->GetResourceFile();
     bmp.SaveFile(wxTheApp->GetResourcePath() + file, wxBITMAP_TYPE_BMP);
     wxString cmd;
     cmd.Printf(wxT("DrawBitmap('%s', %d, %d)"), wxTheApp->GetResourceUrl() + file, x, y);
-    ClientEval(cmd);
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::DoDrawBitmap(bmp, x, y, useMask);
 }
 
 void wxWindowDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y) {
     wxString cmd;
     cmd.Printf(wxT("DrawText('%s', %d, %d)"), text, x, y);
-    ClientEval(cmd);
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::DoDrawText(text, x, y);
 }
 
@@ -232,7 +215,7 @@ void wxWindowDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
                                    double angle) {
     wxString cmd;
     cmd.Printf(wxT("DrawRotatedText('%s', %d, %d, %d)"), text, x, y, angle);
-    ClientEval(cmd);
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::DoDrawRotatedText(text, x, y, angle);
 }
 
@@ -245,9 +228,9 @@ bool wxWindowDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord hei
     } catch (...) {
         return false;
     }
-    wxString file = wxString::Format("%d.png", wxNewId());
+    wxString file = wxTheApp->GetResourceFile();
     wxString path = wxTheApp->GetResourcePath() + file;
-    Magick::Image save = memdc->m_image;
+    Magick::Image save = *memdc->m_image;
     save.modifyImage();
     save.crop(Magick::Geometry(width, height, xsrc, ysrc));
     save.magick(GetMagick(wxBITMAP_TYPE_PNG));
@@ -255,7 +238,7 @@ bool wxWindowDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord hei
 
     wxString cmd;
     cmd.Printf(wxT("Blit(%s, %d, %d, %d)"), wxTheApp->GetResourceUrl() + file, xdest, ydest, rop);
-    ClientEval(cmd);
+    m_window->EvalInClient(BuildClientCommand(cmd));
 
     wxMemoryDC::DoBlit(xdest, ydest, width, height, source, xsrc, ysrc, rop, useMask,  xsrcMask, ysrcMask);
     return true;
@@ -265,8 +248,8 @@ void wxWindowDC::DoDrawLines(int n, wxPoint points[],
                              wxCoord xoffset, wxCoord yoffset) {
     wxString cmd;
     cmd.Printf(wxT("DrawLines(%d, %s, %d, %d)"),
-               n, GetJsonPoints(n, points), xoffset, yoffset);
-    ClientEval(cmd);
+               n, GetJsonPointsString(n, points), xoffset, yoffset);
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::DoDrawLines(n, points, xoffset, yoffset);
 }
 
@@ -275,19 +258,22 @@ void wxWindowDC::DoDrawPolygon(int n, wxPoint points[],
                                int fillStyle) {
     wxString cmd;
     cmd.Printf(wxT("DrawPolygon(%d, %s, %d, %d, %d)"),
-               n, GetJsonPoints(n, points), xoffset, yoffset, fillStyle);
-    ClientEval(cmd);
+               n, GetJsonPointsString(n, points), xoffset, yoffset, fillStyle);
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::DoDrawPolygon(n, points, xoffset, yoffset, fillStyle);
 }
 
 void wxWindowDC::DoSetClippingRegionAsRegion(const wxRegion& region) {
-    //TODO
-    wxMemoryDC::DoSetClippingRegionAsRegion(region);
+    wxCoord x, y, width, height;
+    region.GetBox(x, y, width, height);
+    DoSetClippingRegion(x, y, width, height);
 }
 
 void wxWindowDC::DoSetClippingRegion(wxCoord x, wxCoord y,
                                      wxCoord width, wxCoord height) {
-    //TODO
+    wxString cmd;
+    cmd.Printf(wxT("SetClippingRegion(%d, %d, %d, %d)"), x, y, width, height);
+    m_window->EvalInClient(BuildClientCommand(cmd));
     wxMemoryDC::DoSetClippingRegion(x, y, width, height);
 }
 

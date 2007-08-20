@@ -25,6 +25,7 @@
     #include "wx/window.h"
 #endif // WX_PRECOMP
 
+#include "wx/web/private/utils.h"
 
 #include <json/json.h>
 
@@ -38,6 +39,33 @@
 // wxEventLoopImpl
 // ----------------------------------------------------------------------------
 
+enum WebEventClass {
+    WEB_EVENT_CLASS_KEY,
+    WEB_EVENT_CLASS_MOUSE,
+    WEB_EVENT_CLASS_OTHER
+};
+
+WebEventClass GetEventClass(int evtType) {
+    if (evtType == wxEVT_KEY_DOWN || //corresponding to Javascript onKeyDown
+        evtType == wxEVT_KEY_UP || //corresponding to Javascript onKeyUp
+        evtType == wxEVT_CHAR) //corresponding to Javascript onKeyPress
+    {
+        return WEB_EVENT_CLASS_KEY;
+    } else if (evtType == wxEVT_LEFT_DOWN ||
+               evtType == wxEVT_LEFT_UP ||
+               evtType == wxEVT_MIDDLE_DOWN ||
+               evtType == wxEVT_MIDDLE_UP ||
+               evtType == wxEVT_RIGHT_UP ||
+               evtType == wxEVT_RIGHT_DOWN ||
+               evtType == wxEVT_LEFT_DCLICK ||
+               evtType == wxEVT_MIDDLE_DCLICK ||
+               evtType == wxEVT_RIGHT_DCLICK ||
+               evtType == wxEVT_MOTION) {
+        return WEB_EVENT_CLASS_MOUSE;
+    }
+    return WEB_EVENT_CLASS_OTHER;
+}
+    
 class WXDLLEXPORT wxEventLoopImpl {
 public:
     wxEventLoopImpl() {
@@ -51,10 +79,10 @@ public:
     void SetKeepLooping(bool keepLooping) { m_keepLooping = keepLooping; }
     int GetKeepLooping() const { return m_keepLooping; }
 
-    bool DispatchJson(wxString& events);
-    wxEvent* JsonToWxEvent(json_object* jevt);
-    void JsonToWxKeyEvent(json_object* jevt, wxKeyEvent& wxevt);
-    void JsonToWxMouseEvent(json_object* jevt, wxMouseEvent& wxevt);
+    bool DispatchEvents(wxString& events);
+    void DispatchJsonEvent(json_object* jevt);
+    wxKeyEvent* JsonToWxKeyEvent(json_object* jevt, int type);
+    wxMouseEvent* JsonToWxMouseEvent(json_object* jevt, int type);
     wxWindow* GetEventWindow(json_object* jevt);
 
 private:
@@ -63,10 +91,8 @@ private:
 };
 
 
-bool wxEventLoopImpl::DispatchJson(wxString& events) {
+bool wxEventLoopImpl::DispatchEvents(wxString& events) {
     json_object *root = json_tokener_parse(events.char_str());
-    wxEvent* wxevt = NULL;
-    wxWindow* win = NULL;
 
     if (is_error(root)) {
         //TODO error - failed to parse JSON
@@ -74,104 +100,99 @@ bool wxEventLoopImpl::DispatchJson(wxString& events) {
     }
 
     if (json_type_array != json_object_get_type(root)) {
-        //TODO error - JSON in wrong format
-        return false;
+        //JSON in wrong format - probably a wakeup message
+        return true;
     }
 
     int len = json_object_array_length(root);
     for (int i = 0; i < len; ++i) {
         json_object *jevt = json_object_array_get_idx(root, i);
-        if (jevt == NULL ) {
+        if (jevt == NULL || is_error(jevt)) {
             //TODO error - array index skipped
             continue;
         }
-        wxevt = JsonToWxEvent(jevt);
-        if (wxevt == NULL) {
-            //TODO error - failed to parse event
-            continue;
-        }
-        win = GetEventWindow(jevt);
-        if (win == NULL) {
-            //TODO error - event does not contain window data
-            continue;
-        }
-        win->GetEventHandler()->ProcessEvent(*wxevt);
-        delete wxevt;
+        DispatchJsonEvent(jevt);
     }
+    wxTheApp->FlushBuffers();
     return true;
 }
 
 
-wxEvent* wxEventLoopImpl::JsonToWxEvent(json_object* jevt) {
+void wxEventLoopImpl::DispatchJsonEvent(json_object* jevt) {
     wxEvent* wxevt = NULL;
+    wxWindow* win = NULL;
     json_object* type = json_object_object_get(jevt, "eventType");
     int evtType = json_object_get_int(type);
-    if (evtType == wxEVT_KEY_DOWN || //corresponding to Javascript onKeyDown
-        evtType == wxEVT_KEY_UP || //corresponding to Javascript onKeyUp
-        evtType == wxEVT_CHAR) //corresponding to Javascript onKeyPress
-    {
-        wxevt = new wxKeyEvent(evtType);
-        JsonToWxKeyEvent(jevt, *(wxKeyEvent*)wxevt);
-    } else if (evtType == wxEVT_LEFT_DOWN ||
-               evtType == wxEVT_LEFT_UP ||
-               evtType == wxEVT_MIDDLE_DOWN ||
-               evtType == wxEVT_MIDDLE_UP ||
-               evtType == wxEVT_RIGHT_UP ||
-               evtType == wxEVT_RIGHT_DOWN ||
-               evtType == wxEVT_LEFT_DCLICK ||
-               evtType == wxEVT_MIDDLE_DCLICK ||
-               evtType == wxEVT_RIGHT_DCLICK ||
-               evtType == wxEVT_MOTION) {
-        wxevt = new wxMouseEvent(evtType);
-        JsonToWxMouseEvent(jevt, *(wxMouseEvent*)wxevt);
+    switch (GetEventClass(evtType)) {
+        case WEB_EVENT_CLASS_KEY:
+            wxevt = JsonToWxKeyEvent(jevt, evtType);
+            WebStateManager::UpdateKeyState(*(wxKeyEvent*)wxevt);
+            break;
+        case WEB_EVENT_CLASS_MOUSE:
+            wxevt = JsonToWxMouseEvent(jevt, evtType);
+            WebStateManager::UpdateMouseState(*(wxMouseEvent*)wxevt);
+            break;
+        default:
+            break;
     }
+    if (wxevt == NULL) {
+        //TODO error - failed to parse event
+        return;
+    }
+    win = GetEventWindow(jevt);
+    if (win == NULL) {
+        //TODO error - event does not contain window data
+        return;
+    }
+    win->GetEventHandler()->ProcessEvent(*wxevt);
+    delete wxevt;
+ }
 
-    return wxevt;
-}
-
-void wxEventLoopImpl::JsonToWxKeyEvent(json_object* jevt, wxKeyEvent& wxevt) {
-    //State
+wxKeyEvent* wxEventLoopImpl::JsonToWxKeyEvent(json_object* jevt, int type) {
+    wxKeyEvent* wxevt = new wxKeyEvent(type);
+    //Set attributes based on state
     json_object* state = json_object_object_get(jevt, "eventState");
-    wxevt.m_altDown = json_object_get_boolean(
+    wxevt->m_altDown = json_object_get_boolean(
                             json_object_object_get(state, "altDown"));
-    wxevt.m_controlDown = json_object_get_boolean(
+    wxevt->m_controlDown = json_object_get_boolean(
                             json_object_object_get(state, "controlDown"));
-    wxevt.m_metaDown = json_object_get_boolean(
+    wxevt->m_metaDown = json_object_get_boolean(
                             json_object_object_get(state, "metaDown"));
-    wxevt.m_shiftDown = json_object_get_boolean(
+    wxevt->m_shiftDown = json_object_get_boolean(
                             json_object_object_get(state, "shiftDown"));
-    wxevt.m_x = json_object_get_int(
+    wxevt->m_x = json_object_get_int(
                             json_object_object_get(state, "x"));
-    wxevt.m_y = json_object_get_int(
+    wxevt->m_y = json_object_get_int(
                             json_object_object_get(state, "y"));
 
-    //Key
-    wxevt.m_keyCode = json_object_get_int(
+    //Set keycode
+    wxevt->m_keyCode = json_object_get_int(
                             json_object_object_get(jevt, "keyCode"));
 }
 
-void wxEventLoopImpl::JsonToWxMouseEvent(json_object* jevt, wxMouseEvent& wxevt) {
+wxMouseEvent* wxEventLoopImpl::JsonToWxMouseEvent(json_object* jevt, int type) {
+    wxMouseEvent *wxevt = new wxMouseEvent(type);
     //State
     json_object* state = json_object_object_get(jevt, "eventState");
-    wxevt.m_altDown = json_object_get_boolean(
+    wxevt->m_altDown = json_object_get_boolean(
                             json_object_object_get(state, "altDown"));
-    wxevt.m_controlDown = json_object_get_boolean(
+    wxevt->m_controlDown = json_object_get_boolean(
                             json_object_object_get(state, "controlDown"));
-    wxevt.m_metaDown = json_object_get_boolean(
+    wxevt->m_metaDown = json_object_get_boolean(
                             json_object_object_get(state, "metaDown"));
-    wxevt.m_shiftDown = json_object_get_boolean(
+    wxevt->m_shiftDown = json_object_get_boolean(
                             json_object_object_get(state, "shiftDown"));
-    wxevt.m_leftDown = json_object_get_boolean(
+    wxevt->m_leftDown = json_object_get_boolean(
                             json_object_object_get(state, "leftDown"));
-    wxevt.m_middleDown = json_object_get_boolean(
+    wxevt->m_middleDown = json_object_get_boolean(
                             json_object_object_get(state, "middleDown"));
-    wxevt.m_rightDown = json_object_get_boolean(
+    wxevt->m_rightDown = json_object_get_boolean(
                             json_object_object_get(state, "rightDown"));
-    wxevt.m_x = json_object_get_int(
+    wxevt->m_x = json_object_get_int(
                             json_object_object_get(state, "x"));
-    wxevt.m_y = json_object_get_int(
+    wxevt->m_y = json_object_get_int(
                             json_object_object_get(state, "y"));
-
+    return wxevt;
 }
 
 wxWindow* wxEventLoopImpl::GetEventWindow(json_object* jevt) {
@@ -282,6 +303,6 @@ bool wxGUIEventLoop::Dispatch() {
         wxLogSysError("Unable to close request FIFO for dispatch '%s'", wxTheApp->m_requestFifoPath);
 #endif // wxUSE_LOG
     }
-    m_impl->DispatchJson(req);
+    m_impl->DispatchEvents(req);
     return m_impl->GetKeepLooping();
 }

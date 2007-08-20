@@ -31,6 +31,7 @@
 const char * wxIPC_DEFAULT_DIRECTORY = "/var/wx/ipc/";
 const char * wxIPC_REQUEST_SUBDIR = "request/";
 const char * wxIPC_RESPONSE_SUBDIR = "response/";
+const char * wxRESOURCE_DEFAULT_DIRECTORY = "/var/www/wx/resources/";
 const unsigned int wxSID_LENGTH = 64;
 /* keep low - frequent collisions are a security risk! */
 const unsigned int wxSID_COLLISIONS_MAX = 2;
@@ -64,6 +65,8 @@ static void wx_hooks(apr_pool_t *pool);
 typedef struct {
     const char * app;
     const char * ipcDir;
+    const char * resourceDir;
+    const char * resourceUrl;
 } wx_cfg;
 
 static const command_rec wx_cmds[] = {
@@ -77,6 +80,16 @@ static const command_rec wx_cmds[] = {
                   (void*)APR_OFFSETOF(wx_cfg, ipcDir),
                   ACCESS_CONF,
                   "Path to directory for storing IPC nodes"),
+    AP_INIT_TAKE1("WxResourceDirectory",
+                  ap_set_file_slot,
+                  (void*)APR_OFFSETOF(wx_cfg, resourceDir),
+                  ACCESS_CONF,
+                  "Path to directory for storing temporary application resources"),
+    AP_INIT_TAKE1("WxResourceUrl",
+                  ap_set_file_slot,
+                  (void*)APR_OFFSETOF(wx_cfg, resourceUrl),
+                  ACCESS_CONF,
+                  "Url corresponding to wxResourceDirectory"),
     { NULL }
 };
 
@@ -233,8 +246,16 @@ static int wx_handler(request_rec *r) {
         ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, "wxApplicationPath is not set");
         return HTTP_INTERNAL_SERVER_ERROR;
     }
+    if (cfg->resourceDir == NULL) {
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, "wxResourceDirectory is not set");
+        return HTTP_INTERNAL_SERVER_ERROR;
+    }
+    if (cfg->resourceUrl == NULL) {
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, "wxResourceUrl is not set");
+        return HTTP_INTERNAL_SERVER_ERROR;
+    }
     if (cfg->ipcDir == NULL) {
-        cfg->ipcDir = wxDEFAULT_IPC_DIRECTORY;
+        cfg->ipcDir = wxIPC_DEFAULT_DIRECTORY;
     }
     requestDir = apr_pstrcat(r->pool, cfg->ipcDir, wxIPC_REQUEST_SUBDIR, NULL);
     responseDir = apr_pstrcat(r->pool, cfg->ipcDir, wxIPC_RESPONSE_SUBDIR, NULL);
@@ -285,11 +306,17 @@ static int wx_handler(request_rec *r) {
             return HTTP_INTERNAL_SERVER_ERROR;
         }
         responsePath = apr_pstrcat(r->pool, responseDir, sid, NULL);
+        /* TODO - these arguments should be written to the FIFO instead
+         *      - also check app.cpp because there are a few more that we need
+         *      to send
+         */
         cmd = apr_pstrcat(r->pool, cfg->app, " \"",
                                 sid, "\" \"",
                                 r->connection->remote_ip, "\" \"",
                                 requestPath, "\" \"",
-                                responsePath, "\" &", NULL);
+                                responsePath, "\" \"",
+                                cfg->resourceDir, "\" \"",
+                                cfg->resourceUrl, "\" &", NULL);
         if (0 != system(cmd)) { /*TODO: should we fork and exec instead? */
             ap_log_rerror(APLOG_MARK, APLOG_ERR, errno, r, "Error executing command: '%s'", cmd);
             requestPath = apr_pstrcat(r->pool, requestDir, sid, NULL);

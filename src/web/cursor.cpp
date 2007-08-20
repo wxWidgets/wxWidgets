@@ -82,6 +82,7 @@ wxCursor::wxCursor(const char bits[], int width, int  height,
                    const char maskBits[], const wxColour *fg, const wxColour *bg)
 {
     //TODO actually implement this
+    //  probably create a bitmap and make accessible from a resource url
     m_refData = new wxCursorRefData;
     M_CURSORDATA->m_name = "default";
 }

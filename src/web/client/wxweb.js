@@ -49,10 +49,6 @@ var App = Base.extend({
         return this.url;
     },
 
-    processUpdate: function(response) {
-        App.eval(response);
-    },
-
     canvas: "",
 
     dc: null,
@@ -68,6 +64,9 @@ var EventState = Base.extend({
     /* Constructor */
     constructor: function() {
     },
+
+    /* Window State */
+    focused: true,
 
     /* Key State */
     altDown: false,
@@ -103,6 +102,14 @@ var EventManager = Base.extend({
             this.keyUp.bindAsEventListener(this), false);
         Event.observe(document, 'keyPress',
             this.keyPress.bindAsEventListener(this), false);
+    },
+
+    blur: function(event) {
+        this.eventState.focused = false;
+    },
+
+    focus: function(event) {
+        this.eventState.focused = true;
     },
 
     mouseDown: function(event) {
@@ -321,8 +328,36 @@ var DC = Base.extend({
         return $(this.renderer.element);
     },
 
+    SetBackground: function(brush) {
+        //TODO
+    },
+
+    SetBackgroundMode: function(mode) {
+        //TODO
+    },
+
+    SetBrush: function(brush) {
+        //TODO
+    },
+
+    SetFont: function(font) {
+        //TODO
+    },
+
+    SetLogicalFunction: function(f) {
+        //TODO
+    },
+
+    SetPen: function(pen) {
+        //TODO
+    },
+
     Clear: function() {
         this.renderer.clear();
+    },
+
+    FloodFill: function(x, y, col, style) {
+        //TODO
     },
 
     DrawPoint: function(x, y) {
@@ -332,31 +367,38 @@ var DC = Base.extend({
     DrawLine: function(x1, y1, x2, y2) {
         var line = new Graphics.Line(this.renderer);
         line.setPoints(x1, y1, x2, y2);
+        line.translate(this.offset.x, this.offset.y);
         this.renderer.add(line);
     },
 
     DrawArc: function(x1, y1, x2, y2, xc, yc) {
+        //TODO
     },
 
     DrawEllipticArc: function(x, y, w, h, sa, ea) {
+        //TODO
     },
 
     DrawRectangle: function(x, y, w, h) {
         var rect = new Graphics.Rectangle(this.renderer);
-        line.setBounds(x, y, w, h);
+        rect.setBounds(x, y, w, h);
+        rect.translate(this.offset.x, this.offset.y);
         this.renderer.add(rect);
     },
 
     DrawRoundedRectangle: function(x, y, w, h, r) {
+        //TODO
     },
 
     DrawEllipse: function(x, y, w, h) {
         var ellipse = new Graphics.Ellipse(this.renderer);
         ellipse.setBounds(x, y, w, h);
+        ellipse.translate(this.offset.x, this.offset.y);
         this.renderer.add(ellipse);
     },
 
     CrossHair: function(x, y) {
+        //TODO
     },
 
     DrawIcon: function(url, x, y) {
@@ -366,25 +408,50 @@ var DC = Base.extend({
     DrawBitmap: function(url, x, y) {
         var image = new Graphics.Image(this.renderer);
         image.setSource(url, true);
-        image.setLocation(x, y);
+        image.translate(x, y);
+        image.translate(this.offset.x, this.offset.y);
         this.renderer.add(image);
     },
 
     DrawText: function(textValue, x, y) {
-        DrawRotatedText(textValue, x, y, 0);
+        this.DrawRotatedText(textValue, x, y, 0);
     },
 
     DrawRotatedText: function(textValue, x, y, angle) {
         var text = new Graphics.Text(this.renderer);
         text.setTextValue(textValue);
-        text.setLocation(x, y);
+        text.translate(this.offset.x, this.offset.y);
+        text.translate(x, y);
         text.rotate(angle);
         this.renderer.add(text);
     },
 
-    DrawLines: function(n, points, xoffset, yoffset) {
+    Blit: function(url, x, y, op) {
+        //TODO - use op
+        this.DrawBitmap(url, x, y);
+    },
+
+    SetClippingRegion: function(x, y, width, height) {
+        //TODO
+    },
+
+    SetActiveRegion: function(x_, y_, width, height) {
+        this.offset = {x: x_, y: y_};
+        this.SetClippingRegion(x, y, width, height);
+    },
+
+    DestroyClippingRegion: function() {
+    },
+
+    DestroyActiveRegion: function() {
+        this.offset = {x: 0, y: 0};
+        this.DestroyClippingRegion();
+    }
+
+    DrawLines: function(n, points, x, y) {
         var lines = new Graphics.Polyline(this.renderer);
         lines.addPoints(points);
+        lines.translate(this.offset.x, this.offset.y);
         lines.translate(x, y);
         this.renderer.add(lines);
     },
@@ -392,26 +459,43 @@ var DC = Base.extend({
     DrawPolygon: function(n, points, xoffset, yoffset, fillstyle) {
         var poly = new Graphics.Polygon(this.renderer);
         poly.addPoints(points);
+        poly.translate(this.offset.x, this.offset.y);
         poly.translate(xoffset, yoffset);
         this.renderer.add(poly);
     },
 
+    offset: {x: 0, y: 0},
+
     renderer: null
 });
 
-var Colour = Base.extend({
-    constructor: function(arg, green, blue, alpha = 255) {
-        if (arg.red) {
-            this.red = red.red;
-            this.green = red.green;
-            this.blue = red.blue;
-            this.alpha = (red.alpha || 255)
+var GDIObject = Base.extend({
+    constructor: function() {
+    },
+
+    initialize: function(args, members) {
+        if (args.length == 1) {
+            var c = 0;
+            members.each(function(m) {
+                if (args[0][m] != undefined) {
+                    this[m] = args[0][m]
+                    ++c;
+                }
+            });
+            if (c == 0) {
+                this[members[0]] = args[0];
+            }
         } else {
-            this.red = arg;
-            this.green = green;
-            this.blue = blue;
-            this.alpha = alpha;
+            args.each(function(a, i) {
+                this[members[i]] = a;
+            });
         }
+    }
+}
+
+var Colour = GDIObject.extend({
+    constructor: function() {
+        this.initialize($A(arguments), ["red", "green", "blue", "alpha"]);
     },
 
     red: 255,
@@ -420,32 +504,68 @@ var Colour = Base.extend({
     alpha: 255
 });
 
-var Brush = Base.extend({
-    constructor: function(arg, colour) {
-        if (arg.style) {
-            this.style = arg.style;
-            this.colour = new Colour(arg.colour);
-        } else {
-            this.style = arg;
-            this.colour = new Colour(colour);
+var Brush = GDIObject.extend({
+    constructor: function() {
+        this.initialize($(arguments), ["style", "colour"]);
+    },
+
+    //TODO - sensible defaults
+    style: 0,
+    colour: new Colour();
+});
+
+var Font = GDIObject.extend({
+    constructor: function() {
+        this.initialize($(arguments), ["size", "family", "style", "weight",
+                                    "underlined", "name"]);
         }
+    },
+
+    //TODO - sensible defaults
+    size: 12,
+    family: "",
+    style: 0,
+    weight: "",
+    underlined: false,
+    name: ""
+});
+
+var Pen = GDIObject.extend({
+    constructor: function() {
+        this.initialize($(arguments), ["width", "style", "join", "cap", "colour"]);
+    },
+
+    //TODO - sensible defaults
+    width: 1,
+    style: 0,
+    join: 0,
+    cap: 0,
+    colour: new Colour();
+});
+
+var WindowContext = Base.extend({
+    constructor: function(owner, id, x, y, width, height) {
+        this.owner = owner;
+        this.owner = id;
+        this.owner = x;
+        this.owner = y;
+        this.owner = width;
+        this.owner = height;
+    },
+
+    evaluate: function(cmd) {
+        this.EnterContext();
+        var evaler = window.eval.bind(App);
+        evaler(cmd);
+        this.ExitContext();
+    },
+
+    enterContext() {
+        App.dc.SetActiveRegion(this.x, this.y, this.width, this.height);
+    },
+
+    exitContext() {
+        App.dc.DestroyActiveRetion();
     }
 });
 
-var Pen = Base.extend({
-    constructor: function(arg, style, join, cap, colour) {
-        if (arg.width) {
-            this.width = arg.width;
-            this.style = arg.style;
-            this.join = arg.join;
-            this.cap = arg.cap;
-            this.colour = new Colour(arg.colour);
-        } else {
-            this.width = arg;
-            this.style = style;
-            this.join = join;
-            this.cap = cap;
-            this.colour = new Colour(colour);
-        }
-    }
-});

@@ -84,7 +84,7 @@ protected:
     virtual void DoSelect(const wxBitmap& bmp);
 
 protected:
-    Magick::Image m_image;
+    Magick::Image* m_image;
     wxBrush     m_background;
     wxBrush     m_brush;
     wxFont      m_font;
