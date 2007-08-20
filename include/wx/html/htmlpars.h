@@ -262,16 +262,16 @@ public:
 
     // Parses entities in input and replaces them with respective characters
     // (with respect to output encoding)
-    wxString Parse(const wxString& input);
+    wxString Parse(const wxString& input) const;
 
     // Returns character for given entity or 0 if the enity is unknown
-    wxChar GetEntityChar(const wxString& entity);
+    wxChar GetEntityChar(const wxString& entity) const;
 
     // Returns character that represents given Unicode code
 #if wxUSE_UNICODE
-    wxChar GetCharForCode(unsigned code) { return (wxChar)code; }
+    wxChar GetCharForCode(unsigned code) const { return (wxChar)code; }
 #else
-    wxChar GetCharForCode(unsigned code);
+    wxChar GetCharForCode(unsigned code) const;
 #endif
 
 protected:

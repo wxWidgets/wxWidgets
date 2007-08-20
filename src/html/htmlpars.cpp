@@ -474,7 +474,7 @@ void wxHtmlEntitiesParser::SetEncoding(wxFontEncoding encoding)
 #endif
 }
 
-wxString wxHtmlEntitiesParser::Parse(const wxString& input)
+wxString wxHtmlEntitiesParser::Parse(const wxString& input) const
 {
     const wxChar *c, *last;
     const wxChar *in_str = input.c_str();
@@ -520,7 +520,7 @@ wxString wxHtmlEntitiesParser::Parse(const wxString& input)
 }
 
 #if !wxUSE_UNICODE
-wxChar wxHtmlEntitiesParser::GetCharForCode(unsigned code)
+wxChar wxHtmlEntitiesParser::GetCharForCode(unsigned code) const
 {
 #if wxUSE_WCHAR_T
     char buf[2];
@@ -552,7 +552,7 @@ extern "C" int LINKAGEMODE wxHtmlEntityCompare(const void *key, const void *item
 #endif
 }
 
-wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity)
+wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity) const
 {
     unsigned code = 0;
 
