@@ -53,6 +53,7 @@ private:
 #endif // wxLongLong_t
         CPPUNIT_TEST( ToDouble );
         CPPUNIT_TEST( WriteBuf );
+        CPPUNIT_TEST( UTF8Buf );
         CPPUNIT_TEST( CStrDataTernaryOperator );
         CPPUNIT_TEST( CStrDataOperators );
         CPPUNIT_TEST( CStrDataImplicitConversion );
@@ -80,6 +81,7 @@ private:
 #endif // wxLongLong_t
     void ToDouble();
     void WriteBuf();
+    void UTF8Buf();
     void CStrDataTernaryOperator();
     void DoCStrDataTernaryOperator(bool cond);
     void CStrDataOperators();
@@ -674,6 +676,26 @@ void StringTestCase::WriteBuf()
     CPPUNIT_ASSERT_EQUAL((size_t)4, s.length());
 
     CPPUNIT_ASSERT_EQUAL( 0, wxStrcmp(_T("barr"), s) );
+}
+
+void StringTestCase::UTF8Buf()
+{
+#if wxUSE_UNICODE
+    // "czech" in Czech ("cestina"):
+    static const char *textUTF8 = "\304\215e\305\241tina";
+    static const wchar_t textUTF16[] = {0x10D, 0x65, 0x161, 0x74, 0x69, 0x6E, 0x61, 0};
+
+    wxString s;
+    wxStrcpy(wxUTF8StringBuffer(s, 9), textUTF8);
+    CPPUNIT_ASSERT(s == textUTF16);
+
+    {
+        wxUTF8StringBufferLength buf(s, 20);
+        wxStrcpy(buf, textUTF8);
+        buf.SetLength(5);
+    }
+    CPPUNIT_ASSERT(s == wxString(textUTF16, 0, 3));
+#endif // wxUSE_UNICODE
 }
 
 

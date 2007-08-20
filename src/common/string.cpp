@@ -1832,3 +1832,32 @@ wxString wxString::Upper() const
 
 // convert to lower case, return the copy of the string
 wxString wxString::Lower() const { wxString s(*this); return s.MakeLower(); }
+
+// ----------------------------------------------------------------------------
+// wxUTF8StringBuffer
+// ----------------------------------------------------------------------------
+
+#if wxUSE_UNICODE && (!wxUSE_UNICODE_UTF8 || wxUSE_STL_BASED_WXSTRING)
+wxUTF8StringBuffer::~wxUTF8StringBuffer()
+{
+    wxMBConvStrictUTF8 conv;
+    size_t wlen = conv.ToWChar(NULL, 0, m_buf);
+    wxCHECK_RET( wlen != wxCONV_FAILED, "invalid UTF-8 data in string buffer?" );
+
+    wxStringInternalBuffer wbuf(m_str, wlen);
+    conv.ToWChar(wbuf, wlen, m_buf);
+}
+
+wxUTF8StringBufferLength::~wxUTF8StringBufferLength()
+{
+    wxCHECK_RET(m_lenSet, "length not set");
+
+    wxMBConvStrictUTF8 conv;
+    size_t wlen = conv.ToWChar(NULL, 0, m_buf, m_len);
+    wxCHECK_RET( wlen != wxCONV_FAILED, "invalid UTF-8 data in string buffer?" );
+
+    wxStringInternalBufferLength wbuf(m_str, wlen);
+    conv.ToWChar(wbuf, wlen, m_buf, m_len);
+    wbuf.SetLength(wlen);
+}
+#endif // wxUSE_UNICODE && (!wxUSE_UNICODE_UTF8 || wxUSE_STL_BASED_WXSTRING)

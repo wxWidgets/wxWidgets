@@ -2787,12 +2787,6 @@ public:
         : m_str(str), m_buf(lenWanted), m_len(0), m_lenSet(false)
         { }
 
-    ~wxStringTypeBufferLengthBase()
-    {
-        wxASSERT(m_lenSet);
-        m_str.assign(m_buf.data(), m_len);
-    }
-
     operator CharType*() { return m_buf.data(); }
     void SetLength(size_t length) { m_len = length; m_lenSet = true; }
 
@@ -2869,6 +2863,33 @@ typedef wxStringTypeBufferLength<wxChar>  wxStringBufferLength;
 typedef wxStringInternalBuffer                wxStringBuffer;
 typedef wxStringInternalBufferLength          wxStringBufferLength;
 #endif // !wxUSE_STL_BASED_WXSTRING && !wxUSE_UNICODE_UTF8
+
+#if wxUSE_UNICODE_UTF8 && !wxUSE_STL_BASED_WXSTRING
+typedef wxStringInternalBuffer                wxUTF8StringBuffer;
+typedef wxStringInternalBufferLength          wxUTF8StringBufferLength;
+#elif wxUSE_UNICODE // !wxUSE_UNICODE_UTF8 || wxUSE_STL_BASED_WXSTRING
+class WXDLLIMPEXP_BASE wxUTF8StringBuffer : public wxStringTypeBufferBase<char>
+{
+public:
+    wxUTF8StringBuffer(wxString& str, size_t lenWanted = 1024)
+        : wxStringTypeBufferBase<char>(str, lenWanted) {}
+    ~wxUTF8StringBuffer();
+
+    DECLARE_NO_COPY_CLASS(wxUTF8StringBuffer)
+};
+
+class WXDLLIMPEXP_BASE wxUTF8StringBufferLength
+    : public wxStringTypeBufferLengthBase<char>
+{
+public:
+    wxUTF8StringBufferLength(wxString& str, size_t lenWanted = 1024)
+        : wxStringTypeBufferLengthBase<char>(str, lenWanted) {}
+    ~wxUTF8StringBufferLength();
+
+    DECLARE_NO_COPY_CLASS(wxUTF8StringBufferLength)
+};
+#endif // wxUSE_UNICODE_UTF8 && !wxUSE_STL_BASED_WXSTRING or not
+
 
 // ---------------------------------------------------------------------------
 // wxString comparison functions: operator versions are always case sensitive
