@@ -74,6 +74,7 @@ public:
         { m_id = item.m_id; }
     bool IsOk() const                  { return m_id != NULL; }
     void* GetID() const                { return m_id; }
+    operator const void* () const      { return m_id; }
     
 private:
     void* m_id;
@@ -396,7 +397,7 @@ protected:
 // wxDataViewCtrlBase
 // ---------------------------------------------------------
 
-WX_DECLARE_OBJARRAY(wxDataViewItem, wxDataViewItemArray);
+WX_DEFINE_ARRAY(wxDataViewItem, wxDataViewItemArray);
 
 #define wxDV_SINGLE                  0x0000     // for convenience
 #define wxDV_MULTIPLE                0x0001     // can select multiple items
