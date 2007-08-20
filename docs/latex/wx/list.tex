@@ -15,7 +15,11 @@ The wxList<T> class provides linked list functionality. It has been written
 to be type safe and to provide the full API of the STL std::list container and
 should be used like it. The exception is that wxList<T> actually stores
 pointers and therefore its iterators return pointers and not references
-to the actual objets in the list (see example below). Unfortunately, the
+to the actual objets in the list (see example below) and {\it value\_type} 
+is defined as {\it T*}.
+
+
+Unfortunately, the
 new wxList<T> class requires that you declare and define each wxList<T>
 class in your program. This is done with {\it WX\_DECLARE\_LIST} and 
 {\it WX\_DEFINE\_LIST} macros (see example). We hope that we'll be able
@@ -23,9 +27,10 @@ to provide a proper template class providing both the STL std::list
 and the old wxList API in the future.
 
 Please refer to the STL std::list documentation for further
-information on how to use the class. Below we documented the legacy
-API that originated from the old wxList class and which can still 
-be used alternatively for the the same class.
+information on how to use the class. Below we documented both
+the supported STL and the legacy API that originated from the 
+old wxList class and which can still be used alternatively for
+the the same class.
 
 Note that if you compile wxWidgets in STL mode (wxUSE\_STL defined as 1) 
 then wxList<T> will actually derive from std::list and just add a legacy 
@@ -255,3 +260,160 @@ Allows the sorting of arbitrary lists by giving a function to compare
 two list elements. We use the system {\bf qsort} function for the actual
 sorting process.
 
+
+
+\membersection{wxList<T>::assign}\label{wxlistassign}
+
+\func{void}{assign}{\param{const\_iterator }{first}, \param{const const\_iterator\& }{last}}
+
+
+\func{void}{assign}{\param{size\_type }{n}, \param{const\_reference }{v = value\_type()}}
+
+
+\membersection{wxList<T>::back}\label{wxlistback}
+
+\func{reference}{back}{\void}
+
+\constfunc{const\_reference}{back}{\void}
+
+Returns the last item of the list.
+
+\membersection{wxList<T>::begin}\label{wxlistbegin}
+
+\func{iterator}{begin}{\void}
+
+\constfunc{const\_iterator}{begin}{\void}
+
+Returns a (const) iterator pointing to the beginning of the list.
+
+\membersection{wxList<T>::clear}\label{wxlistclear}
+
+\func{void}{clear}{\void}
+
+Removes all items from the list.
+
+\membersection{wxList<T>::empty}\label{wxlistempty}
+
+\constfunc{bool}{empty}{\void}
+
+Returns {\it true} if the list is empty.
+
+\membersection{wxList<T>::end}\label{wxlistend}
+
+\func{iterator}{end}{\void}
+
+\constfunc{const\_iterator}{end}{\void}
+
+Returns a (const) iterator pointing at the end of the list.
+
+\membersection{wxList<T>::erase}\label{wxlisterase2}
+
+\func{iterator}{erase}{\param{const iterator\& }{it}}
+
+Erases the item pointed to by {\it it}.
+
+\func{iterator}{erase}{\param{const iterator\& }{first}, \param{const iterator\& }{last}}
+
+Erases the items from {\it first} to {\it last}.
+
+\membersection{wxList<T>::front}\label{wxlistfront}
+
+\func{reference}{front}{\void}
+
+\constfunc{const\_reference}{front}{\void}
+
+Returns the first item in the list.
+
+\membersection{wxList<T>::insert}\label{wxlistinsert}
+
+\func{iterator}{insert}{\param{const iterator\& }{it}, \param{const\_reference }{v = value\_type()}}
+
+\func{void}{insert}{\param{const iterator\& }{it}, \param{size\_type }{n}, \param{const\_reference }{v = value\_type()}}
+
+\func{void}{insert}{\param{const iterator\& }{it}, \param{const\_iterator }{first}, \param{const const\_iterator\& }{last}}
+
+Inserts an item (or several) at the given position.
+
+\membersection{wxList<T>::max\_size}\label{wxlistmax\_size}
+
+\constfunc{size\_type}{max\_size}{\void}
+
+Returns the largest possible size of the list.
+
+\membersection{wxList<T>::pop\_back}\label{wxlistpop\_back}
+
+\func{void}{pop\_back}{\void}
+
+Removes the last item from the list.
+
+\membersection{wxList<T>::pop\_front}\label{wxlistpop\_front}
+
+\func{void}{pop\_front}{\void}
+
+Removes the first item from the list.
+
+\membersection{wxList<T>::push\_back}\label{wxlistpush\_back}
+
+\func{void}{push\_back}{\param{const\_reference }{v = value\_type()}}
+
+Adds an item to end of the list.
+
+\membersection{wxList<T>::push\_front}\label{wxlistpush\_front}
+
+\func{void}{push\_front}{\param{const\_reference }{v = value\_type()}}
+
+Adds an item to the front of the list.
+
+\membersection{wxList<T>::rbegin}\label{wxlistrbegin}
+
+\func{reverse\_iterator}{rbegin}{\void}
+
+\constfunc{const\_reverse\_iterator}{rbegin}{\void}
+
+Returns a (const) reverse iterator pointing to the beginning of the
+reversed list.
+
+\membersection{wxList<T>::remove}\label{wxlistremove}
+
+\func{void}{remove}{\param{const\_reference }{v}}
+
+Removes an item from the list.
+
+\membersection{wxList<T>::rend}\label{wxlistrend}
+
+\func{reverse\_iterator}{rend}{\void}
+
+\constfunc{const\_reverse\_iterator}{rend}{\void}
+
+Returns a (const) reverse iterator pointing to the end of the
+reversed list.
+
+\membersection{wxList<T>::resize}\label{wxlistresize}
+
+\func{void}{resize}{\param{size\_type }{n}, \param{value\_type }{v = value\_type()}}
+
+Resizes the list. If the the list is enlarges items with
+the value {\it v} are appended to the list.
+
+\membersection{wxList<T>::reverse}\label{wxlistreverse}
+
+\func{void}{reverse}{\void}
+
+Reverses the list.
+
+\membersection{wxList<T>::size}\label{wxlistsize}
+
+\constfunc{size\_type}{size}{\void}
+
+Returns the size of the list.
+
+\membersection{wxList<T>::splice}\label{wxlistsplice}
+
+\func{void}{splice}{\param{const iterator\& }{it}, \param{wxList<T>\& }{l}}
+
+\func{void}{splice}{\param{const iterator\& }{it}, \param{wxList<T>\& }{l}, \param{const iterator\& }{first}}
+
+\func{void}{splice}{\param{const iterator\& }{it}, \param{wxList<T>\& }{l}, \param{const iterator\& }{first}, \param{const iterator\& }{last}}
+
+Moves part of the list into another list, starting from {\it first} and 
+ending at {\it last} if specified.
