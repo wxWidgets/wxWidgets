@@ -149,7 +149,7 @@ protected:
     virtual void AddText(const wxString& txt);
 
 private:
-    void DoAddText(wxChar *temp, int& templen, wxChar nbsp);
+    void DoAddText(wxChar *temp, int& templen);
 
     bool m_tmpLastWasSpace;
     wxChar *m_tmpStrBuf;
@@ -201,6 +201,7 @@ private:
             // html font sizes and faces of fixed and proportional fonts
 
 #if !wxUSE_UNICODE
+    wxChar m_nbsp;
     wxFontEncoding m_InputEnc, m_OutputEnc;
             // I/O font encodings
     wxEncodingConverter *m_EncConv;

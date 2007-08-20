@@ -47,6 +47,7 @@ wxHtmlWinParser::wxHtmlWinParser(wxHtmlWindowInterface *wndIface)
     m_CharHeight = m_CharWidth = 0;
     m_UseLink = false;
 #if !wxUSE_UNICODE
+    m_nbsp = 0;
     m_EncConv = NULL;
     m_InputEnc = wxFONTENCODING_ISO8859_1;
     m_OutputEnc = wxFONTENCODING_DEFAULT;
@@ -346,7 +347,6 @@ void wxHtmlWinParser::AddText(const wxString& txt)
 {
     register wxChar d;
     int templen = 0;
-    wxChar nbsp = GetEntitiesParser()->GetCharForCode(160 /* nbsp */);
 
     size_t lng = txt.length();
     if (lng+1 > m_tmpStrBufSize)
@@ -391,20 +391,29 @@ void wxHtmlWinParser::AddText(const wxString& txt)
         if (x)
         {
             temp[templen-1] = wxT(' ');
-            DoAddText(temp, templen, nbsp);
+            DoAddText(temp, templen);
             m_tmpLastWasSpace = true;
         }
     }
 
     if (templen && (templen > 1 || temp[0] != wxT(' ')))
     {
-        DoAddText(temp, templen, nbsp);
+        DoAddText(temp, templen);
         m_tmpLastWasSpace = false;
     }
 }
 
-void wxHtmlWinParser::DoAddText(wxChar *temp, int& templen, wxChar nbsp)
+void wxHtmlWinParser::DoAddText(wxChar *temp, int& templen)
 {
+    #define NBSP_UNICODE_VALUE 160
+#if !wxUSE_UNICODE
+    if ( m_nbsp == 0 )
+        m_nbsp = GetEntitiesParser()->GetCharForCode(NBSP_UNICODE_VALUE);
+    #define CUR_NBSP_VALUE m_nbsp
+#else
+    #define CUR_NBSP_VALUE NBSP_UNICODE_VALUE
+#endif
+
     temp[templen] = 0;
     templen = 0;
 #if !wxUSE_UNICODE
@@ -414,7 +423,7 @@ void wxHtmlWinParser::DoAddText(wxChar *temp, int& templen, wxChar nbsp)
     size_t len = wxStrlen(temp);
     for (size_t j = 0; j < len; j++)
     {
-        if (temp[j] == nbsp)
+        if (temp[j] == CUR_NBSP_VALUE)
             temp[j] = wxT(' ');
     }
 
@@ -543,6 +552,9 @@ void wxHtmlWinParser::ApplyStateToCell(wxHtmlCell *cell)
 #if !wxUSE_UNICODE
 void wxHtmlWinParser::SetInputEncoding(wxFontEncoding enc)
 {
+    // the character used for non-breakable space may change:
+    m_nbsp = 0;
+
     m_InputEnc = m_OutputEnc = wxFONTENCODING_DEFAULT;
     if (m_EncConv)
     {
