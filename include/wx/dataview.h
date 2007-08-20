@@ -45,7 +45,6 @@ class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
 class WXDLLIMPEXP_FWD_ADV wxDataViewColumn;
 class WXDLLIMPEXP_FWD_ADV wxDataViewRenderer;
 class WXDLLIMPEXP_FWD_ADV wxDataViewModelNotifier;
-class                 wxDataViewEventModelNotifier;
 
 extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxDataViewCtrlNameStr[];
 
@@ -75,6 +74,7 @@ public:
         { m_id = item.m_id; }
     bool IsOk() const                  { return m_id != NULL; }
     void* GetID() const                { return m_id; }
+    operator const void* () const      { return m_id; }
     
 private:
     void* m_id;
@@ -160,8 +160,6 @@ protected:
     virtual ~wxDataViewModel() { }
 
     wxDataViewModelNotifiers  m_notifiers;
-    unsigned int              m_sortingColumn;
-    bool                      m_ascending;
 };
 
 // ---------------------------------------------------------
@@ -399,7 +397,7 @@ protected:
 // wxDataViewCtrlBase
 // ---------------------------------------------------------
 
-WX_DECLARE_OBJARRAY(wxDataViewItem, wxDataViewItemArray);
+WX_DEFINE_ARRAY(wxDataViewItem, wxDataViewItemArray);
 
 #define wxDV_SINGLE                  0x0000     // for convenience
 #define wxDV_MULTIPLE                0x0001     // can select multiple items
@@ -499,7 +497,6 @@ protected:
 private:
     wxDataViewModel        *m_model;
     wxList                  m_cols;
-    wxDataViewEventModelNotifier *m_eventNotifier;
     unsigned int m_expander_column;
     int m_indent ;
 	
@@ -563,7 +560,7 @@ private:
 
 BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_SELECTED, -1)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, -1)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_DESELECTED, -1)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, -1)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED, -1)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED, -1)
@@ -589,12 +586,13 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
     wx__DECLARE_EVT1(wxEVT_COMMAND_DATAVIEW_ ## evt, id, wxDataViewEventHandler(fn))
 
 #define EVT_DATAVIEW_ITEM_SELECTED(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_SELECTED, id, fn)
+#define EVT_DATAVIEW_ITEM_DESELECTED(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_DESELECTED, id, fn)
 #define EVT_DATAVIEW_ITEM_ACTIVATED(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_ACTIVATED, id, fn)
-#define EVT_DATAVIEW_COLUMN_HEADER_CLICK(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_HEADER_CLICK, id, fn)
 #define EVT_DATAVIEW_ITEM_COLLAPSING(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_COLLAPSING, id, fn)
 #define EVT_DATAVIEW_ITEM_COLLAPSED(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_COLLAPSED, id, fn)
 #define EVT_DATAVIEW_ITEM_EXPANDING(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_EXPANDING, id, fn)
 #define EVT_DATAVIEW_ITEM_EXPANDED(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_EXPANDED, id, fn)
+#define EVT_DATAVIEW_COLUMN_HEADER_CLICK(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_HEADER_CLICK, id, fn)
 #define EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_HEADER_RIGHT_CLICK, id, fn)
 #define EVT_DATAVIEW_COLUMN_SORTED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_SORTED, id, fn)
 

@@ -533,9 +533,6 @@ void wxDataViewColumnBase::SetFlags(int flags)
 // wxDataViewCtrlBase
 // ---------------------------------------------------------
 
-#include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(wxDataViewItemArray);
-
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewCtrlBase, wxControl)
 
 wxDataViewCtrlBase::wxDataViewCtrlBase()
