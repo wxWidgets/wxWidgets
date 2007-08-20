@@ -1,5 +1,5 @@
 rem Uncomment the next line to set the version; used also in wxWidgets.iss
-SET WXW_VER=2.8.4
+SET WXW_VER=2.8.5-rc1
 
 
 if (%WXW_VER%)==() SET WXW_VER=CVS
@@ -14,23 +14,23 @@ rem  writes a log file in c:\
 
 echo Building wxWidgets-%WXW_VER% docs... > c:\temp.log
 
-set WXWIN=c:\wx\wxWidgets
-set DAILY=c:\daily
+set WXWIN=c:\wx\wxw28b
+set DAILY=c:\daily28b
 set PATH=%PATH%;C:\wx\wxw26b\utils\tex2rtf\src\vc_based;C:\wx\Gnu\bin;c:\progra~1\htmlhe~1;C:\PROGRA~1\INNOSE~1
 set PATH=%PATH%;C:\Program Files\gs\gs8.51\lib;C:\Program Files\gs\gs8.51\bin
 echo %PATH% >> c:\temp.log
 
-rem update wxwidgets (holds docs) and inno (cvs wxMSW setup.exe only)
+rem update wxw28b (holds docs) and inno (cvs wxMSW setup.exe only)
 c:
 cd %WXWIN%
-cvs up -P -d
+svn up 
 
 rem now inno
-cd \wx\inno\wxWidgets
+cd \wx\inno\wxw28b
 del c*.*
 if exist include\wx\msw\setup.h del include\wx\msw\setup.h
 if exist include\wx\univ\setup.h del include\wx\univ\setup.h
-cvs up -P
+svn up 
 dos2unix configure
 dos2unix config.guess
 dos2unix config.sub
@@ -41,9 +41,10 @@ echo CVS update  >>  c:\temp.log
 rem add bakefile build...
 rem just build the formats not in the CVS to keep down the .#makefile...
 set PATH=%PATH%;C:\wx\Bakefile\src
-cd \wx\inno\wxWidgets\build\bakefiles
+cd \wx\inno\wxw28b\build\bakefiles
 del .bakefile_gen.state
-bakefile_gen -f dmars,dmars,msevc4prj,dmars_smake >> c:\temp.log
+if not exist Bakefiles.local.bkgen echo "Bakefiles.local.bkgen missing" >> c:\temp.log
+bakefile_gen -f dmars,msevc4prj,dmars_smake >> c:\temp.log
 
 
 rem add nmake to the path and build the docs
@@ -51,6 +52,7 @@ call  \vc6
 echo %PATH% >>  c:\temp.log
 SET >>  c:\temp.log
 cd %WXWIN%\build\script
+mkdir %DAILY%\in
 nmake -f makedocs.vc cleandocs
 nmake -f makedocs.vc alldocs
 
@@ -92,19 +94,11 @@ zip wxWidgets-%WXW_VER%-PDF.zip docs\pdf\*.pdf
 
 rem copy chm to inno
 cd %WXWIN%
-mkdir c:\wx\inno\wxWidgets\docs\htmlhelp
-copy docs\htmlhelp\wx.chm \wx\inno\wxWidgets\docs\htmlhelp\wx.chm
+mkdir c:\wx\inno\wxw28b\docs\htmlhelp
+copy docs\htmlhelp\wx.chm \wx\inno\wxw28b\docs\htmlhelp\wx.chm
 cd %WXWIN%\build\script
 iscc wxwidgets.iss >> c:\temp.log
 
-rem echo setting S
-rem echo yes > net use s: /delete
-rem net use s: \\biolpc22\bake 
-rem net use >> c:\temp.log
-
-rem copy %DAILY%\*.ZIP s:\bkl-cronjob\archives\win
-rem copy %DAILY%\*.exe s:\bkl-cronjob\archives\win\*.exe
-rem dir s: /od >> c:\temp.log
 
 echo docs built for %WXW_VER%
 echo docs built for %WXW_VER% >> c:\temp.log
