@@ -1,4 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////
 // Name:        src/common/utilscmn.cpp
 // Purpose:     Miscellaneous utility functions and classes
 // Author:      Julian Smart
@@ -749,6 +748,7 @@ static bool wxLaunchDefaultBrowserBaseImpl(const wxString& url, int flags)
     {
         // ShellExecuteEx() opens the URL in an existing window by default so
         // we can't use it if we need a new window
+        wxURI uri(url);
         wxRegKey key(wxRegKey::HKCR, uri.GetScheme() + _T("\\shell\\open"));
         if ( !key.Exists() )
         {
