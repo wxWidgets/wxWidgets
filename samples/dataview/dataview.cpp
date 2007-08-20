@@ -176,7 +176,8 @@ public:
     
     // override sorting to always sort branches ascendingly
     
-    int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 )
+    int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2, 
+                 unsigned int column, bool ascending )
     {
         if (IsContainer(item1) && IsContainer(item2))
         {
@@ -196,7 +197,7 @@ public:
             return litem1-litem2;
         }
         
-        return wxDataViewModel::Compare( item1, item2 );
+        return wxDataViewModel::Compare( item1, item2, column, ascending );
     }
 
     // implementation of base class virtuals to define model
@@ -422,7 +423,14 @@ public:
     void OnValueChanged( wxDataViewEvent &event );
     void OnItemAdded( wxDataViewEvent &event );
     void OnItemDeleted( wxDataViewEvent &event );
+    
     void OnActivated( wxDataViewEvent &event );
+    void OnExpanding( wxDataViewEvent &event );
+    void OnExpanded( wxDataViewEvent &event );
+    void OnCollapsing( wxDataViewEvent &event );
+    void OnCollapsed( wxDataViewEvent &event );
+    void OnSelected( wxDataViewEvent &event );
+    
     void OnHeaderClick( wxDataViewEvent &event );
     void OnHeaderRightClick( wxDataViewEvent &event );
     void OnSorted( wxDataViewEvent &event );
@@ -457,7 +465,7 @@ bool MyApp::OnInit(void)
 
     // build the first frame
     MyFrame *frame = 
-        new MyFrame(NULL, wxT("wxDataViewCtrl feature test"), 10, 10, 700, 440);
+        new MyFrame(NULL, wxT("wxDataViewCtrl feature test"), 40, 40, 700, 440);
     frame->Show(true);
 
     SetTopWindow(frame);
@@ -498,14 +506,23 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_PREPEND_LIST, MyFrame::OnPrependList )
     EVT_BUTTON( ID_DELETE_LIST, MyFrame::OnDeleteList )
     EVT_BUTTON( ID_GOTO, MyFrame::OnGoto)
+    
     EVT_DATAVIEW_MODEL_ITEM_ADDED( ID_MUSIC_CTRL, MyFrame::OnItemAdded )
     EVT_DATAVIEW_MODEL_ITEM_DELETED( ID_MUSIC_CTRL, MyFrame::OnItemDeleted )
     EVT_DATAVIEW_MODEL_VALUE_CHANGED( ID_MUSIC_CTRL, MyFrame::OnValueChanged )
     EVT_DATAVIEW_MODEL_ITEM_CHANGED( ID_MUSIC_CTRL, MyFrame::OnValueChanged )
+    
     EVT_DATAVIEW_ITEM_ACTIVATED(ID_MUSIC_CTRL, MyFrame::OnActivated )
+    EVT_DATAVIEW_ITEM_EXPANDING(ID_MUSIC_CTRL, MyFrame::OnExpanding)
+    EVT_DATAVIEW_ITEM_EXPANDED(ID_MUSIC_CTRL, MyFrame::OnExpanded)
+    EVT_DATAVIEW_ITEM_COLLAPSING(ID_MUSIC_CTRL, MyFrame::OnCollapsing)
+    EVT_DATAVIEW_ITEM_COLLAPSED(ID_MUSIC_CTRL, MyFrame::OnCollapsed)
+    EVT_DATAVIEW_ITEM_SELECTED(ID_MUSIC_CTRL, MyFrame::OnSelected)
+    
     EVT_DATAVIEW_COLUMN_HEADER_CLICK(ID_MUSIC_CTRL, MyFrame::OnHeaderClick)
     EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED(ID_MUSIC_CTRL, MyFrame::OnHeaderRightClick)
     EVT_DATAVIEW_COLUMN_SORTED(ID_MUSIC_CTRL, MyFrame::OnSorted)
+    
     EVT_RIGHT_UP(MyFrame::OnRightClick)
 END_EVENT_TABLE()
 
@@ -654,6 +671,46 @@ void MyFrame::OnActivated( wxDataViewEvent &event )
     wxLogMessage("wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, Item Id: %d;  Column: %d", event.GetItem().GetID(), event.GetColumn());
 }
 
+void MyFrame::OnSelected( wxDataViewEvent &event )
+{
+    if(!m_log)
+        return;
+
+    wxLogMessage("wxEVT_COMMAND_DATAVIEW_ITEM_SELECTED, Item Id: %d", event.GetItem().GetID() );
+}
+
+void MyFrame::OnExpanding( wxDataViewEvent &event )
+{
+    if (!m_log)
+        return;
+        
+    wxLogMessage("wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, Item Id: %d", event.GetItem().GetID() );
+}
+
+void MyFrame::OnExpanded( wxDataViewEvent &event )
+{
+    if (!m_log)
+        return;
+        
+    wxLogMessage("wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED, Item Id: %d", event.GetItem().GetID() );
+}
+
+void MyFrame::OnCollapsing( wxDataViewEvent &event )
+{
+    if (!m_log)
+        return;
+        
+    wxLogMessage("wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING, Item Id: %d", event.GetItem().GetID() );
+}
+
+void MyFrame::OnCollapsed( wxDataViewEvent &event )
+{
+    if (!m_log)
+        return;
+        
+    wxLogMessage("wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED, Item Id: %d", event.GetItem().GetID() );
+}
+
 void MyFrame::OnHeaderClick( wxDataViewEvent &event )
 {
     if(!m_log)
@@ -688,7 +745,8 @@ void MyFrame::OnRightClick( wxMouseEvent &event )
 
 void MyFrame::OnGoto( wxCommandEvent &event)
 {
-    m_listCtrl->EnsureVisible(50);
+    wxDataViewItem item = m_list_model->GetItem( 50 );
+    m_listCtrl->EnsureVisible(item);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )

@@ -152,14 +152,9 @@ public:
     void RemoveNotifier( wxDataViewModelNotifier *notifier );
     
     // default compare function
-    virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 );
-    
-    void SetSortingColumn( unsigned int col ) { m_sortingColumn = col; }
-    unsigned int GetSortingColumn() { return m_sortingColumn; }
-    void SetSortOrderAscending( bool ascending ) { m_ascending = ascending; }
-    bool GetSortOrderAscending() { return m_ascending; }
-    
-    
+    virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2, 
+                         unsigned int column, bool ascending );
+
 protected:
     // the user should not delete this class directly: he should use DecRef() instead!
     virtual ~wxDataViewModel() { }
@@ -204,7 +199,8 @@ public:
     
     // compare based on index
     
-    virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2 );
+    virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2, 
+                         unsigned int column, bool ascending );
 
     // implement base methods
 
@@ -481,29 +477,20 @@ public:
     int GetIndent() const 
         { return m_indent; } 
 
-    //Selection Code
+    virtual wxDataViewItem GetSelection() = 0;
     virtual int GetSelections( wxDataViewItemArray & sel ) const = 0;
     virtual void SetSelections( const wxDataViewItemArray & sel ) = 0;
     virtual void Select( const wxDataViewItem & item ) = 0;
     virtual void Unselect( const wxDataViewItem & item ) = 0;
     virtual bool IsSelected( const wxDataViewItem & item ) const = 0;
 
-    virtual int GetSelections( wxArrayInt & sel ) const = 0; 
-    virtual void SetSelections( const wxArrayInt & sel ) = 0;
-    virtual void Select( int row ) = 0;
-    virtual void Unselect( int row ) = 0;
-    virtual bool IsSelected( int row ) const = 0;
-    virtual void SelectRange( int from, int to ) = 0;
-    virtual void UnselectRange( int from, int to ) = 0;
-
     virtual void SelectAll() = 0;
     virtual void UnselectAll() = 0;
 
-    virtual void EnsureVisible( int row ) = 0;
-    virtual void EnsureVisible( const wxDataViewItem & item ) = 0;
-
-    virtual wxDataViewItem GetItemByRow( unsigned int row ) const = 0;
-    virtual int GetRowByItem( const wxDataViewItem & item ) const = 0;
+    virtual void EnsureVisible( const wxDataViewItem & item,
+                                wxDataViewColumn *column = NULL ) = 0;
+    virtual void HitTest( const wxPoint & point, wxDataViewItem & item, int & column ) const = 0;
+    virtual wxRect GetItemRect( const wxDataViewItem & item, int column ) const = 0;
 
 protected:
     virtual void DoSetExpanderColumn() = 0 ;
@@ -577,6 +564,11 @@ private:
 BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_SELECTED, -1)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, -1)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, -1)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED, -1)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED, -1)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING, -1)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, -1)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, -1)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, -1)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, -1)
@@ -599,6 +591,10 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 #define EVT_DATAVIEW_ITEM_SELECTED(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_SELECTED, id, fn)
 #define EVT_DATAVIEW_ITEM_ACTIVATED(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_ACTIVATED, id, fn)
 #define EVT_DATAVIEW_COLUMN_HEADER_CLICK(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_HEADER_CLICK, id, fn)
+#define EVT_DATAVIEW_ITEM_COLLAPSING(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_COLLAPSING, id, fn)
+#define EVT_DATAVIEW_ITEM_COLLAPSED(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_COLLAPSED, id, fn)
+#define EVT_DATAVIEW_ITEM_EXPANDING(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_EXPANDING, id, fn)
+#define EVT_DATAVIEW_ITEM_EXPANDED(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_EXPANDED, id, fn)
 #define EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_HEADER_RIGHT_CLICK, id, fn)
 #define EVT_DATAVIEW_COLUMN_SORTED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_SORTED, id, fn)
 
