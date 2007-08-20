@@ -29,14 +29,14 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 {
     //TODO
-    return wxFont();
+    return wxFont(12, wxROMAN, wxITALIC, wxNORMAL);
 }
 
 // Get a system metric, e.g. scrollbar size
 int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(win))
 {
     //TODO
-    return -1;
+    return 16;
 }
 
 bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)

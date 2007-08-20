@@ -12,7 +12,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 
-WX_DEFINE_OBJARRAY(wxResourceFileArray)
+WX_DEFINE_OBJARRAY(wxStringArray)
 WX_DEFINE_OBJARRAY(wxWindowArray)
 
 const char* wxApp::DEFAULT_CANVAS_ID = "MainCanvas";
@@ -48,19 +48,60 @@ void wxApp::Exit() {
 }
 
 bool wxApp::Initialize(int& argc, wxChar **argv) {
-    if (argc < 7) {
+    if (argc < 2) {
         return false;
     }
     if (!wxAppBase::Initialize(argc, argv)) {
         return false;
     }
-    m_sessionId = argv[1];
-    m_remoteIp = argv[2];
-    m_requestFifoPath = argv[3];
-    m_responseFifoPath = argv[4];
-    m_resourcePath = argv[5];
-    m_resourceUrl = argv[5];
+    if (!InitFromFifo(argv[1])) {
+        return false;
+    }
     return WriteTemplate();
+}
+
+bool wxApp::InitFromFifo(const wxString& path) {
+    FILE* fd = fopen(path, "r");
+    if (NULL == fd) {
+        // can't open request fifo, time to panic
+#if wxUSE_LOG
+        wxLogSysError("Unable to open FIFO for initialization at '%s'", path);
+#endif // wxUSE_LOG
+        wxTheApp->CleanUp();
+        wxExit();
+    }
+
+    wxString init;
+    //TODO get rid of magic numbers
+    char buf[1024 + 1];
+    do {
+        // block if no data is available yet
+        int end = fread(buf, sizeof(char), 1024, fd);
+        buf[end] = '\0';
+        init.Append(buf);
+    } while (0 == feof(fd));
+    if (EOF == fclose(fd)) {
+#if wxUSE_LOG
+        wxLogSysError("Unable to close FIFO for initialization at '%s'", path);
+#endif // wxUSE_LOG
+    }
+
+    wxStringArray lines;
+    while (!init.IsEmpty()) {
+        lines.Add(init.BeforeFirst('\n'));
+        init = init.AfterFirst('\n');
+    }
+
+    if (lines.GetCount() < 6) {
+        return false;
+    }
+    m_sessionId = lines[0];
+    m_remoteIp = lines[1];
+    m_requestFifoPath = lines[2];
+    m_responseFifoPath = lines[3];
+    m_resourcePath = lines[4];
+    m_resourceUrl = lines[5];
+    return true;
 }
 
 void wxApp::WakeUpIdle() {

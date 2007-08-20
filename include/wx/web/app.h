@@ -3,7 +3,7 @@
 
 class wxWindowWeb;
 
-WX_DECLARE_OBJARRAY(wxString, wxResourceFileArray);
+WX_DECLARE_OBJARRAY(wxString, wxStringArray);
 WX_DECLARE_OBJARRAY(wxWindowWeb*, wxWindowArray);
 
 
@@ -37,6 +37,7 @@ public:
     virtual const wxString& GetResourceUrl() const;
 
 private:
+    bool InitFromFifo(const wxString& path);
     bool WriteTemplate();
     wxString GetTemplate() const;
 
@@ -49,7 +50,7 @@ private:
     wxString m_responseFifoPath;
     wxString m_resourcePath;
     wxString m_resourceUrl;
-    wxResourceFileArray m_resourceFiles;
+    wxStringArray m_resourceFiles;
     wxWindowArray m_flushTargets;
 
     static const char* DEFAULT_CANVAS_ID;

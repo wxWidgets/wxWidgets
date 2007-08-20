@@ -36,7 +36,8 @@ const unsigned int wxSID_LENGTH = 64;
 /* keep low - frequent collisions are a security risk! */
 const unsigned int wxSID_COLLISIONS_MAX = 2;
 const unsigned int wxFIFO_BUFFER_SIZE = 1024 * 1024;
-const int wxFIFO_WRITE_TIMEOUT = 100;
+const int wxFIFO_WRITE_TIMEOUT = 1000;
+const int wxFIFO_INIT_TIMEOUT = 10000;
 const int wxFIFO_READ_TIMEOUT = -1;
 /* return values */
 enum {
@@ -60,6 +61,7 @@ static int wx_fifo_remove(const char * requestPath, const char * responsePath);
 static int wx_set_headers(request_rec * r);
 static int wx_fifo_print(request_rec * r, char * fifopath);
 static int wx_handler(request_rec *r);
+static int wx_app_init();
 static void wx_hooks(apr_pool_t *pool);
 
 typedef struct {
@@ -306,24 +308,21 @@ static int wx_handler(request_rec *r) {
             return HTTP_INTERNAL_SERVER_ERROR;
         }
         responsePath = apr_pstrcat(r->pool, responseDir, sid, NULL);
+        requestPath = apr_pstrcat(r->pool, requestDir, sid, NULL);
         /* TODO - these arguments should be written to the FIFO instead
          *      - also check app.cpp because there are a few more that we need
          *      to send
          */
-        cmd = apr_pstrcat(r->pool, cfg->app, " \"",
-                                sid, "\" \"",
-                                r->connection->remote_ip, "\" \"",
-                                requestPath, "\" \"",
-                                responsePath, "\" \"",
-                                cfg->resourceDir, "\" \"",
-                                cfg->resourceUrl, "\" &", NULL);
+        cmd = apr_pstrcat(r->pool, cfg->app, " \"", requestPath, "\" &", NULL);
         if (0 != system(cmd)) { /*TODO: should we fork and exec instead? */
             ap_log_rerror(APLOG_MARK, APLOG_ERR, errno, r, "Error executing command: '%s'", cmd);
-            requestPath = apr_pstrcat(r->pool, requestDir, sid, NULL);
             wx_fifo_remove(requestPath, responsePath);
             return HTTP_INTERNAL_SERVER_ERROR;
         }
-
+        if (wxSUCCESS != wx_app_init(sid, r->connection->remote_ip, requestPath, responsePath, cfg->resourceDir, cfg->resourceUrl)) {
+            ap_log_rerror(APLOG_MARK, APLOG_ERR, e, r, "Unable to initialize application!");
+            wx_fifo_remove(requestPath, responsePath);
+            return HTTP_INTERNAL_SERVER_ERROR;
         wx_set_headers(r);
         if (wxSUCCESS != wx_fifo_print(r, fifopath)) {
             ap_log_rerror(APLOG_MARK, APLOG_ERR, e, r, "Unable to print response from FIFO!");
@@ -333,13 +332,33 @@ static int wx_handler(request_rec *r) {
         break;
 
     default:
-        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, "Unknwon error!");
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, "Unknown error!");
         return HTTP_INTERNAL_SERVER_ERROR;
         break;
     }
     /* never reached */
     ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, "Unknwon error!");
     return HTTP_INTERNAL_SERVER_ERROR;
+}
+
+static int wx_app_init(request_rec *r, const char *sid, const char *rip,
+                       const char *req, const char *res, const char *rpath, const char *rurl) {
+    char * init = apr_pstrcat(r->pool, sid, "\n",
+                                       rip, "\n",
+                                       req, "\n",
+                                       res, "\n",
+                                       rpath, "\n",
+                                       rurl, "\n", NULL);
+    if (APR_SUCCESS == apr_file_open(&fifo, req, APR_WRITE, APR_OS_DEFAULT, r->pool)) {
+        apr_file_pipe_timeout_set(fifo, wxFIFO_INIT_TIMEOUT);
+        if (APR_SUCCESS == apr_file_lock(fifo, APR_FLOCK_EXCLUSIVE) && APR_SUCCESS == apr_file_puts(init, fifo)) {
+            apr_file_close(fifo);
+            return wxSUCCESS;
+        } else {
+                apr_file_close(fifo);
+        }
+    }
+    return wxOS_ERROR;
 }
 
 static void wx_hooks(apr_pool_t *pool) {

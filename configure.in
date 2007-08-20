@@ -5207,8 +5207,8 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
     THREADS_CFLAGS=
 
     if test "$wxUSE_THREADS" = "yes" ; then
-        if test "$USE_BEOS" = 1; then
-            AC_MSG_WARN([BeOS threads are not yet supported... disabled])
+        if test "$USE_BEOS" = 1 -o "$wxUSE_WEB" = 1; then
+            AC_MSG_WARN([Threads are not yet supported on this platform... disabled])
             wxUSE_THREADS="no"
         fi
     fi

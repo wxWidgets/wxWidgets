@@ -168,6 +168,7 @@ wxKeyEvent* wxEventLoopImpl::JsonToWxKeyEvent(json_object* jevt, int type) {
     //Set keycode
     wxevt->m_keyCode = json_object_get_int(
                             json_object_object_get(jevt, "keyCode"));
+    return wxevt;
 }
 
 wxMouseEvent* wxEventLoopImpl::JsonToWxMouseEvent(json_object* jevt, int type) {
