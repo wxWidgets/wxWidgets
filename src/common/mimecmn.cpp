@@ -146,44 +146,19 @@ void wxFileTypeInfo::DoVarArgInit(const wxString& mimeType,
     }
 }
 
-// NB: DoVarArgInit uses WX_VA_ARG_STRING macro to extract the string and this
-//     macro interprets the argument as char* or wchar_t* depending on build
-//     (and in UTF8 build, on the current locale). Because only one of the
-//     vararg forms below is called and the decision about which one gets
-//     called depends on the same conditions WX_VA_ARG_STRING uses, we can
-//     implement both of them in the exact same way:
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-void wxFileTypeInfo::VarArgInitWchar(const wxChar *mimeType,
-                                     const wxChar *openCmd,
-                                     const wxChar *printCmd,
-                                     const wxChar *desc,
-                                     ...)
+void wxFileTypeInfo::VarArgInit(const wxString *mimeType,
+                                const wxString *openCmd,
+                                const wxString *printCmd,
+                                const wxString *desc,
+                                ...)
 {
     va_list argptr;
     va_start(argptr, desc);
 
-    DoVarArgInit(mimeType, openCmd, printCmd, desc, argptr);
+    DoVarArgInit(*mimeType, *openCmd, *printCmd, *desc, argptr);
 
     va_end(argptr);
 }
-#endif // !wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-void wxFileTypeInfo::VarArgInitUtf8(const char *mimeType,
-                                    const char *openCmd,
-                                    const char *printCmd,
-                                    const char *desc,
-                                    ...)
-{
-    va_list argptr;
-    va_start(argptr, desc);
-
-    DoVarArgInit(mimeType, openCmd, printCmd, desc, argptr);
-
-    va_end(argptr);
-}
-#endif // wxUSE_UNICODE_UTF8
 
 
 wxFileTypeInfo::wxFileTypeInfo(const wxArrayString& sArray)

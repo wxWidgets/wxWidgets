@@ -125,25 +125,32 @@ private:
                       const wxString& desc,
                       va_list argptr);
 
-#if !wxUSE_UTF8_LOCALE_ONLY
-    void VarArgInitWchar(const wxChar *mimeType,
-                         const wxChar *openCmd,
-                         const wxChar *printCmd,
-                         const wxChar *desc,
-                         // the other parameters form a NULL terminated list of
-                         // extensions
-                         ...);
-#endif
-#if wxUSE_UNICODE_UTF8
-    void VarArgInitUtf8(const char *mimeType,
-                        const char *openCmd,
-                        const char *printCmd,
-                        const char *desc,
-                        // the other parameters form a NULL terminated list of
-                        // extensions
-                        ...);
-#endif
+    void VarArgInit(const wxString *mimeType,
+                    const wxString *openCmd,
+                    const wxString *printCmd,
+                    const wxString *desc,
+                    // the other parameters form a NULL terminated list of
+                    // extensions
+                    ...);
+
 public:
+    // NB: This is a helper to get implicit conversion of variadic ctor's
+    //     fixed arguments into something that can be passed to VarArgInit().
+    //     Do not use, it's used by the ctor only.
+    struct WXDLLIMPEXP_BASE CtorString
+    {
+        CtorString(const char *str) : m_str(str) {}
+        CtorString(const wchar_t *str) : m_str(str) {}
+        CtorString(const wxString& str) : m_str(str) {}
+        CtorString(const wxCStrData& str) : m_str(str) {}
+        CtorString(const wxCharBuffer& str) : m_str(str) {}
+        CtorString(const wxWCharBuffer& str) : m_str(str) {}
+
+        operator const wxString*() const { return &m_str; }
+
+        wxString m_str;
+    };
+
     // ctors
         // a normal item
 
@@ -156,14 +163,11 @@ public:
     //               // just NULL!)
     //               ...);
     WX_DEFINE_VARARG_FUNC_CTOR(wxFileTypeInfo,
-                               // NB: these are not format strings, using
-                               //     wxFormatString here is a hack to get
-                               //     implicit conversion to wchar_t*/char*
-                               4, (const wxFormatString&,
-                                   const wxFormatString&,
-                                   const wxFormatString&,
-                                   const wxFormatString&),
-                               VarArgInitWchar, VarArgInitUtf8)
+                               4, (const CtorString&,
+                                   const CtorString&,
+                                   const CtorString&,
+                                   const CtorString&),
+                               VarArgInit, VarArgInit)
 #ifdef __WATCOMC__
     // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
     WX_VARARG_WATCOM_WORKAROUND_CTOR(
@@ -172,40 +176,40 @@ public:
                                     const wxString&,
                                     const wxString&,
                                     const wxString&),
-                                (wxFormatString(f1),
-                                 wxFormatString(f2),
-                                 wxFormatString(f3),
-                                 wxFormatString(f4)));
+                                (CtorString(f1),
+                                 CtorString(f2),
+                                 CtorString(f3),
+                                 CtorString(f4)));
     WX_VARARG_WATCOM_WORKAROUND_CTOR(
                                 wxFileTypeInfo,
                                 4, (const wxCStrData&,
                                     const wxCStrData&,
                                     const wxCStrData&,
                                     const wxCStrData&),
-                                (wxFormatString(f1),
-                                 wxFormatString(f2),
-                                 wxFormatString(f3),
-                                 wxFormatString(f4)));
+                                (CtorString(f1),
+                                 CtorString(f2),
+                                 CtorString(f3),
+                                 CtorString(f4)));
     WX_VARARG_WATCOM_WORKAROUND_CTOR(
                                 wxFileTypeInfo,
                                 4, (const char*,
                                     const char*,
                                     const char*,
                                     const char*),
-                                (wxFormatString(f1),
-                                 wxFormatString(f2),
-                                 wxFormatString(f3),
-                                 wxFormatString(f4)));
+                                (CtorString(f1),
+                                 CtorString(f2),
+                                 CtorString(f3),
+                                 CtorString(f4)));
     WX_VARARG_WATCOM_WORKAROUND_CTOR(
                                 wxFileTypeInfo,
                                 4, (const wchar_t*,
                                     const wchar_t*,
                                     const wchar_t*,
                                     const wchar_t*),
-                                (wxFormatString(f1),
-                                 wxFormatString(f2),
-                                 wxFormatString(f3),
-                                 wxFormatString(f4)));
+                                (CtorString(f1),
+                                 CtorString(f2),
+                                 CtorString(f3),
+                                 CtorString(f4)));
 #endif
 
         // the array elements correspond to the parameters of the ctor above in
