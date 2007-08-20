@@ -118,6 +118,10 @@ public:
     // get the given part of bitmap
     wxBitmap GetSubBitmap( const wxRect& rect ) const;
 
+    // NB: This should not be called from user code. It is for wx internal
+    // use only. 
+    wxBitmap GetSubBitmapOfHDC( const wxRect& rect, WXHDC hdc ) const;
+
     // copies the contents and mask of the given (colour) icon to the bitmap
     bool CopyFromIcon(const wxIcon& icon,
                       wxBitmapTransparency transp = wxBitmapTransparency_Auto);

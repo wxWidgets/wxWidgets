@@ -1089,8 +1089,14 @@ bool wxBitmap::SaveFile(const wxString& filename,
 // ----------------------------------------------------------------------------
 // sub bitmap extraction
 // ----------------------------------------------------------------------------
+wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect ) const
+{
+        MemoryHDC dcSrc;
+        SelectInHDC selectSrc(dcSrc, GetHbitmap());
+        return GetSubBitmapOfHDC( rect, (WXHDC)dcSrc );
+}
 
-wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
+wxBitmap wxBitmap::GetSubBitmapOfHDC( const wxRect& rect, WXHDC hdc ) const
 {
     wxCHECK_MSG( Ok() &&
                  (rect.x >= 0) && (rect.y >= 0) &&
@@ -1111,16 +1117,15 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
               dcDst;
 
     {
-        SelectInHDC selectSrc(dcSrc, GetHbitmap()),
-                    selectDst(dcDst, GetHbitmapOf(ret));
-
-        if ( !selectSrc || !selectDst )
+        SelectInHDC selectDst(dcDst, GetHbitmapOf(ret));
+		
+        if ( !selectDst )
         {
-            wxLogLastError(_T("SelectObjct(hBitmap)"));
+            wxLogLastError(_T("SelectObject(destBitmap)"));
         }
 
         if ( !::BitBlt(dcDst, 0, 0, rect.width, rect.height,
-                       dcSrc, rect.x, rect.y, SRCCOPY) )
+                       (HDC)hdc, rect.x, rect.y, SRCCOPY) )
         {
             wxLogLastError(_T("BitBlt"));
         }
