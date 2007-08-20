@@ -26,6 +26,7 @@
 #include "wx/strvararg.h"
 #include "wx/string.h"
 #include "wx/crt.h"
+#include "wx/private/wxprintf.h"
 
 // ============================================================================
 // implementation
@@ -46,13 +47,17 @@ const wxStringCharType *wxArgNormalizerNative<const wxCStrData&>::get() const
 }
 
 #if wxUSE_UNICODE_UTF8 && !wxUSE_UTF8_LOCALE_ONLY
-wxArgNormalizerWchar<const wxString&>::wxArgNormalizerWchar(const wxString& s)
-    : wxArgNormalizerWithBuffer<wchar_t>(s.wc_str())
+wxArgNormalizerWchar<const wxString&>::wxArgNormalizerWchar(
+                            const wxString& s,
+                            const wxFormatString *fmt, unsigned index)
+    : wxArgNormalizerWithBuffer<wchar_t>(s.wc_str(), fmt, index)
 {
 }
 
-wxArgNormalizerWchar<const wxCStrData&>::wxArgNormalizerWchar(const wxCStrData& s)
-    : wxArgNormalizerWithBuffer<wchar_t>(s.AsWCharBuf())
+wxArgNormalizerWchar<const wxCStrData&>::wxArgNormalizerWchar(
+                            const wxCStrData& s,
+                            const wxFormatString *fmt, unsigned index)
+    : wxArgNormalizerWithBuffer<wchar_t>(s.AsWCharBuf(), fmt, index)
 {
 }
 #endif // wxUSE_UNICODE_UTF8 && !wxUSE_UTF8_LOCALE_ONLY
@@ -127,10 +132,6 @@ wxArgNormalizedString::operator wxString() const
       (this one should use %ls).
 
    And, of course, the same should be done for %c as well.
-
-   4) Finally, in UTF-8 build when calling ANSI printf() function, we need to
-      translate %c to %s, because not every Unicode character can be
-      represented by a char.
 
 
    wxScanf() family of functions is simpler, because we don't normalize their
@@ -436,9 +437,10 @@ class wxPrintfFormatConverterUtf8 : public wxFormatConverterBase<char>
                             SizeModifier WXUNUSED(size),
                             CharType& outConv, SizeModifier& outSize)
     {
-        // added complication: %c should be translated to %s in UTF-8 build
-        outConv = 's';
-        outSize = Size_Default;
+        // chars are represented using wchar_t in both builds, so this is
+        // the same as above
+        outConv = 'c';
+        outSize = Size_Long;
     }
 };
 #endif // wxUSE_UNICODE_UTF8
@@ -608,3 +610,50 @@ const wchar_t* wxFormatString::AsWChar()
     return m_convertedWChar.data();
 }
 #endif // wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
+
+// ----------------------------------------------------------------------------
+// wxFormatString::GetArgumentType()
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+template<typename CharType>
+wxFormatString::ArgumentType DoGetArgumentType(const CharType *format,
+                                               unsigned n)
+{
+    wxCHECK_MSG( format, wxFormatString::Arg_Other,
+                 "empty format string not allowed here" );
+
+    wxPrintfConvSpecParser<CharType> parser(format);
+
+    wxCHECK_MSG( parser.pspec[n-1] != NULL, wxFormatString::Arg_Other,
+                 "requested argument not found - invalid format string?" );
+
+    switch ( parser.pspec[n-1]->m_type )
+    {
+        case wxPAT_CHAR:
+        case wxPAT_WCHAR:
+            return wxFormatString::Arg_Char;
+
+        default:
+            return wxFormatString::Arg_Other;
+    }
+}
+
+} // anonymous namespace
+
+wxFormatString::ArgumentType wxFormatString::GetArgumentType(unsigned n) const
+{
+    if ( m_char )
+        return DoGetArgumentType(m_char.data(), n);
+    else if ( m_wchar )
+        return DoGetArgumentType(m_wchar.data(), n);
+    else if ( m_str )
+        return DoGetArgumentType(m_str->wx_str(), n);
+    else if ( m_cstr )
+        return DoGetArgumentType(m_cstr->AsInternal(), n);
+
+    wxFAIL_MSG( "unreachable code" );
+    return Arg_Other;
+}
