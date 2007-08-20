@@ -214,6 +214,10 @@ void StringTestCase::Extraction()
 
     #undef TEST_STARTS_WITH
 
+    rest = "Hello world";
+    CPPUNIT_ASSERT( rest.StartsWith("Hello ", &rest) );
+    WX_ASSERT_STR_EQUAL("world", rest);
+
     #define TEST_ENDS_WITH(suffix, correct_rest, result)                      \
         CPPUNIT_ASSERT_EQUAL(result, s.EndsWith(suffix, &rest));              \
         if ( result )                                                         \

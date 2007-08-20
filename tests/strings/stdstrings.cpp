@@ -176,6 +176,9 @@ void StdStringTestCase::StdAssign()
     CPPUNIT_ASSERT( s5 == _T("aaa") );
     CPPUNIT_ASSERT( s6 == _T("ef") );
 
+    s1.assign(s1, 1, 1);
+    WX_ASSERT_STR_EQUAL("e", s1);
+
     const char *pc = s1.c_str();
     s7.assign(pc, pc + 2);
     WX_ASSERT_STR_EQUAL( "de", s7 );
