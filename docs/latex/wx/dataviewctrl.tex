@@ -1,17 +1,13 @@
 
 \section{\class{wxDataViewCtrl}}\label{wxdataviewctrl}
 
-This class and its documentation are work in progress and
-therefore subject to change.
-
-wxDataViewCtrl is planned to be a control to display data either
-in a tree like fashion or in a tabular form or both. So far,
-only the tabular form is implemented. 
+wxDataViewCtrl is a control to display data either
+in a tree like fashion or in a tabular form or both. 
 
 Unlike \helpref{wxListCtrl}{wxlistctrl} wxDataViewCtrl doesn't 
-get its data from the user through virtual functions or events,
-instead you need to write your own 
-\helpref{wxDataViewListModel}{wxdataviewlistmodel} and associate
+get its data from the user through virtual functions or by
+setting it directly. Instead you need to write your own 
+\helpref{wxDataViewModel}{wxdataviewmodel} and associate
 it with this control. Then you need to add a number of
 \helpref{wxDataViewColumn}{wxdataviewcolumn} to this control to
 define what each column shall display. Each wxDataViewColumn
@@ -28,12 +24,6 @@ code is done through \helpref{wxVariant}{wxvariant} which can
 be extended to support more data formats as necessary. 
 Accordingly, all type information uses the strings returned
 from \helpref{wxVariant::GetType}{wxvariantgettype}.
-
-So far, this control has been implemented for GTK+ and there
-is an almost complete generic implementation including several
-additions for a native Windows look and feel (in particular
-concerning the header). It is planned to implement the control
-natively under OS X.
 
 \wxheading{Window styles}
 
@@ -53,29 +43,11 @@ macros to direct input to member functions that take a
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
 
-\twocolitem{{\bf EVT\_DATAVIEW\_ROW\_SELECTED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_ROW\_SELECTED event.}
-\twocolitem{{\bf EVT\_DATAVIEW\_ROW\_ACTIVATED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_ROW\_ACTIVATED event.}
+\twocolitem{{\bf EVT\_DATAVIEW\_ITEM\_SELECTED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_ITEM\_SELECTED event.}
+\twocolitem{{\bf EVT\_DATAVIEW\_ITEM\_ACTIVATED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_ITEM\_ACTIVATED event.}
 \twocolitem{{\bf EVT\_DATAVIEW\_COLUMN\_HEADER\_CLICK(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_COLUMN\_HEADER\_CLICKED event.}
 \twocolitem{{\bf EVT\_DATAVIEW\_COLUMN\_HEADER\_RIGHT\_CLICK(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_COLUMN\_HEADER\_RIGHT\_CLICKED event.}
-
-\end{twocollist}
-
-Additionally, you can get informed about changes to the
-\helpref{model}{wxdataviewlistmodel}, to which a wxDataViewCtrl
-has been associated. These events correspond to the interface
-offered by \helpref{wxDataViewListModelNotifier}{wxdataviewlistmodelnotifier}.
-
-\twocolwidtha{7cm}
-\begin{twocollist}\itemsep=0pt
-
-\twocolitem{{\bf EVT\_DATAVIEW\_MODEL\_ROW\_PREPENDED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_MODEL\_ROW\_PREPENDED event.}
-\twocolitem{{\bf EVT\_DATAVIEW\_MODEL\_ROW\_APPENDED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_MODEL\_ROW\_APPENDED event.}
-\twocolitem{{\bf EVT\_DATAVIEW\_MODEL\_ROW\_INSERTED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_MODEL\_ROW\_INSERTED event.}
-\twocolitem{{\bf EVT\_DATAVIEW\_MODEL\_ROW\_DELETED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_MODEL\_ROW\_DELETED event.}
-\twocolitem{{\bf EVT\_DATAVIEW\_MODEL\_ROW\_CHANGED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_MODEL\_ROW\_CHANGED event.}
-\twocolitem{{\bf EVT\_DATAVIEW\_MODEL\_VALUE\_CHANGED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_MODEL\_VALUE\_CHANGED event.}
-\twocolitem{{\bf EVT\_DATAVIEW\_MODEL\_ROWS\_REORDERED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_MODEL\_ROWS\_REORDERED event.}
-\twocolitem{{\bf EVT\_DATAVIEW\_MODEL\_CLEARED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_MODEL\_CLEARED event.}
+\twocolitem{{\bf EVT\_DATAVIEW\_COLUMN\_HEADER\_SORTED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_COLUMN\_HEADER\_SORTED event.}
 
 \end{twocollist}
 
@@ -162,11 +134,10 @@ Appends a column for rendering a toggle.
 
 \membersection{wxDataViewCtrl::AssociateModel}\label{wxdataviewctrlassociatemodel}
 
-\func{virtual bool}{AssociateModel}{\param{wxDataViewListModel* }{model}}
+\func{virtual bool}{AssociateModel}{\param{wxDataViewModel* }{model}}
 
-Associates a \helpref{wxDataViewListModel}{wxdataviewlistmodel} with the
-control. In the future this should be changed to supporting any data
-model including a to-be-written wxDataViewTreeModel.
+Associates a \helpref{wxDataViewModel}{wxdataviewmodel} with the
+control. 
 
 \membersection{wxDataViewCtrl::Create}\label{wxdataviewctrlcreate}
 
@@ -200,7 +171,7 @@ Returns pointer to the column.
 
 \membersection{wxDataViewCtrl::GetModel}\label{wxdataviewctrlgetmodel}
 
-\func{virtual wxDataViewListModel*}{GetModel}{\void}
+\func{virtual wxDataViewModel*}{GetModel}{\void}
 
 Returns pointer to the data model associated with the
 control (if any).
@@ -211,48 +182,95 @@ control (if any).
 
 Returns the number of columns.
 
+\membersection{wxDataViewCtrl::EnsureVisible}\label{wxdataviewctrlensurevisible}
+
+\func{void}{EnsureVisible}{\param{const wxDataViewItem \& }{item}, \param{wxDataViewColumn* }{column = NULL}}
+
+Call this to ensure that the given item is visible.
+
+\membersection{wxDataViewCtrl::GetExpanderColumn}\label{wxdataviewctrlgetexpandercolumn}
+
+\constfunc{unsigned int}{GetExpanderColumn}{\void}
+
+Returns column containing the expanders.
+
+\membersection{wxDataViewCtrl::GetIndent}\label{wxdataviewctrlgetindent}
+
+\constfunc{int}{GetIndent}{\void}
+
+Returns indentation.
+
+\membersection{wxDataViewCtrl::GetItemRect}\label{wxdataviewctrlgetitemrect}
+
+\constfunc{wxRect}{GetItemRect}{\param{const wxDataViewItem\& }{item}, \param{unsigned int }{column}}
+
+Returns item rect.
+
 \membersection{wxDataViewCtrl::GetSelection}\label{wxdataviewctrlgetselection}
 
-\constfunc{virtual int}{GetSelection}{\void}
+\func{wxDataViewItem}{GetSelection}{\void}
 
-Returns the index of the currently selected row. It will 
-return -1 if no row is selected and the index of the first
-selected row if more than one row are selected.
+Returns first selected item or an invalid item if none is selected.
 
 \membersection{wxDataViewCtrl::GetSelections}\label{wxdataviewctrlgetselections}
 
-\constfunc{virtual int}{GetSelections}{\param{wxArrayInt\& }{aSelections}}
+\constfunc{int}{GetSelections}{\param{wxDataViewItemArray \& }{sel}}
 
-Returns the number of selected rows and fills an array of int
-with the indeces of the selected rows.
+Fills {\it sel} with currently selected items and returns
+their number.
+
+\membersection{wxDataViewCtrl::HitTest}\label{wxdataviewctrlhittest}
+
+\constfunc{void}{HitTest}{\param{const wxPoint\& }{point}, \param{wxDataViewItem\& }{item}, \param{unsigned int\& }{column}}
+
+Hittest.
 
 \membersection{wxDataViewCtrl::IsSelected}\label{wxdataviewctrlisselected}
 
-\constfunc{virtual bool}{IsSelected}{\param{unsigned int }{row}}
+\constfunc{bool}{IsSelected}{\param{const wxDataViewItem \& }{item}}
 
-Returns {\it true} if the row is selected, {\it false} otherwise.
+Return true if the item is selected.
 
-\membersection{wxDataViewCtrl::SetSelection}\label{wxdataviewctrlsetselection}
+\membersection{wxDataViewCtrl::Select}\label{wxdataviewctrlselect}
 
-\func{virtual void}{SetSelection}{\param{int }{row}}
+\func{void}{Select}{\param{const wxDataViewItem \& }{item}}
 
-Sets the selection. Use -1 to unselect all rows.
+Select the given item.
 
-\membersection{wxDataViewCtrl::SetSelectionRange}\label{wxdataviewctrlsetselectionrange}
+\membersection{wxDataViewCtrl::SelectAll}\label{wxdataviewctrlselectall}
 
-\func{virtual void}{SetSelectionRange}{\param{unsigned int }{from}, \param{unsigned int }{to}}
+\func{void}{SelectAll}{\void}
 
-Set a range of selection.
+Select all items.
+
+\membersection{wxDataViewCtrl::SetExpanderColumn}\label{wxdataviewctrlsetexpandercolumn}
+
+\func{void}{SetExpanderColumn}{\param{unsigned int }{col}}
+
+Set which column shall contain the tree-like expanders.
+
+\membersection{wxDataViewCtrl::SetIndent}\label{wxdataviewctrlsetindent}
+
+\func{void}{SetIndent}{\param{int }{indent}}
+
+Sets the indendation.
 
 \membersection{wxDataViewCtrl::SetSelections}\label{wxdataviewctrlsetselections}
 
-\func{virtual void}{SetSelections}{\param{const wxArrayInt\& }{aSelections}}
+\func{void}{SetSelections}{\param{const wxDataViewItemArray \& }{sel}}
 
-Set the selection to the array of int.
+Sets the selection to the array of wxDataViewItems.
 
 \membersection{wxDataViewCtrl::Unselect}\label{wxdataviewctrlunselect}
 
-\func{virtual void}{Unselect}{\param{unsigned int }{row}}
+\func{void}{Unselect}{\param{const wxDataViewItem \& }{item}}
 
-Unselect a particular row.
+Unselect the given item.
+
+\membersection{wxDataViewCtrl::UnselectAll}\label{wxdataviewctrlunselectall}
+
+\func{void}{UnselectAll}{\void}
+
+Unselect all item. This method only has effect if multiple
+selections are allowed.
 
