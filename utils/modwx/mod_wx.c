@@ -56,16 +56,19 @@ enum {
 static void * wx_create_dir_cfg(apr_pool_t* pool, char * dir);
 static void * wx_merge_dir_cfg(apr_pool_t* pool, void* _base, void* _add);
 static int wx_sid_check(apr_pool_t * p, const char * id, const char* fifodir);
-static int wx_fifo_create(request_rec * r, char** sid, const char * fifodir);
-static int wx_fifo_remove(const char * requestPath, const char * responsePath);
+static int wx_fifo_create(request_rec * r, char** sid, const char * requestDir, const char * responseDir);
+static int wx_fifo_remove(request_rec * r, const char * requestPath, const char * responsePath);
 static int wx_set_headers(request_rec * r);
 static int wx_fifo_print(request_rec * r, char * fifopath);
 static int wx_handler(request_rec *r);
-static int wx_app_init();
+static int wx_app_init(request_rec *r, const char *aurl, const char *surl, const char *sid, const char *rip,
+                       const char *req, const char *res, const char *rpath, const char *rurl);
 static void wx_hooks(apr_pool_t *pool);
 
 typedef struct {
     const char * app;
+    const char * appUrl;
+    const char * scriptUrl;
     const char * ipcDir;
     const char * resourceDir;
     const char * resourceUrl;
@@ -77,6 +80,11 @@ static const command_rec wx_cmds[] = {
                   (void*)APR_OFFSETOF(wx_cfg, app),
                   ACCESS_CONF,
                   "Path to wxWeb application to be executed"),
+    AP_INIT_TAKE1("WxApplicationUrl",
+                  ap_set_file_slot,
+                  (void*)APR_OFFSETOF(wx_cfg, appUrl),
+                  ACCESS_CONF,
+                  "Url corresponding to wxApplicationPath"),
     AP_INIT_TAKE1("WxIpcDirectory",
                   ap_set_file_slot,
                   (void*)APR_OFFSETOF(wx_cfg, ipcDir),
@@ -92,6 +100,11 @@ static const command_rec wx_cmds[] = {
                   (void*)APR_OFFSETOF(wx_cfg, resourceUrl),
                   ACCESS_CONF,
                   "Url corresponding to wxResourceDirectory"),
+    AP_INIT_TAKE1("WxScriptUrl",
+                  ap_set_file_slot,
+                  (void*)APR_OFFSETOF(wx_cfg, scriptUrl),
+                  ACCESS_CONF,
+                  "Url corresponding to the Javascript file to be loaded by the client"),
     { NULL }
 };
 
@@ -114,6 +127,10 @@ static void * wx_create_dir_cfg(apr_pool_t* pool, char * dir) {
     }
 
     cfg->app = NULL;
+    cfg->appUrl = NULL;
+    cfg->scriptUrl = NULL;
+    cfg->resourceDir = NULL;
+    cfg->resourceUrl = NULL;
     cfg->ipcDir = NULL;
     return cfg;
 }
@@ -124,6 +141,10 @@ static void * wx_merge_dir_cfg(apr_pool_t* pool, void* _base, void* _add) {
     wx_cfg* cfg = apr_palloc(pool, sizeof(wx_cfg));
 
     cfg->app = apr_pstrdup(pool, (add->app == NULL) ? base->app : add->app);
+    cfg->appUrl = apr_pstrdup(pool, (add->appUrl == NULL) ? base->appUrl : add->appUrl);
+    cfg->scriptUrl = apr_pstrdup(pool, (add->scriptUrl == NULL) ? base->scriptUrl : add->scriptUrl);
+    cfg->resourceDir = apr_pstrdup(pool, (add->resourceDir == NULL) ? base->resourceDir : add->resourceDir);
+    cfg->resourceUrl = apr_pstrdup(pool, (add->resourceUrl == NULL) ? base->resourceUrl : add->resourceUrl);
     cfg->ipcDir = apr_pstrdup(pool, (add->ipcDir == NULL) ? base->ipcDir : add->ipcDir);
     return cfg;
 }
@@ -147,11 +168,8 @@ static int wx_fifo_create(request_rec * r, char** sid, const char * requestDir, 
         rlen = floor(wxSID_LENGTH / 4.0 * 3.0),
         dlen = strlen(requestDir);
     char * c = NULL,
-         * fifopath = apr_palloc(r->pool, dlen + wxSID_LENGTH + 1),
-         * fifoname = &(fifopath[dlen]);
+         * fifopath = apr_palloc(r->pool, dlen + wxSID_LENGTH + 1);
     unsigned char * rbuf = apr_palloc(r->pool, rlen);
-    apr_cpystrn(fifopath, requestDir, dlen);
-    fifoname[wxSID_LENGTH] = '\0';
     while (tries < wxSID_COLLISIONS_MAX) {
         ++tries;
         apr_generate_random_bytes(rbuf, rlen);
@@ -162,27 +180,28 @@ static int wx_fifo_create(request_rec * r, char** sid, const char * requestDir, 
         while ((c = strchr(*sid, '+')) != NULL) {
             *c = '_';
         }
-        apr_cpystrn(fifoname, *sid, wxSID_LENGTH);
+        fifopath = apr_pstrcat(r->pool, requestDir, *sid, NULL);
 
         /* don't use APR functions for fifo - we want indefinite lifetime */
         if (0 == mkfifo(fifopath, S_IRWXU)) {
             fifopath = apr_pstrcat(r->pool, responseDir, *sid, NULL);
             if (0 != mkfifo(fifopath, S_IRWXU)) {
                 ap_log_rerror(APLOG_MARK, APLOG_ERR, errno, r, "Unable to create response FIFO at '%s'", fifopath);
-                ap
                 return wxOS_ERROR;
             }
             return wxSUCCESS;
         } else if (errno != EEXIST) {
             ap_log_rerror(APLOG_MARK, APLOG_ERR, errno, r, "Unable to create request FIFO at '%s'", fifopath);
             return wxOS_ERROR;
+        } else {
+            ap_log_rerror(APLOG_MARK, APLOG_ERR, errno, r, "Collision at '%s'", *sid);
         }
     }
-    ap_log_rerror(APLOG_MARK, APLOG_ERR, errno, r, "Too many Session ID collisions!");
+    ap_log_rerror(APLOG_MARK, APLOG_ERR, errno, r, "Too many Session ID collisions in directory '%s'", requestDir);
     return wxSID_COLLISIONS_ERROR;
 }
 
-static int wx_fifo_remove(const char * requestPath, const char * responsePath) {
+static int wx_fifo_remove(request_rec * r, const char * requestPath, const char * responsePath) {
     /* Always remove response FIFO first! */
     /* TODO: error checking */
     apr_file_remove(responsePath, r->pool);
@@ -246,6 +265,14 @@ static int wx_handler(request_rec *r) {
     wx_cfg* cfg = ap_get_module_config(r->per_dir_config, &wx_module);
     if (cfg->app == NULL) {
         ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, "wxApplicationPath is not set");
+        return HTTP_INTERNAL_SERVER_ERROR;
+    }
+    if (cfg->scriptUrl == NULL) {
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, "wxScriptUrl is not set");
+        return HTTP_INTERNAL_SERVER_ERROR;
+    }
+    if (cfg->appUrl == NULL) {
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, "wxApplicationUrl is not set");
         return HTTP_INTERNAL_SERVER_ERROR;
     }
     if (cfg->resourceDir == NULL) {
@@ -316,15 +343,18 @@ static int wx_handler(request_rec *r) {
         cmd = apr_pstrcat(r->pool, cfg->app, " \"", requestPath, "\" &", NULL);
         if (0 != system(cmd)) { /*TODO: should we fork and exec instead? */
             ap_log_rerror(APLOG_MARK, APLOG_ERR, errno, r, "Error executing command: '%s'", cmd);
-            wx_fifo_remove(requestPath, responsePath);
+            wx_fifo_remove(r, requestPath, responsePath);
             return HTTP_INTERNAL_SERVER_ERROR;
         }
-        if (wxSUCCESS != wx_app_init(sid, r->connection->remote_ip, requestPath, responsePath, cfg->resourceDir, cfg->resourceUrl)) {
+        if (wxSUCCESS != wx_app_init(r, cfg->appUrl, cfg->scriptUrl, sid,
+                                     r->connection->remote_ip, requestPath,
+                                     responsePath, cfg->resourceDir, cfg->resourceUrl)) {
             ap_log_rerror(APLOG_MARK, APLOG_ERR, e, r, "Unable to initialize application!");
-            wx_fifo_remove(requestPath, responsePath);
+            wx_fifo_remove(r, requestPath, responsePath);
             return HTTP_INTERNAL_SERVER_ERROR;
+        }
         wx_set_headers(r);
-        if (wxSUCCESS != wx_fifo_print(r, fifopath)) {
+        if (wxSUCCESS != wx_fifo_print(r, responsePath)) {
             ap_log_rerror(APLOG_MARK, APLOG_ERR, e, r, "Unable to print response from FIFO!");
             return HTTP_INTERNAL_SERVER_ERROR;
         }
@@ -341,9 +371,12 @@ static int wx_handler(request_rec *r) {
     return HTTP_INTERNAL_SERVER_ERROR;
 }
 
-static int wx_app_init(request_rec *r, const char *sid, const char *rip,
+static int wx_app_init(request_rec *r, const char *aurl, const char *surl, const char *sid, const char *rip,
                        const char *req, const char *res, const char *rpath, const char *rurl) {
-    char * init = apr_pstrcat(r->pool, sid, "\n",
+    apr_file_t * fifo = NULL;
+    char * init = apr_pstrcat(r->pool, aurl, "\n",
+                                       surl, "\n",
+                                       sid, "\n",
                                        rip, "\n",
                                        req, "\n",
                                        res, "\n",

@@ -92,15 +92,17 @@ bool wxApp::InitFromFifo(const wxString& path) {
         init = init.AfterFirst('\n');
     }
 
-    if (lines.GetCount() < 6) {
+    if (lines.GetCount() < 8) {
         return false;
     }
-    m_sessionId = lines[0];
-    m_remoteIp = lines[1];
-    m_requestFifoPath = lines[2];
-    m_responseFifoPath = lines[3];
-    m_resourcePath = lines[4];
-    m_resourceUrl = lines[5];
+    m_appUrl = lines[0];
+    m_javascript = lines[1];
+    m_sessionId = lines[2];
+    m_remoteIp = lines[3];
+    m_requestFifoPath = lines[4];
+    m_responseFifoPath = lines[5];
+    m_resourcePath = lines[6];
+    m_resourceUrl = lines[7];
     return true;
 }
 
@@ -269,10 +271,10 @@ wxString wxApp::GetTemplate() const {
     wxString tpl;
     //TODO - do something with the title
     tpl.Printf("<html><head><title>%s</title>"
-               "<script type=\"text/javascript\" src=\"%s\"></script><script type=\"text/javascript\"><!--"
+               "%s<script type=\"text/javascript\"><!--"
                 "   App.initialize(\"%s\", \"%s\");"
                 "--></script><noscript>%s</noscript></head><body><div id=\"%s\"></div></body></html>",
-              GetTitle(), "scriptUrl", "appUrl", DEFAULT_CANVAS_ID, GetNoScript(), DEFAULT_CANVAS_ID);
+              GetTitle(), m_javascript, m_appUrl, DEFAULT_CANVAS_ID, GetNoScript(), DEFAULT_CANVAS_ID);
     return tpl;
 }
 
