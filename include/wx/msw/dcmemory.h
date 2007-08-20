@@ -28,6 +28,9 @@ protected:
     virtual void DoGetSize(int* width, int* height) const;
     virtual void DoSelect(const wxBitmap& bitmap);
 
+    virtual wxBitmap DoGetAsBitmap(const wxRect* subrect) const 
+    { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmapOfHDC(*subrect, GetHDC() );}
+
     // create DC compatible with the given one or screen if dc == NULL
     bool CreateCompatible(wxDC *dc);
 
