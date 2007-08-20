@@ -683,6 +683,9 @@ bool wxDataViewCtrlBase::ClearColumns()
 
 wxDataViewColumn* wxDataViewCtrlBase::GetColumn( unsigned int pos )
 {
+    if( pos >= m_cols.GetCount() )
+        return NULL;
+
     return (wxDataViewColumn*) m_cols[ pos ];
 }
 

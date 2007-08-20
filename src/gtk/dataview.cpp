@@ -3156,6 +3156,19 @@ void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, wxDataViewColum
     gtk_tree_path_free( path );
 }
 
+void wxDataViewCtrl::HitTest( const wxPoint &point, 
+                          wxDataViewItem &item, unsigned int &column ) const
+{
+    item = wxDataViewItem(0);
+    column = 0;
+}
+
+wxRect wxDataViewCtrl::GetItemRect( const wxDataViewItem &item, 
+                          unsigned int column ) const
+{
+    return wxRect();
+}
+
 void wxDataViewCtrl::DoSetExpanderColumn()
 {
 }

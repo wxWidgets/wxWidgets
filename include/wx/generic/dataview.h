@@ -326,6 +326,7 @@ class WXDLLIMPEXP_ADV wxDataViewCtrl: public wxDataViewCtrlBase,
 public:
     wxDataViewCtrl() : wxScrollHelperNative(this)
     {
+        m_sortingColumn = 0;
         Init();
     }
 
@@ -353,12 +354,22 @@ public:
     virtual void DoSetExpanderColumn();
     virtual void DoSetIndent();
 
+    virtual wxDataViewItem GetSelection();
     virtual int GetSelections( wxDataViewItemArray & sel ) const;
     virtual void SetSelections( const wxDataViewItemArray & sel );
     virtual void Select( const wxDataViewItem & item );
     virtual void Unselect( const wxDataViewItem & item );
     virtual bool IsSelected( const wxDataViewItem & item ) const;
 
+    virtual void SelectAll();
+    virtual void UnselectAll();
+
+    virtual void EnsureVisible( const wxDataViewItem & item,
+                                wxDataViewColumn *column = NULL );
+    virtual void HitTest( const wxPoint & point, wxDataViewItem & item, unsigned int & column ) const;
+    virtual wxRect GetItemRect( const wxDataViewItem & item, unsigned int column ) const;
+
+protected:
     virtual int GetSelections( wxArrayInt & sel ) const; 
     virtual void SetSelections( const wxArrayInt & sel );
     virtual void Select( int row );
@@ -367,15 +378,13 @@ public:
     virtual void SelectRange( int from, int to );
     virtual void UnselectRange( int from, int to );
 
-    virtual void SelectAll();
-    virtual void UnselectAll();
-
     virtual void EnsureVisible( int row );
-    virtual void EnsureVisible( const wxDataViewItem & item, wxDataViewColumn *column = NULL );
 
     virtual wxDataViewItem GetItemByRow( unsigned int row ) const;
     virtual int GetRowByItem( const wxDataViewItem & item ) const;
 
+    unsigned int GetSortingColumn() { return m_sortingColumn; }
+    void SetSortingColumn( unsigned int column ) { m_sortingColumn = column; }
 
 public:     // utility functions not part of the API
 
@@ -394,6 +403,7 @@ private:
     wxDataViewModelNotifier *m_notifier;
     wxDataViewMainWindow        *m_clientArea;
     wxDataViewHeaderWindow      *m_headerArea;
+    unsigned int m_sortingColumn;
 
 private:
     void OnSize( wxSizeEvent &event );

@@ -25,7 +25,7 @@
 
 #if defined(__WXGTK20__)
     // for testing
-    // #define wxUSE_GENERICDATAVIEWCTRL 1
+    #define wxUSE_GENERICDATAVIEWCTRL 1
 #elif defined(__WXMAC__)
 #else
     #define wxUSE_GENERICDATAVIEWCTRL 1
@@ -154,7 +154,7 @@ public:
     // default compare function
     virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2, 
                          unsigned int column, bool ascending );
-    
+
 protected:
     // the user should not delete this class directly: he should use DecRef() instead!
     virtual ~wxDataViewModel() { }
@@ -487,6 +487,11 @@ public:
 
     virtual void EnsureVisible( const wxDataViewItem & item,
                                 wxDataViewColumn *column = NULL ) = 0;
+                                
+    virtual void HitTest( const wxPoint &point, 
+                          wxDataViewItem &item, unsigned int &column ) const = 0;
+    virtual wxRect GetItemRect( const wxDataViewItem &item, 
+                          unsigned int column ) const = 0;
 
 protected:
     virtual void DoSetExpanderColumn() = 0 ;

@@ -317,6 +317,12 @@ public:
 
     virtual void EnsureVisible( const wxDataViewItem & item, wxDataViewColumn *column = NULL );
 
+    virtual void HitTest( const wxPoint &point, 
+                          wxDataViewItem &item, unsigned int &column ) const;
+    virtual wxRect GetItemRect( const wxDataViewItem &item, 
+                          unsigned int column ) const;
+
+
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
     
