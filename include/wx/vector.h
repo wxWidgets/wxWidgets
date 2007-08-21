@@ -126,6 +126,10 @@ public:
         return begin() + idx;
     }
 
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED( size_type erase(size_type n) );
+#endif // WXWIN_COMPATIBILITY_2_8
+
     iterator insert(iterator it, const value_type& v = value_type())
     {
         wxCHECK2(Alloc(size() + 1), return 0);
@@ -222,6 +226,15 @@ private:
               m_capacity;
     value_type **m_objects;
 };
+
+#if WXWIN_COMPATIBILITY_2_8
+template<typename T>
+typename wxVector<T>::size_type wxVector<T>::erase(size_type n)
+{
+    RemoveAt(n);
+    return n;
+}
+#endif // WXWIN_COMPATIBILITY_2_8
 
 #endif // wxUSE_STL/!wxUSE_STL
 
