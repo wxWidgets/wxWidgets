@@ -522,6 +522,9 @@ wxSizerItem* wxSizer::Insert( size_t index, wxSizerItem *item )
     if ( item->GetWindow() )
         item->GetWindow()->SetContainingSizer( this );
 
+    if ( item->GetSizer() )
+        item->GetSizer()->SetContainingWindow( m_containingWindow );
+
     return item;
 }
 
@@ -1974,7 +1977,7 @@ void wxStdDialogButtonSizer::Realize()
             Add((wxWindow*)m_buttonNegative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
         }
 
-        // according to HIG, in explicit apply windows the order is: 
+        // according to HIG, in explicit apply windows the order is:
         // [ Help                     Apply   Cancel   OK ]
         if (m_buttonApply)
             Add((wxWindow*)m_buttonApply, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
