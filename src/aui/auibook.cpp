@@ -1948,22 +1948,6 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
         wxAuiNotebookPage& page = m_pages.Item(i);
         wxAuiTabContainerButton& tab_button = m_tab_close_buttons.Item(i);
 
-        // determine if a close button is on this tab
-        if ((m_flags & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0 ||
-            ((m_flags & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0 && page.active))
-        {
-            if (tab_button.cur_state == wxAUI_BUTTON_STATE_HIDDEN)
-            {
-                tab_button.id = wxAUI_BUTTON_CLOSE;
-                tab_button.cur_state = wxAUI_BUTTON_STATE_NORMAL;
-                tab_button.location = wxCENTER;
-            }
-        }
-        else
-        {
-            tab_button.cur_state = wxAUI_BUTTON_STATE_HIDDEN;
-        }
-
         rect.x = offset;
         rect.width = m_rect.width - right_buttons_width - offset - 2;
 
