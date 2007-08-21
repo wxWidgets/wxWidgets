@@ -21,6 +21,8 @@
 
 #else // !wxUSE_STL
 
+#include "wx/utils.h"
+
 template<typename T>
 class wxVector
 {
