@@ -3530,11 +3530,8 @@ void wxAuiManager::OnFloatingPaneClosed(wxWindow* wnd, wxCloseEvent& evt)
 
 void wxAuiManager::OnFloatingPaneActivated(wxWindow* wnd)
 {
-    if (GetFlags() & wxAUI_MGR_ALLOW_ACTIVE_PANE)
+    if ((GetFlags() & wxAUI_MGR_ALLOW_ACTIVE_PANE) && GetPane(wnd).IsOk())
     {
-        // try to find the pane
-        wxASSERT_MSG(GetPane(wnd).IsOk(), wxT("Pane window not found"));
-
         SetActivePane(m_panes, wnd);
         Repaint();
     }
@@ -3561,8 +3558,8 @@ void wxAuiManager::OnRender(wxAuiManagerEvent& evt)
     {
         wxAuiDockUIPart& part = m_uiparts.Item(i);
 
-        // don't draw hidden pane items
-        if (part.sizer_item && !part.sizer_item->IsShown())
+        // don't draw hidden pane items or items that aren't windows
+        if (part.sizer_item && ((!part.sizer_item->IsWindow() && !part.sizer_item->IsSpacer() && !part.sizer_item->IsSizer()) || !part.sizer_item->IsShown()))
             continue;
 
         switch (part.type)
