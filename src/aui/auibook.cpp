@@ -3072,6 +3072,8 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
                                bool select,
                                const wxBitmap& bitmap)
 {
+    page->Reparent(this);
+
     wxAuiNotebookPage info;
     info.window = page;
     info.caption = caption;
@@ -3101,6 +3103,10 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
     UpdateTabCtrlHeight();
     DoSizing();
     active_tabctrl->DoShowHide();
+
+    // adjust selected index
+    if(m_curpage >= (int) page_idx)
+        m_curpage++;
 
     if (select)
     {
