@@ -776,7 +776,7 @@ void wxAuiManager::SetManagedWindow(wxWindow* wnd)
                 wxAuiPaneInfo().Name(wxT("mdiclient")).
                 CenterPane().PaneBorder(false));
     }
-	 else if (m_frame->IsKindOf(CLASSINFO(wxAuiMDIParentFrame)))
+     else if (m_frame->IsKindOf(CLASSINFO(wxAuiMDIParentFrame)))
     {
         wxAuiMDIParentFrame* mdi_frame = (wxAuiMDIParentFrame*)m_frame;
         wxAuiMDIClientWindow* client_window = mdi_frame->GetClientWindow();
@@ -2311,21 +2311,21 @@ void wxAuiManager::Update()
             p.window->SetSize(1,1);
 
 
-	        // the following block is a workaround for bug #1531361
-	        // (see wxWidgets sourceforge page).  On wxGTK (only), when
-	        // a frame is shown/hidden, a move event unfortunately
-	        // also gets fired.  Because we may be dragging around
-	        // a pane, we need to cancel that action here to prevent
-	        // a spurious crash.
-	        if (m_action_window == p.frame)
-	        {
-		        if (wxWindow::GetCapture() == m_frame)
+            // the following block is a workaround for bug #1531361
+            // (see wxWidgets sourceforge page).  On wxGTK (only), when
+            // a frame is shown/hidden, a move event unfortunately
+            // also gets fired.  Because we may be dragging around
+            // a pane, we need to cancel that action here to prevent
+            // a spurious crash.
+            if (m_action_window == p.frame)
+            {
+                if (wxWindow::GetCapture() == m_frame)
                     m_frame->ReleaseMouse();
                 m_action = actionNone;
-		        m_action_window = NULL;
-	        }
+                m_action_window = NULL;
+            }
 
-	        // hide the frame
+            // hide the frame
             if (p.frame->IsShown())
                 p.frame->Show(false);
 
@@ -2380,7 +2380,7 @@ void wxAuiManager::Update()
             {
                 // frame already exists, make sure it's position
                 // and size reflect the information in wxAuiPaneInfo
-                if (p.frame->GetPosition() != p.floating_pos)
+                if ((p.frame->GetPosition() != p.floating_pos) || (p.frame->GetSize() != p.floating_size))
                 {
                     p.frame->SetSize(p.floating_pos.x, p.floating_pos.y,
                                      p.floating_size.x, p.floating_size.y,
@@ -3566,7 +3566,7 @@ void wxAuiManager::OnRender(wxAuiManagerEvent& evt)
 {
     // if the frame is about to be deleted, don't bother
     if (!m_frame || wxPendingDelete.Member(m_frame))
-	    return;
+        return;
 
     wxDC* dc = evt.GetDC();
 
