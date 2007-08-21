@@ -49,6 +49,7 @@ WX_DEFINE_OBJARRAY(wxAuiNotebookPageArray)
 WX_DEFINE_OBJARRAY(wxAuiTabContainerButtonArray)
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_BUTTON)
@@ -56,6 +57,7 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_END_DRAG)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_DRAG_DONE)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_DOWN)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP)
@@ -3905,6 +3907,13 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
                 // set the selection in the destination tab control
                 nb->SetSelection(nb->m_tabs.GetIdxFromWindow(page_info.window));
 
+                // notify owner that the tab has been dragged
+                wxAuiNotebookEvent e2(wxEVT_COMMAND_AUINOTEBOOK_DRAG_DONE, m_windowId);
+                e2.SetSelection(evt.GetSelection());
+                e2.SetOldSelection(evt.GetSelection());
+                e2.SetEventObject(this);
+                GetEventHandler()->ProcessEvent(e2);
+
                 return;
             }
         }
@@ -3936,7 +3945,7 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
                 insert_idx = dest_tabs->GetIdxFromWindow(target);
             }
         }
-         else
+        else
         {
             wxPoint zero(0,0);
             wxRect rect = m_mgr.CalculateHintRect(m_dummy_wnd,
@@ -4004,6 +4013,13 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
 
         UpdateHintWindowSize();
     }
+
+    // notify owner that the tab has been dragged
+    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_DRAG_DONE, m_windowId);
+    e.SetSelection(evt.GetSelection());
+    e.SetOldSelection(evt.GetSelection());
+    e.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(e);
 }
 
 
@@ -4229,7 +4245,8 @@ void wxAuiNotebook::OnTabButton(wxCommandEvent& command_evt)
 
             // ask owner if it's ok to close the tab
             wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, m_windowId);
-            e.SetSelection(m_tabs.GetIdxFromWindow(close_wnd));
+            const int idx = m_tabs.GetIdxFromWindow(close_wnd);
+            e.SetSelection(idx);
             e.SetOldSelection(evt.GetSelection());
             e.SetEventObject(this);
             GetEventHandler()->ProcessEvent(e);
@@ -4248,6 +4265,12 @@ void wxAuiNotebook::OnTabButton(wxCommandEvent& command_evt)
                 int main_idx = m_tabs.GetIdxFromWindow(close_wnd);
                 DeletePage(main_idx);
             }
+
+            // notify owner that the tab has been closed
+            wxAuiNotebookEvent e2(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED, m_windowId);
+            e2.SetSelection(idx);
+            e2.SetEventObject(this);
+            GetEventHandler()->ProcessEvent(e2);
         }
     }
 }
