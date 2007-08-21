@@ -471,6 +471,7 @@ protected:
     void OnSetFocus(wxFocusEvent& event);
     void OnKillFocus(wxFocusEvent& event);
     void OnChar(wxKeyEvent& event);
+    void OnLeftDClick(wxMouseEvent& evt);
 #endif
     void OnMotion(wxMouseEvent& evt);
     void OnLeaveWindow(wxMouseEvent& evt);
@@ -615,6 +616,7 @@ protected:
     void OnTabRightDown(wxCommandEvent& evt);
     void OnTabRightUp(wxCommandEvent& evt);
     void OnNavigationKey(wxNavigationKeyEvent& event);
+    void OnTabBgDClick(wxCommandEvent& evt);
 #endif
 
 protected:
