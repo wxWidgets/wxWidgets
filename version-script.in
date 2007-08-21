@@ -37,9 +37,11 @@
         *wxAuiTabCtrl*OnRightDown*;
         *wxAuiTabCtrl*OnRightUp*;
         *wxAuiTabCtrl*OnSetFocus*;
+        *wxAuiTabCtrl*OnLeftDClick*;
         *wxAuiNotebook*AdvanceSelection*;
         *wxAuiNotebook*GetHeightForPageHeight*;
         *wxAuiNotebook*GetTabCtrlHeight*;
+        *wxAuiNotebook*OnTabBgDClick*;
         *wxAuiNotebook*OnTabMiddleDown*;
         *wxAuiNotebook*OnTabMiddleUp*;
         *wxAuiNotebook*OnTabRightDown*;
