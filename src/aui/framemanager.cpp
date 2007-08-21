@@ -3846,15 +3846,15 @@ void wxAuiManager::OnLeftDown(wxMouseEvent& event)
 
 
 
-            if (part->dock && part->dock->dock_direction == wxAUI_DOCK_CENTER)
-                return;
-
             if (GetFlags() & wxAUI_MGR_ALLOW_ACTIVE_PANE)
             {
                 // set the caption as active
                 SetActivePane(m_panes, part->pane->window);
                 Repaint();
             }
+
+            if (part->dock && part->dock->dock_direction == wxAUI_DOCK_CENTER)
+                return;
 
             m_action = actionClickCaption;
             m_action_part = part;
