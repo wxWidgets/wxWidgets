@@ -172,7 +172,7 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
         #define WX_GMTOFF_IN_TM
     #elif defined(__WXWINCE__) && defined(__VISUALC8__)
         // _timezone is not present in dynamic run-time library
-        #if 1
+        #if 0
         // Solution (1): use the function equivalent of _timezone
         static long wxGetTimeZone()
         {
@@ -186,7 +186,7 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
             return s_Timezone;
         }
         #define WX_TIMEZONE wxGetTimeZone()
-        #elif 0
+        #elif 1
         // Solution (2): using GetTimeZoneInformation
         static long wxGetTimeZone()
         {
