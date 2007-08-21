@@ -171,7 +171,23 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
     #elif defined(__DARWIN__)
         #define WX_GMTOFF_IN_TM
     #elif defined(__WXWINCE__) && defined(__VISUALC8__)
+        // _timezone is not present in dynamic run-time library
+        #if 1
+        static long wxGetTimeZone()
+        {
+            static long timezone = MAXLONG; // invalid timezone
+            if (timezone == MAXLONG)
+            {
+                TIME_ZONE_INFORMATION tzi;
+                ::GetTimeZoneInformation(&tzi);
+                timezone = tzi.Bias;
+            }
+            return timezone;
+        }
+        #define WX_TIMEZONE wxGetTimeZone()
+        #else
         #define WX_TIMEZONE _timezone
+        #endif
     #else // unknown platform - try timezone
         #define WX_TIMEZONE timezone
     #endif
