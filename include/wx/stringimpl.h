@@ -416,18 +416,18 @@ public:
     { return *this = str; }
     // same as ` = str[pos..pos + n]
   wxStringImpl& assign(const wxStringImpl& str, size_t pos, size_t n)
-    { clear(); return append(str, pos, n); }
+    { return replace(0, npos, str, pos, n); }
     // same as `= first n (or all if n == npos) characters of sz'
   wxStringImpl& assign(const wxStringCharType *sz)
-    { clear(); return append(sz, wxStrlen(sz)); }
+    { return replace(0, npos, sz, wxStrlen(sz)); }
   wxStringImpl& assign(const wxStringCharType *sz, size_t n)
-    { clear(); return append(sz, n); }
+    { return replace(0, npos, sz, n); }
     // same as `= n copies of ch'
   wxStringImpl& assign(size_t n, wxStringCharType ch)
-    { clear(); return append(n, ch); }
+    { return replace(0, npos, n, ch); }
     // assign from first to last
   wxStringImpl& assign(const_iterator first, const_iterator last)
-    { clear(); return append(first, last); }
+    { return replace(begin(), end(), first, last); }
 
     // first valid index position
   const_iterator begin() const { return m_pchData; }
@@ -478,18 +478,23 @@ public:
   const wxStringCharType* data() const { return m_pchData; }
 
     // replaces the substring of length nLen starting at nStart
-  wxStringImpl& replace(size_t nStart, size_t nLen, const wxStringCharType* sz);
+  wxStringImpl& replace(size_t nStart, size_t nLen, const wxStringCharType* sz)
+    { return replace(nStart, nLen, sz, npos); }
     // replaces the substring of length nLen starting at nStart
   wxStringImpl& replace(size_t nStart, size_t nLen, const wxStringImpl& str)
-    { return replace(nStart, nLen, str.c_str()); }
+    { return replace(nStart, nLen, str.c_str(), str.length()); }
     // replaces the substring with nCount copies of ch
-  wxStringImpl& replace(size_t nStart, size_t nLen, size_t nCount, wxStringCharType ch);
+  wxStringImpl& replace(size_t nStart, size_t nLen,
+                        size_t nCount, wxStringCharType ch)
+    { return replace(nStart, nLen, wxStringImpl(nCount, ch)); }
     // replaces a substring with another substring
   wxStringImpl& replace(size_t nStart, size_t nLen,
-                        const wxStringImpl& str, size_t nStart2, size_t nLen2);
+                        const wxStringImpl& str, size_t nStart2, size_t nLen2)
+    { return replace(nStart, nLen, str.substr(nStart2, nLen2)); }
     // replaces the substring with first nCount chars of sz
   wxStringImpl& replace(size_t nStart, size_t nLen,
                         const wxStringCharType* sz, size_t nCount);
+
   wxStringImpl& replace(iterator first, iterator last, const_pointer s)
     { return replace(first - begin(), last - first, s); }
   wxStringImpl& replace(iterator first, iterator last, const_pointer s,

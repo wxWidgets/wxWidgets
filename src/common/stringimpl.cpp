@@ -576,54 +576,45 @@ size_t wxStringImpl::rfind(wxStringCharType ch, size_t nStart) const
 }
 
 wxStringImpl& wxStringImpl::replace(size_t nStart, size_t nLen,
-                                    const wxStringCharType *sz)
+                                    const wxStringCharType *sz, size_t nCount)
 {
-  wxASSERT_MSG( nStart <= length(),
-                _T("index out of bounds in wxStringImpl::replace") );
-  size_t strLen = length() - nStart;
-  nLen = strLen < nLen ? strLen : nLen;
+    // check and adjust parameters
+    const size_t lenOld = length();
 
-  wxStringImpl strTmp;
-  strTmp.reserve(length()); // micro optimisation to avoid multiple mem allocs
+    wxASSERT_MSG( nStart <= lenOld,
+                  _T("index out of bounds in wxStringImpl::replace") );
+    size_t nEnd = nStart + nLen;
+    if ( nEnd > lenOld )
+    {
+        // nLen may be out of range, as it can be npos, just clump it down
+        nLen = lenOld - nStart;
+        nEnd = lenOld;
+    }
 
-  //This is kind of inefficient, but its pretty good considering...
-  //we don't want to use character access operators here because on STL
-  //it will freeze the reference count of strTmp, which means a deep copy
-  //at the end when swap is called
-  //
-  //Also, we can't use append with the full character pointer and must
-  //do it manually because this string can contain null characters
-  for(size_t i1 = 0; i1 < nStart; ++i1)
-      strTmp.append(1, this->c_str()[i1]);
+    if ( nCount == npos )
+        nCount = wxStrlen(sz);
 
-  //its safe to do the full version here because
-  //sz must be a normal c string
-  strTmp.append(sz);
+    // build the new string from 3 pieces: part of this string before nStart,
+    // the new substring and the part of this string after nStart+nLen
+    wxStringImpl tmp;
+    const size_t lenNew = lenOld + nCount - nLen;
+    if ( lenNew )
+    {
+        tmp.AllocBuffer(lenOld + nCount - nLen);
 
-  for(size_t i2 = nStart + nLen; i2 < length(); ++i2)
-      strTmp.append(1, this->c_str()[i2]);
+        wxStringCharType *dst = tmp.m_pchData;
+        memcpy(dst, m_pchData, nStart*sizeof(wxStringCharType));
+        dst += nStart;
 
-  swap(strTmp);
-  return *this;
-}
+        memcpy(dst, sz, nCount*sizeof(wxStringCharType));
+        dst += nCount;
 
-wxStringImpl& wxStringImpl::replace(size_t nStart, size_t nLen,
-                                    size_t nCount, wxStringCharType ch)
-{
-  return replace(nStart, nLen, wxStringImpl(nCount, ch).c_str());
-}
+        memcpy(dst, m_pchData + nEnd, (lenOld - nEnd)*sizeof(wxStringCharType));
+    }
 
-wxStringImpl& wxStringImpl::replace(size_t nStart, size_t nLen,
-                                    const wxStringImpl& str,
-                                    size_t nStart2, size_t nLen2)
-{
-  return replace(nStart, nLen, str.substr(nStart2, nLen2));
-}
-
-wxStringImpl& wxStringImpl::replace(size_t nStart, size_t nLen,
-                                    const wxStringCharType* sz, size_t nCount)
-{
-  return replace(nStart, nLen, wxStringImpl(sz, nCount).c_str());
+    // and replace this string contents with the new one
+    swap(tmp);
+    return *this;
 }
 
 wxStringImpl wxStringImpl::substr(size_t nStart, size_t nLen) const
@@ -709,6 +700,17 @@ bool wxStringImpl::ConcatSelf(size_t nSrcLen,
   if ( nSrcLen > 0 ) {
     wxStringData *pData = GetStringData();
     size_t nLen = pData->nDataLength;
+
+    // take special care when appending part of this string to itself: the code
+    // below reallocates our buffer and this invalidates pszSrcData pointer so
+    // we have to copy it in another temporary string in this case (but avoid
+    // doing this unnecessarily)
+    if ( pszSrcData >= m_pchData && pszSrcData < m_pchData + nLen )
+    {
+        wxStringImpl tmp(pszSrcData, nSrcLen);
+        return ConcatSelf(nSrcLen, tmp.m_pchData, nSrcLen);
+    }
+
     size_t nNewLen = nLen + nSrcLen;
 
     // alloc new buffer if current is too small
