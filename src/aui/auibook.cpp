@@ -2796,6 +2796,9 @@ void wxAuiNotebook::InitNotebook(long style)
 
 wxAuiNotebook::~wxAuiNotebook()
 {
+    while ( GetPageCount() > 0 )
+        DeletePage(0);
+
     m_mgr.UnInit();
 }
 
