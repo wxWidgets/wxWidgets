@@ -1085,8 +1085,8 @@ public:
     // another one to get the current time broken down
     static struct tm *GetTmNow()
     {
-        time_t t = GetTimeNow();
-        return localtime(&t);
+        static struct tm l_CurrentTime;
+        return GetTmNow(&l_CurrentTime);
     }
 
     // get current time using thread-safe function
