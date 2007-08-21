@@ -516,6 +516,9 @@ wxSizerItem* wxSizer::Insert( size_t index, wxSizerItem *item )
     if ( item->GetWindow() )
         item->GetWindow()->SetContainingSizer( this );
 
+    if ( item->GetSizer() )
+        item->GetSizer()->SetContainingWindow( m_containingWindow );
+
     return item;
 }
 
