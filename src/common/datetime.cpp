@@ -173,6 +173,21 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
     #elif defined(__WXWINCE__) && defined(__VISUALC8__)
         // _timezone is not present in dynamic run-time library
         #if 1
+        // Solution (1): use the function equivalent of _timezone
+        static long wxGetTimeZone()
+        {
+            static long s_Timezone = MAXLONG; // invalid timezone
+            if (s_Timezone == MAXLONG)
+            {
+                int t;
+                _get_timezone(& t);
+                s_Timezone = (long) t;
+            }
+            return s_Timezone;
+        }
+        #define WX_TIMEZONE wxGetTimeZone()
+        #elif 0
+        // Solution (2): using GetTimeZoneInformation
         static long wxGetTimeZone()
         {
             static long timezone = MAXLONG; // invalid timezone
@@ -186,6 +201,7 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
         }
         #define WX_TIMEZONE wxGetTimeZone()
         #else
+        // Old method using _timezone: this symbol doesn't exist in the dynamic run-time library (i.e. using /MD)
         #define WX_TIMEZONE _timezone
         #endif
     #else // unknown platform - try timezone
