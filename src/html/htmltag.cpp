@@ -23,6 +23,8 @@
 #endif
 
 #include "wx/html/htmlpars.h"
+#include "wx/vector.h"
+
 #include <stdio.h> // for vsscanf
 #include <stdarg.h>
 
@@ -47,10 +49,12 @@ struct wxHtmlCacheItem
     wxChar *Name;
 };
 
+// NB: this is an empty class and not typedef because of forward declaration
+class wxHtmlTagsCacheData : public wxVector<wxHtmlCacheItem>
+{
+};
 
 IMPLEMENT_CLASS(wxHtmlTagsCache,wxObject)
-
-#define CACHE_INCREMENT  64
 
 bool wxIsCDATAElement(const wxChar *tag)
 {
@@ -60,13 +64,12 @@ bool wxIsCDATAElement(const wxChar *tag)
 
 wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
 {
+    m_Cache = new wxHtmlTagsCacheData;
+    m_CachePos = 0;
+
     const wxChar *src = source.c_str();
     int lng = source.length();
     wxChar tagBuffer[256];
-
-    m_Cache = NULL;
-    m_CacheSize = 0;
-    m_CachePos = 0;
 
     for ( int pos = 0; pos < lng; pos++ )
     {
@@ -80,11 +83,11 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
                 continue;
             }
 
-            if (m_CacheSize % CACHE_INCREMENT == 0)
-                m_Cache = (wxHtmlCacheItem*) realloc(m_Cache, (m_CacheSize + CACHE_INCREMENT) * sizeof(wxHtmlCacheItem));
-            int tg = m_CacheSize++;
+            size_t tg = Cache().size();
+            Cache().push_back(wxHtmlCacheItem());
+
             int stpos = pos++;
-            m_Cache[tg].Key = stpos;
+            Cache()[tg].Key = stpos;
 
             int i;
             for ( i = 0;
@@ -96,26 +99,26 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
             }
             tagBuffer[i] = _T('\0');
 
-            m_Cache[tg].Name = new wxChar[i+1];
-            memcpy(m_Cache[tg].Name, tagBuffer, (i+1)*sizeof(wxChar));
+            Cache()[tg].Name = new wxChar[i+1];
+            memcpy(Cache()[tg].Name, tagBuffer, (i+1)*sizeof(wxChar));
 
             while (pos < lng && src[pos] != wxT('>')) pos++;
 
             if (src[stpos+1] == wxT('/')) // ending tag:
             {
-                m_Cache[tg].End1 = m_Cache[tg].End2 = -2;
+                Cache()[tg].End1 = Cache()[tg].End2 = -2;
                 // find matching begin tag:
                 for (i = tg; i >= 0; i--)
-                    if ((m_Cache[i].End1 == -1) && (wxStrcmp(m_Cache[i].Name, tagBuffer+1) == 0))
+                    if ((Cache()[i].End1 == -1) && (wxStrcmp(Cache()[i].Name, tagBuffer+1) == 0))
                     {
-                        m_Cache[i].End1 = stpos;
-                        m_Cache[i].End2 = pos + 1;
+                        Cache()[i].End1 = stpos;
+                        Cache()[i].End2 = pos + 1;
                         break;
                     }
             }
             else
             {
-                m_Cache[tg].End1 = m_Cache[tg].End2 = -1;
+                Cache()[tg].End1 = Cache()[tg].End2 = -1;
 
                 if (wxIsCDATAElement(tagBuffer))
                 {
@@ -179,22 +182,30 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
     }
 
     // ok, we're done, now we'll free .Name members of cache - we don't need it anymore:
-    for (int i = 0; i < m_CacheSize; i++)
+    for ( wxHtmlTagsCacheData::iterator i = Cache().begin();
+          i != Cache().end(); ++i )
     {
-        delete[] m_Cache[i].Name;
-        m_Cache[i].Name = NULL;
+        delete[] i->Name;
+        i->Name = NULL;
     }
+}
+
+wxHtmlTagsCache::~wxHtmlTagsCache()
+{
+    delete m_Cache;
 }
 
 void wxHtmlTagsCache::QueryTag(int at, int* end1, int* end2)
 {
-    if (m_Cache == NULL) return;
-    if (m_Cache[m_CachePos].Key != at)
+    if (Cache().empty())
+        return;
+
+    if (Cache()[m_CachePos].Key != at)
     {
-        int delta = (at < m_Cache[m_CachePos].Key) ? -1 : 1;
+        int delta = (at < Cache()[m_CachePos].Key) ? -1 : 1;
         do
         {
-            if ( m_CachePos < 0 || m_CachePos == m_CacheSize )
+            if ( m_CachePos < 0 || m_CachePos == Cache().size() )
             {
                 // something is very wrong with HTML, give up by returning an
                 // impossibly large value which is going to be ignored by the
@@ -206,10 +217,10 @@ void wxHtmlTagsCache::QueryTag(int at, int* end1, int* end2)
 
             m_CachePos += delta;
         }
-        while (m_Cache[m_CachePos].Key != at);
+        while (Cache()[m_CachePos].Key != at);
     }
-    *end1 = m_Cache[m_CachePos].End1;
-    *end2 = m_Cache[m_CachePos].End2;
+    *end1 = Cache()[m_CachePos].End1;
+    *end2 = Cache()[m_CachePos].End2;
 }
 
 

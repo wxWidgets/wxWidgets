@@ -25,21 +25,22 @@ class WXDLLIMPEXP_FWD_HTML wxHtmlEntitiesParser;
 //          - internal wxHTML class, do not use!
 //-----------------------------------------------------------------------------
 
-struct wxHtmlCacheItem;
+class wxHtmlTagsCacheData;
 
 class WXDLLIMPEXP_HTML wxHtmlTagsCache : public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxHtmlTagsCache)
 
 private:
-    wxHtmlCacheItem *m_Cache;
-    int m_CacheSize;
-    int m_CachePos;
+    wxHtmlTagsCacheData *m_Cache;
+    size_t m_CachePos;
+
+    wxHtmlTagsCacheData& Cache() { return *m_Cache; }
 
 public:
-    wxHtmlTagsCache() : wxObject() {m_CacheSize = 0; m_Cache = NULL;}
+    wxHtmlTagsCache() {m_Cache = NULL;}
     wxHtmlTagsCache(const wxString& source);
-    virtual ~wxHtmlTagsCache() {free(m_Cache);}
+    virtual ~wxHtmlTagsCache();
 
     // Finds parameters for tag starting at at and fills the variables
     void QueryTag(int at, int* end1, int* end2);
