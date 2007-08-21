@@ -364,13 +364,12 @@ void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
 
          case kEventMouseWheelMoved :
             {
-                wxevent.SetEventType( wxEVT_MOUSEWHEEL ) ;
-
                 EventMouseWheelAxis axis = cEvent.GetParameter<EventMouseWheelAxis>(kEventParamMouseWheelAxis, typeMouseWheelAxis) ;
                 SInt32 delta = cEvent.GetParameter<SInt32>(kEventParamMouseWheelDelta, typeSInt32) ;
 
                 if ( axis == kEventMouseWheelAxisY )
                 {
+                    wxevent.SetEventType( wxEVT_MOUSEWHEEL ) ;
                     wxevent.m_wheelRotation = delta;
                     wxevent.m_wheelDelta = 1;
                     wxevent.m_linesPerAction = 1;
