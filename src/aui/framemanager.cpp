@@ -2374,7 +2374,7 @@ void wxAuiManager::Update()
             {
                 // frame already exists, make sure it's position
                 // and size reflect the information in wxAuiPaneInfo
-                if (p.frame->GetPosition() != p.floating_pos)
+                if ((p.frame->GetPosition() != p.floating_pos) || (p.frame->GetSize() != p.floating_size))
                 {
                     p.frame->SetSize(p.floating_pos.x, p.floating_pos.y,
                                      p.floating_size.x, p.floating_size.y,
