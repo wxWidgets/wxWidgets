@@ -1906,6 +1906,9 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
 void wxListHeaderWindow::DrawCurrent()
 {
+#if 1
+    m_owner->SetColumnWidth( m_column, m_currentX - m_minX );
+#else
     int x1 = m_currentX;
     int y1 = 0;
     m_owner->ClientToScreen( &x1, &y1 );
@@ -1928,6 +1931,7 @@ void wxListHeaderWindow::DrawCurrent()
 
     dc.SetPen( wxNullPen );
     dc.SetBrush( wxNullBrush );
+#endif
 }
 
 void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
