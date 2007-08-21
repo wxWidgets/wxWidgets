@@ -35,7 +35,7 @@ enum wxAuiNotebookOption
     wxAUI_NB_TOP                 = 1 << 0,
     wxAUI_NB_LEFT                = 1 << 1,  // not implemented yet
     wxAUI_NB_RIGHT               = 1 << 2,  // not implemented yet
-    wxAUI_NB_BOTTOM              = 1 << 3,  // not implemented yet
+    wxAUI_NB_BOTTOM              = 1 << 3,
     wxAUI_NB_TAB_SPLIT           = 1 << 4,
     wxAUI_NB_TAB_MOVE            = 1 << 5,
     wxAUI_NB_TAB_EXTERNAL_MOVE   = 1 << 6,
@@ -460,6 +460,7 @@ protected:
     void OnEraseBackground(wxEraseEvent& evt);
     void OnSize(wxSizeEvent& evt);
     void OnLeftDown(wxMouseEvent& evt);
+    void OnLeftDClick(wxMouseEvent& evt);
     void OnLeftUp(wxMouseEvent& evt);
     void OnMiddleDown(wxMouseEvent& evt);
     void OnMiddleUp(wxMouseEvent& evt);
@@ -610,6 +611,7 @@ protected:
     void OnTabMiddleUp(wxCommandEvent& evt);
     void OnTabRightDown(wxCommandEvent& evt);
     void OnTabRightUp(wxCommandEvent& evt);
+    void OnTabBgDClick(wxCommandEvent& evt);
     void OnNavigationKeyNotebook(wxNavigationKeyEvent& event);
 
     // set selection to the given window (which must be non-NULL and be one of
@@ -657,6 +659,7 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_BUTTON, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, 0)
@@ -666,6 +669,8 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_DRAG_DONE, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK, 0)
 END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
@@ -675,6 +680,8 @@ typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
 
 #define EVT_AUINOTEBOOK_PAGE_CLOSE(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, winid, wxAuiNotebookEventHandler(fn))
+#define EVT_AUINOTEBOOK_PAGE_CLOSED(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED, winid, wxAuiNotebookEventHandler(fn))
 #define EVT_AUINOTEBOOK_PAGE_CHANGED(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, winid, wxAuiNotebookEventHandler(fn))
 #define EVT_AUINOTEBOOK_PAGE_CHANGING(winid, fn) \
@@ -689,6 +696,8 @@ typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, winid, wxAuiNotebookEventHandler(fn))
 #define EVT_AUINOTEBOOK_ALLOW_DND(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND, winid, wxAuiNotebookEventHandler(fn))
+#define EVT_AUINOTEBOOK_DRAG_DONE(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_DRAG_DONE, winid, wxAuiNotebookEventHandler(fn))
 #define EVT_AUINOTEBOOK_TAB_MIDDLE_DOWN(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_DOWN, winid, wxAuiNotebookEventHandler(fn))
 #define EVT_AUINOTEBOOK_TAB_MIDDLE_UP(winid, fn) \
@@ -697,10 +706,13 @@ typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN, winid, wxAuiNotebookEventHandler(fn))
 #define EVT_AUINOTEBOOK_TAB_RIGHT_UP(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP, winid, wxAuiNotebookEventHandler(fn))
+#define EVT_AUINOTEBOOK_BG_DCLICK(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK, winid, wxAuiNotebookEventHandler(fn))
 #else
 
 // wxpython/swig event work
 %constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE;
+%constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED;
 %constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED;
 %constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING;
 %constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_BUTTON;
@@ -708,8 +720,11 @@ typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
 %constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_END_DRAG;
 %constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION;
 %constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND;
+%constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_DRAG_DONE;
+%constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK;
 %pythoncode {
     EVT_AUINOTEBOOK_PAGE_CLOSE = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, 1 )
+    EVT_AUINOTEBOOK_PAGE_CLOSED = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED, 1 )
     EVT_AUINOTEBOOK_PAGE_CHANGED = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, 1 )
     EVT_AUINOTEBOOK_PAGE_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, 1 )
     EVT_AUINOTEBOOK_BUTTON = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_BUTTON, 1 )
@@ -719,6 +734,8 @@ typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
     EVT_AUINOTEBOOK_ALLOW_DND = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND, 1 )
     EVT_AUINOTEBOOK_NAVIGATE_FORWARD = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_NAVIGATE_FORWARD, 1 )
     EVT_AUINOTEBOOK_NAVIGATE_BACK = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_NAVIGATE_BACK, 1 )
+    EVT_AUINOTEBOOK_DRAG_DONE = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_DRAG_DONE, 1 )
+    EVT_AUINOTEBOOK_BG_DCLICK = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK, 1 )
 }
 #endif
 

@@ -287,17 +287,39 @@ void wxAuiDefaultTabArt::DrawBackground(wxDC& dc,
                                         const wxRect& rect)
 {
     // draw background
-    wxRect r(rect.x, rect.y, rect.width+2, rect.height-3);
-    wxColor top_color = wxAuiStepColour(m_base_colour, 90);
-    wxColor bottom_color = wxAuiStepColour(m_base_colour, 170);
+
+    wxColor top_color       = wxAuiStepColour(m_base_colour, 90);
+    wxColor bottom_color   = wxAuiStepColour(m_base_colour, 170);
+    wxRect r;
+
+   if (m_flags &wxAUI_NB_BOTTOM)
+       r = wxRect(rect.x, rect.y, rect.width+2, rect.height);
+   // TODO: else if (m_flags &wxAUI_NB_LEFT) {}
+   // TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
+   else //for wxAUI_NB_TOP
+       r = wxRect(rect.x, rect.y, rect.width+2, rect.height-3);
+
     dc.GradientFillLinear(r, top_color, bottom_color, wxSOUTH);
 
-    // draw base lines
-    int y = rect.GetHeight();
-    int w = rect.GetWidth();
-    dc.SetPen(m_border_pen);
-    dc.SetBrush(m_base_colour_brush);
-    dc.DrawRectangle(-1, y-4, w+2, 4);
+
+   // draw base lines
+
+   dc.SetPen(m_border_pen);
+   int y = rect.GetHeight();
+   int w = rect.GetWidth();
+
+   if (m_flags &wxAUI_NB_BOTTOM)
+   {
+       dc.SetBrush(wxBrush(bottom_color));
+       dc.DrawRectangle(-1, 0, w+2, 4);
+   }
+   // TODO: else if (m_flags &wxAUI_NB_LEFT) {}
+   // TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
+   else //for wxAUI_NB_TOP
+   {
+       dc.SetBrush(m_base_colour_brush);
+       dc.DrawRectangle(-1, y-4, w+2, 4);
+   }
 }
 
 
@@ -394,13 +416,26 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
 
 
     wxPoint border_points[6];
-    border_points[0] = wxPoint(tab_x,             tab_y+tab_height-4);
-    border_points[1] = wxPoint(tab_x,             tab_y+2);
-    border_points[2] = wxPoint(tab_x+2,           tab_y);
-    border_points[3] = wxPoint(tab_x+tab_width-2, tab_y);
-    border_points[4] = wxPoint(tab_x+tab_width,   tab_y+2);
-    border_points[5] = wxPoint(tab_x+tab_width,   tab_y+tab_height-4);
-
+    if (m_flags &wxAUI_NB_BOTTOM)
+    {
+        border_points[0] = wxPoint(tab_x,             tab_y);
+        border_points[1] = wxPoint(tab_x,             tab_y+tab_height-6);
+        border_points[2] = wxPoint(tab_x+2,           tab_y+tab_height-4);
+        border_points[3] = wxPoint(tab_x+tab_width-2, tab_y+tab_height-4);
+        border_points[4] = wxPoint(tab_x+tab_width,   tab_y+tab_height-6);
+        border_points[5] = wxPoint(tab_x+tab_width,   tab_y);
+    }
+    else //if (m_flags & wxAUI_NB_TOP) {}
+    {
+        border_points[0] = wxPoint(tab_x,             tab_y+tab_height-4);
+        border_points[1] = wxPoint(tab_x,             tab_y+2);
+        border_points[2] = wxPoint(tab_x+2,           tab_y);
+        border_points[3] = wxPoint(tab_x+tab_width-2, tab_y);
+        border_points[4] = wxPoint(tab_x+tab_width,   tab_y+2);
+        border_points[5] = wxPoint(tab_x+tab_width,   tab_y+tab_height-4);
+    }
+    // TODO: else if (m_flags &wxAUI_NB_LEFT) {}
+    // TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
 
     int drawn_tab_yoff = border_points[1].y;
     int drawn_tab_height = border_points[0].y - border_points[1].y;
@@ -476,7 +511,12 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     // this gets rid of the top one of those lines in the tab control
     if (page.active)
     {
-        dc.SetPen(m_base_colour_pen);
+        if (m_flags &wxAUI_NB_BOTTOM)
+            dc.SetPen(wxPen(wxColour(wxAuiStepColour(m_base_colour, 170))));
+        // TODO: else if (m_flags &wxAUI_NB_LEFT) {}
+        // TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
+        else //for wxAUI_NB_TOP
+            dc.SetPen(m_base_colour_pen);
         dc.DrawLine(border_points[0].x+1,
                     border_points[0].y,
                     border_points[5].x,
@@ -2634,8 +2674,21 @@ public:
             return;
 
         m_tab_rect = wxRect(m_rect.x, m_rect.y, m_rect.width, m_tab_ctrl_height);
-        m_tabs->SetSize(m_rect.x, m_rect.y, m_rect.width, m_tab_ctrl_height);
-        m_tabs->SetRect(wxRect(0, 0, m_rect.width, m_tab_ctrl_height));
+        if (m_tabs->GetFlags() & wxAUI_NB_BOTTOM)
+        {
+            m_tab_rect = wxRect (m_rect.x, m_rect.y + m_rect.height - m_tab_ctrl_height, m_rect.width, m_tab_ctrl_height);
+            m_tabs->SetSize     (m_rect.x, m_rect.y + m_rect.height - m_tab_ctrl_height, m_rect.width, m_tab_ctrl_height);
+            m_tabs->SetRect     (wxRect(0, 0, m_rect.width, m_tab_ctrl_height));
+        }
+        else //TODO: if (GetFlags() & wxAUI_NB_TOP)
+        {
+            m_tab_rect = wxRect (m_rect.x, m_rect.y, m_rect.width, m_tab_ctrl_height);
+            m_tabs->SetSize     (m_rect.x, m_rect.y, m_rect.width, m_tab_ctrl_height);
+            m_tabs->SetRect     (wxRect(0, 0,        m_rect.width, m_tab_ctrl_height));
+        }
+        // TODO: else if (GetFlags() & wxAUI_NB_LEFT){}
+        // TODO: else if (GetFlags() & wxAUI_NB_RIGHT){}
+
         m_tabs->Refresh();
         m_tabs->Update();
 
@@ -2645,8 +2698,18 @@ public:
         for (i = 0; i < page_count; ++i)
         {
             wxAuiNotebookPage& page = pages.Item(i);
-            page.window->SetSize(m_rect.x, m_rect.y + m_tab_ctrl_height,
-                                 m_rect.width, m_rect.height - m_tab_ctrl_height);
+            if (m_tabs->GetFlags() & wxAUI_NB_BOTTOM)
+            {
+                page.window->SetSize(m_rect.x, m_rect.y,
+                                     m_rect.width, m_rect.height - m_tab_ctrl_height);
+            }
+            else //TODO: if (GetFlags() & wxAUI_NB_TOP)
+            {
+                page.window->SetSize(m_rect.x, m_rect.y + m_tab_ctrl_height,
+                                  m_rect.width, m_rect.height - m_tab_ctrl_height);
+            }
+            // TODO: else if (GetFlags() & wxAUI_NB_LEFT){}
+            // TODO: else if (GetFlags() & wxAUI_NB_RIGHT){}
 
 #if wxUSE_MDI
             if (page.window->IsKindOf(CLASSINFO(wxAuiMDIChildFrame)))
