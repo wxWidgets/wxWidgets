@@ -28,13 +28,14 @@ public:
     typedef size_t size_type;
     typedef T value_type;
     typedef value_type* iterator;
+    typedef const value_type* const_iterator;
     typedef value_type& reference;
 
-    wxVector() : m_allocsize(16), m_size(0), m_capacity(0), m_objects(0) {}
+    wxVector() : m_size(0), m_capacity(0), m_values(NULL) {}
 
     wxVector(const wxVector& c)
     {
-        wxCHECK2(Copy(c), return);
+        Copy(c);
     }
 
     ~wxVector()
@@ -44,19 +45,35 @@ public:
 
     void clear()
     {
-        for (size_type i = 0; i < size(); i++)
-            delete m_objects[i];
-        free(m_objects);
-        m_objects = 0;
+        delete[] m_values;
+        m_values = NULL;
         m_size = m_capacity = 0;
     }
 
     void reserve(size_type n)
     {
-        if ( !Alloc(n) )
+        if ( n <= m_capacity )
+            return;
+
+        // increase the size twice, unless we're already too big or unless
+        // more is requested
+        const size_type increment = (m_size > 0)
+                                     ? wxMin(m_size, ALLOC_MAX_SIZE)
+                                     : ALLOC_INITIAL_SIZE;
+        if ( m_capacity + increment > n )
+            n = m_capacity + increment;
+
+        value_type *mem = new value_type[n];
+
+        if ( m_values )
         {
-            wxFAIL_MSG( _T("out of memory in wxVector::reserve()") );
+            for ( size_type i = 0; i < m_size; ++i )
+                mem[i] = m_values[i];
+            delete[] m_values;
         }
+
+        m_values = mem;
+        m_capacity = n;
     }
 
     size_type size() const
@@ -76,31 +93,31 @@ public:
 
     wxVector& operator=(const wxVector& vb)
     {
-        wxCHECK(Copy(vb), *this);
+        Copy(vb);
         return *this;
     }
 
-    void push_back(const value_type& o)
+    void push_back(const value_type& v)
     {
-        wxCHECK2(Alloc(size() + 1), return);
-        Append(new value_type(o));
+        reserve(size() + 1);
+        m_values[m_size++] = v;
     }
 
     void pop_back()
     {
-        RemoveAt(size() - 1);
+        erase(end() - 1);
     }
 
     const value_type& at(size_type idx) const
     {
         wxASSERT(idx < m_size);
-        return *m_objects[idx];
+        return m_values[idx];
     }
 
     value_type& at(size_type idx)
     {
         wxASSERT(idx < m_size);
-        return *m_objects[idx];
+        return m_values[idx];
     }
 
     const value_type& operator[](size_type idx) const  { return at(idx); }
@@ -110,128 +127,83 @@ public:
     const value_type& back() const { return at(size() - 1); }
     value_type& back() { return at(size() - 1); }
 
-    iterator begin() { return m_objects[0]; }
-    iterator end() { return m_objects[size()]; }
+    const_iterator begin() const { return m_values; }
+    iterator begin() { return m_values; }
+    const_iterator end() const { return m_values + size(); }
+    iterator end() { return m_values + size(); }
+
+    iterator insert(iterator it, const value_type& v = value_type())
+    {
+        size_t idx = it - begin();
+
+        reserve(size() + 1);
+
+        // unless we're inserting at the end, move following values out of
+        // the way:
+        for ( size_t n = m_size; n != idx; --n )
+            m_values[n] = m_values[n-1];
+
+        m_values[idx] = v;
+        m_size++;
+
+        return begin() + idx;
+    }
+
+    iterator erase(iterator it)
+    {
+        return erase(it, it + 1);
+    }
 
     iterator erase(iterator first, iterator last)
     {
-        size_type idx = first - begin();
-        RemoveAt(idx, last - first);
-        return begin() + idx;
-    }
-    iterator erase(iterator it)
-    {
-        size_type idx = it - begin();
-        RemoveAt(idx);
-        return begin() + idx;
+        if ( first == last )
+            return first;
+        wxASSERT( first < end() && last <= end() );
+
+        size_type index = first - begin();
+        size_type count = last - first;
+
+        // move the remaining values over to the freed space:
+        for ( iterator i = last; i < end(); ++i )
+            *(i - count) = *i;
+
+        // erase items behind the new end of m_values:
+        for ( iterator i = end() - count; i < end(); ++i )
+            *i = value_type();
+
+        m_size -= count;
+
+        return begin() + index;
     }
 
 #if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED( size_type erase(size_type n) );
 #endif // WXWIN_COMPATIBILITY_2_8
 
-    iterator insert(iterator it, const value_type& v = value_type())
-    {
-        wxCHECK2(Alloc(size() + 1), return 0);
-        size_type idx = it - begin();
-        InsertAt(new value_type(v), idx);
-        return begin() + idx;
-    }
-
 private:
-    bool Alloc(size_type sz)
-    {
-        // work in multiples of m_allocsize;
-        sz = (sz / m_allocsize + 1) * m_allocsize;
-        if (sz <= m_capacity)
-            return true;
+    static const size_type ALLOC_INITIAL_SIZE = 16;
+    static const size_type ALLOC_MAX_SIZE = 4096;
 
-        // try to realloc
-        void *mem = realloc(m_objects, sizeof(value_type*) * sz);
-        if (! mem)
-            return false; // failed
-        // success
-        m_objects = (value_type **) mem;
-        m_capacity = sz;
-        return true;
-    }
-
-    void Append(value_type *obj)
-    {
-        wxASSERT(m_size < m_capacity);
-        m_objects[m_size] = obj;
-        m_size++;
-    }
-
-    void InsertAt(size_type idx, value_type *obj)
-    {
-        wxASSERT(idx <= m_size);
-        wxASSERT(m_size < m_capacity);
-        if (idx < m_size)
-            memmove(
-                m_objects + idx + 1,
-                m_objects + idx,
-                ( m_size - idx ) * sizeof(value_type*) );
-
-        m_size++;
-    }
-
-    void RemoveAt(size_type idx)
-    {
-        wxASSERT(idx < m_size);
-        delete m_objects[idx];
-        if (idx < m_size - 1)
-            memcpy(
-                m_objects + idx,
-                m_objects + idx + 1,
-                ( m_size - idx - 1 ) * sizeof(value_type*) );
-        m_size--;
-    }
-
-    void RemoveAt(size_type idx, size_type count)
-    {
-        if (count == 0)
-            return;
-        wxASSERT(idx < m_size);
-        size_type i;
-        for (i = 0; i < count; i++)
-            delete m_objects[idx+1];
-        if (idx < m_size - count)
-            memcpy(
-                m_objects + idx,
-                m_objects + idx + count,
-                ( m_size - idx - count ) * sizeof(value_type*) );
-        m_size -= count;
-    }
-    bool Copy(const wxVector& vb)
+    void Copy(const wxVector& vb)
     {
         clear();
-        if (! Alloc(vb.size()))
-            return false;
+        reserve(vb.size());
 
-        for (size_type i = 0; i < vb.size(); i++)
-        {
-            value_type *o = new value_type(vb.at(i));
-            if (! o)
-                return false;
-            Append(o);
-        }
-
-        return true;
+        for ( const_iterator i = vb.begin(); i != vb.end(); ++i )
+            push_back(*i);
     }
 
 private:
-    size_type m_allocsize;
     size_type m_size,
               m_capacity;
-    value_type **m_objects;
+    value_type *m_values;
 };
 
 #if WXWIN_COMPATIBILITY_2_8
 template<typename T>
 typename wxVector<T>::size_type wxVector<T>::erase(size_type n)
 {
-    RemoveAt(n);
+    erase(begin() + n);
     return n;
 }
 #endif // WXWIN_COMPATIBILITY_2_8
