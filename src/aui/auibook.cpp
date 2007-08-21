@@ -72,7 +72,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxAuiNotebookEvent, wxEvent)
 
 
 
-
 // these functions live in dockart.cpp -- they'll eventually
 // be moved to a new utility cpp file
 
@@ -152,7 +151,43 @@ static void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags
                      dc.LogicalToDeviceY(rect.y),
                      rect.width,
                      rect.height );
+#elif 0 // (defined(__WXMAC__))
 
+    // This doesn't work, unfortunately, so draw the focus rectangle generically
+
+    wxWindow* p = win->GetParent() ? win->GetParent() : win;
+#if wxMAC_USE_CORE_GRAPHICS 
+    {
+        CGRect cgrect = CGRectMake( rect.x , rect.y , rect.width, rect.height ) ;
+
+        HIThemeFrameDrawInfo info ;
+        memset( &info, 0 , sizeof(info) ) ;
+
+        info.version = 0 ;
+        info.kind = 0 ;
+        info.state = kThemeStateActive;
+        info.isFocused = true ;
+
+        CGContextRef cgContext = (CGContextRef) win->MacGetCGContextRef() ;
+        wxASSERT( cgContext ) ;
+
+        HIThemeDrawFocusRect( &cgrect , true , cgContext , kHIThemeOrientationNormal ) ;
+    }
+ #else
+    {
+        Rect r;
+        r.left = rect.x; r.top = rect.y; r.right = rect.GetRight(); r.bottom = rect.GetBottom();
+        wxTopLevelWindowMac* top = win->MacGetTopLevelWindow();
+        if ( top )
+        {
+            wxPoint pt(0, 0) ;
+            wxMacControl::Convert( &pt , p->m_peer , top->m_peer ) ;
+            OffsetRect( &r , pt.x , pt.y ) ;
+        }
+
+        win->DrawThemeFocusRect( &r , true ) ;
+    }
+#endif
 #else
     wxUnusedVar(win);
     wxUnusedVar(flags);
@@ -2942,6 +2977,9 @@ void wxAuiNotebook::InitNotebook(long style)
 
 wxAuiNotebook::~wxAuiNotebook()
 {
+    // Indicate we're deleting pages
+    m_isBeingDeleted = true;
+    
     while ( GetPageCount() > 0 )
         DeletePage(0);
 
@@ -3305,7 +3343,7 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
     RemoveEmptyTabFrames();
 
     // set new active pane
-    if (new_active)
+    if (new_active && !m_isBeingDeleted)
     {
         m_curpage = -1;
         SetSelection(m_tabs.GetIdxFromWindow(new_active));
@@ -4178,7 +4216,8 @@ void wxAuiNotebook::RemoveEmptyTabFrames()
         m_mgr.GetPane(first_good).Centre();
     }
 
-    m_mgr.Update();
+    if (!m_isBeingDeleted)
+        m_mgr.Update();
 }
 
 void wxAuiNotebook::OnChildFocus(wxChildFocusEvent& evt)
