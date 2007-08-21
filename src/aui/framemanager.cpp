@@ -529,6 +529,13 @@ wxAuiFloatingFrame* wxAuiManager::CreateFloatingFrame(wxWindow* parent,
     return new wxAuiFloatingFrame(parent, this, pane_info);
 }
 
+bool wxAuiManager::CanDockPanel(const wxAuiPaneInfo & WXUNUSED(p))
+{
+    // if a key modifier is pressed while dragging the frame,
+    // don't dock the window
+    return !(wxGetKeyState(WXK_CONTROL) || wxGetKeyState(WXK_ALT));
+}
+
 // GetPane() looks up a wxAuiPaneInfo structure based
 // on the supplied window pointer.  Upon failure, GetPane()
 // returns an empty wxAuiPaneInfo, a condition which can be checked
@@ -3392,7 +3399,7 @@ void wxAuiManager::OnFloatingPaneMoving(wxWindow* wnd, wxDirection dir)
 
     // if a key modifier is pressed while dragging the frame,
     // don't dock the window
-    if (wxGetKeyState(WXK_CONTROL) || wxGetKeyState(WXK_ALT))
+    if (!CanDockPanel(pane))
     {
         HideHint();
         return;
@@ -3467,7 +3474,7 @@ void wxAuiManager::OnFloatingPaneMoved(wxWindow* wnd, wxDirection dir)
 
     // if a key modifier is pressed while dragging the frame,
     // don't dock the window
-    if (!wxGetKeyState(WXK_CONTROL) && !wxGetKeyState(WXK_ALT))
+    if (CanDockPanel(pane))
     {
         // do the drop calculation
         DoDrop(m_docks, m_panes, pane, client_pt, action_offset);

@@ -166,7 +166,7 @@ public:
     }
 
     ~wxAuiPaneInfo() {}
-    
+
 #ifndef SWIG
     wxAuiPaneInfo(const wxAuiPaneInfo& c)
     {
@@ -347,12 +347,12 @@ public:
 #ifdef SWIG
     %typemap(out) wxAuiPaneInfo& ;
 #endif
-    
+
 public:
 
     // NOTE: You can add and subtract flags from this list,
     // but do not change the values of the flags, because
-    // they are stored in a binary integer format in the 
+    // they are stored in a binary integer format in the
     // perspective string.  If you really need to change the
     // values around, you'll have to ensure backwards-compatibility
     // in the perspective loading code.
@@ -380,11 +380,11 @@ public:
         buttonMaximize        = 1 << 22,
         buttonMinimize        = 1 << 23,
         buttonPin             = 1 << 24,
-        
+
         buttonCustom1         = 1 << 26,
         buttonCustom2         = 1 << 27,
         buttonCustom3         = 1 << 28,
-        
+
         savedHiddenState      = 1 << 30, // used internally
         actionPane            = 1 << 31  // used internally
     };
@@ -450,7 +450,7 @@ public:
 
     bool AddPane(wxWindow* window,
                  const wxAuiPaneInfo& pane_info);
-                 
+
     bool AddPane(wxWindow* window,
                  const wxAuiPaneInfo& pane_info,
                  const wxPoint& drop_pos);
@@ -464,7 +464,7 @@ public:
                  int insert_level = wxAUI_INSERT_PANE);
 
     bool DetachPane(wxWindow* window);
-    
+
     void Update();
 
     wxString SavePaneInfo(wxAuiPaneInfo& pane);
@@ -474,7 +474,7 @@ public:
 
     void SetDockSizeConstraint(double width_pct, double height_pct);
     void GetDockSizeConstraint(double* width_pct, double* height_pct) const;
-    
+
     void ClosePane(wxAuiPaneInfo& pane_info);
     void MaximizePane(wxAuiPaneInfo& pane_info);
     void RestorePane(wxAuiPaneInfo& pane_info);
@@ -483,6 +483,7 @@ public:
 public:
 
     virtual wxAuiFloatingFrame* CreateFloatingFrame(wxWindow* parent, const wxAuiPaneInfo& p);
+    virtual bool CanDockPanel(const wxAuiPaneInfo & p);
 
     void StartPaneDrag(
                  wxWindow* pane_window,
@@ -492,12 +493,12 @@ public:
                  wxWindow* pane_window,
                  const wxPoint& pt,
                  const wxPoint& offset);
-                      
+
     void DrawHintRect(
                  wxWindow* pane_window,
                  const wxPoint& pt,
                  const wxPoint& offset);
-                      
+
     virtual void ShowHint(const wxRect& rect);
     virtual void HideHint();
 
@@ -505,14 +506,14 @@ public:
 
     // deprecated -- please use SetManagedWindow() and
     // and GetManagedWindow() instead
-    
+
     wxDEPRECATED( void SetFrame(wxFrame* frame) );
     wxDEPRECATED( wxFrame* GetFrame() const );
-    
+
 protected:
 
     void UpdateHintWindowConfig();
-    
+
     void DoFrameLayout();
 
     void LayoutAddPane(wxSizer* container,
@@ -622,7 +623,7 @@ protected:
     wxTimer m_hint_fadetimer;    // transparent fade timer
     wxByte m_hint_fadeamt;       // transparent fade amount
     wxByte m_hint_fademax;       // maximum value of hint fade
-    
+
     void* m_reserved;
 
 #ifndef SWIG
@@ -664,17 +665,17 @@ public:
     void SetPane(wxAuiPaneInfo* p) { pane = p; }
     void SetButton(int b) { button = b; }
     void SetDC(wxDC* pdc) { dc = pdc; }
- 
+
     wxAuiManager* GetManager() const { return manager; }
     wxAuiPaneInfo* GetPane() const { return pane; }
     int GetButton() const { return button; }
     wxDC* GetDC() const { return dc; }
-    
+
     void Veto(bool veto = true) { veto_flag = veto; }
     bool GetVeto() const { return veto_flag; }
     void SetCanVeto(bool can_veto) { canveto_flag = can_veto; }
     bool CanVeto() const { return  canveto_flag && veto_flag; }
-    
+
 public:
     wxAuiManager* manager;
     wxAuiPaneInfo* pane;
