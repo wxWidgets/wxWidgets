@@ -2865,6 +2865,9 @@ void wxAuiNotebook::InitNotebook(long style)
 
 wxAuiNotebook::~wxAuiNotebook()
 {
+    // Indicate we're deleting pages
+    m_isBeingDeleted = true;
+
     while ( GetPageCount() > 0 )
         DeletePage(0);
 
@@ -3225,7 +3228,7 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
     RemoveEmptyTabFrames();
 
     // set new active pane
-    if (new_active)
+    if (new_active && !m_isBeingDeleted)
     {
         m_curpage = -1;
         SetSelectionToWindow(new_active);
@@ -4104,7 +4107,8 @@ void wxAuiNotebook::RemoveEmptyTabFrames()
         m_mgr.GetPane(first_good).Centre();
     }
 
-    m_mgr.Update();
+    if (!m_isBeingDeleted)
+        m_mgr.Update();
 }
 
 void wxAuiNotebook::OnChildFocusNotebook(wxChildFocusEvent& evt)
