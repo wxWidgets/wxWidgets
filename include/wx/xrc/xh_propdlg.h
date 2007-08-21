@@ -15,6 +15,7 @@
 
 #if wxUSE_XRC
 
+#if wxABI_VERSION >= 20805
 class WXDLLEXPORT wxPropertySheetDialog;
 
 class WXDLLIMPEXP_XRC wxPropertySheetDialogXmlHandler : public wxXmlResourceHandler
@@ -30,6 +31,7 @@ private:
     bool m_isInside;
     wxPropertySheetDialog *m_dialog;
 };
+#endif // wxABI_VERSION >= 20805
 
 #endif // wxUSE_XRC
 

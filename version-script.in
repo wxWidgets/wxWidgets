@@ -71,6 +71,7 @@
         *wxWindowMSW*GetThemedBorderStyle*;
         *wxWizard*GetBitmap*;
         *wxWizard*SetBitmap*;
+        *wxPropertySheetDialogXmlHandler*;
 };
 
 # public symbols added in 2.8.4 (please keep in alphabetical order):
