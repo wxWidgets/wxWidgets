@@ -50,6 +50,7 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_END_DRAG)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_DRAG_DONE)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_DOWN)
@@ -2135,7 +2136,7 @@ BEGIN_EVENT_TABLE(wxAuiTabCtrl, wxControl)
     EVT_ERASE_BACKGROUND(wxAuiTabCtrl::OnEraseBackground)
     EVT_SIZE(wxAuiTabCtrl::OnSize)
     EVT_LEFT_DOWN(wxAuiTabCtrl::OnLeftDown)
-    EVT_LEFT_DCLICK(wxAuiTabCtrl::OnLeftDown)
+    EVT_LEFT_DCLICK(wxAuiTabCtrl::OnLeftDClick)
     EVT_LEFT_UP(wxAuiTabCtrl::OnLeftUp)
     EVT_MIDDLE_DOWN(wxAuiTabCtrl::OnMiddleDown)
     EVT_MIDDLE_UP(wxAuiTabCtrl::OnMiddleUp)
@@ -2326,6 +2327,18 @@ void wxAuiTabCtrl::OnRightDown(wxMouseEvent& evt)
     e.SetEventObject(this);
     e.SetSelection(GetIdxFromWindow(wnd));
     GetEventHandler()->ProcessEvent(e);
+}
+
+void wxAuiTabCtrl::OnLeftDClick(wxMouseEvent& evt)
+{
+    wxWindow* wnd;
+    wxAuiTabContainerButton* button;
+    if (!TabHitTest(evt.m_x, evt.m_y, &wnd) && !ButtonHitTest(evt.m_x, evt.m_y, &button))
+    {
+        wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK, m_windowId);
+        e.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(e);
+    }
 }
 
 void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
@@ -2702,6 +2715,9 @@ BEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
     EVT_COMMAND_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
                       wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP,
                       wxAuiNotebook::OnTabRightUp)
+    EVT_COMMAND_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
+                      wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK,
+                      wxAuiNotebook::OnTabBgDClick)
     EVT_NAVIGATION_KEY(wxAuiNotebook::OnNavigationKeyNotebook)
 
 #ifdef wxHAS_NATIVE_TAB_TRAVERSAL
@@ -3561,6 +3577,14 @@ void wxAuiNotebook::OnTabClicked(wxCommandEvent& command_evt)
     wxASSERT(wnd != NULL);
 
     SetSelectionToWindow(wnd);
+}
+
+void wxAuiNotebook::OnTabBgDClick(wxCommandEvent& WXUNUSED(evt))
+{
+    // notify owner that the tabbar background has been double-clicked
+    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK, m_windowId);
+    e.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(e);
 }
 
 void wxAuiNotebook::OnTabBeginDrag(wxCommandEvent&)
