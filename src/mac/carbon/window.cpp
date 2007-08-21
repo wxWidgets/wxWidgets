@@ -2832,7 +2832,9 @@ void wxWindowMac::ClearBackground()
 void wxWindowMac::Update()
 {
 #if TARGET_API_MAC_OSX
-    MacGetTopLevelWindow()->MacPerformUpdates() ;
+    wxTopLevelWindowMac* top = MacGetTopLevelWindow();
+    if (top)
+        top->MacPerformUpdates() ;
 #else
     ::Draw1Control( m_peer->GetControlRef() ) ;
 #endif
