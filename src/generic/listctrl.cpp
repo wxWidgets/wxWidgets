@@ -83,8 +83,8 @@ static const int EXTRA_BORDER_X = 2;
 static const int EXTRA_BORDER_Y = 2;
 
 // offset for the header window
-static const int HEADER_OFFSET_X = 1;
-static const int HEADER_OFFSET_Y = 1;
+static const int HEADER_OFFSET_X = 0;
+static const int HEADER_OFFSET_Y = 0;
 
 // margin between rows of icons in [small] icon view
 static const int MARGIN_BETWEEN_ROWS = 6;
@@ -1808,15 +1808,8 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         m_owner->GetColumn( i, item );
         int wCol = item.m_width;
 
-        // the width of the rect to draw: make it smaller to fit entirely
-        // inside the column rect
-#ifdef __WXMAC__
         int cw = wCol;
         int ch = h;
-#else
-        int cw = wCol - 2;
-        int ch = h - 2;
-#endif
 
         int flags = 0;
         if (!m_parent->IsEnabled())
