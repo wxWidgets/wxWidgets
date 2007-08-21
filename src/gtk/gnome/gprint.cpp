@@ -1847,10 +1847,6 @@ void wxGnomePrintDC::DoGetTextExtent(const wxString& string, wxCoord *width, wxC
         return;
     }
 
-    // Set new font description
-    if (theFont)
-        pango_layout_set_font_description( m_layout, theFont->GetNativeFontInfo()->description );
-
     // Set layout's text
 
     // FIXME-UTF8: wouldn't be needed if utf8_str() always returned a buffer
