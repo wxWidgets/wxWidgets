@@ -2193,12 +2193,14 @@ bool wxAuiTabContainer::ButtonHitTest(int x, int y,
 // as the Show() method on this class is "unplugged"
 static void ShowWnd(wxWindow* wnd, bool show)
 {
+#if wxUSE_MDI
     if (wnd->IsKindOf(CLASSINFO(wxAuiMDIChildFrame)))
     {
         wxAuiMDIChildFrame* cf = (wxAuiMDIChildFrame*)wnd;
         cf->DoShow(show);
     }
-     else
+    else
+#endif
     {
         wnd->Show(show);
     }
@@ -2743,11 +2745,13 @@ public:
             page.window->SetSize(m_rect.x, m_rect.y + m_tab_ctrl_height,
                                  m_rect.width, m_rect.height - m_tab_ctrl_height);
 
+#if wxUSE_MDI
             if (page.window->IsKindOf(CLASSINFO(wxAuiMDIChildFrame)))
             {
                 wxAuiMDIChildFrame* wnd = (wxAuiMDIChildFrame*)page.window;
                 wnd->ApplyMDIChildFrameRect();
             }
+#endif
         }
     }
 
@@ -3140,6 +3144,7 @@ bool wxAuiNotebook::DeletePage(size_t page_idx)
         return false;
 
     // actually destroy the window now
+#if wxUSE_MDI
     if (wnd->IsKindOf(CLASSINFO(wxAuiMDIChildFrame)))
     {
         // delete the child frame with pending delete, as is
@@ -3147,7 +3152,8 @@ bool wxAuiNotebook::DeletePage(size_t page_idx)
         if (!wxPendingDelete.Member(wnd))
             wxPendingDelete.Append(wnd);
     }
-     else
+    else
+#endif
     {
         wnd->Destroy();
     }
@@ -4231,11 +4237,13 @@ void wxAuiNotebook::OnTabButton(wxCommandEvent& command_evt)
                 return;
 
 
+#if wxUSE_MDI
             if (close_wnd->IsKindOf(CLASSINFO(wxAuiMDIChildFrame)))
             {
                 close_wnd->Close();
             }
-             else
+            else
+#endif
             {
                 int main_idx = m_tabs.GetIdxFromWindow(close_wnd);
                 DeletePage(main_idx);
