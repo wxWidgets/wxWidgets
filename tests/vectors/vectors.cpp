@@ -35,9 +35,11 @@ public:
 private:
     CPPUNIT_TEST_SUITE( VectorsTestCase );
         CPPUNIT_TEST( PushTest );
+        CPPUNIT_TEST( Iterators );
     CPPUNIT_TEST_SUITE_END();
 
     void PushTest();
+    void Iterators();
 
     DECLARE_NO_COPY_CLASS(VectorsTestCase)
 };
@@ -63,4 +65,19 @@ void VectorsTestCase::PushTest()
     CPPUNIT_ASSERT( v[0] == 1 );
     CPPUNIT_ASSERT( v[1] == 2 );
     CPPUNIT_ASSERT( v[2] == 42 );
+}
+
+void VectorsTestCase::Iterators()
+{
+    wxVector<int> v;
+    v.push_back(1);
+    v.push_back(2);
+    v.push_back(3);
+    v.push_back(4);
+
+    int value = 1;
+    for ( wxVector<int>::iterator i = v.begin(); i != v.end(); ++i, ++value )
+    {
+        CPPUNIT_ASSERT_EQUAL( value, *i );
+    }
 }
