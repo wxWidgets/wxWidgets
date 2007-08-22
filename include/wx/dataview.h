@@ -413,43 +413,44 @@ public:
     wxDataViewModel* GetModel();
 
     // short cuts
-    bool AppendTextColumn( const wxString &label, unsigned int model_column, 
+    wxDataViewColumn *AppendTextColumn( const wxString &label, unsigned int model_column, 
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
-    bool AppendToggleColumn( const wxString &label, unsigned int model_column,
+    wxDataViewColumn *AppendToggleColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
-    bool AppendProgressColumn( const wxString &label, unsigned int model_column, 
+    wxDataViewColumn *AppendProgressColumn( const wxString &label, unsigned int model_column, 
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_DEFAULT_WIDTH,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
-    bool AppendDateColumn( const wxString &label, unsigned int model_column,
+    wxDataViewColumn *AppendDateColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
-    bool AppendBitmapColumn( const wxString &label, unsigned int model_column,
+    wxDataViewColumn *AppendBitmapColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
-    bool AppendTextColumn( const wxBitmap &label, unsigned int model_column,
+    wxDataViewColumn *AppendTextColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
-    bool AppendToggleColumn( const wxBitmap &label, unsigned int model_column,
+    wxDataViewColumn *AppendToggleColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
-    bool AppendProgressColumn( const wxBitmap &label, unsigned int model_column,
+    wxDataViewColumn *AppendProgressColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_DEFAULT_WIDTH,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
-    bool AppendDateColumn( const wxBitmap &label, unsigned int model_column,
+    wxDataViewColumn *AppendDateColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
-    bool AppendBitmapColumn( const wxBitmap &label, unsigned int model_column,
+    
+    wxDataViewColumn *AppendBitmapColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );

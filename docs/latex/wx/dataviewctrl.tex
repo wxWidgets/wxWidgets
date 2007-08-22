@@ -88,51 +88,57 @@ Destructor.
 
 \func{virtual bool}{AppendColumn}{\param{wxDataViewColumn* }{col}}
 
-Add a \helpref{wxDataViewColumn}{wxdataviewcolumn} to the control. Note
-that there is a number of short cut methods which implicitly create
+Add a \helpref{wxDataViewColumn}{wxdataviewcolumn} to the control. Returns
+{\it true} on success.
+
+Note that there is a number of short cut methods which implicitly create
 a \helpref{wxDataViewColumn}{wxdataviewcolumn} and a 
 \helpref{wxDataViewRenderer}{wxdataviewrenderer} for it (see below).
 
-
 \membersection{wxDataViewCtrl::AppendBitmapColumn}\label{wxdataviewctrlappendbitmapcolumn}
 
-\func{bool}{AppendBitmapColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
+\func{wxDataViewColumn*}{AppendBitmapColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
 
-\func{bool}{AppendBitmapColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
+\func{wxDataViewColumn*}{AppendBitmapColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
 
-Appends a column for rendering a bitmap.
+Appends a column for rendering a bitmap. Returns the wxDataViewColumn
+created in the function or NULL on failure.
 
 \membersection{wxDataViewCtrl::AppendDateColumn}\label{wxdataviewctrlappenddatecolumn}
 
-\func{bool}{AppendDateColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_ACTIVATABLE}, \param{int }{width = -1}}
+\func{wxDataViewColumn*}{AppendDateColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_ACTIVATABLE}, \param{int }{width = -1}}
 
-\func{bool}{AppendDateColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_ACTIVATABLE}, \param{int }{width = -1}}
+\func{wxDataViewColumn*}{AppendDateColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_ACTIVATABLE}, \param{int }{width = -1}}
 
-Appends a column for rendering a date.
+Appends a column for rendering a date. Returns the wxDataViewColumn
+created in the function or NULL on failure.
 
 \membersection{wxDataViewCtrl::AppendProgressColumn}\label{wxdataviewctrlappendprogresscolumn}
 
-\func{bool}{AppendProgressColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 80}}
+\func{wxDataViewColumn*}{AppendProgressColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 80}}
 
-\func{bool}{AppendProgressColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 80}}
+\func{wxDataViewColumn*}{AppendProgressColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 80}}
 
-Appends a column for rendering a progress indicator.
+Appends a column for rendering a progress indicator. Returns the wxDataViewColumn
+created in the function or NULL on failure.
 
 \membersection{wxDataViewCtrl::AppendTextColumn}\label{wxdataviewctrlappendtextcolumn}
 
-\func{bool}{AppendTextColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
+\func{wxDataViewColumn*}{AppendTextColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
 
-\func{bool}{AppendTextColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
+\func{wxDataViewColumn*}{AppendTextColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
 
-Appends a column for rendering text.
+Appends a column for rendering text. Returns the wxDataViewColumn
+created in the function or NULL on failure.
 
 \membersection{wxDataViewCtrl::AppendToggleColumn}\label{wxdataviewctrlappendtogglecolumn}
 
-\func{bool}{AppendToggleColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 30}}
+\func{wxDataViewColumn*}{AppendToggleColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 30}}
 
-\func{bool}{AppendToggleColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 30}}
+\func{wxDataViewColumn*}{AppendToggleColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 30}}
 
-Appends a column for rendering a toggle.
+Appends a column for rendering a toggle. Returns the wxDataViewColumn
+created in the function or NULL on failure.
 
 \membersection{wxDataViewCtrl::AssociateModel}\label{wxdataviewctrlassociatemodel}
 
