@@ -25,7 +25,7 @@
 
 #if defined(__WXGTK20__)
     // for testing
-    #define wxUSE_GENERICDATAVIEWCTRL 1
+    // #define wxUSE_GENERICDATAVIEWCTRL 1
 #elif defined(__WXMAC__)
 #else
     #define wxUSE_GENERICDATAVIEWCTRL 1
@@ -81,6 +81,8 @@ private:
 };
 
 bool operator == (const wxDataViewItem &left, const wxDataViewItem &right);
+
+WX_DEFINE_ARRAY(wxDataViewItem, wxDataViewItemArray);
 
 // ---------------------------------------------------------
 // wxDataViewModelNotifier
@@ -166,9 +168,6 @@ protected:
 // wxDataViewIndexListModel
 // ---------------------------------------------------------
 
-// use hash map later
-WX_DEFINE_ARRAY_PTR( void*, wxDataViewItemHash );
-
 class wxDataViewIndexListModel: public wxDataViewModel
 {
 public:
@@ -212,7 +211,7 @@ public:
     virtual wxDataViewItem GetNextSibling( const wxDataViewItem &item ) const;
     
 private:
-    wxDataViewItemHash m_hash;
+    wxDataViewItemArray m_hash;
     unsigned int m_lastIndex;
 };
 
@@ -396,8 +395,6 @@ protected:
 // ---------------------------------------------------------
 // wxDataViewCtrlBase
 // ---------------------------------------------------------
-
-WX_DEFINE_ARRAY(wxDataViewItem, wxDataViewItemArray);
 
 #define wxDV_SINGLE                  0x0000     // for convenience
 #define wxDV_MULTIPLE                0x0001     // can select multiple items
