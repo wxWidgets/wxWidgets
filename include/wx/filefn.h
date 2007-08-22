@@ -155,7 +155,7 @@ enum wxFileKind
     #define   wxRmDir      _wrmdir
     #define   wxStat       _wstat
     #define   wxStructStat struct _stat
-#elif defined(__WXMSW__) && !defined(__WXPALMOS__) && \
+#elif (defined(__WXMSW__) || defined(__OS2__)) && !defined(__WXPALMOS__) && \
       ( \
         defined(__VISUALC__) || \
         (defined(__MINGW32__) && !defined(__WINE__) && \

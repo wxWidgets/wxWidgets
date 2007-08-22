@@ -158,7 +158,7 @@ WXDLLEXPORT int wxOpen( const wxChar *pathname, int flags, mode_t mode )
 // BCC 5.5 and 5.5.1 have a bug in _wopen where files are created read only
 // regardless of the mode parameter. This hack works around the problem by
 // setting the mode with _wchmod.
-// 
+//
 int wxOpen(const wchar_t *pathname, int flags, mode_t mode)
 {
     int moreflags = 0;
@@ -1578,10 +1578,10 @@ bool wxSetWorkingDirectory(const wxString& d)
     if (d[1] == ':')
     {
         ::DosSetDefaultDisk(1 + wxToupper(d[0]) - _T('A'));
-	// do not call DosSetCurrentDir when just changing drive,
-	// since it requires e.g. "d:." instead of "d:"!
-	if (d.length() == 2)
-	    return true;
+    // do not call DosSetCurrentDir when just changing drive,
+    // since it requires e.g. "d:." instead of "d:"!
+    if (d.length() == 2)
+        return true;
     }
     return (::DosSetCurrentDir((PSZ)d.c_str()) == 0);
 #elif defined(__UNIX__) || defined(__WXMAC__) || defined(__DOS__)
@@ -1860,7 +1860,7 @@ bool wxIsWritable(const wxString &path)
 {
 #if defined( __UNIX__ ) || defined(__OS2__)
     // access() will take in count also symbolic links
-    return access(wxConvFile.cWX2MB(path), W_OK) == 0;
+    return wxAccess(wxConvFile.cWX2MB(path), W_OK) == 0;
 #elif defined( __WINDOWS__ )
     return wxCheckWin32Permission(path, GENERIC_WRITE);
 #else
@@ -1874,7 +1874,7 @@ bool wxIsReadable(const wxString &path)
 {
 #if defined( __UNIX__ ) || defined(__OS2__)
     // access() will take in count also symbolic links
-    return access(wxConvFile.cWX2MB(path), R_OK) == 0;
+    return wxAccess(wxConvFile.cWX2MB(path), R_OK) == 0;
 #elif defined( __WINDOWS__ )
     return wxCheckWin32Permission(path, GENERIC_READ);
 #else
@@ -1888,7 +1888,7 @@ bool wxIsExecutable(const wxString &path)
 {
 #if defined( __UNIX__ ) || defined(__OS2__)
     // access() will take in count also symbolic links
-    return access(wxConvFile.cWX2MB(path), X_OK) == 0;
+    return wxAccess(wxConvFile.cWX2MB(path), X_OK) == 0;
 #elif defined( __WINDOWS__ )
    return wxCheckWin32Permission(path, GENERIC_EXECUTE);
 #else
