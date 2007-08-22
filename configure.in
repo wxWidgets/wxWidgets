@@ -667,6 +667,9 @@ WX_ARG_FEATURE(protocol_file, [  --enable-protocol-file  FILE support in wxProto
 
 WX_ARG_FEATURE(threads,     [  --enable-threads        use threads], wxUSE_THREADS)
 
+WX_ARG_ENABLE(iniconf,      [  --enable-iniconf        use wxIniConfig (Win32 only)], wxUSE_INICONF)
+WX_ARG_FEATURE(regkey,      [  --enable-regkey         use wxRegKey class (Win32 only)], wxUSE_REGKEY)
+
 if test "$wxUSE_GUI" = "yes"; then
 
 dnl ---------------------------------------------------------------------------
@@ -934,10 +937,8 @@ dnl wxMSW-only options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_FEATURE(dccache,     [  --enable-dccache        cache temporary wxDC objects (Win32 only)], wxUSE_DC_CACHEING)
-WX_ARG_ENABLE(iniconf,      [  --enable-iniconf        use wxIniConfig (Win32 only)], wxUSE_INICONF)
 WX_ARG_FEATURE(ps-in-msw,   [  --enable-ps-in-msw      use PS printing in wxMSW (Win32 only)], wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
 WX_ARG_FEATURE(ownerdrawn,  [  --enable-ownerdrawn     use owner drawn controls (Win32 only)], wxUSE_OWNER_DRAWN)
-WX_ARG_FEATURE(regkey,      [  --enable-regkey         use wxRegKey class (Win32 only)], wxUSE_REGKEY)
 WX_ARG_FEATURE(uxtheme,     [  --enable-uxtheme        enable support for Windows XP themed look (Win32 only)], wxUSE_UXTHEME)
 WX_ARG_FEATURE(wxdib,       [  --enable-wxdib          use wxDIB class (Win32 only)], wxUSE_DIB)
 
@@ -7057,36 +7058,40 @@ dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_MSW" = 1 ; then
 
-if test "$wxUSE_DC_CACHEING" = "yes"; then
-    AC_DEFINE(wxUSE_DC_CACHEING)
-fi
+    if test "$wxUSE_DC_CACHEING" = "yes"; then
+        AC_DEFINE(wxUSE_DC_CACHEING)
+    fi
 
-if test "$wxUSE_INICONF" = "yes"; then
-    AC_DEFINE(wxUSE_INICONF)
-fi
+    if test "$wxUSE_DIB" = "yes"; then
+        AC_DEFINE(wxUSE_WXDIB)
+    fi
 
-if test "$wxUSE_DIB" = "yes"; then
-    AC_DEFINE(wxUSE_WXDIB)
-fi
+    if test "$wxUSE_OWNER_DRAWN" = "yes"; then
+        AC_DEFINE(wxUSE_OWNER_DRAWN)
+    fi
 
-if test "$wxUSE_OWNER_DRAWN" = "yes"; then
-    AC_DEFINE(wxUSE_OWNER_DRAWN)
-fi
+    if test "$wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW" = "yes"; then
+        AC_DEFINE(wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
+    fi
 
-if test "$wxUSE_REGKEY" = "yes"; then
-    AC_DEFINE(wxUSE_REGKEY)
-fi
-
-if test "$wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW" = "yes"; then
-    AC_DEFINE(wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
-fi
-
-if test "$wxUSE_UXTHEME" = "yes"; then
-    AC_DEFINE(wxUSE_UXTHEME)
-fi
+    if test "$wxUSE_UXTHEME" = "yes"; then
+        AC_DEFINE(wxUSE_UXTHEME)
+    fi
 
 fi
 dnl wxUSE_MSW = 1
+    
+
+if test "$USE_WIN32" = 1 ; then
+    if test "$wxUSE_INICONF" = "yes"; then
+        AC_DEFINE(wxUSE_INICONF)
+    fi
+
+    if test "$wxUSE_REGKEY" = "yes"; then
+        AC_DEFINE(wxUSE_REGKEY)
+    fi
+fi
+dnl USE_WIN32 = 1
 
 dnl ---------------------------------------------------------------------------
 dnl wxGraphicsContext
