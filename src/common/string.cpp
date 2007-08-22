@@ -1391,49 +1391,46 @@ int wxString::Find(wxUniChar ch, bool bFromEnd) const
 // it out. Note that number extraction works correctly on UTF-8 strings, so
 // we can use wxStringCharType and wx_str() for maximum efficiency.
 
-template <typename T>
-bool wxStringToIntType(const wxStringCharType *start,
-                       T *val,
-                       int base,
-                       T (*func)(const wxStringCharType*, wxStringCharType**, int))
-{
-    wxCHECK_MSG( val, false, _T("NULL output pointer") );
-    wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
-
 #ifndef __WXWINCE__
-    errno = 0;
+    #define DO_IF_NOT_WINCE(x) x
+#else
+    #define DO_IF_NOT_WINCE(x)
 #endif
 
-    wxStringCharType *end;
-    *val = (*func)(start, &end, base);
-
-    // return true only if scan was stopped by the terminating NUL and if the
-    // string was not empty to start with and no under/overflow occurred
-    return !*end && (end != start)
-#ifndef __WXWINCE__
-        && (errno != ERANGE)
-#endif
-    ;
-}
+#define WX_STRING_TO_INT_TYPE(val, base, func)                              \
+    wxCHECK_MSG( val, false, _T("NULL output pointer") );                   \
+    wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );  \
+                                                                            \
+    DO_IF_NOT_WINCE( errno = 0; )                                           \
+                                                                            \
+    const wxStringCharType *start = wx_str();                               \
+    wxStringCharType *end;                                                  \
+    *val = func(start, &end, base);                                         \
+                                                                            \
+    /* return true only if scan was stopped by the terminating NUL and */   \
+    /* if the string was not empty to start with and no under/overflow */   \
+    /* occurred: */                                                         \
+    return !*end && (end != start)                                          \
+        DO_IF_NOT_WINCE( && (errno != ERANGE) )
 
 bool wxString::ToLong(long *val, int base) const
 {
-    return wxStringToIntType(wx_str(), val, base, wxStrtol);
+    WX_STRING_TO_INT_TYPE(val, base, wxStrtol);
 }
 
 bool wxString::ToULong(unsigned long *val, int base) const
 {
-    return wxStringToIntType(wx_str(), val, base, wxStrtoul);
+    WX_STRING_TO_INT_TYPE(val, base, wxStrtoul);
 }
 
 bool wxString::ToLongLong(wxLongLong_t *val, int base) const
 {
-    return wxStringToIntType(wx_str(), val, base, wxStrtoll);
+    WX_STRING_TO_INT_TYPE(val, base, wxStrtoll);
 }
 
 bool wxString::ToULongLong(wxULongLong_t *val, int base) const
 {
-    return wxStringToIntType(wx_str(), val, base, wxStrtoull);
+    WX_STRING_TO_INT_TYPE(val, base, wxStrtoull);
 }
 
 bool wxString::ToDouble(double *val) const
