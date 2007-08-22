@@ -157,28 +157,28 @@ public:
             void *id = child->GetItem().GetID();
             
             m_children.Add( id );
-#if 0            
-            if (m_internal->IsSorted())
+
+            if (m_internal->IsSorted() || m_internal->GetDataViewModel()->HasDefaultCompare())
             {
                 g_internal = m_internal;
                 m_children.Sort( &wxGtkTreeModelChildCmp );
                 return m_children.Index( id );
             }
-#endif
+
             return m_children.GetCount()-1;
         }
         
     unsigned int AddLeave( void* id )
         {
             m_children.Add( id );
-#if 0            
-            if (m_internal->IsSorted())
+
+            if (m_internal->IsSorted() || m_internal->GetDataViewModel()->HasDefaultCompare())
             {
                 g_internal = m_internal;
                 m_children.Sort( &wxGtkTreeModelChildCmp );
                 return m_children.Index( id );
             }
-#endif
+
             return m_children.GetCount()-1;
         }
         
@@ -2097,9 +2097,14 @@ void wxDataViewColumn::SetSortable( bool sortable )
     GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
     
     if (sortable)
+    {
         gtk_tree_view_column_set_sort_column_id( column, GetModelColumn() );
+    }
     else
+    {
         gtk_tree_view_column_set_sort_column_id( column, -1 );
+        gtk_tree_view_column_set_sort_indicator( column, FALSE );
+    }
 }
 
 bool wxDataViewColumn::IsSortable() const
@@ -2128,6 +2133,8 @@ void wxDataViewColumn::SetSortOrder( bool ascending )
         gtk_tree_view_column_set_sort_order( column, GTK_SORT_ASCENDING );
     else
         gtk_tree_view_column_set_sort_order( column, GTK_SORT_DESCENDING );
+
+    gtk_tree_view_column_set_sort_indicator( column, TRUE );
 }
 
 bool wxDataViewColumn::IsSortOrderAscending() const

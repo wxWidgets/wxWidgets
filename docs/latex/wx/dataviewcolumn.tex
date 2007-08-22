@@ -128,9 +128,14 @@ a little arrow.
 
 \func{void}{SetSortable}{\param{bool }{sortable}}
 
-Indicate that the column is sortable. This is only to provide a
-visual hint in the column (such as a sort order indicator). It
-will not actually sort the data. 
+Indicate that the column is sortable. This does
+not show any sorting indicate yet, but it does
+make the column header clickable. Call 
+\helpref{SetSortOrder}{wxdataviewcolumnsetsortorder}
+afterwards to actually make the sort indicator appear.
+If {\it sortable} is false, the column header is
+no longer clickable and the sort indicator (little
+arrow) will disappear.
 
 \membersection{wxDataViewColumn::SetTitle}\label{wxdataviewcolumnsettitle}
 

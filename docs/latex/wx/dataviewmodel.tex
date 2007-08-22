@@ -38,7 +38,9 @@ Note that wxDataViewModel does not define the position or
 index of any item in the control since several control might
 display the data differently, but wxDataViewModel does
 provide a \helpref{Compare}{wxdataviewmodelcompare} method
-which the wxDataViewCtrl may use to sort the data.
+which the wxDataViewCtrl may use to sort the data either
+in conjunction with a column header or without (see
+\helpref{HasDefaultCompare}{wxdataviewmodelhasdefaultcompare}.
 
 This class maintains a list of 
 \helpref{wxDataViewModelNotifier}{wxdataviewmodelnotifier}
@@ -107,6 +109,8 @@ The compare function to be used by control. The default compare function
 sorts by container and other items separately and in ascending order.
 Override this for a different sorting behaviour.
 
+See also \helpref{HasDefaultCompare}{wxdataviewmodelhasdefaultcompare}.
+
 \membersection{wxDataViewModel::GetColumnCount}\label{wxdataviewmodelgetcolumncount}
 
 \constfunc{unsigned int}{GetColumnCount}{\void}
@@ -146,6 +150,18 @@ of {\it item} or an invalid wxDataViewItem if {\it item} is the root item.
 
 Override this to indicate the value of {\it item}
 A \helpref{wxVariant}{wxvariant} is used to store the data.
+
+\membersection{wxDataViewModel::HasDefaultCompare}\label{wxdataviewmodelhasdefaultcompare}
+
+\func{bool}{HasDefaultCompare}{\void}
+
+Override this to indicate that the model provides a default compare
+function that the control should use if no wxDataViewColumn has been
+chosen for sorting. Usually, the user clicks on a column header for
+sorting, the data will be sorted alphanumerically. If any other
+order (e.g. by index or order of appearance) is required, then this
+should be used. See also \helpref{wxDataViewIndexListModel}{wxdataviewindexlistmodel}
+for a model which makes use of this.
 
 \membersection{wxDataViewModel::IsContainer}\label{wxdataviewmodeliscontainer}
 

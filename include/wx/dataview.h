@@ -156,6 +156,7 @@ public:
     // default compare function
     virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2, 
                          unsigned int column, bool ascending );
+    virtual bool HasDefaultCompare() { return false; }
 
 protected:
     // the user should not delete this class directly: he should use DecRef() instead!
@@ -198,6 +199,7 @@ public:
     
     virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2, 
                          unsigned int column, bool ascending );
+    virtual bool HasDefaultCompare() { return true; }
 
     // implement base methods
 
