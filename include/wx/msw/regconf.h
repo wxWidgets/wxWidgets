@@ -9,13 +9,14 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef   _REGCONF_H
-#define   _REGCONF_H
+#ifndef _WX_MSW_REGCONF_H_
+#define _WX_MSW_REGCONF_H_
 
-#ifndef   _REGISTRY_H
-  #include "wx/msw/registry.h"
-#endif
+#include "wx/defs.h"
 
+#if wxUSE_CONFIG && wxUSE_REGKEY
+
+#include "wx/msw/registry.h"
 #include "wx/object.h"
 #include "wx/confbase.h"
 #include "wx/buffer.h"
@@ -109,4 +110,6 @@ private:
   DECLARE_ABSTRACT_CLASS(wxRegConfig)
 };
 
-#endif  //_REGCONF_H
+#endif // wxUSE_CONFIG && wxUSE_REGKEY
+
+#endif  // _WX_MSW_REGCONF_H_

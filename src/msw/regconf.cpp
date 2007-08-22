@@ -16,7 +16,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_CONFIG
+#if wxUSE_CONFIG && wxUSE_REGKEY
 
 #include "wx/config.h"
 
@@ -780,4 +780,4 @@ bool wxRegConfig::DeleteAll()
   return bOk;
 }
 
-#endif // wxUSE_CONFIG
+#endif // wxUSE_CONFIG && wxUSE_REGKEY
