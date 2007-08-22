@@ -99,6 +99,7 @@ static wxFontEncoding gs_encodings[] =
     wxFONTENCODING_BIG5,
     wxFONTENCODING_SHIFT_JIS,
     wxFONTENCODING_GB2312,
+    wxFONTENCODING_ISO2022_JP,
 };
 
 // the descriptions for them
@@ -153,6 +154,7 @@ static const wxChar* gs_encodingDescs[] =
     wxTRANSLATE( "BIG5" ),
     wxTRANSLATE( "SHIFT-JIS" ),
     wxTRANSLATE( "GB-2312" ),
+    wxTRANSLATE( "ISO-2022-JP" ),
 };
 
 // and the internal names (these are not translated on purpose!)
@@ -220,6 +222,7 @@ static const wxChar* gs_encodingNames[WXSIZEOF(gs_encodingDescs)][9] =
     { wxT( "BIG5" ), wxT("big5"), NULL },
     { wxT( "SJIS" ), wxT( "SHIFT-JIS" ), wxT( "SHIFT_JIS" ), NULL },
     { wxT( "GB2312" ), NULL },
+    { wxT( "ISO-2022-JP" ), NULL },
 };
 
 wxCOMPILE_TIME_ASSERT( WXSIZEOF(gs_encodingDescs) == WXSIZEOF(gs_encodings), EncodingsArraysNotInSync );
