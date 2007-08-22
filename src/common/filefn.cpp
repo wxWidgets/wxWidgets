@@ -1860,7 +1860,7 @@ bool wxIsWritable(const wxString &path)
 {
 #if defined( __UNIX__ ) || defined(__OS2__)
     // access() will take in count also symbolic links
-    return wxAccess(wxConvFile.cWX2MB(path), W_OK) == 0;
+    return wxAccess(path.c_str(), W_OK) == 0;
 #elif defined( __WINDOWS__ )
     return wxCheckWin32Permission(path, GENERIC_WRITE);
 #else
@@ -1874,7 +1874,7 @@ bool wxIsReadable(const wxString &path)
 {
 #if defined( __UNIX__ ) || defined(__OS2__)
     // access() will take in count also symbolic links
-    return wxAccess(wxConvFile.cWX2MB(path), R_OK) == 0;
+    return wxAccess(path.c_str(), R_OK) == 0;
 #elif defined( __WINDOWS__ )
     return wxCheckWin32Permission(path, GENERIC_READ);
 #else
@@ -1888,7 +1888,7 @@ bool wxIsExecutable(const wxString &path)
 {
 #if defined( __UNIX__ ) || defined(__OS2__)
     // access() will take in count also symbolic links
-    return wxAccess(wxConvFile.cWX2MB(path), X_OK) == 0;
+    return wxAccess(path.c_str(), X_OK) == 0;
 #elif defined( __WINDOWS__ )
    return wxCheckWin32Permission(path, GENERIC_EXECUTE);
 #else
