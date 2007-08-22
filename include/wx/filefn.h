@@ -159,7 +159,7 @@ enum wxFileKind
     #define   wxCRT_RmDir      _wrmdir
     #define   wxCRT_Stat       _wstat
     #define   wxStructStat struct _stat
-#elif defined(__WXMSW__) && !defined(__WXPALMOS__) && \
+#elif (defined(__WXMSW__) || defined(__OS2__)) && !defined(__WXPALMOS__) && \
       ( \
         defined(__VISUALC__) || \
         (defined(__MINGW32__) && !defined(__WINE__) && \
@@ -436,7 +436,7 @@ inline int wxLstat(const wxString& path, wxStructStat *buf)
     { return wxCRT_Lstat(path.fn_str(), buf); }
 inline int wxRmDir(const wxString& path)
     { return wxCRT_RmDir(path.fn_str()); }
-#ifdef __WINDOWS__
+#if defined(__WINDOWS__) || (defined(__OS2__) && defined(__WATCOMC__))
 inline int wxMkDir(const wxString& path, mode_t WXUNUSED(mode) = 0)
     { return wxCRT_MkDir(path.fn_str()); }
 #else
