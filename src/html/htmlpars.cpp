@@ -29,7 +29,7 @@
 #include "wx/fontmap.h"
 #include "wx/html/htmldefs.h"
 #include "wx/html/htmlpars.h"
-#include "wx/arrimpl.cpp"
+#include "wx/vector.h"
 
 #ifdef __WXWINCE__
     #include "wx/msw/wince/missing.h"       // for bsearch()
@@ -47,12 +47,15 @@ const wxChar *wxTRACE_HTML_DEBUG = _T("htmldebug");
 class wxHtmlTextPiece
 {
 public:
+    wxHtmlTextPiece() {}
     wxHtmlTextPiece(int pos, int lng) : m_pos(pos), m_lng(lng) {}
     int m_pos, m_lng;
 };
 
-WX_DECLARE_OBJARRAY(wxHtmlTextPiece, wxHtmlTextPieces);
-WX_DEFINE_OBJARRAY(wxHtmlTextPieces)
+// NB: this is an empty class and not typedef because of forward declaration
+class wxHtmlTextPieces : public wxVector<wxHtmlTextPiece>
+{
+};
 
 class wxHtmlParserState
 {
@@ -168,7 +171,7 @@ void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
         {
             // add text to m_TextPieces:
             if (i - textBeginning > 0)
-                m_TextPieces->Add(
+                m_TextPieces->push_back(
                     wxHtmlTextPiece(textBeginning, i - textBeginning));
 
             // if it is a comment, skip it:
@@ -230,7 +233,7 @@ void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
 
     // add remaining text to m_TextPieces:
     if (end_pos - textBeginning > 0)
-        m_TextPieces->Add(
+        m_TextPieces->push_back(
             wxHtmlTextPiece(textBeginning, end_pos - textBeginning));
 }
 
@@ -262,7 +265,7 @@ void wxHtmlParser::DoParsing(int begin_pos, int end_pos)
     if (end_pos <= begin_pos) return;
 
     wxHtmlTextPieces& pieces = *m_TextPieces;
-    size_t piecesCnt = pieces.GetCount();
+    size_t piecesCnt = pieces.size();
 
     while (begin_pos < end_pos)
     {
