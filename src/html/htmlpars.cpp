@@ -953,7 +953,7 @@ wxHtmlParser::SkipCommentTag(wxString::const_iterator& start,
     wxString::const_iterator p = start;
 
     // comments begin with "<!--" in HTML 4.0
-    if ( end - p < 3 || *++p != '!' || *++p != '-' || *++p != '-' )
+    if ( p > end - 3 || *++p != '!' || *++p != '-' || *++p != '-' )
     {
         // not a comment at all
         return false;
