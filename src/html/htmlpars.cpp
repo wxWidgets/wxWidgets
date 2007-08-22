@@ -558,16 +558,18 @@ wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity) const
 
     if (entity[0] == wxT('#'))
     {
-        const wxChar *ent_s = entity.c_str();
-        const wxChar *format;
+        // NB: parsed value is a number, so it's OK to use wx_str(), internal
+        //     representation is the same for numbers
+        const wxStringCharType *ent_s = entity.wx_str();
+        const wxStringCharType *format;
 
-        if (ent_s[1] == wxT('x') || ent_s[1] == wxT('X'))
+        if (ent_s[1] == wxSTRING_TEXT('x') || ent_s[1] == wxSTRING_TEXT('X'))
         {
-            format = wxT("%x");
+            format = wxSTRING_TEXT("%x");
             ent_s++;
         }
         else
-            format = wxT("%u");
+            format = wxSTRING_TEXT("%u");
         ent_s++;
 
         if (wxSscanf(ent_s, format, &code) != 1)
