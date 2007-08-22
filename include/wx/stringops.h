@@ -156,7 +156,15 @@ struct WXDLLIMPEXP_BASE wxStringOperationsUtf8
     }
 
     // decodes single UTF-8 character from UTF-8 string
-    static wxUniChar DecodeChar(wxStringImpl::const_iterator i);
+    static wxUniChar DecodeChar(wxStringImpl::const_iterator i)
+    {
+        if ( (unsigned char)*i < 0x80 )
+            return (int)*i;
+        return DecodeNonAsciiChar(i);
+    }
+
+private:
+    static wxUniChar DecodeNonAsciiChar(wxStringImpl::const_iterator i);
 };
 #endif // wxUSE_UNICODE_UTF8
 
