@@ -476,46 +476,52 @@ void wxHtmlEntitiesParser::SetEncoding(wxFontEncoding encoding)
 
 wxString wxHtmlEntitiesParser::Parse(const wxString& input) const
 {
-    const wxChar *c, *last;
-    const wxChar *in_str = input.c_str();
     wxString output;
 
-    output.reserve(input.length());
+    const wxString::const_iterator end(input.end());
+    wxString::const_iterator c(input.begin());
+    wxString::const_iterator last(c);
 
-    for (c = in_str, last = in_str; *c != wxT('\0'); c++)
+    for ( ; c < end; ++c )
     {
         if (*c == wxT('&'))
         {
+            if ( output.empty() )
+                output.reserve(input.length());
+
             if (c - last > 0)
-                output.append(last, c - last);
-            if ( *++c == wxT('\0') )
+                output.append(last, c);
+            if ( ++c == end )
                 break;
 
             wxString entity;
-            const wxChar *ent_s = c;
+            const wxString::const_iterator ent_s = c;
             wxChar entity_char;
 
-            for (; (*c >= wxT('a') && *c <= wxT('z')) ||
-                   (*c >= wxT('A') && *c <= wxT('Z')) ||
-                   (*c >= wxT('0') && *c <= wxT('9')) ||
-                   *c == wxT('_') || *c == wxT('#'); c++) {}
-            entity.append(ent_s, c - ent_s);
-            if (*c != wxT(';')) c--;
+            for (; c != end &&
+                   ((*c >= wxT('a') && *c <= wxT('z')) ||
+                    (*c >= wxT('A') && *c <= wxT('Z')) ||
+                    (*c >= wxT('0') && *c <= wxT('9')) ||
+                    *c == wxT('_') || *c == wxT('#')); ++c) {}
+            entity.append(ent_s, c);
+            if (c == end || *c != wxT(';')) --c;
             last = c+1;
             entity_char = GetEntityChar(entity);
             if (entity_char)
                 output << entity_char;
             else
             {
-                output.append(ent_s-1, c-ent_s+2);
+                output.append(ent_s-1, c+1);
                 wxLogTrace(wxTRACE_HTML_DEBUG,
-                           wxT("Unrecognized HTML entity: '%s'"),
-                           entity.c_str());
+                           "Unrecognized HTML entity: '%s'",
+                           entity);
             }
         }
     }
-    if (*last != wxT('\0'))
-        output.append(last);
+    if ( last == input.begin() ) // common case: no entity
+        return input;
+    if ( last != end )
+        output.append(last, end);
     return output;
 }
 
