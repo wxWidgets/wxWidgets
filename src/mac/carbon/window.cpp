@@ -2580,12 +2580,13 @@ void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
 
         if ( hasFocus )
             DrawThemeFocusRect( &rect , true ) ;
-
-        if ( hasBothScrollbars )
+   /*
+        if ( hasBothScrollbars ) // hasBothScrollbars is not declared
         {
             // GetThemeStandaloneGrowBoxBounds
             // DrawThemeStandaloneNoGrowBox
         }
+   */
     }
 #endif
 }
