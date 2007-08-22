@@ -1837,7 +1837,7 @@ wxString wxString::Lower() const { wxString s(*this); return s.MakeLower(); }
 // wxUTF8StringBuffer
 // ----------------------------------------------------------------------------
 
-#if wxUSE_UNICODE && (!wxUSE_UNICODE_UTF8 || wxUSE_STL_BASED_WXSTRING)
+#if wxUSE_UNICODE_WCHAR
 wxUTF8StringBuffer::~wxUTF8StringBuffer()
 {
     wxMBConvStrictUTF8 conv;
@@ -1860,4 +1860,4 @@ wxUTF8StringBufferLength::~wxUTF8StringBufferLength()
     conv.ToWChar(wbuf, wlen, m_buf, m_len);
     wbuf.SetLength(wlen);
 }
-#endif // wxUSE_UNICODE && (!wxUSE_UNICODE_UTF8 || wxUSE_STL_BASED_WXSTRING)
+#endif // wxUSE_UNICODE_WCHAR

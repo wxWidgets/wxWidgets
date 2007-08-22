@@ -2864,10 +2864,10 @@ typedef wxStringInternalBuffer                wxStringBuffer;
 typedef wxStringInternalBufferLength          wxStringBufferLength;
 #endif // !wxUSE_STL_BASED_WXSTRING && !wxUSE_UNICODE_UTF8
 
-#if wxUSE_UNICODE_UTF8 && !wxUSE_STL_BASED_WXSTRING
+#if wxUSE_UNICODE_UTF8
 typedef wxStringInternalBuffer                wxUTF8StringBuffer;
 typedef wxStringInternalBufferLength          wxUTF8StringBufferLength;
-#elif wxUSE_UNICODE // !wxUSE_UNICODE_UTF8 || wxUSE_STL_BASED_WXSTRING
+#elif wxUSE_UNICODE_WCHAR
 class WXDLLIMPEXP_BASE wxUTF8StringBuffer : public wxStringTypeBufferBase<char>
 {
 public:
@@ -2888,7 +2888,7 @@ public:
 
     DECLARE_NO_COPY_CLASS(wxUTF8StringBufferLength)
 };
-#endif // wxUSE_UNICODE_UTF8 && !wxUSE_STL_BASED_WXSTRING or not
+#endif // wxUSE_UNICODE_UTF8/wxUSE_UNICODE_WCHAR
 
 
 // ---------------------------------------------------------------------------
