@@ -139,12 +139,12 @@ static int wxDoVsnprintf(CharType *buf, size_t lenMax,
     }
 
     // finally, process each conversion specifier with its own argument
-    toparse = format;
+    const CharType *toparse = format;
     for (i=0; i < parser.nargs; i++)
     {
         // copy in the output buffer the portion of the format string between
         // last specifier and the current one
-        size_t tocopy = ( arg[i].m_pArgPos - toparse );
+        size_t tocopy = ( parser.arg[i].m_pArgPos - toparse );
 
         lenCur += wxCopyStrWithPercents(lenMax - lenCur, buf + lenCur,
                                         tocopy, toparse);
@@ -155,7 +155,8 @@ static int wxDoVsnprintf(CharType *buf, size_t lenMax,
         }
 
         // process this specifier directly in the output buffer
-        int n = arg[i].Process(buf+lenCur, lenMax - lenCur, &argdata[arg[i].m_pos], lenCur);
+        int n = parser.arg[i].Process(buf+lenCur, lenMax - lenCur,
+                                      &argdata[parser.arg[i].m_pos], lenCur);
         if (n == -1)
         {
             buf[lenMax-1] = wxT('\0');  // be sure to always NUL-terminate the string
@@ -165,7 +166,7 @@ static int wxDoVsnprintf(CharType *buf, size_t lenMax,
 
         // the +1 is because wxPrintfConvSpec::m_pArgEnd points to the last character
         // of the format specifier, but we are not interested to it...
-        toparse = arg[i].m_pArgEnd + 1;
+        toparse = parser.arg[i].m_pArgEnd + 1;
     }
 
     // copy portion of the format string after last specifier
