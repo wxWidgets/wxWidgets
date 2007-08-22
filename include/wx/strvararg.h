@@ -124,6 +124,11 @@ class WXDLLIMPEXP_FWD_BASE wxString;
 // accounts for string changes done by wxArgNormalizer<>
 //
 // Note that this class can _only_ be used for function arguments!
+#ifdef __VISUALC__
+    // "struct 'wx[W]CharBuffer<T>' needs to have dll-interface to be used by
+    // clients of class 'wxString'" - this is private, we don't care
+    #pragma warning (disable:4251)
+#endif
 class WXDLLIMPEXP_BASE wxFormatString
 {
 public:
@@ -178,11 +183,6 @@ private:
 #endif // wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
 
 private:
-#ifdef __VISUALC__
-    // "struct 'ConvertedBuffer<T>' needs to have dll-interface to be used by
-    // clients of class 'wxString'" - this is private, we don't care
-    #pragma warning (disable:4251)
-#endif
     wxCharBuffer  m_char;
     wxWCharBuffer m_wchar;
 #ifdef __VISUALC__
@@ -217,16 +217,27 @@ struct wxFormatStringArgument
 };
 
 template<typename T>
-inline wxFormatStringArgument wxFindFormatStringArgument(T WXUNUSED(arg))
+struct wxFormatStringArgumentFinder
 {
-    // by default, arguments are not format strings, so return "not found"
-    return wxFormatStringArgument();
-}
+    static wxFormatStringArgument find(T)
+    {
+        // by default, arguments are not format strings, so return "not found"
+        return wxFormatStringArgument();
+    }
+};
 
-inline wxFormatStringArgument
-wxFindFormatStringArgument(const wxFormatString& arg)
+template<>
+struct wxFormatStringArgumentFinder<const wxFormatString&>
 {
-    return wxFormatStringArgument(&arg);
+    static wxFormatStringArgument find(const wxFormatString& arg)
+        { return wxFormatStringArgument(&arg); }
+};
+
+template<>
+struct wxFormatStringArgumentFinder<wxFormatString>
+{
+    static wxFormatStringArgument find(const wxFormatString& arg)
+        { return wxFormatStringArgument(&arg); }
 };
 
 
@@ -715,6 +726,15 @@ private:
 #define _WX_VARARG_FIXED_UNUSED_EXPAND_4(t1,t2,t3,t4) \
          t1 WXUNUSED(f1), t2 WXUNUSED(f2), t3 WXUNUSED(f3), t4 WXUNUSED(f4)
 
+#define _WX_VARARG_FIXED_TYPEDEFS_1(t1) \
+             typedef t1 TF1
+#define _WX_VARARG_FIXED_TYPEDEFS_2(t1,t2) \
+             _WX_VARARG_FIXED_TYPEDEFS_1(t1); typedef t2 TF2
+#define _WX_VARARG_FIXED_TYPEDEFS_3(t1,t2,t3) \
+             _WX_VARARG_FIXED_TYPEDEFS_2(t1,t2); typedef t3 TF3
+#define _WX_VARARG_FIXED_TYPEDEFS_4(t1,t2,t3,t4) \
+             _WX_VARARG_FIXED_TYPEDEFS_3(t1,t2,t3); typedef t4 TF4
+
 // This macro expands N-items tuple of fixed arguments types into part of
 // function's declaration. For example,
 // "_WX_VARARG_FIXED_EXPAND(3, (int, char*, int))" expands into
@@ -729,6 +749,14 @@ private:
                 _WX_VARARG_FIXED_UNUSED_EXPAND_IMPL(N, args)
 #define _WX_VARARG_FIXED_UNUSED_EXPAND_IMPL(N, args) \
                 _WX_VARARG_FIXED_UNUSED_EXPAND_##N args
+
+// Declarates typedefs for fixed arguments types; i-th fixed argument types
+// will have TFi typedef.
+#define _WX_VARARG_FIXED_TYPEDEFS(N, args) \
+                _WX_VARARG_FIXED_TYPEDEFS_IMPL(N, args)
+#define _WX_VARARG_FIXED_TYPEDEFS_IMPL(N, args) \
+                _WX_VARARG_FIXED_TYPEDEFS_##N args
+
 
 // This macro calls another macro 'm' passed as second argument 'N' times,
 // with its only argument set to 1..N, and concatenates the results using
@@ -784,9 +812,11 @@ private:
 // And the same for fixed arguments, _not_ normalizing it:
 #define _WX_VARARG_PASS_FIXED(i)        f##i
 
-#define _WX_VARARG_FIND_FMT(i)          (wxFindFormatStringArgument(f##i))
+#define _WX_VARARG_FIND_FMT(i) \
+            (wxFormatStringArgumentFinder<TF##i>::find(f##i))
 
 #define _WX_VARARG_FORMAT_STRING(numfixed, fixed)                             \
+    _WX_VARARG_FIXED_TYPEDEFS(numfixed, fixed);                               \
     const wxFormatString *fmt =                                               \
             (_WX_VARARG_JOIN(numfixed, _WX_VARARG_FIND_FMT))
 
