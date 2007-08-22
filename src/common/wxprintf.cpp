@@ -174,7 +174,7 @@ static int wxDoVsnprintf(CharType *buf, size_t lenMax,
     // NOTE2: the +1 is because we want to copy also the '\0'
     size_t tocopy = wxStrlen(format) + 1  - ( toparse - format ) ;
 
-    lenCur += wxCopyStrWithPercents(lenMax - lenCur, buf + lenCur, 
+    lenCur += wxCopyStrWithPercents(lenMax - lenCur, buf + lenCur,
                                     tocopy, toparse) - 1;
     if (buf[lenCur])
     {
@@ -189,8 +189,6 @@ static int wxDoVsnprintf(CharType *buf, size_t lenMax,
 
     return lenCur;
 }
-
-} // anonymous namespace
 
 #endif // !defined(wxCRT_VsnprintfW) || !defined(wxCRT_VsnprintfA)
 
