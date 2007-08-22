@@ -70,7 +70,7 @@ struct WXDLLIMPEXP_BASE wxStringOperationsUtf8
 #endif
 
     // table of offsets to skip forward when iterating over UTF-8 sequence
-    static unsigned char ms_utf8IterTable[256];
+    static const unsigned char ms_utf8IterTable[256];
 
 
     template<typename Iterator>

@@ -703,7 +703,7 @@ size_t wxMBConvUTF7::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 // UTF-8
 // ----------------------------------------------------------------------------
 
-static wxUint32 utf8_max[]=
+static const wxUint32 utf8_max[]=
     { 0x7f, 0x7ff, 0xffff, 0x1fffff, 0x3ffffff, 0x7fffffff, 0xffffffff };
 
 // boundaries of the private use area we use to (temporarily) remap invalid
@@ -712,7 +712,7 @@ const wxUint32 wxUnicodePUA = 0x100000;
 const wxUint32 wxUnicodePUAEnd = wxUnicodePUA + 256;
 
 // this table gives the length of the UTF-8 encoding from its first character:
-unsigned char tableUtf8Lengths[256] = {
+const unsigned char tableUtf8Lengths[256] = {
     // single-byte sequences (ASCII):
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // 00..0F
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // 10..1F

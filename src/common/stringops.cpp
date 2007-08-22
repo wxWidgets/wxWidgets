@@ -34,7 +34,7 @@
 // UTF-8 sequences lengths
 // ---------------------------------------------------------------------------
 
-unsigned char wxStringOperationsUtf8::ms_utf8IterTable[256] = {
+const unsigned char wxStringOperationsUtf8::ms_utf8IterTable[256] = {
     // single-byte sequences (ASCII):
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // 00..0F
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // 10..1F
