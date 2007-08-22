@@ -70,6 +70,10 @@
     #undef HAVE_VSWPRINTF
 #endif
 
+#if defined(__WATCOMC__)
+    #define HAVE_VSWPRINTF 1
+#endif
+
 #if wxUSE_PRINTF_POS_PARAMS
     /*
         The systems where vsnprintf() supports positional parameters should
