@@ -464,7 +464,7 @@ public:
     void OnRenameTimer();
 
     void ScrollWindow( int dx, int dy, const wxRect *rect = NULL );
-    void ScrollTo( int rows );
+    void ScrollTo( int rows, int column );
 
     bool HasCurrentRow() { return m_currentRow != (unsigned int)-1; }
     void ChangeCurrentRow( unsigned int row );
@@ -1987,7 +1987,7 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
 
     m_count = -1;
     UpdateDisplay();
-	
+
     return true;
 }
 
@@ -2000,8 +2000,8 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
 
     wxDataViewTreeNode * node;
     node = FindNode(parent);
-    SendModelEvent(wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_DELETED, item);
 
+    SendModelEvent(wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_DELETED, item);
     if( node == NULL || node->GetChildren().Index( item.GetID() ) == wxNOT_FOUND )
     {
         return false;
@@ -2009,6 +2009,14 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
 
     int sub = -1;
     node->GetChildren().Remove( item.GetID() );
+    //Manuplate selection
+    if( m_selection.GetCount() > 1 )
+    {
+        int row = m_selection[0];
+        m_selection.Empty();
+        m_selection.Add(row);
+    }
+
     if( GetOwner()->GetModel()->IsContainer( item ) )
     {
         wxDataViewTreeNode * n = NULL;
@@ -2140,12 +2148,41 @@ void wxDataViewMainWindow::ScrollWindow( int dx, int dy, const wxRect *rect )
         GetOwner()->m_headerArea->ScrollWindow( dx, 0 );
 }
 
-void wxDataViewMainWindow::ScrollTo( int rows )
+void wxDataViewMainWindow::ScrollTo( int rows, int column )
 {
     int x, y;
     m_owner->GetScrollPixelsPerUnit( &x, &y );
-    int sc = rows*m_lineHeight/y;
-    m_owner->Scroll(0, sc );
+    int sy = rows*m_lineHeight/y;
+    int sx = 0;
+    if( column != -1 )
+    {
+        wxRect rect = GetClientRect();
+        unsigned int colnum = 0;
+        unsigned int x_start = 0, x_end = 0, w = 0;
+        int xx, yy, xe;
+        m_owner->CalcUnscrolledPosition( rect.x, rect.y, &xx, &yy );
+        for (x_start = 0; colnum < column; colnum++)
+        {
+            wxDataViewColumn *col = GetOwner()->GetColumn(colnum);
+            if (col->IsHidden())
+                continue;      // skip it!
+
+            w = col->GetWidth();
+            x_start += w;
+        }
+
+        x_end = x_start + w;
+        xe = xx + rect.width;
+        if( x_end > xe )
+        {
+            sx = ( xx + x_end - xe )/x;
+        }
+        if( x_start < xx )
+        {
+            sx = x_start/x; 
+        }
+    }
+    m_owner->Scroll( sx, sy );
 }
 
 void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -2415,7 +2452,12 @@ unsigned int wxDataViewMainWindow::GetLastVisibleRow()
     m_owner->CalcUnscrolledPosition( client_size.x, client_size.y,
                                      &client_size.x, &client_size.y );
 
-    return wxMin( GetRowCount()-1, ((unsigned)client_size.y/m_lineHeight)+1 );
+    //we should deal with the pixel here 
+    unsigned int row = (client_size.y)/m_lineHeight;
+    if( client_size.y % m_lineHeight < m_lineHeight/2 )
+        row -= 1;
+    
+    return wxMin( GetRowCount()-1, row );
 }
 
 unsigned int wxDataViewMainWindow::GetRowCount()
@@ -2998,7 +3040,7 @@ int wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item)
 {
     wxDataViewModel * model = GetOwner()->GetModel();
     if( model == NULL )
-        return 0;
+        return -1;
 
     if( !item.IsOk() )
         return -1;
@@ -3708,16 +3750,44 @@ void wxDataViewCtrl::UnselectAll()
     m_clientArea->SelectAllRows(false);
 }
 
-void wxDataViewCtrl::EnsureVisible( int row )
+void wxDataViewCtrl::EnsureVisible( int row, int column )
 {
-    m_clientArea->ScrollTo( row );
+    if( row < 0 )
+        row = 0;
+    if( row > m_clientArea->GetRowCount() )
+        row = m_clientArea->GetRowCount();
+
+    int first = m_clientArea->GetFirstVisibleRow();
+    int last = m_clientArea->GetLastVisibleRow();
+    if( row < first )
+        m_clientArea->ScrollTo( row, column );
+    else if( row > last )
+        m_clientArea->ScrollTo( row - last + first, column );
+    else
+        m_clientArea->ScrollTo( first, column );
 }
 
 void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, wxDataViewColumn * column )
 {
     int row = m_clientArea->GetRowByItem(item);
     if( row >= 0 )
-        EnsureVisible(row);
+    {
+        if( column == NULL )
+            return EnsureVisible(row, -1);
+        else
+        {  
+            int col = 0;
+            int len = GetColumnCount();
+            for( int i = 0; i < len; i ++ )
+                if( GetColumn(i) == column )
+                {
+                    col = i;
+                    break;
+                }
+            EnsureVisible( row, col );
+        }
+    }
+        
 }
 
 void wxDataViewCtrl::HitTest( const wxPoint & point, wxDataViewItem & item, int & column ) const

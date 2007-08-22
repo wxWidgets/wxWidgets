@@ -746,7 +746,7 @@ void MyFrame::OnRightClick( wxMouseEvent &event )
 void MyFrame::OnGoto( wxCommandEvent &event)
 {
     wxDataViewItem item = m_list_model->GetItem( 50 );
-    m_listCtrl->EnsureVisible(item);
+    m_listCtrl->EnsureVisible(item,m_listCtrl->GetColumn(1));
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )

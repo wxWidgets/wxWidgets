@@ -378,7 +378,7 @@ protected:
     virtual void SelectRange( int from, int to );
     virtual void UnselectRange( int from, int to );
 
-    virtual void EnsureVisible( int row );
+    virtual void EnsureVisible( int row, int column );
 
     virtual wxDataViewItem GetItemByRow( unsigned int row ) const;
     virtual int GetRowByItem( const wxDataViewItem & item ) const;

@@ -268,6 +268,8 @@ unsigned int wxDataViewIndexListModel::GetRow( const wxDataViewItem &item ) cons
 
 wxDataViewItem wxDataViewIndexListModel::GetItem( unsigned int row ) const
 {
+    if( row >= m_hash.GetCount() )
+        return wxDataViewItem();
     return wxDataViewItem( m_hash[row] );
 }
 
