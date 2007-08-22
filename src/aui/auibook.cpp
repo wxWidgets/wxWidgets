@@ -30,6 +30,7 @@
 
 #include "wx/aui/tabmdi.h"
 #include "wx/dcbuffer.h"
+#include "wx/log.h"
 
 #ifdef __WXMSW__
 #include  "wx/msw/private.h"
@@ -151,14 +152,19 @@ static void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags
                      dc.LogicalToDeviceY(rect.y),
                      rect.width,
                      rect.height );
-#elif 0 // (defined(__WXMAC__))
+#elif (defined(__WXMAC__))
 
-    // This doesn't work, unfortunately, so draw the focus rectangle generically
-
-    wxWindow* p = win->GetParent() ? win->GetParent() : win;
 #if wxMAC_USE_CORE_GRAPHICS 
     {
         CGRect cgrect = CGRectMake( rect.x , rect.y , rect.width, rect.height ) ;
+
+#if 0
+        Rect bounds ;
+        win->GetPeer()->GetRect( &bounds ) ;
+
+        wxLogDebug(wxT("Focus rect %d, %d, %d, %d"), rect.x, rect.y, rect.width, rect.height);
+        wxLogDebug(wxT("Peer rect %d, %d, %d, %d"), bounds.left, bounds.top, bounds.right - bounds.left, bounds.bottom - bounds.top);
+#endif
 
         HIThemeFrameDrawInfo info ;
         memset( &info, 0 , sizeof(info) ) ;
@@ -181,11 +187,11 @@ static void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags
         if ( top )
         {
             wxPoint pt(0, 0) ;
-            wxMacControl::Convert( &pt , p->m_peer , top->m_peer ) ;
+            wxMacControl::Convert( &pt , win->GetPeer() , top->GetPeer() ) ;
             OffsetRect( &r , pt.x , pt.y ) ;
         }
 
-        win->DrawThemeFocusRect( &r , true ) ;
+        DrawThemeFocusRect( &r , true ) ;
     }
 #endif
 #else
@@ -678,6 +684,30 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
                 text_offset,
                 drawn_tab_yoff + (drawn_tab_height)/2 - (texty/2) - 1);
 
+    // draw close button if necessary
+    if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
+    {
+        wxBitmap bmp = m_disabled_close_bmp;
+
+        if (close_button_state == wxAUI_BUTTON_STATE_HOVER ||
+            close_button_state == wxAUI_BUTTON_STATE_PRESSED)
+        {
+            bmp = m_active_close_bmp;
+        }
+
+        wxRect rect(tab_x + tab_width - close_button_width - 1,
+                    tab_y + (tab_height/2) - (bmp.GetHeight()/2),
+                    close_button_width,
+                    tab_height);
+        IndentPressedBitmap(&rect, close_button_state);
+        dc.DrawBitmap(bmp, rect.x, rect.y, true);
+
+        *out_button_rect = rect;
+    }
+
+    *out_tab_rect = wxRect(tab_x, tab_y, tab_width, tab_height);
+
+#ifndef __WXMAC__
     // draw focus rectangle
     if (page.active && (wnd->FindFocus() == wnd))
     {
@@ -702,29 +732,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
 
         DrawFocusRect(wnd, dc, focusRect, 0);
     }
-
-    // draw close button if necessary
-    if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
-    {
-        wxBitmap bmp = m_disabled_close_bmp;
-
-        if (close_button_state == wxAUI_BUTTON_STATE_HOVER ||
-            close_button_state == wxAUI_BUTTON_STATE_PRESSED)
-        {
-            bmp = m_active_close_bmp;
-        }
-
-        wxRect rect(tab_x + tab_width - close_button_width - 1,
-                    tab_y + (tab_height/2) - (bmp.GetHeight()/2),
-                    close_button_width,
-                    tab_height);
-        IndentPressedBitmap(&rect, close_button_state);
-        dc.DrawBitmap(bmp, rect.x, rect.y, true);
-
-        *out_button_rect = rect;
-    }
-
-    *out_tab_rect = wxRect(tab_x, tab_y, tab_width, tab_height);
+#endif
 
     dc.DestroyClippingRegion();
 }
@@ -1176,6 +1184,7 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
                  (tab_y + tab_height)/2 - (texty/2) + 1);
 
 
+#ifndef __WXMAC__
     // draw focus rectangle
     if (page.active && (wnd->FindFocus() == wnd))
     {
@@ -1186,6 +1195,7 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
 
         DrawFocusRect(wnd, dc, focusRect, 0);
     }
+#endif
 
     // draw close button if necessary
     if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
@@ -1748,6 +1758,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     // afforded on screen
     int total_width = 0;
     int visible_width = 0;
+
     for (i = 0; i < page_count; ++i)
     {
         wxAuiNotebookPage& page = m_pages.Item(i);
@@ -1934,6 +1945,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     size_t active = 999;
     int active_offset = 0;
     wxRect active_rect;
+    wxRect active_focus_rect;
 
     int x_extent = 0;
     wxRect rect = m_rect;
@@ -1983,6 +1995,8 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
             active = i;
             active_offset = offset;
             active_rect = rect;
+            active_focus_rect = rect;
+            active_focus_rect.width = x_extent;
         }
 
         offset += x_extent;
@@ -2026,6 +2040,16 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     raw_dc->Blit(m_rect.x, m_rect.y,
                  m_rect.GetWidth(), m_rect.GetHeight(),
                  &dc, 0, 0);
+
+#ifdef __WXMAC__
+    // On Mac, need to draw the focus rect directly to the window
+    if (wnd && (wnd->FindFocus() == wnd) && (active >= m_tab_offset && active < m_pages.GetCount()))
+    {
+        wxRect focusRect(active_focus_rect);
+        focusRect.Inflate(-6, -6);
+        DrawFocusRect(wnd, * raw_dc, focusRect, 0);
+    }
+#endif
 }
 
 // Is the tab visible?
