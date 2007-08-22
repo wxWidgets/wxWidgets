@@ -943,6 +943,8 @@ private:
 #define _WX_VARARG_WATCOM_UNPACK(N, convfixed) \
         _WX_VARARG_WATCOM_UNPACK_##N convfixed
 
+#define _WX_VARARG_PASS_WATCOM(i) a##i
+
 #define _WX_VARARG_WATCOM_WORKAROUND(N, rettype, name,                        \
                                      convfixed, dummy, numfixed, fixed)       \
     template<_WX_VARARG_JOIN(N, _WX_VARARG_TEMPL)>                            \
@@ -950,7 +952,7 @@ private:
                  _WX_VARARG_JOIN(N, _WX_VARARG_ARG))                          \
     {                                                                         \
          return name(_WX_VARARG_WATCOM_UNPACK(numfixed, convfixed),           \
-                     _WX_VARARG_JOIN(N, _WX_VARARG_PASS_WCHAR));              \
+                     _WX_VARARG_JOIN(N, _WX_VARARG_PASS_WATCOM));             \
     }
 
 #define _WX_VARARG_WATCOM_WORKAROUND_CTOR(N, dummy1, name,                    \
@@ -960,7 +962,7 @@ private:
                  _WX_VARARG_JOIN(N, _WX_VARARG_ARG))                          \
     {                                                                         \
          name(_WX_VARARG_WATCOM_UNPACK(numfixed, convfixed),                  \
-                     _WX_VARARG_JOIN(N, _WX_VARARG_PASS_WCHAR));              \
+                     _WX_VARARG_JOIN(N, _WX_VARARG_PASS_WATCOM));             \
     }
 
 #endif // __WATCOMC__
