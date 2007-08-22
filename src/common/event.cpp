@@ -115,7 +115,11 @@ class wxEventTableEntryModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxEventTableEntryModule)
 public:
     wxEventTableEntryModule() {}
-    bool OnInit() { return true; }
+    bool OnInit()
+    {
+        wxEventHashTable::ReconstructAll();
+        return true;
+    }
     void OnExit()
     {
         wxEventHashTable::ClearAll();
@@ -846,6 +850,23 @@ void wxEventHashTable::ClearAll()
     while (table)
     {
         table->Clear();
+        table = table->m_next;
+    }
+}
+
+// Rebuild all tables if they were cleared by ClearAll
+void wxEventHashTable::ReconstructAll()
+{
+    wxEventHashTable* table = sm_first;
+    while (table)
+    {
+        // This will only be true if the event table was cleared.
+        // What we do here is basically what the constructor does.
+        if(table->m_eventTypeTable == NULL)
+        {
+            table->AllocEventTypeTable(EVENT_TYPE_TABLE_INIT_SIZE);
+            table->m_rebuildHash = true;
+        }
         table = table->m_next;
     }
 }

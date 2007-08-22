@@ -2347,6 +2347,8 @@ public:
 
     // Clear all tables
     static void ClearAll();
+    // Rebuild all tables
+    static void ReconstructAll();
 
 protected:
     // Init the hash table with the entries of the static event table.

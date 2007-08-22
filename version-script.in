@@ -53,6 +53,7 @@
         *wxAuiNotebook*SetSelectedFont*;
         *wxAuiNotebook*ShowWindowMenu*;
         *wxDocument*GetUserReadableName*;
+        *wxEventHashTable*ReconstructAll*;
         *wxHtmlEasyPrinting*GetParentWindow*;
         *wxHtmlEasyPrinting*SetParentWindow*;
         *wxLog*DoCreateOnDemand*;
