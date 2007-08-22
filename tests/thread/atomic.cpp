@@ -23,6 +23,8 @@
 #include "wx/atomic.h"
 #include "wx/thread.h"
 #include "wx/dynarray.h"
+#include "wx/log.h"
+
 WX_DEFINE_ARRAY_PTR(wxThread *, wxArrayThread);
 
 // ----------------------------------------------------------------------------
