@@ -27,10 +27,8 @@ class WXDLLIMPEXP_FWD_HTML wxHtmlEntitiesParser;
 
 class wxHtmlTagsCacheData;
 
-class WXDLLIMPEXP_HTML wxHtmlTagsCache : public wxObject
+class WXDLLIMPEXP_HTML wxHtmlTagsCache
 {
-    DECLARE_DYNAMIC_CLASS(wxHtmlTagsCache)
-
 private:
     wxHtmlTagsCacheData *m_Cache;
     size_t m_CachePos;
@@ -55,10 +53,8 @@ public:
 //                  by wxHtmlParser.
 //--------------------------------------------------------------------------------
 
-class WXDLLIMPEXP_HTML wxHtmlTag : public wxObject
+class WXDLLIMPEXP_HTML wxHtmlTag
 {
-    DECLARE_CLASS(wxHtmlTag)
-
 protected:
     // constructs wxHtmlTag object based on HTML tag.
     // The tag begins (with '<' character) at position pos in source
@@ -69,7 +65,7 @@ protected:
               wxHtmlEntitiesParser *entParser);
     friend class wxHtmlParser;
 public:
-    virtual ~wxHtmlTag();
+    ~wxHtmlTag();
 
     wxHtmlTag *GetParent() const {return m_Parent;}
     wxHtmlTag *GetFirstSibling() const;

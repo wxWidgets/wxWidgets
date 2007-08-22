@@ -54,8 +54,6 @@ class wxHtmlTagsCacheData : public wxVector<wxHtmlCacheItem>
 {
 };
 
-IMPLEMENT_CLASS(wxHtmlTagsCache,wxObject)
-
 bool wxIsCDATAElement(const wxChar *tag)
 {
     return (wxStrcmp(tag, _T("SCRIPT")) == 0) ||
@@ -230,12 +228,10 @@ void wxHtmlTagsCache::QueryTag(int at, int* end1, int* end2)
 // wxHtmlTag
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxHtmlTag,wxObject)
-
 wxHtmlTag::wxHtmlTag(wxHtmlTag *parent,
                      const wxString& source, int pos, int end_pos,
                      wxHtmlTagsCache *cache,
-                     wxHtmlEntitiesParser *entParser) : wxObject()
+                     wxHtmlEntitiesParser *entParser)
 {
     /* Setup DOM relations */
 
