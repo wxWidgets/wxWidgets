@@ -497,12 +497,13 @@ wxString wxHtmlEntitiesParser::Parse(const wxString& input)
     const wxChar *in_str = input.c_str();
     wxString output;
 
-    output.reserve(input.length());
-
     for (c = in_str, last = in_str; *c != wxT('\0'); c++)
     {
         if (*c == wxT('&'))
         {
+            if ( output.empty() )
+                output.reserve(input.length());
+
             if (c - last > 0)
                 output.append(last, c - last);
             if ( *++c == wxT('\0') )
@@ -531,6 +532,8 @@ wxString wxHtmlEntitiesParser::Parse(const wxString& input)
             }
         }
     }
+    if (last == in_str) // common case: no entity
+        return input;
     if (*last != wxT('\0'))
         output.append(last);
     return output;
