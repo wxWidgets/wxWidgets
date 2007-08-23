@@ -183,8 +183,9 @@ public:
 #endif // WXWIN_COMPATIBILITY_2_8
 
 private:
-    static const size_type ALLOC_INITIAL_SIZE = 16;
-    static const size_type ALLOC_MAX_SIZE = 4096;
+    // VC6 can't compile static const int members
+    enum { ALLOC_INITIAL_SIZE = 16 };
+    enum { ALLOC_MAX_SIZE = 4096 };
 
     void Copy(const wxVector& vb)
     {
