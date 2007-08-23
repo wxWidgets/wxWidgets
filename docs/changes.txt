@@ -91,6 +91,11 @@ Major new features in 2.8 release
 2.8.5
 -----
 
+All:
+
+- Fixed hang in wxInputStream::ReadLine when no input is left by testing
+  with CanRead before each character is read.
+
 All (GUI):
 
 - Added colour normalization to PNM image handler (Ray Johnston).
@@ -103,6 +108,15 @@ All (GUI):
 - Added tab mouse click events to wxAuiNotebook (Ben Williams).
 - Option for middle-click tab close in wxAuiNotebook (Ben Williams).
 - Added wxAuiNotebook::SetFont, GetTabCtrlHeight, GetHeightForPageHeight.
+- Fixed caption clicking being ignored on centred wxAUI panel.
+- Added AdvanceSelection, ShowWindowMenu functions and keyboard handling to
+  wxAuiNotebook.
+- Added wxAUI_NB_SUPPORT for standard wxAuiNotebook art (Langhammer).
+- Added event for double clicks on wxAuiNotebook tab background.
+- Added events for wxAuiNotebook tab dragging and closing notification.
+- Fixed some problems handling unusual wxAUI pane activation order in wxGTK.
+- Fixed a problem with resizing floating wxAUI panes.
+- Fixed a wxTabFrame leak by deleting all wxAuiNotebook pages in the destructor.
 - Added SetBitmap/GetBitmap to wxWizard, to allow e.g. on-the-fly creation
   of bitmap to fit page height.
 - Fixed wxXPMHandler::SaveFile for images with more than 92 colors.
@@ -113,8 +127,10 @@ All (GUI):
   wxMenuItem::GetItemLabel, wxMenuItem::GetItemLabelText, wxMenuItem::GetLabelText.
   Get...Label functions get the raw label with mnemonics and accelerators,
   and Get...LabelText function get the text only without mnemonics/accelerators.
-- Added AdvanceSelection, ShowWindowMenu functions and keyboard handling to
-  wxAuiNotebook.
+- Fixed a problem with wxSizer::GetContainingSizer failing for nested sizers
+  depending on sizer addition order.
+- Added Set/GetParentWindow to wxHtmlEasyPrinting to allow reuse with different
+  parent windows.
 
 wxMSW:
 
@@ -125,7 +141,14 @@ wxMSW:
 - Fixed bug with symbol resolving in wxStackWalker (Axel Gembe).
 - Fixed showing busy cursor for disabled windows and during wxExecute()
 - Added wxBORDER_THEME, used automatically by wxTextCtrl in wxTE_RICH[2] mode.
-- Fix problems with timers on SMP machines in wxAnimationCtrl (Gennady)
+  See wxMSW section in the manual for further details.
+- Fix problems with timers on SMP machines in wxAnimationCtrl (Gennady).
+- Fixed WinCE compile theme-related error, and WinCE timezone link error
+  when using dynamic run-time library. Also fixed localtime link error when
+  using Windows Mobile 5.
+- Gave toolbars some extra height, without which DoGetBestSize can report a
+  size that's smaller than the actual window, causing windows to overlap.
+  Removed corresponding hack in wxAUI.
 
 wxGTK:
 
@@ -143,12 +166,20 @@ wxGTK:
 - Don't unconditionally add wxCAPTION style to wxMiniFrame.
 - Fixed crash in file and dir pickers for GTK+ < 2.6 if compiled
   with GTK+ >= 2.6.
-- Generate wxEVT_COMMAND_LIST_END_LABEL_EDIT event even if label didn't change
+- Generate wxEVT_COMMAND_LIST_END_LABEL_EDIT event even if label didn't change.
+- Replaced g_free with g_border_free to fix crash with newer GTK+.
+- Fixed crash in settings when using tooltips->tip_window with GTK+ 2.11.6.
 
 wxMac:
 
 - Fixed ability of non-native/installed toolbars to have controls,
   in native toolbar compilation mode.
+- wxSTAY_ON_TOP mini frame windows no longer get hidden on deactivate.
+- Always have a transparent sizer grip now.
+- Avoid a grow box overlapping a scrollbar.
+- Implemented wxALWAYS_SHOW_SB.
+- Restricted mouse wheel support to y axis.
+- Mouse button handling improvements.
 
 wxMotif:
 
