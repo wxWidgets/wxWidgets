@@ -221,7 +221,16 @@ public:
             case 0: variant = node->m_title; break;
             case 1: variant = node->m_artist; break;
             case 2: variant = node->m_year; break;
-            default: wxLogError( "MyMusicModel::GetValue: wrong column" );
+            default: 
+            {
+                wxLogError( "MyMusicModel::GetValue: wrong column" );
+                wxMouseState state = wxGetMouseState();
+                if (state.ShiftDown())
+                {
+                    char *crash = 0;
+                    *crash = 0;
+                }
+            }
         }
     }
 
@@ -558,8 +567,14 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     m_music_model = new MyMusicModel;
     m_musicCtrl->AssociateModel( m_music_model.get() );
 
-    m_musicCtrl->AppendTextColumn( "Title", 0, wxDATAVIEW_CELL_INERT, 200, 
+    wxDataViewColumn *col = m_musicCtrl->AppendTextColumn( "Title", 0, wxDATAVIEW_CELL_INERT, 200, 
                                      DEFAULT_ALIGN, wxDATAVIEW_COL_SORTABLE );
+#if 0 
+    // Call this and sorting is enabled
+    // immediatly upon start up.                                    
+    col->SetSortOrder( true );
+#endif
+    
     m_musicCtrl->AppendTextColumn( "Artist", 1, wxDATAVIEW_CELL_EDITABLE, 200,
                                      DEFAULT_ALIGN, wxDATAVIEW_COL_SORTABLE );
     m_musicCtrl->AppendTextColumn( "Year", 2, wxDATAVIEW_CELL_INERT, 50,

@@ -82,6 +82,8 @@ private:
 
 bool operator == (const wxDataViewItem &left, const wxDataViewItem &right);
 
+WX_DEFINE_ARRAY(wxDataViewItem, wxDataViewItemArray);
+
 // ---------------------------------------------------------
 // wxDataViewModelNotifier
 // ---------------------------------------------------------
@@ -154,6 +156,7 @@ public:
     // default compare function
     virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2, 
                          unsigned int column, bool ascending );
+    virtual bool HasDefaultCompare() { return false; }
 
 protected:
     // the user should not delete this class directly: he should use DecRef() instead!
@@ -165,9 +168,6 @@ protected:
 // ---------------------------------------------------------
 // wxDataViewIndexListModel
 // ---------------------------------------------------------
-
-// use hash map later
-WX_DEFINE_ARRAY_PTR( void*, wxDataViewItemHash );
 
 class wxDataViewIndexListModel: public wxDataViewModel
 {
@@ -199,6 +199,7 @@ public:
     
     virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2, 
                          unsigned int column, bool ascending );
+    virtual bool HasDefaultCompare() { return true; }
 
     // implement base methods
 
@@ -212,7 +213,7 @@ public:
     virtual wxDataViewItem GetNextSibling( const wxDataViewItem &item ) const;
     
 private:
-    wxDataViewItemHash m_hash;
+    wxDataViewItemArray m_hash;
     unsigned int m_lastIndex;
 };
 
@@ -397,8 +398,6 @@ protected:
 // wxDataViewCtrlBase
 // ---------------------------------------------------------
 
-WX_DEFINE_ARRAY(wxDataViewItem, wxDataViewItemArray);
-
 #define wxDV_SINGLE                  0x0000     // for convenience
 #define wxDV_MULTIPLE                0x0001     // can select multiple items
 
@@ -416,43 +415,44 @@ public:
     wxDataViewModel* GetModel();
 
     // short cuts
-    bool AppendTextColumn( const wxString &label, unsigned int model_column, 
+    wxDataViewColumn *AppendTextColumn( const wxString &label, unsigned int model_column, 
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
-    bool AppendToggleColumn( const wxString &label, unsigned int model_column,
+    wxDataViewColumn *AppendToggleColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
-    bool AppendProgressColumn( const wxString &label, unsigned int model_column, 
+    wxDataViewColumn *AppendProgressColumn( const wxString &label, unsigned int model_column, 
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_DEFAULT_WIDTH,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
-    bool AppendDateColumn( const wxString &label, unsigned int model_column,
+    wxDataViewColumn *AppendDateColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
-    bool AppendBitmapColumn( const wxString &label, unsigned int model_column,
+    wxDataViewColumn *AppendBitmapColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
-    bool AppendTextColumn( const wxBitmap &label, unsigned int model_column,
+    wxDataViewColumn *AppendTextColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
-    bool AppendToggleColumn( const wxBitmap &label, unsigned int model_column,
+    wxDataViewColumn *AppendToggleColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
-    bool AppendProgressColumn( const wxBitmap &label, unsigned int model_column,
+    wxDataViewColumn *AppendProgressColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_DEFAULT_WIDTH,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
-    bool AppendDateColumn( const wxBitmap &label, unsigned int model_column,
+    wxDataViewColumn *AppendDateColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
-    bool AppendBitmapColumn( const wxBitmap &label, unsigned int model_column,
+    
+    wxDataViewColumn *AppendBitmapColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
