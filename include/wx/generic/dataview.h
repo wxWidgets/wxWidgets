@@ -366,7 +366,7 @@ public:
 
     virtual void EnsureVisible( const wxDataViewItem & item,
                                 const wxDataViewColumn *column = NULL );
-    virtual void HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* column ) const;
+    virtual void HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* &column ) const;
     virtual wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn *column = NULL ) const;
 
 protected:

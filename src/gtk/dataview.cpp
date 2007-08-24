@@ -3102,10 +3102,10 @@ void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, const wxDataVie
 }
 
 void wxDataViewCtrl::HitTest( const wxPoint &point, 
-                              wxDataViewItem &item,  wxDataViewColumn *column ) const
+                              wxDataViewItem &item,  wxDataViewColumn *&column ) const
 {
     item = wxDataViewItem(0);
-    column = 0;
+    column = NULL;
 }
 
 wxRect wxDataViewCtrl::GetItemRect( const wxDataViewItem &item, 

@@ -319,7 +319,7 @@ public:
                                 const wxDataViewColumn *column = NULL );
     virtual void HitTest( const wxPoint &point, 
                           wxDataViewItem &item, 
-                          wxDataViewColumn *column ) const;
+                          wxDataViewColumn *&column ) const;
     virtual wxRect GetItemRect( const wxDataViewItem &item, 
                                 const wxDataViewColumn *column = NULL ) const;
 

@@ -509,7 +509,7 @@ public:
     //Methods for building the mapping tree
     void BuildTree( wxDataViewModel  * model );
     void DestroyTree();
-    void HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* column );
+    void HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* &column );
     wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn* column );
 private:
     wxDataViewTreeNode * GetTreeNodeByRow( unsigned int row );
@@ -2943,7 +2943,7 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
     return node;
 }
 
-void wxDataViewMainWindow::HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* column )
+void wxDataViewMainWindow::HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* &column )
 {
     wxDataViewColumn *col = NULL;
     unsigned int cols = GetOwner()->GetColumnCount();
@@ -3791,7 +3791,7 @@ void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, const wxDataVie
         
 }
 
-void wxDataViewCtrl::HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* column ) const
+void wxDataViewCtrl::HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* &column ) const
 {
     m_clientArea->HitTest(point, item, column);
 }
