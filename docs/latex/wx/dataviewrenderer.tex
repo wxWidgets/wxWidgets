@@ -358,7 +358,7 @@ from the editor control (pointed to by {\it editor}):
 
 \membersection{wxDataViewCustomRenderer::Activate}\label{wxdataviewcustomrendereractivate}
 
-\func{virtual bool}{Activate}{\param{wxRect }{cell}, \param{wxDataViewListModel* }{model}, \param{unsigned int }{col}, \param{unsigned int }{row}}
+\func{virtual bool}{Activate}{\param{wxRect }{cell}, \param{wxDataViewModel* }{model}, \param{unsigned int }{col}, \param{unsigned int }{row}}
 
 Override this to react to double clicks or <ENTER>.
 
@@ -378,7 +378,7 @@ Return size required to show content.
 
 \membersection{wxDataViewCustomRenderer::LeftClick}\label{wxdataviewcustomrendererleftclick}
 
-\func{virtual bool}{LeftClick}{\param{wxPoint }{cursor}, \param{wxRect }{cell}, \param{wxDataViewListModel* }{model}, \param{unsigned int }{col}, \param{unsigned int }{row}}
+\func{virtual bool}{LeftClick}{\param{wxPoint }{cursor}, \param{wxRect }{cell}, \param{wxDataViewModel* }{model}, \param{unsigned int }{col}, \param{unsigned int }{row}}
 
 Overrride this to react to a left click.
 
@@ -392,13 +392,13 @@ so that this instance knows what to render.
 
 \membersection{wxDataViewCustomRenderer::RightClick}\label{wxdataviewcustomrendererrightclick}
 
-\func{virtual bool}{RightClick}{\param{wxPoint }{cursor}, \param{wxRect }{cell}, \param{wxDataViewListModel* }{model}, \param{unsigned int }{col}, \param{unsigned int }{row}}
+\func{virtual bool}{RightClick}{\param{wxPoint }{cursor}, \param{wxRect }{cell}, \param{wxDataViewModel* }{model}, \param{unsigned int }{col}, \param{unsigned int }{row}}
 
 Overrride this to react to a right click.
 
 \membersection{wxDataViewCustomRenderer::StartDrag}\label{wxdataviewcustomrendererstartdrag}
 
-\func{virtual bool}{StartDrag}{\param{wxPoint }{cursor}, \param{wxRect }{cell}, \param{wxDataViewListModel* }{model}, \param{unsigned int }{col}, \param{unsigned int }{row}}
+\func{virtual bool}{StartDrag}{\param{wxPoint }{cursor}, \param{wxRect }{cell}, \param{wxDataViewModel* }{model}, \param{unsigned int }{col}, \param{unsigned int }{row}}
 
 Overrride this to start a drag operation.
 
