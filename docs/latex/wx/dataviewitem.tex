@@ -1,0 +1,54 @@
+
+\section{\class{wxDataViewItem}}\label{wxdataviewitem}
+
+wxDataViewItem is a small opaque class that represents an
+item in a \helpref{wxDataViewCtrl}{wxdataviewctrl} in a
+persistent way, i.e. indepent of the position of the
+item in the control or changes to its contents. It must
+hold a unique ID of type {\it void*} in its only field
+and can be converted to a from it. 
+
+If the ID is {\it NULL} the wxDataViewItem is invalid and 
+\helpref{IsOk}{wxdataviewitemisok} will return {\it false}
+which used in many places in the API of wxDataViewCtrl
+to indicate that e.g. no item was found etc.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<dataview.h>
+
+\wxheading{Data structures}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxDataViewItem::wxDataViewItem}\label{wxdataviewitemwxdataviewitem}
+
+\func{}{wxDataViewItem}{\param{void* }{id = NULL}}
+
+Constructor.
+
+\func{}{wxDataViewItem}{\param{const wxDataViewItem\& }{item}}
+
+
+\membersection{wxDataViewItem::GetID}\label{wxdataviewitemgetid}
+
+\constfunc{void*}{GetID}{\void}
+
+Returns the ID.
+
+\membersection{wxDataViewItem::IsOk}\label{wxdataviewitemisok}
+
+\constfunc{bool}{IsOk}{\void}
+
+Returns true if the ID is not {\it NULL}.
+
+\membersection{wxDataViewItem::void*}\label{wxdataviewitemvoid*}
+
+\constfunc{operator const}{void*}{\void}
+
+Converts to {\it void*}.
