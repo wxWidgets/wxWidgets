@@ -331,17 +331,7 @@ These are the data structure classes supported by wxWidgets.
 \twocolitem{\helpref{wxCmdLineParser}{wxcmdlineparser}}{Command line parser class}
 \twocolitem{\helpref{wxDateSpan}{wxdatespan}}{A logical time interval.}
 \twocolitem{\helpref{wxDateTime}{wxdatetime}}{A class for date/time manipulations}
-%\twocolitem{\helpref{wxExpr}{wxexpr}}{A class for flexible I/O}
-%\twocolitem{\helpref{wxExprDatabase}{wxexprdatabase}}{A class for flexible I/O}
-\twocolitem{\helpref{wxArray}{wxarray}}{A dynamic array implementation}
-\twocolitem{\helpref{wxArrayString}{wxarraystring}}{An efficient container for storing \helpref{wxString}{wxstring} objects}
-\twocolitem{\helpref{wxHashMap}{wxhashmap}}{A simple hash map implementation}
-\twocolitem{\helpref{wxHashSet}{wxhashset}}{A simple hash set implementation}
-\twocolitem{\helpref{wxHashTable}{wxhashtable}}{A simple hash table implementation (deprecated, use wxHashMap)}
-% \twocolitem{\helpref{wxHashTableLong}{wxhashtablelong}}{A wxHashTable version for storing long data}
-\twocolitem{\helpref{wxList}{wxlist}}{A simple linked list implementation}
 \twocolitem{\helpref{wxLongLong}{wxlonglong}}{A portable 64 bit integer type}
-\twocolitem{\helpref{wxNode}{wxnode}}{Represents a node in the wxList implementation}
 \twocolitem{\helpref{wxObject}{wxobject}}{The root class for most wxWidgets classes}
 \twocolitem{\helpref{wxPathList}{wxpathlist}}{A class to help search multiple paths}
 \twocolitem{\helpref{wxPoint}{wxpoint}}{Representation of a point}
@@ -355,6 +345,24 @@ These are the data structure classes supported by wxWidgets.
 \twocolitem{\helpref{wxTimeSpan}{wxtimespan}}{A time interval.}
 \twocolitem{\helpref{wxURI}{wxuri}}{Represents a Uniform Resource Identifier}
 \twocolitem{\helpref{wxVariant}{wxvariant}}{A class for storing arbitrary types that may change at run-time}
+\end{twocollist}
+
+{\large {\bf Container classes}}
+
+\overview{Overview}{wxcontaineroverview}
+
+These are classes, templates and class macros are used by wxWidgets. Most
+of these classes provide a subset or almost complete STL API.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxArray<T>}{wxarray}}{A type-safe dynamic array implementation (macro based)}
+\twocolitem{\helpref{wxArrayString}{wxarraystring}}{An efficient container for storing \helpref{wxString}{wxstring} objects}
+\twocolitem{\helpref{wxHashMap<T>}{wxhashmap}}{A type-safe hash map implementation (macro based)}
+\twocolitem{\helpref{wxHashSet<T>}{wxhashset}}{A type-safe hash set implementation(macro based)}
+\twocolitem{\helpref{wxHashTable}{wxhashtable}}{A simple hash table implementation (deprecated, use wxHashMap)}
+\twocolitem{\helpref{wxList<T>}{wxlist}}{A type-safe linked list implementation (macro based)}
+\twocolitem{\helpref{wxVector<T>}{wxvector}}{Template base vector implementation}
 \end{twocollist}
 
 {\large {\bf Run-time class information system}}
@@ -647,9 +655,9 @@ used internally by the HTML classes.
 
 \twocolwidtha{6cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\helpref{wxXmlDocument}{wxxmldocument}}{A class to parse XML files.}
-\twocolitem{\helpref{wxXmlNode}{wxxmlnode}}{A class which represents XML nodes.}
-\twocolitem{\helpref{wxXmlAttribute}{wxxmlattribute}}{A class which represents XML properties.}
+\twocolitem{\helpref{wxXmlDocument}{wxxmldocument}}{A class to parse XML files}
+\twocolitem{\helpref{wxXmlNode}{wxxmlnode}}{A class which represents XML nodes}
+\twocolitem{\helpref{wxXmlAttribute}{wxxmlattribute}}{A class which represent an XML attribute}
 \end{twocollist}
 
 {\large {\bf XML-based resource system classes}}
@@ -661,8 +669,8 @@ from specifications stored in an XML format.
 
 \twocolwidtha{6cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\helpref{wxXmlResource}{wxxmlresource}}{The main class for working with resources.}
-\twocolitem{\helpref{wxXmlResourceHandler}{wxxmlresourcehandler}}{The base class for XML resource handlers.}
+\twocolitem{\helpref{wxXmlResource}{wxxmlresource}}{The main class for working with resources}
+\twocolitem{\helpref{wxXmlResourceHandler}{wxxmlresourcehandler}}{The base class for XML resource handlers}
 \end{twocollist}
 
 {\large {\bf Online help}}
@@ -684,7 +692,8 @@ from specifications stored in an XML format.
 \overview{Database classes overview}{odbcoverview}
 
 wxWidgets provides a set of classes for accessing Microsoft's ODBC (Open Database Connectivity)
-product, donated by Remstar. This is known as wxODBC.
+product, donated by Remstar. This is known as wxODBC. Note that these classes are deprecated
+and will be removed from wxWidgets.
 
 \twocolwidtha{6cm}
 \begin{twocollist}\itemsep=0pt

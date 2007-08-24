@@ -1,0 +1,147 @@
+\section{\class{wxVector<T>}}\label{wxvector}
+
+wxVector is a template which implements most of the std::vector
+class and can be used like. If wxWidgets is compiled in STL mode,
+wxVector will just be a typedef to std::vector. You should
+refer to the STL documentation for further information.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<vector.h>
+
+\wxheading{See also}
+
+\helpref{Container classes overview}{wxcontaineroverview}, 
+\helpref{wxList<T>}{wxlist},
+\helpref{wxArray<T>}{wxvector}
+
+\membersection{wxVector<T>::wxVector<T>}\label{wxvectorwxvector}
+
+\func{}{wxVector<T>}{\void}
+
+\func{}{wxVector<T>}{\param{const wxVector<T>\& }{c}}
+
+Constructor.
+
+\membersection{wxVector<T>::\destruct{wxVector<T>}}\label{wxvectordtor}
+
+\func{}{\destruct{wxVector<T>}}{\void}
+
+Destructor.
+
+\membersection{wxVector<T>::operator=}\label{wxvectoroperatorassign}
+
+\func{wxVector<T>\& operator}{operator=}{\param{const wxVector<T>\& }{vb}}
+
+Assignement operator.
+
+\membersection{wxVector<T>::at}\label{wxvectorat}
+
+\constfunc{const value\_type\&}{at}{\param{size\_type }{idx}}
+
+\func{value\_type\&}{at}{\param{size\_type }{idx}}
+
+Returns item at position {\it idx}.
+
+\membersection{wxVector<T>::back}\label{wxvectorback}
+
+\constfunc{const value\_type\&}{back}{\void}
+
+\func{value\_type\&}{back}{\void}
+
+Return last item.
+
+\membersection{wxVector<T>::begin}\label{wxvectorbegin}
+
+\constfunc{const\_iterator}{begin}{\void}
+
+\func{iterator}{begin}{\void}
+
+Return iterator to beginning of the vector.
+
+\membersection{wxVector<T>::capacity}\label{wxvectorcapacity}
+
+\constfunc{size\_type}{capacity}{\void}
+
+
+\membersection{wxVector<T>::clear}\label{wxvectorclear}
+
+\func{void}{clear}{\void}
+
+Clears the vector.
+
+\membersection{wxVector<T>::empty}\label{wxvectorempty}
+
+\constfunc{bool}{empty}{\void}
+
+Returns true if the vector is empty.
+
+\membersection{wxVector<T>::end}\label{wxvectorend}
+
+\constfunc{const\_iterator}{end}{\void}
+
+\func{iterator}{end}{\void}
+
+Returns iterator to the end of the vector.
+
+\membersection{wxVector<T>::erase}\label{wxvectorerase}
+
+\func{iterator}{erase}{\param{iterator }{it}}
+
+\func{iterator}{erase}{\param{iterator }{first}, \param{iterator }{last}}
+
+Erase items.
+
+\membersection{wxVector<T>::front}\label{wxvectorfront}
+
+\constfunc{const value\_type\&}{front}{\void}
+
+\func{value\_type\&}{front}{\void}
+
+Returns first item.
+
+\membersection{wxVector<T>::insert}\label{wxvectorinsert}
+
+\func{iterator}{insert}{\param{iterator }{it}, \param{const value\_type\& }{v = value\_type()}}
+
+Insert an item. When using values other than built-in integrals 
+or classes with reference counting this can be a very inefficient
+operation.
+
+\membersection{wxVector<T>::operator[]}\label{wxvectoroperatorunknown}
+
+\constfunc{const value\_type\&}{operator[]}{\param{size\_type }{idx}}
+
+\func{value\_type\&}{operator[]}{\param{size\_type }{idx}}
+
+Returns item at position {\it idx}.
+
+\membersection{wxVector<T>::pop\_back}\label{wxvectorpopback}
+
+\func{void}{pop\_back}{\void}
+
+Removes the last item.
+
+\membersection{wxVector<T>::push\_back}\label{wxvectorpushback}
+
+\func{void}{push\_back}{\param{const value\_type\& }{v}}
+
+Adds an item to the end of the vector.
+
+\membersection{wxVector<T>::reserve}\label{wxvectorreserve}
+
+\func{void}{reserve}{\param{size\_type }{n}}
+
+Reserves more memory of {\it n} is greater then 
+\helpref{size}{wxvectorsize}. Other this call has
+no effect.
+
+\membersection{wxVector<T>::size}\label{wxvectorsize}
+
+\constfunc{size\_type}{size}{\void}
+
+Returns the size of the vector.

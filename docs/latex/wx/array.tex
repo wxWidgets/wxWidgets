@@ -9,10 +9,10 @@
 %% License:     wxWindows license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{\class{wxArray}}\label{wxarray}
+\section{\class{wxArray<T>}}\label{wxarray}
 
 This section describes the so called {\it dynamic arrays}. This is a C
-array-like data structure i.e. the member access time is constant (and not
+array-like type safe data structure i.e. the member access time is constant (and not
 linear according to the number of container elements as for linked lists). However, these
 arrays are dynamic in the sense that they will automatically allocate more
 memory if there is not enough of it for adding a new element. They also perform
@@ -141,7 +141,9 @@ type, e.g. shorts, in an array of larger one, e.g. {\tt ARRAY\_INT}, does
 
 \wxheading{See also}
 
-\helpref{Container classes overview}{wxcontaineroverview}, \helpref{wxList}{wxlist}
+\helpref{Container classes overview}{wxcontaineroverview}, 
+\helpref{wxList<T>}{wxlist},
+\helpref{wxVector<T>}{wxvector}
 
 \wxheading{Include files}
 
