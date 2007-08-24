@@ -17,7 +17,7 @@ No base class
 
 \helpref{Container classes overview}{wxcontaineroverview}, 
 \helpref{wxList<T>}{wxlist},
-\helpref{wxArray<T>}{wxvector}
+\helpref{wxArray<T>}{wxarray}
 
 \membersection{wxVector<T>::wxVector<T>}\label{wxvectorwxvector}
 
@@ -37,7 +37,7 @@ Destructor.
 
 \func{wxVector<T>\& operator}{operator=}{\param{const wxVector<T>\& }{vb}}
 
-Assignement operator.
+Assignment operator.
 
 \membersection{wxVector<T>::at}\label{wxvectorat}
 
@@ -94,7 +94,9 @@ Returns iterator to the end of the vector.
 
 \func{iterator}{erase}{\param{iterator }{first}, \param{iterator }{last}}
 
-Erase items.
+Erase items. When using values other than built-in integrals 
+or classes with reference counting this can be an inefficient
+operation.
 
 \membersection{wxVector<T>::front}\label{wxvectorfront}
 
@@ -109,7 +111,7 @@ Returns first item.
 \func{iterator}{insert}{\param{iterator }{it}, \param{const value\_type\& }{v = value\_type()}}
 
 Insert an item. When using values other than built-in integrals 
-or classes with reference counting this can be a very inefficient
+or classes with reference counting this can be an inefficient
 operation.
 
 \membersection{wxVector<T>::operator[]}\label{wxvectoroperatorunknown}
