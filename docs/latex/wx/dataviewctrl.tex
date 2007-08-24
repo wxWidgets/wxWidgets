@@ -176,20 +176,20 @@ Deletes given column.
 
 \membersection{wxDataViewCtrl::GetColumn}\label{wxdataviewctrlgetcolumn}
 
-\func{virtual wxDataViewColumn*}{GetColumn}{\param{unsigned int }{pos}}
+\constfunc{virtual wxDataViewColumn*}{GetColumn}{\param{unsigned int }{pos}}
 
 Returns pointer to the column.
 
 \membersection{wxDataViewCtrl::GetModel}\label{wxdataviewctrlgetmodel}
 
-\func{virtual wxDataViewModel*}{GetModel}{\void}
+\constfunc{virtual wxDataViewModel*}{GetModel}{\void}
 
 Returns pointer to the data model associated with the
 control (if any).
 
 \membersection{wxDataViewCtrl::GetColumnCount}\label{wxdataviewctrlgetcolumncount}
 
-\func{virtual unsigned int}{GetColumnCount}{\void}
+\constfunc{virtual unsigned int}{GetColumnCount}{\void}
 
 Returns the number of columns.
 
@@ -213,13 +213,13 @@ Returns indentation.
 
 \membersection{wxDataViewCtrl::GetItemRect}\label{wxdataviewctrlgetitemrect}
 
-\constfunc{wxRect}{GetItemRect}{\param{const wxDataViewItem\& }{item}, \param{wxDataViewColumn *}{col}}
+\constfunc{wxRect}{GetItemRect}{\param{const wxDataViewItem\& }{item}, \param{const wxDataViewColumn *}{col = NULL}}
 
 Returns item rect.
 
 \membersection{wxDataViewCtrl::GetSelection}\label{wxdataviewctrlgetselection}
 
-\func{wxDataViewItem}{GetSelection}{\void}
+\constfunc{wxDataViewItem}{GetSelection}{\void}
 
 Returns first selected item or an invalid item if none is selected.
 
