@@ -240,11 +240,12 @@ public:
         MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
         switch (col)
         {
-            case 0: node->m_title = variant.GetString(); break;
-            case 1: node->m_artist  = variant.GetString(); break;
-            case 2: node->m_year  = variant.GetString(); break;
+            case 0: node->m_title = variant.GetString(); return true;
+            case 1: node->m_artist  = variant.GetString(); return true;
+            case 2: node->m_year  = variant.GetString(); return true;
             default: wxLogError( "MyMusicModel::SetValue: wrong column" );
         }
+        return false;
     }
 
     virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const
