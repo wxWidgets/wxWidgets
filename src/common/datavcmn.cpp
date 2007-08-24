@@ -268,7 +268,7 @@ unsigned int wxDataViewIndexListModel::GetRow( const wxDataViewItem &item ) cons
 
 wxDataViewItem wxDataViewIndexListModel::GetItem( unsigned int row ) const
 {
-    wxASSERT( row >= m_hash.GetCount() );
+    wxASSERT( row < m_hash.GetCount() );
     return wxDataViewItem( m_hash[row] );
 }
 
