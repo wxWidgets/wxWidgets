@@ -306,7 +306,7 @@ public:
     virtual bool AssociateModel( wxDataViewModel *model );
     virtual bool AppendColumn( wxDataViewColumn *col );
 
-    virtual wxDataViewItem GetSelection();
+    virtual wxDataViewItem GetSelection() const;
     virtual int GetSelections( wxDataViewItemArray & sel ) const;
     virtual void SetSelections( const wxDataViewItemArray & sel );
     virtual void Select( const wxDataViewItem & item );
@@ -315,12 +315,13 @@ public:
     virtual void SelectAll();
     virtual void UnselectAll();
 
-    virtual void EnsureVisible( const wxDataViewItem & item, wxDataViewColumn *column = NULL );
-
+    virtual void EnsureVisible( const wxDataViewItem& item, 
+                                const wxDataViewColumn *column = NULL );
     virtual void HitTest( const wxPoint &point, 
-                          wxDataViewItem &item, unsigned int &column ) const;
+                          wxDataViewItem &item, 
+                          wxDataViewColumn *column ) const;
     virtual wxRect GetItemRect( const wxDataViewItem &item, 
-                          unsigned int column ) const;
+                                const wxDataViewColumn *column = NULL ) const;
 
 
     static wxVisualAttributes

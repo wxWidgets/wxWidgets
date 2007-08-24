@@ -25,7 +25,7 @@
 
 #if defined(__WXGTK20__)
     // for testing
-    // #define wxUSE_GENERICDATAVIEWCTRL 1
+    #define wxUSE_GENERICDATAVIEWCTRL 1
 #elif defined(__WXMAC__)
 #else
     #define wxUSE_GENERICDATAVIEWCTRL 1
@@ -463,7 +463,7 @@ public:
 
     virtual bool DeleteColumn( unsigned int pos );
     virtual bool ClearColumns();
-    virtual wxDataViewColumn* GetColumn( unsigned int pos );
+    virtual wxDataViewColumn* GetColumn( unsigned int pos ) const;
 
     void SetExpanderColumn( unsigned int col )
         { m_expander_column = col ; DoSetExpanderColumn(); }
@@ -475,7 +475,7 @@ public:
     int GetIndent() const 
         { return m_indent; } 
 
-    virtual wxDataViewItem GetSelection() = 0;
+    virtual wxDataViewItem GetSelection() const = 0;
     virtual int GetSelections( wxDataViewItemArray & sel ) const = 0;
     virtual void SetSelections( const wxDataViewItemArray & sel ) = 0;
     virtual void Select( const wxDataViewItem & item ) = 0;
@@ -486,12 +486,9 @@ public:
     virtual void UnselectAll() = 0;
 
     virtual void EnsureVisible( const wxDataViewItem & item,
-                                wxDataViewColumn *column = NULL ) = 0;
-                                
-    virtual void HitTest( const wxPoint &point, 
-                          wxDataViewItem &item, unsigned int &column ) const = 0;
-    virtual wxRect GetItemRect( const wxDataViewItem &item, 
-                          unsigned int column ) const = 0;
+                                const wxDataViewColumn *column = NULL ) = 0;
+    virtual void HitTest( const wxPoint & point, wxDataViewItem &item, wxDataViewColumn* column ) const = 0;
+    virtual wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn *column = NULL ) const = 0;
 
 protected:
     virtual void DoSetExpanderColumn() = 0 ;

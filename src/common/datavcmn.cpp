@@ -36,7 +36,7 @@ bool operator == (const wxDataViewItem &left, const wxDataViewItem &right)
 // wxDataViewModel
 // ---------------------------------------------------------
 
-#include "wx/listimpl.cpp"
+#include <wx/listimpl.cpp>
 WX_DEFINE_LIST(wxDataViewModelNotifiers);
 
 wxDataViewModel::wxDataViewModel()
@@ -268,6 +268,7 @@ unsigned int wxDataViewIndexListModel::GetRow( const wxDataViewItem &item ) cons
 
 wxDataViewItem wxDataViewIndexListModel::GetItem( unsigned int row ) const
 {
+    wxASSERT( row < m_hash.GetCount() );
     return wxDataViewItem( m_hash[row] );
 }
 
@@ -713,7 +714,7 @@ bool wxDataViewCtrlBase::ClearColumns()
     return false;
 }
 
-wxDataViewColumn* wxDataViewCtrlBase::GetColumn( unsigned int pos )
+wxDataViewColumn* wxDataViewCtrlBase::GetColumn( unsigned int pos ) const
 {
     if( pos >= m_cols.GetCount() )
         return NULL;

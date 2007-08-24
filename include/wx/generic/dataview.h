@@ -354,7 +354,7 @@ public:
     virtual void DoSetExpanderColumn();
     virtual void DoSetIndent();
 
-    virtual wxDataViewItem GetSelection();
+    virtual wxDataViewItem GetSelection() const;
     virtual int GetSelections( wxDataViewItemArray & sel ) const;
     virtual void SetSelections( const wxDataViewItemArray & sel );
     virtual void Select( const wxDataViewItem & item );
@@ -365,9 +365,9 @@ public:
     virtual void UnselectAll();
 
     virtual void EnsureVisible( const wxDataViewItem & item,
-                                wxDataViewColumn *column = NULL );
-    virtual void HitTest( const wxPoint & point, wxDataViewItem & item, unsigned int & column ) const;
-    virtual wxRect GetItemRect( const wxDataViewItem & item, unsigned int column ) const;
+                                const wxDataViewColumn *column = NULL );
+    virtual void HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* column ) const;
+    virtual wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn *column = NULL ) const;
 
 protected:
     virtual int GetSelections( wxArrayInt & sel ) const; 
@@ -378,7 +378,7 @@ protected:
     virtual void SelectRange( int from, int to );
     virtual void UnselectRange( int from, int to );
 
-    virtual void EnsureVisible( int row );
+    virtual void EnsureVisible( int row, int column );
 
     virtual wxDataViewItem GetItemByRow( unsigned int row ) const;
     virtual int GetRowByItem( const wxDataViewItem & item ) const;

@@ -2934,7 +2934,7 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
     return true;
 }
 
-wxDataViewItem wxDataViewCtrl::GetSelection()
+wxDataViewItem wxDataViewCtrl::GetSelection() const
 {
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
     
@@ -3092,7 +3092,7 @@ void wxDataViewCtrl::UnselectAll()
     GtkEnableSelectionEvents();
 }
 
-void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, wxDataViewColumn *column )
+void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, const wxDataViewColumn *column )
 {
     GtkTreeIter iter;
     iter.user_data = (gpointer) item.GetID();
@@ -3102,14 +3102,14 @@ void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, wxDataViewColum
 }
 
 void wxDataViewCtrl::HitTest( const wxPoint &point, 
-                          wxDataViewItem &item, unsigned int &column ) const
+                              wxDataViewItem &item,  wxDataViewColumn *column ) const
 {
     item = wxDataViewItem(0);
     column = 0;
 }
 
 wxRect wxDataViewCtrl::GetItemRect( const wxDataViewItem &item, 
-                          unsigned int column ) const
+                                    const wxDataViewColumn *column ) const
 {
     return wxRect();
 }
