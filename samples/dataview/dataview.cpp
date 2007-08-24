@@ -453,6 +453,8 @@ private:
     
     wxDataViewCtrl* m_listCtrl;
     wxObjectDataPtr<MyListModel> m_list_model;
+
+    wxDataViewColumn * m_col;
     
     wxTextCtrl    * m_log;
     wxLog *m_logOld;
@@ -539,6 +541,7 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
   wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
     m_log = NULL;
+    m_col = NULL;
 
     SetIcon(wxICON(sample));
 
@@ -593,7 +596,7 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     m_listCtrl->AssociateModel( m_list_model.get() );
     
     m_listCtrl->AppendTextColumn( "editable string", 0, wxDATAVIEW_CELL_EDITABLE, 120 );
-    m_listCtrl->AppendTextColumn( "index", 1, wxDATAVIEW_CELL_INERT, 120 );
+    m_col = m_listCtrl->AppendTextColumn( "index", 1, wxDATAVIEW_CELL_INERT, 120 );
     
     data_sizer->Add( m_listCtrl, 2, wxGROW );
  
@@ -761,7 +764,7 @@ void MyFrame::OnRightClick( wxMouseEvent &event )
 void MyFrame::OnGoto( wxCommandEvent &event)
 {
     wxDataViewItem item = m_list_model->GetItem( 50 );
-    m_listCtrl->EnsureVisible(item,m_listCtrl->GetColumn(1));
+    m_listCtrl->EnsureVisible(item,m_col);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )

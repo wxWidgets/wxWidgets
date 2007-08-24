@@ -366,8 +366,8 @@ public:
 
     virtual void EnsureVisible( const wxDataViewItem & item,
                                 wxDataViewColumn *column = NULL );
-    virtual void HitTest( const wxPoint & point, wxDataViewItem & item, int & column ) const;
-    virtual wxRect GetItemRect( const wxDataViewItem & item, int column ) const;
+    virtual void HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* &column ) const;
+    virtual wxRect GetItemRect( const wxDataViewItem & item, wxDataViewColumn *column = NULL ) const;
 
 protected:
     virtual int GetSelections( wxArrayInt & sel ) const; 

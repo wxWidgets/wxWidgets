@@ -487,8 +487,8 @@ public:
 
     virtual void EnsureVisible( const wxDataViewItem & item,
                                 wxDataViewColumn *column = NULL ) = 0;
-    virtual void HitTest( const wxPoint & point, wxDataViewItem & item, int & column ) const = 0;
-    virtual wxRect GetItemRect( const wxDataViewItem & item, int column ) const = 0;
+    virtual void HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* &column ) const = 0;
+    virtual wxRect GetItemRect( const wxDataViewItem & item, wxDataViewColumn *column = NULL ) const = 0;
 
 protected:
     virtual void DoSetExpanderColumn() = 0 ;

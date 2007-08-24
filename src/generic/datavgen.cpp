@@ -509,8 +509,8 @@ public:
     //Methods for building the mapping tree
     void BuildTree( wxDataViewModel  * model );
     void DestroyTree();
-    void HitTest( const wxPoint & point, wxDataViewItem & item, int & column );
-    wxRect GetItemRect( const wxDataViewItem & item, int column );
+    void HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* &column );
+    wxRect GetItemRect( const wxDataViewItem & item, wxDataViewColumn* column );
 private:
     wxDataViewTreeNode * GetTreeNodeByRow( unsigned int row );
     //We did not need this temporarily
@@ -2943,8 +2943,9 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
     return node;
 }
 
-void wxDataViewMainWindow::HitTest( const wxPoint & point, wxDataViewItem & item, int & column )
+void wxDataViewMainWindow::HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* &column )
 {
+    wxDataViewColumn *col = NULL;
     unsigned int cols = GetOwner()->GetColumnCount();
     unsigned int colnum = 0;
     unsigned int x_start = 0;
@@ -2952,7 +2953,7 @@ void wxDataViewMainWindow::HitTest( const wxPoint & point, wxDataViewItem & item
     m_owner->CalcUnscrolledPosition( point.x, point.y, &x, &y );
     for (x_start = 0; colnum < cols; colnum++)
     {
-        wxDataViewColumn *col = GetOwner()->GetColumn(colnum);
+        col = GetOwner()->GetColumn(colnum);
         if (col->IsHidden())
             continue;      // skip it!
 
@@ -2963,11 +2964,11 @@ void wxDataViewMainWindow::HitTest( const wxPoint & point, wxDataViewItem & item
         x_start += w;
     }
 
-    column = colnum;
+    column = col;
     item = GetItemByRow( y/m_lineHeight );
 }
 
-wxRect wxDataViewMainWindow::GetItemRect( const wxDataViewItem & item, int column )
+wxRect wxDataViewMainWindow::GetItemRect( const wxDataViewItem & item, wxDataViewColumn* column )
 {
     int row = GetRowByItem(item);
     int y = row*m_lineHeight;
@@ -2978,7 +2979,7 @@ wxRect wxDataViewMainWindow::GetItemRect( const wxDataViewItem & item, int colum
     {
        col = GetOwner()->GetColumn( i );
        x += col->GetWidth();
-       if( i == column - 1 )
+       if( GetOwner()->GetColumn(i+1) == column )
            break;
     }
     int w = col->GetWidth();
@@ -3790,12 +3791,12 @@ void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, wxDataViewColum
         
 }
 
-void wxDataViewCtrl::HitTest( const wxPoint & point, wxDataViewItem & item, int & column ) const
+void wxDataViewCtrl::HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* &column ) const
 {
     m_clientArea->HitTest(point, item, column);
 }
 
-wxRect wxDataViewCtrl::GetItemRect( const wxDataViewItem & item, int column ) const
+wxRect wxDataViewCtrl::GetItemRect( const wxDataViewItem & item, wxDataViewColumn* column ) const
 {
     return m_clientArea->GetItemRect(item, column);
 }
