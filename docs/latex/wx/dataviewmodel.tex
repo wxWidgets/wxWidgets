@@ -15,7 +15,7 @@ define the data model which acts as an interface between
 your actual data and the wxDataViewCtrl. Since you will
 usually also allow the wxDataViewCtrl to change your data
 through its graphical interface, you will also have to override
-\helpref{SetValue}{wxdataviewlistmodelsetvalue} which the
+\helpref{SetValue}{wxdataviewmodelsetvalue} which the
 wxDataViewCtrl will call when a change to some data has been
 commited.
 
@@ -92,7 +92,7 @@ Destructor. This should not be called directly. Use DecRef() instead.
 
 \func{void}{AddNotifier}{\param{wxDataViewModelNotifier* }{notifier}}
 
-Adds a \helpref{wxDataViewModelNotifier}{wxdataviewlistmodelnotifier}
+Adds a \helpref{wxDataViewModelNotifier}{wxdataviewmodelnotifier}
 to the model.
 
 \membersection{wxDataViewModel::Cleared}\label{wxdataviewmodelcleared}
