@@ -213,7 +213,7 @@ Returns indentation.
 
 \membersection{wxDataViewCtrl::GetItemRect}\label{wxdataviewctrlgetitemrect}
 
-\constfunc{wxRect}{GetItemRect}{\param{const wxDataViewItem\& }{item}, \param{unsigned int }{column}}
+\constfunc{wxRect}{GetItemRect}{\param{const wxDataViewItem\& }{item}, \param{wxDataViewColumn *}{col}}
 
 Returns item rect.
 
@@ -232,7 +232,7 @@ their number.
 
 \membersection{wxDataViewCtrl::HitTest}\label{wxdataviewctrlhittest}
 
-\constfunc{void}{HitTest}{\param{const wxPoint\& }{point}, \param{wxDataViewItem\& }{item}, \param{unsigned int\& }{column}}
+\constfunc{void}{HitTest}{\param{const wxPoint\& }{point}, \param{wxDataViewItem\& }{item}, \param{wxDataViewColumn *}{col}}
 
 Hittest.
 
