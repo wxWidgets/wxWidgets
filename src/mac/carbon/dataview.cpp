@@ -115,22 +115,8 @@ public:
 
 
     wxCHECK_MSG(item.IsOk(),false,_("Added item is invalid."));
-    if (!(parent.IsOk()) && (this->m_dataViewControlPtr->AddItem(kDataBrowserNoItem,                                 &itemID) == noErr) ||
-          parent.IsOk()  && (this->m_dataViewControlPtr->AddItem(reinterpret_cast<DataBrowserItemID>(parent.GetID()),&itemID) == noErr))
-    {
-     // variable definitions and initializations:
-      wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->m_dataViewControlPtr->GetPeer()));
-      wxDataViewEvent dataViewEvent  (wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_ADDED,dataViewCtrlPtr->GetId());
-      
-      dataViewEvent.SetEventObject(dataViewCtrlPtr);
-      dataViewEvent.SetItem(item);
-     // sent the equivalent wxWidget event:
-      dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
-     // done:
-      return true;
-    } /* if */
-    else
-      return false;
+    return (!(parent.IsOk()) && (this->m_dataViewControlPtr->AddItem(kDataBrowserNoItem,&itemID) == noErr) ||
+            parent.IsOk()  && (this->m_dataViewControlPtr->AddItem(reinterpret_cast<DataBrowserItemID>(parent.GetID()),&itemID) == noErr));
   } /* ItemAdded(wxDataViewItem const&, wxDataViewItem const&) */
 
   virtual bool ItemChanged(wxDataViewItem const& item)
@@ -160,26 +146,24 @@ public:
 
   virtual bool ItemDeleted(wxDataViewItem const& parent, wxDataViewItem const& item)
   {
-    DataBrowserItemID itemID(reinterpret_cast<DataBrowserItemID>(item.GetID()));
-
-
-    wxCHECK_MSG(item.IsOk(),false,_("Deleted item is invalid."));
-    if (this->m_dataViewControlPtr->RemoveItem(reinterpret_cast<DataBrowserItemID>(parent.GetID()),&itemID) == noErr)
+    if (item.IsOk())
     {
-     // variable definitions and initializations:
-      wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->m_dataViewControlPtr->GetPeer()));
-      wxDataViewEvent dataViewEvent  (wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_DELETED,dataViewCtrlPtr->GetId());
-
-      dataViewEvent.SetEventObject(dataViewCtrlPtr);
-      dataViewEvent.SetItem(item);
-     // sent the equivalent wxWidget event:
-      dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
-     // done
-      return true;
+     // variable definition and initialization:
+      DataBrowserItemID itemID(reinterpret_cast<DataBrowserItemID>(item.GetID()));
+      OSStatus          errorStatus;
+      wxDataViewCtrl*   dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->m_dataViewControlPtr->GetPeer()));
+      
+     // when this method is called and currently an item is being edited this item may have already been deleted in the model (the passed item and the being edited item have
+     // not to be identical because the being edited item might be below the passed item in the hierarchy); therefore, the control is informed that currently a deleting process
+     // is started and that variables can currently not be updated even when requested by the system:
+      dataViewCtrlPtr->SetDeleting(true);
+      errorStatus = this->m_dataViewControlPtr->RemoveItem(reinterpret_cast<DataBrowserItemID>(parent.GetID()),&itemID);
+      dataViewCtrlPtr->SetDeleting(false);
+      return (errorStatus == noErr);
     } /* if */
     else
       return false;
-  } /* ItemDeleted(wxDataViewItem const&) */
+  } /* ItemDeleted(wxDataViewItem const&, wxDataViewItem const&) */
 
   virtual bool ValueChanged(wxDataViewItem const& item, unsigned int col)
   {
@@ -230,6 +214,11 @@ public:
     else
       return false;
   } /* Cleared(void) */
+
+  virtual void Resort(void)
+  {
+    this->m_dataViewControlPtr->Resort();
+  }
 
 protected:
 private:
@@ -679,6 +668,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumn,wxDataViewColumnBase)
 #pragma mark -
 void wxDataViewCtrl::Init(void)
 {
+  this->m_Deleting      = false;
   this->m_macIsUserPane = false;
   this->m_NotifierPtr   = NULL;
   this->m_cgContext     = NULL;
@@ -695,6 +685,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
 
   this->m_peer = new wxMacDataViewDataBrowserListViewControl(this,pos,size,style);
   this->MacPostControlCreate(pos,size);
+  ::SetAutomaticControlDragTrackingEnabledForWindow(::GetControlOwner(this->m_peer->GetControlRef()),true);
 
   InstallControlEventHandler(this->m_peer->GetControlRef(),GetwxMacDataViewCtrlEventHandlerUPP(),GetEventTypeCount(eventList),eventList,this,NULL);
 
@@ -711,7 +702,7 @@ bool wxDataViewCtrl::AppendColumn(wxDataViewColumn* dataViewColumnPtr)
               (dataViewColumnPtr->GetModelColumn() < this->GetModel()->GetColumnCount()),false,_("Column's model column has no equivalent in the associated model."));
   if (this->wxDataViewCtrlBase::AppendColumn(dataViewColumnPtr))
   {
-   // variable definition:
+   // variable definitions:
     DataBrowserPropertyID                          NewPropertyID;
     DataBrowserListViewColumnDesc                  columnDescription;
     wxMacCFStringHolder                            cfTitle(dataViewColumnPtr->GetTitle(),(this->m_font.Ok() ? this->m_font.GetEncoding() : wxLocale::GetSystemEncoding()));
@@ -721,13 +712,17 @@ bool wxDataViewCtrl::AppendColumn(wxDataViewColumn* dataViewColumnPtr)
     wxCHECK_MSG(MacDataViewListCtrlPtr != NULL,                                    false,_("m_peer is not or incorrectly initialized"));
     wxCHECK_MSG(MacDataViewListCtrlPtr->GetFreePropertyID(&NewPropertyID) == noErr,false,_("Maximum number of columns reached."));
     dataViewColumnPtr->SetPropertyID(NewPropertyID);
+    if (dataViewColumnPtr->GetWidth() <= 0)
+      dataViewColumnPtr->SetWidth(wxDVC_DEFAULT_WIDTH);
     columnDescription.propertyDesc.propertyID = NewPropertyID;
     columnDescription.propertyDesc.propertyType = dataViewColumnPtr->GetRenderer()->GetPropertyType();
-    columnDescription.propertyDesc.propertyFlags = kDataBrowserListViewSelectionColumn;
+    columnDescription.propertyDesc.propertyFlags = kDataBrowserListViewSelectionColumn; // make the column selectable
     if (dataViewColumnPtr->IsSortable())
       columnDescription.propertyDesc.propertyFlags |= kDataBrowserListViewSortableColumn;
-    if (dataViewColumnPtr->IsResizeable())
+#if 0
+    if (dataViewColumnPtr->IsMovable())
       columnDescription.propertyDesc.propertyFlags |= kDataBrowserListViewMovableColumn;
+#endif
     if (dataViewColumnPtr->GetRenderer()->GetMode() == wxDATAVIEW_CELL_EDITABLE)
       columnDescription.propertyDesc.propertyFlags |= kDataBrowserPropertyIsEditable;
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
@@ -740,8 +735,16 @@ bool wxDataViewCtrl::AppendColumn(wxDataViewColumn* dataViewColumnPtr)
     columnDescription.propertyDesc.propertyFlags |= kDataBrowserListViewNoGapForIconInHeaderButton;
 #endif
     columnDescription.headerBtnDesc.version = kDataBrowserListViewLatestHeaderDesc;
-    columnDescription.headerBtnDesc.minimumWidth = 0;
-    columnDescription.headerBtnDesc.maximumWidth = 30000;
+    if (dataViewColumnPtr->IsResizable())
+    {
+      columnDescription.headerBtnDesc.minimumWidth = 0;
+      columnDescription.headerBtnDesc.maximumWidth = 30000;
+    } /* if */
+    else
+    {
+      columnDescription.headerBtnDesc.minimumWidth = dataViewColumnPtr->GetWidth();
+      columnDescription.headerBtnDesc.maximumWidth = dataViewColumnPtr->GetWidth();
+    } /* if */
     columnDescription.headerBtnDesc.titleOffset = 0;
     columnDescription.headerBtnDesc.titleString = cfTitle; // we cannot directly use the wxMacCFStringHolder constructor call because then the CFStringRef is released
                                                            // having called 'AddColumn' where the title (CFStringRef) is going to be used
@@ -771,11 +774,11 @@ bool wxDataViewCtrl::AppendColumn(wxDataViewColumn* dataViewColumnPtr)
     wxCHECK_MSG(MacDataViewListCtrlPtr->AddColumn(&columnDescription,kDataBrowserListViewAppendColumn) == noErr,false,_("Column could not be added."));
 
    // final adjustments for the layout:
-    if (dataViewColumnPtr->GetWidth() <= 0)
-      dataViewColumnPtr->SetWidth(wxDVC_DEFAULT_WIDTH);
     wxCHECK_MSG(MacDataViewListCtrlPtr->SetColumnWidth(NewPropertyID,dataViewColumnPtr->GetWidth()) == noErr,false,_("Column width could not be set."));
+#if 0
     if (dataViewColumnPtr->IsSortable()) // if the current column is marked sortable this column will become the active sortable column, otherwise don't do anything
       MacDataViewListCtrlPtr->SetSortProperty(NewPropertyID);
+#endif
     if (this->GetColumnCount()-1 == this->GetExpanderColumn()) // if the current column is marked expandable this column will become the active expandable column
       MacDataViewListCtrlPtr->SetDisclosureColumn(NewPropertyID,true);
 
@@ -792,19 +795,6 @@ bool wxDataViewCtrl::AppendColumn(wxDataViewColumn* dataViewColumnPtr)
     return false;
 } /* wxDataViewCtrl::AppendColumn(wxDataViewColumn*) */
 
-wxDataViewItem wxDataViewCtrl::GetSelection(void)
-{
-  wxArrayDataBrowserItemID itemIDs;
-  
-  wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
-
-  
-  if (MacDataViewListCtrlPtr->GetSelectedItemIDs(itemIDs) > 0)
-    return wxDataViewItem(reinterpret_cast<void*>(itemIDs[0]));
-  else
-    return wxDataViewItem();
-} /* wxDataViewCtrl::GetSelection(void) */
-
 bool wxDataViewCtrl::AssociateModel(wxDataViewModel* model)
 {
   if (!wxDataViewCtrlBase::AssociateModel(model))
@@ -815,6 +805,169 @@ bool wxDataViewCtrl::AssociateModel(wxDataViewModel* model)
 
   return true;
 } /* wxDataViewCtrl::AssociateModel(wxDataViewModel*) */
+
+void wxDataViewCtrl::EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr)
+{
+  if (item.IsOk())
+  {
+   // variable definition and initialization:
+    DataBrowserPropertyID propertyID;
+    wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+
+    if (columnPtr != NULL)
+      propertyID = columnPtr->GetPropertyID();
+    else
+      propertyID = kDataBrowserNoItem;
+    MacDataViewListCtrlPtr->RevealItem(reinterpret_cast<DataBrowserItemID>(item.GetID()),propertyID,kDataBrowserRevealOnly);
+  } /* if */
+} /* wxDataViewCtrl::EnsureVisible(wxDataViewItem const&, wxDataViewColumn const*) */
+
+wxRect wxDataViewCtrl::GetItemRect(wxDataViewItem const& item, wxDataViewColumn const* columnPtr) const
+{
+  if (item.IsOk() && (columnPtr != NULL))
+  {
+   // variable definition:
+    Rect                                           MacRectangle;
+    wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+    
+    if (MacDataViewListCtrlPtr->GetPartBounds(reinterpret_cast<DataBrowserItemID>(item.GetID()),columnPtr->GetPropertyID(),kDataBrowserPropertyContentPart,&MacRectangle) == noErr)
+    {
+     // variable definition:
+      wxRect rectangle;
+      
+      ::wxMacNativeToRect(&MacRectangle,&rectangle);
+      return rectangle;
+    } /* if */
+    else
+      return wxRect();
+  } /* if */
+  else
+    return wxRect();
+} /* wxDataViewCtrl::GetItemRect(wxDataViewItem const&, unsigned int) const */
+
+wxDataViewItem wxDataViewCtrl::GetSelection(void) const
+{
+  wxArrayDataBrowserItemID itemIDs;
+  
+  wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+
+  
+  if (MacDataViewListCtrlPtr->GetSelectedItemIDs(itemIDs) > 0)
+    return wxDataViewItem(reinterpret_cast<void*>(itemIDs[0]));
+  else
+    return wxDataViewItem();
+} /* wxDataViewCtrl::GetSelection(void) const */
+
+int wxDataViewCtrl::GetSelections(wxDataViewItemArray& sel) const
+{
+  size_t NoOfSelectedItems;
+
+  wxArrayDataBrowserItemID itemIDs;
+  
+  wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+  
+  
+  NoOfSelectedItems = MacDataViewListCtrlPtr->GetSelectedItemIDs(itemIDs);
+  sel.Empty();
+  sel.SetCount(NoOfSelectedItems);
+  for (size_t i=0; i<NoOfSelectedItems; ++i)
+    sel[i] = wxDataViewItem(reinterpret_cast<void*>(itemIDs[i]));
+  return static_cast<int>(NoOfSelectedItems);
+} /* wxDataViewCtrl::GetSelections(wxDataViewItemArray&) const */
+
+void wxDataViewCtrl::HitTest(wxPoint const& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const
+{
+  item = wxDataViewItem();
+  columnPtr = NULL;
+} /* wxDataViewCtrl::HitTest(wxPoint const&, wxDataViewItem&, wxDataViewColumn*&) const */
+
+bool wxDataViewCtrl::IsSelected(wxDataViewItem const& item) const
+{
+  wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+  
+  
+  return MacDataViewListCtrlPtr->IsItemSelected(reinterpret_cast<DataBrowserItemID>(item.GetID()));
+} /* wxDataViewCtrl::IsSelected(wxDataViewItem const&) const */
+
+void wxDataViewCtrl::SelectAll(void)
+{
+  DataBrowserItemID* itemIDPtr;
+
+  Handle handle(::NewHandle(0));
+  
+  size_t NoOfItems;
+  
+  wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+  
+  
+  wxCHECK_RET(MacDataViewListCtrlPtr->GetItems(kDataBrowserNoItem,true,kDataBrowserItemAnyState,handle) == noErr,_("Could not get items."));
+  NoOfItems = static_cast<size_t>(::GetHandleSize(handle)/sizeof(DataBrowserItemID));
+  HLock(handle);
+  itemIDPtr = (DataBrowserItemID*) (*handle);
+  MacDataViewListCtrlPtr->SetSelectedItems(NoOfItems,itemIDPtr,kDataBrowserItemsAssign);
+  HUnlock(handle);
+  DisposeHandle(handle);
+} /* wxDataViewCtrl::SelectAll(void) */
+
+void wxDataViewCtrl::Select(wxDataViewItem const& item)
+{
+  if (item.IsOk())
+  {
+   // variable definition and initialization:
+    DataBrowserItemID                              itemID(reinterpret_cast<DataBrowserItemID>(item.GetID()));
+    wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+  
+    MacDataViewListCtrlPtr->SetSelectedItems(1,&itemID,kDataBrowserItemsAdd);
+  } /* if */
+} /* wxDataViewCtrl::Select(wxDataViewItem const&) */
+
+void wxDataViewCtrl::SetSelections(wxDataViewItemArray const& sel)
+{
+  size_t const NoOfSelections = sel.GetCount();
+
+  DataBrowserItemID* itemIDs;
+
+  wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+  
+  
+  itemIDs = new DataBrowserItemID[NoOfSelections];
+  for (size_t i=0; i<NoOfSelections; ++i)
+    itemIDs[i] = reinterpret_cast<DataBrowserItemID>(sel[i].GetID());
+  MacDataViewListCtrlPtr->SetSelectedItems(NoOfSelections,itemIDs,kDataBrowserItemsAssign);
+  delete[] itemIDs;
+} /* wxDataViewCtrl::SetSelections(wxDataViewItemArray const&) */
+
+void wxDataViewCtrl::Unselect(wxDataViewItem const& item)
+{
+  if (item.IsOk())
+  {
+   // variable definition and initialization:
+    DataBrowserItemID                              itemID(reinterpret_cast<DataBrowserItemID>(item.GetID()));
+    wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+  
+    MacDataViewListCtrlPtr->SetSelectedItems(1,&itemID,kDataBrowserItemsRemove);
+  } /* if */
+} /* wxDataViewCtrl::Unselect(wxDataViewItem const&) */
+
+void wxDataViewCtrl::UnselectAll(void)
+{
+  DataBrowserItemID* itemIDPtr;
+  
+  Handle handle(::NewHandle(0));
+  
+  size_t NoOfItems;
+  
+  wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+  
+  
+  wxCHECK_RET(MacDataViewListCtrlPtr->GetItems(kDataBrowserNoItem,true,kDataBrowserItemAnyState,handle) == noErr,_("Could not get items."));
+  NoOfItems = static_cast<size_t>(::GetHandleSize(handle)/sizeof(DataBrowserItemID));
+  HLock(handle);
+  itemIDPtr = (DataBrowserItemID*) (*handle);
+  MacDataViewListCtrlPtr->SetSelectedItems(NoOfItems,itemIDPtr,kDataBrowserItemsRemove);
+  HUnlock(handle);
+  DisposeHandle(handle);
+} /* wxDataViewCtrl::UnselectAll(void) */
 
 // data handling:
 void wxDataViewCtrl::AddChildrenLevel(wxDataViewItem const& parentItem)

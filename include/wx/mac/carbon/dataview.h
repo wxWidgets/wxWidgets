@@ -500,14 +500,36 @@ public:
     return this;
   }
   
-  virtual wxDataViewItem GetSelection(void);
+  virtual void EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr=NULL);
+  
+  virtual wxRect GetItemRect(wxDataViewItem const& item, wxDataViewColumn const* columnPtr) const;
+  virtual wxDataViewItem GetSelection(void) const;
+  virtual int GetSelections(wxDataViewItemArray& sel) const;
+  
+  virtual void HitTest(wxPoint const& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const;
 
+  virtual bool IsSelected(wxDataViewItem const& item) const;
+
+  virtual void SelectAll(void);
+  virtual void Select(wxDataViewItem const& item);
+  virtual void SetSelections(wxDataViewItemArray const& sel);
+
+  virtual void Unselect(wxDataViewItem const& item);
+  virtual void UnselectAll(void);
+  
+  
 //
 // implementation
 //
 
-  // adds all children of the passed parent to the control; if 'parentItem' is invalid the root(s) is/are added:
+ // adds all children of the passed parent to the control; if 'parentItem' is invalid the root(s) is/are added:
   void AddChildrenLevel(wxDataViewItem const& parentItem);
+
+ // checks if currently a delete process is running:
+  bool IsDeleting(void) const
+  {
+    return this->m_Deleting;
+  }
 
  // with CG, we need to get the context from an kEventControlDraw event
  // unfortunately, the DataBrowser callbacks don't provide the context
@@ -520,6 +542,12 @@ public:
   void* MacGetDrawingContext(void) const
   {
     return this->m_cgContext;
+  }
+
+ /// sets the flag indicating a deletion process:
+  void SetDeleting(bool deleting)
+  {
+    this->m_Deleting = deleting;
   }
 
 protected:
@@ -538,9 +566,13 @@ private:
 // variables
 //
 
-  wxDataViewModelNotifier* m_NotifierPtr; // the notifier is NOT owned by this class but by the associated model
+  bool m_Deleting; // flag indicating if a delete process is running; this flag is necessary because the notifier indicating an item deletion in the model may be called
+                   // after the actual deletion of the item; then, the callback function "wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc" may
+                   // try to update data into variables that are already deleted; this flag will ignore all variable update requests during item deletion
 
   void* m_cgContext; // pointer to core graphics context
+  
+  wxDataViewModelNotifier* m_NotifierPtr; // the notifier is NOT owned by this class but by the associated model
 
  // wxWidget internal stuff:
   DECLARE_DYNAMIC_CLASS(wxDataViewCtrl)

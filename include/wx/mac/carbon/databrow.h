@@ -107,6 +107,7 @@ public:
   OSStatus GetDefaultColumnWidth(UInt16 *width ) const; // returns the default column width in pixels
   OSStatus GetDefaultRowHeight  (UInt16 * height ) const;
   OSStatus GetHeaderButtonHeight(UInt16 *height );
+  OSStatus GetPartBounds        (DataBrowserItemID item, DataBrowserPropertyID property, DataBrowserPropertyPart part, Rect* bounds);
   OSStatus GetRowHeight         (DataBrowserItemID item , UInt16 *height) const;
   OSStatus GetScrollPosition    (UInt32* top, UInt32 *left) const;
 
@@ -129,8 +130,9 @@ public:
   OSStatus GetColumnIndex   (DataBrowserPropertyID propertyID, DataBrowserTableViewColumnIndex* index) const; // returns for the passed property the corresponding column index
   OSStatus GetFreePropertyID(DataBrowserPropertyID* propertyID) const; // this method returns a property id that is valid and currently not used; if it cannot be found 'errDataBrowerPropertyNotSupported' is returned
   OSStatus GetPropertyFlags (DataBrowserPropertyID propertyID, DataBrowserPropertyFlags *flags ) const;
-  OSStatus GetPropertyID    (DataBrowserTableViewColumnIndex index, DataBrowserTableViewColumnID* propertyId); // returns for the passed column index the corresponding property ID
-
+  OSStatus GetPropertyID    (DataBrowserItemDataRef itemData, DataBrowserPropertyID* propertyID); // returns for the passed item data reference the corresponding property ID
+  OSStatus GetPropertyID    (DataBrowserTableViewColumnIndex index, DataBrowserPropertyID* propertyID); // returns for the passed column index the corresponding property ID
+  
   OSStatus IsUsedPropertyID(DataBrowserPropertyID propertyID) const; // checks if passed property id is used by the control; no error is returned if the id exists
 
   OSStatus RemoveColumn(DataBrowserTableViewColumnIndex index);
@@ -154,7 +156,7 @@ public:
     return this->GetItemCount(kDataBrowserNoItem,true,kDataBrowserItemAnyState,numItems);
   }
   OSStatus GetItemCount (DataBrowserItemID container, Boolean recurse, DataBrowserItemState state, ItemCount* numItems) const;
-  OSStatus GetItemID    (DataBrowserTableViewRowIndex row, DataBrowserItemID * item) const;
+  OSStatus GetItemID    (DataBrowserTableViewRowIndex row, DataBrowserItemID* item) const;
   OSStatus GetItems     (DataBrowserItemID container, Boolean recurse, DataBrowserItemState state, Handle items) const;
   OSStatus GetItemRow   (DataBrowserItemID item, DataBrowserTableViewRowIndex* row) const;
 
@@ -199,6 +201,8 @@ public:
 //
   OSStatus GetSortOrder   (DataBrowserSortOrder* order) const;
   OSStatus GetSortProperty(DataBrowserPropertyID* propertyID) const;
+
+  OSStatus Resort(DataBrowserItemID container=kDataBrowserNoItem, Boolean sortChildren=true);
 
   OSStatus SetSortOrder   (DataBrowserSortOrder  order);
   OSStatus SetSortProperty(DataBrowserPropertyID propertyID);
