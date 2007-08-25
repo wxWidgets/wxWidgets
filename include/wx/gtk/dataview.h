@@ -34,14 +34,15 @@ public:
                         wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                         int align = wxDVR_DEFAULT_ALIGNMENT );
 
-    // implementation
-    GtkCellRenderer* GetGtkHandle() { return m_renderer; }
-
     virtual void SetMode( wxDataViewCellMode mode );
     virtual wxDataViewCellMode GetMode() const;
 
     virtual void SetAlignment( int align );
     virtual int GetAlignment() const;
+
+    // implementation
+    GtkCellRenderer* GetGtkHandle() { return m_renderer; }
+    void GtkInitHandlers();
 
 protected:
     GtkCellRenderer   *m_renderer;
@@ -323,6 +324,8 @@ public:
     virtual wxRect GetItemRect( const wxDataViewItem &item, 
                                 const wxDataViewColumn *column = NULL ) const;
 
+    virtual void Expand( const wxDataViewItem & item );
+    virtual void Collapse( const wxDataViewItem & item );
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);

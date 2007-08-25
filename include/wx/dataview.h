@@ -485,6 +485,9 @@ public:
     virtual void SelectAll() = 0;
     virtual void UnselectAll() = 0;
 
+    virtual void Expand( const wxDataViewItem & item ) = 0;
+    virtual void Collapse( const wxDataViewItem & item ) = 0;
+
     virtual void EnsureVisible( const wxDataViewItem & item,
                                 const wxDataViewColumn *column = NULL ) = 0;
     virtual void HitTest( const wxPoint & point, wxDataViewItem &item, wxDataViewColumn* &column ) const = 0;

@@ -2993,6 +2993,24 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
     return true;
 }
 
+void wxDataViewCtrl::Expand( const wxDataViewItem & item )
+{
+    GtkTreeIter iter;
+    iter.user_data = item.GetID();
+    GtkTreePath *path = m_internal->get_path( &iter );
+    gtk_tree_view_expand_row( GTK_TREE_VIEW(m_treeview), path, false );
+    gtk_tree_path_free( path );
+}
+
+void wxDataViewCtrl::Collapse( const wxDataViewItem & item )
+{
+    GtkTreeIter iter;
+    iter.user_data = item.GetID();
+    GtkTreePath *path = m_internal->get_path( &iter );
+    gtk_tree_view_collapse_row( GTK_TREE_VIEW(m_treeview), path );
+    gtk_tree_path_free( path );
+}
+
 wxDataViewItem wxDataViewCtrl::GetSelection() const
 {
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
