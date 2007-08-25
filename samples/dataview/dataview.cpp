@@ -440,6 +440,9 @@ public:
     void OnCollapsed( wxDataViewEvent &event );
     void OnSelected( wxDataViewEvent &event );
     
+    void OnEditingStarted( wxDataViewEvent &event );
+    void OnEditingDone( wxDataViewEvent &event );
+    
     void OnHeaderClick( wxDataViewEvent &event );
     void OnHeaderRightClick( wxDataViewEvent &event );
     void OnSorted( wxDataViewEvent &event );
@@ -529,6 +532,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_DATAVIEW_ITEM_COLLAPSING(ID_MUSIC_CTRL, MyFrame::OnCollapsing)
     EVT_DATAVIEW_ITEM_COLLAPSED(ID_MUSIC_CTRL, MyFrame::OnCollapsed)
     EVT_DATAVIEW_ITEM_SELECTED(ID_MUSIC_CTRL, MyFrame::OnSelected)
+    
+    EVT_DATAVIEW_ITEM_EDITING_STARTED(ID_MUSIC_CTRL, MyFrame::OnEditingStarted)
+    EVT_DATAVIEW_ITEM_EDITING_DONE(ID_MUSIC_CTRL, MyFrame::OnEditingDone)
+    
     
     EVT_DATAVIEW_COLUMN_HEADER_CLICK(ID_MUSIC_CTRL, MyFrame::OnHeaderClick)
     EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED(ID_MUSIC_CTRL, MyFrame::OnHeaderRightClick)
@@ -703,6 +710,23 @@ void MyFrame::OnExpanding( wxDataViewEvent &event )
         return;
         
     wxLogMessage("wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, Item Id: %d", event.GetItem().GetID() );
+}
+
+
+void MyFrame::OnEditingStarted( wxDataViewEvent &event )
+{
+    if (!m_log)
+        return;
+        
+    wxLogMessage("wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED, Item Id: %d", event.GetItem().GetID() );
+}
+
+void MyFrame::OnEditingDone( wxDataViewEvent &event )
+{
+    if (!m_log)
+        return;
+        
+    wxLogMessage("wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, Item Id: %d", event.GetItem().GetID() );
 }
 
 void MyFrame::OnExpanded( wxDataViewEvent &event )
