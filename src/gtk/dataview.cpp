@@ -3116,6 +3116,8 @@ wxRect wxDataViewCtrl::GetItemRect( const wxDataViewItem &item,
 
 void wxDataViewCtrl::DoSetExpanderColumn()
 {
+    gtk_tree_view_set_expander_column( GTK_TREE_VIEW(m_treeview), 
+        GTK_TREE_VIEW_COLUMN( GetExpanderColumn()->GetGtkHandle() ) );
 }
 
 void wxDataViewCtrl::DoSetIndent()

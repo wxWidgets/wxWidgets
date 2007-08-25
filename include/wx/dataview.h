@@ -465,9 +465,9 @@ public:
     virtual bool ClearColumns();
     virtual wxDataViewColumn* GetColumn( unsigned int pos ) const;
 
-    void SetExpanderColumn( unsigned int col )
+    void SetExpanderColumn( wxDataViewColumn *col )
         { m_expander_column = col ; DoSetExpanderColumn(); }
-    unsigned int GetExpanderColumn() const 
+    wxDataViewColumn *GetExpanderColumn() const 
         { return m_expander_column; }
 
     void SetIndent( int indent )
@@ -497,7 +497,7 @@ protected:
 private:
     wxDataViewModel        *m_model;
     wxList                  m_cols;
-    unsigned int m_expander_column;
+    wxDataViewColumn       *m_expander_column;
     int m_indent ;
 	
 protected:

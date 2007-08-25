@@ -2321,7 +2321,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 	     }
 
             wxDataViewItem dataitem = node->GetItem();
-	     model->GetValue( value, dataitem, col->GetModelColumn());
+             model->GetValue( value, dataitem, col->GetModelColumn());
             cell->SetValue( value );
 
             // update the y offset
@@ -2329,7 +2329,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
             //Draw the expander here.
             int indent = node->GetIndentLevel();
-            if( col->GetModelColumn() == GetOwner()->GetExpanderColumn() )
+            if( col == GetOwner()->GetExpanderColumn() )
             {
                 //Calculate the indent first
                 indent = cell_rect.x + GetOwner()->GetIndent() * indent;

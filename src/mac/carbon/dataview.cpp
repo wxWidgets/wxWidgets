@@ -779,7 +779,7 @@ bool wxDataViewCtrl::AppendColumn(wxDataViewColumn* dataViewColumnPtr)
     if (dataViewColumnPtr->IsSortable()) // if the current column is marked sortable this column will become the active sortable column, otherwise don't do anything
       MacDataViewListCtrlPtr->SetSortProperty(NewPropertyID);
 #endif
-    if (this->GetColumnCount()-1 == this->GetExpanderColumn()) // if the current column is marked expandable this column will become the active expandable column
+    if (dataViewColumnPtr == this->GetExpanderColumn()) // if the current column is marked expandable this column will become the active expandable column
       MacDataViewListCtrlPtr->SetDisclosureColumn(NewPropertyID,true);
 
    // make sure that the data is up-to-date...
