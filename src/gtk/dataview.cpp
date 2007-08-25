@@ -1173,6 +1173,51 @@ bool wxGtkDataViewModelNotifier::Cleared()
 // wxDataViewRenderer
 // ---------------------------------------------------------
 
+static gpointer s_user_data = NULL;
+
+static void
+wxgtk_cell_editable_editing_done( GtkCellEditable *editable, 
+                                  wxDataViewRenderer *wxrenderer )
+{
+    wxDataViewColumn *column = wxrenderer->GetOwner();
+    wxDataViewCtrl *dv = column->GetOwner();
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, dv->GetId() );
+    event.SetDataViewColumn( column );
+    event.SetModel( dv->GetModel() );
+    wxDataViewItem item( s_user_data );
+    event.SetItem( item );
+    dv->GetEventHandler()->ProcessEvent( event );
+}
+
+static void 
+wxgtk_renderer_editing_started( GtkCellRenderer *cell, GtkCellEditable *editable,
+                                gchar *path, wxDataViewRenderer *wxrenderer )
+{
+    wxDataViewColumn *column = wxrenderer->GetOwner();
+    wxDataViewCtrl *dv = column->GetOwner();
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED, dv->GetId() );
+    event.SetDataViewColumn( column );
+    event.SetModel( dv->GetModel() );
+    GtkTreePath *tree_path = gtk_tree_path_new_from_string( path );
+    GtkTreeIter iter;
+    dv->GtkGetInternal()->get_iter( &iter, tree_path );
+    gtk_tree_path_free( tree_path );
+    wxDataViewItem item( iter.user_data );
+    event.SetItem( item );
+    dv->GetEventHandler()->ProcessEvent( event );
+
+    if (GTK_IS_CELL_EDITABLE(editable))
+    {
+        s_user_data = iter.user_data;
+    
+        g_signal_connect (GTK_CELL_EDITABLE (editable), "editing_done",
+            G_CALLBACK (wxgtk_cell_editable_editing_done),
+            (gpointer) wxrenderer );
+        
+    }
+}
+
+
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer, wxDataViewRendererBase)
 
 wxDataViewRenderer::wxDataViewRenderer( const wxString &varianttype, wxDataViewCellMode mode,
@@ -1183,6 +1228,16 @@ wxDataViewRenderer::wxDataViewRenderer( const wxString &varianttype, wxDataViewC
 
     // NOTE: SetMode() and SetAlignment() needs to be called in the renderer's ctor,
     //       after the m_renderer pointer has been initialized
+}
+
+void wxDataViewRenderer::GtkInitHandlers()
+{
+    if (!gtk_check_version(2,6,0))
+    {
+        g_signal_connect (GTK_CELL_RENDERER(m_renderer), "editing_started",
+		    G_CALLBACK (wxgtk_renderer_editing_started),
+		    this);
+    }
 }
 
 void wxDataViewRenderer::SetMode( wxDataViewCellMode mode )
@@ -1349,6 +1404,8 @@ wxDataViewTextRenderer::wxDataViewTextRenderer( const wxString &varianttype, wxD
         g_value_unset( &gvalue );
 
         g_signal_connect_after( m_renderer, "edited", G_CALLBACK(wxGtkTextRendererEditedCallback), this );
+        
+        GtkInitHandlers();
     }
 
     SetMode(mode);
@@ -1612,6 +1669,8 @@ bool wxDataViewCustomRenderer::Init(wxDataViewCellMode mode, int align)
     SetMode(mode);
     SetAlignment(align);
 
+    GtkInitHandlers();
+    
     return true;
 }
 
