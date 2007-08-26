@@ -133,26 +133,20 @@ static bool GetColourFromGTKWidget(GdkColor& gdkColor,
 
 static void GetTooltipColors()
 {
-    GtkTooltips* tooltips = gtk_tooltips_new();
-    gtk_tooltips_force_window(tooltips);
+    GtkWidget* widget = gtk_window_new(GTK_WINDOW_POPUP);
+    gtk_window_set_type_hint((GtkWindow*)widget, GDK_WINDOW_TYPE_HINT_TOOLTIP);
+    const char* name = "gtk-tooltip";
+    if (gtk_check_version(2, 11, 0))
+        name = "gtk-tooltips";
+    gtk_widget_set_name(widget, name);
+    gtk_widget_ensure_style(widget);
 
-    // FIXME: In 2.11.6 tip_window is private and always NULL so
-    // we need to do something different if there is no window.
-    // See https://sourceforge.net/tracker/index.php?func=detail&aid=1767485&group_id=9863&atid=109863
-    if (tooltips->tip_window)
-    {
-        gtk_widget_ensure_style(tooltips->tip_window);
-        GdkColor c = tooltips->tip_window->style->bg[GTK_STATE_NORMAL];
-        gs_objects.m_colTooltip = wxColor(c);
-        c = tooltips->tip_window->style->fg[GTK_STATE_NORMAL];
-        gs_objects.m_colTooltipText = wxColor(c);
-    }
-    else
-    {
-        gs_objects.m_colTooltipText = wxColour(255, 255, 128); // FIXME
-    }
+    GdkColor c = widget->style->bg[GTK_STATE_NORMAL];
+    gs_objects.m_colTooltip = wxColor(c);
+    c = widget->style->fg[GTK_STATE_NORMAL];
+    gs_objects.m_colTooltipText = wxColor(c);
 
-    gtk_object_sink((GtkObject*)tooltips);
+    gtk_widget_destroy(widget);
 }
 
 wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
