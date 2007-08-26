@@ -247,9 +247,9 @@ template<> void wxStringWriteValue(wxString &s, const wxString &data )
                              &wxFromStringConverter<type>, typeid(type).name());
 #else
     #define wxBUILTIN_TYPE_INFO( element, type )                                    \
-        void _toString##element( const wxxVariant& data, wxString &result )         \
+        void _toString##element( const wxVariantBase& data, wxString &result )         \
             { wxToStringConverter<type, data, result); }                            \
-        void _fromString##element( const wxString& data, wxxVariant &result )       \
+        void _fromString##element( const wxString& data, wxVariantBase &result )       \
             { wxFromStringConverter<type, data, result); }                          \
         wxBuiltInTypeInfo s_typeInfo##type(element, &_toString##element,            \
                                            &_fromString##element, typeid(type).name());
@@ -285,7 +285,7 @@ wxILLEGAL_TYPE_SPECIALIZATION( wxString * )
 wxCOLLECTION_TYPE_INFO( wxString, wxArrayString );
 
 template<> void wxCollectionToVariantArray( wxArrayString const &theArray, 
-                                            wxxVariantArray &value)
+                                            wxVariantBaseArray &value)
 {
     wxArrayCollectionToVariantArray( theArray, value );
 }
@@ -466,7 +466,7 @@ void wxHandlerInfo::Remove()
 // wxClassInfo
 // ----------------------------------------------------------------------------
 
-bool wxClassInfo::Create(wxObject *object, int ParamCount, wxxVariant *Params) const
+bool wxClassInfo::Create(wxObject *object, int ParamCount, wxVariantBase *Params) const
 {
     if ( ParamCount != m_constructorPropertiesCount )
     {
@@ -478,7 +478,7 @@ bool wxClassInfo::Create(wxObject *object, int ParamCount, wxxVariant *Params) c
     return m_constructor->Create( object, Params );
 }
 
-wxObject *wxClassInfo::ConstructObject(int ParamCount, wxxVariant *Params) const
+wxObject *wxClassInfo::ConstructObject(int ParamCount, wxVariantBase *Params) const
 {
     if ( ParamCount != m_constructorPropertiesCount )
     {
@@ -595,7 +595,7 @@ wxObjectStreamingCallback wxClassInfo::GetStreamingCallback() const
 }
 
 bool wxClassInfo::BeforeWriteObject( const wxObject *obj, wxObjectWriter *streamer, 
-                                     wxObjectReaderCallback *persister, wxxVariantArray &metadata) const
+                                     wxObjectReaderCallback *persister, wxVariantBaseArray &metadata) const
 {
     wxObjectStreamingCallback sb = GetStreamingCallback();
     if ( sb )
@@ -605,7 +605,7 @@ bool wxClassInfo::BeforeWriteObject( const wxObject *obj, wxObjectWriter *stream
 }
 
 void wxClassInfo::SetProperty(wxObject *object, const wxChar *propertyName, 
-                              const wxxVariant &value) const
+                              const wxVariantBase &value) const
 {
     const wxPropertyAccessor *accessor;
 
@@ -614,31 +614,31 @@ void wxClassInfo::SetProperty(wxObject *object, const wxChar *propertyName,
     accessor->SetProperty( object, value );
 }
 
-wxxVariant wxClassInfo::GetProperty(wxObject *object, const wxChar *propertyName) const
+wxVariantBase wxClassInfo::GetProperty(wxObject *object, const wxChar *propertyName) const
 {
     const wxPropertyAccessor *accessor;
 
     accessor = FindAccessor(propertyName);
     wxASSERT(accessor->HasGetter());
-    wxxVariant result;
+    wxVariantBase result;
     accessor->GetProperty(object,result);
     return result;
 }
 
-wxxVariantArray wxClassInfo::GetPropertyCollection(wxObject *object, 
+wxVariantBaseArray wxClassInfo::GetPropertyCollection(wxObject *object, 
                                                    const wxChar *propertyName) const
 {
     const wxPropertyAccessor *accessor;
 
     accessor = FindAccessor(propertyName);
     wxASSERT(accessor->HasGetter());
-    wxxVariantArray result;
+    wxVariantBaseArray result;
     accessor->GetPropertyCollection(object,result);
     return result;
 }
 
 void wxClassInfo::AddToPropertyCollection(wxObject *object, const wxChar *propertyName, 
-                                          const wxxVariant& value) const
+                                          const wxVariantBase& value) const
 {
     const wxPropertyAccessor *accessor;
 
@@ -682,9 +682,9 @@ struct wxDynamicObject::wxDynamicObjectInternal
     wxDynamicObjectInternal() {}
 
 #if wxUSE_UNICODE
-    map<wstring,wxxVariant> m_properties;
+    map<wstring,wxVariantBase> m_properties;
 #else
-    map<string,wxxVariant> m_properties;
+    map<string,wxVariantBase> m_properties;
 #endif
 };
 
@@ -711,14 +711,14 @@ wxDynamicObject::~wxDynamicObject()
     delete m_superClassInstance;
 }
 
-void wxDynamicObject::SetProperty (const wxChar *propertyName, const wxxVariant &value)
+void wxDynamicObject::SetProperty (const wxChar *propertyName, const wxVariantBase &value)
 {
     wxASSERT_MSG(m_classInfo->FindPropertyInfoInThisClass(propertyName),
                  wxT("Accessing Unknown Property in a Dynamic Object") );
     m_data->m_properties[propertyName] = value;
 }
 
-wxxVariant wxDynamicObject::GetProperty (const wxChar *propertyName) const
+wxVariantBase wxDynamicObject::GetProperty (const wxChar *propertyName) const
 {
     wxASSERT_MSG(m_classInfo->FindPropertyInfoInThisClass(propertyName),
                  wxT("Accessing Unknown Property in a Dynamic Object") );
@@ -738,7 +738,7 @@ void wxDynamicObject::RenameProperty( const wxChar *oldPropertyName,
     wxASSERT_MSG(m_classInfo->FindPropertyInfoInThisClass(oldPropertyName),
                  wxT("Renaming Unknown Property in a Dynamic Object") );
 
-    wxxVariant value = m_data->m_properties[oldPropertyName];
+    wxVariantBase value = m_data->m_properties[oldPropertyName];
     m_data->m_properties.erase( oldPropertyName );
     m_data->m_properties[newPropertyName] = value;
 }
@@ -772,7 +772,7 @@ wxObject *wxDynamicClassInfo::AllocateObject() const
     return obj;
 }
 
-bool wxDynamicClassInfo::Create (wxObject *object, int paramCount, wxxVariant *params) const
+bool wxDynamicClassInfo::Create (wxObject *object, int paramCount, wxVariantBase *params) const
 {
     wxDynamicObject *dynobj = wx_dynamic_cast( wxDynamicObject *,  object );
     wxASSERT_MSG( dynobj, 
@@ -794,7 +794,7 @@ const wxChar* wxDynamicClassInfo::GetCreateParamName(int i) const
     return GetParents()[0]->GetCreateParamName( i );
 }
 
-void wxDynamicClassInfo::SetProperty(wxObject *object, const wxChar *propertyName, const wxxVariant &value) const
+void wxDynamicClassInfo::SetProperty(wxObject *object, const wxChar *propertyName, const wxVariantBase &value) const
 {
     wxDynamicObject* dynobj = wx_dynamic_cast(wxDynamicObject*, object);
     wxASSERT_MSG( dynobj, wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") );
@@ -804,7 +804,7 @@ void wxDynamicClassInfo::SetProperty(wxObject *object, const wxChar *propertyNam
         GetParents()[0]->SetProperty( dynobj->GetSuperClassInstance(), propertyName, value );
 }
 
-wxxVariant wxDynamicClassInfo::GetProperty(wxObject *object, const wxChar *propertyName) const
+wxVariantBase wxDynamicClassInfo::GetProperty(wxObject *object, const wxChar *propertyName) const
 {
     wxDynamicObject* dynobj = wx_dynamic_cast(wxDynamicObject*, object);
     wxASSERT_MSG( dynobj, wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") );
@@ -816,7 +816,7 @@ wxxVariant wxDynamicClassInfo::GetProperty(wxObject *object, const wxChar *prope
 
 void wxDynamicClassInfo::AddProperty( const wxChar *propertyName, const wxTypeInfo* typeInfo )
 {
-    new wxPropertyInfo( m_firstProperty, this, propertyName, typeInfo->GetTypeName(), new wxGenericPropertyAccessor( propertyName ), wxxVariant() );
+    new wxPropertyInfo( m_firstProperty, this, propertyName, typeInfo->GetTypeName(), new wxGenericPropertyAccessor( propertyName ), wxVariantBase() );
 }
 
 void wxDynamicClassInfo::AddHandler( const wxChar *handlerName, wxObjectEventFunction address, const wxClassInfo* eventClassInfo )
@@ -879,14 +879,14 @@ wxGenericPropertyAccessor::~wxGenericPropertyAccessor()
     delete m_data;
 }
 
-void wxGenericPropertyAccessor::SetProperty(wxObject *object, const wxxVariant &value) const
+void wxGenericPropertyAccessor::SetProperty(wxObject *object, const wxVariantBase &value) const
 {
     wxDynamicObject* dynobj = wx_dynamic_cast(wxDynamicObject*, object);
     wxASSERT_MSG( dynobj, wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") );
     dynobj->SetProperty(m_propertyName, value );
 }
 
-void wxGenericPropertyAccessor::GetProperty(const wxObject *object, wxxVariant& value) const
+void wxGenericPropertyAccessor::GetProperty(const wxObject *object, wxVariantBase& value) const
 {
     const wxDynamicObject* dynobj = wx_dynamic_cast( const wxDynamicObject * ,  object );
     wxASSERT_MSG( dynobj, wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") );

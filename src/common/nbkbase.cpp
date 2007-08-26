@@ -89,7 +89,7 @@ wxCOLLECTION_TYPE_INFO( wxNotebookPageInfo *, wxNotebookPageInfoList );
 
 #if wxUSE_EXTENDED_RTTI
 template<> void wxCollectionToVariantArray( wxNotebookPageInfoList const &theList,
-                                            wxxVariantArray &value)
+                                            wxVariantBaseArray &value)
 {
     wxListCollectionToVariantArray<wxNotebookPageInfoList::compatibility_iterator>( theList, value );
 }

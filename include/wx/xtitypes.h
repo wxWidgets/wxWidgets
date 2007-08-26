@@ -91,9 +91,9 @@ private:
         { data = (e) s_enumData##e.GetEnumMemberValue(s); }             \
     template<> void wxStringWriteValue(wxString &s, const e &data )    \
         { s = s_enumData##e.GetEnumMemberName((int)data); }             \
-    void FromLong##e( long data, wxxVariant& result )                  \
-        { result = wxxVariant((e)data); }                               \
-    void ToLong##e( const wxxVariant& data, long &result )             \
+    void FromLong##e( long data, wxVariantBase& result )                  \
+        { result = wxVariantBase((e)data); }                               \
+    void ToLong##e( const wxVariantBase& data, long &result )             \
         { result = (long) data.wxTEMPLATED_MEMBER_CALL(Get, e); }      \
                                                                         \
     wxTO_STRING_IMP( e )                                                \
@@ -180,9 +180,9 @@ void wxSetToString( wxString &s, const wxBitset<e> &data )
         { wxSetFromString( s, data ); }                                        \
     template<> void wxStringWriteValue( wxString &s, const wxBitset<e> &data ) \
         { wxSetToString( s, data ); }                                          \
-    void FromLong##SetName( long data, wxxVariant& result )                    \
-        { result = wxxVariant(SetName((unsigned long)data)); }                  \
-    void ToLong##SetName( const wxxVariant& data, long &result )               \
+    void FromLong##SetName( long data, wxVariantBase& result )                    \
+        { result = wxVariantBase(SetName((unsigned long)data)); }                  \
+    void ToLong##SetName( const wxVariantBase& data, long &result )               \
         { result = (long) data.wxTEMPLATED_MEMBER_CALL(Get, SetName).to_ulong(); } \
     wxTO_STRING_IMP( SetName )                                                  \
     wxFROM_STRING_IMP( SetName )                                                \
@@ -247,9 +247,9 @@ void wxFlagsToString( wxString &s, const e& data )
         { wxFlagsFromString<e>( s, data ); }                           \
     template<>  void wxStringWriteValue( wxString &s, const e& data )  \
         { wxFlagsToString<e>( s, data ); }                             \
-    void FromLong##e( long data, wxxVariant& result )                  \
-        { result = wxxVariant(e(data)); }                               \
-    void ToLong##e( const wxxVariant& data, long &result )             \
+    void FromLong##e( long data, wxVariantBase& result )                  \
+        { result = wxVariantBase(e(data)); }                               \
+    void ToLong##e( const wxVariantBase& data, long &result )             \
         { result = (long) data.wxTEMPLATED_MEMBER_CALL(Get, e).m_data; } \
     wxTO_STRING_IMP( e )                                                \
     wxFROM_STRING_IMP( e )                                              \
@@ -296,7 +296,7 @@ enum wxTypeKind
     wxT_LAST_TYPE_KIND = wxT_DELEGATE // sentinel for bad data, asserts, debugging
 };
 
-class WXDLLIMPEXP_BASE wxxVariant;
+class WXDLLIMPEXP_BASE wxVariantBase;
 class WXDLLIMPEXP_BASE wxTypeInfo;
 
 WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxTypeInfo*, wxTypeInfoMap, class WXDLLIMPEXP_BASE );
@@ -304,8 +304,8 @@ WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxTypeInfo*, wxTypeInfoMap, class WXDLLIMP
 class WXDLLIMPEXP_BASE wxTypeInfo
 {
 public:
-    typedef void (*wxVariant2StringFnc)( const wxxVariant& data, wxString &result );
-    typedef void (*wxString2VariantFnc)( const wxString& data, wxxVariant &result );
+    typedef void (*wxVariant2StringFnc)( const wxVariantBase& data, wxString &result );
+    typedef void (*wxString2VariantFnc)( const wxString& data, wxVariantBase &result );
 
     wxTypeInfo(wxTypeKind kind,
                wxVariant2StringFnc to = NULL, wxString2VariantFnc from = NULL,
@@ -348,8 +348,8 @@ public:
     // can the content of this type be converted to and from strings ?
     bool HasStringConverters() const { return m_toString != NULL && m_fromString != NULL; }
 
-    // convert a wxxVariant holding data of this type into a string
-    void ConvertToString( const wxxVariant& data, wxString &result ) const
+    // convert a wxVariantBase holding data of this type into a string
+    void ConvertToString( const wxVariantBase& data, wxString &result ) const
     { 
         if ( m_toString ) 
             (*m_toString)( data, result ); 
@@ -357,8 +357,8 @@ public:
             wxLogError( wxGetTranslation(_T("String conversions not supported")) ); 
     }
 
-    // convert a string into a wxxVariant holding the corresponding data in this type
-    void ConvertFromString( const wxString& data, wxxVariant &result ) const
+    // convert a string into a wxVariantBase holding the corresponding data in this type
+    void ConvertFromString( const wxString& data, wxVariantBase &result ) const
     { 
         if( m_fromString ) 
             (*m_fromString)( data, result ); 
@@ -389,10 +389,11 @@ private:
     wxVariant2StringFnc m_toString;
     wxString2VariantFnc m_fromString;
 
-    static wxTypeInfoMap*      ms_typeTable;
-
     wxTypeKind m_kind;
     wxString m_name;
+
+    // the static list of all types we know about
+    static wxTypeInfoMap* ms_typeTable;
 };
 
 class WXDLLIMPEXP_BASE wxBuiltInTypeInfo : public wxTypeInfo
@@ -431,8 +432,8 @@ public:
 class WXDLLIMPEXP_BASE wxEnumTypeInfo : public wxTypeInfo
 {
 public:
-    typedef void (*converterToLong_t)( const wxxVariant& data, long &result );
-    typedef void (*converterFromLong_t)( long data, wxxVariant &result );
+    typedef void (*converterToLong_t)( const wxVariantBase& data, long &result );
+    typedef void (*converterFromLong_t)( long data, wxVariantBase &result );
 
     wxEnumTypeInfo( wxTypeKind kind, wxEnumData* enumInfo, wxVariant2StringFnc to,
                     wxString2VariantFnc from, converterToLong_t toLong,
@@ -457,8 +458,8 @@ public:
 #endif
     const wxEnumData* GetEnumData() const { return m_enumInfo; }
 
-    // convert a wxxVariant holding data of this type into a long
-    void ConvertToLong( const wxxVariant& data, long &result ) const
+    // convert a wxVariantBase holding data of this type into a long
+    void ConvertToLong( const wxVariantBase& data, long &result ) const
     { 
         if( m_toLong ) 
             (*m_toLong)( data, result ); 
@@ -466,8 +467,8 @@ public:
             wxLogError( wxGetTranslation(_T("Long Conversions not supported")) ); 
     }
 
-    // convert a long into a wxxVariant holding the corresponding data in this type
-    void ConvertFromLong( long data, wxxVariant &result ) const
+    // convert a long into a wxVariantBase holding the corresponding data in this type
+    void ConvertFromLong( long data, wxVariantBase &result ) const
     { 
         if( m_fromLong ) 
             (*m_fromLong)( data, result ); 
@@ -527,8 +528,6 @@ private:
     wxString    m_elementTypeName;
 };
 
-// a delegate is an exposed event source
-
 class WXDLLIMPEXP_BASE wxEventSourceTypeInfo : public wxTypeInfo
 {
 public:
@@ -559,9 +558,9 @@ template<typename T> const wxTypeInfo* wxGetTypeInfo( T * ) \
         wxCustomTypeInfo s_typeInfo##e(typeid(e).name(), &toString, &fromString);
 #else
     #define wxCUSTOM_TYPE_INFO( e, toString, fromString )             \
-        void ToString##e( const wxxVariant& data, wxString &result )   \
+        void ToString##e( const wxVariantBase& data, wxString &result )   \
             { toString(data, result); }                                 \
-        void FromString##e( const wxString& data, wxxVariant &result ) \
+        void FromString##e( const wxString& data, wxVariantBase &result ) \
             { fromString(data, result); }                               \
         wxCustomTypeInfo s_typeInfo##e(typeid(e).name(),               \
                                        &ToString##e, &FromString##e);

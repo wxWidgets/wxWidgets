@@ -110,7 +110,7 @@ void wxObjectXmlWriter::DoEndWriteTopLevelEntry( const wxString &WXUNUSED(name) 
 
 void wxObjectXmlWriter::DoBeginWriteObject(const wxObject *WXUNUSED(object), 
                                      const wxClassInfo *classInfo, 
-                                     int objectID, wxxVariantArray &metadata   )
+                                     int objectID, wxVariantBaseArray &metadata   )
 {
     wxXmlNode *pnode;
     pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("object"));
@@ -132,7 +132,7 @@ void wxObjectXmlWriter::DoEndWriteObject(const wxObject *WXUNUSED(object),
     m_data->Pop();
 }
 
-void wxObjectXmlWriter::DoWriteSimpleType( wxxVariant &value )
+void wxObjectXmlWriter::DoWriteSimpleType( wxVariantBase &value )
 {
     wxXmlAddContentToNode( m_data->m_current,value.GetAsString() );
 }
@@ -210,7 +210,7 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxObjectWriterCallback *ca
     wxString className;
     wxClassInfo *classInfo;
 
-    wxxVariant *createParams;
+    wxVariantBase *createParams;
     int *createParamOids;
     const wxClassInfo** createClassInfos;
     wxXmlNode *children;
@@ -276,14 +276,14 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxObjectWriterCallback *ca
     // first make the object know to our internal registry
     SetObjectClassInfo( objectID, classInfo );
 
-    wxxVariantArray metadata;
+    wxVariantBaseArray metadata;
     wxXmlProperty *xp = node->GetProperties();
     while ( xp )
     {
         if ( xp->GetName() != wxString(wxT("class")) && 
              xp->GetName() != wxString(wxT("id")) )
         {
-            metadata.Add( new wxxVariant( xp->GetValue(), xp->GetName() ) );
+            metadata.Add( new wxVariantBase( xp->GetValue(), xp->GetName() ) );
         }
         xp = xp->GetNext();
     }
@@ -292,7 +292,7 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxObjectWriterCallback *ca
 
     //
     // stream back the Create parameters first
-    createParams = new wxxVariant[ classInfo->GetCreateParamCount() ];
+    createParams = new wxVariantBase[ classInfo->GetCreateParamCount() ];
     createParamOids = new int[classInfo->GetCreateParamCount() ];
     createClassInfos = new const wxClassInfo*[classInfo->GetCreateParamCount() ];
 
@@ -347,7 +347,7 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxObjectWriterCallback *ca
                     {
                         long realval;
                         eti->ConvertToLong( createParams[i], realval );
-                        createParams[i] = wxxVariant( realval );
+                        createParams[i] = wxVariantBase( realval );
                     }
                     else
                     {
@@ -435,7 +435,7 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxObjectWriterCallback *ca
                             }
                             else
                             {
-                                wxxVariant elementValue = ReadValue( elementContent, elementType );
+                                wxVariantBase elementValue = ReadValue( elementContent, elementType );
                                 if ( pi->GetAccessor()->HasAdder() )
                                     callbacks->AddToPropertyCollection( objectID, classInfo,pi, elementValue );
                             }
@@ -462,7 +462,7 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxObjectWriterCallback *ca
                         else
                         {
                             wxASSERT( pi->GetTypeInfo()->HasStringConverters() );
-                            wxxVariant nodeval = ReadValue( prop, pi->GetTypeInfo() );
+                            wxVariantBase nodeval = ReadValue( prop, pi->GetTypeInfo() );
                             callbacks->SetProperty( objectID, classInfo,pi, nodeval );
                         }
                     }
@@ -491,7 +491,7 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxObjectWriterCallback *ca
                 }
                 else
                 {
-                    wxxVariant nodeval = ReadValue( prop, pi->GetTypeInfo() );
+                    wxVariantBase nodeval = ReadValue( prop, pi->GetTypeInfo() );
                     if( pi->GetFlags() & wxPROP_ENUM_STORE_LONG )
                     {
                         const wxEnumTypeInfo *eti = 
@@ -500,7 +500,7 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxObjectWriterCallback *ca
                         {
                             long realval;
                             eti->ConvertToLong( nodeval, realval );
-                            nodeval = wxxVariant( realval );
+                            nodeval = wxVariantBase( realval );
                         }
                         else
                         {
@@ -520,13 +520,13 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxObjectWriterCallback *ca
     return objectID;
 }
 
-wxxVariant wxObjectXmlReader::ReadValue(wxXmlNode *node,
+wxVariantBase wxObjectXmlReader::ReadValue(wxXmlNode *node,
                                   const wxTypeInfo *type )
 {
     wxString content;
     if ( node )
         content = node->GetContent();
-    wxxVariant result;
+    wxVariantBase result;
     type->ConvertFromString( content, result );
     return result;
 }

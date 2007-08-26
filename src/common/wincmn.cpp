@@ -133,7 +133,7 @@ END_EVENT_TABLE()
 // as windows with negative ids never can be recreated anyway
 
 bool wxWindowStreamingCallback( const wxObject *object, wxObjectWriter *, 
-                                wxObjectReaderCallback *, wxxVariantArray & )
+                                wxObjectReaderCallback *, wxVariantBaseArray & )
 {
     const wxWindow * win = wx_dynamic_cast(const wxWindow*, object);
     if ( win && win->GetId() < 0 )
@@ -149,7 +149,7 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxWindow, wxWindowBase, "wx/window.h", \
 wxCOLLECTION_TYPE_INFO( wxWindow*, wxWindowList );
 
 template<> void wxCollectionToVariantArray( wxWindowList const &theList, 
-                                            wxxVariantArray &value)
+                                            wxVariantBaseArray &value)
 {
     wxListCollectionToVariantArray<wxWindowList::compatibility_iterator>( theList, value );
 }
@@ -220,9 +220,9 @@ wxBEGIN_PROPERTIES_TABLE(wxWindow)
                 wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group")) // bg
     wxPROPERTY( ForegroundColour, wxColour, SetForegroundColour, GetForegroundColour, \
                 wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group")) // fg
-    wxPROPERTY( Enabled, bool, Enable, IsEnabled, wxxVariant((bool)true), 0 /*flags*/, \
+    wxPROPERTY( Enabled, bool, Enable, IsEnabled, wxVariantBase((bool)true), 0 /*flags*/, \
                 wxT("Helpstring"), wxT("group"))
-    wxPROPERTY( Shown, bool, Show, IsShown, wxxVariant((bool)true), 0 /*flags*/, \
+    wxPROPERTY( Shown, bool, Show, IsShown, wxVariantBase((bool)true), 0 /*flags*/, \
                 wxT("Helpstring"), wxT("group"))
 
 #if 0

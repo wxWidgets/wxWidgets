@@ -355,8 +355,8 @@ public:
     wxDynamicObject(wxObject* superClassInstance, const wxDynamicClassInfo *info);
     virtual ~wxDynamicObject();
 
-    void SetProperty (const wxChar *propertyName, const wxxVariant &value);
-    wxxVariant GetProperty (const wxChar *propertyName) const;
+    void SetProperty (const wxChar *propertyName, const wxVariantBase &value);
+    wxVariantBase GetProperty (const wxChar *propertyName) const;
 
     // get the runtime identity of this object
     wxClassInfo *GetClassInfo() const

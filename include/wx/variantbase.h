@@ -27,6 +27,8 @@
 #include "wx/iosfwrap.h"
 
 class wxTypeInfo;
+class wxObject;
+class wxClassInfo;
 
 /*
  * wxVariantData stores the actual data in a wxVariant object,
@@ -172,7 +174,7 @@ public:
     // Tests whether there is data
     bool IsNull() const;
 
-    // FIXME: used by wxxVariant code but is nice wording...
+    // FIXME: used by wxVariantBase code but is nice wording...
     bool IsEmpty() const { return IsNull(); }
 
     // For compatibility with wxWidgets <= 2.6, this doesn't increase
@@ -220,7 +222,7 @@ public:
         return dataptr->Get();
     }
 
-    // get a ref to the stored data
+    // get a const ref to the stored data
     template<typename T> const T& Get(wxTEMPLATED_MEMBER_FIX(T)) const
     {
         const wxVariantDataT<T> *dataptr = 
@@ -251,6 +253,24 @@ protected:
 
 #include "wx/dynarray.h"
 WX_DECLARE_OBJARRAY_WITH_DECL(wxVariantBase, wxVariantBaseArray, class WXDLLIMPEXP_BASE);
+
+
+// templated streaming, every type must have their specialization for these methods
+
+template<typename T>
+void wxStringReadValue( const wxString &s, T &data );
+
+template<typename T>
+void wxStringWriteValue( wxString &s, const T &data);
+
+template<typename T>
+void wxToStringConverter( const wxVariantBase &v, wxString &s wxTEMPLATED_FUNCTION_FIX(T)) \
+    { wxStringWriteValue( s, v.wxTEMPLATED_MEMBER_CALL(Get, T) ); }
+
+template<typename T>
+void wxFromStringConverter( const wxString &s, wxVariantBase &v wxTEMPLATED_FUNCTION_FIX(T)) \
+    { T d; wxStringReadValue( s, d ); v = wxVariantBase(d); }
+
 
 #endif // wxUSE_VARIANT
 #endif // _WX_VARIANTBASE_H_

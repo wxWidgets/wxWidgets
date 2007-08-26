@@ -1530,11 +1530,11 @@ class WXDLLIMPEXP_BASE wxVariantDataList: public wxVariantData
 //DECLARE_DYNAMIC_CLASS(wxVariantDataList)
 public:
     wxVariantDataList() {}
-    wxVariantDataList(const wxList& list);
+    wxVariantDataList(const wxListVoid& list);
     virtual ~wxVariantDataList();
 
     wxListVoid& GetValue() { return m_value; }
-    void SetValue(const wxList& value) ;
+    void SetValue(const wxListVoid& value) ;
 
     virtual bool Eq(wxVariantData& data) const;
 #if wxUSE_STD_IOSTREAM
@@ -1558,7 +1558,7 @@ protected:
 
 //IMPLEMENT_DYNAMIC_CLASS(wxVariantDataList, wxVariantData)
 
-wxVariantDataList::wxVariantDataList(const wxList& list)
+wxVariantDataList::wxVariantDataList(const wxListVoid& list)
 {
     SetValue(list);
 }
@@ -1568,10 +1568,10 @@ wxVariantDataList::~wxVariantDataList()
     Clear();
 }
 
-void wxVariantDataList::SetValue(const wxList& value)
+void wxVariantDataList::SetValue(const wxListVoid& value)
 {
     Clear();
-    wxList::compatibility_iterator node = value.GetFirst();
+    wxListVoid::compatibility_iterator node = value.GetFirst();
     while (node)
     {
         wxVariant* var = (wxVariant*) node->GetData();
@@ -1657,13 +1657,13 @@ bool wxVariantDataList::Read(wxString& WXUNUSED(str))
 
 // wxVariant
 
-wxVariant::wxVariant(const wxList& val, const wxString& name) // List of variants
+wxVariant::wxVariant(const wxListVoid& val, const wxString& name) // List of variants
 {
     m_data = new wxVariantDataList(val);
     m_name = name;
 }
 
-bool wxVariant::operator== (const wxList& value) const
+bool wxVariant::operator== (const wxListVoid& value) const
 {
     wxASSERT_MSG( (GetType() == wxT("list")), wxT("Invalid type for == operator") );
 
@@ -1671,12 +1671,12 @@ bool wxVariant::operator== (const wxList& value) const
     return (GetData()->Eq(other));
 }
 
-bool wxVariant::operator!= (const wxList& value) const
+bool wxVariant::operator!= (const wxListVoid& value) const
 {
     return (!((*this) == value));
 }
 
-void wxVariant::operator= (const wxList& value)
+void wxVariant::operator= (const wxListVoid& value)
 {
     if (GetType() == wxT("list") &&
         m_data->GetRefCount() == 1)

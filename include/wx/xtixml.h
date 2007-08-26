@@ -23,7 +23,7 @@ class WXDLLIMPEXP_XML wxXmlNode;
 class WXDLLIMPEXP_BASE wxPropertyInfo;
 class WXDLLIMPEXP_BASE wxObject;
 class WXDLLIMPEXP_BASE wxClassInfo;
-class WXDLLIMPEXP_BASE wxxVariantArray;
+class WXDLLIMPEXP_BASE wxVariantBaseArray;
 class WXDLLIMPEXP_BASE wxHandlerInfo;
 class WXDLLIMPEXP_BASE wxObjectWriterCallback;
 
@@ -53,7 +53,7 @@ public:
 
     // start of writing an object having the passed in ID
     virtual void DoBeginWriteObject(const wxObject *object, 
-        const wxClassInfo *classInfo, int objectID, wxxVariantArray &metadata );
+        const wxClassInfo *classInfo, int objectID, wxVariantBaseArray &metadata );
 
     // end of writing an toplevel object name param is used for unique 
     // identification within the container
@@ -61,7 +61,7 @@ public:
         const wxClassInfo *classInfo, int objectID );
 
     // writes a simple property in the stream format
-    virtual void DoWriteSimpleType( wxxVariant &value );
+    virtual void DoWriteSimpleType( wxVariantBase &value );
 
     // start of writing a complex property into the stream (
     virtual void DoBeginWriteProperty( const wxPropertyInfo *propInfo );
@@ -108,7 +108,7 @@ private:
     int ReadComponent(wxXmlNode *parent, wxObjectWriterCallback *callbacks);
 
     // read the content of this node (simple type) and return the corresponding value
-    wxxVariant ReadValue(wxXmlNode *Node, const wxTypeInfo *type );
+    wxVariantBase ReadValue(wxXmlNode *Node, const wxTypeInfo *type );
 
     wxXmlNode * m_parent;
 };

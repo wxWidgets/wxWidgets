@@ -65,7 +65,7 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxMenu, wxEvtHandler, "wx/menu.h")
 wxCOLLECTION_TYPE_INFO( wxMenuItem *, wxMenuItemList ) ;
 
 template<> void wxCollectionToVariantArray( wxMenuItemList const &theList,
-                                            wxxVariantArray &value)
+                                            wxVariantBaseArray &value)
 {
     wxListCollectionToVariantArray<wxMenuItemList::compatibility_iterator>( theList, value ) ;
 }
@@ -97,7 +97,7 @@ wxEND_FLAGS( wxMenuBarStyle )
 // the negative id would lead the window (its superclass !) to
 // vetoe streaming out otherwise
 bool wxMenuBarStreamingCallback( const wxObject *WXUNUSED(object), wxObjectWriter *,
-                                 wxObjectReaderCallback *, wxxVariantArray & )
+                                 wxObjectReaderCallback *, wxVariantBaseArray & )
 {
     return true;
 }
@@ -122,7 +122,7 @@ wxCONSTRUCTOR_2( wxMenuInfo, wxMenu*, Menu, wxString, Title )
 wxCOLLECTION_TYPE_INFO( wxMenuInfo *, wxMenuInfoList ) ;
 
 template<> void wxCollectionToVariantArray( wxMenuInfoList const &theList, 
-                                            wxxVariantArray &value)
+                                            wxVariantBaseArray &value)
 {
     wxListCollectionToVariantArray<wxMenuInfoList::compatibility_iterator>( theList, value ) ;
 }
@@ -151,7 +151,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuInfo, wxObject)
 #if wxUSE_EXTENDED_RTTI
 
 bool wxMenuItemStreamingCallback( const wxObject *object, wxObjectWriter *,
-                                  wxObjectReaderCallback *, wxxVariantArray & )
+                                  wxObjectReaderCallback *, wxVariantBaseArray & )
 {
     const wxMenuItem * mitem = wx_dynamic_cast(const wxMenuItem*, object);
     if ( mitem->GetMenu() && !mitem->GetMenu()->GetTitle().empty() )
@@ -188,11 +188,11 @@ wxBEGIN_PROPERTIES_TABLE(wxMenuItem)
                          0 /*flags*/, wxT("Helpstring"), wxT("group") )
     wxPROPERTY( SubMenu, wxMenu*, SetSubMenu, GetSubMenu, wxEMPTY_PARAMETER_VALUE, \
                 0 /*flags*/, wxT("Helpstring"), wxT("group") )
-    wxPROPERTY( Enabled, bool, Enable, IsEnabled, wxxVariant((bool)true), \
+    wxPROPERTY( Enabled, bool, Enable, IsEnabled, wxVariantBase((bool)true), \
                 0 /*flags*/, wxT("Helpstring"), wxT("group") )
-    wxPROPERTY( Checked, bool, Check, IsChecked, wxxVariant((bool)false), \
+    wxPROPERTY( Checked, bool, Check, IsChecked, wxVariantBase((bool)false), \
                 0 /*flags*/, wxT("Helpstring"), wxT("group") )
-    wxPROPERTY( Checkable, bool, SetCheckable, IsCheckable, wxxVariant((bool)false), \
+    wxPROPERTY( Checkable, bool, SetCheckable, IsCheckable, wxVariantBase((bool)false), \
                 0 /*flags*/, wxT("Helpstring"), wxT("group") )
 wxEND_PROPERTIES_TABLE()
 

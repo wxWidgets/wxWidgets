@@ -42,9 +42,9 @@ const int wxNullObjectID = -3;
 class WXDLLIMPEXP_BASE wxObjectWriter;
 class WXDLLIMPEXP_BASE wxObjectReader;
 class WXDLLIMPEXP_BASE wxClassInfo;
-class WXDLLIMPEXP_BASE wxxVariantArray;
+class WXDLLIMPEXP_BASE wxVariantBaseArray;
 class WXDLLIMPEXP_BASE wxPropertyInfo;
-class WXDLLIMPEXP_BASE wxxVariant;
+class WXDLLIMPEXP_BASE wxVariantBase;
 class WXDLLIMPEXP_BASE wxObjectWriter;
 class WXDLLIMPEXP_BASE wxHandlerInfo;
 
@@ -57,7 +57,7 @@ public:
     virtual bool BeforeWriteObject( wxObjectWriter *WXUNUSED(writer), 
                                     const wxObject *WXUNUSED(object), 
                                     const wxClassInfo *WXUNUSED(classInfo), 
-                                    wxxVariantArray &WXUNUSED(metadata)) 
+                                    wxVariantBaseArray &WXUNUSED(metadata)) 
         { return true; }
 
     // will be called after this object has been written, may be 
@@ -73,7 +73,7 @@ public:
     virtual bool BeforeWriteProperty( wxObjectWriter *WXUNUSED(writer), 
                                       const wxObject *WXUNUSED(object), 
                                       const wxPropertyInfo *WXUNUSED(propInfo), 
-                                      wxxVariant &WXUNUSED(value) )  
+                                      wxVariantBase &WXUNUSED(value) )  
         { return true; }
 
     // will be called before a property gets written, may change the value, 
@@ -82,7 +82,7 @@ public:
     virtual bool BeforeWriteProperty( wxObjectWriter *WXUNUSED(writer), 
                                       const wxObject *WXUNUSED(object), 
                                       const wxPropertyInfo *WXUNUSED(propInfo), 
-                                      wxxVariantArray &WXUNUSED(value) )  
+                                      wxVariantBaseArray &WXUNUSED(value) )  
         { return true; }
 
     // will be called after a property has been written out, may be needed 
@@ -118,7 +118,7 @@ public:
     // with this call you start writing out a new top-level object
     void WriteObject(const wxObject *object, const wxClassInfo *classInfo, 
                      wxObjectReaderCallback *persister, const wxString &name, 
-                     wxxVariantArray &WXUNUSED(metadata));
+                     wxVariantBaseArray &WXUNUSED(metadata));
 
     // Managing the object identity table a.k.a context
     //
@@ -147,7 +147,7 @@ public:
 
     // start of writing an object having the passed in ID
     virtual void DoBeginWriteObject(const wxObject *object, const wxClassInfo *classInfo, 
-                                    int objectID, wxxVariantArray &metadata ) = 0;
+                                    int objectID, wxVariantBaseArray &metadata ) = 0;
 
     // end of writing an toplevel object name param is used for unique 
     // identification within the container
@@ -155,7 +155,7 @@ public:
                 const wxClassInfo *classInfo, int objectID ) = 0;
 
     // writes a simple property in the stream format
-    virtual void DoWriteSimpleType( wxxVariant &value ) = 0;
+    virtual void DoWriteSimpleType( wxVariantBase &value ) = 0;
 
     // start of writing a complex property into the stream (
     virtual void DoBeginWriteProperty( const wxPropertyInfo *propInfo ) = 0;
@@ -192,7 +192,7 @@ private:
                            wxObjectWriterInternalPropertiesData *data );
 
     void WriteObject(const wxObject *object, const wxClassInfo *classInfo, 
-                     wxObjectReaderCallback *persister, bool isEmbedded, wxxVariantArray &metadata );
+                     wxObjectReaderCallback *persister, bool isEmbedded, wxVariantBaseArray &metadata );
 
     void FindConnectEntry(const wxEvtHandler * evSource,
                           const wxEventSourceTypeInfo* dti, const wxObject* &sink, 
@@ -247,7 +247,7 @@ public:
 
     // allocate the new object on the heap, that object will have the passed in ID
     virtual void AllocateObject(int objectID, wxClassInfo *classInfo, 
-                                wxxVariantArray &metadata) = 0;
+                                wxVariantBaseArray &metadata) = 0;
 
     // initialize the already allocated object having the ID objectID with the Create method
     // creation parameters which are objects are having their Ids passed in objectIDValues
@@ -256,10 +256,10 @@ public:
     virtual void CreateObject(int objectID,
         const wxClassInfo *classInfo,
         int paramCount,
-        wxxVariant *VariantValues,
+        wxVariantBase *VariantValues,
         int *objectIDValues,
         const wxClassInfo **objectClassInfos,
-        wxxVariantArray &metadata) = 0;
+        wxVariantBaseArray &metadata) = 0;
 
     // construct the new object on the heap, that object will have the passed in ID 
     // (for objects that don't support allocate-create type of creation)
@@ -269,10 +269,10 @@ public:
     virtual void ConstructObject(int objectID,
         const wxClassInfo *classInfo,
         int paramCount,
-        wxxVariant *VariantValues,
+        wxVariantBase *VariantValues,
         int *objectIDValues,
         const wxClassInfo **objectClassInfos,
-        wxxVariantArray &metadata) = 0;
+        wxVariantBaseArray &metadata) = 0;
 
     // destroy the heap-allocated object having the ID objectID, this may be used 
     // if an object is embedded in another object and set via value semantics, 
@@ -283,7 +283,7 @@ public:
     virtual void SetProperty(int objectID,
         const wxClassInfo *classInfo,
         const wxPropertyInfo* propertyInfo,
-        const wxxVariant &VariantValue) = 0;
+        const wxVariantBase &VariantValue) = 0;
 
     // sets the corresponding property (value is an object)
     virtual void SetPropertyAsObject(int objectID,
@@ -295,7 +295,7 @@ public:
     virtual void AddToPropertyCollection( int objectID,
         const wxClassInfo *classInfo,
         const wxPropertyInfo* propertyInfo,
-        const wxxVariant &VariantValue) = 0;
+        const wxVariantBase &VariantValue) = 0;
 
     // sets the corresponding property (value is an object)
     virtual void AddToPropertyCollectionAsObject(int objectID,
@@ -332,7 +332,7 @@ public:
 
     // allocate the new object on the heap, that object will have the passed in ID
     virtual void AllocateObject(int objectID, wxClassInfo *classInfo,
-        wxxVariantArray &metadata);
+        wxVariantBaseArray &metadata);
 
     // initialize the already allocated object having the ID objectID with 
     // the Create method creation parameters which are objects are having 
@@ -341,10 +341,10 @@ public:
     virtual void CreateObject(int objectID,
         const wxClassInfo *classInfo,
         int paramCount,
-        wxxVariant *VariantValues,
+        wxVariantBase *VariantValues,
         int *objectIDValues,
         const wxClassInfo **objectClassInfos,
-        wxxVariantArray &metadata
+        wxVariantBaseArray &metadata
         );
 
     // construct the new object on the heap, that object will have the 
@@ -355,10 +355,10 @@ public:
     virtual void ConstructObject(int objectID,
         const wxClassInfo *classInfo,
         int paramCount,
-        wxxVariant *VariantValues,
+        wxVariantBase *VariantValues,
         int *objectIDValues,
         const wxClassInfo **objectClassInfos,
-        wxxVariantArray &metadata);
+        wxVariantBaseArray &metadata);
 
     // destroy the heap-allocated object having the ID objectID, this may be 
     // used if an object is embedded in another object and set via value semantics, 
@@ -369,7 +369,7 @@ public:
     virtual void SetProperty(int objectID,
         const wxClassInfo *classInfo,
         const wxPropertyInfo* propertyInfo,
-        const wxxVariant &variantValue);
+        const wxVariantBase &variantValue);
 
     // sets the corresponding property (value is an object)
     virtual void SetPropertyAsObject(int objectId,
@@ -381,7 +381,7 @@ public:
     virtual void AddToPropertyCollection( int objectID,
         const wxClassInfo *classInfo,
         const wxPropertyInfo* propertyInfo,
-        const wxxVariant &VariantValue);
+        const wxVariantBase &VariantValue);
 
     // sets the corresponding property (value is an object)
     virtual void AddToPropertyCollectionAsObject(int objectID,

@@ -1028,7 +1028,9 @@ void MyApp::DoVariantDemo(wxCommandEvent& WXUNUSED(event) )
     wxUnusedVar(v);
 
     wxArrayString stringArray;
-    stringArray.Add(_T("one")); stringArray.Add(_T("two")); stringArray.Add(_T("three"));
+    stringArray.Add(_T("one"));
+    stringArray.Add(_T("two"));
+    stringArray.Add(_T("three"));
     var1 = stringArray;
     textCtrl << _T("var1 = ") << var1.MakeString() << _T("\n");
 
@@ -1043,7 +1045,8 @@ void MyApp::DoVariantDemo(wxCommandEvent& WXUNUSED(event) )
     size_t i;
     for (i = (size_t) 0; i < n; i++)
     {
-        textCtrl << _T("var1[") << (int) i << _T("] (type ") << var1[i].GetType() << _T(") = ") << var1[i].MakeString() << _T("\n");
+        textCtrl << _T("var1[") << (int) i << _T("] (type ") << var1[i].GetType() 
+                 << _T(") = ") << var1[i].MakeString() << _T("\n");
     }
 
     var1 = wxVariant(new wxFont(wxSystemSettings::GetFont(wxSYS_OEM_FIXED_FONT)));

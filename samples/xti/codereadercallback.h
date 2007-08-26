@@ -27,7 +27,7 @@ private:
     struct wxObjectCodeReaderCallbackInternal;
     wxObjectCodeReaderCallbackInternal * m_data;
     wxTextOutputStream *m_fp;
-    wxString ValueAsCode( const wxxVariant &param );
+    wxString ValueAsCode( const wxVariantBase &param );
 
 public:
     wxObjectCodeReaderCallback(wxTextOutputStream *out);
@@ -35,7 +35,7 @@ public:
 
     // allocate the new object on the heap, that object will have the passed in ID
     virtual void AllocateObject(int objectID, wxClassInfo *classInfo,
-        wxxVariantArray &metadata);
+        wxVariantBaseArray &metadata);
 
     // initialize the already allocated object having the ID objectID 
     // with the Create method creation parameters which are objects are 
@@ -44,10 +44,10 @@ public:
     virtual void CreateObject(int objectID,
         const wxClassInfo *classInfo,
         int paramCount,
-        wxxVariant *variantValues,
+        wxVariantBase *variantValues,
         int *objectIDValues,
         const wxClassInfo **objectClassInfos,
-        wxxVariantArray &metadata
+        wxVariantBaseArray &metadata
         );
 
     // construct the new object on the heap, that object will have the 
@@ -58,10 +58,10 @@ public:
     virtual void ConstructObject(int objectID,
         const wxClassInfo *classInfo,
         int paramCount,
-        wxxVariant *VariantValues,
+        wxVariantBase *VariantValues,
         int *objectIDValues,
         const wxClassInfo **objectClassInfos,
-        wxxVariantArray &metadata);
+        wxVariantBaseArray &metadata);
 
     // destroy the heap-allocated object having the ID objectID, this may 
     // be used if an object is embedded in another object and set via value 
@@ -72,7 +72,7 @@ public:
     virtual void SetProperty(int objectID,
         const wxClassInfo *classInfo,
         const wxPropertyInfo* propertyInfo,
-        const wxxVariant &variantValue);
+        const wxVariantBase &variantValue);
 
     // sets the corresponding property (value is an object)
     virtual void SetPropertyAsObject(int objectId,
@@ -84,7 +84,7 @@ public:
     virtual void AddToPropertyCollection( int objectID,
         const wxClassInfo *classInfo,
         const wxPropertyInfo* propertyInfo,
-        const wxxVariant &VariantValue);
+        const wxVariantBase &VariantValue);
 
     // sets the corresponding property (value is an object)
     virtual void AddToPropertyCollectionAsObject(int objectID,

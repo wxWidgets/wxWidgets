@@ -85,7 +85,7 @@ wxObjectCodeReaderCallback::~wxObjectCodeReaderCallback()
 }
 
 void wxObjectCodeReaderCallback::AllocateObject(int objectID, wxClassInfo *classInfo,
-                                       wxxVariantArray &WXUNUSED(metadata))
+                                       wxVariantBaseArray &WXUNUSED(metadata))
 {
     wxString objectName = wxString::Format( wxT("LocalObject_%d"), objectID );
     m_fp->WriteString( wxString::Format( wxT("\t%s *%s = new %s;\n"),
@@ -101,7 +101,7 @@ void wxObjectCodeReaderCallback::DestroyObject(int objectID, wxClassInfo *WXUNUS
         m_data->GetObjectName( objectID).c_str() ) );
 }
 
-wxString wxObjectCodeReaderCallback::ValueAsCode( const wxxVariant &param )
+wxString wxObjectCodeReaderCallback::ValueAsCode( const wxVariantBase &param )
 {
     wxString value;
     const wxTypeInfo* type = param.GetTypeInfo();
@@ -132,10 +132,10 @@ wxString wxObjectCodeReaderCallback::ValueAsCode( const wxxVariant &param )
 void wxObjectCodeReaderCallback::CreateObject(int objectID,
                                      const wxClassInfo *WXUNUSED(classInfo),
                                      int paramCount,
-                                     wxxVariant *params,
+                                     wxVariantBase *params,
                                      int *objectIDValues,
                                      const wxClassInfo **WXUNUSED(objectClassInfos),
-                                     wxxVariantArray &WXUNUSED(metadata)
+                                     wxVariantBaseArray &WXUNUSED(metadata)
                                      )
 {
     int i;
@@ -164,10 +164,10 @@ void wxObjectCodeReaderCallback::CreateObject(int objectID,
 void wxObjectCodeReaderCallback::ConstructObject(int objectID,
                                      const wxClassInfo *classInfo,
                                      int paramCount,
-                                     wxxVariant *params,
+                                     wxVariantBase *params,
                                      int *objectIDValues,
                                      const wxClassInfo **WXUNUSED(objectClassInfos),
-                                     wxxVariantArray &WXUNUSED(metadata)
+                                     wxVariantBaseArray &WXUNUSED(metadata)
                                      )
 {
     wxString objectName = wxString::Format( wxT("LocalObject_%d"), objectID );
@@ -197,7 +197,7 @@ void wxObjectCodeReaderCallback::ConstructObject(int objectID,
 void wxObjectCodeReaderCallback::SetProperty(int objectID,
                                     const wxClassInfo *WXUNUSED(classInfo),
                                     const wxPropertyInfo* propertyInfo,
-                                    const wxxVariant &value)
+                                    const wxVariantBase &value)
 {
     m_fp->WriteString( wxString::Format( wxT("\t%s->%s(%s);\n"),
         m_data->GetObjectName(objectID).c_str(),
@@ -225,7 +225,7 @@ void wxObjectCodeReaderCallback::SetPropertyAsObject(int objectID,
 void wxObjectCodeReaderCallback::AddToPropertyCollection( int objectID,
                                                 const wxClassInfo *WXUNUSED(classInfo),
                                                 const wxPropertyInfo* propertyInfo,
-                                                const wxxVariant &value)
+                                                const wxVariantBase &value)
 {
     m_fp->WriteString( wxString::Format( wxT("\t%s->%s(%s);\n"),
         m_data->GetObjectName(objectID).c_str(),

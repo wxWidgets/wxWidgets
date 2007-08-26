@@ -44,12 +44,12 @@
 #if wxUSE_EXTENDED_RTTI
     const wxClassInfo* wxObject::ms_classParents[] = { NULL } ;
 
-    wxObject* wxVariantToObjectConverterwxObject ( wxxVariant &data )
+    wxObject* wxVariantToObjectConverterwxObject ( wxVariantBase &data )
         { return data.wxTEMPLATED_MEMBER_CALL(Get, wxObject*) ; }
-    wxObject* wxVariantOfPtrToObjectConverterwxObject ( wxxVariant &data )
+    wxObject* wxVariantOfPtrToObjectConverterwxObject ( wxVariantBase &data )
         { return &data.wxTEMPLATED_MEMBER_CALL(Get, wxObject) ; }
-    wxxVariant wxObjectToVariantConverterwxObject ( wxObject *data )
-        { return wxxVariant( wx_dynamic_cast(wxObject*, data)  ) ; }
+    wxVariantBase wxObjectToVariantConverterwxObject ( wxObject *data )
+        { return wxVariantBase( wx_dynamic_cast(wxObject*, data)  ) ; }
 
     wxClassInfo 
         wxObject::ms_classInfo(ms_classParents, wxEmptyString, wxT("wxObject"),

@@ -74,7 +74,7 @@ void wxObjectWriter::ClearObjectContext()
 
 void wxObjectWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo, 
                            wxObjectReaderCallback *persister, const wxString &name, 
-                           wxxVariantArray &metadata )
+                           wxVariantBaseArray &metadata )
 {
     DoBeginWriteTopLevelEntry( name );
     WriteObject( object, classInfo, persister, false, metadata);
@@ -83,7 +83,7 @@ void wxObjectWriter::WriteObject(const wxObject *object, const wxClassInfo *clas
 
 void wxObjectWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo, 
                            wxObjectReaderCallback *persister, bool isEmbedded, 
-                           wxxVariantArray &metadata )
+                           wxVariantBaseArray &metadata )
 {
     if ( !classInfo->BeforeWriteObject( object, this, persister, metadata) )
         return;
@@ -210,7 +210,7 @@ void wxObjectWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* c
 
     if ( pi->GetTypeInfo()->GetKind() == wxT_COLLECTION )
     {
-        wxxVariantArray data;
+        wxVariantBaseArray data;
         pi->GetAccessor()->GetPropertyCollection(obj, data);
         const wxTypeInfo * elementType = 
             wx_dynamic_cast( const wxCollectionTypeInfo*, pi->GetTypeInfo() )->GetElementType();
@@ -220,7 +220,7 @@ void wxObjectWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* c
                 DoBeginWriteProperty( pi );
 
             DoBeginWriteElement();
-            wxxVariant value = data[i];
+            wxVariantBase value = data[i];
             if ( persister->BeforeWriteProperty( this, obj, pi, value ) )
             {
                 const wxClassTypeInfo* cti = 
@@ -229,7 +229,7 @@ void wxObjectWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* c
                 {
                     const wxClassInfo* pci = cti->GetClassInfo();
                     wxObject *vobj = pci->VariantToInstance( value );
-                    wxxVariantArray md;
+                    wxVariantBaseArray md;
                     WriteObject( vobj, (vobj ? vobj->GetClassInfo() : pci ), 
                                  persister, cti->GetKind()== wxT_OBJECT, md );
                 }
@@ -282,7 +282,7 @@ void wxObjectWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* c
         }
         else
         {
-            wxxVariant value;
+            wxVariantBase value;
             pi->GetAccessor()->GetProperty(obj, value);
 
             // avoid streaming out void objects
@@ -329,12 +329,12 @@ void wxObjectWriter::WriteOneProperty( const wxObject *obj, const wxClassInfo* c
                     {
                         wxString stringValue;
                         cti->ConvertToString( value, stringValue );
-                        wxxVariant convertedValue(stringValue);
+                        wxVariantBase convertedValue(stringValue);
                         DoWriteSimpleType( convertedValue );
                     }
                     else
                     {
-                        wxxVariantArray md;
+                        wxVariantBaseArray md;
                         WriteObject( vobj, (vobj ? vobj->GetClassInfo() : pci ), 
                                      persister, cti->GetKind()== wxT_OBJECT, md);
                     }
@@ -476,7 +476,7 @@ wxObjectRuntimeReaderCallback::~wxObjectRuntimeReaderCallback()
 }
 
 void wxObjectRuntimeReaderCallback::AllocateObject(int objectID, wxClassInfo *classInfo,
-                                          wxxVariantArray &WXUNUSED(metadata))
+                                          wxVariantBaseArray &WXUNUSED(metadata))
 {
     wxObject *O;
     O = classInfo->CreateObject();
@@ -486,10 +486,10 @@ void wxObjectRuntimeReaderCallback::AllocateObject(int objectID, wxClassInfo *cl
 void wxObjectRuntimeReaderCallback::CreateObject(int objectID,
                                         const wxClassInfo *classInfo,
                                         int paramCount,
-                                        wxxVariant *params,
+                                        wxVariantBase *params,
                                         int *objectIdValues,
                                         const wxClassInfo **objectClassInfos,
-                                        wxxVariantArray &WXUNUSED(metadata))
+                                        wxVariantBaseArray &WXUNUSED(metadata))
 {
     wxObject *o;
     o = m_data->GetObject(objectID);
@@ -515,10 +515,10 @@ void wxObjectRuntimeReaderCallback::CreateObject(int objectID,
 void wxObjectRuntimeReaderCallback::ConstructObject(int objectID,
                                         const wxClassInfo *classInfo,
                                         int paramCount,
-                                        wxxVariant *params,
+                                        wxVariantBase *params,
                                         int *objectIdValues,
                                         const wxClassInfo **objectClassInfos,
-                                        wxxVariantArray &WXUNUSED(metadata))
+                                        wxVariantBaseArray &WXUNUSED(metadata))
 {
     wxObject *o;
     for ( int i = 0; i < paramCount; ++i )
@@ -552,7 +552,7 @@ void wxObjectRuntimeReaderCallback::DestroyObject(int objectID, wxClassInfo *WXU
 void wxObjectRuntimeReaderCallback::SetProperty(int objectID,
                                        const wxClassInfo *classInfo,
                                        const wxPropertyInfo* propertyInfo,
-                                       const wxxVariant &value)
+                                       const wxVariantBase &value)
 {
     wxObject *o;
     o = m_data->GetObject(objectID);
@@ -625,7 +625,7 @@ wxObject *wxObjectRuntimeReaderCallback::GetObject(int objectID)
 void wxObjectRuntimeReaderCallback::AddToPropertyCollection( int objectID,
                                                    const wxClassInfo *classInfo,
                                                    const wxPropertyInfo* propertyInfo,
-                                                   const wxxVariant &value)
+                                                   const wxVariantBase &value)
 {
     wxObject *o;
     o = m_data->GetObject(objectID);
@@ -659,7 +659,7 @@ void wxObjectRuntimeReaderCallback::AddToPropertyCollectionAsObject(int objectID
 
 #if TEST_XVARIANT
 #include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(wxxVariantArray);
+WX_DEFINE_OBJARRAY(wxVariantBaseArray);
 #endif
 
 #endif // wxUSE_EXTENDED_RTTI
