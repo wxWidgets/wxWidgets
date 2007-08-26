@@ -265,7 +265,7 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
             {
                 if (SendMessage(GetHwnd(), CB_GETDROPPEDSTATE, 0, 0))
                     return false;
-            
+
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
 
                 const int sel = GetSelection();
@@ -374,7 +374,7 @@ bool wxComboBox::MSWShouldPreProcessMessage(WXMSG *pMsg)
     if (wxIsCtrlDown())
     {
         WPARAM vkey = pMsg->wParam;
-        
+
         switch (vkey)
         {
             case 'C':
@@ -387,7 +387,7 @@ bool wxComboBox::MSWShouldPreProcessMessage(WXMSG *pMsg)
                 return false;
         }
     }
-    
+
     return wxChoice::MSWShouldPreProcessMessage(pMsg);
 }
 
@@ -799,12 +799,12 @@ void wxComboBox::OnUpdateRedo(wxUpdateUIEvent& event)
 
 void wxComboBox::OnUpdateDelete(wxUpdateUIEvent& event)
 {
-    event.Enable(HasSelection() && IsEditable());
+    event.Enable(IsEditable() && HasSelection());
 }
 
 void wxComboBox::OnUpdateSelectAll(wxUpdateUIEvent& event)
 {
-    event.Enable(GetLastPosition() > 0);
+    event.Enable(IsEditable() && GetLastPosition() > 0);
 }
 
 #endif // wxUSE_COMBOBOX
