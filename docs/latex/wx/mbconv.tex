@@ -82,6 +82,15 @@ No base class
 Trivial default constructor.
 
 
+\membersection{wxMBConv::Clone}\label{wxmbconvclone}
+
+\constfunc{virtual wxMBConv *}{Clone}{\void}
+
+This pure virtual function is overridden in each of the derived classes to
+return a new copy of the object it is called on. It is used for copying the
+conversion objects while preserving their dynamic type.
+
+
 \membersection{wxMBConv::MB2WC}\label{wxmbconvmb2wc}
 
 \constfunc{virtual size\_t}{MB2WC}{\param{wchar\_t *}{out}, \param{const char *}{in}, \param{size\_t }{outLen}}
