@@ -31,7 +31,7 @@ using namespace std;
 
 #include "wx/tokenzr.h"
 #include "wx/txtstrm.h"
-#include "codedepersister.h"
+#include "codereadercallback.h"
 
 #if !wxUSE_EXTENDED_RTTI
     #error This sample requires XTI (eXtended RTTI) enabled
