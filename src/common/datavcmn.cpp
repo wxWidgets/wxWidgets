@@ -335,7 +335,6 @@ wxDataViewItem wxDataViewIndexListModel::GetNextSibling( const wxDataViewItem &i
 // ---------------------------------------------------------
 // wxDataViewRendererBase
 // ---------------------------------------------------------
-static wxDataViewItem g_item;
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewRendererBase, wxObject)
 
@@ -378,7 +377,6 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
     event.SetDataViewColumn( GetOwner() );
     event.SetModel( GetOwner()->GetOwner()->GetModel() );
     event.SetItem( item );
-    g_item = item;
     GetOwner()->GetOwner()->GetEventHandler()->ProcessEvent( event );
 
     return true;
@@ -415,7 +413,7 @@ bool wxDataViewRendererBase::FinishEditing()
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, GetOwner()->GetOwner()->GetId() );
     event.SetDataViewColumn( GetOwner() );
     event.SetModel( GetOwner()->GetOwner()->GetModel() );
-    event.SetItem( g_item );
+    event.SetItem( m_item );
     GetOwner()->GetOwner()->GetEventHandler()->ProcessEvent( event );
 
     return true;
