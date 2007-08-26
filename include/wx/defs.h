@@ -1352,8 +1352,6 @@ typedef float wxFloat32;
 
 // XTI helper macro. This one is used both by xti.h and rtti.h and
 // thus needs to go in a common header to avoid redundancy.
-// Once rtti.h (and the old RTTI system) will be removed, this macro
-// can be moved in the xti.h file.
 #define wxDECLARE_CLASS_INFO_ITERATORS()                                     \
     class WXDLLIMPEXP_BASE const_iterator                                    \
     {                                                                        \

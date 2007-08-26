@@ -38,17 +38,6 @@
 
 using namespace std;
 
-
-wxString wxxVariant::GetAsString() const
-{
-    if (!GetTypeInfo())
-        return wxEmptyString;
-    wxString s;
-    GetTypeInfo()->ConvertToString( *this, s );
-    return s;
-}
-
-
 // ----------------------------------------------------------------------------
 // wxEnumData
 // ----------------------------------------------------------------------------
@@ -113,6 +102,7 @@ const wxChar * wxEnumData::GetEnumMemberNameByIndex( int idx ) const
 // ----------------------------------------------------------------------------
 // Type Information
 // ----------------------------------------------------------------------------
+
 // ----------------------------------------------------------------------------
 // value streaming
 // ----------------------------------------------------------------------------
@@ -246,6 +236,7 @@ template<> void wxStringWriteValue(wxString &s, const wxString &data )
     s = data;
 }
 
+
 // built-ins
 //
 
@@ -257,9 +248,9 @@ template<> void wxStringWriteValue(wxString &s, const wxString &data )
 #else
     #define wxBUILTIN_TYPE_INFO( element, type )                                    \
         void _toString##element( const wxxVariant& data, wxString &result )         \
-            { wxToStringConverter<type>(data, result); }                            \
+            { wxToStringConverter<type, data, result); }                            \
         void _fromString##element( const wxString& data, wxxVariant &result )       \
-            { wxFromStringConverter<type>(data, result); }                          \
+            { wxFromStringConverter<type, data, result); }                          \
         wxBuiltInTypeInfo s_typeInfo##type(element, &_toString##element,            \
                                            &_fromString##element, typeid(type).name());
 #endif
@@ -339,7 +330,7 @@ wxClassTypeInfo::wxClassTypeInfo( wxTypeKind kind, wxClassInfo* classInfo,
                   wxT("Illegal Kind for Enum Type")); m_classInfo = classInfo;
 }
 
-wxDelegateTypeInfo::wxDelegateTypeInfo( int eventType, wxClassInfo* eventClass, 
+wxEventSourceTypeInfo::wxEventSourceTypeInfo( int eventType, wxClassInfo* eventClass, 
                                         wxVariant2StringFnc to, 
                                         wxString2VariantFnc from ) :
     wxTypeInfo ( wxT_DELEGATE, to, from, wxEmptyString )
@@ -349,7 +340,7 @@ wxDelegateTypeInfo::wxDelegateTypeInfo( int eventType, wxClassInfo* eventClass,
     m_lastEventType = -1;
 }
 
-wxDelegateTypeInfo::wxDelegateTypeInfo( int eventType, int lastEventType, 
+wxEventSourceTypeInfo::wxEventSourceTypeInfo( int eventType, int lastEventType, 
                                         wxClassInfo* eventClass, 
                                         wxVariant2StringFnc to,
                                         wxString2VariantFnc from ) :
@@ -604,7 +595,7 @@ wxObjectStreamingCallback wxClassInfo::GetStreamingCallback() const
 }
 
 bool wxClassInfo::BeforeWriteObject( const wxObject *obj, wxObjectWriter *streamer, 
-                                     wxPersister *persister, wxxVariantArray &metadata) const
+                                     wxObjectReaderCallback *persister, wxxVariantArray &metadata) const
 {
     wxObjectStreamingCallback sb = GetStreamingCallback();
     if ( sb )
@@ -677,23 +668,11 @@ void wxClassInfo::GetProperties( wxPropertyInfoMap &infomap ) const
     }
 }
 
-/*
-VARIANT TO OBJECT
-*/
-
-wxObject* wxxVariant::GetAsObject()
-{
-    const wxClassTypeInfo *ti = dynamic_cast<const wxClassTypeInfo*>( m_data->GetTypeInfo() );
-    if ( ti )
-        return ti->GetClassInfo()->VariantToInstance(*this);
-    else
-        return NULL;
-}
 
 // ----------------------------------------------------------------------------
 // wxDynamicObject support
 // ----------------------------------------------------------------------------
-//
+
 // Dynamic Objects are objects that have a real superclass instance and carry their
 // own attributes in a hash map. Like this it is possible to create the objects and
 // stream them, as if their class information was already available from compiled data
@@ -726,7 +705,7 @@ wxDynamicObject::wxDynamicObject(wxObject* superClassInstance, const wxDynamicCl
 
 wxDynamicObject::~wxDynamicObject()
 {
-    dynamic_cast<const wxDynamicClassInfo*>(m_classInfo)->
+    wx_dynamic_cast(const wxDynamicClassInfo*, m_classInfo)->
         m_data->m_dynamicObjects.remove( this );
     delete m_data;
     delete m_superClassInstance;
@@ -758,6 +737,7 @@ void wxDynamicObject::RenameProperty( const wxChar *oldPropertyName,
 {
     wxASSERT_MSG(m_classInfo->FindPropertyInfoInThisClass(oldPropertyName),
                  wxT("Renaming Unknown Property in a Dynamic Object") );
+
     wxxVariant value = m_data->m_properties[oldPropertyName];
     m_data->m_properties.erase( oldPropertyName );
     m_data->m_properties[newPropertyName] = value;
@@ -794,7 +774,7 @@ wxObject *wxDynamicClassInfo::AllocateObject() const
 
 bool wxDynamicClassInfo::Create (wxObject *object, int paramCount, wxxVariant *params) const
 {
-    wxDynamicObject *dynobj = dynamic_cast< wxDynamicObject *>( object );
+    wxDynamicObject *dynobj = wx_dynamic_cast( wxDynamicObject *,  object );
     wxASSERT_MSG( dynobj, 
         wxT("cannot call wxDynamicClassInfo::Create on ")
         wxT("an object other than wxDynamicObject") );
@@ -816,7 +796,7 @@ const wxChar* wxDynamicClassInfo::GetCreateParamName(int i) const
 
 void wxDynamicClassInfo::SetProperty(wxObject *object, const wxChar *propertyName, const wxxVariant &value) const
 {
-    wxDynamicObject* dynobj = dynamic_cast< wxDynamicObject * >( object );
+    wxDynamicObject* dynobj = wx_dynamic_cast(wxDynamicObject*, object);
     wxASSERT_MSG( dynobj, wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") );
     if ( FindPropertyInfoInThisClass(propertyName) )
         dynobj->SetProperty( propertyName, value );
@@ -826,7 +806,7 @@ void wxDynamicClassInfo::SetProperty(wxObject *object, const wxChar *propertyNam
 
 wxxVariant wxDynamicClassInfo::GetProperty(wxObject *object, const wxChar *propertyName) const
 {
-    wxDynamicObject* dynobj = dynamic_cast< wxDynamicObject * >( object );
+    wxDynamicObject* dynobj = wx_dynamic_cast(wxDynamicObject*, object);
     wxASSERT_MSG( dynobj, wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") );
     if ( FindPropertyInfoInThisClass(propertyName) )
         return dynobj->GetProperty( propertyName );
@@ -864,7 +844,7 @@ void wxDynamicClassInfo::RenameProperty( const wxChar *oldPropertyName, const wx
     wxPropertyInfo* pi = FindPropertyInfoInThisClass(oldPropertyName);
     wxASSERT_MSG( pi,wxT("not existing property") );
     pi->m_name = newPropertyName;
-    dynamic_cast<wxGenericPropertyAccessor*>(pi->GetAccessor())->RenameProperty( oldPropertyName, newPropertyName );
+    wx_dynamic_cast(wxGenericPropertyAccessor*, pi->GetAccessor())->RenameProperty( oldPropertyName, newPropertyName );
     for ( wxDynamicObjectList::iterator iter = m_data->m_dynamicObjects.begin(); iter != m_data->m_dynamicObjects.end(); ++iter )
         (*iter)->RenameProperty( oldPropertyName, newPropertyName );
 }
@@ -898,16 +878,17 @@ wxGenericPropertyAccessor::~wxGenericPropertyAccessor()
 {
     delete m_data;
 }
+
 void wxGenericPropertyAccessor::SetProperty(wxObject *object, const wxxVariant &value) const
 {
-    wxDynamicObject* dynobj = dynamic_cast< wxDynamicObject * >( object );
+    wxDynamicObject* dynobj = wx_dynamic_cast(wxDynamicObject*, object);
     wxASSERT_MSG( dynobj, wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") );
     dynobj->SetProperty(m_propertyName, value );
 }
 
 void wxGenericPropertyAccessor::GetProperty(const wxObject *object, wxxVariant& value) const
 {
-    const wxDynamicObject* dynobj = dynamic_cast< const wxDynamicObject * >( object );
+    const wxDynamicObject* dynobj = wx_dynamic_cast( const wxDynamicObject * ,  object );
     wxASSERT_MSG( dynobj, wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") );
     value = dynobj->GetProperty( m_propertyName );
 }

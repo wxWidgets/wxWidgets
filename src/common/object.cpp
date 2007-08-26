@@ -49,7 +49,7 @@
     wxObject* wxVariantOfPtrToObjectConverterwxObject ( wxxVariant &data )
         { return &data.wxTEMPLATED_MEMBER_CALL(Get, wxObject) ; }
     wxxVariant wxObjectToVariantConverterwxObject ( wxObject *data )
-        { return wxxVariant( dynamic_cast<wxObject*> (data)  ) ; }
+        { return wxxVariant( wx_dynamic_cast(wxObject*, data)  ) ; }
 
     wxClassInfo 
         wxObject::ms_classInfo(ms_classParents, wxEmptyString, wxT("wxObject"),
@@ -59,10 +59,12 @@
                               wxVariantToObjectConverterwxObject, 
                               wxObjectToVariantConverterwxObject);
 
+#if TEST_XVARIANT
     template<> void wxStringReadValue(const wxString &, wxObject * &) {assert(0);}
     template<> void wxStringWriteValue(wxString &, wxObject* const &) {assert(0);}
     template<> void wxStringReadValue(const wxString &, wxObject &) {assert(0);}
     template<> void wxStringWriteValue(wxString &, wxObject const &) {assert(0);}
+#endif
 
     wxClassTypeInfo s_typeInfo(wxT_OBJECT_PTR, &wxObject::ms_classInfo, \
                                 NULL, NULL, typeid(wxObject*).name() );

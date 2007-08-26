@@ -13,9 +13,14 @@
 #ifndef _XVARIANT_H_
 #define _XVARIANT_H_
 
+#define TEST_XVARIANT   0
+
 #include "wx/defs.h"
 #include "wx/string.h"
 #include <typeinfo>
+
+
+#if TEST_XVARIANT
 
 class WXDLLIMPEXP_BASE wxTypeInfo;
 class WXDLLIMPEXP_BASE wxObject;
@@ -85,7 +90,7 @@ public:
     template<typename T> T& Get(wxTEMPLATED_MEMBER_FIX(T))
     {
         wxxVariantDataT<T> *dataptr = 
-            dynamic_cast<wxxVariantDataT<T>*> (m_data);
+            wx_dynamic_cast(wxxVariantDataT<T>*, m_data);
         wxASSERT_MSG( dataptr, 
             wxString::Format(wxT("Cast to %s not possible"), typeid(T).name()) );
         return dataptr->Get();
@@ -95,7 +100,7 @@ public:
     template<typename T> const T& Get(wxTEMPLATED_MEMBER_FIX(T)) const
     {
         const wxxVariantDataT<T> *dataptr = 
-            dynamic_cast<const wxxVariantDataT<T>*> (m_data);
+            wx_dynamic_cast(const wxxVariantDataT<T>*, m_data);
         wxASSERT_MSG( dataptr, 
             wxString::Format(wxT("Cast to %s not possible"), typeid(T).name()) );
         return dataptr->Get();
@@ -106,7 +111,7 @@ public:
     template<typename T> bool HasData(wxTEMPLATED_MEMBER_FIX(T)) const
     {
         const wxxVariantDataT<T> *dataptr = 
-            dynamic_cast<const wxxVariantDataT<T>*> (m_data);
+            wx_dynamic_cast(const wxxVariantDataT<T>*, m_data);
         return dataptr != NULL;
     }
 
@@ -150,6 +155,21 @@ private:
 
 WX_DECLARE_OBJARRAY_WITH_DECL(wxxVariant, wxxVariantArray, class WXDLLIMPEXP_BASE);
 
+#else
+
+
+class wxObject;
+class wxClassInfo;
+
+#include "wx/variantbase.h"
+#define wxxVariantArray wxVariantBaseArray
+#define wxxVariant wxVariantBase
+#define wxxVariantData wxVariantData
+
+#endif
+
+
+
 // templated streaming, every type must have their specialization for these methods
 
 template<typename T>
@@ -165,5 +185,6 @@ void wxToStringConverter( const wxxVariant &v, wxString &s wxTEMPLATED_FUNCTION_
 template<typename T>
 void wxFromStringConverter( const wxString &s, wxxVariant &v wxTEMPLATED_FUNCTION_FIX(T)) \
     { T d; wxStringReadValue( s, d ); v = wxxVariant(d); }
+
 
 #endif
