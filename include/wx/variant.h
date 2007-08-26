@@ -23,7 +23,10 @@
 
 // NOTE: wxVariantData is declared in variantbase.h
 
-// wxVariant is not wxObject-derived and thus cannot simply use wxList
+// wxVariant is not wxObject-derived and thus cannot simply use wxList;
+// wxVariantDataList infacts needs to store wxVariants into a wxList object
+// and since wxList can store only wxObject-derived classes, it can't store
+// wxVariants. wxListVoid however can.
 WX_DECLARE_LIST(void, wxListVoid);
 
 
@@ -36,8 +39,10 @@ class WXDLLIMPEXP_BASE wxVariant: public wxVariantBase
 {
 public:
     wxVariant() {}
+
     wxVariant(const wxVariant& variant)
-        : wxVariantBase(variant) {}
+        : wxVariantBase((const wxVariantBase&)variant) { }
+
     wxVariant(wxVariantData* data, const wxString& name = wxEmptyString)
         : wxVariantBase(data, name) {}
 
@@ -146,10 +151,10 @@ public:
     // list operations
     // ------------------------------
 
-    wxVariant(const wxList& val, const wxString& name = wxEmptyString); // List of variants
-    bool operator== (const wxList& value) const;
-    bool operator!= (const wxList& value) const;
-    void operator= (const wxList& value) ;
+    wxVariant(const wxListVoid& val, const wxString& name = wxEmptyString); // List of variants
+    bool operator== (const wxListVoid& value) const;
+    bool operator!= (const wxListVoid& value) const;
+    void operator= (const wxListVoid& value) ;
     // Treat a list variant as an array
     wxVariant operator[] (size_t idx) const;
     wxVariant& operator[] (size_t idx) ;
