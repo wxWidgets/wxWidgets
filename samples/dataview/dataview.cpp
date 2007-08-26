@@ -39,6 +39,63 @@
 #define DATAVIEW_DEFAULT_STYLE          (wxDV_MULTIPLE|wxDV_HORIZ_RULES|wxDV_VERT_RULES)
 
 
+// -------------------------------------
+// MySpinCtrlInPlaceRenderer
+// -------------------------------------
+
+class MySpinCtrlInPlaceRenderer: public wxDataViewCustomRenderer
+{
+public:
+    MySpinCtrlInPlaceRenderer() :
+        wxDataViewCustomRenderer( wxT("long"), wxDATAVIEW_CELL_EDITABLE ) { }
+    
+    
+    virtual bool HasEditorCtrl()
+        { 
+            return true; 
+        }
+    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
+        { 
+            long l = value;
+            return new wxSpinCtrl( parent, wxID_ANY, wxEmptyString, 
+                    labelRect.GetTopLeft(), labelRect.GetSize(), -0, -1, 2010, l );
+        }
+    virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value )
+        { 
+            wxSpinCtrl *sc = (wxSpinCtrl*) editor;
+            long l = sc->GetValue();
+            value = l;
+            return true;
+        }
+        
+    bool Render( wxRect rect, wxDC *dc, int WXUNUSED(state) )
+    {
+        wxString str;
+        str.Printf( wxT("%d"), (int) m_data );
+        dc->SetTextForeground( *wxBLACK );
+        dc->DrawText( str, rect.x, rect.y );
+        return true;
+    }
+    wxSize GetSize() const
+    {
+        return wxSize(80,16);
+    }
+    bool SetValue( const wxVariant &value )
+    {
+        m_data = value.GetLong();
+        return true;
+    }
+    bool GetValue( wxVariant &value ) const
+    {
+        value = m_data;
+        return true;
+    }
+    
+private:
+    long    m_data;
+};
+
+
 
 // -------------------------------------
 // MyMusicModel
@@ -66,7 +123,7 @@ class MyMusicModelNode
 {
 public:
     MyMusicModelNode( MyMusicModelNode* parent, 
-                      const wxString &title, const wxString &artist, const wxString &year )
+                      const wxString &title, const wxString &artist, int year )
     { 
         m_parent = parent; 
         m_title = title;
@@ -80,6 +137,7 @@ public:
     { 
         m_parent = parent; 
         m_title = branch;
+        m_year = -1;
         m_isContainer = true;
     }
     
@@ -106,7 +164,7 @@ public:
 public:
     wxString            m_title;
     wxString            m_artist;
-    wxString            m_year;
+    int                 m_year;
     
 private:
     MyMusicModelNode   *m_parent;
@@ -127,21 +185,21 @@ public:
         m_pop = new MyMusicModelNode( m_root, "Pop music" );
         m_root->Append( m_pop );
         m_pop->Append( new MyMusicModelNode( m_pop, 
-            "You are not alone", "Michael Jackson", "1995" ) );
+            "You are not alone", "Michael Jackson", 1995 ) );
         m_pop->Append( new MyMusicModelNode( m_pop, 
-            "Take a bow", "Madonna", "1994" ) );
+            "Take a bow", "Madonna", 1994 ) );
         m_classical = new MyMusicModelNode( m_root, "Classical music" );
         m_root->Append( m_classical );
         m_classical->Append( new MyMusicModelNode( m_classical, 
-            "Ninth symphony", "Ludwig van Beethoven", "1824" ) );
+            "Ninth symphony", "Ludwig van Beethoven", 1824 ) );
         m_classical->Append( new MyMusicModelNode( m_classical, 
-            "German Requiem", "Johannes Brahms", "1868" ) );
+            "German Requiem", "Johannes Brahms", 1868 ) );
         m_classicalMusicIsKnownToControl = false;
     }
     
     // helper methods to change the model
 
-    void AddToClassical( const wxString &title, const wxString &artist, const wxString &year )
+    void AddToClassical( const wxString &title, const wxString &artist, int year )
     {
         // add to data
         MyMusicModelNode *child_node = 
@@ -163,15 +221,11 @@ public:
         MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
         wxDataViewItem parent( node->GetParent() );
         
-        // notify control
-        ItemDeleted( parent, item );
-        //We must delete the node after we call ItemDeleted
-        //The reason is that:
-        //When we use wxSortedArray, the array find a node through binary search for speed.
-        //And when the array is searching for some node, it call the model's compare function.
-        //The compare function need the node to be compared. So we should delete the node later, here.
         node->GetParent()->GetChildren().Remove( node );
         delete node;
+        
+        // notify control
+        ItemDeleted( parent, item );
     }
     
     // override sorting to always sort branches ascendingly
@@ -209,6 +263,9 @@ public:
 
     virtual wxString GetColumnType( unsigned int col ) const
     {
+        if (col == 2)
+            return "long";
+            
         return "string";
     }
 
@@ -220,10 +277,12 @@ public:
         {
             case 0: variant = node->m_title; break;
             case 1: variant = node->m_artist; break;
-            case 2: variant = node->m_year; break;
+            case 2: variant = (long) node->m_year; break;
             default: 
             {
                 wxLogError( "MyMusicModel::GetValue: wrong column" );
+                
+                // provoke a crash when mouse button down
                 wxMouseState state = wxGetMouseState();
                 if (state.ShiftDown())
                 {
@@ -242,7 +301,7 @@ public:
         {
             case 0: node->m_title = variant.GetString(); break;
             case 1: node->m_artist  = variant.GetString(); break;
-            case 2: node->m_year  = variant.GetString(); break;
+            case 2: node->m_year  = variant.GetLong(); break;
             default: wxLogError( "MyMusicModel::SetValue: wrong column" );
         }
     }
@@ -479,7 +538,7 @@ bool MyApp::OnInit(void)
 
     // build the first frame
     MyFrame *frame = 
-        new MyFrame(NULL, wxT("wxDataViewCtrl feature test"), 40, 40, 700, 440);
+        new MyFrame(NULL, wxT("wxDataViewCtrl feature test"), 40, 40, 800, 440);
     frame->Show(true);
 
     SetTopWindow(frame);
@@ -509,7 +568,7 @@ enum
      
     ID_PREPEND_LIST     = 200,
     ID_DELETE_LIST      = 201,
-    ID_GOTO                  = 202
+    ID_GOTO             = 202
 };
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -585,10 +644,12 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     col->SetSortOrder( true );
 #endif
     
-    m_musicCtrl->AppendTextColumn( "Artist", 1, wxDATAVIEW_CELL_EDITABLE, 200,
+    m_musicCtrl->AppendTextColumn( "Artist", 1, wxDATAVIEW_CELL_EDITABLE, 150,
                                      DEFAULT_ALIGN, wxDATAVIEW_COL_SORTABLE );
-    m_musicCtrl->AppendTextColumn( "Year", 2, wxDATAVIEW_CELL_INERT, 50,
-                                     DEFAULT_ALIGN );
+
+    MySpinCtrlInPlaceRenderer *sr = new MySpinCtrlInPlaceRenderer;
+    wxDataViewColumn *column = new wxDataViewColumn( "year", sr, 2, -1, wxALIGN_CENTRE, wxDATAVIEW_COL_SORTABLE );
+    m_musicCtrl->AppendColumn( column );
 
     data_sizer->Add( m_musicCtrl, 3, wxGROW );
     
@@ -638,7 +699,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnAddMozart(wxCommandEvent& WXUNUSED(event) )
 {
-    m_music_model->AddToClassical( "Kleine Nachtmusik", "Wolfgang Mozart", "1787" );
+    m_music_model->AddToClassical( "Kleine Nachtmusik", "Wolfgang Mozart", 1787 );
 }
 
 void MyFrame::OnDeleteMusic(wxCommandEvent& WXUNUSED(event) )
