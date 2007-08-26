@@ -372,7 +372,16 @@ void wxFileConfig::Init()
         }
         else
         {
-            wxLogWarning(_("can't open user configuration file '%s'."),  m_fnLocalFile.GetFullPath().c_str() );
+            const wxString path = m_fnLocalFile.GetFullPath();
+            wxLogWarning(_("can't open user configuration file '%s'."),
+                         path.c_str());
+
+            if ( m_fnLocalFile.FileExists() )
+            {
+                wxLogWarning(_("Changes won't be saved to avoid overwriting the existing file \"%s\""),
+                             path.c_str());
+                m_fnLocalFile.Clear();
+            }
         }
     }
 
