@@ -335,6 +335,7 @@ wxDataViewItem wxDataViewIndexListModel::GetNextSibling( const wxDataViewItem &i
 // ---------------------------------------------------------
 // wxDataViewRendererBase
 // ---------------------------------------------------------
+static wxDataViewItem g_item;
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewRendererBase, wxObject)
 
@@ -372,6 +373,14 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
     m_editorCtrl->SetFocus();
 #endif
 
+    // Now we should send Editing Started event
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED, GetOwner()->GetOwner()->GetId() );
+    event.SetDataViewColumn( GetOwner() );
+    event.SetModel( GetOwner()->GetOwner()->GetModel() );
+    event.SetItem( item );
+    g_item = item;
+    GetOwner()->GetOwner()->GetEventHandler()->ProcessEvent( event );
+
     return true;
 }
 
@@ -401,6 +410,13 @@ bool wxDataViewRendererBase::FinishEditing()
     GetOwner()->GetOwner()->GetModel()->ValueChanged( m_item, col );
 
     // m_editorCtrl->PopEventHandler( true );
+    
+    // Now we should send Editing Done event
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, GetOwner()->GetOwner()->GetId() );
+    event.SetDataViewColumn( GetOwner() );
+    event.SetModel( GetOwner()->GetOwner()->GetModel() );
+    event.SetItem( g_item );
+    GetOwner()->GetOwner()->GetEventHandler()->ProcessEvent( event );
 
     return true;
 }

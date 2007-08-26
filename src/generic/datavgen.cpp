@@ -511,6 +511,9 @@ public:
     void DestroyTree();
     void HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* &column );
     wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn* column );
+
+    void Expand( unsigned int row ) { OnExpanding( row ); }
+    void Collapse( unsigned int row ) { OnCollapsing( row ); }
 private:
     wxDataViewTreeNode * GetTreeNodeByRow( unsigned int row );
     //We did not need this temporarily
@@ -1878,6 +1881,7 @@ void wxDataViewMainWindow::OnRenameTimer()
 
     wxDataViewItem item = GetItemByRow( m_currentRow );
     m_currentCol->GetRenderer()->StartEditing( item, labelRect );
+
 }
 
 //------------------------------------------------------------------
@@ -3496,6 +3500,7 @@ wxDataViewItem wxDataViewMainWindow::GetSelection() const
 //-----------------------------------------------------------------------------
 // wxDataViewCtrl
 //-----------------------------------------------------------------------------
+WX_DEFINE_LIST(wxDataViewColumnList);
 
 IMPLEMENT_DYNAMIC_CLASS(wxDataViewCtrl, wxDataViewCtrlBase)
 
@@ -3600,6 +3605,7 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
     if (!wxDataViewCtrlBase::AppendColumn(col))
         return false;
 
+    m_cols.Append( col );
     OnColumnChange();
     return true;
 }
@@ -3620,6 +3626,47 @@ void wxDataViewCtrl::DoSetExpanderColumn()
 void wxDataViewCtrl::DoSetIndent()
 {
     m_clientArea->UpdateDisplay();
+}
+
+unsigned int wxDataViewCtrl::GetColumnCount() const
+{
+    return m_cols.GetCount();
+}
+
+wxDataViewColumn* wxDataViewCtrl::GetColumn( unsigned int pos ) const
+{
+    wxDataViewColumnList::const_iterator iter;
+    int i = 0;
+    for (iter = m_cols.begin(); iter!=m_cols.end(); iter++)
+    {
+        if (i == pos)
+            return *iter;
+
+        if ((*iter)->IsHidden())
+            continue;
+        i ++;
+    }
+    return NULL;
+}
+
+bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
+{
+    wxDataViewColumnList::Node * ret = m_cols.Find( column );
+    if (ret == NULL)
+        return false;
+
+    m_cols.Erase(ret); 
+    delete column;
+    OnColumnChange();
+
+    return true;
+}
+
+bool wxDataViewCtrl::ClearColumns()
+{
+    m_cols.clear();
+    OnColumnChange();
+    return true;
 }
 
 //Selection code with wxDataViewItem as parameters
@@ -3809,6 +3856,20 @@ wxDataViewItem wxDataViewCtrl::GetItemByRow( unsigned int row ) const
 int wxDataViewCtrl::GetRowByItem( const wxDataViewItem & item ) const
 {
     return m_clientArea->GetRowByItem( item );
+}
+
+void wxDataViewCtrl::Expand( const wxDataViewItem & item )
+{
+    int row = m_clientArea->GetRowByItem( item );
+    if (row != -1)
+        m_clientArea->Expand(row);
+}
+
+void wxDataViewCtrl::Collapse( const wxDataViewItem & item )
+{
+    int row = m_clientArea->GetRowByItem( item );
+    if (row != -1)
+        m_clientArea->Collapse(row);    
 }
 
  #endif

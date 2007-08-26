@@ -314,6 +314,8 @@ protected:
 // wxDataViewCtrl
 // ---------------------------------------------------------
 
+WX_DECLARE_LIST(wxDataViewColumn, wxDataViewColumnList );
+
 class WXDLLIMPEXP_ADV wxDataViewCtrl: public wxDataViewCtrlBase,
                                        public wxScrollHelperNative
 {
@@ -354,6 +356,11 @@ public:
     virtual void DoSetExpanderColumn();
     virtual void DoSetIndent();
 
+    virtual unsigned int GetColumnCount() const;
+    virtual wxDataViewColumn* GetColumn( unsigned int pos ) const;
+    virtual bool DeleteColumn( wxDataViewColumn *column );
+    virtual bool ClearColumns();
+
     virtual wxDataViewItem GetSelection() const;
     virtual int GetSelections( wxDataViewItemArray & sel ) const;
     virtual void SetSelections( const wxDataViewItemArray & sel );
@@ -368,6 +375,9 @@ public:
                                 const wxDataViewColumn *column = NULL );
     virtual void HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* &column ) const;
     virtual wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn *column = NULL ) const;
+
+    virtual void Expand( const wxDataViewItem & item );
+    virtual void Collapse( const wxDataViewItem & item );
 
 protected:
     virtual int GetSelections( wxArrayInt & sel ) const; 
@@ -400,6 +410,7 @@ public:     // utility functions not part of the API
     wxWindow *GetMainWindow() { return (wxWindow*) m_clientArea; }
 
 private:
+    wxDataViewColumnList m_cols;
     wxDataViewModelNotifier *m_notifier;
     wxDataViewMainWindow        *m_clientArea;
     wxDataViewHeaderWindow      *m_headerArea;
