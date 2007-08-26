@@ -1048,6 +1048,11 @@ void MyApp::DoVariantDemo(wxCommandEvent& WXUNUSED(event) )
 
     var1 = wxVariant(new wxFont(wxSystemSettings::GetFont(wxSYS_OEM_FIXED_FONT)));
     textCtrl << _T("var1 = (wxfont)\"");
+
+    #define wxGetVariantCast(var,classname) \
+    ((classname*)(var.IsValueKindOf(&classname::ms_classInfo) ?\
+                  var.GetWxObjectPtr() : NULL));
+
     wxFont* font = wxGetVariantCast(var1,wxFont);
     if (font)
     {
