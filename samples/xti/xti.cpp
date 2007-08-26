@@ -47,6 +47,7 @@
 #include "wx/spinctrl.h"
 
 #include "classlist.h"
+#include "codereadercallback.h"
 
 #if !wxUSE_EXTENDED_RTTI
     #error This sample requires XTI (eXtended RTTI) enabled
@@ -88,7 +89,7 @@ public:
 
 private:
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE()
 };
 
 // ----------------------------------------------------------------------------
@@ -120,7 +121,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
 END_EVENT_TABLE()
 
-IMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp)
 
 // ============================================================================
 // implementation
@@ -262,7 +263,7 @@ MyFrame::MyFrame(const wxString& title)
 
 // the following class "persists" (i.e. saves) a wxFrame into a wxObjectWriter
 
-class MyDesignerPersister : public wxPersister
+class MyDesignerPersister : public wxObjectReaderCallback
 {
 public:
     MyDesignerPersister( wxDynamicObject * frame)
@@ -281,7 +282,7 @@ public:
         // be connected really in the designer, so we have to supply 
         // the information
         if ( object == m_frame->GetProperty(wxT("Button")).GetAsObject() && 
-            propInfo == CLASSINFO( wxButton )->FindPropertyInfo("OnClick") )
+             propInfo == wxCLASSINFO( wxButton )->FindPropertyInfo("OnClick") )
         {
             eventSink = m_frame;
             handlerInfo = m_frame->GetClassInfo()->
@@ -314,7 +315,7 @@ void RegisterFrameRTTI()
     // set up the RTTI info for a class (MyXTIFrame) which
     // is not defined anywhere in this program
     wxDynamicClassInfo *dyninfo = 
-        dynamic_cast< wxDynamicClassInfo *>( wxClassInfo::FindClass(wxT("MyXTIFrame")));
+        wx_dynamic_cast( wxDynamicClassInfo *, wxClassInfo::FindClass(wxT("MyXTIFrame")));
     if ( dyninfo == NULL )
     {
         dyninfo = new wxDynamicClassInfo(wxT("myxtiframe.h"),
@@ -339,7 +340,7 @@ wxDynamicObject* CreateFrameRTTI()
     wxClassInfo *info = wxClassInfo::FindClass(wxT("MyXTIFrame"));
     wxASSERT( info );
     wxDynamicObject* frameWrapper = 
-        dynamic_cast<wxDynamicObject*>( info->CreateObject() );
+        wx_dynamic_cast(wxDynamicObject*, info->CreateObject() );
     Params[0] = wxxVariant((wxWindow*)(NULL));
     Params[1] = wxxVariant(wxWindowID(baseID++));
     Params[2] = wxxVariant(wxString(wxT("This is a frame created from XTI")));
@@ -347,7 +348,7 @@ wxDynamicObject* CreateFrameRTTI()
     Params[4] = wxxVariant(wxSize(400,300));
     Params[5] = wxxVariant((long)wxDEFAULT_FRAME_STYLE);
     wxASSERT( info->Create(frameWrapper, 6, Params ));
-    frame = dynamic_cast<wxFrame*>(frameWrapper->GetSuperClassInstance());
+    frame = wx_dynamic_cast(wxFrame*, frameWrapper->GetSuperClassInstance());
 
     // now build a notebook inside it:
     wxNotebook* notebook;
@@ -524,7 +525,7 @@ wxDynamicObject* CreateFrameRTTI()
     Params[4] = wxxVariant(wxSize(-1,-1));
     Params[5] = wxxVariant((long) wxGA_HORIZONTAL);
     wxASSERT( info->Create(control, 6, Params ));
-    dynamic_cast<wxGauge*>(control)->SetValue(20);
+    wx_dynamic_cast(wxGauge*, control)->SetValue(20);
 
     return frameWrapper;
 }
@@ -560,8 +561,8 @@ wxDynamicObject* LoadFrameRTTI(const wxString &fileName)
     if (root->GetName() != "TestXTI")
         return NULL;
 
-    // now depersist the wxFrame we saved into it using wxRuntimeDepersister
-    wxRuntimeDepersister Callbacks;
+    // now depersist the wxFrame we saved into it using wxObjectRuntimeReaderCallback
+    wxObjectRuntimeReaderCallback Callbacks;
     wxObjectXmlReader Reader( root );
     int obj = Reader.ReadObject( wxString("myTestFrame"), &Callbacks );
     return (wxDynamicObject*)Callbacks.GetObject( obj );
@@ -585,8 +586,8 @@ bool GenerateFrameRTTICode(const wxString &inFileName, const wxString &outFileNa
     if (root->GetName() != "TestXTI")
         return false;
 
-    // read the XML file using the wxCodeDepersister
-    wxCodeDepersister Callbacks(&tos);
+    // read the XML file using the wxObjectCodeReaderCallback
+    wxObjectCodeReaderCallback Callbacks(&tos);
     wxObjectXmlReader Reader(root);
 
     // ReadObject will return the ID of the object read??
@@ -613,7 +614,7 @@ void MyFrame::OnPersist(wxCommandEvent& WXUNUSED(event))
     }
 
     // show the frame we're going to save to the user
-    wxFrame *trueFrame = dynamic_cast<wxFrame *>( frame->GetSuperClassInstance() );
+    wxFrame *trueFrame = wx_dynamic_cast(wxFrame *, frame->GetSuperClassInstance() );
     trueFrame->Show();
 
     // ask the user where to save it
@@ -650,12 +651,12 @@ void MyFrame::OnDepersist(wxCommandEvent& WXUNUSED(event))
         return;
     }
 
-    wxFrame *trueFrame = dynamic_cast<wxFrame*>( frame );
+    wxFrame *trueFrame = wx_dynamic_cast(wxFrame*, frame );
     if ( !trueFrame )
     {
-        wxDynamicObject* dyno = dynamic_cast< wxDynamicObject* >( frame );
+        wxDynamicObject* dyno = wx_dynamic_cast(wxDynamicObject*, frame );
         if ( dyno )
-            trueFrame = dynamic_cast< wxFrame *>( dyno->GetSuperClassInstance() );
+            trueFrame = wx_dynamic_cast(wxFrame *, dyno->GetSuperClassInstance() );
     }
 
     if ( trueFrame )
