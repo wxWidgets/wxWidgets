@@ -289,9 +289,7 @@ TAG_HANDLER_BEGIN(TITLE, "TITLE")
         wxHtmlWindowInterface *winIface = m_WParser->GetWindowInterface();
         if (winIface)
         {
-            wxString title = m_WParser->GetSource()->Mid(
-                                    tag.GetBeginPos(),
-                                    tag.GetEndPos1()-tag.GetBeginPos());
+            wxString title(tag.GetBeginIter(), tag.GetEndIter1());
 #if !wxUSE_UNICODE && wxUSE_WCHAR_T
             const wxFontEncoding enc = m_WParser->GetInputEncoding();
             if ( enc != wxFONTENCODING_DEFAULT )

@@ -73,7 +73,8 @@ public:
 
     // Parses the m_Source from begin_pos to end_pos-1.
     // (in noparams version it parses whole m_Source)
-    void DoParsing(int begin_pos, int end_pos);
+    void DoParsing(const wxString::const_iterator& begin_pos,
+                   const wxString::const_iterator& end_pos);
     void DoParsing();
 
     // Returns pointer to the tag at parser's current position
@@ -104,7 +105,7 @@ public:
     // Restores state before last call to PushTagHandler
     void PopTagHandler();
 
-    wxString* GetSource() {return &m_Source;}
+    const wxString* GetSource() {return m_Source;}
     void SetSource(const wxString& src);
 
     // Sets HTML source and remembers current parser's state so that it can
@@ -140,7 +141,8 @@ protected:
     void CreateDOMTree();
     void DestroyDOMTree();
     void CreateDOMSubTree(wxHtmlTag *cur,
-                          int begin_pos, int end_pos,
+                          const wxString::const_iterator& begin_pos,
+                          const wxString::const_iterator& end_pos,
                           wxHtmlTagsCache *cache);
 
     // Adds text to the output.
@@ -163,7 +165,7 @@ protected:
     wxHtmlTextPieces *m_TextPieces;
     size_t m_CurTextPiece;
 
-    wxString m_Source;
+    const wxString *m_Source;
 
     wxHtmlParserState *m_SavedStates;
 
@@ -232,7 +234,7 @@ protected:
     // parses input between beginning and ending tag.
     // m_Parser must be set.
     void ParseInner(const wxHtmlTag& tag)
-        { m_Parser->DoParsing(tag.GetBeginPos(), tag.GetEndPos1()); }
+        { m_Parser->DoParsing(tag.GetBeginIter(), tag.GetEndIter1()); }
 
     // Parses given source as if it was tag's inner code (see
     // wxHtmlParser::GetInnerSource).  Unlike ParseInner(), this method lets

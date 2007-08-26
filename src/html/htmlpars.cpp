@@ -48,8 +48,10 @@ class wxHtmlTextPiece
 {
 public:
     wxHtmlTextPiece() {}
-    wxHtmlTextPiece(int pos, int lng) : m_pos(pos), m_lng(lng) {}
-    int m_pos, m_lng;
+    wxHtmlTextPiece(const wxString::const_iterator& start,
+                    const wxString::const_iterator& end)
+        : m_start(start), m_end(end) {}
+    wxString::const_iterator m_start, m_end;
 };
 
 // NB: this is an empty class and not typedef because of forward declaration
@@ -64,7 +66,7 @@ public:
     wxHtmlTag         *m_tags;
     wxHtmlTextPieces  *m_textPieces;
     int                m_curTextPiece;
-    wxString           m_source;
+    const wxString    *m_source;
     wxHtmlParserState *m_nextState;
 };
 
@@ -78,6 +80,7 @@ wxHtmlParser::wxHtmlParser()
     : wxObject(), m_HandlersHash(wxKEY_STRING),
       m_FS(NULL), m_HandlersStack(NULL)
 {
+    m_Source = NULL;
     m_entitiesParser = new wxHtmlEntitiesParser;
     m_Tags = NULL;
     m_CurTag = NULL;
@@ -103,6 +106,7 @@ wxHtmlParser::~wxHtmlParser()
     m_HandlersHash.Clear();
     WX_CLEAR_LIST(wxList, m_HandlersList);
     delete m_entitiesParser;
+    delete m_Source;
 }
 
 wxObject* wxHtmlParser::Parse(const wxString& source)
@@ -128,7 +132,10 @@ void wxHtmlParser::DoneParser()
 void wxHtmlParser::SetSource(const wxString& src)
 {
     DestroyDOMTree();
-    m_Source = src;
+    // NB: this is allocated on heap because wxHtmlTag keeps a pointer to
+    //     this string if WXWIN_COMPATIBILITY_2_8
+    delete m_Source;
+    m_Source = new wxString(src);
     CreateDOMTree();
     m_CurTag = NULL;
     m_CurTextPiece = 0;
@@ -136,54 +143,53 @@ void wxHtmlParser::SetSource(const wxString& src)
 
 void wxHtmlParser::CreateDOMTree()
 {
-    wxHtmlTagsCache cache(m_Source);
+    wxHtmlTagsCache cache(*m_Source);
     m_TextPieces = new wxHtmlTextPieces;
-    CreateDOMSubTree(NULL, 0, m_Source.length(), &cache);
+    CreateDOMSubTree(NULL, m_Source->begin(), m_Source->end(), &cache);
     m_CurTextPiece = 0;
 }
 
-extern bool wxIsCDATAElement(const wxChar *tag);
+extern bool wxIsCDATAElement(const wxString& tag);
 
 void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
-                                    int begin_pos, int end_pos,
+                                    const wxString::const_iterator& begin_pos,
+                                    const wxString::const_iterator& end_pos,
                                     wxHtmlTagsCache *cache)
 {
-    if (end_pos <= begin_pos) return;
+    if (end_pos <= begin_pos)
+        return;
 
     wxChar c;
-    int i = begin_pos;
-    int textBeginning = begin_pos;
+    wxString::const_iterator i = begin_pos;
+    wxString::const_iterator textBeginning = begin_pos;
 
     // If the tag contains CDATA text, we include the text between beginning
     // and ending tag verbosely. Setting i=end_pos will skip to the very
     // end of this function where text piece is added, bypassing any child
     // tags parsing (CDATA element can't have child elements by definition):
-    if (cur != NULL && wxIsCDATAElement(cur->GetName().c_str()))
+    if (cur != NULL && wxIsCDATAElement(cur->GetName()))
     {
         i = end_pos;
     }
 
     while (i < end_pos)
     {
-        c = m_Source.GetChar(i);
+        c = *i;
 
         if (c == wxT('<'))
         {
             // add text to m_TextPieces:
-            if (i - textBeginning > 0)
-                m_TextPieces->push_back(
-                    wxHtmlTextPiece(textBeginning, i - textBeginning));
+            if (i > textBeginning)
+                m_TextPieces->push_back(wxHtmlTextPiece(textBeginning, i));
 
             // if it is a comment, skip it:
-            wxString::const_iterator iter = m_Source.begin() + i;
-            if ( SkipCommentTag(iter, m_Source.end()) )
+            if ( SkipCommentTag(i, m_Source->end()) )
             {
-                textBeginning =
-                i = iter - m_Source.begin() + 1; // skip closing '>' too
+                textBeginning = i = i + 1; // skip closing '>' too
             }
 
             // add another tag to the tree:
-            else if (i < end_pos-1 && m_Source.GetChar(i+1) != wxT('/'))
+            else if (i < end_pos-1 && *(i+1) != wxT('/'))
             {
                 wxHtmlTag *chd;
                 if (cur)
@@ -211,12 +217,12 @@ void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
                 if (chd->HasEnding())
                 {
                     CreateDOMSubTree(chd,
-                                     chd->GetBeginPos(), chd->GetEndPos1(),
+                                     chd->GetBeginIter(), chd->GetEndIter1(),
                                      cache);
-                    i = chd->GetEndPos2();
+                    i = chd->GetEndIter2();
                 }
                 else
-                    i = chd->GetBeginPos();
+                    i = chd->GetBeginIter();
 
                 textBeginning = i;
             }
@@ -224,17 +230,16 @@ void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
             // ... or skip ending tag:
             else
             {
-                while (i < end_pos && m_Source.GetChar(i) != wxT('>')) i++;
+                while (i < end_pos && *i != wxT('>')) ++i;
                 textBeginning = i+1;
             }
         }
-        else i++;
+        else ++i;
     }
 
     // add remaining text to m_TextPieces:
-    if (end_pos - textBeginning > 0)
-        m_TextPieces->push_back(
-            wxHtmlTextPiece(textBeginning, end_pos - textBeginning));
+    if (end_pos > textBeginning)
+        m_TextPieces->push_back(wxHtmlTextPiece(textBeginning, end_pos));
 }
 
 void wxHtmlParser::DestroyDOMTree()
@@ -257,42 +262,45 @@ void wxHtmlParser::DoParsing()
 {
     m_CurTag = m_Tags;
     m_CurTextPiece = 0;
-    DoParsing(0, m_Source.length());
+    DoParsing(m_Source->begin(), m_Source->end());
 }
 
-void wxHtmlParser::DoParsing(int begin_pos, int end_pos)
+void wxHtmlParser::DoParsing(const wxString::const_iterator& begin_pos_,
+                             const wxString::const_iterator& end_pos)
 {
-    if (end_pos <= begin_pos) return;
+    wxString::const_iterator begin_pos(begin_pos_);
+
+    if (end_pos <= begin_pos)
+        return;
 
     wxHtmlTextPieces& pieces = *m_TextPieces;
     size_t piecesCnt = pieces.size();
 
     while (begin_pos < end_pos)
     {
-        while (m_CurTag && m_CurTag->GetBeginPos() < begin_pos)
+        while (m_CurTag && m_CurTag->GetBeginIter() < begin_pos)
             m_CurTag = m_CurTag->GetNextTag();
         while (m_CurTextPiece < piecesCnt &&
-               pieces[m_CurTextPiece].m_pos < begin_pos)
+               pieces[m_CurTextPiece].m_start < begin_pos)
             m_CurTextPiece++;
 
         if (m_CurTextPiece < piecesCnt &&
             (!m_CurTag ||
-             pieces[m_CurTextPiece].m_pos < m_CurTag->GetBeginPos()))
+             pieces[m_CurTextPiece].m_start < m_CurTag->GetBeginIter()))
         {
             // Add text:
             AddText(GetEntitiesParser()->Parse(
-                       m_Source.Mid(pieces[m_CurTextPiece].m_pos,
-                                    pieces[m_CurTextPiece].m_lng)));
-            begin_pos = pieces[m_CurTextPiece].m_pos +
-                        pieces[m_CurTextPiece].m_lng;
+                       wxString(pieces[m_CurTextPiece].m_start,
+                                pieces[m_CurTextPiece].m_end)));
+            begin_pos = pieces[m_CurTextPiece].m_end;
             m_CurTextPiece++;
         }
         else if (m_CurTag)
         {
             if (m_CurTag->HasEnding())
-                begin_pos = m_CurTag->GetEndPos2();
+                begin_pos = m_CurTag->GetEndIter2();
             else
-                begin_pos = m_CurTag->GetBeginPos();
+                begin_pos = m_CurTag->GetBeginIter();
             wxHtmlTag *t = m_CurTag;
             m_CurTag = m_CurTag->GetNextTag();
             AddTag(*t);
@@ -318,7 +326,7 @@ void wxHtmlParser::AddTag(const wxHtmlTag& tag)
     if (!inner)
     {
         if (tag.HasEnding())
-            DoParsing(tag.GetBeginPos(), tag.GetEndPos1());
+            DoParsing(tag.GetBeginIter(), tag.GetEndIter1());
     }
 }
 
@@ -393,7 +401,7 @@ void wxHtmlParser::SetSourceAndSaveState(const wxString& src)
     m_Tags = NULL;
     m_TextPieces = NULL;
     m_CurTextPiece = 0;
-    m_Source = wxEmptyString;
+    m_Source = NULL;
 
     SetSource(src);
 }
@@ -419,8 +427,7 @@ bool wxHtmlParser::RestoreState()
 
 wxString wxHtmlParser::GetInnerSource(const wxHtmlTag& tag)
 {
-    return GetSource()->Mid(tag.GetBeginPos(),
-                            tag.GetEndPos1() - tag.GetBeginPos());
+    return wxString(tag.GetBeginIter(), tag.GetEndIter1());
 }
 
 //-----------------------------------------------------------------------------
@@ -501,11 +508,16 @@ wxString wxHtmlEntitiesParser::Parse(const wxString& input) const
             const wxString::const_iterator ent_s = c;
             wxChar entity_char;
 
-            for (; c != end &&
-                   ((*c >= wxT('a') && *c <= wxT('z')) ||
-                    (*c >= wxT('A') && *c <= wxT('Z')) ||
-                    (*c >= wxT('0') && *c <= wxT('9')) ||
-                    *c == wxT('_') || *c == wxT('#')); ++c) {}
+            for ( ; c != end; ++c )
+            {
+                wxChar ch = *c;
+                if ( !((ch >= wxT('a') && ch <= wxT('z')) ||
+                       (ch >= wxT('A') && ch <= wxT('Z')) ||
+                       (ch >= wxT('0') && ch <= wxT('9')) ||
+                        ch == wxT('_') || ch == wxT('#')) )
+                    break;
+            }
+
             entity.append(ent_s, c);
             if (c == end || *c != wxT(';')) --c;
             last = c+1;

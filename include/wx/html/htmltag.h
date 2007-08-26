@@ -31,7 +31,7 @@ class WXDLLIMPEXP_HTML wxHtmlTagsCache
 {
 private:
     wxHtmlTagsCacheData *m_Cache;
-    size_t m_CachePos;
+    int m_CachePos;
 
     wxHtmlTagsCacheData& Cache() { return *m_Cache; }
 
@@ -41,7 +41,11 @@ public:
     virtual ~wxHtmlTagsCache();
 
     // Finds parameters for tag starting at at and fills the variables
-    void QueryTag(int at, int* end1, int* end2);
+    void QueryTag(const wxString::const_iterator& at,
+                  const wxString::const_iterator& inputEnd,
+                  wxString::const_iterator *end1,
+                  wxString::const_iterator *end2,
+                  bool *hasEnding);
 
     DECLARE_NO_COPY_CLASS(wxHtmlTagsCache)
 };
@@ -60,7 +64,9 @@ protected:
     // The tag begins (with '<' character) at position pos in source
     // end_pos is position where parsing ends (usually end of document)
     wxHtmlTag(wxHtmlTag *parent,
-              const wxString& source, int pos, int end_pos,
+              const wxString *source,
+              const wxString::const_iterator& pos,
+              const wxString::const_iterator& end_pos,
               wxHtmlTagsCache *cache,
               wxHtmlEntitiesParser *entParser);
     friend class wxHtmlParser;
@@ -108,24 +114,37 @@ public:
     // Returns string containing all params.
     wxString GetAllParams() const;
 
-    // return true if this there is matching ending tag
-    inline bool HasEnding() const {return m_End1 >= 0;}
+    // return true if there is matching ending tag
+    inline bool HasEnding() const {return m_hasEnding;}
 
     // returns beginning position of _internal_ block of text
     // See explanation (returned value is marked with *):
     // bla bla bla <MYTAG>* bla bla intenal text</MYTAG> bla bla
-    inline int GetBeginPos() const {return m_Begin;}
+    wxString::const_iterator GetBeginIter() const
+        { return m_Begin; }
     // returns ending position of _internal_ block of text.
     // bla bla bla <MYTAG> bla bla intenal text*</MYTAG> bla bla
-    inline int GetEndPos1() const {return m_End1;}
+    wxString::const_iterator GetEndIter1() const
+        { wxASSERT(m_hasEnding); return m_End1; }
     // returns end position 2 :
     // bla bla bla <MYTAG> bla bla internal text</MYTAG>* bla bla
-    inline int GetEndPos2() const {return m_End2;}
+    wxString::const_iterator GetEndIter2() const
+        { wxASSERT(m_hasEnding); return m_End2; }
+
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED( inline int GetBeginPos() const );
+    wxDEPRECATED( inline int GetEndPos1() const );
+    wxDEPRECATED( inline int GetEndPos2() const );
+#endif // WXWIN_COMPATIBILITY_2_8
 
 private:
     wxString m_Name;
-    int m_Begin, m_End1, m_End2;
+    bool m_hasEnding;
+    wxString::const_iterator m_Begin, m_End1, m_End2;
     wxArrayString m_ParamNames, m_ParamValues;
+#if WXWIN_COMPATIBILITY_2_8
+    wxString::const_iterator m_sourceStart;
+#endif
 
     // DOM tree relations:
     wxHtmlTag *m_Next;
@@ -137,10 +156,16 @@ private:
 };
 
 
+#if WXWIN_COMPATIBILITY_2_8
+inline int wxHtmlTag::GetBeginPos() const { return m_Begin - m_sourceStart; }
+inline int wxHtmlTag::GetEndPos1() const { return m_End1 - m_sourceStart; }
+inline int wxHtmlTag::GetEndPos2() const { return m_End2 - m_sourceStart; }
+#endif // WXWIN_COMPATIBILITY_2_8
 
 
 
-#endif
+
+#endif // wxUSE_HTML
 
 #endif // _WX_HTMLTAG_H_
 
