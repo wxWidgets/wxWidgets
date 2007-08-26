@@ -275,6 +275,8 @@ protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewColumn)
 };
 
+WX_DECLARE_LIST(wxDataViewColumn, wxDataViewColumnList );
+
 // --------------------------------------------------------- 
 // wxDataViewCtrl
 // --------------------------------------------------------- 
@@ -305,7 +307,12 @@ public:
            const wxValidator& validator = wxDefaultValidator );
 
     virtual bool AssociateModel( wxDataViewModel *model );
+    
     virtual bool AppendColumn( wxDataViewColumn *col );
+    virtual unsigned int GetColumnCount() const;
+    virtual wxDataViewColumn* GetColumn( unsigned int pos ) const;
+    virtual bool DeleteColumn( wxDataViewColumn *column );
+    virtual bool ClearColumns();
 
     virtual wxDataViewItem GetSelection() const;
     virtual int GetSelections( wxDataViewItemArray & sel ) const;
@@ -346,6 +353,7 @@ private:
     GtkWidget               *m_treeview;
     wxDataViewModelNotifier *m_notifier;
     wxDataViewCtrlInternal  *m_internal;
+    wxDataViewColumnList     m_cols;
 
     
     virtual void OnInternalIdle();

@@ -1977,6 +1977,9 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
 
 IMPLEMENT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
 
+#include <wx/listimpl.cpp>
+WX_DEFINE_LIST(wxDataViewColumnList);
+
 wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *cell,
                                     unsigned int model_column, int width,
                                     wxAlignment align, int flags ) :
@@ -2986,10 +2989,62 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
     if (!wxDataViewCtrlBase::AppendColumn(col))
         return false;
 
-    GtkTreeViewColumn *column = (GtkTreeViewColumn *)col->GetGtkHandle();
+    m_cols.Append( col );
 
-    gtk_tree_view_append_column( GTK_TREE_VIEW(m_treeview), column );
+    gtk_tree_view_append_column( GTK_TREE_VIEW(m_treeview), 
+                                 GTK_TREE_VIEW_COLUMN(col->GetGtkHandle()) );
 
+    return true;
+}
+
+unsigned int wxDataViewCtrl::GetColumnCount() const
+{
+    return m_cols.GetCount();
+}
+
+wxDataViewColumn* wxDataViewCtrl::GetColumn( unsigned int pos ) const
+{
+    GtkTreeViewColumn *gtk_col = gtk_tree_view_get_column( GTK_TREE_VIEW(m_treeview), pos );
+    if (!gtk_col)
+        return NULL;
+        
+    wxDataViewColumnList::const_iterator iter;
+    for (iter = m_cols.begin(); iter != m_cols.end(); iter++)
+    {
+        wxDataViewColumn *col = *iter;
+        if (GTK_TREE_VIEW_COLUMN(col->GetGtkHandle()) == gtk_col)
+        {
+            return col;
+        }
+    }
+    
+    return NULL;
+}
+
+bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
+{
+    gtk_tree_view_remove_column( GTK_TREE_VIEW(m_treeview), 
+                                 GTK_TREE_VIEW_COLUMN(column->GetGtkHandle()) );
+
+    m_cols.remove( column );
+
+    delete column;
+
+    return true;
+}
+
+bool wxDataViewCtrl::ClearColumns()
+{
+    wxDataViewColumnList::iterator iter;
+    for (iter = m_cols.begin(); iter != m_cols.end(); iter++)
+    {
+        wxDataViewColumn *col = *iter;
+        gtk_tree_view_remove_column( GTK_TREE_VIEW(m_treeview), 
+                                     GTK_TREE_VIEW_COLUMN(col->GetGtkHandle()) );
+    }
+    
+    m_cols.clear();
+    
     return true;
 }
 

@@ -539,18 +539,12 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewCtrlBase, wxControl)
 wxDataViewCtrlBase::wxDataViewCtrlBase()
 {
     m_model = NULL;
-    m_cols.DeleteContents( true );
     m_expander_column = 0;
     m_indent = 8;
 }
 
 wxDataViewCtrlBase::~wxDataViewCtrlBase()
 {
-    // IMPORTANT: before calling DecRef() on our model (since it may
-    //            result in a free() call), erase all columns (since
-    //            they hold a pointer to our model)
-    m_cols.Clear();
-
     if (m_model)
     {
         m_model->DecRef();
@@ -694,32 +688,8 @@ wxDataViewCtrlBase::AppendBitmapColumn( const wxBitmap &label, unsigned int mode
 bool
 wxDataViewCtrlBase::AppendColumn( wxDataViewColumn *col )
 {
-    m_cols.Append( (wxObject*) col );
     col->SetOwner( (wxDataViewCtrl*) this );
     return true;
-}
-
-unsigned int wxDataViewCtrlBase::GetColumnCount() const
-{
-    return m_cols.GetCount();
-}
-
-bool wxDataViewCtrlBase::DeleteColumn( unsigned int WXUNUSED(pos) )
-{
-    return false;
-}
-
-bool wxDataViewCtrlBase::ClearColumns()
-{
-    return false;
-}
-
-wxDataViewColumn* wxDataViewCtrlBase::GetColumn( unsigned int pos ) const
-{
-    if( pos >= m_cols.GetCount() )
-        return NULL;
-
-    return (wxDataViewColumn*) m_cols[ pos ];
 }
 
 // ---------------------------------------------------------

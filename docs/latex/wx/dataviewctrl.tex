@@ -182,7 +182,7 @@ Collapses the item.
     
 \membersection{wxDataViewCtrl::DeleteColumn}\label{wxdataviewctrldeletecolumn}
 
-\func{virtual bool}{DeleteColumn}{\param{unsigned int }{pos}}
+\func{virtual bool}{DeleteColumn}{\param{const wxDataViewColumn* }{column}}
 
 Deletes given column.
 
@@ -196,7 +196,9 @@ Expands the item.
 
 \constfunc{virtual wxDataViewColumn*}{GetColumn}{\param{unsigned int }{pos}}
 
-Returns pointer to the column.
+Returns pointer to the column. {\it pos} refers to the 
+position in the control which may change after reordering
+columns by the user.
 
 \membersection{wxDataViewCtrl::GetModel}\label{wxdataviewctrlgetmodel}
 
