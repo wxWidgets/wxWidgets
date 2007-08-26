@@ -134,7 +134,10 @@ static bool GetColourFromGTKWidget(GdkColor& gdkColor,
 static void GetTooltipColors()
 {
     GtkWidget* widget = gtk_window_new(GTK_WINDOW_POPUP);
-    gtk_window_set_type_hint((GtkWindow*)widget, GDK_WINDOW_TYPE_HINT_TOOLTIP);
+#if GTK_CHECK_VERSION(2, 10, 0)
+    if (!gtk_check_version(2, 10, 0))
+        gtk_window_set_type_hint((GtkWindow*)widget, GDK_WINDOW_TYPE_HINT_TOOLTIP);
+#endif
     const char* name = "gtk-tooltip";
     if (gtk_check_version(2, 11, 0))
         name = "gtk-tooltips";
