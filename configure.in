@@ -5743,8 +5743,13 @@ if test "$wxUSE_STL" = "yes"; then
 fi
 
 if test "$wxUSE_EXTENDED_RTTI" = "yes"; then
-  AC_DEFINE(wxUSE_EXTENDED_RTTI)
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS xti"
+  if test "$wxUSE_NO_RTTI" = "yes"; then
+    AC_MSG_WARN([extended RTTI (aka XTI) cannot be enabled if standard RTTI is disabled; diabling extended RTTI])
+    wxUSE_EXTENDED_RTTI="no"
+  else
+    AC_DEFINE(wxUSE_EXTENDED_RTTI)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS xti"
+  fi
 fi
 
 if test "$wxUSE_APPLE_IEEE" = "yes"; then
