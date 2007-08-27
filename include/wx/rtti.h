@@ -143,7 +143,7 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
     DECLARE_ABSTRACT_CLASS(name)                                              \
     static wxObject* wxCreateObject();
 
-#define wxDECLARE_CLASS(name) DECLARE_DYNAMIC_CLASS(name)
+#define wxCLASSINFO(name)                 (&name::ms_classInfo)
 
 
 // common part of the macros below
@@ -194,8 +194,6 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
 #define wxIMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2)                 \
     wxIMPLEMENT_CLASS_COMMON2(name, basename1, basename2, NULL)
 
-#define wxIMPLEMENT_CLASS IMPLEMENT_ABSTRACT_CLASS
-#define wxIMPLEMENT_CLASS2 IMPLEMENT_ABSTRACT_CLASS2
 
 
 // -----------------------------------
