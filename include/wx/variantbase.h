@@ -19,6 +19,7 @@
 #include "wx/string.h"
 #include "wx/arrstr.h"
 #include "wx/cpp.h"
+#include <typeinfo>
 
 #if wxUSE_DATETIME
     #include "wx/datetime.h"
@@ -203,6 +204,8 @@ public:
 
     bool IsType(const wxString& type) const;
     bool IsValueKindOf(const wxClassInfo* type) const;
+
+    // FIXME wxXTI methods:
 
     // get the typeinfo of the stored object
     const wxTypeInfo* GetTypeInfo() const 
