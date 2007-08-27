@@ -2301,6 +2301,13 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         }
     }
 
+    wxDataViewColumn *expander = GetOwner()->GetExpanderColumn();
+    if (!expander)
+    {
+        // TODO: last column for RTL support
+        expander = GetOwner()->GetColumn( 0 );
+    }
+        
     // redraw all cells for all rows which must be repainted and for all columns
     wxRect cell_rect;
     cell_rect.x = x_start;
@@ -2314,6 +2321,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         if (col->IsHidden())
             continue;       // skipt it!
 
+        
         for (unsigned int item = item_start; item < item_last; item++)
         {
             // get the cell value and set it into the renderer
@@ -2333,7 +2341,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
             //Draw the expander here.
             int indent = node->GetIndentLevel();
-            if( col == GetOwner()->GetExpanderColumn() )
+            if( col == expander )
             {
                 //Calculate the indent first
                 indent = cell_rect.x + GetOwner()->GetIndent() * indent;
