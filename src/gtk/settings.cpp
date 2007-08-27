@@ -446,10 +446,10 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
                                 case wxSYS_BORDER_X:
                                 case wxSYS_EDGE_X:
                                 case wxSYS_FRAMESIZE_X:
-                                    border_return = int(data[1]); // width of right extent
+                                    border_return = ((long*)data)[1]; // width of right extent
                                     break;
                                 default:
-                                    border_return = int(data[3]); // height of bottom extent
+                                    border_return = ((long*)data)[3]; // height of bottom extent
                                     break;
                             }
                         }
@@ -576,7 +576,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
 
                 if ((type == XA_CARDINAL) && (format == 32) && (nitems >= 3) && (data))
                 {
-                    caption_height = int(data[2]); // top frame extent
+                    caption_height = ((long*)data)[2]; // top frame extent
                 }
 
                 if (data)
