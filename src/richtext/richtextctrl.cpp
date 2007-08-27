@@ -2527,8 +2527,14 @@ void wxRichTextCtrl::OnUpdateSelectAll(wxUpdateUIEvent& event)
     event.Enable(GetLastPosition() > 0);
 }
 
-void wxRichTextCtrl::OnContextMenu(wxContextMenuEvent& WXUNUSED(event))
+void wxRichTextCtrl::OnContextMenu(wxContextMenuEvent& event)
 {
+    if (event.GetEventObject() != this)
+    {
+        event.Skip();
+        return;
+    }
+
     if (!m_contextMenu)
     {
         m_contextMenu = new wxMenu;
