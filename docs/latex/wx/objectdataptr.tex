@@ -60,6 +60,7 @@ class MyCar
 {
 public:
     MyCar( int price );
+    MyCar( const MyCar& data );
     
     bool operator == ( const MyCar& car ) const;
     bool operator != (const MyCar& car) const { return !(*this == car); }
@@ -80,6 +81,11 @@ MyCar::MyCar( int price )
 {
     m_data = new MyCarRefData;
     m_data.get()->SetPrice( price );
+}
+
+MyCar::MyCar( const MyCar& car )
+{
+    m_data.reset( car.m_data.get() );
 }
 
 bool MyCar::operator == ( const MyCar& car ) const
