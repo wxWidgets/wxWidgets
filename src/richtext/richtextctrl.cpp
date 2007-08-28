@@ -129,6 +129,11 @@ wxRichTextCtrl::wxRichTextCtrl(wxWindow* parent,
 bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& value, const wxPoint& pos, const wxSize& size, long style,
                              const wxValidator& validator, const wxString& name)
 {
+#ifdef __WXMSW__
+    if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
+        style |= wxBORDER_THEME;
+#endif
+
     if (!wxTextCtrlBase::Create(parent, id, pos, size,
                                 style|wxFULL_REPAINT_ON_RESIZE,
                                 validator, name))
