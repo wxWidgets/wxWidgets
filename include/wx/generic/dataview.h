@@ -328,7 +328,8 @@ class WXDLLIMPEXP_ADV wxDataViewCtrl: public wxDataViewCtrlBase,
 public:
     wxDataViewCtrl() : wxScrollHelperNative(this)
     {
-        m_sortingColumn = 0;
+        //No sorting column at start, I think
+        m_sortingColumn = NULL;
         Init();
     }
 
@@ -338,6 +339,7 @@ public:
            const wxValidator& validator = wxDefaultValidator )
              : wxScrollHelperNative(this)
     {
+        m_sortingColumn = NULL;
         Create(parent, id, pos, size, style, validator );
     }
 
@@ -393,8 +395,8 @@ protected:
     virtual wxDataViewItem GetItemByRow( unsigned int row ) const;
     virtual int GetRowByItem( const wxDataViewItem & item ) const;
 
-    unsigned int GetSortingColumn() { return m_sortingColumn; }
-    void SetSortingColumn( unsigned int column ) { m_sortingColumn = column; }
+    wxDataViewColumn* GetSortingColumn() { return m_sortingColumn; }
+    void SetSortingColumn( wxDataViewColumn* column ) { m_sortingColumn = column; }
 
 public:     // utility functions not part of the API
 
@@ -414,7 +416,7 @@ private:
     wxDataViewModelNotifier *m_notifier;
     wxDataViewMainWindow        *m_clientArea;
     wxDataViewHeaderWindow      *m_headerArea;
-    unsigned int m_sortingColumn;
+    wxDataViewColumn* m_sortingColumn;
 
 private:
     void OnSize( wxSizeEvent &event );

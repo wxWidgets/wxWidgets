@@ -68,6 +68,12 @@ static const int EXPANDER_MARGIN = 4;
 
 #define USE_NATIVE_HEADER_WINDOW    0
 
+//Below is the compare stuff
+//For the generic implements, both the leaf nodes and the nodes are sorted for fast search when needed
+static wxDataViewModel * g_model;
+static int g_column;
+static bool g_asending;
+
 // NB: for some reason, this class must be dllexport'ed or we get warnings from
 //     MSVC in DLL build
 class WXDLLIMPEXP_ADV wxDataViewHeaderWindowBase : public wxControl
@@ -254,18 +260,16 @@ public:
 // wxDataViewTreeNode
 //-----------------------------------------------------------------------------
 class wxDataViewTreeNode;
-WX_DEFINE_SORTED_ARRAY( wxDataViewTreeNode *, wxDataViewTreeNodes );
-WX_DEFINE_SORTED_ARRAY( void* , wxDataViewTreeLeaves);
+WX_DEFINE_ARRAY( wxDataViewTreeNode *, wxDataViewTreeNodes );
+WX_DEFINE_ARRAY( void* , wxDataViewTreeLeaves);
 
-int LINKAGEMODE wxGenericTreeModelNodeCmp( wxDataViewTreeNode * node1, wxDataViewTreeNode * node2);
-int LINKAGEMODE wxGenericTreeModelItemCmp( void * id1, void * id2);
+int LINKAGEMODE wxGenericTreeModelNodeCmp( wxDataViewTreeNode ** node1, wxDataViewTreeNode ** node2);
+int LINKAGEMODE wxGenericTreeModelItemCmp( void ** id1, void ** id2);
 
 class wxDataViewTreeNode
 {
 public:
     wxDataViewTreeNode( wxDataViewTreeNode * parent = NULL )
-        :leaves( wxGenericTreeModelItemCmp ),
-         nodes(wxGenericTreeModelNodeCmp)
     	{ this->parent = parent;
           if( parent == NULL )
               open = true;
@@ -287,10 +291,19 @@ public:
 
     void AddNode( wxDataViewTreeNode * node )
     {
-        nodes.Add( node );
         leaves.Add( node->GetItem().GetID() );
+        if (g_column >= 0)
+            leaves.Sort( &wxGenericTreeModelItemCmp );
+        nodes.Add( node );
+        if (g_column >= 0)
+            nodes.Sort( &wxGenericTreeModelNodeCmp );
     }
-    void AddLeaf( void * leaf ) { leaves.Add( leaf ); }
+    void AddLeaf( void * leaf ) 
+    { 
+        leaves.Add( leaf ); 
+        if (g_column >= 0)
+            leaves.Sort( &wxGenericTreeModelItemCmp );        
+    }
 
     wxDataViewItem & GetItem() { return item; }
     void SetItem( const wxDataViewItem & item ) { this->item = item; }
@@ -349,26 +362,15 @@ public:
 
     void Resort()
     {
-        wxDataViewTreeNodes nds = nodes;
-        wxDataViewTreeLeaves lvs = leaves;
-        nodes.Empty();
-        leaves.Empty();
-
-        int len = nds.GetCount();
-        if(len > 0)
+        if (g_column >= 0)
         {
-			int i;
-            for(i = 0; i < len; i ++)
-                nodes.Add(nds[i]);
-            for(i = 0; i < len; i ++)
+            nodes.Sort( &wxGenericTreeModelNodeCmp );      
+            int len = nodes.GetCount();
+            for (int i = 0; i < len; i ++)
+            {
                 nodes[i]->Resort();
-        }
-
-        len = lvs.GetCount();
-        if(len > 0)
-        {
-            for(int i = 0; i < len; i++)
-                leaves.Add(lvs[i]);
+            }
+            leaves.Sort( &wxGenericTreeModelItemCmp );
         }
     }
 
@@ -382,20 +384,14 @@ private:
     int subTreeCount;
 };
 
-//Below is the compare stuff
-//For the generic implements, both the leaf nodes and the nodes are sorted for fast search when needed
-static wxDataViewModel * g_model;
-static unsigned int g_column;
-static bool g_asending;
-
-int LINKAGEMODE wxGenericTreeModelNodeCmp( wxDataViewTreeNode * node1, wxDataViewTreeNode * node2)
+int LINKAGEMODE wxGenericTreeModelNodeCmp( wxDataViewTreeNode ** node1, wxDataViewTreeNode ** node2)
 {
-    return g_model->Compare( node1->GetItem(), node2->GetItem(), g_column, g_asending );
+    return g_model->Compare( (*node1)->GetItem(), (*node2)->GetItem(), g_column, g_asending );
 }
 
-int LINKAGEMODE wxGenericTreeModelItemCmp( void * id1, void * id2)
+int LINKAGEMODE wxGenericTreeModelItemCmp( void ** id1, void ** id2)
 {
-    return g_model->Compare( id1, id2, g_column, g_asending );
+    return g_model->Compare( *id1, *id2, g_column, g_asending );
 }
 
 
@@ -436,13 +432,14 @@ public:
     void SortPrepare()
     {
         g_model = GetOwner()->GetModel(); 
-        g_column = GetOwner()->GetSortingColumn();
-        wxDataViewColumn * col = GetOwner()->GetColumn(g_column);
+        wxDataViewColumn* col = GetOwner()->GetSortingColumn();
         if( !col )
         {
+            g_column = -1;
             g_asending = true;
             return;
         }
+        g_column = col->GetModelColumn();
         g_asending = col->IsSortOrderAscending();    
     }
 	
@@ -1222,7 +1219,7 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
         //hdi.fmt &= ~(HDF_SORTDOWN|HDF_SORTUP);
 
         //sorting support
-        if(model && m_owner->GetSortingColumn() == i)
+        if(model && m_owner->GetSortingColumn() == col)
         {
             //The Microsoft Comctrl32.dll 6.0 support SORTUP/SORTDOWN, but they are not default
             //see http://msdn2.microsoft.com/en-us/library/ms649534.aspx for more detail
@@ -1357,14 +1354,14 @@ bool wxDataViewHeaderWindowMSW::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARA
                     wxDataViewColumn *col = GetColumn(idx);
                     if(col->IsSortable())
                     {
-                        if(model && m_owner->GetSortingColumn() == idx)
+                        if(model && m_owner->GetSortingColumn() == col)
                         {
                             bool order = col->IsSortOrderAscending();
                             col->SetSortOrder(!order);
                         }
                         else if(model)
                         {
-                            m_owner->SetSortingColumn(idx);
+                            m_owner->SetSortingColumn(col);
                         }
                     }
                     UpdateDisplay();
@@ -1528,7 +1525,7 @@ void wxGenericDataViewHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         int ch = h;
 
         wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE;
-        if (col->IsSortable() && GetOwner()->GetSortingColumn() == i)
+        if (col->IsSortable() && GetOwner()->GetSortingColumn() == col)
         {
             if (col->IsSortOrderAscending())
                 sortArrow = wxHDR_SORT_ICON_UP;
@@ -1693,15 +1690,15 @@ void wxGenericDataViewHeaderWindow::OnMouse( wxMouseEvent &event )
                     wxDataViewColumn *col = GetColumn(m_column);
                     if(col->IsSortable())
                     {
-                        unsigned int colnum = m_owner->GetSortingColumn();
-                        if(model && static_cast<int>(colnum) == m_column)
+                        wxDataViewColumn* sortCol = m_owner->GetSortingColumn();
+                        if(model && sortCol == col)
                         {
                             bool order = col->IsSortOrderAscending();
                             col->SetSortOrder(!order);
                         }
                         else if(model)
                         {
-                            m_owner->SetSortingColumn(m_column);
+                            m_owner->SetSortingColumn(col);
                         }
                     }
                     UpdateDisplay();
@@ -2016,9 +2013,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
     //Manuplate selection
     if( m_selection.GetCount() > 1 )
     {
-        int row = m_selection[0];
         m_selection.Empty();
-        m_selection.Add(row);
     }
 
     if( GetOwner()->GetModel()->IsContainer( item ) )
@@ -3407,9 +3402,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     }
     if (event.LeftDown() || forceClick)
     {
-#ifdef __WXMSW__
         SetFocus();
-#endif
 
         m_lineBeforeLastClicked = m_lineLastClicked;
         m_lineLastClicked = current;
@@ -3713,7 +3706,12 @@ void wxDataViewCtrl::Select( const wxDataViewItem & item )
 {
     int row = m_clientArea->GetRowByItem( item );
     if( row >= 0 )
+    {
+        //Unselect all rows before select another in the single select mode
+        if (m_clientArea->IsSingleSel())
+            m_clientArea->SelectAllRows(false);
         m_clientArea->SelectRow(row, true);
+    }
 }
 
 void wxDataViewCtrl::Unselect( const wxDataViewItem & item )
@@ -3763,7 +3761,11 @@ void wxDataViewCtrl::SetSelections( const wxArrayInt & sel )
 void wxDataViewCtrl::Select( int row )
 {
     if( row >= 0 )
+    {
+        if (m_clientArea->IsSingleSel())
+            m_clientArea->SelectAllRows(false);
         m_clientArea->SelectRow( row, true );
+    }
 }
 
 void wxDataViewCtrl::Unselect( int row )
