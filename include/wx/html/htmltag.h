@@ -117,21 +117,25 @@ public:
     // return true if there is matching ending tag
     inline bool HasEnding() const {return m_hasEnding;}
 
-    // returns beginning position of _internal_ block of text
+    // returns beginning position of _internal_ block of text as iterator
+    // into parser's source string (see wxHtmlParser::GetSource())
     // See explanation (returned value is marked with *):
     // bla bla bla <MYTAG>* bla bla intenal text</MYTAG> bla bla
     wxString::const_iterator GetBeginIter() const
         { return m_Begin; }
-    // returns ending position of _internal_ block of text.
+    // returns ending position of _internal_ block of text as iterator
+    // into parser's source string (see wxHtmlParser::GetSource()):
     // bla bla bla <MYTAG> bla bla intenal text*</MYTAG> bla bla
     wxString::const_iterator GetEndIter1() const
         { wxASSERT(m_hasEnding); return m_End1; }
-    // returns end position 2 :
+    // returns end position 2 as iterator
+    // into parser's source string (see wxHtmlParser::GetSource()):
     // bla bla bla <MYTAG> bla bla internal text</MYTAG>* bla bla
     wxString::const_iterator GetEndIter2() const
         { wxASSERT(m_hasEnding); return m_End2; }
 
 #if WXWIN_COMPATIBILITY_2_8
+    // use GetBeginIter(), GetEndIter1() and GetEndIter2() instead
     wxDEPRECATED( inline int GetBeginPos() const );
     wxDEPRECATED( inline int GetEndPos1() const );
     wxDEPRECATED( inline int GetEndPos2() const );
