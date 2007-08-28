@@ -2,7 +2,7 @@
 // Name:        src/cocoa/textctrl.mm
 // Purpose:     wxTextCtrl
 // Author:      David Elliott
-// Modified by:
+// Modified by: Mark Oxenham
 // Created:     2003/03/16
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
@@ -62,7 +62,23 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID winid,
 
     [(NSTextField*)m_cocoaNSView setTarget: sm_cocoaTarget];
     [(NSTextField*)m_cocoaNSView setAction:@selector(wxNSControlAction:)];
-    
+
+    // set the text alignment option
+    NSTextAlignment alignStyle;
+    if (style & wxTE_RIGHT)
+        alignStyle = NSRightTextAlignment;
+    else if (style & wxTE_CENTRE)
+        alignStyle = NSCenterTextAlignment;
+    else // default to wxTE_LEFT because it is 0 and can't be tested
+        alignStyle = NSLeftTextAlignment;
+    [GetNSControl() setAlignment:alignStyle];
+
+    // if Read-only then set as such, this flag is overwritable by wxTextCtrl::SetEditable(TRUE)
+    if (style & wxTE_READONLY)
+    {
+        SetEditable(FALSE);
+    }
+
     return true;
 }
 
@@ -92,8 +108,18 @@ void wxTextCtrl::AppendText(wxString const&)
 {
 }
 
-void wxTextCtrl::SetEditable(bool)
+void wxTextCtrl::SetEditable(bool editable)
 {
+    // first ensure that the current value is stored (in case the user had not finished editing
+    // before SetEditable(FALSE) was called)
+    DoSetValue(GetValue(),1);
+
+    [GetNSTextField() setEditable: editable];
+
+    // forces the focus on the textctrl to be lost - while focus is still maintained
+    // after SetEditable(FALSE) the user may still edit the control
+    // (might not the best way to do this..)
+    [GetNSTextField() abortEditing];
 }
 
 void wxTextCtrl::MarkDirty()
@@ -167,7 +193,7 @@ void wxTextCtrl::WriteText(wxString const&)
 
 bool wxTextCtrl::IsEditable() const
 {
-    return true;
+    return [GetNSTextField() isEditable];
 }
 
 bool wxTextCtrl::IsModified() const
@@ -201,7 +227,8 @@ int wxTextCtrl::GetLineLength(long) const
 
 wxTextPos wxTextCtrl::GetLastPosition() const
 {
-    return 0;
+    // working - returns the size of the wxString
+    return (long)(GetValue().Len());
 }
 
 int wxTextCtrl::GetNumberOfLines() const
