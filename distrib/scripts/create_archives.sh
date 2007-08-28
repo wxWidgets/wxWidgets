@@ -145,20 +145,24 @@ dospinport(){
 
     copyfilelist $portfiles $APPDIR $TMPFILESDIR
 
+# use DOS line endings for text files for MSW archives.
     if [ $port = "msw" ]; then
         FILES=`find . -type f \( -path '*/CVS/*' -prune -o -exec ${SCRIPTDIR}/is_text.sh {} \; -print \)`
-        echo "$FILES" > /tmp/textfiles
+        
+    else
+        FILES=`find . -name \*.ds?`        
     fi
+    echo "$FILES" > /tmp/textfiles
 
     pushd /tmp/wx$port
-    # use DOS line endings for text files for MSW archives.
-    if [ $port = "msw" ]; then
-        pushd /tmp/wx$port/wx$portname-$VERSION
-        for file in `cat /tmp/textfiles`; do
-            unix2dos $file
-        done
-        popd
-    fi
+
+
+    pushd /tmp/wx$port/wx$portname-$VERSION
+    for file in `cat /tmp/textfiles`; do
+        unix2dos $file
+    done
+    popd
+
     echo "Creating wx$portname-$VERSION.zip..."
     zip $ZIPFLAGS -r -9 $APPDIR/deliver/wx$portname-$VERSION.zip .
     echo "Creating wx$portname-$VERSION.tar.gz..."
