@@ -778,58 +778,73 @@ wxMBConvStrictUTF8::ToWChar(wchar_t *dst, size_t dstLen,
             return written;
         }
 
-        unsigned char c = *p;
-        unsigned len = tableUtf8Lengths[c];
-        if ( !len )
-            break;
-
-        if ( srcLen < len ) // the test works for wxNO_LEN too
-            break;
-
-        if ( srcLen != wxNO_LEN )
-            srcLen -= len;
-
         if ( out && !dstLen-- )
             break;
 
+        wxUint32 code;
+        unsigned char c = *p;
 
-        //   Char. number range   |        UTF-8 octet sequence
-        //      (hexadecimal)     |              (binary)
-        //  ----------------------+---------------------------------------------
-        //  0000 0000 - 0000 007F | 0xxxxxxx
-        //  0000 0080 - 0000 07FF | 110xxxxx 10xxxxxx
-        //  0000 0800 - 0000 FFFF | 1110xxxx 10xxxxxx 10xxxxxx
-        //  0001 0000 - 0010 FFFF | 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
-        //
-        //  Code point value is stored in bits marked with 'x', lowest-order bit
-        //  of the value on the right side in the diagram above.
-        //                                                       (from RFC 3629)
-
-        // mask to extract lead byte's value ('x' bits above), by sequence length:
-        static const unsigned char leadValueMask[] = { 0x7F, 0x1F, 0x0F, 0x07 };
-
-        // mask and value of lead byte's most significant bits, by length:
-        static const unsigned char leadMarkerMask[] = { 0x80, 0xE0, 0xF0, 0xF8 };
-        static const unsigned char leadMarkerVal[] = { 0x00, 0xC0, 0xE0, 0xF0 };
-
-        len--; // it's more convenient to work with 0-based length here
-
-        // extract the lead byte's value bits:
-        if ( (c & leadMarkerMask[len]) != leadMarkerVal[len] )
-            break;
-
-        wxUint32 code = c & leadValueMask[len];
-
-        // all remaining bytes, if any, are handled in the same way regardless of
-        // sequence's length:
-        for ( ; len; --len )
+        if ( c < 0x80 )
         {
-            c = *++p;
-            if ( (c & 0xC0) != 0x80 )
-                return wxCONV_FAILED;
+            if ( srcLen == 0 ) // the test works for wxNO_LEN too
+                break;
 
-            code <<= 6;
-            code |= c & 0x3F;
+            if ( srcLen != wxNO_LEN )
+                srcLen--;
+
+            code = c;
+        }
+        else
+        {
+            unsigned len = tableUtf8Lengths[c];
+            if ( !len )
+                break;
+
+            if ( srcLen < len ) // the test works for wxNO_LEN too
+                break;
+
+            if ( srcLen != wxNO_LEN )
+                srcLen -= len;
+
+            //   Char. number range   |        UTF-8 octet sequence
+            //      (hexadecimal)     |              (binary)
+            //  ----------------------+----------------------------------------
+            //  0000 0000 - 0000 007F | 0xxxxxxx
+            //  0000 0080 - 0000 07FF | 110xxxxx 10xxxxxx
+            //  0000 0800 - 0000 FFFF | 1110xxxx 10xxxxxx 10xxxxxx
+            //  0001 0000 - 0010 FFFF | 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+            //
+            //  Code point value is stored in bits marked with 'x',
+            //  lowest-order bit of the value on the right side in the diagram
+            //  above.                                         (from RFC 3629)
+
+            // mask to extract lead byte's value ('x' bits above), by sequence
+            // length:
+            static const unsigned char leadValueMask[] = { 0x7F, 0x1F, 0x0F, 0x07 };
+
+            // mask and value of lead byte's most significant bits, by length:
+            static const unsigned char leadMarkerMask[] = { 0x80, 0xE0, 0xF0, 0xF8 };
+            static const unsigned char leadMarkerVal[] = { 0x00, 0xC0, 0xE0, 0xF0 };
+
+            len--; // it's more convenient to work with 0-based length here
+
+            // extract the lead byte's value bits:
+            if ( (c & leadMarkerMask[len]) != leadMarkerVal[len] )
+                break;
+
+            code = c & leadValueMask[len];
+
+            // all remaining bytes, if any, are handled in the same way
+            // regardless of sequence's length:
+            for ( ; len; --len )
+            {
+                c = *++p;
+                if ( (c & 0xC0) != 0x80 )
+                    return wxCONV_FAILED;
+
+                code <<= 6;
+                code |= c & 0x3F;
+            }
         }
 
 #ifdef WC_UTF16
