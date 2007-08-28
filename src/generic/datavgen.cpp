@@ -2936,13 +2936,17 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
                 BuildTreeHelper(model, node->GetItem(), node);
 
             wxDataViewTreeNodes nodes = node->GetNodes();
-            //The wxSortedArray search a node in binary search, so using Item() is more efficient
-            wxDataViewTreeNode temp;
-            temp.SetItem(*(n->GetData()));
-            int index = nodes.Index( &temp );
-            if( index == wxNOT_FOUND )
+            int i = 0;
+            for (; i < nodes.GetCount(); i ++)
+            {
+                if (nodes[i]->GetItem() == *(n->GetData()))
+                {    
+                    node = nodes[i];
+                    break;
+                }
+            }
+            if (i == nodes.GetCount())
                 return NULL;
-            node = nodes[index];
         }
         else
             return NULL;
