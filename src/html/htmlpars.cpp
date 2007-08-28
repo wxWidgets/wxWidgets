@@ -132,8 +132,13 @@ void wxHtmlParser::DoneParser()
 void wxHtmlParser::SetSource(const wxString& src)
 {
     DestroyDOMTree();
-    // NB: this is allocated on heap because wxHtmlTag keeps a pointer to
-    //     this string if WXWIN_COMPATIBILITY_2_8
+    // NB: This is allocated on heap because wxHtmlTag uses iterators and
+    //     making a copy of m_Source string in SetSourceAndSaveState() and
+    //     RestoreState() would invalidate them (because wxString::m_impl's
+    //     memory would change completely twice and iterators use pointers
+    //     into it). So instead, we keep the string object intact and only
+    //     store/restore pointer to it, for which we need it to be allocated
+    //     on the heap.
     delete m_Source;
     m_Source = new wxString(src);
     CreateDOMTree();
@@ -411,6 +416,7 @@ bool wxHtmlParser::RestoreState()
     if (!m_SavedStates) return false;
 
     DestroyDOMTree();
+    delete m_Source;
 
     wxHtmlParserState *s = m_SavedStates;
     m_SavedStates = s->m_nextState;
