@@ -452,6 +452,20 @@ typedef struct _OSVERSIONINFOEX {
   */
 
 #if defined (__MINGW32__)
+
+#if !wxCHECK_W32API_VERSION(3,1)
+
+#include <windows.h>
+#include "wx/msw/winundef.h"
+
+typedef struct
+{
+    RECT       rgrc[3];
+    WINDOWPOS *lppos;
+} NCCALCSIZE_PARAMS, *LPNCCALCSIZE_PARAMS;
+
+#endif
+
 #endif
 
  /*
