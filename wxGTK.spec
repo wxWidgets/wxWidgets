@@ -1,7 +1,7 @@
 %define _prefix /usr
-%define ver  2.8.4
+%define ver  2.8.5
 %define ver2 2.8
-%define rel  4
+%define rel  0
 
 # Configurable settings (use --with(out) {unicode,gtk2} on rpmbuild cmd line):
 %define unicode 1
