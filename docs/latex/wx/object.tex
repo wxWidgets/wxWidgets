@@ -1,6 +1,6 @@
 \section{\class{wxObject}}\label{wxobject}
 
-This is the root class of all wxWidgets classes.
+This is the root class of many of the wxWidgets classes.
 It declares a virtual destructor which ensures that
 destructors get called for all derived class objects where necessary.
 
@@ -231,6 +231,8 @@ you will need to cast to your own derived class.
 \wxheading{See also}
 
 \helpref{wxObject}{wxobject}
+\helpref{wxObjectDataPtr<T>}{wxobjectdataptr}
+\helpref{Reference counting}{trefcount}
 
 \wxheading{Derived from}
 
@@ -239,6 +241,104 @@ No base class
 \wxheading{Include files}
 
 <wx/object.h>
+
+\wxheading{Example}
+
+\begin{verbatim}
+
+// include file
+
+class MyCar: public wxObject
+{
+public:
+    MyCar() { }
+    MyCar( int price );
+    
+    bool IsOk() const { return m_refData != NULL; }
+
+    bool operator == ( const MyCar& car ) const;
+    bool operator != (const MyCar& car) const { return !(*this == car); }
+
+    void SetPrice( int price );
+    int GetPrice() const;
+
+protected:
+    virtual wxObjectRefData *CreateRefData() const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+
+    DECLARE_DYNAMIC_CLASS(MyCar)
+};
+
+
+// implementation
+
+class MyCarRefData: public wxObjectRefData
+{
+public:
+    MyCarRefData()
+    {
+        m_price = 0;
+    }
+
+    MyCarRefData( const MyCarRefData& data )
+        : wxObjectRefData()
+    {
+        m_price = data.m_price;
+    }
+
+    bool operator == (const MyCarRefData& data) const
+    {
+        return m_price == data.m_price;
+    }
+
+    int m_price;
+};
+
+
+#define M_CARDATA ((MyCarRefData *)m_refData)
+
+IMPLEMENT_DYNAMIC_CLASS(MyCar,wxObject)
+
+MyCar::MyCar( int price )
+{
+    m_refData = new MyCarRefData();
+    M_CARDATA->m_price = price;
+}
+
+wxObjectRefData *MyCar::CreateRefData() const
+{
+    return new MyCarRefData;
+}
+
+wxObjectRefData *MyCar::CloneRefData(const wxObjectRefData *data) const
+{
+    return new MyCarRefData(*(MyCarRefData *)data);
+}
+
+bool MyCar::operator == ( const MyCar& car ) const
+{
+    if (m_refData == car.m_refData) return true;
+
+    if (!m_refData || !car.m_refData) return false;
+
+    return ( *(MyCarRefData*)m_refData == *(MyCarRefData*)car.m_refData );
+}
+
+void MyCar::SetPrice( int price )
+{
+    UnShare();
+
+    M_CARDATA->m_price = price;
+}
+
+int MyCar::GetPrice() const
+{
+    wxCHECK_MSG( IsOk(), -1, "invalid car" );
+    
+    return (M_CARDATA->m_price);
+}
+
+\end{verbatim}
 
 \wxheading{Library}
 

@@ -73,7 +73,8 @@ wxWidgets; some ports may use this tecnique also for other classes.
 \subsection{Make your own reference-counted class}\label{wxobjectoverview}
 
 Reference counting can be implemented easily using \helpref{wxObject}{wxobject}
-and \helpref{wxObjectRefData}{wxobjectrefdata} classes.
+and \helpref{wxObjectRefData}{wxobjectrefdata} classes. Alternatively, you
+can also use the \helpref{wxObjectDataPtr<T>}{wxobjectdataptr} template.
 
 First, derive a new class from \helpref{wxObjectRefData}{wxobjectrefdata} and
 put there the memory-consuming data.
