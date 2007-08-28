@@ -2,13 +2,13 @@
 
 if [ "$VERSION" = "" ]; then
     echo "Including build-environ.cfg"
-    . scripts/build-environ.cfg
+    . scripts28/build-environ.cfg
 fi 
 
 echo "temp dir is $WX_TEMP_DIR"
 
 START_DIR="$PWD"
-SCRIPTDIR=${START_DIR}/scripts
+SCRIPTDIR=${START_DIR}/scripts28
 WX_SRC_DIR=$WX_TEMP_DIR/wxWidgets
 
 CURDATE=`date -I`
@@ -24,10 +24,11 @@ cd $WX_TEMP_DIR
 if [ ! -d $WX_SRC_DIR ]; then
   cd $WX_TEMP_DIR
   echo "Grabbing wx CVS with tag $BUILD_TAG"
-  svn up https://svn.wxwidgets.org/svn/wx/wxWidgets/branches/WX_2_8_BRANCH/ wxWidgets
+  svn co https://svn.wxwidgets.org/svn/wx/wxWidgets/branches/WX_2_8_BRANCH/ wxWidgets
   cd $WX_SRC_DIR
 else
     cd $WX_SRC_DIR
+    svn cleanup
     svn up
 fi
 #copy setup0.h setup.h for msw
