@@ -1997,16 +1997,10 @@ void DestroyTreeHelper( wxDataViewTreeNode * node);
 bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
                                        const wxDataViewItem& item)
 {
-    SortPrepare();
-
-    wxDataViewTreeNode * node;
-    node = FindNode(parent);
-
-    SendModelEvent(wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_DELETED, item);
-    if( node == NULL || node->GetChildren().Index( item.GetID() ) == wxNOT_FOUND )
-    {
-        return false;
-    }
+    wxDataViewTreeNode * node = FindNode(parent);
+    
+    wxCHECK_MSG( node != NULL, false, "item not found" );
+    wxCHECK_MSG( node->GetChildren().Index( item.GetID() ) != wxNOT_FOUND, false, "item not found" );
 
     int sub = -1;
     node->GetChildren().Remove( item.GetID() );
@@ -2030,8 +2024,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
             }
         }
 
-        if (!n)
-            return false;
+        wxCHECK_MSG( n != NULL, false, "item not found" );
 
         node->GetNodes().Remove( n );
         sub -= n->GetSubTreeCount();
@@ -2049,6 +2042,9 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
         m_currentRow = m_count - 1;
 
     UpdateDisplay();
+    
+    SendModelEvent(wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_DELETED, item);
+
     return true;
 }
 
