@@ -944,6 +944,7 @@ static void LINKAGEMODE SetTraceMasks()
 #endif // wxUSE_LOG
 }
 
+static
 bool DoShowAssertDialog(const wxString& msg)
 {
     // under MSW we can show the dialog even in the console mode
