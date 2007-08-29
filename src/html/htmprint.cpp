@@ -251,7 +251,7 @@ bool wxHtmlPrintout::OnBeginDocument(int startPage, int endPage)
 bool wxHtmlPrintout::OnPrintPage(int page)
 {
     wxDC *dc = GetDC();
-    if (dc)
+    if (dc && dc->Ok())
     {
         if (HasPage(page))
             RenderPage(dc, page);
