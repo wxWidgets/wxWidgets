@@ -265,6 +265,15 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size)
     // toolbar-specific post initialisation
     ::SendMessage(GetHwnd(), TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
 
+    // The toolbar background for some colour schemes cannot be determined
+    // (for example Silver). So set an explicit background colour to avoid parts of
+    // the background being painted wrongly.
+
+    int majorVersion, minorVersion;
+    wxGetOsVersion(& majorVersion, & minorVersion);
+    if (majorVersion < 6)
+        SetBackgroundColour(GetBackgroundColour());
+
     return true;
 }
 
@@ -371,7 +380,7 @@ wxSize wxToolBar::DoGetBestSize() const
         if (!(GetWindowStyle() & wxTB_NODIVIDER))
             sizeBest.y += 2;
         sizeBest.y ++;
-	}
+    }
 
     CacheBestSize(sizeBest);
 
