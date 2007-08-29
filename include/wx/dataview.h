@@ -22,10 +22,11 @@
 #include "wx/variant.h"
 #include "wx/listctrl.h"
 #include "wx/dynarray.h"
+#include "wx/icon.h"
 
 #if defined(__WXGTK20__)
     // for testing
-    // #define wxUSE_GENERICDATAVIEWCTRL 1
+    #define wxUSE_GENERICDATAVIEWCTRL 1
 #elif defined(__WXMAC__)
 #else
     #define wxUSE_GENERICDATAVIEWCTRL 1
@@ -321,6 +322,35 @@ protected:
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRendererBase)
 };
+
+//-----------------------------------------------------------------------------
+// wxDataViewIconText
+//-----------------------------------------------------------------------------
+
+class wxDataViewIconText: public wxObject
+{
+public:
+    wxDataViewIconText( const wxString &text = wxEmptyString, const wxIcon& icon = wxNullIcon )
+    { m_icon = icon; m_text = text; }
+    wxDataViewIconText( const wxDataViewIconText &other )
+    { m_icon = other.m_icon; m_text = other.m_text; }
+
+    void SetText( const wxString &text ) { m_text = text; }
+    wxString GetText() const             { return m_text; }
+    void SetIcon( const wxIcon &icon )   { m_icon = icon; }
+    const wxIcon &GetIcon() const        { return m_icon; }
+
+private:
+    wxString    m_text;
+    wxIcon      m_icon;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxDataViewIconText)
+};
+
+bool operator == (const wxDataViewIconText &one, const wxDataViewIconText &two);
+
+DECLARE_VARIANT_OBJECT(wxDataViewIconText)
 
 // ---------------------------------------------------------
 // wxDataViewColumnBase

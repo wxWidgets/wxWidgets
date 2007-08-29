@@ -332,6 +332,21 @@ wxDataViewItem wxDataViewIndexListModel::GetNextSibling( const wxDataViewItem &i
     return wxDataViewItem( m_hash[pos+1] );
 }
 
+//-----------------------------------------------------------------------------
+// wxDataViewIconText
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxDataViewIconText,wxObject)
+
+IMPLEMENT_VARIANT_OBJECT(wxDataViewIconText)
+
+bool operator == (const wxDataViewIconText &one, const wxDataViewIconText &two)
+{
+    if (one.GetText() != two.GetText()) return false;
+    if (one.IsSameAs(two)) return false;
+    return true;
+}
+
 // ---------------------------------------------------------
 // wxDataViewRendererBase
 // ---------------------------------------------------------
