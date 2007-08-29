@@ -394,6 +394,8 @@ public:
             str.Printf( "row number %d", i );
             m_array.Add( str );
         }
+        
+        m_icon = wxIcon( null_xpm );
     }
     
     // helper methods to change the model
@@ -415,11 +417,14 @@ public:
     
     virtual unsigned int GetColumnCount() const
     {
-        return 2;
+        return 3;
     }
 
     virtual wxString GetColumnType( unsigned int col ) const
     {
+        if (col == 1)
+            return "wxDataViewIconText";
+            
         return "string";
     }
     
@@ -434,6 +439,11 @@ public:
         if (col==0)
         {
             variant = m_array[ row ];
+        } else
+        if (col==1)
+        {
+            wxDataViewIconText data( "test", m_icon );
+            variant << data;
         }
         else
         {
@@ -456,6 +466,7 @@ public:
     }
     
     wxArrayString    m_array;
+    wxIcon           m_icon;
 };
 
 // -------------------------------------
@@ -664,7 +675,11 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     m_listCtrl->AssociateModel( m_list_model.get() );
     
     m_listCtrl->AppendTextColumn( "editable string", 0, wxDATAVIEW_CELL_EDITABLE, 120 );
-    m_col = m_listCtrl->AppendTextColumn( "index", 1, wxDATAVIEW_CELL_INERT, 120 );
+    
+    m_col = new wxDataViewColumn( "icon", new wxDataViewIconTextRenderer, 1, 60 );
+    m_listCtrl->AppendColumn( m_col );
+    
+    m_col = m_listCtrl->AppendTextColumn( "index", 2, wxDATAVIEW_CELL_INERT, 120 );
     
     data_sizer->Add( m_listCtrl, 2, wxGROW );
  

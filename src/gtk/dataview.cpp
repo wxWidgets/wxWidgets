@@ -1890,6 +1890,67 @@ bool wxDataViewDateRenderer::Activate( wxRect cell, wxDataViewModel *model,
     return true;
 }
 
+
+// --------------------------------------------------------- 
+// wxDataViewIconTextRenderer
+// --------------------------------------------------------- 
+
+IMPLEMENT_CLASS(wxDataViewIconTextRenderer, wxDataViewCustomRenderer)
+
+wxDataViewIconTextRenderer::wxDataViewIconTextRenderer( 
+  const wxString &varianttype, wxDataViewCellMode mode, int align ) :
+    wxDataViewCustomRenderer( varianttype, mode, align )
+{
+    SetMode(mode);
+    SetAlignment(align);
+}
+
+wxDataViewIconTextRenderer::~wxDataViewIconTextRenderer()
+{
+}
+    
+bool wxDataViewIconTextRenderer::SetValue( const wxVariant &value )
+{
+    m_value << value;
+    return true;
+}
+
+bool wxDataViewIconTextRenderer::GetValue( wxVariant &value ) const
+{
+    return false;
+}
+    
+bool wxDataViewIconTextRenderer::Render( wxRect cell, wxDC *dc, int state )
+{
+    dc->SetFont( GetOwner()->GetOwner()->GetFont() );
+    
+    const wxIcon &icon = m_value.GetIcon();
+    if (icon.IsOk())
+    {
+        dc->DrawIcon( icon, cell.x, cell.y ); // TODO centre
+        cell.x += icon.GetWidth()+4;
+    }
+    
+    dc->DrawText( m_value.GetText(), cell.x, cell.y );
+
+    return true;
+}
+
+wxSize wxDataViewIconTextRenderer::GetSize() const
+{
+    return wxSize(80,16);  // TODO
+}
+
+wxControl* wxDataViewIconTextRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
+{
+    return NULL;
+}
+
+bool wxDataViewIconTextRenderer::GetValueFromEditorCtrl( wxControl* editor, wxVariant &value )
+{
+    return false;
+}
+
 // ---------------------------------------------------------
 // wxDataViewColumn
 // ---------------------------------------------------------
