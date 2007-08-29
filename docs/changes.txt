@@ -149,6 +149,8 @@ wxMSW:
 - Gave toolbars some extra height, without which DoGetBestSize can report a
   size that's smaller than the actual window, causing windows to overlap.
   Removed corresponding hack in wxAUI.
+- Fixed wxToolBar background colour problems with some colour schemes such
+  as Silver, by setting the background to a known colour.
 
 wxGTK:
 
