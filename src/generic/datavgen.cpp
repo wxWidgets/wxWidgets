@@ -71,8 +71,8 @@ static const int EXPANDER_MARGIN = 4;
 //Below is the compare stuff
 //For the generic implements, both the leaf nodes and the nodes are sorted for fast search when needed
 static wxDataViewModel * g_model;
-static int g_column;
-static bool g_asending;
+static int g_column = -2;
+static bool g_asending = true;
 
 // NB: for some reason, this class must be dllexport'ed or we get warnings from
 //     MSVC in DLL build
@@ -292,16 +292,16 @@ public:
     void AddNode( wxDataViewTreeNode * node )
     {
         leaves.Add( node->GetItem().GetID() );
-        if (g_column >= 0)
+        if (g_column >= -1)
             leaves.Sort( &wxGenericTreeModelItemCmp );
         nodes.Add( node );
-        if (g_column >= 0)
+        if (g_column >= -1)
             nodes.Sort( &wxGenericTreeModelNodeCmp );
     }
     void AddLeaf( void * leaf ) 
     { 
         leaves.Add( leaf ); 
-        if (g_column >= 0)
+        if (g_column >= -1)
             leaves.Sort( &wxGenericTreeModelItemCmp );        
     }
 
@@ -362,7 +362,7 @@ public:
 
     void Resort()
     {
-        if (g_column >= 0)
+        if (g_column >= -1)
         {
             nodes.Sort( &wxGenericTreeModelNodeCmp );      
             int len = nodes.GetCount();
@@ -435,7 +435,11 @@ public:
         wxDataViewColumn* col = GetOwner()->GetSortingColumn();
         if( !col )
         {
-            g_column = -1;
+            if (g_model->HasDefaultCompare())
+                g_column = -1;
+            else
+                g_column = -2;
+
             g_asending = true;
             return;
         }
@@ -555,6 +559,8 @@ private:
     //This is the tree structure of the model
     wxDataViewTreeNode * m_root;
     int m_count;
+    //This is the tree node under the cursor
+    wxDataViewTreeNode * m_underMouse;
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewMainWindow)
     DECLARE_EVENT_TABLE()
@@ -984,6 +990,66 @@ bool wxDataViewDateRenderer::Activate( wxRect WXUNUSED(cell), wxDataViewModel *m
     wxMessageBox(value.Format());
 #endif // wxUSE_DATE_RENDERER_POPUP/!wxUSE_DATE_RENDERER_POPUP
     return true;
+}
+
+// --------------------------------------------------------- 
+// wxDataViewIconTextRenderer
+// --------------------------------------------------------- 
+
+IMPLEMENT_CLASS(wxDataViewIconTextRenderer, wxDataViewCustomRenderer)
+
+wxDataViewIconTextRenderer::wxDataViewIconTextRenderer( 
+  const wxString &varianttype, wxDataViewCellMode mode, int align ) :
+    wxDataViewCustomRenderer( varianttype, mode, align )
+{
+    SetMode(mode);
+    SetAlignment(align);
+}
+
+wxDataViewIconTextRenderer::~wxDataViewIconTextRenderer()
+{
+}
+    
+bool wxDataViewIconTextRenderer::SetValue( const wxVariant &value )
+{
+    m_value << value;
+    return true;
+}
+
+bool wxDataViewIconTextRenderer::GetValue( wxVariant &value ) const
+{
+    return false;
+}
+    
+bool wxDataViewIconTextRenderer::Render( wxRect cell, wxDC *dc, int state )
+{
+    dc->SetFont( GetOwner()->GetOwner()->GetFont() );
+    
+    const wxIcon &icon = m_value.GetIcon();
+    if (icon.IsOk())
+    {
+        dc->DrawIcon( icon, cell.x, cell.y ); // TODO centre
+        cell.x += icon.GetWidth()+4;
+    }
+    
+    dc->DrawText( m_value.GetText(), cell.x, cell.y );
+
+    return true;
+}
+
+wxSize wxDataViewIconTextRenderer::GetSize() const
+{
+    return wxSize(80,16);  // TODO
+}
+
+wxControl* wxDataViewIconTextRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
+{
+    return NULL;
+}
+
+bool wxDataViewIconTextRenderer::GetValueFromEditorCtrl( wxControl* editor, wxVariant &value )
+{
+    return false;
 }
 
 // ---------------------------------------------------------
@@ -1841,6 +1907,7 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 
     //Make m_count = -1 will cause the class recaculate the real displaying number of rows.
     m_count = -1 ;
+    m_underMouse = NULL;
     UpdateDisplay();
 }
 
@@ -1901,7 +1968,7 @@ public:
 
 bool Walker( wxDataViewTreeNode * node, DoJob & func )
 {
-    if( node==NULL ||  !node->HasChildren())
+    if( node==NULL )
         return false;
 
     switch( func( node ) )
@@ -2009,8 +2076,17 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
     {
         m_selection.Empty();
     }
-
-    if( GetOwner()->GetModel()->IsContainer( item ) )
+    bool isContainer = false;
+    wxDataViewTreeNodes nds = node->GetNodes();
+    for (int i = 0; i < nds.GetCount(); i ++)
+    {    
+        if (nds[i]->GetItem() == item)
+        {
+            isContainer = true;
+            break;
+        }
+    }
+    if( isContainer )
     {
         wxDataViewTreeNode * n = NULL;
         wxDataViewTreeNodes nodes = node->GetNodes();
@@ -2030,13 +2106,15 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
         sub -= n->GetSubTreeCount();
         DestroyTreeHelper(n);
     }
-
-    if( node->GetChildrenNumber() == 0)
-        node->SetHasChildren( false );
-
     //Make the row number invalid and get a new valid one when user call GetRowCount
     m_count = -1;
     node->ChangeSubTreeCount(sub);
+    if( node->GetChildrenNumber() == 0)
+    {
+        node->GetParent()->GetNodes().Remove( node );
+        delete node;
+    }
+
     //Change the current row to the last row if the current exceed the max row number
     if( m_currentRow > GetRowCount() )
         m_currentRow = m_count - 1;
@@ -2297,6 +2375,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     {
         // TODO: last column for RTL support
         expander = GetOwner()->GetColumn( 0 );
+        GetOwner()->SetExpanderColumn(expander);
     }
         
     // redraw all cells for all rows which must be repainted and for all columns
@@ -2345,13 +2424,16 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 dc.SetBrush( wxNullBrush );
                 if( node->HasChildren() )
                 {
-                    //dc.DrawRoundedRectangle( expander_x,expander_y,expander_width,expander_width, 1.0);
-                    //dc.DrawLine( expander_x + 2 , expander_y + expander_width/2, expander_x + expander_width - 2, expander_y + expander_width/2 );
                     wxRect rect( expander_x , expander_y, expander_width, expander_width);
+                    int flag = 0;
+                    if (m_underMouse == node)
+                    {
+                        flag |= wxCONTROL_CURRENT;
+                    }
                     if( node->IsOpen() )
-                        wxRendererNative::Get().DrawTreeItemButton( this, dc, rect, wxCONTROL_EXPANDED );
+                        wxRendererNative::Get().DrawTreeItemButton( this, dc, rect, flag|wxCONTROL_EXPANDED );
                     else
-                        wxRendererNative::Get().DrawTreeItemButton( this, dc, rect );
+                        wxRendererNative::Get().DrawTreeItemButton( this, dc, rect, flag);
                 }
                 else
                 {
@@ -2850,7 +2932,10 @@ void wxDataViewMainWindow::OnExpanding( unsigned int row )
                node->ToggleOpen();
                //Here I build the children of current node
                if( node->GetChildrenNumber() == 0 )
+               {
+                   SortPrepare();
                    BuildTreeHelper(GetOwner()->GetModel(), node->GetItem(), node);
+               }
                m_count = -1;
                UpdateDisplay();
                //Send the expanded event
@@ -2929,7 +3014,10 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
         if( node->HasChildren() )
         {
             if( node->GetChildrenNumber() == 0 )
+            {
+                SortPrepare();
                 BuildTreeHelper(model, node->GetItem(), node);
+            }
 
             wxDataViewTreeNodes nodes = node->GetNodes();
             int i = 0;
@@ -3225,9 +3313,8 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     int x = event.GetX();
     int y = event.GetY();
     m_owner->CalcUnscrolledPosition( x, y, &x, &y );
-
     wxDataViewColumn *col = NULL;
-
+    
     int xpos = 0;
     unsigned int cols = GetOwner()->GetColumnCount();
     unsigned int i;
@@ -3246,14 +3333,53 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     }
     if (!col)
         return;
+
     wxDataViewRenderer *cell = col->GetRenderer();
-
     unsigned int current = y / m_lineHeight;
-
     if ((current > GetRowCount()) || (x > GetEndOfLastCol()))
     {
         // Unselect all if below the last row ?
         return;
+    }
+
+    //Test whether the mouse is hovered on the tree item button
+    bool hover = false;
+    if (GetOwner()->GetExpanderColumn() == col)
+    {
+        wxDataViewTreeNode * node = GetTreeNodeByRow(current);
+        if( node!=NULL && node->HasChildren() )
+        {
+            int indent = node->GetIndentLevel();
+            indent = GetOwner()->GetIndent()*indent;
+            wxRect rect( xpos + indent + EXPANDER_MARGIN, current * m_lineHeight + EXPANDER_MARGIN, m_lineHeight-2*EXPANDER_MARGIN,m_lineHeight-2*EXPANDER_MARGIN);
+            if( rect.Contains( x, y) )
+            {
+                //So the mouse is over the expander
+                hover = true;
+                if (m_underMouse && m_underMouse != node)
+                {
+                    //wxLogMessage("Undo the row: %d", GetRowByItem(m_underMouse->GetItem()));
+                    Refresh(GetRowByItem(m_underMouse->GetItem()));
+                }
+                if (m_underMouse != node)
+                {
+                    //wxLogMessage("Do the row: %d", current);
+                    Refresh(current);
+                }
+                m_underMouse = node;
+            }
+        }
+	 if (node!=NULL && !node->HasChildren())
+            delete node;
+    }
+    if (!hover)
+    {
+        if (m_underMouse != NULL)
+        {
+            wxLogMessage("Undo the row: %d", GetRowByItem(m_underMouse->GetItem()));
+            Refresh(GetRowByItem(m_underMouse->GetItem()));
+            m_underMouse = NULL;
+        }
     }
 
     wxDataViewModel *model = GetOwner()->GetModel();
