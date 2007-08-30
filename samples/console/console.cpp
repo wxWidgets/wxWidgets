@@ -89,7 +89,7 @@
     #define TEST_WCHAR
     #define TEST_ZIP
 #else // #if TEST_ALL
-    #define TEST_TIMER
+    #define TEST_MIME
 #endif
 
 // some tests are interactive, define this to run them
@@ -1383,7 +1383,7 @@ static void TestMimeAssociate()
                             _T(""),             // print cmd
                             _T("XYZ File"),     // description
                             _T(".xyz"),         // extensions
-                            NULL                // end of extensions
+                            wxNullPtr           // end of extensions
                          );
     ftInfo.SetShortDesc(_T("XYZFile")); // used under Win32 only
 
@@ -4413,12 +4413,10 @@ int main(int argc, char **argv)
 #endif // TEST_FTP
 
 #ifdef TEST_MIME
-    wxLog::AddTraceMask(_T("mime"));
-    #if TEST_ALL
-        TestMimeEnum();
-    #endif
-        TestMimeOverride();
-        TestMimeAssociate();
+    //wxLog::AddTraceMask(_T("mime"));
+    TestMimeEnum();
+    TestMimeOverride();
+    // TestMimeAssociate();
     TestMimeFilename();
 #endif // TEST_MIME
 
