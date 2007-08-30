@@ -12,6 +12,7 @@
 #define _WX_CONVAUTO_H_
 
 #include "wx/strconv.h"
+#include "wx/fontenc.h"
 
 #if wxUSE_WCHAR_T
 
@@ -23,13 +24,39 @@ class WXDLLIMPEXP_BASE wxConvAuto : public wxMBConv
 {
 public:
     // default ctor, the real conversion will be created on demand
-    wxConvAuto() { m_conv = NULL; /* the rest will be initialized later */ }
+    wxConvAuto(wxFontEncoding enc = wxFONTENCODING_DEFAULT)
+    {
+        m_conv = NULL; // the rest will be initialized later
+        m_encDefault = enc;
+    }
 
     // copy ctor doesn't initialize anything neither as conversion can only be
     // deduced on first use
-    wxConvAuto(const wxConvAuto& WXUNUSED(other)) : wxMBConv() { m_conv = NULL; }
+    wxConvAuto(const wxConvAuto& other) : wxMBConv()
+    {
+        m_conv = NULL;
+        m_encDefault = other.m_encDefault;
+    }
 
-    virtual ~wxConvAuto() { if ( m_conv && m_ownsConv ) delete m_conv; }
+    virtual ~wxConvAuto()
+    {
+        if ( m_ownsConv )
+            delete m_conv;
+    }
+
+    // get/set the fall-back encoding used when the input text doesn't have BOM
+    // and isn't UTF-8
+    //
+    // special values are wxFONTENCODING_MAX meaning not to use any fall back
+    // at all (but just fail to convert in this case) and wxFONTENCODING_SYSTEM
+    // meaning to use the encoding of the system locale
+    static wxFontEncoding GetFallbackEncoding() { return ms_defaultMBEncoding; }
+    static void SetFallbackEncoding(wxFontEncoding enc);
+    static void DisableFallbackEncoding()
+    {
+        SetFallbackEncoding(wxFONTENCODING_MAX);
+    }
+
 
     // override the base class virtual function(s) to use our m_conv
     virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
@@ -57,8 +84,8 @@ private:
     // return the BOM type of this buffer
     static BOMType DetectBOM(const char *src, size_t srcLen);
 
-    // initialize m_conv with the conversion to use by default (UTF-8)
-    void InitWithDefault()
+    // initialize m_conv with the UTF-8 conversion
+    void InitWithUTF8()
     {
         m_conv = &wxConvUTF8;
         m_ownsConv = false;
@@ -76,9 +103,16 @@ private:
     void SkipBOM(const char **src, size_t *len) const;
 
 
+    // fall-back multibyte encoding to use, may be wxFONTENCODING_SYSTEM or
+    // wxFONTENCODING_MAX but not wxFONTENCODING_DEFAULT
+    static wxFontEncoding ms_defaultMBEncoding;
+
     // conversion object which we really use, NULL until the first call to
     // either ToWChar() or FromWChar()
     wxMBConv *m_conv;
+
+    // the multibyte encoding to use by default if input isn't Unicode
+    wxFontEncoding m_encDefault;
 
     // our BOM type
     BOMType m_bomType;
