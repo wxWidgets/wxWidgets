@@ -1265,15 +1265,17 @@ bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
     // from which the opacity property is checked from.
     Window win = wxGetTopmostWindowX11(dpy, GDK_WINDOW_XID (m_widget->window));
 
-    unsigned int opacity = alpha * 0x1010101;
 
     // Using pure Xlib to not have a GTK version check mess due to gtk2.0 not having GdkDisplay
     if (alpha == 0xff)
         XDeleteProperty(dpy, win, XInternAtom(dpy, "_NET_WM_WINDOW_OPACITY", False));
     else
+    {
+        long opacity = alpha * 0x1010101L;
         XChangeProperty(dpy, win, XInternAtom(dpy, "_NET_WM_WINDOW_OPACITY", False),
                         XA_CARDINAL, 32, PropModeReplace,
                         (unsigned char *) &opacity, 1L);
+    }
     XSync(dpy, False);
     return true;
 }
