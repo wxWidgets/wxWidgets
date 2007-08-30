@@ -204,7 +204,7 @@ void StringTestCase::Extraction()
     #define TEST_STARTS_WITH(prefix, correct_rest, result)                    \
         CPPUNIT_ASSERT_EQUAL(result, s.StartsWith(prefix, &rest));            \
         if ( result )                                                         \
-            CPPUNIT_ASSERT_EQUAL(wxString(correct_rest), rest)
+            WX_ASSERT_STR_EQUAL(correct_rest, rest)
 
     TEST_STARTS_WITH( _T("Hello"),           _T(", world!"),      true  );
     TEST_STARTS_WITH( _T("Hello, "),         _T("world!"),        true  );
@@ -223,7 +223,7 @@ void StringTestCase::Extraction()
     #define TEST_ENDS_WITH(suffix, correct_rest, result)                      \
         CPPUNIT_ASSERT_EQUAL(result, s.EndsWith(suffix, &rest));              \
         if ( result )                                                         \
-            CPPUNIT_ASSERT_EQUAL(wxString(correct_rest), rest)
+            WX_ASSERT_STR_EQUAL(correct_rest, rest)
 
     TEST_ENDS_WITH( _T(""),                 _T("Hello, world!"), true  );
     TEST_ENDS_WITH( _T("!"),                _T("Hello, world"),  true  );
@@ -274,7 +274,7 @@ void StringTestCase::Replace()
         { \
             wxString s = original; \
             s.replace( pos , len , replacement ); \
-            CPPUNIT_ASSERT( s == result ); \
+            WX_ASSERT_STR_EQUAL( result, s ); \
         }
 
     TEST_REPLACE( _T("012-AWORD-XYZ"), 4, 5, _T("BWORD"),  _T("012-BWORD-XYZ") );
@@ -660,7 +660,7 @@ void StringTestCase::WriteBuf()
     CPPUNIT_ASSERT(_T('f') == s[0u]);
     CPPUNIT_ASSERT(_T('o') == s[1]);
     CPPUNIT_ASSERT(_T('o') == s[2]);
-    CPPUNIT_ASSERT_EQUAL((size_t)3, s.length());
+    WX_ASSERT_SIZET_EQUAL(3, s.length());
 
 
     {
@@ -673,7 +673,7 @@ void StringTestCase::WriteBuf()
     CPPUNIT_ASSERT(_T('a') == s[1]);
     CPPUNIT_ASSERT(_T('r') == s[2]);
     CPPUNIT_ASSERT(_T('r') == s[3]);
-    CPPUNIT_ASSERT_EQUAL((size_t)4, s.length());
+    WX_ASSERT_SIZET_EQUAL(4, s.length());
 
     CPPUNIT_ASSERT_EQUAL( 0, wxStrcmp(_T("barr"), s) );
 }
