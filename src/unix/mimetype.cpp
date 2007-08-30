@@ -141,19 +141,6 @@ public:
         wxString sTmp = GetLine(i).AfterFirst(wxT('='));
         return sTmp;
     }
-
-protected:
-    // we override this virtual method because we want to always use UTF-8
-    // conversion allowing for invalid characters as MIME information files
-    // often contain lines in different encodings and can't be read using any
-    // single conversion in Unicode build, so we just try to read what we can
-    // suing the most common encoding (UTF-8 is almost ubiquitous nowadays) and
-    // ignore the rest
-    virtual bool OnRead(const wxMBConv& WXUNUSED(conv))
-    {
-        return wxTextFile::OnRead(
-                    wxMBConvUTF8(wxMBConvUTF8::MAP_INVALID_UTF8_TO_PUA));
-    }
 };
 
 // ----------------------------------------------------------------------------
