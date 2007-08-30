@@ -277,7 +277,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer,wxDataViewRendererBase)
 // ---------------------------------------------------------
 #pragma mark -
 wxDataViewCustomRenderer::wxDataViewCustomRenderer(wxString const& varianttype, wxDataViewCellMode mode, int align)
-                         :wxDataViewRenderer(varianttype,mode,align), m_editorCtrlPtr(NULL)
+                         :wxDataViewRenderer(varianttype,mode,align), m_editorCtrlPtr(NULL), m_DCPtr(NULL)
 {
 } /* wxDataViewCustomRenderer::wxDataViewCustomRenderer(wxString const&, wxDataViewCellMode) */
 
@@ -300,7 +300,7 @@ wxDC* wxDataViewCustomRenderer::GetDC(void)
 
 bool wxDataViewCustomRenderer::Render(void)
 {
-  return false;
+  return true;
 } /* wxDataViewCustomRenderer::Render(void) */
 
 void wxDataViewCustomRenderer::SetDC(wxDC* newDCPtr)
@@ -362,6 +362,38 @@ bool wxDataViewBitmapRenderer::Render(void)
 } /* wxDataViewBitmapRenderer::Render(void) */
 
 IMPLEMENT_CLASS(wxDataViewBitmapRenderer,wxDataViewRenderer)
+
+// ---------------------------------------------------------
+// wxDataViewIconTextRenderer
+// ---------------------------------------------------------
+#pragma mark -
+wxDataViewIconTextRenderer::wxDataViewIconTextRenderer(wxString const& varianttype, wxDataViewCellMode mode, int align)
+                           :wxDataViewRenderer(varianttype,mode)
+{
+}
+
+bool wxDataViewIconTextRenderer::Render(void)
+{
+  wxLogMessage(wxString(_("Types: ")) << this->GetValue().GetType() << wxT(' ') << this->GetVariantType());
+  if (this->GetValue().GetType() == this->GetVariantType())
+  {
+   // variable definition:
+    wxDataViewIconText iconText;
+    
+    iconText << this->GetValue();
+
+   // variable definition:
+    wxMacCFStringHolder cfString(iconText.GetText(),(this->GetView()->GetFont().Ok() ? this->GetView()->GetFont().GetEncoding() : wxLocale::GetSystemEncoding()));
+    
+    return ((::SetDataBrowserItemDataIcon(this->GetDataReference(),MAC_WXHICON(iconText.GetIcon().GetHICON())) == noErr) &&
+            (::SetDataBrowserItemDataText(this->GetDataReference(),cfString) == noErr));
+  } /* if */
+  else
+    return false;
+} /* wxDataViewIconTextRenderer::Render(void) */
+
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewIconTextRenderer,wxDataViewRenderer)
+
 
 // ---------------------------------------------------------
 // wxDataViewToggleRenderer
@@ -670,7 +702,6 @@ void wxDataViewCtrl::Init(void)
 {
   this->m_Deleting      = false;
   this->m_macIsUserPane = false;
-  this->m_NotifierPtr   = NULL;
   this->m_cgContext     = NULL;
 } /* wxDataViewCtrl::Init(void) */
 
@@ -692,25 +723,40 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
   return true;
 } /* wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator) */
 
+bool wxDataViewCtrl::AssociateModel(wxDataViewModel* model)
+{
+  if (!wxDataViewCtrlBase::AssociateModel(model))
+    return false;
+  
+  model->AddNotifier(new wxMacDataViewModelNotifier(dynamic_cast<wxMacDataViewDataBrowserListViewControl*>(this->m_peer)));
+
+  return true;
+} /* wxDataViewCtrl::AssociateModel(wxDataViewModel*) */
+
 bool wxDataViewCtrl::AppendColumn(wxDataViewColumn* dataViewColumnPtr)
 {
+  DataBrowserPropertyID NewPropertyID;
+
+  wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+
+
  // first, some error checking:
+  wxCHECK_MSG(MacDataViewListCtrlPtr != NULL,                                            false,_("m_peer is not or incorrectly initialized"));
   wxCHECK_MSG(dataViewColumnPtr != NULL,                                                 false,_("Column pointer must not be NULL."));
   wxCHECK_MSG(dataViewColumnPtr->GetRenderer() != NULL,                                  false,_("Column does not have a renderer."));
   wxCHECK_MSG(this->GetModel() != NULL,                                                  false,_("No model associated with control."));
   wxCHECK_MSG((dataViewColumnPtr->GetModelColumn() >= 0) &&
               (dataViewColumnPtr->GetModelColumn() < this->GetModel()->GetColumnCount()),false,_("Column's model column has no equivalent in the associated model."));
-  if (this->wxDataViewCtrlBase::AppendColumn(dataViewColumnPtr))
+  if ((MacDataViewListCtrlPtr->GetFreePropertyID(&NewPropertyID) == noErr) && this->wxDataViewCtrlBase::AppendColumn(dataViewColumnPtr))
   {
+   // insert column into hash map:
+    this->m_ColumnPointers.insert(ColumnPointerHashMapType::value_type(NewPropertyID,dataViewColumnPtr));
+
    // variable definitions:
-    DataBrowserPropertyID                          NewPropertyID;
-    DataBrowserListViewColumnDesc                  columnDescription;
-    wxMacCFStringHolder                            cfTitle(dataViewColumnPtr->GetTitle(),(this->m_font.Ok() ? this->m_font.GetEncoding() : wxLocale::GetSystemEncoding()));
-    wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+    DataBrowserListViewColumnDesc columnDescription;
+    wxMacCFStringHolder           cfTitle(dataViewColumnPtr->GetTitle(),(this->m_font.Ok() ? this->m_font.GetEncoding() : wxLocale::GetSystemEncoding()));
 
    // initialize column description:
-    wxCHECK_MSG(MacDataViewListCtrlPtr != NULL,                                    false,_("m_peer is not or incorrectly initialized"));
-    wxCHECK_MSG(MacDataViewListCtrlPtr->GetFreePropertyID(&NewPropertyID) == noErr,false,_("Maximum number of columns reached."));
     dataViewColumnPtr->SetPropertyID(NewPropertyID);
     if (dataViewColumnPtr->GetWidth() <= 0)
       dataViewColumnPtr->SetWidth(wxDVC_DEFAULT_WIDTH);
@@ -735,7 +781,7 @@ bool wxDataViewCtrl::AppendColumn(wxDataViewColumn* dataViewColumnPtr)
     columnDescription.propertyDesc.propertyFlags |= kDataBrowserListViewNoGapForIconInHeaderButton;
 #endif
     columnDescription.headerBtnDesc.version = kDataBrowserListViewLatestHeaderDesc;
-    if (dataViewColumnPtr->IsResizable())
+    if (dataViewColumnPtr->IsResizeable())
     {
       columnDescription.headerBtnDesc.minimumWidth = 0;
       columnDescription.headerBtnDesc.maximumWidth = 30000;
@@ -775,10 +821,6 @@ bool wxDataViewCtrl::AppendColumn(wxDataViewColumn* dataViewColumnPtr)
 
    // final adjustments for the layout:
     wxCHECK_MSG(MacDataViewListCtrlPtr->SetColumnWidth(NewPropertyID,dataViewColumnPtr->GetWidth()) == noErr,false,_("Column width could not be set."));
-#if 0
-    if (dataViewColumnPtr->IsSortable()) // if the current column is marked sortable this column will become the active sortable column, otherwise don't do anything
-      MacDataViewListCtrlPtr->SetSortProperty(NewPropertyID);
-#endif
     if (dataViewColumnPtr == this->GetExpanderColumn()) // if the current column is marked expandable this column will become the active expandable column
       MacDataViewListCtrlPtr->SetDisclosureColumn(NewPropertyID,true);
 
@@ -795,16 +837,67 @@ bool wxDataViewCtrl::AppendColumn(wxDataViewColumn* dataViewColumnPtr)
     return false;
 } /* wxDataViewCtrl::AppendColumn(wxDataViewColumn*) */
 
-bool wxDataViewCtrl::AssociateModel(wxDataViewModel* model)
+bool wxDataViewCtrl::ClearColumns(void)
 {
-  if (!wxDataViewCtrlBase::AssociateModel(model))
-    return false;
-  
-  this->m_NotifierPtr = new wxMacDataViewModelNotifier(dynamic_cast<wxMacDataViewDataBrowserListViewControl*>(this->m_peer));
-  model->AddNotifier(this->m_NotifierPtr);
+  wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
 
+  
+  while (this->m_ColumnPointers.begin() != this->m_ColumnPointers.end())
+  {
+    wxCHECK_MSG(MacDataViewListCtrlPtr->RemoveColumnByProperty(this->m_ColumnPointers.begin()->first) == noErr,false,_("Could not remove column."));
+    delete this->m_ColumnPointers.begin()->second;
+    this->m_ColumnPointers.erase(this->m_ColumnPointers.begin());
+  } /* while */
   return true;
-} /* wxDataViewCtrl::AssociateModel(wxDataViewModel*) */
+} /* wxDataViewCtrl::ClearColumns(void) */
+
+bool wxDataViewCtrl::DeleteColumn(wxDataViewColumn* columnPtr)
+{
+  wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+
+  
+  if ((MacDataViewListCtrlPtr->RemoveColumnByProperty(columnPtr->GetPropertyID()) == noErr) && (this->m_ColumnPointers.erase(columnPtr->GetPropertyID()) > 0))
+  {
+    delete columnPtr;
+    return true;
+  } /* if */
+  else
+    return false;
+} /* wxDataViewCtrl::DeleteColumn(wxDataViewColumn*) */
+
+wxDataViewColumn* wxDataViewCtrl::GetColumn(unsigned int pos) const
+{
+  DataBrowserPropertyID propertyID;
+  
+  wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+
+  
+  if (MacDataViewListCtrlPtr->GetPropertyID(pos,&propertyID) == noErr)
+  {
+   // variable definition:
+    ColumnPointerHashMapType::const_iterator Result(this->m_ColumnPointers.find(propertyID));
+    
+    if (Result != this->m_ColumnPointers.end())
+      return Result->second;
+    else
+      return NULL;
+  } /* if */
+  else
+    return NULL;
+} /* wxDataViewCtrl::GetColumn(unsigned int pos) const */
+
+unsigned int wxDataViewCtrl::GetColumnCount(void) const
+{
+  return this->m_ColumnPointers.size();
+} /* wxDataViewCtrl::GetColumnCount(void) const */
+
+void wxDataViewCtrl::Collapse(wxDataViewItem const& item)
+{
+  wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+
+
+  MacDataViewListCtrlPtr->CloseContainer(reinterpret_cast<DataBrowserItemID>(item.GetID()));
+} /* wxDataViewCtrl::Collapse(wxDataViewItem const&) */
 
 void wxDataViewCtrl::EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr)
 {
@@ -821,6 +914,14 @@ void wxDataViewCtrl::EnsureVisible(wxDataViewItem const& item, wxDataViewColumn 
     MacDataViewListCtrlPtr->RevealItem(reinterpret_cast<DataBrowserItemID>(item.GetID()),propertyID,kDataBrowserRevealOnly);
   } /* if */
 } /* wxDataViewCtrl::EnsureVisible(wxDataViewItem const&, wxDataViewColumn const*) */
+
+void wxDataViewCtrl::Expand(wxDataViewItem const& item)
+{
+  wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+  
+  
+  MacDataViewListCtrlPtr->OpenContainer(reinterpret_cast<DataBrowserItemID>(item.GetID()));
+} /* wxDataViewCtrl::Expand(wxDataViewItem const&) */
 
 wxRect wxDataViewCtrl::GetItemRect(wxDataViewItem const& item, wxDataViewColumn const* columnPtr) const
 {
@@ -984,23 +1085,36 @@ void wxDataViewCtrl::AddChildrenLevel(wxDataViewItem const& parentItem)
   } /* while */
 } /* wxDataViewCtrl::AddChildrenLevel(wxDataViewItem const&) */
 
+wxDataViewColumn* wxDataViewCtrl::GetColumnPtr(DataBrowserPropertyID propertyID) const
+{
+ // variable definition:
+  ColumnPointerHashMapType::const_iterator Result(this->m_ColumnPointers.find(propertyID));
+  
+  if (Result != this->m_ColumnPointers.end())
+    return Result->second;
+  else
+    return NULL;
+} /* wxDataViewCtrl::GetColumnPtr(DataBrowserPropertyID) const */
+
 // inherited methods from wxDataViewCtrlBase
 void wxDataViewCtrl::DoSetExpanderColumn(void)
 {
-  if (this->GetExpanderColumn() < this->GetColumnCount())
+  if (this->GetExpanderColumn() != NULL)
   {
    // variable definition and initialization:
-    DataBrowserPropertyID                          propertyID;
     wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
 
-    if (MacDataViewListCtrlPtr->GetPropertyID(this->GetExpanderColumn(),&propertyID) == noErr)
-      (void) MacDataViewListCtrlPtr->SetDisclosureColumn(propertyID);
+    (void) MacDataViewListCtrlPtr->SetDisclosureColumn(this->GetExpanderColumn()->GetPropertyID());
   } /* if */
 } /* wxDataViewCtrl::DoSetExpanderColumn(void) */
 
 void wxDataViewCtrl::DoSetIndent(void)
 {
-} /* wxDataViewCtrl::DoSetExpanderColumn(void) */
+  wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));  
+
+
+  (void) MacDataViewListCtrlPtr->SetIndent(static_cast<float>(this->GetIndent()));
+} /* wxDataViewCtrl::DoSetIndent(void) */
 
 // event handling:
 void wxDataViewCtrl::OnSize(wxSizeEvent& event)

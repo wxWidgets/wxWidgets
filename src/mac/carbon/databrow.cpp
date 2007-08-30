@@ -273,20 +273,25 @@ OSStatus wxMacDataBrowserTableViewControl::SetDefaultRowHeight(UInt16 height)
   return ::SetDataBrowserTableViewRowHeight(this->m_controlRef,height);
 }
 
-OSStatus wxMacDataBrowserTableViewControl::SetHasScrollBars( bool horiz, bool vert )
+OSStatus wxMacDataBrowserTableViewControl::SetHasScrollBars(bool horiz, bool vert)
 {
-    return SetDataBrowserHasScrollBars(this->m_controlRef, horiz, vert );
-}
+  return ::SetDataBrowserHasScrollBars(this->m_controlRef,horiz,vert);
+} /* wxMacDataBrowserTableViewControl::SetHasScrollBars(bool, bool) */
 
 OSStatus wxMacDataBrowserTableViewControl::SetHeaderButtonHeight(UInt16 height)
 {
-    return SetDataBrowserListViewHeaderBtnHeight(this->m_controlRef, height );
-}
+  return ::SetDataBrowserListViewHeaderBtnHeight(this->m_controlRef,height);
+} /* wxMacDataBrowserTableViewControl::SetHeaderButtonHeight(UInt16) */
 
-OSStatus wxMacDataBrowserTableViewControl::SetHiliteStyle( DataBrowserTableViewHiliteStyle hiliteStyle )
+OSStatus wxMacDataBrowserTableViewControl::SetHiliteStyle(DataBrowserTableViewHiliteStyle hiliteStyle)
 {
-    return SetDataBrowserTableViewHiliteStyle(this->m_controlRef, hiliteStyle );
-}
+  return ::SetDataBrowserTableViewHiliteStyle(this->m_controlRef,hiliteStyle);
+} /*wxMacDataBrowserTableViewControl::SetHiliteStyle(DataBrowserTableViewHiliteStyle)  */
+
+OSStatus wxMacDataBrowserTableViewControl::SetIndent(float Indent)
+{
+  return ::DataBrowserSetMetric(this->m_controlRef,kDataBrowserMetricDisclosureColumnPerDepthGap,true,Indent);
+} /* wxMacDataBrowserTableViewControl::SetIndent(float* Indent) */
 
 OSStatus wxMacDataBrowserTableViewControl::SetRowHeight(DataBrowserItemID item, UInt16 height)
 {
@@ -344,14 +349,19 @@ OSStatus wxMacDataBrowserTableViewControl::IsUsedPropertyID(DataBrowserPropertyI
   return ::GetDataBrowserTableViewColumnPosition(this->m_controlRef,propertyID,&index);
 } /* wxMacDataBrowserTableViewControl::IsUsedPropertyId(DataBrowserPropertyID) const */
 
-OSStatus wxMacDataBrowserTableViewControl::RemoveColumn(DataBrowserTableViewColumnIndex index)
+OSStatus wxMacDataBrowserTableViewControl::RemoveColumnByProperty(DataBrowserTableViewColumnID propertyID)
+{
+  return ::RemoveDataBrowserTableViewColumn(this->m_controlRef,propertyID);
+} /* wxMacDataBrowserTableViewControl::RemoveColumnByProperty(DataBrowserTableViewColumnID) */
+
+OSStatus wxMacDataBrowserTableViewControl::RemoveColumnByIndex(DataBrowserTableViewColumnIndex index)
 {
   DataBrowserTableViewColumnID propertyID;
 
 
   this->GetPropertyID(index,&propertyID);
   return ::RemoveDataBrowserTableViewColumn(this->m_controlRef,propertyID);
-} /* wxMacDataBrowserTableViewControl::RemoveColumn(DataBrowserTableViewColumnIndex) */
+} /* wxMacDataBrowserTableViewControl::RemoveColumnByIndex(DataBrowserTableViewColumnIndex) */
 
 OSStatus wxMacDataBrowserTableViewControl::SetColumnIndex(DataBrowserPropertyID propertyID, DataBrowserTableViewColumnIndex index)
 {
@@ -525,6 +535,19 @@ OSStatus wxMacDataBrowserTableViewControl::SetSortProperty(DataBrowserPropertyID
 {
   return ::SetDataBrowserSortProperty(this->m_controlRef,propertyID);
 }
+
+//
+// container handling
+//
+OSStatus wxMacDataBrowserTableViewControl::CloseContainer(DataBrowserItemID containerID)
+{
+  return ::CloseDataBrowserContainer(this->m_controlRef,containerID);
+} /* wxMacDataBrowserTableViewControl::CloseContainer(DataBrowserItemID) */
+
+OSStatus wxMacDataBrowserTableViewControl::OpenContainer(DataBrowserItemID containerID)
+{
+  return ::OpenDataBrowserContainer(this->m_controlRef,containerID);
+} /* wxMacDataBrowserTableViewControl::OpenContainer(DataBrowserItemID) */
 
 IMPLEMENT_ABSTRACT_CLASS(wxMacDataBrowserTableViewControl,wxMacControl)
 
@@ -714,27 +737,27 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
     if (propertyID >= kMinPropertyID) // in case data columns set the data
     {
      // variable definitions:
-      DataBrowserTableViewColumnIndex columnIndex;
-      OSStatus                        errorStatus;
-      wxVariant                       variant;
-      wxDataViewColumn*               dataViewColumnPtr;
-      wxDataViewCtrl*                 dataViewCtrlPtr;
+      wxVariant         variant;
+      wxDataViewColumn* dataViewColumnPtr;
+      wxDataViewCtrl*   dataViewCtrlPtr;
       
       dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(this->GetPeer());
       wxCHECK_MSG(dataViewCtrlPtr             != NULL,errDataBrowserNotConfigured,_("Pointer to data view control not set correctly."));
       wxCHECK_MSG(dataViewCtrlPtr->GetModel() != NULL,errDataBrowserNotConfigured,_("Pointer to model not set correctly."));
-      errorStatus = this->GetColumnIndex(propertyID,&columnIndex);
-      wxCHECK_MSG(errorStatus == noErr,errorStatus,_("Column index does not exist."));
-      dataViewColumnPtr = dataViewCtrlPtr->GetColumn(columnIndex);
+      dataViewColumnPtr = dataViewCtrlPtr->GetColumnPtr(propertyID);
       wxCHECK_MSG(dataViewColumnPtr                != NULL,errDataBrowserNotConfigured,_("No column for the specified column position existing."));
       wxCHECK_MSG(dataViewColumnPtr->GetRenderer() != NULL,errDataBrowserNotConfigured,_("No renderer specified for column."));
       dataViewCtrlPtr->GetModel()->GetValue(variant,wxDataViewItem(reinterpret_cast<void*>(itemID)),dataViewColumnPtr->GetModelColumn());
-      dataViewColumnPtr->GetRenderer()->SetDataReference(itemData);
-      dataViewColumnPtr->GetRenderer()->SetValue(variant);
-      wxCHECK_MSG(dataViewColumnPtr->GetRenderer()->Render(),errDataBrowserNotConfigured,_("Rendering failed."));
+      if (!(variant.IsNull()))
+      {
+        dataViewColumnPtr->GetRenderer()->SetDataReference(itemData);
+        dataViewColumnPtr->GetRenderer()->SetValue(variant);
+        wxCHECK_MSG(dataViewColumnPtr->GetRenderer()->Render(),errDataBrowserNotConfigured,_("Rendering failed."));
+      } /* if */
       return noErr;
     } /* if */
     else // react on special system requests
+    {
       switch (propertyID)
       {
         case kDataBrowserContainerIsClosableProperty:
@@ -753,7 +776,6 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
            // opening the container is allowed if not vetoed:
             return ::SetDataBrowserItemDataBooleanValue(itemData,dataViewEvent.IsAllowed());
           } /* block */
-          return noErr;
         case kDataBrowserContainerIsOpenableProperty:
           {
            // variable definitions:
@@ -782,11 +804,12 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
         case kDataBrowserItemIsEditableProperty:
           return ::SetDataBrowserItemDataBooleanValue(itemData,true);
       } /* switch */
+    } /* if */
   } /* if */
   return errDataBrowserPropertyNotSupported;
 } /* wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(DataBrowserItemID, DataBrowserPropertyID, DataBrowserItemDataRef, Boolean) */
 
-void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(DataBrowserItemID itemID, DataBrowserItemNotification message, DataBrowserItemDataRef WXUNUSED(itemData))
+void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(DataBrowserItemID itemID, DataBrowserItemNotification message, DataBrowserItemDataRef itemData)
 {
   switch (message)
   {
@@ -823,6 +846,60 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
         dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
       } /* block */
       break;
+    case kDataBrowserEditStarted:
+      {
+       // variable definitions:
+        wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetPeer()));
+        
+        if (dataViewCtrlPtr != NULL)
+        {
+         // initialize wxWidget event:
+          DataBrowserPropertyID propertyID;  
+          wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED,dataViewCtrlPtr->GetId()); // variable definition
+          
+          dataViewEvent.SetEventObject(dataViewCtrlPtr);
+          dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
+          if (this->GetPropertyID(itemData,&propertyID) == noErr)
+          {
+           // variable definition and initialization:
+            DataBrowserTableViewColumnIndex columnIndex;
+            
+            wxCHECK_RET(this->GetColumnIndex(propertyID,&columnIndex),_("Column index not found."));
+            dataViewEvent.SetColumn(columnIndex);
+            dataViewEvent.SetDataViewColumn(dataViewCtrlPtr->GetColumnPtr(propertyID));          
+          } /* if */
+         // finally send the equivalent wxWidget event:
+          dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
+        } /* if */
+      } /* block */
+      break;
+    case kDataBrowserEditStopped:
+    {
+     // variable definitions:
+      wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetPeer()));
+      
+      if (dataViewCtrlPtr != NULL)
+      {
+       // initialize wxWidget event:
+        DataBrowserPropertyID propertyID;  
+        wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE,dataViewCtrlPtr->GetId()); // variable definition
+        
+        dataViewEvent.SetEventObject(dataViewCtrlPtr);
+        dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
+        if (this->GetPropertyID(itemData,&propertyID) == noErr)
+        {
+         // variable definition and initialization:
+          DataBrowserTableViewColumnIndex columnIndex;
+
+          wxCHECK_RET(this->GetColumnIndex(propertyID,&columnIndex),_("Column index not found."));
+          dataViewEvent.SetColumn(columnIndex);
+          dataViewEvent.SetDataViewColumn(dataViewCtrlPtr->GetColumnPtr(propertyID));          
+        } /* if */
+       // finally send the equivalent wxWidget event:
+        dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
+      } /* if */
+    } /* block */
+      break;
     case kDataBrowserItemAdded:
       {
        // variable definitions:
@@ -836,6 +913,23 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
         dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
        // finally send the equivalent wxWidget event:
         dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
+      } /* block */
+      break;
+    case kDataBrowserItemDeselected:
+      {
+       // variable definitions:
+        wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetPeer()));
+        
+        if (dataViewCtrlPtr != NULL) // can become NULL if an item is still selected while removing the data browser
+        {
+         // initialize wxWidget event:
+          wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_DESELECTED,dataViewCtrlPtr->GetId()); // variable definition
+          
+          dataViewEvent.SetEventObject(dataViewCtrlPtr);
+          dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
+         // finally send the equivalent wxWidget event:
+          dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
+        } /* if */
       } /* block */
       break;
     case kDataBrowserItemDoubleClicked:
@@ -884,6 +978,8 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
        // finally send the equivalent wxWidget event:
         dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
       } /* block */
+      break;
+    case kDataBrowserSelectionSetChanged:
       break;
     case kDataBrowserUserStateChanged:
       {

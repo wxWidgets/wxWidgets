@@ -120,6 +120,7 @@ public:
   OSStatus SetHasScrollBars( bool horiz, bool vert );
   OSStatus SetHeaderButtonHeight( UInt16 height );
   OSStatus SetHiliteStyle( DataBrowserTableViewHiliteStyle hiliteStyle );
+  OSStatus SetIndent(float Indent);
   OSStatus SetRowHeight( DataBrowserItemID item , UInt16 height);
   OSStatus SetScrollPosition( UInt32 top , UInt32 left );
 
@@ -135,7 +136,8 @@ public:
   
   OSStatus IsUsedPropertyID(DataBrowserPropertyID propertyID) const; // checks if passed property id is used by the control; no error is returned if the id exists
 
-  OSStatus RemoveColumn(DataBrowserTableViewColumnIndex index);
+  OSStatus RemoveColumnByProperty(DataBrowserTableViewColumnID propertyID);
+  OSStatus RemoveColumnByIndex   (DataBrowserTableViewColumnIndex index);
 
   OSStatus SetColumnIndex     (DataBrowserPropertyID propertyID, DataBrowserTableViewColumnIndex index);
   OSStatus SetDisclosureColumn(DataBrowserPropertyID propertyID, Boolean expandableRows=true);
@@ -206,6 +208,13 @@ public:
 
   OSStatus SetSortOrder   (DataBrowserSortOrder  order);
   OSStatus SetSortProperty(DataBrowserPropertyID propertyID);
+
+//
+// container handling
+//
+  OSStatus CloseContainer(DataBrowserItemID containerID);
+  
+  OSStatus OpenContainer(DataBrowserItemID containerID);
 
 protected :
 //

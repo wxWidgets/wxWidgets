@@ -193,7 +193,7 @@ public:
 // implementation
 //
   virtual bool Render(void); // declared in wxDataViewRenderer but will not be used here, therefore calling this function will
-                             // return 'false' without having done anything
+                             // return 'true' without having done anything
 
   virtual DataBrowserPropertyType GetPropertyType(void) const
   {
@@ -275,6 +275,33 @@ public:
 protected:
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewBitmapRenderer)
+};
+
+// ---------------------------------------------------------
+// wxDataViewToggleRenderer
+// ---------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewIconTextRenderer: public wxDataViewRenderer
+{
+public:
+  wxDataViewIconTextRenderer(wxString const& varianttype = wxT("wxDataViewIconText"), wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int align=wxDVR_DEFAULT_ALIGNMENT);
+  
+//
+// inherited functions from wxDataViewRenderer
+//
+  virtual bool Render(void);
+  
+//
+// implementation
+//
+  virtual DataBrowserPropertyType GetPropertyType(void) const
+  {
+    return kDataBrowserIconAndTextType;
+  }
+  
+protected:
+private:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewIconTextRenderer)
 };
 
 // ---------------------------------------------------------
@@ -490,17 +517,23 @@ public:
   bool Create(wxWindow *parent, wxWindowID id, wxPoint const& pos=wxDefaultPosition, wxSize const& size=wxDefaultSize, long style=0,
               wxValidator const& validator=wxDefaultValidator);
 
- // inherited methods from 'wxDataViewCtrlBase':
-  virtual bool AppendColumn(wxDataViewColumn* columnPtr);
-
-  virtual bool AssociateModel(wxDataViewModel* model);
-
   virtual wxControl* GetMainWindow(void) // should disappear as it is not of any use for the native implementation
   {
     return this;
   }
   
+ // inherited methods from 'wxDataViewCtrlBase':
+  virtual bool AssociateModel(wxDataViewModel* model);
+
+  virtual bool AppendColumn(wxDataViewColumn* columnPtr);
+  virtual bool ClearColumns(void);
+  virtual bool DeleteColumn(wxDataViewColumn* columnPtr);
+  virtual wxDataViewColumn* GetColumn(unsigned int pos) const;
+  virtual unsigned int GetColumnCount(void) const;
+
+  virtual void Collapse(wxDataViewItem const& item);
   virtual void EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr=NULL);
+  virtual void Expand(wxDataViewItem const& item);
   
   virtual wxRect GetItemRect(wxDataViewItem const& item, wxDataViewColumn const* columnPtr) const;
   virtual wxDataViewItem GetSelection(void) const;
@@ -516,14 +549,17 @@ public:
 
   virtual void Unselect(wxDataViewItem const& item);
   virtual void UnselectAll(void);
-  
-  
+
 //
 // implementation
 //
 
  // adds all children of the passed parent to the control; if 'parentItem' is invalid the root(s) is/are added:
   void AddChildrenLevel(wxDataViewItem const& parentItem);
+
+ // returns a pointer to a column;
+ // in case the pointer cannot be found NULL is returned:
+  wxDataViewColumn* GetColumnPtr(DataBrowserPropertyID propertyID) const;
 
  // checks if currently a delete process is running:
   bool IsDeleting(void) const
@@ -559,6 +595,9 @@ protected:
   void OnSize(wxSizeEvent &event);
 
 private:
+ // type definitions:
+  WX_DECLARE_HASH_MAP(DataBrowserPropertyID,wxDataViewColumn*,wxIntegerHash,wxIntegerEqual,ColumnPointerHashMapType);
+
  // initializing of local variables:
   void Init(void);
 
@@ -572,7 +611,7 @@ private:
 
   void* m_cgContext; // pointer to core graphics context
   
-  wxDataViewModelNotifier* m_NotifierPtr; // the notifier is NOT owned by this class but by the associated model
+  ColumnPointerHashMapType m_ColumnPointers; // all column pointers are stored in a hash map with the property ID as a key
 
  // wxWidget internal stuff:
   DECLARE_DYNAMIC_CLASS(wxDataViewCtrl)
