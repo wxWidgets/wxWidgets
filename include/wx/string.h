@@ -1087,19 +1087,25 @@ public:
 
   void resize(size_t nSize, wxUniChar ch = wxT('\0'))
   {
+    const size_t len = length();
+    if ( nSize == len)
+        return;
+
 #if wxUSE_UNICODE_UTF8
-    if ( !ch.IsAscii() )
+    if ( nSize < len )
     {
-        size_t len = length();
-        if ( nSize == len)
-            return;
-        else if ( nSize < len )
-            erase(nSize);
-        else
-            append(nSize - len, ch);
+        // we can't use wxStringImpl::resize() for truncating the string as it
+        // counts in bytes, not characters
+        erase(nSize);
+        return;
     }
+
+    // we also can't use (presumably more efficient) resize() if we have to
+    // append characters taking more than one byte
+    if ( !ch.IsAscii() )
+        append(nSize - len, ch);
     else
-#endif
+#endif // wxUSE_UNICODE_UTF8
         m_impl.resize(nSize, (wxStringCharType)ch);
   }
 

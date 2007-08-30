@@ -488,6 +488,11 @@ void StdStringTestCase::StdResize()
     CPPUNIT_ASSERT( s2 == _T("abcABCdefD") );
     CPPUNIT_ASSERT( s3 == _T("abcABCdefDEF  ") );
     CPPUNIT_ASSERT( s4 == _T("abcABCdefDEFWW") );
+
+    wxString s =
+        wxString::FromUTF8("\xd0\x9f\xd1\x80\xd0\xb8\xd0\xb2\xd0\xb5\xd1\x82");
+    s.resize(3);
+    WX_ASSERT_STR_EQUAL("\xd0\x9f\xd1\x80\xd0\xb8", s);
 }
 
 void StdStringTestCase::StdRiter()
