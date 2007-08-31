@@ -131,6 +131,16 @@ created in the function or NULL on failure.
 Appends a column for rendering a progress indicator. Returns the wxDataViewColumn
 created in the function or NULL on failure.
 
+\membersection{wxDataViewCtrl::AppendIconTextColumn}\label{wxdataviewctrlappendicontextcolumn}
+
+\func{wxDataViewColumn*}{AppendIconTextColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
+
+\func{wxDataViewColumn*}{AppendIconTextColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
+
+Appends a column for rendering text with an icon. Returns the wxDataViewColumn
+created in the function or NULL on failure. This uses the 
+\helpref{wxDataViewIconTextRenderer}{wxdataviewicontextrenderer}.
+
 \membersection{wxDataViewCtrl::AppendTextColumn}\label{wxdataviewctrlappendtextcolumn}
 
 \func{wxDataViewColumn*}{AppendTextColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}

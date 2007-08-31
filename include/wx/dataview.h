@@ -26,7 +26,7 @@
 
 #if defined(__WXGTK20__)
     // for testing
-    #define wxUSE_GENERICDATAVIEWCTRL 1
+    // #define wxUSE_GENERICDATAVIEWCTRL 1
 #elif defined(__WXMAC__)
 #else
     #define wxUSE_GENERICDATAVIEWCTRL 1
@@ -449,6 +449,10 @@ public:
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
+    wxDataViewColumn *AppendIconTextColumn( const wxString &label, unsigned int model_column, 
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
+                    wxAlignment align = wxALIGN_CENTER,
+                    int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendToggleColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
                     wxAlignment align = wxALIGN_CENTER,
@@ -466,6 +470,10 @@ public:
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendTextColumn( const wxBitmap &label, unsigned int model_column,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
+                    wxAlignment align = wxALIGN_CENTER,
+                    int flags = wxDATAVIEW_COL_RESIZABLE );
+    wxDataViewColumn *AppendIconTextColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );

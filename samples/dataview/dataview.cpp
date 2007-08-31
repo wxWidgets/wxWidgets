@@ -676,11 +676,8 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     m_listCtrl->AssociateModel( m_list_model.get() );
     
     m_listCtrl->AppendTextColumn( "editable string", 0, wxDATAVIEW_CELL_EDITABLE, 120 );
-    
-    m_col = new wxDataViewColumn( "icon", new wxDataViewIconTextRenderer, 1, 60 );
-    m_listCtrl->AppendColumn( m_col );
-    
-    m_col = m_listCtrl->AppendTextColumn( "index", 2, wxDATAVIEW_CELL_INERT, 120 );
+    m_listCtrl->AppendIconTextColumn( "icon", 1, wxDATAVIEW_CELL_INERT, 60 );
+    m_listCtrl->AppendTextColumn( "index", 2, wxDATAVIEW_CELL_INERT, 120 );
     
     data_sizer->Add( m_listCtrl, 2, wxGROW );
  

@@ -615,6 +615,17 @@ wxDataViewCtrlBase::AppendTextColumn( const wxString &label, unsigned int model_
 }
 
 wxDataViewColumn *
+wxDataViewCtrlBase::AppendIconTextColumn( const wxString &label, unsigned int model_column,
+                            wxDataViewCellMode mode, int width, wxAlignment align, int flags )
+{
+    wxDataViewColumn *ret = new wxDataViewColumn( label,
+        new wxDataViewIconTextRenderer( wxT("wxDataViewIconText"), mode, (int)align ),
+        model_column, width, align, flags );
+    AppendColumn( ret );
+    return ret;
+}
+
+wxDataViewColumn *
 wxDataViewCtrlBase::AppendToggleColumn( const wxString &label, unsigned int model_column,
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
@@ -665,6 +676,17 @@ wxDataViewCtrlBase::AppendTextColumn( const wxBitmap &label, unsigned int model_
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
         new wxDataViewTextRenderer( wxT("string"), mode, (int)align ),
+        model_column, width, align, flags );
+    AppendColumn( ret );
+    return ret;
+}
+
+wxDataViewColumn *
+wxDataViewCtrlBase::AppendIconTextColumn( const wxBitmap &label, unsigned int model_column,
+                            wxDataViewCellMode mode, int width, wxAlignment align, int flags )
+{
+    wxDataViewColumn *ret = new wxDataViewColumn( label,
+        new wxDataViewIconTextRenderer( wxT("wxDataViewIconText"), mode, (int)align ),
         model_column, width, align, flags );
     AppendColumn( ret );
     return ret;
