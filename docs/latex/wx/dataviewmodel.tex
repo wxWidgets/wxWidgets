@@ -98,13 +98,13 @@ to the model.
 
 \membersection{wxDataViewModel::Cleared}\label{wxdataviewmodelcleared}
 
-\func{bool}{Cleared}{\void}
+\func{virtual bool}{Cleared}{\void}
 
 Called to inform the model that all data has been deleted.
 
 \membersection{wxDataViewModel::Compare}\label{wxdataviewmodelcompare}
 
-\func{int}{Compare}{\param{const wxDataViewItem\& }{item1}, \param{const wxDataViewItem\& }{item2}, \param{unsigned int }{column}, \param{bool }{ascending}}
+\func{virtual int}{Compare}{\param{const wxDataViewItem\& }{item1}, \param{const wxDataViewItem\& }{item2}, \param{unsigned int }{column}, \param{bool }{ascending}}
 
 The compare function to be used by control. The default compare function
 sorts by container and other items separately and in ascending order.
@@ -114,13 +114,13 @@ See also \helpref{HasDefaultCompare}{wxdataviewmodelhasdefaultcompare}.
 
 \membersection{wxDataViewModel::GetColumnCount}\label{wxdataviewmodelgetcolumncount}
 
-\constfunc{unsigned int}{GetColumnCount}{\void}
+\constfunc{virtual unsigned int}{GetColumnCount}{\void}
 
 Override this to indicate the number of columns in the model.
 
 \membersection{wxDataViewModel::GetColumnType}\label{wxdataviewmodelgetcolumntype}
 
-\constfunc{wxString}{GetColumnType}{\param{unsigned int }{col}}
+\constfunc{virtual wxString}{GetColumnType}{\param{unsigned int }{col}}
 
 Override this to indicate what type of data is stored in the
 column specified by {\it col}. This should return a string
@@ -128,28 +128,28 @@ indicating the type of data as reported by \helpref{wxVariant}{wxvariant}.
 
 \membersection{wxDataViewModel::GetChildren}\label{wxdataviewmodelgetchildren}
 
-\constfunc{unsigned int}{GetChildren}{\param{const wxDataViewItem\& }{item}, \param{wxDataViewItemArray\& }{children} }
+\constfunc{virtual unsigned int}{GetChildren}{\param{const wxDataViewItem\& }{item}, \param{wxDataViewItemArray\& }{children} }
 
 Override this so the control can query the child items of
 an item. Returns the number of items.
 
 \membersection{wxDataViewModel::GetParent}\label{wxdataviewmodelgetparent}
 
-\constfunc{wxDataViewItem}{GetParent}{\param{const wxDataViewItem\& }{item}}
+\constfunc{virtual wxDataViewItem}{GetParent}{\param{const wxDataViewItem\& }{item}}
 
 Override this to indicate which wxDataViewItem representing the parent
 of {\it item} or an invalid wxDataViewItem if {\it item} is the root item.
 
 \membersection{wxDataViewModel::GetValue}\label{wxdataviewmodelgetvalue}
 
-\constfunc{void}{GetValue}{\param{wxVariant\& }{variant}, \param{const wxDataViewItem\& }{item}, \param{unsigned int }{col}}
+\constfunc{virtual void}{GetValue}{\param{wxVariant\& }{variant}, \param{const wxDataViewItem\& }{item}, \param{unsigned int }{col}}
 
 Override this to indicate the value of {\it item}
 A \helpref{wxVariant}{wxvariant} is used to store the data.
 
 \membersection{wxDataViewModel::HasDefaultCompare}\label{wxdataviewmodelhasdefaultcompare}
 
-\func{bool}{HasDefaultCompare}{\void}
+\constfunc{virtual bool}{HasDefaultCompare}{\void}
 
 Override this to indicate that the model provides a default compare
 function that the control should use if no wxDataViewColumn has been
@@ -161,27 +161,27 @@ for a model which makes use of this.
 
 \membersection{wxDataViewModel::IsContainer}\label{wxdataviewmodeliscontainer}
 
-\constfunc{bool}{IsContainer}{\param{const wxDataViewItem\& }{item}}
+\constfunc{virtual bool}{IsContainer}{\param{const wxDataViewItem\& }{item}}
 
 Override this to indicate of {\it item} is a container, i.e. if
 it can have child items.
 
 \membersection{wxDataViewModel::ItemAdded}\label{wxdataviewmodelitemadded}
 
-\func{bool}{ItemAdded}{\param{const wxDataViewItem\& }{parent}, \param{const wxDataViewItem\& }{item}}
+\func{virtual bool}{ItemAdded}{\param{const wxDataViewItem\& }{parent}, \param{const wxDataViewItem\& }{item}}
 
 Call this to inform the model that an item has been added
 to the data.
 
 \membersection{wxDataViewModel::ItemChanged}\label{wxdataviewmodelitemchanged}
 
-\func{bool}{ItemChanged}{\param{const wxDataViewItem\& }{item}}
+\func{virtual bool}{ItemChanged}{\param{const wxDataViewItem\& }{item}}
 
 Call this to inform the model that an item has changed.
 
 \membersection{wxDataViewModel::ItemDeleted}\label{wxdataviewmodelitemdeleted}
 
-\func{bool}{ItemDeleted}{\param{const wxDataViewItem\& }{parent}, \param{const wxDataViewItem\& }{item}}
+\func{virtual bool}{ItemDeleted}{\param{const wxDataViewItem\& }{parent}, \param{const wxDataViewItem\& }{item}}
 
 Call this to inform the model that an item has been deleted.
 
@@ -193,14 +193,14 @@ Remove the {\it notifier} from the list of notifiers.
 
 \membersection{wxDataViewModel::Resort}\label{wxdataviewmodelresort}
 
-\func{void}{Resort}{\void}
+\func{virtual void}{Resort}{\void}
 
 Call this to initiate a resort after the sort function has
 been changed.
 
 \membersection{wxDataViewModel::SetValue}\label{wxdataviewmodelsetvalue}
 
-\func{bool}{SetValue}{\param{const wxVariant\& }{variant}, \param{const wxDataViewItem\& }{item}, \param{unsigned int }{col}}
+\func{virtual bool}{SetValue}{\param{const wxVariant\& }{variant}, \param{const wxDataViewItem\& }{item}, \param{unsigned int }{col}}
 
 This gets called in order to set a value in the data model.
 The most common scenario is that the wxDataViewCtrl calls
@@ -210,7 +210,7 @@ has to be called!
 
 \membersection{wxDataViewModel::ValueChanged}\label{wxdataviewmodelvaluechanged}
 
-\func{bool}{ValueChanged}{\param{const wxDataViewItem\& }{item}, \param{unsigned int }{col}}
+\func{virtual bool}{ValueChanged}{\param{const wxDataViewItem\& }{item}, \param{unsigned int }{col}}
 
 Call this to inform this model that a value in
 the model has been changed.
