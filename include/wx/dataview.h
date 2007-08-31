@@ -138,8 +138,7 @@ public:
     // define hierachy
     virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const = 0;
     virtual bool IsContainer( const wxDataViewItem &item ) const = 0;
-    virtual wxDataViewItem GetFirstChild( const wxDataViewItem &parent ) const = 0;
-    virtual wxDataViewItem GetNextSibling( const wxDataViewItem &item ) const = 0;
+    virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const = 0;
 
     // delegated notifiers
     virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
@@ -210,8 +209,7 @@ public:
                            const wxDataViewItem &item, unsigned int col );
     virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const;
     virtual bool IsContainer( const wxDataViewItem &item ) const;
-    virtual wxDataViewItem GetFirstChild( const wxDataViewItem &parent ) const;
-    virtual wxDataViewItem GetNextSibling( const wxDataViewItem &item ) const;
+    virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const;
     
 private:
     wxDataViewItemArray m_hash;

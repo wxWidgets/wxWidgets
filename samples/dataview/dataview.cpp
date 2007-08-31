@@ -333,47 +333,35 @@ public:
         return node->IsContainer();
     }
     
-    virtual wxDataViewItem GetFirstChild( const wxDataViewItem &parent ) const
+    virtual unsigned int GetChildren( const wxDataViewItem &parent, wxDataViewItemArray &array ) const
     {
         MyMusicModelNode *node = (MyMusicModelNode*) parent.GetID();
         if (!node)
-            return wxDataViewItem( (void*) m_root );
+        {
+            array.Add( wxDataViewItem( (void*) m_root ) );
+            return 1;
+        }
         
-        if (node->GetChildCount() == 0)
-            return wxDataViewItem( 0 );
-           
         if (node == m_classical)
         {
             MyMusicModel *model = (MyMusicModel*)(const MyMusicModel*) this;
             model->m_classicalMusicIsKnownToControl = true;
         }
         
-        MyMusicModelNode *first_child = node->GetChildren().Item( 0 );
-        return wxDataViewItem( (void*) first_child );
+        if (node->GetChildCount() == 0)
+        {
+            return 0;
+        }
+           
+        unsigned int count = node->GetChildren().GetCount();
+        unsigned int pos;
+        for (pos = 0; pos < count; pos++)
+        {
+            MyMusicModelNode *child = node->GetChildren().Item( pos );
+            array.Add( wxDataViewItem( (void*) child ) );
+        }
+        return count;
     }
-    
-    virtual wxDataViewItem GetNextSibling( const wxDataViewItem &item ) const
-    {
-        MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
-        
-        // "MyMusic" has no siblings in our model
-        if (node == m_root)
-            return wxDataViewItem(0);
-
-        MyMusicModelNode *parent = node->GetParent();
-        int pos = parent->GetChildren().Index( node );
-        
-        // Something went wrong
-        if (pos == wxNOT_FOUND)
-            return wxDataViewItem(0);
-            
-        // No more children
-        if (pos == parent->GetChildCount()-1)
-            return wxDataViewItem(0);
-            
-        node = parent->GetChildren().Item( pos+1 );
-        return wxDataViewItem( (void*) node );
-    } 
     
 private:
     MyMusicModelNode*   m_root;

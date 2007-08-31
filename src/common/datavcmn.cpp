@@ -307,29 +307,14 @@ bool wxDataViewIndexListModel::IsContainer( const wxDataViewItem &item ) const
     return false;
 }
 
-wxDataViewItem wxDataViewIndexListModel::GetFirstChild( const wxDataViewItem &parent ) const
+unsigned int wxDataViewIndexListModel::GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const
 {
-    if (!parent.IsOk())
-    {
-        if (m_hash.GetCount() == 0)
-            return wxDataViewItem(0);
+    if (item.IsOk())
+        return 0;
 
-        return wxDataViewItem( m_hash[0]);
-    }
-
-    return wxDataViewItem(0);
-}
-
-wxDataViewItem wxDataViewIndexListModel::GetNextSibling( const wxDataViewItem &item ) const
-{
-    if (!item.IsOk())
-        return wxDataViewItem(0);
-
-    int pos = m_hash.Index( item.GetID() );
-    if ((pos == wxNOT_FOUND) || (pos == (int) (m_hash.GetCount()-1)))
-        return wxDataViewItem(0);
-
-    return wxDataViewItem( m_hash[pos+1] );
+    children = m_hash;
+    
+    return m_hash.GetCount();
 }
 
 //-----------------------------------------------------------------------------

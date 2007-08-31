@@ -2380,17 +2380,19 @@ void wxDataViewCtrlInternal::BuildBranch( wxGtkTreeModelNode *node )
 {
     if (node->GetChildCount() == 0)
     {
-        wxDataViewItem child = m_wx_model->GetFirstChild( node->GetItem() );
-        while (child.IsOk())
+        wxDataViewItemArray children;
+        unsigned int count = m_wx_model->GetChildren( node->GetItem(), children );
+        unsigned int pos;
+        for (pos = 0; pos < count; pos++)
         {
+            wxDataViewItem child = children[pos];
+            
             if (m_wx_model->IsContainer( child ))
                 node->AddNode( new wxGtkTreeModelNode( node, child, this ) );
             else
                 node->AddLeave( child.GetID() );
     
             // Don't send any events here
-    
-            child = m_wx_model->GetNextSibling( child );
         }
     }
 }

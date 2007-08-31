@@ -8,6 +8,7 @@ pure virtual functions in order to define a complete
 data model. In detail, you need to override 
 \helpref{IsContainer}{wxdataviewmodeliscontainer},
 \helpref{GetParent}{wxdataviewmodelgetparent},
+\helpref{GetChildren}{wxdataviewmodelgetchildren},
 \helpref{GetColumnCount}{wxdataviewmodelgetcolumncount},
 \helpref{GetColumnType}{wxdataviewmodelgetcolumntype} and
 \helpref{GetValue}{wxdataviewmodelgetvalue} in order to
@@ -125,17 +126,12 @@ Override this to indicate what type of data is stored in the
 column specified by {\it col}. This should return a string
 indicating the type of data as reported by \helpref{wxVariant}{wxvariant}.
 
-\membersection{wxDataViewModel::GetFirstChild}\label{wxdataviewmodelgetfirstchild}
+\membersection{wxDataViewModel::GetChildren}\label{wxdataviewmodelgetfirstchild}
 
-\constfunc{wxDataViewItem}{GetFirstChild}{\param{const wxDataViewItem\& }{parent}}
+\constfunc{unsigned int}{GetChildren}{\param{const wxDataViewItem\& }{item}, \param{wxDataViewItemArray\& }{children} }
 
-To be removed.
-
-\membersection{wxDataViewModel::GetNextSibling}\label{wxdataviewmodelgetnextsibling}
-
-\constfunc{wxDataViewItem}{GetNextSibling}{\param{const wxDataViewItem\& }{item}}
-
-To be removed.
+Override this so the control can query the child items of
+an item. Returns the number of items.
 
 \membersection{wxDataViewModel::GetParent}\label{wxdataviewmodelgetparent}
 
