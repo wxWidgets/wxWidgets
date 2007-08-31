@@ -94,8 +94,8 @@ public:
     // enclosed with "
     // Example : <P align=right> GetParam("ALIGN") returns (RIGHT)
     //           <P IMG SRC="WhaT.jpg"> GetParam("SRC") returns (WhaT.jpg)
-    //                           (or ("WhaT.jpg") if with_commas == true)
-    wxString GetParam(const wxString& par, bool with_commas = false) const;
+    //                           (or ("WhaT.jpg") if with_quotes == true)
+    wxString GetParam(const wxString& par, bool with_quotes = false) const;
 
     // Convenience functions:
     bool GetParamAsColour(const wxString& par, wxColour *clr) const;
@@ -103,7 +103,7 @@ public:
 
     // Scans param like scanf() functions family does.
     // Example : ScanParam("COLOR", "\"#%X\"", &clr);
-    // This is always with with_commas=false
+    // This is always with with_quotes=false
     // Returns number of scanned values
     // (like sscanf() does)
     // NOTE: unlike scanf family, this function only accepts

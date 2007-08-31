@@ -431,12 +431,12 @@ bool wxHtmlTag::HasParam(const wxString& par) const
     return (m_ParamNames.Index(par, false) != wxNOT_FOUND);
 }
 
-wxString wxHtmlTag::GetParam(const wxString& par, bool with_commas) const
+wxString wxHtmlTag::GetParam(const wxString& par, bool with_quotes) const
 {
     int index = m_ParamNames.Index(par, false);
     if (index == wxNOT_FOUND)
         return wxGetEmptyString();
-    if (with_commas)
+    if (with_quotes)
     {
         // VS: backward compatibility, seems to be never used by wxHTML...
         wxString s;
