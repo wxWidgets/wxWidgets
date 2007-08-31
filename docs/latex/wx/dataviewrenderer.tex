@@ -7,6 +7,7 @@ render the individual cells. One instance of a renderer class is
 owned by \helpref{wxDataViewColumn}{wxdataviewcolumn}. There is
 a number of ready-to-use renderers provided:
 \helpref{wxDataViewTextRenderer}{wxdataviewtextrenderer},
+\helpref{wxDataViewIconTextRenderer}{wxdataviewtextrenderer},
 \helpref{wxDataViewToggleRenderer}{wxdataviewtogglerenderer},
 \helpref{wxDataViewProgressRenderer}{wxdataviewprogressrenderer},
 \helpref{wxDataViewBitmapRenderer}{wxdataviewbitmaprenderer},
@@ -187,6 +188,82 @@ wxDataViewProgressRenderer
 
 \func{}{wxDataViewProgressRenderer}{\param{const wxString\& }{label = wxEmptyString}, \param{const wxString\& }{varianttype = wxT("long")}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}}
 
+
+\section{\class{wxDataViewIconText}}\label{wxdataviewicontext}
+
+wxDataViewIconText is used by 
+\helpref{wxDataViewIconTextRenderer}{wxdataviewicontextrenderer}
+for data transfer. This class can be converted to a from
+a \helpref{wxVariant}{wxvariant}.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<dataview.h>
+
+\membersection{wxDataViewIconText::wxDataViewIconText}\label{wxdataviewicontextwxdataviewicontext}
+
+\func{}{wxDataViewIconText}{\param{const wxString\& }{text = wxEmptyString}, \param{const wxIcon\& }{icon = wxNullIcon}}
+
+\func{}{wxDataViewIconText}{\param{const wxDataViewIconText\& }{other}}
+
+Constructor.
+
+\membersection{wxDataViewIconText::GetIcon}\label{wxdataviewicontextgeticon}
+
+\constfunc{const wxIcon\&}{GetIcon}{\void}
+
+Gets the icon.
+
+\membersection{wxDataViewIconText::GetText}\label{wxdataviewicontextgettext}
+
+\constfunc{wxString}{GetText}{\void}
+
+Gets the text.
+
+\membersection{wxDataViewIconText::SetIcon}\label{wxdataviewicontextseticon}
+
+\func{void}{SetIcon}{\param{const wxIcon\& }{icon}}
+
+Set the icon.
+
+\membersection{wxDataViewIconText::SetText}\label{wxdataviewicontextsettext}
+
+\func{void}{SetText}{\param{const wxString\& }{text}}
+
+Set the text.
+
+\section{\class{wxDataViewIconTextRenderer}}\label{wxdataviewicontextrenderer}
+
+The wxDataViewIconTextRenderer class is used to display text with
+a small icon next to it as it is typically done in a file manager.
+This classes uses the \helpref{wxDataViewIconText}{wxdataviewicontext}
+helper class to store its data. wxDataViewIonText can be converted
+to a from a \helpref{wxVariant}{wxvariant} using the left shift
+operator.
+
+\wxheading{Derived from}
+
+\helpref{wxDataViewRenderer}{wxdataviewrenderer}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/dataview.h>
+
+\wxheading{Library}
+
+\helpref{wxAdv}{librarieslist}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDataViewIconTextRenderer::wxDataViewIconTextRenderer}\label{wxdataviewtogglerendererwxdataviewicontextrenderer}
+
+\func{}{wxDataViewIconTextRenderer}{\param{const wxString\& }{varianttype = wxT("wxDataViewIconText")}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}}
 
 
 \section{\class{wxDataViewToggleRenderer}}\label{wxdataviewtogglerenderer}
