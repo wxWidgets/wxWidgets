@@ -290,7 +290,7 @@ wxMenu * wxDeepCopyMenu( wxMenu *menu )
             new wxMenuItem(
                 m_pMenu, // parent menu
                 theItem->GetId(), // id
-                theItem->GetText(), // text label
+                theItem->GetItemLabel(), // text label
                 theItem->GetHelp(), // status bar help string
                 theItem->GetKind(), // menu flags - checkable, separator, etc.
                 wxDeepCopyMenu(theItem->GetSubMenu()) )); // submenu
