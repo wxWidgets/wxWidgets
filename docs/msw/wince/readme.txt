@@ -130,6 +130,13 @@ coredll.lib wx_mono.lib wx_wxjpeg.lib wx_wxpng.lib wx_wxzlib.lib wx_wxexpat.lib 
 since the library names in the wxWidgets workspace were changed
 by VS 2005.
 
+Alternatively, don't edit the wxWidgets library project file, so the libraries will be
+placed under build\wince, and then edit the sample projects as follows:
+
+- prepend ..\..\build\wince\ to the Additional Library Directives line
+- change the Additional Dependencies as above, to:
+  coredll.lib wx_mono.lib wx_wxjpeg.lib wx_wxpng.lib wx_wxzlib.lib wx_wxexpat.lib commctrl.lib winsock.lib wininet.lib
+
 Status
 ======
 
