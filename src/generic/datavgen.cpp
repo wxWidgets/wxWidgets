@@ -1662,10 +1662,6 @@ void wxGenericDataViewHeaderWindow::OnMouse( wxMouseEvent &event )
         m_owner->CalcUnscrolledPosition(w, 0, &w, NULL);
         w -= 6;
 
-        // erase the line if it was drawn
-        if (m_currentX < w)
-            DrawCurrent();
-
         if (event.ButtonUp())
         {
             m_isDragging = false;
@@ -1673,18 +1669,14 @@ void wxGenericDataViewHeaderWindow::OnMouse( wxMouseEvent &event )
                 ReleaseMouse();
 
             m_dirty = true;
+        }
+        m_currentX = wxMax(m_minX + 7, x);
 
+        if (m_currentX < w) 
+        {
             GetColumn(m_column)->SetWidth(m_currentX - m_minX);
-
             Refresh();
             GetOwner()->Refresh();
-        }
-        else
-        {
-            m_currentX = wxMax(m_minX + 7, x);
-
-            // draw in the new location
-            if (m_currentX < w) DrawCurrent();
         }
 
     }
@@ -1740,7 +1732,6 @@ void wxGenericDataViewHeaderWindow::OnMouse( wxMouseEvent &event )
                 m_isDragging = true;
                 CaptureMouse();
                 m_currentX = x;
-                DrawCurrent();
             }
             else    // click on a column
             {
@@ -1787,8 +1778,12 @@ void wxGenericDataViewHeaderWindow::OnMouse( wxMouseEvent &event )
     }
 }
 
+//I must say that this function is deprecated, but I think it is useful to keep it for a time
 void wxGenericDataViewHeaderWindow::DrawCurrent()
 {
+#if 1
+    GetColumn(m_column)->SetWidth(m_currentX - m_minX);
+#else
     int x1 = m_currentX;
     int y1 = 0;
     ClientToScreen (&x1, &y1);
@@ -1806,7 +1801,8 @@ void wxGenericDataViewHeaderWindow::DrawCurrent()
     dc.SetPen(m_penCurrent);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
     AdjustDC(dc);
-    dc.DrawLine(x1, y1, x2, y2);
+    dc.DrawLine(x1, y1, x2, y2 );
+#endif
 }
 
 void wxGenericDataViewHeaderWindow::AdjustDC(wxDC& dc)
@@ -3009,7 +3005,7 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
     //Find the item along the parent-chain.
     //This algorithm is designed to speed up the node-finding method
     wxDataViewTreeNode * node = m_root;
-    for( ItemList::Node * n = list.GetFirst(); n; n = n->GetNext() )
+    for( ItemList::const_iterator iter = list.begin(); iter !=list.end() ; iter++ )
     {
         if( node->HasChildren() )
         {
@@ -3023,7 +3019,7 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
             int i = 0;
             for (; i < nodes.GetCount(); i ++)
             {
-                if (nodes[i]->GetItem() == *(n->GetData()))
+                if (nodes[i]->GetItem() == (**iter))
                 {    
                     node = nodes[i];
                     break;
@@ -3090,8 +3086,8 @@ int wxDataViewMainWindow::RecalculateCount()
 class ItemToRowJob : public DoJob
 {
 public:
-    ItemToRowJob(const wxDataViewItem & item, ItemList::Node * node )
-    { this->item = item ; ret = -1 ; nd = node ; }
+    ItemToRowJob(const wxDataViewItem & item, ItemList::const_iterator iter )
+    { this->item = item ; ret = -1 ; m_iter = iter ; }
     virtual ~ItemToRowJob(){};
 
     //Maybe binary search will help to speed up this process
@@ -3103,9 +3099,9 @@ public:
              return DoJob::OK;
          }
 
-         if( nd && node->GetItem() == *(nd->GetData()))
+         if( node->GetItem() == **m_iter )
          {
-             nd = nd->GetNext();
+             m_iter++ ;
              return DoJob::CONT;
          }
          else
@@ -3126,7 +3122,7 @@ public:
     //the row number is begin from zero
     int GetResult(){ return ret -1 ; }
 private:
-    ItemList::Node * nd;
+    ItemList::const_iterator  m_iter;
     wxDataViewItem item;
     int ret;
 
@@ -3155,7 +3151,7 @@ int wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item)
     pItem = new wxDataViewItem( );
     list.Insert( pItem );
 
-    ItemToRowJob job( item, list.GetFirst() );
+    ItemToRowJob job( item, list.begin() );
     Walker(m_root , job );
     return job.GetResult();
 }
@@ -3165,23 +3161,23 @@ void BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item, wxDataVie
     if( !model->IsContainer( item ) )
         return ;
 
-    wxDataViewItem i = model->GetFirstChild( item );
-    int num = 0;
-    while( i.IsOk() )
+    wxDataViewItemArray children;
+    unsigned int num = model->GetChildren( item, children);
+    int index = 0;
+    while( index < num )
     {
-        num ++;
-        if( model->IsContainer( i ) )
+        if( model->IsContainer( children[index] ) )
         {
             wxDataViewTreeNode * n = new wxDataViewTreeNode( node );
-            n->SetItem(i);
+            n->SetItem(children[index]);
             n->SetHasChildren( true ) ;
             node->AddNode( n );
         }
         else
         {
-            node->AddLeaf( i.GetID() );
+            node->AddLeaf( children[index].GetID() );
         }
-        i = model->GetNextSibling( i );
+        index ++;
     }
     node->SetSubTreeCount( num );
     wxDataViewTreeNode * n = node->GetParent();
@@ -3463,22 +3459,24 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
         //Process the event of user clicking the expander
         bool expander = false;
-        wxDataViewTreeNode * node = GetTreeNodeByRow(current);
-        if( node!=NULL && node->HasChildren() )
+        if (GetOwner()->GetExpanderColumn() == col)
         {
-            int indent = node->GetIndentLevel();
-            indent = GetOwner()->GetIndent()*indent;
-            wxRect rect( xpos + indent + EXPANDER_MARGIN, current * m_lineHeight + EXPANDER_MARGIN, m_lineHeight-2*EXPANDER_MARGIN,m_lineHeight-2*EXPANDER_MARGIN);
-            if( rect.Contains( x, y) )
-            {
-                expander = true;
-                if( node->IsOpen() )
-                    OnCollapsing(current);
-                else
-                    OnExpanding( current );
-            }
+	        wxDataViewTreeNode * node = GetTreeNodeByRow(current);
+	        if( node!=NULL && node->HasChildren() )
+	        {
+	            int indent = node->GetIndentLevel();
+	            indent = GetOwner()->GetIndent()*indent;
+	            wxRect rect( xpos + indent + EXPANDER_MARGIN, current * m_lineHeight + EXPANDER_MARGIN, m_lineHeight-2*EXPANDER_MARGIN,m_lineHeight-2*EXPANDER_MARGIN);
+	            if( rect.Contains( x, y) )
+	            {
+	                expander = true;
+	                if( node->IsOpen() )
+	                    OnCollapsing(current);
+	                else
+	                    OnExpanding( current );
+	            }
+	        }
         }
-
         //If the user click the expander, we do not do editing even if the column with expander are editable
         if (m_lastOnSame && !expander )
         {
@@ -3778,7 +3776,7 @@ wxDataViewColumn* wxDataViewCtrl::GetColumn( unsigned int pos ) const
 
 bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
 {
-    wxDataViewColumnList::Node * ret = m_cols.Find( column );
+    wxDataViewColumnList::compatibility_iterator  ret = m_cols.Find( column );
     if (ret == NULL)
         return false;
 
