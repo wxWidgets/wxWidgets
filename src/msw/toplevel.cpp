@@ -741,7 +741,8 @@ void wxTopLevelWindowMSW::Maximize(bool maximize)
 bool wxTopLevelWindowMSW::IsMaximized() const
 {
     return IsAlwaysMaximized() ||
-#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
+#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__) && !defined(__WINCE_STANDARDSDK__)
+
            (::IsZoomed(GetHwnd()) != 0) ||
 #endif
            m_maximizeOnShow;
