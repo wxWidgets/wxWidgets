@@ -126,13 +126,6 @@ END_EVENT_TABLE()
 wxTaskBarIconArea::wxTaskBarIconArea(wxTaskBarIcon *icon, const wxBitmap &bmp)
     : wxTaskBarIconAreaBase(), m_icon(icon), m_pos(0,0)
 {
-    if (!IsProtocolSupported())
-    {
-        wxLogTrace(_T("systray"),
-                   _T("using legacy KDE1,2 and GNOME 1.2 methods"));
-        SetLegacyWMProperties();
-    }
-
 #if defined(__WXGTK20__) && defined(TASKBAR_ICON_AREA_BASE_INCLUDED)
     m_invokingWindow = icon;
 #endif
@@ -142,6 +135,13 @@ wxTaskBarIconArea::wxTaskBarIconArea(wxTaskBarIcon *icon, const wxBitmap &bmp)
     SetSize(wxSize(bmp.GetWidth(), bmp.GetHeight()));
 
     SetTrayIcon(bmp);
+
+    if (!IsProtocolSupported())
+    {
+        wxLogTrace(_T("systray"),
+                   _T("using legacy KDE1,2 and GNOME 1.2 methods"));
+        SetLegacyWMProperties();
+    }
 }
 
 void wxTaskBarIconArea::SetTrayIcon(const wxBitmap& bmp)
