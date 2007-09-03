@@ -281,8 +281,8 @@ bool wxGLCanvas::Create( wxWindow *parent,
             data[p++]=GLX_BUFFER_SIZE; data[p++]=attribList[arg++]; break;
           case WX_GL_LEVEL:
             data[p++]=GLX_LEVEL; data[p++]=attribList[arg++]; break;
-          case WX_GL_DOUBLEBUFFER: data[p++] = GLX_DOUBLEBUFFER; break;
-          case WX_GL_STEREO: data[p++] = GLX_STEREO; break;
+          case WX_GL_DOUBLEBUFFER: data[p++] = GLX_DOUBLEBUFFER; data[p++] = 1; break;
+          case WX_GL_STEREO: data[p++] = GLX_STEREO; data[p++] = 1; break;
           case WX_GL_AUX_BUFFERS:
             data[p++]=GLX_AUX_BUFFERS; data[p++]=attribList[arg++]; break;
           case WX_GL_MIN_RED:

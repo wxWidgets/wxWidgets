@@ -464,6 +464,7 @@ void wxGLCanvas::GetGLAttribListFromWX(int *wx_attribList, int *gl_attribList )
                     break;
                 case WX_GL_STEREO:
                     gl_attribList[p++] = GLX_STEREO;
+                    gl_attribList[p++] = 1;
                     break;
                 case WX_GL_AUX_BUFFERS:
                     gl_attribList[p++] = GLX_AUX_BUFFERS;
