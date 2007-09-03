@@ -185,17 +185,21 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
                     glattrs[p++] = GLX_LEVEL;
                     break;
 
+                    // the following boolean attributes don't have values in wx
+                    // API (they're turned on if specified) but do have them in
+                    // OpenGL, so do put them into glattrs and also skip the
+                    // copy of wx value after switch by using "continue"
+                    // instead of "break"
                 case WX_GL_DOUBLEBUFFER:
                     glattrs[p++] = GLX_DOUBLEBUFFER;
                     glattrs[p++] = True;
-
-                    // again, we don't have value for this one in wx list (even
-                    // though OpenGL does use it)
                     continue;
 
                 case WX_GL_STEREO:
                     glattrs[p++] = GLX_STEREO;
-                    break;
+                    glattrs[p++] = True;
+                    continue;
+
 
                 case WX_GL_AUX_BUFFERS:
                     glattrs[p++] = GLX_AUX_BUFFERS;
