@@ -13,32 +13,27 @@
 
 #include "wx/vector.h"
 
-#define WX_DECLARE_STACK(obj, cls)\
-class cls : public wxVectorBase\
+#define WX_DECLARE_STACK(obj, cls) \
+class cls : public wxVector<obj> \
 {\
-    WX_DECLARE_VECTORBASE(obj, cls);\
 public:\
     void push(const obj& o)\
     {\
-        if ( !Alloc(size() + 1) )\
-        {\
-            wxFAIL_MSG(_T("failed to extend stack"));\
-        }\
-        Append(new obj(o));\
+        push_back(o); \
     };\
 \
     void pop()\
     {\
-        RemoveAt(size() - 1);\
+        pop_back(); \
     };\
 \
     obj& top()\
     {\
-        return *(obj *) GetItem(size() - 1);\
+        return at(size() - 1);\
     };\
     const obj& top() const\
     {\
-        return *(obj *) GetItem(size() - 1);\
+        return at(size() - 1); \
     };\
 }
 
