@@ -172,6 +172,7 @@ wxGTK:
 - Replaced g_free with g_border_free to fix crash with newer GTK+.
 - Fixed crash in settings when using tooltips->tip_window with GTK+ 2.11.6.
 - Fix WX_GL_STEREO attribute handling (Tristan Mehamli)
+- Fix wxThread::SetPriority() when the thread is running (Christos Gourdoupis)
 
 wxMac:
 
