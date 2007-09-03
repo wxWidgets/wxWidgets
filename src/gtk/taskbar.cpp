@@ -60,9 +60,10 @@ bool wxTaskBarIconAreaBase::IsProtocolSupported()
         Display *display = GDK_DISPLAY();
         Screen *screen = DefaultScreenOfDisplay(display);
 
-        wxString name;
-        name.Printf(_T("_NET_SYSTEM_TRAY_S%d"), XScreenNumberOfScreen(screen));
-        Atom atom = XInternAtom(display, name.ToAscii(), False);
+        char name[32];
+        g_snprintf(name, sizeof(name), "_NET_SYSTEM_TRAY_S%d",
+            XScreenNumberOfScreen(screen));
+        Atom atom = XInternAtom(display, name, False);
 
         Window manager = XGetSelectionOwner(display, atom);
 
