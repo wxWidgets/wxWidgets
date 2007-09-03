@@ -230,6 +230,7 @@ wxGTK:
 - Don't unconditionally add wxCAPTION style to wxMiniFrame
 - Generate wxEVT_COMMAND_LIST_END_LABEL_EDIT event even if label didn't change
 - Fix WX_GL_STEREO attribute handling (Tristan Mehamli)
+- Fix wxThread::SetPriority() when the thread is running (Christos Gourdoupis)
 
 
 2.8.4

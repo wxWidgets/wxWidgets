@@ -1311,7 +1311,7 @@ void wxThread::SetPriority(unsigned int prio)
 
             // map wx priorites WXTHREAD_MIN_PRIORITY..WXTHREAD_MAX_PRIORITY
             // to Unix priorities 20..-20
-            if ( setpriority(PRIO_PROCESS, 0, -(2*prio)/5 + 20) == -1 )
+            if ( setpriority(PRIO_PROCESS, 0, -(2*(int)prio)/5 + 20) == -1 )
             {
                 wxLogError(_("Failed to set thread priority %d."), prio);
             }
