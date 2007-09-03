@@ -50,7 +50,7 @@ void            UMAShowArrowCursor() ;
 
 // window manager
 
-GrafPtr        UMAGetWindowPort( WindowRef inWindowRef ) ;
+WXDLLIMPEXP_BASE GrafPtr UMAGetWindowPort( WindowRef inWindowRef ) ;
 void             UMADisposeWindow( WindowRef inWindowRef ) ;
 void             UMASetWTitle( WindowRef inWindowRef , const wxString& title , wxFontEncoding encoding) ;
 

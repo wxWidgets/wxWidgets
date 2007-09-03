@@ -15,7 +15,7 @@
 #include "wx/string.h"
 #include "wx/event.h"
 
-class wxToolTip : public wxObject
+class WXDLLIMPEXP_CORE wxToolTip : public wxObject
 {
 public:
     // ctor & dtor
