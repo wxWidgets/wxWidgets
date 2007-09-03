@@ -31,6 +31,7 @@
     #include "wx/settings.h"
 #endif //WX_PRECOMP
 
+#include "wx/scopeguard.h"
 #include "wx/splitter.h"
 #include "wx/renderer.h"
 #include "wx/msw/private.h"
@@ -115,7 +116,13 @@ public:
                                 const wxRect& rect,
                                 int flags = 0);
 
-    virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0);
+    virtual void DrawFocusRect(wxWindow* win,
+                               wxDC& dc,
+                               const wxRect& rect,
+                               int flags = 0);
+
+    virtual int GetHeaderButtonHeight(wxWindow *win);
+
 private:
     DECLARE_NO_COPY_CLASS(wxRendererMSW)
 };
@@ -139,7 +146,6 @@ public:
                                   int flags = 0,
                                   wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
                                   wxHeaderButtonParams* params = NULL);
-    virtual int GetHeaderButtonHeight(wxWindow *win);
 
     virtual void DrawTreeItemButton(wxWindow *win,
                                     wxDC& dc,
@@ -277,12 +283,38 @@ wxRendererMSW::DrawPushButton(wxWindow * WXUNUSED(win),
     ::DrawFrameControl(GetHdcOf(dc), &rc, DFC_BUTTON, style);
 }
 
-void wxRendererMSW::DrawFocusRect(wxWindow* WXUNUSED(win), wxDC& dc, const wxRect& rect, int WXUNUSED(flags))
+void wxRendererMSW::DrawFocusRect(wxWindow * WXUNUSED(win),
+                                  wxDC& dc,
+                                  const wxRect& rect,
+                                  int WXUNUSED(flags))
 {
     RECT rc;
     wxCopyRectToRECT(rect, rc);
 
     ::DrawFocusRect(GetHdcOf(dc), &rc);
+}
+
+int wxRendererMSW::GetHeaderButtonHeight(wxWindow * WXUNUSED(win))
+{
+    // some "reasonable" value returned in case of error, it doesn't really
+    // correspond to anything but it's better than returning 0
+    static const int DEFAULT_HEIGHT = 20;
+
+
+    // create a temporary header window just to get its geometry
+    HWND hwndHeader = ::CreateWindow(WC_HEADER, NULL, NULL,
+                                     0, 0, 0, 0, NULL, NULL, NULL, NULL);
+    if ( !hwndHeader )
+        return DEFAULT_HEIGHT;
+
+    wxON_BLOCK_EXIT1( ::DestroyWindow, hwndHeader );
+
+    // initialize the struct filled with the values by Header_Layout()
+    RECT parentRect = { 0, 0, 100, 100 };
+    WINDOWPOS wp = { 0 };
+    HDLAYOUT hdl = { &parentRect, &wp };
+
+    return Header_Layout(hwndHeader, &hdl) ? wp.cy : DEFAULT_HEIGHT;
 }
 
 // ============================================================================
@@ -380,31 +412,6 @@ wxRendererXP::DrawHeaderButton(wxWindow *win,
 
     // Add any extras that are specified in flags and params
     return DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params);
-}
-
-
-int
-wxRendererXP::GetHeaderButtonHeight(wxWindow *win)
-{
-    wxUxThemeHandle hTheme(win, L"HEADER");
-    if ( !hTheme )
-    {
-        return m_rendererNative.GetHeaderButtonHeight(win);
-    }
-
-    HRESULT hr;
-    int value = -1;
-
-    hr = wxUxThemeEngine::Get()->GetThemeMetric( hTheme,
-                                                 NULL,
-                                                 HP_HEADERITEM,
-                                                 HIS_NORMAL,
-                                                 TMT_HEIGHT,
-                                                 &value );
-    if ( hr == S_OK )
-        return value;
-    else
-        return 20;
 }
 
 

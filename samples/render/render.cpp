@@ -133,8 +133,10 @@ public:
         dc.DrawText(_T("Below is the standard header button drawn"), 10, 10);
         dc.DrawText(_T("using the current renderer:"), 10, 40);
 
-        wxRendererNative::Get().DrawHeaderButton(this, dc,
-                                                 wxRect(20, 70, 100, 60));
+        wxRendererNative& renderer = wxRendererNative::Get();
+        const wxCoord height = renderer.GetHeaderButtonHeight(this);
+
+        renderer.DrawHeaderButton(this, dc, wxRect(20, 70, 100, height));
     }
 
     DECLARE_EVENT_TABLE()
