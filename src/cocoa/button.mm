@@ -15,6 +15,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/toplevel.h"
 #endif
 
 #include "wx/stockitem.h"
@@ -103,6 +104,16 @@ wxSize wxButton::DoGetBestSize() const
             size.x = 68;
     }
     return size;
+}
+
+void wxButton::SetDefault()
+{
+    wxTopLevelWindow * const
+        tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+
+    wxCHECK_RET( tlw != NULL, _T("button without top level window?") );
+
+    tlw->SetDefaultItem(this);
 }
 
 static NSRect MakeNSButtonDefaultRect()

@@ -59,6 +59,7 @@ public:
     wxString GetLabel() const;
     void SetLabel(const wxString& label);
     wxSize DoGetBestSize() const;
+    virtual void SetDefault();
 };
 
 #endif
