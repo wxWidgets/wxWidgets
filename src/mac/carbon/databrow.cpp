@@ -20,6 +20,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_DATAVIEWCTRL
+
 #include "wx/utils.h"
 
 #ifndef WX_PRECOMP
@@ -1020,5 +1022,5 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
 } /* wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(DataBrowserItemID, DataBrowserItemNotification, DataBrowserItemDataRef) */
 
 
-#endif
- // wxUSE_GENERICDATAVIEWCTRL
+#endif // wxUSE_DATAVIEWCTRL
+#endif // wxUSE_GENERICDATAVIEWCTRL
