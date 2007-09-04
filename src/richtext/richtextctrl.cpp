@@ -151,7 +151,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     // The base attributes must all have default values
     wxTextAttrEx attributes;
     attributes.SetFont(GetFont());
-    attributes.SetTextColour(*wxBLACK);
+    attributes.SetTextColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
     attributes.SetAlignment(wxTEXT_ALIGNMENT_LEFT);
     attributes.SetLineSpacing(10);
     attributes.SetParagraphSpacingAfter(10);
@@ -166,7 +166,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     wxTextAttrEx defaultAttributes;
     SetDefaultStyle(defaultAttributes);
 
-    SetBackgroundColour(*wxWHITE);
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 
     // Tell the sizers to use the given or best size
