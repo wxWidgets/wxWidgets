@@ -132,7 +132,7 @@ wxTaskBarIconArea::wxTaskBarIconArea(wxTaskBarIcon *icon, const wxBitmap &bmp)
 
     // Set initial size to bitmap size (tray manager may and often will
     // change it):
-    SetSize(wxSize(bmp.GetWidth(), bmp.GetHeight()));
+    SetClientSize(wxSize(bmp.GetWidth(), bmp.GetHeight()));
 
     SetTrayIcon(bmp);
 
@@ -149,7 +149,7 @@ void wxTaskBarIconArea::SetTrayIcon(const wxBitmap& bmp)
     m_bmp = bmp;
 
     // determine suitable bitmap size:
-    wxSize winsize(GetSize());
+    wxSize winsize(GetClientSize());
     wxSize bmpsize(m_bmp.GetWidth(), m_bmp.GetHeight());
     wxSize iconsize(wxMin(winsize.x, bmpsize.x), wxMin(winsize.y, bmpsize.y));
 
