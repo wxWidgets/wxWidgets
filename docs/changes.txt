@@ -132,6 +132,7 @@ All (GUI):
 - Added Set/GetParentWindow to wxHtmlEasyPrinting to allow reuse with different
   parent windows.
 - Fixed a wxRichTextCtrl problem saving a URL to XML.
+- Fixed default background and text colours for wxRichTextCtrl.
 
 wxMSW:
 
