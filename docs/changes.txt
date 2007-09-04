@@ -131,6 +131,7 @@ All (GUI):
   depending on sizer addition order.
 - Added Set/GetParentWindow to wxHtmlEasyPrinting to allow reuse with different
   parent windows.
+- Fixed a wxRichTextCtrl problem saving a URL to XML.
 
 wxMSW:
 
