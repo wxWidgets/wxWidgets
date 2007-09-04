@@ -579,6 +579,8 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/xtistrm.h \
 	wx/zipstrm.h \
 	wx/zstream.h \
+	wx/private/fdiodispatcher.h \
+	wx/private/selectdispatcher.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -1846,6 +1848,8 @@ COND_USE_STC_1___wxscintilla___depname = \
 @COND_TOOLKIT_WINCE@OPENGL_HDR_PLATFORM = wx/msw/glcanvas.h
 @COND_TOOLKIT_X11@OPENGL_HDR_PLATFORM = wx/x11/glcanvas.h wx/unix/glx11.h
 COND_TOOLKIT__BASE_MACOSX_HDR =  \
+	wx/private/fdiodispatcher.h \
+	wx/private/selectdispatcher.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -1863,6 +1867,8 @@ COND_TOOLKIT__BASE_MACOSX_HDR =  \
 	wx/mac/corefoundation/private/strconv_cf.h
 @COND_TOOLKIT_@BASE_MACOSX_HDR = $(COND_TOOLKIT__BASE_MACOSX_HDR)
 COND_TOOLKIT_COCOA_BASE_MACOSX_HDR =  \
+	wx/private/fdiodispatcher.h \
+	wx/private/selectdispatcher.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -1880,6 +1886,8 @@ COND_TOOLKIT_COCOA_BASE_MACOSX_HDR =  \
 	wx/mac/corefoundation/private/strconv_cf.h
 @COND_TOOLKIT_COCOA@BASE_MACOSX_HDR = $(COND_TOOLKIT_COCOA_BASE_MACOSX_HDR)
 COND_TOOLKIT_GTK_BASE_MACOSX_HDR =  \
+	wx/private/fdiodispatcher.h \
+	wx/private/selectdispatcher.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -1901,14 +1909,19 @@ COND_TOOLKIT_MAC_BASE_MACOSX_HDR =  \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h \
 	wx/mac/corefoundation/private/strconv_cf.h \
+	wx/private/fdiodispatcher.h \
+	wx/private/selectdispatcher.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
 	wx/unix/chkconf.h \
 	wx/unix/evtloop.h \
+	wx/unix/pipe.h \
 	wx/unix/stdpaths.h
 @COND_TOOLKIT_MAC@BASE_MACOSX_HDR = $(COND_TOOLKIT_MAC_BASE_MACOSX_HDR)
 COND_TOOLKIT_MOTIF_BASE_MACOSX_HDR =  \
+	wx/private/fdiodispatcher.h \
+	wx/private/selectdispatcher.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -1926,6 +1939,8 @@ COND_TOOLKIT_MOTIF_BASE_MACOSX_HDR =  \
 	wx/mac/corefoundation/private/strconv_cf.h
 @COND_TOOLKIT_MOTIF@BASE_MACOSX_HDR = $(COND_TOOLKIT_MOTIF_BASE_MACOSX_HDR)
 COND_TOOLKIT_X11_BASE_MACOSX_HDR =  \
+	wx/private/fdiodispatcher.h \
+	wx/private/selectdispatcher.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -1954,6 +1969,8 @@ COND_PLATFORM_OS2_1_BASE_PLATFORM_HDR =  \
 	wx/os2/wxrsc.h
 @COND_PLATFORM_OS2_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_OS2_1_BASE_PLATFORM_HDR)
 COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
+	wx/private/fdiodispatcher.h \
+	wx/private/selectdispatcher.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -2924,6 +2941,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_HDR =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_HDR)
 COND_TOOLKIT_MAC_ADVANCED_PLATFORM_HDR =  \
 	wx/mac/carbon/drawer.h \
+	wx/mac/carbon/dataview.h \
+	wx/mac/carbon/databrow.h \
 	wx/mac/carbon/sound.h \
 	wx/mac/carbon/taskbarosx.h \
 	wx/mac/corefoundation/joystick.h
@@ -11632,6 +11651,8 @@ COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_aboutdlg.o \
 	monodll_drawer.o \
+	monodll_dataview.o \
+	monodll_databrow.o \
 	monodll_sound.o \
 	monodll_taskbar.o \
 	monodll_hidjoystick.o
@@ -11696,6 +11717,8 @@ COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarcmn.o \
 	monolib_aboutdlg.o \
 	monolib_drawer.o \
+	monolib_dataview.o \
+	monolib_databrow.o \
 	monolib_sound.o \
 	monolib_taskbar.o \
 	monolib_hidjoystick.o
@@ -11760,6 +11783,8 @@ COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_taskbarcmn.o \
 	advdll_aboutdlg.o \
 	advdll_drawer.o \
+	advdll_dataview.o \
+	advdll_databrow.o \
 	advdll_sound.o \
 	advdll_taskbar.o \
 	advdll_hidjoystick.o
@@ -11812,6 +11837,8 @@ COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_taskbarcmn.o \
 	advlib_aboutdlg.o \
 	advlib_drawer.o \
+	advlib_dataview.o \
+	advlib_databrow.o \
 	advlib_sound.o \
 	advlib_taskbar.o \
 	advlib_hidjoystick.o
@@ -17681,6 +17708,15 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@monodll_joystick.o: $(srcdir)/src/os2/joystick.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/joystick.cpp
 
+@COND_TOOLKIT_MAC_USE_GUI_1@monodll_dataview.o: $(srcdir)/src/mac/carbon/dataview.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/dataview.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1@monodll_databrow.o: $(srcdir)/src/mac/carbon/databrow.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/databrow.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1@monodll_hidjoystick.o: $(srcdir)/src/mac/corefoundation/hidjoystick.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hidjoystick.cpp
 
@@ -17704,9 +17740,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_animate.o: $(srcdir)/src/gtk/animate.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
@@ -22007,6 +22040,15 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@monolib_joystick.o: $(srcdir)/src/os2/joystick.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/joystick.cpp
 
+@COND_TOOLKIT_MAC_USE_GUI_1@monolib_dataview.o: $(srcdir)/src/mac/carbon/dataview.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/dataview.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1@monolib_databrow.o: $(srcdir)/src/mac/carbon/databrow.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/databrow.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1@monolib_hidjoystick.o: $(srcdir)/src/mac/corefoundation/hidjoystick.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hidjoystick.cpp
 
@@ -22030,9 +22072,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_animate.o: $(srcdir)/src/gtk/animate.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
@@ -29837,6 +29876,15 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MAC@advdll_drawer.o: $(srcdir)/src/mac/carbon/drawer.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/drawer.cpp
 
+@COND_TOOLKIT_MAC@advdll_dataview.o: $(srcdir)/src/mac/carbon/dataview.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/dataview.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
+
+@COND_TOOLKIT_MAC@advdll_databrow.o: $(srcdir)/src/mac/carbon/databrow.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/databrow.cpp
+
 @COND_TOOLKIT_MAC@advdll_hidjoystick.o: $(srcdir)/src/mac/corefoundation/hidjoystick.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hidjoystick.cpp
 
@@ -29860,9 +29908,6 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_animate.o: $(srcdir)/src/gtk/animate.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(ADVDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
@@ -30056,6 +30101,15 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MAC@advlib_drawer.o: $(srcdir)/src/mac/carbon/drawer.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/drawer.cpp
 
+@COND_TOOLKIT_MAC@advlib_dataview.o: $(srcdir)/src/mac/carbon/dataview.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/dataview.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
+
+@COND_TOOLKIT_MAC@advlib_databrow.o: $(srcdir)/src/mac/carbon/databrow.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/databrow.cpp
+
 @COND_TOOLKIT_MAC@advlib_hidjoystick.o: $(srcdir)/src/mac/corefoundation/hidjoystick.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/hidjoystick.cpp
 
@@ -30079,9 +30133,6 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_animate.o: $(srcdir)/src/gtk/animate.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(ADVLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp

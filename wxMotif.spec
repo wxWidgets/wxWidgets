@@ -234,6 +234,8 @@ wx/xti.h
 wx/xtistrm.h
 wx/zipstrm.h
 wx/zstream.h
+wx/private/fdiodispatcher.h
+wx/private/selectdispatcher.h
 wx/unix/app.h
 wx/unix/apptbase.h
 wx/unix/apptrait.h

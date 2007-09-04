@@ -73,6 +73,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/utilsunx.cpp
 </set>
 <set var="BASE_UNIX_HDR" hints="files">
+    wx/private/fdiodispatcher.h
+    wx/private/selectdispatcher.h
     wx/unix/app.h
     wx/unix/apptbase.h
     wx/unix/apptrait.h
@@ -222,11 +224,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="BASE_MACOSX_WXMAC_HDR" hints="files">
     $(BASE_MAC_HDR)
+    wx/private/fdiodispatcher.h
+    wx/private/selectdispatcher.h
     wx/unix/app.h
     wx/unix/apptbase.h
     wx/unix/apptrait.h
     wx/unix/chkconf.h
     wx/unix/evtloop.h
+    wx/unix/pipe.h
     wx/unix/stdpaths.h
 </set>
 
