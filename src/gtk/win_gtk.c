@@ -71,8 +71,6 @@ static void gtk_pizza_forall        (GtkContainer     *container,
 
 static void     gtk_pizza_allocate_child     (GtkPizza      *pizza,
                                               GtkPizzaChild *child);
-static void     gtk_pizza_adjust_allocations_recurse (GtkWidget *widget,
-                                                      gpointer   cb_data);
 
 static GtkType gtk_pizza_child_type (GtkContainer     *container);
 
@@ -735,63 +733,28 @@ gtk_pizza_allocate_child (GtkPizza      *pizza,
     gtk_widget_size_allocate (child->widget, &allocation);
 }
 
-static void
-gtk_pizza_adjust_allocations_recurse (GtkWidget *widget,
-                                       gpointer   cb_data)
-{
-    GtkPizzaAdjData *data = cb_data;
-
-    widget->allocation.x += data->dx;
-    widget->allocation.y += data->dy;
-
-    if (GTK_WIDGET_NO_WINDOW (widget) && GTK_IS_CONTAINER (widget))
-    {
-        gtk_container_forall (GTK_CONTAINER (widget),
-                          gtk_pizza_adjust_allocations_recurse,
-                          cb_data);
-    }
-}
-
-static void
-gtk_pizza_adjust_allocations (GtkPizza *pizza,
-                               gint       dx,
-                               gint       dy)
+void
+gtk_pizza_scroll (GtkPizza *pizza, gint dx, gint dy)
 {
     GList *tmp_list;
-    GtkPizzaAdjData data;
+    
+    pizza->m_xoffset += dx;
+    pizza->m_yoffset += dy;
 
-    data.dx = dx;
-    data.dy = dy;
-
+    if (pizza->bin_window)
+        gdk_window_scroll( pizza->bin_window, -dx, -dy );
+        
     tmp_list = pizza->children;
     while (tmp_list)
     {
         GtkPizzaChild *child = tmp_list->data;
         tmp_list = tmp_list->next;
 
-        child->widget->allocation.x += dx;
-        child->widget->allocation.y += dy;
-
-        if (GTK_WIDGET_NO_WINDOW (child->widget) &&
-            GTK_IS_CONTAINER (child->widget))
-        {
-            gtk_container_forall (GTK_CONTAINER (child->widget),
-                                  gtk_pizza_adjust_allocations_recurse,
-                                  &data);
-        }
+        GtkAllocation alloc = child->widget->allocation;
+        alloc.x -= dx;
+        alloc.y -= dy;
+        gtk_widget_size_allocate( child->widget, &alloc );
     }
-}
-
-void
-gtk_pizza_scroll (GtkPizza *pizza, gint dx, gint dy)
-{
-    pizza->m_xoffset += dx;
-    pizza->m_yoffset += dy;
-
-    gtk_pizza_adjust_allocations (pizza, -dx, -dy);
-
-    if (pizza->bin_window)
-        gdk_window_scroll( pizza->bin_window, -dx, -dy );
 }
 
 #ifdef __cplusplus
