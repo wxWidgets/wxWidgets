@@ -1179,7 +1179,7 @@ bool wxToolBar::Realize()
     // are incorrectly drawn, by forcing the background to a specific colour.
     int majorVersion, minorVersion;
     wxGetOsVersion(& majorVersion, & minorVersion);
-    if (majorVersion < 6 && hasControls && !!UseBgCol())
+    if (majorVersion < 6 && hasControls && !UseBgCol())
         SetBackgroundColour(GetBackgroundColour());
 
     return true;
