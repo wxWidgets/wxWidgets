@@ -308,15 +308,6 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size)
         ::SendMessage(GetHwnd(), TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_DRAWDDARROWS);
 #endif
 
-    // The toolbar background for some colour schemes cannot be determined
-    // (for example Silver). So set an explicit background colour to avoid parts of
-    // the background being painted wrongly.
-
-    int majorVersion, minorVersion;
-    wxGetOsVersion(& majorVersion, & minorVersion);
-    if (majorVersion < 6)
-        SetBackgroundColour(GetBackgroundColour());
-
     return true;
 }
 
@@ -1009,6 +1000,8 @@ bool wxToolBar::Realize()
     // Deal with the controls finally
     // ------------------------------
 
+    bool hasControls = false;
+
     // adjust the controls size to fit nicely in the toolbar
     int y = 0;
     size_t index = 0;
@@ -1039,6 +1032,8 @@ bool wxToolBar::Realize()
 
             continue;
         }
+
+        hasControls = true;
 
         wxControl *control = tool->GetControl();
         wxStaticText * const staticText = tool->GetStaticText();
@@ -1179,6 +1174,13 @@ bool wxToolBar::Realize()
 
     InvalidateBestSize();
     UpdateSize();
+
+    // Fix a bug on e.g. the Silver theme on WinXP where control backgrounds
+    // are incorrectly drawn, by forcing the background to a specific colour.
+    int majorVersion, minorVersion;
+    wxGetOsVersion(& majorVersion, & minorVersion);
+    if (majorVersion < 6 && hasControls && !!UseBgCol())
+        SetBackgroundColour(GetBackgroundColour());
 
     return true;
 }
