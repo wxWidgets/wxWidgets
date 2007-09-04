@@ -929,6 +929,9 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara
     if (!attr.GetCharacterStyleName().empty())
         str << wxT(" characterstyle=\"") << wxString(attr.GetCharacterStyleName()) << wxT("\"");
 
+    if (attr.HasURL())
+        str << wxT(" url=\"") << attr.GetURL() << wxT("\"");
+
     if (isPara)
     {
         if (attr.HasAlignment())
@@ -972,9 +975,6 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara
 
         if (attr.HasBulletName())
             str << wxT(" bulletname=\"") << attr.GetBulletName() << wxT("\"");
-
-        if (attr.HasURL())
-            str << wxT(" url=\"") << attr.GetURL() << wxT("\"");
 
         if (!attr.GetParagraphStyleName().empty())
             str << wxT(" parstyle=\"") << wxString(attr.GetParagraphStyleName()) << wxT("\"");
@@ -1099,6 +1099,10 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
         attr.SetTextEffectFlags(wxAtoi(value));
     }
 
+    value = node->GetAttribute(wxT("url"), wxEmptyString);
+    if (!value.empty())
+        attr.SetURL(value);
+
     // Set paragraph attributes
     if (isPara)
     {
@@ -1171,10 +1175,6 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
         value = node->GetAttribute(wxT("bulletname"), wxEmptyString);
         if (!value.empty())
             attr.SetBulletName(value);
-
-        value = node->GetAttribute(wxT("url"), wxEmptyString);
-        if (!value.empty())
-            attr.SetURL(value);
 
         value = node->GetAttribute(wxT("parstyle"), wxEmptyString);
         if (!value.empty())
