@@ -495,6 +495,7 @@ WX_ARG_SYS_WITH(libjpeg,   [  --with-libjpeg          use libjpeg (JPEG file for
 WX_ARG_SYS_WITH(libtiff,   [  --with-libtiff          use libtiff (TIFF file format)], wxUSE_LIBTIFF)
 WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file format)], wxUSE_LIBXPM)
 WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help files loading)], wxUSE_LIBMSPACK)
+WX_ARG_WITHOUT(gtkprint,   [  --without-gtkprint      don't use GTK printing support], wxUSE_GTKPRINT)
 WX_ARG_WITHOUT(gnomeprint, [  --without-gnomeprint    don't use GNOME printing libraries], wxUSE_LIBGNOMEPRINT)
 WX_ARG_WITH(gnomevfs,      [  --with-gnomevfs         use GNOME VFS for associating MIME types], wxUSE_LIBGNOMEVFS)
 WX_ARG_WITH(hildon,        [  --with-hildon           use Hildon framework for Nokia 770], wxUSE_LIBHILDON)
@@ -5489,6 +5490,23 @@ if test "$WXGTK20" = 1; then
     PKG_PROG_PKG_CONFIG()
 
     if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
+
+        if test "$wxUSE_GTKPRINT" = "yes" ; then
+
+                PKG_CHECK_MODULES(GTKPRINT,
+                                  [gtk+-unix-print-2.0 >= 2.10],
+                    [
+                        CFLAGS="$GTKPRINT_CFLAGS $CFLAGS"
+                        CXXFLAGS="$GTKPRINT_CFLAGS $CXXFLAGS"
+                        AC_DEFINE(wxUSE_GTKPRINT)
+                    ],
+                    [
+                        AC_MSG_WARN([GTK printing support not found (GTK+ >= 2.10), library will use GNOME printing support or standard PostScript printing])
+                        wxUSE_GTKPRINT="no"
+                    ]
+                )
+        fi
+
         if test "$wxUSE_LIBGNOMEPRINT" = "yes" ; then
 
                 PKG_CHECK_MODULES(LIBGNOMEPRINTUI,
@@ -7424,7 +7442,7 @@ EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_ODBC="$ODBC_LINK"
 EXTRALIBS_STC="-lwxscintilla${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK $EXTRALIBS_HILDON $EXTRALIBS_GNOMEVFS $EXTRALIBS_GNOMEPRINT`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK $EXTRALIBS_HILDON $EXTRALIBS_GNOMEVFS $EXTRALIBS_GNOMEPRINT $EXTRALIBS_GTKPRINT`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"
@@ -7535,6 +7553,7 @@ AC_SUBST(EXTRALIBS_GUI)
 AC_SUBST(EXTRALIBS_OPENGL)
 AC_SUBST(EXTRALIBS_SDL)
 AC_SUBST(WITH_PLUGIN_SDL)
+AC_SUBST(EXTRALIBS_GTKPRINT)
 AC_SUBST(EXTRALIBS_GNOMEPRINT)
 AC_SUBST(EXTRALIBS_GNOMEVFS)
 AC_SUBST(EXTRALIBS_HILDON)
@@ -7556,6 +7575,9 @@ case "$TOOLKIT" in
         TOOLKIT_DESC="GTK+"
         if test "$WXGTK20" = 1; then
             TOOLKIT_DESC="$TOOLKIT_DESC 2"
+            if test "$wxUSE_GTKPRINT" = "yes" ; then
+                TOOLKIT_EXTRA="$TOOLKIT_EXTRA GTK+ printing";
+            fi
             if test "$wxUSE_LIBGNOMEPRINT" = "yes" ; then
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA gnomeprint";
             fi
