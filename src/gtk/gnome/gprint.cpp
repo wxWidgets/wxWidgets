@@ -1972,17 +1972,9 @@ int wxGnomePrintDC::GetResolution()
     return 72;
 }
 
-
-class wxGnomePrintModule: public wxModule
-{
-public:
-    wxGnomePrintModule() {}
-    bool OnInit();
-    void OnExit();
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxGnomePrintModule)
-};
+// ----------------------------------------------------------------------------
+// wxGnomePrintModule
+// ----------------------------------------------------------------------------
 
 bool wxGnomePrintModule::OnInit()
 {

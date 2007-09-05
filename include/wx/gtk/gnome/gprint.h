@@ -18,10 +18,26 @@
 #include "wx/print.h"
 #include "wx/printdlg.h"
 #include "wx/dc.h"
+#include "wx/module.h"
 
 typedef struct _GnomePrintJob GnomePrintJob;
 typedef struct _GnomePrintContext GnomePrintContext;
 typedef struct _GnomePrintConfig GnomePrintConfig;
+
+// ----------------------------------------------------------------------------
+// wxGnomePrintModule
+// ----------------------------------------------------------------------------
+
+class wxGnomePrintModule: public wxModule
+{
+public:
+    wxGnomePrintModule() {}
+    bool OnInit();
+    void OnExit();
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxGnomePrintModule)
+};
 
 //----------------------------------------------------------------------------
 // wxGnomePrintNativeData
