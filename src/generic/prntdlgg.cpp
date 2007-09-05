@@ -68,8 +68,8 @@
 #endif
 
 #if wxUSE_GTKPRINT
-    // #include "wx/link.h"
-    // wxFORCE_LINK_MODULE(gtk_print)
+    #include "wx/link.h"
+    wxFORCE_LINK_MODULE(gtk_print)
 #endif
 
 // ----------------------------------------------------------------------------

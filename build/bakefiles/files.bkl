@@ -1056,6 +1056,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/gauge.cpp
     src/gtk/gnome/gprint.cpp
     src/gtk/gnome/gvfs.cpp
+    src/gtk/print.cpp
     src/gtk/listbox.cpp
     src/gtk/mdi.cpp
     src/gtk/menu.cpp
@@ -1106,6 +1107,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/gauge.h
     wx/gtk/gnome/gprint.h
     wx/gtk/gnome/gvfs.h
+    wx/gtk/print.h
     wx/gtk/listbox.h
     wx/gtk/mdi.h
     wx/gtk/menu.h
