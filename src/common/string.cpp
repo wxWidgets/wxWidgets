@@ -407,7 +407,7 @@ const wxCharBuffer wxString::mb_str(const wxMBConv& conv) const
     if ( !wcLen )
         return wxCharBuffer("");
 
-    return conv.cWC2MB(wcBuf, wcLen, NULL);
+    return conv.cWC2MB(wcBuf, wcLen+1, NULL);
 }
 
 #else // ANSI
