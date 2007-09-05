@@ -25,6 +25,7 @@
 #include "wx/clipbrd.h"
 #include "wx/colordlg.h"
 #include "wx/metafile.h"
+#include "wx/file.h"
 
 #if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     #include "../sample.xpm"
@@ -206,6 +207,7 @@ public:
     void OnSize(wxSizeEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+    void OnOpenFile(wxCommandEvent& event);
     void OnDrag(wxCommandEvent& event);
     void OnDragMoveByDefault(wxCommandEvent& event);
     void OnDragMoveAllow(wxCommandEvent& event);
@@ -793,6 +795,7 @@ enum
     Menu_DragMoveAllow,
     Menu_NewFrame,
     Menu_About = 101,
+    Menu_OpenFile,
     Menu_Help,
     Menu_Clear,
     Menu_Copy,
@@ -812,6 +815,7 @@ enum
 BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
     EVT_MENU(Menu_Quit,       DnDFrame::OnQuit)
     EVT_MENU(Menu_About,      DnDFrame::OnAbout)
+    EVT_MENU(Menu_OpenFile,      DnDFrame::OnOpenFile)
     EVT_MENU(Menu_Drag,       DnDFrame::OnDrag)
     EVT_MENU(Menu_DragMoveDef,  DnDFrame::OnDragMoveByDefault)
     EVT_MENU(Menu_DragMoveAllow,DnDFrame::OnDragMoveAllow)
@@ -904,7 +908,7 @@ bool DnDApp::OnInit()
     // create the main frame window
     DnDFrame *frame = new DnDFrame((wxFrame  *) NULL,
                                    _T("Drag-and-Drop/Clipboard wxWidgets Sample"),
-                                   10, 100, 650, 340);
+                                   10, 100, 750, 540);
 
     // activate it
     frame->Show(true);
@@ -939,6 +943,8 @@ DnDFrame::DnDFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int
     file_menu->AppendCheckItem(Menu_DragMoveAllow, _T("&Allow moving"));
     file_menu->AppendSeparator();
     file_menu->Append(Menu_NewFrame, _T("&New frame\tCtrl-N"));
+    file_menu->AppendSeparator();
+    file_menu->Append(Menu_OpenFile, _T("&Open file..."));
     file_menu->AppendSeparator();
     file_menu->Append(Menu_Quit, _T("E&xit\tCtrl-Q"));
 
@@ -1007,10 +1013,10 @@ DnDFrame::DnDFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int
     sizer_top->Add(m_ctrlText, 1, wxEXPAND );
 
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
-    sizer->Add(sizer_top, 1, wxEXPAND );
+    sizer->Add(sizer_top, 2, wxEXPAND );
 #if wxUSE_LOG
-    sizer->Add(m_ctrlLog, 2, wxEXPAND);
-    sizer->SetItemMinSize(m_ctrlLog, 450, 0);
+    sizer->Add(m_ctrlLog, 1, wxEXPAND);
+    sizer->SetItemMinSize(m_ctrlLog, 450, 100);
 #endif // wxUSE_LOG
     sizer->AddSpacer(50);
 
@@ -1108,6 +1114,18 @@ void DnDFrame::OnDragMoveByDefault(wxCommandEvent& event)
 void DnDFrame::OnDragMoveAllow(wxCommandEvent& event)
 {
     m_moveAllow = event.IsChecked();
+}
+
+
+void DnDFrame::OnOpenFile(wxCommandEvent& WXUNUSED(event))
+{
+    wxFileDialog dialog(this, _T("Open a file"), wxEmptyString, wxEmptyString, _T("Files (*.*)|*.*"), wxFD_MULTIPLE);
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxString str;
+        str.Printf( _T("File opened: %s"), dialog.GetPath().c_str() );
+        m_ctrlFile->Append( str );
+    }
 }
 
 void DnDFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -1490,8 +1508,14 @@ bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
     wxString str;
     str.Printf( _T("%d files dropped"), (int)nFiles);
     m_pOwner->Append(str);
-    for ( size_t n = 0; n < nFiles; n++ ) {
+    for ( size_t n = 0; n < nFiles; n++ )
+    {
         m_pOwner->Append(filenames[n]);
+        if (wxFile::Exists(filenames[n]))
+            m_pOwner->Append(wxT("  This file exists.") );
+        else
+            m_pOwner->Append(wxT("  This file doesn't exist.") );
+            
     }
 
     return true;
