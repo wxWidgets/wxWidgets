@@ -4,6 +4,7 @@ build/msw/wx_base.dsp
 build/msw/wx_core.dsp
 build/msw/wx_dbgrid.dsp
 build/msw/wx.dsw
+build/msw/wx_dll.dsw
 build/msw/wx_gl.dsp
 build/msw/wx_html.dsp
 build/msw/wx_media.dsp
@@ -15,6 +16,7 @@ build/msw/wx_wxexpat.dsp
 build/msw/wx_wxjpeg.dsp
 build/msw/wx_wxpng.dsp
 build/msw/wx_wxregex.dsp
+build/msw/wx_wxscintilla.dsp
 build/msw/wx_wxtiff.dsp
 build/msw/wx_wxzlib.dsp
 build/msw/wx_xml.dsp
