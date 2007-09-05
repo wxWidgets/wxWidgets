@@ -67,6 +67,11 @@
     wxFORCE_LINK_MODULE(gnome_print)
 #endif
 
+#if wxUSE_GTKPRINT
+    // #include "wx/link.h"
+    // wxFORCE_LINK_MODULE(gtk_print)
+#endif
+
 // ----------------------------------------------------------------------------
 // global vars
 // ----------------------------------------------------------------------------
