@@ -248,54 +248,56 @@ size_t wxFileDataObject::GetDataSize() const
 
 bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
 {
+    // we get data in the text/uri-list format, i.e. as a sequence of URIs
+    // (filenames prefixed by "file:") delimited by "\r\n". size includes
+    // the trailing zero (in theory, not for Nautilus in early GNOME
+    // versions).
+    
     m_filenames.Empty();
 
-    // we get data in the text/uri-list format, i.e. as a sequence of URIs
-    // (filenames prefixed by "file:") delimited by "\r\n"
-    wxString filename;
-    for ( const char *p = (const char *)buf; ; p++ )
+    const gchar *nexttemp = (const gchar*) buf;
+    for ( ; ; )
     {
-        // some broken programs (testdnd GTK+ sample!) omit the trailing
-        // "\r\n", so check for '\0' explicitly here instead of doing it in
-        // the loop statement to account for it
-        if ( (*p == '\r' && *(p+1) == '\n') || !*p )
+        int len = 0;
+        const gchar *temp = nexttemp;
+        for (;;)
         {
-            size_t lenPrefix = 5; // strlen("file:")
-            if ( filename.Left(lenPrefix).MakeLower() == _T("file:") )
+            if (temp[len] == 0)
             {
-                // sometimes the syntax is "file:filename", sometimes it's
-                // URL-like: "file://filename" - deal with both
-                if ( filename[lenPrefix] == _T('/') &&
-                     filename[lenPrefix + 1] == _T('/') )
+                if (len > 0)
                 {
-                    // skip the slashes
-                    lenPrefix += 2;
+                    // if an app omits '\r''\n'
+                    nexttemp = temp+len;
+                    break;
                 }
-
-                // It would probably be nicer to use a GTK or Glib
-                // function to unescape the 8-bit strings pointed to
-                // by buf, but this does the same in wx code.
-                wxString filename_unicode = wxURI::Unescape(filename.c_str() + lenPrefix);
-                wxCharBuffer filename_8bit = filename_unicode.mb_str(wxConvISO8859_1);
-                AddFile(wxString(filename_8bit, *wxConvFileName));
-                filename.Empty();
+                    
+                return true;
             }
-            else if ( !filename.empty() )
+            if (temp[len] == '\r')
             {
-                wxLogDebug(_T("Unsupported URI \"%s\" in wxFileDataObject"),
-                           filename.c_str());
-            }
-
-            if ( !*p )
+                if (temp[len+1] == '\n')
+                    nexttemp = temp+len+2;
+                else
+                    nexttemp = temp+len+1;
                 break;
-
-            // skip '\r'
-            p++;
+            }
+            len++;
         }
-        else
+        
+        if (len == 0)
+            break;
+        
+        // required to give it a trailing zero
+        gchar *uri = g_strndup( temp, len );
+    
+        gchar *fn = g_filename_from_uri( uri, NULL, NULL );
+        
+        g_free( uri );
+    
+        if (fn)
         {
-            // The string is in ISO-8859-1 according to XDND spec
-            filename += *p;
+            AddFile( wxConvFileName->cMB2WX( fn ) );
+            g_free( fn );
         }
     }
 
