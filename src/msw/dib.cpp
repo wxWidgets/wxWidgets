@@ -789,9 +789,9 @@ wxImage wxDIB::ConvertToImage() const
                     *alpha++ = a;
                     if ( a > 0 )
                     {
-                        dst[0] = (dst[0] * 255 - 127) / a;
-                        dst[1] = (dst[1] * 255 - 127) / a;
-                        dst[2] = (dst[2] * 255 - 127) / a;
+                        dst[0] = (dst[0] * 255) / a;
+                        dst[1] = (dst[1] * 255) / a;
+                        dst[2] = (dst[2] * 255) / a;
                     }
                 }
 
