@@ -1870,14 +1870,14 @@ void wxGtkPrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
         {
             gs_cairo->cairo_save( m_cairo );
             gs_cairo->cairo_rotate( m_cairo, angle*DEG2RAD );
-            // pango_cairo_update_layout (m_cairo, m_layout);
-            // pango_cairo_show_layout (m_cairo, m_layout);
+            gs_cairo->pango_cairo_update_layout (m_cairo, m_layout);
+            gs_cairo->pango_cairo_show_layout (m_cairo, m_layout);
             gs_cairo->cairo_restore( m_cairo );
         }
         else
         {
-            // pango_cairo_update_layout (m_cairo, m_layout);
-            // pango_cairo_show_layout (m_cairo, m_layout);
+            gs_cairo->pango_cairo_update_layout (m_cairo, m_layout);
+            gs_cairo->pango_cairo_show_layout (m_cairo, m_layout);
         }
 
         // Reset unscaled size.
@@ -1917,14 +1917,14 @@ void wxGtkPrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
         {
             gs_cairo->cairo_save( m_cairo );
             gs_cairo->cairo_rotate( m_cairo, angle*DEG2RAD );
-            // pango_cairo_update_layout (m_cairo, m_layout);
-            // pango_cairo_show_layout (m_cairo, m_layout);
+            gs_cairo->pango_cairo_update_layout (m_cairo, m_layout);
+            gs_cairo->pango_cairo_show_layout (m_cairo, m_layout);
             gs_cairo->cairo_restore( m_cairo );
         }
         else
         {
-            // pango_cairo_update_layout (m_cairo, m_layout);
-            // pango_cairo_show_layout (m_cairo, m_layout);
+            gs_cairo->pango_cairo_update_layout (m_cairo, m_layout);
+            gs_cairo->pango_cairo_show_layout (m_cairo, m_layout);
         }
     }
 

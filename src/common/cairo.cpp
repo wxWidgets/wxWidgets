@@ -35,9 +35,15 @@ wxCairoLibrary *wxCairoLibrary::s_lib = NULL;
 wxCairoLibrary::wxCairoLibrary()
 {
     m_cairo_lib = NULL;
+    m_pango_cairo_lib = NULL;
 
     wxLogNull log;
-    m_cairo_lib = new wxDynamicLibrary( wxT("libcairo.so") );
+    
+    m_cairo_lib = new wxDynamicLibrary( wxT("libcairo.so.2") );
+    m_ok = m_cairo_lib->IsLoaded();
+    if (!m_ok) return;
+
+    m_pango_cairo_lib = new wxDynamicLibrary( wxT("libpangocairo-1.0.so.0") );
     m_ok = m_cairo_lib->IsLoaded();
     if (!m_ok) return;
 
@@ -125,6 +131,9 @@ void wxCairoLibrary::InitializeMethods()
     wxDL_METHOD_LOAD( m_cairo_lib, cairo_surface_create_similar, success )
     wxDL_METHOD_LOAD( m_cairo_lib, cairo_surface_destroy, success )
     wxDL_METHOD_LOAD( m_cairo_lib, cairo_translate, success )
+
+    wxDL_METHOD_LOAD( m_pango_cairo_lib, pango_cairo_update_layout, success )
+    wxDL_METHOD_LOAD( m_pango_cairo_lib, pango_cairo_show_layout, success )
 
     m_ok = true;
 }
