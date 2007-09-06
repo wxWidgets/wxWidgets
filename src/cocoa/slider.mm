@@ -42,11 +42,14 @@ inline void AdjustDimension(
     const int dimension = (size.*GetDimension)();
     const int minSize = (isTicksStyle) ? 23 : 20;
 
+    // prevent clipping of overly "thin" sliders
     if (dimension < minSize)
     {
         (size.*SetDimension)(minSize);
     }
 
+    // move the slider control to the middle of the dimension that is not
+    // being used to define its length
     pos += (dimension - (size.*GetDimension)() + 1) / 2;
 }
 
@@ -68,17 +71,25 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID winid,
         AdjustDimension(isTicksStyle, adjustedPos.x, adjustedSize, &wxSize::GetWidth, &wxSize::SetWidth);
     }
     
-    if(!CreateControl(parent,winid,pos,size,style,validator,name))
+    if(!CreateControl(parent,winid,adjustedPos,adjustedSize,style,validator,name))
         return false;
-    SetNSSlider([[WX_GET_OBJC_CLASS(WXNSSlider) alloc] initWithFrame: MakeDefaultNSRect(size)]);
+    SetNSSlider([[WX_GET_OBJC_CLASS(WXNSSlider) alloc] initWithFrame: MakeDefaultNSRect(adjustedSize)]);
     [m_cocoaNSView release];
     
     if(m_parent)
         m_parent->CocoaAddChild(this);
-    SetInitialFrameRect(pos,size);
+    SetInitialFrameRect(adjustedPos,adjustedSize);
     
     SetRange(minValue, maxValue);
     SetValue(value);
+    
+    // -1 default for wxSL_AUTOTICKS == false
+    int tickMarks = -1;
+    // minValue > maxValue not handled, tickMarks set to 0
+    if ( style & wxSL_AUTOTICKS )
+        tickMarks = ((maxValue - minValue >= 0) ? (maxValue - minValue) : 0);
+    // arg2 needed a value, doesnt do anything
+    SetTickFreq(tickMarks,1);
 
     return true;
 }
