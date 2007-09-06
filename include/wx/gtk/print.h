@@ -4,7 +4,7 @@
 // Purpose:     GTK printing support
 // Created:     2007-08-25
 // RCS-ID:      $Id: print.h,v 1 2007-08-25 05:44:44 PC Exp $
-// Copyright:   (c) 2007 wxWidgets development team
+// Copyright:   (c) Anthony Bretaudeau
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -19,6 +19,8 @@
 #include "wx/printdlg.h"
 #include "wx/prntbase.h"
 #include "wx/dc.h"
+#include "wx/cairo.h"
+
 
 typedef struct _GtkPrintOperation GtkPrintOperation;
 typedef struct _GtkPrintContext GtkPrintContext;
