@@ -1940,11 +1940,15 @@ void wxGtkPrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
 
 void wxGtkPrintDC::Clear()
 {
+// Clear does nothing for printing, but keep the code
+// for later reuse 
+/*
     gs_cairo->cairo_save(m_cairo);
     gs_cairo->cairo_set_operator (m_cairo, CAIRO_OPERATOR_SOURCE);
     SetBrush(m_backgroundBrush);
     gs_cairo->cairo_paint(m_cairo);
     gs_cairo->cairo_restore(m_cairo);
+*/
 }
 
 void wxGtkPrintDC::SetFont( const wxFont& font )
