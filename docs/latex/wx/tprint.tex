@@ -218,7 +218,16 @@ Note that the application will not require the GNOME print libraries
 to be installed in order to run (there will be no dependency on
 these libraries).
 
-In version GTK+ 2.10, support for printing has finally been
-added to GTK+ itself. Support for this has yet to be written
-for wxGTK (which requires drawing through Cairo).
+In version GTK+ 2.10, support for printing has been added to GTK+ 
+itself. Beginning with version wxWidgets 2.9.X, the GTK+ port of 
+wxWidgets can make use of this feature
+if wxWidgets is configured accordingly and if the GTK+ version is >= 2.10.
+You need to configure wxWidgets with the {\it configure --with-gtkprint}
+switch and your application will then search for the GTK+ print support
+at runtime. If it is found, printing will be done through GTK+, otherwise the
+application will fall back to GNOME printing support if it is available or,
+if it isn't, to the old PostScript printing code.
+Note that the application will not require a GTK+ version >= 2.10
+to be installed in order to run (there will be no dependency on
+this version).
 
