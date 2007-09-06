@@ -1007,7 +1007,7 @@ wxString wxString::FromAscii(const char *ascii)
     return FromAscii(ascii, wxStrlen(ascii));
 }
 
-wxString wxString::FromAscii(const char ascii)
+wxString wxString::FromAscii(char ascii)
 {
     // What do we do with '\0' ?
 
