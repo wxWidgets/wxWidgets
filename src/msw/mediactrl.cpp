@@ -1665,22 +1665,6 @@ enum
 //---------------------------------------------------------------------------
 //  QT Library
 //---------------------------------------------------------------------------
-#define wxDL_METHOD_DEFINE( rettype, name, args, shortargs, defret ) \
-    typedef rettype (* name ## Type) args ; \
-    name ## Type pfn_ ## name; \
-    rettype name args \
-    { if (m_ok) return pfn_ ## name shortargs ; return defret; }
-
-#define wxDL_VOIDMETHOD_DEFINE( name, args, shortargs ) \
-    typedef void (* name ## Type) args ; \
-    name ## Type pfn_ ## name; \
-    void name args \
-    { if (m_ok) pfn_ ## name shortargs ; }
-
-#define wxDL_METHOD_LOAD( lib, name, success ) \
-    pfn_ ## name = (name ## Type) lib.GetSymbol( wxT(#name), &success ); \
-    if (!success) return false
-
 
 class WXDLLIMPEXP_MEDIA wxQuickTimeLibrary
 {

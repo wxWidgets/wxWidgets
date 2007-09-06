@@ -49,16 +49,6 @@ wxFORCE_LINK_THIS_MODULE(gnome_print)
 // wxGnomePrintLibrary
 //----------------------------------------------------------------------------
 
-#define wxDL_METHOD_DEFINE( rettype, name, args, shortargs, defret ) \
-    typedef rettype (* name ## Type) args ; \
-    name ## Type pfn_ ## name; \
-    rettype name args \
-    { if (m_ok) return pfn_ ## name shortargs ; return defret; }
-
-#define wxDL_METHOD_LOAD( lib, name, success ) \
-    pfn_ ## name = (name ## Type) lib->GetSymbol( wxT(#name), &success ); \
-    if (!success) return;
-
 class wxGnomePrintLibrary
 {
 public:

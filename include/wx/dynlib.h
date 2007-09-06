@@ -105,6 +105,27 @@ enum wxPluginCategory
 #define wxDYNLIB_FUNCTION(type, name, dynlib) \
     type pfn ## name = (type)(dynlib).GetSymbol(_T(#name))
 
+
+// the following macros can be used to redirect a whole
+// library to a class and check at run-time if the the
+// library is present and contains all required methods.
+
+#define wxDL_METHOD_DEFINE( rettype, name, args, shortargs, defret ) \
+    typedef rettype (* name ## Type) args ; \
+    name ## Type pfn_ ## name; \
+    rettype name args \
+    { if (m_ok) return pfn_ ## name shortargs ; return defret; }
+
+#define wxDL_VOIDMETHOD_DEFINE( name, args, shortargs ) \
+    typedef void (* name ## Type) args ; \
+    name ## Type pfn_ ## name; \
+    void name args \
+    { if (m_ok) pfn_ ## name shortargs ; }
+    
+#define wxDL_METHOD_LOAD( lib, name, success ) \
+    pfn_ ## name = (name ## Type) lib->GetSymbol( wxT(#name), &success ); \
+    if (!success) return;
+
 // ----------------------------------------------------------------------------
 // wxDynamicLibraryDetails: contains details about a loaded wxDynamicLibrary
 // ----------------------------------------------------------------------------
