@@ -485,6 +485,9 @@ wxDEPRECATED( inline bool wxSetEnv(const wxString& var, int value) );
 inline bool wxSetEnv(const wxString& var, int value)
 {
     wxASSERT_MSG( value == 0, "using non-NULL integer as string?" );
+
+    wxUnusedVar(value); // fix unused parameter warning in release build
+
     return wxUnsetEnv(var);
 }
 #endif // WXWIN_COMPATIBILITY_2_8
