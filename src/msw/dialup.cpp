@@ -452,12 +452,10 @@ wxDialUpManagerMSW::wxDialUpManagerMSW()
 exit:
         if ( funcName )
         {
-            static const wxChar *msg = wxTRANSLATE(
-"The version of remote access service (RAS) installed on this machine is too\
-old, please upgrade (the following required function is missing: %s)."
-                                                   );
-
-            wxLogError(wxGetTranslation(msg), funcName);
+            wxLogError(_("The version of remote access service (RAS) installed "
+                          "on this machine is too old, please upgrade (the "
+                          "following required function is missing: %s)."),
+                       funcName);
             m_dllRas.Unload();
             return;
         }

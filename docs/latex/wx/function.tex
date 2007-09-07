@@ -1801,11 +1801,9 @@ build. In fact, its definition is:
 \func{const wxChar *}{wxTRANSLATE}{\param{const char *}{s}}
 
 This macro doesn't do anything in the program code -- it simply expands to the
-value of its argument (except in Unicode build where it is equivalent to
-\helpref{wxT}{wxt} which makes it unnecessary to use both wxTRANSLATE and wxT
-with the same string which would be really unreadable).
+value of its argument.
 
-However it does have a purpose and it is to mark the literal strings for the
+However it does have a purpose which is to mark the literal strings for the
 extraction into the message catalog created by {\tt xgettext} program. Usually
 this is achieved using \helpref{\_()}{underscore} but that macro not only marks
 the string for extraction but also expands into a
@@ -1820,7 +1818,7 @@ translated (note that it is a bad example, really, as
 day names already). If you write
 
 \begin{verbatim}
-static const wxChar * const weekdays[] = { _("Mon"), ..., _("Sun") };
+static const char * const weekdays[] = { _("Mon"), ..., _("Sun") };
 ...
 // use weekdays[n] as usual
 \end{verbatim}
@@ -1829,7 +1827,7 @@ the code wouldn't compile because the function calls are forbidden in the array
 initializer. So instead you should do
 
 \begin{verbatim}
-static const wxChar * const weekdays[] = { wxTRANSLATE("Mon"), ..., wxTRANSLATE("Sun") };
+static const char * const weekdays[] = { wxTRANSLATE("Mon"), ..., wxTRANSLATE("Sun") };
 ...
 // use wxGetTranslation(weekdays[n])
 \end{verbatim}
@@ -1840,6 +1838,7 @@ Note that although the code {\bf would} compile if you simply omit
 wxTRANSLATE() in the above, it wouldn't work as expected because there would be
 no translations for the weekday names in the program message catalog and
 wxGetTranslation wouldn't find them.
+
 
 \membersection{::wxVsnprintf}\label{wxvsnprintf}
 

@@ -5,6 +5,23 @@
 INCOMPATIBLE CHANGES SINCE 2.8.x
 ================================
 
+Unicode-related changes
+-----------------------
+
+The biggest changes in wxWidgets 3.0 are the changes due to the merge of the
+old ANSI and Unicode build modes in a single build. See the Unicode overview
+in the manual for more details but here are the most important incompatible
+changes:
+
+- Many wxWidgets functions taking "const wxChar *" have been changed to take
+  either "const wxString&" if they should accept both Unicode or ANSI strings
+  and the argument can't be NULL or "const char *" if the strings are always
+  ANSI but may be NULL.
+
+- Some structure fields have been changed from "wxChar *" to "char *" too:
+  e.g. wxCmdLineEntryDesc fields.
+
+
 Changes in behaviour not resulting in compilation errors, please read this!
 ---------------------------------------------------------------------------
 

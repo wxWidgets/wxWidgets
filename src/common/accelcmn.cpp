@@ -40,7 +40,7 @@
 static const struct wxKeyName
 {
     wxKeyCode code;
-    const wxChar *name;
+    const char *name;
 } wxKeyNames[] =
 {
     { WXK_DELETE, wxTRANSLATE("DEL") },
@@ -114,7 +114,7 @@ static const struct wxKeyName
 //
 // as accels can be either translated or not, check for both possibilities and
 // also compare case-insensitively as the key names case doesn't count
-static inline bool CompareAccelString(const wxString& str, const wxChar *accel)
+static inline bool CompareAccelString(const wxString& str, const char *accel)
 {
     return str.CmpNoCase(accel) == 0
 #if wxUSE_INTL
@@ -128,7 +128,7 @@ static inline bool CompareAccelString(const wxString& str, const wxChar *accel)
 //
 // first and last parameter specify the valid domain for "number" part
 static int IsNumberedAccelKey(const wxString& str,
-                              const wxChar *prefix,
+                              const char *prefix,
                               wxKeyCode prefixCode,
                               unsigned first,
                               unsigned last)

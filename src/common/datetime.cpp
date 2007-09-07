@@ -3835,7 +3835,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
     // some special cases
     static struct
     {
-        const wxChar *str;
+        const char *str;
         int dayDiffFromToday;
     } literalDates[] =
     {
@@ -4010,7 +4010,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
                 else // not a valid weekday name
                 {
                     // try the ordinals
-                    static const wxChar *ordinals[] =
+                    static const char *ordinals[] =
                     {
                         wxTRANSLATE("first"),
                         wxTRANSLATE("second"),
@@ -4176,7 +4176,7 @@ const wxChar *wxDateTime::ParseTime(const wxChar *time)
     // first try some extra things
     static const struct
     {
-        const wxChar *name;
+        const char *name;
         wxDateTime_t  hour;
     } stdTimes[] =
     {

@@ -466,7 +466,7 @@ bool wxAppConsoleBase::OnExceptionInMainLoop()
 
 #if wxUSE_CMDLINE_PARSER
 
-#define OPTION_VERBOSE _T("verbose")
+#define OPTION_VERBOSE "verbose"
 
 void wxAppConsoleBase::OnInitCmdLine(wxCmdLineParser& parser)
 {
@@ -475,8 +475,8 @@ void wxAppConsoleBase::OnInitCmdLine(wxCmdLineParser& parser)
     {
         {
             wxCMD_LINE_SWITCH,
-            _T("h"),
-            _T("help"),
+            "h",
+            "help",
             gettext_noop("show this help message"),
             wxCMD_LINE_VAL_NONE,
             wxCMD_LINE_OPTION_HELP
@@ -485,7 +485,7 @@ void wxAppConsoleBase::OnInitCmdLine(wxCmdLineParser& parser)
 #if wxUSE_LOG
         {
             wxCMD_LINE_SWITCH,
-            wxEmptyString,
+            "",
             OPTION_VERBOSE,
             gettext_noop("generate verbose log messages"),
             wxCMD_LINE_VAL_NONE,
@@ -496,9 +496,9 @@ void wxAppConsoleBase::OnInitCmdLine(wxCmdLineParser& parser)
         // terminator
         {
             wxCMD_LINE_NONE,
-            wxEmptyString,
-            wxEmptyString,
-            wxEmptyString,
+            "",
+            "",
+            "",
             wxCMD_LINE_VAL_NONE,
             0x0
         }
