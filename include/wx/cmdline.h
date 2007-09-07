@@ -64,8 +64,8 @@ enum wxCmdLineEntryType
 struct wxCmdLineEntryDesc
 {
     wxCmdLineEntryType kind;
-    const char *shortName;
-    const char *longName;
+    wxString shortName;
+    wxString longName;
     wxString description;
     wxCmdLineParamType type;
     int flags;

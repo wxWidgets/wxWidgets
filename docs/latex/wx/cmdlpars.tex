@@ -69,8 +69,8 @@ this structure:
 struct wxCmdLineEntryDesc
 {
     wxCmdLineEntryType kind;
-    const char *shortName;
-    const char *longName;
+    wxString shortName;
+    wxString longName;
     wxString description;
     wxCmdLineParamType type;
     int flags;
@@ -93,7 +93,7 @@ enum wxCmdLineEntryType
 }
 
 The field {\tt shortName} is the usual, short, name of the switch or the option.
-{\tt longName} is the corresponding long name or NULL if the option has no long
+{\tt longName} is the corresponding long name or empty if the option has no long
 name. Both of these fields are unused for the parameters. Both the short and
 long option names can contain only letters, digits and the underscores.
 
