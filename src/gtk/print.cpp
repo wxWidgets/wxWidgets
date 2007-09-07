@@ -85,7 +85,7 @@ bool wxGtkPrintModule::OnInit()
 
 void wxGtkPrintModule::OnExit()
 {
-    delete gs_cairo;
+    gs_cairo = NULL;
 }
 
 IMPLEMENT_DYNAMIC_CLASS(wxGtkPrintModule, wxModule)
