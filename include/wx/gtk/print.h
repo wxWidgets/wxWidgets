@@ -344,6 +344,28 @@ private:
     {
         return y;
     }
+    wxCoord CairoToLogicalX(double x) const
+    {
+        int addValue = 0;
+        if (m_signX == -1) addValue = m_deviceOffsetX - m_deviceOriginX; // right to left
+        else addValue = m_deviceOriginX;// left to right
+        return (wxCoord) MapFromCairo((double)(x - addValue) * m_signX + m_logicalOriginX);
+    }
+    wxCoord CairoToLogicalXRel(double x) const
+    {
+        return (wxCoord) MapFromCairo(x);
+    }
+    wxCoord CairoToLogicalY(double y) const
+    {
+        int addValue = 0;
+        if (m_signY == -1) addValue = m_deviceOffsetY - m_deviceOriginY; // bottom to up
+        else addValue = m_deviceOriginY;// up to bottom
+        return (wxCoord) MapFromCairo((double)(y - addValue) * m_signY + m_logicalOriginY);
+    }
+    wxCoord CairoToLogicalYRel(double y) const
+    {
+        return (wxCoord) MapFromCairo(y);
+    }
     wxCoord LogicalToDeviceX(wxCoord x) const
     {
         int addValue = 0;
@@ -366,7 +388,44 @@ private:
     {
         return y;
     }
-
+    double LogicalToCairoX(wxCoord x) const
+    {
+        int addValue = 0;
+        if (m_signX == -1) addValue = m_deviceOffsetX - m_deviceOriginX; // right to left
+        else addValue = m_deviceOriginX;// left to right
+        return MapToCairo((double)(x - m_logicalOriginX) * m_signX + addValue);
+    }
+    double LogicalToCairoXRel(wxCoord x) const
+    {
+        return MapToCairo(x);
+    }
+    double LogicalToCairoY(wxCoord y) const
+    {
+        int addValue = 0;
+        if (m_signY == -1) addValue = m_deviceOffsetY - m_deviceOriginY; // bottom to up
+        else addValue = m_deviceOriginY;// up to bottom
+        return MapToCairo((double)(y - m_logicalOriginY)  * m_signY + addValue);
+    }
+    double LogicalToCairoYRel(wxCoord y) const
+    {
+        return MapToCairo(y);
+    }
+    double MapToCairo(wxCoord coordInt) const
+    {
+        return (double)coordInt*72.0/(double)ms_resolution;
+    }
+    double MapToCairo(double coordReal) const
+    {
+        return coordReal*72.0/(double)ms_resolution;
+    }
+    wxCoord MapFromCairo(wxCoord coordInt) const
+    {
+        return (wxCoord) ((double)coordInt*(double)ms_resolution/72.0);
+    }
+    wxCoord MapFromCairo(double coordReal) const
+    {
+        return (wxCoord) (coordReal*(double)ms_resolution/72.0);
+    }
     DECLARE_DYNAMIC_CLASS(wxGtkPrintDC)
     DECLARE_NO_COPY_CLASS(wxGtkPrintDC)
 };
