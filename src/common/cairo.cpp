@@ -44,7 +44,7 @@ wxCairoLibrary::wxCairoLibrary()
     if (!m_ok) return;
 
     m_pango_cairo_lib = new wxDynamicLibrary( wxT("libpangocairo-1.0.so.0") );
-    m_ok = m_cairo_lib->IsLoaded();
+    m_ok = m_pango_cairo_lib->IsLoaded();
     if (!m_ok) return;
 
     InitializeMethods();
@@ -150,7 +150,7 @@ public:
     void OnExit();
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxGtkPrintModule)
+    DECLARE_DYNAMIC_CLASS(wxCairoPrintModule)
 };
 
 bool wxCairoModule::OnInit()

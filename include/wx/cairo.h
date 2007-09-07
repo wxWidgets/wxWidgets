@@ -25,16 +25,16 @@
 class wxCairoLibrary
 {
 public:
-    wxCairoLibrary();
-    ~wxCairoLibrary();
-
     static wxCairoLibrary* Get();
     static void CleanUp();
 
+private:
+    wxCairoLibrary();
+    ~wxCairoLibrary();
+    
     bool IsOk();
     void InitializeMethods();
 
-private:
     bool              m_ok;
     wxDynamicLibrary *m_cairo_lib;
     wxDynamicLibrary *m_pango_cairo_lib;
