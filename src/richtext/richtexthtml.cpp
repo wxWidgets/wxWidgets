@@ -76,7 +76,7 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
     ClearTemporaryImageLocations();
 
     buffer->Defragment();
-    
+
     wxTextOutputStream str(stream);
 
     wxTextAttrEx currentParaStyle = buffer->GetAttributes();
@@ -88,10 +88,10 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
     str << wxT("<table border=0 cellpadding=0 cellspacing=0><tr><td width=\"100%\">");
 
     OutputFont(currentParaStyle, str);
-    
+
     m_font = false;
     m_inTable = false;
-    
+
     m_indents.Clear();
     m_listTypes.Clear();
 
@@ -104,7 +104,7 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
         if (para)
         {
             wxTextAttrEx paraStyle(para->GetCombinedAttributes());
-            
+
             BeginParagraphFormatting(currentParaStyle, paraStyle, str);
 
             wxRichTextObjectList::compatibility_iterator node2 = para->GetChildren().GetFirst();
@@ -116,7 +116,7 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
                 {
                     wxTextAttrEx charStyle(para->GetCombinedAttributes(obj->GetAttributes()));
                     BeginCharacterFormatting(currentCharStyle, charStyle, paraStyle, str);
-                    
+
                     wxString text = textObj->GetText();
 
                     if (charStyle.HasTextEffects() && (charStyle.GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS))
@@ -143,16 +143,16 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
         }
         node = node->GetNext();
     }
-    
+
     CloseLists(-1, str);
 
     str << wxT("</font>");
-    
+
     str << wxT("</td></tr></table><p>");
 
     if ((GetFlags() & wxRICHTEXT_HANDLER_NO_HEADER_FOOTER) == 0)
         str << wxT("</body></html>");
-    
+
     str << wxT("\n");
 
     m_buffer = NULL;
@@ -190,7 +190,7 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
         str << wxT("<i>");
     if (thisStyle.GetFont().GetUnderlined())
         str << wxT("<u>");
-    
+
     if (thisStyle.HasURL())
         str << wxT("<a href=\"") << thisStyle.GetURL() << wxT("\">");
 }
@@ -232,7 +232,7 @@ void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxTextAttrEx& WXUNUSE
 
             // Close levels high than this
             CloseLists(indent, str);
-            
+
             if (m_indents.GetCount() > 0 && indent == m_indents.Last())
             {
                 // Same level, no need to start a new list
@@ -240,23 +240,23 @@ void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxTextAttrEx& WXUNUSE
             else if (m_indents.GetCount() == 0 || indent > m_indents.Last())
             {
                 m_indents.Add(indent);
-                
+
                 wxString tag;
                 int listType = TypeOfList(thisStyle, tag);
                 m_listTypes.Add(listType);
-                
+
                 wxString align = GetAlignment(thisStyle);
                 str << wxString::Format(wxT("<p align=\"%s\">"), align.c_str());
-                
+
                 str << tag;
             }
-            
+
             str << wxT("<li> ");
         }
         else
         {
             CloseLists(-1, str);
-            
+
             wxString align = GetAlignment(thisStyle);
             str << wxString::Format(wxT("<p align=\"%s\">"), align.c_str());
 
@@ -273,7 +273,7 @@ void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxTextAttrEx& WXUNUSE
                 str << SymbolicIndent( - thisStyle.GetLeftSubIndent());
             }
 
-            m_inTable = true;            
+            m_inTable = true;
         }
     }
     else
@@ -282,7 +282,7 @@ void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxTextAttrEx& WXUNUSE
 
         wxString align = GetAlignment(thisStyle);
         str << wxString::Format(wxT("<p align=\"%s\">"), align.c_str());
-    }    
+    }
 }
 
 /// End paragraph formatting
@@ -292,7 +292,7 @@ void wxRichTextHTMLHandler::EndParagraphFormatting(const wxTextAttrEx& WXUNUSED(
     {
         if (thisStyle.HasFont())
             stream << wxT("</font>");
-            
+
         stream << wxT("</td></tr></table>\n");
         m_inTable = false;
     }
@@ -326,9 +326,10 @@ void wxRichTextHTMLHandler::OutputFont(const wxTextAttrEx& style, wxTextOutputSt
 {
     if (style.HasFont())
     {
-        stream << wxString::Format(wxT("<font face=\"%s\" size=\"%ld\" color=\"%s\" >"),
-                style.GetFont().GetFaceName().c_str(), PtToSize(style.GetFont().GetPointSize()),
-                style.GetTextColour().GetAsString(wxC2S_HTML_SYNTAX).c_str());
+        stream << wxString::Format(wxT("<font face=\"%s\" size=\"%ld\""), style.GetFont().GetFaceName().c_str(), PtToSize(style.GetFont().GetPointSize()));
+        if (style.HasTextColour())
+            stream << wxString::Format(wxT(" color=\"%s\""), style.GetTextColour().GetAsString(wxC2S_HTML_SYNTAX).c_str());
+        stream << wxT(" >");
     }
 }
 
@@ -353,7 +354,7 @@ int wxRichTextHTMLHandler::TypeOfList( const wxTextAttrEx& thisStyle, wxString& 
         tag = wxT("<ul>");
         m_is_ul = true;
     }
-    
+
     if (m_is_ul)
         return 1;
     else
@@ -392,13 +393,13 @@ void wxRichTextHTMLHandler::WriteImage(wxRichTextImage* image, wxOutputStream& s
             image->MakeBlock();
 
         if (image->GetImage().Ok())
-        {        
+        {
             wxString ext(image->GetImageBlock().GetExtension());
             wxString tempFilename(wxString::Format(wxT("image%d.%s"), sm_fileCounter, ext));
             wxMemoryFSHandler::AddFile(tempFilename, image->GetImage(), image->GetImageBlock().GetImageType());
-            
+
             m_imageLocations.Add(tempFilename);
-            
+
             str << wxT("memory:") << tempFilename;
         }
         else
@@ -414,18 +415,18 @@ void wxRichTextHTMLHandler::WriteImage(wxRichTextImage* image, wxOutputStream& s
             image->MakeBlock();
 
         if (image->GetImage().Ok())
-        {        
+        {
             wxString tempDir(GetTempDir());
             if (tempDir.IsEmpty())
                 tempDir = wxFileName::GetTempDir();
-            
+
             wxString ext(image->GetImageBlock().GetExtension());
             wxString tempFilename(wxString::Format(wxT("%s/image%d.%s"), tempDir, sm_fileCounter, ext));
             image->GetImageBlock().Write(tempFilename);
-            
+
             m_imageLocations.Add(tempFilename);
-            
-            str << wxFileSystem::FileNameToURL(tempFilename);            
+
+            str << wxFileSystem::FileNameToURL(tempFilename);
         }
         else
             str << wxT("file:?");
@@ -458,7 +459,7 @@ long wxRichTextHTMLHandler::PtToSize(long size)
     for (i = 0; i < len; i++)
         if (size <= m_fontSizeMapping[i])
             return i+1;
-    return 7;        
+    return 7;
 }
 
 wxString wxRichTextHTMLHandler::SymbolicIndent(long indent)
@@ -552,7 +553,7 @@ bool wxRichTextHTMLHandler::DeleteTemporaryImages(int flags, const wxArrayString
     for (i = 0; i < imageLocations.GetCount(); i++)
     {
         wxString location = imageLocations[i];
-        
+
         if (flags & wxRICHTEXT_HANDLER_SAVE_IMAGES_TO_MEMORY)
         {
 #if wxUSE_FILESYSTEM
@@ -565,7 +566,7 @@ bool wxRichTextHTMLHandler::DeleteTemporaryImages(int flags, const wxArrayString
                 wxRemoveFile(location);
         }
     }
-    
+
     return true;
 }
 
