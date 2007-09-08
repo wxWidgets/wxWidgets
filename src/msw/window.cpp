@@ -4705,7 +4705,7 @@ bool wxWindowMSW::HandleMoving(wxRect& rect)
 
 bool wxWindowMSW::HandleEnterSizeMove()
 {
-    wxMoveEvent event(wxPoint(), m_windowId);
+    wxMoveEvent event(wxPoint(0,0), m_windowId);
     event.SetEventType(wxEVT_MOVE_START);
     event.SetEventObject(this);
 
@@ -4714,7 +4714,7 @@ bool wxWindowMSW::HandleEnterSizeMove()
 
 bool wxWindowMSW::HandleExitSizeMove()
 {
-    wxMoveEvent event(wxPoint(), m_windowId);
+    wxMoveEvent event(wxPoint(0,0), m_windowId);
     event.SetEventType(wxEVT_MOVE_END);
     event.SetEventObject(this);
 
