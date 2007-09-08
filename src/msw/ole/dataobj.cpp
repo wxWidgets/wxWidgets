@@ -1139,7 +1139,7 @@ bool wxFileDataObject::GetDataHere(void *WXUNUSED_IN_WINCE(pData)) const
 #endif // wxUSE_UNICODE_MSLU
         {
             len = m_filenames[i].length();
-            memcpy(pbuf, m_filenames[i].c_str(), len*sizeOfChar);
+            memcpy(pbuf, m_filenames[i].wx_str(), len*sizeOfChar);
         }
 
         pbuf += len*sizeOfChar;
