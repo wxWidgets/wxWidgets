@@ -118,6 +118,7 @@ public:
 
     void OnAbout( wxCommandEvent &event );
     void OnNewFrame( wxCommandEvent &event );
+    void OnImageInfo( wxCommandEvent &event );
 #ifdef wxHAVE_RAW_BITMAP
     void OnTestRawBitmap( wxCommandEvent &event );
 #endif // wxHAVE_RAW_BITMAP
@@ -131,6 +132,13 @@ public:
     MyCanvas         *m_canvas;
 
 private:
+    // ask user for the file name and try to load an image from it
+    //
+    // return the file path on success, empty string if we failed to load the
+    // image or were cancelled by user
+    static wxString LoadUserImage(wxImage& image);
+
+
     DECLARE_DYNAMIC_CLASS(MyFrame)
     DECLARE_EVENT_TABLE()
 };
@@ -1101,17 +1109,19 @@ enum
     ID_QUIT  = wxID_EXIT,
     ID_ABOUT = wxID_ABOUT,
     ID_NEW = 100,
-    ID_SHOWRAW = 101
+    ID_INFO,
+    ID_SHOWRAW
 };
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
 
-BEGIN_EVENT_TABLE(MyFrame,wxFrame)
+BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU    (ID_ABOUT, MyFrame::OnAbout)
   EVT_MENU    (ID_QUIT,  MyFrame::OnQuit)
-  EVT_MENU    (ID_NEW,  MyFrame::OnNewFrame)
+  EVT_MENU    (ID_NEW,   MyFrame::OnNewFrame)
+  EVT_MENU    (ID_INFO,  MyFrame::OnImageInfo)
 #ifdef wxHAVE_RAW_BITMAP
-  EVT_MENU    (ID_SHOWRAW,  MyFrame::OnTestRawBitmap)
+  EVT_MENU    (ID_SHOWRAW, MyFrame::OnTestRawBitmap)
 #endif
 
 #if wxUSE_CLIPBOARD
@@ -1128,8 +1138,9 @@ MyFrame::MyFrame()
 
   wxMenu *menuImage = new wxMenu;
   menuImage->Append( ID_NEW, _T("&Show any image...\tCtrl-O"));
-
+  menuImage->Append( ID_INFO, _T("Show image &information...\tCtrl-I"));
 #ifdef wxHAVE_RAW_BITMAP
+  menuImage->AppendSeparator();
   menuImage->Append( ID_SHOWRAW, _T("Test &raw bitmap...\tCtrl-R"));
 #endif
   menuImage->AppendSeparator();
@@ -1171,23 +1182,71 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
                       _T("About wxImage Demo"), wxICON_INFORMATION | wxOK );
 }
 
+wxString MyFrame::LoadUserImage(wxImage& image)
+{
+    wxString filename;
+
+#if wxUSE_FILEDLG
+    filename = wxFileSelector(_T("Select image file"));
+    if ( !filename.empty() )
+    {
+        if ( !image.LoadFile(filename) )
+        {
+            wxLogError(_T("Couldn't load image from '%s'."), filename.c_str());
+
+            return wxEmptyString;
+        }
+    }
+#endif // wxUSE_FILEDLG
+
+    return filename;
+}
+
 void MyFrame::OnNewFrame( wxCommandEvent &WXUNUSED(event) )
 {
-#if wxUSE_FILEDLG
-    wxString filename = wxFileSelector(_T("Select image file"));
-    if ( !filename )
-        return;
-
     wxImage image;
-    if ( !image.LoadFile(filename) )
+    wxString filename = LoadUserImage(image);
+    if ( !filename.empty() )
+        (new MyImageFrame(this, filename, wxBitmap(image)))->Show();
+}
+
+void MyFrame::OnImageInfo( wxCommandEvent &WXUNUSED(event) )
+{
+    wxImage image;
+    if ( !LoadUserImage(image).empty() )
     {
-        wxLogError(_T("Couldn't load image from '%s'."), filename.c_str());
+        // TODO: show more information about the file
+        wxString info = wxString::Format("Image size: %dx%d",
+                                         image.GetWidth(),
+                                         image.GetHeight());
 
-        return;
+        int xres = image.GetOptionInt(wxIMAGE_OPTION_RESOLUTIONX),
+            yres = image.GetOptionInt(wxIMAGE_OPTION_RESOLUTIONY);
+        if ( xres || yres )
+        {
+            info += wxString::Format("\nResolution: %dx%d", xres, yres);
+            switch ( image.GetOptionInt(wxIMAGE_OPTION_RESOLUTIONUNIT) )
+            {
+                default:
+                    wxFAIL_MSG( "unknown image resolution units" );
+                    // fall through
+
+                case wxIMAGE_RESOLUTION_NONE:
+                    info += " in default units";
+                    break;
+
+                case wxIMAGE_RESOLUTION_INCHES:
+                    info += " in";
+                    break;
+
+                case wxIMAGE_RESOLUTION_CM:
+                    info += " cm";
+                    break;
+            }
+        }
+
+        wxLogMessage("%s", info);
     }
-
-    (new MyImageFrame(this, filename, wxBitmap(image)))->Show();
-#endif // wxUSE_FILEDLG
 }
 
 #ifdef wxHAVE_RAW_BITMAP

@@ -344,6 +344,43 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
             alpha -= 2*w;
     }
 
+    // set the image resolution if it's available
+    uint16 tiffRes;
+    if ( TIFFGetField(tif, TIFFTAG_RESOLUTIONUNIT, &tiffRes) )
+    {
+        wxImageResolution res;
+        switch ( tiffRes )
+        {
+            default:
+                wxLogWarning(_("Unknown TIFF resolution unit %d ignored"),
+                             tiffRes);
+                // fall through
+
+            case RESUNIT_NONE:
+                res = wxIMAGE_RESOLUTION_NONE;
+                break;
+
+            case RESUNIT_INCH:
+                res = wxIMAGE_RESOLUTION_INCHES;
+                break;
+
+            case RESUNIT_CENTIMETER:
+                res = wxIMAGE_RESOLUTION_CM;
+                break;
+        }
+
+        if ( res != wxIMAGE_RESOLUTION_NONE )
+        {
+            float xres, yres;
+            if ( TIFFGetField(tif, TIFFTAG_XRESOLUTION, &xres) )
+                image->SetOption(wxIMAGE_OPTION_RESOLUTIONX, xres);
+
+            if ( TIFFGetField(tif, TIFFTAG_YRESOLUTION, &yres) )
+                image->SetOption(wxIMAGE_OPTION_RESOLUTIONY, yres);
+        }
+    }
+
+
     _TIFFfree( raster );
 
     TIFFClose( tif );
@@ -386,14 +423,36 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     TIFFSetField(tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
     TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
 
-    if ( image->HasOption(wxIMAGE_OPTION_RESOLUTIONX) &&
-            image->HasOption(wxIMAGE_OPTION_RESOLUTIONY) )
+    // save the image resolution if we have it
+    int xres, yres;
+    const wxImageResolution res = GetResolutionFromOptions(*image, &xres, &yres);
+    uint16 tiffRes;
+    switch ( res )
     {
-        TIFFSetField(tif, TIFFTAG_XRESOLUTION,
-                        (float)image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONX));
-        TIFFSetField(tif, TIFFTAG_YRESOLUTION,
-                        (float)image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONY));
+        default:
+            wxFAIL_MSG( _T("unknown image resolution units") );
+            // fall through
+
+        case wxIMAGE_RESOLUTION_NONE:
+            tiffRes = RESUNIT_NONE;
+            break;
+
+        case wxIMAGE_RESOLUTION_INCHES:
+            tiffRes = RESUNIT_INCH;
+            break;
+
+        case wxIMAGE_RESOLUTION_CM:
+            tiffRes = RESUNIT_CENTIMETER;
+            break;
     }
+
+    if ( tiffRes != RESUNIT_NONE )
+    {
+        TIFFSetField(tif, TIFFTAG_RESOLUTIONUNIT, tiffRes);
+        TIFFSetField(tif, TIFFTAG_XRESOLUTION, (float)xres);
+        TIFFSetField(tif, TIFFTAG_YRESOLUTION, (float)yres);
+    }
+
 
     int spp = image->GetOptionInt(wxIMAGE_OPTION_SAMPLESPERPIXEL);
     if ( !spp )
@@ -401,7 +460,7 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
 
     int bpp = image->GetOptionInt(wxIMAGE_OPTION_BITSPERSAMPLE);
     if ( !bpp )
-        bpp=8;
+        bpp = 8;
 
     int compression = image->GetOptionInt(wxIMAGE_OPTION_COMPRESSION);
     if ( !compression )

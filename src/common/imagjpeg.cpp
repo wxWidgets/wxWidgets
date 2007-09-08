@@ -310,6 +310,17 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
         }
     }
 
+    // set up resolution if available: it's part of optional JFIF APP0 chunk
+    if ( cinfo.saw_JFIF_marker )
+    {
+        image->SetOption(wxIMAGE_OPTION_RESOLUTIONX, cinfo.X_density);
+        image->SetOption(wxIMAGE_OPTION_RESOLUTIONY, cinfo.Y_density);
+
+        // we use the same values for this option as libjpeg so we don't need
+        // any conversion here
+        image->SetOption(wxIMAGE_OPTION_RESOLUTIONUNIT, cinfo.density_unit);
+    }
+
     jpeg_finish_decompress( &cinfo );
     jpeg_destroy_decompress( &cinfo );
     return true;

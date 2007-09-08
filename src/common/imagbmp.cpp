@@ -27,6 +27,7 @@
     #include "wx/bitmap.h"
     #include "wx/palette.h"
     #include "wx/intl.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/filefn.h"
@@ -154,7 +155,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
         wxUint16  bpp;            // bits per pixel
         wxUint32  compression;    // compression method
         wxUint32  size_of_bmp;    // size of the bitmap
-        wxUint32  h_res, v_res;   // image resolution in dpi
+        wxUint32  h_res, v_res;   // image resolution in pixels-per-meter
         wxUint32  num_clrs;       // number of colors used
         wxUint32  num_signif_clrs;// number of significant colors
     } hdr;
@@ -181,7 +182,37 @@ bool wxBMPHandler::SaveDib(wxImage *image,
     hdr.bpp = wxUINT16_SWAP_ON_BE(bpp);
     hdr.compression = 0; // RGB uncompressed
     hdr.size_of_bmp = wxUINT32_SWAP_ON_BE(row_width * image->GetHeight());
-    hdr.h_res = hdr.v_res = wxUINT32_SWAP_ON_BE(72);  // 72dpi is standard
+
+    // get the resolution from the image options  or fall back to 72dpi standard
+    // for the BMP format if not specified
+    wxUint32 hres = image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONX),
+             vres = image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONY);
+    switch ( image->GetOptionInt(wxIMAGE_OPTION_RESOLUTION) )
+    {
+        default:
+            wxFAIL_MSG( _T("unexpected image resolution units") );
+            // fall through
+
+        case wxIMAGE_RESOLUTION_NONE:
+            hres =
+            vres = 72;
+            // fall through to convert it to correct units
+
+        case wxIMAGE_RESOLUTION_INCHES:
+            // convert resolution in inches to resolution in centimeters
+            hres *= 100*mm2inches;
+            vres *= 100*mm2inches;
+            // fall through to convert it to resolution in meters
+
+        case wxIMAGE_RESOLUTION_CM:
+            // convert resolution in centimeters to resolution in meters
+            hres *= 100;
+            vres *= 100;
+            break;
+    }
+
+    hdr.h_res = wxUINT32_SWAP_ON_BE(hres);
+    hdr.v_res = wxUINT32_SWAP_ON_BE(vres);
     hdr.num_clrs = wxUINT32_SWAP_ON_BE(palette_size); // # colors in colormap
     hdr.num_signif_clrs = 0;     // all colors are significant
 
@@ -906,6 +937,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     }
 
     stream.Read(dbuf, 4 * 2);
+
     int ncolors = wxINT32_SWAP_ON_BE( (int)dbuf[0] );
     if (ncolors == 0)
         ncolors = 1 << bpp;
@@ -943,6 +975,11 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         image->SetMaskFromImage(mask, 255, 255, 255);
 
     }
+
+    // the resolution in the bitmap header is in meters, convert to centimeters
+    image->SetOption(wxIMAGE_OPTION_RESOLUTIONUNIT, wxIMAGE_RESOLUTION_CM);
+    image->SetOption(wxIMAGE_OPTION_RESOLUTIONX, dbuf[2]/100);
+    image->SetOption(wxIMAGE_OPTION_RESOLUTIONY, dbuf[3]/100);
 
     return true;
 }

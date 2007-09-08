@@ -180,6 +180,7 @@ All (GUI):
 - Added wxToolTip::SetAutoPop() and SetReshow() (Jan Knepper)
 - Added wxTaskBarIcon::Destroy()
 - Added XRC handler for wxSearchCtrl (Sander Berents)
+- Read image resolution from TIFF, JPEG and BMP images (Maycon Aparecido Gasoto)
 
 wxGTK:
 
