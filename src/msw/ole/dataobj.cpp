@@ -1216,9 +1216,9 @@ public:
 
 wxURLDataObject::wxURLDataObject(const wxString& url)
 {
-    // we support CF_TEXT and CFSTR_SHELLURL formats which are basicly the same
-    // but it seems that some browsers only provide one of them so we have to
-    // support both
+    // we support CF_TEXT and CFSTR_SHELLURL formats which are basically the
+    // same but it seems that some browsers only provide one of them so we have
+    // to support both
     Add(new wxTextDataObject);
     Add(new CFSTR_SHELLURLDataObject());
 
@@ -1255,13 +1255,15 @@ wxString wxURLDataObject::GetURL() const
 
 void wxURLDataObject::SetURL(const wxString& url)
 {
-    SetData(wxDataFormat(wxUSE_UNICODE ? wxDF_UNICODETEXT : wxDF_TEXT),
-            url.Length()+1, url.c_str());
+    wxCharBuffer urlMB(url.mb_str());
+    if ( urlMB )
+    {
+        const size_t len = strlen(urlMB) + 1; // size with trailing NUL
+        SetData(wxDF_TEXT, len, urlMB);
+        SetData(wxDataFormat(CFSTR_SHELLURL), len, urlMB);
+    }
 
-    // CFSTR_SHELLURL is always supposed to be ANSI...
-    wxWX2MBbuf urlA = (wxWX2MBbuf)url.mbc_str();
-    size_t len = strlen(urlA);
-    SetData(wxDataFormat(CFSTR_SHELLURL), len+1, (const char*)urlA);
+    SetData(wxDF_UNICODETEXT, url.length() + 1, url.wc_str());
 }
 
 // ----------------------------------------------------------------------------
