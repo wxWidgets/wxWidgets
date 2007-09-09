@@ -1159,6 +1159,37 @@ void MyCanvas::DrawGradients(wxDC& dc)
     dc.DrawText(_T("Blue in bottom right corner"), r.x, r.y);
     r.Offset(0, TEXT_HEIGHT);
     dc.GradientFillConcentric(r, *wxBLUE, *wxWHITE, wxPoint(r.width, r.height));
+
+    // check that the area filled by the gradient is exactly the interior of
+    // the rectangle
+    r.x = 350;
+    r.y = 30;
+    dc.DrawText("The interior should be filled but", r.x, r.y);
+    r.y += 15;
+    dc.DrawText(" the red border should remain visible:", r.x, r.y);
+    r.y += 15;
+
+    r.width =
+    r.height = 50;
+    wxRect r2 = r;
+    r2.x += 60;
+    wxRect r3 = r;
+    r3.y += 60;
+    wxRect r4 = r2;
+    r4.y += 60;
+    dc.SetPen(wxPen(wxColour(255, 0, 0)));
+    dc.DrawRectangle(r);
+    r.Deflate(1);
+    dc.GradientFillLinear(r, wxColour(0,255,0), wxColour(0,0,0), wxNORTH);
+    dc.DrawRectangle(r2);
+    r2.Deflate(1);
+    dc.GradientFillLinear(r2, wxColour(0,0,0), wxColour(0,255,0), wxSOUTH);
+    dc.DrawRectangle(r3);
+    r3.Deflate(1);
+    dc.GradientFillLinear(r3, wxColour(0,255,0), wxColour(0,0,0), wxEAST);
+    dc.DrawRectangle(r4);
+    r4.Deflate(1);
+    dc.GradientFillLinear(r4, wxColour(0,0,0), wxColour(0,255,0), wxWEST);
 }
 
 void MyCanvas::DrawRegions(wxDC& dc)

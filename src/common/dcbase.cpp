@@ -1302,7 +1302,7 @@ void wxImplDC::DoGradientFillLinear(const wxRect& rect,
             SetPen(wxPen(colour, 1, wxSOLID));
             SetBrush(wxBrush(colour));
             if(nDirection == wxEAST)
-                DoDrawRectangle(rect.GetRight()-x-xDelta, rect.GetTop(),
+                DoDrawRectangle(rect.GetRight()-x-xDelta+1, rect.GetTop(),
                         xDelta, rect.GetHeight());
             else //nDirection == wxWEST
                 DoDrawRectangle(rect.GetLeft()+x, rect.GetTop(),
@@ -1342,7 +1342,7 @@ void wxImplDC::DoGradientFillLinear(const wxRect& rect,
                 DoDrawRectangle(rect.GetLeft(), rect.GetTop()+y,
                         rect.GetWidth(), yDelta);
             else //nDirection == wxSOUTH
-                DoDrawRectangle(rect.GetLeft(), rect.GetBottom()-y-yDelta,
+                DoDrawRectangle(rect.GetLeft(), rect.GetBottom()-y-yDelta+1,
                         rect.GetWidth(), yDelta);
         }
     }
@@ -2432,7 +2432,7 @@ void wxDCBase::DoGradientFillLinear(const wxRect& rect,
             SetPen(wxPen(colour, 1, wxSOLID));
             SetBrush(wxBrush(colour));
             if(nDirection == wxEAST)
-                DrawRectangle(rect.GetRight()-x-xDelta, rect.GetTop(),
+                DrawRectangle(rect.GetRight()-x-xDelta+1, rect.GetTop(),
                         xDelta, rect.GetHeight());
             else //nDirection == wxWEST
                 DrawRectangle(rect.GetLeft()+x, rect.GetTop(),
@@ -2472,7 +2472,7 @@ void wxDCBase::DoGradientFillLinear(const wxRect& rect,
                 DrawRectangle(rect.GetLeft(), rect.GetTop()+y,
                         rect.GetWidth(), yDelta);
             else //nDirection == wxSOUTH
-                DrawRectangle(rect.GetLeft(), rect.GetBottom()-y-yDelta,
+                DrawRectangle(rect.GetLeft(), rect.GetBottom()-y-yDelta+1,
                         rect.GetWidth(), yDelta);
         }
     }
