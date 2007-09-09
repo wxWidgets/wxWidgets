@@ -1199,32 +1199,64 @@ bool wxIsPlatform64Bit()
 
 wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 {
-    OSVERSIONINFO info;
-    wxZeroMemory(info);
-
-    info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    if ( ::GetVersionEx(&info) )
+    static struct
     {
-        if (verMaj) *verMaj = info.dwMajorVersion;
-        if (verMin) *verMin = info.dwMinorVersion;
+        // this may be false, true or -1 if we tried to initialize but failed
+        int initialized;
+
+        wxOperatingSystemId os;
+
+        int verMaj,
+            verMin;
+    } s_version;
+
+    // query the OS info only once as it's not supposed to change
+    if ( !s_version.initialized )
+    {
+        OSVERSIONINFO info;
+        wxZeroMemory(info);
+        info.dwOSVersionInfoSize = sizeof(info);
+        if ( ::GetVersionEx(&info) )
+        {
+            s_version.initialized = true;
+
+#if defined(__WXWINCE__)
+            s_version.os = wxOS_WINDOWS_CE;
+#elif defined(__WXMICROWIN__)
+            s_version.os = wxOS_WINDOWS_MICRO;
+#else // "normal" desktop Windows system, use run-time detection
+            switch ( info.dwPlatformId )
+            {
+                case VER_PLATFORM_WIN32_NT:
+                    s_version.os = wxOS_WINDOWS_NT;
+                    break;
+
+                case VER_PLATFORM_WIN32_WINDOWS:
+                    s_version.os = wxOS_WINDOWS_9X;
+                    break;
+            }
+#endif // Windows versions
+
+            s_version.verMaj = info.dwMajorVersion;
+            s_version.verMin = info.dwMinorVersion;
+        }
+        else // GetVersionEx() failed
+        {
+            s_version.initialized = -1;
+        }
     }
 
-#if defined( __WXWINCE__ )
-    return wxOS_WINDOWS_CE;
-#elif defined( __WXMICROWIN__ )
-    return wxOS_WINDOWS_MICRO;
-#else
-    switch ( info.dwPlatformId )
+    if ( s_version.initialized == 1 )
     {
-    case VER_PLATFORM_WIN32_NT:
-        return wxOS_WINDOWS_NT;
-
-    case VER_PLATFORM_WIN32_WINDOWS:
-        return wxOS_WINDOWS_9X;
+        if ( verMaj )
+            *verMaj = s_version.verMaj;
+        if ( verMin )
+            *verMin = s_version.verMin;
     }
 
-    return wxOS_UNKNOWN;
-#endif
+    // this works even if we were not initialized successfully as the initial
+    // values of this field is 0 which is wxOS_UNKNOWN and exactly what we need
+    return s_version.os;
 }
 
 wxWinVersion wxGetWinVersion()
