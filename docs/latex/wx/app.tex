@@ -129,6 +129,21 @@ had been already processed (for the former return value) or that it is not
 going to be processed at all (for the latter one).
 
 
+\membersection{wxApp::GetAppDisplayName}\label{wxappgetappdisplayname}
+
+\constfunc{wxString}{GetAppDisplayName}{\void}
+
+Returns the user-readable application name. The difference between this string
+and the one returned by \helpref{GetAppName}{wxappgetappname} is that this one
+is meant to be shown to the user and so should be used for the window titles,
+page headers and so on while the other one should be only used internally, e.g.
+for the file names or configuration file keys.
+
+By default, returns the same string as \headers{GetAppName}{wxappgetappname}.
+
+\newsince{3.0}
+
+
 \membersection{wxApp::GetAppName}\label{wxappgetappname}
 
 \constfunc{wxString}{GetAppName}{\void}
@@ -139,6 +154,10 @@ Returns the application name.
 
 wxWidgets sets this to a reasonable default before
 calling \helpref{wxApp::OnInit}{wxapponinit}, but the application can reset it at will.
+
+\wxheading{See also}
+
+\helpref{GetAppDisplayName}{wxappgetappdisplayname}
 
 
 \membersection{wxApp::GetClassName}\label{wxappgetclassname}
@@ -587,13 +606,25 @@ If true is returned, more OnIdle processing is requested by one or more window.
 \helpref{wxIdleEvent}{wxidleevent}
 
 
+\membersection{wxApp::SetAppDisplayName}\label{wxappsetappdisplayname}
+
+\func{void}{SetAppDisplayName}{\param{const wxString\& }{name}}
+
+Set the application name to be used in the user-visible places such as window
+titles. See \helpref{GetAppDisplayName}{wxappgetappdisplayname} for more about
+the differences between the display name and name.
+
+
 \membersection{wxApp::SetAppName}\label{wxappsetappname}
 
 \func{void}{SetAppName}{\param{const wxString\& }{name}}
 
-Sets the name of the application. The name may be used in dialogs
-(for example by the document/view framework). A default name is set by
-wxWidgets.
+Sets the name of the application. This name should be used for file names,
+configuration file entries and other internal strings. For the user-visible
+strings, such as the window titles, the application display name set by 
+\helpref{SetAppDisplayName}{wxappsetappdisplayname} is used instead.
+
+By default the application name is set to the name of its executable file.
 
 \wxheading{See also}
 
