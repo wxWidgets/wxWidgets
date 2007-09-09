@@ -233,6 +233,27 @@ const char* wxCStrData::AsChar() const
     wxString *str = wxConstCast(m_str, wxString);
 
     // convert the string:
+    //
+    // FIXME-UTF8: we'd like to do the conversion in the existing buffer (if we
+    //             have it) but it's unfortunately not obvious to implement
+    //             because we don't know how big buffer do we need for the
+    //             given string length (in case of multibyte encodings, e.g.
+    //             ISO-2022-JP or UTF-8 when internal representation is wchar_t)
+    //
+    //             One idea would be to store more than just m_convertedToChar
+    //             in wxString: then we could record the length of the string
+    //             which was converted the last time and try to reuse the same
+    //             buffer if the current length is not greater than it (this
+    //             could still fail because string could have been modified in
+    //             place but it would work most of the time, so we'd do it and
+    //             only allocate the new buffer if in-place conversion returned
+    //             an error). We could also store a bit saying if the string
+    //             was modified since the last conversion (and update it in all
+    //             operation modifying the string, of course) to avoid unneeded
+    //             consequential conversions. But both of these ideas require
+    //             adding more fields to wxString and require profiling results
+    //             to be sure that we really gain enough from them to justify
+    //             doing it.
     wxCharBuffer buf(str->mb_str());
 
     // if it failed, return empty string and not NULL to avoid crashes in code
@@ -241,7 +262,6 @@ const char* wxCStrData::AsChar() const
     if ( !buf )
         return "";
 
-    // FIXME-UTF8: do the conversion in-place in the existing buffer
     if ( str->m_convertedToChar &&
          strlen(buf) == strlen(str->m_convertedToChar) )
     {
