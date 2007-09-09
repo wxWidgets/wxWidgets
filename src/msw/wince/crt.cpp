@@ -51,7 +51,7 @@ void abort()
 {
     wxString name;
     if ( wxTheApp )
-        name = wxTheApp->GetAppName();
+        name = wxTheApp->GetAppDisplayName();
     if ( name.empty() )
         name = L"wxWidgets Application";
 

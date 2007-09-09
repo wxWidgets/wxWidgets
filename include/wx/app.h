@@ -123,6 +123,17 @@ public:
     }
     void SetAppName(const wxString& name) { m_appName = name; }
 
+        // set/get the application display name: the display name is the name
+        // shown to the user in titles, reports, etc while the app name is
+        // used for paths, config, and other places the user doesn't see
+        //
+        // so the app name could be myapp while display name could be "My App"
+    wxString GetAppDisplayName() const
+    {
+        return m_appDisplayName.empty() ? GetAppName() : m_appDisplayName;
+    }
+    void SetAppDisplayName(const wxString& name) { m_appDisplayName = name; }
+
         // set/get the app class name
     wxString GetClassName() const { return m_className; }
     void SetClassName(const wxString& name) { m_className = name; }
@@ -325,9 +336,10 @@ protected:
     wxEventLoopBase *CreateMainLoop();
 
     // application info (must be set from the user code)
-    wxString m_vendorName,      // vendor name (ACME Inc)
-             m_appName,         // app name
-             m_className;       // class name
+    wxString m_vendorName,        // vendor name (e.g. "ACME Inc")
+             m_appName,           // app name ("myapp")
+             m_appDisplayName,    // app display name ("My Application")
+             m_className;         // class name
 
     // the class defining the application behaviour, NULL initially and created
     // by GetTraits() when first needed
@@ -458,7 +470,7 @@ public:
     virtual bool SetDisplayMode(const wxVideoMode& WXUNUSED(info)) { return true; }
 
         // set use of best visual flag (see below)
-    void SetUseBestVisual( bool flag, bool forceTrueColour = false ) 
+    void SetUseBestVisual( bool flag, bool forceTrueColour = false )
         { m_useBestVisual = flag; m_forceTrueColour = forceTrueColour; }
     bool GetUseBestVisual() const { return m_useBestVisual; }
 

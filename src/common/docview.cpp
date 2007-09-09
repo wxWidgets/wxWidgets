@@ -468,8 +468,8 @@ bool wxDocument::OnSaveModified()
         wxString title = GetUserReadableName();
 
         wxString msgTitle;
-        if (!wxTheApp->GetAppName().empty())
-            msgTitle = wxTheApp->GetAppName();
+        if (!wxTheApp->GetAppDisplayName().empty())
+            msgTitle = wxTheApp->GetAppDisplayName();
         else
             msgTitle = wxString(_("Warning"));
 
@@ -577,8 +577,8 @@ void wxDocument::SetFilename(const wxString& filename, bool notifyViews)
 bool wxDocument::DoSaveDocument(const wxString& file)
 {
     wxString msgTitle;
-    if (!wxTheApp->GetAppName().empty())
-        msgTitle = wxTheApp->GetAppName();
+    if (!wxTheApp->GetAppDisplayName().empty())
+        msgTitle = wxTheApp->GetAppDisplayName();
     else
         msgTitle = wxString(_("File error"));
 
@@ -1450,7 +1450,7 @@ wxString wxDocManager::MakeNewDocumentName()
 // If docName is empty, a document is not currently active.
 wxString wxDocManager::MakeFrameTitle(wxDocument* doc)
 {
-    wxString appName = wxTheApp->GetAppName();
+    wxString appName = wxTheApp->GetAppDisplayName();
     wxString title;
     if (!doc)
         title = appName;
@@ -1631,8 +1631,8 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
         if (!wxFileExists(pathTmp))
         {
             wxString msgTitle;
-            if (!wxTheApp->GetAppName().empty())
-                msgTitle = wxTheApp->GetAppName();
+            if (!wxTheApp->GetAppDisplayName().empty())
+                msgTitle = wxTheApp->GetAppDisplayName();
             else
                 msgTitle = wxString(_("File error"));
 

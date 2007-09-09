@@ -287,7 +287,7 @@ bool wxClipboard::AddData( wxDataObject *data )
     Display* xdisplay = wxGlobalDisplay();
     Widget xwidget = (Widget)wxTheApp->GetTopLevelRealizedWidget();
     Window xwindow = XtWindow( xwidget );
-    wxXmString label( wxTheApp->GetAppName() );
+    wxXmString label( wxTheApp->GetAppDisplayName() );
     Time timestamp = XtLastTimestampProcessed( xdisplay );
     long itemId;
 

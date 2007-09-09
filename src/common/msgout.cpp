@@ -222,7 +222,7 @@ void wxMessageOutputMessageBox::Output(const wxString& str)
 
     wxString title;
     if ( wxTheApp )
-        title.Printf(_("%s message"), wxTheApp->GetAppName().c_str());
+        title.Printf(_("%s message"), wxTheApp->GetAppDisplayName().c_str());
 
     ::wxMessageBox(out, title);
 }

@@ -106,7 +106,7 @@ bool DrawingView::OnClose(bool deleteWindow)
   canvas->view = (wxView *) NULL;
   canvas = (MyCanvas *) NULL;
 
-  wxString s(wxTheApp->GetAppName());
+  wxString s(wxTheApp->GetAppDisplayName());
   if (frame)
     frame->SetTitle(s);
 

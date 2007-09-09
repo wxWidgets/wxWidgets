@@ -31,10 +31,10 @@ public:
     // accessors for various simply fields
     // -----------------------------------
 
-    // name of the program, if not used defaults wxApp::GetAppName()
+    // name of the program, if not used defaults to wxApp::GetAppDisplayName()
     void SetName(const wxString& name) { m_name = name; }
     wxString GetName() const
-        { return m_name.empty() ? wxTheApp->GetAppName() : m_name; }
+        { return m_name.empty() ? wxTheApp->GetAppDisplayName() : m_name; }
 
     // version of the program, in free format (but without "version" word)
     void SetVersion(const wxString& version) { m_version = version; }

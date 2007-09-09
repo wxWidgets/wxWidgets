@@ -182,6 +182,7 @@ All (GUI):
 - Added XRC handler for wxSearchCtrl (Sander Berents)
 - Read image resolution from TIFF, JPEG and BMP images (Maycon Aparecido Gasoto)
 - Added wxSYS_DCLICK_TIME system metric constant
+- Added wxApp::Get/SetAppDisplayName() (Brian A. Vanderburg II)
 
 wxGTK:
 

@@ -281,9 +281,7 @@ void wxLogGui::Flush()
         repeatCount = wxLog::DoLogNumberOfRepeats();
     }
 
-    wxString appName = wxTheApp->GetAppName();
-    if ( !appName.empty() )
-        appName[0u] = (wxChar)wxToupper(appName[0u]);
+    wxString appName = wxTheApp->GetAppDisplayName();
 
     long style;
     wxString titleFormat;
