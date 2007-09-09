@@ -235,6 +235,12 @@ const char* wxCStrData::AsChar() const
     // convert the string:
     wxCharBuffer buf(str->mb_str());
 
+    // if it failed, return empty string and not NULL to avoid crashes in code
+    // written with either wxWidgets 2 wxString or std::string behaviour in
+    // mind: neither of them ever returns NULL and so we shouldn't neither
+    if ( !buf )
+        return "";
+
     // FIXME-UTF8: do the conversion in-place in the existing buffer
     if ( str->m_convertedToChar &&
          strlen(buf) == strlen(str->m_convertedToChar) )
@@ -260,6 +266,10 @@ const wchar_t* wxCStrData::AsWChar() const
 
     // convert the string:
     wxWCharBuffer buf(str->wc_str());
+
+    // notice that here, unlike above in AsChar(), conversion can't fail as our
+    // internal UTF-8 is always well-formed -- or the string was corrupted and
+    // all bets are off anyhow
 
     // FIXME-UTF8: do the conversion in-place in the existing buffer
     if ( str->m_convertedToWChar &&
