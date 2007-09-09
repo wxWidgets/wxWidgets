@@ -373,10 +373,10 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
         {
             float xres, yres;
             if ( TIFFGetField(tif, TIFFTAG_XRESOLUTION, &xres) )
-                image->SetOption(wxIMAGE_OPTION_RESOLUTIONX, xres);
+                image->SetOption(wxIMAGE_OPTION_RESOLUTIONX, wxRound(xres));
 
             if ( TIFFGetField(tif, TIFFTAG_YRESOLUTION, &yres) )
-                image->SetOption(wxIMAGE_OPTION_RESOLUTIONY, yres);
+                image->SetOption(wxIMAGE_OPTION_RESOLUTIONY, wxRound(yres));
         }
     }
 
