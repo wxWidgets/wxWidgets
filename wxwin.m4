@@ -572,13 +572,14 @@ AC_DEFUN([WX_STANDARD_OPTIONS],
         dnl the following lines will expand to WX_ARG_ENABLE_YESNOAUTO calls if and only if
         dnl the $1 argument contains respectively the debug,unicode or shared options.
 
-        ifelse(index([$1], [debug]), [-1],,
+        dnl be careful here not to set debug flag if only "wxdebug" was specified
+        ifelse(regexp([$1], [\bdebug]), [-1],,
                [WX_ARG_ENABLE_YESNOAUTO([debug], [DEBUG], [Build in debug mode], [auto])])
 
         ifelse(index([$1], [unicode]), [-1],,
                [WX_ARG_ENABLE_YESNOAUTO([unicode], [UNICODE], [Build in Unicode mode], [auto])])
 
-        ifelse(index([$1], [shared]), [-1],,
+        ifelse(regexp([$1], [\bshared]), [-1],,
                [WX_ARG_ENABLE_YESNOAUTO([shared], [SHARED], [Build as shared library], [auto])])
 
         dnl WX_ARG_WITH_YESNOAUTO cannot be used for --with-toolkit since it's an option
