@@ -178,6 +178,7 @@ wxGTK:
 - Fixed size problem in wxTaskBarIcon
 - Fixed scrolling problem of wxStaticBox (and possibly other control)
 - Fixed wxFileDataObject for DnD in UTF8 locales with non-ASCII characters
+- Fixed off by 1 bug in wxDC::GradientFillLinear() (Tim Kosse)
 
 wxMac:
 
