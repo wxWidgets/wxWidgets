@@ -494,6 +494,12 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
 
             return dclick_distance * 2;
 
+        case wxSYS_DCLICK_MSEC:
+            gint dclick;
+            g_object_get(gtk_settings_get_default(),
+                            "gtk-double-click-time", &dclick, NULL);
+            return dclick;
+
         case wxSYS_DRAG_X:
         case wxSYS_DRAG_Y:
             gint drag_threshold;

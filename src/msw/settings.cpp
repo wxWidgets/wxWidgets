@@ -380,8 +380,9 @@ static const int gs_metricsMap[] =
 #ifdef SM_SWAPBUTTON
     SM_SWAPBUTTON,
 #else
-    -1
+    -1,
 #endif
+    -1   // wxSYS_DCLICK_MSEC - not available as system metric
 };
 
 // Get a system metric, e.g. scrollbar size
@@ -393,6 +394,12 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
 #else // !__WXMICROWIN__
     wxCHECK_MSG( index > 0 && (size_t)index < WXSIZEOF(gs_metricsMap), 0,
                  _T("invalid metric") );
+
+    if ( index == wxSYS_DCLICK_MSEC )
+    {
+        // This one is not a Win32 system metric
+        return ::GetDoubleClickTime();
+    }
 
     int indexMSW = gs_metricsMap[index];
     if ( indexMSW == -1 )

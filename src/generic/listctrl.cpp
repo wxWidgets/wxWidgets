@@ -42,6 +42,7 @@
     #include "wx/dcclient.h"
     #include "wx/dcscreen.h"
     #include "wx/math.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/imaglist.h"
@@ -3154,15 +3155,12 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
                 (hitResult == wxLIST_HITTEST_ONITEMLABEL) &&
                 HasFlag(wxLC_EDIT_LABELS) )
             {
-                if (InReportView())
+                if ( !InReportView() ||
+                        GetLineLabelRect(current).Contains(x, y) )
                 {
-                    wxRect label = GetLineLabelRect( current );
-                    if (label.Contains( x, y ))
-                        m_renameTimer->Start( 250, true );
-
+                    int dclick = wxSystemSettings::GetMetric(wxSYS_DCLICK_MSEC);
+                    m_renameTimer->Start(dclick > 0 ? dclick : 250, true);
                 }
-                else
-                    m_renameTimer->Start( 250, true );
             }
         }
 

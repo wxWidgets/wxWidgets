@@ -181,6 +181,7 @@ All (GUI):
 - Added wxTaskBarIcon::Destroy()
 - Added XRC handler for wxSearchCtrl (Sander Berents)
 - Read image resolution from TIFF, JPEG and BMP images (Maycon Aparecido Gasoto)
+- Added wxSYS_DCLICK_TIME system metric constant
 
 wxGTK:
 

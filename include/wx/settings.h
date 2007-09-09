@@ -125,7 +125,8 @@ enum wxSystemMetric
     wxSYS_NETWORK_PRESENT,
     wxSYS_PENWINDOWS_PRESENT,
     wxSYS_SHOW_SOUNDS,
-    wxSYS_SWAP_BUTTONS
+    wxSYS_SWAP_BUTTONS,
+    wxSYS_DCLICK_MSEC
 };
 
 // possible values for wxSystemSettings::HasFeature() parameter
