@@ -960,19 +960,19 @@ long wxXmlResourceHandler::GetLong(const wxString& param, long defaultv)
 
 float wxXmlResourceHandler::GetFloat(const wxString& param, float defaultv)
 {
+    wxString str = GetParamValue(param);
+
+    // strings in XRC always use C locale but wxString::ToDouble() uses the
+    // current one, so transform the string to it supposing that the only
+    // difference between them is the decimal separator
+    //
+    // TODO: use wxString::ToCDouble() when we have it
+    str.Replace(wxT("."), wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT,
+                                            wxLOCALE_CAT_NUMBER));
+
     double value;
-    wxString str1 = GetParamValue(param);
-
-#ifndef __WXWINCE__
-    const char *prevlocale = setlocale(LC_NUMERIC, "C");
-#endif
-
-    if (!str1.ToDouble(&value))
+    if (!str.ToDouble(&value))
         value = defaultv;
-
-#ifndef __WXWINCE__
-    setlocale(LC_NUMERIC, prevlocale);
-#endif
 
     return wx_truncate_cast(float, value);
 }
