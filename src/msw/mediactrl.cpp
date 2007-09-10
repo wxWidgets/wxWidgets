@@ -2928,7 +2928,7 @@ bool wxMCIMediaBackend::Load(const wxString& fileName)
     // omit this it tells MCI to select the device instead. This is good
     // because we have no reliable way of "enumerating" the devices in MCI
     MCI_OPEN_PARMS openParms;
-    openParms.lpstrElementName = (wxChar*) fileName.c_str();
+    openParms.lpstrElementName = fileName.wx_str();
 
     if (mciSendCommand(0, MCI_OPEN, MCI_OPEN_ELEMENT,
                         (DWORD)(LPVOID)&openParms) != 0)
