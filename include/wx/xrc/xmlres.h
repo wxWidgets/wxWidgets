@@ -17,7 +17,6 @@
 
 #include "wx/string.h"
 #include "wx/dynarray.h"
-#include "wx/arrstr.h"
 #include "wx/datetime.h"
 #include "wx/list.h"
 #include "wx/gdicmn.h"
@@ -27,6 +26,7 @@
 #include "wx/artprov.h"
 #include "wx/colour.h"
 #include "wx/animate.h"
+#include "wx/vector.h"
 
 #include "wx/xml/xml.h"
 
@@ -40,8 +40,9 @@ class WXDLLIMPEXP_FWD_CORE wxToolBar;
 
 class WXDLLIMPEXP_FWD_XRC wxXmlResourceHandler;
 class WXDLLIMPEXP_FWD_XRC wxXmlSubclassFactory;
-class WXDLLIMPEXP_FWD_XRC wxXmlSubclassFactoriesList;
+class wxXmlSubclassFactories;
 class wxXmlResourceModule;
+class wxXmlResourceDataRecords;
 
 
 // These macros indicate current version of XML resources (this information is
@@ -67,28 +68,6 @@ class wxXmlResourceModule;
                  WX_XMLRES_CURRENT_VERSION_MINOR * 256*256 + \
                  WX_XMLRES_CURRENT_VERSION_RELEASE * 256 + \
                  WX_XMLRES_CURRENT_VERSION_REVISION)
-
-class WXDLLIMPEXP_XRC wxXmlResourceDataRecord
-{
-public:
-    wxXmlResourceDataRecord() : Doc(NULL) {
-#if wxUSE_DATETIME
-        Time = wxDateTime::Now();
-#endif
-    }
-    ~wxXmlResourceDataRecord() {delete Doc;}
-
-    wxString File;
-    wxXmlDocument *Doc;
-#if wxUSE_DATETIME
-    wxDateTime Time;
-#endif
-};
-
-
-WX_DECLARE_USER_EXPORTED_OBJARRAY(wxXmlResourceDataRecord,
-                                  wxXmlResourceDataRecords,
-                                  WXDLLIMPEXP_XRC);
 
 enum wxXmlResourceFlags
 {
@@ -288,11 +267,15 @@ protected:
 #endif // wxUSE_FILESYSTEM
 
 private:
+    wxXmlResourceDataRecords& Data() { return *m_data; }
+    const wxXmlResourceDataRecords& Data() const { return *m_data; }
+
+private:
     long m_version;
 
     int m_flags;
-    wxList m_handlers;
-    wxXmlResourceDataRecords m_data;
+    wxVector<wxXmlResourceHandler*> m_handlers;
+    wxXmlResourceDataRecords *m_data;
 #if wxUSE_FILESYSTEM
     wxFileSystem m_curFileSystem;
     wxFileSystem& GetCurFileSystem() { return m_curFileSystem; }
@@ -304,7 +287,7 @@ private:
     friend class wxXmlResourceHandler;
     friend class wxXmlResourceModule;
 
-    static wxXmlSubclassFactoriesList *ms_subclassFactories;
+    static wxXmlSubclassFactories *ms_subclassFactories;
 
     // singleton instance:
     static wxXmlResource *ms_instance;
