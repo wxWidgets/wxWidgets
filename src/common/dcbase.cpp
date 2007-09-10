@@ -513,12 +513,12 @@ wxCoord wxImplDC::DeviceToLogicalYRel(wxCoord y) const
 
 wxCoord wxImplDC::LogicalToDeviceX(wxCoord x) const
 {
-    return wxRound((double)(x - m_logicalOriginX) * m_scaleX) * m_signX + m_deviceOriginX + m_deviceLocalOriginX;
+    return wxRound((double)(x - m_logicalOriginX) * m_scaleX) * m_signX + m_deviceOriginX * m_signY + m_deviceLocalOriginX;
 }
 
 wxCoord wxImplDC::LogicalToDeviceY(wxCoord y) const
 {
-    return wxRound((double)(y - m_logicalOriginY) * m_scaleY) * m_signY + m_deviceOriginY + m_deviceLocalOriginY;
+    return wxRound((double)(y - m_logicalOriginY) * m_scaleY) * m_signY + m_deviceOriginY * m_signY + m_deviceLocalOriginY;
 }
 
 wxCoord wxImplDC::LogicalToDeviceXRel(wxCoord x) const
@@ -601,6 +601,7 @@ void wxImplDC::SetDeviceLocalOrigin( wxCoord x, wxCoord y )
 void wxImplDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
 {
     // only wxPostScripDC has m_signX = -1, we override SetAxisOrientation there
+    // wxWidgets 2.9: no longer override it
     m_signX = (xLeftRight ?  1 : -1);
     m_signY = (yBottomUp  ? -1 :  1);
     ComputeScaleAndOrigin();
@@ -1706,6 +1707,7 @@ void wxDCBase::SetDeviceLocalOrigin( wxCoord x, wxCoord y )
 void wxDCBase::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
 {
     // only wxPostScripDC has m_signX = -1, we override SetAxisOrientation there
+    // wxWidgets 2.9: no longer override it
     m_signX = (xLeftRight ?  1 : -1);
     m_signY = (yBottomUp  ? -1 :  1);
     ComputeScaleAndOrigin();

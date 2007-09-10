@@ -232,9 +232,6 @@ public:
     wxCoord GetCharWidth() const;
     bool CanGetTextExtent() const { return true; }
     wxSize GetPPI() const;
-    void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
-    void SetLogicalOrigin( wxCoord x, wxCoord y );
-    void SetDeviceOrigin( wxCoord x, wxCoord y );
     virtual int GetDepth() const { return 24; }
     void SetBackgroundMode(int WXUNUSED(mode)) { }
     void SetPalette(const wxPalette& WXUNUSED(palette)) { }
@@ -289,47 +286,14 @@ private:
     unsigned char           m_currentRed;
     unsigned char           m_currentGreen;
     unsigned char           m_currentBlue;
-
-    int                     m_deviceOffsetY;
+    
+    double                  m_pageHeight;
 
     GnomePrintContext      *m_gpc;
     GnomePrintJob*          m_job;
 
     void makeEllipticalPath(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 
-private:
-    wxCoord XDEV2LOG(wxCoord x) const
-    {
-        return wxRound((double)(x - m_deviceOriginX) / m_scaleX) * m_signX + m_logicalOriginX;
-    }
-    wxCoord XDEV2LOGREL(wxCoord x) const
-    {
-        return wxRound((double)(x) / m_scaleX);
-    }
-    wxCoord YDEV2LOG(wxCoord y) const
-    {
-        return wxRound((double)(y + m_deviceOriginY - m_deviceOffsetY) / m_scaleY) * m_signY + m_logicalOriginY;
-    }
-    wxCoord YDEV2LOGREL(wxCoord y) const
-    {
-        return wxRound((double)(y) / m_scaleY);
-    }
-    wxCoord XLOG2DEV(wxCoord x) const
-    {
-        return wxRound((double)(x - m_logicalOriginX) * m_scaleX) * m_signX + m_deviceOriginX;
-    }
-    wxCoord XLOG2DEVREL(wxCoord x) const
-    {
-        return wxRound((double)(x) * m_scaleX);
-    }
-    wxCoord YLOG2DEV(wxCoord y) const
-    {
-        return wxRound((double)(y - m_logicalOriginY) * m_scaleY) * m_signY - m_deviceOriginY + m_deviceOffsetY;
-    }
-    wxCoord YLOG2DEVREL(wxCoord y) const
-    {
-        return wxRound((double)(y) * m_scaleY);
-    }
 private:
     DECLARE_DYNAMIC_CLASS(wxGnomePrintDC)
     DECLARE_NO_COPY_CLASS(wxGnomePrintDC)

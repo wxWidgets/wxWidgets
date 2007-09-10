@@ -40,8 +40,6 @@
 #include <libgnomeprintui/gnome-print-job-preview.h>
 #include <libgnomeprintui/gnome-print-paper-selector.h>
 
-static const double RAD2DEG  = 180.0 / M_PI;
-
 #include "wx/link.h"
 wxFORCE_LINK_THIS_MODULE(gnome_print)
 
@@ -945,6 +943,19 @@ bool wxGnomePrinter::Setup( wxWindow *parent )
 // wxGnomePrintDC
 //-----------------------------------------------------------------------------
 
+// conversion
+static const double RAD2DEG  = 180.0 / M_PI;
+
+// we don't want to use only 72 dpi from GNOME print
+static const int DPI = 600;
+static const double PS2DEV = 600.0 / 72.0;
+static const double DEV2PS = 72.0 / 600.0;
+
+#define XLOG2DEV(x)     ((double)(LogicalToDeviceX(x)) * DEV2PS)
+#define XLOG2DEVREL(x)  ((double)(LogicalToDeviceXRel(x)) * DEV2PS)
+#define YLOG2DEV(x)     ((m_pageHeight - (double)LogicalToDeviceY(x)) * DEV2PS)
+#define YLOG2DEVREL(x)  ((double)(LogicalToDeviceYRel(x)) * DEV2PS)
+
 IMPLEMENT_CLASS(wxGnomePrintDC, wxDC)
 
 wxGnomePrintDC::wxGnomePrintDC( const wxPrintData& data )
@@ -965,10 +976,11 @@ wxGnomePrintDC::wxGnomePrintDC( const wxPrintData& data )
     m_currentBlue = 0;
     m_currentGreen = 0;
 
-    m_signX =  1;  // default x-axis left to right
-    m_signY = -1;  // default y-axis bottom up -> top down
+    // Query page size. This seems to omit the margins
+    double pw,ph;
+    gs_lgp->gnome_print_job_get_page_size( native->GetPrintJob(), &pw, &ph );
 
-    GetSize( NULL, &m_deviceOffsetY );
+    m_pageHeight = ph * PS2DEV;
 }
 
 wxGnomePrintDC::~wxGnomePrintDC()
@@ -1069,8 +1081,8 @@ void wxGnomePrintDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,d
     x += w/2;
     y += h/2;
 
-    int xx = XLOG2DEV(x);
-    int yy = YLOG2DEV(y);
+    double xx = XLOG2DEV(x);
+    double yy = YLOG2DEV(y);
 
     gs_libGnomePrint->gnome_print_gsave( m_gpc );
 
@@ -1078,8 +1090,8 @@ void wxGnomePrintDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,d
     double scale = (double)YLOG2DEVREL(h) / (double) XLOG2DEVREL(w);
     gs_libGnomePrint->gnome_print_scale( m_gpc, 1.0, scale );
 
-    xx = 0;
-    yy = 0;
+    xx = 0.0;
+    yy = 0.0;
 
     if (m_brush.GetStyle () != wxTRANSPARENT)
     {
@@ -1496,8 +1508,8 @@ void wxGnomePrintDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y )
 
 void wxGnomePrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle)
 {
-    x = XLOG2DEV(x);
-    y = YLOG2DEV(y);
+    double xx = XLOG2DEV(x);
+    double yy = YLOG2DEV(y);
 
     bool underlined = m_font.Ok() && m_font.GetUnderlined();
 
@@ -1543,76 +1555,30 @@ void wxGnomePrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord 
     }
 
     int w,h;
-
-    if (fabs(m_scaleY - 1.0) > 0.00001)
-    {
-        // If there is a user or actually any scale applied to
-        // the device context, scale the font.
-
-        // scale font description
-        gint oldSize = pango_font_description_get_size( m_fontdesc );
-        double size = oldSize;
-        size = size * m_scaleY;
-        pango_font_description_set_size( m_fontdesc, (gint)size );
-
-        // actually apply scaled font
-        pango_layout_set_font_description( m_layout, m_fontdesc );
-
-        pango_layout_get_pixel_size( m_layout, &w, &h );
+    pango_layout_get_pixel_size( m_layout, &w, &h );
 #if 0
         if ( m_backgroundMode == wxSOLID )
         {
             gdk_gc_set_foreground(m_textGC, m_textBackgroundColour.GetColor());
-            gdk_draw_rectangle(m_window, m_textGC, TRUE, x, y, w, h);
+            gdk_draw_rectangle(m_window, m_textGC, TRUE, xx, yy, w, h);
             gdk_gc_set_foreground(m_textGC, m_textForegroundColour.GetColor());
         }
 #endif
-        // Draw layout.
-        gs_libGnomePrint->gnome_print_moveto (m_gpc, x, y);
-        if (fabs(angle) > 0.00001)
-        {
-            gs_libGnomePrint->gnome_print_gsave( m_gpc );
-            gs_libGnomePrint->gnome_print_rotate( m_gpc, angle );
-            gs_libGnomePrint->gnome_print_pango_layout( m_gpc, m_layout );
-            gs_libGnomePrint->gnome_print_grestore( m_gpc );
-        }
-        else
-        {
-            gs_libGnomePrint->gnome_print_pango_layout( m_gpc, m_layout );
-        }
 
-        // reset unscaled size
-        pango_font_description_set_size( m_fontdesc, oldSize );
-
-        // actually apply unscaled font
-        pango_layout_set_font_description( m_layout, m_fontdesc );
-    }
-    else
-    {
-        pango_layout_get_pixel_size( m_layout, &w, &h );
-#if 0
-        if ( m_backgroundMode == wxSOLID )
-        {
-            gdk_gc_set_foreground(m_textGC, m_textBackgroundColour.GetColor());
-            gdk_draw_rectangle(m_window, m_textGC, TRUE, x, y, w, h);
-            gdk_gc_set_foreground(m_textGC, m_textForegroundColour.GetColor());
-        }
-#endif
-        // Draw layout.
-        gs_libGnomePrint->gnome_print_moveto (m_gpc, x, y);
-        if (fabs(angle) > 0.00001)
-        {
-            gs_libGnomePrint->gnome_print_gsave( m_gpc );
-            gs_libGnomePrint->gnome_print_rotate( m_gpc, angle );
-            gs_libGnomePrint->gnome_print_pango_layout( m_gpc, m_layout );
-            gs_libGnomePrint->gnome_print_grestore( m_gpc );
-        }
-        else
-        {
-            gs_libGnomePrint->gnome_print_pango_layout( m_gpc, m_layout );
-        }
-    }
-
+    // Draw layout.
+    gs_libGnomePrint->gnome_print_moveto (m_gpc, xx, yy);
+        
+    gs_libGnomePrint->gnome_print_gsave( m_gpc );
+        
+    gs_libGnomePrint->gnome_print_scale( m_gpc, m_scaleX * DEV2PS, m_scaleY * DEV2PS );
+        
+    if (fabs(angle) > 0.00001)
+        gs_libGnomePrint->gnome_print_rotate( m_gpc, angle );
+            
+    gs_libGnomePrint->gnome_print_pango_layout( m_gpc, m_layout );
+        
+    gs_libGnomePrint->gnome_print_grestore( m_gpc );
+    
     if (underlined)
     {
         // undo underline attributes setting:
@@ -1891,9 +1857,9 @@ void wxGnomePrintDC::DoGetSize(int* width, int* height) const
     gs_libGnomePrint->gnome_print_job_get_page_size( native->GetPrintJob(), &pw, &ph );
 
     if (width)
-        *width = (int) (pw + 0.5);
+        *width = wxRound( pw * PS2DEV );
     if (height)
-        *height = (int) (ph + 0.5);
+        *height = wxRound( ph * PS2DEV );
 }
 
 void wxGnomePrintDC::DoGetSizeMM(int *width, int *height) const
@@ -1921,35 +1887,19 @@ void wxGnomePrintDC::DoGetSizeMM(int *width, int *height) const
 
 wxSize wxGnomePrintDC::GetPPI() const
 {
-    return wxSize(72,72);
-}
-
-void wxGnomePrintDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
-{
-    m_signX = (xLeftRight ? 1 : -1);
-    m_signY = (yBottomUp  ? 1 : -1);
-
-    ComputeScaleAndOrigin();
-}
-
-void wxGnomePrintDC::SetLogicalOrigin( wxCoord x, wxCoord y )
-{
-    wxDC::SetLogicalOrigin( x, y );
-}
-
-void wxGnomePrintDC::SetDeviceOrigin( wxCoord x, wxCoord y )
-{
-    wxDC::SetDeviceOrigin( x, y );
+    return wxSize(DPI,DPI);
 }
 
 void wxGnomePrintDC::SetPrintData(const wxPrintData& data)
 { 
     m_printData = data;
     
+    int height;
     if (m_printData.GetOrientation() == wxPORTRAIT)
-        GetSize( NULL, &m_deviceOffsetY );
+        GetSize( NULL, &height );
     else
-        GetSize( &m_deviceOffsetY, NULL );
+        GetSize( &height, NULL );
+    m_deviceLocalOriginY = height;
 }
 
 void wxGnomePrintDC::SetResolution(int ppi)
@@ -1958,7 +1908,7 @@ void wxGnomePrintDC::SetResolution(int ppi)
 
 int wxGnomePrintDC::GetResolution()
 {
-    return 72;
+    return DPI;
 }
 
 // ----------------------------------------------------------------------------

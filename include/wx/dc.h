@@ -29,6 +29,7 @@
 #include "wx/list.h"            // we use wxList in inline functions
 #include "wx/dynarray.h"
 #include "wx/math.h"
+#include "wx/image.h"
 
   // 1 if using the reorganized DC code
 #define wxUSE_NEW_DC 0
@@ -873,6 +874,49 @@ public:
                     bool useMask = false)
         { m_pimpl->DoDrawBitmap(bmp, pt.x, pt.y, useMask); }
 
+    virtual void DrawScaledBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, wxCoord w, wxCoord h, bool useMask = false, int quality = wxIMAGE_QUALITY_NORMAL)
+        {
+            if (bmp.GetWidth() != w || bmp.GetHeight() != h)
+            {
+                if (quality != wxIMAGE_QUALITY_HIGH)
+                    quality = wxIMAGE_QUALITY_NORMAL;
+                wxImage tmpImg = bmp.ConvertToImage();
+                tmpImg.Rescale( w, h, quality );
+                wxBitmap scaledBmp(tmpImg);
+                m_pimpl->DoDrawBitmap(scaledBmp, x, y, useMask);
+            }
+            else
+                m_pimpl->DoDrawBitmap(bmp, x, y, useMask);
+        }
+    virtual void DrawScaledBitmap(const wxBitmap &bmp, const wxPoint& pt, const wxSize& sz, bool useMask = false, int quality = wxIMAGE_QUALITY_NORMAL)
+        {
+            if (bmp.GetWidth() != sz.x || bmp.GetHeight() != sz.y)
+            {
+                if (quality != wxIMAGE_QUALITY_HIGH)
+                    quality = wxIMAGE_QUALITY_NORMAL;
+                wxImage tmpImg = bmp.ConvertToImage();
+                tmpImg.Rescale( sz.x, sz.y, quality );
+                wxBitmap scaledBmp(tmpImg);
+                m_pimpl->DoDrawBitmap(scaledBmp, pt.x, pt.y, useMask);
+            }
+            else
+                m_pimpl->DoDrawBitmap(bmp, pt.x, pt.y, useMask);
+        }
+    virtual void DrawScaledBitmap(const wxBitmap &bmp, const wxRect& rect, bool useMask = false, int quality = wxIMAGE_QUALITY_NORMAL)
+        {
+            if (bmp.GetWidth() != rect.width || bmp.GetHeight() != rect.height)
+            {
+                if (quality != wxIMAGE_QUALITY_HIGH)
+                    quality = wxIMAGE_QUALITY_NORMAL;
+                wxImage tmpImg = bmp.ConvertToImage();
+                tmpImg.Rescale( rect.width, rect.height, quality );
+                wxBitmap scaledBmp(tmpImg);
+                m_pimpl->DoDrawBitmap(scaledBmp, rect.x, rect.y, useMask);
+            }
+            else
+                m_pimpl->DoDrawBitmap(bmp, rect.x, rect.y, useMask);
+        }
+
     void DrawText(const wxString& text, wxCoord x, wxCoord y)
         { m_pimpl->DoDrawText(text, x, y); }
     void DrawText(const wxString& text, const wxPoint& pt)
@@ -1188,6 +1232,49 @@ public:
     void DrawBitmap(const wxBitmap &bmp, const wxPoint& pt,
                     bool useMask = false)
         { DoDrawBitmap(bmp, pt.x, pt.y, useMask); }
+
+    virtual void DrawScaledBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, wxCoord w, wxCoord h, bool useMask = false, int quality = wxIMAGE_QUALITY_NORMAL)
+        {
+            if (bmp.GetWidth() != w || bmp.GetHeight() != h)
+            {
+                if (quality != wxIMAGE_QUALITY_HIGH)
+                    quality = wxIMAGE_QUALITY_NORMAL;
+                wxImage tmpImg = bmp.ConvertToImage();
+                tmpImg.Rescale( w, h, quality );
+                wxBitmap scaledBmp(tmpImg);
+                DoDrawBitmap(scaledBmp, x, y, useMask);
+            }
+            else
+                DoDrawBitmap(bmp, x, y, useMask);
+        }
+    virtual void DrawScaledBitmap(const wxBitmap &bmp, const wxPoint& pt, const wxSize& sz, bool useMask = false, int quality = wxIMAGE_QUALITY_NORMAL)
+        {
+            if (bmp.GetWidth() != sz.x || bmp.GetHeight() != sz.y)
+            {
+                if (quality != wxIMAGE_QUALITY_HIGH)
+                    quality = wxIMAGE_QUALITY_NORMAL;
+                wxImage tmpImg = bmp.ConvertToImage();
+                tmpImg.Rescale( sz.x, sz.y, quality );
+                wxBitmap scaledBmp(tmpImg);
+                DoDrawBitmap(scaledBmp, pt.x, pt.y, useMask);
+            }
+            else
+                DoDrawBitmap(bmp, pt.x, pt.y, useMask);
+        }
+    virtual void DrawScaledBitmap(const wxBitmap &bmp, const wxRect& rect, bool useMask = false, int quality = wxIMAGE_QUALITY_NORMAL)
+        {
+            if (bmp.GetWidth() != rect.width || bmp.GetHeight() != rect.height)
+            {
+                if (quality != wxIMAGE_QUALITY_HIGH)
+                    quality = wxIMAGE_QUALITY_NORMAL;
+                wxImage tmpImg = bmp.ConvertToImage();
+                tmpImg.Rescale( rect.width, rect.height, quality );
+                wxBitmap scaledBmp(tmpImg);
+                DoDrawBitmap(scaledBmp, rect.x, rect.y, useMask);
+            }
+            else
+                DoDrawBitmap(bmp, rect.x, rect.y, useMask);
+        }
 
     void DrawText(const wxString& text, wxCoord x, wxCoord y)
         { DoDrawText(text, x, y); }
