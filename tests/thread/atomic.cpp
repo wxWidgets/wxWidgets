@@ -61,6 +61,7 @@ private:
 
     CPPUNIT_TEST_SUITE( AtomicTestCase );
         CPPUNIT_TEST( TestNoThread );
+        CPPUNIT_TEST( TestDecReturn );
         CPPUNIT_TEST( TestTwoThreadsMix );
         CPPUNIT_TEST( TestTenThreadsMix );
         CPPUNIT_TEST( TestTwoThreadsSeparate );
@@ -68,6 +69,7 @@ private:
     CPPUNIT_TEST_SUITE_END();
 
     void TestNoThread();
+    void TestDecReturn();
     void TestTenThreadsMix() { TestWithThreads(10, IncAndDecMixed); }
     void TestTwoThreadsMix() { TestWithThreads(2, IncAndDecMixed); }
     void TestTenThreadsSeparate() { TestWithThreads(10, IncOnly); }
@@ -95,6 +97,17 @@ void AtomicTestCase::TestNoThread()
 
     CPPUNIT_ASSERT( int1 == 10000000 );
     CPPUNIT_ASSERT( int2 == -10000000 );
+}
+
+void AtomicTestCase::TestDecReturn()
+{
+    wxAtomicInt i(0);
+    wxAtomicInc(i);
+    wxAtomicInc(i);
+    CPPUNIT_ASSERT( i == 2 );
+
+    CPPUNIT_ASSERT( wxAtomicDec(i) > 0 );
+    CPPUNIT_ASSERT( wxAtomicDec(i) == 0 );
 }
 
 void AtomicTestCase::TestWithThreads(int count, ETestType testType)
