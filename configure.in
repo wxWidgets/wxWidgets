@@ -1987,6 +1987,9 @@ if test "$wxUSE_STL" = "yes"; then
     fi
 fi
 
+dnl check for atomic operations builtins for wx/atomic.h:
+WX_ATOMIC_BUILTINS
+
 dnl pop C++
 AC_LANG_POP()
 

@@ -676,6 +676,11 @@
 #undef HAVE_VISIBILITY
 
 /*
+ * Define if the compiler supports GCC's atomic memory access builtins
+ */
+#undef HAVE_GCC_ATOMIC_BUILTINS
+
+/*
  * Define if compiler's visibility support in libstdc++ is broken
  */
 #undef HAVE_BROKEN_LIBSTDCXX_VISIBILITY

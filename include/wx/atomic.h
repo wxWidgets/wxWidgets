@@ -25,7 +25,25 @@
 
 #if wxUSE_THREADS
 
-#if defined(__WXMSW__)
+#if defined(HAVE_GCC_ATOMIC_BUILTINS)
+
+// NB: we intentionally don't use Linux's asm/atomic.h header, because it's
+//     an internal kernel header that doesn't always work in userspace:
+//     http://bugs.mysql.com/bug.php?id=28456
+//     http://golubenco.org/blog/atomic-operations/
+
+inline void wxAtomicInc (wxUint32 &value)
+{
+    __sync_fetch_and_add(&value, 1);
+}
+
+inline wxUint32 wxAtomicDec (wxUint32 &value)
+{
+    return __sync_sub_and_fetch(&value, 1);
+}
+
+
+#elif defined(__WXMSW__)
 
 // include standard Windows headers
 #include "wx/msw/wrapwin.h"
@@ -51,20 +69,6 @@ inline void wxAtomicInc (wxUint32 &value)
 inline wxUint32 wxAtomicDec (wxUint32 &value)
 {
     return OSAtomicDecrement32 ((int32_t*)&value);
-}
-
-#elif defined(__LINUX__)
-
-#include <asm/atomic.h>
-
-inline void wxAtomicInc (wxUint32 &value)
-{
-    atomic_inc ((atomic_t*)&value);
-}
-
-inline wxUint32 wxAtomicDec (wxUint32 &value)
-{
-    return atomic_dec_and_test ((atomic_t*)&value) ? 0 : 1;
 }
 
 #elif defined (__SOLARIS__)
