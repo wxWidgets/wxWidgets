@@ -25,21 +25,31 @@
 class wxCairoLibrary
 {
 public:
-    static wxCairoLibrary* Get();
+    // return the pointer to the global instance of this class or NULL if we
+    // failed to load/initialize it
+    static wxCairoLibrary *Get();
+
+
+    // for internal use only
     static void CleanUp();
 
 private:
+    // the single wxCairoLibrary instance or NULL
+    static wxCairoLibrary *ms_lib;
+
     wxCairoLibrary();
     ~wxCairoLibrary();
     
     bool IsOk();
-    void InitializeMethods();
+    bool InitializeMethods();
 
-    bool              m_ok;
-    wxDynamicLibrary *m_cairo_lib;
-    wxDynamicLibrary *m_pango_cairo_lib;
+    wxDynamicLibrary m_libCairo;
+    wxDynamicLibrary m_libPangoCairo;
     
-    static wxCairoLibrary *s_lib;
+    // true if we successfully loaded the libraries and can use them
+    //
+    // note that this field must have this name as it's used by wxDL_XXX macros
+    bool m_ok;
 
 public:
     wxDL_VOIDMETHOD_DEFINE( cairo_arc,
@@ -88,32 +98,32 @@ public:
         (cairo_pattern_t *pattern, cairo_filter_t filter), (pattern, filter) )
     wxDL_VOIDMETHOD_DEFINE( cairo_rectangle,
         (cairo_t *cr, double x, double y, double width, double height), (cr, x, y, width, height) )
-    wxDL_METHOD_DEFINE( void, cairo_reset_clip,
-        (cairo_t *cr), (cr), /**/)
-    wxDL_METHOD_DEFINE( void, cairo_restore,
-        (cairo_t *cr), (cr), /**/)
-    wxDL_METHOD_DEFINE( void, cairo_rotate,
-        (cairo_t *cr, double angle), (cr, angle), /**/)
-    wxDL_METHOD_DEFINE( void, cairo_save,
-        (cairo_t *cr), (cr), /**/)
-    wxDL_METHOD_DEFINE( void, cairo_scale,
-        (cairo_t *cr, double sx, double sy), (cr, sx, sy), /**/)
-    wxDL_METHOD_DEFINE( void, cairo_set_dash,
-        (cairo_t *cr, const double *dashes, int num_dashes, double offset), (cr, dashes, num_dashes, offset), /**/)
-    wxDL_METHOD_DEFINE( void, cairo_set_fill_rule,
-        (cairo_t *cr, cairo_fill_rule_t fill_rule), (cr, fill_rule), /**/)
-    wxDL_METHOD_DEFINE( void, cairo_set_line_cap,
-        (cairo_t *cr, cairo_line_cap_t line_cap), (cr, line_cap), /**/)
-    wxDL_METHOD_DEFINE( void, cairo_set_line_join,
-        (cairo_t *cr, cairo_line_join_t line_join), (cr, line_join), /**/)
-    wxDL_METHOD_DEFINE( void, cairo_set_line_width,
-        (cairo_t *cr, double width), (cr, width), /**/)
-    wxDL_METHOD_DEFINE( void, cairo_set_operator,
-        (cairo_t *cr, cairo_operator_t op), (cr, op), /**/)
-    wxDL_METHOD_DEFINE( void, cairo_set_source,
-        (cairo_t *cr, cairo_pattern_t *source), (cr, source), /**/)
-    wxDL_METHOD_DEFINE( void, cairo_set_source_rgba,
-        (cairo_t *cr, double red, double green, double blue, double alpha), (cr, red, green, blue, alpha), /**/)
+    wxDL_VOIDMETHOD_DEFINE( cairo_reset_clip,
+        (cairo_t *cr), (cr) )
+    wxDL_VOIDMETHOD_DEFINE( cairo_restore,
+        (cairo_t *cr), (cr) )
+    wxDL_VOIDMETHOD_DEFINE( cairo_rotate,
+        (cairo_t *cr, double angle), (cr, angle) )
+    wxDL_VOIDMETHOD_DEFINE( cairo_save,
+        (cairo_t *cr), (cr) )
+    wxDL_VOIDMETHOD_DEFINE( cairo_scale,
+        (cairo_t *cr, double sx, double sy), (cr, sx, sy) )
+    wxDL_VOIDMETHOD_DEFINE( cairo_set_dash,
+        (cairo_t *cr, const double *dashes, int num_dashes, double offset), (cr, dashes, num_dashes, offset) )
+    wxDL_VOIDMETHOD_DEFINE( cairo_set_fill_rule,
+        (cairo_t *cr, cairo_fill_rule_t fill_rule), (cr, fill_rule) )
+    wxDL_VOIDMETHOD_DEFINE( cairo_set_line_cap,
+        (cairo_t *cr, cairo_line_cap_t line_cap), (cr, line_cap) )
+    wxDL_VOIDMETHOD_DEFINE( cairo_set_line_join,
+        (cairo_t *cr, cairo_line_join_t line_join), (cr, line_join) )
+    wxDL_VOIDMETHOD_DEFINE( cairo_set_line_width,
+        (cairo_t *cr, double width), (cr, width) )
+    wxDL_VOIDMETHOD_DEFINE( cairo_set_operator,
+        (cairo_t *cr, cairo_operator_t op), (cr, op) )
+    wxDL_VOIDMETHOD_DEFINE( cairo_set_source,
+        (cairo_t *cr, cairo_pattern_t *source), (cr, source) )
+    wxDL_VOIDMETHOD_DEFINE( cairo_set_source_rgba,
+        (cairo_t *cr, double red, double green, double blue, double alpha), (cr, red, green, blue, alpha) )
     wxDL_VOIDMETHOD_DEFINE( cairo_stroke,
         (cairo_t *cr), (cr) )
     wxDL_VOIDMETHOD_DEFINE( cairo_stroke_preserve,
@@ -133,8 +143,6 @@ public:
     DECLARE_NO_COPY_CLASS(wxCairoLibrary)
 };
 
-#endif
- // wxUSE_CAIRO
+#endif // wxUSE_CAIRO
 
-#endif
-  // _WX_CAIRO_H_BASE_
+#endif // _WX_CAIRO_H_BASE_

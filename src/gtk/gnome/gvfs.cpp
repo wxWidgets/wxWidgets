@@ -42,12 +42,16 @@ public:
     wxGnomeVFSLibrary();
     ~wxGnomeVFSLibrary();
 
-    bool IsOk();
-    void InitializeMethods();
-
 private:
-    bool              m_ok;
-    wxDynamicLibrary *m_gnome_vfs_lib;
+    bool IsOk();
+    bool InitializeMethods();
+
+    wxDynamicLibrary m_libGnomeVFS;
+
+    // only true if we successfully loaded the library above
+    //
+    // don't rename this field, it's used by wxDL_XXX macros internally
+    bool m_ok;
 
 public:
     wxDL_METHOD_DEFINE( gboolean, gnome_vfs_init,
@@ -61,21 +65,14 @@ public:
 
 wxGnomeVFSLibrary::wxGnomeVFSLibrary()
 {
-    m_gnome_vfs_lib = NULL;
-
     wxLogNull log;
 
-    m_gnome_vfs_lib = new wxDynamicLibrary( wxT("libgnomevfs-2.so.0") );
-    m_ok = m_gnome_vfs_lib->IsLoaded();
-    if (!m_ok) return;
-
-    InitializeMethods();
+    m_libGnomeVFS.Load("libgnomevfs-2.so.0");
+    m_ok = m_libGnomeVFS.IsLoaded() && InitializeMethods();
 }
 
 wxGnomeVFSLibrary::~wxGnomeVFSLibrary()
 {
-    if (m_gnome_vfs_lib)
-        delete m_gnome_vfs_lib;
 }
 
 bool wxGnomeVFSLibrary::IsOk()
@@ -83,15 +80,12 @@ bool wxGnomeVFSLibrary::IsOk()
     return m_ok;
 }
 
-void wxGnomeVFSLibrary::InitializeMethods()
+bool wxGnomeVFSLibrary::InitializeMethods()
 {
-    m_ok = false;
-    bool success;
+    wxDL_METHOD_LOAD( m_libGnomeVFS, gnome_vfs_init )
+    wxDL_METHOD_LOAD( m_libGnomeVFS, gnome_vfs_shutdown )
 
-    wxDL_METHOD_LOAD( m_gnome_vfs_lib, gnome_vfs_init, success )
-    wxDL_METHOD_LOAD( m_gnome_vfs_lib, gnome_vfs_shutdown, success )
-
-    m_ok = true;
+    return true;
 }
 
 static wxGnomeVFSLibrary* gs_lgvfs = NULL;
@@ -166,6 +160,4 @@ void wxGnomeVFSModule::OnExit()
 
 IMPLEMENT_DYNAMIC_CLASS(wxGnomeVFSModule, wxModule)
 
-#endif
-    // wxUSE_LIBGNOMEVFS
-    // wxUSE_MIMETYPE
+#endif // wxUSE_LIBGNOMEVFS && wxUSE_MIMETYPE

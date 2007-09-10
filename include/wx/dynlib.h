@@ -106,25 +106,40 @@ enum wxPluginCategory
     type pfn ## name = (type)(dynlib).GetSymbol(_T(#name))
 
 
-// the following macros can be used to redirect a whole
-// library to a class and check at run-time if the the
-// library is present and contains all required methods.
+// the following macros can be used to redirect a whole library to a class and
+// check at run-time if the library is present and contains all required
+// methods
+//
+// notice that they are supposed to be used inside a class which has "m_ok"
+// member variable indicating if the library had been successfully loaded
 
-#define wxDL_METHOD_DEFINE( rettype, name, args, shortargs, defret ) \
-    typedef rettype (* name ## Type) args ; \
-    name ## Type pfn_ ## name; \
+// helper macros constructing the name of the variable storing the function
+// pointer and the name of its type from the function name
+#define wxDL_METHOD_NAME(name) m_pfn ## name
+#define wxDL_METHOD_TYPE(name) name ## _t
+
+// parameters are:
+//  - rettype: return type of the function, e.g. "int"
+//  - name: name of the function, e.g. "foo"
+//  - args: function signature in parentheses, e.g. "(int x, int y)"
+//  - argnames: the names of the parameters in parentheses, e.g. "(x, y)"
+//  - defret: the value to return if the library wasn't successfully loaded
+#define wxDL_METHOD_DEFINE( rettype, name, args, argnames, defret ) \
+    typedef rettype (* wxDL_METHOD_TYPE(name)) args ; \
+    wxDL_METHOD_TYPE(name) wxDL_METHOD_NAME(name); \
     rettype name args \
-    { if (m_ok) return pfn_ ## name shortargs ; return defret; }
+        { return m_ok ? wxDL_METHOD_NAME(name) argnames : defret; }
 
-#define wxDL_VOIDMETHOD_DEFINE( name, args, shortargs ) \
-    typedef void (* name ## Type) args ; \
-    name ## Type pfn_ ## name; \
+#define wxDL_VOIDMETHOD_DEFINE( name, args, argnames ) \
+    typedef void (* wxDL_METHOD_TYPE(name)) args ; \
+    wxDL_METHOD_TYPE(name) wxDL_METHOD_NAME(name); \
     void name args \
-    { if (m_ok) pfn_ ## name shortargs ; }
-    
-#define wxDL_METHOD_LOAD( lib, name, success ) \
-    pfn_ ## name = (name ## Type) lib->GetSymbol( wxT(#name), &success ); \
-    if (!success) return;
+        { if ( m_ok ) wxDL_METHOD_NAME(name) argnames ; }
+
+#define wxDL_METHOD_LOAD(lib, name) \
+    wxDL_METHOD_NAME(name) = \
+        (wxDL_METHOD_TYPE(name)) lib.GetSymbol(#name, &m_ok); \
+    if ( !m_ok ) return false
 
 // ----------------------------------------------------------------------------
 // wxDynamicLibraryDetails: contains details about a loaded wxDynamicLibrary

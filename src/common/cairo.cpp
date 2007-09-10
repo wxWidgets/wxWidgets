@@ -26,7 +26,7 @@
 #endif
 
 
-wxCairoLibrary *wxCairoLibrary::s_lib = NULL;
+wxCairoLibrary *wxCairoLibrary::ms_lib = NULL;
 
 //----------------------------------------------------------------------------
 // wxCairoLibrary
@@ -34,49 +34,49 @@ wxCairoLibrary *wxCairoLibrary::s_lib = NULL;
 
 wxCairoLibrary::wxCairoLibrary()
 {
-    m_cairo_lib = NULL;
-    m_pango_cairo_lib = NULL;
-
     wxLogNull log;
     
-    m_cairo_lib = new wxDynamicLibrary( wxT("libcairo.so.2") );
-    m_ok = m_cairo_lib->IsLoaded();
-    if (!m_ok) return;
+    m_libCairo.Load("libcairo.so.2");
+    m_ok = m_libCairo.IsLoaded();
+    if ( !m_ok )
+        return;
 
-    m_pango_cairo_lib = new wxDynamicLibrary( wxT("libpangocairo-1.0.so.0") );
-    m_ok = m_pango_cairo_lib->IsLoaded();
-    if (!m_ok) return;
+    m_libPangoCairo.Load("libpangocairo-1.0.so.0");
+    m_ok = m_libPangoCairo.IsLoaded();
+    if ( !m_ok )
+    {
+        m_libCairo.Unload();
+        return;
+    }
 
-    InitializeMethods();
+    m_ok = InitializeMethods();
 }
 
 wxCairoLibrary::~wxCairoLibrary()
 {
-    if (m_cairo_lib)
-        delete m_cairo_lib;
 }
 
 /* static */ wxCairoLibrary* wxCairoLibrary::Get()
 {
-    if (s_lib)
-        return s_lib;
-        
-    s_lib = new wxCairoLibrary();
-    if (s_lib->IsOk())
-        return s_lib;
-        
-    delete s_lib;
-    s_lib = NULL;
+    if ( !ms_lib )
+    {
+        ms_lib = new wxCairoLibrary();
+        if ( !ms_lib->IsOk() )
+        {
+            delete ms_lib;
+            ms_lib = NULL;
+        }
+    }
     
-    return NULL;
+    return ms_lib;
 }
 
 /* static */ void wxCairoLibrary::CleanUp()
 {
-    if (s_lib)
+    if (ms_lib)
     {
-        delete s_lib;
-        s_lib = NULL;
+        delete ms_lib;
+        ms_lib = NULL;
     }
 }
 
@@ -85,72 +85,69 @@ bool wxCairoLibrary::IsOk()
     return m_ok;
 }
 
-void wxCairoLibrary::InitializeMethods()
+bool wxCairoLibrary::InitializeMethods()
 {
-    m_ok = false;
-    bool success;
+    wxDL_METHOD_LOAD(m_libCairo, cairo_arc);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_arc_negative);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_clip);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_close_path);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_create);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_curve_to);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_destroy);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_fill);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_fill_preserve);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_get_target);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_image_surface_create_for_data);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_line_to);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_move_to);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_new_path);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_paint);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_pattern_add_color_stop_rgba);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_pattern_create_for_surface);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_pattern_create_linear);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_pattern_create_radial);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_pattern_destroy);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_pattern_set_extend);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_pattern_set_filter);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_rectangle);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_reset_clip);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_restore);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_rotate);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_save);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_scale);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_set_dash);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_set_fill_rule);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_set_line_cap);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_set_line_join);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_set_line_width);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_set_operator);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_set_source);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_set_source_rgba);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_stroke);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_stroke_preserve);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_surface_create_similar);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_surface_destroy);
+    wxDL_METHOD_LOAD(m_libCairo, cairo_translate);
 
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_arc, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_arc_negative, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_clip, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_close_path, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_create, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_curve_to, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_destroy, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_fill, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_fill_preserve, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_get_target, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_image_surface_create_for_data, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_line_to, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_move_to, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_new_path, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_paint, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_pattern_add_color_stop_rgba, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_pattern_create_for_surface, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_pattern_create_linear, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_pattern_create_radial, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_pattern_destroy, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_pattern_set_extend, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_pattern_set_filter, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_rectangle, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_reset_clip, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_restore, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_rotate, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_save, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_scale, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_set_dash, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_set_fill_rule, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_set_line_cap, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_set_line_join, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_set_line_width, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_set_operator, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_set_source, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_set_source_rgba, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_stroke, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_stroke_preserve, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_surface_create_similar, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_surface_destroy, success )
-    wxDL_METHOD_LOAD( m_cairo_lib, cairo_translate, success )
+    wxDL_METHOD_LOAD(m_libPangoCairo, pango_cairo_update_layout);
+    wxDL_METHOD_LOAD(m_libPangoCairo, pango_cairo_show_layout);
 
-    wxDL_METHOD_LOAD( m_pango_cairo_lib, pango_cairo_update_layout, success )
-    wxDL_METHOD_LOAD( m_pango_cairo_lib, pango_cairo_show_layout, success )
-
-    m_ok = true;
+    return true;
 }
 
 //----------------------------------------------------------------------------
 // wxCairoModule
 //----------------------------------------------------------------------------
 
-class wxCairoModule: public wxModule
+class wxCairoModule : public wxModule
 {
 public:
     wxCairoModule() { }
-    bool OnInit();
-    void OnExit();
+    virtual bool OnInit();
+    virtual void OnExit();
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxCairoPrintModule)
+    DECLARE_DYNAMIC_CLASS(wxCairotModule)
 };
 
 bool wxCairoModule::OnInit()
@@ -165,5 +162,4 @@ void wxCairoModule::OnExit()
 
 IMPLEMENT_DYNAMIC_CLASS(wxCairoModule, wxModule)
 
-#endif
-  // wxUSE_CAIRO
+#endif // wxUSE_CAIRO

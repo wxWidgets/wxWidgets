@@ -1775,76 +1775,71 @@ public:
 
 bool wxQuickTimeLibrary::Initialize()
 {
-    m_ok = false;
-
     // Turn off the wxDynamicLibrary logging as we're prepared to handle the
     // errors
     wxLogNull nolog;
 
-    if (!m_dll.Load(wxT("qtmlClient.dll")))
-    {
+    m_ok = m_dll.Load(wxT("qtmlClient.dll"));
+    if ( !m_ok )
         return false;
-    }
 
-    wxDL_METHOD_LOAD( m_dll, StartMovie, m_ok );
-    wxDL_METHOD_LOAD( m_dll, StopMovie, m_ok );
-    wxDL_METHOD_LOAD( m_dll, IsMovieDone, m_ok );
-    wxDL_METHOD_LOAD( m_dll, GoToBeginningOfMovie, m_ok );
-    wxDL_METHOD_LOAD( m_dll, GetMoviesError, m_ok );
-    wxDL_METHOD_LOAD( m_dll, EnterMovies, m_ok );
-    wxDL_METHOD_LOAD( m_dll, ExitMovies, m_ok );
-    wxDL_METHOD_LOAD( m_dll, InitializeQTML, m_ok );
-    wxDL_METHOD_LOAD( m_dll, TerminateQTML, m_ok );
-    wxDL_METHOD_LOAD( m_dll, NativePathNameToFSSpec, m_ok );
-    wxDL_METHOD_LOAD( m_dll, OpenMovieFile, m_ok );
-    wxDL_METHOD_LOAD( m_dll, CloseMovieFile, m_ok );
-    wxDL_METHOD_LOAD( m_dll, NewMovieFromFile, m_ok );
-    wxDL_METHOD_LOAD( m_dll, GetMovieRate, m_ok );
-    wxDL_METHOD_LOAD( m_dll, SetMovieRate, m_ok );
-    wxDL_METHOD_LOAD( m_dll, MoviesTask, m_ok );
-    wxDL_METHOD_LOAD( m_dll, BlockMove, m_ok );
-    wxDL_METHOD_LOAD( m_dll, NewHandleClear, m_ok );
-    wxDL_METHOD_LOAD( m_dll, NewMovieFromDataRef, m_ok );
-    wxDL_METHOD_LOAD( m_dll, DisposeHandle, m_ok );
-    wxDL_METHOD_LOAD( m_dll, GetMovieNaturalBoundsRect, m_ok );
-    wxDL_METHOD_LOAD( m_dll, GetMovieIndTrackType, m_ok );
-    wxDL_METHOD_LOAD( m_dll, CreatePortAssociation, m_ok );
-    wxDL_METHOD_LOAD( m_dll, DestroyPortAssociation, m_ok );
-    wxDL_METHOD_LOAD( m_dll, GetNativeWindowPort, m_ok );
-    wxDL_METHOD_LOAD( m_dll, SetMovieGWorld, m_ok );
-    wxDL_METHOD_LOAD( m_dll, DisposeMovie, m_ok );
-    wxDL_METHOD_LOAD( m_dll, SetMovieBox, m_ok );
-    wxDL_METHOD_LOAD( m_dll, SetMovieTimeScale, m_ok );
-    wxDL_METHOD_LOAD( m_dll, GetMovieDuration, m_ok );
-    wxDL_METHOD_LOAD( m_dll, GetMovieTimeBase, m_ok );
-    wxDL_METHOD_LOAD( m_dll, GetMovieTimeScale, m_ok );
-    wxDL_METHOD_LOAD( m_dll, GetMovieTime, m_ok );
-    wxDL_METHOD_LOAD( m_dll, SetMovieTime, m_ok );
-    wxDL_METHOD_LOAD( m_dll, GetMovieVolume, m_ok );
-    wxDL_METHOD_LOAD( m_dll, SetMovieVolume, m_ok );
-    wxDL_METHOD_LOAD( m_dll, SetMovieTimeValue, m_ok );
-    wxDL_METHOD_LOAD( m_dll, NewMovieController, m_ok );
-    wxDL_METHOD_LOAD( m_dll, DisposeMovieController, m_ok );
-    wxDL_METHOD_LOAD( m_dll, MCSetVisible, m_ok );
-    wxDL_METHOD_LOAD( m_dll, PrePrerollMovie, m_ok );
-    wxDL_METHOD_LOAD( m_dll, PrerollMovie, m_ok );
-    wxDL_METHOD_LOAD( m_dll, GetMoviePreferredRate, m_ok );
-    wxDL_METHOD_LOAD( m_dll, GetMovieLoadState, m_ok );
-    wxDL_METHOD_LOAD( m_dll, MCDoAction, m_ok );
-    wxDL_METHOD_LOAD( m_dll, MCSetControllerBoundsRect, m_ok );
-    wxDL_METHOD_LOAD( m_dll, NativeEventToMacEvent, m_ok );
-    wxDL_METHOD_LOAD( m_dll, MCIsPlayerEvent, m_ok );
-    wxDL_METHOD_LOAD( m_dll, MCSetMovie, m_ok );
-    wxDL_METHOD_LOAD( m_dll, MCSetActionFilterWithRefCon, m_ok );
-    wxDL_METHOD_LOAD( m_dll, MCGetControllerInfo, m_ok );
-    wxDL_METHOD_LOAD( m_dll, BeginUpdate, m_ok );
-    wxDL_METHOD_LOAD( m_dll, UpdateMovie, m_ok );
-    wxDL_METHOD_LOAD( m_dll, EndUpdate, m_ok );
-    wxDL_METHOD_LOAD( m_dll, GetMoviesStickyError, m_ok );
+    wxDL_METHOD_LOAD( m_dll, StartMovie );
+    wxDL_METHOD_LOAD( m_dll, StopMovie );
+    wxDL_METHOD_LOAD( m_dll, IsMovieDone );
+    wxDL_METHOD_LOAD( m_dll, GoToBeginningOfMovie );
+    wxDL_METHOD_LOAD( m_dll, GetMoviesError );
+    wxDL_METHOD_LOAD( m_dll, EnterMovies );
+    wxDL_METHOD_LOAD( m_dll, ExitMovies );
+    wxDL_METHOD_LOAD( m_dll, InitializeQTML );
+    wxDL_METHOD_LOAD( m_dll, TerminateQTML );
+    wxDL_METHOD_LOAD( m_dll, NativePathNameToFSSpec );
+    wxDL_METHOD_LOAD( m_dll, OpenMovieFile );
+    wxDL_METHOD_LOAD( m_dll, CloseMovieFile );
+    wxDL_METHOD_LOAD( m_dll, NewMovieFromFile );
+    wxDL_METHOD_LOAD( m_dll, GetMovieRate );
+    wxDL_METHOD_LOAD( m_dll, SetMovieRate );
+    wxDL_METHOD_LOAD( m_dll, MoviesTask );
+    wxDL_METHOD_LOAD( m_dll, BlockMove );
+    wxDL_METHOD_LOAD( m_dll, NewHandleClear );
+    wxDL_METHOD_LOAD( m_dll, NewMovieFromDataRef );
+    wxDL_METHOD_LOAD( m_dll, DisposeHandle );
+    wxDL_METHOD_LOAD( m_dll, GetMovieNaturalBoundsRect );
+    wxDL_METHOD_LOAD( m_dll, GetMovieIndTrackType );
+    wxDL_METHOD_LOAD( m_dll, CreatePortAssociation );
+    wxDL_METHOD_LOAD( m_dll, DestroyPortAssociation );
+    wxDL_METHOD_LOAD( m_dll, GetNativeWindowPort );
+    wxDL_METHOD_LOAD( m_dll, SetMovieGWorld );
+    wxDL_METHOD_LOAD( m_dll, DisposeMovie );
+    wxDL_METHOD_LOAD( m_dll, SetMovieBox );
+    wxDL_METHOD_LOAD( m_dll, SetMovieTimeScale );
+    wxDL_METHOD_LOAD( m_dll, GetMovieDuration );
+    wxDL_METHOD_LOAD( m_dll, GetMovieTimeBase );
+    wxDL_METHOD_LOAD( m_dll, GetMovieTimeScale );
+    wxDL_METHOD_LOAD( m_dll, GetMovieTime );
+    wxDL_METHOD_LOAD( m_dll, SetMovieTime );
+    wxDL_METHOD_LOAD( m_dll, GetMovieVolume );
+    wxDL_METHOD_LOAD( m_dll, SetMovieVolume );
+    wxDL_METHOD_LOAD( m_dll, SetMovieTimeValue );
+    wxDL_METHOD_LOAD( m_dll, NewMovieController );
+    wxDL_METHOD_LOAD( m_dll, DisposeMovieController );
+    wxDL_METHOD_LOAD( m_dll, MCSetVisible );
+    wxDL_METHOD_LOAD( m_dll, PrePrerollMovie );
+    wxDL_METHOD_LOAD( m_dll, PrerollMovie );
+    wxDL_METHOD_LOAD( m_dll, GetMoviePreferredRate );
+    wxDL_METHOD_LOAD( m_dll, GetMovieLoadState );
+    wxDL_METHOD_LOAD( m_dll, MCDoAction );
+    wxDL_METHOD_LOAD( m_dll, MCSetControllerBoundsRect );
+    wxDL_METHOD_LOAD( m_dll, NativeEventToMacEvent );
+    wxDL_METHOD_LOAD( m_dll, MCIsPlayerEvent );
+    wxDL_METHOD_LOAD( m_dll, MCSetMovie );
+    wxDL_METHOD_LOAD( m_dll, MCSetActionFilterWithRefCon );
+    wxDL_METHOD_LOAD( m_dll, MCGetControllerInfo );
+    wxDL_METHOD_LOAD( m_dll, BeginUpdate );
+    wxDL_METHOD_LOAD( m_dll, UpdateMovie );
+    wxDL_METHOD_LOAD( m_dll, EndUpdate );
+    wxDL_METHOD_LOAD( m_dll, GetMoviesStickyError );
 
-    m_ok = true;
-
-    return true;
+    return m_ok;
 }
 
 class WXDLLIMPEXP_MEDIA wxQTMediaBackend : public wxMediaBackendCommonBase
