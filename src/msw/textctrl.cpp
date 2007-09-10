@@ -1712,8 +1712,15 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
             // should never see it
             if ( buf[len - 2] == _T('\r') && buf[len - 1] == _T('\n') )
             {
+                // richedit 1.0 uses "\r\n" as line terminator, so remove "\r"
+                // here and "\n" below
                 buf[len - 2] = _T('\n');
                 len--;
+            }
+            else if ( buf[len - 1] == _T('\r') )
+            {
+                // richedit 2.0+ uses only "\r", replace it with "\n"
+                buf[len - 1] = _T('\n');
             }
         }
 #endif // wxUSE_RICHEDIT
