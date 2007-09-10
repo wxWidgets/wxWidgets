@@ -1439,8 +1439,10 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
         case wxFONTENCODING_ISO8859_13:     ret = 28603; break;
         // case wxFONTENCODING_ISO8859_14:     ret = 28604; break; // no correspondence on Windows
         case wxFONTENCODING_ISO8859_15:     ret = 28605; break;
+
         case wxFONTENCODING_KOI8:           ret = 20866; break;
         case wxFONTENCODING_KOI8_U:         ret = 21866; break;
+
         case wxFONTENCODING_CP437:          ret = 437; break;
         case wxFONTENCODING_CP850:          ret = 850; break;
         case wxFONTENCODING_CP852:          ret = 852; break;
@@ -1459,7 +1461,9 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
         case wxFONTENCODING_CP1255:         ret = 1255; break;
         case wxFONTENCODING_CP1256:         ret = 1256; break;
         case wxFONTENCODING_CP1257:         ret = 1257; break;
+
         case wxFONTENCODING_EUC_JP:         ret = 20932; break;
+
         case wxFONTENCODING_MACROMAN:       ret = 10000; break;
         case wxFONTENCODING_MACJAPANESE:    ret = 10001; break;
         case wxFONTENCODING_MACCHINESETRAD: ret = 10002; break;
@@ -1474,8 +1478,12 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
         case wxFONTENCODING_MACCROATIAN:    ret = 10082; break;
         case wxFONTENCODING_MACICELANDIC:   ret = 10079; break;
         case wxFONTENCODING_MACROMANIAN:    ret = 10009; break;
+
+        case wxFONTENCODING_ISO2022_JP:     ret = 50222; break;
+
         case wxFONTENCODING_UTF7:           ret = 65000; break;
         case wxFONTENCODING_UTF8:           ret = 65001; break;
+
         default:                            return -1;
     }
 
