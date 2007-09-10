@@ -122,8 +122,8 @@ public:
 
     wxDL_METHOD_DEFINE( PangoLayout*, gnome_print_pango_create_layout,
         (GnomePrintContext *gpc), (gpc), NULL )
-    wxDL_METHOD_DEFINE( void, gnome_print_pango_layout,
-        (GnomePrintContext *gpc, PangoLayout *layout), (gpc, layout), /**/ )
+    wxDL_VOIDMETHOD_DEFINE( gnome_print_pango_layout,
+        (GnomePrintContext *gpc, PangoLayout *layout), (gpc, layout)  )
 
     wxDL_METHOD_DEFINE( GnomePrintJob*, gnome_print_job_new,
         (GnomePrintConfig *config), (config), NULL )
@@ -161,14 +161,14 @@ public:
 
     wxDL_METHOD_DEFINE( GtkWidget*, gnome_print_dialog_new,
         (GnomePrintJob *gpj, const guchar *title, gint flags), (gpj, title, flags), NULL )
-    wxDL_METHOD_DEFINE( void, gnome_print_dialog_construct_range_page,
+    wxDL_VOIDMETHOD_DEFINE( gnome_print_dialog_construct_range_page,
         (GnomePrintDialog *gpd, gint flags, gint start, gint end,
         const guchar *currentlabel, const guchar *rangelabel),
-        (gpd, flags, start, end, currentlabel, rangelabel), /**/ )
-    wxDL_METHOD_DEFINE( void, gnome_print_dialog_get_copies,
-        (GnomePrintDialog *gpd, gint *copies, gboolean *collate), (gpd, copies, collate), /**/ )
-    wxDL_METHOD_DEFINE( void, gnome_print_dialog_set_copies,
-        (GnomePrintDialog *gpd, gint copies, gint collate), (gpd, copies, collate), /**/ )
+        (gpd, flags, start, end, currentlabel, rangelabel) )
+    wxDL_VOIDMETHOD_DEFINE( gnome_print_dialog_get_copies,
+        (GnomePrintDialog *gpd, gint *copies, gboolean *collate), (gpd, copies, collate)  )
+    wxDL_VOIDMETHOD_DEFINE( gnome_print_dialog_set_copies,
+        (GnomePrintDialog *gpd, gint copies, gint collate), (gpd, copies, collate)  )
     wxDL_METHOD_DEFINE( GnomePrintRangeType, gnome_print_dialog_get_range,
         (GnomePrintDialog *gpd), (gpd), GNOME_PRINT_RANGETYPE_NONE )
     wxDL_METHOD_DEFINE( int, gnome_print_dialog_get_range_page,
@@ -193,7 +193,7 @@ wxGnomePrintLibrary::wxGnomePrintLibrary()
         return;
 
     m_libGnomePrintUI.Load("libgnomeprintui-2-2.so.0");
-    m_ok = m_libGnomePrintUI->IsLoaded();
+    m_ok = m_libGnomePrintUI.IsLoaded();
     if ( !m_ok )
     {
         m_libGnomePrint.Unload();
@@ -2022,4 +2022,5 @@ void wxGnomePrintPreview::DetermineScaling()
     }
 }
 
-#endif // wxUSE_LIBGNOMEPRINT
+#endif 
+    // wxUSE_LIBGNOMEPRINT
