@@ -111,13 +111,13 @@ inline wxUint32 wxAtomicDec (wxUint32 &value) { return --value; }
 class wxAtomicInt32
 {
 public:
-    wxAtomicInt() { } // non initialized for consistency with basic int type
-    wxAtomicInt(wxInt32 v) : m_value(v) { }
+    wxAtomicInt32() { } // non initialized for consistency with basic int type
+    wxAtomicInt32(wxInt32 v) : m_value(v) { }
 
     operator wxInt32() const { return m_value; }
-    operator wxInt32&() { return m_value; }
+    operator volatile wxInt32&() { return m_value; }
 
-    wxAtomicInt& operator=(wxInt32 v) { m_value = v; return *this; }
+    wxAtomicInt32& operator=(wxInt32 v) { m_value = v; return *this; }
 
     void Inc()
     {
@@ -134,10 +134,12 @@ public:
 private:
     volatile wxInt32  m_value;
     wxCriticalSection m_locker;
+
+    DECLARE_NO_COPY_CLASS(wxAtomicInt32)
 };
 
-inline void wxAtomicInc(wxAtomicInt &value) { value.Inc(); }
-inline wxInt32 wxAtomicDec(wxAtomicInt &value) { return value.Dec(); }
+inline void wxAtomicInc(wxAtomicInt32 &value) { value.Inc(); }
+inline wxInt32 wxAtomicDec(wxAtomicInt32 &value) { return value.Dec(); }
 
 #else // !wxHAS_GENERIC_ATOMIC_OPS
 
