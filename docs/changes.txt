@@ -24,7 +24,10 @@ changes:
 
   b) Passing NULL as argument: as NULL can't be unambiguously converted to
      wxString, in many cases code using it won't compile any more and NULL
-     should be replaced with an empty string.
+     should be replaced with an empty string. The same issue also applies to
+     the structure fields which used to contain "const wxChar *" pointers (such
+     as wxCmdLineEntryDesc::shortName, longName and description fields) and are
+     now wxStrings: empty strings should be assigned to them instead of NULL.
 
 
 
