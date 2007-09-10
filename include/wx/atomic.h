@@ -113,6 +113,7 @@ class wxAtomicInt32
 public:
     wxAtomicInt32() { } // non initialized for consistency with basic int type
     wxAtomicInt32(wxInt32 v) : m_value(v) { }
+    wxAtomicInt32(const wxAtomicInt32& a) : m_value(a.m_value) {}
 
     operator wxInt32() const { return m_value; }
     operator volatile wxInt32&() { return m_value; }
@@ -134,8 +135,6 @@ public:
 private:
     volatile wxInt32  m_value;
     wxCriticalSection m_locker;
-
-    DECLARE_NO_COPY_CLASS(wxAtomicInt32)
 };
 
 inline void wxAtomicInc(wxAtomicInt32 &value) { value.Inc(); }
