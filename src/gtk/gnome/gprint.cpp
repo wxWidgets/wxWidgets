@@ -53,8 +53,8 @@ public:
     wxGnomePrintLibrary();
     ~wxGnomePrintLibrary();
 
-private:
     bool IsOk();
+private:
     bool InitializeMethods();
 
     wxDynamicLibrary m_libGnomePrint;
@@ -214,68 +214,68 @@ bool wxGnomePrintLibrary::IsOk()
 
 bool wxGnomePrintLibrary::InitializeMethods()
 {
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_newpath )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_moveto )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_lineto )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_curveto )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_arcto )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_closepath )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_stroke )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_fill )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_setrgbcolor )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_setlinewidth )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_setdash )
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_newpath );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_moveto );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_lineto );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_curveto );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_arcto );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_closepath );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_stroke );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_fill );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_setrgbcolor );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_setlinewidth );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_setdash );
 
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_rgbimage )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_rgbaimage )
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_rgbimage );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_rgbaimage );
 
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_concat )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_scale )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_rotate )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_translate )
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_concat );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_scale );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_rotate );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_translate );
 
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_gsave )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_grestore )
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_gsave );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_grestore );
 
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_clip )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_eoclip )
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_clip );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_eoclip );
 
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_beginpage )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_showpage )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_end_doc )
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_beginpage );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_showpage );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_end_doc );
 
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_pango_create_layout )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_pango_layout )
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_pango_create_layout );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_pango_layout );
 
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_job_new )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_job_get_context )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_job_close )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_job_print )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_job_get_page_size )
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_job_new );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_job_get_context );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_job_close );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_job_print );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_job_get_page_size );
 
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_unit_get_by_abbreviation )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_convert_distance )
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_unit_get_by_abbreviation );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_convert_distance );
 
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_config_default )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_config_set )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_config_set_boolean )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_config_set_double )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_config_set_int )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_config_set_length )
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_config_default );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_config_set );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_config_set_boolean );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_config_set_double );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_config_set_int );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_config_set_length );
     
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_config_get )
-    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_config_get_length )
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_config_get );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_config_get_length );
 
-    wxDL_METHOD_LOAD( m_libGnomePrintUI, gnome_print_dialog_new )
-    wxDL_METHOD_LOAD( m_libGnomePrintUI, gnome_print_dialog_construct_range_page )
-    wxDL_METHOD_LOAD( m_libGnomePrintUI, gnome_print_dialog_get_copies )
-    wxDL_METHOD_LOAD( m_libGnomePrintUI, gnome_print_dialog_set_copies )
-    wxDL_METHOD_LOAD( m_libGnomePrintUI, gnome_print_dialog_get_range )
-    wxDL_METHOD_LOAD( m_libGnomePrintUI, gnome_print_dialog_get_range_page )
+    wxDL_METHOD_LOAD( m_libGnomePrintUI, gnome_print_dialog_new );
+    wxDL_METHOD_LOAD( m_libGnomePrintUI, gnome_print_dialog_construct_range_page );
+    wxDL_METHOD_LOAD( m_libGnomePrintUI, gnome_print_dialog_get_copies );
+    wxDL_METHOD_LOAD( m_libGnomePrintUI, gnome_print_dialog_set_copies );
+    wxDL_METHOD_LOAD( m_libGnomePrintUI, gnome_print_dialog_get_range );
+    wxDL_METHOD_LOAD( m_libGnomePrintUI, gnome_print_dialog_get_range_page );
 
-    wxDL_METHOD_LOAD( m_libGnomePrintUI, gnome_paper_selector_new_with_flags )
+    wxDL_METHOD_LOAD( m_libGnomePrintUI, gnome_paper_selector_new_with_flags );
 
-    wxDL_METHOD_LOAD( m_libGnomePrintUI, gnome_print_job_preview_new )
+    wxDL_METHOD_LOAD( m_libGnomePrintUI, gnome_print_job_preview_new );
 
     return true;
 }
@@ -978,7 +978,7 @@ wxGnomePrintDC::wxGnomePrintDC( const wxPrintData& data )
 
     // Query page size. This seems to omit the margins
     double pw,ph;
-    gs_lgp->gnome_print_job_get_page_size( native->GetPrintJob(), &pw, &ph );
+    gs_libGnomePrint->gnome_print_job_get_page_size( native->GetPrintJob(), &pw, &ph );
 
     m_pageHeight = ph * PS2DEV;
 }
