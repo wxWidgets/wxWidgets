@@ -2426,26 +2426,36 @@ public:
             return wxCONV_FAILED;
         }
 
-        // if we were really converting, check if we succeeded
-        if ( buf )
+        // we did something, check if we really succeeded
+        if ( flags )
         {
-            if ( flags )
+            // check if the conversion failed, i.e. if any replacements
+            // were done
+            if ( usedDef )
+                return wxCONV_FAILED;
+        }
+        else // we must resort to double tripping...
+        {
+            // first we need to ensure that we really have the MB data: this is
+            // not the case if we're called with NULL buffer, in which case we
+            // need to do the conversion yet again
+            wxCharBuffer bufDef;
+            if ( !buf )
             {
-                // check if the conversion failed, i.e. if any replacements
-                // were done
-                if ( usedDef )
+                bufDef = wxCharBuffer(len);
+                buf = bufDef.data();
+                if ( !::WideCharToMultiByte(m_CodePage, flags, pwz, -1,
+                                            buf, len, NULL, NULL) )
                     return wxCONV_FAILED;
             }
-            else // we must resort to double tripping...
+
+            wxWCharBuffer wcBuf(n);
+            if ( MB2WC(wcBuf.data(), buf, n) == wxCONV_FAILED ||
+                    wcscmp(wcBuf, pwz) != 0 )
             {
-                wxWCharBuffer wcBuf(n);
-                if ( MB2WC(wcBuf.data(), buf, n) == wxCONV_FAILED ||
-                        wcscmp(wcBuf, pwz) != 0 )
-                {
-                    // we didn't obtain the same thing we started from, hence
-                    // the conversion was lossy and we consider that it failed
-                    return wxCONV_FAILED;
-                }
+                // we didn't obtain the same thing we started from, hence
+                // the conversion was lossy and we consider that it failed
+                return wxCONV_FAILED;
             }
         }
 
