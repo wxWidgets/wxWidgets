@@ -106,7 +106,8 @@ Anders
 
 #include "wx/platform.h"
 
-#ifdef __WXGTK20__
+#if wxUSE_TASKBARICON
+
 #include <gtk/gtkversion.h>
 #if GTK_CHECK_VERSION(2, 1, 0)
 
@@ -634,5 +635,5 @@ egg_tray_icon_get_orientation (EggTrayIcon *icon)
 
 
 
-#endif /* __WXGTK20__ */
 #endif /* GTK_CHECK_VERSION(2, 1, 0) */
+#endif /* wxUSE_TASKBARICON */
