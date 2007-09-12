@@ -227,7 +227,7 @@ void wxBitmapButton::OnMouseEnterOrLeave(wxMouseEvent& event)
 void wxBitmapButton::SetBitmapLabel(const wxBitmap& bitmap)
 {
 #if wxUSE_IMAGE
-    if ( !HasFlag(wxBU_AUTODRAW) && !m_disabledSetByUser )
+    if ( !HasFlag(wxBU_AUTODRAW) && !m_disabledSetByUser && bitmap.IsOk() )
     {
         m_bmpDisabled = wxBitmap(bitmap.ConvertToImage().ConvertToGreyscale());
     }
