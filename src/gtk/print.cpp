@@ -26,6 +26,7 @@
 #include "wx/math.h"
 #include "wx/image.h"
 #include "wx/module.h"
+#include "wx/crt.h"
 #endif
 
 #include "wx/fontutil.h"
@@ -60,7 +61,7 @@ static wxCairoLibrary* gs_cairo = NULL;
 class wxGtkPrintModule: public wxModule
 {
 public:
-    wxGtkPrintModule() 
+    wxGtkPrintModule()
     {
 #if wxUSE_LIBGNOMEPRINT
         // This module must be initialized AFTER gnomeprint's one
@@ -183,12 +184,11 @@ wxPrintNativeDataBase *wxGtkPrintFactory::CreatePrintNativeData()
 //----------------------------------------------------------------------------
 
 // We use it to pass useful objets to gtk printing callback functions.
-typedef struct
+struct wxPrinterToGtkData
 {
    wxGtkPrinter * printer;
    wxPrintout * printout;
-}
-wxPrinterToGtkData;
+};
 
 extern "C"
 {
@@ -552,11 +552,11 @@ void wxGtkPrintNativeData::SetPrintConfig( GtkPrintSettings * config )
 GtkPageSetup* wxGtkPrintNativeData::GetPageSetupFromSettings(GtkPrintSettings* settings)
 {
     GtkPageSetup* page_setup = gtk_page_setup_new();
-	gtk_page_setup_set_orientation (page_setup, gtk_print_settings_get_orientation (settings));
+    gtk_page_setup_set_orientation (page_setup, gtk_print_settings_get_orientation (settings));
 
-	GtkPaperSize *paper_size = gtk_print_settings_get_paper_size (settings);
-	if (paper_size != NULL)
-		gtk_page_setup_set_paper_size_and_default_margins (page_setup, paper_size);
+    GtkPaperSize *paper_size = gtk_print_settings_get_paper_size (settings);
+    if (paper_size != NULL)
+        gtk_page_setup_set_paper_size_and_default_margins (page_setup, paper_size);
 
     return page_setup;
 }
@@ -565,7 +565,7 @@ GtkPageSetup* wxGtkPrintNativeData::GetPageSetupFromSettings(GtkPrintSettings* s
 void wxGtkPrintNativeData::SetPageSetupToSettings(GtkPrintSettings* settings, GtkPageSetup* page_setup)
 {
     gtk_print_settings_set_orientation ( settings, gtk_page_setup_get_orientation (page_setup));
-	gtk_print_settings_set_paper_size ( settings, gtk_page_setup_get_paper_size (page_setup));
+    gtk_print_settings_set_paper_size ( settings, gtk_page_setup_get_paper_size (page_setup));
 }
 
 //----------------------------------------------------------------------------
@@ -637,7 +637,7 @@ int wxGtkPrintDialog::ShowModal()
     // If the settings are OK, we restore it.
     if (settings != NULL)
         gtk_print_operation_set_print_settings (native->GetPrintJob(), settings);
-        gtk_print_operation_set_default_page_setup (native->GetPrintJob(), native->GetPageSetupFromSettings(settings));
+    gtk_print_operation_set_default_page_setup (native->GetPrintJob(), native->GetPageSetupFromSettings(settings));
 
     // Show the dialog if needed.
     GError* gError = NULL;
@@ -678,8 +678,8 @@ int wxGtkPrintDialog::ShowModal()
             range = gtk_print_settings_get_page_ranges (newSettings, &num_ranges);
             if (num_ranges >= 1)
             {
-            m_printDialogData.SetFromPage( range[0].start );
-            m_printDialogData.SetToPage( range[0].end );
+                m_printDialogData.SetFromPage( range[0].start );
+                m_printDialogData.SetToPage( range[0].end );
             }
             else {
                 m_printDialogData.SetAllPages( true );
@@ -981,8 +981,8 @@ void wxGtkPrinter::DrawPage(wxPrintout *printout, GtkPrintOperation *operation, 
             // We don't need to verify these values as it has already been done in wxGtkPrinter::BeginPrint.
             if (num_ranges >= 1)
             {
-            startPage = range[0].start + 1;
-            endPage = range[0].end + 1;
+                startPage = range[0].start + 1;
+                endPage = range[0].end + 1;
             }
             else {
                 startPage = minPage;
@@ -1075,14 +1075,14 @@ wxGtkPrintDC::wxGtkPrintDC( const wxPrintData& data )
 
     // RR: what does this do?
     m_resolution = m_printData.GetQuality(); // (int) gtk_print_context_get_dpi_x( m_gpc );
-    if (m_resolution < 0) 
+    if (m_resolution < 0)
         m_resolution = (1 << (m_resolution+4)) *150;
 
     wxPrintf( "resolution %d\n", m_resolution );
-    
+
     m_PS2DEV = (double)m_resolution / 72.0;
     m_DEV2PS = 72.0 / (double)m_resolution;
-    
+
     m_context = gtk_print_context_create_pango_context( m_gpc );
     m_layout = gtk_print_context_create_pango_layout ( m_gpc );
     m_fontdesc = pango_font_description_from_string( "Sans 12" );
@@ -1744,7 +1744,7 @@ void wxGtkPrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
     }
 
     int w,h;
-    
+
     // Scale font description.
     gint oldSize = pango_font_description_get_size( m_fontdesc );
     double size = oldSize;
@@ -1779,15 +1779,15 @@ void wxGtkPrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
 
     // Draw layout.
     gs_cairo->cairo_move_to (m_cairo, xx, yy);
-    
+
     gs_cairo->cairo_save( m_cairo );
-    
+
     if (fabs(angle) > 0.00001)
         gs_cairo->cairo_rotate( m_cairo, angle*DEG2RAD );
-        
+
     gs_cairo->pango_cairo_update_layout (m_cairo, m_layout);
     gs_cairo->pango_cairo_show_layout (m_cairo, m_layout);
-    
+
     gs_cairo->cairo_restore( m_cairo );
 
     if (underlined)
@@ -1795,7 +1795,7 @@ void wxGtkPrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
         // Undo underline attributes setting
         pango_layout_set_attributes(m_layout, NULL);
     }
-    
+
     // Reset unscaled size.
     pango_font_description_set_size( m_fontdesc, oldSize );
 
@@ -1832,7 +1832,7 @@ void wxGtkPrintDC::SetFont( const wxFont& font )
         m_fontdesc = pango_font_description_copy( m_font.GetNativeFontInfo()->description ); // m_fontdesc is now set to device units
 
         // Scale font description from device units to pango units
-        gint oldSize = pango_font_description_get_size( m_fontdesc ); 
+        gint oldSize = pango_font_description_get_size( m_fontdesc );
         double size = oldSize *m_DEV2PS;                          // scale to cairo units
         pango_font_description_set_size( m_fontdesc, (gint)size );    // apply to description
 
@@ -2142,7 +2142,7 @@ void wxGtkPrintDC::DoGetTextExtent(const wxString& string, wxCoord *width, wxCoo
         *width = wxRound( (double)w / m_scaleX * m_PS2DEV );
     if (height)
         *height = wxRound( (double)h / m_scaleY * m_PS2DEV );
-        
+
     if (descent)
     {
         PangoLayoutIter *iter = pango_layout_get_iter(m_layout);
@@ -2255,11 +2255,11 @@ void wxGtkPrintPreview::DetermineScaling()
 
         m_previewPrintout->SetPPIScreen( (int) ((ScreenPixels.GetWidth() * 25.4) / ScreenMM.GetWidth()),
                                          (int) ((ScreenPixels.GetHeight() * 25.4) / ScreenMM.GetHeight()) );
-                         
+
         // TODO !!!!!!!!!!!!!!!      
         int resolution = 600;
         m_previewPrintout->SetPPIPrinter( resolution, resolution );
-        
+
         // Get width and height in points (1/72th of an inch)
         wxSize sizeDevUnits(paper->GetSizeDeviceUnits());
 
