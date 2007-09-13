@@ -1656,13 +1656,18 @@ void wxGtkPrintDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, b
 
 
     gs_cairo->cairo_save(m_cairo);
-    // In case we're scaling the image by using a width and height different
-    // than the bitmap's size create a pattern transformation on the surface and
-    // draw the transformed pattern.
-    cairo_pattern_t* pattern = gs_cairo->cairo_pattern_create_for_surface(surface);
 
     // Prepare to draw the image.
     gs_cairo->cairo_translate(m_cairo, x, y);
+
+    // Scale the image
+    cairo_filter_t filter = CAIRO_FILTER_BILINEAR;
+    cairo_pattern_t* pattern = cairo_pattern_create_for_surface(surface);
+    cairo_pattern_set_filter(pattern,filter);
+    wxDouble scaleX = (wxDouble) bw * m_DEV2PS / (wxDouble) bw;
+    wxDouble scaleY = (wxDouble) bh * m_DEV2PS / (wxDouble) bh;
+    cairo_scale(m_cairo, scaleX, scaleY);
+
     gs_cairo->cairo_set_source(m_cairo, pattern);
     // Use the original size here since the context is scaled already.
     gs_cairo->cairo_rectangle(m_cairo, 0, 0, bw, bh);
