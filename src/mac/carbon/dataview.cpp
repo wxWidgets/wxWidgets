@@ -355,7 +355,7 @@ bool wxDataViewBitmapRenderer::Render(void)
     if (bitmap.Ok())
       return (::SetDataBrowserItemDataIcon(this->GetDataReference(),bitmap.GetBitmapData()->GetIconRef()) == noErr);
     else
-      return false;
+      return true;
   } /* if */
   else
     return false;
@@ -374,7 +374,6 @@ wxDataViewIconTextRenderer::wxDataViewIconTextRenderer(wxString const& variantty
 
 bool wxDataViewIconTextRenderer::Render(void)
 {
-  wxLogMessage(wxString(_("Types: ")) << this->GetValue().GetType() << wxT(' ') << this->GetVariantType());
   if (this->GetValue().GetType() == this->GetVariantType())
   {
    // variable definition:
@@ -460,14 +459,14 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewDateRenderer,wxDataViewRenderer)
 #pragma mark -
 wxDataViewColumn::wxDataViewColumn(wxString const &title, wxDataViewRenderer *cell, unsigned int model_column, int width, wxAlignment align, int flags)
                  :wxDataViewColumnBase(title,cell,model_column,width,wxALIGN_CENTER,flags), m_ascending(true),
-                  m_flags(flags & ~(wxDATAVIEW_COL_HIDDEN | wxDATAVIEW_COL_RESIZABLE)), m_maxWidth(std::numeric_limits<int>::max()), m_minWidth(0), m_width(width),
+                  m_flags(flags & ~(wxDATAVIEW_COL_HIDDEN)), m_maxWidth(30000), m_minWidth(0), m_width(width >= 0 ? width : wxDVC_DEFAULT_WIDTH),
                   m_alignment(align), m_title(title)
 {
 } /* wxDataViewColumn::wxDataViewColumn(wxString const &title, wxDataViewRenderer*, unsigned int, int, wxAlignment, int) */
 
 wxDataViewColumn::wxDataViewColumn(wxBitmap const& bitmap, wxDataViewRenderer *cell, unsigned int model_column, int width, wxAlignment align, int flags)
                  :wxDataViewColumnBase(bitmap,cell,model_column,width,wxALIGN_CENTER,flags), m_ascending(true),
-                  m_flags(flags & (wxDATAVIEW_COL_HIDDEN | wxDATAVIEW_COL_RESIZABLE)), m_maxWidth(std::numeric_limits<int>::max()), m_minWidth(0), m_width(width),
+                  m_flags(flags & ~(wxDATAVIEW_COL_HIDDEN)), m_maxWidth(30000), m_minWidth(0), m_width(width >= 0 ? width : wxDVC_DEFAULT_WIDTH),
                   m_alignment(align)
 {
 } /* wxDataViewColumn::wxDataViewColumn(wxBitmap const&, wxDataViewRenderer*, unsigned int, int, wxAlignment, int) */
@@ -758,8 +757,6 @@ bool wxDataViewCtrl::AppendColumn(wxDataViewColumn* dataViewColumnPtr)
 
    // initialize column description:
     dataViewColumnPtr->SetPropertyID(NewPropertyID);
-    if (dataViewColumnPtr->GetWidth() <= 0)
-      dataViewColumnPtr->SetWidth(wxDVC_DEFAULT_WIDTH);
     columnDescription.propertyDesc.propertyID = NewPropertyID;
     columnDescription.propertyDesc.propertyType = dataViewColumnPtr->GetRenderer()->GetPropertyType();
     columnDescription.propertyDesc.propertyFlags = kDataBrowserListViewSelectionColumn; // make the column selectable
@@ -821,13 +818,15 @@ bool wxDataViewCtrl::AppendColumn(wxDataViewColumn* dataViewColumnPtr)
 
    // final adjustments for the layout:
     wxCHECK_MSG(MacDataViewListCtrlPtr->SetColumnWidth(NewPropertyID,dataViewColumnPtr->GetWidth()) == noErr,false,_("Column width could not be set."));
-    if (dataViewColumnPtr == this->GetExpanderColumn()) // if the current column is marked expandable this column will become the active expandable column
-      MacDataViewListCtrlPtr->SetDisclosureColumn(NewPropertyID,true);
 
    // make sure that the data is up-to-date...
-   // if the newly appended column is the first column add the initial data to the control otherwise ask the control to 'update' the data in the newly appended column:
+   // if the newly appended column is the first column add the initial data to the control and mark the column as an expander column,
+   // otherwise ask the control to 'update' the data in the newly appended column:
     if (this->GetColumnCount() == 1)
+    {
+      this->SetExpanderColumn(dataViewColumnPtr);
       this->AddChildrenLevel(wxDataViewItem());
+    } /* if */
     else
       MacDataViewListCtrlPtr->UpdateItems(kDataBrowserNoItem,0,NULL,kDataBrowserItemNoProperty,NewPropertyID);
    // done:
@@ -922,6 +921,15 @@ void wxDataViewCtrl::Expand(wxDataViewItem const& item)
   
   MacDataViewListCtrlPtr->OpenContainer(reinterpret_cast<DataBrowserItemID>(item.GetID()));
 } /* wxDataViewCtrl::Expand(wxDataViewItem const&) */
+
+unsigned int wxDataViewCtrl::GetCount(void) const
+{
+  ItemCount noOfItems;
+
+
+  wxCHECK_MSG(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer)->GetItemCount(&noOfItems) == noErr,0,_("Could not determine number of items"));
+  return noOfItems;
+} /* wxDataViewCtrl::GetCount(void) const */
 
 wxRect wxDataViewCtrl::GetItemRect(wxDataViewItem const& item, wxDataViewColumn const* columnPtr) const
 {
@@ -1073,16 +1081,15 @@ void wxDataViewCtrl::UnselectAll(void)
 // data handling:
 void wxDataViewCtrl::AddChildrenLevel(wxDataViewItem const& parentItem)
 {
-  wxDataViewItem item;
+  int NoOfChildren;
+
+  wxDataViewItemArray items;
   
   
   wxCHECK_RET(this->GetModel() != NULL,_("Model pointer not initialized."));
-  item = this->GetModel()->GetFirstChild(parentItem);
-  while (item.IsOk())
-  {
-    (void) this->GetModel()->ItemAdded(parentItem,item);
-    item = this->GetModel()->GetNextSibling(item);
-  } /* while */
+  NoOfChildren = this->GetModel()->GetChildren(parentItem,items);
+  for (int i=0; i<NoOfChildren; ++i)
+    (void) this->GetModel()->ItemAdded(parentItem,items[i]);
 } /* wxDataViewCtrl::AddChildrenLevel(wxDataViewItem const&) */
 
 wxDataViewColumn* wxDataViewCtrl::GetColumnPtr(DataBrowserPropertyID propertyID) const

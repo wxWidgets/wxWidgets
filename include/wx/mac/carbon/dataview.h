@@ -179,7 +179,7 @@ public:
     return false;
   }
 
-  virtual bool StartEditing(unsigned int WXUNUSED(row), wxRect WXUNUSED(labelRect)) 
+  virtual bool StartEditing(const wxDataViewItem &WXUNUSED(item), wxRect WXUNUSED(labelRect)) 
   {
     return false;
   }
@@ -535,6 +535,7 @@ public:
   virtual void EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr=NULL);
   virtual void Expand(wxDataViewItem const& item);
   
+  virtual unsigned int GetCount(void) const;
   virtual wxRect GetItemRect(wxDataViewItem const& item, wxDataViewColumn const* columnPtr) const;
   virtual wxDataViewItem GetSelection(void) const;
   virtual int GetSelections(wxDataViewItemArray& sel) const;
