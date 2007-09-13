@@ -260,6 +260,13 @@ Returns first selected item or an invalid item if none is selected.
 Fills {\it sel} with currently selected items and returns
 their number.
 
+\membersection{wxDataViewCtrl::GetSortingColumn}\label{wxdataviewctrlgetsortingcolumn}
+
+\constfunc{virtual wxDataViewColumn*}{GetSortingColumn}{\void}
+
+Returns the wxDataViewColumn currently responsible for sorting
+or NULL if none has been selected.
+
 \membersection{wxDataViewCtrl::HitTest}\label{wxdataviewctrlhittest}
 
 \constfunc{void}{HitTest}{\param{const wxPoint\& }{point}, \param{wxDataViewItem\& }{item}, \param{wxDataViewColumn *\&}{col}}

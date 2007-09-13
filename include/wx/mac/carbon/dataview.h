@@ -531,6 +531,8 @@ public:
   virtual wxDataViewColumn* GetColumn(unsigned int pos) const;
   virtual unsigned int GetColumnCount(void) const;
 
+    virtual wxDataViewColumn *GetSortingColumn() const;
+
   virtual void Collapse(wxDataViewItem const& item);
   virtual void EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr=NULL);
   virtual void Expand(wxDataViewItem const& item);

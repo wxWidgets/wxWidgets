@@ -392,6 +392,8 @@ public:
     virtual bool DeleteColumn( wxDataViewColumn *column );
     virtual bool ClearColumns();
 
+    virtual wxDataViewColumn *GetSortingColumn() const;
+    
     virtual wxDataViewItem GetSelection() const;
     virtual int GetSelections( wxDataViewItemArray & sel ) const;
     virtual void SetSelections( const wxDataViewItemArray & sel );

@@ -890,6 +890,11 @@ unsigned int wxDataViewCtrl::GetColumnCount(void) const
   return this->m_ColumnPointers.size();
 } /* wxDataViewCtrl::GetColumnCount(void) const */
 
+wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
+{
+    return NULL;
+}
+
 void wxDataViewCtrl::Collapse(wxDataViewItem const& item)
 {
   wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));

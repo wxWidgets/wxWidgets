@@ -3794,6 +3794,11 @@ bool wxDataViewCtrl::ClearColumns()
     return true;
 }
 
+wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
+{
+    return NULL;
+}
+
 //Selection code with wxDataViewItem as parameters
 wxDataViewItem wxDataViewCtrl::GetSelection() const
 {

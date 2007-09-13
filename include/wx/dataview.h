@@ -505,6 +505,8 @@ public:
         { m_expander_column = col ; DoSetExpanderColumn(); }
     wxDataViewColumn *GetExpanderColumn() const 
         { return m_expander_column; }
+        
+    virtual wxDataViewColumn *GetSortingColumn() const = 0;
 
     void SetIndent( int indent )
         { m_indent = indent ; DoSetIndent(); }

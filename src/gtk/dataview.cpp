@@ -1256,6 +1256,7 @@ void wxDataViewRenderer::SetMode( wxDataViewCellMode mode )
         break;
     }
 
+    // This value is most often ignored in GtkTreeView    
     GValue gvalue = { 0, };
     g_value_init( &gvalue, gtk_cell_renderer_mode_get_type() );
     g_value_set_enum( &gvalue, gtkMode );
@@ -3109,6 +3110,11 @@ bool wxDataViewCtrl::ClearColumns()
     m_cols.clear();
     
     return true;
+}
+
+wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
+{
+    return NULL;
 }
 
 void wxDataViewCtrl::Expand( const wxDataViewItem & item )
