@@ -181,6 +181,7 @@ void wxSpinCtrl::SetValue( int value )
 
     GtkDisableEvents();
     gtk_spin_button_set_value((GtkSpinButton*)m_widget, value);
+    m_pos = value;
     GtkEnableEvents();
 }
 
