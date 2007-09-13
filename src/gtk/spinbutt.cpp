@@ -38,7 +38,7 @@ gtk_value_changed(GtkSpinButton* spinbutton, wxSpinButton* win)
     const double value = gtk_spin_button_get_value(spinbutton);
     const int pos = int(value);
     const int oldPos = win->m_pos;
-    if (!win->m_hasVMT || g_blockEventsOnDrag || win->m_blockScrollEvent || pos == oldPos)
+    if (!win->m_hasVMT || g_blockEventsOnDrag || pos == oldPos)
     {
         win->m_pos = pos;
         return;
@@ -152,6 +152,7 @@ void wxSpinButton::SetValue( int value )
 
     GtkDisableEvents();
     gtk_spin_button_set_value((GtkSpinButton*)m_widget, value);
+    m_pos = int(gtk_spin_button_get_value((GtkSpinButton*)m_widget));
     GtkEnableEvents();
 }
 
