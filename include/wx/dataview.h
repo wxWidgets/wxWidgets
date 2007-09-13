@@ -407,7 +407,7 @@ public:
     virtual bool IsSortOrderAscending() const = 0;
 
     const wxBitmap &GetBitmap() const       { return m_bitmap; }
-    unsigned int GetModelColumn() const     { return m_model_column; }
+    unsigned int GetModelColumn() const     { return static_cast<unsigned int>(m_model_column); }
 
     wxDataViewCtrl *GetOwner()              { return m_owner; }
     wxDataViewRenderer* GetRenderer()       { return m_renderer; }

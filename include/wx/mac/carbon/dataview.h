@@ -179,7 +179,7 @@ public:
     return false;
   }
 
-  virtual bool StartEditing(const wxDataViewItem &WXUNUSED(item), wxRect WXUNUSED(labelRect)) 
+  virtual bool StartEditing(wxDataViewItem const& WXUNUSED(item), wxRect WXUNUSED(labelRect)) 
   {
     return false;
   }
@@ -472,6 +472,10 @@ public:
   {
     this->m_propertyID = newID;
   }
+  void SetWidthVariable(int NewWidth)
+  {
+    this->m_width = NewWidth;
+  }
 
 protected:
 private:
@@ -530,13 +534,14 @@ public:
   virtual bool DeleteColumn(wxDataViewColumn* columnPtr);
   virtual wxDataViewColumn* GetColumn(unsigned int pos) const;
   virtual unsigned int GetColumnCount(void) const;
-    virtual int GetColumnPosition( const wxDataViewColumn *column ) const;
-    virtual wxDataViewColumn *GetSortingColumn() const;
+  virtual int GetColumnPosition(wxDataViewColumn const* columnPtr) const;
 
   virtual void Collapse(wxDataViewItem const& item);
   virtual void EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr=NULL);
   virtual void Expand(wxDataViewItem const& item);
   
+  virtual wxDataViewColumn* GetSortingColumn(void) const;
+
   virtual unsigned int GetCount(void) const;
   virtual wxRect GetItemRect(wxDataViewItem const& item, wxDataViewColumn const* columnPtr) const;
   virtual wxDataViewItem GetSelection(void) const;

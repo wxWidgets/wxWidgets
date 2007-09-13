@@ -644,6 +644,7 @@ void wxDataViewColumn::SetSortOrder(bool ascending)
       else
         headerDescription.initialOrder = kDataBrowserOrderDecreasing;
       verify_noerr(macDataViewListCtrlPtr->SetHeaderDesc(this->GetPropertyID(),&headerDescription));
+      macDataViewListCtrlPtr->SetSortProperty(this->GetPropertyID());
     } /* if */
   } /* if */
 } /* wxDataViewColumn::SetSortOrder(bool) */
@@ -890,15 +891,20 @@ unsigned int wxDataViewCtrl::GetColumnCount(void) const
   return this->m_ColumnPointers.size();
 } /* wxDataViewCtrl::GetColumnCount(void) const */
 
-int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
+int wxDataViewCtrl::GetColumnPosition(wxDataViewColumn const* columnPtr) const
 {
-    return -1;
-}
-
-wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
-{
-    return NULL;
-}
+  if (columnPtr != NULL)
+  {
+   // variable definition and initialization:
+    DataBrowserTableViewColumnIndex                Position;
+    wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+    
+    wxCHECK_MSG(MacDataViewListCtrlPtr->GetColumnIndex(columnPtr->GetPropertyID(),&Position) == noErr,-1,_("Could not determine column's position"));
+    return static_cast<int>(Position);
+  } /* if */
+  else
+    return wxNOT_FOUND;
+} /* wxDataViewCtrl::GetColumnPosition(wxDataViewColumn const*) const */
 
 void wxDataViewCtrl::Collapse(wxDataViewItem const& item)
 {
@@ -931,6 +937,19 @@ void wxDataViewCtrl::Expand(wxDataViewItem const& item)
   
   MacDataViewListCtrlPtr->OpenContainer(reinterpret_cast<DataBrowserItemID>(item.GetID()));
 } /* wxDataViewCtrl::Expand(wxDataViewItem const&) */
+
+wxDataViewColumn* wxDataViewCtrl::GetSortingColumn(void) const
+{
+  DataBrowserPropertyID propertyID;
+
+  wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+  
+  
+  if (MacDataViewListCtrlPtr->GetSortProperty(&propertyID) == noErr)
+    return this->GetColumnPtr(propertyID);
+  else
+    return NULL;
+} /* wxDataViewCtrl::GetSortingColumn(void) const */
 
 unsigned int wxDataViewCtrl::GetCount(void) const
 {

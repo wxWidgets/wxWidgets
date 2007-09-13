@@ -985,8 +985,23 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
       break;
     case kDataBrowserUserStateChanged:
       {
+       // variable definitions and initialization:
         DataBrowserPropertyID propertyID;
-        
+        wxDataViewCtrl*       dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetPeer()));
+
+        wxCHECK_RET(dataViewCtrlPtr != NULL,_("Pointer to data view control not set correctly"));
+       // update column widths:
+        for (size_t i=0; i<dataViewCtrlPtr->GetColumnCount(); ++i)
+        {
+         // constant definition for abbreviational purposes:
+          wxDataViewColumn* const columnPtr = dataViewCtrlPtr->GetColumn(i);
+         // variable definition:
+          UInt16 columnWidth;
+          
+          wxCHECK_RET(this->GetColumnWidth(columnPtr->GetPropertyID(),&columnWidth) == noErr,_("Column width could not be determined"));
+          columnPtr->SetWidthVariable(columnWidth);
+        } /* for */
+       // update order status:
         if ((this->GetSortProperty(&propertyID) == noErr) && (propertyID >= kMinPropertyID))
         {
           DataBrowserSortOrder            sortOrder;
@@ -996,9 +1011,6 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
           {
            // variable definition and initialization:
             wxDataViewColumn* columnPtr;
-            wxDataViewCtrl*   dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetPeer()));
-
-            wxCHECK_RET(dataViewCtrlPtr != NULL,_("Pointer to data vie wcontrol not set correctly."));
             columnPtr = dataViewCtrlPtr->GetColumn(columnIndex);
            // check if the sort order has changed:
             if (  columnPtr->IsSortOrderAscending()  && (sortOrder == kDataBrowserOrderDecreasing) ||
