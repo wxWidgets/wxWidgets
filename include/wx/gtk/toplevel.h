@@ -94,11 +94,11 @@ public:
     GtkWidget    *m_mainWidget;
 
     bool          m_fsIsShowing;         /* full screen */
-    long          m_fsSaveGdkFunc, m_fsSaveGdkDecor;
+    int           m_fsSaveGdkFunc, m_fsSaveGdkDecor;
     wxRect        m_fsSaveFrame;
 
     // m_windowStyle translated to GDK's terms
-    long          m_gdkFunc,
+    int           m_gdkFunc,
                   m_gdkDecor;
 
     bool m_sizeSet;
@@ -113,10 +113,13 @@ public:
                                  int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
                                  int incW = wxDefaultCoord, int incH = wxDefaultCoord );
 
-    // return the full size of the window without WM decorations
+    // return the size of the window without WM decorations
     void GTKDoGetSize(int *width, int *height) const;
 
     void GtkUpdateSize() { m_sizeSet = false; }
+
+    // whether frame extents are accurate
+    virtual bool IsDecorCacheable() const;
 
 protected:
     // common part of all ctors
@@ -126,18 +129,12 @@ protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
     // take into account WM decorations here
-    virtual void DoGetSize(int *width, int *height) const;
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
 
     // override these methods to take into account tool/menu/statusbars
     virtual void DoGetClientSize(int *width, int *height) const;
-
-    // this method takes the size of the window not taking account of
-    // decorations
-    void GTKDoSetSize(int width, int height);
-
 
     // string shown in the title bar
     wxString m_title;

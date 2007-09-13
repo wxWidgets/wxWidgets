@@ -14,7 +14,6 @@
 
 #include "wx/toplevel.h"
 
-#ifdef __WXGTK20__
 #include <gtk/gtkversion.h>
 #if GTK_CHECK_VERSION(2, 1, 0)
 
@@ -25,7 +24,9 @@ public:
 
     // Returns true if SYSTRAY protocol is supported by the desktop
     bool IsProtocolSupported();
-    
+
+    virtual bool IsDecorCacheable() const;
+
     wxEvtHandler *m_invokingWindow;
 
 protected:
@@ -34,6 +35,5 @@ protected:
 #endif // wxUSE_MENUS_NATIVE
 };
 
-#endif // __WXGTK20__
 #endif // GTK_CHECK_VERSION(2, 1, 0)
 #endif // _WX_GTK_TASKBARPRIV_H_

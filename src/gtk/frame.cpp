@@ -310,6 +310,9 @@ void wxFrame::GtkOnSize()
 
     ConstrainSize();
 
+    int width, height;
+    GTKDoGetSize(&width, &height);
+
     if (m_mainWidget)
     {
         // TODO
@@ -327,7 +330,7 @@ void wxFrame::GtkOnSize()
         {
             int xx = m_miniEdge;
             int yy = m_miniEdge + m_miniTitle;
-            int ww = m_width  - 2*m_miniEdge;
+            int ww = width - 2*m_miniEdge;
             if (ww < 0)
                 ww = 0;
             menubarHeight = m_menuBarHeight;
@@ -363,7 +366,7 @@ void wxFrame::GtkOnSize()
             {
                 ww = m_toolBarDetached ? wxPLACE_HOLDER
                                        : m_frameToolBar->m_width;
-                hh = m_height - 2*m_miniEdge;
+                hh = height - 2*m_miniEdge;
 
                 client_area_x_offset += ww;
             }
@@ -373,7 +376,7 @@ void wxFrame::GtkOnSize()
                ww = m_toolBarDetached ? wxPLACE_HOLDER
                                       : m_frameToolBar->m_width;
                xx = GetClientSize().x - 1;
-               hh = m_height - 2*m_miniEdge;
+               hh = height - 2*m_miniEdge;
                if( hh < 0 )
                   hh = 0;
 
@@ -387,13 +390,13 @@ void wxFrame::GtkOnSize()
 #endif // wxUSE_MENUS_NATIVE
                 m_frameToolBar->m_x = xx;
                 m_frameToolBar->m_y = yy;
-                ww = m_width - 2*m_miniEdge;
+                ww = width - 2*m_miniEdge;
                 hh = m_toolBarDetached ? wxPLACE_HOLDER
                                        : m_frameToolBar->m_height;
             }
             else
             {
-                ww = m_width - 2*m_miniEdge;
+                ww = width - 2*m_miniEdge;
                 hh = m_toolBarDetached ? wxPLACE_HOLDER
                                        : m_frameToolBar->m_height;
 
@@ -412,8 +415,8 @@ void wxFrame::GtkOnSize()
 
         int client_x = client_area_x_offset + m_miniEdge;
         int client_y = client_area_y_offset + m_miniEdge + m_miniTitle;
-        int client_w = m_width - client_area_x_offset - 2*m_miniEdge;
-        int client_h = m_height - client_area_y_offset- 2*m_miniEdge - m_miniTitle;
+        int client_w = width - client_area_x_offset - 2*m_miniEdge;
+        int client_h = height - client_area_y_offset- 2*m_miniEdge - m_miniTitle;
         if (client_w < 0)
             client_w = 0;
         if (client_h < 0)
@@ -432,8 +435,8 @@ void wxFrame::GtkOnSize()
     if (m_frameStatusBar && m_frameStatusBar->IsShown())
     {
         int xx = 0 + m_miniEdge;
-        int yy = m_height - wxSTATUS_HEIGHT - m_miniEdge - client_area_y_offset;
-        int ww = m_width - 2*m_miniEdge;
+        int yy = height - wxSTATUS_HEIGHT - m_miniEdge - client_area_y_offset;
+        int ww = width - 2*m_miniEdge;
         if (ww < 0)
             ww = 0;
         int hh = wxSTATUS_HEIGHT;

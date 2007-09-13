@@ -134,11 +134,11 @@ void wxMDIParentFrame::GtkOnSize()
 
     menu_bar->m_x = 0;
     menu_bar->m_y = 0;
-    menu_bar->m_width = m_width;
+    GTKDoGetSize(&menu_bar->m_width, NULL);
     menu_bar->m_height = wxMENU_HEIGHT;
     gtk_pizza_set_size( GTK_PIZZA(m_mainWidget),
                           menu_bar->m_widget,
-                          0, 0, m_width, wxMENU_HEIGHT );
+                          0, 0, menu_bar->m_width, menu_bar->m_height);
 }
 
 void wxMDIParentFrame::OnInternalIdle()
@@ -160,11 +160,11 @@ void wxMDIParentFrame::OnInternalIdle()
             wxMenuBar *menu_bar = active_child_frame->m_menuBar;
             if (menu_bar)
             {
-                menu_bar->m_width = m_width;
+                GTKDoGetSize(&menu_bar->m_width, NULL);
                 menu_bar->m_height = wxMENU_HEIGHT;
                 gtk_pizza_set_size( GTK_PIZZA(m_mainWidget),
                                     menu_bar->m_widget,
-                                    0, 0, m_width, wxMENU_HEIGHT );
+                                    0, 0, menu_bar->m_width, menu_bar->m_height);
                 menu_bar->SetInvokingWindow(active_child_frame);
             }
         }
@@ -191,11 +191,11 @@ void wxMDIParentFrame::OnInternalIdle()
                 {
                     if (menu_bar->Show(true))
                     {
-                        menu_bar->m_width = m_width;
+                        GTKDoGetSize(&menu_bar->m_width, NULL);
                         menu_bar->m_height = wxMENU_HEIGHT;
                         gtk_pizza_set_size( GTK_PIZZA(m_mainWidget),
                                             menu_bar->m_widget,
-                                            0, 0, m_width, wxMENU_HEIGHT );
+                                            0, 0, menu_bar->m_width, menu_bar->m_height);
                         menu_bar->SetInvokingWindow( child_frame );
                     }
                     visible_child_menu = true;
@@ -227,11 +227,11 @@ void wxMDIParentFrame::OnInternalIdle()
             m_frameMenuBar->Show( true );
             m_frameMenuBar->SetInvokingWindow( this );
 
-            m_frameMenuBar->m_width = m_width;
+            GTKDoGetSize(&m_frameMenuBar->m_width, NULL);
             m_frameMenuBar->m_height = wxMENU_HEIGHT;
             gtk_pizza_set_size( GTK_PIZZA(m_mainWidget),
                                 m_frameMenuBar->m_widget,
-                                0, 0, m_width, wxMENU_HEIGHT );
+                                0, 0, m_frameMenuBar->m_width, m_frameMenuBar->m_height);
         }
     }
 }
@@ -383,9 +383,11 @@ void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
         m_menuBar->SetParent( mdi_frame );
 
         /* insert the invisible menu bar into the _parent_ mdi frame */
+        int w;
+        mdi_frame->GTKDoGetSize(&w, NULL);
         gtk_pizza_put( GTK_PIZZA(mdi_frame->m_mainWidget),
                          m_menuBar->m_widget,
-                         0, 0,  mdi_frame->m_width, wxMENU_HEIGHT );
+                         0, 0, w, wxMENU_HEIGHT);
     }
 }
 
