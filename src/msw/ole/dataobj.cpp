@@ -685,13 +685,14 @@ size_t wxDataObject::GetBufferOffset(const wxDataFormat& format )
     return NeedsVerbatimData(format) ? 0 : sizeof(size_t);
 }
 
-const void* wxDataObject::GetSizeFromBuffer( const void* buffer, size_t* size,
-                                               const wxDataFormat& format )
+const void *wxDataObject::GetSizeFromBuffer(const void *buffer,
+                                            size_t *size,
+                                            const wxDataFormat& format)
 {
     // hack: the third parameter is declared non-const in Wine's headers so
     // cast away the const
-    size_t realsz = ::HeapSize(::GetProcessHeap(), 0,
-                               wx_const_cast(void*, buffer));
+    const size_t realsz = ::HeapSize(::GetProcessHeap(), 0,
+                                     wx_const_cast(void*, buffer));
     if ( realsz == (size_t)-1 )
     {
         // note that HeapSize() does not set last error
@@ -702,9 +703,13 @@ const void* wxDataObject::GetSizeFromBuffer( const void* buffer, size_t* size,
     *size = realsz;
 
     // check if this data has its size prepended (as it was by default for wx
-    // programs prior 2.6.3):
-    size_t *p = (size_t *)buffer;
-    if ( *p == realsz )
+    // programs prior 2.6.3): notice that we may still mistakenly interpret the
+    // start of the real data as size (e.g. suppose the object contains 2 ints
+    // and the first of them is 8...) but there is no way around it as long as
+    // we want to keep this compatibility hack (it won't be there any more in
+    // the next major wx version)
+    DWORD *p = (DWORD *)buffer;
+    if ( *p == realsz && realsz > sizeof(DWORD) )
     {
         if ( NeedsVerbatimData(format) )
             wxLogDebug(wxT("Apparent data format mismatch: size not needed"));
