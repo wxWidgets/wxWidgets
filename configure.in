@@ -1508,7 +1508,7 @@ dnl ------------------------------------------------------------------------
 
 dnl Note: non-empty last parameter makes check compile-only,
 dnl   skipping worthless preprocessing check
-AC_CHECK_HEADERS(stdlib.h fnmatch.h langinfo.h malloc.h unistd.h wchar.h,,, [AC_INCLUDES_DEFAULT()])
+AC_CHECK_HEADERS(langinfo.h wchar.h,,, [AC_INCLUDES_DEFAULT])
 
 dnl maybe wchar_t is in wcstr.h if we don't have wchar.h?
 if test "$ac_cv_header_wchar_h" != "yes"; then
@@ -4231,36 +4231,6 @@ if test "$ac_cv_func_snprintf" = "yes"; then
 
     if test "$wx_cv_func_snprintf_decl" = "yes"; then
         AC_DEFINE(HAVE_SNPRINTF_DECL)
-
-        dnl we know there is an snprintf declaration, but some old headers
-        dnl may have one taking a "char *" format instead of "const char *"
-        AC_CACHE_CHECK([if snprintf declaration is broken], wx_cv_func_broken_snprintf_decl,
-            [
-                AC_TRY_COMPILE(
-                    [
-                        #include <stdio.h>
-                        #include <stdarg.h>
-                        #ifdef __MSL__
-                        #if __MSL__ >= 0x6000
-                        namespace std {}
-                        using namespace std;
-                        #endif
-                        #endif
-                    ],
-                    [
-                        char *buf;
-                        const char *fmt = "%s";
-                        snprintf(buf, 10u, fmt, "wx");
-                    ],
-                    wx_cv_func_broken_snprintf_decl=no,
-                    wx_cv_func_broken_snprintf_decl=yes
-                )
-            ]
-        )
-
-        if test "$wx_cv_func_broken_snprintf_decl" = "yes"; then
-            AC_DEFINE(HAVE_BROKEN_SNPRINTF_DECL)
-        fi
     fi
 
     if test "$wxUSE_PRINTF_POS_PARAMS" = "yes"; then
@@ -4304,38 +4274,6 @@ fi
 
 if test "$wxUSE_UNICODE" = yes; then
 
-    dnl our wxVsnprintf() implementation needs to use the system swprintf() in Unicode
-    dnl builds so let's check if swprintf() is declared as C99 imposes:
-    dnl     int swprintf(wchar_t *s, size_t n, const wchar_t *format, ...);
-    dnl or rather as:
-    dnl     int swprintf(wchar_t *s, const wchar_t *format, ...);
-    AC_CHECK_FUNCS(swprintf)
-
-    if test "$ac_cv_func_swprintf" = "yes"; then
-        AC_CACHE_CHECK([if swprintf declaration is broken], wx_cv_func_broken_swprintf_decl,
-            [
-                AC_TRY_COMPILE(
-                    [
-                        #include <stdio.h>
-                        #include <stdarg.h>
-                        #include <wchar.h>
-                    ],
-                    [
-                        wchar_t *buf;
-                        const wchar_t *fmt = L"test";
-                        swprintf(buf, 10u, fmt);
-                    ],
-                    wx_cv_func_broken_swprintf_decl=no,
-                    wx_cv_func_broken_swprintf_decl=yes
-                )
-            ]
-        )
-
-        if test "$wx_cv_func_broken_swprintf_decl" = "yes"; then
-            AC_DEFINE(HAVE_BROKEN_SWPRINTF_DECL)
-        fi
-    fi
-
     dnl also look if we have wide char IO functions, notice that [f]putws are
     dnl declared in special widec.h under Solaris
     wchar_headers="#include <stdio.h>
@@ -4349,7 +4287,7 @@ if test "$wxUSE_UNICODE" = yes; then
             fi
     esac
 
-    WX_CHECK_FUNCS(wputc wputchar putws fputws wprintf vswprintf,,,
+    WX_CHECK_FUNCS(putws fputws wprintf vswprintf,,,
                    [$wchar_headers])
 
     dnl MinGW has a vswprintf with a different prototype, and
@@ -4361,10 +4299,6 @@ if test "$wxUSE_UNICODE" = yes; then
                    [AC_MSG_RESULT([yes])
                     AC_DEFINE(HAVE__VSNWPRINTF)],
                    [AC_MSG_RESULT([no])]);
-fi
-
-if test "x$ac_cv_header_fnmatch_h" = "xyes"; then
-    WX_CHECK_FUNCS(fnmatch,,,[#include <fnmatch.h>])
 fi
 
 if test "$wxUSE_FILE" = "yes"; then
@@ -4610,9 +4544,6 @@ if test "$wxUSE_SNGLINST_CHECKER" = "yes"; then
         wxUSE_SNGLINST_CHECKER=no
     fi
 fi
-
-dnl check for timegm() used by datetime.cpp
-AC_CHECK_FUNCS(timegm)
 
 dnl look for a function to modify the environment
 AC_CHECK_FUNCS(setenv putenv, break)
@@ -5080,7 +5011,6 @@ fi
 
 AC_CHECK_FUNC(localtime_r, [ AC_DEFINE(HAVE_LOCALTIME_R) ])
 AC_CHECK_FUNC(gmtime_r, [ AC_DEFINE(HAVE_GMTIME_R) ])
-AC_CHECK_FUNC(readdir_r, [ AC_DEFINE(HAVE_READDIR_R) ])
 dnl By preference, we probably should use getaddrinfo which avoids thread
 dnl safety issues and supports IPv6, however there currently is no code
 dnl for it, so testing for it is temporarily disabled and we are restricted

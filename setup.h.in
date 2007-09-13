@@ -828,12 +828,6 @@
 /* Define if you have ftime() */
 #undef HAVE_FTIME
 
-/* Define if you have support for large (64 bit size) files */
-#undef HAVE_LARGEFILE_SUPPORT
-
-/* Define if you have localtime() */
-#undef HAVE_LOCALTIME
-
 /* Define if you have nanosleep() */
 #undef HAVE_NANOSLEEP
 
@@ -858,12 +852,6 @@
 /* Define if you have pthread_attr_setstacksize */
 #undef HAVE_PTHREAD_ATTR_SETSTACKSIZE
 
-/* Define if you have sigaction() */
-#undef HAVE_SIGACTION
-
-/* Define if you have sigemptyset() */
-#undef HAVE_SIGEMPTYSET
-
 /* Define if you have shl_load() */
 #undef HAVE_SHL_LOAD
 
@@ -872,10 +860,6 @@
 
 /* Define if you have snprintf() declaration in the header */
 #undef HAVE_SNPRINTF_DECL
-
-/* Define if you have a _broken_ snprintf() declaration in the header,
- * with 'char*' for the 3rd parameter instead of 'const char*' */
-#undef HAVE_BROKEN_SNPRINTF_DECL
 
 /* Define if you have a snprintf() which supports positional arguments
    (defined in the unix98 standard) */
@@ -902,9 +886,6 @@
 /* Define if you have all functions to set thread priority */
 #undef HAVE_THREAD_PRIORITY_FUNCTIONS
 
-/* Define if you have timegm() function */
-#undef HAVE_TIMEGM
-
 /* Define if you have vsnprintf() */
 #undef HAVE_VSNPRINTF
 
@@ -926,9 +907,6 @@
 
 /* Define if you have wcstoull() and wcstoll() */
 #undef HAVE_WCSTOULL
-
-/* define if you have vsscanf function */
-#undef HAVE_VSSCANF
 
 /* The number of bytes in a wchar_t.  */
 #undef SIZEOF_WCHAR_T
@@ -1020,9 +998,6 @@
 /* Define if you have the putenv function.  */
 #undef HAVE_PUTENV
 
-/* Define if you have the readdir_r function.  */
-#undef HAVE_READDIR_R
-
 /* Define if you have the setenv function.  */
 #undef HAVE_SETENV
 
@@ -1044,18 +1019,6 @@
 /* Define if you have the <X11/extensions/xf86vmode.h> header file.  */
 #undef HAVE_X11_EXTENSIONS_XF86VMODE_H
 
-/* Define if you have the fnmatch() function */
-#undef HAVE_FNMATCH
-
-/* Define if you have the <fnmatch.h> header file.  */
-#undef HAVE_FNMATCH_H
-
-/* Define if you have the <iostream> header file.  */
-#undef HAVE_IOSTREAM
-
-/* Define if you have the <linux/joystick.h> header file.  */
-#undef HAVE_LINUX_JOYSTICK_H
-
 /* Define if you have the <sched.h> header file.  */
 #undef HAVE_SCHED_H
 
@@ -1070,9 +1033,6 @@
 
 /* Define if you have the <wcstr.h> header file.  */
 #undef HAVE_WCSTR_H
-
-/* Define if you have the <wctype.h> header file.  */
-#undef HAVE_WCTYPE_H
 
 /* Define if you have <widec.h> (Solaris only) */
 #undef HAVE_WIDEC_H
@@ -1095,12 +1055,6 @@
 /* Define if you have wcsrtombs() function */
 #undef HAVE_WCSRTOMBS
 
-/* Define this if you have wputc() */
-#undef HAVE_WPUTC
-
-/* Define this if you have wputchar() */
-#undef HAVE_WPUTCHAR
-
 /* Define this if you have putws() */
 #undef HAVE_PUTWS
 
@@ -1115,13 +1069,6 @@
 
 /* Define this if you have wprintf() and related functions */
 #undef HAVE_WPRINTF
-
-/* Define this if you have swprintf() */
-#undef HAVE_SWPRINTF
-
-/* Define if you have a _broken_ swprintf() declaration in the header,
- * without a 'size_t max' parameter as second argument */
-#undef HAVE_BROKEN_SWPRINTF_DECL
 
 /* Define this if you have vswprintf() and related functions */
 #undef HAVE_VSWPRINTF
@@ -1152,9 +1099,6 @@
 
 /* Define if you have the <sys/select.h> header file.  */
 #undef HAVE_SYS_SELECT_H
-
-/* Define if you have the <sys/epoll.h> header file.  */
-#undef HAVE_SYS_EPOLL_H
 
 /* Define if fdopen is available.  */
 #undef HAVE_FDOPEN
