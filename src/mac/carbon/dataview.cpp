@@ -890,6 +890,11 @@ unsigned int wxDataViewCtrl::GetColumnCount(void) const
   return this->m_ColumnPointers.size();
 } /* wxDataViewCtrl::GetColumnCount(void) const */
 
+int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
+{
+    return -1;
+}
+
 wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
 {
     return NULL;

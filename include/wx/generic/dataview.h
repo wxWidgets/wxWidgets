@@ -391,6 +391,7 @@ public:
     virtual wxDataViewColumn* GetColumn( unsigned int pos ) const;
     virtual bool DeleteColumn( wxDataViewColumn *column );
     virtual bool ClearColumns();
+    virtual int GetColumnPosition( const wxDataViewColumn *column ) const;
 
     virtual wxDataViewColumn *GetSortingColumn() const;
     

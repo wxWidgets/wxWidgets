@@ -3112,6 +3112,11 @@ bool wxDataViewCtrl::ClearColumns()
     return true;
 }
 
+int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
+{
+    return -1;
+}
+
 wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
 {
     return NULL;

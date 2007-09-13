@@ -210,18 +210,17 @@ Returns pointer to the column. {\it pos} refers to the
 position in the control which may change after reordering
 columns by the user.
 
-\membersection{wxDataViewCtrl::GetModel}\label{wxdataviewctrlgetmodel}
-
-\constfunc{virtual wxDataViewModel*}{GetModel}{\void}
-
-Returns pointer to the data model associated with the
-control (if any).
-
 \membersection{wxDataViewCtrl::GetColumnCount}\label{wxdataviewctrlgetcolumncount}
 
 \constfunc{virtual unsigned int}{GetColumnCount}{\void}
 
 Returns the number of columns.
+
+\membersection{wxDataViewCtrl::GetColumnPosition}\label{wxdataviewctrlgetcolumnposition}
+
+\constfunc{virtual int}{GetColumnPosition}{\param{const wxDataViewColumn* }{column}}
+
+Returns the position of the column or -1 if not found in the control.
 
 \membersection{wxDataViewCtrl::EnsureVisible}\label{wxdataviewctrlensurevisible}
 
@@ -246,6 +245,13 @@ Returns indentation.
 \constfunc{wxRect}{GetItemRect}{\param{const wxDataViewItem\& }{item}, \param{const wxDataViewColumn *}{col = NULL}}
 
 Returns item rect.
+
+\membersection{wxDataViewCtrl::GetModel}\label{wxdataviewctrlgetmodel}
+
+\constfunc{virtual wxDataViewModel*}{GetModel}{\void}
+
+Returns pointer to the data model associated with the
+control (if any).
 
 \membersection{wxDataViewCtrl::GetSelection}\label{wxdataviewctrlgetselection}
 

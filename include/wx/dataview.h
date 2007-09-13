@@ -497,6 +497,7 @@ public:
 
     virtual unsigned int GetColumnCount() const = 0;
     virtual wxDataViewColumn* GetColumn( unsigned int pos ) const = 0;
+    virtual int GetColumnPosition( const wxDataViewColumn *column ) const = 0;
     
     virtual bool DeleteColumn( wxDataViewColumn *column ) = 0;
     virtual bool ClearColumns() = 0;

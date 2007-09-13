@@ -530,7 +530,7 @@ public:
   virtual bool DeleteColumn(wxDataViewColumn* columnPtr);
   virtual wxDataViewColumn* GetColumn(unsigned int pos) const;
   virtual unsigned int GetColumnCount(void) const;
-
+    virtual int GetColumnPosition( const wxDataViewColumn *column ) const;
     virtual wxDataViewColumn *GetSortingColumn() const;
 
   virtual void Collapse(wxDataViewItem const& item);
