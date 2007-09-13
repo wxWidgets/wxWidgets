@@ -79,7 +79,6 @@ bool wxGtkPrintModule::OnInit()
     gs_cairo = wxCairoLibrary::Get();
     if (gs_cairo && gtk_check_version(2,10,0) == NULL)
         wxPrintFactory::SetPrintFactory( new wxGtkPrintFactory );
-        
     return true;
 }
 
@@ -670,21 +669,29 @@ int wxGtkPrintDialog::ShowModal()
         case GTK_PRINT_PAGES_CURRENT:
             m_printDialogData.SetSelection( true );
             break;
-        case GTK_PRINT_PAGES_ALL:
-            m_printDialogData.SetAllPages( true );
-            m_printDialogData.SetFromPage( 0 );
-            m_printDialogData.SetToPage( 9999 );
-            break;
         case GTK_PRINT_PAGES_RANGES:
-        default:
-            // wxWidgets doesn't support multiple ranges, so we can only save the first one even if the user wants to print others.
+            {// wxWidgets doesn't support multiple ranges, so we can only save the first one even if the user wants to print others.
             // For example, the user enters "1-3;5-7" in the dialog: pages 1-3 and 5-7 will be correctly printed when the user
             // will hit "OK" button. However we can only save 1-3 in the print data.
             gint num_ranges = 0;
             GtkPageRange* range;
             range = gtk_print_settings_get_page_ranges (newSettings, &num_ranges);
+            if (num_ranges >= 1)
+            {
             m_printDialogData.SetFromPage( range[0].start );
             m_printDialogData.SetToPage( range[0].end );
+            }
+            else {
+                m_printDialogData.SetAllPages( true );
+                m_printDialogData.SetFromPage( 0 );
+                m_printDialogData.SetToPage( 9999 );
+            }
+            break;}
+        case GTK_PRINT_PAGES_ALL:
+        default:
+            m_printDialogData.SetAllPages( true );
+            m_printDialogData.SetFromPage( 0 );
+            m_printDialogData.SetToPage( 9999 );
             break;
     }
 
@@ -972,8 +979,15 @@ void wxGtkPrinter::DrawPage(wxPrintout *printout, GtkPrintOperation *operation, 
             GtkPageRange* range;
             range = gtk_print_settings_get_page_ranges (settings, &num_ranges);
             // We don't need to verify these values as it has already been done in wxGtkPrinter::BeginPrint.
+            if (num_ranges >= 1)
+            {
             startPage = range[0].start + 1;
             endPage = range[0].end + 1;
+            }
+            else {
+                startPage = minPage;
+                endPage = maxPage;
+            }
             break;}
         case GTK_PRINT_PAGES_ALL:
         default:
@@ -1081,6 +1095,14 @@ wxGtkPrintDC::wxGtkPrintDC( const wxPrintData& data )
 
     m_signX =  1;  // default x-axis left to right.
     m_signY = 1;  // default y-axis bottom up -> top down.
+
+    // By default the origine of cairo contexte is in the upper left corner of the printable area.
+    // We need to translate it so that it is in the upper left corner of the paper (i.e. doesn't care about margins)
+    GtkPageSetup *setup = gtk_print_context_get_page_setup( m_gpc );
+    gdouble ml, mt;
+    ml = gtk_page_setup_get_left_margin (setup, GTK_UNIT_POINTS);
+    mt = gtk_page_setup_get_top_margin (setup, GTK_UNIT_POINTS);
+    gs_cairo->cairo_translate(m_cairo, -ml, -mt);
 }
 
 wxGtkPrintDC::~wxGtkPrintDC()
@@ -1269,6 +1291,8 @@ void wxGtkPrintDC::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2,wxCoord
     alpha1 *= DEG2RAD;
     alpha2 *= DEG2RAD;
 
+    gs_cairo->cairo_new_path(m_cairo);
+
     gs_cairo->cairo_arc_negative ( m_cairo, XLOG2DEVREL(xc), YLOG2DEVREL(yc), XLOG2DEVREL((int)radius), alpha1, alpha2);
     gs_cairo->cairo_line_to(m_cairo, XLOG2DEVREL(xc), YLOG2DEVREL(yc));
     gs_cairo->cairo_close_path (m_cairo);
@@ -1287,6 +1311,8 @@ void wxGtkPrintDC::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2,wxCoord
 void wxGtkPrintDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
 {
     gs_cairo->cairo_save( m_cairo );
+
+    gs_cairo->cairo_new_path(m_cairo);
 
     gs_cairo->cairo_translate( m_cairo, XLOG2DEVREL((wxCoord) (x + w / 2.)), XLOG2DEVREL((wxCoord) (y + h / 2.)) );
     double scale = (double)YLOG2DEVREL(h) / (double) XLOG2DEVREL(w);
@@ -1382,6 +1408,7 @@ void wxGtkPrintDC::DoDrawPolyPolygon(int n, int count[], wxPoint points[], wxCoo
 
 void wxGtkPrintDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
+    gs_cairo->cairo_new_path(m_cairo);
     gs_cairo->cairo_rectangle ( m_cairo, XLOG2DEVREL(x), YLOG2DEVREL(y), XLOG2DEVREL(width), YLOG2DEVREL(height));
 
     SetBrush( m_brush );
@@ -1442,6 +1469,8 @@ void wxGtkPrintDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, w
 void wxGtkPrintDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     gs_cairo->cairo_save (m_cairo);
+
+    gs_cairo->cairo_new_path(m_cairo);
 
     gs_cairo->cairo_translate (m_cairo, XLOG2DEVREL((wxCoord) (x + width / 2.)), YLOG2DEVREL((wxCoord) (y + height / 2.)));
     gs_cairo->cairo_scale(m_cairo, 1, (double)YLOG2DEVREL(height)/(double)XLOG2DEVREL(width));
@@ -1580,10 +1609,14 @@ void wxGtkPrintDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, b
                 // blue. The 32-bit quantities are stored native-endian.
                 // Pre-multiplied alpha is used.
                 unsigned char alpha = p.Alpha();
+
+                if (!bmpSource.HasAlpha() && mask)
+                    alpha = 255;
+
                 if (alpha == 0)
                     *data = 0;
                 else
-                    *data = ( alpha/255                  << 24
+                    *data = ( alpha                  << 24
                               | (p.Red() * alpha/255)    << 16
                               | (p.Green() * alpha/255)  <<  8
                               | (p.Blue() * alpha/255) );
@@ -1809,14 +1842,14 @@ void wxGtkPrintDC::SetPen( const wxPen& pen )
 
     switch (m_pen.GetStyle())
     {
-        case wxDOT:           gs_cairo->cairo_set_dash( m_cairo, dotted, 1, 0 ); break;
-        case wxSHORT_DASH:    gs_cairo->cairo_set_dash( m_cairo, short_dashed, 1, 0 ); break;
-        case wxLONG_DASH:     gs_cairo->cairo_set_dash( m_cairo, long_dashed, 1, 0 ); break;
-        case wxDOT_DASH:      gs_cairo->cairo_set_dash( m_cairo, dotted_dashed, 3, 0 );  break;
+        case wxDOT:           gs_cairo->cairo_set_dash( m_cairo, dotted, 2, 0 ); break;
+        case wxSHORT_DASH:    gs_cairo->cairo_set_dash( m_cairo, short_dashed, 2, 0 ); break;
+        case wxLONG_DASH:     gs_cairo->cairo_set_dash( m_cairo, long_dashed, 2, 0 ); break;
+        case wxDOT_DASH:      gs_cairo->cairo_set_dash( m_cairo, dotted_dashed, 4, 0 );  break;
         case wxUSER_DASH:
         {
             wxDash *wx_dashes;
-            int num = m_pen.GetDashes (&wx_dashes) - 1;
+            int num = m_pen.GetDashes (&wx_dashes);
             gdouble *g_dashes = g_new( gdouble, num );
             int i;
             for (i = 0; i < num; ++i)

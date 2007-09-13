@@ -50,12 +50,6 @@
 #include "mondrian.xpm"
 #endif
 
-#if wxUSE_LIBGNOMEPRINT
-#include "wx/html/forcelnk.h"
-FORCE_LINK(gnome_print)
-#endif
-
-
 // Declare a frame
 MyFrame   *frame = (MyFrame *) NULL;
 // int orientation = wxPORTRAIT;
@@ -337,10 +331,10 @@ void MyFrame::Draw(wxDC& dc)
     // between the screen image, the print preview image (at various zoom
     // levels), and the printed page.
     dc.SetBackground(*wxWHITE_BRUSH);
-    dc.Clear();
+    // dc.Clear();
     dc.SetFont(wxGetApp().m_testFont);
 
-    dc.SetBackgroundMode(wxTRANSPARENT);
+    // dc.SetBackgroundMode(wxTRANSPARENT);
 
     dc.SetPen(*wxBLACK_PEN);
     dc.SetBrush(*wxLIGHT_GREY_BRUSH);
@@ -353,7 +347,7 @@ void MyFrame::Draw(wxDC& dc)
     dc.SetPen(*wxRED_PEN);
 
     dc.DrawRoundedRectangle(0, 20, 200, 80, 20);
-
+    
     dc.DrawText( wxT("Rectangle 200 by 80"), 40, 40);
 
     dc.SetPen( wxPen(*wxBLACK,0,wxDOT_DASH) );
