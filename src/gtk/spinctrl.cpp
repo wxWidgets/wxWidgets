@@ -175,7 +175,8 @@ int wxSpinCtrl::GetValue() const
 
     wxSpinCtrl_GtkDisableEvents( this );
     gtk_spin_button_update( GTK_SPIN_BUTTON(m_widget) );
-    m_pos = int(gtk_spin_button_get_value(GTK_SPIN_BUTTON(m_widget)));
+    wx_const_cast(wxSpinCtrl*, this)->m_pos =
+        int(gtk_spin_button_get_value(GTK_SPIN_BUTTON(m_widget)));
     wxSpinCtrl_GtkEnableEvents( this );
 
     return m_pos;
