@@ -2790,7 +2790,7 @@ wxdataview_selection_changed_callback( GtkTreeSelection* selection, wxDataViewCt
     if (!GTK_WIDGET_REALIZED(dv->m_widget))
         return;
 
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_SELECTED, dv->GetId() );
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, dv->GetId() );
     event.SetItem( dv->GetSelection() );
     event.SetModel( dv->GetModel() );
     dv->GetEventHandler()->ProcessEvent( event );
