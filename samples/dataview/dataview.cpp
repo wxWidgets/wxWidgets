@@ -829,7 +829,9 @@ void MyFrame::OnHeaderRightClick( wxDataViewEvent &event )
     if(!m_log)
         return;
 
-    wxLogMessage("wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, Column: %d", event.GetColumn());
+    int pos = m_musicCtrl->GetColumnPosition( event.GetDataViewColumn() );
+
+    wxLogMessage("wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, Column position: %d", pos );
 }
 
 void MyFrame::OnSorted( wxDataViewEvent &event )

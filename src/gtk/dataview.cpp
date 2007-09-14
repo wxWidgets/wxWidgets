@@ -1975,6 +1975,16 @@ gtk_dataview_header_button_press_callback( GtkWidget *widget,
             return FALSE;
     }
 
+    if (gdk_event->button == 3)
+    {
+        wxDataViewCtrl *dv = column->GetOwner();
+        wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, dv->GetId() );
+        event.SetDataViewColumn( column );
+        event.SetModel( dv->GetModel() );
+        if (dv->GetEventHandler()->ProcessEvent( event ))
+            return FALSE;
+    }
+
     return FALSE;
 }
 
