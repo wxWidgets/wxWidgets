@@ -485,7 +485,7 @@ void wxAppConsoleBase::OnInitCmdLine(wxCmdLineParser& parser)
 #if wxUSE_LOG
         {
             wxCMD_LINE_SWITCH,
-            "",
+            NULL,
             OPTION_VERBOSE,
             gettext_noop("generate verbose log messages"),
             wxCMD_LINE_VAL_NONE,
@@ -494,14 +494,7 @@ void wxAppConsoleBase::OnInitCmdLine(wxCmdLineParser& parser)
 #endif // wxUSE_LOG
 
         // terminator
-        {
-            wxCMD_LINE_NONE,
-            "",
-            "",
-            "",
-            wxCMD_LINE_VAL_NONE,
-            0x0
-        }
+        wxCMD_LINE_DESC_END
     };
 
     parser.SetDesc(cmdLineDesc);

@@ -64,12 +64,16 @@ enum wxCmdLineEntryType
 struct wxCmdLineEntryDesc
 {
     wxCmdLineEntryType kind;
-    wxString shortName;
-    wxString longName;
-    wxString description;
+    const char *shortName;
+    const char *longName;
+    const char *description;
     wxCmdLineParamType type;
     int flags;
 };
+
+// the list of wxCmdLineEntryDesc objects should be terminated with this one
+#define wxCMD_LINE_DESC_END \
+        { wxCMD_LINE_NONE, NULL, NULL, NULL, wxCMD_LINE_VAL_NONE, 0x0 }
 
 // ----------------------------------------------------------------------------
 // wxCmdLineParser is a class for parsing command line.
