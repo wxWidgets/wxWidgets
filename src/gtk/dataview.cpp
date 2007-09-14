@@ -3114,7 +3114,15 @@ bool wxDataViewCtrl::ClearColumns()
 
 int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
 {
-    return -1;
+    GtkTreeViewColumn *gtk_column = GTK_TREE_VIEW_COLUMN(column->GetConstGtkHandle());
+
+    GList *list = gtk_tree_view_get_columns( GTK_TREE_VIEW(m_treeview) );
+    
+    gint pos = g_list_index( list, (gconstpointer)  gtk_column );
+    
+    g_list_free( list );
+
+    return pos;
 }
 
 wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const

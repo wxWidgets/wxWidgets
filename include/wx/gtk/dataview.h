@@ -288,6 +288,7 @@ public:
 
     // implementation
     GtkWidget* GetGtkHandle() { return m_column; }
+    GtkWidget* GetConstGtkHandle() const { return m_column; }
 
 private:
     // holds the GTK handle

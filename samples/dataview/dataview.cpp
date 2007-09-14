@@ -497,7 +497,7 @@ public:
     void OnExpanded( wxDataViewEvent &event );
     void OnCollapsing( wxDataViewEvent &event );
     void OnCollapsed( wxDataViewEvent &event );
-    void OnSelected( wxDataViewEvent &event );
+    void OnSelectionChanged( wxDataViewEvent &event );
     
     void OnEditingStarted( wxDataViewEvent &event );
     void OnEditingDone( wxDataViewEvent &event );
@@ -590,11 +590,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_DATAVIEW_ITEM_EXPANDED(ID_MUSIC_CTRL, MyFrame::OnExpanded)
     EVT_DATAVIEW_ITEM_COLLAPSING(ID_MUSIC_CTRL, MyFrame::OnCollapsing)
     EVT_DATAVIEW_ITEM_COLLAPSED(ID_MUSIC_CTRL, MyFrame::OnCollapsed)
-    EVT_DATAVIEW_ITEM_SELECTED(ID_MUSIC_CTRL, MyFrame::OnSelected)
+    EVT_DATAVIEW_SELECTION_CHANGED(ID_MUSIC_CTRL, MyFrame::OnSelectionChanged)
     
     EVT_DATAVIEW_ITEM_EDITING_STARTED(ID_MUSIC_CTRL, MyFrame::OnEditingStarted)
     EVT_DATAVIEW_ITEM_EDITING_DONE(ID_MUSIC_CTRL, MyFrame::OnEditingDone)
-    
     
     EVT_DATAVIEW_COLUMN_HEADER_CLICK(ID_MUSIC_CTRL, MyFrame::OnHeaderClick)
     EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED(ID_MUSIC_CTRL, MyFrame::OnHeaderRightClick)
@@ -755,15 +754,15 @@ void MyFrame::OnActivated( wxDataViewEvent &event )
     if(!m_log)
         return;
 
-    wxLogMessage("wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, Item Id: %d;  Column: %d", event.GetItem().GetID(), event.GetColumn());
+    wxLogMessage("wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, Item Id: %d", event.GetItem().GetID() );
 }
 
-void MyFrame::OnSelected( wxDataViewEvent &event )
+void MyFrame::OnSelectionChanged( wxDataViewEvent &event )
 {
     if(!m_log)
         return;
 
-    wxLogMessage("wxEVT_COMMAND_DATAVIEW_ITEM_SELECTED, Item Id: %d", event.GetItem().GetID() );
+    wxLogMessage("wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, First selected Item: %d", event.GetItem().GetID() );
 }
 
 void MyFrame::OnExpanding( wxDataViewEvent &event )
@@ -819,8 +818,10 @@ void MyFrame::OnHeaderClick( wxDataViewEvent &event )
 {
     if(!m_log)
         return;
+        
+    int pos = m_musicCtrl->GetColumnPosition( event.GetDataViewColumn() );
 
-    wxLogMessage("wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, Column: %d", event.GetColumn());
+    wxLogMessage("wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, Column position: %d", pos );
 }
 
 void MyFrame::OnHeaderRightClick( wxDataViewEvent &event )
