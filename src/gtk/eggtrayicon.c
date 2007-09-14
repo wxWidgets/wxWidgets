@@ -106,8 +106,6 @@ Anders
 
 #include "wx/platform.h"
 
-#if wxUSE_TASKBARICON
-
 #include <gtk/gtkversion.h>
 #if GTK_CHECK_VERSION(2, 1, 0)
 
@@ -121,7 +119,6 @@ Anders
 #elif defined (GDK_WINDOWING_WIN32)
 #include <gdk/gdkwin32.h>
 #endif
-
 
 #define SYSTEM_TRAY_REQUEST_DOCK    0
 #define SYSTEM_TRAY_BEGIN_MESSAGE   1
@@ -633,7 +630,4 @@ egg_tray_icon_get_orientation (EggTrayIcon *icon)
 
 
 
-
-
 #endif /* GTK_CHECK_VERSION(2, 1, 0) */
-#endif /* wxUSE_TASKBARICON */
