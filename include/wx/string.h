@@ -2766,7 +2766,7 @@ private:
 #endif // !wxUSE_STL_BASED_WXSTRING
 
 template<typename T>
-class wxStringTypeBufferBase
+class WXDLLIMPEXP_BASE wxStringTypeBufferBase
 {
 public:
     typedef T CharType;
@@ -2784,7 +2784,7 @@ protected:
 };
 
 template<typename T>
-class wxStringTypeBufferLengthBase
+class WXDLLIMPEXP_BASE wxStringTypeBufferLengthBase
 {
 public:
     typedef T CharType;

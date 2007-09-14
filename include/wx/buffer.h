@@ -25,7 +25,7 @@ class WXDLLIMPEXP_FWD_BASE wxCStrData;
 // ----------------------------------------------------------------------------
 
 template <typename T>
-class wxCharTypeBuffer
+class WXDLLIMPEXP_BASE wxCharTypeBuffer
 {
 public:
     typedef T CharType;
@@ -150,7 +150,7 @@ private:
     bool m_owned;
 };
 
-class wxCharBuffer : public wxCharTypeBuffer<char>
+class WXDLLIMPEXP_BASE wxCharBuffer : public wxCharTypeBuffer<char>
 {
 public:
     typedef wxCharTypeBuffer<char> wxCharTypeBufferBase;
@@ -165,7 +165,7 @@ public:
 };
 
 #if wxUSE_WCHAR_T
-class wxWCharBuffer : public wxCharTypeBuffer<wchar_t>
+class WXDLLIMPEXP_BASE wxWCharBuffer : public wxCharTypeBuffer<wchar_t>
 {
 public:
     typedef wxCharTypeBuffer<wchar_t> wxCharTypeBufferBase;
@@ -284,7 +284,7 @@ private:
 };
 
 
-class wxMemoryBuffer
+class WXDLLIMPEXP_BASE wxMemoryBuffer
 {
 public:
     // ctor and dtor
