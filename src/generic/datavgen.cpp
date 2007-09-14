@@ -298,11 +298,11 @@ public:
         if (g_column >= -1)
             nodes.Sort( &wxGenericTreeModelNodeCmp );
     }
-    void AddLeaf( void * leaf ) 
-    { 
-        leaves.Add( leaf ); 
+    void AddLeaf( void * leaf )
+    {
+        leaves.Add( leaf );
         if (g_column >= -1)
-            leaves.Sort( &wxGenericTreeModelItemCmp );        
+            leaves.Sort( &wxGenericTreeModelItemCmp );
     }
 
     wxDataViewItem & GetItem() { return item; }
@@ -364,7 +364,7 @@ public:
     {
         if (g_column >= -1)
         {
-            nodes.Sort( &wxGenericTreeModelNodeCmp );      
+            nodes.Sort( &wxGenericTreeModelNodeCmp );
             int len = nodes.GetCount();
             for (int i = 0; i < len; i ++)
             {
@@ -423,15 +423,15 @@ public:
     bool ValueChanged( const wxDataViewItem &item, unsigned int col );
     bool Cleared();
     void Resort()
-    { 
+    {
         SortPrepare();
-        m_root->Resort(); 
-        UpdateDisplay(); 
+        m_root->Resort();
+        UpdateDisplay();
     }
 
     void SortPrepare()
     {
-        g_model = GetOwner()->GetModel(); 
+        g_model = GetOwner()->GetModel();
         wxDataViewColumn* col = GetOwner()->GetSortingColumn();
         if( !col )
         {
@@ -444,9 +444,9 @@ public:
             return;
         }
         g_column = col->GetModelColumn();
-        g_asending = col->IsSortOrderAscending();    
+        g_asending = col->IsSortOrderAscending();
     }
-	
+
     void SetOwner( wxDataViewCtrl* owner ) { m_owner = owner; }
     wxDataViewCtrl *GetOwner() { return m_owner; }
     const wxDataViewCtrl *GetOwner() const { return m_owner; }
@@ -992,13 +992,13 @@ bool wxDataViewDateRenderer::Activate( wxRect WXUNUSED(cell), wxDataViewModel *m
     return true;
 }
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewIconTextRenderer
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 IMPLEMENT_CLASS(wxDataViewIconTextRenderer, wxDataViewCustomRenderer)
 
-wxDataViewIconTextRenderer::wxDataViewIconTextRenderer( 
+wxDataViewIconTextRenderer::wxDataViewIconTextRenderer(
   const wxString &varianttype, wxDataViewCellMode mode, int align ) :
     wxDataViewCustomRenderer( varianttype, mode, align )
 {
@@ -1009,7 +1009,7 @@ wxDataViewIconTextRenderer::wxDataViewIconTextRenderer(
 wxDataViewIconTextRenderer::~wxDataViewIconTextRenderer()
 {
 }
-    
+
 bool wxDataViewIconTextRenderer::SetValue( const wxVariant &value )
 {
     m_value << value;
@@ -1020,18 +1020,18 @@ bool wxDataViewIconTextRenderer::GetValue( wxVariant &value ) const
 {
     return false;
 }
-    
+
 bool wxDataViewIconTextRenderer::Render( wxRect cell, wxDC *dc, int state )
 {
     dc->SetFont( GetOwner()->GetOwner()->GetFont() );
-    
+
     const wxIcon &icon = m_value.GetIcon();
     if (icon.IsOk())
     {
         dc->DrawIcon( icon, cell.x, cell.y ); // TODO centre
         cell.x += icon.GetWidth()+4;
     }
-    
+
     dc->DrawText( m_value.GetText(), cell.x, cell.y );
 
     return true;
@@ -1672,7 +1672,7 @@ void wxGenericDataViewHeaderWindow::OnMouse( wxMouseEvent &event )
         }
         m_currentX = wxMax(m_minX + 7, x);
 
-        if (m_currentX < w) 
+        if (m_currentX < w)
         {
             GetColumn(m_column)->SetWidth(m_currentX - m_minX);
             Refresh();
@@ -2061,7 +2061,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
                                        const wxDataViewItem& item)
 {
     wxDataViewTreeNode * node = FindNode(parent);
-    
+
     wxCHECK_MSG( node != NULL, false, "item not found" );
     wxCHECK_MSG( node->GetChildren().Index( item.GetID() ) != wxNOT_FOUND, false, "item not found" );
 
@@ -2074,8 +2074,8 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
     }
     bool isContainer = false;
     wxDataViewTreeNodes nds = node->GetNodes();
-    for (int i = 0; i < nds.GetCount(); i ++)
-    {    
+    for (size_t i = 0; i < nds.GetCount(); i ++)
+    {
         if (nds[i]->GetItem() == item)
         {
             isContainer = true;
@@ -2116,7 +2116,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
         m_currentRow = m_count - 1;
 
     UpdateDisplay();
-    
+
     SendModelEvent(wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_DELETED, item);
 
     return true;
@@ -2248,7 +2248,7 @@ void wxDataViewMainWindow::ScrollTo( int rows, int column )
         }
         if( x_start < xx )
         {
-            sx = x_start/x; 
+            sx = x_start/x;
         }
     }
     m_owner->Scroll( sx, sy );
@@ -2373,7 +2373,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         expander = GetOwner()->GetColumn( 0 );
         GetOwner()->SetExpanderColumn(expander);
     }
-        
+
     // redraw all cells for all rows which must be repainted and for all columns
     wxRect cell_rect;
     cell_rect.x = x_start;
@@ -2387,7 +2387,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         if (col->IsHidden())
             continue;       // skipt it!
 
-        
+
         for (unsigned int item = item_start; item < item_last; item++)
         {
             // get the cell value and set it into the renderer
@@ -2533,11 +2533,11 @@ unsigned int wxDataViewMainWindow::GetLastVisibleRow()
     m_owner->CalcUnscrolledPosition( client_size.x, client_size.y,
                                      &client_size.x, &client_size.y );
 
-    //we should deal with the pixel here 
+    //we should deal with the pixel here
     unsigned int row = (client_size.y)/m_lineHeight;
     if( client_size.y % m_lineHeight < m_lineHeight/2 )
         row -= 1;
-    
+
     return wxMin( GetRowCount()-1, row );
 }
 
@@ -2924,7 +2924,7 @@ void wxDataViewMainWindow::OnExpanding( unsigned int row )
                //Check if the user prevent expanding
                if( e.GetSkipped() )
                     return;
-               
+
                node->ToggleOpen();
                //Here I build the children of current node
                if( node->GetChildrenNumber() == 0 )
@@ -3020,7 +3020,7 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
             for (; i < nodes.GetCount(); i ++)
             {
                 if (nodes[i]->GetItem() == (**iter))
-                {    
+                {
                     node = nodes[i];
                     break;
                 }
@@ -3310,7 +3310,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     int y = event.GetY();
     m_owner->CalcUnscrolledPosition( x, y, &x, &y );
     wxDataViewColumn *col = NULL;
-    
+
     int xpos = 0;
     unsigned int cols = GetOwner()->GetColumnCount();
     unsigned int i;
@@ -3780,7 +3780,7 @@ bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
     if (ret == NULL)
         return false;
 
-    m_cols.Erase(ret); 
+    m_cols.Erase(ret);
     delete column;
     OnColumnChange();
 
@@ -3917,7 +3917,7 @@ bool wxDataViewCtrl::IsSelected( int row ) const
 
 void wxDataViewCtrl::SelectRange( int from, int to )
 {
-    wxArrayInt sel; 
+    wxArrayInt sel;
     for( int i = from; i < to; i ++ )
         sel.Add( i );
     m_clientArea->Select(sel);
@@ -3967,7 +3967,7 @@ void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, const wxDataVie
         if( column == NULL )
             return EnsureVisible(row, -1);
         else
-        {  
+        {
             int col = 0;
             int len = GetColumnCount();
             for( int i = 0; i < len; i ++ )
@@ -3979,7 +3979,7 @@ void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, const wxDataVie
             EnsureVisible( row, col );
         }
     }
-        
+
 }
 
 void wxDataViewCtrl::HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* &column ) const
@@ -4013,7 +4013,7 @@ void wxDataViewCtrl::Collapse( const wxDataViewItem & item )
 {
     int row = m_clientArea->GetRowByItem( item );
     if (row != -1)
-        m_clientArea->Collapse(row);    
+        m_clientArea->Collapse(row);
 }
 
  #endif

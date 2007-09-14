@@ -195,7 +195,7 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
     // items must be different
     unsigned long litem1 = (unsigned long) item1.GetID();
     unsigned long litem2 = (unsigned long) item2.GetID();
-    
+
     if (!ascending)
         return litem2-litem2;
 
@@ -272,12 +272,14 @@ wxDataViewItem wxDataViewIndexListModel::GetItem( unsigned int row ) const
     return wxDataViewItem( m_hash[row] );
 }
 
-int wxDataViewIndexListModel::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
-                                       unsigned int column, bool ascending )
+int wxDataViewIndexListModel::Compare(const wxDataViewItem& item1,
+                                      const wxDataViewItem& item2,
+                                      unsigned int WXUNUSED(column),
+                                      bool ascending)
 {
     if (ascending)
         return GetRow(item1) - GetRow(item2);
-    
+
     return GetRow(item2) - GetRow(item1);
 }
 
@@ -313,7 +315,7 @@ unsigned int wxDataViewIndexListModel::GetChildren( const wxDataViewItem &item, 
         return 0;
 
     children = m_hash;
-    
+
     return m_hash.GetCount();
 }
 
@@ -408,7 +410,7 @@ bool wxDataViewRendererBase::FinishEditing()
     GetOwner()->GetOwner()->GetModel()->ValueChanged( m_item, col );
 
     // m_editorCtrl->PopEventHandler( true );
-    
+
     // Now we should send Editing Done event
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, GetOwner()->GetOwner()->GetId() );
     event.SetDataViewColumn( GetOwner() );
@@ -614,7 +616,7 @@ wxDataViewColumn *
 wxDataViewCtrlBase::AppendToggleColumn( const wxString &label, unsigned int model_column,
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
-    
+
     wxDataViewColumn *ret = new wxDataViewColumn( label,
         new wxDataViewToggleRenderer( wxT("bool"), mode, (int)align ),
         model_column, width, align, flags );
