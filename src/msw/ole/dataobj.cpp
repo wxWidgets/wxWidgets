@@ -688,7 +688,7 @@ size_t wxDataObject::GetBufferOffset(const wxDataFormat& format )
 
 const void *wxDataObject::GetSizeFromBuffer(const void *buffer,
                                             size_t *size,
-                                            const wxDataFormat& format)
+                                            const wxDataFormat& WXUNUSED(format))
 {
     // hack: the third parameter is declared non-const in Wine's headers so
     // cast away the const
