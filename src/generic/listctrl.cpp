@@ -2071,6 +2071,8 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 
 void wxListHeaderWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
 {
+    wxPrintf( wxT("OnSetFocus\n") );
+
     m_owner->SetFocus();
     m_owner->Update();
 }
@@ -3009,7 +3011,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 #endif // __WXMAC__
 
     if ( event.LeftDown() )
-        SetFocus();
+        SetFocusIgnoringChildren();
 
     event.SetEventObject( GetParent() );
     if ( GetParent()->GetEventHandler()->ProcessEvent( event) )
