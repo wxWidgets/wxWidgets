@@ -68,6 +68,9 @@ bool wxStatusBar95::Create(wxWindow *parent,
 {
     wxCHECK_MSG( parent, false, wxT("status bar must have a parent") );
 
+    // Avoid giving the status bar a themed window
+    style = (style & ~wxBORDER_MASK) | wxBORDER_NONE;
+
     SetName(name);
     SetWindowStyleFlag(style);
     SetParent(parent);
