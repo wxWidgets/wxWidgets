@@ -92,6 +92,9 @@ public:
     void SetSortColumn( int column )            { m_sort_column = column; }
     int GetSortColumn()                         { return m_sort_column; }
     
+    void SetDataViewSortColumn( wxDataViewColumn *column ) { m_dataview_sort_column = column; }
+    wxDataViewColumn *GetDataViewSortColumn()   { return m_dataview_sort_column; }
+    
     bool IsSorted()                             { return (m_sort_column >= 0); }
     
     
@@ -109,6 +112,7 @@ private:
     GtkWxTreeModel       *m_gtk_model;
     wxDataViewCtrl       *m_owner;
     GtkSortType           m_sort_order;
+    wxDataViewColumn     *m_dataview_sort_column;
     int                   m_sort_column;
 };
 
@@ -614,6 +618,8 @@ gboolean wxgtk_tree_model_get_sort_column_id    (GtkTreeSortable        *sortabl
     return TRUE;
 }
 
+wxDataViewColumn *gs_lastLeftClickHeader = NULL;
+
 void     wxgtk_tree_model_set_sort_column_id  (GtkTreeSortable        *sortable,
 						      gint                      sort_column_id,
 						      GtkSortType               order)
@@ -621,23 +627,29 @@ void     wxgtk_tree_model_set_sort_column_id  (GtkTreeSortable        *sortable,
     GtkWxTreeModel *tree_model = (GtkWxTreeModel *) sortable;
     g_return_if_fail (GTK_IS_WX_TREE_MODEL (sortable) );
 
-    if ((sort_column_id == (gint) tree_model->internal->GetSortColumn()) &&
-        (order == tree_model->internal->GetSortOrder()))
-        return;
+    tree_model->internal->SetDataViewSortColumn( gs_lastLeftClickHeader );
     
-    tree_model->internal->SetSortColumn( sort_column_id );
+    if ((sort_column_id != (gint) tree_model->internal->GetSortColumn()) ||
+        (order != tree_model->internal->GetSortOrder()))
+    {
+        tree_model->internal->SetSortColumn( sort_column_id );
+        tree_model->internal->SetSortOrder( order );
     
-    tree_model->internal->SetSortOrder( order );
+        gtk_tree_sortable_sort_column_changed (sortable);
     
-    gtk_tree_sortable_sort_column_changed (sortable);
-    
-    tree_model->internal->GetDataViewModel()->Resort();
+        tree_model->internal->GetDataViewModel()->Resort();
+    }
 
-    wxDataViewCtrl *dv = tree_model->internal->GetOwner();    
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, dv->GetId() );
-    // TODO event.SetDataViewColumn( column );
-    event.SetModel( dv->GetModel() );
-    dv->GetEventHandler()->ProcessEvent( event );
+    if (gs_lastLeftClickHeader)
+    {
+        wxDataViewCtrl *dv = tree_model->internal->GetOwner();    
+        wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, dv->GetId() );
+        event.SetDataViewColumn( gs_lastLeftClickHeader );
+        event.SetModel( dv->GetModel() );
+        dv->GetEventHandler()->ProcessEvent( event );
+    }
+    
+    gs_lastLeftClickHeader = NULL;
 }
 
 void     wxgtk_tree_model_set_sort_func         (GtkTreeSortable        *sortable,
@@ -1967,6 +1979,8 @@ gtk_dataview_header_button_press_callback( GtkWidget *widget,
 
     if (gdk_event->button == 1)
     {
+        gs_lastLeftClickHeader = column;
+    
         wxDataViewCtrl *dv = column->GetOwner();
         wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, dv->GetId() );
         event.SetDataViewColumn( column );
@@ -2371,6 +2385,7 @@ wxDataViewCtrlInternal::wxDataViewCtrlInternal( wxDataViewCtrl *owner,
     m_root = NULL; 
     m_sort_order = GTK_SORT_ASCENDING;
     m_sort_column = -1;
+    m_dataview_sort_column = NULL;
     InitTree();
 }
     
@@ -3137,7 +3152,7 @@ int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
 
 wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
 {
-    return NULL;
+    return m_internal->GetDataViewSortColumn();
 }
 
 void wxDataViewCtrl::Expand( const wxDataViewItem & item )
