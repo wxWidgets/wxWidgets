@@ -65,7 +65,9 @@ wxChar const *SQL_CATALOG_FILENAME     = wxT("catalog.txt");
     #include "wx/thread.h"
 
     extern wxList TablesInUse;
+#if wxUSE_THREADS
     extern wxCriticalSection csTablesInUse;
+#endif // wxUSE_THREADS
 #endif
 
 // SQL Log defaults to be used by GetDbConnection
@@ -1750,7 +1752,9 @@ void wxDb::Close(void)
 
 #ifdef __WXDEBUG__
     {
+#if wxUSE_THREADS
         wxCriticalSectionLocker lock(csTablesInUse);
+#endif // wxUSE_THREADS
         wxTablesInUse *tiu;
         wxList::compatibility_iterator pNode;
         pNode = TablesInUse.GetFirst();

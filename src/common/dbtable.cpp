@@ -62,7 +62,9 @@ ULONG lastTableID = 0;
     #include "wx/thread.h"
 
     wxList TablesInUse;
+#if wxUSE_THREADS
     wxCriticalSection csTablesInUse;
+#endif // wxUSE_THREADS
 #endif
 
 
@@ -199,7 +201,9 @@ bool wxDbTable::initialize(wxDb *pwxDb, const wxString &tblName, const UWORD num
     tableInUse->tableID   = tableID;
     tableInUse->pDb       = pDb;
     {
+#if wxUSE_THREADS
         wxCriticalSectionLocker lock(csTablesInUse);
+#endif // wxUSE_THREADS
         TablesInUse.Append(tableInUse);
     }
 #endif
@@ -328,7 +332,9 @@ void wxDbTable::cleanup()
 
         wxList::compatibility_iterator pNode;
         {
+#if wxUSE_THREADS
             wxCriticalSectionLocker lock(csTablesInUse);
+#endif // wxUSE_THREADS
             pNode = TablesInUse.GetFirst();
             while (!found && pNode)
             {
