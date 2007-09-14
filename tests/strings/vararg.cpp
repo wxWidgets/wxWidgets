@@ -114,7 +114,13 @@ void VarArgTestCase::CharPrintf()
     WX_ASSERT_STR_EQUAL( "a to z", s );
 
     // test char used as integer:
+    #ifdef _MSC_VER
+        #pragma warning(disable:4309) // truncation of constant value
+    #endif
     c = 240;
+    #ifdef _MSC_VER
+        #pragma warning(default:4309)
+    #endif
     s.Printf("value is %i (int)", c);
     WX_ASSERT_STR_EQUAL( wxString("value is -16 (int)"), s );
 

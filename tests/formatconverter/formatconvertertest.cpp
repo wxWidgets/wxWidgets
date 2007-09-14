@@ -282,6 +282,12 @@ void FormatConverterTestCase::check(const wxString& input,
                                     const wxString& expectedWcharUnix,
                                     const wxString& expectedWcharWindows)
 {
+    // all of them are unused in some build configurations
+    wxUnusedVar(expectedScanf);
+    wxUnusedVar(expectedUtf8);
+    wxUnusedVar(expectedWcharUnix);
+    wxUnusedVar(expectedWcharWindows);
+
     wxString result, msg;
 
 #ifndef __WINDOWS__
