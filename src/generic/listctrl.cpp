@@ -3010,7 +3010,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 #endif // __WXMAC__
 
     if ( event.LeftDown() )
-        SetFocus();
+        SetFocusIgnoringChildren();
 
     event.SetEventObject( GetParent() );
     if ( GetParent()->GetEventHandler()->ProcessEvent( event) )
