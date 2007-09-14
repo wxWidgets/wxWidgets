@@ -178,6 +178,7 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
 
     wxSpinButton_GtkDisableEvents( this );
     gtk_spin_button_set_range((GtkSpinButton*)m_widget, minVal, maxVal);
+    m_pos = int(gtk_spin_button_get_value((GtkSpinButton*)m_widget));
     wxSpinButton_GtkEnableEvents( this );
 }
 

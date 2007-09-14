@@ -175,6 +175,7 @@ int wxSpinCtrl::GetValue() const
 
     wxSpinCtrl_GtkDisableEvents( this );
     gtk_spin_button_update( GTK_SPIN_BUTTON(m_widget) );
+    m_pos = int(gtk_spin_button_get_value(GTK_SPIN_BUTTON(m_widget)));
     wxSpinCtrl_GtkEnableEvents( this );
 
     return m_pos;
@@ -228,6 +229,7 @@ void wxSpinCtrl::SetRange(int minVal, int maxVal)
 
     wxSpinCtrl_GtkDisableEvents( this );
     gtk_spin_button_set_range( GTK_SPIN_BUTTON(m_widget), minVal, maxVal);
+    m_pos = int(gtk_spin_button_get_value(GTK_SPIN_BUTTON(m_widget)));
     wxSpinCtrl_GtkEnableEvents( this );
 }
 
