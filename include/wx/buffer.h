@@ -150,6 +150,8 @@ private:
     bool m_owned;
 };
 
+WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxCharTypeBuffer<char> )
+
 class WXDLLIMPEXP_BASE wxCharBuffer : public wxCharTypeBuffer<char>
 {
 public:
@@ -165,6 +167,8 @@ public:
 };
 
 #if wxUSE_WCHAR_T
+WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxCharTypeBuffer<wchar_t> )
+
 class WXDLLIMPEXP_BASE wxWCharBuffer : public wxCharTypeBuffer<wchar_t>
 {
 public:

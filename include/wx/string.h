@@ -2834,6 +2834,9 @@ public:
 };
 
 #if wxUSE_STL_BASED_WXSTRING
+
+WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxStringTypeBufferBase<wxStringCharType> )
+
 class wxStringInternalBuffer : public wxStringTypeBufferBase<wxStringCharType>
 {
 public:
@@ -2845,7 +2848,11 @@ public:
     DECLARE_NO_COPY_CLASS(wxStringInternalBuffer)
 };
 
-class wxStringInternalBufferLength : public wxStringTypeBufferLengthBase<wxStringCharType>
+WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE(
+    wxStringTypeBufferLengthBase<wxStringCharType> )
+
+class wxStringInternalBufferLength
+    : public wxStringTypeBufferLengthBase<wxStringCharType>
 {
 public:
     wxStringInternalBufferLength(wxString& str, size_t lenWanted = 1024)
@@ -2874,6 +2881,9 @@ typedef wxStringInternalBufferLength          wxStringBufferLength;
 typedef wxStringInternalBuffer                wxUTF8StringBuffer;
 typedef wxStringInternalBufferLength          wxUTF8StringBufferLength;
 #elif wxUSE_UNICODE_WCHAR
+
+WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxStringTypeBufferBase<char> )
+
 class WXDLLIMPEXP_BASE wxUTF8StringBuffer : public wxStringTypeBufferBase<char>
 {
 public:
@@ -2883,6 +2893,8 @@ public:
 
     DECLARE_NO_COPY_CLASS(wxUTF8StringBuffer)
 };
+
+WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxStringTypeBufferLengthBase<char> )
 
 class WXDLLIMPEXP_BASE wxUTF8StringBufferLength
     : public wxStringTypeBufferLengthBase<char>
