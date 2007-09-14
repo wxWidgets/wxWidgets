@@ -38,7 +38,7 @@ static void
 gtk_value_changed(GtkSpinButton* spinbutton, wxSpinCtrl* win)
 {
     win->m_pos = int(gtk_spin_button_get_value(spinbutton));
-    if (!win->m_hasVMT || g_blockEventsOnDrag || win->m_blockScrollEvent)
+    if (!win->m_hasVMT || g_blockEventsOnDrag)
         return;
 
     wxCommandEvent event( wxEVT_COMMAND_SPINCTRL_UPDATED, win->GetId());
@@ -63,7 +63,7 @@ extern "C" {
 static void
 gtk_changed(GtkSpinButton* spinbutton, wxSpinCtrl* win)
 {
-    if (!win->m_hasVMT || win->m_blockScrollEvent)
+    if (!win->m_hasVMT)
         return;
 
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->GetId() );
@@ -151,6 +151,7 @@ int wxSpinCtrl::GetValue() const
 
     GtkDisableEvents();
     gtk_spin_button_update( GTK_SPIN_BUTTON(m_widget) );
+    m_pos = int(gtk_spin_button_get_value(GTK_SPIN_BUTTON(m_widget)));
     GtkEnableEvents();
 
     return m_pos;
@@ -204,6 +205,7 @@ void wxSpinCtrl::SetRange(int minVal, int maxVal)
 
     GtkDisableEvents();
     gtk_spin_button_set_range( GTK_SPIN_BUTTON(m_widget), minVal, maxVal);
+    m_pos = int(gtk_spin_button_get_value(GTK_SPIN_BUTTON(m_widget)));
     GtkEnableEvents();
 }
 
@@ -212,7 +214,7 @@ void wxSpinCtrl::GtkDisableEvents() const
 {
     g_signal_handlers_block_by_func( m_widget,
         (gpointer)gtk_value_changed, (void*) this);
-        
+
     g_signal_handlers_block_by_func(m_widget,
         (gpointer)gtk_changed, (void*) this);
 }
@@ -221,7 +223,7 @@ void wxSpinCtrl::GtkEnableEvents() const
 {
     g_signal_handlers_unblock_by_func(m_widget,
         (gpointer)gtk_value_changed, (void*) this);
-        
+
     g_signal_handlers_unblock_by_func(m_widget,
         (gpointer)gtk_changed, (void*) this);
 }

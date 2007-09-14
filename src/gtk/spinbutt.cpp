@@ -52,9 +52,9 @@ gtk_value_changed(GtkSpinButton* spinbutton, wxSpinButton* win)
         !event.IsAllowed() )
     {
         /* program has vetoed */
-        win->BlockScrollEvent();
+        // this will cause another "value_changed" signal,
+        // but because pos == oldPos nothing will happen
         gtk_spin_button_set_value(spinbutton, oldPos);
-        win->UnblockScrollEvent();
         return;
     }
 
@@ -162,6 +162,7 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
 
     GtkDisableEvents();
     gtk_spin_button_set_range((GtkSpinButton*)m_widget, minVal, maxVal);
+    m_pos = int(gtk_spin_button_get_value((GtkSpinButton*)m_widget));
     GtkEnableEvents();
 }
 
