@@ -2071,8 +2071,6 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 
 void wxListHeaderWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
 {
-    wxPrintf( wxT("OnSetFocus\n") );
-
     m_owner->SetFocus();
     m_owner->Update();
 }
