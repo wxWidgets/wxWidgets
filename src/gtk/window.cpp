@@ -2237,7 +2237,6 @@ void wxWindowGTK::Init()
     m_hasScrolling = false;
     m_isScrolling = false;
     m_mouseButtonDown = false;
-    m_blockScrollEvent = false;
 
     // initialize scrolling stuff
     for ( int dir = 0; dir < ScrollDir_Max; dir++ )
@@ -4124,18 +4123,6 @@ wxWindow *wxWindowBase::GetCapture()
 bool wxWindowGTK::IsRetained() const
 {
     return false;
-}
-
-void wxWindowGTK::BlockScrollEvent()
-{
-    wxASSERT(!m_blockScrollEvent);
-    m_blockScrollEvent = true;
-}
-
-void wxWindowGTK::UnblockScrollEvent()
-{
-    wxASSERT(m_blockScrollEvent);
-    m_blockScrollEvent = false;
 }
 
 void wxWindowGTK::SetScrollbar(int orient,

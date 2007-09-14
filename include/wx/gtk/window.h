@@ -239,9 +239,6 @@ public:
     // Common scroll event handling code for wxWindow and wxScrollBar
     wxEventType GetScrollEventType(GtkRange* range);
 
-    void BlockScrollEvent();
-    void UnblockScrollEvent();
-
     // position and size of the window
     int                  m_x, m_y;
     int                  m_width, m_height;
@@ -301,7 +298,6 @@ public:
     bool                 m_needsStyleChange:1;  // May not be able to change
                                                 // background style until OnIdle
     bool                 m_mouseButtonDown:1;
-    bool                 m_blockScrollEvent:1;
 
     bool                 m_showOnIdle:1;        // postpone showing the window until idle
 

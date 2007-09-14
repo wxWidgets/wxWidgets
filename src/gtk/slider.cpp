@@ -231,9 +231,9 @@ gtk_event_after(GtkRange* range, GdkEvent* event, wxSlider* win)
             ProcessScrollEvent(win, wxEVT_SCROLL_THUMBRELEASE);
         }
         // Keep slider at an integral position
-        win->BlockScrollEvent();
+        win->m_blockScrollEvent = true;
         gtk_range_set_value(GTK_RANGE (win->m_widget), win->GetValue());
-        win->UnblockScrollEvent();
+        win->m_blockScrollEvent = false;
     }
 }
 }
@@ -279,6 +279,7 @@ wxSlider::wxSlider()
     m_pos = 0;
     m_scrollEventType = 0;
     m_needThumbRelease = false;
+    m_blockScrollEvent = false;
 }
 
 bool wxSlider::Create(wxWindow *parent,
@@ -298,10 +299,6 @@ bool wxSlider::Create(wxWindow *parent,
         wxFAIL_MSG( wxT("wxSlider creation failed") );
         return false;
     }
-
-    m_pos = 0;
-    m_scrollEventType = 0;
-    m_needThumbRelease = false;
 
     if (style & wxSL_VERTICAL)
         m_widget = gtk_vscale_new( (GtkAdjustment *) NULL );
@@ -344,18 +341,18 @@ void wxSlider::SetValue( int value )
 {
     if (GetValue() != value)
     {
-        BlockScrollEvent();
+        m_blockScrollEvent = true;
         gtk_range_set_value(GTK_RANGE (m_widget), value);
-        UnblockScrollEvent();
+        m_blockScrollEvent = false;
     }
 }
 
 void wxSlider::SetRange( int minValue, int maxValue )
 {
-    BlockScrollEvent();
+    m_blockScrollEvent = true;
     gtk_range_set_range(GTK_RANGE (m_widget), minValue, maxValue);
     gtk_range_set_increments(GTK_RANGE (m_widget), 1, (maxValue - minValue + 9) / 10);
-    UnblockScrollEvent();
+    m_blockScrollEvent = false;
 }
 
 int wxSlider::GetMin() const
@@ -370,9 +367,9 @@ int wxSlider::GetMax() const
 
 void wxSlider::SetPageSize( int pageSize )
 {
-    BlockScrollEvent();
+    m_blockScrollEvent = true;
     gtk_range_set_increments(GTK_RANGE (m_widget), GetLineSize(), pageSize);
-    UnblockScrollEvent();
+    m_blockScrollEvent = false;
 }
 
 int wxSlider::GetPageSize() const
@@ -392,9 +389,9 @@ int wxSlider::GetThumbLength() const
 
 void wxSlider::SetLineSize( int lineSize )
 {
-    BlockScrollEvent();
+    m_blockScrollEvent = true;
     gtk_range_set_increments(GTK_RANGE (m_widget), lineSize, GetPageSize());
-    UnblockScrollEvent();
+    m_blockScrollEvent = false;
 }
 
 int wxSlider::GetLineSize() const

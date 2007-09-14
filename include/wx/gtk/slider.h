@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKSLIDERH__
-#define __GTKSLIDERH__
+#ifndef _WX_GTK_SLIDER_H_
+#define _WX_GTK_SLIDER_H_
 
 // ----------------------------------------------------------------------------
 // wxSlider
@@ -63,12 +63,12 @@ public:
     double m_pos;
     int m_scrollEventType;
     bool m_needThumbRelease;
+    bool m_blockScrollEvent;
 
 protected:
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
-private:
     DECLARE_DYNAMIC_CLASS(wxSlider)
 };
 
-#endif // __GTKSLIDERH__
+#endif // _WX_GTK_SLIDER_H_
