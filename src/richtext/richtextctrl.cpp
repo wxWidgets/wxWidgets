@@ -2713,12 +2713,13 @@ void wxRichTextCtrl::PositionCaret()
     wxRect caretRect;
     if (GetCaretPositionForIndex(GetCaretPosition(), caretRect))
     {
-        wxPoint originalPt = caretRect.GetPosition();
-        wxPoint pt = GetPhysicalPoint(originalPt);
-        if (GetCaret()->GetPosition() != pt)
+        wxPoint newPt = caretRect.GetPosition();
+        wxSize newSz = caretRect.GetSize();
+        wxPoint pt = GetPhysicalPoint(newPt);
+        if (GetCaret()->GetPosition() != pt || GetCaret()->GetSize() != newSz)
         {
             GetCaret()->Move(pt);
-            GetCaret()->SetSize(caretRect.GetSize());
+            GetCaret()->SetSize(newSz);
         }
     }
 }
