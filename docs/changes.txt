@@ -187,6 +187,7 @@ All (GUI):
 - Added wxTaskBarIcon::Destroy()
 - Added XRC handler for wxSearchCtrl (Sander Berents)
 - Read image resolution from TIFF, JPEG and BMP images (Maycon Aparecido Gasoto)
+- Add support for reading alpha data from TIFF images
 - Added wxSYS_DCLICK_TIME system metric constant (Arne Steinarson)
 - Added wxApp::Get/SetAppDisplayName() (Brian A. Vanderburg II)
 
