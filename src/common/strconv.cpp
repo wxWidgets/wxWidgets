@@ -3188,8 +3188,14 @@ wxCharBuffer wxSafeConvertWX2MB(const wchar_t *ws)
     WX_DEFINE_GLOBAL_CONV2(wxMBConv, wxMBConvLibc, wxConvLibc, wxEMPTY_PARAMETER_VALUE);
 #endif
 
-WX_DEFINE_GLOBAL_CONV(wxMBConvStrictUTF8, wxConvUTF8, wxEMPTY_PARAMETER_VALUE);
-WX_DEFINE_GLOBAL_CONV(wxMBConvUTF7, wxConvUTF7, wxEMPTY_PARAMETER_VALUE);
+// NB: we can't use wxEMPTY_PARAMETER_VALUE as final argument here because it's
+//     passed to WX_DEFINE_GLOBAL_CONV2 after a macro expansion and so still
+//     provokes an error message about "not enough macro parameters"; and we
+//     can't use "()" here as the name##Obj declaration would be parsed as a
+//     function declaration then, so use a semicolon and live with an extra
+//     empty statement (and hope that no compilers warns about this)
+WX_DEFINE_GLOBAL_CONV(wxMBConvStrictUTF8, wxConvUTF8, ;);
+WX_DEFINE_GLOBAL_CONV(wxMBConvUTF7, wxConvUTF7, ;);
 
 WX_DEFINE_GLOBAL_CONV(wxCSConv, wxConvLocal, (wxFONTENCODING_SYSTEM));
 WX_DEFINE_GLOBAL_CONV(wxCSConv, wxConvISO8859_1, (wxFONTENCODING_ISO8859_1));
