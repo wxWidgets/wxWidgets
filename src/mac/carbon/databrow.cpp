@@ -918,22 +918,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
       } /* block */
       break;
     case kDataBrowserItemDeselected:
-      {
-       // variable definitions:
-        wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetPeer()));
-        
-        if (dataViewCtrlPtr != NULL) // can become NULL if an item is still selected while removing the data browser
-        {
-         // initialize wxWidget event:
-          wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_DESELECTED,dataViewCtrlPtr->GetId()); // variable definition
-          
-          dataViewEvent.SetEventObject(dataViewCtrlPtr);
-          dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
-         // finally send the equivalent wxWidget event:
-          dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
-        } /* if */
-      } /* block */
-      break;
+      break; // not implemented by wxWidgets; see kDataBrowserSelectionSetChanged
     case kDataBrowserItemDoubleClicked:
       {
        // variable definitions:
@@ -967,21 +952,21 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
       } /* block */
       break;
     case kDataBrowserItemSelected:
+      break; // not implemented by wxWidgets; see kDataBrowserSelectionSetChanged
+    case kDataBrowserSelectionSetChanged:
       {
        // variable definitions:
         wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetPeer()));
         
         wxCHECK_RET(dataViewCtrlPtr != NULL,_("Pointer to data view control not set correctly."));
        // initialize wxWidget event:
-        wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_SELECTED,dataViewCtrlPtr->GetId()); // variable definition
+        wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED,dataViewCtrlPtr->GetId()); // variable definition
 
         dataViewEvent.SetEventObject(dataViewCtrlPtr);
-        dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
+        dataViewEvent.SetModel      (dataViewCtrlPtr->GetModel());
        // finally send the equivalent wxWidget event:
         dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
       } /* block */
-      break;
-    case kDataBrowserSelectionSetChanged:
       break;
     case kDataBrowserUserStateChanged:
       {
