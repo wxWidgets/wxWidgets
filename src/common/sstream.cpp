@@ -167,13 +167,14 @@ size_t wxStringOutputStream::OnSysWrite(const void *buffer, size_t size)
         srcLen = size;
     }
 
-    wxWCharBuffer wbuf(m_conv.cMB2WC(src, srcLen, NULL /* out len */));
+    size_t wlen;
+    wxWCharBuffer wbuf(m_conv.cMB2WC(src, srcLen, &wlen));
     if ( wbuf )
     {
         // conversion succeeded, clear the unconverted buffer
         m_unconv = wxMemoryBuffer(0);
 
-        *m_str += wbuf;
+        m_str->append(wbuf, wlen);
     }
     else // conversion failed
     {

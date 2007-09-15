@@ -56,15 +56,20 @@ public:
         //CPPUNIT_TEST(Output_TellO);
 
         // Other test specific for String stream test case.
+        CPPUNIT_TEST(Output_Check);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
-    // Add own test here.
+    void Output_Check();
 
 private:
     // Implement base class functions.
     virtual wxStringInputStream  *DoCreateInStream();
     virtual wxStringOutputStream *DoCreateOutStream();
+
+    // output the given string to wxStringOutputStream and check that its
+    // contents is exactly the same string
+    void CheckString(const wxString& text);
 
     wxString m_str;
 };
@@ -97,6 +102,27 @@ wxStringOutputStream *strStream::DoCreateOutStream()
     return pStrOutStream;
 }
 
+void strStream::CheckString(const wxString& text)
+{
+    wxStringOutputStream sos;
+
+    size_t len = text.length();
+#if wxUSE_UNICODE
+    const wxCharBuffer textMB(wxConvLibc.cWC2MB(text.wc_str(), len + 1, &len));
+#else
+    const char *textMB = text.c_str();
+#endif
+
+    sos.Write(textMB, len);
+
+    CPPUNIT_ASSERT_EQUAL( text, sos.GetString() );
+}
+
+void strStream::Output_Check()
+{
+    CheckString("Hello world!");
+    CheckString(wxString("hi\0dden", 8));
+}
 
 // Register the stream sub suite, by using some stream helper macro.
 STREAM_TEST_SUBSUITE_NAMED_REGISTRATION(strStream)
