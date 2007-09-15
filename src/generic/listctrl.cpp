@@ -2463,9 +2463,9 @@ wxRect wxListMainWindow::GetLineLabelRect(size_t line) const
     }
 
     wxRect rect;
-    rect.x = HEADER_OFFSET_X;
+    rect.x = image_x + HEADER_OFFSET_X;
     rect.y = GetLineY(line);
-    rect.width = GetColumnWidth(0);
+    rect.width = GetColumnWidth(0) - image_x;
     rect.height = GetLineHeight();
 
     return rect;
