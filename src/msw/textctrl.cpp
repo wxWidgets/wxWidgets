@@ -77,6 +77,15 @@
 
 #include "wx/msw/missing.h"
 
+#if wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
+
+// dummy value used for m_dropTarget, different from any valid pointer value
+// (which are all even under Windows) and NULL
+static wxDropTarget *
+    wxRICHTEXT_DEFAULT_DROPTARGET = wx_reinterpret_cast(wxDropTarget *, 1);
+
+#endif // wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -307,6 +316,20 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
     if ( !MSWCreateText(value, pos, size) )
         return false;
+
+#if wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
+    if ( IsRich() )
+    {
+        // rich text controls have a default associated drop target which
+        // allows them to receive (rich) text dropped on them, which is nice,
+        // but prevents us from associating a user-defined drop target with
+        // them as we need to unregister the old one first
+        //
+        // to make it work, we set m_dropTarget to this special value initially
+        // and check for it in our SetDropTarget()
+        m_dropTarget = wxRICHTEXT_DEFAULT_DROPTARGET;
+    }
+#endif // wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
 
     return true;
 }
@@ -2404,6 +2427,22 @@ bool wxTextCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     // not processed, leave it to the base class
     return wxTextCtrlBase::MSWOnNotify(idCtrl, lParam, result);
 }
+
+#if wxUSE_DRAG_AND_DROP
+
+void wxTextCtrl::SetDropTarget(wxDropTarget *dropTarget)
+{
+    if ( m_dropTarget == wxRICHTEXT_DEFAULT_DROPTARGET )
+    {
+        // get rid of the built-in drop target
+        ::RevokeDragDrop(GetHwnd());
+        m_dropTarget = NULL;
+    }
+
+    wxTextCtrlBase::SetDropTarget(dropTarget);
+}
+
+#endif // wxUSE_DRAG_AND_DROP
 
 // ----------------------------------------------------------------------------
 // colour setting for the rich edit controls
