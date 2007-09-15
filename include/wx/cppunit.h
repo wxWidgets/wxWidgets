@@ -91,7 +91,7 @@
 
 inline std::ostream& operator<<(std::ostream& o, const wxString& s)
 {
-    return o << s.mb_str();
+    return o << wxSafeConvertWX2MB(s);
 }
 
 
