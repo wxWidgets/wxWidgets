@@ -991,6 +991,11 @@ gtk_window_key_press_callback( GtkWidget *widget,
     if (g_blockEventsOnDrag)
         return FALSE;
 
+    // GTK+ sends keypress events to the focus widget and then
+    // to all its parent and grandparent widget. We only want
+    // the key events from the focus widget.
+    if (!GTK_WIDGET_HAS_FOCUS(widget))
+        return FALSE;
 
     wxKeyEvent event( wxEVT_KEY_DOWN );
     bool ret = false;
@@ -3777,6 +3782,7 @@ void wxWindowGTK::GtkSendPaintEvents()
     nc_paint_event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( nc_paint_event );
 
+    
     wxPaintEvent paint_event( GetId() );
     paint_event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( paint_event );
