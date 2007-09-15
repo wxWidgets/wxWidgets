@@ -177,7 +177,7 @@ protected:
                                                                               \
     void classname::SetFocusIgnoringChildren()                                \
     {                                                                         \
-        SetFocus();                                                           \
+        basename::SetFocusIgnoringChildren();                                 \
     }
 
 #else // !wxHAS_NATIVE_TAB_TRAVERSAL

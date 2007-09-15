@@ -60,6 +60,7 @@ public:
     virtual bool IsRetained() const;
 
     virtual void SetFocus();
+    virtual void SetFocusIgnoringChildren();
     virtual void SetCanFocus(bool canFocus);
 
     virtual bool Reparent( wxWindowBase *newParent );

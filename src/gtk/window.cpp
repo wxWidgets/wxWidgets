@@ -3172,6 +3172,24 @@ bool wxWindowGTK::GTKSetDelayedFocusIfNeeded()
     return false;
 }
 
+void wxWindowGTK::SetFocusIgnoringChildren()
+{
+    wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
+    if ( m_hasFocus )
+    {
+        // don't do anything if we already have focus
+        return;
+    }
+
+    if (m_wxwindow)
+    {
+        if (!GTK_WIDGET_CAN_FOCUS(m_wxwindow))
+            GTK_WIDGET_SET_FLAGS(m_wxwindow, GTK_CAN_FOCUS);
+    }
+    
+    wxWindowGTK::SetFocus();
+}
+
 void wxWindowGTK::SetFocus()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
