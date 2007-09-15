@@ -86,7 +86,7 @@ private:
 class wxDelegateTheme : public wxTheme
 {
 public:
-    wxDelegateTheme(const wxChar *theme);
+    wxDelegateTheme(const wxString& theme);
     virtual ~wxDelegateTheme();
 
     virtual wxRenderer *GetRenderer();
@@ -122,7 +122,7 @@ struct WXDLLEXPORT wxThemeInfo
     wxThemeInfo *next;
 
     // constructor for the struct itself
-    wxThemeInfo(Constructor ctor, const wxChar *name, const wxChar *desc);
+    wxThemeInfo(Constructor ctor, const wxString& name, const wxString& desc);
 };
 
 // ----------------------------------------------------------------------------
