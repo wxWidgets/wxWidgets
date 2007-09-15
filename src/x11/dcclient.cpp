@@ -41,7 +41,8 @@
 // local defines
 //-----------------------------------------------------------------------------
 
-#define USE_PAINT_REGION 1
+// VZ: what is this for exactly??
+#define USE_PAINT_REGION 0
 
 //-----------------------------------------------------------------------------
 // local data
@@ -2171,13 +2172,13 @@ void wxWindowDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoo
     rect.width = XLOG2DEVREL(width);
     rect.height = YLOG2DEVREL(height);
 
-    if (!m_currentClippingRegion.IsNull())
+    if (!m_currentClippingRegion.IsEmpty())
         m_currentClippingRegion.Intersect( rect );
     else
-        m_currentClippingRegion.Union( rect );
+        m_currentClippingRegion = rect;
 
 #if USE_PAINT_REGION
-    if (!m_paintClippingRegion.IsNull())
+    if (!m_paintClippingRegion.IsEmpty())
         m_currentClippingRegion.Intersect( m_paintClippingRegion );
 #endif
 
@@ -2203,13 +2204,13 @@ void wxWindowDC::DoSetClippingRegionAsRegion( const wxRegion& region )
 
     if (!m_window) return;
 
-    if (!m_currentClippingRegion.IsNull())
+    if (!m_currentClippingRegion.IsEmpty())
         m_currentClippingRegion.Intersect( region );
     else
-        m_currentClippingRegion.Union( region );
+        m_currentClippingRegion = region;
 
 #if USE_PAINT_REGION
-    if (!m_paintClippingRegion.IsNull())
+    if (!m_paintClippingRegion.IsEmpty())
         m_currentClippingRegion.Intersect( m_paintClippingRegion );
 #endif
 
