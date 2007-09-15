@@ -676,8 +676,8 @@ void wxWindowX11::ScrollWindow(int dx, int dy, const wxRect *rect)
 
         if (dx < 0) s_x += -dx;
         if (dy < 0) s_y += -dy;
-        if (dx > 0) d_x = dx + offset.x;
-        if (dy > 0) d_y = dy + offset.y;
+        if (dx > 0) d_x += dx + offset.x;
+        if (dy > 0) d_y += dy + offset.y;
 
         XCopyArea( xdisplay, xwindow, xwindow, xgc, s_x, s_y, w, h, d_x, d_y );
 
