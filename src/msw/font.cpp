@@ -483,7 +483,7 @@ int wxNativeFontInfo::GetPointSize() const
 wxSize wxNativeFontInfo::GetPixelSize() const
 {
     wxSize ret;
-    ret.SetHeight(lf.lfHeight);
+    ret.SetHeight(abs((int)lf.lfHeight));
     ret.SetWidth(lf.lfWidth);
     return ret;
 }
