@@ -391,7 +391,10 @@ wxMBConv::cMB2WC(const char *inBuff, size_t inLen, size_t *outLen) const
     const size_t dstLen = ToWChar(NULL, 0, inBuff, inLen);
     if ( dstLen != wxCONV_FAILED )
     {
-        wxWCharBuffer wbuf(dstLen - 1);
+        // notice that we allocate space for dstLen+1 wide characters here
+        // because we want the buffer to always be NUL-terminated, even if the
+        // input isn't (as otherwise the caller has no way to know its length)
+        wxWCharBuffer wbuf(dstLen);
         if ( ToWChar(wbuf.data(), dstLen, inBuff, inLen) != wxCONV_FAILED )
         {
             if ( outLen )
@@ -417,16 +420,18 @@ wxMBConv::cWC2MB(const wchar_t *inBuff, size_t inLen, size_t *outLen) const
     size_t dstLen = FromWChar(NULL, 0, inBuff, inLen);
     if ( dstLen != wxCONV_FAILED )
     {
-        // special case of empty input: can't allocate 0 size buffer below as
-        // wxCharBuffer insists on NUL-terminating it
-        wxCharBuffer buf(dstLen ? dstLen - 1 : 1);
+        const size_t nulLen = GetMBNulLen();
+
+        // as above, ensure that the buffer is always NUL-terminated, even if
+        // the input is not
+        wxCharBuffer buf(dstLen + nulLen - 1);
+        memset(buf.data() + dstLen, 0, nulLen);
         if ( FromWChar(buf.data(), dstLen, inBuff, inLen) != wxCONV_FAILED )
         {
             if ( outLen )
             {
                 *outLen = dstLen;
 
-                const size_t nulLen = GetMBNulLen();
                 if ( dstLen >= nulLen &&
                         !NotAllNULs(buf.data() + dstLen - nulLen, nulLen) )
                 {
