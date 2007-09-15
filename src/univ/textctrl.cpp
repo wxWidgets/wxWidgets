@@ -2442,9 +2442,12 @@ void wxTextCtrl::UpdateLastVisible()
     {
         case wxTE_HT_BEYOND:
             // everything is visible
+            SData().m_ofsHorz = 0;
+
+            SData().m_colStart = 0;
             SData().m_colLastVisible = text.length();
 
-            // calc it below
+            // calculate it below
             SData().m_posLastVisible = -1;
             break;
 
@@ -3262,7 +3265,7 @@ bool wxTextCtrl::GetLineAndRow(wxTextCoord row,
    fine for vertical scrolling as all lines have the same height but is rather
    ugly for horizontal scrolling if proportional font is used. This is why we
    manually update and use SData().m_ofsHorz which contains the length of the string
-   which is hidden beyond the left borde. An important property of text
+   which is hidden beyond the left border. An important property of text
    controls using this kind of scrolling is that an entire number of characters
    is always shown and that parts of characters never appear on display -
    neither in the leftmost nor rightmost positions.
@@ -3277,7 +3280,7 @@ void wxTextCtrl::ShowHorzPosition(wxCoord pos)
 
     // pos is the logical position to show
 
-    // SData().m_ofsHorz is the fisrt logical position shown
+    // SData().m_ofsHorz is the first logical position shown
     if ( pos < SData().m_ofsHorz )
     {
         // scroll backwards
