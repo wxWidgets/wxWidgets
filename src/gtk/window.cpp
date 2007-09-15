@@ -1013,18 +1013,7 @@ gtk_window_key_press_callback( GtkWidget *widget,
         return_after_IM = true;
     }
 
-    // 2005.01.26 modified by Hong Jen Yee (hzysoft@sina.com.tw):
-    // When we get a key_press event here, it could be originate
-    // from the current widget or its child widgets.  However, only the widget
-    // with the INPUT FOCUS can generate the INITIAL key_press event.  That is,
-    // if the CURRENT widget doesn't have the FOCUS at all, this event definitely
-    // originated from its child widgets and shouldn't be passed to IM context.
-    // In fact, what a GTK+ IM should do is filtering keyEvents and convert them
-    // into text input ONLY WHEN THE WIDGET HAS INPUT FOCUS.  Besides, when current
-    // widgets has both IM context and input focus, the event should be filtered
-    // by gtk_im_context_filter_keypress().
-    // Then, we should, according to GTK+ 2.0 API doc, return whatever it returns.
-    if ((!ret) && (win->m_imData != NULL) && ( wxWindow::FindFocus() == win ))
+    if ((!ret) && (win->m_imData != NULL))
     {
         // We should let GTK+ IM filter key event first. According to GTK+ 2.0 API
         // docs, if IM filter returns true, no further processing should be done.
