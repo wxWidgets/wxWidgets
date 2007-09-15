@@ -77,9 +77,6 @@ wxChar wxTextInputStream::NextChar()
     memset((void*)m_lastBytes, 0, 10);
     for(size_t inlen = 0; inlen < 9; inlen++)
     {
-        if (!m_input.CanRead())
-            return wxEOT;
-
         // actually read the next character
         m_lastBytes[inlen] = m_input.GetC();
 
@@ -93,9 +90,6 @@ wxChar wxTextInputStream::NextChar()
     // there should be no encoding which requires more than nine bytes for one character...
     return wxEOT;
 #else
-    if (!m_input.CanRead())
-        return wxEOT;
-
     m_lastBytes[0] = m_input.GetC();
 
     if(m_input.LastRead() <= 0)
