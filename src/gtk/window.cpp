@@ -988,7 +988,12 @@ gtk_window_key_press_callback( GtkWidget *widget,
         return FALSE;
     if (g_blockEventsOnDrag)
         return FALSE;
-
+    
+    // GTK+ sends keypress events to the focus widget and then
+    // to all its parent and grandparent widget. We only want
+    // the key events from the focus widget.
+    if (!GTK_WIDGET_HAS_FOCUS(widget))
+        return FALSE;
 
     wxKeyEvent event( wxEVT_KEY_DOWN );
     bool ret = false;
@@ -3177,6 +3182,7 @@ bool wxWindowGTK::GTKSetDelayedFocusIfNeeded()
 void wxWindowGTK::SetFocus()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
+    
     if ( m_hasFocus )
     {
         // don't do anything if we already have focus
