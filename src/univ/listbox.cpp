@@ -192,7 +192,7 @@ bool wxListBox::Create(wxWindow *parent,
                             validator, name) )
         return false;
 
-    m_strings = IsSorted() ? new wxArrayString : new wxSortedArrayString;
+    m_strings = IsSorted() ? new wxSortedArrayString : new wxArrayString;
 
     Set(n, choices);
 
