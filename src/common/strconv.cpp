@@ -983,14 +983,15 @@ wxMBConvStrictUTF8::FromWChar(char *dst, size_t dstLen,
     return wxCONV_FAILED;
 }
 
-size_t wxMBConvUTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+size_t wxMBConvUTF8::ToWChar(wchar_t *buf, size_t n,
+                             const char *psz, size_t srcLen) const
 {
     if ( m_options == MAP_INVALID_UTF8_NOT )
-        return wxMBConvStrictUTF8::MB2WC(buf, psz, n);
+        return wxMBConvStrictUTF8::ToWChar(buf, n, psz, srcLen);
 
     size_t len = 0;
 
-    while (*psz && ((!buf) || (len < n)))
+    while ((srcLen == wxNO_LEN ? *psz : srcLen--) && ((!buf) || (len < n)))
     {
         const char *opsz = psz;
         bool invalid = false;
@@ -1124,10 +1125,10 @@ size_t wxMBConvUTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
         }
     }
 
-    if (buf && (len < n))
+    if (srcLen == wxNO_LEN && buf && (len < n))
         *buf = 0;
 
-    return len;
+    return len + 1;
 }
 
 static inline bool isoctal(wchar_t wch)
@@ -1135,14 +1136,15 @@ static inline bool isoctal(wchar_t wch)
     return L'0' <= wch && wch <= L'7';
 }
 
-size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+size_t wxMBConvUTF8::FromWChar(char *buf, size_t n,
+                               const wchar_t *psz, size_t srcLen) const
 {
     if ( m_options == MAP_INVALID_UTF8_NOT )
-        return wxMBConvStrictUTF8::WC2MB(buf, psz, n);
+        return wxMBConvStrictUTF8::FromWChar(buf, n, psz, srcLen);
 
     size_t len = 0;
 
-    while (*psz && ((!buf) || (len < n)))
+    while ((srcLen == wxNO_LEN ? *psz : srcLen--) && ((!buf) || (len < n)))
     {
         wxUint32 cc;
 
@@ -1210,10 +1212,10 @@ size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
         }
     }
 
-    if (buf && (len < n))
+    if (srcLen == wxNO_LEN && buf && (len < n))
         *buf = 0;
 
-    return len;
+    return len + 1;
 }
 
 // ============================================================================
