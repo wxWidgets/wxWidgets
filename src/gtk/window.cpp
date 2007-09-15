@@ -4131,7 +4131,8 @@ void wxWindowGTK::SetScrollbar(int orient,
                                int range,
                                bool WXUNUSED(update))
 {
-    GtkRange * const sb = m_scrollBar[ScrollDirFromOrient(orient)];
+    const int dir = ScrollDirFromOrient(orient);
+    GtkRange* const sb = m_scrollBar[dir];
     wxCHECK_RET( sb, _T("this window is not scrollable") );
 
     if (range > 0)
@@ -4145,17 +4146,20 @@ void wxWindowGTK::SetScrollbar(int orient,
         thumbVisible = 1;
     }
 
-    if (pos > range - thumbVisible)
-        pos = range - thumbVisible;
-    if (pos < 0)
-        pos = 0;
     GtkAdjustment * const adj = sb->adjustment;
     adj->step_increment = 1;
     adj->page_increment =
     adj->page_size = thumbVisible;
-    adj->upper = range;
-    SetScrollPos(orient, pos);
-    gtk_adjustment_changed(adj);
+    adj->value = pos;
+
+    g_signal_handlers_block_by_func(
+        sb, (void*)gtk_scrollbar_value_changed, this);
+
+    gtk_range_set_range(sb, 0, range);
+    m_scrollPos[dir] = sb->adjustment->value;
+
+    g_signal_handlers_unblock_by_func(
+        sb, (void*)gtk_scrollbar_value_changed, this);
 }
 
 void wxWindowGTK::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
@@ -4168,21 +4172,14 @@ void wxWindowGTK::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
     //   will not move smoothly while tracking when using wxScrollHelper.
     if (GetScrollPos(orient) != pos)
     {
-        GtkAdjustment* adj = sb->adjustment;
-        const int max = int(adj->upper - adj->page_size);
-        if (pos > max)
-            pos = max;
-        if (pos < 0)
-            pos = 0;
-        m_scrollPos[dir] = adj->value = pos;
+        g_signal_handlers_block_by_func(
+            sb, (void*)gtk_scrollbar_value_changed, this);
 
-        g_signal_handlers_block_by_func(m_scrollBar[dir],
-            (gpointer)gtk_scrollbar_value_changed, this);
+        gtk_range_set_value(sb, pos);
+        m_scrollPos[dir] = sb->adjustment->value;
 
-        gtk_adjustment_value_changed(adj);
-
-        g_signal_handlers_unblock_by_func(m_scrollBar[dir],
-            (gpointer)gtk_scrollbar_value_changed, this);
+        g_signal_handlers_unblock_by_func(
+            sb, (void*)gtk_scrollbar_value_changed, this);
     }
 }
 
@@ -4272,7 +4269,7 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 
     // No scrolling requested.
     if ((dx == 0) && (dy == 0)) return;
-    
+
     m_clipPaintRegion = true;
 
     if (GetLayoutDirection() == wxLayout_RightToLeft)

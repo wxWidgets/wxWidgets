@@ -139,7 +139,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
     else
         m_widget = gtk_hscrollbar_new( (GtkAdjustment *) NULL );
 
-    m_scrollBar[int(isVertical)] = (GtkRange*)m_widget;
+    m_scrollBar[0] = (GtkRange*)m_widget;
 
     g_signal_connect_after(m_widget, "value_changed",
                      G_CALLBACK(gtk_value_changed), this);
@@ -188,21 +188,11 @@ void wxScrollBar::SetThumbPosition( int viewStart )
 {
     if (GetThumbPosition() != viewStart)
     {
-        GtkAdjustment* adj = ((GtkRange*)m_widget)->adjustment;
-        const int i = (GtkRange*)m_widget == m_scrollBar[1];
-        const int max = int(adj->upper - adj->page_size);
-        if (viewStart > max)
-            viewStart = max;
-        if (viewStart < 0)
-            viewStart = 0;
-
-        m_scrollPos[i] =
-        adj->value = viewStart;
-        
         g_signal_handlers_block_by_func(m_widget,
             (gpointer)gtk_value_changed, this);
 
-        gtk_adjustment_value_changed(adj);
+        gtk_range_set_value((GtkRange*)m_widget, viewStart);
+        m_scrollPos[0] = gtk_range_get_value((GtkRange*)m_widget);
 
         g_signal_handlers_unblock_by_func(m_widget,
             (gpointer)gtk_value_changed, this);
@@ -217,17 +207,15 @@ void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageS
         range =
         thumbSize = 1;
     }
-    if (position > range - thumbSize)
-        position = range - thumbSize;
-    if (position < 0)
-        position = 0;
     GtkAdjustment* adj = ((GtkRange*)m_widget)->adjustment;
     adj->step_increment = 1;
     adj->page_increment = pageSize;
     adj->page_size = thumbSize;
-    adj->upper = range;
-    SetThumbPosition(position);
-    gtk_adjustment_changed(adj);
+    adj->value = position;
+    g_signal_handlers_block_by_func(m_widget, (void*)gtk_value_changed, this);
+    gtk_range_set_range((GtkRange*)m_widget, 0, range);
+    m_scrollPos[0] = adj->value;
+    g_signal_handlers_unblock_by_func(m_widget, (void*)gtk_value_changed, this);
 }
 
 void wxScrollBar::SetPageSize( int pageLength )
