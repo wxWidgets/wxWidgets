@@ -3615,8 +3615,12 @@ void wxTextCtrl::UpdateScrollbars()
 
         if ( scrollRangeXOld )
         {
-            x *= scrollRangeX - m_rectText.width / charWidth;
-            x /= scrollRangeXOld - m_rectText.width / charWidth;
+            const int w = m_rectText.width / charWidth;
+            if ( w != scrollRangeXOld )
+            {
+                x *= scrollRangeX - w;
+                x /= scrollRangeXOld - w;
+            }
             Scroll(x, y);
         }
 
