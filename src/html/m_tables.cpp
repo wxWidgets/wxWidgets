@@ -576,6 +576,10 @@ void wxHtmlTableCell::Layout(int w)
             m_ColsInfo[i].leftpos = wpos;
             wpos += m_ColsInfo[i].pixwidth + m_Spacing;
         }
+
+        // add the remaining space to the last column
+        if (m_NumCols > 0 && wpos < m_Width)
+            m_ColsInfo[m_NumCols-1].pixwidth += m_Width - wpos;
     }
 
     /* 3.  sub-layout all cells: */
