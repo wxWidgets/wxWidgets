@@ -4193,6 +4193,7 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
     // FIXME: is this really a bug in wxMSW?
     rectTextArea.width--;
 #endif // __WXMSW__
+    dc.DestroyClippingRegion();
     dc.SetClippingRegion(rectTextArea);
 
     // adjust for scrolling
