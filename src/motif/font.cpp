@@ -679,7 +679,8 @@ void wxGetTextExtent(WXDisplay* display, const wxFont& font,
     XCharStruct overall;
     int slen = str.length();
 
-    XTextExtents((XFontStruct*) pFontStruct, (char*) str.mb_str(), slen,
+    XTextExtents((XFontStruct*) pFontStruct,
+                 wx_const_cast(char*, (const char *)str.mb_str()), slen,
                  &direction, &ascent2, &descent2, &overall);
 
     if ( width )
