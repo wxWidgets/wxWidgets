@@ -1965,7 +1965,7 @@ void wxTextCtrl::ShowPosition(wxTextPos pos)
                 {
                     // finding the last line is easy if each line has exactly
                     // one row
-                    yEnd = yStart + rectText.height / GetLineHeight() - 1;
+                    yEnd = yStart + rectText.height / GetLineHeight();
                 }
 
                 if ( yEnd < y )
@@ -2418,7 +2418,7 @@ void wxTextCtrl::UpdateTextRect()
             WData().m_rowFirstInvalid = 0;
 
             // increase timestamp: this means that the lines which had been
-            // laid out before will be relayd out the next time LayoutLines()
+            // laid out before will be relaid out the next time LayoutLines()
             // is called because their timestamp will be smaller than the
             // current one
             WData().m_timestamp++;
