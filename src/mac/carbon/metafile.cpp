@@ -35,7 +35,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxMetafileDC, wxDC)
 
 class wxMetafileRefData: public wxGDIRefData
 {
-    friend class WXDLLEXPORT wxMetafile;
+    friend class wxMetafile;
 
 public:
     wxMetafileRefData();

@@ -33,7 +33,7 @@ WX_DEFINE_LIST(wxAccelList)
 
 class WXDLLEXPORT wxAcceleratorRefData: public wxObjectRefData
 {
-    friend class WXDLLEXPORT wxAcceleratorTable;
+    friend class wxAcceleratorTable;
 public:
     wxAcceleratorRefData();
     virtual ~wxAcceleratorRefData();

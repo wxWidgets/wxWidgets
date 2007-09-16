@@ -31,8 +31,7 @@ class WXDLLEXPORT wxCursorRefData: public wxBitmapRefData
 {
     DECLARE_NO_COPY_CLASS(wxCursorRefData)
 
-    friend class WXDLLEXPORT wxBitmap;
-    friend class WXDLLEXPORT wxCursor;
+    friend class wxCursor;
 
 public:
     wxCursorRefData();

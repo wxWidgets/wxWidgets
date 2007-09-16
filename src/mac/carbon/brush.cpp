@@ -23,7 +23,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxBrush, wxGDIObject)
 
 class WXDLLEXPORT wxBrushRefData: public wxGDIRefData
 {
-    friend class WXDLLEXPORT wxBrush;
+    friend class wxBrush;
 
 public:
     wxBrushRefData();
