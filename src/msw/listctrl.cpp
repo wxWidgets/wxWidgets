@@ -2847,30 +2847,12 @@ void wxListCtrl::SetItemCount(long count)
 
 void wxListCtrl::RefreshItem(long item)
 {
-    // strangely enough, ListView_Update() results in much more flicker here
-    // than a dumb Refresh() -- why?
-#if 0
-    if ( !ListView_Update(GetHwnd(), item) )
-    {
-        wxLogLastError(_T("ListView_Update"));
-    }
-#else // 1
-    wxRect rect;
-    GetItemRect(item, rect);
-    RefreshRect(rect);
-#endif // 0/1
+    RefreshItems(item, item);
 }
 
 void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
 {
-    wxRect rect1, rect2;
-    GetItemRect(itemFrom, rect1);
-    GetItemRect(itemTo, rect2);
-
-    wxRect rect = rect1;
-    rect.height = rect2.GetBottom() - rect1.GetTop();
-
-    RefreshRect(rect);
+    ListView_RedrawItems(GetHwnd(), itemFrom, itemTo);
 }
 
 // ----------------------------------------------------------------------------

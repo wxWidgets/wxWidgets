@@ -40,6 +40,8 @@ public:
         : wxListCtrl(parent, id, pos, size, style),
           m_attr(*wxBLUE, *wxLIGHT_GREY, wxNullFont)
         {
+            m_updated = -1;
+
 #ifdef __POCKETPC__
             EnableContextMenu();
 #endif
@@ -87,6 +89,9 @@ private:
     virtual wxListItemAttr *OnGetItemAttr(long item) const;
 
     wxListItemAttr m_attr;
+
+    long m_updated;
+
 
     DECLARE_NO_COPY_CLASS(MyListCtrl)
     DECLARE_EVENT_TABLE()

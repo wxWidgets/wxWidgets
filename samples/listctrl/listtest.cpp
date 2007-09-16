@@ -881,8 +881,7 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
 
     switch ( event.GetKeyCode() )
     {
-        case 'c': // colorize
-        case 'C':
+        case 'C': // colorize
             {
                 wxListItem info;
                 info.m_itemId = event.GetIndex();
@@ -906,8 +905,7 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
             }
             break;
 
-        case 'n': // next
-        case 'N':
+        case 'N': // next
             item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
             if ( item++ == GetItemCount() - 1 )
             {
@@ -920,8 +918,7 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
             EnsureVisible(item);
             break;
 
-        case 'r': // show bounding Rect
-        case 'R':
+        case 'R': // show bounding rectangle
             {
                 item = event.GetIndex();
                 wxRect r;
@@ -933,6 +930,26 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
 
                 wxLogMessage(_T("Bounding rect of item %ld is (%d, %d)-(%d, %d)"),
                              item, r.x, r.y, r.x + r.width, r.y + r.height);
+            }
+            break;
+
+        case 'U': // update
+            if ( !IsVirtual() )
+                break;
+
+            if ( m_updated != -1 )
+                RefreshItem(m_updated);
+
+            m_updated = event.GetIndex();
+            if ( m_updated != -1 )
+            {
+                // we won't see changes to this item as it's selected, update
+                // the next one (or the first one if we're on the last item)
+                if ( ++m_updated == GetItemCount() )
+                    m_updated = 0;
+
+                wxLogMessage("Updating colour of the item %ld", m_updated);
+                RefreshItem(m_updated);
             }
             break;
 
@@ -981,6 +998,12 @@ void MyListCtrl::OnChar(wxKeyEvent& event)
         case 'N':
         case 'c':
         case 'C':
+        case 'r':
+        case 'R':
+        case 'u':
+        case 'U':
+        case WXK_DELETE:
+        case WXK_INSERT:
             // these are the keys we process ourselves
             break;
 
@@ -1032,7 +1055,7 @@ wxString MyListCtrl::OnGetItemText(long item, long column) const
     {
         return SMALL_VIRTUAL_VIEW_ITEMS[item][column];
     }
-    else
+    else // "big" virtual control
     {
         return wxString::Format(_T("Column %ld of item %ld"), column, item);
     }
@@ -1043,7 +1066,7 @@ int MyListCtrl::OnGetItemColumnImage(long item, long column) const
     if (!column)
         return 0;
 
-    if (!(item %3) && column == 1)
+    if (!(item % 3) && column == 1)
         return 0;
 
     return -1;
@@ -1051,6 +1074,14 @@ int MyListCtrl::OnGetItemColumnImage(long item, long column) const
 
 wxListItemAttr *MyListCtrl::OnGetItemAttr(long item) const
 {
+    // test to check that RefreshItem() works correctly: when m_updated is
+    // set to some item and it is refreshed, we highlight the item
+    if ( item == m_updated )
+    {
+        static wxListItemAttr s_attrHighlight(*wxRED, wxNullColour, wxNullFont);
+        return &s_attrHighlight;
+    }
+
     return item % 2 ? NULL : (wxListItemAttr *)&m_attr;
 }
 
