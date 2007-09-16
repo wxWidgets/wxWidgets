@@ -166,6 +166,7 @@ All (GUI):
 - Added support for drop down toolbar buttons (Tim Kosse).
 - Added support for labels for toolbar controls (Vince Harron).
 - Added wxMessageDialog::SetMessage() and SetExtendedMessage().
+- Added XRCSIZERITEM() macro for obtaining sizers from XRC (Brian Vanderburg II)
 - Added wxEventBlocker class (Francesco Montorsi)..
 - Added wxFile/DirPickerCtrl::Get/SetFile/DirName() (Francesco Montorsi)..
 - Added wxSizerFlags::Top() and Bottom().

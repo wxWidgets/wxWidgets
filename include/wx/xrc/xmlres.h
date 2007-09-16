@@ -320,6 +320,18 @@ private:
 #define XRCCTRL(window, id, type) \
     (wxStaticCast((window).FindWindow(XRCID(id)), type))
 
+// This macro returns pointer to sizer item
+// Example:
+//
+// <object class="spacer" name="area">
+//   <size>400, 300</size>
+// </object>
+//
+// wxSizerItem* item = XRCSIZERITEM(*this, wxT("area"))
+
+#define XRCSIZERITEM(window, id) \
+    ((window).GetSizer() ? (window).GetSizer()->GetItemById(id) : NULL)    
+
 // wxXmlResourceHandler is an abstract base class for resource handlers
 // capable of creating a control from an XML node.
 

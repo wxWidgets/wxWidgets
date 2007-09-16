@@ -298,6 +298,11 @@ public:
 
     virtual wxRect GetRect() { return m_rect; }
 
+    // set a sizer item id (different from a window id, all sizer items,
+    // including spacers, can have an associated id)
+    void SetId(int id) { m_id = id; }
+    int GetId() const { return m_id; }
+
     bool IsWindow() const { return m_kind == Item_Window; }
     bool IsSizer() const { return m_kind == Item_Sizer; }
     bool IsSpacer() const { return m_kind == Item_Spacer; }
@@ -407,6 +412,7 @@ protected:
     int          m_proportion;
     int          m_border;
     int          m_flag;
+    int          m_id;
 
     // on screen rectangle of this item (not including borders)
     wxRect       m_rect;
@@ -593,6 +599,7 @@ public:
     wxSizerItem* GetItem( wxWindow *window, bool recursive = false );
     wxSizerItem* GetItem( wxSizer *sizer, bool recursive = false );
     wxSizerItem* GetItem( size_t index );
+    wxSizerItem* GetItemById( int id, bool recursive = false );
 
     // Manage whether individual scene items are considered
     // in the layout calculations or not.

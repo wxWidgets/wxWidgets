@@ -88,6 +88,13 @@ Return the border attribute.
 
 Return the flags attribute.
 
+\membersection{wxSizerItem::GetId}\label{wxsizeritemgetid}
+
+\constfunc{int}{GetId}{\void}
+
+Return the numeric id of wxSizerItem, or \texttt{wxID\_NONE} if the id has
+not been set.
+
 
 \membersection{wxSizerItem::GetMinSize}\label{wxsizeritemgetminsize}
 
@@ -204,6 +211,12 @@ taking alignment and borders into account.
 \func{void}{SetFlag}{\param{int }{flag}}
 
 Set the flag  item attribute.
+
+\membersection{wxSizerItem::SetId}\label{wxsizeritemSetId}
+
+\func{void}{SetId}{\param{int}{id}}
+
+Sets the numeric id of the wxSizerItem to \arg{id}.
 
 
 \membersection{wxSizerItem::SetInitSize}\label{wxsizeritemsetinitsize}

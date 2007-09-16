@@ -361,6 +361,9 @@ void wxSizerXmlHandler::SetSizerItemAttributes(wxSizerItem* sitem)
         gbsitem->SetPos(GetGBPos(wxT("cellpos")));
         gbsitem->SetSpan(GetGBSpan(wxT("cellspan")));
     }
+
+    // record the id of the item, if any, for use by XRCSIZERITEM()
+    sitem->SetId(GetID());
 }
 
 void wxSizerXmlHandler::AddSizerItem(wxSizerItem* sitem)

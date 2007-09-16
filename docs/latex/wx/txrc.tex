@@ -506,7 +506,22 @@ END_EVENT_TABLE()
 
 \end{verbatim}
 
+It is also possible to access the wxSizerItem of a sizer that is part of
+a resource.  This can be done using {\tt XRCSIZERITEM} as shown.  The
+resource file can have something like this for a sizer item.
 
+\begin{verbatim}
+<object class="spacer" name="area">
+  <size>400, 300</size>
+</object>
+\end{verbatim}
+
+The code can then access the sizer item by using {\tt XRCSIZERITEM} and
+{\tt XRCID} together.
+
+\begin{verbatim}
+wxSizerItem* item = XRCSIZERITEM(*this, XRCID("area"));
+\end{verbatim}
 
 \subsection{Adding new resource handlers}\label{newresourcehandlers}
 

@@ -103,6 +103,7 @@ wxSizerItem::wxSizerItem()
     m_proportion = 0;
     m_border = 0;
     m_flag = 0;
+    m_id = wxID_NONE;
 }
 
 // window item
@@ -132,6 +133,7 @@ wxSizerItem::wxSizerItem(wxWindow *window,
              m_proportion(proportion),
              m_border(border),
              m_flag(flag),
+             m_id(wxID_NONE),
              m_userData(userData)
 {
     DoSetWindow(window);
@@ -154,6 +156,7 @@ wxSizerItem::wxSizerItem(wxSizer *sizer,
              m_proportion(proportion),
              m_border(border),
              m_flag(flag),
+             m_id(wxID_NONE),
              m_ratio(0.0),
              m_userData(userData)
 {
@@ -183,6 +186,7 @@ wxSizerItem::wxSizerItem(int width,
              m_proportion(proportion),
              m_border(border),
              m_flag(flag),
+             m_id(wxID_NONE),
              m_userData(userData)
 {
     DoSetSpacer(wxSize(width, height));
@@ -1083,6 +1087,33 @@ wxSizerItem* wxSizer::GetItem( size_t index )
                  _T("GetItem index is out of range") );
 
     return m_children.Item( index )->GetData();
+}
+
+wxSizerItem* wxSizer::GetItemById( int id, bool recursive )
+{
+    // This gets a sizer item by the id of the sizer item
+    // and NOT the id of a window if the item is a window.
+
+    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxSizerItem     *item = node->GetData();
+
+        if (item->GetId() == id)
+        {
+            return item;
+        }
+        else if (recursive && item->IsSizer())
+        {
+            wxSizerItem *subitem = item->GetSizer()->GetItemById( id, true );
+            if (subitem)
+                return subitem;
+        }
+
+        node = node->GetNext();
+    }
+
+    return NULL;
 }
 
 bool wxSizer::Show( wxWindow *window, bool show, bool recursive )

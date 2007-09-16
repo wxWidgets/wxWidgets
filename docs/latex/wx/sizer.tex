@@ -274,6 +274,18 @@ Use parameter \arg{recursive} to search in subsizers too.
 
 Returns pointer to item or NULL.
 
+\membersection{wxSizer::GetItemById}\label{wxsizergetitembyid}
+
+\func{wxSizerItem *}{GetItemById}{\param{int }{id}, \param{bool }{recursive = false}}
+
+Finds item of the sizer which has the given \arg{id}.  This \arg{id} is not the
+window id but the id of the wxSizerItem itself.  This is mainly useful for
+retrieving the sizers created from XRC resources. 
+
+Use parameter \arg{recursive} to search in subsizers too.
+
+Returns pointer to item or \NULL.
+
 
 \membersection{wxSizer::GetSize}\label{wxsizergetsize}
 
