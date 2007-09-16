@@ -102,7 +102,7 @@ void wxItemContainer::Clear()
             ResetItemClientObject(i);
     }
 
-    m_clientDataItemsType = wxClientData_None;
+    SetClientDataType(wxClientData_None);
 
     DoClear();
 }
@@ -118,7 +118,7 @@ void wxItemContainer::Delete(unsigned int pos)
 
     if ( IsEmpty() )
     {
-        m_clientDataItemsType = wxClientData_None;
+        SetClientDataType(wxClientData_None);
     }
 }
 
@@ -162,23 +162,22 @@ wxItemContainer::DoInsertOneItem(const wxString& WXUNUSED(item),
 
 void wxItemContainer::SetClientObject(unsigned int n, wxClientData *data)
 {
-    wxASSERT_MSG( m_clientDataItemsType == wxClientData_Object ||
-                    m_clientDataItemsType == wxClientData_None,
+    wxASSERT_MSG( !HasClientUntypedData(),
                   wxT("can't have both object and void client data") );
 
-    if ( m_clientDataItemsType == wxClientData_Object )
+    if ( HasClientObjectData() )
     {
         wxClientData * clientDataOld
             = wx_static_cast(wxClientData *, DoGetItemClientData(n));
         if ( clientDataOld )
             delete clientDataOld;
     }
-    else // m_clientDataItemsType == wxClientData_None
+    else // didn't have any client data so far
     {
         // now we have object client data
         DoInitItemClientData();
 
-        m_clientDataItemsType = wxClientData_Object;
+        SetClientDataType(wxClientData_Object);
     }
 
     DoSetItemClientData(n, data);
@@ -186,7 +185,7 @@ void wxItemContainer::SetClientObject(unsigned int n, wxClientData *data)
 
 wxClientData *wxItemContainer::GetClientObject(unsigned int n) const
 {
-    wxCHECK_MSG( m_clientDataItemsType == wxClientData_Object, NULL,
+    wxCHECK_MSG( HasClientObjectData(), NULL,
                   wxT("this window doesn't have object client data") );
 
     return wx_static_cast(wxClientData *, DoGetItemClientData(n));
@@ -194,13 +193,13 @@ wxClientData *wxItemContainer::GetClientObject(unsigned int n) const
 
 void wxItemContainer::SetClientData(unsigned int n, void *data)
 {
-    if ( m_clientDataItemsType == wxClientData_None )
+    if ( !HasClientData() )
     {
         DoInitItemClientData();
-        m_clientDataItemsType = wxClientData_Void;
+        SetClientDataType(wxClientData_Void);
     }
 
-    wxASSERT_MSG( m_clientDataItemsType == wxClientData_Void,
+    wxASSERT_MSG( HasClientUntypedData(),
                   wxT("can't have both object and void client data") );
 
     DoSetItemClientData(n, data);
@@ -208,7 +207,7 @@ void wxItemContainer::SetClientData(unsigned int n, void *data)
 
 void *wxItemContainer::GetClientData(unsigned int n) const
 {
-    wxCHECK_MSG( m_clientDataItemsType == wxClientData_Void, NULL,
+    wxCHECK_MSG( HasClientUntypedData(), NULL,
                   wxT("this window doesn't have void client data") );
 
     return DoGetItemClientData(n);

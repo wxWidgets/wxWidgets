@@ -142,6 +142,15 @@ public:
         return GetStdInputHandler(handlerDef);
     }
 
+    // we delegate our client data handling to wxListBox which we use for the
+    // items, so override this and other methods dealing with the client data
+    virtual wxClientDataType GetClientDataType() const
+    {
+        return GetLBox()->GetClientDataType();
+    }
+
+    virtual void SetClientDataType(wxClientDataType clientDataItemsType);
+
 protected:
     virtual int DoInsertItems(const wxArrayStringsAdapter& items,
                               unsigned int pos,
@@ -149,6 +158,7 @@ protected:
 
     virtual void DoSetItemClientData(unsigned int n, void* clientData);
     virtual void* DoGetItemClientData(unsigned int n) const;
+
 
     // common part of all ctors
     void Init();

@@ -1028,7 +1028,8 @@ void wxOwnerDrawnComboBox::DoSetItemClientData(unsigned int n, void* clientData)
 {
     EnsurePopupControl();
 
-    GetVListBoxComboPopup()->SetItemClientData(n,clientData,m_clientDataItemsType);
+    GetVListBoxComboPopup()->SetItemClientData(n, clientData,
+                                               GetClientDataType());
 }
 
 void* wxOwnerDrawnComboBox::DoGetItemClientData(unsigned int n) const

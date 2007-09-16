@@ -121,7 +121,7 @@ private:
 
     int AppendItems(const wxArrayStringsAdapter& items, void **clientData)
     {
-        wxASSERT_MSG( m_clientDataItemsType != wxClientData_Object,
+        wxASSERT_MSG( GetClientDataType() != wxClientData_Object,
                       _T("can't mix different types of client data") );
 
         return AppendItems(items, clientData, wxClientData_Void);
@@ -130,7 +130,7 @@ private:
     int AppendItems(const wxArrayStringsAdapter& items,
                     wxClientData **clientData)
     {
-        wxASSERT_MSG( m_clientDataItemsType != wxClientData_Void,
+        wxASSERT_MSG( GetClientDataType() != wxClientData_Void,
                       _T("can't mix different types of client data") );
 
         return AppendItems(items, wx_reinterpret_cast(void **, clientData),
@@ -166,7 +166,7 @@ private:
                      unsigned int pos,
                      void **clientData)
     {
-        wxASSERT_MSG( m_clientDataItemsType != wxClientData_Object,
+        wxASSERT_MSG( GetClientDataType() != wxClientData_Object,
                       _T("can't mix different types of client data") );
 
         return InsertItems(items, pos, clientData, wxClientData_Void);
@@ -176,7 +176,7 @@ private:
                      unsigned int pos,
                      wxClientData **clientData)
     {
-        wxASSERT_MSG( m_clientDataItemsType != wxClientData_Void,
+        wxASSERT_MSG( GetClientDataType() != wxClientData_Void,
                       _T("can't mix different types of client data") );
 
         return InsertItems(items, pos,
@@ -280,6 +280,16 @@ public:
     void Delete(unsigned int pos);
 
 
+    // various accessors
+    // -----------------
+
+    // The control may maintain its items in a sorted order in which case
+    // items are automatically inserted at the right position when they are
+    // inserted or appended. Derived classes have to override this method if
+    // they implement sorting, typically by returning HasFlag(wxXX_SORT)
+    virtual bool IsSorted() const { return false; }
+
+
     // client data stuff
     // -----------------
 
@@ -289,19 +299,23 @@ public:
     void SetClientObject(unsigned int n, wxClientData* clientData);
     wxClientData* GetClientObject(unsigned int n) const;
 
+    // return the type of client data stored in this control: usually it just
+    // returns m_clientDataItemsType but must be overridden in the controls
+    // which delegate their client data storage to another one (e.g. wxChoice
+    // in wxUniv which stores data in wxListBox which it uses anyhow); don't
+    // forget to override SetClientDataType() if you override this one
+    //
+    // NB: for this to work no code should ever access m_clientDataItemsType
+    //     directly but only via this function!
+    virtual wxClientDataType GetClientDataType() const
+        { return m_clientDataItemsType; }
+
     bool HasClientData() const
-        { return m_clientDataItemsType != wxClientData_None; }
+        { return GetClientDataType() != wxClientData_None; }
     bool HasClientObjectData() const
-        { return m_clientDataItemsType == wxClientData_Object; }
+        { return GetClientDataType() == wxClientData_Object; }
     bool HasClientUntypedData() const
-        { return m_clientDataItemsType == wxClientData_Void; }
-
-
-    // The control may maintain its items in a sorted order in which case
-    // items are automatically inserted at the right position when they are
-    // inserted or appended. Derived classes have to override this method if
-    // they implement sorting, typically by returning HasFlag(wxXX_SORT)
-    virtual bool IsSorted() const { return false; }
+        { return GetClientDataType() == wxClientData_Void; }
 
 protected:
     // there is usually no need to override this method but you can do it if it
@@ -364,7 +378,14 @@ protected:
     // set it to NULL (must only be called if HasClientObjectData())
     void ResetItemClientObject(unsigned int n);
 
+    // set the type of the client data stored in this control: override this if
+    // you override GetClientDataType()
+    virtual void SetClientDataType(wxClientDataType clientDataItemsType)
+    {
+        m_clientDataItemsType = clientDataItemsType;
+    }
 
+private:
     // the type of the client data for the items
     wxClientDataType m_clientDataItemsType;
 };

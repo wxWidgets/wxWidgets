@@ -92,6 +92,8 @@ protected:
     void OnLeftUp(wxMouseEvent& event);
 
 private:
+    friend class wxComboBox; // it accesses our DoGetItemClientData()
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -410,6 +412,11 @@ int wxComboBox::GetSelection() const
 #endif
 }
 
+void wxComboBox::SetClientDataType(wxClientDataType clientDataItemsType)
+{
+    GetLBox()->SetClientDataType(clientDataItemsType);
+}
+
 int wxComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
                               unsigned int pos,
                               void **clientData, wxClientDataType type)
@@ -419,12 +426,12 @@ int wxComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
 
 void wxComboBox::DoSetItemClientData(unsigned int n, void* clientData)
 {
-    GetLBox()->SetClientData(n, clientData);
+    GetLBox()->DoSetItemClientData(n, clientData);
 }
 
 void *wxComboBox::DoGetItemClientData(unsigned int n) const
 {
-    return GetLBox()->GetClientData(n);
+    return GetLBox()->DoGetItemClientData(n);
 }
 
 bool wxComboBox::IsEditable() const
