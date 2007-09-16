@@ -29,6 +29,7 @@
 #undef new
 #endif
 
+#include "wx/beforestd.h"
 #if wxUSE_IOSTREAMH
 #include <iostream.h>
 #include <fstream.h>
@@ -37,6 +38,7 @@
 #include <fstream>
 using namespace std;
 #endif
+#include "wx/afterstd.h"
 
 #include <ctype.h>
 #include "tex2any.h"
