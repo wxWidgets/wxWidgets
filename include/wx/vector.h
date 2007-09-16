@@ -170,7 +170,7 @@ public:
             *(i - count) = *i;
 
         // erase items behind the new end of m_values:
-        for ( iterator i = end() - count; i < end(); ++i )
+        for ( /* iterator */  i = end() - count; i < end(); ++i )
             *i = value_type();
 
         m_size -= count;
