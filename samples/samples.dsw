@@ -63,18 +63,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "checklst"=.\checklst\checklst.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "collpane"=.\collpane\collpane.dsp - Package Owner=<4>
 
 Package=<5>
@@ -208,18 +196,6 @@ Package=<4>
 ###############################################################################
 
 Project: "drawing"=.\drawing\drawing.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "dynamic"=.\dynamic\dynamic.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -579,18 +555,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "minifram"=.\minifram\minifram.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "minimal"=.\minimal\minimal.dsp - Package Owner=<4>
 
 Package=<5>
@@ -651,31 +615,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "png"=.\png\png.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "printing"=.\printing\printing.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "propsize"=.\propsize\propsize.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -700,18 +640,6 @@ Package=<4>
 ###############################################################################
 
 Project: "richtext"=.\richtext\richtext.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "rotate"=.\rotate\rotate.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
