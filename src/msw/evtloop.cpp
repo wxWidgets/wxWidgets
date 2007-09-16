@@ -336,7 +336,7 @@ bool wxConsoleEventLoop::Dispatch()
     }
     else
     {
-        wxLogDebug(_T("Ignoring unexpected message %d"), msg.message);
+        ::DispatchMessage(&msg);
     }
 
     return !m_shouldExit;

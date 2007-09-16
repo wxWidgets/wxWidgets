@@ -2249,6 +2249,7 @@ void wxComboCtrlBase::SetValueWithEvent(const wxString& value, bool withEvent)
             m_ignoreEvtText++;
 
         m_text->SetValue(value);
+
         if ( !(m_iFlags & wxCC_NO_TEXT_AUTO_SELECT) )
             m_text->SelectAll();
     }

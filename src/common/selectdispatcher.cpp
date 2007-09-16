@@ -95,14 +95,10 @@ bool wxSelectSets::SetFD(int fd, int flags)
         if ( flags & ms_flags[n] )
         {
             wxFD_SET(fd, &m_fds[n]);
-            wxLogTrace(wxSelectDispatcher_Trace,
-                       _T("Registered fd %d for %s events"), fd, ms_names[n]);
         }
         else if ( wxFD_ISSET(fd,  (fd_set*) &m_fds[n]) )
         {
             wxFD_CLR(fd, &m_fds[n]);
-            wxLogTrace(wxSelectDispatcher_Trace,
-                       _T("Unregistered fd %d from %s events"), fd, ms_names[n]);
         }
     }
 
@@ -123,6 +119,9 @@ void wxSelectSets::Handle(int fd, wxFDIOHandler& handler) const
             wxLogTrace(wxSelectDispatcher_Trace,
                        _T("Got %s event on fd %d"), ms_names[n], fd);
             (handler.*ms_handlers[n])();
+            // callback can modify sets and destroy handler, returning from
+            // here guarantees that one event is processed at a time
+            return;
         }
     }
 }
@@ -153,6 +152,8 @@ bool wxSelectDispatcher::RegisterFD(int fd, wxFDIOHandler *handler, int flags)
     if ( fd > m_maxFD )
       m_maxFD = fd;
 
+    wxLogTrace(wxSelectDispatcher_Trace,
+                _T("Registered fd %d: input:%d, output:%d, exceptional:%d"), fd, (flags & wxFDIO_INPUT) == wxFDIO_INPUT, (flags & wxFDIO_OUTPUT), (flags & wxFDIO_EXCEPTION) == wxFDIO_EXCEPTION);
     return true;
 }
 
@@ -163,6 +164,8 @@ bool wxSelectDispatcher::ModifyFD(int fd, wxFDIOHandler *handler, int flags)
 
     wxASSERT_MSG( fd <= m_maxFD, _T("logic error: registered fd > m_maxFD?") );
 
+    wxLogTrace(wxSelectDispatcher_Trace,
+                _T("Modified fd %d: input:%d, output:%d, exceptional:%d"), fd, (flags & wxFDIO_INPUT) == wxFDIO_INPUT, (flags & wxFDIO_OUTPUT) == wxFDIO_OUTPUT, (flags & wxFDIO_EXCEPTION) == wxFDIO_EXCEPTION);
     return m_sets.SetFD(fd, flags);
 }
 
@@ -185,11 +188,15 @@ bool wxSelectDispatcher::UnregisterFD(int fd)
                   ++it )
             {
                 if ( it->first > m_maxFD )
+                {
                     m_maxFD = it->first;
+                }
             }
         }
     }
 
+    wxLogTrace(wxSelectDispatcher_Trace,
+                _T("Removed fd %d, current max: %d"), fd, m_maxFD);
     return true;
 }
 

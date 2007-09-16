@@ -1009,6 +1009,8 @@ void wxSocketBase::OnRequest(wxSocketNotify notification)
 void wxSocketBase::Notify(bool notify)
 {
     m_notify = notify;
+    if ( m_socket )
+        m_socket->Notify(notify);
 }
 
 void wxSocketBase::SetNotify(wxSocketEventFlags flags)
@@ -1096,8 +1098,8 @@ wxSocketServer::wxSocketServer(const wxSockAddress& addr_man,
         return;
     }
 
-        // Setup the socket as server
-
+    // Setup the socket as server
+    m_socket->Notify(m_notify);
     m_socket->SetLocal(addr_man.GetAddress());
 
     if (GetFlags() & wxSOCKET_REUSEADDR) {
@@ -1123,6 +1125,8 @@ wxSocketServer::wxSocketServer(const wxSockAddress& addr_man,
     m_socket->SetCallback(GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
                                   GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
                                   wx_socket_callback, (char *)this);
+
+    wxLogTrace( wxTRACE_Socket, _T("wxSocketServer on fd %d"), m_socket->m_fd );
 }
 
 // --------------------------------------------------------------------------
@@ -1306,6 +1310,9 @@ bool wxSocketClient::DoConnect(wxSockAddress& addr_man, wxSockAddress* local, bo
   m_socket->SetPeer(addr_man.GetAddress());
   err = m_socket->Connect(GSOCK_STREAMED);
 
+  // register for callbacks (call it after m_socket->m_fd was initialized)
+  m_socket->Notify(m_notify);
+
   if (!wait)
     m_socket->SetNonBlocking(0);
 
@@ -1361,6 +1368,7 @@ wxDatagramSocket::wxDatagramSocket( const wxSockAddress& addr,
         wxFAIL_MSG( _T("datagram socket not new'd") );
         return;
     }
+    m_socket->Notify(m_notify);
     // Setup the socket as non connection oriented
     m_socket->SetLocal(addr.GetAddress());
     if (flags & wxSOCKET_REUSEADDR)

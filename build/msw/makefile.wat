@@ -237,7 +237,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_gdiobj.obj &
 	$(OBJS)\monodll_gdiplus.obj &
 	$(OBJS)\monodll_graphics.obj &
-	$(OBJS)\monodll_gsockmsw.obj &
 	$(OBJS)\monodll_icon.obj &
 	$(OBJS)\monodll_imaglist.obj &
 	$(OBJS)\monodll_minifram.obj &
@@ -319,6 +318,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_bmpbase.obj &
 	$(OBJS)\monodll_bookctrl.obj &
 	$(OBJS)\monodll_btncmn.obj &
+	$(OBJS)\monodll_cairo.obj &
 	$(OBJS)\monodll_choiccmn.obj &
 	$(OBJS)\monodll_clipcmn.obj &
 	$(OBJS)\monodll_clrpickercmn.obj &
@@ -463,7 +463,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_gdiobj.obj &
 	$(OBJS)\monodll_gdiplus.obj &
 	$(OBJS)\monodll_graphics.obj &
-	$(OBJS)\monodll_gsockmsw.obj &
 	$(OBJS)\monodll_icon.obj &
 	$(OBJS)\monodll_imaglist.obj &
 	$(OBJS)\monodll_minifram.obj &
@@ -548,6 +547,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_bmpbase.obj &
 	$(OBJS)\monodll_bookctrl.obj &
 	$(OBJS)\monodll_btncmn.obj &
+	$(OBJS)\monodll_cairo.obj &
 	$(OBJS)\monodll_choiccmn.obj &
 	$(OBJS)\monodll_clipcmn.obj &
 	$(OBJS)\monodll_clrpickercmn.obj &
@@ -880,7 +880,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_gdiobj.obj &
 	$(OBJS)\monolib_gdiplus.obj &
 	$(OBJS)\monolib_graphics.obj &
-	$(OBJS)\monolib_gsockmsw.obj &
 	$(OBJS)\monolib_icon.obj &
 	$(OBJS)\monolib_imaglist.obj &
 	$(OBJS)\monolib_minifram.obj &
@@ -962,6 +961,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_bmpbase.obj &
 	$(OBJS)\monolib_bookctrl.obj &
 	$(OBJS)\monolib_btncmn.obj &
+	$(OBJS)\monolib_cairo.obj &
 	$(OBJS)\monolib_choiccmn.obj &
 	$(OBJS)\monolib_clipcmn.obj &
 	$(OBJS)\monolib_clrpickercmn.obj &
@@ -1106,7 +1106,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_gdiobj.obj &
 	$(OBJS)\monolib_gdiplus.obj &
 	$(OBJS)\monolib_graphics.obj &
-	$(OBJS)\monolib_gsockmsw.obj &
 	$(OBJS)\monolib_icon.obj &
 	$(OBJS)\monolib_imaglist.obj &
 	$(OBJS)\monolib_minifram.obj &
@@ -1191,6 +1190,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_bmpbase.obj &
 	$(OBJS)\monolib_bookctrl.obj &
 	$(OBJS)\monolib_btncmn.obj &
+	$(OBJS)\monolib_cairo.obj &
 	$(OBJS)\monolib_choiccmn.obj &
 	$(OBJS)\monolib_clipcmn.obj &
 	$(OBJS)\monolib_clrpickercmn.obj &
@@ -1451,7 +1451,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_gdiobj.obj &
 	$(OBJS)\coredll_gdiplus.obj &
 	$(OBJS)\coredll_graphics.obj &
-	$(OBJS)\coredll_gsockmsw.obj &
 	$(OBJS)\coredll_icon.obj &
 	$(OBJS)\coredll_imaglist.obj &
 	$(OBJS)\coredll_minifram.obj &
@@ -1533,6 +1532,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_bmpbase.obj &
 	$(OBJS)\coredll_bookctrl.obj &
 	$(OBJS)\coredll_btncmn.obj &
+	$(OBJS)\coredll_cairo.obj &
 	$(OBJS)\coredll_choiccmn.obj &
 	$(OBJS)\coredll_clipcmn.obj &
 	$(OBJS)\coredll_clrpickercmn.obj &
@@ -1677,7 +1677,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_gdiobj.obj &
 	$(OBJS)\coredll_gdiplus.obj &
 	$(OBJS)\coredll_graphics.obj &
-	$(OBJS)\coredll_gsockmsw.obj &
 	$(OBJS)\coredll_icon.obj &
 	$(OBJS)\coredll_imaglist.obj &
 	$(OBJS)\coredll_minifram.obj &
@@ -1762,6 +1761,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_bmpbase.obj &
 	$(OBJS)\coredll_bookctrl.obj &
 	$(OBJS)\coredll_btncmn.obj &
+	$(OBJS)\coredll_cairo.obj &
 	$(OBJS)\coredll_choiccmn.obj &
 	$(OBJS)\coredll_clipcmn.obj &
 	$(OBJS)\coredll_clrpickercmn.obj &
@@ -1916,7 +1916,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_gdiobj.obj &
 	$(OBJS)\corelib_gdiplus.obj &
 	$(OBJS)\corelib_graphics.obj &
-	$(OBJS)\corelib_gsockmsw.obj &
 	$(OBJS)\corelib_icon.obj &
 	$(OBJS)\corelib_imaglist.obj &
 	$(OBJS)\corelib_minifram.obj &
@@ -1998,6 +1997,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_bmpbase.obj &
 	$(OBJS)\corelib_bookctrl.obj &
 	$(OBJS)\corelib_btncmn.obj &
+	$(OBJS)\corelib_cairo.obj &
 	$(OBJS)\corelib_choiccmn.obj &
 	$(OBJS)\corelib_clipcmn.obj &
 	$(OBJS)\corelib_clrpickercmn.obj &
@@ -2142,7 +2142,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_gdiobj.obj &
 	$(OBJS)\corelib_gdiplus.obj &
 	$(OBJS)\corelib_graphics.obj &
-	$(OBJS)\corelib_gsockmsw.obj &
 	$(OBJS)\corelib_icon.obj &
 	$(OBJS)\corelib_imaglist.obj &
 	$(OBJS)\corelib_minifram.obj &
@@ -2227,6 +2226,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_bmpbase.obj &
 	$(OBJS)\corelib_bookctrl.obj &
 	$(OBJS)\corelib_btncmn.obj &
+	$(OBJS)\corelib_cairo.obj &
 	$(OBJS)\corelib_choiccmn.obj &
 	$(OBJS)\corelib_clipcmn.obj &
 	$(OBJS)\corelib_clrpickercmn.obj &
@@ -3337,6 +3337,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_socket.obj &
 	$(OBJS)\monodll_url.obj &
 	$(OBJS)\monodll_gsocket.obj &
+	$(OBJS)\monodll_gsockmsw.obj &
 	$(OBJS)\monodll_urlmsw.obj &
 	$(____MONOLIB_GUI_SRC_FILENAMES_OBJECTS) &
 	$(OBJS)\monodll_xml.obj &
@@ -3473,6 +3474,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_socket.obj &
 	$(OBJS)\monolib_url.obj &
 	$(OBJS)\monolib_gsocket.obj &
+	$(OBJS)\monolib_gsockmsw.obj &
 	$(OBJS)\monolib_urlmsw.obj &
 	$(____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS) &
 	$(OBJS)\monolib_xml.obj &
@@ -3736,6 +3738,7 @@ NETDLL_OBJECTS =  &
 	$(OBJS)\netdll_socket.obj &
 	$(OBJS)\netdll_url.obj &
 	$(OBJS)\netdll_gsocket.obj &
+	$(OBJS)\netdll_gsockmsw.obj &
 	$(OBJS)\netdll_urlmsw.obj
 NETLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
@@ -3758,6 +3761,7 @@ NETLIB_OBJECTS =  &
 	$(OBJS)\netlib_socket.obj &
 	$(OBJS)\netlib_url.obj &
 	$(OBJS)\netlib_gsocket.obj &
+	$(OBJS)\netlib_gsockmsw.obj &
 	$(OBJS)\netlib_urlmsw.obj
 COREDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
@@ -5951,6 +5955,9 @@ $(OBJS)\monodll_url.obj :  .AUTODEPEND ..\..\src\common\url.cpp
 $(OBJS)\monodll_gsocket.obj :  .AUTODEPEND ..\..\src\msw\gsocket.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -6549,11 +6556,6 @@ $(OBJS)\monodll_graphics.obj :  .AUTODEPEND ..\..\src\msw\graphics.cpp
 !endif
 
 !ifeq USE_GUI 1
-$(OBJS)\monodll_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
 $(OBJS)\monodll_icon.obj :  .AUTODEPEND ..\..\src\msw\icon.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -7070,6 +7072,11 @@ $(OBJS)\monodll_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_btncmn.obj :  .AUTODEPEND ..\..\src\common\btncmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_cairo.obj :  .AUTODEPEND ..\..\src\common\cairo.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -8122,6 +8129,9 @@ $(OBJS)\monolib_url.obj :  .AUTODEPEND ..\..\src\common\url.cpp
 $(OBJS)\monolib_gsocket.obj :  .AUTODEPEND ..\..\src\msw\gsocket.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -8720,11 +8730,6 @@ $(OBJS)\monolib_graphics.obj :  .AUTODEPEND ..\..\src\msw\graphics.cpp
 !endif
 
 !ifeq USE_GUI 1
-$(OBJS)\monolib_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
 $(OBJS)\monolib_icon.obj :  .AUTODEPEND ..\..\src\msw\icon.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -9241,6 +9246,11 @@ $(OBJS)\monolib_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_btncmn.obj :  .AUTODEPEND ..\..\src\common\btncmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_cairo.obj :  .AUTODEPEND ..\..\src\common\cairo.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -10602,6 +10612,9 @@ $(OBJS)\netdll_url.obj :  .AUTODEPEND ..\..\src\common\url.cpp
 $(OBJS)\netdll_gsocket.obj :  .AUTODEPEND ..\..\src\msw\gsocket.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
+$(OBJS)\netdll_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
+
 $(OBJS)\netdll_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
@@ -10639,6 +10652,9 @@ $(OBJS)\netlib_url.obj :  .AUTODEPEND ..\..\src\common\url.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
 
 $(OBJS)\netlib_gsocket.obj :  .AUTODEPEND ..\..\src\msw\gsocket.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
+
+$(OBJS)\netlib_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
 
 $(OBJS)\netlib_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
@@ -10932,11 +10948,6 @@ $(OBJS)\coredll_gdiplus.obj :  .AUTODEPEND ..\..\src\msw\gdiplus.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_graphics.obj :  .AUTODEPEND ..\..\src\msw\graphics.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\coredll_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
@@ -11457,6 +11468,11 @@ $(OBJS)\coredll_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_btncmn.obj :  .AUTODEPEND ..\..\src\common\btncmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_cairo.obj :  .AUTODEPEND ..\..\src\common\cairo.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
@@ -12324,11 +12340,6 @@ $(OBJS)\corelib_graphics.obj :  .AUTODEPEND ..\..\src\msw\graphics.cpp
 !endif
 
 !ifeq USE_GUI 1
-$(OBJS)\corelib_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
 $(OBJS)\corelib_icon.obj :  .AUTODEPEND ..\..\src\msw\icon.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
@@ -12845,6 +12856,11 @@ $(OBJS)\corelib_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_btncmn.obj :  .AUTODEPEND ..\..\src\common\btncmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_cairo.obj :  .AUTODEPEND ..\..\src\common\cairo.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

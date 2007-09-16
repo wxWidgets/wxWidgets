@@ -488,6 +488,10 @@ SOURCE=..\..\src\common\btncmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\cairo.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\choiccmn.cpp
 # End Source File
 # Begin Source File
@@ -2160,10 +2164,6 @@ SOURCE=..\..\src\msw\gdiplus.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\graphics.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\msw\gsockmsw.cpp
 # End Source File
 # Begin Source File
 
@@ -8714,6 +8714,10 @@ SOURCE=..\..\include\wx\busyinfo.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\button.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\cairo.h
 # End Source File
 # Begin Source File
 

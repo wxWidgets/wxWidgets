@@ -138,6 +138,8 @@ Major new features in this release
 
 All:
 
+- Added support for using wxEventLoop, timers and sockets in console
+  applications (Lukasz Michalski).
 - Added support for user-defined types to wxConfig (Marcin Wojdyr).
 - Added wxJoin() and wxSplit() functions (Francesco Montorsi).
 - Added wxMutex::LockTimeout() (Aleksandr Napylov).
@@ -146,7 +148,6 @@ All:
 - Added wxEXEC_BLOCK flag (Hank Schultz).
 - Add support for wxStream-derived classes to wxRTTI (Stas Sergeev).
 - Added wxStreamBuffer::Truncate() (Stas Sergeev).
-- Allow using  wxEventLoop in console applications (Lukasz Michalski).
 - Added functions for Base64 en/decoding (Charles Reimers).
 - Added support for binary data to wxConfig (Charles Reimers).
 - Added functions for atomically inc/decrementing integers (Armel Asselin).
