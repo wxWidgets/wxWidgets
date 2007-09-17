@@ -3792,8 +3792,9 @@ void wxAuiManager::OnLeftDown(wxMouseEvent& event)
         if (part->type == wxAuiDockUIPart::typeDockSizer ||
             part->type == wxAuiDockUIPart::typePaneSizer)
         {
-            if (part->dock && part->dock->dock_direction == wxAUI_DOCK_CENTER)
-                return;
+            // Removing this restriction so that a centre pane can be resized
+            //if (part->dock && part->dock->dock_direction == wxAUI_DOCK_CENTER)
+            //    return;
 
             // a dock may not be resized if it has a single
             // pane which is not resizable
