@@ -1,13 +1,19 @@
 \section{\class{wxPanel}}\label{wxpanel}
 
-A panel is a window on which controls are placed. It is usually placed within a frame.
-It contains minimal extra functionality over and above its parent class wxWindow; its main
-purpose is to be similar in appearance and functionality to a dialog, but with the flexibility of
-having any window as a parent.
+A panel is a window on which controls are placed. It is usually placed within
+a frame. Its main feature over its parent class wxWindow is code for handling
+child windows and TAB traversal. Since wxWidgets 2.9, there is support both
+for TAB traversal implemented by wxWidgets itself as well as native TAB
+traversal (such as for GTK 2.0).
 
-{\it Note:} if not all characters are being intercepted by your OnKeyDown or OnChar handler,
-it may be because you are using the wxTAB\_TRAVERSAL style, which grabs some keypresses for use
-by child controls.
+{\it Note:} Tab traversal is implemented through an otherwise undocumented
+intermediate wxControlContainer class from which any class can derive
+in addition to the normal wxWindow base class. Please see <wx/containr.h>
+and <wx/panel.h> to find out how this is achieved.
+
+{\it Note:} if not all characters are being intercepted by your OnKeyDown or
+OnChar handler, it may be because you are using the wxTAB\_TRAVERSAL style, 
+which grabs some keypresses for use by child controls.
 
 \wxheading{Derived from}
 
@@ -87,6 +93,17 @@ Destructor. Deletes any child windows before deleting the physical window.
 
 Used for two-step panel construction. See \helpref{wxPanel::wxPanel}{wxpanelctor}\rtfsp
 for details.
+
+
+\membersection{wxPanel::AcceptsFocus}\label{wxpanelacceptsfocus}
+
+\constfunc{bool}{AcceptsFocus}{\void}
+
+This method is overridden from \helpref{wxWindow::AcceptsFocus}{wxwindowacceptsfocus}
+and returns true only if there is no child window in the panel which
+can accept the focus. This is reevaluated each time a child
+window is added or removed from the panel.
+
 
 \membersection{wxPanel::InitDialog}\label{wxpanelinitdialog}
 

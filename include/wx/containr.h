@@ -70,10 +70,9 @@ public:
     // wxListCtrl) and so should get focus for ourselves
     bool AcceptsFocusRecursively() const { return true; }
 
-    // call this when the number of children of the window changes
-    //
-    // note that we have any children, this panel (used just as container for
-    // them) shouldn't get focus for itself
+    // Call this when the number of children of the window changes.
+    // If we have any children, this panel (used just as container for
+    // them) shouldn't get focus for itself.
     void UpdateCanFocus() { SetCanFocus(!HasAnyFocusableChildren()); }
 
 protected:
@@ -177,7 +176,7 @@ protected:
                                                                               \
     void classname::SetFocusIgnoringChildren()                                \
     {                                                                         \
-        basename::SetFocusIgnoringChildren();                                 \
+        basename::SetFocus();                                                 \
     }
 
 #else // !wxHAS_NATIVE_TAB_TRAVERSAL

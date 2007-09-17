@@ -25,7 +25,6 @@
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
     #include "wx/textctrl.h"
-    #include "wx/radiobut.h"
     #include "wx/toolbar.h"
     #include "wx/combobox.h"
     #include "wx/layout.h"
@@ -3172,24 +3171,6 @@ bool wxWindowGTK::GTKSetDelayedFocusIfNeeded()
     return false;
 }
 
-void wxWindowGTK::SetFocusIgnoringChildren()
-{
-    wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
-    if ( m_hasFocus )
-    {
-        // don't do anything if we already have focus
-        return;
-    }
-
-    if (m_wxwindow)
-    {
-        if (!GTK_WIDGET_CAN_FOCUS(m_wxwindow))
-            GTK_WIDGET_SET_FLAGS(m_wxwindow, GTK_CAN_FOCUS);
-    }
-    
-    wxWindowGTK::SetFocus();
-}
-
 void wxWindowGTK::SetFocus()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
@@ -3201,6 +3182,11 @@ void wxWindowGTK::SetFocus()
 
     if (m_wxwindow)
     {
+        // wxWindow::SetFocus() should really set the focus to
+        // this control, whatever the flags are
+        if (!GTK_WIDGET_CAN_FOCUS(m_wxwindow))
+            GTK_WIDGET_SET_FLAGS(m_wxwindow, GTK_CAN_FOCUS);
+            
         if (!GTK_WIDGET_HAS_FOCUS (m_wxwindow))
         {
             gtk_widget_grab_focus (m_wxwindow);
@@ -3208,15 +3194,18 @@ void wxWindowGTK::SetFocus()
     }
     else if (m_widget)
     {
+        // wxWindow::SetFocus() should really set the focus to
+        // this control, whatever the flags are
+        if (!GTK_WIDGET_CAN_FOCUS(m_widget))
+            GTK_WIDGET_SET_FLAGS(m_widget, GTK_CAN_FOCUS);
+            
         if (GTK_IS_CONTAINER(m_widget))
         {
-#if wxUSE_RADIOBTN
-            if (IsKindOf(CLASSINFO(wxRadioButton)))
+            if (GTK_IS_RADIO_BUTTON(m_widget))
             {
                 gtk_widget_grab_focus (m_widget);
                 return;
             }
-#endif // wxUSE_RADIOBTN
 
             gtk_widget_child_focus( m_widget, GTK_DIR_TAB_FORWARD );
         }

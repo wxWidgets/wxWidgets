@@ -60,7 +60,8 @@ public:
     virtual bool IsRetained() const;
 
     virtual void SetFocus();
-    virtual void SetFocusIgnoringChildren();
+    
+    // hint from wx to native GTK+ tab traversal code
     virtual void SetCanFocus(bool canFocus);
 
     virtual bool Reparent( wxWindowBase *newParent );

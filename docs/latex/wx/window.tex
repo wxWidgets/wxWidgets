@@ -2780,26 +2780,23 @@ background, such as a tiled bitmap. Currently the style has no effect on other p
 \helpref{wxWindow::GetBackgroundStyle}{wxwindowgetbackgroundstyle}
 
 
-\membersection{wxWindow::SetInitialSize}\label{wxwindowsetinitialsize}
 
-\func{void}{SetInitialSize}{\param{const wxSize\& }{size = wxDefaultSize}}
+\membersection{wxWindow::SetCanFocus}\label{wxwindowsetcanfocus}
 
-A {\it smart} SetSize that will fill in default size components with the
-window's {\it best} size values.  Also sets the window's minsize to
-the value passed in for use with sizers.  This means that if a full or
-partial size is passed to this function then the sizers will use that
-size instead of the results of GetBestSize to determine the minimum
-needs of the window for layout.
+\func{virtual void}{SetCanFocus}{\param{bool}{ canFocus}}
 
-Most controls will use this to set their initial size, and their min
-size to the passed in value (if any.)
-
+This method is only implemented by ports which have support for
+native TAB traversal (such as GTK+ 2.0). It is called by wxWidgets'
+container control code to give the native system a hint when
+doing TAB traversal. A call to this does not disable or change
+the effect of programmatically calling 
+\helpref{wxWindow::SetFocus}{wxwindowsetfocus}.
 
 \wxheading{See also}
 
-\helpref{wxWindow::SetSize}{wxwindowsetsize},\rtfsp
-\helpref{wxWindow::GetBestSize}{wxwindowgetbestsize},\rtfsp
-\helpref{wxWindow::GetEffectiveMinSize}{wxwindowgeteffectiveminsize}
+\helpref{wxFocusEvent}{wxfocusevent}
+\helpref{wxPanel::SetFocus}{wxpanelsetfocus}
+\helpref{wxPanel::SetFocusIgnoringChildren}{wxpanelsetfocusignoringchildren}
 
 
 \membersection{wxWindow::SetCaret}\label{wxwindowsetcaret}
@@ -2903,13 +2900,6 @@ If the window already has a drop target, it is deleted.
 
 
 
-\membersection{wxWindow::SetInitialBestSize}\label{wxwindowsetinitialbestsize}
-
-\func{virtual void}{SetInitialBestSize}{\param{const wxSize\& }{size}}
-
-Sets the initial window size if none is given (i.e. at least one of the
-components of the size passed to ctor/Create() is wxDefaultCoord).
-
 \membersection{wxWindow::SetEventHandler}\label{wxwindowseteventhandler}
 
 \func{void}{SetEventHandler}{\param{wxEvtHandler* }{handler}}
@@ -2928,9 +2918,9 @@ an application may wish to substitute another, for example to allow
 central implementation of event-handling for a variety of different
 window classes.
 
-It is usually better to use \helpref{wxWindow::PushEventHandler}{wxwindowpusheventhandler} since
-this sets up a chain of event handlers, where an event not handled by one event handler is
-handed to the next one in the chain.
+It is usually better to use \helpref{wxWindow::PushEventHandler}{wxwindowpusheventhandler}
+since this sets up a chain of event handlers, where an event not handled by
+one event handler is handed to the next one in the chain.
 
 \wxheading{See also}
 
@@ -3096,6 +3086,36 @@ on creation and should not be modified subsequently.
 \helpref{wxWindow::GetId}{wxwindowgetid},\rtfsp
 \helpref{Window identifiers}{windowids}
 
+
+
+\membersection{wxWindow::SetInitialBestSize}\label{wxwindowsetinitialbestsize}
+
+\func{virtual void}{SetInitialBestSize}{\param{const wxSize\& }{size}}
+
+Sets the initial window size if none is given (i.e. at least one of the
+components of the size passed to ctor/Create() is wxDefaultCoord).
+
+
+\membersection{wxWindow::SetInitialSize}\label{wxwindowsetinitialsize}
+
+\func{void}{SetInitialSize}{\param{const wxSize\& }{size = wxDefaultSize}}
+
+A {\it smart} SetSize that will fill in default size components with the
+window's {\it best} size values.  Also sets the window's minsize to
+the value passed in for use with sizers.  This means that if a full or
+partial size is passed to this function then the sizers will use that
+size instead of the results of GetBestSize to determine the minimum
+needs of the window for layout.
+
+Most controls will use this to set their initial size, and their min
+size to the passed in value (if any.)
+
+
+\wxheading{See also}
+
+\helpref{wxWindow::SetSize}{wxwindowsetsize},\rtfsp
+\helpref{wxWindow::GetBestSize}{wxwindowgetbestsize},\rtfsp
+\helpref{wxWindow::GetEffectiveMinSize}{wxwindowgeteffectiveminsize}
 
 
 \membersection{wxWindow::SetLabel}\label{wxwindowsetlabel}
