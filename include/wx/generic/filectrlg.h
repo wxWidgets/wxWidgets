@@ -26,7 +26,7 @@ class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 extern WXDLLEXPORT_DATA(const wxChar) wxFileSelectorDefaultWildcardStr[];
 
 //-----------------------------------------------------------------------------
-//  wxFileData - a class to hold the file info for the wxFileList
+//  wxFileData - a class to hold the file info for the wxFileListCtrl
 //-----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxFileData
@@ -83,7 +83,7 @@ public:
     // Get/Set the type of file, file/dir/drive/link
     int GetType() const { return m_type; }
 
-    // the wxFileList fields in report view
+    // the wxFileListCtrl fields in report view
     enum fileListFieldType
     {
         FileList_Name,
@@ -96,7 +96,7 @@ public:
         FileList_Max
     };
 
-    // Get the entry for report view of wxFileList
+    // Get the entry for report view of wxFileListCtrl
     wxString GetEntry( fileListFieldType num ) const;
 
     // Get a string representation of the file info
@@ -121,14 +121,14 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-//  wxFileList
+//  wxFileListCtrl
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFileList : public wxListCtrl
+class WXDLLEXPORT wxFileListCtrl : public wxListCtrl
 {
 public:
-    wxFileList();
-    wxFileList( wxWindow *win,
+    wxFileListCtrl();
+    wxFileListCtrl( wxWindow *win,
                 wxWindowID id,
                 const wxString &wild,
                 bool showHidden,
@@ -137,7 +137,7 @@ public:
                 long style = wxLC_LIST,
                 const wxValidator &validator = wxDefaultValidator,
                 const wxString &name = wxT("filelist") );
-    virtual ~wxFileList();
+    virtual ~wxFileListCtrl();
 
     virtual void ChangeToListMode();
     virtual void ChangeToReportMode();
@@ -177,7 +177,7 @@ protected:
     wxFileData::fileListFieldType m_sort_field;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxFileList)
+    DECLARE_DYNAMIC_CLASS(wxFileListCtrl)
     DECLARE_EVENT_TABLE()
 };
 
@@ -242,7 +242,7 @@ public:
     void GoToParentDir();
     void GoToHomeDir();
 
-    wxFileList *GetFileList() { return m_list; }
+    wxFileListCtrl *GetFileList() { return m_list; }
 
     void ChangeToReportMode() { m_list->ChangeToReportMode(); }
     void ChangeToListMode() { m_list->ChangeToListMode(); }
@@ -265,21 +265,21 @@ private:
 
     int m_style;
 
-    wxString       m_filterExtension;
-    wxChoice      *m_choice;
-    wxTextCtrl    *m_text;
-    wxFileList    *m_list;
-    wxCheckBox    *m_check;
-    wxStaticText  *m_static;
+    wxString         m_filterExtension;
+    wxChoice        *m_choice;
+    wxTextCtrl      *m_text;
+    wxFileListCtrl  *m_list;
+    wxCheckBox      *m_check;
+    wxStaticText    *m_static;
 
-    wxString      m_dir;
-    wxString      m_fileName;
-    wxString      m_wildCard; // wild card in one string as passed to the object previously.
+    wxString        m_dir;
+    wxString        m_fileName;
+    wxString        m_wildCard; // wild card in one string as we got it
 
     int     m_filterIndex;
-    bool m_inSelected;
+    bool    m_inSelected;
     bool    m_ignoreChanges;
-    bool m_noSelChgEvent; // suppress selection changed events.
+    bool    m_noSelChgEvent; // suppress selection changed events.
 
     DECLARE_DYNAMIC_CLASS( wxGenericFileCtrl )
     DECLARE_EVENT_TABLE()

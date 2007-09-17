@@ -390,29 +390,29 @@ void wxFileData::MakeItem( wxListItem &item )
 }
 
 //-----------------------------------------------------------------------------
-//  wxFileList
+//  wxFileListCtrl
 //-----------------------------------------------------------------------------
 
 static bool ignoreChanges = false;
 
-IMPLEMENT_DYNAMIC_CLASS(wxFileList,wxListCtrl)
+IMPLEMENT_DYNAMIC_CLASS(wxFileListCtrl,wxListCtrl)
 
-BEGIN_EVENT_TABLE(wxFileList,wxListCtrl)
-    EVT_LIST_DELETE_ITEM(wxID_ANY, wxFileList::OnListDeleteItem)
-    EVT_LIST_DELETE_ALL_ITEMS(wxID_ANY, wxFileList::OnListDeleteAllItems)
-    EVT_LIST_END_LABEL_EDIT(wxID_ANY, wxFileList::OnListEndLabelEdit)
-    EVT_LIST_COL_CLICK(wxID_ANY, wxFileList::OnListColClick)
+BEGIN_EVENT_TABLE(wxFileListCtrl,wxListCtrl)
+    EVT_LIST_DELETE_ITEM(wxID_ANY, wxFileListCtrl::OnListDeleteItem)
+    EVT_LIST_DELETE_ALL_ITEMS(wxID_ANY, wxFileListCtrl::OnListDeleteAllItems)
+    EVT_LIST_END_LABEL_EDIT(wxID_ANY, wxFileListCtrl::OnListEndLabelEdit)
+    EVT_LIST_COL_CLICK(wxID_ANY, wxFileListCtrl::OnListColClick)
 END_EVENT_TABLE()
 
 
-wxFileList::wxFileList()
+wxFileListCtrl::wxFileListCtrl()
 {
     m_showHidden = false;
     m_sort_foward = 1;
     m_sort_field = wxFileData::FileList_Name;
 }
 
-wxFileList::wxFileList(wxWindow *win,
+wxFileListCtrl::wxFileListCtrl(wxWindow *win,
                        wxWindowID id,
                        const wxString& wild,
                        bool showHidden,
@@ -439,14 +439,14 @@ wxFileList::wxFileList(wxWindow *win,
         ChangeToReportMode();
 }
 
-void wxFileList::ChangeToListMode()
+void wxFileListCtrl::ChangeToListMode()
 {
     ClearAll();
     SetSingleStyle( wxLC_LIST );
     UpdateFiles();
 }
 
-void wxFileList::ChangeToReportMode()
+void wxFileListCtrl::ChangeToReportMode()
 {
     ClearAll();
     SetSingleStyle( wxLC_REPORT );
@@ -473,20 +473,20 @@ void wxFileList::ChangeToReportMode()
     UpdateFiles();
 }
 
-void wxFileList::ChangeToSmallIconMode()
+void wxFileListCtrl::ChangeToSmallIconMode()
 {
     ClearAll();
     SetSingleStyle( wxLC_SMALL_ICON );
     UpdateFiles();
 }
 
-void wxFileList::ShowHidden( bool show )
+void wxFileListCtrl::ShowHidden( bool show )
 {
     m_showHidden = show;
     UpdateFiles();
 }
 
-long wxFileList::Add( wxFileData *fd, wxListItem &item )
+long wxFileListCtrl::Add( wxFileData *fd, wxListItem &item )
 {
     long ret = -1;
     item.m_mask = wxLIST_MASK_TEXT + wxLIST_MASK_DATA + wxLIST_MASK_IMAGE;
@@ -505,7 +505,7 @@ long wxFileList::Add( wxFileData *fd, wxListItem &item )
     return ret;
 }
 
-void wxFileList::UpdateItem(const wxListItem &item)
+void wxFileListCtrl::UpdateItem(const wxListItem &item)
 {
     wxFileData *fd = (wxFileData*)GetItemData(item);
     wxCHECK_RET(fd, wxT("invalid filedata"));
@@ -522,7 +522,7 @@ void wxFileList::UpdateItem(const wxListItem &item)
     }
 }
 
-void wxFileList::UpdateFiles()
+void wxFileListCtrl::UpdateFiles()
 {
     // don't do anything before ShowModal() call which sets m_dirName
     if ( m_dirName == wxT("*") )
@@ -629,7 +629,7 @@ void wxFileList::UpdateFiles()
     SortItems(m_sort_field, m_sort_foward);
 }
 
-void wxFileList::SetWild( const wxString &wild )
+void wxFileListCtrl::SetWild( const wxString &wild )
 {
     if (wild.Find(wxT('|')) != wxNOT_FOUND)
         return;
@@ -638,7 +638,7 @@ void wxFileList::SetWild( const wxString &wild )
     UpdateFiles();
 }
 
-void wxFileList::MakeDir()
+void wxFileListCtrl::MakeDir()
 {
     wxString new_name( _("NewName") );
     wxString path( m_dirName );
@@ -686,7 +686,7 @@ void wxFileList::MakeDir()
         delete fd;
 }
 
-void wxFileList::GoToParentDir()
+void wxFileListCtrl::GoToParentDir()
 {
     if (!IsTopMostDir(m_dirName))
     {
@@ -717,13 +717,13 @@ void wxFileList::GoToParentDir()
     }
 }
 
-void wxFileList::GoToHomeDir()
+void wxFileListCtrl::GoToHomeDir()
 {
     wxString s = wxGetUserHome( wxString() );
     GoToDir(s);
 }
 
-void wxFileList::GoToDir( const wxString &dir )
+void wxFileListCtrl::GoToDir( const wxString &dir )
 {
     if (!wxDirExists(dir)) return;
 
@@ -737,7 +737,7 @@ void wxFileList::GoToDir( const wxString &dir )
     EnsureVisible( 0 );
 }
 
-void wxFileList::FreeItemData(wxListItem& item)
+void wxFileListCtrl::FreeItemData(wxListItem& item)
 {
     if ( item.m_data )
     {
@@ -748,17 +748,17 @@ void wxFileList::FreeItemData(wxListItem& item)
     }
 }
 
-void wxFileList::OnListDeleteItem( wxListEvent &event )
+void wxFileListCtrl::OnListDeleteItem( wxListEvent &event )
 {
     FreeItemData(event.m_item);
 }
 
-void wxFileList::OnListDeleteAllItems( wxListEvent & WXUNUSED(event) )
+void wxFileListCtrl::OnListDeleteAllItems( wxListEvent & WXUNUSED(event) )
 {
     FreeAllItemsData();
 }
 
-void wxFileList::FreeAllItemsData()
+void wxFileListCtrl::FreeAllItemsData()
 {
     wxListItem item;
     item.m_mask = wxLIST_MASK_DATA;
@@ -772,7 +772,7 @@ void wxFileList::FreeAllItemsData()
     }
 }
 
-void wxFileList::OnListEndLabelEdit( wxListEvent &event )
+void wxFileListCtrl::OnListEndLabelEdit( wxListEvent &event )
 {
     wxFileData *fd = (wxFileData*)event.m_item.m_data;
     wxASSERT( fd );
@@ -820,7 +820,7 @@ void wxFileList::OnListEndLabelEdit( wxListEvent &event )
     }
 }
 
-void wxFileList::OnListColClick( wxListEvent &event )
+void wxFileListCtrl::OnListColClick( wxListEvent &event )
 {
     int col = event.GetColumn();
 
@@ -841,7 +841,7 @@ void wxFileList::OnListColClick( wxListEvent &event )
     SortItems(m_sort_field, m_sort_foward);
 }
 
-void wxFileList::SortItems(wxFileData::fileListFieldType field, bool forward)
+void wxFileListCtrl::SortItems(wxFileData::fileListFieldType field, bool forward)
 {
     m_sort_field = field;
     m_sort_foward = forward;
@@ -868,11 +868,11 @@ void wxFileList::SortItems(wxFileData::fileListFieldType field, bool forward)
     }
 }
 
-wxFileList::~wxFileList()
+wxFileListCtrl::~wxFileListCtrl()
 {
     // Normally the data are freed via an EVT_LIST_DELETE_ALL_ITEMS event and
-    // wxFileList::OnListDeleteAllItems. But if the event is generated after
-    // the destruction of the wxFileList we need to free any data here:
+    // wxFileListCtrl::OnListDeleteAllItems. But if the event is generated after
+    // the destruction of the wxFileListCtrl we need to free any data here:
     FreeAllItemsData();
 }
 
@@ -959,10 +959,10 @@ bool wxGenericFileCtrl::Create( wxWindow *parent,
     style2 |= wxSUNKEN_BORDER;
 #endif
 
-    m_list = new wxFileList( this, ID_FILELIST_CTRL,
-                             wxEmptyString, false,
-                             wxDefaultPosition, wxSize( 400, 140 ),
-                             style2 );
+    m_list = new wxFileListCtrl( this, ID_FILELIST_CTRL,
+                                 wxEmptyString, false,
+                                 wxDefaultPosition, wxSize( 400, 140 ),
+                                 style2 );
 
     m_text = new wxTextCtrl( this, ID_TEXT, wxEmptyString,
                              wxDefaultPosition, wxDefaultSize,
