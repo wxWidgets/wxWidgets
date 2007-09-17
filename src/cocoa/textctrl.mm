@@ -24,6 +24,7 @@
 
 #import <Foundation/NSString.h>
 #import <AppKit/NSTextField.h>
+#import <AppKit/NSSecureTextField.h>
 #import <AppKit/NSCell.h>
 
 #include <math.h>
@@ -45,7 +46,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID winid,
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
     m_cocoaNSView = NULL;
-    SetNSTextField([[NSTextField alloc] initWithFrame:MakeDefaultNSRect(size)]);
+    SetNSTextField([(style & wxTE_PASSWORD)?[NSSecureTextField alloc]:[NSTextField alloc] initWithFrame:MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
     [GetNSTextField() setStringValue:wxNSStringWithWxString(value)];
 
