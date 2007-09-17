@@ -100,7 +100,7 @@ public:
     virtual int GetFilterIndex() const { return m_fc.GetFilterIndex(); }
 
     virtual bool HasMultipleFileSelection() const { return HasFlag( wxFC_MULTIPLE ); }
-    virtual void ShowHidden(const bool show);
+    virtual void ShowHidden(bool show);
 
     bool    m_checkNextSelEvent;
     bool    m_ignoreNextFolderChangeEvent;

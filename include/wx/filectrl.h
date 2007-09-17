@@ -66,7 +66,7 @@ public:
     virtual int GetFilterIndex() const = 0;
 
     virtual bool HasMultipleFileSelection() const = 0;
-    virtual void ShowHidden(const bool show) = 0;
+    virtual void ShowHidden(bool show) = 0;
 };
 
 void GenerateFolderChangedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd );
@@ -104,17 +104,17 @@ public:
     // no need for the copy constructor as the default one will be fine.
     virtual wxEvent *Clone() const { return new wxFileCtrlEvent( *this ); }
 
-    void SetFiles( const wxArrayString &files ) { this->files = files; }
-    void SetDirectory( const wxString &directory ) { this->directory = directory; }
+    void SetFiles( const wxArrayString &files ) { m_files = files; }
+    void SetDirectory( const wxString &directory ) { m_directory = directory; }
 
-    wxArrayString GetFiles() const { return files; }
-    wxString GetDirectory() const { return directory; }
+    wxArrayString GetFiles() const { return m_files; }
+    wxString GetDirectory() const { return m_directory; }
 
     wxString GetFile() const;
 
 protected:
-    wxString  directory;
-    wxArrayString files;
+    wxString m_directory;
+    wxArrayString m_files;
 
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN( wxFileCtrlEvent )
 };

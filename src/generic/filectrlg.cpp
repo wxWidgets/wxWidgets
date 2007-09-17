@@ -224,7 +224,7 @@ void wxFileData::ReadData()
 
 #if defined(__UNIX__) && (!defined( __OS2__ ) && !defined(__VMS))
     lstat( m_filePath.fn_str(), &buff );
-    m_type |= S_ISLNK( buff.st_mode ) != 0 ? is_link : 0;
+    m_type |= S_ISLNK(buff.st_mode) ? is_link : 0;
 #else // no lstat()
     // only translate to file charset if we don't go by our
     // wxStat implementation
@@ -393,6 +393,7 @@ void wxFileData::MakeItem( wxListItem &item )
 //  wxFileListCtrl
 //-----------------------------------------------------------------------------
 
+// FIXME: what is this for? It's never read
 static bool ignoreChanges = false;
 
 IMPLEMENT_DYNAMIC_CLASS(wxFileListCtrl,wxListCtrl)
@@ -408,7 +409,7 @@ END_EVENT_TABLE()
 wxFileListCtrl::wxFileListCtrl()
 {
     m_showHidden = false;
-    m_sort_foward = 1;
+    m_sort_forward = true;
     m_sort_field = wxFileData::FileList_Name;
 }
 
@@ -430,7 +431,7 @@ wxFileListCtrl::wxFileListCtrl(wxWindow *win,
 
     m_showHidden = showHidden;
 
-    m_sort_foward = 1;
+    m_sort_forward = true;
     m_sort_field = wxFileData::FileList_Name;
 
     m_dirName = wxT("*");
@@ -626,7 +627,7 @@ void wxFileListCtrl::UpdateFiles()
         }
     }
 
-    SortItems(m_sort_field, m_sort_foward);
+    SortItems(m_sort_field, m_sort_forward);
 }
 
 void wxFileListCtrl::SetWild( const wxString &wild )
@@ -677,7 +678,7 @@ void wxFileListCtrl::MakeDir()
 
     if (id != -1)
     {
-        SortItems(m_sort_field, m_sort_foward);
+        SortItems(m_sort_field, m_sort_forward);
         id = FindItem( 0, wxPtrToUInt(fd) );
         EnsureVisible( id );
         EditLabel( id );
@@ -834,17 +835,17 @@ void wxFileListCtrl::OnListColClick( wxListEvent &event )
     }
 
     if ((wxFileData::fileListFieldType)col == m_sort_field)
-        m_sort_foward = !m_sort_foward;
+        m_sort_forward = !m_sort_forward;
     else
         m_sort_field = (wxFileData::fileListFieldType)col;
 
-    SortItems(m_sort_field, m_sort_foward);
+    SortItems(m_sort_field, m_sort_forward);
 }
 
 void wxFileListCtrl::SortItems(wxFileData::fileListFieldType field, bool forward)
 {
     m_sort_field = field;
-    m_sort_foward = forward;
+    m_sort_forward = forward;
     const long sort_dir = forward ? 1 : -1;
 
     switch (m_sort_field)

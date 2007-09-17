@@ -161,8 +161,8 @@ public:
     void OnListEndLabelEdit( wxListEvent &event );
     void OnListColClick( wxListEvent &event );
 
-    virtual void SortItems(wxFileData::fileListFieldType field, bool foward);
-    bool GetSortDirection() const { return m_sort_foward; }
+    virtual void SortItems(wxFileData::fileListFieldType field, bool forward);
+    bool GetSortDirection() const { return m_sort_forward; }
     wxFileData::fileListFieldType GetSortField() const { return m_sort_field; }
 
 protected:
@@ -173,7 +173,7 @@ protected:
     bool          m_showHidden;
     wxString      m_wild;
 
-    bool m_sort_foward;
+    bool m_sort_forward;
     wxFileData::fileListFieldType m_sort_field;
 
 private:
@@ -237,7 +237,7 @@ public:
     virtual int GetFilterIndex() const { return m_filterIndex; }
 
     virtual bool HasMultipleFileSelection() const { return m_style & wxFC_MULTIPLE; }
-    virtual void ShowHidden(const bool show) { m_list->ShowHidden( show ); }
+    virtual void ShowHidden(bool show) { m_list->ShowHidden( show ); }
 
     void GoToParentDir();
     void GoToHomeDir();

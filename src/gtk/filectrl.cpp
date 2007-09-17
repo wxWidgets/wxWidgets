@@ -45,10 +45,10 @@ wxString wxGtkFileChooser::GetPath() const
 {
     wxGtkString str( gtk_file_chooser_get_filename( m_widget ) );
 
-    if ( str.c_str() == NULL )
-        return wxEmptyString;
-
-    return wxConvFileName->cMB2WX( str );
+    wxString string;
+    if (str.c_str() != NULL)
+        string = wxConvFileName->cMB2WX(str);
+    return string;
 }
 
 void wxGtkFileChooser::GetFilenames( wxArrayString& files ) const
@@ -95,7 +95,7 @@ bool wxGtkFileChooser::SetDirectory( const wxString& dir )
     const gboolean b =
         gtk_file_chooser_set_current_folder( m_widget,
                                              wxConvFileName->cWX2MB( dir.c_str() ) );
-    return b == TRUE;
+    return b != 0;
 }
 
 wxString wxGtkFileChooser::GetDirectory() const
@@ -282,19 +282,13 @@ bool wxGtkFileCtrl::Create( wxWindow *parent,
         return false;
     }
 
-    GtkFileChooserAction gtkAction;
+    GtkFileChooserAction gtkAction = GTK_FILE_CHOOSER_ACTION_OPEN;
 
     if ( style & wxFC_SAVE )
-    {
         gtkAction = GTK_FILE_CHOOSER_ACTION_SAVE;
-    }
-    else if ( style & wxFC_OPEN )
-    {
-        gtkAction = GTK_FILE_CHOOSER_ACTION_OPEN;
-    }
 
     m_widget =  gtk_alignment_new ( 0, 0, 1, 1 );
-    m_fcWidget = GTK_FILE_CHOOSER( gtk_file_chooser_widget_new( GTK_FILE_CHOOSER_ACTION_OPEN ) );
+    m_fcWidget = GTK_FILE_CHOOSER( gtk_file_chooser_widget_new(gtkAction) );
     gtk_widget_show ( GTK_WIDGET( m_fcWidget ) );
     gtk_container_add ( GTK_CONTAINER ( m_widget ), GTK_WIDGET( m_fcWidget ) );
 
@@ -426,9 +420,9 @@ void wxGtkFileCtrl::GetFilenames( wxArrayString& files ) const
     m_fc.GetFilenames( files );
 }
 
-void wxGtkFileCtrl::ShowHidden(const bool show)
+void wxGtkFileCtrl::ShowHidden(bool show)
 {
-    gtk_file_chooser_set_show_hidden( m_fcWidget, ( show == true ) ? TRUE : FALSE );
+    gtk_file_chooser_set_show_hidden(m_fcWidget, show);
 }
 
 #endif 
