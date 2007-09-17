@@ -198,7 +198,6 @@ void GSocketGUIFunctionsTableConcrete::Uninstall_Callback(GSocket *socket,
       {
           dispatcher->UnregisterFD(fd);
           delete handler;
-          socket->m_handler = NULL;
       }
       else
       {

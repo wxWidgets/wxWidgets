@@ -50,8 +50,6 @@ public:
     GAddress *GetPeer();
     GSocketError SetServer();
     GSocket *WaitConnection();
-    // not used under Mac
-    void Notify(bool WXUNUSED(enable)) { }
     bool SetReusable() { return false; }
     GSocketError SetNonOriented();
     GSocketError Connect(GSocketStream stream);

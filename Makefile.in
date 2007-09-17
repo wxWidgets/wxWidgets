@@ -718,7 +718,6 @@ ALL_BASE_SOURCES =  \
 	src/common/xtistrm.cpp \
 	src/common/zipstrm.cpp \
 	src/common/zstream.cpp \
-	src/common/gsocketiohandler.cpp \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
 	src/unix/appunix.cpp \
@@ -800,7 +799,6 @@ ALL_BASE_SOURCES =  \
 	src/common/url.cpp \
 	src/unix/gsocket.cpp \
 	src/msw/gsocket.cpp \
-	src/msw/gsockmsw.cpp \
 	src/msw/urlmsw.cpp \
 	$(NET_WINCE_SRC) \
 	src/xml/xml.cpp \
@@ -3489,7 +3487,6 @@ COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_utilsexc.o
 @COND_PLATFORM_OS2_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS)
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
-	monodll_gsocketiohandler.o \
 	monodll_fdiodispatcher.o \
 	monodll_selectdispatcher.o \
 	monodll_appunix.o \
@@ -3527,7 +3524,6 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS)
 @COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS = monodll_time.o
 COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS =  \
-	monodll_gsocketiohandler.o \
 	monodll_fdiodispatcher.o \
 	monodll_selectdispatcher.o \
 	monodll_appunix.o \
@@ -3548,7 +3544,6 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_utilsexc_base.o
 @COND_TOOLKIT_@__BASE_MACOSX_SRC_OBJECTS = $(COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS)
 COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS =  \
-	monodll_gsocketiohandler.o \
 	monodll_fdiodispatcher.o \
 	monodll_selectdispatcher.o \
 	monodll_appunix.o \
@@ -3569,7 +3564,6 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_utilsexc_base.o
 @COND_TOOLKIT_COCOA@__BASE_MACOSX_SRC_OBJECTS = $(COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS)
 COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS =  \
-	monodll_gsocketiohandler.o \
 	monodll_fdiodispatcher.o \
 	monodll_selectdispatcher.o \
 	monodll_appunix.o \
@@ -3611,7 +3605,6 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_timerunx.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS)
 COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS =  \
-	monodll_gsocketiohandler.o \
 	monodll_fdiodispatcher.o \
 	monodll_selectdispatcher.o \
 	monodll_appunix.o \
@@ -3632,7 +3625,6 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_utilsexc_base.o
 @COND_TOOLKIT_MOTIF@__BASE_MACOSX_SRC_OBJECTS = $(COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS)
 COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS =  \
-	monodll_gsocketiohandler.o \
 	monodll_fdiodispatcher.o \
 	monodll_selectdispatcher.o \
 	monodll_appunix.o \
@@ -3666,12 +3658,9 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS =  \
 @COND_PLATFORM_MACOS_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
-COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS =  \
-	monodll_gsocket.o \
-	monodll_gsockmsw.o \
-	monodll_urlmsw.o \
-	$(__NET_WINCE_SRC_OBJECTS)
-@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS)
+@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS = \
+@COND_PLATFORM_WIN32_1@	monodll_gsocket.o monodll_urlmsw.o \
+@COND_PLATFORM_WIN32_1@	$(__NET_WINCE_SRC_OBJECTS)
 @COND_TOOLKIT_WINCE@__NET_WINCE_SRC_OBJECTS = monodll_net.o
 COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	$(__CORE_SRC_OBJECTS) \
@@ -4098,6 +4087,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 @COND_TOOLKIT_COCOA@	monodll_gsockosx.o monodll_hid.o monodll_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_fontmgrcmn.o \
+	monodll_gsocketiohandler.o \
 	monodll_caret.o \
 	monodll_colour.o \
 	monodll_icon.o \
@@ -4278,6 +4268,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_gdiobj.o \
 	monodll_gdiplus.o \
 	monodll_graphics.o \
+	monodll_gsockmsw.o \
 	monodll_icon.o \
 	monodll_imaglist.o \
 	monodll_minifram.o \
@@ -4329,6 +4320,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_gdiobj.o \
 	monodll_gdiplus.o \
 	monodll_graphics.o \
+	monodll_gsockmsw.o \
 	monodll_icon.o \
 	monodll_imaglist.o \
 	monodll_minifram.o \
@@ -4358,6 +4350,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_fontutil.o \
 	monodll_utilsx11.o \
 	monodll_displayx11.o \
+	monodll_gsocketiohandler.o \
 	monodll_icon.o \
 	monodll_timer.o \
 	monodll_app.o \
@@ -4926,6 +4919,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 @COND_TOOLKIT_COCOA@	monodll_gsockosx.o monodll_hid.o monodll_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_fontmgrcmn.o \
+	monodll_gsocketiohandler.o \
 	monodll_caret.o \
 	monodll_colour.o \
 	monodll_icon.o \
@@ -5106,6 +5100,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_gdiobj.o \
 	monodll_gdiplus.o \
 	monodll_graphics.o \
+	monodll_gsockmsw.o \
 	monodll_icon.o \
 	monodll_imaglist.o \
 	monodll_minifram.o \
@@ -5157,6 +5152,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_gdiobj.o \
 	monodll_gdiplus.o \
 	monodll_graphics.o \
+	monodll_gsockmsw.o \
 	monodll_icon.o \
 	monodll_imaglist.o \
 	monodll_minifram.o \
@@ -5186,6 +5182,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_fontutil.o \
 	monodll_utilsx11.o \
 	monodll_displayx11.o \
+	monodll_gsocketiohandler.o \
 	monodll_icon.o \
 	monodll_timer.o \
 	monodll_app.o \
@@ -5344,7 +5341,6 @@ COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_utilsexc.o
 @COND_PLATFORM_OS2_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_1)
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
-	monolib_gsocketiohandler.o \
 	monolib_fdiodispatcher.o \
 	monolib_selectdispatcher.o \
 	monolib_appunix.o \
@@ -5382,7 +5378,6 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1)
 @COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_1 = monolib_time.o
 COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_1 =  \
-	monolib_gsocketiohandler.o \
 	monolib_fdiodispatcher.o \
 	monolib_selectdispatcher.o \
 	monolib_appunix.o \
@@ -5403,7 +5398,6 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_utilsexc_base.o
 @COND_TOOLKIT_@__BASE_MACOSX_SRC_OBJECTS_1 = $(COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_1)
 COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_1 =  \
-	monolib_gsocketiohandler.o \
 	monolib_fdiodispatcher.o \
 	monolib_selectdispatcher.o \
 	monolib_appunix.o \
@@ -5424,7 +5418,6 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_utilsexc_base.o
 @COND_TOOLKIT_COCOA@__BASE_MACOSX_SRC_OBJECTS_1 = $(COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_1 =  \
-	monolib_gsocketiohandler.o \
 	monolib_fdiodispatcher.o \
 	monolib_selectdispatcher.o \
 	monolib_appunix.o \
@@ -5466,7 +5459,6 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_timerunx.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS_1 = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_1)
 COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_1 =  \
-	monolib_gsocketiohandler.o \
 	monolib_fdiodispatcher.o \
 	monolib_selectdispatcher.o \
 	monolib_appunix.o \
@@ -5487,7 +5479,6 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_utilsexc_base.o
 @COND_TOOLKIT_MOTIF@__BASE_MACOSX_SRC_OBJECTS_1 = $(COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_1)
 COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_1 =  \
-	monolib_gsocketiohandler.o \
 	monolib_fdiodispatcher.o \
 	monolib_selectdispatcher.o \
 	monolib_appunix.o \
@@ -5521,12 +5512,9 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_1 =  \
 @COND_PLATFORM_MACOS_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
-COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_1 =  \
-	monolib_gsocket.o \
-	monolib_gsockmsw.o \
-	monolib_urlmsw.o \
-	$(__NET_WINCE_SRC_OBJECTS_1)
-@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_1)
+@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_1 \
+@COND_PLATFORM_WIN32_1@	= monolib_gsocket.o monolib_urlmsw.o \
+@COND_PLATFORM_WIN32_1@	$(__NET_WINCE_SRC_OBJECTS_1)
 @COND_TOOLKIT_WINCE@__NET_WINCE_SRC_OBJECTS_1 = monolib_net.o
 COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	$(__CORE_SRC_OBJECTS_1) \
@@ -5953,6 +5941,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_COCOA@	monolib_gsockosx.o monolib_hid.o monolib_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_fontmgrcmn.o \
+	monolib_gsocketiohandler.o \
 	monolib_caret.o \
 	monolib_colour.o \
 	monolib_icon.o \
@@ -6134,6 +6123,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_gdiobj.o \
 	monolib_gdiplus.o \
 	monolib_graphics.o \
+	monolib_gsockmsw.o \
 	monolib_icon.o \
 	monolib_imaglist.o \
 	monolib_minifram.o \
@@ -6185,6 +6175,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_gdiobj.o \
 	monolib_gdiplus.o \
 	monolib_graphics.o \
+	monolib_gsockmsw.o \
 	monolib_icon.o \
 	monolib_imaglist.o \
 	monolib_minifram.o \
@@ -6214,6 +6205,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_fontutil.o \
 	monolib_utilsx11.o \
 	monolib_displayx11.o \
+	monolib_gsocketiohandler.o \
 	monolib_icon.o \
 	monolib_timer.o \
 	monolib_app.o \
@@ -6782,6 +6774,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_COCOA@	monolib_gsockosx.o monolib_hid.o monolib_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_fontmgrcmn.o \
+	monolib_gsocketiohandler.o \
 	monolib_caret.o \
 	monolib_colour.o \
 	monolib_icon.o \
@@ -6963,6 +6956,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_gdiobj.o \
 	monolib_gdiplus.o \
 	monolib_graphics.o \
+	monolib_gsockmsw.o \
 	monolib_icon.o \
 	monolib_imaglist.o \
 	monolib_minifram.o \
@@ -7014,6 +7008,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_gdiobj.o \
 	monolib_gdiplus.o \
 	monolib_graphics.o \
+	monolib_gsockmsw.o \
 	monolib_icon.o \
 	monolib_imaglist.o \
 	monolib_minifram.o \
@@ -7043,6 +7038,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_fontutil.o \
 	monolib_utilsx11.o \
 	monolib_displayx11.o \
+	monolib_gsocketiohandler.o \
 	monolib_icon.o \
 	monolib_timer.o \
 	monolib_app.o \
@@ -7236,7 +7232,6 @@ COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_utilsexc.o
 @COND_PLATFORM_OS2_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_2)
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
-	basedll_gsocketiohandler.o \
 	basedll_fdiodispatcher.o \
 	basedll_selectdispatcher.o \
 	basedll_appunix.o \
@@ -7274,7 +7269,6 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2)
 @COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_2 = basedll_time.o
 COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_2 =  \
-	basedll_gsocketiohandler.o \
 	basedll_fdiodispatcher.o \
 	basedll_selectdispatcher.o \
 	basedll_appunix.o \
@@ -7295,7 +7289,6 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_utilsexc_base.o
 @COND_TOOLKIT_@__BASE_MACOSX_SRC_OBJECTS_2 = $(COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_2)
 COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_2 =  \
-	basedll_gsocketiohandler.o \
 	basedll_fdiodispatcher.o \
 	basedll_selectdispatcher.o \
 	basedll_appunix.o \
@@ -7316,7 +7309,6 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_utilsexc_base.o
 @COND_TOOLKIT_COCOA@__BASE_MACOSX_SRC_OBJECTS_2 = $(COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_2 =  \
-	basedll_gsocketiohandler.o \
 	basedll_fdiodispatcher.o \
 	basedll_selectdispatcher.o \
 	basedll_appunix.o \
@@ -7358,7 +7350,6 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_timerunx.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS_2 = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_2)
 COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_2 =  \
-	basedll_gsocketiohandler.o \
 	basedll_fdiodispatcher.o \
 	basedll_selectdispatcher.o \
 	basedll_appunix.o \
@@ -7379,7 +7370,6 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_utilsexc_base.o
 @COND_TOOLKIT_MOTIF@__BASE_MACOSX_SRC_OBJECTS_2 = $(COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_2)
 COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_2 =  \
-	basedll_gsocketiohandler.o \
 	basedll_fdiodispatcher.o \
 	basedll_selectdispatcher.o \
 	basedll_appunix.o \
@@ -7455,7 +7445,6 @@ COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_utilsexc.o
 @COND_PLATFORM_OS2_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_3)
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
-	baselib_gsocketiohandler.o \
 	baselib_fdiodispatcher.o \
 	baselib_selectdispatcher.o \
 	baselib_appunix.o \
@@ -7493,7 +7482,6 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3)
 @COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_3 = baselib_time.o
 COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_3 =  \
-	baselib_gsocketiohandler.o \
 	baselib_fdiodispatcher.o \
 	baselib_selectdispatcher.o \
 	baselib_appunix.o \
@@ -7514,7 +7502,6 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_utilsexc_base.o
 @COND_TOOLKIT_@__BASE_MACOSX_SRC_OBJECTS_3 = $(COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_3)
 COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_3 =  \
-	baselib_gsocketiohandler.o \
 	baselib_fdiodispatcher.o \
 	baselib_selectdispatcher.o \
 	baselib_appunix.o \
@@ -7535,7 +7522,6 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_utilsexc_base.o
 @COND_TOOLKIT_COCOA@__BASE_MACOSX_SRC_OBJECTS_3 = $(COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_3 =  \
-	baselib_gsocketiohandler.o \
 	baselib_fdiodispatcher.o \
 	baselib_selectdispatcher.o \
 	baselib_appunix.o \
@@ -7577,7 +7563,6 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_timerunx.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS_3 = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_3)
 COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_3 =  \
-	baselib_gsocketiohandler.o \
 	baselib_fdiodispatcher.o \
 	baselib_selectdispatcher.o \
 	baselib_appunix.o \
@@ -7598,7 +7583,6 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_utilsexc_base.o
 @COND_TOOLKIT_MOTIF@__BASE_MACOSX_SRC_OBJECTS_3 = $(COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_3)
 COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_3 =  \
-	baselib_gsocketiohandler.o \
 	baselib_fdiodispatcher.o \
 	baselib_selectdispatcher.o \
 	baselib_appunix.o \
@@ -7684,12 +7668,9 @@ COND_USE_SOSYMLINKS_1___netdll___so_symlinks_uninst_cmd = rm -f \
 @COND_PLATFORM_MACOS_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
-COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_2 =  \
-	netdll_gsocket.o \
-	netdll_gsockmsw.o \
-	netdll_urlmsw.o \
-	$(__NET_WINCE_SRC_OBJECTS_2)
-@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_2)
+@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_2 \
+@COND_PLATFORM_WIN32_1@	= netdll_gsocket.o netdll_urlmsw.o \
+@COND_PLATFORM_WIN32_1@	$(__NET_WINCE_SRC_OBJECTS_2)
 @COND_TOOLKIT_WINCE@__NET_WINCE_SRC_OBJECTS_2 = netdll_net.o
 COND_MONOLITHIC_0_SHARED_0___netlib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
@@ -7705,12 +7686,9 @@ COND_MONOLITHIC_0_SHARED_0___netlib___depname = \
 @COND_PLATFORM_MACOS_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
-COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_3 =  \
-	netlib_gsocket.o \
-	netlib_gsockmsw.o \
-	netlib_urlmsw.o \
-	$(__NET_WINCE_SRC_OBJECTS_3)
-@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_3)
+@COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_3 \
+@COND_PLATFORM_WIN32_1@	= netlib_gsocket.o netlib_urlmsw.o \
+@COND_PLATFORM_WIN32_1@	$(__NET_WINCE_SRC_OBJECTS_3)
 @COND_TOOLKIT_WINCE@__NET_WINCE_SRC_OBJECTS_3 = netlib_net.o
 @COND_SHARED_1@____wxnet_namedll_DEP = $(__netdll___depname)
 @COND_SHARED_0@____wxnet_namelib_DEP = $(__netlib___depname)
@@ -8092,6 +8070,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_COCOA@	coredll_gsockosx.o coredll_hid.o coredll_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_fontmgrcmn.o \
+	coredll_gsocketiohandler.o \
 	coredll_caret.o \
 	coredll_colour.o \
 	coredll_icon.o \
@@ -8273,6 +8252,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_gdiobj.o \
 	coredll_gdiplus.o \
 	coredll_graphics.o \
+	coredll_gsockmsw.o \
 	coredll_icon.o \
 	coredll_imaglist.o \
 	coredll_minifram.o \
@@ -8324,6 +8304,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_gdiobj.o \
 	coredll_gdiplus.o \
 	coredll_graphics.o \
+	coredll_gsockmsw.o \
 	coredll_icon.o \
 	coredll_imaglist.o \
 	coredll_minifram.o \
@@ -8353,6 +8334,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_fontutil.o \
 	coredll_utilsx11.o \
 	coredll_displayx11.o \
+	coredll_gsocketiohandler.o \
 	coredll_icon.o \
 	coredll_timer.o \
 	coredll_app.o \
@@ -8921,6 +8903,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_COCOA@	coredll_gsockosx.o coredll_hid.o coredll_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_fontmgrcmn.o \
+	coredll_gsocketiohandler.o \
 	coredll_caret.o \
 	coredll_colour.o \
 	coredll_icon.o \
@@ -9102,6 +9085,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_gdiobj.o \
 	coredll_gdiplus.o \
 	coredll_graphics.o \
+	coredll_gsockmsw.o \
 	coredll_icon.o \
 	coredll_imaglist.o \
 	coredll_minifram.o \
@@ -9153,6 +9137,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_gdiobj.o \
 	coredll_gdiplus.o \
 	coredll_graphics.o \
+	coredll_gsockmsw.o \
 	coredll_icon.o \
 	coredll_imaglist.o \
 	coredll_minifram.o \
@@ -9182,6 +9167,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_fontutil.o \
 	coredll_utilsx11.o \
 	coredll_displayx11.o \
+	coredll_gsocketiohandler.o \
 	coredll_icon.o \
 	coredll_timer.o \
 	coredll_app.o \
@@ -9549,6 +9535,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_COCOA@	corelib_gsockosx.o corelib_hid.o corelib_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_fontmgrcmn.o \
+	corelib_gsocketiohandler.o \
 	corelib_caret.o \
 	corelib_colour.o \
 	corelib_icon.o \
@@ -9730,6 +9717,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_gdiobj.o \
 	corelib_gdiplus.o \
 	corelib_graphics.o \
+	corelib_gsockmsw.o \
 	corelib_icon.o \
 	corelib_imaglist.o \
 	corelib_minifram.o \
@@ -9781,6 +9769,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_gdiobj.o \
 	corelib_gdiplus.o \
 	corelib_graphics.o \
+	corelib_gsockmsw.o \
 	corelib_icon.o \
 	corelib_imaglist.o \
 	corelib_minifram.o \
@@ -9810,6 +9799,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_fontutil.o \
 	corelib_utilsx11.o \
 	corelib_displayx11.o \
+	corelib_gsocketiohandler.o \
 	corelib_icon.o \
 	corelib_timer.o \
 	corelib_app.o \
@@ -10378,6 +10368,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_COCOA@	corelib_gsockosx.o corelib_hid.o corelib_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_fontmgrcmn.o \
+	corelib_gsocketiohandler.o \
 	corelib_caret.o \
 	corelib_colour.o \
 	corelib_icon.o \
@@ -10559,6 +10550,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_gdiobj.o \
 	corelib_gdiplus.o \
 	corelib_graphics.o \
+	corelib_gsockmsw.o \
 	corelib_icon.o \
 	corelib_imaglist.o \
 	corelib_minifram.o \
@@ -10610,6 +10602,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_gdiobj.o \
 	corelib_gdiplus.o \
 	corelib_graphics.o \
+	corelib_gsockmsw.o \
 	corelib_icon.o \
 	corelib_imaglist.o \
 	corelib_minifram.o \
@@ -10639,6 +10632,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_fontutil.o \
 	corelib_utilsx11.o \
 	corelib_displayx11.o \
+	corelib_gsocketiohandler.o \
 	corelib_icon.o \
 	corelib_timer.o \
 	corelib_app.o \
@@ -13852,9 +13846,6 @@ monodll_socket.o: $(srcdir)/src/common/socket.cpp $(MONODLL_ODEP)
 monodll_url.o: $(srcdir)/src/common/url.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/url.cpp
 
-monodll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
-
 monodll_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/urlmsw.cpp
 
@@ -14376,24 +14367,6 @@ monodll_xtixml.o: $(srcdir)/src/common/xtixml.cpp $(MONODLL_ODEP)
 
 monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/sound_sdl.cpp
-
-@COND_PLATFORM_UNIX_1@monodll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@monodll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monodll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@monodll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@monodll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_@monodll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
 
 @COND_PLATFORM_UNIX_1@monodll_fdiodispatcher.o: $(srcdir)/src/common/fdiodispatcher.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fdiodispatcher.cpp
@@ -15940,6 +15913,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_graphics.o: $(srcdir)/src/mac/carbon/graphics.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/graphics.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_dropsrc.o: $(srcdir)/src/msw/ole/dropsrc.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/dropsrc.cpp
 
@@ -16041,6 +16020,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_COCOA_USE_GUI_1@monodll_utilsexc_cf.o: $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monodll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_nanox.o: $(srcdir)/src/x11/nanox.c $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/x11/nanox.c
@@ -18208,9 +18193,6 @@ monolib_socket.o: $(srcdir)/src/common/socket.cpp $(MONOLIB_ODEP)
 monolib_url.o: $(srcdir)/src/common/url.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/url.cpp
 
-monolib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
-
 monolib_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/urlmsw.cpp
 
@@ -18732,24 +18714,6 @@ monolib_xtixml.o: $(srcdir)/src/common/xtixml.cpp $(MONOLIB_ODEP)
 
 monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/sound_sdl.cpp
-
-@COND_PLATFORM_UNIX_1@monolib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@monolib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monolib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@monolib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@monolib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_@monolib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
 
 @COND_PLATFORM_UNIX_1@monolib_fdiodispatcher.o: $(srcdir)/src/common/fdiodispatcher.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fdiodispatcher.cpp
@@ -20296,6 +20260,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_graphics.o: $(srcdir)/src/mac/carbon/graphics.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/graphics.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_dropsrc.o: $(srcdir)/src/msw/ole/dropsrc.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/dropsrc.cpp
 
@@ -20397,6 +20367,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_COCOA_USE_GUI_1@monolib_utilsexc_cf.o: $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monolib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_nanox.o: $(srcdir)/src/x11/nanox.c $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/x11/nanox.c
@@ -22543,24 +22519,6 @@ basedll_volume.o: $(srcdir)/src/msw/volume.cpp $(BASEDLL_ODEP)
 basedll_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/uma.cpp
 
-@COND_PLATFORM_UNIX_1@basedll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@basedll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@basedll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@basedll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@basedll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_@basedll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
 @COND_PLATFORM_UNIX_1@basedll_fdiodispatcher.o: $(srcdir)/src/common/fdiodispatcher.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/fdiodispatcher.cpp
 
@@ -23329,24 +23287,6 @@ baselib_volume.o: $(srcdir)/src/msw/volume.cpp $(BASELIB_ODEP)
 baselib_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/uma.cpp
 
-@COND_PLATFORM_UNIX_1@baselib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@baselib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@baselib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@baselib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@baselib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_@baselib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
 @COND_PLATFORM_UNIX_1@baselib_fdiodispatcher.o: $(srcdir)/src/common/fdiodispatcher.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/fdiodispatcher.cpp
 
@@ -23836,9 +23776,6 @@ netdll_socket.o: $(srcdir)/src/common/socket.cpp $(NETDLL_ODEP)
 netdll_url.o: $(srcdir)/src/common/url.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/common/url.cpp
 
-netdll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(NETDLL_ODEP)
-	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
-
 netdll_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/msw/urlmsw.cpp
 
@@ -23889,9 +23826,6 @@ netlib_socket.o: $(srcdir)/src/common/socket.cpp $(NETLIB_ODEP)
 
 netlib_url.o: $(srcdir)/src/common/url.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/common/url.cpp
-
-netlib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(NETLIB_ODEP)
-	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
 
 netlib_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/msw/urlmsw.cpp
@@ -25219,6 +25153,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_graphics.o: $(srcdir)/src/mac/carbon/graphics.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/graphics.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@coredll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@coredll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_dropsrc.o: $(srcdir)/src/msw/ole/dropsrc.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/dropsrc.cpp
 
@@ -25320,6 +25260,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_COCOA_USE_GUI_1@coredll_utilsexc_cf.o: $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@coredll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
 
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_nanox.o: $(srcdir)/src/x11/nanox.c $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $(srcdir)/src/x11/nanox.c
@@ -28180,6 +28126,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_graphics.o: $(srcdir)/src/mac/carbon/graphics.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/graphics.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@corelib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@corelib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_dropsrc.o: $(srcdir)/src/msw/ole/dropsrc.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/dropsrc.cpp
 
@@ -28281,6 +28233,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_COCOA_USE_GUI_1@corelib_utilsexc_cf.o: $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@corelib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
 
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_nanox.o: $(srcdir)/src/x11/nanox.c $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $(srcdir)/src/x11/nanox.c

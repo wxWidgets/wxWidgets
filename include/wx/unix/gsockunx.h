@@ -25,8 +25,6 @@ class wxGSocketIOHandler;
 #include "gsocket.h"
 #endif
 
-#include "wx/private/gsocketiohandler.h"
-
 class GSocketGUIFunctionsTableConcrete : public GSocketGUIFunctionsTable
 {
 public:
@@ -72,14 +70,9 @@ public:
     GSocketError GetSockOpt(int level, int optname, void *optval, int *optlen);
     GSocketError SetSockOpt(int level, int optname,
         const void *optval, int optlen);
-    // enable or disable notifications
-    void Notify(bool enable);
     virtual void Detected_Read();
     virtual void Detected_Write();
 protected:
-    //enable or disable event callback using gsocket gui callback table
-    void EnableEvents(bool flag = true);
-    void DisableEvents() { EnableEvents(false); }
     void Enable(GSocketEvent event);
     void Disable(GSocketEvent event);
     GSocketError Input_Timeout();
@@ -106,9 +99,6 @@ public:
   bool m_broadcast;
   bool m_dobind;
   unsigned long m_timeout;
-
-  // true if socket should fire events (use GUI GSocketFunctionsTable)
-  bool m_use_events;
 
   /* Callbacks */
   GSocketEventFlags m_detected;

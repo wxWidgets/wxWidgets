@@ -21,7 +21,6 @@
 #ifndef __GSOCKET_STANDALONE__
 #include "wx/defs.h"
 #include "wx/private/gsocketiohandler.h"
-#include "wx/thread.h"
 #endif
 
 #if defined(__VISAGECPP__)
@@ -456,6 +455,38 @@ struct servent *wxGetservbyname_r(const char *port, const char *protocol,
 
 static GSocketGUIFunctionsTable *gs_gui_functions;
 
+class GSocketGUIFunctionsTableNull: public GSocketGUIFunctionsTable
+{
+public:
+    virtual bool OnInit();
+    virtual void OnExit();
+    virtual bool CanUseEventLoop();
+    virtual bool Init_Socket(GSocket *socket);
+    virtual void Destroy_Socket(GSocket *socket);
+    virtual void Install_Callback(GSocket *socket, GSocketEvent event);
+    virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event);
+    virtual void Enable_Events(GSocket *socket);
+    virtual void Disable_Events(GSocket *socket);
+};
+
+bool GSocketGUIFunctionsTableNull::OnInit()
+{   return true; }
+void GSocketGUIFunctionsTableNull::OnExit()
+{}
+bool GSocketGUIFunctionsTableNull::CanUseEventLoop()
+{   return false; }
+bool GSocketGUIFunctionsTableNull::Init_Socket(GSocket *WXUNUSED(socket))
+{   return true; }
+void GSocketGUIFunctionsTableNull::Destroy_Socket(GSocket *WXUNUSED(socket))
+{}
+void GSocketGUIFunctionsTableNull::Install_Callback(GSocket *WXUNUSED(socket), GSocketEvent WXUNUSED(event))
+{}
+void GSocketGUIFunctionsTableNull::Uninstall_Callback(GSocket *WXUNUSED(socket), GSocketEvent WXUNUSED(event))
+{}
+void GSocketGUIFunctionsTableNull::Enable_Events(GSocket *WXUNUSED(socket))
+{}
+void GSocketGUIFunctionsTableNull::Disable_Events(GSocket *WXUNUSED(socket))
+{}
 /* Global initialisers */
 
 void GSocket_SetGUIFunctions(GSocketGUIFunctionsTable *guifunc)
@@ -467,7 +498,7 @@ int GSocket_Init(void)
 {
   if (!gs_gui_functions)
   {
-    static GSocketGUIFunctionsTableConcrete table;
+    static GSocketGUIFunctionsTableNull table;
     gs_gui_functions = &table;
   }
   if ( !gs_gui_functions->OnInit() )
@@ -510,7 +541,6 @@ GSocket::GSocket()
   m_timeout             = 10*60*1000;
                                 /* 10 minutes * 60 sec * 1000 millisec */
   m_establishing        = false;
-  m_use_events          = false;
 
   assert(gs_gui_functions);
   /* Per-socket GUI-specific initialization */
@@ -519,8 +549,7 @@ GSocket::GSocket()
 
 void GSocket::Close()
 {
-    if (m_use_events)
-        DisableEvents();
+    gs_gui_functions->Disable_Events(this);
     /* gsockosx.c calls CFSocketInvalidate which closes the socket for us */
 #if !(defined(__DARWIN__) && (defined(__WXMAC__) || defined(__WXCOCOA__)))
     close(m_fd);
@@ -537,8 +566,7 @@ GSocket::~GSocket()
     Shutdown();
 
   /* Per-socket GUI-specific cleanup */
-  if (m_use_events)
-    gs_gui_functions->Destroy_Socket(this);
+  gs_gui_functions->Destroy_Socket(this);
 
   delete m_handler;
 
@@ -548,7 +576,6 @@ GSocket::~GSocket()
 
   if (m_peer)
     GAddress_destroy(m_peer);
-
 }
 
 /* GSocket_Shutdown:
@@ -562,8 +589,7 @@ void GSocket::Shutdown()
   assert(this);
 
   /* Don't allow events to fire after socket has been closed */
-  if (m_use_events)
-    DisableEvents();
+  gs_gui_functions->Disable_Events(this);
 
   /* If socket has been created, shutdown it */
   if (m_fd != INVALID_SOCKET)
@@ -747,8 +773,7 @@ GSocketError GSocket::SetServer()
 #endif
 
   ioctl(m_fd, FIONBIO, &arg);
-  if (m_use_events)
-    EnableEvents();
+  gs_gui_functions->Enable_Events(this);
 
   /* allow a socket to re-bind if the socket is in the TIME_WAIT
      state after being previously closed.
@@ -867,28 +892,9 @@ GSocket *GSocket::WaitConnection()
 #else
   ioctl(connection->m_fd, FIONBIO, &arg);
 #endif
-  if (m_use_events)
-    connection->Notify(true);
+  gs_gui_functions->Enable_Events(connection);
 
   return connection;
-}
-
-void GSocket::Notify(bool flag)
-{
-    if ( flag == m_use_events )
-        return;
-    // it is not safe to attach or detach i/o descriptor in child thread
-    wxASSERT_MSG(wxThread::IsMain(),wxT("wxSocketBase::Notify can be called in main thread only"));
-    m_use_events = flag;
-    EnableEvents(flag);
-}
-
-void GSocket::EnableEvents(bool flag)
-{
-    if ( flag )
-        gs_gui_functions->Enable_Events(this);
-    else
-        gs_gui_functions->Disable_Events(this);
 }
 
 bool GSocket::SetReusable()
@@ -1023,8 +1029,8 @@ GSocketError GSocket::Connect(GSocketStream stream)
    * call to Enable_Events now.
    */
 
-  if ( m_use_events && (m_non_blocking || ret == 0) )
-    EnableEvents();
+  if (m_non_blocking || ret == 0)
+    gs_gui_functions->Enable_Events(this);
 
   if (ret == -1)
   {
@@ -1049,8 +1055,8 @@ GSocketError GSocket::Connect(GSocketStream stream)
         SOCKOPTLEN_T len = sizeof(error);
 
         getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (char*) &error, &len);
-        if ( m_use_events )
-            EnableEvents();
+
+        gs_gui_functions->Enable_Events(this);
 
         if (!error)
           return GSOCK_NOERROR;
@@ -1130,8 +1136,7 @@ GSocketError GSocket::SetNonOriented()
 #else
   ioctl(m_fd, FIONBIO, &arg);
 #endif
-  if ( m_use_events )
-    EnableEvents();
+  gs_gui_functions->Enable_Events(this);
 
   if (m_reusable)
   {
@@ -1203,12 +1208,9 @@ int GSocket::Read(char *buffer, int size)
     if (ret == 0)
     {
       /* Make sure wxSOCKET_LOST event gets sent and shut down the socket */
-      if (m_use_events)
-      {
-        m_detected = GSOCK_LOST_FLAG;
-        Detected_Read();
-        return 0;
-      }
+      m_detected = GSOCK_LOST_FLAG;
+      Detected_Read();
+      return 0;
     }
     else if (ret == -1)
     {
@@ -1536,20 +1538,14 @@ GSocketError GSocket::SetSockOpt(int level, int optname,
 
 void GSocket::Enable(GSocketEvent event)
 {
-    if ( m_use_events )
-    {
-        m_detected &= ~(1 << event);
-        gs_gui_functions->Install_Callback(this, event);
-    }
+  m_detected &= ~(1 << event);
+  gs_gui_functions->Install_Callback(this, event);
 }
 
 void GSocket::Disable(GSocketEvent event)
 {
-    if ( m_use_events )
-    {
-        m_detected |= (1 << event);
-        gs_gui_functions->Uninstall_Callback(this, event);
-    }
+  m_detected |= (1 << event);
+  gs_gui_functions->Uninstall_Callback(this, event);
 }
 
 /* _GSocket_Input_Timeout:

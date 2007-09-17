@@ -54,7 +54,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!--                               UNIX                                     -->
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 <set var="BASE_UNIX_SRC" hints="files">
-    src/common/gsocketiohandler.cpp
     src/common/fdiodispatcher.cpp
     src/common/selectdispatcher.cpp
     src/unix/appunix.cpp
@@ -539,7 +538,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="NET_WIN32_SRC" hints="files">
     src/msw/gsocket.cpp
-    src/msw/gsockmsw.cpp
     src/msw/urlmsw.cpp
 </set>
 <set var="NET_WIN32_HDR" hints="files">
@@ -1459,6 +1457,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="X11_LOWLEVEL_SRC" hints="files">
     $(XWIN_LOWLEVEL_SRC)
+    src/common/gsocketiohandler.cpp
     src/generic/icon.cpp
     src/generic/timer.cpp
     src/x11/app.cpp
@@ -1553,6 +1552,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/gdiobj.cpp
     src/msw/gdiplus.cpp
     src/msw/graphics.cpp
+    src/msw/gsockmsw.cpp
     src/msw/icon.cpp
     src/msw/imaglist.cpp
     src/msw/minifram.cpp
@@ -1874,6 +1874,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="DFB_LOWLEVEL_SRC" hints="files">
     src/common/fontmgrcmn.cpp
+    src/common/gsocketiohandler.cpp
     src/generic/caret.cpp
     src/generic/colour.cpp
     src/generic/icon.cpp

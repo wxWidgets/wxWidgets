@@ -55,7 +55,7 @@ wxFDIODispatcher *wxFDIODispatcher::Get()
 #endif // wxUSE_EPOLL_DISPATCHER
 #if wxUSE_SELECT_DISPATCHER
             gs_dispatcher = wxSelectDispatcher::Create();
-#endif // wxUSE_SELECT_DISPATCHER
+#endif // wxUSE_WCHAR_T
     }
 
     wxASSERT_MSG( gs_dispatcher, _T("failed to create any IO dispatchers") );

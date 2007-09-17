@@ -82,8 +82,7 @@ wxEpollDispatcher *wxEpollDispatcher::Create()
         wxLogSysError(_("Failed to create epoll descriptor"));
         return NULL;
     }
-    wxLogTrace(wxEpollDispatcher_Trace,
-                   _T("Epoll fd %d created"), epollDescriptor);
+
     return new wxEpollDispatcher(epollDescriptor);
 }
 
@@ -116,8 +115,6 @@ bool wxEpollDispatcher::RegisterFD(int fd, wxFDIOHandler* handler, int flags)
 
         return false;
     }
-    wxLogTrace(wxEpollDispatcher_Trace,
-               _T("Added fd %d (handler %p) to epoll %d"), fd, handler, m_epollDescriptor);
 
     return true;
 }
@@ -137,8 +134,6 @@ bool wxEpollDispatcher::ModifyFD(int fd, wxFDIOHandler* handler, int flags)
         return false;
     }
 
-    wxLogTrace(wxEpollDispatcher_Trace,
-                _T("Modified fd %d (handler: %p) on epoll %d"), fd, handler, m_epollDescriptor);
     return true;
 }
 
@@ -153,8 +148,7 @@ bool wxEpollDispatcher::UnregisterFD(int fd)
         wxLogSysError(_("Failed to unregister descriptor %d from epoll descriptor %d"),
                       fd, m_epollDescriptor);
     }
-    wxLogTrace(wxEpollDispatcher_Trace,
-                _T("removed fd %d from %d"), fd, m_epollDescriptor);
+
     return true;
 }
 

@@ -237,6 +237,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_gdiobj.obj &
 	$(OBJS)\monodll_gdiplus.obj &
 	$(OBJS)\monodll_graphics.obj &
+	$(OBJS)\monodll_gsockmsw.obj &
 	$(OBJS)\monodll_icon.obj &
 	$(OBJS)\monodll_imaglist.obj &
 	$(OBJS)\monodll_minifram.obj &
@@ -261,7 +262,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_helpwin.obj &
 	$(OBJS)\monodll_automtn.obj &
 	$(OBJS)\monodll_uuid.obj &
-	$(OBJS)\monodll_filectrlg.obj &
 	$(OBJS)\monodll_statusbr.obj &
 	$(OBJS)\monodll_prntdlgg.obj &
 	$(OBJS)\monodll_accel.obj &
@@ -415,6 +415,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_dcpsg.obj &
 	$(OBJS)\monodll_dirctrlg.obj &
 	$(OBJS)\monodll_dragimgg.obj &
+	$(OBJS)\monodll_filectrlg.obj &
 	$(OBJS)\monodll_filepickerg.obj &
 	$(OBJS)\monodll_fontpickerg.obj &
 	$(OBJS)\monodll_listbkg.obj &
@@ -465,6 +466,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_gdiobj.obj &
 	$(OBJS)\monodll_gdiplus.obj &
 	$(OBJS)\monodll_graphics.obj &
+	$(OBJS)\monodll_gsockmsw.obj &
 	$(OBJS)\monodll_icon.obj &
 	$(OBJS)\monodll_imaglist.obj &
 	$(OBJS)\monodll_minifram.obj &
@@ -493,7 +495,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_colrdlgg.obj &
 	$(OBJS)\monodll_dirdlgg.obj &
 	$(OBJS)\monodll_fdrepdlg.obj &
-	$(OBJS)\monodll_filectrlg.obj &
 	$(OBJS)\monodll_filedlgg.obj &
 	$(OBJS)\monodll_fontdlgg.obj &
 	$(OBJS)\monodll_listctrl.obj &
@@ -646,6 +647,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_dcpsg.obj &
 	$(OBJS)\monodll_dirctrlg.obj &
 	$(OBJS)\monodll_dragimgg.obj &
+	$(OBJS)\monodll_filectrlg.obj &
 	$(OBJS)\monodll_filepickerg.obj &
 	$(OBJS)\monodll_fontpickerg.obj &
 	$(OBJS)\monodll_listbkg.obj &
@@ -884,6 +886,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_gdiobj.obj &
 	$(OBJS)\monolib_gdiplus.obj &
 	$(OBJS)\monolib_graphics.obj &
+	$(OBJS)\monolib_gsockmsw.obj &
 	$(OBJS)\monolib_icon.obj &
 	$(OBJS)\monolib_imaglist.obj &
 	$(OBJS)\monolib_minifram.obj &
@@ -908,7 +911,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_helpwin.obj &
 	$(OBJS)\monolib_automtn.obj &
 	$(OBJS)\monolib_uuid.obj &
-	$(OBJS)\monolib_filectrlg.obj &
 	$(OBJS)\monolib_statusbr.obj &
 	$(OBJS)\monolib_prntdlgg.obj &
 	$(OBJS)\monolib_accel.obj &
@@ -1062,6 +1064,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_dcpsg.obj &
 	$(OBJS)\monolib_dirctrlg.obj &
 	$(OBJS)\monolib_dragimgg.obj &
+	$(OBJS)\monolib_filectrlg.obj &
 	$(OBJS)\monolib_filepickerg.obj &
 	$(OBJS)\monolib_fontpickerg.obj &
 	$(OBJS)\monolib_listbkg.obj &
@@ -1112,6 +1115,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_gdiobj.obj &
 	$(OBJS)\monolib_gdiplus.obj &
 	$(OBJS)\monolib_graphics.obj &
+	$(OBJS)\monolib_gsockmsw.obj &
 	$(OBJS)\monolib_icon.obj &
 	$(OBJS)\monolib_imaglist.obj &
 	$(OBJS)\monolib_minifram.obj &
@@ -1140,7 +1144,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_colrdlgg.obj &
 	$(OBJS)\monolib_dirdlgg.obj &
 	$(OBJS)\monolib_fdrepdlg.obj &
-	$(OBJS)\monolib_filectrlg.obj &
 	$(OBJS)\monolib_filedlgg.obj &
 	$(OBJS)\monolib_fontdlgg.obj &
 	$(OBJS)\monolib_listctrl.obj &
@@ -1293,6 +1296,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_dcpsg.obj &
 	$(OBJS)\monolib_dirctrlg.obj &
 	$(OBJS)\monolib_dragimgg.obj &
+	$(OBJS)\monolib_filectrlg.obj &
 	$(OBJS)\monolib_filepickerg.obj &
 	$(OBJS)\monolib_fontpickerg.obj &
 	$(OBJS)\monolib_listbkg.obj &
@@ -1459,6 +1463,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_gdiobj.obj &
 	$(OBJS)\coredll_gdiplus.obj &
 	$(OBJS)\coredll_graphics.obj &
+	$(OBJS)\coredll_gsockmsw.obj &
 	$(OBJS)\coredll_icon.obj &
 	$(OBJS)\coredll_imaglist.obj &
 	$(OBJS)\coredll_minifram.obj &
@@ -1483,7 +1488,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_helpwin.obj &
 	$(OBJS)\coredll_automtn.obj &
 	$(OBJS)\coredll_uuid.obj &
-	$(OBJS)\coredll_filectrlg.obj &
 	$(OBJS)\coredll_statusbr.obj &
 	$(OBJS)\coredll_prntdlgg.obj &
 	$(OBJS)\coredll_accel.obj &
@@ -1637,6 +1641,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_dcpsg.obj &
 	$(OBJS)\coredll_dirctrlg.obj &
 	$(OBJS)\coredll_dragimgg.obj &
+	$(OBJS)\coredll_filectrlg.obj &
 	$(OBJS)\coredll_filepickerg.obj &
 	$(OBJS)\coredll_fontpickerg.obj &
 	$(OBJS)\coredll_listbkg.obj &
@@ -1687,6 +1692,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_gdiobj.obj &
 	$(OBJS)\coredll_gdiplus.obj &
 	$(OBJS)\coredll_graphics.obj &
+	$(OBJS)\coredll_gsockmsw.obj &
 	$(OBJS)\coredll_icon.obj &
 	$(OBJS)\coredll_imaglist.obj &
 	$(OBJS)\coredll_minifram.obj &
@@ -1715,7 +1721,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_colrdlgg.obj &
 	$(OBJS)\coredll_dirdlgg.obj &
 	$(OBJS)\coredll_fdrepdlg.obj &
-	$(OBJS)\coredll_filectrlg.obj &
 	$(OBJS)\coredll_filedlgg.obj &
 	$(OBJS)\coredll_fontdlgg.obj &
 	$(OBJS)\coredll_listctrl.obj &
@@ -1868,6 +1873,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_dcpsg.obj &
 	$(OBJS)\coredll_dirctrlg.obj &
 	$(OBJS)\coredll_dragimgg.obj &
+	$(OBJS)\coredll_filectrlg.obj &
 	$(OBJS)\coredll_filepickerg.obj &
 	$(OBJS)\coredll_fontpickerg.obj &
 	$(OBJS)\coredll_listbkg.obj &
@@ -1928,6 +1934,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_gdiobj.obj &
 	$(OBJS)\corelib_gdiplus.obj &
 	$(OBJS)\corelib_graphics.obj &
+	$(OBJS)\corelib_gsockmsw.obj &
 	$(OBJS)\corelib_icon.obj &
 	$(OBJS)\corelib_imaglist.obj &
 	$(OBJS)\corelib_minifram.obj &
@@ -1952,7 +1959,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_helpwin.obj &
 	$(OBJS)\corelib_automtn.obj &
 	$(OBJS)\corelib_uuid.obj &
-	$(OBJS)\corelib_filectrlg.obj &
 	$(OBJS)\corelib_statusbr.obj &
 	$(OBJS)\corelib_prntdlgg.obj &
 	$(OBJS)\corelib_accel.obj &
@@ -2106,6 +2112,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_dcpsg.obj &
 	$(OBJS)\corelib_dirctrlg.obj &
 	$(OBJS)\corelib_dragimgg.obj &
+	$(OBJS)\corelib_filectrlg.obj &
 	$(OBJS)\corelib_filepickerg.obj &
 	$(OBJS)\corelib_fontpickerg.obj &
 	$(OBJS)\corelib_listbkg.obj &
@@ -2156,6 +2163,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_gdiobj.obj &
 	$(OBJS)\corelib_gdiplus.obj &
 	$(OBJS)\corelib_graphics.obj &
+	$(OBJS)\corelib_gsockmsw.obj &
 	$(OBJS)\corelib_icon.obj &
 	$(OBJS)\corelib_imaglist.obj &
 	$(OBJS)\corelib_minifram.obj &
@@ -2184,7 +2192,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_colrdlgg.obj &
 	$(OBJS)\corelib_dirdlgg.obj &
 	$(OBJS)\corelib_fdrepdlg.obj &
-	$(OBJS)\corelib_filectrlg.obj &
 	$(OBJS)\corelib_filedlgg.obj &
 	$(OBJS)\corelib_fontdlgg.obj &
 	$(OBJS)\corelib_listctrl.obj &
@@ -2337,6 +2344,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_dcpsg.obj &
 	$(OBJS)\corelib_dirctrlg.obj &
 	$(OBJS)\corelib_dragimgg.obj &
+	$(OBJS)\corelib_filectrlg.obj &
 	$(OBJS)\corelib_filepickerg.obj &
 	$(OBJS)\corelib_fontpickerg.obj &
 	$(OBJS)\corelib_listbkg.obj &
@@ -3353,7 +3361,6 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_socket.obj &
 	$(OBJS)\monodll_url.obj &
 	$(OBJS)\monodll_gsocket.obj &
-	$(OBJS)\monodll_gsockmsw.obj &
 	$(OBJS)\monodll_urlmsw.obj &
 	$(____MONOLIB_GUI_SRC_FILENAMES_OBJECTS) &
 	$(OBJS)\monodll_xml.obj &
@@ -3490,7 +3497,6 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_socket.obj &
 	$(OBJS)\monolib_url.obj &
 	$(OBJS)\monolib_gsocket.obj &
-	$(OBJS)\monolib_gsockmsw.obj &
 	$(OBJS)\monolib_urlmsw.obj &
 	$(____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS) &
 	$(OBJS)\monolib_xml.obj &
@@ -3754,7 +3760,6 @@ NETDLL_OBJECTS =  &
 	$(OBJS)\netdll_socket.obj &
 	$(OBJS)\netdll_url.obj &
 	$(OBJS)\netdll_gsocket.obj &
-	$(OBJS)\netdll_gsockmsw.obj &
 	$(OBJS)\netdll_urlmsw.obj
 NETLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
@@ -3777,7 +3782,6 @@ NETLIB_OBJECTS =  &
 	$(OBJS)\netlib_socket.obj &
 	$(OBJS)\netlib_url.obj &
 	$(OBJS)\netlib_gsocket.obj &
-	$(OBJS)\netlib_gsockmsw.obj &
 	$(OBJS)\netlib_urlmsw.obj
 COREDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
@@ -5971,9 +5975,6 @@ $(OBJS)\monodll_url.obj :  .AUTODEPEND ..\..\src\common\url.cpp
 $(OBJS)\monodll_gsocket.obj :  .AUTODEPEND ..\..\src\msw\gsocket.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
 $(OBJS)\monodll_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -6572,6 +6573,11 @@ $(OBJS)\monodll_graphics.obj :  .AUTODEPEND ..\..\src\msw\graphics.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_icon.obj :  .AUTODEPEND ..\..\src\msw\icon.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -6688,11 +6694,6 @@ $(OBJS)\monodll_automtn.obj :  .AUTODEPEND ..\..\src\msw\ole\automtn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_uuid.obj :  .AUTODEPEND ..\..\src\msw\ole\uuid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monodll_filectrlg.obj :  .AUTODEPEND ..\..\src\generic\filectrlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -7577,6 +7578,11 @@ $(OBJS)\monodll_dragimgg.obj :  .AUTODEPEND ..\..\src\generic\dragimgg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_filectrlg.obj :  .AUTODEPEND ..\..\src\generic\filectrlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_filepickerg.obj :  .AUTODEPEND ..\..\src\generic\filepickerg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -8153,9 +8159,6 @@ $(OBJS)\monolib_url.obj :  .AUTODEPEND ..\..\src\common\url.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_gsocket.obj :  .AUTODEPEND ..\..\src\msw\gsocket.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
@@ -8756,6 +8759,11 @@ $(OBJS)\monolib_graphics.obj :  .AUTODEPEND ..\..\src\msw\graphics.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_icon.obj :  .AUTODEPEND ..\..\src\msw\icon.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -8872,11 +8880,6 @@ $(OBJS)\monolib_automtn.obj :  .AUTODEPEND ..\..\src\msw\ole\automtn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_uuid.obj :  .AUTODEPEND ..\..\src\msw\ole\uuid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monolib_filectrlg.obj :  .AUTODEPEND ..\..\src\generic\filectrlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -9757,6 +9760,11 @@ $(OBJS)\monolib_dirctrlg.obj :  .AUTODEPEND ..\..\src\generic\dirctrlg.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_dragimgg.obj :  .AUTODEPEND ..\..\src\generic\dragimgg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_filectrlg.obj :  .AUTODEPEND ..\..\src\generic\filectrlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -10648,9 +10656,6 @@ $(OBJS)\netdll_url.obj :  .AUTODEPEND ..\..\src\common\url.cpp
 $(OBJS)\netdll_gsocket.obj :  .AUTODEPEND ..\..\src\msw\gsocket.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
-$(OBJS)\netdll_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
-
 $(OBJS)\netdll_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
@@ -10688,9 +10693,6 @@ $(OBJS)\netlib_url.obj :  .AUTODEPEND ..\..\src\common\url.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
 
 $(OBJS)\netlib_gsocket.obj :  .AUTODEPEND ..\..\src\msw\gsocket.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
-
-$(OBJS)\netlib_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
 
 $(OBJS)\netlib_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
@@ -10988,6 +10990,11 @@ $(OBJS)\coredll_graphics.obj :  .AUTODEPEND ..\..\src\msw\graphics.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_icon.obj :  .AUTODEPEND ..\..\src\msw\icon.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -11104,11 +11111,6 @@ $(OBJS)\coredll_automtn.obj :  .AUTODEPEND ..\..\src\msw\ole\automtn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_uuid.obj :  .AUTODEPEND ..\..\src\msw\ole\uuid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\coredll_filectrlg.obj :  .AUTODEPEND ..\..\src\generic\filectrlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
@@ -11993,6 +11995,11 @@ $(OBJS)\coredll_dragimgg.obj :  .AUTODEPEND ..\..\src\generic\dragimgg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_filectrlg.obj :  .AUTODEPEND ..\..\src\generic\filectrlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_filepickerg.obj :  .AUTODEPEND ..\..\src\generic\filepickerg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -12386,6 +12393,11 @@ $(OBJS)\corelib_graphics.obj :  .AUTODEPEND ..\..\src\msw\graphics.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\corelib_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\corelib_icon.obj :  .AUTODEPEND ..\..\src\msw\icon.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
@@ -12502,11 +12514,6 @@ $(OBJS)\corelib_automtn.obj :  .AUTODEPEND ..\..\src\msw\ole\automtn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_uuid.obj :  .AUTODEPEND ..\..\src\msw\ole\uuid.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\corelib_filectrlg.obj :  .AUTODEPEND ..\..\src\generic\filectrlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
@@ -13387,6 +13394,11 @@ $(OBJS)\corelib_dirctrlg.obj :  .AUTODEPEND ..\..\src\generic\dirctrlg.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_dragimgg.obj :  .AUTODEPEND ..\..\src\generic\dragimgg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_filectrlg.obj :  .AUTODEPEND ..\..\src\generic\filectrlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

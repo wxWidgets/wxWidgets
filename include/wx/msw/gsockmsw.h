@@ -62,8 +62,6 @@ public:
   GAddress *GetPeer();
   GSocketError SetServer();
   GSocket *WaitConnection();
-  // not used under MSW
-  void Notify(bool WXUNUSED(enable)) { }
   bool SetReusable();
   bool SetBroadcast();
   bool DontDoBind();
