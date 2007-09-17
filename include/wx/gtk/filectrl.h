@@ -12,6 +12,10 @@
 #ifndef FILECTRL_H
 #define FILECTRL_H
 
+#include "wx/control.h"
+
+extern WXDLLEXPORT_DATA(const wxChar) wxFileSelectorDefaultWildcardStr[];
+
 typedef struct _GtkFileChooser GtkFileChooser;
 
 // [GTK] current problems:
