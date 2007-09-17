@@ -15,6 +15,7 @@
             datepick.cpp
             dirctrl.cpp
             dirpicker.cpp
+            filectrl.cpp
             filepicker.cpp
             fontpicker.cpp
             gauge.cpp

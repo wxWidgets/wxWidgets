@@ -198,6 +198,8 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                    ok_btn_stock, GTK_RESPONSE_ACCEPT,
                    NULL);
 
+    m_fc.SetWidget( GTK_FILE_CHOOSER(m_widget) );
+
     gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_ACCEPT);
 
     if ( style & wxFD_MULTIPLE )
@@ -287,7 +289,7 @@ void wxFileDialog::OnFakeOk( wxCommandEvent &event )
     if (!gtk_check_version(2,4,0))
         EndDialog(wxID_OK);
     else
-        wxGenericFileDialog::OnListOk( event );
+        wxGenericFileDialog::OnOk( event );
 }
 
 int wxFileDialog::ShowModal()
@@ -318,8 +320,7 @@ wxString wxFileDialog::GetPath() const
 {
     if (!gtk_check_version(2,4,0))
     {
-        wxGtkString str(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget)));
-        return wxString(str, *wxConvFileName);
+        return m_fc.GetPath();
     }
 
     return wxGenericFileDialog::GetPath();
@@ -329,12 +330,7 @@ void wxFileDialog::GetFilenames(wxArrayString& files) const
 {
     if (!gtk_check_version(2,4,0))
     {
-        GetPaths(files);
-        for (size_t n = 0; n < files.GetCount(); ++n )
-        {
-            wxFileName file(files[n]);
-            files[n] = file.GetFullName();
-        }
+        m_fc.GetFilenames( files );
     }
     else
         wxGenericFileDialog::GetFilenames( files );
@@ -344,23 +340,7 @@ void wxFileDialog::GetPaths(wxArrayString& paths) const
 {
     if (!gtk_check_version(2,4,0))
     {
-        paths.Empty();
-        if (gtk_file_chooser_get_select_multiple(GTK_FILE_CHOOSER(m_widget)))
-        {
-            GSList *gpathsi = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(m_widget));
-            GSList *gpaths = gpathsi;
-            while (gpathsi)
-            {
-                wxString file((gchar*) gpathsi->data, *wxConvFileName);
-                paths.Add(file);
-                g_free(gpathsi->data);
-                gpathsi = gpathsi->next;
-            }
-
-            g_slist_free(gpaths);
-        }
-        else
-            paths.Add(GetPath());
+        m_fc.GetPaths( paths );
     }
     else
         wxGenericFileDialog::GetPaths( paths );
@@ -381,9 +361,7 @@ void wxFileDialog::SetPath(const wxString& path)
 {
     if (!gtk_check_version(2,4,0))
     {
-        if (path.empty()) return;
-
-        gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(m_widget), path.fn_str());
+        m_fc.SetPath( path );
     }
     else
         wxGenericFileDialog::SetPath( path );
@@ -393,10 +371,7 @@ void wxFileDialog::SetDirectory(const wxString& dir)
 {
     if (!gtk_check_version(2,4,0))
     {
-        if (wxDirExists(dir))
-        {
-            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget), dir.fn_str());
-        }
+        m_fc.SetDirectory( dir );
     }
     else
         wxGenericFileDialog::SetDirectory( dir );
@@ -406,8 +381,7 @@ wxString wxFileDialog::GetDirectory() const
 {
     if (!gtk_check_version(2,4,0))
     {
-        wxGtkString str(gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(m_widget)));
-        return wxString(str, *wxConvFileName);
+        m_fc.GetDirectory();
     }
 
     return wxGenericFileDialog::GetDirectory();
@@ -429,7 +403,7 @@ void wxFileDialog::SetFilename(const wxString& name)
 wxString wxFileDialog::GetFilename() const
 {
     if (!gtk_check_version(2,4,0))
-        return wxFileName(GetPath()).GetFullName();
+        return m_fc.GetFilename();
     else
         return wxGenericFileDialog::GetFilename();
 }
@@ -438,49 +412,7 @@ void wxFileDialog::SetWildcard(const wxString& wildCard)
 {
     if (!gtk_check_version(2,4,0))
     {
-        // parse filters
-        wxArrayString wildDescriptions, wildFilters;
-        if (!wxParseCommonDialogsFilter(wildCard, wildDescriptions, wildFilters))
-        {
-            wxFAIL_MSG( wxT("wxFileDialog::SetWildCard - bad wildcard string") );
-        }
-        else
-        {
-            // Parsing went fine. Set m_wildCard to be returned by wxFileDialogBase::GetWildcard
-            m_wildCard = wildCard;
-
-            GtkFileChooser* chooser = GTK_FILE_CHOOSER(m_widget);
-
-            // empty current filter list:
-            GSList* ifilters = gtk_file_chooser_list_filters(chooser);
-            GSList* filters = ifilters;
-
-            while (ifilters)
-            {
-                gtk_file_chooser_remove_filter(chooser,GTK_FILE_FILTER(ifilters->data));
-                ifilters = ifilters->next;
-            }
-            g_slist_free(filters);
-
-            // add parsed to GtkChooser
-            for (size_t n = 0; n < wildFilters.GetCount(); ++n)
-            {
-                GtkFileFilter* filter = gtk_file_filter_new();
-                gtk_file_filter_set_name(filter, wxGTK_CONV(wildDescriptions[n]));
-
-                wxStringTokenizer exttok(wildFilters[n], wxT(";"));
-                while (exttok.HasMoreTokens())
-                {
-                    wxString token = exttok.GetNextToken();
-                    gtk_file_filter_add_pattern(filter, wxGTK_CONV(token));
-                }
-
-                gtk_file_chooser_add_filter(chooser, filter);
-            }
-
-            // Reset the filter index
-            SetFilterIndex(0);
-        }
+        m_fc.SetWildcard( wildCard );
     }
     else
         wxGenericFileDialog::SetWildcard( wildCard );
@@ -491,22 +423,7 @@ void wxFileDialog::SetFilterIndex(int filterIndex)
 
     if (!gtk_check_version(2,4,0))
     {
-        gpointer filter;
-        GtkFileChooser *chooser = GTK_FILE_CHOOSER(m_widget);
-        GSList *filters = gtk_file_chooser_list_filters(chooser);
-
-        filter = g_slist_nth_data(filters, filterIndex);
-
-        if (filter != NULL)
-        {
-            gtk_file_chooser_set_filter(chooser, GTK_FILE_FILTER(filter));
-        }
-        else
-        {
-            wxFAIL_MSG( wxT("wxFileDialog::SetFilterIndex - bad filter index") );
-        }
-
-        g_slist_free(filters);
+       m_fc.SetFilterIndex( filterIndex);
     }
     else
         wxGenericFileDialog::SetFilterIndex( filterIndex );
@@ -516,19 +433,7 @@ int wxFileDialog::GetFilterIndex() const
 {
     if (!gtk_check_version(2,4,0))
     {
-        GtkFileChooser *chooser = GTK_FILE_CHOOSER(m_widget);
-        GtkFileFilter *filter = gtk_file_chooser_get_filter(chooser);
-        GSList *filters = gtk_file_chooser_list_filters(chooser);
-        gint index = g_slist_index(filters, filter);
-        g_slist_free(filters);
-
-        if (index == -1)
-        {
-            wxFAIL_MSG( wxT("wxFileDialog::GetFilterIndex - bad filter index returned by gtk+") );
-            return 0;
-        }
-        else
-            return index;
+        return m_fc.GetFilterIndex();
     }
     else
                 return wxGenericFileDialog::GetFilterIndex();

@@ -2338,6 +2338,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
 	wx/gtk/clrpicker.h \
 	wx/gtk/dialog.h \
 	wx/gtk/dirdlg.h \
+	wx/gtk/filectrl.h \
 	wx/gtk/filedlg.h \
 	wx/gtk/fontpicker.h \
 	wx/gtk/filepicker.h \
@@ -3148,6 +3149,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/generic/dcpsg.h \
 	wx/generic/dirctrlg.h \
 	wx/generic/dragimgg.h \
+	wx/generic/filectrlg.h \
 	wx/generic/filedlgg.h \
 	wx/generic/filepickerg.h \
 	wx/generic/fontdlgg.h \
@@ -3230,6 +3232,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/effects.h \
 	wx/evtloop.h \
 	wx/fdrepdlg.h \
+	wx/filectrl.h \
 	wx/filepicker.h \
 	wx/fontpicker.h \
 	wx/fmappriv.h \
@@ -3817,6 +3820,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_dseldlg.o \
 	monodll_effects.o \
 	monodll_fddlgcmn.o \
+	monodll_filectrlcmn.o \
 	monodll_filepickercmn.o \
 	monodll_fontpickercmn.o \
 	monodll_fldlgcmn.o \
@@ -3886,6 +3890,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_dcpsg.o \
 	monodll_dirctrlg.o \
 	monodll_dragimgg.o \
+	monodll_filectrlg.o \
 	monodll_filepickerg.o \
 	monodll_fontpickerg.o \
 	monodll_listbkg.o \
@@ -3996,6 +4001,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_dseldlg.o \
 	monodll_effects.o \
 	monodll_fddlgcmn.o \
+	monodll_filectrlcmn.o \
 	monodll_filepickercmn.o \
 	monodll_fontpickercmn.o \
 	monodll_fldlgcmn.o \
@@ -4065,6 +4071,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_dcpsg.o \
 	monodll_dirctrlg.o \
 	monodll_dragimgg.o \
+	monodll_filectrlg.o \
 	monodll_filepickerg.o \
 	monodll_fontpickerg.o \
 	monodll_listbkg.o \
@@ -4183,6 +4190,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_dcscreen.o \
 	monodll_dnd.o \
 	monodll_evtloop.o \
+	monodll_filectrl.o \
 	monodll_font.o \
 	monodll_gsockgtk.o \
 	monodll_minifram.o \
@@ -5010,6 +5018,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_dcscreen.o \
 	monodll_dnd.o \
 	monodll_evtloop.o \
+	monodll_filectrl.o \
 	monodll_font.o \
 	monodll_gsockgtk.o \
 	monodll_minifram.o \
@@ -5666,6 +5675,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_dseldlg.o \
 	monolib_effects.o \
 	monolib_fddlgcmn.o \
+	monolib_filectrlcmn.o \
 	monolib_filepickercmn.o \
 	monolib_fontpickercmn.o \
 	monolib_fldlgcmn.o \
@@ -5735,6 +5745,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_dcpsg.o \
 	monolib_dirctrlg.o \
 	monolib_dragimgg.o \
+	monolib_filectrlg.o \
 	monolib_filepickerg.o \
 	monolib_fontpickerg.o \
 	monolib_listbkg.o \
@@ -5845,6 +5856,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_dseldlg.o \
 	monolib_effects.o \
 	monolib_fddlgcmn.o \
+	monolib_filectrlcmn.o \
 	monolib_filepickercmn.o \
 	monolib_fontpickercmn.o \
 	monolib_fldlgcmn.o \
@@ -5914,6 +5926,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_dcpsg.o \
 	monolib_dirctrlg.o \
 	monolib_dragimgg.o \
+	monolib_filectrlg.o \
 	monolib_filepickerg.o \
 	monolib_fontpickerg.o \
 	monolib_listbkg.o \
@@ -6032,6 +6045,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_dcscreen.o \
 	monolib_dnd.o \
 	monolib_evtloop.o \
+	monolib_filectrl.o \
 	monolib_font.o \
 	monolib_gsockgtk.o \
 	monolib_minifram.o \
@@ -6860,6 +6874,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_dcscreen.o \
 	monolib_dnd.o \
 	monolib_evtloop.o \
+	monolib_filectrl.o \
 	monolib_font.o \
 	monolib_gsockgtk.o \
 	monolib_minifram.o \
@@ -7799,6 +7814,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_dseldlg.o \
 	coredll_effects.o \
 	coredll_fddlgcmn.o \
+	coredll_filectrlcmn.o \
 	coredll_filepickercmn.o \
 	coredll_fontpickercmn.o \
 	coredll_fldlgcmn.o \
@@ -7868,6 +7884,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_dcpsg.o \
 	coredll_dirctrlg.o \
 	coredll_dragimgg.o \
+	coredll_filectrlg.o \
 	coredll_filepickerg.o \
 	coredll_fontpickerg.o \
 	coredll_listbkg.o \
@@ -7978,6 +7995,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_dseldlg.o \
 	coredll_effects.o \
 	coredll_fddlgcmn.o \
+	coredll_filectrlcmn.o \
 	coredll_filepickercmn.o \
 	coredll_fontpickercmn.o \
 	coredll_fldlgcmn.o \
@@ -8047,6 +8065,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_dcpsg.o \
 	coredll_dirctrlg.o \
 	coredll_dragimgg.o \
+	coredll_filectrlg.o \
 	coredll_filepickerg.o \
 	coredll_fontpickerg.o \
 	coredll_listbkg.o \
@@ -8165,6 +8184,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_dcscreen.o \
 	coredll_dnd.o \
 	coredll_evtloop.o \
+	coredll_filectrl.o \
 	coredll_font.o \
 	coredll_gsockgtk.o \
 	coredll_minifram.o \
@@ -8993,6 +9013,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_dcscreen.o \
 	coredll_dnd.o \
 	coredll_evtloop.o \
+	coredll_filectrl.o \
 	coredll_font.o \
 	coredll_gsockgtk.o \
 	coredll_minifram.o \
@@ -9250,6 +9271,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_dseldlg.o \
 	corelib_effects.o \
 	corelib_fddlgcmn.o \
+	corelib_filectrlcmn.o \
 	corelib_filepickercmn.o \
 	corelib_fontpickercmn.o \
 	corelib_fldlgcmn.o \
@@ -9319,6 +9341,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_dcpsg.o \
 	corelib_dirctrlg.o \
 	corelib_dragimgg.o \
+	corelib_filectrlg.o \
 	corelib_filepickerg.o \
 	corelib_fontpickerg.o \
 	corelib_listbkg.o \
@@ -9429,6 +9452,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_dseldlg.o \
 	corelib_effects.o \
 	corelib_fddlgcmn.o \
+	corelib_filectrlcmn.o \
 	corelib_filepickercmn.o \
 	corelib_fontpickercmn.o \
 	corelib_fldlgcmn.o \
@@ -9498,6 +9522,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_dcpsg.o \
 	corelib_dirctrlg.o \
 	corelib_dragimgg.o \
+	corelib_filectrlg.o \
 	corelib_filepickerg.o \
 	corelib_fontpickerg.o \
 	corelib_listbkg.o \
@@ -9616,6 +9641,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_dcscreen.o \
 	corelib_dnd.o \
 	corelib_evtloop.o \
+	corelib_filectrl.o \
 	corelib_font.o \
 	corelib_gsockgtk.o \
 	corelib_minifram.o \
@@ -10444,6 +10470,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_dcscreen.o \
 	corelib_dnd.o \
 	corelib_evtloop.o \
+	corelib_filectrl.o \
 	corelib_font.o \
 	corelib_gsockgtk.o \
 	corelib_minifram.o \
@@ -15514,6 +15541,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_dnd.o: $(srcdir)/src/os2/dnd.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/dnd.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_filectrl.o: $(srcdir)/src/gtk/filectrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/filectrl.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_font.o: $(srcdir)/src/gtk/font.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/font.cpp
 
@@ -17329,6 +17359,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_fddlgcmn.o: $(srcdir)/src/common/fddlgcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fddlgcmn.cpp
 
+@COND_USE_GUI_1@monodll_filectrlcmn.o: $(srcdir)/src/common/filectrlcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/filectrlcmn.cpp
+
 @COND_USE_GUI_1@monodll_filepickercmn.o: $(srcdir)/src/common/filepickercmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/filepickercmn.cpp
 
@@ -17535,6 +17568,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_dragimgg.o: $(srcdir)/src/generic/dragimgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/dragimgg.cpp
+
+@COND_USE_GUI_1@monodll_filectrlg.o: $(srcdir)/src/generic/filectrlg.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/filectrlg.cpp
 
 @COND_USE_GUI_1@monodll_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
@@ -19861,6 +19897,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_dnd.o: $(srcdir)/src/os2/dnd.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/dnd.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_filectrl.o: $(srcdir)/src/gtk/filectrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/filectrl.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_font.o: $(srcdir)/src/gtk/font.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/font.cpp
 
@@ -21676,6 +21715,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_fddlgcmn.o: $(srcdir)/src/common/fddlgcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fddlgcmn.cpp
 
+@COND_USE_GUI_1@monolib_filectrlcmn.o: $(srcdir)/src/common/filectrlcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/filectrlcmn.cpp
+
 @COND_USE_GUI_1@monolib_filepickercmn.o: $(srcdir)/src/common/filepickercmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/filepickercmn.cpp
 
@@ -21882,6 +21924,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_dragimgg.o: $(srcdir)/src/generic/dragimgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/dragimgg.cpp
+
+@COND_USE_GUI_1@monolib_filectrlg.o: $(srcdir)/src/generic/filectrlg.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/filectrlg.cpp
 
 @COND_USE_GUI_1@monolib_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
@@ -24748,6 +24793,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_dnd.o: $(srcdir)/src/os2/dnd.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/dnd.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_filectrl.o: $(srcdir)/src/gtk/filectrl.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/filectrl.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_font.o: $(srcdir)/src/gtk/font.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/font.cpp
 
@@ -26554,6 +26602,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_fddlgcmn.o: $(srcdir)/src/common/fddlgcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/fddlgcmn.cpp
 
+@COND_USE_GUI_1@coredll_filectrlcmn.o: $(srcdir)/src/common/filectrlcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/filectrlcmn.cpp
+
 @COND_USE_GUI_1@coredll_filepickercmn.o: $(srcdir)/src/common/filepickercmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/filepickercmn.cpp
 
@@ -26760,6 +26811,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_dragimgg.o: $(srcdir)/src/generic/dragimgg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/dragimgg.cpp
+
+@COND_USE_GUI_1@coredll_filectrlg.o: $(srcdir)/src/generic/filectrlg.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/filectrlg.cpp
 
 @COND_USE_GUI_1@coredll_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
@@ -27699,6 +27753,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_dnd.o: $(srcdir)/src/os2/dnd.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/dnd.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_filectrl.o: $(srcdir)/src/gtk/filectrl.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/filectrl.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_font.o: $(srcdir)/src/gtk/font.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/font.cpp
@@ -29506,6 +29563,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_fddlgcmn.o: $(srcdir)/src/common/fddlgcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/fddlgcmn.cpp
 
+@COND_USE_GUI_1@corelib_filectrlcmn.o: $(srcdir)/src/common/filectrlcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/filectrlcmn.cpp
+
 @COND_USE_GUI_1@corelib_filepickercmn.o: $(srcdir)/src/common/filepickercmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/filepickercmn.cpp
 
@@ -29712,6 +29772,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_dragimgg.o: $(srcdir)/src/generic/dragimgg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/dragimgg.cpp
+
+@COND_USE_GUI_1@corelib_filectrlg.o: $(srcdir)/src/generic/filectrlg.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/filectrlg.cpp
 
 @COND_USE_GUI_1@corelib_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp

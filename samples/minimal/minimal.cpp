@@ -172,6 +172,30 @@ MyFrame::MyFrame(const wxString& title)
     CreateStatusBar(2);
     SetStatusText(_T("Welcome to wxWidgets!"));
 #endif // wxUSE_STATUSBAR
+
+    wxTextCtrl* text = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_DONTWRAP  );
+    text->SetValue( wxT("0 /////////////////////////////////////////////////////////////////////////////\n\
+1 // Name:        minimal.cpp\n\
+2 // Purpose:     Minimal wxWidgets sample\n\
+3 // Author:      Julian Smart\n\
+4 // Modified by:\n\
+5 // Created:     04/01/98\n\
+6 // RCS-ID:      $Id$\n\
+7 // Copyright:   (c) Julian Smart\n\
+8 // Licence:     wxWindows licence\n\
+9 /////////////////////////////////////////////////////////////////////////////\n\
+") );
+
+    text->WriteText( wxT("10 /////////////////////////////////////////////////////////////////////////////\n\
+11 // Name:        minimal.cpp\n\
+12 // Purpose:     Minimal wxWidgets sample\n\
+13 // Author:      Julian Smart\n\
+14 // Modified by:\n\
+15 // Created:     04/01/98\n\
+16 // RCS-ID:      $Id$\n\
+17 // Copyright:   (c) Julian Smart\n\
+18 // Licence:     wxWindows licence\n\
+19 /////////////////////////////////////////////////////////////////////////////") );
 }
 
 

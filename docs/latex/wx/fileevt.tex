@@ -1,0 +1,77 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        fileevt.tex
+%% Purpose:     wxFileCtrlEvent documentation
+%% Author:      Diaa M. Sami
+%% Created:     2007-07-25
+%% RCS-ID:      $Id: $
+%% Copyright:   (c) 2007 Diaa M. Sami
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxFileCtrlEvent}}\label{wxfilectrlevent}
+
+A file control event holds information about events associated with
+\helpref{wxFileCtrl}{wxfilectrl} objects.
+
+\wxheading{Derived from}
+
+\helpref{wxCommandEvent}{wxcommandevent}\\
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/filectrl.h>
+
+\wxheading{Event table macros}
+
+To process input from a file control, use these event handler macros to direct input to member
+functions that take a wxFileCtrlEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_FILECTRL\_FILEACTIVATED(id, func)}}{The user activated a file(by double-clicking or pressing Enter)}
+\twocolitem{{\bf EVT\_FILECTRL\_SELECTIONCHANGED(id, func)}}{The user changed the current selection(by selecting or deselecting a file)}
+\twocolitem{{\bf EVT\_FILECTRL\_FOLDERCHANGED(id, func)}}{The current folder of the file ctrl has been changed}
+\end{twocollist}%
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFileCtrlEvent::wxFileCtrlEvent}\label{wxfilectrleventctor}
+
+\func{}{wxFileCtrlEvent}{\param{wxEventType }{type}, \param{wxObject }{evtObject}, \param{int }{id}}
+
+Constructor.
+
+\membersection{wxFileCtrlEvent::GetFiles}\label{wxfilectrleventgetfiles}
+
+\constfunc{wxArrayString}{GetFiles}{\void}
+
+Returns the files selected.
+In case of a {\bf EVT\_FILECTRL\_SELECTIONCHANGED}, this method returns the
+files selected after the event.
+
+\membersection{wxFileCtrlEvent::GetDirectory}\label{wxfilectrleventgetdirectory}
+
+\constfunc{wxString}{GetDirectory}{\void}
+
+Returns the current directory.
+In case of a {\bf EVT\_FILECTRL\_FOLDERCHANGED}, this method returns the new directory.
+
+\membersection{wxFileCtrlEvent::GetFile}\label{wxfilectrleventgetfile}
+
+\constfunc{wxString}{GetFile}{\void}
+
+Returns the file selected(assuming it is only one file).
+
+\membersection{wxFileCtrlEvent::SetFiles}\label{wxfilectrleventsetfiles}
+
+\func{}{wxFileCtrlEvent::SetFiles}{\param{const wxArrayString &}{files}}
+
+Sets the files changed by this event.
+
+\membersection{wxFileCtrlEvent::SetDirectory}\label{wxfilectrleventsetdirectory}
+
+\func{}{wxFileCtrlEvent::SetDirectory}{\param{const wxString &}{directory}}
+
+Sets the current directory of this event.

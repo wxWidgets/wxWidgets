@@ -602,6 +602,10 @@ SOURCE=..\..\src\common\fddlgcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\filectrlcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\filepickercmn.cpp
 # End Source File
 # Begin Source File
@@ -4316,6 +4320,10 @@ SOURCE=..\..\src\generic\fdrepdlg.cpp
 
 !ENDIF
 
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\generic\filectrlg.cpp
 # End Source File
 # Begin Source File
 
@@ -8293,6 +8301,10 @@ SOURCE=..\..\include\wx\generic\fdrepdlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\filectrlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\filedlgg.h
 # End Source File
 # Begin Source File
@@ -8926,6 +8938,10 @@ SOURCE=..\..\include\wx\evtloop.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\fdrepdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\filectrl.h
 # End Source File
 # Begin Source File
 

@@ -1,0 +1,222 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        filectrl.tex
+%% Purpose:     wxFilerCtrl documentation
+%% Author:      Diaa M. Sami
+%% Created:     2007-07-25
+%% RCS-ID:      $Id: $
+%% Copyright:   (c) 2007 Diaa M. Sami
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxFileCtrl}}\label{wxfilectrl}
+
+This control allows the user to select a file. two implemetations exist, one
+for Gtk and another generic one for anything other than Gtk.
+It is only available if \texttt{wxUSE\_FILECTRL} is set to $1$.
+
+\wxheading{Derived from}
+
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/filectrl.h>
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxFC\_DEFAULT\_STYLE}}{The default style: wxFC\_OPEN}
+\twocolitem{\windowstyle{wxFC\_OPEN}}{Creates an file control suitable for opening files.
+Cannot be combined with wxFC\_SAVE.}
+\twocolitem{\windowstyle{wxFC\_SAVE}}{Creates an file control suitable for saving files. Cannot be combined with wxFC\_OPEN.}
+\twocolitem{\windowstyle{wxFC\_MULTIPLE}}{For open control only, Allows selecting multiple files. Cannot be combined with wxFC\_SAVE}
+\twocolitem{\windowstyle{wxFC\_NOSHOWHIDDEN}}{Hides the ``Show Hidden Files" checkbox (Generic only)}
+\end{twocollist}
+
+\wxheading{Event handling}
+
+To process a file control event, use these event handler macros to direct
+input to member functions that take a \helpref{wxFileCtrlEvent}{wxfilectrlevent}
+argument.
+
+\twocolwidtha{7cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_FILECTRL\_FILEACTIVATED(id, func)}}{The user activated a file(by double-clicking or pressing Enter)}
+\twocolitem{{\bf EVT\_FILECTRL\_SELECTIONCHANGED(id, func)}}{The user changed the current selection(by selecting or deselecting a file)}
+\twocolitem{{\bf EVT\_FILECTRL\_FOLDERCHANGED(id, func)}}{The current folder of the file ctrl has been changed}
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{wxGenericDirCtrl}{wxgenericdirctrl}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFileCtrl::wxFileCtrl}\label{wxfilectrlctor}
+
+\func{}{wxFileCtrl}{\void}
+
+Default constructor.
+
+\func{}{wxFileCtrl}{\param{wxWindow *}{parent},\rtfsp
+\param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{defaultDirectory = wxEmptyString},\rtfsp
+\param{const wxString\& }{defaultFilename = wxEmptyString},\rtfsp
+\param{const wxPoint\& }{wildCard = wxFileSelectorDefaultWildcardStr},\rtfsp
+\param{long}{ style = wxFC\_DEFAULT\_STYLE},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition},
+\param{const wxSize\& }{size = wxDefaultSize},
+\param{const wxString\& }{name = ``filectrl"}}
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window, must not be non-\texttt{NULL}.}
+
+\docparam{id}{The identifier for the control.}
+
+\docparam{defaultDirectory}{The initial directory shown in the control. Must be
+a valid path to a directory or the empty string.
+In case it is the empty string, the current working directory is used.}
+
+\docparam{defaultFilename}{The default filename, or the empty string.}
+
+\docparam{wildcard}{A wildcard specifying which files can be selected,
+such as ``*.*" or ``BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".}
+
+\docparam{style}{The window style, see {\tt wxFC\_*} flags.}
+
+\docparam{pos}{Initial position.}
+
+\docparam{size}{Initial size.}
+
+\docparam{name}{Control name.}
+
+\wxheading{Return value}
+
+\true if the control was successfully created or \false if creation failed.
+
+\membersection{wxFileCtrl::Create}\label{wxfilectrlcreate}
+
+\func{bool}{Create}{\param{wxWindow *}{parent},\rtfsp
+\param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{defaultDirectory = wxEmptyString},\rtfsp
+\param{const wxString\& }{defaultFilename = wxEmptyString},\rtfsp
+\param{const wxPoint\& }{wildCard = wxFileSelectorDefaultWildcardStr},\rtfsp
+\param{long}{ style = wxFC\_DEFAULT\_STYLE},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition},
+\param{const wxSize\& }{size = wxDefaultSize},
+\param{const wxString\& }{name = ``filectrl"}}
+
+Create function for two-step construction. See \helpref{wxFileCtrl::wxFileCtrl}{wxfilectrlctor} for details.
+
+\membersection{wxFileDialog::GetFilename}\label{wxfilectrlgetfilename}
+
+\constfunc{wxString}{GetFilename}{\void}
+
+Returns the currently selected filename.
+For the controls having the {\tt wxFC\_MULTIPLE} style, use \helpref{GetFilenames}{wxfilectrlgetfilenames}
+instead
+
+\membersection{wxFileCtrl::GetDirectory}\label{wxfilectrlgetdirectory}
+
+\constfunc{wxString}{GetDirectory}{\void}
+
+Returns the current directory of the file ctrl(the directory shown in the file ctrl).
+
+\membersection{wxFileCtrl::GetWildcard}\label{wxfilectrlgetwildcard}
+
+\constfunc{wxString}{GetWildcard}{\void}
+
+Returns the current wildcard.
+
+\membersection{wxFileCtrl::GetPath}\label{wxfilectrlgetpath}
+
+\constfunc{wxString}{GetPath}{\void}
+
+Returns the full path (directory and filename) of the currently selected file.
+For the controls having the {\tt wxFC\_MULTIPLE} style, use \helpref{GetPaths}{wxfilectrlgetpaths}
+instead
+
+\membersection{wxFileCtrl::GetPaths}\label{wxfilectrlgetpaths}
+
+\constfunc{void}{GetPaths}{\param{wxArrayString\& }{paths}}
+
+Fills the array {\it paths} with the full paths of the files chosen. This
+function should be used with the controls having the {\tt wxFC\_MULTIPLE} style,
+use \helpref{GetPath}{wxfilectrlgetpath} otherwise.
+
+\wxheading{Remarks}
+
+{\it paths} is emptied first.
+
+\membersection{wxFileCtrl::GetFilenames}\label{wxfilectrlgetfilenames}
+
+\constfunc{void}{GetFilenames}{\param{wxArrayString\& }{filenames}}
+
+Fills the array {\it filenames} with the filenames only of selected items. This
+function should only be used with the controls having the {\tt wxFC\_MULTIPLE} style,
+use \helpref{GetFilename}{wxfilectrlgetfilename} for the others.
+
+\wxheading{Remarks}
+
+{\it filenames} is emptied first.
+
+\membersection{wxFileCtrl::GetFilterIndex}\label{wxfilectrlgetfilterindex}
+
+\constfunc{int}{GetFilterIndex}{\void}
+
+Returns the zero-based index of the currently selected filter.
+
+\membersection{wxFileCtrl::ShowHidden}\label{wxfilectrlshowhidden}
+
+\func{void}{ShowHidden}{\param{const bool }{show}}
+
+Sets whether hidden files and folders are shown or not.
+
+\membersection{wxFileCtrl::SetWildcard}\label{wxfilectrlsetwildcard}
+
+\func{void}{SetWildcard}{\param{const wxString\& }{wildCard}}
+
+Sets the wildcard, which can contain multiple file types, for example:
+
+``BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
+
+\membersection{wxFileCtrl::SetFilterIndex}\label{wxfilectrlsetfilterindex}
+
+\func{void}{SetFilterIndex}{\param{int }{filterIndex}}
+
+Sets the current filter index, starting from zero.
+
+\membersection{wxFileCtrl::SetDirectory}\label{wxfilectrlsetdirectory}
+
+\func{bool}{SetDirectory}{\param{const wxString\& }{directory}}
+
+Sets(changes) the current directory displayed in the control.
+
+\wxheading{Return value}
+
+Returns \true on success, \false otherwise.
+
+\membersection{wxFileCtrl::SetFilename}\label{wxfilectrlsetfilename}
+
+\func{bool}{SetFilename}{\param{const wxString\& }{filename}}
+
+Selects a certain file.
+
+\wxheading{Return value}
+
+Returns \true on success, \false otherwise
+
+\membersection{wxFileCtrl::SetPath}\label{wxfilectrlsetpath}
+
+\func{bool}{SetPath}{\param{const wxString\& }{path}}
+
+Selects a certain file using its path (the combined directory and filename).
+Equivalent to \helpref{SetPath}{wxfilectrlsetpath} then \helpref{SetFilename}{wxfilectrlsetfilename}.
+
+\wxheading{Return value}
+
+Returns \true on success, \false otherwise.

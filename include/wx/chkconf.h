@@ -511,6 +511,14 @@
 #   endif
 #endif /* !defined(wxUSE_DOC_VIEW_ARCHITECTURE) */
 
+#ifndef wxUSE_FILECTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_FILECTRL must be defined."
+#   else
+#       define wxUSE_FILECTRL 0
+#   endif
+#endif /* !defined(wxUSE_FILECTRL) */
+
 #ifndef wxUSE_FILEDLG
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_FILEDLG must be defined."
@@ -1416,6 +1424,17 @@
 #       endif
 #   endif
 #endif /* !wxMSW || wxUniv */
+
+/* generic file dialog depends on (generic) file control */
+#if wxUSE_FILEDLG && !wxUSE_FILECTRL && \
+        (defined(__WXUNIVERSAL__) || defined(__WXGTK__))
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "Generic wxFileDialog requires wxFileCtrl"
+#   else
+#       undef wxUSE_FILECTRL
+#       define wxUSE_FILECTRL 1
+#   endif
+#endif /* wxUSE_FILEDLG */
 
 /* common dependencies */
 #if wxUSE_CALENDARCTRL

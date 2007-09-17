@@ -504,6 +504,10 @@ SOURCE=.\dirpicker.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\filectrl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\filepicker.cpp
 # End Source File
 # Begin Source File

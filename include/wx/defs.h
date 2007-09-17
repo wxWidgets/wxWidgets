@@ -1875,6 +1875,9 @@ enum
 
     /*  IDs used by generic file dialog (13 consecutive starting from this value) */
     wxID_FILEDLGG = 5900,
+    
+    /*  IDs used by generic file ctrl (4 consecutive starting from this value) */
+    wxID_FILECTRL = 5950,
 
     wxID_HIGHEST = 5999
 };

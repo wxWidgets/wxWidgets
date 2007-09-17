@@ -44,7 +44,7 @@ wxFileDialog::~wxFileDialog()
 
 void wxFileDialog::OnFakeOk( wxCommandEvent &event )
 {
-    wxGenericFileDialog::OnListOk( event );
+    wxGenericFileDialog::OnOk( event );
 }
 
 int wxFileDialog::ShowModal()

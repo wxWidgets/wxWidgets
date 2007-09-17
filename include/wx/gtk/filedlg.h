@@ -11,6 +11,7 @@
 #define __GTKFILEDLGH__
 
 #include "wx/generic/filedlgg.h"
+#include "wx/gtk/filectrl.h"    // for wxGtkFileChooser
 
 //-------------------------------------------------------------------------
 // wxFileDialog
@@ -64,6 +65,8 @@ private:
     DECLARE_DYNAMIC_CLASS(wxFileDialog)
     DECLARE_EVENT_TABLE()
     void OnFakeOk( wxCommandEvent &event );
+
+    wxGtkFileChooser    m_fc;
 };
 
 #endif // __GTKFILEDLGH__

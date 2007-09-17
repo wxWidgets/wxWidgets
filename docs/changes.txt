@@ -168,8 +168,9 @@ All (GUI):
 - Added support for labels for toolbar controls (Vince Harron).
 - Added wxMessageDialog::SetMessage() and SetExtendedMessage().
 - Added XRCSIZERITEM() macro for obtaining sizers from XRC (Brian Vanderburg II)
-- Added wxEventBlocker class (Francesco Montorsi)..
-- Added wxFile/DirPickerCtrl::Get/SetFile/DirName() (Francesco Montorsi)..
+- New and improved wxFileCtrl (Diaa Sami and Marcin Wojdyr)
+- Added wxEventBlocker class (Francesco Montorsi).
+- Added wxFile/DirPickerCtrl::Get/SetFile/DirName() (Francesco Montorsi).
 - Added wxSizerFlags::Top() and Bottom().
 - Slovak translation added.
 - Fixed tab-related drawing and hit-testing bugs in wxRichTextCtrl.

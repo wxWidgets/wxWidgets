@@ -736,6 +736,7 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_DISPLAY=yes
   DEFAULT_wxUSE_DETECT_SM=yes
   DEFAULT_wxUSE_DIRPICKERCTRL=yes
+  DEFAULT_wxUSE_FILECTRL=yes
   DEFAULT_wxUSE_FILEPICKERCTRL=yes
   DEFAULT_wxUSE_FONTPICKERCTRL=yes
   DEFAULT_wxUSE_GAUGE=yes
@@ -789,6 +790,7 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_DISPLAY=no
   DEFAULT_wxUSE_DETECT_SM=no
   DEFAULT_wxUSE_DIRPICKERCTRL=no
+  DEFAULT_wxUSE_FILECTRL=no
   DEFAULT_wxUSE_FILEPICKERCTRL=no
   DEFAULT_wxUSE_FONTPICKERCTRL=no
   DEFAULT_wxUSE_GAUGE=no
@@ -846,6 +848,7 @@ WX_ARG_FEATURE(display,     [  --enable-display        use wxDisplay class], wxU
 WX_ARG_FEATURE(detect_sm,   [  --enable-detect_sm      use code to detect X11 session manager], wxUSE_DETECT_SM)
 WX_ARG_FEATURE(editablebox, [  --enable-editablebox    use wxEditableListBox class], wxUSE_EDITABLELISTBOX)
 WX_ARG_FEATURE(filepicker,  [  --enable-filepicker     use wxFilePickerCtrl class], wxUSE_FILEPICKERCTRL)
+WX_ARG_FEATURE(filectrl,    [  --enable-filectrl       use wxFileCtrl class], wxUSE_FILECTRL)
 WX_ARG_FEATURE(fontpicker,  [  --enable-fontpicker     use wxFontPickerCtrl class], wxUSE_FONTPICKERCTRL)
 WX_ARG_FEATURE(gauge,       [  --enable-gauge          use wxGauge class], wxUSE_GAUGE)
 WX_ARG_FEATURE(grid,        [  --enable-grid           use wxGrid class], wxUSE_GRID)
@@ -6488,6 +6491,11 @@ fi
 
 if test "$wxUSE_DIRPICKERCTRL" = "yes"; then
   AC_DEFINE(wxUSE_DIRPICKERCTRL)
+  USES_CONTROLS=1
+fi
+
+if test "$wxUSE_FILECTRL" = "yes"; then
+  AC_DEFINE(wxUSE_FILECTRL)
   USES_CONTROLS=1
 fi
 

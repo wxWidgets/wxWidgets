@@ -146,6 +146,9 @@ protected:
     virtual void DoSetItemClientData(unsigned int n, void* clientData);
     virtual void * DoGetItemClientData(unsigned int n) const;
 
+    virtual wxClientDataType GetClientDataType() const;
+    virtual void SetClientDataType(wxClientDataType clientDataItemsType);
+
     // the subcontrols
     wxComboBoxText*     m_text;
     wxComboBoxChoice*   m_choice;

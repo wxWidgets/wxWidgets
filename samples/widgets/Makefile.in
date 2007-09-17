@@ -61,6 +61,7 @@ WIDGETS_OBJECTS =  \
 	widgets_datepick.o \
 	widgets_dirctrl.o \
 	widgets_dirpicker.o \
+	widgets_filectrl.o \
 	widgets_filepicker.o \
 	widgets_fontpicker.o \
 	widgets_gauge.o \
@@ -245,6 +246,9 @@ widgets_dirctrl.o: $(srcdir)/dirctrl.cpp
 
 widgets_dirpicker.o: $(srcdir)/dirpicker.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/dirpicker.cpp
+
+widgets_filectrl.o: $(srcdir)/filectrl.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/filectrl.cpp
 
 widgets_filepicker.o: $(srcdir)/filepicker.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/filepicker.cpp

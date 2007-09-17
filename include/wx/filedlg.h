@@ -186,25 +186,25 @@ wxSaveFileSelector(const wxString& what,
 
 
 #if defined (__WXUNIVERSAL__)
-#define wxHAS_GENERIC_FILEDIALOG
-#include "wx/generic/filedlgg.h"
+    #define wxHAS_GENERIC_FILEDIALOG
+    #include "wx/generic/filedlgg.h"
 #elif defined(__WXMSW__)
-#include "wx/msw/filedlg.h"
+    #include "wx/msw/filedlg.h"
 #elif defined(__WXMOTIF__)
-#include "wx/motif/filedlg.h"
+    #include "wx/motif/filedlg.h"
 #elif defined(__WXGTK24__)
-#include "wx/gtk/filedlg.h"     // GTK+ > 2.4 has native version
+    #include "wx/gtk/filedlg.h"     // GTK+ > 2.4 has native version
 #elif defined(__WXGTK20__)
-#define wxHAS_GENERIC_FILEDIALOG
-#include "wx/generic/filedlgg.h"
+    #define wxHAS_GENERIC_FILEDIALOG
+    #include "wx/generic/filedlgg.h"
 #elif defined(__WXGTK__)
-#include "wx/gtk1/filedlg.h"
+    #include "wx/gtk1/filedlg.h"
 #elif defined(__WXMAC__)
-#include "wx/mac/filedlg.h"
+    #include "wx/mac/filedlg.h"
 #elif defined(__WXCOCOA__)
-#include "wx/cocoa/filedlg.h"
+    #include "wx/cocoa/filedlg.h"
 #elif defined(__WXPM__)
-#include "wx/os2/filedlg.h"
+    #include "wx/os2/filedlg.h"
 #endif
 
 #endif // wxUSE_FILEDLG
