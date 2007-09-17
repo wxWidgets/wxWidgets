@@ -16,6 +16,8 @@
 
 #include "wx/filectrl.h"
 
+#if defined(__WXGTK24__) && !defined(__WXUNIVERSAL__)
+
 #ifndef WX_PRECOMP
 #    include "wx/sizer.h"
 #    include "wx/debug.h"
@@ -429,4 +431,8 @@ void wxGtkFileCtrl::ShowHidden(const bool show)
     gtk_file_chooser_set_show_hidden( m_fcWidget, ( show == true ) ? TRUE : FALSE );
 }
 
-#endif // wxUSE_FILECTRL
+#endif 
+    // wxUSE_FILECTRL
+
+#endif
+    // if defined(__WXGTK24__) && !defined(__WXUNIVERSAL__)
