@@ -1,0 +1,59 @@
+#!/bin/sh
+
+# TODO: Get these from somewhere...
+MAJOR_VERSION=2
+MINOR_VERSION=9
+REVISION=0
+BRANCH="$MAJOR_VERSION.$MINOR_VERSION"
+RELEASE="$BRANCH.$REVISION"
+
+if [ "$WXROOT" = "" ]; then
+  scriptDir="$(cd $(dirname $0);pwd)"
+  WXROOT=$scriptDir/../../..
+fi
+
+export INSTALLDIR=/Library/Frameworks/wx.Framework/Versions/$BRANCH
+rm -rf $INSTALLDIR
+
+mkdir -p builds
+cd builds
+$scriptDir/macbuild universal unicode wxpython
+
+cd $INSTALLDIR
+
+ln -s bin Resources
+ln -s lib/libwx_macud-$RELEASE.dylib ./wx
+ln -s include Headers
+cd include
+
+ln -s wx-$BRANCH/wx wx
+touch wx.h
+
+echo "#ifndef __WX_FRAMEWORK_HEADER__" 1>> wx.h
+echo "#define __WX_FRAMEWORK_HEADER__" 1>> wx.h
+echo "" 1>> wx.h
+echo "" 1>> wx.h
+
+for header in `ls wx/*.h`
+do
+    echo "#include <$header>" 1>> wx.h
+done
+
+echo "" 1>> wx.h
+echo "" 1>> wx.h
+echo "#endif // __WX_FRAMEWORK_HEADER__" 1>> wx.h
+
+cd ..
+
+# keep the gl library there since we link against it.
+#rm lib/libwx_macud-$MAJOR_VERSION.$MINOR_VERSION.*
+
+#mkdir Resources
+#cp bin/wx-config Resources/wx-config
+#cp bin/wxrc Resources/wxrc
+#rm -rf bin
+#rm -rf lib/wx/config
+#mv share Resources/share
+
+cd $INSTALLDIR/..
+ln -s $BRANCH Current
