@@ -241,19 +241,18 @@ int XmlResApp::OnRun()
 {
     static const wxCmdLineEntryDesc cmdLineDesc[] =
     {
-        { wxCMD_LINE_SWITCH, _T("h"), _T("help"),  _T("show help message"),
-              wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
-        { wxCMD_LINE_SWITCH, _T("v"), _T("verbose"), _T("be verbose"), (wxCmdLineParamType)0, 0 },
-        { wxCMD_LINE_SWITCH, _T("e"), _T("extra-cpp-code"),  _T("output C++ header file with XRC derived classes"), (wxCmdLineParamType)0, 0 },
-        { wxCMD_LINE_SWITCH, _T("c"), _T("cpp-code"),  _T("output C++ source rather than .rsc file"), (wxCmdLineParamType)0, 0 },
-        { wxCMD_LINE_SWITCH, _T("p"), _T("python-code"),  _T("output wxPython source rather than .rsc file"), (wxCmdLineParamType)0, 0 },
-        { wxCMD_LINE_SWITCH, _T("g"), _T("gettext"),  _T("output list of translatable strings (to stdout or file if -o used)"), (wxCmdLineParamType)0, 0 },
-        { wxCMD_LINE_OPTION, _T("n"), _T("function"),  _T("C++/Python function name (with -c or -p) [InitXmlResource]"), (wxCmdLineParamType)0, 0 },
-        { wxCMD_LINE_OPTION, _T("o"), _T("output"),  _T("output file [resource.xrs/cpp]"), (wxCmdLineParamType)0, 0 },
+        { wxCMD_LINE_SWITCH, "h", "help",  "show help message", wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
+        { wxCMD_LINE_SWITCH, "v", "verbose", "be verbose" },
+        { wxCMD_LINE_SWITCH, "e", "extra-cpp-code",  "output C++ header file with XRC derived classes" },
+        { wxCMD_LINE_SWITCH, "c", "cpp-code",  "output C++ source rather than .rsc file" },
+        { wxCMD_LINE_SWITCH, "p", "python-code",  "output wxPython source rather than .rsc file" },
+        { wxCMD_LINE_SWITCH, "g", "gettext",  "output list of translatable strings (to stdout or file if -o used)" },
+        { wxCMD_LINE_OPTION, "n", "function",  "C++/Python function name (with -c or -p) [InitXmlResource]" },
+        { wxCMD_LINE_OPTION, "o", "output",  "output file [resource.xrs/cpp]" },
 #if 0 // not yet implemented
-        { wxCMD_LINE_OPTION, _T("l"), _T("list-of-handlers"),  _T("output list of necessary handlers to this file"), (wxCmdLineParamType)0, 0 },
+        { wxCMD_LINE_OPTION, "l", "list-of-handlers",  "output list of necessary handlers to this file" },
 #endif
-        { wxCMD_LINE_PARAM,  NULL, NULL, _T("input file(s)"),
+        { wxCMD_LINE_PARAM,  NULL, NULL, "input file(s)",
               wxCMD_LINE_VAL_STRING,
               wxCMD_LINE_PARAM_MULTIPLE | wxCMD_LINE_OPTION_MANDATORY },
 
@@ -284,14 +283,14 @@ int XmlResApp::OnRun()
 
 void XmlResApp::ParseParams(const wxCmdLineParser& cmdline)
 {
-    flagGettext = cmdline.Found(_T("g"));
-    flagVerbose = cmdline.Found(_T("v"));
-    flagCPP = cmdline.Found(_T("c"));
-    flagPython = cmdline.Found(_T("p"));
-    flagH = flagCPP && cmdline.Found(_T("e"));
+    flagGettext = cmdline.Found("g");
+    flagVerbose = cmdline.Found("v");
+    flagCPP = cmdline.Found("c");
+    flagPython = cmdline.Found("p");
+    flagH = flagCPP && cmdline.Found("e");
 
 
-    if (!cmdline.Found(_T("o"), &parOutput))
+    if (!cmdline.Found("o", &parOutput))
     {
         if (flagGettext)
             parOutput = wxEmptyString;
@@ -314,7 +313,7 @@ void XmlResApp::ParseParams(const wxCmdLineParser& cmdline)
     }
     if (!parOutputPath) parOutputPath = _T(".");
 
-    if (!cmdline.Found(_T("n"), &parFuncname))
+    if (!cmdline.Found("n", &parFuncname))
         parFuncname = _T("InitXmlResource");
 
     for (size_t i = 0; i < cmdline.GetParamCount(); i++)
