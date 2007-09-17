@@ -1,3 +1,37 @@
+wxwidgets2.8 (2.8.5.0-0) unstable; urgency=low
+
+  * Fixed caption clicking being ignored on centred wxAUI panel.
+  * Added AdvanceSelection, ShowWindowMenu functions and keyboard handling to
+    wxAuiNotebook.
+  * Added wxAUI_NB_SUPPORT for standard wxAuiNotebook art (Langhammer).
+  * Added event for double clicks on wxAuiNotebook tab background.
+  * Added events for wxAuiNotebook tab dragging and closing notification.
+  * Fixed some problems handling unusual wxAUI pane activation order in wxGTK.
+  * Fixed a problem with resizing floating wxAUI panes.
+  * Fixed a wxTabFrame leak by deleting all wxAuiNotebook pages in the destructor.
+  * Added XRC handler for wxPropertySheetDialog (Sander Berents).
+  * API consistency fixes: added wxMenuBar::SetMenuLabel, wxMenuBar::GetMenuLabel,
+    wxMenuBar::GetMenuLabelText, wxMenu::GetLabelText, wxMenuItem::SetItemLabel,
+    wxMenuItem::GetItemLabel, wxMenuItem::GetItemLabelText, wxMenuItem::GetLabelText.
+    Get...Label functions get the raw label with mnemonics and accelerators,
+    and Get...LabelText function get the text only without mnemonics/accelerators.
+  * Fixed a problem with wxSizer::GetContainingSizer failing for nested sizers
+    depending on sizer addition order.
+  * Added Set/GetParentWindow to wxHtmlEasyPrinting to allow reuse with different
+    parent windows.
+  * Fixed a wxRichTextCtrl problem saving a URL to XML.
+  * Fixed default background and text colours for wxRichTextCtrl.
+  * Replaced g_free with g_border_free to fix crash with newer GTK+.
+  * Fixed crash in settings when using tooltips->tip_window with GTK+ 2.11.6.
+  * Fix WX_GL_STEREO attribute handling (Tristan Mehamli)
+  * Fix wxThread::SetPriority() when the thread is running (Christos Gourdoupis)
+  * Fixed size problem in wxTaskBarIcon
+  * Fixed scrolling problem of wxStaticBox (and possibly other control)
+  * Fixed wxFileDataObject for DnD in UTF8 locales with non-ASCII characters
+	
+	
+ -- Robin Dunn <robin@alldunn.com>  Thu, 14 Sept 2007 21:13:49 -0700
+	
 wxwidgets2.8 (2.8.4.2-0) unstable; urgency=low
 
   * Pacakges now support all Python versions in `pyversions -r`
