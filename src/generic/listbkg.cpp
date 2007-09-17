@@ -324,13 +324,9 @@ wxListbook::InsertPage(size_t n,
     if ( selNew != -1 )
         SetSelection(selNew);
 
-    GetListView()->Arrange();
-
-    if (GetPageCount() == 1)
-    {
-        wxSizeEvent sz(GetSize(), GetId());
-        GetEventHandler()->ProcessEvent(sz);
-    }
+    wxSizeEvent sz(GetSize(), GetId());
+    GetEventHandler()->ProcessEvent(sz);
+    
     return true;
 }
 
