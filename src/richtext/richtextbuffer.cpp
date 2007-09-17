@@ -688,6 +688,7 @@ void wxRichTextParagraphLayoutBox::Copy(const wxRichTextParagraphLayoutBox& obj)
     wxRichTextBox::Copy(obj);
 
     m_partialParagraph = obj.m_partialParagraph;
+    m_defaultAttributes = obj.m_defaultAttributes;
 }
 
 /// Get/set the size for the given range.
