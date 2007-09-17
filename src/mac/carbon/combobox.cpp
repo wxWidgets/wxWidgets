@@ -507,44 +507,37 @@ int wxComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
                               void **clientData,
                               wxClientDataType type)
 {
-    // wxItemContainer should probably be doing it itself but usually this is
-    // not necessary as the derived class DoInsertItems() calls
-    // AssignNewItemClientData() which initializes m_clientDataItemsType
-    // correctly; however as we just forward everything to wxChoice, we need to
-    // do it ourselves
-    //
-    // also notice that we never use wxClientData_Object with wxChoice as we
-    // don't want it to delete the data -- we will
-    int rc = m_choice->DoInsertItems(items, pos, clientData,
-                                     clientData ? wxClientData_Void
-                                                : wxClientData_None) ;
-    if ( rc != wxNOT_FOUND )
-    {
-        if ( !HasClientData() && type != wxClientData_None )
-            m_clientDataItemsType = type;
-    }
-
-    return rc;
+    return m_choice->DoInsertItems(items, pos, clientData, type);
 }
 
 void wxComboBox::DoSetItemClientData(unsigned int n, void* clientData)
 {
-    return m_choice->SetClientData( n , clientData ) ;
+    return m_choice->DoSetItemClientData( n , clientData ) ;
 }
 
 void* wxComboBox::DoGetItemClientData(unsigned int n) const
 {
-    return m_choice->GetClientData( n ) ;
+    return m_choice->DoGetItemClientData( n ) ;
+}
+
+wxClientDataType wxComboBox::GetClientDataType() const
+{
+    return m_choice->GetClientDataType();
+}
+
+void wxComboBox::SetClientDataType(wxClientDataType clientDataItemsType)
+{
+    m_choice->SetClientDataType(clientDataItemsType);
 }
 
 void wxComboBox::DoDeleteOneItem(unsigned int n)
 {
-    m_choice->Delete( n );
+    m_choice->DoDeleteOneItem( n );
 }
 
 void wxComboBox::DoClear()
 {
-    m_choice->Clear();
+    m_choice->DoClear();
 }
 
 int wxComboBox::GetSelection() const

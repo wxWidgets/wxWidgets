@@ -82,7 +82,6 @@ bool wxListBox::Create(
         return false;
 
     wxMacDataBrowserListControl* control = new wxMacDataBrowserListControl( this, pos, size, style );
-    control->SetClientDataType( m_clientDataItemsType );
     m_peer = control;
 
     MacPostControlCreate( pos, size );

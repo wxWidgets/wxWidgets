@@ -486,9 +486,9 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
 
     void *oldData = NULL;
     wxClientData *oldObjData = NULL;
-    if ( m_clientDataItemsType == wxClientData_Void )
+    if ( HasClientUntypedData() )
         oldData = GetClientData(n);
-    else if ( m_clientDataItemsType == wxClientData_Object )
+    else if ( HasClientObjectData() )
         oldObjData = GetClientObject(n);
 
     // delete and recreate it

@@ -483,9 +483,6 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
         g_object_unref (entry);
     }
 
-    if ( !HasClientData() )
-        m_clientDataItemsType = type;
-
     return pos + numItems - 1;
 }
 

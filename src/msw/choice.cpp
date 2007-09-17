@@ -363,25 +363,22 @@ void wxChoice::SetString(unsigned int n, const wxString& s)
     // we have to delete and add back the string as there is no way to change a
     // string in place
 
-    // we need to preserve the client data
-    void *data;
-    if ( m_clientDataItemsType != wxClientData_None )
-    {
-        data = DoGetItemClientData(n);
-    }
-    else // no client data
-    {
-        data = NULL;
-    }
+    // we need to preserve the client data manually
+    void *oldData = NULL;
+    wxClientData *oldObjData = NULL;
+    if ( HasClientUntypedData() )
+        oldData = GetClientData(n);
+    else if ( HasClientObjectData() )
+        oldObjData = GetClientObject(n);
 
     ::SendMessage(GetHwnd(), CB_DELETESTRING, n, 0);
     ::SendMessage(GetHwnd(), CB_INSERTSTRING, n, (LPARAM)s.wx_str() );
 
-    if ( data )
-    {
-        DoSetItemClientData(n, data);
-    }
-    //else: it's already NULL by default
+    // restore the client data
+    if ( oldData )
+        SetClientData(n, oldData);
+    else if ( oldObjData )
+        SetClientObject(n, oldObjData);
 
     InvalidateBestSize();
 }

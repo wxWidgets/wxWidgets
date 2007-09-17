@@ -109,7 +109,7 @@ private:
 
             // this is the first time client data is used with this control
             DoInitItemClientData();
-            m_clientDataItemsType = type;
+            SetClientDataType(type);
         }
         //else: we already have client data
 
