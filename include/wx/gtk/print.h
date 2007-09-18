@@ -171,7 +171,6 @@ public:
 
 private:
     GtkPrintContext *m_gpc;
-    bool             m_showDialog;
     wxDC            *m_dc;
 
     DECLARE_DYNAMIC_CLASS(wxGtkPrinter)

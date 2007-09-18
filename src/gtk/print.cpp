@@ -644,7 +644,7 @@ int wxGtkPrintDialog::ShowModal()
     if (GetShowDialog())
         response = gtk_print_operation_run (native->GetPrintJob(), GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, GTK_WINDOW(gtk_widget_get_toplevel(m_parent->m_widget) ), &gError);
     else
-        response = gtk_print_operation_run (native->GetPrintJob(), GTK_PRINT_OPERATION_ACTION_PRINT, (GtkWindow *) m_parent, &gError);
+        response = gtk_print_operation_run (native->GetPrintJob(), GTK_PRINT_OPERATION_ACTION_PRINT, GTK_WINDOW(gtk_widget_get_toplevel(m_parent->m_widget)), &gError);
 
     // Does everything went well?
     if (response == GTK_PRINT_OPERATION_RESULT_CANCEL)
@@ -847,19 +847,29 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     dataToSend.printer = this;
     dataToSend.printout = printout;
 
-    // These Gtk signals are catched here.
+    // These Gtk signals are caught here.
     g_signal_connect (printOp, "begin-print", G_CALLBACK (gtk_begin_print_callback), &dataToSend);
     g_signal_connect (printOp, "draw-page", G_CALLBACK (gtk_draw_page_print_callback), &dataToSend);
     g_signal_connect (printOp, "end-print", G_CALLBACK (gtk_end_print_callback), printout);
     g_signal_connect (printOp, "preview", G_CALLBACK (gtk_preview_print_callback), printout);
 
-    m_showDialog = true;
-    if (!prompt)
-        m_showDialog = false;
+    // This is used to setup the DC and
+    // show the dialog if desired
+    wxGtkPrintDialog dialog( parent, &m_printDialogData );
+    dialog.SetPrintDC(m_dc);
+    dialog.SetShowDialog(prompt);
 
-    // PrintDialog returns a wxDC but we created it before so we don't need it anymore: we just delete it.
-    wxDC* uselessdc = PrintDialog( parent );
-    delete uselessdc;
+    // doesn't necessarily show
+    int ret = dialog.ShowModal();
+    if (ret == wxID_CANCEL)
+    {
+        sm_lastError = wxPRINTER_CANCELLED;
+    }
+    if (ret == wxID_NO)
+    {
+        sm_lastError = wxPRINTER_ERROR;
+        wxFAIL_MSG(_("The print dialog returned an error."));
+    }
 
     g_object_unref (printOp);
 
@@ -1023,13 +1033,11 @@ void wxGtkPrinter::DrawPage(wxPrintout *printout, GtkPrintOperation *operation, 
 wxDC* wxGtkPrinter::PrintDialog( wxWindow *parent )
 {
     wxGtkPrintDialog dialog( parent, &m_printDialogData );
-    int ret;
 
     dialog.SetPrintDC(m_dc);
+    dialog.SetShowDialog(true);
 
-    dialog.SetShowDialog(m_showDialog);
-
-    ret = dialog.ShowModal();
+    int ret = dialog.ShowModal();
 
     if (ret == wxID_CANCEL)
     {
@@ -1073,12 +1081,10 @@ wxGtkPrintDC::wxGtkPrintDC( const wxPrintData& data )
 
     m_gpc = native->GetPrintContext();
 
-    // RR: what does this do?
+    // Match print quality to resolution (high = 1200dpi)
     m_resolution = m_printData.GetQuality(); // (int) gtk_print_context_get_dpi_x( m_gpc );
     if (m_resolution < 0)
         m_resolution = (1 << (m_resolution+4)) *150;
-
-    wxPrintf( "resolution %d\n", m_resolution );
 
     m_PS2DEV = (double)m_resolution / 72.0;
     m_DEV2PS = 72.0 / (double)m_resolution;
@@ -1093,11 +1099,12 @@ wxGtkPrintDC::wxGtkPrintDC( const wxPrintData& data )
     m_currentBlue = 0;
     m_currentGreen = 0;
 
-    m_signX =  1;  // default x-axis left to right.
+    m_signX = 1;  // default x-axis left to right.
     m_signY = 1;  // default y-axis bottom up -> top down.
 
-    // By default the origine of cairo contexte is in the upper left corner of the printable area.
-    // We need to translate it so that it is in the upper left corner of the paper (i.e. doesn't care about margins)
+    // By default the origin of the cairo context is in the upper left
+    // corner of the printable area. We need to translate it so that it
+    // is in the upper left corner of the paper (without margins)
     GtkPageSetup *setup = gtk_print_context_get_page_setup( m_gpc );
     gdouble ml, mt;
     ml = gtk_page_setup_get_left_margin (setup, GTK_UNIT_POINTS);
