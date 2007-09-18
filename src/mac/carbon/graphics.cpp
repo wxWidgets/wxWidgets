@@ -532,6 +532,20 @@ void wxMacCoreGraphicsBrushData::CreateRadialGradientBrush( wxDouble xo, wxDoubl
     m_isShading = true ;
 }
 
+static const char *gs_stripedback_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"4 4 2 1",
+". c #F0F0F0",
+"X c #ECECEC",
+/* pixels */
+"....",
+"....",
+"XXXX",
+"XXXX"
+};
+
+wxBitmap gs_stripedback_bmp( wxImage( (const char* const* ) gs_stripedback_xpm  ), -1 ) ;
+
 wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData(wxGraphicsRenderer* renderer, const wxBrush &brush) : wxGraphicsObjectRefData( renderer )
 {
     Init();
@@ -550,12 +564,25 @@ wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData(wxGraphicsRenderer* rende
             else
 #endif
             {
-                // as close as we can get, unfortunately < 10.4 things get difficult
-                RGBColor color;
-                GetThemeBrushAsColor( brush.MacGetTheme(), 32, true, &color );
-                CGFloat components[4] = {  (CGFloat) color.red / 65536,
-                    (CGFloat) color.green / 65536, (CGFloat) color.blue / 65536, 1 } ;
-                m_color.Set( CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ) ;
+                if( brush.MacGetTheme() == kThemeBrushDialogBackgroundActive )
+                {
+                    // striped background is a pattern, we have to emulate it
+                    
+                    m_isPattern = true;
+                    m_patternColorComponents = new CGFloat[1] ;
+                    m_patternColorComponents[0] = 1.0;
+                    m_colorSpace.Set( CGColorSpaceCreatePattern( NULL ) );
+                    m_pattern.Set( *( new ImagePattern( &gs_stripedback_bmp , CGAffineTransformMakeScale( 1,-1 ) ) ) );
+                }
+                else
+                {
+                    // as close as we can get, unfortunately < 10.4 things get difficult
+                    RGBColor color;
+                    GetThemeBrushAsColor( brush.MacGetTheme(), 32, true, &color );
+                    CGFloat components[4] = {  (CGFloat) color.red / 65536,
+                        (CGFloat) color.green / 65536, (CGFloat) color.blue / 65536, 1 } ;
+                    m_color.Set( CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ) ;
+                }
             }
         }
         else
