@@ -270,14 +270,14 @@ class wxDataViewTreeNode
 {
 public:
     wxDataViewTreeNode( wxDataViewTreeNode * parent = NULL )
-    	{ this->parent = parent;
+        { this->parent = parent;
           if( parent == NULL )
               open = true;
-	   else
-	   	open = false;
+       else
+        open = false;
           hasChildren = false;
           subTreeCount  = 0;
-	}
+    }
     //I don't know what I need to do in the destructure
     ~wxDataViewTreeNode()
     {
@@ -313,13 +313,13 @@ public:
     int GetIndentLevel()
     {
         int ret = 0 ;
-	 wxDataViewTreeNode * node = this;
-	 while( node->GetParent()->GetParent() != NULL )
-	 {
-	     node = node->GetParent();
-	     ret ++;
-	 }
-	 return ret;
+     wxDataViewTreeNode * node = this;
+     while( node->GetParent()->GetParent() != NULL )
+     {
+         node = node->GetParent();
+         ret ++;
+     }
+     return ret;
     }
 
     bool IsOpen()
@@ -587,7 +587,7 @@ public:
     virtual bool Cleared()
         { return m_mainWindow->Cleared(); }
     virtual void Resort()
-    	 { m_mainWindow->Resort(); }
+         { m_mainWindow->Resort(); }
 
     wxDataViewMainWindow    *m_mainWindow;
 };
@@ -2392,11 +2392,11 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         {
             // get the cell value and set it into the renderer
             wxVariant value;
-	     wxDataViewTreeNode * node = GetTreeNodeByRow(item);
-	     if( node == NULL )
-	     {
-	         continue;
-	     }
+         wxDataViewTreeNode * node = GetTreeNodeByRow(item);
+         if( node == NULL )
+         {
+             continue;
+         }
 
             wxDataViewItem dataitem = node->GetItem();
              model->GetValue( value, dataitem, col->GetModelColumn());
@@ -2775,7 +2775,7 @@ public:
     {
         current ++;
         if( current == static_cast<int>(row))
-    	 {
+         {
             ret = node->GetItem() ;
             return DoJob::OK;
         }
@@ -2803,7 +2803,7 @@ public:
     {
         current ++;
         if( current == static_cast<int>(row))
-    	 {
+         {
             ret = wxDataViewItem( n ) ;
             return DoJob::OK;
         }
@@ -2839,7 +2839,7 @@ public:
     {
         current ++;
         if( current == static_cast<int>(row))
-    	 {
+         {
             ret = node ;
             return DoJob::OK;
         }
@@ -2873,7 +2873,7 @@ public:
     {
         current ++;
         if( current == static_cast<int>(row))
-    	 {
+         {
             ret = new wxDataViewTreeNode( parent ) ;
             ret->SetItem( wxDataViewItem( n ));
             ret->SetHasChildren(false);
@@ -3254,11 +3254,11 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
             break;
         //Add the process for tree expanding/collapsing
         case WXK_LEFT:
-	     OnCollapsing(m_currentRow);
-	     break;
-	 case WXK_RIGHT:
-	     OnExpanding( m_currentRow);
-	     break;
+         OnCollapsing(m_currentRow);
+         break;
+     case WXK_RIGHT:
+         OnExpanding( m_currentRow);
+         break;
         case WXK_END:
             if (!IsEmpty())
                 OnArrowChar( GetRowCount() - 1, event );
@@ -3365,7 +3365,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                 m_underMouse = node;
             }
         }
-	 if (node!=NULL && !node->HasChildren())
+     if (node!=NULL && !node->HasChildren())
             delete node;
     }
     if (!hover)
@@ -3461,21 +3461,21 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         bool expander = false;
         if (GetOwner()->GetExpanderColumn() == col)
         {
-	        wxDataViewTreeNode * node = GetTreeNodeByRow(current);
-	        if( node!=NULL && node->HasChildren() )
-	        {
-	            int indent = node->GetIndentLevel();
-	            indent = GetOwner()->GetIndent()*indent;
-	            wxRect rect( xpos + indent + EXPANDER_MARGIN, current * m_lineHeight + EXPANDER_MARGIN, m_lineHeight-2*EXPANDER_MARGIN,m_lineHeight-2*EXPANDER_MARGIN);
-	            if( rect.Contains( x, y) )
-	            {
-	                expander = true;
-	                if( node->IsOpen() )
-	                    OnCollapsing(current);
-	                else
-	                    OnExpanding( current );
-	            }
-	        }
+            wxDataViewTreeNode * node = GetTreeNodeByRow(current);
+            if( node!=NULL && node->HasChildren() )
+            {
+                int indent = node->GetIndentLevel();
+                indent = GetOwner()->GetIndent()*indent;
+                wxRect rect( xpos + indent + EXPANDER_MARGIN, current * m_lineHeight + EXPANDER_MARGIN, m_lineHeight-2*EXPANDER_MARGIN,m_lineHeight-2*EXPANDER_MARGIN);
+                if( rect.Contains( x, y) )
+                {
+                    expander = true;
+                    if( node->IsOpen() )
+                        OnCollapsing(current);
+                    else
+                        OnExpanding( current );
+                }
+            }
         }
         //If the user click the expander, we do not do editing even if the column with expander are editable
         if (m_lastOnSame && !expander )
@@ -3965,7 +3965,7 @@ void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, const wxDataVie
     if( row >= 0 )
     {
         if( column == NULL )
-            return EnsureVisible(row, -1);
+            EnsureVisible(row, -1);
         else
         {
             int col = 0;
