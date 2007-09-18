@@ -1599,7 +1599,7 @@ gtk_window_button_press_callback( GtkWidget *widget,
     if ( ret )
         return TRUE;
 
-    if ((event_type == wxEVT_LEFT_DOWN) && 
+    if ((event_type == wxEVT_LEFT_DOWN) &&
         (g_focusWindow != win) && win->AcceptsFocus())
     {
         win->SetFocus();
@@ -1677,9 +1677,9 @@ gtk_window_button_release_callback( GtkWidget *widget,
     event.SetId( win->GetId() );
 
     bool ret = win->GTKProcessEvent(event);
-    
+
     g_lastMouseEvent = NULL;
-    
+
     return ret;
 }
 
@@ -2806,7 +2806,7 @@ void wxWindowGTK::OnInternalIdle()
         }
     }
 
-    if (wxUpdateUIEvent::CanUpdate(this))
+    if (wxUpdateUIEvent::CanUpdate(this) && IsShown())
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
@@ -4156,7 +4156,7 @@ void wxWindowGTK::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
                               (gpointer)gtk_scrollbar_value_changed, this);
 
         gtk_adjustment_value_changed(adj);
-        
+
         g_signal_connect_after(m_scrollBar[dir], "value_changed",
                                G_CALLBACK(gtk_scrollbar_value_changed), this);
     }
@@ -4251,7 +4251,7 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 
     // No scrolling requested.
     if ((dx == 0) && (dy == 0)) return;
-    
+
     m_clipPaintRegion = true;
 
     if (GetLayoutDirection() == wxLayout_RightToLeft)

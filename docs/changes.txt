@@ -87,13 +87,20 @@ Major new features in 2.8 release
   wxDirPickerCtrl, wxFilePickerCtrl, wxFontPickerCtrl, wxCollapsiblePane,
   wxSearchCtrl, wxAboutBox, wxTreebook, tar streams.
 
-
 2.8.6
 -----
 
 All (GUI):
 
-- Add support for reading alpha data from TIFF images
+- Added an optimization to UI updates on idle, by only updating when the window
+  is shown.
+- Multiple centre panes in wxAUI can now be resized.
+- Add support for reading alpha data from TIFF images.
+  
+wxMSW:
+
+- Fixed a bug with a spurious border appearing on wxStatusBar under Windows XP/Vista.
+
 
 2.8.5
 -----
