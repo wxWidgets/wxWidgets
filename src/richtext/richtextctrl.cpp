@@ -229,7 +229,10 @@ void wxRichTextCtrl::Thaw()
 
     if (m_freezeCount == 0)
     {
-        SetupScrollbars();
+        if (GetBuffer().GetDirty())
+            LayoutContent();
+        else
+            SetupScrollbars();
         Refresh(false);
     }
 }
@@ -244,11 +247,9 @@ void wxRichTextCtrl::Clear()
     m_caretAtLineStart = false;
     m_selectionRange.SetRange(-2, -2);
 
-    SetScrollbars(0, 0, 0, 0, 0, 0);
-
     if (m_freezeCount == 0)
     {
-        SetupScrollbars();
+        LayoutContent();
         Refresh(false);
     }
     SendTextUpdatedEvent();
