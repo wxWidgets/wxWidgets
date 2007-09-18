@@ -1660,41 +1660,55 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
     {
         keyval = (keyval - '0') + WXK_NUMPAD0;
     }
-    else if (keycode >= 67 && keycode <= 81)
+    else 
     {
         switch (keycode)
         {
-        case 76 :
-            keyval = WXK_NUMPAD_ENTER;
-            break;
-
-        case 81:
-            keyval = WXK_NUMPAD_EQUAL;
-            break;
-
-        case 67:
-            keyval = WXK_NUMPAD_MULTIPLY;
-            break;
-
-        case 75:
-            keyval = WXK_NUMPAD_DIVIDE;
-            break;
-
-        case 78:
-            keyval = WXK_NUMPAD_SUBTRACT;
-            break;
-
-        case 69:
-            keyval = WXK_NUMPAD_ADD;
-            break;
-
-        case 65:
-            keyval = WXK_NUMPAD_DECIMAL;
-            break;
-
-        default:
-            break;
-        } // end switch
+            case 76 :
+                keyval = WXK_NUMPAD_ENTER;
+                break;
+                
+            case 81:
+                keyval = WXK_NUMPAD_EQUAL;
+                break;
+                
+            case 67:
+                keyval = WXK_NUMPAD_MULTIPLY;
+                break;
+                
+            case 75:
+                keyval = WXK_NUMPAD_DIVIDE;
+                break;
+                
+            case 78:
+                keyval = WXK_NUMPAD_SUBTRACT;
+                break;
+                
+            case 69:
+                keyval = WXK_NUMPAD_ADD;
+                break;
+                
+            case 65:
+                keyval = WXK_NUMPAD_DECIMAL;
+                break;
+            case 24:    // + key
+                keyval = WXK_ADD;
+                break;
+            case 27:    // - key
+                keyval = WXK_SUBTRACT;
+                break;
+            case 28:    // * key
+                keyval = WXK_MULTIPLY;
+                break;
+            case 44:    // / key
+                keyval = WXK_DIVIDE;
+                break;
+            case 47:    //. key
+                keyval = WXK_DECIMAL;
+                break;
+            default:
+                break;
+        }
     }
 
     event.m_shiftDown = modifiers & shiftKey;
