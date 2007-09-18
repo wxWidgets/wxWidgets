@@ -1858,9 +1858,7 @@ gtk_window_focus_out_callback( GtkWidget *widget,
         // Disable default focus handling for custom windows
         // since the default GTK+ handler issues a repaint
         if ( has_wxwindow )
-    {
             return TRUE;
-    }
     }
 
     // continue with normal processing
@@ -2101,22 +2099,22 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
 // "grab_broken"
 //-----------------------------------------------------------------------------
 
-#ifdef __WXGTK210__
-static void
-gtk_window_grab_broken( GtkWidget *m_widget,
+#if GTK_CHECK_VERSION(2, 8, 0)
+static gboolean
+gtk_window_grab_broken( GtkWidget*,
                         GdkEventGrabBroken *event,
                         wxWindow *win )
 {
     // Mouse capture has been lost involuntarily, notify the application
-    if( !event->keyboard && win && wxWindow::GetCapture() == win )
+    if(!event->keyboard && wxWindow::GetCapture() == win)
     {
         wxMouseCaptureLostEvent evt( win->GetId() );
         evt.SetEventObject( win );
         win->GetEventHandler()->ProcessEvent( evt );
     }
+    return false;
 }
 #endif
-
 
 } // extern "C"
 
@@ -2531,7 +2529,7 @@ void wxWindowGTK::PostCreation()
         // Catch native resize events
         g_signal_connect (m_wxwindow, "size_allocate",
                           G_CALLBACK (gtk_window_size_callback), this);
-#ifdef __WXGTK210__
+#if GTK_CHECK_VERSION(2, 8, 0)
         if (!gtk_check_version(2,8,0))
         {
             // Make sure we can notify the app when mouse capture is lost
@@ -2543,7 +2541,7 @@ void wxWindowGTK::PostCreation()
 
     if ( connect_widget != m_wxwindow )
     {
-#ifdef __WXGTK210__
+#if GTK_CHECK_VERSION(2, 8, 0)
         if (!gtk_check_version(2,8,0))
         {
             // Make sure we can notify app code when mouse capture is lost
@@ -3051,9 +3049,7 @@ int wxWindowGTK::GetCharHeight() const
     wxFont font = GetFont();
     wxCHECK_MSG( font.Ok(), 12, wxT("invalid font") );
 
-    PangoContext *context = NULL;
-    if (m_widget)
-        context = gtk_widget_get_pango_context( m_widget );
+    PangoContext* context = gtk_widget_get_pango_context(m_widget);
 
     if (!context)
         return 0;
@@ -3079,9 +3075,7 @@ int wxWindowGTK::GetCharWidth() const
     wxFont font = GetFont();
     wxCHECK_MSG( font.Ok(), 8, wxT("invalid font") );
 
-    PangoContext *context = NULL;
-    if (m_widget)
-        context = gtk_widget_get_pango_context( m_widget );
+    PangoContext* context = gtk_widget_get_pango_context(m_widget);
 
     if (!context)
         return 0;
@@ -3186,19 +3180,19 @@ void wxWindowGTK::SetFocus()
         // this control, whatever the flags are
         if (!GTK_WIDGET_CAN_FOCUS(m_wxwindow))
             GTK_WIDGET_SET_FLAGS(m_wxwindow, GTK_CAN_FOCUS);
-            
+
         if (!GTK_WIDGET_HAS_FOCUS (m_wxwindow))
         {
             gtk_widget_grab_focus (m_wxwindow);
         }
     }
-    else if (m_widget)
+    else
     {
         // wxWindow::SetFocus() should really set the focus to
         // this control, whatever the flags are
         if (!GTK_WIDGET_CAN_FOCUS(m_widget))
             GTK_WIDGET_SET_FLAGS(m_widget, GTK_CAN_FOCUS);
-            
+
         if (GTK_IS_CONTAINER(m_widget))
         {
             if (GTK_IS_RADIO_BUTTON(m_widget))
@@ -3778,7 +3772,6 @@ void wxWindowGTK::GtkSendPaintEvents()
     nc_paint_event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( nc_paint_event );
 
-    
     wxPaintEvent paint_event( GetId() );
     paint_event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( paint_event );
