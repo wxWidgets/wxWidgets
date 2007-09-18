@@ -44,10 +44,6 @@ class wxXmlSubclassFactories;
 class wxXmlResourceModule;
 class wxXmlResourceDataRecords;
 
-// make VC++ happy: otherwise it gives warnings when using this type for a
-// member of DLL-exported wxXmlResource class in shared builds
-template class WXDLLIMPEXP_FWD_XRC wxVector<wxXmlResourceHandler *>;
-
 // These macros indicate current version of XML resources (this information is
 // encoded in root node of XRC file as "version" property).
 //
@@ -277,7 +273,7 @@ private:
     long m_version;
 
     int m_flags;
-    wxVector<wxXmlResourceHandler*> m_handlers;
+    class WXDLLIMPEXP_FWD_XRC wxVector<wxXmlResourceHandler*> m_handlers;
     wxXmlResourceDataRecords *m_data;
 #if wxUSE_FILESYSTEM
     wxFileSystem m_curFileSystem;
