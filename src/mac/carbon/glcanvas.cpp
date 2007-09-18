@@ -289,6 +289,7 @@ void wxGLCanvas::SetViewport()
         if ( !m_macCanvasIsShown )
             parms[0] += 20000 ;
         aglSetInteger( m_glContext->m_glContext , AGL_BUFFER_RECT , parms ) ;
+        aglUpdateContext(m_glContext->m_glContext);
    }
 #endif
 }
@@ -302,8 +303,6 @@ void wxGLCanvas::MacUpdateView()
 {
     if (m_glContext)
     {
-        UpdateContext();
-        m_glContext->SetCurrent();
         SetViewport();
     }
 }
@@ -338,44 +337,19 @@ bool wxGLCanvas::Show(bool show)
 {
     if ( !wxWindow::Show( show ) )
         return false ;
-/*
-    if ( !show )
-    {
-        if ( m_macCanvasIsShown )
-        {
-            m_macCanvasIsShown = false ;
-            SetViewport() ;
-        }
-    }
-    else
-    {
-        if ( m_peer->IsVisible()&& !m_macCanvasIsShown )
-        {
-            m_macCanvasIsShown = true ;
-            SetViewport() ;
-        }
-    }
-*/
+    
+    // call directly to avoid redraw glitches
+    MacVisibilityChanged();
+
     return true ;
 }
 
 void wxGLCanvas::MacVisibilityChanged()
 {
-    if ( !MacIsReallyShown() )
+    if ( MacIsReallyShown() != m_macCanvasIsShown )
     {
-        if ( m_macCanvasIsShown )
-        {
-            m_macCanvasIsShown = false ;
-            SetViewport() ;
-        }
-    }
-    else
-    {
-        if ( !m_macCanvasIsShown )
-        {
-            m_macCanvasIsShown = true ;
-            SetViewport() ;
-        }
+        m_macCanvasIsShown = !m_macCanvasIsShown;
+        MacUpdateView();
     }
     wxWindowMac::MacVisibilityChanged() ;
 }
