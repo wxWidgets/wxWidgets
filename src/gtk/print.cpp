@@ -1847,10 +1847,14 @@ void wxGtkPrintDC::SetPen( const wxPen& pen )
 
     m_pen = pen;
 
-    double width = (double) m_pen.GetWidth();
-    if (width == 0) width = 0.1;
+    double width;
+    
+    if (m_pen.GetWidth() <= 0)
+        width = 0.1;
+    else
+        width = (double) m_pen.GetWidth();
 
-    gs_cairo->cairo_set_line_width( m_cairo, (width * m_PS2DEV) / m_scaleX );
+    gs_cairo->cairo_set_line_width( m_cairo, width * m_DEV2PS * m_scaleX );
     static const double dotted[] = {2.0, 5.0};
     static const double short_dashed[] = {4.0, 4.0};
     static const double long_dashed[] = {4.0, 8.0};
