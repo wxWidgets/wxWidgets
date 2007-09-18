@@ -35,16 +35,10 @@ If you don't specify a border style for a wxTextCtrl in rich edit mode, wxWidget
 the control themed borders automatically, where previously they would take the Windows 95-style
 sunken border. Other native controls such as wxTextCtrl in non-rich edit mode, and wxComboBox,
 already paint themed borders where appropriate. To use themed borders on other windows, such
-as wxPanel, pass the wxBORDER\_THEME style, or pass no border style.
+as wxPanel, pass the wxBORDER\_THEME style, or (apart from wxPanel) pass no border style.
 
-Note that in wxWidgets 2.9 and above, wxBORDER\_THEME is defined to be 0 and it is not necessary
-to pass the border style explicitly: wxWidgets will deduce the correct border style itself if there
-is none supplied. Because of the requirements of binary compatibility, this automatic border
-capability could not be put into wxWidgets 2.8 except for built-in, native controls. So in 2.8, the border
-must be specified for custom controls and windows.
-
-Since specifying wxBORDER\_THEME is defined as 0 and is the equivalent of abstaining on the
-border style decision, on non-Windows platforms a suitable border style will be chosen.
+In general, specifying wxBORDER\_THEME will cause a border of some kind to be used, chosen by the platform
+and control class. To leave the border decision entirely to wxWidgets, pass wxBORDER\_DEFAULT.
 This is not to be confused with specifying wxBORDER\_NONE, which says that there should
 definitely be {\it no} border.
 
@@ -53,6 +47,8 @@ definitely be {\it no} border.
 The way that wxMSW decides whether to apply a themed border is as follows.
 The theming code calls wxWindow::GetBorder() to obtain a border. If no border style has been
 passed to the window constructor, GetBorder() calls GetDefaultBorder() for this window.
+If wxBORDER\_THEME was passed to the window constructor, GetBorder() calls GetDefaultBorderForControl().
+
 The implementation of wxWindow::GetDefaultBorder() on wxMSW calls wxWindow::CanApplyThemeBorder()
 which is a virtual function that tells wxWidgets whether a control can have a theme
 applied explicitly (some native controls already paint a theme in which case we should not

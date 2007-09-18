@@ -1563,7 +1563,7 @@ gtk_window_button_press_callback( GtkWidget *widget,
     if ( ret )
         return TRUE;
 
-    if ((event_type == wxEVT_LEFT_DOWN) && !win->IsOfStandardClass() && 
+    if ((event_type == wxEVT_LEFT_DOWN) && !win->IsOfStandardClass() &&
         (g_focusWindow != win) /* && win->IsFocusable() */)
     {
         win->SetFocus();
@@ -1858,9 +1858,9 @@ gtk_window_focus_out_callback( GtkWidget *widget,
         // Disable default focus handling for custom windows
         // since the default GTK+ handler issues a repaint
         if ( has_wxwindow )
-	{
+    {
             return TRUE;
-	}
+    }
     }
 
     // continue with normal processing
@@ -2098,7 +2098,7 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
 }
 
 //-----------------------------------------------------------------------------
-// "grab_broken" 
+// "grab_broken"
 //-----------------------------------------------------------------------------
 
 #ifdef __WXGTK210__
@@ -4317,8 +4317,11 @@ void wxWindowGTK::GtkScrolledWindowSetBorder(GtkWidget* w, int wxstyle)
             gtkstyle = GTK_SHADOW_OUT;
         else if (wxstyle & wxBORDER_SUNKEN)
             gtkstyle = GTK_SHADOW_IN;
+#if 0
+        // Now obsolete
         else if (wxstyle & wxBORDER_DOUBLE)
             gtkstyle = GTK_SHADOW_ETCHED_IN;
+#endif
         else //default
             gtkstyle = GTK_SHADOW_IN;
 

@@ -1359,11 +1359,14 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
 
         switch ( border )
         {
-            case wxBORDER_DEFAULT: // also wxBORDER_THEME
-                break;
+            default:
+            case wxBORDER_DEFAULT:
+                wxFAIL_MSG( _T("unknown border style") );
+                // fall through
 
             case wxBORDER_NONE:
             case wxBORDER_SIMPLE:
+            case wxBORDER_THEME:
                 break;
 
             case wxBORDER_STATIC:
@@ -1379,13 +1382,9 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
                 style &= ~WS_BORDER;
                 break;
 
-            default:
-                wxFAIL_MSG( _T("unknown border style") );
-                break;
-
-            case wxBORDER_DOUBLE:
-                *exstyle |= WS_EX_DLGMODALFRAME;
-                break;
+//            case wxBORDER_DOUBLE:
+//                *exstyle |= WS_EX_DLGMODALFRAME;
+//                break;
         }
 
         // wxUniv doesn't use Windows dialog navigation functions at all

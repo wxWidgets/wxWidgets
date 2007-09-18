@@ -1387,7 +1387,7 @@ protected:
     // this allows you to implement standard control borders without
     // repeating the code in different classes that are not derived from
     // wxControl
-    virtual wxBorder GetDefaultBorderForControl() const { return wxWindowBase::GetDefaultBorder(); }
+    virtual wxBorder GetDefaultBorderForControl() const { return wxBORDER_SUNKEN; }
 
     // Get the default size for the new window if no explicit size given. TLWs
     // have their own default size so this is just for non top-level windows.

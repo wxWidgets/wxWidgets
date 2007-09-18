@@ -1407,7 +1407,7 @@ enum wxBorder
     wxBORDER_RAISED = 0x04000000,
     wxBORDER_SUNKEN = 0x08000000,
     wxBORDER_DOUBLE = 0x10000000, /* deprecated */
-    wxBORDER_THEME  = wxBORDER_DEFAULT,
+    wxBORDER_THEME  = wxBORDER_DOUBLE,
 
     /*  a mask to extract border style from the combination of flags */
     wxBORDER_MASK   = 0x1f200000
@@ -2542,9 +2542,9 @@ typedef void*       WXDisplay;
  * since they are unlikely to be needed in a public header.
  */
 #if defined(__LP64__) && __LP64__
-	typedef double CGFloat;
+    typedef double CGFloat;
 #else
-	typedef float CGFloat;
+    typedef float CGFloat;
 #endif
 
 #if (defined(__LP64__) && __LP64__) || (defined(NS_BUILD_32_LIKE_64) && NS_BUILD_32_LIKE_64)
