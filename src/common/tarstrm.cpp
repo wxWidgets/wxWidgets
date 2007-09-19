@@ -426,7 +426,7 @@ wxTarUser::wxTarUser()
 
     gname = new wxChar[grp.length() + 1];
     wxStrcpy(gname, grp.c_str());
-};
+}
 
 static const wxTarUser& wxGetTarUser()
 {
