@@ -106,14 +106,19 @@ wxMSW:
 - Fixed a bug with a spurious border appearing on wxStatusBar under Windows XP/Vista.
 
 wxGTK:
+
 - Fixed wxSpinCtrl problem not reporting the correct value
-  after calling SetValue()
+  after calling SetValue().
 - Fixed problem with key events sometimes being sent to
   parent window. This also solves a problem with being able
   to change the selection of a wxListCtrl while editing a
   label.
 - Correct context menu event coming from wxListCtrl to 
   have the right ID (not that from the client window).
+  
+wxMac:
+
+- Fixed a crash in wxToolBar when adding tools with non-standard sizes.
 
 2.8.5
 -----
