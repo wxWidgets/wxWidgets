@@ -125,6 +125,14 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
     }
 }
 
+CGImageRef wxMacCreateCGImageFromBitmap( const wxBitmap& bitmap )
+{
+    wxBitmapRefData * bmap = bitmap.GetBitmapData() ;
+    if ( bmap == NULL )
+        return NULL ;
+    return (CGImageRef) bmap->CGImageCreate();
+}
+
 void wxMacReleaseBitmapButton( ControlButtonContentInfo*info )
 {
     if ( info->contentType == kControlContentIconRef )
@@ -654,6 +662,14 @@ PicHandle wxBitmapRefData::GetPictHandle()
             m_pictHandle = (PicHandle) NewHandle(0);
             if ( m_pictHandle )
             {
+                bool hadAlpha = m_hasAlpha ;
+                
+                // QuickTime PICT export does not work with a AlphaSkipFirst bitmap, therefore we have
+                // to convert in that case first
+                
+                if ( !hadAlpha )
+                    UseAlpha( true );
+                
                 err = GraphicsExportSetInputCGBitmapContext( exporter, m_hBitmap);
                 err = GraphicsExportSetOutputHandle(exporter, (Handle)m_pictHandle);
                 err = GraphicsExportDoExport(exporter, NULL);
@@ -664,6 +680,9 @@ PicHandle wxBitmapRefData::GetPictHandle()
 					memmove( *m_pictHandle , (char*)(*m_pictHandle)+512, handleSize - 512 );
 					SetHandleSize( (Handle) m_pictHandle, handleSize - 512 );
 				}
+
+                if ( !hadAlpha )
+                    UseAlpha( false );
             }
             CloseComponent( exporter );
         }
@@ -694,7 +713,16 @@ CGImageRef wxBitmapRefData::CGImageCreate() const
 #if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4) && wxMAC_USE_CORE_GRAPHICS
         if ( UMAGetSystemVersion() >= 0x1040 && m_depth != 1 && m_bitmapMask == NULL )
         {
-            image = CGBitmapContextCreateImage( m_hBitmap );
+            if ( m_bitmapMask )
+            {
+                CGImageRef tempImage = CGBitmapContextCreateImage( m_hBitmap );
+                CGImageRef tempMask = CGBitmapContextCreateImage((CGContextRef) m_bitmapMask->GetHBITMAP() );
+                image = CGImageCreateWithMask( tempImage, tempMask );
+                CGImageRelease(tempMask);
+                CGImageRelease(tempImage);
+            }
+            else
+                image = CGBitmapContextCreateImage( m_hBitmap );
         }
         else
 #endif
@@ -1643,8 +1671,14 @@ void wxMask::RealizeNative()
     }
 
 #if wxMAC_USE_CORE_GRAPHICS
-    m_maskBitmap = CGBitmapContextCreate((char*) m_memBuf.GetData(), m_width, m_height, 8, m_bytesPerRow, NULL, 
-        kCGImageAlphaOnly );
+    CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceGray();
+    // from MouseTracking sample :
+    // Ironically, due to a bug in CGImageCreateWithMask, you cannot use 
+    // CGColorSpaceCreateWithName(kCGColorSpaceGenericGray) at this point!
+    
+    m_maskBitmap = CGBitmapContextCreate((char*) m_memBuf.GetData(), m_width, m_height, 8, m_bytesPerRow, colorspace, 
+        kCGImageAlphaNone );
+    CGColorSpaceRelease( colorspace );
     wxASSERT_MSG( m_maskBitmap , wxT("Unable to create CGBitmapContext context") ) ;
 #else
     Rect rect = { 0 , 0 , m_height , m_width } ;
