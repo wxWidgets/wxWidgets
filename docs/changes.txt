@@ -90,6 +90,10 @@ Major new features in 2.8 release
 2.8.6
 -----
 
+All:
+
+- Fixed another bug in wxFileConfig when deleting entries (Axel Gembe)
+
 All (GUI):
 
 - Added an optimization to UI updates on idle, by only updating when the window
