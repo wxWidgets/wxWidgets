@@ -462,6 +462,7 @@ public:
                      wxObject* userData = NULL);
     wxSizerItem* Add( wxWindow *window, const wxSizerFlags& flags);
     wxSizerItem* Add( wxSizer *sizer, const wxSizerFlags& flags);
+    wxSizerItem* Add( int width, int height, const wxSizerFlags& flags);
     wxSizerItem* Add( wxSizerItem *item);
 
     wxSizerItem* AddSpacer(int size);
@@ -492,6 +493,10 @@ public:
     wxSizerItem* Insert(size_t index,
                         wxSizer *sizer,
                         const wxSizerFlags& flags);
+    wxSizerItem* Insert(size_t index,
+                        int width,
+                        int height,
+                        const wxSizerFlags& flags);                        
     virtual wxSizerItem* Insert( size_t index, wxSizerItem *item);
 
     wxSizerItem* InsertSpacer(size_t index, int size);
@@ -515,6 +520,7 @@ public:
                          wxObject* userData = NULL);
     wxSizerItem* Prepend(wxWindow *window, const wxSizerFlags& flags);
     wxSizerItem* Prepend(wxSizer *sizer, const wxSizerFlags& flags);
+    wxSizerItem* Prepend(int width, int height, const wxSizerFlags& flags);
     wxSizerItem* Prepend(wxSizerItem *item);
 
     wxSizerItem* PrependSpacer(int size);
@@ -1007,6 +1013,12 @@ wxSizer::Add( wxSizer *sizer, const wxSizerFlags& flags )
 }
 
 inline wxSizerItem*
+wxSizer::Add( int width, int height, const wxSizerFlags& flags )
+{
+    return Add( new wxSizerItem(width, height, flags) );
+}
+
+inline wxSizerItem*
 wxSizer::AddSpacer(int size)
 {
     return Add(size, size);
@@ -1067,6 +1079,12 @@ wxSizer::Prepend( wxSizer *sizer, const wxSizerFlags& flags )
 }
 
 inline wxSizerItem*
+wxSizer::Prepend( int width, int height, const wxSizerFlags& flags )
+{
+    return Prepend( new wxSizerItem(width, height, flags) );
+}
+
+inline wxSizerItem*
 wxSizer::Insert( size_t index,
                  wxWindow *window,
                  int proportion,
@@ -1110,6 +1128,12 @@ inline wxSizerItem*
 wxSizer::Insert( size_t index, wxSizer *sizer, const wxSizerFlags& flags )
 {
     return Insert( index, new wxSizerItem(sizer, flags) );
+}
+
+inline wxSizerItem*
+wxSizer::Insert( size_t index, int width, int height, const wxSizerFlags& flags )
+{
+    return Insert( index, new wxSizerItem(width, height, flags) );
 }
 
 inline wxSizerItem*
