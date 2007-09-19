@@ -70,6 +70,7 @@ private:
         CPPUNIT_TEST( Binary );
         CPPUNIT_TEST( Save );
         CPPUNIT_TEST( DeleteEntry );
+        CPPUNIT_TEST( DeleteAndWriteEntry );
         CPPUNIT_TEST( DeleteGroup );
         CPPUNIT_TEST( DeleteAll );
         CPPUNIT_TEST( RenameEntry );
@@ -89,6 +90,7 @@ private:
     void Binary();
     void Save();
     void DeleteEntry();
+    void DeleteAndWriteEntry();
     void DeleteGroup();
     void DeleteAll();
     void RenameEntry();
@@ -322,6 +324,47 @@ void FileConfigTestCase::DeleteEntry()
                          _T("[root/group1]\n")
                          _T("[root/group2]\n"),
                          fc );
+}
+
+void FileConfigTestCase::DeleteAndWriteEntry()
+{
+    wxStringInputStream sis(
+            "[root/group1]\n"
+            "subentry=subvalue\n"
+            "subentry2=subvalue2\n"
+            "subentry3=subvalue3\n"
+    );
+
+    wxFileConfig fc(sis);
+
+    fc.DeleteEntry("/root/group1/subentry2");
+    fc.Write("/root/group1/subentry2", "testvalue");
+    fc.DeleteEntry("/root/group2/subentry2");
+    fc.Write("/root/group2/subentry2", "testvalue2");
+    fc.DeleteEntry("/root/group1/subentry2");
+    fc.Write("/root/group1/subentry2", "testvalue");
+    fc.DeleteEntry("/root/group2/subentry2");
+    fc.Write("/root/group2/subentry2", "testvalue2");
+
+    wxVERIFY_FILECONFIG( "[root/group1]\n"
+                         "subentry=subvalue\n"
+                         "subentry3=subvalue3\n"
+                         "subentry2=testvalue\n"
+                         "[root/group2]\n"
+                         "subentry2=testvalue2\n",
+                         fc );
+
+    fc.DeleteEntry("/root/group2/subentry2");
+    wxVERIFY_FILECONFIG( "[root/group1]\n"
+                         "subentry=subvalue\n"
+                         "subentry3=subvalue3\n"
+                         "subentry2=testvalue\n",
+                         fc );
+
+    fc.DeleteEntry("/root/group1/subentry2");
+    fc.DeleteEntry("/root/group1/subentry");
+    fc.DeleteEntry("/root/group1/subentry3");
+    wxVERIFY_FILECONFIG( "", fc );
 }
 
 void FileConfigTestCase::DeleteGroup()

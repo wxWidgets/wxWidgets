@@ -1810,29 +1810,21 @@ bool wxFileConfigGroup::DeleteEntry(const wxString& name)
       // our last entry is being deleted - find the last one which stays
       wxASSERT( m_pLine != NULL );  // if we have an entry with !NULL pLine...
 
-      // go back until we find another entry or reach the group's line
+      // find the previous entry (if any)
       wxFileConfigEntry *pNewLast = NULL;
-      size_t n, nEntries = m_aEntries.GetCount();
-      wxFileConfigLineList *pl;
-      for ( pl = pLine->Prev(); pl != m_pLine; pl = pl->Prev() ) {
-        // is it our subgroup?
-        for ( n = 0; (pNewLast == NULL) && (n < nEntries); n++ ) {
-          if ( m_aEntries[n]->GetLine() == m_pLine )
-            pNewLast = m_aEntries[n];
-        }
-
-        if ( pNewLast != NULL ) // found?
+      const wxFileConfigLineList * const
+        pNewLastLine = m_pLastEntry->GetLine()->Prev();
+      const size_t nEntries = m_aEntries.GetCount();
+      for ( size_t n = 0; n < nEntries; n++ ) {
+        if ( m_aEntries[n]->GetLine() == pNewLastLine ) {
+          pNewLast = m_aEntries[n];
           break;
+        }
       }
 
-      if ( pl == m_pLine ) {
-        wxASSERT( !pNewLast );  // how comes it has the same line as we?
-
-        // we've reached the group line without finding any subgroups
-        m_pLastEntry = NULL;
-      }
-      else
-        m_pLastEntry = pNewLast;
+      // pNewLast can be NULL here -- it's ok and can happen if we have no
+      // entries left
+      m_pLastEntry = pNewLast;
     }
 
     m_pConfig->LineListRemove(pLine);

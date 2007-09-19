@@ -228,6 +228,13 @@ wxX11:
 - Make Enter key activate the default button (David Hart).
 
 
+2.8.6
+-----
+
+All:
+
+- Fixed another bug in wxFileConfig when deleting entries (Axel Gembe)
+
 2.8.5
 -----
 
