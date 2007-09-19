@@ -3028,8 +3028,13 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         if (event.RightDown())
         {
             SendNotify( (size_t)-1, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, event.GetPosition() );
-            // Allow generation of context menu event
-            event.Skip();
+            
+            wxContextMenuEvent evtCtx(
+                wxEVT_CONTEXT_MENU,
+                GetParent()->GetId(),
+                ClientToScreen(event.GetPosition()));
+            evtCtx.SetEventObject(GetParent());
+            GetParent()->GetEventHandler()->ProcessEvent(evtCtx);
         }
         return;
     }
@@ -3106,8 +3111,13 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         if (event.RightDown())
         {
             SendNotify( (size_t) -1, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, event.GetPosition() );
-            // Allow generation of context menu event
-            event.Skip();
+            
+            wxContextMenuEvent evtCtx(
+                wxEVT_CONTEXT_MENU,
+                GetParent()->GetId(),
+                ClientToScreen(event.GetPosition()));
+            evtCtx.SetEventObject(GetParent());
+            GetParent()->GetEventHandler()->ProcessEvent(evtCtx);
         }
         else
         {
