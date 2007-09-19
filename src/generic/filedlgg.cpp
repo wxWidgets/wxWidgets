@@ -112,6 +112,11 @@ BEGIN_EVENT_TABLE(wxGenericFileDialog,wxDialog)
     EVT_BUTTON(ID_NEW_DIR, wxGenericFileDialog::OnNew)
     EVT_BUTTON(wxID_OK, wxGenericFileDialog::OnOk)
     EVT_FILECTRL_FILEACTIVATED(ID_FILE_CTRL, wxGenericFileDialog::OnFileActivated)
+
+    EVT_UPDATE_UI(ID_UP_DIR, wxGenericFileDialog::OnUpdateButtonsUI)
+#if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
+    EVT_UPDATE_UI(ID_NEW_DIR, wxGenericFileDialog::OnUpdateButtonsUI)
+#endif // defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
 END_EVENT_TABLE()
 
 long wxGenericFileDialog::ms_lastViewStyle = wxLC_LIST;
@@ -328,7 +333,6 @@ wxGenericFileDialog::~wxGenericFileDialog()
 int wxGenericFileDialog::ShowModal()
 {
     m_filectrl->SetDirectory(m_dir);
-    UpdateControls();
 
     return wxDialog::ShowModal();
 }
@@ -340,7 +344,6 @@ bool wxGenericFileDialog::Show( bool show )
     if (show)
     {
         m_filectrl->SetDirectory(m_dir);
-        UpdateControls();
     }
 #endif
 
@@ -391,14 +394,12 @@ void wxGenericFileDialog::OnUp( wxCommandEvent &WXUNUSED(event) )
 {
     m_filectrl->GoToParentDir();
     m_filectrl->GetFileList()->SetFocus();
-    UpdateControls();
 }
 
 void wxGenericFileDialog::OnHome( wxCommandEvent &WXUNUSED(event) )
 {
     m_filectrl->GoToHomeDir();
     m_filectrl->SetFocus();
-    UpdateControls();
 }
 
 void wxGenericFileDialog::OnNew( wxCommandEvent &WXUNUSED(event) )
@@ -430,14 +431,9 @@ void wxGenericFileDialog::GetFilenames(wxArrayString& files) const
     m_filectrl->GetFilenames(files);
 }
 
-void wxGenericFileDialog::UpdateControls()
+void wxGenericFileDialog::OnUpdateButtonsUI(wxUpdateUIEvent& event)
 {
-    const bool enable = !IsTopMostDir(m_filectrl->GetDirectory());
-    m_upDirButton->Enable(enable);
-
-#if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
-    m_newDirButton->Enable(enable);
-#endif // defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
+    event.Enable( !IsTopMostDir(m_filectrl->GetDirectory()) );
 }
 
 #ifdef wxHAS_GENERIC_FILEDIALOG

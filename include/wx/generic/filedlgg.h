@@ -83,13 +83,14 @@ public:
     void OnNew( wxCommandEvent &event );
     void OnFileActivated( wxFileCtrlEvent &event);
 
-    virtual void UpdateControls();
-
 private:
-    // Don't use this implementation at all :-)
+    // if true, don't use this implementation at all
     bool m_bypassGenericImpl;
 
 protected:
+    // update the state of m_upDirButton and m_newDirButton depending on the
+    // currently selected directory
+    void OnUpdateButtonsUI(wxUpdateUIEvent& event);
 
     wxString               m_filterExtension;
     wxGenericFileCtrl     *m_filectrl;
@@ -98,6 +99,7 @@ protected:
 
 private:
     void Init();
+
     DECLARE_DYNAMIC_CLASS(wxGenericFileDialog)
     DECLARE_EVENT_TABLE()
 
