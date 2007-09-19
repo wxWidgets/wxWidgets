@@ -988,7 +988,7 @@ gtk_window_key_press_callback( GtkWidget *widget,
         return FALSE;
     if (g_blockEventsOnDrag)
         return FALSE;
-    
+
     // GTK+ sends keypress events to the focus widget and then
     // to all its parent and grandparent widget. We only want
     // the key events from the focus widget.
@@ -3182,7 +3182,7 @@ bool wxWindowGTK::GTKSetDelayedFocusIfNeeded()
 void wxWindowGTK::SetFocus()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
-    
+
     if ( m_hasFocus )
     {
         // don't do anything if we already have focus
@@ -4297,8 +4297,11 @@ void wxWindowGTK::GtkScrolledWindowSetBorder(GtkWidget* w, int wxstyle)
             gtkstyle = GTK_SHADOW_OUT;
         else if (wxstyle & wxBORDER_SUNKEN)
             gtkstyle = GTK_SHADOW_IN;
+        // wxBORDER_DOUBLE is no longer supported since wxBORDER_THEME takes on the same value
+#if 0
         else if (wxstyle & wxBORDER_DOUBLE)
             gtkstyle = GTK_SHADOW_ETCHED_IN;
+#endif
         else //default
             gtkstyle = GTK_SHADOW_IN;
 

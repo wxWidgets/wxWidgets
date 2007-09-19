@@ -1,4 +1,4 @@
-wxWidgets 2.8.6 
+wxWidgets 2.8.6
 ---------------------------------------------------------
 
 Welcome to wxWidgets, a sophisticated cross-platform C++
@@ -153,5 +153,5 @@ web site.
 
 Have fun!
 
-The wxWidgets Team, August 2007
+The wxWidgets Team, September 2007
 

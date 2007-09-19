@@ -412,15 +412,18 @@ void wxStdRenderer::DrawBorder(wxDC& dc,
 
     switch ( border )
     {
+        case wxBORDER_THEME:
         case wxBORDER_SUNKEN:
             DrawSunkenBorder(dc, &rect);
             break;
 
+        // wxBORDER_DOUBLE is no longer supported since wxBORDER_THEME takes on the same value
+#if 0
         case wxBORDER_DOUBLE:
             DrawAntiSunkenBorder(dc, &rect);
             DrawExtraBorder(dc, &rect);
             break;
-
+#endif
         case wxBORDER_STATIC:
             DrawStaticBorder(dc, &rect);
             break;
