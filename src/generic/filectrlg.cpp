@@ -542,11 +542,23 @@ void wxFileListCtrl::UpdateFiles()
     {
         wxArrayString names, paths;
         wxArrayInt icons;
-        size_t n, count = wxGetAvailableDrives(paths, names, icons);
+        const size_t count = wxGetAvailableDrives(paths, names, icons);
 
-        for (n=0; n<count; n++)
+        for ( size_t n = 0; n < count; n++ )
         {
-            wxFileData *fd = new wxFileData(paths[n], names[n], wxFileData::is_drive, icons[n]);
+            // use paths[n] as the drive name too as our HandleAction() can't
+            // deal with the drive names (of the form "System (C:)") currently
+            // as it mistakenly treats them as file names
+            //
+            // it would be preferable to show names, and not paths, in the
+            // dialog just as the native dialog does but for this we must:
+            //  a) store the item type as item data and modify HandleAction()
+            //     to use it instead of wxDirExists() to check whether the item
+            //     is a directory
+            //  b) store the drives by their drive letters and not their
+            //     descriptions as otherwise it's pretty confusing to the user
+            wxFileData *fd = new wxFileData(paths[n], paths[n],
+                                            wxFileData::is_drive, icons[n]);
             if (Add(fd, item) != -1)
                 item.m_itemId++;
             else
