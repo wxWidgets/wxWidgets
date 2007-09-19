@@ -1174,6 +1174,10 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
         {
             wclass = kDocumentWindowClass ;
         }
+        else if ( HasFlag( wxNO_BORDER ) )
+        {
+            wclass = kSimpleWindowClass ;
+        }
         else
         {
             wclass = kPlainWindowClass ;
