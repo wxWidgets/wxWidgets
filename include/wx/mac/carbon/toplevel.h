@@ -143,6 +143,12 @@ private :
     // logic & checks cease to work as expected. To set the metal appearance, use SetExtraStyle.
     void MacSetMetalAppearance( bool on ) ;
     void MacSetUnifiedAppearance( bool on ) ;
+    // binary compatible workaround
+    void DoMacCreateRealWindow( wxWindow *parent, const wxString& title,
+                                      const wxPoint& pos,
+                                      const wxSize& size,
+                                      long style,
+                                      const wxString& name );
 
     WXEVENTHANDLERREF    m_macEventHandler ;
 
