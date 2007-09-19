@@ -20,6 +20,7 @@
     #include "wx/dcmemory.h"
     #include "wx/log.h"
     #include "wx/region.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/mac/uma.h"
