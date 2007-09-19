@@ -12,7 +12,7 @@
        {wx}/include/wx/version.h
        {wx}/include/msvc/wx/setup.h  {major release only}
        {wx}/docs/latex/wx/manual.tex
-       {wx}/docs/msw/install.txt
+       {wx}/docs/msw/install.txt {major release only}
        {wx}/docs/changes.txt    
        {wx}/docs/readme.txt       
        {wx}/build/bakefiles/wxpresets/presets/wx_win32.bkl {major release only}
