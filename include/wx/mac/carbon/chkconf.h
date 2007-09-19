@@ -63,7 +63,7 @@
  */
  
 #ifndef wxMAC_USE_COCOA
-    #define wxMAC_USE_COCOA 1
+    #define wxMAC_USE_COCOA 0
 #endif
 
 #endif
