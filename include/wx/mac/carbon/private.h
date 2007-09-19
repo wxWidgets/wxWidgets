@@ -454,6 +454,7 @@ CTabHandle         wxMacCreateColorTable( int numColors );
 */
 void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , int forceType = 0 );
 void wxMacReleaseBitmapButton( ControlButtonContentInfo*info );
+CGImageRef wxMacCreateCGImageFromBitmap( const wxBitmap& bitmap );
 
 #define MAC_WXCOLORREF(a) (*((RGBColor*)&(a)))
 #define MAC_WXHBITMAP(a) (GWorldPtr(a))
@@ -1371,6 +1372,64 @@ public :
 private :
     void* m_pool;
 };
+
+// NSObject
+
+void wxMacCocoaRelease( void* obj );
+void wxMacCocoaAutorelease( void* obj );
+void wxMacCocoaRetain( void* obj );
+
+#if wxMAC_USE_COCOA
+
+// NSCursor
+
+WX_NSCursor wxMacCocoaCreateStockCursor( int cursor_type );
+WX_NSCursor  wxMacCocoaCreateCursorFromCGImage( CGImageRef cgImageRef, float hotSpotX, float hotSpotY );
+void  wxMacCocoaSetCursor( WX_NSCursor cursor );
+void  wxMacCocoaHideCursor();
+void  wxMacCocoaShowCursor();
+
+typedef struct tagClassicCursor
+{
+    wxUint16 bits[16];
+    wxUint16 mask[16];
+    wxInt16 hotspot[2];
+}ClassicCursor;
+
+#else // !wxMAC_USE_COCOA
+
+// non Darwin
+
+typedef Cursor ClassicCursor;
+
+#endif // wxMAC_USE_COCOA
+
+// -------------
+// Common to all
+// -------------
+
+// Cursor support
+
+const short kwxCursorBullseye = 0;
+const short kwxCursorBlank = 1;
+const short kwxCursorPencil = 2;
+const short kwxCursorMagnifier = 3;
+const short kwxCursorNoEntry = 4;
+const short kwxCursorPaintBrush = 5;
+const short kwxCursorPointRight = 6;
+const short kwxCursorPointLeft = 7;
+const short kwxCursorQuestionArrow = 8;
+const short kwxCursorRightArrow = 9;
+const short kwxCursorSizeNS = 10;
+const short kwxCursorSize = 11;
+const short kwxCursorSizeNESW = 12;
+const short kwxCursorSizeNWSE = 13;
+const short kwxCursorRoller = 14;
+const short kwxCursorLast = kwxCursorRoller;
+
+// exposing our fallback cursor map
+
+extern ClassicCursor gMacCursors[];
 
 #endif
     // _WX_PRIVATE_H_
