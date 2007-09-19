@@ -110,8 +110,8 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         m_strings = new wxSortedArrayString;
     }
 
-    // begin with no selection
-    m_selection_hack = wxNOT_FOUND;
+    // If we have items, GTK will choose the first item by default
+    m_selection_hack = n > 0 ? 0 : wxNOT_FOUND;
 
     GtkWidget *menu = gtk_menu_new();
 
