@@ -481,10 +481,10 @@ void wxToolBarTool::UpdateToggleImage( bool toggle )
 #if wxMAC_USE_NATIVE_TOOLBAR
         if (m_toolbarItemRef != NULL)
         {
-            if ( info.contentType == kControlContentIconRef )
-                HIToolbarItemSetIconRef( m_toolbarItemRef, info.u.iconRef );
-            else
-                HIToolbarItemSetImage( m_toolbarItemRef, info.u.imageRef );
+            ControlButtonContentInfo info2;
+            wxMacCreateBitmapButton( &info2, bmp, kControlContentCGImageRef);
+            HIToolbarItemSetImage( m_toolbarItemRef, info2.u.imageRef );
+            wxMacReleaseBitmapButton( &info2 );
         }
 #endif
         wxMacReleaseBitmapButton( &info );
@@ -497,10 +497,10 @@ void wxToolBarTool::UpdateToggleImage( bool toggle )
 #if wxMAC_USE_NATIVE_TOOLBAR
         if (m_toolbarItemRef != NULL)
         {
-           if ( info.contentType == kControlContentIconRef )
-                HIToolbarItemSetIconRef( m_toolbarItemRef, info.u.iconRef );
-            else
-                HIToolbarItemSetImage( m_toolbarItemRef, info.u.imageRef );
+            ControlButtonContentInfo info2;
+            wxMacCreateBitmapButton( &info2, m_bmpNormal, kControlContentCGImageRef);
+            HIToolbarItemSetImage( m_toolbarItemRef, info2.u.imageRef );
+            wxMacReleaseBitmapButton( &info2 );
         }
 #endif
         wxMacReleaseBitmapButton( &info );
@@ -1532,16 +1532,18 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                         kHIToolbarItemCantBeRemoved | kHIToolbarItemAnchoredLeft | kHIToolbarItemAllowDuplicates, &item );
                     if (err  == noErr)
                     {
+                        ControlButtonContentInfo info2;
+                        wxMacCreateBitmapButton( &info2, tool->GetNormalBitmap(), kControlContentCGImageRef);
+
                         InstallEventHandler(
                             HIObjectGetEventTarget(item), GetwxMacToolBarEventHandlerUPP(),
                             GetEventTypeCount(toolBarEventList), toolBarEventList, tool, NULL );
                         HIToolbarItemSetLabel( item, wxMacCFStringHolder(tool->GetLabel(), m_font.GetEncoding()) );
-                        if ( info.contentType == kControlContentIconRef )
-                            HIToolbarItemSetIconRef( item, info.u.iconRef );
-                        else
-                            HIToolbarItemSetImage( item, info.u.imageRef );
+                        HIToolbarItemSetImage( item, info2.u.imageRef );
                         HIToolbarItemSetCommandID( item, kHIToolbarCommandPressAction );
                         tool->SetToolbarItemRef( item );
+
+                        wxMacReleaseBitmapButton( &info2 );
                     }
                 }
                 else
