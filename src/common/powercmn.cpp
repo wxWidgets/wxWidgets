@@ -38,8 +38,10 @@
     DEFINE_EVENT_TYPE(wxEVT_POWER_SUSPENDED)
     DEFINE_EVENT_TYPE(wxEVT_POWER_SUSPEND_CANCEL)
     DEFINE_EVENT_TYPE(wxEVT_POWER_RESUME)
-#endif
 
+    IMPLEMENT_ABSTRACT_CLASS(wxPowerEvent, wxEvent)
+#endif
+    
 // provide stubs for the systems not implementing these functions
 #if !defined(__WXPALMOS__) && !defined(__WXMSW__)
 

@@ -66,6 +66,10 @@ public:
 
 private:
     bool m_veto;
+
+#if wxABI_VERSION >= 20806
+    DECLARE_ABSTRACT_CLASS(wxPowerEvent)
+#endif
 };
 
 BEGIN_DECLARE_EVENT_TYPES()
