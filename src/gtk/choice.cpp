@@ -163,6 +163,12 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
         m_selection_hack += count;
     }
 
+    // We must set the selection so that it can be read back even if 
+    // the user has not modified it since GTK+ will then select the
+    // first item so well return 0.
+    if ((count > 0) && (m_selection_hack==wxNOT_FOUND))
+        m_selection_hack = 0;
+
     return pos - 1;
 }
 
