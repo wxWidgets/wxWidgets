@@ -201,7 +201,8 @@ public:
                         const wxString& name = wxFileCtrlNameStr )
     {
         m_ignoreChanges = false;
-        Create( parent, id, defaultDirectory, defaultFilename, wildCard, style, pos, size, name );
+        Create(parent, id, defaultDirectory, defaultFilename, wildCard,
+               style, pos, size, name );
     }
 
     virtual ~wxGenericFileCtrl() {}
@@ -221,11 +222,14 @@ public:
     virtual bool SetDirectory( const wxString& dir );
 
     // Selects a certain file.
-    // In case the filename specified isn't found/couldn't be shown with currently selected filter, false is returned and nothing happens
+    // In case the filename specified isn't found/couldn't be shown with
+    // currently selected filter, false is returned and nothing happens
     virtual bool SetFilename( const wxString& name );
 
-    // chdirs to a certain directory and selects a certain file.
-    // In case the filename specified isn't found/couldn't be shown with currently selected filter, false is returned and if directory exists it's chdir'ed to
+    // Changes to a certain directory and selects a certain file.
+    // In case the filename specified isn't found/couldn't be shown with
+    // currently selected filter, false is returned and if directory exists
+    // it's chdir'ed to
     virtual bool SetPath( const wxString& path );
 
     virtual wxString GetFilename() const;
@@ -236,7 +240,8 @@ public:
     virtual void GetFilenames( wxArrayString& files ) const;
     virtual int GetFilterIndex() const { return m_filterIndex; }
 
-    virtual bool HasMultipleFileSelection() const { return m_style & wxFC_MULTIPLE; }
+    virtual bool HasMultipleFileSelection() const
+        { return HasFlag(wxFC_MULTIPLE); }
     virtual void ShowHidden(bool show) { m_list->ShowHidden( show ); }
 
     void GoToParentDir();
