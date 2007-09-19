@@ -1286,6 +1286,7 @@ protected :
     void EnsureIsLoaded();
     void Load();
     void Unload();
+    friend class wxGDIPlusRendererModule;
 
 private :
     bool m_loaded;
@@ -1326,7 +1327,11 @@ void wxGDIPlusRenderer::Load()
 void wxGDIPlusRenderer::Unload()
 {
     if ( m_gditoken )
+    {
         GdiplusShutdown(m_gditoken);
+        m_gditoken = NULL;
+    }
+    m_loaded = false;
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxWindowDC& dc)
@@ -1457,5 +1462,18 @@ wxGraphicsFont wxGDIPlusRenderer::CreateFont( const wxFont &font , const wxColou
     else
         return wxNullGraphicsFont;
 }
+
+// Shutdown GDI+ at app exit, before possible dll unload
+class wxGDIPlusRendererModule : public wxModule
+{
+public:
+    virtual bool OnInit() { return true; }
+    virtual void OnExit() { gs_GDIPlusRenderer.Unload(); }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxGDIPlusRendererModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxGDIPlusRendererModule, wxModule)
 
 #endif  // wxUSE_GRAPHICS_CONTEXT
