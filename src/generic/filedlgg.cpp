@@ -16,7 +16,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_FILEDLG && (defined(__WXUNIVERSAL__) || defined(__WXGTK__))
+#if wxUSE_FILEDLG
 
 // NOTE : it probably also supports MAC, untested
 #if !defined(__UNIX__) && !defined(__DOS__) && !defined(__WIN32__) && !defined(__OS2__)
