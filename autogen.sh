@@ -1,2 +1,3 @@
 #!/bin/sh
-autoconf
+#autoconf
+make -f build/autogen.mk
