@@ -66,6 +66,8 @@ public:
 
 private:
     bool m_veto;
+
+    DECLARE_ABSTRACT_CLASS(wxPowerEvent)
 };
 
 BEGIN_DECLARE_EVENT_TYPES()
