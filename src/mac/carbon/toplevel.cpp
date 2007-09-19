@@ -940,7 +940,7 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
     m_windowId = id == -1 ? NewControlId() : id;
     wxWindow::SetLabel( title ) ;
 
-    MacCreateRealWindow( title, pos , size , style , name ) ;
+    DoMacCreateRealWindow( parent, title, pos , size , style , name ) ;
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 
@@ -1082,6 +1082,17 @@ void  wxTopLevelWindowMac::MacCreateRealWindow(
     long style,
     const wxString& name )
 {
+    DoMacCreateRealWindow( NULL, title, pos, size, style, name );
+}
+
+void  wxTopLevelWindowMac::DoMacCreateRealWindow(
+    wxWindow* parent, 
+    const wxString& title,
+    const wxPoint& pos,
+    const wxSize& size,
+    long style,
+    const wxString& name )
+{
     OSStatus err = noErr ;
     SetName(name);
     m_windowStyle = style;
@@ -1193,6 +1204,13 @@ void  wxTopLevelWindowMac::MacCreateRealWindow(
 
     if ( HasFlag( wxFRAME_FLOAT_ON_PARENT ) )
         group = GetWindowGroupOfClass(kFloatingWindowClass) ;
+        
+    if ( group == NULL && parent != NULL )
+    {
+        WindowRef parenttlw = (WindowRef) parent->MacGetTopLevelWindowRef();
+        if( parenttlw )
+            group = GetWindowGroup( parenttlw );
+    }
         
     attr |= kWindowCompositingAttribute;
 #if 0 // wxMAC_USE_CORE_GRAPHICS ; TODO : decide on overall handling of high dpi screens (pixel vs userscale)
