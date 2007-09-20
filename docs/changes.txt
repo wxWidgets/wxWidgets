@@ -93,6 +93,8 @@ Major new features in 2.8 release
 All:
 
 - Fixed another bug in wxFileConfig when deleting entries (Axel Gembe)
+- Added Portuguese translation (Antonio Cardoso Martins)
+
 
 All (GUI):
 
