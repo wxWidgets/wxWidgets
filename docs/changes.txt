@@ -234,6 +234,8 @@ wxX11:
 All:
 
 - Fixed another bug in wxFileConfig when deleting entries (Axel Gembe)
+- Added Portuguese translation (Antonio Cardoso Martins)
+
 
 2.8.5
 -----
