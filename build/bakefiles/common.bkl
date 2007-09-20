@@ -676,6 +676,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <if cond="FORMAT=='watcom' and TOOLKIT=='MGL'">
             <include>$(DOLLAR)(%SCITECH)/include</include>
         </if>
+        <include>$(INC_TIFF_BUILD)</include>
         <include>$(INC_TIFF)</include>
         <include>$(INC_JPEG)</include>
         <include>$(INC_PNG)</include>

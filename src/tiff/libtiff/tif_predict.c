@@ -317,7 +317,7 @@ fpAcc(TIFF* tif, tidata_t cp0, tsize_t cc)
 	for (count = 0; count < wc; count++) {
 		uint32 byte;
 		for (byte = 0; byte < bps; byte++) {
-#if WORDS_BIGENDIAN
+#ifdef WORDS_BIGENDIAN
 			cp[bps * count + byte] = tmp[byte * wc + count];
 #else
 			cp[bps * count + byte] =
@@ -459,7 +459,7 @@ fpDiff(TIFF* tif, tidata_t cp0, tsize_t cc)
 	for (count = 0; count < wc; count++) {
 		uint32 byte;
 		for (byte = 0; byte < bps; byte++) {
-#if WORDS_BIGENDIAN
+#ifdef WORDS_BIGENDIAN
 			cp[byte * wc + count] =	tmp[bps * count + byte];
 #else
 			cp[(bps - byte - 1) * wc + count] =

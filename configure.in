@@ -2557,6 +2557,9 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             dnl we are using the system library
             wxUSE_LIBTIFF=sys
         fi
+        if test "$wxUSE_LIBTIFF" = "builtin" ; then
+            AC_CONFIG_SUBDIRS([src/tiff])
+        fi
     fi
 fi
 

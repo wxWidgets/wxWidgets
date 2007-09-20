@@ -30,6 +30,8 @@
  */
 #include "tiffiop.h"
 
+#include <windows.h>
+
 static tsize_t
 _tiffReadProc(thandle_t fd, tdata_t buf, tsize_t size)
 {

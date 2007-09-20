@@ -1,8 +1,8 @@
-src/tiff/make*
-src/tiff/tiff.dsp
-src/tiff/tiff.dsw
-src/tiff/*.c
-src/tiff/*.h
+src/tiff/libtiff/make*
+src/tiff/libtiff/tiff.dsp
+src/tiff/libtiff/tiff.dsw
+src/tiff/libtiff/*.c
+src/tiff/libtiff/*.h
 src/tiff/README
 src/tiff/COPYRIGHT
 src/tiff/VERSION
