@@ -24725,7 +24725,7 @@ echo "${ECHO_T}`eval echo '${'wx_cv_func_$wx_func'}'`" >&6
     if eval test \$wx_cv_func_$wx_func = yes
     then
       cat >>confdefs.h <<_ACEOF
-#define HAVE_`echo $wx_func | tr 'a-z' 'A-Z'` 1
+#define `echo "HAVE_$wx_func" | $as_tr_cpp` 1
 _ACEOF
 
 
@@ -24808,7 +24808,7 @@ echo "${ECHO_T}`eval echo '${'wx_cv_func_$wx_func'}'`" >&6
     if eval test \$wx_cv_func_$wx_func = yes
     then
       cat >>confdefs.h <<_ACEOF
-#define HAVE_`echo $wx_func | tr 'a-z' 'A-Z'` 1
+#define `echo "HAVE_$wx_func" | $as_tr_cpp` 1
 _ACEOF
 
 
@@ -34958,7 +34958,7 @@ echo "${ECHO_T}`eval echo '${'wx_cv_func_$wx_func'}'`" >&6
     if eval test \$wx_cv_func_$wx_func = yes
     then
       cat >>confdefs.h <<_ACEOF
-#define HAVE_`echo $wx_func | tr 'a-z' 'A-Z'` 1
+#define `echo "HAVE_$wx_func" | $as_tr_cpp` 1
 _ACEOF
 
 
@@ -35096,7 +35096,7 @@ echo "${ECHO_T}`eval echo '${'wx_cv_func_$wx_func'}'`" >&6
     if eval test \$wx_cv_func_$wx_func = yes
     then
       cat >>confdefs.h <<_ACEOF
-#define HAVE_`echo $wx_func | tr 'a-z' 'A-Z'` 1
+#define `echo "HAVE_$wx_func" | $as_tr_cpp` 1
 _ACEOF
 
 
@@ -35181,7 +35181,7 @@ echo "${ECHO_T}`eval echo '${'wx_cv_func_$wx_func'}'`" >&6
     if eval test \$wx_cv_func_$wx_func = yes
     then
       cat >>confdefs.h <<_ACEOF
-#define HAVE_`echo $wx_func | tr 'a-z' 'A-Z'` 1
+#define `echo "HAVE_$wx_func" | $as_tr_cpp` 1
 _ACEOF
 
 
@@ -35271,7 +35271,7 @@ echo "${ECHO_T}`eval echo '${'wx_cv_func_$wx_func'}'`" >&6
     if eval test \$wx_cv_func_$wx_func = yes
     then
       cat >>confdefs.h <<_ACEOF
-#define HAVE_`echo $wx_func | tr 'a-z' 'A-Z'` 1
+#define `echo "HAVE_$wx_func" | $as_tr_cpp` 1
 _ACEOF
 
 
@@ -37035,7 +37035,7 @@ echo "${ECHO_T}`eval echo '${'wx_cv_func_$wx_func'}'`" >&6
     if eval test \$wx_cv_func_$wx_func = yes
     then
       cat >>confdefs.h <<_ACEOF
-#define HAVE_`echo $wx_func | tr 'a-z' 'A-Z'` 1
+#define `echo "HAVE_$wx_func" | $as_tr_cpp` 1
 _ACEOF
 
 
@@ -37130,7 +37130,7 @@ echo "${ECHO_T}`eval echo '${'wx_cv_func_$wx_func'}'`" >&6
     if eval test \$wx_cv_func_$wx_func = yes
     then
       cat >>confdefs.h <<_ACEOF
-#define HAVE_`echo $wx_func | tr 'a-z' 'A-Z'` 1
+#define `echo "HAVE_$wx_func" | $as_tr_cpp` 1
 _ACEOF
 
 
@@ -37213,7 +37213,7 @@ echo "${ECHO_T}`eval echo '${'wx_cv_func_$wx_func'}'`" >&6
     if eval test \$wx_cv_func_$wx_func = yes
     then
       cat >>confdefs.h <<_ACEOF
-#define HAVE_`echo $wx_func | tr 'a-z' 'A-Z'` 1
+#define `echo "HAVE_$wx_func" | $as_tr_cpp` 1
 _ACEOF
 
 
@@ -37297,7 +37297,7 @@ echo "${ECHO_T}`eval echo '${'wx_cv_func_$wx_func'}'`" >&6
     if eval test \$wx_cv_func_$wx_func = yes
     then
       cat >>confdefs.h <<_ACEOF
-#define HAVE_`echo $wx_func | tr 'a-z' 'A-Z'` 1
+#define `echo "HAVE_$wx_func" | $as_tr_cpp` 1
 _ACEOF
 
 
@@ -37887,7 +37887,7 @@ echo "${ECHO_T}`eval echo '${'wx_cv_func_$wx_func'}'`" >&6
     if eval test \$wx_cv_func_$wx_func = yes
     then
       cat >>confdefs.h <<_ACEOF
-#define HAVE_`echo $wx_func | tr 'a-z' 'A-Z'` 1
+#define `echo "HAVE_$wx_func" | $as_tr_cpp` 1
 _ACEOF
 
 
@@ -37971,7 +37971,7 @@ echo "${ECHO_T}`eval echo '${'wx_cv_func_$wx_func'}'`" >&6
     if eval test \$wx_cv_func_$wx_func = yes
     then
       cat >>confdefs.h <<_ACEOF
-#define HAVE_`echo $wx_func | tr 'a-z' 'A-Z'` 1
+#define `echo "HAVE_$wx_func" | $as_tr_cpp` 1
 _ACEOF
 
 
@@ -38054,7 +38054,7 @@ echo "${ECHO_T}`eval echo '${'wx_cv_func_$wx_func'}'`" >&6
     if eval test \$wx_cv_func_$wx_func = yes
     then
       cat >>confdefs.h <<_ACEOF
-#define HAVE_`echo $wx_func | tr 'a-z' 'A-Z'` 1
+#define `echo "HAVE_$wx_func" | $as_tr_cpp` 1
 _ACEOF
 
 
@@ -38137,7 +38137,7 @@ echo "${ECHO_T}`eval echo '${'wx_cv_func_$wx_func'}'`" >&6
     if eval test \$wx_cv_func_$wx_func = yes
     then
       cat >>confdefs.h <<_ACEOF
-#define HAVE_`echo $wx_func | tr 'a-z' 'A-Z'` 1
+#define `echo "HAVE_$wx_func" | $as_tr_cpp` 1
 _ACEOF
 
 
