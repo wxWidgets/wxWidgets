@@ -489,6 +489,7 @@ public:
     void SelectRows( unsigned int from, unsigned int to, bool on );
     void ReverseRowSelection( unsigned int row );
     bool IsRowSelected( unsigned int row );
+    void SendSelectionChangedEvent( const wxDataViewItem& item);
 
     void RefreshRow( unsigned int row );
     void RefreshRows( unsigned int from, unsigned int to );
@@ -2660,6 +2661,18 @@ bool wxDataViewMainWindow::IsRowSelected( unsigned int row )
     return (m_selection.Index( row ) != wxNOT_FOUND);
 }
 
+void wxDataViewMainWindow::SendSelectionChangedEvent( const wxDataViewItem& item)
+{
+    wxWindow *parent = GetParent();
+    wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, parent->GetId());
+
+    le.SetEventObject(parent);
+    le.SetModel(GetOwner()->GetModel());
+    le.SetItem( item );
+
+    parent->GetEventHandler()->ProcessEvent(le);
+}
+
 void wxDataViewMainWindow::RefreshRow( unsigned int row )
 {
     wxRect rect( 0, row*m_lineHeight, GetEndOfLastCol(), m_lineHeight );
@@ -2734,6 +2747,8 @@ void wxDataViewMainWindow::OnArrowChar(unsigned int newCurrent, const wxKeyEvent
         }
 
         SelectRows( oldCurrent, newCurrent, true );
+        if (oldCurrent!=newCurrent)
+            SendSelectionChangedEvent(GetItemByRow(m_selection[0]));
     }
     else // !shift
     {
@@ -2746,7 +2761,10 @@ void wxDataViewMainWindow::OnArrowChar(unsigned int newCurrent, const wxKeyEvent
         ChangeCurrentRow( newCurrent );
 
         if ( !event.ControlDown() )
+        {
             SelectRow( m_currentRow, true );
+            SendSelectionChangedEvent(GetItemByRow(m_currentRow));
+        }
         else
             RefreshRow( m_currentRow );
     }
@@ -2942,6 +2960,7 @@ void wxDataViewMainWindow::OnExpanding( unsigned int row )
                 SelectRow( row, false );
                 SelectRow( row + 1, true );
                 ChangeCurrentRow( row + 1 );
+                SendSelectionChangedEvent( GetItemByRow(row+1));
             }
         }
         else
@@ -2977,6 +2996,7 @@ void wxDataViewMainWindow::OnCollapsing(unsigned int row)
                     SelectRow( row, false);
                     SelectRow(parent , true );
                     ChangeCurrentRow( parent );
+                    SendSelectionChangedEvent( node->GetItem() );
                 }
             }
         }
@@ -3372,7 +3392,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     {
         if (m_underMouse != NULL)
         {
-            wxLogMessage("Undo the row: %d", GetRowByItem(m_underMouse->GetItem()));
+            //wxLogMessage("Undo the row: %d", GetRowByItem(m_underMouse->GetItem()));
             Refresh(GetRowByItem(m_underMouse->GetItem()));
             m_underMouse = NULL;
         }
@@ -3511,6 +3531,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             SelectAllRows(false);
             ChangeCurrentRow(current);
             SelectRow(m_currentRow,true);
+            SendSelectionChangedEvent(GetItemByRow( m_currentRow ) );
         }
 
         // notify cell about right click
@@ -3540,10 +3561,9 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             if ( IsSingleSel() || !IsRowSelected(current) )
             {
                 SelectAllRows( false );
-
                 ChangeCurrentRow(current);
-
                 SelectRow(m_currentRow,true);
+                SendSelectionChangedEvent(GetItemByRow( m_currentRow ) );
             }
             else // multi sel & current is highlighted & no mod keys
             {
@@ -3556,8 +3576,8 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             if (cmdModifierDown)
             {
                 ChangeCurrentRow(current);
-
                 ReverseRowSelection(m_currentRow);
+                SendSelectionChangedEvent(GetItemByRow(m_selection[0]) );
             }
             else if (event.ShiftDown())
             {
@@ -3573,6 +3593,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                 }
 
                 SelectRows(lineFrom, lineTo, true);
+                SendSelectionChangedEvent(GetItemByRow(m_selection[0]) );
             }
             else // !ctrl, !shift
             {
@@ -3796,7 +3817,21 @@ bool wxDataViewCtrl::ClearColumns()
 
 int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
 {
-    return -1;
+    int ret = 0, dead = 0;
+    int len = GetColumnCount();
+    for (int i=0; i<len; i++)
+    {
+        wxDataViewColumn * col = GetColumn(i);
+        if (col->IsHidden())
+            continue;
+        ret += col->GetWidth();
+        if (column==col)
+        {
+            CalcScrolledPosition( ret, dead, &ret, &dead );
+            break;
+        }
+    }
+    return ret;
 }
 
 wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
