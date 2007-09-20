@@ -1185,9 +1185,14 @@ bool wxToolBar::Realize()
 // message handlers
 // ----------------------------------------------------------------------------
 
-bool wxToolBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id)
+bool wxToolBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id_)
 {
-    wxToolBarToolBase *tool = FindById((int)id);
+    // cast to signed is important as we compare this id with (signed) ints in
+    // FindById() and without the cast we'd get a positive int from a
+    // "negative" (i.e. > 32767) WORD
+    const int id = (signed short)id_;
+
+    wxToolBarToolBase *tool = FindById(id);
     if ( !tool )
         return false;
 
@@ -1209,7 +1214,7 @@ bool wxToolBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id)
 
     // OnLeftClick() can veto the button state change - for buttons which
     // may be toggled only, of couse
-    if ( !OnLeftClick((int)id, toggled) && tool->CanBeToggled() )
+    if ( !OnLeftClick(id, toggled) && tool->CanBeToggled() )
     {
         // revert back
         tool->Toggle(!toggled);

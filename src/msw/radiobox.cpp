@@ -258,8 +258,10 @@ void wxRadioBox::SubclassRadioButton(WXHWND hWndBtn)
 // events generation
 // ----------------------------------------------------------------------------
 
-bool wxRadioBox::MSWCommand(WXUINT cmd, WXWORD id)
+bool wxRadioBox::MSWCommand(WXUINT cmd, WXWORD id_)
 {
+    const int id = (signed short)id_;
+
     if ( cmd == BN_CLICKED )
     {
         if (id == GetId())

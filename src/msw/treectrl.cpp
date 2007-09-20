@@ -1902,8 +1902,10 @@ bool wxTreeCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
     return wxTreeCtrlBase::MSWShouldPreProcessMessage(msg);
 }
 
-bool wxTreeCtrl::MSWCommand(WXUINT cmd, WXWORD id)
+bool wxTreeCtrl::MSWCommand(WXUINT cmd, WXWORD id_)
 {
+    const int id = (signed short)id_;
+
     if ( cmd == EN_UPDATE )
     {
         wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, id);

@@ -482,9 +482,11 @@ bool wxToolMenuBar::Realize()
     return true;
 }
 
-bool wxToolMenuBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id)
+bool wxToolMenuBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id_)
 {
-    wxToolBarToolBase *tool = FindById((int)id);
+    const int id = (signed short)id_;
+
+    wxToolBarToolBase *tool = FindById(id);
     if ( !tool )
     {
         bool checked = false;

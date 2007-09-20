@@ -1749,8 +1749,9 @@ bool wxListCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
     return wxControl::MSWShouldPreProcessMessage(msg);
 }
 
-bool wxListCtrl::MSWCommand(WXUINT cmd, WXWORD id)
+bool wxListCtrl::MSWCommand(WXUINT cmd, WXWORD id_)
 {
+    const int id = (signed short)id_;
     if (cmd == EN_UPDATE)
     {
         wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, id);

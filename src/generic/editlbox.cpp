@@ -197,12 +197,12 @@ IMPLEMENT_CLASS(wxEditableListBox, wxPanel)
 
 // NB: generate the IDs at runtime to avoid conflict with XRCID values,
 //     they could cause XRCCTRL() failures in XRC-based dialogs
-const int wxID_ELB_DELETE = wxNewId();
-const int wxID_ELB_EDIT = wxNewId();
-const int wxID_ELB_NEW = wxNewId();
-const int wxID_ELB_UP = wxNewId();
-const int wxID_ELB_DOWN = wxNewId();
-const int wxID_ELB_LISTCTRL = wxNewId();
+const int wxID_ELB_DELETE = wxWindow::NewControlId();
+const int wxID_ELB_EDIT = wxWindow::NewControlId();
+const int wxID_ELB_NEW = wxWindow::NewControlId();
+const int wxID_ELB_UP = wxWindow::NewControlId();
+const int wxID_ELB_DOWN = wxWindow::NewControlId();
+const int wxID_ELB_LISTCTRL = wxWindow::NewControlId();
 
 BEGIN_EVENT_TABLE(wxEditableListBox, wxPanel)
     EVT_LIST_ITEM_SELECTED(wxID_ELB_LISTCTRL, wxEditableListBox::OnItemSelected)

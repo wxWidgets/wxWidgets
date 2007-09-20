@@ -4871,8 +4871,11 @@ bool wxWindowMSW::HandleGetMinMaxInfo(void *WXUNUSED_IN_WINCE(mmInfo))
 // command messages
 // ---------------------------------------------------------------------------
 
-bool wxWindowMSW::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
+bool wxWindowMSW::HandleCommand(WXWORD id_, WXWORD cmd, WXHWND control)
 {
+    // sign extend to int from short before comparing with the other int ids
+    int id = (signed short)id_;
+
 #if wxUSE_MENUS_NATIVE
     if ( !cmd && wxCurrentPopupMenu )
     {
@@ -4895,8 +4898,7 @@ bool wxWindowMSW::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
     // try the id
     if ( !win )
     {
-        // must cast to a signed type before comparing with other ids!
-        win = FindItem((signed short)id);
+        win = FindItem(id);
     }
 
     if ( win )
