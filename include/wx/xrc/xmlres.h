@@ -326,10 +326,10 @@ private:
 //   <size>400, 300</size>
 // </object>
 //
-// wxSizerItem* item = XRCSIZERITEM(*this, wxT("area"))
+// wxSizerItem* item = XRCSIZERITEM(*this, "area")
 
 #define XRCSIZERITEM(window, id) \
-    ((window).GetSizer() ? (window).GetSizer()->GetItemById(id) : NULL)    
+    ((window).GetSizer() ? (window).GetSizer()->GetItemById(XRCID(id)) : NULL)
 
 // wxXmlResourceHandler is an abstract base class for resource handlers
 // capable of creating a control from an XML node.
