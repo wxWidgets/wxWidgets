@@ -298,13 +298,13 @@ void wxTextCtrl::Init()
 
 wxTextCtrl::~wxTextCtrl()
 {
-#if wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
     if ( m_dropTarget == wxRICHTEXT_DEFAULT_DROPTARGET )
     {
         // don't try to destroy this dummy pointer in the base class dtor
         m_dropTarget = NULL;
     }
-#endif // wxUSE_DRAG_AND_DROP
+#endif // wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
 
     delete m_privateContextMenu;
 }
