@@ -5,14 +5,14 @@ msgstr ""
 "Project-Id-Version: uk\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-10-29 14:59+0100\n"
-"PO-Revision-Date: 2007-06-09 08:22+0300\n"
+"PO-Revision-Date: 2007-09-18 20:13+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=KOI8-U\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: KBabel 1.11.4\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: ../src/common/debugrpt.cpp:575
 #, c-format
@@ -127,8 +127,8 @@ msgstr "%i з %i"
 msgid "%ld byte"
 msgid_plural "%ld bytes"
 msgstr[0] "%ld байт"
-msgstr[1] "%ld байти"
-msgstr[2] "%ld байт╕в"
+msgstr[1] "%ld байт"
+msgstr[2] "%ld байт"
 
 #: ../src/common/cmdline.cpp:870
 #, c-format
@@ -237,7 +237,7 @@ msgstr "Стиль &позначки:"
 #: ../src/generic/fontdlgg.cpp:396 ../src/generic/wizard.cpp:451
 #: ../src/mac/carbon/fontdlg.cpp:525
 msgid "&Cancel"
-msgstr "&В╕дм╕на"
+msgstr "&Скасувати"
 
 #: ../src/msw/mdi.cpp:171
 msgid "&Cascade"
@@ -319,7 +319,7 @@ msgstr "&Шрифт для р╕вня..."
 #: ../src/richtext/richtextfontpage.cpp:122
 #: ../src/richtext/richtextsymboldlg.cpp:399
 msgid "&Font:"
-msgstr "&Шрифт"
+msgstr "&Шрифт:"
 
 #: ../src/common/stockitem.cpp:126
 msgid "&Forward"
@@ -427,7 +427,7 @@ msgstr "&Гаразд"
 
 #: ../src/common/stockitem.cpp:140
 msgid "&Open"
-msgstr "&В╕дкрити..."
+msgstr "&В╕дкрити"
 
 #: ../src/html/helpfrm.cpp:117
 msgid "&Open..."
@@ -1427,7 +1427,7 @@ msgstr "Неможливо записати до потоку розпакування: %s"
 #: ../src/richtext/richtextstyledlg.cpp:290 ../src/gtk1/fontdlg.cpp:145
 #: ../contrib/src/deprecated/proplist.cpp:514
 msgid "Cancel"
-msgstr "В╕дм╕на"
+msgstr "Скасувати"
 
 #: ../src/xrc/xmlres.cpp:1270 ../src/xrc/xmlres.cpp:1318
 msgid "Cannot convert dialog units: dialog unknown."
@@ -1627,14 +1627,14 @@ msgstr "Позначте, щоб додати точку п╕сля позначки."
 #: ../src/richtext/richtextliststylepage.cpp:237
 #: ../src/richtext/richtextliststylepage.cpp:239
 msgid "Check to add a right parenthesis."
-msgstr "Позначте, щоб додати праву лапку"
+msgstr "Позначте, щоб додати праву дужку"
 
 #: ../src/richtext/richtextbulletspage.cpp:177
 #: ../src/richtext/richtextbulletspage.cpp:179
 #: ../src/richtext/richtextliststylepage.cpp:230
 #: ../src/richtext/richtextliststylepage.cpp:232
 msgid "Check to enclose the bullet in parentheses."
-msgstr "Позначте, щоб додати до позначки лапки."
+msgstr "Позначте, щоб додати до позначки дужку."
 
 #: ../src/mac/carbon/fontdlg.cpp:479 ../src/mac/carbon/fontdlg.cpp:481
 msgid "Check to make the font bold."
@@ -2739,7 +2739,7 @@ msgstr "Не вдалося переспрямувати вв╕д/вив╕д зародженого процесу"
 
 #: ../src/msw/utilsexc.cpp:651
 msgid "Failed to redirect the child process IO"
-msgstr "Не вдалося перенапрямити IO доч╕рнього процесу"
+msgstr "Не вдалося переспрямувати IO доч╕рнього процесу"
 
 #: ../src/msw/dde.cpp:292
 #, c-format
@@ -5066,8 +5066,8 @@ msgid ""
 "[Cancel] if it cannot be replaced"
 msgstr ""
 "Наб╕р символ╕в '%s' нев╕домий. Ви можете вибрати\n"
-"зам╕сть нього ╕нший наб╕р або натиснути [В╕дм╕на] \n"
-"якщо в╕н не може бути зам╕нений"
+"зам╕сть нього ╕нший наб╕р або натиснути [Скасувати], \n"
+"якщо його не можна зам╕нити"
 
 #: ../src/msw/ole/dataobj.cpp:160
 #, c-format
@@ -5169,12 +5169,11 @@ msgstr "Шлях '%s' ма╓ забагато \"..\"!"
 
 #: ../src/common/log.cpp:291
 #, c-format
-#, fuzzy
 msgid "The previous message repeated once."
 msgid_plural "The previous message repeated %lu times."
-msgstr[0] "Попередн╓ пов╕домлення повторено один раз."
+msgstr[0] "Попередн╓ пов╕домлення повторено %lu раз."
 msgstr[1] "Попередн╓ пов╕домлення повторено %lu раз."
-msgstr[2] "Попередн╓ пов╕домлення повторено %lu рази."
+msgstr[2] "Попередн╓ пов╕домлення повторено %lu раз."
 
 #: ../src/richtext/richtextsymboldlg.cpp:462
 #: ../src/richtext/richtextsymboldlg.cpp:464
