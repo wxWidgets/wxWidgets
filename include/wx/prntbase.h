@@ -388,8 +388,10 @@ protected:
     wxWindowDisabler*     m_windowDisabler;
 
 private:
-    DECLARE_CLASS(wxPreviewFrame)
+    void OnChar(wxKeyEvent& event);
+
     DECLARE_EVENT_TABLE()
+    DECLARE_CLASS(wxPreviewFrame)
     DECLARE_NO_COPY_CLASS(wxPreviewFrame)
 };
 

@@ -878,20 +878,14 @@ void wxPreviewCanvas::OnSysColourChanged(wxSysColourChangedEvent& event)
 void wxPreviewCanvas::OnChar(wxKeyEvent &event)
 {
     wxPreviewControlBar* controlBar = ((wxPreviewFrame*) GetParent())->GetControlBar();
-    if (event.GetKeyCode() == WXK_ESCAPE)
+    switch (event.GetKeyCode())
     {
-        ((wxPreviewFrame*) GetParent())->Close(true);
-        return;
-    }
-    else if (event.GetKeyCode() == WXK_TAB)
-    {
-        controlBar->OnGoto();
-        return;
-    }
-    else if (event.GetKeyCode() == WXK_RETURN)
-    {
-        controlBar->OnPrint();
-        return;
+        case WXK_TAB:
+            controlBar->OnGoto();
+            return;
+        case WXK_RETURN:
+            controlBar->OnPrint();
+            return;
     }
 
     if (!event.ControlDown())
@@ -1224,8 +1218,21 @@ int wxPreviewControlBar::GetZoomControl()
 IMPLEMENT_CLASS(wxPreviewFrame, wxFrame)
 
 BEGIN_EVENT_TABLE(wxPreviewFrame, wxFrame)
+    EVT_CHAR_HOOK(wxPreviewFrame::OnChar)
     EVT_CLOSE(wxPreviewFrame::OnCloseWindow)
 END_EVENT_TABLE()
+
+void wxPreviewFrame::OnChar(wxKeyEvent &event)
+{
+    if ( event.GetKeyCode() == WXK_ESCAPE )
+    {
+        Close(true);
+    }
+    else
+    {
+        event.Skip();
+    }
+}
 
 wxPreviewFrame::wxPreviewFrame(wxPrintPreviewBase *preview, wxWindow *parent, const wxString& title,
                                const wxPoint& pos, const wxSize& size, long style, const wxString& name):
