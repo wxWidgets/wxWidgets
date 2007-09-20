@@ -1213,7 +1213,7 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
     {
         WindowRef parenttlw = (WindowRef) parent->MacGetTopLevelWindowRef();
         if( parenttlw )
-            group = GetWindowGroup( parenttlw );
+            group = GetWindowGroupParent( GetWindowGroup( parenttlw ) );
     }
         
     attr |= kWindowCompositingAttribute;
@@ -1246,9 +1246,11 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
     wxCHECK_RET( err == noErr, wxT("Mac OS error when trying to create new window") );
 
     // setup a separate group for each window, so that overlays can be handled easily
-    verify_noerr( CreateWindowGroup( kWindowGroupAttrMoveTogether | kWindowGroupAttrLayerTogether | kWindowGroupAttrHideOnCollapse, &group ));
-    verify_noerr( SetWindowGroupParent( group, GetWindowGroup( (WindowRef) m_macWindow )));
-    verify_noerr( SetWindowGroup( (WindowRef) m_macWindow , group ));
+    
+    WindowGroupRef overlaygroup = NULL;
+    verify_noerr( CreateWindowGroup( kWindowGroupAttrMoveTogether | kWindowGroupAttrLayerTogether | kWindowGroupAttrHideOnCollapse, &overlaygroup ));
+    verify_noerr( SetWindowGroupParent( overlaygroup, GetWindowGroup( (WindowRef) m_macWindow )));
+    verify_noerr( SetWindowGroup( (WindowRef) m_macWindow , overlaygroup ));
   
     // the create commands are only for content rect,
     // so we have to set the size again as structure bounds
