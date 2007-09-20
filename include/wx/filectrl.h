@@ -25,7 +25,7 @@ enum
     wxFC_OPEN              = 0x0001,
     wxFC_SAVE              = 0x0002,
     wxFC_MULTIPLE          = 0x0004,
-    wxFC_NOSHOWHIDDEN      = 0x0008,
+    wxFC_NOSHOWHIDDEN      = 0x0008
 };
 
 #define wxFC_DEFAULT_STYLE wxFC_OPEN
