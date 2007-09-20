@@ -2457,8 +2457,10 @@ public:
                     return wxCONV_FAILED;
             }
 
+            if ( !n )
+                n = wcslen(pwz);
             wxWCharBuffer wcBuf(n);
-            if ( MB2WC(wcBuf.data(), buf, n) == wxCONV_FAILED ||
+            if ( MB2WC(wcBuf.data(), buf, n + 1) == wxCONV_FAILED ||
                     wcscmp(wcBuf, pwz) != 0 )
             {
                 // we didn't obtain the same thing we started from, hence
