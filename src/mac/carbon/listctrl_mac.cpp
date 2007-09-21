@@ -1105,7 +1105,15 @@ bool wxListCtrl::GetItem(wxListItem& info) const
         if (!IsVirtual())
         {
             if (info.m_itemId >= 0 && info.m_itemId < GetItemCount())
+            {
                 m_dbImpl->MacGetColumnInfo(info.m_itemId, info.m_col, info);
+                if (info.GetMask() & wxLIST_MASK_STATE)
+                {
+                    DataBrowserItemID id = (DataBrowserItemID)m_dbImpl->GetItemFromLine(info.m_itemId);
+                    if (IsDataBrowserItemSelected( m_dbImpl->GetControlRef(), id ))
+                        info.SetState(info.GetState() | wxLIST_STATE_SELECTED);
+                }
+            }
         }
         else
         {
