@@ -49,8 +49,7 @@ If using configure, Unix instructions apply.
 
 c) Build instructions
 
-Assumming that you installed the wxWidgets sources
-into c:\wxWidgets:
+Assuming that you installed the wxWidgets sources into c:\wxWidgets:
 
 -> Copy c:\wxWidgets\include\wx\msw\setup0.h
    to   c:\wxWidgets\include\wx\msw\setup.h
@@ -59,7 +58,7 @@ into c:\wxWidgets:
 
    and std iostreams are disabled with
    #define wxUSE_STD_IOSTREAM   0
- 
+
 -> type: cd c:\wxWidgets\build\msw
 -> type: make -f makefile.gcc  (if using GNU tools)
 or type: nmake -f makefile.vc   (if using MS VC++)
@@ -69,7 +68,7 @@ etc.
 
 d) Borland (including free command line tools)
    Download tools from http://www.borland.com/downloads/
-   
+
    See docs/msw/install.txt for details; in brief:
 
 -> type cd c:\wxWidgets\build\msw
