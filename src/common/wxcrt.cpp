@@ -972,7 +972,7 @@ template<typename T>
 static wxULongLong_t wxCRT_DoStrtoull(const T* nptr, T** endptr, int base)
 {
     T sign;
-    wxULongLong_t uval = wxCRT_StrtoullBase(nptr, endptr, base, &sign);
+    wxULongLong_t uval = ::wxCRT_StrtoullBase(nptr, endptr, base, &sign);
 
     if ( sign == wxT('-') )
     {
@@ -987,7 +987,7 @@ template<typename T>
 static wxLongLong_t wxCRT_DoStrtoll(const T* nptr, T** endptr, int base)
 {
     T sign;
-    wxULongLong_t uval = wxCRT_StrtoullBase(nptr, endptr, base, &sign);
+    wxULongLong_t uval = ::wxCRT_StrtoullBase(nptr, endptr, base, &sign);
     wxLongLong_t val = 0;
 
     if ( sign == wxT('-') )

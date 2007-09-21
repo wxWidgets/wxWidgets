@@ -558,7 +558,7 @@ static CharType *wxDoExpandPath(CharType *buf, const wxString& name)
     buf[0] = wxT('\0');
     if (name.empty())
         return buf;
-    nm = MYcopystring((const CharType*)name.c_str()); // Make a scratch copy
+    nm = ::MYcopystring(static_cast<const CharType*>(name.c_str())); // Make a scratch copy
     CharType *nm_tmp = nm;
 
     /* Skip leading whitespace and cr */
