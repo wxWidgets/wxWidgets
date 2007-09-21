@@ -2002,9 +2002,10 @@ gtk_scrollbar_event_after(GtkRange* range, GdkEvent* event, wxWindow* win)
 
         const int orient = wxWindow::OrientFromScrollDir(
                                         win->ScrollDirFromRange(range));
-        wxScrollWinEvent event(wxEVT_SCROLLWIN_THUMBRELEASE, win->GetScrollPos(orient), orient);
-        event.SetEventObject(win);
-        win->GTKProcessEvent(event);
+        wxScrollWinEvent evt(wxEVT_SCROLLWIN_THUMBRELEASE,
+                                win->GetScrollPos(orient), orient);
+        evt.SetEventObject(win);
+        win->GTKProcessEvent(evt);
     }
 }
 

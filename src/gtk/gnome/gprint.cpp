@@ -1031,10 +1031,10 @@ void wxGnomePrintDC::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2,wxCoo
         alpha1 = 0.0;
         alpha2 = 360.0;
     }
-    else
-    if (radius == 0.0)
+    else if ( wxIsNullDouble(radius) )
     {
-        alpha1 = alpha2 = 0.0;
+        alpha1 =
+        alpha2 = 0.0;
     }
     else
     {
@@ -1161,8 +1161,8 @@ void wxGnomePrintDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxC
         int i;
         for (i = 1; i < n; i++)
         {
-            int x = points[i].x + xoffset;
-            int y = points[i].y + yoffset;
+            x = points[i].x + xoffset;
+            y = points[i].y + yoffset;
             gs_libGnomePrint->gnome_print_lineto( m_gpc, XLOG2DEV(x), YLOG2DEV(y) );
             CalcBoundingBox( x, y );
         }
@@ -1181,8 +1181,8 @@ void wxGnomePrintDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxC
         int i;
         for (i = 1; i < n; i++)
         {
-            int x = points[i].x + xoffset;
-            int y = points[i].y + yoffset;
+            x = points[i].x + xoffset;
+            y = points[i].y + yoffset;
             gs_libGnomePrint->gnome_print_lineto( m_gpc, XLOG2DEV(x), YLOG2DEV(y) );
             CalcBoundingBox( x, y );
         }

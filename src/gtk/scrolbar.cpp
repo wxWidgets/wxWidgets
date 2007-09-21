@@ -33,14 +33,19 @@ gtk_value_changed(GtkRange* range, wxScrollBar* win)
     {
         const int orient = win->HasFlag(wxSB_VERTICAL) ? wxVERTICAL : wxHORIZONTAL;
         const int value = win->GetThumbPosition();
-        wxScrollEvent event(eventType, win->GetId(), value, orient);
-        event.SetEventObject(win);
-        win->GetEventHandler()->ProcessEvent(event);
+        const int id = win->GetId();
+
+        // first send the specific event for the user action
+        wxScrollEvent evtSpec(eventType, id, value, orient);
+        evtSpec.SetEventObject(win);
+        win->GetEventHandler()->ProcessEvent(evtSpec);
+
         if (!win->m_isScrolling)
         {
-            wxScrollEvent event(wxEVT_SCROLL_CHANGED, win->GetId(), value, orient);
-            event.SetEventObject(win);
-            win->GetEventHandler()->ProcessEvent(event);
+            // and if it's over also send a general "changed" event
+            wxScrollEvent evtChanged(wxEVT_SCROLL_CHANGED, id, value, orient);
+            evtChanged.SetEventObject(win);
+            win->GetEventHandler()->ProcessEvent(evtChanged);
         }
     }
 }
@@ -73,14 +78,15 @@ gtk_event_after(GtkRange* range, GdkEvent* event, wxScrollBar* win)
 
         const int value = win->GetThumbPosition();
         const int orient = win->HasFlag(wxSB_VERTICAL) ? wxVERTICAL : wxHORIZONTAL;
+        const int id = win->GetId();
 
-        wxScrollEvent event(wxEVT_SCROLL_THUMBRELEASE, win->GetId(), value, orient);
-        event.SetEventObject(win);
-        win->GetEventHandler()->ProcessEvent(event);
+        wxScrollEvent evtRel(wxEVT_SCROLL_THUMBRELEASE, id, value, orient);
+        evtRel.SetEventObject(win);
+        win->GetEventHandler()->ProcessEvent(evtRel);
 
-        wxScrollEvent event2(wxEVT_SCROLL_CHANGED, win->GetId(), value, orient);
-        event2.SetEventObject(win);
-        win->GetEventHandler()->ProcessEvent(event2);
+        wxScrollEvent evtChanged(wxEVT_SCROLL_CHANGED, id, value, orient);
+        evtChanged.SetEventObject(win);
+        win->GetEventHandler()->ProcessEvent(evtChanged);
     }
 }
 }

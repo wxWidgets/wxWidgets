@@ -527,8 +527,8 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
             // if we have a dropdown menu, we use 2 GTK tools internally
             wxToolBarToolsList::compatibility_iterator node = m_tools.Item( i );
-            wxToolBarTool *tool = (wxToolBarTool*) node->GetData();
-            if ( tool->IsButton() && (tool->GetKind() == wxITEM_DROPDOWN) )
+            wxToolBarTool * const tool2 = (wxToolBarTool*) node->GetData();
+            if ( tool2->IsButton() && tool2->GetKind() == wxITEM_DROPDOWN )
                 posGtk++;
         }
     }

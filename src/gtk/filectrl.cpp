@@ -194,7 +194,7 @@ int wxGtkFileChooser::GetFilterIndex() const
     }
     else
         return index;
-};
+}
 
 //-----------------------------------------------------------------------------
 // end wxGtkFileChooser Implementation

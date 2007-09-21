@@ -184,11 +184,11 @@ void wxGenericCollapsiblePane::OnStateChange(const wxSize& sz)
                 if (top->GetSizer())
                 {
                     // we have just set the size hints...
-                    wxSize sz = top->GetSizer()->CalcMin();
+                    wxSize szClient = top->GetSizer()->CalcMin();
 
                     // use SetClientSize() and not SetSize() otherwise the size for
                     // e.g. a wxFrame with a menubar wouldn't be correctly set
-                    top->SetClientSize(sz);
+                    top->SetClientSize(szClient);
                 }
                 else
                     top->Layout();

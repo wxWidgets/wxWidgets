@@ -1188,18 +1188,18 @@ void wxScrollHelper::HandleOnChar(wxKeyEvent& event)
 
     if ( m_xScrollPosition != xScrollOld )
     {
-        wxScrollWinEvent event(wxEVT_SCROLLWIN_THUMBTRACK, m_xScrollPosition,
+        wxScrollWinEvent evt(wxEVT_SCROLLWIN_THUMBTRACK, m_xScrollPosition,
                                wxHORIZONTAL);
-        event.SetEventObject(m_win);
-        m_win->GetEventHandler()->ProcessEvent(event);
+        evt.SetEventObject(m_win);
+        m_win->GetEventHandler()->ProcessEvent(evt);
     }
 
     if ( m_yScrollPosition != yScrollOld )
     {
-        wxScrollWinEvent event(wxEVT_SCROLLWIN_THUMBTRACK, m_yScrollPosition,
+        wxScrollWinEvent evt(wxEVT_SCROLLWIN_THUMBTRACK, m_yScrollPosition,
                                wxVERTICAL);
-        event.SetEventObject(m_win);
-        m_win->GetEventHandler()->ProcessEvent(event);
+        evt.SetEventObject(m_win);
+        m_win->GetEventHandler()->ProcessEvent(evt);
     }
 }
 

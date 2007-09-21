@@ -1376,8 +1376,8 @@ wxFlexGridSizer::~wxFlexGridSizer()
 
 void wxFlexGridSizer::RecalcSizes()
 {
-    int nitems, nrows, ncols;
-    if ( (nitems = CalcRowsCols(nrows, ncols)) == 0 )
+    int nrows, ncols;
+    if ( !CalcRowsCols(nrows, ncols) )
         return;
 
     const wxPoint pt(GetPosition());

@@ -96,7 +96,7 @@ static void gtk_collapsiblepane_expanded_callback (GObject    *object,
         // fire an event
         wxCollapsiblePaneEvent ev(p, p->GetId(), p->IsCollapsed());
         p->GetEventHandler()->ProcessEvent(ev);
-    
+
         // the user asked to explicitely handle the resizing itself...
         return;
     }
@@ -106,7 +106,7 @@ static void gtk_collapsiblepane_expanded_callback (GObject    *object,
     if ( top && top->GetSizer() )
     {
         // 2) recalculate minimal size of the top window
-        wxSize sz = top->GetSizer()->CalcMin();
+        sz = top->GetSizer()->CalcMin();
 
         if (top->m_mainWidget)
         {

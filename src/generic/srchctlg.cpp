@@ -342,8 +342,6 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
     m_text = new wxSearchTextCtrl(this, value, style & ~wxBORDER_MASK);
     m_text->SetDescriptiveText(_("Search"));
 
-    wxSize sizeText = m_text->GetBestSize();
-
     m_searchButton = new wxSearchButton(this,
                                         wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN,
                                         m_searchBitmap);

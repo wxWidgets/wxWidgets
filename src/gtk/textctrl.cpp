@@ -251,10 +251,10 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
         for (size_t i = 0; i < tabs.GetCount(); i++)
             tagname += wxString::Format(_T(" %d"), tabs[i]);
 
-        const wxWX2MBbuf buf = tagname.mb_str(wxConvUTF8);
+        const wxWX2MBbuf buftag = tagname.utf8_str();
 
         tag = gtk_text_tag_table_lookup( gtk_text_buffer_get_tag_table( text_buffer ),
-                                        buf );
+                                        buftag );
         if (!tag)
         {
             // Factor to convert from 1/10th of a mm into pixels
@@ -270,7 +270,7 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
             PangoTabArray* tabArray = pango_tab_array_new(tabs.GetCount(), TRUE);
             for (size_t i = 0; i < tabs.GetCount(); i++)
                 pango_tab_array_set_tab(tabArray, i, PANGO_TAB_LEFT, (gint)(tabs[i] * factor));
-            tag = gtk_text_buffer_create_tag( text_buffer, buf,
+            tag = gtk_text_buffer_create_tag( text_buffer, buftag,
                                               "tabs", tabArray, NULL );
             pango_tab_array_free(tabArray);
         }
@@ -951,7 +951,6 @@ wxString wxTextCtrl::GetValue() const
 {
     wxCHECK_MSG( m_text != NULL, wxEmptyString, wxT("invalid text ctrl") );
 
-    wxString tmp;
     if ( IsMultiLine() )
     {
         GtkTextIter start;
@@ -967,8 +966,6 @@ wxString wxTextCtrl::GetValue() const
         const gchar *text = gtk_entry_get_text( GTK_ENTRY(m_text) );
         return wxGTK_CONV_BACK(text);
     }
-
-    return tmp;
 }
 
 wxFontEncoding wxTextCtrl::GetTextEncoding() const

@@ -393,9 +393,6 @@ void wxFileData::MakeItem( wxListItem &item )
 //  wxFileListCtrl
 //-----------------------------------------------------------------------------
 
-// FIXME: what is this for? It's never read
-static bool ignoreChanges = false;
-
 IMPLEMENT_DYNAMIC_CLASS(wxFileListCtrl,wxListCtrl)
 
 BEGIN_EVENT_TABLE(wxFileListCtrl,wxListCtrl)
@@ -722,10 +719,8 @@ void wxFileListCtrl::GoToParentDir()
         long id = FindItem( 0, fname );
         if (id != wxNOT_FOUND)
         {
-            ignoreChanges = true;
             SetItemState( id, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
             EnsureVisible( id );
-            ignoreChanges = false;
         }
     }
 }
@@ -743,9 +738,7 @@ void wxFileListCtrl::GoToDir( const wxString &dir )
     m_dirName = dir;
     UpdateFiles();
 
-    ignoreChanges = true;
     SetItemState( 0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
-    ignoreChanges = false;
 
     EnsureVisible( 0 );
 }
@@ -818,9 +811,7 @@ void wxFileListCtrl::OnListEndLabelEdit( wxListEvent &event )
     {
         fd->SetNewName( new_name, event.GetLabel() );
 
-        ignoreChanges = true;
         SetItemState( event.GetItem(), wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
-        ignoreChanges = false;
 
         UpdateItem( event.GetItem() );
         EnsureVisible( event.GetItem() );

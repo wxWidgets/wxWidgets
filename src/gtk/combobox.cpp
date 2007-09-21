@@ -775,8 +775,6 @@ unsigned int wxComboBox::GetCount() const
         }
         return count;
     }
-
-    return 0;
 }
 
 void wxComboBox::SetSelection( int n )

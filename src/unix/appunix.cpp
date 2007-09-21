@@ -8,8 +8,17 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/app.h"
-#include "wx/log.h"
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/log.h"
+#endif
+
 #include "wx/evtloop.h"
 
 #include <signal.h>
