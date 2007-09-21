@@ -1172,7 +1172,7 @@ void wxWindow::DoGetSize(int *x, int *y) const
                        XmNwidth, &xx,
                        XmNheight, &yy,
                        NULL );
-    if(x) *x = widget ? xx : -1; 
+    if(x) *x = widget ? xx : -1;
     if(y) *y = widget ? yy : -1;
 }
 
@@ -1654,7 +1654,7 @@ void wxWindow::OnInternalIdle()
 {
     // This calls the UI-update mechanism (querying windows for
     // menu/toolbar/control state information)
-    if (wxUpdateUIEvent::CanUpdate(this))
+    if (wxUpdateUIEvent::CanUpdate(this) && IsShown())
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
@@ -2624,14 +2624,14 @@ void wxGetTextExtent(const wxWindow* window, const wxString& str,
     {
         XRectangle ink, logical;
         WXFontSet fset = (WXFontSet) args[0].value;
-    
+
         XmbTextExtents( (XFontSet)fset, str.c_str(), str.length(),
                         &ink, &logical);
 
         if( width ) *width = logical.width;
         if( height ) *height = logical.height;
-        if( ascent ) *ascent = -logical.y;    
-        if( descent ) *descent = logical.height + logical.y;    
+        if( ascent ) *ascent = -logical.y;
+        if( descent ) *descent = logical.height + logical.y;
     }
     else
     {
@@ -2670,14 +2670,14 @@ void wxGetTextExtent(const wxWindow* window, const wxString& str,
     if (type == XmFONT_IS_FONTSET)
     {
         XRectangle ink, logical;
-    
+
         XmbTextExtents( (XFontSet)thing, str.c_str(), str.length(),
                         &ink, &logical);
 
         if( width ) *width = logical.width;
         if( height ) *height = logical.height;
-        if( ascent ) *ascent = -logical.y;    
-        if( descent ) *descent = logical.height + logical.y;    
+        if( ascent ) *ascent = -logical.y;
+        if( descent ) *descent = logical.height + logical.y;
     }
     else
     {

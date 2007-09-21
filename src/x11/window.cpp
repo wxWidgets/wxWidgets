@@ -1312,7 +1312,7 @@ void wxWindowX11::OnInternalIdle()
 
     // This calls the UI-update mechanism (querying windows for
     // menu/toolbar/control state information)
-    if (wxUpdateUIEvent::CanUpdate((wxWindow*) this))
+    if (wxUpdateUIEvent::CanUpdate((wxWindow*) this) && IsShown())
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 
     // Set the input focus if couldn't do it before

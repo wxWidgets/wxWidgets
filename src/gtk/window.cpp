@@ -2839,7 +2839,7 @@ void wxWindowGTK::OnInternalIdle()
         }
     }
 
-    if (wxUpdateUIEvent::CanUpdate(this))
+    if (wxUpdateUIEvent::CanUpdate(this) && IsShown())
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 

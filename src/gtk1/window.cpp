@@ -1583,7 +1583,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
     }
 
     g_lastMouseEvent = (GdkEvent*) gdk_event;
-    
+
     wxMouseEvent event( event_type );
     InitMouseEvent( win, event, gdk_event );
 
@@ -1686,7 +1686,7 @@ static gint gtk_window_button_release_callback( GtkWidget *widget,
     }
 
     g_lastMouseEvent = (GdkEvent*) gdk_event;
-    
+
     wxMouseEvent event( event_type );
     InitMouseEvent( win, event, gdk_event );
 
@@ -2958,7 +2958,7 @@ void wxWindowGTK::OnInternalIdle()
         }
     }
 
-    if (wxUpdateUIEvent::CanUpdate(this))
+    if (wxUpdateUIEvent::CanUpdate(this) && IsShown())
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 

@@ -1225,6 +1225,6 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 
 void wxWindowMGL::OnInternalIdle()
 {
-    if (wxUpdateUIEvent::CanUpdate(this))
+    if (wxUpdateUIEvent::CanUpdate(this) && IsShown())
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }

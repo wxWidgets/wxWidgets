@@ -1076,7 +1076,7 @@ void wxWindowDFB::HandleKeyEvent(const wxDFBWindowEvent& event_)
 
 void wxWindowDFB::OnInternalIdle()
 {
-    if (wxUpdateUIEvent::CanUpdate(this))
+    if (wxUpdateUIEvent::CanUpdate(this) && IsShown())
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
