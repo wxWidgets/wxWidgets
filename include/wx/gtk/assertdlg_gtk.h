@@ -59,8 +59,8 @@ typedef enum
 
 
 
-GType gtk_assert_dialog_get_type();
-GtkWidget *gtk_assert_dialog_new();
+GType gtk_assert_dialog_get_type(void);
+GtkWidget *gtk_assert_dialog_new(void);
 
 /* get the assert message */
 gchar *gtk_assert_dialog_get_message(GtkAssertDialog *assertdlg);
