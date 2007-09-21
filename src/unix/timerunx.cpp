@@ -37,7 +37,7 @@
 #include "wx/unix/private/timer.h"
 
 #include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxTimerList);
+WX_DEFINE_LIST(wxTimerList)
 
 // trace mask for the debugging messages used here
 #define wxTrace_Timer wxT("timer")
