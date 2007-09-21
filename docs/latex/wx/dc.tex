@@ -359,12 +359,16 @@ of many other toolkits).
 
 \func{void}{DrawLines}{\param{int}{ n}, \param{wxPoint}{ points[]}, \param{wxCoord}{ xoffset = 0}, \param{wxCoord}{ yoffset = 0}}
 
-\func{void}{DrawLines}{\param{wxList *}{points}, \param{wxCoord}{ xoffset = 0}, \param{wxCoord}{ yoffset = 0}}
+Draws lines using an array of {\it points} of size {\it n}
+adding the optional offset coordinate. The current pen is
+used for drawing the lines.
 
-Draws lines using an array of {\it points} of size {\it n}, or list of
-pointers to points, adding the optional offset coordinate. The current
-pen is used for drawing the lines.  The programmer is responsible for
-deleting the list of points.
+\func{void}{DrawLines}{\param{const wxList *}{points}, \param{wxCoord}{ xoffset = 0}, \param{wxCoord}{ yoffset = 0}}
+
+This method is deprecated and will be removed or replaced
+with a type-safe version. It uses a wxList of pointers to
+wxPoints, adding the optional offset coordinate. The programmer
+is responsible for deleting the list of points.
 
 \pythonnote{The wxPython version of this method accepts a Python list
 of wxPoint objects.}
@@ -379,11 +383,16 @@ of wxPoint objects.}
 \func{void}{DrawPolygon}{\param{int}{ n}, \param{wxPoint}{ points[]}, \param{wxCoord}{ xoffset = 0}, \param{wxCoord}{ yoffset = 0},\\
   \param{int }{fill\_style = wxODDEVEN\_RULE}}
 
-\func{void}{DrawPolygon}{\param{wxList *}{points}, \param{wxCoord}{ xoffset = 0}, \param{wxCoord}{ yoffset = 0},\\
+Draws a filled polygon using an array of {\it points} of size {\it n},
+adding the optional offset coordinate.
+
+\func{void}{DrawPolygon}{\param{const wxList *}{points}, \param{wxCoord}{ xoffset = 0}, \param{wxCoord}{ yoffset = 0},\\
   \param{int }{fill\_style = wxODDEVEN\_RULE}}
 
-Draws a filled polygon using an array of {\it points} of size {\it n},
-or list of pointers to points, adding the optional offset coordinate.
+This method is deprecated and will be removed or replaced
+with a type-safe version. It draws a filled polygon using
+a list of pointers to wxPoints, adding  the optional offset
+coordinate.
 
 The last argument specifies the fill rule: {\bf wxODDEVEN\_RULE} (the
 default) or {\bf wxWINDING\_RULE}.
@@ -482,6 +491,24 @@ dimension of the rectangle. This means that the corner can be
 a sensible size relative to the size of the rectangle, and also avoids
 the strange effects X produces when the corners are too big for
 the rectangle.
+
+
+docs/latex/wx/dc.tex
+
+\membersection{wxDC::DrawScaledBitmap}\label{wxdcdrawscaledbitmap}
+
+\func{void}{DrawScaledBitmap}{\param{const wxBitmap\&}{ bitmap}, \param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxCoord}{ w}, \param{wxCoord}{ h}, \param{bool}{ transparent}, \param{int}{ quality = wxIMAGE_QUALITY_NORMAL}}
+
+Draw a bitmap on the device context at the specified point and resize it to the specified size. If {\it transparent} is true and the bitmap has a transparency mask, the bitmap will be drawn transparently.
+
+Under wxGTK with Gtk Printing support, you should use this method with a wxPrinterDC if you want to print an image with a resolution higher than 72 dpi. On every other DC and platform, resizing is done using \helpref{wxImage::Rescale}{wximagerescale}.
+
+For a description of the {\it quality} parameter, see the \helpref{Scale}{wximagescale} function.
+
+When drawing a mono-bitmap, the current text foreground colour will be used to draw the foreground
+of the bitmap (all bits set to 1), and the current text background colour to draw the background
+(all bits set to 0). See also \helpref{SetTextForeground}{wxdcsettextforeground},
+\helpref{SetTextBackground}{wxdcsettextbackground} and \helpref{wxMemoryDC}{wxmemorydc}.
 
 
 \membersection{wxDC::DrawSpline}\label{wxdcdrawspline}
