@@ -425,6 +425,16 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
     QDBeginCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
     CGContextTranslateCTM( cgContext , 0 , bounds.bottom - bounds.top ) ;
     CGContextScaleCTM( cgContext , 1 , -1 ) ;
+
+    if ( window )
+    {
+        wxPoint origin = window->GetClientAreaOrigin();
+        int x, y;
+        x = origin.x;
+        y = origin.y;
+        window->MacWindowToRootWindow( &x , &y );
+        CGContextTranslateCTM( cgContext, x, y);
+    }
 #endif
 
     HIThemeSplitterDrawInfo drawInfo ;
