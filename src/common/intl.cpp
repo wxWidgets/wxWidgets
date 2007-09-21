@@ -1742,7 +1742,7 @@ bool wxLocale::Init(int language, int flags)
     //
     // this contradicts IBM own docs but this is not of much help, so just work
     // around it in the crudest possible manner
-    char *p = wxStrchr(retloc, ' ');
+    char* p = const_cast<char*>(wxStrchr(retloc, ' '));
     if ( p )
         *p = '\0';
 #endif // __AIX__
