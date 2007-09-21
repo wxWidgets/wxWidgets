@@ -30,6 +30,7 @@
 
 #include <string.h>
 #include "wx/taskbar.h"
+#include "wx/dynlib.h"
 
 // initialized on demand
 UINT   gs_msgTaskbar = 0;
@@ -41,6 +42,39 @@ IMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler)
 // ============================================================================
 // implementation
 // ============================================================================
+
+// wrapper around Shell_NotifyIcon(): this function is not present in Win95
+// shell32.dll so load it dynamically to allow programs using wxTaskBarIcon to
+// start under this OS
+static BOOL wxShellNotifyIcon(DWORD dwMessage, NOTIFYICONDATA *pData)
+{
+#if wxUSE_DYNLIB_CLASS
+    typedef BOOL (WINAPI *Shell_NotifyIcon_t)(DWORD, NOTIFYICONDATA *);
+
+    static Shell_NotifyIcon_t s_pfnShell_NotifyIcon = NULL;
+    static bool s_initialized = false;
+    if ( !s_initialized )
+    {
+        s_initialized = true;
+
+        wxLogNull noLog;
+        wxDynamicLibrary dllShell("shell32.dll");
+        if ( dllShell.IsLoaded() )
+        {
+            s_pfnShell_NotifyIcon =
+                (Shell_NotifyIcon_t)dllShell.GetSymbolAorW("Shell_NotifyIcon");
+        }
+
+        // NB: it's ok to destroy dllShell here, we link to shell32.dll
+        //     implicitly so it won't be unloaded
+    }
+
+    return s_pfnShell_NotifyIcon ? (*s_pfnShell_NotifyIcon)(dwMessage, pData)
+                                 : FALSE;
+#else // !wxUSE_DYNLIB_CLASS
+    return Shell_NotifyIcon(dwMessage, pData);
+#endif // wxUSE_DYNLIB_CLASS/!wxUSE_DYNLIB_CLASS
+}
 
 // ----------------------------------------------------------------------------
 // wxTaskBarIconWindow: helper window
@@ -147,8 +181,8 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
         wxStrncpy(notifyData.szTip, tooltip.c_str(), WXSIZEOF(notifyData.szTip));
     }
 
-    bool ok = Shell_NotifyIcon(m_iconAdded ? NIM_MODIFY
-                                           : NIM_ADD, &notifyData) != 0;
+    bool ok = wxShellNotifyIcon(m_iconAdded ? NIM_MODIFY
+                                            : NIM_ADD, &notifyData) != 0;
 
     if ( !m_iconAdded && ok )
         m_iconAdded = true;
@@ -165,7 +199,7 @@ bool wxTaskBarIcon::RemoveIcon()
 
     NotifyIconData notifyData(GetHwndOf(m_win));
 
-    return Shell_NotifyIcon(NIM_DELETE, &notifyData) != 0;
+    return wxShellNotifyIcon(NIM_DELETE, &notifyData) != 0;
 }
 
 #if wxUSE_MENUS
