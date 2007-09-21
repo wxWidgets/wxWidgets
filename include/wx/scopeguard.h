@@ -103,6 +103,12 @@ class wxScopeGuardImplBase
 public:
     wxScopeGuardImplBase() : m_wasDismissed(false) { }
 
+    wxScopeGuardImplBase(const wxScopeGuardImplBase& other)
+        : m_wasDismissed(other.m_wasDismissed)
+    {
+        other.Dismiss();
+    }
+
     void Dismiss() const { m_wasDismissed = true; }
 
     // for OnScopeExit() only (we can't make it friend, unfortunately)!
@@ -110,12 +116,6 @@ public:
 
 protected:
     ~wxScopeGuardImplBase() { }
-
-    wxScopeGuardImplBase(const wxScopeGuardImplBase& other)
-        : m_wasDismissed(other.m_wasDismissed)
-    {
-        other.Dismiss();
-    }
 
     // must be mutable for copy ctor to work
     mutable bool m_wasDismissed;
