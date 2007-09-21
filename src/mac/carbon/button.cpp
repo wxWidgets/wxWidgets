@@ -16,6 +16,7 @@
 #ifndef WX_PRECOMP
     #include "wx/panel.h"
     #include "wx/toplevel.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/stockitem.h"
