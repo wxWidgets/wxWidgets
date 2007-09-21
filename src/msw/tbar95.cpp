@@ -961,7 +961,7 @@ bool wxToolBar::Realize()
                                 if ( tool->Toggle(false) )
                                     DoToggleTool(tool, false);
 
-                                prevButton.fsState &= TBSTATE_CHECKED;
+                                prevButton.fsState &= ~TBSTATE_CHECKED;
                                 nodePrev = nodePrev->GetPrevious();
                                 prevIndex--;
                             }
