@@ -165,6 +165,7 @@ include/wx/wx_setup.vms
 include/wx/common/*.h
 include/wx/generic/*.h
 include/wx/generic/*.xpm
+include/wx/private/*.h
 include/wx/unix/*.h
 include/wx/html/*.h
 include/wx/html/msw/*.bmp
@@ -220,6 +221,15 @@ samples/artprov/*.rc
 samples/artprov/*.wav
 samples/artprov/*.pro
 samples/artprov/*.bkl
+
+samples/aui/*.cpp
+samples/aui/makefile*
+samples/aui/*.xbm
+samples/aui/*.xpm
+samples/aui/*.ico
+samples/aui/*.rc
+samples/aui/*.pro
+samples/aui/*.bkl
 
 samples/richtext/*.cpp
 samples/richtext/makefile*
