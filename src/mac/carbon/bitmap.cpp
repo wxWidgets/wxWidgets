@@ -75,6 +75,8 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
             
         if ( forceType == 0  )
         {
+            // NOTE : For testing Panther behaviour under higher
+            // Systems make this always be false
             if ( UMAGetSystemVersion() >= 0x1040 )
             {
                 // as soon as it is supported, it's a better default
@@ -662,17 +664,14 @@ PicHandle wxBitmapRefData::GetPictHandle()
             m_pictHandle = (PicHandle) NewHandle(0);
             if ( m_pictHandle )
             {
-                bool hadAlpha = m_hasAlpha ;
-                
-                // QuickTime PICT export does not work with a AlphaSkipFirst bitmap, therefore we have
-                // to convert in that case first
-                
-                if ( !hadAlpha )
-                    UseAlpha( true );
-                
-                err = GraphicsExportSetInputCGBitmapContext( exporter, m_hBitmap);
+                // QT does not correctly export the mask
+                // TODO if we get around to it create a synthetic PICT with the CopyBits and Mask commands
+                CGImageRef imageRef = CGImageCreate();
+                err = GraphicsExportSetInputCGImage( exporter, imageRef );
                 err = GraphicsExportSetOutputHandle(exporter, (Handle)m_pictHandle);
                 err = GraphicsExportDoExport(exporter, NULL);
+                CGImageRelease( imageRef );
+
 				size_t handleSize = GetHandleSize( (Handle) m_pictHandle );
 				// the 512 bytes header is only needed for pict files, but not in memory
 				if ( handleSize >= 512 )
@@ -680,9 +679,6 @@ PicHandle wxBitmapRefData::GetPictHandle()
 					memmove( *m_pictHandle , (char*)(*m_pictHandle)+512, handleSize - 512 );
 					SetHandleSize( (Handle) m_pictHandle, handleSize - 512 );
 				}
-
-                if ( !hadAlpha )
-                    UseAlpha( false );
             }
             CloseComponent( exporter );
         }
