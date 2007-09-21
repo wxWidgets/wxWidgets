@@ -541,7 +541,7 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_GetenvW(const wchar_t *name);
     /* _wtof doesn't exist */
 #else
 #ifndef __VMS
-    #define wxCRT_AtofW(s)         wcstof(s, NULL)
+    #define wxCRT_AtofW(s)         wcstod(s, NULL)
 #endif
     #define wxCRT_AtolW(s)         wcstol(s, NULL, 10)
     /* wcstoi doesn't exist */
