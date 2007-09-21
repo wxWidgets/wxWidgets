@@ -30,7 +30,7 @@
  * ``Library-private'' definitions.
  */
 
-#ifdef _MSC_VER
+#if defined(_WIN32)
 # include "tif_config.h.vc"
 #else
 # include "tif_config.h"
