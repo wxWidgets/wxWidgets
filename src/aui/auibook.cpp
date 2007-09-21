@@ -4501,13 +4501,6 @@ bool wxAuiNotebook::SetFont(const wxFont& font)
     SetSelectedFont(selectedFont);
     SetMeasuringFont(selectedFont);
 
-    if (GetArtProvider())
-    {
-        GetArtProvider()->SetNormalFont(normalFont);
-        GetArtProvider()->SetSelectedFont(selectedFont);
-        GetArtProvider()->SetMeasuringFont(selectedFont);
-    }
-    
     return true;
 }
 
