@@ -1660,7 +1660,7 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
     {
         keyval = (keyval - '0') + WXK_NUMPAD0;
     }
-    else 
+    else if (keycode >= 67 && keycode <= 81) 
     {
         switch (keycode)
         {
@@ -1690,21 +1690,6 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
                 
             case 65:
                 keyval = WXK_NUMPAD_DECIMAL;
-                break;
-            case 24:    // + key
-                keyval = WXK_ADD;
-                break;
-            case 27:    // - key
-                keyval = WXK_SUBTRACT;
-                break;
-            case 28:    // * key
-                keyval = WXK_MULTIPLY;
-                break;
-            case 44:    // / key
-                keyval = WXK_DIVIDE;
-                break;
-            case 47:    //. key
-                keyval = WXK_DECIMAL;
                 break;
             default:
                 break;
