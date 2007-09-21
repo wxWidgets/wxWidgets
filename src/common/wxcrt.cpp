@@ -240,14 +240,14 @@ int /* not wint_t */ wxCRT_FputcW(wchar_t wc, FILE *stream)
 #ifdef wxNEED_WPRINTF
 
 // TODO: implement the scanf() functions
-static int vwscanf(const wchar_t *format, va_list argptr)
+int vwscanf(const wchar_t *format, va_list argptr)
 {
     wxFAIL_MSG( _T("TODO") );
 
     return -1;
 }
 
-static int vswscanf(const wchar_t *ws, const wchar_t *format, va_list argptr)
+int vswscanf(const wchar_t *ws, const wchar_t *format, va_list argptr)
 {
     // The best we can do without proper Unicode support in glibc is to
     // convert the strings into MB representation and run ANSI version
@@ -262,7 +262,7 @@ static int vswscanf(const wchar_t *ws, const wchar_t *format, va_list argptr)
     return vsscanf(wxConvLibc.cWX2MB(ws), wxConvLibc.cWX2MB(format), argptr);
 }
 
-static int vfwscanf(FILE *stream, const wchar_t *format, va_list argptr)
+int vfwscanf(FILE *stream, const wchar_t *format, va_list argptr)
 {
     wxFAIL_MSG( _T("TODO") );
 
@@ -271,7 +271,7 @@ static int vfwscanf(FILE *stream, const wchar_t *format, va_list argptr)
 
 #define vswprintf wxCRT_VsnprintfW
 
-static int vfwprintf(FILE *stream, const wchar_t *format, va_list argptr)
+int vfwprintf(FILE *stream, const wchar_t *format, va_list argptr)
 {
     wxString s;
     int rc = s.PrintfV(format, argptr);
@@ -286,7 +286,7 @@ static int vfwprintf(FILE *stream, const wchar_t *format, va_list argptr)
     return rc;
 }
 
-static int vwprintf(const wchar_t *format, va_list argptr)
+int vwprintf(const wchar_t *format, va_list argptr)
 {
     return wxCRT_VfprintfW(stdout, format, argptr);
 }
