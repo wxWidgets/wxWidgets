@@ -1003,7 +1003,7 @@ void wxMimeTypesManagerImpl::LoadKDEApp(const wxString& filename)
     wxStringTokenizer tokenizer(mimetypes, _T(";"));
     while(tokenizer.HasMoreTokens()) {
         wxString mimetype = tokenizer.GetNextToken().Lower();
-        int nIndex = m_aTypes.Index(mimetype);
+        nIndex = m_aTypes.Index(mimetype);
         if(nIndex != wxNOT_FOUND) { // is this a known MIME type?
             wxMimeTypeCommands* entry = m_aEntries[nIndex];
             entry->AddOrReplaceVerb(wxT("open"), sCmd);
