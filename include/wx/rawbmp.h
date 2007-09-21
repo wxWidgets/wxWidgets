@@ -650,7 +650,7 @@ struct wxPixelDataOut<wxBitmap>
 
 #if WXWIN_COMPATIBILITY_2_8
         // not needed anymore, calls to it should be simply removed
-        wxDEPRECATED_INLINE( void UseAlpha(), wxEMPTY_PARAMETER_VALUE );
+        wxDEPRECATED_INLINE( void UseAlpha(), wxEMPTY_PARAMETER_VALUE )
 #endif
 
     // private: -- see comment in the beginning of the file
