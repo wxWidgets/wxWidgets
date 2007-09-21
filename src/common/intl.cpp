@@ -18,17 +18,17 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __EMX__
-// The following define is needed by Innotek's libc to
-// make the definition of struct localeconv available.
-#define __INTERNAL_DEFS
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
+#endif
+
+#ifdef __EMX__
+// The following define is needed by Innotek's libc to
+// make the definition of struct localeconv available.
+#define __INTERNAL_DEFS
 #endif
 
 #if wxUSE_INTL
