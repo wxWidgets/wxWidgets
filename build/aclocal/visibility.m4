@@ -64,8 +64,8 @@ AC_DEFUN([WX_VISIBILITY],
       CXXFLAGS="$wx_save_CXXFLAGS"])
     AC_MSG_RESULT([$wx_cv_cc_visibility])
     if test $wx_cv_cc_visibility = yes; then
-      AC_DEFINE([HAVE_VISIBILITY])
-
+      dnl we do have basic visibility support, now check if we can use it:
+      dnl
       dnl Debian/Ubuntu's gcc 4.1 is affected:
       dnl https://bugs.launchpad.net/ubuntu/+source/gcc-4.1/+bug/109262
       AC_MSG_CHECKING([for broken libstdc++ visibility])
@@ -89,10 +89,39 @@ AC_DEFUN([WX_VISIBILITY],
         CXXFLAGS="$wx_save_CXXFLAGS"
         LDFLAGS="$wx_save_LDFLAGS"])
       AC_MSG_RESULT([$wx_cv_cc_broken_libstdcxx_visibility])
+
+      if test $wx_cv_cc_broken_libstdcxx_visibility = yes; then
+        AC_MSG_CHECKING([whether we can work around it])
+        AC_CACHE_VAL(wx_cv_cc_visibility_workaround, [
+          AC_LANG_PUSH(C++)
+          AC_TRY_LINK(
+            [
+              #pragma GCC visibility push(default)
+              #include <string>
+              #pragma GCC visibility pop
+            ],
+            [
+              std::string s("hello");
+              return s.length();
+            ],
+            wx_cv_cc_visibility_workaround=no,
+            wx_cv_cc_visibility_workaround=yes)
+          AC_LANG_POP()
+        ])
+        AC_MSG_RESULT([$wx_cv_cc_visibility_workaround])
+
+        if test $wx_cv_cc_visibility_workaround = no; then
+          dnl we can't use visibility at all then
+          wx_cv_cc_visibility=no
+        fi
+      fi
+    fi
+
+    if test $wx_cv_cc_visibility = yes; then
+      AC_DEFINE([HAVE_VISIBILITY])
       if test $wx_cv_cc_broken_libstdcxx_visibility = yes; then
         AC_DEFINE([HAVE_BROKEN_LIBSTDCXX_VISIBILITY])
       fi
-
     else
       CFLAGS_VISIBILITY=""
       CXXFLAGS_VISIBILITY=""

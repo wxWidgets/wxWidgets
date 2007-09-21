@@ -36402,12 +36402,7 @@ fi
     { echo "$as_me:$LINENO: result: $wx_cv_cc_visibility" >&5
 echo "${ECHO_T}$wx_cv_cc_visibility" >&6; }
     if test $wx_cv_cc_visibility = yes; then
-      cat >>confdefs.h <<\_ACEOF
-#define HAVE_VISIBILITY 1
-_ACEOF
-
-
-                  { echo "$as_me:$LINENO: checking for broken libstdc++ visibility" >&5
+                              { echo "$as_me:$LINENO: checking for broken libstdc++ visibility" >&5
 echo $ECHO_N "checking for broken libstdc++ visibility... $ECHO_C" >&6; }
       if test "${wx_cv_cc_broken_libstdcxx_visibility+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -36483,13 +36478,99 @@ fi
 
       { echo "$as_me:$LINENO: result: $wx_cv_cc_broken_libstdcxx_visibility" >&5
 echo "${ECHO_T}$wx_cv_cc_broken_libstdcxx_visibility" >&6; }
+
+      if test $wx_cv_cc_broken_libstdcxx_visibility = yes; then
+        { echo "$as_me:$LINENO: checking whether we can work around it" >&5
+echo $ECHO_N "checking whether we can work around it... $ECHO_C" >&6; }
+        if test "${wx_cv_cc_visibility_workaround+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+          ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+          cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+              #pragma GCC visibility push(default)
+              #include <string>
+              #pragma GCC visibility pop
+
+int
+main ()
+{
+
+              std::string s("hello");
+              return s.length();
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  wx_cv_cc_visibility_workaround=no
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	wx_cv_cc_visibility_workaround=yes
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+          ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+fi
+
+        { echo "$as_me:$LINENO: result: $wx_cv_cc_visibility_workaround" >&5
+echo "${ECHO_T}$wx_cv_cc_visibility_workaround" >&6; }
+
+        if test $wx_cv_cc_visibility_workaround = no; then
+                    wx_cv_cc_visibility=no
+        fi
+      fi
+    fi
+
+    if test $wx_cv_cc_visibility = yes; then
+      cat >>confdefs.h <<\_ACEOF
+#define HAVE_VISIBILITY 1
+_ACEOF
+
       if test $wx_cv_cc_broken_libstdcxx_visibility = yes; then
         cat >>confdefs.h <<\_ACEOF
 #define HAVE_BROKEN_LIBSTDCXX_VISIBILITY 1
 _ACEOF
 
       fi
-
     else
       CFLAGS_VISIBILITY=""
       CXXFLAGS_VISIBILITY=""
@@ -49220,6 +49301,9 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
 else
     SAMPLES_SUBDIRS="console"
+    if test "$wxUSE_SOCKETS" = "yes" ; then
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sockets"
+    fi
 fi
 
 
@@ -52983,7 +53067,12 @@ for subdir in `echo $SUBDIRS`; do
                 makefiles=`(cd $srcdir ; find $subdir -name Makefile.in) | $EGREP -v "$disabled"`
             fi
         else                                     if test ${subdir} = "samples"; then
-                makefiles="samples/Makefile.in samples/console/Makefile.in"
+                                                makefiles="samples/Makefile.in $makefiles"
+                for sample in `echo $SAMPLES_SUBDIRS`; do
+                    if test -d $srcdir/samples/$sample; then
+                        makefiles="samples/$sample/Makefile.in $makefiles"
+                    fi
+                done
             elif test ${subdir} = "utils"; then
                 makefiles=""
                 for util in HelpGen tex2rtf ; do
