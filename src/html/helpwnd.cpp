@@ -382,6 +382,9 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
         m_NavigPan = new wxPanel(m_Splitter, wxID_ANY);
         m_NavigNotebook = new wxNotebook(m_NavigPan, wxID_HTML_NOTEBOOK,
                                          wxDefaultPosition, wxDefaultSize);
+#ifdef __WXMAC__
+        m_NavigNotebook->SetWindowVariant(wxWINDOW_VARIANT_SMALL);
+#endif
 
         navigSizer = new wxBoxSizer(wxVERTICAL);
         navigSizer->Add(m_NavigNotebook, 1, wxEXPAND);
@@ -402,6 +405,9 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
     if ( helpStyle & wxHF_CONTENTS )
     {
         wxWindow *dummy = new wxPanel(m_NavigNotebook, wxID_HTML_INDEXPAGE);
+#ifdef __WXMAC__
+        dummy->SetWindowVariant(wxWINDOW_VARIANT_NORMAL);
+#endif
         wxSizer *topsizer = new wxBoxSizer(wxVERTICAL);
 
         topsizer->Add(0, 10);
@@ -467,6 +473,9 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
     if ( helpStyle & wxHF_INDEX )
     {
         wxWindow *dummy = new wxPanel(m_NavigNotebook, wxID_HTML_INDEXPAGE);
+#ifdef __WXMAC__
+        dummy->SetWindowVariant(wxWINDOW_VARIANT_NORMAL);
+#endif
         wxSizer *topsizer = new wxBoxSizer(wxVERTICAL);
 
         dummy->SetSizer(topsizer);
@@ -507,6 +516,9 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
     if ( helpStyle & wxHF_SEARCH )
     {
         wxWindow *dummy = new wxPanel(m_NavigNotebook, wxID_HTML_INDEXPAGE);
+#ifdef __WXMAC__
+        dummy->SetWindowVariant(wxWINDOW_VARIANT_NORMAL);
+#endif
         wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
         dummy->SetSizer(sizer);
