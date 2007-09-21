@@ -36,6 +36,74 @@
 
 
 #if wxUSE_NEW_DC
+class WXDLLIMPEXP_FWD_CORE wxDC;
+#else
+class WXDLLIMPEXP_FWD_CORE wxDCBase;
+#endif
+
+class WXDLLEXPORT wxDrawObject
+{
+public:
+
+    wxDrawObject()
+        : m_isBBoxValid(false)
+        , m_minX(0), m_minY(0), m_maxX(0), m_maxY(0)
+    { }
+
+    virtual ~wxDrawObject() { }
+
+#if wxUSE_NEW_DC
+    virtual void Draw(wxDC&) const { }
+#else
+    virtual void Draw(wxDCBase&) const { }
+#endif
+
+    virtual void CalcBoundingBox(wxCoord x, wxCoord y)
+    {
+      if ( m_isBBoxValid )
+      {
+         if ( x < m_minX ) m_minX = x;
+         if ( y < m_minY ) m_minY = y;
+         if ( x > m_maxX ) m_maxX = x;
+         if ( y > m_maxY ) m_maxY = y;
+      }
+      else
+      {
+         m_isBBoxValid = true;
+
+         m_minX = x;
+         m_minY = y;
+         m_maxX = x;
+         m_maxY = y;
+      }
+    }
+
+    void ResetBoundingBox()
+    {
+        m_isBBoxValid = false;
+
+        m_minX = m_maxX = m_minY = m_maxY = 0;
+    }
+
+    // Get the final bounding box of the PostScript or Metafile picture.
+
+    wxCoord MinX() const { return m_minX; }
+    wxCoord MaxX() const { return m_maxX; }
+    wxCoord MinY() const { return m_minY; }
+    wxCoord MaxY() const { return m_maxY; }
+
+    //to define the type of object for derived objects
+    virtual int GetType()=0;
+
+protected:
+    //for boundingbox calculation
+    bool m_isBBoxValid:1;
+    //for boundingbox calculation
+    wxCoord m_minX, m_minY, m_maxX, m_maxY;
+};
+
+
+#if wxUSE_NEW_DC
 
 //-----------------------------------------------------------------------------
 // wxDCFactory
@@ -69,7 +137,7 @@ private:
 // wxNativeDCFactory
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDCFactory
+class WXDLLIMPEXP_CORE wxNativeDCFactory
 {
 public:
     wxNativeDCFactory() {}
@@ -83,63 +151,6 @@ public:
     virtual wxImplDC* CreateMemoryDC();
     virtual wxImplDC* CreateMemoryDC( wxBitmap &bitmap );
     virtual wxImplDC* CreateMemoryDC( wxDC *dc );
-};
-
-//-----------------------------------------------------------------------------
-// wxWindowDC
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxWindowDC : public wxDC
-{
-public:
-    wxWindowDC();
-    wxWindowDC( wxWindow *win );
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxWindowDC)
-};
-
-//-----------------------------------------------------------------------------
-// wxClientDC
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxClientDC : public wxDC
-{
-public:
-    wxClientDC();
-    wxClientDC( wxWindow *win );
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxClientDC)
-};
-
-//-----------------------------------------------------------------------------
-// wxMemoryDC
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxMemoryDC: public wxDC
-{
-public:
-    wxMemoryDC();
-    wxMemoryDC( wxBitmap& bitmap );
-    wxMemoryDC( wxDC *dc );
-    
-private:
-    DECLARE_DYNAMIC_CLASS(wxMemoryDC)
-};
-    
-//-----------------------------------------------------------------------------
-// wxPaintDC
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxPaintDC : public wxDC
-{
-public:
-    wxPaintDC();
-    wxPaintDC( wxWindow *win );
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxPaintDC)
 };
 
 //-----------------------------------------------------------------------------
@@ -184,7 +195,7 @@ public:
 
     // bounding box
 
-    virtual void CalcBoundingBox(wxCoord x, wxCoord y);
+    virtual void CalcBoundingBox(wxCoord x, wxCoord y)
     {
       if ( m_isBBoxValid )
       {
@@ -203,7 +214,7 @@ public:
          m_maxY = y;
       }
     }
-    void ResetBoundingBox();
+    void ResetBoundingBox()
     {
         m_isBBoxValid = false;
 
@@ -421,6 +432,8 @@ public:
 
 
 #if wxUSE_SPLINES
+    virtual void DoDrawSpline(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord x3, wxCoord y3);
+    virtual void DoDrawSpline(int n, wxPoint points[]);
     virtual void DoDrawSpline(wxList *points);
 #endif
     
@@ -486,7 +499,7 @@ protected:
 
 private:
     DECLARE_ABSTRACT_CLASS(wxImplDC)
-}
+};
 
 
 class wxDC: public wxObject
@@ -588,9 +601,9 @@ public:
         { return m_pimpl->GetBackground(); }
     
     void SetBackgroundMode(int mode)
-        { m_pimpl->SetBackground( mode ); }
+        { m_pimpl->SetBackgroundMode( mode ); }
     int GetBackgroundMode() const
-        { return m_pimpl->GetBackground(); }
+        { return m_pimpl->GetBackgroundMode(); }
 
     void SetTextForeground(const wxColour& colour)
         { m_pimpl->SetTextForeground(colour); }
@@ -680,19 +693,19 @@ public:
 
     wxCoord DeviceToLogicalX(wxCoord x) const
         { return m_pimpl->DeviceToLogicalX(x); }
-    wxCoord DeviceToLogicalY(wxCoord y) const;
+    wxCoord DeviceToLogicalY(wxCoord y) const
         { return m_pimpl->DeviceToLogicalY(y); }
-    wxCoord DeviceToLogicalXRel(wxCoord x) const;
+    wxCoord DeviceToLogicalXRel(wxCoord x) const
         { return m_pimpl->DeviceToLogicalXRel(x); }
-    wxCoord DeviceToLogicalYRel(wxCoord y) const;
+    wxCoord DeviceToLogicalYRel(wxCoord y) const
         { return m_pimpl->DeviceToLogicalYRel(y); }
-    wxCoord LogicalToDeviceX(wxCoord x) const;
+    wxCoord LogicalToDeviceX(wxCoord x) const
         { return m_pimpl->LogicalToDeviceX(x); }
-    wxCoord LogicalToDeviceY(wxCoord y) const;
+    wxCoord LogicalToDeviceY(wxCoord y) const
         { return m_pimpl->LogicalToDeviceY(y); }
-    wxCoord LogicalToDeviceXRel(wxCoord x) const;
+    wxCoord LogicalToDeviceXRel(wxCoord x) const
         { return m_pimpl->LogicalToDeviceXRel(x); }
-    wxCoord LogicalToDeviceYRel(wxCoord y) const;
+    wxCoord LogicalToDeviceYRel(wxCoord y) const
         { return m_pimpl->LogicalToDeviceYRel(y); }
 
     void SetMapMode(int mode)
@@ -756,9 +769,9 @@ public:
     void GradientFillConcentric(const wxRect& rect,
                                 const wxColour& initialColour,
                                 const wxColour& destColour)
-        { m_pimpl->GradientFillConcentric(rect, initialColour, destColour,
-                                 wxPoint(rect.GetWidth() / 2,
-                                         rect.GetHeight() / 2)); }
+        { m_pimpl->DoGradientFillConcentric( rect, initialColour, destColour,
+                                             wxPoint(rect.GetWidth() / 2,
+                                                     rect.GetHeight() / 2)); }
 
     void GradientFillConcentric(const wxRect& rect,
                                 const wxColour& initialColour,
@@ -815,19 +828,25 @@ public:
     void DrawLines(int n, wxPoint points[],
                    wxCoord xoffset = 0, wxCoord yoffset = 0)
         { m_pimpl->DoDrawLines(n, points, xoffset, yoffset); }
+
+#if 0
+    // needs to be removed
     void DrawLines(const wxList *list,
                    wxCoord xoffset = 0, wxCoord yoffset = 0)
-        { m_pimpl->DrawLines( list, xoffset, yoffset ); }
+#endif
 
     void DrawPolygon(int n, wxPoint points[],
                      wxCoord xoffset = 0, wxCoord yoffset = 0,
                      int fillStyle = wxODDEVEN_RULE)
         { m_pimpl->DoDrawPolygon(n, points, xoffset, yoffset, fillStyle); }
 
+#if 0
+    // needs to be removed
     void DrawPolygon(const wxList *list,
                      wxCoord xoffset = 0, wxCoord yoffset = 0,
                      int fillStyle = wxODDEVEN_RULE)
         { m_pimpl->DrawPolygon( list, xoffset, yoffset, fillStyle ); }
+#endif
 
     void DrawPolyPolygon(int n, int count[], wxPoint points[],
                          wxCoord xoffset = 0, wxCoord yoffset = 0,
@@ -853,7 +872,7 @@ public:
     void DrawCircle(wxCoord x, wxCoord y, wxCoord radius)
         { m_pimpl->DoDrawEllipse(x - radius, y - radius, 2*radius, 2*radius); }
     void DrawCircle(const wxPoint& pt, wxCoord radius)
-        { m_pimpl->DrawCircle(pt.x, pt.y, radius); }
+        { m_pimpl->DoDrawEllipse(pt.x - radius, pt.y - radius, 2*radius, 2*radius); }
 
     void DrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
         { m_pimpl->DoDrawEllipse(x, y, width, height); }
@@ -893,13 +912,12 @@ public:
                            const wxRect& rect,
                            int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                            int indexAccel = -1,
-                           wxRect *rectBounding = NULL)
-        { m_pimpl->DrawLabel( text, image, rect, alignment, indexAccel, rectBounding ); }
+                           wxRect *rectBounding = NULL);
 
     void DrawLabel(const wxString& text, const wxRect& rect,
                    int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                    int indexAccel = -1)
-        { m_pimpl->DrawLabel(text, wxNullBitmap, rect, alignment, indexAccel); }
+        { DrawLabel(text, wxNullBitmap, rect, alignment, indexAccel); }
 
     bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
               wxDC *source, wxCoord xsrc, wxCoord ysrc,
@@ -941,16 +959,18 @@ public:
     }
 
 #if wxUSE_SPLINES
-    // TODO: this API needs fixing (wxPointList, why (!const) "wxList *"?)
     void DrawSpline(wxCoord x1, wxCoord y1,
                     wxCoord x2, wxCoord y2,
                     wxCoord x3, wxCoord y3)
-        { m_pimpl->DrawSpline(x1,y1,x2,y2,x3,y3); }
+        { m_pimpl->DoDrawSpline(x1,y1,x2,y2,x3,y3); }
     void DrawSpline(int n, wxPoint points[])
-        { m_pimpl->DrawSpline(n,points); }
+        { m_pimpl->DoDrawSpline(n,points); }
 
+#if 0
+    // needs to be removed
     void DrawSpline(wxList *points) 
         { m_pimpl->DoDrawSpline(points); }
+#endif
 #endif // wxUSE_SPLINES
 
 
@@ -972,71 +992,70 @@ protected:
 
 private:
     DECLARE_ABSTRACT_CLASS(wxImplDC)
-}
+};
 
+
+//-----------------------------------------------------------------------------
+// wxWindowDC
+//-----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxWindowDC : public wxDC
+{
+public:
+    wxWindowDC();
+    wxWindowDC( wxWindow *win );
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxWindowDC)
+};
+
+//-----------------------------------------------------------------------------
+// wxClientDC
+//-----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxClientDC : public wxDC
+{
+public:
+    wxClientDC();
+    wxClientDC( wxWindow *win );
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxClientDC)
+};
+
+//-----------------------------------------------------------------------------
+// wxMemoryDC
+//-----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxMemoryDC: public wxDC
+{
+public:
+    wxMemoryDC();
+    wxMemoryDC( wxBitmap& bitmap );
+    wxMemoryDC( wxDC *dc );
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxMemoryDC)
+};
+    
+//-----------------------------------------------------------------------------
+// wxPaintDC
+//-----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxPaintDC : public wxDC
+{
+public:
+    wxPaintDC();
+    wxPaintDC( wxWindow *win );
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxPaintDC)
+};
 
 #else  // wxUSE_NEW_DC
 
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
-class WXDLLIMPEXP_FWD_CORE wxDCBase;
-
-class WXDLLEXPORT wxDrawObject
-{
-public:
-
-    wxDrawObject()
-        : m_isBBoxValid(false)
-        , m_minX(0), m_minY(0), m_maxX(0), m_maxY(0)
-    { }
-
-    virtual ~wxDrawObject() { }
-
-    virtual void Draw(wxDCBase&) const { }
-
-    virtual void CalcBoundingBox(wxCoord x, wxCoord y)
-    {
-      if ( m_isBBoxValid )
-      {
-         if ( x < m_minX ) m_minX = x;
-         if ( y < m_minY ) m_minY = y;
-         if ( x > m_maxX ) m_maxX = x;
-         if ( y > m_maxY ) m_maxY = y;
-      }
-      else
-      {
-         m_isBBoxValid = true;
-
-         m_minX = x;
-         m_minY = y;
-         m_maxX = x;
-         m_maxY = y;
-      }
-    }
-
-    void ResetBoundingBox()
-    {
-        m_isBBoxValid = false;
-
-        m_minX = m_maxX = m_minY = m_maxY = 0;
-    }
-
-    // Get the final bounding box of the PostScript or Metafile picture.
-
-    wxCoord MinX() const { return m_minX; }
-    wxCoord MaxX() const { return m_maxX; }
-    wxCoord MinY() const { return m_minY; }
-    wxCoord MaxY() const { return m_maxY; }
-
-    //to define the type of object for derived objects
-    virtual int GetType()=0;
-
-protected:
-    //for boundingbox calculation
-    bool m_isBBoxValid:1;
-    //for boundingbox calculation
-    wxCoord m_minX, m_minY, m_maxX, m_maxY;
-};
 
 // ---------------------------------------------------------------------------
 // global variables
