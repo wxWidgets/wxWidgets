@@ -517,10 +517,13 @@ typedef int wxWindowID;
 /*  Macro to issue warning when using deprecated functions with gcc3 or MSVC7: */
 #if wxCHECK_GCC_VERSION(3, 1)
     #define wxDEPRECATED(x) x __attribute__ ((deprecated))
+    #define wxDEPRECATED_INLINE(func, body) x { body } __attribute__ ((deprecated))
 #elif defined(__VISUALC__) && (__VISUALC__ >= 1300)
     #define wxDEPRECATED(x) __declspec(deprecated) x
+    #define wxDEPRECATED_INLINE(func, body) __declspec(deprecated) x { body }
 #else
     #define wxDEPRECATED(x) x
+    #define wxDEPRECATED_INLINE(func, body) func { body }
 #endif
 
 /*

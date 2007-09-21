@@ -76,6 +76,7 @@ the corresponding topic.
 \helpref{WXDEBUG\_NEW}{debugnew}\\
 \helpref{wxDEPRECATED}{wxdeprecated}\\
 \helpref{wxDEPRECATED\_BUT\_USED\_INTERNALLY}{wxdeprecatedbutusedinternally}\\
+\helpref{wxDEPRECATED\_INLINE}{wxdeprecatedinline}\\
 \helpref{wxDirExists}{functionwxdirexists}\\
 \helpref{wxDirSelector}{wxdirselector}\\
 \helpref{wxDisplayDepth}{wxdisplaydepth}\\
@@ -3007,6 +3008,25 @@ macro ensures that a deprecation warning will be generated if this function is
 used from the user code or, in case of Visual C++, even when it is simply
 overridden.
 
+
+\membersection{wxDEPRECATED\_INLINE}\label{wxdeprecatedinline}
+
+\func{}{wxDEPRECATED\_INLINE}{\param{}{func}, \param{}{body}}
+
+This macro is similar to \helpref{wxDEPRECATED}{wxdeprecated} but can be used
+to not only declare the function \arg{func} as deprecated but to also provide
+its (inline) implementation \arg{body}.
+
+It can be used as following:
+\begin{verbatim}
+    class wxFoo
+    {
+    public:
+        // OldMethod() is deprecated, use NewMethod() instead
+        void NewMethod();
+        wxDEPRECATED_INLINE( void OldMethod(), NewMethod() );
+    };
+\end{verbatim}
 
 \membersection{wxEXPLICIT}\label{wxexplicit}
 
