@@ -33,8 +33,8 @@
 #include "wx/dynlib.h"
 
 // initialized on demand
-UINT   gs_msgTaskbar = 0;
-UINT   gs_msgRestartTaskbar = 0;
+static UINT gs_msgTaskbar = 0;
+static UINT gs_msgRestartTaskbar = 0;
 
 
 IMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler)
