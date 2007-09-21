@@ -7,12 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __VMS
-// vms_jackets.h should for proper working be included before anything else
-# include <vms_jackets.h>
-#undef ConnectionNumber
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -400,10 +394,10 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 
 
     bool init_result;
+    int i;
 
 #if wxUSE_UNICODE
     // gtk_init() wants UTF-8, not wchar_t, so convert
-    int i;
     char **argvGTK = new char *[argc_ + 1];
     for ( i = 0; i < argc_; i++ )
     {
@@ -463,7 +457,7 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
         wxArrayString opt, desc;
         m_traits->GetStandardCmdLineOptions(opt, desc);
 
-        for ( int i = 0; i < argc_; i++ )
+        for ( i = 0; i < argc_; i++ )
         {
             // leave just the names of the options with values
             const wxString str = wxString(argv_[i]).BeforeFirst('=');

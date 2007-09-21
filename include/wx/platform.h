@@ -20,7 +20,15 @@
     are included
 */
 #ifdef __MWERKS__
-#    include <stddef.h>
+#   include <stddef.h>
+#endif
+
+/*
+    This header must be included before anything else under VMS
+ */
+#ifdef __VMS
+#   include <vms_jackets.h>
+#   undef ConnectionNumber
 #endif
 
 /*

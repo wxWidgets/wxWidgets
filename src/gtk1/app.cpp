@@ -7,12 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __VMS
-// vms_jackets.h should for proper working be included before anything else
-# include <vms_jackets.h>
-#undef ConnectionNumber
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
