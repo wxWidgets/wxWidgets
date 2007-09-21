@@ -61,8 +61,7 @@ static BOOL wxShellNotifyIcon(DWORD dwMessage, NOTIFYICONDATA *pData)
         wxDynamicLibrary dllShell("shell32.dll");
         if ( dllShell.IsLoaded() )
         {
-            s_pfnShell_NotifyIcon =
-                (Shell_NotifyIcon_t)dllShell.GetSymbolAorW("Shell_NotifyIcon");
+            wxDL_INIT_FUNC_AW(s_pfn, Shell_NotifyIcon, dllShell);
         }
 
         // NB: it's ok to destroy dllShell here, we link to shell32.dll

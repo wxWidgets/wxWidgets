@@ -106,6 +106,24 @@ enum wxPluginCategory
     type pfn ## name = (type)(dynlib).GetSymbol(_T(#name))
 
 
+// a more convenient function replacing wxDYNLIB_FUNCTION above
+//
+// it uses the convention that the type of the function is its name suffixed
+// with "_t" but it doesn't define a variable but just assigns the loaded value
+// to it and also allows to pass it the prefix to be used instead of hardcoding
+// "pfn" (the prefix can be "m_" or "gs_pfn" or whatever)
+#define wxDL_INIT_FUNC(pfx, name, dynlib) \
+    pfx ## name = (name ## _t)(dynlib).GetSymbol(#name)
+
+#ifdef __WXMSW__
+
+// same as wxDL_INIT_FUNC() but appends 'A' or 'W' to the function name, see
+// wxDynamicLibrary::GetSymbolAorW()
+#define wxDL_INIT_FUNC_AW(pfx, name, dynlib) \
+    pfx ## name = (name ## _t)(dynlib).GetSymbolAorW(#name)
+
+#endif // __WXMSW__
+
 // the following macros can be used to redirect a whole library to a class and
 // check at run-time if the library is present and contains all required
 // methods

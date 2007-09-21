@@ -517,19 +517,9 @@ wxDisplayFactoryWin32Base::wxDisplayFactoryWin32Base()
 
         wxLogNull noLog;
 
-        gs_MonitorFromPoint = (MonitorFromPoint_t)
-            dllUser32.GetSymbol(wxT("MonitorFromPoint"));
-        if ( !gs_MonitorFromPoint )
-            return;
-
-        gs_MonitorFromWindow = (MonitorFromWindow_t)
-            dllUser32.GetSymbol(wxT("MonitorFromWindow"));
-        if ( !gs_MonitorFromWindow )
-            return;
-
-        gs_GetMonitorInfo = (GetMonitorInfo_t)
-            dllUser32.GetSymbolAorW(wxT("GetMonitorInfo"));
-        if ( !gs_GetMonitorInfo )
+        if ( (wxDL_INIT_FUNC(gs_, MonitorFromPoint, dllUser32)) == NULL ||
+             (wxDL_INIT_FUNC(gs_, MonitorFromWindow, dllUser32)) == NULL ||
+             (wxDL_INIT_FUNC_AW(gs_, GetMonitorInfo, dllUser32)) == NULL )
             return;
 
         ms_supportsMultimon = 1;
@@ -601,9 +591,7 @@ wxDisplayFactoryMultimon::wxDisplayFactoryMultimon()
         wxLogNull noLog;
 
         wxDynamicLibrary dllUser32(_T("user32.dll"));
-        pfnEnumDisplayMonitors = (EnumDisplayMonitors_t)
-            dllUser32.GetSymbol(wxT("EnumDisplayMonitors"));
-        if ( !pfnEnumDisplayMonitors )
+        if ( (wxDL_INIT_FUNC(pfn, EnumDisplayMonitors, dllUser32)) == NULL )
             return;
     }
 
@@ -750,8 +738,7 @@ bool wxDisplayImplMultimon::ChangeMode(const wxVideoMode& mode)
         wxDynamicLibrary dllUser32(_T("user32.dll"));
         if ( dllUser32.IsLoaded() )
         {
-            pfnChangeDisplaySettingsEx = (ChangeDisplaySettingsEx_t)
-                dllUser32.GetSymbolAorW(_T("ChangeDisplaySettingsEx"));
+            wxDL_INIT_FUNC_AW(pfn, ChangeDisplaySettingsEx, dllUser32);
         }
         //else: huh, no user32.dll??
 
@@ -829,21 +816,19 @@ wxDisplayFactoryDirectDraw::wxDisplayFactoryDirectDraw()
     if ( !m_dllDDraw.IsLoaded() )
         return;
 
-    DirectDrawEnumerateEx_t pDDEnumEx = (DirectDrawEnumerateEx_t)
-        m_dllDDraw.GetSymbolAorW(_T("DirectDrawEnumerateEx"));
-    if ( !pDDEnumEx )
+    DirectDrawEnumerateEx_t
+        wxDL_INIT_FUNC_AW(pfn, DirectDrawEnumerateEx, m_dllDDraw);
+    if ( !pfnDirectDrawEnumerateEx )
         return;
 
     // we can't continue without DirectDrawCreate() later, so resolve it right
     // now and fail the initialization if it's not available
-    m_pfnDirectDrawCreate = (DirectDrawCreate_t)
-        m_dllDDraw.GetSymbol(_T("DirectDrawCreate"));
-    if ( !m_pfnDirectDrawCreate )
+    if ( !wxDL_INIT_FUNC(m_pfn, DirectDrawCreate, m_dllDDraw) )
         return;
 
-    if ( (*pDDEnumEx)(DDEnumExCallback,
-                      this,
-                      DDENUM_ATTACHEDSECONDARYDEVICES) != DD_OK )
+    if ( (*pfnDirectDrawEnumerateEx)(DDEnumExCallback,
+                                     this,
+                                     DDENUM_ATTACHEDSECONDARYDEVICES) != DD_OK )
     {
         wxLogLastError(_T("DirectDrawEnumerateEx"));
     }
