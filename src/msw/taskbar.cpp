@@ -26,16 +26,10 @@
     #include "wx/menu.h"
 #endif
 
-#include "wx/msw/private.h"
-#include "wx/msw/winundef.h"
+#include "wx/msw/wrapshl.h"
 
 #include <string.h>
 #include "wx/taskbar.h"
-
-#ifdef __WXWINCE__
-    #include <winreg.h>
-    #include <shellapi.h>
-#endif
 
 // initialized on demand
 UINT   gs_msgTaskbar = 0;

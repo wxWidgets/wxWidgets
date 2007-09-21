@@ -12,10 +12,13 @@
 #ifndef _WX_MSW_WRAPSHL_H_
 #define _WX_MSW_WRAPSHL_H_
 
+#include "wx/msw/wrapwin.h"
+
 #ifdef __WXWINCE__
     #include <winreg.h>
     #include <objbase.h>
     #include <shlguid.h>
+    #include <shellapi.h>
 #endif
 
 #include <shlobj.h>
