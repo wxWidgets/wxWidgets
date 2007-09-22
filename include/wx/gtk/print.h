@@ -273,7 +273,6 @@ protected:
             wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
     void DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y );
     void DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool useMask = false  );
-    void DoDrawScaledBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, wxCoord w, wxCoord h, bool useMask = false, int quality = wxIMAGE_QUALITY_NORMAL );
     void DoDrawText(const wxString& text, wxCoord x, wxCoord y );
     void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle);
     void DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);

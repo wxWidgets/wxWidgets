@@ -493,22 +493,6 @@ the strange effects X produces when the corners are too big for
 the rectangle.
 
 
-\membersection{wxDC::DrawScaledBitmap}\label{wxdcdrawscaledbitmap}
-
-\func{void}{DrawScaledBitmap}{\param{const wxBitmap\&}{ bitmap}, \param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxCoord}{ w}, \param{wxCoord}{ h}, \param{bool}{ transparent}, \param{int}{ quality = wxIMAGE\_QUALITY\_NORMAL}}
-
-Draw a bitmap on the device context at the specified point and resize it to the specified size. If {\it transparent} is true and the bitmap has a transparency mask, the bitmap will be drawn transparently.
-
-Under wxGTK with Gtk Printing support, you should use this method with a wxPrinterDC if you want to print an image with a resolution higher than 72 dpi. On every other DC and platform, resizing is done using \helpref{wxImage::Rescale}{wximagerescale}.
-
-For a description of the {\it quality} parameter, see the \helpref{Scale}{wximagescale} function.
-
-When drawing a mono-bitmap, the current text foreground colour will be used to draw the foreground
-of the bitmap (all bits set to 1), and the current text background colour to draw the background
-(all bits set to 0). See also \helpref{SetTextForeground}{wxdcsettextforeground},
-\helpref{SetTextBackground}{wxdcsettextbackground} and \helpref{wxMemoryDC}{wxmemorydc}.
-
-
 \membersection{wxDC::DrawSpline}\label{wxdcdrawspline}
 
 \func{void}{DrawSpline}{\param{int }{n}, \param{wxPoint }{points[]}}
