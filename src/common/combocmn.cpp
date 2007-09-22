@@ -1005,10 +1005,10 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
         {
             int newY = butHeight+(customBorder*2);
             SetClientSize(wxDefaultCoord,newY);
-    if ( m_bmpNormal.Ok() || m_btnArea.width != butWidth || m_btnArea.height != butHeight )
-        m_iFlags |= wxCC_IFLAG_HAS_NONSTANDARD_BUTTON;
-    else
-        m_iFlags &= ~wxCC_IFLAG_HAS_NONSTANDARD_BUTTON;
+            if ( m_bmpNormal.Ok() || m_btnArea.width != butWidth || m_btnArea.height != butHeight )
+                m_iFlags |= wxCC_IFLAG_HAS_NONSTANDARD_BUTTON;
+            else
+                m_iFlags &= ~wxCC_IFLAG_HAS_NONSTANDARD_BUTTON;
 
             sz.y = newY;
         }
@@ -1265,7 +1265,7 @@ void wxComboCtrlBase::PrepareBackground( wxDC& dc, const wxRect& rect, int flags
     {
         // Drawing control
         isEnabled = IsEnabled();
-        doDrawFocusRect = ShouldDrawFocus() & !(m_iFlags & wxCC_FULL_BUTTON);
+        doDrawFocusRect = ShouldDrawFocus() && !(m_iFlags & wxCC_FULL_BUTTON);
 
         // Windows-style: for smaller size control (and for disabled background) use less spacing
         focusSpacingX = isEnabled ? 2 : 1;
@@ -1275,7 +1275,7 @@ void wxComboCtrlBase::PrepareBackground( wxDC& dc, const wxRect& rect, int flags
     {
         // Drawing a list item
         isEnabled = true; // they are never disabled
-        doDrawFocusRect = flags & wxCONTROL_SELECTED ? true : false;
+        doDrawFocusRect = (flags & wxCONTROL_SELECTED) != 0;
 
         focusSpacingX = 0;
         focusSpacingY = 0;
