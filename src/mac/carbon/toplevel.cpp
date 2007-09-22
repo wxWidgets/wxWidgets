@@ -374,6 +374,10 @@ void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
                     wxevent.m_wheelDelta = 1;
                     wxevent.m_linesPerAction = 1;
                 }
+                else
+                {
+                    wxevent.SetEventType( wxEVT_NULL );
+                }
             }
             break ;
         case kEventMouseEntered :
