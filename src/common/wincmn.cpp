@@ -78,9 +78,6 @@
     #else
         #include <gtk/gtkfeatures.h>
     #endif
-    extern const unsigned int gtk_major_version;
-    extern const unsigned int gtk_minor_version;
-    extern const unsigned int gtk_micro_version;
 #endif
 
 #include "wx/platinfo.h"
@@ -1131,8 +1128,6 @@ wxColour wxWindowBase::GetForegroundColour() const
     // logic is the same as above
     if ( !m_hasFgCol && !m_foregroundColour.Ok() )
     {
-        wxASSERT_MSG( !m_hasFgCol, _T("we have invalid explicit fg colour?") );
-
         wxColour colFg = GetDefaultAttributes().colFg;
 
         if ( !colFg.Ok() )
