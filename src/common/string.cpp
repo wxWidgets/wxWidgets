@@ -975,13 +975,12 @@ int wxString::CmpNoCase(const wxString& s) const
 {
     // FIXME-UTF8: use wxUniChar::ToLower/ToUpper once added
 
-    size_t idx = 0;
     const_iterator i1 = begin();
     const_iterator end1 = end();
     const_iterator i2 = s.begin();
     const_iterator end2 = s.end();
 
-    for ( ; i1 != end1 && i2 != end2; ++idx, ++i1, ++i2 )
+    for ( ; i1 != end1 && i2 != end2; ++i1, ++i2 )
     {
         wxUniChar lower1 = (wxChar)wxTolower(*i1);
         wxUniChar lower2 = (wxChar)wxTolower(*i2);
@@ -1353,7 +1352,7 @@ wxString& wxString::Trim(bool bFromRight)
             // find last non-space character
             reverse_iterator psz = rbegin();
             while ( (psz != rend()) && wxSafeIsspace(*psz) )
-                psz++;
+                ++psz;
 
             // truncate at trailing space start
             erase(psz.base(), end());
@@ -1363,7 +1362,7 @@ wxString& wxString::Trim(bool bFromRight)
             // find first non-space character
             iterator psz = begin();
             while ( (psz != end()) && wxSafeIsspace(*psz) )
-                psz++;
+                ++psz;
 
             // fix up data and length
             erase(begin(), psz);
