@@ -735,6 +735,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "stc"=.\stc\stctest.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "taskbar"=.\taskbar\taskbar.dsp - Package Owner=<4>
 
 Package=<5>
