@@ -2233,6 +2233,47 @@ void wxWindowBase::OnInitDialog( wxInitDialogEvent &WXUNUSED(event) )
     UpdateWindowUI(wxUPDATE_UI_RECURSE);
 }
 
+// ----------------------------------------------------------------------------
+// menu-related functions
+// ----------------------------------------------------------------------------
+
+#if wxUSE_MENUS
+
+// this is used to pass the id of the selected item from the menu event handler
+// to the main function itself
+//
+// it's ok to use a global here as there can be at most one popup menu shown at
+// any time
+static int gs_popupMenuSelection = wxID_NONE;
+
+void wxWindowBase::InternalOnPopupMenu(wxCommandEvent& event)
+{
+    // store the id in a global variable where we'll retrieve it from later
+    gs_popupMenuSelection = event.GetId();
+}
+
+int
+wxWindowBase::DoGetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y)
+{
+    gs_popupMenuSelection = wxID_NONE;
+
+    Connect(wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(wxWindowBase::InternalOnPopupMenu),
+            NULL,
+            this);
+
+    PopupMenu(&menu, x, y);
+
+    Disconnect(wxEVT_COMMAND_MENU_SELECTED,
+               wxCommandEventHandler(wxWindowBase::InternalOnPopupMenu),
+               NULL,
+               this);
+
+    return gs_popupMenuSelection;
+}
+
+#endif // wxUSE_MENUS
+
 // methods for drawing the sizers in a visible way
 #ifdef __WXDEBUG__
 

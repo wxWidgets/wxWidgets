@@ -1161,6 +1161,33 @@ name in the window constructor or via \helpref{wxWindow::SetName}{wxwindowsetnam
 Returns the parent of the window, or NULL if there is no parent.
 
 
+\membersection{wxWindow::GetPopupMenuSelectionFromUser}\label{wxwindowgetpopupmenuselectionfromuser}
+
+\func{int}{GetPopupMenuSelectionFromUser}{\param{wxMenu\&}{ menu}, \param{const wxPoint\&}{ pos}}
+
+\func{int}{GetPopupMenuSelectionFromUser}{\param{wxMenu\&}{ menu}, \param{int}{ x}, \param{int}{ y}}
+
+This function shows a popup menu at the given position in this window and
+returns the selected id. It can be more convenient than the general purpose
+\helpref{PopupMenu}{wxwindowpopupmenu} function for simple menus proposing a
+choice in a list of strings to the user.
+
+\wxheading{Parameters}
+
+\docparam{menu}{The menu to show}
+
+\docparam{pos}{The position at which to show the menu in client coordinates}
+
+\docparam{x}{The horizontal position of the menu}
+
+\docparam{y}{The vertical position of the menu}
+
+\wxheading{Return value}
+
+The selected menu item id or \texttt{wxID\_NONE} if none selected or an error
+occurred.
+
+
 \membersection{wxWindow::GetPosition}\label{wxwindowgetposition}
 
 \constfunc{virtual void}{GetPosition}{\param{int* }{x}, \param{int* }{y}}

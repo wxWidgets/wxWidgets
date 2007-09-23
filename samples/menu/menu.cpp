@@ -256,6 +256,8 @@ enum
     Menu_Popup_ToBeChecked,
     Menu_Popup_Submenu,
 
+    Menu_PopupChoice,
+
     Menu_Max
 };
 
@@ -1005,27 +1007,50 @@ void MyFrame::ShowContextMenu(const wxPoint& pos)
 {
     wxMenu menu;
 
-    menu.Append(Menu_Help_About, _T("&About"));
-    menu.Append(Menu_Popup_Submenu, _T("&Submenu"), CreateDummyMenu(NULL));
-    menu.Append(Menu_Popup_ToBeDeleted, _T("To be &deleted"));
-    menu.AppendCheckItem(Menu_Popup_ToBeChecked, _T("To be &checked"));
-    menu.Append(Menu_Popup_ToBeGreyed, _T("To be &greyed"),
-                _T("This menu item should be initially greyed out"));
-    menu.AppendSeparator();
-    menu.Append(Menu_File_Quit, _T("E&xit"));
+    if ( wxGetKeyState(WXK_SHIFT) )
+    {
+        // when Shift is pressed, demonstrate the use of a simple function
+        // returning the id of the item selected in the popup menu
+        menu.SetTitle("Choose one of:");
+        static const char *choices[] = { "Apple", "Banana", "Cherry" };
+        for ( size_t n = 0; n < WXSIZEOF(choices); n++ )
+            menu.Append(Menu_PopupChoice + n, choices[n]);
 
-    menu.Delete(Menu_Popup_ToBeDeleted);
-    menu.Check(Menu_Popup_ToBeChecked, true);
-    menu.Enable(Menu_Popup_ToBeGreyed, false);
+        const int rc = GetPopupMenuSelectionFromUser(menu, pos);
+        if ( rc == wxID_NONE )
+        {
+            wxLogMessage("No selection");
+        }
+        else
+        {
+            wxLogMessage("You have selected \"%s\"",
+                         choices[rc - Menu_PopupChoice]);
+        }
+    }
+    else // normal case, shift not pressed
+    {
+        menu.Append(Menu_Help_About, _T("&About"));
+        menu.Append(Menu_Popup_Submenu, _T("&Submenu"), CreateDummyMenu(NULL));
+        menu.Append(Menu_Popup_ToBeDeleted, _T("To be &deleted"));
+        menu.AppendCheckItem(Menu_Popup_ToBeChecked, _T("To be &checked"));
+        menu.Append(Menu_Popup_ToBeGreyed, _T("To be &greyed"),
+                    _T("This menu item should be initially greyed out"));
+        menu.AppendSeparator();
+        menu.Append(Menu_File_Quit, _T("E&xit"));
 
-    PopupMenu(&menu, pos.x, pos.y);
+        menu.Delete(Menu_Popup_ToBeDeleted);
+        menu.Check(Menu_Popup_ToBeChecked, true);
+        menu.Enable(Menu_Popup_ToBeGreyed, false);
 
-    // test for destroying items in popup menus
+        PopupMenu(&menu, pos);
+
+        // test for destroying items in popup menus
 #if 0 // doesn't work in wxGTK!
-    menu.Destroy(Menu_Popup_Submenu);
+        menu.Destroy(Menu_Popup_Submenu);
 
-    PopupMenu( &menu, event.GetX(), event.GetY() );
+        PopupMenu( &menu, event.GetX(), event.GetY() );
 #endif // 0
+    }
 }
 
 void MyFrame::OnTestNormal(wxCommandEvent& WXUNUSED(event))
