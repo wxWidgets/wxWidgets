@@ -179,16 +179,6 @@
 #define wxCRT_VprintfA       vprintf
 #define wxCRT_VsprintfA      vsprintf
 
-#define  wxCRT_FprintfW      fwprintf
-#define  wxCRT_PrintfW       wprintf
-#define  wxCRT_VfprintfW     vfwprintf
-#define  wxCRT_VprintfW      vwprintf
-
-#if defined(__WINDOWS__) && !defined(HAVE_VSWPRINTF)
-// only non-standard vswprintf() without buffer size argument can be used here
-#define  wxCRT_VsprintfW     vswprintf
-#endif
-
 /*
    In Unicode mode we need to have all standard functions such as wprintf() and
    so on but not all systems have them so use our own implementations in this
@@ -210,6 +200,16 @@
     int wxCRT_VfprintfW( FILE *stream, const wchar_t *format, va_list ap );
     int wxCRT_VprintfW( const wchar_t *format, va_list ap );
     int wxCRT_VsprintfW( wchar_t *str, const wchar_t *format, va_list ap );
+#else /* !wxNEED_WPRINTF */
+    #define wxCRT_FprintfW      fwprintf
+    #define wxCRT_PrintfW       wprintf
+    #define wxCRT_VfprintfW     vfwprintf
+    #define wxCRT_VprintfW      vwprintf
+    
+    #if defined(__WINDOWS__) && !defined(HAVE_VSWPRINTF)
+        // only non-standard vswprintf() without buffer size argument can be used here
+        #define  wxCRT_VsprintfW     vswprintf
+    #endif
 #endif /* wxNEED_WPRINTF */
 
 
