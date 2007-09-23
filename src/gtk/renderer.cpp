@@ -218,8 +218,16 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
 {
 
     GtkWidget *button = GetHeaderButtonWidget();
-
-    GdkWindow* gdk_window = dc.GetGDKWindow();
+    
+    GdkWindow* gdk_window = NULL;
+#if wxUSE_NEW_DC
+    wxImplDC *impl = dc.GetImpl();
+    wxGTKImplDC *gtk_impl = wxDynamicCast( impl, wxGTKImplDC );
+    if (gtk_impl)
+        gdk_window = gtk_impl->GetGDKWindow();
+#else
+    gdk_window = dc.GetGDKWindow();
+#endif
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
 
@@ -249,7 +257,15 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
 {
     GtkWidget *tree = GetTreeWidget();
 
-    GdkWindow* gdk_window = dc.GetGDKWindow();
+    GdkWindow* gdk_window = NULL;
+#if wxUSE_NEW_DC
+    wxImplDC *impl = dc.GetImpl();
+    wxGTKImplDC *gtk_impl = wxDynamicCast( impl, wxGTKImplDC );
+    if (gtk_impl)
+        gdk_window = gtk_impl->GetGDKWindow();
+#else
+    gdk_window = dc.GetGDKWindow();
+#endif
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
 
@@ -332,7 +348,15 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
         return;
     }
 
-    GdkWindow* gdk_window = dc.GetGDKWindow();
+    GdkWindow* gdk_window = NULL;
+#if wxUSE_NEW_DC
+    wxImplDC *impl = dc.GetImpl();
+    wxGTKImplDC *gtk_impl = wxDynamicCast( impl, wxGTKImplDC );
+    if (gtk_impl)
+        gdk_window = gtk_impl->GetGDKWindow();
+#else
+    gdk_window = dc.GetGDKWindow();
+#endif
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
 
@@ -396,7 +420,15 @@ wxRendererGTK::DrawDropArrow(wxWindow *WXUNUSED(win),
     // work for wxMemoryDC. So that is why we assume wxDC
     // is wxWindowDC (wxClientDC, wxMemoryDC and wxPaintDC
     // are derived from it) and use its m_window.
-    GdkWindow* gdk_window = dc.GetGDKWindow();
+    GdkWindow* gdk_window = NULL;
+#if wxUSE_NEW_DC
+    wxImplDC *impl = dc.GetImpl();
+    wxGTKImplDC *gtk_impl = wxDynamicCast( impl, wxGTKImplDC );
+    if (gtk_impl)
+        gdk_window = gtk_impl->GetGDKWindow();
+#else
+    gdk_window = dc.GetGDKWindow();
+#endif
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
 
@@ -457,9 +489,16 @@ wxRendererGTK::DrawCheckBox(wxWindow *WXUNUSED(win),
                             int flags )
 {
     GtkWidget *button = GetCheckButtonWidget();
-
-    // for reason why we do this, see DrawDropArrow
-    GdkWindow* gdk_window = dc.GetGDKWindow();
+    
+    GdkWindow* gdk_window = NULL;
+#if wxUSE_NEW_DC
+    wxImplDC *impl = dc.GetImpl();
+    wxGTKImplDC *gtk_impl = wxDynamicCast( impl, wxGTKImplDC );
+    if (gtk_impl)
+        gdk_window = gtk_impl->GetGDKWindow();
+#else
+    gdk_window = dc.GetGDKWindow();
+#endif
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
 
@@ -497,8 +536,15 @@ wxRendererGTK::DrawPushButton(wxWindow *WXUNUSED(win),
 {
     GtkWidget *button = GetButtonWidget();
 
-    // for reason why we do this, see DrawDropArrow
-    GdkWindow* gdk_window = dc.GetGDKWindow();
+    GdkWindow* gdk_window = NULL;
+#if wxUSE_NEW_DC
+    wxImplDC *impl = dc.GetImpl();
+    wxGTKImplDC *gtk_impl = wxDynamicCast( impl, wxGTKImplDC );
+    if (gtk_impl)
+        gdk_window = gtk_impl->GetGDKWindow();
+#else
+    gdk_window = dc.GetGDKWindow();
+#endif
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
 
@@ -533,7 +579,15 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
                                      const wxRect& rect,
                                      int flags )
 {
-    GdkWindow* gdk_window = dc.GetGDKWindow();
+    GdkWindow* gdk_window = NULL;
+#if wxUSE_NEW_DC
+    wxImplDC *impl = dc.GetImpl();
+    wxGTKImplDC *gtk_impl = wxDynamicCast( impl, wxGTKImplDC );
+    if (gtk_impl)
+        gdk_window = gtk_impl->GetGDKWindow();
+#else
+    gdk_window = dc.GetGDKWindow();
+#endif
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
 
@@ -582,7 +636,15 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
 
 void wxRendererGTK::DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
 {
-    GdkWindow* gdk_window = dc.GetGDKWindow();
+    GdkWindow* gdk_window = NULL;
+#if wxUSE_NEW_DC
+    wxImplDC *impl = dc.GetImpl();
+    wxGTKImplDC *gtk_impl = wxDynamicCast( impl, wxGTKImplDC );
+    if (gtk_impl)
+        gdk_window = gtk_impl->GetGDKWindow();
+#else
+    gdk_window = dc.GetGDKWindow();
+#endif
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
 

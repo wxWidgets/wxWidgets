@@ -20,21 +20,32 @@
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 
-//-----------------------------------------------------------------------------
-// global data initialization
-//-----------------------------------------------------------------------------
-
-GdkWindow *wxScreenDC::sm_overlayWindow  = (GdkWindow*) NULL;
-int wxScreenDC::sm_overlayWindowX = 0;
-int wxScreenDC::sm_overlayWindowY = 0;
 
 //-----------------------------------------------------------------------------
 // wxScreenDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxScreenDC,wxPaintDC)
+#if wxUSE_NEW_DC
+IMPLEMENT_ABSTRACT_CLASS(wxGTKScreenImplDC, wxGTKWindowImplDC)
+#else
+IMPLEMENT_ABSTRACT_CLASS(wxScreenDC,wxWindowDC)
+#endif
 
-wxScreenDC::wxScreenDC()
+#if wxUSE_NEW_DC
+wxGTKScreenImplDC::wxGTKScreenImplDC( wxScreenDC *owner ) 
+  : wxGTKWindowImplDC( owner )
+{ 
+    Init(); 
+}
+
+#else
+wxScreenDC::wxScreenDC() 
+{ 
+    Init(); 
+}
+#endif
+
+void wxGTKScreenImplDC::Init()
 {
     m_ok = false;
     m_cmap = gdk_colormap_get_system();
@@ -57,32 +68,15 @@ wxScreenDC::wxScreenDC()
     gdk_gc_set_subwindow( m_bgGC, GDK_INCLUDE_INFERIORS );
 }
 
-wxScreenDC::~wxScreenDC()
+wxGTKScreenImplDC::~wxGTKScreenImplDC()
 {
     gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );
     gdk_gc_set_subwindow( m_brushGC, GDK_CLIP_BY_CHILDREN );
     gdk_gc_set_subwindow( m_textGC, GDK_CLIP_BY_CHILDREN );
     gdk_gc_set_subwindow( m_bgGC, GDK_CLIP_BY_CHILDREN );
-
-    EndDrawingOnTop();
 }
 
-bool wxScreenDC::StartDrawingOnTop( wxWindow * )
-{
-    return true;
-}
-
-bool wxScreenDC::StartDrawingOnTop( wxRect * )
-{
-    return true;
-}
-
-bool wxScreenDC::EndDrawingOnTop()
-{
-    return true;
-}
-
-void wxScreenDC::DoGetSize(int *width, int *height) const
+void wxGTKScreenImplDC::DoGetSize(int *width, int *height) const
 {
     wxDisplaySize(width, height);
 }

@@ -147,7 +147,7 @@ bool wxOverlayImpl::IsOk()
 void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height )
 {
 #if defined(__WXGTK__)
-    m_window = dc->m_owner;
+    m_window = dc->m_owningWindow;
 #else
     #if defined (__WXMSW__) 
     m_window = dc->GetWindow();

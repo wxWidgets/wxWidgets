@@ -13,6 +13,20 @@
 #define _WX_DCSCREEN_H_BASE_
 
 #include "wx/defs.h"
+#include "wx/dc.h"
+
+#if wxUSE_NEW_DC
+
+class WXDLLIMPEXP_CORE wxScreenDC : public wxWindowDC
+{
+public:
+    wxScreenDC();
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxScreenDC)
+};
+
+#endif
 
 #if defined(__WXPALMOS__)
 #include "wx/palmos/dcscreen.h"

@@ -76,8 +76,16 @@ static gboolean gtk_window_own_expose_callback(GtkWidget* widget, GdkEventExpose
     int style = win->GetWindowStyle();
 
     wxClientDC dc(win);
+    
+#if wxUSE_NEW_DC
+    wxImplDC *impl = dc.GetImpl();
+    wxGTKClientImplDC *client_impl = wxDynamicCast( impl, wxGTKClientImplDC );
+    // Hack alert
+    client_impl->m_window = pizza->bin_window;
+#else
     // Hack alert
     dc.m_window = pizza->bin_window;
+#endif
 
     if (style & wxRESIZE_BORDER)
     {

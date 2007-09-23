@@ -27,8 +27,15 @@ class WXDLLIMPEXP_CORE wxWindowDC : public wxDC
 #endif
 {
 public:
-    wxGTKWindowImplDC();
-    wxGTKWindowImplDC( wxWindow *win );
+
+
+#if wxUSE_NEW_DC
+    wxGTKWindowImplDC( wxDC *owner );
+    wxGTKWindowImplDC( wxDC *owner, wxWindow *win );
+#else
+    wxWindowDC();
+    wxWindowDC( wxWindow *win );
+#endif
 
     virtual ~wxGTKWindowImplDC();
 
@@ -115,9 +122,8 @@ public:
     GdkGC        *m_textGC;
     GdkGC        *m_bgGC;
     GdkColormap  *m_cmap;
-    bool          m_isMemDC;
     bool          m_isScreenDC;
-    wxWindow     *m_owner;
+    wxWindow     *m_owningWindow;
     wxRegion      m_currentClippingRegion;
     wxRegion      m_paintClippingRegion;
 
@@ -126,7 +132,7 @@ public:
     PangoLayout *m_layout;
     PangoFontDescription *m_fontdesc;
 
-    void SetUpDC();
+    void SetUpDC( bool ismem = false );
     void Destroy();
     
     virtual void ComputeScaleAndOrigin();
@@ -134,7 +140,7 @@ public:
     virtual GdkWindow *GetGDKWindow() const { return m_window; }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxGTKWindowImplDC)
+    DECLARE_ABSTRACT_CLASS(wxGTKWindowImplDC)
 };
 
 //-----------------------------------------------------------------------------
@@ -149,14 +155,20 @@ class WXDLLIMPEXP_CORE wxClientDC : public wxWindowDC
 #endif
 {
 public:
-    wxGTKClientImplDC() { }
-    wxGTKClientImplDC( wxWindow *win );
+
+#if wxUSE_NEW_DC
+    wxGTKClientImplDC( wxDC *owner );
+    wxGTKClientImplDC( wxDC *owner, wxWindow *win );
+#else
+    wxClientDC();
+    wxClientDC( wxWindow *win );
+#endif
 
 protected:
     virtual void DoGetSize(int *width, int *height) const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxGTKClientImplDC)
+    DECLARE_ABSTRACT_CLASS(wxGTKClientImplDC)
 };
 
 //-----------------------------------------------------------------------------
@@ -171,11 +183,17 @@ class WXDLLIMPEXP_CORE wxPaintDC : public wxClientDC
 #endif
 {
 public:
-    wxGTKPaintImplDC() { }
-    wxGTKPaintImplDC( wxWindow *win );
+
+#if wxUSE_NEW_DC
+    wxGTKPaintImplDC( wxDC *owner );
+    wxGTKPaintImplDC( wxDC *owner, wxWindow *win );
+#else
+    wxPaintDC();
+    wxPaintDC( wxWindow *win );
+#endif
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxGTKPaintImplDC)
+    DECLARE_ABSTRACT_CLASS(wxGTKPaintImplDC)
 };
 
 #endif // __GTKDCCLIENTH__

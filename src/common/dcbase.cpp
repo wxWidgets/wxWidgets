@@ -25,6 +25,9 @@
 #endif
 
 #include "wx/dc.h"
+#include "wx/dcclient.h"
+#include "wx/dcmemory.h"
+#include "wx/dcscreen.h"
 #include "wx/dcbuffer.h" // for IMPLEMENT_DYNAMIC_CLASS
 
 #ifndef WX_PRECOMP
@@ -61,246 +64,273 @@ wxDCFactory *wxDCFactory::GetFactory()
 // wxNativeDCFactory
 //-----------------------------------------------------------------------------
 
-wxImplDC* wxNativeDCFactory::CreateWindowDC()
+wxImplDC* wxNativeDCFactory::CreateWindowDC( wxWindowDC *owner )
 { 
 #if defined(__WXMSW__)
-    return new wxWindowsWindowImplDC();
+    return new wxWindowsWindowImplDC( owner );
 #elif defined(__WXGTK20__)
-    return new wxGTKWindowImplDC();
+    return new wxGTKWindowImplDC( owner );
 #elif defined(__WXGTK__)
-    return new wxGTKWindowImplDC();
+    return new wxGTKWindowImplDC( owner );
 #elif defined(__WXMAC__)
-    return new wxMacWindowImplDC();
+    return new wxMacWindowImplDC( owner );
 #elif defined(__WXCOCOA__)
-    return new wxCocoaWindowImplDC();
+    return new wxCocoaWindowImplDC( owner );
 #elif defined(__WXMOTIF__)
-    return new wxMotifWindowImplDC();
+    return new wxMotifWindowImplDC( owner );
 #elif defined(__WXX11__)
-    return new wxX11WindowImplDC();
+    return new wxX11WindowImplDC( owner );
 #elif defined(__WXMGL__)
-    return new wxMGLWindowImplDC();
+    return new wxMGLWindowImplDC( owner );
 #elif defined(__WXDFB__)
-    return new wxDFBWindowImplDC();
+    return new wxDFBWindowImplDC( owner );
 #elif defined(__WXPM__)
-    return new wxPMWindowImplDC();
+    return new wxPMWindowImplDC( owner );
 #elif defined(__PALMOS__)
-    return new wxPalmWindowImplDC();
+    return new wxPalmWindowImplDC( owner );
 #endif
 }
 
-wxImplDC* wxNativeDCFactory::CreateWindowDC( wxWindow *window )
+wxImplDC* wxNativeDCFactory::CreateWindowDC( wxWindowDC *owner, wxWindow *window )
 { 
 #if defined(__WXMSW__)
-    return new wxWindowsWindowImplDC( window );
+    return new wxWindowsWindowImplDC( owner, window );
 #elif defined(__WXGTK20__)
-    return new wxGTKWindowImplDC( window );
+    return new wxGTKWindowImplDC( owner, window );
 #elif defined(__WXGTK__)
-    return new wxGTKWindowImplDC( window );
+    return new wxGTKWindowImplDC( owner, window );
 #elif defined(__WXMAC__)
-    return new wxMacWindowImplDC( window );
+    return new wxMacWindowImplDC( owner, window );
 #elif defined(__WXCOCOA__)
-    return new wxCocoaWindowImplDC( window );
+    return new wxCocoaWindowImplDC( owner, window );
 #elif defined(__WXMOTIF__)
-    return new wxMotifWindowImplDC( window );
+    return new wxMotifWindowImplDC( owner, window );
 #elif defined(__WXX11__)
-    return new wxX11WindowImplDC( window );
+    return new wxX11WindowImplDC( owner, window );
 #elif defined(__WXMGL__)
-    return new wxMGLWindowImplDC( window );
+    return new wxMGLWindowImplDC( owner, window );
 #elif defined(__WXDFB__)
-    return new wxDFBWindowImplDC( window );
+    return new wxDFBWindowImplDC( owner, window );
 #elif defined(__WXPM__)
-    return new wxPMWindowImplDC( window );
+    return new wxPMWindowImplDC( owner, window );
 #elif defined(__PALMOS__)
-    return new wxPalmWindowImplDC( window );
+    return new wxPalmWindowImplDC( owner, window );
 #endif
 }
 
-wxImplDC* wxNativeDCFactory::CreateClientDC()
+wxImplDC* wxNativeDCFactory::CreateClientDC( wxClientDC *owner )
 {
 #if defined(__WXMSW__)
-    return new wxWindowsClientImplDC();
+    return new wxWindowsClientImplDC( owner );
 #elif defined(__WXGTK20__)
-    return new wxGTKClientImplDC();
+    return new wxGTKClientImplDC( owner );
 #elif defined(__WXGTK__)
-    return new wxGTKClientImplDC();
+    return new wxGTKClientImplDC( owner );
 #elif defined(__WXMAC__)
-    return new wxMacClientImplDC();
+    return new wxMacClientImplDC( owner );
 #elif defined(__WXCOCOA__)
-    return new wxCocoaClientImplDC();
+    return new wxCocoaClientImplDC( owner );
 #elif defined(__WXMOTIF__)
-    return new wxMotifClientImplDC();
+    return new wxMotifClientImplDC( owner );
 #elif defined(__WXX11__)
-    return new wxX11ClientImplDC();
+    return new wxX11ClientImplDC( owner );
 #elif defined(__WXMGL__)
-    return new wxMGLClientImplDC();
+    return new wxMGLClientImplDC( owner );
 #elif defined(__WXDFB__)
-    return new wxDFBClientImplDC();
+    return new wxDFBClientImplDC( owner );
 #elif defined(__WXPM__)
-    return new wxPMClientImplDC();
+    return new wxPMClientImplDC( owner );
 #elif defined(__PALMOS__)
-    return new wxPalmClientImplDC();
+    return new wxPalmClientImplDC( owner );
 #endif
 }
 
-wxImplDC* wxNativeDCFactory::CreateClientDC( wxWindow *window )
+wxImplDC* wxNativeDCFactory::CreateClientDC( wxClientDC *owner, wxWindow *window )
 {
 #if defined(__WXMSW__)
-    return new wxWindowsClientImplDC( window );
+    return new wxWindowsClientImplDC( owner, window );
 #elif defined(__WXGTK20__)
-    return new wxGTKClientImplDC( window );
+    return new wxGTKClientImplDC( owner, window );
 #elif defined(__WXGTK__)
-    return new wxGTKClientImplDC( window );
+    return new wxGTKClientImplDC( owner, window );
 #elif defined(__WXMAC__)
-    return new wxMacClientImplDC( window );
+    return new wxMacClientImplDC( owner, window );
 #elif defined(__WXCOCOA__)
-    return new wxCocoaClientImplDC( window );
+    return new wxCocoaClientImplDC( owner, window );
 #elif defined(__WXMOTIF__)
-    return new wxMotifClientImplDC( window );
+    return new wxMotifClientImplDC( owner, window );
 #elif defined(__WXX11__)
-    return new wxX11ClientImplDC( window );
+    return new wxX11ClientImplDC( owner, window );
 #elif defined(__WXMGL__)
-    return new wxMGLClientImplDC( window );
+    return new wxMGLClientImplDC( owner, window );
 #elif defined(__WXDFB__)
-    return new wxDFBClientImplDC( window );
+    return new wxDFBClientImplDC( owner, window );
 #elif defined(__WXPM__)
-    return new wxPMClientImplDC( window );
+    return new wxPMClientImplDC( owner, window );
 #elif defined(__PALMOS__)
-    return new wxPalmClientImplDC( window );
+    return new wxPalmClientImplDC( owner, window );
 #endif
 }
 
-wxImplDC* wxNativeDCFactory::CreatePaintDC()
+wxImplDC* wxNativeDCFactory::CreatePaintDC( wxPaintDC *owner )
 {
 #if defined(__WXMSW__)
-    return new wxWindowsPaintImplDC();
+    return new wxWindowsPaintImplDC( owner );
 #elif defined(__WXGTK20__)
-    return new wxGTKPaintImplDC();
+    return new wxGTKPaintImplDC( owner );
 #elif defined(__WXGTK__)
-    return new wxGTKPaintImplDC();
+    return new wxGTKPaintImplDC( owner );
 #elif defined(__WXMAC__)
-    return new wxMacPaintImplDC();
+    return new wxMacPaintImplDC( owner );
 #elif defined(__WXCOCOA__)
-    return new wxCocoaPaintImplDC();
+    return new wxCocoaPaintImplDC( owner );
 #elif defined(__WXMOTIF__)
-    return new wxMotifPaintImplDC();
+    return new wxMotifPaintImplDC( owner );
 #elif defined(__WXX11__)
-    return new wxX11PaintImplDC();
+    return new wxX11PaintImplDC( owner );
 #elif defined(__WXMGL__)
-    return new wxMGLPaintImplDC();
+    return new wxMGLPaintImplDC( owner );
 #elif defined(__WXDFB__)
-    return new wxDFBPaintImplDC();
+    return new wxDFBPaintImplDC( owner );
 #elif defined(__WXPM__)
-    return new wxPMPaintImplDC();
+    return new wxPMPaintImplDC( owner );
 #elif defined(__PALMOS__)
-    return new wxPalmPaintImplDC();
+    return new wxPalmPaintImplDC( owner );
 #endif
 }
 
-wxImplDC* wxNativeDCFactory::CreatePaintDC( wxWindow *window )
+wxImplDC* wxNativeDCFactory::CreatePaintDC( wxPaintDC *owner, wxWindow *window )
 {
 #if defined(__WXMSW__)
-    return new wxWindowsPaintImplDC( window );
+    return new wxWindowsPaintImplDC( owner, window );
 #elif defined(__WXGTK20__)
-    return new wxGTKPaintImplDC( window );
+    return new wxGTKPaintImplDC( owner, window );
 #elif defined(__WXGTK__)
-    return new wxGTKPaintImplDC( window );
+    return new wxGTKPaintImplDC( owner, window );
 #elif defined(__WXMAC__)
-    return new wxMacPaintImplDC( window );
+    return new wxMacPaintImplDC( owner, window );
 #elif defined(__WXCOCOA__)
-    return new wxCocoaPaintImplDC( window );
+    return new wxCocoaPaintImplDC( owner, window );
 #elif defined(__WXMOTIF__)
-    return new wxMotifPaintImplDC( window );
+    return new wxMotifPaintImplDC( owner, window );
 #elif defined(__WXX11__)
-    return new wxX11PaintImplDC( window );
+    return new wxX11PaintImplDC( owner, window );
 #elif defined(__WXMGL__)
-    return new wxMGLPaintImplDC( window );
+    return new wxMGLPaintImplDC( owner, window );
 #elif defined(__WXDFB__)
-    return new wxDFBPaintImplDC( window );
+    return new wxDFBPaintImplDC( owner, window );
 #elif defined(__WXPM__)
-    return new wxPMPaintImplDC( window );
+    return new wxPMPaintImplDC( owner, window );
 #elif defined(__PALMOS__)
-    return new wxPalmPaintImplDC( window );
+    return new wxPalmPaintImplDC( owner, window );
 #endif
 }
 
-wxImplDC* wxNativeDCFactory::CreateMemoryDC()
+wxImplDC* wxNativeDCFactory::CreateMemoryDC( wxMemoryDC *owner )
 {
 #if defined(__WXMSW__)
-    return new wxWindowsMemoryImplDC();
+    return new wxWindowsMemoryImplDC( owner );
 #elif defined(__WXGTK20__)
-    return new wxGTKMemoryImplDC();
+    return new wxGTKMemoryImplDC( owner );
 #elif defined(__WXGTK__)
-    return new wxGTKMemoryImplDC();
+    return new wxGTKMemoryImplDC( owner );
 #elif defined(__WXMAC__)
-    return new wxMacMemoryImplDC();
+    return new wxMacMemoryImplDC( owner );
 #elif defined(__WXCOCOA__)
-    return new wxCocoaMemoryImplDC();
+    return new wxCocoaMemoryImplDC( owner );
 #elif defined(__WXMOTIF__)
-    return new wxMotifMemoryImplDC();
+    return new wxMotifMemoryImplDC( owner );
 #elif defined(__WXX11__)
-    return new wxX11MemoryImplDC();
+    return new wxX11MemoryImplDC( owner );
 #elif defined(__WXMGL__)
-    return new wxMGLMemoryImplDC();
+    return new wxMGLMemoryImplDC( owner );
 #elif defined(__WXDFB__)
-    return new wxDFBMemoryImplDC();
+    return new wxDFBMemoryImplDC( owner );
 #elif defined(__WXPM__)
-    return new wxPMMemoryImplDC();
+    return new wxPMMemoryImplDC( owner );
 #elif defined(__PALMOS__)
-    return new wxPalmMemoryImplDC();
+    return new wxPalmMemoryImplDC( owner );
 #endif
 }
 
-wxImplDC* wxNativeDCFactory::CreateMemoryDC( wxBitmap &bitmap )
+wxImplDC* wxNativeDCFactory::CreateMemoryDC( wxMemoryDC *owner, wxBitmap &bitmap )
 {
 #if defined(__WXMSW__)
-    return new wxWindowsMemoryImplDC( bitmap );
+    return new wxWindowsMemoryImplDC( owner, bitmap );
 #elif defined(__WXGTK20__)
-    return new wxGTKMemoryImplDC( bitmap );
+    return new wxGTKMemoryImplDC( owner, bitmap );
 #elif defined(__WXGTK__)
-    return new wxGTKMemoryImplDC( bitmap );
+    return new wxGTKMemoryImplDC( owner, bitmap );
 #elif defined(__WXMAC__)
-    return new wxMacMemoryImplDC( bitmap );
+    return new wxMacMemoryImplDC( owner, bitmap );
 #elif defined(__WXCOCOA__)
-    return new wxCocoaMemoryImplDC( bitmap );
+    return new wxCocoaMemoryImplDC( owner, bitmap );
 #elif defined(__WXMOTIF__)
-    return new wxMotifMemoryImplDC( bitmap );
+    return new wxMotifMemoryImplDC( owner, bitmap );
 #elif defined(__WXX11__)
-    return new wxX11MemoryImplDC( bitmap );
+    return new wxX11MemoryImplDC( owner, bitmap );
 #elif defined(__WXMGL__)
-    return new wxMGLMemoryImplDC( bitmap );
+    return new wxMGLMemoryImplDC( owner, bitmap );
 #elif defined(__WXDFB__)
-    return new wxDFBMemoryImplDC( bitmap );
+    return new wxDFBMemoryImplDC( owner, bitmap );
 #elif defined(__WXPM__)
-    return new wxPMMemoryImplDC( bitmap );
+    return new wxPMMemoryImplDC( owner, bitmap );
 #elif defined(__PALMOS__)
-    return new wxPalmMemoryImplDC( bitmap );
+    return new wxPalmMemoryImplDC( owner, bitmap );
 #endif
 }
 
-wxImplDC* wxNativeDCFactory::CreateMemoryDC( wxDC *dc )
+wxImplDC* wxNativeDCFactory::CreateMemoryDC( wxMemoryDC *owner, wxDC *dc )
 {
 #if defined(__WXMSW__)
-    return new wxWindowsMemoryImplDC( dc );
+    return new wxWindowsMemoryImplDC( owner, dc );
 #elif defined(__WXGTK20__)
-    return new wxGTKMemoryImplDC( dc );
+    return new wxGTKMemoryImplDC( owner, dc );
 #elif defined(__WXGTK__)
-    return new wxGTKMemoryImplDC( dc );
+    return new wxGTKMemoryImplDC( owner, dc );
 #elif defined(__WXMAC__)
-    return new wxMacMemoryImplDC( dc );
+    return new wxMacMemoryImplDC( owner, dc );
 #elif defined(__WXCOCOA__)
-    return new wxCocoaMemoryImplDC( dc );
+    return new wxCocoaMemoryImplDC( owner, dc );
 #elif defined(__WXMOTIF__)
-    return new wxMotifMemoryImplDC( dc );
+    return new wxMotifMemoryImplDC( owner, dc );
 #elif defined(__WXX11__)
-    return new wxX11MemoryImplDC( dc );
+    return new wxX11MemoryImplDC( owner, dc );
 #elif defined(__WXMGL__)
-    return new wxMGLMemoryImplDC( dc );
+    return new wxMGLMemoryImplDC( owner, dc );
 #elif defined(__WXDFB__)
-    return new wxDFBMemoryImplDC( dc );
+    return new wxDFBMemoryImplDC( owner, dc );
 #elif defined(__WXPM__)
-    return new wxPMMemoryImplDC( dc );
+    return new wxPMMemoryImplDC( owner, dc );
 #elif defined(__PALMOS__)
-    return new wxPalmMemoryImplDC( dc );
+    return new wxPalmMemoryImplDC( owner, dc );
+#endif
+}
+
+wxImplDC* wxNativeDCFactory::CreateScreenDC( wxScreenDC *owner )
+{
+#if defined(__WXMSW__)
+    return new wxWindowsScreenImplDC( owner );
+#elif defined(__WXGTK20__)
+    return new wxGTKScreenImplDC( owner );
+#elif defined(__WXGTK__)
+    return new wxGTKScreenImplDC( owner );
+#elif defined(__WXMAC__)
+    return new wxMacScreenImplDC( owner );
+#elif defined(__WXCOCOA__)
+    return new wxCocoaScreenImplDC( owner );
+#elif defined(__WXMOTIF__)
+    return new wxMotifScreenImplDC( owner );
+#elif defined(__WXX11__)
+    return new wxX11ScreenImplDC( owner );
+#elif defined(__WXMGL__)
+    return new wxMGLScreenImplDC( owner );
+#elif defined(__WXDFB__)
+    return new wxDFBScreenImplDC( owner );
+#elif defined(__WXPM__)
+    return new wxPMScreenImplDC( owner );
+#elif defined(__PALMOS__)
+    return new wxPalmScreenImplDC( owner );
 #endif
 }
 
@@ -310,16 +340,16 @@ wxImplDC* wxNativeDCFactory::CreateMemoryDC( wxDC *dc )
 
 IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
 
-wxWindow::wxWindowDC()
+wxWindowDC::wxWindowDC()
 {
     wxDCFactory *factory = wxDCFactory::GetFactory();
-    m_pimpl = factory->CreateWindowDC();
+    m_pimpl = factory->CreateWindowDC( this );
 }
 
-wxWindow::wxWindowDC( wxWindow *win )
+wxWindowDC::wxWindowDC( wxWindow *win )
 {
     wxDCFactory *factory = wxDCFactory::GetFactory();
-    m_pimpl = factory->CreateWindowDC( win );
+    m_pimpl = factory->CreateWindowDC( this, win );
 }
 
 //-----------------------------------------------------------------------------
@@ -331,13 +361,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxDC)
 wxClientDC::wxClientDC()
 {
     wxDCFactory *factory = wxDCFactory::GetFactory();
-    m_pimpl = factory->CreateClientDC();
+    m_pimpl = factory->CreateClientDC( this );
 }
 
 wxClientDC::wxClientDC( wxWindow *win )
 {
     wxDCFactory *factory = wxDCFactory::GetFactory();
-    m_pimpl = factory->CreateClientDC( win );
+    m_pimpl = factory->CreateClientDC( this, win );
 }
 
 //-----------------------------------------------------------------------------
@@ -349,20 +379,75 @@ IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
 wxMemoryDC::wxMemoryDC()
 {
     wxDCFactory *factory = wxDCFactory::GetFactory();
-    m_pimpl = factory->CreateMemoryDC();
+    m_pimpl = factory->CreateMemoryDC( this );
 }
 
 wxMemoryDC::wxMemoryDC( wxBitmap& bitmap )
 {
     wxDCFactory *factory = wxDCFactory::GetFactory();
-    m_pimpl = factory->CreateMemoryDC( bitmap );
+    m_pimpl = factory->CreateMemoryDC( this, bitmap );
 }
 
 wxMemoryDC::wxMemoryDC( wxDC *dc )
 {
     wxDCFactory *factory = wxDCFactory::GetFactory();
-    m_pimpl = factory->CreateMemoryDC( dc );
+    m_pimpl = factory->CreateMemoryDC( this, dc );
 }
+
+void wxMemoryDC::SelectObject(wxBitmap& bmp)
+{
+    // make sure that the given wxBitmap is not sharing its data with other
+    // wxBitmap instances as its contents will be modified by any drawing
+    // operation done on this DC
+    if (bmp.IsOk())
+        bmp.UnShare();
+
+#ifdef __WXGTK__
+    wxGTKMemoryImplDC *mem_pimpl = wxDynamicCast( m_pimpl, wxGTKMemoryImplDC );
+#else
+    // TODO
+#endif
+    if (mem_pimpl)
+        mem_pimpl->DoSelect(bmp);
+}
+
+void wxMemoryDC::SelectObjectAsSource(const wxBitmap& bmp)
+{
+#ifdef __WXGTK__
+    wxGTKMemoryImplDC *mem_pimpl = wxDynamicCast( m_pimpl, wxGTKMemoryImplDC );
+#else
+    // TODO
+#endif
+    mem_pimpl->DoSelect(bmp);
+}
+
+const wxBitmap& wxMemoryDC::GetSelectedBitmap() const
+{
+#ifdef __WXGTK__
+    wxGTKMemoryImplDC *mem_pimpl = wxDynamicCast( m_pimpl, wxGTKMemoryImplDC );
+#else
+    // TODO
+#endif
+    if (mem_pimpl)
+        return mem_pimpl->DoGetSelectedBitmap();
+
+    return wxNullBitmap;    
+}
+
+wxBitmap& wxMemoryDC::GetSelectedBitmap()
+{
+#ifdef __WXGTK__
+    wxGTKMemoryImplDC *mem_pimpl = wxDynamicCast( m_pimpl, wxGTKMemoryImplDC );
+#else
+    // TODO
+#endif
+    
+    if (mem_pimpl)
+        return mem_pimpl->DoGetSelectedBitmap();
+   
+    return wxNullBitmap;    
+}
+
     
 //-----------------------------------------------------------------------------
 // wxPaintDC
@@ -373,13 +458,25 @@ IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxDC)
 wxPaintDC::wxPaintDC()
 {
     wxDCFactory *factory = wxDCFactory::GetFactory();
-    m_pimpl = factory->CreatePaintDC();
+    m_pimpl = factory->CreatePaintDC( this );
 }
 
 wxPaintDC::wxPaintDC( wxWindow *win )
 {
     wxDCFactory *factory = wxDCFactory::GetFactory();
-    m_pimpl = factory->CreatePaintDC( win );
+    m_pimpl = factory->CreatePaintDC( this, win );
+}
+
+//-----------------------------------------------------------------------------
+// wxScreenDC
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
+
+wxScreenDC::wxScreenDC()
+{
+    wxDCFactory *factory = wxDCFactory::GetFactory();
+    m_pimpl = factory->CreateScreenDC( this );
 }
 
 //-----------------------------------------------------------------------------
@@ -431,61 +528,6 @@ wxImplDC::wxImplDC( wxDC *owner )
 wxImplDC::~wxImplDC()
 {
 }
-
-#if WXWIN_COMPATIBILITY_2_8
-    // for compatibility with the old code when wxCoord was long everywhere
-void wxImplDC::GetTextExtent(const wxString& string,
-                       long *x, long *y,
-                       long *descent,
-                       long *externalLeading,
-                       const wxFont *theFont) const
-    {
-        wxCoord x2, y2, descent2, externalLeading2;
-        DoGetTextExtent(string, &x2, &y2,
-                        &descent2, &externalLeading2,
-                        theFont);
-        if ( x )
-            *x = x2;
-        if ( y )
-            *y = y2;
-        if ( descent )
-            *descent = descent2;
-        if ( externalLeading )
-            *externalLeading = externalLeading2;
-    }
-
-void wxImplDC::GetLogicalOrigin(long *x, long *y) const 
-    {
-        wxCoord x2, y2;
-        DoGetLogicalOrigin(&x2, &y2);
-        if ( x )
-            *x = x2;
-        if ( y )
-            *y = y2;
-    }
-
-void wxImplDC::GetDeviceOrigin(long *x, long *y) const 
-    {
-        wxCoord x2, y2;
-        DoGetDeviceOrigin(&x2, &y2);
-        if ( x )
-            *x = x2;
-        if ( y )
-            *y = y2;
-    } 
-    
-void wxImplDC::GetClippingBox(long *x, long *y, long *w, long *h) const 
-    {
-        wxCoord xx,yy,ww,hh;
-        DoGetClippingBox(&xx, &yy, &ww, &hh);
-        if (x) *x = xx;
-        if (y) *y = yy;
-        if (w) *w = ww;
-        if (h) *h = hh;
-    } 
-#endif  // WXWIN_COMPATIBILITY_2_8
-
-
 
 // ----------------------------------------------------------------------------
 // coordinate conversions and transforms
@@ -669,7 +711,7 @@ bool wxImplDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths)
         }
         else
         {
-            GetTextExtent(c, &w, &h);
+            DoGetTextExtent(c, &w, &h);
             if (c_int < FWC_SIZE)
                 s_fontWidthCache.m_widths[c_int] = w;
         }
@@ -751,13 +793,13 @@ void wxImplDC::GetMultiLineTextExtent(const wxString& text,
 void wxImplDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
                                wxCoord width, wxCoord height)
 {
-    wxCHECK_RET( Ok(), wxT("invalid window dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
     wxCoord x2 = x1 + width,
             y2 = y1 + height;
 
     // the pen width is calibrated to give 3 for width == height == 10
-    wxDCPenChanger pen(m_owner, wxPen(GetTextForeground(), (width + height + 1)/7));
+    wxDCPenChanger pen( *m_owner, wxPen(GetTextForeground(), (width + height + 1)/7));
 
     // we're drawing a scaled version of wx/generic/tick.xpm here
     wxCoord x3 = x1 + (4*width) / 10,   // x of the tick bottom
@@ -801,6 +843,7 @@ wxImplDC::DoStretchBlit(wxCoord xdest, wxCoord ydest,
     return rc;
 }
 
+#if 0
 void wxImplDC::DrawLines(const wxList *list, wxCoord xoffset, wxCoord yoffset)
 {
     int n = list->GetCount();
@@ -838,6 +881,7 @@ void wxImplDC::DrawPolygon(const wxList *list,
 
     delete [] points;
 }
+#endif
 
 void
 wxImplDC::DoDrawPolyPolygon(int n,
@@ -885,7 +929,7 @@ wxImplDC::DoDrawPolyPolygon(int n,
 #if wxUSE_SPLINES
 
 // TODO: this API needs fixing (wxPointList, why (!const) "wxList *"?)
-void wxImplDC::DrawSpline(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord x3, wxCoord y3)
+void wxImplDC::DoDrawSpline(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord x3, wxCoord y3)
 {
     wxList point_list;
 
@@ -901,7 +945,7 @@ void wxImplDC::DrawSpline(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoor
     point3->x = x3; point3->y = y3;
     point_list.Append((wxObject*)point3);
 
-    DrawSpline(&point_list);
+    DoDrawSpline(&point_list);
 
     for( wxList::compatibility_iterator node = point_list.GetFirst(); node; node = node->GetNext() )
     {
@@ -910,7 +954,7 @@ void wxImplDC::DrawSpline(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoor
     }
 }
 
-void wxImplDC::DrawSpline(int n, wxPoint points[])
+void wxImplDC::DoDrawSpline(int n, wxPoint points[])
 {
     wxList list;
     for (int i =0; i < n; i++)
@@ -918,7 +962,7 @@ void wxImplDC::DrawSpline(int n, wxPoint points[])
         list.Append((wxObject*)&points[i]);
     }
 
-    DrawSpline(&list);
+    DoDrawSpline(&list);
 }
 
 // ----------------------------------- spline code ----------------------------------------
@@ -931,7 +975,7 @@ int wx_spline_pop(double *x1, double *y1, double *x2, double *y2, double *x3,
 void wx_spline_push(double x1, double y1, double x2, double y2, double x3, double y3,
           double x4, double y4);
 static bool wx_spline_add_point(double x, double y);
-static void wx_spline_draw_point_array(wxDCBase *dc);
+static void wx_spline_draw_point_array(wxDC *dc);
 
 wxList wx_spline_point_list;
 
@@ -1025,7 +1069,7 @@ static bool wx_spline_add_point(double x, double y)
 
 static void wx_spline_draw_point_array(wxDC *dc)
 {
-  dc->DrawLines(&wx_spline_point_list, 0, 0 );
+//  dc->DrawLines(&wx_spline_point_list, 0, 0 );  wxList
   wxList::compatibility_iterator node = wx_spline_point_list.GetFirst();
   while (node)
   {
@@ -1038,7 +1082,7 @@ static void wx_spline_draw_point_array(wxDC *dc)
 
 void wxImplDC::DoDrawSpline( wxList *points )
 {
-    wxCHECK_RET( Ok(), wxT("invalid window dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
     wxPoint *p;
     double           cx1, cy1, cx2, cy2, cx3, cy3, cx4, cy4;
@@ -1098,162 +1142,6 @@ void wxImplDC::DoDrawSpline( wxList *points )
 
 #endif // wxUSE_SPLINES
 
-
-void wxImplDC::DrawLabel(const wxString& text,
-                         const wxBitmap& bitmap,
-                         const wxRect& rect,
-                         int alignment,
-                         int indexAccel,
-                         wxRect *rectBounding)
-{
-    // find the text position
-    wxCoord widthText, heightText, heightLine;
-    GetMultiLineTextExtent(text, &widthText, &heightText, &heightLine);
-
-    wxCoord width, height;
-    if ( bitmap.Ok() )
-    {
-        width = widthText + bitmap.GetWidth();
-        height = bitmap.GetHeight();
-    }
-    else // no bitmap
-    {
-        width = widthText;
-        height = heightText;
-    }
-
-    wxCoord x, y;
-    if ( alignment & wxALIGN_RIGHT )
-    {
-        x = rect.GetRight() - width;
-    }
-    else if ( alignment & wxALIGN_CENTRE_HORIZONTAL )
-    {
-        x = (rect.GetLeft() + rect.GetRight() + 1 - width) / 2;
-    }
-    else // alignment & wxALIGN_LEFT
-    {
-        x = rect.GetLeft();
-    }
-
-    if ( alignment & wxALIGN_BOTTOM )
-    {
-        y = rect.GetBottom() - height;
-    }
-    else if ( alignment & wxALIGN_CENTRE_VERTICAL )
-    {
-        y = (rect.GetTop() + rect.GetBottom() + 1 - height) / 2;
-    }
-    else // alignment & wxALIGN_TOP
-    {
-        y = rect.GetTop();
-    }
-
-    // draw the bitmap first
-    wxCoord x0 = x,
-            y0 = y,
-            width0 = width;
-    if ( bitmap.Ok() )
-    {
-        DoDrawBitmap(bitmap, x, y, true /* use mask */);
-
-        wxCoord offset = bitmap.GetWidth() + 4;
-        x += offset;
-        width -= offset;
-
-        y += (height - heightText) / 2;
-    }
-
-    // we will draw the underscore under the accel char later
-    wxCoord startUnderscore = 0,
-            endUnderscore = 0,
-            yUnderscore = 0;
-
-    // split the string into lines and draw each of them separately
-    wxString curLine;
-    for ( wxString::const_iterator pc = text.begin(); ; ++pc )
-    {
-        if ( *pc == _T('\n') || pc == text.end() )
-        {
-            int xRealStart = x; // init it here to avoid compielr warnings
-
-            if ( !curLine.empty() )
-            {
-                // NB: can't test for !(alignment & wxALIGN_LEFT) because
-                //     wxALIGN_LEFT is 0
-                if ( alignment & (wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL) )
-                {
-                    wxCoord widthLine;
-                    m_owner->GetTextExtent(curLine, &widthLine, NULL);
-
-                    if ( alignment & wxALIGN_RIGHT )
-                    {
-                        xRealStart += width - widthLine;
-                    }
-                    else // if ( alignment & wxALIGN_CENTRE_HORIZONTAL )
-                    {
-                        xRealStart += (width - widthLine) / 2;
-                    }
-                }
-                //else: left aligned, nothing to do
-
-                DoDrawText(curLine, xRealStart, y);
-            }
-
-            y += heightLine;
-
-            // do we have underscore in this line? we can check yUnderscore
-            // because it is set below to just y + heightLine if we do
-            if ( y == yUnderscore )
-            {
-                // adjust the horz positions to account for the shift
-                startUnderscore += xRealStart;
-                endUnderscore += xRealStart;
-            }
-
-            if ( pc == text.end() )
-                break;
-
-            curLine.clear();
-        }
-        else // not end of line
-        {
-            if ( pc - text.begin() == indexAccel )
-            {
-                // remeber to draw underscore here
-                GetTextExtent(curLine, &startUnderscore, NULL);
-                curLine += *pc;
-                GetTextExtent(curLine, &endUnderscore, NULL);
-
-                yUnderscore = y + heightLine;
-            }
-            else
-            {
-                curLine += *pc;
-            }
-        }
-    }
-
-    // draw the underscore if found
-    if ( startUnderscore != endUnderscore )
-    {
-        // it should be of the same colour as text
-        SetPen(wxPen(GetTextForeground(), 0, wxSOLID));
-
-        yUnderscore--;
-
-        DoDrawLine(startUnderscore, yUnderscore, endUnderscore, yUnderscore);
-    }
-
-    // return bounding rect if requested
-    if ( rectBounding )
-    {
-        *rectBounding = wxRect(x, y - heightText, widthText, heightText);
-    }
-
-    CalcBoundingBox(x0, y0);
-    CalcBoundingBox(x0 + width0, y0 + height);
-}
 
 
 void wxImplDC::DoGradientFillLinear(const wxRect& rect,
@@ -1404,7 +1292,7 @@ void wxImplDC::DoGradientFillConcentric(const wxRect& rect,
 
             //set the pixel
             m_pen.SetColour(wxColour(nR,nG,nB));
-            DoDrawPoint(wxPoint(x + rect.GetLeft(), y + rect.GetTop()));
+            DoDrawPoint(x + rect.GetLeft(), y + rect.GetTop());
         }
     }
     //return old pen color
@@ -1416,6 +1304,162 @@ void wxImplDC::DoGradientFillConcentric(const wxRect& rect,
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
+
+void wxDC::DrawLabel(const wxString& text,
+                         const wxBitmap& bitmap,
+                         const wxRect& rect,
+                         int alignment,
+                         int indexAccel,
+                         wxRect *rectBounding)
+{
+    // find the text position
+    wxCoord widthText, heightText, heightLine;
+    GetMultiLineTextExtent(text, &widthText, &heightText, &heightLine);
+
+    wxCoord width, height;
+    if ( bitmap.Ok() )
+    {
+        width = widthText + bitmap.GetWidth();
+        height = bitmap.GetHeight();
+    }
+    else // no bitmap
+    {
+        width = widthText;
+        height = heightText;
+    }
+
+    wxCoord x, y;
+    if ( alignment & wxALIGN_RIGHT )
+    {
+        x = rect.GetRight() - width;
+    }
+    else if ( alignment & wxALIGN_CENTRE_HORIZONTAL )
+    {
+        x = (rect.GetLeft() + rect.GetRight() + 1 - width) / 2;
+    }
+    else // alignment & wxALIGN_LEFT
+    {
+        x = rect.GetLeft();
+    }
+
+    if ( alignment & wxALIGN_BOTTOM )
+    {
+        y = rect.GetBottom() - height;
+    }
+    else if ( alignment & wxALIGN_CENTRE_VERTICAL )
+    {
+        y = (rect.GetTop() + rect.GetBottom() + 1 - height) / 2;
+    }
+    else // alignment & wxALIGN_TOP
+    {
+        y = rect.GetTop();
+    }
+
+    // draw the bitmap first
+    wxCoord x0 = x,
+            y0 = y,
+            width0 = width;
+    if ( bitmap.Ok() )
+    {
+        DrawBitmap(bitmap, x, y, true /* use mask */);
+
+        wxCoord offset = bitmap.GetWidth() + 4;
+        x += offset;
+        width -= offset;
+
+        y += (height - heightText) / 2;
+    }
+
+    // we will draw the underscore under the accel char later
+    wxCoord startUnderscore = 0,
+            endUnderscore = 0,
+            yUnderscore = 0;
+
+    // split the string into lines and draw each of them separately
+    wxString curLine;
+    for ( wxString::const_iterator pc = text.begin(); ; ++pc )
+    {
+        if ( *pc == _T('\n') || pc == text.end() )
+        {
+            int xRealStart = x; // init it here to avoid compielr warnings
+
+            if ( !curLine.empty() )
+            {
+                // NB: can't test for !(alignment & wxALIGN_LEFT) because
+                //     wxALIGN_LEFT is 0
+                if ( alignment & (wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL) )
+                {
+                    wxCoord widthLine;
+                    GetTextExtent(curLine, &widthLine, NULL);
+
+                    if ( alignment & wxALIGN_RIGHT )
+                    {
+                        xRealStart += width - widthLine;
+                    }
+                    else // if ( alignment & wxALIGN_CENTRE_HORIZONTAL )
+                    {
+                        xRealStart += (width - widthLine) / 2;
+                    }
+                }
+                //else: left aligned, nothing to do
+
+                DrawText(curLine, xRealStart, y);
+            }
+
+            y += heightLine;
+
+            // do we have underscore in this line? we can check yUnderscore
+            // because it is set below to just y + heightLine if we do
+            if ( y == yUnderscore )
+            {
+                // adjust the horz positions to account for the shift
+                startUnderscore += xRealStart;
+                endUnderscore += xRealStart;
+            }
+
+            if ( pc == text.end() )
+                break;
+
+            curLine.clear();
+        }
+        else // not end of line
+        {
+            if ( pc - text.begin() == indexAccel )
+            {
+                // remeber to draw underscore here
+                GetTextExtent(curLine, &startUnderscore, NULL);
+                curLine += *pc;
+                GetTextExtent(curLine, &endUnderscore, NULL);
+
+                yUnderscore = y + heightLine;
+            }
+            else
+            {
+                curLine += *pc;
+            }
+        }
+    }
+
+    // draw the underscore if found
+    if ( startUnderscore != endUnderscore )
+    {
+        // it should be of the same colour as text
+        SetPen(wxPen(GetTextForeground(), 0, wxSOLID));
+
+        yUnderscore--;
+
+        DrawLine(startUnderscore, yUnderscore, endUnderscore, yUnderscore);
+    }
+
+    // return bounding rect if requested
+    if ( rectBounding )
+    {
+        *rectBounding = wxRect(x, y - heightText, widthText, heightText);
+    }
+
+    CalcBoundingBox(x0, y0);
+    CalcBoundingBox(x0 + width0, y0 + height);
+}
 
 #if WXWIN_COMPATIBILITY_2_8
     // for compatibility with the old code when wxCoord was long everywhere

@@ -16,16 +16,21 @@
 //-----------------------------------------------------------------------------
 
 #if wxUSE_NEW_DC
-class WXDLLIMPEXP_CORE wxGTKImplDC : public wxDC
+class WXDLLIMPEXP_CORE wxGTKImplDC : public wxImplDC
 #else
 #define wxGTKImplDC wxDC
-class WXDLLIMPEXP_CORE wxGTKImplDC : public wxDCBase
+class WXDLLIMPEXP_CORE wxDC : public wxDCBase
 #endif
 
 {
 public:
-    wxGTKImplDC();
-    virtual ~wxGTKImplDC() { }
+#if wxUSE_NEW_DC
+    wxGTKImplDC( wxDC *owner );
+#else
+    wxDC();
+#endif
+
+    virtual ~wxGTKImplDC();
 
 #if wxUSE_PALETTE
     void SetColourMap( const wxPalette& palette ) { SetPalette(palette); };

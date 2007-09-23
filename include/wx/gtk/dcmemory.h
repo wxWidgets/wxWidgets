@@ -16,13 +16,27 @@
 // wxMemoryDC
 //-----------------------------------------------------------------------------
 
+
+#if wxUSE_NEW_DC
+class WXDLLIMPEXP_CORE wxGTKMemoryImplDC : public wxGTKWindowImplDC, public wxMemoryImplDCBase
+#else
+#define wxGTKMemoryImplDC wxMemoryDC
 class WXDLLIMPEXP_CORE wxMemoryDC : public wxWindowDC, public wxMemoryDCBase
+#endif
 {
 public:
-    wxMemoryDC() : wxWindowDC() { Init(); }
-    wxMemoryDC(wxBitmap& bitmap) : wxWindowDC() { Init(); SelectObject(bitmap); }
-    wxMemoryDC( wxDC *dc ); // Create compatible DC
-    virtual ~wxMemoryDC();
+
+#if wxUSE_NEW_DC
+    wxGTKMemoryImplDC( wxMemoryDC *owner );
+    wxGTKMemoryImplDC( wxMemoryDC *owner, wxBitmap& bitmap );
+    wxGTKMemoryImplDC( wxMemoryDC *owner, wxDC *dc );
+#else
+    wxMemoryDC();
+    wxMemoryDC(wxBitmap& bitmap);
+    wxMemoryDC( wxDC *dc );
+#endif
+    
+    virtual ~wxGTKMemoryImplDC();
 
     // these get reimplemented for mono-bitmaps to behave
     // more like their Win32 couterparts. They now interpret
@@ -36,21 +50,24 @@ public:
 
     // implementation
     wxBitmap GetSelectedBitmap() const { return m_selected; }
-    wxBitmap  m_selected;
 
 protected:
-    void DoGetSize( int *width, int *height ) const;
-    virtual void DoSelect(const wxBitmap& bitmap);
-    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const
-    {
-        wxBitmap bmp = GetSelectedBitmap();
-        return subrect ? bmp.GetSubBitmap(*subrect) : bmp;
-    }
+    // overridden from wxImplDC
+    virtual void DoGetSize( int *width, int *height ) const;
+    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const;
 
+public:    
+    // overridden from wxMemoryImplDCBase
+    virtual void DoSelect(const wxBitmap& bitmap);
+    virtual const wxBitmap& DoGetSelectedBitmap() const;
+    virtual wxBitmap& DoGetSelectedBitmap();
+
+    wxBitmap  m_selected;
+    
 private:
     void Init();
 
-    DECLARE_DYNAMIC_CLASS(wxMemoryDC)
+    DECLARE_ABSTRACT_CLASS(wxGTKMemoryImplDC)
 };
 
 #endif // _WX_GTK_DCMEMORY_H_

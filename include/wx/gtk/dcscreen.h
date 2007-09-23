@@ -13,36 +13,38 @@
 #include "wx/dcclient.h"
 
 //-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_FWD_CORE wxScreenDC;
-
-//-----------------------------------------------------------------------------
 // wxScreenDC
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxScreenDC : public wxPaintDC
+#if wxUSE_NEW_DC
+class WXDLLIMPEXP_CORE wxGTKScreenImplDC : public wxGTKWindowImplDC
+#else
+#define wxGTKScreenImplDC wxScreenDC
+class WXDLLIMPEXP_CORE wxScreenDC : public wxWindowDC
+#endif
 {
 public:
+
+#if wxUSE_NEW_DC
+    wxGTKScreenImplDC( wxScreenDC *owner );
+#else
     wxScreenDC();
-    virtual ~wxScreenDC();
+#endif
 
-    static bool StartDrawingOnTop( wxWindow *window );
-    static bool StartDrawingOnTop( wxRect *rect = (wxRect *) NULL );
-    static bool EndDrawingOnTop();
+    ~wxGTKScreenImplDC();
 
-    // implementation
+    static bool StartDrawingOnTop( wxWindow *window ) { return true; }
+    static bool StartDrawingOnTop( wxRect *rect = (wxRect *) NULL ) { return true; }
+    static bool EndDrawingOnTop() { return true; }
 
-    static GdkWindow  *sm_overlayWindow;
-    static int         sm_overlayWindowX;
-    static int         sm_overlayWindowY;
 
 protected:
     virtual void DoGetSize(int *width, int *height) const;
+    
+    void Init();
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxScreenDC)
+    DECLARE_ABSTRACT_CLASS(wxGTKScreenImplDC)
 };
 
 #endif

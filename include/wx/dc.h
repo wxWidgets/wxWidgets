@@ -37,6 +37,11 @@
 
 #if wxUSE_NEW_DC
 class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxClientDC;
+class WXDLLIMPEXP_FWD_CORE wxPaintDC;
+class WXDLLIMPEXP_FWD_CORE wxWindowDC;
+class WXDLLIMPEXP_FWD_CORE wxScreenDC;
+class WXDLLIMPEXP_FWD_CORE wxMemoryDC;
 #else
 class WXDLLIMPEXP_FWD_CORE wxDCBase;
 #endif
@@ -117,15 +122,16 @@ public:
     wxDCFactory() {}
     virtual ~wxDCFactory() {}
     
-    virtual wxImplDC* CreateWindowDC() = 0;
-    virtual wxImplDC* CreateWindowDC( wxWindow *window ) = 0;
-    virtual wxImplDC* CreateClientDC() = 0;
-    virtual wxImplDC* CreateClientDC( wxWindow *window ) = 0;
-    virtual wxImplDC* CreatePaintDC() = 0;
-    virtual wxImplDC* CreatePaintDC( wxWindow *window ) = 0;
-    virtual wxImplDC* CreateMemoryDC() = 0;
-    virtual wxImplDC* CreateMemoryDC( wxBitmap &bitmap ) = 0;
-    virtual wxImplDC* CreateMemoryDC( wxDC *dc ) = 0;
+    virtual wxImplDC* CreateWindowDC( wxWindowDC *owner ) = 0;
+    virtual wxImplDC* CreateWindowDC( wxWindowDC *owner, wxWindow *window ) = 0;
+    virtual wxImplDC* CreateClientDC( wxClientDC *owner ) = 0;
+    virtual wxImplDC* CreateClientDC( wxClientDC *owner, wxWindow *window ) = 0;
+    virtual wxImplDC* CreatePaintDC( wxPaintDC *owner ) = 0;
+    virtual wxImplDC* CreatePaintDC( wxPaintDC *owner, wxWindow *window ) = 0;
+    virtual wxImplDC* CreateMemoryDC( wxMemoryDC *owner ) = 0;
+    virtual wxImplDC* CreateMemoryDC( wxMemoryDC *owner, wxBitmap &bitmap ) = 0;
+    virtual wxImplDC* CreateMemoryDC( wxMemoryDC *owner, wxDC *dc ) = 0;
+    virtual wxImplDC* CreateScreenDC( wxScreenDC *owner ) = 0;
     
     static void SetDCFactory( wxDCFactory *factory );
     static wxDCFactory *GetFactory();
@@ -137,20 +143,21 @@ private:
 // wxNativeDCFactory
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxNativeDCFactory
+class WXDLLIMPEXP_CORE wxNativeDCFactory: public wxDCFactory
 {
 public:
     wxNativeDCFactory() {}
     
-    virtual wxImplDC* CreateWindowDC();
-    virtual wxImplDC* CreateWindowDC( wxWindow *window );
-    virtual wxImplDC* CreateClientDC();
-    virtual wxImplDC* CreateClientDC( wxWindow *window );
-    virtual wxImplDC* CreatePaintDC();
-    virtual wxImplDC* CreatePaintDC( wxWindow *window );
-    virtual wxImplDC* CreateMemoryDC();
-    virtual wxImplDC* CreateMemoryDC( wxBitmap &bitmap );
-    virtual wxImplDC* CreateMemoryDC( wxDC *dc );
+    virtual wxImplDC* CreateWindowDC( wxWindowDC *owner );
+    virtual wxImplDC* CreateWindowDC( wxWindowDC *owner, wxWindow *window );
+    virtual wxImplDC* CreateClientDC( wxClientDC *owner );
+    virtual wxImplDC* CreateClientDC( wxClientDC *owner, wxWindow *window );
+    virtual wxImplDC* CreatePaintDC( wxPaintDC *owner );
+    virtual wxImplDC* CreatePaintDC( wxPaintDC *owner, wxWindow *window );
+    virtual wxImplDC* CreateMemoryDC( wxMemoryDC *owner );
+    virtual wxImplDC* CreateMemoryDC( wxMemoryDC *owner, wxBitmap &bitmap );
+    virtual wxImplDC* CreateMemoryDC( wxMemoryDC *owner, wxDC *dc );
+    virtual wxImplDC* CreateScreenDC( wxScreenDC *owner );
 };
 
 //-----------------------------------------------------------------------------
@@ -163,7 +170,7 @@ public:
     wxImplDC( wxDC *owner );
     ~wxImplDC();
     
-    wxDC *GetOwner() { return m_owner; }
+    wxDC *GetOwner() const { return m_owner; }
     
     virtual bool IsOk() const { return m_ok; }
 
@@ -506,6 +513,9 @@ class wxDC: public wxObject
 {
 public:
     wxDC()   { m_pimpl = NULL; }
+
+    wxImplDC *GetImpl()
+        { return m_pimpl; }
 
     bool IsOk() const 
         { return m_pimpl && m_pimpl->IsOk(); }
@@ -1024,21 +1034,6 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-// wxMemoryDC
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxMemoryDC: public wxDC
-{
-public:
-    wxMemoryDC();
-    wxMemoryDC( wxBitmap& bitmap );
-    wxMemoryDC( wxDC *dc );
-    
-private:
-    DECLARE_DYNAMIC_CLASS(wxMemoryDC)
-};
-    
-//-----------------------------------------------------------------------------
 // wxPaintDC
 //-----------------------------------------------------------------------------
 
@@ -1081,6 +1076,8 @@ public:
         CalcBoundingBox(drawobject->MaxX(),drawobject->MaxY());
     }
 
+    wxDC *GetOwner() const { return (wxDC*) this; }
+    
     bool FloodFill(wxCoord x, wxCoord y, const wxColour& col,
                    int style = wxFLOOD_SURFACE)
         { return DoFloodFill(x, y, col, style); }

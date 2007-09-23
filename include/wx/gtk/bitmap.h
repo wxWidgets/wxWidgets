@@ -137,6 +137,8 @@ private:
     bool CreateFromImageAsPixbuf(const wxImage& image);
 #endif // wxUSE_IMAGE
 
+public:
+    // implementation only
     enum Representation
     {
         Pixmap,
@@ -145,9 +147,6 @@ private:
     // removes other representations from memory, keeping only 'keep'
     // (wxBitmap may keep same bitmap e.g. as both pixmap and pixbuf):
     void PurgeOtherRepresentations(Representation keep);
-
-    friend class wxMemoryDC;
-    friend class wxBitmapHandler;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmap)

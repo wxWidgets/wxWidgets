@@ -12,7 +12,52 @@
 #ifndef _WX_DCMEMORY_H_BASE_
 #define _WX_DCMEMORY_H_BASE_
 
+#include "wx/dc.h"
 #include "wx/bitmap.h"
+
+
+#if wxUSE_NEW_DC
+
+//-----------------------------------------------------------------------------
+// wxMemoryDC
+//-----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxMemoryImplDCBase
+{
+public:
+    wxMemoryImplDCBase() { }
+
+    virtual void DoSelect(const wxBitmap& bmp) = 0;
+    
+    virtual const wxBitmap& DoGetSelectedBitmap() const = 0;
+    virtual wxBitmap& DoGetSelectedBitmap() = 0;
+};
+
+
+class WXDLLIMPEXP_CORE wxMemoryDC: public wxDC
+{
+public:
+    wxMemoryDC();
+    wxMemoryDC( wxBitmap& bitmap );
+    wxMemoryDC( wxDC *dc );
+    
+    // select the given bitmap to draw on it
+    void SelectObject(wxBitmap& bmp);
+
+    // select the given bitmap for read-only
+    void SelectObjectAsSource(const wxBitmap& bmp);
+    
+    // get selected bitmap
+    const wxBitmap& GetSelectedBitmap() const;
+    wxBitmap& GetSelectedBitmap();
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxMemoryDC)
+};
+    
+
+
+#else
 
 // NOTE: different native implementations of wxMemoryDC will derive from
 //       different wxDC classes (wxPaintDC, wxWindowDC, etc), so that
@@ -47,6 +92,10 @@ public:
 protected:
     virtual void DoSelect(const wxBitmap& bmp) = 0;
 };
+
+
+#endif
+
 
 #if defined(__WXPALMOS__)
 #include "wx/palmos/dcmemory.h"
