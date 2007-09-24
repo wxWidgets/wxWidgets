@@ -125,11 +125,6 @@ wxMac:
 2.8.5
 -----
 
-All:
-
-- Fixed hang in wxInputStream::ReadLine when no input is left by testing
-  with CanRead before each character is read.
-
 All (GUI):
 
 - Added colour normalization to PNM image handler (Ray Johnston).
