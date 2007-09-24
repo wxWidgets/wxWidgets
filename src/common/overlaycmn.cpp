@@ -147,7 +147,14 @@ bool wxOverlayImpl::IsOk()
 void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height )
 {
 #if defined(__WXGTK__)
+#if wxUSE_NEW_DC
+    wxImplDC *impl = dc->GetImpl();
+    wxGTKWindowImplDC *gtk_impl = wxDynamicCast( impl, wxGTKWindowImplDC );
+    if (gtk_impl)
+        m_window = gtk_impl->m_owningWindow;
+#else
     m_window = dc->m_owningWindow;
+#endif
 #else
     #if defined (__WXMSW__) 
     m_window = dc->GetWindow();
