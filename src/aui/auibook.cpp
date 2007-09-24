@@ -3259,7 +3259,8 @@ bool wxAuiNotebook::DeletePage(size_t page_idx)
 
     // hide the window in advance, as this will
     // prevent flicker
-    ShowWnd(wnd, false);
+	if ( !IsBeingDeleted() )
+        ShowWnd(wnd, false);
 
     if (!RemovePage(page_idx))
         return false;

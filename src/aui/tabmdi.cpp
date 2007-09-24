@@ -716,7 +716,6 @@ wxAuiMDIClientWindow::wxAuiMDIClientWindow(wxAuiMDIParentFrame* parent, long sty
 
 wxAuiMDIClientWindow::~wxAuiMDIClientWindow()
 {
-    DestroyChildren();
 }
 
 bool wxAuiMDIClientWindow::CreateClient(wxAuiMDIParentFrame* parent, long style)
