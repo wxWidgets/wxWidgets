@@ -143,7 +143,7 @@ bool wxXmlNode::HasProp(const wxString& propName) const
 
 bool wxXmlNode::GetPropVal(const wxString& propName, wxString *value) const
 {
-    wxCHECK_MSG( value, false, "value argument must not be NULL" );
+    wxCHECK_MSG( value, false, wxT("value argument must not be NULL") );
 
     wxXmlProperty *prop = GetProperties();
 
