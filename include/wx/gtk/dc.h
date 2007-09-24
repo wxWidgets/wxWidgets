@@ -47,16 +47,6 @@ public:
     virtual GdkWindow* GetGDKWindow() const { return NULL; }
 
 protected:
-    // implementation
-    wxCoord XDEV2LOG(wxCoord x) const       { return DeviceToLogicalX(x); }
-    wxCoord XDEV2LOGREL(wxCoord x) const    { return DeviceToLogicalXRel(x); }
-    wxCoord YDEV2LOG(wxCoord y) const       { return DeviceToLogicalY(y); }
-    wxCoord YDEV2LOGREL(wxCoord y) const    { return DeviceToLogicalYRel(y); }
-    wxCoord XLOG2DEV(wxCoord x) const       { return LogicalToDeviceX(x); }
-    wxCoord XLOG2DEVREL(wxCoord x) const    { return LogicalToDeviceXRel(x); }
-    wxCoord YLOG2DEV(wxCoord y) const       { return LogicalToDeviceY(y); }
-    wxCoord YLOG2DEVREL(wxCoord y) const    { return LogicalToDeviceYRel(y); }
-
     // base class pure virtuals implemented here
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     virtual void DoGetSizeMM(int* width, int* height) const;

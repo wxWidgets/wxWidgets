@@ -37,6 +37,11 @@
 // local defines
 //-----------------------------------------------------------------------------
 
+#define XLOG2DEV(x)    LogicalToDeviceX(x)
+#define XLOG2DEVREL(x) LogicalToDeviceXRel(x)
+#define YLOG2DEV(y)    LogicalToDeviceY(y)
+#define YLOG2DEVREL(y) LogicalToDeviceYRel(y)
+
 #define USE_PAINT_REGION 1
 
 //-----------------------------------------------------------------------------

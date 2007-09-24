@@ -13,23 +13,13 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_PRINTING_ARCHITECTURE
-
-#if wxUSE_POSTSCRIPT
+#if wxUSE_PRINTING_ARCHITECTURE && wxUSE_POSTSCRIPT
 
 #include "wx/dc.h"
 #include "wx/dialog.h"
 #include "wx/module.h"
 #include "wx/cmndata.h"
 #include "wx/strvararg.h"
-
-extern WXDLLIMPEXP_DATA_CORE(int) wxPageNumber;
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxPostScriptDC;
 
 //-----------------------------------------------------------------------------
 // wxPostScriptDC
@@ -71,18 +61,18 @@ public:
     // Resolution in pixels per logical inch
     wxSize GetPPI() const;
 
-    // overridden because origin is bottom left and
-    // axes are inverted
-    void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
-    
+#if wxUSE_NEW_DC
+#else
     // these need to be overridden as wxPostscriptDC inherits
     // from the platform dependent wxDC and this we'd call
     // e.g. wxMSW specific code here.
+    virtual void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
     virtual void SetMapMode(int mode);
     virtual void SetUserScale(double x, double y);
     virtual void SetLogicalScale(double x, double y);
     virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
     virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
+#endif
 
     void SetBackgroundMode(int WXUNUSED(mode)) { }
     void SetPalette(const wxPalette& WXUNUSED(palette)) { }
@@ -95,32 +85,9 @@ public:
     static void SetResolution(int ppi);
     static int GetResolution();
 
-    WX_DEFINE_VARARG_FUNC_VOID(PsPrintf, 1, (const wxFormatString&),
-                               DoPsPrintfFormatWchar, DoPsPrintfFormatUtf8)
-#ifdef __WATCOMC__
-    // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-    WX_VARARG_WATCOM_WORKAROUND(void, PsPrintf, 1, (const wxString&),
-                                (wxFormatString(f1)));
-    WX_VARARG_WATCOM_WORKAROUND(void, PsPrintf, 1, (const wxCStrData&),
-                                (wxFormatString(f1)));
-    WX_VARARG_WATCOM_WORKAROUND(void, PsPrintf, 1, (const char*),
-                                (wxFormatString(f1)));
-    WX_VARARG_WATCOM_WORKAROUND(void, PsPrintf, 1, (const wchar_t*),
-                                (wxFormatString(f1)));
-#endif
-
     void PsPrint( const wxString& psdata );
-    void PsPrint( int ch );
 
 private:
-#if !wxUSE_UTF8_LOCALE_ONLY
-    void DoPsPrintfFormatWchar(const wxChar *fmt, ... );
-#endif
-#if wxUSE_UNICODE_UTF8
-    void DoPsPrintfFormatUtf8(const char *fmt, ... );
-#endif
-
-    static float ms_PSScaleFactor;
 
 protected:
     bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col, int style = wxFLOOD_SURFACE);
@@ -165,16 +132,14 @@ protected:
     double            m_underlinePosition;
     double            m_underlineThickness;
     wxPrintData       m_printData;
+    double            m_pageHeight;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxPostScriptDC)
 };
 
 #endif
-    // wxUSE_POSTSCRIPT
-
-#endif
-    // wxUSE_PRINTING_ARCHITECTURE
+    // wxUSE_POSTSCRIPT && wxUSE_PRINTING_ARCHITECTURE
 
 #endif
         // _WX_DCPSG_H_
