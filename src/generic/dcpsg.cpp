@@ -465,8 +465,8 @@ void wxPostScriptDC::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
         buffer.Printf( "newpath\n"
                        "%f %f %f %f %f %f ellipse\n"
                        "%f %f lineto\n"
-                       "stroke\n"
-                       "fill\n",
+                       "closepath\n"
+                       "stroke\n",
                 XLOG2DEV(xc), YLOG2DEV(yc), 
                 XLOG2DEVREL(i_radius), YLOG2DEVREL(i_radius), 
                 alpha1, alpha2,
@@ -524,7 +524,7 @@ void wxPostScriptDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,d
                        "%f %f %f %f %f %f false ellipticarc\n",
                   XLOG2DEV(x+w/2), YLOG2DEV(y+h/2),
                   XLOG2DEVREL(w/2), YLOG2DEVREL(h/2),
-                  wxRound(sa), wxRound(ea) );
+                  sa, ea );
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
@@ -933,14 +933,14 @@ void wxPostScriptDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
     wxString buffer;
     buffer.Printf( "/origstate save def\n"
                    "20 dict begin\n"
-                   "/pix %f string def\n"
-                   "/grays %f string def\n"
+                   "/pix %d string def\n"
+                   "/grays %d string def\n"
                    "/npixels 0 def\n"
                    "/rgbindx 0 def\n"
                    "%f %f translate\n"
                    "%f %f scale\n"
-                   "%f %f 8\n"
-                   "[%f 0 0 %f 0 %f]\n"
+                   "%d %d 8\n"
+                   "[%d 0 0 %d 0 %d]\n"
                    "{currentfile pix readhexstring pop}\n"
                    "false 3 colorimage\n",
             w, w, xx, yy, ww, hh, w, h, w, -h, h );
@@ -970,7 +970,11 @@ void wxPostScriptDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
         }
         *(bufferindex++) = '\n';
         *bufferindex = 0;
-        PsPrint( charbuffer );
+        
+        if (m_pstream)
+            fwrite( charbuffer, 1, strlen( charbuffer ), m_pstream );
+        else
+            PsPrint( charbuffer );
     }
 
     PsPrint( "end\n" );
@@ -1271,11 +1275,6 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     wxCoord text_w, text_h, text_descent;
 
     GetTextExtent(text, &text_w, &text_h, &text_descent);
-
-    // VZ: this seems to be unnecessary, so taking it out for now, if it
-    //     doesn't create any problems, remove this comment entirely
-    //SetFont( m_font );
-
 
     int size = m_font.GetPointSize();
 
@@ -1602,6 +1601,25 @@ void wxPostScriptDC::SetDeviceOrigin(wxCoord x, wxCoord y)
     wxDCBase::SetDeviceOrigin(x,y);
 }
 #endif
+
+void wxPostScriptDC::ComputeScaleAndOrigin()
+{
+    const wxRealPoint origScale(m_scaleX, m_scaleY);
+
+#if wxUSE_NEW_DC
+    wxImplDC::ComputeScaleAndOrigin();
+#else
+    wxDC::ComputeScaleAndOrigin();
+#endif
+
+    // If scale has changed call SetPen to recalulate the line width
+    // and SetFont to recalculate font size
+    if ( wxRealPoint(m_scaleX, m_scaleY) != origScale && m_pen.IsOk() )
+    {
+        SetPen( m_pen );
+        SetFont( m_font  );
+    }
+}
 
 void wxPostScriptDC::DoGetSize(int* width, int* height) const
 {
