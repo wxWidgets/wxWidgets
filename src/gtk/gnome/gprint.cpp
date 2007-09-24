@@ -1613,7 +1613,14 @@ void wxGnomePrintDC::SetPen( const wxPen& pen )
 
     m_pen = pen;
 
-    gs_libGnomePrint->gnome_print_setlinewidth( m_gpc, XLOG2DEVREL( 1000 * m_pen.GetWidth() ) / 1000.0f );
+    double width;
+    
+    if (m_pen.GetWidth() <= 0)
+        width = 0.1;
+    else
+        width = (double) m_pen.GetWidth();
+
+    gs_libGnomePrint->gnome_print_setlinewidth( m_gpc, width * DEV2PS * m_scaleX );
 
     static const double dotted[] =  {2.0, 5.0};
     static const double short_dashed[] = {4.0, 4.0};
@@ -1858,6 +1865,7 @@ void wxGnomePrintDC::DoGetSize(int* width, int* height) const
 
     if (width)
         *width = wxRound( pw * PS2DEV );
+        
     if (height)
         *height = wxRound( ph * PS2DEV );
 }
