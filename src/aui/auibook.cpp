@@ -3368,9 +3368,9 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
     RemoveEmptyTabFrames();
 
     // set new active pane
+    m_curpage = -1;
     if (new_active && !m_isBeingDeleted)
     {
-        m_curpage = -1;
         SetSelection(m_tabs.GetIdxFromWindow(new_active));
     }
 
