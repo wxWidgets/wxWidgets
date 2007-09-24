@@ -26,14 +26,30 @@
 
 class WXDLLIMPEXP_FWD_BASE wxFileOutputStream;
 
+
+
+#if wxUSE_NEW_DC
+class WXDLLIMPEXP_FWD_BASE wxSVGFileDC;
+
+class WXDLLIMPEXP_CORE wxSVGFileImplDC : public wxImplDC
+#else
+#define wxSVGFileImplDC wxSVGFileDC
 class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
+#endif
 {
 public:
-    wxSVGFileDC (wxString f);
-    wxSVGFileDC (wxString f, int Width, int Height);
-    wxSVGFileDC (wxString f, int Width, int Height, float dpi);
 
-    virtual ~wxSVGFileDC();
+#if wxUSE_NEW_DC
+    wxSVGFileImplDC( wxSVGFileDC *owner, const wxString &filename, 
+                     int width=320, int height=240, double dpi=72.0 );
+#else
+    wxSVGFileDC( const wxString &filename,
+                 int width=320, int height=240, double dpi=72.0 );
+#endif
+
+    virtual ~wxSVGFileImplDC();
+    
+    bool IsOk() const { return m_OK; }
 
     virtual bool CanDrawBitmap() const { return true; }
     virtual bool CanGetTextExtent() const { return true; }
@@ -91,14 +107,15 @@ public:
     virtual void SetFont(const wxFont& font);
     virtual void SetPen(const wxPen& pen);
 
-    virtual bool IsOk() const {return m_OK;}
-
+#if wxUSE_NEW_DC
+#else
     virtual void SetMapMode( int mode );
     virtual void SetUserScale( double x, double y );
     virtual void SetLogicalScale( double x, double y );
     virtual void SetLogicalOrigin( wxCoord x, wxCoord y );
     virtual void SetDeviceOrigin( wxCoord x, wxCoord y );
     virtual void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
+#endif
 
 private:
    virtual bool DoGetPixel(wxCoord, wxCoord, wxColour *) const
@@ -172,10 +189,19 @@ private:
 
    virtual void DoSetClippingRegionAsRegion(const wxRegion& WXUNUSED(region))
    {
-       wxFAIL_MSG(wxT("wxSVGFILEDC::DoSetClippingRegionAsRegion Call not yet implemented"));
+       wxFAIL_MSG(wxT("wxSVGFILEDC::DoSetClippingRegionAsRegion not yet implemented"));
    }
 
-   void Init (wxString f, int Width, int Height, float dpi);
+   virtual void DoSetClippingRegion( int WXUNUSED(x),  int WXUNUSED(y), int WXUNUSED(width), int WXUNUSED(height) )
+   {
+       wxFAIL_MSG(wxT("wxSVGFILEDC::DoSetClippingRegion not yet implemented"));
+   }
+
+   virtual void DoGetSizeMM( int *width, int *height ) const;
+   
+   virtual wxSize GetPPI() const;
+
+   void Init (const wxString &filename, int width, int height, double dpi);
 
    void NewGraphics();
 
@@ -188,10 +214,25 @@ private:
    bool                m_OK;
    bool                m_graphics_changed;
    int                 m_width, m_height;
+   double              m_dpi;
 
 private:
-   DECLARE_ABSTRACT_CLASS(wxSVGFileDC)
+   DECLARE_ABSTRACT_CLASS(wxSVGFileImplDC)
 };
+
+
+#if wxUSE_NEW_DC
+class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
+{
+public:
+    wxSVGFileDC( const wxString &filename, 
+                 int width=320, int height=240, double dpi=72.0 )
+    { 
+        m_pimpl = new wxSVGFileImplDC( this, filename, width, height, dpi );
+    }
+};
+#endif
+
 
 #endif // wxUSE_SVG
 
