@@ -1415,6 +1415,9 @@ void wxGtkPrintDC::DoDrawPolyPolygon(int n, int count[], wxPoint points[], wxCoo
 
 void wxGtkPrintDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
+    width--;
+    height--;
+
     gs_cairo->cairo_new_path(m_cairo);
     gs_cairo->cairo_rectangle ( m_cairo, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEVREL(width), YLOG2DEVREL(height));
 
@@ -1430,6 +1433,9 @@ void wxGtkPrintDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord 
 
 void wxGtkPrintDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
 {
+    width--;
+    height--;
+
     if (radius < 0.0) radius = - radius * ((width < height) ? width : height);
 
     wxCoord dd = 2 * (wxCoord) radius;
@@ -1475,6 +1481,9 @@ void wxGtkPrintDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, w
 
 void wxGtkPrintDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
+    width--;
+    height--;
+
     gs_cairo->cairo_save (m_cairo);
 
     gs_cairo->cairo_new_path(m_cairo);

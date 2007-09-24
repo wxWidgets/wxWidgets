@@ -737,6 +737,9 @@ void wxPostScriptDC::DoDrawLines (int n, wxPoint points[], wxCoord xoffset, wxCo
 void wxPostScriptDC::DoDrawRectangle (wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
+    
+    width--;
+    height--;
 
     if (m_brush.GetStyle () != wxTRANSPARENT)
     {
@@ -788,6 +791,9 @@ void wxPostScriptDC::DoDrawRectangle (wxCoord x, wxCoord y, wxCoord width, wxCoo
 void wxPostScriptDC::DoDrawRoundedRectangle (wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
+
+    width--;
+    height--;
 
     if (radius < 0.0)
     {
@@ -867,6 +873,9 @@ void wxPostScriptDC::DoDrawRoundedRectangle (wxCoord x, wxCoord y, wxCoord width
 void wxPostScriptDC::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
+
+    width--;
+    height--;
 
     if (m_brush.GetStyle () != wxTRANSPARENT)
     {

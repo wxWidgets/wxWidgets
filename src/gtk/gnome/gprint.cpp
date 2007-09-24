@@ -1198,6 +1198,9 @@ void wxGnomePrintDC::DoDrawPolyPolygon(int n, int count[], wxPoint points[], wxC
 
 void wxGnomePrintDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
+    width--;
+    height--;
+
     if (m_brush.GetStyle () != wxTRANSPARENT)
     {
         SetBrush( m_brush );
@@ -1233,7 +1236,10 @@ void wxGnomePrintDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoor
 
 void wxGnomePrintDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
 {
-    wxCoord rad = (wxCoord) radius;
+    width--;
+    height--;
+
+    wxCoord rad = wxRound( radius );
 
     if (m_brush.GetStyle() != wxTRANSPARENT)
     {
@@ -1348,6 +1354,9 @@ void wxGnomePrintDC::makeEllipticalPath(wxCoord x, wxCoord y,
 
 void wxGnomePrintDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
+    width--;
+    height--;
+
     if (m_brush.GetStyle () != wxTRANSPARENT)
     {
         SetBrush( m_brush );
