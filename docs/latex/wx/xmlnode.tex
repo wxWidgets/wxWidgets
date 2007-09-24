@@ -207,7 +207,8 @@ Returns a pointer to the parent of this node or \NULL if this node has no parent
 \constfunc{bool}{GetAttribute}{\param{const wxString\& }{attrName}, \param{wxString* }{value}}
 
 Returns \true if a attribute named {\it attrName} could be found.
-If the {\it value} pointer is not \NULL, the value of that attribute is saved there.
+The value of that attribute is saved in \arg{value} (which
+must not be \NULL).
 
 \constfunc{wxString}{GetAttribute}{\param{const wxString\& }{attrName}, \param{const wxString\& }{defaultVal}}
 
