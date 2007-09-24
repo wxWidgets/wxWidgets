@@ -143,6 +143,8 @@ bool wxXmlNode::HasAttribute(const wxString& attrName) const
 
 bool wxXmlNode::GetAttribute(const wxString& attrName, wxString *value) const
 {
+    wxCHECK_MSG( value, false, "value argument must not be NULL" );
+
     wxXmlAttribute *attr = GetAttributes();
 
     while (attr)
