@@ -1655,15 +1655,19 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
     if ( keyval == keychar && ( event.GetEventType() == wxEVT_KEY_UP || event.GetEventType() == wxEVT_KEY_DOWN ) )
         keyval = wxToupper( keyval ) ;
 
-    // Check for NUMPAD keys
-    if (keyval >= '0' && keyval <= '9' && keycode >= 82 && keycode <= 92)
+    // Check for NUMPAD keys.  For KEY_UP/DOWN events we need to use the
+    // WXK_NUMPAD constants, but for the CHAR event we want to use the
+    // standard ascii values
+    if ( event.GetEventType() != wxEVT_CHAR )
     {
-        keyval = (keyval - '0') + WXK_NUMPAD0;
-    }
-    else if (keycode >= 67 && keycode <= 81) 
-    {
-        switch (keycode)
+        if ( keyval >= '0' && keyval <= '9' && keycode >= 82 && keycode <= 92 )
         {
+            keyval = (keyval - '0') + WXK_NUMPAD0;
+        }
+        else if (keycode >= 65 && keycode <= 81) 
+        {
+            switch (keycode)
+            {
             case 76 :
                 keyval = WXK_NUMPAD_ENTER;
                 break;
@@ -1693,6 +1697,7 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
                 break;
             default:
                 break;
+            }
         }
     }
 
