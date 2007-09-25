@@ -78,8 +78,12 @@ bool wxAppConsole::SetSignalHandler(int signal, SignalHandler handler)
     struct sigaction sa;
     memset(&sa, 0, sizeof(sa));
     sa.sa_handler = (SignalHandler_t)&wxAppConsole::HandleSignal;
-    sa.sa_flags = SA_RESTART;
-    int res = sigaction(signal, &sa, 0);
+#ifdef __VMS
+   sa.sa_flags = 0;
+#else
+   sa.sa_flags = SA_RESTART;
+#endif
+   int res = sigaction(signal, &sa, 0);
     if ( res != 0 )
     {
         wxLogSysError(_("Failed to install signal handler"));

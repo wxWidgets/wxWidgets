@@ -600,7 +600,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
         const unsigned idx = m_strings ? m_strings->Add(item)
                                        : pos;
 
-        GtkAddItem(item, idx == GetCount() ? -1 : idx);
+        GtkAddItem(item, idx == GetCount() ? (unsigned) -1 : idx);
 
         m_clientList.Insert(idx, NULL);
 

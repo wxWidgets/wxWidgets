@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 23 May 2007                                                         *
+# Date : 12 September 2007                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -58,6 +58,7 @@ OBJECTS = \
 		arrstr.obj,\
 		artprov.obj,\
 		artstd.obj,\
+		base64.obj,\
 		bmpbase.obj,\
 		btncmn.obj,\
 		bookctrl.obj,\
@@ -178,7 +179,7 @@ OBJECTS1=fs_inet.obj,\
 		strvararg.obj,\
 		sysopt.obj
 
-OBJECTS2=tbarbase.obj,\
+OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		textbuf.obj,\
 		textcmn.obj,\
 		textfile.obj,\
@@ -231,6 +232,7 @@ SOURCES = \
 		arrstr.cpp,\
 		artprov.cpp,\
 		artstd.cpp,\
+		base64.cpp,\
 		bmpbase.cpp,\
 		btncmn.cpp,\
 		bookctrl.cpp,\
@@ -349,6 +351,7 @@ SOURCES = \
 		stdpbase.cpp,\
 		stockitem.cpp,\
 		stopwatch.cpp,\
+		srchcmn.cpp,\
 		strconv.cpp,\
 		stream.cpp,\
 		strvararg.cpp,\
@@ -449,6 +452,7 @@ appcmn.obj : appcmn.cpp
 arrstr.obj : arrstr.cpp
 artprov.obj : artprov.cpp
 artstd.obj : artstd.cpp
+base64.obj : base64.cpp
 bmpbase.obj : bmpbase.cpp
 btncmn.obj : btncmn.cpp
 bookctrl.obj : bookctrl.cpp
@@ -619,3 +623,4 @@ filepickercmn.obj : filepickercmn.cpp
 fontpickercmn.obj : fontpickercmn.cpp
 pickerbase.obj : pickerbase.cpp
 listctrlcmn.obj : listctrlcmn.cpp
+srchcmn.obj : srchcmn.cpp

@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 24 April 2007                                                       *
+# Date : 5 September 2007                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -43,7 +43,7 @@ CC_DEFINE =
 .c.obj :
 	cc $(CFLAGS)$(CC_DEFINE) $(MMS$TARGET_NAME).c
 
-OBJECTS =       baseunix.obj,\
+OBJECTS = appunix.obj,baseunix.obj,\
 		dialup.obj,\
 		dir.obj,\
 		displayx11.obj,\
@@ -63,7 +63,7 @@ OBJECTS =       baseunix.obj,\
 		taskbarx11.obj,\
 		timerunx.obj
 
-SOURCES =       baseunix.cpp,\
+SOURCES = appunix.cpp,baseunix.cpp,\
 		dialup.cpp,\
 		dir.cpp,\
 		displayx11.cpp,\
@@ -101,6 +101,7 @@ all : $(SOURCES)
 .endif
 .endif
 
+appunix.obj : appunix.cpp
 baseunix.obj : baseunix.cpp
 dialup.obj : dialup.cpp
 dir.obj : dir.cpp

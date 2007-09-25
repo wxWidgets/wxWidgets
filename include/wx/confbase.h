@@ -185,8 +185,8 @@ public:
    // no default version since it does not make sense for binary data
 #endif // wxUSE_BASE64
 
-  // Causes ambiguities in VC++ 6 (at least)
-#if (!defined(__VISUALC__) || __VISUALC__ > 1200)
+  // Causes ambiguities in VC++ 6 and OpenVMS (at least)
+#if ( (!defined(__VISUALC__) || __VISUALC__ > 1200) && !defined( __VMS ) )
   // read other types, for which wxFromString is defined
   template <typename T>
   bool Read(const wxString& key, T* value) const
@@ -294,8 +294,8 @@ public:
   bool Write(const wxString& key, float value)
     { return DoWriteDouble(key, value); }
 
-  // Causes ambiguities in VC++ 6 (at least)
-#if (!defined(__VISUALC__) || __VISUALC__ > 1200)
+  // Causes ambiguities in VC++ 6 and OpenVMS (at least)
+#if ( (!defined(__VISUALC__) || __VISUALC__ > 1200) && !defined( __VMS ) )
   // for other types, use wxToString()
   template <typename T>
   bool Write(const wxString& key, T const& value)

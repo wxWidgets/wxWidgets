@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 3 July 2007                                                        *
+ * Date : 25 September 2007                                                   *
  *                                                                           *
  *****************************************************************************/
 
@@ -167,7 +167,7 @@ typedef pid_t GPid;
 #endif
 
 
-#define WXWIN_COMPATIBILITY_2_6 0
+#define WXWIN_COMPATIBILITY_2_6 1
 
 #define WXWIN_COMPATIBILITY_2_8 1
 
@@ -191,7 +191,11 @@ typedef pid_t GPid;
 
 
 #ifndef wxUSE_UNICODE
+#if defined( __WXX11__ )
+    #define wxUSE_UNICODE 0
+#else
     #define wxUSE_UNICODE 1
+#endif
 #endif
 
 #define wxUSE_WCHAR_T 1
@@ -229,6 +233,10 @@ typedef pid_t GPid;
 #define wxUSE_PRINTF_POS_PARAMS 0
 
 #define wxUSE_LONGLONG      1
+
+#define wxUSE_BASE64        1
+
+#define wxUSE_CONSOLE_EVENTLOOP 0
 
 #define wxUSE_FILE          1
 #define wxUSE_FFILE         1
@@ -282,6 +290,8 @@ typedef pid_t GPid;
 #define wxUSE_APPLE_IEEE          0
 
 #define wxUSE_JOYSTICK            0
+
+#define wxUSE_FONTENUM 1
 
 #define wxUSE_FONTMAP 1
 
@@ -345,6 +355,7 @@ typedef pid_t GPid;
 #define wxUSE_DATEPICKCTRL 1
 #define wxUSE_DIRPICKERCTRL 1
 #define wxUSE_EDITABLELISTBOX 1
+#define wxUSE_FILECTRL      1
 #define wxUSE_FILEPICKERCTRL 1
 #define wxUSE_FONTPICKERCTRL 1
 #define wxUSE_GAUGE        1
@@ -388,6 +399,8 @@ typedef pid_t GPid;
 #define wxUSE_TOOLBOOK 1
 
 #define wxUSE_TAB_DIALOG    1
+
+#define wxUSE_TASKBARICON 1
 
 #define wxUSE_GRID         1
 
@@ -517,6 +530,8 @@ typedef pid_t GPid;
 
 #define wxUSE_AFM_FOR_POSTSCRIPT 1
 
+#define wxUSE_SVG 1
+
 #define wxUSE_ODBC          1
 
 #define wxODBC_FWD_ONLY_CURSORS	 1
@@ -563,34 +578,60 @@ typedef pid_t GPid;
 
 /* --- end common options --- */
 
-/* for some features we don't have dedicated configure switches, so just choose
- * the common values automatically */
-#if (defined(__WIN32__) && !defined(__WXUNIVERSAL__)) || defined(__WXPM__)
-#define wxUSE_OWNER_DRAWN 1
-#else
-#define wxUSE_OWNER_DRAWN 0
-#endif
-
-/* enable rich edit under Win32 */
-#if defined(__WIN32__) && !defined(__WINE__) && !defined(__GNUWIN32_OLD__)
-#define wxUSE_RICHEDIT 1
-#define wxUSE_RICHEDIT2 1
-#else
-#define wxUSE_RICHEDIT 0
-#define wxUSE_RICHEDIT2 0
-#endif
-
-#define wxUSE_INKEDIT 1
-
-#define wxUSE_UNICODE_MSLU 0
+/*
+ * Unix/VMS-specific options
+ */
+#define wxUSE_SELECT_DISPATCHER 1
+#define wxUSE_EPOLL_DISPATCHER 0
 
 #define wxUSE_UNICODE_UTF8 0
-
 #define wxUSE_UTF8_LOCALE_ONLY 0
+
+/* --- start MSW options --- */
+
+#ifndef wxUSE_UNICODE_MSLU
+    #define wxUSE_UNICODE_MSLU 0
+#endif
+
+#define wxUSE_MFC           0
+
+#define wxUSE_OLE           0
+
+#define wxUSE_OLE_AUTOMATION 0
+
+#define wxUSE_ACTIVEX 0
 
 #define wxUSE_DC_CACHEING 1
 
-#define wxUSE_GADGETS 1
+#define wxUSE_WXDIB 0
+
+#define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 0
+
+#define wxUSE_REGKEY 0
+
+#define wxUSE_RICHEDIT  0
+
+#define wxUSE_RICHEDIT2 0
+
+#define wxUSE_OWNER_DRAWN 0
+
+#define wxUSE_UXTHEME           0
+
+#define wxUSE_INKEDIT  0
+
+#define wxUSE_INICONF 0
+
+
+#define wxUSE_DATEPICKCTRL_GENERIC 0
+
+
+#define wxUSE_CRASHREPORT 0
+
+
+
+#define wxUSE_BITMAP_MESSAGE         0
+
+/* --- end MSW options --- */
 
 /*
  * Supports bool type
@@ -680,6 +721,11 @@ typedef pid_t GPid;
 #undef HAVE_GCC_ATOMIC_BUILTINS
 
 /*
+ * Define if compiler's visibility support in libstdc++ is broken
+ */
+#undef HAVE_BROKEN_LIBSTDCXX_VISIBILITY
+
+/*
  * The built-in regex supports advanced REs in additional to POSIX's basic
  * and extended. Your system regex probably won't support this, and in this
  * case WX_NO_REGEX_ADVANCED should be defined.
@@ -697,7 +743,11 @@ typedef pid_t GPid;
 /*
  * Use GTK print for printing under GTK+ 2.0
  */
+#ifdef VMS_GTK2
+#define wxUSE_GTKPRINT 1
+#else
 #define wxUSE_GTKPRINT 0
+#endif
 /*
  * Use GNOME print for printing under GTK+ 2.0
  */
@@ -732,18 +782,6 @@ typedef pid_t GPid;
  * Use OpenGL
  */
 #define wxUSE_OPENGL 1
-
-/*
- * Set to 1 to compile MS Windows XP theme engine support
- */
-/* #define wxUSE_UXTHEME 1 */
-
-/*
- * Use OLE and OLE Automation (MSW only)
- */
-#define wxUSE_OLE 0
-#define wxUSE_OLE_AUTOMATION 0
-#define wxUSE_ACTIVEX 0
 
 /* for compatibility */
 /*
@@ -840,12 +878,6 @@ typedef pid_t GPid;
 /* Define if you have ftime() */
 #define HAVE_FTIME
 
-/* Define if you have support for large (64 bit size) files */
-#undef HAVE_LARGEFILE_SUPPORT
-
-/* Define if you have localtime() */
-#define HAVE_LOCALTIME
-
 /* Define if you have nanosleep() */
 #if __CRTL_VER >= 70320000
 #define HAVE_NANOSLEEP 1
@@ -874,17 +906,8 @@ typedef pid_t GPid;
 /* Define if you have pthread_attr_setstacksize */
 #define HAVE_PTHREAD_ATTR_SETSTACKSIZE 1
 
-/* Define if you have sigaction() */
-#define HAVE_SIGACTION 1
-
-/* Define if you have sigemptyset() */
-#define HAVE_SIGEMPTYSET 1
-
 /* Define if you have the putenv function.  */
 #define HAVE_PUTENV 1
-
-/* Define if you have the readdir_r function.  */
-#undef HAVE_READDIR_R
 
 /* Define if you have the setenv function.  */
 #   if __CRTL_VER >= 70000000
@@ -911,10 +934,6 @@ typedef pid_t GPid;
 #undef HAVE_SNPRINTF_DECL
 #endif
 
-/* Define if you have a _broken_ snprintf() declaration in the header,
- * with 'char*' for the 3rd parameter instead of 'const char*' */
-#undef HAVE_BROKEN_SNPRINTF_DECL
-
 /* Define if you have a snprintf() which supports positional arguments
    (defined in the unix98 standard) */
 #undef HAVE_UNIX98_PRINTF
@@ -939,9 +958,6 @@ typedef pid_t GPid;
 
 /* Define if you have all functions to set thread priority */
 #define HAVE_THREAD_PRIORITY_FUNCTIONS 1
-
-/* Define if you have timegm() function */
-#undef HAVE_TIMEGM
 
 #if __CRTL_VER >= 70312000
 /* Define if you have vsnprintf() */
@@ -968,13 +984,10 @@ typedef pid_t GPid;
 #define HAVE_WCSLEN 1
 
 /* Define if you have wcsdup function  */
-#define HAVE_WCSDUP 0
+#undef HAVE_WCSDUP
 
 /* Define if you have wcstoull() and wcstoll() */
 #undef HAVE_WCSTOULL
-
-/* define if you have vsscanf function */
-#undef HAVE_VSSCANF
 
 /* The number of bytes in a wchar_t.  */
 #define SIZEOF_WCHAR_T 4
@@ -1005,9 +1018,6 @@ typedef pid_t GPid;
 
 /* Define if wchar_t is distinct type in your compiler. */
 #define wxWCHAR_T_IS_REAL_TYPE 1
-
-/* Define if you have the dlopen function.  */
-#define HAVE_DLOPEN 1
 
 /* Define if you have the dlerror function.  */
 #define HAVE_DLERROR 1
@@ -1099,26 +1109,6 @@ typedef pid_t GPid;
 #undef HAVE_X11_XKBLIB_H
 #endif
 
-/* Define if you have the fnmatch() function */
-#if __CRTL_VER >= 70320000
-#define HAVE_FNMATCH 1
-#else
-#undef HAVE_FNMATCH
-#endif
-
-/* Define if you have the <fnmatch.h> header file.  */
-#if __CRTL_VER >= 70320000
-#define HAVE_FNMATCH_H 1
-#else
-#undef HAVE_FNMATCH_H
-#endif
-
-/* Define if you have the <iostream> header file.  */
-#undef HAVE_IOSTREAM
-
-/* Define if you have the <linux/joystick.h> header file.  */
-#undef HAVE_LINUX_JOYSTICK_H
-
 /* Define if you have the <sched.h> header file.  */
 #undef HAVE_SCHED_H
 
@@ -1165,12 +1155,6 @@ typedef pid_t GPid;
 /* Define if you have wcsrtombs() function */
 #define HAVE_WCSRTOMBS 1
 
-/* Define this if you have wputc() */
-#define HAVE_WPUTC 1
-
-/* Define this if you have wputchar() */
-#define HAVE_WPUTCHAR 1
-
 /* Define this if you have putws() */
 #undef HAVE_PUTWS
 
@@ -1185,14 +1169,6 @@ typedef pid_t GPid;
 
 /* Define this if you have wprintf() and related functions */
 #define HAVE_WPRINTF 1
-
-
-/* Define this if you have swprintf() */
-#define HAVE_SWPRINTF 1
-
-/* Define if you have a _broken_ swprintf() declaration in the header,
- * without a 'size_t max' parameter as second argument */
-#undef HAVE_BROKEN_SWPRINTF_DECL
 
 /* Define this if you have vswprintf() and related functions */
 #define HAVE_VSWPRINTF 1
@@ -1220,9 +1196,6 @@ typedef pid_t GPid;
 
 /* Define if you have Pango xft support */
 #undef HAVE_PANGO_XFT
-
-/* Define if you have the <sys/epoll.h> header file.  */
-#undef HAVE_SYS_EPOLL_H
 
 /* Define if fdopen is available.  */
 #define HAVE_FDOPEN 1

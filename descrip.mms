@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 19 April 2007                                                       *
+# Date : 5 September 2007                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -60,8 +60,6 @@ gtk : [.include.wx]setup.h
 	set default [-.aui]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.caret]
-	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	set default [-.checklst]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.config]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
@@ -125,8 +123,6 @@ gtk2 : [.include.wx]setup.h
 	set default [--.samples.calendar]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [-.caret]
-#	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
-	set default [-.checklst]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [-.config]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
@@ -192,8 +188,6 @@ x11 : [.include.wx]setup.h
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.caret]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
-	set default [-.checklst]
-#	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.config]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.controls]
@@ -247,8 +241,6 @@ motif : [.include.wx]setup.h
 	set default [--.samples.calendar]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.caret]
-	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
-	set default [-.checklst]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.config]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)

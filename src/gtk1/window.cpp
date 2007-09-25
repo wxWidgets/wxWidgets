@@ -927,7 +927,10 @@ static void wxFillOtherKeyEventFields(wxKeyEvent& event,
     event.m_rawCode = (wxUint32) gdk_event->keyval;
     event.m_rawFlags = 0;
 #if wxUSE_UNICODE
-    event.m_uniChar = gdk_keyval_to_unicode(gdk_event->keyval);
+#if 0
+   // this is not gtk1.x
+   event.m_uniChar = gdk_keyval_to_unicode(gdk_event->keyval);
+#endif
 #endif
     wxGetMousePosition( &x, &y );
     win->ScreenToClient( &x, &y );
