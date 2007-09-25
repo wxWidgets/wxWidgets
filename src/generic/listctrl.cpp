@@ -1882,7 +1882,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
         // draw the text and image clipping them so that they
         // don't overwrite the column boundary
-        wxDCClipper clipper(dc, x, HEADER_OFFSET_Y, cw, h - 4 );
+        wxDCClipper clipper(dc, x, HEADER_OFFSET_Y, cw, h  );
 
         // if we have an image, draw it on the right of the label
         if ( imageList )
