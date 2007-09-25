@@ -1,5 +1,5 @@
 rem Uncomment the next line to set the version; used also in wxWidgets.iss
-SET WXW_VER=2.8.5-rc1
+SET WXW_VER=2.8.6
 
 
 if (%WXW_VER%)==() SET WXW_VER=CVS
@@ -84,6 +84,8 @@ cd %WXWIN%
 del %DAILY%\*.zip
 zip %DAILY%\wxWidgets-%WXW_VER%-CHM.zip docs\htmlhelp\wx.chm utils/tex2rtf/docs/*.chm docs/htmlhelp/*.chm
 zip %DAILY%\wxWidgets-%WXW_VER%-HLP.zip docs\winhelp\wx.hlp docs\winhelp\wx.cnt utils/tex2rtf/docs/*.HLP utils/tex2rtf/docs/*.cnt docs/winhelp/*.hlp docs/winhelp/*.cnt
+zip %DAILY%\wxWidgets-%WXW_VER%-HTB.zip docs\htb\*.htb utils/tex2rtf/docs/*.htb 
+zip %DAILY%\wxWidgets-%WXW_VER%-HTML.zip docs\mshtml\wx\*.* utils/tex2rtf/docs/*.html utils/tex2rtf/docs/*.gif 
 
 cd %DAILY%\
 mkdir docs
