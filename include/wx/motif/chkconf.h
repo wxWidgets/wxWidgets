@@ -16,3 +16,6 @@
 #   define wxUSE_TAB_DIALOG 1
 #endif
 
+#if !defined(wxUSE_GADGETS)
+#   define wxUSE_GADGETS 0
+#endif
