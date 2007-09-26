@@ -463,6 +463,10 @@ SOURCE=.\geometry\size.cpp
 
 SOURCE=.\test.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\controls\textctrltest.cpp
+# End Source File
 # End Group
 # End Target
 # End Project

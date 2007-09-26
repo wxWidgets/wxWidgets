@@ -91,7 +91,8 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_rect.obj \
 	$(OBJS)\test_gui_size.obj \
 	$(OBJS)\test_gui_point.obj \
-	$(OBJS)\test_gui_config.obj
+	$(OBJS)\test_gui_config.obj \
+	$(OBJS)\test_gui_textctrltest.obj
 PRINTFBENCH_CXXFLAGS = /M$(__RUNTIME_LIBS_38)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(OBJS)\printfbench.pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
@@ -578,6 +579,9 @@ $(OBJS)\test_gui_point.obj: .\geometry\point.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) $**
 
 $(OBJS)\test_gui_config.obj: .\config\config.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) $**
+
+$(OBJS)\test_gui_textctrltest.obj: .\controls\textctrltest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) $**
 
 $(OBJS)\printfbench_dummy.obj: .\dummy.cpp

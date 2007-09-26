@@ -292,7 +292,8 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_rect.obj &
 	$(OBJS)\test_gui_size.obj &
 	$(OBJS)\test_gui_point.obj &
-	$(OBJS)\test_gui_config.obj
+	$(OBJS)\test_gui_config.obj &
+	$(OBJS)\test_gui_textctrltest.obj
 PRINTFBENCH_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
@@ -526,6 +527,9 @@ $(OBJS)\test_gui_point.obj :  .AUTODEPEND .\geometry\point.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_config.obj :  .AUTODEPEND .\config\config.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_textctrltest.obj :  .AUTODEPEND .\controls\textctrltest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\printfbench_dummy.obj :  .AUTODEPEND .\dummy.cpp

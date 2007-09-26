@@ -34,18 +34,25 @@ using std::vector;
 using std::auto_ptr;
 using std::cout;
 
+#if wxUSE_GUI
+    typedef wxApp TestAppBase;
+#else
+    typedef wxAppConsole TestAppBase;
+#endif
+
 // The application class
 //
-class TestApp : public wxAppConsole
+class TestApp : public TestAppBase
 {
 public:
     TestApp();
 
     // standard overrides
-    void OnInitCmdLine(wxCmdLineParser& parser);
-    bool OnCmdLineParsed(wxCmdLineParser& parser);
-    bool OnInit();
-    int  OnRun();
+    virtual void OnInitCmdLine(wxCmdLineParser& parser);
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
+    virtual bool OnInit();
+    virtual int  OnRun();
+    virtual int  OnExit();
 
 private:
     void List(Test *test, const string& parent = "") const;
@@ -68,6 +75,9 @@ TestApp::TestApp()
 //
 bool TestApp::OnInit()
 {
+    if ( !TestAppBase::OnInit() )
+        return false;
+
     cout << "Test program for wxWidgets\n"
          << "build: " << WX_BUILD_OPTIONS_SIGNATURE << std::endl;
 
@@ -78,14 +88,19 @@ bool TestApp::OnInit()
     cout << "\n";
 #endif
 
-    return wxAppConsole::OnInit();
+#if wxUSE_GUI
+    // create a hidden parent window to be used as parent for the GUI controls
+    new wxFrame(NULL, wxID_ANY, "Hidden wx test frame");
+#endif // wxUSE_GUI
+
+    return true;
 };
 
 // The table of command line options
 //
 void TestApp::OnInitCmdLine(wxCmdLineParser& parser)
 {
-    wxAppConsole::OnInitCmdLine(parser);
+    TestAppBase::OnInitCmdLine(parser);
 
     static const wxCmdLineEntryDesc cmdLineDesc[] = {
         { wxCMD_LINE_SWITCH, "l", "list",
@@ -115,7 +130,7 @@ bool TestApp::OnCmdLineParsed(wxCmdLineParser& parser)
     m_longlist = parser.Found(_T("longlist"));
     m_list = m_longlist || parser.Found(_T("list"));
 
-    return wxAppConsole::OnCmdLineParsed(parser);
+    return TestAppBase::OnCmdLineParsed(parser);
 }
 
 // Run
@@ -153,6 +168,15 @@ int TestApp::OnRun()
     return ( m_list || runner.run("", false, true, !verbose) )
            ? EXIT_SUCCESS
            : EXIT_FAILURE;
+}
+
+int TestApp::OnExit()
+{
+#if wxUSE_GUI
+    delete GetTopWindow();
+#endif // wxUSE_GUI
+
+    return 0;
 }
 
 // List the tests
