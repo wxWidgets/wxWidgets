@@ -807,4 +807,16 @@ void wxComboBox::OnUpdateSelectAll(wxUpdateUIEvent& event)
     event.Enable(IsEditable() && GetLastPosition() > 0);
 }
 
+#if wxUSE_TOOLTIPS
+
+void wxComboBox::DoSetToolTip(wxToolTip *tip)
+{
+    wxChoice::DoSetToolTip(tip);
+
+    if ( tip && !HasFlag(wxCB_READONLY) )
+        tip->Add(GetEditHWND());
+}
+
+#endif // wxUSE_TOOLTIPS
+
 #endif // wxUSE_COMBOBOX

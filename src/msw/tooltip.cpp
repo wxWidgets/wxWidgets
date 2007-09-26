@@ -31,7 +31,6 @@
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/app.h"
     #include "wx/control.h"
-    #include "wx/combobox.h"
 #endif
 
 #include "wx/tokenzr.h"
@@ -395,7 +394,7 @@ void wxToolTip::SetWindow(wxWindow *win)
         Add(m_window->GetHWND());
     }
 #if !defined(__WXUNIVERSAL__)
-    // and all of its subcontrols (e.g. radiobuttons in a radiobox) as well
+    // and all of its subcontrols (e.g. radio buttons in a radiobox) as well
     wxControl *control = wxDynamicCast(m_window, wxControl);
     if ( control )
     {
@@ -417,22 +416,6 @@ void wxToolTip::SetWindow(wxWindow *win)
             wxASSERT_MSG( hwnd, _T("no hwnd for subcontrol?") );
 
             Add((WXHWND)hwnd);
-        }
-    }
-
-    // VZ: it's ugly to do it here, but I don't want any major changes right
-    //     now, later we will probably want to have wxWindow::OnGotToolTip() or
-    //     something like this where the derived class can do such things
-    //     itself instead of wxToolTip "knowing" about them all
-    wxComboBox *combo = wxDynamicCast(control, wxComboBox);
-    if ( combo )
-    {
-        WXHWND hwndComboEdit = combo->GetWindowStyle() & wxCB_READONLY
-                                ? combo->GetHWND()
-                                : combo->GetEditHWND();
-        if ( hwndComboEdit )
-        {
-            Add(hwndComboEdit);
         }
     }
 #endif // !defined(__WXUNIVERSAL__)

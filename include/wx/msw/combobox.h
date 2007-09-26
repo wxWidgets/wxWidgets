@@ -126,7 +126,12 @@ public:
     void OnUpdateDelete(wxUpdateUIEvent& event);
     void OnUpdateSelectAll(wxUpdateUIEvent& event);
 
+protected:
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+
+#if wxUSE_TOOLTIPS
+    virtual void DoSetToolTip(wxToolTip *tip);
+#endif
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxComboBox)
