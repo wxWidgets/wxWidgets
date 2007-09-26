@@ -618,11 +618,22 @@ void wxComboBox::SetValue( const wxString& value )
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
-    wxString tmp;
-    if (!value.IsNull()) tmp = value;
-    gtk_entry_set_text( GTK_ENTRY(entry), wxGTK_CONV( tmp ) );
+    gtk_entry_set_text( GTK_ENTRY(entry), wxGTK_CONV( value ) );
 
     InvalidateBestSize();
+}
+
+void wxComboBox::WriteText(const wxString& value)
+{
+    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
+
+    GtkWidget *entry = GTK_COMBO(m_widget)->entry;
+    GtkEditable * const edit = GTK_EDITABLE(entry);
+
+    gtk_editable_delete_selection(edit);
+    gint len = gtk_editable_get_position(edit);
+    gtk_editable_insert_text(edit, wxGTK_CONV(value), -1, &len);
+    gtk_editable_set_position(edit, len);
 }
 
 void wxComboBox::Copy()

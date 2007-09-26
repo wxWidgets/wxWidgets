@@ -94,6 +94,7 @@ public:
 
     wxString GetValue() const;
     void SetValue(const wxString& value);
+    void WriteText(const wxString& value);
 
     void Copy();
     void Cut();
