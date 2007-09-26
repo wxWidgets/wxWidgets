@@ -2381,6 +2381,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
 	wx/gtk/stattext.h \
 	wx/gtk/tbargtk.h \
 	wx/gtk/textctrl.h \
+	wx/gtk/textentry.h \
 	wx/gtk/tglbtn.h \
 	wx/gtk/treectrl.h \
 	wx/gtk/treeentry_gtk.h
@@ -3212,6 +3213,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/statusbr.h \
 	wx/textctrl.h \
 	wx/textdlg.h \
+	wx/textentry.h \
 	wx/toolbar.h \
 	wx/validate.h \
 	wx/valtext.h \
@@ -3878,6 +3880,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_stockitem.o \
 	monodll_tbarbase.o \
 	monodll_textcmn.o \
+	monodll_textentrycmn.o \
 	monodll_toplvcmn.o \
 	monodll_treebase.o \
 	monodll_valgen.o \
@@ -4059,6 +4062,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_stockitem.o \
 	monodll_tbarbase.o \
 	monodll_textcmn.o \
+	monodll_textentrycmn.o \
 	monodll_toplvcmn.o \
 	monodll_treebase.o \
 	monodll_valgen.o \
@@ -4581,6 +4585,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_stattext.o \
 	monodll_tbargtk.o \
 	monodll_textctrl.o \
+	monodll_textentry.o \
 	monodll_tglbtn.o \
 	monodll_treeentry_gtk.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS)
@@ -5732,6 +5737,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_stockitem.o \
 	monolib_tbarbase.o \
 	monolib_textcmn.o \
+	monolib_textentrycmn.o \
 	monolib_toplvcmn.o \
 	monolib_treebase.o \
 	monolib_valgen.o \
@@ -5913,6 +5919,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_stockitem.o \
 	monolib_tbarbase.o \
 	monolib_textcmn.o \
+	monolib_textentrycmn.o \
 	monolib_toplvcmn.o \
 	monolib_treebase.o \
 	monolib_valgen.o \
@@ -6436,6 +6443,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_stattext.o \
 	monolib_tbargtk.o \
 	monolib_textctrl.o \
+	monolib_textentry.o \
 	monolib_tglbtn.o \
 	monolib_treeentry_gtk.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1)
@@ -7861,6 +7869,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_stockitem.o \
 	coredll_tbarbase.o \
 	coredll_textcmn.o \
+	coredll_textentrycmn.o \
 	coredll_toplvcmn.o \
 	coredll_treebase.o \
 	coredll_valgen.o \
@@ -8042,6 +8051,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_stockitem.o \
 	coredll_tbarbase.o \
 	coredll_textcmn.o \
+	coredll_textentrycmn.o \
 	coredll_toplvcmn.o \
 	coredll_treebase.o \
 	coredll_valgen.o \
@@ -8565,6 +8575,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_stattext.o \
 	coredll_tbargtk.o \
 	coredll_textctrl.o \
+	coredll_textentry.o \
 	coredll_tglbtn.o \
 	coredll_treeentry_gtk.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2)
@@ -9326,6 +9337,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_stockitem.o \
 	corelib_tbarbase.o \
 	corelib_textcmn.o \
+	corelib_textentrycmn.o \
 	corelib_toplvcmn.o \
 	corelib_treebase.o \
 	corelib_valgen.o \
@@ -9507,6 +9519,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_stockitem.o \
 	corelib_tbarbase.o \
 	corelib_textcmn.o \
+	corelib_textentrycmn.o \
 	corelib_toplvcmn.o \
 	corelib_treebase.o \
 	corelib_valgen.o \
@@ -10030,6 +10043,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_stattext.o \
 	corelib_tbargtk.o \
 	corelib_textctrl.o \
+	corelib_textentry.o \
 	corelib_tglbtn.o \
 	corelib_treeentry_gtk.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3)
@@ -13900,6 +13914,9 @@ monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
 monodll_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
 
+monodll_textentry.o: $(srcdir)/src/gtk/textentry.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/textentry.cpp
+
 monodll_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(MONODLL_ODEP)
 	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/gtk/treeentry_gtk.c
 
@@ -17527,6 +17544,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_textcmn.o: $(srcdir)/src/common/textcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/textcmn.cpp
 
+@COND_USE_GUI_1@monodll_textentrycmn.o: $(srcdir)/src/common/textentrycmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/textentrycmn.cpp
+
 @COND_USE_GUI_1@monodll_toplvcmn.o: $(srcdir)/src/common/toplvcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/toplvcmn.cpp
 
@@ -18246,6 +18266,9 @@ monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
 
 monolib_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
+
+monolib_textentry.o: $(srcdir)/src/gtk/textentry.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/textentry.cpp
 
 monolib_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(MONOLIB_ODEP)
 	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/gtk/treeentry_gtk.c
@@ -21874,6 +21897,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_textcmn.o: $(srcdir)/src/common/textcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/textcmn.cpp
 
+@COND_USE_GUI_1@monolib_textentrycmn.o: $(srcdir)/src/common/textentrycmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/textentrycmn.cpp
+
 @COND_USE_GUI_1@monolib_toplvcmn.o: $(srcdir)/src/common/toplvcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/toplvcmn.cpp
 
@@ -23919,6 +23945,9 @@ coredll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(COREDLL_ODEP)
 
 coredll_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
+
+coredll_textentry.o: $(srcdir)/src/gtk/textentry.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/textentry.cpp
 
 coredll_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(COREDLL_ODEP)
 	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $(srcdir)/src/gtk/treeentry_gtk.c
@@ -26731,6 +26760,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_textcmn.o: $(srcdir)/src/common/textcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/textcmn.cpp
 
+@COND_USE_GUI_1@coredll_textentrycmn.o: $(srcdir)/src/common/textentrycmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/textentrycmn.cpp
+
 @COND_USE_GUI_1@coredll_toplvcmn.o: $(srcdir)/src/common/toplvcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/toplvcmn.cpp
 
@@ -26892,6 +26924,9 @@ corelib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(CORELIB_ODEP)
 
 corelib_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
+
+corelib_textentry.o: $(srcdir)/src/gtk/textentry.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/textentry.cpp
 
 corelib_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(CORELIB_ODEP)
 	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $(srcdir)/src/gtk/treeentry_gtk.c
@@ -29703,6 +29738,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_textcmn.o: $(srcdir)/src/common/textcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/textcmn.cpp
+
+@COND_USE_GUI_1@corelib_textentrycmn.o: $(srcdir)/src/common/textentrycmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/textentrycmn.cpp
 
 @COND_USE_GUI_1@corelib_toplvcmn.o: $(srcdir)/src/common/toplvcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/toplvcmn.cpp

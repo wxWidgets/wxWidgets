@@ -790,21 +790,23 @@ wxTextCtrl::~wxTextCtrl()
 
 void wxTextCtrl::DoSetValue(const wxString& value, int flags)
 {
-    if ( IsSingleLine() && (value == GetValue()) )
+    if ( value != GetValue() )
     {
-        // nothing changed
-        return;
+        EventsSuppressor noeventsIf(this, !(flags & SetValue_SendEvent));
+
+        Replace(0, GetLastPosition(), value);
+
+        if ( IsSingleLine() )
+        {
+            SetInsertionPoint(0);
+        }
     }
-
-    Replace(0, GetLastPosition(), value);
-
-    if ( IsSingleLine() )
+    else // nothing changed
     {
-        SetInsertionPoint(0);
+        // still send event for consistency
+        if ( flags & SetValue_SendEvent )
+            SendTextUpdatedEvent();
     }
-
-    if ( flags & SetValue_SendEvent )
-        SendTextUpdatedEvent();
 }
 
 const wxArrayString& wxTextCtrl::GetLines() const
@@ -1264,6 +1266,9 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
 
     // now call it to do the rest (not related to refreshing)
     ClearSelection();
+
+    if ( EventsAllowed() )
+        SendTextUpdatedEvent();
 }
 
 void wxTextCtrl::Remove(wxTextPos from, wxTextPos to)

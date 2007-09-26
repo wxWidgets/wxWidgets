@@ -134,6 +134,13 @@ public:
         return m_descriptiveText;
     }
 
+
+    // provide access to the base class protected methods to wxSearchCtrl which
+    // needs to forward to them
+    using wxTextCtrl::DoSetValue;
+    using wxTextCtrl::DoLoadFile;
+    using wxTextCtrl::DoSaveFile;
+
 protected:
     void OnText(wxCommandEvent& eventText)
     {
@@ -334,7 +341,8 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
 #else
     style |= wxBORDER_SIMPLE;
 #endif
-    if ( !wxTextCtrlBase::Create(parent, id, pos, size, style, validator, name) )
+    if ( !wxSearchCtrlBaseBaseClass::Create(parent, id, pos, size,
+                                            style, validator, name) )
     {
         return false;
     }
@@ -897,9 +905,17 @@ wxTextCtrl& operator<<(const wxChar c);
 
 void wxSearchCtrl::DoSetValue(const wxString& value, int flags)
 {
-    m_text->ChangeValue( value );
-    if ( flags & SetValue_SendEvent )
-        SendTextUpdatedEvent();
+    m_text->DoSetValue(value, flags);
+}
+
+bool wxSearchCtrl::DoLoadFile(const wxString& file, int fileType)
+{
+    return m_text->DoLoadFile(file, fileType);
+}
+
+bool wxSearchCtrl::DoSaveFile(const wxString& file, int fileType)
+{
+    return m_text->DoSaveFile(file, fileType);
 }
 
 // do the window-specific processing after processing the update event

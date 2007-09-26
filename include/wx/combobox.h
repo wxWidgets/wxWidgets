@@ -22,51 +22,33 @@ extern WXDLLEXPORT_DATA(const wxChar) wxComboBoxNameStr[];
 // wxComboBoxBase: this interface defines the methods wxComboBox must implement
 // ----------------------------------------------------------------------------
 
-#include "wx/textctrl.h"
 #include "wx/ctrlsub.h"
+#include "wx/textentry.h"
 
-class WXDLLEXPORT wxComboBoxBase : public wxItemContainer
+class WXDLLEXPORT wxComboBoxBase : public wxItemContainer,
+                                   public wxTextEntry
 {
 public:
-    // wxTextCtrl-like methods wxComboBox must implement
-    virtual wxString GetValue() const = 0;
-    virtual void SetValue(const wxString& value) = 0;
+    // override this to disambiguate between two base classes versions
+    virtual void Clear()
+    {
+        wxTextEntry::Clear();
+        wxItemContainer::Clear();
+    }
 
-    virtual void Copy() = 0;
-    virtual void Cut() = 0;
-    virtual void Paste() = 0;
-    virtual void SetInsertionPoint(long pos) = 0;
-    virtual long GetInsertionPoint() const = 0;
-    virtual wxTextPos GetLastPosition() const = 0;
-    virtual void Replace(long from, long to, const wxString& value) = 0;
-    virtual void SetSelection(long from, long to) = 0;
-    virtual void SetEditable(bool editable) = 0;
-
-    virtual void SetInsertionPointEnd()
-        { SetInsertionPoint(GetLastPosition()); }
-    virtual void Remove(long from, long to)
-        { Replace(from, to, wxEmptyString); }
-
-    virtual bool IsEditable() const = 0;
-
-    virtual void Undo() = 0;
-    virtual void Redo() = 0;
-    virtual void SelectAll() = 0;
-
-    virtual bool CanCopy() const = 0;
-    virtual bool CanCut() const = 0;
-    virtual bool CanPaste() const = 0;
-    virtual bool CanUndo() const = 0;
-    virtual bool CanRedo() const = 0;
+    // also bring in GetSelection() versions of both base classes in scope
+    //
+    // NB: GetSelection(from, to) could be already implemented in wxTextEntry
+    //     but still make it pure virtual because for some platforms it's not
+    //     implemented there and also because the derived class has to override
+    //     it anyhow to avoid ambiguity with the other GetSelection()
+    virtual int GetSelection() const = 0;
+    virtual void GetSelection(long *from, long *to) const = 0;
 
     // may return value different from GetSelection() when the combobox
     // dropdown is shown and the user selected, but not yet accepted, a value
     // different from the old one in it
     virtual int GetCurrentSelection() const { return GetSelection(); }
-
-    // redeclare inherited SetSelection() overload here as well to avoid
-    // virtual function hiding
-    virtual void SetSelection(int n) = 0;
 };
 
 // ----------------------------------------------------------------------------
@@ -93,5 +75,4 @@ public:
 
 #endif // wxUSE_COMBOBOX
 
-#endif
-    // _WX_COMBOBOX_H_BASE_
+#endif // _WX_COMBOBOX_H_BASE_

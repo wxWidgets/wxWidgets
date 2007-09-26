@@ -84,7 +84,8 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextStyleDefinition;
  * wxRichTextCtrl class declaration
  */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextCtrl : public wxTextCtrlBase,
+class WXDLLIMPEXP_RICHTEXT wxRichTextCtrl : public wxControl,
+                                            public wxTextCtrlIface,
                                             public wxScrollHelper
 {
     DECLARE_CLASS( wxRichTextCtrl )

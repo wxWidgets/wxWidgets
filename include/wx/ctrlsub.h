@@ -73,7 +73,7 @@ public:
     bool SetStringSelection(const wxString& s);
 
     // return the selected string or empty string if none
-    wxString GetStringSelection() const;
+    virtual wxString GetStringSelection() const;
 
     // this is the same as SetSelection( for single-selection controls but
     // reads better for multi-selection ones

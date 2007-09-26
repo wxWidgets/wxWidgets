@@ -27,7 +27,10 @@
     // no native version, use the generic one
     #define wxUSE_NATIVE_SEARCH_CONTROL 0
 
-    #define wxSearchCtrlBaseBaseClass wxTextCtrlBase
+    class WXDLLIMPEXP_CORE wxSearchCtrlBaseBaseClass : public wxControl,
+                                                       public wxTextCtrlIface
+    {
+    };
 #endif
 
 // ----------------------------------------------------------------------------

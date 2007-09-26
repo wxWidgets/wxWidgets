@@ -34,6 +34,7 @@
     #include "wx/settings.h"
     #include "wx/dialog.h"
     #include "wx/timer.h"
+    #include "wx/textctrl.h"
 #endif
 
 #include "wx/tooltip.h"

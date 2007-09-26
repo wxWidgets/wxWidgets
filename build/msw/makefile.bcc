@@ -1690,6 +1690,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_stockitem.obj \
 	$(OBJS)\monodll_tbarbase.obj \
 	$(OBJS)\monodll_textcmn.obj \
+	$(OBJS)\monodll_textentrycmn.obj \
 	$(OBJS)\monodll_toplvcmn.obj \
 	$(OBJS)\monodll_treebase.obj \
 	$(OBJS)\monodll_valgen.obj \
@@ -1920,6 +1921,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_stockitem.obj \
 	$(OBJS)\monodll_tbarbase.obj \
 	$(OBJS)\monodll_textcmn.obj \
+	$(OBJS)\monodll_textentrycmn.obj \
 	$(OBJS)\monodll_toplvcmn.obj \
 	$(OBJS)\monodll_treebase.obj \
 	$(OBJS)\monodll_valgen.obj \
@@ -2328,6 +2330,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_stockitem.obj \
 	$(OBJS)\monolib_tbarbase.obj \
 	$(OBJS)\monolib_textcmn.obj \
+	$(OBJS)\monolib_textentrycmn.obj \
 	$(OBJS)\monolib_toplvcmn.obj \
 	$(OBJS)\monolib_treebase.obj \
 	$(OBJS)\monolib_valgen.obj \
@@ -2558,6 +2561,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_stockitem.obj \
 	$(OBJS)\monolib_tbarbase.obj \
 	$(OBJS)\monolib_textcmn.obj \
+	$(OBJS)\monolib_textentrycmn.obj \
 	$(OBJS)\monolib_toplvcmn.obj \
 	$(OBJS)\monolib_treebase.obj \
 	$(OBJS)\monolib_valgen.obj \
@@ -2878,6 +2882,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_stockitem.obj \
 	$(OBJS)\coredll_tbarbase.obj \
 	$(OBJS)\coredll_textcmn.obj \
+	$(OBJS)\coredll_textentrycmn.obj \
 	$(OBJS)\coredll_toplvcmn.obj \
 	$(OBJS)\coredll_treebase.obj \
 	$(OBJS)\coredll_valgen.obj \
@@ -3108,6 +3113,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_stockitem.obj \
 	$(OBJS)\coredll_tbarbase.obj \
 	$(OBJS)\coredll_textcmn.obj \
+	$(OBJS)\coredll_textentrycmn.obj \
 	$(OBJS)\coredll_toplvcmn.obj \
 	$(OBJS)\coredll_treebase.obj \
 	$(OBJS)\coredll_valgen.obj \
@@ -3339,6 +3345,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_stockitem.obj \
 	$(OBJS)\corelib_tbarbase.obj \
 	$(OBJS)\corelib_textcmn.obj \
+	$(OBJS)\corelib_textentrycmn.obj \
 	$(OBJS)\corelib_toplvcmn.obj \
 	$(OBJS)\corelib_treebase.obj \
 	$(OBJS)\corelib_valgen.obj \
@@ -3569,6 +3576,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_stockitem.obj \
 	$(OBJS)\corelib_tbarbase.obj \
 	$(OBJS)\corelib_textcmn.obj \
+	$(OBJS)\corelib_textentrycmn.obj \
 	$(OBJS)\corelib_toplvcmn.obj \
 	$(OBJS)\corelib_treebase.obj \
 	$(OBJS)\corelib_valgen.obj \
@@ -6967,6 +6975,11 @@ $(OBJS)\monodll_textcmn.obj: ..\..\src\common\textcmn.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_textentrycmn.obj: ..\..\src\common\textentrycmn.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_toplvcmn.obj: ..\..\src\common\toplvcmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 !endif
@@ -9049,6 +9062,11 @@ $(OBJS)\monolib_tbarbase.obj: ..\..\src\common\tbarbase.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_textcmn.obj: ..\..\src\common\textcmn.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_textentrycmn.obj: ..\..\src\common\textentrycmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
@@ -11184,6 +11202,11 @@ $(OBJS)\coredll_textcmn.obj: ..\..\src\common\textcmn.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_textentrycmn.obj: ..\..\src\common\textentrycmn.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_toplvcmn.obj: ..\..\src\common\toplvcmn.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 !endif
@@ -12483,6 +12506,11 @@ $(OBJS)\corelib_tbarbase.obj: ..\..\src\common\tbarbase.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_textcmn.obj: ..\..\src\common\textcmn.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_textentrycmn.obj: ..\..\src\common\textentrycmn.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 !endif
 

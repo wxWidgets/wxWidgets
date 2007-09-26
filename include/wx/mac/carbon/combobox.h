@@ -96,8 +96,10 @@ class WXDLLEXPORT wxComboBox : public wxControl, public wxComboBoxBase
     virtual void SetString(unsigned int n, const wxString& s);
 
     // Text field functions
-    virtual wxString GetValue() const;
     virtual void SetValue(const wxString& value);
+    virtual wxString GetValue() const;
+    virtual void WriteText(const wxString& text);
+    virtual void GetSelection(long *from, long *to) const;
 
     // Clipboard operations
     virtual void Copy();

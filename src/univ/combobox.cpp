@@ -283,6 +283,11 @@ void wxComboBox::SetValue(const wxString& value)
     wxComboCtrl::SetValue(value);
 }
 
+void wxComboBox::WriteText(const wxString& value)
+{
+    if ( GetTextCtrl() ) GetTextCtrl()->WriteText(value);
+}
+
 void wxComboBox::Copy()
 {
     if ( GetTextCtrl() ) GetTextCtrl()->Copy();
@@ -335,6 +340,11 @@ void wxComboBox::Remove(long from, long to)
 void wxComboBox::SetSelection(long from, long to)
 {
     if ( GetTextCtrl() ) GetTextCtrl()->SetSelection(from, to);
+}
+
+void wxComboBox::GetSelection(long *from, long *to) const
+{
+    if ( GetTextCtrl() ) GetTextCtrl()->GetSelection(from, to);
 }
 
 void wxComboBox::SetEditable(bool editable)
@@ -410,6 +420,11 @@ int wxComboBox::GetSelection() const
     // in the list that it is the item that is selected!
     return FindString(if ( GetTextCtrl() ) GetTextCtrl()->GetValue());
 #endif
+}
+
+wxString wxComboBox::GetStringSelection() const
+{
+    return GetLBox()->GetStringSelection();
 }
 
 void wxComboBox::SetClientDataType(wxClientDataType clientDataItemsType)

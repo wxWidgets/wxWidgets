@@ -822,6 +822,10 @@ SOURCE=..\..\src\common\textcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\textentrycmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\toplvcmn.cpp
 # End Source File
 # Begin Source File
@@ -9410,6 +9414,10 @@ SOURCE=..\..\include\wx\textctrl.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\textdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\textentry.h
 # End Source File
 # Begin Source File
 

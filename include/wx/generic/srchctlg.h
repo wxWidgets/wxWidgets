@@ -203,7 +203,9 @@ public:
 #endif // wxUSE_MENUS
 
 protected:
-    virtual void DoSetValue(const wxString& value, int flags = 0);
+    virtual void DoSetValue(const wxString& value, int flags);
+    virtual bool DoLoadFile(const wxString& file, int fileType);
+    virtual bool DoSaveFile(const wxString& file, int fileType);
 
     // override the base class virtuals involved into geometry calculations
     virtual wxSize DoGetBestSize() const;

@@ -44,6 +44,7 @@ public:
     // implement base class pure virtuals
     // ----------------------------------
 
+    virtual void WriteText(const wxString& text);
     virtual wxString GetValue() const;
     virtual bool IsEmpty() const;
 
@@ -54,30 +55,13 @@ public:
     virtual bool IsModified() const;
     virtual bool IsEditable() const;
 
-    // If the return values from and to are the same, there is no selection.
     virtual void GetSelection(long* from, long* to) const;
 
-    // operations
-    // ----------
-
-    // editing
-    virtual void Clear();
-    virtual void Replace(long from, long to, const wxString& value);
     virtual void Remove(long from, long to);
 
-    // sets/clears the dirty flag
     virtual void MarkDirty();
     virtual void DiscardEdits();
 
-    virtual void SetMaxLength(unsigned long len);
-
-    // writing text inserts it at the current position, appending always
-    // inserts it at the end
-    virtual void WriteText(const wxString& text);
-    virtual void AppendText(const wxString& text);
-
-    // apply text attribute to the range of text (only works with richedit
-    // controls)
     virtual bool SetStyle(long start, long end, const wxTextAttr& style);
 
     // translate between the position (which is just an index in the text ctrl
@@ -101,16 +85,8 @@ public:
     virtual void Cut();
     virtual void Paste();
 
-    // Undo/redo
-    virtual void Undo();
-    virtual void Redo();
-
-    virtual bool CanUndo() const;
-    virtual bool CanRedo() const;
-
     // Insertion point
     virtual void SetInsertionPoint(long pos);
-    virtual void SetInsertionPointEnd();
     virtual long GetInsertionPoint() const;
     virtual wxTextPos GetLastPosition() const;
 
@@ -181,9 +157,15 @@ public:
     bool IsFrozen() const { return m_freezeCount > 0; }
 
 protected:
+    // overridden wxWindow virtual methods
     virtual wxSize DoGetBestSize() const;
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
+
+    // overridden wxTextEntry virtual methods
+    virtual const wxWindow *GetEditableWindow() const { return this; }
+    virtual GtkEditable *GetEditable() const;
+    virtual void EnableTextChangedEvents(bool enable);
 
     // common part of all ctors
     void Init();

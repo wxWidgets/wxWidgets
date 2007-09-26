@@ -161,14 +161,14 @@ void wxTextAttr::operator= (const wxTextAttr& attr)
 bool wxTextCtrlBase::SetStyle(long WXUNUSED(start), long WXUNUSED(end),
                               const wxTextAttr& WXUNUSED(style))
 {
-    // to be implemented in derived TextCtrl classes
+    // to be implemented in derived classes
     return false;
 }
 
 // get the styling at the given position
 bool wxTextCtrlBase::GetStyle(long WXUNUSED(position), wxTextAttr& WXUNUSED(style))
 {
-    // to be implemented in derived TextCtrl classes
+    // to be implemented in derived classes
     return false;
 }
 
@@ -184,12 +184,6 @@ bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
         m_defaultStyle = wxTextAttr::Combine(style, m_defaultStyle, this);
 
     return true;
-}
-
-// get default text attributes
-const wxTextAttr& wxTextCtrlBase::GetDefaultStyle() const
-{
-    return m_defaultStyle;
 }
 
 // ----------------------------------------------------------------------------
@@ -221,7 +215,7 @@ bool wxTextCtrlBase::DoLoadFile(const wxString& filename, int WXUNUSED(fileType)
     return false;
 }
 
-bool wxTextCtrlBase::SaveFile(const wxString& filename, int fileType)
+bool wxTextAreaBase::SaveFile(const wxString& filename, int fileType)
 {
     wxString filenameToUse = filename.empty() ? m_filename : filename;
     if ( filenameToUse.empty() )
@@ -320,42 +314,13 @@ int wxTextCtrlBase::overflow(int c)
 #endif // wxHAS_TEXT_WINDOW_STREAM
 
 // ----------------------------------------------------------------------------
-// clipboard stuff
-// ----------------------------------------------------------------------------
-
-bool wxTextCtrlBase::CanCopy() const
-{
-    // can copy if there's a selection
-    long from, to;
-    GetSelection(&from, &to);
-    return from != to;
-}
-
-bool wxTextCtrlBase::CanCut() const
-{
-    // can cut if there's a selection and if we're not read only
-    return CanCopy() && IsEditable();
-}
-
-bool wxTextCtrlBase::CanPaste() const
-{
-    // can paste if we are not read only
-    return IsEditable();
-}
-
-// ----------------------------------------------------------------------------
 // emulating key presses
 // ----------------------------------------------------------------------------
 
-#ifdef __WIN32__
-// the generic version is unused in wxMSW
-bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& WXUNUSED(event))
-{
-    return false;
-}
-#else // !__WIN32__
 bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
 {
+    // we have a native implementation for Win32 and so don't need this one
+#ifndef __WIN32__
     wxChar ch = 0;
     int keycode = event.GetKeyCode();
     switch ( keycode )
@@ -447,37 +412,9 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
 
         return true;
     }
-
-    return false;
-}
 #endif // !__WIN32__
 
-// ----------------------------------------------------------------------------
-// selection and ranges
-// ----------------------------------------------------------------------------
-
-void wxTextCtrlBase::SelectAll()
-{
-    SetSelection(0, GetLastPosition());
-}
-
-wxString wxTextCtrlBase::GetStringSelection() const
-{
-    long from, to;
-    GetSelection(&from, &to);
-
-    return GetRange(from, to);
-}
-
-wxString wxTextCtrlBase::GetRange(long from, long to) const
-{
-    wxString sel;
-    if ( from < to )
-    {
-        sel = GetValue().Mid(from, to - from);
-    }
-
-    return sel;
+    return false;
 }
 
 // do the window-specific processing after processing the update event
@@ -501,7 +438,7 @@ void wxTextCtrlBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
 // ----------------------------------------------------------------------------
 
 wxTextCtrlHitTestResult
-wxTextCtrlBase::HitTest(const wxPoint& pt, wxTextCoord *x, wxTextCoord *y) const
+wxTextAreaBase::HitTest(const wxPoint& pt, wxTextCoord *x, wxTextCoord *y) const
 {
     // implement in terms of the other overload as the native ports typically
     // can get the position and not (x, y) pair directly (although wxUniv
@@ -518,8 +455,7 @@ wxTextCtrlBase::HitTest(const wxPoint& pt, wxTextCoord *x, wxTextCoord *y) const
 }
 
 wxTextCtrlHitTestResult
-wxTextCtrlBase::HitTest(const wxPoint& WXUNUSED(pt),
-                        long * WXUNUSED(pos)) const
+wxTextAreaBase::HitTest(const wxPoint& WXUNUSED(pt), long * WXUNUSED(pos)) const
 {
     // not implemented
     return wxTE_HT_UNKNOWN;
@@ -529,18 +465,19 @@ wxTextCtrlBase::HitTest(const wxPoint& WXUNUSED(pt),
 // events
 // ----------------------------------------------------------------------------
 
-void wxTextCtrlBase::SendTextUpdatedEvent()
+/* static */
+void wxTextCtrlBase::SendTextUpdatedEvent(wxWindow *win)
 {
-    wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
+    wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, win->GetId());
 
     // do not do this as it could be very inefficient if the text control
     // contains a lot of text and we're not using ref-counted wxString
     // implementation -- instead, event.GetString() will query the control for
     // its current text if needed
-    //event.SetString(GetValue());
+    //event.SetString(win->GetValue());
 
-    event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
+    event.SetEventObject(win);
+    win->GetEventHandler()->ProcessEvent(event);
 }
 
 #else // !wxUSE_TEXTCTRL

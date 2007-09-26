@@ -93,6 +93,7 @@ public:
     // wxTextCtrl methods
     virtual wxString GetValue() const;
     virtual void SetValue(const wxString& value);
+    virtual void WriteText(const wxString& value);
     virtual void Copy();
     virtual void Cut();
     virtual void Paste();
@@ -103,6 +104,7 @@ public:
     virtual void Replace(long from, long to, const wxString& value);
     virtual void Remove(long from, long to);
     virtual void SetSelection(long from, long to);
+    virtual void GetSelection(long *from, long *to) const;
     virtual void SetEditable(bool editable);
     virtual bool IsEditable() const;
 
@@ -125,6 +127,7 @@ public:
     virtual int FindString(const wxString& s, bool bCase = false) const;
     virtual void SetSelection(int n);
     virtual int GetSelection() const;
+    virtual wxString GetStringSelection() const;
 
     wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 

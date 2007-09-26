@@ -27,6 +27,9 @@
 
 ////@begin forward declarations
 class wxSymbolListCtrl;
+
+class WXDLLIMPEXP_CORE wxTextCtrl;
+
 ////@end forward declarations
 
 // __UNICODE__ is a symbol used by DialogBlocks-generated code.

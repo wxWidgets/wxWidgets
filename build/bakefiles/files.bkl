@@ -697,6 +697,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/stockitem.cpp
     src/common/tbarbase.cpp
     src/common/textcmn.cpp
+    src/common/textentrycmn.cpp
     src/common/toplvcmn.cpp
     src/common/treebase.cpp
     src/common/valgen.cpp
@@ -828,6 +829,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/statusbr.h
     wx/textctrl.h
     wx/textdlg.h
+    wx/textentry.h
     wx/toolbar.h
     wx/validate.h
     wx/valtext.h
@@ -1082,6 +1084,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/stattext.cpp
     src/gtk/tbargtk.cpp
     src/gtk/textctrl.cpp
+    src/gtk/textentry.cpp
     src/gtk/tglbtn.cpp
     src/gtk/treeentry_gtk.c
 </set>
@@ -1135,6 +1138,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/stattext.h
     wx/gtk/tbargtk.h
     wx/gtk/textctrl.h
+    wx/gtk/textentry.h
     wx/gtk/tglbtn.h
     wx/gtk/treectrl.h
     wx/gtk/treeentry_gtk.h

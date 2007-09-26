@@ -417,6 +417,16 @@ void wxComboBox::SetValue(const wxString& value)
         m_text->SetValue( value );
 }
 
+void wxComboBox::WriteText(const wxString& text)
+{
+    m_text->WriteText(text);
+}
+
+void wxComboBox::GetSelection(long *from, long *to) const
+{
+    m_text->GetSelection(from, to);
+}
+
 // Clipboard operations
 
 void wxComboBox::Copy()
