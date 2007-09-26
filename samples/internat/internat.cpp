@@ -25,12 +25,13 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/wx.h"
 #endif
 
 #include "wx/intl.h"
 #include "wx/file.h"
 #include "wx/log.h"
+#include "wx/cmdline.h"
 
 #if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__)
 #include "mondrian.xpm"
@@ -44,10 +45,15 @@
 class MyApp: public wxApp
 {
 public:
+    MyApp() { m_lang = wxLANGUAGE_UNKNOWN; }
+
+    virtual void OnInitCmdLine(wxCmdLineParser& parser);
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
     virtual bool OnInit();
 
 protected:
-    wxLocale m_locale; // locale we'll be using
+    wxLanguage m_lang;  // language specified by user
+    wxLocale m_locale;  // locale we'll be using
 };
 
 // Define a new frame type
@@ -163,40 +169,64 @@ IMPLEMENT_APP(MyApp)
 // MyApp
 // ----------------------------------------------------------------------------
 
+// command line arguments handling
+void MyApp::OnInitCmdLine(wxCmdLineParser& parser)
+{
+    parser.AddParam(_("locale"),
+                    wxCMD_LINE_VAL_STRING,
+                    wxCMD_LINE_PARAM_OPTIONAL);
+
+    wxApp::OnInitCmdLine(parser);
+}
+
+bool MyApp::OnCmdLineParsed(wxCmdLineParser& parser)
+{
+    if ( !wxApp::OnCmdLineParsed(parser) )
+        return false;
+
+    if ( parser.GetParamCount() )
+    {
+        const wxString loc = parser.GetParam();
+        const wxLanguageInfo * const lang = wxLocale::FindLanguageInfo(loc);
+        if ( !lang )
+        {
+            wxLogError(_("Locale \"%s\" is unknown."), loc);
+            return false;
+        }
+
+        m_lang = wx_static_cast(wxLanguage, lang->Language);
+    }
+
+    return true;
+}
+
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit()
 {
     if ( !wxApp::OnInit() )
         return false;
 
-    long lng = -1;
-
-    if ( argc == 2 )
+    if ( m_lang == wxLANGUAGE_UNKNOWN )
     {
-        // the parameter must be the lang index
-        wxString tmp(argv[1]);
-        tmp.ToLong(&lng);
+        int lng = wxGetSingleChoiceIndex
+                  (
+                    _("Please choose language:"),
+                    _("Language"),
+                    WXSIZEOF(langNames),
+                    langNames
+                  );
+        m_lang = lng == -1 ? wxLANGUAGE_DEFAULT : langIds[lng];
     }
 
-    if ( lng == -1 )
-    {
-        lng = wxGetSingleChoiceIndex
-              (
-                _T("Please choose language:"),
-                _T("Language"),
-                WXSIZEOF(langNames),
-                langNames
-              );
-    }
-
-    if ( lng != -1 )
+    if ( m_lang != wxLANGUAGE_DEFAULT )
     {
         // don't use wxLOCALE_LOAD_DEFAULT flag so that Init() doesn't return
         // false just because it failed to load wxstd catalog
-        if ( !m_locale.Init(langIds[lng], wxLOCALE_CONV_ENCODING) )
+        if ( !m_locale.Init(m_lang, wxLOCALE_CONV_ENCODING) )
         {
-            wxLogError(_T("This language is not supported by the system."));
-            return false;
+            wxLogWarning(_("This language is not supported by the system."));
+
+            // continue nevertheless
         }
     }
 
