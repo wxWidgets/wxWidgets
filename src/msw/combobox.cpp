@@ -395,7 +395,7 @@ WXHWND wxComboBox::GetEditHWND() const
 {
     // this function should not be called for wxCB_READONLY controls, it is
     // the callers responsability to check this
-    wxASSERT_MSG( !(GetWindowStyle() & wxCB_READONLY),
+    wxASSERT_MSG( !HasFlag(wxCB_READONLY),
                   _T("read-only combobox doesn't have any edit control") );
 
     POINT pt;
@@ -403,7 +403,7 @@ WXHWND wxComboBox::GetEditHWND() const
     HWND hwndEdit = ::ChildWindowFromPoint(GetHwnd(), pt);
     if ( !hwndEdit || hwndEdit == GetHwnd() )
     {
-        wxFAIL_MSG(_T("not read only combobox without edit control?"));
+        wxFAIL_MSG(_T("combobox without edit control?"));
     }
 
     return (WXHWND)hwndEdit;
@@ -502,232 +502,17 @@ WXDWORD wxComboBox::MSWGetStyle(long style, WXDWORD *exstyle) const
 // wxComboBox text control-like methods
 // ----------------------------------------------------------------------------
 
-wxString wxComboBox::GetValue() const
-{
-    return wxGetWindowText(m_hWnd);
-}
-
 void wxComboBox::SetValue(const wxString& value)
 {
     if ( HasFlag(wxCB_READONLY) )
         SetStringSelection(value);
     else
-        SetWindowText(GetHwnd(), value.c_str());
-}
-
-// Clipboard operations
-void wxComboBox::Copy()
-{
-    SendMessage(GetHwnd(), WM_COPY, 0, 0L);
-}
-
-void wxComboBox::Cut()
-{
-    SendMessage(GetHwnd(), WM_CUT, 0, 0L);
-}
-
-void wxComboBox::Paste()
-{
-    SendMessage(GetHwnd(), WM_PASTE, 0, 0L);
-}
-
-void wxComboBox::Undo()
-{
-    if (CanUndo())
-    {
-        HWND hEditWnd = (HWND) GetEditHWND();
-        if ( hEditWnd )
-            ::SendMessage(hEditWnd, EM_UNDO, 0, 0);
-    }
-}
-
-void wxComboBox::Redo()
-{
-    if (CanUndo())
-    {
-        // Same as Undo, since Undo undoes the undo, i.e. a redo.
-        HWND hEditWnd = (HWND) GetEditHWND();
-        if ( hEditWnd )
-            ::SendMessage(hEditWnd, EM_UNDO, 0, 0);
-    }
-}
-
-void wxComboBox::SelectAll()
-{
-    SetSelection(0, GetLastPosition());
-}
-
-bool wxComboBox::CanUndo() const
-{
-    if (!IsEditable())
-        return false;
-
-    HWND hEditWnd = (HWND) GetEditHWND();
-    if ( hEditWnd )
-        return ::SendMessage(hEditWnd, EM_CANUNDO, 0, 0) != 0;
-    else
-        return false;
-}
-
-bool wxComboBox::CanRedo() const
-{
-    if (!IsEditable())
-        return false;
-
-    HWND hEditWnd = (HWND) GetEditHWND();
-    if ( hEditWnd )
-        return ::SendMessage(hEditWnd, EM_CANUNDO, 0, 0) != 0;
-    else
-        return false;
-}
-
-bool wxComboBox::HasSelection() const
-{
-    long from, to;
-    GetSelection(&from, &to);
-    return from != to;
-}
-
-bool wxComboBox::CanCopy() const
-{
-    // Can copy if there's a selection
-    return HasSelection();
-}
-
-bool wxComboBox::CanCut() const
-{
-    return IsEditable() && CanCopy();
-}
-
-bool wxComboBox::CanPaste() const
-{
-    if ( !IsEditable() )
-        return false;
-
-    // Standard edit control: check for straight text on clipboard
-    if ( !::OpenClipboard(GetHwndOf(wxTheApp->GetTopWindow())) )
-        return false;
-
-    bool isTextAvailable = ::IsClipboardFormatAvailable(CF_TEXT) != 0;
-    ::CloseClipboard();
-
-    return isTextAvailable;
+        wxTextEntry::SetValue(value);
 }
 
 bool wxComboBox::IsEditable() const
 {
-    return !HasFlag(wxCB_READONLY);
-}
-
-void wxComboBox::SetEditable(bool editable)
-{
-    HWND hWnd = (HWND)GetEditHWND();
-    if ( !::SendMessage(hWnd, EM_SETREADONLY, !editable, 0) )
-    {
-        wxLogLastError(_T("SendMessage(EM_SETREADONLY)"));
-    }
-}
-
-void wxComboBox::SetInsertionPoint(long pos)
-{
-    if ( GetWindowStyle() & wxCB_READONLY )
-        return;
-
-    HWND hWnd = GetHwnd();
-    ::SendMessage(hWnd, CB_SETEDITSEL, 0, MAKELPARAM(pos, pos));
-    HWND hEditWnd = (HWND) GetEditHWND();
-    if ( hEditWnd )
-    {
-        // Scroll insertion point into view
-        SendMessage(hEditWnd, EM_SCROLLCARET, (WPARAM)0, (LPARAM)0);
-        // Why is this necessary? (Copied from wxTextCtrl::SetInsertionPoint)
-        SendMessage(hEditWnd, EM_REPLACESEL, 0, (LPARAM) wxEmptyString);
-    }
-}
-
-void wxComboBox::SetInsertionPointEnd()
-{
-    // setting insertion point doesn't make sense for read only comboboxes
-    if ( !(GetWindowStyle() & wxCB_READONLY) )
-    {
-        wxTextPos pos = GetLastPosition();
-        SetInsertionPoint(pos);
-    }
-}
-
-long wxComboBox::GetInsertionPoint() const
-{
-    // CB_GETEDITSEL returns the index of the first character of the selection in
-    // its low-order word
-    DWORD pos= (DWORD)::SendMessage(GetHwnd(), CB_GETEDITSEL, 0, 0L);
-    return LOWORD(pos);
-}
-
-wxTextPos wxComboBox::GetLastPosition() const
-{
-    HWND hEditWnd = (HWND) GetEditHWND();
-
-    // Get number of characters in the last (only) line. We'll add this to the character
-    // index for the last line, 1st position.
-    wxTextPos lineLength = (wxTextPos)SendMessage(hEditWnd, EM_LINELENGTH, (WPARAM) 0, (LPARAM)0L);
-
-    return lineLength;
-}
-
-void wxComboBox::Replace(long from, long to, const wxString& value)
-{
-#if wxUSE_CLIPBOARD
-    Remove(from, to);
-
-    // Now replace with 'value', by pasting.
-    wxSetClipboardData(wxDF_TEXT, (wxObject *)value.wx_str(), 0, 0);
-
-    // Paste into edit control
-    SendMessage(GetHwnd(), WM_PASTE, (WPARAM)0, (LPARAM)0L);
-#else
-    wxUnusedVar(from);
-    wxUnusedVar(to);
-    wxUnusedVar(value);
-#endif
-}
-
-void wxComboBox::Remove(long from, long to)
-{
-    // Set selection and remove it
-    SetSelection(from, to);
-    SendMessage(GetHwnd(), WM_CUT, (WPARAM)0, (LPARAM)0);
-}
-
-void wxComboBox::SetSelection(long from, long to)
-{
-    // if from and to are both -1, it means (in wxWidgets) that all text should
-    // be selected, translate this into Windows convention
-    if ( (from == -1) && (to == -1) )
-    {
-        from = 0;
-    }
-
-    if ( SendMessage(GetHwnd(), CB_SETEDITSEL,
-                     0, (LPARAM)MAKELONG(from, to)) == CB_ERR )
-    {
-        wxLogDebug(_T("CB_SETEDITSEL failed"));
-    }
-}
-
-void wxComboBox::GetSelection(long* from, long* to) const
-{
-    DWORD dwStart, dwEnd;
-    if ( ::SendMessage(GetHwnd(), CB_GETEDITSEL,
-                       (WPARAM)&dwStart, (LPARAM)&dwEnd) == CB_ERR )
-    {
-        *from =
-        *to = 0;
-    }
-    else
-    {
-        *from = dwStart;
-        *to = dwEnd;
-    }
+    return !HasFlag(wxCB_READONLY) && wxTextEntry::IsEditable();
 }
 
 // ----------------------------------------------------------------------------

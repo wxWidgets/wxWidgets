@@ -180,6 +180,8 @@ private:
 
 #ifdef __WXGTK20__
     #include "wx/gtk/textentry.h"
+#elif defined(__WXMSW__)
+    #include "wx/msw/textentry.h"
 #else
     // no platform-specific implementation of wxTextEntry yet
     class WXDLLIMPEXP_CORE wxTextEntry : public wxTextEntryBase

@@ -468,7 +468,7 @@ wxTextAreaBase::HitTest(const wxPoint& WXUNUSED(pt), long * WXUNUSED(pos)) const
 // ----------------------------------------------------------------------------
 
 /* static */
-void wxTextCtrlBase::SendTextUpdatedEvent(wxWindow *win)
+bool wxTextCtrlBase::SendTextUpdatedEvent(wxWindow *win)
 {
     wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, win->GetId());
 
@@ -479,7 +479,7 @@ void wxTextCtrlBase::SendTextUpdatedEvent(wxWindow *win)
     //event.SetString(win->GetValue());
 
     event.SetEventObject(win);
-    win->GetEventHandler()->ProcessEvent(event);
+    return win->GetEventHandler()->ProcessEvent(event);
 }
 
 #else // !wxUSE_TEXTCTRL

@@ -41,44 +41,41 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxTextCtrlNameStr);
 
-    // implement base class pure virtuals
-    // ----------------------------------
+    // overridden wxTextEntry methods
+    // ------------------------------
 
     virtual wxString GetValue() const;
+    virtual wxString GetRange(long from, long to) const;
+
     virtual bool IsEmpty() const;
 
-    virtual wxString GetRange(long from, long to) const;
+    virtual void WriteText(const wxString& text);
+    virtual void AppendText(const wxString& text);
+    virtual void Clear();
 
     virtual int GetLineLength(long lineNo) const;
     virtual wxString GetLineText(long lineNo) const;
     virtual int GetNumberOfLines() const;
 
-    virtual bool IsModified() const;
-    virtual bool IsEditable() const;
-
-    virtual void GetSelection(long* from, long* to) const;
-
-    // operations
-    // ----------
-
-    // editing
-    virtual void Clear();
-    virtual void Replace(long from, long to, const wxString& value);
-    virtual void Remove(long from, long to);
-
-    // load the control's contents from the file
-    virtual bool DoLoadFile(const wxString& file, int fileType);
-
-    // clears the dirty flag
-    virtual void MarkDirty();
-    virtual void DiscardEdits();
-
     virtual void SetMaxLength(unsigned long len);
 
-    // writing text inserts it at the current position, appending always
-    // inserts it at the end
-    virtual void WriteText(const wxString& text);
-    virtual void AppendText(const wxString& text);
+    virtual void GetSelection(long *from, long *to) const;
+
+    virtual void Redo();
+    virtual bool CanRedo() const;
+
+    virtual void SetInsertionPointEnd();
+    virtual long GetInsertionPoint() const;
+    virtual wxTextPos GetLastPosition() const;
+
+    // implement base class pure virtuals
+    // ----------------------------------
+
+    virtual bool DoLoadFile(const wxString& file, int fileType);
+
+    virtual bool IsModified() const;
+    virtual void MarkDirty();
+    virtual void DiscardEdits();
 
 #ifdef __WIN32__
     virtual bool EmulateKeyPress(const wxKeyEvent& event);
@@ -107,33 +104,7 @@ public:
         return wxTextCtrlBase::HitTest(pt, col, row);
     }
 
-    // Clipboard operations
-    virtual void Copy();
-    virtual void Cut();
-    virtual void Paste();
-
-    virtual bool CanCopy() const;
-    virtual bool CanCut() const;
-    virtual bool CanPaste() const;
-
-    // Undo/redo
-    virtual void Undo();
-    virtual void Redo();
-
-    virtual bool CanUndo() const;
-    virtual bool CanRedo() const;
-
-    // Insertion point
-    virtual void SetInsertionPoint(long pos);
-    virtual void SetInsertionPointEnd();
-    virtual long GetInsertionPoint() const;
-    virtual wxTextPos GetLastPosition() const;
-
-    virtual void SetSelection(long from, long to);
-    virtual void SetEditable(bool editable);
-
     // Caret handling (Windows only)
-
     bool ShowNativeCaret(bool show = true);
     bool HideNativeCaret() { return ShowNativeCaret(false); }
 
@@ -172,7 +143,7 @@ public:
 
     virtual void AdoptAttributesFromHWND();
 
-    virtual bool AcceptsFocus() const;
+    virtual bool AcceptsFocusFromKeyboard() const;
 
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const;
@@ -227,6 +198,10 @@ protected:
 
     virtual void DoSetValue(const wxString &value, int flags = 0);
 
+    // implement wxTextEntry pure virtual: it implements all the operations for
+    // the simple EDIT controls
+    virtual WXHWND GetEditHWND() const { return m_hWnd; }
+
     // return true if this control has a user-set limit on amount of text (i.e.
     // the limit is due to a previous call to SetMaxLength() and not built in)
     bool HasSpaceLimit(unsigned int *len) const;
@@ -252,8 +227,8 @@ protected:
     void DoWriteText(const wxString& text,
                      int flags = SetValue_SendEvent | SetValue_SelectionOnly);
 
-    // set the selection possibly without scrolling the caret into view
-    void DoSetSelection(long from, long to, bool scrollCaret = true);
+    // set the selection (possibly without scrolling the caret into view)
+    void DoSetSelection(long from, long to, int flags);
 
     // return true if there is a non empty selection in the control
     bool HasSelection() const;
@@ -278,6 +253,11 @@ protected:
     // text ourselves: we want this to be exactly 1
     int m_updatesCount;
 
+    virtual void EnableTextChangedEvents(bool enable)
+    {
+        m_updatesCount = enable ? -1 : -2;
+    }
+
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxTextCtrl)
@@ -292,5 +272,4 @@ private:
 
 };
 
-#endif
-    // _WX_TEXTCTRL_H_
+#endif // _WX_TEXTCTRL_H_

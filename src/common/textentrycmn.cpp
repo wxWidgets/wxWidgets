@@ -29,6 +29,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/textentry.h"
+#include "wx/clipbrd.h"
 
 // ============================================================================
 // wxTextEntryBase implementation
@@ -97,7 +98,16 @@ bool wxTextEntryBase::CanCut() const
 
 bool wxTextEntryBase::CanPaste() const
 {
-    return IsEditable();
+    if ( IsEditable() )
+    {
+#if wxUSE_CLIPBOARD
+        // check if there is any text on the clipboard
+        if ( wxTheClipboard->IsSupported(wxDF_TEXT) )
+            return true;
+#endif // wxUSE_CLIPBOARD
+    }
+
+    return false;
 }
 
 #endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX
