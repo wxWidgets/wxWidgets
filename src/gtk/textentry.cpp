@@ -24,6 +24,8 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/window.h"
+    #include "wx/textctrl.h"
 #endif //WX_PRECOMP
 
 #include "wx/textentry.h"
