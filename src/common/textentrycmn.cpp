@@ -26,6 +26,8 @@
 #if wxUSE_TEXTCTRL || wxUSE_COMBOBOX
 
 #ifndef WX_PRECOMP
+    #include "wx/window.h"
+    #include "wx/dataobj.h"
 #endif //WX_PRECOMP
 
 #include "wx/textentry.h"
