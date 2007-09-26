@@ -412,7 +412,9 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
 
         return true;
     }
-#endif // !__WIN32__
+#else // __WIN32__
+    wxUnusedVar(event);
+#endif // !__WIN32__/__WIN32__
 
     return false;
 }
