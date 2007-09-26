@@ -1642,6 +1642,8 @@ static const char *wxSetlocaleTryUTF8(int c, const wxString& lc)
 
 bool wxLocale::Init(int language, int flags)
 {
+    bool ret = true;
+
     int lang = language;
     if (lang == wxLANGUAGE_DEFAULT)
     {
@@ -1729,10 +1731,7 @@ bool wxLocale::Init(int language, int flags)
     }
 
     if ( !retloc )
-    {
-        wxLogError(wxT("Cannot set locale to '%s'."), locale.c_str());
-        return false;
-    }
+        ret = false;
 
 #ifdef __AIX__
     // at least in AIX 5.2 libc is buggy and the string returned from
@@ -1798,8 +1797,7 @@ bool wxLocale::Init(int language, int flags)
             if (locale.empty())
             {
                 wxLogLastError(wxT("SetThreadLocale"));
-                wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
-                return false;
+                ret = false;
             }
             else
             {
@@ -1839,10 +1837,7 @@ bool wxLocale::Init(int language, int flags)
     }
 
     if ( !retloc )
-    {
-        wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
-        return false;
-    }
+        ret = false;
 #elif defined(__WXMAC__)
     if (lang == wxLANGUAGE_DEFAULT)
         locale = wxEmptyString;
@@ -1856,11 +1851,6 @@ bool wxLocale::Init(int language, int flags)
         // Some C libraries don't like xx_YY form and require xx only
         retloc = wxSetlocale(LC_ALL, locale.Mid(0,2));
     }
-    if ( !retloc )
-    {
-        wxLogError(wxT("Cannot set locale to '%s'."), locale.c_str());
-        return false;
-    }
 #else
     wxUnusedVar(flags);
     return false;
@@ -1868,9 +1858,20 @@ bool wxLocale::Init(int language, int flags)
 #endif
 
 #ifndef WX_NO_LOCALE_SUPPORT
-    bool ret = Init(name, canonical, retloc,
-                    (flags & wxLOCALE_LOAD_DEFAULT) != 0,
-                    (flags & wxLOCALE_CONV_ENCODING) != 0);
+    if ( !ret )
+    {
+        wxLogWarning(_("Cannot set locale to language \"%s\"."), name.c_str());
+
+        // continue nevertheless and try to load at least the translations for
+        // this language
+    }
+
+    if ( !Init(name, canonical, retloc,
+               (flags & wxLOCALE_LOAD_DEFAULT) != 0,
+               (flags & wxLOCALE_CONV_ENCODING) != 0) )
+    {
+        ret = false;
+    }
 
     if (IsOk()) // setlocale() succeeded
         m_language = lang;
