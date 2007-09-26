@@ -32,6 +32,7 @@
     #include "wx/combobox.h"
     #include "wx/dcclient.h"
     #include "wx/settings.h"
+    #include "wx/textctrl.h"
 #endif
 
 #include "wx/dcbuffer.h"
