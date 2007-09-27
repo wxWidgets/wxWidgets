@@ -72,6 +72,7 @@ public:
 
     // resolve ambiguities among virtual functions inherited from both base
     // classes
+    virtual void Clear();
     virtual void SetValue(const wxString& value);
     virtual wxString GetStringSelection() const
         { return wxChoice::GetStringSelection(); }

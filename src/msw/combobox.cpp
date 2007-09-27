@@ -510,6 +510,13 @@ void wxComboBox::SetValue(const wxString& value)
         wxTextEntry::SetValue(value);
 }
 
+void wxComboBox::Clear()
+{
+    wxChoice::Clear();
+    if ( !HasFlag(wxCB_READONLY) )
+        wxTextEntry::Clear();
+}
+
 bool wxComboBox::IsEditable() const
 {
     return !HasFlag(wxCB_READONLY) && wxTextEntry::IsEditable();
