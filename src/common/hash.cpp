@@ -406,7 +406,7 @@ void wxHashTable::DoCopy(const wxHashTable& table)
       hash_table[i] = NULL;
     else {
       hash_table[i] = new wxList(key_type);
-      *(hash_table[i]) = *(table.hash_table[i]);
+      hash_table[i]->Assign(*(table.hash_table[i]));
     }
   }
 }
