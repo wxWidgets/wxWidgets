@@ -2898,7 +2898,7 @@ void wxWindowGTK::DoGetPosition( int *x, int *y ) const
 
     int dx = 0;
     int dy = 0;
-    if (m_parent && m_parent->m_wxwindow)
+    if (!IsTopLevel() && m_parent && m_parent->m_wxwindow)
     {
         GtkPizza *pizza = GTK_PIZZA(m_parent->m_wxwindow);
         dx = gtk_pizza_get_xoffset( pizza );
