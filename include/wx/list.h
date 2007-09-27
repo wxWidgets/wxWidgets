@@ -1182,7 +1182,7 @@ public:
 
 #if !wxUSE_STL
     wxList& operator=(const wxList& list)
-        { (void) wxListBase::operator=(list); return *this; }
+        { Assign(list); return *this; }
 
     // compatibility methods
     void Sort(wxSortCompareFunction compfunc) { wxListBase::Sort(compfunc); }
