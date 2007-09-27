@@ -1641,6 +1641,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/tabctrl.cpp
     src/msw/tbar95.cpp
     src/msw/textctrl.cpp
+    src/msw/textentry.cpp
     src/msw/tglbtn.cpp
     src/msw/treectrl.cpp
 </set>
@@ -1723,6 +1724,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/tabctrl.h
     wx/msw/tbar95.h
     wx/msw/textctrl.h
+    wx/msw/textentry.h
     wx/msw/tglbtn.h
     wx/msw/tooltip.h
     wx/msw/toplevel.h

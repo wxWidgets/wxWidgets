@@ -3818,6 +3818,69 @@ SOURCE=..\..\src\msw\textctrl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\textentry.cpp
+
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\tglbtn.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
@@ -8190,6 +8253,10 @@ SOURCE=..\..\include\wx\msw\tbar95.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\textctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\textentry.h
 # End Source File
 # Begin Source File
 

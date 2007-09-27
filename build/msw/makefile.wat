@@ -305,6 +305,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_tabctrl.obj &
 	$(OBJS)\monodll_tbar95.obj &
 	$(OBJS)\monodll_textctrl.obj &
+	$(OBJS)\monodll_textentry.obj &
 	$(OBJS)\monodll_tglbtn.obj &
 	$(OBJS)\monodll_treectrl.obj &
 	$(OBJS)\monodll_checklst.obj &
@@ -956,6 +957,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_tabctrl.obj &
 	$(OBJS)\monolib_tbar95.obj &
 	$(OBJS)\monolib_textctrl.obj &
+	$(OBJS)\monolib_textentry.obj &
 	$(OBJS)\monolib_tglbtn.obj &
 	$(OBJS)\monolib_treectrl.obj &
 	$(OBJS)\monolib_checklst.obj &
@@ -1535,6 +1537,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_tabctrl.obj &
 	$(OBJS)\coredll_tbar95.obj &
 	$(OBJS)\coredll_textctrl.obj &
+	$(OBJS)\coredll_textentry.obj &
 	$(OBJS)\coredll_tglbtn.obj &
 	$(OBJS)\coredll_treectrl.obj &
 	$(OBJS)\coredll_checklst.obj &
@@ -2008,6 +2011,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_tabctrl.obj &
 	$(OBJS)\corelib_tbar95.obj &
 	$(OBJS)\corelib_textctrl.obj &
+	$(OBJS)\corelib_textentry.obj &
 	$(OBJS)\corelib_tglbtn.obj &
 	$(OBJS)\corelib_treectrl.obj &
 	$(OBJS)\corelib_checklst.obj &
@@ -6050,6 +6054,9 @@ $(OBJS)\monodll_tabctrl.obj :  .AUTODEPEND ..\..\src\msw\tabctrl.cpp
 $(OBJS)\monodll_tbar95.obj :  .AUTODEPEND ..\..\src\msw\tbar95.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_textentry.obj :  .AUTODEPEND ..\..\src\msw\textentry.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -8239,6 +8246,9 @@ $(OBJS)\monolib_tabctrl.obj :  .AUTODEPEND ..\..\src\msw\tabctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_tbar95.obj :  .AUTODEPEND ..\..\src\msw\tbar95.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_textentry.obj :  .AUTODEPEND ..\..\src\msw\textentry.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
@@ -10810,6 +10820,9 @@ $(OBJS)\coredll_tabctrl.obj :  .AUTODEPEND ..\..\src\msw\tabctrl.cpp
 $(OBJS)\coredll_tbar95.obj :  .AUTODEPEND ..\..\src\msw\tbar95.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_textentry.obj :  .AUTODEPEND ..\..\src\msw\textentry.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -12216,6 +12229,9 @@ $(OBJS)\corelib_tabctrl.obj :  .AUTODEPEND ..\..\src\msw\tabctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_tbar95.obj :  .AUTODEPEND ..\..\src\msw\tbar95.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_textentry.obj :  .AUTODEPEND ..\..\src\msw\textentry.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
