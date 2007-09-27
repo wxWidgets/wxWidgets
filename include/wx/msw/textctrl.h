@@ -230,9 +230,6 @@ protected:
     // set the selection (possibly without scrolling the caret into view)
     void DoSetSelection(long from, long to, int flags);
 
-    // return true if there is a non empty selection in the control
-    bool HasSelection() const;
-
     // get the length of the line containing the character at the given
     // position
     long GetLengthOfLineContainingPos(long pos) const;
