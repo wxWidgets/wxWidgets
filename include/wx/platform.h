@@ -591,6 +591,15 @@
 #    define wxSTD
 #endif
 
+/* On OpenVMS with the most recent HP C++ compiler some function (i.e. wscanf)
+ * are only available in the std-namespace. (BUG???)
+ */
+#if defined(  __VMS ) && (__DECCXX_VER >= 70100000) && !defined(__STD_CFRONT) && !defined( __NONAMESPACE_STD )
+# define wxVMS_USE_STD std::
+#else
+# define wxVMS_USE_STD
+#endif
+
 /* Choose which method we will use for updating menus
  * - in OnIdle, or when we receive a wxEVT_MENU_OPEN event.
  * Presently, only Windows and GTK+ support wxEVT_MENU_OPEN.

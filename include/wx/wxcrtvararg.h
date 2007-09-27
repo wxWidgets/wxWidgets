@@ -225,24 +225,10 @@
     int wxCRT_FscanfW(FILE *stream, const wchar_t *format, ...);
     int wxCRT_VsscanfW(const wchar_t *str, const wchar_t *format, va_list ap);
 #else
-#ifdef __VMS
-#if (__DECCXX_VER >= 70100000) && !defined(__STD_CFRONT) && !defined( __NONAMESPACE_STD )
-# define wxCRT_ScanfW     std::wscanf
-# define wxCRT_SscanfW    std::swscanf
-# define wxCRT_FscanfW    std::fwscanf
-# define wxCRT_VsscanfW   std::vswscanf
-#else
-    #define wxCRT_ScanfW     wscanf
-    #define wxCRT_SscanfW    swscanf
-    #define wxCRT_FscanfW    fwscanf
-    #define wxCRT_VsscanfW   vswscanf
-#endif
-#else
-    #define wxCRT_ScanfW     wscanf
-    #define wxCRT_SscanfW    swscanf
-    #define wxCRT_FscanfW    fwscanf
-    #define wxCRT_VsscanfW   vswscanf
-#endif
+    #define wxCRT_ScanfW     wxVMS_USE_STD wscanf
+    #define wxCRT_SscanfW    wxVMS_USE_STD swscanf
+    #define wxCRT_FscanfW    wxVMS_USE_STD fwscanf
+    #define wxCRT_VsscanfW   wxVMS_USE_STD vswscanf
 #endif
 
 // ----------------------------------------------------------------------------
