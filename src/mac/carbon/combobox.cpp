@@ -20,6 +20,7 @@
     #include "wx/menu.h"
     #include "wx/containr.h"
     #include "wx/toplevel.h"
+    #include "wx/textctrl.h"
 #endif
 
 #include "wx/mac/uma.h"
