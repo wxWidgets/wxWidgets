@@ -446,8 +446,8 @@ void wxPostScriptDC::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
         PsPrintf( wxT("newpath\n")
                   wxT("%d %d %d %d %d %d ellipse\n")
                   wxT("%d %d lineto\n")
-                  wxT("stroke\n")
-                  wxT("fill\n"),
+                  wxT("closepath\n")
+                  wxT("stroke\n"),
                 LogicalToDeviceX(xc), LogicalToDeviceY(yc), LogicalToDeviceXRel(radius), LogicalToDeviceYRel(radius), (wxCoord)alpha1, (wxCoord) alpha2,
                 LogicalToDeviceX(xc), LogicalToDeviceY(yc) );
 
