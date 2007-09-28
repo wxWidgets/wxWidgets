@@ -75,7 +75,8 @@ void wxTextEntry::Undo()
 void wxTextEntry::Redo()
 {
     // same as Undo, since Undo undoes the undo
-    return Undo();
+    Undo();
+    return;
 }
 
 bool wxTextEntry::CanUndo() const
