@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Name:       example.xml
+    Purpose:    Buildbot example configuration.
+    Author:     Mike Wetherell
+    RCS-ID:     $Id$
+    Copyright:  (c) 2007 Mike Wetherell
+    Licence:    wxWidgets licence
+
+    There is one xml file such as this per build slave containing a <build>
+    element for each build the slave runs. Each <build> corresponds to a
+    column in the waterfall display.
+-->
+
+<bot xmlns:xi="http://www.w3.org/2001/XInclude"
+     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+     xmlns:exsl="http://exslt.org/common"
+     xsl:version="1.0">
+
+<!--
+    Common declarations.
+-->
+<xi:include href="include.xml" xpointer="xpointer(*/*)"/>
+
+<!--
+    Notes:
+
+    The elements marked 'Unique' below must be unique across all builds on
+    all slaves.
+
+    If a build is currently failing because of something other than a bug in
+    wxWidgets, e.g. out of space or missing libs, then comment it out, or
+    add '** Ignore **' to the beginning of the <name>, so that wxWidgets
+    developers know not to waste time investigating.
+-->
+<build>
+    <!--
+        Unique. Appears as the title in the waterfall display.
+    -->
+    <name>Linux x86_64 wxGTK Stable</name>
+
+    <!--
+        Unique. The name of a directory for the bulid. On most slaves must
+        be a single name, on the Testdrive builds it must be a path such as
+        '/tmp/wx/td_gtk'.
+    -->
+    <builddir>example_gtk</builddir>
+
+    <!--
+        The name of a scheduler that will trigger this build. The schedulers
+        are usually defined in common.xml, look in there to see if there is
+        already one you can use, and add a new one if not.
+ 
+        The 'trunk_quick' and 'stable_quick' schedulers currently in
+        common.xml trigger a build after every source change on the trunk
+        and stable branches respectively. There are also daily and weekly
+        schedulers 'daily_6am', 'monday_6am', 'tuesday_6am' and so on.
+
+        The <scheduler> element can be omitted, in which case the build
+        never runs automatically, but can still be triggered manually.
+        Or you can use several, e.g. you could use two weekly schedulers
+        that fire on different days to have a build run twice a week.
+    -->
+    <scheduler>trunk_quick</scheduler>
+
+    <!--
+        The meaning of <sandbox> is specific to the build slave. There
+        should be a comment in the slave's configuration file saying if they
+        are allowed or required. On the testdrive it specifies the remote
+        machine that will run the bulid.
+    -->
+    <sandbox>debug</sandbox>
+
+    <!--
+        You can override the make command the compile steps will use using
+        this <make> element, if omitted defaults to 'make'. For Windows
+        builds this becomes the place to put build options as there is no
+        configure step.
+    -->
+    <make>nmake -f makefile.vc SHARED=1 CPPUNIT_CFLAGS=-I\cppunit\include CPPUNIT_LIBS=cppunit.lib</make>
+
+    <!--
+        The build steps.
+    -->
+    <steps>
+        <!--
+            Check out the sources, by default the trunk branch. Or for a
+            particular branch or tag, e.g.:
+                <checkout branch="{$STABLE_BRANCH}"/>
+                <checkout branch="branches/WX_2_6_BRANCH"/>
+        -->
+        <checkout/>
+
+        <!--
+            A <shellcommand> build step can be used anywhere you need to run
+            arbitrary commands not covered by the standard build steps.
+            <haltOnFailure/> specifies that the whole build fails if this
+            step fails, without it it continues with the next step anyway.
+        -->
+        <shellcommand>
+            <description>setting up</description>
+            <descriptionDone>set up</descriptionDone>
+            <haltOnFailure/>
+            <command>setup-script</command>
+        </shellcommand>
+
+        <!--
+            Configure. Options and environment variables can be added with
+            the 'options' attribute:
+                <configure options="-with-foobar CC=cc CXX=CC"/>
+            Omitted for Windows builds.
+        -->
+        <configure/>
+
+        <!--
+            Compile the library. For Windows builds use <compile-msw/>
+            instead which runs the make command in the 'build\msw'
+            subdirectory instead of the wxWidgets root.
+        -->
+        <compile/>
+
+        <!--
+            Compile subdirectories. There is also <compile-contrib/> for
+            branches that have contrib.
+        -->
+        <compile-samples/>
+        <compile-utils/>
+        <compile-tests/>
+
+        <!--
+            Run the test suites. For Windows builds the command to run the
+            test suite must be overridden, e.g.:
+                <run-tests>
+                    <command>PATH=..\lib\vc_dll;%PATH%</command>
+                    <command>cd tests</command>
+                    <command>vc_msw\test</command>
+                    <command>vc_msw\test_gui</command>
+                </run-tests>
+        -->
+        <run-tests/>
+    </steps>
+</build>
+
+</bot>

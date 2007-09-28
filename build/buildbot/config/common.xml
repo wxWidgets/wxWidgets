@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Name:       common.xml
+    Purpose:    Schedulers and locks common to all slaves.
+    Author:     Mike Wetherell
+    RCS-ID:     $Id$
+    Copyright:  (c) 2007 Mike Wetherell
+    Licence:    wxWidgets licence
+-->
+
+<bot xmlns:xi="http://www.w3.org/2001/XInclude"
+     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+     xmlns:exsl="http://exslt.org/common"
+     xsl:version="1.0">
+
+<xi:include href="include.xml" xpointer="xpointer(*/*)"/>
+
+<!--
+    Quick schedulers. Builds using these are triggered after each change to
+    the sources on the given branch.
+    
+    name:               unique 
+    branch:             branch to watch 
+    treeStableTimer:    wait until the tree has stopped changing for the
+                        given number of seconds before firing
+    fileNotImportant:   files matching these patterns do not trigger a build 
+-->
+
+<scheduler>
+    <name>trunk_quick</name>
+    <branch>trunk</branch>
+    <treeStableTimer>900</treeStableTimer>
+    <fileNotImportant>doc/*</fileNotImportant>
+</scheduler>
+
+<scheduler>
+    <name>stable_quick</name>
+    <branch><STABLE_BRANCH/></branch>
+    <treeStableTimer>900</treeStableTimer>
+    <fileNotImportant>doc/*</fileNotImportant>
+</scheduler>
+
+<!--
+    Schedulers that fire once a week.
+
+    A build can use one of these to be triggered once a week, or more than
+    one if it should run several times a week on particular days.
+-->
+
+<nightly>
+    <name>sunday_6am</name>
+    <hour>6</hour>
+    <dayOfWeek>0</dayOfWeek>
+</nightly>
+
+<nightly>
+    <name>monday_6am</name>
+    <hour>6</hour>
+    <dayOfWeek>1</dayOfWeek>
+</nightly>
+
+<nightly>
+    <name>tuesday_6am</name>
+    <hour>6</hour>
+    <dayOfWeek>2</dayOfWeek>
+</nightly>
+
+<nightly>
+    <name>wednesday_6am</name>
+    <hour>6</hour>
+    <dayOfWeek>3</dayOfWeek>
+</nightly>
+
+<nightly>
+    <name>thursday_6am</name>
+    <hour>6</hour>
+    <dayOfWeek>4</dayOfWeek>
+</nightly>
+
+<nightly>
+    <name>friday_6am</name>
+    <hour>6</hour>
+    <dayOfWeek>5</dayOfWeek>
+</nightly>
+
+<nightly>
+    <name>saturday_6am</name>
+    <hour>6</hour>
+    <dayOfWeek>6</dayOfWeek>
+</nightly>
+
+<!--
+    Schedulers for daily builds.
+-->
+
+<nightly>
+    <name>daily_6am</name>
+    <hour>6</hour>
+</nightly>
+
+<!--
+    Track SVN changes using the wx-cvs mailing list.
+    The <prefix> is subtracted from the paths in the 'Modified Files:'
+    section, the remainder is then assumed to give the branch and filename.
+-->
+
+<svnmaildirsource>
+    <prefix>wxWidgets</prefix>
+</svnmaildirsource>
+
+</bot>

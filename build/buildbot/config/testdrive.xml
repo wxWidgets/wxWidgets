@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Name:       testdrive.xml
+    Purpose:    Buildbot configuration for the HP Testdrive.
+    Author:     Mike Wetherell
+    RCS-ID:     $Id$
+    Copyright:  (c) 2007 Mike Wetherell
+    Licence:    wxWidgets licence
+-->
+
+<bot xmlns:xi="http://www.w3.org/2001/XInclude"
+     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+     xmlns:exsl="http://exslt.org/common"
+     xsl:version="1.0">
+
+<xi:include href="testdrive-inc.xml" xpointer="xpointer(*/*)"/>
+
+<!--
+    Notes:
+
+    The list of available machines is here:
+        http://www.testdrive.hp.com/current.shtml
+    Currently only unix hosts are supported, with hopefully one or more
+    Windows machines to follow.
+
+    <sandbox> specifies the remote machine that will run the job, or it can
+    be 'debug' in which case the sandbox will just echo the commands.
+
+    <builddir> specifies an absolute path on the remote machine for the
+    build, rather than the usual single directory name. The last component
+    also specifies a subdirectory on the master for logs, which as usual
+    must be unique across all slaves.
+
+    An extra build step <setup> is required after <checkout> to set up
+    prerequisites such as ccache and cppunit. Cppunit generally needs to be
+    compiled by the same compiler that will be used for wxWidgets, add
+    configure options using the 'cppunit-options' attribute when needed, e.g.:
+        <setup cppunit-options="CC=cc CXX=CC"/>
+
+    Cross compilers available on the Linux x86 machines (more coming):
+        powerpc-apple-darwin8
+        i686-apple-darwin8
+
+    Please limit the number of quick builds to one unix, one Windows and one
+    Mac per branch. And please don't load up all the cpus of a remote machine
+    at once with make -j.
+-->
+
+<build>
+    <name>Linux x86_64 wxGTK Trunk</name>
+    <sandbox>td162.testdrive.hp.com</sandbox>
+    <builddir>/tmp/wx/td_gtk</builddir>
+    <scheduler>trunk_quick</scheduler>
+
+    <steps>
+        <checkout/>
+
+        <setup/>
+        <configure/>
+
+        <compile/>
+        <compile-samples/>
+        <compile-utils/>
+        <compile-tests/>
+
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x86_64 wxGTK Stable</name>
+    <sandbox>td166.testdrive.hp.com</sandbox>
+    <builddir>/tmp/wx/td_gtk_stable</builddir>
+    <scheduler>stable_quick</scheduler>
+
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
+
+        <setup/>
+        <configure/>
+
+        <compile/>
+        <compile-samples/>
+        <compile-utils/>
+        <compile-contrib/>
+        <compile-tests/>
+
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>OSX PowerPC wxMac Trunk</name>
+    <sandbox>td179.testdrive.hp.com</sandbox>
+    <builddir>/tmp/wx/td_mac</builddir>
+    <scheduler>trunk_quick</scheduler>
+
+    <steps>
+        <checkout/>
+
+        <setup cppunit-options="--host=powerpc-apple-darwin8"/>
+        <configure options="--host=powerpc-apple-darwin8"/>
+
+        <compile/>
+        <compile-samples/>
+        <compile-utils/>
+        <compile-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>OSX Intel wxMac Stable</name>
+    <sandbox>td186.testdrive.hp.com</sandbox>
+    <builddir>/tmp/wx/td_mac_stable</builddir>
+    <scheduler>stable_quick</scheduler>
+
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
+
+        <setup cppunit-options="--host=i686-apple-darwin8"/>
+        <configure options="--host=i686-apple-darwin8"/>
+
+        <compile/>
+        <compile-samples/>
+        <compile-utils/>
+        <compile-contrib/>
+        <compile-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>FreeBSD x86 wxX11 Stable</name>
+    <sandbox>td152.testdrive.hp.com</sandbox>
+    <builddir>/tmp/wx/td_freebsd_stable</builddir>
+    <scheduler>daily_6am</scheduler>
+
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
+
+        <setup/>
+        <configure options="--with-x11"/>
+
+        <compile/>
+        <compile-samples/>
+        <compile-utils/>
+        <compile-contrib/>
+        <compile-tests/>
+
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>HP-UX 11i PA-RISC gcc wxMotif Stable</name>
+    <sandbox>td192.testdrive.hp.com</sandbox>
+    <builddir>/tmp/wx/td_hpux_pa_stable</builddir>
+    <scheduler>daily_6am</scheduler>
+
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
+
+        <setup/>
+        <configure/>
+
+        <compile/>
+        <compile-samples/>
+        <compile-utils/>
+        <compile-contrib/>
+        <compile-tests/>
+
+        <run-tests/>
+    </steps>
+</build>
+
+</bot>
