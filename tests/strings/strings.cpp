@@ -615,7 +615,7 @@ void StringTestCase::WriteBuf()
     CPPUNIT_ASSERT_EQUAL(_T('f'), s[0u]);
     CPPUNIT_ASSERT_EQUAL(_T('o'), s[1]);
     CPPUNIT_ASSERT_EQUAL(_T('o'), s[2]);
-    CPPUNIT_ASSERT_EQUAL(3u, s.length());
+    WX_ASSERT_SIZET_EQUAL(3, s.length());
 
     {
         wxChar *p = s.GetWriteBuf(10);
@@ -626,7 +626,7 @@ void StringTestCase::WriteBuf()
         CPPUNIT_ASSERT_EQUAL(_T('a'), s[1]);
         CPPUNIT_ASSERT_EQUAL(_T('r'), s[2]);
         CPPUNIT_ASSERT_EQUAL(_T('r'), s[3]);
-        CPPUNIT_ASSERT_EQUAL(4u, s.length());
+        WX_ASSERT_SIZET_EQUAL(4, s.length());
 
         CPPUNIT_ASSERT_EQUAL( 0, wxStrcmp(_T("barr"), s) );
     }
