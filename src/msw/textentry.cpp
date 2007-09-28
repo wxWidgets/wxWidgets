@@ -3,7 +3,7 @@
 // Purpose:     wxTextEntry implementation for wxMSW
 // Author:      Vadim Zeitlin
 // Created:     2007-09-26
-// RCS-ID:      $Id: wxhead.cpp,v 1.7 2007/01/09 16:22:45 zeitlin Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
