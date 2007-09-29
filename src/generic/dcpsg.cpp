@@ -297,7 +297,7 @@ wxPostScriptDC::wxPostScriptDC (const wxPrintData& printData)
     // this calculates m_pageHeight required for
     // taking the inverted Y axis into account
     SetPrintData( printData );
-    
+
     m_ok = true;
 }
 
@@ -446,8 +446,8 @@ void wxPostScriptDC::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
                        "%f %f lineto\n"
                        "closepath\n"
                        "fill\n",
-                XLOG2DEV(xc), YLOG2DEV(yc), 
-                XLOG2DEVREL(i_radius), YLOG2DEVREL(i_radius), 
+                XLOG2DEV(xc), YLOG2DEV(yc),
+                XLOG2DEVREL(i_radius), YLOG2DEVREL(i_radius),
                 alpha1, alpha2,
                 XLOG2DEV(xc), YLOG2DEV(yc) );
         buffer.Replace( ",", "." );
@@ -460,15 +460,15 @@ void wxPostScriptDC::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
     if (m_pen.GetStyle() != wxTRANSPARENT)
     {
         SetPen( m_pen );
-        
+
         wxString buffer;
         buffer.Printf( "newpath\n"
                        "%f %f %f %f %f %f ellipse\n"
                        "%f %f lineto\n"
                        "closepath\n"
                        "stroke\n",
-                XLOG2DEV(xc), YLOG2DEV(yc), 
-                XLOG2DEVREL(i_radius), YLOG2DEVREL(i_radius), 
+                XLOG2DEV(xc), YLOG2DEV(yc),
+                XLOG2DEVREL(i_radius), YLOG2DEVREL(i_radius),
                 alpha1, alpha2,
                 XLOG2DEV(xc), YLOG2DEV(yc) );
         buffer.Replace( ",", "." );
@@ -721,7 +721,7 @@ void wxPostScriptDC::DoDrawLines (int n, wxPoint points[], wxCoord xoffset, wxCo
               YLOG2DEV(points[0].y+yoffset) );
     buffer.Replace( ",", "." );
     PsPrint( buffer );
-    
+
     for (i = 1; i < n; i++)
     {
         buffer.Printf( "%f %f lineto\n",
@@ -737,7 +737,7 @@ void wxPostScriptDC::DoDrawLines (int n, wxPoint points[], wxCoord xoffset, wxCo
 void wxPostScriptDC::DoDrawRectangle (wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
-    
+
     width--;
     height--;
 
@@ -979,7 +979,7 @@ void wxPostScriptDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
         }
         *(bufferindex++) = '\n';
         *bufferindex = 0;
-        
+
         if (m_pstream)
             fwrite( charbuffer, 1, strlen( charbuffer ), m_pstream );
         else
@@ -1076,7 +1076,7 @@ void wxPostScriptDC::SetFont( const wxFont& font )
     PsPrint( name );
     PsPrint( " findfont\n" );
 
-    
+
     double size = (double) m_font.GetPointSize();
     wxString buffer;
     buffer.Printf( "%f scalefont setfont\n", size * DEV2PS * m_scaleX );
@@ -1095,7 +1095,7 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
     m_pen = pen;
 
     double width;
-    
+
     if (m_pen.GetWidth() <= 0)
         width = 0.1;
     else
@@ -1241,9 +1241,9 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
     const wxWX2MBbuf textbuf = text.mb_str();
-    if (textbuf.data() == NULL)
+    if ( !textbuf )
         return;
-    
+
     if (m_textForegroundColour.Ok())
     {
         unsigned char red = m_textForegroundColour.Red();
@@ -1326,7 +1326,7 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     if (m_font.GetUnderlined())
     {
         wxCoord uy = (wxCoord)(y + size - m_underlinePosition);
-        
+
         buffer.Printf( "gsave\n"
                        "%f %f moveto\n"
                        "%f setlinewidth\n"
@@ -1386,7 +1386,7 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
             buffer.Printf( "%f %f %f setrgbcolor\n", redPS, greenPS, bluePS );
             buffer.Replace( ",", "." );
             PsPrint( buffer );
-            
+
             m_currentRed = red;
             m_currentBlue = blue;
             m_currentGreen = green;
@@ -1441,7 +1441,7 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
         wxCoord w, h;
         GetTextExtent(text, &w, &h);
 
-        buffer.Printf( 
+        buffer.Printf(
                 "gsave\n"
                 "%f %f moveto\n"
                 "%f setlinewidth\n"
@@ -1559,7 +1559,7 @@ wxCoord wxPostScriptDC::GetCharWidth() const
 
 void wxPostScriptDC::SetPrintData(const wxPrintData& data)
 {
-    m_printData = data;    
+    m_printData = data;
 
     wxPaperSize id = m_printData.GetPaperId();
     wxPrintPaperType *paper = wxThePrintPaperDatabase->FindPaperType(id);
@@ -1653,10 +1653,10 @@ void wxPostScriptDC::DoGetSize(int* width, int* height) const
         h = tmp;
     }
 
-    if (width) 
+    if (width)
         *width = wxRound( w * PS2DEV );
-        
-    if (height) 
+
+    if (height)
         *height = wxRound( h * PS2DEV );
 }
 
@@ -1722,14 +1722,14 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
     wxString buffer;
 
     PsPrint( "%!PS-Adobe-2.0\n" );
-    
+
     buffer.Printf( "%%%%Title: %s\n", m_title );
     PsPrint( buffer );
     PsPrint( "%%Creator: wxWidgets PostScript renderer\n" );
-    
+
     buffer.Printf( "%%%%CreationDate: %s\n", wxNow() );
     PsPrint( buffer );
-    
+
     if (m_printData.GetOrientation() == wxLANDSCAPE)
         PsPrint( "%%Orientation: Landscape\n" );
     else
@@ -1754,10 +1754,10 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
        case wxPAPER_10X14: paper = wxT("10x14"); break;         // 10-by-14-inch sheet
        default: paper = wxT("A4");
     }
-    
+
     buffer.Printf( "%%%%DocumentPaperSizes: %s\n", paper );
     PsPrint( buffer );
-    
+
     PsPrint( "%%EndComments\n\n" );
 
     PsPrint( "%%BeginProlog\n" );
@@ -1900,23 +1900,23 @@ void wxPostScriptDC::StartPage()
 
     buffer.Printf( "%d %d translate\n", translate_x, translate_y );
     PsPrint( buffer );
-    
+
     double scale_x = data->GetPrinterScaleX();
     double scale_y = data->GetPrinterScaleY();
-    
+
     buffer.Printf( "%f %f scale\n", scale_x, scale_y );
     buffer.Replace( ",", "." );
     PsPrint( buffer );
-    
+
 #endif
 
     // Each page starts with an "initgraphics" which resets the
-    // transformation and so we need to rotate the page for 
+    // transformation and so we need to rotate the page for
     // landscape printing)
 
     // I copied this one from a PostScript tutorial, but to no avail. RR.
     // PsPrint( "90 rotate llx neg ury nef translate\n" );
-    
+
     if (m_printData.GetOrientation() == wxLANDSCAPE)
         PsPrint( "90 rotate\n" );
 }
@@ -2009,9 +2009,9 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
    // GTK 2.0
 
     const wxWX2MBbuf strbuf = string.mb_str();
-    
+
     // conversion failed (non e.g. ISO characters)
-    if (strbuf.data() == NULL)
+    if ( !strbuf )
         return;
 
 #if !wxUSE_AFM_FOR_POSTSCRIPT
