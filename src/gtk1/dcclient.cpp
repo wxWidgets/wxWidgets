@@ -656,20 +656,9 @@ void wxWindowDC::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCoord 
     if (m_pen.GetStyle() == wxTRANSPARENT) return;
     if (n <= 0) return;
 
-    //Check, if scaling is necessary
-    bool doScale(true);
-    long val(10);
-    if (!xoffset)
-        if (!yoffset)
-            if (XLOG2DEV(val)==val)
-                if (YLOG2DEV(val)==val)
-                    doScale = false;
 
-    GdkPoint *gpts = NULL;
-
-    if (doScale){
-        gpts = new GdkPoint[n];
-    if (! gpts)
+    GdkPoint * const gpts = new GdkPoint[n];
+    if ( !gpts )
     {
         wxFAIL_MSG( wxT("Cannot allocate PolyLine") );
         return;
@@ -677,28 +666,17 @@ void wxWindowDC::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCoord 
 
     for (int i = 0; i < n; i++)
     {
-        wxCoord x1 = XLOG2DEV(points[i].x + xoffset);
-        wxCoord y1 = YLOG2DEV(points[i].y + yoffset);
+        wxCoord x = points[i].x + xoffset,
+                y = points[i].y + yoffset;
 
-        CalcBoundingBox( x1 + xoffset, y1 + yoffset );
+        CalcBoundingBox(x + xoffset, y + yoffset);
 
-        gpts[i].x = x1;
-        gpts[i].y = y1;
-    }
-    }
-    else {
-        for (int i = 0; i < n; i++) {
-            CalcBoundingBox( points[i].x, points[i].y );
-        }
-
-        //GdkPoint and wxPoint have the same memory allignment, so we can cast one into another
-        gpts = reinterpret_cast<GdkPoint*>(points);
+        gpts[i].x = XLOG2DEV(x);
+        gpts[i].y = YLOG2DEV(y);
     }
 
-    if (m_window)
-        gdk_draw_lines( m_window, m_penGC, gpts, n);
+    gdk_draw_lines( m_window, m_penGC, gpts, n);
 
-    if (doScale)
     delete[] gpts;
 }
 
@@ -708,102 +686,66 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[], wxCoord xoffset, wxCoor
 
     if (n <= 0) return;
 
-    //Check, if scaling is necessary
-    bool doScale(true);
-    long val(10);
-    if (!xoffset)
-        if (!yoffset)
-            if (XLOG2DEV(val)==val)
-                if (YLOG2DEV(val)==val){
-                    doScale = false;
-                }
+    GdkPoint * const gpts = new GdkPoint[n];
 
-    GdkPoint *gdkpoints = NULL;
-
-    if (doScale){
-        gdkpoints = new GdkPoint[n+1]; //FIXME: Why the "+1"
-
-    int i;
-    for (i = 0 ; i < n ; i++)
+    for (int i = 0 ; i < n ; i++)
     {
-        gdkpoints[i].x = XLOG2DEV(points[i].x + xoffset);
-        gdkpoints[i].y = YLOG2DEV(points[i].y + yoffset);
+        wxCoord x = points[i].x + xoffset,
+                y = points[i].y + yoffset;
 
-        CalcBoundingBox( points[i].x + xoffset, points[i].y + yoffset );
-    }
-    }
-    else {
-        int i(0);
-        for (; i < n ; ++i) {
-            CalcBoundingBox( points[i].x, points[i].y );
-        }
-        //GdkPoint and wxPoint have the same memory allignment, so we can cast one into another
-        gdkpoints = reinterpret_cast<GdkPoint*> (points);
+        CalcBoundingBox(x + xoffset, y + yoffset);
+
+        gpts[i].x = XLOG2DEV(x);
+        gpts[i].y = YLOG2DEV(y);
     }
 
-    if (m_window)
+    if (m_brush.GetStyle() == wxSOLID)
     {
-        //I think wxSOLID is the most often used style (it is for me),
-        //so I put it in front of the if ... ifelse's
-        if (m_brush.GetStyle() == wxSOLID)
+        gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts, n );
+    }
+    else if (m_brush.GetStyle() != wxTRANSPARENT)
+    {
+        if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
         {
-            gdk_draw_polygon( m_window, m_brushGC, TRUE, gdkpoints, n );
-        }else
-        if (m_brush.GetStyle() != wxTRANSPARENT)
+            gdk_gc_set_ts_origin( m_textGC,
+                                  m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
+                                  m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
+            gdk_draw_polygon( m_window, m_textGC, TRUE, gpts, n );
+            gdk_gc_set_ts_origin( m_textGC, 0, 0 );
+        } else
+        if (IS_15_PIX_HATCH(m_brush.GetStyle()))
         {
-            if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
-            {
-                gdk_gc_set_ts_origin( m_textGC,
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
-                                      m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
-                gdk_draw_polygon( m_window, m_textGC, TRUE, gdkpoints, n );
-                gdk_gc_set_ts_origin( m_textGC, 0, 0 );
-            } else
-            if (IS_15_PIX_HATCH(m_brush.GetStyle()))
-            {
-                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 15, m_deviceOriginY % 15 );
-                gdk_draw_polygon( m_window, m_brushGC, TRUE, gdkpoints, n );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            } else
-            if (IS_16_PIX_HATCH(m_brush.GetStyle()))
-            {
-                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 16, m_deviceOriginY % 16 );
-                gdk_draw_polygon( m_window, m_brushGC, TRUE, gdkpoints, n );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            } else
-            if (m_brush.GetStyle() == wxSTIPPLE)
-            {
-                gdk_gc_set_ts_origin( m_brushGC,
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
-                                      m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
-                gdk_draw_polygon( m_window, m_brushGC, TRUE, gdkpoints, n );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            }
-            else
-            {
-                gdk_draw_polygon( m_window, m_brushGC, TRUE, gdkpoints, n );
-            }
+            gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 15, m_deviceOriginY % 15 );
+            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts, n );
+            gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
+        } else
+        if (IS_16_PIX_HATCH(m_brush.GetStyle()))
+        {
+            gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 16, m_deviceOriginY % 16 );
+            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts, n );
+            gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
+        } else
+        if (m_brush.GetStyle() == wxSTIPPLE)
+        {
+            gdk_gc_set_ts_origin( m_brushGC,
+                                  m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
+                                  m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
+            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts, n );
+            gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
         }
-
-        if (m_pen.GetStyle() != wxTRANSPARENT)
+        else
         {
-/*
-            for (i = 0 ; i < n ; i++)
-            {
-                gdk_draw_line( m_window, m_penGC,
-                               gdkpoints[i%n].x,
-                               gdkpoints[i%n].y,
-                               gdkpoints[(i+1)%n].x,
-                               gdkpoints[(i+1)%n].y);
-            }
-*/
-            gdk_draw_polygon( m_window, m_penGC, FALSE, gdkpoints, n );
-
+            gdk_draw_polygon( m_window, m_brushGC, TRUE, gpts, n );
         }
     }
 
-    if (doScale)
-    delete[] gdkpoints;
+    if (m_pen.GetStyle() != wxTRANSPARENT)
+    {
+        gdk_draw_polygon( m_window, m_penGC, FALSE, gpts, n );
+
+    }
+
+    delete[] gpts;
 }
 
 void wxWindowDC::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
