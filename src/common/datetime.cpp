@@ -1607,6 +1607,7 @@ unsigned long wxDateTime::GetAsDOS() const
     time_t ticks = GetTicks();
     struct tm tmstruct;
     struct tm *tm = wxLocaltime_r(&ticks, &tmstruct);
+    wxCHECK_MSG( tm, ULONG_MAX, _T("time can't be represented in DOS format") );
 
     long year = tm->tm_year;
     year -= 80;
