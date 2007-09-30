@@ -557,7 +557,8 @@ public:                                                                  \
                                                                          \
   ~name();                                                               \
                                                                          \
-  void Alloc(size_t count) { reserve(count); }                           \
+  void Alloc(size_t count) { base::reserve(count); }                     \
+  void reserve(size_t count) { base::reserve(count); }                   \
   size_t GetCount() const { return base_array::size(); }                 \
   size_t size() const { return base_array::size(); }                     \
   bool IsEmpty() const { return base_array::empty(); }                   \
