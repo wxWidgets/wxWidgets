@@ -55,10 +55,6 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_UNICODE
-    #error "HelpGen doesn't build in Unicode mode"
-#endif
-
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/log.h"
@@ -82,10 +78,10 @@
 // -----------------------------------------------------------------------------
 
 // return the label for the given function name (i.e. argument of \label)
-static wxString MakeLabel(const wxChar *classname, const wxChar *funcname = NULL);
+static wxString MakeLabel(const char *classname, const char *funcname = NULL);
 
 // return the whole \helpref{arg}{arg_label} string
-static wxString MakeHelpref(const wxChar *argument);
+static wxString MakeHelpref(const char *argument);
 
 // [un]quote special TeX characters (in place)
 static void TeXFilter(wxString* str);
@@ -385,7 +381,7 @@ protected:
 
     // returns the length of 'match' if the string 'str' starts with it or 0
     // otherwise
-    static size_t TryMatch(const wxChar *str, const wxChar *match);
+    static size_t TryMatch(const char *str, const char *match);
 
     // skip spaces: returns pointer to first non space character (also
     // updates the value of m_line)
@@ -1068,7 +1064,7 @@ void HelpGenVisitor::VisitClass( spClass& cl )
 
             baseHeaderName.erase(0, 3);
             for ( index = 0; index < WXSIZEOF(headers); index++ ) {
-                if ( Stricmp(baseHeaderName, headers[index]) == 0 )
+                if ( wxStricmp(baseHeaderName, headers[index]) == 0 )
                     break;
             }
 

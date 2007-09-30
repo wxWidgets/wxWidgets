@@ -225,7 +225,7 @@ void RipperDocGen::AppendMulitilineStr( wxString& st, wxString& mlStr )
 void RipperDocGen::AppendHighlightedSource( wxString& st, wxString source )
 {
     // FIXME:: below should not be fixed :)
-    wxChar buf[1024*32];
+    char buf[1024*32];
 
     // DBG:::
 //    ASSERT( source.length() + 1 < sizeof(buf) );
