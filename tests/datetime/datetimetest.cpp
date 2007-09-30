@@ -854,7 +854,7 @@ void DateTimeTestCase::TestDSTBug()
 {
     /////////////////////////
     // Test GetEndDST()
-    wxDateTime dt = wxDateTime::GetEndDST(2004);
+    wxDateTime dt = wxDateTime::GetEndDST(2004, wxDateTime::France);
     CPPUNIT_ASSERT_EQUAL(31, (int)dt.GetDay());
     CPPUNIT_ASSERT_EQUAL(wxDateTime::Oct, dt.GetMonth());
     CPPUNIT_ASSERT_EQUAL(2004, (int)dt.GetYear());
