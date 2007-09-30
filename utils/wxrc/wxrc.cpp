@@ -30,6 +30,7 @@
 #include "wx/utils.h"
 #include "wx/hashset.h"
 #include "wx/mimetype.h"
+#include "wx/vector.h"
 
 WX_DECLARE_HASH_SET(wxString, wxStringHash, wxStringEqual, StringSet);
 
@@ -201,6 +202,22 @@ public:
 WX_DECLARE_OBJARRAY(XRCWndClassData,ArrayOfXRCWndClassData);
 WX_DEFINE_OBJARRAY(ArrayOfXRCWndClassData)
 
+struct ExtractedString
+{
+    ExtractedString() : lineNo(-1) {}
+    ExtractedString(const wxString& str_,
+                    const wxString& filename_, int lineNo_)
+        : str(str_), filename(filename_), lineNo(lineNo_)
+    {}
+
+    wxString str;
+
+    wxString filename;
+    int      lineNo;
+};
+
+typedef wxVector<ExtractedString> ExtractedStrings;
+
 
 class XmlResApp : public wxAppConsole
 {
@@ -222,8 +239,8 @@ private:
     void MakePackagePython(const wxArrayString& flist);
 
     void OutputGettext();
-    wxArrayString FindStrings();
-    wxArrayString FindStrings(wxXmlNode *node);
+    ExtractedStrings FindStrings();
+    ExtractedStrings FindStrings(const wxString& filename, wxXmlNode *node);
 
     bool flagVerbose, flagCPP, flagPython, flagGettext;
     wxString parOutput, parFuncname, parOutputPath;
@@ -809,7 +826,7 @@ void XmlResApp::MakePackagePython(const wxArrayString& flist)
 
 void XmlResApp::OutputGettext()
 {
-    wxArrayString str = FindStrings();
+    ExtractedStrings str = FindStrings();
 
     wxFFile fout;
     if (parOutput.empty())
@@ -817,17 +834,23 @@ void XmlResApp::OutputGettext()
     else
         fout.Open(parOutput, wxT("wt"));
 
-    for (size_t i = 0; i < str.GetCount(); i++)
-        fout.Write("_(\"" + str[i] + "\");\n");
+    for (ExtractedStrings::const_iterator i = str.begin(); i != str.end(); ++i)
+    {
+        wxString s;
+
+        s.Printf("#line %d \"%s\"\n", i->lineNo, i->filename);
+        fout.Write(s);
+        fout.Write("_(\"" + i->str + "\");\n");
+    }
 
     if (!parOutput) fout.Detach();
 }
 
 
 
-wxArrayString XmlResApp::FindStrings()
+ExtractedStrings XmlResApp::FindStrings()
 {
-    wxArrayString arr, a2;
+    ExtractedStrings arr, a2;
 
     for (size_t i = 0; i < parFiles.GetCount(); i++)
     {
@@ -841,7 +864,8 @@ wxArrayString XmlResApp::FindStrings()
             retCode = 1;
             continue;
         }
-        a2 = FindStrings(doc.GetRoot());
+        a2 = FindStrings(parFiles[i], doc.GetRoot());
+
         WX_APPEND_ARRAY(arr, a2);
     }
 
@@ -888,9 +912,10 @@ static wxString ConvertText(const wxString& str)
 }
 
 
-wxArrayString XmlResApp::FindStrings(wxXmlNode *node)
+ExtractedStrings
+XmlResApp::FindStrings(const wxString& filename, wxXmlNode *node)
 {
-    wxArrayString arr;
+    ExtractedStrings arr;
 
     wxXmlNode *n = node;
     if (n == NULL) return arr;
@@ -919,14 +944,22 @@ wxArrayString XmlResApp::FindStrings(wxXmlNode *node)
             if (!flagGettext ||
                 node->GetAttribute(_T("translate"), _T("1")) != _T("0"))
             {
-                arr.Add(ConvertText(n->GetContent()));
+                arr.push_back
+                    (
+                        ExtractedString
+                        (
+                            ConvertText(n->GetContent()),
+                            filename,
+                            n->GetLineNumber()
+                        )
+                    );
             }
         }
 
         // subnodes:
         if (n->GetType() == wxXML_ELEMENT_NODE)
         {
-            wxArrayString a2 = FindStrings(n);
+            ExtractedStrings a2 = FindStrings(filename, n);
             WX_APPEND_ARRAY(arr, a2);
         }
 

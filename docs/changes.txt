@@ -154,6 +154,8 @@ All:
   wxLogInterposerTemp was added.
 - Added support for broadcasting to UDP sockets (Andrew Vincent).
 - Documentation now includes the wx library in which each class is defined.
+- wxrc --gettext now generates references to source .xrc files (Heikki
+  Linnakangas).
 
 All (Unix):
 
