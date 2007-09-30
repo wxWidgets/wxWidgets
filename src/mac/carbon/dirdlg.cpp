@@ -84,6 +84,7 @@ int wxDirDialog::ShowModal()
     OSStatus err = noErr;
 
     err = NavGetDefaultDialogCreationOptions(&options);
+    options.optionFlags &= ~kNavAllowMultipleFiles;
     if (err == noErr)
     {
         wxMacCFStringHolder message(m_message, m_font.GetEncoding());
