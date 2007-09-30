@@ -858,7 +858,7 @@ void DateTimeTestCase::TestDSTBug()
     CPPUNIT_ASSERT_EQUAL(31, (int)dt.GetDay());
     CPPUNIT_ASSERT_EQUAL(wxDateTime::Oct, dt.GetMonth());
     CPPUNIT_ASSERT_EQUAL(2004, (int)dt.GetYear());
-    CPPUNIT_ASSERT_EQUAL(2, (int)dt.GetHour());
+    CPPUNIT_ASSERT_EQUAL(1, (int)dt.GetHour());
     CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetMinute());
     CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetSecond());
     CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetMillisecond());

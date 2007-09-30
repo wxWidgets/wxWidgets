@@ -1231,9 +1231,6 @@ wxDateTime wxDateTime::GetBeginDST(int year, Country country)
         }
 
         dt += wxTimeSpan::Hours(1);
-
-        // disable DST tests because it could result in an infinite recursion!
-        dt.MakeGMT(true);
     }
     else switch ( country )
     {
@@ -1332,9 +1329,6 @@ wxDateTime wxDateTime::GetEndDST(int year, Country country)
         }
 
         dt += wxTimeSpan::Hours(1);
-
-        // disable DST tests because it could result in an infinite recursion!
-        dt.MakeGMT(true);
     }
     else switch ( country )
     {
