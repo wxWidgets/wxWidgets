@@ -69,7 +69,7 @@ enum wxXmlNodeType
 
 \membersection{wxXmlNode::wxXmlNode}\label{wxxmlnodewxxmlnode}
 
-\func{}{wxXmlNode}{\param{wxXmlNode* }{parent}, \param{wxXmlNodeType }{type}, \param{const wxString\& }{name}, \param{const wxString\& }{content = wxEmptyString}, \param{wxXmlAttribute* }{attrs = \NULL}, \param{wxXmlNode* }{next = \NULL}}
+\func{}{wxXmlNode}{\param{wxXmlNode* }{parent}, \param{wxXmlNodeType }{type}, \param{const wxString\& }{name}, \param{const wxString\& }{content = wxEmptyString}, \param{wxXmlAttribute* }{attrs = \NULL}, \param{wxXmlNode* }{next = \NULL}, \param{int }{lineNo = -1}}
 
 \wxheading{Parameters}
 
@@ -86,6 +86,7 @@ constructor and it shouldn't be done again.}
 and its eventual siblings are attached to the node.}
 \docparam{next}{If not \NULL, this node and its eventual siblings are attached to
 the node.}
+\docparam{lineNo}{Number of line this node was present at in input file or -1.}
 
 Creates this XML node and eventually insert it into an existing XML tree.
 
@@ -99,7 +100,7 @@ after using copy ctor and are never unmodified by operator=.
 On the other hand, it DOES copy children and attributes.
 
 
-\func{}{wxXmlNode}{\param{wxXmlNodeType }{type}, \param{const wxString\& }{name}, \param{const wxString\& }{content = wxEmptyString}}
+\func{}{wxXmlNode}{\param{wxXmlNodeType }{type}, \param{const wxString\& }{name}, \param{const wxString\& }{content = wxEmptyString}, \param{int }{lineNo = -1}}
 
 A simplified version of the first constructor form, assuming a \NULL parent.
 
@@ -159,6 +160,12 @@ Returns the number of nodes which separe this node from {\tt grandparent}.
 This function searches only the parents of this node until it finds {\tt grandparent}
 or the \NULL node (which is the parent of non-linked nodes or the parent of a
 \helpref{wxXmlDocument}{wxxmldocument}'s root node).
+
+\membersection{wxXmlNode::GetLineNumber}\label{wxxmlnodegetlinenumber}
+
+\constfunc{int}{GetLineNumber}{\void}
+
+Returns line number of the node in the input XML file or -1 if it is unknown.
 
 
 \membersection{wxXmlNode::GetNodeContent}\label{wxxmlnodegetnodecontent}

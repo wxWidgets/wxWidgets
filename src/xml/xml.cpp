@@ -49,10 +49,11 @@ static bool wxIsWhiteOnly(const wxString& buf);
 
 wxXmlNode::wxXmlNode(wxXmlNode *parent,wxXmlNodeType type,
                      const wxString& name, const wxString& content,
-                     wxXmlAttribute *attrs, wxXmlNode *next)
+                     wxXmlAttribute *attrs, wxXmlNode *next, int lineNo)
     : m_type(type), m_name(name), m_content(content),
       m_attrs(attrs), m_parent(parent),
-      m_children(NULL), m_next(next)
+      m_children(NULL), m_next(next),
+      m_lineNo(lineNo)
 {
     if (m_parent)
     {
@@ -67,10 +68,12 @@ wxXmlNode::wxXmlNode(wxXmlNode *parent,wxXmlNodeType type,
 }
 
 wxXmlNode::wxXmlNode(wxXmlNodeType type, const wxString& name,
-                     const wxString& content)
+                     const wxString& content,
+                     int lineNo)
     : m_type(type), m_name(name), m_content(content),
       m_attrs(NULL), m_parent(NULL),
-      m_children(NULL), m_next(NULL)
+      m_children(NULL), m_next(NULL),
+      m_lineNo(lineNo)
 {}
 
 wxXmlNode::wxXmlNode(const wxXmlNode& node)
@@ -110,6 +113,7 @@ void wxXmlNode::DoCopy(const wxXmlNode& node)
     m_type = node.m_type;
     m_name = node.m_name;
     m_content = node.m_content;
+    m_lineNo = node.m_lineNo;
     m_children = NULL;
 
     wxXmlNode *n = node.m_children;
@@ -454,6 +458,7 @@ bool wxIsWhiteOnly(const wxString& buf)
 
 struct wxXmlParsingContext
 {
+    XML_Parser parser;
     wxMBConv  *conv;
     wxXmlNode *root;
     wxXmlNode *node;
@@ -467,8 +472,12 @@ extern "C" {
 static void StartElementHnd(void *userData, const char *name, const char **atts)
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
-    wxXmlNode *node = new wxXmlNode(wxXML_ELEMENT_NODE, CharToString(ctx->conv, name));
+    wxXmlNode *node = new wxXmlNode(wxXML_ELEMENT_NODE,
+                                    CharToString(ctx->conv, name),
+                                    wxEmptyString,
+                                    XML_GetCurrentLineNumber(ctx->parser));
     const char **a = atts;
+
     while (*a)
     {
         node->AddAttribute(CharToString(ctx->conv, a[0]), CharToString(ctx->conv, a[1]));
@@ -507,7 +516,9 @@ static void TextHnd(void *userData, const char *s, int len)
 
         if (!whiteOnly)
         {
-            ctx->lastAsText = new wxXmlNode(wxXML_TEXT_NODE, wxT("text"), str);
+            ctx->lastAsText =
+                new wxXmlNode(wxXML_TEXT_NODE, wxT("text"), str,
+                              XML_GetCurrentLineNumber(ctx->parser));
             ctx->node->AddChild(ctx->lastAsText);
         }
     }
@@ -517,7 +528,9 @@ static void StartCdataHnd(void *userData)
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
 
-    ctx->lastAsText = new wxXmlNode(wxXML_CDATA_SECTION_NODE, wxT("cdata"),wxT(""));
+    ctx->lastAsText =
+        new wxXmlNode(wxXML_CDATA_SECTION_NODE, wxT("cdata"), wxT(""),
+                      XML_GetCurrentLineNumber(ctx->parser));
     ctx->node->AddChild(ctx->lastAsText);
 }
 
@@ -530,8 +543,10 @@ static void CommentHnd(void *userData, const char *data)
         // VS: ctx->node == NULL happens if there is a comment before
         //     the root element (e.g. wxDesigner's output). We ignore such
         //     comments, no big deal...
-        ctx->node->AddChild(new wxXmlNode(wxXML_COMMENT_NODE,
-                            wxT("comment"), CharToString(ctx->conv, data)));
+        ctx->node->AddChild(
+            new wxXmlNode(wxXML_COMMENT_NODE,
+                          wxT("comment"), CharToString(ctx->conv, data),
+                          XML_GetCurrentLineNumber(ctx->parser)));
     }
     ctx->lastAsText = NULL;
 }
@@ -609,6 +624,7 @@ bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding, int fl
         ctx.conv = new wxCSConv(encoding);
 #endif
     ctx.removeWhiteOnlyNodes = (flags & wxXMLDOC_KEEP_WHITESPACE_NODES) == 0;
+    ctx.parser = parser;
 
     XML_SetUserData(parser, (void*)&ctx);
     XML_SetElementHandler(parser, StartElementHnd, EndElementHnd);

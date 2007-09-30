@@ -103,10 +103,16 @@ class WXDLLIMPEXP_XML wxXmlNode
 {
 public:
     wxXmlNode()
-        : m_attrs(NULL), m_parent(NULL), m_children(NULL), m_next(NULL) {}
+        : m_attrs(NULL), m_parent(NULL), m_children(NULL), m_next(NULL),
+          m_lineNo(-1)
+    {
+    }
+
     wxXmlNode(wxXmlNode *parent, wxXmlNodeType type,
               const wxString& name, const wxString& content = wxEmptyString,
-              wxXmlAttribute *attrs = NULL, wxXmlNode *next = NULL);
+              wxXmlAttribute *attrs = NULL, wxXmlNode *next = NULL,
+              int lineNo = -1);
+
     virtual ~wxXmlNode();
 
     // copy ctor & operator=. Note that this does NOT copy syblings
@@ -118,7 +124,8 @@ public:
 
     // user-friendly creation:
     wxXmlNode(wxXmlNodeType type, const wxString& name,
-              const wxString& content = wxEmptyString);
+              const wxString& content = wxEmptyString,
+              int lineNo = -1);
     virtual void AddChild(wxXmlNode *child);
     virtual bool InsertChild(wxXmlNode *child, wxXmlNode *before_node);
     virtual bool RemoveChild(wxXmlNode *child);
@@ -151,6 +158,8 @@ public:
     wxString GetAttribute(const wxString& attrName,
                          const wxString& defaultVal) const;
     bool HasAttribute(const wxString& attrName) const;
+
+    int GetLineNumber() const { return m_lineNo; }
 
     void SetType(wxXmlNodeType type) { m_type = type; }
     void SetName(const wxString& name) { m_name = name; }
@@ -202,6 +211,7 @@ private:
     wxString m_content;
     wxXmlAttribute *m_attrs;
     wxXmlNode *m_parent, *m_children, *m_next;
+    int m_lineNo; // line number in original file, or -1 
 
     void DoCopy(const wxXmlNode& node);
 };
