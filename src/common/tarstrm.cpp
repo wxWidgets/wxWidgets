@@ -360,7 +360,7 @@ static wxString wxTarUserName(int uid)
     struct passwd pw;
 
     if (getpwuid_r(uid, &pw, buf.data(), bufsize, &ppw) == 0)
-        return wxString(ppw->pw_name, wxConvLibc);
+        return wxString(pw.pw_name, wxConvLibc);
 #else
     if ((ppw = getpwuid(uid)) != NULL)
         return wxString(ppw->pw_name, wxConvLibc);
@@ -382,7 +382,7 @@ static wxString wxTarGroupName(int gid)
     struct group gr;
 
     if (getgrgid_r(gid, &gr, buf.data(), bufsize, &pgr) == 0)
-        return wxString(pgr->gr_name, wxConvLibc);
+        return wxString(gr.gr_name, wxConvLibc);
 #else
     if ((pgr = getgrgid(gid)) != NULL)
         return wxString(pgr->gr_name, wxConvLibc);
