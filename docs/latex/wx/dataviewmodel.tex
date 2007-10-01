@@ -179,11 +179,24 @@ to the data.
 
 Call this to inform the model that an item has changed.
 
-\membersection{wxDataViewModel::ItemDeleted}\label{wxdataviewmodelitemdeleted}
+\membersection{wxDataViewModel::ItemsAdded}\label{wxdataviewmodelitemsadded}
 
-\func{virtual bool}{ItemDeleted}{\param{const wxDataViewItem\& }{parent}, \param{const wxDataViewItem\& }{item}}
+\func{virtual bool}{ItemsAdded}{\param{const wxDataViewItem\& }{parent}, \param{const wxDataViewItemArray\& }{items}}
 
-Call this to inform the model that an item has been deleted.
+Call this to inform the model that several items have been added
+to the data.
+
+\membersection{wxDataViewModel::ItemsChanged}\label{wxdataviewmodelitemschanged}
+
+\func{virtual bool}{ItemsChanged}{\param{const wxDataViewItemArray\& }{items}}
+
+Call this to inform the model that several items have changed.
+
+\membersection{wxDataViewModel::ItemsDeleted}\label{wxdataviewmodelitemsdeleted}
+
+\func{virtual bool}{ItemsDeleted}{\param{const wxDataViewItem\& }{parent}, \param{const wxDataViewItemArray\& }{items}}
+
+Call this to inform the model that several items have been deleted.
 
 \membersection{wxDataViewModel::RemoveNotifier}\label{wxdataviewmodelremovenotifier}
 

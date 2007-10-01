@@ -33,11 +33,45 @@ bool operator == (const wxDataViewItem &left, const wxDataViewItem &right)
 
 
 // ---------------------------------------------------------
-// wxDataViewModel
+// wxDataViewModelNotifier
 // ---------------------------------------------------------
 
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxDataViewModelNotifiers);
+
+bool wxDataViewModelNotifier::ItemsAdded( const wxDataViewItem &parent, const wxDataViewItemArray &items )
+{
+    size_t count = items.GetCount();
+    size_t i;
+    for (i = 0; i < count; i++)
+        if (!ItemAdded( parent, items[i] )) return false;
+        
+    return true;
+}
+
+bool wxDataViewModelNotifier::ItemsDeleted( const wxDataViewItem &parent, const wxDataViewItemArray &items )
+{
+    size_t count = items.GetCount();
+    size_t i;
+    for (i = 0; i < count; i++)
+        if (!ItemDeleted( parent, items[i] )) return false;
+    
+    return true;
+}
+
+bool wxDataViewModelNotifier::ItemsChanged( const wxDataViewItemArray &items )
+{
+    size_t count = items.GetCount();
+    size_t i;
+    for (i = 0; i < count; i++)
+        if (!ItemChanged( items[i] )) return false;
+        
+    return true;
+}
+
+// ---------------------------------------------------------
+// wxDataViewModel
+// ---------------------------------------------------------
 
 wxDataViewModel::wxDataViewModel()
 {
@@ -83,6 +117,51 @@ bool wxDataViewModel::ItemChanged( const wxDataViewItem &item )
     {
         wxDataViewModelNotifier* notifier = *iter;
         if (!notifier->ItemChanged( item ))
+            ret = false;
+    }
+
+    return ret;
+}
+
+bool wxDataViewModel::ItemsAdded( const wxDataViewItem &parent, const wxDataViewItemArray &items )
+{
+    bool ret = true;
+
+    wxDataViewModelNotifiers::iterator iter;
+    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    {
+        wxDataViewModelNotifier* notifier = *iter;
+        if (!notifier->ItemsAdded( parent, items ))
+            ret = false;
+    }
+
+    return ret;
+}
+
+bool wxDataViewModel::ItemsDeleted( const wxDataViewItem &parent, const wxDataViewItemArray &items )
+{
+    bool ret = true;
+
+    wxDataViewModelNotifiers::iterator iter;
+    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    {
+        wxDataViewModelNotifier* notifier = *iter;
+        if (!notifier->ItemsDeleted( parent, items ))
+            ret = false;
+    }
+
+    return ret;
+}
+
+bool wxDataViewModel::ItemsChanged( const wxDataViewItemArray &items )
+{
+    bool ret = true;
+
+    wxDataViewModelNotifiers::iterator iter;
+    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    {
+        wxDataViewModelNotifier* notifier = *iter;
+        if (!notifier->ItemsChanged( items ))
             ret = false;
     }
 

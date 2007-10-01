@@ -98,6 +98,9 @@ public:
     virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item ) = 0;
     virtual bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item ) = 0;
     virtual bool ItemChanged( const wxDataViewItem &item ) = 0;
+    virtual bool ItemsAdded( const wxDataViewItem &parent, const wxDataViewItemArray &items );
+    virtual bool ItemsDeleted( const wxDataViewItem &parent, const wxDataViewItemArray &items );
+    virtual bool ItemsChanged( const wxDataViewItemArray &items );
     virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col ) = 0;
     virtual bool Cleared() = 0;
     
@@ -142,8 +145,11 @@ public:
 
     // delegated notifiers
     virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
+    virtual bool ItemsAdded( const wxDataViewItem &parent, const wxDataViewItemArray &items );
     virtual bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item );
+    virtual bool ItemsDeleted( const wxDataViewItem &parent, const wxDataViewItemArray &items );
     virtual bool ItemChanged( const wxDataViewItem &item );
+    virtual bool ItemsChanged( const wxDataViewItemArray &items );
     virtual bool ValueChanged( const wxDataViewItem &item, unsigned int col );
     virtual bool Cleared();
 
