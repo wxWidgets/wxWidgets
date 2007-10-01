@@ -11,6 +11,5 @@ sys$share:libgdk2.exe/share
 sys$share:libpango.exe/share
 sys$share:libglib2.exe/share
 sys$share:iodbc.exe/share
-sys$share:vms_jackets.exe/share
 sys$share:pthread$rtl.exe/share
 sys$library:decw$xlibshr.exe/share

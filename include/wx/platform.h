@@ -24,14 +24,6 @@
 #endif
 
 /*
-    This header must be included before anything else under VMS
- */
-#ifdef __VMS
-#   include <vms_jackets.h>
-#   undef ConnectionNumber
-#endif
-
-/*
     WXMAC variants
     __WXMAC_CLASSIC__ means ppc non-carbon builds, __WXMAC_CARBON__ means
     carbon API available (mach or cfm builds) , __WXMAC_OSX__ means mach-o

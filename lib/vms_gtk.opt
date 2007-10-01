@@ -10,6 +10,5 @@ sys$share:iodbc.exe/share
 sys$share:libgtk.exe/share
 sys$share:libgdk.exe/share
 sys$share:libglib.exe/share
-sys$share:vms_jackets.exe/share
 sys$share:pthread$rtl.exe/share
 sys$library:decw$xlibshr.exe/share
