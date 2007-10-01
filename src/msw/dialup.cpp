@@ -163,7 +163,7 @@ struct WXDLLEXPORT wxRasThreadData
     HANDLE  hEventRas,  // automatic event which RAS signals when status changes
             hEventQuit; // manual event which we signal when we terminate
 
-    class WXDLLEXPORT wxDialUpManagerMSW *dialUpManager;  // the owner
+    class WXDLLIMPEXP_FWD_CORE wxDialUpManagerMSW *dialUpManager;  // the owner
 };
 
 // ----------------------------------------------------------------------------

@@ -30,8 +30,8 @@
 #endif // Cygwin
 
 // fwd decl
-class  WXDLLEXPORT wxImageList;
-class  WXDLLEXPORT wxDragImage;
+class  WXDLLIMPEXP_FWD_CORE wxImageList;
+class  WXDLLIMPEXP_FWD_CORE wxDragImage;
 struct WXDLLIMPEXP_FWD_CORE wxTreeViewItem;
 
 #if WXWIN_COMPATIBILITY_2_6

@@ -45,7 +45,7 @@
 #include <ctype.h>
 
 // in case we're compiling in non-GUI mode
-class WXDLLEXPORT wxIcon;
+class WXDLLIMPEXP_FWD_CORE wxIcon;
 
 // These classes use Windows registry to retrieve the required information.
 //
