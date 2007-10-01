@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 12 September 2007                                                   *
+# Date : 29 September 2007                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -103,6 +103,7 @@ OBJECTS = \
 		filename.obj,\
 		filefn.obj,\
 		filesys.obj,\
+		filectrlcmn.obj,\
 		fldlgcmn.obj,\
 		fmapbase.obj,\
 		fontcmn.obj,\
@@ -183,6 +184,7 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		textbuf.obj,\
 		textcmn.obj,\
 		textfile.obj,\
+		textentrycmn.obj,\
 		timercmn.obj,\
 		timerimpl.obj,\
 		tokenzr.obj,\
@@ -278,6 +280,7 @@ SOURCES = \
 		filename.cpp,\
 		filefn.cpp,\
 		filesys.cpp,\
+		filectrlcmn.cpp,\
 		fldlgcmn.cpp,\
 		fmapbase.cpp,\
 		fontcmn.cpp,\
@@ -362,6 +365,7 @@ SOURCES = \
 		textbuf.cpp,\
 		textcmn.cpp,\
 		textfile.cpp,\
+		textentrycmn.cpp,\
 		timercmn.cpp,\
 		timerimpl.cpp,\
 		tokenzr.cpp,\
@@ -624,3 +628,5 @@ fontpickercmn.obj : fontpickercmn.cpp
 pickerbase.obj : pickerbase.cpp
 listctrlcmn.obj : listctrlcmn.cpp
 srchcmn.obj : srchcmn.cpp
+textentrycmn.obj : textentrycmn.cpp
+filectrlcmn.obj : filectrlcmn.cpp
