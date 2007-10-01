@@ -241,9 +241,13 @@
     #define WXDLLIMPEXP_STC
 #endif
 
-/* GCC warns about using __attribute__ on forward declarations, so we need
-   another set of macros for them: */
-#if defined(HAVE_VISIBILITY)
+/*
+   GCC warns about using __attribute__ (and also __declspec in mingw32 case) on
+   forward declarations while MSVC complains about forward declarations without
+   __declspec for the classes later declared with it, so we need a separate set
+   of macros for forward declarations to hide this difference:
+ */
+#if defined(HAVE_VISIBILITY) || (defined(__WINDOWS__) && defined(__GNUC__))
     #define WXDLLIMPEXP_FWD_BASE
     #define WXDLLIMPEXP_FWD_NET
     #define WXDLLIMPEXP_FWD_CORE
