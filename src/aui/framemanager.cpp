@@ -4310,7 +4310,8 @@ void wxAuiManager::OnChildFocus(wxChildFocusEvent& event)
     // active panes are allowed by the owner)
     if (GetFlags() & wxAUI_MGR_ALLOW_ACTIVE_PANE)
     {
-        if (GetPane(event.GetWindow()).IsOk())
+        wxAuiPaneInfo& pane = GetPane(event.GetWindow());
+        if (pane.IsOk() && (pane.state & wxAuiPaneInfo::optionActive) == 0)
         {
             SetActivePane(m_panes, event.GetWindow());
             m_frame->Refresh();
