@@ -29,6 +29,10 @@
     #pragma warn -8022
 #endif
 
+#ifndef CPPUNIT_STD_NEED_ALLOCATOR
+    #define CPPUNIT_STD_NEED_ALLOCATOR 0
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 // Set the default format for the errors, which can be used by an IDE to jump
 // to the error location. This default gets overridden by the cppunit headers
