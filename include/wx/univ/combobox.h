@@ -147,11 +147,7 @@ public:
 
     // we delegate our client data handling to wxListBox which we use for the
     // items, so override this and other methods dealing with the client data
-    virtual wxClientDataType GetClientDataType() const
-    {
-        return GetLBox()->GetClientDataType();
-    }
-
+    virtual wxClientDataType GetClientDataType() const;
     virtual void SetClientDataType(wxClientDataType clientDataItemsType);
 
 protected:

@@ -427,6 +427,11 @@ wxString wxComboBox::GetStringSelection() const
     return GetLBox()->GetStringSelection();
 }
 
+wxClientDataType wxComboBox::GetClientDataType() const
+{
+    return GetLBox()->GetClientDataType();
+}
+
 void wxComboBox::SetClientDataType(wxClientDataType clientDataItemsType)
 {
     GetLBox()->SetClientDataType(clientDataItemsType);
