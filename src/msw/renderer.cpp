@@ -311,7 +311,7 @@ int wxRendererMSW::GetHeaderButtonHeight(wxWindow * WXUNUSED(win))
 
     // initialize the struct filled with the values by Header_Layout()
     RECT parentRect = { 0, 0, 100, 100 };
-    WINDOWPOS wp = { 0 };
+    WINDOWPOS wp = { 0, 0, 0, 0, 0, 0, 0 };
     HDLAYOUT hdl = { &parentRect, &wp };
 
     return Header_Layout(hwndHeader, &hdl) ? wp.cy : DEFAULT_HEIGHT;
