@@ -651,12 +651,17 @@ _T("\n"));
         wxString ext = wxFileName(flist[i]).GetExt();
         if ( ext.Lower() == _T("xrc") )
             mime = _T("text/xml");
+#if wxUSE_MIMETYPE
         else
         {
             wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
             if ( ft )
+            {
                 ft->GetMimeType(&mime);
+                delete ft;
+            }
         }
+#endif // wxUSE_MIMETYPE
 
         s.Printf(_T("    XRC_ADD_FILE(wxT(\"XRC_resource/") + flist[i] +
                  _T("\"), xml_res_file_%i, xml_res_size_%i, _T(\"%s\"));\n"),
