@@ -1338,7 +1338,7 @@ samples/widgets/combobox.cpp
 samples/widgets/datepick.cpp
 samples/widgets/dirctrl.cpp
 samples/widgets/dirpicker.cpp
-samples/widgets/filecontrol.cpp
+samples/widgets/filectrl.cpp
 samples/widgets/filepicker.cpp
 samples/widgets/fontpicker.cpp
 samples/widgets/gauge.cpp
