@@ -416,7 +416,6 @@ public:
     virtual ~wxDataViewMainWindow();
 
     // notifications from wxDataViewModel
-    void SendModelEvent( wxEventType type, const wxDataViewItem & item);
     bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
     bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item );
     bool ItemChanged( const wxDataViewItem &item );
@@ -2013,25 +2012,12 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
     return false;
 }
 
-void wxDataViewMainWindow::SendModelEvent( wxEventType type, const wxDataViewItem & item )
-{
-    wxWindow *parent = GetParent();
-    wxDataViewEvent le(type, parent->GetId());
-
-    le.SetEventObject(parent);
-    le.SetModel(GetOwner()->GetModel());
-    le.SetItem( item );
-
-    parent->GetEventHandler()->ProcessEvent(le);
-}
-
 bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxDataViewItem & item)
 {
     SortPrepare();
 
     wxDataViewTreeNode * node;
     node = FindNode(parent);
-    SendModelEvent(wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_ADDED, item );
 
     if( node == NULL )
         return false;
@@ -2118,8 +2104,6 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
 
     UpdateDisplay();
 
-    SendModelEvent(wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_DELETED, item);
-
     return true;
 }
 
@@ -2128,8 +2112,14 @@ bool wxDataViewMainWindow::ItemChanged(const wxDataViewItem & item)
     SortPrepare();
     g_model->Resort();
 
-    SendModelEvent(wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_CHANGED,item);
-
+    //Send event
+    wxWindow *parent = GetParent();
+    wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, parent->GetId());
+    le.SetEventObject(parent);
+    le.SetModel(GetOwner()->GetModel());
+    le.SetItem(item);
+    parent->GetEventHandler()->ProcessEvent(le);
+    
     return true;
 }
 
@@ -2149,7 +2139,7 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
 
     //Send event
     wxWindow *parent = GetParent();
-    wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_MODEL_VALUE_CHANGED, parent->GetId());
+    wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, parent->GetId());
     le.SetEventObject(parent);
     le.SetModel(GetOwner()->GetModel());
     le.SetItem(item);
@@ -2166,12 +2156,6 @@ bool wxDataViewMainWindow::Cleared()
 
     DestroyTree();
     UpdateDisplay();
-
-    wxWindow *parent = GetParent();
-    wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_MODEL_CLEARED, parent->GetId());
-    le.SetEventObject(parent);
-    le.SetModel(GetOwner()->GetModel());
-    parent->GetEventHandler()->ProcessEvent(le);
 
     return true;
 }

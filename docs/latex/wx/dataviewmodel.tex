@@ -179,6 +179,9 @@ to the data.
 
 Call this to inform the model that an item has changed.
 
+This will eventually emit a wxEVT\_DATAVIEW\_ITEM\_VALUE\_CHANGED
+event (in which the column fields will not be set) to the user. 
+
 \membersection{wxDataViewModel::ItemsAdded}\label{wxdataviewmodelitemsadded}
 
 \func{virtual bool}{ItemsAdded}{\param{const wxDataViewItem\& }{parent}, \param{const wxDataViewItemArray\& }{items}}
@@ -191,6 +194,9 @@ to the data.
 \func{virtual bool}{ItemsChanged}{\param{const wxDataViewItemArray\& }{items}}
 
 Call this to inform the model that several items have changed.
+
+This will eventually emit wxEVT\_DATAVIEW\_ITEM\_VALUE\_CHANGED
+events (in which the column fields will not be set) to the user. 
 
 \membersection{wxDataViewModel::ItemsDeleted}\label{wxdataviewmodelitemsdeleted}
 
@@ -225,6 +231,11 @@ has to be called!
 
 \func{virtual bool}{ValueChanged}{\param{const wxDataViewItem\& }{item}, \param{unsigned int }{col}}
 
-Call this to inform this model that a value in
-the model has been changed.
+Call this to inform this model that a value in the model has
+been changed. This is also called from wxDataViewCtrl's
+internal editing code, e.g. when editing a text field 
+in the control.
+
+This will eventually emit a wxEVT\_DATAVIEW\_ITEM\_VALUE\_CHANGED
+event to the user.
 

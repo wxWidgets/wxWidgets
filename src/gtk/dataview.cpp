@@ -2435,13 +2435,7 @@ bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDa
         parent_node->AddNode( new wxGtkTreeModelNode( parent_node, item, this ) );
     else
         parent_node->AddLeave( item.GetID() );
-        
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_ADDED, m_owner->GetId() );
-    event.SetEventObject( m_owner );
-    event.SetModel( m_owner->GetModel() );
-    event.SetItem( item );
-    m_owner->GetEventHandler()->ProcessEvent( event );
-
+    
     return true;
 }
 
@@ -2450,18 +2444,12 @@ bool wxDataViewCtrlInternal::ItemDeleted( const wxDataViewItem &parent, const wx
     wxGtkTreeModelNode *parent_node = FindNode( parent );
     parent_node->DeleteChild( item.GetID() );
     
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_DELETED, m_owner->GetId() );
-    event.SetEventObject( m_owner );
-    event.SetModel( m_owner->GetModel() );
-    event.SetItem( item );
-    m_owner->GetEventHandler()->ProcessEvent( event );
-
     return true;
 }
 
 bool wxDataViewCtrlInternal::ItemChanged( const wxDataViewItem &item )
 {
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_CHANGED, m_owner->GetId() );
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, m_owner->GetId() );
     event.SetEventObject( m_owner );
     event.SetModel( m_owner->GetModel() );
     event.SetItem( item );
@@ -2472,10 +2460,11 @@ bool wxDataViewCtrlInternal::ItemChanged( const wxDataViewItem &item )
 
 bool wxDataViewCtrlInternal::ValueChanged( const wxDataViewItem &item, unsigned int col )
 {
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_MODEL_VALUE_CHANGED, m_owner->GetId() );
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, m_owner->GetId() );
     event.SetEventObject( m_owner );
     event.SetModel( m_owner->GetModel() );
     event.SetColumn( col );
+    event.SetDataViewColumn( GetOwner()->GetColumn(col) );
     event.SetItem( item );
     m_owner->GetEventHandler()->ProcessEvent( event );
     
@@ -2484,11 +2473,6 @@ bool wxDataViewCtrlInternal::ValueChanged( const wxDataViewItem &item, unsigned 
 
 bool wxDataViewCtrlInternal::Cleared()
 {
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_MODEL_CLEARED, m_owner->GetId() );
-    event.SetEventObject( m_owner );
-    event.SetModel( m_owner->GetModel() );
-    m_owner->GetEventHandler()->ProcessEvent( event );
-    
     return true;
 }
 
@@ -2932,6 +2916,52 @@ void gtk_dataviewctrl_size_callback( GtkWidget *WXUNUSED(widget),
 }
 
 
+//-----------------------------------------------------------------------------
+// "motion_notify_event"
+//-----------------------------------------------------------------------------
+
+static gboolean
+gtk_dataview_motion_notify_callback( GtkWidget *widget,
+                                   GdkEventMotion *gdk_event,
+                                   wxDataViewCtrl *dv )
+{
+    if (gdk_event->is_hint)
+    {
+        int x = 0;
+        int y = 0;
+        GdkModifierType state;
+        gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
+        gdk_event->x = x;
+        gdk_event->y = y;
+    }
+
+    GtkTreePath *path = NULL;
+    GtkTreeViewColumn *column = NULL;
+    gint cell_x = 0;
+    gint cell_y = 0;
+    if (gtk_tree_view_get_path_at_pos( 
+        GTK_TREE_VIEW(dv->GtkGetTreeView()),
+        (int) gdk_event->x, (int) gdk_event->y,
+        &path,
+        &column,
+        &cell_x,
+        &cell_y))
+    {
+        if (path)
+        {
+            GtkTreeIter iter;
+            dv->GtkGetInternal()->get_iter( &iter, path );
+            
+            // wxPrintf( "mouse %d %d\n", (int) gdk_event->x, (int) gdk_event->y );
+        
+            gtk_tree_path_free( path );
+        }
+    }
+
+
+    return FALSE;
+}
+
 
 IMPLEMENT_DYNAMIC_CLASS(wxDataViewCtrl, wxDataViewCtrlBase)
 
@@ -3035,6 +3065,9 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
                             
     g_signal_connect_after (m_treeview, "row-expanded",
                             G_CALLBACK (wxdataview_row_expanded_callback), this);
+
+    g_signal_connect (m_treeview, "motion_notify_event",
+                      G_CALLBACK (gtk_dataview_motion_notify_callback), this);
 
     return true;
 }

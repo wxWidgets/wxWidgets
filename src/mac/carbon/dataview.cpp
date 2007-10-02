@@ -131,7 +131,7 @@ public:
       wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->m_dataViewControlPtr->GetPeer()));
       
      // sent the equivalent wxWidget event:
-      wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_CHANGED,dataViewCtrlPtr->GetId()); // variable defintion
+      wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_VALUE_ITEM_CHANGED,dataViewCtrlPtr->GetId()); // variable defintion
 
       dataViewEvent.SetEventObject(dataViewCtrlPtr);
       dataViewEvent.SetItem(item);
@@ -183,7 +183,7 @@ public:
         (this->m_dataViewControlPtr->UpdateItems(parentID,1,&itemID,dataViewCtrlPtr->GetColumn(col)->GetPropertyID(),propertyID) == noErr))
     {
      // variable definition and initialization:
-      wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_MODEL_VALUE_CHANGED,dataViewCtrlPtr->GetId());
+      wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED,dataViewCtrlPtr->GetId());
 
       dataViewEvent.SetEventObject(dataViewCtrlPtr);
       dataViewEvent.SetColumn(col);
@@ -200,17 +200,7 @@ public:
   virtual bool Cleared(void)
   {
     if (this->m_dataViewControlPtr->RemoveItems() == noErr)
-    {
-     // variable definitions and initializations:
-      wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->m_dataViewControlPtr->GetPeer()));
-      wxDataViewEvent dataViewEvent  (wxEVT_COMMAND_DATAVIEW_MODEL_CLEARED,dataViewCtrlPtr->GetId());
-
-      dataViewEvent.SetEventObject(dataViewCtrlPtr);
-     // send the equivalent wxWidget event:
-      dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
-     // done
       return true;
-    } /* if */
     else
       return false;
   } /* Cleared(void) */
