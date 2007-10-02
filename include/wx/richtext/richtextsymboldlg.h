@@ -28,7 +28,7 @@
 ////@begin forward declarations
 class wxSymbolListCtrl;
 
-class WXDLLIMPEXP_CORE wxTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
 ////@end forward declarations
 

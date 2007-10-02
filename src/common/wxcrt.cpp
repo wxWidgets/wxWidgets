@@ -936,9 +936,9 @@ wxCRT_StrtoullBase(const T* nptr, T** endptr, int base, T* sign)
         unsigned int n;
 
         T c = *i;
-        if ( c >= wxT('0') )
+        if ( c >= '0' )
         {
-            if ( c <= wxT('9') )
+            if ( c <= '9' )
                 n = c - wxT('0');
             else
                 n = wxTolower(c) - wxT('a') + 10;

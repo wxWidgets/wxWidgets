@@ -59,9 +59,12 @@ public:
 
         // increase the size twice, unless we're already too big or unless
         // more is requested
-        const size_type increment = (m_size > 0)
-                                     ? wxMin(m_size, ALLOC_MAX_SIZE)
-                                     : ALLOC_INITIAL_SIZE;
+        //
+        // NB: casts to size_t are needed to suppress mingw32 warnings about
+        //     mixing enums and ints in the same expression
+        const size_type increment = m_size > 0
+                                     ? wxMin(m_size, (size_type)ALLOC_MAX_SIZE)
+                                     : (size_type)ALLOC_INITIAL_SIZE;
         if ( m_capacity + increment > n )
             n = m_capacity + increment;
 
