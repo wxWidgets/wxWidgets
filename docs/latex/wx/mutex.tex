@@ -8,10 +8,11 @@ resource as only one thread at a time can own a mutex object.
 Mutexes may be recursive in the sense that a thread can lock a mutex which it
 had already locked before (instead of dead locking the entire process in this
 situation by starting to wait on a mutex which will never be released while the
-thread is waiting) but using them is not recommended and they are {\bf not}
-recursive by default. The reason for this is that recursive mutexes are not
-supported by all Unix flavours and, worse, they cannot be used with 
-\helpref{wxCondition}{wxcondition}.
+thread is waiting) but using them is not recommended under Unix and they are 
+{\bf not} recursive there by default. The reason for this is that recursive
+mutexes are not supported by all Unix flavours and, worse, they cannot be used
+with \helpref{wxCondition}{wxcondition}. On the other hand, Win32 mutexes are
+always recursive.
 
 For example, when several threads use the data stored in the linked list,
 modifications to the list should only be allowed to one thread at a time
