@@ -226,7 +226,7 @@ unsigned long wxGetProcessId()
 bool wxGetEnv(const wxString& var, wxString *value)
 {
     // wxGetenv is defined as getenv()
-    wxChar *p = wxGetenv(var);
+    wxChar *p = wxGetenv((const wxChar *)var);
     if ( !p )
         return false;
 
@@ -238,7 +238,7 @@ bool wxGetEnv(const wxString& var, wxString *value)
     return true;
 }
 
-bool wxSetEnv(const wxString& variable, const char *value)
+static bool wxDoSetEnv(const wxString& variable, const char *value)
 {
 #if defined(HAVE_SETENV)
     return setenv(variable.mb_str(), value, 1 /* overwrite */) == 0;
@@ -395,11 +395,7 @@ const wxChar* wxGetHomeDir(
 }
 
 // Hack for OS/2
-#if wxUSE_UNICODE
-const wxMB2WXbuf wxGetUserHome( const wxString &rUser )
-#else // just for binary compatibility -- there is no 'const' here
 wxChar* wxGetUserHome ( const wxString &rUser )
-#endif
 {
     wxChar*    zHome;
     wxString   sUser1(rUser);
@@ -466,7 +462,7 @@ bool wxGetDiskSpace(const wxString& path,
     if (wxDirExists(fn.GetFullPath()) == false)
         return false;
 
-    disknum = 1 + wxToupper(fn.GetVolume().GetChar(0)) - _T('A');
+    disknum = wxToupper(fn.GetVolume().GetChar(0)) - _T('A') + 1;
 
     rc = ::DosQueryFSInfo(disknum,             // 1 = A, 2 = B, 3 = C, ...
                           FSIL_ALLOC,          // allocation info
