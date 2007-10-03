@@ -1956,12 +1956,12 @@ wxLongLong wxAMMediaBackend::GetPosition()
 }
 
 //---------------------------------------------------------------------------
-// wxAMMediaBackend::GetVolume
+// wxAMMediaBackend::GetVolume and SetVolume()
 //
-// Gets the volume through the IActiveMovie interface -
-// value ranges from 0 (MAX volume) to -10000 (minimum volume).
-// -100 per decibel (Logorithmic in 0.01db per step).
+// Notice that for the IActiveMovie interface value ranges from 0 (MAX volume)
+// to -10000 (minimum volume) and the scale is logarithmic in 0.01db per step.
 //---------------------------------------------------------------------------
+
 double wxAMMediaBackend::GetVolume()
 {
     long lVolume;
@@ -1972,37 +1972,20 @@ double wxAMMediaBackend::GetVolume()
         return 0.0;
     }
 
-    // Volume conversion from Greg Hazel
-    double dVolume = (double)lVolume / 125;
+    double dVolume = lVolume / 2000.; // volume is now in [-5..0] range
+    dVolume = pow(10.0, dVolume);     //                 [10^-5, 1]
+    dVolume -= 0.00001;               //                [0, 1-10^-5]
+    dVolume /= 1 - 0.00001;           //                   [0, 1]
 
-    // convert to 0 to 1
-    dVolume = pow(10.0, dVolume/20.0);
-    // handle -INF
-    dVolume *= 1 + pow(10.0, -5.0);
-    dVolume -= pow(10.0, -5.0);
     return dVolume;
 }
 
-//---------------------------------------------------------------------------
-// wxAMMediaBackend::SetVolume
-//
-// Sets the volume through the IActiveMovie interface -
-// value ranges from 0 (MAX volume) to -10000 (minimum volume).
-// -100 per decibel (Logorithmic in 0.01db per step).
-//---------------------------------------------------------------------------
 bool wxAMMediaBackend::SetVolume(double dVolume)
 {
-    // Volume conversion from Greg Hazel
-    long lVolume;
-    // handle -INF
-    dVolume *= 1 - pow(10.0, -5.0);
-    dVolume += pow(10.0, -5.0);
-    // convert to -100db to 0db
-    dVolume = 20 * log10(dVolume);
-    // scale to -10000 to 0
-    lVolume = (long)(125 * dVolume);
+    // inverse the transformation above
+    long lVolume = 2000*log10(dVolume + (1 - dVolume)*0.00001);
 
-    HRESULT hr = GetAM()->put_Volume( lVolume );
+    HRESULT hr = GetAM()->put_Volume(lVolume);
     if(FAILED(hr))
     {
         wxAMLOG(hr);
