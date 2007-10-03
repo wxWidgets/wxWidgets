@@ -1966,7 +1966,7 @@ double wxAMMediaBackend::GetVolume()
     }
 
     // Volume conversion from Greg Hazel
-    double dVolume = (double)lVolume / 125;
+    double dVolume = (double)lVolume / 100;
 
     // convert to 0 to 1
     dVolume = pow(10.0, dVolume/20.0);
@@ -1993,7 +1993,7 @@ bool wxAMMediaBackend::SetVolume(double dVolume)
     // convert to -100db to 0db
     dVolume = 20 * log10(dVolume);
     // scale to -10000 to 0
-    lVolume = (long)(125 * dVolume);
+    lVolume = (long)(100 * dVolume);
 
     HRESULT hr = GetAM()->put_Volume( lVolume );
     if(FAILED(hr))
