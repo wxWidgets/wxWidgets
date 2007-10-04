@@ -169,14 +169,14 @@ void wxDataFormat::SetId( NativeFormat format )
         m_format = 0;
     }
     m_format = (NativeFormat) CFStringCreateCopy(NULL, (CFStringRef)format);
-    if ( UTTypeConformsTo( (CFStringRef)format, CFSTR("public.plain-text") ) )
+    if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("public.utf16-plain-text") )  ) 
+    {
+        m_type = wxDF_UNICODETEXT;
+    } 
+    else if ( UTTypeConformsTo( (CFStringRef)format, CFSTR("public.plain-text") ) )
     {
         m_type = wxDF_TEXT;
     }
-    else if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("public.utf16-plain-text") )  ) 
-    {
-        m_type = wxDF_UNICODETEXT;
-    }        
 #if wxMAC_USE_CORE_GRAPHICS
     else if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("public.tiff") )  ) 
     {
