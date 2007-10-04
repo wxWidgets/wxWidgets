@@ -289,7 +289,7 @@ void wxMetafile::SetPICT(void* pictHandle)
     QDPictRelease( pictRef );
     ((wxMetafileRefData*) m_refData)->Close();
 #else
-    m_refData = new wxMetafileRefData((PicHandle)mf);
+    m_refData = new wxMetafileRefData((PicHandle)pictHandle);
 #endif
 }
 
