@@ -1104,6 +1104,15 @@
 /* Define if fdopen is available.  */
 #undef HAVE_FDOPEN
 
+/* Define if sysconf is available. */
+#undef HAVE_SYSCONF
+
+/* Define if getpwuid_r is available. */
+#undef HAVE_GETPWUID_R
+
+/* Define if getgrgid_r is available. */
+#undef HAVE_GETGRGID_R
+
 /* -------------------------------------------------------------------------
    Win32 adjustments section
    ------------------------------------------------------------------------- */

@@ -28,10 +28,12 @@
 #include "wx/datetime.h"
 #include "wx/ptr_scpd.h"
 #include "wx/filename.h"
+#include "wx/thread.h"
 
 #include <ctype.h>
 
 #ifdef __UNIX__
+#include <pwd.h>
 #include <grp.h>
 #endif
 
@@ -344,32 +346,99 @@ static wxFileOffset RoundUpSize(wxFileOffset size, int factor = 1)
     return ((size + chunk - 1) / chunk) * chunk;
 }
 
-static wxString GroupName()
-{
 #ifdef __UNIX__
-    group *gr;
-    if ((gr = getgrgid(getgid())) != NULL)
-        return wxString(gr->gr_name, wxConvLibc);
+
+static wxString wxTarUserName(int uid)
+{
+    struct passwd *ppw;
+
+#ifdef HAVE_GETPWUID_R
+#if defined HAVE_SYSCONF && defined _SC_GETPW_R_SIZE_MAX
+    long pwsize = sysconf(_SC_GETPW_R_SIZE_MAX);
+    size_t bufsize(wxMin(wxMax(1024l, pwsize), 32768l));
+#else
+    size_t bufsize = 1024;
+#endif
+    wxCharBuffer buf(bufsize);
+    struct passwd pw;
+
+    if (getpwuid_r(uid, &pw, buf.data(), bufsize, &ppw) == 0)
+        return wxString(pw.pw_name, wxConvLibc);
+#else
+    if ((ppw = getpwuid(uid)) != NULL)
+        return wxString(ppw->pw_name, wxConvLibc);
 #endif
     return _("unknown");
 }
 
-static inline int UserId()
+static wxString wxTarGroupName(int gid)
 {
-#ifdef __UNIX__
-    return getuid();
+    struct group *pgr;
+#ifdef HAVE_GETGRGID_R
+#if defined HAVE_SYSCONF && defined _SC_GETGR_R_SIZE_MAX
+    long grsize = sysconf(_SC_GETGR_R_SIZE_MAX);
+    size_t bufsize(wxMin(wxMax(1024l, grsize), 32768l));
 #else
-    return 0;
+    size_t bufsize = 1024;
 #endif
+    wxCharBuffer buf(bufsize);
+    struct group gr;
+
+    if (getgrgid_r(gid, &gr, buf.data(), bufsize, &pgr) == 0)
+        return wxString(gr.gr_name, wxConvLibc);
+#else
+    if ((pgr = getgrgid(gid)) != NULL)
+        return wxString(pgr->gr_name, wxConvLibc);
+#endif
+    return _("unknown");
 }
 
-static inline int GroupId()
+#endif  // __UNIX__
+
+// Cache the user and group names since getting them can be expensive,
+// get both names and ids at the same time.
+//
+struct wxTarUser
+{
+    wxTarUser();
+    ~wxTarUser() { delete [] uname; delete [] gname; }
+
+    int uid;
+    int gid;
+
+    wxChar *uname;
+    wxChar *gname;
+};
+
+wxTarUser::wxTarUser()
 {
 #ifdef __UNIX__
-    return getgid();
+    uid = getuid();
+    gid = getgid();
+    wxString usr = wxTarUserName(uid);
+    wxString grp = wxTarGroupName(gid);
 #else
-    return 0;
+    uid = 0;
+    gid = 0;
+    wxString usr = wxGetUserId();
+    wxString grp = _("unknown");
 #endif
+
+    uname = new wxChar[usr.length() + 1];
+    wxStrcpy(uname, usr.c_str());
+
+    gname = new wxChar[grp.length() + 1];
+    wxStrcpy(gname, grp.c_str());
+}
+
+static const wxTarUser& wxGetTarUser()
+{
+#if wxUSE_THREADS
+    static wxCriticalSection cs;
+    wxCriticalSectionLocker lock(cs);
+#endif
+    static wxTarUser tu;
+    return tu;
 }
 
 // ignore the size field for entry types 3, 4, 5 and 6
@@ -397,14 +466,14 @@ wxTarEntry::wxTarEntry(const wxString& name /*=wxEmptyString*/,
                        wxFileOffset size    /*=0*/)
   : m_Mode(0644),
     m_IsModeSet(false),
-    m_UserId(UserId()),
-    m_GroupId(GroupId()),
+    m_UserId(wxGetTarUser().uid),
+    m_GroupId(wxGetTarUser().gid),
     m_Size(size),
     m_Offset(wxInvalidOffset),
     m_ModifyTime(dt),
     m_TypeFlag(wxTAR_REGTYPE),
-    m_UserName(wxGetUserId()),
-    m_GroupName(GroupName()),
+    m_UserName(wxGetTarUser().uname),
+    m_GroupName(wxGetTarUser().gname),
     m_DevMajor(~0),
     m_DevMinor(~0)
 {

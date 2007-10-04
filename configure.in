@@ -4637,6 +4637,14 @@ fi
 
 WX_CHECK_FUNCS(fdopen)
 
+if test "$wxUSE_TARSTREAM" = "yes"; then
+    WX_CHECK_FUNCS(sysconf)
+    WX_CHECK_FUNCS(getpwuid_r, [], [], [#define _REENTRANT
+                                        #include <pwd.h>])
+    WX_CHECK_FUNCS(getgrgid_r, [], [], [#define _REENTRANT
+                                        #include <grp.h>])
+fi
+ 
 fi
 
 
