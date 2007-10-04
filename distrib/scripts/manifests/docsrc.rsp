@@ -2,6 +2,7 @@ docs/latex/wx/*.tex
 docs/latex/wx/*.sty
 docs/latex/wx/*.bib
 docs/latex/wx/*.hpj
+docs/latex/wx/*.inc
 docs/latex/wx/*.ini
 docs/latex/wx/*.txt
 docs/latex/wx/*.cnt
