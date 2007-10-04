@@ -27,40 +27,6 @@
 // global data
 //-----------------------------------------------------------------------------
 
-class wxMacToolTipTimer ;
-
-class wxMacToolTip
-{
-public :
-    wxMacToolTip() ;
-    ~wxMacToolTip() ;
-
-    void Setup( WindowRef window , const wxString& text , const wxPoint& localPosition ) ;
-    void Draw() ;
-    void Clear() ;
-
-    long GetMark()
-    { return m_mark ; }
-
-    bool IsShown()
-    { return m_shown ; }
-
-private :
-    wxString    m_label ;
-    wxPoint m_position ;
-    Rect            m_rect ;
-    WindowRef    m_window ;
-    PicHandle    m_backpict ;
-    bool        m_shown ;
-    long        m_mark ;
-#if wxUSE_TIMER 
-    wxMacToolTipTimer* m_timer ;
-#endif
-#if TARGET_CARBON
-    wxMacCFStringHolder m_helpTextRef ;
-#endif
-} ;
-
 #if wxUSE_TIMER
 class wxMacToolTipTimer : public wxTimer
 {
