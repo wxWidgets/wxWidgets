@@ -283,38 +283,40 @@ void wxDataObject::AddToPasteboard( void * pb, int itemID )
         {
             // empty the buffer because in some case GetDataHere does not fill buf
             memset( buf, 0, sz );
-            GetDataHere( array[ i ], buf );
-            int counter = 1 ;
-            if ( thisFormat.GetType() == wxDF_FILENAME )
+            if ( GetDataHere( array[ i ], buf ) )
             {
-                // the data is D-normalized UTF8 strings of filenames delimited with \n
-                char *fname = strtok((char*) buf,"\n");
-                while (fname != NULL)
+                int counter = 1 ;
+                if ( thisFormat.GetType() == wxDF_FILENAME )
                 {
-                    // translate the filepath into a fileurl and put that into the pasteobard
-                    CFStringRef path = CFStringCreateWithBytes(NULL,(UInt8*)fname,strlen(fname),kCFStringEncodingUTF8,false);
-                    CFURLRef url = CFURLCreateWithFileSystemPath(NULL, path , kCFURLPOSIXPathStyle, false);
-                    CFRelease(path);
-                    CFDataRef data = CFURLCreateData(NULL,url,kCFStringEncodingUTF8,true);
-                    CFRelease(url);
-                    PasteboardPutItemFlavor( pasteboard, (PasteboardItemID) counter,
-                        (CFStringRef) thisFormat.GetFormatId() , data, kPasteboardFlavorNoFlags);
-                    CFRelease( data );
-                    counter++;
-                    fname = strtok (NULL,"\n");
+                    // the data is D-normalized UTF8 strings of filenames delimited with \n
+                    char *fname = strtok((char*) buf,"\n");
+                    while (fname != NULL)
+                    {
+                        // translate the filepath into a fileurl and put that into the pasteobard
+                        CFStringRef path = CFStringCreateWithBytes(NULL,(UInt8*)fname,strlen(fname),kCFStringEncodingUTF8,false);
+                        CFURLRef url = CFURLCreateWithFileSystemPath(NULL, path , kCFURLPOSIXPathStyle, false);
+                        CFRelease(path);
+                        CFDataRef data = CFURLCreateData(NULL,url,kCFStringEncodingUTF8,true);
+                        CFRelease(url);
+                        PasteboardPutItemFlavor( pasteboard, (PasteboardItemID) counter,
+                            (CFStringRef) thisFormat.GetFormatId() , data, kPasteboardFlavorNoFlags);
+                        CFRelease( data );
+                        counter++;
+                        fname = strtok (NULL,"\n");
+                    }
+                    
                 }
-                
-            }
-            else
-            {
-                CFDataRef data = CFDataCreate( kCFAllocatorDefault, (UInt8*)buf, datasize );
-                if ( thisFormat.GetType() == wxDF_TEXT )
-                     PasteboardPutItemFlavor( pasteboard, (PasteboardItemID) itemID,
-                        CFSTR("com.apple.traditional-mac-plain-text") , data, kPasteboardFlavorNoFlags);
                 else
-                    PasteboardPutItemFlavor( pasteboard, (PasteboardItemID) itemID,
-                        (CFStringRef) thisFormat.GetFormatId() , data, kPasteboardFlavorNoFlags);
-                CFRelease( data );
+                {
+                    CFDataRef data = CFDataCreate( kCFAllocatorDefault, (UInt8*)buf, datasize );
+                    if ( thisFormat.GetType() == wxDF_TEXT )
+                         PasteboardPutItemFlavor( pasteboard, (PasteboardItemID) itemID,
+                            CFSTR("com.apple.traditional-mac-plain-text") , data, kPasteboardFlavorNoFlags);
+                    else
+                        PasteboardPutItemFlavor( pasteboard, (PasteboardItemID) itemID,
+                            (CFStringRef) thisFormat.GetFormatId() , data, kPasteboardFlavorNoFlags);
+                    CFRelease( data );
+                }
             }
             free( buf );
         }
