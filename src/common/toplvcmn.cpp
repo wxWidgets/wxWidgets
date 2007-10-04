@@ -81,6 +81,12 @@ bool wxTopLevelWindowBase::Destroy()
     if ( !wxPendingDelete.Member(this) )
         wxPendingDelete.Append(this);
 
+#ifdef __WXMAC__
+	// on mac we know that objects will always be deleted after this event
+	// has been handled, using Hide we avoid erratic redraws during window
+	// tear down
+	Hide();
+#else
     if (wxTopLevelWindows.GetCount() > 1)
     {
         // Hide it immediately. This should
@@ -91,6 +97,7 @@ bool wxTopLevelWindowBase::Destroy()
         // could delete any pending events.
         Hide();
     }
+#endif
 
     return true;
 }
