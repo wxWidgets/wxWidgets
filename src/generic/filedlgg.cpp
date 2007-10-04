@@ -433,7 +433,10 @@ void wxGenericFileDialog::GetFilenames(wxArrayString& files) const
 
 void wxGenericFileDialog::OnUpdateButtonsUI(wxUpdateUIEvent& event)
 {
-    event.Enable( !IsTopMostDir(m_filectrl->GetDirectory()) );
+    // surprisingly, we can be called before m_filectrl is set in Create() as
+    // wxFileCtrl ctor itself can generate idle events, so we need this test
+    if ( m_filectrl )
+        event.Enable( !IsTopMostDir(m_filectrl->GetDirectory()) );
 }
 
 #ifdef wxHAS_GENERIC_FILEDIALOG
