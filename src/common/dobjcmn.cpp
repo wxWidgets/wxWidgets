@@ -289,6 +289,10 @@ static inline wxMBConv& GetConv(const wxDataFormat& format)
 
 size_t wxTextDataObject::GetDataSize(const wxDataFormat& format) const
 {
+    wxCharBuffer buffer = GetConv(format).cWX2MB( GetText().c_str() );
+    if ( !buffer )
+        return 0;
+
     size_t len = GetConv(format).WC2MB( NULL, GetText().c_str(), 0 );
     return len;
 }
@@ -299,6 +303,9 @@ bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
         return false;
 
     wxCharBuffer buffer = GetConv(format).cWX2MB( GetText().c_str() );
+    if ( !buffer )
+        return false;
+
     size_t len = GetConv(format).WC2MB( NULL, GetText().c_str(), 0 );
     memcpy( (char*)buf, (const char*)buffer, len );
 
