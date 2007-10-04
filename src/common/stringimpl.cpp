@@ -584,7 +584,7 @@ wxStringImpl& wxStringImpl::replace(size_t nStart, size_t nLen,
     wxASSERT_MSG( nStart <= lenOld,
                   _T("index out of bounds in wxStringImpl::replace") );
     size_t nEnd = nStart + nLen;
-    if ( nEnd > lenOld )
+    if ( nLen > lenOld - nStart )
     {
         // nLen may be out of range, as it can be npos, just clump it down
         nLen = lenOld - nStart;
