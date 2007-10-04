@@ -272,6 +272,27 @@ void wxMetafile::SetHMETAFILE(WXHMETAFILE mf)
 #endif
 }
 
+void wxMetafile::SetPICT(void* pictHandle)
+{
+    UnRef();
+
+#if wxMAC_USE_CORE_GRAPHICS
+    Handle picHandle = (Handle) pictHandle;
+    HLock(picHandle);
+    CFDataRef data = CFDataCreateWithBytesNoCopy( kCFAllocatorDefault, (const UInt8*) *picHandle, GetHandleSize(picHandle), kCFAllocatorNull);
+    wxCFRef<CGDataProviderRef> provider(UMACGDataProviderCreateWithCFData(data));
+    QDPictRef pictRef = QDPictCreateWithProvider(provider);
+    CGRect rect = QDPictGetBounds(pictRef);
+    m_refData = new wxMetafileRefData( rect.size.width, rect.size.height );
+    QDPictDrawToCGContext( ((wxMetafileRefData*) m_refData)->GetContext(), rect, pictRef );
+    CFRelease( data );
+    QDPictRelease( pictRef );
+    ((wxMetafileRefData*) m_refData)->Close();
+#else
+    m_refData = new wxMetafileRefData((PicHandle)mf);
+#endif
+}
+
 bool wxMetaFile::Play(wxDC *dc)
 {
     if (!m_refData)

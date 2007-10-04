@@ -1857,7 +1857,7 @@ bool wxPICTResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, lon
     {
         wxMetafile mf ;
 
-        mf.SetHMETAFILE( (WXHMETAFILE) thePict ) ;
+        mf.SetPICT( thePict ) ;
         bitmap->Create( mf.GetWidth() , mf.GetHeight() ) ;
         wxMemoryDC dc ;
         dc.SelectObject( *bitmap ) ;
