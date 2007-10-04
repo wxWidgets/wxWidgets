@@ -19,12 +19,12 @@
 <!--
     Quick schedulers. Builds using these are triggered after each change to
     the sources on the given branch.
-    
-    name:               unique 
-    branch:             branch to watch 
+
+    name:               unique
+    branch:             branch to watch
     treeStableTimer:    wait until the tree has stopped changing for the
                         given number of seconds before firing
-    fileNotImportant:   files matching these patterns do not trigger a build 
+    fileNotImportant:   files matching these patterns do not trigger a build
 -->
 
 <scheduler>

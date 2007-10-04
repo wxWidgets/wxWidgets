@@ -11,6 +11,9 @@
     There is one xml file such as this per build slave containing a <build>
     element for each build the slave runs. Each <build> corresponds to a
     column in the waterfall display.
+
+    For full documentation see:
+    http://www.wxwidgets.org/wiki/index.php/Development:_Buildbot
 -->
 
 <bot xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -51,7 +54,7 @@
         The name of a scheduler that will trigger this build. The schedulers
         are usually defined in common.xml, look in there to see if there is
         already one you can use, and add a new one if not.
- 
+
         The 'trunk_quick' and 'stable_quick' schedulers currently in
         common.xml trigger a build after every source change on the trunk
         and stable branches respectively. There are also daily and weekly
