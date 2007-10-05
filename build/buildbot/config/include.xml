@@ -168,6 +168,9 @@
     <xsl:param name="halt" select="'false'"/>
     <compile>
         <defaults content="{$content}">
+            <name>
+                compile <xsl:value-of select="$dir"/>
+            </name>
             <description>
                 compiling <xsl:value-of select="$dir"/>
             </description>
