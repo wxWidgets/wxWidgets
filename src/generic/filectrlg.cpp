@@ -28,7 +28,6 @@
     #include "wx/filedlg.h"
 #endif
 
-#include "wx/filename.h"
 #include "wx/clntdata.h"
 #include "wx/file.h"        // for wxS_IXXX constants only
 #include "wx/generic/dirctrlg.h" // for wxFileIconsTable
@@ -1031,34 +1030,61 @@ bool wxGenericFileCtrl::Create( wxWindow *parent,
     return true;
 }
 
+// NB: there is an unfortunate mismatch between wxFileName and wxFileDialog
+//     method names but our GetDirectory() does correspond to wxFileName::
+//     GetPath() while our GetPath() is wxFileName::GetFullPath()
 wxString wxGenericFileCtrl::GetPath() const
 {
-    return DoGetFilename( true );
+    wxASSERT_MSG ( !(m_style & wxFC_MULTIPLE), "use GetPaths() instead" );
+
+    return DoGetFileName().GetFullPath();
 }
 
 wxString wxGenericFileCtrl::GetFilename() const
 {
-    return DoGetFilename( false );
+    wxASSERT_MSG ( !(m_style & wxFC_MULTIPLE), "use GetFilenames() instead" );
+
+    return DoGetFileName().GetFullName();
 }
 
-wxString wxGenericFileCtrl::DoGetFilename( const bool fullPath ) const
+wxString wxGenericFileCtrl::GetDirectory() const
 {
-    wxASSERT_MSG( ( m_style & wxFC_MULTIPLE ) == 0,
-                  wxT( "With controls that has wxFC_MULTIPLE style " )
-                  wxT( "use GetFilenames/GetPaths to get all filenames/paths selected" ) );
+    // don't check for wxFC_MULTIPLE here, this one is probably safe to call in
+    // any case as it can be always taken to mean "current directory"
+    return DoGetFileName().GetPath();
+}
 
-    const wxString value = m_text->GetValue();
+wxFileName wxGenericFileCtrl::DoGetFileName() const
+{
+    wxFileName fn;
 
-    if ( !value.empty() )
-        return value;
-    return fullPath ? ( GetProperFileListDir() + value ) : value;
+    wxString value = m_text->GetValue();
+    if ( value.empty() )
+    {
+        // nothing in the text control, get the selected file from the list
+        wxListItem item;
+        item.m_itemId = m_list->GetNextItem(-1, wxLIST_NEXT_ALL,
+                                            wxLIST_STATE_SELECTED);
+        m_list->GetItem(item);
+
+        fn.Assign(m_list->GetDir(), item.m_text);
+    }
+    else // user entered the value
+    {
+        // the path can be either absolute or relative
+        fn.Assign(value);
+        if ( fn.IsRelative() )
+            fn.MakeAbsolute(m_list->GetDir());
+    }
+
+    return fn;
 }
 
 void wxGenericFileCtrl::DoGetFilenames( wxArrayString& filenames, const bool fullPath ) const
 {
     filenames.Empty();
 
-    const wxString dir = GetProperFileListDir();
+    const wxString dir = m_list->GetDir();
     const wxString value = m_text->GetValue();
 
     if ( !value.empty() )
@@ -1103,11 +1129,6 @@ bool wxGenericFileCtrl::SetDirectory( const wxString& dir )
     m_ignoreChanges = false;
 
     return wxFileName( dir ).SameAs( m_list->GetDir() );
-}
-
-wxString wxGenericFileCtrl::GetDirectory() const
-{
-    return m_list->GetDir();
 }
 
 bool wxGenericFileCtrl::SetFilename( const wxString& name )
@@ -1442,19 +1463,6 @@ void wxGenericFileCtrl::GoToHomeDir()
 {
     m_list->GoToHomeDir();
     UpdateControls();
-}
-
-wxString wxGenericFileCtrl::GetProperFileListDir() const
-{
-    wxString dir = m_list->GetDir();
-#ifdef __UNIX__
-    if ( dir != wxT( "/" ) )
-#elif defined(__WXWINCE__)
-    if ( dir != wxT( "/" ) && dir != wxT( "\\" ) )
-#endif
-        dir += wxFILE_SEP_PATH;
-
-    return dir;
 }
 
 #endif // wxUSE_FILECTRL

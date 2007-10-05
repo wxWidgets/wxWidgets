@@ -17,6 +17,7 @@
 #include "wx/panel.h"
 #include "wx/listctrl.h"
 #include "wx/filectrl.h"
+#include "wx/filename.h"
 
 class WXDLLIMPEXP_FWD_CORE wxCheckBox;
 class WXDLLIMPEXP_FWD_CORE wxChoice;
@@ -247,6 +248,12 @@ public:
     void GoToParentDir();
     void GoToHomeDir();
 
+    // get the directory currently shown in the control: this can be different
+    // from GetDirectory() if the user entered a full path (with a path other
+    // than the one currently shown in the control) in the text control
+    // manually
+    wxString GetShownDirectory() const { return m_list->GetDir(); }
+
     wxFileListCtrl *GetFileList() { return m_list; }
 
     void ChangeToReportMode() { m_list->ChangeToReportMode(); }
@@ -264,9 +271,11 @@ private:
 
     void DoSetFilterIndex( int filterindex );
     void UpdateControls();
-    wxString DoGetFilename( const bool fullPath ) const;
+
+    // the first of these methods can only be used for the controls with single
+    // selection (i.e. without wxFC_MULTIPLE style), the second one in any case
+    wxFileName DoGetFileName() const;
     void DoGetFilenames( wxArrayString& filenames, const bool fullPath ) const;
-    wxString GetProperFileListDir() const;
 
     int m_style;
 

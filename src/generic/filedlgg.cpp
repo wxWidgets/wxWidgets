@@ -198,9 +198,6 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
     if ((len > 1) && (wxEndsWithPathSeparator(m_dir)))
         m_dir.Remove( len-1, 1 );
 
-    m_path = m_dir;
-    m_path += wxFILE_SEP_PATH;
-    m_path += defaultFile;
     m_filterExtension = wxEmptyString;
 
     // layout
@@ -350,16 +347,6 @@ bool wxGenericFileDialog::Show( bool show )
     return wxDialog::Show( show );
 }
 
-void wxGenericFileDialog::SetWildcard(const wxString& wildCard)
-{
-    m_filectrl->SetWildcard(wildCard);
-}
-
-void wxGenericFileDialog::SetFilterIndex( int filterindex )
-{
-    m_filectrl->SetFilterIndex(filterindex);
-}
-
 void wxGenericFileDialog::OnOk( wxCommandEvent &WXUNUSED(event) )
 {
     wxArrayString selectedFiles;
@@ -413,30 +400,12 @@ void wxGenericFileDialog::OnFileActivated( wxFileCtrlEvent &WXUNUSED(event) )
     OnOk( dummy );
 }
 
-void wxGenericFileDialog::SetPath( const wxString& path )
-{
-    // not only set the full path but also update filename and dir
-    m_path = path;
-
-    m_filectrl->SetPath(path);
-}
-
-void wxGenericFileDialog::GetPaths( wxArrayString& paths ) const
-{
-    m_filectrl->GetPaths(paths);
-}
-
-void wxGenericFileDialog::GetFilenames(wxArrayString& files) const
-{
-    m_filectrl->GetFilenames(files);
-}
-
 void wxGenericFileDialog::OnUpdateButtonsUI(wxUpdateUIEvent& event)
 {
     // surprisingly, we can be called before m_filectrl is set in Create() as
     // wxFileCtrl ctor itself can generate idle events, so we need this test
     if ( m_filectrl )
-        event.Enable( !IsTopMostDir(m_filectrl->GetDirectory()) );
+        event.Enable( !IsTopMostDir(m_filectrl->GetShownDirectory()) );
 }
 
 #ifdef wxHAS_GENERIC_FILEDIALOG

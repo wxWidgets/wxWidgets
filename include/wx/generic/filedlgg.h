@@ -61,13 +61,27 @@ public:
     virtual ~wxGenericFileDialog();
 
     virtual void SetMessage(const wxString& message) { SetTitle(message); }
-    virtual void SetPath(const wxString& path);
-    virtual void SetFilterIndex(int filterIndex);
-    virtual void SetWildcard(const wxString& wildCard);
+    virtual void SetPath(const wxString& path)
+        { m_filectrl->SetPath(path); }
+    virtual void SetFilterIndex(int filterIndex)
+        { m_filectrl->SetFilterIndex(filterIndex); }
+    virtual void SetWildcard(const wxString& wildCard)
+        { m_filectrl->SetWildcard(wildCard); }
 
-    // for multiple file selection
-    virtual void GetPaths(wxArrayString& paths) const;
-    virtual void GetFilenames(wxArrayString& files) const;
+    virtual wxString GetPath() const
+        { return m_filectrl->GetPath(); }
+    virtual void GetPaths(wxArrayString& paths) const
+        { return m_filectrl->GetPaths(paths); }
+    virtual wxString GetDirectory() const
+        { return m_filectrl->GetDirectory(); }
+    virtual wxString GetFilename() const
+        { return m_filectrl->GetFilename(); }
+    virtual void GetFilenames(wxArrayString& files) const
+        { return m_filectrl->GetFilenames(files); }
+    virtual wxString GetWildcard() const
+        { return m_filectrl->GetWildcard(); }
+    virtual int GetFilterIndex() const
+        { return m_filectrl->GetFilterIndex(); }
 
     // implementation only from now on
     // -------------------------------
