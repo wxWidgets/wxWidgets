@@ -186,7 +186,7 @@ public:
 #endif // wxUSE_BASE64
 
   // Causes ambiguities in VC++ 6 and OpenVMS (at least)
-#if ( (!defined(__VISUALC__) || __VISUALC__ > 1200) && !defined( __VMS ) )
+#if ( (!defined(__VISUALC__) || __VISUALC__ > 1200) && !defined( __VMS ) && !defined (__DMC__))
   // read other types, for which wxFromString is defined
   template <typename T>
   bool Read(const wxString& key, T* value) const
@@ -295,7 +295,7 @@ public:
     { return DoWriteDouble(key, value); }
 
   // Causes ambiguities in VC++ 6 and OpenVMS (at least)
-#if ( (!defined(__VISUALC__) || __VISUALC__ > 1200) && !defined( __VMS ) )
+#if ( (!defined(__VISUALC__) || __VISUALC__ > 1200) && !defined( __VMS ) && !defined (__DMC__))
   // for other types, use wxToString()
   template <typename T>
   bool Write(const wxString& key, T const& value)
