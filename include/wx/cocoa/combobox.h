@@ -17,6 +17,8 @@
 #include "wx/hashmap.h"
 #include "wx/cocoa/ObjcAssociate.h"
 
+#include "wx/textctrl.h"
+
 DECLARE_WXCOCOA_OBJC_CLASS(NSComboBox);
 
 WX_DECLARE_OBJC_HASHMAP(NSComboBox);
@@ -38,11 +40,12 @@ public:
 // ========================================================================
 // wxComboBox
 // ========================================================================
-class WXDLLEXPORT wxComboBox : public wxTextCtrl, public wxComboBoxBase, protected wxCocoaNSComboBox
+class WXDLLEXPORT wxComboBox : public wxControl, public wxComboBoxBase, protected wxCocoaNSComboBox, protected wxCocoaNSTextField
 {
     DECLARE_DYNAMIC_CLASS(wxComboBox)
     DECLARE_EVENT_TABLE()
     WX_DECLARE_COCOA_OWNER(NSComboBox,NSTextField,NSView)
+    WX_DECLARE_COCOA_OWNER(NSTextField,NSControl,NSView)
 // ------------------------------------------------------------------------
 // initialization
 // ------------------------------------------------------------------------
@@ -97,11 +100,12 @@ protected:
     wxArrayPtrVoid m_Datas;
     virtual void doWxEvent(int nEvent);
 
+    virtual void Cocoa_didChangeText()
+    {}
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
 public:
-    // FIXME: Quit deriving from wxTextCtrl
     void Clear() // HACK
     {   wxComboBoxBase::Clear(); }
 
@@ -123,46 +127,28 @@ public:
     virtual void DoSetItemClientData(unsigned int, void*);
     virtual void* DoGetItemClientData(unsigned int) const;
     virtual bool IsSorted() const { return HasFlag(wxCB_SORT); }
-    // wxComboBoxBase pure virtuals
-    virtual wxString GetValue() const
-    {   return wxTextCtrl::GetValue(); }
-    virtual void SetValue(const wxString& value)
-    {   return wxTextCtrl::SetValue(value); }
-    virtual void Cut() { wxTextCtrl::Cut(); }
-    virtual void Copy() { wxTextCtrl::Copy(); }
-    virtual void Paste() { wxTextCtrl::Paste(); }
-    virtual void SetInsertionPoint(long pos)
-    {   wxTextCtrl::SetInsertionPoint(pos); }
-    virtual void SetInsertionPointEnd()
-    {   wxTextCtrl::SetInsertionPointEnd(); }
-    virtual long GetInsertionPoint() const
-    {   return wxTextCtrl::GetInsertionPoint(); }
-    virtual wxTextPos GetLastPosition() const
-    {   return wxTextCtrl::GetLastPosition(); }
-    virtual void Replace(long from, long to, const wxString& value)
-    {   wxTextCtrl::Replace(from,to,value); }
-    virtual void SetSelection(long from, long to)
-    {   wxTextCtrl::SetSelection(from,to); }
-    virtual void SetEditable(bool editable)
-    {   wxTextCtrl::SetEditable(editable); }
-    virtual bool IsEditable() const
-    {   return !HasFlag(wxCB_READONLY); }
-    virtual void Undo()
-    {   wxTextCtrl::Undo(); }
-    virtual void Redo()
-    {   wxTextCtrl::Redo(); }
-    virtual void SelectAll()
-    {   wxTextCtrl::SelectAll(); }
-    virtual bool CanCopy() const
-    {   return wxTextCtrl::CanCopy(); }
-    virtual bool CanCut() const
-    {   return wxTextCtrl::CanCut(); }
-    virtual bool CanPaste() const
-    {   return wxTextCtrl::CanPaste(); }
-    virtual bool CanUndo() const
-    {   return wxTextCtrl::CanUndo(); }
-    virtual bool CanRedo() const
-    {   return wxTextCtrl::CanRedo(); }
+
+// ------------------------------------------------------------------------
+// wxTextEntryBase virtual implementations:
+// ------------------------------------------------------------------------
+    // FIXME: This needs to be moved to some sort of common code.
+    virtual void WriteText(const wxString&);
+    virtual wxString GetValue() const;
+    virtual void Remove(long, long);
+    virtual void Cut();
+    virtual void Copy();
+    virtual void Paste();
+    virtual void Undo();
+    virtual void Redo();
+    virtual bool CanUndo() const;
+    virtual bool CanRedo() const;
+    virtual void SetInsertionPoint(long pos);
+    virtual long GetInsertionPoint() const;
+    virtual wxTextPos GetLastPosition() const;
+    virtual void SetSelection(long from, long to);
+    virtual void GetSelection(long *from, long *to) const;
+    virtual bool IsEditable() const;
+    virtual void SetEditable(bool editable);
 };
 
 #endif // __WX_COCOA_COMBOBOX_H__

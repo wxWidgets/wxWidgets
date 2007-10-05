@@ -168,10 +168,11 @@ WX_IMPLEMENT_GET_OBJC_CLASS(wxPoserNSComboBox,NSComboBox)
 
 #import <AppKit/NSComboBox.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxTextCtrl)
-BEGIN_EVENT_TABLE(wxComboBox, wxTextCtrl)
+IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
+BEGIN_EVENT_TABLE(wxComboBox, wxControl)
 END_EVENT_TABLE()
 WX_IMPLEMENT_COCOA_OWNER(wxComboBox,NSComboBox,NSTextField,NSView)
+WX_IMPLEMENT_COCOA_OWNER(wxComboBox,NSTextField,NSControl,NSView)
 
 bool wxComboBox::Create(wxWindow *parent, wxWindowID winid,
             const wxString& value,
@@ -315,6 +316,95 @@ void wxComboBox::DoSetItemClientData(unsigned int nIndex, void* pData)
 void* wxComboBox::DoGetItemClientData(unsigned int nIndex) const
 {
     return m_Datas[nIndex];
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// wxTextEntry virtual implementations:
+
+void wxComboBox::WriteText(wxString const&)
+{
+}
+
+wxString wxComboBox::GetValue() const
+{
+    wxAutoNSAutoreleasePool pool;
+    return wxStringWithNSString([GetNSTextField() stringValue]);
+}
+
+void wxComboBox::Remove(long, long)
+{
+}
+
+void wxComboBox::Cut()
+{
+}
+
+void wxComboBox::Copy()
+{
+}
+
+void wxComboBox::Paste()
+{
+}
+
+void wxComboBox::Undo()
+{
+}
+
+void wxComboBox::Redo()
+{
+}
+
+bool wxComboBox::CanUndo() const
+{
+    return false;
+}
+
+bool wxComboBox::CanRedo() const
+{
+    return false;
+}
+
+void wxComboBox::SetInsertionPoint(long)
+{
+}
+
+long wxComboBox::GetInsertionPoint() const
+{
+    return 0;
+}
+
+wxTextPos wxComboBox::GetLastPosition() const
+{
+    // working - returns the size of the wxString
+    return (long)(GetValue().Len());
+}
+
+void wxComboBox::SetSelection(long, long)
+{
+}
+
+void wxComboBox::GetSelection(long*, long*) const
+{
+}
+
+bool wxComboBox::IsEditable() const
+{
+    return [GetNSTextField() isEditable];
+}
+
+void wxComboBox::SetEditable(bool editable)
+{
+    // first ensure that the current value is stored (in case the user had not finished editing
+    // before SetEditable(FALSE) was called)
+    DoSetValue(GetValue(),1);
+
+    [GetNSTextField() setEditable: editable];
+
+    // forces the focus on the textctrl to be lost - while focus is still maintained
+    // after SetEditable(FALSE) the user may still edit the control
+    // (might not the best way to do this..)
+    [GetNSTextField() abortEditing];
 }
 
 #endif // wxUSE_COMBOBOX
