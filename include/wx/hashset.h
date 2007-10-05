@@ -107,6 +107,11 @@ public:                                                                      \
 //     be called (a decent compiler should give a warning about it, but don't
 //     count on it)!
 #define WX_CLEAR_HASH_SET(type, hashset)                                     \
-    WX_CLEAR_HASH_MAP(type, hashset)
+    {                                                                        \
+        type::iterator it, en;                                               \
+        for( it = (hashset).begin(), en = (hashset).end(); it != en; ++it )  \
+            delete *it;                                                      \
+        (hashset).clear();                                                   \
+    }
 
 #endif // _WX_HASHSET_H_
