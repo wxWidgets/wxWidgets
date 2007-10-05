@@ -77,8 +77,8 @@ public:
 IMPLEMENT_ABSTRACT_CLASS(wxHtmlParser,wxObject)
 
 wxHtmlParser::wxHtmlParser()
-    : wxObject(), m_HandlersHash(wxKEY_STRING),
-      m_FS(NULL), m_HandlersStack(NULL)
+    : wxObject(),
+      m_FS(NULL)
 {
     m_Source = NULL;
     m_entitiesParser = new wxHtmlEntitiesParser;
@@ -94,17 +94,8 @@ wxHtmlParser::~wxHtmlParser()
     while (RestoreState()) {}
     DestroyDOMTree();
 
-    if (m_HandlersStack)
-    {
-        wxList& tmp = *m_HandlersStack;
-        wxList::iterator it, en;
-        for( it = tmp.begin(), en = tmp.end(); it != en; ++it )
-            delete (wxHashTable*)*it;
-        tmp.clear();
-    }
-    delete m_HandlersStack;
-    m_HandlersHash.Clear();
-    WX_CLEAR_LIST(wxList, m_HandlersList);
+    WX_CLEAR_ARRAY(m_HandlersStack);
+    WX_CLEAR_HASH_SET(wxHtmlTagHandlersSet, m_HandlersSet);
     delete m_entitiesParser;
     delete m_Source;
 }
@@ -318,13 +309,12 @@ void wxHtmlParser::DoParsing(const wxString::const_iterator& begin_pos_,
 
 void wxHtmlParser::AddTag(const wxHtmlTag& tag)
 {
-    wxHtmlTagHandler *h;
     bool inner = false;
 
-    h = (wxHtmlTagHandler*) m_HandlersHash.Get(tag.GetName());
-    if (h)
+    wxHtmlTagHandlersHash::const_iterator h = m_HandlersHash.find(tag.GetName());
+    if (h != m_HandlersHash.end())
     {
-        inner = h->HandleTag(tag);
+        inner = h->second->HandleTag(tag);
         if (m_stopParsing)
             return;
     }
@@ -341,10 +331,9 @@ void wxHtmlParser::AddTagHandler(wxHtmlTagHandler *handler)
     wxStringTokenizer tokenizer(s, wxT(", "));
 
     while (tokenizer.HasMoreTokens())
-        m_HandlersHash.Put(tokenizer.GetNextToken(), handler);
+        m_HandlersHash[tokenizer.GetNextToken()] = handler;
 
-    if (m_HandlersList.IndexOf(handler) == wxNOT_FOUND)
-        m_HandlersList.Append(handler);
+    m_HandlersSet.insert(handler);
 
     handler->SetParser(this);
 }
@@ -354,39 +343,24 @@ void wxHtmlParser::PushTagHandler(wxHtmlTagHandler *handler, const wxString& tag
     wxStringTokenizer tokenizer(tags, wxT(", "));
     wxString key;
 
-    if (m_HandlersStack == NULL)
-    {
-        m_HandlersStack = new wxList;
-    }
-
-    m_HandlersStack->Insert((wxObject*)new wxHashTable(m_HandlersHash));
+    m_HandlersStack.push_back(new wxHtmlTagHandlersHash(m_HandlersHash));
 
     while (tokenizer.HasMoreTokens())
     {
         key = tokenizer.GetNextToken();
-        m_HandlersHash.Delete(key);
-        m_HandlersHash.Put(key, handler);
+        m_HandlersHash[key] = handler;
     }
 }
 
 void wxHtmlParser::PopTagHandler()
 {
-    wxList::compatibility_iterator first;
+    wxCHECK_RET( !m_HandlersStack.empty(),
+                 "attempt to remove HTML tag handler from empty stack" );
 
-    if ( !m_HandlersStack ||
-#if wxUSE_STL
-         !(first = m_HandlersStack->GetFirst())
-#else // !wxUSE_STL
-         ((first = m_HandlersStack->GetFirst()) == NULL)
-#endif // wxUSE_STL/!wxUSE_STL
-        )
-    {
-        wxLogWarning(_("Warning: attempt to remove HTML tag handler from empty stack."));
-        return;
-    }
-    m_HandlersHash = *((wxHashTable*) first->GetData());
-    delete (wxHashTable*) first->GetData();
-    m_HandlersStack->Erase(first);
+    wxHtmlTagHandlersHash *prev = m_HandlersStack.back();
+    m_HandlersStack.pop_back();
+    m_HandlersHash = *prev;
+    delete prev;
 }
 
 void wxHtmlParser::SetSourceAndSaveState(const wxString& src)

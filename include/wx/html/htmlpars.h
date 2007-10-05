@@ -15,7 +15,9 @@
 
 #include "wx/html/htmltag.h"
 #include "wx/filesys.h"
-#include "wx/hash.h"
+#include "wx/hashmap.h"
+#include "wx/hashset.h"
+#include "wx/vector.h"
 #include "wx/fontenc.h"
 
 class WXDLLIMPEXP_FWD_BASE wxMBConv;
@@ -25,6 +27,14 @@ class WXDLLIMPEXP_FWD_HTML wxHtmlEntitiesParser;
 
 class wxHtmlTextPieces;
 class wxHtmlParserState;
+
+WX_DECLARE_HASH_SET_WITH_DECL(wxHtmlTagHandler*,
+                              wxPointerHash, wxPointerEqual,
+                              wxHtmlTagHandlersSet,
+                              class WXDLLIMPEXP_HTML);
+WX_DECLARE_STRING_HASH_MAP_WITH_DECL(wxHtmlTagHandler*,
+                                     wxHtmlTagHandlersHash,
+                                     class WXDLLIMPEXP_HTML);
 
 
 enum wxHtmlURLType
@@ -178,15 +188,15 @@ protected:
     //      it may (and often does) contain more references to one object
     // m_HandlersList is list of all handlers and it is guaranteed to contain
     //      only one reference to each handler instance.
-    wxList m_HandlersList;
-    wxHashTable m_HandlersHash;
+    wxHtmlTagHandlersSet m_HandlersSet;
+    wxHtmlTagHandlersHash m_HandlersHash;
 
     DECLARE_NO_COPY_CLASS(wxHtmlParser)
 
     // class for opening files (file system)
     wxFileSystem *m_FS;
     // handlers stack used by PushTagHandler and PopTagHandler
-    wxList *m_HandlersStack;
+    wxVector<wxHtmlTagHandlersHash*> m_HandlersStack;
 
     // entity parse
     wxHtmlEntitiesParser *m_entitiesParser;
