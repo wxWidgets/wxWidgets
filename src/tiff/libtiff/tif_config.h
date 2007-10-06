@@ -41,4 +41,8 @@
 # endif
 #endif
 
-#define lfind _lfind
+#ifndef __BORLANDC__
+   #define lfind _lfind
+#endif
+
+
