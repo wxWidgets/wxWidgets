@@ -135,7 +135,7 @@ void wxTextEntry::GetSelection(long *from, long *to) const
 
 bool wxTextEntry::IsEditable() const
 {
-    return (::GetWindowLong(GetEditHwnd(), GWL_STYLE) & ES_READONLY) != 0;
+    return !(::GetWindowLong(GetEditHwnd(), GWL_STYLE) & ES_READONLY);
 }
 
 void wxTextEntry::SetEditable(bool editable)
