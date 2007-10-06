@@ -2293,6 +2293,8 @@ void wxAuiManager::GetDockSizeConstraint(double* width_pct, double* height_pct) 
 
 void wxAuiManager::Update()
 {
+    m_hover_button = NULL;
+
     wxSizer* sizer;
     int i, pane_count = m_panes.GetCount();
 
