@@ -589,10 +589,10 @@ wxString wxGetOsDescription()
 }
 
 #ifndef __DARWIN__
-wxChar *wxGetUserHome (const wxString& user)
+wxString wxGetUserHome (const wxString& user)
 {
     // TODO
-    return NULL;
+    return wxString();
 }
 
 bool wxGetDiskSpace(const wxString& path, wxDiskspaceSize_t *pTotal, wxDiskspaceSize_t *pFree)

@@ -522,13 +522,10 @@ WXDLLIMPEXP_BASE wxString wxGetUserName();
 WXDLLIMPEXP_BASE wxString wxGetHomeDir();
 WXDLLIMPEXP_BASE const wxChar* wxGetHomeDir(wxString *pstr);
 
-// Get the user's home dir (caller must copy --- volatile)
-// returns NULL is no HOME dir is known
-#if defined(__UNIX__) && wxUSE_UNICODE && !defined(__WINE__)
-WXDLLIMPEXP_BASE const wxMB2WXbuf wxGetUserHome(const wxString& user = wxEmptyString);
-#else
-WXDLLIMPEXP_BASE wxChar* wxGetUserHome(const wxString& user = wxEmptyString);
-#endif
+// Get the user's (by default use the current user name) home dir,
+// return empty string on error
+WXDLLIMPEXP_BASE wxString wxGetUserHome(const wxString& user = wxEmptyString);
+
 
 #if wxUSE_LONGLONG
     typedef wxLongLong wxDiskspaceSize_t;
@@ -550,7 +547,7 @@ typedef int (wxCMPFUNC_CONV *CMPFUNCDATA)(const void* pItem1, const void* pItem2
 
 
 WXDLLIMPEXP_BASE void wxQsort(void *const pbase, size_t total_elems,
-			                   size_t size, CMPFUNCDATA cmp, const void* user_data);
+                              size_t size, CMPFUNCDATA cmp, const void* user_data);
 
 
 #if wxUSE_GUI // GUI only things from now on

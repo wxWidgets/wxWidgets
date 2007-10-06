@@ -467,14 +467,14 @@ const wxChar* wxGetHomeDir(wxString *pstr)
     return strDir.c_str();
 }
 
-wxChar *wxGetUserHome(const wxString& WXUNUSED(user))
+wxString wxGetUserHome(const wxString& user)
 {
-    // VZ: the old code here never worked for user != "" anyhow! Moreover, it
-    //     returned sometimes a malloc()'d pointer, sometimes a pointer to a
-    //     static buffer and sometimes I don't even know what.
-    static wxString s_home;
+    wxString home;
 
-    return (wxChar *)wxGetHomeDir(&s_home);
+    if ( user.empty() || user == wxGetUserId() )
+        wxGetHomeDir(&home);
+
+    return home;
 }
 
 bool wxGetDiskSpace(const wxString& WXUNUSED_IN_WINCE(path),

@@ -394,55 +394,45 @@ const wxChar* wxGetHomeDir(
     return rStrDir.c_str();
 }
 
-// Hack for OS/2
-wxChar* wxGetUserHome ( const wxString &rUser )
+wxString wxGetUserHome ( const wxString &rUser )
 {
     wxChar*    zHome;
-    wxString   sUser1(rUser);
+    wxString   sUser(rUser);
 
-    wxChar *wxBuffer = new wxChar[256];
+    wxString home;
+
 #ifndef __EMX__
-    if (!sUser1.empty())
+    if (!sUser.empty())
     {
-        wxChar                      zTmp[64];
+        const wxString currentUser = wxGetUserId();
 
-        if (wxGetUserId( zTmp
-                        ,sizeof(zTmp)/sizeof(char)
-                       ))
+        // Guests belong in the temp dir
+        if ( currentUser == "annonymous" )
         {
-            // Guests belong in the temp dir
-            if (wxStricmp(zTmp, _T("annonymous")) == 0)
-            {
-                if ((zHome = wxGetenv(_T("TMP"))) != NULL    ||
-                    (zHome = wxGetenv(_T("TMPDIR"))) != NULL ||
-                    (zHome = wxGetenv(_T("TEMP"))) != NULL)
-                    delete[] wxBuffer;
-                    return *zHome ? zHome : (wxChar*)_T("\\");
-            }
-            if (wxStricmp(zTmp, WXSTRINGCAST sUser1) == 0)
-                sUser1 = wxEmptyString;
+            zHome = wxGetenv(_T("TMP"));
+            if ( !zHome )
+                zHome = wxGetenv(_T("TMPDIR"));
+            if ( !zHome )
+                zHome = wxGetenv(_T("TEMP"));
+
+            if ( zHome && *zHome )
+                return zHome;
         }
+
+        if ( sUser == currentUser )
+            sUser.clear();
     }
 #endif
-    if (sUser1.empty())
+    if (sUser.empty())
     {
         if ((zHome = wxGetenv(_T("HOME"))) != NULL)
         {
-            wxStrcpy(wxBuffer, zHome);
-            wxUnix2DosFilename(wxBuffer);
-#if wxUSE_UNICODE
-            wxWCharBuffer retBuffer (wxBuffer);
-            delete[] wxBuffer;
-            return retBuffer;
-#else
-            wxStrcpy(zHome, wxBuffer);
-            delete[] wxBuffer;
-            return zHome;
-#endif
+            home = zHome;
+            home.Replace("/", "\\");
         }
     }
-    delete[] wxBuffer;
-    return (wxChar*)wxEmptyString; // No home known!
+
+    return home;
 }
 
 bool wxGetDiskSpace(const wxString& path,

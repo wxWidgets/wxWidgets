@@ -211,14 +211,14 @@ const wxChar* wxGetHomeDir(wxString *home)
     return strDir.c_str();
 }
 
-wxChar *wxGetUserHome(const wxString& user)
+wxString wxGetUserHome(const wxString& user)
 {
-    static wxString home;
+    wxString home;
 
     if (user.empty() || user == wxGetUserId())
-        return wx_const_cast(wxChar*, wxGetHomeDir(&home));
-    else
-        return _T("");
+        wxGetHomeDir(&home);
+
+    return home;
 }
 
 // returns %UserName%, $USER or just "user"

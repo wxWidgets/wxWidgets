@@ -1571,11 +1571,14 @@ that there isn't always a standard way to do a reliable check on the OS architec
 
 \membersection{::wxGetUserHome}\label{wxgetuserhome}
 
-\func{const wxChar *}{wxGetUserHome}{\param{const wxString\& }{user = ""}}
+\func{wxString}{wxGetUserHome}{\param{const wxString\& }{user = ""}}
 
-Returns the home directory for the given user. If the username is empty
-(default value), this function behaves like
-\helpref{wxGetHomeDir}{wxgethomedir}.
+Returns the home directory for the given user. If the \arg{user} is empty
+(default value), this function behaves like 
+\helpref{wxGetHomeDir}{wxgethomedir} i.e. returns the current user home
+directory.
+
+If the home directory couldn't be determined, an empty string is returned.
 
 \wxheading{Include files}
 

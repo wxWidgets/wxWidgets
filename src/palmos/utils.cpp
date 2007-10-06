@@ -103,9 +103,9 @@ const wxChar* wxGetHomeDir(wxString *pstr)
     return NULL;
 }
 
-wxChar *wxGetUserHome(const wxString& WXUNUSED(user))
+wxString wxGetUserHome(const wxString& WXUNUSED(user))
 {
-    return NULL;
+    return wxString();
 }
 
 bool wxGetDiskSpace(const wxString& path, wxDiskspaceSize_t *pTotal, wxDiskspaceSize_t *pFree)

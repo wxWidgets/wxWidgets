@@ -695,7 +695,7 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
 
 const wxChar* wxGetHomeDir( wxString *home  )
 {
-    *home = wxGetUserHome( wxEmptyString );
+    *home = wxGetUserHome();
     wxString tmp;
     if ( home->empty() )
         *home = wxT("/");
@@ -707,11 +707,7 @@ const wxChar* wxGetHomeDir( wxString *home  )
     return home->c_str();
 }
 
-#if wxUSE_UNICODE
-const wxMB2WXbuf wxGetUserHome( const wxString &user )
-#else // just for binary compatibility -- there is no 'const' here
-char *wxGetUserHome( const wxString &user )
-#endif
+wxString wxGetUserHome( const wxString &user )
 {
     struct passwd *who = (struct passwd *) NULL;
 
@@ -721,20 +717,17 @@ char *wxGetUserHome( const wxString &user )
 
         if ((ptr = wxGetenv(wxT("HOME"))) != NULL)
         {
-#if wxUSE_UNICODE
-            wxWCharBuffer buffer( ptr );
-            return buffer;
-#else
             return ptr;
-#endif
         }
-        if ((ptr = wxGetenv(wxT("USER"))) != NULL || (ptr = wxGetenv(wxT("LOGNAME"))) != NULL)
+
+        if ((ptr = wxGetenv(wxT("USER"))) != NULL ||
+             (ptr = wxGetenv(wxT("LOGNAME"))) != NULL)
         {
             who = getpwnam(wxSafeConvertWX2MB(ptr));
         }
 
-        // We now make sure the the user exists!
-        if (who == NULL)
+        // make sure the user exists!
+        if ( !who )
         {
             who = getpwuid(getuid());
         }
