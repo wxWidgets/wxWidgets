@@ -1082,42 +1082,42 @@ wxFileName wxGenericFileCtrl::DoGetFileName() const
 
 void wxGenericFileCtrl::DoGetFilenames( wxArrayString& filenames, const bool fullPath ) const
 {
-    filenames.Empty();
+    filenames.clear();
 
     const wxString dir = m_list->GetDir();
-    const wxString value = m_text->GetValue();
 
+    const wxString value = m_text->GetValue();
     if ( !value.empty() )
     {
-        if ( fullPath )
-            filenames.Add( dir + value );
-        else
-            filenames.Add( value );
+        wxFileName fn(value);
+        if ( fn.IsRelative() )
+            fn.MakeAbsolute(dir);
+
+        filenames.push_back(fullPath ? fn.GetFullPath() : fn.GetFullName());
         return;
     }
 
-    if ( m_list->GetSelectedItemCount() == 0 )
-    {
+    const int numSel = m_list->GetSelectedItemCount();
+    if ( !numSel )
         return;
-    }
 
-    filenames.Alloc( m_list->GetSelectedItemCount() );
+    filenames.reserve(numSel);
 
     wxListItem item;
     item.m_mask = wxLIST_MASK_TEXT;
-
-    item.m_itemId = m_list->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
-    while ( item.m_itemId != -1 )
+    item.m_itemId = -1;
+    for ( ;; )
     {
-        m_list->GetItem( item );
+        item.m_itemId = m_list->GetNextItem(item.m_itemId, wxLIST_NEXT_ALL,
+                                            wxLIST_STATE_SELECTED);
 
-        if ( fullPath )
-            filenames.Add( dir + item.m_text );
-        else
-            filenames.Add( item.m_text );
+        if ( item.m_itemId == -1 )
+            break;
 
-        item.m_itemId = m_list->GetNextItem( item.m_itemId,
-                                             wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
+        m_list->GetItem(item);
+
+        const wxFileName fn(dir, item.m_text);
+        filenames.push_back(fullPath ? fn.GetFullPath() : fn.GetFullName());
     }
 }
 
