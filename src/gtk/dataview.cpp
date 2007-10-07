@@ -2690,7 +2690,7 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( GtkTreeIter *iter )
     
     if (!result)
     {
-        wxPrintf( "Not found %d\n", (int) iter->user_data );
+        wxLogDebug( "Not found %p", iter->user_data );
         char *crash = NULL;
         *crash = 0;
     }
@@ -2707,7 +2707,7 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( const wxDataViewItem &item
     
     if (!result)
     {
-        wxPrintf( "Not found %d\n", (int) item.GetID() );
+        wxLogDebug( "Not found %p", item.GetID() );
         char *crash = NULL;
         *crash = 0;
     }
