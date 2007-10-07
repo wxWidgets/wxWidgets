@@ -743,7 +743,7 @@ wxImage wxImage::ResampleBicubic(int width, int height) const
 }
 
 // Blur in the horizontal direction
-wxImage wxImage::BlurHorizontal(int blurRadius)
+wxImage wxImage::BlurHorizontal(int blurRadius) const
 {
     wxImage ret_image;
     ret_image.Create(M_IMGDATA->m_width, M_IMGDATA->m_height, false);
@@ -858,7 +858,7 @@ wxImage wxImage::BlurHorizontal(int blurRadius)
 }
 
 // Blur in the vertical direction
-wxImage wxImage::BlurVertical(int blurRadius)
+wxImage wxImage::BlurVertical(int blurRadius) const
 {
     wxImage ret_image;
     ret_image.Create(M_IMGDATA->m_width, M_IMGDATA->m_height, false);
@@ -973,7 +973,7 @@ wxImage wxImage::BlurVertical(int blurRadius)
 }
 
 // The new blur function
-wxImage wxImage::Blur(int blurRadius)
+wxImage wxImage::Blur(int blurRadius) const
 {
     wxImage ret_image;
     ret_image.Create(M_IMGDATA->m_width, M_IMGDATA->m_height, false);

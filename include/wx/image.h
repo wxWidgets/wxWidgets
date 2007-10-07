@@ -258,9 +258,9 @@ public:
     wxImage ResampleBicubic(int width, int height) const;
 
     // blur the image according to the specified pixel radius
-    wxImage Blur(int radius);
-    wxImage BlurHorizontal(int radius);
-    wxImage BlurVertical(int radius);
+    wxImage Blur(int radius) const;
+    wxImage BlurHorizontal(int radius) const;
+    wxImage BlurVertical(int radius) const;
 
     wxImage ShrinkBy( int xFactor , int yFactor ) const ;
 
