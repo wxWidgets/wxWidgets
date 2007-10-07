@@ -195,6 +195,8 @@ All (GUI):
 - Added wxSYS_DCLICK_TIME system metric constant (Arne Steinarson)
 - Added wxApp::Get/SetAppDisplayName() (Brian A. Vanderburg II)
 - Added wxWindow::GetPopupMenuSelectionFromUser() (Arne Steinarson)
+- Implemented wxTreeCtrl::GetPrevVisible() in the generic version and made the
+  behaviour of GetNextSibling() consistent between wxMSW and generic versions
 
 wxGTK:
 

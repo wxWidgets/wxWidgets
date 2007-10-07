@@ -1354,7 +1354,15 @@ wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
     wxCHECK_MSG( item.IsOk(), wxTreeItemId(), wxT("invalid tree item") );
     wxASSERT_MSG( IsVisible(item), wxT("The item you call GetNextVisible() for must be visible itself!"));
 
-    return wxTreeItemId(TreeView_GetNextVisible(GetHwnd(), HITEM(item)));
+    wxTreeItemId next(TreeView_GetNextVisible(GetHwnd(), HITEM(item)));
+    if ( next.IsOk() && !IsVisible(next) )
+    {
+        // Win32 considers that any non-collapsed item is visible while we want
+        // to return only really visible items
+        next.Unset();
+    }
+
+    return next;
 }
 
 wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
@@ -1362,7 +1370,15 @@ wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
     wxCHECK_MSG( item.IsOk(), wxTreeItemId(), wxT("invalid tree item") );
     wxASSERT_MSG( IsVisible(item), wxT("The item you call GetPrevVisible() for must be visible itself!"));
 
-    return wxTreeItemId(TreeView_GetPrevVisible(GetHwnd(), HITEM(item)));
+    wxTreeItemId prev(TreeView_GetPrevVisible(GetHwnd(), HITEM(item)));
+    if ( prev.IsOk() && !IsVisible(prev) )
+    {
+        // just as above, Win32 function will happily return the previous item
+        // in the tree for the first visible item too
+        prev.Unset();
+    }
+
+    return prev;
 }
 
 // ----------------------------------------------------------------------------

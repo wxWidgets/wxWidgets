@@ -111,6 +111,13 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     MENU_LINK(DecSpacing)
     MENU_LINK(ToggleIcon)
     MENU_LINK(SelectRoot)
+
+    MENU_LINK(ShowFirstVisible)
+#ifdef wxHAS_LAST_VISIBLE
+    MENU_LINK(ShowLastVisible)
+#endif // wxHAS_LAST_VISIBLE
+    MENU_LINK(ShowNextVisible)
+    MENU_LINK(ShowPrevVisible)
 #undef MENU_LINK
 
 END_EVENT_TABLE()
@@ -140,7 +147,7 @@ BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
     EVT_TREE_KEY_DOWN(TreeTest_Ctrl, MyTreeCtrl::OnTreeKeyDown)
     EVT_TREE_ITEM_ACTIVATED(TreeTest_Ctrl, MyTreeCtrl::OnItemActivated)
 
-    // so many differents ways to handle right mouse button clicks...
+    // so many different ways to handle right mouse button clicks...
     EVT_CONTEXT_MENU(MyTreeCtrl::OnContextMenu)
     // EVT_TREE_ITEM_MENU is the preferred event for creating context menus
     // on a tree control, because it includes the point of the click or item,
@@ -254,6 +261,13 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     item_menu->Append(TreeTest_ClearBold, wxT("Make item &not bold"));
     item_menu->AppendSeparator();
     item_menu->Append(TreeTest_ToggleIcon, wxT("Toggle the item's &icon"));
+    item_menu->AppendSeparator();
+    item_menu->Append(TreeTest_ShowFirstVisible, wxT("Show &first visible"));
+#ifdef wxHAS_LAST_VISIBLE
+    item_menu->Append(TreeTest_ShowLastVisible, wxT("Show &last visible"));
+#endif // wxHAS_LAST_VISIBLE
+    item_menu->Append(TreeTest_ShowNextVisible, wxT("Show &next visible"));
+    item_menu->Append(TreeTest_ShowPrevVisible, wxT("Show &previous visible"));
 
 #ifndef NO_MULTIPLE_SELECTION
     item_menu->AppendSeparator();
@@ -699,6 +713,38 @@ void MyFrame::OnToggleIcon(wxCommandEvent& WXUNUSED(event))
     CHECK_ITEM( item );
 
     m_treeCtrl->DoToggleIcon(item);
+}
+
+void MyFrame::DoShowFirstOrLast(TreeFunc0_t pfn, const wxString& label)
+{
+    const wxTreeItemId item = (m_treeCtrl->*pfn)();
+
+    if ( !item.IsOk() )
+        wxLogMessage("There is no %s item", label);
+    else
+        wxLogMessage("The %s item is \"%s\"",
+                     label, m_treeCtrl->GetItemText(item));
+}
+
+void MyFrame::DoShowNextOrPrev(TreeFunc1_t pfn, const wxString& label)
+{
+    wxTreeItemId item = m_treeCtrl->GetSelection();
+
+    CHECK_ITEM( item );
+
+    if ( !m_treeCtrl->IsVisible(item) )
+    {
+        wxLogMessage("The selected item must be visible.");
+        return;
+    }
+
+    item = (m_treeCtrl->*pfn)(item);
+
+    if ( !item.IsOk() )
+        wxLogMessage("There is no %s item", label);
+    else
+        wxLogMessage("The %s item is \"%s\"",
+                     label, m_treeCtrl->GetItemText(item));
 }
 
 void MyFrame::OnSetFgColour(wxCommandEvent& WXUNUSED(event))

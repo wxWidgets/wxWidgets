@@ -1315,6 +1315,7 @@ wxTreeItemId wxGenericTreeCtrl::GetFirstVisibleItem() const
 wxTreeItemId wxGenericTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
 {
     wxCHECK_MSG( item.IsOk(), wxTreeItemId(), wxT("invalid tree item") );
+    wxASSERT_MSG( IsVisible(item), wxT("this item itself should be visible") );
 
     wxTreeItemId id = item;
     if (id.IsOk())
@@ -1331,10 +1332,37 @@ wxTreeItemId wxGenericTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
 wxTreeItemId wxGenericTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
 {
     wxCHECK_MSG( item.IsOk(), wxTreeItemId(), wxT("invalid tree item") );
+    wxASSERT_MSG( IsVisible(item), wxT("this item itself should be visible") );
 
-    wxFAIL_MSG(wxT("not implemented"));
+    // find out the starting point
+    wxTreeItemId prevItem = GetPrevSibling(item);
+    if ( !prevItem.IsOk() )
+    {
+        prevItem = GetItemParent(item);
+    }
 
-    return wxTreeItemId();
+    // find the first visible item after it
+    while ( prevItem.IsOk() && !IsVisible(prevItem) )
+    {
+        prevItem = GetNext(prevItem);
+        if ( !prevItem.IsOk() || prevItem == item )
+        {
+            // there are no visible items before item
+            return wxTreeItemId();
+        }
+    }
+
+    // from there we must be able to navigate until this item
+    while ( prevItem.IsOk() )
+    {
+        const wxTreeItemId nextItem = GetNextVisible(prevItem);
+        if ( !nextItem.IsOk() || nextItem == item )
+            break;
+
+        prevItem = nextItem;
+    }
+
+    return prevItem;
 }
 
 // called by wxTextTreeCtrl when it marks itself for deletion

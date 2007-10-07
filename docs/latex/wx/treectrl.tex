@@ -332,7 +332,7 @@ will be sent which can be vetoed as well.
 
 \func{void}{EndEditLabel}{\param{bool }{cancelEdit}}
 
-Ends label editing. If {\it cancelEdit} is {\tt true}, the edit will be cancelled.
+Ends label editing. If {\it cancelEdit} is \true, the edit will be cancelled.
 
 This function is currently supported under Windows only.
 
@@ -371,13 +371,13 @@ Expands the given item and all its children recursively.
 
 \membersection{wxTreeCtrl::GetBoundingRect}\label{wxtreectrlgetitemrect}
 
-\constfunc{bool}{GetBoundingRect}{\param{const wxTreeItemId\&}{ item}, \param{wxRect\& }{rect}, \param{bool }{textOnly = {\tt false}}}
+\constfunc{bool}{GetBoundingRect}{\param{const wxTreeItemId\&}{ item}, \param{wxRect\& }{rect}, \param{bool }{textOnly = \false}}
 
-Retrieves the rectangle bounding the {\it item}. If {\it textOnly} is {\tt true},
+Retrieves the rectangle bounding the {\it item}. If {\it textOnly} is \true,
 only the rectangle around the item's label will be returned, otherwise the
 item's image is also taken into account.
 
-The return value is {\tt true} if the rectangle was successfully retrieved or {\tt false}
+The return value is \true if the rectangle was successfully retrieved or \false
 if it was not (in this case {\it rect} is not changed) -- for example, if the
 item is currently invisible.
 
@@ -404,9 +404,9 @@ This function is only available in the generic version.
 
 \membersection{wxTreeCtrl::GetChildrenCount}\label{wxtreectrlgetchildrencount}
 
-\constfunc{unsigned int}{GetChildrenCount}{\param{const wxTreeItemId\&}{ item}, \param{bool}{ recursively = {\tt true}}}
+\constfunc{unsigned int}{GetChildrenCount}{\param{const wxTreeItemId\&}{ item}, \param{bool}{ recursively = \true}}
 
-Returns the number of items in the branch. If {\it recursively} is {\tt true}, returns the total number
+Returns the number of items in the branch. If {\it recursively} is \true, returns the total number
 of descendants, otherwise only one level of children is counted.
 
 
@@ -439,7 +439,7 @@ to make these functions reentrant (i.e. allow more than one
 enumeration on one and the same object simultaneously). The cookie passed to
 GetFirstChild and GetNextChild should be the same variable.
 
-Returns an invalid tree item (i.e. IsOk() returns {\tt false}) if there are no further children.
+Returns an invalid tree item (i.e. IsOk() returns \false) if there are no further children.
 
 \wxheading{See also}
 
@@ -603,7 +603,10 @@ Returns an invalid tree item if there are no further siblings.
 
 \constfunc{wxTreeItemId}{GetNextVisible}{\param{const wxTreeItemId\&}{ item}}
 
-Returns the next visible item.
+Returns the next visible item or an invalid item if this item is the last
+visible one.
+
+Notice that the \arg{item} itself must be visible.
 
 
 \membersection{wxTreeCtrl::GetItemParent}\label{wxtreectrlgetitemparent}
@@ -630,7 +633,10 @@ Returns an invalid tree item if there are no further children.
 
 \constfunc{wxTreeItemId}{GetPrevVisible}{\param{const wxTreeItemId\&}{ item}}
 
-Returns the previous visible item.
+Returns the previous visible item or an invalid item if this item is the first
+visible one.
+
+Notice that the \arg{item} itself must be visible.
 
 
 \membersection{wxTreeCtrl::GetQuickBestSize}\label{wxtreectrlgetquickbestsize}
@@ -656,8 +662,8 @@ Returns the root item for the tree control.
 
 \constfunc{int}{GetItemSelectedImage}{\param{const wxTreeItemId\& }{item}}
 
-Gets the selected item image (this function is obsolete, use
-{\tt GetItemImage(item, wxTreeItemIcon\_Selected}) instead).
+Gets the selected item image (this function is obsolete, use 
+{\tt GetItemImage(item, wxTreeItemIcon\_Selected)} instead).
 
 
 \membersection{wxTreeCtrl::GetSelection}\label{wxtreectrlgetselection}
@@ -747,7 +753,7 @@ both selected and unselected items.
 
 \constfunc{bool}{IsBold}{\param{const wxTreeItemId\& }{item}}
 
-Returns {\tt true} if the given item is in bold state.
+Returns \true if the given item is in bold state.
 
 See also: \helpref{SetItemBold}{wxtreectrlsetitembold}
 
@@ -763,28 +769,28 @@ Returns \true if the control is empty (i.e. has no items, even no root one).
 
 \constfunc{bool}{IsExpanded}{\param{const wxTreeItemId\&}{ item}}
 
-Returns {\tt true} if the item is expanded (only makes sense if it has children).
+Returns \true if the item is expanded (only makes sense if it has children).
 
 
 \membersection{wxTreeCtrl::IsSelected}\label{wxtreectrlisselected}
 
 \constfunc{bool}{IsSelected}{\param{const wxTreeItemId\&}{ item}}
 
-Returns {\tt true} if the item is selected.
+Returns \true if the item is selected.
 
 
 \membersection{wxTreeCtrl::IsVisible}\label{wxtreectrlisvisible}
 
 \constfunc{bool}{IsVisible}{\param{const wxTreeItemId\&}{ item}}
 
-Returns {\tt true} if the item is visible (it might be outside the view, or not expanded).
+Returns \true if the item is visible on the screen.
 
 
 \membersection{wxTreeCtrl::ItemHasChildren}\label{wxtreectrlitemhaschildren}
 
 \constfunc{bool}{ItemHasChildren}{\param{const wxTreeItemId\&}{ item}}
 
-Returns {\tt true} if the item has children.
+Returns \true if the item has children.
 
 
 \membersection{wxTreeCtrl::OnCompareItems}\label{wxtreectrloncompareitems}
@@ -879,9 +885,9 @@ Sets the colour of the item's background.
 
 \membersection{wxTreeCtrl::SetItemBold}\label{wxtreectrlsetitembold}
 
-\func{void}{SetItemBold}{\param{const wxTreeItemId\& }{item}, \param{bool}{ bold = {\tt true}}}
+\func{void}{SetItemBold}{\param{const wxTreeItemId\& }{item}, \param{bool}{ bold = \true}}
 
-Makes item appear in bold font if {\it bold} parameter is {\tt true} or resets it to
+Makes item appear in bold font if {\it bold} parameter is \true or resets it to
 the normal state.
 
 See also: \helpref{IsBold}{wxtreectrlisbold}
@@ -911,7 +917,7 @@ tree->GetItemData(item)->SetData(data).}
 
 \membersection{wxTreeCtrl::SetItemDropHighlight}\label{wxtreectrlsetitemdrophighlight}
 
-\func{void}{SetItemDropHighlight}{\param{const wxTreeItemId\&}{ item}, \param{bool}{highlight = {\tt true}}}
+\func{void}{SetItemDropHighlight}{\param{const wxTreeItemId\&}{ item}, \param{bool}{highlight = \true}}
 
 Gives the item the visual feedback for Drag'n'Drop actions, which is
 useful if something is dragged from the outside onto the tree control
@@ -933,7 +939,7 @@ although font attributes may vary.
 
 \membersection{wxTreeCtrl::SetItemHasChildren}\label{wxtreectrlsetitemhaschildren}
 
-\func{void}{SetItemHasChildren}{\param{const wxTreeItemId\&}{ item}, \param{bool }{hasChildren = {\tt true}}}
+\func{void}{SetItemHasChildren}{\param{const wxTreeItemId\&}{ item}, \param{bool }{hasChildren = \true}}
 
 Force appearance of the button next to the item. This is useful to
 allow the user to expand the items which don't have any children now,
@@ -954,7 +960,8 @@ for the description of the {\it which} parameter.
 
 \func{void}{SetItemSelectedImage}{\param{const wxTreeItemId\&}{ item}, \param{int }{selImage}}
 
-Sets the selected item image (this function is obsolete, use {\tt SetItemImage(item, wxTreeItemIcon\_Selected}) instead).
+Sets the selected item image (this function is obsolete, use 
+{\tt SetItemImage(item, wxTreeItemIcon\_Selected)} instead).
 
 
 \membersection{wxTreeCtrl::SetItemText}\label{wxtreectrlsetitemtext}

@@ -225,6 +225,18 @@ public:
 
     void OnToggleIcon(wxCommandEvent& event);
 
+    void OnShowFirstVisible(wxCommandEvent& WXUNUSED(event))
+        { DoShowFirstOrLast(&wxTreeCtrl::GetFirstVisibleItem, "first visible"); }
+#ifdef wxHAS_LAST_VISIBLE // we don't have it currently but may add later
+    void OnShowLastVisible(wxCommandEvent& WXUNUSED(event))
+        { DoShowFirstOrLast(&wxTreeCtrl::GetLastVisibleItem, "last visible"); }
+#endif // wxHAS_LAST_VISIBLE
+
+    void OnShowNextVisible(wxCommandEvent& WXUNUSED(event))
+        { DoShowNextOrPrev(&wxTreeCtrl::GetNextVisible, "next visible"); }
+    void OnShowPrevVisible(wxCommandEvent& WXUNUSED(event))
+        { DoShowNextOrPrev(&wxTreeCtrl::GetPrevVisible, "previous visible"); }
+
     void OnIdle(wxIdleEvent& event);
     void OnSize(wxSizeEvent& event);
 
@@ -237,6 +249,14 @@ private:
 
     void CreateTreeWithDefStyle();
     void CreateTree(long style);
+
+    // common parts of OnShowFirst/LastVisible() and OnShowNext/PrevVisible()
+    typedef wxTreeItemId (wxTreeCtrl::*TreeFunc0_t)() const;
+    void DoShowFirstOrLast(TreeFunc0_t pfn, const wxString& label);
+
+    typedef wxTreeItemId (wxTreeCtrl::*TreeFunc1_t)(const wxTreeItemId&) const;
+    void DoShowNextOrPrev(TreeFunc1_t pfn, const wxString& label);
+
 
     wxPanel *m_panel;
     MyTreeCtrl *m_treeCtrl;
@@ -297,5 +317,9 @@ enum
     TreeTest_Select,
     TreeTest_Unselect,
     TreeTest_SelectRoot,
+    TreeTest_ShowFirstVisible,
+    TreeTest_ShowLastVisible,
+    TreeTest_ShowNextVisible,
+    TreeTest_ShowPrevVisible,
     TreeTest_Ctrl = 1000
 };
