@@ -6562,6 +6562,9 @@ bool wxTextAttrEqPartial(const wxTextAttrEx& attr1, const wxTextAttrEx& attr2, i
         attr1.GetFont().GetUnderlined() != attr2.GetFont().GetUnderlined())
         return false;
 
+    if ((flags & wxTEXT_ATTR_URL) && attr1.GetURL() != attr2.GetURL())
+        return false;
+
     if ((flags & wxTEXT_ATTR_ALIGNMENT) && attr1.GetAlignment() != attr2.GetAlignment())
         return false;
 
@@ -6666,6 +6669,9 @@ bool wxTextAttrEqPartial(const wxTextAttrEx& attr1, const wxRichTextAttr& attr2,
 
     if ((flags & wxTEXT_ATTR_FONT_UNDERLINE) && attr1.GetFont().Ok() &&
         attr1.GetFont().GetUnderlined() != attr2.GetFontUnderlined())
+        return false;
+
+    if ((flags & wxTEXT_ATTR_URL) && attr1.GetURL() != attr2.GetURL())
         return false;
 
     if ((flags & wxTEXT_ATTR_ALIGNMENT) && attr1.GetAlignment() != attr2.GetAlignment())
