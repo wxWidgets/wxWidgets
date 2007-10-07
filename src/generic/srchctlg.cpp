@@ -139,17 +139,17 @@ public:
     // needs to forward to them
     void DoSetValue(const wxString& value, int flags)
     {
-        m_text->DoSetValue(value, flags);
+        wxTextCtrl::DoSetValue(value, flags);
     }
 
     bool DoLoadFile(const wxString& file, int fileType)
     {
-        return m_text->DoLoadFile(file, fileType);
+        return wxTextCtrl::DoLoadFile(file, fileType);
     }
 
     bool DoSaveFile(const wxString& file, int fileType)
     {
-        return m_text->DoSaveFile(file, fileType);
+        return wxTextCtrl::DoSaveFile(file, fileType);
     }
 
 protected:
@@ -913,6 +913,21 @@ wxTextCtrl& operator<<(float f);
 wxTextCtrl& operator<<(double d);
 wxTextCtrl& operator<<(const wxChar c);
 #endif
+
+void wxSearchCtrl::DoSetValue(const wxString& value, int flags)
+{
+    m_text->DoSetValue(value, flags);
+}
+
+bool wxSearchCtrl::DoLoadFile(const wxString& file, int fileType)
+{
+    return m_text->DoLoadFile(file, fileType);
+}
+
+bool wxSearchCtrl::DoSaveFile(const wxString& file, int fileType)
+{
+    return m_text->DoSaveFile(file, fileType);
+}
 
 // do the window-specific processing after processing the update event
 void wxSearchCtrl::DoUpdateWindowUI(wxUpdateUIEvent& event)
