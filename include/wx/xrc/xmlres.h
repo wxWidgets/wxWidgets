@@ -273,7 +273,7 @@ private:
     long m_version;
 
     int m_flags;
-    class WXDLLIMPEXP_FWD_XRC wxVector<wxXmlResourceHandler*> m_handlers;
+    wxVector<wxXmlResourceHandler*> m_handlers;
     wxXmlResourceDataRecords *m_data;
 #if wxUSE_FILESYSTEM
     wxFileSystem m_curFileSystem;

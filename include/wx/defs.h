@@ -71,6 +71,12 @@
 #   pragma warning(disable:4512)    /*  operator=() couldn't be generated */
 #   pragma warning(disable:4710)    /*  function not inlined */
 
+    /* There are too many false positivies for this one, particularly when
+       using templates like wxVector<T> */
+    /* class 'foo' needs to have dll-interface to be used by clients of
+       class 'bar'" */
+#   pragma warning(disable:4251)
+
     /* For VC++ 5.0 for release mode, the warning 'C4702: unreachable code */
     /* is buggy, and occurs for code that does actually get executed */
 #   if !defined __WXDEBUG__ && __VISUALC__ <= 1100
