@@ -1080,7 +1080,15 @@ wxFileName wxGenericFileCtrl::DoGetFileName() const
     return fn;
 }
 
-void wxGenericFileCtrl::DoGetFilenames( wxArrayString& filenames, const bool fullPath ) const
+// helper used in DoGetFilenames() and needed because Borland can't compile
+// operator?: inline
+static inline wxString GetFileNameOrPath(const wxFileName& fn, bool fullPath)
+{
+    return fullPath ? fn.GetFullPath() : fn.GetFullName();
+}
+
+void
+wxGenericFileCtrl::DoGetFilenames(wxArrayString& filenames, bool fullPath) const
 {
     filenames.clear();
 
@@ -1093,7 +1101,7 @@ void wxGenericFileCtrl::DoGetFilenames( wxArrayString& filenames, const bool ful
         if ( fn.IsRelative() )
             fn.MakeAbsolute(dir);
 
-        filenames.push_back(fullPath ? fn.GetFullPath() : fn.GetFullName());
+        filenames.push_back(GetFileNameOrPath(fn, fullPath));
         return;
     }
 
@@ -1117,7 +1125,7 @@ void wxGenericFileCtrl::DoGetFilenames( wxArrayString& filenames, const bool ful
         m_list->GetItem(item);
 
         const wxFileName fn(dir, item.m_text);
-        filenames.push_back(fullPath ? fn.GetFullPath() : fn.GetFullName());
+        filenames.push_back(GetFileNameOrPath(fn, fullPath));
     }
 }
 
