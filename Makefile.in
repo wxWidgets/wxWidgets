@@ -31452,7 +31452,6 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mkdir $(DISTDIR)/src/palmos
 	$(CP_P) $(DOCDIR)/base/readme.txt $(DISTDIR)/README.txt
 	$(CP_P) $(WXDIR)/src/common/*.inc $(DISTDIR)/src/common
-	$(CP_P) $(WXDIR)/src/common/base.rc $(DISTDIR)/src/common
 	list='$(ALL_PORTS_BASE_HEADERS)'; for p in $$list; do \
 	  $(CP_P) $(WXDIR)/include/$$p $(DISTDIR)/include/$$p; \
 	done
