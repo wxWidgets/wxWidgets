@@ -92,6 +92,25 @@ static pascal OSStatus wxMacDataViewCtrlEventHandler(EventHandlerCallRef handler
   return eventNotHandledErr;
 } /* wxMacDataViewCtrlEventHandler(EventHandlerCallRef, EventRef, void*) */
 
+static DataBrowserItemID* CreateDataBrowserItemIDArray(size_t& noOfEntries, wxDataViewItemArray const& items) // returns a newly allocated pointer to valid data browser item IDs
+{
+  size_t const noOfItems = items.GetCount();
+
+  DataBrowserItemID* itemIDs(new DataBrowserItemID[noOfItems]);
+ 
+
+ // convert all valid data view items to data browser items
+  noOfEntries = 0;
+  for (size_t i=0; i<noOfItems; ++i)
+    if (items[i].IsOk())
+    {
+      itemIDs[noOfEntries] = reinterpret_cast<DataBrowserItemID>(items[i].GetID());
+      ++noOfEntries;
+    } /* if */
+ // done:
+  return itemIDs;
+} /* CreateDataBrowserItemIDArray(size_t&, wxDataViewItemArray const&) */
+
 //-----------------------------------------------------------------------------
 // local function pointers
 //-----------------------------------------------------------------------------
@@ -119,19 +138,39 @@ public:
             parent.IsOk()  && (this->m_dataViewControlPtr->AddItem(reinterpret_cast<DataBrowserItemID>(parent.GetID()),&itemID) == noErr));
   } /* ItemAdded(wxDataViewItem const&, wxDataViewItem const&) */
 
+  virtual bool ItemsAdded(wxDataViewItem const& parent, wxDataViewItemArray const& items)
+  {
+    bool noFailureFlag;
+
+    DataBrowserItemID* itemIDs;
+    
+    size_t noOfEntries;
+    
+
+   // convert all valid data view items to data browser items:
+    itemIDs = ::CreateDataBrowserItemIDArray(noOfEntries,items);
+   // insert all valid items into control:
+    noFailureFlag = ((noOfEntries == 0) ||
+                     !(parent.IsOk()) && (this->m_dataViewControlPtr->AddItems(kDataBrowserNoItem,noOfEntries,itemIDs,kDataBrowserItemNoProperty) == noErr) ||
+                     parent.IsOk() && (this->m_dataViewControlPtr->AddItems(reinterpret_cast<DataBrowserItemID>(parent.GetID()),noOfEntries,itemIDs,kDataBrowserItemNoProperty) == noErr));
+   // give allocated array space free again:
+    delete[] itemIDs;
+   // done:
+    return noFailureFlag;
+  } /* ItemsAdded(wxDataViewItem const&, wxDataViewItemArray const&) */
+
   virtual bool ItemChanged(wxDataViewItem const& item)
   {
     DataBrowserItemID itemID(reinterpret_cast<DataBrowserItemID>(item.GetID()));
     
     
-    wxCHECK_MSG(item.IsOk(),             false,_("Changed item is invalid."));
-    wxCHECK_MSG(this->GetOwner() != NULL,false,_("Owner not initialized."));
+    wxCHECK_MSG(item.IsOk(),false,_("Changed item is invalid."));
     if (this->m_dataViewControlPtr->UpdateItems(&itemID) == noErr)
     {
       wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->m_dataViewControlPtr->GetPeer()));
       
      // sent the equivalent wxWidget event:
-      wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_VALUE_ITEM_CHANGED,dataViewCtrlPtr->GetId()); // variable defintion
+      wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED,dataViewCtrlPtr->GetId()); // variable defintion
 
       dataViewEvent.SetEventObject(dataViewCtrlPtr);
       dataViewEvent.SetItem(item);
@@ -144,6 +183,39 @@ public:
       return false;
   } /* ItemChanged(wxDataViewItem const&) */
 
+  virtual bool ItemsChanged(wxDataViewItemArray const& items)
+  {
+    bool noFailureFlag;
+
+    DataBrowserItemID* itemIDs;
+    
+    size_t noOfEntries;
+    
+
+   // convert all valid data view items to data browser items:
+    itemIDs = ::CreateDataBrowserItemIDArray(noOfEntries,items);
+   // change items (ATTENTION: ONLY ITEMS OF THE ROOT ARE CHANGED BECAUSE THE PARENT PARAMETER IS MISSING):
+    noFailureFlag = (this->m_dataViewControlPtr->UpdateItems(kDataBrowserNoItem,noOfEntries,itemIDs,kDataBrowserItemNoProperty,kDataBrowserItemNoProperty) == noErr);
+    if (noFailureFlag)
+    {
+      wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->m_dataViewControlPtr->GetPeer()));
+      
+     // send for all changed items a wxWidget event:
+      wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED,dataViewCtrlPtr->GetId()); // variable defintion
+
+      dataViewEvent.SetEventObject(dataViewCtrlPtr);
+      for (size_t i=0; i<noOfEntries; ++i)
+      {
+        dataViewEvent.SetItem(reinterpret_cast<void*>(itemIDs[i]));
+        dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
+      } /* for */
+    } /* if */
+   // release allocated array space:
+    delete[] itemIDs;
+   // done:
+    return noFailureFlag;
+  } /* ItemsChanged(wxDataViewItem const&) */
+
   virtual bool ItemDeleted(wxDataViewItem const& parent, wxDataViewItem const& item)
   {
     if (item.IsOk())
@@ -154,16 +226,49 @@ public:
       wxDataViewCtrl*   dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->m_dataViewControlPtr->GetPeer()));
       
      // when this method is called and currently an item is being edited this item may have already been deleted in the model (the passed item and the being edited item have
-     // not to be identical because the being edited item might be below the passed item in the hierarchy); therefore, the control is informed that currently a deleting process
-     // is started and that variables can currently not be updated even when requested by the system:
+     // not to be identical because the being edited item might be below the passed item in the hierarchy);
+     // to prevent the control trying to ask the model to update an already deleted item the control is informed that currently a deleting process
+     // has been started and that variables can currently not be updated even when requested by the system:
       dataViewCtrlPtr->SetDeleting(true);
       errorStatus = this->m_dataViewControlPtr->RemoveItem(reinterpret_cast<DataBrowserItemID>(parent.GetID()),&itemID);
+     // enable automatic updating again:
       dataViewCtrlPtr->SetDeleting(false);
       return (errorStatus == noErr);
     } /* if */
     else
       return false;
   } /* ItemDeleted(wxDataViewItem const&, wxDataViewItem const&) */
+
+  virtual bool ItemsDeleted(wxDataViewItem const& parent, wxDataViewItemArray const& items)
+  {
+    bool noFailureFlag;
+
+    DataBrowserItemID* itemIDs;
+    
+    wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->m_dataViewControlPtr->GetPeer()));
+
+    size_t noOfEntries;
+    
+
+    wxCHECK_MSG(dataViewCtrlPtr != NULL,false,_("Data view control is not correctly initialized"));
+   // convert all valid data view items to data browser items:
+    itemIDs = ::CreateDataBrowserItemIDArray(noOfEntries,items);
+   // when this method is called and currently an item is being edited this item may have already been deleted in the model (the passed item and the being edited item have
+   // not to be identical because the being edited item might be below the passed item in the hierarchy);
+   // to prevent the control trying to ask the model to update an already deleted item the control is informed that currently a deleting process
+   // has been started and that variables can currently not be updated even when requested by the system:
+    dataViewCtrlPtr->SetDeleting(true);
+   // insert all valid items into control:
+    noFailureFlag = ((noOfEntries == 0) ||
+                     !(parent.IsOk()) && (this->m_dataViewControlPtr->RemoveItems(kDataBrowserNoItem,noOfEntries,itemIDs,kDataBrowserItemNoProperty) == noErr) ||
+                     parent.IsOk() && (this->m_dataViewControlPtr->RemoveItems(reinterpret_cast<DataBrowserItemID>(parent.GetID()),noOfEntries,itemIDs,kDataBrowserItemNoProperty) == noErr));
+   // enable automatic updating again:
+    dataViewCtrlPtr->SetDeleting(false);
+   // give allocated array space free again:
+    delete[] itemIDs;
+   // done:
+    return noFailureFlag;
+  } /* ItemsDeleted(wxDataViewItem const&, wxDataViewItemArray const&) */
 
   virtual bool ValueChanged(wxDataViewItem const& item, unsigned int col)
   {
@@ -199,10 +304,7 @@ public:
 
   virtual bool Cleared(void)
   {
-    if (this->m_dataViewControlPtr->RemoveItems() == noErr)
-      return true;
-    else
-      return false;
+    return (this->m_dataViewControlPtr->RemoveItems() == noErr);
   } /* Cleared(void) */
 
   virtual void Resort(void)
@@ -1107,8 +1209,12 @@ void wxDataViewCtrl::AddChildrenLevel(wxDataViewItem const& parentItem)
   
   wxCHECK_RET(this->GetModel() != NULL,_("Model pointer not initialized."));
   NoOfChildren = this->GetModel()->GetChildren(parentItem,items);
+#if 0
   for (int i=0; i<NoOfChildren; ++i)
     (void) this->GetModel()->ItemAdded(parentItem,items[i]);
+#else
+  (void) this->GetModel()->ItemsAdded(parentItem,items);
+#endif
 } /* wxDataViewCtrl::AddChildrenLevel(wxDataViewItem const&) */
 
 wxDataViewColumn* wxDataViewCtrl::GetColumnPtr(DataBrowserPropertyID propertyID) const

@@ -178,11 +178,11 @@ public:
 
   OSStatus UpdateItems(void) // updates all items
   {
-    return this->UpdateItems(kDataBrowserNoItem,0,NULL,kDataBrowserItemNoProperty,kDataBrowserNoItem);
+    return this->UpdateItems(kDataBrowserNoItem,0,NULL,kDataBrowserItemNoProperty,kDataBrowserItemNoProperty);
   }
   OSStatus UpdateItems(DataBrowserItemID const* item) // updates all columns of item
   {
-    return this->UpdateItems(kDataBrowserNoItem,1,item,kDataBrowserItemNoProperty,kDataBrowserNoItem);
+    return this->UpdateItems(kDataBrowserNoItem,1,item,kDataBrowserItemNoProperty,kDataBrowserItemNoProperty);
   }
   OSStatus UpdateItems(DataBrowserItemID container, UInt32 numItems, DataBrowserItemID const* items, DataBrowserPropertyID preSortProperty, DataBrowserPropertyID propertyID) const;
 
