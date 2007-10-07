@@ -73,6 +73,7 @@ public:
     // resolve ambiguities among virtual functions inherited from both base
     // classes
     virtual void Clear();
+    virtual wxString GetValue() const;
     virtual void SetValue(const wxString& value);
     virtual wxString GetStringSelection() const
         { return wxChoice::GetStringSelection(); }
@@ -81,8 +82,7 @@ public:
     virtual void SetSelection(long from, long to)
         { wxTextEntry::SetSelection(from, to); }
     virtual int GetSelection() const { return wxChoice::GetSelection(); }
-    virtual void GetSelection(long *from, long *to) const
-        { wxTextEntry::GetSelection(from, to); }
+    virtual void GetSelection(long *from, long *to) const;
 
     virtual bool IsEditable() const;
 
@@ -116,7 +116,18 @@ protected:
     virtual void DoSetToolTip(wxToolTip *tip);
 #endif
 
+    // this is the overridden wxTextEntry method which should only be called
+    // when we do have an edit control so it asserts if this is not the case
     virtual WXHWND GetEditHWND() const;
+
+    // this is the implementation of GetEditHWND() which can also be used when
+    // we don't have the edit control, it simply returns NULL then
+    //
+    // try not to use this function unless absolutely necessary (as in the
+    // message handling code where the edit control might not be created yet
+    // for the messages we receive during the control creation) as normally
+    // just testing for IsEditable() and using GetEditHWND() should be enough
+    WXHWND GetEditHWNDIfAvailable() const;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxComboBox)

@@ -235,6 +235,9 @@ WXLRESULT wxComboBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
             {
                 // combobox selection sometimes spontaneously changes when its
                 // size changes, restore it to the old value if necessary
+                if ( !GetEditHWNDIfAvailable() )
+                    break;
+
                 long fromOld, toOld;
                 GetSelection(&fromOld, &toOld);
                 WXLRESULT result = wxChoice::MSWWindowProc(nMsg, wParam, lParam);
@@ -391,22 +394,27 @@ bool wxComboBox::MSWShouldPreProcessMessage(WXMSG *pMsg)
     return wxChoice::MSWShouldPreProcessMessage(pMsg);
 }
 
+WXHWND wxComboBox::GetEditHWNDIfAvailable() const
+{
+    POINT pt = { 4, 4 };
+    WXHWND hWndEdit = (WXHWND)::ChildWindowFromPoint(GetHwnd(), pt);
+    if ( hWndEdit == GetHWND() )
+        hWndEdit = NULL;
+
+    return hWndEdit;
+}
+
 WXHWND wxComboBox::GetEditHWND() const
 {
     // this function should not be called for wxCB_READONLY controls, it is
-    // the callers responsability to check this
+    // the callers responsibility to check this
     wxASSERT_MSG( !HasFlag(wxCB_READONLY),
                   _T("read-only combobox doesn't have any edit control") );
 
-    POINT pt;
-    pt.x = pt.y = 4;
-    HWND hwndEdit = ::ChildWindowFromPoint(GetHwnd(), pt);
-    if ( !hwndEdit || hwndEdit == GetHwnd() )
-    {
-        wxFAIL_MSG(_T("combobox without edit control?"));
-    }
+    WXHWND hWndEdit = GetEditHWNDIfAvailable();
+    wxASSERT_MSG( hWndEdit, _T("combobox without edit control?") );
 
-    return (WXHWND)hwndEdit;
+    return hWndEdit;
 }
 
 // ----------------------------------------------------------------------------
@@ -502,6 +510,12 @@ WXDWORD wxComboBox::MSWGetStyle(long style, WXDWORD *exstyle) const
 // wxComboBox text control-like methods
 // ----------------------------------------------------------------------------
 
+wxString wxComboBox::GetValue() const
+{
+    return HasFlag(wxCB_READONLY) ? GetStringSelection()
+                                  : wxTextEntry::GetValue();
+}
+
 void wxComboBox::SetValue(const wxString& value)
 {
     if ( HasFlag(wxCB_READONLY) )
@@ -515,6 +529,21 @@ void wxComboBox::Clear()
     wxChoice::Clear();
     if ( !HasFlag(wxCB_READONLY) )
         wxTextEntry::Clear();
+}
+
+void wxComboBox::GetSelection(long *from, long *to) const
+{
+    if ( !HasFlag(wxCB_READONLY) )
+    {
+        wxTextEntry::GetSelection(from, to);
+    }
+    else // text selection doesn't make sense for read only comboboxes
+    {
+        if ( from )
+            *from = -1;
+        if ( to )
+            *to = -1;
+    }
 }
 
 bool wxComboBox::IsEditable() const
