@@ -423,25 +423,10 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
         return false;
     }
 
-    WXDWORD exflags;
-    (void)MSWGetCreateWindowFlags(&exflags);
-
-    if ( exflags )
-    {
-        ::SetWindowLong(GetHwnd(), GWL_EXSTYLE, exflags);
-        ::SetWindowPos(GetHwnd(),
-                       exflags & WS_EX_TOPMOST ? HWND_TOPMOST : 0,
-                       0, 0, 0, 0,
-                       SWP_NOSIZE |
-                       SWP_NOMOVE |
-                       (exflags & WS_EX_TOPMOST ? 0 : SWP_NOZORDER) |
-                       SWP_NOACTIVATE);
-    }
-
 #if !defined(__WXWINCE__)
     // For some reason, the system menu is activated when we use the
     // WS_EX_CONTEXTHELP style, so let's set a reasonable icon
-    if ( exflags & WS_EX_CONTEXTHELP )
+    if ( HasExtraStyle(wxWS_EX_CONTEXTHELP) )
     {
         wxFrame *winTop = wxDynamicCast(wxTheApp->GetTopWindow(), wxFrame);
         if ( winTop )
@@ -455,7 +440,7 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
             }
         }
     }
-#endif
+#endif // !__WXWINCE__
 
     // move the dialog to its initial position without forcing repainting
     int x, y, w, h;
@@ -561,7 +546,7 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 
         // reuse the code in MSWGetStyle() but correct the results slightly for
         // the dialog
-        dlgTemplate->style = MSWGetStyle(style, NULL);
+        dlgTemplate->style = MSWGetStyle(style, &dlgTemplate->dwExtendedStyle);
 
         // all dialogs are popups
         dlgTemplate->style |= WS_POPUP;

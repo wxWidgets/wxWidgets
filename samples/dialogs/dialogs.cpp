@@ -168,6 +168,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_CENTRE_SCREEN,                 MyFrame::DlgCenteredScreen)
     EVT_MENU(DIALOGS_CENTRE_PARENT,                 MyFrame::DlgCenteredParent)
     EVT_MENU(DIALOGS_MINIFRAME,                     MyFrame::MiniFrame)
+    EVT_MENU(DIALOGS_ONTOP,                         MyFrame::DlgOnTop)
 
 #if wxUSE_STARTUP_TIPS
     EVT_MENU(DIALOGS_TIP,                           MyFrame::ShowTip)
@@ -390,6 +391,7 @@ bool MyApp::OnInit()
     dialogs_menu->Append(DIALOGS_CENTRE_SCREEN, _T("Centered on &screen\tShift-Ctrl-1"));
     dialogs_menu->Append(DIALOGS_CENTRE_PARENT, _T("Centered on &parent\tShift-Ctrl-2"));
     dialogs_menu->Append(DIALOGS_MINIFRAME, _T("&Mini frame"));
+    dialogs_menu->Append(DIALOGS_ONTOP, _T("Dialog staying on &top"));
     menuDlg->Append(wxID_ANY, _T("&Generic dialogs"), dialogs_menu);
 
 #if USE_SETTINGS_DIALOG
@@ -1055,6 +1057,15 @@ void MyFrame::MiniFrame(wxCommandEvent& WXUNUSED(event))
 
     frame->CentreOnParent();
     frame->Show();
+}
+
+void MyFrame::DlgOnTop(wxCommandEvent& WXUNUSED(event))
+{
+    wxDialog dlg(this, wxID_ANY, _T("Dialog staying on top of other windows"),
+                 wxDefaultPosition, wxSize(300, 100),
+                 wxDEFAULT_DIALOG_STYLE | wxSTAY_ON_TOP);
+    (new wxButton(&dlg, wxID_OK, _T("Close")))->Centre();
+    dlg.ShowModal();
 }
 
 #if wxUSE_STARTUP_TIPS

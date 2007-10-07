@@ -268,6 +268,7 @@ public:
     void DlgCenteredScreen(wxCommandEvent& event);
     void DlgCenteredParent(wxCommandEvent& event);
     void MiniFrame(wxCommandEvent& event);
+    void DlgOnTop(wxCommandEvent& event);
 
 #if wxUSE_PROGRESSDLG
     void ShowProgress(wxCommandEvent& event);
@@ -366,6 +367,7 @@ enum
     DIALOGS_CENTRE_SCREEN,
     DIALOGS_CENTRE_PARENT,
     DIALOGS_MINIFRAME,
+    DIALOGS_ONTOP,
     DIALOGS_MODELESS_BTN,
     DIALOGS_PROGRESS,
     DIALOGS_ABOUTDLG_SIMPLE,
