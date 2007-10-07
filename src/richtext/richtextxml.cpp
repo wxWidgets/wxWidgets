@@ -1205,7 +1205,7 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
         value = node->GetPropVal(wxT("outlinelevel"), wxEmptyString);
         if (!value.IsEmpty())
         {
-            attr.SetOutlineLevel(wxAtoi(value) != 0);
+            attr.SetOutlineLevel(wxAtoi(value));
         }
     }
 
