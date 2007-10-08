@@ -96,6 +96,16 @@ wxBase64Decode(const char *src, size_t srcLen = wxNO_LEN,
                wxBase64DecodeMode mode = wxBase64DecodeMode_Strict,
                size_t *posErr = NULL);
 
+inline wxMemoryBuffer
+wxBase64Decode(const wxString& src,
+               wxBase64DecodeMode mode = wxBase64DecodeMode_Strict,
+               size_t *posErr = NULL)
+{
+    // don't use str.length() here as the ASCII buffer is shorter than it for
+    // strings with embedded NULs
+    return wxBase64Decode(src.ToAscii(), wxNO_LEN, mode, posErr);
+}
+
 #endif // wxUSE_BASE64
 
 #endif // _WX_BASE64_H_

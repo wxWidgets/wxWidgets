@@ -2856,6 +2856,11 @@ The clipboard must have previously been opened for this call to succeed.
 \param{wxBase64DecodeMode }{mode = wxBase64DecodeMode\_Strict},\\
 \param{size\_t }{*posErr = \NULL}}
 
+\func{wxMemoryBuffer}{wxBase64Decode}{\\
+\param{const wxString\& }{src},\\
+\param{wxBase64DecodeMode }{mode = wxBase64DecodeMode\_Strict},\\
+\param{size\_t }{*posErr = \NULL}}
+
 These function decode a Base64-encoded string. The first version is a raw
 decoding function and decodes the data into the provided buffer \arg{dst} of
 the given size \arg{dstLen}. An error is returned if the buffer is not large
@@ -2878,7 +2883,8 @@ necessary buffer size.}
 \docparam{dstLen}{The size of the output buffer, ignored if \arg{dst} is
 \NULL.}
 
-\docparam{src}{The input string, must not be \NULL.}
+\docparam{src}{The input string, must not be \NULL. For the version using
+wxString, the input string should contain only ASCII characters.}
 
 \docparam{srcLen}{The length of the input string or special value
 \texttt{wxNO\_LEN} if the string is \NUL-terminated and the length should be
