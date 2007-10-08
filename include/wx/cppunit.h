@@ -95,7 +95,11 @@
 
 inline std::ostream& operator<<(std::ostream& o, const wxString& s)
 {
-    return o << (const char *)wxSafeConvertWX2MB(s);
+#if wxUSE_UNICODE
+    return o << (const char *)wxSafeConvertWX2MB(s.wc_str());
+#else
+    return o << s.c_str();
+#endif
 }
 
 
