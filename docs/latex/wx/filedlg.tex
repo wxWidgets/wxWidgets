@@ -122,7 +122,7 @@ Returns the default filename.
 \constfunc{void}{GetFilenames}{\param{wxArrayString\& }{filenames}}
 
 Fills the array {\it filenames} with the names of the files chosen. This
-function should only be used with the dialogs which have {\tt wxMULTIPLE} style,
+function should only be used with the dialogs which have {\tt wxFD\_MULTIPLE} style,
 use \helpref{GetFilename}{wxfiledialoggetfilename} for the others.
 
 Note that under Windows, if the user selects shortcuts, the filenames
@@ -155,7 +155,7 @@ Returns the full path (directory and filename) of the selected file.
 \constfunc{void}{GetPaths}{\param{wxArrayString\& }{paths}}
 
 Fills the array {\it paths} with the full paths of the files chosen. This
-function should only be used with the dialogs which have {\tt wxMULTIPLE} style,
+function should only be used with the dialogs which have {\tt wxFD\_MULTIPLE} style,
 use \helpref{GetPath}{wxfiledialoggetpath} for the others.
 
 \membersection{wxFileDialog::GetWildcard}\label{wxfiledialoggetwildcard}
