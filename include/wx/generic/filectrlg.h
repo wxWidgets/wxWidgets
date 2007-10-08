@@ -275,7 +275,7 @@ private:
     // the first of these methods can only be used for the controls with single
     // selection (i.e. without wxFC_MULTIPLE style), the second one in any case
     wxFileName DoGetFileName() const;
-    void DoGetFilenames( wxArrayString& filenames, const bool fullPath ) const;
+    void DoGetFilenames( wxArrayString& filenames, bool fullPath ) const;
 
     int m_style;
 
