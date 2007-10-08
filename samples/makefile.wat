@@ -48,7 +48,7 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" &
 
 ### Targets: ###
 
-all : .SYMBOLIC access animate artprov aui calendar caret collpane config combo console controls dataview db dialogs dialup display dnd docview docvwmdi dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer memcheck menu minifram minimal mobile nativdlg notebook oleauto opengl ownerdrw popup printing regtest render richtext sashtest scroll scrollsub shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc
+all : .SYMBOLIC access animate artprov aui calendar caret collpane config combo console controls dataview db dialogs dialup display dnd docview docvwmdi dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer memcheck menu minimal mobile nativdlg notebook oleauto opengl ownerdrw popup printing regtest render richtext sashtest scroll scrollsub shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc
 
 clean : .SYMBOLIC 
 	-if exist .\*.obj del .\*.obj
@@ -177,9 +177,6 @@ clean : .SYMBOLIC
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
 	cd $(WATCOM_CWD)
 	cd menu
-	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
-	cd $(WATCOM_CWD)
-	cd minifram
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
 	cd $(WATCOM_CWD)
 	cd minimal
@@ -484,11 +481,6 @@ memcheck : .SYMBOLIC
 
 menu : .SYMBOLIC 
 	cd menu
-	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
-	cd $(WATCOM_CWD)
-
-minifram : .SYMBOLIC 
-	cd minifram
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 
