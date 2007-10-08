@@ -3296,6 +3296,17 @@ void wxListMainWindow::MoveToItem(size_t item)
             Scroll( -1, rect.y / hLine );
         if (rect.y + rect.height + 5 > view_y + client_h)
             Scroll( -1, (rect.y + rect.height - client_h + hLine) / hLine );
+
+#ifdef __WXMAC__
+        // At least on Mac the visible lines value will get reset inside of
+        // Scroll *before* it actually scrolls the window because of the
+        // Update() that happens there, so it will still have the wrong value.
+        // So let's reset it again and wait for it to be recalculated in the
+        // next paint event.  I would expect this problem to show up in wxGTK
+        // too but couldn't duplicate it there.  Perhaps the order of events
+        // is different...  --Robin
+        ResetVisibleLinesRange();
+#endif
     }
     else // !report
     {
