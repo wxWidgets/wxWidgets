@@ -257,6 +257,14 @@
 #endif
 
 
+/* test for old versions of Borland C, need at least 5.82, Turbo explorer, 
+   available for free at http://www.turboexplorer.com/downloads 
+*/
+#if defined(__BORLANDC__) && (__BORLANDC__ < 0x582)
+#error "This version of wxWidgets requires at least Borland 5.82 (Turbo Explorer); You may at your own risk remove this line and try your system"
+#endif //__BORLANDC__
+
+
 /*
    This macro can be used to test the Open Watcom version.
 */
