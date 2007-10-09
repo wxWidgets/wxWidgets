@@ -325,8 +325,8 @@ void wxFontRefData::InitFromNative()
         }
     }
 
-    switch ( wxToupper(*m_nativeFontInfo.
-                            GetXFontComponent(wxXLFD_SLANT).c_str()) )
+    switch ( wxToupper( m_nativeFontInfo.
+			GetXFontComponent(wxXLFD_SLANT)[0u]).GetValue() )
     {
         case _T('I'):   // italique
             m_style = wxFONTSTYLE_ITALIC;
