@@ -125,10 +125,10 @@ void Base64TestCase::EncodeDecodeEmpty()
     CPPUNIT_ASSERT_EQUAL('\0', shouldBeEmpty[0]);
 
     wxMemoryBuffer bufmt;
-    wxString resultmt = wxBase64Encode(bufmt);
-    CPPUNIT_ASSERT(resultmt.empty());
+    wxString resultEmpty = wxBase64Encode(bufmt);
+    CPPUNIT_ASSERT(resultEmpty.empty());
 
-    bufmt = wxBase64Decode(resultmt);
+    bufmt = wxBase64Decode(resultEmpty);
     WX_ASSERT_SIZET_EQUAL(0, bufmt.GetDataLen());
 }
 
