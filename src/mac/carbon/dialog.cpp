@@ -145,16 +145,16 @@ void wxDialog::DoShowModal()
 
     SetFocus() ;
 
-#if TARGET_CARBON
     WindowRef windowRef = (WindowRef) MacGetWindowRef();
-    WindowGroupRef formerGroup = GetWindowGroup(windowRef) ;
-    SetWindowGroup( windowRef, GetWindowGroupOfClass( kMovableModalWindowClass ));
+    WindowGroupRef windowGroup;
+    WindowGroupRef formerParentGroup;
+    if ( GetParent() == NULL )
+    {
+        windowGroup = GetWindowGroup(windowRef) ;
+        formerParentGroup = GetWindowGroupParent( windowGroup );
+        SetWindowGroupParent( windowGroup, GetWindowGroupOfClass( kMovableModalWindowClass ) );
+    }
     BeginAppModalStateForWindow(windowRef) ;
-#else
-    // TODO : test whether parent gets disabled
-    bool formerModal = s_macIsInModalLoop ;
-    s_macIsInModalLoop = true ;
-#endif
 
     while ( IsModalShowing() )
     {
@@ -162,13 +162,11 @@ void wxDialog::DoShowModal()
         // calls process idle itself
     }
 
-#if TARGET_CARBON
     EndAppModalStateForWindow(windowRef) ;
-    SetWindowGroup( windowRef, formerGroup );
-#else
-    // TODO probably reenable the parent window if any
-    s_macIsInModalLoop = formerModal ;
-#endif
+    if ( GetParent() == NULL )
+    {
+        SetWindowGroupParent( windowGroup , formerParentGroup );
+    }
 }
 
 
