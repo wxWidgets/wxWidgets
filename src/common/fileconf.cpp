@@ -927,7 +927,7 @@ bool wxFileConfig::DoReadBinary(const wxString& key, wxMemoryBuffer* buf) const
     if ( !Read(key, &str) )
         return false;
 
-    *buf = wxBase64Decode(str.ToAscii());
+    *buf = wxBase64Decode(str);
     return true;
 }
 
