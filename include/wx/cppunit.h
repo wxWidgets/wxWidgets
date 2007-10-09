@@ -88,8 +88,9 @@
 #define WX_ASSERT_SIZET_EQUAL(n, m) CPPUNIT_ASSERT_EQUAL(((size_t)n), m)
 
 ///////////////////////////////////////////////////////////////////////////////
-// stream inserter for wxString
-//
+// define stream inserter for wxString if it's not defined in the main library,
+// we need it to output the test failures involving wxString
+#if !wxUSE_STD_IOSTREAM
 
 #include "wx/string.h"
 
@@ -102,6 +103,7 @@ inline std::ostream& operator<<(std::ostream& o, const wxString& s)
 #endif
 }
 
+#endif // !wxUSE_STD_IOSTREAM
 
 ///////////////////////////////////////////////////////////////////////////////
 // Some more compiler warning tweaking and auto linking.
