@@ -159,7 +159,7 @@ bool wxRichTextTabsPage::TransferDataFromWindow()
 {
     wxPanel::TransferDataFromWindow();
 
-    wxTextAttrEx* attr = GetAttributes();
+    wxTextAttr* attr = GetAttributes();
 
     if (m_tabsPresent)
     {
@@ -178,7 +178,7 @@ bool wxRichTextTabsPage::TransferDataToWindow()
 {
     wxPanel::TransferDataToWindow();
 
-    wxTextAttrEx* attr = GetAttributes();
+    wxTextAttr* attr = GetAttributes();
 
     m_tabListCtrl->Clear();
     m_tabEditCtrl->SetValue(wxEmptyString);
@@ -226,7 +226,7 @@ void wxRichTextTabsPage::SortTabs()
     }
 }
 
-wxTextAttrEx* wxRichTextTabsPage::GetAttributes()
+wxTextAttr* wxRichTextTabsPage::GetAttributes()
 {
     return wxRichTextFormattingDialog::GetDialogAttributes(this);
 }

@@ -65,7 +65,7 @@ Sets the insertion point to the end of the buffer and writes the text.
 
 Applies the given alignment to the selection (undoable).
 
-For alignment values, see \helpref{wxTextAttrEx}{wxtextattrex}.
+For alignment values, see \helpref{wxTextAttr}{wxtextattr}.
 
 \membersection{wxRichTextCtrl::ApplyBoldToSelection}\label{wxrichtextctrlapplyboldtoselection}
 
@@ -113,7 +113,7 @@ Returns \true if undo commands are being batched.
 
 Begins using alignment
 
-For alignment values, see \helpref{wxTextAttrEx}{wxtextattrex}.
+For alignment values, see \helpref{wxTextAttr}{wxtextattr}.
 
 \membersection{wxRichTextCtrl::BeginBatchUndo}\label{wxrichtextctrlbeginbatchundo}
 
@@ -249,7 +249,7 @@ Begins a right indent, specified in tenths of a millimetre.
 
 \membersection{wxRichTextCtrl::BeginStyle}\label{wxrichtextctrlbeginstyle}
 
-\func{bool}{BeginStyle}{\param{const wxTextAttrEx\& }{style}}
+\func{bool}{BeginStyle}{\param{const wxTextAttr\& }{style}}
 
 Begins applying a style.
 
@@ -551,7 +551,7 @@ refresh the control.
 
 \membersection{wxRichTextCtrl::GetBasicStyle}\label{wxrichtextctrlgetbasicstyle}
 
-\constfunc{const wxTextAttrEx\&}{GetBasicStyle}{\void}
+\constfunc{const wxTextAttr\&}{GetBasicStyle}{\void}
 
 Gets the basic (overall) style. This is the style of the whole
 buffer before further styles are applied, unlike the default style, which
@@ -584,13 +584,12 @@ Returns the caret height and position for the given character position
 
 Gets the command processor associated with the control's buffer.
 
-\membersection{wxRichTextCtrl::GetDefaultStyleEx}\label{wxrichtextctrlgetdefaultstyleex}
+\membersection{wxRichTextCtrl::GetDefaultStyle}\label{wxrichtextctrlgetdefaultstyle}
 
-\constfunc{const wxTextAttrEx\&}{GetDefaultStyleEx}{\void}
+\constfunc{const wxTextAttr\&}{GetDefaultStyle}{\void}
 
 Returns the current default style, which can be used to change how subsequently inserted
-text is displayed. When wxTextAttrEx is merged with wxTextAttr, this function
-will become GetDefaultStyle.
+text is displayed.
 
 \membersection{wxRichTextCtrl::GetDelayedLayoutThreshold}\label{wxrichtextctrlgetdelayedlayoutthreshold}
 
@@ -692,14 +691,9 @@ Returns the text within the current selection range, if any.
 
 \membersection{wxRichTextCtrl::GetStyle}\label{wxrichtextctrlgetstyle}
 
-\func{bool}{GetStyle}{\param{long }{position}, \param{wxRichTextAttr\& }{style}}
-
-\func{bool}{GetStyle}{\param{long }{position}, \param{wxTextAttrEx\& }{style}}
-
 \func{bool}{GetStyle}{\param{long }{position}, \param{wxTextAttr\& }{style}}
 
-Gets the attributes at the given position. The wxRichTextAttr version is generally more efficient
-because it does not use wxFont objects.
+Gets the attributes at the given position.
 
 This function gets the combined style - that is, the style you see on the screen as a result
 of combining base style, paragraph style and character style attributes. To get the character
@@ -707,9 +701,7 @@ or paragraph style alone, use \helpref{GetUncombinedStyle}{wxrichtextctrlgetunco
 
 \membersection{wxRichTextCtrl::GetStyleForRange}\label{wxrichtextctrlgetstyleforrange}
 
-\func{bool}{GetStyleForRange}{\param{const wxRichTextRange\& }{range}, \param{wxRichTextAttr\& }{style}}
-
-\func{bool}{GetStyleForRange}{\param{const wxRichTextRange\& }{range}, \param{wxTextAttrEx\& }{style}}
+\func{bool}{GetStyleForRange}{\param{const wxRichTextRange\& }{range}, \param{wxTextAttr\& }{style}}
 
 Gets the attributes common to the specified range. Attributes that differ in value within the range will
 not be included in {\it style}'s flags.
@@ -723,14 +715,9 @@ character and paragraph styles to be applied.
 
 \membersection{wxRichTextCtrl::GetUncombinedStyle}\label{wxrichtextctrlgetuncombinedstyle}
 
-\func{bool}{GetUncombinedStyle}{\param{long }{position}, \param{wxRichTextAttr\& }{style}}
-
-\func{bool}{GetUncombinedStyle}{\param{long }{position}, \param{wxTextAttrEx\& }{style}}
-
 \func{bool}{GetUncombinedStyle}{\param{long }{position}, \param{wxTextAttr\& }{style}}
 
-Gets the attributes at the given position. The wxRichTextAttr version is generally more efficient
-because it does not use wxFont objects.
+Gets the attributes at the given position.
 
 This function gets the {\it uncombined style} - that is, the attributes associated with the
 paragraph or character content, and not necessarily the combined attributes you see on the
@@ -756,9 +743,7 @@ if this is the case.
 
 \membersection{wxRichTextCtrl::HasCharacterAttributes}\label{wxrichtextctrlhascharacterattributes}
 
-\constfunc{bool}{HasCharacterAttributes}{\param{const wxRichTextRange\& }{range}, \param{const wxTextAttrEx\& }{style}}
-
-\constfunc{bool}{HasCharacterAttributes}{\param{const wxRichTextRange\& }{range}, \param{const wxRichTextAttr\& }{style}}
+\constfunc{bool}{HasCharacterAttributes}{\param{const wxRichTextRange\& }{range}, \param{const wxTextAttr\& }{style}}
 
 Test if this whole range has character attributes of the specified kind. If any
 of the attributes are different within the range, the test fails. You
@@ -767,9 +752,7 @@ flags indicating which attributes are of interest.
 
 \membersection{wxRichTextCtrl::HasParagraphAttributes}\label{wxrichtextctrlhasparagraphattributes}
 
-\constfunc{bool}{HasParagraphAttributes}{\param{const wxRichTextRange\& }{range}, \param{const wxTextAttrEx\& }{style}}
-
-\constfunc{bool}{HasParagraphAttributes}{\param{const wxRichTextRange\& }{range}, \param{const wxRichTextAttr\& }{style}}
+\constfunc{bool}{HasParagraphAttributes}{\param{const wxRichTextRange\& }{range}, \param{const wxTextAttr\& }{style}}
 
 Test if this whole range has paragraph attributes of the specified kind. If any
 of the attributes are different within the range, the test fails. You
@@ -820,7 +803,7 @@ bool wxRichTextCtrl::IsSelectionBold()
 {
     if (HasSelection())
     {
-        wxRichTextAttr attr;
+        wxTextAttr attr;
         wxRichTextRange range = GetInternalSelectionRange();
         attr.SetFlags(wxTEXT_ATTR_FONT_WEIGHT);
         attr.SetFontWeight(wxBOLD);
@@ -831,7 +814,7 @@ bool wxRichTextCtrl::IsSelectionBold()
     {
         // If no selection, then we need to combine current style with default style
         // to see what the effect would be if we started typing.
-        wxRichTextAttr attr;
+        wxTextAttr attr;
         attr.SetFlags(wxTEXT_ATTR_FONT_WEIGHT);
 
         long pos = GetAdjustedCaretPosition(GetCaretPosition());
@@ -1252,7 +1235,7 @@ Cancels any selection.
 
 \membersection{wxRichTextCtrl::SetAndShowDefaultStyle}\label{wxrichtextctrlsetandshowdefaultstyle}
 
-\func{void}{SetAndShowDefaultStyle}{\param{const wxRichTextAttr\& }{attr}}
+\func{void}{SetAndShowDefaultStyle}{\param{const wxTextAttr\& }{attr}}
 
 Sets {\it attr} as the default style and tells the control that the UI should reflect
 this attribute until the user moves the caret.
@@ -1261,9 +1244,7 @@ See also \helpref{IsDefaultStyleShowing}{wxrichtextctrlisdefaultstyleshowing}.
 
 \membersection{wxRichTextCtrl::SetBasicStyle}\label{wxrichtextctrlsetbasicstyle}
 
-\func{void}{SetBasicStyle}{\param{const wxRichTextAttr\& }{style}}
-
-\func{void}{SetBasicStyle}{\param{const wxTextAttrEx\& }{style}}
+\func{void}{SetBasicStyle}{\param{const wxTextAttr\& }{style}}
 
 Sets the basic (overall) style. This is the style of the whole
 buffer before further styles are applied, unlike the default style, which
@@ -1279,7 +1260,7 @@ A value of -1 means the caret is at the start of the buffer.
 
 \membersection{wxRichTextCtrl::SetDefaultStyle}\label{wxrichtextctrlsetdefaultstyle}
 
-\func{bool}{SetDefaultStyle}{\param{const wxTextAttrEx\& }{style}}
+\func{bool}{SetDefaultStyle}{\param{const wxTextAttr\& }{style}}
 
 Sets the current default style, which can be used to change how subsequently inserted
 text is displayed.
@@ -1373,28 +1354,22 @@ So, for example, to set the selection for a character at position 5, use the ran
 
 \membersection{wxRichTextCtrl::SetStyle}\label{wxrichtextctrlsetstyle}
 
-\func{bool}{SetStyle}{\param{const wxRichTextRange\& }{range}, \param{const wxRichTextAttr\& }{style}}
-
-\func{bool}{SetStyle}{\param{long }{start}, \param{long }{end}, \param{const wxTextAttrEx\& }{style}}
+\func{bool}{SetStyle}{\param{const wxRichTextRange\& }{range}, \param{const wxTextAttr\& }{style}}
 
 \func{bool}{SetStyle}{\param{long }{start}, \param{long }{end}, \param{const wxTextAttr\& }{style}}
 
-Sets the attributes for the given range. The wxRichTextAttr version is more efficient
-because it does not use wxFont objects.
+Sets the attributes for the given range.
 
 The end point of range is specified as the last character position of the span of text, plus one.
 So, for example, to set the style for a character at position 5, use the range (5,6).
 
 \membersection{wxRichTextCtrl::SetStyleEx}\label{wxrichtextctrlsetstyleex}
 
-\func{bool}{SetStyleEx}{\param{const wxRichTextRange\& }{range}, \param{const wxRichTextAttr\& }{style}, \param{int }{flags $=$ wxRICHTEXT\_SETSTYLE\_WITH\_UNDO}}
+\func{bool}{SetStyleEx}{\param{const wxRichTextRange\& }{range}, \param{const wxTextAttr\& }{style}, \param{int }{flags $=$ wxRICHTEXT\_SETSTYLE\_WITH\_UNDO}}
 
-\func{bool}{SetStyleEx}{\param{const wxRichTextRange\& }{range}, \param{const wxTextAttrEx\& }{style}, \param{int }{flags $=$ wxRICHTEXT\_SETSTYLE\_WITH\_UNDO}}
+\func{bool}{SetStyleEx}{\param{long }{start}, \param{long }{end}, \param{const wxTextAttr\& }{style}, \param{int }{flags $=$ wxRICHTEXT\_SETSTYLE\_WITH\_UNDO}}
 
-\func{bool}{SetStyleEx}{\param{long }{start}, \param{long }{end}, \param{const wxTextAttrEx\& }{style}, \param{int }{flags $=$ wxRICHTEXT\_SETSTYLE\_WITH\_UNDO}}
-
-Sets the attributes for the given range, passing flags to determine how the attributes are set. The wxRichTextAttr version is more efficient
-because it does not use wxFont objects.
+Sets the attributes for the given range, passing flags to determine how the attributes are set.
 
 The end point of range is specified as the last character position of the span of text, plus one.
 So, for example, to set the style for a character at position 5, use the range (5,6).

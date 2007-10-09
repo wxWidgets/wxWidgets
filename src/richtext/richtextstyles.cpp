@@ -54,14 +54,14 @@ bool wxRichTextStyleDefinition::Eq(const wxRichTextStyleDefinition& def) const
 }
 
 /// Gets the style combined with the base style
-wxRichTextAttr wxRichTextStyleDefinition::GetStyleMergedWithBase(const wxRichTextStyleSheet* sheet) const
+wxTextAttr wxRichTextStyleDefinition::GetStyleMergedWithBase(const wxRichTextStyleSheet* sheet) const
 {
     if (!m_baseStyle.IsEmpty())
     {
         wxRichTextStyleDefinition* baseStyle = sheet->FindStyle(m_baseStyle);
         if (baseStyle)
         {
-            wxRichTextAttr baseAttr = baseStyle->GetStyleMergedWithBase(sheet);
+            wxTextAttr baseAttr = baseStyle->GetStyleMergedWithBase(sheet);
             baseAttr.Apply(m_style, NULL);
             return baseAttr;
         }
@@ -111,14 +111,14 @@ bool wxRichTextListStyleDefinition::operator ==(const wxRichTextListStyleDefinit
 }
 
 /// Sets/gets the attributes for the given level
-void wxRichTextListStyleDefinition::SetLevelAttributes(int i, const wxRichTextAttr& attr)
+void wxRichTextListStyleDefinition::SetLevelAttributes(int i, const wxTextAttr& attr)
 {
     wxASSERT( (i >= 0 && i < 10) );
     if (i >= 0 && i < 10)
         m_levelStyles[i] = attr;
 }
 
-const wxRichTextAttr* wxRichTextListStyleDefinition::GetLevelAttributes(int i) const
+const wxTextAttr* wxRichTextListStyleDefinition::GetLevelAttributes(int i) const
 {
     wxASSERT( (i >= 0 && i < 10) );
     if (i >= 0 && i < 10)
@@ -127,7 +127,7 @@ const wxRichTextAttr* wxRichTextListStyleDefinition::GetLevelAttributes(int i) c
         return NULL;
 }
 
-wxRichTextAttr* wxRichTextListStyleDefinition::GetLevelAttributes(int i)
+wxTextAttr* wxRichTextListStyleDefinition::GetLevelAttributes(int i)
 {
     wxASSERT( (i >= 0 && i < 10) );
     if (i >= 0 && i < 10)
@@ -142,7 +142,7 @@ void wxRichTextListStyleDefinition::SetAttributes(int i, int leftIndent, int lef
     wxASSERT( (i >= 0 && i < 10) );
     if (i >= 0 && i < 10)
     {
-        wxRichTextAttr attr;
+        wxTextAttr attr;
 
         attr.SetBulletStyle(bulletStyle);
         attr.SetLeftIndent(leftIndent, leftSubIndent);
@@ -178,11 +178,11 @@ int wxRichTextListStyleDefinition::FindLevelForIndent(int indent) const
 
 /// Combine the list style with a paragraph style, using the given indent (from which
 /// an appropriate level is found)
-wxRichTextAttr wxRichTextListStyleDefinition::CombineWithParagraphStyle(int indent, const wxRichTextAttr& paraStyle, wxRichTextStyleSheet* styleSheet)
+wxTextAttr wxRichTextListStyleDefinition::CombineWithParagraphStyle(int indent, const wxTextAttr& paraStyle, wxRichTextStyleSheet* styleSheet)
 {
     int listLevel = FindLevelForIndent(indent);
 
-    wxRichTextAttr attr(*GetLevelAttributes(listLevel));
+    wxTextAttr attr(*GetLevelAttributes(listLevel));
     int oldLeftIndent = attr.GetLeftIndent();
     int oldLeftSubIndent = attr.GetLeftSubIndent();
 
@@ -203,7 +203,7 @@ wxRichTextAttr wxRichTextListStyleDefinition::CombineWithParagraphStyle(int inde
 
 /// Combine the base and list style, using the given indent (from which
 /// an appropriate level is found)
-wxRichTextAttr wxRichTextListStyleDefinition::GetCombinedStyle(int indent, wxRichTextStyleSheet* styleSheet)
+wxTextAttr wxRichTextListStyleDefinition::GetCombinedStyle(int indent, wxRichTextStyleSheet* styleSheet)
 {
     int listLevel = FindLevelForIndent(indent);
     return GetCombinedStyleForLevel(listLevel, styleSheet);
@@ -211,9 +211,9 @@ wxRichTextAttr wxRichTextListStyleDefinition::GetCombinedStyle(int indent, wxRic
 
 /// Combine the base and list style, using the given indent (from which
 /// an appropriate level is found)
-wxRichTextAttr wxRichTextListStyleDefinition::GetCombinedStyleForLevel(int listLevel, wxRichTextStyleSheet* styleSheet)
+wxTextAttr wxRichTextListStyleDefinition::GetCombinedStyleForLevel(int listLevel, wxRichTextStyleSheet* styleSheet)
 {
-    wxRichTextAttr attr(*GetLevelAttributes(listLevel));
+    wxTextAttr attr(*GetLevelAttributes(listLevel));
     int oldLeftIndent = attr.GetLeftIndent();
     int oldLeftSubIndent = attr.GetLeftSubIndent();
 
@@ -590,7 +590,7 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
 
     bool isCentred = false;
 
-    wxRichTextAttr attr(def->GetStyleMergedWithBase(GetStyleSheet()));
+    wxTextAttr attr(def->GetStyleMergedWithBase(GetStyleSheet()));
 
     if (attr.HasAlignment() && attr.GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
         isCentred = true;
@@ -722,7 +722,7 @@ wxString wxRichTextStyleListBox::GetStyleToShowInIdleTime(wxRichTextCtrl* ctrl, 
     // Take into account current default style just chosen by user
     if (ctrl->IsDefaultStyleShowing())
     {
-        wxTextAttrEx attr;
+        wxTextAttr attr;
 
         ctrl->GetStyle(adjustedCaretPos, attr);
         wxRichTextApplyStyle(attr, ctrl->GetDefaultStyleEx());
@@ -1000,9 +1000,9 @@ END_EVENT_TABLE()
 
 bool wxRichTextStyleComboPopup::Create( wxWindow* parent )
 {
-	int borderStyle = GetDefaultBorder();
-	if (borderStyle == wxBORDER_SUNKEN)
-	    borderStyle = wxBORDER_SIMPLE;
+    int borderStyle = GetDefaultBorder();
+    if (borderStyle == wxBORDER_SUNKEN)
+        borderStyle = wxBORDER_SIMPLE;
 
     return wxRichTextStyleListBox::Create(parent, wxID_ANY,
                                   wxPoint(0,0), wxDefaultSize,

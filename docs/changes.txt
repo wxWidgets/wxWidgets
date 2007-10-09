@@ -187,16 +187,18 @@ All (GUI):
 - Show standard options in wxCmdLineParser usage message (Francesco Montorsi).
 - Added wxRect::operator+ (union) and * (intersection) (bdonner).
 - Added support for two auxiliary mouse buttons to wxMouseEvent (Chris Weiland).
-- Added wxToolTip::SetAutoPop() and SetReshow() (Jan Knepper)
-- Added wxTaskBarIcon::Destroy()
-- Added XRC handler for wxSearchCtrl (Sander Berents)
-- Read image resolution from TIFF, JPEG and BMP images (Maycon Aparecido Gasoto)
-- Add support for reading alpha data from TIFF images
-- Added wxSYS_DCLICK_TIME system metric constant (Arne Steinarson)
-- Added wxApp::Get/SetAppDisplayName() (Brian A. Vanderburg II)
-- Added wxWindow::GetPopupMenuSelectionFromUser() (Arne Steinarson)
+- Added wxToolTip::SetAutoPop() and SetReshow() (Jan Knepper).
+- Added wxTaskBarIcon::Destroy().
+- Added XRC handler for wxSearchCtrl (Sander Berents).
+- Read image resolution from TIFF, JPEG and BMP images (Maycon Aparecido Gasoto).
+- Add support for reading alpha data from TIFF images.
+- Added wxSYS_DCLICK_TIME system metric constant (Arne Steinarson).
+- Added wxApp::Get/SetAppDisplayName() (Brian A. Vanderburg II).
+- Added wxWindow::GetPopupMenuSelectionFromUser() (Arne Steinarson).
 - Implemented wxTreeCtrl::GetPrevVisible() in the generic version and made the
-  behaviour of GetNextSibling() consistent between wxMSW and generic versions
+  behaviour of GetNextSibling() consistent between wxMSW and generic versions.
+- Merged wxRichTextAttr and wxTextAttrEx into wxTextAttr, and added a font table
+  to wxRichTextBuffer to reduce wxFont consumption and increase performance.
 
 wxGTK:
 

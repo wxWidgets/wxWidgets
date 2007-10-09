@@ -267,17 +267,14 @@ bool wxRichTextFontPage::TransferDataFromWindow()
 {
     wxPanel::TransferDataFromWindow();
 
-    wxTextAttrEx* attr = GetAttributes();
+    wxTextAttr* attr = GetAttributes();
 
     if (m_faceListBox->GetSelection() != wxNOT_FOUND)
     {
         wxString faceName = m_faceListBox->GetFaceName(m_faceListBox->GetSelection());
         if (!faceName.IsEmpty())
         {
-            wxFont font(attr->GetFont().Ok() ? attr->GetFont() : *wxNORMAL_FONT);
-            font.SetFaceName(faceName);
-            wxSetFontPreservingStyles(*attr, font);
-            attr->SetFlags(attr->GetFlags() | wxTEXT_ATTR_FONT_FACE);
+            attr->SetFontFaceName(faceName);
         }
     }
     else
@@ -289,10 +286,7 @@ bool wxRichTextFontPage::TransferDataFromWindow()
         int sz = wxAtoi(strSize);
         if (sz > 0)
         {
-            wxFont font(attr->GetFont().Ok() ? attr->GetFont() : *wxNORMAL_FONT);
-            font.SetPointSize(sz);
-            wxSetFontPreservingStyles(*attr, font);
-            attr->SetFlags(attr->GetFlags() | wxTEXT_ATTR_FONT_SIZE);
+            attr->SetFontSize(sz);
         }
     }
     else
@@ -306,10 +300,7 @@ bool wxRichTextFontPage::TransferDataFromWindow()
         else
             style = wxNORMAL;
 
-        wxFont font(attr->GetFont().Ok() ? attr->GetFont() : *wxNORMAL_FONT);
-        font.SetStyle(style);
-        wxSetFontPreservingStyles(*attr, font);
-        attr->SetFlags(attr->GetFlags() | wxTEXT_ATTR_FONT_ITALIC);
+        attr->SetFontStyle(style);
     }
     else
         attr->SetFlags(attr->GetFlags() & (~ wxTEXT_ATTR_FONT_ITALIC));
@@ -322,10 +313,7 @@ bool wxRichTextFontPage::TransferDataFromWindow()
         else
             weight = wxNORMAL;
 
-        wxFont font(attr->GetFont().Ok() ? attr->GetFont() : *wxNORMAL_FONT);
-        font.SetWeight(weight);
-        wxSetFontPreservingStyles(*attr, font);
-        attr->SetFlags(attr->GetFlags() | wxTEXT_ATTR_FONT_WEIGHT);
+        attr->SetFontWeight(weight);
     }
     else
         attr->SetFlags(attr->GetFlags() & (~ wxTEXT_ATTR_FONT_WEIGHT));
@@ -338,10 +326,7 @@ bool wxRichTextFontPage::TransferDataFromWindow()
         else
             underlined = false;
 
-        wxFont font(attr->GetFont().Ok() ? attr->GetFont() : *wxNORMAL_FONT);
-        font.SetUnderlined(underlined);
-        wxSetFontPreservingStyles(*attr, font);
-        attr->SetFlags(attr->GetFlags() | wxTEXT_ATTR_FONT_UNDERLINE);
+        attr->SetFontUnderlined(underlined);
     }
     else
         attr->SetFlags(attr->GetFlags() & (~ wxTEXT_ATTR_FONT_UNDERLINE));
@@ -352,7 +337,7 @@ bool wxRichTextFontPage::TransferDataFromWindow()
     }
     else
         attr->SetFlags(attr->GetFlags() & (~ wxTEXT_ATTR_TEXT_COLOUR));
-        
+
     if (m_strikethroughCtrl->Get3StateValue() != wxCHK_UNDETERMINED)
     {
         attr->SetTextEffectFlags(attr->GetTextEffectFlags() | wxTEXT_ATTR_EFFECT_STRIKETHROUGH);
@@ -366,7 +351,7 @@ bool wxRichTextFontPage::TransferDataFromWindow()
     if (m_capitalsCtrl->Get3StateValue() != wxCHK_UNDETERMINED)
     {
         attr->SetTextEffectFlags(attr->GetTextEffectFlags() | wxTEXT_ATTR_EFFECT_CAPITALS);
-    
+
         if (m_capitalsCtrl->Get3StateValue() == wxCHK_CHECKED)
             attr->SetTextEffects(attr->GetTextEffects() | wxTEXT_ATTR_EFFECT_CAPITALS);
         else
@@ -381,11 +366,11 @@ bool wxRichTextFontPage::TransferDataToWindow()
     wxPanel::TransferDataToWindow();
 
     m_dontUpdate = true;
-    wxTextAttrEx* attr = GetAttributes();
+    wxTextAttr* attr = GetAttributes();
 
-    if (attr->HasFont() && attr->HasFontFaceName())
+    if (attr->HasFontFaceName())
     {
-        m_faceTextCtrl->SetValue(attr->GetFont().GetFaceName());
+        m_faceTextCtrl->SetValue(attr->GetFontFaceName());
         m_faceListBox->SetFaceNameSelection(attr->GetFont().GetFaceName());
     }
     else
@@ -394,9 +379,9 @@ bool wxRichTextFontPage::TransferDataToWindow()
         m_faceListBox->SetFaceNameSelection(wxEmptyString);
     }
 
-    if (attr->HasFont() && attr->HasFontSize())
+    if (attr->HasFontSize())
     {
-        wxString strSize = wxString::Format(wxT("%d"), attr->GetFont().GetPointSize());
+        wxString strSize = wxString::Format(wxT("%d"), attr->GetFontSize());
         m_sizeTextCtrl->SetValue(strSize);
         if (m_sizeListBox->FindString(strSize) != wxNOT_FOUND)
             m_sizeListBox->SetStringSelection(strSize);
@@ -407,9 +392,9 @@ bool wxRichTextFontPage::TransferDataToWindow()
         m_sizeListBox->SetSelection(wxNOT_FOUND);
     }
 
-    if (attr->HasFont() && attr->HasFontWeight())
+    if (attr->HasFontWeight())
     {
-        if (attr->GetFont().GetWeight() == wxBOLD)
+        if (attr->GetFontWeight() == wxBOLD)
             m_weightCtrl->SetSelection(1);
         else
             m_weightCtrl->SetSelection(0);
@@ -419,9 +404,9 @@ bool wxRichTextFontPage::TransferDataToWindow()
         m_weightCtrl->SetSelection(wxNOT_FOUND);
     }
 
-    if (attr->HasFont() && attr->HasFontItalic())
+    if (attr->HasFontItalic())
     {
-        if (attr->GetFont().GetStyle() == wxITALIC)
+        if (attr->GetFontStyle() == wxITALIC)
             m_styleCtrl->SetSelection(1);
         else
             m_styleCtrl->SetSelection(0);
@@ -431,9 +416,9 @@ bool wxRichTextFontPage::TransferDataToWindow()
         m_styleCtrl->SetSelection(wxNOT_FOUND);
     }
 
-    if (attr->HasFont() && attr->HasFontUnderlined())
+    if (attr->HasFontUnderlined())
     {
-        if (attr->GetFont().GetUnderlined())
+        if (attr->GetFontUnderlined())
             m_underliningCtrl->SetSelection(1);
         else
             m_underliningCtrl->SetSelection(0);
@@ -484,7 +469,7 @@ bool wxRichTextFontPage::TransferDataToWindow()
     return true;
 }
 
-wxTextAttrEx* wxRichTextFontPage::GetAttributes()
+wxTextAttr* wxRichTextFontPage::GetAttributes()
 {
     return wxRichTextFormattingDialog::GetDialogAttributes(this);
 }
@@ -543,7 +528,7 @@ void wxRichTextFontPage::UpdatePreview()
 
         font.SetUnderlined(underlined);
     }
-    
+
     int textEffects = 0;
 
     if (m_strikethroughCtrl->Get3StateValue() == wxCHK_CHECKED)

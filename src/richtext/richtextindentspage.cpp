@@ -334,7 +334,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
 ////@end wxRichTextIndentsSpacingPage content construction
 }
 
-wxTextAttrEx* wxRichTextIndentsSpacingPage::GetAttributes()
+wxTextAttr* wxRichTextIndentsSpacingPage::GetAttributes()
 {
     return wxRichTextFormattingDialog::GetDialogAttributes(this);
 }
@@ -352,7 +352,7 @@ et magnis dis parturient montes, nascetur ridiculus mus. Nullam vitae justo id m
 iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
 
     TransferDataFromWindow();
-    wxTextAttrEx attr(*GetAttributes());
+    wxTextAttr attr(*GetAttributes());
     attr.SetFlags(attr.GetFlags() &
       (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|
        wxTEXT_ATTR_LINE_SPACING|
@@ -362,7 +362,7 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
     font.SetPointSize(9);
     m_previewCtrl->SetFont(font);
 
-    wxTextAttrEx normalParaAttr;
+    wxTextAttr normalParaAttr;
     normalParaAttr.SetFont(font);
     normalParaAttr.SetTextColour(wxColour(wxT("LIGHT GREY")));
 
@@ -389,7 +389,7 @@ bool wxRichTextIndentsSpacingPage::TransferDataFromWindow()
 {
     wxPanel::TransferDataFromWindow();
 
-    wxTextAttrEx* attr = GetAttributes();
+    wxTextAttr* attr = GetAttributes();
 
     if (m_alignmentLeft->GetValue())
         attr->SetAlignment(wxTEXT_ALIGNMENT_LEFT);
@@ -450,7 +450,7 @@ bool wxRichTextIndentsSpacingPage::TransferDataFromWindow()
         attr->SetFlags(attr->GetFlags() & (~wxTEXT_ATTR_LINE_SPACING));
     else
         attr->SetLineSpacing(lineSpacing);
-        
+
     int outlineLevel = m_outlineLevelCtrl->GetSelection();
     if (outlineLevel != wxNOT_FOUND)
         attr->SetOutlineLevel(outlineLevel);
@@ -464,7 +464,7 @@ bool wxRichTextIndentsSpacingPage::TransferDataToWindow()
 
     wxPanel::TransferDataToWindow();
 
-    wxTextAttrEx* attr = GetAttributes();
+    wxTextAttr* attr = GetAttributes();
 
     if (attr->HasAlignment())
     {
@@ -548,7 +548,7 @@ bool wxRichTextIndentsSpacingPage::TransferDataToWindow()
         if (outlineLevel < 0)
             outlineLevel = 0;
         if (outlineLevel > 9)
-            outlineLevel = 9;            
+            outlineLevel = 9;
 
         m_outlineLevelCtrl->SetSelection(outlineLevel);
     }

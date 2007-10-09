@@ -55,8 +55,21 @@ static void wxGtkTextInsert(GtkWidget *text,
                             const char *txt,
                             size_t len)
 {
-    GdkFont *font = attr.HasFont() ? attr.GetFont().GetInternalFont()
-                                   : NULL;
+    wxFont tmpFont;
+    GdkFont *font;
+    if (attr.HasFont())
+    {
+        tmpFont = attr.GetFont();
+
+        // FIXME: if this crashes because tmpFont goes out of scope and the GdkFont is
+        // deleted, then we need to call gdk_font_ref on font.
+        // This is because attr.GetFont() now returns a temporary font since wxTextAttr
+        // no longer stores a wxFont object, for efficiency.
+
+        font = tmpFont.GetInternalFont();
+    }
+    else
+        font  = NULL;
 
     GdkColor *colFg = attr.HasTextColour() ? attr.GetTextColour().GetColor()
                                            : NULL;

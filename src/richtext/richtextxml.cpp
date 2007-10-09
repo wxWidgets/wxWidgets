@@ -270,7 +270,7 @@ bool wxRichTextXMLHandler::ImportStyleDefinition(wxRichTextStyleSheet* sheet, wx
         {
             if (child->GetName() == wxT("style"))
             {
-                wxTextAttrEx attr;
+                wxTextAttr attr;
                 GetStyle(attr, child, false);
                 def->SetStyle(attr);
             }
@@ -292,7 +292,7 @@ bool wxRichTextXMLHandler::ImportStyleDefinition(wxRichTextStyleSheet* sheet, wx
         {
             if (child->GetName() == wxT("style"))
             {
-                wxTextAttrEx attr;
+                wxTextAttr attr;
                 GetStyle(attr, child, false);
                 def->SetStyle(attr);
             }
@@ -314,7 +314,7 @@ bool wxRichTextXMLHandler::ImportStyleDefinition(wxRichTextStyleSheet* sheet, wx
         {
             if (child->GetName() == wxT("style"))
             {
-                wxTextAttrEx attr;
+                wxTextAttr attr;
                 GetStyle(attr, child, false);
 
                 wxString styleLevel = child->GetAttribute(wxT("level"), wxEmptyString);
@@ -834,7 +834,7 @@ bool wxRichTextXMLHandler::ExportStyleDefinition(wxOutputStream& stream, wxMBCon
         int i;
         for (i = 0; i < 10; i ++)
         {
-            wxRichTextAttr* levelAttr = listDef->GetLevelAttributes(i);
+            wxTextAttr* levelAttr = listDef->GetLevelAttributes(i);
             if (levelAttr)
             {
                 wxString style = CreateStyle(def->GetStyle(), false);
@@ -882,7 +882,7 @@ bool wxRichTextXMLHandler::ExportStyleDefinition(wxOutputStream& stream, wxMBCon
 }
 
 /// Create style parameters
-wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara)
+wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttr& attr, bool isPara)
 {
     wxString str;
     if (attr.HasTextColour() && attr.GetTextColour().Ok())
@@ -894,26 +894,23 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara
         str << wxT(" bgcolor=\"#") << ColourToHexString(attr.GetBackgroundColour()) << wxT("\"");
     }
 
-    if (attr.GetFont().Ok())
-    {
-        if (attr.HasFontSize())
-            str << wxT(" fontsize=\"") << attr.GetFont().GetPointSize() << wxT("\"");
+    if (attr.HasFontSize())
+        str << wxT(" fontsize=\"") << attr.GetFontSize() << wxT("\"");
 
-        //if (attr.HasFontFamily())
-        //    str << wxT(" fontfamily=\"") << attr.GetFont().GetFamily() << wxT("\"");
+    //if (attr.HasFontFamily())
+    //    str << wxT(" fontfamily=\"") << attr.GetFont().GetFamily() << wxT("\"");
 
-        if (attr.HasFontItalic())
-            str << wxT(" fontstyle=\"") << attr.GetFont().GetStyle() << wxT("\"");
+    if (attr.HasFontItalic())
+        str << wxT(" fontstyle=\"") << attr.GetFontStyle() << wxT("\"");
 
-        if (attr.HasFontWeight())
-            str << wxT(" fontweight=\"") << attr.GetFont().GetWeight() << wxT("\"");
+    if (attr.HasFontWeight())
+        str << wxT(" fontweight=\"") << attr.GetFontWeight() << wxT("\"");
 
-        if (attr.HasFontUnderlined())
-            str << wxT(" fontunderlined=\"") << (int) attr.GetFont().GetUnderlined() << wxT("\"");
+    if (attr.HasFontUnderlined())
+        str << wxT(" fontunderlined=\"") << (int) attr.GetFontUnderlined() << wxT("\"");
 
-        if (attr.HasFontFaceName())
-            str << wxT(" fontface=\"") << attr.GetFont().GetFaceName() << wxT("\"");
-    }
+    if (attr.HasFontFaceName())
+        str << wxT(" fontface=\"") << attr.GetFontFaceName() << wxT("\"");
 
     if (attr.HasTextEffects())
     {
@@ -1009,20 +1006,20 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara
 }
 
 /// Get style parameters
-bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool isPara)
+bool wxRichTextXMLHandler::GetStyle(wxTextAttr& attr, wxXmlNode* node, bool isPara)
 {
     wxString fontFacename;
     int fontSize = 12;
-    int fontFamily = wxDEFAULT;
+    // int fontFamily = wxDEFAULT;
     int fontWeight = wxNORMAL;
     int fontStyle = wxNORMAL;
     bool fontUnderlined = false;
 
-    int fontFlags = 0;
+    // int fontFlags = 0;
 
     fontFacename = node->GetAttribute(wxT("fontface"), wxEmptyString);
     if (!fontFacename.IsEmpty())
-        fontFlags |= wxTEXT_ATTR_FONT_FACE;
+        attr.SetFontFaceName(fontFacename);
 
     wxString value;
     //value = node->GetAttribute(wxT("fontfamily"), wxEmptyString);
@@ -1033,37 +1030,29 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
     if (!value.empty())
     {
         fontStyle = wxAtoi(value);
-        fontFlags |= wxTEXT_ATTR_FONT_ITALIC;
+        attr.SetFontStyle(fontStyle);
     }
 
     value = node->GetAttribute(wxT("fontsize"), wxEmptyString);
     if (!value.empty())
     {
         fontSize = wxAtoi(value);
-        fontFlags |= wxTEXT_ATTR_FONT_SIZE;
+        attr.SetFontSize(fontSize);
     }
 
     value = node->GetAttribute(wxT("fontweight"), wxEmptyString);
     if (!value.empty())
     {
         fontWeight = wxAtoi(value);
-        fontFlags |= wxTEXT_ATTR_FONT_WEIGHT;
+        attr.SetFontWeight(fontWeight);
     }
 
     value = node->GetAttribute(wxT("fontunderlined"), wxEmptyString);
     if (!value.empty())
     {
         fontUnderlined = wxAtoi(value) != 0;
-        fontFlags |= wxTEXT_ATTR_FONT_UNDERLINE;
+        attr.SetFontUnderlined(fontUnderlined);
     }
-
-    attr.SetFlags(fontFlags);
-
-    if (attr.HasFlag(wxTEXT_ATTR_FONT))
-        attr.SetFont(* wxTheFontList->FindOrCreateFont(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFacename));
-
-    // Restore correct font flags
-    attr.SetFlags(fontFlags);
 
     value = node->GetAttribute(wxT("textcolor"), wxEmptyString);
     if (!value.empty())

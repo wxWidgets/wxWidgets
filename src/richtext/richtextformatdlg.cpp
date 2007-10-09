@@ -130,7 +130,7 @@ bool wxRichTextFormattingDialog::ApplyStyle(wxRichTextCtrl* ctrl, const wxRichTe
 }
 
 /// Set the attributes and optionally update the display
-bool wxRichTextFormattingDialog::SetStyle(const wxTextAttrEx& style, bool update)
+bool wxRichTextFormattingDialog::SetStyle(const wxTextAttr& style, bool update)
 {
     m_attributes = style;
     if (update)
@@ -347,7 +347,7 @@ bool wxRichTextFormattingDialogFactory::SetSheetStyle(wxRichTextFormattingDialog
     dialog->SetSheetInnerBorder(0);
     dialog->SetSheetOuterBorder(0);
 #else
-	wxUnusedVar(dialog);
+    wxUnusedVar(dialog);
 #endif // wxRICHTEXT_USE_TOOLBOOK
 
     return true;
@@ -440,7 +440,7 @@ wxRichTextFormattingDialog* wxRichTextFormattingDialog::GetDialog(wxWindow* win)
 
 
 // Helper for pages to get the attributes
-wxTextAttrEx* wxRichTextFormattingDialog::GetDialogAttributes(wxWindow* win)
+wxTextAttr* wxRichTextFormattingDialog::GetDialogAttributes(wxWindow* win)
 {
     wxRichTextFormattingDialog* dialog = GetDialog(win);
     if (dialog)

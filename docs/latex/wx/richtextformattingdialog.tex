@@ -102,9 +102,9 @@ Creation: see \helpref{the constructor}{wxrichtextformattingdialog} for details 
 
 \membersection{wxRichTextFormattingDialog::GetAttributes}\label{wxrichtextformattingdialoggetattributes}
 
-\constfunc{const wxTextAttrEx\&}{GetAttributes}{\void}
+\constfunc{const wxTextAttr\&}{GetAttributes}{\void}
 
-\func{wxTextAttrEx\&}{GetAttributes}{\void}
+\func{wxTextAttr\&}{GetAttributes}{\void}
 
 Gets the attributes being edited.
 
@@ -116,7 +116,7 @@ Helper for pages to get the top-level dialog.
 
 \membersection{wxRichTextFormattingDialog::GetDialogAttributes}\label{wxrichtextformattingdialoggetdialogattributes}
 
-\func{wxTextAttrEx*}{GetDialogAttributes}{\param{wxWindow* }{win}}
+\func{wxTextAttr*}{GetDialogAttributes}{\param{wxWindow* }{win}}
 
 Helper for pages to get the attributes.
 
@@ -159,7 +159,7 @@ Gets the associated style sheet, if any.
 
 \membersection{wxRichTextFormattingDialog::SetAttributes}\label{wxrichtextformattingdialogsetattributes}
 
-\func{void}{SetAttributes}{\param{const wxTextAttrEx\& }{attr}}
+\func{void}{SetAttributes}{\param{const wxTextAttr\& }{attr}}
 
 Sets the attributes to be edited.
 
@@ -178,7 +178,7 @@ Sets the image list associated with the dialog's property sheet.
 
 \membersection{wxRichTextFormattingDialog::SetStyle}\label{wxrichtextformattingdialogsetstyle}
 
-\func{bool}{SetStyle}{\param{const wxTextAttrEx\& }{style}, \param{bool }{update = true}}
+\func{bool}{SetStyle}{\param{const wxTextAttr\& }{style}, \param{bool }{update = true}}
 
 Sets the attributes and optionally updates the display, if {\it update} is \true.
 

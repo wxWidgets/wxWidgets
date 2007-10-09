@@ -79,8 +79,8 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
 
     wxTextOutputStream str(stream);
 
-    wxTextAttrEx currentParaStyle = buffer->GetAttributes();
-    wxTextAttrEx currentCharStyle = buffer->GetAttributes();
+    wxTextAttr currentParaStyle = buffer->GetAttributes();
+    wxTextAttr currentCharStyle = buffer->GetAttributes();
 
     if ((GetFlags() & wxRICHTEXT_HANDLER_NO_HEADER_FOOTER) == 0)
         str << wxT("<html><head></head><body>\n");
@@ -103,7 +103,7 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
 
         if (para)
         {
-            wxTextAttrEx paraStyle(para->GetCombinedAttributes());
+            wxTextAttr paraStyle(para->GetCombinedAttributes());
 
             BeginParagraphFormatting(currentParaStyle, paraStyle, str);
 
@@ -114,7 +114,7 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
                 wxRichTextPlainText* textObj = wxDynamicCast(obj, wxRichTextPlainText);
                 if (textObj && !textObj->IsEmpty())
                 {
-                    wxTextAttrEx charStyle(para->GetCombinedAttributes(obj->GetAttributes()));
+                    wxTextAttr charStyle(para->GetCombinedAttributes(obj->GetAttributes()));
                     BeginCharacterFormatting(currentCharStyle, charStyle, paraStyle, str);
 
                     wxString text = textObj->GetText();
@@ -160,18 +160,18 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
     return true;
 }
 
-void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& currentStyle, const wxTextAttrEx& thisStyle, const wxTextAttrEx& WXUNUSED(paraStyle), wxTextOutputStream& str)
+void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttr& currentStyle, const wxTextAttr& thisStyle, const wxTextAttr& WXUNUSED(paraStyle), wxTextOutputStream& str)
 {
     wxString style;
 
     // Is there any change in the font properties of the item?
-    if (thisStyle.GetFont().GetFaceName() != currentStyle.GetFont().GetFaceName())
+    if (thisStyle.GetFontFaceName() != currentStyle.GetFontFaceName())
     {
-        wxString faceName(thisStyle.GetFont().GetFaceName());
+        wxString faceName(thisStyle.GetFontFaceName());
         style += wxString::Format(wxT(" face=\"%s\""), faceName.c_str());
     }
-    if (thisStyle.GetFont().GetPointSize() != currentStyle.GetFont().GetPointSize())
-        style += wxString::Format(wxT(" size=\"%ld\""), PtToSize(thisStyle.GetFont().GetPointSize()));
+    if (thisStyle.GetFontSize() != currentStyle.GetFontSize())
+        style += wxString::Format(wxT(" size=\"%ld\""), PtToSize(thisStyle.GetFontSize()));
     if (thisStyle.GetTextColour() != currentStyle.GetTextColour() )
     {
         wxString color(thisStyle.GetTextColour().GetAsString(wxC2S_HTML_SYNTAX));
@@ -184,27 +184,27 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
         m_font = true;
     }
 
-    if (thisStyle.GetFont().GetWeight() == wxBOLD)
+    if (thisStyle.GetFontWeight() == wxBOLD)
         str << wxT("<b>");
-    if (thisStyle.GetFont().GetStyle() == wxITALIC)
+    if (thisStyle.GetFontStyle() == wxITALIC)
         str << wxT("<i>");
-    if (thisStyle.GetFont().GetUnderlined())
+    if (thisStyle.GetFontUnderlined())
         str << wxT("<u>");
 
     if (thisStyle.HasURL())
         str << wxT("<a href=\"") << thisStyle.GetURL() << wxT("\">");
 }
 
-void wxRichTextHTMLHandler::EndCharacterFormatting(const wxTextAttrEx& WXUNUSED(currentStyle), const wxTextAttrEx& thisStyle, const wxTextAttrEx& WXUNUSED(paraStyle), wxTextOutputStream& stream)
+void wxRichTextHTMLHandler::EndCharacterFormatting(const wxTextAttr& WXUNUSED(currentStyle), const wxTextAttr& thisStyle, const wxTextAttr& WXUNUSED(paraStyle), wxTextOutputStream& stream)
 {
     if (thisStyle.HasURL())
         stream << wxT("</a>");
 
-    if (thisStyle.GetFont().GetUnderlined())
+    if (thisStyle.GetFontUnderlined())
         stream << wxT("</u>");
-    if (thisStyle.GetFont().GetStyle() == wxITALIC)
+    if (thisStyle.GetFontStyle() == wxITALIC)
         stream << wxT("</i>");
-    if (thisStyle.GetFont().GetWeight() == wxBOLD)
+    if (thisStyle.GetFontWeight() == wxBOLD)
         stream << wxT("</b>");
 
     if (m_font)
@@ -215,7 +215,7 @@ void wxRichTextHTMLHandler::EndCharacterFormatting(const wxTextAttrEx& WXUNUSED(
 }
 
 /// Begin paragraph formatting
-void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxTextAttrEx& WXUNUSED(currentStyle), const wxTextAttrEx& thisStyle, wxTextOutputStream& str)
+void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxTextAttr& WXUNUSED(currentStyle), const wxTextAttr& thisStyle, wxTextOutputStream& str)
 {
     if (thisStyle.HasPageBreak())
     {
@@ -286,7 +286,7 @@ void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxTextAttrEx& WXUNUSE
 }
 
 /// End paragraph formatting
-void wxRichTextHTMLHandler::EndParagraphFormatting(const wxTextAttrEx& WXUNUSED(currentStyle), const wxTextAttrEx& thisStyle, wxTextOutputStream& stream)
+void wxRichTextHTMLHandler::EndParagraphFormatting(const wxTextAttr& WXUNUSED(currentStyle), const wxTextAttr& thisStyle, wxTextOutputStream& stream)
 {
     if (m_inTable)
     {
@@ -322,18 +322,18 @@ void wxRichTextHTMLHandler::CloseLists(int level, wxTextOutputStream& str)
 }
 
 /// Output font tag
-void wxRichTextHTMLHandler::OutputFont(const wxTextAttrEx& style, wxTextOutputStream& stream)
+void wxRichTextHTMLHandler::OutputFont(const wxTextAttr& style, wxTextOutputStream& stream)
 {
     if (style.HasFont())
     {
-        stream << wxString::Format(wxT("<font face=\"%s\" size=\"%ld\""), style.GetFont().GetFaceName().c_str(), PtToSize(style.GetFont().GetPointSize()));
+        stream << wxString::Format(wxT("<font face=\"%s\" size=\"%ld\""), style.GetFontFaceName().c_str(), PtToSize(style.GetFontSize()));
         if (style.HasTextColour())
             stream << wxString::Format(wxT(" color=\"%s\""), style.GetTextColour().GetAsString(wxC2S_HTML_SYNTAX).c_str());
         stream << wxT(" >");
     }
 }
 
-int wxRichTextHTMLHandler::TypeOfList( const wxTextAttrEx& thisStyle, wxString& tag )
+int wxRichTextHTMLHandler::TypeOfList( const wxTextAttr& thisStyle, wxString& tag )
 {
     // We can use number attribute of li tag but not all the browsers support it.
     // also wxHtmlWindow doesn't support type attribute.
@@ -361,7 +361,7 @@ int wxRichTextHTMLHandler::TypeOfList( const wxTextAttrEx& thisStyle, wxString& 
         return 0;
 }
 
-wxString wxRichTextHTMLHandler::GetAlignment( const wxTextAttrEx& thisStyle )
+wxString wxRichTextHTMLHandler::GetAlignment( const wxTextAttr& thisStyle )
 {
     switch( thisStyle.GetAlignment() )
     {

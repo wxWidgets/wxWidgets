@@ -840,7 +840,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     tabs.Add(600);
     tabs.Add(800);
     tabs.Add(1000);
-    wxTextAttrEx attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_TABS);
     attr.SetTabs(tabs);
     r.SetDefaultStyle(attr);
@@ -1184,7 +1184,7 @@ void MyFrame::OnUpdateFormat(wxUpdateUIEvent& event)
 
 void MyFrame::OnIndentMore(wxCommandEvent& WXUNUSED(event))
 {
-    wxTextAttrEx attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_LEFT_INDENT);
 
     if (m_richTextCtrl->GetStyle(m_richTextCtrl->GetInsertionPoint(), attr))
@@ -1202,7 +1202,7 @@ void MyFrame::OnIndentMore(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnIndentLess(wxCommandEvent& WXUNUSED(event))
 {
-    wxTextAttrEx attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_LEFT_INDENT);
 
     if (m_richTextCtrl->GetStyle(m_richTextCtrl->GetInsertionPoint(), attr))
@@ -1222,7 +1222,7 @@ void MyFrame::OnIndentLess(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnLineSpacingHalf(wxCommandEvent& WXUNUSED(event))
 {
-    wxTextAttrEx attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_LINE_SPACING);
 
     if (m_richTextCtrl->GetStyle(m_richTextCtrl->GetInsertionPoint(), attr))
@@ -1240,7 +1240,7 @@ void MyFrame::OnLineSpacingHalf(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnLineSpacingDouble(wxCommandEvent& WXUNUSED(event))
 {
-    wxTextAttrEx attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_LINE_SPACING);
 
     if (m_richTextCtrl->GetStyle(m_richTextCtrl->GetInsertionPoint(), attr))
@@ -1258,7 +1258,7 @@ void MyFrame::OnLineSpacingDouble(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnLineSpacingSingle(wxCommandEvent& WXUNUSED(event))
 {
-    wxTextAttrEx attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_LINE_SPACING);
 
     if (m_richTextCtrl->GetStyle(m_richTextCtrl->GetInsertionPoint(), attr))
@@ -1276,7 +1276,7 @@ void MyFrame::OnLineSpacingSingle(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnParagraphSpacingMore(wxCommandEvent& WXUNUSED(event))
 {
-    wxTextAttrEx attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_PARA_SPACING_AFTER);
 
     if (m_richTextCtrl->GetStyle(m_richTextCtrl->GetInsertionPoint(), attr))
@@ -1294,7 +1294,7 @@ void MyFrame::OnParagraphSpacingMore(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnParagraphSpacingLess(wxCommandEvent& WXUNUSED(event))
 {
-    wxTextAttrEx attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_PARA_SPACING_AFTER);
 
     if (m_richTextCtrl->GetStyle(m_richTextCtrl->GetInsertionPoint(), attr))
@@ -1422,7 +1422,7 @@ void MyFrame::OnManageStyles(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnInsertSymbol(wxCommandEvent& WXUNUSED(event))
 {
-    wxTextAttrEx attr;
+    wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_FONT);
     m_richTextCtrl->GetStyle(m_richTextCtrl->GetInsertionPoint(), attr);
 

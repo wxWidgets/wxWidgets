@@ -448,7 +448,7 @@ void wxTextCtrl::CreatePeer(
     }
 #endif
 
-    // the horizontal single line scrolling bug that made us keep 
+    // the horizontal single line scrolling bug that made us keep
 #if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
     if ( !m_peer )
         m_peer = new wxMacMLTEClassicControl( this , str , pos , size , style ) ;
@@ -1374,7 +1374,7 @@ bool wxMacUnicodeTextControl::Create( wxTextCtrl *wxPeer,
     wxMacConvertNewlines10To13( &st ) ;
     wxMacCFStringHolder cf(st , m_font.GetEncoding()) ;
     CFStringRef cfr = cf ;
-    
+
     m_valueTag = kControlEditTextCFStringTag ;
     CreateControl( wxPeer, &bounds, cfr );
 
@@ -1384,7 +1384,7 @@ bool wxMacUnicodeTextControl::Create( wxTextCtrl *wxPeer,
     InstallControlEventHandler( m_controlRef , GetwxMacUnicodeTextControlEventHandlerUPP(),
                                 GetEventTypeCount(unicodeTextControlEventList), unicodeTextControlEventList, this,
                                 &m_focusHandlerRef);
-                                
+
     return true;
 }
 
@@ -1829,7 +1829,7 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
 
     if ( style.HasFont() )
     {
-        const wxFont &font = style.GetFont() ;
+        wxFont font(style.GetFont()) ;
 
 #if 0 // old version
         Str255 fontName = "\pMonaco" ;

@@ -160,20 +160,95 @@ enum wxTextAttrAlignment
 
 // Flags to indicate which attributes are being applied
 
-#define wxTEXT_ATTR_TEXT_COLOUR             0x0001
-#define wxTEXT_ATTR_BACKGROUND_COLOUR       0x0002
-#define wxTEXT_ATTR_FONT_FACE               0x0004
-#define wxTEXT_ATTR_FONT_SIZE               0x0008
-#define wxTEXT_ATTR_FONT_WEIGHT             0x0010
-#define wxTEXT_ATTR_FONT_ITALIC             0x0020
-#define wxTEXT_ATTR_FONT_UNDERLINE          0x0040
+#define wxTEXT_ATTR_TEXT_COLOUR             0x00000001
+#define wxTEXT_ATTR_BACKGROUND_COLOUR       0x00000002
+#define wxTEXT_ATTR_FONT_FACE               0x00000004
+#define wxTEXT_ATTR_FONT_SIZE               0x00000008
+#define wxTEXT_ATTR_FONT_WEIGHT             0x00000010
+#define wxTEXT_ATTR_FONT_ITALIC             0x00000020
+#define wxTEXT_ATTR_FONT_UNDERLINE          0x00000040
+#define wxTEXT_ATTR_FONT_ENCODING           0x02000000
 #define wxTEXT_ATTR_FONT \
   ( wxTEXT_ATTR_FONT_FACE | wxTEXT_ATTR_FONT_SIZE | wxTEXT_ATTR_FONT_WEIGHT | \
-    wxTEXT_ATTR_FONT_ITALIC | wxTEXT_ATTR_FONT_UNDERLINE )
-#define wxTEXT_ATTR_ALIGNMENT               0x0080
-#define wxTEXT_ATTR_LEFT_INDENT             0x0100
-#define wxTEXT_ATTR_RIGHT_INDENT            0x0200
-#define wxTEXT_ATTR_TABS                    0x0400
+    wxTEXT_ATTR_FONT_ITALIC | wxTEXT_ATTR_FONT_UNDERLINE | wxTEXT_ATTR_FONT_ENCODING )
+#define wxTEXT_ATTR_ALIGNMENT               0x00000080
+#define wxTEXT_ATTR_LEFT_INDENT             0x00000100
+#define wxTEXT_ATTR_RIGHT_INDENT            0x00000200
+#define wxTEXT_ATTR_TABS                    0x00000400
+
+#define wxTEXT_ATTR_PARA_SPACING_AFTER      0x00000800
+#define wxTEXT_ATTR_PARA_SPACING_BEFORE     0x00001000
+#define wxTEXT_ATTR_LINE_SPACING            0x00002000
+#define wxTEXT_ATTR_CHARACTER_STYLE_NAME    0x00004000
+#define wxTEXT_ATTR_PARAGRAPH_STYLE_NAME    0x00008000
+#define wxTEXT_ATTR_LIST_STYLE_NAME         0x00010000
+#define wxTEXT_ATTR_BULLET_STYLE            0x00020000
+#define wxTEXT_ATTR_BULLET_NUMBER           0x00040000
+#define wxTEXT_ATTR_BULLET_TEXT             0x00080000
+#define wxTEXT_ATTR_BULLET_NAME             0x00100000
+#define wxTEXT_ATTR_URL                     0x00200000
+#define wxTEXT_ATTR_PAGE_BREAK              0x00400000
+#define wxTEXT_ATTR_EFFECTS                 0x00800000
+#define wxTEXT_ATTR_OUTLINE_LEVEL           0x01000000
+
+/*!
+ * Character and paragraph combined styles
+ */
+
+#define wxTEXT_ATTR_CHARACTER (wxTEXT_ATTR_FONT|wxTEXT_ATTR_FONT_ENCODING|wxTEXT_ATTR_EFFECTS|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_CHARACTER_STYLE_NAME|wxTEXT_ATTR_URL)
+
+#define wxTEXT_ATTR_PARAGRAPH (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|\
+    wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|\
+    wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_TEXT|wxTEXT_ATTR_BULLET_NAME|\
+    wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME|wxTEXT_ATTR_OUTLINE_LEVEL)
+
+#define wxTEXT_ATTR_ALL (wxTEXT_ATTR_CHARACTER|wxTEXT_ATTR_PARAGRAPH)
+
+/*!
+ * Styles for wxTextAttr::SetBulletStyle
+ */
+
+#define wxTEXT_ATTR_BULLET_STYLE_NONE               0x00000000
+#define wxTEXT_ATTR_BULLET_STYLE_ARABIC             0x00000001
+#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_UPPER      0x00000002
+#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER      0x00000004
+#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER        0x00000008
+#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER        0x00000010
+#define wxTEXT_ATTR_BULLET_STYLE_SYMBOL             0x00000020
+#define wxTEXT_ATTR_BULLET_STYLE_BITMAP             0x00000040
+#define wxTEXT_ATTR_BULLET_STYLE_PARENTHESES        0x00000080
+#define wxTEXT_ATTR_BULLET_STYLE_PERIOD             0x00000100
+#define wxTEXT_ATTR_BULLET_STYLE_STANDARD           0x00000200
+#define wxTEXT_ATTR_BULLET_STYLE_RIGHT_PARENTHESIS  0x00000400
+#define wxTEXT_ATTR_BULLET_STYLE_OUTLINE            0x00000800
+
+#define wxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT         0x00000000
+#define wxTEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT        0x00001000
+#define wxTEXT_ATTR_BULLET_STYLE_ALIGN_CENTRE       0x00002000
+
+/*!
+ * Styles for wxTextAttr::SetTextEffects
+ */
+
+#define wxTEXT_ATTR_EFFECT_NONE                     0x00000000
+#define wxTEXT_ATTR_EFFECT_CAPITALS                 0x00000001
+#define wxTEXT_ATTR_EFFECT_SMALL_CAPITALS           0x00000002
+#define wxTEXT_ATTR_EFFECT_STRIKETHROUGH            0x00000004
+#define wxTEXT_ATTR_EFFECT_DOUBLE_STRIKETHROUGH     0x00000008
+#define wxTEXT_ATTR_EFFECT_SHADOW                   0x00000010
+#define wxTEXT_ATTR_EFFECT_EMBOSS                   0x00000020
+#define wxTEXT_ATTR_EFFECT_OUTLINE                  0x00000040
+#define wxTEXT_ATTR_EFFECT_ENGRAVE                  0x00000080
+#define wxTEXT_ATTR_EFFECT_SUPERSCRIPT              0x00000100
+#define wxTEXT_ATTR_EFFECT_SUBSCRIPT                0x00000200
+
+/*!
+ * Line spacing values
+ */
+
+#define wxTEXT_ATTR_LINE_SPACING_NORMAL         10
+#define wxTEXT_ATTR_LINE_SPACING_HALF           15
+#define wxTEXT_ATTR_LINE_SPACING_TWICE          20
 
 // ----------------------------------------------------------------------------
 // wxTextAttr: a structure containing the visual attributes of a text
@@ -184,13 +259,151 @@ class WXDLLEXPORT wxTextAttr
 public:
     // ctors
     wxTextAttr() { Init(); }
+    wxTextAttr(const wxTextAttr& attr) { Init(); Copy(attr); }
     wxTextAttr(const wxColour& colText,
                const wxColour& colBack = wxNullColour,
                const wxFont& font = wxNullFont,
                wxTextAttrAlignment alignment = wxTEXT_ALIGNMENT_DEFAULT);
 
-    // operations
+    // Initialise this object.
     void Init();
+
+    // Copy
+    void Copy(const wxTextAttr& attr);
+
+    // Assignment
+    void operator= (const wxTextAttr& attr);
+
+    // Equality test
+    bool operator== (const wxTextAttr& attr) const;
+
+    // Partial equality test taking flags into account
+    bool EqPartial(const wxTextAttr& attr, int flags) const;
+
+    // Create font from font attributes.
+    wxFont CreateFont() const;
+
+    // Get attributes from font.
+    bool GetFontAttributes(const wxFont& font, int flags = wxTEXT_ATTR_FONT);
+
+    // setters
+    void SetTextColour(const wxColour& colText) { m_colText = colText; m_flags |= wxTEXT_ATTR_TEXT_COLOUR; }
+    void SetBackgroundColour(const wxColour& colBack) { m_colBack = colBack; m_flags |= wxTEXT_ATTR_BACKGROUND_COLOUR; }
+    void SetAlignment(wxTextAttrAlignment alignment) { m_textAlignment = alignment; m_flags |= wxTEXT_ATTR_ALIGNMENT; }
+    void SetTabs(const wxArrayInt& tabs) { m_tabs = tabs; m_flags |= wxTEXT_ATTR_TABS; }
+    void SetLeftIndent(int indent, int subIndent = 0) { m_leftIndent = indent; m_leftSubIndent = subIndent; m_flags |= wxTEXT_ATTR_LEFT_INDENT; }
+    void SetRightIndent(int indent) { m_rightIndent = indent; m_flags |= wxTEXT_ATTR_RIGHT_INDENT; }
+
+    void SetFontSize(int pointSize) { m_fontSize = pointSize; m_flags |= wxTEXT_ATTR_FONT_SIZE; }
+    void SetFontStyle(int fontStyle) { m_fontStyle = fontStyle; m_flags |= wxTEXT_ATTR_FONT_ITALIC; }
+    void SetFontWeight(int fontWeight) { m_fontWeight = fontWeight; m_flags |= wxTEXT_ATTR_FONT_WEIGHT; }
+    void SetFontFaceName(const wxString& faceName) { m_fontFaceName = faceName; m_flags |= wxTEXT_ATTR_FONT_FACE; }
+    void SetFontUnderlined(bool underlined) { m_fontUnderlined = underlined; m_flags |= wxTEXT_ATTR_FONT_UNDERLINE; }
+    void SetFontEncoding(wxFontEncoding encoding) { m_fontEncoding = encoding; m_flags |= wxTEXT_ATTR_FONT_ENCODING; }
+
+    // Set font
+    void SetFont(const wxFont& font, int flags = wxTEXT_ATTR_FONT) { GetFontAttributes(font, flags); }
+
+    void SetFlags(long flags) { m_flags = flags; }
+
+    void SetCharacterStyleName(const wxString& name) { m_characterStyleName = name; m_flags |= wxTEXT_ATTR_CHARACTER_STYLE_NAME; }
+    void SetParagraphStyleName(const wxString& name) { m_paragraphStyleName = name; m_flags |= wxTEXT_ATTR_PARAGRAPH_STYLE_NAME; }
+    void SetListStyleName(const wxString& name) { m_listStyleName = name; SetFlags(GetFlags() | wxTEXT_ATTR_LIST_STYLE_NAME); }
+    void SetParagraphSpacingAfter(int spacing) { m_paragraphSpacingAfter = spacing; m_flags |= wxTEXT_ATTR_PARA_SPACING_AFTER; }
+    void SetParagraphSpacingBefore(int spacing) { m_paragraphSpacingBefore = spacing; m_flags |= wxTEXT_ATTR_PARA_SPACING_BEFORE; }
+    void SetLineSpacing(int spacing) { m_lineSpacing = spacing; m_flags |= wxTEXT_ATTR_LINE_SPACING; }
+    void SetBulletStyle(int style) { m_bulletStyle = style; m_flags |= wxTEXT_ATTR_BULLET_STYLE; }
+    void SetBulletNumber(int n) { m_bulletNumber = n; m_flags |= wxTEXT_ATTR_BULLET_NUMBER; }
+    void SetBulletText(const wxString& text) { m_bulletText = text; m_flags |= wxTEXT_ATTR_BULLET_TEXT; }
+    void SetBulletFont(const wxString& bulletFont) { m_bulletFont = bulletFont; }
+    void SetBulletName(const wxString& name) { m_bulletName = name; m_flags |= wxTEXT_ATTR_BULLET_NAME; }
+    void SetURL(const wxString& url) { m_urlTarget = url; m_flags |= wxTEXT_ATTR_URL; }
+    void SetPageBreak(bool pageBreak = true) { SetFlags(pageBreak ? (GetFlags() | wxTEXT_ATTR_PAGE_BREAK) : (GetFlags() & ~wxTEXT_ATTR_PAGE_BREAK)); }
+    void SetTextEffects(int effects) { m_textEffects = effects; SetFlags(GetFlags() | wxTEXT_ATTR_EFFECTS); }
+    void SetTextEffectFlags(int effects) { m_textEffectFlags = effects; }
+    void SetOutlineLevel(int level) { m_outlineLevel = level; SetFlags(GetFlags() | wxTEXT_ATTR_OUTLINE_LEVEL); }
+
+    const wxColour& GetTextColour() const { return m_colText; }
+    const wxColour& GetBackgroundColour() const { return m_colBack; }
+    wxTextAttrAlignment GetAlignment() const { return m_textAlignment; }
+    const wxArrayInt& GetTabs() const { return m_tabs; }
+    long GetLeftIndent() const { return m_leftIndent; }
+    long GetLeftSubIndent() const { return m_leftSubIndent; }
+    long GetRightIndent() const { return m_rightIndent; }
+    long GetFlags() const { return m_flags; }
+
+    int GetFontSize() const { return m_fontSize; }
+    int GetFontStyle() const { return m_fontStyle; }
+    int GetFontWeight() const { return m_fontWeight; }
+    bool GetFontUnderlined() const { return m_fontUnderlined; }
+    const wxString& GetFontFaceName() const { return m_fontFaceName; }
+    wxFontEncoding GetFontEncoding() const { return m_fontEncoding; }
+
+    wxFont GetFont() const { return CreateFont(); }
+
+    const wxString& GetCharacterStyleName() const { return m_characterStyleName; }
+    const wxString& GetParagraphStyleName() const { return m_paragraphStyleName; }
+    const wxString& GetListStyleName() const { return m_listStyleName; }
+    int GetParagraphSpacingAfter() const { return m_paragraphSpacingAfter; }
+    int GetParagraphSpacingBefore() const { return m_paragraphSpacingBefore; }
+    int GetLineSpacing() const { return m_lineSpacing; }
+    int GetBulletStyle() const { return m_bulletStyle; }
+    int GetBulletNumber() const { return m_bulletNumber; }
+    const wxString& GetBulletText() const { return m_bulletText; }
+    const wxString& GetBulletFont() const { return m_bulletFont; }
+    const wxString& GetBulletName() const { return m_bulletName; }
+    const wxString& GetURL() const { return m_urlTarget; }
+    int GetTextEffects() const { return m_textEffects; }
+    int GetTextEffectFlags() const { return m_textEffectFlags; }
+    int GetOutlineLevel() const { return m_outlineLevel; }
+
+    // accessors
+    bool HasTextColour() const { return m_colText.Ok() && HasFlag(wxTEXT_ATTR_TEXT_COLOUR) ; }
+    bool HasBackgroundColour() const { return m_colBack.Ok() && HasFlag(wxTEXT_ATTR_BACKGROUND_COLOUR) ; }
+    bool HasAlignment() const { return (m_textAlignment != wxTEXT_ALIGNMENT_DEFAULT) || HasFlag(wxTEXT_ATTR_ALIGNMENT) ; }
+    bool HasTabs() const { return HasFlag(wxTEXT_ATTR_TABS) ; }
+    bool HasLeftIndent() const { return HasFlag(wxTEXT_ATTR_LEFT_INDENT); }
+    bool HasRightIndent() const { return HasFlag(wxTEXT_ATTR_RIGHT_INDENT); }
+    bool HasFontWeight() const { return HasFlag(wxTEXT_ATTR_FONT_WEIGHT); }
+    bool HasFontSize() const { return HasFlag(wxTEXT_ATTR_FONT_SIZE); }
+    bool HasFontItalic() const { return HasFlag(wxTEXT_ATTR_FONT_ITALIC); }
+    bool HasFontUnderlined() const { return HasFlag(wxTEXT_ATTR_FONT_UNDERLINE); }
+    bool HasFontFaceName() const { return HasFlag(wxTEXT_ATTR_FONT_FACE); }
+    bool HasFontEncoding() const { return HasFlag(wxTEXT_ATTR_FONT_ENCODING); }
+    bool HasFont() const { return HasFlag(wxTEXT_ATTR_FONT); }
+
+    bool HasParagraphSpacingAfter() const { return HasFlag(wxTEXT_ATTR_PARA_SPACING_AFTER); }
+    bool HasParagraphSpacingBefore() const { return HasFlag(wxTEXT_ATTR_PARA_SPACING_BEFORE); }
+    bool HasLineSpacing() const { return HasFlag(wxTEXT_ATTR_LINE_SPACING); }
+    bool HasCharacterStyleName() const { return HasFlag(wxTEXT_ATTR_CHARACTER_STYLE_NAME) && !m_characterStyleName.IsEmpty(); }
+    bool HasParagraphStyleName() const { return HasFlag(wxTEXT_ATTR_PARAGRAPH_STYLE_NAME) && !m_paragraphStyleName.IsEmpty(); }
+    bool HasListStyleName() const { return HasFlag(wxTEXT_ATTR_LIST_STYLE_NAME) || !m_listStyleName.IsEmpty(); }
+    bool HasBulletStyle() const { return HasFlag(wxTEXT_ATTR_BULLET_STYLE); }
+    bool HasBulletNumber() const { return HasFlag(wxTEXT_ATTR_BULLET_NUMBER); }
+    bool HasBulletText() const { return HasFlag(wxTEXT_ATTR_BULLET_TEXT); }
+    bool HasBulletName() const { return HasFlag(wxTEXT_ATTR_BULLET_NAME); }
+    bool HasURL() const { return HasFlag(wxTEXT_ATTR_URL); }
+    bool HasPageBreak() const { return HasFlag(wxTEXT_ATTR_PAGE_BREAK); }
+    bool HasTextEffects() const { return HasFlag(wxTEXT_ATTR_EFFECTS); }
+    bool HasTextEffect(int effect) const { return HasFlag(wxTEXT_ATTR_EFFECTS) && ((GetTextEffectFlags() & effect) != 0); }
+    bool HasOutlineLevel() const { return HasFlag(wxTEXT_ATTR_OUTLINE_LEVEL); }
+
+    bool HasFlag(long flag) const { return (m_flags & flag) != 0; }
+
+    // Is this a character style?
+    bool IsCharacterStyle() const { return HasFlag(wxTEXT_ATTR_CHARACTER); }
+    bool IsParagraphStyle() const { return HasFlag(wxTEXT_ATTR_PARAGRAPH); }
+
+    // returns false if we have any attributes set, true otherwise
+    bool IsDefault() const
+    {
+        return GetFlags() == 0;
+    }
+
+    // Merges the given attributes. Does not affect 'this'. If compareWith
+    // is non-NULL, then it will be used to mask out those attributes that are the same in style
+    // and compareWith, for situations where we don't want to explicitly set inherited attributes.
+    bool Apply(const wxTextAttr& style, const wxTextAttr* compareWith = NULL);
 
     // merges the attributes of the base and the overlay objects and returns
     // the result; the parameter attributes take precedence
@@ -207,47 +420,6 @@ public:
         *this = Merge(*this, overlay);
     }
 
-
-    // operators
-    void operator= (const wxTextAttr& attr);
-
-    // setters
-    void SetTextColour(const wxColour& colText) { m_colText = colText; m_flags |= wxTEXT_ATTR_TEXT_COLOUR; }
-    void SetBackgroundColour(const wxColour& colBack) { m_colBack = colBack; m_flags |= wxTEXT_ATTR_BACKGROUND_COLOUR; }
-    void SetFont(const wxFont& font, long flags = wxTEXT_ATTR_FONT) { m_font = font; m_flags |= flags; }
-    void SetAlignment(wxTextAttrAlignment alignment) { m_textAlignment = alignment; m_flags |= wxTEXT_ATTR_ALIGNMENT; }
-    void SetTabs(const wxArrayInt& tabs) { m_tabs = tabs; m_flags |= wxTEXT_ATTR_TABS; }
-    void SetLeftIndent(int indent, int subIndent = 0) { m_leftIndent = indent; m_leftSubIndent = subIndent; m_flags |= wxTEXT_ATTR_LEFT_INDENT; }
-    void SetRightIndent(int indent) { m_rightIndent = indent; m_flags |= wxTEXT_ATTR_RIGHT_INDENT; }
-    void SetFlags(long flags) { m_flags = flags; }
-
-    // accessors
-    bool HasTextColour() const { return m_colText.Ok() && HasFlag(wxTEXT_ATTR_TEXT_COLOUR) ; }
-    bool HasBackgroundColour() const { return m_colBack.Ok() && HasFlag(wxTEXT_ATTR_BACKGROUND_COLOUR) ; }
-    bool HasFont() const { return m_font.Ok() && HasFlag(wxTEXT_ATTR_FONT) ; }
-    bool HasAlignment() const { return (m_textAlignment != wxTEXT_ALIGNMENT_DEFAULT) || ((m_flags & wxTEXT_ATTR_ALIGNMENT) != 0) ; }
-    bool HasTabs() const { return (m_flags & wxTEXT_ATTR_TABS) != 0 ; }
-    bool HasLeftIndent() const { return (m_flags & wxTEXT_ATTR_LEFT_INDENT) != 0 ; }
-    bool HasRightIndent() const { return (m_flags & wxTEXT_ATTR_RIGHT_INDENT) != 0 ; }
-    bool HasFlag(long flag) const { return (m_flags & flag) != 0; }
-
-    const wxColour& GetTextColour() const { return m_colText; }
-    const wxColour& GetBackgroundColour() const { return m_colBack; }
-    const wxFont& GetFont() const { return m_font; }
-    wxTextAttrAlignment GetAlignment() const { return m_textAlignment; }
-    const wxArrayInt& GetTabs() const { return m_tabs; }
-    long GetLeftIndent() const { return m_leftIndent; }
-    long GetLeftSubIndent() const { return m_leftSubIndent; }
-    long GetRightIndent() const { return m_rightIndent; }
-    long GetFlags() const { return m_flags; }
-
-    // returns false if we have any attributes set, true otherwise
-    bool IsDefault() const
-    {
-        return !HasTextColour() && !HasBackgroundColour() && !HasFont() && !HasAlignment() &&
-               !HasTabs() && !HasLeftIndent() && !HasRightIndent() ;
-    }
-
     // return the attribute having the valid font and colours: it uses the
     // attributes set in attr and falls back first to attrDefault and then to
     // the text control font/colours for those attributes which are not set
@@ -255,18 +427,64 @@ public:
                               const wxTextAttr& attrDef,
                               const wxTextCtrlBase *text);
 
+    // Compare tabs
+    static bool TabsEq(const wxArrayInt& tabs1, const wxArrayInt& tabs2);
+
+    // Remove attributes
+    static bool RemoveStyle(wxTextAttr& destStyle, const wxTextAttr& style);
+
+    // Combine two bitlists, specifying the bits of interest with separate flags.
+    static bool CombineBitlists(int& valueA, int valueB, int& flagsA, int flagsB);
+
+    // Compare two bitlists
+    static bool BitlistsEqPartial(int valueA, int valueB, int flags);
+
+    // Split into paragraph and character styles
+    static bool SplitParaCharStyles(const wxTextAttr& style, wxTextAttr& parStyle, wxTextAttr& charStyle);
+
 private:
     long                m_flags;
-    wxColour            m_colText,
-                        m_colBack;
-    wxFont              m_font;
-    wxTextAttrAlignment m_textAlignment;
+
+    // Paragraph styles
     wxArrayInt          m_tabs; // array of int: tab stops in 1/10 mm
     int                 m_leftIndent; // left indent in 1/10 mm
     int                 m_leftSubIndent; // left indent for all but the first
                                          // line in a paragraph relative to the
                                          // first line, in 1/10 mm
     int                 m_rightIndent; // right indent in 1/10 mm
+    wxTextAttrAlignment m_textAlignment;
+
+    int                 m_paragraphSpacingAfter;
+    int                 m_paragraphSpacingBefore;
+    int                 m_lineSpacing;
+    int                 m_bulletStyle;
+    int                 m_bulletNumber;
+    int                 m_textEffects;
+    int                 m_textEffectFlags;
+    int                 m_outlineLevel;
+    wxString            m_bulletText;
+    wxString            m_bulletFont;
+    wxString            m_bulletName;
+    wxString            m_urlTarget;
+    wxFontEncoding      m_fontEncoding;
+
+    // Character styles
+    wxColour            m_colText,
+                        m_colBack;
+    int                 m_fontSize;
+    int                 m_fontStyle;
+    int                 m_fontWeight;
+    bool                m_fontUnderlined;
+    wxString            m_fontFaceName;
+
+    // Character style
+    wxString            m_characterStyleName;
+
+    // Paragraph style
+    wxString            m_paragraphStyleName;
+
+    // List style
+    wxString            m_listStyleName;
 };
 
 // ----------------------------------------------------------------------------

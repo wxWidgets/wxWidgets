@@ -45,10 +45,10 @@ public:
     bool ImportStyleDefinition(wxRichTextStyleSheet* sheet, wxXmlNode* node);
 
     /// Create style parameters
-    wxString CreateStyle(const wxTextAttrEx& attr, bool isPara = false);
+    wxString CreateStyle(const wxTextAttr& attr, bool isPara = false);
 
     /// Get style parameters
-    bool GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool isPara = false);
+    bool GetStyle(wxTextAttr& attr, wxXmlNode* node, bool isPara = false);
 #endif
 
     /// Can we save using this handler?

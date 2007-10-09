@@ -2410,9 +2410,12 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
         // the real height in twips and not the negative number which
         // wxFillLogFont() returns (this is correct in general and works with
         // the Windows font mapper, but not here)
+
+        wxFont font(style.GetFont());
+
         LOGFONT lf;
-        wxFillLogFont(&lf, &style.GetFont());
-        cf.yHeight = 20*style.GetFont().GetPointSize(); // 1 pt = 20 twips
+        wxFillLogFont(&lf, &font);
+        cf.yHeight = 20*font.GetPointSize(); // 1 pt = 20 twips
         cf.bCharSet = lf.lfCharSet;
         cf.bPitchAndFamily = lf.lfPitchAndFamily;
         wxStrncpy( cf.szFaceName, lf.lfFaceName, WXSIZEOF(cf.szFaceName) );

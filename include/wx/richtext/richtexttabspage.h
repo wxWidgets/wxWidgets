@@ -69,7 +69,7 @@ public:
     virtual void SortTabs();
 
     /// Gets the attributes associated with the main formatting dialog
-    wxTextAttrEx* GetAttributes();
+    wxTextAttr* GetAttributes();
 
 ////@begin wxRichTextTabsPage event handler declarations
 

@@ -56,27 +56,26 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_MAXLEN)
 
 IMPLEMENT_ABSTRACT_CLASS(wxTextCtrlBase, wxControl)
 
-// ----------------------------------------------------------------------------
-// style functions - not implemented here
-// ----------------------------------------------------------------------------
+// ============================================================================
+// wxTextAttr implementation
+// ============================================================================
 
 wxTextAttr::wxTextAttr(const wxColour& colText,
                const wxColour& colBack,
                const wxFont& font,
-               wxTextAttrAlignment alignment)
-    : m_colText(colText), m_colBack(colBack), m_font(font), m_textAlignment(alignment)
+               wxTextAttrAlignment alignment): m_textAlignment(alignment), m_colText(colText), m_colBack(colBack)
 {
-    m_flags = 0;
-    m_leftIndent = 0;
-    m_leftSubIndent = 0;
-    m_rightIndent = 0;
+    Init();
+
     if (m_colText.Ok()) m_flags |= wxTEXT_ATTR_TEXT_COLOUR;
     if (m_colBack.Ok()) m_flags |= wxTEXT_ATTR_BACKGROUND_COLOUR;
-    if (m_font.Ok()) m_flags |= wxTEXT_ATTR_FONT;
     if (alignment != wxTEXT_ALIGNMENT_DEFAULT)
         m_flags |= wxTEXT_ATTR_ALIGNMENT;
+
+    GetFontAttributes(font);
 }
 
+// Initialisation
 void wxTextAttr::Init()
 {
     m_textAlignment = wxTEXT_ALIGNMENT_DEFAULT;
@@ -84,6 +83,456 @@ void wxTextAttr::Init()
     m_leftIndent = 0;
     m_leftSubIndent = 0;
     m_rightIndent = 0;
+
+    m_fontSize = 12;
+    m_fontStyle = wxNORMAL;
+    m_fontWeight = wxNORMAL;
+    m_fontUnderlined = false;
+    m_fontEncoding = wxFONTENCODING_DEFAULT;
+
+    m_paragraphSpacingAfter = 0;
+    m_paragraphSpacingBefore = 0;
+    m_lineSpacing = 0;
+    m_bulletStyle = wxTEXT_ATTR_BULLET_STYLE_NONE;
+    m_textEffects = wxTEXT_ATTR_EFFECT_NONE;
+    m_textEffectFlags = wxTEXT_ATTR_EFFECT_NONE;
+    m_outlineLevel = 0;
+    m_bulletNumber = 0;
+}
+
+// Copy
+void wxTextAttr::Copy(const wxTextAttr& attr)
+{
+    m_colText = attr.m_colText;
+    m_colBack = attr.m_colBack;
+    m_textAlignment = attr.m_textAlignment;
+    m_leftIndent = attr.m_leftIndent;
+    m_leftSubIndent = attr.m_leftSubIndent;
+    m_rightIndent = attr.m_rightIndent;
+    m_tabs = attr.m_tabs;
+    m_flags = attr.m_flags;
+
+    m_fontSize = attr.m_fontSize;
+    m_fontStyle = attr.m_fontStyle;
+    m_fontWeight = attr.m_fontWeight;
+    m_fontUnderlined = attr.m_fontUnderlined;
+    m_fontFaceName = attr.m_fontFaceName;
+    m_fontEncoding = attr.m_fontEncoding;
+    m_textEffects = attr.m_textEffects;
+    m_textEffectFlags = attr.m_textEffectFlags;
+
+    m_paragraphSpacingAfter = attr.m_paragraphSpacingAfter;
+    m_paragraphSpacingBefore = attr.m_paragraphSpacingBefore;
+    m_lineSpacing = attr.m_lineSpacing;
+    m_characterStyleName = attr.m_characterStyleName;
+    m_paragraphStyleName = attr.m_paragraphStyleName;
+    m_listStyleName = attr.m_listStyleName;
+    m_bulletStyle = attr.m_bulletStyle;
+    m_bulletNumber = attr.m_bulletNumber;
+    m_bulletText = attr.m_bulletText;
+    m_bulletFont = attr.m_bulletFont;
+    m_bulletName = attr.m_bulletName;
+    m_outlineLevel = attr.m_outlineLevel;
+
+    m_urlTarget = attr.m_urlTarget;
+}
+
+// operators
+void wxTextAttr::operator= (const wxTextAttr& attr)
+{
+    Copy(attr);
+}
+
+// Equality test
+bool wxTextAttr::operator== (const wxTextAttr& attr) const
+{
+    return  GetFlags() == attr.GetFlags() &&
+
+            GetTextColour() == attr.GetTextColour() &&
+            GetBackgroundColour() == attr.GetBackgroundColour() &&
+
+            GetAlignment() == attr.GetAlignment() &&
+            GetLeftIndent() == attr.GetLeftIndent() &&
+            GetLeftSubIndent() == attr.GetLeftSubIndent() &&
+            GetRightIndent() == attr.GetRightIndent() &&
+            TabsEq(GetTabs(), attr.GetTabs()) &&
+
+            GetParagraphSpacingAfter() == attr.GetParagraphSpacingAfter() &&
+            GetParagraphSpacingBefore() == attr.GetParagraphSpacingBefore() &&
+            GetLineSpacing() == attr.GetLineSpacing() &&
+            GetCharacterStyleName() == attr.GetCharacterStyleName() &&
+            GetParagraphStyleName() == attr.GetParagraphStyleName() &&
+            GetListStyleName() == attr.GetListStyleName() &&
+
+            GetBulletStyle() == attr.GetBulletStyle() &&
+            GetBulletText() == attr.GetBulletText() &&
+            GetBulletNumber() == attr.GetBulletNumber() &&
+            GetBulletFont() == attr.GetBulletFont() &&
+            GetBulletName() == attr.GetBulletName() &&
+
+            GetTextEffects() == attr.GetTextEffects() &&
+            GetTextEffectFlags() == attr.GetTextEffectFlags() &&
+
+            GetOutlineLevel() == attr.GetOutlineLevel() &&
+
+            GetFontSize() == attr.GetFontSize() &&
+            GetFontStyle() == attr.GetFontStyle() &&
+            GetFontWeight() == attr.GetFontWeight() &&
+            GetFontUnderlined() == attr.GetFontUnderlined() &&
+            GetFontFaceName() == attr.GetFontFaceName() &&
+            GetFontEncoding() == attr.GetFontEncoding() &&
+
+            GetURL() == attr.GetURL();
+}
+
+// Partial equality test taking flags into account
+bool wxTextAttr::EqPartial(const wxTextAttr& attr, int flags) const
+{
+    if ((flags & wxTEXT_ATTR_TEXT_COLOUR) && GetTextColour() != attr.GetTextColour())
+        return false;
+
+    if ((flags & wxTEXT_ATTR_BACKGROUND_COLOUR) && GetBackgroundColour() != attr.GetBackgroundColour())
+        return false;
+
+    if ((flags & wxTEXT_ATTR_FONT_FACE) &&
+        GetFontFaceName() != attr.GetFontFaceName())
+        return false;
+
+    if ((flags & wxTEXT_ATTR_FONT_SIZE) &&
+        GetFontSize() != attr.GetFontSize())
+        return false;
+
+    if ((flags & wxTEXT_ATTR_FONT_WEIGHT) &&
+        GetFontWeight() != attr.GetFontWeight())
+        return false;
+
+    if ((flags & wxTEXT_ATTR_FONT_ITALIC) &&
+        GetFontStyle() != attr.GetFontStyle())
+        return false;
+
+    if ((flags & wxTEXT_ATTR_FONT_UNDERLINE) &&
+        GetFontUnderlined() != attr.GetFontUnderlined())
+        return false;
+
+    if ((flags & wxTEXT_ATTR_FONT_ENCODING) &&
+        GetFontEncoding() != attr.GetFontEncoding())
+        return false;
+
+    if ((flags & wxTEXT_ATTR_URL) && GetURL() != attr.GetURL())
+        return false;
+
+    if ((flags & wxTEXT_ATTR_ALIGNMENT) && GetAlignment() != attr.GetAlignment())
+        return false;
+
+    if ((flags & wxTEXT_ATTR_LEFT_INDENT) &&
+        ((GetLeftIndent() != attr.GetLeftIndent()) || (GetLeftSubIndent() != attr.GetLeftSubIndent())))
+        return false;
+
+    if ((flags & wxTEXT_ATTR_RIGHT_INDENT) &&
+        (GetRightIndent() != attr.GetRightIndent()))
+        return false;
+
+    if ((flags & wxTEXT_ATTR_PARA_SPACING_AFTER) &&
+        (GetParagraphSpacingAfter() != attr.GetParagraphSpacingAfter()))
+        return false;
+
+    if ((flags & wxTEXT_ATTR_PARA_SPACING_BEFORE) &&
+        (GetParagraphSpacingBefore() != attr.GetParagraphSpacingBefore()))
+        return false;
+
+    if ((flags & wxTEXT_ATTR_LINE_SPACING) &&
+        (GetLineSpacing() != attr.GetLineSpacing()))
+        return false;
+
+    if ((flags & wxTEXT_ATTR_CHARACTER_STYLE_NAME) &&
+        (GetCharacterStyleName() != attr.GetCharacterStyleName()))
+        return false;
+
+    if ((flags & wxTEXT_ATTR_PARAGRAPH_STYLE_NAME) &&
+        (GetParagraphStyleName() != attr.GetParagraphStyleName()))
+        return false;
+
+    if ((flags & wxTEXT_ATTR_LIST_STYLE_NAME) &&
+        (GetListStyleName() != attr.GetListStyleName()))
+        return false;
+
+    if ((flags & wxTEXT_ATTR_BULLET_STYLE) &&
+        (GetBulletStyle() != attr.GetBulletStyle()))
+         return false;
+
+    if ((flags & wxTEXT_ATTR_BULLET_NUMBER) &&
+        (GetBulletNumber() != attr.GetBulletNumber()))
+         return false;
+
+    if ((flags & wxTEXT_ATTR_BULLET_TEXT) &&
+        (GetBulletText() != attr.GetBulletText()) &&
+        (GetBulletFont() != attr.GetBulletFont()))
+         return false;
+
+    if ((flags & wxTEXT_ATTR_BULLET_NAME) &&
+        (GetBulletName() != attr.GetBulletName()))
+         return false;
+
+    if ((flags & wxTEXT_ATTR_TABS) &&
+        !TabsEq(GetTabs(), attr.GetTabs()))
+        return false;
+
+    if ((flags & wxTEXT_ATTR_PAGE_BREAK) &&
+        (HasPageBreak() != attr.HasPageBreak()))
+         return false;
+
+    if (flags & wxTEXT_ATTR_EFFECTS)
+    {
+        if (HasTextEffects() != attr.HasTextEffects())
+            return false;
+        if (!BitlistsEqPartial(GetTextEffects(), attr.GetTextEffects(), attr.GetTextEffectFlags()))
+            return false;
+    }
+
+    if ((flags & wxTEXT_ATTR_OUTLINE_LEVEL) &&
+        (GetOutlineLevel() != attr.GetOutlineLevel()))
+         return false;
+
+    return true;
+}
+
+// Create font from font attributes.
+wxFont wxTextAttr::CreateFont() const
+{
+    int fontSize = 10;
+    if (HasFontSize())
+        fontSize = GetFontSize();
+
+    int fontStyle = wxNORMAL;
+    if (HasFontItalic())
+        fontStyle = GetFontStyle();
+
+    int fontWeight = wxNORMAL;
+    if (HasFontWeight())
+        fontWeight = GetFontWeight();
+
+    bool underlined = false;
+    if (HasFontUnderlined())
+        underlined = GetFontUnderlined();
+
+    wxString fontFaceName;
+    if (HasFontFaceName())
+        fontFaceName = GetFontFaceName();
+
+    wxFontEncoding encoding = wxFONTENCODING_DEFAULT;
+    if (HasFontEncoding())
+        encoding = GetFontEncoding();
+
+    wxFont font(fontSize, wxDEFAULT, fontStyle, fontWeight, underlined, fontFaceName, encoding);
+#ifdef __WXMAC__
+    font.SetNoAntiAliasing(true);
+#endif
+    return font;
+}
+
+// Get attributes from font.
+bool wxTextAttr::GetFontAttributes(const wxFont& font, int flags)
+{
+    if (!font.Ok())
+        return false;
+
+    if (flags & wxTEXT_ATTR_FONT_SIZE)
+        m_fontSize = font.GetPointSize();
+
+    if (flags & wxTEXT_ATTR_FONT_ITALIC)
+        m_fontStyle = font.GetStyle();
+
+    if (flags & wxTEXT_ATTR_FONT_WEIGHT)
+        m_fontWeight = font.GetWeight();
+
+    if (flags & wxTEXT_ATTR_FONT_UNDERLINE)
+        m_fontUnderlined = font.GetUnderlined();
+
+    if (flags & wxTEXT_ATTR_FONT_FACE)
+        m_fontFaceName = font.GetFaceName();
+
+    if (flags & wxTEXT_ATTR_FONT_ENCODING)
+        m_fontEncoding = font.GetEncoding();
+
+    return true;
+}
+
+bool wxTextAttr::Apply(const wxTextAttr& style, const wxTextAttr* compareWith)
+{
+    wxTextAttr& destStyle = (*this);
+
+    if (style.HasFontWeight())
+    {
+        if (!(compareWith && compareWith->HasFontWeight() && compareWith->GetFontWeight() == style.GetFontWeight()))
+            destStyle.SetFontWeight(style.GetFontWeight());
+    }
+
+    if (style.HasFontSize())
+    {
+        if (!(compareWith && compareWith->HasFontSize() && compareWith->GetFontSize() == style.GetFontSize()))
+            destStyle.SetFontSize(style.GetFontSize());
+    }
+
+    if (style.HasFontItalic())
+    {
+        if (!(compareWith && compareWith->HasFontItalic() && compareWith->GetFontStyle() == style.GetFontStyle()))
+            destStyle.SetFontStyle(style.GetFontStyle());
+    }
+
+    if (style.HasFontUnderlined())
+    {
+        if (!(compareWith && compareWith->HasFontUnderlined() && compareWith->GetFontUnderlined() == style.GetFontUnderlined()))
+            destStyle.SetFontUnderlined(style.GetFontUnderlined());
+    }
+
+    if (style.HasFontFaceName())
+    {
+        if (!(compareWith && compareWith->HasFontFaceName() && compareWith->GetFontFaceName() == style.GetFontFaceName()))
+            destStyle.SetFontFaceName(style.GetFontFaceName());
+    }
+
+    if (style.HasFontEncoding())
+    {
+        if (!(compareWith && compareWith->HasFontEncoding() && compareWith->GetFontEncoding() == style.GetFontEncoding()))
+            destStyle.SetFontEncoding(style.GetFontEncoding());
+    }
+
+    if (style.GetTextColour().Ok() && style.HasTextColour())
+    {
+        if (!(compareWith && compareWith->HasTextColour() && compareWith->GetTextColour() == style.GetTextColour()))
+            destStyle.SetTextColour(style.GetTextColour());
+    }
+
+    if (style.GetBackgroundColour().Ok() && style.HasBackgroundColour())
+    {
+        if (!(compareWith && compareWith->HasBackgroundColour() && compareWith->GetBackgroundColour() == style.GetBackgroundColour()))
+            destStyle.SetBackgroundColour(style.GetBackgroundColour());
+    }
+
+    if (style.HasAlignment())
+    {
+        if (!(compareWith && compareWith->HasAlignment() && compareWith->GetAlignment() == style.GetAlignment()))
+            destStyle.SetAlignment(style.GetAlignment());
+    }
+
+    if (style.HasTabs())
+    {
+        if (!(compareWith && compareWith->HasTabs() && TabsEq(compareWith->GetTabs(), style.GetTabs())))
+            destStyle.SetTabs(style.GetTabs());
+    }
+
+    if (style.HasLeftIndent())
+    {
+        if (!(compareWith && compareWith->HasLeftIndent() && compareWith->GetLeftIndent() == style.GetLeftIndent()
+                          && compareWith->GetLeftSubIndent() == style.GetLeftSubIndent()))
+            destStyle.SetLeftIndent(style.GetLeftIndent(), style.GetLeftSubIndent());
+    }
+
+    if (style.HasRightIndent())
+    {
+        if (!(compareWith && compareWith->HasRightIndent() && compareWith->GetRightIndent() == style.GetRightIndent()))
+            destStyle.SetRightIndent(style.GetRightIndent());
+    }
+
+    if (style.HasParagraphSpacingAfter())
+    {
+        if (!(compareWith && compareWith->HasParagraphSpacingAfter() && compareWith->GetParagraphSpacingAfter() == style.GetParagraphSpacingAfter()))
+            destStyle.SetParagraphSpacingAfter(style.GetParagraphSpacingAfter());
+    }
+
+    if (style.HasParagraphSpacingBefore())
+    {
+        if (!(compareWith && compareWith->HasParagraphSpacingBefore() && compareWith->GetParagraphSpacingBefore() == style.GetParagraphSpacingBefore()))
+            destStyle.SetParagraphSpacingBefore(style.GetParagraphSpacingBefore());
+    }
+
+    if (style.HasLineSpacing())
+    {
+        if (!(compareWith && compareWith->HasLineSpacing() && compareWith->GetLineSpacing() == style.GetLineSpacing()))
+            destStyle.SetLineSpacing(style.GetLineSpacing());
+    }
+
+    if (style.HasCharacterStyleName())
+    {
+        if (!(compareWith && compareWith->HasCharacterStyleName() && compareWith->GetCharacterStyleName() == style.GetCharacterStyleName()))
+            destStyle.SetCharacterStyleName(style.GetCharacterStyleName());
+    }
+
+    if (style.HasParagraphStyleName())
+    {
+        if (!(compareWith && compareWith->HasParagraphStyleName() && compareWith->GetParagraphStyleName() == style.GetParagraphStyleName()))
+            destStyle.SetParagraphStyleName(style.GetParagraphStyleName());
+    }
+
+    if (style.HasListStyleName())
+    {
+        if (!(compareWith && compareWith->HasListStyleName() && compareWith->GetListStyleName() == style.GetListStyleName()))
+            destStyle.SetListStyleName(style.GetListStyleName());
+    }
+
+    if (style.HasBulletStyle())
+    {
+        if (!(compareWith && compareWith->HasBulletStyle() && compareWith->GetBulletStyle() == style.GetBulletStyle()))
+            destStyle.SetBulletStyle(style.GetBulletStyle());
+    }
+
+    if (style.HasBulletText())
+    {
+        if (!(compareWith && compareWith->HasBulletText() && compareWith->GetBulletText() == style.GetBulletText()))
+        {
+            destStyle.SetBulletText(style.GetBulletText());
+            destStyle.SetBulletFont(style.GetBulletFont());
+        }
+    }
+
+    if (style.HasBulletNumber())
+    {
+        if (!(compareWith && compareWith->HasBulletNumber() && compareWith->GetBulletNumber() == style.GetBulletNumber()))
+            destStyle.SetBulletNumber(style.GetBulletNumber());
+    }
+
+    if (style.HasBulletName())
+    {
+        if (!(compareWith && compareWith->HasBulletName() && compareWith->GetBulletName() == style.GetBulletName()))
+            destStyle.SetBulletName(style.GetBulletName());
+    }
+
+    if (style.HasURL())
+    {
+        if (!(compareWith && compareWith->HasURL() && compareWith->GetURL() == style.GetURL()))
+            destStyle.SetURL(style.GetURL());
+    }
+
+    if (style.HasPageBreak())
+    {
+        if (!(compareWith && compareWith->HasPageBreak()))
+            destStyle.SetPageBreak();
+    }
+
+    if (style.HasTextEffects())
+    {
+        if (!(compareWith && compareWith->HasTextEffects() && compareWith->GetTextEffects() == style.GetTextEffects()))
+        {
+            int destBits = destStyle.GetTextEffects();
+            int destFlags = destStyle.GetTextEffectFlags();
+
+            int srcBits = style.GetTextEffects();
+            int srcFlags = style.GetTextEffectFlags();
+
+            CombineBitlists(destBits, srcBits, destFlags, srcFlags);
+
+            destStyle.SetTextEffects(destBits);
+            destStyle.SetTextEffectFlags(destFlags);
+        }
+    }
+
+    if (style.HasOutlineLevel())
+    {
+        if (!(compareWith && compareWith->HasOutlineLevel() && compareWith->GetOutlineLevel() == style.GetOutlineLevel()))
+            destStyle.SetOutlineLevel(style.GetOutlineLevel());
+    }
+
+    return true;
 }
 
 /* static */
@@ -143,19 +592,73 @@ wxTextAttr wxTextAttr::Combine(const wxTextAttr& attr,
     return newAttr;
 }
 
-void wxTextAttr::operator= (const wxTextAttr& attr)
+/// Compare tabs
+bool wxTextAttr::TabsEq(const wxArrayInt& tabs1, const wxArrayInt& tabs2)
 {
-    m_font = attr.m_font;
-    m_colText = attr.m_colText;
-    m_colBack = attr.m_colBack;
-    m_textAlignment = attr.m_textAlignment;
-    m_leftIndent = attr.m_leftIndent;
-    m_leftSubIndent = attr.m_leftSubIndent;
-    m_rightIndent = attr.m_rightIndent;
-    m_tabs = attr.m_tabs;
-    m_flags = attr.m_flags;
+    if (tabs1.GetCount() != tabs2.GetCount())
+        return false;
+
+    size_t i;
+    for (i = 0; i < tabs1.GetCount(); i++)
+    {
+        if (tabs1[i] != tabs2[i])
+            return false;
+    }
+    return true;
 }
 
+// Remove attributes
+bool wxTextAttr::RemoveStyle(wxTextAttr& destStyle, const wxTextAttr& style)
+{
+    int flags = style.GetFlags();
+    int destFlags = destStyle.GetFlags();
+
+    destStyle.SetFlags(destFlags & ~flags);
+
+    return true;
+}
+
+/// Combine two bitlists, specifying the bits of interest with separate flags.
+bool wxTextAttr::CombineBitlists(int& valueA, int valueB, int& flagsA, int flagsB)
+{
+    // We want to apply B's bits to A, taking into account each's flags which indicate which bits
+    // are to be taken into account. A zero in B's bits should reset that bit in A but only if B's flags
+    // indicate it.
+
+    // First, reset the 0 bits from B. We make a mask so we're only dealing with B's zero
+    // bits at this point, ignoring any 1 bits in B or 0 bits in B that are not relevant.
+    int valueA2 = ~(~valueB & flagsB) & valueA;
+
+    // Now combine the 1 bits.
+    int valueA3 = (valueB & flagsB) | valueA2;
+
+    valueA = valueA3;
+    flagsA = (flagsA | flagsB);
+
+    return true;
+}
+
+/// Compare two bitlists
+bool wxTextAttr::BitlistsEqPartial(int valueA, int valueB, int flags)
+{
+    int relevantBitsA = valueA & flags;
+    int relevantBitsB = valueB & flags;
+    return (relevantBitsA != relevantBitsB);
+}
+
+/// Split into paragraph and character styles
+bool wxTextAttr::SplitParaCharStyles(const wxTextAttr& style, wxTextAttr& parStyle, wxTextAttr& charStyle)
+{
+    wxTextAttr defaultCharStyle1(style);
+    wxTextAttr defaultParaStyle1(style);
+    defaultCharStyle1.SetFlags(defaultCharStyle1.GetFlags()&wxTEXT_ATTR_CHARACTER);
+    defaultParaStyle1.SetFlags(defaultParaStyle1.GetFlags()&wxTEXT_ATTR_PARAGRAPH);
+
+    charStyle.Apply(defaultCharStyle1);
+    parStyle.Apply(defaultParaStyle1);
+
+    return true;
+}
 
 // apply styling to text range
 bool wxTextCtrlBase::SetStyle(long WXUNUSED(start), long WXUNUSED(end),

@@ -50,15 +50,15 @@ Returns the style name.
 
 \membersection{wxRichTextStyleDefinition::GetStyle}\label{wxrichtextstyledefinitiongetstyle}
 
-\func{wxRichTextAttr\&}{GetStyle}{\void}
+\func{wxTextAttr\&}{GetStyle}{\void}
 
-\constfunc{const wxRichTextAttr\&}{GetStyle}{\void}
+\constfunc{const wxTextAttr\&}{GetStyle}{\void}
 
 Returns the attributes associated with this style.
 
 \membersection{wxRichTextStyleDefinition::GetStyleMergedWithBase}\label{wxrichtextstyledefinitiongetstylemergedwithbase}
 
-\constfunc{wxRichTextAttr}{GetStyleMergedWithBase}{\param{wxRichTextStyleSheet*}{ sheet}}
+\constfunc{wxTextAttr}{GetStyleMergedWithBase}{\param{wxRichTextStyleSheet*}{ sheet}}
 
 Returns the style attributes combined with the attributes of the specified base style, if any. This function works recursively.
 
@@ -82,7 +82,7 @@ Sets the name of the style.
 
 \membersection{wxRichTextStyleDefinition::SetStyle}\label{wxrichtextstyledefinitionsetstyle}
 
-\func{void}{SetStyle}{\param{const wxRichTextAttr\& }{style}}
+\func{void}{SetStyle}{\param{const wxTextAttr\& }{style}}
 
 Sets the attributes for this style.
 

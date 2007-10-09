@@ -26,7 +26,7 @@ rich text control in either the current font or specified font.
 \begin{verbatim}
     wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
 
-    wxTextAttrEx attr;
+    wxTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_FONT);
     ctrl->GetStyle(ctrl->GetInsertionPoint(), attr);
 

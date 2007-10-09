@@ -426,13 +426,13 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
 
     wxRichTextListStyleDefinition* listDef = wxDynamicCast(def, wxRichTextListStyleDefinition);
 
-    wxTextAttrEx attr(def->GetStyleMergedWithBase(GetStyleSheet()));
+    wxTextAttr attr(def->GetStyleMergedWithBase(GetStyleSheet()));
 
     wxFont font(m_previewCtrl->GetFont());
     font.SetPointSize(9);
     m_previewCtrl->SetFont(font);
 
-    wxTextAttrEx normalParaAttr;
+    wxTextAttr normalParaAttr;
     normalParaAttr.SetFont(font);
     normalParaAttr.SetTextColour(wxColour(wxT("LIGHT GREY")));
 
@@ -451,7 +451,7 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
         int i;
         for (i = 0; i < 10; i++)
         {
-            wxTextAttrEx levelAttr = * listDef->GetLevelAttributes(i);
+            wxTextAttr levelAttr = * listDef->GetLevelAttributes(i);
             levelAttr.SetBulletNumber(1);
             m_previewCtrl->BeginStyle(levelAttr);
             m_previewCtrl->WriteText(wxString::Format(wxT("\nList level %d. "), i+1) + s_para2List);
@@ -870,4 +870,4 @@ void wxRichTextStyleOrganiserDialog::OnListSelection(wxCommandEvent& event)
 
 #endif
     // wxUSE_RICHTEXT
-    
+

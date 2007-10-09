@@ -179,33 +179,23 @@ public:
     // methods allow to apply the given text style to the given selection or to
     // set/get the style which will be used for all appended text
     virtual bool SetStyle(long start, long end, const wxTextAttr& style);
-    virtual bool SetStyle(long start, long end, const wxTextAttrEx& style);
-    virtual bool SetStyle(const wxRichTextRange& range, const wxRichTextAttr& style);
+    virtual bool SetStyle(const wxRichTextRange& range, const wxTextAttr& style);
     virtual bool GetStyle(long position, wxTextAttr& style);
-    virtual bool GetStyle(long position, wxTextAttrEx& style);
-    virtual bool GetStyle(long position, wxRichTextAttr& style);
 
     // get the common set of styles for the range
-    virtual bool GetStyleForRange(const wxRichTextRange& range, wxRichTextAttr& style);
-    virtual bool GetStyleForRange(const wxRichTextRange& range, wxTextAttrEx& style);
-
+    virtual bool GetStyleForRange(const wxRichTextRange& range, wxTextAttr& style);
     // extended style setting operation with flags including:
     // wxRICHTEXT_SETSTYLE_WITH_UNDO, wxRICHTEXT_SETSTYLE_OPTIMIZE, wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY, wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY
     // see richtextbuffer.h for more details.
-    virtual bool SetStyleEx(long start, long end, const wxTextAttrEx& style, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
-    virtual bool SetStyleEx(const wxRichTextRange& range, const wxTextAttrEx& style, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
-    virtual bool SetStyleEx(const wxRichTextRange& range, const wxRichTextAttr& style, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
+    virtual bool SetStyleEx(const wxRichTextRange& range, const wxTextAttr& style, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
 
     /// Get the content (uncombined) attributes for this position.
     virtual bool GetUncombinedStyle(long position, wxTextAttr& style);
-    virtual bool GetUncombinedStyle(long position, wxTextAttrEx& style);
-    virtual bool GetUncombinedStyle(long position, wxRichTextAttr& style);
 
-    virtual bool SetDefaultStyle(const wxTextAttrEx& style);
     virtual bool SetDefaultStyle(const wxTextAttr& style);
 
-    // TODO: change to GetDefaultStyle if we merge wxTextAttr and wxTextAttrEx
-    virtual const wxTextAttrEx& GetDefaultStyleEx() const;
+    virtual const wxTextAttr& GetDefaultStyleEx() const { return GetDefaultStyle(); }
+
     virtual const wxTextAttr& GetDefaultStyle() const;
 
     /// Set list style
@@ -307,14 +297,12 @@ public:
     virtual bool LineBreak();
 
     /// Set basic (overall) style
-    virtual void SetBasicStyle(const wxTextAttrEx& style) { GetBuffer().SetBasicStyle(style); }
-    virtual void SetBasicStyle(const wxRichTextAttr& style) { GetBuffer().SetBasicStyle(style); }
+    virtual void SetBasicStyle(const wxTextAttr& style) { GetBuffer().SetBasicStyle(style); }
 
     /// Get basic (overall) style
-    virtual const wxTextAttrEx& GetBasicStyle() const { return GetBuffer().GetBasicStyle(); }
+    virtual const wxTextAttr& GetBasicStyle() const { return GetBuffer().GetBasicStyle(); }
 
-    /// Begin using a style
-    virtual bool BeginStyle(const wxTextAttrEx& style) { return GetBuffer().BeginStyle(style); }
+    virtual bool BeginStyle(const wxTextAttr& style) { return GetBuffer().BeginStyle(style); }
 
     /// End the style
     virtual bool EndStyle() { return GetBuffer().EndStyle(); }
@@ -535,11 +523,7 @@ public:
     /// of the attributes are different within the range, the test fails. You
     /// can use this to implement, for example, bold button updating. style must have
     /// flags indicating which attributes are of interest.
-    virtual bool HasCharacterAttributes(const wxRichTextRange& range, const wxTextAttrEx& style) const
-    {
-        return GetBuffer().HasCharacterAttributes(range.ToInternal(), style);
-    }
-    virtual bool HasCharacterAttributes(const wxRichTextRange& range, const wxRichTextAttr& style) const
+    virtual bool HasCharacterAttributes(const wxRichTextRange& range, const wxTextAttr& style) const
     {
         return GetBuffer().HasCharacterAttributes(range.ToInternal(), style);
     }
@@ -548,11 +532,7 @@ public:
     /// of the attributes are different within the range, the test fails. You
     /// can use this to implement, for example, centering button updating. style must have
     /// flags indicating which attributes are of interest.
-    virtual bool HasParagraphAttributes(const wxRichTextRange& range, const wxTextAttrEx& style) const
-    {
-        return GetBuffer().HasParagraphAttributes(range.ToInternal(), style);
-    }
-    virtual bool HasParagraphAttributes(const wxRichTextRange& range, const wxRichTextAttr& style) const
+    virtual bool HasParagraphAttributes(const wxRichTextRange& range, const wxTextAttr& style) const
     {
         return GetBuffer().HasParagraphAttributes(range.ToInternal(), style);
     }
@@ -767,7 +747,7 @@ public:
 
     /// Convenience function that tells the control to start reflecting the default
     /// style, since the user is changing it.
-    void SetAndShowDefaultStyle(const wxRichTextAttr& attr)
+    void SetAndShowDefaultStyle(const wxTextAttr& attr)
     {
         SetDefaultStyle(attr);
         SetCaretPositionForDefaultStyle(GetCaretPosition());

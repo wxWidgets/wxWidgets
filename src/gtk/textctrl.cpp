@@ -84,7 +84,9 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
     {
         wxGtkTextRemoveTagsWithPrefix(text_buffer, "WXFONT", start, end);
 
-        PangoFontDescription *font_description = attr.GetFont().GetNativeFontInfo()->description;
+        wxFont font(attr.GetFont());
+
+        PangoFontDescription *font_description = font.GetNativeFontInfo()->description;
         wxGtkString font_string(pango_font_description_to_string(font_description));
         g_snprintf(buf, sizeof(buf), "WXFONT %s", font_string.c_str());
         tag = gtk_text_tag_table_lookup( gtk_text_buffer_get_tag_table( text_buffer ),
@@ -95,7 +97,7 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
                                               NULL );
         gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
 
-        if (attr.GetFont().GetUnderlined())
+        if (font.GetUnderlined())
         {
             g_snprintf(buf, sizeof(buf), "WXFONTUNDERLINE");
             tag = gtk_text_tag_table_lookup( gtk_text_buffer_get_tag_table( text_buffer ),
@@ -943,7 +945,7 @@ wxFontEncoding wxTextCtrl::GetTextEncoding() const
     // first check the default text style (we intentionally don't check the
     // style for the current position as it doesn't make sense for SetValue())
     const wxTextAttr& style = GetDefaultStyle();
-    wxFontEncoding enc = style.HasFont() ? style.GetFont().GetEncoding()
+    wxFontEncoding enc = style.HasFontEncoding() ? style.GetFontEncoding()
                                          : wxFONTENCODING_SYSTEM;
 
     // fall back to the controls font if no style
@@ -1028,9 +1030,9 @@ void wxTextCtrl::WriteText( const wxString &text )
     // check if we have a specific style for the current position
     wxFontEncoding enc = wxFONTENCODING_SYSTEM;
     wxTextAttr style;
-    if ( GetStyle(GetInsertionPoint(), style) && style.HasFont() )
+    if ( GetStyle(GetInsertionPoint(), style) && style.HasFontEncoding() )
     {
-        enc = style.GetFont().GetEncoding();
+        enc = style.GetFontEncoding();
     }
 
     if ( enc == wxFONTENCODING_SYSTEM )

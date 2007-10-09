@@ -2,8 +2,7 @@
 
 {\bf Major classes:} \helpref{wxRichTextCtrl}{wxrichtextctrl}, \helpref{wxRichTextBuffer}{wxrichtextbuffer}, \helpref{wxRichTextEvent}{wxrichtextevent}
 
-{\bf Helper classes:} \helpref{wxRichTextAttr}{wxrichtextattr}, \helpref{wxTextAttrEx}{wxtextattrex}, 
-\helpref{wxRichTextRange}{wxrichtextrange}
+{\bf Helper classes:} \helpref{wxTextAttr}{wxtextattr}, \helpref{wxRichTextRange}{wxrichtextrange}
 
 {\bf File handler classes:} \helpref{wxRichTextFileHandler}{wxrichtextfilehandler}, \helpref{wxRichTextHTMLHandler}{wxrichtexthtmlhandler}, 
 \helpref{wxRichTextXMLHandler}{wxrichtextxmlhandler}
@@ -186,7 +185,7 @@ The following code is taken from the sample, and adds text and styles to a rich 
     tabs.Add(600);
     tabs.Add(800);
     tabs.Add(1000);
-    wxTextAttrEx attr;
+    wxTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_TABS);
     attr.SetTabs(tabs);
     r.SetDefaultStyle(attr);
@@ -220,14 +219,7 @@ be processed by the control rather than being used for navigation between contro
 
 \subsubsection{wxRichTextCtrl and styles}
 
-Styling attributes are represented by three classes: \helpref{wxTextAttr}{wxtextattr}, \helpref{wxTextAttrEx}{wxtextattrex} and \helpref{wxRichTextAttr}{wxrichtextattr}.
-wxTextAttr is shared across all controls that are derived from wxTextCtrlBase and
-can store basic character and paragraph attributes. wxTextAttrEx derives
-from wxTextAttr and adds some further attributes that are only supported
-by wxRichTextCtrl. Finally, wxRichTextAttr is a more efficient version
-of wxTextAttrEx that doesn't use a wxFont object and can be used to
-query styles more quickly. wxTextAttrEx and wxRichTextAttr are largely
-interchangeable and have suitable conversion operators between them.
+Styling attributes are represented by \helpref{wxTextAttr}{wxtextattr}.
 
 When setting a style, the flags of the attribute object determine which
 attributes are applied. When querying a style, the passed flags are ignored
@@ -348,7 +340,7 @@ always has one such buffer.
 
 The content is represented by a hierarchy of objects, all derived from
 wxRichTextObject. An object might be an image, a fragment of text, a paragraph,
-or a whole buffer. Objects store a wxTextAttrEx containing style information;
+or a whole buffer. Objects store a wxTextAttr containing style information;
 a paragraph object can contain both paragraph and character information, but
 content objects such as text can only store character information. The final
 style displayed in the control or in a printout is a combination of base
@@ -375,7 +367,7 @@ A paragraph of pure text with the same style contains just one further
 object, a wxRichTextPlainText object. When styling is applied to part of
 this object, the object is decomposed into separate objects, one object
 for each different character style. So each object within a paragraph always has
-just one wxTextAttrEx object to denote its character style. Of course, this can
+just one wxTextAttr object to denote its character style. Of course, this can
 lead to fragmentation after a lot of edit operations, potentially leading
 to several objects with the same style where just one would do. So
 a Defragment function is called when updating the control's display, to ensure that
