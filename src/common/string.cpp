@@ -96,6 +96,25 @@ wxSTD ostream& operator<<(wxSTD ostream& os, const wxWCharBuffer& str)
 }
 #endif
 
+#if wxUSE_UNICODE
+
+wxSTD wostream& operator<<(wxSTD wostream& wos, const wxString& str)
+{
+    return wos << str.wc_str();
+}
+
+wxSTD wostream& operator<<(wxSTD wostream& wos, const wxCStrData& str)
+{
+    return wos << str.AsWChar();
+}
+
+wxSTD wostream& operator<<(wxSTD wostream& wos, const wxWCharBuffer& str)
+{
+    return wos << str.data();
+}
+
+#endif  // wxUSE_UNICODE
+
 #endif // wxUSE_STD_IOSTREAM
 
 // ===========================================================================

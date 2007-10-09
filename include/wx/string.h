@@ -3031,6 +3031,14 @@ WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxCharBuffer&);
 WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxWCharBuffer&);
 #endif
 
+#if wxUSE_UNICODE
+
+WXDLLIMPEXP_BASE wxSTD wostream& operator<<(wxSTD wostream&, const wxString&);
+WXDLLIMPEXP_BASE wxSTD wostream& operator<<(wxSTD wostream&, const wxCStrData&);
+WXDLLIMPEXP_BASE wxSTD wostream& operator<<(wxSTD wostream&, const wxWCharBuffer&);
+
+#endif  // wxUSE_UNICODE
+
 #endif  // wxUSE_STD_IOSTREAM
 
 // ---------------------------------------------------------------------------
