@@ -3031,7 +3031,7 @@ WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxCharBuffer&);
 WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxWCharBuffer&);
 #endif
 
-#endif  // wxSTD_STRING_COMPATIBILITY
+#endif  // wxUSE_STD_IOSTREAM
 
 // ---------------------------------------------------------------------------
 // wxCStrData implementation

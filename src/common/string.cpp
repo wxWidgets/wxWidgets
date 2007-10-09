@@ -72,11 +72,10 @@ const size_t wxString::npos = (size_t) -1;
 
 wxSTD ostream& operator<<(wxSTD ostream& os, const wxCStrData& str)
 {
-// FIXME-UTF8: always, not only if wxUSE_UNICODE
-#if wxUSE_UNICODE && !defined(__BORLANDC__)
-    return os << (const wchar_t*)str.AsWCharBuf();
+#if wxUSE_UNICODE && !wxUSE_UNICODE_UTF8
+    return os << (const char *)str.AsCharBuf();
 #else
-    return os << (const char*)str.AsCharBuf();
+    return os << str.AsInternal();
 #endif
 }
 
