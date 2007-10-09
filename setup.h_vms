@@ -1200,6 +1200,15 @@ typedef pid_t GPid;
 /* Define if fdopen is available.  */
 #define HAVE_FDOPEN 1
 
+/* Define if sysconf is available. */
+#define HAVE_SYSCONF 1
+
+/* Define if getpwuid_r is available. */
+#undef HAVE_GETPWUID_R
+
+/* Define if getgrgid_r is available. */
+#undef HAVE_GETGRGID_R
+
 /* ---------------------------------------------------------------------
    Win32 adjustments section
    ---------------------------------------------------------------------

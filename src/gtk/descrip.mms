@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 14 March 2007                                                       *
+# Date : 5 October 2007                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -100,7 +100,7 @@ OBJECTS0= \
 	textctrl.obj,\
 	tglbtn.obj,\
 	msgdlg.obj,\
-	treeentry_gtk.obj
+	treeentry_gtk.obj,textentry.obj,filectrl.obj,print.obj
 
 SOURCES =\
 	app.cpp,\
@@ -167,7 +167,7 @@ SOURCES =\
 	utilsres.cpp,\
         win_gtk.c,\
 	window.cpp,\
-	treeentry_gtk.c
+	treeentry_gtk.c,textentry.cpp,filectrl.cpp,print.cpp
    
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -253,3 +253,6 @@ utilsres.obj : utilsres.cpp
 win_gtk.obj : win_gtk.c
 window.obj : window.cpp
 treeentry_gtk.obj : treeentry_gtk.c
+textentry.obj : textentry.cpp
+filectrl.obj : filectrl.cpp
+print.obj : print.cpp
