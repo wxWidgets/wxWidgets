@@ -44,6 +44,8 @@ class WXDLLEXPORT wxStaticBox: public wxControl
     virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
 
     virtual void GetBordersForSizer(int *borderTop, int *borderOther) const;
+    
+    virtual bool AcceptsFocus() const { return false; }
 };
 
 #endif
