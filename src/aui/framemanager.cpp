@@ -1446,12 +1446,11 @@ bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
         if (!p.IsOk())
         {
             // the pane window couldn't be found
-            // in the existing layout
-            return false;
+            // in the existing layout -- skip it
+            continue;
         }
 
         p.SafeSet(pane);
-
     }
 
     if (update)
