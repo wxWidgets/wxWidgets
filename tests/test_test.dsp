@@ -521,6 +521,10 @@ SOURCE=.\intl\intltest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\strings\iostream.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\streams\largefile.cpp
 # End Source File
 # Begin Source File

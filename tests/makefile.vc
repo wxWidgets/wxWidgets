@@ -52,6 +52,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_regextest.obj \
 	$(OBJS)\test_wxregextest.obj \
 	$(OBJS)\test_scopeguardtest.obj \
+	$(OBJS)\test_iostream.obj \
 	$(OBJS)\test_strings.obj \
 	$(OBJS)\test_stdstrings.obj \
 	$(OBJS)\test_tokenizer.obj \
@@ -489,6 +490,9 @@ $(OBJS)\test_wxregextest.obj: .\regex\wxregextest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_scopeguardtest.obj: .\scopeguard\scopeguardtest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_iostream.obj: .\strings\iostream.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_strings.obj: .\strings\strings.cpp
