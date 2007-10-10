@@ -96,7 +96,7 @@ wxSTD ostream& operator<<(wxSTD ostream& os, const wxWCharBuffer& str)
 }
 #endif
 
-#if wxUSE_UNICODE
+#if wxUSE_UNICODE && defined(HAVE_WOSTREAM)
 
 wxSTD wostream& operator<<(wxSTD wostream& wos, const wxString& str)
 {
@@ -113,7 +113,7 @@ wxSTD wostream& operator<<(wxSTD wostream& wos, const wxWCharBuffer& str)
     return wos << str.data();
 }
 
-#endif  // wxUSE_UNICODE
+#endif  // wxUSE_UNICODE && defined(HAVE_WOSTREAM)
 
 #endif // wxUSE_STD_IOSTREAM
 

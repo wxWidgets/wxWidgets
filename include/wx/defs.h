@@ -449,6 +449,13 @@ typedef int wxWindowID;
 #endif /* HAVE_VARIADIC_MACROS */
 
 
+#ifndef HAVE_WOSTREAM
+    // Mingw <=3.4 doesn't have std::wostream
+    #if !defined(__MINGW32__) || wxCHECK_GCC_VERSION(4,0)
+        #define HAVE_WOSTREAM
+    #endif
+#endif /* HAVE_WOSTREAM */
+
 /*  ---------------------------------------------------------------------------- */
 /*  portable calling conventions macros */
 /*  ---------------------------------------------------------------------------- */
