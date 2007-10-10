@@ -2089,6 +2089,8 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
                 dock.fixed = false;
             if (!pane.IsToolbar())
                 dock.toolbar = false;
+            if (pane.HasFlag(wxAuiPaneInfo::optionDockFixed))
+                dock.fixed = true;
             if (pane.state & wxAuiPaneInfo::actionPane)
                 action_pane_marked = true;
         }

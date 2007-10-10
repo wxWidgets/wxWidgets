@@ -127,6 +127,13 @@ Direction() determines the direction of the docked pane. It is functionally the 
 
 \func{wxAuiPaneInfo\&}{Dock}{\void}
 
+Dock() indicates that a pane should be docked.  It is the opposite of Float().
+
+\membersection{wxAuiPaneInfo::DockFixed}\label{wxauipaneinfodockfixed}
+
+\func{wxAuiPaneInfo\&}{DockFixed}{\param{bool }{b = true}}
+
+DockFixed() causes the containing dock to have no resize sash.  This is useful for creating panes that span the entire width or height of a dock, but should not be resizable in the other direction.
 
 \membersection{wxAuiPaneInfo::Dockable}\label{wxauipaneinfodockable}
 
@@ -144,7 +151,7 @@ Fixed() forces a pane to be fixed size so that it cannot be resized. After calli
 
 \func{wxAuiPaneInfo\&}{Float}{\void}
 
-Float() indicates that a pane should be floated.
+Float() indicates that a pane should be floated.  It is the opposite of Dock().
 
 \membersection{wxAuiPaneInfo::Floatable}\label{wxauipaneinfofloatable}
 
