@@ -118,7 +118,8 @@ private:
 // wxDataViewModel
 // ---------------------------------------------------------
 
-WX_DECLARE_LIST(wxDataViewModelNotifier, wxDataViewModelNotifiers );
+WX_DECLARE_LIST_WITH_DECL(wxDataViewModelNotifier, wxDataViewModelNotifiers,
+                          class WXDLLIMPEXP_ADV);
 
 class WXDLLIMPEXP_ADV wxDataViewModel: public wxObjectRefData
 {
@@ -175,7 +176,7 @@ protected:
 // wxDataViewIndexListModel
 // ---------------------------------------------------------
 
-class wxDataViewIndexListModel: public wxDataViewModel
+class WXDLLIMPEXP_ADV wxDataViewIndexListModel: public wxDataViewModel
 {
 public:
     wxDataViewIndexListModel( unsigned int initial_size = 0 );
@@ -331,7 +332,7 @@ protected:
 // wxDataViewIconText
 //-----------------------------------------------------------------------------
 
-class wxDataViewIconText: public wxObject
+class WXDLLIMPEXP_ADV wxDataViewIconText: public wxObject
 {
 public:
     wxDataViewIconText( const wxString &text = wxEmptyString, const wxIcon& icon = wxNullIcon )
@@ -354,7 +355,7 @@ private:
 
 bool operator == (const wxDataViewIconText &one, const wxDataViewIconText &two);
 
-DECLARE_VARIANT_OBJECT(wxDataViewIconText)
+DECLARE_VARIANT_OBJECT_EXPORTED(wxDataViewIconText, WXDLLIMPEXP_ADV)
 
 // ---------------------------------------------------------
 // wxDataViewColumnBase

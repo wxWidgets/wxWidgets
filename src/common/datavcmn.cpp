@@ -404,7 +404,7 @@ unsigned int wxDataViewIndexListModel::GetChildren( const wxDataViewItem &item, 
 
 IMPLEMENT_DYNAMIC_CLASS(wxDataViewIconText,wxObject)
 
-IMPLEMENT_VARIANT_OBJECT(wxDataViewIconText)
+IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxDataViewIconText, WXDLLIMPEXP_ADV)
 
 bool operator == (const wxDataViewIconText &one, const wxDataViewIconText &two)
 {

@@ -19,15 +19,15 @@
 // classes
 // --------------------------------------------------------- 
 
-class WXDLLIMPEXP_FWD_CORE wxDataViewCtrl;
-class WXDLLIMPEXP_FWD_CORE wxDataViewCtrlInternal;
+class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
+class WXDLLIMPEXP_FWD_ADV wxDataViewCtrlInternal;
 
 
 // --------------------------------------------------------- 
 // wxDataViewRenderer
 // --------------------------------------------------------- 
 
-class wxDataViewRenderer: public wxDataViewRendererBase
+class WXDLLIMPEXP_ADV wxDataViewRenderer: public wxDataViewRendererBase
 {
 public:
     wxDataViewRenderer( const wxString &varianttype, 
@@ -55,7 +55,7 @@ protected:
 // wxDataViewTextRenderer
 // --------------------------------------------------------- 
 
-class wxDataViewTextRenderer: public wxDataViewRenderer
+class WXDLLIMPEXP_ADV wxDataViewTextRenderer: public wxDataViewRenderer
 {
 public:
     wxDataViewTextRenderer( const wxString &varianttype = wxT("string"), 
@@ -75,7 +75,7 @@ protected:
 // wxDataViewBitmapRenderer
 // --------------------------------------------------------- 
 
-class wxDataViewBitmapRenderer: public wxDataViewRenderer
+class WXDLLIMPEXP_ADV wxDataViewBitmapRenderer: public wxDataViewRenderer
 {
 public:
     wxDataViewBitmapRenderer( const wxString &varianttype = wxT("wxBitmap"), 
@@ -93,7 +93,7 @@ protected:
 // wxDataViewToggleRenderer
 // --------------------------------------------------------- 
 
-class wxDataViewToggleRenderer: public wxDataViewRenderer
+class WXDLLIMPEXP_ADV wxDataViewToggleRenderer: public wxDataViewRenderer
 {
 public:
     wxDataViewToggleRenderer( const wxString &varianttype = wxT("bool"), 
@@ -111,7 +111,7 @@ protected:
 // wxDataViewCustomRenderer
 // --------------------------------------------------------- 
 
-class wxDataViewCustomRenderer: public wxDataViewRenderer
+class WXDLLIMPEXP_ADV wxDataViewCustomRenderer: public wxDataViewRenderer
 {
 public:
     wxDataViewCustomRenderer( const wxString &varianttype = wxT("string"), 
@@ -157,7 +157,7 @@ protected:
 // wxDataViewProgressRenderer
 // --------------------------------------------------------- 
 
-class wxDataViewProgressRenderer: public wxDataViewCustomRenderer
+class WXDLLIMPEXP_ADV wxDataViewProgressRenderer: public wxDataViewCustomRenderer
 {
 public:
     wxDataViewProgressRenderer( const wxString &label = wxEmptyString, 
@@ -184,7 +184,7 @@ protected:
 // wxDataViewIconTextRenderer
 // --------------------------------------------------------- 
 
-class wxDataViewIconTextRenderer: public wxDataViewCustomRenderer
+class WXDLLIMPEXP_ADV wxDataViewIconTextRenderer: public wxDataViewCustomRenderer
 {
 public:
     wxDataViewIconTextRenderer( const wxString &varianttype = wxT("wxDataViewIconText"), 
@@ -213,7 +213,7 @@ protected:
 // wxDataViewDateRenderer
 // --------------------------------------------------------- 
 
-class wxDataViewDateRenderer: public wxDataViewCustomRenderer
+class WXDLLIMPEXP_ADV wxDataViewDateRenderer: public wxDataViewCustomRenderer
 {
 public:
     wxDataViewDateRenderer( const wxString &varianttype = wxT("datetime"), 
@@ -239,7 +239,7 @@ protected:
 // wxDataViewColumn
 // --------------------------------------------------------- 
 
-class WXDLLIMPEXP_CORE wxDataViewColumn: public wxDataViewColumnBase
+class WXDLLIMPEXP_ADV wxDataViewColumn: public wxDataViewColumnBase
 {
 public:
     wxDataViewColumn( const wxString &title, wxDataViewRenderer *renderer,
@@ -305,13 +305,14 @@ protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewColumn)
 };
 
-WX_DECLARE_LIST(wxDataViewColumn, wxDataViewColumnList );
+WX_DECLARE_LIST_WITH_DECL(wxDataViewColumn, wxDataViewColumnList,
+                          class WXDLLIMPEXP_ADV);
 
 // --------------------------------------------------------- 
 // wxDataViewCtrl
 // --------------------------------------------------------- 
 
-class WXDLLIMPEXP_CORE wxDataViewCtrl: public wxDataViewCtrlBase
+class WXDLLIMPEXP_ADV wxDataViewCtrl: public wxDataViewCtrlBase
 {
 public:
     wxDataViewCtrl() 
