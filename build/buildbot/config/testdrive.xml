@@ -32,19 +32,24 @@
     also specifies a subdirectory on the master for logs, which as usual
     must be unique across all slaves.
 
-    An extra build step <setup> is required after <checkout> to set up
-    prerequisites such as ccache and cppunit. Cppunit generally needs to be
-    compiled by the same compiler that will be used for wxWidgets, add
-    configure options using the 'cppunit-options' attribute when needed, e.g.:
+    An extra build step <setup> can be used after <checkout> to set up ccache
+    and cppunit. Cppunit generally needs to be compiled by the same compiler
+    that will be used for wxWidgets, add configure options using the
+    'cppunit-options' attribute when needed, e.g.:
         <setup cppunit-options="CC=cc CXX=CC"/>
 
     Cross compilers available on the Linux x86 machines (more coming):
         powerpc-apple-darwin8
         i686-apple-darwin8
+        i386-mingw32    (with cppunit installed under $HOME/opt/mingw345)
 
     Please limit the number of quick builds to one unix, one Windows and one
     Mac per branch. And please don't load up all the cpus of a remote machine
     at once with make -j.
+-->
+
+<!-- 
+    Unix Quick Builds
 -->
 
 <build>
@@ -90,6 +95,10 @@
     </steps>
 </build>
 
+<!-- 
+    Mac Quick Builds
+-->
+
 <build>
     <name>OSX PowerPC wxMac Trunk</name>
     <sandbox>td179.testdrive.hp.com</sandbox>
@@ -128,6 +137,51 @@
         <compile-tests/>
     </steps>
 </build>
+
+<!-- 
+    Windows Quick Builds
+-->
+
+<build>
+    <name>MinGW32 wxMSW Trunk</name>
+    <sandbox>td185.testdrive.hp.com</sandbox>
+    <builddir>/tmp/wx/td_msw</builddir>
+    <scheduler>trunk_quick</scheduler>
+
+    <steps>
+        <checkout/>
+
+        <configure options="--host=i386-mingw32 --with-cppunit-prefix=$HOME/opt/mingw345"/>
+
+        <compile/>
+        <compile-samples/>
+        <compile-utils/>
+        <compile-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>MinGW32 wxMSW Stable</name>
+    <sandbox>td189.testdrive.hp.com</sandbox>
+    <builddir>/tmp/wx/td_msw_stable</builddir>
+    <scheduler>stable_quick</scheduler>
+
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
+
+        <configure options="--host=i386-mingw32 --with-cppunit-prefix=$HOME/opt/mingw345"/>
+
+        <compile/>
+        <compile-samples/>
+        <compile-utils/>
+        <compile-contrib/>
+        <compile-tests/>
+    </steps>
+</build>
+
+<!-- 
+    Daily builds
+-->
 
 <build>
     <name>FreeBSD x86 wxX11 Stable</name>
