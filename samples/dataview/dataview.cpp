@@ -500,8 +500,6 @@ public:
     void OnDeleteList(wxCommandEvent& event);
 
     void OnValueChanged( wxDataViewEvent &event );
-    void OnItemAdded( wxDataViewEvent &event );
-    void OnItemDeleted( wxDataViewEvent &event );
     
     void OnActivated( wxDataViewEvent &event );
     void OnExpanding( wxDataViewEvent &event );
@@ -591,10 +589,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_DELETE_LIST, MyFrame::OnDeleteList )
     EVT_BUTTON( ID_GOTO, MyFrame::OnGoto)
     
-    EVT_DATAVIEW_MODEL_ITEM_ADDED( ID_MUSIC_CTRL, MyFrame::OnItemAdded )
-    EVT_DATAVIEW_MODEL_ITEM_DELETED( ID_MUSIC_CTRL, MyFrame::OnItemDeleted )
-    EVT_DATAVIEW_MODEL_VALUE_CHANGED( ID_MUSIC_CTRL, MyFrame::OnValueChanged )
-    EVT_DATAVIEW_MODEL_ITEM_CHANGED( ID_MUSIC_CTRL, MyFrame::OnValueChanged )
+    EVT_DATAVIEW_ITEM_VALUE_CHANGED( ID_MUSIC_CTRL, MyFrame::OnValueChanged )
     
     EVT_DATAVIEW_ITEM_ACTIVATED(ID_MUSIC_CTRL, MyFrame::OnActivated )
     EVT_DATAVIEW_ITEM_EXPANDING(ID_MUSIC_CTRL, MyFrame::OnExpanding)
@@ -736,28 +731,12 @@ void MyFrame::OnDeleteList( wxCommandEvent& WXUNUSED(event) )
             m_list_model->DeleteItem( items[i] );
 }
 
-void MyFrame::OnItemAdded( wxDataViewEvent &event )
-{
-    if (!m_log)
-        return;
-        
-    wxLogMessage("wxEVT_COMMAND_DATAVIEW_MODEL_ITEM_ADDED, Item Id: %d",event.GetItem().GetID());
-}
-
-void MyFrame::OnItemDeleted( wxDataViewEvent &event )
-{
-    if (!m_log)
-        return;
-        
-    wxLogMessage( "EVT_DATAVIEW_MODEL_ITEM_DELETED, Item Id: %d", event.GetItem().GetID() );
-}
-
 void MyFrame::OnValueChanged( wxDataViewEvent &event )
 {
     if (!m_log)
         return;
         
-    wxLogMessage( "EVT_DATAVIEW_MODEL_VALUE_CHANGED, Item Id: %d;  Column: %d", event.GetItem().GetID(), event.GetColumn() );
+    wxLogMessage( "EVT_DATAVIEW_ITEM_VALUE_CHANGED, Item Id: %d;  Column: %d", event.GetItem().GetID(), event.GetColumn() );
 }
 
 void MyFrame::OnActivated( wxDataViewEvent &event )
