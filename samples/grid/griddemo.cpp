@@ -961,8 +961,8 @@ void GridFrame::OnShowSelection(wxCommandEvent& WXUNUSED(event))
                     single = _T("column");
                 }
 
-                const wxArrayInt sels(rows ? grid->GetSelectedRows()
-                                           : grid->GetSelectedCols());
+                const wxArrayInt sels((const wxArrayInt)(rows ? grid->GetSelectedRows()
+                                           : grid->GetSelectedCols()));
                 size_t count = sels.size();
                 wxLogMessage(_T("%lu %s selected:"),
                              (unsigned long)count, plural);

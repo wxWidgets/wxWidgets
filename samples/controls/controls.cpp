@@ -1314,8 +1314,9 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
 
 static const wxChar *GetDataString(wxClientData *data)
 {
-    return data ? wx_static_cast(wxStringClientData *, data)->GetData().c_str()
-                : _T("none");
+    return (
+      data ? wx_static_cast(wxStringClientData *, data)->GetData() : wxString("none")
+    ).c_str();
 }
 
 void MyPanel::OnChoice( wxCommandEvent &event )

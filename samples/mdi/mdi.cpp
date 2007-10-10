@@ -516,8 +516,13 @@ void MyChild::OnPaste(wxCommandEvent& WXUNUSED(event))
 {
     wxClipboardLocker lock;
     wxTextDataObject data;
-    canvas->SetText(wxTheClipboard->GetData(data) ? data.GetText().c_str()
-                                                  : _T("No text on clipboard"));
+    canvas->SetText(
+        (
+            wxTheClipboard->GetData(data) ? 
+            data.GetText() : 
+            wxString("No text on clipboard")
+        ).c_str()
+    );
 }
 
 void MyChild::OnUpdatePaste(wxUpdateUIEvent& event)

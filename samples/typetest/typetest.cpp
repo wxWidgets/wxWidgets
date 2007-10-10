@@ -955,11 +955,10 @@ void MyApp::DoMIMEDemo(wxCommandEvent& WXUNUSED(event))
             filetype->GetOpenCommand(&open, params);
 
             textCtrl << _T("MIME information about extension '") << ext << _T('\n')
-                     << _T("\tMIME type: ") << ( !type ? wxT("unknown")
-                                                   : type.c_str() ) << _T('\n')
-                     << _T("\tDescription: ") << ( !desc ? wxEmptyString : desc.c_str() )
+                     << _T("\tMIME type: ") << ( !type ? wxString("unknown") : type ) << _T('\n')
+                     << _T("\tDescription: ") << ( !desc ? wxString(wxEmptyString) : desc )
                         << _T('\n')
-                     << _T("\tCommand to open: ") << ( !open ? wxT("no") : open.c_str() )
+                     << _T("\tCommand to open: ") << ( !open ? wxString("no") : open )
                         << _T('\n');
 
             delete filetype;

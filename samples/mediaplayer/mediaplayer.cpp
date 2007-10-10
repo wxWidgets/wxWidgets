@@ -428,7 +428,7 @@ bool wxMediaPlayerApp::OnInit()
     cmdLineDesc[0].kind = wxCMD_LINE_PARAM;
     cmdLineDesc[0].shortName = NULL;
     cmdLineDesc[0].longName = NULL;
-    cmdLineDesc[0].description = wxT("input files");
+    cmdLineDesc[0].description = "input files";
     cmdLineDesc[0].type = wxCMD_LINE_VAL_STRING;
     cmdLineDesc[0].flags = wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE;
 
