@@ -178,7 +178,13 @@ private:
     unsigned m_eventsBlock;
 };
 
-#ifdef __WXGTK20__
+#ifdef __WXUNIVERSAL__
+    // TODO: we need to use wxTextEntryDelegate here, but for now just prevent
+    //       the GTK/MSW classes from being used in wxUniv build
+    class WXDLLIMPEXP_CORE wxTextEntry : public wxTextEntryBase
+    {
+    };
+#elif defined(__WXGTK20__)
     #include "wx/gtk/textentry.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/textentry.h"
