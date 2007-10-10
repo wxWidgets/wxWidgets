@@ -298,6 +298,9 @@ public:
     wxAuiPaneInfo& RightDockable(bool b = true) { return SetFlag(optionRightDockable, b); }
     wxAuiPaneInfo& Floatable(bool b = true) { return SetFlag(optionFloatable, b); }
     wxAuiPaneInfo& Movable(bool b = true) { return SetFlag(optionMovable, b); }
+#if wxABI_VERSION >= 20807
+    wxAuiPaneInfo& DockFixed(bool b = true) { return SetFlag(optionDockFixed, b); }
+#endif
 
     wxAuiPaneInfo& Dockable(bool b = true)
     {
@@ -375,6 +378,7 @@ public:
         optionActive          = 1 << 14,
         optionGripperTop      = 1 << 15,
         optionMaximized       = 1 << 16,
+        optionDockFixed       = 1 << 17,
 
         buttonClose           = 1 << 21,
         buttonMaximize        = 1 << 22,
