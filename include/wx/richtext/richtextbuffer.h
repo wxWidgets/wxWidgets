@@ -1762,8 +1762,8 @@ public:
 #endif
 
 #if wxUSE_FFILE && wxUSE_STREAMS
-    bool LoadFile(wxRichTextBuffer *buffer, const wxString& filename);
-    bool SaveFile(wxRichTextBuffer *buffer, const wxString& filename);
+    virtual bool LoadFile(wxRichTextBuffer *buffer, const wxString& filename);
+    virtual bool SaveFile(wxRichTextBuffer *buffer, const wxString& filename);
 #endif // wxUSE_STREAMS && wxUSE_STREAMS
 
     /// Can we handle this filename (if using files)? By default, checks the extension.
