@@ -673,9 +673,10 @@ void wxStdRenderer::DrawCheckButton(wxDC& dc,
                                     wxAlignment align,
                                     int indexAccel)
 {
-    wxBitmap bmp(bitmap.Ok() ? bitmap : GetCheckBitmap(flags));
-
-    DrawCheckOrRadioButton(dc, label, bmp, rect, flags, align, indexAccel);
+    if (bitmap.Ok())
+        DrawCheckOrRadioButton(dc, label, bitmap, rect, flags, align, indexAccel);
+    else
+        DrawCheckOrRadioButton(dc, label, GetCheckBitmap(flags), rect, flags, align, indexAccel);
 }
 
 void wxStdRenderer::DrawRadioButton(wxDC& dc,
@@ -686,9 +687,11 @@ void wxStdRenderer::DrawRadioButton(wxDC& dc,
                                     wxAlignment align,
                                     int indexAccel)
 {
-    wxBitmap bmp(bitmap.Ok() ? bitmap : GetRadioBitmap(flags));
-
-    DrawCheckOrRadioButton(dc, label, bmp, rect, flags, align, indexAccel);
+    if (bitmap.Ok())
+        DrawCheckOrRadioButton(dc, label, bitmap, rect, flags, align, indexAccel);
+    else
+        DrawCheckOrRadioButton(dc, label, GetRadioBitmap(flags), rect, flags, align, indexAccel);
+    
 }
 
 void wxStdRenderer::DrawCheckOrRadioButton(wxDC& dc,
