@@ -120,7 +120,7 @@ static struct
 {
     int m_low, m_high;
     wxUnicodeSubsetCodes m_subset;
-    wxChar* m_name;
+    const wxChar* m_name;
 } g_UnicodeSubsetTable[] =
 {
   { 0x0000, 0x007E,
