@@ -22,6 +22,7 @@
 #include "wx/cocoa/string.h"
 #include "wx/cocoa/trackingrectmanager.h"
 #include "wx/cocoa/objc/objc_uniquifying.h"
+#include "wx/cocoa/objc/NSView.h"
 
 #import <AppKit/NSControl.h>
 #import <AppKit/NSCell.h>
@@ -210,12 +211,10 @@ bool wxControl::Create(wxWindow *parent, wxWindowID winid,
         return false;
     wxLogTrace(wxTRACE_COCOA,wxT("Created control with id=%d"),GetId());
     m_cocoaNSView = NULL;
-    SetNSControl([[WX_GET_OBJC_CLASS(wxNonControlNSControl) alloc] initWithFrame: MakeDefaultNSRect(size)]);
+    SetNSControl([[WX_GET_OBJC_CLASS(WXNSView) alloc] initWithFrame: MakeDefaultNSRect(size)]);
     // NOTE: YES we want to release this (to match the alloc).
     // DoAddChild(this) will retain us again since addSubView doesn't.
     [m_cocoaNSView release];
-
-    [GetNSControl() sizeToFit];
 
     if(m_parent)
         m_parent->CocoaAddChild(this);
@@ -273,7 +272,8 @@ bool wxControl::ProcessCommand(wxCommandEvent& event)
 
 void wxControl::CocoaSetEnabled(bool enable)
 {
-    [GetNSControl() setEnabled: enable];
+    if([GetNSControl() respondsToSelector:@selector(setEnabled:)])
+        [GetNSControl() setEnabled: enable];
 }
 
 /*static*/ void wxControl::CocoaSetLabelForObject(const wxString& label, struct objc_object *aView)
