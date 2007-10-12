@@ -2024,8 +2024,40 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
 
     wxDataViewItem item( (void*) iter->user_data );
 
+    wxDataViewModel *wx_model = tree_model->internal->GetDataViewModel();
+
+    if (wx_model->IsContainer( item ))
+    {
+        if (wx_model->HasContainerColumns( item ) || (cell->GetOwner()->GetModelColumn() == 0))
+        {
+            GValue gvalue = { 0, };
+            g_value_init( &gvalue, G_TYPE_BOOLEAN );
+            g_value_set_boolean( &gvalue, TRUE );
+            g_object_set_property( G_OBJECT(renderer), "visible", &gvalue );
+            g_value_unset( &gvalue );
+        }
+        else
+        {
+            GValue gvalue = { 0, };
+            g_value_init( &gvalue, G_TYPE_BOOLEAN );
+            g_value_set_boolean( &gvalue, FALSE );
+            g_object_set_property( G_OBJECT(renderer), "visible", &gvalue );
+            g_value_unset( &gvalue );
+            
+            return;
+        }
+    }
+    else
+    {
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, G_TYPE_BOOLEAN );
+        g_value_set_boolean( &gvalue, TRUE );
+        g_object_set_property( G_OBJECT(renderer), "visible", &gvalue );
+        g_value_unset( &gvalue );
+    }
+
     wxVariant value;
-    tree_model->internal->GetDataViewModel()->GetValue( value, item, cell->GetOwner()->GetModelColumn() );
+    wx_model->GetValue( value, item, cell->GetOwner()->GetModelColumn() );
 
     if (value.GetType() != cell->GetVariantType())
         wxLogError( wxT("Wrong type, required: %s but: %s"),
@@ -2036,7 +2068,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
 
 #if 0
     wxListItemAttr attr;
-    tree_model->model->GetAttr( attr, cell->GetOwner()->GetModelColumn(), model_row );
+    wx_model->GetAttr( item, attr, cell->GetOwner()->GetModelColumn() );
 
     if (attr.HasBackgroundColour())
     {
