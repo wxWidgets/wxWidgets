@@ -28,7 +28,7 @@
 #import <AppKit/NSApplication.h>
 #import <AppKit/NSWindow.h>
 
-#define wxUSE_FSCRIPT 1
+#define wxUSE_FSCRIPT 0
 #if wxUSE_FSCRIPT
     #import <FScript/FScriptMenuItem.h>
 #endif
