@@ -147,6 +147,16 @@ of {\it item} or an invalid wxDataViewItem if {\it item} is the root item.
 Override this to indicate the value of {\it item}
 A \helpref{wxVariant}{wxvariant} is used to store the data.
 
+
+\membersection{wxDataViewModel::HasContainerColumns}\label{wxdataviewmodelhascontainercolumns}
+
+\constfunc{virtual bool}{HasContainerColumns}{\param{const wxDataViewItem\& }{item}}
+
+Override this method to indicate if a container item merely
+acts as a headline (or for categorisation) or if it also
+acts a normal item with entries for futher columns. By 
+default returns {\it false}.
+
 \membersection{wxDataViewModel::HasDefaultCompare}\label{wxdataviewmodelhasdefaultcompare}
 
 \constfunc{virtual bool}{HasDefaultCompare}{\void}

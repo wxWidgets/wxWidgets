@@ -142,6 +142,8 @@ public:
     // define hierachy
     virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const = 0;
     virtual bool IsContainer( const wxDataViewItem &item ) const = 0;
+    // Is the container just a header or an item with all columns
+    virtual bool HasContainerColumns( const wxDataViewItem &item ) const { return false; }
     virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const = 0;
 
     // delegated notifiers
