@@ -1174,10 +1174,15 @@ int wxWindow::GetCharWidth() const
     return 5;
 }
 
-void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
-        int *descent, int *externalLeading, const wxFont *theFont) const
+void wxWindow::GetTextExtent(const wxString& string, int *outX, int *outY,
+        int *outDescent, int *outExternalLeading, const wxFont *inFont) const
 {
-    // TODO
+    // FIXME: This obviously ignores the window's font (if any) along with any size
+    // transformations.  However, it's better than nothing.
+    // We don't create a wxClientDC because we don't want to accidently be able to use
+    // it for drawing.
+    wxDC tmpdc;
+    return tmpdc.GetTextExtent(string, outX, outY, outDescent, outExternalLeading, inFont);
 }
 
 // Coordinates relative to the window
@@ -1233,11 +1238,44 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
     // TODO
 }
 
+static inline int _DoFixupDistance(int vDistance, int cDistance)
+{
+    // If the virtual distance is wxDefaultCoord, set it to the client distance
+    // This definitely has to be done or else we literally get views with a -1 size component!
+    if(vDistance == wxDefaultCoord)
+        vDistance = cDistance;
+    // NOTE: Since cDistance should always be >= 0 and since wxDefaultCoord is -1, the above
+    // test is more or less useless because it gets covered by the next one.  However, just in
+    // case anyone decides that the next test is not correct, I want them to be aware that
+    // the above test would still be needed.
+
+    // I am not entirely sure about this next one but I believe it makes sense because
+    // otherwise the virtual view (which is the m_cocoaNSView that got wrapped by the scrolling
+    // machinery) can be smaller than the NSClipView (the client area) which
+    // means that, for instance, mouse clicks inside the client area as wx sees it but outside
+    // the virtual area as wx sees it won't be seen by the m_cocoaNSView.
+    // We make the assumption that if a virtual distance is less than the client distance that
+    // the real view must already be or will soon be positioned at coordinate 0  within the
+    // NSClipView that represents the client area.  This way, when we increase the distance to
+    // be the client distance, the real view will exactly fit in the clip view.
+    else if(vDistance < cDistance)
+        vDistance = cDistance;
+    return vDistance;
+}
+
 void wxWindow::DoSetVirtualSize( int x, int y )
 {
+    // Call wxWindowBase method which will set m_virtualSize to the appropriate value,
+    // possibly not what the caller passed in.  For example, the current implementation
+    // clamps the width and height to within the min/max virtual ranges.
+    // wxDefaultCoord is passed through unchanged which means we need to handle it ourselves
+    // which we do by using the _DoFixupDistance helper method.
     wxWindowBase::DoSetVirtualSize(x,y);
+    // Create the scroll view if it hasn't been already.
     CocoaCreateNSScrollView();
-    [m_cocoaNSView setFrameSize:NSMakeSize(m_virtualSize.x,m_virtualSize.y)];
+    // Now use fixed-up distances when setting the frame size
+    wxSize clientSize = GetClientSize();
+    [m_cocoaNSView setFrameSize:NSMakeSize(_DoFixupDistance(m_virtualSize.x, clientSize.x), _DoFixupDistance(m_virtualSize.y, clientSize.y))];
 }
 
 bool wxWindow::SetFont(const wxFont& font)
