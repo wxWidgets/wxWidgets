@@ -104,6 +104,10 @@ private:
  * wxVariant can store any kind of data, but has some basic types
  * built in.
  */
+ 
+class WXDLLIMPEXP_FWD_BASE wxVariant;
+
+WX_DECLARE_LIST_WITH_DECL(wxVariant, wxVariantList, class WXDLLIMPEXP_BASE);
 
 class WXDLLIMPEXP_BASE wxVariant: public wxObject
 {
