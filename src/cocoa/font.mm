@@ -39,6 +39,12 @@ public:
     {
     }
 
+    wxFontRefData(const wxNativeFontInfo& info)
+    :   wxGDIRefData()
+    ,   m_fontId(0)
+    ,   m_info(info)
+    {}
+
     wxFontRefData(int size,
                   int family,
                   int style,
@@ -89,9 +95,12 @@ wxFontRefData::~wxFontRefData()
 
 #define M_FONTDATA ((wxFontRefData*)m_refData)
 
-bool wxFont::Create(const wxNativeFontInfo&)
+bool wxFont::Create(const wxNativeFontInfo& nativeFontInfo)
 {
-    return false;
+    UnRef();
+    m_refData = new wxFontRefData(nativeFontInfo);
+    
+    return true;
 }
 
 void wxFont::SetEncoding(wxFontEncoding)
@@ -105,7 +114,8 @@ wxFontEncoding wxFont::GetEncoding() const
 
 int wxFont::GetPointSize() const
 {
-    return 0;
+    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+    return M_FONTDATA->m_info.pointSize;
 }
 
 bool wxFont::GetUnderlined() const
@@ -118,17 +128,20 @@ bool wxFont::GetUnderlined() const
 
 int wxFont::GetStyle() const
 {
-    return 0;
+    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+    return M_FONTDATA->m_info.style;
 }
 
 int wxFont::GetFamily() const
 {
-    return 0;
+    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+    return M_FONTDATA->m_info.family;
 }
 
 int wxFont::GetWeight() const
 {
-    return 0;
+    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+    return M_FONTDATA->m_info.weight;
 }
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
