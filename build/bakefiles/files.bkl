@@ -2461,7 +2461,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/drawer.mm
     src/cocoa/evtloop.mm
     src/cocoa/filedlg.mm
-    src/cocoa/font.cpp
+    src/cocoa/font.mm
     src/cocoa/fontdlg.mm
     src/cocoa/fontenum.mm
     src/cocoa/fontutil.cpp

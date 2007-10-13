@@ -15592,8 +15592,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_font.o: $(srcdir)/src/mac/carbon/font.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/font.cpp
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_font.o: $(srcdir)/src/cocoa/font.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/font.cpp
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_font.o: $(srcdir)/src/cocoa/font.mm $(MONODLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/font.mm
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_font.o: $(srcdir)/src/os2/font.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/font.cpp
@@ -19951,8 +19951,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_font.o: $(srcdir)/src/mac/carbon/font.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/font.cpp
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_font.o: $(srcdir)/src/cocoa/font.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/font.cpp
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_font.o: $(srcdir)/src/cocoa/font.mm $(MONOLIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/font.mm
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_font.o: $(srcdir)/src/os2/font.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/font.cpp
@@ -24829,8 +24829,8 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_font.o: $(srcdir)/src/mac/carbon/font.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/font.cpp
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_font.o: $(srcdir)/src/cocoa/font.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/cocoa/font.cpp
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_font.o: $(srcdir)/src/cocoa/font.mm $(COREDLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/cocoa/font.mm
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_font.o: $(srcdir)/src/os2/font.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/font.cpp
@@ -27814,8 +27814,8 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_font.o: $(srcdir)/src/mac/carbon/font.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/font.cpp
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_font.o: $(srcdir)/src/cocoa/font.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/cocoa/font.cpp
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_font.o: $(srcdir)/src/cocoa/font.mm $(CORELIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/cocoa/font.mm
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_font.o: $(srcdir)/src/os2/font.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/font.cpp
