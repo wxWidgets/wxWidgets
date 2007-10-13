@@ -59,13 +59,11 @@
  * overloading wxVariant with unnecessary functionality.
  */
 
-class WXDLLIMPEXP_BASE wxVariantData: public wxObject
+class WXDLLIMPEXP_BASE wxVariantData
 {
     friend class wxVariant;
 public:
-    wxVariantData()
-        : wxObject(), m_count(1)
-    { }
+    wxVariantData() : m_count(1) { }
 
     // Override these to provide common functionality
     virtual bool Eq(wxVariantData& data) const = 0;
@@ -100,9 +98,6 @@ protected:
 
 private:
     int     m_count;
-
-private:
-    DECLARE_ABSTRACT_CLASS(wxVariantData)
 };
 
 /*
@@ -369,12 +364,7 @@ public:\
 \
 protected:\
     classname m_value; \
-\
-private: \
-    DECLARE_CLASS(classname##VariantData) \
 };\
-\
-IMPLEMENT_CLASS(classname##VariantData, wxVariantData)\
 \
 wxString classname##VariantData::GetType() const\
 {\
@@ -388,7 +378,7 @@ wxClassInfo* classname##VariantData::GetValueClassInfo()\
 \
 expdecl classname& operator << ( classname &value, const wxVariant &variant )\
 {\
-    wxASSERT( wxIsKindOf( variant.GetData(), classname##VariantData ) );\
+    wxASSERT( variant.GetType() == #classname );\
     \
     classname##VariantData *data = (classname##VariantData*) variant.GetData();\
     value = data->GetValue();\
@@ -409,7 +399,7 @@ IMPLEMENT_VARIANT_OBJECT_EXPORTED_NO_EQ(classname,wxEMPTY_PARAMETER_VALUE expdec
 \
 bool classname##VariantData::Eq(wxVariantData& data) const \
 {\
-    wxASSERT( wxIsKindOf((&data), classname##VariantData) );\
+    wxASSERT( GetType() == data.GetType() );\
 \
     classname##VariantData & otherData = (classname##VariantData &) data;\
 \
@@ -426,7 +416,7 @@ IMPLEMENT_VARIANT_OBJECT_EXPORTED_NO_EQ(classname,wxEMPTY_PARAMETER_VALUE expdec
 \
 bool classname##VariantData::Eq(wxVariantData& data) const \
 {\
-    wxASSERT( wxIsKindOf((&data), classname##VariantData) );\
+    wxASSERT( GetType() == data.GetType() );\
 \
     classname##VariantData & otherData = (classname##VariantData &) data;\
 \
