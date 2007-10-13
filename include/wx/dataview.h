@@ -226,6 +226,34 @@ private:
 };
 
 //-----------------------------------------------------------------------------
+// wxDataViewTreeStore
+//-----------------------------------------------------------------------------
+
+#if 0
+class wxDataViewTreeStore: public wxDataViewModel
+{
+public:
+    wxDataViewTreeStore();
+    ~wxDataViewTreeStore();
+
+    void AddColumn( const wxString &variant_type );
+    
+    wxDataViewItem AddItem( const wxDataViewItem& parent, const wxVariant &value );
+    wxDataViewItem AddContainer( const wxDataViewItem& parent, const wxVariant &value );
+    
+    // implement base methods
+
+    virtual void GetValue( wxVariant &variant, 
+                           const wxDataViewItem &item, unsigned int col ) const;
+    virtual bool SetValue( const wxVariant &variant, 
+                           const wxDataViewItem &item, unsigned int col );
+    virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const;
+    virtual bool IsContainer( const wxDataViewItem &item ) const;
+    virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const;
+};
+#endif
+
+//-----------------------------------------------------------------------------
 // wxDataViewEditorCtrlEvtHandler
 //-----------------------------------------------------------------------------
 
