@@ -489,7 +489,7 @@ private:
 
 class WXDLLIMPEXP_FWD_BASE wxList;
 
-class WXDLLIMPEXP_BASE wxListBase : public wxObject
+class WXDLLIMPEXP_BASE wxListBase
 {
 friend class wxNodeBase; // should be able to call DetachNode()
 friend class wxHashTableBase;   // should be able to call untyped Find()
@@ -1192,11 +1192,6 @@ public:
 #else
     wxNode *Member(wxObject *object) const { return (wxNode *)Find(object); }
 #endif
-
-private:
-#if !wxUSE_STL
-    DECLARE_DYNAMIC_CLASS(wxList)
-#endif
 };
 
 #if !wxUSE_STL
@@ -1242,8 +1237,6 @@ public:
 
 private:
     void DoCopy(const wxStringList&); // common part of copy ctor and operator=
-
-    DECLARE_DYNAMIC_CLASS(wxStringList)
 };
 
 #else // if wxUSE_STL

@@ -574,8 +574,6 @@ void wxListBase::DeleteNodes(wxNodeBase* first, wxNodeBase* last)
 // wxList (a.k.a. wxObjectList)
 // -----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxList, wxObject)
-
 wxList::wxList( int key_type )
     : wxObjectList( (wxKeyType)key_type )
 {
@@ -595,8 +593,6 @@ static inline wxChar* MYcopystring(const wxChar* s)
     wxChar* copy = new wxChar[wxStrlen(s) + 1];
     return wxStrcpy(copy, s);
 }
-
-IMPLEMENT_DYNAMIC_CLASS(wxStringList, wxObject)
 
 // instead of WX_DEFINE_LIST(wxStringListBase) we define this function
 // ourselves
