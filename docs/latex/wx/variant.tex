@@ -65,6 +65,10 @@ can be most easily implemented using the reference counting support offered by
 \helpref{wxObject}{wxobject} itself. By default, wxWidgets already implements
 the shift operator conversion for a few of its drawing related classes:
 
+Note that as of wxWidgets 2.9.0, wxVariantData no longer inherits from wxObject
+and wxVariant no longer uses the type-unsafe wxList class for list
+operations but the type-safe wxVariantList class.
+
 \begin{verbatim}
 IMPLEMENT_VARIANT_OBJECT(wxColour)
 IMPLEMENT_VARIANT_OBJECT(wxImage)
@@ -123,7 +127,7 @@ Construction from a boolean value.
 
 Construction from a double-precision floating point value.
 
-\func{}{wxVariant}{\param{const wxList\&}{ value}, \param{const wxString\& }{name = ``"}}
+\func{}{wxVariant}{\param{const wxVariantList\&}{ value}, \param{const wxString\& }{name = ``"}}
 
 Construction from a list of wxVariant objects. This constructor
 copies {\it value}, the application is still responsible for
@@ -260,6 +264,13 @@ Returns the date value.
 
 Returns the floating point value.
 
+\membersection{wxVariant::GetList}\label{wxvariantgetlist}
+
+\constfunc{wxVariantList &}{GetList}{\void}
+
+Returns a reference to the wxVariantList class used by
+wxVariant if this wxVariant is currently a list of variants.
+
 \membersection{wxVariant::GetLong}\label{wxvariantgetlong}
 
 \constfunc{long}{GetLong}{\void}
@@ -375,7 +386,7 @@ Sets the internal variant data, deleting the existing data if there is any.
 
 \func{void}{operator $=$}{\param{wxObject* }{value}}
 
-\func{void}{operator $=$}{\param{const wxList\& }{value}}
+\func{void}{operator $=$}{\param{const wxVariantList\& }{value}}
 
 \func{void}{operator $=$}{\param{const wxDateTime\& }{value}}
 
@@ -409,7 +420,7 @@ Assignment operators, using \helpref{reference counting}{trefcount} when possibl
 
 \constfunc{bool}{operator $==$}{\param{wxObject* }{value}}
 
-\constfunc{bool}{operator $==$}{\param{const wxList\& }{value}}
+\constfunc{bool}{operator $==$}{\param{const wxVariantList\& }{value}}
 
 \constfunc{bool}{operator $==$}{\param{const wxArrayString\& }{value}}
 
@@ -437,7 +448,7 @@ Equality test operators.
 
 \constfunc{bool}{operator $!=$}{\param{wxObject* }{value}}
 
-\constfunc{bool}{operator $!=$}{\param{const wxList\& }{value}}
+\constfunc{bool}{operator $!=$}{\param{const wxVariantList\& }{value}}
 
 \constfunc{bool}{operator $!=$}{\param{const wxArrayString\& }{value}}
 

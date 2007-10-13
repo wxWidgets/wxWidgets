@@ -290,14 +290,14 @@ public:
     // list operations
     // ------------------------------
 
-    wxVariant(const wxList& val, const wxString& name = wxEmptyString); // List of variants
-    bool operator== (const wxList& value) const;
-    bool operator!= (const wxList& value) const;
-    void operator= (const wxList& value) ;
+    wxVariant(const wxVariantList& val, const wxString& name = wxEmptyString); // List of variants
+    bool operator== (const wxVariantList& value) const;
+    bool operator!= (const wxVariantList& value) const;
+    void operator= (const wxVariantList& value) ;
     // Treat a list variant as an array
     wxVariant operator[] (size_t idx) const;
     wxVariant& operator[] (size_t idx) ;
-    wxList& GetList() const ;
+    wxVariantList& GetList() const ;
 
     // Return the number of elements in a list
     size_t GetCount() const;
