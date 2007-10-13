@@ -18,6 +18,7 @@
     #include "wx/gdicmn.h"
 #endif
 
+#include "wx/fontutil.h"
 #include "wx/encinfo.h"
 
 class WXDLLEXPORT wxFontRefData: public wxGDIRefData
@@ -25,32 +26,17 @@ class WXDLLEXPORT wxFontRefData: public wxGDIRefData
     friend class WXDLLIMPEXP_FWD_CORE wxFont;
 public:
     wxFontRefData()
-        : m_fontId(0)
-        , m_pointSize(10)
-        , m_family(wxDEFAULT)
-        , m_style(wxNORMAL)
-        , m_weight(wxNORMAL)
-        , m_underlined(FALSE)
-        , m_faceName(wxT("Geneva"))
-        , m_encoding(wxFONTENCODING_DEFAULT)
+    :   m_fontId(0)
     {
         Init(10, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE,
              wxT("Geneva"), wxFONTENCODING_DEFAULT);
     }
 
     wxFontRefData(const wxFontRefData& data)
-        : wxGDIRefData()
-        , m_fontId(data.m_fontId)
-        , m_pointSize(data.m_pointSize)
-        , m_family(data.m_family)
-        , m_style(data.m_style)
-        , m_weight(data.m_weight)
-        , m_underlined(data.m_underlined)
-        , m_faceName(data.m_faceName)
-        , m_encoding(data.m_encoding)
+    :   wxGDIRefData()
+    ,   m_fontId(data.m_fontId)
+    ,   m_info(data.m_info)
     {
-        Init(data.m_pointSize, data.m_family, data.m_style, data.m_weight,
-             data.m_underlined, data.m_faceName, data.m_encoding);
     }
 
     wxFontRefData(int size,
@@ -60,14 +46,7 @@ public:
                   bool underlined,
                   const wxString& faceName,
                   wxFontEncoding encoding)
-        : m_fontId(0)
-        , m_pointSize(size)
-        , m_family(family)
-        , m_style(style)
-        , m_weight(weight)
-        , m_underlined(underlined)
-        , m_faceName(faceName)
-        , m_encoding(encoding)
+    :   m_fontId(0)
     {
         Init(size, family, style, weight, underlined, faceName, encoding);
     }
@@ -85,26 +64,22 @@ protected:
 
     // font characterstics
     int            m_fontId;
-    int            m_pointSize;
-    int            m_family;
-    int            m_style;
-    int            m_weight;
-    bool           m_underlined;
-    wxString       m_faceName;
-    wxFontEncoding m_encoding;
-    
+    wxNativeFontInfo m_info;
+
 public:
 };
+
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 
 void wxFontRefData::Init(int size, int family, int style, int weight, bool underlined, const wxString& faceName, wxFontEncoding encoding)
 {
-    m_family = family;
-    m_style = style;
-    m_weight = weight;
-    m_underlined = underlined;
-    m_faceName = faceName;
-    m_encoding = encoding;
+    m_info.pointSize = size;
+    m_info.family = static_cast<wxFontFamily>(family);
+    m_info.style = static_cast<wxFontStyle>(style);
+    m_info.weight = static_cast<wxFontWeight>(weight);
+    m_info.underlined = underlined;
+    m_info.faceName = faceName;
+    m_info.encoding = encoding;
 }
 
 wxFontRefData::~wxFontRefData()
@@ -136,7 +111,7 @@ int wxFont::GetPointSize() const
 bool wxFont::GetUnderlined() const
 {
     if(M_FONTDATA)
-        return M_FONTDATA->m_underlined;
+        return M_FONTDATA->m_info.underlined;
     else
         return false;
 }
@@ -158,22 +133,14 @@ int wxFont::GetWeight() const
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
-    return NULL;
+    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+    return &M_FONTDATA->m_info;
 }
-
-void wxGetNativeFontEncoding(wxFontEncoding, wxNativeEncodingInfo*);
 
 bool wxFont::Create(int pointSize, int family, int style, int weight, bool underlined, const wxString& faceName, wxFontEncoding encoding)
 {
     UnRef();
-    m_refData = new wxFontRefData;
-
-    M_FONTDATA->m_family = family;
-    M_FONTDATA->m_style = style;
-    M_FONTDATA->m_weight = weight;
-    M_FONTDATA->m_pointSize = pointSize;
-    M_FONTDATA->m_underlined = underlined;
-    M_FONTDATA->m_faceName = faceName;
+    m_refData = new wxFontRefData(pointSize, family, style, weight, underlined, faceName, encoding);
 
     RealizeResource();
 
@@ -209,7 +176,7 @@ void wxFont::SetPointSize(int pointSize)
 {
     Unshare();
 
-    M_FONTDATA->m_pointSize = pointSize;
+    M_FONTDATA->m_info.pointSize = pointSize;
 
     RealizeResource();
 }
@@ -218,7 +185,7 @@ void wxFont::SetFamily(int family)
 {
     Unshare();
 
-    M_FONTDATA->m_family = family;
+    M_FONTDATA->m_info.family = static_cast<wxFontFamily>(family);
 
     RealizeResource();
 }
@@ -227,7 +194,7 @@ void wxFont::SetStyle(int style)
 {
     Unshare();
 
-    M_FONTDATA->m_style = style;
+    M_FONTDATA->m_info.style = static_cast<wxFontStyle>(style);
 
     RealizeResource();
 }
@@ -236,7 +203,7 @@ void wxFont::SetWeight(int weight)
 {
     Unshare();
 
-    M_FONTDATA->m_weight = weight;
+    M_FONTDATA->m_info.weight = static_cast<wxFontWeight>(weight);
 
     RealizeResource();
 }
@@ -245,7 +212,7 @@ bool wxFont::SetFaceName(const wxString& faceName)
 {
     Unshare();
 
-    M_FONTDATA->m_faceName = faceName;
+    M_FONTDATA->m_info.faceName = faceName;
 
     RealizeResource();
 
@@ -256,7 +223,7 @@ void wxFont::SetUnderlined(bool underlined)
 {
     Unshare();
 
-    M_FONTDATA->m_underlined = underlined;
+    M_FONTDATA->m_info.underlined = underlined;
 
     RealizeResource();
 }
@@ -266,7 +233,7 @@ wxString wxFont::GetFaceName() const
 {
     wxString str;
     if (M_FONTDATA)
-        str = M_FONTDATA->m_faceName ;
+        str = M_FONTDATA->m_info.faceName;
     return str;
 }
 
