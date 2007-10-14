@@ -1227,7 +1227,16 @@ bool wxHandleFatalExceptions(bool doit)
 // wxExecute support
 // ----------------------------------------------------------------------------
 
-#define USE_OLD_DARWIN_END_PROCESS_DETECT (defined(__DARWIN__) && (defined(__WXMAC__) || defined(__WXCOCOA__)))
+/*
+    NOTE: If this proves not to work well for wxMac then move back to the old
+    behavior.  If, however, it proves to work just fine, nuke all of the code
+    for the old behavior.  I strongly suggest backporting this to 2.8 as well.
+    However, beware that while you can nuke the old code here, you cannot
+    nuke the wxAddProcessCallbackForPid from the 2.8 branch (found in
+    utilsexc_cf since it's an exported symbol).
+ */
+// #define USE_OLD_DARWIN_END_PROCESS_DETECT (defined(__DARWIN__) && defined(__WXMAC__))
+#define USE_OLD_DARWIN_END_PROCESS_DETECT 0
 
 // wxMac/wxCocoa don't use the same process end detection mechanisms so we don't
 // need wxExecute-related helpers for them
