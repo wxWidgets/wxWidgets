@@ -1220,13 +1220,18 @@ bool wxHandleFatalExceptions(bool doit)
 
 #if wxUSE_GUI
 
+#if __DARWIN__
+    #include <sys/errno.h>
+#endif
 // ----------------------------------------------------------------------------
 // wxExecute support
 // ----------------------------------------------------------------------------
 
-// Darwin doesn't use the same process end detection mechanisms so we don't
-// need wxExecute-related helpers for it
-#if !(defined(__DARWIN__) && defined(__WXMAC__))
+#define USE_OLD_DARWIN_END_PROCESS_DETECT (defined(__DARWIN__) && (defined(__WXMAC__) || defined(__WXCOCOA__)))
+
+// wxMac/wxCocoa don't use the same process end detection mechanisms so we don't
+// need wxExecute-related helpers for them
+#if !USE_OLD_DARWIN_END_PROCESS_DETECT
 
 bool wxGUIAppTraits::CreateEndProcessPipe(wxExecuteData& execData)
 {
@@ -1296,7 +1301,7 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
 
     if ( !(flags & wxEXEC_NOEVENTS) )
     {
-#if defined(__DARWIN__) && (defined(__WXMAC__) || defined(__WXCOCOA__))
+#if USE_OLD_DARWIN_END_PROCESS_DETECT
         endProcData->tag = wxAddProcessCallbackForPid(endProcData, execData.pid);
 #else
         endProcData->tag = wxAddProcessCallback
@@ -1306,7 +1311,7 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
                            );
 
         execData.pipeEndProcDetect.Close();
-#endif // defined(__DARWIN__) && (defined(__WXMAC__) || defined(__WXCOCOA__))
+#endif // USE_OLD_DARWIN_END_PROCESS_DETECT
     }
 
     if ( flags & wxEXEC_SYNC )
@@ -1324,6 +1329,35 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
             int status = 0;
 
             int result = waitpid(execData.pid, &status, 0);
+#ifdef __DARWIN__
+            /*  DE: waitpid manpage states that waitpid can fail with EINTR
+                if the call is interrupted by a caught signal.  I suppose
+                that means that this ought to be a while loop.
+
+                The odd thing is that it seems to fail EVERY time.  It fails
+                with a quickly exiting process (e.g. echo), and fails with a
+                slowly exiting process (e.g. sleep 2) but clearly after
+                having waited for the child to exit. Maybe it's a bug in
+                my particular version.
+
+                It works, however, from the CFSocket callback without this
+                trick but in that case it's used only after CFSocket calls
+                the callback and with the WNOHANG flag which would seem to
+                preclude it from being interrupted or at least make it much
+                less likely since it would not then be waiting.
+
+                If Darwin's man page is to be believed then this is definitely
+                necessary.  It's just weird that I've never seen it before
+                and apparently no one else has either or you'd think they'd
+                have reported it by now.  Perhaps blocking the GUI while
+                waiting for a child process to exit is simply not that common.
+             */
+            if(result == -1 && errno == EINTR)
+            {
+                result = waitpid(execData.pid, &status, 0);
+            }
+
+#endif
 
             if ( result == -1 )
             {
