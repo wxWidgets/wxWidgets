@@ -540,7 +540,6 @@ void wxWindowCocoa::CocoaAddChild(wxWindowCocoa *child)
 
     wxASSERT(childView);
     [m_cocoaNSView addSubview: childView];
-    child->m_isShown = !m_cocoaHider;
 }
 
 void wxWindowCocoa::CocoaRemoveFromParent(void)
