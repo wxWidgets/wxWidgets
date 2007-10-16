@@ -204,6 +204,7 @@ protected:
     bool                 m_isDragging;
 
     bool                 m_dirty;     // needs refresh?
+    int                  m_hover;     // index of the column under the mouse
     int                  m_column;    // index of the column being resized
     int                  m_currentX;  // divider line position in logical (unscrolled) coords
     int                  m_minX;      // minimal position beyond which the divider line
@@ -224,6 +225,7 @@ protected:
         m_isDragging = false;
         m_dirty = false;
 
+        m_hover = wxNOT_FOUND;
         m_column = wxNOT_FOUND;
         m_currentX = 0;
         m_minX = 0;
@@ -1598,14 +1600,24 @@ void wxGenericDataViewHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             else
                 sortArrow = wxHDR_SORT_ICON_DOWN;
         }
+        
+        int state = 0;
+        if (m_parent->IsEnabled())
+        {
+            if (i == m_hover)
+                state = wxCONTROL_CURRENT;
+        }
+        else
+        {
+            state = (int) wxCONTROL_DISABLED;
+        }
 
         wxRendererNative::Get().DrawHeaderButton
                                 (
                                     this,
                                     dc,
                                     wxRect(xpos, 0, cw, ch-1),
-                                    m_parent->IsEnabled() ? 0
-                                                          : (int)wxCONTROL_DISABLED,
+                                    state,
                                     sortArrow
                                 );
 
@@ -1715,6 +1727,13 @@ void wxGenericDataViewHeaderWindow::OnMouse( wxMouseEvent &event )
 
             m_minX = xpos;
         }
+        
+        int old_hover = m_hover;
+        m_hover = m_column;
+        if (event.Leaving())
+            m_hover = wxNOT_FOUND;
+        if (old_hover != m_hover)
+            Refresh();
 
         if (m_column == wxNOT_FOUND)
             return;
