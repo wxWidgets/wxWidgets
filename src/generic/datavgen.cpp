@@ -3459,12 +3459,13 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                                   col->GetWidth(), m_lineHeight );
                 cell->Activate( cell_rect, model, item, col->GetModelColumn() );
 
+            }
+            else
+            {
                 wxWindow *parent = GetParent();
                 wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, parent->GetId());
-
+                le.SetItem( GetItemByRow(current) );
                 le.SetEventObject(parent);
-                le.SetColumn(col->GetModelColumn());
-                le.SetDataViewColumn(col);
                 le.SetModel(GetOwner()->GetModel());
 
                 parent->GetEventHandler()->ProcessEvent(le);
@@ -3704,7 +3705,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
         sizer->Add( m_headerArea, 0, wxGROW );
     sizer->Add( m_clientArea, 1, wxGROW );
     SetSizer( sizer );
-
+    
     return true;
 }
 
