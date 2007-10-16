@@ -467,7 +467,8 @@ wxgtk_tree_model_get_column_type (GtkTreeModel *tree_model,
         gtype = G_TYPE_STRING;
     else
     {
-        wxFAIL_MSG( _T("non-string columns not supported yet") );
+        gtype = G_TYPE_STRING;
+        // wxFAIL_MSG( _T("non-string columns not supported yet") );
     }
 
     return gtype;
@@ -2606,11 +2607,12 @@ gboolean wxDataViewCtrlInternal::iter_children( GtkTreeIter *iter, GtkTreeIter *
 gboolean wxDataViewCtrlInternal::iter_has_child( GtkTreeIter *iter )
 {
     wxDataViewItem item( (void*) iter->user_data );
+    
     bool is_container = m_wx_model->IsContainer( item );
     
     if (!is_container)
         return FALSE;
-    
+        
     wxGtkTreeModelNode *node = FindNode( iter );
     BuildBranch( node );
     
@@ -2673,6 +2675,7 @@ wxDataViewCtrlInternal_FindNode( wxDataViewModel * model, wxGtkTreeModelNode *tr
     ItemList list;
     list.DeleteContents( true );
     wxDataViewItem it( item );
+    
     while( it.IsOk() )
     {
         wxDataViewItem * pItem = new wxDataViewItem( it );

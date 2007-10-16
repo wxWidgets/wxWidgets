@@ -487,11 +487,13 @@ public:
 class MyFrame : public wxFrame
 {
 public:
-    MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h);
+    MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int h);
 
 public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+    
+    void OnTestTreeCtrl(wxCommandEvent& event);
     
     void OnAddMozart(wxCommandEvent& event);
     void OnDeleteMusic(wxCommandEvent& event);
@@ -570,6 +572,8 @@ enum
     ID_ABOUT = wxID_ABOUT,
     ID_EXIT = wxID_EXIT,
     
+    ID_TEST_TREECTRL    = 40,
+    
     ID_MUSIC_CTRL       = 50,
     
     ID_ADD_MOZART       = 100,
@@ -582,6 +586,7 @@ enum
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU( ID_ABOUT, MyFrame::OnAbout )
+    EVT_MENU( ID_TEST_TREECTRL, MyFrame::OnTestTreeCtrl )
     EVT_MENU( ID_EXIT, MyFrame::OnQuit )
     EVT_BUTTON( ID_ADD_MOZART, MyFrame::OnAddMozart )
     EVT_BUTTON( ID_DELETE_MUSIC, MyFrame::OnDeleteMusic )
@@ -608,7 +613,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_RIGHT_UP(MyFrame::OnRightClick)
 END_EVENT_TABLE()
 
-MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
+MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int h):
   wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
     m_log = NULL;
@@ -620,6 +625,8 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
 
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(ID_ABOUT, "&About");
+    file_menu->AppendSeparator();
+    file_menu->Append(ID_TEST_TREECTRL, "Test &Treectrl");
     file_menu->AppendSeparator();
     file_menu->Append(ID_EXIT, "E&xit");
 
@@ -701,6 +708,69 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 {
     Close(true);
+}
+
+
+/* XPM */
+static char *small1_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 6 1",
+". c Black",
+"o c #FFFFFF",
+"X c #000080",
+"O c #FFFF00",
+"  c None",
+"+ c #FF0000",
+/* pixels */
+"                ",
+"                ",
+"                ",
+"    .......     ",
+"    .XXXXX.     ",
+"    .oXXXX.     ",
+"    .oXXX.......",
+".....oXXX.OOOOO.",
+".+++.XXXX.oOOOO.",
+".o++......oOOOO.",
+".o++++.  .oOOOO.",
+".o++++.  .OOOOO.",
+".+++++.  .......",
+".......         ",
+"                ",
+"                "
+};
+
+void MyFrame::OnTestTreeCtrl(wxCommandEvent& WXUNUSED(event) )
+{
+    wxDialog dialog( this, -1, "Test wxDataViewTreeStore" );
+    
+    wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
+    
+    wxDataViewCtrl *treectrl = new wxDataViewCtrl( &dialog, -1, 
+        wxDefaultPosition, wxSize(300,200), wxDV_NO_HEADER );
+    treectrl->AppendIconTextColumn( "no label", 0 );
+        
+    main_sizer->Add( treectrl );
+    
+    wxDataViewTreeStore *store = new wxDataViewTreeStore;
+    wxDataViewItem parent = store->AppendContainer( wxDataViewItem(0), "Root 1", wxIcon(small1_xpm) );
+    wxDataViewItem child = store->AppendContainer( parent, "Child 1", wxIcon(small1_xpm) );
+    child = store->AppendContainer( parent, "Child 1", wxIcon(small1_xpm) );
+    child = store->AppendContainer( parent, "Child 2", wxIcon(small1_xpm) );
+    child = store->AppendContainer( parent, "Child 3", wxIcon(small1_xpm) );
+    
+    treectrl->AssociateModel( store );
+    
+    store->DecRef();
+    
+    wxSizer *button_sizer = dialog.CreateButtonSizer( wxOK );
+    if (button_sizer)
+        main_sizer->Add( button_sizer, 0, wxGROW );
+        
+    dialog.SetSizer( main_sizer );
+    main_sizer->Fit( &dialog );
+    
+    dialog.ShowModal();
 }
 
 void MyFrame::OnAddMozart(wxCommandEvent& WXUNUSED(event) )
