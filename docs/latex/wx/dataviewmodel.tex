@@ -33,15 +33,20 @@ one of the following methods:
 \helpref{ItemAdded}{wxdataviewmodelitemadded},
 \helpref{ItemDeleted}{wxdataviewmodelitemdeleted},
 \helpref{ItemChanged}{wxdataviewmodelitemchanged},
-\helpref{Cleared}{wxdataviewmodelcleared}.
+\helpref{Cleared}{wxdataviewmodelcleared}. There are
+plural forms for notification of addition, change
+or removal of several item at once. See 
+\helpref{ItemsAdded}{wxdataviewmodelitesmadded},
+\helpref{ItemsDeleted}{wxdataviewmodelitemsdeleted},
+\helpref{ItemsChanged}{wxdataviewmodelitemschanged},
 
 Note that wxDataViewModel does not define the position or
-index of any item in the control since several control might
-display the data differently, but wxDataViewModel does
+index of any item in the control because different controls
+might display the same data differently. wxDataViewModel does
 provide a \helpref{Compare}{wxdataviewmodelcompare} method
 which the wxDataViewCtrl may use to sort the data either
 in conjunction with a column header or without (see
-\helpref{HasDefaultCompare}{wxdataviewmodelhasdefaultcompare}.
+\helpref{HasDefaultCompare}{wxdataviewmodelhasdefaultcompare}).
 
 This class maintains a list of 
 \helpref{wxDataViewModelNotifier}{wxdataviewmodelnotifier}
@@ -58,6 +63,24 @@ Currently wxWidgets provides the following models apart
 from the base model: 
 \helpref{wxDataViewIndexListModel}{wxdataviewindexlistmodel},
 \helpref{wxDataViewTreeStore}{wxdataviewtreestore}.
+
+Note that wxDataViewModel is reference counted, derives from 
+\helpref{wxObjectRefData}{wxobjectrefdata} and cannot be deleted
+directly as it can be shares by several wxDataViewCtrl. This
+implies that you need to decrease the reference count after
+associating the model with a control like this:
+
+{\small%
+\begin{verbatim}
+    wxDataViewCtrl *musicCtrl = new wxDataViewCtrl( this, ID_MUSIC_CTRL, wxDefaultPosition,
+                                                     wxDefaultSize, wxDV_MULTIPLE );
+    wxDataViewModel *musicModel = new MyMusicModel;
+    m_musicCtrl->AssociateModel( musicModel );
+    musicModel->DecRef();  // avoid memory leak !!
+
+    // add columns now
+\end{verbatim}
+}%
 
 \wxheading{Derived from}
 
@@ -137,7 +160,8 @@ an item. Returns the number of items.
 \constfunc{virtual wxDataViewItem}{GetParent}{\param{const wxDataViewItem\& }{item}}
 
 Override this to indicate which wxDataViewItem representing the parent
-of {\it item} or an invalid wxDataViewItem if {\it item} is the root item.
+of {\it item} or an invalid wxDataViewItem if the the root item is
+the parent item.
 
 \membersection{wxDataViewModel::GetValue}\label{wxdataviewmodelgetvalue}
 
