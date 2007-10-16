@@ -1025,7 +1025,15 @@ bool wxDataViewIconTextRenderer::GetValue( wxVariant &value ) const
 
 bool wxDataViewIconTextRenderer::Render( wxRect cell, wxDC *dc, int state )
 {
-    dc->SetFont( GetOwner()->GetOwner()->GetFont() );
+    wxDataViewCtrl *view = GetOwner()->GetOwner();
+    
+    dc->SetFont( view->GetFont() );
+
+    wxColour col = (state & wxDATAVIEW_CELL_SELECTED) ?
+                        wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) :
+                        view->GetForegroundColour();
+
+    dc->SetTextForeground(col);
 
     const wxIcon &icon = m_value.GetIcon();
     if (icon.IsOk())
