@@ -1093,8 +1093,7 @@ bool wxAuiManager::DetachPane(wxWindow* window)
     return false;
 }
 
-// ClosePane() destroys or hides the pane depending on its
-// flags
+// ClosePane() destroys or hides the pane depending on its flags
 void wxAuiManager::ClosePane(wxAuiPaneInfo& pane_info)
 {
     // if we were maximized, restore
@@ -3532,7 +3531,15 @@ void wxAuiManager::OnFloatingPaneClosed(wxWindow* wnd, wxCloseEvent& evt)
     }
     else
     {
-        ClosePane(pane);
+        // close the pane, but check that it
+        // still exists in our pane array first
+        // (the event handler above might have removed it)
+
+        wxAuiPaneInfo& check = GetPane(wnd);
+        if (check.IsOk())
+        {
+            ClosePane(pane);
+        }
     }
 }
 
@@ -4343,7 +4350,16 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
 
         if (!e.GetVeto())
         {
-            ClosePane(pane);
+            // close the pane, but check that it
+            // still exists in our pane array first
+            // (the event handler above might have removed it)
+
+            wxAuiPaneInfo& check = GetPane(pane.window);
+            if (check.IsOk())
+            {
+                ClosePane(pane);
+            }
+            
             Update();
         }
     }
