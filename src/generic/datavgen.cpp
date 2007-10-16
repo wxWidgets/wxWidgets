@@ -2459,7 +2459,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             wxSize size = cell->GetSize();
             // Because of the tree structure indent, here we should minus the width of the cell for drawing
             size.x = wxMin( size.x + 2*PADDING_RIGHTLEFT, cell_rect.width - indent );
-            size.y = wxMin( size.y + 2*PADDING_TOPBOTTOM, cell_rect.height );
+            size.y = wxMin( size.y + 1*PADDING_TOPBOTTOM, cell_rect.height );
 
             wxRect item_rect(cell_rect.GetTopLeft(), size);
             int align = cell->GetAlignment();
@@ -2482,9 +2482,9 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
             // add padding
             item_rect.x += PADDING_RIGHTLEFT;
-            item_rect.y += PADDING_TOPBOTTOM;
+            //item_rect.y += PADDING_TOPBOTTOM;
             item_rect.width = size.x - 2 * PADDING_RIGHTLEFT;
-            item_rect.height = size.y - 2 * PADDING_TOPBOTTOM;
+            item_rect.height = size.y - 1 * PADDING_TOPBOTTOM;
 
             //Here we add the tree indent
             item_rect.x += indent;
