@@ -107,36 +107,36 @@ a \helpref{wxDataViewColumn}{wxdataviewcolumn} and a
 
 \membersection{wxDataViewCtrl::AppendBitmapColumn}\label{wxdataviewctrlappendbitmapcolumn}
 
-\func{wxDataViewColumn*}{AppendBitmapColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
+\func{wxDataViewColumn*}{AppendBitmapColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}, \param{wxAlignment }{align = wxALIGN\_CENTER}, \param{int }{flags = wxDATAVIEW_COL_RESIZABLE}}
 
-\func{wxDataViewColumn*}{AppendBitmapColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
+\func{wxDataViewColumn*}{AppendBitmapColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}, \param{wxAlignment }{align = wxALIGN\_CENTER}, \param{int }{flags = wxDATAVIEW_COL_RESIZABLE}}
 
 Appends a column for rendering a bitmap. Returns the wxDataViewColumn
 created in the function or NULL on failure.
 
 \membersection{wxDataViewCtrl::AppendDateColumn}\label{wxdataviewctrlappenddatecolumn}
 
-\func{wxDataViewColumn*}{AppendDateColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_ACTIVATABLE}, \param{int }{width = -1}}
+\func{wxDataViewColumn*}{AppendDateColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_ACTIVATABLE}, \param{int }{width = -1}, \param{wxAlignment }{align = wxALIGN\_CENTER}, \param{int }{flags = wxDATAVIEW_COL_RESIZABLE}}
 
-\func{wxDataViewColumn*}{AppendDateColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_ACTIVATABLE}, \param{int }{width = -1}}
+\func{wxDataViewColumn*}{AppendDateColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_ACTIVATABLE}, \param{int }{width = -1}, \param{wxAlignment }{align = wxALIGN\_CENTER}, \param{int }{flags = wxDATAVIEW_COL_RESIZABLE}}
 
 Appends a column for rendering a date. Returns the wxDataViewColumn
 created in the function or NULL on failure.
 
 \membersection{wxDataViewCtrl::AppendProgressColumn}\label{wxdataviewctrlappendprogresscolumn}
 
-\func{wxDataViewColumn*}{AppendProgressColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 80}}
+\func{wxDataViewColumn*}{AppendProgressColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 80}, \param{wxAlignment }{align = wxALIGN\_CENTER}, \param{int }{flags = wxDATAVIEW_COL_RESIZABLE}}
 
-\func{wxDataViewColumn*}{AppendProgressColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 80}}
+\func{wxDataViewColumn*}{AppendProgressColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 80}, \param{wxAlignment }{align = wxALIGN\_CENTER}, \param{int }{flags = wxDATAVIEW_COL_RESIZABLE}}
 
 Appends a column for rendering a progress indicator. Returns the wxDataViewColumn
 created in the function or NULL on failure.
 
 \membersection{wxDataViewCtrl::AppendIconTextColumn}\label{wxdataviewctrlappendicontextcolumn}
 
-\func{wxDataViewColumn*}{AppendIconTextColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
+\func{wxDataViewColumn*}{AppendIconTextColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}, \param{wxAlignment }{align = wxALIGN\_LEFT}, \param{int }{flags = wxDATAVIEW_COL_RESIZABLE}}
 
-\func{wxDataViewColumn*}{AppendIconTextColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
+\func{wxDataViewColumn*}{AppendIconTextColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}, \param{wxAlignment }{align = wxALIGN\_LEFT}, \param{int }{flags = wxDATAVIEW_COL_RESIZABLE}}
 
 Appends a column for rendering text with an icon. Returns the wxDataViewColumn
 created in the function or NULL on failure. This uses the 
@@ -144,18 +144,18 @@ created in the function or NULL on failure. This uses the
 
 \membersection{wxDataViewCtrl::AppendTextColumn}\label{wxdataviewctrlappendtextcolumn}
 
-\func{wxDataViewColumn*}{AppendTextColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
+\func{wxDataViewColumn*}{AppendTextColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}, \param{wxAlignment }{align = wxALIGN\_LEFT}, \param{int }{flags = wxDATAVIEW_COL_RESIZABLE}}
 
-\func{wxDataViewColumn*}{AppendTextColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
+\func{wxDataViewColumn*}{AppendTextColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}, \param{wxAlignment }{align = wxALIGN\_LEFT}, \param{int }{flags = wxDATAVIEW_COL_RESIZABLE}}
 
 Appends a column for rendering text. Returns the wxDataViewColumn
 created in the function or NULL on failure.
 
 \membersection{wxDataViewCtrl::AppendToggleColumn}\label{wxdataviewctrlappendtogglecolumn}
 
-\func{wxDataViewColumn*}{AppendToggleColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 30}}
+\func{wxDataViewColumn*}{AppendToggleColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 30}, \param{wxAlignment }{align = wxALIGN\_CENTER}, \param{int }{flags = wxDATAVIEW_COL_RESIZABLE}}
 
-\func{wxDataViewColumn*}{AppendToggleColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 30}}
+\func{wxDataViewColumn*}{AppendToggleColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 30}, \param{wxAlignment }{align = wxALIGN\_CENTER}, \param{int }{flags = wxDATAVIEW_COL_RESIZABLE}}
 
 Appends a column for rendering a toggle. Returns the wxDataViewColumn
 created in the function or NULL on failure.
