@@ -1,0 +1,143 @@
+
+\section{\class{wxDataViewTreeStore}}\label{wxdataviewtreestore}
+
+wxDataViewTreeStore is a specialised \helpref{wxDataViewModel}{wxdataviewmodel}
+for displaying simple trees very much like \helpref{wxTreeCtrl}{wxtreectrl}
+does and it offers a similar API. This class actually stores the entire
+tree (therefore its name) and implements all virtual from the base class
+so it can be used directly without having to derive any class from it.
+This comes at the price of much reduced flexibility.
+
+\wxheading{Derived from}
+
+\helpref{wxDataViewModel}{wxdataviewmodel}
+
+\wxheading{Include files}
+
+<dataview.h>
+
+\membersection{wxDataViewTreeStore::wxDataViewTreeStore}\label{wxdataviewtreestorewxdataviewtreestore}
+
+\func{}{wxDataViewTreeStore}{\void}
+
+Constructor. Creates the invisible root node internally.
+
+\membersection{wxDataViewTreeStore::\destruct{wxDataViewTreeStore}}\label{wxdataviewtreestoredtor}
+
+\func{}{\destruct{wxDataViewTreeStore}}{\void}
+
+Destructor.
+
+\membersection{wxDataViewTreeStore::AppendContainer}\label{wxdataviewtreestoreappendcontainer}
+
+\func{wxDataViewItem}{AppendContainer}{\param{const wxDataViewItem\& }{parent}, \param{const wxString\& }{text}, \param{const wxIcon\& }{icon = wxNullIcon}, \param{const wxIcon\& }{expanded = wxNullIcon}, \param{wxClientData* }{data = NULL}}
+
+Append a container.
+
+\membersection{wxDataViewTreeStore::AppendItem}\label{wxdataviewtreestoreappenditem}
+
+\func{wxDataViewItem}{AppendItem}{\param{const wxDataViewItem\& }{parent}, \param{const wxString\& }{text}, \param{const wxIcon\& }{icon = wxNullIcon}, \param{wxClientData* }{data = NULL}}
+
+Append an item.
+
+\membersection{wxDataViewTreeStore::DeleteAllItems}\label{wxdataviewtreestoredeleteallitems}
+
+\func{void}{DeleteAllItems}{\void}
+
+Delete all item in the model.
+
+\membersection{wxDataViewTreeStore::DeleteChildren}\label{wxdataviewtreestoredeletechildren}
+
+\func{void}{DeleteChildren}{\param{const wxDataViewItem\& }{item}}
+
+Delete all children of the item, but not the item itself.
+
+\membersection{wxDataViewTreeStore::DeleteItem}\label{wxdataviewtreestoredeleteitem}
+
+\func{void}{DeleteItem}{\param{const wxDataViewItem\& }{item}}
+
+Delete this item.
+
+\membersection{wxDataViewTreeStore::GetChildCount}\label{wxdataviewtreestoregetchildcount}
+
+\constfunc{int}{GetChildCount}{\param{const wxDataViewItem\& }{parent}}
+
+Return the number of children of item.
+
+\membersection{wxDataViewTreeStore::GetItemData}\label{wxdataviewtreestoregetitemdata}
+
+\constfunc{wxClientData*}{GetItemData}{\param{const wxDataViewItem\& }{item}}
+
+Returns the client data asoociated with the item.
+
+\membersection{wxDataViewTreeStore::GetItemExpandedIcon}\label{wxdataviewtreestoregetitemexpandedicon}
+
+\constfunc{const wxIcon\&}{GetItemExpandedIcon}{\param{const wxDataViewItem\& }{item}}
+
+Returns the icon to display in expanded containers.
+
+\membersection{wxDataViewTreeStore::GetItemIcon}\label{wxdataviewtreestoregetitemicon}
+
+\constfunc{const wxIcon\&}{GetItemIcon}{\param{const wxDataViewItem\& }{item}}
+
+Returns the icon of the item.
+
+\membersection{wxDataViewTreeStore::GetItemText}\label{wxdataviewtreestoregetitemtext}
+
+\constfunc{wxString}{GetItemText}{\param{const wxDataViewItem\& }{item}}
+
+Returns the text of the item.
+
+\membersection{wxDataViewTreeStore::GetNthChild}\label{wxdataviewtreestoregetnthchild}
+
+\constfunc{wxDataViewItem}{GetNthChild}{\param{const wxDataViewItem\& }{parent}, \param{unsigned int }{pos}}
+
+Returns the nth child item of item.
+
+\membersection{wxDataViewTreeStore::InsertContainer}\label{wxdataviewtreestoreinsertcontainer}
+
+\func{wxDataViewItem}{InsertContainer}{\param{const wxDataViewItem\& }{parent}, \param{const wxDataViewItem\& }{previous}, \param{const wxString\& }{text}, \param{const wxIcon\& }{icon = wxNullIcon}, \param{const wxIcon\& }{expanded = wxNullIcon}, \param{wxClientData* }{data = NULL}}
+
+Inserts a container after {\it previous}.
+
+\membersection{wxDataViewTreeStore::InsertItem}\label{wxdataviewtreestoreinsertitem}
+
+\func{wxDataViewItem}{InsertItem}{\param{const wxDataViewItem\& }{parent}, \param{const wxDataViewItem\& }{previous}, \param{const wxString\& }{text}, \param{const wxIcon\& }{icon = wxNullIcon}, \param{wxClientData* }{data = NULL}}
+
+Inserts an item after {\it previous}.
+
+\membersection{wxDataViewTreeStore::PrependContainer}\label{wxdataviewtreestoreprependcontainer}
+
+\func{wxDataViewItem}{PrependContainer}{\param{const wxDataViewItem\& }{parent}, \param{const wxString\& }{text}, \param{const wxIcon\& }{icon = wxNullIcon}, \param{const wxIcon\& }{expanded = wxNullIcon}, \param{wxClientData* }{data = NULL}}
+
+Inserts a container before the first child item or {\it parent}.
+
+\membersection{wxDataViewTreeStore::PrependItem}\label{wxdataviewtreestoreprependitem}
+
+\func{wxDataViewItem}{PrependItem}{\param{const wxDataViewItem\& }{parent}, \param{const wxString\& }{text}, \param{const wxIcon\& }{icon = wxNullIcon}, \param{wxClientData* }{data = NULL}}
+
+Inserts an item before the first child item or {\it parent}.
+
+\membersection{wxDataViewTreeStore::SetItemData}\label{wxdataviewtreestoresetitemdata}
+
+\func{void}{SetItemData}{\param{const wxDataViewItem\& }{item}, \param{wxClientData* }{data}}
+
+Sets the client data associated with the item.
+
+\membersection{wxDataViewTreeStore::SetItemExpandedIcon}\label{wxdataviewtreestoresetitemexpandedicon}
+
+\func{void}{SetItemExpandedIcon}{\param{const wxDataViewItem\& }{item}, \param{const wxIcon\& }{icon}}
+
+Sets the expanded icon for the item.
+
+\membersection{wxDataViewTreeStore::SetItemIcon}\label{wxdataviewtreestoresetitemicon}
+
+\func{void}{SetItemIcon}{\param{const wxDataViewItem\& }{item}, \param{const wxIcon\& }{icon}}
+
+Sets the icon for the item.
+
+\membersection{wxDataViewTreeStore::SetItemText}\label{wxdataviewtreestoresetitemtext}
+
+\func{void}{SetItemText}{\param{const wxDataViewItem\& }{item}, \param{const wxString\& }{text}}
+
+Sets the text of the item.
