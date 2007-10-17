@@ -167,15 +167,15 @@ the only restriction is that it must be done before calling
 \helpref{Parse}{wxcmdlineparserparse}.
 
 To specify the command line to parse you may use either one of constructors
-accepting it (\tt{wxCmdLineParser(argc, argv)} or \tt{wxCmdLineParser(const wxString&)} usually) 
+accepting it (\tt{wxCmdLineParser(argc, argv)} or \tt{wxCmdLineParser(const wxString&)} usually)
 or, if you use the default constructor, you can do it later by calling 
 \helpref{SetCmdLine}{wxcmdlineparsersetcmdline}.
 
 The same holds for command line description: it can be specified either in
-the constructor (\helpref{without\ command\ line}{wxcmdlineparserwxcmdlineparser} or 
-\helpref{together\ with\ it}{wxcmdlineparserwxcmdlineparserdescargc}) or
-constructed later using either \helpref{SetDesc}{wxcmdlineparsersetdesc} or
-combination of \helpref{AddSwitch}{wxcmdlineparseraddswitch}, 
+the \helpref{constructor}{wxcmdlineparserwxcmdlineparserctor} (with or without
+the command line itself) or constructed later using either
+\helpref{SetDesc}{wxcmdlineparsersetdesc} or combination of 
+\helpref{AddSwitch}{wxcmdlineparseraddswitch}, 
 \helpref{AddOption}{wxcmdlineparseraddoption} and 
 \helpref{AddParam}{wxcmdlineparseraddparam} methods.
 
