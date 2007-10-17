@@ -165,7 +165,7 @@ created in the function or NULL on failure.
 \func{virtual bool}{AssociateModel}{\param{wxDataViewModel* }{model}}
 
 Associates a \helpref{wxDataViewModel}{wxdataviewmodel} with the
-control. 
+control. This increases the reference count of the model by 1.
 
 \membersection{wxDataViewCtrl::Create}\label{wxdataviewctrlcreate}
 
