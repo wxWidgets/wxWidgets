@@ -374,6 +374,12 @@ wxRendererMac::DrawItemSelectionRect(wxWindow *win,
 {
     if ( !(flags & wxCONTROL_SELECTED) )
         return;
+        
+    if (flags & wxCONTROL_FOCUSED)
+    {
+        if (!IsControlActive( (ControlRef)win->GetHandle() ))
+            flags = wxCONTROL_SELECTED;
+    }
 
     RGBColor selColor;
     GetThemeBrushAsColor(flags & wxCONTROL_FOCUSED

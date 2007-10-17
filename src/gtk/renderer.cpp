@@ -619,7 +619,7 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
         state = GTK_STATE_NORMAL;
     }
 
-    if (flags & wxCONTROL_CURRENT)
+    if ((flags & wxCONTROL_CURRENT) && (flags & wxCONTROL_FOCUSED))
     {
         gtk_paint_focus( win->m_widget->style,
                          gdk_window,

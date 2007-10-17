@@ -1541,11 +1541,7 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         if (highlighted)
         {
             int flags = wxCONTROL_SELECTED;
-            if (m_owner->HasFocus()
-#ifdef __WXMAC__
-                && IsControlActive( (ControlRef)m_owner->GetHandle() )
-#endif
-            )
+            if (m_owner->HasFocus())
                 flags |= wxCONTROL_FOCUSED;
             wxRendererNative::Get().DrawItemSelectionRect( m_owner, *dc, rectHL, flags );
         }

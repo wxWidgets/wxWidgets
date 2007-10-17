@@ -534,7 +534,7 @@ wxRendererXP::DrawPushButton(wxWindow * win,
 }
 
 void
-wxRendererXP::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
+wxRendererXP::DrawItemSelectionRect(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,
                                     int flags)
@@ -557,12 +557,11 @@ wxRendererXP::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
     }
 
     dc.SetBrush(brush);
-
-    // unlike for wxRendererGeneric, on windows we _never_ want to draw
-    // the outline of the rectangle:
     dc.SetPen(*wxTRANSPARENT_PEN);
-
     dc.DrawRectangle( rect );
+    
+    if ((flags & wxCONTROL_FOCUSED) && (flags & wxCONTROL_CURRENT))
+        DrawFocusRect( win, dc, rect, flags );
 }
 
 

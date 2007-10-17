@@ -37,6 +37,10 @@
 #include "wx/splitter.h"
 #include "wx/dcmirror.h"
 
+#ifdef __WXMAC__
+    #include "wx/mac/private.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // wxRendererGeneric: our wxRendererNative implementation
 // ----------------------------------------------------------------------------
@@ -635,10 +639,17 @@ wxRendererGeneric::DrawPushButton(wxWindow *win,
 }
 
 void
+#ifdef __WXMAC__
+wxRendererGeneric::DrawItemSelectionRect(wxWindow * win,
+                                         wxDC& dc,
+                                         const wxRect& rect,
+                                         int flags)
+#else
 wxRendererGeneric::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
                                          wxDC& dc,
                                          const wxRect& rect,
                                          int flags)
+#endif
 {
     wxBrush brush;
     if ( flags & wxCONTROL_SELECTED )
@@ -658,7 +669,14 @@ wxRendererGeneric::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
     }
 
     dc.SetBrush(brush);
-    dc.SetPen(flags & wxCONTROL_CURRENT ? *wxBLACK_PEN : *wxTRANSPARENT_PEN);
+    if ((flags & wxCONTROL_CURRENT) && (flags & wxCONTROL_FOCUSED)
+#ifdef __WXMAC__
+                && IsControlActive( (ControlRef)win->GetHandle() )
+#endif
+    )
+        dc.SetPen( *wxBLACK_PEN );
+    else
+        dc.SetPen( *wxTRANSPARENT_PEN );
 
     dc.DrawRectangle( rect );
 }
