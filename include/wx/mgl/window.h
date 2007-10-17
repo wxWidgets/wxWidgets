@@ -68,7 +68,6 @@ public:
     virtual void Refresh(bool eraseBackground = true,
                          const wxRect *rect = (const wxRect *) NULL);
     virtual void Update();
-    virtual void Clear();
     virtual void Freeze();
     virtual void Thaw();
 

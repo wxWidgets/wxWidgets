@@ -1099,14 +1099,6 @@ void wxWindowMGL::GetTextExtent(const wxString& string,
 // painting
 // ---------------------------------------------------------------------------
 
-void wxWindowMGL::Clear()
-{
-    wxClientDC dc((wxWindow *)this);
-    wxBrush brush(GetBackgroundColour(), wxSOLID);
-    dc.SetBackground(brush);
-    dc.Clear();
-}
-
 void wxWindowMGL::Refresh(bool eraseBack, const wxRect *rect)
 {
     if ( m_eraseBackground == -1 )

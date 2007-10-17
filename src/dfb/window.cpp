@@ -565,14 +565,6 @@ void wxWindowDFB::GetTextExtent(const wxString& string,
 // painting
 // ---------------------------------------------------------------------------
 
-void wxWindowDFB::Clear()
-{
-    wxClientDC dc((wxWindow *)this);
-    wxBrush brush(GetBackgroundColour(), wxSOLID);
-    dc.SetBackground(brush);
-    dc.Clear();
-}
-
 void wxWindowDFB::Refresh(bool WXUNUSED(eraseBack), const wxRect *rect)
 {
     if ( !IsShown() || IsFrozen() )
