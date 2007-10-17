@@ -1223,7 +1223,9 @@ void wxWindow::GetTextExtent(const wxString& string, int *outX, int *outY,
     // We don't create a wxClientDC because we don't want to accidently be able to use
     // it for drawing.
     wxDC tmpdc;
-    return tmpdc.GetTextExtent(string, outX, outY, outDescent, outExternalLeading, inFont);
+    // NOTE: We must use const_cast here on 2.8 because we must take a const wxFont but the wxDC method
+    // must not.  In trunk, the wxDC method has been corrected to take const wxFont.
+    return tmpdc.GetTextExtent(string, outX, outY, outDescent, outExternalLeading, const_cast<wxFont*>(inFont));
 }
 
 // Coordinates relative to the window
