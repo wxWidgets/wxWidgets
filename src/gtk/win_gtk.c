@@ -22,7 +22,6 @@ extern "C" {
 
 typedef struct _GtkPizzaChild GtkPizzaChild;
 typedef struct _GtkPizzaClass GtkPizzaClass;
-typedef struct _GtkPizzaAdjData  GtkPizzaAdjData;
 
 struct _GtkPizzaClass
 {
@@ -38,12 +37,6 @@ struct _GtkPizzaChild
     GtkWidget *widget;
     gint x;
     gint y;
-};
-
-struct _GtkPizzaAdjData
-{
-    gint dx;
-    gint dy;
 };
 
 static void gtk_pizza_class_init    (GtkPizzaClass    *klass);
@@ -253,7 +246,7 @@ void       gtk_pizza_set_xoffset     (GtkPizza          *pizza, gint xoffset)
     g_return_if_fail (GTK_IS_PIZZA (pizza));
 
     pizza->m_xoffset = xoffset;
-    // do something
+    /* do something */
 }
 
 void       gtk_pizza_set_yoffset     (GtkPizza          *pizza, gint yoffset)
@@ -262,7 +255,7 @@ void       gtk_pizza_set_yoffset     (GtkPizza          *pizza, gint yoffset)
     g_return_if_fail (GTK_IS_PIZZA (pizza));
 
     pizza->m_xoffset = yoffset;
-    // do something
+    /* do something */
 }
 
 gint       gtk_pizza_get_rtl_offset  (GtkPizza          *pizza)
@@ -744,12 +737,9 @@ gtk_pizza_scroll (GtkPizza *pizza, gint dx, gint dy)
     if (pizza->bin_window)
         gdk_window_scroll( pizza->bin_window, -dx, -dy );
         
-    tmp_list = pizza->children;
-    while (tmp_list)
+    for (tmp_list = pizza->children; tmp_list; tmp_list = tmp_list->next)
     {
         GtkPizzaChild *child = tmp_list->data;
-        tmp_list = tmp_list->next;
-
         GtkAllocation alloc = child->widget->allocation;
         alloc.x -= dx;
         alloc.y -= dy;
