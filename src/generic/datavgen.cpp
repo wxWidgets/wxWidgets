@@ -499,7 +499,6 @@ public:
         return wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT);
     }
 
-    //void EnsureVisible( unsigned int row );
     wxRect GetLineRect( unsigned int row ) const;
 
     //Some useful functions for row and item mapping
@@ -2541,9 +2540,7 @@ unsigned int wxDataViewMainWindow::GetLastVisibleRow()
                                      &client_size.x, &client_size.y );
 
     //we should deal with the pixel here
-    unsigned int row = (client_size.y)/m_lineHeight;
-    if( client_size.y % m_lineHeight < m_lineHeight/2 )
-        row -= 1;
+    unsigned int row = ((client_size.y)/m_lineHeight) - 1;
 
     return wxMin( GetRowCount()-1, row );
 }
