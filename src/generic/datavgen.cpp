@@ -1612,7 +1612,7 @@ void wxGenericDataViewHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         int state = 0;
         if (m_parent->IsEnabled())
         {
-            if (i == m_hover)
+            if ((int) i == m_hover)
                 state = wxCONTROL_CURRENT;
         }
         else
@@ -1637,12 +1637,13 @@ void wxGenericDataViewHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         case wxALIGN_LEFT:
             x += HEADER_HORIZ_BORDER;
             break;
+        case wxALIGN_RIGHT:
+            x += cw - titleSz.GetWidth() - HEADER_HORIZ_BORDER;
+            break;
+        default:
         case wxALIGN_CENTER:
         case wxALIGN_CENTER_HORIZONTAL:
             x += (cw - titleSz.GetWidth() - 2 * HEADER_HORIZ_BORDER)/2;
-            break;
-        case wxALIGN_RIGHT:
-            x += cw - titleSz.GetWidth() - HEADER_HORIZ_BORDER;
             break;
         }
 
@@ -2238,8 +2239,8 @@ void wxDataViewMainWindow::ScrollTo( int rows, int column )
     if( column != -1 )
     {
         wxRect rect = GetClientRect();
-        unsigned int colnum = 0;
-        unsigned int x_start = 0, x_end = 0, w = 0;
+        int colnum = 0;
+        int x_start = 0, x_end = 0, w = 0;
         int xx, yy, xe;
         m_owner->CalcUnscrolledPosition( rect.x, rect.y, &xx, &yy );
         for (x_start = 0; colnum < column; colnum++)
@@ -2780,7 +2781,7 @@ void wxDataViewMainWindow::OnArrowChar(unsigned int newCurrent, const wxKeyEvent
             RefreshRow( m_currentRow );
     }
 
-    //EnsureVisible( m_currentRow );
+    GetOwner()->EnsureVisible( m_currentRow, -1 );
 }
 
 wxRect wxDataViewMainWindow::GetLineRect( unsigned int row ) const
@@ -3047,7 +3048,7 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
             }
 
             wxDataViewTreeNodes nodes = node->GetNodes();
-            int i = 0;
+            unsigned int i = 0;
             for (; i < nodes.GetCount(); i ++)
             {
                 if (nodes[i]->GetItem() == (**iter))
@@ -3194,7 +3195,7 @@ void BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item, wxDataVie
 
     wxDataViewItemArray children;
     unsigned int num = model->GetChildren( item, children);
-    int index = 0;
+    unsigned int index = 0;
     while( index < num )
     {
         if( model->IsContainer( children[index] ) )
@@ -3808,7 +3809,7 @@ unsigned int wxDataViewCtrl::GetColumnCount() const
 wxDataViewColumn* wxDataViewCtrl::GetColumn( unsigned int pos ) const
 {
     wxDataViewColumnList::const_iterator iter;
-    int i = 0;
+    unsigned int i = 0;
     for (iter = m_cols.begin(); iter!=m_cols.end(); iter++)
     {
         if (i == pos)
@@ -4007,7 +4008,7 @@ void wxDataViewCtrl::EnsureVisible( int row, int column )
 {
     if( row < 0 )
         row = 0;
-    if( row > m_clientArea->GetRowCount() )
+    if( row > (int) m_clientArea->GetRowCount() )
         row = m_clientArea->GetRowCount();
 
     int first = m_clientArea->GetFirstVisibleRow();
