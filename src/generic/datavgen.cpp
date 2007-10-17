@@ -2351,6 +2351,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                     x, item_last * m_lineHeight);
     }
 
+    bool has_focus = (FindFocus() == this);
     // redraw the background for the items which are selected/current
     for (unsigned int item = item_start; item < item_last; item++)
     {
@@ -2358,7 +2359,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         if (selected || item == m_currentRow)
         {
             int flags = selected ? (int)wxCONTROL_SELECTED : 0;
-            if (item == m_currentRow)
+            if ((item == m_currentRow) && has_focus)
                 flags |= wxCONTROL_CURRENT;
             if (m_hasFocus)
                 flags |= wxCONTROL_FOCUSED;
