@@ -11,7 +11,12 @@ and can be converted to a from it.
 If the ID is {\it NULL} the wxDataViewItem is invalid and 
 \helpref{IsOk}{wxdataviewitemisok} will return {\it false}
 which used in many places in the API of wxDataViewCtrl
-to indicate that e.g. no item was found etc.
+to indicate that e.g. no item was found. An ID of NULL
+is also used to indicate the invisible root. Examples
+for this are
+\helpref{wxDataViewModel::GetParent}{wxdataviewmodelgetparent} and
+\helpref{wxDataViewModel::GetChildren}{wxdataviewmodelgetchildren}.
+
 
 \wxheading{Derived from}
 
@@ -21,9 +26,9 @@ No base class
 
 <dataview.h>
 
-\wxheading{Data structures}
+\wxheading{Library}
 
-\latexignore{\rtfignore{\wxheading{Members}}}
+\helpref{wxAdv}{librarieslist}
 
 
 \membersection{wxDataViewItem::wxDataViewItem}\label{wxdataviewitemwxdataviewitem}
