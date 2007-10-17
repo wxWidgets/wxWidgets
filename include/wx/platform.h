@@ -262,7 +262,7 @@
 */
 #if defined(__BORLANDC__) && (__BORLANDC__ < 0x582)
 #error "This version of wxWidgets requires at least Borland 5.82 (Turbo Explorer); You may at your own risk remove this line and try your system"
-#endif //__BORLANDC__
+#endif /* __BORLANDC__ */
 
 
 /*
