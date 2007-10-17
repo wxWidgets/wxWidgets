@@ -3854,9 +3854,6 @@ EOF
       ;;
 
       *-*-cygwin* | *-*-mingw32* )
-        dnl this one shouldn't be used for the library build so put it in a
-        dnl separate variable from WXCONFIG_CPPFLAGS
-        WXCONFIG_ONLY_CPPFLAGS="$WXCONFIG_ONLY_CPPFLAGS -DWXUSINGDLL"
         ;;
 
       *-*-hpux* )
@@ -3866,6 +3863,10 @@ EOF
 
     esac
     fi
+
+    dnl this one shouldn't be used for the library build so put it in a
+    dnl separate variable from WXCONFIG_CPPFLAGS
+    WXCONFIG_ONLY_CPPFLAGS="$WXCONFIG_ONLY_CPPFLAGS -DWXUSINGDLL"
 
     if test $wxUSE_RPATH = "no"; then
         SAMPLES_RPATH_FLAG=''
