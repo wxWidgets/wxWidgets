@@ -1220,7 +1220,7 @@ bool wxHandleFatalExceptions(bool doit)
 
 #if wxUSE_GUI
 
-#if __DARWIN__
+#ifdef __DARWIN__
     #include <sys/errno.h>
 #endif
 // ----------------------------------------------------------------------------
