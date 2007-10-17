@@ -206,6 +206,9 @@ void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
     /* CFSocketInvalidate does CFRunLoopRemoveSource anyway */
     CFRunLoopRemoveSource(s_mainRunLoop, data->source, kCFRunLoopCommonModes);
     CFSocketInvalidate(data->socket);
+
+    // CFSocketInvalidate has closed the socket so we want to make sure GSocket knows this
+    socket->m_fd = -1 /*INVALID_SOCKET*/;
 }
 
 #endif // wxUSE_SOCKETS

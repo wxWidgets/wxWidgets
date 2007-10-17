@@ -550,10 +550,17 @@ GSocket::GSocket()
 void GSocket::Close()
 {
     gs_gui_functions->Disable_Events(this);
-    /* gsockosx.c calls CFSocketInvalidate which closes the socket for us */
-#if !(defined(__DARWIN__) && (defined(__WXMAC__) || defined(__WXCOCOA__)))
-    close(m_fd);
-#endif
+
+    /*  When running on OS X, the gsockosx implementation of GSocketGUIFunctionsTable
+        will close the socket during Disable_Events.  However, it will only do this
+        if it is being used.  That is, it won't do it in a console program.  To
+        ensure we get the right behavior, we have gsockosx set m_fd = INVALID_SOCKET
+        if it has closed the socket which indicates to us (at runtime, instead of
+        at compile time as this had been before) that the socket has already
+        been closed.
+     */
+    if(m_fd != INVALID_SOCKET)
+        close(m_fd);
     m_fd = INVALID_SOCKET;
 }
 
