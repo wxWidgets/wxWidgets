@@ -56,9 +56,6 @@ static const int SCROLL_UNIT_X = 15;
 // the cell padding on the left/right
 static const int PADDING_RIGHTLEFT = 3;
 
-// the cell padding on the top/bottom
-static const int PADDING_TOPBOTTOM = 1;
-
 // the expander space margin
 static const int EXPANDER_MARGIN = 4;
 
@@ -1908,7 +1905,6 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 #else
         20;
 #endif
-    wxASSERT(m_lineHeight > 2*PADDING_TOPBOTTOM);
 
     m_dragCount = 0;
     m_dragStart = wxPoint(0,0);
@@ -2460,7 +2456,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             wxSize size = cell->GetSize();
             // Because of the tree structure indent, here we should minus the width of the cell for drawing
             size.x = wxMin( size.x + 2*PADDING_RIGHTLEFT, cell_rect.width - indent );
-            size.y = wxMin( size.y + 1*PADDING_TOPBOTTOM, cell_rect.height );
+            size.y = wxMin( size.y, cell_rect.height );
 
             wxRect item_rect(cell_rect.GetTopLeft(), size);
             int align = cell->GetAlignment();
@@ -2483,9 +2479,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
             // add padding
             item_rect.x += PADDING_RIGHTLEFT;
-            //item_rect.y += PADDING_TOPBOTTOM;
             item_rect.width = size.x - 2 * PADDING_RIGHTLEFT;
-            item_rect.height = size.y - 1 * PADDING_TOPBOTTOM;
 
             //Here we add the tree indent
             item_rect.x += indent;

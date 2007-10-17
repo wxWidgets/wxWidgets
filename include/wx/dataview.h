@@ -459,11 +459,11 @@ public:
     // short cuts
     wxDataViewColumn *AppendTextColumn( const wxString &label, unsigned int model_column, 
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
-                    wxAlignment align = wxALIGN_LEFT,
+                    wxAlignment align = (wxAlignment)(wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL),
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendIconTextColumn( const wxString &label, unsigned int model_column, 
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
-                    wxAlignment align = wxALIGN_LEFT,
+                    wxAlignment align = (wxAlignment)(wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL),
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendToggleColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
@@ -475,7 +475,7 @@ public:
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendDateColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1,
-                    wxAlignment align = wxALIGN_LEFT,
+                    wxAlignment align = (wxAlignment)(wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL),
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendBitmapColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
@@ -483,11 +483,11 @@ public:
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendTextColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
-                    wxAlignment align = wxALIGN_LEFT,
+                    wxAlignment align = (wxAlignment)(wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL),
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendIconTextColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
-                    wxAlignment align = wxALIGN_LEFT,
+                    wxAlignment align = (wxAlignment)(wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL),
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendToggleColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
@@ -499,7 +499,7 @@ public:
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendDateColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1,
-                    wxAlignment align = wxALIGN_LEFT,
+                    wxAlignment align = (wxAlignment)(wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL),
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     
     wxDataViewColumn *AppendBitmapColumn( const wxBitmap &label, unsigned int model_column,
