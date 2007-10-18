@@ -37982,6 +37982,7 @@ _ACEOF
   done
 
 
+
   for wx_func in getpwuid_r
   do
     echo "$as_me:$LINENO: checking for $wx_func" >&5
@@ -37998,8 +37999,10 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-                #define _REENTRANT
-                                        #include <pwd.h>
+
+                    #define _REENTRANT
+                    #include <pwd.h>
+
                 $ac_includes_default
 
 int
@@ -38009,6 +38012,10 @@ main ()
                 #ifndef $wx_func
                   &$wx_func;
                 #endif
+
+                    struct passwd pw, *ppw;
+                    char buf[1024];
+                    getpwuid_r(0, &pw, buf, sizeof(buf), &ppw)
 
 
   ;
@@ -38065,6 +38072,7 @@ _ACEOF
   done
 
 
+
   for wx_func in getgrgid_r
   do
     echo "$as_me:$LINENO: checking for $wx_func" >&5
@@ -38081,8 +38089,10 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-                #define _REENTRANT
-                                        #include <grp.h>
+
+                    #define _REENTRANT
+                    #include <grp.h>
+
                 $ac_includes_default
 
 int
@@ -38092,6 +38102,10 @@ main ()
                 #ifndef $wx_func
                   &$wx_func;
                 #endif
+
+                    struct group grp, *pgrp;
+                    char buf[1024];
+                    getgrgid_r(0, &grp, buf, sizeof(buf), &pgrp)
 
 
   ;
