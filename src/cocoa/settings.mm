@@ -19,8 +19,10 @@
 #endif
 
 #include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/private/fontfactory.h"
 
 #import <AppKit/NSColor.h>
+#import <AppKit/NSFont.h>
 
 // ----------------------------------------------------------------------------
 // wxSystemSettingsNative
@@ -106,8 +108,10 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 
 wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 {
-// return a nonworking font object, crash from wxInitializeStockObjects
-    return wxFont();
+    // Return the system font for now
+    {   wxAutoNSAutoreleasePool pool;
+        return wxCocoaFontFactory::InstanceForNSFont([NSFont systemFontOfSize:0.0], false);
+    }
     switch (index)
     {
         case wxSYS_ANSI_VAR_FONT :
