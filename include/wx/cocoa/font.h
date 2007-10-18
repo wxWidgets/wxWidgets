@@ -16,12 +16,30 @@
 // wxFont
 // ----------------------------------------------------------------------------
 
+DECLARE_WXCOCOA_OBJC_CLASS(NSFont);
+
+// Internal class that bridges us with code like wxSystemSettings
+class wxCocoaFontFactory;
+// We have c-tors/methods taking pointers of these
+class wxFontRefData;
+
+/*! @discussion
+    wxCocoa's implementation of wxFont is very incomplete.  In particular,
+    a lot of work needs to be done on wxNativeFontInfo which is currently
+    using the totally generic implementation.
+
+    See the documentation in src/cocoa/font.mm for more implementatoin details.
+ */
 class WXDLLEXPORT wxFont : public wxFontBase
 {
+    friend class wxCocoaFontFactory;
 public:
-    // ctors and such
+    /*! @abstract   Default construction of invalid font for 2-step construct then Create process.
+     */
     wxFont() { }
 
+    /*! @abstract   Platform-independent construction with individual properties
+     */
     wxFont(int size,
            int family,
            int style,
@@ -33,12 +51,19 @@ public:
         (void)Create(size, family, style, weight, underlined, face, encoding);
     }
 
+    /*! @abstract   Construction with opaque wxNativeFontInfo
+     */
     wxFont(const wxNativeFontInfo& info)
     {
         (void)Create(info);
     }
 
+    /*! @abstract   Construction with platform-dependent font descriptor string.
+        @param  fontDesc        Usually the result of wxNativeFontInfo::ToUserString()
+     */
     wxFont(const wxString& fontDesc);
+
+    // NOTE: Copy c-tor and assignment from wxObject is fine
 
     bool Create(int size,
                 int family,
@@ -73,11 +98,36 @@ public:
     // implementation only from now on
     // -------------------------------
 
+    /*! @abstract   Defined on some ports (not including this one) in wxGDIObject
+        @discussion
+        The intention here I suppose is to allow one to create a wxFont without yet
+        creating the underlying native object.  There's no point not to create the
+        NSFont immediately in wxCocoa so this is useless.
+        This method came from the stub code copied in the early days of wxCocoa.
+        FIXME(1): Remove this in trunk.  FIXME(2): Is it really a good idea for this to
+        be part of the public API for wxGDIObject?
+     */
     virtual bool RealizeResource();
 
 protected:
+    /*! @abstract   Helper method for COW.
+        @discussion
+        wxFont can be considered a mutable holder of an immutable opaque implementation object.
+        All methods that mutate the font should first call Unshare() to ensure that mutating
+        the implementation object does not cause another wxFont that happened to share the
+        same ref data to mutate.
+     */
     void Unshare();
 
+    /*! @abstract   Internal constructor with ref data
+        @discussion
+        Takes ownership of @a refData.  That is, it is assumed that refData has either just been
+        created using new (which initializes its m_refCount to 1) or if you are sharing a ref that
+        you have called IncRef on it before passing it to this method.
+     */
+    explicit wxFont(wxFontRefData *refData)
+    {   Create(refData); }
+    bool Create(wxFontRefData *refData);
 private:
     DECLARE_DYNAMIC_CLASS(wxFont)
 };
