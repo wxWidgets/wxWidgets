@@ -497,6 +497,7 @@ public:
     
     void OnAddMozart(wxCommandEvent& event);
     void OnDeleteMusic(wxCommandEvent& event);
+    void OnDeleteYear(wxCommandEvent& event);
     
     void OnPrependList(wxCommandEvent& event);
     void OnDeleteList(wxCommandEvent& event);
@@ -578,6 +579,7 @@ enum
     
     ID_ADD_MOZART       = 100,
     ID_DELETE_MUSIC     = 101,
+    ID_DELETE_YEAR      = 102,
      
     ID_PREPEND_LIST     = 200,
     ID_DELETE_LIST      = 201,
@@ -590,6 +592,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU( ID_EXIT, MyFrame::OnQuit )
     EVT_BUTTON( ID_ADD_MOZART, MyFrame::OnAddMozart )
     EVT_BUTTON( ID_DELETE_MUSIC, MyFrame::OnDeleteMusic )
+    EVT_BUTTON( ID_DELETE_YEAR, MyFrame::OnDeleteYear )
     EVT_BUTTON( ID_PREPEND_LIST, MyFrame::OnPrependList )
     EVT_BUTTON( ID_DELETE_LIST, MyFrame::OnDeleteList )
     EVT_BUTTON( ID_GOTO, MyFrame::OnGoto)
@@ -689,6 +692,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     
     button_sizer->Add( new wxButton( this, ID_ADD_MOZART, "Add Mozart"), 0, wxALL, 10 );
     button_sizer->Add( new wxButton( this, ID_DELETE_MUSIC, "Delete selected"), 0, wxALL, 10 );
+    button_sizer->Add( new wxButton( this, ID_DELETE_YEAR, "Delete \"Year\" column"), 0, wxALL, 10 );
     button_sizer->Add( 10, 10, 1 );
     button_sizer->Add( new wxButton( this, ID_PREPEND_LIST, "Prepend"), 0, wxALL, 10 );
     button_sizer->Add( new wxButton( this, ID_DELETE_LIST, "Delete selected"), 0, wxALL, 10 );
@@ -784,6 +788,12 @@ void MyFrame::OnDeleteMusic(wxCommandEvent& WXUNUSED(event) )
     for( int i = 0; i < len; i ++ )
         if (items[i].IsOk())
             m_music_model->Delete( items[i] );
+}
+
+void MyFrame::OnDeleteYear( wxCommandEvent& WXUNUSED(event) )
+{
+    m_musicCtrl->DeleteColumn( m_musicCtrl->GetColumn( 2 ) );
+    FindWindow( ID_DELETE_YEAR )->Disable();
 }
 
 void MyFrame::OnPrependList( wxCommandEvent& WXUNUSED(event) )

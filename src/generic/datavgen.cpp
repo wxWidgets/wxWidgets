@@ -3759,6 +3759,16 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
     return true;
 }
 
+bool wxDataViewCtrl::PrependColumn( wxDataViewColumn *col )
+{
+    if (!wxDataViewCtrlBase::PrependColumn(col))
+        return false;
+
+    m_cols.Insert( col );
+    OnColumnChange();
+    return true;
+}
+
 void wxDataViewCtrl::OnColumnChange()
 {
     if (m_headerArea)

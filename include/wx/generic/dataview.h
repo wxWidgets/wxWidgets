@@ -383,6 +383,7 @@ public:
 
     virtual bool AssociateModel( wxDataViewModel *model );
     virtual bool AppendColumn( wxDataViewColumn *col );
+    virtual bool PrependColumn( wxDataViewColumn *col );
 
     virtual void DoSetExpanderColumn();
     virtual void DoSetIndent();

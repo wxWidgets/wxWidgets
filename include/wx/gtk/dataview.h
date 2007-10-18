@@ -339,6 +339,7 @@ public:
 
     virtual bool AssociateModel( wxDataViewModel *model );
     
+    virtual bool PrependColumn( wxDataViewColumn *col );
     virtual bool AppendColumn( wxDataViewColumn *col );
     virtual unsigned int GetColumnCount() const;
     virtual wxDataViewColumn* GetColumn( unsigned int pos ) const;

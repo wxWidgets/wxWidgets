@@ -3154,6 +3154,19 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
     return true;
 }
 
+bool wxDataViewCtrl::PrependColumn( wxDataViewColumn *col )
+{
+    if (!wxDataViewCtrlBase::PrependColumn(col))
+        return false;
+
+    m_cols.Insert( col );
+
+    gtk_tree_view_insert_column( GTK_TREE_VIEW(m_treeview), 
+                                 GTK_TREE_VIEW_COLUMN(col->GetGtkHandle()), 0 );
+
+    return true;
+}
+
 unsigned int wxDataViewCtrl::GetColumnCount() const
 {
     return m_cols.GetCount();
