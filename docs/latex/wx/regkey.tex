@@ -162,7 +162,7 @@ Gets the first value of this key.
 
 \membersection{wxRegKey::GetKeyInfo}\label{wxregkeygetkeyinfo}
 
-\constfunc{bool}{Exists}{\param{size\_t *}{pnSubKeys}, \param{size\_t *}{pnValues}, \param{size\_t *}{pnMaxValueLen}}
+\constfunc{bool}{GetKeyInfo}{\param{size\_t *}{pnSubKeys}, \param{size\_t *}{pnValues}, \param{size\_t *}{pnMaxValueLen}}
 
 Gets information about the key.
 
@@ -173,6 +173,8 @@ Gets information about the key.
 \docparam{pnMaxKeyLen}{The maximum length of the subkey name.}
 
 \docparam{pnValues}{The number of values.}
+
+\docparam{pnMaxValueLen}{The maximum length of a value.}
 
 
 \membersection{wxRegKey::GetNextKey}\label{wxregkeygetnextkey}
