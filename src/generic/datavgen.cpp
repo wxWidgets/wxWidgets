@@ -231,7 +231,6 @@ protected:
         m_penCurrent = wxPen(col, 1, wxSOLID);
     }
 
-    void DrawCurrent();
     void AdjustDC(wxDC& dc);
 
 private:
@@ -688,7 +687,8 @@ bool wxDataViewTextRenderer::Render( wxRect cell, wxDC *dc, int state )
                         view->GetForegroundColour();
 
     dc->SetTextForeground(col);
-    dc->DrawText( m_text, cell.x, cell.y );
+    dc->DrawText( m_text, cell.x,  cell.y + ((cell.height - dc->GetCharHeight()) / 2));
+    // dc->DrawText( m_text, cell.x, cell.y );
 
     return true;
 }
@@ -1032,18 +1032,28 @@ bool wxDataViewIconTextRenderer::Render( wxRect cell, wxDC *dc, int state )
     const wxIcon &icon = m_value.GetIcon();
     if (icon.IsOk())
     {
-        dc->DrawIcon( icon, cell.x, cell.y ); // TODO centre
+        dc->DrawIcon( icon, cell.x, cell.y + ((cell.height - icon.GetHeight()) / 2)); 
         cell.x += icon.GetWidth()+4;
     }
 
-    dc->DrawText( m_value.GetText(), cell.x, cell.y );
+    dc->DrawText( m_value.GetText(), cell.x,  cell.y + ((cell.height - dc->GetCharHeight()) / 2));
 
     return true;
 }
 
 wxSize wxDataViewIconTextRenderer::GetSize() const
 {
-    return wxSize(80,16);  // TODO
+    const wxDataViewCtrl *view = GetView();
+    if (!m_value.GetText().empty())
+    {
+        int x,y;
+        view->GetTextExtent( m_value.GetText(), &x, &y );
+        
+        if (m_value.GetIcon().IsOk())
+            x += m_value.GetIcon().GetWidth() + 4;
+        return wxSize( x, y );
+    }
+    return wxSize(80,20);
 }
 
 wxControl* wxDataViewIconTextRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
@@ -1800,33 +1810,6 @@ void wxGenericDataViewHeaderWindow::OnMouse( wxMouseEvent &event )
     }
 }
 
-//I must say that this function is deprecated, but I think it is useful to keep it for a time
-void wxGenericDataViewHeaderWindow::DrawCurrent()
-{
-#if 1
-    GetColumn(m_column)->SetWidth(m_currentX - m_minX);
-#else
-    int x1 = m_currentX;
-    int y1 = 0;
-    ClientToScreen (&x1, &y1);
-
-    int x2 = m_currentX-1;
-#ifdef __WXMSW__
-    ++x2; // but why ????
-#endif
-    int y2 = 0;
-    m_owner->GetClientSize( NULL, &y2 );
-    m_owner->ClientToScreen( &x2, &y2 );
-
-    wxScreenDC dc;
-    dc.SetLogicalFunction(wxINVERT);
-    dc.SetPen(m_penCurrent);
-    dc.SetBrush(*wxTRANSPARENT_BRUSH);
-    AdjustDC(dc);
-    dc.DrawLine(x1, y1, x2, y2 );
-#endif
-}
-
 void wxGenericDataViewHeaderWindow::AdjustDC(wxDC& dc)
 {
     int xpix, x;
@@ -1895,13 +1878,7 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     m_currentCol = NULL;
     m_currentRow = 0;
 
-    // TODO: we need to calculate this smartly
-    m_lineHeight =
-#ifdef __WXMSW__
-        17;
-#else
-        20;
-#endif
+    m_lineHeight = wxMax( 17, GetCharHeight() + 2 ); // 17 = mini icon height + 1
 
     m_dragCount = 0;
     m_dragStart = wxPoint(0,0);
@@ -2455,7 +2432,8 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             wxSize size = cell->GetSize();
             // Because of the tree structure indent, here we should minus the width of the cell for drawing
             size.x = wxMin( size.x + 2*PADDING_RIGHTLEFT, cell_rect.width - indent );
-            size.y = wxMin( size.y, cell_rect.height );
+            // size.y = wxMin( size.y, cell_rect.height );
+            size.y = cell_rect.height;
 
             wxRect item_rect(cell_rect.GetTopLeft(), size);
             int align = cell->GetAlignment();
