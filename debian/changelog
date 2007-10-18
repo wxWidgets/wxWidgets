@@ -1,4 +1,12 @@
-wxwidgets2.8 (2.8.5.0-0) unstable; urgency=low
+wxwidgets2.8 (2.8.6.1-0) unstable; urgency=low
+
+  * wxPython: Add wx.Window.GetGtkWidget.
+  * wxPython: Undprecated wx.ListCtrl.[G|S]etItemSpacing
+  * wxPython: Fixed wx.Palette constructor wrapper. 
+
+ -- Robin Dunn <robin@alldunn.com>  Mon, 15 Oct 2007 14:53:06 -0700
+
+wxwidgets2.8 (2.8.6.0-0) unstable; urgency=low
 
   * Fixed caption clicking being ignored on centred wxAUI panel.
   * Added AdvanceSelection, ShowWindowMenu functions and keyboard handling to
