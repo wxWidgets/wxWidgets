@@ -742,7 +742,7 @@ static char *small1_xpm[] = {
 
 void MyFrame::OnTestTreeCtrl(wxCommandEvent& WXUNUSED(event) )
 {
-    wxDialog dialog( this, -1, "Test wxDataViewTreeStore", wxDefaultPosition, wxDefaultSize, wxRESIZE_BORDER );
+    wxDialog dialog( this, -1, "Test wxDataViewTreeStore" );
     
     wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
     
@@ -761,10 +761,10 @@ void MyFrame::OnTestTreeCtrl(wxCommandEvent& WXUNUSED(event) )
     treectrl->AssociateModel( store );
     
     store->DecRef();
-    
+
     wxSizer *button_sizer = dialog.CreateButtonSizer( wxOK );
     if (button_sizer)
-        main_sizer->Add( button_sizer, 0, wxGROW );
+        main_sizer->Add( button_sizer, 0, wxGROW|wxALL, 10 );
         
     dialog.SetSizer( main_sizer );
     main_sizer->Fit( &dialog );

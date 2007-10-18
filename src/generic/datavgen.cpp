@@ -3696,6 +3696,8 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
                             style | wxScrolledWindowStyle|wxSUNKEN_BORDER, validator))
         return false;
 
+    SetInitialSize(size);
+    
     Init();
 
 #ifdef __WXMAC__
