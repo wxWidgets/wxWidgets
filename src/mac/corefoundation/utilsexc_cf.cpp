@@ -17,6 +17,7 @@
 #endif //ndef WX_PRECOMP
 #include "wx/unix/execute.h"
 #include "wx/stdpaths.h"
+#include "wx/app.h"
 #include "wx/apptrait.h"
 #include "wx/thread.h"
 #include "wx/process.h"
@@ -51,7 +52,14 @@ class wxProcessTerminationEventHandler: public wxEvtHandler
     {
         Disconnect(-1, wxEVT_END_PROCESS, wxProcessEventHandler(wxProcessTerminationEventHandler::OnTerminate));
         wxHandleProcessTermination(m_data);
-        delete this;
+
+        // NOTE: We don't use this to delay destruction until the next idle run but rather to
+        // avoid killing ourselves while our caller (which is our wxEvtHandler superclass
+        // ProcessPendingEvents) still needs our m_eventsLocker to be valid.
+        // Since we're in the GUI library we can guarantee that ScheduleForDestroy is using
+        // the GUI implementation which delays destruction and not the base implementation
+        // which does it immediately.
+        wxTheApp->GetTraits()->ScheduleForDestroy(this);
     }
 
     wxEndProcessData* m_data;
