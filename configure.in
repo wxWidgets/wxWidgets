@@ -7732,6 +7732,9 @@ fi
 if test "$wxUSE_AUI" = "yes" ; then
     CORE_GUI_LIBS="aui $CORE_GUI_LIBS"
 fi
+if test "$wxUSE_RICHTEXT" = "yes" ; then
+    CORE_GUI_LIBS="richtext $CORE_GUI_LIBS"
+fi
 
 if test "$wxUSE_GUI" != "yes"; then
     CORE_GUI_LIBS=""
