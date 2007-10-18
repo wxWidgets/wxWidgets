@@ -269,118 +269,116 @@ class wxDataViewTreeNode
 {
 public:
     wxDataViewTreeNode( wxDataViewTreeNode * parent = NULL )
-        { this->parent = parent;
-          if( parent == NULL )
-              open = true;
-       else
-        open = false;
-          hasChildren = false;
-          subTreeCount  = 0;
+    { 
+        m_parent = parent;
+        if (!parent)
+            m_open = true;
+        else
+            m_open = false;
+        m_hasChildren = false;
+        m_subTreeCount  = 0;
     }
-    //I don't know what I need to do in the destructure
+    
     ~wxDataViewTreeNode()
     {
-
     }
 
-    wxDataViewTreeNode * GetParent() { return parent; }
-    void SetParent( wxDataViewTreeNode * parent ) { this->parent = parent; }
-    wxDataViewTreeNodes &  GetNodes() { return nodes; }
-    wxDataViewTreeLeaves & GetChildren() { return leaves; }
+    wxDataViewTreeNode * GetParent() { return m_parent; }
+    void SetParent( wxDataViewTreeNode * parent ) { m_parent = parent; }
+    wxDataViewTreeNodes &  GetNodes() { return m_nodes; }
+    wxDataViewTreeLeaves & GetChildren() { return m_leaves; }
 
     void AddNode( wxDataViewTreeNode * node )
     {
-        leaves.Add( node->GetItem().GetID() );
+        m_leaves.Add( node->GetItem().GetID() );
         if (g_column >= -1)
-            leaves.Sort( &wxGenericTreeModelItemCmp );
-        nodes.Add( node );
+            m_leaves.Sort( &wxGenericTreeModelItemCmp );
+        m_nodes.Add( node );
         if (g_column >= -1)
-            nodes.Sort( &wxGenericTreeModelNodeCmp );
+            m_nodes.Sort( &wxGenericTreeModelNodeCmp );
     }
     void AddLeaf( void * leaf )
     {
-        leaves.Add( leaf );
+        m_leaves.Add( leaf );
         if (g_column >= -1)
-            leaves.Sort( &wxGenericTreeModelItemCmp );
+            m_leaves.Sort( &wxGenericTreeModelItemCmp );
     }
 
-    wxDataViewItem & GetItem() { return item; }
-    void SetItem( const wxDataViewItem & item ) { this->item = item; }
+    wxDataViewItem & GetItem() { return m_item; }
+    void SetItem( const wxDataViewItem & item ) { m_item = item; }
 
-    unsigned int GetChildrenNumber() { return leaves.GetCount(); }
-    unsigned int GetNodeNumber() { return nodes.GetCount(); }
+    unsigned int GetChildrenNumber() { return m_leaves.GetCount(); }
+    unsigned int GetNodeNumber() { return m_nodes.GetCount(); }
     int GetIndentLevel()
     {
         int ret = 0 ;
-     wxDataViewTreeNode * node = this;
-     while( node->GetParent()->GetParent() != NULL )
-     {
-         node = node->GetParent();
-         ret ++;
-     }
-     return ret;
+        wxDataViewTreeNode * node = this;
+        while( node->GetParent()->GetParent() != NULL )
+        {
+            node = node->GetParent();
+            ret ++;
+        }
+        return ret;
     }
 
     bool IsOpen()
     {
-        return open ;
+        return m_open ;
     }
 
     void ToggleOpen()
     {
-        int len = nodes.GetCount();
+        int len = m_nodes.GetCount();
         int sum = 0;
         for ( int i = 0 ;i < len ; i ++)
-            sum += nodes[i]->GetSubTreeCount();
+            sum += m_nodes[i]->GetSubTreeCount();
 
-        sum += leaves.GetCount();
-        if( open )
+        sum += m_leaves.GetCount();
+        if (m_open)
         {
             ChangeSubTreeCount(-sum);
-            open = !open;
+            m_open = !m_open;
         }
         else
         {
-            open = !open;
+            m_open = !m_open;
             ChangeSubTreeCount(sum);
         }
     }
-    bool HasChildren() { return hasChildren; }
-    void SetHasChildren( bool has ){ hasChildren = has; }
+    bool HasChildren() { return m_hasChildren; }
+    void SetHasChildren( bool has ){ m_hasChildren = has; }
 
-    void SetSubTreeCount( int num ) { subTreeCount = num; }
-    int GetSubTreeCount() { return subTreeCount; }
+    void SetSubTreeCount( int num ) { m_subTreeCount = num; }
+    int GetSubTreeCount() { return m_subTreeCount; }
     void ChangeSubTreeCount( int num )
     {
-        if( !open )
+        if( !m_open )
             return ;
-        subTreeCount += num;
-        if( parent )
-            parent->ChangeSubTreeCount(num);
+        m_subTreeCount += num;
+        if( m_parent )
+            m_parent->ChangeSubTreeCount(num);
     }
 
     void Resort()
     {
         if (g_column >= -1)
         {
-            nodes.Sort( &wxGenericTreeModelNodeCmp );
-            int len = nodes.GetCount();
+            m_nodes.Sort( &wxGenericTreeModelNodeCmp );
+            int len = m_nodes.GetCount();
             for (int i = 0; i < len; i ++)
-            {
-                nodes[i]->Resort();
-            }
-            leaves.Sort( &wxGenericTreeModelItemCmp );
+                m_nodes[i]->Resort();
+            m_leaves.Sort( &wxGenericTreeModelItemCmp );
         }
     }
 
 private:
-    wxDataViewTreeNode * parent;
-    wxDataViewTreeNodes  nodes;
-    wxDataViewTreeLeaves leaves;
-    wxDataViewItem  item;
-    bool open;
-    bool hasChildren;
-    int subTreeCount;
+    wxDataViewTreeNode  *m_parent;
+    wxDataViewTreeNodes  m_nodes;
+    wxDataViewTreeLeaves m_leaves;
+    wxDataViewItem       m_item;
+    bool                 m_open;
+    bool                 m_hasChildren;
+    int                  m_subTreeCount;
 };
 
 int LINKAGEMODE wxGenericTreeModelNodeCmp( wxDataViewTreeNode ** node1, wxDataViewTreeNode ** node2)
@@ -2400,14 +2398,16 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         {
             // get the cell value and set it into the renderer
             wxVariant value;
-         wxDataViewTreeNode * node = GetTreeNodeByRow(item);
-         if( node == NULL )
-         {
-             continue;
-         }
+            wxDataViewTreeNode * node = GetTreeNodeByRow(item);
+            if( node == NULL )
+                continue;
 
             wxDataViewItem dataitem = node->GetItem();
-             model->GetValue( value, dataitem, col->GetModelColumn());
+            
+            if ((i > 0) && model->IsContainer(dataitem) && !model->HasContainerColumns(dataitem))
+                continue;
+            
+            model->GetValue( value, dataitem, col->GetModelColumn());
             cell->SetValue( value );
 
             // update the y offset
@@ -3402,7 +3402,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                 m_underMouse = node;
             }
         }
-     if (node!=NULL && !node->HasChildren())
+        if (node!=NULL && !node->HasChildren())
             delete node;
     }
     if (!hover)
@@ -3451,13 +3451,18 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         m_lastOnSame = false;
     }
 
+    wxDataViewItem item = GetItemByRow(current);
+    bool ignore_other_columns =
+        ((GetOwner()->GetExpanderColumn() != col) &&
+         (model->IsContainer(item)) &&
+         (!model->HasContainerColumns(item)));
+    
     if (event.LeftDClick())
     {
         if ( current == m_lineLastClicked )
         {
-            if (cell->GetMode() == wxDATAVIEW_CELL_ACTIVATABLE)
+            if ((!ignore_other_columns) && (cell->GetMode() == wxDATAVIEW_CELL_ACTIVATABLE))
             {
-                wxDataViewItem item = GetItemByRow(current);
                 wxVariant value;
                 model->GetValue( value, item, col->GetModelColumn() );
                 cell->SetValue( value );
@@ -3516,7 +3521,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             }
         }
         //If the user click the expander, we do not do editing even if the column with expander are editable
-        if (m_lastOnSame && !expander )
+        if (m_lastOnSame && !expander && !ignore_other_columns)
         {
             if ((col == m_currentCol) && (current == m_currentRow) &&
                 (cell->GetMode() == wxDATAVIEW_CELL_EDITABLE) )
