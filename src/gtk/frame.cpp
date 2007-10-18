@@ -110,55 +110,6 @@ static void gtk_toolbar_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidge
 }
 #endif // wxUSE_TOOLBAR
 
-
-// ----------------------------------------------------------------------------
-// wxFrame itself
-// ----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// InsertChild for wxFrame
-//-----------------------------------------------------------------------------
-
-#if wxUSE_TOOLBAR
-
-/* Callback for wxFrame. This very strange beast has to be used because
- * C++ has no virtual methods in a constructor. We have to emulate a
- * virtual function here as wxWidgets requires different ways to insert
- * a child in container classes. */
-
-static void wxInsertChildInFrame(wxWindow* parent, wxWindow* child)
-{
-    wxASSERT( GTK_IS_WIDGET(child->m_widget) );
-
-    // These are outside the client area
-    wxFrame* frame = wx_static_cast(wxFrame*, parent);
-    gtk_pizza_put( GTK_PIZZA(frame->m_mainWidget),
-                     child->m_widget,
-                     child->m_x,
-                     child->m_y,
-                     child->m_width,
-                     child->m_height );
-
-#if wxUSE_TOOLBAR_NATIVE
-    // We connect to these events for recalculating the client area
-    // space when the toolbar is floating
-    if (wxIS_KIND_OF(child,wxToolBar))
-    {
-        if (child->HasFlag(wxTB_DOCKABLE))
-        {
-            g_signal_connect (child->m_widget, "child_attached",
-                              G_CALLBACK (gtk_toolbar_attached_callback),
-                              parent);
-            g_signal_connect (child->m_widget, "child_detached",
-                              G_CALLBACK (gtk_toolbar_detached_callback),
-                              parent);
-        }
-    }
-#endif // wxUSE_TOOLBAR_NATIVE
-}
-
-#endif // wxUSE_TOOLBAR
-
 // ----------------------------------------------------------------------------
 // wxFrame creation
 // ----------------------------------------------------------------------------
@@ -598,24 +549,8 @@ bool wxFrame::HasVisibleMenubar() const
 
 #if wxUSE_TOOLBAR
 
-wxToolBar* wxFrame::CreateToolBar( long style, wxWindowID id, const wxString& name )
-{
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-
-    InsertChildFunction save = m_insertCallback;
-    m_insertCallback = wxInsertChildInFrame;
-    m_frameToolBar = wxFrameBase::CreateToolBar( style, id, name );
-    m_insertCallback = save;
-
-    GtkUpdateSize();
-
-    return m_frameToolBar;
-}
-
 void wxFrame::SetToolBar(wxToolBar *toolbar)
 {
-    bool hadTbar = m_frameToolBar != NULL;
-
     wxFrameBase::SetToolBar(toolbar);
 
     if ( m_frameToolBar )
@@ -627,51 +562,28 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
             GetChildren().DeleteObject( m_frameToolBar );
 
             gtk_widget_reparent( m_frameToolBar->m_widget, m_mainWidget );
-            GtkUpdateSize();
         }
-    }
-    else // toolbar unset
-    {
-        // still need to update size if it had been there before
-        if ( hadTbar )
+#if wxUSE_TOOLBAR_NATIVE
+        if (m_frameToolBar->HasFlag(wxTB_DOCKABLE))
         {
-            GtkUpdateSize();
+            g_signal_connect(m_frameToolBar->m_widget, "child_attached",
+                G_CALLBACK(gtk_toolbar_attached_callback), this);
+            g_signal_connect(m_frameToolBar->m_widget, "child_detached",
+                G_CALLBACK(gtk_toolbar_detached_callback), this);
         }
+#endif // wxUSE_TOOLBAR_NATIVE
     }
+
+    GtkUpdateSize();
 }
 
 #endif // wxUSE_TOOLBAR
 
 #if wxUSE_STATUSBAR
 
-wxStatusBar* wxFrame::CreateStatusBar(int number,
-                                      long style,
-                                      wxWindowID id,
-                                      const wxString& name)
-{
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-
-    // because it will change when toolbar is added
-    GtkUpdateSize();
-
-    return wxFrameBase::CreateStatusBar( number, style, id, name );
-}
-
 void wxFrame::SetStatusBar(wxStatusBar *statbar)
 {
-    bool hadStatBar = m_frameStatusBar != NULL;
-
     wxFrameBase::SetStatusBar(statbar);
-
-    if (hadStatBar && !m_frameStatusBar)
-        GtkUpdateSize();
-}
-
-void wxFrame::PositionStatusBar()
-{
-    if ( !m_frameStatusBar )
-        return;
-
     GtkUpdateSize();
 }
 #endif // wxUSE_STATUSBAR

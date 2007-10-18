@@ -54,18 +54,10 @@ public:
     virtual ~wxFrame();
 
 #if wxUSE_STATUSBAR
-    virtual wxStatusBar* CreateStatusBar(int number = 1,
-                                         long style = wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE,
-                                         wxWindowID id = 0,
-                                         const wxString& name = wxStatusLineNameStr);
-
     void SetStatusBar(wxStatusBar *statbar);
 #endif // wxUSE_STATUSBAR
 
 #if wxUSE_TOOLBAR
-    virtual wxToolBar* CreateToolBar(long style = -1,
-                                     wxWindowID id = -1,
-                                     const wxString& name = wxToolBarNameStr);
     void SetToolBar(wxToolBar *toolbar);
 #endif // wxUSE_TOOLBAR
 
@@ -86,10 +78,6 @@ public:
 protected:
     // common part of all ctors
     void Init();
-
-#if wxUSE_STATUSBAR
-    virtual void PositionStatusBar();
-#endif // wxUSE_STATUSBAR
 
     // override wxWindow methods to take into account tool/menu/statusbars
     virtual void DoGetClientSize( int *width, int *height ) const;
