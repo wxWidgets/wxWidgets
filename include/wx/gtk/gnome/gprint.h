@@ -253,7 +253,7 @@ protected:
     void DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius = 20.0);
     void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 #if wxUSE_SPLINES
-    void DoDrawSpline(wxList *points);
+    void DoDrawSpline(const wxPointList *points);
 #endif // wxUSE_SPLINES
     bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
             wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop = wxCOPY, bool useMask = false,
@@ -273,9 +273,6 @@ protected:
 
     void SetPrintData(const wxPrintData& data);
     wxPrintData& GetPrintData() { return m_printData; }
-
-private:
-    static float ms_PSScaleFactor;
 
 private:
     wxPrintData             m_printData;

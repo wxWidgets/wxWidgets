@@ -541,7 +541,7 @@ void wxGCDC::DoDrawLines(int n, wxPoint points[],
 }
 
 #if wxUSE_SPLINES
-void wxGCDC::DoDrawSpline(wxList *points)
+void wxGCDC::DoDrawSpline(const wxPointList *points)
 {
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoDrawSpline - invalid DC") );
 
@@ -550,18 +550,18 @@ void wxGCDC::DoDrawSpline(wxList *points)
 
     wxGraphicsPath path = m_graphicContext->CreatePath();
 
-    wxList::compatibility_iterator node = points->GetFirst();
-    if (node == wxList::compatibility_iterator())
+    wxPointList::compatibility_iterator node = points->GetFirst();
+    if (node == wxPointList::compatibility_iterator())
         // empty list
         return;
 
-    wxPoint *p = (wxPoint *)node->GetData();
+    wxPoint *p = node->GetData();
 
     wxCoord x1 = p->x;
     wxCoord y1 = p->y;
 
     node = node->GetNext();
-    p = (wxPoint *)node->GetData();
+    p = node->GetData();
 
     wxCoord x2 = p->x;
     wxCoord y2 = p->y;
@@ -579,7 +579,7 @@ void wxGCDC::DoDrawSpline(wxList *points)
 #endif // !wxUSE_STL
 
     {
-        p = (wxPoint *)node->GetData();
+        p = node->GetData();
         x1 = x2;
         y1 = y2;
         x2 = p->x;

@@ -200,7 +200,7 @@ protected:
     virtual void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 
 #if wxUSE_SPLINES
-    virtual void DoDrawSpline(wxList *points);
+    virtual void DoDrawSpline(const wxPointList *points);
 #endif
 
     virtual void DoCrossHair(wxCoord x, wxCoord y);

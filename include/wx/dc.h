@@ -26,7 +26,6 @@
 #include "wx/brush.h"
 #include "wx/pen.h"
 #include "wx/palette.h"
-#include "wx/list.h"            // we use wxList in inline functions
 #include "wx/dynarray.h"
 #include "wx/math.h"
 #include "wx/image.h"
@@ -441,7 +440,7 @@ public:
 #if wxUSE_SPLINES
     virtual void DoDrawSpline(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord x3, wxCoord y3);
     virtual void DoDrawSpline(int n, wxPoint points[]);
-    virtual void DoDrawSpline(wxList *points);
+    virtual void DoDrawSpline(const wxPointList *points);
 #endif
     
 private:
@@ -841,7 +840,7 @@ public:
 
 #if 0
     // needs to be removed
-    void DrawLines(const wxList *list,
+    void DrawLines(const wxPointList *list,
                    wxCoord xoffset = 0, wxCoord yoffset = 0)
 #endif
 
@@ -852,7 +851,7 @@ public:
 
 #if 0
     // needs to be removed
-    void DrawPolygon(const wxList *list,
+    void DrawPolygon(const wxPointList *list,
                      wxCoord xoffset = 0, wxCoord yoffset = 0,
                      int fillStyle = wxODDEVEN_RULE)
         { m_pimpl->DrawPolygon( list, xoffset, yoffset, fillStyle ); }
@@ -975,12 +974,8 @@ public:
         { m_pimpl->DoDrawSpline(x1,y1,x2,y2,x3,y3); }
     void DrawSpline(int n, wxPoint points[])
         { m_pimpl->DoDrawSpline(n,points); }
-
-#if 0
-    // needs to be removed
-    void DrawSpline(wxList *points) 
+    void DrawSpline(const wxPointList *points) 
         { m_pimpl->DoDrawSpline(points); }
-#endif
 #endif // wxUSE_SPLINES
 
 
@@ -1149,17 +1144,29 @@ public:
     void DrawLines(int n, wxPoint points[],
                    wxCoord xoffset = 0, wxCoord yoffset = 0)
         { DoDrawLines(n, points, xoffset, yoffset); }
-    void DrawLines(const wxList *list,
+    void DrawLines(const wxPointList *list,
                    wxCoord xoffset = 0, wxCoord yoffset = 0);
+
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED( void DrawLines(const wxList *list,
+                                 wxCoord xoffset = 0, wxCoord yoffset = 0) );
+#endif  // WXWIN_COMPATIBILITY_2_8
+
 
     void DrawPolygon(int n, wxPoint points[],
                      wxCoord xoffset = 0, wxCoord yoffset = 0,
                      int fillStyle = wxODDEVEN_RULE)
         { DoDrawPolygon(n, points, xoffset, yoffset, fillStyle); }
 
-    void DrawPolygon(const wxList *list,
+    void DrawPolygon(const wxPointList *list,
                      wxCoord xoffset = 0, wxCoord yoffset = 0,
                      int fillStyle = wxODDEVEN_RULE);
+
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED( void DrawPolygon(const wxList *list,
+                     wxCoord xoffset = 0, wxCoord yoffset = 0,
+                     int fillStyle = wxODDEVEN_RULE) );
+#endif  // WXWIN_COMPATIBILITY_2_8
 
     void DrawPolyPolygon(int n, int count[], wxPoint points[],
                          wxCoord xoffset = 0, wxCoord yoffset = 0,
@@ -1272,13 +1279,17 @@ public:
     }
 
 #if wxUSE_SPLINES
-    // TODO: this API needs fixing (wxPointList, why (!const) "wxList *"?)
     void DrawSpline(wxCoord x1, wxCoord y1,
                     wxCoord x2, wxCoord y2,
                     wxCoord x3, wxCoord y3);
     void DrawSpline(int n, wxPoint points[]);
 
-    void DrawSpline(wxList *points) { DoDrawSpline(points); }
+    void DrawSpline(const wxPointList *points) { DoDrawSpline(points); }
+
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED( void DrawSpline(const wxList *points) );
+#endif  // WXWIN_COMPATIBILITY_2_8
+    
 #endif // wxUSE_SPLINES
 
     // Eventually we will have wxUSE_GENERIC_DRAWELLIPSE
@@ -1319,11 +1330,11 @@ public:
      *  \param angle Rotating angle (counterclockwise, start at 3 o'clock, 360 is full circle).
      *  \param center Center of rotation.
      */
-    void Rotate( wxList* points, double angle, wxPoint center = wxPoint(0,0) );
+    void Rotate( wxPointList* points, double angle, wxPoint center = wxPoint(0,0) );
 
     // used by DrawEllipticArcRot
     // Careful: wxList gets filled with points you have to delete later.
-    void CalculateEllipticPoints( wxList* points,
+    void CalculateEllipticPoints( wxPointList* points,
                                   wxCoord xStart, wxCoord yStart,
                                   wxCoord w, wxCoord h,
                                   double sa, double ea );
@@ -1710,7 +1721,7 @@ protected:
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
 
 #if wxUSE_SPLINES
-    virtual void DoDrawSpline(wxList *points);
+    virtual void DoDrawSpline(const wxPointList *points);
 #endif
 
 protected:

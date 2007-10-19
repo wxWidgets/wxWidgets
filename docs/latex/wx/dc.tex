@@ -363,12 +363,11 @@ Draws lines using an array of {\it points} of size {\it n}
 adding the optional offset coordinate. The current pen is
 used for drawing the lines.
 
-\func{void}{DrawLines}{\param{const wxList *}{points}, \param{wxCoord}{ xoffset = 0}, \param{wxCoord}{ yoffset = 0}}
+\func{void}{DrawLines}{\param{const wxPointList *}{points}, \param{wxCoord}{ xoffset = 0}, \param{wxCoord}{ yoffset = 0}}
 
-This method is deprecated and will be removed or replaced
-with a type-safe version. It uses a wxList of pointers to
-wxPoints, adding the optional offset coordinate. The programmer
-is responsible for deleting the list of points.
+This method uses a list of wxPoints, adding the optional offset
+coordinate. The programmer is responsible for deleting the list
+of points.
 
 \pythonnote{The wxPython version of this method accepts a Python list
 of wxPoint objects.}
@@ -386,13 +385,11 @@ of wxPoint objects.}
 Draws a filled polygon using an array of {\it points} of size {\it n},
 adding the optional offset coordinate.
 
-\func{void}{DrawPolygon}{\param{const wxList *}{points}, \param{wxCoord}{ xoffset = 0}, \param{wxCoord}{ yoffset = 0},\\
+\func{void}{DrawPolygon}{\param{const wxPointList *}{points}, \param{wxCoord}{ xoffset = 0}, \param{wxCoord}{ yoffset = 0},\\
   \param{int }{fill\_style = wxODDEVEN\_RULE}}
 
-This method is deprecated and will be removed or replaced
-with a type-safe version. It draws a filled polygon using
-a list of pointers to wxPoints, adding  the optional offset
-coordinate.
+This method draws a filled polygon using a list of wxPoints,
+adding the optional offset coordinate.
 
 The last argument specifies the fill rule: {\bf wxODDEVEN\_RULE} (the
 default) or {\bf wxWINDING\_RULE}.
@@ -500,10 +497,9 @@ the rectangle.
 Draws a spline between all given control points, using the current
 pen.
 
-\func{void}{DrawSpline}{\param{wxList *}{points}}
+\func{void}{DrawSpline}{\param{const wxPointList *}{points}}
 
-Draws a spline between all given control points, using the current
-pen.  Doesn't delete the wxList and contents.
+Draws a spline between all given control points.
 
 \func{void}{DrawSpline}{\param{wxCoord}{ x1}, \param{wxCoord}{ y1}, \param{wxCoord}{ x2}, \param{wxCoord}{ y2}, \param{wxCoord}{ x3}, \param{wxCoord}{ y3}}
 

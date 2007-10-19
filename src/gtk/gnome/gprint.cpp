@@ -158,6 +158,8 @@ public:
         (GnomePrintConfig *config, const guchar *key), (config, key), NULL )
     wxDL_METHOD_DEFINE( gboolean, gnome_print_config_get_length,
         (GnomePrintConfig *config, const guchar *key, gdouble *val, const GnomePrintUnit **unit), (config, key, val, unit), false )
+    wxDL_METHOD_DEFINE( gboolean, gnome_print_config_get_boolean,
+        (GnomePrintConfig *config, const guchar *key, gboolean *val), (config, key, val), false )
 
     wxDL_METHOD_DEFINE( GtkWidget*, gnome_print_dialog_new,
         (GnomePrintJob *gpj, const guchar *title, gint flags), (gpj, title, flags), NULL )
@@ -265,6 +267,7 @@ bool wxGnomePrintLibrary::InitializeMethods()
     
     wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_config_get );
     wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_config_get_length );
+    wxDL_METHOD_LOAD( m_libGnomePrint, gnome_print_config_get_boolean );
 
     wxDL_METHOD_LOAD( m_libGnomePrintUI, gnome_print_dialog_new );
     wxDL_METHOD_LOAD( m_libGnomePrintUI, gnome_print_dialog_construct_range_page );
@@ -308,6 +311,28 @@ bool wxGnomePrintNativeData::TransferTo( wxPrintData &data )
     else
         data.SetOrientation( wxPORTRAIT );
     g_free( res );
+
+    res = gs_libGnomePrint->gnome_print_config_get( m_config,
+            (guchar*)(char*)GNOME_PRINT_KEY_OUTPUT_FILENAME );
+    if (res)
+    {
+        data.SetFilename( wxConvFile.cMB2WX( (const char*) res ) );
+        wxPrintf( "filename %s\n", data.GetFilename() );
+        g_free( res );
+    }
+    else
+    {
+        data.SetFilename( wxEmptyString );
+    }
+
+    gboolean ret;
+    if (gs_libGnomePrint->gnome_print_config_get_boolean( m_config,
+            (guchar*)(char*)GNOME_PRINT_KEY_COLLATE, &ret))
+    {
+        data.SetCollate( ret );
+    }
+
+    // gnome_print_v
     
     return true;
 }
@@ -1377,20 +1402,20 @@ void wxGnomePrintDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord 
 }
 
 #if wxUSE_SPLINES
-void wxGnomePrintDC::DoDrawSpline(wxList *points)
+void wxGnomePrintDC::DoDrawSpline(const wxPointList *points)
 {
     SetPen (m_pen);
 
     double c, d, x1, y1, x2, y2, x3, y3;
     wxPoint *p, *q;
 
-    wxList::compatibility_iterator node = points->GetFirst();
-    p = (wxPoint *)node->GetData();
+    wxPointList::compatibility_iterator node = points->GetFirst();
+    p = node->GetData();
     x1 = p->x;
     y1 = p->y;
 
     node = node->GetNext();
-    p = (wxPoint *)node->GetData();
+    p = node->GetData();
     c = p->x;
     d = p->y;
     x3 =
@@ -1408,7 +1433,7 @@ void wxGnomePrintDC::DoDrawSpline(wxList *points)
     node = node->GetNext();
     while (node)
     {
-        q = (wxPoint *)node->GetData();
+        q = node->GetData();
 
         x1 = x3;
         y1 = y3;

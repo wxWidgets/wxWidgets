@@ -110,7 +110,7 @@ protected:
     virtual void DoDrawPoint(wxCoord x, wxCoord y);
 
 #if wxUSE_SPLINES
-    virtual void DoDrawSpline(wxList *points);
+    virtual void DoDrawSpline(const wxPointList *points);
 #endif
 
     virtual void DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);

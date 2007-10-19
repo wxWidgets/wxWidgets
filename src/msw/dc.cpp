@@ -997,7 +997,7 @@ void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 }
 
 #if wxUSE_SPLINES
-void wxDC::DoDrawSpline(wxList *points)
+void wxDC::DoDrawSpline(const wxPointList *points)
 {
 #ifdef  __WXWINCE__
     // WinCE does not support ::PolyBezier so use generic version
@@ -1029,8 +1029,8 @@ void wxDC::DoDrawSpline(wxList *points)
     size_t bezier_pos = 0;
     wxCoord x1, y1, x2, y2, cx1, cy1, cx4, cy4;
 
-    wxList::compatibility_iterator node = points->GetFirst();
-    wxPoint *p = (wxPoint *)node->GetData();
+    wxPointList::compatibility_iterator node = points->GetFirst();
+    wxPoint *p = node->GetData();
     lppt[ bezier_pos ].x = x1 = p->x;
     lppt[ bezier_pos ].y = y1 = p->y;
     bezier_pos++;
@@ -1038,7 +1038,7 @@ void wxDC::DoDrawSpline(wxList *points)
     bezier_pos++;
 
     node = node->GetNext();
-    p = (wxPoint *)node->GetData();
+    p = node->GetData();
 
     x2 = p->x;
     y2 = p->y;

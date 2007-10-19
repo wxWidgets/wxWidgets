@@ -419,6 +419,7 @@ inline wxPoint operator-(const wxPoint& p)
     return wxPoint(-p.x, -p.y);
 }
 
+WX_DECLARE_LIST_WITH_DECL(wxPoint, wxPointList, class WXDLLIMPEXP_CORE);
 
 // ---------------------------------------------------------------------------
 // wxRect

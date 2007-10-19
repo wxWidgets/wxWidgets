@@ -843,16 +843,15 @@ wxImplDC::DoStretchBlit(wxCoord xdest, wxCoord ydest,
     return rc;
 }
 
-#if 0
-void wxImplDC::DrawLines(const wxList *list, wxCoord xoffset, wxCoord yoffset)
+void wxImplDC::DrawLines(const wxPointList *list, wxCoord xoffset, wxCoord yoffset)
 {
     int n = list->GetCount();
     wxPoint *points = new wxPoint[n];
 
     int i = 0;
-    for ( wxList::compatibility_iterator node = list->GetFirst(); node; node = node->GetNext(), i++ )
+    for ( wxPointList::compatibility_iterator node = list->GetFirst(); node; node = node->GetNext(), i++ )
     {
-        wxPoint *point = (wxPoint *)node->GetData();
+        wxPoint *point = node->GetData();
         points[i].x = point->x;
         points[i].y = point->y;
     }
@@ -862,7 +861,7 @@ void wxImplDC::DrawLines(const wxList *list, wxCoord xoffset, wxCoord yoffset)
     delete [] points;
 }
 
-void wxImplDC::DrawPolygon(const wxList *list,
+void wxImplDC::DrawPolygon(const wxPointList *list,
                            wxCoord xoffset, wxCoord yoffset,
                            int fillStyle)
 {
@@ -870,9 +869,9 @@ void wxImplDC::DrawPolygon(const wxList *list,
     wxPoint *points = new wxPoint[n];
 
     int i = 0;
-    for ( wxList::compatibility_iterator node = list->GetFirst(); node; node = node->GetNext(), i++ )
+    for ( wxPointList::compatibility_iterator node = list->GetFirst(); node; node = node->GetNext(), i++ )
     {
-        wxPoint *point = (wxPoint *)node->GetData();
+        wxPoint *point = node->GetData();
         points[i].x = point->x;
         points[i].y = point->y;
     }
@@ -881,7 +880,6 @@ void wxImplDC::DrawPolygon(const wxList *list,
 
     delete [] points;
 }
-#endif
 
 void
 wxImplDC::DoDrawPolyPolygon(int n,
@@ -928,39 +926,36 @@ wxImplDC::DoDrawPolyPolygon(int n,
 
 #if wxUSE_SPLINES
 
-// TODO: this API needs fixing (wxPointList, why (!const) "wxList *"?)
 void wxImplDC::DoDrawSpline(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord x3, wxCoord y3)
 {
-    wxList point_list;
+    wxPointList point_list;
 
     wxPoint *point1 = new wxPoint;
     point1->x = x1; point1->y = y1;
-    point_list.Append((wxObject*)point1);
+    point_list.Append( point1 );
 
     wxPoint *point2 = new wxPoint;
     point2->x = x2; point2->y = y2;
-    point_list.Append((wxObject*)point2);
+    point_list.Append( point2 );
 
     wxPoint *point3 = new wxPoint;
     point3->x = x3; point3->y = y3;
-    point_list.Append((wxObject*)point3);
+    point_list.Append( point3 );
 
     DoDrawSpline(&point_list);
 
-    for( wxList::compatibility_iterator node = point_list.GetFirst(); node; node = node->GetNext() )
+    for( wxPointList::compatibility_iterator node = point_list.GetFirst(); node; node = node->GetNext() )
     {
-        wxPoint *p = (wxPoint *)node->GetData();
+        wxPoint *p = node->GetData();
         delete p;
     }
 }
 
 void wxImplDC::DoDrawSpline(int n, wxPoint points[])
 {
-    wxList list;
+    wxPointList list;
     for (int i =0; i < n; i++)
-    {
-        list.Append((wxObject*)&points[i]);
-    }
+        list.Append( &points[i] );
 
     DoDrawSpline(&list);
 }
@@ -977,7 +972,7 @@ void wx_spline_push(double x1, double y1, double x2, double y2, double x3, doubl
 static bool wx_spline_add_point(double x, double y);
 static void wx_spline_draw_point_array(wxDC *dc);
 
-wxList wx_spline_point_list;
+wxPointList wx_spline_point_list;
 
 #define                half(z1, z2)        ((z1+z2)/2.0)
 #define                THRESHOLD        5
@@ -1060,27 +1055,24 @@ int wx_spline_pop(double *x1, double *y1, double *x2, double *y2,
 
 static bool wx_spline_add_point(double x, double y)
 {
-  wxPoint *point = new wxPoint ;
-  point->x = (int) x;
-  point->y = (int) y;
-  wx_spline_point_list.Append((wxObject*)point);
-  return true;
+    wxPoint *point = new wxPoint( wxRound(x), wxRound(y) );
+    wx_spline_point_list.Append(point );
+    return true;
 }
 
 static void wx_spline_draw_point_array(wxDC *dc)
 {
-//  dc->DrawLines(&wx_spline_point_list, 0, 0 );  wxList
-  wxList::compatibility_iterator node = wx_spline_point_list.GetFirst();
-  while (node)
-  {
-    wxPoint *point = (wxPoint *)node->GetData();
-    delete point;
-    wx_spline_point_list.Erase(node);
-    node = wx_spline_point_list.GetFirst();
-  }
+    wxPointList::compatibility_iterator node = wx_spline_point_list.GetFirst();
+    while (node)
+    {
+        wxPoint *point = node->GetData();
+        delete point;
+        wx_spline_point_list.Erase(node);
+        node = wx_spline_point_list.GetFirst();
+    }
 }
 
-void wxImplDC::DoDrawSpline( wxList *points )
+void wxImplDC::DoDrawSpline( const wxPointList *points )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
@@ -1088,7 +1080,7 @@ void wxImplDC::DoDrawSpline( wxList *points )
     double           cx1, cy1, cx2, cy2, cx3, cy3, cx4, cy4;
     double           x1, y1, x2, y2;
 
-    wxList::compatibility_iterator node = points->GetFirst();
+    wxPointList::compatibility_iterator node = points->GetFirst();
     if (!node)
         // empty list
         return;
@@ -1099,7 +1091,7 @@ void wxImplDC::DoDrawSpline( wxList *points )
     y1 = p->y;
 
     node = node->GetNext();
-    p = (wxPoint *)node->GetData();
+    p = node->GetData();
 
     x2 = p->x;
     y2 = p->y;
@@ -1116,7 +1108,7 @@ void wxImplDC::DoDrawSpline( wxList *points )
 #endif // !wxUSE_STL
           )
     {
-        p = (wxPoint *)node->GetData();
+        p = node->GetData();
         x1 = x2;
         y1 = y2;
         x2 = p->x;
@@ -1823,15 +1815,16 @@ wxDCBase::DoStretchBlit(wxCoord xdest, wxCoord ydest,
 // line/polygons
 // ----------------------------------------------------------------------------
 
-void wxDCBase::DrawLines(const wxList *list, wxCoord xoffset, wxCoord yoffset)
+void wxDCBase::DrawLines(const wxPointList *list, wxCoord xoffset, wxCoord yoffset)
 {
-    int n = list->GetCount();
+    unsigned int n = list->GetCount();
     wxPoint *points = new wxPoint[n];
 
-    int i = 0;
-    for ( wxList::compatibility_iterator node = list->GetFirst(); node; node = node->GetNext(), i++ )
+    unsigned int i = 0;
+    wxPointList::compatibility_iterator node;
+    for ( node = list->GetFirst(); node; node = node->GetNext(), i++ )
     {
-        wxPoint *point = (wxPoint *)node->GetData();
+        wxPoint *point = node->GetData();
         points[i].x = point->x;
         points[i].y = point->y;
     }
@@ -1841,18 +1834,40 @@ void wxDCBase::DrawLines(const wxList *list, wxCoord xoffset, wxCoord yoffset)
     delete [] points;
 }
 
+#if WXWIN_COMPATIBILITY_2_8
+void wxDCBase::DrawLines(const wxList *list, wxCoord xoffset, wxCoord yoffset )
+{
+    unsigned int n = list->GetCount();
+    wxPoint *points = new wxPoint[n];
 
-void wxDCBase::DrawPolygon(const wxList *list,
+    unsigned int i = 0;
+    wxNode *node;
+    for ( node = list->GetFirst(); node; node = node->GetNext(), i++ )
+    {
+        wxPoint *point = (wxPoint*) node->GetData();
+        points[i].x = point->x;
+        points[i].y = point->y;
+    }
+
+    DoDrawLines(n, points, xoffset, yoffset);
+
+    delete [] points;
+}
+#endif  // WXWIN_COMPATIBILITY_2_8
+
+
+void wxDCBase::DrawPolygon(const wxPointList *list,
                            wxCoord xoffset, wxCoord yoffset,
                            int fillStyle)
 {
-    int n = list->GetCount();
+    unsigned int n = list->GetCount();
     wxPoint *points = new wxPoint[n];
 
-    int i = 0;
-    for ( wxList::compatibility_iterator node = list->GetFirst(); node; node = node->GetNext(), i++ )
+    unsigned int i = 0;
+    wxPointList::compatibility_iterator node;
+    for ( node = list->GetFirst(); node; node = node->GetNext(), i++ )
     {
-        wxPoint *point = (wxPoint *)node->GetData();
+        wxPoint *point = node->GetData();
         points[i].x = point->x;
         points[i].y = point->y;
     }
@@ -1861,6 +1876,30 @@ void wxDCBase::DrawPolygon(const wxList *list,
 
     delete [] points;
 }
+
+
+#if WXWIN_COMPATIBILITY_2_8
+void wxDCBase::DrawPolygon(const wxList *list,
+                     wxCoord xoffset, wxCoord yoffset,
+                     int fillStyle )
+{
+    unsigned int n = list->GetCount();
+    wxPoint *points = new wxPoint[n];
+
+    unsigned int i = 0;
+    wxNode *node;
+    for ( node = list->GetFirst(); node; node = node->GetNext(), i++ )
+    {
+        wxPoint *point = (wxPoint*) node->GetData();
+        points[i].x = point->x;
+        points[i].y = point->y;
+    }
+
+    DoDrawPolygon(n, points, xoffset, yoffset, fillStyle);
+
+    delete [] points;
+}
+#endif  // WXWIN_COMPATIBILITY_2_8
 
 void
 wxDCBase::DoDrawPolyPolygon(int n,
@@ -1911,39 +1950,36 @@ wxDCBase::DoDrawPolyPolygon(int n,
 
 #if wxUSE_SPLINES
 
-// TODO: this API needs fixing (wxPointList, why (!const) "wxList *"?)
 void wxDCBase::DrawSpline(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord x3, wxCoord y3)
 {
-    wxList point_list;
+    wxPointList point_list;
 
     wxPoint *point1 = new wxPoint;
     point1->x = x1; point1->y = y1;
-    point_list.Append((wxObject*)point1);
+    point_list.Append( point1 );
 
     wxPoint *point2 = new wxPoint;
     point2->x = x2; point2->y = y2;
-    point_list.Append((wxObject*)point2);
+    point_list.Append( point2 );
 
     wxPoint *point3 = new wxPoint;
     point3->x = x3; point3->y = y3;
-    point_list.Append((wxObject*)point3);
+    point_list.Append( point3 );
 
     DrawSpline(&point_list);
 
-    for( wxList::compatibility_iterator node = point_list.GetFirst(); node; node = node->GetNext() )
+    for( wxPointList::compatibility_iterator node = point_list.GetFirst(); node; node = node->GetNext() )
     {
-        wxPoint *p = (wxPoint *)node->GetData();
+        wxPoint *p = node->GetData();
         delete p;
     }
 }
 
 void wxDCBase::DrawSpline(int n, wxPoint points[])
 {
-    wxList list;
+    wxPointList list;
     for (int i =0; i < n; i++)
-    {
-        list.Append((wxObject*)&points[i]);
-    }
+        list.Append( &points[i] );
 
     DrawSpline(&list);
 }
@@ -1960,7 +1996,7 @@ void wx_spline_push(double x1, double y1, double x2, double y2, double x3, doubl
 static bool wx_spline_add_point(double x, double y);
 static void wx_spline_draw_point_array(wxDCBase *dc);
 
-wxList wx_spline_point_list;
+wxPointList wx_spline_point_list;
 
 #define                half(z1, z2)        ((z1+z2)/2.0)
 #define                THRESHOLD        5
@@ -2043,27 +2079,39 @@ int wx_spline_pop(double *x1, double *y1, double *x2, double *y2,
 
 static bool wx_spline_add_point(double x, double y)
 {
-  wxPoint *point = new wxPoint ;
-  point->x = (int) x;
-  point->y = (int) y;
-  wx_spline_point_list.Append((wxObject*)point);
-  return true;
+    wxPoint *point = new wxPoint( wxRound(x), wxRound(y) );
+    wx_spline_point_list.Append( point );
+    return true;
 }
 
 static void wx_spline_draw_point_array(wxDCBase *dc)
 {
-  dc->DrawLines(&wx_spline_point_list, 0, 0 );
-  wxList::compatibility_iterator node = wx_spline_point_list.GetFirst();
-  while (node)
-  {
-    wxPoint *point = (wxPoint *)node->GetData();
-    delete point;
-    wx_spline_point_list.Erase(node);
-    node = wx_spline_point_list.GetFirst();
-  }
+    dc->DrawLines(&wx_spline_point_list, 0, 0 );
+    wxPointList::compatibility_iterator node = wx_spline_point_list.GetFirst();
+    while (node)
+    {
+        wxPoint *point = node->GetData();
+        delete point;
+        wx_spline_point_list.Erase(node);
+        node = wx_spline_point_list.GetFirst();
+    }
 }
 
-void wxDCBase::DoDrawSpline( wxList *points )
+#if WXWIN_COMPATIBILITY_2_8
+void wxDCBase::DrawSpline(const wxList *points)
+{
+    wxPointList list;
+    wxNode *node = points->GetFirst();
+    while (node)
+    {
+        list.Append( (wxPoint*) node->GetData() );
+        node = node->GetNext();
+    }
+    DoDrawSpline( &list );
+}
+#endif  // WXWIN_COMPATIBILITY_2_8
+
+void wxDCBase::DoDrawSpline( const wxPointList *points )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
@@ -2071,18 +2119,18 @@ void wxDCBase::DoDrawSpline( wxList *points )
     double           cx1, cy1, cx2, cy2, cx3, cy3, cx4, cy4;
     double           x1, y1, x2, y2;
 
-    wxList::compatibility_iterator node = points->GetFirst();
+    wxPointList::compatibility_iterator node = points->GetFirst();
     if (!node)
         // empty list
         return;
 
-    p = (wxPoint *)node->GetData();
+    p = node->GetData();
 
     x1 = p->x;
     y1 = p->y;
 
     node = node->GetNext();
-    p = (wxPoint *)node->GetData();
+    p = node->GetData();
 
     x2 = p->x;
     y2 = p->y;
@@ -2099,7 +2147,7 @@ void wxDCBase::DoDrawSpline( wxList *points )
 #endif // !wxUSE_STL
           )
     {
-        p = (wxPoint *)node->GetData();
+        p = node->GetData();
         x1 = x2;
         y1 = y2;
         x2 = p->x;
@@ -2632,22 +2680,22 @@ void wxDCBase::DoDrawEllipticArcRot( wxCoord x, wxCoord y,
                                      wxCoord w, wxCoord h,
                                      double sa, double ea, double angle )
 {
-    wxList list;
+    wxPointList list;
 
     CalculateEllipticPoints( &list, x, y, w, h, sa, ea );
     Rotate( &list, angle, wxPoint( x+w/2, y+h/2 ) );
 
     // Add center (for polygon/pie)
-    list.Append( (wxObject*) new wxPoint( x+w/2, y+h/2 ) );
+    list.Append( new wxPoint( x+w/2, y+h/2 ) );
 
     // copy list into array and delete list elements
     int n = list.GetCount();
     wxPoint *points = new wxPoint[n];
     int i = 0;
-    wxNode* node = 0;
+    wxPointList::compatibility_iterator node;
     for ( node = list.GetFirst(); node; node = node->GetNext(), i++ )
     {
-        wxPoint *point = (wxPoint *)node->GetData();
+        wxPoint *point = node->GetData();
         points[i].x = point->x;
         points[i].y = point->y;
         delete point;
@@ -2673,16 +2721,17 @@ void wxDCBase::DoDrawEllipticArcRot( wxCoord x, wxCoord y,
 
 } // DrawEllipticArcRot
 
-void wxDCBase::Rotate( wxList* points, double angle, wxPoint center )
+void wxDCBase::Rotate( wxPointList* points, double angle, wxPoint center )
 {
     if( angle != 0.0 )
     {
         double pi(M_PI);
         double dSinA = -sin(angle*2.0*pi/360.0);
         double dCosA = cos(angle*2.0*pi/360.0);
-        for ( wxNode* node = points->GetFirst(); node; node = node->GetNext() )
+        wxPointList::compatibility_iterator node;
+        for ( node = points->GetFirst(); node; node = node->GetNext() )
         {
-            wxPoint* point = (wxPoint*)node->GetData();
+            wxPoint* point = node->GetData();
 
             // transform coordinates, if necessary
             if( center.x ) point->x -= center.x;
@@ -2700,7 +2749,7 @@ void wxDCBase::Rotate( wxList* points, double angle, wxPoint center )
     }
 }
 
-void wxDCBase::CalculateEllipticPoints( wxList* points,
+void wxDCBase::CalculateEllipticPoints( wxPointList* points,
                                         wxCoord xStart, wxCoord yStart,
                                         wxCoord w, wxCoord h,
                                         double sa, double ea )
@@ -2773,7 +2822,7 @@ void wxDCBase::CalculateEllipticPoints( wxList* points,
     long y2_old = 0;
     long y_old = 0;
     // Lists for quadrant 1 to 4
-    wxList pointsarray[4];
+    wxPointList pointsarray[4];
     // Calculate points for first quadrant and set in all quadrants
     for( x = 0; x <= a; ++x )
     {
@@ -2792,40 +2841,41 @@ void wxDCBase::CalculateEllipticPoints( wxList* points,
         {
             int x1 = x - 1;
             // remove points on the same line
-            pointsarray[0].Insert( (wxObject*) new wxPoint( xCenter + x1 - decrX, yCenter - y_old ) );
-            pointsarray[1].Append( (wxObject*) new wxPoint( xCenter - x1, yCenter - y_old ) );
-            pointsarray[2].Insert( (wxObject*) new wxPoint( xCenter - x1, yCenter + y_old - decrY ) );
-            pointsarray[3].Append( (wxObject*) new wxPoint( xCenter + x1 - decrX, yCenter + y_old - decrY ) );
+            pointsarray[0].Insert( new wxPoint( xCenter + x1 - decrX, yCenter - y_old ) );
+            pointsarray[1].Append( new wxPoint( xCenter - x1, yCenter - y_old ) );
+            pointsarray[2].Insert( new wxPoint( xCenter - x1, yCenter + y_old - decrY ) );
+            pointsarray[3].Append( new wxPoint( xCenter + x1 - decrX, yCenter + y_old - decrY ) );
         } // set point
     } // calculate point
 
     // Starting and/or ending points for the quadrants, first quadrant gets both.
-    pointsarray[0].Insert( (wxObject*) new wxPoint( xCenter + a - decrX, yCenter ) );
-    pointsarray[0].Append( (wxObject*) new wxPoint( xCenter, yCenter - b ) );
-    pointsarray[1].Append( (wxObject*) new wxPoint( xCenter - a, yCenter ) );
-    pointsarray[2].Append( (wxObject*) new wxPoint( xCenter, yCenter + b - decrY ) );
-    pointsarray[3].Append( (wxObject*) new wxPoint( xCenter + a - decrX, yCenter ) );
+    pointsarray[0].Insert( new wxPoint( xCenter + a - decrX, yCenter ) );
+    pointsarray[0].Append( new wxPoint( xCenter, yCenter - b ) );
+    pointsarray[1].Append( new wxPoint( xCenter - a, yCenter ) );
+    pointsarray[2].Append( new wxPoint( xCenter, yCenter + b - decrY ) );
+    pointsarray[3].Append( new wxPoint( xCenter + a - decrX, yCenter ) );
 
     // copy quadrants in original list
     if( bUseAngles )
     {
         // Copy the right part of the points in the lists
         // and delete the wxPoints, because they do not leave this method.
-        points->Append( (wxObject*) new wxPoint( xsa, ysa ) );
+        points->Append( new wxPoint( xsa, ysa ) );
         int q = sq;
         bool bStarted = false;
         bool bReady = false;
         bool bForceTurn = ( sq == eq && sa > ea );
         while( !bReady )
         {
-            for( wxNode *node = pointsarray[q].GetFirst(); node; node = node->GetNext() )
+            wxPointList::compatibility_iterator node;
+            for( node = pointsarray[q].GetFirst(); node; node = node->GetNext() )
             {
                 // once: go to starting point in start quadrant
                 if( !bStarted &&
                     (
-                      ( (wxPoint*) node->GetData() )->x < xsa+1 && q <= 1
+                      node->GetData()->x < xsa+1 && q <= 1
                       ||
-                      ( (wxPoint*) node->GetData() )->x > xsa-1 && q >= 2
+                      node->GetData()->x > xsa-1 && q >= 2
                     )
                   )
                 {
@@ -2843,10 +2893,10 @@ void wxDCBase::CalculateEllipticPoints( wxList* points,
                       )
                     {
                         // copy point
-                        wxPoint* pPoint = new wxPoint( *((wxPoint*) node->GetData() ) );
-                        points->Append( (wxObject*) pPoint );
+                        wxPoint* pPoint = new wxPoint( *(node->GetData()) );
+                        points->Append( pPoint );
                     }
-                    else if( q == eq && !bForceTurn || ( (wxPoint*) node->GetData() )->x == xea)
+                    else if( q == eq && !bForceTurn || node->GetData()->x == xea)
                     {
                         bReady = true;
                     }
@@ -2857,40 +2907,41 @@ void wxDCBase::CalculateEllipticPoints( wxList* points,
             bForceTurn = false;
             bStarted = true;
         } // while not bReady
-        points->Append( (wxObject*) new wxPoint( xea, yea ) );
+        points->Append( new wxPoint( xea, yea ) );
 
         // delete points
         for( q = 0; q < 4; ++q )
         {
-            for( wxNode *node = pointsarray[q].GetFirst(); node; node = node->GetNext() )
+            wxPointList::compatibility_iterator node;
+            for( node = pointsarray[q].GetFirst(); node; node = node->GetNext() )
             {
-                wxPoint *p = (wxPoint *)node->GetData();
+                wxPoint *p = node->GetData();
                 delete p;
             }
         }
     }
     else
     {
-        wxNode* node;
+        wxPointList::compatibility_iterator node;
         // copy whole ellipse, wxPoints will be deleted outside
         for( node = pointsarray[0].GetFirst(); node; node = node->GetNext() )
         {
-            wxObject *p = node->GetData();
+            wxPoint *p = node->GetData();
             points->Append( p );
         }
         for( node = pointsarray[1].GetFirst(); node; node = node->GetNext() )
         {
-            wxObject *p = node->GetData();
+            wxPoint *p = node->GetData();
             points->Append( p );
         }
         for( node = pointsarray[2].GetFirst(); node; node = node->GetNext() )
         {
-            wxObject *p = node->GetData();
+            wxPoint *p = node->GetData();
             points->Append( p );
         }
         for( node = pointsarray[3].GetFirst(); node; node = node->GetNext() )
         {
-            wxObject *p = node->GetData();
+            wxPoint *p = node->GetData();
             points->Append( p );
         }
     } // not iUseAngles

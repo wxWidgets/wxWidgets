@@ -1470,7 +1470,7 @@ void wxPostScriptDC::SetLogicalFunction (int WXUNUSED(function))
 }
 
 #if wxUSE_SPLINES
-void wxPostScriptDC::DoDrawSpline( wxList *points )
+void wxPostScriptDC::DoDrawSpline( const wxPointList *points )
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -1481,13 +1481,13 @@ void wxPostScriptDC::DoDrawSpline( wxList *points )
     double c, d, x1, y1, x2, y2, x3, y3;
     wxPoint *p, *q;
 
-    wxList::compatibility_iterator node = points->GetFirst();
-    p = (wxPoint *)node->GetData();
+    wxPointList::compatibility_iterator node = points->GetFirst();
+    p = node->GetData();
     x1 = p->x;
     y1 = p->y;
 
     node = node->GetNext();
-    p = (wxPoint *)node->GetData();
+    p = node->GetData();
     c = p->x;
     d = p->y;
     x3 =
@@ -1516,7 +1516,7 @@ void wxPostScriptDC::DoDrawSpline( wxList *points )
     node = node->GetNext();
     while (node)
     {
-        q = (wxPoint *)node->GetData();
+        q = node->GetData();
 
         x1 = x3;
         y1 = y3;
