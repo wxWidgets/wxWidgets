@@ -288,6 +288,13 @@ bool wxApp::Yield(bool onlyIfNeeded)
     while(1)
     {
         wxAutoNSAutoreleasePool pool;
+        /*  NOTE: It may be better to use something like
+            NSEventTrackingRunLoopMode since we don't necessarily want all
+            timers/sources/observers to run, only those which would
+            run while tracking events.  However, it should be noted that
+            NSEventTrackingRunLoopMode is in the common set of modes
+            so it may not effectively make much of a difference.
+         */
         NSEvent *event = [GetNSApplication()
                 nextEventMatchingMask:NSAnyEventMask
                 untilDate:[NSDate distantPast]
@@ -297,6 +304,20 @@ bool wxApp::Yield(bool onlyIfNeeded)
             break;
         [GetNSApplication() sendEvent: event];
     }
+
+    /*
+        Because we just told NSApplication to avoid blocking it will in turn
+        run the CFRunLoop with a timeout of 0 seconds.  In that case, our
+        run loop observer on kCFRunLoopBeforeWaiting never fires because
+        no waiting occurs.  Therefore, no idle events are sent.
+
+        Believe it or not, this is actually desirable because we do not want
+        to process idle from here.  However, we do want to process pending
+        events because some user code expects to do work in a thread while
+        the main thread waits and then notify the main thread by posting
+        an event.
+     */
+    ProcessPendingEvents();
 
 #if wxUSE_LOG
     // let the logs be flashed again
@@ -310,6 +331,35 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
 void wxApp::WakeUpIdle()
 {
+    /*  When called from the main thread the NSAutoreleasePool managed by
+        the [NSApplication run] method would ordinarily be in place and so
+        one would think a pool here would be unnecessary.
+
+        However, when called from a different thread there is usually no
+        NSAutoreleasePool in place because wxThread has no knowledge of
+        wxCocoa.  The pool here is generally only ever going to contain
+        the NSEvent we create with the factory method.  As soon as we add
+        it to the main event queue with postEvent:atStart: it is retained
+        and so safe for our pool to release.
+     */
+    wxAutoNSAutoreleasePool pool;
+    /*  NOTE: This is a little heavy handed.  What this does is cause an
+        AppKit NSEvent to be added to NSApplication's queue (which is always
+        on the main thread).  This will cause the main thread runloop to
+        exit which returns control to nextEventMatchingMask which returns
+        the event which is then sent with sendEvent: and essentially dropped
+        since it's not for a window (windowNumber 0) and NSApplication
+        certainly doesn't understand it.
+
+        With the exception of wxEventLoop::Exit which uses us to cause the
+        runloop to exit and return to the NSApplication event loop, most
+        callers only need wx idle to happen, or more specifically only really
+        need to ensure that ProcessPendingEvents is called which is currently
+        done without exiting the runloop.
+
+        Be careful if you decide to change the implementation of this method
+        as wxEventLoop::Exit depends on the current behavior.
+     */
     [m_cocoaApp postEvent:[NSEvent otherEventWithType:NSApplicationDefined
             location:NSZeroPoint modifierFlags:NSAnyEventMask
             timestamp:0 windowNumber:0 context:nil
@@ -326,6 +376,39 @@ extern "C" static void ObserveMainRunLoopBeforeWaiting(CFRunLoopObserverRef obse
 static int sg_cApplicationWillUpdate = 0;
 #endif
 
+/*!
+    Invoked from the applicationWillUpdate notification observer.  See the
+    NSApplication documentation for the official statement on when this
+    will be called.  Since it can be hard to understand for a Cocoa newbie
+    I'll try to explain it here as it relates to wxCocoa.
+
+    Basically, we get called from within nextEventMatchingMask if and only
+    if any user code told the application to send the update notification
+    (sort of like a request for idle events).  However, unlike wx idle events,
+    this notification is sent quite often, nearly every time through the loop
+    because nearly every control tells the application to send it.
+
+    Because wx idle events are only supposed to be sent when the event loop
+    is about to block we instead schedule a function to be called just
+    before the run loop waits and send the idle events from there.
+
+    It also has the desirable effect of only sending the wx idle events when
+    the event loop is actualy going to block.  If the event loop is being
+    pumped manualy (e.g. like a PeekMessage) then the kCFRunLoopBeforeWaiting
+    observer never fires.  Our Yield() method depends on this because sending
+    idle events from within Yield would be bad.
+
+    Normally you might think that we could just set the observer up once and
+    leave it attached.  However, this is problematic because our run loop
+    observer calls user code (the idle handlers) which can actually display
+    modal dialogs.  Displaying a modal dialog causes reentry of the event
+    loop, usually in a different run loop mode than the main loop (e.g. in
+    modal-dialog mode instead of default mode).  Because we only register the
+    observer with the run loop mode at the time of this call, it won't be
+    called from a modal loop.
+
+    We want it to be called and thus we need a new observer.
+ */
 void wxApp::CocoaDelegate_applicationWillUpdate()
 {
     wxLogTrace(wxTRACE_COCOA,wxT("applicationWillUpdate"));
@@ -334,6 +417,9 @@ void wxApp::CocoaDelegate_applicationWillUpdate()
     CFRunLoopRef cfRunLoop = CFRunLoopGetCurrent();
     wxCFRef<CFStringRef> cfRunLoopMode(CFRunLoopCopyCurrentMode(cfRunLoop));
 
+    /*  If we have an observer and that observer is for the wrong run loop
+        mode then invalidate it and release it.
+     */
     if(m_cfRunLoopIdleObserver != NULL && m_cfObservedRunLoopMode != cfRunLoopMode)
     {
         CFRunLoopObserverInvalidate(m_cfRunLoopIdleObserver);
@@ -342,6 +428,9 @@ void wxApp::CocoaDelegate_applicationWillUpdate()
 #if 0
     ++sg_cApplicationWillUpdate;
 #endif
+    /*  This will be true either on the first call or when the above code has
+        invalidated and released the exisiting observer.
+     */
     if(m_cfRunLoopIdleObserver == NULL)
     {
         // Enable idle event handling
@@ -352,6 +441,13 @@ void wxApp::CocoaDelegate_applicationWillUpdate()
         ,   NULL
         ,   NULL
         };
+        /*  NOTE: I can't recall why we don't just let the observer repeat
+            instead of invalidating itself each time it fires thus requiring
+            it to be recreated for each shot but there was if I remember
+            some good (but very obscure) reason for it.
+
+            On the other hand, I could be wrong so don't take that as gospel.
+         */
         m_cfRunLoopIdleObserver.reset(CFRunLoopObserverCreate(kCFAllocatorDefault, kCFRunLoopBeforeWaiting, /*repeats*/FALSE, /*priority*/0, ObserveMainRunLoopBeforeWaiting, &observerContext));
         m_cfObservedRunLoopMode = cfRunLoopMode;
         CFRunLoopAddObserver(cfRunLoop, m_cfRunLoopIdleObserver, m_cfObservedRunLoopMode);
@@ -369,9 +465,24 @@ static inline bool FakeNeedMoreIdle()
 #endif
 }
 
+/*!
+    Called by CFRunLoop just before waiting.  This is the appropriate time to
+    send idle events.  Unlike other ports, we don't peek the queue for events
+    and stop idling if there is one.  Instead, if the user requests more idle
+    events we tell Cocoa to send us an applicationWillUpdate notification
+    which will cause our observer of that notification to tell CFRunLoop to
+    call us before waiting which will cause us to be fired again but only
+    after exhausting the event queue.
+
+    The reason we do it this way is that peeking for an event causes CFRunLoop
+    to reenter and fire off its timers, observers, and sources which we're
+    better off avoiding.  Doing it this way, we basically let CFRunLoop do the
+    work of peeking for the next event which is much nicer.
+ */
 void wxApp::CF_ObserveMainRunLoopBeforeWaiting(CFRunLoopObserverRef observer, int activity)
 {
-    // Ensure that the app knows we've been invalidated
+    // Ensure that CocoaDelegate_applicationWillUpdate will recreate us.
+    // We've already been invalidated by CFRunLoop because we are one-shot.
     m_cfRunLoopIdleObserver.reset();
 #if 0
     wxLogTrace(wxTRACE_COCOA,wxT("Idle BEGIN (%d)"), sg_cApplicationWillUpdate);
@@ -398,3 +509,52 @@ void wxApp::OnAssert(const wxChar *file, int line, const wxChar* cond, const wxC
     m_isInAssert = false;
 }
 #endif // __WXDEBUG__
+
+/*  A note about Cocoa's event loops vs. run loops:
+
+    It's important to understand that Cocoa has a two-level event loop.  The
+    outer level is run by NSApplication and can only ever happen on the main
+    thread. The nextEventMatchingMask:untilDate:inMode:dequeue: method returns
+    the next event which is then given to sendEvent: to send it.  These
+    methods are defined in NSApplication and are thus part of AppKit.
+
+    Events (NSEvent) are only sent due to actual user actions like clicking
+    the mouse or moving the mouse or pressing a key and so on.  There are no
+    paint events; there are no timer events; there are no socket events; there
+    are no idle events.
+
+    All of those types of "events" have nothing to do with the GUI at all.
+    That is why Cocoa's AppKit doesn't implement them.  Instead, they are
+    implemented in Foundation's NSRunLoop which on OS X uses CFRunLoop
+    to do the actual work.
+
+    How NSApplication uses NSRunLoop is rather interesting.  Basically, it
+    interacts with NSRunLoop only from within the nextEventMatchingMask
+    method.  It passes its inMode: argument almost directly to NSRunLoop
+    and thus CFRunLoop.  The run loop then runs (e.g. loops) until it
+    is told to exit.  The run loop calls the callout functions directly.
+    From within those callout functions the run loop is considered to
+    be running.  Presumably, the AppKit installs a run loop source to
+    receive messages from the window server over the mach port (like a
+    socket).  For some messages (e.g. need to paint) the AppKit will
+    call application code like drawRect: without exiting the run loop.
+    For other messages (ones that can be encapsulated in an NSEvent)
+    the AppKit tells the run loop to exit which returns control to
+    the nextEventMatchingMask method which then returns the NSEvent
+    object.  It's important to note that once the runloop has exited
+    it is no longer considered running and thus if you ask it which
+    mode it is running in it will return nil.
+
+    When manually pumping the event loop care should be taken to
+    tell it to run in the correct mode.  For instance, if you are
+    using it to run a modal dialog then you want to run it in
+    the modal panel run loop mode.  AppKit presumably has sources
+    or timers or observers that specifically don't listen on this
+    mode.  Another interesting mode is the connection reply mode.
+    This allows Cocoa to wait for a response from a distributed
+    objects message without firing off user code that may result
+    in a DO call being made thus recursing.  So basically, the
+    mode is a way for Cocoa to attempt to avoid run loop recursion
+    but to allow it under certain circumstances.
+ */
+
