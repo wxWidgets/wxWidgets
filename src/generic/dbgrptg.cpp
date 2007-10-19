@@ -302,9 +302,18 @@ wxDebugReportDialog::wxDebugReportDialog(wxDebugReport& dbgrpt)
 {
     // upper part of the dialog: explanatory message
     wxString msg;
+    wxString debugDir = dbgrpt.GetDirectory();
+
+    // The temporary directory can be the short form on Windows;
+    // normalize it for the benefit of users.
+#ifdef __WXMSW__
+    wxFileName debugDirFilename(debugDir, wxEmptyString);
+    debugDirFilename.Normalize(wxPATH_NORM_LONG);
+    debugDir = debugDirFilename.GetPath();
+#endif
     msg << _("A debug report has been generated in the directory\n")
         << _T('\n')
-        << _T("             \"") << dbgrpt.GetDirectory() << _T("\"\n")
+        << _T("             \"") << debugDir << _T("\"\n")
         << _T('\n')
         << _("The report contains the files listed below. If any of these files contain private information,\nplease uncheck them and they will be removed from the report.\n")
         << _T('\n')
