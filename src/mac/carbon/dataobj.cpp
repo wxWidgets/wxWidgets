@@ -144,7 +144,7 @@ void wxDataFormat::SetType( wxDataFormatId dataType )
         break;
 
     case wxDF_FILENAME:
-        m_format = (long) CFStringCreateCopy( NULL, CFSTR("public.url") );
+        m_format = (long) CFStringCreateCopy( NULL, CFSTR("public.file-url") );
         break;
 
     default:
