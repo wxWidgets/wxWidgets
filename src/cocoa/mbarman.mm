@@ -132,6 +132,12 @@ wxMenuBarManager::wxMenuBarManager()
     [[NSNotificationCenter defaultCenter] addObserver:m_observer
             selector:@selector(windowDidBecomeKey:)
             name:NSWindowDidBecomeKeyNotification object:nil];
+
+    // HACK: Reuse the same selector and eventual C++ method and make it
+    // check for whether the notification is to become key or main.
+    [[NSNotificationCenter defaultCenter] addObserver:m_observer
+            selector:@selector(windowDidBecomeKey:)
+            name:NSWindowDidBecomeMainNotification object:nil];
 #if 0
     [[NSNotificationCenter defaultCenter] addObserver:m_observer
             selector:@selector(windowDidResignKey:)
@@ -271,6 +277,78 @@ void wxMenuBarManager::WindowDidBecomeKey(NSNotification *notification)
 {
     /* NOTE: m_currentNSWindow might be destroyed but we only ever use it
        to look it up in the hash table.  Do not send messages to it. */
+
+    /*  Update m_currentNSWindow only if we really should.  For instance,
+        if a non-wx window is becoming key but a wx window remains main
+        then don't change out the menubar.  However, if a non-wx window
+        (whether the same window or not) is main, then switch to the
+        generic menubar so the wx window that last installed a menubar
+        doesn't get menu events it doesn't expect.
+
+        If a wx window is becoming main then check to see if the key
+        window is a wx window and if so do nothing because that
+        is what would have been done before.
+
+        If a non-wx window is becoming main and 
+     */
+    NSString *notificationName = [notification name];
+    if(NULL == notificationName)
+        return;
+    else if([NSWindowDidBecomeKeyNotification isEqualTo:notificationName])
+    {   // This is the only one that was handled in 2.8 as shipped
+        // Generally the key window can change without the main window changing.
+        // The user can do this simply by clicking on something in a palette window
+        // that needs to become key.
+        NSWindow *newKeyWindow = [notification object];
+        wxCocoaNSWindow *theWxKeyWindow = wxCocoaNSWindow::GetFromCocoa(newKeyWindow);
+        if(theWxKeyWindow != NULL)
+        {   // If the new key window is a wx window, handle it as before
+            // even if it has not actually changed.
+            m_currentNSWindow = newKeyWindow;
+        }
+        else
+        {   // If the new key window is not wx then check the main window.
+            NSWindow *mainWindow = [[NSApplication sharedApplication] mainWindow];
+            if(m_currentNSWindow == mainWindow)
+                // Don't reset if the menubar doesn't need to change.
+                return;
+            else
+                // This is strange because theoretically we should have picked this up
+                // already in the main window notification but it's possible that
+                // we simply haven't gotten it yet and will about as soon as we return.
+                // We already know that the key window isn't wx so fall back to this
+                // one and let the code go ahead and set the wx menubar if it is
+                // a wx window and set the generic one if it isn't.
+                m_currentNSWindow = mainWindow;
+        }
+    }
+    else if([NSWindowDidBecomeMainNotification isEqualTo:notificationName])
+    {   // Handling this is new
+        // Generally the main window cannot change without the key window changing
+        // because if the user clicks on a window that can become main then the
+        // window will also become key.
+        // However, it's possible that when it becomes main it automatically makes
+        // some palette the key window.
+        NSWindow *newMainWindow = [notification object];
+        // If we already know about the window, bail.
+        if(newMainWindow == m_currentNSWindow)
+            return;
+        else
+        {
+            NSWindow *keyWindow = [[NSApplication sharedApplication] keyWindow];
+            if(keyWindow == m_currentNSWindow)
+                // if we already know about the key window, bail
+                return;
+            else
+            {   // As above, sort of strange.  Neither one is current.  Prefer key over main.
+                wxCocoaNSWindow *theWxMainWindow = wxCocoaNSWindow::GetFromCocoa(keyWindow);
+                if(theWxMainWindow != NULL)
+                    m_currentNSWindow = keyWindow;
+                else
+                    m_currentNSWindow = newMainWindow;
+            }
+        }
+    }
     m_currentNSWindow = [notification object];
     wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa(m_currentNSWindow);
     if(win)
