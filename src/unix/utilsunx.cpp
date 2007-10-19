@@ -1170,13 +1170,18 @@ bool wxHandleFatalExceptions(bool doit)
 
 #if wxUSE_GUI
 
+#ifdef __DARWIN__
+    #include <sys/errno.h>
+#endif
 // ----------------------------------------------------------------------------
 // wxExecute support
 // ----------------------------------------------------------------------------
 
-// Darwin doesn't use the same process end detection mechanisms so we don't
-// need wxExecute-related helpers for it
-#if !(defined(__DARWIN__) && defined(__WXMAC__))
+#define USE_OLD_DARWIN_END_PROCESS_DETECT (defined(__DARWIN__) && defined(__WXMAC__))
+
+// wxMac doesn't use the same process end detection mechanisms so we don't
+// need wxExecute-related helpers for it.
+#if !USE_OLD_DARWIN_END_PROCESS_DETECT
 
 bool wxGUIAppTraits::CreateEndProcessPipe(wxExecuteData& execData)
 {
@@ -1244,7 +1249,7 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
     }
 
 
-#if defined(__DARWIN__) && (defined(__WXMAC__) || defined(__WXCOCOA__))
+#if USE_OLD_DARWIN_END_PROCESS_DETECT
     endProcData->tag = wxAddProcessCallbackForPid(endProcData, execData.pid);
 #else
     endProcData->tag = wxAddProcessCallback
@@ -1254,7 +1259,7 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
                 );
 
     execData.pipeEndProcDetect.Close();
-#endif // defined(__DARWIN__) && (defined(__WXMAC__) || defined(__WXCOCOA__))
+#endif // USE_OLD_DARWIN_END_PROCESS_DETECT
 
     if ( flags & wxEXEC_SYNC )
     {
