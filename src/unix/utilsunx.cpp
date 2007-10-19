@@ -1177,7 +1177,33 @@ bool wxHandleFatalExceptions(bool doit)
 // wxExecute support
 // ----------------------------------------------------------------------------
 
+/*
+    NOTE: The original code shipped in 2.8 used __DARWIN__ && __WXMAC__ to wrap
+    the wxGUIAppTraits differences but __DARWIN__ && (__WXMAC__ || __WXCOCOA__)
+    to decide whether to call wxAddProcessCallbackForPid instead of
+    wxAddProcessCallback.  This define normalizes things so the two match.
+
+    Since wxCocoa was already creating the pipes in its wxGUIAppTraits I
+    decided to leave that as is and implement wxAddProcessCallback in the
+    utilsexec_cf.cpp file.  I didn't see a reason to wrap that in a __WXCOCOA__
+    check since it's valid for both wxMac and wxCocoa.
+
+    Since the existing code is working for wxMac I've left it as is although
+    do note that the old task_for_pid method still used on PPC machines is
+    expected to fail in Leopard PPC and theoretically already fails if you run
+    your PPC app under Rosetta.
+
+    You thus have two choices if you find end process detect broken:
+     1) Change the define below such that the new code is used for wxMac.
+        This is theoretically ABI compatible since the old code still remains
+        in utilsexec_cf.cpp it's just no longer used by this code.
+     2) Change the USE_POLLING define in utilsexc_cf.cpp to 1 unconditionally
+        This is theoretically not compatible since it removes the
+        wxMAC_MachPortEndProcessDetect helper function.  Though in practice
+        this shouldn't be a problem since it wasn't prototyped anywhere.
+ */
 #define USE_OLD_DARWIN_END_PROCESS_DETECT (defined(__DARWIN__) && defined(__WXMAC__))
+// #define USE_OLD_DARWIN_END_PROCESS_DETECT 0
 
 // wxMac doesn't use the same process end detection mechanisms so we don't
 // need wxExecute-related helpers for it.
