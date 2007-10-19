@@ -317,13 +317,13 @@ int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
     CFSocketRef cfSocket = CFSocketCreateWithNative(kCFAllocatorDefault,fd,kCFSocketReadCallBack,&WXCF_EndProcessDetector,&context);
     if(cfSocket == NULL)
     {
-        wxLogError("Failed to create socket for end process detection");
+        wxLogError(wxT("Failed to create socket for end process detection"));
         return 0;
     }
     CFRunLoopSourceRef runLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, cfSocket, /*highest priority:*/0);
     if(runLoopSource == NULL)
     {
-        wxLogError("Failed to create CFRunLoopSource from CFSocket for end process detection");
+        wxLogError(wxT("Failed to create CFRunLoopSource from CFSocket for end process detection"));
         // closes the fd.. we can't really stop it, nor do we necessarily want to.
         CFSocketInvalidate(cfSocket);
         CFRelease(cfSocket);
