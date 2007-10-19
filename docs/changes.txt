@@ -111,6 +111,10 @@ Changes in behaviour which may result in compilation errors
 
 - Removed global GetLine() function from wx/protocol/protocol.h, use
   wxProtocol::ReadLine() instead.
+  
+- wxVariant no longer derives from wxObject. wxVariantData also no longer
+  derives from wxObject; instead of using wxDynamicCast with wxVariantData you
+  can use the macro wxDynamicCastVariantData with the same arguments.
 
 
 Deprecated methods and their replacements
@@ -156,6 +160,8 @@ All:
 - Documentation now includes the wx library in which each class is defined.
 - wxrc --gettext now generates references to source .xrc files (Heikki
   Linnakangas).
+- wxVariant::Unshare allows exclusive allocation of data that must be shared,
+  if the wxVariantData::Clone function is implemented.
 
 All (Unix):
 

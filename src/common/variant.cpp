@@ -130,7 +130,6 @@ bool wxVariant::operator!= (const wxVariant& variant) const
     return (!(*this == variant));
 }
 
-
 wxString wxVariant::MakeString() const
 {
     if (!IsNull())
@@ -175,6 +174,30 @@ void wxVariant::UnRef()
         m_data->DecRef();
         m_data = NULL;
     }
+}
+
+bool wxVariant::Unshare()
+{
+    if ( m_data && m_data->GetRefCount() > 1 )
+    {
+        // note that ref is not going to be destroyed in this case...
+        const wxVariantData* ref = m_data;
+        UnRef();
+
+        // ... so we can still access it
+        m_data = ref->Clone();
+
+        wxASSERT_MSG( (m_data && m_data->GetRefCount() == 1),
+                  _T("wxVariant::AllocExclusive() failed.") );
+
+        if (!m_data || m_data->GetRefCount() != 1)
+            return false;
+        else
+            return true;
+    }
+    //else: data is null or ref count is 1, so we are exclusive owners of m_refData anyhow
+    else
+        return true;
 }
 
 
@@ -226,6 +249,8 @@ public:
     virtual bool Read(wxInputStream& str);
     virtual bool Write(wxOutputStream &str) const;
 #endif // wxUSE_STREAMS
+
+    wxVariantData* Clone() const { return new wxVariantDataLong(m_value); }
 
     virtual wxString GetType() const { return wxT("long"); }
 
@@ -377,6 +402,7 @@ public:
 #endif // wxUSE_STREAMS
     virtual wxString GetType() const { return wxT("double"); }
 
+    wxVariantData* Clone() const { return new wxVariantDoubleData(m_value); }
 protected:
     double m_value;
 };
@@ -514,6 +540,7 @@ public:
 #endif // wxUSE_STREAMS
     virtual wxString GetType() const { return wxT("bool"); }
 
+    wxVariantData* Clone() const { return new wxVariantDataBool(m_value); }
 protected:
     bool m_value;
 };
@@ -651,6 +678,7 @@ public:
     virtual bool Write(wxOutputStream& str) const;
 #endif // wxUSE_STREAMS
     virtual wxString GetType() const { return wxT("char"); }
+    wxVariantData* Clone() const { return new wxVariantDataChar(m_value); }
 
 protected:
     wxUniChar m_value;
@@ -802,6 +830,7 @@ public:
     virtual bool Write(wxOutputStream& str) const;
 #endif // wxUSE_STREAMS
     virtual wxString GetType() const { return wxT("string"); }
+    wxVariantData* Clone() const { return new wxVariantDataString(m_value); }
 
 protected:
     wxString m_value;
@@ -955,10 +984,10 @@ public:
 #endif
     virtual bool Read(wxString& str);
     virtual wxString GetType() const ;
-    virtual wxVariantData* Clone() { return new wxVariantDataWxObjectPtr; }
+    virtual wxVariantData* Clone() const { return new wxVariantDataWxObjectPtr(m_value); }
 
     virtual wxClassInfo* GetValueClassInfo();
-    
+
 protected:
     wxObject* m_value;
 };
@@ -975,13 +1004,13 @@ bool wxVariantDataWxObjectPtr::Eq(wxVariantData& data) const
 wxString wxVariantDataWxObjectPtr::GetType() const
 {
     wxString returnVal(wxT("wxObject*"));
-    
+
     if (m_value)
     {
         returnVal = m_value->GetClassInfo()->GetClassName();
         returnVal += wxT("*");
     }
-    
+
     return returnVal;
 }
 
@@ -1076,7 +1105,7 @@ public:
 #endif
     virtual bool Read(wxString& str);
     virtual wxString GetType() const { return wxT("void*"); }
-    virtual wxVariantData* Clone() { return new wxVariantDataVoidPtr; }
+    virtual wxVariantData* Clone() const { return new wxVariantDataVoidPtr(m_value); }
 
 protected:
     void* m_value;
@@ -1193,7 +1222,7 @@ public:
 #endif
     virtual bool Read(wxString& str);
     virtual wxString GetType() const { return wxT("datetime"); }
-    virtual wxVariantData* Clone() { return new wxVariantDataDateTime; }
+    virtual wxVariantData* Clone() const { return new wxVariantDataDateTime(m_value); }
 
 protected:
     wxDateTime m_value;
@@ -1357,7 +1386,7 @@ public:
 #endif
     virtual bool Read(wxString& str);
     virtual wxString GetType() const { return wxT("arrstring"); }
-    virtual wxVariantData* Clone() { return new wxVariantDataArrayString; }
+    virtual wxVariantData* Clone() const { return new wxVariantDataArrayString(m_value); }
 
 protected:
     wxArrayString m_value;
@@ -1484,6 +1513,7 @@ public:
 
     void Clear();
 
+    wxVariantData* Clone() const { return new wxVariantDataList(m_value); }
 protected:
     wxVariantList  m_value;
 };

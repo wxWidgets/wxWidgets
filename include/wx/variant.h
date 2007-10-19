@@ -81,6 +81,10 @@ public:
     // If it based on wxObject return the ClassInfo.
     virtual wxClassInfo* GetValueClassInfo() { return NULL; }
 
+    // Implement this to make wxVariant::AllocExcusive work. Returns
+    // a copy of the data.
+    virtual wxVariantData* Clone() const { return NULL; }
+
     void IncRef() { m_count++; }
     void DecRef()
     {
@@ -104,7 +108,7 @@ private:
  * wxVariant can store any kind of data, but has some basic types
  * built in.
  */
- 
+
 class WXDLLIMPEXP_FWD_BASE wxVariant;
 
 WX_DECLARE_LIST_WITH_DECL(wxVariant, wxVariantList, class WXDLLIMPEXP_BASE);
@@ -145,6 +149,9 @@ public:
 
     // destroy a reference
     void UnRef();
+
+    // ensure that the data is exclusive to this variant, and not shared
+    bool Unshare();
 
     // Make NULL (i.e. delete the data)
     void MakeNull();
@@ -366,6 +373,8 @@ public:\
     virtual wxString GetType() const; \
     virtual wxClassInfo* GetValueClassInfo(); \
 \
+    virtual wxVariantData* Clone() const { return new classname##VariantData(m_value); } \
+\
 protected:\
     classname m_value; \
 };\
@@ -435,6 +444,9 @@ bool classname##VariantData::Eq(wxVariantData& data) const \
 #define wxGetVariantCast(var,classname) \
     ((classname*)(var.IsValueKindOf(&classname::ms_classInfo) ?\
                   var.GetWxObjectPtr() : NULL));
+
+// Replacement for using wxDynamicCast on a wxVariantData object
+#define wxDynamicCastVariantData(data, classname) dynamic_cast<classname*>(data)
 
 extern wxVariant WXDLLIMPEXP_BASE wxNullVariant;
 

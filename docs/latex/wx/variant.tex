@@ -74,7 +74,14 @@ IMPLEMENT_VARIANT_OBJECT(wxBitmap)
 
 Note that as of wxWidgets 2.9.0, wxVariantData no longer inherits from wxObject
 and wxVariant no longer uses the type-unsafe wxList class for list
-operations but the type-safe wxVariantList class.
+operations but the type-safe wxVariantList class. Also, wxVariantData now
+supports the Clone function for implementing the \helpref{wxVariant::Unshare}{wxvariantunshare} function.
+Clone is implemented automatically by IMPLEMENT\_VARIANT\_OBJECT.
+
+Since wxVariantData no longer derives from wxObject, any code that tests the type
+of the data using wxDynamicCast will require adjustment. You can use the macro
+wxDynamicCastVariantData with the same arguments as wxDynamicCast, to use C++ RTTI
+type information instead of wxWidgets RTTI.
 
 \wxheading{Derived from}
 
@@ -364,6 +371,15 @@ is of type list, but the number of elements in the list is zero.
 
 Sets the internal variant data, deleting the existing data if there is any.
 
+\membersection{wxVariant::Unshare}\label{wxvariantunshare}
+
+\func{bool}{Unshare}{\void}
+
+Makes sure that any data associated with this variant is not shared with other
+variants. For this to work, \helpref{wxVariantData::Clone}{wxvariantdataclone} must
+be implemented for the data types you are working with. Clone is implemented
+for all the default data types.
+
 \membersection{wxVariant::operator $=$}\label{wxvariantassignment}
 
 \func{void}{operator $=$}{\param{const wxVariant\& }{value}}
@@ -544,6 +560,14 @@ No base class
 
 Default constructor.
 
+\membersection{wxVariantData::Clone}\label{wxvariantdataclone}
+
+\constfunc{wxVariantData*}{Clone}{\void}
+
+This function can be overridden to clone the data.
+Implement Clone if you wish \helpref{wxVariant::Unshare}{wxvariantunshare} to work
+for your data. This function is implemented for all built-in data types.
+
 \membersection{wxVariantData::DecRef}\label{wxvariantdatadecref}
 
 \func{void}{DecRef}{\void}
@@ -553,7 +577,6 @@ automatically deleted.
 
 Note that destructor of wxVariantData is protected, so delete
 cannot be used as normal. Instead, \helpref{DecRef}{wxvariantdatadecref} should be called.
-
 
 
 \membersection{wxVariantData::Eq}\label{wxvariantdataeq}
