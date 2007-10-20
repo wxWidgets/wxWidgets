@@ -1715,12 +1715,7 @@ void wxGtkPrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
 
     bool underlined = m_font.Ok() && m_font.GetUnderlined();
 
-// FIXME-UTF8: wouldn't be needed if utf8_str() always returned a buffer
-#if wxUSE_UNICODE_UTF8
-    const char *data = text.utf8_str();
-#else
-    const wxCharBuffer data = text.utf8_str();
-#endif
+    const wxUTF8Buf data = text.utf8_str();
 
     size_t datalen = strlen(data);
     pango_layout_set_text( m_layout, data, datalen);
@@ -2135,12 +2130,7 @@ void wxGtkPrintDC::DoGetTextExtent(const wxString& string, wxCoord *width, wxCoo
     }
 
     // Set layout's text
-    // FIXME-UTF8: wouldn't be needed if utf8_str() always returned a buffer
-#if wxUSE_UNICODE_UTF8
-    const char *dataUTF8 = string.utf8_str();
-#else
-    const wxCharBuffer dataUTF8 = string.utf8_str();
-#endif
+    const wxUTF8Buf dataUTF8 = string.utf8_str();
 
     PangoFontDescription *desc = m_fontdesc;
     if (theFont) desc = theFont->GetNativeFontInfo()->description;
