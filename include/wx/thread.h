@@ -600,8 +600,8 @@ class WXDLLIMPEXP_BASE wxThreadHelperThread : public wxThread
 public:
     // constructor only creates the C++ thread object and doesn't create (or
     // start) the real thread
-    wxThreadHelperThread(wxThreadHelper& owner)
-        : wxThread(wxTHREAD_JOINABLE), m_owner(owner)
+    wxThreadHelperThread(wxThreadHelper& owner, wxThreadKind kind)
+        : wxThread(kind), m_owner(owner)
         { }
 
 protected:
@@ -628,16 +628,28 @@ class WXDLLIMPEXP_BASE wxThreadHelper
 private:
     void KillThread()
     {
+        // If detached thread is about to finish, it will set
+        // m_thread to NULL so don't delete it then
+        // But if KillThread is called before detached thread
+        // sets it to NULL, then the thread object still
+        // exists and can be killed
+        wxCriticalSectionLocker locker(m_critSection);
+    
         if ( m_thread )
         {
             m_thread->Kill();
-            delete m_thread;
+            
+            if ( m_kind == wxTHREAD_JOINABLE )
+              delete m_thread;
+            
+            m_thread = NULL;
         }
     }
 
 public:
     // constructor only initializes m_thread to NULL
-    wxThreadHelper() : m_thread(NULL) { }
+    wxThreadHelper(wxThreadKind kind = wxTHREAD_JOINABLE)
+        : m_thread(NULL), m_kind(kind) { }
 
     // destructor deletes m_thread
     virtual ~wxThreadHelper() { KillThread(); }
@@ -648,7 +660,7 @@ public:
     {
         KillThread();
 
-        m_thread = new wxThreadHelperThread(*this);
+        m_thread = new wxThreadHelperThread(*this, m_kind);
 
         return m_thread->Create(stackSize);
     }
@@ -658,16 +670,38 @@ public:
     virtual void *Entry() = 0;
 
     // returns a pointer to the thread which can be used to call Run()
-    wxThread *GetThread() const { return m_thread; }
+    wxThread *GetThread() const
+    {
+        wxCriticalSectionLocker locker((wxCriticalSection&)m_critSection);
+        
+        wxThread* thread = m_thread;
+        
+        return thread;
+    }
 
 protected:
     wxThread *m_thread;
+    wxThreadKind m_kind;
+    wxCriticalSection m_critSection; // To guard the m_thread variable
+    
+    friend class wxThreadHelperThread;
 };
 
 // call Entry() in owner, put it down here to avoid circular declarations
 inline void *wxThreadHelperThread::Entry()
 {
-    return m_owner.Entry();
+    void * const result = m_owner.Entry();
+    
+    wxCriticalSectionLocker locker(m_owner.m_critSection);
+    
+    // Detached thread will be deleted after returning, so make sure
+    // wxThreadHelper::GetThread will not return an invalid pointer.
+    // And that wxThreadHelper::KillThread will not try to kill
+    // an already deleted thread
+    if ( m_owner.m_kind == wxTHREAD_DETACHED )
+        m_owner.m_thread = NULL;
+        
+    return result;
 }
 
 // ----------------------------------------------------------------------------
