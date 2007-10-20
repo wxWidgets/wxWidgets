@@ -2462,7 +2462,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             item_rect.x += indent;
 
             int state = 0;
-            if (m_selection.Index(item) != wxNOT_FOUND)
+            if (m_hasFocus && (m_selection.Index(item) != wxNOT_FOUND))
                 state |= wxDATAVIEW_CELL_SELECTED;
 
             // TODO: it would be much more efficient to create a clipping
