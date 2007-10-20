@@ -635,6 +635,16 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
 {
 }
 
+void wxDataViewCustomRenderer::RenderText( const wxString &text, int xoffset, wxRect cell, wxDC *dc, int state )
+{
+    wxDataViewCtrl *view = GetOwner()->GetOwner();
+    wxColour col = (state & wxDATAVIEW_CELL_SELECTED) ?
+                        wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) :
+                        view->GetForegroundColour();
+    dc->SetTextForeground(col);
+    dc->DrawText( text, cell.x + xoffset, cell.y + ((cell.height - dc->GetCharHeight()) / 2));
+}
+
 // ---------------------------------------------------------
 // wxDataViewTextRenderer
 // ---------------------------------------------------------
@@ -681,15 +691,7 @@ bool wxDataViewTextRenderer::GetValueFromEditorCtrl( wxControl *editor, wxVarian
 
 bool wxDataViewTextRenderer::Render( wxRect cell, wxDC *dc, int state )
 {
-    wxDataViewCtrl *view = GetOwner()->GetOwner();
-    wxColour col = (state & wxDATAVIEW_CELL_SELECTED) ?
-                        wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) :
-                        view->GetForegroundColour();
-
-    dc->SetTextForeground(col);
-    dc->DrawText( m_text, cell.x,  cell.y + ((cell.height - dc->GetCharHeight()) / 2));
-    // dc->DrawText( m_text, cell.x, cell.y );
-
+    RenderText( m_text, 0, cell, dc, state );
     return true;
 }
 
@@ -950,12 +952,10 @@ bool wxDataViewDateRenderer::GetValue( wxVariant &value ) const
     return true;
 }
 
-bool wxDataViewDateRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
+bool wxDataViewDateRenderer::Render( wxRect cell, wxDC *dc, int state )
 {
-    dc->SetFont( GetOwner()->GetOwner()->GetFont() );
     wxString tmp = m_date.FormatDate();
-    dc->DrawText( tmp, cell.x, cell.y );
-
+    RenderText( tmp, 0, cell, dc, state );
     return true;
 }
 
@@ -1019,24 +1019,15 @@ bool wxDataViewIconTextRenderer::GetValue( wxVariant &value ) const
 
 bool wxDataViewIconTextRenderer::Render( wxRect cell, wxDC *dc, int state )
 {
-    wxDataViewCtrl *view = GetOwner()->GetOwner();
-    
-    dc->SetFont( view->GetFont() );
-
-    wxColour col = (state & wxDATAVIEW_CELL_SELECTED) ?
-                        wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) :
-                        view->GetForegroundColour();
-
-    dc->SetTextForeground(col);
-
+    int xoffset = 0;
     const wxIcon &icon = m_value.GetIcon();
     if (icon.IsOk())
     {
         dc->DrawIcon( icon, cell.x, cell.y + ((cell.height - icon.GetHeight()) / 2)); 
-        cell.x += icon.GetWidth()+4;
+        xoffset =  icon.GetWidth()+4;
     }
-
-    dc->DrawText( m_value.GetText(), cell.x,  cell.y + ((cell.height - dc->GetCharHeight()) / 2));
+    
+    RenderText( m_value.GetText(), xoffset, cell, dc, state );
 
     return true;
 }

@@ -379,6 +379,16 @@ wxDataViewCustomRenderer::~wxDataViewCustomRenderer(void)
     delete this->m_DCPtr;
 } /* wxDataViewCustomRenderer::~wxDataViewCustomRenderer(void) */
 
+void wxDataViewCustomRenderer::RenderText( const wxString &text, int xoffset, wxRect cell, wxDC *dc, int state )
+{
+    wxDataViewCtrl *view = GetOwner()->GetOwner();
+    wxColour col = (state & wxDATAVIEW_CELL_SELECTED) ?
+                        wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) :
+                        view->GetForegroundColour();
+    dc->SetTextForeground(col);
+    dc->DrawText( text, cell.x + xoffset, cell.y + ((cell.height - dc->GetCharHeight()) / 2));
+}
+
 wxDC* wxDataViewCustomRenderer::GetDC(void)
 {
   if (this->m_DCPtr == NULL)

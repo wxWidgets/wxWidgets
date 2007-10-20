@@ -122,6 +122,9 @@ public:
 
 
     virtual bool Render( wxRect cell, wxDC *dc, int state ) = 0;
+    
+    void RenderText( const wxString &text, int xoffset,  wxRect cell, wxDC *dc, int state );
+    
     virtual wxSize GetSize() const = 0;
 
     virtual bool Activate( wxRect cell,

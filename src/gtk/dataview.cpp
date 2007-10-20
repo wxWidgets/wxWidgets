@@ -28,7 +28,7 @@
 #include "wx/icon.h"
 #include "wx/list.h"
 #include "wx/listimpl.cpp"
-
+#include "wx/settings.h"
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
@@ -1673,6 +1673,16 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
         Init(mode, align);
 }
 
+void wxDataViewCustomRenderer::RenderText( const wxString &text, int xoffset, wxRect cell, wxDC *dc, int state )
+{
+    wxDataViewCtrl *view = GetOwner()->GetOwner();
+    wxColour col = (state & wxDATAVIEW_CELL_SELECTED) ?
+                        wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) :
+                        view->GetForegroundColour();
+    dc->SetTextForeground(col);
+    dc->DrawText( text, cell.x + xoffset, cell.y + ((cell.height - dc->GetCharHeight()) / 2));
+}
+
 bool wxDataViewCustomRenderer::Init(wxDataViewCellMode mode, int align)
 {
     GtkWxCellRenderer *renderer = (GtkWxCellRenderer *) gtk_wx_cell_renderer_new();
@@ -1874,8 +1884,7 @@ bool wxDataViewDateRenderer::Render( wxRect cell, wxDC *dc, int state )
 {
     dc->SetFont( GetOwner()->GetOwner()->GetFont() );
     wxString tmp = m_date.FormatDate();
-    dc->DrawText( tmp, cell.x, cell.y );
-
+    RenderText( tmp, 0, cell, dc, state );
     return true;
 }
 
@@ -1936,23 +1945,30 @@ bool wxDataViewIconTextRenderer::GetValue( wxVariant &value ) const
     
 bool wxDataViewIconTextRenderer::Render( wxRect cell, wxDC *dc, int state )
 {
-    dc->SetFont( GetOwner()->GetOwner()->GetFont() );
-    
     const wxIcon &icon = m_value.GetIcon();
+    int offset = 0;
     if (icon.IsOk())
     {
-        dc->DrawIcon( icon, cell.x, cell.y ); // TODO centre
-        cell.x += icon.GetWidth()+4;
+        int yoffset = wxMax( 0, (cell.height - icon.GetHeight()) / 2 );
+        dc->DrawIcon( icon, cell.x, cell.y + yoffset );
+        offset = icon.GetWidth() + 4;
     }
     
-    dc->DrawText( m_value.GetText(), cell.x, cell.y );
+    RenderText( m_value.GetText(), offset, cell, dc, state );
 
     return true;
 }
 
 wxSize wxDataViewIconTextRenderer::GetSize() const
 {
-    return wxSize(80,16);  // TODO
+    wxSize size;
+    if (m_value.GetIcon().IsOk())
+        size.x = 4 + m_value.GetIcon().GetWidth();
+    wxCoord x,y,d;
+    GetView()->GetTextExtent( m_value.GetText(), &x, &y, &d );
+    size.x += x;
+    size.y = y+d;
+    return size; 
 }
 
 wxControl* wxDataViewIconTextRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )

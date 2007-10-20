@@ -19,6 +19,10 @@
 
 #include "wx/dataview.h"
 
+#include "wx/spinctrl.h"
+#include "wx/dc.h"
+#include "wx/settings.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/icon.h"
@@ -970,6 +974,58 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED)
+
+
+// -------------------------------------
+// wxDataViewSpinRenderer
+// -------------------------------------
+
+wxDataViewSpinRenderer::wxDataViewSpinRenderer( int min, int max, wxDataViewCellMode mode, int alignment ) :
+   wxDataViewCustomRenderer( "long", mode, alignment ) 
+{ 
+    m_min = min;
+    m_max = max;
+}
+    
+wxControl* wxDataViewSpinRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
+{ 
+    long l = value;
+    return new wxSpinCtrl( parent, wxID_ANY, wxEmptyString, 
+               labelRect.GetTopLeft(), labelRect.GetSize(), wxSP_ARROW_KEYS, m_min, m_max, l );
+}
+        
+bool wxDataViewSpinRenderer::GetValueFromEditorCtrl( wxControl* editor, wxVariant &value )
+{ 
+    wxSpinCtrl *sc = (wxSpinCtrl*) editor;
+    long l = sc->GetValue();
+    value = l;
+    return true;
+}
+        
+bool wxDataViewSpinRenderer::Render( wxRect rect, wxDC *dc, int state )
+{
+    wxString str;
+    str.Printf( "%d", (int) m_data );
+    RenderText( str, 0, rect, dc, state );
+    return true;
+}
+    
+wxSize wxDataViewSpinRenderer::GetSize() const
+{
+    return wxSize(80,16);
+}
+    
+bool wxDataViewSpinRenderer::SetValue( const wxVariant &value )
+{
+    m_data = value.GetLong();
+    return true;
+}
+    
+bool wxDataViewSpinRenderer::GetValue( wxVariant &value ) const
+{
+    value = m_data;
+    return true;
+}
 
 //-----------------------------------------------------------------------------
 // wxDataViewTreeStore

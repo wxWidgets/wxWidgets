@@ -713,6 +713,29 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
     #include "wx/generic/dataview.h"
 #endif
 
+// -------------------------------------
+// wxDataViewSpinRenderer
+// -------------------------------------
+
+class wxDataViewSpinRenderer: public wxDataViewCustomRenderer
+{
+public:
+    wxDataViewSpinRenderer( int min, int max,
+                            wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
+                            int alignment = wxDVR_DEFAULT_ALIGNMENT );
+    virtual bool HasEditorCtrl() { return true; }
+    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
+    virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
+    virtual bool Render( wxRect rect, wxDC *dc, int state );
+    virtual wxSize GetSize() const;
+    virtual bool SetValue( const wxVariant &value );
+    virtual bool GetValue( wxVariant &value ) const;
+    
+private:
+    long    m_data;
+    long    m_min,m_max;
+};
+
 //-----------------------------------------------------------------------------
 // wxDataViewTreeStore
 //-----------------------------------------------------------------------------

@@ -12,6 +12,7 @@ a number of ready-to-use renderers provided:
 \helpref{wxDataViewProgressRenderer}{wxdataviewprogressrenderer},
 \helpref{wxDataViewBitmapRenderer}{wxdataviewbitmaprenderer},
 \helpref{wxDataViewDateRenderer}{wxdataviewdaterenderer}.
+\helpref{wxDataViewSpinRenderer}{wxdataviewspinrenderer}.
 
 Additionally, the user can write own renderers by deriving from
 \helpref{wxDataViewCustomRenderer}{wxdataviewcustomrenderer}.
@@ -467,6 +468,15 @@ Override this to render the cell. Before this is called,
 \helpref{SetValue}{wxdataviewrenderersetvalue} was called
 so that this instance knows what to render.
 
+\membersection{wxDataViewCustomRenderer::RenderText}\label{wxdataviewcustomrendererrender}
+
+\func{bool}{RenderText}{\param{const wxString\& }{text}, \param{int }{xoffset}, \param{wxRect }{cell}, \param{wxDC* }{dc}, \param{int }{state}}
+
+This method should be called from within \helpref{Render}{wxdataviewcustomrendererrender}
+whenever you need to render simple text. This will ensure that the
+correct colour, font and vertical alignment will be chosen so the
+text will look the same as text drawn by native renderers.
+
 \membersection{wxDataViewCustomRenderer::RightClick}\label{wxdataviewcustomrendererrightclick}
 
 \func{virtual bool}{RightClick}{\param{wxPoint }{cursor}, \param{wxRect }{cell}, \param{wxDataViewModel* }{model}, \param{unsigned int }{col}, \param{unsigned int }{row}}
@@ -480,4 +490,29 @@ Overrride this to react to a right click.
 Overrride this to start a drag operation.
 
 
+\section{\class{wxDataViewSpinRenderer}}\label{wxdataviewspinrenderer}
+
+This is a specialized renderer for rendering integer values. It
+supports modifying the values in-place by using a wxSpinCtrl.
+The renderer only support variants of type {\it long}.
+
+\wxheading{Derived from}
+
+\helpref{wxDataViewCustomRenderer}{wxdataviewcustomrenderer}
+
+\wxheading{Include files}
+
+<dataview.h>
+
+\wxheading{Data structures}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxDataViewSpinRenderer::wxDataViewSpinRenderer}\label{wxdataviewspinrendererwxdataviewspinrenderer}
+
+\func{}{wxDataViewSpinRenderer}{\param{int }{min}, \param{int }{max}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_EDITABLE}, \param{int }{alignment = wxDVR\_DEFAULT\_ALIGNMENT}}
+
+Constructor. {\it min} and {\it max} indicate the minimum und
+maximum values of for the wxSpinCtrl.
 

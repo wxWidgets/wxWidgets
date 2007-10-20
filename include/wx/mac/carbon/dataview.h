@@ -118,6 +118,8 @@ public:
   
   virtual ~wxDataViewCustomRenderer(void);
 
+  void RenderText( const wxString &text, int xoffset, wxRect cell, wxDC *dc, int state );
+
 //
 // methods handling render space
 //
