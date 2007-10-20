@@ -3366,12 +3366,12 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                 if (m_underMouse && m_underMouse != node)
                 {
                     //wxLogMessage("Undo the row: %d", GetRowByItem(m_underMouse->GetItem()));
-                    Refresh(GetRowByItem(m_underMouse->GetItem()));
+                    RefreshRow(GetRowByItem(m_underMouse->GetItem()));
                 }
                 if (m_underMouse != node)
                 {
                     //wxLogMessage("Do the row: %d", current);
-                    Refresh(current);
+                    RefreshRow(current);
                 }
                 m_underMouse = node;
             }
@@ -3384,7 +3384,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         if (m_underMouse != NULL)
         {
             //wxLogMessage("Undo the row: %d", GetRowByItem(m_underMouse->GetItem()));
-            Refresh(GetRowByItem(m_underMouse->GetItem()));
+            RefreshRow(GetRowByItem(m_underMouse->GetItem()));
             m_underMouse = NULL;
         }
     }
