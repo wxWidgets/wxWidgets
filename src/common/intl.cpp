@@ -70,6 +70,7 @@
 #include "wx/apptrait.h"
 #include "wx/stdpaths.h"
 #include "wx/hashset.h"
+#include "wx/filesys.h"
 
 #if defined(__WXMAC__)
     #include  "wx/mac/private.h"  // includes mac headers
@@ -907,11 +908,8 @@ private:
                 ofsHashTable;   //        +18:  offset of hash table start
     };
 
-    // all data is stored here, NULL if no data loaded
-    size_t8 *m_pData;
-
-    // amount of memory pointed to by m_pData.
-    size_t32 m_nSize;
+    // all data is stored here
+    wxMemoryBuffer m_data;
 
     // data description
     size_t32          m_numStrings;   // number of strings in this domain
@@ -929,18 +927,25 @@ private:
                             : ui;
     }
 
+    // just return the pointer to the start of the data as "char *" to
+    // facilitate doing pointer arithmetic with it
+    char *StringData() const
+    {
+        return wx_static_cast(char *, m_data.GetData());
+    }
+
     const char *StringAtOfs(wxMsgTableEntry *pTable, size_t32 n) const
     {
         const wxMsgTableEntry * const ent = pTable + n;
 
         // this check could fail for a corrupt message catalog
         size_t32 ofsString = Swap(ent->ofsString);
-        if ( ofsString + Swap(ent->nLen) > m_nSize)
+        if ( ofsString + Swap(ent->nLen) > m_data.GetDataLen())
         {
             return NULL;
         }
 
-        return (const char *)(m_pData + ofsString);
+        return StringData() + ofsString;
     }
 
     bool m_bSwapped;   // wrong endianness?
@@ -1003,13 +1008,10 @@ static wxArrayString gs_searchPrefixes;
 
 wxMsgCatalogFile::wxMsgCatalogFile()
 {
-    m_pData = NULL;
-    m_nSize = 0;
 }
 
 wxMsgCatalogFile::~wxMsgCatalogFile()
 {
-    delete [] m_pData;
 }
 
 // return the directories to search for message catalogs under the given
@@ -1145,17 +1147,40 @@ bool wxMsgCatalogFile::Load(const wxString& szDirPrefix, const wxString& szName,
 
   wxFileName fn(szName);
   fn.SetExt(_T("mo"));
+
   wxString strFullName;
-  if ( !wxFindFileInPath(&strFullName, searchPath, fn.GetFullPath()) ) {
+#if wxUSE_FILESYSTEM
+  wxFileSystem fileSys;
+  if ( !fileSys.FindFileInPath(&strFullName, searchPath, fn.GetFullPath()) )
+#else // !wxUSE_FILESYSTEM
+  if ( !wxFindFileInPath(&strFullName, searchPath, fn.GetFullPath()) )
+#endif // wxUSE_FILESYSTEM/!wxUSE_FILESYSTEM
+  {
     wxLogVerbose(_("catalog file for domain '%s' not found."), szName);
     wxLogTrace(TRACE_I18N, _T("Catalog \"%s.mo\" not found"), szName);
     return false;
   }
 
-  // open file
+  // open file and read its data
   wxLogVerbose(_("using catalog '%s' from '%s'."), szName, strFullName.c_str());
   wxLogTrace(TRACE_I18N, _T("Using catalog \"%s\"."), strFullName.c_str());
 
+#if wxUSE_FILESYSTEM
+  wxFSFile * const fileMsg = fileSys.OpenFile(strFullName);
+  if ( !fileMsg )
+    return false;
+
+  wxInputStream *fileStream = fileMsg->GetStream();
+  m_data.SetDataLen(0);
+
+  static const size_t chunkSize = 4096;
+  while ( !fileStream->Eof() ) {
+    fileStream->Read(m_data.GetAppendBuf(chunkSize), chunkSize);
+    m_data.UngetAppendBuf(fileStream->LastRead());
+  }
+
+  delete fileMsg;
+#else // !wxUSE_FILESYSTEM
   wxFile fileMsg(strFullName);
   if ( !fileMsg.IsOpened() )
     return false;
@@ -1169,16 +1194,15 @@ bool wxMsgCatalogFile::Load(const wxString& szDirPrefix, const wxString& szName,
   wxASSERT_MSG( nSize == lenFile + size_t(0), _T("message catalog bigger than 4GB?") );
 
   // read the whole file in memory
-  m_pData = new size_t8[nSize];
-  if ( fileMsg.Read(m_pData, nSize) != lenFile ) {
-    wxDELETEA(m_pData);
+  if ( fileMsg.Read(m_data.GetWriteBuf(nSize), nSize) != lenFile )
     return false;
-  }
+#endif // wxUSE_FILESYSTEM/!wxUSE_FILESYSTEM
+
 
   // examine header
-  bool bValid = nSize + (size_t)0 > sizeof(wxMsgCatalogHeader);
+  bool bValid = m_data.GetDataLen() > sizeof(wxMsgCatalogHeader);
 
-  wxMsgCatalogHeader *pHeader = (wxMsgCatalogHeader *)m_pData;
+  const wxMsgCatalogHeader *pHeader = (wxMsgCatalogHeader *)m_data.GetData();
   if ( bValid ) {
     // we'll have to swap all the integers if it's true
     m_bSwapped = pHeader->magic == MSGCATALOG_MAGIC_SW;
@@ -1191,17 +1215,15 @@ bool wxMsgCatalogFile::Load(const wxString& szDirPrefix, const wxString& szName,
     // it's either too short or has incorrect magic number
     wxLogWarning(_("'%s' is not a valid message catalog."), strFullName.c_str());
 
-    wxDELETEA(m_pData);
     return false;
   }
 
   // initialize
   m_numStrings  = Swap(pHeader->numStrings);
-  m_pOrigTable  = (wxMsgTableEntry *)(m_pData +
+  m_pOrigTable  = (wxMsgTableEntry *)(StringData() +
                    Swap(pHeader->ofsOrigTable));
-  m_pTransTable = (wxMsgTableEntry *)(m_pData +
+  m_pTransTable = (wxMsgTableEntry *)(StringData() +
                    Swap(pHeader->ofsTransTable));
-  m_nSize = (size_t32)nSize;
 
   // now parse catalog's header and try to extract catalog charset and
   // plural forms formula from it:
