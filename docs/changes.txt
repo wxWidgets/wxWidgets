@@ -32,6 +32,11 @@ changes:
   type "const char *", you need to remove wxT() or _T() around the values used
   to initialize them (which should normally always be ASCII).
 
+- wxIPC classes didn't work correctly in Unicode build before, this was fixed
+  but at a price of breaking backwards compatibility: many methods which used
+  to work with "wxChar *" before use "void *" now (some int parameters were
+  also changed to size_t). While wxIPC_TEXT can still be used to transfer 7
+  bit text, the new wxIPC_UTF8TEXT format is used for transferring wxStrings.
 
 
 Changes in behaviour not resulting in compilation errors, please read this!
@@ -143,6 +148,7 @@ Major new features in this release
 All:
 
 - Allow loading message catalogs from wxFileSystem (Axel Gembe)
+- Use UTF-8 for Unicode data in wxIPC classes (Anders Larsen)
 - Added support for user-defined types to wxConfig (Marcin Wojdyr).
 - Added wxJoin() and wxSplit() functions (Francesco Montorsi).
 - Added wxMutex::LockTimeout() (Aleksandr Napylov).

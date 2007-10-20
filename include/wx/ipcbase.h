@@ -31,10 +31,19 @@ enum wxIPCFormat
   wxIPC_PENDATA =          10,
   wxIPC_RIFF =             11,
   wxIPC_WAVE =             12,
-  wxIPC_UNICODETEXT =      13,
+  wxIPC_UTF16TEXT =        13, /* CF_UNICODE */
   wxIPC_ENHMETAFILE =      14,
   wxIPC_FILENAME =         15, /* CF_HDROP */
   wxIPC_LOCALE =           16,
+  wxIPC_UTF8TEXT =         17,
+  wxIPC_UTF32TEXT =        18,
+#if SIZEOF_WCHAR_T == 2
+  wxIPC_UNICODETEXT = wxIPC_UTF16TEXT,
+#elif SIZEOF_WCHAR_T == 4
+  wxIPC_UNICODETEXT = wxIPC_UTF32TEXT,
+#else
+#  error "Unknown wchar_t size"
+#endif
   wxIPC_PRIVATE =          20
 };
 
@@ -43,113 +52,165 @@ class WXDLLIMPEXP_FWD_BASE wxClientBase;
 
 class WXDLLIMPEXP_BASE wxConnectionBase: public wxObject
 {
-  DECLARE_CLASS(wxConnectionBase)
-
 public:
-  wxConnectionBase(wxChar *buffer, int size); // use external buffer
+  wxConnectionBase(void *buffer, size_t size); // use external buffer
   wxConnectionBase(); // use internal, adaptive buffer
   wxConnectionBase(const wxConnectionBase& copy);
-  virtual ~wxConnectionBase(void);
+  virtual ~wxConnectionBase();
 
   void SetConnected( bool c ) { m_connected = c; }
   bool GetConnected() { return m_connected; }
 
   // Calls that CLIENT can make
-  virtual bool Execute(const wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT ) = 0;
-  // FIXME-UTF8: review this code for compatibility implications, update
-  //             accordingly, don' use c_str() below
-  virtual bool Execute(const wxString& str)
-    { return Execute(str.c_str(), -1, wxIPC_TEXT); }
-  virtual wxChar *Request(const wxString& item, int *size = (int *) NULL, wxIPCFormat format = wxIPC_TEXT) = 0;
-  virtual bool Poke(const wxString& item, const wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT) = 0;
+  bool Execute(const void *data, size_t size, wxIPCFormat fmt = wxIPC_PRIVATE)
+      { return DoExecute(data, size, fmt); }
+  bool Execute(const char *s, size_t size = wxNO_LEN)
+      { return DoExecute(s, size == wxNO_LEN ? strlen(s) + 1
+                                             : size, wxIPC_TEXT); }
+  bool Execute(const wchar_t *ws, size_t size = wxNO_LEN)
+      { return DoExecute(ws, size == wxNO_LEN ? (wcslen(ws) + 1)*sizeof(wchar_t)
+                                              : size, wxIPC_UNICODETEXT); }
+  bool Execute(const wxString& s)
+  {
+      const wxUTF8Buf buf = s.utf8_str();
+      return DoExecute(buf, strlen(buf) + 1, wxIPC_UTF8TEXT);
+  }
+  bool Execute(const wxCStrData& cs)
+      { return Execute(cs.AsString()); }
+
+  virtual const void *Request(const wxString& item,
+                              size_t *size = NULL,
+                              wxIPCFormat format = wxIPC_TEXT) = 0;
+
+  bool Poke(const wxString& item, const void *data, size_t size,
+            wxIPCFormat fmt = wxIPC_PRIVATE)
+      { return DoPoke(item, data, size, fmt); }
+  bool Poke(const wxString& item, const char *s, size_t size = wxNO_LEN)
+      { return DoPoke(item, s, size == wxNO_LEN ? strlen(s) + 1
+                                                : size, wxIPC_TEXT); }
+  bool Poke(const wxString& item, const wchar_t *ws, size_t size = wxNO_LEN)
+      { return DoPoke(item, ws,
+                      size == wxNO_LEN ? (wcslen(ws) + 1)*sizeof(wchar_t)
+                                       : size, wxIPC_UNICODETEXT); }
+  bool Poke(const wxString& item, const wxString s)
+  {
+      const wxUTF8Buf buf = s.utf8_str();
+      return DoPoke(item, buf,  strlen(buf) + 1, wxIPC_UTF8TEXT);
+  }
+  bool Poke(const wxString& item, const wxCStrData& cs)
+      { return Poke(item, cs.AsString()); }
+
   virtual bool StartAdvise(const wxString& item) = 0;
   virtual bool StopAdvise(const wxString& item) = 0;
 
   // Calls that SERVER can make
-  virtual bool Advise(const wxString& item, const wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT) = 0;
+  bool Advise(const wxString& item, const void *data, size_t size,
+              wxIPCFormat fmt = wxIPC_PRIVATE)
+      { return DoAdvise(item, data, size, fmt); }
+  bool Advise(const wxString& item, const char *s, size_t size = wxNO_LEN)
+      { return DoAdvise(item, s, size == wxNO_LEN ? strlen(s) + 1
+                                                  : size, wxIPC_TEXT); }
+  bool Advise(const wxString& item, const wchar_t *ws, size_t size = wxNO_LEN)
+      { return DoAdvise(item, ws,
+                        size == wxNO_LEN ? (wcslen(ws) + 1)*sizeof(wchar_t)
+                                         : size, wxIPC_UNICODETEXT); }
+  bool Advise(const wxString& item, const wxString s)
+  {
+      const wxUTF8Buf buf = s.utf8_str();
+      return DoAdvise(item, buf,  strlen(buf) + 1, wxIPC_UTF8TEXT);
+  }
+  bool Advise(const wxString& item, const wxCStrData& cs)
+      { return Advise(item, cs.AsString()); }
 
   // Calls that both can make
-  virtual bool Disconnect(void) = 0;
+  virtual bool Disconnect() = 0;
+
 
   // Callbacks to SERVER - override at will
-  virtual bool OnExecute     ( const wxString& WXUNUSED(topic),
-                               wxChar *WXUNUSED(data),
-                               int WXUNUSED(size),
-                               wxIPCFormat WXUNUSED(format) )
-                             { return false; }
+  virtual bool OnExecute(const wxString& WXUNUSED(topic),
+                         const void *WXUNUSED(data),
+                         size_t WXUNUSED(size),
+                         wxIPCFormat WXUNUSED(format))
+      { return false; }
 
-  virtual const wxChar *OnRequest ( const wxString& WXUNUSED(topic),
-                                    const wxString& WXUNUSED(item),
-                                    int *WXUNUSED(size),
-                                    wxIPCFormat WXUNUSED(format) )
-                                  { return (wxChar *) NULL; }
+  virtual const void *OnRequest(const wxString& WXUNUSED(topic),
+                                const wxString& WXUNUSED(item),
+                                size_t *size,
+                                wxIPCFormat WXUNUSED(format))
+      { *size = 0; return NULL; }
 
-  virtual bool OnPoke        ( const wxString& WXUNUSED(topic),
-                               const wxString& WXUNUSED(item),
-                               wxChar *WXUNUSED(data),
-                               int WXUNUSED(size),
-                               wxIPCFormat WXUNUSED(format) )
-                             { return false; }
+  virtual bool OnPoke(const wxString& WXUNUSED(topic),
+                      const wxString& WXUNUSED(item),
+                      const void *WXUNUSED(data),
+                      size_t WXUNUSED(size),
+                      wxIPCFormat WXUNUSED(format))
+      { return false; }
 
-  virtual bool OnStartAdvise ( const wxString& WXUNUSED(topic),
-                               const wxString& WXUNUSED(item) )
-                             { return false; }
+  virtual bool OnStartAdvise(const wxString& WXUNUSED(topic),
+                             const wxString& WXUNUSED(item))
+      { return false; }
 
-  virtual bool OnStopAdvise  ( const wxString& WXUNUSED(topic),
-                               const wxString& WXUNUSED(item) )
-                             { return false; }
+  virtual bool OnStopAdvise(const wxString& WXUNUSED(topic),
+                            const wxString& WXUNUSED(item))
+      { return false; }
 
   // Callbacks to CLIENT - override at will
-  virtual bool OnAdvise      ( const wxString& WXUNUSED(topic),
-                               const wxString& WXUNUSED(item),
-                               wxChar *WXUNUSED(data),
-                               int WXUNUSED(size),
-                               wxIPCFormat WXUNUSED(format) )
-                             { return false; }
+  virtual bool OnAdvise(const wxString& WXUNUSED(topic),
+                        const wxString& WXUNUSED(item),
+                        const void *WXUNUSED(data),
+                        size_t WXUNUSED(size),
+                        wxIPCFormat WXUNUSED(format))
+      { return false; }
 
-  // Callbacks to BOTH - override at will
-  // Default behaviour is to delete connection and return true
-  virtual bool OnDisconnect(void) = 0;
+  // Callbacks to BOTH
+  virtual bool OnDisconnect() { delete this; return true; }
+
 
   // return a buffer at least this size, reallocating buffer if needed
-  // returns NULL if using an inadequate user buffer - it can't be resized
-  wxChar *      GetBufferAtLeast( size_t bytes );
+  // returns NULL if using an inadequate user buffer which can't be resized
+  void *GetBufferAtLeast(size_t bytes);
 
 protected:
-  bool          m_connected;
+  virtual bool DoExecute(const void *data, size_t size, wxIPCFormat format) = 0;
+  virtual bool DoPoke(const wxString& item, const void *data, size_t size,
+                      wxIPCFormat format) = 0;
+  virtual bool DoAdvise(const wxString& item, const void *data, size_t size,
+                        wxIPCFormat format) = 0;
+
+
 private:
-  wxChar *      m_buffer;
+  char         *m_buffer;
   size_t        m_buffersize;
   bool          m_deletebufferwhendone;
 
-  // can't use DECLARE_NO_COPY_CLASS(wxConnectionBase) because we already
-  // have copy ctor but still forbid the default assignment operator
-  wxConnectionBase& operator=(const wxConnectionBase&);
+protected:
+  bool          m_connected;
+
+  DECLARE_NO_ASSIGN_CLASS(wxConnectionBase);
+  DECLARE_CLASS(wxConnectionBase)
 };
 
 
-class WXDLLIMPEXP_BASE wxServerBase: public wxObject
+class WXDLLIMPEXP_BASE wxServerBase : public wxObject
 {
-  DECLARE_CLASS(wxServerBase)
-
 public:
-  inline wxServerBase(void) {}
-  inline ~wxServerBase(void) {}
+  wxServerBase() { }
+  virtual ~wxServerBase() { }
 
   // Returns false on error (e.g. port number is already in use)
   virtual bool Create(const wxString& serverName) = 0;
 
   // Callbacks to SERVER - override at will
   virtual wxConnectionBase *OnAcceptConnection(const wxString& topic) = 0;
+
+  DECLARE_CLASS(wxServerBase)
 };
 
-class WXDLLIMPEXP_BASE wxClientBase: public wxObject
+class WXDLLIMPEXP_BASE wxClientBase : public wxObject
 {
-  DECLARE_CLASS(wxClientBase)
-
 public:
-  inline wxClientBase(void) {}
-  inline ~wxClientBase(void) {}
+  wxClientBase() { }
+  virtual ~wxClientBase() { }
 
   virtual bool ValidHost(const wxString& host) = 0;
 
@@ -159,8 +220,9 @@ public:
                                            const wxString& topic) = 0;
 
   // Callbacks to CLIENT - override at will
-  virtual wxConnectionBase *OnMakeConnection(void) = 0;
+  virtual wxConnectionBase *OnMakeConnection() = 0;
+
+  DECLARE_CLASS(wxClientBase)
 };
 
-#endif
-    // _WX_IPCBASEH__
+#endif // _WX_IPCBASEH__

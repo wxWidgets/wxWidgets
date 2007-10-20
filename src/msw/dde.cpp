@@ -498,7 +498,7 @@ bool wxDDEClient::DeleteConnection(WXHCONV conv)
 // wxDDEConnection
 // ----------------------------------------------------------------------------
 
-wxDDEConnection::wxDDEConnection(wxChar *buffer, int size)
+wxDDEConnection::wxDDEConnection(void *buffer, size_t size)
      : wxConnectionBase(buffer, size)
 {
     m_client = NULL;
@@ -545,13 +545,9 @@ bool wxDDEConnection::Disconnect()
     return ok;
 }
 
-bool wxDDEConnection::Execute(const wxChar *data, int size, wxIPCFormat WXUNUSED(format))
+bool wxDDEConnection::DoExecute(const void *data, size_t size, wxIPCFormat WXUNUSED(format))
 {
     DWORD result;
-    if (size < 0)
-    {
-        size = (wxStrlen(data) + 1) * sizeof(wxChar);    // includes final NUL
-    }
 
     bool ok = DdeClientTransaction((LPBYTE)data,
                                     size,
@@ -572,7 +568,7 @@ bool wxDDEConnection::Execute(const wxChar *data, int size, wxIPCFormat WXUNUSED
     return ok;
 }
 
-wxChar *wxDDEConnection::Request(const wxString& item, int *size, wxIPCFormat format)
+const void *wxDDEConnection::Request(const wxString& item, size_t *size, wxIPCFormat format)
 {
     DWORD result;
 
@@ -593,7 +589,7 @@ wxChar *wxDDEConnection::Request(const wxString& item, int *size, wxIPCFormat fo
 
     DWORD len = DdeGetData(returned_data, NULL, 0, 0);
 
-    wxChar *data = GetBufferAtLeast( len );
+    void *data = GetBufferAtLeast(len);
     wxASSERT_MSG(data != NULL,
                  _T("Buffer too small in wxDDEConnection::Request") );
     (void) DdeGetData(returned_data, (LPBYTE)data, len, 0);
@@ -601,18 +597,14 @@ wxChar *wxDDEConnection::Request(const wxString& item, int *size, wxIPCFormat fo
     (void) DdeFreeDataHandle(returned_data);
 
     if (size)
-        *size = (int)len;
+        *size = (size_t)len;
 
     return data;
 }
 
-bool wxDDEConnection::Poke(const wxString& item, const wxChar *data, int size, wxIPCFormat format)
+bool wxDDEConnection::DoPoke(const wxString& item, const void *data, size_t size, wxIPCFormat format)
 {
     DWORD result;
-    if (size < 0)
-    {
-        size = (wxStrlen(data) + 1) * sizeof(wxChar);    // includes final NUL
-    }
 
     HSZ item_atom = DDEGetAtom(item);
     bool ok = DdeClientTransaction((LPBYTE)data,
@@ -669,16 +661,11 @@ bool wxDDEConnection::StopAdvise(const wxString& item)
 }
 
 // Calls that SERVER can make
-bool wxDDEConnection::Advise(const wxString& item,
-                             const wxChar *data,
-                             int size,
-                             wxIPCFormat format)
+bool wxDDEConnection::DoAdvise(const wxString& item,
+                               const void *data,
+                               size_t size,
+                               wxIPCFormat format)
 {
-    if (size < 0)
-    {
-        size = (wxStrlen(data) + 1) * sizeof(wxChar);    // includes final NUL
-    }
-
     HSZ item_atom = DDEGetAtom(item);
     HSZ topic_atom = DDEGetAtom(m_topicName);
     m_sendingData = data;  // mrf: potential for scope problems here?
@@ -693,12 +680,6 @@ bool wxDDEConnection::Advise(const wxString& item,
     }
 
     return ok;
-}
-
-bool wxDDEConnection::OnDisconnect()
-{
-    delete this;
-    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -775,7 +756,7 @@ _DDECallback(WORD wType,
                 {
                     DWORD len = DdeGetData(hData, NULL, 0, 0);
 
-                    wxChar *data = connection->GetBufferAtLeast( len );
+                    void *data = connection->GetBufferAtLeast(len);
                     wxASSERT_MSG(data != NULL,
                                  _T("Buffer too small in _DDECallback (XTYP_EXECUTE)") );
 
@@ -804,15 +785,26 @@ _DDECallback(WORD wType,
                 {
                     wxString item_name = DDEStringFromAtom(hsz2);
 
-                    int user_size = -1;
-                    const wxChar *data = connection->OnRequest(connection->m_topicName,
-                                                               item_name,
-                                                               &user_size,
-                                                               (wxIPCFormat)wFmt);
+                    size_t user_size = wxNO_LEN;
+                    const void *data = connection->OnRequest(connection->m_topicName,
+                                                             item_name,
+                                                             &user_size,
+                                                             (wxIPCFormat)wFmt);
                     if (data)
                     {
-                        if (user_size < 0)
-                            user_size = (wxStrlen((wxChar*)data) + 1) * sizeof(wxChar);    // includes final NUL
+                      if (user_size == wxNO_LEN)
+                        switch (wFmt)
+                        {
+                          case wxIPC_TEXT:
+                          case wxIPC_UTF8TEXT:
+                            user_size = strlen((const char*)data) + 1;  // includes final NUL
+                            break;
+                          case wxIPC_UNICODETEXT:
+                            user_size = (wcslen((const wchar_t*)data) + 1) * sizeof(wchar_t);  // includes final NUL
+                            break;
+                          default:
+                            user_size = 0;
+                        }
 
                         HDDEDATA handle = DdeCreateDataHandle(DDEIdInst,
                                                               (LPBYTE)data,
@@ -837,7 +829,7 @@ _DDECallback(WORD wType,
 
                     DWORD len = DdeGetData(hData, NULL, 0, 0);
 
-                    wxChar *data = connection->GetBufferAtLeast( len );
+                    void *data = connection->GetBufferAtLeast(len);
                     wxASSERT_MSG(data != NULL,
                                  _T("Buffer too small in _DDECallback (XTYP_POKE)") );
 
@@ -924,7 +916,7 @@ _DDECallback(WORD wType,
 
                     DWORD len = DdeGetData(hData, NULL, 0, 0);
 
-                    wxChar *data = connection->GetBufferAtLeast( len );
+                    void *data = connection->GetBufferAtLeast(len);
                     wxASSERT_MSG(data != NULL,
                                  _T("Buffer too small in _DDECallback (XTYP_ADVDATA)") );
 

@@ -69,20 +69,20 @@ public:
     MyConnection();
     ~MyConnection();
 
-    virtual bool OnExecute(const wxString& topic, wxChar *data, int size, wxIPCFormat format);
-    virtual const wxChar *OnRequest(const wxString& topic, const wxString& item, int *size, wxIPCFormat format);
-    virtual bool OnPoke(const wxString& topic, const wxString& item, wxChar *data, int size, wxIPCFormat format);
+    virtual bool OnExecute(const wxString& topic, const void *data, size_t size, wxIPCFormat format);
+    virtual const void *OnRequest(const wxString& topic, const wxString& item, size_t *size, wxIPCFormat format);
+    virtual bool OnPoke(const wxString& topic, const wxString& item, const void *data, size_t size, wxIPCFormat format);
     virtual bool OnStartAdvise(const wxString& topic, const wxString& item);
     virtual bool OnStopAdvise(const wxString& topic, const wxString& item);
-    virtual bool Advise(const wxString& item, const wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT);
+    virtual bool DoAdvise(const wxString& item, const void *data, size_t size, wxIPCFormat format);
     virtual bool OnDisconnect();
 protected:
-    void Log(const wxString& command, const wxString& topic, const wxString& item, const wxChar *data, int size, wxIPCFormat format);
+    void Log(const wxString& command, const wxString& topic, const wxString& item, const void *data, size_t size, wxIPCFormat format);
 public:
     wxString        m_sAdvise;
 protected:
     wxString        m_sRequestDate;
-    char             m_achRequestBytes[3];
+    char            m_achRequestBytes[3];
 };
 
 class MyServer: public wxServer

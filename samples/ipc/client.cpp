@@ -337,14 +337,14 @@ void MyFrame::OnExecute(wxCommandEvent& WXUNUSED(event))
     {
         wxString s = _T("Date");
 
-        m_client->GetConnection()->Execute((const wxChar *)s.c_str());
-        m_client->GetConnection()->Execute((const wxChar *)s.c_str(), (s.Length() + 1) * sizeof(wxChar));
+        m_client->GetConnection()->Execute(s);
+        m_client->GetConnection()->Execute((const char *)s.c_str(), s.length() + 1);
 #if wxUSE_DDE_FOR_IPC
         wxLogMessage(_T("DDE Execute can only be used to send text strings, not arbitrary data.\nThe type argument will be ignored, text truncated, converted to Unicode and null terminated."));
 #endif
         char bytes[3];
         bytes[0] = '1'; bytes[1] = '2'; bytes[2] = '3';
-        m_client->GetConnection()->Execute((wxChar *)bytes, 3, wxIPC_PRIVATE);
+        m_client->GetConnection()->Execute(bytes, 3, wxIPC_PRIVATE);
     }
 }
 
@@ -353,12 +353,12 @@ void MyFrame::OnPoke(wxCommandEvent& WXUNUSED(event))
     if (m_client->IsConnected())
     {
         wxString s = wxDateTime::Now().Format();
-        m_client->GetConnection()->Poke(_T("Date"), (const wxChar *)s.c_str());
+        m_client->GetConnection()->Poke(_T("Date"), s);
         s = wxDateTime::Now().FormatTime() + _T(" ") + wxDateTime::Now().FormatDate();
-        m_client->GetConnection()->Poke(_T("Date"), (const wxChar *)s.c_str(), (s.Length() + 1) * sizeof(wxChar));
+        m_client->GetConnection()->Poke(_T("Date"), (const char *)s.c_str(), s.length() + 1);
         char bytes[3];
         bytes[0] = '1'; bytes[1] = '2'; bytes[2] = '3';
-        m_client->GetConnection()->Poke(_T("bytes[3]"), (wxChar *)bytes, 3, wxIPC_PRIVATE);
+        m_client->GetConnection()->Poke(_T("bytes[3]"), bytes, 3, wxIPC_PRIVATE);
     }
 }
 
@@ -366,7 +366,7 @@ void MyFrame::OnRequest(wxCommandEvent& WXUNUSED(event))
 {
     if (m_client->IsConnected())
     {
-        int size;
+        size_t size;
         m_client->GetConnection()->Request(_T("Date"));
         m_client->GetConnection()->Request(_T("Date+len"), &size);
         m_client->GetConnection()->Request(_T("bytes[3]"), &size, wxIPC_PRIVATE);
@@ -417,7 +417,7 @@ MyClient::~MyClient()
 // ----------------------------------------------------------------------------
 
 void MyConnection::Log(const wxString& command, const wxString& topic,
-    const wxString& item, const wxChar *data, int size, wxIPCFormat format)
+    const wxString& item, const void *data, size_t size, wxIPCFormat format)
 {
     wxString s;
     if (topic.IsEmpty() && item.IsEmpty())
@@ -429,10 +429,17 @@ void MyConnection::Log(const wxString& command, const wxString& topic,
     else
         s.Printf(_T("%s(topic=\"%s\",item=\"%s\","), command.c_str(), topic.c_str(), item.c_str());
 
-    if (format == wxIPC_TEXT || format == wxIPC_UNICODETEXT)
-        wxLogMessage(_T("%s\"%s\",%d)"), s.c_str(), data, size);
-    else if (format == wxIPC_PRIVATE)
+    switch (format)
     {
+      case wxIPC_TEXT:
+      case wxIPC_UTF8TEXT:
+#if !wxUSE_UNICODE || wxUSE_UNICODE_UTF8
+        wxLogMessage(_T("%s\"%s\",%d)"), s.c_str(), data, size);
+#else
+        wxLogMessage(_T("%s\"%s\",%d)"), s.c_str(), wxConvUTF8.cMB2WC((const char*)data), size);
+#endif
+        break;
+      case wxIPC_PRIVATE:
         if (size == 3)
         {
             char *bytes = (char *)data;
@@ -440,13 +447,18 @@ void MyConnection::Log(const wxString& command, const wxString& topic,
         }
         else
             wxLogMessage(_T("%s...,%d)"), s.c_str(), size);
-    }
-    else if (format == wxIPC_INVALID)
+        break;
+      case wxIPC_INVALID:
         wxLogMessage(_T("%s[invalid data],%d)"), s.c_str(), size);
+        break;
+      default:
+        wxLogMessage(_T("%s[unknown data],%d)"), s.c_str(), size);
+        break;
+    }
 }
 
-bool MyConnection::OnAdvise(const wxString& topic, const wxString& item, wxChar *data,
-    int size, wxIPCFormat format)
+bool MyConnection::OnAdvise(const wxString& topic, const wxString& item, const void *data,
+    size_t size, wxIPCFormat format)
 {
     Log(_T("OnAdvise"), topic, item, data, size, format);
     return true;
@@ -459,24 +471,24 @@ bool MyConnection::OnDisconnect()
     return true;
 }
 
-bool MyConnection::Execute(const wxChar *data, int size, wxIPCFormat format)
+bool MyConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
 {
-    Log(_T("Execute"), wxEmptyString, wxEmptyString, (wxChar *)data, size, format);
-    bool retval = wxConnection::Execute(data, size, format);
+    Log(_T("Execute"), wxEmptyString, wxEmptyString, data, size, format);
+    bool retval = wxConnection::DoExecute(data, size, format);
     if (!retval)
         wxLogMessage(_T("Execute failed!"));
     return retval;
 }
 
-wxChar *MyConnection::Request(const wxString& item, int *size, wxIPCFormat format)
+const void *MyConnection::Request(const wxString& item, size_t *size, wxIPCFormat format)
 {
-    wxChar *data =  wxConnection::Request(item, size, format);
-    Log(_T("Request"), wxEmptyString, item, data, size ? *size : -1, format);
+    const void *data =  wxConnection::Request(item, size, format);
+    Log(_T("Request"), wxEmptyString, item, data, size ? *size : wxNO_LEN, format);
     return data;
 }
 
-bool MyConnection::Poke(const wxString& item, const wxChar *data, int size, wxIPCFormat format)
+bool MyConnection::DoPoke(const wxString& item, const void *data, size_t size, wxIPCFormat format)
 {
     Log(_T("Poke"), wxEmptyString, item, data, size, format);
-    return wxConnection::Poke(item, data, size, format);
+    return wxConnection::DoPoke(item, data, size, format);
 }
