@@ -13,6 +13,12 @@
 #ifndef _WX_EFFECTS_H_
 #define _WX_EFFECTS_H_
 
+// this class is deprecated and will be removed in the next wx version
+//
+// please use wxRenderer::DrawBorder() instead of DrawSunkenEdge(); there is no
+// replacement for TileBitmap() but it doesn't seem to be very useful anyhow
+#ifdef WXWIN_COMPATIBILITY_2_8
+
 /*
  * wxEffects: various 3D effects
  */
@@ -22,17 +28,15 @@
 #include "wx/gdicmn.h"
 #include "wx/dc.h"
 
-class WXDLLEXPORT wxEffects: public wxObject
+class WXDLLEXPORT wxEffectsImpl: public wxObject
 {
-DECLARE_CLASS(wxEffects)
-
 public:
     // Assume system colours
-    wxEffects() ;
+    wxEffectsImpl() ;
     // Going from lightest to darkest
-    wxEffects(const wxColour& highlightColour, const wxColour& lightShadow,
-              const wxColour& faceColour, const wxColour& mediumShadow,
-              const wxColour& darkShadow) ;
+    wxEffectsImpl(const wxColour& highlightColour, const wxColour& lightShadow,
+                  const wxColour& faceColour, const wxColour& mediumShadow,
+                  const wxColour& darkShadow) ;
 
     // Accessors
     wxColour GetHighlightColour() const { return m_highlightColour; }
@@ -70,6 +74,18 @@ protected:
     wxColour    m_faceColour;       // Usually grey
     wxColour    m_mediumShadow;     // Usually dark grey
     wxColour    m_darkShadow;       // Usually black
+
+    DECLARE_CLASS(wxEffectsImpl)
 };
 
-#endif
+// current versions of g++ don't generate deprecation warnings for classes
+// declared deprecated, so define wxEffects as a typedef instead: this does
+// generate warnings with both g++ and VC (which also has no troubles with
+// directly deprecating the classes...)
+//
+// note that this g++ bug (16370) is supposed to be fixed in g++ 4.3.0
+typedef wxEffectsImpl wxDEPRECATED(wxEffects);
+
+#endif // WXWIN_COMPATIBILITY_2_8
+
+#endif // _WX_EFFECTS_H_
