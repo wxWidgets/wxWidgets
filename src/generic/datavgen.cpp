@@ -3444,7 +3444,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             {
                 wxWindow *parent = GetParent();
                 wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, parent->GetId());
-                le.SetItem( GetItemByRow(current) );
+                le.SetItem( item );
                 le.SetEventObject(parent);
                 le.SetModel(GetOwner()->GetModel());
 
