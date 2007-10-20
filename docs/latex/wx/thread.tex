@@ -458,6 +458,27 @@ is undefined.
 \func{void}{Yield}{\void}
 
 Give the rest of the thread time slice to the system allowing the other threads to run.
+Note that using this function is {\bf strongly discouraged}, since in
+many cases it indicates a design weakness of your threading model (as
+does using Sleep functions).
+Threads should use the CPU in an efficient manner, i.e. they should
+do their current work efficiently, then as soon as the work is done block
+on a wakeup event (wxCondition, wxMutex, select(), poll(), ...)
+which will get signalled e.g. by other threads or a user device once further
+thread work is available. Using Yield or Sleep
+indicates polling-type behaviour, since we're fuzzily giving up our timeslice
+and wait until sometime later we'll get reactivated, at which time we
+realize that there isn't really much to do and Yield again...
+The most critical characteristic of Yield is that it's operating system
+specific: there may be scheduler changes which cause your thread to not
+wake up relatively soon again, but instead many seconds later,
+causing huge performance issues for your application. {\bf with a
+well-behaving, CPU-efficient thread the operating system is likely to properly
+care for its reactivation the moment it needs it, whereas with
+non-deterministic, Yield-using threads all bets are off and the system
+scheduler is free to penalize drastically}, and this effect gets worse
+with increasing system load due to less free CPU resources available.
+You may refer to various Linux kernel sched\_yield discussions for more information.
 See also \helpref{Sleep()}{wxthreadsleep}.
 
 
