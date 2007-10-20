@@ -3,7 +3,7 @@
 0. Purpose
 ----------
 
-This is broad technote covering all aspects of binary compatibility with 
+This is a broad technote covering all aspects of binary compatibility with 
 wxWidgets.
 
 1. Releases

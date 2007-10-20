@@ -1962,6 +1962,8 @@ See also \helpref{wxIsBusy}{wxisbusy}, \helpref{wxBusyCursor}{wxbusycursor}.
 
 Ring the system bell.
 
+Note that this function is categorized as a GUI one and so is not thread-safe.
+
 \wxheading{Include files}
 
 <wx/utils.h>
@@ -3370,7 +3372,7 @@ Returns the mouse position in screen coordinates.
 
 Returns the current state of the mouse.  Returns a wxMouseState
 instance that contains the current position of the mouse pointer in
-screen coordinants, as well as boolean values indicating the up/down
+screen coordinates, as well as boolean values indicating the up/down
 status of the mouse buttons and the modifier keys.
 
 \wxheading{Include files}
@@ -3425,8 +3427,8 @@ Returns label that should be used for given {\it id} element.
 \docparam{id}{given id of the \helpref{wxMenuItem}{wxmenuitem}, \helpref{wxButton}{wxbutton}, \helpref{wxToolBar}{wxtoolbar} tool, etc.}
 
 \docparam{withCodes}{if false then strip accelerator code from the label;
-usefull for getting labels without accelerator char code like for toolbar tooltip or
-under platforms without traditional keyboard like smartphones}
+useful for getting labels without accelerator char code like for toolbar tooltip or
+on platforms without traditional keyboard like smartphones}
 
 \docparam{accelerator}{optional accelerator string automatically added to label; useful
 for building labels for \helpref{wxMenuItem}{wxmenuitem}}

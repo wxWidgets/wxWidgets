@@ -633,6 +633,17 @@ rectangle are returned as a tuple.}
 {\tt ( x, y, width, height )}}
 
 
+\membersection{wxDC::GetDepth}\label{wxdcgetdepth}
+
+\constfunc{int}{GetDepth}{\void}
+
+Returns the depth (number of bits/pixel) of this DC.
+
+\wxheading{See also}
+
+\helpref{wxDisplayDepth}{wxdisplaydepth}
+
+
 \membersection{wxDC::GetFont}\label{wxdcgetfont}
 
 \constfunc{const wxFont\&}{GetFont}{\void}
@@ -1138,7 +1149,7 @@ The mapping mode can be one of the following:
 \twocolitem{wxMM\_POINTS}{Each logical unit is a point, or 1/72 of an inch.}
 \twocolitem{wxMM\_METRIC}{Each logical unit is 1 mm.}
 \twocolitem{wxMM\_LOMETRIC}{Each logical unit is 1/10 of a mm.}
-\twocolitem{wxMM\_TEXT}{Each logical unit is 1 pixel.}
+\twocolitem{wxMM\_TEXT}{Each logical unit is 1 device pixel.}
 \end{twocollist}
 
 
@@ -1151,7 +1162,7 @@ or bitmap associated with the DC. If the argument is wxNullPalette, the current
 palette is selected out of the device context, and the original palette
 restored.
 
-See \helpref{wxPalette}{wxpalette} for further details. 
+See \helpref{wxPalette}{wxpalette} for further details.
 
 
 \membersection{wxDC::SetPen}\label{wxdcsetpen}

@@ -781,7 +781,8 @@ the user.
 \wxheading{See also}
 
 \helpref{wxImageHandler}{wximagehandler},
-\helpref{wxInitAllImageHandlers}{wxinitallimagehandlers}
+\helpref{wxInitAllImageHandlers}{wxinitallimagehandlers},
+\helpref{wxQuantize}{wxquantize}
 
 
 \membersection{wxImage::InsertHandler}\label{wximageinserthandler}
@@ -944,6 +945,12 @@ true if the handler was found and removed, false otherwise.
 Returns a mirrored copy of the image. The parameter {\it horizontally}
 indicates the orientation.
 
+
+\membersection{wxImage::Paste}\label{wximagepaste}
+
+\func{void}{Paste}{\param{const wxImage\& }{image}, \param{int }{x}, \param{int }{y}}
+
+Copy the data of the given \arg{image} to the specified position in this image.
 
 \membersection{wxImage::Replace}\label{wximagereplace}
 
@@ -1159,8 +1166,10 @@ Returns a resized version of this image without scaling it by adding either a bo
 with the given colour or cropping as necessary. The image is pasted into a new
 image with the given {\it size} and background colour at the position {\it pos}
 relative to the upper left of the new image. If {\it red = green = blue = -1}
-then use either the current mask colour if set or find, use, and set a
-suitable mask colour for any newly exposed areas.
+then the areas of the larger image not covered by this image are made
+transparent by filling them with the image mask colour (which will be allocated
+automatically if it isn't currently set). Otherwise, the areas will be filled
+with the colour with the specified RGB components.
 
 \wxheading{See also}
 
