@@ -33,7 +33,7 @@
 // FIXME: is this right? somehow I don't think so (VZ)
 
 #define gtk_accel_group_attach(g, o) gtk_window_add_accel_group((o), (g))
-//#define gtk_accel_group_detach(g, o) gtk_window_remove_accel_group((o), (g))
+#define gtk_accel_group_detach(g, o) gtk_window_remove_accel_group((o), (g))
 //#define gtk_menu_ensure_uline_accel_group(m) gtk_menu_get_accel_group(m)
 
 #define ACCEL_OBJECT        GtkWindow
@@ -238,6 +238,11 @@ static void wxMenubarUnsetInvokingWindow( wxMenu *menu, wxWindow *win )
     wxWindow *top_frame = win;
     while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
         top_frame = top_frame->GetParent();
+
+    // support for native hot keys
+    ACCEL_OBJECT *obj = ACCEL_OBJ_CAST(top_frame->m_widget);
+    if ( menu->m_accel && g_slist_find( ACCEL_OBJECTS(menu->m_accel), obj ) )
+        gtk_accel_group_detach( menu->m_accel, obj );
 
     wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
     while (node)
@@ -446,8 +451,11 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
         if( frame )
             frame->UpdateMenuBarSize();
+        
+        wxMenubarUnsetInvokingWindow( menu, m_invokingWindow );
     }
 
+    
     return menu;
 }
 
@@ -1049,8 +1057,6 @@ void wxMenu::Init()
 
 wxMenu::~wxMenu()
 {
-   WX_CLEAR_LIST(wxMenuItemList, m_items);
-
    if ( GTK_IS_WIDGET( m_menu ))
    {
        // see wxMenu::Init
@@ -1062,6 +1068,13 @@ wxMenu::~wxMenu()
        if ( m_owner )
            gtk_widget_destroy( m_menu );
    }
+   
+   // This must come after we release GTK resources above. Otherwise, GTK will 
+   // give warnings/errors when attempting to free accelerator resources from 
+   // child items that just were destroyed (the m_menu widget can contain 
+   // references to accelerators in child items. Problem detected when removing 
+   // a menu from a wxMenuBar, and the removed menu had submenus with accelerators.) 
+   WX_CLEAR_LIST(wxMenuItemList, m_items);
 }
 
 void wxMenu::SetLayoutDirection(const wxLayoutDirection dir)
