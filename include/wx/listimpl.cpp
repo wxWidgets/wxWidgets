@@ -20,8 +20,8 @@
     name::BaseListType name::EmptyList;
 
 #else // !wxUSE_STL
-
-    #define _DEFINE_LIST(T, name)         \
+    #undef WX_DEFINE_LIST_2
+    #define WX_DEFINE_LIST_2(T, name)     \
         void wx##name##Node::DeleteData() \
         {                                 \
             delete (T *)GetData();        \
@@ -30,10 +30,7 @@
     // redefine the macro so that now it will generate the class implementation
     // old value would provoke a compile-time error if this file is not included
     #undef  WX_DEFINE_LIST
-    #define WX_DEFINE_LIST(name) _DEFINE_LIST(_WX_LIST_ITEM_TYPE_##name, name)
-
-    // don't pollute preprocessor's name space
-    //#undef  _DEFINE_LIST
+    #define WX_DEFINE_LIST(name) WX_DEFINE_LIST_2(_WX_LIST_ITEM_TYPE_##name, name)
 
 #endif // wxUSE_STL/!wxUSE_STL
 
