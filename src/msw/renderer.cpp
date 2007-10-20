@@ -548,7 +548,7 @@ wxRendererXP::DrawItemSelectionRect(wxWindow *win,
         }
         else // !focused
         {
-            brush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
+            brush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
         }
     }
     else // !selected
