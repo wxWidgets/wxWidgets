@@ -1590,6 +1590,48 @@ int wxString::DoPrintfUtf8(const char *format, ...)
 }
 #endif // wxUSE_UNICODE_UTF8
 
+/*
+    Uses wxVsnprintf and places the result into the this string.
+
+    In ANSI build, wxVsnprintf is effectively vsnprintf but in Unicode build
+    it is vswprintf.  Due to a discrepancy between vsnprintf and vswprintf in
+    the ISO C99 (and thus SUSv3) standard the return value for the case of
+    an undersized buffer is inconsistent.  For conforming vsnprintf
+    implementations the function must return the number of characters that
+    would have been printed had the buffer been large enough.  For conforming
+    vswprintf implementations the function must return a negative number
+    and set errno.
+
+    What vswprintf sets errno to is undefined but Darwin seems to set it to
+    EOVERFLOW.  The only expected errno that are defined anywhere are by an
+    addendum indicating that EILSEQ should be set for bad input characters and
+    EINVALID for bad arguments such as a NULL buffer pointer.  It would appear
+    that setting EOVERFLOW is not documented anywhere and has only been at
+    this time observed on Darwin.
+
+    In practice it's impossible to determine before compilation which behavior
+    may be used.  The vswprintf function may have vsnprintf-like behavior or
+    vice-versa.  Behavior detected on one release can theoretically change
+    with an updated release.  Not to mention that configure testing for it
+    would require the test to be run on the host system, not the build system
+    which makes cross compilation difficult. Therefore, we make no assumptions
+    about behavior and try our best to handle every known case, including the
+    case where wxVsnprintf returns a negative number and fails to set errno.
+
+    There is yet one more non-standard implementation and that is our own.
+    Fortunately, that can be detected at compile-time.
+
+    On top of all that, ISO C99 explicitly defines snprintf to write a null
+    character to the last position of the specified buffer.  That would be at
+    at the given buffer size minus 1.  It is supposed to do this even if it
+    turns out that the buffer is sized too small.
+
+    Darwin (tested on 10.5) follows the C99 behavior exactly.
+
+    Glibc 2.6 almost follows the C99 behavior except vswprintf never sets
+    errno even when it fails.  However, it only seems to ever fail due
+    to an undersized buffer.
+*/
 #if wxUSE_UNICODE_UTF8
 template<typename BufferType>
 #else
@@ -1627,12 +1669,19 @@ static int DoStringPrintfV(wxString& str,
         // only a copy
         va_list argptrcopy;
         wxVaCopy(argptrcopy, argptr);
+
+#ifndef __WXWINCE__
+        // Set errno to 0 to make it determinate if wxVsnprintf fails to set it.
+        errno = 0;
+#endif
         int len = wxVsnprintf(buf, size, format, argptrcopy);
         va_end(argptrcopy);
 
         // some implementations of vsnprintf() don't NUL terminate
         // the string if there is not enough space for it so
         // always do it manually
+        // FIXME: This really seems to be the wrong and would be an off-by-one
+        // bug except the code above allocates an extra character.
         buf[size] = _T('\0');
 
         // vsnprintf() may return either -1 (traditional Unix behaviour) or the
@@ -1654,7 +1703,17 @@ static int DoStringPrintfV(wxString& str,
             // assume it only returns error if there is not enough space, but
             // as we don't know how much we need, double the current size of
             // the buffer
+#ifndef __WXWINCE__
+            if( (errno == 0) || (errno == EOVERFLOW) )
+            // still not enough, as we don't know how much we need, double the
+            // current size of the buffer
+                size *= 2;
+            else
+            // If errno was set to something else, assume hard failure.
+                return -1;
+#else
             size *= 2;
+#endif // __WXWINCE__
 #endif // wxUSE_WXVSNPRINTF/!wxUSE_WXVSNPRINTF
         }
         else if ( len >= size )
@@ -1667,6 +1726,11 @@ static int DoStringPrintfV(wxString& str,
 #else
             // some vsnprintf() implementations NUL-terminate the buffer and
             // some don't in len == size case, to be safe always add 1
+            // FIXME: I don't quite understand this comment.  The vsnprintf
+            // function is specifically defined to return the number of
+            // characters printed not including the null terminator.
+            // So OF COURSE you need to add 1 to get the right buffer size.
+            // The following line is definitely correct, no question.
             size = len + 1;
 #endif
         }
