@@ -140,7 +140,7 @@
 
 
 #if wxUSE_LONGLONG
-wxULongLong wxInvalidSize = (unsigned)-1;
+extern const wxULongLong wxInvalidSize = (unsigned)-1;
 #endif // wxUSE_LONGLONG
 
 
