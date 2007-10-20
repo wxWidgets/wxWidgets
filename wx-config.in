@@ -893,7 +893,7 @@ bindir="@bindir@"
 [ -z "$output_option_basename"      ] || echo "@WX_LIBRARY_BASENAME_GUI@"
 [ -z "$output_option_cc"            ] || echo "@CC@"
 [ -z "$output_option_cxx"           ] || echo "@CXX@"
-[ -z "$output_option_ld"            ] || echo "@EXE_LINKER@"
+[ -z "$output_option_ld"            ] || echo "@CXX@ -o"
 [ -z "$flag_option_selected_config" ] || echo "$this_config"
 
 

@@ -7703,16 +7703,6 @@ if test "$wxUSE_MAC" = 1 ; then
 fi
 
 if test "$wxUSE_SHARED" = "yes"; then
-
-    dnl We get the shared build linker from bakefile, since it
-    dnl moved all the logic for this out of this file and into
-    dnl its own macro.  But it can't decide on whether to return
-    dnl us $(VAR), ${VAR}, or the present expansion of VAR.
-    dnl So normalise and expand everything here now, because its
-    dnl not going to change inside wx-config anyway.
-    sanitised_bakefile_mess=`echo "$SHARED_LD_CXX" | tr -d '()'`
-    EXE_LINKER=`eval echo "$sanitised_bakefile_mess"`
-
     dnl Need addtional flag on OS/2, so override bakefiles value
     dnl (there currently is no suitable variable to which the
     dnl  missing flags could be added, AFAICS. SN, 18.12.2004. )
@@ -7724,11 +7714,6 @@ if test "$wxUSE_SHARED" = "yes"; then
         cp -p ${srcdir}/src/os2/dllar.sh .
       ;;
     esac
-else
-
-    dnl No bakefile support for static builds, but this should be ok for most.
-    EXE_LINKER="$CXX -o"
-
 fi
 if test "$wxUSE_OMF" = "yes"; then
     case "${host}" in
@@ -7837,7 +7822,6 @@ AC_SUBST(WXCONFIG_LIBS)
 AC_SUBST(WXCONFIG_RPATH)
 AC_SUBST(WXCONFIG_LDFLAGS_GUI)
 AC_SUBST(WXCONFIG_RESFLAGS)
-AC_SUBST(EXE_LINKER)
 
 dnl distribution vars
 AC_SUBST(GUIDIST)
