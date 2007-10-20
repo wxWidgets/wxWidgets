@@ -1646,9 +1646,16 @@ void wxGenericTreeCtrl::Expand(const wxTreeItemId& itemId)
     }
 
     item->Expand();
-    CalculatePositions();
+    if ( !m_freezeCount )
+    {
+        CalculatePositions();
 
-    RefreshSubtree(item);
+        RefreshSubtree(item);
+    }
+    else // frozen
+    {
+        m_dirty = true;
+    }
 
     event.SetEventType(wxEVT_COMMAND_TREE_ITEM_EXPANDED);
     GetEventHandler()->ProcessEvent( event );
@@ -3582,7 +3589,10 @@ void wxGenericTreeCtrl::Thaw()
 
     if ( --m_freezeCount == 0 )
     {
-        Refresh();
+        if ( m_dirty )
+            DoDirtyProcessing();
+        else
+            Refresh();
     }
 }
 

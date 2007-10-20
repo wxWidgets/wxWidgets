@@ -191,6 +191,7 @@ void wxTreeCtrlBase::ExpandAll()
 
 void wxTreeCtrlBase::ExpandAllChildren(const wxTreeItemId& item)
 {
+    Freeze();
     // expand this item first, this might result in its children being added on
     // the fly
     if ( item != GetRootItem() || !HasFlag(wxTR_HIDE_ROOT) )
@@ -205,6 +206,7 @@ void wxTreeCtrlBase::ExpandAllChildren(const wxTreeItemId& item)
     {
         ExpandAllChildren(idCurr);
     }
+    Thaw();
 }
 
 void wxTreeCtrlBase::CollapseAll()
@@ -217,6 +219,7 @@ void wxTreeCtrlBase::CollapseAll()
 
 void wxTreeCtrlBase::CollapseAllChildren(const wxTreeItemId& item)
 {
+    Freeze();
     // first (recursively) collapse all the children
     wxTreeItemIdValue cookie;
     for ( wxTreeItemId idCurr = GetFirstChild(item, cookie);
@@ -228,6 +231,7 @@ void wxTreeCtrlBase::CollapseAllChildren(const wxTreeItemId& item)
 
     // then collapse this element too
     Collapse(item);
+    Thaw();
 }
 
 bool wxTreeCtrlBase::IsEmpty() const
