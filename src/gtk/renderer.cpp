@@ -235,11 +235,20 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
     if (win->GetLayoutDirection() == wxLayout_RightToLeft)
         x_diff = rect.width;
 
+    GtkStateType state = GTK_STATE_NORMAL;
+    if (flags & wxCONTROL_DISABLED)
+        state = GTK_STATE_INSENSITIVE;
+    else
+    {
+        if (flags & wxCONTROL_CURRENT)
+            state = GTK_STATE_PRELIGHT;
+    }
+
     gtk_paint_box
     (
         button->style,
         gdk_window,
-        flags & wxCONTROL_DISABLED ? GTK_STATE_INSENSITIVE : GTK_STATE_NORMAL,
+        state,
         GTK_SHADOW_OUT,
         NULL,
         button,
