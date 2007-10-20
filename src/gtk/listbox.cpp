@@ -768,6 +768,13 @@ void wxListBox::GtkSetSelection(int n, const bool select, const bool blockEvent)
         gtk_tree_selection_select_iter(selection, &iter);
     else
         gtk_tree_selection_unselect_iter(selection, &iter);
+        
+    GtkTreePath* path = gtk_tree_model_get_path(
+                        GTK_TREE_MODEL(m_liststore), &iter);
+
+    gtk_tree_view_scroll_to_cell(m_treeview, path, NULL, FALSE, 0.0f, 0.0f);
+
+    gtk_tree_path_free(path);
 
     m_blockEvent = false;
 }
