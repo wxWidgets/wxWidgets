@@ -716,58 +716,44 @@ int wxCmdLineParser::Parse(bool showUsage)
             }
             else // it's an option. not a switch
             {
-                // get the value
-                if ( isLong )
+                switch ( (*p).GetValue() )
                 {
-                    if ( *p++ != _T('=') )
-                    {
-                        errorMsg << wxString::Format(_("Option '%s' requires a value, '=' expected."), name.c_str())
-                                 << _T('\n');
+                    case _T('='):
+                    case _T(':'):
+                        // the value follows
+                        ++p;
+                        break;
 
-                        ok = false;
-                    }
-                }
-                else // short option
-                {
-                    switch ( (*p).GetValue() )
-                    {
-                        case _T('='):
-                        case _T(':'):
-                            // the value follows
-                            ++p;
-                            break;
+                    case 0:
+                        // the value is in the next argument
+                        if ( ++n == count )
+                        {
+                            // ... but there is none
+                            errorMsg << wxString::Format(_("Option '%s' requires a value."),
+                                                         name.c_str())
+                                     << _T('\n');
 
-                        case 0:
-                            // the value is in the next argument
-                            if ( ++n == count )
-                            {
-                                // ... but there is none
-                                errorMsg << wxString::Format(_("Option '%s' requires a value."),
-                                                             name.c_str())
-                                         << _T('\n');
+                            ok = false;
+                        }
+                        else
+                        {
+                            // ... take it from there
+                            p = m_data->m_arguments[n].begin();
+                            end = m_data->m_arguments[n].end();
+                        }
+                        break;
 
-                                ok = false;
-                            }
-                            else
-                            {
-                                // ... take it from there
-                                p = m_data->m_arguments[n].begin();
-                                end = m_data->m_arguments[n].end();
-                            }
-                            break;
+                    default:
+                        // the value is right here: this may be legal or
+                        // not depending on the option style
+                        if ( opt.flags & wxCMD_LINE_NEEDS_SEPARATOR )
+                        {
+                            errorMsg << wxString::Format(_("Separator expected after the option '%s'."),
+                                                         name.c_str())
+                                    << _T('\n');
 
-                        default:
-                            // the value is right here: this may be legal or
-                            // not depending on the option style
-                            if ( opt.flags & wxCMD_LINE_NEEDS_SEPARATOR )
-                            {
-                                errorMsg << wxString::Format(_("Separator expected after the option '%s'."),
-                                                             name.c_str())
-                                        << _T('\n');
-
-                                ok = false;
-                            }
-                    }
+                            ok = false;
+                        }
                 }
 
                 if ( ok )
