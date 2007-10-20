@@ -662,7 +662,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     m_musicCtrl->AppendTextColumn( "Artist", 1, wxDATAVIEW_CELL_EDITABLE, 150,
                                      DEFAULT_ALIGN, wxDATAVIEW_COL_SORTABLE );
 
-    MySpinCtrlInPlaceRenderer *sr = new MySpinCtrlInPlaceRenderer;
+    wxDataViewSpinRenderer *sr = new wxDataViewSpinRenderer( 0, 2010 );
     wxDataViewColumn *column = new wxDataViewColumn( "year", sr, 2, -1, wxALIGN_CENTRE, wxDATAVIEW_COL_SORTABLE );
     m_musicCtrl->AppendColumn( column );
 
