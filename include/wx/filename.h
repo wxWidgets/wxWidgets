@@ -85,7 +85,7 @@ enum
 };
 
 // error code of wxFileName::GetSize()
-extern wxULongLong wxInvalidSize;
+extern WXDLLIMPEXP_DATA_BASE(wxULongLong) wxInvalidSize;
 
 
 
