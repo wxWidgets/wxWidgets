@@ -268,7 +268,7 @@ class wxDataViewTreeNode
 {
 public:
     wxDataViewTreeNode( wxDataViewTreeNode * parent = NULL )
-    { 
+    {
         m_parent = parent;
         if (!parent)
             m_open = true;
@@ -277,7 +277,7 @@ public:
         m_hasChildren = false;
         m_subTreeCount  = 0;
     }
-    
+
     ~wxDataViewTreeNode()
     {
     }
@@ -1012,7 +1012,7 @@ bool wxDataViewIconTextRenderer::SetValue( const wxVariant &value )
     return true;
 }
 
-bool wxDataViewIconTextRenderer::GetValue( wxVariant &value ) const
+bool wxDataViewIconTextRenderer::GetValue( wxVariant& WXUNUSED(value) ) const
 {
     return false;
 }
@@ -1023,10 +1023,10 @@ bool wxDataViewIconTextRenderer::Render( wxRect cell, wxDC *dc, int state )
     const wxIcon &icon = m_value.GetIcon();
     if (icon.IsOk())
     {
-        dc->DrawIcon( icon, cell.x, cell.y + ((cell.height - icon.GetHeight()) / 2)); 
+        dc->DrawIcon( icon, cell.x, cell.y + ((cell.height - icon.GetHeight()) / 2));
         xoffset =  icon.GetWidth()+4;
     }
-    
+
     RenderText( m_value.GetText(), xoffset, cell, dc, state );
 
     return true;
@@ -1039,7 +1039,7 @@ wxSize wxDataViewIconTextRenderer::GetSize() const
     {
         int x,y;
         view->GetTextExtent( m_value.GetText(), &x, &y );
-        
+
         if (m_value.GetIcon().IsOk())
             x += m_value.GetIcon().GetWidth() + 4;
         return wxSize( x, y );
@@ -1047,12 +1047,17 @@ wxSize wxDataViewIconTextRenderer::GetSize() const
     return wxSize(80,20);
 }
 
-wxControl* wxDataViewIconTextRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
+wxControl *
+wxDataViewIconTextRenderer::CreateEditorCtrl(wxWindow * WXUNUSED(parent),
+                                             wxRect WXUNUSED(labelRect),
+                                             const wxVariant& WXUNUSED(value))
 {
     return NULL;
 }
 
-bool wxDataViewIconTextRenderer::GetValueFromEditorCtrl( wxControl* editor, wxVariant &value )
+bool
+wxDataViewIconTextRenderer::GetValueFromEditorCtrl(wxControl* WXUNUSED(editor),
+                                                   wxVariant& WXUNUSED(value))
 {
     return false;
 }
@@ -1603,7 +1608,7 @@ void wxGenericDataViewHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             else
                 sortArrow = wxHDR_SORT_ICON_DOWN;
         }
-        
+
         int state = 0;
         if (m_parent->IsEnabled())
         {
@@ -1731,7 +1736,7 @@ void wxGenericDataViewHeaderWindow::OnMouse( wxMouseEvent &event )
 
             m_minX = xpos;
         }
-        
+
         int old_hover = m_hover;
         m_hover = m_column;
         if (event.Leaving())
@@ -2108,7 +2113,7 @@ bool wxDataViewMainWindow::ItemChanged(const wxDataViewItem & item)
     le.SetModel(GetOwner()->GetModel());
     le.SetItem(item);
     parent->GetEventHandler()->ProcessEvent(le);
-    
+
     return true;
 }
 
@@ -2371,10 +2376,10 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 continue;
 
             wxDataViewItem dataitem = node->GetItem();
-            
+
             if ((i > 0) && model->IsContainer(dataitem) && !model->HasContainerColumns(dataitem))
                 continue;
-            
+
             model->GetValue( value, dataitem, col->GetModelColumn());
             cell->SetValue( value );
 
@@ -3425,7 +3430,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         ((GetOwner()->GetExpanderColumn() != col) &&
          (model->IsContainer(item)) &&
          (!model->HasContainerColumns(item)));
-    
+
     if (event.LeftDClick())
     {
         if ( current == m_lineLastClicked )
@@ -3666,7 +3671,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
         return false;
 
     SetInitialSize(size);
-    
+
     Init();
 
 #ifdef __WXMAC__
@@ -3687,7 +3692,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
         sizer->Add( m_headerArea, 0, wxGROW );
     sizer->Add( m_clientArea, 1, wxGROW );
     SetSizer( sizer );
-    
+
     return true;
 }
 

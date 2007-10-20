@@ -50,7 +50,7 @@ bool wxDataViewModelNotifier::ItemsAdded( const wxDataViewItem &parent, const wx
     size_t i;
     for (i = 0; i < count; i++)
         if (!ItemAdded( parent, items[i] )) return false;
-        
+
     return true;
 }
 
@@ -60,7 +60,7 @@ bool wxDataViewModelNotifier::ItemsDeleted( const wxDataViewItem &parent, const 
     size_t i;
     for (i = 0; i < count; i++)
         if (!ItemDeleted( parent, items[i] )) return false;
-    
+
     return true;
 }
 
@@ -70,7 +70,7 @@ bool wxDataViewModelNotifier::ItemsChanged( const wxDataViewItemArray &items )
     size_t i;
     for (i = 0; i < count; i++)
         if (!ItemChanged( items[i] )) return false;
-        
+
     return true;
 }
 
@@ -981,27 +981,27 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED)
 // -------------------------------------
 
 wxDataViewSpinRenderer::wxDataViewSpinRenderer( int min, int max, wxDataViewCellMode mode, int alignment ) :
-   wxDataViewCustomRenderer( "long", mode, alignment ) 
-{ 
+   wxDataViewCustomRenderer( "long", mode, alignment )
+{
     m_min = min;
     m_max = max;
 }
-    
+
 wxControl* wxDataViewSpinRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
-{ 
+{
     long l = value;
-    return new wxSpinCtrl( parent, wxID_ANY, wxEmptyString, 
+    return new wxSpinCtrl( parent, wxID_ANY, wxEmptyString,
                labelRect.GetTopLeft(), labelRect.GetSize(), wxSP_ARROW_KEYS, m_min, m_max, l );
 }
-        
+
 bool wxDataViewSpinRenderer::GetValueFromEditorCtrl( wxControl* editor, wxVariant &value )
-{ 
+{
     wxSpinCtrl *sc = (wxSpinCtrl*) editor;
     long l = sc->GetValue();
     value = l;
     return true;
 }
-        
+
 bool wxDataViewSpinRenderer::Render( wxRect rect, wxDC *dc, int state )
 {
     wxString str;
@@ -1009,18 +1009,18 @@ bool wxDataViewSpinRenderer::Render( wxRect rect, wxDC *dc, int state )
     RenderText( str, 0, rect, dc, state );
     return true;
 }
-    
+
 wxSize wxDataViewSpinRenderer::GetSize() const
 {
     return wxSize(80,16);
 }
-    
+
 bool wxDataViewSpinRenderer::SetValue( const wxVariant &value )
 {
     m_data = value.GetLong();
     return true;
 }
-    
+
 bool wxDataViewSpinRenderer::GetValue( wxVariant &value ) const
 {
     value = m_data;
@@ -1031,8 +1031,8 @@ bool wxDataViewSpinRenderer::GetValue( wxVariant &value ) const
 // wxDataViewTreeStore
 //-----------------------------------------------------------------------------
 
-wxDataViewTreeStoreNode::wxDataViewTreeStoreNode( 
-        wxDataViewTreeStoreNode *parent, 
+wxDataViewTreeStoreNode::wxDataViewTreeStoreNode(
+        wxDataViewTreeStoreNode *parent,
         const wxString &text, const wxIcon &icon, wxClientData *data )
 {
     m_parent = parent;
@@ -1046,12 +1046,12 @@ wxDataViewTreeStoreNode::~wxDataViewTreeStoreNode()
     if (m_data)
         delete m_data;
 }
-    
+
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxDataViewTreeStoreNodeList);
 
-wxDataViewTreeStoreContainerNode::wxDataViewTreeStoreContainerNode( 
-        wxDataViewTreeStoreNode *parent, const wxString &text, 
+wxDataViewTreeStoreContainerNode::wxDataViewTreeStoreContainerNode(
+        wxDataViewTreeStoreNode *parent, const wxString &text,
         const wxIcon &icon, const wxIcon &expanded, wxClientData *data ) :
     wxDataViewTreeStoreNode( parent, text, icon, data )
 {
@@ -1075,19 +1075,19 @@ wxDataViewTreeStore::~wxDataViewTreeStore()
     delete m_root;
 }
 
-wxDataViewItem wxDataViewTreeStore::AppendItem( const wxDataViewItem& parent, 
+wxDataViewItem wxDataViewTreeStore::AppendItem( const wxDataViewItem& parent,
         const wxString &text, const wxIcon &icon, wxClientData *data )
 {
     wxDataViewTreeStoreContainerNode *parent_node = FindContainerNode( parent );
     if (!parent_node) return wxDataViewItem(0);
-    
-    wxDataViewTreeStoreNode *node = 
+
+    wxDataViewTreeStoreNode *node =
         new wxDataViewTreeStoreNode( parent_node, text, icon, data );
     parent_node->GetChildren().Append( node );
-    
+
     // notify control
     ItemAdded( parent, node->GetItem() );
-    
+
     return node->GetItem();
 }
 
@@ -1096,60 +1096,71 @@ wxDataViewItem wxDataViewTreeStore::PrependItem( const wxDataViewItem& parent,
 {
     wxDataViewTreeStoreContainerNode *parent_node = FindContainerNode( parent );
     if (!parent_node) return wxDataViewItem(0);
-    
-    wxDataViewTreeStoreNode *node = 
+
+    wxDataViewTreeStoreNode *node =
         new wxDataViewTreeStoreNode( parent_node, text, icon, data );
     parent_node->GetChildren().Insert( node );
-    
+
     // notify control
     ItemAdded( parent, node->GetItem() );
-    
+
     return node->GetItem();
 }
 
-wxDataViewItem wxDataViewTreeStore::InsertItem( const wxDataViewItem& parent, const wxDataViewItem& previous,
-        const wxString &text, const wxIcon &icon, wxClientData *data )
+wxDataViewItem
+wxDataViewTreeStore::InsertItem(const wxDataViewItem& WXUNUSED(parent),
+                                const wxDataViewItem& WXUNUSED(previous),
+                                const wxString& WXUNUSED(text),
+                                const wxIcon& WXUNUSED(icon),
+                                wxClientData * WXUNUSED(data))
 {
     return wxDataViewItem(0);
 }
 
-wxDataViewItem wxDataViewTreeStore::PrependContainer( const wxDataViewItem& parent, 
-        const wxString &text, const wxIcon &icon, const wxIcon &expanded, 
+wxDataViewItem wxDataViewTreeStore::PrependContainer( const wxDataViewItem& parent,
+        const wxString &text, const wxIcon &icon, const wxIcon &expanded,
         wxClientData *data )
 {
     wxDataViewTreeStoreContainerNode *parent_node = FindContainerNode( parent );
     if (!parent_node) return wxDataViewItem(0);
-    
-    wxDataViewTreeStoreContainerNode *node = 
+
+    wxDataViewTreeStoreContainerNode *node =
         new wxDataViewTreeStoreContainerNode( parent_node, text, icon, expanded, data );
     parent_node->GetChildren().Insert( node );
-    
+
     // notify control
     ItemAdded( parent, node->GetItem() );
-    
+
     return node->GetItem();
 }
 
-wxDataViewItem wxDataViewTreeStore::AppendContainer( const wxDataViewItem& parent, 
-        const wxString &text, const wxIcon &icon, const wxIcon &expanded, 
-        wxClientData *data )
+wxDataViewItem
+wxDataViewTreeStore::AppendContainer(const wxDataViewItem& parent,
+                                     const wxString &text,
+                                     const wxIcon& icon,
+                                     const wxIcon& expanded,
+                                     wxClientData * data)
 {
     wxDataViewTreeStoreContainerNode *parent_node = FindContainerNode( parent );
     if (!parent_node) return wxDataViewItem(0);
-    
-    wxDataViewTreeStoreContainerNode *node = 
+
+    wxDataViewTreeStoreContainerNode *node =
         new wxDataViewTreeStoreContainerNode( parent_node, text, icon, expanded, data );
     parent_node->GetChildren().Append( node );
-    
+
     // notify control
     ItemAdded( parent, node->GetItem() );
-    
+
     return node->GetItem();
 }
 
-wxDataViewItem wxDataViewTreeStore::InsertContainer( const wxDataViewItem& parent, const wxDataViewItem& previous,
-        const wxString &text, const wxIcon &icon, const wxIcon &expanded, 
-        wxClientData *data )
+wxDataViewItem
+wxDataViewTreeStore::InsertContainer(const wxDataViewItem& WXUNUSED(parent),
+                                     const wxDataViewItem& WXUNUSED(previous),
+                                     const wxString& WXUNUSED(text),
+                                     const wxIcon& WXUNUSED(icon),
+                                     const wxIcon& WXUNUSED(expanded),
+                                     wxClientData * WXUNUSED(data))
 {
     return wxDataViewItem(0);
 }
@@ -1158,11 +1169,11 @@ wxDataViewItem wxDataViewTreeStore::GetNthChild( const wxDataViewItem& parent, u
 {
     wxDataViewTreeStoreContainerNode *parent_node = FindContainerNode( parent );
     if (!parent_node) return wxDataViewItem(0);
-    
+
     wxDataViewTreeStoreNodeList::compatibility_iterator node = parent_node->GetChildren().Item( pos );
     if (node)
         return node->GetData();
-        
+
     return wxDataViewItem(0);
 }
 
@@ -1170,21 +1181,21 @@ int wxDataViewTreeStore::GetChildCount( const wxDataViewItem& parent ) const
 {
     wxDataViewTreeStoreNode *node = FindNode( parent );
     if (!node) return -1;
-    
+
     if (!node->IsContainer())
         return 0;
-        
+
     wxDataViewTreeStoreContainerNode *container_node = (wxDataViewTreeStoreContainerNode*) node;
-    return (int) container_node->GetChildren().GetCount();    
+    return (int) container_node->GetChildren().GetCount();
 }
 
 void wxDataViewTreeStore::SetItemText( const wxDataViewItem& item, const wxString &text )
 {
     wxDataViewTreeStoreNode *node = FindNode( item );
     if (!node) return;
-    
+
     node->SetText( text );
-    
+
     // notify control
     ValueChanged( item, 0 );
 }
@@ -1193,7 +1204,7 @@ wxString wxDataViewTreeStore::GetItemText( const wxDataViewItem& item ) const
 {
     wxDataViewTreeStoreNode *node = FindNode( item );
     if (!node) return wxEmptyString;
-    
+
     return node->GetText();
 }
 
@@ -1201,9 +1212,9 @@ void wxDataViewTreeStore::SetItemIcon( const wxDataViewItem& item, const wxIcon 
 {
     wxDataViewTreeStoreNode *node = FindNode( item );
     if (!node) return;
-    
+
     node->SetIcon( icon );
-    
+
     // notify control
     ValueChanged( item, 0 );
 }
@@ -1212,7 +1223,7 @@ const wxIcon &wxDataViewTreeStore::GetItemIcon( const wxDataViewItem& item ) con
 {
     wxDataViewTreeStoreNode *node = FindNode( item );
     if (!node) return wxNullIcon;
-    
+
     return node->GetIcon();
 }
 
@@ -1220,9 +1231,9 @@ void wxDataViewTreeStore::SetItemExpandedIcon( const wxDataViewItem& item, const
 {
     wxDataViewTreeStoreContainerNode *node = FindContainerNode( item );
     if (!node) return;
-    
+
     node->SetExpandedIcon( icon );
-    
+
     // notify control
     ValueChanged( item, 0 );
 }
@@ -1231,7 +1242,7 @@ const wxIcon &wxDataViewTreeStore::GetItemExpandedIcon( const wxDataViewItem& it
 {
     wxDataViewTreeStoreContainerNode *node = FindContainerNode( item );
     if (!node) return wxNullIcon;
-    
+
     return node->GetExpandedIcon();
 }
 
@@ -1239,9 +1250,9 @@ void wxDataViewTreeStore::SetItemData( const wxDataViewItem& item, wxClientData 
 {
     wxDataViewTreeStoreNode *node = FindNode( item );
     if (!node) return;
-    
+
     node->SetData( data );
-    
+
     // notify control? only sensible when sorting on client data
     // ValueChanged( item, 0 );
 }
@@ -1250,7 +1261,7 @@ wxClientData *wxDataViewTreeStore::GetItemData( const wxDataViewItem& item ) con
 {
     wxDataViewTreeStoreNode *node = FindNode( item );
     if (!node) return NULL;
-    
+
     return node->GetData();
 }
 
@@ -1262,12 +1273,12 @@ void wxDataViewTreeStore::DeleteItem( const wxDataViewItem& item )
 
     wxDataViewTreeStoreContainerNode *parent_node = FindContainerNode( parent_item );
     if (!parent_node) return;
-    
+
     wxDataViewTreeStoreContainerNode *node = FindContainerNode( item );
     if (!node) return;
-    
+
     parent_node->GetChildren().DeleteObject( node );
-    
+
     // notify control
     ItemDeleted( parent_item, item );
 }
@@ -1276,7 +1287,7 @@ void wxDataViewTreeStore::DeleteChildren( const wxDataViewItem& item )
 {
     wxDataViewTreeStoreContainerNode *node = FindContainerNode( item );
     if (!node) return;
-    
+
     wxDataViewItemArray array;
     wxDataViewTreeStoreNodeList::iterator iter;
     for (iter = node->GetChildren().begin(); iter != node->GetChildren().end(); iter++)
@@ -1284,9 +1295,9 @@ void wxDataViewTreeStore::DeleteChildren( const wxDataViewItem& item )
         wxDataViewTreeStoreNode* child = *iter;
         array.Add( child->GetItem() );
     }
-    
+
     node->GetChildren().clear();
-    
+
     // notify control
     ItemsDeleted( item, array );
 }
@@ -1296,34 +1307,38 @@ void wxDataViewTreeStore::DeleteAllItems()
     // TODO
 }
 
-void wxDataViewTreeStore::GetValue( wxVariant &variant, 
-                           const wxDataViewItem &item, unsigned int col ) const
+void
+wxDataViewTreeStore::GetValue(wxVariant &variant,
+                              const wxDataViewItem &item,
+                              unsigned int WXUNUSED(col)) const
 {
     // if (col != 0) return;
-    
+
     wxDataViewTreeStoreNode *node = FindNode( item );
     if (!node) return;
-    
+
     wxDataViewIconText data( node->GetText(), node->GetIcon() );
-    
+
     variant << data;
 }
 
-bool wxDataViewTreeStore::SetValue( const wxVariant &variant, 
-                           const wxDataViewItem &item, unsigned int col )
+bool
+wxDataViewTreeStore::SetValue(const wxVariant& variant,
+                              const wxDataViewItem& item,
+                              unsigned int WXUNUSED(col))
 {
     // if (col != 0) return false;
-    
+
     wxDataViewTreeStoreNode *node = FindNode( item );
     if (!node) return false;
-    
+
     wxDataViewIconText data;
-    
+
     data << variant;
-    
+
     node->SetText( data.GetText() );
     node->SetIcon( data.GetIcon() );
-    
+
     return true;
 }
 
@@ -1331,13 +1346,13 @@ wxDataViewItem wxDataViewTreeStore::GetParent( const wxDataViewItem &item ) cons
 {
     wxDataViewTreeStoreNode *node = FindNode( item );
     if (!node) return wxDataViewItem(0);
-    
+
     wxDataViewTreeStoreNode *parent = node->GetParent();
     if (!parent) return wxDataViewItem(0);
-    
+
     if (parent == m_root)
         return wxDataViewItem(0);
-    
+
     return parent->GetItem();
 }
 
@@ -1345,7 +1360,7 @@ bool wxDataViewTreeStore::IsContainer( const wxDataViewItem &item ) const
 {
     wxDataViewTreeStoreNode *node = FindNode( item );
     if (!node) return false;
-    
+
     return node->IsContainer();
 }
 
@@ -1360,36 +1375,36 @@ unsigned int wxDataViewTreeStore::GetChildren( const wxDataViewItem &item, wxDat
         wxDataViewTreeStoreNode* child = *iter;
         children.Add( child->GetItem() );
     }
-    
+
     return node->GetChildren().GetCount();
 }
 
-int wxDataViewTreeStore::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2, 
+int wxDataViewTreeStore::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
                          unsigned int WXUNUSED(column), bool WXUNUSED(ascending) )
 {
     wxDataViewTreeStoreNode *node1 = FindNode( item1 );
     wxDataViewTreeStoreNode *node2 = FindNode( item2 );
-    
+
     if (!node1 || !node2)
         return 0;
-    
-    wxDataViewTreeStoreContainerNode* parent1 = 
+
+    wxDataViewTreeStoreContainerNode* parent1 =
         (wxDataViewTreeStoreContainerNode*) node1->GetParent();
-    wxDataViewTreeStoreContainerNode* parent2 = 
+    wxDataViewTreeStoreContainerNode* parent2 =
         (wxDataViewTreeStoreContainerNode*) node2->GetParent();
-        
+
     if (parent1 != parent2)
     {
         wxLogError( wxT("Comparing items with different parent.") );
         return 0;
     }
-        
+
     if (node1->IsContainer() && !!node2->IsContainer())
         return 1;
-        
+
     if (node2->IsContainer() && !!node1->IsContainer())
         return -1;
-        
+
     return parent1->GetChildren().IndexOf( node1 ) - parent1->GetChildren().IndexOf( node2 );
 }
 
@@ -1397,7 +1412,7 @@ wxDataViewTreeStoreNode *wxDataViewTreeStore::FindNode( const wxDataViewItem &it
 {
     if (!item.IsOk())
         return m_root;
-        
+
     return (wxDataViewTreeStoreNode*) item.GetID();
 }
 
@@ -1407,12 +1422,12 @@ wxDataViewTreeStoreContainerNode *wxDataViewTreeStore::FindContainerNode( const 
         return (wxDataViewTreeStoreContainerNode*) m_root;
 
     wxDataViewTreeStoreNode* node = (wxDataViewTreeStoreNode*) item.GetID();
-    
+
     if (!node->IsContainer())
         return NULL;
-        
+
     return (wxDataViewTreeStoreContainerNode*) node;
 }
 
-#endif
+#endif // wxUSE_DATAVIEWCTRL
 
