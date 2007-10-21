@@ -4640,10 +4640,28 @@ WX_CHECK_FUNCS(fdopen)
 
 if test "$wxUSE_TARSTREAM" = "yes"; then
     WX_CHECK_FUNCS(sysconf)
-    WX_CHECK_FUNCS(getpwuid_r, [], [], [#define _REENTRANT
-                                        #include <pwd.h>])
-    WX_CHECK_FUNCS(getgrgid_r, [], [], [#define _REENTRANT
-                                        #include <grp.h>])
+
+    WX_CHECK_FUNCS(getpwuid_r, [], [],
+                   [
+                    #define _REENTRANT
+                    #include <pwd.h>
+                   ],
+                   [[
+                    struct passwd pw, *ppw;
+                    char buf[1024];
+                    getpwuid_r(0, &pw, buf, sizeof(buf), &ppw)
+                   ]])
+
+    WX_CHECK_FUNCS(getgrgid_r, [], [],
+                   [
+                    #define _REENTRANT
+                    #include <grp.h>
+                   ],
+                   [[
+                    struct group grp, *pgrp;
+                    char buf[1024];
+                    getgrgid_r(0, &grp, buf, sizeof(buf), &pgrp)
+                   ]])
 fi
  
 fi
