@@ -220,6 +220,10 @@ bool wxTextFile::OnRead(const wxMBConv& conv)
             case '\r':
                 if ( chLast == '\r' )
                 {
+                    if ( p - 1 >= lineStart )
+                    {
+                        AddLine(wxString(lineStart, p - 1), wxTextFileType_Mac);
+                    }
                     // Mac empty line
                     AddLine(wxEmptyString, wxTextFileType_Mac);
                     lineStart = p + 1;
