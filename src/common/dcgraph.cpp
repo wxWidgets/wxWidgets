@@ -27,6 +27,9 @@
     #include "wx/region.h"
 #endif
 
+#ifdef __WXMAC__
+#include "wx/mac/private.h"
+#endif
 //-----------------------------------------------------------------------------
 // constants
 //-----------------------------------------------------------------------------
@@ -136,6 +139,29 @@ void wxGCDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
     wxCoord h = icon.GetHeight();
 
     m_graphicContext->DrawIcon( icon , x, y, w, h );
+}
+
+bool wxGCDC::StartDoc( const wxString& WXUNUSED(message) ) 
+{ 
+}
+
+void wxGCDC::EndDoc() 
+{
+}
+
+void wxGCDC::StartPage()
+{
+}
+
+void wxGCDC::EndPage() 
+{
+}
+    
+void wxGCDC::Flush()
+{
+#ifdef __WXMAC__
+    CGContextFlush( (CGContextRef) m_graphicContext->GetNativeContext() );
+#endif
 }
 
 void wxGCDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
