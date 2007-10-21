@@ -1128,6 +1128,26 @@ public:
 // graphics implementation
 // ============================================================================
 
+// make sure we all use one class for all conversions from wx to native colour
+
+class wxMacCoreGraphicsColour
+{
+public:
+    wxMacCoreGraphicsColour();
+    wxMacCoreGraphicsColour(const wxBrush &brush);
+    ~wxMacCoreGraphicsColour();
+    
+     void Apply( CGContextRef cgContext );
+protected:
+    void Init();
+    wxMacCFRefHolder<CGColorRef> m_color;
+    wxMacCFRefHolder<CGColorSpaceRef> m_colorSpace;
+
+    bool m_isPattern;
+    wxMacCFRefHolder<CGPatternRef> m_pattern;
+    CGFloat* m_patternColorComponents;
+} ;
+
 #if wxMAC_USE_CORE_GRAPHICS && !wxUSE_GRAPHICS_CONTEXT
 
 class WXDLLEXPORT wxMacCGPath : public wxGraphicPath
