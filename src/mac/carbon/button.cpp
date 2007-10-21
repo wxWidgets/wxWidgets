@@ -194,7 +194,8 @@ wxSize wxButton::DoGetBestSize() const
     else
     {
         wBtn = bestsize.right - bestsize.left ;
-        sz.y = bestsize.bottom - bestsize.top ;
+        // non 'normal' window variants don't return the correct height
+        // sz.y = bestsize.bottom - bestsize.top ;
     }
 
     if ((wBtn > sz.x) || ( GetWindowStyle() & wxBU_EXACTFIT))
