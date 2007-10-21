@@ -292,7 +292,6 @@ public:
 
     virtual void StrokePath( const wxGraphicsPath& p );
     virtual void FillPath( const wxGraphicsPath& p , int fillStyle = wxODDEVEN_RULE );
-    virtual void DrawPath( const wxGraphicsPath& path, int fillStyle = wxODDEVEN_RULE );
 
     // stroke lines connecting each of the points
     virtual void StrokeLines( size_t n, const wxPoint2DDouble *points);
@@ -946,7 +945,7 @@ void wxGDIPlusContext::Init()
 void wxGDIPlusContext::SetDefaults()
 {
     m_context->SetTextRenderingHint(TextRenderingHintSystemDefault);
-     m_context->SetPixelOffsetMode(PixelOffsetModeHalf);
+    m_context->SetPixelOffsetMode(PixelOffsetModeHalf);
     m_context->SetSmoothingMode(SmoothingModeHighQuality);
     m_state1 = m_context->Save();
     m_state2 = m_context->Save();
@@ -1026,19 +1025,11 @@ void wxGDIPlusContext::FillPath( const wxGraphicsPath& path , int fillStyle )
 {
     if ( !m_brush.IsNull() )
     {
+        wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
         ((GraphicsPath*) path.GetNativePath())->SetFillMode( fillStyle == wxODDEVEN_RULE ? FillModeAlternate : FillModeWinding);
         m_context->FillPath( ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush() ,
             (GraphicsPath*) path.GetNativePath());
     }
-}
-
-void wxGDIPlusContext::DrawPath( const wxGraphicsPath& path, int fillStyle )
-{
-    {
-        wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
-        FillPath( path , fillStyle );
-    }
-    StrokePath( path );
 }
 
 void wxGDIPlusContext::Rotate( wxDouble angle )
