@@ -2751,9 +2751,13 @@ void wxGridRowOrColAttrData::SetAttr(wxGridCellAttr *attr, int rowOrCol)
     int i = m_rowsOrCols.Index(rowOrCol);
     if ( i == wxNOT_FOUND )
     {
-        // add the attribute
-        m_rowsOrCols.Add(rowOrCol);
-        m_attrs.Add(attr);
+        if ( attr )
+        {
+            // add the attribute
+            m_rowsOrCols.Add(rowOrCol);
+            m_attrs.Add(attr);
+        }
+        // nothing to remove
     }
     else
     {
