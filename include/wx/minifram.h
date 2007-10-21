@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MINIFRAM_H_BASE_
-#define _WX_MINIFRAMH_BASE_
+#define _WX_MINIFRAM_H_BASE_
 
 #include "wx/defs.h"
 
