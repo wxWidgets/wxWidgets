@@ -2503,6 +2503,35 @@ void wxWindowMac::SetScrollPos(int orient, int pos, bool refresh)
 // our own window origin is at leftOrigin/rightOrigin
 //
 
+void  wxWindowMac::MacPaintGrowBox()
+{
+    if ( IsTopLevel() )
+        return ;
+
+#if wxMAC_USE_CORE_GRAPHICS
+    if ( MacHasScrollBarCorner() )
+    {
+        Rect rect ;
+
+        CGContextRef cgContext = (CGContextRef) MacGetCGContextRef() ;
+        wxASSERT( cgContext ) ;
+        
+        m_peer->GetRect( &rect ) ;
+
+        int size = m_hScrollBar ? m_hScrollBar->GetSize().y : ( m_vScrollBar ? m_vScrollBar->GetSize().x : MAC_SCROLLBAR_SIZE ) ;
+        CGRect cgrect = CGRectMake( rect.right - size , rect.bottom - size , size , size ) ;
+        CGPoint cgpoint = CGPointMake( rect.right - size , rect.bottom - size ) ;
+        CGContextSaveGState( cgContext );
+        
+        wxMacCoreGraphicsColour bkgnd( m_macBackgroundBrush ) ;
+        bkgnd.Apply( cgContext );
+        CGContextFillRect( cgContext, cgrect );
+        CGContextRestoreGState( cgContext );
+    }
+#endif
+}
+
+
 void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
 {
     if ( IsTopLevel() )
@@ -2510,7 +2539,6 @@ void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
 
     Rect rect ;
     bool hasFocus = m_peer->NeedsFocusRect() && m_peer->HasFocus() ;
-    bool hasScrollCorner = MacHasScrollBarCorner() ;
 
     // back to the surrounding frame rectangle
     m_peer->GetRect( &rect ) ;
@@ -2546,11 +2574,12 @@ void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
         {
             HIThemeDrawFocusRect( &cgrect , true , cgContext , kHIThemeOrientationNormal ) ;
         }
-
+#if 0 // TODO REMOVE now done in a separate call earlier in drawing the window itself
         m_peer->GetRect( &rect ) ;
-        if ( hasScrollCorner )
+        if ( MacHasScrollBarCorner() )
         {
-            int size = (m_hScrollBar == NULL ? m_vScrollBar : m_hScrollBar ) ->GetWindowVariant() == wxWINDOW_VARIANT_NORMAL ? 16 : 12 ;
+            int variant = (m_hScrollBar == NULL ? m_vScrollBar : m_hScrollBar ) ->GetWindowVariant();
+            int size = m_hScrollBar ? m_hScrollBar->GetSize().y : ( m_vScrollBar ? m_vScrollBar->GetSize().x : MAC_SCROLLBAR_SIZE ) ;
             CGRect cgrect = CGRectMake( rect.right - size , rect.bottom - size , size , size ) ;
             CGPoint cgpoint = CGPointMake( rect.right - size , rect.bottom - size ) ;
             HIThemeGrowBoxDrawInfo info ;
@@ -2558,10 +2587,12 @@ void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
             info.version = 0 ;
             info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive ;
             info.kind = kHIThemeGrowBoxKindNone ;
+            // contrary to the docs ...SizeSmall does not work
             info.size = kHIThemeGrowBoxSizeNormal ;
-            info.direction = kThemeGrowRight | kThemeGrowDown ;
+            info.direction = 0 ;
             HIThemeDrawGrowBox( &cgpoint , &info , cgContext , kHIThemeOrientationNormal ) ;
         }
+#endif
     }
  #else
     {
@@ -2782,7 +2813,7 @@ void wxWindowMac::OnSetFocus( wxFocusEvent& event )
         Rect rect ;
 
         m_peer->GetRect( &rect ) ;
-        // auf den umgebenden Rahmen zur�ck
+        // auf den umgebenden Rahmen zurﾁￂﾟck
         InsetRect( &rect, -1 , -1 ) ;
 
         wxTopLevelWindowMac* top = MacGetTopLevelWindow();
@@ -3070,6 +3101,8 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
             delete dc ;
         }
 
+        MacPaintGrowBox();
+
         // calculate a client-origin version of the update rgn and set m_updateRegion to that
         OffsetRgn( newupdate , -origin.x , -origin.y ) ;
         m_updateRegion = newupdate ;
@@ -3250,11 +3283,18 @@ void wxWindowMac::MacCreateScrollBars( long style )
         wxPoint hPoint(0, height - scrlsize) ;
         wxSize hSize(width - adjust, scrlsize) ;
 
+        // we have to set the min size to a smaller value, otherwise they cannot get smaller (InitialSize sets MinSize)
         if ( style & wxVSCROLL )
+        {
             m_vScrollBar = new wxScrollBar((wxWindow*)this, wxID_ANY, vPoint, vSize , wxVERTICAL);
+            m_vScrollBar->SetMinSize( wxDefaultSize );
+        }
 
         if ( style & wxHSCROLL )
+        {
             m_hScrollBar = new wxScrollBar((wxWindow*)this, wxID_ANY, hPoint, hSize , wxHORIZONTAL);
+            m_hScrollBar->SetMinSize( wxDefaultSize );
+        }
     }
 
     // because the create does not take into account the client area origin
