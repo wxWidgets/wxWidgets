@@ -138,7 +138,7 @@ wxMetafileRefData::wxMetafileRefData( int width, int height)
             CGPDFContextBeginPage(m_context, NULL);
         else
 #endif
-            CGContextBeginPage(m_context, NULL);
+            CGContextBeginPage(m_context, &r);
 
         CGColorSpaceRef genericColorSpace  = wxMacGetGenericRGBColorSpace();
 
