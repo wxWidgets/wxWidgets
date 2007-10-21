@@ -50,11 +50,15 @@ public:
 
     virtual void Clear();
 
-    virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return true; }
-    virtual void EndDoc(void) {}
+    virtual bool StartDoc( const wxString& message );
+    virtual void EndDoc();
 
-    virtual void StartPage(void) {}
-    virtual void EndPage(void) {}
+    virtual void StartPage();
+    virtual void EndPage();
+    
+    // to be virtualized on next major
+    // flushing the content of this dc immediately onto screen
+    void Flush();
 
     virtual void SetFont(const wxFont& font);
     virtual void SetPen(const wxPen& pen);
