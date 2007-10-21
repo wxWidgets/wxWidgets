@@ -437,10 +437,10 @@ public:
     // pops a stored state from the stack
     virtual void PopState() = 0;
 
-    // clips drawings to the region, combined to current clipping region
+    // clips drawings to the region intersected with the current clipping region
     virtual void Clip( const wxRegion &region ) = 0;
 
-    // clips drawings to the rect
+    // clips drawings to the rect intersected with the current clipping region
     virtual void Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) = 0;
     
     // resets the clipping to original extent
