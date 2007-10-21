@@ -2265,7 +2265,15 @@ void * wxMacDataItemBrowserControl::MacGetClientData( unsigned int n) const
 
 void wxMacDataItemBrowserControl::MacScrollTo( unsigned int n )
 {
-    RevealItem( GetItemFromLine( n) , kDataBrowserRevealWithoutSelecting );
+    UInt32 top , left ;
+    GetScrollPosition( &top , &left ) ;
+    wxMacDataItem * item = (wxMacDataItem*) GetItemFromLine( n );
+
+    UInt16 height ;
+    GetRowHeight( (DataBrowserItemID) item , &height ) ;
+    SetScrollPosition( n * ((UInt32)height) , left ) ;
+
+    RevealItem( item , kDataBrowserRevealWithoutSelecting );
 }
 
 
