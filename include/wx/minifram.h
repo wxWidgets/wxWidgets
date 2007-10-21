@@ -14,6 +14,8 @@
 
 #include "wx/defs.h"
 
+#if wxUSE_MINIFRAME
+
 #if defined(__WXPALMOS__)
 #include "wx/palmos/minifram.h"
 #elif defined(__WXMSW__)
@@ -37,5 +39,5 @@
 typedef wxFrame wxMiniFrame;
 #endif
 
-#endif
-    // _WX_MINIFRAM_H_BASE_
+#endif // wxUSE_MINIFRAME
+#endif // _WX_MINIFRAM_H_BASE_

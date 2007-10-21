@@ -16,10 +16,10 @@
 #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-#endif
+#if wxUSE_MINIFRAME
 
 #include "wx/minifram.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxMiniFrame, wxFrame)
 
+#endif // wxUSE_MINIFRAME
