@@ -96,21 +96,6 @@ public:
     // Windows callbacks
     WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
-#if WXWIN_COMPATIBILITY_2_6
-    // use the other ctor
-    wxDEPRECATED( wxDialog(wxWindow *parent,
-             const wxString& title, bool modal,
-             int x = wxDefaultCoord, int y = wxDefaultCoord, int width = 500, int height = 500,
-             long style = wxDEFAULT_DIALOG_STYLE,
-             const wxString& name = wxDialogNameStr) );
-
-    // just call Show() or ShowModal()
-    wxDEPRECATED( void SetModal(bool flag) );
-
-    // use IsModal()
-    wxDEPRECATED( bool IsModalShowing() const );
-#endif // WXWIN_COMPATIBILITY_2_6
-
 protected:
     // find the window to use as parent for this dialog if none has been
     // specified explicitly by the user
