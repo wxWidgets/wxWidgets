@@ -14,11 +14,12 @@
        {wx}/src/wxvc_dll.dsp
        {wx}/samples/minimal/borland_ide.cpp
        {wx}/docs/latex/wx/manual.tex
+       {wx}/docs/msw/install.txt {major release only}
        {wx}/docs/changes.txt
-       {wx}/docs/gtk/changes.txt
        {wx}/build/bakefiles/wxpresets/presets/wx_win32.bkl
        {wx}/build/script/win_docs.bat {windows doc and setup file}
        {wx}/distrib/scripts/build-environ.cfg {cvs tar and zip files}
+       {wx}/mac/carbon/config_xcode.h
 
    The script misc/scripts/inc_release can be used for incrementing
    the release field of the version, i.e. changing 2.8.x to 2.8.x+1.
