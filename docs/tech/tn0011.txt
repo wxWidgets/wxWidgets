@@ -17,6 +17,7 @@
        {wx}/docs/msw/install.txt {major release only}
        {wx}/docs/changes.txt
        {wx}/build/bakefiles/wxpresets/presets/wx_win32.bkl
+       {wx}/build/bakefiles/version.bkl {C:R:A}
        {wx}/build/script/win_docs.bat {windows doc and setup file}
        {wx}/distrib/scripts/build-environ.cfg {cvs tar and zip files}
        {wx}/mac/carbon/config_xcode.h
