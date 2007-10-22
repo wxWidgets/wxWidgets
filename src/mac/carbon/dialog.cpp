@@ -139,7 +139,7 @@ extern bool s_macIsInModalLoop ;
 
 void wxDialog::DoShowModal()
 {
-    wxCHECK_RET( !IsModalShowing(), wxT("DoShowModal() called twice") );
+    wxCHECK_RET( !IsModal(), wxT("DoShowModal() called twice") );
 
     wxModalDialogs.Append(this);
 
@@ -153,7 +153,7 @@ void wxDialog::DoShowModal()
     s_macIsInModalLoop = true ;
 #endif
 
-    while ( IsModalShowing() )
+    while ( IsModal() )
     {
         wxTheApp->MacDoOneEvent() ;
         // calls process idle itself
