@@ -79,21 +79,21 @@ build ('d'). Last component of them name is name of wxWidgets component
 "Configuring the build" below). This is a typical set of release ANSI build
 libraries (release versions on left, debug on right side):
 
-  wxbase28.lib              wxbase28d.lib
-  wxbase28_net.lib          wxbase28d_net.lib
-  wxbase28_xml.lib          wxbase28d_xml.lib
-  wxmsw28_core.lib          wxmsw28d_core.lib
-  wxmsw28_html.lib          wxmsw28d_html.lib
-  wxmsw28_adv.lib           wxmsw28d_adv.lib
+  wxbase29.lib              wxbase29d.lib
+  wxbase29_net.lib          wxbase29d_net.lib
+  wxbase29_xml.lib          wxbase29d_xml.lib
+  wxmsw29_core.lib          wxmsw29d_core.lib
+  wxmsw29_html.lib          wxmsw29d_html.lib
+  wxmsw29_adv.lib           wxmsw29d_adv.lib
 
 Their Unicode debug counterparts in wxUniversal build would be
 
-  wxbase28ud.lib
-  wxbase28ud_net.lib
-  wxbase28ud_xml.lib        (notice these libs are same for wxUniv and wxMSW)
-  wxmswuniv28ud_core.lib
-  wxmswuniv28ud_html.lib
-  wxmswuniv28ud_adv.lib
+  wxbase29ud.lib
+  wxbase29ud_net.lib
+  wxbase29ud_xml.lib        (notice these libs are same for wxUniv and wxMSW)
+  wxmswuniv29ud_core.lib
+  wxmswuniv29ud_html.lib
+  wxmswuniv29ud_adv.lib
 
 These directories also contain subdirectory with wx/setup.h header. This
 subdirectory is named after port, Unicode, wxUniv and debug settings and 
@@ -731,7 +731,7 @@ USE_GUI=0
   you should set wxUSE_GUI to 1 in setup.h.
 
 USE_OPENGL=1
-  Build wxmsw28_gl.lib library with OpenGL integration class wxGLCanvas.
+  Build wxmsw29_gl.lib library with OpenGL integration class wxGLCanvas.
   You must also modify your setup.h to #define wxUSE_GLCANVAS 1. Note that
   OpenGL library is always built as additional library, even in monolithic
   build!
@@ -787,9 +787,9 @@ VENDOR=<your company name>
   distribute wxWidgets DLLs with your application. Default value is 'custom'.
   This string is included as part of DLL name. wxWidgets DLLs contain compiler
   name, version information and vendor name in them. For example
-  wxmsw280_core_bcc_custom.dll is one of DLLs build using Borland C++ with
+  wxmsw290_core_bcc_custom.dll is one of DLLs build using Borland C++ with
   default settings. If you set VENDOR=mycorp, the name will change to
-  wxmsw280_core_bcc_mycorp.dll.
+  wxmsw290_core_bcc_mycorp.dll.
 
 CFG=<configuration name>
   Sets configuration name so that you can have multiple wxWidgets builds with
