@@ -48,7 +48,11 @@ public:
     Edit (wxWindow *parent, wxWindowID id = wxID_ANY,
           const wxPoint &pos = wxDefaultPosition,
           const wxSize &size = wxDefaultSize,
-          long style = wxSUNKEN_BORDER|wxVSCROLL
+          long style = 
+#ifndef __WXMAC__
+          wxSUNKEN_BORDER|
+#endif
+          wxVSCROLL
          );
 
     //! destructor
