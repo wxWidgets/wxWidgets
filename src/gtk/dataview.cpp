@@ -988,8 +988,10 @@ gtk_wx_cell_renderer_activate(
     wxDataViewModel *model = cell->GetOwner()->GetOwner()->GetModel();
 
     GtkTreePath *treepath = gtk_tree_path_new_from_string( path );
-    // TODO
-    wxDataViewItem item;
+
+    GtkTreeIter iter;
+    cell->GetOwner()->GetOwner()->GetInternal()->get_iter( &iter, treepath );
+    wxDataViewItem item( iter.user_data );
     gtk_tree_path_free( treepath );
 
     unsigned int model_col = cell->GetOwner()->GetModelColumn();
