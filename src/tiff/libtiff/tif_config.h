@@ -41,8 +41,17 @@
 # endif
 #endif
 
-#ifndef __BORLANDC__
+#ifndef __BORLANDC__ 
    #define lfind _lfind
 #endif
 
+#ifdef __APPLE__
+    #undef lfind
+    #undef HAVE_IO_H
+    #if __BIG_ENDIAN__
+        #undef HOST_FILLORDER
+        #define HOST_FILLORDER FILLORDER_MSB2LSB
+        #define WORDS_BIGENDIAN 1
+    #endif
+#endif
 
