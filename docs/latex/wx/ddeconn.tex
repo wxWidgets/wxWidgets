@@ -74,7 +74,7 @@ enum wxIPCFormat
 
 \func{}{wxDDEConnection}{\void}
 
-\func{}{wxDDEConnection}{\param{void* }{buffer}, \param{size_t}{ size}}
+\func{}{wxDDEConnection}{\param{void* }{buffer}, \param{size\_t}{ size}}
 
 Constructs a connection object. If no user-defined connection object is
 to be derived from wxDDEConnection, then the constructor should not be
@@ -90,11 +90,11 @@ transactions.
 
 \membersection{wxDDEConnection::Advise}\label{wxddeconnectionadvise}
 
-\func{bool}{Advise}{\param{const wxString\& }{item}, \param{const void* }{data}, \param{size_t }{size}, \param{wxIPCFormat }{format = wxIPC\_PRIVATE}}
+\func{bool}{Advise}{\param{const wxString\& }{item}, \param{const void* }{data}, \param{size\_t }{size}, \param{wxIPCFormat }{format = wxIPC\_PRIVATE}}
 
-\func{bool}{Advise}{\param{const wxString\& }{item}, \param{const char* }{data}, \param{size_t }{size = (size_t)-1}}
+\func{bool}{Advise}{\param{const wxString\& }{item}, \param{const char* }{data}, \param{size\_t }{size = (size\_t)-1}}
 
-\func{bool}{Advise}{\param{const wxString\& }{item}, \param{const wchar_t* }{data}, \param{size_t }{size = (size_t)-1}}
+\func{bool}{Advise}{\param{const wxString\& }{item}, \param{const wchar\_t* }{data}, \param{size\_t }{size = (size\_t)-1}}
 
 \func{bool}{Advise}{\param{const wxString\& }{item}, \param{const wxString& }{data}}
 
@@ -105,11 +105,11 @@ member to be called. Returns true if successful.
 
 \membersection{wxDDEConnection::Execute}\label{wxddeconnectionexecute}
 
-\func{bool}{Execute}{\param{const void* }{data}, \param{size_t }{size}, \param{wxIPCFormat }{format = wxIPC\_PRIVATE}}
+\func{bool}{Execute}{\param{const void* }{data}, \param{size\_t }{size}, \param{wxIPCFormat }{format = wxIPC\_PRIVATE}}
 
-\func{bool}{Execute}{\param{const char* }{data}, \param{size_t }{size = (size_t)-1}}
+\func{bool}{Execute}{\param{const char* }{data}, \param{size\_t }{size = (size\_t)-1}}
 
-\func{bool}{Execute}{\param{const wchar_t* }{data}, \param{size_t }{size = (size_t)-1}}
+\func{bool}{Execute}{\param{const wchar\_t* }{data}, \param{size\_t }{size = (size\_t)-1}}
 
 \func{bool}{Execute}{\param{const wxString& }{data}}
 
@@ -133,7 +133,7 @@ successful.
 
 \membersection{wxDDEConnection::OnAdvise}\label{wxddeconnectiononadvise}
 
-\func{virtual bool}{OnAdvise}{\param{const wxString\& }{topic}, \param{const wxString\& }{item}, \param{const void* }{data}, \param{size_t }{size}, \param{wxIPCFormat }{format}}
+\func{virtual bool}{OnAdvise}{\param{const wxString\& }{topic}, \param{const wxString\& }{item}, \param{const void* }{data}, \param{size\_t }{size}, \param{wxIPCFormat }{format}}
 
 Message sent to the client application when the server notifies it of a
 change in the data associated with the given item.
@@ -148,7 +148,7 @@ to delete the connection object.
 
 \membersection{wxDDEConnection::OnExecute}\label{wxddeconnectiononexecute}
 
-\func{virtual bool}{OnExecute}{\param{const wxString\& }{topic}, \param{const void* }{data}, \param{size_t }{size}, \param{wxIPCFormat}{ format}}
+\func{virtual bool}{OnExecute}{\param{const wxString\& }{topic}, \param{const void* }{data}, \param{size\_t }{size}, \param{wxIPCFormat}{ format}}
 
 Message sent to the server application when the client notifies it to
 execute the given data. Note that there is no item associated with
@@ -156,14 +156,14 @@ this message.
 
 \membersection{wxDDEConnection::OnPoke}\label{wxddeconnectiononpoke}
 
-\func{virtual bool}{OnPoke}{\param{const wxString\& }{topic}, \param{const wxString\& }{item}, \param{const void* }{data}, \param{size_t }{size}, \param{wxIPCFormat }{format}}
+\func{virtual bool}{OnPoke}{\param{const wxString\& }{topic}, \param{const wxString\& }{item}, \param{const void* }{data}, \param{size\_t }{size}, \param{wxIPCFormat }{format}}
 
 Message sent to the server application when the client notifies it to
 accept the given data.
 
 \membersection{wxDDEConnection::OnRequest}\label{wxddeconnectiononrequest}
 
-\func{virtual const void*}{OnRequest}{\param{const wxString\& }{topic}, \param{const wxString\& }{item}, \param{size_t * }{size}, \param{wxIPCFormat }{format}}
+\func{virtual const void*}{OnRequest}{\param{const wxString\& }{topic}, \param{const wxString\& }{item}, \param{size\_t * }{size}, \param{wxIPCFormat }{format}}
 
 Message sent to the server application when the client
 calls \helpref{wxDDEConnection::Request}{wxddeconnectionrequest}. The server
@@ -189,11 +189,11 @@ this doesn't have much meaning in practice.
 
 \membersection{wxDDEConnection::Poke}\label{wxddeconnectionpoke}
 
-\func{bool}{Poke}{\param{const wxString\& }{item}, \param{const void* }{data}, \param{size_t }{size}, \param{wxIPCFormat }{format = wxIPC\_PRIVATE}}
+\func{bool}{Poke}{\param{const wxString\& }{item}, \param{const void* }{data}, \param{size\_t }{size}, \param{wxIPCFormat }{format = wxIPC\_PRIVATE}}
 
-\func{bool}{Poke}{\param{const wxString\& }{item}, \param{const char* }{data}, \param{size_t }{size = (size_t)-1}}
+\func{bool}{Poke}{\param{const wxString\& }{item}, \param{const char* }{data}, \param{size\_t }{size = (size\_t)-1}}
 
-\func{bool}{Poke}{\param{const wxString\& }{item}, \param{const wchar_t* }{data}, \param{size_t }{size = (size_t)-1}}
+\func{bool}{Poke}{\param{const wxString\& }{item}, \param{const wchar\_t* }{data}, \param{size\_t }{size = (size\_t)-1}}
 
 \func{bool}{Poke}{\param{const wxString\& }{item}, \param{const wxString& }{data}}
 
@@ -204,7 +204,7 @@ to be called. Returns true if successful.
 
 \membersection{wxDDEConnection::Request}\label{wxddeconnectionrequest}
 
-\func{const void*}{Request}{\param{const wxString\& }{item}, \param{size_t *}{size}, \param{wxIPCFormat }{format = wxIPC\_TEXT}}
+\func{const void*}{Request}{\param{const wxString\& }{item}, \param{size\_t *}{size}, \param{wxIPCFormat }{format = wxIPC\_TEXT}}
 
 Called by the client application to request data from the server. Causes
 the server connection's \helpref{wxDDEConnection::OnRequest}{wxddeconnectiononrequest} member to be called. Returns a

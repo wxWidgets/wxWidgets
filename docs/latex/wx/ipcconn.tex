@@ -70,7 +70,7 @@ enum wxIPCFormat
 
 \func{}{wxConnection}{\void}
 
-\func{}{wxConnection}{\param{void* }{buffer}, \param{size_t}{ size}}
+\func{}{wxConnection}{\param{void* }{buffer}, \param{size\_t}{ size}}
 
 Constructs a connection object. If no user-defined connection
 object is to be derived from wxConnection, then the constructor
@@ -91,11 +91,11 @@ mainly for backwards compatibility.
 
 \membersection{wxConnection::Advise}\label{wxconnectionadvise}
 
-\func{bool}{Advise}{\param{const wxString\& }{item}, \param{const void* }{data}, \param{size_t }{size}, \param{wxIPCFormat }{format = wxIPC\_PRIVATE}}
+\func{bool}{Advise}{\param{const wxString\& }{item}, \param{const void* }{data}, \param{size\_t }{size}, \param{wxIPCFormat }{format = wxIPC\_PRIVATE}}
 
-\func{bool}{Advise}{\param{const wxString\& }{item}, \param{const char* }{data}, \param{size_t }{size = (size_t)-1}}
+\func{bool}{Advise}{\param{const wxString\& }{item}, \param{const char* }{data}, \param{size\_t }{size = (size\_t)-1}}
 
-\func{bool}{Advise}{\param{const wxString\& }{item}, \param{const wchar_t* }{data}, \param{size_t }{size = (size_t)-1}}
+\func{bool}{Advise}{\param{const wxString\& }{item}, \param{const wchar\_t* }{data}, \param{size\_t }{size = (size\_t)-1}}
 
 \func{bool}{Advise}{\param{const wxString\& }{item}, \param{const wxString& }{data}}
 
@@ -106,11 +106,11 @@ to be called. Returns true if successful.
 
 \membersection{wxConnection::Execute}\label{wxconnectionexecute}
 
-\func{bool}{Execute}{\param{const void* }{data}, \param{size_t }{size}, \param{wxIPCFormat }{format = wxIPC\_PRIVATE}}
+\func{bool}{Execute}{\param{const void* }{data}, \param{size\_t }{size}, \param{wxIPCFormat }{format = wxIPC\_PRIVATE}}
 
-\func{bool}{Execute}{\param{const char* }{data}, \param{size_t }{size = (size_t)-1}}
+\func{bool}{Execute}{\param{const char* }{data}, \param{size\_t }{size = (size\_t)-1}}
 
-\func{bool}{Execute}{\param{const wchar_t* }{data}, \param{size_t }{size = (size_t)-1}}
+\func{bool}{Execute}{\param{const wchar\_t* }{data}, \param{size\_t }{size = (size\_t)-1}}
 
 \func{bool}{Execute}{\param{const wxString& }{data}}
 
@@ -133,7 +133,7 @@ its side of the connection.
 
 \membersection{wxConnection::OnAdvise}\label{wxconnectiononadvise}
 
-\func{virtual bool}{OnAdvise}{\param{const wxString\& }{topic}, \param{const wxString\& }{item}, \param{const void* }{data}, \param{size_t }{size}, \param{wxIPCFormat }{format}}
+\func{virtual bool}{OnAdvise}{\param{const wxString\& }{topic}, \param{const wxString\& }{item}, \param{const void* }{data}, \param{size\_t }{size}, \param{wxIPCFormat }{format}}
 
 Message sent to the client application when the server notifies
 it of a change in the data associated with the given item, using
@@ -152,7 +152,7 @@ the connection object is no longer available.
 
 \membersection{wxConnection::OnExecute}\label{wxconnectiononexecute}
 
-\func{virtual bool}{OnExecute}{\param{const wxString\& }{topic}, \param{const void* }{data}, \param{size_t }{size}, \param{wxIPCFormat}{ format}}
+\func{virtual bool}{OnExecute}{\param{const wxString\& }{topic}, \param{const void* }{data}, \param{size\_t }{size}, \param{wxIPCFormat}{ format}}
 
 Message sent to the server application when the client notifies
 it to execute the given data, using \helpref{Execute}{wxconnectionexecute}.
@@ -160,14 +160,14 @@ Note that there is no item associated with this message.
 
 \membersection{wxConnection::OnPoke}\label{wxconnectiononpoke}
 
-\func{virtual bool}{OnPoke}{\param{const wxString\& }{topic}, \param{const wxString\& }{item}, \param{const void* }{data}, \param{size_t }{size}, \param{wxIPCFormat }{format}}
+\func{virtual bool}{OnPoke}{\param{const wxString\& }{topic}, \param{const wxString\& }{item}, \param{const void* }{data}, \param{size\_t }{size}, \param{wxIPCFormat }{format}}
 
 Message sent to the server application when the client notifies it to
 accept the given data.
 
 \membersection{wxConnection::OnRequest}\label{wxconnectiononrequest}
 
-\func{virtual const void*}{OnRequest}{\param{const wxString\& }{topic}, \param{const wxString\& }{item}, \param{size_t * }{size}, \param{wxIPCFormat }{format}}
+\func{virtual const void*}{OnRequest}{\param{const wxString\& }{topic}, \param{const wxString\& }{item}, \param{size\_t * }{size}, \param{wxIPCFormat }{format}}
 
 Message sent to the server application when the client calls 
 \helpref{wxConnection::Request}{wxconnectionrequest}. The
@@ -195,11 +195,11 @@ this doesn't have much meaning in practice.
 
 \membersection{wxConnection::Poke}\label{wxconnectionpoke}
 
-\func{bool}{Poke}{\param{const wxString\& }{item}, \param{const void* }{data}, \param{size_t }{size}, \param{wxIPCFormat }{format = wxIPC\_PRIVATE}}
+\func{bool}{Poke}{\param{const wxString\& }{item}, \param{const void* }{data}, \param{size\_t }{size}, \param{wxIPCFormat }{format = wxIPC\_PRIVATE}}
 
-\func{bool}{Poke}{\param{const wxString\& }{item}, \param{const char* }{data}, \param{size_t }{size = (size_t)-1}}
+\func{bool}{Poke}{\param{const wxString\& }{item}, \param{const char* }{data}, \param{size\_t }{size = (size\_t)-1}}
 
-\func{bool}{Poke}{\param{const wxString\& }{item}, \param{const wchar_t* }{data}, \param{size_t }{size = (size_t)-1}}
+\func{bool}{Poke}{\param{const wxString\& }{item}, \param{const wchar\_t* }{data}, \param{size\_t }{size = (size\_t)-1}}
 
 \func{bool}{Poke}{\param{const wxString\& }{item}, \param{const wxString& }{data}}
 
@@ -213,7 +213,7 @@ Returns true if successful.
 
 \membersection{wxConnection::Request}\label{wxconnectionrequest}
 
-\func{const void*}{Request}{\param{const wxString\& }{item}, \param{size_t *}{size}, \param{wxIPCFormat }{format = wxIPC\_TEXT}}
+\func{const void*}{Request}{\param{const wxString\& }{item}, \param{size\_t *}{size}, \param{wxIPCFormat }{format = wxIPC\_TEXT}}
 
 Called by the client application to request data from the server.
 Causes the server connection's \helpref{wxConnection::OnRequest}{wxconnectiononrequest} 
