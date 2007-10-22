@@ -151,7 +151,17 @@ protected:
 
 private:
     wxDC        *m_dc;
-    
+
+public:    
+    // Internal, temporay for RenderText.
+    GtkCellRenderer      *m_text_renderer;
+    GdkWindow            *window;
+    GtkWidget            *widget;
+    void                 *background_area;
+    void                 *cell_area;
+    void                 *expose_area;
+    int                   flags;
+
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCustomRenderer)
 };

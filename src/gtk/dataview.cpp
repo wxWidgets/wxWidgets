@@ -920,6 +920,13 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
     GtkWxCellRenderer *wxrenderer = (GtkWxCellRenderer *) renderer;
     wxDataViewCustomRenderer *cell = wxrenderer->cell;
 
+    cell->window = window;
+    cell->widget = widget;
+    cell->background_area = (void*) background_area;
+    cell->cell_area = (void*) cell_area;
+    cell->expose_area = (void*) expose_area;
+    cell->flags = (int) flags;
+
     GdkRectangle rect;
     gtk_wx_cell_renderer_get_size (renderer, widget, cell_area,
                                    &rect.x,
@@ -990,7 +997,7 @@ gtk_wx_cell_renderer_activate(
     GtkTreePath *treepath = gtk_tree_path_new_from_string( path );
 
     GtkTreeIter iter;
-    cell->GetOwner()->GetOwner()->GetInternal()->get_iter( &iter, treepath );
+    cell->GetOwner()->GetOwner()->GtkGetInternal()->get_iter( &iter, treepath );
     wxDataViewItem item( iter.user_data );
     gtk_tree_path_free( treepath );
 
@@ -1434,7 +1441,7 @@ bool wxDataViewTextRenderer::SetValue( const wxVariant &value )
 
     GValue gvalue = { 0, };
     g_value_init( &gvalue, G_TYPE_STRING );
-    g_value_set_string( &gvalue, wxGTK_CONV_FONT( tmp, GetOwner()->GetOwner()->GetFont() ) );
+    g_value_set_string( &gvalue, wxGTK_CONV( tmp ) );
     g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
     g_value_unset( &gvalue );
 
@@ -1446,8 +1453,7 @@ bool wxDataViewTextRenderer::GetValue( wxVariant &value ) const
     GValue gvalue = { 0, };
     g_value_init( &gvalue, G_TYPE_STRING );
     g_object_get_property( G_OBJECT(m_renderer), "text", &gvalue );
-    wxString tmp = wxGTK_CONV_BACK_FONT( g_value_get_string( &gvalue ),
-        wx_const_cast(wxDataViewTextRenderer*, this)->GetOwner()->GetOwner()->GetFont() );
+    wxString tmp = wxGTK_CONV_BACK( g_value_get_string( &gvalue ) );
     g_value_unset( &gvalue );
 
     value = tmp;
@@ -1668,6 +1674,7 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
     wxDataViewRenderer( varianttype, mode, align )
 {
     m_dc = NULL;
+    m_text_renderer = NULL;
 
     if (no_init)
         m_renderer = NULL;
@@ -1677,12 +1684,37 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
 
 void wxDataViewCustomRenderer::RenderText( const wxString &text, int xoffset, wxRect cell, wxDC *dc, int state )
 {
+#if 0
     wxDataViewCtrl *view = GetOwner()->GetOwner();
     wxColour col = (state & wxDATAVIEW_CELL_SELECTED) ?
                         wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) :
                         view->GetForegroundColour();
     dc->SetTextForeground(col);
     dc->DrawText( text, cell.x + xoffset, cell.y + ((cell.height - dc->GetCharHeight()) / 2));
+#else
+    if (!m_text_renderer)
+        m_text_renderer = gtk_cell_renderer_text_new();
+    
+    GValue gvalue = { 0, };
+    g_value_init( &gvalue, G_TYPE_STRING );
+    g_value_set_string( &gvalue, wxGTK_CONV( text ) );
+    g_object_set_property( G_OBJECT(m_text_renderer), "text", &gvalue );
+    g_value_unset( &gvalue );
+
+    ((GdkRectangle*) cell_area)->x += xoffset;
+    ((GdkRectangle*) cell_area)->width -= xoffset;
+    
+    gtk_cell_renderer_render( m_text_renderer,
+        window,
+        widget,
+        (GdkRectangle*) background_area,
+        (GdkRectangle*) cell_area,
+        (GdkRectangle*) expose_area,
+        (GtkCellRendererState) flags );
+    
+    ((GdkRectangle*) cell_area)->x -= xoffset;
+    ((GdkRectangle*) cell_area)->width += xoffset;
+#endif
 }
 
 bool wxDataViewCustomRenderer::Init(wxDataViewCellMode mode, int align)
@@ -1704,6 +1736,9 @@ wxDataViewCustomRenderer::~wxDataViewCustomRenderer()
 {
     if (m_dc)
         delete m_dc;
+
+    if (m_text_renderer)
+        gtk_object_sink( GTK_OBJECT(m_text_renderer) );
 }
 
 wxDC *wxDataViewCustomRenderer::GetDC()
@@ -1741,8 +1776,7 @@ wxDataViewProgressRenderer::wxDataViewProgressRenderer( const wxString &label,
         GValue gvalue = { 0, };
         g_value_init( &gvalue, G_TYPE_STRING );
 
-        // FIXME: font encoding support
-        g_value_set_string( &gvalue, wxGTK_CONV_SYS(m_label) );
+        g_value_set_string( &gvalue, wxGTK_CONV(m_label) );
         g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
         g_value_unset( &gvalue );
 
