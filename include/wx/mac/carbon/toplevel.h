@@ -70,6 +70,7 @@ public:
     virtual bool SetTransparent(wxByte alpha);
     virtual bool CanSetTransparent();
 
+    virtual bool SetBackgroundStyle(wxBackgroundStyle style);
 
     // implementation from now on
     // --------------------------

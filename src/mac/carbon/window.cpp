@@ -278,6 +278,15 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                             }
                         }
                         CGContextSetAlpha( cgContext , alpha ) ;
+
+                        if ( thisWindow->GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT )
+                        {
+                            HIRect bounds;
+                            HIViewGetBounds( controlRef, &bounds );
+                            CGContextClearRect( cgContext, bounds );
+                        }
+
+
 #endif
                         if ( thisWindow->MacDoRedraw( updateRgn , cEvent.GetTicks() ) )
                             result = noErr ;
@@ -2363,7 +2372,8 @@ void wxWindowMac::OnEraseBackground(wxEraseEvent& event)
         return ;
 
 #if TARGET_API_MAC_OSX
-    if ( !m_macBackgroundBrush.Ok() || m_macBackgroundBrush.GetStyle() == wxTRANSPARENT )
+    if ( !m_macBackgroundBrush.Ok() || m_macBackgroundBrush.GetStyle() == wxTRANSPARENT
+         || GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT )
     {
         event.Skip() ;
     }
@@ -3343,7 +3353,8 @@ void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
 
 void wxWindowMac::OnPaint( wxPaintEvent & event )
 {
-    if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL )
+    if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL
+         && GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT )
         CallNextEventHandler(
             (EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() ,
             (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
@@ -3387,6 +3398,8 @@ bool wxWindowMac::Reparent(wxWindowBase *newParentBase)
 bool wxWindowMac::SetTransparent(wxByte alpha)
 {
 #if wxMAC_USE_CORE_GRAPHICS
+    SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
+
     if ( alpha != m_macAlpha )
     {
         m_macAlpha = alpha ;

@@ -1751,7 +1751,8 @@ enum wxBackgroundStyle
 {
   wxBG_STYLE_SYSTEM,
   wxBG_STYLE_COLOUR,
-  wxBG_STYLE_CUSTOM
+  wxBG_STYLE_CUSTOM,
+  wxBG_STYLE_TRANSPARENT
 };
 
 /*

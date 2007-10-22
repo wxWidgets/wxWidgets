@@ -102,6 +102,7 @@ static const EventTypeSpec eventList[] =
     { kEventClassWindow , kEventWindowBoundsChanging } ,
     { kEventClassWindow , kEventWindowBoundsChanged } ,
     { kEventClassWindow , kEventWindowClose } ,
+    { kEventClassWindow , kEventWindowGetRegion } ,
 
     // we have to catch these events on the toplevel window level,
     // as controls don't get the raw mouse events anymore
@@ -804,6 +805,36 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
         }
             break ;
 
+        case kEventWindowGetRegion :
+            {
+                if ( toplevelWindow->GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT )
+                {
+                    WindowRegionCode windowRegionCode ;
+
+                    // Fetch the region code that is being queried
+                    GetEventParameter( event,
+                                       kEventParamWindowRegionCode,
+                                       typeWindowRegionCode, NULL,
+                                       sizeof windowRegionCode, NULL,
+                                       &windowRegionCode ) ;
+
+                    // If it is the opaque region code then set the
+                    // region to empty and return noErr to stop event
+                    // propagation
+                    if ( windowRegionCode == kWindowOpaqueRgn ) {
+                        RgnHandle region;
+                        GetEventParameter( event,
+                                           kEventParamRgnHandle,
+                                           typeQDRgnHandle, NULL,
+                                           sizeof region, NULL,
+                                           &region) ;
+                        SetEmptyRgn(region) ;
+                        result = noErr ;
+                    }
+                }
+            }
+            break ;
+
         default :
             break ;
     }
@@ -1480,6 +1511,24 @@ void wxTopLevelWindowMac::SetExtraStyle(long exStyle)
         }
     }
 #endif
+}
+
+bool wxTopLevelWindowMac::SetBackgroundStyle(wxBackgroundStyle style)
+{
+    if ( !wxTopLevelWindowBase::SetBackgroundStyle(style) )
+        return false ;
+
+    WindowRef windowRef = HIViewGetWindow( (HIViewRef)GetHandle() );
+
+    if ( GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT )
+    {
+        OSStatus err = HIWindowChangeFeatures( windowRef, 0, kWindowIsOpaque );
+        verify_noerr( err );
+        err = ReshapeCustomWindow( windowRef );
+        verify_noerr( err );
+    }
+
+    return true ;
 }
 
 // TODO: switch to structure bounds -

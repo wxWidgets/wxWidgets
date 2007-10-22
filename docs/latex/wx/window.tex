@@ -226,6 +226,16 @@ called by the user code.
 Sets the cached best size value.
 
 
+\membersection{wxWindow::CanSetTransparent}\label{wxwindowcansettransparent}
+
+\func{bool}{CanSetTransparent}{\void}
+
+Returns \true if the system supports transparent windows and calling 
+\helpref{SetTransparent}{wxwindowsettransparent} may succeed. If this function
+returns \false, transparent windows are definitely not supported by the current
+system.
+
+
 \membersection{wxWindow::CaptureMouse}\label{wxwindowcapturemouse}
 
 \func{virtual void}{CaptureMouse}{\void}
@@ -775,19 +785,32 @@ Returns the background colour of the window.
 
 \constfunc{virtual wxBackgroundStyle}{GetBackgroundStyle}{\void}
 
-Returns the background style of the window. The background style indicates
-whether background colour should be determined by the system (wxBG\_STYLE\_SYSTEM),
-be set to a specific colour (wxBG\_STYLE\_COLOUR), or should be left to the
-application to implement (wxBG\_STYLE\_CUSTOM).
-
-On GTK+, use of wxBG\_STYLE\_CUSTOM allows the flicker-free drawing of a custom
-background, such as a tiled bitmap. Currently the style has no effect on other platforms.
+Returns the background style of the window. The background style can be one of:
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxBG\_STYLE\_SYSTEM}{Use the default background, as determined by
+the system or the current theme.}
+\twocolitem{wxBG\_STYLE\_COLOUR}{Use a solid colour for the background, this
+style is set automatically if you call 
+\helpref{SetBackgroundColour}{wxwindowsetbackgroundcolour} so you only need to
+set it explicitly if you had changed the background style to something else
+before.}
+\twocolitem{wxBG\_STYLE\_CUSTOM}{Don't draw the background at all, it's
+supposed that it is drawn by the user-defined erase background event handler.
+This style should be used to avoid flicker when the background is entirely
+custom-drawn.}
+\twocolitem{wxBG\_STYLE\_TRANSPARET}{The background is (partially) transparent,
+this style is automatically set if you call 
+\helpref{SetTransparent}{wxwindowsettransparent} which is used to set the
+transparency level.}
+\end{twocollist}
 
 \wxheading{See also}
 
 \helpref{wxWindow::SetBackgroundColour}{wxwindowsetbackgroundcolour},\rtfsp
 \helpref{wxWindow::GetForegroundColour}{wxwindowgetforegroundcolour},\rtfsp
-\helpref{wxWindow::SetBackgroundStyle}{wxwindowsetbackgroundstyle}
+\helpref{wxWindow::SetBackgroundStyle}{wxwindowsetbackgroundstyle},\rtfsp
+\helpref{wxWindow::SetTransparent}{wxwindowsettransparent}
+
 
 \membersection{wxWindow::GetEffectiveMinSize}\label{wxwindowgeteffectiveminsize}
 
@@ -2793,19 +2816,15 @@ applications on the system.
 
 \func{virtual void}{SetBackgroundStyle}{\param{wxBackgroundStyle}{ style}}
 
-Sets the background style of the window. The background style indicates
-whether background colour should be determined by the system (wxBG\_STYLE\_SYSTEM),
-be set to a specific colour (wxBG\_STYLE\_COLOUR), or should be left to the
-application to implement (wxBG\_STYLE\_CUSTOM).
-
-On GTK+, use of wxBG\_STYLE\_CUSTOM allows the flicker-free drawing of a custom
-background, such as a tiled bitmap. Currently the style has no effect on other platforms.
+Sets the background style of the window. see 
+\helpref{GetBackgroundStyle()}{wxwindowgetbackgroundstyle} for the description
+of the possible style values.
 
 \wxheading{See also}
 
 \helpref{wxWindow::SetBackgroundColour}{wxwindowsetbackgroundcolour},\rtfsp
 \helpref{wxWindow::GetForegroundColour}{wxwindowgetforegroundcolour},\rtfsp
-\helpref{wxWindow::GetBackgroundStyle}{wxwindowgetbackgroundstyle}
+\helpref{wxWindow::SetTransparent}{wxwindowsettransparent}
 
 
 
@@ -3543,6 +3562,20 @@ Attach a tooltip to the window.
 
 See also: \helpref{GetToolTip}{wxwindowgettooltip},
  \helpref{wxToolTip}{wxtooltip}
+
+
+\membersection{wxWindow::SetTransparent}\label{wxwindowsettransparent}
+
+\func{bool}{SetTransparent}{\param{wxByte }{alpha}}
+
+Set the transparency of the window. If the system supports transparent windows,
+returns \true, otherwise returns \false and the window remains fully opaque.
+See also \helpref{CanSetTransparent}{wxwindowcansettransparent}.
+
+The parameter \arg{alpha} is in the range $0..255$ where $0$ corresponds to a
+fully transparent window and $255$ to the fully opaque one. The constants
+\texttt{wxIMAGE\_ALPHA\_TRANSPARENT} and \texttt{wxIMAGE\_ALPHA\_OPAQUE} can be
+used.
 
 
 \membersection{wxWindow::SetValidator}\label{wxwindowsetvalidator}
