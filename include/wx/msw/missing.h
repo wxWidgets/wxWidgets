@@ -235,6 +235,11 @@ typedef struct wxtagNMLVCUSTOMDRAW_ {
     #define HDS_HOTTRACK 4
 #endif
 
+#ifndef HDF_SORTUP
+    #define HDF_SORTUP   0x0400
+    #define HDF_SORTDOWN 0x0200
+#endif
+
  /*
   * In addition to the above, the following are required for several compilers.
   */
