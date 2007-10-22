@@ -154,6 +154,7 @@ protected:
         { return GetColumn(GetColumnIdxFromHeader(nmHDR)); }
         
     int m_scrollOffsetX;
+    int m_buttonHeight;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewHeaderWindowMSW)
@@ -1203,12 +1204,13 @@ bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
 {
     m_owner = parent;
 
-    m_scrollOffsetX = 0;;
+    m_scrollOffsetX = 0;
+    m_buttonHeight = wxRendererNative::Get().GetHeaderButtonHeight( this );
 
     int x = pos.x == wxDefaultCoord ? 0 : pos.x,
         y = pos.y == wxDefaultCoord ? 0 : pos.y,
         w = size.x == wxDefaultCoord ? 1 : size.x,
-        h = size.y == wxDefaultCoord ? 22 : size.y;
+        h = size.y == wxDefaultCoord ? m_buttonHeight : size.y;
 
     if ( !CreateControl(parent, id, pos, size, 0, wxDefaultValidator, name) )
         return false;
@@ -1253,7 +1255,7 @@ wxDataViewHeaderWindowMSW::~wxDataViewHeaderWindow()
 
 wxSize wxDataViewHeaderWindowMSW::DoGetBestSize() const
 {
-    return wxSize(80, 22);
+    return wxSize(80, m_buttonHeight );
 }
 
 #ifndef HDF_SORTUP
@@ -1507,7 +1509,8 @@ void wxDataViewHeaderWindowMSW::DoSetSize(int x, int y,
                                           int w, int h,
                                           int f)
 {
-    wxControl::DoSetSize( x+m_scrollOffsetX, y, w-m_scrollOffsetX, h, f );
+    // TODO: why is there a border + 2px around it?
+    wxControl::DoSetSize( x+m_scrollOffsetX-2, y-2, w-m_scrollOffsetX+4, h+4, f );
 }
 
 #else       // !defined(__WXMSW__)
@@ -1838,7 +1841,7 @@ END_EVENT_TABLE()
 
 wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID id,
     const wxPoint &pos, const wxSize &size, const wxString &name ) :
-    wxWindow( parent, id, pos, size, wxWANTS_CHARS, name ),
+    wxWindow( parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE, name ),
     m_selection( wxDataViewSelectionCmp )
 
 {
@@ -3644,7 +3647,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
            long style, const wxValidator& validator )
 {
     if (!wxControl::Create( parent, id, pos, size,
-                            style | wxScrolledWindowStyle|wxSUNKEN_BORDER, validator))
+                            style | wxScrolledWindowStyle|wxBORDER_SUNKEN, validator))
         return false;
 
     SetInitialSize(size);
