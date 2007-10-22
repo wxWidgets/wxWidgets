@@ -134,8 +134,6 @@ public:
 
     ~wxDataViewHeaderWindowMSW();
 
-    void OnPaint(wxPaintEvent &event);
-
     // called when any column setting is changed and/or changed
     // the column count
     virtual void UpdateDisplay();
@@ -158,7 +156,6 @@ protected:
     int m_scrollOffsetX;
 
 private:
-    DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxDataViewHeaderWindowMSW)
 };
 
@@ -1200,10 +1197,6 @@ int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick);
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewHeaderWindowMSW, wxWindow)
 
-BEGIN_EVENT_TABLE(wxDataViewHeaderWindowMSW, wxDataViewHeaderWindowBase)
-    // EVT_PAINT         (wxDataViewHeaderWindowMSW::OnPaint)
-END_EVENT_TABLE()
-
 bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
                                         const wxPoint &pos, const wxSize &size,
                                         const wxString &name )
@@ -1263,55 +1256,12 @@ wxSize wxDataViewHeaderWindowMSW::DoGetBestSize() const
     return wxSize(80, 22);
 }
 
-void wxDataViewHeaderWindowMSW::OnPaint(wxPaintEvent &event)
-{
-    wxClientDC dc(this);
-
-    int sortArrow = wxHDR_SORT_ICON_UP;
-
-    wxRect rect(0,0,80,22);
-
-    // Draw an up or down arrow
-    int arrowSpace = 0;
-    if (sortArrow != wxHDR_SORT_ICON_NONE )
-    {
-        wxRect ar = rect;
-
-        // make a rect for the arrow
-        ar.height = 4;
-        ar.width = 8;
-        ar.y += (rect.height - ar.height)/2;
-        ar.x = ar.x + rect.width - 3*ar.width/2;
-        arrowSpace = 3*ar.width/2; // space to preserve when drawing the label
-
-        wxPoint triPt[3];
-        if ( sortArrow & wxHDR_SORT_ICON_UP )
-        {
-            triPt[0].x = ar.width / 2;
-            triPt[0].y = 0;
-            triPt[1].x = ar.width;
-            triPt[1].y = ar.height;
-            triPt[2].x = 0;
-            triPt[2].y = ar.height;
-        }
-        else
-        {
-            triPt[0].x = 0;
-            triPt[0].y = 0;
-            triPt[1].x = ar.width;
-            triPt[1].y = 0;
-            triPt[2].x = ar.width / 2;
-            triPt[2].y = ar.height;
-        }
-
-        wxColour c = wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW);
-        dc.SetPen(wxPen(c));
-        dc.SetBrush(wxBrush(c));
-        dc.DrawPolygon( 3, triPt, ar.x, ar.y);
-    }
-
-    event.Skip();
-}
+#ifndef HDF_SORTUP
+#define HDF_SORTUP 0x0400
+#endif
+#ifndef HDF_SORTDOWN
+#define HDF_SORTDOWN 0x0200
+#endif
 
 void wxDataViewHeaderWindowMSW::UpdateDisplay()
 {
@@ -1340,10 +1290,8 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
         {
             //The Microsoft Comctrl32.dll 6.0 support SORTUP/SORTDOWN, but they are not default
             //see http://msdn2.microsoft.com/en-us/library/ms649534.aspx for more detail
-            
-            // if (col->IsSortOrderAscending())
-            //  hdi.fmt |= col->IsSortOrderAscending() ? HDF_SORTUP : HDF_SORTDOWN;
-            // ;
+            // VZ: works with 5.81
+            hdi.fmt |= col->IsSortOrderAscending() ? HDF_SORTUP : HDF_SORTDOWN;
         }
 
         // lParam is reserved for application's use:
