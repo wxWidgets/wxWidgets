@@ -371,6 +371,14 @@
             /* and there is a bug in D Mars tchar.h prior to 8.39.4n, so define as sprintf */
             #define wxSprintf sprintf
         #endif
+    #elif defined(__MINGW32__) && ( defined(_STLPORT_VERSION) && _STLPORT_VERSION >= 0x510 )
+        #if wxUSE_UNICODE
+            /* MinGW with STLPort 5.1 adds count to swprintf (C99) so prototype conversion see wxchar.cpp */
+            int wxSprintf (wchar_t*, const wchar_t*, ...);
+        #else
+            /* MinGW with STLPort 5.1 has clashing defines for _stprintf so use sprintf */
+            #define wxSprintf sprintf
+        #endif
     #else
         #define  wxSprintf   _stprintf
     #endif
@@ -887,9 +895,10 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
 
 /*
    MinGW MSVCRT has non-standard vswprintf() (for MSVC compatibility
-   presumably) and normally _vsnwprintf() is used instead
+   presumably) and normally _vsnwprintf() is used instead (but as
+   STLPort 5.1 defines standard vswprintf(), don't do this for it)
  */
-#if defined(HAVE_VSWPRINTF) && defined(__MINGW32__)
+#if defined(HAVE_VSWPRINTF) && defined(__MINGW32__) && !( defined(_STLPORT_VERSION) && _STLPORT_VERSION >= 0x510 )
     #undef HAVE_VSWPRINTF
 #endif
 

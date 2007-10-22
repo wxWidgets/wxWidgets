@@ -1250,6 +1250,20 @@ int WXDLLEXPORT wxSnprintf_(wxChar *buf, size_t len, const wxChar *format, ...)
 
 #endif //__DMC__
 
+#if defined(__MINGW32__) && ( defined(_STLPORT_VERSION) && _STLPORT_VERSION >= 0x510 )
+    /* MinGW with STLPort 5.1 has clashing defines for _stprintf so use swprintf */
+    /* STLPort 5.1 defines standard (C99) vswprintf() and swprintf() that takes count. */
+    int wxSprintf (wchar_t * s, const wchar_t * format, ... )
+    {
+        va_list arglist;
+    
+        va_start( arglist, format );
+        int iLen = swprintf ( s, -1, format, arglist );
+        va_end( arglist );
+        return iLen ;
+    }
+#endif // MINGW32 _STLPORT_VERSION >= 0x510
+
 // ----------------------------------------------------------------------------
 // implement the standard IO functions for wide char if libc doesn't have them
 // ----------------------------------------------------------------------------
