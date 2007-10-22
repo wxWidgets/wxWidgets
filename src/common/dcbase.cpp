@@ -1841,7 +1841,7 @@ void wxDCBase::DrawLines(const wxList *list, wxCoord xoffset, wxCoord yoffset )
     wxPoint *points = new wxPoint[n];
 
     unsigned int i = 0;
-    wxNode *node;
+    wxObjectList::compatibility_iterator node;
     for ( node = list->GetFirst(); node; node = node->GetNext(), i++ )
     {
         wxPoint *point = (wxPoint*) node->GetData();
@@ -1887,7 +1887,7 @@ void wxDCBase::DrawPolygon(const wxList *list,
     wxPoint *points = new wxPoint[n];
 
     unsigned int i = 0;
-    wxNode *node;
+    wxObjectList::compatibility_iterator node;
     for ( node = list->GetFirst(); node; node = node->GetNext(), i++ )
     {
         wxPoint *point = (wxPoint*) node->GetData();
@@ -2101,7 +2101,7 @@ static void wx_spline_draw_point_array(wxDCBase *dc)
 void wxDCBase::DrawSpline(const wxList *points)
 {
     wxPointList list;
-    wxNode *node = points->GetFirst();
+    wxObjectList::compatibility_iterator node = points->GetFirst();
     while (node)
     {
         list.Append( (wxPoint*) node->GetData() );
