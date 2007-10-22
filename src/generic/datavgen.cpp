@@ -63,7 +63,7 @@ static const int EXPANDER_MARGIN = 4;
 // wxDataViewHeaderWindow
 //-----------------------------------------------------------------------------
 
-#define USE_NATIVE_HEADER_WINDOW    0
+#define USE_NATIVE_HEADER_WINDOW    1
 
 //Below is the compare stuff
 //For the generic implements, both the leaf nodes and the nodes are sorted for fast search when needed
@@ -134,23 +134,31 @@ public:
 
     ~wxDataViewHeaderWindowMSW();
 
+    void OnPaint(wxPaintEvent &event);
+
     // called when any column setting is changed and/or changed
     // the column count
     virtual void UpdateDisplay();
 
-    // called when the main window gets scrolled
+    // called Refresh afterwards
     virtual void ScrollWindow(int dx, int dy, const wxRect *rect = NULL);
 
 protected:
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+    
     virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags);
+
+    wxSize DoGetBestSize() const;
 
     unsigned int GetColumnIdxFromHeader(NMHEADER *nmHDR);
 
     wxDataViewColumn *GetColumnFromHeader(NMHEADER *nmHDR)
         { return GetColumn(GetColumnIdxFromHeader(nmHDR)); }
+        
+    int m_scrollOffsetX;
 
 private:
+    DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxDataViewHeaderWindowMSW)
 };
 
@@ -1192,23 +1200,33 @@ int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick);
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewHeaderWindowMSW, wxWindow)
 
+BEGIN_EVENT_TABLE(wxDataViewHeaderWindowMSW, wxDataViewHeaderWindowBase)
+    // EVT_PAINT         (wxDataViewHeaderWindowMSW::OnPaint)
+END_EVENT_TABLE()
+
 bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
                                         const wxPoint &pos, const wxSize &size,
                                         const wxString &name )
 {
     m_owner = parent;
 
-    if ( !CreateControl(parent, id, pos, size, 0, wxDefaultValidator, name) )
-        return false;
+    m_scrollOffsetX = 0;;
 
     int x = pos.x == wxDefaultCoord ? 0 : pos.x,
         y = pos.y == wxDefaultCoord ? 0 : pos.y,
         w = size.x == wxDefaultCoord ? 1 : size.x,
         h = size.y == wxDefaultCoord ? 22 : size.y;
 
+    if ( !CreateControl(parent, id, pos, size, 0, wxDefaultValidator, name) )
+        return false;
+
     // create the native WC_HEADER window:
     WXHWND hwndParent = (HWND)parent->GetHandle();
     WXDWORD msStyle = WS_CHILD | HDS_BUTTONS | HDS_HORZ | HDS_HOTTRACK | HDS_FULLDRAG;
+    
+    if ( m_isShown )
+        msStyle |= WS_VISIBLE;
+    
     m_hWnd = CreateWindowEx(0,
                             WC_HEADER,
                             (LPCTSTR) NULL,
@@ -1231,43 +1249,68 @@ bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
     // the following is required to get the default win's font for
     // header windows and must be done befor sending the HDM_LAYOUT msg
     SetFont(GetFont());
-
-    RECT rcParent;
-    HDLAYOUT hdl;
-    WINDOWPOS wp;
-
-    // Retrieve the bounding rectangle of the parent window's
-    // client area, and then request size and position values
-    // from the header control.
-    ::GetClientRect((HWND)hwndParent, &rcParent);
-
-    hdl.prc = &rcParent;
-    hdl.pwpos = &wp;
-    if (!SendMessage((HWND)m_hWnd, HDM_LAYOUT, 0, (LPARAM) &hdl))
-    {
-        wxLogLastError(_T("SendMessage"));
-        return false;
-    }
-
-    // Set the size, position, and visibility of the header control.
-    SetWindowPos((HWND)m_hWnd,
-                 wp.hwndInsertAfter,
-                 wp.x, wp.y,
-                 wp.cx, wp.cy,
-                 wp.flags | SWP_SHOWWINDOW);
-
-    // set our size hints: wxDataViewCtrl will put this wxWindow inside
-    // a wxBoxSizer and in order to avoid super-big header windows,
-    // we need to set our height as fixed
-    SetMinSize(wxSize(-1, wp.cy));
-    SetMaxSize(wxSize(-1, wp.cy));
-
+    
     return true;
 }
 
 wxDataViewHeaderWindowMSW::~wxDataViewHeaderWindow()
 {
     UnsubclassWin();
+}
+
+wxSize wxDataViewHeaderWindowMSW::DoGetBestSize() const
+{
+    return wxSize(80, 22);
+}
+
+void wxDataViewHeaderWindowMSW::OnPaint(wxPaintEvent &event)
+{
+    wxClientDC dc(this);
+
+    int sortArrow = wxHDR_SORT_ICON_UP;
+
+    wxRect rect(0,0,80,22);
+
+    // Draw an up or down arrow
+    int arrowSpace = 0;
+    if (sortArrow != wxHDR_SORT_ICON_NONE )
+    {
+        wxRect ar = rect;
+
+        // make a rect for the arrow
+        ar.height = 4;
+        ar.width = 8;
+        ar.y += (rect.height - ar.height)/2;
+        ar.x = ar.x + rect.width - 3*ar.width/2;
+        arrowSpace = 3*ar.width/2; // space to preserve when drawing the label
+
+        wxPoint triPt[3];
+        if ( sortArrow & wxHDR_SORT_ICON_UP )
+        {
+            triPt[0].x = ar.width / 2;
+            triPt[0].y = 0;
+            triPt[1].x = ar.width;
+            triPt[1].y = ar.height;
+            triPt[2].x = 0;
+            triPt[2].y = ar.height;
+        }
+        else
+        {
+            triPt[0].x = 0;
+            triPt[0].y = 0;
+            triPt[1].x = ar.width;
+            triPt[1].y = 0;
+            triPt[2].x = ar.width / 2;
+            triPt[2].y = ar.height;
+        }
+
+        wxColour c = wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW);
+        dc.SetPen(wxPen(c));
+        dc.SetBrush(wxBrush(c));
+        dc.DrawPolygon( 3, triPt, ar.x, ar.y);
+    }
+
+    event.Skip();
 }
 
 void wxDataViewHeaderWindowMSW::UpdateDisplay()
@@ -1279,7 +1322,6 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
     // add the updated array of columns to the header control
     unsigned int cols = GetOwner()->GetColumnCount();
     unsigned int added = 0;
-    wxDataViewModel * model = GetOwner()->GetModel();
     for (unsigned int i = 0; i < cols; i++)
     {
         wxDataViewColumn *col = GetColumn( i );
@@ -1294,13 +1336,14 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
         hdi.fmt = HDF_LEFT | HDF_STRING;
         //hdi.fmt &= ~(HDF_SORTDOWN|HDF_SORTUP);
 
-        //sorting support
-        if(model && m_owner->GetSortingColumn() == col)
+        if (col->IsSortable() && GetOwner()->GetSortingColumn() == col)
         {
             //The Microsoft Comctrl32.dll 6.0 support SORTUP/SORTDOWN, but they are not default
             //see http://msdn2.microsoft.com/en-us/library/ms649534.aspx for more detail
-            //hdi.fmt |= model->GetSortOrderAscending()? HDF_SORTUP:HDF_SORTDOWN;
-            ;
+            
+            // if (col->IsSortOrderAscending())
+            //  hdi.fmt |= col->IsSortOrderAscending() ? HDF_SORTUP : HDF_SORTDOWN;
+            // ;
         }
 
         // lParam is reserved for application's use:
@@ -1505,32 +1548,18 @@ bool wxDataViewHeaderWindowMSW::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARA
     return true;
 }
 
-void wxDataViewHeaderWindowMSW::ScrollWindow(int WXUNUSED(dx), int WXUNUSED(dy),
-                                             const wxRect *WXUNUSED(rect))
+void wxDataViewHeaderWindowMSW::ScrollWindow(int dx, int dy, const wxRect *rect )
 {
-    wxSize ourSz = GetClientSize();
-    wxSize ownerSz = m_owner->GetClientSize();
-
-    // where should the (logical) origin of this window be placed?
-    int x1 = 0, y1 = 0;
-    m_owner->CalcUnscrolledPosition(0, 0, &x1, &y1);
-
-    // put this window on top of our parent and
-    SetWindowPos((HWND)m_hWnd, HWND_TOP, -x1, 0,
-                  ownerSz.GetWidth() + x1, ourSz.GetHeight(),
-                  SWP_SHOWWINDOW);
+    m_scrollOffsetX += dx;
+    
+    GetParent()->Layout();
 }
 
-void wxDataViewHeaderWindowMSW::DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
-                                          int WXUNUSED(w), int WXUNUSED(h),
-                                          int WXUNUSED(f))
+void wxDataViewHeaderWindowMSW::DoSetSize(int x, int y,
+                                          int w, int h,
+                                          int f)
 {
-    // the wxDataViewCtrl's internal wxBoxSizer will call this function when
-    // the wxDataViewCtrl window gets resized: the following dummy call
-    // to ScrollWindow() is required in order to get this header window
-    // correctly repainted when it's (horizontally) scrolled:
-
-    ScrollWindow(0, 0);
+    wxControl::DoSetSize( x+m_scrollOffsetX, y, w-m_scrollOffsetX, h, f );
 }
 
 #else       // !defined(__WXMSW__)
