@@ -59,7 +59,7 @@ const wxSize wxDefaultSize(wxDefaultCoord, wxDefaultCoord);
 const wxPoint wxDefaultPosition(wxDefaultCoord, wxDefaultCoord);
 
 #include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxPointList);
+WX_DEFINE_LIST(wxPointList)
 
 
 #if wxUSE_EXTENDED_RTTI

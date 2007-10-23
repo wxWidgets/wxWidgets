@@ -42,7 +42,7 @@ bool operator == (const wxDataViewItem &left, const wxDataViewItem &right)
 // ---------------------------------------------------------
 
 #include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxDataViewModelNotifiers);
+WX_DEFINE_LIST(wxDataViewModelNotifiers)
 
 bool wxDataViewModelNotifier::ItemsAdded( const wxDataViewItem &parent, const wxDataViewItemArray &items )
 {
@@ -1048,7 +1048,7 @@ wxDataViewTreeStoreNode::~wxDataViewTreeStoreNode()
 }
 
 #include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxDataViewTreeStoreNodeList);
+WX_DEFINE_LIST(wxDataViewTreeStoreNodeList)
 
 wxDataViewTreeStoreContainerNode::wxDataViewTreeStoreContainerNode(
         wxDataViewTreeStoreNode *parent, const wxString &text,

@@ -58,7 +58,7 @@ typedef struct _GtkWxTreeModel       GtkWxTreeModel;
 //-----------------------------------------------------------------------------
 
 WX_DECLARE_LIST(wxDataViewItem, ItemList);
-WX_DEFINE_LIST(ItemList);
+WX_DEFINE_LIST(ItemList)
 
 class wxDataViewCtrlInternal
 {
@@ -2149,7 +2149,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
 IMPLEMENT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
 
 #include <wx/listimpl.cpp>
-WX_DEFINE_LIST(wxDataViewColumnList);
+WX_DEFINE_LIST(wxDataViewColumnList)
 
 wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *cell,
                                     unsigned int model_column, int width,
