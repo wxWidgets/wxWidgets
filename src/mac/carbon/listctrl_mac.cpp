@@ -2967,7 +2967,6 @@ void wxMacDataBrowserListCtrlControl::ItemNotification(DataBrowserItemID itemID,
         bool trigger = false;
 
         wxListEvent event( wxEVT_COMMAND_LIST_ITEM_SELECTED, list->GetId() );
-        bool isSingle = (list->GetWindowStyle() & wxLC_SINGLE_SEL) != 0;
 
         event.SetEventObject( list );
         if ( !list->IsVirtual() )
@@ -2987,8 +2986,9 @@ void wxMacDataBrowserListCtrlControl::ItemNotification(DataBrowserItemID itemID,
         {
             case kDataBrowserItemDeselected:
                 event.SetEventType(wxEVT_COMMAND_LIST_ITEM_DESELECTED);
-                if ( !isSingle )
-                    trigger = !IsSelectionSuppressed();
+                // as the generic implementation is also triggering this
+                // event for single selection, we do the same (different than listbox)
+                trigger = !IsSelectionSuppressed();
                 break;
 
             case kDataBrowserItemSelected:
