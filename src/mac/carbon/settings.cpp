@@ -233,6 +233,9 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
         // TODO: case wxSYS_NETWORK_PRESENT:
         // TODO: case wxSYS_SHOW_SOUNDS:
 
+        case wxSYS_DCLICK_MSEC:
+            return (int)(GetDblTime() * 1000. / 60.);
+
         default:
             // unsupported metric
             break;
