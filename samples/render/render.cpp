@@ -135,6 +135,20 @@ public:
 
         wxRendererNative::Get().DrawHeaderButton(this, dc,
                                                  wxRect(20, 70, 100, 60));
+
+        // Draw some check boxes in various states
+        dc.SetBrush(*wxBLACK_BRUSH);
+        dc.SetTextForeground(*wxBLACK);
+        dc.DrawText(_T("Checkbox Drawn with native renderer"), 10, 150);
+        // Checked
+        wxRendererNative::Get().DrawCheckBox(this, dc, wxRect(20, 170, 16, 16), wxCONTROL_CHECKED);
+        // Undetermined
+        wxRendererNative::Get().DrawCheckBox(this, dc, wxRect(40, 170, 16, 16), wxCONTROL_CHECKABLE);
+        // Unchecked
+        wxRendererNative::Get().DrawCheckBox(this, dc, wxRect(60, 170, 16, 16), 0);
+        // Checked and Disabled
+        wxRendererNative::Get().DrawCheckBox(this, dc, wxRect(80, 170, 16, 16), wxCONTROL_CHECKED | wxCONTROL_DISABLED);
+
     }
 
     DECLARE_EVENT_TABLE()

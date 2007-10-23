@@ -57,6 +57,11 @@ public:
         wxOrientation orient,
         int flags = 0 );
 
+    virtual void DrawCheckBox(wxWindow *win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags = 0);
+
     virtual void DrawComboBoxDropButton(wxWindow *win,
                                         wxDC& dc,
                                         const wxRect& rect,
@@ -459,6 +464,8 @@ wxRendererMac::DrawMacThemeButton(wxWindow *win,
             drawInfo.kind = kind;
             drawInfo.state = (flags & wxCONTROL_DISABLED) ? kThemeStateInactive : kThemeStateActive;
             drawInfo.value = (flags & wxCONTROL_SELECTED) ? kThemeButtonOn : kThemeButtonOff;
+            if (flags & wxCONTROL_UNDETERMINED)
+                drawInfo.value = kThemeButtonMixed;
             drawInfo.adornment = adornment;
 
             HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
@@ -471,6 +478,18 @@ wxRendererMac::DrawMacThemeButton(wxWindow *win,
     }
 }
 
+void
+wxRendererMac::DrawCheckBox(wxWindow *win,
+                            wxDC& dc,
+                            const wxRect& rect,
+                            int flags)
+{
+    if (flags & wxCONTROL_CHECKED)
+        flags |= wxCONTROL_SELECTED;
+
+    DrawMacThemeButton(win, dc, rect, flags,
+                       kThemeCheckBox, kThemeAdornmentNone);
+}
 
 void
 wxRendererMac::DrawComboBoxDropButton(wxWindow *win,
