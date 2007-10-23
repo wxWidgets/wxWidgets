@@ -1498,7 +1498,8 @@ bool wxDataViewHeaderWindowMSW::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARA
     return true;
 }
 
-void wxDataViewHeaderWindowMSW::ScrollWindow(int dx, int dy, const wxRect *rect )
+void wxDataViewHeaderWindowMSW::ScrollWindow(int dx, int WXUNUSED(dy),
+                                             const wxRect * WXUNUSED(rect))
 {
     m_scrollOffsetX += dx;
     
