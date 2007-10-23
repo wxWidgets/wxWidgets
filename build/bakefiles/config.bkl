@@ -229,14 +229,6 @@ Acts according to BUILD by default.
         </description>
     </option>
 
-    <option name="USE_ODBC">
-        <values>0,1</values>
-        <default-value>0</default-value>
-        <description>
-            Build ODBC database classes (USE_GUI must be 1)?
-        </description>
-    </option>
-
     <!-- currently only VC++ can compile wxDebugReport which is in QA lib -->
     <set var="USE_QA_DEFAULT">
         <if cond="FORMAT in ['msvc','msvc6prj','msvs2005prj']">1</if>
@@ -347,7 +339,6 @@ to run the tests, include CppUnit library here.
         <option name="EXTRALIBS"/>
         <option name="EXTRALIBS_XML"/>
         <option name="EXTRALIBS_HTML"/>
-        <option name="EXTRALIBS_ODBC"/>
         <option name="EXTRALIBS_GUI"/>
         <option name="EXTRALIBS_OPENGL"/>
         <option name="EXTRALIBS_SDL"/>
@@ -399,7 +390,6 @@ it if SHARED=1 unless you know what you are doing.
         <set var="EXTRALIBS"/>
         <set var="EXTRALIBS_XML"/>
         <set var="EXTRALIBS_HTML"/>
-        <set var="EXTRALIBS_ODBC"/>
         <set var="EXTRALIBS_GUI"/>
         <set var="EXTRALIBS_OPENGL">
             <if cond="COMPILER=='wat' and TOOLKIT=='MSW'">opengl32.lib glu32.lib</if>
@@ -449,7 +439,6 @@ Set the version of your Mingw installation here.
         <set var="USE_MEDIA">1</set>
         <set var="USE_XRC">1</set>
         <set var="USE_OPENGL">1</set>
-        <set var="USE_ODBC">1</set>
         <set var="USE_QA">1</set>
         <set var="MONOLITHIC">0</set>
         <set var="USE_GUI">1</set>

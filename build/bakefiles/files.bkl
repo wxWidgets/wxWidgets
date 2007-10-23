@@ -3203,28 +3203,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 
 <!-- ====================================================================== -->
-<!--                              ODBC classes                              -->
-<!-- ====================================================================== -->
-
-<set var="ODBC_SRC" hints="files">
-    src/common/db.cpp
-    src/common/dbtable.cpp
-</set>
-<set var="ODBC_HDR" hints="files">
-    wx/db.h
-    wx/dbkeyg.h
-    wx/dbtable.h
-</set>
-
-<set var="DBGRID_SRC" hints="files">
-    src/common/dbgrid.cpp
-</set>
-<set var="DBGRID_HDR" hints="files">
-    wx/dbgrid.h
-</set>
-
-
-<!-- ====================================================================== -->
 <!--                             Misc plugin sources:                       -->
 <!-- ====================================================================== -->
 
@@ -3529,7 +3507,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
             $(LOWLEVEL_HDR)
             $(GUI_CORE_HEADERS)
             $(ADVANCED_HDR) $(MEDIA_HDR) $(HTML_HDR)
-            $(OPENGL_HDR) $(QA_HDR) $(DBGRID_HDR) $(XRC_HDR) $(AUI_HDR) $(RICHTEXT_HDR)
+            $(OPENGL_HDR) $(QA_HDR) $(XRC_HDR) $(AUI_HDR) $(RICHTEXT_HDR)
             $(STC_HDR)
         </if>
     </set>
@@ -3538,7 +3516,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="ALL_BASE_HEADERS" make_var="1" hints="files">
         $(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)
         $(NET_CMN_HDR) $(NET_PLATFORM_HDR)
-        $(XML_HDR) $(ODBC_HDR)
+        $(XML_HDR)
     </set>
     <set var="ALL_HEADERS" make_var="1" hints="files">
         $(ALL_BASE_HEADERS) $(ALL_GUI_HEADERS)
@@ -3559,7 +3537,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         $(NET_OS2_HDR)
         $(NET_UNIX_HDR)
         $(NET_MAC_CARBONLIB_HDR)
-        $(XML_HDR) $(ODBC_HDR)
+        $(XML_HDR)
     </set>
 
     <!-- used by 'make dist', should include wxBase sources for all ports -->
@@ -3575,7 +3553,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         $(BASE_AND_GUI_MAC_SRC)
         $(BASE_AND_GUI_WIN32_SRC)
         $(NET_CMN_SRC) $(NET_UNIX_SRC) $(NET_WIN32_SRC) $(NET_WINCE_SRC)
-        $(XML_SRC) $(ODBC_SRC)
+        $(XML_SRC)
     </set>
 
 

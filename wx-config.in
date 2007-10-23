@@ -970,7 +970,6 @@ ldlibs_core="@EXTRALIBS_GUI@"
 ldlibs_gl="@OPENGL_LIBS@"
 ldlibs_html="@EXTRALIBS_HTML@"
 ldlibs_xml="@EXTRALIBS_XML@"
-ldlibs_odbc="@EXTRALIBS_ODBC@"
 ldlibs_adv="@EXTRALIBS_SDL@"
 ldlibs_stc="@EXTRALIBS_STC@"
 

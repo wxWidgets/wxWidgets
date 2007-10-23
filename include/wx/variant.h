@@ -26,10 +26,6 @@
     #include "wx/datetime.h"
 #endif // wxUSE_DATETIME
 
-#if wxUSE_ODBC
-    #include "wx/db.h"  // will #include sqltypes.h
-#endif //ODBC
-
 #include "wx/iosfwrap.h"
 
 /*
@@ -202,19 +198,9 @@ public:
     // wxDateTime
 #if wxUSE_DATETIME
     wxVariant(const wxDateTime& val, const wxString& name = wxEmptyString);
-#if wxUSE_ODBC
-    wxVariant(const DATE_STRUCT* valptr, const wxString& name = wxEmptyString);
-    wxVariant(const TIME_STRUCT* valptr, const wxString& name = wxEmptyString);
-    wxVariant(const TIMESTAMP_STRUCT* valptr, const wxString& name = wxEmptyString);
-#endif
     bool operator== (const wxDateTime& value) const;
     bool operator!= (const wxDateTime& value) const;
     void operator= (const wxDateTime& value) ;
-#if wxUSE_ODBC
-    void operator= (const DATE_STRUCT* value) ;
-    void operator= (const TIME_STRUCT* value) ;
-    void operator= (const TIMESTAMP_STRUCT* value) ;
-#endif
     inline operator wxDateTime () const { return GetDateTime(); }
     wxDateTime GetDateTime() const;
 #endif

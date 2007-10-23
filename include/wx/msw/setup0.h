@@ -1134,29 +1134,6 @@
 #define wxUSE_SVG 1
 
 // ----------------------------------------------------------------------------
-// database classes
-// ----------------------------------------------------------------------------
-
-// Define 1 to use ODBC classes
-#define wxUSE_ODBC          0
-
-// For backward compatibility reasons, this parameter now only controls the
-// default scrolling method used by cursors.  This default behavior can be
-// overriden by setting the second param of wxDB::wxDbGetConnection() or
-// wxDb() constructor to indicate whether the connection (and any wxDbTable()s
-// that use the connection) should support forward only scrolling of cursors,
-// or both forward and backward support for backward scrolling cursors is
-// dependent on the data source as well as the ODBC driver being used.
-#define wxODBC_FWD_ONLY_CURSORS	 1
-
-// Default is 0.  Set to 1 to use the deprecated classes, enum types, function,
-// member variables.  With a setting of 1, full backward compatibility with the
-// 2.0.x release is possible. It is STRONGLY recommended that this be set to 0,
-// as future development will be done only on the non-deprecated
-// functions/classes/member variables/etc.
-#define wxODBC_BACKWARD_COMPATABILITY 0
-
-// ----------------------------------------------------------------------------
 // other compiler (mis)features
 // ----------------------------------------------------------------------------
 

@@ -1199,15 +1199,6 @@ class wxVariantDataDateTime: public wxVariantData
 public:
     wxVariantDataDateTime() { }
     wxVariantDataDateTime(const wxDateTime& value) { m_value = value; }
-#if wxUSE_ODBC
-    wxVariantDataDateTime(const TIME_STRUCT* valptr)
-        { m_value = wxDateTime(valptr->hour, valptr->minute, valptr->second); }
-    wxVariantDataDateTime(const DATE_STRUCT* valptr)
-        { m_value = wxDateTime(valptr->day, (wxDateTime::Month) (valptr->month - 1),valptr->year); }
-    wxVariantDataDateTime(const TIMESTAMP_STRUCT* valptr)
-        { m_value = wxDateTime(valptr->day, (wxDateTime::Month) (valptr->month - 1), valptr->year,
-                        valptr->hour, valptr->minute, valptr->second, (wxDateTime::wxDateTime_t)valptr->fraction ); }
-#endif //ODBC
 
     inline wxDateTime GetValue() const { return m_value; }
     inline void SetValue(const wxDateTime& value) { m_value = value; }
@@ -1281,26 +1272,6 @@ wxVariant::wxVariant(const wxDateTime& val, const wxString& name) // Date
     m_name = name;
 }
 
-#if wxUSE_ODBC
-wxVariant::wxVariant(const TIME_STRUCT* valptr, const wxString& name) // Date
-{
-    m_data = new wxVariantDataDateTime(valptr);
-    m_name = name;
-}
-
-wxVariant::wxVariant(const TIMESTAMP_STRUCT* valptr, const wxString& name) // Date
-{
-    m_data = new wxVariantDataDateTime(valptr);
-    m_name = name;
-}
-
-wxVariant::wxVariant(const DATE_STRUCT* valptr, const wxString& name) // Date
-{
-    m_data = new wxVariantDataDateTime(valptr);
-    m_name = name;
-}
-#endif // wxUSE_ODBC
-
 bool wxVariant::operator== (const wxDateTime& value) const
 {
     wxDateTime thisValue;
@@ -1328,27 +1299,6 @@ void wxVariant::operator= (const wxDateTime& value)
         m_data = new wxVariantDataDateTime(value);
     }
 }
-
-#if wxUSE_ODBC
-void wxVariant::operator= (const DATE_STRUCT* value)
-{
-    UnRef();
-    m_data = new wxVariantDataDateTime(value);
-}
-
-void wxVariant::operator= (const TIME_STRUCT* value)
-{
-    UnRef();
-    m_data = new wxVariantDataDateTime(value);
-}
-
-void wxVariant::operator= (const TIMESTAMP_STRUCT* value)
-{
-    UnRef();
-    m_data = new wxVariantDataDateTime(value);
-}
-
-#endif // wxUSE_ODBC
 
 wxDateTime wxVariant::GetDateTime() const
 {

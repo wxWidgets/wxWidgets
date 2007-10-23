@@ -387,13 +387,6 @@ HTML_SRC = \
 ../../src/html/winpars.cpp \
 ../../src/generic/htmllbox.cpp
 
-ODBC_SRC = \
-../../src/common/db.cpp \
-../../src/common/dbtable.cpp
-
-DBGRID_SRC = \
-../../src/common/dbgrid.cpp
-
 XRC_SRC = \
 ../../src/xrc/xh_bmpbt.cpp \
 ../../src/xrc/xh_bmp.cpp \
@@ -453,8 +446,6 @@ $(CORE_SRC) \
 $(ADVANCED_SRC) \
 $(MEDIA_SRC) \
 $(HTML_SRC) \
-$(ODBC_SRC) \
-$(DBGRID_SRC) \
 $(XRC_SRC) \
 $(XML_SRC) \
 $(OPENGL_SRC) \

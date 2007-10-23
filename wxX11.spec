@@ -105,9 +105,8 @@ cd obj-shared
 %if %{unicode}
                               --enable-unicode \
 %else
-                              --with-odbc \
+                              --disable-unicode \
 %endif
-                              --with-opengl
 $MAKE
 
 cd contrib/src
@@ -120,7 +119,7 @@ cd obj-static
 %if %{unicode}
                               --enable-unicode \
 %else
-                              --with-odbc \
+                              --disable-unicode \
 %endif
                               --with-opengl
 $MAKE
@@ -286,9 +285,6 @@ wx/url.h
 wx/unix/gsockunx.h
 wx/xml/xml.h
 wx/xtixml.h
-wx/db.h
-wx/dbkeyg.h
-wx/dbtable.h
 EOF
 # --- wxBase headers list ends here ---
 for f in `cat wxbase-headers-list` ; do
@@ -362,9 +358,6 @@ rm -f %{_bindir}/%{wxconfiglink}
 %doc COPYING.LIB *.txt
 %{_libdir}/libwx_%{portname}*_adv-%{ver2}.so.*
 %{_libdir}/libwx_%{portname}*_core-%{ver2}.so.*
-%if !%{unicode}
-    %{_libdir}/libwx_%{portname}*_dbgrid-%{ver2}.so.*
-%endif
 %{_libdir}/libwx_%{portname}*_html-%{ver2}.so.*
 %{_libdir}/libwx_%{portname}*_media-%{ver2}.so.*
 %{_libdir}/libwx_%{portname}*_qa-%{ver2}.so.*
@@ -375,9 +368,6 @@ rm -f %{_bindir}/%{wxconfiglink}
 %defattr(-,root,root)
 %{_libdir}/libwx_%{portname}*_adv-%{ver2}.so
 %{_libdir}/libwx_%{portname}*_core-%{ver2}.so
-%if !%{unicode}
-    %{_libdir}/libwx_%{portname}*_dbgrid-%{ver2}.so
-%endif
 %{_libdir}/libwx_%{portname}*_gl-%{ver2}.so
 %{_libdir}/libwx_%{portname}*_html-%{ver2}.so
 %{_libdir}/libwx_%{portname}*_media-%{ver2}.so

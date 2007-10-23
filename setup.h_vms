@@ -532,13 +532,6 @@ typedef pid_t GPid;
 
 #define wxUSE_SVG 1
 
-#define wxUSE_ODBC          1
-
-#define wxODBC_FWD_ONLY_CURSORS	 1
-
-#define wxODBC_BACKWARD_COMPATABILITY 0
-
-
 #define REMOVE_UNUSED_ARG   1
 
 #define wxUSE_IOSTREAMH     1
@@ -760,10 +753,6 @@ typedef pid_t GPid;
  * Use the Hildon framework
  */
 #define wxUSE_LIBHILDON 0
-/*
- * Use iODBC
- */
-#define wxUSE_BUILTIN_IODBC 0
 /*
  * Have glibc2
  */

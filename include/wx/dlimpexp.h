@@ -81,8 +81,6 @@
 #    define WXMAKINGDLL_CORE
 #    define WXMAKINGDLL_ADV
 #    define WXMAKINGDLL_QA
-#    define WXMAKINGDLL_ODBC
-#    define WXMAKINGDLL_DBGRID
 #    define WXMAKINGDLL_HTML
 #    define WXMAKINGDLL_GL
 #    define WXMAKINGDLL_XML
@@ -141,17 +139,6 @@
 #    define WXDLLIMPEXP_DATA_ADV(type) type
 #endif
 
-#ifdef WXMAKINGDLL_ODBC
-#    define WXDLLIMPEXP_ODBC WXEXPORT
-#    define WXDLLIMPEXP_DATA_ODBC(type) WXEXPORT type
-#elif defined(WXUSINGDLL)
-#    define WXDLLIMPEXP_ODBC WXIMPORT
-#    define WXDLLIMPEXP_DATA_ODBC(type) WXIMPORT type
-#else /* not making nor using DLL */
-#    define WXDLLIMPEXP_ODBC
-#    define WXDLLIMPEXP_DATA_ODBC(type) type
-#endif
-
 #ifdef WXMAKINGDLL_QA
 #    define WXDLLIMPEXP_QA WXEXPORT
 #    define WXDLLIMPEXP_DATA_QA(type) WXEXPORT type
@@ -161,17 +148,6 @@
 #else /* not making nor using DLL */
 #    define WXDLLIMPEXP_QA
 #    define WXDLLIMPEXP_DATA_QA(type) type
-#endif
-
-#ifdef WXMAKINGDLL_DBGRID
-#    define WXDLLIMPEXP_DBGRID WXEXPORT
-#    define WXDLLIMPEXP_DATA_DBGRID(type) WXEXPORT type
-#elif defined(WXUSINGDLL)
-#    define WXDLLIMPEXP_DBGRID WXIMPORT
-#    define WXDLLIMPEXP_DATA_DBGRID(type) WXIMPORT type
-#else /* not making nor using DLL */
-#    define WXDLLIMPEXP_DBGRID
-#    define WXDLLIMPEXP_DATA_DBGRID(type) type
 #endif
 
 #ifdef WXMAKINGDLL_HTML
@@ -253,8 +229,6 @@
     #define WXDLLIMPEXP_FWD_CORE
     #define WXDLLIMPEXP_FWD_ADV
     #define WXDLLIMPEXP_FWD_QA
-    #define WXDLLIMPEXP_FWD_ODBC
-    #define WXDLLIMPEXP_FWD_DBGRID
     #define WXDLLIMPEXP_FWD_HTML
     #define WXDLLIMPEXP_FWD_GL
     #define WXDLLIMPEXP_FWD_XML
@@ -269,8 +243,6 @@
     #define WXDLLIMPEXP_FWD_CORE      WXDLLIMPEXP_CORE
     #define WXDLLIMPEXP_FWD_ADV       WXDLLIMPEXP_ADV
     #define WXDLLIMPEXP_FWD_QA        WXDLLIMPEXP_QA
-    #define WXDLLIMPEXP_FWD_ODBC      WXDLLIMPEXP_ODBC
-    #define WXDLLIMPEXP_FWD_DBGRID    WXDLLIMPEXP_DBGRID
     #define WXDLLIMPEXP_FWD_HTML      WXDLLIMPEXP_HTML
     #define WXDLLIMPEXP_FWD_GL        WXDLLIMPEXP_GL
     #define WXDLLIMPEXP_FWD_XML       WXDLLIMPEXP_XML

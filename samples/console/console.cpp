@@ -70,7 +70,6 @@
     #define TEST_MIME
     #define TEST_MODULE
     #define TEST_PATHLIST
-    #define TEST_ODBC
     #define TEST_PRINTF
     #define TEST_REGCONF
     #define TEST_REGEX
@@ -1658,26 +1657,6 @@ static void TestRegExInteractive()
 }
 
 #endif // TEST_REGEX
-
-// ----------------------------------------------------------------------------
-// database
-// ----------------------------------------------------------------------------
-
-#if !wxUSE_ODBC
-    #undef TEST_ODBC
-#endif
-
-#ifdef TEST_ODBC
-
-#include "wx/db.h"
-
-static void TestDbOpen()
-{
-    HENV henv;
-    wxDb db(henv);
-}
-
-#endif // TEST_ODBC
 
 // ----------------------------------------------------------------------------
 // printf() tests
@@ -4434,10 +4413,6 @@ int main(int argc, char **argv)
 #ifdef TEST_PATHLIST
     TestPathList();
 #endif // TEST_PATHLIST
-
-#ifdef TEST_ODBC
-    TestDbOpen();
-#endif // TEST_ODBC
 
 #ifdef TEST_PRINTF
     TestPrintf();

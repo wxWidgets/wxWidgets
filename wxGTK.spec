@@ -167,7 +167,6 @@ cd obj-shared
 			      --enable-unicode \
 %else
 			      --disable-unicode \
-			      --with-odbc \
 %endif
 			      --with-opengl
 $MAKE
@@ -189,7 +188,6 @@ cd obj-static
 			      --enable-unicode \
 %else
 			      --disable-unicode \
-			      --with-odbc \
 %endif
 			      --with-opengl
 $MAKE
@@ -358,9 +356,6 @@ wx/url.h
 wx/unix/gsockunx.h
 wx/xml/xml.h
 wx/xtixml.h
-wx/db.h
-wx/dbkeyg.h
-wx/dbtable.h
 EOF
 # --- wxBase headers list ends here ---
 cat <<EOF >wxbase-headers.paths
@@ -484,9 +479,6 @@ cat <<EOF >wxbase-headers.paths
 %{_includedir}/wx-%{ver2}/wx/url.h
 %{_includedir}/wx-%{ver2}/wx/xml/xml.h
 %{_includedir}/wx-%{ver2}/wx/xtixml.h
-%{_includedir}/wx-%{ver2}/wx/db.h
-%{_includedir}/wx-%{ver2}/wx/dbkeyg.h
-%{_includedir}/wx-%{ver2}/wx/dbtable.h
 %{_includedir}/wx-%{ver2}/wx/unix/apptbase.h
 %{_includedir}/wx-%{ver2}/wx/unix/apptrait.h
 %{_includedir}/wx-%{ver2}/wx/unix/execute.h
@@ -589,9 +581,6 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/libwx_%{buildname}_adv-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_aui-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_core-%{ver2}.so.*
-%if !%{unicode}
-    %{_libdir}/libwx_%{buildname}_dbgrid-%{ver2}.so.*
-%endif
 %{_libdir}/libwx_%{buildname}_html-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.so.*
@@ -608,9 +597,6 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/libwx_%{buildname}_adv-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_aui-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_core-%{ver2}.so
-%if !%{unicode}
-    %{_libdir}/libwx_%{buildname}_dbgrid-%{ver2}.so
-%endif
 %{_libdir}/libwx_%{buildname}_gl-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_html-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.so
@@ -621,9 +607,6 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/libwx_%{buildname}_adv-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_aui-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_core-%{ver2}.a
-%if !%{unicode}
-    %{_libdir}/libwx_%{buildname}_dbgrid-%{ver2}.a
-%endif
 %{_libdir}/libwx_%{buildname}_gl-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_html-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.a

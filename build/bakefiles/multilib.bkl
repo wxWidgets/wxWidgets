@@ -142,51 +142,6 @@
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">media=medialib+mediadll</set>
 
 
-    <!-- ================================================================= -->
-    <!--                        DB classes library                         -->
-    <!-- ================================================================= -->
-
-    <dll id="odbcdll" template="wx_base_dll"
-         cond="SHARED=='1' and USE_ODBC=='1' and MONOLITHIC=='0'">
-        <define>WXUSINGDLL</define>
-        <define>WXMAKINGDLL_ODBC</define>
-        <sources>$(ODBC_SRC)</sources>
-        <msvc-headers>$(ODBC_HDR)</msvc-headers>
-        <library>basedll</library>
-        <ldlibs>$(EXTRALIBS_ODBC)</ldlibs>
-    </dll>
-
-    <lib id="odbclib" template="wx_base_lib"
-        cond="SHARED=='0' and USE_ODBC=='1' and MONOLITHIC=='0'">
-        <sources>$(ODBC_SRC)</sources>
-        <msvc-headers>$(ODBC_HDR)</msvc-headers>
-    </lib>
-
-    <dll id="dbgriddll" template="wx_dll"
-         cond="SHARED=='1' and USE_GUI=='1' and USE_ODBC=='1' and MONOLITHIC=='0'">
-        <define>WXUSINGDLL</define>
-        <define>WXMAKINGDLL_DBGRID</define>
-        <sources>$(DBGRID_SRC)</sources>
-        <msvc-headers>$(DBGRID_HDR)</msvc-headers>
-        <library>advdll</library>
-        <library>odbcdll</library>
-        <library>coredll</library>
-        <library>basedll</library>
-    </dll>
-
-    <lib id="dbgridlib" template="wx_lib"
-        cond="SHARED=='0' and USE_GUI=='1' and USE_ODBC=='1' and MONOLITHIC=='0'">
-        <sources>$(DBGRID_SRC)</sources>
-        <msvc-headers>$(DBGRID_HDR)</msvc-headers>
-    </lib>
-
-    <!-- <wxshortcut id="wxodbc" cond="MONOLITHIC=='0' and USE_ODBC=='1'"/> -->
-    <wxshortcut id="wxdbgrid" cond="MONOLITHIC=='0' and USE_GUI=='1' and USE_ODBC=='1'"/>
-
-    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">odbc=odbclib+odbcdll</set>
-    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">dbgrid=dbgridlib+dbgriddll</set>
-
-
     <!-- ================================================================ -->
     <!--                               wxHTML                             -->
     <!-- ================================================================ -->

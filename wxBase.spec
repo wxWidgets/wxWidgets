@@ -73,7 +73,7 @@ cd obj-shared
 %if %{unicode}
                               --enable-unicode
 %else
-                              --with-odbc
+                              --disable-unicode \
 %endif
 $MAKE
 cd ..
@@ -84,7 +84,7 @@ cd obj-static
 %if %{unicode}
                               --enable-unicode
 %else
-                              --with-odbc
+                              --disable-unicode \
 %endif
 $MAKE
 cd ..

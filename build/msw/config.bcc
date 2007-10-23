@@ -128,11 +128,6 @@ USE_STC = 1
 USE_OPENGL = 0
 !endif
 
-# Build ODBC database classes (USE_GUI must be 1)? [0,1]
-!ifndef USE_ODBC
-USE_ODBC = 0
-!endif
-
 # Build quality assurance classes library (USE_GUI must be 1)? [0,1]
 !ifndef USE_QA
 USE_QA = 0

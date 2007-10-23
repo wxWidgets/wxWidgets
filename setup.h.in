@@ -503,13 +503,6 @@
 #define wxUSE_SVG 0
 
 
-#define wxUSE_ODBC          0
-
-#define wxODBC_FWD_ONLY_CURSORS	 0
-
-#define wxODBC_BACKWARD_COMPATABILITY 0
-
-
 #define REMOVE_UNUSED_ARG   0
 
 #define wxUSE_IOSTREAMH     0
@@ -723,10 +716,6 @@
  * Use the Hildon framework
  */
 #define wxUSE_LIBHILDON 0
-/*
- * Use iODBC
- */
-#define wxUSE_BUILTIN_IODBC 0
 /*
  * Have glibc2
  */

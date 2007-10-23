@@ -378,7 +378,6 @@ DEFAULT_wxUSE_LIBGNOMEVFS=no
 DEFAULT_wxUSE_LIBHILDON=no
 DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
-DEFAULT_wxUSE_ODBC=no
 DEFAULT_wxUSE_OPENGL=no
 
 dnl features disabled by default
@@ -508,7 +507,6 @@ WX_ARG_WITH(dmalloc,       [  --with-dmalloc          use dmalloc library (http:
 WX_ARG_WITH(sdl,           [  --with-sdl              use SDL for audio on Unix], wxUSE_LIBSDL)
 WX_ARG_SYS_WITH(regex,     [  --with-regex            enable support for wxRegEx class], wxUSE_REGEX)
 WX_ARG_SYS_WITH(zlib,      [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
-WX_ARG_SYS_WITH(odbc,      [  --with-odbc             use the IODBC and wxODBC classes], wxUSE_ODBC)
 WX_ARG_SYS_WITH(expat,     [  --with-expat            enable XML support using expat parser], wxUSE_EXPAT)
 
 AC_MSG_CHECKING([for --with-macosx-sdk])
@@ -2676,16 +2674,6 @@ if test "$USE_WIN32" = 1 ; then
             LIBS="$LIBS -lkernel32 -luser32"
     esac
 
-    dnl add extra odbc libs if we have compiled in odbc
-    if test "$wxUSE_ODBC" = "sys" ; then
-        wxUSE_ODBC = "yes"
-    fi
-    if test "$wxUSE_ODBC" = "yes" ; then
-        LIBS=" -lodbc32 -lole32 -loleaut32 $LIBS"
-        AC_DEFINE(wxUSE_ODBC)
-    fi
-    dnl We might want to abort here if wxUSE_ODBC="builtin" isn't supported on msw.
-
     dnl This one is still used by some sample makefiles.
     RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
     RESPROGRAMOBJ="\$(PROGRAM)_resources.o"
@@ -3538,56 +3526,6 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
 fi
 
-
-dnl ----------------------------------------------------------------
-dnl iODBC support
-dnl ----------------------------------------------------------------
-
-IODBC_C_SRC=""
-
-
-dnl ODBC is handled separately for MSW
-if test "$TOOLKIT" != "MSW" ; then
-
-    if test "$wxUSE_ODBC" = "sys" -o "$wxUSE_ODBC" = "yes" ; then
-        dnl This is not ideal we really ough to use the unixodbc-config
-        dnl  or iodbc-config if they exist.
-
-        AC_CHECK_HEADER([sql.h], [found_sql_h=1],, [ ])
-        if test "x$found_sql_h" = "x1" ; then
-            AC_CHECK_LIB(iodbc, SQLAllocEnv, ODBC_LINK=" -liodbc",
-            [
-                AC_CHECK_LIB(unixodbc, SQLAllocEnv, ODBC_LINK=" -lunixodbc",
-                [
-                    AC_CHECK_LIB(odbc, SQLAllocEnv, ODBC_LINK=" -lodbc")
-                ])
-            ])
-        fi
-        if test "x$ODBC_LINK" = "x" ; then
-            if test "$wxUSE_ODBC" = "sys" ; then
-                AC_MSG_ERROR([system ODBC library not found! Use --with-odbc=builtin to use built-in version])
-            else
-                AC_MSG_WARN([system ODBC library not found, will use built-in instead])
-                wxUSE_ODBC=builtin
-            fi
-        else
-            dnl we are using the system library
-            wxUSE_ODBC=sys
-        fi
-    fi
-
-    if test "$wxUSE_ODBC" = "builtin" ; then
-        AC_DEFINE(wxUSE_BUILTIN_IODBC)
-    fi
-fi
-
-if test "$wxUSE_ODBC" != "no" ; then
-    AC_DEFINE(wxUSE_ODBC)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS db"
-
-    dnl is this still necessary?
-    WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D_IODBC_"
-fi
 
 dnl ---------------------------------------------------------------------------
 dnl wxDisplay Sanity checks
@@ -7213,14 +7151,11 @@ dnl ---------------------------------------------------------------------------
 STD_BASE_LIBS="base"
 STD_GUI_LIBS=""
 BUILT_WX_LIBS="base"
-ALL_WX_LIBS="xrc stc gl media dbgrid qa html adv core odbc xml net base"
+ALL_WX_LIBS="xrc stc gl media qa html adv core xml net base"
 
 if test "$wxUSE_SOCKETS" = "yes" ; then
     STD_BASE_LIBS="net $STD_BASE_LIBS"
     BUILT_WX_LIBS="net $BUILT_WX_LIBS"
-fi
-if test "$wxUSE_ODBC" != "no" ; then
-    BUILT_WX_LIBS="odbc $BUILT_WX_LIBS"
 fi
 if test "$wxUSE_XML" = "yes" ; then
     STD_BASE_LIBS="xml $STD_BASE_LIBS"
@@ -7234,9 +7169,6 @@ if test "$wxUSE_GUI" = "yes"; then
     if test "$wxUSE_DEBUGREPORT" = "yes" ; then
         STD_GUI_LIBS="qa $STD_GUI_LIBS"
         BUILT_WX_LIBS="qa $BUILT_WX_LIBS"
-    fi
-    if test "$wxUSE_ODBC" != "no" ; then
-        BUILT_WX_LIBS="dbgrid $BUILT_WX_LIBS"
     fi
     if test "$wxUSE_HTML" = "yes" ; then
         STD_GUI_LIBS="html $STD_GUI_LIBS"
@@ -7410,7 +7342,6 @@ LIBS=`echo $LIBS`
 EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
 EXTRALIBS_XML="$EXPAT_LINK"
 EXTRALIBS_HTML="$MSPACK_LINK"
-EXTRALIBS_ODBC="$ODBC_LINK"
 EXTRALIBS_STC="-lwxscintilla${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 if test "$wxUSE_GUI" = "yes"; then
     EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK $EXTRALIBS_HILDON $EXTRALIBS_GNOMEVFS $EXTRALIBS_GNOMEPRINT`
@@ -7429,9 +7360,6 @@ if test "$wxUSE_REGEX" = "builtin" ; then
 fi
 if test "$wxUSE_EXPAT" = "builtin" ; then
     wxconfig_3rdparty="expat $wxconfig_3rdparty"
-fi
-if test "$wxUSE_ODBC" = "builtin" ; then
-    wxconfig_3rdparty="odbc $wxconfig_3rdparty"
 fi
 if test "$wxUSE_LIBTIFF" = "builtin" ; then
     wxconfig_3rdparty="tiff $wxconfig_3rdparty"
@@ -7471,7 +7399,6 @@ fi
 AC_SUBST(wxUSE_ZLIB)
 AC_SUBST(wxUSE_REGEX)
 AC_SUBST(wxUSE_EXPAT)
-AC_SUBST(wxUSE_ODBC)
 AC_SUBST(wxUSE_LIBJPEG)
 AC_SUBST(wxUSE_LIBPNG)
 AC_SUBST(wxUSE_LIBTIFF)
@@ -7486,12 +7413,6 @@ if test $wxUSE_PLUGINS = "yes" ; then
     USE_PLUGINS=1
 else
     USE_PLUGINS=0
-fi
-
-if test $wxUSE_ODBC != "no" ; then
-    USE_ODBC=1
-else
-    USE_ODBC=0
 fi
 
 if test "$wxUSE_DEBUGREPORT" = "yes" ; then
@@ -7519,7 +7440,6 @@ AC_SUBST(CXXWARNINGS)
 AC_SUBST(EXTRALIBS)
 AC_SUBST(EXTRALIBS_XML)
 AC_SUBST(EXTRALIBS_HTML)
-AC_SUBST(EXTRALIBS_ODBC)
 AC_SUBST(EXTRALIBS_GUI)
 AC_SUBST(EXTRALIBS_OPENGL)
 AC_SUBST(EXTRALIBS_SDL)
@@ -8022,7 +7942,6 @@ if test "$wxUSE_X11" = 1 -o "$wxUSE_MOTIF" = 1; then
 echo "                                       xpm                ${wxUSE_LIBXPM-none}"
 fi
 echo "                                       zlib               ${wxUSE_ZLIB}"
-echo "                                       odbc               ${wxUSE_ODBC}"
 echo "                                       expat              ${wxUSE_EXPAT}"
 echo "                                       libmspack          ${wxUSE_LIBMSPACK}"
 echo "                                       sdl                ${wxUSE_LIBSDL}"

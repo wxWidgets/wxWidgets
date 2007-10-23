@@ -132,11 +132,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_m_tables.obj &
 	$(OBJS)\monodll_winpars.obj &
 	$(OBJS)\monodll_htmllbox.obj &
-	$(OBJS)\monodll_db.obj &
-	$(OBJS)\monodll_dbtable.obj &
 	$(OBJS)\monodll_debugrpt.obj &
 	$(OBJS)\monodll_dbgrptg.obj &
-	$(OBJS)\monodll_dbgrid.obj &
 	$(OBJS)\monodll_xh_animatctrl.obj &
 	$(OBJS)\monodll_xh_bmp.obj &
 	$(OBJS)\monodll_xh_bmpcbox.obj &
@@ -464,11 +461,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_m_tables.obj &
 	$(OBJS)\monolib_winpars.obj &
 	$(OBJS)\monolib_htmllbox.obj &
-	$(OBJS)\monolib_db.obj &
-	$(OBJS)\monolib_dbtable.obj &
 	$(OBJS)\monolib_debugrpt.obj &
 	$(OBJS)\monolib_dbgrptg.obj &
-	$(OBJS)\monolib_dbgrid.obj &
 	$(OBJS)\monolib_xh_animatctrl.obj &
 	$(OBJS)\monolib_xh_bmp.obj &
 	$(OBJS)\monolib_xh_bmpcbox.obj &
@@ -1231,46 +1225,6 @@ __medialib___depname = &
 !endif
 !endif
 !endif
-__odbcdll___depname =
-!ifeq MONOLITHIC 0
-!ifeq SHARED 1
-!ifeq USE_ODBC 1
-__odbcdll___depname = &
-	$(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_odbc.dll
-!endif
-!endif
-!endif
-__odbclib___depname =
-!ifeq MONOLITHIC 0
-!ifeq SHARED 0
-!ifeq USE_ODBC 1
-__odbclib___depname = &
-	$(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_odbc.lib
-!endif
-!endif
-!endif
-__dbgriddll___depname =
-!ifeq MONOLITHIC 0
-!ifeq SHARED 1
-!ifeq USE_GUI 1
-!ifeq USE_ODBC 1
-__dbgriddll___depname = &
-	$(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_dbgrid.dll
-!endif
-!endif
-!endif
-!endif
-__dbgridlib___depname =
-!ifeq MONOLITHIC 0
-!ifeq SHARED 0
-!ifeq USE_GUI 1
-!ifeq USE_ODBC 1
-__dbgridlib___depname = &
-	$(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_dbgrid.lib
-!endif
-!endif
-!endif
-!endif
 __htmldll___depname =
 !ifeq MONOLITHIC 0
 !ifeq SHARED 1
@@ -1548,7 +1502,7 @@ MAKEARGS = DOS32="$(DOS32)" CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" &
 	MONOLITHIC="$(MONOLITHIC)" USE_GUI="$(USE_GUI)" USE_HTML="$(USE_HTML)" &
 	USE_MEDIA="$(USE_MEDIA)" USE_XRC="$(USE_XRC)" USE_AUI="$(USE_AUI)" &
 	USE_RICHTEXT="$(USE_RICHTEXT)" USE_OPENGL="$(USE_OPENGL)" &
-	USE_ODBC="$(USE_ODBC)" USE_QA="$(USE_QA)" &
+	USE_QA="$(USE_QA)" &
 	USE_EXCEPTIONS="$(USE_EXCEPTIONS)" USE_RTTI="$(USE_RTTI)" &
 	USE_GDIPLUS="$(USE_GDIPLUS)" OFFICIAL_BUILD="$(OFFICIAL_BUILD)" &
 	VENDOR="$(VENDOR)" WX_FLAVOUR="$(WX_FLAVOUR)" &
@@ -2237,54 +2191,6 @@ MEDIALIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 MEDIALIB_OBJECTS =  &
 	$(OBJS)\medialib_dummy.obj &
 	$(OBJS)\medialib_mediactrlcmn.obj
-ODBCDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
-	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
-	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
-	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
-	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
-	-i=..\..\src\expat\lib -dwxUSE_GUI=0 -dWXUSINGDLL -dWXMAKINGDLL_ODBC &
-	/fh=$(OBJS)\wxprec_odbcdll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
-	$(CPPFLAGS) $(CXXFLAGS)
-ODBCDLL_OBJECTS =  &
-	$(OBJS)\odbcdll_dummy.obj &
-	$(OBJS)\odbcdll_db.obj &
-	$(OBJS)\odbcdll_dbtable.obj
-ODBCLIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
-	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
-	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
-	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
-	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
-	-i=..\..\src\expat\lib -dwxUSE_GUI=0 /fh=$(OBJS)\wxprec_odbclib.pch &
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
-ODBCLIB_OBJECTS =  &
-	$(OBJS)\odbclib_dummy.obj &
-	$(OBJS)\odbclib_db.obj &
-	$(OBJS)\odbclib_dbtable.obj
-DBGRIDDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
-	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
-	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
-	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
-	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
-	-i=..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_DBGRID &
-	/fh=$(OBJS)\wxprec_dbgriddll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
-	$(CPPFLAGS) $(CXXFLAGS)
-DBGRIDDLL_OBJECTS =  &
-	$(OBJS)\dbgriddll_dummy.obj &
-	$(OBJS)\dbgriddll_dbgrid.obj
-DBGRIDLIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
-	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
-	$(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
-	-wcd=657 -wcd=667 -i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg &
-	-i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
-	-i=..\..\src\expat\lib /fh=$(OBJS)\wxprec_dbgridlib.pch $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
-DBGRIDLIB_OBJECTS =  &
-	$(OBJS)\dbgridlib_dummy.obj &
-	$(OBJS)\dbgridlib_dbgrid.obj
 HTMLDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
 	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) &
@@ -2633,7 +2539,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC setup_h $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__mediadll___depname) $(__medialib___depname) $(__odbcdll___depname) $(__odbclib___depname) $(__dbgriddll___depname) $(__dbgridlib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__qadll___depname) $(__qalib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__xrcdll___depname) $(__xrclib___depname) $(__auidll___depname) $(__auilib___depname) $(__richtextdll___depname) $(__richtextlib___depname) $(__gldll___depname) $(__gllib___depname) build_cfg_file
+all : .SYMBOLIC setup_h $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__mediadll___depname) $(__medialib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__qadll___depname) $(__qalib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__xrcdll___depname) $(__xrclib___depname) $(__auidll___depname) $(__auilib___depname) $(__richtextdll___depname) $(__richtextlib___depname) $(__gldll___depname) $(__gllib___depname) build_cfg_file
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -2665,12 +2571,6 @@ clean : .SYMBOLIC
 	-del $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media.dll
 	-del $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media.lib
 	-del $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media.lib
-	-del $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_odbc.dll
-	-del $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_odbc.lib
-	-del $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_odbc.lib
-	-del $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_dbgrid.dll
-	-del $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_dbgrid.lib
-	-del $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_dbgrid.lib
 	-del $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html.dll
 	-del $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html.lib
 	-del $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html.lib
@@ -2901,70 +2801,6 @@ $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 	@%create $(OBJS)\medialib.lbc
 	@for %i in ($(MEDIALIB_OBJECTS)) do @%append $(OBJS)\medialib.lbc +%i
 	wlib -q -p4096 -n -b $^@ @$(OBJS)\medialib.lbc
-!endif
-!endif
-!endif
-!endif
-
-!ifeq MONOLITHIC 0
-!ifeq SHARED 1
-!ifeq USE_ODBC 1
-$(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_odbc.dll :  $(ODBCDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(__basedll___depname)
-	@%create $(OBJS)\odbcdll.lbc
-	@%append $(OBJS)\odbcdll.lbc option quiet
-	@%append $(OBJS)\odbcdll.lbc name $^@
-	@%append $(OBJS)\odbcdll.lbc option caseexact
-	@%append $(OBJS)\odbcdll.lbc $(LDFLAGS) $(__DEBUGINFO_3)  libpath $(LIBDIRNAME) libpath $(%SCITECH)\lib\$(__BUILD_FILENAMES)\dos32\ow10 libpath $(%SCITECH)\lib\$(__BUILD_FILENAMES)\dos32\ow10\$(__MGLPMLIBPATH_FILENAMES)
-	@for %i in ($(ODBCDLL_OBJECTS)) do @%append $(OBJS)\odbcdll.lbc file %i
-	@for %i in ( wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) mgl.lib mglcpp.lib pm.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib ) do @%append $(OBJS)\odbcdll.lbc library %i
-	@%append $(OBJS)\odbcdll.lbc
-	@%append $(OBJS)\odbcdll.lbc system
-	wlink @$(OBJS)\odbcdll.lbc
-	wlib -q -n -b $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_odbc.lib +$^@
-!endif
-!endif
-!endif
-
-!ifeq MONOLITHIC 0
-!ifeq SHARED 0
-!ifeq USE_ODBC 1
-$(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_odbc.lib :  $(ODBCLIB_OBJECTS)
-	@%create $(OBJS)\odbclib.lbc
-	@for %i in ($(ODBCLIB_OBJECTS)) do @%append $(OBJS)\odbclib.lbc +%i
-	wlib -q -p4096 -n -b $^@ @$(OBJS)\odbclib.lbc
-!endif
-!endif
-!endif
-
-!ifeq MONOLITHIC 0
-!ifeq SHARED 1
-!ifeq USE_GUI 1
-!ifeq USE_ODBC 1
-$(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_dbgrid.dll :  $(DBGRIDDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(__advdll___depname) $(__odbcdll___depname) $(__coredll___depname) $(__basedll___depname)
-	@%create $(OBJS)\dbgriddll.lbc
-	@%append $(OBJS)\dbgriddll.lbc option quiet
-	@%append $(OBJS)\dbgriddll.lbc name $^@
-	@%append $(OBJS)\dbgriddll.lbc option caseexact
-	@%append $(OBJS)\dbgriddll.lbc $(LDFLAGS) $(__DEBUGINFO_3)  libpath $(LIBDIRNAME) libpath $(%SCITECH)\lib\$(__BUILD_FILENAMES)\dos32\ow10 libpath $(%SCITECH)\lib\$(__BUILD_FILENAMES)\dos32\ow10\$(__MGLPMLIBPATH_FILENAMES)
-	@for %i in ($(DBGRIDDLL_OBJECTS)) do @%append $(OBJS)\dbgriddll.lbc file %i
-	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) mgl.lib mglcpp.lib pm.lib $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_odbc.lib $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib) do @%append $(OBJS)\dbgriddll.lbc library %i
-	@%append $(OBJS)\dbgriddll.lbc
-	@%append $(OBJS)\dbgriddll.lbc system
-	wlink @$(OBJS)\dbgriddll.lbc
-	wlib -q -n -b $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_dbgrid.lib +$^@
-!endif
-!endif
-!endif
-!endif
-
-!ifeq MONOLITHIC 0
-!ifeq SHARED 0
-!ifeq USE_GUI 1
-!ifeq USE_ODBC 1
-$(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_dbgrid.lib :  $(DBGRIDLIB_OBJECTS)
-	@%create $(OBJS)\dbgridlib.lbc
-	@for %i in ($(DBGRIDLIB_OBJECTS)) do @%append $(OBJS)\dbgridlib.lbc +%i
-	wlib -q -p4096 -n -b $^@ @$(OBJS)\dbgridlib.lbc
 !endif
 !endif
 !endif
@@ -3225,7 +3061,6 @@ build_cfg_file : .SYMBOLIC $(SETUPHDIR)
 	@echo USE_GUI=$(USE_GUI) >>$(BUILD_CFG_FILE)
 	@echo USE_HTML=$(USE_HTML) >>$(BUILD_CFG_FILE)
 	@echo USE_MEDIA=$(USE_MEDIA) >>$(BUILD_CFG_FILE)
-	@echo USE_ODBC=$(USE_ODBC) >>$(BUILD_CFG_FILE)
 	@echo USE_OPENGL=$(USE_OPENGL) >>$(BUILD_CFG_FILE)
 	@echo USE_QA=$(USE_QA) >>$(BUILD_CFG_FILE)
 	@echo USE_GDIPLUS=$(USE_GDIPLUS) >>$(BUILD_CFG_FILE)
@@ -4563,19 +4398,10 @@ $(OBJS)\monodll_winpars.obj :  .AUTODEPEND ..\..\src\html\winpars.cpp
 $(OBJS)\monodll_htmllbox.obj :  .AUTODEPEND ..\..\src\generic\htmllbox.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_db.obj :  .AUTODEPEND ..\..\src\common\db.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_dbtable.obj :  .AUTODEPEND ..\..\src\common\dbtable.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
 $(OBJS)\monodll_debugrpt.obj :  .AUTODEPEND ..\..\src\common\debugrpt.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dbgrptg.obj :  .AUTODEPEND ..\..\src\generic\dbgrptg.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_dbgrid.obj :  .AUTODEPEND ..\..\src\common\dbgrid.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_animatctrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_animatctrl.cpp
@@ -5766,19 +5592,10 @@ $(OBJS)\monolib_winpars.obj :  .AUTODEPEND ..\..\src\html\winpars.cpp
 $(OBJS)\monolib_htmllbox.obj :  .AUTODEPEND ..\..\src\generic\htmllbox.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_db.obj :  .AUTODEPEND ..\..\src\common\db.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_dbtable.obj :  .AUTODEPEND ..\..\src\common\dbtable.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
 $(OBJS)\monolib_debugrpt.obj :  .AUTODEPEND ..\..\src\common\debugrpt.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dbgrptg.obj :  .AUTODEPEND ..\..\src\generic\dbgrptg.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_dbgrid.obj :  .AUTODEPEND ..\..\src\common\dbgrid.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_animatctrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_animatctrl.cpp
@@ -7853,36 +7670,6 @@ $(OBJS)\medialib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 
 $(OBJS)\medialib_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
-
-$(OBJS)\odbcdll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(ODBCDLL_CXXFLAGS) $<
-
-$(OBJS)\odbcdll_db.obj :  .AUTODEPEND ..\..\src\common\db.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(ODBCDLL_CXXFLAGS) $<
-
-$(OBJS)\odbcdll_dbtable.obj :  .AUTODEPEND ..\..\src\common\dbtable.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(ODBCDLL_CXXFLAGS) $<
-
-$(OBJS)\odbclib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(ODBCLIB_CXXFLAGS) $<
-
-$(OBJS)\odbclib_db.obj :  .AUTODEPEND ..\..\src\common\db.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(ODBCLIB_CXXFLAGS) $<
-
-$(OBJS)\odbclib_dbtable.obj :  .AUTODEPEND ..\..\src\common\dbtable.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(ODBCLIB_CXXFLAGS) $<
-
-$(OBJS)\dbgriddll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(DBGRIDDLL_CXXFLAGS) $<
-
-$(OBJS)\dbgriddll_dbgrid.obj :  .AUTODEPEND ..\..\src\common\dbgrid.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(DBGRIDDLL_CXXFLAGS) $<
-
-$(OBJS)\dbgridlib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(DBGRIDLIB_CXXFLAGS) $<
-
-$(OBJS)\dbgridlib_dbgrid.obj :  .AUTODEPEND ..\..\src\common\dbgrid.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(DBGRIDLIB_CXXFLAGS) $<
 
 $(OBJS)\htmldll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<

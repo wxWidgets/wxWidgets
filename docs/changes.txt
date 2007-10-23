@@ -39,6 +39,14 @@ changes:
   bit text, the new wxIPC_UTF8TEXT format is used for transferring wxStrings.
 
 
+wxODBC library removal
+----------------------
+
+wxODBC library was unmaintained since several years and we couldn't continue
+supporting it any longer so it was removed. Please use any of the other open
+source ODBC libraries in the future projects.
+
+
 Changes in behaviour not resulting in compilation errors, please read this!
 ---------------------------------------------------------------------------
 

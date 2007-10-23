@@ -34,7 +34,6 @@ MSWDIR   = $(WXDIR)/src/msw
 PMDIR    = $(WXDIR)/src/os2
 MACDIR   = $(WXDIR)/src/mac
 COCOADIR = $(WXDIR)/src/cocoa
-ODBCDIR  = $(WXDIR)/src/iodbc
 FTDIR    = $(WXDIR)/src/freetype
 INCDIR   = $(WXDIR)/include
 SAMPDIR  = $(WXDIR)/samples
@@ -121,14 +120,6 @@ ALL_DIST: distrib_clean
 	$(CP_P) $(REGEXDIR)/README $(DISTDIR)/src/regex
 	$(CP_PR) $(EXPATDIR) $(DISTDIR)/src/expat
 	#(cd $(DISTDIR)/src/expat ; rm -rf `find -name CVS`)
-	mkdir $(DISTDIR)/src/iodbc
-	$(CP_P) $(ODBCDIR)/*.h $(DISTDIR)/src/iodbc
-	$(CP_P) $(ODBCDIR)/*.c $(DISTDIR)/src/iodbc
-	$(CP_P) $(ODBCDIR)/*.ci $(DISTDIR)/src/iodbc
-	$(CP_P) $(ODBCDIR)/*.exp $(DISTDIR)/src/iodbc
-	$(CP_P) $(ODBCDIR)/README $(DISTDIR)/src/iodbc
-	$(CP_P) $(ODBCDIR)/NEWS $(DISTDIR)/src/iodbc
-	$(CP_P) $(ODBCDIR)/Changes.log $(DISTDIR)/src/iodbc
 	# copy some files from include/ that are not installed:
 	mkdir $(DISTDIR)/include
 	mkdir $(DISTDIR)/include/wx
@@ -480,8 +471,6 @@ DEMOS_DIST: ALL_GUI_DIST
 	$(CP_P) $(DEMODIR)/bombs/*.rc $(DISTDIR)/demos/bombs
 	$(CP_P) $(DEMODIR)/bombs/readme.txt $(DISTDIR)/demos/bombs
 
-	$(CP_PR) $(DEMODIR)/dbbrowse $(DISTDIR)/demos/dbbrowse
-
 	mkdir $(DISTDIR)/demos/forty
 	$(CP_P) $(DEMODIR)/forty/Makefile.in $(DISTDIR)/demos/forty
 	$(CP_P) $(DEMODIR)/forty/makefile.unx $(DISTDIR)/demos/forty
@@ -740,7 +729,7 @@ distdir: @GUIDIST@
 	@# in other dist targets.
 	find $(DISTDIR) \( -name "CVS" -o -name ".cvsignore" -o -name "*.dsp" -o -name "*.dsw" -o -name "*.hh*" -o \
 			\( -name "makefile.*" -a ! -name "makefile.unx" \) \) \
-			-print | egrep -v '/(samples|dbbrowse)/.*\.hh.$$' | xargs rm -rf
+			-print | egrep -v '/samples/.*\.hh.$$' | xargs rm -rf
 
 dist: distdir
 	@cd _dist_dir && tar ch $(DISTDIRNAME) | gzip -f9 > ../$(WXARCHIVE);

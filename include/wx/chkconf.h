@@ -1165,17 +1165,6 @@
 #   endif
 #endif /* wxUSE_MIMETYPE */
 
-#if wxUSE_ODBC
-#   if !wxUSE_DATETIME
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxODBC requires wxUSE_DATETIME"
-#       else
-#           undef wxUSE_ODBC
-#           define wxUSE_ODBC 0
-#       endif
-#   endif
-#endif /* wxUSE_ODBC */
-
 #if wxUSE_TEXTFILE && !wxUSE_TEXTBUFFER
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_TEXTFILE requires wxUSE_TEXTBUFFER"
@@ -1851,15 +1840,6 @@
 #       else
 #           undef wxUSE_DATAVIEWCTRL
 #           define wxUSE_DATAVIEWCTRL 0
-#       endif
-#   endif
-
-#   if wxUSE_ODBC
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxUSE_ODBC requires wxVariant"
-#       else
-#           undef wxUSE_ODBC
-#           define wxUSE_ODBC 0
 #       endif
 #   endif
 #endif /* wxUSE_VARIANT */
