@@ -1142,17 +1142,10 @@ bool wxRichTextCtrl::IsPositionVisible(long pos) const
     startX = 0;
     startY = startY * ppuY;
 
-    int sx = 0, sy = 0;
-    GetVirtualSize(& sx, & sy);
-    sx = 0;
-    if (ppuY != 0)
-        sy = sy/ppuY;
-
     wxRect rect = line->GetRect();
-
     wxSize clientSize = GetClientSize();
 
-    return !(((rect.y + rect.height) > (clientSize.y + startY)) || rect.y < startY);
+    return (rect.GetBottom() > startY) && (rect.GetTop() < (startY + clientSize.y));
 }
 
 void wxRichTextCtrl::SetCaretPosition(long position, bool showAtLineStart)
