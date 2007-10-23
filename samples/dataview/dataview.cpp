@@ -752,19 +752,19 @@ void MyFrame::OnTestTreeCtrl(wxCommandEvent& WXUNUSED(event) )
     
     wxDataViewCtrl *treectrl = new wxDataViewCtrl( &dialog, -1, 
         wxDefaultPosition, wxSize(300,200), wxDV_NO_HEADER );
-    treectrl->AppendIconTextColumn( "no label", 0, wxDATAVIEW_CELL_INERT, 200 );
         
-    main_sizer->Add( treectrl, 1, wxGROW );
-    
     wxDataViewTreeStore *store = new wxDataViewTreeStore;
     wxDataViewItem parent = store->AppendContainer( wxDataViewItem(0), "Root 1", wxIcon(small1_xpm) );
     wxDataViewItem child = store->AppendItem( parent, "Child 1", wxIcon(small1_xpm) );
     child = store->AppendItem( parent, "Child 2", wxIcon(small1_xpm) );
     child = store->AppendItem( parent, "Child 3", wxIcon(small1_xpm) );
-    
     treectrl->AssociateModel( store );
-    
     store->DecRef();
+
+    treectrl->AppendIconTextColumn( "no label", 0, wxDATAVIEW_CELL_INERT, 200 );
+
+    main_sizer->Add( treectrl, 1, wxGROW );
+    
 
     wxSizer *button_sizer = dialog.CreateButtonSizer( wxOK );
     if (button_sizer)
