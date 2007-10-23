@@ -1043,7 +1043,7 @@ void wxGDIPlusContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, 
                 helper->GetPixelFormat(),&data);
 
             image = new Bitmap(data.Width, data.Height, data.Stride,
-                PixelFormat32bppARGB , (BYTE*) data.Scan0);
+                PixelFormat32bppPARGB , (BYTE*) data.Scan0);
 
             helper->UnlockBits(&data);
         }
