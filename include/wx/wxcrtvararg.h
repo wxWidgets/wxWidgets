@@ -63,12 +63,21 @@
 #endif
 
 /*
-   MinGW MSVCRT has non-standard vswprintf() (for MSVC compatibility
-   presumably) and normally _vsnwprintf() is used instead
+   mingw32 normally uses MSVCRT which has non-standard vswprintf() and so
+   normally _vsnwprintf() is used instead, the only exception is when mingw32
+   is used with STLPort which does have a standard vswprintf() starting from
+   version 5.1 which we can use.
  */
-#if defined(HAVE_VSWPRINTF) && defined(__MINGW32__)
-    #undef HAVE_VSWPRINTF
-#endif
+#ifdef __MINGW32__
+    #if defined(_STLPORT_VERSION) && _STLPORT_VERSION >= 0x510
+        #ifndef HAVE_VSWPRINTF
+            #define HAVE_VSWPRINTF
+        #endif
+    #elif defined(HAVE_VSWPRINTF)
+        /* can't use non-standard vswprintf() */
+        #undef HAVE_VSWPRINTF
+    #endif
+#endif /* __MINGW32__ */
 
 #if defined(__WATCOMC__)
     #define HAVE_VSWPRINTF 1
@@ -205,7 +214,7 @@
     #define wxCRT_PrintfW       wprintf
     #define wxCRT_VfprintfW     vfwprintf
     #define wxCRT_VprintfW      vwprintf
-    
+
     #if defined(__WINDOWS__) && !defined(HAVE_VSWPRINTF)
         // only non-standard vswprintf() without buffer size argument can be used here
         #define  wxCRT_VsprintfW     vswprintf
