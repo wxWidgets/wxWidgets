@@ -932,7 +932,7 @@ void MyFrame::OnRightClick( wxMouseEvent &event )
     wxLogMessage("wxEVT_MOUSE_RIGHT_UP, Click Point is X: %d, Y: %d", event.GetX(), event.GetY());
 }
 
-void MyFrame::OnGoto( wxCommandEvent &event)
+void MyFrame::OnGoto(wxCommandEvent& WXUNUSED(event))
 {
     wxDataViewItem item = m_list_model->GetItem( 50 );
     m_listCtrl->EnsureVisible(item,m_col);
