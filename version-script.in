@@ -28,6 +28,7 @@
 @WX_VERSION_TAG@.7 {
     global:
 	*wxStaticBox*AcceptsFocus*;
+	*wxAuiPaneInfo*DockFixed*;
 };
 
 # public symbols added in 2.8.5 (please keep in alphabetical order):
