@@ -1603,12 +1603,24 @@ int wxString::DoPrintfUtf8(const char *format, ...)
     and set errno.
 
     What vswprintf sets errno to is undefined but Darwin seems to set it to
-    EOVERFLOW.  The only expected errno that are defined anywhere are by an
-    addendum indicating that EILSEQ should be set for bad input characters and
-    EINVALID for bad arguments such as a NULL buffer pointer.  It would appear
-    that setting EOVERFLOW is not documented anywhere and has only been at
-    this time observed on Darwin.
+    EOVERFLOW.  The only expected errno are EILSEQ and EINVAL.  Both of
+    those are defined in the standard and backed up by several conformance
+    statements.  Note that ENOMEM mentioned in the manual page does not
+    apply to swprintf, only wprintf and fwprintf.
 
+    Official manual page:
+    http://www.opengroup.org/onlinepubs/009695399/functions/swprintf.html
+
+    Some conformance statements (AIX, Solaris):
+    http://www.opengroup.org/csq/view.mhtml?RID=ibm%2FSD1%2F3
+    http://www.theopengroup.org/csq/view.mhtml?norationale=1&noreferences=1&RID=Fujitsu%2FSE2%2F10
+
+    Since EILSEQ and EINVAL are rather common but EOVERFLOW is not and since
+    EILSEQ and EINVAL are specifically defined to mean the error is other than
+    an undersized buffer and no other errno are defined we treat those two
+    as meaning hard errors and everything else gets the old behavior which
+    is to keep looping and increasing buffer size until the function succeeds.
+ 
     In practice it's impossible to determine before compilation which behavior
     may be used.  The vswprintf function may have vsnprintf-like behavior or
     vice-versa.  Behavior detected on one release can theoretically change
@@ -1704,16 +1716,15 @@ static int DoStringPrintfV(wxString& str,
             // as we don't know how much we need, double the current size of
             // the buffer
 #ifndef __WXWINCE__
-            if( (errno == 0) || (errno == EOVERFLOW) )
+            if( (errno == EILSEQ) || (errno == EINVAL) )
+            // If errno was set to one of the two well-known hard errors
+            // then fail immediately to avoid an infinite loop.
+                return -1;
+            else
+#endif // __WXWINCE__
             // still not enough, as we don't know how much we need, double the
             // current size of the buffer
                 size *= 2;
-            else
-            // If errno was set to something else, assume hard failure.
-                return -1;
-#else
-            size *= 2;
-#endif // __WXWINCE__
 #endif // wxUSE_WXVSNPRINTF/!wxUSE_WXVSNPRINTF
         }
         else if ( len >= size )
