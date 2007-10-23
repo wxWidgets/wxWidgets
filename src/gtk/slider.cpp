@@ -277,7 +277,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxSlider,wxControl)
 wxSlider::wxSlider()
 {
     m_pos = 0;
-    m_scrollEventType = 0;
+    m_scrollEventType = GTK_SCROLL_NONE;
     m_needThumbRelease = false;
     m_blockScrollEvent = false;
 }
@@ -293,6 +293,9 @@ bool wxSlider::Create(wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name)
 {
+    m_pos = value;
+    m_scrollEventType = GTK_SCROLL_NONE;
+
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
@@ -317,13 +320,14 @@ bool wxSlider::Create(wxWindow *parent,
     g_signal_connect(m_widget, "move_slider", G_CALLBACK(gtk_move_slider), this);
     g_signal_connect(m_widget, "format_value", G_CALLBACK(gtk_format_value), NULL);
     g_signal_connect(m_widget, "value_changed", G_CALLBACK(gtk_value_changed), this);
-    gulong handler_id;
-    handler_id = g_signal_connect(
-        m_widget, "event_after", G_CALLBACK(gtk_event_after), this);
+    gulong handler_id = g_signal_connect(m_widget, "event_after", G_CALLBACK(gtk_event_after), this);
     g_signal_handler_block(m_widget, handler_id);
 
     SetRange( minValue, maxValue );
-    SetValue( value );
+
+    // don't call the public SetValue() as it won't do anything unless the
+    // value really changed
+    GTKSetValue( value );
 
     m_parent->DoAddChild( this );
 
@@ -340,11 +344,14 @@ int wxSlider::GetValue() const
 void wxSlider::SetValue( int value )
 {
     if (GetValue() != value)
-    {
-        m_blockScrollEvent = true;
-        gtk_range_set_value(GTK_RANGE (m_widget), value);
-        m_blockScrollEvent = false;
-    }
+        GTKSetValue(value);
+}
+
+void wxSlider::GTKSetValue(int value)
+{
+    m_blockScrollEvent = true;
+    gtk_range_set_value(GTK_RANGE (m_widget), value);
+    m_blockScrollEvent = false;
 }
 
 void wxSlider::SetRange( int minValue, int maxValue )

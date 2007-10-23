@@ -58,7 +58,7 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-    
+
     // implementation
     double m_pos;
     int m_scrollEventType;
@@ -67,6 +67,9 @@ public:
 
 protected:
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
+
+    // set the slider value unconditionally
+    void GTKSetValue(int value);
 
     DECLARE_DYNAMIC_CLASS(wxSlider)
 };
