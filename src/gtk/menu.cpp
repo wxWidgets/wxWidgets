@@ -143,14 +143,16 @@ static void DoCommonMenuCallbackCode(wxMenu *menu, wxMenuEvent& event)
 
 extern "C" {
 
-static void gtk_menu_open_callback( GtkWidget *widget, wxMenu *menu )
+static void
+gtk_menu_open_callback(GtkWidget * WXUNUSED(widget), wxMenu *menu)
 {
     wxMenuEvent event(wxEVT_MENU_OPEN, -1, menu);
 
     DoCommonMenuCallbackCode(menu, event);
 }
 
-static void gtk_menu_close_callback( GtkWidget *widget, wxMenuBar *menubar )
+static void
+gtk_menu_close_callback(GtkWidget * WXUNUSED(widget), wxMenuBar *menubar)
 {
     if ( !menubar->GetMenuCount() )
     {
@@ -451,11 +453,11 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
         if( frame )
             frame->UpdateMenuBarSize();
-        
+
         wxMenubarUnsetInvokingWindow( menu, m_invokingWindow );
     }
 
-    
+
     return menu;
 }
 
@@ -1068,12 +1070,12 @@ wxMenu::~wxMenu()
        if ( m_owner )
            gtk_widget_destroy( m_menu );
    }
-   
-   // This must come after we release GTK resources above. Otherwise, GTK will 
-   // give warnings/errors when attempting to free accelerator resources from 
-   // child items that just were destroyed (the m_menu widget can contain 
-   // references to accelerators in child items. Problem detected when removing 
-   // a menu from a wxMenuBar, and the removed menu had submenus with accelerators.) 
+
+   // This must come after we release GTK resources above. Otherwise, GTK will
+   // give warnings/errors when attempting to free accelerator resources from
+   // child items that just were destroyed (the m_menu widget can contain
+   // references to accelerators in child items. Problem detected when removing
+   // a menu from a wxMenuBar, and the removed menu had submenus with accelerators.)
    WX_CLEAR_LIST(wxMenuItemList, m_items);
 }
 

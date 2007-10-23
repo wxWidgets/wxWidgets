@@ -24,7 +24,7 @@
 // "toggled"
 //-----------------------------------------------------------------------------
 extern "C" {
-static void gtk_checklist_toggled(GtkCellRendererToggle *renderer,
+static void gtk_checklist_toggled(GtkCellRendererToggle * WXUNUSED(renderer),
                                   gchar                 *stringpath,
                                   wxCheckListBox        *listbox)
 {

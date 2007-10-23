@@ -407,9 +407,9 @@ gtk_window_own_expose_callback( GtkWidget *widget,
 
 // make it extern because wxStaticText needs to disconnect this one
 extern "C" {
-void wxgtk_window_size_request_callback(GtkWidget *widget,
+void wxgtk_window_size_request_callback(GtkWidget * WXUNUSED(widget),
                                         GtkRequisition *requisition,
-                                        wxWindow *win)
+                                        wxWindow * win)
 {
     int w, h;
     win->GetSize( &w, &h );
@@ -427,7 +427,7 @@ void wxgtk_window_size_request_callback(GtkWidget *widget,
 
 extern "C" {
 static
-void wxgtk_combo_size_request_callback(GtkWidget *widget,
+void wxgtk_combo_size_request_callback(GtkWidget * WXUNUSED(widget),
                                        GtkRequisition *requisition,
                                        wxComboBox *win)
 {
@@ -1115,7 +1115,7 @@ gtk_window_key_press_callback( GtkWidget *widget,
 
 extern "C" {
 static void
-gtk_wxwindow_commit_cb (GtkIMContext *context,
+gtk_wxwindow_commit_cb (GtkIMContext * WXUNUSED(context),
                         const gchar  *str,
                         wxWindow     *window)
 {
@@ -1193,7 +1193,7 @@ gtk_wxwindow_commit_cb (GtkIMContext *context,
 
 extern "C" {
 static gboolean
-gtk_window_key_release_callback( GtkWidget *widget,
+gtk_window_key_release_callback( GtkWidget * WXUNUSED(widget),
                                  GdkEventKey *gdk_event,
                                  wxWindowGTK *win )
 {
@@ -1652,7 +1652,7 @@ gtk_window_button_release_callback( GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 static gboolean
-gtk_window_motion_notify_callback( GtkWidget *widget,
+gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
                                    GdkEventMotion *gdk_event,
                                    wxWindowGTK *win )
 {
@@ -1762,7 +1762,7 @@ static gboolean wxgtk_window_popup_menu_callback(GtkWidget*, wxWindowGTK* win)
 //-----------------------------------------------------------------------------
 
 static gboolean
-gtk_window_focus_in_callback( GtkWidget *widget,
+gtk_window_focus_in_callback( GtkWidget * WXUNUSED(widget),
                               GdkEventFocus *WXUNUSED(event),
                               wxWindow *win )
 {
@@ -1812,8 +1812,8 @@ gtk_window_focus_in_callback( GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 static gboolean
-gtk_window_focus_out_callback( GtkWidget *widget,
-                               GdkEventFocus *gdk_event,
+gtk_window_focus_out_callback( GtkWidget * WXUNUSED(widget),
+                               GdkEventFocus * WXUNUSED(gdk_event),
                                wxWindowGTK *win )
 {
     DEBUG_MAIN_THREAD
@@ -1867,7 +1867,7 @@ gtk_window_focus_out_callback( GtkWidget *widget,
 
 static gboolean
 wx_window_focus_callback(GtkWidget *widget,
-                         GtkDirectionType direction,
+                         GtkDirectionType WXUNUSED(direction),
                          wxWindowGTK *win)
 {
     // the default handler for focus signal in GtkPizza (or, rather, in
@@ -2070,7 +2070,7 @@ gtk_window_realized_callback( GtkWidget *m_widget, wxWindow *win )
 
 static
 void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
-                               GtkAllocation *alloc,
+                               GtkAllocation * WXUNUSED(alloc),
                                wxWindow *win )
 {
     int client_width = 0;
@@ -3610,7 +3610,8 @@ bool wxWindowGTK::ScrollPages(int pages)
     return DoScrollByUnits(ScrollDir_Vert, ScrollUnit_Page, pages);
 }
 
-void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
+void wxWindowGTK::Refresh(bool WXUNUSED(eraseBackground),
+                          const wxRect *rect)
 {
     if (!m_widget)
         return;

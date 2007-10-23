@@ -62,9 +62,9 @@ extern bool           g_blockEventsOnScroll;
 
 extern "C" {
 static void
-gtk_listbox_row_activated_callback(GtkTreeView        *treeview,
+gtk_listbox_row_activated_callback(GtkTreeView        * WXUNUSED(treeview),
                                    GtkTreePath        *path,
-                                   GtkTreeViewColumn  *col,
+                                   GtkTreeViewColumn  * WXUNUSED(col),
                                    wxListBox          *listbox)
 {
     if (g_blockEventsOnDrag) return;
@@ -114,7 +114,8 @@ gtk_listbox_row_activated_callback(GtkTreeView        *treeview,
 
 extern "C" {
 static void
-gtk_listitem_changed_callback( GtkTreeSelection* selection, wxListBox *listbox )
+gtk_listitem_changed_callback(GtkTreeSelection * WXUNUSED(selection),
+                              wxListBox *listbox )
 {
     if (g_blockEventsOnDrag) return;
 
@@ -208,7 +209,7 @@ static void gtk_tree_entry_destroy_cb(GtkTreeEntry* entry,
 #include <iostream>
 
 extern "C" {
-static gint gtk_listbox_sort_callback(GtkTreeModel *model,
+static gint gtk_listbox_sort_callback(GtkTreeModel * WXUNUSED(model),
                                       GtkTreeIter  *a,
                                       GtkTreeIter  *b,
                                       wxListBox    *listbox)
@@ -244,8 +245,8 @@ static gint gtk_listbox_sort_callback(GtkTreeModel *model,
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gboolean gtk_listbox_searchequal_callback(GtkTreeModel* model,
-                                                 gint column,
+static gboolean gtk_listbox_searchequal_callback(GtkTreeModel * WXUNUSED(model),
+                                                 gint WXUNUSED(column),
                                                  const gchar* key,
                                                  GtkTreeIter* iter,
                                                  wxListBox* listbox)
@@ -447,7 +448,7 @@ wxListBox::~wxListBox()
 int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
                              unsigned int pos,
                              void **clientData,
-                             wxClientDataType type)
+                             wxClientDataType WXUNUSED(type))
 {
     wxCHECK_MSG( m_treeview != NULL, wxNOT_FOUND, wxT("invalid listbox") );
 
@@ -768,7 +769,7 @@ void wxListBox::GtkSetSelection(int n, const bool select, const bool blockEvent)
         gtk_tree_selection_select_iter(selection, &iter);
     else
         gtk_tree_selection_unselect_iter(selection, &iter);
-        
+
     GtkTreePath* path = gtk_tree_model_get_path(
                         GTK_TREE_MODEL(m_liststore), &iter);
 

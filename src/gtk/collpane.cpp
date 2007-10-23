@@ -39,9 +39,10 @@
 
 extern "C" {
 
-static void gtk_collapsiblepane_expanded_callback (GObject    *object,
-                                                    GParamSpec *param_spec,
-                                                    wxCollapsiblePane *p)
+static void
+gtk_collapsiblepane_expanded_callback(GObject * WXUNUSED(object),
+                                      GParamSpec * WXUNUSED(param_spec),
+                                      wxCollapsiblePane *p)
 {
     // NB: unlike for the "activate" signal, when this callback is called, if
     //     we try to query the "collapsed" status through p->IsCollapsed(), we

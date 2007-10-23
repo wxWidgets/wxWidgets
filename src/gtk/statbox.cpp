@@ -36,7 +36,7 @@ extern "C" {
 static void
 gtk_frame_size_allocate (GtkWidget     *widget,
                          GtkAllocation *allocation,
-                         wxStaticBox *p)
+                         wxStaticBox * WXUNUSED(box))
 {
     GtkFrame *frame = GTK_FRAME (widget);
 

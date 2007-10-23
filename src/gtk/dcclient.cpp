@@ -91,11 +91,7 @@ void gdk_wx_draw_bitmap(GdkDrawable  *drawable,
                         GdkGC        *gc,
                         GdkDrawable  *src,
                         gint         xsrc,
-                        gint         ysrc,
-                        gint         xdest,
-                        gint         ydest,
-                        gint         width,
-                        gint         height)
+                        gint         ysrc)
 {
     wxCHECK_RET( drawable, _T("NULL drawable in gdk_wx_draw_bitmap") );
     wxCHECK_RET( src, _T("NULL src in gdk_wx_draw_bitmap") );
@@ -103,15 +99,13 @@ void gdk_wx_draw_bitmap(GdkDrawable  *drawable,
 
     gint src_width, src_height;
     gdk_drawable_get_size(src, &src_width, &src_height);
-    if (width == -1) width = src_width;
-    if (height == -1) height = src_height;
 
     XCopyPlane( GDK_WINDOW_XDISPLAY(drawable),
                 GDK_WINDOW_XID(src),
                 GDK_WINDOW_XID(drawable),
                 GDK_GC_XGC(gc),
                 xsrc, ysrc,
-                width, height,
+                src_width, src_height,
                 0, 0,
                 1 );
 }
@@ -1196,7 +1190,7 @@ void wxGTKWindowImplDC::DoDrawBitmap( const wxBitmap &bitmap,
         GdkGC *gc = gdk_gc_new( bitmap2 );
         gdk_gc_set_foreground( gc, m_textForegroundColour.GetColor() );
         gdk_gc_set_background( gc, m_textBackgroundColour.GetColor() );
-        gdk_wx_draw_bitmap( bitmap2, gc, use_bitmap.GetPixmap(), 0, 0, 0, 0, -1, -1 );
+        gdk_wx_draw_bitmap(bitmap2, gc, use_bitmap.GetPixmap(), 0, 0);
 
         gdk_draw_drawable(m_window, use_gc, bitmap2, 0, 0, xx, yy, -1, -1);
 
@@ -1418,7 +1412,7 @@ bool wxGTKWindowImplDC::DoBlit( wxCoord xdest, wxCoord ydest,
             GdkGC *gc = gdk_gc_new( bitmap );
             gdk_gc_set_foreground( gc, m_textForegroundColour.GetColor() );
             gdk_gc_set_background( gc, m_textBackgroundColour.GetColor() );
-            gdk_wx_draw_bitmap( bitmap, gc, use_bitmap.GetPixmap(), 0, 0, 0, 0, -1, -1 );
+            gdk_wx_draw_bitmap(bitmap, gc, use_bitmap.GetPixmap(), 0, 0);
 
             gdk_draw_drawable(m_window, use_gc, bitmap, xsrc, ysrc, cx, cy, cw, ch);
 

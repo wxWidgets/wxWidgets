@@ -42,9 +42,9 @@ extern "C"
 // "insert_text" handler for GtkEntry
 static void
 wx_gtk_insert_text_callback(GtkEditable *editable,
-                            const gchar *new_text,
-                            gint new_text_length,
-                            gint *position,
+                            const gchar * WXUNUSED(new_text),
+                            gint WXUNUSED(new_text_length),
+                            gint * WXUNUSED(position),
                             wxTextEntry *text)
 {
     // we should only be called if we have a max len limit at all

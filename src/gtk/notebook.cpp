@@ -101,9 +101,9 @@ static void gtk_notebook_page_changing_callback( GtkNotebook *widget,
 }
 
 extern "C" {
-static void gtk_notebook_page_changed_callback( GtkNotebook *widget,
+static void gtk_notebook_page_changed_callback( GtkNotebook * WXUNUSED(widget),
                                                 GtkNotebookPage *WXUNUSED(gpage),
-                                                guint page,
+                                                guint WXUNUSED(page),
                                                 wxNotebook *notebook )
 {
     int old = notebook->m_oldSelection;

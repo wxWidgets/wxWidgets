@@ -33,21 +33,21 @@ public:
 
     ~wxGTKScreenImplDC();
 
-    static bool StartDrawingOnTop( wxWindow *window ) { return true; }
-    static bool StartDrawingOnTop( wxRect *rect = (wxRect *) NULL ) { return true; }
+    static bool StartDrawingOnTop(wxWindow * WXUNUSED(window))
+        { return true; }
+    static bool StartDrawingOnTop(wxRect * WXUNUSED(rect) =  NULL)
+        { return true; }
     static bool EndDrawingOnTop() { return true; }
 
 
 protected:
     virtual void DoGetSize(int *width, int *height) const;
-    
+
     void Init();
 
 private:
     DECLARE_ABSTRACT_CLASS(wxGTKScreenImplDC)
 };
 
-#endif
-
-    // __GTKDCSCREENH__
+#endif // __GTKDCSCREENH__
 

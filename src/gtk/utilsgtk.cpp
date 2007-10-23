@@ -245,6 +245,10 @@ const gchar *wx_pango_version_check (int major, int minor, int micro)
 
     return "can't check";
 #else // !PANGO_VERSION_MAJOR
+    wxUnusedVar(major);
+    wxUnusedVar(minor);
+    wxUnusedVar(micro);
+
     return "too old headers";
 #endif
 }

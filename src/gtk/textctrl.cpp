@@ -38,8 +38,8 @@
 extern "C" {
 static void wxGtkOnRemoveTag(GtkTextBuffer *buffer,
                              GtkTextTag *tag,
-                             GtkTextIter *start,
-                             GtkTextIter *end,
+                             GtkTextIter * WXUNUSED(start),
+                             GtkTextIter * WXUNUSED(end),
                              char *prefix)
 {
     gchar *name;
@@ -305,9 +305,9 @@ extern "C" {
 static void
 au_apply_tag_callback(GtkTextBuffer *buffer,
                       GtkTextTag *tag,
-                      GtkTextIter *start,
-                      GtkTextIter *end,
-                      gpointer textctrl)
+                      GtkTextIter * WXUNUSED(start),
+                      GtkTextIter * WXUNUSED(end),
+                      gpointer WXUNUSED(textctrl))
 {
     if(tag == gtk_text_tag_table_lookup(gtk_text_buffer_get_tag_table(buffer), "wxUrl"))
         g_signal_stop_emission_by_name (buffer, "apply_tag");
@@ -320,7 +320,7 @@ au_apply_tag_callback(GtkTextBuffer *buffer,
 
 extern "C" {
 static gboolean
-pred_whitespace (gunichar ch, gpointer user_data)
+pred_whitespace(gunichar ch, gpointer WXUNUSED(user_data))
 {
     return g_unichar_isspace(ch);
 }
@@ -328,7 +328,7 @@ pred_whitespace (gunichar ch, gpointer user_data)
 
 extern "C" {
 static gboolean
-pred_non_whitespace (gunichar ch, gpointer user_data)
+pred_non_whitespace (gunichar ch, gpointer WXUNUSED(user_data))
 {
     return !g_unichar_isspace(ch);
 }
@@ -336,7 +336,7 @@ pred_non_whitespace (gunichar ch, gpointer user_data)
 
 extern "C" {
 static gboolean
-pred_nonpunct (gunichar ch, gpointer user_data)
+pred_nonpunct (gunichar ch, gpointer WXUNUSED(user_data))
 {
     return !g_unichar_ispunct(ch);
 }
@@ -344,7 +344,7 @@ pred_nonpunct (gunichar ch, gpointer user_data)
 
 extern "C" {
 static gboolean
-pred_nonpunct_or_slash (gunichar ch, gpointer user_data)
+pred_nonpunct_or_slash (gunichar ch, gpointer WXUNUSED(user_data))
 {
     return !g_unichar_ispunct(ch) || ch == '/';
 }
@@ -453,7 +453,7 @@ au_check_range(GtkTextIter *s,
 
 extern "C" {
 static void
-au_insert_text_callback(GtkTextBuffer *buffer,
+au_insert_text_callback(GtkTextBuffer * WXUNUSED(buffer),
                         GtkTextIter *end,
                         gchar *text,
                         gint len,
@@ -485,7 +485,7 @@ au_insert_text_callback(GtkTextBuffer *buffer,
 
 extern "C" {
 static void
-au_delete_range_callback(GtkTextBuffer *buffer,
+au_delete_range_callback(GtkTextBuffer * WXUNUSED(buffer),
                          GtkTextIter *start,
                          GtkTextIter *end,
                          wxTextCtrl *win)
@@ -511,7 +511,7 @@ au_delete_range_callback(GtkTextBuffer *buffer,
 
 extern "C" {
 static void
-gtk_text_changed_callback( GtkWidget *widget, wxTextCtrl *win )
+gtk_text_changed_callback( GtkWidget * WXUNUSED(widget), wxTextCtrl *win )
 {
     if ( win->IgnoreTextUpdate() )
         return;
@@ -573,7 +573,9 @@ gtk_paste_clipboard_callback( GtkWidget *widget, wxTextCtrl *win )
 
 extern "C" {
 static gboolean
-gtk_text_exposed_callback( GtkWidget *widget, GdkEventExpose *event, wxTextCtrl *win )
+gtk_text_exposed_callback( GtkWidget * WXUNUSED(widget),
+                           GdkEventExpose * WXUNUSED(event),
+                           wxTextCtrl * WXUNUSED(win) )
 {
     return TRUE;
 }
@@ -1234,7 +1236,7 @@ bool wxTextCtrl::Enable( bool enable )
 // wxGTK-specific: called recursively by Enable,
 // to give widgets an opportunity to correct their colours after they
 // have been changed by Enable
-void wxTextCtrl::OnEnabled( bool enable )
+void wxTextCtrl::OnEnabled(bool WXUNUSED(enable))
 {
     // If we have a custom background colour, we use this colour in both
     // disabled and enabled mode, or we end up with a different colour under the

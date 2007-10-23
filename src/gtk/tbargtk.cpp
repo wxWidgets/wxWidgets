@@ -448,7 +448,7 @@ bool wxToolBar::Create( wxWindow *parent,
     return true;
 }
 
-GdkWindow *wxToolBar::GTKGetWindow(wxArrayGdkWindows& windows) const
+GdkWindow *wxToolBar::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
     return GTK_WIDGET(m_toolbar)->window;
 }

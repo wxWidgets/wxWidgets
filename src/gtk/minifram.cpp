@@ -239,7 +239,9 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
 
 extern "C" {
 static gboolean
-gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxMiniFrame *win )
+gtk_window_leave_callback(GtkWidget *widget,
+                          GdkEventCrossing * WXUNUSED(gdk_event),
+                          wxMiniFrame *win)
 {
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;

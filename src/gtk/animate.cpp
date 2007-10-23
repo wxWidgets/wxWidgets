@@ -30,10 +30,10 @@
 // ============================================================================
 
 void gdk_pixbuf_area_updated(GdkPixbufLoader *loader,
-                             gint             x,
-                             gint             y,
-                             gint             width,
-                             gint             height,
+                             gint             WXUNUSED(x),
+                             gint             WXUNUSED(y),
+                             gint             WXUNUSED(width),
+                             gint             WXUNUSED(height),
                              wxAnimation      *anim)
 {
     if (anim && anim->GetPixbuf() == NULL)
@@ -420,7 +420,7 @@ bool wxAnimationCtrl::SetBackgroundColour( const wxColour &colour )
 // wxAnimationCtrl - event handlers
 //-----------------------------------------------------------------------------
 
-void wxAnimationCtrl::OnTimer(wxTimerEvent &ev)
+void wxAnimationCtrl::OnTimer(wxTimerEvent& WXUNUSED(ev))
 {
     wxASSERT(m_iter != NULL);
 

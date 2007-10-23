@@ -2667,7 +2667,7 @@ bool wxWindowBase::TryParent(wxEvent& event)
 // ----------------------------------------------------------------------------
 
 // Navigates in the specified direction inside this window
-bool wxWindowBase::DoNavigateIn(int flags)
+bool wxWindowBase::DoNavigateIn(int WXUNUSED(flags))
 {
 #ifdef wxHAS_NATIVE_TAB_TRAVERSAL
     // native code doesn't process our wxNavigationKeyEvents anyhow

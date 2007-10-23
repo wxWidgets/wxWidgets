@@ -378,21 +378,17 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
 
     if ( isVert )
     {
-        int h = win->GetClientSize().GetHeight();
-
         rect.x = position;
         rect.y = 0;
         rect.width = full_size;
-        rect.height = h;
+        rect.height = size.y;
     }
     else // horz
     {
-        int w = win->GetClientSize().GetWidth();
-
         rect.x = 0;
         rect.y = position;
         rect.height = full_size;
-        rect.width = w;
+        rect.width = size.x;
     }
 
     int x_diff = 0;

@@ -252,7 +252,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPostScriptDC, wxDC)
 
 //-------------------------------------------------------------------------------
 
-void wxPostScriptDC::SetResolution(int ppi)
+void wxPostScriptDC::SetResolution(int WXUNUSED(ppi))
 {
 }
 

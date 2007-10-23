@@ -138,7 +138,7 @@ static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_
 }
 
 extern "C" {
-static gint gtk_radiobutton_focus_in( GtkWidget *widget,
+static gint gtk_radiobutton_focus_in( GtkWidget * WXUNUSED(widget),
                                       GdkEvent *WXUNUSED(event),
                                       wxRadioBox *win )
 {
@@ -164,7 +164,7 @@ static gint gtk_radiobutton_focus_in( GtkWidget *widget,
 }
 
 extern "C" {
-static gint gtk_radiobutton_focus_out( GtkWidget *widget,
+static gint gtk_radiobutton_focus_out( GtkWidget * WXUNUSED(widget),
                                        GdkEvent *WXUNUSED(event),
                                        wxRadioBox *win )
 {

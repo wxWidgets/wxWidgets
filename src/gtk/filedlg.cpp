@@ -63,13 +63,13 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
     {
         if ( !g_file_test(filename, G_FILE_TEST_EXISTS) )
         {
-            wxMessageDialog dlg( dialog, _("Please choose an existing file."), 
+            wxMessageDialog dlg( dialog, _("Please choose an existing file."),
                                  _("Error"), wxOK| wxICON_ERROR);
             dlg.ShowModal();
             return;
         }
     }
-    
+
     // change to the directory where the user went if asked
     if (style & wxFD_CHANGE_DIR)
     {
@@ -91,7 +91,8 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
 extern "C"
 {
 
-static void gtk_filedialog_cancel_callback(GtkWidget *w, wxFileDialog *dialog)
+static void
+gtk_filedialog_cancel_callback(GtkWidget * WXUNUSED(w), wxFileDialog *dialog)
 {
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
     event.SetEventObject(dialog);

@@ -167,9 +167,10 @@ static gboolean gtk_frame_focus_in_callback( GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gboolean gtk_frame_focus_out_callback( GtkWidget *widget,
-                                          GdkEventFocus *WXUNUSED(gdk_event),
-                                          wxTopLevelWindowGTK *win )
+static
+gboolean gtk_frame_focus_out_callback(GtkWidget * WXUNUSED(widget),
+                                      GdkEventFocus *WXUNUSED(gdk_event),
+                                      wxTopLevelWindowGTK * WXUNUSED(win))
 {
     // if the focus goes out of our app alltogether, OnIdle() will send
     // wxActivateEvent, otherwise gtk_window_focus_in_callback() will reset

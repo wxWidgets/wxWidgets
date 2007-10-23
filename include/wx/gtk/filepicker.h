@@ -49,7 +49,8 @@
     /* so, override wxButton::GTKGetWindow and return NULL as GTK+ doesn't */ \
     /* give us access to the internal GdkWindow of a GtkFileChooserButton  */ \
 protected:                                                                    \
-    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const         \
+    virtual GdkWindow *                                                       \
+    GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const                  \
         { return NULL; }
 
 
