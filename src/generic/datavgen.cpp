@@ -1205,7 +1205,7 @@ bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
     m_owner = parent;
 
     m_scrollOffsetX = 0;
-    m_buttonHeight = wxRendererNative::Get().GetHeaderButtonHeight( this );
+    m_buttonHeight = wxRendererNative::Get().GetHeaderButtonHeight( this ) + 10;
 
     int x = pos.x == wxDefaultCoord ? 0 : pos.x,
         y = pos.y == wxDefaultCoord ? 0 : pos.y,
@@ -1217,7 +1217,7 @@ bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
 
     // create the native WC_HEADER window:
     WXHWND hwndParent = (HWND)parent->GetHandle();
-    WXDWORD msStyle = WS_CHILD | HDS_BUTTONS | HDS_HORZ | HDS_HOTTRACK | HDS_FULLDRAG;
+    WXDWORD msStyle = WS_CHILD | HDS_DRAGDROP | HDS_BUTTONS | HDS_HORZ | HDS_HOTTRACK | HDS_FULLDRAG;
     
     if ( m_isShown )
         msStyle |= WS_VISIBLE;
@@ -1257,13 +1257,6 @@ wxSize wxDataViewHeaderWindowMSW::DoGetBestSize() const
 {
     return wxSize(80, m_buttonHeight );
 }
-
-#ifndef HDF_SORTUP
-#define HDF_SORTUP 0x0400
-#endif
-#ifndef HDF_SORTDOWN
-#define HDF_SORTDOWN 0x0200
-#endif
 
 void wxDataViewHeaderWindowMSW::UpdateDisplay()
 {
@@ -1323,7 +1316,7 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
 
         default:
             // such alignment is not allowed for the column header!
-            wxFAIL;
+            break; // wxFAIL;
         }
 
         SendMessage((HWND)m_hWnd, HDM_INSERTITEM,
@@ -1511,7 +1504,7 @@ void wxDataViewHeaderWindowMSW::DoSetSize(int x, int y,
                                           int f)
 {
     // TODO: why is there a border + 2px around it?
-    wxControl::DoSetSize( x+m_scrollOffsetX-2, y-2, w-m_scrollOffsetX+4, h+4, f );
+    wxControl::DoSetSize( x+m_scrollOffsetX+1, y+1, w-m_scrollOffsetX-2, h-2, f );
 }
 
 #else       // !defined(__WXMSW__)
