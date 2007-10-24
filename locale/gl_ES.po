@@ -4974,7 +4974,7 @@ msgid "Save &As..."
 msgstr "Gardar &Coma..."
 
 #: ../src/common/docview.cpp:300
-msgid "Save as"
+msgid "Save As"
 msgstr "Gardar coma"
 
 #: ../src/common/stockitem.cpp:212
@@ -5062,7 +5062,7 @@ msgid "Select a document view"
 msgstr "Seleccionar una vista de documento"
 
 #: ../src/common/docview.cpp:1589
-msgid "Select a file"
+msgid "Open File"
 msgstr "Seleccione un ficheiro"
 
 #: ../src/common/stockitem.cpp:153

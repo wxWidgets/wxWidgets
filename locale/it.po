@@ -4770,8 +4770,8 @@ msgid "Save &As..."
 msgstr "Salva con n&ome..."
 
 #: ../src/common/docview.cpp:300
-msgid "Save as"
-msgstr "Salva con nome"
+msgid "Save As"
+msgstr "Salva con Nome"
 
 #: ../src/common/stockitem.cpp:212
 msgid "Save current document"
@@ -4850,8 +4850,8 @@ msgid "Select a document view"
 msgstr "Scegliere una visualizzazione del documento"
 
 #: ../src/common/docview.cpp:1589
-msgid "Select a file"
-msgstr "Scegliere un file"
+msgid "Open File"
+msgstr "Scegliere un File"
 
 #: ../src/common/stockitem.cpp:153
 msgid "Select all"

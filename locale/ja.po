@@ -4727,7 +4727,7 @@ msgid "Save &As..."
 msgstr "名前を付けて保存(&A)..."
 
 #: ../src/common/docview.cpp:300
-msgid "Save as"
+msgid "Save As"
 msgstr "名前を付けて保存"
 
 #: ../src/common/stockitem.cpp:212
@@ -4810,7 +4810,7 @@ msgid "Select a document view"
 msgstr "ドキュメントビューを選択"
 
 #: ../src/common/docview.cpp:1589
-msgid "Select a file"
+msgid "Open File"
 msgstr "ファイルを選択"
 
 #: ../src/common/stockitem.cpp:153

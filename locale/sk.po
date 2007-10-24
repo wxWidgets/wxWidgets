@@ -4767,8 +4767,8 @@ msgid "Save &As..."
 msgstr "Uložiť &ako..."
 
 #: ../src/common/docview.cpp:300
-msgid "Save as"
-msgstr "Uložiť ako"
+msgid "Save As"
+msgstr "Uložiť Ako"
 
 #: ../src/common/stockitem.cpp:212
 msgid "Save current document"
@@ -4847,8 +4847,8 @@ msgid "Select a document view"
 msgstr "Vybrať pohľad dokumentu"
 
 #: ../src/common/docview.cpp:1589
-msgid "Select a file"
-msgstr "Vybrať súbor"
+msgid "Open File"
+msgstr "Vybrať Súbor"
 
 #: ../src/common/stockitem.cpp:153
 msgid "Select all"

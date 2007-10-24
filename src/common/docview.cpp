@@ -298,7 +298,7 @@ bool wxDocument::SaveAs()
 #else
     wxString filter = docTemplate->GetFileFilter() ;
 #endif
-    wxString tmp = wxFileSelector(_("Save as"),
+    wxString tmp = wxFileSelector(_("Save As"),
             docTemplate->GetDirectory(),
             wxFileNameFromPath(GetFilename()),
             docTemplate->GetDefaultExtension(),
@@ -1617,7 +1617,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
 
     wxWindow* parent = wxFindSuitableParent();
 
-    wxString pathTmp = wxFileSelectorEx(_("Select a file"),
+    wxString pathTmp = wxFileSelectorEx(_("Open File"),
                                         m_lastDirectory,
                                         wxEmptyString,
                                         &FilterIndex,
@@ -2216,7 +2216,7 @@ void wxFileHistory::RemoveFileFromHistory(size_t i)
     wxCHECK_RET( i < m_fileHistory.GetCount(),
                  wxT("invalid index in wxFileHistory::RemoveFileFromHistory") );
 
-    // delete the element from the array 
+    // delete the element from the array
     m_fileHistory.RemoveAt(i);
 
     wxList::compatibility_iterator node = m_fileMenus.GetFirst();
@@ -2279,7 +2279,7 @@ void wxFileHistory::Load(wxConfigBase& config)
     buf.Printf(wxT("file%d"), 1);
 
     wxString historyFile;
-    while ((m_fileHistory.GetCount() < m_fileMaxFiles) && 
+    while ((m_fileHistory.GetCount() < m_fileMaxFiles) &&
            config.Read(buf, &historyFile) && !historyFile.empty())
     {
         m_fileHistory.Add(historyFile);

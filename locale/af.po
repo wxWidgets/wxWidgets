@@ -4780,8 +4780,8 @@ msgid "Save &As..."
 msgstr "&Stoor..."
 
 #: ../src/common/docview.cpp:300
-msgid "Save as"
-msgstr "Stoor as"
+msgid "Save As"
+msgstr "Stoor As"
 
 #: ../src/common/stockitem.cpp:212
 #, fuzzy
@@ -4863,8 +4863,8 @@ msgid "Select a document view"
 msgstr "Kies 'n dokumentweergawe"
 
 #: ../src/common/docview.cpp:1589
-msgid "Select a file"
-msgstr "Kies 'n lêer"
+msgid "Open File"
+msgstr "Kies 'n Lêer"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy

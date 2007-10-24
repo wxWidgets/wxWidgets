@@ -4830,7 +4830,7 @@ msgid "Save &As..."
 msgstr "Tallenna &nimellä..."
 
 #: ../src/common/docview.cpp:300
-msgid "Save as"
+msgid "Save As"
 msgstr "Tallenna nimellä"
 
 #: ../src/common/stockitem.cpp:212
@@ -4914,7 +4914,7 @@ msgid "Select a document view"
 msgstr "Valitse dokumentin näkymä"
 
 #: ../src/common/docview.cpp:1589
-msgid "Select a file"
+msgid "Open File"
 msgstr "Valitse tiedosto"
 
 #: ../src/common/stockitem.cpp:153

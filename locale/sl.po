@@ -5565,8 +5565,8 @@ msgstr "&Shrani kot ..."
 
 # common/docview.cpp:249
 #: ../src/common/docview.cpp:300
-msgid "Save as"
-msgstr "Shrani kot"
+msgid "Save As"
+msgstr "Shrani Kot"
 
 # common/docview.cpp:1494
 #: ../src/common/stockitem.cpp:212
@@ -5669,8 +5669,8 @@ msgstr "Izberi pogled dokumenta"
 # common/docview.cpp:1371
 # common/docview.cpp:1422
 #: ../src/common/docview.cpp:1589
-msgid "Select a file"
-msgstr "Izberi datoteko"
+msgid "Open File"
+msgstr "Izberi Datoteko"
 
 # common/docview.cpp:1371
 # common/docview.cpp:1422

@@ -4709,7 +4709,7 @@ msgid "Save &As..."
 msgstr "另存為(&A)..."
 
 #: ../src/common/docview.cpp:300
-msgid "Save as"
+msgid "Save As"
 msgstr "另存為"
 
 #: ../src/common/stockitem.cpp:212
@@ -4790,7 +4790,7 @@ msgid "Select a document view"
 msgstr "選擇文件視界"
 
 #: ../src/common/docview.cpp:1589
-msgid "Select a file"
+msgid "Open File"
 msgstr "選擇檔案"
 
 #: ../src/common/stockitem.cpp:153
