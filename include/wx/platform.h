@@ -553,12 +553,22 @@
 #    endif
 #endif
 
-#if defined (__WXMAC__)
-#    if ( !defined(__MACH__) || ( defined(__BIG_ENDIAN__) && __BIG_ENDIAN__ ) )
-#        define WORDS_BIGENDIAN 1
-#    else
-#        undef WORDS_BIGENDIAN
-#    endif
+/*
+    Handle Darwin gcc universal compilation.  Don't do this in an Apple-
+    specific case since no sane compiler should be defining either
+    __BIG_ENDIAN__ or __LITTLE_ENDIAN__ unless it really is generating
+    code that will be hosted on a machine with the appropriate endianness.
+    If a compiler defines neither, assume the user or configure set
+    WORDS_BIGENDIAN appropriately.
+ */
+#if defined(__BIG_ENDIAN__)
+#    undef WORDS_BIGENDIAN
+#    define WORDS_BIGENDIAN 1
+#elif defined(__LITTLE_ENDIAN__)
+#    undef WORDS_BIGENDIAN
+#elif defined(__WXMAC__) && !defined(WORDS_BIGENDIAN)
+/*  According to Stefan even ancient Mac compilers defined __BIG_ENDIAN__ */
+#    warning "Compiling wxMac with probably wrong endianness"
 #endif
 
 /*
