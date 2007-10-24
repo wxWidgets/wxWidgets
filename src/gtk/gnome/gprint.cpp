@@ -26,6 +26,7 @@
     #include "wx/math.h"
     #include "wx/image.h"
     #include "wx/module.h"
+    #include "wx/crt.h"
 #endif
 
 #include "wx/fontutil.h"
