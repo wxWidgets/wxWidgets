@@ -275,11 +275,7 @@ void wxLogGui::Flush()
     // do it right now to block any new calls to Flush() while we're here
     m_bHasMessages = false;
 
-    unsigned repeatCount = 0;
-    if ( wxLog::GetRepetitionCounting() )
-    {
-        repeatCount = wxLog::DoLogNumberOfRepeats();
-    }
+    const unsigned repeatCount = wxLog::LogLastRepetitionCountIfNeeded();
 
     wxString appName = wxTheApp->GetAppDisplayName();
 
@@ -317,7 +313,11 @@ void wxLogGui::Flush()
 #if wxUSE_LOG_DIALOG
 
         if ( repeatCount > 0 )
-            m_aMessages[nMsgCount-1] += wxString::Format(wxT(" (%s)"), m_aMessages[nMsgCount-2].c_str());
+        {
+            m_aMessages[nMsgCount - 1]
+                << " (" << m_aMessages[nMsgCount - 2] << ")";
+        }
+
         wxLogDialog dlg(NULL,
                         m_aMessages, m_aSeverity, m_aTimes,
                         title, style);

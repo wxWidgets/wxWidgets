@@ -304,8 +304,9 @@ protected:
 #endif
 
     // log a message indicating the number of times the previous message was
-    // repeated; only does something if ms_prevCounter > 0
-    static void LogLastRepetitionCountIfNeeded();
+    // repeated if ms_prevCounter > 0, does nothing otherwise; return the old
+    // value of ms_prevCounter
+    static unsigned LogLastRepetitionCountIfNeeded();
 
 private:
     // static variables

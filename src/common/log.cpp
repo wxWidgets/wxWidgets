@@ -458,9 +458,11 @@ void WXDLLEXPORT wxVLogSysError(unsigned long err, const wxString& format, va_li
 // ----------------------------------------------------------------------------
 
 /* static */
-void wxLog::LogLastRepetitionCountIfNeeded()
+unsigned wxLog::LogLastRepetitionCountIfNeeded()
 {
     wxCRIT_SECT_LOCKER(lock, ms_prevCS);
+
+    const unsigned count = ms_prevCounter;
 
     wxLog *pLogger = GetActiveTarget();
     if ( pLogger && ms_prevCounter )
@@ -479,6 +481,8 @@ void wxLog::LogLastRepetitionCountIfNeeded()
         ms_prevString.clear();
         pLogger->DoLog(ms_prevLevel, msg, ms_prevTimeStamp);
     }
+
+    return count;
 }
 
 wxLog::~wxLog()
@@ -904,6 +908,9 @@ wxLogInterposerTemp::wxLogInterposerTemp()
 // static variables
 // ----------------------------------------------------------------------------
 
+#if wxUSE_THREADS
+wxCriticalSection wxLog::ms_prevCS;
+#endif // wxUSE_THREADS
 bool            wxLog::ms_bRepetCounting = false;
 wxString        wxLog::ms_prevString;
 unsigned int    wxLog::ms_prevCounter = 0;
