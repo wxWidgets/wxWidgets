@@ -3,7 +3,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
 # धनञ्जय शर्मा (Dhananjaya Sharma) <dysxhi@yahoo.co.in>, 2004.
 #
-msgid ""
+fmsgid ""
 msgstr ""
 "Project-Id-Version: wxstd-hi\n"
 "Report-Msgid-Bugs-To: \n"
@@ -4767,7 +4767,7 @@ msgid "Save &As..."
 msgstr "सुरक्षित करें (&S)"
 
 #: ../src/common/docview.cpp:300
-msgid "Save as"
+msgid "Save As"
 msgstr "जैसा सुरक्षित करें"
 
 #: ../src/common/stockitem.cpp:212
@@ -4850,7 +4850,7 @@ msgid "Select a document view"
 msgstr "एक प्रलेख व्यू का चयन करें"
 
 #: ../src/common/docview.cpp:1589
-msgid "Select a file"
+msgid "Open File"
 msgstr "एक फ़ाइल का चयन करें"
 
 #: ../src/common/stockitem.cpp:153

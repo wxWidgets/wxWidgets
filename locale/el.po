@@ -4834,7 +4834,7 @@ msgid "Save &As..."
 msgstr "Αποθήκευση &ως..."
 
 #: ../src/common/docview.cpp:300
-msgid "Save as"
+msgid "Save As"
 msgstr "Αποθήκευση ως"
 
 #: ../src/common/stockitem.cpp:212
@@ -4917,7 +4917,7 @@ msgid "Select a document view"
 msgstr "Επιλέξτε μια προβολή εγγράφων"
 
 #: ../src/common/docview.cpp:1589
-msgid "Select a file"
+msgid "Open File"
 msgstr "Επιλέξτε ένα αρχείο"
 
 #: ../src/common/stockitem.cpp:153

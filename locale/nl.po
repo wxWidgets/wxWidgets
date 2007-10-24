@@ -4811,8 +4811,8 @@ msgid "Save &As..."
 msgstr "O&pslaan..."
 
 #: ../src/common/docview.cpp:300
-msgid "Save as"
-msgstr "Opslaan als"
+msgid "Save As"
+msgstr "Opslaan Als"
 
 #: ../src/common/stockitem.cpp:212
 #, fuzzy
@@ -4894,8 +4894,8 @@ msgid "Select a document view"
 msgstr "Selecteer een documentweergave"
 
 #: ../src/common/docview.cpp:1589
-msgid "Select a file"
-msgstr "Selecteer een bestand"
+msgid "Open File"
+msgstr "Selecteer een Bestand"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy

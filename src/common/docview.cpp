@@ -296,7 +296,7 @@ bool wxDocument::SaveAs()
 #else
     wxString filter = docTemplate->GetFileFilter() ;
 #endif
-    wxString tmp = wxFileSelector(_("Save as"),
+    wxString tmp = wxFileSelector(_("Save As"),
             docTemplate->GetDirectory(),
             wxFileNameFromPath(GetFilename()),
             docTemplate->GetDefaultExtension(),
@@ -1585,7 +1585,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
 
     wxWindow* parent = wxFindSuitableParent();
 
-    wxString pathTmp = wxFileSelectorEx(_("Select a file"),
+    wxString pathTmp = wxFileSelectorEx(_("Open File"),
                                         m_lastDirectory,
                                         wxEmptyString,
                                         &FilterIndex,

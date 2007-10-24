@@ -4766,8 +4766,8 @@ msgid "Save &As..."
 msgstr "Zapisz J&ako..."
 
 #: ../src/common/docview.cpp:300
-msgid "Save as"
-msgstr "Zapisz jako"
+msgid "Save As"
+msgstr "Zapisz Jako"
 
 # perspektywê?
 #: ../src/common/stockitem.cpp:212
@@ -4852,7 +4852,7 @@ msgid "Select a document view"
 msgstr "Wybierz widok dokumentu"
 
 #: ../src/common/docview.cpp:1589
-msgid "Select a file"
+msgid "Open File"
 msgstr "Wybierz plik"
 
 #: ../src/common/stockitem.cpp:153
