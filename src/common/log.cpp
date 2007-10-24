@@ -458,11 +458,10 @@ void WXDLLEXPORT wxVLogSysError(unsigned long err, const wxString& format, va_li
 // ----------------------------------------------------------------------------
 
 /* static */
-unsigned wxLog::DoLogNumberOfRepeats()
+void wxLog::LogLastRepetitionCountIfNeeded()
 {
-    long retval = ms_prevCounter;
     wxLog *pLogger = GetActiveTarget();
-    if ( pLogger && ms_prevCounter > 0 )
+    if ( pLogger && ms_prevCounter )
     {
         wxString msg;
 #if wxUSE_INTL
@@ -471,23 +470,18 @@ unsigned wxLog::DoLogNumberOfRepeats()
                             ms_prevCounter),
                    ms_prevCounter);
 #else
-        msg.Printf(wxT("The previous message was repeated."));
+        msg.Printf(wxT("The previous message was repeated %lu times."),
+                   ms_prevCounter);
 #endif
         ms_prevCounter = 0;
         ms_prevString.clear();
         pLogger->DoLog(ms_prevLevel, msg, ms_prevTimeStamp);
     }
-    return retval;
 }
 
 wxLog::~wxLog()
 {
-    if ( ms_prevCounter > 0 )
-    {
-        // looks like the repeat count has not been logged yet,
-        // so let's do it now
-        wxLog::DoLogNumberOfRepeats();
-    }
+    LogLastRepetitionCountIfNeeded();
 }
 
 /* static */
@@ -498,21 +492,26 @@ void wxLog::OnLog(wxLogLevel level, const wxString& szString, time_t t)
         wxLog *pLogger = GetActiveTarget();
         if ( pLogger )
         {
-            if ( GetRepetitionCounting() && ms_prevString == szString )
+            if ( GetRepetitionCounting() )
             {
-                ms_prevCounter++;
-            }
-            else
-            {
-                if ( GetRepetitionCounting() )
+                if ( szString == ms_prevString )
                 {
-                    DoLogNumberOfRepeats();
+                    ms_prevCounter++;
+
+                    // nothing else to do, in particular, don't log the
+                    // repeated message
+                    return;
                 }
+
+                LogLastRepetitionCountIfNeeded();
+
+                // reset repetition counter for a new message
                 ms_prevString = szString;
                 ms_prevLevel = level;
                 ms_prevTimeStamp = t;
-                pLogger->DoLog(level, szString, t);
             }
+
+            pLogger->DoLog(level, szString, t);
         }
     }
 }

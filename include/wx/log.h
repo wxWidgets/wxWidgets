@@ -301,20 +301,20 @@ protected:
     #define wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
 #endif
 
-    // log a line containing the number of times the previous message was
-    // repeated
-    // returns: the number
-    static unsigned DoLogNumberOfRepeats();
+    // log a message indicating the number of times the previous message was
+    // repeated; only does something if ms_prevCounter > 0
+    static void LogLastRepetitionCountIfNeeded();
 
 private:
     // static variables
     // ----------------
 
-    // traditional behaviour or counting repetitions
+    // if true, don't log the same message multiple times, only log it once
+    // with the number of times it was repeated
     static bool        ms_bRepetCounting;
+
     static wxString    ms_prevString;   // previous message that was logged
-    // how many times the previous message was logged
-    static unsigned    ms_prevCounter;
+    static unsigned    ms_prevCounter;  // how many times it was repeated
     static time_t      ms_prevTimeStamp;// timestamp of the previous message
     static wxLogLevel  ms_prevLevel;    // level of the previous message
 
