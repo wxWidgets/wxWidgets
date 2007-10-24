@@ -4528,6 +4528,10 @@ bool wxWindowMSW::HandlePaint()
     eventNc.SetEventObject(this);
     GetEventHandler()->ProcessEvent(eventNc);
 
+    // don't keep an HRGN we don't need any longer (GetUpdateRegion() can only
+    // be called from inside the event handlers called above)
+    m_updateRegion.Clear();
+
     return processed;
 }
 
