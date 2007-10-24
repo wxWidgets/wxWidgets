@@ -14,6 +14,8 @@
 
 #include "wx/defs.h"
 
+#include "wx/thread.h"
+
 // ----------------------------------------------------------------------------
 // common constants for use in wxUSE_LOG/!wxUSE_LOG
 // ----------------------------------------------------------------------------
@@ -313,6 +315,7 @@ private:
     // with the number of times it was repeated
     static bool        ms_bRepetCounting;
 
+    wxCRIT_SECT_DECLARE(ms_prevCS);     // protects the ms_prev values below
     static wxString    ms_prevString;   // previous message that was logged
     static unsigned    ms_prevCounter;  // how many times it was repeated
     static time_t      ms_prevTimeStamp;// timestamp of the previous message

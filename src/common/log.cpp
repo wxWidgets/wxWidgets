@@ -460,6 +460,8 @@ void WXDLLEXPORT wxVLogSysError(unsigned long err, const wxString& format, va_li
 /* static */
 void wxLog::LogLastRepetitionCountIfNeeded()
 {
+    wxCRIT_SECT_LOCKER(lock, ms_prevCS);
+
     wxLog *pLogger = GetActiveTarget();
     if ( pLogger && ms_prevCounter )
     {
@@ -494,6 +496,8 @@ void wxLog::OnLog(wxLogLevel level, const wxString& szString, time_t t)
         {
             if ( GetRepetitionCounting() )
             {
+                wxCRIT_SECT_LOCKER(lock, ms_prevCS);
+
                 if ( szString == ms_prevString )
                 {
                     ms_prevCounter++;
