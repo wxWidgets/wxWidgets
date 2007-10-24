@@ -212,7 +212,7 @@
     #endif
 #endif /* ia64 */
 
-#if defined(_M_MPPC) || defined(__PPC__)
+#if defined(_M_MPPC) || defined(__PPC__) || defined(__ppc__)
     #ifndef __POWERPC__
         #define __POWERPC__
     #endif
@@ -302,11 +302,12 @@
 /*
    OS: then test for generic Unix defines, then for particular flavours and
        finally for Unix-like systems
+       Mac OS X matches this case (__MACH__), prior Mac OS do not.
  */
 #elif defined(__UNIX__) || defined(__unix) || defined(__unix__) || \
       defined(____SVR4____) || defined(__LINUX__) || defined(__sgi) || \
       defined(__hpux) || defined(sun) || defined(__SUN__) || defined(_AIX) || \
-      defined(__EMX__) || defined(__VMS) || defined(__BEOS__)
+      defined(__EMX__) || defined(__VMS) || defined(__BEOS__) || defined(__MACH__)
 
 #    define __UNIX_LIKE__
 
@@ -348,6 +349,35 @@
 #            define wxSIZE_T_IS_UINT
 #        endif
 #    endif
+
+    /*  All of these should already be defined by including configure-
+        generated setup.h but we wish to support Xcode compilation without
+        requiring the user to define these himself.
+     */
+#    if defined(__APPLE__) && defined(__MACH__)
+#        ifndef __UNIX__
+#            define __UNIX__ 1
+#        endif
+#        ifndef __BSD__
+#            define __BSD__ 1
+#        endif
+        /*  __DARWIN__ is our own define to mean OS X or pure Darwin */
+#        ifndef __DARWIN__
+#            define __DARWIN__ 1
+#        endif
+        /*  NOTE: TARGET_CARBON is actually a 0/1 and must be 1 for OS X */
+#        ifndef TARGET_CARBON
+#            define TARGET_CARBON 1
+#        endif
+        /* OS X uses unsigned long size_t for both ILP32 and LP64 modes. */
+#        if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
+#            define wxSIZE_T_IS_ULONG
+#        endif
+#    endif
+
+/*
+   OS: Classic Mac OS
+ */
 #elif defined(applec) || \
       defined(THINK_C) || \
       (defined(__MWERKS__) && !defined(__INTEL__))
@@ -355,38 +385,10 @@
 #    if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
 #        define wxSIZE_T_IS_ULONG
 #    endif
-#elif defined(__WXMAC__) && defined(__APPLE__)
-    /* Mac OS X */
-#    define __UNIX_LIKE__
 
-    /*
-      These defines are needed when compiling using Project Builder
-      with a non generated setup0.h
-    */
-#    ifndef __UNIX__
-#        define __UNIX__ 1
-#    endif
-#    ifndef __BSD__
-#        define __BSD__ 1
-#    endif
-#    ifndef __DARWIN__
-#        define __DARWIN__ 1
-#    endif
-#    ifndef __POWERPC__
-#        define __POWERPC__ 1
-#    endif
-#    ifndef TARGET_CARBON
-#        define TARGET_CARBON 1
-#    endif
-
-#    if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
-#        define wxSIZE_T_IS_ULONG
-#    endif
-    /*
-       Some code has been added to workaround defects(?) in the
-       bundled gcc compiler. These corrections are identified by
-       __DARWIN__ for Darwin related corrections (wxMac, wxMotif)
-     */
+/*
+   OS: OS/2
+ */
 #elif defined(__OS2__)
 
     /* wxOS2 vs. non wxOS2 ports on OS2 platform */
@@ -407,6 +409,9 @@
 #    endif
 #    define wxSIZE_T_IS_UINT
 
+/*
+   OS: Palm OS
+ */
 #elif defined(__PALMOS__)
 #    ifdef __WIN32__
 #        error "__WIN32__ should not be defined for PalmOS"
@@ -418,6 +423,9 @@
 #        error "__WXMSW__ should not be defined for PalmOS"
 #    endif
 
+/*
+   OS: Otherwise it must be Windows
+ */
 #else   /* Windows */
 #    ifndef __WINDOWS__
 #        define __WINDOWS__
