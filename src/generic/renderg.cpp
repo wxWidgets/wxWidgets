@@ -218,8 +218,6 @@ wxRendererGeneric::DrawHeaderButton(wxWindow* win,
                                     wxHeaderSortIconType sortArrow,
                                     wxHeaderButtonParams* params)
 {
-    const int CORNER = 1;
-
     const wxCoord x = rect.x,
                   y = rect.y,
                   w = rect.width,
@@ -232,18 +230,16 @@ wxRendererGeneric::DrawHeaderButton(wxWindow* win,
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
     dc.SetPen(m_penBlack);
-    dc.DrawLine( x+w-CORNER+1, y, x+w, y+h );  // right (outer)
-    dc.DrawRectangle( x, y+h, w+1, 1 );        // bottom (outer)
+    dc.DrawLine( x+w-1, y, x+w-1, y+h );  // right (outer)
+    dc.DrawLine( x, y+h-1, x+w, y+h-1 );  // bottom (outer)
 
     dc.SetPen(m_penDarkGrey);
-    dc.DrawLine( x+w-CORNER, y, x+w-1, y+h );  // right (inner)
-    dc.DrawRectangle( x+1, y+h-1, w-2, 1 );    // bottom (inner)
+    dc.DrawLine( x+w-2, y+1, x+w-2, y+h-1 );  // right (inner)
+    dc.DrawLine( x+1, y+h-2, x+w-1, y+h-2 );  // bottom (inner)
 
     dc.SetPen(m_penHighlight);
-    dc.DrawRectangle( x, y, w-CORNER+1, 1 );   // top (outer)
-    dc.DrawRectangle( x, y, 1, h );            // left (outer)
-    dc.DrawLine( x, y+h-1, x+1, y+h-1 );
-    dc.DrawLine( x+w-1, y, x+w-1, y+1 );
+    dc.DrawLine( x, y, x, y+h-1 ); // left (outer)
+    dc.DrawLine( x, y, x+w-1, y ); // top (outer)
 
     return DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params);
 }
