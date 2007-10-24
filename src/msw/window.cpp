@@ -4506,6 +4506,10 @@ bool wxWindowMSW::HandlePaint()
     eventNc.SetEventObject(this);
     GetEventHandler()->ProcessEvent(eventNc);
 
+    // don't keep an HRGN we don't need any longer (GetUpdateRegion() can only
+    // be called from inside the event handlers called above)
+    m_updateRegion.Clear();
+
     return processed;
 }
 
@@ -4551,20 +4555,29 @@ void wxWindowMSW::OnEraseBackground(wxEraseEvent& event)
         return;
     }
 
-    if ( GetBackgroundStyle() == wxBG_STYLE_CUSTOM )
+    switch ( GetBackgroundStyle() )
     {
-        // don't skip the event here, custom background means that the app
-        // is drawing it itself in its OnPaint(), so don't draw it at all
-        // now to avoid flicker
-        return;
-    }
+        default:
+            wxFAIL_MSG( _T("Unknown background style") );
+            // fall through
 
+        case wxBG_STYLE_SYSTEM:
+        case wxBG_STYLE_COLOUR:
+            // do default background painting
+            if ( !DoEraseBackground(GetHdcOf(*event.GetDC())) )
+            {
+                // let the system paint the background
+                event.Skip();
+            }
 
-    // do default background painting
-    if ( !DoEraseBackground(GetHdcOf(*event.GetDC())) )
-    {
-        // let the system paint the background
-        event.Skip();
+        case wxBG_STYLE_CUSTOM:
+            // don't skip the event here, custom background means that the app
+            // is drawing it itself in its OnPaint(), so don't draw it at all
+            // now to avoid flicker
+            return;
+
+        case wxBG_STYLE_TRANSPARENT:
+            event.Skip();
     }
 }
 
@@ -5935,10 +5948,18 @@ WXWORD wxCharCodeWXToMSW(int wxk, bool *isVirtual)
             break;
 
         default:
-            if ( isVirtual )
-                *isVirtual = false;
-            vk = (WXWORD)wxk;
-            break;
+            // check to see if its one of the OEM key codes.
+            BYTE vks = LOBYTE(VkKeyScan(wxk));
+            if ( vks != -1 )
+            {
+                vk = vks;
+            }
+            else
+            {
+                if ( isVirtual )
+                    *isVirtual = false;
+                vk = (WXWORD)wxk;
+            }
     }
 
     return vk;
