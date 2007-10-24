@@ -19,15 +19,11 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
-    #include "wx/frame.h"
+    #include "wx/toplevel.h"
     #include "wx/dcclient.h"
     #include "wx/menu.h"
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
-    #include "wx/textctrl.h"
-    #include "wx/toolbar.h"
-    #include "wx/combobox.h"
-    #include "wx/layout.h"
     #include "wx/math.h"
 #endif
 
@@ -429,7 +425,7 @@ extern "C" {
 static
 void wxgtk_combo_size_request_callback(GtkWidget * WXUNUSED(widget),
                                        GtkRequisition *requisition,
-                                       wxComboBox *win)
+                                       wxWindow* win)
 {
     // This callback is actually hooked into the text entry
     // of the combo box, not the GtkHBox.
@@ -2065,34 +2061,36 @@ gtk_window_realized_callback( GtkWidget *m_widget, wxWindow *win )
 }
 
 //-----------------------------------------------------------------------------
-// "size_allocate"
+// "size_allocate" from m_wxwindow or m_widget
 //-----------------------------------------------------------------------------
 
-static
-void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
-                               GtkAllocation * WXUNUSED(alloc),
-                               wxWindow *win )
+static void
+size_allocate(GtkWidget*, GtkAllocation* alloc, wxWindow* win)
 {
-    int client_width = 0;
-    int client_height = 0;
-    win->GetClientSize( &client_width, &client_height );
-    if ((client_width == win->m_oldClientWidth) && (client_height == win->m_oldClientHeight))
-        return;
-
-    if ( !client_width && !client_height )
+    int w = alloc->width;
+    int h = alloc->height;
+    if (win->m_wxwindow)
     {
-        // the window is currently unmapped, don't generate size events
-        return;
+        const int border = GTK_CONTAINER(win->m_wxwindow)->border_width;
+        w -= 2 * border;
+        h -= 2 * border;
+        if (w < 0) w = 0;
+        if (h < 0) h = 0;
     }
-
-    win->m_oldClientWidth = client_width;
-    win->m_oldClientHeight = client_height;
-
-    if (!win->m_nativeSizeEvent)
+    if (win->m_oldClientWidth != w || win->m_oldClientHeight != h)
     {
-        wxSizeEvent event( win->GetSize(), win->GetId() );
-        event.SetEventObject( win );
-        win->GTKProcessEvent( event );
+        win->m_oldClientWidth  = w;
+        win->m_oldClientHeight = h;
+        // this callback can be connected to m_wxwindow,
+        // so always get size from m_widget->allocation
+        win->m_width  = win->m_widget->allocation.width;
+        win->m_height = win->m_widget->allocation.height;
+        if (!win->m_nativeSizeEvent)
+        {
+            wxSizeEvent event(win->GetSize(), win->GetId());
+            event.SetEventObject(win);
+            win->GTKProcessEvent(event);
+        }
     }
 }
 
@@ -2239,8 +2237,6 @@ void wxWindowGTK::Init()
 
     m_oldClientWidth =
     m_oldClientHeight = 0;
-
-    m_resizing = false;
 
     m_insertCallback = wxInsertChildInWindow;
 
@@ -2525,11 +2521,14 @@ void wxWindowGTK::PostCreation()
     g_signal_connect (connect_widget, "realize",
                       G_CALLBACK (gtk_window_realized_callback), this);
 
+    if (!IsTopLevel())
+    {
+        g_signal_connect(m_wxwindow ? m_wxwindow : m_widget, "size_allocate",
+            G_CALLBACK(size_allocate), this);
+    }
+
     if (m_wxwindow)
     {
-        // Catch native resize events
-        g_signal_connect (m_wxwindow, "size_allocate",
-                          G_CALLBACK (gtk_window_size_callback), this);
 #if GTK_CHECK_VERSION(2, 8, 0)
         if (!gtk_check_version(2,8,0))
         {
@@ -2654,9 +2653,6 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid window") );
     wxASSERT_MSG( (m_parent != NULL), wxT("wxWindowGTK::SetSize requires parent.\n") );
 
-    if (m_resizing) return; /* I don't like recursions */
-    m_resizing = true;
-
     int currentX, currentY;
     GetPosition(&currentX, &currentY);
     if (x == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
@@ -2676,6 +2672,7 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
             height = sizeBest.y;
     }
 
+    const wxSize oldSize(m_width, m_height);
     if (width != -1)
         m_width = width;
     if (height != -1)
@@ -2683,36 +2680,11 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
 
     ConstrainSize();
 
-#if wxUSE_TOOLBAR_NATIVE
-    if (wxDynamicCast(GetParent(), wxToolBar))
-    {
-       // don't take the x,y values, they're wrong because toolbar sets them
-       GtkWidget  *widget = m_widget;
-       gtk_widget_set_size_request (widget, m_width, m_height);
-    }
-    else
-#endif
-    if (m_parent->m_wxwindow == NULL) // i.e. wxNotebook
-    {
-        // don't set the size for children of wxNotebook, just take the values.
-        m_x = x;
-        m_y = y;
-        m_width = width;
-        m_height = height;
-    }
-    else
+    if (m_parent->m_wxwindow)
     {
         GtkPizza *pizza = GTK_PIZZA(m_parent->m_wxwindow);
-        if ((sizeFlags & wxSIZE_ALLOW_MINUS_ONE) == 0)
-        {
-            if (x != -1) m_x = x + gtk_pizza_get_xoffset( pizza );
-            if (y != -1) m_y = y + gtk_pizza_get_yoffset( pizza );
-        }
-        else
-        {
-            m_x = x + gtk_pizza_get_xoffset( pizza );
-            m_y = y + gtk_pizza_get_yoffset( pizza );
-        }
+        m_x = x + gtk_pizza_get_xoffset(pizza);
+        m_y = y + gtk_pizza_get_yoffset(pizza);
 
         int left_border = 0;
         int right_border = 0;
@@ -2740,32 +2712,20 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
                       m_height+top_border+bottom_border );
     }
 
-    if (m_hasScrolling)
+    if (m_width != oldSize.x || m_height != oldSize.y)
     {
-        /* Sometimes the client area changes size without the
-           whole windows's size changing, but if the whole
-           windows's size doesn't change, no wxSizeEvent will
-           normally be sent. Here we add an extra test if
-           the client test has been changed and this will
-           be used then. */
+        // update these variables to keep size_allocate handler
+        // from sending another size event for this change
         GetClientSize( &m_oldClientWidth, &m_oldClientHeight );
+
+        gtk_widget_queue_resize(m_widget);
+        if (!m_nativeSizeEvent)
+        {
+            wxSizeEvent event( wxSize(m_width,m_height), GetId() );
+            event.SetEventObject( this );
+            GetEventHandler()->ProcessEvent( event );
+        }
     }
-
-/*
-    wxPrintf( "OnSize sent from " );
-    if (GetClassInfo() && GetClassInfo()->GetClassName())
-        wxPrintf( GetClassInfo()->GetClassName() );
-    wxPrintf( " %d %d %d %d\n", (int)m_x, (int)m_y, (int)m_width, (int)m_height );
-*/
-
-    if (!m_nativeSizeEvent)
-    {
-        wxSizeEvent event( wxSize(m_width,m_height), GetId() );
-        event.SetEventObject( this );
-        GetEventHandler()->ProcessEvent( event );
-    }
-
-    m_resizing = false;
 }
 
 bool wxWindowGTK::GtkShowFromOnIdle()

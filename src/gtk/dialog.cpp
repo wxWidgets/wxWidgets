@@ -13,18 +13,12 @@
 #include "wx/dialog.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/app.h"
-    #include "wx/frame.h"
     #include "wx/cursor.h"
 #endif // WX_PRECOMP
 
 #include "wx/evtloop.h"
 
-#include <gdk/gdk.h>
 #include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
-
-#include "wx/gtk/win_gtk.h"
 
 //-----------------------------------------------------------------------------
 // global data
@@ -42,7 +36,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxDialog,wxTopLevelWindow)
 void wxDialog::Init()
 {
     m_returnCode = 0;
-    m_sizeSet = false;
     m_modalShowing = false;
     m_themeEnabled = true;
 }
@@ -75,16 +68,6 @@ bool wxDialog::Show( bool show )
     if (!show && IsModal())
     {
         EndModal( wxID_CANCEL );
-    }
-
-    if (show && !m_sizeSet)
-    {
-        /* by calling GtkOnSize here, we don't have to call
-           either after showing the frame, which would entail
-           much ugly flicker nor from within the size_allocate
-           handler, because GTK 1.1.X forbids that. */
-
-        GtkOnSize();
     }
 
     bool ret = wxWindow::Show( show );

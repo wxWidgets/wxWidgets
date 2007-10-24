@@ -11,17 +11,6 @@
 #define _WX_GTK_FRAME_H_
 
 //-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
-class WXDLLIMPEXP_FWD_CORE wxMDIClientWindow;
-class WXDLLIMPEXP_FWD_CORE wxMenu;
-class WXDLLIMPEXP_FWD_CORE wxMenuBar;
-class WXDLLIMPEXP_FWD_CORE wxToolBar;
-class WXDLLIMPEXP_FWD_CORE wxStatusBar;
-
-//-----------------------------------------------------------------------------
 // wxFrame
 //-----------------------------------------------------------------------------
 
@@ -68,12 +57,7 @@ public:
     // --------------------------
 
     // GTK callbacks
-    virtual void GtkOnSize();
     virtual void OnInternalIdle();
-
-    bool          m_menuBarDetached;
-    int           m_menuBarHeight;
-    bool          m_toolBarDetached;
 
 protected:
     // common part of all ctors
@@ -85,13 +69,6 @@ protected:
 #if wxUSE_MENUS_NATIVE
     virtual void DetachMenuBar();
     virtual void AttachMenuBar(wxMenuBar *menubar);
-    // Whether frame has a menubar showing
-    //   (needed to deal with perverted MDI menubar handling)
-    virtual bool HasVisibleMenubar() const;
-
-public:
-    // Menu size is dynamic now, call this whenever it might change.
-    void UpdateMenuBarSize();
 #endif // wxUSE_MENUS_NATIVE
 
 private:

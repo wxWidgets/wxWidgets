@@ -26,10 +26,6 @@
 #include "wx/stockitem.h"
 #include "wx/gtk/private.h"
 
-#ifdef __WXGTK20__
-#include <gdk/gdktypes.h>
-#endif
-
 // FIXME: is this right? somehow I don't think so (VZ)
 
 #define gtk_accel_group_attach(g, o) gtk_window_add_accel_group((o), (g))
@@ -390,20 +386,7 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title, int pos)
     // m_invokingWindow is set after wxFrame::SetMenuBar(). This call enables
     // addings menu later on.
     if (m_invokingWindow)
-    {
         wxMenubarSetInvokingWindow( menu, m_invokingWindow );
-
-            // OPTIMISE ME:  we should probably cache this, or pass it
-            //               directly, but for now this is a minimal
-            //               change to validate the new dynamic sizing.
-            //               see (and refactor :) similar code in Remove
-            //               below.
-
-        wxFrame *frame = wxDynamicCast( m_invokingWindow, wxFrame );
-
-        if( frame )
-            frame->UpdateMenuBarSize();
-    }
 
     return true;
 }
@@ -447,16 +430,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     menu->m_owner = NULL;
 
     if (m_invokingWindow)
-    {
-        // OPTIMISE ME:  see comment in GtkAppend
-        wxFrame *frame = wxDynamicCast( m_invokingWindow, wxFrame );
-
-        if( frame )
-            frame->UpdateMenuBarSize();
-
         wxMenubarUnsetInvokingWindow( menu, m_invokingWindow );
-    }
-
 
     return menu;
 }

@@ -8,14 +8,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// declarations
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -334,6 +326,20 @@ static gint gtk_toolbar_tool_callback( GtkWidget *WXUNUSED(widget),
 }
 
 //-----------------------------------------------------------------------------
+// "size_request" from m_toolbar
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static void
+size_request(GtkWidget*, GtkRequisition* req, wxToolBar* win)
+{
+    const wxSize margins = win->GetMargins();
+    req->width  += margins.x;
+    req->height += 2 * margins.y;
+}
+}
+
+//-----------------------------------------------------------------------------
 // InsertChild callback for wxToolBar
 //-----------------------------------------------------------------------------
 
@@ -444,6 +450,9 @@ bool wxToolBar::Create( wxWindow *parent,
     m_parent->DoAddChild( this );
 
     PostCreation(size);
+
+    g_signal_connect_after(m_toolbar, "size_request",
+        G_CALLBACK(size_request), this);
 
     return true;
 }
@@ -635,11 +644,6 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             break;
     }
 
-    GtkRequisition req;
-    (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(m_widget) )->size_request )
-        (m_widget, &req );
-    m_width = req.width + m_xMargin;
-    m_height = req.height + 2*m_yMargin;
     InvalidateBestSize();
 
     return true;

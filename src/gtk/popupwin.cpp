@@ -15,9 +15,6 @@
 #include "wx/popupwin.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/app.h"
-    #include "wx/frame.h"
-    #include "wx/cursor.h"
 #endif // WX_PRECOMP
 
 #include <gtk/gtk.h>
@@ -131,11 +128,11 @@ static void wxInsertChildInPopupWin(wxWindowGTK* parent, wxWindowGTK* child)
 // wxPopupWindow
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxPopupWindow,wxPopupWindowBase)
 #ifdef __WXUNIVERSAL__
+BEGIN_EVENT_TABLE(wxPopupWindow,wxPopupWindowBase)
     EVT_SIZE(wxPopupWindow::OnSize)
-#endif
 END_EVENT_TABLE()
+#endif
 
 wxPopupWindow::~wxPopupWindow()
 {
@@ -143,8 +140,6 @@ wxPopupWindow::~wxPopupWindow()
 
 bool wxPopupWindow::Create( wxWindow *parent, int style )
 {
-    m_sizeSet = false;
-
     if (!PreCreation( parent, wxDefaultPosition, wxDefaultSize ) ||
         !CreateBase( parent, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, wxT("popup") ))
     {
@@ -203,41 +198,20 @@ void wxPopupWindow::DoSetSize( int x, int y, int width, int height, int sizeFlag
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid dialog") );
     wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid dialog") );
 
-    if (m_resizing) return; /* I don't like recursions */
-    m_resizing = true;
-
     int old_x = m_x;
     int old_y = m_y;
 
     int old_width = m_width;
     int old_height = m_height;
 
-    if ((sizeFlags & wxSIZE_ALLOW_MINUS_ONE) == 0)
-    {
-        if (x != -1) m_x = x;
-        if (y != -1) m_y = y;
-        if (width != -1) m_width = width;
-        if (height != -1) m_height = height;
-    }
-    else
-    {
+    if (x != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         m_x = x;
+    if (y != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         m_y = y;
+    if (width != -1)
         m_width = width;
+    if (height != -1)
         m_height = height;
-    }
-
-/*
-    if ((sizeFlags & wxSIZE_AUTO_WIDTH) == wxSIZE_AUTO_WIDTH)
-    {
-        if (width == -1) m_width = 80;
-    }
-
-    if ((sizeFlags & wxSIZE_AUTO_HEIGHT) == wxSIZE_AUTO_HEIGHT)
-    {
-       if (height == -1) m_height = 26;
-    }
-*/
 
     ConstrainSize();
 
@@ -245,75 +219,27 @@ void wxPopupWindow::DoSetSize( int x, int y, int width, int height, int sizeFlag
     {
         if ((m_x != old_x) || (m_y != old_y))
         {
-            /* we set the position here and when showing the dialog
-               for the first time in idle time */
-            // Where does that happen in idle time? I do not see it anywhere - MR
             gtk_window_move( GTK_WINDOW(m_widget), m_x, m_y );
         }
     }
 
     if ((m_width != old_width) || (m_height != old_height))
     {
+        // gtk_window_resize does not work for GTK_WINDOW_POPUP
         gtk_widget_set_size_request( m_widget, m_width, m_height );
-
-        /* actual resizing is deferred to GtkOnSize in idle time and
-           when showing the dialog */
-        m_sizeSet = false;
-
+        wxSizeEvent event(GetSize(), GetId());
+        event.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(event);
     }
-
-    m_resizing = false;
-}
-
-void wxPopupWindow::GtkOnSize()
-{
-    if (m_sizeSet) return;
-    if (!m_wxwindow) return;
-
-    /* FIXME: is this a hack? */
-    /* Since for some reason GTK will revert to using maximum size ever set
-       for this window, we have to set geometry hints maxsize to match size
-       given. Also set the to that minsize since resizing isn't possible
-       anyway. */
-
-    /* set size hints */
-    gint flag = GDK_HINT_MAX_SIZE | GDK_HINT_MIN_SIZE; // GDK_HINT_POS;
-    GdkGeometry geom;
-    geom.min_width = m_width;
-    geom.min_height = m_height;
-    geom.max_width = m_width;
-    geom.max_height = m_height;
-    gtk_window_set_geometry_hints( GTK_WINDOW(m_widget),
-                                   (GtkWidget*) NULL,
-                                   &geom,
-                                   (GdkWindowHints) flag );
-
-
-    m_sizeSet = true;
-
-    wxSizeEvent event( wxSize(m_width,m_height), GetId() );
-    event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( event );
-}
-
-void wxPopupWindow::OnInternalIdle()
-{
-    if (!m_sizeSet && GTK_WIDGET_REALIZED(m_wxwindow))
-        GtkOnSize();
-
-    wxWindow::OnInternalIdle();
 }
 
 bool wxPopupWindow::Show( bool show )
 {
-    if (show && !m_sizeSet)
+    if (show && !IsShown())
     {
-        /* by calling GtkOnSize here, we don't have to call
-           either after showing the frame, which would entail
-           much ugly flicker nor from within the size_allocate
-           handler, because GTK 1.1.X forbids that. */
-
-        GtkOnSize();
+        wxSizeEvent event(GetSize(), GetId());
+        event.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(event);
     }
 
     bool ret = wxWindow::Show( show );

@@ -20,8 +20,7 @@
     #include "wx/image.h"
 #endif
 
-#include "wx/gtk/win_gtk.h"
-#include "wx/gtk/private.h"
+#include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
 // data
@@ -29,7 +28,6 @@
 
 extern bool        g_blockEventsOnDrag;
 extern bool        g_blockEventsOnScroll;
-extern GtkWidget  *wxGetRootWindow();
 
 //-----------------------------------------------------------------------------
 // "expose_event" of m_mainWidget
@@ -63,10 +61,8 @@ static gboolean gtk_window_own_expose_callback(GtkWidget* widget, GdkEventExpose
     if (!win->m_hasVMT || gdk_event->count > 0)
         return false;
 
-    GtkPizza *pizza = GTK_PIZZA(widget);
-
     gtk_paint_shadow (widget->style,
-                      pizza->bin_window,
+                      widget->window,
                       GTK_STATE_NORMAL,
                       GTK_SHADOW_OUT,
                       NULL, NULL, NULL, // FIXME: No clipping?
@@ -76,15 +72,15 @@ static gboolean gtk_window_own_expose_callback(GtkWidget* widget, GdkEventExpose
     int style = win->GetWindowStyle();
 
     wxClientDC dc(win);
-    
+
 #if wxUSE_NEW_DC
     wxImplDC *impl = dc.GetImpl();
     wxGTKClientImplDC *client_impl = wxDynamicCast( impl, wxGTKClientImplDC );
     // Hack alert
-    client_impl->m_window = pizza->bin_window;
+    client_impl->m_window = widget->window;
 #else
     // Hack alert
-    dc.m_window = pizza->bin_window;
+    dc.m_window = widget->window;
 #endif
 
     if (style & wxRESIZE_BORDER)
@@ -130,9 +126,6 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 
     if (win->m_isDragging) return TRUE;
 
-    GtkPizza *pizza = GTK_PIZZA(widget);
-    if (gdk_event->window != pizza->bin_window) return TRUE;
-
     int style = win->GetWindowStyle();
 
     int y = (int)gdk_event->y;
@@ -143,7 +136,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
     {
         GtkWidget *ancestor = gtk_widget_get_toplevel( widget );
 
-        GdkWindow *source = GTK_PIZZA(widget)->bin_window;
+        GdkWindow *source = widget->window;
 
         int org_x = 0;
         int org_y = 0;
@@ -304,8 +297,22 @@ gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event,
     win->m_y = y;
     gtk_window_move( GTK_WINDOW(win->m_widget), x, y );
 
-
     return TRUE;
+}
+}
+
+//-----------------------------------------------------------------------------
+// "size_allocate" from GtkFixed, parent of m_mainWidget
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static void size_allocate(GtkWidget*, GtkAllocation* alloc, wxMiniFrame* win)
+{
+    // place m_mainWidget inside of decorations drawn on the GtkFixed
+    GtkAllocation alloc2 = win->m_mainWidget->allocation;
+    alloc2.width = alloc->width - 2 * win->m_miniEdge;
+    alloc2.height = alloc->height - win->m_miniTitle - 2 * win->m_miniEdge;
+    gtk_widget_size_allocate(win->m_mainWidget, &alloc2);
 }
 }
 
@@ -340,6 +347,27 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
 
     wxFrame::Create( parent, id, title, pos, size, style, name );
 
+    // borders and title are on a GtkFixed between m_widget and m_mainWidget
+    GtkWidget* fixed = gtk_fixed_new();
+    gtk_fixed_set_has_window((GtkFixed*)fixed, true);
+    gtk_widget_add_events(fixed,
+        GDK_POINTER_MOTION_MASK |
+        GDK_POINTER_MOTION_HINT_MASK |
+        GDK_BUTTON_MOTION_MASK |
+        GDK_BUTTON_PRESS_MASK |
+        GDK_BUTTON_RELEASE_MASK |
+        GDK_LEAVE_NOTIFY_MASK);
+    gtk_widget_show(fixed);
+    gtk_widget_reparent(m_mainWidget, fixed);
+    gtk_container_add((GtkContainer*)m_widget, fixed);
+    gtk_fixed_move((GtkFixed*)fixed, m_mainWidget, m_miniEdge, m_miniTitle + m_miniEdge);
+    g_signal_connect(fixed, "size_allocate", G_CALLBACK(size_allocate), this);
+
+    m_gdkDecor = 0;
+    m_gdkFunc = 0;
+    if (style & wxRESIZE_BORDER)
+       m_gdkFunc = GDK_FUNC_RESIZE;
+
     if (m_parent && (GTK_IS_WINDOW(m_parent->m_widget)))
     {
         gtk_window_set_transient_for( GTK_WINDOW(m_widget), GTK_WINDOW(m_parent->m_widget) );
@@ -355,27 +383,43 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     }
 
     /* these are called when the borders are drawn */
-    g_signal_connect (m_mainWidget, "expose_event",
+    g_signal_connect_after(fixed, "expose_event",
                       G_CALLBACK (gtk_window_own_expose_callback), this );
 
     /* these are required for dragging the mini frame around */
-    g_signal_connect (m_mainWidget, "button_press_event",
+    g_signal_connect (fixed, "button_press_event",
                       G_CALLBACK (gtk_window_button_press_callback), this);
-    g_signal_connect (m_mainWidget, "button_release_event",
+    g_signal_connect (fixed, "button_release_event",
                       G_CALLBACK (gtk_window_button_release_callback), this);
-    g_signal_connect (m_mainWidget, "motion_notify_event",
+    g_signal_connect (fixed, "motion_notify_event",
                       G_CALLBACK (gtk_window_motion_notify_callback), this);
-    g_signal_connect (m_mainWidget, "leave_notify_event",
+    g_signal_connect (fixed, "leave_notify_event",
                       G_CALLBACK (gtk_window_leave_callback), this);
     return true;
+}
+
+void wxMiniFrame::DoGetClientSize(int* width, int* height) const
+{
+    wxFrame::DoGetClientSize(width, height);
+    if (width)
+    {
+        *width -= 2 * m_miniEdge;
+        if (*width < 0) *width = 0;
+    }
+    if (height)
+    {
+        *height -= m_miniTitle + 2 * m_miniEdge;
+        if (*height < 0) *height = 0;
+    }
 }
 
 void wxMiniFrame::SetTitle( const wxString &title )
 {
     wxFrame::SetTitle( title );
 
-    if (GTK_PIZZA(m_mainWidget)->bin_window)
-        gdk_window_invalidate_rect( GTK_PIZZA(m_mainWidget)->bin_window, NULL, true );
+    GtkWidget* fixed = GTK_BIN(m_widget)->child;
+    if (fixed->window)
+        gdk_window_invalidate_rect(fixed->window, NULL, false);
 }
 
 #endif // wxUSE_MINIFRAME

@@ -25,9 +25,6 @@
 #include "wx/panel.h"
 
 #include "wx/gtk/private.h"
-#include "wx/gtk/win_gtk.h"
-
-#include <gtk/gtkexpander.h>
 
 // ============================================================================
 // implementation
@@ -120,39 +117,11 @@ gtk_collapsiblepane_expanded_callback(GObject * WXUNUSED(object),
             //     when the expander is collapsed!)
             gtk_window_set_resizable (GTK_WINDOW (top->m_widget), p->IsExpanded());
 
-            // 4) set size hints: note that this code has been taken and adapted
-            //    from src/gtk/toplevel.cpp
-            GdkGeometry geom;
+            // 4) set size hints
+            top->SetSizeHints(sz.x, sz.y);
 
-            geom.min_width = sz.x;
-            geom.min_height = sz.y;
-
-            gtk_window_set_geometry_hints( GTK_WINDOW(top->m_widget),
-                                           (GtkWidget*) NULL,
-                                           &geom,
-                                           GDK_HINT_MIN_SIZE );
-
-            // 5) set size: also this code has been adapted from src/gtk/toplevel.cpp
-            //    to do the size changes immediately and not delaying them in the idle
-            //    time
-            top->m_width = sz.x;
-            top->m_height = sz.y;
-
-            int client_x = top->m_miniEdge;
-            int client_y = top->m_miniEdge + top->m_miniTitle;
-            int client_w = top->m_width - 2*top->m_miniEdge;
-            int client_h = top->m_height - 2*top->m_miniEdge - top->m_miniTitle;
-            if (client_w < 0)
-                client_w = 0;
-            if (client_h < 0)
-                client_h = 0;
-
-            gtk_pizza_set_size( GTK_PIZZA(top->m_mainWidget),
-                                top->m_wxwindow,
-                                client_x, client_y, client_w, client_h );
-
-            gtk_widget_set_size_request( top->m_wxwindow, sz.x, sz.y );
-
+            // 5) set size
+            top->SetClientSize(sz);
         }
     }
 

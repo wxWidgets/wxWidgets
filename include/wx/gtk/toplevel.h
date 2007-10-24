@@ -83,14 +83,11 @@ public:
     // --------------------------
 
     // GTK callbacks
-    virtual void GtkOnSize();
     virtual void OnInternalIdle();
 
     // do *not* call this to iconize the frame, this is a private function!
     void SetIconizeState(bool iconic);
 
-    int           m_miniEdge,
-                  m_miniTitle;
     GtkWidget    *m_mainWidget;
 
     bool          m_fsIsShowing;         /* full screen */
@@ -100,8 +97,6 @@ public:
     // m_windowStyle translated to GDK's terms
     int           m_gdkFunc,
                   m_gdkDecor;
-
-    bool m_sizeSet;
 
     // private gtk_timeout_add result for mimicing wxUSER_ATTENTION_INFO and
     // wxUSER_ATTENTION_ERROR difference, -2 for no hint, -1 for ERROR hint, rest for GtkTimeout handle.
@@ -115,8 +110,6 @@ public:
 
     // return the size of the window without WM decorations
     void GTKDoGetSize(int *width, int *height) const;
-
-    void GtkUpdateSize() { m_sizeSet = false; }
 
     // whether frame extents are accurate
     virtual bool IsDecorCacheable() const;
@@ -139,6 +132,7 @@ protected:
     // string shown in the title bar
     wxString m_title;
 
+private:
     // is the frame currently iconized?
     bool m_isIconized;
 

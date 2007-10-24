@@ -60,7 +60,7 @@ public:
     virtual bool IsRetained() const;
 
     virtual void SetFocus();
-    
+
     // hint from wx to native GTK+ tab traversal code
     virtual void SetCanFocus(bool canFocus);
 
@@ -252,7 +252,7 @@ public:
 
     // return true if the window is of a standard (i.e. not wxWidgets') class
     bool IsOfStandardClass() const { return m_wxwindow == NULL; }
-    
+
     // this widget will be queried for GTK's focus events
     GtkWidget           *m_focusWidget;
 
@@ -284,13 +284,11 @@ public:
     // find the direction of the given scrollbar (must be one of ours)
     ScrollDir ScrollDirFromRange(GtkRange *range) const;
 
-
     // extra (wxGTK-specific) flags
     bool                 m_noExpose:1;          // wxGLCanvas has its own redrawing
     bool                 m_nativeSizeEvent:1;   // wxGLCanvas sends wxSizeEvent upon "alloc_size"
     bool                 m_hasScrolling:1;
     bool                 m_hasVMT:1;
-    bool                 m_resizing:1;
     bool                 m_hasFocus:1;          // true if == FindFocus()
     bool                 m_isScrolling:1;       // dragging scrollbar thumb?
     bool                 m_clipPaintRegion:1;   // true after ScrollWindow()

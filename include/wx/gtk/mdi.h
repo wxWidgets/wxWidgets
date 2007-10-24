@@ -12,6 +12,9 @@
 
 #include "wx/frame.h"
 
+class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
+class WXDLLIMPEXP_FWD_CORE wxMDIClientWindow;
+
 //-----------------------------------------------------------------------------
 // wxMDIParentFrame
 //-----------------------------------------------------------------------------
@@ -58,12 +61,11 @@ public:
     wxMDIClientWindow  *m_clientWindow;
     bool                m_justInserted;
 
-    virtual void GtkOnSize();
     virtual void OnInternalIdle();
 
 protected:
     void Init();
-    virtual bool HasVisibleMenubar() const;
+    virtual void DoGetClientSize(int* width, int* height) const;
 
 private:
     friend class wxMDIChildFrame;
