@@ -20,25 +20,18 @@
     #include "wx/log.h"
     #include "wx/dcclient.h"
     #include "wx/sizer.h"
+    #include "wx/icon.h"
+    #include "wx/list.h"
+    #include "wx/settings.h"
+    #include "wx/crt.h"
 #endif
 
 #include "wx/stockitem.h"
 #include "wx/calctrl.h"
 #include "wx/popupwin.h"
-#include "wx/icon.h"
-#include "wx/list.h"
 #include "wx/listimpl.cpp"
-#include "wx/settings.h"
 
 #include "wx/gtk/private.h"
-#include "wx/gtk/win_gtk.h"
-
-#include <gobject/gvaluecollector.h>
-#include <gtk/gtktreemodel.h>
-#include <gtk/gtktreesortable.h>
-#include <gtk/gtktreednd.h>
-
-#include <gdk/gdkkeysyms.h>
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------

@@ -20,12 +20,13 @@
 #include "wx/dataview.h"
 
 #include "wx/spinctrl.h"
-#include "wx/dc.h"
-#include "wx/settings.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/dc.h"
+    #include "wx/settings.h"
     #include "wx/log.h"
     #include "wx/icon.h"
+    #include "wx/crt.h"
 #endif
 
 const wxChar wxDataViewCtrlNameStr[] = wxT("dataviewCtrl");
@@ -36,6 +37,12 @@ bool operator == (const wxDataViewItem &left, const wxDataViewItem &right)
     return (left.GetID() == right.GetID() );
 }
 
+#ifdef __WXDEBUG__
+void wxDataViewItem::Print(const wxString& text) const
+{
+    wxPrintf("item %s: %l\n", text, (long)m_id);
+}
+#endif
 
 // ---------------------------------------------------------
 // wxDataViewModelNotifier

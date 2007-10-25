@@ -78,7 +78,7 @@ public:
     operator const void* () const      { return m_id; }
 
 #ifdef __WXDEBUG__
-    void Print( const wxString &text ) const  { wxPrintf( "item %s: %d\n", text, (int) m_id ); }
+    void Print( const wxString &text ) const;
 #endif
 
 private:
