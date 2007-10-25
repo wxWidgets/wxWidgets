@@ -105,4 +105,9 @@
    #define lfind _lfind
 #endif
 
+#ifdef __DMC__
+#define HAVE_INT32
+typedef	long int32;
+#endif
+
 #endif
