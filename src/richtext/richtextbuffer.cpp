@@ -595,7 +595,7 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
     if (invalidRange == wxRICHTEXT_ALL)
         layoutAll = true;
     else    // If we know what range is affected, start laying out from that point on.
-        if (invalidRange.GetStart() > GetRange().GetStart())
+        if (invalidRange.GetStart() >= GetRange().GetStart())
     {
         wxRichTextParagraph* firstParagraph = GetParagraphAtPosition(invalidRange.GetStart());
         if (firstParagraph)
@@ -604,10 +604,13 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
             wxRichTextObjectList::compatibility_iterator previousNode;
             if ( firstNode )
                 previousNode = firstNode->GetPrevious();
-            if (firstNode && previousNode)
+            if (firstNode)
             {
-                wxRichTextParagraph* previousParagraph = wxDynamicCast(previousNode->GetData(), wxRichTextParagraph);
-                availableSpace.y = previousParagraph->GetPosition().y + previousParagraph->GetCachedSize().y;
+                if (previousNode)
+                {
+                    wxRichTextParagraph* previousParagraph = wxDynamicCast(previousNode->GetData(), wxRichTextParagraph);
+                    availableSpace.y = previousParagraph->GetPosition().y + previousParagraph->GetCachedSize().y;
+                }
 
                 // Now we're going to start iterating from the first affected paragraph.
                 node = firstNode;
