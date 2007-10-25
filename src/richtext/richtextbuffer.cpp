@@ -4813,7 +4813,8 @@ wxTextAttr wxRichTextBuffer::GetStyleForNewParagraph(long pos, bool caretPositio
             wxRichTextParagraphStyleDefinition* paraDef = GetStyleSheet()->FindParagraphStyle(para->GetAttributes().GetParagraphStyleName());
             if (paraDef)
             {
-                if (!paraDef->GetNextStyle().IsEmpty())
+                // If we're not at the end of the paragraph, then we apply THIS style, and not the designated next style.
+                if (para->GetRange().GetEnd() == pos && !paraDef->GetNextStyle().IsEmpty())
                 {
                     wxRichTextParagraphStyleDefinition* nextParaDef = GetStyleSheet()->FindParagraphStyle(paraDef->GetNextStyle());
                     if (nextParaDef)
