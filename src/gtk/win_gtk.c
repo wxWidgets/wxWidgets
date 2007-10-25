@@ -734,14 +734,11 @@ gtk_pizza_scroll (GtkPizza *pizza, gint dx, gint dy)
 
     if (pizza->bin_window)
         gdk_window_scroll( pizza->bin_window, -dx, -dy );
-        
+
     for (tmp_list = pizza->children; tmp_list; tmp_list = tmp_list->next)
     {
         GtkPizzaChild *child = tmp_list->data;
-        GtkAllocation alloc = child->widget->allocation;
-        alloc.x -= dx;
-        alloc.y -= dy;
-        gtk_widget_size_allocate( child->widget, &alloc );
+        gtk_widget_queue_resize(child->widget);
     }
 }
 
