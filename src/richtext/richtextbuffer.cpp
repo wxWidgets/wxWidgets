@@ -28,6 +28,7 @@
     #include "wx/module.h"
 #endif
 
+#include "wx/settings.h"
 #include "wx/filename.h"
 #include "wx/clipbrd.h"
 #include "wx/wfstream.h"
@@ -4258,9 +4259,12 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttr& attr, con
 
     if (selected)
     {
-        dc.SetBrush(*wxBLACK_BRUSH);
-        dc.SetPen(*wxBLACK_PEN);
-        dc.SetTextForeground(*wxWHITE);
+        wxColour highlightColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+        wxColour highlightTextColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+
+        dc.SetBrush(wxBrush(highlightColour));
+        dc.SetPen(wxPen(highlightColour));
+        dc.SetTextForeground(highlightTextColour);
         dc.SetBackgroundMode(wxTRANSPARENT);
     }
     else
