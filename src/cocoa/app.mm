@@ -124,6 +124,37 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         }
     }
 
+    /*
+        Cocoa supports -Key value options which set the user defaults key "Key"
+        to the value "value"  Some of them are very handy for debugging like
+        -NSShowAllViews YES.  Cocoa picks these up from the real argv so
+        our removal of them from the wx copy of it does not affect Cocoa's
+        ability to see them.
+
+        We basically just assume that any "-NS" option and its following
+        argument needs to be removed from argv.  We hope that user code does
+        not expect to see -NS options and indeed it's probably a safe bet
+        since most user code accepting options is probably using the
+        double-dash GNU-style syntax.
+     */
+    for(int i=1; i < argc; ++i)
+    {
+        static const wxChar *ARG_NS = wxT("-NS");
+        static const int ARG_NS_LEN = wxStrlen(ARG_NS);
+        if( wxStrncmp(argv[i], ARG_NS, ARG_NS_LEN) == 0 )
+        {
+            // Only eat this option if it has an argument
+            if( (i + 1) < argc )
+            {
+                argc -= 2;
+                memmove(argv + i, argv + i + 2, argc * sizeof(wxChar*));
+                // drop back one position so the next run through the loop
+                // reprocesses the argument at our current index.
+                --i;
+            }
+        }
+    }
+
     return wxAppBase::Initialize(argc, argv);
 }
 
