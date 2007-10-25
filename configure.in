@@ -7680,7 +7680,7 @@ case "${host}" in
     *-*-solaris2* )
         dnl system packages are compiled with Sun CC and so pkg-config outputs
         dnl CC-specific "-mt" flag, remove it when using gcc
-        if "$GCC" = yes; then
+        if test "$GCC" = yes; then
             CPPFLAGS=`echo $CPPFLAGS | sed 's/-mt//'`
             LIBS=`echo $LIBS | sed 's/-mt//'`
             EXTRALIBS_GUI=`echo $EXTRALIBS_GUI | sed 's/-mt//'`
