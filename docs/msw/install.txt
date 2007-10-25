@@ -22,7 +22,7 @@ Please report bugs using the SourceForge bug tracker:
 Unarchiving
 ============================================================
 
-A setup program is provided (setup.exe) to automatically copy
+A setup program is provided (wxMSW-x.x.x-setup.exe) to automatically copy
 files to a directory on your hard disk. Do not install into a
 path that contains spaces.
 
@@ -276,6 +276,10 @@ The minimum version required is 5.5 (last version supported by BC++ 5.0 was
 2.4.2), which can be downloaded for free from:
 http://www.borland.com/products/downloads/download_cbuilder.html
 
+We have found that the free Turbo Explorer and commercial BDS work fine; the 
+debugger is very good. To avoid linker errors you will need to add 
+-DSHARED=1 to the makefile line for the library
+
 The version 5.6 included in Borland C++ Builder 2006 works as well after the
 following small change: please remove the test for __WINDOWS__ from line 88
 of the file BCCDIR\include\stl\_threads.h.
@@ -311,8 +315,8 @@ Doubleclick / open samples\minimal\borland.bdsproj. The current version
 is to be used with a dynamic build of wxWidgets-made by running
 make -f Makefile.bcc -DBUILD=debug -DSHARED=1
 in wxWidgets\build\msw. You also need the wxWidgets\lib\bcc_dll
-directory in your PATH. The debugger tracks your source and aslo
-travces into the wxWidgets sources.
+directory in your PATH. The debugger tracks your source and also
+traces into the wxWidgets sources.
 
 To use this to debug other samples, copy the borland_ide.cpp
 and borland.bdsproj files, then replace all occurences of
