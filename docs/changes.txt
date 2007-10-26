@@ -87,6 +87,16 @@ Major new features in 2.8 release
   wxDirPickerCtrl, wxFilePickerCtrl, wxFontPickerCtrl, wxCollapsiblePane,
   wxSearchCtrl, wxAboutBox, wxTreebook, tar streams.
 
+
+2.8.7
+-----
+
+wxGTK:
+
+- Added gtk.window.force-background-colour wxSystemOptions option to work around
+  a background colour bug in the gtk-qt theme under KDE.
+
+
 2.8.6
 -----
 
