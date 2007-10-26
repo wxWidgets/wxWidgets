@@ -136,10 +136,6 @@ __DLLFLAG_p = -DWXUSINGDLL
 __WXLIB_NET_p = \
 	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
 !endif
-!if "$(MONOLITHIC)" == "0" && "$(USE_ODBC)" == "1"
-__WXLIB_ODBC_p = \
-	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_odbc.lib
-!endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_BASE_p = \
 	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
@@ -189,7 +185,7 @@ clean:
 
 $(OBJS)\console.exe: $(CONSOLE_OBJECTS)
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap @&&|
-	c0x32.obj $(CONSOLE_OBJECTS),$@,, $(__WXLIB_NET_p)  $(__WXLIB_ODBC_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32$(__THREADSFLAG_5)$(__RUNTIME_LIBS_8).lib,,
+	c0x32.obj $(CONSOLE_OBJECTS),$@,, $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG_5)$(__RUNTIME_LIBS_8).lib,,
 |
 
 data: 

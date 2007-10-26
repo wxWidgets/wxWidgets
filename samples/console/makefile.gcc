@@ -125,12 +125,6 @@ __WXLIB_NET_p = \
 	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net
 endif
 ifeq ($(MONOLITHIC),0)
-ifeq ($(USE_ODBC),1)
-__WXLIB_ODBC_p = \
-	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_odbc
-endif
-endif
-ifeq ($(MONOLITHIC),0)
 __WXLIB_BASE_p = \
 	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)
 endif
@@ -182,7 +176,7 @@ clean:
 	-if exist $(OBJS)\console.exe del $(OBJS)\console.exe
 
 $(OBJS)\console.exe: $(CONSOLE_OBJECTS)
-	$(CXX) -o $@ $(CONSOLE_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)   $(__WXLIB_NET_p)  $(__WXLIB_ODBC_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
+	$(CXX) -o $@ $(CONSOLE_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)   $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
