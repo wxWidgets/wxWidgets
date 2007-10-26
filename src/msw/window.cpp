@@ -1516,7 +1516,29 @@ void wxWindowMSW::Freeze()
     if ( !m_frozenness++ )
     {
         if ( IsShown() )
-            SendSetRedraw(GetHwnd(), false);
+        {
+            if ( IsTopLevel() )
+            {
+                // If this is a TLW, then freeze it's non-TLW children
+                // instead.  This is needed because on Windows a frozen TLW
+                // lets window paint and mouse events pass through to other
+                // Windows below this one in z-order.
+                for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+                      node;
+                      node = node->GetNext() )
+                {
+                    wxWindow *child = node->GetData();
+                    if ( child->IsTopLevel() )
+                        continue;
+                    else
+                        child->Freeze();
+                }
+            }
+            else // This is not a TLW, so just freeze it.
+            {
+                SendSetRedraw(GetHwnd(), false);
+            }
+        }
     }
 }
 
@@ -1528,8 +1550,26 @@ void wxWindowMSW::Thaw()
     {
         if ( IsShown() )
         {
-            SendSetRedraw(GetHwnd(), true);
-
+            if ( IsTopLevel() )
+            {
+                // If this is a TLW, then Thaw it's non-TLW children
+                // instead.  See Freeze.
+                for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+                      node;
+                      node = node->GetNext() )
+                {
+                    wxWindow *child = node->GetData();
+                    if ( child->IsTopLevel() )
+                        continue;
+                    else
+                        child->Thaw();
+                }
+            }
+            else // This is not a TLW, so just thaw it.
+            {
+                SendSetRedraw(GetHwnd(), true);
+            }
+            
             // we need to refresh everything or otherwise the invalidated area
             // is not going to be repainted
             Refresh();
