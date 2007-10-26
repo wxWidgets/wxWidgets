@@ -1691,14 +1691,6 @@ SOURCE=..\..\include\wx\ipcbase.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\isql.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\isqlext.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\link.h
 # End Source File
 # Begin Source File

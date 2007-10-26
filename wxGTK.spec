@@ -264,8 +264,6 @@ wx/iosfwrap.h
 wx/ioswrap.h
 wx/ipc.h
 wx/ipcbase.h
-wx/isql.h
-wx/isqlext.h
 wx/link.h
 wx/list.h
 wx/listimpl.cpp
