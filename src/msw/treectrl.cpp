@@ -2859,17 +2859,40 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             break;
 
         case TVN_ITEMEXPANDED:
-            // the item is not refreshed properly after expansion when it has
-            // an image depending on the expanded/collapsed state - bug in
-            // comctl32.dll or our code?
             {
                 NM_TREEVIEW *tv = (NM_TREEVIEW *)lParam;
-                wxTreeItemId id(tv->itemNew.hItem);
+                const wxTreeItemId id(tv->itemNew.hItem);
 
-                int image = GetItemImage(id, wxTreeItemIcon_Expanded);
-                if ( image != -1 )
+                if ( tv->action == TVE_COLLAPSE )
                 {
-                    RefreshItem(id);
+                    if ( wxApp::GetComCtl32Version() >= 600 )
+                    {
+                        // for some reason the item selection rectangle depends
+                        // on whether it is expanded or collapsed (at least
+                        // with comctl32.dll v6): it is wider (by 3 pixels) in
+                        // the expanded state, so when the item collapses and
+                        // then is deselected the rightmost 3 pixels of the
+                        // previously drawn selection are left on the screen
+                        //
+                        // it's not clear if it's a bug in comctl32.dll or in
+                        // our code (because it does not happen in Explorer but
+                        // OTOH we don't do anything which could result in this
+                        // AFAICS) but we do need to work around it to avoid
+                        // ugly artifacts
+                        RefreshItem(id);
+                    }
+                }
+                else // expand
+                {
+                    // the item is also not refreshed properly after expansion when
+                    // it has an image depending on the expanded/collapsed state:
+                    // again, it's not clear if the bug is in comctl32.dll or our
+                    // code...
+                    int image = GetItemImage(id, wxTreeItemIcon_Expanded);
+                    if ( image != -1 )
+                    {
+                        RefreshItem(id);
+                    }
                 }
             }
             break;
