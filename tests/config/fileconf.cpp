@@ -79,6 +79,7 @@ private:
         CPPUNIT_TEST( CreateSubgroupAndEntries );
         CPPUNIT_TEST( DeleteLastGroup );
         CPPUNIT_TEST( DeleteAndRecreateGroup );
+        CPPUNIT_TEST( AddToExistingRoot );
     CPPUNIT_TEST_SUITE_END();
 
     void Path();
@@ -99,6 +100,8 @@ private:
     void CreateSubgroupAndEntries();
     void DeleteLastGroup();
     void DeleteAndRecreateGroup();
+    void AddToExistingRoot();
+
 
     static wxString ChangePath(wxFileConfig& fc, const wxChar *path)
     {
@@ -605,6 +608,24 @@ void FileConfigTestCase::DeleteAndRecreateGroup()
                          _T("[Second]\n")
                          _T("Value2=New\n"),
                          fc );
+}
+
+void FileConfigTestCase::AddToExistingRoot()
+{
+    static const wxChar *confInitial =
+        _T("[Group]\n")
+        _T("value1=foo\n");
+
+    wxStringInputStream sis(confInitial);
+    wxFileConfig fc(sis);
+
+    fc.Write(_T("/value1"), _T("bar"));
+    wxVERIFY_FILECONFIG(
+        _T("value1=bar\n")
+        _T("[Group]\n")
+        _T("value1=foo\n"),
+        fc
+    );
 }
 
 #endif // wxUSE_FILECONFIG
