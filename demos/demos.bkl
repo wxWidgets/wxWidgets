@@ -2,7 +2,7 @@
 <makefile>
 
     <include file="../build/bakefiles/config.bkl"/>
-    
+
     <template id="sub">
         <dir>$(id)</dir>
         <installable>no</installable>
@@ -10,7 +10,6 @@
     </template>
 
     <subproject id="bombs" template="sub"/>
-    <subproject id="dbbrowse" template="sub"/>
     <subproject id="forty" template="sub"/>
     <subproject id="fractal" template="sub"/>
     <subproject id="life" template="sub"/>
