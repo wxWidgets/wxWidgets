@@ -38,7 +38,7 @@ quality, e.g. the Terminal font in small sizes is not and this option may be
 used if wider fonts selection is more important than higher quality.}
 \end{twocollist}
 
-\wxheading{GTK}
+\wxheading{GTK+}
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
@@ -51,6 +51,8 @@ transparency be always available (setting it can still fail, of course) and
 setting it to $0$ makes it always unavailable.}
 \twocolitem{gtk.desktop}{This option can be set to override the default desktop
 environment determination. Supported values are \texttt{GNOME} and \texttt{KDE}.}
+\twocolitem{gtk.window.force-background-colour}{If 1, the backgrounds of windows with the wxBG\_STYLE\_COLOUR background style are cleared forcibly instead
+of relying on the underlying GTK+ window colour. This works around a display problem when running applications under KDE with the gtk-qt theme installed (0.6 and below).}
 \end{twocollist}
 
 \wxheading{Mac}
