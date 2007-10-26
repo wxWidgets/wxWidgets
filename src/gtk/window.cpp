@@ -31,6 +31,7 @@
 #include "wx/tooltip.h"
 #include "wx/caret.h"
 #include "wx/fontutil.h"
+#include "wx/sysopt.h"
 
 #ifdef __WXDEBUG__
     #include "wx/thread.h"
@@ -3723,6 +3724,14 @@ void wxWindowGTK::GtkSendPaintEvents()
     {
         wxWindowDC dc( (wxWindow*)this );
         dc.SetClippingRegion( m_updateRegion );
+
+        // Work around gtk-qt <= 0.60 bug whereby the window colour
+        // remains grey
+        if (GetBackgroundStyle() == wxBG_STYLE_COLOUR && GetBackgroundColour().Ok() && wxSystemOptions::GetOptionInt(wxT("gtk.window.force-background-colour")) == 1)
+        {
+            dc.SetBackground(wxBrush(GetBackgroundColour()));
+            dc.Clear();
+        }
 
         wxEraseEvent erase_event( GetId(), &dc );
         erase_event.SetEventObject( this );
