@@ -1312,9 +1312,6 @@ void wxFileConfig::LineListRemove(wxFileConfigLineList *pLine)
     else
         pNext->SetPrev(pPrev);
 
-    if ( m_pRootGroup->GetGroupLine() == pLine )
-        m_pRootGroup->SetLine(m_linesHead);
-
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        head: %s"),
                 ((m_linesHead) ? (const wxChar*)m_linesHead->Text().c_str()
