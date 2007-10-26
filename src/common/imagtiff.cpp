@@ -28,6 +28,9 @@
 
 extern "C"
 {
+#ifdef __DMC__
+    #include "tif_config.h"
+#endif    
     #include "tiff.h"
     #include "tiffio.h"
 }
