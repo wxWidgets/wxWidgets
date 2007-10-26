@@ -199,7 +199,6 @@
         <compile/>
         <compile-samples/>
         <compile-utils/>
-        <compile-contrib/>
         <compile-tests/>
 
         <run-tests/>
