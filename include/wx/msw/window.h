@@ -60,7 +60,6 @@ public:
     virtual void Lower();
 
     virtual bool Show( bool show = true );
-    virtual void DoEnable( bool enable );
 
     virtual void SetFocus();
     virtual void SetFocusFromKbd();
@@ -433,14 +432,6 @@ public:
     // check if a native double-buffering applies for this window
     virtual bool IsDoubleBuffered() const;
 
-    // this allows you to implement standard control borders without
-    // repeating the code in different classes that are not derived from
-    // wxControl
-    virtual wxBorder GetDefaultBorderForControl() const;
-
-    // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const;
-
     // synthesize a wxEVT_LEAVE_WINDOW event and set m_mouseInWindow to false
     void GenerateMouseLeave();
 
@@ -449,6 +440,13 @@ public:
     virtual void OnInternalIdle();
 
 protected:
+    // this allows you to implement standard control borders without
+    // repeating the code in different classes that are not derived from
+    // wxControl
+    virtual wxBorder GetDefaultBorderForControl() const;
+
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const;
 
 #if wxUSE_MENUS_NATIVE
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
@@ -481,6 +479,8 @@ protected:
 
     virtual void DoCaptureMouse();
     virtual void DoReleaseMouse();
+
+    virtual void DoEnable(bool enable);
 
     // this simply moves/resizes the given HWND which is supposed to be our
     // sibling (this is useful for controls which are composite at MSW level

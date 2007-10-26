@@ -32,10 +32,10 @@ public:
 #if wxUSE_STREAMS
     virtual bool LoadFile(wxImage *image, wxInputStream& stream, bool verbose=true, int index=-1);
     virtual bool SaveFile(wxImage *image, wxOutputStream& stream, bool verbose=true);
+protected:
     virtual bool DoCanRead(wxInputStream& stream);
 #endif
 
-private:
     DECLARE_DYNAMIC_CLASS(wxIFFHandler)
 };
 

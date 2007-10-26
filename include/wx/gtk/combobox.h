@@ -127,6 +127,8 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
+    virtual bool IsSorted() const { return HasFlag(wxCB_SORT); }
+
 protected:
     // From wxWindowGTK:
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
@@ -138,13 +140,17 @@ protected:
                               void **clientData, wxClientDataType type);
     virtual void DoSetItemClientData(unsigned int n, void* clientData);
     virtual void* DoGetItemClientData(unsigned int n) const;
-    virtual bool IsSorted() const { return HasFlag(wxCB_SORT); }
     virtual void DoClear();
     virtual void DoDeleteOneItem(unsigned int n);
 
     // From wxControl:
     virtual wxSize DoGetBestSize() const;
 
+    // Widgets that use the style->base colour for the BG colour should
+    // override this and return true.
+    virtual bool UseGTKStyleBase() const { return true; }
+
+private:
     // From wxTextEntry:
     virtual const wxWindow *GetEditableWindow() const { return this; }
     virtual GtkEditable *GetEditable() const;
@@ -156,11 +162,6 @@ protected:
             DisableEvents();
     }
 
-    // Widgets that use the style->base colour for the BG colour should
-    // override this and return true.
-    virtual bool UseGTKStyleBase() const { return true; }
-
-private:
     // this array is only used for controls with wxCB_SORT style, so only
     // allocate it if it's needed (hence using pointer)
     wxSortedArrayString *m_strings;

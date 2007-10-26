@@ -128,11 +128,6 @@ public:
 
     // implementation only from now on
 
-    // wxGTK-specific: called recursively by Enable,
-    // to give widgets an oppprtunity to correct their colours after they
-    // have been changed by Enable
-    virtual void OnEnabled( bool enable ) ;
-
     // tell the control to ignore next text changed signal
     void IgnoreNextTextUpdate(int n = 1) { m_countUpdatesToIgnore = n; }
 
@@ -157,15 +152,15 @@ public:
     bool IsFrozen() const { return m_freezeCount > 0; }
 
 protected:
+    // wxGTK-specific: called recursively by Enable,
+    // to give widgets an oppprtunity to correct their colours after they
+    // have been changed by Enable
+    virtual void OnEnabled(bool enable);
+
     // overridden wxWindow virtual methods
     virtual wxSize DoGetBestSize() const;
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
-
-    // overridden wxTextEntry virtual methods
-    virtual const wxWindow *GetEditableWindow() const { return this; }
-    virtual GtkEditable *GetEditable() const;
-    virtual void EnableTextChangedEvents(bool enable);
 
     // common part of all ctors
     void Init();
@@ -185,6 +180,11 @@ protected:
     void GTKSetJustification();
 
 private:
+    // overridden wxTextEntry virtual methods
+    virtual const wxWindow *GetEditableWindow() const { return this; }
+    virtual GtkEditable *GetEditable() const;
+    virtual void EnableTextChangedEvents(bool enable);
+
     // change the font for everything in this control
     void ChangeFontGlobally();
 

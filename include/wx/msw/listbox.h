@@ -77,10 +77,6 @@ public:
 
     virtual ~wxListBox();
 
-    // implement base class pure virtuals
-    virtual void DoClear();
-    virtual void DoDeleteOneItem(unsigned int n);
-
     virtual unsigned int GetCount() const;
     virtual wxString GetString(unsigned int n) const;
     virtual void SetString(unsigned int n, const wxString& s);
@@ -137,6 +133,9 @@ public:
     virtual bool CanApplyThemeBorder() const { return false; }
 
 protected:
+    virtual void DoClear();
+    virtual void DoDeleteOneItem(unsigned int n);
+
     virtual void DoSetSelection(int n, bool select);
 
     virtual int DoInsertItems(const wxArrayStringsAdapter& items,

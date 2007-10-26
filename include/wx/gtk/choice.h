@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKCHOICEH__
-#define __GTKCHOICEH__
+#ifndef _WX_GTK_CHOICE_H_
+#define _WX_GTK_CHOICE_H_
 
 class WXDLLIMPEXP_FWD_BASE wxSortedArrayString;
 class WXDLLIMPEXP_FWD_BASE wxArrayString;
@@ -61,10 +61,6 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr );
 
-    // implement base class pure virtuals
-    void DoDeleteOneItem(unsigned int n);
-    void DoClear();
-
     int GetSelection() const;
     void SetSelection(int n);
 
@@ -77,6 +73,9 @@ public:
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
 protected:
+    void DoDeleteOneItem(unsigned int n);
+    void DoClear();
+
     wxArrayPtrVoid m_clientData; // contains the client data for the items
 
     virtual wxSize DoGetBestSize() const;
@@ -108,4 +107,4 @@ private:
 };
 
 
-#endif // __GTKCHOICEH__
+#endif // _WX_GTK_CHOICE_H_

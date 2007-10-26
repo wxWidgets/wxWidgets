@@ -56,7 +56,6 @@ protected:
     virtual void DoGetSize( int *width, int *height ) const;
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const;
 
-public:    
     // overridden from wxMemoryImplDCBase
     virtual void DoSelect(const wxBitmap& bitmap);
     virtual const wxBitmap& DoGetSelectedBitmap() const;

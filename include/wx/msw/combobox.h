@@ -109,16 +109,12 @@ public:
     void OnUpdateDelete(wxUpdateUIEvent& event);
     void OnUpdateSelectAll(wxUpdateUIEvent& event);
 
-protected:
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
+protected:
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip(wxToolTip *tip);
 #endif
-
-    // this is the overridden wxTextEntry method which should only be called
-    // when we do have an edit control so it asserts if this is not the case
-    virtual WXHWND GetEditHWND() const;
 
     // this is the implementation of GetEditHWND() which can also be used when
     // we don't have the edit control, it simply returns NULL then
@@ -130,6 +126,10 @@ protected:
     WXHWND GetEditHWNDIfAvailable() const;
 
 private:
+    // this is the overridden wxTextEntry method which should only be called
+    // when we do have an edit control so it asserts if this is not the case
+    virtual WXHWND GetEditHWND() const;
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxComboBox)
     DECLARE_EVENT_TABLE()
 };

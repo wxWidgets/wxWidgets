@@ -66,9 +66,6 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxChoiceNameStr);
 
-    virtual void DoDeleteOneItem(unsigned int n);
-    virtual void DoClear();
-
     virtual unsigned int GetCount() const;
     virtual int GetSelection() const;
     virtual int GetCurrentSelection() const;
@@ -91,6 +88,9 @@ public:
 protected:
     // common part of all ctors
     void Init() { m_lastAcceptedSelection = wxID_NONE; }
+
+    virtual void DoDeleteOneItem(unsigned int n);
+    virtual void DoClear();
 
     virtual int DoInsertItems(const wxArrayStringsAdapter& items,
                               unsigned int pos,

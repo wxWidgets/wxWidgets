@@ -71,8 +71,6 @@ public:
     // implement base class pure virtuals
     // ----------------------------------
 
-    virtual bool DoLoadFile(const wxString& file, int fileType);
-
     virtual bool IsModified() const;
     virtual void MarkDirty();
     virtual void DiscardEdits();
@@ -187,6 +185,8 @@ protected:
     // common part of all ctors
     void Init();
 
+    virtual bool DoLoadFile(const wxString& file, int fileType);
+
     // creates the control of appropriate class (plain or rich edit) with the
     // styles corresponding to m_windowStyle
     //
@@ -197,10 +197,6 @@ protected:
                        const wxSize& size);
 
     virtual void DoSetValue(const wxString &value, int flags = 0);
-
-    // implement wxTextEntry pure virtual: it implements all the operations for
-    // the simple EDIT controls
-    virtual WXHWND GetEditHWND() const { return m_hWnd; }
 
     // return true if this control has a user-set limit on amount of text (i.e.
     // the limit is due to a previous call to SetMaxLength() and not built in)
@@ -250,12 +246,16 @@ protected:
     // text ourselves: we want this to be exactly 1
     int m_updatesCount;
 
+private:
     virtual void EnableTextChangedEvents(bool enable)
     {
         m_updatesCount = enable ? -1 : -2;
     }
 
-private:
+    // implement wxTextEntry pure virtual: it implements all the operations for
+    // the simple EDIT controls
+    virtual WXHWND GetEditHWND() const { return m_hWnd; }
+
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxTextCtrl)
 

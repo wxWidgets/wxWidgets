@@ -64,10 +64,6 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxListBoxNameStr);
 
-    // implement base class pure virtuals
-    virtual void DoClear();
-    virtual void DoDeleteOneItem(unsigned int n);
-
     virtual unsigned int GetCount() const;
     virtual wxString GetString(unsigned int n) const;
     virtual void SetString(unsigned int n, const wxString& s);
@@ -102,6 +98,8 @@ public:
     void GtkSetSelection(int n, const bool select, const bool blockEvent);
 
 protected:
+    virtual void DoClear();
+    virtual void DoDeleteOneItem(unsigned int n);
     virtual wxSize DoGetBestSize() const;
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
