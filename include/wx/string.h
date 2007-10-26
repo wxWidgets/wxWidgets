@@ -1876,7 +1876,7 @@ public:
   wxString& append(const wxString& str, size_t pos, size_t n)
   {
     size_t from, len;
-    PosLenToImpl(pos, n, &from, &len);
+    str.PosLenToImpl(pos, n, &from, &len);
     m_impl.append(str.m_impl, from, len);
     return *this;
   }
@@ -1943,7 +1943,7 @@ public:
   wxString& assign(const wxString& str, size_t pos, size_t n)
   {
     size_t from, len;
-    PosLenToImpl(pos, n, &from, &len);
+    str.PosLenToImpl(pos, n, &from, &len);
     m_impl.assign(str.m_impl, from, len);
     return *this;
   }
@@ -2039,7 +2039,7 @@ public:
   wxString& insert(size_t nPos, const wxString& str, size_t nStart, size_t n)
   {
     size_t from, len;
-    PosLenToImpl(nStart, n, &from, &len);
+    str.PosLenToImpl(nStart, n, &from, &len);
     m_impl.insert(PosToImpl(nPos), str.m_impl, from, len);
     return *this;
   }
@@ -2169,7 +2169,7 @@ public:
     PosLenToImpl(nStart, nLen, &from, &len);
 
     size_t from2, len2;
-    PosLenToImpl(nStart2, nLen2, &from2, &len2);
+    str.PosLenToImpl(nStart2, nLen2, &from2, &len2);
 
     m_impl.replace(from, len, str.m_impl, from2, len2);
     return *this;
