@@ -42,6 +42,7 @@
         powerpc-apple-darwin8
         i686-apple-darwin8
         i386-mingw32    (with cppunit installed under $HOME/opt/mingw345)
+        i686-pc-cygwin  (with cppunit, x11, motif and gtk)
 
     Please limit the number of quick builds to one unix, one Windows and one
     Mac per branch. And please don't load up all the cpus of a remote machine
@@ -100,7 +101,7 @@
 -->
 
 <build>
-    <name>OSX PowerPC wxMac Trunk</name>
+    <name>OSX 10.4 PowerPC wxMac Trunk</name>
     <sandbox>td179.testdrive.hp.com</sandbox>
     <builddir>/tmp/wx/td_mac</builddir>
     <scheduler>trunk_quick</scheduler>
@@ -119,7 +120,7 @@
 </build>
 
 <build>
-    <name>OSX Intel wxMac Stable</name>
+    <name>OSX 10.4 Intel wxMac Stable</name>
     <sandbox>td186.testdrive.hp.com</sandbox>
     <builddir>/tmp/wx/td_mac_stable</builddir>
     <scheduler>stable_quick</scheduler>
@@ -182,6 +183,28 @@
 <!-- 
     Daily builds
 -->
+
+<build>
+    <name>FreeBSD x86 wxX11 Trunk</name>
+    <sandbox>td152.testdrive.hp.com</sandbox>
+    <builddir>/tmp/wx/td_freebsd</builddir>
+    <scheduler>daily_6am</scheduler>
+
+    <steps>
+        <checkout/>
+
+        <setup/>
+        <configure options="--with-x11 --disable-unicode"/>
+
+        <compile/>
+        <compile-samples/>
+        <compile-utils/>
+        <compile-contrib/>
+        <compile-tests/>
+
+        <run-tests/>
+    </steps>
+</build>
 
 <build>
     <name>FreeBSD x86 wxX11 Stable</name>
