@@ -440,9 +440,6 @@ public:
 
     static wxAuiManager* GetManager(wxWindow* window);
 
-#ifdef SWIG
-    %disownarg( wxAuiDockArt* art_provider );
-#endif
     void SetArtProvider(wxAuiDockArt* art_provider);
     wxAuiDockArt* GetArtProvider() const;
 
