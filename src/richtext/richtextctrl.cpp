@@ -3113,7 +3113,7 @@ void wxRichTextCtrl::ClearAvailableFontNames()
     sm_availableFontNames.Clear();
 }
 
-void wxRichTextCtrl::OnSysColourChanged(wxSysColourChangedEvent& event)
+void wxRichTextCtrl::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 {
     //wxLogDebug(wxT("wxRichTextCtrl::OnSysColourChanged"));
 
