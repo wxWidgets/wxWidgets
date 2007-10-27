@@ -959,7 +959,8 @@ void wxGStreamerMediaEventHandler::OnMediaFinish(wxMediaEvent& WXUNUSED(event))
 // Sets m_playbin to NULL signifying we havn't loaded anything yet
 //-----------------------------------------------------------------------------
 wxGStreamerMediaBackend::wxGStreamerMediaBackend()
-    : m_playbin(NULL)
+    : m_playbin(NULL),
+      m_eventHandler(NULL)
 {
 }
 
@@ -1084,12 +1085,12 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     // Create our playbin object
     m_playbin = gst_element_factory_make ("playbin", "play");
     if (!GST_IS_ELEMENT(m_playbin))
-        {
+    {
         if(G_IS_OBJECT(m_playbin))
             g_object_unref(m_playbin);
         wxLogSysError(wxT("Got an invalid playbin"));
         return false;
-        }
+    }
 
 #if GST_VERSION_MAJOR == 0 && GST_VERSION_MINOR < 10
     // Connect the glib events/callbacks we want to our playbin
@@ -1125,7 +1126,7 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
                 if( !TryAudioSink(audiosink) )
                 {
                     wxLogSysError(wxT("Could not find a valid audiosink"));
-    return false;
+                    return false;
                 }
             }
         }
@@ -1150,7 +1151,7 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
                     g_object_unref(audiosink);
                     wxLogSysError(wxT("Could not find a suitable video sink"));
                     return false;
-    }
+                }
             }
         }
     }
