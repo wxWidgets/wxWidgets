@@ -22,6 +22,8 @@
 
 #ifndef WX_PRECOMP
   #include "wx/timer.h"
+  #include "wx/settings.h"
+  #include "wx/dcclient.h"
 #endif
 
 #include "wx/icon.h"
@@ -411,6 +413,10 @@ void wxDataViewCustomRenderer::SetDC(wxDC* newDCPtr)
   this->m_DCPtr = newDCPtr;
 } /* wxDataViewCustomRenderer::SetDC(wxDC*) */
 
+WXDataBrowserPropertyType wxDataViewCustomRenderer::GetPropertyType() const
+{
+    return WXDataBrowserPropertyType(kDataBrowserCustomType);
+}
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewCustomRenderer, wxDataViewRenderer)
 
@@ -435,6 +441,11 @@ bool wxDataViewTextRenderer::Render(void)
   else
     return false;
 } /* wxDataViewTextRenderer::Render(void) */
+
+WXDataBrowserPropertyType wxDataViewTextRenderer::GetPropertyType() const
+{
+    return WXDataBrowserPropertyType(kDataBrowserTextType);
+}
 
 IMPLEMENT_CLASS(wxDataViewTextRenderer,wxDataViewRenderer)
 
@@ -462,6 +473,11 @@ bool wxDataViewBitmapRenderer::Render(void)
   else
     return false;
 } /* wxDataViewBitmapRenderer::Render(void) */
+
+WXDataBrowserPropertyType wxDataViewBitmapRenderer::GetPropertyType() const
+{
+    return WXDataBrowserPropertyType(kDataBrowserIconType);
+}
 
 IMPLEMENT_CLASS(wxDataViewBitmapRenderer,wxDataViewRenderer)
 
@@ -493,6 +509,11 @@ bool wxDataViewIconTextRenderer::Render(void)
     return false;
 } /* wxDataViewIconTextRenderer::Render(void) */
 
+WXDataBrowserPropertyType wxDataViewIconTextRenderer::GetPropertyType() const
+{
+    return WXDataBrowserPropertyType(kDataBrowserIconAndTextType);
+}
+
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewIconTextRenderer,wxDataViewRenderer)
 
 
@@ -512,6 +533,11 @@ bool wxDataViewToggleRenderer::Render(void)
   else
     return false;
 } /* wxDataViewToggleRenderer::Render(void) */
+
+WXDataBrowserPropertyType wxDataViewToggleRenderer::GetPropertyType() const
+{
+    return WXDataBrowserPropertyType(kDataBrowserCheckboxType);
+}
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewToggleRenderer,wxDataViewRenderer)
 
@@ -534,6 +560,11 @@ bool wxDataViewProgressRenderer::Render(void)
     return false;
 } /* wxDataViewProgressRenderer::Render(void) */
 
+WXDataBrowserPropertyType wxDataViewProgressRenderer::GetPropertyType() const
+{
+    return WXDataBrowserPropertyType(kDataBrowserProgressBarType);
+}
+
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewProgressRenderer,wxDataViewRenderer)
 
 // ---------------------------------------------------------
@@ -552,6 +583,11 @@ bool wxDataViewDateRenderer::Render(void)
   else
     return false;
 } /* wxDataViewDateRenderer::Render(void) */
+
+WXDataBrowserPropertyType wxDataViewDateRenderer::GetPropertyType() const
+{
+    return WXDataBrowserPropertyType(kDataBrowserDateTimeType);
+}
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewDateRenderer,wxDataViewRenderer)
 
@@ -861,7 +897,7 @@ bool wxDataViewCtrl::AppendColumn(wxDataViewColumn* dataViewColumnPtr)
    // initialize column description:
     dataViewColumnPtr->SetPropertyID(NewPropertyID);
     columnDescription.propertyDesc.propertyID = NewPropertyID;
-    columnDescription.propertyDesc.propertyType = dataViewColumnPtr->GetRenderer()->GetPropertyType();
+    columnDescription.propertyDesc.propertyType = DataBrowserPropertyType(dataViewColumnPtr->GetRenderer()->GetPropertyType());
     columnDescription.propertyDesc.propertyFlags = kDataBrowserListViewSelectionColumn; // make the column selectable
     if (dataViewColumnPtr->IsSortable())
       columnDescription.propertyDesc.propertyFlags |= kDataBrowserListViewSortableColumn;
@@ -1227,7 +1263,7 @@ void wxDataViewCtrl::AddChildrenLevel(wxDataViewItem const& parentItem)
 #endif
 } /* wxDataViewCtrl::AddChildrenLevel(wxDataViewItem const&) */
 
-wxDataViewColumn* wxDataViewCtrl::GetColumnPtr(DataBrowserPropertyID propertyID) const
+wxDataViewColumn* wxDataViewCtrl::GetColumnPtr(WXDataBrowserPropertyID propertyID) const
 {
  // variable definition:
   ColumnPointerHashMapType::const_iterator Result(this->m_ColumnPointers.find(propertyID));

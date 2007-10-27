@@ -7,23 +7,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __MACCARBONDATAVIEWCTRL_H__
-#define __MACCARBONDATAVIEWCTRL_H__
+#ifndef _WX_MACCARBONDATAVIEWCTRL_H_
+#define _WX_MACCARBONDATAVIEWCTRL_H_
 
-#include <Carbon/carbon.h>
-
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/list.h"
-#include "wx/control.h"
-#include "wx/scrolwin.h"
-#include "wx/icon.h"
-
-// ---------------------------------------------------------
-// classes
-// ---------------------------------------------------------
-
-class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
+typedef void* DataBrowserItemDataRef;
+typedef void* WXDataBrowserPropertyType;
+typedef wxUint32 WXDataBrowserPropertyID;
 
 // ---------------------------------------------------------
 // wxDataViewRenderer
@@ -76,7 +65,7 @@ public:
     return this->m_value;
   }
 
-  virtual DataBrowserPropertyType GetPropertyType(void) const = 0;
+  virtual WXDataBrowserPropertyType GetPropertyType() const = 0;
 
   virtual bool Render(void) = 0; // a call to the appropriate data browser function filling the data reference with the stored datum;
                                  // returns 'true' if the data value could be rendered, 'false' otherwise
@@ -197,10 +186,7 @@ public:
   virtual bool Render(void); // declared in wxDataViewRenderer but will not be used here, therefore calling this function will
                              // return 'true' without having done anything
 
-  virtual DataBrowserPropertyType GetPropertyType(void) const
-  {
-    return kDataBrowserCustomType;
-  }
+  virtual WXDataBrowserPropertyType GetPropertyType() const;
 
   void SetDC(wxDC* newDCPtr); // this method takes ownership of the pointer
 
@@ -239,10 +225,7 @@ public:
 //
 // implementation
 //
-  virtual DataBrowserPropertyType GetPropertyType(void) const
-  {
-    return kDataBrowserTextType;
-  }
+  virtual WXDataBrowserPropertyType GetPropertyType() const;
 
 protected:
 private:
@@ -269,10 +252,7 @@ public:
 //
 // implementation
 //
-  virtual DataBrowserPropertyType GetPropertyType(void) const
-  {
-    return kDataBrowserIconType;
-  }
+  virtual WXDataBrowserPropertyType GetPropertyType() const;
 
 protected:
 private:
@@ -296,10 +276,7 @@ public:
 //
 // implementation
 //
-  virtual DataBrowserPropertyType GetPropertyType(void) const
-  {
-    return kDataBrowserIconAndTextType;
-  }
+  virtual WXDataBrowserPropertyType GetPropertyType() const;
   
 protected:
 private:
@@ -323,10 +300,7 @@ public:
 //
 // implementation
 //
-  virtual DataBrowserPropertyType GetPropertyType(void) const
-  {
-    return kDataBrowserCheckboxType;
-  }
+  virtual WXDataBrowserPropertyType GetPropertyType() const;
 
 protected:
 private:
@@ -351,10 +325,7 @@ public:
 //
 // implementation
 //
-  virtual DataBrowserPropertyType GetPropertyType(void) const
-  {
-    return kDataBrowserProgressBarType;
-  }
+  virtual WXDataBrowserPropertyType GetPropertyType() const;
 
 protected:
 private:
@@ -378,10 +349,7 @@ public:
 //
 // implementation
 //
-  virtual DataBrowserPropertyType GetPropertyType(void) const
-  {
-    return kDataBrowserDateTimeType;
-  }
+  virtual WXDataBrowserPropertyType GetPropertyType() const;
 
 protected:
 private:
@@ -465,12 +433,12 @@ public:
 //
 // implementation
 //
-  DataBrowserPropertyID GetPropertyID(void) const
+  WXDataBrowserPropertyID GetPropertyID() const
   {
     return this->m_propertyID;
   }
   
-  void SetPropertyID(DataBrowserPropertyID newID)
+  void SetPropertyID(WXDataBrowserPropertyID newID)
   {
     this->m_propertyID = newID;
   }
@@ -486,7 +454,7 @@ private:
 //
   bool m_ascending; // sorting order
 
-  DataBrowserPropertyID m_propertyID; // each column is identified by its unique property ID (NOT by the column index)
+  WXDataBrowserPropertyID m_propertyID; // each column is identified by its unique property ID (NOT by the column index)
   
   int m_flags;    // flags for the column
   int m_maxWidth; // maximum width for the column
@@ -569,7 +537,7 @@ public:
 
  // returns a pointer to a column;
  // in case the pointer cannot be found NULL is returned:
-  wxDataViewColumn* GetColumnPtr(DataBrowserPropertyID propertyID) const;
+  wxDataViewColumn* GetColumnPtr(WXDataBrowserPropertyID propertyID) const;
 
  // checks if currently a delete process is running:
   bool IsDeleting(void) const
@@ -606,7 +574,7 @@ protected:
 
 private:
  // type definitions:
-  WX_DECLARE_HASH_MAP(DataBrowserPropertyID,wxDataViewColumn*,wxIntegerHash,wxIntegerEqual,ColumnPointerHashMapType);
+  WX_DECLARE_HASH_MAP(WXDataBrowserPropertyID,wxDataViewColumn*,wxIntegerHash,wxIntegerEqual,ColumnPointerHashMapType);
 
  // initializing of local variables:
   void Init(void);
@@ -630,4 +598,4 @@ private:
 };
 
 
-#endif // __MACDATAVIEWCTRL_H__
+#endif // _WX_MACCARBONDATAVIEWCTRL_H_
