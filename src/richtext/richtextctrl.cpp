@@ -76,6 +76,7 @@ BEGIN_EVENT_TABLE( wxRichTextCtrl, wxControl )
     EVT_KILL_FOCUS(wxRichTextCtrl::OnKillFocus)
     EVT_MOUSE_CAPTURE_LOST(wxRichTextCtrl::OnCaptureLost)
     EVT_CONTEXT_MENU(wxRichTextCtrl::OnContextMenu)
+    EVT_SYS_COLOUR_CHANGED(wxRichTextCtrl::OnSysColourChanged)
 
     EVT_MENU(wxID_UNDO, wxRichTextCtrl::OnUndo)
     EVT_UPDATE_UI(wxID_UNDO, wxRichTextCtrl::OnUpdateUndo)
@@ -506,7 +507,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
 }
 
 /// Right-click
-void wxRichTextCtrl::OnRightClick(wxMouseEvent& WXUNUSED(event))
+void wxRichTextCtrl::OnRightClick(wxMouseEvent& event)
 {
     SetFocus();
 
@@ -516,7 +517,8 @@ void wxRichTextCtrl::OnRightClick(wxMouseEvent& WXUNUSED(event))
     cmdEvent.SetEventObject(this);
     cmdEvent.SetPosition(m_caretPosition+1);
 
-    GetEventHandler()->ProcessEvent(cmdEvent);
+    if (!GetEventHandler()->ProcessEvent(cmdEvent))
+        event.Skip();
 }
 
 /// Left-double-click
@@ -3109,6 +3111,18 @@ const wxArrayString& wxRichTextCtrl::GetAvailableFontNames()
 void wxRichTextCtrl::ClearAvailableFontNames()
 {
     sm_availableFontNames.Clear();
+}
+
+void wxRichTextCtrl::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    //wxLogDebug(wxT("wxRichTextCtrl::OnSysColourChanged"));
+
+    wxTextAttrEx basicStyle = GetBasicStyle();
+    basicStyle.SetTextColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    SetBasicStyle(basicStyle);
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+
+    Refresh();
 }
 
 #endif

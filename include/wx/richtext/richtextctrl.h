@@ -582,6 +582,7 @@ public:
     void Command(wxCommandEvent& event);
     void OnDropFiles(wxDropFilesEvent& event);
     void OnCaptureLost(wxMouseCaptureLostEvent& event);
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     void OnCut(wxCommandEvent& event);
     void OnCopy(wxCommandEvent& event);
