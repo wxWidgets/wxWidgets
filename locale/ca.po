@@ -4164,8 +4164,9 @@ msgid "Objects must have an id attribute"
 msgstr ""
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1589
 msgid "Open File"
-msgstr ""
+msgstr "Selecciona un Fitxer"
 
 #: ../src/html/helpwnd.cpp:659 ../src/html/helpwnd.cpp:1531
 msgid "Open HTML document"
@@ -4901,10 +4902,6 @@ msgstr "Seleccioneu una plantilla de document"
 #: ../src/common/docview.cpp:1786
 msgid "Select a document view"
 msgstr "Seleccioneu una vista del document"
-
-#: ../src/common/docview.cpp:1589
-msgid "Open File"
-msgstr "Selecciona un Fitxer"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy

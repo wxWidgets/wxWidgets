@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 2.9.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-13 14:22-0200\n"
+"POT-Creation-Date: 2006-10-29 14:59+0100\n"
 "PO-Revision-Date: 2007-02-13 14:36-0200\n"
 "Last-Translator: Adiel Mittmann <adiel@inf.ufsc.br>\n"
 "Language-Team:  <en@li.org>\n"
@@ -28,8 +28,8 @@ msgstr ""
 "\n"
 "Por favor, envie este relat�rio ao mantenedor do programa. Obrigado!\n"
 
-#: ../src/richtext/richtextstyledlg.cpp:202
-#: ../src/richtext/richtextstyledlg.cpp:214 ../src/palmos/utils.cpp:216
+#: ../src/palmos/utils.cpp:216 ../src/richtext/richtextstyledlg.cpp:203
+#: ../src/richtext/richtextstyledlg.cpp:215
 msgid " "
 msgstr " "
 
@@ -37,12 +37,12 @@ msgstr " "
 msgid "              Thank you and we're sorry for the inconvenience!\n"
 msgstr "              Obrigado e desculpe pelo transtorno!\n"
 
-#: ../src/common/log.cpp:246
+#: ../src/common/log.cpp:245
 #, c-format
 msgid " (error %ld: %s)"
 msgstr " (erro %ld: %s)"
 
-#: ../src/common/docview.cpp:1428
+#: ../src/common/docview.cpp:1429
 msgid " - "
 msgstr " - "
 
@@ -50,7 +50,7 @@ msgstr " - "
 msgid " Couldn't create the UnicodeConverter"
 msgstr "Imposs�vel criar o UnicodeConverter"
 
-#: ../src/html/htmprint.cpp:579 ../src/richtext/richtextprint.cpp:549
+#: ../src/html/htmprint.cpp:579 ../src/richtext/richtextprint.cpp:535
 msgid " Preview"
 msgstr " Visualizar"
 
@@ -97,22 +97,22 @@ msgstr "Envelope n� 9, 3,875\" x  8,875\""
 msgid "#define %s must be an integer."
 msgstr "#define %s deve ser um inteiro."
 
-#: ../src/common/filename.cpp:2371
+#: ../src/common/filename.cpp:2345
 #, c-format
 msgid "%.*f GB"
 msgstr "%.*f GB"
 
-#: ../src/common/filename.cpp:2369
+#: ../src/common/filename.cpp:2343
 #, c-format
 msgid "%.*f MB"
 msgstr "%.*f MB"
 
-#: ../src/common/filename.cpp:2373
+#: ../src/common/filename.cpp:2347
 #, c-format
 msgid "%.*f TB"
 msgstr "%.*f TB"
 
-#: ../src/common/filename.cpp:2367
+#: ../src/common/filename.cpp:2341
 #, c-format
 msgid "%.*f kB"
 msgstr "%.*f kB"
@@ -135,32 +135,32 @@ msgstr[1] "%ld bytes"
 msgid "%s (or %s)"
 msgstr "%s (ou %s)"
 
-#: ../src/common/filename.cpp:2365
+#: ../src/common/filename.cpp:2339
 #, c-format
 msgid "%s B"
 msgstr "%s B"
 
-#: ../src/generic/logg.cpp:265
+#: ../src/generic/logg.cpp:260
 #, c-format
 msgid "%s Error"
 msgstr "Erro do aplicativo %s"
 
-#: ../src/generic/logg.cpp:273
+#: ../src/generic/logg.cpp:268
 #, c-format
 msgid "%s Information"
 msgstr "Informa��o do aplicativo %s"
 
-#: ../src/generic/logg.cpp:269
+#: ../src/generic/logg.cpp:264
 #, c-format
 msgid "%s Warning"
 msgstr "Aviso do aplicativo %s"
 
-#: ../src/common/tarstrm.cpp:1236
+#: ../src/common/tarstrm.cpp:1235
 #, c-format
 msgid "%s did not fit the tar header for entry '%s'"
 msgstr "%s n�o coube no cabe�alho tar para a entrada '%s'"
 
-#: ../src/common/fldlgcmn.cpp:94
+#: ../src/common/fldlgcmn.cpp:93
 #, c-format
 msgid "%s files (%s)|%s"
 msgstr "Arquivos %s (%s)|%s"
@@ -199,12 +199,8 @@ msgstr "&Sobre..."
 msgid "&Actual Size"
 msgstr "&Tamanho real"
 
-#: ../src/richtext/richtextindentspage.cpp:297
-msgid "&After a paragraph:"
-msgstr "&Depois de um par�grafo:"
-
+#: ../src/richtext/richtextindentspage.cpp:135
 #: ../src/richtext/richtextliststylepage.cpp:319
-#: ../src/richtext/richtextindentspage.cpp:138
 msgid "&Alignment"
 msgstr "&Alinhamento"
 
@@ -212,7 +208,7 @@ msgstr "&Alinhamento"
 msgid "&Apply"
 msgstr "&Aplicar"
 
-#: ../src/richtext/richtextstyledlg.cpp:237
+#: ../src/richtext/richtextstyledlg.cpp:238
 msgid "&Apply Style"
 msgstr "&Aplicar Estilo"
 
@@ -228,22 +224,18 @@ msgstr "&Voltar"
 msgid "&Based on:"
 msgstr "&Baseado em:"
 
-#: ../src/richtext/richtextindentspage.cpp:285
-msgid "&Before a paragraph:"
-msgstr "&Antes de um par�grafo:"
-
 #: ../src/common/stockitem.cpp:113
 msgid "&Bold"
 msgstr "&Negrito"
 
-#: ../src/richtext/richtextliststylepage.cpp:209
 #: ../src/richtext/richtextbulletspage.cpp:155
+#: ../src/richtext/richtextliststylepage.cpp:209
 msgid "&Bullet style:"
 msgstr "&Estilo de marcador:"
 
-#: ../src/mac/carbon/fontdlg.cpp:525 ../src/common/stockitem.cpp:114
-#: ../src/generic/fontdlgg.cpp:377 ../src/generic/fontdlgg.cpp:396
-#: ../src/generic/wizard.cpp:451
+#: ../src/common/stockitem.cpp:114 ../src/generic/fontdlgg.cpp:377
+#: ../src/generic/fontdlgg.cpp:396 ../src/generic/wizard.cpp:451
+#: ../src/mac/carbon/fontdlg.cpp:525
 msgid "&Cancel"
 msgstr "&Cancelar"
 
@@ -251,7 +243,7 @@ msgstr "&Cancelar"
 msgid "&Cascade"
 msgstr "&Em cascata"
 
-#: ../src/richtext/richtextsymboldlg.cpp:432
+#: ../src/richtext/richtextsymboldlg.cpp:438
 msgid "&Character code:"
 msgstr "&C�digo do caractere:"
 
@@ -259,18 +251,18 @@ msgstr "&C�digo do caractere:"
 msgid "&Clear"
 msgstr "&Limpar"
 
-#: ../src/html/helpdlg.cpp:91 ../src/html/helpfrm.cpp:119
-#: ../src/common/prntbase.cpp:1103 ../src/common/stockitem.cpp:116
-#: ../src/generic/logg.cpp:515
+#: ../src/common/prntbase.cpp:1101 ../src/common/stockitem.cpp:116
+#: ../src/generic/logg.cpp:510 ../src/html/helpfrm.cpp:119
+#: ../src/html/helpdlg.cpp:91
 msgid "&Close"
 msgstr "&Fechar"
 
-#: ../src/richtext/richtextfontpage.cpp:207
+#: ../src/richtext/richtextfontpage.cpp:201
 msgid "&Colour:"
 msgstr "C&or:"
 
-#: ../src/mac/carbon/textctrl.cpp:1053 ../src/msw/textctrl.cpp:2243
-#: ../src/common/stockitem.cpp:117 ../src/richtext/richtextctrl.cpp:2490
+#: ../src/common/stockitem.cpp:117 ../src/mac/carbon/textctrl.cpp:1118
+#: ../src/msw/textctrl.cpp:2210 ../src/richtext/richtextctrl.cpp:2424
 msgid "&Copy"
 msgstr "&Copiar"
 
@@ -278,17 +270,17 @@ msgstr "&Copiar"
 msgid "&Debug report preview:"
 msgstr "Pr�-visualiza��o do relat�rio de depura��o:"
 
-#: ../src/mac/carbon/textctrl.cpp:1055 ../src/msw/textctrl.cpp:2245
-#: ../src/common/stockitem.cpp:119 ../src/richtext/richtexttabspage.cpp:142
-#: ../src/richtext/richtextctrl.cpp:2492
+#: ../src/common/stockitem.cpp:119 ../src/mac/carbon/textctrl.cpp:1120
+#: ../src/msw/textctrl.cpp:2212 ../src/richtext/richtextctrl.cpp:2426
+#: ../src/richtext/richtexttabspage.cpp:142
 msgid "&Delete"
 msgstr "&Excluir"
 
-#: ../src/richtext/richtextstyledlg.cpp:255
+#: ../src/richtext/richtextstyledlg.cpp:256
 msgid "&Delete Style..."
 msgstr "E&xcluir estilo..."
 
-#: ../src/generic/logg.cpp:723
+#: ../src/generic/logg.cpp:718
 msgid "&Details"
 msgstr "&Detalhes"
 
@@ -300,11 +292,11 @@ msgstr "&Para baixo"
 msgid "&Edit"
 msgstr "&Editar"
 
-#: ../src/richtext/richtextstyledlg.cpp:249
+#: ../src/richtext/richtextstyledlg.cpp:250
 msgid "&Edit Style..."
 msgstr "&Editar estilo..."
 
-#: ../src/html/helpfrm.cpp:126 ../src/common/stockitem.cpp:122
+#: ../src/common/stockitem.cpp:122 ../src/html/helpfrm.cpp:126
 msgid "&File"
 msgstr "&Arquivo"
 
@@ -324,8 +316,8 @@ msgstr "&Fam�lia da fonte:"
 msgid "&Font for Level..."
 msgstr "&Fonte para n�vel..."
 
-#: ../src/richtext/richtextsymboldlg.cpp:393
-#: ../src/richtext/richtextfontpage.cpp:128
+#: ../src/richtext/richtextfontpage.cpp:122
+#: ../src/richtext/richtextsymboldlg.cpp:399
 msgid "&Font:"
 msgstr "&Fonte:"
 
@@ -333,16 +325,16 @@ msgstr "&Fonte:"
 msgid "&Forward"
 msgstr "&Para frente"
 
-#: ../src/richtext/richtextsymboldlg.cpp:444
+#: ../src/richtext/richtextsymboldlg.cpp:450
 msgid "&From:"
 msgstr "&De:"
 
-#: ../src/common/prntbase.cpp:1149
+#: ../src/common/prntbase.cpp:1147
 msgid "&Goto..."
 msgstr "&Ir para..."
 
-#: ../src/html/helpfrm.cpp:127 ../src/common/stockitem.cpp:128
-#: ../src/generic/wizard.cpp:447 ../src/generic/wizard.cpp:454
+#: ../src/common/stockitem.cpp:128 ../src/generic/wizard.cpp:447
+#: ../src/generic/wizard.cpp:454 ../src/html/helpfrm.cpp:127
 msgid "&Help"
 msgstr "&Ajuda"
 
@@ -350,13 +342,13 @@ msgstr "&Ajuda"
 msgid "&Home"
 msgstr "&Pasta pessoal"
 
+#: ../src/richtext/richtextindentspage.cpp:191
 #: ../src/richtext/richtextliststylepage.cpp:372
-#: ../src/richtext/richtextindentspage.cpp:194
 msgid "&Indentation (tenths of a mm)"
 msgstr "&Recuo (d�cimos de mm)"
 
+#: ../src/richtext/richtextindentspage.cpp:174
 #: ../src/richtext/richtextliststylepage.cpp:356
-#: ../src/richtext/richtextindentspage.cpp:177
 msgid "&Indeterminate"
 msgstr "&Indeterminado"
 
@@ -368,18 +360,18 @@ msgstr "&Indice"
 msgid "&Italic"
 msgstr "&It�lico"
 
+#: ../src/richtext/richtextindentspage.cpp:160
 #: ../src/richtext/richtextliststylepage.cpp:342
-#: ../src/richtext/richtextindentspage.cpp:163
 msgid "&Justified"
 msgstr "&Justificado"
 
+#: ../src/richtext/richtextindentspage.cpp:146
 #: ../src/richtext/richtextliststylepage.cpp:328
-#: ../src/richtext/richtextindentspage.cpp:149
 msgid "&Left"
 msgstr "&Esquerda"
 
+#: ../src/richtext/richtextindentspage.cpp:202
 #: ../src/richtext/richtextliststylepage.cpp:381
-#: ../src/richtext/richtextindentspage.cpp:205
 msgid "&Left:"
 msgstr "&Esquerda:"
 
@@ -387,11 +379,11 @@ msgstr "&Esquerda:"
 msgid "&List level:"
 msgstr "&N�vel da lista:"
 
-#: ../src/generic/logg.cpp:516
+#: ../src/generic/logg.cpp:511
 msgid "&Log"
 msgstr "&Log"
 
-#: ../src/univ/themes/win32.cpp:3735
+#: ../src/univ/themes/win32.cpp:3734
 msgid "&Move"
 msgstr "&Mover"
 
@@ -399,8 +391,8 @@ msgstr "&Mover"
 msgid "&New"
 msgstr "&Novo"
 
-#: ../src/aui/tabmdi.cpp:108 ../src/msw/mdi.cpp:176
-#: ../src/generic/mdig.cpp:118
+#: ../src/generic/mdig.cpp:118 ../src/aui/tabmdi.cpp:107
+#: ../src/msw/mdi.cpp:176
 msgid "&Next"
 msgstr "&Pr�ximo"
 
@@ -428,8 +420,8 @@ msgstr "&Notas:"
 msgid "&Number:"
 msgstr "&N�mero:"
 
-#: ../src/mac/carbon/fontdlg.cpp:531 ../src/common/stockitem.cpp:139
-#: ../src/generic/fontdlgg.cpp:382 ../src/generic/fontdlgg.cpp:389
+#: ../src/common/stockitem.cpp:139 ../src/generic/fontdlgg.cpp:382
+#: ../src/generic/fontdlgg.cpp:389 ../src/mac/carbon/fontdlg.cpp:531
 msgid "&OK"
 msgstr "&OK"
 
@@ -441,12 +433,8 @@ msgstr "&Abrir"
 msgid "&Open..."
 msgstr "&Abrir..."
 
-#: ../src/richtext/richtextindentspage.cpp:241
-msgid "&Outline level:"
-msgstr "&N�vel da lista:"
-
-#: ../src/mac/carbon/textctrl.cpp:1054 ../src/msw/textctrl.cpp:2244
-#: ../src/common/stockitem.cpp:141 ../src/richtext/richtextctrl.cpp:2491
+#: ../src/common/stockitem.cpp:141 ../src/mac/carbon/textctrl.cpp:1119
+#: ../src/msw/textctrl.cpp:2211 ../src/richtext/richtextctrl.cpp:2425
 msgid "&Paste"
 msgstr "&Colar"
 
@@ -462,8 +450,8 @@ msgstr "&Posi��o (d�cimos de mil�metro):"
 msgid "&Preferences"
 msgstr "&Prefer�ncias"
 
-#: ../src/aui/tabmdi.cpp:109 ../src/msw/mdi.cpp:177
-#: ../src/generic/mdig.cpp:119
+#: ../src/generic/mdig.cpp:119 ../src/aui/tabmdi.cpp:108
+#: ../src/msw/mdi.cpp:177
 msgid "&Previous"
 msgstr "&Anterior"
 
@@ -471,7 +459,7 @@ msgstr "&Anterior"
 msgid "&Print"
 msgstr "&Imprimir"
 
-#: ../src/common/prntbase.cpp:1108
+#: ../src/common/prntbase.cpp:1106
 msgid "&Print..."
 msgstr "&Imprimir..."
 
@@ -483,9 +471,9 @@ msgstr "&Propriedades"
 msgid "&Quit"
 msgstr "&Sai"
 
-#: ../src/mac/carbon/textctrl.cpp:1050 ../src/msw/textctrl.cpp:2240
-#: ../src/common/stockitem.cpp:147 ../src/common/cmdproc.cpp:288
-#: ../src/common/cmdproc.cpp:295 ../src/richtext/richtextctrl.cpp:2487
+#: ../src/common/cmdproc.cpp:288 ../src/common/cmdproc.cpp:295
+#: ../src/common/stockitem.cpp:147 ../src/mac/carbon/textctrl.cpp:1115
+#: ../src/msw/textctrl.cpp:2207 ../src/richtext/richtextctrl.cpp:2421
 msgid "&Redo"
 msgstr "&Refazer"
 
@@ -493,7 +481,7 @@ msgstr "&Refazer"
 msgid "&Redo "
 msgstr "&Refazer "
 
-#: ../src/richtext/richtextstyledlg.cpp:243
+#: ../src/richtext/richtextstyledlg.cpp:244
 msgid "&Rename Style..."
 msgstr "&Renomear Estilo..."
 
@@ -501,21 +489,21 @@ msgstr "&Renomear Estilo..."
 msgid "&Replace"
 msgstr "&Substituir"
 
-#: ../src/richtext/richtextstyledlg.cpp:273
+#: ../src/richtext/richtextstyledlg.cpp:274
 msgid "&Restart numbering"
 msgstr "&Reiniciar numera��o"
 
-#: ../src/univ/themes/win32.cpp:3734
+#: ../src/univ/themes/win32.cpp:3733
 msgid "&Restore"
 msgstr "&Restaurar"
 
+#: ../src/richtext/richtextindentspage.cpp:153
 #: ../src/richtext/richtextliststylepage.cpp:335
-#: ../src/richtext/richtextindentspage.cpp:156
 msgid "&Right"
 msgstr "&Direita"
 
+#: ../src/richtext/richtextindentspage.cpp:226
 #: ../src/richtext/richtextliststylepage.cpp:403
-#: ../src/richtext/richtextindentspage.cpp:229
 msgid "&Right:"
 msgstr "&Direita:"
 
@@ -523,7 +511,7 @@ msgstr "&Direita:"
 msgid "&Save"
 msgstr "&Salvar"
 
-#: ../src/generic/logg.cpp:511
+#: ../src/generic/logg.cpp:506
 msgid "&Save..."
 msgstr "&Salvar..."
 
@@ -531,16 +519,16 @@ msgstr "&Salvar..."
 msgid "&Show tips at startup"
 msgstr "&Mostrar dicas ao iniciar"
 
-#: ../src/univ/themes/win32.cpp:3737
+#: ../src/univ/themes/win32.cpp:3736
 msgid "&Size"
 msgstr "&Tamanho"
 
-#: ../src/richtext/richtextfontpage.cpp:146
+#: ../src/richtext/richtextfontpage.cpp:140
 msgid "&Size:"
 msgstr "&Tamanho:"
 
+#: ../src/richtext/richtextindentspage.cpp:248
 #: ../src/richtext/richtextliststylepage.cpp:423
-#: ../src/richtext/richtextindentspage.cpp:273
 msgid "&Spacing (tenths of a mm)"
 msgstr "&Espa�amento (d�cimos de mil�metro)"
 
@@ -548,24 +536,20 @@ msgstr "&Espa�amento (d�cimos de mil�metro)"
 msgid "&Stop"
 msgstr "&Parar"
 
-#: ../src/richtext/richtextfontpage.cpp:219
-msgid "&Strikethrough"
-msgstr "&Riscado"
-
 #: ../src/generic/fontdlgg.cpp:289 ../src/richtext/richtextstylepage.cpp:103
 msgid "&Style:"
 msgstr "&Estilo:"
 
-#: ../src/richtext/richtextstyledlg.cpp:190
+#: ../src/richtext/richtextstyledlg.cpp:191
 msgid "&Styles:"
 msgstr "&Estilos:"
 
-#: ../src/richtext/richtextsymboldlg.cpp:406
+#: ../src/richtext/richtextsymboldlg.cpp:412
 msgid "&Subset:"
 msgstr "&Subconjunto:"
 
-#: ../src/richtext/richtextliststylepage.cpp:268
 #: ../src/richtext/richtextbulletspage.cpp:216
+#: ../src/richtext/richtextliststylepage.cpp:268
 msgid "&Symbol:"
 msgstr "&S�mbolo:"
 
@@ -573,13 +557,13 @@ msgstr "&S�mbolo:"
 msgid "&Underline"
 msgstr "&Sublinhar"
 
-#: ../src/richtext/richtextfontpage.cpp:194
+#: ../src/richtext/richtextfontpage.cpp:188
 msgid "&Underlining:"
 msgstr "&Sublinhado:"
 
-#: ../src/mac/carbon/textctrl.cpp:1049 ../src/msw/textctrl.cpp:2239
-#: ../src/common/stockitem.cpp:157 ../src/common/cmdproc.cpp:266
-#: ../src/richtext/richtextctrl.cpp:2486
+#: ../src/common/cmdproc.cpp:266 ../src/common/stockitem.cpp:157
+#: ../src/mac/carbon/textctrl.cpp:1114 ../src/msw/textctrl.cpp:2206
+#: ../src/richtext/richtextctrl.cpp:2420
 msgid "&Undo"
 msgstr "&Desfazer"
 
@@ -599,10 +583,10 @@ msgstr "Para &cima"
 msgid "&Weight:"
 msgstr "&Peso:"
 
-#: ../src/aui/tabmdi.cpp:297 ../src/aui/tabmdi.cpp:313
-#: ../src/aui/tabmdi.cpp:315 ../src/msw/mdi.cpp:1432 ../src/msw/mdi.cpp:1439
-#: ../src/msw/mdi.cpp:1469 ../src/generic/mdig.cpp:298
-#: ../src/generic/mdig.cpp:314 ../src/generic/mdig.cpp:318
+#: ../src/generic/mdig.cpp:298 ../src/generic/mdig.cpp:314
+#: ../src/generic/mdig.cpp:318 ../src/aui/tabmdi.cpp:272
+#: ../src/aui/tabmdi.cpp:288 ../src/aui/tabmdi.cpp:290 ../src/msw/mdi.cpp:1417
+#: ../src/msw/mdi.cpp:1424 ../src/msw/mdi.cpp:1454
 msgid "&Window"
 msgstr "&Janela"
 
@@ -610,7 +594,7 @@ msgstr "&Janela"
 msgid "&Yes"
 msgstr "&Sim"
 
-#: ../src/msw/regconf.cpp:253 ../src/common/config.cpp:469
+#: ../src/common/config.cpp:451 ../src/msw/regconf.cpp:253
 #, c-format
 msgid "'%s' has extra '..', ignored."
 msgstr "'%s' tem '..' adicionais; foram ignorados."
@@ -626,7 +610,7 @@ msgstr "'%s' n�o � v�lido"
 msgid "'%s' is not a correct numeric value for option '%s'."
 msgstr "'%s' n�o � um valor num�rico correto para a op��o '%s'."
 
-#: ../src/common/intl.cpp:1188
+#: ../src/common/intl.cpp:1194
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' n�o � um cat�logo de mensagens v�lido."
@@ -656,21 +640,21 @@ msgstr "'%s' deve conter apenas caracteres alfab�ticos."
 msgid "'%s' should only contain alphabetic or numeric characters."
 msgstr "'%s' deve conter apenas caracteres alfanum�ricos."
 
-#: ../src/richtext/richtextliststylepage.cpp:228
 #: ../src/richtext/richtextbulletspage.cpp:175
+#: ../src/richtext/richtextliststylepage.cpp:228
 msgid "(*)"
 msgstr "(*)"
 
-#: ../src/html/helpwnd.cpp:956
+#: ../src/html/htmlhelp.cpp:638 ../src/html/helpwnd.cpp:956
 msgid "(Help)"
 msgstr "(Ajuda)"
 
-#: ../src/richtext/richtextliststylepage.cpp:485
 #: ../src/richtext/richtextbulletspage.cpp:280
+#: ../src/richtext/richtextliststylepage.cpp:485
 msgid "(None)"
 msgstr "(Nenhum)"
 
-#: ../src/richtext/richtextsymboldlg.cpp:519
+#: ../src/richtext/richtextsymboldlg.cpp:525
 msgid "(Normal text)"
 msgstr "(Texto normal)"
 
@@ -679,22 +663,37 @@ msgstr "(Texto normal)"
 msgid "(bookmarks)"
 msgstr "(marcadores)"
 
-#: ../src/richtext/richtextformatdlg.cpp:602
+#: ../src/richtext/richtextformatdlg.cpp:584
 msgid "(none)"
 msgstr "(nenhum)"
 
-#: ../src/richtext/richtextliststylepage.cpp:496
 #: ../src/richtext/richtextbulletspage.cpp:291
+#: ../src/richtext/richtextliststylepage.cpp:496
 msgid "*"
 msgstr "*"
 
-#: ../src/richtext/richtextliststylepage.cpp:235
 #: ../src/richtext/richtextbulletspage.cpp:182
+#: ../src/richtext/richtextliststylepage.cpp:235
 msgid "*)"
 msgstr "*)"
 
-#: ../src/richtext/richtextliststylepage.cpp:499
+#: ../src/common/debugrpt.cpp:565
+#, fuzzy
+msgid "*** A debug report has been generated\n"
+msgstr "Um relat�rio de depura��o foi gerado no diret�rio\n"
+
+#: ../src/common/debugrpt.cpp:568
+#, fuzzy
+msgid "*** And includes the following files:\n"
+msgstr "E inclui os seguintes arquivos:\n"
+
+#: ../src/common/debugrpt.cpp:566
+#, c-format
+msgid "*** It can be found in \"%s\"\n"
+msgstr ""
+
 #: ../src/richtext/richtextbulletspage.cpp:294
+#: ../src/richtext/richtextliststylepage.cpp:499
 msgid "+"
 msgstr "+"
 
@@ -708,17 +707,13 @@ msgstr ""
 ", era esperado static, #include ou #define\n"
 "durante an�lise do recurso."
 
-#: ../src/richtext/richtextliststylepage.cpp:497
 #: ../src/richtext/richtextbulletspage.cpp:292
+#: ../src/richtext/richtextliststylepage.cpp:497
 msgid "-"
 msgstr "-"
 
-#: ../src/richtext/richtextindentspage.cpp:246
-msgid "1"
-msgstr "1"
-
+#: ../src/richtext/richtextindentspage.cpp:290
 #: ../src/richtext/richtextliststylepage.cpp:461
-#: ../src/richtext/richtextindentspage.cpp:316
 msgid "1.5"
 msgstr "1,5"
 
@@ -742,43 +737,14 @@ msgstr "12\" x 11\""
 msgid "15 x 11 in"
 msgstr "15\" x 11\""
 
+#: ../src/richtext/richtextindentspage.cpp:291
 #: ../src/richtext/richtextliststylepage.cpp:462
-#: ../src/richtext/richtextindentspage.cpp:247
-#: ../src/richtext/richtextindentspage.cpp:317
 msgid "2"
 msgstr "2"
-
-#: ../src/richtext/richtextindentspage.cpp:248
-msgid "3"
-msgstr "3"
-
-#: ../src/richtext/richtextindentspage.cpp:249
-msgid "4"
-msgstr "4"
-
-#: ../src/richtext/richtextindentspage.cpp:250
-msgid "5"
-msgstr "5"
-
-#: ../src/richtext/richtextindentspage.cpp:251
-msgid "6"
-msgstr "6"
 
 #: ../src/common/paper.cpp:134
 msgid "6 3/4 Envelope, 3 5/8 x 6 1/2 in"
 msgstr "Envelope 6 3/4, 3,625\" x 6,5\""
-
-#: ../src/richtext/richtextindentspage.cpp:252
-msgid "7"
-msgstr "7"
-
-#: ../src/richtext/richtextindentspage.cpp:253
-msgid "8"
-msgstr "8"
-
-#: ../src/richtext/richtextindentspage.cpp:254
-msgid "9"
-msgstr "9"
 
 #: ../src/common/paper.cpp:141
 msgid "9 x 11 in"
@@ -800,7 +766,7 @@ msgstr ": codifica��o desconhecida"
 msgid "< &Back"
 msgstr "< &Voltar"
 
-#: ../src/common/prntbase.cpp:1131
+#: ../src/common/prntbase.cpp:1129
 msgid "<<"
 msgstr "<<"
 
@@ -866,16 +832,16 @@ msgstr "<b>Tipo negrito.</b> "
 msgid "<i>Italic face.</i> "
 msgstr "<i>Tipo it�lico.</i> "
 
-#: ../src/richtext/richtextliststylepage.cpp:498
 #: ../src/richtext/richtextbulletspage.cpp:293
+#: ../src/richtext/richtextliststylepage.cpp:498
 msgid ">"
 msgstr ">"
 
-#: ../src/common/prntbase.cpp:1137
+#: ../src/common/prntbase.cpp:1135
 msgid ">>"
 msgstr ">>"
 
-#: ../src/common/prntbase.cpp:1143
+#: ../src/common/prntbase.cpp:1141
 msgid ">>|"
 msgstr ">>|"
 
@@ -883,18 +849,15 @@ msgstr ">>|"
 msgid "A debug report has been generated in the directory\n"
 msgstr "Um relat�rio de depura��o foi gerado no diret�rio\n"
 
-#: ../src/common/debugrpt.cpp:565
-msgid "A debug report has been generated. It can be found in"
-msgstr "Um relat�rio de depura��o foi gerado.  Ele pode ser encontrado em"
-
 #: ../src/common/xtixml.cpp:406
 msgid "A non empty collection must consist of 'element' nodes"
-msgstr "Uma cole��o que n�o esteja vazia precisa consistir de n�s 'elemento'"
+msgstr ""
+"Uma cole��o que n�o esteja vazia precisa consistir de n�s 'elemento'"
 
-#: ../src/richtext/richtextliststylepage.cpp:304
-#: ../src/richtext/richtextliststylepage.cpp:306
 #: ../src/richtext/richtextbulletspage.cpp:254
 #: ../src/richtext/richtextbulletspage.cpp:256
+#: ../src/richtext/richtextliststylepage.cpp:304
+#: ../src/richtext/richtextliststylepage.cpp:306
 msgid "A standard bullet name."
 msgstr "Um nome para o marcador padr�o."
 
@@ -970,8 +933,8 @@ msgstr "A6, 105 x 148 mm"
 msgid "A6 Rotated 148 x 105 mm"
 msgstr "Folha A6, 148 x 105 mm"
 
-#: ../src/mac/carbon/fontdlg.cpp:276 ../src/generic/fontdlgg.cpp:87
-#: ../src/richtext/richtextformatdlg.cpp:410
+#: ../src/generic/fontdlgg.cpp:87 ../src/mac/carbon/fontdlg.cpp:276
+#: ../src/richtext/richtextformatdlg.cpp:401
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
 
@@ -979,13 +942,13 @@ msgstr "ABCDEFGabcdefg12345"
 msgid "ADD"
 msgstr "SOMA"
 
-#: ../src/common/ftp.cpp:381 ../src/richtext/richtextsymboldlg.cpp:451
-#: ../src/richtext/richtextsymboldlg.cpp:454
-#: ../src/richtext/richtextsymboldlg.cpp:455
+#: ../src/common/ftp.cpp:381 ../src/richtext/richtextsymboldlg.cpp:457
+#: ../src/richtext/richtextsymboldlg.cpp:460
+#: ../src/richtext/richtextsymboldlg.cpp:461
 msgid "ASCII"
 msgstr "ASCII"
 
-#: ../src/generic/aboutdlgg.cpp:106
+#: ../src/generic/aboutdlgg.cpp:105
 msgid "About "
 msgstr "Sobre"
 
@@ -1014,6 +977,7 @@ msgstr "AddToPropertyCollection chamada sem adicionador v�lido"
 msgid "Adding book %s"
 msgstr "Adicionando livro %s"
 
+#: ../src/richtext/richtextindentspage.cpp:271
 #: ../src/richtext/richtextliststylepage.cpp:443
 msgid "After a paragraph:"
 msgstr "Depois de um par�grafo:"
@@ -1030,12 +994,12 @@ msgstr "Alinhar � Direita"
 msgid "All"
 msgstr "Tudo"
 
-#: ../src/common/fldlgcmn.cpp:77
+#: ../src/common/fldlgcmn.cpp:76
 #, c-format
 msgid "All files (%s)|%s"
 msgstr "Todos os arquivos (%s)|%s"
 
-#: ../include/wx/defs.h:2337
+#: ../include/wx/defs.h:2332
 msgid "All files (*)|*"
 msgstr "Todos os arquivos (*)|*"
 
@@ -1043,11 +1007,11 @@ msgstr "Todos os arquivos (*)|*"
 msgid "All files (*.*)|*"
 msgstr "Todos os arquivos (*.*)|*"
 
-#: ../include/wx/defs.h:2334
+#: ../include/wx/defs.h:2329
 msgid "All files (*.*)|*.*"
 msgstr "Todos os arquivos (*.*)|*.*"
 
-#: ../src/richtext/richtextstyles.cpp:832
+#: ../src/richtext/richtextstyles.cpp:751
 msgid "All styles"
 msgstr "Todos estilos"
 
@@ -1063,22 +1027,18 @@ msgstr "Discagem ao provedor j� est� em curso."
 msgid "Alt-"
 msgstr "Alt-"
 
-#: ../src/common/debugrpt.cpp:568
-msgid "And includes the following files:\n"
-msgstr "E inclui os seguintes arquivos:\n"
-
 #: ../src/generic/animateg.cpp:163
 #, c-format
 msgid "Animation file is not of type %ld."
 msgstr "Arquivo de anima��o n�o � do tipo %ld."
 
-#: ../src/generic/logg.cpp:1169
+#: ../src/generic/logg.cpp:1164
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "Anexar log ao arquivo '%s'? (escolher [N�o] ir� sobrescrev�-lo)"
 
-#: ../src/richtext/richtextliststylepage.cpp:486
 #: ../src/richtext/richtextbulletspage.cpp:281
+#: ../src/richtext/richtextliststylepage.cpp:486
 msgid "Arabic"
 msgstr "�rabe"
 
@@ -1094,9 +1054,9 @@ msgstr "Cole��o de arquivo n�o cont�m arquivo #SYSTEM"
 msgid "Attributes"
 msgstr "Atributos"
 
-#: ../src/richtext/richtextliststylepage.cpp:294
 #: ../src/richtext/richtextbulletspage.cpp:242
 #: ../src/richtext/richtextbulletspage.cpp:244
+#: ../src/richtext/richtextliststylepage.cpp:294
 msgid "Available fonts."
 msgstr "Fontes dispon�veis."
 
@@ -1184,7 +1144,7 @@ msgstr "BMP: N�o foi poss�vel gravar cabe�alho de arquivo (BitmapInfo)."
 msgid "BMP: wxImage doesn't have own wxPalette."
 msgstr "BMP: wxImage n�o tem wxPalette pr�pria."
 
-#: ../src/mac/carbon/fontdlg.cpp:343 ../src/richtext/richtextformatdlg.cpp:499
+#: ../src/mac/carbon/fontdlg.cpp:343 ../src/richtext/richtextformatdlg.cpp:481
 msgid "Background colour"
 msgstr "Cor do fundo"
 
@@ -1196,12 +1156,13 @@ msgstr "B�ltico (ISO-8859-13)"
 msgid "Baltic (old) (ISO-8859-4)"
 msgstr "B�ltico (antigo) (ISO-8859-4)"
 
+#: ../src/richtext/richtextindentspage.cpp:259
 #: ../src/richtext/richtextliststylepage.cpp:432
 msgid "Before a paragraph:"
 msgstr "Antes de um par�grafo:"
 
-#: ../src/richtext/richtextliststylepage.cpp:493
 #: ../src/richtext/richtextbulletspage.cpp:288
+#: ../src/richtext/richtextliststylepage.cpp:493
 msgid "Bitmap"
 msgstr "Imagem"
 
@@ -1210,10 +1171,10 @@ msgstr "Imagem"
 msgid "Bitmap resource specification %s not found."
 msgstr "A especifica��o de recurso de bitmap %s n�o foi encontrada."
 
-#: ../src/mac/carbon/fontdlg.cpp:477 ../src/generic/fontdlgg.cpp:240
-#: ../src/richtext/richtextfontpage.cpp:249
-#: ../src/richtext/richtextfontpage.cpp:320
-#: ../src/richtext/richtextfontpage.cpp:528
+#: ../src/generic/fontdlgg.cpp:240 ../src/mac/carbon/fontdlg.cpp:477
+#: ../src/richtext/richtextfontpage.cpp:226
+#: ../src/richtext/richtextfontpage.cpp:297
+#: ../src/richtext/richtextfontpage.cpp:457
 msgid "Bold"
 msgstr "Negrito"
 
@@ -1221,8 +1182,8 @@ msgstr "Negrito"
 msgid "Bottom margin (mm):"
 msgstr "Margem inferior (mm):"
 
-#: ../src/richtext/richtextliststylepage.cpp:244
 #: ../src/richtext/richtextbulletspage.cpp:191
+#: ../src/richtext/richtextliststylepage.cpp:244
 msgid "Bullet &Alignment:"
 msgstr "Alinhamento do marcador:"
 
@@ -1230,7 +1191,7 @@ msgstr "Alinhamento do marcador:"
 msgid "Bullet style"
 msgstr "Estilo de marcador"
 
-#: ../src/richtext/richtextformatdlg.cpp:293
+#: ../src/richtext/richtextformatdlg.cpp:290
 msgid "Bullets"
 msgstr "Marcadores"
 
@@ -1238,7 +1199,7 @@ msgstr "Marcadores"
 msgid "C sheet, 17 x 22 in"
 msgstr "Folha C, 17\" x 22\""
 
-#: ../src/generic/logg.cpp:513
+#: ../src/generic/logg.cpp:508
 msgid "C&lear"
 msgstr "&Limpar"
 
@@ -1286,15 +1247,11 @@ msgstr "LIMPAR"
 msgid "COMMAND"
 msgstr "COMANDO"
 
-#: ../src/richtext/richtextfontpage.cpp:226
-msgid "Ca&pitals"
-msgstr "&Mai�sculas"
-
 #: ../src/os2/thread.cpp:116
 msgid "Can not create mutex."
 msgstr "Imposs�vel criar mutex."
 
-#: ../src/common/filefn.cpp:1383
+#: ../src/common/filefn.cpp:1345
 #, c-format
 msgid "Can not enumerate files '%s'"
 msgstr "Imposs�vel enumerar arquivos '%s'"
@@ -1309,7 +1266,7 @@ msgstr "Imposs�vel enumerar arquivos no diret�rio '%s'"
 msgid "Can not resume thread %lu"
 msgstr "Imposs�vel continuar thread %lu"
 
-#: ../src/mac/classic/thread.cpp:487 ../src/msw/thread.cpp:866
+#: ../src/mac/classic/thread.cpp:487 ../src/msw/thread.cpp:868
 #, c-format
 msgid "Can not resume thread %x"
 msgstr "Imposs�vel continuar thread %x"
@@ -1323,12 +1280,12 @@ msgstr "Imposs�vel iniciar thread: erro gravando TLS."
 msgid "Can not suspend thread %lu"
 msgstr "Imposs�vel suspender thread %lu"
 
-#: ../src/mac/classic/thread.cpp:460 ../src/msw/thread.cpp:851
+#: ../src/mac/classic/thread.cpp:460 ../src/msw/thread.cpp:853
 #, c-format
 msgid "Can not suspend thread %x"
 msgstr "Imposs�vel suspender thread %x"
 
-#: ../src/msw/thread.cpp:773
+#: ../src/msw/thread.cpp:772
 msgid "Can not wait for thread termination"
 msgstr "Imposs�vel esperar pelo t�rmino da thread"
 
@@ -1339,19 +1296,21 @@ msgstr "Imposs�vel &Desfazer "
 #: ../src/common/image.cpp:2624
 #, c-format
 msgid "Can't check image format of file '%s': file does not exist."
-msgstr "Imposs�vel verificar formato de imagem do arquivo '%s': arquivo n�o existe."
+msgstr ""
+"Imposs�vel verificar formato de imagem do arquivo '%s': arquivo n�o "
+"existe."
 
-#: ../src/msw/registry.cpp:443
+#: ../src/msw/registry.cpp:437
 #, c-format
 msgid "Can't close registry key '%s'"
 msgstr "Imposs�vel fechar chave de registro '%s'"
 
-#: ../src/msw/registry.cpp:519
+#: ../src/msw/registry.cpp:513
 #, c-format
 msgid "Can't copy values of unsupported type %d."
 msgstr "Imposs�vel copiar valores do tipo n�o suportado %d."
 
-#: ../src/msw/registry.cpp:424
+#: ../src/msw/registry.cpp:418
 #, c-format
 msgid "Can't create registry key '%s'"
 msgstr "Imposs�vel criar chave de registro '%s'"
@@ -1361,12 +1320,12 @@ msgstr "Imposs�vel criar chave de registro '%s'"
 msgid "Can't create thread"
 msgstr "Imposs�vel criar thread"
 
-#: ../src/msw/window.cpp:3423
+#: ../src/msw/window.cpp:3397
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "Imposs�vel criar janela de classe %s"
 
-#: ../src/msw/registry.cpp:695
+#: ../src/msw/registry.cpp:689
 #, c-format
 msgid "Can't delete key '%s'"
 msgstr "Imposs�vel excluir chave '%s'"
@@ -1376,22 +1335,22 @@ msgstr "Imposs�vel excluir chave '%s'"
 msgid "Can't delete the INI file '%s'"
 msgstr "Imposs�vel excluir o arquivo INI '%s'"
 
-#: ../src/msw/registry.cpp:723
+#: ../src/msw/registry.cpp:717
 #, c-format
 msgid "Can't delete value '%s' from key '%s'"
 msgstr "Imposs�vel excluir valor '%s' da chave '%s'"
 
-#: ../src/msw/registry.cpp:1072
+#: ../src/msw/registry.cpp:1066
 #, c-format
 msgid "Can't enumerate subkeys of key '%s'"
 msgstr "Imposs�vel enumerar subchaves da chave '%s'"
 
-#: ../src/msw/registry.cpp:1027
+#: ../src/msw/registry.cpp:1021
 #, c-format
 msgid "Can't enumerate values of key '%s'"
 msgstr "Imposs�vel enumerar valores da chave '%s'"
 
-#: ../src/msw/registry.cpp:1289
+#: ../src/msw/registry.cpp:1283
 #, c-format
 msgid "Can't export value of unsupported type %d."
 msgstr "Imposs�vel exportar valor do tipo n�o suportado %d."
@@ -1401,7 +1360,7 @@ msgstr "Imposs�vel exportar valor do tipo n�o suportado %d."
 msgid "Can't find current position in file '%s'"
 msgstr "Imposs�vel localizar posi��o atual no arquivo '%s'"
 
-#: ../src/msw/registry.cpp:352
+#: ../src/msw/registry.cpp:346
 #, c-format
 msgid "Can't get info about registry key '%s'"
 msgstr "Imposs�vel obter informa��es sobre a chave de registro '%s'"
@@ -1419,7 +1378,7 @@ msgstr "Imposs�vel inicializar fluxo de infla��o da zlib."
 msgid "Can't load image from file '%s': file does not exist."
 msgstr "Imposs�vel carregar imagem do arquivo '%s': arquivo n�o existe."
 
-#: ../src/msw/registry.cpp:388
+#: ../src/msw/registry.cpp:382
 #, c-format
 msgid "Can't open registry key '%s'"
 msgstr "Imposs�vel abrir chave de registro '%s'"
@@ -1431,15 +1390,16 @@ msgstr "Imposs�vel ler do fluxo de infla��o: %s"
 
 #: ../src/common/zstream.cpp:239
 msgid "Can't read inflate stream: unexpected EOF in underlying stream."
-msgstr "Imposs�vel ler fluxo de infla��o: EOF inesperado no fluxo subjacente."
+msgstr ""
+"Imposs�vel ler fluxo de infla��o: EOF inesperado no fluxo subjacente."
 
-#: ../src/msw/registry.cpp:961
+#: ../src/msw/registry.cpp:955
 #, c-format
 msgid "Can't read value of '%s'"
 msgstr "Imposs�vel ler valor de '%s'"
 
-#: ../src/msw/registry.cpp:796 ../src/msw/registry.cpp:826
-#: ../src/msw/registry.cpp:886
+#: ../src/msw/registry.cpp:790 ../src/msw/registry.cpp:820
+#: ../src/msw/registry.cpp:880
 #, c-format
 msgid "Can't read value of key '%s'"
 msgstr "Imposs�vel ler valor da chave '%s'"
@@ -1449,7 +1409,7 @@ msgstr "Imposs�vel ler valor da chave '%s'"
 msgid "Can't save image to file '%s': unknown extension."
 msgstr "Imposs�vel salvar imagem no arquivo '%s': extens�o desconhecida."
 
-#: ../src/generic/logg.cpp:575 ../src/generic/logg.cpp:1026
+#: ../src/generic/logg.cpp:570 ../src/generic/logg.cpp:1021
 msgid "Can't save log contents to file."
 msgstr "Imposs�vel salvar conte�do do log no arquivo."
 
@@ -1457,8 +1417,8 @@ msgstr "Imposs�vel salvar conte�do do log no arquivo."
 msgid "Can't set thread priority"
 msgstr "Imposs�vel definir prioridade da thread"
 
-#: ../src/msw/registry.cpp:813 ../src/msw/registry.cpp:855
-#: ../src/msw/registry.cpp:976
+#: ../src/msw/registry.cpp:807 ../src/msw/registry.cpp:849
+#: ../src/msw/registry.cpp:970
 #, c-format
 msgid "Can't set value of '%s'"
 msgstr "Imposs�vel definir valor de '%s'"
@@ -1468,9 +1428,9 @@ msgstr "Imposs�vel definir valor de '%s'"
 msgid "Can't write to deflate stream: %s"
 msgstr "Imposs�vel escrever no fluxo de defla��o: %s"
 
-#: ../src/mac/carbon/msgdlg.cpp:68 ../src/gtk1/fontdlg.cpp:145
-#: ../src/motif/msgdlg.cpp:204 ../src/generic/dirdlgg.cpp:105
-#: ../src/richtext/richtextstyledlg.cpp:289
+#: ../src/generic/dirdlgg.cpp:105 ../src/html/htmlhelp.cpp:434
+#: ../src/mac/carbon/msgdlg.cpp:66 ../src/motif/msgdlg.cpp:204
+#: ../src/richtext/richtextstyledlg.cpp:290 ../src/gtk1/fontdlg.cpp:145
 #: ../contrib/src/deprecated/proplist.cpp:514
 msgid "Cancel"
 msgstr "Cancelar"
@@ -1506,13 +1466,15 @@ msgstr "Imposs�vel localizar o arquivo de livro de endere�os"
 #: ../src/unix/threadpsx.cpp:1128
 #, c-format
 msgid "Cannot get priority range for scheduling policy %d."
-msgstr "Imposs�vel obter intervalo de prioridade para pol�ticas de agendamento %d."
+msgstr ""
+"Imposs�vel obter intervalo de prioridade para pol�ticas de agendamento %"
+"d."
 
-#: ../src/unix/utilsunx.cpp:809
+#: ../src/unix/utilsunx.cpp:802
 msgid "Cannot get the hostname"
 msgstr "Imposs�vel obter o nome da m�quina"
 
-#: ../src/unix/utilsunx.cpp:845
+#: ../src/unix/utilsunx.cpp:838
 msgid "Cannot get the official hostname"
 msgstr "Imposs�vel obter o nome oficial da m�quina"
 
@@ -1524,7 +1486,7 @@ msgstr "Imposs�vel desligar - n�o h� uma conex�o dial-up ativa."
 msgid "Cannot initialize OLE"
 msgstr "Imposs�vel inicializar OLE"
 
-#: ../src/mgl/app.cpp:283
+#: ../src/mgl/app.cpp:282
 msgid "Cannot initialize SciTech MGL!"
 msgstr "Imposs�vel inicializar SciTech MGL!"
 
@@ -1532,7 +1494,7 @@ msgstr "Imposs�vel inicializar SciTech MGL!"
 msgid "Cannot initialize display."
 msgstr "Imposs�vel inicializar v�deo."
 
-#: ../src/msw/volume.cpp:602
+#: ../src/msw/volume.cpp:600
 #, c-format
 msgid "Cannot load icon from '%s'."
 msgstr "Imposs�vel carregar �cone de '%s'."
@@ -1571,7 +1533,7 @@ msgstr "Imposs�vel abrir arquivo para impress�o PostScript!"
 msgid "Cannot open index file: %s"
 msgstr "Imposs�vel abrir arquivo de �ndice: %s"
 
-#: ../src/common/intl.cpp:1244
+#: ../src/common/intl.cpp:1250
 #, c-format
 msgid "Cannot parse Plural-Forms:'%s'"
 msgstr "Imposs�vel analisar formas do plural:'%s'"
@@ -1590,7 +1552,7 @@ msgstr "Imposs�vel analisar dimens�es de '%s'."
 msgid "Cannot print empty page."
 msgstr "Imposs�vel imprimir p�gina vazia."
 
-#: ../src/msw/volume.cpp:492
+#: ../src/msw/volume.cpp:158 ../src/msw/volume.cpp:490
 #, c-format
 msgid "Cannot read typename from '%s'!"
 msgstr "Imposs�vel ler \"typename\" de '%s'!"
@@ -1619,8 +1581,8 @@ msgstr "Diferenciar mai�sculas/min�sculas"
 msgid "Celtic (ISO-8859-14)"
 msgstr "Celta (ISO-8859-14)"
 
+#: ../src/richtext/richtextindentspage.cpp:167
 #: ../src/richtext/richtextliststylepage.cpp:349
-#: ../src/richtext/richtextindentspage.cpp:170
 msgid "Cen&tred"
 msgstr "Centralizado"
 
@@ -1632,53 +1594,53 @@ msgstr "Centralizado"
 msgid "Central European (ISO-8859-2)"
 msgstr "Europeu central (ISO-8859-2)"
 
-#: ../src/richtext/richtextliststylepage.cpp:249
 #: ../src/richtext/richtextbulletspage.cpp:196
+#: ../src/richtext/richtextliststylepage.cpp:249
 msgid "Centre"
 msgstr "Centro"
 
+#: ../src/richtext/richtextindentspage.cpp:169
+#: ../src/richtext/richtextindentspage.cpp:171
 #: ../src/richtext/richtextliststylepage.cpp:351
 #: ../src/richtext/richtextliststylepage.cpp:353
-#: ../src/richtext/richtextindentspage.cpp:172
-#: ../src/richtext/richtextindentspage.cpp:174
 msgid "Centre text."
 msgstr "Centralizar texto."
 
-#: ../src/richtext/richtextliststylepage.cpp:280
 #: ../src/richtext/richtextbulletspage.cpp:229
+#: ../src/richtext/richtextliststylepage.cpp:280
 msgid "Ch&oose..."
 msgstr "Es&colher"
 
-#: ../src/richtext/richtextbuffer.cpp:2599
+#: ../src/richtext/richtextbuffer.cpp:2573
 msgid "Change List Style"
 msgstr "Alterar Estilo da Lista"
 
-#: ../src/richtext/richtextbuffer.cpp:1596
+#: ../src/richtext/richtextbuffer.cpp:1608
 msgid "Change Style"
 msgstr "Alterar Estilo"
 
-#: ../src/richtext/richtextstyles.cpp:834
+#: ../src/richtext/richtextstyles.cpp:753
 msgid "Character styles"
 msgstr "Estilos de caractere"
 
-#: ../src/richtext/richtextliststylepage.cpp:223
-#: ../src/richtext/richtextliststylepage.cpp:225
 #: ../src/richtext/richtextbulletspage.cpp:170
 #: ../src/richtext/richtextbulletspage.cpp:172
+#: ../src/richtext/richtextliststylepage.cpp:223
+#: ../src/richtext/richtextliststylepage.cpp:225
 msgid "Check to add a period after the bullet."
 msgstr "Marque para que um ponto seja adicionado ap�s o marcador."
 
-#: ../src/richtext/richtextliststylepage.cpp:237
-#: ../src/richtext/richtextliststylepage.cpp:239
 #: ../src/richtext/richtextbulletspage.cpp:184
 #: ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/richtext/richtextliststylepage.cpp:237
+#: ../src/richtext/richtextliststylepage.cpp:239
 msgid "Check to add a right parenthesis."
 msgstr "Marque para adicionar um par�ntese direito."
 
-#: ../src/richtext/richtextliststylepage.cpp:230
-#: ../src/richtext/richtextliststylepage.cpp:232
 #: ../src/richtext/richtextbulletspage.cpp:177
 #: ../src/richtext/richtextbulletspage.cpp:179
+#: ../src/richtext/richtextliststylepage.cpp:230
+#: ../src/richtext/richtextliststylepage.cpp:232
 msgid "Check to enclose the bullet in parentheses."
 msgstr "Marque para que o marcador fique entre par�nteses."
 
@@ -1694,26 +1656,16 @@ msgstr "Marque para que a fonte esteja em it�lico."
 msgid "Check to make the font underlined."
 msgstr "Marque para tornar a fonte sublinhada"
 
-#: ../src/richtext/richtextstyledlg.cpp:275
-#: ../src/richtext/richtextstyledlg.cpp:277
+#: ../src/richtext/richtextstyledlg.cpp:276
+#: ../src/richtext/richtextstyledlg.cpp:278
 msgid "Check to restart numbering."
 msgstr "Marque para reiniciar a numera��o."
-
-#: ../src/richtext/richtextfontpage.cpp:221
-#: ../src/richtext/richtextfontpage.cpp:223
-msgid "Check to show a line through the text."
-msgstr "Marque para que uma linha seja exibida sobre o texto."
-
-#: ../src/richtext/richtextfontpage.cpp:228
-#: ../src/richtext/richtextfontpage.cpp:230
-msgid "Check to show the text in capitals."
-msgstr "Marque para que o texto esteja em mai�sculas."
 
 #: ../src/msw/dialup.cpp:787
 msgid "Choose ISP to dial"
 msgstr "Escolha um provedor para discar"
 
-#: ../src/gtk/colordlg.cpp:41 ../src/generic/colrdlgg.cpp:144
+#: ../src/generic/colrdlgg.cpp:144 ../src/gtk/colordlg.cpp:41
 #: ../src/palmos/colordlg.cpp:74
 msgid "Choose colour"
 msgstr "Escolha uma cor"
@@ -1727,23 +1679,23 @@ msgstr "Escolha uma fonte"
 msgid "Circular dependency involving module \"%s\" detected."
 msgstr "Depend�ncia circular detectada envolvendo o m�dulo \"%s\"."
 
-#: ../src/aui/tabmdi.cpp:105 ../src/generic/mdig.cpp:115
+#: ../src/generic/mdig.cpp:115 ../src/aui/tabmdi.cpp:104
 msgid "Cl&ose"
 msgstr "&Fechar"
 
-#: ../src/generic/logg.cpp:513
+#: ../src/generic/logg.cpp:508
 msgid "Clear the log contents"
 msgstr "Apagar o conte�do do log"
 
-#: ../src/richtext/richtextstyledlg.cpp:238
-#: ../src/richtext/richtextstyledlg.cpp:240
+#: ../src/richtext/richtextstyledlg.cpp:239
+#: ../src/richtext/richtextstyledlg.cpp:241
 msgid "Click to apply the selected style."
 msgstr "Clique para aplicar o estilo selecionado."
 
-#: ../src/richtext/richtextliststylepage.cpp:281
-#: ../src/richtext/richtextliststylepage.cpp:283
 #: ../src/richtext/richtextbulletspage.cpp:230
 #: ../src/richtext/richtextbulletspage.cpp:232
+#: ../src/richtext/richtextliststylepage.cpp:281
+#: ../src/richtext/richtextliststylepage.cpp:283
 msgid "Click to browse for a symbol."
 msgstr "Clique para procurar por um s�mbolo."
 
@@ -1755,8 +1707,8 @@ msgstr "Clique para cancelar as mudan�as na fonte."
 msgid "Click to cancel the font selection."
 msgstr "Clique para cancelar a sele��o da fonte."
 
-#: ../src/richtext/richtextstyledlg.cpp:290
-#: ../src/richtext/richtextstyledlg.cpp:292
+#: ../src/richtext/richtextstyledlg.cpp:291
+#: ../src/richtext/richtextstyledlg.cpp:293
 msgid "Click to cancel this window."
 msgstr "Clique para cancelar esta janela."
 
@@ -1764,8 +1716,8 @@ msgstr "Clique para cancelar esta janela."
 msgid "Click to change the font colour."
 msgstr "Clique para alterar a cor da fonte."
 
-#: ../src/richtext/richtextfontpage.cpp:211
-#: ../src/richtext/richtextfontpage.cpp:213
+#: ../src/richtext/richtextfontpage.cpp:205
+#: ../src/richtext/richtextfontpage.cpp:207
 msgid "Click to change the text colour."
 msgstr "Clique para alterar a cor do texto."
 
@@ -1774,8 +1726,8 @@ msgstr "Clique para alterar a cor do texto."
 msgid "Click to choose the font for this level."
 msgstr "Clique para escolher a fonte para este n�vel."
 
-#: ../src/richtext/richtextstyledlg.cpp:265
-#: ../src/richtext/richtextstyledlg.cpp:267
+#: ../src/richtext/richtextstyledlg.cpp:266
+#: ../src/richtext/richtextstyledlg.cpp:268
 msgid "Click to close this window."
 msgstr "Clique para fechar esta janela"
 
@@ -1788,23 +1740,23 @@ msgstr "Clique para confirmar as mudan�as na fonte."
 msgid "Click to confirm the font selection."
 msgstr "Clique para confirmar a sele��o da fonte."
 
-#: ../src/richtext/richtextstyledlg.cpp:284
-#: ../src/richtext/richtextstyledlg.cpp:286
+#: ../src/richtext/richtextstyledlg.cpp:285
+#: ../src/richtext/richtextstyledlg.cpp:287
 msgid "Click to confirm your selection."
 msgstr "Clique para confirmar sua sele��o."
 
-#: ../src/richtext/richtextstyledlg.cpp:218
-#: ../src/richtext/richtextstyledlg.cpp:220
+#: ../src/richtext/richtextstyledlg.cpp:219
+#: ../src/richtext/richtextstyledlg.cpp:221
 msgid "Click to create a new character style."
 msgstr "Clique para criar um novo estilo de caractere."
 
-#: ../src/richtext/richtextstyledlg.cpp:230
-#: ../src/richtext/richtextstyledlg.cpp:232
+#: ../src/richtext/richtextstyledlg.cpp:231
+#: ../src/richtext/richtextstyledlg.cpp:233
 msgid "Click to create a new list style."
 msgstr "Clique para criar um novo estilo de listas."
 
-#: ../src/richtext/richtextstyledlg.cpp:224
-#: ../src/richtext/richtextstyledlg.cpp:226
+#: ../src/richtext/richtextstyledlg.cpp:225
+#: ../src/richtext/richtextstyledlg.cpp:227
 msgid "Click to create a new paragraph style."
 msgstr "Clique para criar um novo estilo de par�grafo."
 
@@ -1818,8 +1770,8 @@ msgstr "Clique para criar uma nova posi��o de tabula��o."
 msgid "Click to delete all tab positions."
 msgstr "Clique para excluir todas posi��es de tabula��o."
 
-#: ../src/richtext/richtextstyledlg.cpp:256
-#: ../src/richtext/richtextstyledlg.cpp:258
+#: ../src/richtext/richtextstyledlg.cpp:257
+#: ../src/richtext/richtextstyledlg.cpp:259
 msgid "Click to delete the selected style."
 msgstr "Clique para excluir o estilo selecionado."
 
@@ -1828,29 +1780,29 @@ msgstr "Clique para excluir o estilo selecionado."
 msgid "Click to delete the selected tab position."
 msgstr "Clique para excluir a posi��o de tabula��o selecionada."
 
-#: ../src/richtext/richtextstyledlg.cpp:250
-#: ../src/richtext/richtextstyledlg.cpp:252
+#: ../src/richtext/richtextstyledlg.cpp:251
+#: ../src/richtext/richtextstyledlg.cpp:253
 msgid "Click to edit the selected style."
 msgstr "Clique para editar o estilo selecionado."
 
-#: ../src/richtext/richtextstyledlg.cpp:244
-#: ../src/richtext/richtextstyledlg.cpp:246
+#: ../src/richtext/richtextstyledlg.cpp:245
+#: ../src/richtext/richtextstyledlg.cpp:247
 msgid "Click to rename the selected style."
 msgstr "Clique para renomear o estilo selecionado."
 
 #: ../src/generic/dbgrptg.cpp:93 ../src/generic/progdlgg.cpp:658
-#: ../src/generic/progdlgg.cpp:663 ../src/richtext/richtextstyledlg.cpp:263
-#: ../src/richtext/richtextsymboldlg.cpp:476
-#: ../src/richtext/richtextsymboldlg.cpp:490
+#: ../src/generic/progdlgg.cpp:663 ../src/richtext/richtextsymboldlg.cpp:482
+#: ../src/richtext/richtextsymboldlg.cpp:496
+#: ../src/richtext/richtextstyledlg.cpp:264
 #: ../contrib/src/deprecated/proplist.cpp:509
 msgid "Close"
 msgstr "Fechar"
 
-#: ../src/univ/themes/win32.cpp:3743
+#: ../src/univ/themes/win32.cpp:3742
 msgid "Close\tAlt-F4"
 msgstr "Fechar\tAlt-F4"
 
-#: ../src/aui/tabmdi.cpp:106 ../src/generic/mdig.cpp:116
+#: ../src/generic/mdig.cpp:116 ../src/aui/tabmdi.cpp:105
 msgid "Close All"
 msgstr "Fechar tudo"
 
@@ -1858,14 +1810,14 @@ msgstr "Fechar tudo"
 msgid "Close current document"
 msgstr "Fecha o documento atual"
 
-#: ../src/generic/logg.cpp:515
+#: ../src/generic/logg.cpp:510
 msgid "Close this window"
 msgstr "Fechar esta janela"
 
-#: ../src/richtext/richtextsymboldlg.cpp:477
-#: ../src/richtext/richtextsymboldlg.cpp:479
-#: ../src/richtext/richtextsymboldlg.cpp:491
-#: ../src/richtext/richtextsymboldlg.cpp:493
+#: ../src/richtext/richtextsymboldlg.cpp:483
+#: ../src/richtext/richtextsymboldlg.cpp:485
+#: ../src/richtext/richtextsymboldlg.cpp:497
+#: ../src/richtext/richtextsymboldlg.cpp:499
 msgid "Closes the dialog without inserting a symbol."
 msgstr "Fecha o di�logo sem inserir o s�mbolo."
 
@@ -1873,27 +1825,20 @@ msgstr "Fecha o di�logo sem inserir o s�mbolo."
 msgid "Colour:"
 msgstr "Cor:"
 
-#: ../src/common/init.cpp:185
-#, c-format
-msgid ""
-"Command line argument %d couldn't be converted to Unicode and will be "
-"ignored."
-msgstr "O argumento %d da linha de comando n�o p�de ser convertido para Unicode e ser� ignorado."
-
 #: ../src/html/helpwnd.cpp:1528
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
 msgstr "Arquivo de ajuda HTML Compactado (*.chm)|*.chm|"
 
-#: ../src/generic/dirctrlg.cpp:602
+#: ../src/generic/dirctrlg.cpp:606
 msgid "Computer"
 msgstr "Computador"
 
-#: ../src/common/fileconf.cpp:1002
+#: ../src/common/fileconf.cpp:996
 #, c-format
 msgid "Config entry name cannot start with '%c'."
 msgstr "Nome de entrada de configura��o n�o pode iniciar com '%c'."
 
-#: ../src/gtk/filedlg.cpp:61 ../src/generic/filedlgg.cpp:1466
+#: ../src/generic/filedlgg.cpp:1466 ../src/gtk/filedlg.cpp:61
 msgid "Confirm"
 msgstr "Confirmar"
 
@@ -1901,11 +1846,11 @@ msgstr "Confirmar"
 msgid "Confirm registry update"
 msgstr "Confirmar atualiza��o do registro"
 
-#: ../src/html/htmlwin.cpp:517
+#: ../src/html/htmlwin.cpp:491
 msgid "Connecting..."
 msgstr "Conectando..."
 
-#: ../src/html/helpwnd.cpp:453
+#: ../src/html/htmlhelp.cpp:565 ../src/html/helpwnd.cpp:453
 msgid "Contents"
 msgstr "Conte�do"
 
@@ -1914,7 +1859,7 @@ msgstr "Conte�do"
 msgid "Conversion to charset '%s' doesn't work."
 msgstr "Convers�o para conjunto de caracteres '%s' n�o funciona."
 
-#: ../src/html/htmlwin.cpp:940
+#: ../src/html/htmlwin.cpp:914
 #, c-format
 msgid "Copied to clipboard:\"%s\""
 msgstr "Copiado para a �rea de transfer�ncia:\"%s\""
@@ -1958,7 +1903,8 @@ msgid ""
 "Could not resolve control class or id '%s'. Use (non-zero) integer instead\n"
 " or provide #define (see manual for caveats)"
 msgstr ""
-"Controle da classe ou id '%s' n�o resolvido. Use inteiros (diferentes zero)\n"
+"Controle da classe ou id '%s' n�o resolvido. Use inteiros (diferentes "
+"zero)\n"
 " ou disponibilize um #define (veja o manual para precau��es)"
 
 #: ../contrib/src/deprecated/resource.cpp:1278
@@ -1971,16 +1917,16 @@ msgstr ""
 "zero)\n"
 " ou disponibilize um #define (veja o manual para precau��es)"
 
-#: ../src/common/prntbase.cpp:1522
+#: ../src/common/prntbase.cpp:1520
 msgid "Could not start document preview."
 msgstr "N�o foi poss�vel iniciar visualiza��o do documento."
 
-#: ../src/gtk/gnome/gprint.cpp:775 ../src/msw/printwin.cpp:230
-#: ../src/generic/printps.cpp:181
+#: ../src/generic/printps.cpp:181 ../src/gtk/gnome/gprint.cpp:773
+#: ../src/msw/printwin.cpp:230
 msgid "Could not start printing."
 msgstr "N�o foi poss�vel iniciar impress�o."
 
-#: ../src/common/wincmn.cpp:1500
+#: ../src/common/wincmn.cpp:1398
 msgid "Could not transfer data to window"
 msgstr "N�o foi poss�vel transferir dados para a janela"
 
@@ -1992,7 +1938,7 @@ msgstr "N�o foi poss�vel liberar um mutex"
 msgid "Couldn't acquire a mutex lock"
 msgstr "N�o foi poss�vel adquirir um bloqueio mutex"
 
-#: ../src/msw/dragimag.cpp:156 ../src/msw/dragimag.cpp:195
+#: ../src/msw/dragimag.cpp:156 ../src/msw/dragimag.cpp:196
 #: ../src/msw/imaglist.cpp:147 ../src/msw/imaglist.cpp:165
 #: ../src/msw/imaglist.cpp:177
 msgid "Couldn't add an image to the image list."
@@ -2006,32 +1952,33 @@ msgstr "N�o foi poss�vel criar um temporizador"
 msgid "Couldn't create cursor."
 msgstr "N�o foi poss�vel criar cursor."
 
-#: ../src/mac/carbon/overlay.cpp:125
+#: ../src/mac/carbon/overlay.cpp:113
 msgid "Couldn't create the overlay window"
 msgstr "Imposs�vel criar a janela \"overlay\""
 
-#: ../src/mac/carbon/overlay.cpp:161
+#: ../src/mac/carbon/overlay.cpp:157
 msgid "Couldn't end the context on the overlay window"
 msgstr "Imposs�vel finalizar o contexto na janela \"overlay\""
 
 #: ../src/common/dynlib.cpp:199
 #, c-format
 msgid "Couldn't find symbol '%s' in a dynamic library"
-msgstr "N�o foi poss�vel localizar o s�mbolo '%s' em uma biblioteca din�mica"
+msgstr ""
+"N�o foi poss�vel localizar o s�mbolo '%s' em uma biblioteca din�mica"
 
-#: ../src/mac/classic/thread.cpp:517 ../src/msw/thread.cpp:892
+#: ../src/mac/classic/thread.cpp:517 ../src/msw/thread.cpp:894
 msgid "Couldn't get the current thread pointer"
 msgstr "N�o foi poss�vel obter o ponteiro atual da thread"
 
-#: ../src/mac/carbon/overlay.cpp:132
+#: ../src/mac/carbon/overlay.cpp:119
 msgid "Couldn't init the context on the overlay window"
 msgstr "Imposs�vel inicializar o contexto na janela \"overlay\""
 
 #: ../src/common/imagpng.cpp:621
 msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
 msgstr ""
-"N�o foi poss�vel carregar uma imagem PNG - arquivo corrompido ou mem�ria "
-"insuficiente."
+"N�o foi poss�vel carregar uma imagem PNG - arquivo corrompido ou "
+"mem�ria insuficiente."
 
 #: ../src/unix/sound.cpp:471
 #, c-format
@@ -2043,10 +1990,11 @@ msgstr "N�o foi poss�vel carregar dados de som de '%s'."
 msgid "Couldn't open audio: %s"
 msgstr "N�o foi poss�vel abrir �udio: %s"
 
-#: ../src/msw/ole/dataobj.cpp:144
+#: ../src/msw/ole/dataobj.cpp:143
 #, c-format
 msgid "Couldn't register clipboard format '%s'."
-msgstr "N�o foi poss�vel registrar o formato da �rea de transfer�ncia '%s'."
+msgstr ""
+"N�o foi poss�vel registrar o formato da �rea de transfer�ncia '%s'."
 
 #: ../src/os2/thread.cpp:166
 msgid "Couldn't release a mutex"
@@ -2055,7 +2003,9 @@ msgstr "N�o foi poss�vel liberar um mutex"
 #: ../src/msw/listctrl.cpp:716
 #, c-format
 msgid "Couldn't retrieve information about list control item %d."
-msgstr "N�o foi poss�vel obter informa��es sobre o item %d da caixa de listagem."
+msgstr ""
+"N�o foi poss�vel obter informa��es sobre o item %d da caixa de "
+"listagem."
 
 #: ../src/common/imagpng.cpp:670 ../src/common/imagpng.cpp:679
 #: ../src/common/imagpng.cpp:687
@@ -2068,7 +2018,8 @@ msgstr "N�o foi poss�vel terminar a thread"
 
 #: ../src/common/xtistrm.cpp:157
 msgid "Create Parameter not found in declared RTTI Parameters"
-msgstr "Par�metro \"Create\" n�o localizado nos par�metros RTTI declarados"
+msgstr ""
+"Par�metro \"Create\" n�o localizado nos par�metros RTTI declarados"
 
 #: ../src/generic/dirdlgg.cpp:315
 msgid "Create directory"
@@ -2082,8 +2033,8 @@ msgstr "Criar novo diret�rio"
 msgid "Ctrl-"
 msgstr "Ctrl-"
 
-#: ../src/mac/carbon/textctrl.cpp:1052 ../src/msw/textctrl.cpp:2242
-#: ../src/common/stockitem.cpp:118 ../src/richtext/richtextctrl.cpp:2489
+#: ../src/common/stockitem.cpp:118 ../src/mac/carbon/textctrl.cpp:1117
+#: ../src/msw/textctrl.cpp:2209 ../src/richtext/richtextctrl.cpp:2423
 msgid "Cu&t"
 msgstr "&Recortar"
 
@@ -2121,7 +2072,8 @@ msgstr "DELETE"
 
 #: ../src/common/imagbmp.cpp:918
 msgid "DIB Header: Encoding doesn't match bitdepth."
-msgstr "Cabe�alho DIB: Codifica��o n�o corresponde � quantidade de bits."
+msgstr ""
+"Cabe�alho DIB: Codifica��o n�o corresponde � quantidade de bits."
 
 #: ../src/common/imagbmp.cpp:880
 msgid "DIB Header: Image height > 32767 pixels for file."
@@ -2168,7 +2120,7 @@ msgstr "Gera��o de relat�rio de depura��o falhou."
 msgid "Decorative"
 msgstr "Decorativo"
 
-#: ../src/common/fmapbase.cpp:661
+#: ../src/common/fmapbase.cpp:657
 msgid "Default encoding"
 msgstr "Codifica��o padr�o"
 
@@ -2176,7 +2128,7 @@ msgstr "Codifica��o padr�o"
 msgid "Default printer"
 msgstr "Impressora padr�o"
 
-#: ../src/richtext/richtextbuffer.cpp:4917
+#: ../src/richtext/richtextbuffer.cpp:4827
 msgid "Delete"
 msgstr "&Excluir"
 
@@ -2184,11 +2136,11 @@ msgstr "&Excluir"
 msgid "Delete A&ll"
 msgstr "Excluir &Tudo"
 
-#: ../src/richtext/richtextstyledlg.cpp:727
+#: ../src/richtext/richtextstyledlg.cpp:736
 msgid "Delete Style"
 msgstr "Excluir Estilo"
 
-#: ../src/richtext/richtextctrl.cpp:600 ../src/richtext/richtextctrl.cpp:636
+#: ../src/richtext/richtextctrl.cpp:560 ../src/richtext/richtextctrl.cpp:589
 msgid "Delete Text"
 msgstr "Excluir Texto"
 
@@ -2200,7 +2152,7 @@ msgstr "Excluir item"
 msgid "Delete selection"
 msgstr "Excluir sele��o"
 
-#: ../src/richtext/richtextstyledlg.cpp:727
+#: ../src/richtext/richtextstyledlg.cpp:736
 #, c-format
 msgid "Delete style %s?"
 msgstr "Excluir estilo %s?"
@@ -2215,11 +2167,11 @@ msgstr "Arquivo obsoleto de bloqueio '%s' exclu�do."
 msgid "Dependency \"%s\" of module \"%s\" doesn't exist."
 msgstr "A depend�ncia \"%s\" do m�dulo \"%s\" n�o existe."
 
-#: ../src/generic/dirctrlg.cpp:668
+#: ../src/generic/dirctrlg.cpp:672
 msgid "Desktop"
 msgstr "Desktop"
 
-#: ../src/generic/aboutdlgg.cpp:71
+#: ../src/generic/aboutdlgg.cpp:70
 msgid "Developed by "
 msgstr "Desenvolvido por "
 
@@ -2228,14 +2180,14 @@ msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
 msgstr ""
-"Fun��es de discagem est�o indispon�veis porque o servi�o de acesso remoto "
-"(RAS) n�o foi instalado nesta m�quina. Por favor instale-o."
+"Fun��es de discagem est�o indispon�veis porque o servi�o de acesso "
+"remoto (RAS) n�o foi instalado nesta m�quina. Por favor instale-o."
 
 #: ../src/generic/tipdlg.cpp:242
 msgid "Did you know..."
 msgstr "Voc� sabia que..."
 
-#: ../src/dfb/wrapdfb.cpp:64
+#: ../src/dfb/wrapdfb.cpp:59
 #, c-format
 msgid "DirectFB error %d occured."
 msgstr "Ocorreu o erro DirectFB %d."
@@ -2244,7 +2196,7 @@ msgstr "Ocorreu o erro DirectFB %d."
 msgid "Directories"
 msgstr "Diret�rios"
 
-#: ../src/common/filefn.cpp:1257
+#: ../src/common/filefn.cpp:1219
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "N�o foi poss�vel criar o diret�rio '%s'"
@@ -2267,8 +2219,8 @@ msgid ""
 "Display all index items that contain given substring. Search is case "
 "insensitive."
 msgstr ""
-"Mostra todos os itens que cont�m a substring dada. Busca n�o diferenciando "
-"mai�sculas de min�sculas."
+"Mostra todos os itens que cont�m a substring dada. Busca n�o "
+"diferenciando mai�sculas de min�sculas."
 
 #: ../src/html/helpwnd.cpp:671
 msgid "Display options dialog"
@@ -2294,20 +2246,20 @@ msgstr ""
 "Valor novo � \n"
 "%s %1"
 
-#: ../src/common/docview.cpp:458
+#: ../src/common/docview.cpp:459
 #, c-format
 msgid "Do you want to save changes to document %s?"
 msgstr "Deseja salvar altera��es no documento %s?"
 
-#: ../src/generic/aboutdlgg.cpp:74
+#: ../src/generic/aboutdlgg.cpp:73
 msgid "Documentation by "
 msgstr "Documenta��o por "
 
-#: ../src/common/sizer.cpp:2023
+#: ../src/common/sizer.cpp:2019
 msgid "Don't Save"
 msgstr "N�o Salvar"
 
-#: ../src/msw/frame.cpp:195 ../src/html/htmlwin.cpp:582
+#: ../src/html/htmlwin.cpp:556 ../src/msw/frame.cpp:195
 msgid "Done"
 msgstr "Pronto"
 
@@ -2360,24 +2312,20 @@ msgstr "Editar item"
 msgid "Elapsed time : "
 msgstr "Tempo decorrido: "
 
-#: ../src/richtext/richtextstyledlg.cpp:561
+#: ../src/richtext/richtextstyledlg.cpp:570
 msgid "Enter a character style name"
 msgstr "Entre com o nome de um estilo de caractere:"
 
-#: ../src/richtext/richtextstyledlg.cpp:763
+#: ../src/richtext/richtextstyledlg.cpp:772
 msgid "Enter a list style name"
 msgstr "Entre com o nome de um estilo de listas:"
 
-#: ../src/richtext/richtextstyledlg.cpp:836
-msgid "Enter a new style name"
-msgstr "Entre com um novo nome para o estilo:"
-
-#: ../src/common/prntbase.cpp:1074
+#: ../src/common/prntbase.cpp:1072
 #, c-format
 msgid "Enter a page number between %d and %d:"
 msgstr "Entre com um n�mero de p�gina entre %d e %d:"
 
-#: ../src/richtext/richtextstyledlg.cpp:609
+#: ../src/richtext/richtextstyledlg.cpp:618
 msgid "Enter a paragraph style name"
 msgstr "Entre com o nome de um estilo de par�grafo:"
 
@@ -2394,17 +2342,20 @@ msgstr "Entradas localizadas"
 msgid "Envelope Invite 220 x 220 mm"
 msgstr "Envelope Convite, 220 x 220 mm"
 
-#: ../src/common/config.cpp:420
+#: ../src/common/config.cpp:402
 #, c-format
-msgid "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr "Expans�o das vari�veis de ambiente falhou: falta '%c' na posi��o %u em '%s'."
+msgid ""
+"Environment variables expansion failed: missing '%c' at position %u in '%s'."
+msgstr ""
+"Expans�o das vari�veis de ambiente falhou: falta '%c' na posi��o %u "
+"em '%s'."
 
-#: ../src/gtk1/fontdlg.cpp:75 ../src/generic/dirdlgg.cpp:350
-#: ../src/generic/dirctrlg.cpp:704 ../src/generic/dirctrlg.cpp:722
-#: ../src/generic/dirctrlg.cpp:733 ../src/generic/filedlgg.cpp:712
-#: ../src/generic/filedlgg.cpp:830 ../src/generic/filedlgg.cpp:844
-#: ../src/generic/filedlgg.cpp:862 ../src/generic/filedlgg.cpp:1416
-#: ../src/generic/filedlgg.cpp:1444 ../src/generic/filedlgg.cpp:1472
+#: ../src/generic/dirctrlg.cpp:708 ../src/generic/dirctrlg.cpp:726
+#: ../src/generic/dirctrlg.cpp:737 ../src/generic/dirdlgg.cpp:350
+#: ../src/generic/filedlgg.cpp:712 ../src/generic/filedlgg.cpp:830
+#: ../src/generic/filedlgg.cpp:844 ../src/generic/filedlgg.cpp:862
+#: ../src/generic/filedlgg.cpp:1416 ../src/generic/filedlgg.cpp:1444
+#: ../src/generic/filedlgg.cpp:1472 ../src/gtk1/fontdlg.cpp:75
 msgid "Error"
 msgstr "Erro"
 
@@ -2416,11 +2367,11 @@ msgstr "Erro ao criar diret�rio"
 msgid "Error in reading image DIB."
 msgstr "Erro ao ler imagem DIB."
 
-#: ../src/common/fileconf.cpp:510
+#: ../src/common/fileconf.cpp:504
 msgid "Error reading config options."
 msgstr "Erro ao ler op��es de configura��o."
 
-#: ../src/common/fileconf.cpp:1092
+#: ../src/common/fileconf.cpp:1084
 msgid "Error saving user configuration data."
 msgstr "Erro ao salvar os dados de configura��o do usu�rio."
 
@@ -2428,7 +2379,7 @@ msgstr "Erro ao salvar os dados de configura��o do usu�rio."
 msgid "Error while waiting on semaphore"
 msgstr "Erro agurdado por sem�foro"
 
-#: ../src/common/log.cpp:447
+#: ../src/common/log.cpp:441
 msgid "Error: "
 msgstr "Erro: "
 
@@ -2476,9 +2427,10 @@ msgstr "Era esperado '=' durante a an�lise do recurso."
 msgid "Expected 'char' while parsing resource."
 msgstr "Era esperado 'char' durante a an�lise do recurso."
 
-#: ../src/msw/registry.cpp:1141
+#: ../src/msw/registry.cpp:1135
 #, c-format
-msgid "Exporting registry key: file \"%s\" already exists and won't be overwritten."
+msgid ""
+"Exporting registry key: file \"%s\" already exists and won't be overwritten."
 msgstr ""
 "Exportando chave de registro: arquivo \"%s\" j� existe e n�o ser� "
 "sobrescrito."
@@ -2517,7 +2469,9 @@ msgstr "Falha na mudan�a do modo de v�deo"
 #: ../src/common/debugrpt.cpp:243
 #, c-format
 msgid "Failed to clean up debug report directory \"%s\""
-msgstr "Falha ao fazer a limpeza do diret�rio do relat�rio de depura��o \"%s\"."
+msgstr ""
+"Falha ao fazer a limpeza do diret�rio do relat�rio de depura��o \"%s"
+"\"."
 
 #: ../src/common/filename.cpp:190
 msgid "Failed to close file handle"
@@ -2532,7 +2486,7 @@ msgstr "Falha ao fechar arquivo de bloqueio '%s'"
 msgid "Failed to close the clipboard."
 msgstr "Falha ao fechar a �rea de transfer�ncia."
 
-#: ../src/x11/utils.cpp:265
+#: ../src/x11/utils.cpp:264
 #, c-format
 msgid "Failed to close the display \"%s\""
 msgstr "Falha ao tentar fechar o display \"%s\""
@@ -2545,27 +2499,27 @@ msgstr "Falha na conex�o: faltando usu�rio/senha."
 msgid "Failed to connect: no ISP to dial."
 msgstr "Falha na conex�o: nenhum provedor para discar."
 
-#: ../src/common/textfile.cpp:177
-#, c-format
-msgid "Failed to convert file \"%s\" to Unicode."
+#: ../src/common/textfile.cpp:135
+#, fuzzy
+msgid "Failed to convert file contents to Unicode."
 msgstr "Falha ao converter o arquivo \"%s\" para Unicode."
 
-#: ../src/msw/registry.cpp:627
+#: ../src/msw/registry.cpp:621
 #, c-format
 msgid "Failed to copy registry value '%s'"
 msgstr "Falha ao copiar o valor de registro '%s'"
 
-#: ../src/msw/registry.cpp:636
+#: ../src/msw/registry.cpp:630
 #, c-format
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
 msgstr "Falha ao copiar o conte�do da chave de registro '%s' para '%s'."
 
-#: ../src/common/filefn.cpp:1072
+#: ../src/common/filefn.cpp:1034
 #, c-format
 msgid "Failed to copy the file '%s' to '%s'"
 msgstr "Falha ao copiar o arquivo '%s' para '%s'"
 
-#: ../src/msw/registry.cpp:614
+#: ../src/msw/registry.cpp:608
 #, c-format
 msgid "Failed to copy the registry subkey '%s' to '%s'."
 msgstr "Falha ao copiar a subchave do registro '%s' para '%s'"
@@ -2582,7 +2536,7 @@ msgstr "Falha ao criar o \"MDI parent frame\"."
 msgid "Failed to create a status bar."
 msgstr "Falha ao criar barra de status."
 
-#: ../src/common/filename.cpp:852
+#: ../src/common/filename.cpp:822
 msgid "Failed to create a temporary file name"
 msgstr "Falha ao criar um nome de arquivo tempor�rio"
 
@@ -2616,12 +2570,15 @@ msgstr ""
 #: ../src/msw/mimetype.cpp:189
 #, c-format
 msgid "Failed to create registry entry for '%s' files."
-msgstr "Falha ao criar entrada no registro do Windows para arquivos do tipo '%s'."
+msgstr ""
+"Falha ao criar entrada no registro do Windows para arquivos do tipo '%s'."
 
 #: ../src/msw/fdrepdlg.cpp:472
 #, c-format
 msgid "Failed to create the standard find/replace dialog (error code %d)"
-msgstr "Falha ao criar o di�logo localizar/substituir padr�o (c�digo de erro %d)"
+msgstr ""
+"Falha ao criar o di�logo localizar/substituir padr�o (c�digo de erro %"
+"d)"
 
 #: ../src/html/winpars.cpp:587
 #, c-format
@@ -2645,7 +2602,7 @@ msgstr "Falha ao estabelecer loop de alerta com servidor DDE"
 msgid "Failed to establish dialup connection: %s"
 msgstr "Falha ao estabelecer conex�o dial-up: %s"
 
-#: ../src/unix/utilsunx.cpp:509 ../src/unix/utilsunx.cpp:525
+#: ../src/unix/utilsunx.cpp:508 ../src/unix/utilsunx.cpp:524
 #, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "Falha ao executar '%s'\n"
@@ -2684,7 +2641,9 @@ msgstr ""
 #: ../src/common/regex.cpp:425 ../src/common/regex.cpp:473
 #, c-format
 msgid "Failed to find match for regular expression: %s"
-msgstr "N�o foi poss�vel encontrar correspond�ncias para a express�o regular: %s"
+msgstr ""
+"N�o foi poss�vel encontrar correspond�ncias para a express�o "
+"regular: %s"
 
 #: ../src/msw/dialup.cpp:719
 #, c-format
@@ -2703,13 +2662,15 @@ msgstr "Falha ao obter dados da �rea de transfer�ncia"
 msgid "Failed to get the local system time"
 msgstr "Falha ao obter a hora local do sistema"
 
-#: ../src/common/filefn.cpp:1516
+#: ../src/common/filefn.cpp:1478
 msgid "Failed to get the working directory"
 msgstr "Falha ao obter o diret�rio atual"
 
 #: ../src/univ/theme.cpp:114
 msgid "Failed to initialize GUI: no built-in themes found."
-msgstr "Falha ao inicializar interface gr�fica: nenhum tema embutido foi encontrado."
+msgstr ""
+"Falha ao inicializar interface gr�fica: nenhum tema embutido foi "
+"encontrado."
 
 #: ../src/msw/helpchm.cpp:64
 msgid "Failed to initialize MS HTML Help."
@@ -2719,7 +2680,7 @@ msgstr "Falha ao inicializar o MS HTML Help"
 msgid "Failed to initialize OpenGL"
 msgstr "Falha ao inicializar o OpenGL"
 
-#: ../src/gtk/textctrl.cpp:1066
+#: ../src/gtk/textctrl.cpp:1006
 msgid "Failed to insert text in the control."
 msgstr "Falha ao inserir texto no controle."
 
@@ -2733,8 +2694,8 @@ msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
 msgstr ""
-"Falha ao unir a thread, vazamento potencial de mem�ria detectado - por favor "
-"reinicie o programa"
+"Falha ao unir a thread, vazamento potencial de mem�ria detectado - por "
+"favor reinicie o programa"
 
 #: ../src/msw/utils.cpp:725
 #, c-format
@@ -2751,7 +2712,7 @@ msgstr "Falha ao carregar imagem %d do arquivo '%s'."
 msgid "Failed to load metafile from file \"%s\"."
 msgstr "Falha ao carregar meta-arquivo do arquivo \"%s\"."
 
-#: ../src/msw/volume.cpp:312
+#: ../src/msw/volume.cpp:310
 msgid "Failed to load mpr.dll."
 msgstr "Falha ao carregar mpr.dll."
 
@@ -2770,7 +2731,7 @@ msgstr "Falha ao carregar biblioteca compartilhada '%s' Erro '%s'"
 msgid "Failed to lock the lock file '%s'"
 msgstr "Falha ao bloquear o arquivo de bloqueio '%s'"
 
-#: ../src/common/filename.cpp:2208
+#: ../src/common/filename.cpp:2183
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "Falha ao alterar data/hora do arquivo '%s'"
@@ -2785,12 +2746,12 @@ msgstr "Falha ao abrir '%s' para %s"
 msgid "Failed to open CHM archive '%s'."
 msgstr "Falha ao abrir arquivo CHM '%s'."
 
-#: ../src/x11/utils.cpp:284
+#: ../src/x11/utils.cpp:280
 #, c-format
 msgid "Failed to open display \"%s\"."
 msgstr "Falha ao abrir o display \"%s\""
 
-#: ../src/common/filename.cpp:887
+#: ../src/common/filename.cpp:857
 msgid "Failed to open temporary file."
 msgstr "Falha ao abrir arquivo tempor�rio."
 
@@ -2806,7 +2767,7 @@ msgstr "Falha na inser��o de dados na �rea de transfer�ncia"
 msgid "Failed to read PID from lock file."
 msgstr "Falha ao ler PID do arquivo de bloqueio."
 
-#: ../src/unix/utilsunx.cpp:599
+#: ../src/unix/utilsunx.cpp:598
 msgid "Failed to redirect child process input/output"
 msgstr "Falha ao redirecionar entrada/sa�da de processo-filho"
 
@@ -2843,12 +2804,12 @@ msgstr "Falha ao remover arquivo de bloqueio '%s'"
 msgid "Failed to remove stale lock file '%s'."
 msgstr "Falha ao remover arquivo obsoleto de bloqueio '%s'."
 
-#: ../src/msw/registry.cpp:465
+#: ../src/msw/registry.cpp:459
 #, c-format
 msgid "Failed to rename registry value '%s' to '%s'."
 msgstr "Falha ao renomear valor do registro '%s' para '%s'."
 
-#: ../src/common/filefn.cpp:1175
+#: ../src/common/filefn.cpp:1137
 #, c-format
 msgid ""
 "Failed to rename the file '%s' to '%s' because the destination file already "
@@ -2857,7 +2818,7 @@ msgstr ""
 "Falha ao renomear o arquivo '%s' para '%s' porque o arquivo de destino j� "
 "existe."
 
-#: ../src/msw/registry.cpp:569
+#: ../src/msw/registry.cpp:563
 #, c-format
 msgid "Failed to rename the registry key '%s' to '%s'."
 msgstr "Falha ao renomear a chave do registro '%s' para '%s'."
@@ -2866,7 +2827,7 @@ msgstr "Falha ao renomear a chave do registro '%s' para '%s'."
 msgid "Failed to retrieve data from the clipboard."
 msgstr "Falha ao obter dados da �rea de transfer�ncia."
 
-#: ../src/common/filename.cpp:2302
+#: ../src/common/filename.cpp:2276
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
 msgstr "Falha ao alterar a data/hora do arquivo '%s'"
@@ -2902,11 +2863,11 @@ msgstr "Falha ao definir dados da �rea de transfer�ncia."
 msgid "Failed to set permissions on lock file '%s'"
 msgstr "Falha ao definir as permiss�es do arquivo de bloqueio '%s'"
 
-#: ../src/common/file.cpp:516
+#: ../src/common/file.cpp:517
 msgid "Failed to set temporary file permissions"
 msgstr "Falha ao definir permiss�es do arquivo tempor�rio"
 
-#: ../src/gtk/textctrl.cpp:1008
+#: ../src/gtk/textctrl.cpp:948
 msgid "Failed to set text in the text control."
 msgstr "Falha ao definir texto no controle de texto."
 
@@ -2933,7 +2894,7 @@ msgstr "Falha ao terminar loop de alerta com servidor DDE"
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "Falha ao terminar a conex�o dial-up: %s"
 
-#: ../src/common/filename.cpp:2223
+#: ../src/common/filename.cpp:2198
 #, c-format
 msgid "Failed to touch the file '%s'"
 msgstr "Falha ao efetuar \"touch\" no arquivo '%s'"
@@ -2948,7 +2909,7 @@ msgstr "Falha ao desbloquear arquivo de bloqueio '%s'"
 msgid "Failed to unregister DDE server '%s'"
 msgstr "Falha ao remover registro do servidor DDE '%s'"
 
-#: ../src/common/fileconf.cpp:1065
+#: ../src/common/fileconf.cpp:1057
 msgid "Failed to update user configuration file."
 msgstr "Falha ao atualizar arquivo de configura��o de usu�rio."
 
@@ -2962,11 +2923,11 @@ msgstr "Falha ao enviar o relat�rio de depura��o (c�digo de erro %d)."
 msgid "Failed to write to lock file '%s'"
 msgstr "Falha ao gravar no arquivo de bloqueio '%s'"
 
-#: ../src/generic/logg.cpp:400
+#: ../src/generic/logg.cpp:395
 msgid "Fatal error"
 msgstr "Erro fatal"
 
-#: ../src/common/log.cpp:436
+#: ../src/common/log.cpp:430
 msgid "Fatal error: "
 msgstr "Erro fatal: "
 
@@ -2974,12 +2935,12 @@ msgstr "Erro fatal: "
 msgid "File"
 msgstr "Arquivo"
 
-#: ../src/mgl/bitmap.cpp:414
+#: ../src/mgl/bitmap.cpp:422
 #, c-format
 msgid "File %s does not exist."
 msgstr "O arquivo %s n�o existe."
 
-#: ../src/gtk/filedlg.cpp:58 ../src/generic/filedlgg.cpp:1464
+#: ../src/generic/filedlgg.cpp:1464 ../src/gtk/filedlg.cpp:58
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "O arquivo '%s' j� existe; deseja realmente sobrescrev�-lo?"
@@ -2993,15 +2954,15 @@ msgstr ""
 "O arquivo '%s' j� existe.\n"
 "Deseja substitu�-lo?"
 
-#: ../src/common/textcmn.cpp:218 ../src/richtext/richtextctrl.cpp:1829
+#: ../src/common/textcmn.cpp:218 ../src/richtext/richtextctrl.cpp:1764
 msgid "File couldn't be loaded."
 msgstr "Imposs�vel carregar o arquivo."
 
-#: ../src/common/docview.cpp:565 ../src/common/docview.cpp:1605
+#: ../src/common/docview.cpp:566 ../src/common/docview.cpp:1606
 msgid "File error"
 msgstr "Erro de arquivo"
 
-#: ../src/generic/dirctrlg.cpp:722 ../src/generic/filedlgg.cpp:844
+#: ../src/generic/dirctrlg.cpp:726 ../src/generic/filedlgg.cpp:844
 msgid "File name exists already."
 msgstr "Nome de arquivo j� existe."
 
@@ -3009,7 +2970,7 @@ msgstr "Nome de arquivo j� existe."
 msgid "Files"
 msgstr "Arquivos"
 
-#: ../src/common/filefn.cpp:1821
+#: ../src/common/filefn.cpp:1775
 #, c-format
 msgid "Files (%s)"
 msgstr "Arquivos (%s)"
@@ -3034,11 +2995,11 @@ msgstr "Fonte de tamanho fixo.<br> <b>negrito</b> <i>it�lico</i> "
 msgid "Folio, 8 1/2 x 13 in"
 msgstr "F�lio, 8,5\" x 13\""
 
-#: ../src/mac/carbon/fontdlg.cpp:410 ../src/richtext/richtextformatdlg.cpp:275
+#: ../src/mac/carbon/fontdlg.cpp:410 ../src/richtext/richtextformatdlg.cpp:272
 msgid "Font"
 msgstr "Fonte"
 
-#: ../src/richtext/richtextfontpage.cpp:181
+#: ../src/richtext/richtextfontpage.cpp:175
 msgid "Font &weight:"
 msgstr "&Peso da fonte:"
 
@@ -3046,7 +3007,7 @@ msgstr "&Peso da fonte:"
 msgid "Font size:"
 msgstr "Tamanho da fonte:"
 
-#: ../src/richtext/richtextfontpage.cpp:168
+#: ../src/richtext/richtextfontpage.cpp:162
 msgid "Font st&yle:"
 msgstr "E&stilo da fonte:"
 
@@ -3054,14 +3015,14 @@ msgstr "E&stilo da fonte:"
 msgid "Font:"
 msgstr "Fonte:"
 
-#: ../src/dfb/fontmgr.cpp:172
-#, c-format
-msgid "Fonts index file %s disappeared while loading fonts."
-msgstr "O arquivo de �ndice de fontes %s desapareceu durante o carregamento de fontes."
-
-#: ../src/unix/utilsunx.cpp:546
+#: ../src/unix/utilsunx.cpp:545
 msgid "Fork failed"
 msgstr "Falha no \"fork\""
+
+#: ../include/wx/richtext/richtextformatdlg.h:121
+#: ../include/wx/richtext/richtextformatdlg.h:133
+msgid "Formatting"
+msgstr ""
 
 #: ../src/common/xtixml.cpp:232
 msgid "Forward hrefs are not supported"
@@ -3073,7 +3034,7 @@ msgstr "hrefs adiantadas n�o s�o suportadas"
 msgid "Found "
 msgstr "Encontrado"
 
-#: ../src/html/helpwnd.cpp:867
+#: ../src/html/htmlhelp.cpp:460 ../src/html/helpwnd.cpp:867
 #, c-format
 msgid "Found %i matches"
 msgstr "%i ocorr�ncias encontradas"
@@ -3106,11 +3067,11 @@ msgstr "GIF: mem�ria insuficiente."
 msgid "GIF: unknown error!!!"
 msgstr "GIF: erro desconhecido!!!"
 
-#: ../src/univ/themes/gtk.cpp:528
+#: ../src/univ/themes/gtk.cpp:530
 msgid "GTK+ theme"
 msgstr "Tema GTK+"
 
-#: ../src/common/prntbase.cpp:239
+#: ../src/common/prntbase.cpp:237
 msgid "Generic PostScript"
 msgstr "PostScript gen�rico"
 
@@ -3138,9 +3099,17 @@ msgstr "GetPropertyCollection chamada sem um \"collection getter\" v�lido"
 msgid "Go back"
 msgstr "Voltar"
 
+#: ../src/html/htmlhelp.cpp:541
+msgid "Go back to the previous HTML page"
+msgstr ""
+
 #: ../src/html/helpwnd.cpp:640
 msgid "Go forward"
 msgstr "Avan�ar"
+
+#: ../src/html/htmlhelp.cpp:543
+msgid "Go forward to the next HTML page"
+msgstr ""
 
 #: ../src/html/helpwnd.cpp:645
 msgid "Go one level up in document hierarchy"
@@ -3154,11 +3123,11 @@ msgstr "Ir para o diret�rio inicial"
 msgid "Go to parent directory"
 msgstr "Ir para o diret�rio pai"
 
-#: ../src/common/prntbase.cpp:1079
+#: ../src/common/prntbase.cpp:1077
 msgid "Goto Page"
 msgstr "Ir para a p�gina"
 
-#: ../src/generic/aboutdlgg.cpp:77
+#: ../src/generic/aboutdlgg.cpp:76
 msgid "Graphics art by "
 msgstr "Gr�ficos por "
 
@@ -3182,7 +3151,7 @@ msgstr "HOME"
 msgid "HTML Help Project (*.hhp)|*.hhp|"
 msgstr "Projeto de Ajuda HTML (*.hhp)|*.hhp|"
 
-#: ../src/html/htmlwin.cpp:629
+#: ../src/html/htmlwin.cpp:603
 #, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "�ncora HTML %s n�o existe."
@@ -3192,21 +3161,27 @@ msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
 msgstr "Arquivos HTML (*.html;*.htm)|*.html;*.htm|"
 
 #: ../src/html/htmprint.cpp:379
+#, fuzzy
 msgid ""
 "HTML pagination algorithm generated more than the allowed maximum number of "
-"pages and it can't continue any longer!"
+"pages and it can continue any longer!"
 msgstr ""
-"O algoritmo de p�gina��o HTML gerou mais p�ginas do que o permitido e n�o "
-"pode continuar mais!"
+"O algoritmo de p�gina��o HTML gerou mais p�ginas do que o permitido "
+"e n�o pode continuar mais!"
 
 #: ../src/common/fmapbase.cpp:113
 msgid "Hebrew (ISO-8859-8)"
 msgstr "Hebraico (ISO-8859-8)"
 
-#: ../src/html/helpdlg.cpp:67 ../src/html/helpfrm.cpp:96
+#: ../src/html/helpfrm.cpp:96 ../src/html/helpdlg.cpp:67
 #: ../contrib/src/deprecated/proplist.cpp:519
 msgid "Help"
 msgstr "Ajuda"
+
+#: ../src/html/htmlhelp.cpp:87
+#, fuzzy, c-format
+msgid "Help : %s"
+msgstr "Ajuda: %s"
 
 #: ../src/html/helpwnd.cpp:1185
 msgid "Help Browser Options"
@@ -3247,7 +3222,7 @@ msgstr "Ajuda: %s"
 msgid "Home"
 msgstr "Pasta pessoal"
 
-#: ../src/generic/dirctrlg.cpp:666
+#: ../src/generic/dirctrlg.cpp:670
 msgid "Home directory"
 msgstr "Pasta pessoal"
 
@@ -3314,7 +3289,8 @@ msgid ""
 "report, please enter it here and it will be joined to it:"
 msgstr ""
 "Se voc� tiver qualquer informa��o adicional pertinente a este\n"
-"relat�rio de erro, por favor entre-a aqui e ela ser� adicionada ao relat�rio:"
+"relat�rio de erro, por favor entre-a aqui e ela ser� adicionada ao "
+"relat�rio:"
 
 #: ../src/generic/dbgrptg.cpp:311
 msgid ""
@@ -3323,12 +3299,13 @@ msgid ""
 "but be warned that it may hinder improving the program, so if\n"
 "at all possible please do continue with the report generation.\n"
 msgstr ""
-"Se voc� deseja suprimir completamente o relat�rio de depura��o, por favor "
-"escolha o bot�o \"Cancelar\",\n"
-"mas esteja avisado de que isto pode impedir melhoras no programa, ent�o se\n"
+"Se voc� deseja suprimir completamente o relat�rio de depura��o, por "
+"favor escolha o bot�o \"Cancelar\",\n"
+"mas esteja avisado de que isto pode impedir melhoras no programa, ent�o "
+"se\n"
 "isto for poss�vel por favor continue com a gera��o de relat�rio.\n"
 
-#: ../src/msw/registry.cpp:1305
+#: ../src/msw/registry.cpp:1299
 #, c-format
 msgid "Ignoring value \"%s\" of the key \"%s\"."
 msgstr "Ignorando valor \"%s\" da chave \"%s\"."
@@ -3339,7 +3316,8 @@ msgstr "Sintaxe do arquivo de recursos mal-formada."
 
 #: ../src/common/xtistrm.cpp:256
 msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
-msgstr "Classe de objeto ilegal (n�o � um wxEvtHandler) como origem do evento"
+msgstr ""
+"Classe de objeto ilegal (n�o � um wxEvtHandler) como origem do evento"
 
 #: ../include/wx/xti.h:1668
 msgid "Illegal Parameter Count for ConstructObject Method"
@@ -3349,7 +3327,7 @@ msgstr "N�mero ilegal de par�metros para m�todo ConstructObject"
 msgid "Illegal Parameter Count for Create Method"
 msgstr "N�mero ilegal de par�metros para o m�todo Create"
 
-#: ../src/generic/dirctrlg.cpp:704 ../src/generic/filedlgg.cpp:830
+#: ../src/generic/dirctrlg.cpp:708 ../src/generic/filedlgg.cpp:830
 msgid "Illegal directory name."
 msgstr "Nome ilegal de diret?rio."
 
@@ -3371,29 +3349,29 @@ msgstr "Arquivo de imagem n�o � do tipo %ld."
 msgid "Image file is not of type %s."
 msgstr "Arquivo de imagem n�o � do tipo %s."
 
-#: ../src/msw/textctrl.cpp:425
+#: ../src/msw/textctrl.cpp:454
 msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
 msgstr ""
-"Imposs�vel criar um controle \"rich edit\"; o controle de texto simples ser� "
-"usado. Por favor reinstale riched32.dll"
+"Imposs�vel criar um controle \"rich edit\"; o controle de texto simples "
+"ser� usado. Por favor reinstale riched32.dll"
 
-#: ../src/unix/utilsunx.cpp:435
+#: ../src/unix/utilsunx.cpp:434
 msgid "Impossible to get child process input"
 msgstr "Imposs�vel obter entrada do processo filho"
 
-#: ../src/common/filefn.cpp:1091
+#: ../src/common/filefn.cpp:1053
 #, c-format
 msgid "Impossible to get permissions for file '%s'"
 msgstr "Imposs�vel obter permiss�es para o arquivo '%s'"
 
-#: ../src/common/filefn.cpp:1105
+#: ../src/common/filefn.cpp:1067
 #, c-format
 msgid "Impossible to overwrite the file '%s'"
 msgstr "Imposs�vel sobrescrever o arquivo '%s'"
 
-#: ../src/common/filefn.cpp:1149
+#: ../src/common/filefn.cpp:1111
 #, c-format
 msgid "Impossible to set permissions for the file '%s'"
 msgstr "Imposs�vel definir permissions para o arquivo '%s'"
@@ -3402,11 +3380,11 @@ msgstr "Imposs�vel definir permissions para o arquivo '%s'"
 msgid "Indent"
 msgstr "Recuar"
 
-#: ../src/richtext/richtextformatdlg.cpp:281
+#: ../src/richtext/richtextformatdlg.cpp:278
 msgid "Indents && Spacing"
 msgstr "Recuo && espa�amento"
 
-#: ../src/html/helpwnd.cpp:493
+#: ../src/html/htmlhelp.cpp:578 ../src/html/helpwnd.cpp:493
 msgid "Index"
 msgstr "�ndice"
 
@@ -3414,31 +3392,31 @@ msgstr "�ndice"
 msgid "Indian (ISO-8859-12)"
 msgstr "Indiano (ISO-8859-12)"
 
-#: ../src/common/init.cpp:241
+#: ../src/common/init.cpp:232
 msgid "Initialization failed in post init, aborting."
 msgstr "Inicializa��o falhou em post init, abortando."
 
-#: ../src/richtext/richtextsymboldlg.cpp:469
-#: ../src/richtext/richtextsymboldlg.cpp:496
+#: ../src/richtext/richtextsymboldlg.cpp:475
+#: ../src/richtext/richtextsymboldlg.cpp:502
 msgid "Insert"
 msgstr "Inserir"
 
-#: ../src/richtext/richtextbuffer.cpp:4819
-#: ../src/richtext/richtextbuffer.cpp:5591
+#: ../src/richtext/richtextbuffer.cpp:4724
+#: ../src/richtext/richtextbuffer.cpp:5503
 msgid "Insert Image"
 msgstr "Inserir Imagem"
 
-#: ../src/richtext/richtextctrl.cpp:561 ../src/richtext/richtextctrl.cpp:812
-#: ../src/richtext/richtextbuffer.cpp:4707
-#: ../src/richtext/richtextbuffer.cpp:4748
-#: ../src/richtext/richtextbuffer.cpp:4786
+#: ../src/richtext/richtextbuffer.cpp:4600
+#: ../src/richtext/richtextbuffer.cpp:4644
+#: ../src/richtext/richtextbuffer.cpp:4686
+#: ../src/richtext/richtextctrl.cpp:532 ../src/richtext/richtextctrl.cpp:748
 msgid "Insert Text"
 msgstr "Inserir Texto"
 
-#: ../src/richtext/richtextsymboldlg.cpp:471
-#: ../src/richtext/richtextsymboldlg.cpp:473
-#: ../src/richtext/richtextsymboldlg.cpp:498
-#: ../src/richtext/richtextsymboldlg.cpp:500
+#: ../src/richtext/richtextsymboldlg.cpp:477
+#: ../src/richtext/richtextsymboldlg.cpp:479
+#: ../src/richtext/richtextsymboldlg.cpp:504
+#: ../src/richtext/richtextsymboldlg.cpp:506
 msgid "Inserts the chosen symbol."
 msgstr "Insere o s�mbolo escolhido."
 
@@ -3455,7 +3433,7 @@ msgstr "�ndice de imagem TIFF inv�lido."
 msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
 msgstr "Recurso XRC '%s' inv�lido: n�o tem o n� raiz 'resource'."
 
-#: ../src/common/appcmn.cpp:286
+#: ../src/common/appcmn.cpp:277
 #, c-format
 msgid "Invalid display mode specification '%s'."
 msgstr "Especifica��o de modo de v�deo '%s' inv�lida."
@@ -3483,10 +3461,10 @@ msgstr "ID de objeto passada a HasObjectClassInfo � inv�lida ou nula"
 msgid "Invalid regular expression '%s': %s"
 msgstr "Express�o regular '%s' inv�lida: %s"
 
-#: ../src/mac/carbon/fontdlg.cpp:484 ../src/generic/fontdlgg.cpp:236
-#: ../src/richtext/richtextfontpage.cpp:246
-#: ../src/richtext/richtextfontpage.cpp:304
-#: ../src/richtext/richtextfontpage.cpp:517
+#: ../src/generic/fontdlgg.cpp:236 ../src/mac/carbon/fontdlg.cpp:484
+#: ../src/richtext/richtextfontpage.cpp:223
+#: ../src/richtext/richtextfontpage.cpp:281
+#: ../src/richtext/richtextfontpage.cpp:446
 msgid "Italic"
 msgstr "It�lico"
 
@@ -3494,11 +3472,13 @@ msgstr "It�lico"
 msgid "Italy Envelope, 110 x 230 mm"
 msgstr "Envelope It�lia, 110 x 230 mm"
 
-#: ../src/common/imagjpeg.cpp:250
+#: ../src/common/imagjpeg.cpp:245
 msgid "JPEG: Couldn't load - file is probably corrupted."
-msgstr "JPEG: N�o foi poss�vel carregar - provavelmente o arquivo est� corrompido."
+msgstr ""
+"JPEG: N�o foi poss�vel carregar - provavelmente o arquivo est� "
+"corrompido."
 
-#: ../src/common/imagjpeg.cpp:393
+#: ../src/common/imagjpeg.cpp:388
 msgid "JPEG: Couldn't save image."
 msgstr "JPEG: N�o foi poss�vel salvar imagem."
 
@@ -3558,10 +3538,10 @@ msgstr "Cart�o-postal japon�s rotacionado, 148 x 100 mm"
 msgid "Justified"
 msgstr "Justificado"
 
+#: ../src/richtext/richtextindentspage.cpp:162
+#: ../src/richtext/richtextindentspage.cpp:164
 #: ../src/richtext/richtextliststylepage.cpp:344
 #: ../src/richtext/richtextliststylepage.cpp:346
-#: ../src/richtext/richtextindentspage.cpp:165
-#: ../src/richtext/richtextindentspage.cpp:167
 msgid "Justify text left and right."
 msgstr "Justifica o texto � esquerda e � direita."
 
@@ -3669,10 +3649,6 @@ msgstr "N�M_TAB"
 msgid "KP_UP"
 msgstr "N�M_PARA_CIMA"
 
-#: ../src/richtext/richtextindentspage.cpp:308
-msgid "L&ine spacing:"
-msgstr "Espa�amento entre l&inhas:"
-
 #: ../src/common/menucmn.cpp:74
 msgid "LEFT"
 msgstr "ESQUERDA"
@@ -3685,17 +3661,17 @@ msgstr "Paisagem"
 msgid "Ledger, 17 x 11 in"
 msgstr "Ledger, 17\" x 11\""
 
-#: ../src/richtext/richtextliststylepage.cpp:248
-#: ../src/richtext/richtextliststylepage.cpp:252
-#: ../src/richtext/richtextliststylepage.cpp:253
 #: ../src/richtext/richtextbulletspage.cpp:195
 #: ../src/richtext/richtextbulletspage.cpp:199
 #: ../src/richtext/richtextbulletspage.cpp:200
+#: ../src/richtext/richtextliststylepage.cpp:248
+#: ../src/richtext/richtextliststylepage.cpp:252
+#: ../src/richtext/richtextliststylepage.cpp:253
 msgid "Left"
 msgstr "Esquerda"
 
+#: ../src/richtext/richtextindentspage.cpp:214
 #: ../src/richtext/richtextliststylepage.cpp:392
-#: ../src/richtext/richtextindentspage.cpp:217
 msgid "Left (&first line):"
 msgstr "Esquerda (&primeira linha):"
 
@@ -3703,10 +3679,10 @@ msgstr "Esquerda (&primeira linha):"
 msgid "Left margin (mm):"
 msgstr "Margem esquerda (mm):"
 
+#: ../src/richtext/richtextindentspage.cpp:148
+#: ../src/richtext/richtextindentspage.cpp:150
 #: ../src/richtext/richtextliststylepage.cpp:330
 #: ../src/richtext/richtextliststylepage.cpp:332
-#: ../src/richtext/richtextindentspage.cpp:151
-#: ../src/richtext/richtextindentspage.cpp:153
 msgid "Left-align text."
 msgstr "Alinha texto � esquerda."
 
@@ -3753,8 +3729,10 @@ msgstr "Leve"
 #: ../src/generic/helpext.cpp:301
 #, c-format
 msgid "Line %lu of map file \"%s\" has invalid syntax, skipped."
-msgstr "A linha %lu do arquivo de mapa \"%s\" tem sintaxe inv�lida; ignorada."
+msgstr ""
+"A linha %lu do arquivo de mapa \"%s\" tem sintaxe inv�lida; ignorada."
 
+#: ../src/richtext/richtextindentspage.cpp:282
 #: ../src/richtext/richtextliststylepage.cpp:454
 msgid "Line spacing:"
 msgstr "Espa�amento entre linhas:"
@@ -3763,30 +3741,30 @@ msgstr "Espa�amento entre linhas:"
 msgid "Link contained '//', converted to absolute link."
 msgstr "O link continha '//'; convertido para link absoluto."
 
-#: ../src/richtext/richtextformatdlg.cpp:300
+#: ../src/richtext/richtextformatdlg.cpp:296
 msgid "List Style"
 msgstr "Estilo de listas"
 
-#: ../src/richtext/richtextstyles.cpp:835
+#: ../src/richtext/richtextstyles.cpp:754
 msgid "List styles"
 msgstr "Estilos de lista"
 
-#: ../src/richtext/richtextfontpage.cpp:157
-#: ../src/richtext/richtextfontpage.cpp:159
+#: ../src/richtext/richtextfontpage.cpp:151
+#: ../src/richtext/richtextfontpage.cpp:153
 msgid "Lists font sizes in points."
 msgstr "Lista o tamanho das fontes em pontos."
 
-#: ../src/richtext/richtextfontpage.cpp:138
-#: ../src/richtext/richtextfontpage.cpp:140
+#: ../src/richtext/richtextfontpage.cpp:132
+#: ../src/richtext/richtextfontpage.cpp:134
 msgid "Lists the available fonts."
 msgstr "Lista as fontes dispon�veis."
 
-#: ../src/common/fldlgcmn.cpp:283
+#: ../src/common/fldlgcmn.cpp:269
 #, c-format
 msgid "Load %s file"
 msgstr "Carregar arquivo %s"
 
-#: ../src/html/htmlwin.cpp:547
+#: ../src/html/htmlwin.cpp:521
 msgid "Loading : "
 msgstr "Carregando : "
 
@@ -3800,7 +3778,7 @@ msgstr "O arquivo de bloqueio '%s' tem dono incorreto."
 msgid "Lock file '%s' has incorrect permissions."
 msgstr "Arquivo de bloqueio '%s' tem permiss�es incorretas."
 
-#: ../src/generic/logg.cpp:578
+#: ../src/generic/logg.cpp:573
 #, c-format
 msgid "Log saved to the file '%s'."
 msgstr "Log salvo no arquivo '%s'."
@@ -3809,13 +3787,13 @@ msgstr "Log salvo no arquivo '%s'."
 msgid "Long Conversions not supported"
 msgstr "Convers�es do tipo \"long\" n�o suportadas"
 
-#: ../src/richtext/richtextliststylepage.cpp:488
 #: ../src/richtext/richtextbulletspage.cpp:283
+#: ../src/richtext/richtextliststylepage.cpp:488
 msgid "Lower case letters"
 msgstr "Letras min�sculas"
 
-#: ../src/richtext/richtextliststylepage.cpp:490
 #: ../src/richtext/richtextbulletspage.cpp:285
+#: ../src/richtext/richtextliststylepage.cpp:490
 msgid "Lower case roman numerals"
 msgstr "N�meros romanos min�sculos"
 
@@ -3832,10 +3810,11 @@ msgid ""
 "MS HTML Help functions are unavailable because the MS HTML Help library is "
 "not installed on this machine. Please install it."
 msgstr ""
-"As fun��es do MS HTML Help n�o est� dispon�veis porque a biblioteca do MS "
-"HTML Help n�o est� instalada neste sistema.  Por favor instale-a."
+"As fun��es do MS HTML Help n�o est� dispon�veis porque a "
+"biblioteca do MS HTML Help n�o est� instalada neste sistema.  Por favor "
+"instale-a."
 
-#: ../src/univ/themes/win32.cpp:3741
+#: ../src/univ/themes/win32.cpp:3740
 msgid "Ma&ximize"
 msgstr "Ma&ximizar"
 
@@ -3848,7 +3827,7 @@ msgstr "Diferenciar mai�sculas/min�sculas"
 msgid "Memory VFS already contains file '%s'!"
 msgstr "Mem�ria VFS j� cont�m arquivo '%s'!"
 
-#: ../src/msw/frame.cpp:415
+#: ../src/msw/frame.cpp:366
 msgid "Menu"
 msgstr "Menu"
 
@@ -3856,11 +3835,11 @@ msgstr "Menu"
 msgid "Metal theme"
 msgstr "Tema Metal"
 
-#: ../src/univ/themes/win32.cpp:3739
+#: ../src/univ/themes/win32.cpp:3738
 msgid "Mi&nimize"
 msgstr "Mi&nimizar"
 
-#: ../src/mgl/app.cpp:162
+#: ../src/mgl/app.cpp:161
 #, c-format
 msgid "Mode %ix%i-%i not available."
 msgstr "Modo %ix%i-%i n�o dispon�vel."
@@ -3898,26 +3877,24 @@ msgstr "NUM_LOCK"
 msgid "Name"
 msgstr "Nome"
 
-#: ../src/richtext/richtextstyledlg.cpp:217
+#: ../src/richtext/richtextstyledlg.cpp:218
 msgid "New &Character Style..."
 msgstr "Novo Estilo de &Caractere..."
 
-#: ../src/richtext/richtextstyledlg.cpp:229
+#: ../src/richtext/richtextstyledlg.cpp:230
 msgid "New &List Style..."
 msgstr "Novo Estilo de &Lista..."
 
-#: ../src/richtext/richtextstyledlg.cpp:223
+#: ../src/richtext/richtextstyledlg.cpp:224
 msgid "New &Paragraph Style..."
 msgstr "Novo Estilo de &Par�grafo..."
 
-#: ../src/richtext/richtextstyledlg.cpp:561
-#: ../src/richtext/richtextstyledlg.cpp:566
-#: ../src/richtext/richtextstyledlg.cpp:609
-#: ../src/richtext/richtextstyledlg.cpp:614
-#: ../src/richtext/richtextstyledlg.cpp:763
-#: ../src/richtext/richtextstyledlg.cpp:768
-#: ../src/richtext/richtextstyledlg.cpp:836
-#: ../src/richtext/richtextstyledlg.cpp:844
+#: ../src/richtext/richtextstyledlg.cpp:570
+#: ../src/richtext/richtextstyledlg.cpp:575
+#: ../src/richtext/richtextstyledlg.cpp:618
+#: ../src/richtext/richtextstyledlg.cpp:623
+#: ../src/richtext/richtextstyledlg.cpp:772
+#: ../src/richtext/richtextstyledlg.cpp:777
 msgid "New Style"
 msgstr "Novo Estilo"
 
@@ -3942,9 +3919,9 @@ msgstr "&Pr�ximo"
 msgid "Next page"
 msgstr "Pr�xima p�gina"
 
-#: ../src/mac/carbon/msgdlg.cpp:65 ../src/mac/carbon/msgdlg.cpp:120
-#: ../src/mac/classic/msgdlg.cpp:59 ../src/mac/classic/msgdlg.cpp:143
-#: ../src/motif/msgdlg.cpp:204
+#: ../src/mac/carbon/msgdlg.cpp:63 ../src/mac/carbon/msgdlg.cpp:119
+#: ../src/mac/carbon/msgdlg.cpp:203 ../src/mac/classic/msgdlg.cpp:59
+#: ../src/mac/classic/msgdlg.cpp:143 ../src/motif/msgdlg.cpp:204
 msgid "No"
 msgstr "N�o"
 
@@ -3976,8 +3953,8 @@ msgid ""
 msgstr ""
 "Nenhuma fonte para mostrar o texto na codifica��o '%s' encontrada,\n"
 "mas uma codifica��o alternativa '%s' est� dispon�vel.\n"
-"Voc� quer usar esta codifica��o (caso contr�rio voc� ter� que escolher "
-"outra)?"
+"Voc� quer usar esta codifica��o (caso contr�rio voc� ter� que "
+"escolher outra)?"
 
 #: ../src/common/fontmap.cpp:424
 #, c-format
@@ -3988,12 +3965,8 @@ msgid ""
 msgstr ""
 "Nenhuma fonte para mostrar o texto na codifica��o '%s' encontrada.\n"
 "Voc� deseja selecionar a fonte a ser usada para esta codifica��o\n"
-"(caso contr�rio o texto com essa codifica��o n�o ser� mostrado corretamente)?"
-
-#: ../src/dfb/fontmgr.cpp:161
-#, c-format
-msgid "No fonts found in %s."
-msgstr "Nenhuma fonte localizada em %s."
+"(caso contr�rio o texto com essa codifica��o n�o ser� mostrado "
+"corretamente)?"
 
 #: ../src/xrc/xmlres.cpp:715
 #, c-format
@@ -4023,6 +3996,7 @@ msgstr "Nenhum manipulador de imagem definido para o tipo %ld."
 msgid "No image handler for type %s defined."
 msgstr "Nenhum manipulador de imagem definido para o tipo %s."
 
+#: ../src/html/htmlhelp.cpp:436 ../src/html/htmlhelp.cpp:441
 #: ../src/html/helpwnd.cpp:850
 msgid "No matching page found yet"
 msgstr "Nenhuma p�gina correspondente foi encontrada at� agora"
@@ -4049,9 +4023,6 @@ msgid "Nordic (ISO-8859-10)"
 msgstr "N�rdico (ISO-8859-10)"
 
 #: ../src/generic/fontdlgg.cpp:235 ../src/generic/fontdlgg.cpp:238
-#: ../src/richtext/richtextindentspage.cpp:245
-#: ../src/richtext/richtextindentspage.cpp:256
-#: ../src/richtext/richtextindentspage.cpp:257
 msgid "Normal"
 msgstr "Normal"
 
@@ -4063,7 +4034,7 @@ msgstr "Tipo normal de fonte<br>e <u>sublinhado</u>. "
 msgid "Normal font:"
 msgstr "Fonte normal:"
 
-#: ../src/richtext/richtextfontpage.cpp:251
+#: ../src/richtext/richtextfontpage.cpp:228
 msgid "Not underlined"
 msgstr "N�o sublinhado"
 
@@ -4071,13 +4042,13 @@ msgstr "N�o sublinhado"
 msgid "Note, 8 1/2 x 11 in"
 msgstr "Nota, 8,5\" x 11\""
 
-#: ../src/richtext/richtextliststylepage.cpp:491
 #: ../src/richtext/richtextbulletspage.cpp:286
+#: ../src/richtext/richtextliststylepage.cpp:491
 msgid "Numbered outline"
 msgstr "Numera��o em n�veis"
 
-#: ../src/mac/carbon/msgdlg.cpp:67 ../src/msw/dialog.cpp:180
-#: ../src/gtk1/fontdlg.cpp:139 ../src/richtext/richtextstyledlg.cpp:282
+#: ../src/mac/carbon/msgdlg.cpp:65 ../src/msw/dialog.cpp:180
+#: ../src/richtext/richtextstyledlg.cpp:283 ../src/gtk1/fontdlg.cpp:139
 #: ../contrib/src/deprecated/proplist.cpp:502
 msgid "OK"
 msgstr "OK"
@@ -4086,9 +4057,10 @@ msgstr "OK"
 msgid "Objects must have an id attribute"
 msgstr "Objetos precisam de um atributo id"
 
-#: ../src/common/docview.cpp:1278 ../src/common/docview.cpp:1628
+#: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1589
 msgid "Open File"
-msgstr "Abrir arquivo"
+msgstr "Abrir Arquivo"
 
 #: ../src/html/helpwnd.cpp:659 ../src/html/helpwnd.cpp:1531
 msgid "Open HTML document"
@@ -4099,7 +4071,7 @@ msgstr "Abrir documento HTML"
 msgid "Open file \"%s\""
 msgstr "Abrir arquivo \"%s\""
 
-#: ../src/generic/dirdlgg.cpp:350 ../src/generic/dirctrlg.cpp:733
+#: ../src/generic/dirctrlg.cpp:737 ../src/generic/dirdlgg.cpp:350
 #: ../src/generic/filedlgg.cpp:712 ../src/generic/filedlgg.cpp:862
 msgid "Operation not permitted."
 msgstr "Opera��o n�o permitida."
@@ -4292,12 +4264,12 @@ msgstr "Envelope PRC n� 9 rotacionado, 324 x 229 mm"
 msgid "PRINT"
 msgstr "PRINT"
 
-#: ../src/common/prntbase.cpp:1544
+#: ../src/common/prntbase.cpp:1542
 #, c-format
 msgid "Page %d"
 msgstr "P�gina %d"
 
-#: ../src/common/prntbase.cpp:1542
+#: ../src/common/prntbase.cpp:1540
 #, c-format
 msgid "Page %d of %d"
 msgstr "P�gina %d de %d"
@@ -4306,7 +4278,7 @@ msgstr "P�gina %d de %d"
 msgid "Page Setup"
 msgstr "Configura��o da P�gina"
 
-#: ../src/gtk/gnome/gprint.cpp:550 ../src/common/prntbase.cpp:462
+#: ../src/common/prntbase.cpp:460 ../src/gtk/gnome/gprint.cpp:548
 msgid "Page setup"
 msgstr "Configura��o da p�gina"
 
@@ -4324,7 +4296,7 @@ msgstr "Tamanho do Papel"
 msgid "Paper size"
 msgstr "Tamanho do papel"
 
-#: ../src/richtext/richtextstyles.cpp:833
+#: ../src/richtext/richtextstyles.cpp:752
 msgid "Paragraph styles"
 msgstr "Estilos de par�grafo"
 
@@ -4340,7 +4312,7 @@ msgstr "Passando um objeto j� registrado a SetObjectName"
 msgid "Passing an unkown object to GetObject"
 msgstr "Passando um objeto desconhecido a GetObject"
 
-#: ../src/richtext/richtextctrl.cpp:2144
+#: ../src/richtext/richtextctrl.cpp:2077
 msgid "Paste"
 msgstr "&Colar"
 
@@ -4348,8 +4320,8 @@ msgstr "&Colar"
 msgid "Paste selection"
 msgstr "Colar sele��o"
 
-#: ../src/richtext/richtextliststylepage.cpp:221
 #: ../src/richtext/richtextbulletspage.cpp:168
+#: ../src/richtext/richtextliststylepage.cpp:221
 msgid "Peri&od"
 msgstr "Pon&to"
 
@@ -4388,7 +4360,7 @@ msgstr ""
 "(no m�nimo a vers�o 4.70 � necess�ria e voc� tem a %d.%02d)\n"
 "ou este programa n�o operar� corretamente."
 
-#: ../src/common/prntbase.cpp:324
+#: ../src/common/prntbase.cpp:322
 msgid "Please wait while printing\n"
 msgstr "Por favor aguarde a impress�o\n"
 
@@ -4400,8 +4372,12 @@ msgstr "Retrato"
 msgid "PostScript file"
 msgstr "Arquivo PostScript"
 
-#: ../src/mac/carbon/fontdlg.cpp:513 ../src/html/helpwnd.cpp:1207
-#: ../src/generic/fontdlgg.cpp:362
+#: ../src/html/htmlhelp.cpp:509
+msgid "Preparing help window..."
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:362 ../src/html/helpwnd.cpp:1207
+#: ../src/mac/carbon/fontdlg.cpp:513
 msgid "Preview:"
 msgstr "Pr�-visualiza��o:"
 
@@ -4409,17 +4385,17 @@ msgstr "Pr�-visualiza��o:"
 msgid "Previous page"
 msgstr "P�gina anterior"
 
-#: ../src/gtk/gnome/gprint.cpp:405 ../src/gtk/gnome/gprint.cpp:417
-#: ../src/common/prntbase.cpp:404 ../src/generic/prntdlgg.cpp:139
-#: ../src/generic/prntdlgg.cpp:152
+#: ../src/common/prntbase.cpp:402 ../src/generic/prntdlgg.cpp:139
+#: ../src/generic/prntdlgg.cpp:152 ../src/gtk/gnome/gprint.cpp:403
+#: ../src/gtk/gnome/gprint.cpp:415
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../src/common/docview.cpp:1041
+#: ../src/common/docview.cpp:1042
 msgid "Print Preview"
 msgstr "Visualiza��o de impress�o"
 
-#: ../src/common/prntbase.cpp:1496 ../src/common/prntbase.cpp:1522
+#: ../src/common/prntbase.cpp:1494 ../src/common/prntbase.cpp:1520
 msgid "Print Preview Failure"
 msgstr "Falha ao visualizar impress�o"
 
@@ -4439,7 +4415,7 @@ msgstr "Imprimir em cores"
 msgid "Print previe&w"
 msgstr "Visuali&zar impress�o"
 
-#: ../src/gtk/gnome/gprint.cpp:797
+#: ../src/gtk/gnome/gprint.cpp:795
 msgid "Print preview"
 msgstr "Visualiza��o da impress�o"
 
@@ -4479,11 +4455,11 @@ msgstr "Impressora..."
 msgid "Printer:"
 msgstr "Impressora:"
 
-#: ../src/common/prntbase.cpp:321 ../src/common/prntbase.cpp:542
+#: ../src/common/prntbase.cpp:319 ../src/common/prntbase.cpp:540
 msgid "Printing "
 msgstr "Imprimindo "
 
-#: ../src/common/prntbase.cpp:338
+#: ../src/common/prntbase.cpp:336
 msgid "Printing Error"
 msgstr "Erro ao imprimir"
 
@@ -4498,12 +4474,13 @@ msgstr "Imprimindo..."
 
 #: ../src/common/debugrpt.cpp:552
 #, c-format
-msgid "Processing debug report has failed, leaving the files in \"%s\" directory."
+msgid ""
+"Processing debug report has failed, leaving the files in \"%s\" directory."
 msgstr ""
-"Processamento do relat�rio de depura��o falhou, deixando os arquivos no "
-"diret�rio \"%s\"."
+"Processamento do relat�rio de depura��o falhou, deixando os arquivos "
+"no diret�rio \"%s\"."
 
-#: ../src/common/log.cpp:437
+#: ../src/common/log.cpp:431
 msgid "Program aborted."
 msgstr "Programa interrompido."
 
@@ -4511,7 +4488,7 @@ msgstr "Programa interrompido."
 msgid "Quarto, 215 x 275 mm"
 msgstr "Quarto, 215 x 275 mm"
 
-#: ../src/generic/logg.cpp:1171
+#: ../src/generic/logg.cpp:1166
 msgid "Question"
 msgstr "Pergunta"
 
@@ -4532,7 +4509,7 @@ msgstr "DIREITA"
 msgid "Read error on file '%s'"
 msgstr "Erro de leitura no arquivo '%s'"
 
-#: ../src/common/prntbase.cpp:253
+#: ../src/common/prntbase.cpp:251
 msgid "Ready"
 msgstr "Pronto"
 
@@ -4549,34 +4526,35 @@ msgstr "N� de objeto com ref=\"%s\" n�o localizado!"
 msgid "Refresh"
 msgstr "Atualizar"
 
-#: ../src/msw/registry.cpp:561
+#: ../src/msw/registry.cpp:555
 #, c-format
 msgid "Registry key '%s' already exists."
 msgstr "A chave de registro '%s' j� existe."
 
-#: ../src/msw/registry.cpp:530
+#: ../src/msw/registry.cpp:524
 #, c-format
 msgid "Registry key '%s' does not exist, cannot rename it."
 msgstr "A chave de registro '%s' n�o existe; imposs�vel renome�-la."
 
-#: ../src/msw/registry.cpp:662
+#: ../src/msw/registry.cpp:656
 #, c-format
 msgid ""
 "Registry key '%s' is needed for normal system operation,\n"
 "deleting it will leave your system in unusable state:\n"
 "operation aborted."
 msgstr ""
-"A chave de registro '%s' � necess�ria para opera��o normal do sistema,\n"
+"A chave de registro '%s' � necess�ria para opera��o normal do "
+"sistema,\n"
 "apagando-a tornar� seu sistema inutiliz�vel:\n"
 "opera��o cancelada."
 
-#: ../src/msw/registry.cpp:457
+#: ../src/msw/registry.cpp:451
 #, c-format
 msgid "Registry value '%s' already exists."
 msgstr "Valor de registro '%s' j� existe."
 
-#: ../src/richtext/richtextfontpage.cpp:245
-#: ../src/richtext/richtextfontpage.cpp:248
+#: ../src/richtext/richtextfontpage.cpp:222
+#: ../src/richtext/richtextfontpage.cpp:225
 msgid "Regular"
 msgstr "Normal"
 
@@ -4600,10 +4578,10 @@ msgstr "Remover dos marcadores a p�gina atual "
 #, c-format
 msgid "Renderer \"%s\" has incompatible version %d.%d and couldn't be loaded."
 msgstr ""
-"Renderizador \"%s\" � de uma vers�o incompat�vel, %d.%d; n�o foi poss�vel "
-"carreg�-lo."
+"Renderizador \"%s\" � de uma vers�o incompat�vel, %d.%d; n�o foi "
+"poss�vel carreg�-lo."
 
-#: ../src/richtext/richtextbuffer.cpp:2761
+#: ../src/richtext/richtextbuffer.cpp:2732
 msgid "Renumber List"
 msgstr "Lista Numerada"
 
@@ -4611,7 +4589,7 @@ msgstr "Lista Numerada"
 msgid "Rep&lace"
 msgstr "&Substituir"
 
-#: ../src/richtext/richtextctrl.cpp:2275
+#: ../src/richtext/richtextctrl.cpp:2206
 msgid "Replace"
 msgstr "Substituir"
 
@@ -4635,8 +4613,8 @@ msgstr "Arquivos de recurso precisam ser da mesma vers�o!"
 msgid "Revert to Saved"
 msgstr "Reverter ao que est� salvo"
 
-#: ../src/richtext/richtextliststylepage.cpp:250
 #: ../src/richtext/richtextbulletspage.cpp:197
+#: ../src/richtext/richtextliststylepage.cpp:250
 msgid "Right"
 msgstr "Direita"
 
@@ -4644,10 +4622,10 @@ msgstr "Direita"
 msgid "Right margin (mm):"
 msgstr "Margem direita (mm):"
 
+#: ../src/richtext/richtextindentspage.cpp:155
+#: ../src/richtext/richtextindentspage.cpp:157
 #: ../src/richtext/richtextliststylepage.cpp:337
 #: ../src/richtext/richtextliststylepage.cpp:339
-#: ../src/richtext/richtextindentspage.cpp:158
-#: ../src/richtext/richtextindentspage.cpp:160
 msgid "Right-align text."
 msgstr "Alinhar texto � direita."
 
@@ -4655,8 +4633,8 @@ msgstr "Alinhar texto � direita."
 msgid "Roman"
 msgstr "Romano"
 
-#: ../src/richtext/richtextliststylepage.cpp:299
 #: ../src/richtext/richtextbulletspage.cpp:249
+#: ../src/richtext/richtextliststylepage.cpp:299
 msgid "S&tandard bullet name:"
 msgstr "Nome do marcador padr�o:"
 
@@ -4692,11 +4670,11 @@ msgstr "ESPECIAL"
 msgid "SUBTRACT"
 msgstr "SUBTRA��O"
 
-#: ../src/common/sizer.cpp:2022
+#: ../src/common/sizer.cpp:2018
 msgid "Save"
 msgstr "Salvar"
 
-#: ../src/common/fldlgcmn.cpp:285
+#: ../src/common/fldlgcmn.cpp:271
 #, c-format
 msgid "Save %s file"
 msgstr "Salvar arquivo %s"
@@ -4705,7 +4683,7 @@ msgstr "Salvar arquivo %s"
 msgid "Save &As..."
 msgstr "Salvar &Como..."
 
-#: ../src/common/docview.cpp:299
+#: ../src/common/docview.cpp:300
 msgid "Save As"
 msgstr "Salvar como"
 
@@ -4717,7 +4695,7 @@ msgstr "Salvar documento atual"
 msgid "Save current document with a different filename"
 msgstr "Salvar o documento atual com outro nome"
 
-#: ../src/generic/logg.cpp:511
+#: ../src/generic/logg.cpp:506
 msgid "Save log contents to file"
 msgstr "Salvar em arquivo conte�do do log"
 
@@ -4725,8 +4703,8 @@ msgstr "Salvar em arquivo conte�do do log"
 msgid "Script"
 msgstr "Script"
 
-#: ../src/html/helpwnd.cpp:513 ../src/html/helpwnd.cpp:528
-#: ../src/generic/srchctlg.cpp:328
+#: ../src/html/htmlhelp.cpp:610 ../src/html/helpwnd.cpp:513
+#: ../src/html/helpwnd.cpp:528
 msgid "Search"
 msgstr "Pesquisar"
 
@@ -4735,8 +4713,8 @@ msgid ""
 "Search contents of help book(s) for all occurences of the text you typed "
 "above"
 msgstr ""
-"Pesquisar o conte�do dos livro(s) de ajuda por todas todas as ocorrencias do "
-"texo que voc� digitou acima"
+"Pesquisar o conte�do dos livro(s) de ajuda por todas todas as ocorrencias "
+"do texo que voc� digitou acima"
 
 #: ../src/generic/fdrepdlg.cpp:159
 msgid "Search direction"
@@ -4750,11 +4728,17 @@ msgstr "Pesquisar por:"
 msgid "Search in all books"
 msgstr "Pesquisar em todos os livros"
 
+#: ../src/html/htmlhelp.cpp:593
+#, fuzzy
+msgid "Search!"
+msgstr "Pesquisar"
+
+#: ../src/html/htmlhelp.cpp:383 ../src/html/htmlhelp.cpp:441
 #: ../src/html/helpwnd.cpp:849
 msgid "Searching..."
 msgstr "Pesquisando..."
 
-#: ../src/generic/dirctrlg.cpp:604
+#: ../src/generic/dirctrlg.cpp:608
 msgid "Sections"
 msgstr "Se��es"
 
@@ -4770,39 +4754,35 @@ msgstr ""
 "Erro de busca no arquivo '%s' (arquivos grandes n�o s�o suportados pela "
 "stdio)"
 
-#: ../src/mac/carbon/textctrl.cpp:1057 ../src/msw/textctrl.cpp:2247
-#: ../src/richtext/richtextctrl.cpp:2494
+#: ../src/mac/carbon/textctrl.cpp:1122 ../src/msw/textctrl.cpp:2214
+#: ../src/richtext/richtextctrl.cpp:2428
 msgid "Select &All"
 msgstr "Selecionar &tudo"
 
-#: ../src/common/docview.cpp:1708
+#: ../src/common/docview.cpp:1709
 msgid "Select a document template"
 msgstr "Selecione um modelo de documento"
 
-#: ../src/common/docview.cpp:1785
+#: ../src/common/docview.cpp:1786
 msgid "Select a document view"
 msgstr "Selecione uma visualiza��o do documento"
-
-#: ../src/common/docview.cpp:1588
-msgid "Open File"
-msgstr "Selecione um Arquivo"
 
 #: ../src/common/stockitem.cpp:153
 msgid "Select all"
 msgstr "Selecionar &tudo"
 
-#: ../src/richtext/richtextfontpage.cpp:186
-#: ../src/richtext/richtextfontpage.cpp:188
+#: ../src/richtext/richtextfontpage.cpp:180
+#: ../src/richtext/richtextfontpage.cpp:182
 msgid "Select regular or bold."
 msgstr "Selecione normal ou negrito."
 
-#: ../src/richtext/richtextfontpage.cpp:173
-#: ../src/richtext/richtextfontpage.cpp:175
+#: ../src/richtext/richtextfontpage.cpp:167
+#: ../src/richtext/richtextfontpage.cpp:169
 msgid "Select regular or italic style."
 msgstr "Selecione o estilo normal ou it�lico."
 
-#: ../src/richtext/richtextfontpage.cpp:199
-#: ../src/richtext/richtextfontpage.cpp:201
+#: ../src/richtext/richtextfontpage.cpp:193
+#: ../src/richtext/richtextfontpage.cpp:195
 msgid "Select underlining or no underlining."
 msgstr "Selecione sublinhado ou sem sublinhado."
 
@@ -4862,24 +4842,24 @@ msgstr "Mostrar todos os itens do �ndice"
 msgid "Show hidden directories"
 msgstr "Mostrar diret�rios ocultos"
 
-#: ../src/html/helpwnd.cpp:632
+#: ../src/html/htmlhelp.cpp:538 ../src/html/helpwnd.cpp:632
 msgid "Show/hide navigation panel"
 msgstr "Mostrar/ocultar painel de navega��o"
 
-#: ../src/richtext/richtextsymboldlg.cpp:414
-#: ../src/richtext/richtextsymboldlg.cpp:416
+#: ../src/richtext/richtextsymboldlg.cpp:420
+#: ../src/richtext/richtextsymboldlg.cpp:422
 msgid "Shows a Unicode subset."
 msgstr "Mostra um subconjunto do Unicode."
 
-#: ../src/richtext/richtextliststylepage.cpp:476
-#: ../src/richtext/richtextliststylepage.cpp:478
 #: ../src/richtext/richtextbulletspage.cpp:273
 #: ../src/richtext/richtextbulletspage.cpp:275
+#: ../src/richtext/richtextliststylepage.cpp:476
+#: ../src/richtext/richtextliststylepage.cpp:478
 msgid "Shows a preview of the bullet settings."
 msgstr "Mostra uma visualiza��o da configura��o de marcadores."
 
-#: ../src/richtext/richtextfontpage.cpp:236
-#: ../src/richtext/richtextfontpage.cpp:238
+#: ../src/richtext/richtextfontpage.cpp:213
+#: ../src/richtext/richtextfontpage.cpp:215
 msgid "Shows a preview of the font settings."
 msgstr "Mostra uma visualiza��o da configura��o da fonte."
 
@@ -4887,8 +4867,8 @@ msgstr "Mostra uma visualiza��o da configura��o da fonte."
 msgid "Shows a preview of the font."
 msgstr "Mostra uma visualiza��o da fonte."
 
-#: ../src/richtext/richtextindentspage.cpp:329
-#: ../src/richtext/richtextindentspage.cpp:331
+#: ../src/richtext/richtextindentspage.cpp:303
+#: ../src/richtext/richtextindentspage.cpp:305
 msgid "Shows a preview of the paragraph settings."
 msgstr "Mostra uma visualiza��o da configura��o de par�grafo."
 
@@ -4900,12 +4880,12 @@ msgstr "Mostra a pr�-visualiza��o da fonte"
 msgid "Simple monochrome theme"
 msgstr "Tema monocrom�tico simples"
 
+#: ../src/richtext/richtextindentspage.cpp:289
+#: ../src/richtext/richtextindentspage.cpp:293
+#: ../src/richtext/richtextindentspage.cpp:294
 #: ../src/richtext/richtextliststylepage.cpp:460
 #: ../src/richtext/richtextliststylepage.cpp:464
 #: ../src/richtext/richtextliststylepage.cpp:465
-#: ../src/richtext/richtextindentspage.cpp:315
-#: ../src/richtext/richtextindentspage.cpp:319
-#: ../src/richtext/richtextindentspage.cpp:320
 msgid "Single"
 msgstr "�nico"
 
@@ -4926,38 +4906,39 @@ msgstr "Pular"
 msgid "Slant"
 msgstr "Inclina��o"
 
-#: ../src/common/docview.cpp:575
+#: ../src/common/docview.cpp:576
 msgid "Sorry, could not open this file for saving."
 msgstr "N�o foi poss�vel abrir este arquivo para grava��o."
 
-#: ../src/common/docview.cpp:611 ../src/common/docview.cpp:1607
+#: ../src/common/docview.cpp:612 ../src/common/docview.cpp:1608
 msgid "Sorry, could not open this file."
 msgstr "N�o foi poss�vel abrir este arquivo."
 
-#: ../src/common/docview.cpp:582
+#: ../src/common/docview.cpp:583
 msgid "Sorry, could not save this file."
 msgstr "N�o foi poss�vel salvar este arquivo."
 
 #: ../contrib/src/fl/controlbar.cpp:384
-msgid "Sorry, docking is not supported for ports other than wxMSW, wxMac and wxGTK"
+msgid ""
+"Sorry, docking is not supported for ports other than wxMSW, wxMac and wxGTK"
 msgstr "O encaixamento s� � suportado nas vers�es wxMSW, wxMac e wxGTK"
 
-#: ../src/common/prntbase.cpp:1496
+#: ../src/common/prntbase.cpp:1494
 msgid "Sorry, not enough memory to create a preview."
 msgstr "Mem�ria insuficiente para criar uma visualiza��o."
 
-#: ../src/common/docview.cpp:1037
+#: ../src/common/docview.cpp:1038
 msgid "Sorry, print preview needs a printer to be installed."
-msgstr "A visualiza��o de impress�o necessita de uma impressora instalada."
+msgstr ""
+"A visualiza��o de impress�o necessita de uma impressora instalada."
 
-#: ../src/richtext/richtextstyledlg.cpp:566
-#: ../src/richtext/richtextstyledlg.cpp:614
-#: ../src/richtext/richtextstyledlg.cpp:768
-#: ../src/richtext/richtextstyledlg.cpp:844
+#: ../src/richtext/richtextstyledlg.cpp:575
+#: ../src/richtext/richtextstyledlg.cpp:623
+#: ../src/richtext/richtextstyledlg.cpp:777
 msgid "Sorry, that name is taken. Please choose another."
 msgstr "Este nome j� est� sendo usado.  Escolha um outro."
 
-#: ../src/common/docview.cpp:1277 ../src/common/docview.cpp:1627
+#: ../src/common/docview.cpp:1278 ../src/common/docview.cpp:1628
 msgid "Sorry, the format for this file is unknown."
 msgstr "O formato deste arquivo � desconhecido."
 
@@ -4974,8 +4955,8 @@ msgstr "Arquivo de som '%s' est� em um formato n�o suportado."
 msgid "Spacing"
 msgstr "Espa�amento"
 
-#: ../src/richtext/richtextliststylepage.cpp:494
 #: ../src/richtext/richtextbulletspage.cpp:289
+#: ../src/richtext/richtextliststylepage.cpp:494
 msgid "Standard"
 msgstr "Padr�o"
 
@@ -4987,7 +4968,7 @@ msgstr "Statement, 5,5\" x 8,5\""
 msgid "Status:"
 msgstr "Status: "
 
-#: ../src/generic/logg.cpp:628
+#: ../src/generic/logg.cpp:623
 msgid "Status: "
 msgstr "Status: "
 
@@ -5006,7 +4987,7 @@ msgstr "String para cor: Especifica��o de cor incorreta: %s"
 msgid "String conversions not supported"
 msgstr "Convers�es de string n�o suportadas"
 
-#: ../src/richtext/richtextformatdlg.cpp:269
+#: ../src/richtext/richtextformatdlg.cpp:266
 msgid "Style"
 msgstr "&Estilo"
 
@@ -5037,13 +5018,13 @@ msgstr "SuperB/SuperB/A3 305 x 487 mm"
 msgid "Swiss"
 msgstr "Su��o"
 
-#: ../src/richtext/richtextliststylepage.cpp:492
 #: ../src/richtext/richtextbulletspage.cpp:287
+#: ../src/richtext/richtextliststylepage.cpp:492
 msgid "Symbol"
 msgstr "S�mbolo"
 
-#: ../src/richtext/richtextliststylepage.cpp:288
 #: ../src/richtext/richtextbulletspage.cpp:237
+#: ../src/richtext/richtextliststylepage.cpp:288
 msgid "Symbol &font:"
 msgstr "Fonte de s�mbolos:"
 
@@ -5092,7 +5073,7 @@ msgstr "Tabl�ide Extra, 11,69\" x 18\""
 msgid "Tabloid, 11 x 17 in"
 msgstr "Tabl�ide, 11\" x 17\""
 
-#: ../src/richtext/richtextformatdlg.cpp:287
+#: ../src/richtext/richtextformatdlg.cpp:284
 msgid "Tabs"
 msgstr "Tabula��es"
 
@@ -5100,7 +5081,7 @@ msgstr "Tabula��es"
 msgid "Teletype"
 msgstr "Telex"
 
-#: ../src/common/docview.cpp:1709
+#: ../src/common/docview.cpp:1710
 msgid "Templates"
 msgstr "Modelos"
 
@@ -5116,31 +5097,31 @@ msgstr "O servidor FTP n�o suporta modo passivo."
 msgid "The FTP server doesn't support the PORT command."
 msgstr "O servidor FTP n�o suporta o comando \"PORT\"."
 
-#: ../src/richtext/richtextliststylepage.cpp:214
-#: ../src/richtext/richtextliststylepage.cpp:216
 #: ../src/richtext/richtextbulletspage.cpp:160
 #: ../src/richtext/richtextbulletspage.cpp:162
+#: ../src/richtext/richtextliststylepage.cpp:214
+#: ../src/richtext/richtextliststylepage.cpp:216
 msgid "The available bullet styles."
 msgstr "Os estilos dispon�veis de marcador."
 
-#: ../src/richtext/richtextstyledlg.cpp:194
-#: ../src/richtext/richtextstyledlg.cpp:196
+#: ../src/richtext/richtextstyledlg.cpp:195
+#: ../src/richtext/richtextstyledlg.cpp:197
 msgid "The available styles."
 msgstr "Os estilos dispon�veis."
 
-#: ../src/richtext/richtextliststylepage.cpp:254
-#: ../src/richtext/richtextliststylepage.cpp:256
-#: ../src/richtext/richtextliststylepage.cpp:275
-#: ../src/richtext/richtextliststylepage.cpp:277
 #: ../src/richtext/richtextbulletspage.cpp:201
 #: ../src/richtext/richtextbulletspage.cpp:203
 #: ../src/richtext/richtextbulletspage.cpp:224
 #: ../src/richtext/richtextbulletspage.cpp:226
+#: ../src/richtext/richtextliststylepage.cpp:254
+#: ../src/richtext/richtextliststylepage.cpp:256
+#: ../src/richtext/richtextliststylepage.cpp:275
+#: ../src/richtext/richtextliststylepage.cpp:277
 msgid "The bullet character."
 msgstr "O caractere para marcadores."
 
-#: ../src/richtext/richtextsymboldlg.cpp:436
-#: ../src/richtext/richtextsymboldlg.cpp:438
+#: ../src/richtext/richtextsymboldlg.cpp:442
+#: ../src/richtext/richtextsymboldlg.cpp:444
 msgid "The character code."
 msgstr "O c�digo do caractere."
 
@@ -5155,7 +5136,7 @@ msgstr ""
 "um outro para substitu�-lo ou escolher\n"
 "[Cancelar] se ele n�o pode ser substitu�do"
 
-#: ../src/msw/ole/dataobj.cpp:161
+#: ../src/msw/ole/dataobj.cpp:160
 #, c-format
 msgid "The clipboard format '%d' doesn't exist."
 msgstr "O formato '%d' da �rea de transfer�ncia n�o existe."
@@ -5174,7 +5155,7 @@ msgstr ""
 "O diret�rio '%s' n�o existe\n"
 "Deseja cri�-lo agora?"
 
-#: ../src/common/docview.cpp:1976
+#: ../src/common/docview.cpp:1977
 #, c-format
 msgid ""
 "The file '%s' couldn't be opened.\n"
@@ -5183,7 +5164,7 @@ msgstr ""
 "� arquivo '%s' n�o p�de ser aberto.\n"
 "Foi removido da lista de arquivos recentemente utilizados."
 
-#: ../src/common/docview.cpp:1986
+#: ../src/common/docview.cpp:1987
 #, c-format
 msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
@@ -5192,10 +5173,10 @@ msgstr ""
 "O arquivo '%s' n�o existe e n�o p�de ser aberto.\n"
 "Foi removido da lista de arquivos recentemente utilizados."
 
+#: ../src/richtext/richtextindentspage.cpp:221
+#: ../src/richtext/richtextindentspage.cpp:223
 #: ../src/richtext/richtextliststylepage.cpp:398
 #: ../src/richtext/richtextliststylepage.cpp:400
-#: ../src/richtext/richtextindentspage.cpp:224
-#: ../src/richtext/richtextindentspage.cpp:226
 msgid "The first line indent."
 msgstr "O recuo da primeira linha."
 
@@ -5207,8 +5188,8 @@ msgstr "A cor da fonte"
 msgid "The font family."
 msgstr "A fam�lia da fonte"
 
-#: ../src/richtext/richtextsymboldlg.cpp:398
-#: ../src/richtext/richtextsymboldlg.cpp:400
+#: ../src/richtext/richtextsymboldlg.cpp:404
+#: ../src/richtext/richtextsymboldlg.cpp:406
 msgid "The font from which to take the symbol."
 msgstr "A fonte da qual o s�mbolo deve ser retirado."
 
@@ -5229,17 +5210,17 @@ msgstr "O estilo da fonte"
 msgid "The font weight."
 msgstr "O peso da fonte"
 
+#: ../src/richtext/richtextindentspage.cpp:209
+#: ../src/richtext/richtextindentspage.cpp:211
 #: ../src/richtext/richtextliststylepage.cpp:387
 #: ../src/richtext/richtextliststylepage.cpp:389
-#: ../src/richtext/richtextindentspage.cpp:212
-#: ../src/richtext/richtextindentspage.cpp:214
 msgid "The left indent."
 msgstr "O recuo � esquerda"
 
+#: ../src/richtext/richtextindentspage.cpp:295
+#: ../src/richtext/richtextindentspage.cpp:297
 #: ../src/richtext/richtextliststylepage.cpp:466
 #: ../src/richtext/richtextliststylepage.cpp:468
-#: ../src/richtext/richtextindentspage.cpp:321
-#: ../src/richtext/richtextindentspage.cpp:323
 msgid "The line spacing."
 msgstr "O espa�amento entre linhas."
 
@@ -5248,25 +5229,20 @@ msgstr "O espa�amento entre linhas."
 msgid "The list item number."
 msgstr "O n�mero do item da lista."
 
-#: ../src/richtext/richtextindentspage.cpp:258
-#: ../src/richtext/richtextindentspage.cpp:260
-msgid "The outline level."
-msgstr "O n�vel da lista."
-
-#: ../src/common/filename.cpp:1254
+#: ../src/common/filename.cpp:1224
 #, c-format
 msgid "The path '%s' contains too many \"..\"!"
 msgstr "O caminho '%s' cont�m muitos \"..\"!"
 
-#: ../src/common/log.cpp:292
+#: ../src/common/log.cpp:291
 #, c-format
 msgid "The previous message repeated once."
 msgid_plural "The previous message repeated %lu times."
 msgstr[0] "A mensagem anterior repetida uma vez."
 msgstr[1] "A mensagem anterior repetida %lu vezes."
 
-#: ../src/richtext/richtextsymboldlg.cpp:456
-#: ../src/richtext/richtextsymboldlg.cpp:458
+#: ../src/richtext/richtextsymboldlg.cpp:462
+#: ../src/richtext/richtextsymboldlg.cpp:464
 msgid "The range to show."
 msgstr "O intervalo a ser exibido."
 
@@ -5276,8 +5252,8 @@ msgid ""
 "private information,\n"
 "please uncheck them and they will be removed from the report.\n"
 msgstr ""
-"O relat�rio cont�m os arquivos listados abaixo. Se alguns destes arquivos "
-"contiver informa��o privada,\n"
+"O relat�rio cont�m os arquivos listados abaixo. Se alguns destes "
+"arquivos contiver informa��o privada,\n"
 "por favore desmarque-os e eles ser�o removidos do relat�rio.\n"
 
 #: ../src/common/cmdline.cpp:903
@@ -5285,23 +5261,23 @@ msgstr ""
 msgid "The required parameter '%s' was not specified."
 msgstr "O par�metro necess�rio '%s' n�o foi especificado."
 
+#: ../src/richtext/richtextindentspage.cpp:233
+#: ../src/richtext/richtextindentspage.cpp:235
 #: ../src/richtext/richtextliststylepage.cpp:409
 #: ../src/richtext/richtextliststylepage.cpp:411
-#: ../src/richtext/richtextindentspage.cpp:236
-#: ../src/richtext/richtextindentspage.cpp:238
 msgid "The right indent."
 msgstr "O recuo � direita."
 
+#: ../src/richtext/richtextindentspage.cpp:279
 #: ../src/richtext/richtextliststylepage.cpp:449
 #: ../src/richtext/richtextliststylepage.cpp:451
-#: ../src/richtext/richtextindentspage.cpp:305
 msgid "The spacing after the paragraph."
 msgstr "O espa�amento ap�s o par�grafo."
 
+#: ../src/richtext/richtextindentspage.cpp:266
+#: ../src/richtext/richtextindentspage.cpp:268
 #: ../src/richtext/richtextliststylepage.cpp:438
 #: ../src/richtext/richtextliststylepage.cpp:440
-#: ../src/richtext/richtextindentspage.cpp:292
-#: ../src/richtext/richtextindentspage.cpp:294
 msgid "The spacing before the paragraph."
 msgstr "O espa�amento antes do par�grafo."
 
@@ -5315,8 +5291,8 @@ msgstr "O estilo da fonte"
 msgid "The style on which this style is based."
 msgstr "O estilo no qual este estilo � baseado."
 
-#: ../src/richtext/richtextstyledlg.cpp:206
-#: ../src/richtext/richtextstyledlg.cpp:208
+#: ../src/richtext/richtextstyledlg.cpp:207
+#: ../src/richtext/richtextstyledlg.cpp:209
 msgid "The style preview."
 msgstr "O estilo da visualiza��o."
 
@@ -5329,7 +5305,7 @@ msgstr "A posi��o da tabula��o."
 msgid "The tab positions."
 msgstr "As posi��es de tabula��o."
 
-#: ../src/common/textcmn.cpp:254 ../src/richtext/richtextctrl.cpp:1846
+#: ../src/common/textcmn.cpp:254 ../src/richtext/richtextctrl.cpp:1781
 msgid "The text couldn't be saved."
 msgstr "N�o foi poss�vel salvar o texto."
 
@@ -5344,14 +5320,16 @@ msgid ""
 "The version of remote access service (RAS) installed on this machine is "
 "tooold, please upgrade (the following required function is missing: %s)."
 msgstr ""
-"A vers�o do servi�o de acesso remoto (RAS) instalado nesta m�quina � muito "
-"antiga, por favor atualize-a (a seguinte fun��o desejada est� faltando: %s)."
+"A vers�o do servi�o de acesso remoto (RAS) instalado nesta m�quina � "
+"muito antiga, por favor atualize-a (a seguinte fun��o desejada est� "
+"faltando: %s)."
 
-#: ../src/html/htmprint.cpp:610 ../src/richtext/richtextprint.cpp:575
-msgid "There was a problem during page setup: you may need to set a default printer."
+#: ../src/html/htmprint.cpp:610 ../src/richtext/richtextprint.cpp:561
+msgid ""
+"There was a problem during page setup: you may need to set a default printer."
 msgstr ""
-"Existe um problema durante a configura��o da p�gina: talvez voc� precise "
-"definir a impressora padr�o."
+"Existe um problema durante a configura��o da p�gina: talvez voc� "
+"precise definir a impressora padr�o."
 
 #: ../src/msw/datectrl.cpp:110
 msgid ""
@@ -5361,23 +5339,26 @@ msgstr ""
 "Este sistema n�o suporta o controle de escolha de data, por favor atualize "
 "sua vers�o do comctl32.dll"
 
-#: ../src/msw/thread.cpp:1245
+#: ../src/msw/thread.cpp:1247
 msgid ""
 "Thread module initialization failed: can not store value in thread local "
 "storage"
 msgstr ""
-"Falha na inicializa��o do m�dulo de threads: imposs�vel guardar valor na "
-"�rea de armazenamento local do thread"
+"Falha na inicializa��o do m�dulo de threads: imposs�vel guardar "
+"valor na �rea de armazenamento local do thread"
 
 #: ../src/unix/threadpsx.cpp:1618
 msgid "Thread module initialization failed: failed to create thread key"
-msgstr "Falha na inicializa��o do m�dulo de threads: falha ao criar chave da thread"
+msgstr ""
+"Falha na inicializa��o do m�dulo de threads: falha ao criar chave da "
+"thread"
 
-#: ../src/msw/thread.cpp:1233
+#: ../src/msw/thread.cpp:1235
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
-msgstr "Falha na inicializa��o do m�dulo thread: falha ao criar chave da thread"
+msgstr ""
+"Falha na inicializa��o do m�dulo thread: falha ao criar chave da thread"
 
 #: ../src/unix/threadpsx.cpp:1136
 msgid "Thread priority setting is ignored."
@@ -5413,7 +5394,7 @@ msgstr "Desculpe, mas as dicas n�o est�o dispon�veis!"
 msgid "To:"
 msgstr "Para:"
 
-#: ../src/richtext/richtextbuffer.cpp:5043
+#: ../src/richtext/richtextbuffer.cpp:4953
 msgid "Too many EndStyle calls!"
 msgstr "Muitas chamadas a EndStyle!"
 
@@ -5425,14 +5406,16 @@ msgstr "H� cores demais no PNG; a imagem pode ficar levemente borrada."
 msgid "Top margin (mm):"
 msgstr "Margem superior (mm):"
 
-#: ../src/generic/aboutdlgg.cpp:80
+#: ../src/generic/aboutdlgg.cpp:79
 msgid "Translations by "
 msgstr "Tradu��es por "
 
 #: ../src/common/fs_mem.cpp:193
 #, c-format
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
-msgstr "Tentou-se remover o arquivo '%s' da mem�ria VFS, mas ele n�o est� carregado!"
+msgstr ""
+"Tentou-se remover o arquivo '%s' da mem�ria VFS, mas ele n�o est� "
+"carregado!"
 
 #: ../src/common/sckaddr.cpp:144 ../src/common/sckaddr.cpp:247
 msgid "Trying to solve a NULL hostname: giving up"
@@ -5446,13 +5429,13 @@ msgstr "Turco (ISO-8859-9)"
 msgid "Type"
 msgstr "Tipo"
 
-#: ../src/richtext/richtextfontpage.cpp:132
-#: ../src/richtext/richtextfontpage.cpp:134
+#: ../src/richtext/richtextfontpage.cpp:126
+#: ../src/richtext/richtextfontpage.cpp:128
 msgid "Type a font name."
 msgstr "Digite o nome de uma fonte."
 
-#: ../src/richtext/richtextfontpage.cpp:150
-#: ../src/richtext/richtextfontpage.cpp:152
+#: ../src/richtext/richtextfontpage.cpp:144
+#: ../src/richtext/richtextfontpage.cpp:146
 msgid "Type a size in points."
 msgstr "Digite um tamanho, em pontos."
 
@@ -5477,7 +5460,7 @@ msgstr "US-ASCII"
 msgid "Unable to create TextEncodingConverter"
 msgstr "Imposs�vel criar o TextEncodingConverter"
 
-#: ../src/html/htmlwin.cpp:534
+#: ../src/html/htmlwin.cpp:508
 #, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr "Imposs�vel abrir documento HTML solicitado: %s"
@@ -5490,9 +5473,9 @@ msgstr "Imposs�vel reproduzir som de forma ass�ncrona."
 msgid "Undelete"
 msgstr "Restaurar"
 
-#: ../src/mac/carbon/fontdlg.cpp:493 ../src/richtext/richtextfontpage.cpp:252
-#: ../src/richtext/richtextfontpage.cpp:336
-#: ../src/richtext/richtextfontpage.cpp:539
+#: ../src/mac/carbon/fontdlg.cpp:493 ../src/richtext/richtextfontpage.cpp:229
+#: ../src/richtext/richtextfontpage.cpp:313
+#: ../src/richtext/richtextfontpage.cpp:468
 msgid "Underlined"
 msgstr "&Sublinhado"
 
@@ -5518,14 +5501,15 @@ msgstr "Caracteres inesperados ap�s a op��o '%s'."
 #: ../contrib/src/deprecated/resource.cpp:3111
 #: ../contrib/src/deprecated/resource.cpp:3125
 msgid "Unexpected end of file while parsing resource."
-msgstr "Fim de arquivo encontrado inesperadamento durante an�lise do recurso."
+msgstr ""
+"Fim de arquivo encontrado inesperadamento durante an�lise do recurso."
 
 #: ../src/common/cmdline.cpp:844
 #, c-format
 msgid "Unexpected parameter '%s'"
 msgstr "Par�metro '%s' inesperado"
 
-#: ../src/richtext/richtextsymboldlg.cpp:452
+#: ../src/richtext/richtextsymboldlg.cpp:458
 msgid "Unicode"
 msgstr "Unicode"
 
@@ -5578,7 +5562,7 @@ msgstr "Objeto desconhecido passado a GetObjectClassInfo"
 msgid "Unknown dynamic library error"
 msgstr "Erro de biblioteca din�mica desconhecido"
 
-#: ../src/common/fmapbase.cpp:675
+#: ../src/common/fmapbase.cpp:671
 #, c-format
 msgid "Unknown encoding (%d)"
 msgstr "Codifica��o desconhecida (%d)"
@@ -5602,7 +5586,7 @@ msgstr "Sinalizador de estilo desconhecido "
 msgid "Unkown Property %s"
 msgstr "Propriedade %s desconhecida"
 
-#: ../src/common/mimecmn.cpp:214
+#: ../src/common/mimecmn.cpp:169
 #, c-format
 msgid "Unmatched '{' in an entry for mime type %s."
 msgstr "'{' n�o correspondida em uma entrada do tipo mime %s."
@@ -5622,7 +5606,7 @@ msgstr "Estilo %s n�o foi reconhecido durante an�lise do recurso."
 msgid "Unsupported clipboard format."
 msgstr "Formato da �rea de transfer�ncia n�o suportado."
 
-#: ../src/common/appcmn.cpp:269
+#: ../src/common/appcmn.cpp:260
 #, c-format
 msgid "Unsupported theme '%s'."
 msgstr "Tema '%s' n�o suportado"
@@ -5631,13 +5615,13 @@ msgstr "Tema '%s' n�o suportado"
 msgid "Up"
 msgstr "Para cima"
 
-#: ../src/richtext/richtextliststylepage.cpp:487
 #: ../src/richtext/richtextbulletspage.cpp:282
+#: ../src/richtext/richtextliststylepage.cpp:487
 msgid "Upper case letters"
 msgstr "Letras mai�sculas"
 
-#: ../src/richtext/richtextliststylepage.cpp:489
 #: ../src/richtext/richtextbulletspage.cpp:284
+#: ../src/richtext/richtextliststylepage.cpp:489
 msgid "Upper case roman numerals"
 msgstr "N�meros romanos mai�sculos"
 
@@ -5646,10 +5630,10 @@ msgstr "N�meros romanos mai�sculos"
 msgid "Usage: %s"
 msgstr "Uso: %s"
 
+#: ../src/richtext/richtextindentspage.cpp:176
+#: ../src/richtext/richtextindentspage.cpp:178
 #: ../src/richtext/richtextliststylepage.cpp:358
 #: ../src/richtext/richtextliststylepage.cpp:360
-#: ../src/richtext/richtextindentspage.cpp:179
-#: ../src/richtext/richtextindentspage.cpp:181
 msgid "Use the current alignment setting."
 msgstr "Usar a configura��o atual de alinhamento."
 
@@ -5669,7 +5653,7 @@ msgstr "Exibir arquivos de forma detalhada"
 msgid "View files as a list view"
 msgstr "Exibir arquivos em formato de lista"
 
-#: ../src/common/docview.cpp:1786
+#: ../src/common/docview.cpp:1787
 msgid "Views"
 msgstr "Modos de exibi��o"
 
@@ -5689,17 +5673,19 @@ msgstr "WINDOWS_DIREITA"
 msgid "Waiting for subprocess termination failed"
 msgstr "Falha na espera por t�rmino do subprocesso"
 
-#: ../src/html/htmprint.cpp:380 ../src/common/docview.cpp:455
+#: ../src/common/docview.cpp:456 ../src/html/htmprint.cpp:380
 msgid "Warning"
 msgstr "Aviso"
 
-#: ../src/common/log.cpp:451
+#: ../src/common/log.cpp:445
 msgid "Warning: "
 msgstr "Aviso: "
 
 #: ../src/html/htmlpars.cpp:385
 msgid "Warning: attempt to remove HTML tag handler from empty stack."
-msgstr "Aviso: tentativa de remo��o de manipulador de tag HTML de uma pilha vazia."
+msgstr ""
+"Aviso: tentativa de remo��o de manipulador de tag HTML de uma pilha "
+"vazia."
 
 #: ../src/common/fmapbase.cpp:106
 msgid "Western European (ISO-8859-1)"
@@ -5721,7 +5707,7 @@ msgstr "Palavra inteira"
 msgid "Whole words only"
 msgstr "Somente palavras inteiras"
 
-#: ../src/univ/themes/win32.cpp:1059
+#: ../src/univ/themes/win32.cpp:1058
 msgid "Win32 theme"
 msgstr "Tema Win32"
 
@@ -5840,7 +5826,7 @@ msgstr "Windows/DOS OEM (CP 437)"
 msgid "Write error on file '%s'"
 msgstr "Erro de grava��o no arquivo '%s'"
 
-#: ../src/xml/xml.cpp:662
+#: ../src/xml/xml.cpp:658
 #, c-format
 msgid "XML parsing error: '%s' at line %d"
 msgstr "Erro de an�lise XML: '%s' na linha %d"
@@ -5886,19 +5872,20 @@ msgstr "Recurso XRC: Imposs�vel criar bitmap de '%s'."
 #: ../src/xrc/xmlres.cpp:1080
 #, c-format
 msgid "XRC resource: Incorrect colour specification '%s' for property '%s'."
-msgstr "Recurso XRC: Especifica��o de cores '%s' incorreta para propriedade '%s'."
+msgstr ""
+"Recurso XRC: Especifica��o de cores '%s' incorreta para propriedade '%s'."
 
-#: ../src/mac/carbon/msgdlg.cpp:66 ../src/mac/carbon/msgdlg.cpp:121
-#: ../src/mac/classic/msgdlg.cpp:60 ../src/mac/classic/msgdlg.cpp:142
-#: ../src/motif/msgdlg.cpp:204
+#: ../src/mac/carbon/msgdlg.cpp:64 ../src/mac/carbon/msgdlg.cpp:120
+#: ../src/mac/carbon/msgdlg.cpp:202 ../src/mac/classic/msgdlg.cpp:60
+#: ../src/mac/classic/msgdlg.cpp:142 ../src/motif/msgdlg.cpp:204
 msgid "Yes"
 msgstr "Sim"
 
-#: ../src/mac/carbon/overlay.cpp:150
+#: ../src/mac/carbon/overlay.cpp:146
 msgid "You cannot Clear an overlay that is not inited"
 msgstr "Voc� n�o pode limpar uma \"overlay\" que n�o foi inicializada"
 
-#: ../src/dfb/overlay.cpp:60 ../src/mac/carbon/overlay.cpp:110
+#: ../src/mac/carbon/overlay.cpp:104 ../src/dfb/overlay.cpp:55
 msgid "You cannot Init an overlay twice"
 msgstr "Voc� n�o pode inicializar uma \"overlay\" duas vezes"
 
@@ -5918,13 +5905,15 @@ msgstr "&Diminuir Zoom"
 msgid "Zoom to &Fit"
 msgstr "Zoom para &Caber"
 
-#: ../src/common/docview.cpp:2160
+#: ../src/common/docview.cpp:2161
 msgid "[EMPTY]"
 msgstr "[VAZIO]"
 
 #: ../src/msw/dde.cpp:1055
 msgid "a DDEML application has created a prolonged race condition."
-msgstr "uma aplica��o DDEML criou uma condi��o de disputa de dados prolongada."
+msgstr ""
+"uma aplica��o DDEML criou uma condi��o de disputa de dados "
+"prolongada."
 
 #: ../src/msw/dde.cpp:1043
 msgid ""
@@ -5933,7 +5922,8 @@ msgid ""
 "or an invalid instance identifier\n"
 "was passed to a DDEML function."
 msgstr ""
-"uma fun��o DDEML foi chamada sem primeiro chamar a fun��o DdeInitialize,\n"
+"uma fun��o DDEML foi chamada sem primeiro chamar a fun��o "
+"DdeInitialize,\n"
 "ou um identificador de inst�ncia invalido\n"
 "foi passado para uma fun��o DDEML."
 
@@ -5951,23 +5941,33 @@ msgstr "falha na valida��o de um par�metro pelo DDEML."
 
 #: ../src/msw/dde.cpp:1034
 msgid "a request for a synchronous advise transaction has timed out."
-msgstr "tempo esgotado em uma solicita��o para uma transa��o s�ncrona de alerta."
+msgstr ""
+"tempo esgotado em uma solicita��o para uma transa��o s�ncrona de "
+"alerta."
 
 #: ../src/msw/dde.cpp:1040
 msgid "a request for a synchronous data transaction has timed out."
-msgstr "tempo esgotado em uma solicita��o para uma transa��o s�ncrona de dados."
+msgstr ""
+"tempo esgotado em uma solicita��o para uma transa��o s�ncrona de "
+"dados."
 
 #: ../src/msw/dde.cpp:1049
 msgid "a request for a synchronous execute transaction has timed out."
-msgstr "tempo esgotado em uma solicita��o para uma transa��o s�ncrona de execu��o."
+msgstr ""
+"tempo esgotado em uma solicita��o para uma transa��o s�ncrona de "
+"execu��o."
 
 #: ../src/msw/dde.cpp:1067
 msgid "a request for a synchronous poke transaction has timed out."
-msgstr "tempo esgotado em uma solicita��o para uma transa��o \"poke\" s�ncrona."
+msgstr ""
+"tempo esgotado em uma solicita��o para uma transa��o \"poke\" "
+"s�ncrona."
 
 #: ../src/msw/dde.cpp:1082
 msgid "a request to end an advise transaction has timed out."
-msgstr "tempo esgotado em uma solicita��o de t�rmino de uma transa��o de alerta."
+msgstr ""
+"tempo esgotado em uma solicita��o de t�rmino de uma transa��o de "
+"alerta."
 
 #: ../src/msw/dde.cpp:1076
 msgid ""
@@ -6013,7 +6013,8 @@ msgid ""
 "Once the application has returned from an XTYP_XACT_COMPLETE callback,\n"
 "the transaction identifier for that callback is no longer valid."
 msgstr ""
-"um identificador de transa��o invalido foi passado para a fun��o DDEML.\n"
+"um identificador de transa��o invalido foi passado para a fun��o "
+"DDEML.\n"
 "J� que a aplica��o retornou de uma chamada callback do tipo "
 "XTYP_XACT_COMPLETE,\n"
 "o identificador de transa��o para aquele retorno n�o � mais v�lido."
@@ -6022,7 +6023,7 @@ msgstr ""
 msgid "assuming this is a multi-part zip concatenated"
 msgstr "assumindo isto como v�rias partes de um zip concatenado"
 
-#: ../src/common/fileconf.cpp:1897
+#: ../src/common/fileconf.cpp:1880
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
 msgstr "tentativa de alterar a chave imut�vel '%s' ignorada."
@@ -6056,30 +6057,31 @@ msgstr "buffer � muito pequeno para o diret�rio Windows"
 msgid "can't close file '%s'"
 msgstr "imposs�vel fechar arquivo '%s'"
 
-#: ../src/common/file.cpp:278
+#: ../src/common/file.cpp:279
 #, c-format
 msgid "can't close file descriptor %d"
 msgstr "imposs�vel fechar descritor de arquivo %d"
 
-#: ../src/common/file.cpp:544
+#: ../src/common/file.cpp:545
 #, c-format
 msgid "can't commit changes to file '%s'"
 msgstr "imposs�vel submeter altera��es ao arquivo '%s'"
 
-#: ../src/common/file.cpp:212
+#: ../src/common/file.cpp:213
 #, c-format
 msgid "can't create file '%s'"
 msgstr "imposs�vel criar arquivo '%s'"
 
-#: ../src/common/fileconf.cpp:1203
+#: ../src/common/fileconf.cpp:1195
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "imposs�vel excluir arquivo de configura��es do usu�rio '%s'"
 
-#: ../src/common/file.cpp:450
+#: ../src/common/file.cpp:451
 #, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
-msgstr "imposs�vel determinar se o final do arquivo foi alcan�ado no descritor %d"
+msgstr ""
+"imposs�vel determinar se o final do arquivo foi alcan�ado no descritor %d"
 
 #: ../src/msdos/utilsdos.cpp:299 ../src/msdos/utilsdos.cpp:458
 #, c-format
@@ -6090,21 +6092,22 @@ msgstr "imposs�vel executar '%s'"
 msgid "can't find central directory in zip"
 msgstr "imposs�vel encontrar diret�rio central no arquivo zip"
 
-#: ../src/common/file.cpp:420
+#: ../src/common/file.cpp:421
 #, c-format
 msgid "can't find length of file on file descriptor %d"
-msgstr "imposs�vel determinar comprimento do arquivo no descritor de arquivos %d"
+msgstr ""
+"imposs�vel determinar comprimento do arquivo no descritor de arquivos %d"
 
 #: ../src/msw/utils.cpp:394
 msgid "can't find user's HOME, using current directory."
 msgstr "imposs�vel localizar o HOME do usu�rio; usando diret�rio atual."
 
-#: ../src/common/file.cpp:336
+#: ../src/common/file.cpp:337
 #, c-format
 msgid "can't flush file descriptor %d"
 msgstr "imposs�vel liberar descritor de arquivos %d"
 
-#: ../src/msw/wince/filefnwce.cpp:198 ../src/common/file.cpp:392
+#: ../src/common/file.cpp:393 ../src/msw/wince/filefnwce.cpp:198
 #, c-format
 msgid "can't get seek position on file descriptor %d"
 msgstr "imposs�vel obter posi��o de busca no descritor de arquivos %d"
@@ -6113,7 +6116,7 @@ msgstr "imposs�vel obter posi��o de busca no descritor de arquivos %d"
 msgid "can't load any font, aborting"
 msgstr "imposs�vel carregar qualquer fonte; cancelando"
 
-#: ../src/common/file.cpp:264 ../src/common/ffile.cpp:75
+#: ../src/common/ffile.cpp:75 ../src/common/file.cpp:265
 #, c-format
 msgid "can't open file '%s'"
 msgstr "imposs�vel abrir arquivo '%s'"
@@ -6128,7 +6131,7 @@ msgstr "imposs�vel abrir arquivo de configura��es globais '%s'."
 msgid "can't open user configuration file '%s'."
 msgstr "imposs�vel abrir arquivo de configura��es do usu�rio '%s'."
 
-#: ../src/common/fileconf.cpp:1045
+#: ../src/common/fileconf.cpp:1039
 msgid "can't open user configuration file."
 msgstr "imposs�vel abrir arquivo de configura��es do usu�rio."
 
@@ -6140,41 +6143,41 @@ msgstr "imposs�vel reinicializar o sistema de defla��o da zlib"
 msgid "can't re-initialize zlib inflate stream"
 msgstr "imposs�vel reinicializar o sistema de infla��o da zlib"
 
-#: ../src/common/file.cpp:302
+#: ../src/common/file.cpp:303
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "imposs�vel ler do descritor de arquivos %d"
 
-#: ../src/common/file.cpp:539
+#: ../src/common/file.cpp:540
 #, c-format
 msgid "can't remove file '%s'"
 msgstr "imposs�vel remover o arquivo '%s'"
 
-#: ../src/common/file.cpp:555
+#: ../src/common/file.cpp:556
 #, c-format
 msgid "can't remove temporary file '%s'"
 msgstr "imposs�vel remover o arquivo tempor�rio '%s'"
 
-#: ../src/msw/wince/filefnwce.cpp:185 ../src/common/file.cpp:378
+#: ../src/common/file.cpp:379 ../src/msw/wince/filefnwce.cpp:185
 #, c-format
 msgid "can't seek on file descriptor %d"
 msgstr "imposs�vel buscar no descritor de arquivos %d"
 
-#: ../src/common/textfile.cpp:275
+#: ../src/common/textfile.cpp:233
 #, c-format
 msgid "can't write buffer '%s' to disk."
 msgstr "imposs�vel gravar buffer '%s' no disco."
 
-#: ../src/common/file.cpp:318
+#: ../src/common/file.cpp:319
 #, c-format
 msgid "can't write to file descriptor %d"
 msgstr "imposs�vel gravar no descritor de arquivos %d"
 
-#: ../src/common/fileconf.cpp:1059
+#: ../src/common/fileconf.cpp:1050
 msgid "can't write user configuration file."
 msgstr "imposs�vel gravar arquivo de configura��es do usu�rio."
 
-#: ../src/common/intl.cpp:1146
+#: ../src/common/intl.cpp:1152
 #, c-format
 msgid "catalog file for domain '%s' not found."
 msgstr "arquivo de cat�logo para dom�nio '%s' n�o localizado."
@@ -6183,7 +6186,7 @@ msgstr "arquivo de cat�logo para dom�nio '%s' n�o localizado."
 msgid "checksum error"
 msgstr "erro de checksum"
 
-#: ../src/common/tarstrm.cpp:745
+#: ../src/common/tarstrm.cpp:744
 msgid "checksum failure reading tar header block"
 msgstr "\"checksum\" inv�lido na leitura do bloco de cabe�alho tar"
 
@@ -6207,7 +6210,7 @@ msgstr "data"
 msgid "decompression error"
 msgstr "erro de descompacta��o"
 
-#: ../src/common/fmapbase.cpp:685
+#: ../src/common/fmapbase.cpp:681
 msgid "default"
 msgstr "padr�o"
 
@@ -6219,15 +6222,15 @@ msgstr "o delegate n�o tem informa��es de tipo"
 msgid "dump of the process state (binary)"
 msgstr "descarga do estado do processo (bin�rio)"
 
-#: ../src/common/datetime.cpp:3977
+#: ../src/common/datetime.cpp:3936
 msgid "eighteenth"
 msgstr "d�cimo-oitavo"
 
-#: ../src/common/datetime.cpp:3967
+#: ../src/common/datetime.cpp:3926
 msgid "eighth"
 msgstr "oitavo"
 
-#: ../src/common/datetime.cpp:3970
+#: ../src/common/datetime.cpp:3929
 msgid "eleventh"
 msgstr "d�cimo-primeiro"
 
@@ -6236,7 +6239,7 @@ msgstr "d�cimo-primeiro"
 msgid "encoding %i"
 msgstr "codifica��o %i"
 
-#: ../src/common/fileconf.cpp:1883
+#: ../src/common/fileconf.cpp:1866
 #, c-format
 msgid "entry '%s' appears more than once in group '%s'"
 msgstr "a entrada '%s' aparece mais de uma vez no grupo '%s'"
@@ -6276,44 +6279,45 @@ msgstr "estabelecer"
 msgid "failed to flush the file '%s'"
 msgstr "falha ao liberar o arquivo '%s'"
 
-#: ../src/common/datetime.cpp:3974
+#: ../src/common/datetime.cpp:3933
 msgid "fifteenth"
 msgstr "d�cimo-quinto"
 
-#: ../src/common/datetime.cpp:3964
+#: ../src/common/datetime.cpp:3923
 msgid "fifth"
 msgstr "quinto"
 
-#: ../src/common/fileconf.cpp:672
+#: ../src/common/fileconf.cpp:666
 #, c-format
 msgid "file '%s', line %d: '%s' ignored after group header."
 msgstr "arquivo '%s', linha %d: '%s' ignorado ap�s cabe�alho do grupo."
 
-#: ../src/common/fileconf.cpp:701
+#: ../src/common/fileconf.cpp:695
 #, c-format
 msgid "file '%s', line %d: '=' expected."
 msgstr "arquivo '%s', linha %d: '=' esperado."
 
-#: ../src/common/fileconf.cpp:724
+#: ../src/common/fileconf.cpp:718
 #, c-format
 msgid "file '%s', line %d: key '%s' was first found at line %d."
-msgstr "arquivo '%s', linha %d: chave '%s' foi localizada primeiro na linha %d."
+msgstr ""
+"arquivo '%s', linha %d: chave '%s' foi localizada primeiro na linha %d."
 
-#: ../src/common/fileconf.cpp:714
+#: ../src/common/fileconf.cpp:708
 #, c-format
 msgid "file '%s', line %d: value for immutable key '%s' ignored."
 msgstr "arquivo '%s', linha %d: valor da chave imut�vel '%s' ignorado."
 
-#: ../src/common/fileconf.cpp:636
+#: ../src/common/fileconf.cpp:630
 #, c-format
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "arquivo '%s': caractere %c inesperado na linha %d."
 
-#: ../src/richtext/richtextbuffer.cpp:5430
+#: ../src/richtext/richtextbuffer.cpp:5342
 msgid "files"
 msgstr "arquivos"
 
-#: ../src/common/datetime.cpp:3960
+#: ../src/common/datetime.cpp:3919
 msgid "first"
 msgstr "primeiro"
 
@@ -6321,25 +6325,25 @@ msgstr "primeiro"
 msgid "font size"
 msgstr "tamanho da fonte"
 
-#: ../src/common/datetime.cpp:3973
+#: ../src/common/datetime.cpp:3932
 msgid "fourteenth"
 msgstr "d�cimo-quarto"
 
-#: ../src/common/datetime.cpp:3963
+#: ../src/common/datetime.cpp:3922
 msgid "fourth"
 msgstr "quarto"
 
-#: ../src/common/appbase.cpp:352
+#: ../src/common/appbase.cpp:369
 msgid "generate verbose log messages"
 msgstr "gerar mensagens de log detalhadas"
 
-#: ../src/richtext/richtextbuffer.cpp:8034
-#: ../src/richtext/richtextbuffer.cpp:8074
-#: ../src/richtext/richtextbuffer.cpp:8145
+#: ../src/richtext/richtextbuffer.cpp:7480
+#: ../src/richtext/richtextbuffer.cpp:7520
+#: ../src/richtext/richtextbuffer.cpp:7591
 msgid "image"
 msgstr "imagem"
 
-#: ../src/common/tarstrm.cpp:722
+#: ../src/common/tarstrm.cpp:721
 msgid "incomplete header block in tar"
 msgstr "bloco de cabe�alho incompleto no arquivo tar"
 
@@ -6347,7 +6351,7 @@ msgstr "bloco de cabe�alho incompleto no arquivo tar"
 msgid "incorrect event handler string, missing dot"
 msgstr "string de manipulador de eventos incorreta; falta um ponto"
 
-#: ../src/common/tarstrm.cpp:1298
+#: ../src/common/tarstrm.cpp:1297
 msgid "incorrect size given for tar entry"
 msgstr "tamanho incorreto para uma entrada tar"
 
@@ -6355,15 +6359,15 @@ msgstr "tamanho incorreto para uma entrada tar"
 msgid "initiate"
 msgstr "iniciar"
 
-#: ../src/common/tarstrm.cpp:918
+#: ../src/common/tarstrm.cpp:917
 msgid "invalid data in extended tar header"
 msgstr "dados inv�lido no cabe�alho estendido tar"
 
-#: ../src/common/file.cpp:452
+#: ../src/common/file.cpp:453
 msgid "invalid eof() return value."
 msgstr "valor de retorno de eof() inv�lido."
 
-#: ../src/generic/logg.cpp:1185
+#: ../src/generic/logg.cpp:1180
 msgid "invalid message box return value"
 msgstr "valor de retorno da caixa de mensagem inv�lido"
 
@@ -6379,25 +6383,25 @@ msgstr "it�lico"
 msgid "light"
 msgstr "leve"
 
-#: ../src/common/intl.cpp:1562
+#: ../src/common/intl.cpp:1568
 #, c-format
 msgid "locale '%s' can not be set."
 msgstr "imposs�vel definir locale '%s'."
 
-#: ../src/common/intl.cpp:1137
+#: ../src/common/intl.cpp:1143
 #, c-format
 msgid "looking for catalog '%s' in path '%s'."
 msgstr "procurando pelo cat�logo '%s' no caminho '%s'."
 
-#: ../src/common/datetime.cpp:4129
+#: ../src/common/datetime.cpp:4088
 msgid "midnight"
 msgstr "meia-noite"
 
-#: ../src/common/datetime.cpp:3978
+#: ../src/common/datetime.cpp:3937
 msgid "nineteenth"
 msgstr "d�cimo-nono"
 
-#: ../src/common/datetime.cpp:3968
+#: ../src/common/datetime.cpp:3927
 msgid "ninth"
 msgstr "nono"
 
@@ -6409,11 +6413,11 @@ msgstr "nenhum erro DDE."
 msgid "no error"
 msgstr "nenhum erro"
 
-#: ../src/html/helpdata.cpp:655
+#: ../src/html/helpdata.cpp:655 ../src/html/htmlhelp.cpp:201
 msgid "noname"
 msgstr "sem nome"
 
-#: ../src/common/datetime.cpp:4128
+#: ../src/common/datetime.cpp:4087
 msgid "noon"
 msgstr "meio-dia"
 
@@ -6455,7 +6459,7 @@ msgstr "leitura do fluxo zip (entrada %s): comprimento invalido"
 msgid "reentrancy problem."
 msgstr "falha de reentrada."
 
-#: ../src/common/datetime.cpp:3961
+#: ../src/common/datetime.cpp:3920
 msgid "second"
 msgstr "segundo"
 
@@ -6463,11 +6467,11 @@ msgstr "segundo"
 msgid "seek error"
 msgstr "erro de busca"
 
-#: ../src/common/datetime.cpp:3976
+#: ../src/common/datetime.cpp:3935
 msgid "seventeenth"
 msgstr "d�cimo-s�timo"
 
-#: ../src/common/datetime.cpp:3966
+#: ../src/common/datetime.cpp:3925
 msgid "seventh"
 msgstr "s�timo"
 
@@ -6475,23 +6479,23 @@ msgstr "s�timo"
 msgid "shift"
 msgstr "shift"
 
-#: ../src/common/appbase.cpp:342
+#: ../src/common/appbase.cpp:359
 msgid "show this help message"
 msgstr "mostrar esta mensagem de ajuda"
 
-#: ../src/common/datetime.cpp:3975
+#: ../src/common/datetime.cpp:3934
 msgid "sixteenth"
 msgstr "d�cimo-sexto"
 
-#: ../src/common/datetime.cpp:3965
+#: ../src/common/datetime.cpp:3924
 msgid "sixth"
 msgstr "sexto"
 
-#: ../src/common/appcmn.cpp:240
+#: ../src/common/appcmn.cpp:231
 msgid "specify display mode to use (e.g. 640x480-16)"
 msgstr "defina o modo de v�deo a ser usado (p. ex., 640x480-16)"
 
-#: ../src/common/appcmn.cpp:226
+#: ../src/common/appcmn.cpp:217
 msgid "specify the theme to use"
 msgstr "defina o tema a ser usado"
 
@@ -6503,24 +6507,25 @@ msgstr "tamanho do arquivo armazenado n�o consta do cabe�alho Zip"
 msgid "str"
 msgstr "str"
 
-#: ../src/common/tarstrm.cpp:928 ../src/common/tarstrm.cpp:950
-#: ../src/common/tarstrm.cpp:1419 ../src/common/tarstrm.cpp:1441
+#: ../src/common/tarstrm.cpp:927 ../src/common/tarstrm.cpp:949
+#: ../src/common/tarstrm.cpp:1417 ../src/common/tarstrm.cpp:1439
 msgid "tar entry not open"
 msgstr "entrada \"tar\" n�o est� aberta"
 
-#: ../src/common/datetime.cpp:3969
+#: ../src/common/datetime.cpp:3928
 msgid "tenth"
 msgstr "d�cimo"
 
 #: ../src/msw/dde.cpp:1037
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
-msgstr "a resposta � transa��o fez com que o bit DDE_FBUSY fosse ativado."
+msgstr ""
+"a resposta � transa��o fez com que o bit DDE_FBUSY fosse ativado."
 
-#: ../src/common/datetime.cpp:3962
+#: ../src/common/datetime.cpp:3921
 msgid "third"
 msgstr "terceiro"
 
-#: ../src/common/datetime.cpp:3972
+#: ../src/common/datetime.cpp:3931
 msgid "thirteenth"
 msgstr "d�cimo-terceiro"
 
@@ -6529,11 +6534,11 @@ msgstr "d�cimo-terceiro"
 msgid "tiff module: %s"
 msgstr "m�dulo tiff: %s"
 
-#: ../src/common/datetime.cpp:3787
+#: ../src/common/datetime.cpp:3746
 msgid "today"
 msgstr "hoje"
 
-#: ../src/common/datetime.cpp:3789
+#: ../src/common/datetime.cpp:3748
 msgid "tomorrow"
 msgstr "amanh�"
 
@@ -6541,11 +6546,11 @@ msgstr "amanh�"
 msgid "translator-credits"
 msgstr "tradutor-cr�ditos"
 
-#: ../src/common/datetime.cpp:3971
+#: ../src/common/datetime.cpp:3930
 msgid "twelfth"
 msgstr "d�cimo-segundo"
 
-#: ../src/common/datetime.cpp:3979
+#: ../src/common/datetime.cpp:3938
 msgid "twentieth"
 msgstr "vig�simo"
 
@@ -6553,12 +6558,12 @@ msgstr "vig�simo"
 msgid "underlined"
 msgstr "sublinhado"
 
-#: ../src/common/fileconf.cpp:2010
+#: ../src/common/fileconf.cpp:1993
 #, c-format
 msgid "unexpected \" at position %d in '%s'."
 msgstr "\" inesperada na posi��o %d de '%s'."
 
-#: ../src/common/tarstrm.cpp:969
+#: ../src/common/tarstrm.cpp:968
 msgid "unexpected end of file"
 msgstr "fim de arquivo inesperado"
 
@@ -6571,7 +6576,7 @@ msgstr "desconhecido"
 msgid "unknown class %s"
 msgstr "classe %s desconhecida"
 
-#: ../src/html/chm.cpp:352 ../src/common/regex.cpp:257
+#: ../src/common/regex.cpp:257 ../src/html/chm.cpp:352
 msgid "unknown error"
 msgstr "erro desconhecido"
 
@@ -6584,20 +6589,20 @@ msgstr "erro desconhecido (c�digo de erro %08x)."
 msgid "unknown line terminator"
 msgstr "finalizador de linha desconhecido"
 
-#: ../src/msw/wince/filefnwce.cpp:166 ../src/common/file.cpp:360
+#: ../src/common/file.cpp:361 ../src/msw/wince/filefnwce.cpp:166
 msgid "unknown seek origin"
 msgstr "origem de busca desconhecida"
 
-#: ../src/common/fmapbase.cpp:699
+#: ../src/common/fmapbase.cpp:695
 #, c-format
 msgid "unknown-%d"
 msgstr "%d desconhecido"
 
-#: ../src/common/docview.cpp:424
+#: ../src/common/docview.cpp:425
 msgid "unnamed"
 msgstr "sem nome"
 
-#: ../src/common/docview.cpp:1410
+#: ../src/common/docview.cpp:1411
 #, c-format
 msgid "unnamed%d"
 msgstr "%d sem nome"
@@ -6606,7 +6611,7 @@ msgstr "%d sem nome"
 msgid "unsupported Zip compression method"
 msgstr "m�todo de compacta��o Zip n�o suportado"
 
-#: ../src/common/intl.cpp:1152
+#: ../src/common/intl.cpp:1158
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "usando cat�logo '%s' de '%s'."
@@ -6641,6 +6646,10 @@ msgstr "wxRichTextListStylePage"
 msgid "wxRichTextStylePage"
 msgstr "wxRichTextStylePage"
 
+#: ../src/html/search.cpp:49
+msgid "wxSearchEngine::LookFor must be called before scanning!"
+msgstr ""
+
 #: ../src/common/socket.cpp:412 ../src/common/socket.cpp:466
 msgid "wxSocket: invalid signature in ReadMsg."
 msgstr "wxSocket: assinatura inv�lida em ReadMsg."
@@ -6658,11 +6667,11 @@ msgstr "O wxWidgets n�o p�de abrir o display para '%s': terminando."
 msgid "wxWidgets could not open display. Exiting."
 msgstr "O wxWidgets n�o p�de abrir o display. Terminando."
 
-#: ../src/richtext/richtextsymboldlg.cpp:427
+#: ../src/richtext/richtextsymboldlg.cpp:433
 msgid "xxxx"
 msgstr "xxxx"
 
-#: ../src/common/datetime.cpp:3788
+#: ../src/common/datetime.cpp:3747
 msgid "yesterday"
 msgstr "ontem"
 
@@ -6671,12 +6680,84 @@ msgstr "ontem"
 msgid "zlib error %d"
 msgstr "erro zlib %d"
 
-#: ../src/common/prntbase.cpp:1125
+#: ../src/common/prntbase.cpp:1123
 msgid "|<<"
 msgstr "|<<"
 
-#: ../src/richtext/richtextliststylepage.cpp:500
 #: ../src/richtext/richtextbulletspage.cpp:295
+#: ../src/richtext/richtextliststylepage.cpp:500
 msgid "~"
 msgstr "~"
 
+#~ msgid "&After a paragraph:"
+#~ msgstr "&Depois de um par�grafo:"
+
+#~ msgid "&Before a paragraph:"
+#~ msgstr "&Antes de um par�grafo:"
+
+#~ msgid "&Outline level:"
+#~ msgstr "&N�vel da lista:"
+
+#~ msgid "&Strikethrough"
+#~ msgstr "&Riscado"
+
+#~ msgid "1"
+#~ msgstr "1"
+
+#~ msgid "3"
+#~ msgstr "3"
+
+#~ msgid "4"
+#~ msgstr "4"
+
+#~ msgid "5"
+#~ msgstr "5"
+
+#~ msgid "6"
+#~ msgstr "6"
+
+#~ msgid "7"
+#~ msgstr "7"
+
+#~ msgid "8"
+#~ msgstr "8"
+
+#~ msgid "9"
+#~ msgstr "9"
+
+#~ msgid "A debug report has been generated. It can be found in"
+#~ msgstr ""
+#~ "Um relat�rio de depura��o foi gerado.  Ele pode ser encontrado em"
+
+#~ msgid "Ca&pitals"
+#~ msgstr "&Mai�sculas"
+
+#~ msgid "Check to show a line through the text."
+#~ msgstr "Marque para que uma linha seja exibida sobre o texto."
+
+#~ msgid "Check to show the text in capitals."
+#~ msgstr "Marque para que o texto esteja em mai�sculas."
+
+#~ msgid ""
+#~ "Command line argument %d couldn't be converted to Unicode and will be "
+#~ "ignored."
+#~ msgstr ""
+#~ "O argumento %d da linha de comando n�o p�de ser convertido para "
+#~ "Unicode e ser� ignorado."
+
+#~ msgid "Enter a new style name"
+#~ msgstr "Entre com um novo nome para o estilo:"
+
+#~ msgid "Fonts index file %s disappeared while loading fonts."
+#~ msgstr ""
+#~ "O arquivo de �ndice de fontes %s desapareceu durante o carregamento de "
+#~ "fontes."
+
+#~ msgid "L&ine spacing:"
+#~ msgstr "Espa�amento entre l&inhas:"
+
+#~ msgid "No fonts found in %s."
+#~ msgstr "Nenhuma fonte localizada em %s."
+
+#~ msgid "The outline level."
+#~ msgstr "O n�vel da lista."

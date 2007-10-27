@@ -12,7 +12,8 @@ msgstr ""
 "Content-Type: text/plain; charset=KOI8-U\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: ../src/common/debugrpt.cpp:575
 #, c-format
@@ -1385,7 +1386,9 @@ msgstr "Неможливо прочитати з потоку розпакування %s"
 
 #: ../src/common/zstream.cpp:239
 msgid "Can't read inflate stream: unexpected EOF in underlying stream."
-msgstr "Неможливо прочитати пот╕к, що розширю╓ться: неоч╕куваний к╕нець файла у п╕длеглому потоц╕."
+msgstr ""
+"Неможливо прочитати пот╕к, що розширю╓ться: неоч╕куваний к╕нець файла у "
+"п╕длеглому потоц╕."
 
 #: ../src/msw/registry.cpp:955
 #, c-format
@@ -1966,7 +1969,9 @@ msgstr "Неможливо ╕н╕ц╕ювати контекст в╕кна оверлею"
 
 #: ../src/common/imagpng.cpp:621
 msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
-msgstr "Неможливо завантажити зображення PNG ? можливо файл пошкоджений або не вистача╓ пам'ят╕."
+msgstr ""
+"Неможливо завантажити зображення PNG ? можливо файл пошкоджений або не "
+"вистача╓ пам'ят╕."
 
 #: ../src/unix/sound.cpp:471
 #, c-format
@@ -2162,7 +2167,9 @@ msgstr "Розроблено "
 msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
-msgstr "Серв╕с в╕ддаленого з'╓днання (RAS) не встановлений на ц╕й машин╕. Будь ласка встанов╕ть його."
+msgstr ""
+"Серв╕с в╕ддаленого з'╓днання (RAS) не встановлений на ц╕й машин╕. Будь ласка "
+"встанов╕ть його."
 
 #: ../src/generic/tipdlg.cpp:242
 msgid "Did you know..."
@@ -2325,8 +2332,11 @@ msgstr "Конверт Запрошення 220 x 220 мм"
 
 #: ../src/common/config.cpp:402
 #, c-format
-msgid "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr "Розкриття зм╕нно╖ оточення зазнало невдач╕: в╕дсутн╓ '%c' на позиц╕╖ %u у '%s'."
+msgid ""
+"Environment variables expansion failed: missing '%c' at position %u in '%s'."
+msgstr ""
+"Розкриття зм╕нно╖ оточення зазнало невдач╕: в╕дсутн╓ '%c' на позиц╕╖ %u у '%"
+"s'."
 
 #: ../src/generic/dirctrlg.cpp:708 ../src/generic/dirctrlg.cpp:726
 #: ../src/generic/dirctrlg.cpp:737 ../src/generic/dirdlgg.cpp:350
@@ -2407,8 +2417,10 @@ msgstr "П╕д час синтаксичного анал╕зу ресурсу оч╕кувалось 'char'."
 
 #: ../src/msw/registry.cpp:1135
 #, c-format
-msgid "Exporting registry key: file \"%s\" already exists and won't be overwritten."
-msgstr "Експорт ключа ре╓стру: файл \"%s\" вже ╕сну╓, його не буде перезаписано."
+msgid ""
+"Exporting registry key: file \"%s\" already exists and won't be overwritten."
+msgstr ""
+"Експорт ключа ре╓стру: файл \"%s\" вже ╕сну╓, його не буде перезаписано."
 
 #: ../src/common/fmapbase.cpp:150
 msgid "Extended Unix Codepage for Japanese (EUC-JP)"
@@ -2578,7 +2590,8 @@ msgstr "Не вдалося виконати '%s'\n"
 
 #: ../src/common/debugrpt.cpp:672
 msgid "Failed to execute curl, please install it in PATH."
-msgstr "Неможливо виконати curl, будь ласка встанов╕ть його у тец╕ вказан╕й у PATH."
+msgstr ""
+"Неможливо виконати curl, будь ласка встанов╕ть його у тец╕ вказан╕й у PATH."
 
 #: ../contrib/src/deprecated/resource.cpp:2499
 #, c-format
@@ -2780,7 +2793,9 @@ msgstr "Неможливо перейменувати значення ре╓стру з '%s' в '%s."
 msgid ""
 "Failed to rename the file '%s' to '%s' because the destination file already "
 "exists."
-msgstr "Помилка п╕д час перейменування файла '%s' на '%s', файл з такою назвою вже ╕сну╓."
+msgstr ""
+"Помилка п╕д час перейменування файла '%s' на '%s', файл з такою назвою вже "
+"╕сну╓."
 
 #: ../src/msw/registry.cpp:563
 #, c-format
@@ -3128,7 +3143,9 @@ msgstr "Файли HTML (*.html;*.htm)|*.html;*.htm|"
 msgid ""
 "HTML pagination algorithm generated more than the allowed maximum number of "
 "pages and it can continue any longer!"
-msgstr "Алгоритм розбиття на стор╕нки HTML виробив к╕льк╕сть стор╕нок б╕льшу за максимальну дозволену, в╕н не може продовжувати дал╕!"
+msgstr ""
+"Алгоритм розбиття на стор╕нки HTML виробив к╕льк╕сть стор╕нок б╕льшу за "
+"максимальну дозволену, в╕н не може продовжувати дал╕!"
 
 #: ../src/common/fmapbase.cpp:113
 msgid "Hebrew (ISO-8859-8)"
@@ -3259,7 +3276,8 @@ msgid ""
 "but be warned that it may hinder improving the program, so if\n"
 "at all possible please do continue with the report generation.\n"
 msgstr ""
-"Якщо Ви бажа╓те повн╕стю придушити надсилання зв╕т╕в про помилку, будь ласка, обер╕ть кнопку \"Скасувати\",\n"
+"Якщо Ви бажа╓те повн╕стю придушити надсилання зв╕т╕в про помилку, будь "
+"ласка, обер╕ть кнопку \"Скасувати\",\n"
 "але майте на уваз╕, що це може зашкодити покращенню програми, отож,\n"
 "за будь-яко╖ нагоди продовжте роботу над зв╕том.\n"
 
@@ -3310,7 +3328,9 @@ msgstr "Файл зображення не належить до типу %s."
 msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
-msgstr "Неможливо створити контрол rich edit, натом╕сть використову╓ться звичайний контрол тексту. Будь ласка перевстанов╕ть riched32.dll"
+msgstr ""
+"Неможливо створити контрол rich edit, натом╕сть використову╓ться звичайний "
+"контрол тексту. Будь ласка перевстанов╕ть riched32.dll"
 
 #: ../src/unix/utilsunx.cpp:434
 msgid "Impossible to get child process input"
@@ -3405,11 +3425,13 @@ msgstr "Нев╕рний файл замка '%s'."
 
 #: ../src/common/xtistrm.cpp:361 ../src/common/xtistrm.cpp:376
 msgid "Invalid or Null Object ID passed to GetObjectClassInfo"
-msgstr "До GetObjectClassInfo передано нев╕рний або нульовий ╕дентиф╕катор об'╓кта"
+msgstr ""
+"До GetObjectClassInfo передано нев╕рний або нульовий ╕дентиф╕катор об'╓кта"
 
 #: ../src/common/xtistrm.cpp:391
 msgid "Invalid or Null Object ID passed to HasObjectClassInfo"
-msgstr "До HasObjectClassInfo передано нев╕рний або нульовий ╕дентиф╕катор об'╓кта"
+msgstr ""
+"До HasObjectClassInfo передано нев╕рний або нульовий ╕дентиф╕катор об'╓кта"
 
 #: ../src/common/regex.cpp:304
 #, c-format
@@ -3761,7 +3783,9 @@ msgstr "MENU"
 msgid ""
 "MS HTML Help functions are unavailable because the MS HTML Help library is "
 "not installed on this machine. Please install it."
-msgstr "Функц╕╖ дов╕дки MS HTML недоступн╕, оск╕льки на ц╕й машин╕ не встановлено б╕бл╕отеку дов╕дки MS HTML. Будь ласка, встанов╕ть ╖╖."
+msgstr ""
+"Функц╕╖ дов╕дки MS HTML недоступн╕, оск╕льки на ц╕й машин╕ не встановлено "
+"б╕бл╕отеку дов╕дки MS HTML. Будь ласка, встанов╕ть ╖╖."
 
 #: ../src/univ/themes/win32.cpp:3740
 msgid "Ma&ximize"
@@ -4005,6 +4029,7 @@ msgid "Objects must have an id attribute"
 msgstr "Об'╓кти повинн╕ мати атрибут id"
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1589
 msgid "Open File"
 msgstr "В╕дкрити файл"
 
@@ -4420,8 +4445,11 @@ msgstr "Друк..."
 
 #: ../src/common/debugrpt.cpp:552
 #, c-format
-msgid "Processing debug report has failed, leaving the files in \"%s\" directory."
-msgstr "Робота над зв╕том про помилку завершилася помилкою, файли залишено у тец╕ \"%s\"."
+msgid ""
+"Processing debug report has failed, leaving the files in \"%s\" directory."
+msgstr ""
+"Робота над зв╕том про помилку завершилася помилкою, файли залишено у тец╕ \"%"
+"s\"."
 
 #: ../src/common/log.cpp:431
 msgid "Program aborted."
@@ -4519,7 +4547,8 @@ msgstr "Видалити дану стор╕нку з закладок"
 #: ../src/common/rendcmn.cpp:196
 #, c-format
 msgid "Renderer \"%s\" has incompatible version %d.%d and couldn't be loaded."
-msgstr "В╕зуал╕затор \"%s\" ма╓ несум╕сну верс╕ю %d.%d, його неможливо завантажити."
+msgstr ""
+"В╕зуал╕затор \"%s\" ма╓ несум╕сну верс╕ю %d.%d, його неможливо завантажити."
 
 #: ../src/richtext/richtextbuffer.cpp:2732
 msgid "Renumber List"
@@ -4704,10 +4733,6 @@ msgstr "Вибер╕ть шаблон документу"
 msgid "Select a document view"
 msgstr "Вибер╕ть перегляд документу"
 
-#: ../src/common/docview.cpp:1589
-msgid "Open File"
-msgstr "Вибер╕ть файл"
-
 #: ../src/common/stockitem.cpp:153
 msgid "Select all"
 msgstr "Обрати все"
@@ -4858,8 +4883,11 @@ msgid "Sorry, could not save this file."
 msgstr "Неможливо записати цей файл."
 
 #: ../contrib/src/fl/controlbar.cpp:384
-msgid "Sorry, docking is not supported for ports other than wxMSW, wxMac and wxGTK"
-msgstr "Вибачте, у портах в╕дм╕нних в╕д wxMSW, wxMac та wxGTK вбудовування у панель не передбачено"
+msgid ""
+"Sorry, docking is not supported for ports other than wxMSW, wxMac and wxGTK"
+msgstr ""
+"Вибачте, у портах в╕дм╕нних в╕д wxMSW, wxMac та wxGTK вбудовування у панель "
+"не передбачено"
 
 #: ../src/common/prntbase.cpp:1494
 msgid "Sorry, not enough memory to create a preview."
@@ -4911,7 +4939,8 @@ msgstr "Статус: "
 
 #: ../src/common/xtistrm.cpp:249
 msgid "Streaming delegates for not already streamed objects not yet supported"
-msgstr "Streaming delegates для об'╓кт╕в, що ще не в потоц╕, ще не п╕дтриму╓ться"
+msgstr ""
+"Streaming delegates для об'╓кт╕в, що ще не в потоц╕, ще не п╕дтриму╓ться"
 
 #: ../src/msw/colour.cpp:35
 #, c-format
@@ -5186,8 +5215,8 @@ msgid ""
 "private information,\n"
 "please uncheck them and they will be removed from the report.\n"
 msgstr ""
-"Зв╕т м╕стить файли зазначен╕ нижче. Якщо хоч якийсь з цих файл╕в "
-"м╕стить особисту ╕нформац╕ю,\n"
+"Зв╕т м╕стить файли зазначен╕ нижче. Якщо хоч якийсь з цих файл╕в м╕стить "
+"особисту ╕нформац╕ю,\n"
 "будь ласка зн╕м╕ть з них позначення, ╖х буде видалено з╕ зв╕ту..\n"
 
 #: ../src/common/cmdline.cpp:903
@@ -5253,17 +5282,24 @@ msgstr "Значення опц╕╖ '%s' повинно бути задано."
 msgid ""
 "The version of remote access service (RAS) installed on this machine is "
 "tooold, please upgrade (the following required function is missing: %s)."
-msgstr "Серв╕с в╕ддаленого з'╓днання (RAS), що встановлений на ц╕й машин╕, старий, будь ласка онов╕ть його (функц╕я %s не знайдена)."
+msgstr ""
+"Серв╕с в╕ддаленого з'╓днання (RAS), що встановлений на ц╕й машин╕, старий, "
+"будь ласка онов╕ть його (функц╕я %s не знайдена)."
 
 #: ../src/html/htmprint.cpp:610 ../src/richtext/richtextprint.cpp:561
-msgid "There was a problem during page setup: you may need to set a default printer."
-msgstr "П╕д час створення стор╕нки виникла проблема: можливо, Вам сл╕д встановити типову друкарку."
+msgid ""
+"There was a problem during page setup: you may need to set a default printer."
+msgstr ""
+"П╕д час створення стор╕нки виникла проблема: можливо, Вам сл╕д встановити "
+"типову друкарку."
 
 #: ../src/msw/datectrl.cpp:110
 msgid ""
 "This system doesn't support date picker control, please upgrade your version "
 "of comctl32.dll"
-msgstr "Ця система не п╕дтриму╓ контрол визначення дати, будь ласка онов╕ть Вашу верс╕ю comctl32.dll"
+msgstr ""
+"Ця система не п╕дтриму╓ контрол визначення дати, будь ласка онов╕ть Вашу "
+"верс╕ю comctl32.dll"
 
 #: ../src/msw/thread.cpp:1247
 msgid ""
@@ -5281,7 +5317,9 @@ msgstr "Помилка ╕н╕ц╕ал╕зац╕╖ модуля ниток: не вдалося створити ключ нитки"
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
-msgstr "Помилка ╕н╕ц╕ал╕зац╕╖ модуля ниток: Неможливо вид╕лити ╕ндекс в локальному простор╕ нитки"
+msgstr ""
+"Помилка ╕н╕ц╕ал╕зац╕╖ модуля ниток: Неможливо вид╕лити ╕ндекс в локальному "
+"простор╕ нитки"
 
 #: ../src/unix/threadpsx.cpp:1136
 msgid "Thread priority setting is ignored."
@@ -5297,7 +5335,8 @@ msgstr "Розставити &вертикально"
 
 #: ../src/common/ftp.cpp:631
 msgid "Timeout while waiting for FTP server to connect, try passive mode."
-msgstr "Тайм-аут оч╕кування на з'╓днання з сервером FTP, спроба пасивного режиму."
+msgstr ""
+"Тайм-аут оч╕кування на з'╓днання з сервером FTP, спроба пасивного режиму."
 
 #: ../src/msw/timer.cpp:111 ../src/os2/timer.cpp:130
 msgid "Timer creation failed."
@@ -5334,7 +5373,8 @@ msgstr "Переклад "
 #: ../src/common/fs_mem.cpp:193
 #, c-format
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
-msgstr "Спроба видалення файлу '%s' з╕ списку пам'ят╕ VFS, але його не завантажено!"
+msgstr ""
+"Спроба видалення файлу '%s' з╕ списку пам'ят╕ VFS, але його не завантажено!"
 
 #: ../src/common/sckaddr.cpp:144 ../src/common/sckaddr.cpp:247
 msgid "Trying to solve a NULL hostname: giving up"
@@ -5835,7 +5875,8 @@ msgid ""
 "or an invalid instance identifier\n"
 "was passed to a DDEML function."
 msgstr ""
-"Функц╕я DDEML була викликана без попереднього виклику функц╕╖ DdeInitialize,\n"
+"Функц╕я DDEML була викликана без попереднього виклику функц╕╖ "
+"DdeInitialize,\n"
 "або неправильний ╕дентиф╕катор ╕нстанц╕╖\n"
 "було передано до DDEML функц╕╖."
 
@@ -5998,7 +6039,8 @@ msgstr "Неможливо встановити довжину файлу з дескриптором %d"
 
 #: ../src/msw/utils.cpp:394
 msgid "can't find user's HOME, using current directory."
-msgstr "Неможливо встановити HOME користувача, буде використаний даний каталог."
+msgstr ""
+"Неможливо встановити HOME користувача, буде використаний даний каталог."
 
 #: ../src/common/file.cpp:337
 #, c-format
@@ -6584,4 +6626,3 @@ msgstr "|<<"
 #: ../src/richtext/richtextliststylepage.cpp:500
 msgid "~"
 msgstr "~"
-

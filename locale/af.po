@@ -4123,6 +4123,7 @@ msgid "Objects must have an id attribute"
 msgstr "Objekte moet elkeen 'n id-attribuut hê"
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1589
 msgid "Open File"
 msgstr "Open Lêer"
 
@@ -4861,10 +4862,6 @@ msgstr "Kies 'n dokumentsjabloon"
 #: ../src/common/docview.cpp:1786
 msgid "Select a document view"
 msgstr "Kies 'n dokumentweergawe"
-
-#: ../src/common/docview.cpp:1589
-msgid "Open File"
-msgstr "Kies 'n Lêer"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy

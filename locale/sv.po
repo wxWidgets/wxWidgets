@@ -24,8 +24,7 @@ msgstr ""
 "\n"
 "Skicka den här rapporten till programansvarig. Tack!\n"
 
-#: ../src/palmos/utils.cpp:216
-#: ../src/richtext/richtextstyledlg.cpp:203
+#: ../src/palmos/utils.cpp:216 ../src/richtext/richtextstyledlg.cpp:203
 #: ../src/richtext/richtextstyledlg.cpp:215
 msgid " "
 msgstr " "
@@ -43,13 +42,11 @@ msgstr " (fel %ld: %s)"
 msgid " - "
 msgstr " - "
 
-#: ../src/common/strconv.cpp:3063
-#: ../src/common/strconv.cpp:3071
+#: ../src/common/strconv.cpp:3063 ../src/common/strconv.cpp:3071
 msgid " Couldn't create the UnicodeConverter"
 msgstr " Kunde inte skapa Unicode-omvandlaren"
 
-#: ../src/html/htmprint.cpp:579
-#: ../src/richtext/richtextprint.cpp:535
+#: ../src/html/htmprint.cpp:579 ../src/richtext/richtextprint.cpp:535
 msgid " Preview"
 msgstr " Förhandsgranska"
 
@@ -116,10 +113,8 @@ msgstr "%.*f TB"
 msgid "%.*f kB"
 msgstr "%.*f kB"
 
-#: ../src/html/helpwnd.cpp:1021
-#: ../src/html/helpwnd.cpp:1023
-#: ../src/html/helpwnd.cpp:1655
-#: ../src/html/helpwnd.cpp:1693
+#: ../src/html/helpwnd.cpp:1021 ../src/html/helpwnd.cpp:1023
+#: ../src/html/helpwnd.cpp:1655 ../src/html/helpwnd.cpp:1693
 #, c-format
 msgid "%i of %i"
 msgstr "%i av %i"
@@ -192,8 +187,7 @@ msgstr "%s: felformaterad resursfilsyntax."
 msgid "&About"
 msgstr "&Om"
 
-#: ../src/html/helpfrm.cpp:122
-#: ../src/html/helpfrm.cpp:124
+#: ../src/html/helpfrm.cpp:122 ../src/html/helpfrm.cpp:124
 msgid "&About..."
 msgstr "&Om..."
 
@@ -235,10 +229,8 @@ msgstr "&Fet"
 msgid "&Bullet style:"
 msgstr "&Punktlisttecken:"
 
-#: ../src/common/stockitem.cpp:114
-#: ../src/generic/fontdlgg.cpp:377
-#: ../src/generic/fontdlgg.cpp:396
-#: ../src/generic/wizard.cpp:451
+#: ../src/common/stockitem.cpp:114 ../src/generic/fontdlgg.cpp:377
+#: ../src/generic/fontdlgg.cpp:396 ../src/generic/wizard.cpp:451
 #: ../src/mac/carbon/fontdlg.cpp:525
 msgid "&Cancel"
 msgstr "&Avbryt"
@@ -255,10 +247,8 @@ msgstr "&Teckenkod:"
 msgid "&Clear"
 msgstr "&Töm"
 
-#: ../src/common/prntbase.cpp:1101
-#: ../src/common/stockitem.cpp:116
-#: ../src/generic/logg.cpp:510
-#: ../src/html/helpfrm.cpp:119
+#: ../src/common/prntbase.cpp:1101 ../src/common/stockitem.cpp:116
+#: ../src/generic/logg.cpp:510 ../src/html/helpfrm.cpp:119
 #: ../src/html/helpdlg.cpp:91
 msgid "&Close"
 msgstr "St&äng"
@@ -267,10 +257,8 @@ msgstr "St&äng"
 msgid "&Colour:"
 msgstr "F&ärg:"
 
-#: ../src/common/stockitem.cpp:117
-#: ../src/mac/carbon/textctrl.cpp:1118
-#: ../src/msw/textctrl.cpp:2210
-#: ../src/richtext/richtextctrl.cpp:2424
+#: ../src/common/stockitem.cpp:117 ../src/mac/carbon/textctrl.cpp:1118
+#: ../src/msw/textctrl.cpp:2210 ../src/richtext/richtextctrl.cpp:2424
 msgid "&Copy"
 msgstr "K&opiera"
 
@@ -278,10 +266,8 @@ msgstr "K&opiera"
 msgid "&Debug report preview:"
 msgstr "Förhandsgranskning av &debugrapport:"
 
-#: ../src/common/stockitem.cpp:119
-#: ../src/mac/carbon/textctrl.cpp:1120
-#: ../src/msw/textctrl.cpp:2212
-#: ../src/richtext/richtextctrl.cpp:2426
+#: ../src/common/stockitem.cpp:119 ../src/mac/carbon/textctrl.cpp:1120
+#: ../src/msw/textctrl.cpp:2212 ../src/richtext/richtextctrl.cpp:2426
 #: ../src/richtext/richtexttabspage.cpp:142
 msgid "&Delete"
 msgstr "&Ta bort"
@@ -306,8 +292,7 @@ msgstr "&Redigera"
 msgid "&Edit Style..."
 msgstr "&Redigera stil..."
 
-#: ../src/common/stockitem.cpp:122
-#: ../src/html/helpfrm.cpp:126
+#: ../src/common/stockitem.cpp:122 ../src/html/helpfrm.cpp:126
 msgid "&File"
 msgstr "&Arkiv"
 
@@ -344,10 +329,8 @@ msgstr "&Från:"
 msgid "&Goto..."
 msgstr "&Gå till..."
 
-#: ../src/common/stockitem.cpp:128
-#: ../src/generic/wizard.cpp:447
-#: ../src/generic/wizard.cpp:454
-#: ../src/html/helpfrm.cpp:127
+#: ../src/common/stockitem.cpp:128 ../src/generic/wizard.cpp:447
+#: ../src/generic/wizard.cpp:454 ../src/html/helpfrm.cpp:127
 msgid "&Help"
 msgstr "&Hjälp"
 
@@ -400,19 +383,16 @@ msgstr "&Logga"
 msgid "&Move"
 msgstr "&Flytta"
 
-#: ../src/common/stockitem.cpp:137
-#: ../src/richtext/richtexttabspage.cpp:136
+#: ../src/common/stockitem.cpp:137 ../src/richtext/richtexttabspage.cpp:136
 msgid "&New"
 msgstr "&Ny"
 
-#: ../src/generic/mdig.cpp:118
-#: ../src/aui/tabmdi.cpp:107
+#: ../src/generic/mdig.cpp:118 ../src/aui/tabmdi.cpp:107
 #: ../src/msw/mdi.cpp:176
 msgid "&Next"
 msgstr "&Nästa"
 
-#: ../src/generic/wizard.cpp:450
-#: ../src/generic/wizard.cpp:646
+#: ../src/generic/wizard.cpp:450 ../src/generic/wizard.cpp:646
 msgid "&Next >"
 msgstr "&Nästa >"
 
@@ -436,10 +416,8 @@ msgstr "&Anteckningar:"
 msgid "&Number:"
 msgstr "&Nummer:"
 
-#: ../src/common/stockitem.cpp:139
-#: ../src/generic/fontdlgg.cpp:382
-#: ../src/generic/fontdlgg.cpp:389
-#: ../src/mac/carbon/fontdlg.cpp:531
+#: ../src/common/stockitem.cpp:139 ../src/generic/fontdlgg.cpp:382
+#: ../src/generic/fontdlgg.cpp:389 ../src/mac/carbon/fontdlg.cpp:531
 msgid "&OK"
 msgstr "&OK"
 
@@ -451,10 +429,8 @@ msgstr "&Öppna"
 msgid "&Open..."
 msgstr "&Öppna..."
 
-#: ../src/common/stockitem.cpp:141
-#: ../src/mac/carbon/textctrl.cpp:1119
-#: ../src/msw/textctrl.cpp:2211
-#: ../src/richtext/richtextctrl.cpp:2425
+#: ../src/common/stockitem.cpp:141 ../src/mac/carbon/textctrl.cpp:1119
+#: ../src/msw/textctrl.cpp:2211 ../src/richtext/richtextctrl.cpp:2425
 msgid "&Paste"
 msgstr "K&listra in"
 
@@ -470,8 +446,7 @@ msgstr "&Position (tiondelar av mm):"
 msgid "&Preferences"
 msgstr "&Inställningar"
 
-#: ../src/generic/mdig.cpp:119
-#: ../src/aui/tabmdi.cpp:108
+#: ../src/generic/mdig.cpp:119 ../src/aui/tabmdi.cpp:108
 #: ../src/msw/mdi.cpp:177
 msgid "&Previous"
 msgstr "&Föregående"
@@ -492,17 +467,13 @@ msgstr "&Egenskaper"
 msgid "&Quit"
 msgstr "&Avsluta"
 
-#: ../src/common/cmdproc.cpp:288
-#: ../src/common/cmdproc.cpp:295
-#: ../src/common/stockitem.cpp:147
-#: ../src/mac/carbon/textctrl.cpp:1115
-#: ../src/msw/textctrl.cpp:2207
-#: ../src/richtext/richtextctrl.cpp:2421
+#: ../src/common/cmdproc.cpp:288 ../src/common/cmdproc.cpp:295
+#: ../src/common/stockitem.cpp:147 ../src/mac/carbon/textctrl.cpp:1115
+#: ../src/msw/textctrl.cpp:2207 ../src/richtext/richtextctrl.cpp:2421
 msgid "&Redo"
 msgstr "&Upprepa"
 
-#: ../src/common/cmdproc.cpp:284
-#: ../src/common/cmdproc.cpp:304
+#: ../src/common/cmdproc.cpp:284 ../src/common/cmdproc.cpp:304
 msgid "&Redo "
 msgstr "&Upprepa "
 
@@ -561,8 +532,7 @@ msgstr "&Avstånd (tiondelar av mm)"
 msgid "&Stop"
 msgstr "&Stopp"
 
-#: ../src/generic/fontdlgg.cpp:289
-#: ../src/richtext/richtextstylepage.cpp:103
+#: ../src/generic/fontdlgg.cpp:289 ../src/richtext/richtextstylepage.cpp:103
 msgid "&Style:"
 msgstr "&Stil:"
 
@@ -579,8 +549,7 @@ msgstr "&Delmängd:"
 msgid "&Symbol:"
 msgstr "&Symbol:"
 
-#: ../src/common/stockitem.cpp:156
-#: ../src/generic/fontdlgg.cpp:351
+#: ../src/common/stockitem.cpp:156 ../src/generic/fontdlgg.cpp:351
 msgid "&Underline"
 msgstr "&Understrykning"
 
@@ -588,10 +557,8 @@ msgstr "&Understrykning"
 msgid "&Underlining:"
 msgstr "&Understrykning:"
 
-#: ../src/common/cmdproc.cpp:266
-#: ../src/common/stockitem.cpp:157
-#: ../src/mac/carbon/textctrl.cpp:1114
-#: ../src/msw/textctrl.cpp:2206
+#: ../src/common/cmdproc.cpp:266 ../src/common/stockitem.cpp:157
+#: ../src/mac/carbon/textctrl.cpp:1114 ../src/msw/textctrl.cpp:2206
 #: ../src/richtext/richtextctrl.cpp:2420
 msgid "&Undo"
 msgstr "&Ångra"
@@ -612,15 +579,10 @@ msgstr "&Upp"
 msgid "&Weight:"
 msgstr "&Vikt:"
 
-#: ../src/generic/mdig.cpp:298
-#: ../src/generic/mdig.cpp:314
-#: ../src/generic/mdig.cpp:318
-#: ../src/aui/tabmdi.cpp:272
-#: ../src/aui/tabmdi.cpp:288
-#: ../src/aui/tabmdi.cpp:290
-#: ../src/msw/mdi.cpp:1417
-#: ../src/msw/mdi.cpp:1424
-#: ../src/msw/mdi.cpp:1454
+#: ../src/generic/mdig.cpp:298 ../src/generic/mdig.cpp:314
+#: ../src/generic/mdig.cpp:318 ../src/aui/tabmdi.cpp:272
+#: ../src/aui/tabmdi.cpp:288 ../src/aui/tabmdi.cpp:290 ../src/msw/mdi.cpp:1417
+#: ../src/msw/mdi.cpp:1424 ../src/msw/mdi.cpp:1454
 msgid "&Window"
 msgstr "&Fönster"
 
@@ -628,14 +590,12 @@ msgstr "&Fönster"
 msgid "&Yes"
 msgstr "&Ja"
 
-#: ../src/common/config.cpp:451
-#: ../src/msw/regconf.cpp:253
+#: ../src/common/config.cpp:451 ../src/msw/regconf.cpp:253
 #, c-format
 msgid "'%s' has extra '..', ignored."
 msgstr "\"%s\" har extra \"..\", ignoreras."
 
-#: ../src/common/valtext.cpp:128
-#: ../src/common/valtext.cpp:158
+#: ../src/common/valtext.cpp:128 ../src/common/valtext.cpp:158
 #: ../src/common/valtext.cpp:164
 #, c-format
 msgid "'%s' is invalid"
@@ -681,8 +641,7 @@ msgstr "\"%s\" får bara innehålla alfabetiska eller numeriska tecken."
 msgid "(*)"
 msgstr "(*)"
 
-#: ../src/html/htmlhelp.cpp:638
-#: ../src/html/helpwnd.cpp:956
+#: ../src/html/htmlhelp.cpp:638 ../src/html/helpwnd.cpp:956
 msgid "(Help)"
 msgstr "(Hjälp)"
 
@@ -695,8 +654,7 @@ msgstr "(Ingen)"
 msgid "(Normal text)"
 msgstr "(Normal text)"
 
-#: ../src/html/helpwnd.cpp:408
-#: ../src/html/helpwnd.cpp:1092
+#: ../src/html/helpwnd.cpp:408 ../src/html/helpwnd.cpp:1092
 #: ../src/html/helpwnd.cpp:1720
 msgid "(bookmarks)"
 msgstr "(bokmärken)"
@@ -806,38 +764,32 @@ msgstr "< &Bakåt"
 msgid "<<"
 msgstr "<<"
 
-#: ../src/mac/carbon/fontdlg.cpp:545
-#: ../src/mac/carbon/fontdlg.cpp:752
+#: ../src/mac/carbon/fontdlg.cpp:545 ../src/mac/carbon/fontdlg.cpp:752
 #: ../src/mac/carbon/fontdlg.cpp:772
 msgid "<Any Decorative>"
 msgstr "<Någon dekorativ>"
 
-#: ../src/mac/carbon/fontdlg.cpp:546
-#: ../src/mac/carbon/fontdlg.cpp:754
+#: ../src/mac/carbon/fontdlg.cpp:546 ../src/mac/carbon/fontdlg.cpp:754
 #: ../src/mac/carbon/fontdlg.cpp:774
 msgid "<Any Modern>"
 msgstr "<Någon modern>"
 
-#: ../src/mac/carbon/fontdlg.cpp:544
-#: ../src/mac/carbon/fontdlg.cpp:750
+#: ../src/mac/carbon/fontdlg.cpp:544 ../src/mac/carbon/fontdlg.cpp:750
 #: ../src/mac/carbon/fontdlg.cpp:770
 msgid "<Any Roman>"
 msgstr "<Någon roman>"
 
-#: ../src/mac/carbon/fontdlg.cpp:547
-#: ../src/mac/carbon/fontdlg.cpp:756
+#: ../src/mac/carbon/fontdlg.cpp:547 ../src/mac/carbon/fontdlg.cpp:756
 #: ../src/mac/carbon/fontdlg.cpp:776
 msgid "<Any Script>"
 msgstr "<Någon skrivstil>"
 
-#: ../src/mac/carbon/fontdlg.cpp:548
-#: ../src/mac/carbon/fontdlg.cpp:761
+#: ../src/mac/carbon/fontdlg.cpp:548 ../src/mac/carbon/fontdlg.cpp:761
 #: ../src/mac/carbon/fontdlg.cpp:780
 msgid "<Any Swiss>"
 msgstr "<Någon swiss>"
 
-#: ../src/mac/carbon/fontdlg.cpp:549
-#: ../src/mac/carbon/fontdlg.cpp:758
+#: ../src/mac/carbon/fontdlg.cpp:549 ../src/mac/carbon/fontdlg.cpp:758
 #: ../src/mac/carbon/fontdlg.cpp:778
 msgid "<Any Teletype>"
 msgstr "<Någon teletyp>"
@@ -846,18 +798,15 @@ msgstr "<Någon teletyp>"
 msgid "<Any>"
 msgstr "<Någon>"
 
-#: ../src/generic/filedlgg.cpp:331
-#: ../src/generic/filedlgg.cpp:354
+#: ../src/generic/filedlgg.cpp:331 ../src/generic/filedlgg.cpp:354
 msgid "<DIR>"
 msgstr "<KAT>"
 
-#: ../src/generic/filedlgg.cpp:335
-#: ../src/generic/filedlgg.cpp:358
+#: ../src/generic/filedlgg.cpp:335 ../src/generic/filedlgg.cpp:358
 msgid "<DRIVE>"
 msgstr "<ENHET>"
 
-#: ../src/generic/filedlgg.cpp:333
-#: ../src/generic/filedlgg.cpp:356
+#: ../src/generic/filedlgg.cpp:333 ../src/generic/filedlgg.cpp:356
 msgid "<LINK>"
 msgstr "<LÄNK>"
 
@@ -977,8 +926,7 @@ msgstr "A6 105 x 148 mm"
 msgid "A6 Rotated 148 x 105 mm"
 msgstr "A6 roterad 148 x 105 mm"
 
-#: ../src/generic/fontdlgg.cpp:87
-#: ../src/mac/carbon/fontdlg.cpp:276
+#: ../src/generic/fontdlgg.cpp:87 ../src/mac/carbon/fontdlg.cpp:276
 #: ../src/richtext/richtextformatdlg.cpp:401
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
@@ -987,8 +935,7 @@ msgstr "ABCDEFGabcdefg12345"
 msgid "ADD"
 msgstr "ADDERA"
 
-#: ../src/common/ftp.cpp:381
-#: ../src/richtext/richtextsymboldlg.cpp:457
+#: ../src/common/ftp.cpp:381 ../src/richtext/richtextsymboldlg.cpp:457
 #: ../src/richtext/richtextsymboldlg.cpp:460
 #: ../src/richtext/richtextsymboldlg.cpp:461
 msgid "ASCII"
@@ -1162,8 +1109,7 @@ msgstr "TILLBAKA"
 msgid "BIG5"
 msgstr "BIG5"
 
-#: ../src/common/imagbmp.cpp:474
-#: ../src/common/imagbmp.cpp:490
+#: ../src/common/imagbmp.cpp:474 ../src/common/imagbmp.cpp:490
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP: Kunde inte allokera minne."
 
@@ -1191,8 +1137,7 @@ msgstr "BMP: Kunde inte skriva filhuvudet (BitmapInfo)."
 msgid "BMP: wxImage doesn't have own wxPalette."
 msgstr "BMP: wxImage saknar egen wxPalette."
 
-#: ../src/mac/carbon/fontdlg.cpp:343
-#: ../src/richtext/richtextformatdlg.cpp:481
+#: ../src/mac/carbon/fontdlg.cpp:343 ../src/richtext/richtextformatdlg.cpp:481
 msgid "Background colour"
 msgstr "Bakgrundsfärg"
 
@@ -1219,8 +1164,7 @@ msgstr "Bitmapp"
 msgid "Bitmap resource specification %s not found."
 msgstr "Bitmappresursspecifikation %s hittades inte."
 
-#: ../src/generic/fontdlgg.cpp:240
-#: ../src/mac/carbon/fontdlg.cpp:477
+#: ../src/generic/fontdlgg.cpp:240 ../src/mac/carbon/fontdlg.cpp:477
 #: ../src/richtext/richtextfontpage.cpp:226
 #: ../src/richtext/richtextfontpage.cpp:297
 #: ../src/richtext/richtextfontpage.cpp:457
@@ -1284,8 +1228,7 @@ msgstr "AVBRYT"
 msgid "CAPITAL"
 msgstr "CAPITAL"
 
-#: ../src/html/chm.cpp:797
-#: ../src/html/chm.cpp:856
+#: ../src/html/chm.cpp:797 ../src/html/chm.cpp:856
 msgid "CHM handler currently supports only local files!"
 msgstr "CHM-hanteraren stöder för närvarande endast lokala filer!"
 
@@ -1306,8 +1249,7 @@ msgstr "Kan inte skapa mutex."
 msgid "Can not enumerate files '%s'"
 msgstr "Kan inte räkna upp filerna \"%s\""
 
-#: ../src/msw/dir.cpp:201
-#: ../src/unix/dir.cpp:228
+#: ../src/msw/dir.cpp:201 ../src/unix/dir.cpp:228
 #, c-format
 msgid "Can not enumerate files in directory '%s'"
 msgstr "Kan inte räkna upp filerna i katalogen \"%s\""
@@ -1317,8 +1259,7 @@ msgstr "Kan inte räkna upp filerna i katalogen \"%s\""
 msgid "Can not resume thread %lu"
 msgstr "Kan inte återuppta tråden %lu"
 
-#: ../src/mac/classic/thread.cpp:487
-#: ../src/msw/thread.cpp:868
+#: ../src/mac/classic/thread.cpp:487 ../src/msw/thread.cpp:868
 #, c-format
 msgid "Can not resume thread %x"
 msgstr "Kan inte återuppta tråden %x"
@@ -1332,8 +1273,7 @@ msgstr "Kan inte starta tråden: fel vid skrivning av TLS."
 msgid "Can not suspend thread %lu"
 msgstr "Kan inte hålla inne tråd %lu"
 
-#: ../src/mac/classic/thread.cpp:460
-#: ../src/msw/thread.cpp:853
+#: ../src/mac/classic/thread.cpp:460 ../src/msw/thread.cpp:853
 #, c-format
 msgid "Can not suspend thread %x"
 msgstr "Kan inte hålla inne tråd %x"
@@ -1366,10 +1306,8 @@ msgstr "Kan inte kopiera värden av ej stödd typ %d."
 msgid "Can't create registry key '%s'"
 msgstr "Kan inte skapa registernyckel \"%s\""
 
-#: ../src/mac/carbon/mpthread.cpp:906
-#: ../src/mac/classic/thread.cpp:435
-#: ../src/msw/thread.cpp:641
-#: ../src/os2/thread.cpp:483
+#: ../src/mac/carbon/mpthread.cpp:906 ../src/mac/classic/thread.cpp:435
+#: ../src/msw/thread.cpp:641 ../src/os2/thread.cpp:483
 msgid "Can't create thread"
 msgstr "Kan inte skapa tråd"
 
@@ -1383,8 +1321,7 @@ msgstr "Kan inte skapa fönster av klass %s"
 msgid "Can't delete key '%s'"
 msgstr "Kan inte ta bort nyckel \"%s\""
 
-#: ../src/msw/iniconf.cpp:435
-#: ../src/os2/iniconf.cpp:466
+#: ../src/msw/iniconf.cpp:435 ../src/os2/iniconf.cpp:466
 #, c-format
 msgid "Can't delete the INI file '%s'"
 msgstr "Kan inte ta bort INI-filen \"%s\""
@@ -1427,8 +1364,7 @@ msgstr "Kan inte initiera zlib deflate-ström."
 msgid "Can't initialize zlib inflate stream."
 msgstr "Kan inte initiera zlib inflate-ström."
 
-#: ../src/common/image.cpp:2015
-#: ../src/common/image.cpp:2037
+#: ../src/common/image.cpp:2015 ../src/common/image.cpp:2037
 #, c-format
 msgid "Can't load image from file '%s': file does not exist."
 msgstr "Kan inte läsa in bild från fil \"%s\": Filen finns inte."
@@ -1452,8 +1388,7 @@ msgstr "Kan inte läsa inflate-ström: Oväntat filslut i underliggande ström."
 msgid "Can't read value of '%s'"
 msgstr "Kan inte läsa värdet av \"%s\""
 
-#: ../src/msw/registry.cpp:790
-#: ../src/msw/registry.cpp:820
+#: ../src/msw/registry.cpp:790 ../src/msw/registry.cpp:820
 #: ../src/msw/registry.cpp:880
 #, c-format
 msgid "Can't read value of key '%s'"
@@ -1464,18 +1399,15 @@ msgstr "Kan inte läsa värdet av nyckel \"%s\""
 msgid "Can't save image to file '%s': unknown extension."
 msgstr "Kan inte spara bild till fil \"%s\": Okänd filändelse."
 
-#: ../src/generic/logg.cpp:570
-#: ../src/generic/logg.cpp:1021
+#: ../src/generic/logg.cpp:570 ../src/generic/logg.cpp:1021
 msgid "Can't save log contents to file."
 msgstr "Kan inte spara logginnehållet till fil."
 
-#: ../src/msw/thread.cpp:597
-#: ../src/os2/thread.cpp:466
+#: ../src/msw/thread.cpp:597 ../src/os2/thread.cpp:466
 msgid "Can't set thread priority"
 msgstr "Kan inte sätta trådprioritet"
 
-#: ../src/msw/registry.cpp:807
-#: ../src/msw/registry.cpp:849
+#: ../src/msw/registry.cpp:807 ../src/msw/registry.cpp:849
 #: ../src/msw/registry.cpp:970
 #, c-format
 msgid "Can't set value of '%s'"
@@ -1486,18 +1418,14 @@ msgstr "Kan inte sätta värdet på \"%s\""
 msgid "Can't write to deflate stream: %s"
 msgstr "Kan inte skriva till deflate-ström: %s"
 
-#: ../src/generic/dirdlgg.cpp:105
-#: ../src/html/htmlhelp.cpp:434
-#: ../src/mac/carbon/msgdlg.cpp:66
-#: ../src/motif/msgdlg.cpp:204
-#: ../src/richtext/richtextstyledlg.cpp:290
-#: ../src/gtk1/fontdlg.cpp:145
+#: ../src/generic/dirdlgg.cpp:105 ../src/html/htmlhelp.cpp:434
+#: ../src/mac/carbon/msgdlg.cpp:66 ../src/motif/msgdlg.cpp:204
+#: ../src/richtext/richtextstyledlg.cpp:290 ../src/gtk1/fontdlg.cpp:145
 #: ../contrib/src/deprecated/proplist.cpp:514
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: ../src/xrc/xmlres.cpp:1270
-#: ../src/xrc/xmlres.cpp:1318
+#: ../src/xrc/xmlres.cpp:1270 ../src/xrc/xmlres.cpp:1318
 msgid "Cannot convert dialog units: dialog unknown."
 msgstr "Kan inte konvertera dialogenheter: Okänd dialog."
 
@@ -1612,8 +1540,7 @@ msgstr "Kan inte tolka dimension från \"%s\"."
 msgid "Cannot print empty page."
 msgstr "Kan inte skriva ut tom sida."
 
-#: ../src/msw/volume.cpp:158
-#: ../src/msw/volume.cpp:490
+#: ../src/msw/volume.cpp:158 ../src/msw/volume.cpp:490
 #, c-format
 msgid "Cannot read typename from '%s'!"
 msgstr "Kan inte läsa typnamn från \"%s\"!"
@@ -1705,18 +1632,15 @@ msgstr "Kryssa i för att lägga till en högerparantes."
 msgid "Check to enclose the bullet in parentheses."
 msgstr "Kryssa i för att innesluta punktlisttecknet i paranteser."
 
-#: ../src/mac/carbon/fontdlg.cpp:479
-#: ../src/mac/carbon/fontdlg.cpp:481
+#: ../src/mac/carbon/fontdlg.cpp:479 ../src/mac/carbon/fontdlg.cpp:481
 msgid "Check to make the font bold."
 msgstr "Kryssa i för att göra typsnittet fet."
 
-#: ../src/mac/carbon/fontdlg.cpp:486
-#: ../src/mac/carbon/fontdlg.cpp:488
+#: ../src/mac/carbon/fontdlg.cpp:486 ../src/mac/carbon/fontdlg.cpp:488
 msgid "Check to make the font italic."
 msgstr "Kryssa i för att göra typsnittet kursivt."
 
-#: ../src/mac/carbon/fontdlg.cpp:495
-#: ../src/mac/carbon/fontdlg.cpp:497
+#: ../src/mac/carbon/fontdlg.cpp:495 ../src/mac/carbon/fontdlg.cpp:497
 msgid "Check to make the font underlined."
 msgstr "Kryssa i för att göra typsnittet understruket."
 
@@ -1729,14 +1653,12 @@ msgstr "Kryssa i för att börja om numrering."
 msgid "Choose ISP to dial"
 msgstr "Välj Internetleverantör att ringa upp"
 
-#: ../src/generic/colrdlgg.cpp:144
-#: ../src/gtk/colordlg.cpp:41
+#: ../src/generic/colrdlgg.cpp:144 ../src/gtk/colordlg.cpp:41
 #: ../src/palmos/colordlg.cpp:74
 msgid "Choose colour"
 msgstr "Välj färg"
 
-#: ../src/gtk/fontdlg.cpp:107
-#: ../src/gtk1/fontdlg.cpp:126
+#: ../src/gtk/fontdlg.cpp:107 ../src/gtk1/fontdlg.cpp:126
 msgid "Choose font"
 msgstr "Välj typsnitt"
 
@@ -1745,8 +1667,7 @@ msgstr "Välj typsnitt"
 msgid "Circular dependency involving module \"%s\" detected."
 msgstr "Cirkulärt beroende involverande modul \"%s\" upptäckt."
 
-#: ../src/generic/mdig.cpp:115
-#: ../src/aui/tabmdi.cpp:104
+#: ../src/generic/mdig.cpp:115 ../src/aui/tabmdi.cpp:104
 msgid "Cl&ose"
 msgstr "St&äng"
 
@@ -1766,13 +1687,11 @@ msgstr "Klicka för att använda den valda stilen."
 msgid "Click to browse for a symbol."
 msgstr "Klicka för att bläddra efter en symbol."
 
-#: ../src/mac/carbon/fontdlg.cpp:526
-#: ../src/mac/carbon/fontdlg.cpp:528
+#: ../src/mac/carbon/fontdlg.cpp:526 ../src/mac/carbon/fontdlg.cpp:528
 msgid "Click to cancel changes to the font."
 msgstr "Klicka för att avbryta ändringarna i typsnittet."
 
-#: ../src/generic/fontdlgg.cpp:379
-#: ../src/generic/fontdlgg.cpp:398
+#: ../src/generic/fontdlgg.cpp:379 ../src/generic/fontdlgg.cpp:398
 msgid "Click to cancel the font selection."
 msgstr "Klicka för att avbryta typsnittsvalet."
 
@@ -1781,8 +1700,7 @@ msgstr "Klicka för att avbryta typsnittsvalet."
 msgid "Click to cancel this window."
 msgstr "Klicka för att avbryta fönstret."
 
-#: ../src/mac/carbon/fontdlg.cpp:507
-#: ../src/mac/carbon/fontdlg.cpp:509
+#: ../src/mac/carbon/fontdlg.cpp:507 ../src/mac/carbon/fontdlg.cpp:509
 msgid "Click to change the font colour."
 msgstr "Klicka för att ändra typsnittsfärgen."
 
@@ -1801,15 +1719,12 @@ msgstr "Klicka för att välja typsnitt för den här nivån."
 msgid "Click to close this window."
 msgstr "Klicka för att stänga fönstret."
 
-#: ../src/mac/carbon/fontdlg.cpp:533
-#: ../src/mac/carbon/fontdlg.cpp:535
+#: ../src/mac/carbon/fontdlg.cpp:533 ../src/mac/carbon/fontdlg.cpp:535
 msgid "Click to confirm changes to the font."
 msgstr "Klicka för att bekräfta ändringar i typsnittet."
 
-#: ../src/generic/fontdlgg.cpp:384
-#: ../src/generic/fontdlgg.cpp:386
-#: ../src/generic/fontdlgg.cpp:391
-#: ../src/generic/fontdlgg.cpp:393
+#: ../src/generic/fontdlgg.cpp:384 ../src/generic/fontdlgg.cpp:386
+#: ../src/generic/fontdlgg.cpp:391 ../src/generic/fontdlgg.cpp:393
 msgid "Click to confirm the font selection."
 msgstr "Klicka för att bekräfta typsnittsvalet."
 
@@ -1863,10 +1778,8 @@ msgstr "Klicka för att redigera stilen."
 msgid "Click to rename the selected style."
 msgstr "Klicka för att döpa om stilen."
 
-#: ../src/generic/dbgrptg.cpp:93
-#: ../src/generic/progdlgg.cpp:658
-#: ../src/generic/progdlgg.cpp:663
-#: ../src/richtext/richtextsymboldlg.cpp:482
+#: ../src/generic/dbgrptg.cpp:93 ../src/generic/progdlgg.cpp:658
+#: ../src/generic/progdlgg.cpp:663 ../src/richtext/richtextsymboldlg.cpp:482
 #: ../src/richtext/richtextsymboldlg.cpp:496
 #: ../src/richtext/richtextstyledlg.cpp:264
 #: ../contrib/src/deprecated/proplist.cpp:509
@@ -1877,8 +1790,7 @@ msgstr "Stäng"
 msgid "Close\tAlt-F4"
 msgstr "Stäng\tAlt-F4"
 
-#: ../src/generic/mdig.cpp:116
-#: ../src/aui/tabmdi.cpp:105
+#: ../src/generic/mdig.cpp:116 ../src/aui/tabmdi.cpp:105
 msgid "Close All"
 msgstr "Stäng alla"
 
@@ -1914,8 +1826,7 @@ msgstr "Dator"
 msgid "Config entry name cannot start with '%c'."
 msgstr "Konfigurationspost kan inte starta med \"%c\"."
 
-#: ../src/generic/filedlgg.cpp:1466
-#: ../src/gtk/filedlg.cpp:61
+#: ../src/generic/filedlgg.cpp:1466 ../src/gtk/filedlg.cpp:61
 msgid "Confirm"
 msgstr "Bekräfta"
 
@@ -1927,8 +1838,7 @@ msgstr "Bekräfta registeruppdatering"
 msgid "Connecting..."
 msgstr "Ansluter..."
 
-#: ../src/html/htmlhelp.cpp:565
-#: ../src/html/helpwnd.cpp:453
+#: ../src/html/htmlhelp.cpp:565 ../src/html/helpwnd.cpp:453
 msgid "Contents"
 msgstr "Innehåll"
 
@@ -1981,7 +1891,8 @@ msgid ""
 "Could not resolve control class or id '%s'. Use (non-zero) integer instead\n"
 " or provide #define (see manual for caveats)"
 msgstr ""
-"Kunde inte slå upp kontrollklass eller id \"%s\". Använd (ickenoll) heltal istället\n"
+"Kunde inte slå upp kontrollklass eller id \"%s\". Använd (ickenoll) heltal "
+"istället\n"
 "eller tillhandahåll #define (se manualen för risker)"
 
 #: ../contrib/src/deprecated/resource.cpp:1278
@@ -1997,8 +1908,7 @@ msgstr ""
 msgid "Could not start document preview."
 msgstr "Kunde inte påbörja förhandsgranskning av dokumentet."
 
-#: ../src/generic/printps.cpp:181
-#: ../src/gtk/gnome/gprint.cpp:773
+#: ../src/generic/printps.cpp:181 ../src/gtk/gnome/gprint.cpp:773
 #: ../src/msw/printwin.cpp:230
 msgid "Could not start printing."
 msgstr "Kunde inte påbörja utskrift."
@@ -2007,8 +1917,7 @@ msgstr "Kunde inte påbörja utskrift."
 msgid "Could not transfer data to window"
 msgstr "Kunde inte föra över data till fönstret"
 
-#: ../src/mac/carbon/mpthread.cpp:222
-#: ../src/mac/carbon/mpthread.cpp:301
+#: ../src/mac/carbon/mpthread.cpp:222 ../src/mac/carbon/mpthread.cpp:301
 msgid "Could not unlock mutex"
 msgstr "Kunde inte låsa upp mutex"
 
@@ -2016,21 +1925,17 @@ msgstr "Kunde inte låsa upp mutex"
 msgid "Couldn't acquire a mutex lock"
 msgstr "Kunde inte förvärva ett mutexlås"
 
-#: ../src/msw/dragimag.cpp:156
-#: ../src/msw/dragimag.cpp:196
-#: ../src/msw/imaglist.cpp:147
-#: ../src/msw/imaglist.cpp:165
+#: ../src/msw/dragimag.cpp:156 ../src/msw/dragimag.cpp:196
+#: ../src/msw/imaglist.cpp:147 ../src/msw/imaglist.cpp:165
 #: ../src/msw/imaglist.cpp:177
 msgid "Couldn't add an image to the image list."
 msgstr "Kunde inte lägga till en bild till bildlistan."
 
-#: ../src/msw/timer.cpp:101
-#: ../src/os2/timer.cpp:144
+#: ../src/msw/timer.cpp:101 ../src/os2/timer.cpp:144
 msgid "Couldn't create a timer"
 msgstr "Kunde inte skapa en timer"
 
-#: ../src/mgl/cursor.cpp:132
-#: ../src/mgl/cursor.cpp:163
+#: ../src/mgl/cursor.cpp:132 ../src/mgl/cursor.cpp:163
 msgid "Couldn't create cursor."
 msgstr "Kunde inte skapa markör."
 
@@ -2047,8 +1952,7 @@ msgstr "Kunde inte avsluta kontexten på överläggsfönstret"
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Kunde inte hitta symbolen \"%s\" i ett dynamiskt bibliotek"
 
-#: ../src/mac/classic/thread.cpp:517
-#: ../src/msw/thread.cpp:894
+#: ../src/mac/classic/thread.cpp:517 ../src/msw/thread.cpp:894
 msgid "Couldn't get the current thread pointer"
 msgstr "Kunde inte hämta den aktuella trådpekaren"
 
@@ -2084,14 +1988,12 @@ msgstr "Kunde inte släppa ett mutex"
 msgid "Couldn't retrieve information about list control item %d."
 msgstr "Kunde inte hämta information om listkontrollpost %d."
 
-#: ../src/common/imagpng.cpp:670
-#: ../src/common/imagpng.cpp:679
+#: ../src/common/imagpng.cpp:670 ../src/common/imagpng.cpp:679
 #: ../src/common/imagpng.cpp:687
 msgid "Couldn't save PNG image."
 msgstr "Kunde inte spara PNG-bild."
 
-#: ../src/mac/classic/thread.cpp:775
-#: ../src/msw/thread.cpp:658
+#: ../src/mac/classic/thread.cpp:775 ../src/msw/thread.cpp:658
 msgid "Couldn't terminate thread"
 msgstr "Kunde inte avsluta tråd"
 
@@ -2103,8 +2005,7 @@ msgstr "Skapa-parameter hittades inte i deklarerade RTTI-parametrar"
 msgid "Create directory"
 msgstr "Skapa katalog"
 
-#: ../src/generic/dirdlgg.cpp:129
-#: ../src/generic/filedlgg.cpp:1088
+#: ../src/generic/dirdlgg.cpp:129 ../src/generic/filedlgg.cpp:1088
 msgid "Create new directory"
 msgstr "Skapa ny katalog"
 
@@ -2112,10 +2013,8 @@ msgstr "Skapa ny katalog"
 msgid "Ctrl-"
 msgstr "Ctrl-"
 
-#: ../src/common/stockitem.cpp:118
-#: ../src/mac/carbon/textctrl.cpp:1117
-#: ../src/msw/textctrl.cpp:2209
-#: ../src/richtext/richtextctrl.cpp:2423
+#: ../src/common/stockitem.cpp:118 ../src/mac/carbon/textctrl.cpp:1117
+#: ../src/msw/textctrl.cpp:2209 ../src/richtext/richtextctrl.cpp:2423
 msgid "Cu&t"
 msgstr "&Klipp ut"
 
@@ -2220,8 +2119,7 @@ msgstr "Ta bort a&llt"
 msgid "Delete Style"
 msgstr "Ta bort stil"
 
-#: ../src/richtext/richtextctrl.cpp:560
-#: ../src/richtext/richtextctrl.cpp:589
+#: ../src/richtext/richtextctrl.cpp:560 ../src/richtext/richtextctrl.cpp:589
 msgid "Delete Text"
 msgstr "Ta bort text"
 
@@ -2257,8 +2155,13 @@ msgid "Developed by "
 msgstr "Utvecklad av "
 
 #: ../src/msw/dialup.cpp:396
-msgid "Dial up functions are unavailable because the remote access service (RAS) is not installed on this machine. Please install it."
-msgstr "Uppringningsfunktioner är inte tillgängliga på grund av att fjärråtkomstservice (RAS) inte är installerad på denna maskin. Var vänlig och installera den."
+msgid ""
+"Dial up functions are unavailable because the remote access service (RAS) is "
+"not installed on this machine. Please install it."
+msgstr ""
+"Uppringningsfunktioner är inte tillgängliga på grund av att "
+"fjärråtkomstservice (RAS) inte är installerad på denna maskin. Var vänlig "
+"och installera den."
 
 #: ../src/generic/tipdlg.cpp:242
 msgid "Did you know..."
@@ -2292,8 +2195,12 @@ msgid "Directory doesn't exist."
 msgstr "Katalogen finns inte."
 
 #: ../src/html/helpwnd.cpp:480
-msgid "Display all index items that contain given substring. Search is case insensitive."
-msgstr "Visa alla indexposter som innehåller given delsträng. Sökningen är skiftlägesokänslig."
+msgid ""
+"Display all index items that contain given substring. Search is case "
+"insensitive."
+msgstr ""
+"Visa alla indexposter som innehåller given delsträng. Sökningen är "
+"skiftlägesokänslig."
 
 #: ../src/html/helpwnd.cpp:671
 msgid "Display options dialog"
@@ -2305,7 +2212,8 @@ msgstr "Visar hjälp medan du bläddrar i böckerna till vänster."
 
 #: ../src/msw/mimetype.cpp:667
 msgid ""
-"Do you want to overwrite the command used to %s files with extension \"%s\" ?\n"
+"Do you want to overwrite the command used to %s files with extension \"%s"
+"\" ?\n"
 "Current value is \n"
 "%s, \n"
 "New value is \n"
@@ -2330,8 +2238,7 @@ msgstr "Dokumenterat av "
 msgid "Don't Save"
 msgstr "Spara inte"
 
-#: ../src/html/htmlwin.cpp:556
-#: ../src/msw/frame.cpp:195
+#: ../src/html/htmlwin.cpp:556 ../src/msw/frame.cpp:195
 msgid "Done"
 msgstr "Färdigt"
 
@@ -2416,21 +2323,17 @@ msgstr "Kuvert Invite 220 x 220 mm"
 
 #: ../src/common/config.cpp:402
 #, c-format
-msgid "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr "Miljövariabelexpansion misslyckades: \"%c\" saknas på position %u i \"%s\"."
+msgid ""
+"Environment variables expansion failed: missing '%c' at position %u in '%s'."
+msgstr ""
+"Miljövariabelexpansion misslyckades: \"%c\" saknas på position %u i \"%s\"."
 
-#: ../src/generic/dirctrlg.cpp:708
-#: ../src/generic/dirctrlg.cpp:726
-#: ../src/generic/dirctrlg.cpp:737
-#: ../src/generic/dirdlgg.cpp:350
-#: ../src/generic/filedlgg.cpp:712
-#: ../src/generic/filedlgg.cpp:830
-#: ../src/generic/filedlgg.cpp:844
-#: ../src/generic/filedlgg.cpp:862
-#: ../src/generic/filedlgg.cpp:1416
-#: ../src/generic/filedlgg.cpp:1444
-#: ../src/generic/filedlgg.cpp:1472
-#: ../src/gtk1/fontdlg.cpp:75
+#: ../src/generic/dirctrlg.cpp:708 ../src/generic/dirctrlg.cpp:726
+#: ../src/generic/dirctrlg.cpp:737 ../src/generic/dirdlgg.cpp:350
+#: ../src/generic/filedlgg.cpp:712 ../src/generic/filedlgg.cpp:830
+#: ../src/generic/filedlgg.cpp:844 ../src/generic/filedlgg.cpp:862
+#: ../src/generic/filedlgg.cpp:1416 ../src/generic/filedlgg.cpp:1444
+#: ../src/generic/filedlgg.cpp:1472 ../src/gtk1/fontdlg.cpp:75
 msgid "Error"
 msgstr "Fel"
 
@@ -2504,8 +2407,11 @@ msgstr "Förväntade \"char\" när resursen tolkades."
 
 #: ../src/msw/registry.cpp:1135
 #, c-format
-msgid "Exporting registry key: file \"%s\" already exists and won't be overwritten."
-msgstr "Exporterar registernyckel: Filen \"%s\" finns redan och kommer inte att skrivas över."
+msgid ""
+"Exporting registry key: file \"%s\" already exists and won't be overwritten."
+msgstr ""
+"Exporterar registernyckel: Filen \"%s\" finns redan och kommer inte att "
+"skrivas över."
 
 #: ../src/common/fmapbase.cpp:150
 msgid "Extended Unix Codepage for Japanese (EUC-JP)"
@@ -2516,8 +2422,7 @@ msgstr "Utökad Unix-kodsida för japanska (EUC-JP)"
 msgid "Extraction of '%s' into '%s' failed."
 msgstr "Uppackning av \"%s\" till \"%s\" misslyckades."
 
-#: ../src/common/menucmn.cpp:251
-#: ../src/common/menucmn.cpp:325
+#: ../src/common/menucmn.cpp:251 ../src/common/menucmn.cpp:325
 msgid "F"
 msgstr "F"
 
@@ -2652,8 +2557,7 @@ msgstr "Kunde inte skapa standard sök/ersättdialog (felkod %d)"
 msgid "Failed to display HTML document in %s encoding"
 msgstr "Kunde inte visa HTML-dokument i %s-kodning"
 
-#: ../src/mac/classic/clipbrd.cpp:187
-#: ../src/msw/clipbrd.cpp:125
+#: ../src/mac/classic/clipbrd.cpp:187 ../src/msw/clipbrd.cpp:125
 msgid "Failed to empty the clipboard."
 msgstr "Kunde inte tömma urklippsbordet."
 
@@ -2670,8 +2574,7 @@ msgstr "Kunde inte starta en meddelandeloop med DDE-server"
 msgid "Failed to establish dialup connection: %s"
 msgstr "Kunde inte etablera uppringningsanslutning: %s"
 
-#: ../src/unix/utilsunx.cpp:508
-#: ../src/unix/utilsunx.cpp:524
+#: ../src/unix/utilsunx.cpp:508 ../src/unix/utilsunx.cpp:524
 #, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "Kunde inte utföra \"%s\"\n"
@@ -2707,8 +2610,7 @@ msgstr ""
 "Kunde inte hitta XPM-resurs %s.\n"
 "Har du glömt att använda wxResourceLoadBitmapData?"
 
-#: ../src/common/regex.cpp:425
-#: ../src/common/regex.cpp:473
+#: ../src/common/regex.cpp:425 ../src/common/regex.cpp:473
 #, c-format
 msgid "Failed to find match for regular expression: %s"
 msgstr "Kunde inte hitta träff för reguljärt uttryck: %s"
@@ -2756,8 +2658,12 @@ msgid "Failed to inspect the lock file '%s'"
 msgstr "Kunde inte inspektera låsfilen \"%s\""
 
 #: ../src/unix/threadpsx.cpp:910
-msgid "Failed to join a thread, potential memory leak detected - please restart the program"
-msgstr "Kunde inte slå ihop en tråd, möjlig minnesläcka hittad - var vänlig och starta om programmet"
+msgid ""
+"Failed to join a thread, potential memory leak detected - please restart the "
+"program"
+msgstr ""
+"Kunde inte slå ihop en tråd, möjlig minnesläcka hittad - var vänlig och "
+"starta om programmet"
 
 #: ../src/msw/utils.cpp:725
 #, c-format
@@ -2873,8 +2779,11 @@ msgstr "Kunde inte byta namn på registervärde \"%s\" till \"%s\"."
 
 #: ../src/common/filefn.cpp:1137
 #, c-format
-msgid "Failed to rename the file '%s' to '%s' because the destination file already exists."
-msgstr "Kunde inte döpa om filen \"%s\" till \"%s\" eftersom målfilen redan finns."
+msgid ""
+"Failed to rename the file '%s' to '%s' because the destination file already "
+"exists."
+msgstr ""
+"Kunde inte döpa om filen \"%s\" till \"%s\" eftersom målfilen redan finns."
 
 #: ../src/msw/registry.cpp:563
 #, c-format
@@ -2929,8 +2838,7 @@ msgstr "Kunde inte sätta temporära filbehörigheter"
 msgid "Failed to set text in the text control."
 msgstr "Kunde inte ange text i textkontrollen."
 
-#: ../src/unix/threadpsx.cpp:1253
-#: ../src/unix/threadpsx.cpp:1263
+#: ../src/unix/threadpsx.cpp:1253 ../src/unix/threadpsx.cpp:1263
 #, c-format
 msgid "Failed to set thread priority %d."
 msgstr "Kunde inte sätta trådprioritet %d."
@@ -2940,8 +2848,7 @@ msgstr "Kunde inte sätta trådprioritet %d."
 msgid "Failed to store image '%s' to memory VFS!"
 msgstr "Kunde inte spara bild \"%s\" till minnes-VFS!"
 
-#: ../src/mac/carbon/mpthread.cpp:1268
-#: ../src/unix/threadpsx.cpp:1436
+#: ../src/mac/carbon/mpthread.cpp:1268 ../src/unix/threadpsx.cpp:1436
 msgid "Failed to terminate a thread."
 msgstr "Kunde inte avsluta en tråd."
 
@@ -3000,8 +2907,7 @@ msgstr "Fil"
 msgid "File %s does not exist."
 msgstr "Filen %s finns inte."
 
-#: ../src/generic/filedlgg.cpp:1464
-#: ../src/gtk/filedlg.cpp:58
+#: ../src/generic/filedlgg.cpp:1464 ../src/gtk/filedlg.cpp:58
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "Filen \"%s\" finns redan, vill du verkligen skriva över den?"
@@ -3015,18 +2921,15 @@ msgstr ""
 "Filen \"%s\" finns redan\n"
 "Vill du ersätta den?"
 
-#: ../src/common/textcmn.cpp:218
-#: ../src/richtext/richtextctrl.cpp:1764
+#: ../src/common/textcmn.cpp:218 ../src/richtext/richtextctrl.cpp:1764
 msgid "File couldn't be loaded."
 msgstr "Filen kunde inte läsas in."
 
-#: ../src/common/docview.cpp:566
-#: ../src/common/docview.cpp:1606
+#: ../src/common/docview.cpp:566 ../src/common/docview.cpp:1606
 msgid "File error"
 msgstr "Filfel"
 
-#: ../src/generic/dirctrlg.cpp:726
-#: ../src/generic/filedlgg.cpp:844
+#: ../src/generic/dirctrlg.cpp:726 ../src/generic/filedlgg.cpp:844
 msgid "File name exists already."
 msgstr "Filnamnet finns redan."
 
@@ -3059,8 +2962,7 @@ msgstr "Fastbreddtypsnitt.<br> <b>fet</b> <i>kursivt</i> "
 msgid "Folio, 8 1/2 x 13 in"
 msgstr "Foliant, 8 1/2 x 13 tum"
 
-#: ../src/mac/carbon/fontdlg.cpp:410
-#: ../src/richtext/richtextformatdlg.cpp:272
+#: ../src/mac/carbon/fontdlg.cpp:410 ../src/richtext/richtextformatdlg.cpp:272
 msgid "Font"
 msgstr "Typsnitt"
 
@@ -3099,8 +3001,7 @@ msgstr "Framåt-href stöds inte"
 msgid "Found "
 msgstr "Hittade "
 
-#: ../src/html/htmlhelp.cpp:460
-#: ../src/html/helpwnd.cpp:867
+#: ../src/html/htmlhelp.cpp:460 ../src/html/helpwnd.cpp:867
 #, c-format
 msgid "Found %i matches"
 msgstr "Hittade %i träffar"
@@ -3181,8 +3082,7 @@ msgstr "Gå till nästa HTML-sida"
 msgid "Go one level up in document hierarchy"
 msgstr "Gå upp en nivå i dokumenthierarki"
 
-#: ../src/generic/dirdlgg.cpp:134
-#: ../src/generic/filedlgg.cpp:1078
+#: ../src/generic/dirdlgg.cpp:134 ../src/generic/filedlgg.cpp:1078
 msgid "Go to home directory"
 msgstr "Gå till hemkatalog"
 
@@ -3202,8 +3102,7 @@ msgstr "Grafik av "
 msgid "Greek (ISO-8859-7)"
 msgstr "Grekisk (ISO-8859-7)"
 
-#: ../src/common/zstream.cpp:149
-#: ../src/common/zstream.cpp:302
+#: ../src/common/zstream.cpp:149 ../src/common/zstream.cpp:302
 msgid "Gzip not supported by this version of zlib"
 msgstr "Gzip stöds inte av den här versionen av zlib"
 
@@ -3229,15 +3128,18 @@ msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
 msgstr "HTML-filer (*.html;*.htm)|*.html;*.htm|"
 
 #: ../src/html/htmprint.cpp:379
-msgid "HTML pagination algorithm generated more than the allowed maximum number of pages and it can continue any longer!"
-msgstr "HTML-sidnumreringsalgoritm skapade fler sidor än tillåtet maxantal och kan inte fortsätta!"
+msgid ""
+"HTML pagination algorithm generated more than the allowed maximum number of "
+"pages and it can continue any longer!"
+msgstr ""
+"HTML-sidnumreringsalgoritm skapade fler sidor än tillåtet maxantal och kan "
+"inte fortsätta!"
 
 #: ../src/common/fmapbase.cpp:113
 msgid "Hebrew (ISO-8859-8)"
 msgstr "Hebreisk (ISO-8859-8)"
 
-#: ../src/html/helpfrm.cpp:96
-#: ../src/html/helpdlg.cpp:67
+#: ../src/html/helpfrm.cpp:96 ../src/html/helpdlg.cpp:67
 #: ../contrib/src/deprecated/proplist.cpp:519
 msgid "Help"
 msgstr "Hjälp"
@@ -3251,8 +3153,7 @@ msgstr "Hjälp : %s"
 msgid "Help Browser Options"
 msgstr "Hjälpbläddraralternativ"
 
-#: ../src/generic/helpext.cpp:461
-#: ../src/generic/helpext.cpp:462
+#: ../src/generic/helpext.cpp:461 ../src/generic/helpext.cpp:462
 msgid "Help Index"
 msgstr "Hjälpindex"
 
@@ -3299,12 +3200,9 @@ msgstr "I64"
 msgid "ICO: Error in reading mask DIB."
 msgstr "ICO: Fel vid läsning av mask DIB."
 
-#: ../src/common/imagbmp.cpp:1045
-#: ../src/common/imagbmp.cpp:1104
-#: ../src/common/imagbmp.cpp:1113
-#: ../src/common/imagbmp.cpp:1124
-#: ../src/common/imagbmp.cpp:1168
-#: ../src/common/imagbmp.cpp:1178
+#: ../src/common/imagbmp.cpp:1045 ../src/common/imagbmp.cpp:1104
+#: ../src/common/imagbmp.cpp:1113 ../src/common/imagbmp.cpp:1124
+#: ../src/common/imagbmp.cpp:1168 ../src/common/imagbmp.cpp:1178
 #: ../src/common/imagbmp.cpp:1187
 msgid "ICO: Error writing the image file!"
 msgstr "ICO: Fel vid skrivning till bildfilen!"
@@ -3361,7 +3259,8 @@ msgstr ""
 
 #: ../src/generic/dbgrptg.cpp:311
 msgid ""
-"If you wish to suppress this debug report completely, please choose the \"Cancel\" button,\n"
+"If you wish to suppress this debug report completely, please choose the "
+"\"Cancel\" button,\n"
 "but be warned that it may hinder improving the program, so if\n"
 "at all possible please do continue with the report generation.\n"
 msgstr ""
@@ -3390,8 +3289,7 @@ msgstr "Otillåtet antal parametrar för ConstructObject-metod"
 msgid "Illegal Parameter Count for Create Method"
 msgstr "Otillåtet antal parametrar för Create-metod"
 
-#: ../src/generic/dirctrlg.cpp:708
-#: ../src/generic/filedlgg.cpp:830
+#: ../src/generic/dirctrlg.cpp:708 ../src/generic/filedlgg.cpp:830
 msgid "Illegal directory name."
 msgstr "Ogiltigt katalognamn."
 
@@ -3403,8 +3301,7 @@ msgstr "Ogiltig filspecifikation."
 msgid "Image and mask have different sizes."
 msgstr "Bild och mask har olika storlekar."
 
-#: ../src/common/image.cpp:2176
-#: ../src/common/image.cpp:2216
+#: ../src/common/image.cpp:2176 ../src/common/image.cpp:2216
 #, c-format
 msgid "Image file is not of type %ld."
 msgstr "Bildfilen är inte av typen %ld."
@@ -3415,8 +3312,12 @@ msgid "Image file is not of type %s."
 msgstr "Bildfilen är inte av typen %s."
 
 #: ../src/msw/textctrl.cpp:454
-msgid "Impossible to create a rich edit control, using simple text control instead. Please reinstall riched32.dll"
-msgstr "Omöjligt att skapa en rich edit control, använder enkel text control istället. Installera om riched32.dll"
+msgid ""
+"Impossible to create a rich edit control, using simple text control instead. "
+"Please reinstall riched32.dll"
+msgstr ""
+"Omöjligt att skapa en rich edit control, använder enkel text control "
+"istället. Installera om riched32.dll"
 
 #: ../src/unix/utilsunx.cpp:434
 msgid "Impossible to get child process input"
@@ -3445,8 +3346,7 @@ msgstr "Indentera"
 msgid "Indents && Spacing"
 msgstr "Indrag &och avstånd"
 
-#: ../src/html/htmlhelp.cpp:578
-#: ../src/html/helpwnd.cpp:493
+#: ../src/html/htmlhelp.cpp:578 ../src/html/helpwnd.cpp:493
 msgid "Index"
 msgstr "Index"
 
@@ -3471,8 +3371,7 @@ msgstr "Sätt in bild"
 #: ../src/richtext/richtextbuffer.cpp:4600
 #: ../src/richtext/richtextbuffer.cpp:4644
 #: ../src/richtext/richtextbuffer.cpp:4686
-#: ../src/richtext/richtextctrl.cpp:532
-#: ../src/richtext/richtextctrl.cpp:748
+#: ../src/richtext/richtextctrl.cpp:532 ../src/richtext/richtextctrl.cpp:748
 msgid "Insert Text"
 msgstr "Sätt in text"
 
@@ -3511,8 +3410,7 @@ msgstr "Ogiltig geometrispecifikation \"%s\""
 msgid "Invalid lock file '%s'."
 msgstr "Ogiltig låsfil \"%s\"."
 
-#: ../src/common/xtistrm.cpp:361
-#: ../src/common/xtistrm.cpp:376
+#: ../src/common/xtistrm.cpp:361 ../src/common/xtistrm.cpp:376
 msgid "Invalid or Null Object ID passed to GetObjectClassInfo"
 msgstr "Ogiltigt eller null objekt-id skickat till GetObjectClassInfo"
 
@@ -3525,8 +3423,7 @@ msgstr "Ogiltigt eller null objekt-id skickat till HasObjectClassInfo"
 msgid "Invalid regular expression '%s': %s"
 msgstr "Ogiltigt reguljärt uttryck \"%s\": %s"
 
-#: ../src/generic/fontdlgg.cpp:236
-#: ../src/mac/carbon/fontdlg.cpp:484
+#: ../src/generic/fontdlgg.cpp:236 ../src/mac/carbon/fontdlg.cpp:484
 #: ../src/richtext/richtextfontpage.cpp:223
 #: ../src/richtext/richtextfontpage.cpp:281
 #: ../src/richtext/richtextfontpage.cpp:446
@@ -3616,8 +3513,7 @@ msgstr "KOI8-R"
 msgid "KOI8-U"
 msgstr "KOI8-U"
 
-#: ../src/common/menucmn.cpp:267
-#: ../src/common/menucmn.cpp:327
+#: ../src/common/menucmn.cpp:267 ../src/common/menucmn.cpp:327
 msgid "KP_"
 msgstr "KP_"
 
@@ -3717,8 +3613,7 @@ msgstr "KP_UPP"
 msgid "LEFT"
 msgstr "VÄNSTER"
 
-#: ../src/generic/prntdlgg.cpp:607
-#: ../src/generic/prntdlgg.cpp:862
+#: ../src/generic/prntdlgg.cpp:607 ../src/generic/prntdlgg.cpp:862
 msgid "Landscape"
 msgstr "Liggande"
 
@@ -3847,8 +3742,7 @@ msgstr "Låsfilen \"%s\" har felaktig behörighet."
 msgid "Log saved to the file '%s'."
 msgstr "Logg sparad till filen \"%s\"."
 
-#: ../include/wx/xti.h:497
-#: ../include/wx/xti.h:501
+#: ../include/wx/xti.h:497 ../include/wx/xti.h:501
 msgid "Long Conversions not supported"
 msgstr "Konvertering till long stöds inte"
 
@@ -3862,8 +3756,7 @@ msgstr "Små bokstäver"
 msgid "Lower case roman numerals"
 msgstr "Små romerska siffor"
 
-#: ../src/gtk/mdi.cpp:466
-#: ../src/gtk1/mdi.cpp:462
+#: ../src/gtk/mdi.cpp:466 ../src/gtk1/mdi.cpp:462
 msgid "MDI child"
 msgstr "MDI-barn"
 
@@ -3872,8 +3765,13 @@ msgid "MENU"
 msgstr "MENY"
 
 #: ../src/msw/helpchm.cpp:57
-msgid "MS HTML Help functions are unavailable because the MS HTML Help library is not installed on this machine. Please install it."
-msgstr "MS HTML hjälpfunktioner är inte tillgängliga på grund av att MS HTML hjälpbiblioteket inte är installerat på den här maskinen. Vänligen installera det."
+msgid ""
+"MS HTML Help functions are unavailable because the MS HTML Help library is "
+"not installed on this machine. Please install it."
+msgstr ""
+"MS HTML hjälpfunktioner är inte tillgängliga på grund av att MS HTML "
+"hjälpbiblioteket inte är installerat på den här maskinen. Vänligen "
+"installera det."
 
 #: ../src/univ/themes/win32.cpp:3740
 msgid "Ma&ximize"
@@ -3967,10 +3865,8 @@ msgstr "Ny katalog"
 msgid "New item"
 msgstr "Nytt element"
 
-#: ../src/generic/dirdlgg.cpp:324
-#: ../src/generic/dirdlgg.cpp:334
-#: ../src/generic/filedlgg.cpp:688
-#: ../src/generic/filedlgg.cpp:697
+#: ../src/generic/dirdlgg.cpp:324 ../src/generic/dirdlgg.cpp:334
+#: ../src/generic/filedlgg.cpp:688 ../src/generic/filedlgg.cpp:697
 msgid "NewName"
 msgstr "Nytt namn"
 
@@ -3982,12 +3878,9 @@ msgstr "Nästa"
 msgid "Next page"
 msgstr "Nästa sida"
 
-#: ../src/mac/carbon/msgdlg.cpp:63
-#: ../src/mac/carbon/msgdlg.cpp:119
-#: ../src/mac/carbon/msgdlg.cpp:203
-#: ../src/mac/classic/msgdlg.cpp:59
-#: ../src/mac/classic/msgdlg.cpp:143
-#: ../src/motif/msgdlg.cpp:204
+#: ../src/mac/carbon/msgdlg.cpp:63 ../src/mac/carbon/msgdlg.cpp:119
+#: ../src/mac/carbon/msgdlg.cpp:203 ../src/mac/classic/msgdlg.cpp:59
+#: ../src/mac/classic/msgdlg.cpp:143 ../src/motif/msgdlg.cpp:204
 msgid "No"
 msgstr "Nej"
 
@@ -4014,7 +3907,8 @@ msgstr "Inga poster funna."
 msgid ""
 "No font for displaying text in encoding '%s' found,\n"
 "but an alternative encoding '%s' is available.\n"
-"Do you want to use this encoding (otherwise you will have to choose another one)?"
+"Do you want to use this encoding (otherwise you will have to choose another "
+"one)?"
 msgstr ""
 "Inget typsnitt för att visa text med kodningen \"%s\" hittades,\n"
 "men en alternativ kodning \"%s\" är tillgänglig.\n"
@@ -4040,8 +3934,7 @@ msgstr "Ingen hanterare hittades för XML-nod \"%s\", klass \"%s\"!"
 msgid "No handler found for animation type."
 msgstr "Ingen hanterare hittades för animationstyp."
 
-#: ../src/common/image.cpp:2158
-#: ../src/common/image.cpp:2201
+#: ../src/common/image.cpp:2158 ../src/common/image.cpp:2201
 msgid "No handler found for image type."
 msgstr "Ingen hanterare hittades för bildtyp."
 
@@ -4050,20 +3943,17 @@ msgstr "Ingen hanterare hittades för bildtyp."
 msgid "No image handler for type %d defined."
 msgstr "Ingen bildhanterare är definierad för typ %d."
 
-#: ../src/common/image.cpp:2166
-#: ../src/common/image.cpp:2209
+#: ../src/common/image.cpp:2166 ../src/common/image.cpp:2209
 #, c-format
 msgid "No image handler for type %ld defined."
 msgstr "Ingen bildhanterare är definierad för typ %ld."
 
-#: ../src/common/image.cpp:2233
-#: ../src/common/image.cpp:2269
+#: ../src/common/image.cpp:2233 ../src/common/image.cpp:2269
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "Ingen bildhanterare är definierad för typ %s."
 
-#: ../src/html/htmlhelp.cpp:436
-#: ../src/html/htmlhelp.cpp:441
+#: ../src/html/htmlhelp.cpp:436 ../src/html/htmlhelp.cpp:441
 #: ../src/html/helpwnd.cpp:850
 msgid "No matching page found yet"
 msgstr "Ingen matchande sida hittad ännu"
@@ -4072,8 +3962,7 @@ msgstr "Ingen matchande sida hittad ännu"
 msgid "No sound"
 msgstr "Inget ljud"
 
-#: ../src/common/image.cpp:1838
-#: ../src/common/image.cpp:1879
+#: ../src/common/image.cpp:1838 ../src/common/image.cpp:1879
 msgid "No unused colour in image being masked."
 msgstr "Ingen oanvänd färg i bilden är maskad."
 
@@ -4090,8 +3979,7 @@ msgstr "Ingen giltig mappning hittad i fil \"%s\"."
 msgid "Nordic (ISO-8859-10)"
 msgstr "Nordiska språk (ISO-8859-10)"
 
-#: ../src/generic/fontdlgg.cpp:235
-#: ../src/generic/fontdlgg.cpp:238
+#: ../src/generic/fontdlgg.cpp:235 ../src/generic/fontdlgg.cpp:238
 msgid "Normal"
 msgstr "Normal"
 
@@ -4116,10 +4004,8 @@ msgstr "Anteckning, 8 1/2 x 11 tum"
 msgid "Numbered outline"
 msgstr "Numrerad kant"
 
-#: ../src/mac/carbon/msgdlg.cpp:65
-#: ../src/msw/dialog.cpp:180
-#: ../src/richtext/richtextstyledlg.cpp:283
-#: ../src/gtk1/fontdlg.cpp:139
+#: ../src/mac/carbon/msgdlg.cpp:65 ../src/msw/dialog.cpp:180
+#: ../src/richtext/richtextstyledlg.cpp:283 ../src/gtk1/fontdlg.cpp:139
 #: ../contrib/src/deprecated/proplist.cpp:502
 msgid "OK"
 msgstr "OK"
@@ -4128,13 +4014,12 @@ msgstr "OK"
 msgid "Objects must have an id attribute"
 msgstr "Objekt måste ha ett id-attribut"
 
-#: ../src/common/docview.cpp:1279
-#: ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1589
 msgid "Open File"
-msgstr "Öppna fil"
+msgstr "Öppna Fil"
 
-#: ../src/html/helpwnd.cpp:659
-#: ../src/html/helpwnd.cpp:1531
+#: ../src/html/helpwnd.cpp:659 ../src/html/helpwnd.cpp:1531
 msgid "Open HTML document"
 msgstr "Öppna HTML-dokument"
 
@@ -4143,10 +4028,8 @@ msgstr "Öppna HTML-dokument"
 msgid "Open file \"%s\""
 msgstr "Öppna fil \"%s\""
 
-#: ../src/generic/dirctrlg.cpp:737
-#: ../src/generic/dirdlgg.cpp:350
-#: ../src/generic/filedlgg.cpp:712
-#: ../src/generic/filedlgg.cpp:862
+#: ../src/generic/dirctrlg.cpp:737 ../src/generic/dirdlgg.cpp:350
+#: ../src/generic/filedlgg.cpp:712 ../src/generic/filedlgg.cpp:862
 msgid "Operation not permitted."
 msgstr "Operation ej tillåten."
 
@@ -4165,13 +4048,11 @@ msgstr "Flagga \"%s\" kräver ett värde."
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "Flagga \"%s\": \"%s\" kan inte konverteras till ett datum."
 
-#: ../src/generic/dirdlgg.cpp:185
-#: ../src/generic/prntdlgg.cpp:612
+#: ../src/generic/dirdlgg.cpp:185 ../src/generic/prntdlgg.cpp:612
 msgid "Options"
 msgstr "Alternativ"
 
-#: ../src/generic/prntdlgg.cpp:609
-#: ../src/generic/prntdlgg.cpp:863
+#: ../src/generic/prntdlgg.cpp:609 ../src/generic/prntdlgg.cpp:863
 msgid "Orientation"
 msgstr "Orientering"
 
@@ -4187,8 +4068,7 @@ msgstr "SIDAUPP"
 msgid "PAUSE"
 msgstr "PAUSE"
 
-#: ../src/common/imagpcx.cpp:456
-#: ../src/common/imagpcx.cpp:479
+#: ../src/common/imagpcx.cpp:456 ../src/common/imagpcx.cpp:479
 msgid "PCX: couldn't allocate memory"
 msgstr "PCX: Kunde inte allokera minne"
 
@@ -4204,8 +4084,7 @@ msgstr "PCX: Ogiltig bild"
 msgid "PCX: this is not a PCX file."
 msgstr "PCX: Detta är inte en PCX fil."
 
-#: ../src/common/imagpcx.cpp:458
-#: ../src/common/imagpcx.cpp:480
+#: ../src/common/imagpcx.cpp:458 ../src/common/imagpcx.cpp:480
 msgid "PCX: unknown error !!!"
 msgstr "PCX: Okänt fel !!!"
 
@@ -4229,8 +4108,7 @@ msgstr "PNM: Kunde inte allokera minne."
 msgid "PNM: File format is not recognized."
 msgstr "PNM: Filformat är okänt."
 
-#: ../src/common/imagpnm.cpp:104
-#: ../src/common/imagpnm.cpp:121
+#: ../src/common/imagpnm.cpp:104 ../src/common/imagpnm.cpp:121
 #: ../src/common/imagpnm.cpp:138
 msgid "PNM: File seems truncated."
 msgstr "PNM: Filen tycks vara trunkerad."
@@ -4357,8 +4235,7 @@ msgstr "Sida %d av %d"
 msgid "Page Setup"
 msgstr "Sidinställningar"
 
-#: ../src/common/prntbase.cpp:460
-#: ../src/gtk/gnome/gprint.cpp:548
+#: ../src/common/prntbase.cpp:460 ../src/gtk/gnome/gprint.cpp:548
 msgid "Page setup"
 msgstr "Sidinställning"
 
@@ -4366,14 +4243,12 @@ msgstr "Sidinställning"
 msgid "Pages"
 msgstr "Sidor"
 
-#: ../src/generic/prntdlgg.cpp:795
-#: ../src/generic/prntdlgg.cpp:849
+#: ../src/generic/prntdlgg.cpp:795 ../src/generic/prntdlgg.cpp:849
 #: ../src/generic/prntdlgg.cpp:1051
 msgid "Paper Size"
 msgstr "Pappersstorlek"
 
-#: ../src/generic/prntdlgg.cpp:596
-#: ../src/generic/prntdlgg.cpp:836
+#: ../src/generic/prntdlgg.cpp:596 ../src/generic/prntdlgg.cpp:836
 #: ../src/generic/prntdlgg.cpp:1046
 msgid "Paper size"
 msgstr "Pappersstorlek"
@@ -4390,8 +4265,7 @@ msgstr "Skickade ett redan registrerat objekt till SetObject"
 msgid "Passing a already registered object to SetObjectName"
 msgstr "Skickade ett redan registrerat objekt till SetObjectName"
 
-#: ../src/common/xtistrm.cpp:432
-#: ../src/common/xtistrm.cpp:652
+#: ../src/common/xtistrm.cpp:432 ../src/common/xtistrm.cpp:652
 msgid "Passing an unkown object to GetObject"
 msgstr "Skickade ett okänt objekt till GetObject"
 
@@ -4447,8 +4321,7 @@ msgstr ""
 msgid "Please wait while printing\n"
 msgstr "Vänta på utskrift\n"
 
-#: ../src/generic/prntdlgg.cpp:606
-#: ../src/generic/prntdlgg.cpp:861
+#: ../src/generic/prntdlgg.cpp:606 ../src/generic/prntdlgg.cpp:861
 msgid "Portrait"
 msgstr "Stående"
 
@@ -4460,8 +4333,7 @@ msgstr "PostScript-fil"
 msgid "Preparing help window..."
 msgstr "Förbereder hjälpfönster"
 
-#: ../src/generic/fontdlgg.cpp:362
-#: ../src/html/helpwnd.cpp:1207
+#: ../src/generic/fontdlgg.cpp:362 ../src/html/helpwnd.cpp:1207
 #: ../src/mac/carbon/fontdlg.cpp:513
 msgid "Preview:"
 msgstr "Förhandsgranska:"
@@ -4470,10 +4342,8 @@ msgstr "Förhandsgranska:"
 msgid "Previous page"
 msgstr "Föregående sida"
 
-#: ../src/common/prntbase.cpp:402
-#: ../src/generic/prntdlgg.cpp:139
-#: ../src/generic/prntdlgg.cpp:152
-#: ../src/gtk/gnome/gprint.cpp:403
+#: ../src/common/prntbase.cpp:402 ../src/generic/prntdlgg.cpp:139
+#: ../src/generic/prntdlgg.cpp:152 ../src/gtk/gnome/gprint.cpp:403
 #: ../src/gtk/gnome/gprint.cpp:415
 msgid "Print"
 msgstr "Skriv ut"
@@ -4482,8 +4352,7 @@ msgstr "Skriv ut"
 msgid "Print Preview"
 msgstr "Förhandsgranska"
 
-#: ../src/common/prntbase.cpp:1494
-#: ../src/common/prntbase.cpp:1520
+#: ../src/common/prntbase.cpp:1494 ../src/common/prntbase.cpp:1520
 msgid "Print Preview Failure"
 msgstr "Förhandsgranskning misslyckades"
 
@@ -4543,8 +4412,7 @@ msgstr "Skrivare..."
 msgid "Printer:"
 msgstr "Skrivare:"
 
-#: ../src/common/prntbase.cpp:319
-#: ../src/common/prntbase.cpp:540
+#: ../src/common/prntbase.cpp:319 ../src/common/prntbase.cpp:540
 msgid "Printing "
 msgstr "Skriver ut "
 
@@ -4563,8 +4431,11 @@ msgstr "Skriver ut..."
 
 #: ../src/common/debugrpt.cpp:552
 #, c-format
-msgid "Processing debug report has failed, leaving the files in \"%s\" directory."
-msgstr "Behandling av debugrapport har misslyckats, lämnar filerna i katalogen \"%s\"."
+msgid ""
+"Processing debug report has failed, leaving the files in \"%s\" directory."
+msgstr ""
+"Behandling av debugrapport har misslyckats, lämnar filerna i katalogen \"%s"
+"\"."
 
 #: ../src/common/log.cpp:431
 msgid "Program aborted."
@@ -4590,8 +4461,7 @@ msgstr "RETURN"
 msgid "RIGHT"
 msgstr "HÖGER"
 
-#: ../src/common/ffile.cpp:125
-#: ../src/common/ffile.cpp:144
+#: ../src/common/ffile.cpp:125 ../src/common/ffile.cpp:144
 #, c-format
 msgid "Read error on file '%s'"
 msgstr "Läsfel på fil \"%s\""
@@ -4663,7 +4533,8 @@ msgstr "Ta bort aktuell sida från bokmärken"
 #: ../src/common/rendcmn.cpp:196
 #, c-format
 msgid "Renderer \"%s\" has incompatible version %d.%d and couldn't be loaded."
-msgstr "Rendrerare \"%s\" har inkompatibel version %d.%d och kunde inte läsas in."
+msgstr ""
+"Rendrerare \"%s\" har inkompatibel version %d.%d och kunde inte läsas in."
 
 #: ../src/richtext/richtextbuffer.cpp:2732
 msgid "Renumber List"
@@ -4746,8 +4617,7 @@ msgstr "SKÄRMDUMP"
 msgid "SPACE"
 msgstr "MELLANSLAG"
 
-#: ../src/common/menucmn.cpp:270
-#: ../src/common/menucmn.cpp:329
+#: ../src/common/menucmn.cpp:270 ../src/common/menucmn.cpp:329
 msgid "SPECIAL"
 msgstr "SPECIAL"
 
@@ -4788,15 +4658,18 @@ msgstr "Spara logginnehållet till fil"
 msgid "Script"
 msgstr "Skrivstil"
 
-#: ../src/html/htmlhelp.cpp:610
-#: ../src/html/helpwnd.cpp:513
+#: ../src/html/htmlhelp.cpp:610 ../src/html/helpwnd.cpp:513
 #: ../src/html/helpwnd.cpp:528
 msgid "Search"
 msgstr "Sök"
 
 #: ../src/html/helpwnd.cpp:515
-msgid "Search contents of help book(s) for all occurences of the text you typed above"
-msgstr "Sök i hjälpboken/böckernas innehåll efter alla förekomster av texten du skrev in ovan"
+msgid ""
+"Search contents of help book(s) for all occurences of the text you typed "
+"above"
+msgstr ""
+"Sök i hjälpboken/böckernas innehåll efter alla förekomster av texten du "
+"skrev in ovan"
 
 #: ../src/generic/fdrepdlg.cpp:159
 msgid "Search direction"
@@ -4814,8 +4687,7 @@ msgstr "Sök i alla böcker"
 msgid "Search!"
 msgstr "Sök!"
 
-#: ../src/html/htmlhelp.cpp:383
-#: ../src/html/htmlhelp.cpp:441
+#: ../src/html/htmlhelp.cpp:383 ../src/html/htmlhelp.cpp:441
 #: ../src/html/helpwnd.cpp:849
 msgid "Searching..."
 msgstr "Söker..."
@@ -4834,8 +4706,7 @@ msgstr "Sökfel på fil \"%s\""
 msgid "Seek error on file '%s' (large files not supported by stdio)"
 msgstr "Sökfel på fil \"%s\" (stora filer stöds inte av stdio)"
 
-#: ../src/mac/carbon/textctrl.cpp:1122
-#: ../src/msw/textctrl.cpp:2214
+#: ../src/mac/carbon/textctrl.cpp:1122 ../src/msw/textctrl.cpp:2214
 #: ../src/richtext/richtextctrl.cpp:2428
 msgid "Select &All"
 msgstr "Markera &allt"
@@ -4847,10 +4718,6 @@ msgstr "Välj en dokumentmall"
 #: ../src/common/docview.cpp:1786
 msgid "Select a document view"
 msgstr "Välj en dokumentvy"
-
-#: ../src/common/docview.cpp:1589
-msgid "Open File"
-msgstr "Välj en Fil"
 
 #: ../src/common/stockitem.cpp:153
 msgid "Select all"
@@ -4925,8 +4792,7 @@ msgstr "Visa alla poster i index"
 msgid "Show hidden directories"
 msgstr "Visa dolda kataloger"
 
-#: ../src/html/htmlhelp.cpp:538
-#: ../src/html/helpwnd.cpp:632
+#: ../src/html/htmlhelp.cpp:538 ../src/html/helpwnd.cpp:632
 msgid "Show/hide navigation panel"
 msgstr "Visa/dölj navigeringspanel"
 
@@ -4947,8 +4813,7 @@ msgstr "Visar en förhandsgranskning av punktlistinställningar."
 msgid "Shows a preview of the font settings."
 msgstr "Visar en förhandsgranskning av typsnittsinställningar."
 
-#: ../src/mac/carbon/fontdlg.cpp:517
-#: ../src/mac/carbon/fontdlg.cpp:519
+#: ../src/mac/carbon/fontdlg.cpp:517 ../src/mac/carbon/fontdlg.cpp:519
 msgid "Shows a preview of the font."
 msgstr "Visar förhandsgranskning av typsnittet."
 
@@ -4957,8 +4822,7 @@ msgstr "Visar förhandsgranskning av typsnittet."
 msgid "Shows a preview of the paragraph settings."
 msgstr "Visar förhandsgranskning av styckeinställningarna."
 
-#: ../src/generic/fontdlgg.cpp:367
-#: ../src/generic/fontdlgg.cpp:369
+#: ../src/generic/fontdlgg.cpp:367 ../src/generic/fontdlgg.cpp:369
 msgid "Shows the font preview."
 msgstr "Visar typsnittsgranskningen."
 
@@ -4983,8 +4847,7 @@ msgstr "Storlek"
 msgid "Size:"
 msgstr "Storlek:"
 
-#: ../src/generic/progdlgg.cpp:218
-#: ../src/generic/progdlgg.cpp:236
+#: ../src/generic/progdlgg.cpp:218 ../src/generic/progdlgg.cpp:236
 #: ../src/generic/progdlgg.cpp:627
 msgid "Skip"
 msgstr "Hoppa över"
@@ -4997,8 +4860,7 @@ msgstr "Lutande"
 msgid "Sorry, could not open this file for saving."
 msgstr "Kunde inte öppna denna fil för att spara."
 
-#: ../src/common/docview.cpp:612
-#: ../src/common/docview.cpp:1608
+#: ../src/common/docview.cpp:612 ../src/common/docview.cpp:1608
 msgid "Sorry, could not open this file."
 msgstr "Kunde inte öppna denna fil."
 
@@ -5007,7 +4869,8 @@ msgid "Sorry, could not save this file."
 msgstr "Kunde inte spara denna fil."
 
 #: ../contrib/src/fl/controlbar.cpp:384
-msgid "Sorry, docking is not supported for ports other than wxMSW, wxMac and wxGTK"
+msgid ""
+"Sorry, docking is not supported for ports other than wxMSW, wxMac and wxGTK"
 msgstr "Dockning stöds inte för andra portningar än wxMSW, wxMac och wxGTK"
 
 #: ../src/common/prntbase.cpp:1494
@@ -5024,8 +4887,7 @@ msgstr "Förhandsgranskning kräver en installerad skrivare."
 msgid "Sorry, that name is taken. Please choose another."
 msgstr "Namnet är upptaget. Välj ett annat."
 
-#: ../src/common/docview.cpp:1278
-#: ../src/common/docview.cpp:1628
+#: ../src/common/docview.cpp:1278 ../src/common/docview.cpp:1628
 msgid "Sorry, the format for this file is unknown."
 msgstr "Filformatet för denna fil är okänt."
 
@@ -5068,8 +4930,7 @@ msgstr "Strömmande delegater för icke strömmande objekt stöds inte ännu"
 msgid "String To Colour : Incorrect colour specification : %s"
 msgstr "Sträng till färg: Felaktig färgspecifikation: %s"
 
-#: ../include/wx/xti.h:424
-#: ../include/wx/xti.h:428
+#: ../include/wx/xti.h:424 ../include/wx/xti.h:428
 msgid "String conversions not supported"
 msgstr "Strängomvandlingar stöds inte"
 
@@ -5128,8 +4989,7 @@ msgstr "TIFF-bibliotek fel."
 msgid "TIFF library warning."
 msgstr "TIFF-bibliotek varning."
 
-#: ../src/common/imagtiff.cpp:277
-#: ../src/common/imagtiff.cpp:288
+#: ../src/common/imagtiff.cpp:277 ../src/common/imagtiff.cpp:288
 #: ../src/common/imagtiff.cpp:434
 msgid "TIFF: Couldn't allocate memory."
 msgstr "TIFF: Kunde inte allokera minne."
@@ -5265,13 +5125,11 @@ msgstr ""
 msgid "The first line indent."
 msgstr "Indrag på första raden."
 
-#: ../src/generic/fontdlgg.cpp:321
-#: ../src/generic/fontdlgg.cpp:323
+#: ../src/generic/fontdlgg.cpp:321 ../src/generic/fontdlgg.cpp:323
 msgid "The font colour."
 msgstr "Typsnittets färg."
 
-#: ../src/generic/fontdlgg.cpp:282
-#: ../src/generic/fontdlgg.cpp:284
+#: ../src/generic/fontdlgg.cpp:282 ../src/generic/fontdlgg.cpp:284
 msgid "The font family."
 msgstr "Typsnittets familj."
 
@@ -5280,25 +5138,20 @@ msgstr "Typsnittets familj."
 msgid "The font from which to take the symbol."
 msgstr "Typsnitt att hämta symbolen från."
 
-#: ../src/generic/fontdlgg.cpp:334
-#: ../src/generic/fontdlgg.cpp:336
-#: ../src/generic/fontdlgg.cpp:341
-#: ../src/generic/fontdlgg.cpp:343
+#: ../src/generic/fontdlgg.cpp:334 ../src/generic/fontdlgg.cpp:336
+#: ../src/generic/fontdlgg.cpp:341 ../src/generic/fontdlgg.cpp:343
 msgid "The font point size."
 msgstr "Typsnittsstorlek"
 
-#: ../src/mac/carbon/fontdlg.cpp:466
-#: ../src/mac/carbon/fontdlg.cpp:468
+#: ../src/mac/carbon/fontdlg.cpp:466 ../src/mac/carbon/fontdlg.cpp:468
 msgid "The font size in points."
 msgstr "Typsnittsstorlek i punkter"
 
-#: ../src/generic/fontdlgg.cpp:293
-#: ../src/generic/fontdlgg.cpp:295
+#: ../src/generic/fontdlgg.cpp:293 ../src/generic/fontdlgg.cpp:295
 msgid "The font style."
 msgstr "Typsnittets stil."
 
-#: ../src/generic/fontdlgg.cpp:304
-#: ../src/generic/fontdlgg.cpp:306
+#: ../src/generic/fontdlgg.cpp:304 ../src/generic/fontdlgg.cpp:306
 msgid "The font weight."
 msgstr "Typsnittets vikt."
 
@@ -5340,7 +5193,8 @@ msgstr "Räckvidden att visa."
 
 #: ../src/generic/dbgrptg.cpp:309
 msgid ""
-"The report contains the files listed below. If any of these files contain private information,\n"
+"The report contains the files listed below. If any of these files contain "
+"private information,\n"
 "please uncheck them and they will be removed from the report.\n"
 msgstr ""
 "Rapporten innehåller filerna nedan. Om någon av filerna innehåller\n"
@@ -5395,8 +5249,7 @@ msgstr "Tabbpositionen."
 msgid "The tab positions."
 msgstr "Tabbpositionerna."
 
-#: ../src/common/textcmn.cpp:254
-#: ../src/richtext/richtextctrl.cpp:1781
+#: ../src/common/textcmn.cpp:254 ../src/richtext/richtextctrl.cpp:1781
 msgid "The text couldn't be saved."
 msgstr "Texten kunde inte sparas."
 
@@ -5407,29 +5260,47 @@ msgstr "Värdet för flaggan \"%s\" måste anges."
 
 #: ../src/msw/dialup.cpp:456
 #, c-format
-msgid "The version of remote access service (RAS) installed on this machine is tooold, please upgrade (the following required function is missing: %s)."
-msgstr "Versionen av fjärråtkomsttjänsten (RAS) som är installerad på denna maskin är för gammal, uppgradera (följande nödvändig funktion saknas: %s)."
+msgid ""
+"The version of remote access service (RAS) installed on this machine is "
+"tooold, please upgrade (the following required function is missing: %s)."
+msgstr ""
+"Versionen av fjärråtkomsttjänsten (RAS) som är installerad på denna maskin "
+"är för gammal, uppgradera (följande nödvändig funktion saknas: %s)."
 
-#: ../src/html/htmprint.cpp:610
-#: ../src/richtext/richtextprint.cpp:561
-msgid "There was a problem during page setup: you may need to set a default printer."
-msgstr "Det var problem när sidan ställdes in: Du måste kanske ange en standardskrivare."
+#: ../src/html/htmprint.cpp:610 ../src/richtext/richtextprint.cpp:561
+msgid ""
+"There was a problem during page setup: you may need to set a default printer."
+msgstr ""
+"Det var problem när sidan ställdes in: Du måste kanske ange en "
+"standardskrivare."
 
 #: ../src/msw/datectrl.cpp:110
-msgid "This system doesn't support date picker control, please upgrade your version of comctl32.dll"
-msgstr "Detta system stöder inte datumväljningskontrollen, uppgradera din version av comctl32.dll"
+msgid ""
+"This system doesn't support date picker control, please upgrade your version "
+"of comctl32.dll"
+msgstr ""
+"Detta system stöder inte datumväljningskontrollen, uppgradera din version av "
+"comctl32.dll"
 
 #: ../src/msw/thread.cpp:1247
-msgid "Thread module initialization failed: can not store value in thread local storage"
-msgstr "Trådmodulinitialisering misslyckades: Kan inte spara värde i trådens lokala lagring"
+msgid ""
+"Thread module initialization failed: can not store value in thread local "
+"storage"
+msgstr ""
+"Trådmodulinitialisering misslyckades: Kan inte spara värde i trådens lokala "
+"lagring"
 
 #: ../src/unix/threadpsx.cpp:1618
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr "Trådmodulinitialisering misslyckades: Kunde inte skapa trådnyckel"
 
 #: ../src/msw/thread.cpp:1235
-msgid "Thread module initialization failed: impossible to allocate index in thread local storage"
-msgstr "Trådmodulinitialisering misslyckades: Omöjligt att allokera index i trådens lokala lagring"
+msgid ""
+"Thread module initialization failed: impossible to allocate index in thread "
+"local storage"
+msgstr ""
+"Trådmodulinitialisering misslyckades: Omöjligt att allokera index i trådens "
+"lokala lagring"
 
 #: ../src/unix/threadpsx.cpp:1136
 msgid "Thread priority setting is ignored."
@@ -5445,10 +5316,11 @@ msgstr "Ordna &vertikalt"
 
 #: ../src/common/ftp.cpp:631
 msgid "Timeout while waiting for FTP server to connect, try passive mode."
-msgstr "Tiden för att vänta på att FTP-server skall ansluta har gått ut, försök med passivt läge."
+msgstr ""
+"Tiden för att vänta på att FTP-server skall ansluta har gått ut, försök med "
+"passivt läge."
 
-#: ../src/msw/timer.cpp:111
-#: ../src/os2/timer.cpp:130
+#: ../src/msw/timer.cpp:111 ../src/os2/timer.cpp:130
 msgid "Timer creation failed."
 msgstr "Kunde inte skapa timer."
 
@@ -5485,8 +5357,7 @@ msgstr "Översättningar av "
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
 msgstr "Försöker ta bort fil \"%s\" från minnes-VFS, men den är inte inläst!"
 
-#: ../src/common/sckaddr.cpp:144
-#: ../src/common/sckaddr.cpp:247
+#: ../src/common/sckaddr.cpp:144 ../src/common/sckaddr.cpp:247
 msgid "Trying to solve a NULL hostname: giving up"
 msgstr "Försöker slå upp ett NULL värdnamn: ger upp"
 
@@ -5508,8 +5379,7 @@ msgstr "Skriv in ett typsnittsnamn."
 msgid "Type a size in points."
 msgstr "Skriv in en storlek i punkter."
 
-#: ../src/common/xtistrm.cpp:277
-#: ../src/common/xtixml.cpp:348
+#: ../src/common/xtistrm.cpp:277 ../src/common/xtixml.cpp:348
 #: ../src/common/xtixml.cpp:495
 msgid "Type must have enum - long conversion"
 msgstr "Typen måste ha enum - long omvandling"
@@ -5526,8 +5396,7 @@ msgstr "US standard fanfold, 14 7/8 x 11 tum"
 msgid "US-ASCII"
 msgstr "US-ASCII"
 
-#: ../src/common/strconv.cpp:2771
-#: ../src/common/strconv.cpp:2775
+#: ../src/common/strconv.cpp:2771 ../src/common/strconv.cpp:2775
 msgid "Unable to create TextEncodingConverter"
 msgstr "Kunde inte skapa TextEncodingConverter"
 
@@ -5544,8 +5413,7 @@ msgstr "Kan inte spela ljud asynkront."
 msgid "Undelete"
 msgstr "Ångra borttagning"
 
-#: ../src/mac/carbon/fontdlg.cpp:493
-#: ../src/richtext/richtextfontpage.cpp:229
+#: ../src/mac/carbon/fontdlg.cpp:493 ../src/richtext/richtextfontpage.cpp:229
 #: ../src/richtext/richtextfontpage.cpp:313
 #: ../src/richtext/richtextfontpage.cpp:468
 msgid "Underlined"
@@ -5584,8 +5452,7 @@ msgstr "Oväntad parameter \"%s\""
 msgid "Unicode"
 msgstr "Unicode"
 
-#: ../src/common/fmapbase.cpp:140
-#: ../src/common/fmapbase.cpp:146
+#: ../src/common/fmapbase.cpp:140 ../src/common/fmapbase.cpp:146
 msgid "Unicode 16 bit (UTF-16)"
 msgstr "Unicode 16 bitar (UTF-16)"
 
@@ -5597,8 +5464,7 @@ msgstr "Unicode 16 bitar big endian (UTF-16BE)"
 msgid "Unicode 16 bit Little Endian (UTF-16LE)"
 msgstr "Unicode 16 bitar little endian (UTF-16LE)"
 
-#: ../src/common/fmapbase.cpp:142
-#: ../src/common/fmapbase.cpp:148
+#: ../src/common/fmapbase.cpp:142 ../src/common/fmapbase.cpp:148
 msgid "Unicode 32 bit (UTF-32)"
 msgstr "Unicode 32 bitar (UTF-32)"
 
@@ -5645,8 +5511,7 @@ msgstr "Okänd kodning (%d)"
 msgid "Unknown long option '%s'"
 msgstr "Okänd lång flagga \"%s\""
 
-#: ../src/common/cmdline.cpp:608
-#: ../src/common/cmdline.cpp:630
+#: ../src/common/cmdline.cpp:608 ../src/common/cmdline.cpp:630
 #, c-format
 msgid "Unknown option '%s'"
 msgstr "Okänd flagga \"%s\""
@@ -5665,8 +5530,7 @@ msgstr "Okänd egenskap \"%s\""
 msgid "Unmatched '{' in an entry for mime type %s."
 msgstr "Omatchad \"{\" i en post för mime-typ %s."
 
-#: ../src/common/cmdproc.cpp:257
-#: ../src/common/cmdproc.cpp:283
+#: ../src/common/cmdproc.cpp:257 ../src/common/cmdproc.cpp:283
 #: ../src/common/cmdproc.cpp:303
 msgid "Unnamed command"
 msgstr "Namnlöst kommando"
@@ -5676,8 +5540,7 @@ msgstr "Namnlöst kommando"
 msgid "Unrecognized style %s while parsing resource."
 msgstr "Oväntad stil %s när resursen tolkades."
 
-#: ../src/mac/classic/clipbrd.cpp:66
-#: ../src/msw/clipbrd.cpp:267
+#: ../src/mac/classic/clipbrd.cpp:66 ../src/msw/clipbrd.cpp:267
 #: ../src/msw/clipbrd.cpp:439
 msgid "Unsupported clipboard format."
 msgstr "Urklippsformatet stöds inte."
@@ -5749,8 +5612,7 @@ msgstr "WINDOWS_HÖGER"
 msgid "Waiting for subprocess termination failed"
 msgstr "Väntan på att subprocessen skulle avslutas misslyckades"
 
-#: ../src/common/docview.cpp:456
-#: ../src/html/htmprint.cpp:380
+#: ../src/common/docview.cpp:456 ../src/html/htmprint.cpp:380
 msgid "Warning"
 msgstr "Varning"
 
@@ -5770,8 +5632,7 @@ msgstr "Västerländsk (ISO-8859-1)"
 msgid "Western European with Euro (ISO-8859-15)"
 msgstr "Västerländsk med Euro (ISO-8859-15)"
 
-#: ../src/generic/fontdlgg.cpp:353
-#: ../src/generic/fontdlgg.cpp:355
+#: ../src/generic/fontdlgg.cpp:353 ../src/generic/fontdlgg.cpp:355
 msgid "Whether the font is underlined."
 msgstr "Om typsnittet är understruket."
 
@@ -5920,8 +5781,7 @@ msgstr "XPM: Felaktig färgbeskrivning på rad %d "
 msgid "XPM: incorrect header format!"
 msgstr "XPM: Felaktigt format i huvudet!"
 
-#: ../src/common/xpmdecod.cpp:720
-#: ../src/common/xpmdecod.cpp:729
+#: ../src/common/xpmdecod.cpp:720 ../src/common/xpmdecod.cpp:729
 #, c-format
 msgid "XPM: malformed colour definition '%s' at line %d!"
 msgstr "XPM: Felaktig färgdefinition \"%s\" på rad %d!"
@@ -5936,14 +5796,12 @@ msgstr "XPM: Trunkerat bilddata på rad %d!"
 msgid "XRC resource '%s' (class '%s') not found!"
 msgstr "XRC-resurs \"%s\" (klass \"%s\") hittades inte!"
 
-#: ../src/xrc/xmlres.cpp:1154
-#: ../src/xrc/xmlres.cpp:1166
+#: ../src/xrc/xmlres.cpp:1154 ../src/xrc/xmlres.cpp:1166
 #, c-format
 msgid "XRC resource: Cannot create animation from '%s'."
 msgstr "XRC-resurs: Kan inte skapa animation från \"%s\"."
 
-#: ../src/xrc/xmlres.cpp:1122
-#: ../src/xrc/xmlres.cpp:1134
+#: ../src/xrc/xmlres.cpp:1122 ../src/xrc/xmlres.cpp:1134
 #, c-format
 msgid "XRC resource: Cannot create bitmap from '%s'."
 msgstr "XRC-resurs: Kan inte skapa bild från \"%s\"."
@@ -5953,12 +5811,9 @@ msgstr "XRC-resurs: Kan inte skapa bild från \"%s\"."
 msgid "XRC resource: Incorrect colour specification '%s' for property '%s'."
 msgstr "XRC-resurs: Felaktig färgspecifikation \"%s\" för egenskap \"%s\"."
 
-#: ../src/mac/carbon/msgdlg.cpp:64
-#: ../src/mac/carbon/msgdlg.cpp:120
-#: ../src/mac/carbon/msgdlg.cpp:202
-#: ../src/mac/classic/msgdlg.cpp:60
-#: ../src/mac/classic/msgdlg.cpp:142
-#: ../src/motif/msgdlg.cpp:204
+#: ../src/mac/carbon/msgdlg.cpp:64 ../src/mac/carbon/msgdlg.cpp:120
+#: ../src/mac/carbon/msgdlg.cpp:202 ../src/mac/classic/msgdlg.cpp:60
+#: ../src/mac/classic/msgdlg.cpp:142 ../src/motif/msgdlg.cpp:204
 msgid "Yes"
 msgstr "Ja"
 
@@ -5966,8 +5821,7 @@ msgstr "Ja"
 msgid "You cannot Clear an overlay that is not inited"
 msgstr "Du kan inte tömma ett överlägg som inte är initierat"
 
-#: ../src/mac/carbon/overlay.cpp:104
-#: ../src/dfb/overlay.cpp:55
+#: ../src/mac/carbon/overlay.cpp:104 ../src/dfb/overlay.cpp:55
 msgid "You cannot Init an overlay twice"
 msgstr "Du kan inte initiera överlägg två gånger"
 
@@ -5997,7 +5851,8 @@ msgstr "en DDEML-applikation har skapat ett långvarigt race-tillstånd."
 
 #: ../src/msw/dde.cpp:1043
 msgid ""
-"a DDEML function was called without first calling the DdeInitialize function,\n"
+"a DDEML function was called without first calling the DdeInitialize "
+"function,\n"
 "or an invalid instance identifier\n"
 "was passed to a DDEML function."
 msgstr ""
@@ -6019,7 +5874,8 @@ msgstr "en parameter kunde inte bekräftas av DDEML."
 
 #: ../src/msw/dde.cpp:1034
 msgid "a request for a synchronous advise transaction has timed out."
-msgstr "tiden för en förfrågan för en synkron meddelandetransaktion har gått ut."
+msgstr ""
+"tiden för en förfrågan för en synkron meddelandetransaktion har gått ut."
 
 #: ../src/msw/dde.cpp:1040
 msgid "a request for a synchronous data transaction has timed out."
@@ -6027,7 +5883,8 @@ msgstr "tiden för en förfrågan för en synkron datatransaktion har gått ut."
 
 #: ../src/msw/dde.cpp:1049
 msgid "a request for a synchronous execute transaction has timed out."
-msgstr "tiden för en förfrågan för en synkron exekveringstransaktion har gått ut."
+msgstr ""
+"tiden för en förfrågan för en synkron exekveringstransaktion har gått ut."
 
 #: ../src/msw/dde.cpp:1067
 msgid "a request for a synchronous poke transaction has timed out."
@@ -6035,7 +5892,8 @@ msgstr "tiden för en förfrågan för en synkron poke-transaktion har gått ut."
 
 #: ../src/msw/dde.cpp:1082
 msgid "a request to end an advise transaction has timed out."
-msgstr "tiden för en förfrågan att avsluta en meddelandetransaktion har gått ut."
+msgstr ""
+"tiden för en förfrågan att avsluta en meddelandetransaktion har gått ut."
 
 #: ../src/msw/dde.cpp:1076
 msgid ""
@@ -6148,8 +6006,7 @@ msgstr "kan inte ta bort användarkonfigurationsfil \"%s\""
 msgid "can't determine if the end of file is reached on descriptor %d"
 msgstr "kan inte avgöra om slutet på filen är uppnått på identifierare %d"
 
-#: ../src/msdos/utilsdos.cpp:299
-#: ../src/msdos/utilsdos.cpp:458
+#: ../src/msdos/utilsdos.cpp:299 ../src/msdos/utilsdos.cpp:458
 #, c-format
 msgid "can't execute '%s'"
 msgstr "kan inte exekvera \"%s\""
@@ -6172,8 +6029,7 @@ msgstr "kan inte hitta användarens HEM, använder aktuell katalog."
 msgid "can't flush file descriptor %d"
 msgstr "kan inte spola filidentifierare %d"
 
-#: ../src/common/file.cpp:393
-#: ../src/msw/wince/filefnwce.cpp:198
+#: ../src/common/file.cpp:393 ../src/msw/wince/filefnwce.cpp:198
 #, c-format
 msgid "can't get seek position on file descriptor %d"
 msgstr "kan inte hitta sökposition på filidentifierare %d"
@@ -6182,8 +6038,7 @@ msgstr "kan inte hitta sökposition på filidentifierare %d"
 msgid "can't load any font, aborting"
 msgstr "kan inte läsa in något typsnitt, avbryter"
 
-#: ../src/common/ffile.cpp:75
-#: ../src/common/file.cpp:265
+#: ../src/common/ffile.cpp:75 ../src/common/file.cpp:265
 #, c-format
 msgid "can't open file '%s'"
 msgstr "kan inte öppna fil \"%s\""
@@ -6225,8 +6080,7 @@ msgstr "kan inte ta bort fil \"%s\""
 msgid "can't remove temporary file '%s'"
 msgstr "kan inte ta bort temporär fil \"%s\""
 
-#: ../src/common/file.cpp:379
-#: ../src/msw/wince/filefnwce.cpp:185
+#: ../src/common/file.cpp:379 ../src/msw/wince/filefnwce.cpp:185
 #, c-format
 msgid "can't seek on file descriptor %d"
 msgstr "kan inte söka på filidentifierare %d"
@@ -6480,8 +6334,7 @@ msgstr "inget DDE-fel."
 msgid "no error"
 msgstr "inget fel"
 
-#: ../src/html/helpdata.cpp:655
-#: ../src/html/htmlhelp.cpp:201
+#: ../src/html/helpdata.cpp:655 ../src/html/htmlhelp.cpp:201
 msgid "noname"
 msgstr "namnlös"
 
@@ -6575,10 +6428,8 @@ msgstr "lagrad fillängd finns inte i Zip-huvud"
 msgid "str"
 msgstr "str"
 
-#: ../src/common/tarstrm.cpp:927
-#: ../src/common/tarstrm.cpp:949
-#: ../src/common/tarstrm.cpp:1417
-#: ../src/common/tarstrm.cpp:1439
+#: ../src/common/tarstrm.cpp:927 ../src/common/tarstrm.cpp:949
+#: ../src/common/tarstrm.cpp:1417 ../src/common/tarstrm.cpp:1439
 msgid "tar entry not open"
 msgstr "tar-post är inte öppen"
 
@@ -6598,8 +6449,7 @@ msgstr "tredje"
 msgid "thirteenth"
 msgstr "trettonde"
 
-#: ../src/common/imagtiff.cpp:174
-#: ../src/common/imagtiff.cpp:190
+#: ../src/common/imagtiff.cpp:174 ../src/common/imagtiff.cpp:190
 #, c-format
 msgid "tiff module: %s"
 msgstr "tiffmodul: %s"
@@ -6624,8 +6474,7 @@ msgstr "tolfte"
 msgid "twentieth"
 msgstr "tjugonde"
 
-#: ../src/common/fontcmn.cpp:602
-#: ../src/common/fontcmn.cpp:687
+#: ../src/common/fontcmn.cpp:602 ../src/common/fontcmn.cpp:687
 msgid "underlined"
 msgstr "understruken"
 
@@ -6638,8 +6487,7 @@ msgstr "oväntat \" på position %d i \"%s\"."
 msgid "unexpected end of file"
 msgstr "oväntat slut på filen"
 
-#: ../src/common/tarstrm.cpp:351
-#: ../src/generic/progdlgg.cpp:303
+#: ../src/common/tarstrm.cpp:351 ../src/generic/progdlgg.cpp:303
 msgid "unknown"
 msgstr "okänd"
 
@@ -6648,8 +6496,7 @@ msgstr "okänd"
 msgid "unknown class %s"
 msgstr "okänd klass %s"
 
-#: ../src/common/regex.cpp:257
-#: ../src/html/chm.cpp:352
+#: ../src/common/regex.cpp:257 ../src/html/chm.cpp:352
 msgid "unknown error"
 msgstr "okänt fel"
 
@@ -6662,8 +6509,7 @@ msgstr "okänt fel (felkod %08x)."
 msgid "unknown line terminator"
 msgstr "okänt radavslut"
 
-#: ../src/common/file.cpp:361
-#: ../src/msw/wince/filefnwce.cpp:166
+#: ../src/common/file.cpp:361 ../src/msw/wince/filefnwce.cpp:166
 msgid "unknown seek origin"
 msgstr "okänd sökstart"
 
@@ -6681,8 +6527,7 @@ msgstr "namnlös"
 msgid "unnamed%d"
 msgstr "namnlös%d"
 
-#: ../src/common/zipstrm.cpp:1793
-#: ../src/common/zipstrm.cpp:2174
+#: ../src/common/zipstrm.cpp:1793 ../src/common/zipstrm.cpp:2174
 msgid "unsupported Zip compression method"
 msgstr "komprimeringsmetod i Zip stöds inte"
 
@@ -6725,8 +6570,7 @@ msgstr "wxRichTextStylePage"
 msgid "wxSearchEngine::LookFor must be called before scanning!"
 msgstr "wxSearchEngine::LookFor måste anropas före scanning!"
 
-#: ../src/common/socket.cpp:412
-#: ../src/common/socket.cpp:466
+#: ../src/common/socket.cpp:412 ../src/common/socket.cpp:466
 msgid "wxSocket: invalid signature in ReadMsg."
 msgstr "wxSocket: Ogiltig signatur i ReadMsg."
 
@@ -6751,8 +6595,7 @@ msgstr "xxxx"
 msgid "yesterday"
 msgstr "igår"
 
-#: ../src/common/zstream.cpp:245
-#: ../src/common/zstream.cpp:413
+#: ../src/common/zstream.cpp:245 ../src/common/zstream.cpp:413
 #, c-format
 msgid "zlib error %d"
 msgstr "zlib-fel %d"
@@ -6768,74 +6611,103 @@ msgstr "~"
 
 #~ msgid "."
 #~ msgstr "."
+
 #~ msgid ".."
 #~ msgstr ".."
+
 #~ msgid "Cannot open URL '%s'"
 #~ msgstr "Kan inte öppna URL \"%s\""
+
 #~ msgid "Error "
 #~ msgstr "Fel "
+
 #~ msgid "Failed to create directory %s/.gnome."
 #~ msgstr "Kunde inte skapa katalog %s/.gnome."
+
 #~ msgid "Failed to create directory %s/mime-info."
 #~ msgstr "Kunde inte skapa katalog %s/mime-info."
+
 #~ msgid "MP Thread Support is not available on this System"
 #~ msgstr "MP-trådstöd är inte tillgängligt på det här systemet"
+
 #~ msgid "Mailcap file %s, line %d: incomplete entry ignored."
 #~ msgstr "Mailcap-fil %s, rad %d: ofullständig post ignorerad."
+
 #~ msgid "Mime.types file %s, line %d: unterminated quoted string."
 #~ msgstr "Mime.types fil %s, rad %d: oavslutad citerad sträng."
+
 #~ msgid "Unknown field in file %s, line %d: '%s'."
 #~ msgstr "Okänt fält i fil %s, rad %d: \"%s\"."
+
 #~ msgid "bold "
 #~ msgstr "fet "
+
 #~ msgid "can't query for GUI plugins name in console applications"
 #~ msgstr "kan inte efterfråga GUI-insticksprogram i konsollapplikationer"
+
 #~ msgid "light "
 #~ msgstr "tunn "
+
 #~ msgid "underlined "
 #~ msgstr "understruken "
+
 #~ msgid "unsupported zip archive"
 #~ msgstr "zip-arkiv stöds inte"
+
 #~ msgid ""
 #~ "Failed to get stack backtrace:\n"
 #~ "%s"
 #~ msgstr ""
 #~ "Kunde inte hämta stackbakåtspår:\n"
 #~ "%s"
+
 #~ msgid "Loading Grey Ascii PNM image is not yet implemented."
 #~ msgstr "Att ladda Grey Ascii PNM bilder är ännu inte implementerat."
+
 #~ msgid "Loading Grey Raw PNM image is not yet implemented."
 #~ msgstr "Att ladda Grey Raw PNM bilder är ännu inte implementerat."
+
 #~ msgid "Cannot wait on thread to exit."
 #~ msgstr "Kan inte vänta på att tråden avslutas."
+
 #~ msgid "Could not load Rich Edit DLL '%s'"
 #~ msgstr "Kunde inte ladda Rich Edit DLL \"%s\""
+
 #~ msgid "ZIP handler currently supports only local files!"
 #~ msgstr "ZIP-hanteraren stöder för närvarande endast lokala filer!"
+
 #~ msgid ""
 #~ "can't seek on file descriptor %d, large files support is not enabled."
 #~ msgstr ""
 #~ "kan inte söka på filidentifierare %d, stöd för stora filer är inte "
 #~ "aktiverat."
+
 #~ msgid "More..."
 #~ msgstr "Mer..."
+
 #~ msgid "Setup"
 #~ msgstr "Inställningar"
+
 #~ msgid "/#SYSTEM"
 #~ msgstr "/#SYSTEM"
+
 #~ msgid "Backward"
 #~ msgstr "Baklänges"
+
 #~ msgid "GetUnusedColour:: No Unused Color in image "
 #~ msgstr "GetUnusedColour:: Ingen oanvänd färg i bilden"
+
 #~ msgid ""
 #~ "Can't create list control window, check that comctl32.dll is installed."
 #~ msgstr ""
 #~ "Kan inte skapa listkontrollfönster, kontrollera att comctl32.dll är "
 #~ "installerad."
+
 #~ msgid "Can't delete value of key '%s'"
 #~ msgstr "Kan inte ta bort värdet från nyckel \"%s\""
+
 #~ msgid "gmtime() failed"
 #~ msgstr "gmtime() misslyckades"
+
 #~ msgid "mktime() failed"
 #~ msgstr "mktime() misslyckades"
-

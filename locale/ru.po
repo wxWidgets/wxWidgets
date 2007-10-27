@@ -4131,6 +4131,7 @@ msgid "Objects must have an id attribute"
 msgstr "Объекты должны иметь атрибут id"
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1589
 msgid "Open File"
 msgstr "Открыть файл"
 
@@ -4858,10 +4859,6 @@ msgstr "Выберите шаблон документа"
 #: ../src/common/docview.cpp:1786
 msgid "Select a document view"
 msgstr "Выберите вид документа"
-
-#: ../src/common/docview.cpp:1589
-msgid "Open File"
-msgstr "Выберите файл"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy

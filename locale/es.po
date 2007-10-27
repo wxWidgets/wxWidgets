@@ -4124,8 +4124,9 @@ msgid "Objects must have an id attribute"
 msgstr "Los objetos deben tener un atributo de identificación"
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1589
 msgid "Open File"
-msgstr "Abrir archivo"
+msgstr "Abrir Archivo"
 
 #: ../src/html/helpwnd.cpp:659 ../src/html/helpwnd.cpp:1531
 msgid "Open HTML document"
@@ -4838,10 +4839,6 @@ msgstr "Seleccionar una plantilla de documento"
 #: ../src/common/docview.cpp:1786
 msgid "Select a document view"
 msgstr "Seleccionar una vista de documento"
-
-#: ../src/common/docview.cpp:1589
-msgid "Open File"
-msgstr "Seleccionar un Fichero"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy

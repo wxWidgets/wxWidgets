@@ -4102,8 +4102,9 @@ msgid "Objects must have an id attribute"
 msgstr "Az objektumoknak id jellemzúvel is rendelkezniük kell"
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1589
 msgid "Open File"
-msgstr "Fájl megnyitás"
+msgstr "Fájl Megnyitás"
 
 #: ../src/html/helpwnd.cpp:659 ../src/html/helpwnd.cpp:1531
 msgid "Open HTML document"
@@ -4813,10 +4814,6 @@ msgstr "Válasszon dokumentum mintát"
 #: ../src/common/docview.cpp:1786
 msgid "Select a document view"
 msgstr "Válasszon dokumentum nézetet"
-
-#: ../src/common/docview.cpp:1589
-msgid "Open File"
-msgstr "Válasszon Fájlt"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy

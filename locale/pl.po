@@ -4136,6 +4136,7 @@ msgid "Objects must have an id attribute"
 msgstr "Obiekty musz± posiadaæ w³a¶ciwo¶æ typu 'id'"
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1589
 msgid "Open File"
 msgstr "Otwieranie Pliku"
 
@@ -4850,10 +4851,6 @@ msgstr "Wybierz szablon dokumentu"
 #: ../src/common/docview.cpp:1786
 msgid "Select a document view"
 msgstr "Wybierz widok dokumentu"
-
-#: ../src/common/docview.cpp:1589
-msgid "Open File"
-msgstr "Wybierz Plik"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy

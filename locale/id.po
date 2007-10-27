@@ -4136,6 +4136,7 @@ msgid "Objects must have an id attribute"
 msgstr "Objek harus memiliki atribut id"
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1589
 msgid "Open File"
 msgstr "Buka File"
 
@@ -4870,10 +4871,6 @@ msgstr "Pilih template dokumen"
 #: ../src/common/docview.cpp:1786
 msgid "Select a document view"
 msgstr "Pilih pandangan dokumen"
-
-#: ../src/common/docview.cpp:1589
-msgid "Open File"
-msgstr "Pilih File"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy

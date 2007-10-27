@@ -4184,6 +4184,7 @@ msgid "Objects must have an id attribute"
 msgstr "Τα αντικείμενα πρέπει να έχουν ένα χαρακτηριστικό id"
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1589
 msgid "Open File"
 msgstr "Ανοιγμα Αρχείου"
 
@@ -4915,10 +4916,6 @@ msgstr "Επιλέξτε ένα πρότυπα εγγράφου"
 #: ../src/common/docview.cpp:1786
 msgid "Select a document view"
 msgstr "Επιλέξτε μια προβολή εγγράφων"
-
-#: ../src/common/docview.cpp:1589
-msgid "Open File"
-msgstr "Επιλέξτε ένα αρχείο"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy

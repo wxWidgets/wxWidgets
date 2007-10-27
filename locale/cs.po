@@ -4126,6 +4126,7 @@ msgid "Objects must have an id attribute"
 msgstr ""
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1589
 msgid "Open File"
 msgstr "Otevři Soubor"
 
@@ -4863,10 +4864,6 @@ msgstr "Vyberte šablonu dokumentu"
 #: ../src/common/docview.cpp:1786
 msgid "Select a document view"
 msgstr "Vyberte zobrazení dokumentu"
-
-#: ../src/common/docview.cpp:1589
-msgid "Open File"
-msgstr "Vyberte Soubor"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy
