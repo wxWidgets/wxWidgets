@@ -415,7 +415,7 @@ void wxDataViewCustomRenderer::SetDC(wxDC* newDCPtr)
 
 WXDataBrowserPropertyType wxDataViewCustomRenderer::GetPropertyType() const
 {
-    return WXDataBrowserPropertyType(kDataBrowserCustomType);
+    return kDataBrowserCustomType;
 }
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewCustomRenderer, wxDataViewRenderer)
@@ -444,7 +444,7 @@ bool wxDataViewTextRenderer::Render(void)
 
 WXDataBrowserPropertyType wxDataViewTextRenderer::GetPropertyType() const
 {
-    return WXDataBrowserPropertyType(kDataBrowserTextType);
+    return kDataBrowserTextType;
 }
 
 IMPLEMENT_CLASS(wxDataViewTextRenderer,wxDataViewRenderer)
@@ -476,7 +476,7 @@ bool wxDataViewBitmapRenderer::Render(void)
 
 WXDataBrowserPropertyType wxDataViewBitmapRenderer::GetPropertyType() const
 {
-    return WXDataBrowserPropertyType(kDataBrowserIconType);
+    return kDataBrowserIconType;
 }
 
 IMPLEMENT_CLASS(wxDataViewBitmapRenderer,wxDataViewRenderer)
@@ -511,7 +511,7 @@ bool wxDataViewIconTextRenderer::Render(void)
 
 WXDataBrowserPropertyType wxDataViewIconTextRenderer::GetPropertyType() const
 {
-    return WXDataBrowserPropertyType(kDataBrowserIconAndTextType);
+    return kDataBrowserIconAndTextType;
 }
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewIconTextRenderer,wxDataViewRenderer)
@@ -536,7 +536,7 @@ bool wxDataViewToggleRenderer::Render(void)
 
 WXDataBrowserPropertyType wxDataViewToggleRenderer::GetPropertyType() const
 {
-    return WXDataBrowserPropertyType(kDataBrowserCheckboxType);
+    return kDataBrowserCheckboxType;
 }
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewToggleRenderer,wxDataViewRenderer)
@@ -562,7 +562,7 @@ bool wxDataViewProgressRenderer::Render(void)
 
 WXDataBrowserPropertyType wxDataViewProgressRenderer::GetPropertyType() const
 {
-    return WXDataBrowserPropertyType(kDataBrowserProgressBarType);
+    return kDataBrowserProgressBarType;
 }
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewProgressRenderer,wxDataViewRenderer)
@@ -586,7 +586,7 @@ bool wxDataViewDateRenderer::Render(void)
 
 WXDataBrowserPropertyType wxDataViewDateRenderer::GetPropertyType() const
 {
-    return WXDataBrowserPropertyType(kDataBrowserDateTimeType);
+    return kDataBrowserDateTimeType;
 }
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewDateRenderer,wxDataViewRenderer)

@@ -9,31 +9,26 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef wxUSE_GENERICDATAVIEWCTRL
-#if wxUSE_DATAVIEWCTRL
-
-#include <limits>
-#ifdef __DARWIN__
-    #include <Carbon/Carbon.h>
-#else
-    #include <ATSUnicode.h>
-    #include <TextCommon.h>
-    #include <TextEncodingConverter.h>
-#endif
-
 #include "wx/wxprec.h"
+
+#if wxUSE_DATAVIEWCTRL
+#if !defined(wxUSE_GENERICDATAVIEWCTRL) || wxUSE_GENERICDATAVIEWCTRL == 0
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/toplevel.h"
     #include "wx/font.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/dataview.h"
 #include "wx/utils.h"
 
-#include "wx/mac/carbon/databrow.h"
 #include "wx/mac/private.h"
+#include "wx/mac/carbon/databrow.h"
 #include "wx/mac/uma.h"
+
+#include <limits>
 
 #if defined(__MWERKS__) && wxUSE_UNICODE
 #if __MWERKS__ < 0x4100 || !defined(__DARWIN__)
@@ -948,5 +943,5 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
 } /* wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(DataBrowserItemID, DataBrowserItemNotification, DataBrowserItemDataRef) */
 
 
-#endif // wxUSE_DATAVIEWCTRL
 #endif // wxUSE_GENERICDATAVIEWCTRL
+#endif // wxUSE_DATAVIEWCTRL

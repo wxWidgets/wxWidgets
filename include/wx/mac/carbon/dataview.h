@@ -11,7 +11,7 @@
 #define _WX_MACCARBONDATAVIEWCTRL_H_
 
 typedef void* DataBrowserItemDataRef;
-typedef void* WXDataBrowserPropertyType;
+typedef unsigned long WXDataBrowserPropertyType;
 typedef wxUint32 WXDataBrowserPropertyID;
 
 // ---------------------------------------------------------
