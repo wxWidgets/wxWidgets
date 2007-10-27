@@ -4022,6 +4022,7 @@ msgid "Objects must have an id attribute"
 msgstr ""
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1589
 msgid "Open File"
 msgstr ""
 
@@ -4738,14 +4739,6 @@ msgstr ""
 
 #: ../src/common/docview.cpp:1709
 msgid "Select a document template"
-msgstr ""
-
-#: ../src/common/docview.cpp:1786
-msgid "Select a document view"
-msgstr ""
-
-#: ../src/common/docview.cpp:1589
-msgid "Open File"
 msgstr ""
 
 #: ../src/common/stockitem.cpp:153

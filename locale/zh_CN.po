@@ -4082,6 +4082,7 @@ msgid "Objects must have an id attribute"
 msgstr "对象必须有一个id属性"
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1589
 msgid "Open File"
 msgstr "打开文件"
 
@@ -4783,14 +4784,6 @@ msgstr "全部选择(&A)"
 #: ../src/common/docview.cpp:1709
 msgid "Select a document template"
 msgstr "选择文档模板"
-
-#: ../src/common/docview.cpp:1786
-msgid "Select a document view"
-msgstr "选择文档视图"
-
-#: ../src/common/docview.cpp:1589
-msgid "Open File"
-msgstr "选择文件"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy
@@ -6694,6 +6687,9 @@ msgstr "|<<"
 #: ../src/richtext/richtextliststylepage.cpp:500
 msgid "~"
 msgstr ""
+
+#~ msgid "Select a document view"
+#~ msgstr "选择文档视图"
 
 #~ msgid "."
 #~ msgstr "."

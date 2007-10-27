@@ -4180,8 +4180,9 @@ msgid "Objects must have an id attribute"
 msgstr ""
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1589
 msgid "Open File"
-msgstr ""
+msgstr "Valitse Tiedosto"
 
 #: ../src/html/helpwnd.cpp:659 ../src/html/helpwnd.cpp:1531
 msgid "Open HTML document"
@@ -4907,15 +4908,6 @@ msgstr "Valitse k&aikki"
 #: ../src/common/docview.cpp:1709
 msgid "Select a document template"
 msgstr "Valitse asiakirjamalli"
-
-#: ../src/common/docview.cpp:1786
-#, fuzzy
-msgid "Select a document view"
-msgstr "Valitse dokumentin näkymä"
-
-#: ../src/common/docview.cpp:1589
-msgid "Open File"
-msgstr "Valitse Tiedosto"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy
@@ -6846,6 +6838,10 @@ msgstr "|<<"
 #: ../src/richtext/richtextliststylepage.cpp:500
 msgid "~"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Select a document view"
+#~ msgstr "Valitse dokumentin näkymä"
 
 #~ msgid "."
 #~ msgstr "."

@@ -3,7 +3,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
 # धनञ्जय शर्मा (Dhananjaya Sharma) <dysxhi@yahoo.co.in>, 2004.
 #
-fmsgid ""
+msgid ""
 msgstr ""
 "Project-Id-Version: wxstd-hi\n"
 "Report-Msgid-Bugs-To: \n"
@@ -4113,6 +4113,7 @@ msgid "Objects must have an id attribute"
 msgstr "ऑबजेक्टों के पास एक पहचान-संख्या विशेषता होनी चाहिए"
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1589
 msgid "Open File"
 msgstr "फ़ाइल खोलें"
 
@@ -4848,10 +4849,6 @@ msgstr "एक प्रलेख टेम्पलेट का चयन क�
 #: ../src/common/docview.cpp:1786
 msgid "Select a document view"
 msgstr "एक प्रलेख व्यू का चयन करें"
-
-#: ../src/common/docview.cpp:1589
-msgid "Open File"
-msgstr "एक फ़ाइल का चयन करें"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy

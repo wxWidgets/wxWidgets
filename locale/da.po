@@ -4143,8 +4143,9 @@ msgid "Objects must have an id attribute"
 msgstr ""
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1589
 msgid "Open File"
-msgstr "Åbn fil"
+msgstr "Vælg en File"
 
 #: ../src/html/helpwnd.cpp:659 ../src/html/helpwnd.cpp:1531
 msgid "Open HTML document"
@@ -4867,14 +4868,6 @@ msgstr "Vælg &alt"
 #: ../src/common/docview.cpp:1709
 msgid "Select a document template"
 msgstr "Vælg en dokumentskabelon"
-
-#: ../src/common/docview.cpp:1786
-msgid "Select a document view"
-msgstr "Vælg en dokumentvisning"
-
-#: ../src/common/docview.cpp:1589
-msgid "Open File"
-msgstr "Vælg en File"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy
@@ -6803,6 +6796,9 @@ msgstr "|<<"
 #: ../src/richtext/richtextliststylepage.cpp:500
 msgid "~"
 msgstr ""
+
+#~ msgid "Select a document view"
+#~ msgstr "Vælg en dokumentvisning"
 
 #~ msgid "."
 #~ msgstr "."

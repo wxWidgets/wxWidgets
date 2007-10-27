@@ -4092,6 +4092,7 @@ msgid "Objects must have an id attribute"
 msgstr "Nesnelerin bir kimlik özniteliði olmalýdýr"
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1589
 msgid "Open File"
 msgstr "Dosya aç"
 
@@ -4797,14 +4798,6 @@ msgstr "Tümünü seç"
 #: ../src/common/docview.cpp:1709
 msgid "Select a document template"
 msgstr "Bir döküman þablonu seçiniz"
-
-#: ../src/common/docview.cpp:1786
-msgid "Select a document view"
-msgstr "Bir döküman görünümü seçiniz"
-
-#: ../src/common/docview.cpp:1589
-msgid "Open File"
-msgstr "Bir dosya seçiniz"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy
@@ -6716,6 +6709,9 @@ msgstr "|<<"
 #: ../src/richtext/richtextliststylepage.cpp:500
 msgid "~"
 msgstr ""
+
+#~ msgid "Select a document view"
+#~ msgstr "Bir döküman görünümü seçiniz"
 
 #~ msgid "."
 #~ msgstr "."
