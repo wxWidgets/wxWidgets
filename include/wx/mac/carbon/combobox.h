@@ -84,10 +84,6 @@ class WXDLLEXPORT wxComboBox : public wxControl, public wxComboBoxBase
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxComboBoxNameStr);
 
-    // List functions
-    virtual void DoDeleteOneItem(unsigned int n);
-    virtual void DoClear();
-
     virtual int GetSelection() const;
     virtual void SetSelection(int n);
     virtual int FindString(const wxString& s, bool bCase = false) const;
@@ -127,6 +123,8 @@ class WXDLLEXPORT wxComboBox : public wxControl, public wxComboBoxBase
     virtual bool CanUndo() const;
     virtual bool CanRedo() const;
 
+    virtual wxClientDataType GetClientDataType() const;
+
     wxInt32 MacControlHit( WXEVENTHANDLERREF handler, WXEVENTREF event );
 
     wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
@@ -136,6 +134,10 @@ class WXDLLEXPORT wxComboBox : public wxControl, public wxComboBoxBase
 protected:
     // common part of all ctors
     void Init();
+
+    // List functions
+    virtual void DoDeleteOneItem(unsigned int n);
+    virtual void DoClear();
 
     // override the base class virtuals involved in geometry calculations
     virtual wxSize DoGetBestSize() const;
@@ -148,7 +150,6 @@ protected:
     virtual void DoSetItemClientData(unsigned int n, void* clientData);
     virtual void * DoGetItemClientData(unsigned int n) const;
 
-    virtual wxClientDataType GetClientDataType() const;
     virtual void SetClientDataType(wxClientDataType clientDataItemsType);
 
     // the subcontrols

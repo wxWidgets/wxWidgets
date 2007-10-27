@@ -89,8 +89,6 @@ public:
 
     // implement base class pure virtuals
     virtual void Refresh(bool eraseBack = true, const wxRect *rect = NULL);
-    virtual void DoClear();
-    virtual void DoDeleteOneItem(unsigned int n);
 
     virtual unsigned int GetCount() const;
     virtual wxString GetString(unsigned int n) const;
@@ -110,6 +108,9 @@ public:
     wxMacListControl* GetPeer() const;
 
 protected:
+    virtual void DoClear();
+    virtual void DoDeleteOneItem(unsigned int n);
+
     // from wxItemContainer
     virtual int DoInsertItems(const wxArrayStringsAdapter& items,
                               unsigned int pos,

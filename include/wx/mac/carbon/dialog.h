@@ -59,14 +59,15 @@ public:
     // may be called to terminate the dialog with the given return code
     virtual void EndModal(int retCode);
 
-    // mac also takes command-period as cancel
-    virtual bool IsEscapeKey(const wxKeyEvent& event);
-
     // implementation
     // --------------
 
     // show modal dialog and enter modal loop
     void DoShowModal();
+
+protected:
+    // mac also takes command-period as cancel
+    virtual bool IsEscapeKey(const wxKeyEvent& event);
 
 private:
     void Init();

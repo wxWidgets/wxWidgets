@@ -55,8 +55,6 @@ public:
     virtual void Lower();
 
     virtual bool Show( bool show = true );
-    virtual void DoEnable( bool enable );
-    virtual void OnEnabled( bool enabled );
 
     virtual void SetFocus();
 
@@ -85,6 +83,8 @@ public:
                                const wxFont *theFont = NULL )
                                const;
 protected:
+    virtual void DoEnable( bool enable );
+    virtual void OnEnabled( bool enabled );
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
 public:
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,

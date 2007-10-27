@@ -69,9 +69,6 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxChoiceNameStr);
 
-    virtual void DoDeleteOneItem(unsigned int n);
-    virtual void DoClear();
-
     virtual unsigned int GetCount() const ;
     virtual int GetSelection() const ;
     virtual void SetSelection(int n);
@@ -82,6 +79,9 @@ public:
     virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
 
 protected:
+    virtual void DoDeleteOneItem(unsigned int n);
+    virtual void DoClear();
+
     virtual wxSize DoGetBestSize() const ;
     virtual int DoInsertItems(const wxArrayStringsAdapter& items,
                               unsigned int pos,
