@@ -452,6 +452,11 @@ static gboolean property_notify_event(
 }
 }
 
+BEGIN_EVENT_TABLE(wxTopLevelWindowGTK, wxTopLevelWindowBase)
+    EVT_SYS_COLOUR_CHANGED(wxTopLevelWindowGTK::OnSysColourChanged)
+END_EVENT_TABLE()
+
+
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowGTK creation
 // ----------------------------------------------------------------------------
@@ -1281,4 +1286,17 @@ bool wxTopLevelWindowGTK::CanSetTransparent()
     return XQueryExtension(gdk_x11_get_default_xdisplay (),
                            "Composite", &opcode, &event, &error);
 #endif
+}
+
+void wxTopLevelWindowGTK::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    // We don't know the order in which top-level windows will
+    // be notified, so we need to clear the system objects
+    // for each top-level window.
+    extern void wxClearGtkSystemObjects();
+    wxClearGtkSystemObjects();
+
+    // wxWindowBase::OnSysColourChanged will propagate event
+    // to children
+    event.Skip();
 }
