@@ -4124,9 +4124,8 @@ msgid "Objects must have an id attribute"
 msgstr "Los objetos deben tener un atributo de identificación"
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
-#: ../src/common/docview.cpp:1589
 msgid "Open File"
-msgstr "Abrir Archivo"
+msgstr "Abrir archivo"
 
 #: ../src/html/helpwnd.cpp:659 ../src/html/helpwnd.cpp:1531
 msgid "Open HTML document"
@@ -4756,8 +4755,8 @@ msgid "Save &As..."
 msgstr "Guardar &como..."
 
 #: ../src/common/docview.cpp:300
-msgid "Save As"
-msgstr "Guardar Como"
+msgid "Save as"
+msgstr "Guardar como"
 
 #: ../src/common/stockitem.cpp:212
 #, fuzzy
@@ -4835,6 +4834,14 @@ msgstr "Seleccionar &Todo"
 #: ../src/common/docview.cpp:1709
 msgid "Select a document template"
 msgstr "Seleccionar una plantilla de documento"
+
+#: ../src/common/docview.cpp:1786
+msgid "Select a document view"
+msgstr "Seleccionar una vista de documento"
+
+#: ../src/common/docview.cpp:1589
+msgid "Select a file"
+msgstr "Seleccionar un fichero"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy
@@ -6787,9 +6794,6 @@ msgstr "|<<"
 #: ../src/richtext/richtextliststylepage.cpp:500
 msgid "~"
 msgstr ""
-
-#~ msgid "Select a document view"
-#~ msgstr "Seleccionar una vista de documento"
 
 #~ msgid "."
 #~ msgstr "."

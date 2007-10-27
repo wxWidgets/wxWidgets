@@ -4164,9 +4164,8 @@ msgid "Objects must have an id attribute"
 msgstr ""
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
-#: ../src/common/docview.cpp:1589
 msgid "Open File"
-msgstr "Selecciona un Fitxer"
+msgstr ""
 
 #: ../src/html/helpwnd.cpp:659 ../src/html/helpwnd.cpp:1531
 msgid "Open HTML document"
@@ -4821,8 +4820,8 @@ msgid "Save &As..."
 msgstr "&Desa..."
 
 #: ../src/common/docview.cpp:300
-msgid "Save As"
-msgstr "Anomena i Desa"
+msgid "Save as"
+msgstr "Anomena i desa"
 
 #: ../src/common/stockitem.cpp:212
 #, fuzzy
@@ -4898,6 +4897,14 @@ msgstr "Selecciona-ho &tot"
 #: ../src/common/docview.cpp:1709
 msgid "Select a document template"
 msgstr "Seleccioneu una plantilla de document"
+
+#: ../src/common/docview.cpp:1786
+msgid "Select a document view"
+msgstr "Seleccioneu una vista del document"
+
+#: ../src/common/docview.cpp:1589
+msgid "Select a file"
+msgstr "Selecciona un fitxer"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy
@@ -6857,9 +6864,6 @@ msgstr ""
 #: ../src/richtext/richtextliststylepage.cpp:500
 msgid "~"
 msgstr ""
-
-#~ msgid "Select a document view"
-#~ msgstr "Seleccioneu una vista del document"
 
 #~ msgid "."
 #~ msgstr "."

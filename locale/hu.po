@@ -4102,9 +4102,8 @@ msgid "Objects must have an id attribute"
 msgstr "Az objektumoknak id jellemzúvel is rendelkezniük kell"
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
-#: ../src/common/docview.cpp:1589
 msgid "Open File"
-msgstr "Fájl Megnyitás"
+msgstr "Fájl megnyitás"
 
 #: ../src/html/helpwnd.cpp:659 ../src/html/helpwnd.cpp:1531
 msgid "Open HTML document"
@@ -4732,8 +4731,8 @@ msgid "Save &As..."
 msgstr "&Mentés másként..."
 
 #: ../src/common/docview.cpp:300
-msgid "Save As"
-msgstr "Mentés Másként"
+msgid "Save as"
+msgstr "Mentés másként"
 
 #: ../src/common/stockitem.cpp:212
 #, fuzzy
@@ -4810,6 +4809,14 @@ msgstr "Válassz ki &minden fájlt"
 #: ../src/common/docview.cpp:1709
 msgid "Select a document template"
 msgstr "Válasszon dokumentum mintát"
+
+#: ../src/common/docview.cpp:1786
+msgid "Select a document view"
+msgstr "Válasszon dokumentum nézetet"
+
+#: ../src/common/docview.cpp:1589
+msgid "Select a file"
+msgstr "Válasszon fájlt"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy
@@ -6744,9 +6751,6 @@ msgstr "|<<"
 #: ../src/richtext/richtextliststylepage.cpp:500
 msgid "~"
 msgstr ""
-
-#~ msgid "Select a document view"
-#~ msgstr "Válasszon dokumentum nézetet"
 
 #~ msgid "."
 #~ msgstr "."

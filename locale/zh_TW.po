@@ -4083,7 +4083,6 @@ msgid "Objects must have an id attribute"
 msgstr "物件必須有 id 屬性"
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
-#: ../src/common/docview.cpp:1589
 msgid "Open File"
 msgstr "開啟檔案"
 
@@ -4710,7 +4709,7 @@ msgid "Save &As..."
 msgstr "另存為(&A)..."
 
 #: ../src/common/docview.cpp:300
-msgid "Save As"
+msgid "Save as"
 msgstr "另存為"
 
 #: ../src/common/stockitem.cpp:212
@@ -4785,6 +4784,14 @@ msgstr "選擇全部(&A)"
 #: ../src/common/docview.cpp:1709
 msgid "Select a document template"
 msgstr "選擇文件範本"
+
+#: ../src/common/docview.cpp:1786
+msgid "Select a document view"
+msgstr "選擇文件視界"
+
+#: ../src/common/docview.cpp:1589
+msgid "Select a file"
+msgstr "選擇檔案"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy
@@ -6683,9 +6690,6 @@ msgstr "|<<"
 #: ../src/richtext/richtextliststylepage.cpp:500
 msgid "~"
 msgstr ""
-
-#~ msgid "Select a document view"
-#~ msgstr "選擇文件視界"
 
 #~ msgid "."
 #~ msgstr "."

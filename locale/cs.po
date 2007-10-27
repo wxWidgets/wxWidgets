@@ -4126,7 +4126,6 @@ msgid "Objects must have an id attribute"
 msgstr ""
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
-#: ../src/common/docview.cpp:1589
 msgid "Open File"
 msgstr "Otevři Soubor"
 
@@ -4783,8 +4782,8 @@ msgid "Save &As..."
 msgstr "&Uložit..."
 
 #: ../src/common/docview.cpp:300
-msgid "Save As"
-msgstr "Uložit Jako"
+msgid "Save as"
+msgstr "Uložit jako"
 
 #: ../src/common/stockitem.cpp:212
 #, fuzzy
@@ -4860,6 +4859,14 @@ msgstr "Vybrat &vše"
 #: ../src/common/docview.cpp:1709
 msgid "Select a document template"
 msgstr "Vyberte šablonu dokumentu"
+
+#: ../src/common/docview.cpp:1786
+msgid "Select a document view"
+msgstr "Vyberte zobrazení dokumentu"
+
+#: ../src/common/docview.cpp:1589
+msgid "Select a file"
+msgstr "Vyberte soubor"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy
@@ -6786,9 +6793,6 @@ msgstr "|<<"
 #: ../src/richtext/richtextliststylepage.cpp:500
 msgid "~"
 msgstr ""
-
-#~ msgid "Select a document view"
-#~ msgstr "Vyberte zobrazení dokumentu"
 
 #~ msgid "."
 #~ msgstr "."

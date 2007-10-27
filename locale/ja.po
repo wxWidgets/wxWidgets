@@ -4096,7 +4096,6 @@ msgid "Objects must have an id attribute"
 msgstr "オブジェクトは、ID属性を持っていなくてはいけません"
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
-#: ../src/common/docview.cpp:1589
 msgid "Open File"
 msgstr "ファイルを開く"
 
@@ -4728,7 +4727,7 @@ msgid "Save &As..."
 msgstr "名前を付けて保存(&A)..."
 
 #: ../src/common/docview.cpp:300
-msgid "Save As"
+msgid "Save as"
 msgstr "名前を付けて保存"
 
 #: ../src/common/stockitem.cpp:212
@@ -4805,6 +4804,14 @@ msgstr "全て選択(&A)"
 #: ../src/common/docview.cpp:1709
 msgid "Select a document template"
 msgstr "ドキュメントテンプレートを選択"
+
+#: ../src/common/docview.cpp:1786
+msgid "Select a document view"
+msgstr "ドキュメントビューを選択"
+
+#: ../src/common/docview.cpp:1589
+msgid "Select a file"
+msgstr "ファイルを選択"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy
@@ -6727,9 +6734,6 @@ msgstr "|<<"
 #: ../src/richtext/richtextliststylepage.cpp:500
 msgid "~"
 msgstr ""
-
-#~ msgid "Select a document view"
-#~ msgstr "ドキュメントビューを選択"
 
 #~ msgid "."
 #~ msgstr "."

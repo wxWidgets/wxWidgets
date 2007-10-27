@@ -4113,7 +4113,6 @@ msgid "Objects must have an id attribute"
 msgstr "ऑबजेक्टों के पास एक पहचान-संख्या विशेषता होनी चाहिए"
 
 #: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
-#: ../src/common/docview.cpp:1589
 msgid "Open File"
 msgstr "फ़ाइल खोलें"
 
@@ -4768,7 +4767,7 @@ msgid "Save &As..."
 msgstr "सुरक्षित करें (&S)"
 
 #: ../src/common/docview.cpp:300
-msgid "Save As"
+msgid "Save as"
 msgstr "जैसा सुरक्षित करें"
 
 #: ../src/common/stockitem.cpp:212
@@ -4849,6 +4848,10 @@ msgstr "एक प्रलेख टेम्पलेट का चयन क�
 #: ../src/common/docview.cpp:1786
 msgid "Select a document view"
 msgstr "एक प्रलेख व्यू का चयन करें"
+
+#: ../src/common/docview.cpp:1589
+msgid "Select a file"
+msgstr "एक फ़ाइल का चयन करें"
 
 #: ../src/common/stockitem.cpp:153
 #, fuzzy
