@@ -448,8 +448,12 @@ void wxDialogBase::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
     closing.DeleteObject(this);
 }
 
-void wxDialogBase::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
+void wxDialogBase::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-  SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
-  Refresh();
+#ifndef __WXGTK__
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+    Refresh();
+#endif
+
+    event.Skip();
 }
