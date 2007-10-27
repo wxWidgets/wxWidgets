@@ -1711,8 +1711,13 @@ void wxBoxSizer::RecalcSizes()
 
         if ( !item->IsShown() )
             continue;
-
-        const wxSize sizeThis(item->GetMinSizeWithBorder());
+#ifndef __DMC__
+        // DMC doesn't distinguish between 
+        //     int  SizeInMajorDir(const wxSize& sz) const
+        // and int& SizeInMajorDir(wxSize& sz)
+        const         
+#endif 
+        wxSize sizeThis(item->GetMinSizeWithBorder());
 
 
         // adjust the size in the major direction using the proportion
@@ -1782,8 +1787,10 @@ wxSize wxBoxSizer::CalcMin()
 
         if ( !item->IsShown() )
             continue;
-
-        const wxSize sizeMinThis = item->CalcMin();
+#ifndef __DMC__
+        const // see __DMC__ above
+#endif        
+        wxSize sizeMinThis = item->CalcMin();
 
         SizeInMajorDir(m_minSize) += SizeInMajorDir(sizeMinThis);
         if ( SizeInMinorDir(sizeMinThis) > SizeInMinorDir(m_minSize) )
