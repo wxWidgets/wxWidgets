@@ -144,6 +144,7 @@ protected:
         wxTextEntryBase *m_text;
         bool m_suppress;
     };
+    friend class EventsSuppressor;
 
     // return true if the events are currently not suppressed
     bool EventsAllowed() const { return m_eventsBlock == 0; }
@@ -170,9 +171,6 @@ private:
     //
     // initially the generation of the events is enabled
     virtual void EnableTextChangedEvents(bool WXUNUSED(enable)) { }
-
-
-    friend class EventsSuppressor;
 
     // if this counter is non-null, events are blocked
     unsigned m_eventsBlock;
