@@ -23,6 +23,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_TEXTCTRL || wxUSE_COMBOBOX
+
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/textctrl.h"
@@ -284,3 +286,4 @@ void wxTextEntry::SendMaxLenEvent()
     win->GetEventHandler()->ProcessEvent(event);
 }
 
+#endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX

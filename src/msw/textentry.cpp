@@ -27,6 +27,8 @@
     #include "wx/string.h"
 #endif // WX_PRECOMP
 
+#if wxUSE_TEXTCTRL || wxUSE_COMBOBOX
+
 #include "wx/textentry.h"
 
 #include "wx/msw/private.h"
@@ -154,3 +156,5 @@ void wxTextEntry::SetMaxLength(unsigned long len)
 
     ::SendMessage(GetEditHwnd(), EM_LIMITTEXT, len, 0);
 }
+
+#endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX
