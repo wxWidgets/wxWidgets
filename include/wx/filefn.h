@@ -322,7 +322,12 @@ enum wxFileKind
         #ifdef wxHAS_HUGE_FILES
             #define   wxStat       wxPOSIX_IDENT(stati64)
         #else
-            #define   wxStat       wxPOSIX_IDENT(stat)
+            // Unfortunately Watcom is not consistent, so:-
+            #if defined(__OS2__) && defined(__WATCOMC__)
+                #define   wxStat       _stat
+            #else
+                #define   wxStat       wxPOSIX_IDENT(stat)
+            #endif
         #endif
     #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
