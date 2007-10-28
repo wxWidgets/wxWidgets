@@ -422,7 +422,12 @@ void wxGtkFileCtrl::GetFilenames( wxArrayString& files ) const
 
 void wxGtkFileCtrl::ShowHidden(bool show)
 {
+#ifdef __WXGTK26__    
     gtk_file_chooser_set_show_hidden(m_fcWidget, show);
+#else
+    //  gtk_file_chooser_set_show_hidden only in 2.6
+    g_object_set (G_OBJECT (m_fcWidget), "show-hidden", show, NULL);
+#endif    
 }
 
 #endif 
