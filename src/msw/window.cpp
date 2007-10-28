@@ -4555,29 +4555,20 @@ void wxWindowMSW::OnEraseBackground(wxEraseEvent& event)
         return;
     }
 
-    switch ( GetBackgroundStyle() )
+    if ( GetBackgroundStyle() == wxBG_STYLE_CUSTOM )
     {
-        default:
-            wxFAIL_MSG( _T("Unknown background style") );
-            // fall through
+        // don't skip the event here, custom background means that the app
+        // is drawing it itself in its OnPaint(), so don't draw it at all
+        // now to avoid flicker
+        return;
+    }
 
-        case wxBG_STYLE_SYSTEM:
-        case wxBG_STYLE_COLOUR:
-            // do default background painting
-            if ( !DoEraseBackground(GetHdcOf(*event.GetDC())) )
-            {
-                // let the system paint the background
-                event.Skip();
-            }
 
-        case wxBG_STYLE_CUSTOM:
-            // don't skip the event here, custom background means that the app
-            // is drawing it itself in its OnPaint(), so don't draw it at all
-            // now to avoid flicker
-            return;
-
-        case wxBG_STYLE_TRANSPARENT:
-            event.Skip();
+    // do default background painting
+    if ( !DoEraseBackground(GetHdcOf(*event.GetDC())) )
+    {
+        // let the system paint the background
+        event.Skip();
     }
 }
 
@@ -5948,18 +5939,10 @@ WXWORD wxCharCodeWXToMSW(int wxk, bool *isVirtual)
             break;
 
         default:
-            // check to see if its one of the OEM key codes.
-            BYTE vks = LOBYTE(VkKeyScan(wxk));
-            if ( vks != -1 )
-            {
-                vk = vks;
-            }
-            else
-            {
-                if ( isVirtual )
-                    *isVirtual = false;
-                vk = (WXWORD)wxk;
-            }
+            if ( isVirtual )
+                *isVirtual = false;
+            vk = (WXWORD)wxk;
+            break;
     }
 
     return vk;
