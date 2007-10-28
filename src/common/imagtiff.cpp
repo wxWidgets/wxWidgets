@@ -7,6 +7,14 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -30,7 +38,7 @@ extern "C"
 {
 #ifdef __DMC__
     #include "tif_config.h"
-#endif    
+#endif
     #include "tiff.h"
     #include "tiffio.h"
 }
@@ -45,11 +53,66 @@ extern "C"
     #endif
 #endif
 
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// TIFF library error/warning handlers
+// ----------------------------------------------------------------------------
+
+extern "C"
+{
+
+static void
+TIFFwxWarningHandler(const char* module,
+                     const char* WXUNUSED_IN_UNICODE(fmt),
+                     va_list WXUNUSED_IN_UNICODE(ap))
+{
+    if (module != NULL)
+        wxLogWarning(_("tiff module: %s"), wxString::FromAscii(module).c_str());
+
+    // FIXME: this is not terrible informative but better than crashing!
+#if wxUSE_UNICODE
+    wxLogWarning(_("TIFF library warning."));
+#else
+    wxVLogWarning(fmt, ap);
+#endif
+}
+
+static void
+TIFFwxErrorHandler(const char* module,
+                   const char* WXUNUSED_IN_UNICODE(fmt),
+                   va_list WXUNUSED_IN_UNICODE(ap))
+{
+    if (module != NULL)
+        wxLogError(_("tiff module: %s"), wxString::FromAscii(module).c_str());
+
+    // FIXME: as above
+#if wxUSE_UNICODE
+    wxLogError(_("TIFF library error."));
+#else
+    wxVLogError(fmt, ap);
+#endif
+}
+
+} // extern "C"
+
 //-----------------------------------------------------------------------------
 // wxTIFFHandler
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxTIFFHandler,wxImageHandler)
+
+wxTIFFHandler::wxTIFFHandler()
+{
+    m_name = wxT("TIFF file");
+    m_extension = wxT("tif");
+    m_type = wxBITMAP_TYPE_TIF;
+    m_mime = wxT("image/tiff");
+    TIFFSetWarningHandler((TIFFErrorHandler) TIFFwxWarningHandler);
+    TIFFSetErrorHandler((TIFFErrorHandler) TIFFwxErrorHandler);
+}
 
 #if wxUSE_STREAMS
 
@@ -168,38 +231,6 @@ wxTIFFUnmapProc(thandle_t WXUNUSED(handle),
 {
 }
 
-static void
-TIFFwxWarningHandler(const char* module,
-                     const char* WXUNUSED_IN_UNICODE(fmt),
-                     va_list WXUNUSED_IN_UNICODE(ap))
-{
-    if (module != NULL)
-        wxLogWarning(_("tiff module: %s"), wxString::FromAscii(module).c_str());
-
-    // FIXME: this is not terrible informative but better than crashing!
-#if wxUSE_UNICODE
-    wxLogWarning(_("TIFF library warning."));
-#else
-    wxVLogWarning(fmt, ap);
-#endif
-}
-
-static void
-TIFFwxErrorHandler(const char* module,
-                   const char* WXUNUSED_IN_UNICODE(fmt),
-                   va_list WXUNUSED_IN_UNICODE(ap))
-{
-    if (module != NULL)
-        wxLogError(_("tiff module: %s"), wxString::FromAscii(module).c_str());
-
-    // FIXME: as above
-#if wxUSE_UNICODE
-    wxLogError(_("TIFF library error."));
-#else
-    wxVLogError(fmt, ap);
-#endif
-}
-
 } // extern "C"
 
 TIFF*
@@ -224,16 +255,6 @@ TIFFwxOpen(wxOutputStream &stream, const char* name, const char* mode)
         wxTIFFMapProc, wxTIFFUnmapProc);
 
     return tif;
-}
-
-wxTIFFHandler::wxTIFFHandler()
-{
-    m_name = wxT("TIFF file");
-    m_extension = wxT("tif");
-    m_type = wxBITMAP_TYPE_TIF;
-    m_mime = wxT("image/tiff");
-    TIFFSetWarningHandler((TIFFErrorHandler) TIFFwxWarningHandler);
-    TIFFSetErrorHandler((TIFFErrorHandler) TIFFwxErrorHandler);
 }
 
 bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int index )
