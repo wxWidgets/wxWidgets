@@ -518,17 +518,23 @@ wxScrollWinEvent::wxScrollWinEvent(wxEventType commandType,
 wxMouseEvent::wxMouseEvent(wxEventType commandType)
 {
     m_eventType = commandType;
-    m_metaDown = false;
-    m_altDown = false;
-    m_controlDown = false;
-    m_shiftDown = false;
-    m_leftDown = false;
-    m_rightDown = false;
-    m_middleDown = false;
-    m_aux1Down = false;
-    m_aux2Down = false;
+
     m_x = 0;
     m_y = 0;
+
+    m_leftDown = false;
+    m_middleDown = false;
+    m_rightDown = false;
+    m_aux1Down = false;
+    m_aux2Down = false;
+
+    m_controlDown = false;
+    m_shiftDown = false;
+    m_altDown = false;
+    m_metaDown = false;
+
+    m_clickCount = -1;
+
     m_wheelRotation = 0;
     m_wheelDelta = 0;
     m_linesPerAction = 0;

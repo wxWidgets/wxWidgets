@@ -366,6 +366,20 @@ double click events, {\tt wxMOUSE\_BTN\_MIDDLE} and {\tt wxMOUSE\_BTN\_RIGHT}
 for the same events for the middle and the right buttons respectively.
 
 
+\membersection{wxMouseEvent::GetClickCount}\label{wxmouseeventgetclickcount}
+
+\constfunc{int}{GetClickCount}{\void}
+
+Returns the number of mouse clicks for this event: $1$ for a simple click, $2$
+for a double-click, $3$ for a triple-click and so on.
+
+Currently this function is implemented only in wxMac and returns $-1$ for the
+other platforms (you can still distinguish simple clicks from double-clicks as
+they generate different kinds of events however).
+
+\newsince{2.9.0}
+
+
 \membersection{wxMouseEvent::GetPosition}\label{wxmouseeventgetposition}
 
 \constfunc{wxPoint}{GetPosition}{\void}

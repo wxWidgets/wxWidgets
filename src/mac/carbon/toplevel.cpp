@@ -272,6 +272,7 @@ void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
     wxevent.m_controlDown = modifiers & controlKey;
     wxevent.m_altDown = modifiers & optionKey;
     wxevent.m_metaDown = modifiers & cmdKey;
+    wxevent.m_clickCount = clickCount;
     wxevent.SetTimestamp( cEvent.GetTicks() ) ;
 
     // a control click is interpreted as a right click

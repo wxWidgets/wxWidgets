@@ -694,7 +694,7 @@ class WXDLLIMPEXP_CORE wxMouseEvent : public wxEvent
 {
 public:
     wxMouseEvent(wxEventType mouseType = wxEVT_NULL);
-    wxMouseEvent(const wxMouseEvent& event)    : wxEvent(event)
+    wxMouseEvent(const wxMouseEvent& event) : wxEvent(event)
         { Assign(event); }
 
     // Was it a button event? (*doesn't* mean: is any button *down*?)
@@ -777,6 +777,10 @@ public:
     // True if the mouse is just leaving the window
     bool Leaving() const { return (m_eventType == wxEVT_LEAVE_WINDOW); }
 
+    // Returns the number of mouse clicks associated with this event.
+    int GetClickCount() const { return m_clickCount; }
+
+
     // Find the position of the event
     void GetPosition(wxCoord *xpos, wxCoord *ypos) const
     {
@@ -849,6 +853,8 @@ public:
     bool          m_shiftDown;
     bool          m_altDown;
     bool          m_metaDown;
+
+    int           m_clickCount;
 
     int           m_wheelAxis;
     int           m_wheelRotation;
