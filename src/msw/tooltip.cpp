@@ -97,11 +97,12 @@ public:
         // then as the control gets "focus lost" events and dismisses the
         // tooltip which then reappears because mouse remains hovering over the
         // control, see SF patch 1821229
+#ifndef __DMC__        
         if ( wxApp::GetComCtl32Version() >= 470 )
         {
             uFlags |= TTF_TRANSPARENT;
         }
-
+#endif
         uId = (UINT)hwndOwner;
     }
 };
