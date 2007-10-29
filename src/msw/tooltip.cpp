@@ -36,6 +36,10 @@
 #include "wx/tokenzr.h"
 #include "wx/msw/private.h"
 
+#ifndef TTTOOLINFO_V1_SIZE
+    #define TTTOOLINFO_V1_SIZE 0x28
+#endif
+
 // VZ: normally, the trick with subclassing the tooltip control and processing
 //     TTM_WINDOWFROMPOINT should work but, somehow, it doesn't. I leave the
 //     code here for now (but it's not compiled) in case we need it later.
@@ -78,20 +82,14 @@ public:
         ::ZeroMemory(this, sizeof(TOOLINFO));
 
         // the structure TOOLINFO has been extended with a 4 byte field in
-        // version 4.70 of comctl32.dll and if we compile on a newer machine
-        // but run on one with the old version of comctl32, nothing will work
-        // because the library will detect that we rely on a more recent
-        // version of it. So we always use the old size - if we ever start
-        // using our lParam member, we'd have to check for comctl32 version
-        // during run-time
-#if _WIN32_IE >= 0x0300
-        cbSize = sizeof(TOOLINFO) - sizeof(LPARAM);
-#else // old headers
-        cbSize = sizeof(TOOLINFO);
-#endif // compile-time comctl32.dll version
+        // version 4.70 of comctl32.dll and another one in 5.01 but we don't
+        // use these extended fields so use the old struct size to ensure that
+        // the tooltips work on old (Windows 95) systems too
+        cbSize = TTTOOLINFO_V1_SIZE;
 
         hwnd = hwndOwner;
         uFlags = TTF_IDISHWND;
+
         uId = (UINT)hwndOwner;
     }
 };
