@@ -40,6 +40,10 @@
     #define TTTOOLINFO_V1_SIZE 0x28
 #endif
 
+#ifndef TTF_TRANSPARENT
+    #define TTF_TRANSPARENT 0x0100
+#endif
+
 // VZ: normally, the trick with subclassing the tooltip control and processing
 //     TTM_WINDOWFROMPOINT should work but, somehow, it doesn't. I leave the
 //     code here for now (but it's not compiled) in case we need it later.
