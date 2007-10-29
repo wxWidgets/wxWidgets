@@ -80,7 +80,7 @@ public:
 
     // this method must be called by GTK+ callbacks to indicate that we got the
     // result for our clipboard operation
-    static void OnDone(wxClipboard *clipboard)
+    static void OnDone(wxClipboard * WXUNUSED_UNLESS_DEBUG(clipboard))
     {
         wxASSERT_MSG( clipboard == ms_clipboard,
                         _T("got notification for alien clipboard") );

@@ -136,7 +136,9 @@ bool wxGtkPrintFactory::HasPrintSetupDialog()
     return false;
 }
 
-wxDialog *wxGtkPrintFactory::CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data )
+wxDialog *
+wxGtkPrintFactory::CreatePrintSetupDialog(wxWindow * WXUNUSED(parent),
+                                          wxPrintData * WXUNUSED(data))
 {
     return NULL;
 }
@@ -183,7 +185,7 @@ wxPrintNativeDataBase *wxGtkPrintFactory::CreatePrintNativeData()
 // Callback functions for Gtk Printings.
 //----------------------------------------------------------------------------
 
-// We use it to pass useful objets to gtk printing callback functions.
+// We use it to pass useful objects to GTK printing callback functions.
 struct wxPrinterToGtkData
 {
    wxGtkPrinter * printer;
@@ -206,20 +208,28 @@ extern "C"
         data->printer->DrawPage(data->printout, operation, context, page_nr);
     }
 
-    static void gtk_end_print_callback (GtkPrintOperation *operation, GtkPrintContext *context, gpointer user_data)
+    static void gtk_end_print_callback(GtkPrintOperation * WXUNUSED(operation),
+                                       GtkPrintContext * WXUNUSED(context),
+                                       gpointer user_data)
     {
         wxPrintout *printout = (wxPrintout *) user_data;
 
         printout->OnEndPrinting();
     }
 
-    static gboolean gtk_preview_print_callback (GtkPrintOperation *operation, GtkPrintOperationPreview *preview, GtkPrintContext *context, GtkWindow *parent, gpointer user_data)
+    static gboolean
+    gtk_preview_print_callback(GtkPrintOperation * WXUNUSED(operation),
+                               GtkPrintOperationPreview * WXUNUSED(preview),
+                               GtkPrintContext *context,
+                               GtkWindow *parent,
+                               gpointer user_data)
     {
         wxPrintout *printout = (wxPrintout *) user_data;
 
         printout->SetIsPreview(true);
 
-        /* We create a cairo context with 72dpi resolution. This resolution is only used for positionning. */
+        /* We create a Cairo context with 72dpi resolution. This resolution is
+         * only used for positioning. */
         cairo_t *cairo = gdk_cairo_create(GTK_WIDGET(parent)->window);
         gtk_print_context_set_cairo_context(context, cairo, 72, 72);
 
@@ -968,7 +978,10 @@ void wxGtkPrinter::BeginPrint(wxPrintout *printout, GtkPrintOperation *operation
     gtk_print_operation_set_n_pages(operation, numPages);
 }
 
-void wxGtkPrinter::DrawPage(wxPrintout *printout, GtkPrintOperation *operation, GtkPrintContext *context, int page_nr)
+void wxGtkPrinter::DrawPage(wxPrintout *printout,
+                            GtkPrintOperation *operation,
+                            GtkPrintContext * WXUNUSED(context),
+                            int page_nr)
 {
     int fromPage, toPage, minPage, maxPage, startPage, endPage;
     printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
@@ -1055,7 +1068,7 @@ wxDC* wxGtkPrinter::PrintDialog( wxWindow *parent )
     return new wxGtkPrintDC( m_printDialogData.GetPrintData() );
 }
 
-bool wxGtkPrinter::Setup( wxWindow *parent )
+bool wxGtkPrinter::Setup( wxWindow * WXUNUSED(parent) )
 {
     // Obsolete, for backward compatibility.
     return false;
@@ -1102,7 +1115,7 @@ wxGtkPrintDC::wxGtkPrintDC( const wxPrintData& data )
     m_signX = 1;  // default x-axis left to right.
     m_signY = 1;  // default y-axis bottom up -> top down.
 
-    // By default the origin of the cairo context is in the upper left
+    // By default the origin of the Cairo context is in the upper left
     // corner of the printable area. We need to translate it so that it
     // is in the upper left corner of the paper (without margins)
     GtkPageSetup *setup = gtk_print_context_get_page_setup( m_gpc );
@@ -1120,12 +1133,16 @@ wxGtkPrintDC::~wxGtkPrintDC()
 
 bool wxGtkPrintDC::IsOk() const
 {
-    return (m_gpc != NULL);
+    return m_gpc != NULL;
 }
 
-bool wxGtkPrintDC::DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col, int style )
+bool wxGtkPrintDC::DoFloodFill(wxCoord WXUNUSED(x1),
+                               wxCoord WXUNUSED(y1),
+                               const wxColour& WXUNUSED(col),
+                               int WXUNUSED(style))
 {
-    // We can't access the given coord as a cairo context is scalable, ie a coord doesn't mean anything in this context.
+    // We can't access the given coord as a Cairo context is scalable, ie a
+    // coord doesn't mean anything in this context.
     wxFAIL_MSG(_("not implemented"));
     return false;
 }
@@ -1226,9 +1243,10 @@ void wxGtkPrintDC::DoGradientFillLinear(const wxRect& rect, const wxColour& init
     CalcBoundingBox(x+w, y+h);
 }
 
-bool wxGtkPrintDC::DoGetPixel(wxCoord x1, wxCoord y1, wxColour *col) const
+bool wxGtkPrintDC::DoGetPixel(wxCoord WXUNUSED(x1),
+                              wxCoord WXUNUSED(y1),
+                              wxColour * WXUNUSED(col)) const
 {
-    // We can't access the given coord as a cairo context is scalable, ie a coord doesn't mean anything in this context.
     wxFAIL_MSG(_("not implemented"));
     return false;
 }
@@ -1564,10 +1582,16 @@ void wxGtkPrintDC::DoDrawSpline(const wxPointList *points)
 }
 #endif // wxUSE_SPLINES
 
-bool wxGtkPrintDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-            wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop, bool useMask,
-            wxCoord xsrcMask, wxCoord ysrcMask)
+bool wxGtkPrintDC::DoBlit(wxCoord xdest, wxCoord ydest,
+                          wxCoord width, wxCoord height,
+                          wxDC *source, wxCoord xsrc, wxCoord ysrc,
+                          int rop, bool useMask,
+                          wxCoord WXUNUSED_UNLESS_DEBUG(xsrcMask),
+                          wxCoord WXUNUSED_UNLESS_DEBUG(ysrcMask))
 {
+    wxASSERT_MSG( xsrcMask == wxDefaultCoord && ysrcMask == wxDefaultCoord,
+                  wxT("mask coordinates are not supported") );
+
     wxCHECK_MSG( source, false, wxT("invalid source dc") );
 
     // Blit into a bitmap.
@@ -2055,8 +2079,10 @@ void wxGtkPrintDC::SetBackground( const wxBrush& brush )
 
 void wxGtkPrintDC::SetBackgroundMode(int mode)
 {
-    if (mode == wxSOLID) m_backgroundMode = wxSOLID;
-    else m_backgroundMode = wxTRANSPARENT;
+    if (mode == wxSOLID)
+        m_backgroundMode = wxSOLID;
+    else
+        m_backgroundMode = wxTRANSPARENT;
 }
 
 void wxGtkPrintDC::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
@@ -2070,7 +2096,7 @@ void wxGtkPrintDC::DestroyClippingRegion()
     gs_cairo->cairo_reset_clip(m_cairo);
 }
 
-bool wxGtkPrintDC::StartDoc(const wxString& message)
+bool wxGtkPrintDC::StartDoc(const wxString& WXUNUSED(message))
 {
     return true;
 }
@@ -2198,7 +2224,7 @@ void wxGtkPrintDC::SetPrintData(const wxPrintData& data)
     m_printData = data;
 }
 
-void wxGtkPrintDC::SetResolution(int ppi)
+void wxGtkPrintDC::SetResolution(int WXUNUSED(ppi))
 {
     // We can't change ppi of the GtkPrintContext.
     // TODO: should we really support this?

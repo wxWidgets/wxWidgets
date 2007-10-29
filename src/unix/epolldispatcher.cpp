@@ -41,7 +41,7 @@
 
 // helper: return EPOLLxxx mask corresponding to the given flags (and also log
 // debugging messages about it)
-static uint32_t GetEpollMask(int flags, int fd)
+static uint32_t GetEpollMask(int flags, int WXUNUSED_UNLESS_DEBUG(fd))
 {
     uint32_t ep = 0;
 

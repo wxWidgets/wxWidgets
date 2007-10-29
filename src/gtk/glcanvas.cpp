@@ -89,7 +89,9 @@ gtk_glwindow_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_e
 
 extern "C" {
 static void
-gtk_glcanvas_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxGLCanvas *win )
+gtk_glcanvas_size_callback(GtkWidget *WXUNUSED(widget),
+                           GtkAllocation * WXUNUSED(alloc),
+                           wxGLCanvas *win)
 {
     if (!win->m_hasVMT)
         return;
@@ -175,8 +177,10 @@ bool wxGLCanvas::Create(wxWindow *parent,
                         long style,
                         const wxString& name,
                         const int *attribList,
-                        const wxPalette& palette)
+                        const wxPalette& WXUNUSED_UNLESS_DEBUG(palette))
 {
+    wxASSERT_MSG( !palette.IsOk(), _T("palettes not supported") );
+
     m_exposed = false;
     m_noExpose = true;
     m_nativeSizeEvent = true;
