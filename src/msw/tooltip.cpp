@@ -90,6 +90,17 @@ public:
         hwnd = hwndOwner;
         uFlags = TTF_IDISHWND;
 
+        // we use TTF_TRANSPARENT to fix a problem which arises at least with
+        // the text controls but may presumably happen with other controls
+        // which display the tooltip at mouse position: it can start flashing
+        // then as the control gets "focus lost" events and dismisses the
+        // tooltip which then reappears because mouse remains hovering over the
+        // control, see SF patch 1821229
+        if ( wxApp::GetComCtl32Version() >= 470 )
+        {
+            uFlags |= TTF_TRANSPARENT;
+        }
+
         uId = (UINT)hwndOwner;
     }
 };
