@@ -100,7 +100,7 @@ public:
 #endif //def __OBJC__
 protected:
     // actually enable/disable the cocoa control, overridden by subclasses
-    virtual void CocoaSetEnabled(bool enable) { }
+    virtual void CocoaSetEnabled(bool WXUNUSED(enable)) { }
 
     void CocoaCreateNSScrollView();
     void InitMouseEvent(wxMouseEvent &event, WX_NSEvent cocoaEvent);

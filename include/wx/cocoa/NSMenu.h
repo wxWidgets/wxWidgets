@@ -35,11 +35,11 @@ public:
     ,   OBSERVE_WillSendAction      = 0x10
     };
     virtual void Cocoa_dealloc() {}
-    virtual void CocoaNotification_menuDidAddItem(WX_NSNotification notification) {}
-    virtual void CocoaNotification_menuDidChangeItem(WX_NSNotification notification) {}
-    virtual void CocoaNotification_menuDidRemoveItem(WX_NSNotification notification) {}
-    virtual void CocoaNotification_menuDidSendAction(WX_NSNotification notification) {}
-    virtual void CocoaNotification_menuWillSendAction(WX_NSNotification notification) {}
+    virtual void CocoaNotification_menuDidAddItem(WX_NSNotification WXUNUSED(notification)) {}
+    virtual void CocoaNotification_menuDidChangeItem(WX_NSNotification WXUNUSED(notification)) {}
+    virtual void CocoaNotification_menuDidRemoveItem(WX_NSNotification WXUNUSED(notification)) {}
+    virtual void CocoaNotification_menuDidSendAction(WX_NSNotification WXUNUSED(notification)) {}
+    virtual void CocoaNotification_menuWillSendAction(WX_NSNotification WXUNUSED(notification)) {}
     virtual ~wxCocoaNSMenu() { }
 
 protected:

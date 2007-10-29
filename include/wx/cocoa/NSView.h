@@ -38,39 +38,39 @@ public:
     {   return NULL; }
     virtual void Cocoa_FrameChanged(void) = 0;
     virtual void Cocoa_synthesizeMouseMoved(void) = 0;
-    virtual bool Cocoa_acceptsFirstMouse(bool &acceptsFirstMouse, WX_NSEvent theEvent)
+    virtual bool Cocoa_acceptsFirstMouse(bool &WXUNUSED(acceptsFirstMouse), WX_NSEvent WXUNUSED(theEvent))
     {   return false; }
-    virtual bool Cocoa_drawRect(const NSRect &rect)
+    virtual bool Cocoa_drawRect(const NSRect &WXUNUSED(rect))
     {   return false; }
-    virtual bool Cocoa_mouseDown(WX_NSEvent theEvent)
+    virtual bool Cocoa_mouseDown(WX_NSEvent WXUNUSED(theEvent))
     {   return false; }
-    virtual bool Cocoa_mouseDragged(WX_NSEvent theEvent)
+    virtual bool Cocoa_mouseDragged(WX_NSEvent WXUNUSED(theEvent))
     {   return false; }
-    virtual bool Cocoa_mouseUp(WX_NSEvent theEvent)
+    virtual bool Cocoa_mouseUp(WX_NSEvent WXUNUSED(theEvent))
     {   return false; }
-    virtual bool Cocoa_mouseMoved(WX_NSEvent theEvent)
+    virtual bool Cocoa_mouseMoved(WX_NSEvent WXUNUSED(theEvent))
     {   return false; }
-    virtual bool Cocoa_mouseEntered(WX_NSEvent theEvent)
+    virtual bool Cocoa_mouseEntered(WX_NSEvent WXUNUSED(theEvent))
     {   return false; }
-    virtual bool Cocoa_mouseExited(WX_NSEvent theEvent)
+    virtual bool Cocoa_mouseExited(WX_NSEvent WXUNUSED(theEvent))
     {   return false; }
-    virtual bool Cocoa_rightMouseDown(WX_NSEvent theEvent)
+    virtual bool Cocoa_rightMouseDown(WX_NSEvent WXUNUSED(theEvent))
     {   return false; }
-    virtual bool Cocoa_rightMouseDragged(WX_NSEvent theEvent)
+    virtual bool Cocoa_rightMouseDragged(WX_NSEvent WXUNUSED(theEvent))
     {   return false; }
-    virtual bool Cocoa_rightMouseUp(WX_NSEvent theEvent)
+    virtual bool Cocoa_rightMouseUp(WX_NSEvent WXUNUSED(theEvent))
     {   return false; }
-    virtual bool Cocoa_otherMouseDown(WX_NSEvent theEvent)
+    virtual bool Cocoa_otherMouseDown(WX_NSEvent WXUNUSED(theEvent))
     {   return false; }
-    virtual bool Cocoa_otherMouseDragged(WX_NSEvent theEvent)
+    virtual bool Cocoa_otherMouseDragged(WX_NSEvent WXUNUSED(theEvent))
     {   return false; }
-    virtual bool Cocoa_otherMouseUp(WX_NSEvent theEvent)
+    virtual bool Cocoa_otherMouseUp(WX_NSEvent WXUNUSED(theEvent))
     {   return false; }
     virtual bool Cocoa_resetCursorRects()
     {   return false; }
     virtual bool Cocoa_viewDidMoveToWindow()
     {   return false; }
-    virtual bool Cocoa_viewWillMoveToWindow(WX_NSWindow newWindow)
+    virtual bool Cocoa_viewWillMoveToWindow(WX_NSWindow WXUNUSED(newWindow))
     {   return false; }
     virtual ~wxCocoaNSView() { }
 };

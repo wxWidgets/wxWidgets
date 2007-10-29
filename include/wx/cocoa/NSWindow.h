@@ -30,9 +30,9 @@ class WXDLLIMPEXP_CORE wxCocoaNSWindow
 public:
     void AssociateNSWindow(WX_NSWindow cocoaNSWindow);
     void DisassociateNSWindow(WX_NSWindow cocoaNSWindow);
-    virtual bool Cocoa_canBecomeKeyWindow(bool &canBecome)
+    virtual bool Cocoa_canBecomeKeyWindow(bool &WXUNUSED(canBecome))
     {   return false; }
-    virtual bool Cocoa_canBecomeMainWindow(bool &canBecome)
+    virtual bool Cocoa_canBecomeMainWindow(bool &WXUNUSED(canBecome))
     {   return false; }
     virtual bool CocoaDelegate_windowShouldClose(void) = 0;
     virtual void CocoaDelegate_windowWillClose(void) = 0;

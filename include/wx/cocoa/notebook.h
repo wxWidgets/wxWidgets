@@ -48,7 +48,7 @@ public:
 // ------------------------------------------------------------------------
 protected:
     // Notebooks cannot be enabled/disabled
-    virtual void CocoaSetEnabled(bool enable) { }
+    virtual void CocoaSetEnabled(bool WXUNUSED(enable)) { }
     virtual void CocoaDelegate_tabView_didSelectTabViewItem(WX_NSTabViewItem tabviewItem);
     virtual bool CocoaDelegate_tabView_shouldSelectTabViewItem(WX_NSTabViewItem tabviewItem);
 // ------------------------------------------------------------------------
