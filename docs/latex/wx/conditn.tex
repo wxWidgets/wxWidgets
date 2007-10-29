@@ -44,8 +44,8 @@ public:
         // tell the other(s) thread(s) that we're about to terminate: we must
         // lock the mutex first or we might signal the condition before the
         // waiting threads start waiting on it!
-        wxMutexLocker lock(m_mutex);
-        m_condition.Broadcast(); // same as Signal() here -- one waiter only
+        wxMutexLocker lock(*m_mutex);
+        m_condition->Broadcast(); // same as Signal() here -- one waiter only
 
         return 0;
     }
