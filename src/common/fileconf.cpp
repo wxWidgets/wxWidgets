@@ -242,6 +242,7 @@ public:
 
   // get the last line belonging to an entry/subgroup of this group
   wxFileConfigLineList *GetGroupLine();     // line which contains [group]
+                                            // may be NULL for "/" only
   wxFileConfigLineList *GetLastEntryLine(); // after which our subgroups start
   wxFileConfigLineList *GetLastGroupLine(); // after which the next group starts
 
@@ -606,15 +607,7 @@ void wxFileConfig::Parse(const wxTextBuffer& buffer, bool bLocal)
 
     // add the line to linked list
     if ( bLocal )
-    {
       LineListAppend(strLine);
-
-      // let the root group have its start line as well
-      if ( !n )
-      {
-        m_pCurrentGroup->SetLine(m_linesTail);
-      }
-    }
 
 
     // skip leading spaces
@@ -998,8 +991,8 @@ bool wxFileConfig::DoWriteString(const wxString& key, const wxString& szValue)
 
         SetDirty();
 
-            // this will add a line for this group if it didn't have it before
-
+        // this will add a line for this group if it didn't have it before (or
+        // do nothing for the root but it's ok as it always exists anyhow)
         (void)m_pCurrentGroup->GetGroupLine();
     }
     else
