@@ -1193,6 +1193,13 @@ void wxDataViewHeaderWindowBase::SendEvent(wxEventType type, unsigned int n)
 
 #if defined(__WXMSW__) && USE_NATIVE_HEADER_WINDOW
 
+#ifndef HDS_DRAGDROP
+    #define HDS_DRAGDROP 0x0040
+#endif
+#ifndef HDS_FULLDRAG
+    #define HDS_FULLDRAG 0x0080
+#endif
+
 // implemented in msw/listctrl.cpp:
 int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick);
 
