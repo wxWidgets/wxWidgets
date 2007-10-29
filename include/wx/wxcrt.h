@@ -19,6 +19,10 @@
 #include "wx/wxcrtbase.h"
 #include "wx/string.h"
 
+#if defined (__VISUALC__) || defined (__DMC__)
+    #define HAVE_NO_VSSCANF 1
+#endif
+
 // ============================================================================
 //                              misc functions
 // ============================================================================
