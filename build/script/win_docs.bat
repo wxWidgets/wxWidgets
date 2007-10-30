@@ -16,7 +16,7 @@ set WXWIN=c:\wx\wxWidgets
 set DAILY=c:\daily
 
 rem svn already in my path...
-set PATH=%PATH%;C:\wx\oldcvs\wxw26b\utils\tex2rtf\src\vc_based;c:\wx\Gnu\bin;c:\progra~1\htmlhe~1;C:\PROGRA~1\INNOSE~1
+set PATH=%PATH%;C:\wx\WXWIDG~1.0\utils\tex2rtf\src\vc_based;c:\wx\Gnu\bin;c:\progra~1\htmlhe~1;C:\PROGRA~1\INNOSE~1
 set PATH=%PATH%;C:\Program Files\gs\gs8.51\lib;C:\Program Files\gs\gs8.51\bin
 rem add nmake to the path to build the docs
 call  \vc6
@@ -35,11 +35,12 @@ svn up >>  c:\temp.log
 
 rem now inno
 cd \wx\inno\wxWidgets >>  c:\temp.log
+svn cleanup >>  c:\temp.log
+svn up >>  c:\temp.log
 del c*.*
 if exist include\wx\msw\setup.h del include\wx\msw\setup.h
 if exist include\wx\univ\setup.h del include\wx\univ\setup.h
-svn cleanup >>  c:\temp.log
-svn up >>  c:\temp.log
+
 dos2unix configure
 dos2unix config.guess
 dos2unix config.sub
