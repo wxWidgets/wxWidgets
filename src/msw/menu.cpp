@@ -261,9 +261,15 @@ void wxMenu::Init()
 // The wxWindow destructor will take care of deleting the submenus.
 wxMenu::~wxMenu()
 {
-    if ( !::DestroyMenu(GetHmenu()) )
+    // we should free Windows resources only if Windows doesn't do it for us
+    // which happens if we're attached to a menubar or a submenu of another
+    // menu
+    if ( !IsAttached() && !GetParent() )
     {
-        wxLogLastError(wxT("DestroyMenu"));
+        if ( !::DestroyMenu(GetHmenu()) )
+        {
+            wxLogLastError(wxT("DestroyMenu"));
+        }
     }
 
 #if wxUSE_ACCEL
@@ -874,8 +880,9 @@ wxMenuBar::~wxMenuBar()
             toolMenuBar->SetMenuBar(NULL);
     }
 #else
-
-    if ( m_hMenu )
+    // we should free Windows resources only if Windows doesn't do it for us
+    // which happens if we're attached to a frame
+    if (m_hMenu && !IsAttached())
     {
 #if defined(WINCE_WITH_COMMANDBAR)
         ::DestroyWindow((HWND) m_commandBar);
