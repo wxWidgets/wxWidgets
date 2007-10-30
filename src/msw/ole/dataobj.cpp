@@ -1249,11 +1249,15 @@ void wxURLDataObject::SetURL(const wxString& url)
     if ( urlMB )
     {
         const size_t len = strlen(urlMB) + 1; // size with trailing NUL
+#if !wxUSE_UNICODE
         SetData(wxDF_TEXT, len, urlMB);
+#endif
         SetData(wxDataFormat(CFSTR_SHELLURL), len, urlMB);
     }
 
+#if wxUSE_UNICODE
     SetData(wxDF_UNICODETEXT, url.length() + 1, url.wc_str());
+#endif
 }
 
 // ----------------------------------------------------------------------------
