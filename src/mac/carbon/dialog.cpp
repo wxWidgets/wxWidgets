@@ -148,11 +148,14 @@ void wxDialog::DoShowModal()
     WindowRef windowRef = (WindowRef) MacGetWindowRef();
     WindowGroupRef windowGroup;
     WindowGroupRef formerParentGroup;
+    bool resetGroupParent = false;
+
     if ( GetParent() == NULL )
     {
         windowGroup = GetWindowGroup(windowRef) ;
         formerParentGroup = GetWindowGroupParent( windowGroup );
         SetWindowGroupParent( windowGroup, GetWindowGroupOfClass( kMovableModalWindowClass ) );
+        resetGroupParent = true;
     }
     BeginAppModalStateForWindow(windowRef) ;
 
@@ -163,7 +166,7 @@ void wxDialog::DoShowModal()
     }
 
     EndAppModalStateForWindow(windowRef) ;
-    if ( GetParent() == NULL )
+    if ( resetGroupParent )
     {
         SetWindowGroupParent( windowGroup , formerParentGroup );
     }
