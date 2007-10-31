@@ -18,7 +18,7 @@
 #include "wx/string.h"
 #include "wx/arrstr.h"
 
-class WXDLLIMPEXP_XML wxXmlNode;
+class WXDLLIMPEXP_FWD_XML wxXmlNode;
 
 // ----------------------------------------------------------------------------
 // wxDebugReport: generate a debug report, processing is done in derived class

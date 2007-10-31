@@ -12,7 +12,7 @@
 #ifndef _WX_MSW_REGISTRY_H_
 #define _WX_MSW_REGISTRY_H_
 
-class WXDLLIMPEXP_BASE wxOutputStream;
+class WXDLLIMPEXP_FWD_BASE wxOutputStream;
 
 // ----------------------------------------------------------------------------
 // class wxRegKey encapsulates window HKEY handle

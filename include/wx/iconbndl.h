@@ -16,8 +16,8 @@
 // for wxSize
 #include "wx/gdicmn.h"
 
-class WXDLLIMPEXP_CORE wxIcon;
-class WXDLLIMPEXP_BASE wxString;
+class WXDLLIMPEXP_FWD_CORE wxIcon;
+class WXDLLIMPEXP_FWD_BASE wxString;
 
 WX_DECLARE_EXPORTED_OBJARRAY( wxIcon, wxIconArray );
 

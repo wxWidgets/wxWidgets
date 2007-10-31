@@ -24,9 +24,9 @@
 #include "wx/list.h"
 #include "wx/control.h"
 
-class WXDLLEXPORT wxToolBarBase;
-class WXDLLEXPORT wxToolBarToolBase;
-class WXDLLEXPORT wxImage;
+class WXDLLIMPEXP_FWD_CORE wxToolBarBase;
+class WXDLLIMPEXP_FWD_CORE wxToolBarToolBase;
+class WXDLLIMPEXP_FWD_CORE wxImage;
 
 // ----------------------------------------------------------------------------
 // constants

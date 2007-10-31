@@ -15,11 +15,11 @@
 #include "wx/event.h"
 #include "wx/icon.h"
 
-class WXDLLIMPEXP_CORE wxFrame;
-class WXDLLIMPEXP_CORE wxWindow;
-class WXDLLIMPEXP_CORE wxApp;
-class WXDLLIMPEXP_CORE wxKeyEvent;
-class WXDLLIMPEXP_BASE wxLog;
+class WXDLLIMPEXP_FWD_CORE wxFrame;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxApp;
+class WXDLLIMPEXP_FWD_CORE wxKeyEvent;
+class WXDLLIMPEXP_FWD_BASE wxLog;
 
 // Represents the application. Derive OnInit and declare
 // a new App object to start application

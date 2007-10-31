@@ -19,8 +19,8 @@
 // ----------------------------------------------------------------------------
 
 class wxIDropSource;
-class WXDLLEXPORT wxDataObject;
-class WXDLLEXPORT wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxDataObject;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 // ----------------------------------------------------------------------------
 // macros

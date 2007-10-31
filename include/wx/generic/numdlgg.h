@@ -19,9 +19,9 @@
 #include "wx/dialog.h"
 
 #if wxUSE_SPINCTRL
-    class WXDLLEXPORT wxSpinCtrl;
+    class WXDLLIMPEXP_FWD_CORE wxSpinCtrl;
 #else
-    class WXDLLEXPORT wxTextCtrl;
+    class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 #endif // wxUSE_SPINCTRL
 
 // ----------------------------------------------------------------------------

@@ -23,8 +23,8 @@
     #include "wx/gdicmn.h"
 #endif
 
-class WXDLLIMPEXP_BASE wxArrayString;
-class WXDLLIMPEXP_BASE wxArrayInt;
+class WXDLLIMPEXP_FWD_BASE wxArrayString;
+class WXDLLIMPEXP_FWD_BASE wxArrayInt;
 
 // need this for wxGetDiskSpace() as we can't, unfortunately, forward declare
 // wxLongLong

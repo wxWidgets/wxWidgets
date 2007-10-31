@@ -35,10 +35,10 @@
 // Make the dialog modal when displaying help.
 #define wxHF_MODAL                   0x00040000
 
-class WXDLLIMPEXP_HTML wxHtmlHelpDialog;
-class WXDLLIMPEXP_HTML wxHtmlHelpWindow;
-class WXDLLIMPEXP_HTML wxHtmlHelpFrame;
-class WXDLLIMPEXP_HTML wxHtmlHelpDialog;
+class WXDLLIMPEXP_FWD_HTML wxHtmlHelpDialog;
+class WXDLLIMPEXP_FWD_HTML wxHtmlHelpWindow;
+class WXDLLIMPEXP_FWD_HTML wxHtmlHelpFrame;
+class WXDLLIMPEXP_FWD_HTML wxHtmlHelpDialog;
 
 class WXDLLIMPEXP_HTML wxHtmlHelpController : public wxHelpControllerBase // wxEvtHandler
 {

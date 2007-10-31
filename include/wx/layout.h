@@ -32,8 +32,8 @@
 // forward declrations
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWindowBase;
-class WXDLLEXPORT wxLayoutConstraints;
+class WXDLLIMPEXP_FWD_CORE wxWindowBase;
+class WXDLLIMPEXP_FWD_CORE wxLayoutConstraints;
 
 // ----------------------------------------------------------------------------
 // constants

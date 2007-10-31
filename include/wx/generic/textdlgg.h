@@ -22,7 +22,7 @@
 #include "wx/valtext.h"
 #endif
 
-class WXDLLEXPORT wxTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
 extern WXDLLEXPORT_DATA(const wxChar) wxGetTextFromUserPromptStr[];
 extern WXDLLEXPORT_DATA(const wxChar) wxGetPasswordFromUserPromptStr[];

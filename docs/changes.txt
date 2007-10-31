@@ -91,6 +91,11 @@ Major new features in 2.8 release
 2.8.7
 -----
 
+wxMSW:
+
+- Correct (harmless) warnings given for forward-declared DLL-exported classes
+  by mingw32 4.2 (Tim Stahlhut)
+
 wxGTK:
 
 - Added gtk.window.force-background-colour wxSystemOptions option to work around

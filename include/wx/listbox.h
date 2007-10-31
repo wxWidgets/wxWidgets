@@ -23,8 +23,8 @@
 #include "wx/ctrlsub.h"         // base class
 
 // forward declarations are enough here
-class WXDLLIMPEXP_BASE wxArrayInt;
-class WXDLLIMPEXP_BASE wxArrayString;
+class WXDLLIMPEXP_FWD_BASE wxArrayInt;
+class WXDLLIMPEXP_FWD_BASE wxArrayString;
 
 // ----------------------------------------------------------------------------
 // global data

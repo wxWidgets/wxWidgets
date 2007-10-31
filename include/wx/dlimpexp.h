@@ -234,22 +234,42 @@
 #define WXDLLEXPORT_DATA WXDLLIMPEXP_DATA_CORE
 
 /* wx-2.9 introduces new macros for forward declarations, include them
- * here for forward compatibility: */
-#define WXDLLIMPEXP_FWD_BASE      WXDLLIMPEXP_BASE
-#define WXDLLIMPEXP_FWD_NET       WXDLLIMPEXP_NET
-#define WXDLLIMPEXP_FWD_CORE      WXDLLIMPEXP_CORE
-#define WXDLLIMPEXP_FWD_ADV       WXDLLIMPEXP_ADV
-#define WXDLLIMPEXP_FWD_QA        WXDLLIMPEXP_QA
-#define WXDLLIMPEXP_FWD_ODBC      WXDLLIMPEXP_ODBC
-#define WXDLLIMPEXP_FWD_DBGRID    WXDLLIMPEXP_DBGRID
-#define WXDLLIMPEXP_FWD_HTML      WXDLLIMPEXP_HTML
-#define WXDLLIMPEXP_FWD_GL        WXDLLIMPEXP_GL
-#define WXDLLIMPEXP_FWD_XML       WXDLLIMPEXP_XML
-#define WXDLLIMPEXP_FWD_XRC       WXDLLIMPEXP_XRC
-#define WXDLLIMPEXP_FWD_AUI       WXDLLIMPEXP_AUI
-#define WXDLLIMPEXP_FWD_RICHTEXT  WXDLLIMPEXP_RICHTEXT
-#define WXDLLIMPEXP_FWD_MEDIA     WXDLLIMPEXP_MEDIA
-#define WXDLLIMPEXP_FWD_STC       WXDLLIMPEXP_STC
+ * here for forward compatibility:
+ 
+   GCC warns about using __attribute__ (and also __declspec in mingw32 case) on
+   forward declarations while MSVC complains about forward declarations without
+   __declspec for the classes later declared with it, so we need a separate set
+   of macros for forward declarations to hide this difference:
+ */
+#if defined(__WINDOWS__) && defined(__GNUC__)
+    #define WXDLLIMPEXP_FWD_BASE
+    #define WXDLLIMPEXP_FWD_NET
+    #define WXDLLIMPEXP_FWD_CORE
+    #define WXDLLIMPEXP_FWD_ADV
+    #define WXDLLIMPEXP_FWD_QA
+    #define WXDLLIMPEXP_FWD_HTML
+    #define WXDLLIMPEXP_FWD_GL
+    #define WXDLLIMPEXP_FWD_XML
+    #define WXDLLIMPEXP_FWD_XRC
+    #define WXDLLIMPEXP_FWD_AUI
+    #define WXDLLIMPEXP_FWD_RICHTEXT
+    #define WXDLLIMPEXP_FWD_MEDIA
+    #define WXDLLIMPEXP_FWD_STC
+#else
+    #define WXDLLIMPEXP_FWD_BASE      WXDLLIMPEXP_BASE
+    #define WXDLLIMPEXP_FWD_NET       WXDLLIMPEXP_NET
+    #define WXDLLIMPEXP_FWD_CORE      WXDLLIMPEXP_CORE
+    #define WXDLLIMPEXP_FWD_ADV       WXDLLIMPEXP_ADV
+    #define WXDLLIMPEXP_FWD_QA        WXDLLIMPEXP_QA
+    #define WXDLLIMPEXP_FWD_HTML      WXDLLIMPEXP_HTML
+    #define WXDLLIMPEXP_FWD_GL        WXDLLIMPEXP_GL
+    #define WXDLLIMPEXP_FWD_XML       WXDLLIMPEXP_XML
+    #define WXDLLIMPEXP_FWD_XRC       WXDLLIMPEXP_XRC
+    #define WXDLLIMPEXP_FWD_AUI       WXDLLIMPEXP_AUI
+    #define WXDLLIMPEXP_FWD_RICHTEXT  WXDLLIMPEXP_RICHTEXT
+    #define WXDLLIMPEXP_FWD_MEDIA     WXDLLIMPEXP_MEDIA
+    #define WXDLLIMPEXP_FWD_STC       WXDLLIMPEXP_STC
+#endif
 
 #endif /* _WX_DLIMPEXP_H_ */
 

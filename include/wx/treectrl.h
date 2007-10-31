@@ -24,7 +24,7 @@
 #include "wx/treebase.h"
 #include "wx/textctrl.h" // wxTextCtrl::ms_classinfo used through CLASSINFO macro
 
-class WXDLLEXPORT wxImageList;
+class WXDLLIMPEXP_FWD_CORE wxImageList;
 
 // ----------------------------------------------------------------------------
 // wxTreeCtrlBase

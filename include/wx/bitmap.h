@@ -20,12 +20,12 @@
 #include "wx/gdicmn.h"  // for wxBitmapType
 #include "wx/colour.h"
 
-class WXDLLEXPORT wxBitmap;
-class WXDLLEXPORT wxBitmapHandler;
-class WXDLLEXPORT wxIcon;
-class WXDLLEXPORT wxImage;
-class WXDLLEXPORT wxMask;
-class WXDLLEXPORT wxPalette;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxBitmapHandler;
+class WXDLLIMPEXP_FWD_CORE wxIcon;
+class WXDLLIMPEXP_FWD_CORE wxImage;
+class WXDLLIMPEXP_FWD_CORE wxMask;
+class WXDLLIMPEXP_FWD_CORE wxPalette;
 
 // ----------------------------------------------------------------------------
 // wxVariant support

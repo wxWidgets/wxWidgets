@@ -16,7 +16,7 @@
 
 #if wxUSE_REGEX
 
-class WXDLLIMPEXP_BASE wxString;
+class WXDLLIMPEXP_FWD_BASE wxString;
 
 // ----------------------------------------------------------------------------
 // constants

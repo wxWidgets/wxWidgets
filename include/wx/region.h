@@ -15,9 +15,9 @@
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"
 
-class WXDLLIMPEXP_CORE wxBitmap;
-class WXDLLEXPORT wxColour;
-class WXDLLEXPORT wxRegion;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxColour;
+class WXDLLIMPEXP_FWD_CORE wxRegion;
 
 // ----------------------------------------------------------------------------
 // constants

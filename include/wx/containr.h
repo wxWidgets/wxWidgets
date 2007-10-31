@@ -13,10 +13,10 @@
 #ifndef _WX_CONTAINR_H_
 #define _WX_CONTAINR_H_
 
-class WXDLLEXPORT wxFocusEvent;
-class WXDLLEXPORT wxNavigationKeyEvent;
-class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxWindowBase;
+class WXDLLIMPEXP_FWD_CORE wxFocusEvent;
+class WXDLLIMPEXP_FWD_CORE wxNavigationKeyEvent;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 
 /*
    Implementation note: wxControlContainer is not a real mix-in but rather

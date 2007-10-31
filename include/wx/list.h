@@ -503,7 +503,7 @@ class WXDLLIMPEXP_BASE wxList;
 
 class WXDLLIMPEXP_BASE wxListBase : public wxObject
 {
-friend class WXDLLIMPEXP_BASE wxNodeBase; // should be able to call DetachNode()
+friend class WXDLLIMPEXP_FWD_BASE wxNodeBase; // should be able to call DetachNode()
 friend class wxHashTableBase;   // should be able to call untyped Find()
 
 public:

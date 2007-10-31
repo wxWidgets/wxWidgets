@@ -18,10 +18,10 @@
 #include "wx/hash.h"
 #include "wx/fontenc.h"
 
-class WXDLLIMPEXP_BASE wxMBConv;
-class WXDLLIMPEXP_HTML wxHtmlParser;
-class WXDLLIMPEXP_HTML wxHtmlTagHandler;
-class WXDLLIMPEXP_HTML wxHtmlEntitiesParser;
+class WXDLLIMPEXP_FWD_BASE wxMBConv;
+class WXDLLIMPEXP_FWD_HTML wxHtmlParser;
+class WXDLLIMPEXP_FWD_HTML wxHtmlTagHandler;
+class WXDLLIMPEXP_FWD_HTML wxHtmlEntitiesParser;
 
 class wxHtmlTextPieces;
 class wxHtmlParserState;

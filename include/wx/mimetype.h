@@ -27,9 +27,9 @@
 #include "wx/arrstr.h"
 
 // fwd decls
-class WXDLLIMPEXP_BASE wxIconLocation;
-class WXDLLIMPEXP_BASE wxFileTypeImpl;
-class WXDLLIMPEXP_BASE wxMimeTypesManagerImpl;
+class WXDLLIMPEXP_FWD_BASE wxIconLocation;
+class WXDLLIMPEXP_FWD_BASE wxFileTypeImpl;
+class WXDLLIMPEXP_FWD_BASE wxMimeTypesManagerImpl;
 
 // these constants define the MIME informations source under UNIX and are used
 // by wxMimeTypesManager::Initialize()

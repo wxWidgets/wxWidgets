@@ -24,10 +24,10 @@
 // forward declarations
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFontData;
-class WXDLLEXPORT wxFontBase;
-class WXDLLEXPORT wxFont;
-class WXDLLEXPORT wxSize;
+class WXDLLIMPEXP_FWD_CORE wxFontData;
+class WXDLLIMPEXP_FWD_CORE wxFontBase;
+class WXDLLIMPEXP_FWD_CORE wxFont;
+class WXDLLIMPEXP_FWD_CORE wxSize;
 
 // ----------------------------------------------------------------------------
 // font constants

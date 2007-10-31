@@ -15,20 +15,20 @@
 #include "wx/msw/gdiimage.h"
 #include "wx/palette.h"
 
-class WXDLLEXPORT wxBitmap;
-class WXDLLEXPORT wxBitmapHandler;
-class WXDLLEXPORT wxBitmapRefData;
-class WXDLLEXPORT wxControl;
-class WXDLLEXPORT wxCursor;
-class WXDLLEXPORT wxDC;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxBitmapHandler;
+class WXDLLIMPEXP_FWD_CORE wxBitmapRefData;
+class WXDLLIMPEXP_FWD_CORE wxControl;
+class WXDLLIMPEXP_FWD_CORE wxCursor;
+class WXDLLIMPEXP_FWD_CORE wxDC;
 #if wxUSE_WXDIB
-class WXDLLEXPORT wxDIB;
+class WXDLLIMPEXP_FWD_CORE wxDIB;
 #endif
-class WXDLLEXPORT wxIcon;
-class WXDLLEXPORT wxImage;
-class WXDLLEXPORT wxMask;
-class WXDLLEXPORT wxPalette;
-class WXDLLEXPORT wxPixelDataBase;
+class WXDLLIMPEXP_FWD_CORE wxIcon;
+class WXDLLIMPEXP_FWD_CORE wxImage;
+class WXDLLIMPEXP_FWD_CORE wxMask;
+class WXDLLIMPEXP_FWD_CORE wxPalette;
+class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 
 // ----------------------------------------------------------------------------
 // wxBitmap: a mono or colour bitmap

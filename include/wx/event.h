@@ -30,13 +30,13 @@
 // forward declarations
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxList;
+class WXDLLIMPEXP_FWD_BASE wxList;
 
 #if wxUSE_GUI
-    class WXDLLIMPEXP_CORE wxDC;
-    class WXDLLIMPEXP_CORE wxMenu;
-    class WXDLLIMPEXP_CORE wxWindow;
-    class WXDLLIMPEXP_CORE wxWindowBase;
+    class WXDLLIMPEXP_FWD_CORE wxDC;
+    class WXDLLIMPEXP_FWD_CORE wxMenu;
+    class WXDLLIMPEXP_FWD_CORE wxWindow;
+    class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 #endif // wxUSE_GUI
 
 class WXDLLIMPEXP_BASE wxEvtHandler;

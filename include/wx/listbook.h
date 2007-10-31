@@ -18,8 +18,8 @@
 
 #include "wx/bookctrl.h"
 
-class WXDLLEXPORT wxListView;
-class WXDLLEXPORT wxListEvent;
+class WXDLLIMPEXP_FWD_CORE wxListView;
+class WXDLLIMPEXP_FWD_CORE wxListEvent;
 
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING;
