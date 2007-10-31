@@ -2609,7 +2609,7 @@ const wxChar *wxLocale::GetString(const wxChar *szOrigString,
     const wxChar *pszTrans = NULL;
     wxMsgCatalog *pMsgCat;
 
-    if ( szDomain != NULL )
+    if ( szDomain != NULL && szDomain[0] )
     {
         pMsgCat = FindCatalog(szDomain);
 
