@@ -136,22 +136,22 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info)
 
 #if wxUSE_COLLPANE
     if ( info.HasLicence() )
-        AddCollapsiblePane(wxT("License"), info.GetLicence());
+        AddCollapsiblePane(_("License"), info.GetLicence());
 
     if ( info.HasDevelopers() )
-        AddCollapsiblePane(wxT("Developers"),
+        AddCollapsiblePane(_("Developers"),
                            AllAsString(info.GetDevelopers()));
 
     if ( info.HasDocWriters() )
-        AddCollapsiblePane(wxT("Documentation writers"),
+        AddCollapsiblePane(_("Documentation writers"),
                            AllAsString(info.GetDocWriters()));
 
     if ( info.HasArtists() )
-        AddCollapsiblePane(wxT("Artists"),
+        AddCollapsiblePane(_("Artists"),
                            AllAsString(info.GetArtists()));
 
     if ( info.HasTranslators() )
-        AddCollapsiblePane(wxT("Translators"),
+        AddCollapsiblePane(_("Translators"),
                            AllAsString(info.GetTranslators()));
 #endif // wxUSE_COLLPANE
 
