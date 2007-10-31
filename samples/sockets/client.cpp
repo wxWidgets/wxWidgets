@@ -342,10 +342,6 @@ void MyFrame::OnOpenConnection(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 {
-  const wxChar *buf1;
-  wxChar       *buf2;
-  unsigned char len;
-
   // Disable socket menu entries (exception: Close Session)
   m_busy = true;
   UpdateStatusBar();
@@ -370,9 +366,9 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 
   m_sock->SetFlags(wxSOCKET_WAITALL);
 
-  buf1 = _("Test string (less than 256 chars!)");
-  len  = (unsigned char)((wxStrlen(buf1) + 1) * sizeof(wxChar));
-  buf2 = new wxChar[wxStrlen(buf1) + 1];
+  const wxChar *buf1 = _T("Test string (less than 256 chars!)");
+  unsigned char len  = (unsigned char)((wxStrlen(buf1) + 1)*sizeof(wxChar));
+  wxChar *buf2 = new wxChar[wxStrlen(buf1) + 1];
 
   m_text->AppendText(_("Sending a test buffer to the server ..."));
   m_sock->Write(&len, 1);
