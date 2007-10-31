@@ -2142,10 +2142,10 @@ void wxWindowMac::DoSetClientSize(int clientwidth, int clientheight)
 
 void wxWindowMac::SetLabel(const wxString& title)
 {
-    m_label = wxStripMenuCodes(title, wxStrip_Mnemonics) ;
+    m_label = title ;
 
     if ( m_peer && m_peer->Ok() )
-        m_peer->SetLabel( m_label ) ;
+        m_peer->SetLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics) ) ;
 
     // do not trigger refreshes upon invisible and possible partly created objects
     if ( MacIsReallyShown() )

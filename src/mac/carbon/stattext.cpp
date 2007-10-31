@@ -137,9 +137,9 @@ wxSize wxStaticText::DoGetBestSize() const
 
 void wxStaticText::SetLabel( const wxString& st )
 {
-    m_label = GetLabelText( st );
+    m_label =  st;
 
-    wxMacCFStringHolder str( m_label, m_font.GetEncoding() );
+    wxMacCFStringHolder str( GetLabelText(m_label), m_font.GetEncoding() );
     CFStringRef ref = str;
     OSStatus err = m_peer->SetData<CFStringRef>(kControlEntireControl, kControlStaticTextCFStringTag, ref );
     verify_noerr( err );
