@@ -30,6 +30,7 @@
 #include "wx/cocoa/objc/NSView.h"
 #import <AppKit/NSEvent.h>
 #import <AppKit/NSScrollView.h>
+#import <AppKit/NSScroller.h>
 #import <AppKit/NSColor.h>
 #import <AppKit/NSClipView.h>
 #import <Foundation/NSException.h>
@@ -299,11 +300,100 @@ public:
     void DoGetClientSize(int *x, int *y) const;
     void Encapsulate();
     void Unencapsulate();
+
+    // wxWindow calls this to do the work.  Note that we don't have the refresh parameter
+    // because wxWindow handles that itself.
+    void SetScrollbar(int orientation, int position, int thumbSize, int range);
+    int GetScrollPos(wxOrientation orient);
+    void SetScrollPos(wxOrientation orient, int position);
+    int GetScrollRange(wxOrientation orient);
+    int GetScrollThumb(wxOrientation orient);
+    void ScrollWindow(int dx, int dy, const wxRect*);
+    void UpdateSizes();
+
+    void _wx_doScroller(NSScroller *sender);
+
 protected:
     wxWindowCocoa *m_owner;
     WX_NSScrollView m_cocoaNSScrollView;
     virtual void Cocoa_FrameChanged(void);
     virtual void Cocoa_synthesizeMouseMoved(void) {}
+    /*!
+        Flag as to whether we're scrolling for a native view or a custom
+        wxWindow.  This controls the scrolling behavior.  When providing
+        scrolling for a native view we don't catch scroller action messages
+        and thus don't send scroll events and we don't actually scroll the
+        window when the application calls ScrollWindow.
+
+        When providing scrolling for a custom wxWindow, we make the NSScroller
+        send their action messages to us which we in turn package as wx window
+        scrolling events.  At this point, the window will not physically be
+        scrolled.  The application will most likely handle the event by calling
+        ScrollWindow which will do the real scrolling.  On the other hand,
+        the application may instead not call ScrollWindow until some threshold
+        is reached.  This causes the window to only scroll in steps which is
+        what, for instance, wxScrolledWindow does.
+     */
+    bool m_isNativeView;
+    /*!
+        The range as the application code wishes to see it.  That is, the
+        range from the last SetScrollbar call for the appropriate dimension.
+        The horizontal dimension is the first [0] element and the vertical
+        dimension the second [1] element.
+
+        In wxMSW, a SCROLLINFO with nMin=0 and nMax=range-1 is used which
+        gives exactly range possible positions so long as nPage (which is
+        the thumb size) is less than or equal to 1.
+     */
+    int m_scrollRange[2];
+    /*!
+        The thumb size is intended to reflect the size of the visible portion
+        of the scrolled document.  As the document size increases, the thumb
+        visible thumb size decreases.  As document size decreases, the visible
+        thumb size increases.  However, the thumb size on wx is defined in
+        terms of scroll units (which are effectively defined by the scroll
+        range) and so increasing the number of scroll units to reflect increased
+        document size will have the effect of decreasing the visible thumb
+        size even though the number doesn't change.
+
+        It's also important to note that subtracting the thumb size from the
+        full range gives you the real range that can be used.  Microsoft
+        defines nPos (the current scrolling position) to be within the range
+        from nMin to nMax - max(nPage - 1, 0).  We know that wxMSW code always
+        sets nMin = 0 and nMax = range -1.  So let's algebraically reduce the
+        definition of the maximum allowed position:
+
+        Begin:
+        = nMax - max(nPage - 1, 0)
+        Substitute (range - 1) for nMax and thumbSize for nPage:
+        = range - 1 - max(thumbSize - 1, 0)
+        Add one inside the max conditional and subtract one outside of it:
+        = range - 1 - (max(thumbSize - 1 + 1, 1) - 1)
+        Reduce some constants:
+        = range - 1 - (max(thumbSize, 1) - 1)
+        Distribute the negative across the parenthesis:
+        = range - 1 - max(thumbSize, 1) + 1
+        Reduce the constants:
+        = range - max(thumbSize, 1)
+
+        Also keep in mind that thumbSize may never be greater than range but
+        can be equal to it.  Thus for the smallest possible thumbSize there
+        are exactly range possible scroll positions (numbered from 0 to
+        range - 1) and for the largest possible thumbSize there is exactly
+        one possible scroll position (numbered 0).
+     */
+    int m_scrollThumb[2];
+
+    /*!
+        The origin of the virtual coordinate space expressed in terms of client
+        coordinates.  Starts at (0,0) and each call to ScrollWindow accumulates
+        into it.  Thus if the user scrolls the window right (thus causing the
+        contents to move left with respect to the client origin, the
+        application code (typically wxScrolledWindow) will be called with
+        dx of -something, for example -20.  This is added to m_virtualOrigin
+        and thus m_virtualOrigin will be (-20,0) in this example.
+     */
+    wxPoint m_virtualOrigin;
 private:
     wxWindowCocoaScrollView();
 };
@@ -364,6 +454,140 @@ bool wxWindowCocoaHider::Cocoa_drawRect(const NSRect& rect)
 }
 #endif //def WXCOCOA_FILL_DUMMY_VIEW
 
+
+/*! @class WXManualScrollView
+    @abstract   An NSScrollView subclass which implements wx scroll behavior
+    @discussion
+    Overrides default behavior of NSScrollView such that this class receives
+    the scroller action messages and allows the wxCocoaScrollView to act
+    on them accordingly.  In particular, because the NSScrollView will not
+    receive action messages from the scroller, it will not adjust the
+    document view.  This must be done manually using the ScrollWindow
+    method of wxWindow.
+ */
+@interface WXManualScrollView : NSScrollView
+{
+    /*! @field      m_wxCocoaScrollView
+     */
+    wxWindowCocoaScrollView *m_wxCocoaScrollView;
+}
+
+// Override these to set up the target/action correctly
+- (void)setHorizontalScroller:(NSScroller *)aScroller;
+- (void)setVerticalScroller:(NSScroller *)aScroller;
+- (void)setHasHorizontalScroller:(BOOL)flag;
+- (void)setHasVerticalScroller:(BOOL)flag;
+
+// NOTE: _wx_ prefix means "private" method like _ that Apple (and only Apple) uses.
+- (wxWindowCocoaScrollView*)_wx_wxCocoaScrollView;
+- (void)_wx_setWxCocoaScrollView:(wxWindowCocoaScrollView*)theWxScrollView;
+
+/*! @method     _wx_doScroller
+    @abstract   Handles action messages from the scrollers
+    @discussion
+    Similar to Apple's _doScroller: method which is private and not documented.
+    We do not, however, call that method.  Instead, we effectively override
+    it entirely.  We don't override it by naming ourself the same thing because
+    the base class code may or may not call that method for other reasons we
+    simply cannot know about.
+ */
+- (void)_wx_doScroller:(id)sender;
+
+@end
+
+
+@implementation WXManualScrollView : NSScrollView
+
+static inline void WXManualScrollView_DoSetScrollerTargetAction(WXManualScrollView *self, NSScroller *aScroller)
+{
+    if(aScroller != NULL && [self _wx_wxCocoaScrollView] != NULL)
+    {
+        [aScroller setTarget:self];
+        [aScroller setAction:@selector(_wx_doScroller:)];
+    }
+}
+
+- (void)setHorizontalScroller:(NSScroller *)aScroller
+{
+    [super setHorizontalScroller:aScroller];
+    WXManualScrollView_DoSetScrollerTargetAction(self, aScroller);
+}
+
+- (void)setVerticalScroller:(NSScroller *)aScroller
+{
+    [super setVerticalScroller:aScroller];
+    WXManualScrollView_DoSetScrollerTargetAction(self, aScroller);
+}
+
+- (void)setHasHorizontalScroller:(BOOL)flag
+{
+    [super setHasHorizontalScroller:flag];
+    WXManualScrollView_DoSetScrollerTargetAction(self, [self horizontalScroller]);
+}
+
+- (void)setHasVerticalScroller:(BOOL)flag
+{
+    [super setHasVerticalScroller:flag];
+    WXManualScrollView_DoSetScrollerTargetAction(self, [self verticalScroller]);
+}
+
+- (wxWindowCocoaScrollView*)_wx_wxCocoaScrollView
+{   return m_wxCocoaScrollView; }
+
+- (void)_wx_setWxCocoaScrollView:(wxWindowCocoaScrollView*)theWxScrollView
+{
+    m_wxCocoaScrollView = theWxScrollView;
+    [self setHorizontalScroller:[self horizontalScroller]];
+    [self setVerticalScroller:[self verticalScroller]];
+}
+
+- (void)_wx_doScroller:(id)sender
+{
+    if(m_wxCocoaScrollView != NULL)
+        m_wxCocoaScrollView->_wx_doScroller(sender);
+    else
+        wxLogError(wxT("Unexpected action message received from NSScroller"));
+}
+
+- (void)reflectScrolledClipView:(NSClipView *)aClipView
+{
+    struct _ScrollerBackup
+    {
+        _ScrollerBackup(NSScroller *aScroller)
+        :   m_scroller(aScroller)
+        ,   m_floatValue(aScroller!=nil?[aScroller floatValue]:0.0)
+        ,   m_knobProportion(aScroller!=nil?[aScroller knobProportion]:1.0)
+        ,   m_isEnabled(aScroller!=nil?[aScroller isEnabled]:false)
+        {
+        }
+        NSScroller *m_scroller;
+        CGFloat m_floatValue;
+        CGFloat m_knobProportion;
+        BOOL m_isEnabled;
+        ~_ScrollerBackup()
+        {
+            if(m_scroller != nil)
+            {
+                [m_scroller setFloatValue:m_floatValue knobProportion:m_knobProportion];
+                [m_scroller setEnabled:m_isEnabled];
+            }
+        }
+    private:
+        _ScrollerBackup();
+        _ScrollerBackup(_ScrollerBackup const&);
+        _ScrollerBackup& operator=(_ScrollerBackup const&);
+    };
+    _ScrollerBackup _horizontalBackup([self horizontalScroller]);
+    _ScrollerBackup _verticalBackup([self verticalScroller]);
+    // We MUST call super's implementation or else nothing seems to work right at all.
+    // However, we need our scrollers not to change values due to the document window
+    // moving so we cheat and save/restore their values across this call.
+    [super reflectScrolledClipView: aClipView];
+}
+
+@end
+WX_IMPLEMENT_GET_OBJC_CLASS(WXManualScrollView,NSScrollView)
+
 // ========================================================================
 // wxFlippedNSClipView
 // ========================================================================
@@ -386,13 +610,35 @@ WX_IMPLEMENT_GET_OBJC_CLASS(wxFlippedNSClipView,NSClipView)
 // ========================================================================
 wxWindowCocoaScrollView::wxWindowCocoaScrollView(wxWindow *owner)
 :   m_owner(owner)
+,   m_cocoaNSScrollView() // nil
+,   m_scrollRange() // {0,0}
+,   m_scrollThumb() // {0,0}
+,   m_virtualOrigin(0,0)
 {
     wxAutoNSAutoreleasePool pool;
     wxASSERT(owner);
     wxASSERT(owner->GetNSView());
-    m_cocoaNSScrollView = [[NSScrollView alloc]
+    m_isNativeView = ![owner->GetNSView() isKindOfClass:[WX_GET_OBJC_CLASS(WXNSView) class]];
+    m_cocoaNSScrollView = [(m_isNativeView?[NSScrollView alloc]:[WXManualScrollView alloc])
         initWithFrame:[owner->GetNSView() frame]];
     AssociateNSView(m_cocoaNSScrollView);
+    if(m_isNativeView)
+    {
+        /*  Set a bezel border around the entire thing because it looks funny without it.
+            TODO: Be sure to undo any borders on the real view (if any) and apply them
+            to this view if necessary. Right now, there is no border support in wxCocoa
+            so this isn't an issue.
+         */
+        [m_cocoaNSScrollView setBorderType:NSBezelBorder];
+    }
+    else
+    {
+        [(WXManualScrollView*)m_cocoaNSScrollView _wx_setWxCocoaScrollView: this];
+        // Don't set a bezel because we might be creating a scroll view due to being
+        // the "target window" of a wxScrolledWindow.  That is to say that the user
+        // has absolutely no intention of scrolling the clip view used by this
+        // NSScrollView.
+    }
 
     /* Replace the default NSClipView with a flipped one.  This ensures
        scrolling is "pinned" to the top-left instead of bottom-right. */
@@ -401,9 +647,7 @@ wxWindowCocoaScrollView::wxWindowCocoaScrollView(wxWindow *owner)
     [m_cocoaNSScrollView setContentView:flippedClip];
     [flippedClip release];
 
-    [m_cocoaNSScrollView setBackgroundColor: [NSColor windowBackgroundColor]];
-    [m_cocoaNSScrollView setHasHorizontalScroller: YES];
-    [m_cocoaNSScrollView setHasVerticalScroller: YES];
+    // In all cases we must encapsulate the real NSView properly
     Encapsulate();
 }
 
@@ -432,6 +676,10 @@ void wxWindowCocoaScrollView::Unencapsulate()
 wxWindowCocoaScrollView::~wxWindowCocoaScrollView()
 {
     DisassociateNSView(m_cocoaNSScrollView);
+    if(!m_isNativeView)
+    {
+        [(WXManualScrollView*)m_cocoaNSScrollView _wx_setWxCocoaScrollView:NULL];
+    }
     [m_cocoaNSScrollView release];
 }
 
@@ -455,12 +703,315 @@ void wxWindowCocoaScrollView::DoGetClientSize(int *x, int *y) const
         *y = (int)nssize.height;
 }
 
+static inline void SetCocoaScroller(NSScroller *aScroller, int WXUNUSED(orientation), int position, int thumbSize, int range)
+{
+    wxCHECK_RET(aScroller != nil, wxT("Expected the NSScrollView to have a scroller"));
+
+    // NOTE: thumbSize is already ensured to be >= 1 and <= range by our caller
+    // unless range = 0 in which case we shouldn't have been be called.
+    wxCHECK_RET(range > 0, wxT("Internal wxCocoa bug: shouldn't have been called with 0 range"));
+
+    // Range of valid position values is from 0 to effectiveRange
+    // NOTE: if thumbSize == range then effectiveRange is 0.
+    // thumbSize is at least 1 which gives range from 0 to range - 1 inclusive
+    // which is exactly what we want.
+    int effectiveRange = range - thumbSize;
+
+    // knobProportion is hopefully easy to understand
+    // Note that thumbSize is already guaranteed >= 1 by our caller.
+    CGFloat const knobProportion = CGFloat(thumbSize)/CGFloat(range);
+
+    // NOTE: When effectiveRange is zero there really is no valid position
+    // We arbitrarily pick 0.0 which is the same as a scroller in the home position.
+    CGFloat const floatValue = (effectiveRange != 0)?CGFloat(position)/CGFloat(effectiveRange):0.0;
+
+    [aScroller setFloatValue:floatValue knobProportion: knobProportion];
+    // Make sure it's visibly working
+    [aScroller setEnabled:YES];
+}
+
+void wxWindowCocoaScrollView::SetScrollPos(wxOrientation orientation, int position)
+{
+    // NOTE: Rather than using only setFloatValue: (which we could do) we instead
+    // simply share the SetCocoaScroller call because all but the knobProportion
+    // calculations have to be done anyway.
+    if(orientation & wxHORIZONTAL)
+    {
+        NSScroller *aScroller = [m_cocoaNSScrollView horizontalScroller];
+        if(aScroller != nil)
+            SetCocoaScroller(aScroller, orientation, position, m_scrollThumb[0], m_scrollRange[0]);
+    }
+    if(orientation & wxVERTICAL)
+    {
+        NSScroller *aScroller = [m_cocoaNSScrollView verticalScroller];
+        if(aScroller != nil)
+            SetCocoaScroller(aScroller, orientation, position, m_scrollThumb[1], m_scrollRange[1]);
+    }
+}
+
+void wxWindowCocoaScrollView::SetScrollbar(int orientation, int position, int thumbSize, int range)
+{
+    // FIXME: API assumptions:
+    // 1. If the user wants to remove a scroller he gives range 0.
+    // 2. If the user wants to disable a scroller he sets thumbSize == range
+    //    in which case it is logically impossible to scroll.
+    //    The scroller shall still be displayed.
+
+    // Ensure that range is >= 0.
+    wxASSERT(range >= 0);
+    if(range < 0)
+        range = 0;
+
+    // Ensure that thumbSize <= range
+    wxASSERT(thumbSize <= range);
+    // Also ensure thumbSize >= 1 but don't complain if it isn't
+    if(thumbSize < 1)
+        thumbSize = 1;
+    // Now make sure it's really less than range, even if we just set it to 1
+    if(thumbSize > range)
+        thumbSize = range;
+
+    bool needScroller = (range != 0);
+
+    // Can potentially set both horizontal and vertical at the same time although this is
+    // probably not very useful.
+    if(orientation & wxHORIZONTAL)
+    {
+        m_scrollRange[0] = range;
+        m_scrollThumb[0] = thumbSize;
+        if(!m_isNativeView)
+        {
+            [m_cocoaNSScrollView setHasHorizontalScroller:needScroller];
+            if(needScroller)
+                SetCocoaScroller([m_cocoaNSScrollView horizontalScroller], orientation, position, thumbSize, range);
+        }
+    }
+
+    if(orientation & wxVERTICAL)
+    {
+        m_scrollRange[1] = range;
+        m_scrollThumb[1] = thumbSize;
+        if(!m_isNativeView)
+        {
+            [m_cocoaNSScrollView setHasVerticalScroller:needScroller];
+            if(needScroller)
+                SetCocoaScroller([m_cocoaNSScrollView verticalScroller], orientation, position, thumbSize, range);
+        }
+    }
+}
+
+int wxWindowCocoaScrollView::GetScrollPos(wxOrientation orient)
+{
+    if((orient & wxBOTH) == wxBOTH)
+    {
+        wxLogError(wxT("GetScrollPos called for wxHORIZONTAL and wxVERTICAL together which makes no sense"));
+        return 0;
+    }
+    int effectiveScrollRange;
+    NSScroller *cocoaScroller;
+    if(orient & wxHORIZONTAL)
+    {
+        effectiveScrollRange = m_scrollRange[0] - m_scrollThumb[0];
+        cocoaScroller = [m_cocoaNSScrollView horizontalScroller];
+    }
+    else if(orient & wxVERTICAL)
+    {
+        effectiveScrollRange = m_scrollRange[1] - m_scrollThumb[1];
+        cocoaScroller = [m_cocoaNSScrollView verticalScroller];
+    }
+    else
+    {
+        wxLogError(wxT("GetScrollPos called without an orientation which makes no sense"));
+        return 0;
+    }
+    if(cocoaScroller == nil)
+    {   // Document is not scrolled
+        return 0;
+    }
+    /*
+        The effective range of a scroll bar as defined by wxWidgets is from 0 to (range - thumbSize).
+        That is a scroller at the left/top position is at 0 and a scroller at the bottom/right
+        position is at range-thumbsize.
+
+        The range of an NSScroller is 0.0 to 1.0.  Much easier! NOTE: Apple doesn't really specify
+        but GNUStep docs do say that 0.0 is top/left and 1.0 is bottom/right.  This is actualy
+        in contrast to NSSlider which generally has 1.0 at the TOP when it's done vertically.
+     */
+    CGFloat cocoaScrollPos = [cocoaScroller floatValue];
+    return effectiveScrollRange * cocoaScrollPos;
+}
+
+int wxWindowCocoaScrollView::GetScrollRange(wxOrientation orient)
+{
+    if((orient & wxBOTH) == wxBOTH)
+    {
+        wxLogError(wxT("GetScrollRange called for wxHORIZONTAL and wxVERTICAL together which makes no sense"));
+        return 0;
+    }
+    if(orient & wxHORIZONTAL)
+    {
+        return m_scrollRange[0];
+    }
+    else if(orient & wxVERTICAL)
+    {
+        return m_scrollRange[1];
+    }
+    else
+    {
+        wxLogError(wxT("GetScrollPos called without an orientation which makes no sense"));
+        return 0;
+    }
+}
+
+int wxWindowCocoaScrollView::GetScrollThumb(wxOrientation orient)
+{
+    if((orient & wxBOTH) == wxBOTH)
+    {
+        wxLogError(wxT("GetScrollThumb called for wxHORIZONTAL and wxVERTICAL together which makes no sense"));
+        return 0;
+    }
+    if(orient & wxHORIZONTAL)
+    {
+        return m_scrollThumb[0];
+    }
+    else if(orient & wxVERTICAL)
+    {
+        return m_scrollThumb[1];
+    }
+    else
+    {
+        wxLogError(wxT("GetScrollThumb called without an orientation which makes no sense"));
+        return 0;
+    }
+}
+
+/*!
+    Moves the contents (all existing drawing as well as all all child wxWindow) by the specified
+    amount expressed in the wxWindow's own coordinate system.  This is used to implement scrolling
+    but the usage is rather interesting.  When scrolling right (e.g. increasing the value of
+    the scroller) you must give a negative delta x (e.g. moving the contents LEFT).  Likewise,
+    when scrolling the window down, increasing the value of the scroller, you give a negative
+    delta y which moves the contents up.
+
+    wxCocoa notes: To accomplish this trick in Cocoa we basically do what NSScrollView would
+    have done and that is adjust the content view's bounds origin.  The content view is somewhat
+    confusingly the NSClipView which is more or less sort of the pImpl for NSScrollView
+    The real NSView with the user's content (e.g. the "virtual area" in wxWidgets parlance)
+    is called the document view in NSScrollView parlance.
+
+    The bounds origin is basically the exact opposite concept.  Whereas in Windows the client
+    coordinate system remains constant and the content must shift left/up for increases
+    of scrolling, in Cocoa the coordinate system is actually the virtual one.  So we must
+    instead shift the bounds rectangle right/down to get the effect of the content moving
+    left/up.  Basically, it's a higher level interface than that provided by wxWidgets
+    so essentially we're implementing the low-level move content interface in terms of
+    the high-level move the viewport (the bounds) over top that content (the document
+    view which is the virtual area to wx).
+
+    For all intents and purposes that basically just means that we subtract the deltas
+    from the bounds origin and thus a negative delta actually increases the bounds origin
+    and a positive delta actually decreases it.  This is absolutely true for the horizontal
+    axis but there's a catch in the vertical axis.  If the content view (the clip view) is
+    flipped (and we do this by default) then it works exactly like the horizontal axis.
+    If it is not flipped (i.e. it is in postscript coordinates which are opposite to
+    wxWidgets) then the sense needs to be reversed.
+
+    However, this plays hell with window positions.  The frame rects of any child views
+    do not change origin and this is actually important because if they did, the views
+    would send frame changed notifications, not to mention that Cocoa just doesn't really
+    do scrolling that way, it does it the way we do it here.
+
+    To fix this we implement GetPosition for child windows to not merely consult its
+    superview at the Cocoa level in order to do proper Cocoa->wx coordinate transform
+    but to actually consult is parent wxWindow because it makes a big difference if
+    the parent is scrolled. Argh.  (FIXME: This isn't actually implemented yet)
+ */
+void wxWindowCocoaScrollView::ScrollWindow(int dx, int dy, const wxRect*)
+{
+    // Update our internal origin so we know how much the application code
+    // expects us to have been scrolled.
+    m_virtualOrigin.x += dx;
+    m_virtualOrigin.y += dy;
+
+    // Scroll the window using the standard Cocoa method of adjusting the
+    // clip view's bounds in the opposite fashion.
+    NSClipView *contentView = [m_cocoaNSScrollView contentView];
+    NSRect clipViewBoundsRect = [contentView bounds];
+    clipViewBoundsRect.origin.x -= dx;
+    if([contentView isFlipped])
+        clipViewBoundsRect.origin.y -= dy;
+    else
+        clipViewBoundsRect.origin.y += dy;
+    [contentView scrollToPoint:clipViewBoundsRect.origin];
+}
+
+void wxWindowCocoaScrollView::_wx_doScroller(NSScroller *sender)
+{
+    wxOrientation orientation;
+    if(sender == [m_cocoaNSScrollView horizontalScroller])
+        orientation = wxHORIZONTAL;
+    else if(sender == [m_cocoaNSScrollView verticalScroller])
+        orientation = wxVERTICAL;
+    else
+    {
+        wxLogDebug(wxT("Received action message from unexpected NSScroller"));
+        return;
+    }
+    // NOTE: Cocoa does not move the scroller for page up/down or line
+    // up/down events.  That means the value will be the old value.
+    // For thumbtrack events, the value is the new value.
+    int scrollpos = GetScrollPos(orientation);
+    int commandType;
+    switch([sender hitPart])
+    {
+    default:
+    case NSScrollerNoPart:
+    case NSScrollerKnob:        // Drag of knob
+    case NSScrollerKnobSlot:    // Jump directly to position
+        commandType = wxEVT_SCROLLWIN_THUMBTRACK;
+        break;
+    case NSScrollerDecrementPage:
+        commandType = wxEVT_SCROLLWIN_PAGEUP;
+        break;
+    case NSScrollerIncrementPage:
+        commandType = wxEVT_SCROLLWIN_PAGEDOWN;
+        break;
+    case NSScrollerDecrementLine:
+        commandType = wxEVT_SCROLLWIN_LINEUP;
+        break;
+    case NSScrollerIncrementLine:
+        commandType = wxEVT_SCROLLWIN_LINEDOWN;
+        break;
+    }
+    wxScrollWinEvent event(commandType, scrollpos, orientation);
+    event.SetEventObject(m_owner);
+    m_owner->GetEventHandler()->ProcessEvent(event);
+}
+
+void wxWindowCocoaScrollView::UpdateSizes()
+{
+    // Using the virtual size, figure out what the document frame size should be
+    // NOTE: Assume that the passed in virtualSize is already >= the client size
+    wxSize virtualSize = m_owner->GetVirtualSize();
+
+    // Get the document's current frame
+    NSRect documentViewFrame = [m_owner->GetNSView() frame];
+    NSRect newFrame = documentViewFrame;
+    newFrame.size = NSMakeSize(virtualSize.x, virtualSize.y);
+
+    if(!NSEqualRects(newFrame, documentViewFrame))
+    {
+        [m_owner->GetNSView() setFrame:newFrame];
+    }
+}
+
 void wxWindowCocoaScrollView::Cocoa_FrameChanged(void)
 {
-    wxLogTrace(wxTRACE_COCOA,wxT("Cocoa_FrameChanged"));
+    wxLogTrace(wxTRACE_COCOA,wxT("wxWindowCocoaScrollView=%p::Cocoa_FrameChanged for wxWindow %p"), this, m_owner);
     wxSizeEvent event(m_owner->GetSize(), m_owner->GetId());
     event.SetEventObject(m_owner);
     m_owner->GetEventHandler()->ProcessEvent(event);
+    UpdateSizes();
 }
 
 // ========================================================================
@@ -799,12 +1350,25 @@ bool wxWindowCocoa::Cocoa_otherMouseUp(WX_NSEvent theEvent)
 
 void wxWindowCocoa::Cocoa_FrameChanged(void)
 {
-    wxLogTrace(wxTRACE_COCOA,wxT("wxWindow=%p::Cocoa_FrameChanged"),this);
-    if(m_visibleTrackingRectManager != NULL)
-        m_visibleTrackingRectManager->RebuildTrackingRect();
-    wxSizeEvent event(GetSize(), m_windowId);
-    event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
+    // We always get this message for the real NSView which may have been
+    // enclosed in an NSScrollView.  If that's the case then what we're
+    // effectively getting here is a notifcation that the
+    // virtual sized changed.. which we don't need to send on since
+    // wx has no concept of this whatsoever.
+    bool isViewForSuperview = (m_wxCocoaScrollView == NULL);
+    if(isViewForSuperview)
+    {
+        wxLogTrace(wxTRACE_COCOA,wxT("wxWindow=%p::Cocoa_FrameChanged"),this);
+        if(m_visibleTrackingRectManager != NULL)
+            m_visibleTrackingRectManager->RebuildTrackingRect();
+        wxSizeEvent event(GetSize(), m_windowId);
+        event.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(event);
+    }
+    else
+    {
+        wxLogTrace(wxTRACE_COCOA,wxT("wxWindow=%p::Cocoa_FrameChanged ignored"),this);
+    }
 }
 
 bool wxWindowCocoa::Cocoa_resetCursorRects()
@@ -1192,27 +1756,34 @@ void wxWindow::WarpPointer (int x_pos, int y_pos)
 
 int wxWindow::GetScrollPos(int orient) const
 {
-    // TODO
-    return 0;
+    if(m_wxCocoaScrollView != NULL)
+        return m_wxCocoaScrollView->GetScrollPos(static_cast<wxOrientation>(orient & wxBOTH));
+    else
+        return 0;
 }
 
 // This now returns the whole range, not just the number
 // of positions that we can scroll.
 int wxWindow::GetScrollRange(int orient) const
 {
-    // TODO
-    return 0;
+    if(m_wxCocoaScrollView != NULL)
+        return m_wxCocoaScrollView->GetScrollRange(static_cast<wxOrientation>(orient & wxBOTH));
+    else
+        return 0;
 }
 
 int wxWindow::GetScrollThumb(int orient) const
 {
-    // TODO
-    return 0;
+    if(m_wxCocoaScrollView != NULL)
+        return m_wxCocoaScrollView->GetScrollThumb(static_cast<wxOrientation>(orient & wxBOTH));
+    else
+        return 0;
 }
 
 void wxWindow::SetScrollPos(int orient, int pos, bool refresh)
 {
-    // TODO
+    if(m_wxCocoaScrollView != NULL)
+        return m_wxCocoaScrollView->SetScrollPos(static_cast<wxOrientation>(orient & wxBOTH), pos);
 }
 
 void wxWindow::CocoaCreateNSScrollView()
@@ -1228,38 +1799,15 @@ void wxWindow::SetScrollbar(int orient, int pos, int thumbVisible,
     int range, bool refresh)
 {
     CocoaCreateNSScrollView();
-    // TODO
+    m_wxCocoaScrollView->SetScrollbar(orient, pos, thumbVisible, range);
+    // TODO: Handle refresh (if we even need to)
 }
 
 // Does a physical scroll
 void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
-    // TODO
-}
-
-static inline int _DoFixupDistance(int vDistance, int cDistance)
-{
-    // If the virtual distance is wxDefaultCoord, set it to the client distance
-    // This definitely has to be done or else we literally get views with a -1 size component!
-    if(vDistance == wxDefaultCoord)
-        vDistance = cDistance;
-    // NOTE: Since cDistance should always be >= 0 and since wxDefaultCoord is -1, the above
-    // test is more or less useless because it gets covered by the next one.  However, just in
-    // case anyone decides that the next test is not correct, I want them to be aware that
-    // the above test would still be needed.
-
-    // I am not entirely sure about this next one but I believe it makes sense because
-    // otherwise the virtual view (which is the m_cocoaNSView that got wrapped by the scrolling
-    // machinery) can be smaller than the NSClipView (the client area) which
-    // means that, for instance, mouse clicks inside the client area as wx sees it but outside
-    // the virtual area as wx sees it won't be seen by the m_cocoaNSView.
-    // We make the assumption that if a virtual distance is less than the client distance that
-    // the real view must already be or will soon be positioned at coordinate 0  within the
-    // NSClipView that represents the client area.  This way, when we increase the distance to
-    // be the client distance, the real view will exactly fit in the clip view.
-    else if(vDistance < cDistance)
-        vDistance = cDistance;
-    return vDistance;
+    if(m_wxCocoaScrollView != NULL)
+        m_wxCocoaScrollView->ScrollWindow(dx, dy, rect);
 }
 
 void wxWindow::DoSetVirtualSize( int x, int y )
@@ -1267,14 +1815,14 @@ void wxWindow::DoSetVirtualSize( int x, int y )
     // Call wxWindowBase method which will set m_virtualSize to the appropriate value,
     // possibly not what the caller passed in.  For example, the current implementation
     // clamps the width and height to within the min/max virtual ranges.
-    // wxDefaultCoord is passed through unchanged which means we need to handle it ourselves
-    // which we do by using the _DoFixupDistance helper method.
+    // wxDefaultCoord is passed through unchanged but then GetVirtualSize() will correct
+    // that by returning effectively max(virtual, client)
     wxWindowBase::DoSetVirtualSize(x,y);
     // Create the scroll view if it hasn't been already.
     CocoaCreateNSScrollView();
-    // Now use fixed-up distances when setting the frame size
-    wxSize clientSize = GetClientSize();
-    [m_cocoaNSView setFrameSize:NSMakeSize(_DoFixupDistance(m_virtualSize.x, clientSize.x), _DoFixupDistance(m_virtualSize.y, clientSize.y))];
+
+    // The GetVirtualSize automatically increases the size to max(client,virtual)
+    m_wxCocoaScrollView->UpdateSizes();
 }
 
 bool wxWindow::SetFont(const wxFont& font)
