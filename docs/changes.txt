@@ -156,6 +156,7 @@ Major new features in this release
 All:
 
 - Allow loading message catalogs from wxFileSystem (Axel Gembe)
+- Added wxMessageQueue class for inter-thread communications
 - Use UTF-8 for Unicode data in wxIPC classes (Anders Larsen)
 - Added support for user-defined types to wxConfig (Marcin Wojdyr).
 - Added wxJoin() and wxSplit() functions (Francesco Montorsi).

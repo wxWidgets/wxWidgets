@@ -93,6 +93,7 @@ TEST_OBJECTS =  \
 	test_zlibstream.o \
 	test_textfiletest.o \
 	test_atomic.o \
+	test_queue.o \
 	test_uris.o \
 	test_vectors.o
 TEST_ODEP =  $(___pch_testprec_test_testprec_h_gch___depname)
@@ -211,8 +212,6 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
 @COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_p = \
 @COND_WXUSE_ZLIB_BUILTIN@	-lwxzlib$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
-@COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p = \
-@COND_WXUSE_ODBC_BUILTIN@	-lwxodbc$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 COND_WXUSE_REGEX_BUILTIN___LIB_REGEX_p = \
 	-lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p = $(COND_WXUSE_REGEX_BUILTIN___LIB_REGEX_p)
@@ -241,7 +240,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 test$(EXEEXT): $(TEST_OBJECTS)
-	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)  $(LIBS) $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
+	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)  $(LIBS) $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 	
 	$(__test___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
@@ -250,7 +249,7 @@ test$(EXEEXT): $(TEST_OBJECTS)
 @COND_USE_PCH_1@	$(BK_MAKE_PCH) .pch/testprec_test/testprec.h.gch testprec.h $(CXX) $(TEST_CXXFLAGS)
 
 @COND_USE_GUI_1@test_gui$(EXEEXT): $(TEST_GUI_OBJECTS) $(__test_gui___win32rc)
-@COND_USE_GUI_1@	$(CXX) -o $@ $(TEST_GUI_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)   $(LIBS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
+@COND_USE_GUI_1@	$(CXX) -o $@ $(TEST_GUI_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)   $(LIBS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 @COND_USE_GUI_1@	$(__test_gui___mac_rezcmd)
 @COND_USE_GUI_1@	$(__test_gui___mac_setfilecmd)
 @COND_USE_GUI_1@	$(SAMPLES_RPATH_POSTLINK)
@@ -305,7 +304,7 @@ fr:
 	done
 
 printfbench$(EXEEXT): $(PRINTFBENCH_OBJECTS)
-	$(CXX) -o $@ $(PRINTFBENCH_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)  $(LIBS) $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
+	$(CXX) -o $@ $(PRINTFBENCH_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)  $(LIBS) $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 	
 	$(__printfbench___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
@@ -444,6 +443,9 @@ test_textfiletest.o: $(srcdir)/textfile/textfiletest.cpp $(TEST_ODEP)
 
 test_atomic.o: $(srcdir)/thread/atomic.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/thread/atomic.cpp
+
+test_queue.o: $(srcdir)/thread/queue.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/thread/queue.cpp
 
 test_uris.o: $(srcdir)/uris/uris.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/uris/uris.cpp

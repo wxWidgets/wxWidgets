@@ -67,6 +67,7 @@
             streams/zlibstream.cpp
             textfile/textfiletest.cpp
             thread/atomic.cpp
+            thread/queue.cpp
             uris/uris.cpp
             vectors/vectors.cpp
         </sources>
