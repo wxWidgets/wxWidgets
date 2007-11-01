@@ -2593,6 +2593,19 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     event.m_itemOld = tv->itemOld.hItem;
                 }
             }
+
+            // we receive this message from WM_LBUTTONDOWN handler inside
+            // comctl32.dll and so before the click is passed to
+            // DefWindowProc() which sets the focus to the window which was
+            // clicked and this can lead to unexpected event sequences: for
+            // example, we may get a "selection change" event from the tree
+            // before getting a "kill focus" event for the text control which
+            // had the focus previously, thus breaking user code doing input
+            // validation
+            //
+            // to avoid such surprises, we force the generation of focus events
+            // now, before we generate the selection change ones
+            SetFocus();
             break;
 
             // instead of explicitly checking for _WIN32_IE, check if the
