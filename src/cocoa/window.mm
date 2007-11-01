@@ -1202,6 +1202,44 @@ void wxWindowCocoa::InitMouseEvent(wxMouseEvent& event, WX_NSEvent cocoaEvent)
     // Mouse events happen at the NSWindow level so we need to convert
     // into our bounds coordinates then convert to wx coordinates.
     NSPoint cocoaPoint = [m_cocoaNSView convertPoint:[(NSEvent*)cocoaEvent locationInWindow] fromView:nil];
+    if( m_wxCocoaScrollView != NULL)
+    {
+        // This gets the wx client area (i.e. the visible portion of the content) in
+        // the coordinate system of our (the doucment) view.
+	NSRect documentVisibleRect = [[m_wxCocoaScrollView->GetNSScrollView() contentView] documentVisibleRect];
+        // For horizontal, simply subtract the origin.
+        // e.g. if the origin is at 123 and the user clicks as far left as possible then
+        // the coordinate that wx wants is 0.
+	cocoaPoint.x -= documentVisibleRect.origin.x;
+        if([m_cocoaNSView isFlipped])
+        {
+            // In the flipped view case this works exactly like horizontal.
+            cocoaPoint.y -= documentVisibleRect.origin.y;
+        }
+        // For vertical we have to mind non-flipped (e.g. y=0 at bottom) views.
+        // We also need to mind the fact that we're still in Cocoa coordinates
+        // and not wx coordinates.  The wx coordinate translation will still occur
+        // and that is going to be wxY = boundsH - cocoaY for non-flipped views.
+
+        // When we consider scrolling we are truly interested in how far the top
+        // edge of the bounds rectangle is scrolled off the screen.
+        // Assuming the bounds origin is 0 (which is an assumption we make in
+        // wxCocoa since wxWidgets has no analog to it) then the top edge of
+        // the bounds rectangle is simply its height.  The top edge of the
+        // documentVisibleRect (e.g. the client area) is its height plus
+        // its origin.
+        // Thus, we simply need add the distance between the bounds top
+        // and the client (docuemntVisibleRect) top.
+        // Or putting it another way, we subtract the distance between the
+        // client top and the bounds top.
+        else
+        {
+            NSRect bounds = [m_cocoaNSView bounds];
+            CGFloat scrollYOrigin = (bounds.size.height - (documentVisibleRect.origin.y + documentVisibleRect.size.height));
+            cocoaPoint.y += scrollYOrigin;
+        }
+    }
+
     NSPoint pointWx = CocoaTransformBoundsToWx(cocoaPoint);
     // FIXME: Should we be adjusting for client area origin?
     const wxPoint &clientorigin = GetClientAreaOrigin();
