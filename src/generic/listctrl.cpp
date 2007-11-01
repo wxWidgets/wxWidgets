@@ -2868,9 +2868,10 @@ void wxListMainWindow::HighlightAll( bool on )
             RefreshLine(m_current);
         }
     }
-    else // multi sel
+    else // multi selection
     {
-        HighlightLines(0, GetItemCount() - 1, on);
+        if ( !IsEmpty() )
+            HighlightLines(0, GetItemCount() - 1, on);
     }
 }
 
@@ -3105,7 +3106,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         if (event.RightDown())
         {
             SendNotify( (size_t) -1, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, event.GetPosition() );
-            
+
             wxContextMenuEvent evtCtx(
                 wxEVT_CONTEXT_MENU,
                 GetParent()->GetId(),
@@ -5017,7 +5018,7 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     // add more styles here that should only appear
     // in the main window
     unsigned long only_main_window_style = wxALWAYS_SHOW_SB;
-    
+
     if ( !wxControl::Create( parent, id, pos, size, style & ~only_main_window_style, validator, name ) )
         return false;
 
