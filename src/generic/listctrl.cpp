@@ -2865,9 +2865,10 @@ void wxListMainWindow::HighlightAll( bool on )
             RefreshLine(m_current);
         }
     }
-    else // multi sel
+    else // multi selection
     {
-        HighlightLines(0, GetItemCount() - 1, on);
+        if ( !IsEmpty() )
+            HighlightLines(0, GetItemCount() - 1, on);
     }
 }
 
@@ -3024,7 +3025,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         if (event.RightDown())
         {
             SendNotify( (size_t)-1, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, event.GetPosition() );
-            
+
             wxContextMenuEvent evtCtx(
                 wxEVT_CONTEXT_MENU,
                 GetParent()->GetId(),
@@ -3107,7 +3108,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         if (event.RightDown())
         {
             SendNotify( (size_t) -1, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, event.GetPosition() );
-            
+
             wxContextMenuEvent evtCtx(
                 wxEVT_CONTEXT_MENU,
                 GetParent()->GetId(),
