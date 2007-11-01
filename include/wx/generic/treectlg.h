@@ -112,7 +112,13 @@ public:
     // ----------
 
     virtual wxTreeItemId GetRootItem() const { return m_anchor; }
-    virtual wxTreeItemId GetSelection() const { return m_current; }
+    virtual wxTreeItemId GetSelection() const
+    {
+        wxASSERT_MSG( !HasFlag(wxTR_MULTIPLE),
+                       wxT("must use GetSelections() with this control") );
+
+        return m_current;
+    }
     virtual size_t GetSelections(wxArrayTreeItemIds&) const;
 
     virtual wxTreeItemId GetItemParent(const wxTreeItemId& item) const;
