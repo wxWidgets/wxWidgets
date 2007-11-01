@@ -16,7 +16,7 @@
   #pragma hdrstop
 #endif
 
-#if wxUSE_VALIDATORS && wxUSE_TEXTCTRL
+#if wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
 
 #include "wx/valtext.h"
 
@@ -75,6 +75,28 @@ bool wxTextValidator::Copy(const wxTextValidator& val)
     return true;
 }
 
+wxTextEntry *wxTextValidator::GetTextEntry()
+{
+#if wxUSE_TEXTCTRL
+    if (m_validatorWindow->IsKindOf(CLASSINFO(wxTextCtrl)))
+    {
+        return (wxTextCtrl*)m_validatorWindow;
+    }
+#endif
+#if wxUSE_COMBOBOX
+    if (m_validatorWindow->IsKindOf(CLASSINFO(wxComboBox)))
+    {
+        return (wxComboBox*)m_validatorWindow;
+    }
+#endif
+
+    wxFAIL_MSG(
+        _T("wxTextValidator can only be used with wxTextCtrl or wxComboBox")
+    );
+
+    return NULL;
+}
+
 static bool wxIsAlpha(const wxString& val)
 {
     int i;
@@ -101,16 +123,15 @@ static bool wxIsAlphaNumeric(const wxString& val)
 // This function can pop up an error message.
 bool wxTextValidator::Validate(wxWindow *parent)
 {
-    if( !CheckValidator() )
-        return false;
-
-    wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow;
-
     // If window is disabled, simply return
-    if ( !control->IsEnabled() )
+    if ( !m_validatorWindow->IsEnabled() )
         return true;
 
-    wxString val(control->GetValue());
+    wxTextEntry * const text = GetTextEntry();
+    if ( !text )
+        return false;
+
+    wxString val(text->GetValue());
 
     bool ok = true;
 
@@ -184,13 +205,13 @@ bool wxTextValidator::Validate(wxWindow *parent)
 // Called to transfer data to the window
 bool wxTextValidator::TransferToWindow(void)
 {
-    if( !CheckValidator() )
-        return false;
-
     if ( m_stringValue )
     {
-        wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow;
-        control->SetValue(* m_stringValue);
+        wxTextEntry * const text = GetTextEntry();
+        if ( !text )
+            return false;
+
+        text->SetValue(*m_stringValue);
     }
 
     return true;
@@ -199,13 +220,13 @@ bool wxTextValidator::TransferToWindow(void)
 // Called to transfer data to the window
 bool wxTextValidator::TransferFromWindow(void)
 {
-    if( !CheckValidator() )
-        return false;
-
     if ( m_stringValue )
     {
-        wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow;
-        *m_stringValue = control->GetValue();
+        wxTextEntry * const text = GetTextEntry();
+        if ( !text )
+            return false;
+
+        *m_stringValue = text->GetValue();
     }
 
     return true;
@@ -284,4 +305,4 @@ static bool wxIsNumeric(const wxString& val)
 
 
 #endif
-  // wxUSE_VALIDATORS && wxUSE_TEXTCTRL
+  // wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)

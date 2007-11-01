@@ -14,9 +14,8 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_VALIDATORS && wxUSE_TEXTCTRL
+#if wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
 
-#include "wx/textctrl.h"
 #include "wx/validate.h"
 
 #define wxFILTER_NONE           0x0000
@@ -60,6 +59,7 @@ public:
     inline long GetStyle() const { return m_validatorStyle; }
     inline void SetStyle(long style) { m_validatorStyle = style; }
 
+    wxTextEntry *GetTextEntry();
 
     void SetIncludes(const wxArrayString& includes) { m_includes = includes; }
     inline wxArrayString& GetIncludes() { return m_includes; }
@@ -73,7 +73,6 @@ public:
     // Filter keystrokes
     void OnChar(wxKeyEvent& event);
 
-
 DECLARE_EVENT_TABLE()
 
 protected:
@@ -81,16 +80,6 @@ protected:
     wxString *      m_stringValue;
     wxArrayString   m_includes;
     wxArrayString   m_excludes;
-
-    bool CheckValidator() const
-    {
-        wxCHECK_MSG( m_validatorWindow, false,
-                     _T("No window associated with validator") );
-        wxCHECK_MSG( m_validatorWindow->IsKindOf(CLASSINFO(wxTextCtrl)), false,
-                     _T("wxTextValidator is only for wxTextCtrl's") );
-
-        return true;
-    }
 
 private:
 // Cannot use
@@ -102,7 +91,7 @@ private:
 };
 
 #endif
-  // wxUSE_VALIDATORS && wxUSE_TEXTCTRL
+  // wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
 
 #endif
   // _WX_VALTEXTH__
