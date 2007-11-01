@@ -252,7 +252,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     m_outlineLevelCtrlStrings.Add(_("7"));
     m_outlineLevelCtrlStrings.Add(_("8"));
     m_outlineLevelCtrlStrings.Add(_("9"));
-    m_outlineLevelCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_OUTLINELEVEL, _("Normal"), wxDefaultPosition, wxDefaultSize, m_outlineLevelCtrlStrings, wxCB_READONLY );
+    m_outlineLevelCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_OUTLINELEVEL, _("Normal"), wxDefaultPosition, wxSize(90, -1), m_outlineLevelCtrlStrings, wxCB_READONLY );
     m_outlineLevelCtrl->SetStringSelection(_("Normal"));
     m_outlineLevelCtrl->SetHelpText(_("The outline level."));
     if (wxRichTextIndentsSpacingPage::ShowToolTips())
@@ -314,7 +314,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     m_spacingLineStrings.Add(_("Single"));
     m_spacingLineStrings.Add(_("1.5"));
     m_spacingLineStrings.Add(_("2"));
-    m_spacingLine = new wxComboBox( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_LINE, _("Single"), wxDefaultPosition, wxDefaultSize, m_spacingLineStrings, wxCB_READONLY );
+    m_spacingLine = new wxComboBox( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_LINE, _("Single"), wxDefaultPosition, wxSize(90, -1), m_spacingLineStrings, wxCB_READONLY );
     m_spacingLine->SetStringSelection(_("Single"));
     m_spacingLine->SetHelpText(_("The line spacing."));
     if (wxRichTextIndentsSpacingPage::ShowToolTips())
@@ -323,7 +323,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
 
     itemBoxSizer3->Add(5, 5, 1, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
-    m_previewCtrl = new wxRichTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_PREVIEW_CTRL, wxEmptyString, wxDefaultPosition, wxSize(350, 180), wxSUNKEN_BORDER|wxVSCROLL );
+    m_previewCtrl = new wxRichTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_PREVIEW_CTRL, wxEmptyString, wxDefaultPosition, wxSize(350, 180), wxSUNKEN_BORDER|wxVSCROLL|wxTE_READONLY );
     m_previewCtrl->SetHelpText(_("Shows a preview of the paragraph settings."));
     if (wxRichTextIndentsSpacingPage::ShowToolTips())
         m_previewCtrl->SetToolTip(_("Shows a preview of the paragraph settings."));
