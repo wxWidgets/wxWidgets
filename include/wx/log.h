@@ -263,8 +263,7 @@ protected:
     virtual void DoLogString(const wxChar *szString, time_t t);
 
     // log a line containing the number of times the previous message was
-    // repeated
-    // returns: the number
+    // repeated and returns this number (which can be 0)
     static unsigned DoLogNumberOfRepeats();
 
 private:
@@ -294,6 +293,11 @@ private:
 
     static wxTraceMask ms_ulTraceMask;   // controls wxLogTrace behaviour
     static wxArrayString ms_aTraceMasks; // more powerful filter for wxLogTrace
+
+
+    // this is the replacement of DoLogNumberOfRepeats() (which has to be kept
+    // to avoid breaking ABI in this version)
+    unsigned LogLastRepetitionCountIfNeeded();
 };
 
 // ----------------------------------------------------------------------------
