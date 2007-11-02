@@ -125,13 +125,11 @@ protected:
     {
     public:
         EventsSuppressor(wxTextEntryBase *text, bool suppress = true)
+            : m_text(text),
+              m_suppress(suppress)
         {
-            m_suppress = suppress;
             if ( m_suppress )
-            {
-                m_text = text;
                 m_text->SuppressTextChangedEvents();
-            }
         }
 
         ~EventsSuppressor()
@@ -144,6 +142,7 @@ protected:
         wxTextEntryBase *m_text;
         bool m_suppress;
     };
+
     friend class EventsSuppressor;
 
     // return true if the events are currently not suppressed
