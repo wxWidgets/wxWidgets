@@ -28,6 +28,7 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/utils.h"
+    #include "wx/wxcrt.h"
 #endif // WX_PRECOMP
 
 // Mac Includes
