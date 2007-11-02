@@ -176,7 +176,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     m_display_estimated = m_last_timeupdate = m_break = 0;
     m_ctdelay = 0;
 
-    // if we are going to have at least one label, remmeber it in this var
+    // if we are going to have at least one label, remember it in this var
     wxStaticText *label = NULL;
 
     // also count how many labels we really have
@@ -261,9 +261,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
         sizeDlg.y += 2*LAYOUT_MARGIN;
 
         // try to make the dialog not square but rectangular of reasonable width
-        sizeDlg.x = (wxCoord)wxMax(widthText*2, 4*sizeDlg.y/3);
-        sizeDlg.x *= 3;
-        sizeDlg.x /= 2;
+        sizeDlg.x = (wxCoord)wxMax(3*widthText/2, 4*sizeDlg.y/3);
         SetClientSize(sizeDlg);
     }
 
