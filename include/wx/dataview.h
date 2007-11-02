@@ -718,7 +718,7 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 // wxDataViewSpinRenderer
 // -------------------------------------
 
-class wxDataViewSpinRenderer: public wxDataViewCustomRenderer
+class WXDLLIMPEXP_ADV wxDataViewSpinRenderer: public wxDataViewCustomRenderer
 {
 public:
     wxDataViewSpinRenderer( int min, int max,

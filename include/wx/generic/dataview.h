@@ -345,7 +345,8 @@ protected:
 // wxDataViewCtrl
 // ---------------------------------------------------------
 
-WX_DECLARE_LIST(wxDataViewColumn, wxDataViewColumnList );
+WX_DECLARE_LIST_WITH_DECL(wxDataViewColumn, wxDataViewColumnList,
+                          class WXDLLIMPEXP_ADV);
 
 class WXDLLIMPEXP_ADV wxDataViewCtrl: public wxDataViewCtrlBase,
                                        public wxScrollHelperNative
