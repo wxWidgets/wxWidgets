@@ -57,20 +57,12 @@ public:
     // Enabling
     virtual bool Enable(bool enable = true);
     virtual bool Enable(unsigned int item, bool enable = true);
-    virtual bool IsItemEnabled(unsigned int WXUNUSED(n)) const
-    {
-        /* TODO */
-        return true;
-    }
+    virtual bool IsItemEnabled(unsigned int item) const;
 
     // Showing
     virtual bool Show(bool show = true);
     virtual bool Show(unsigned int item, bool show = true);
-    virtual bool IsItemShown(unsigned int WXUNUSED(n)) const
-    {
-        /* TODO */
-        return true;
-    }
+    virtual bool IsItemShown(unsigned int item) const;
 
     // Specific functions (in wxWidgets2 reference)
     virtual void SetSelection(int item);
