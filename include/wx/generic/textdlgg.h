@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __TEXTDLGH_G__
-#define __TEXTDLGH_G__
+#ifndef _WX_TEXTDLGG_H_
+#define _WX_TEXTDLGG_H_
 
 #include "wx/defs.h"
 
@@ -20,6 +20,7 @@
 
 #if wxUSE_VALIDATORS
 #include "wx/valtext.h"
+#include "wx/textctrl.h"
 #endif
 
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
@@ -109,5 +110,4 @@ wxGetPasswordFromUser(const wxString& message,
 
 #endif
     // wxUSE_TEXTDLG
-#endif
-    // __TEXTDLGH_G__
+#endif // _WX_TEXTDLGG_H_

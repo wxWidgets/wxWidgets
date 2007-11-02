@@ -9,12 +9,14 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_VALTEXTH__
-#define _WX_VALTEXTH__
+#ifndef _WX_VALTEXT_H_
+#define _WX_VALTEXT_H_
 
 #include "wx/defs.h"
 
 #if wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
+
+class WXDLLIMPEXP_FWD_CORE wxTextEntry;
 
 #include "wx/validate.h"
 
@@ -93,5 +95,4 @@ private:
 #endif
   // wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
 
-#endif
-  // _WX_VALTEXTH__
+#endif // _WX_VALTEXT_H_

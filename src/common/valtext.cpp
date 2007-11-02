@@ -23,6 +23,7 @@
 #ifndef WX_PRECOMP
   #include <stdio.h>
   #include "wx/textctrl.h"
+  #include "wx/combobox.h"
   #include "wx/utils.h"
   #include "wx/msgdlg.h"
   #include "wx/intl.h"
