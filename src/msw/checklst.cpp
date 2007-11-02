@@ -483,9 +483,19 @@ void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
 
         if ( nItem != wxNOT_FOUND )
         {
-            wxCheckListBoxItem *item = GetItem(nItem);
-            item->Toggle();
-            item->SendEvent();
+            // people expect to get "kill focus" event for the currently
+            // focused control before getting events from the other controls
+            // and, equally importantly, they may prevent the focus change from
+            // taking place at all (e.g. because the old control contents is
+            // invalid and needs to be corrected) in which case we shouldn't
+            // generate this event at all
+            SetFocus();
+            if ( FindFocus() == this )
+            {
+                wxCheckListBoxItem *item = GetItem(nItem);
+                item->Toggle();
+                item->SendEvent();
+            }
         }
         //else: it's not an error, just click outside of client zone
     }
