@@ -61,7 +61,7 @@
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 long wxMacExecute(wxChar **argv,
                int flags,
-               wxProcess *process)
+               wxProcess *WXUNUSED(process))
 {
     // Semi-macros used for return value of wxMacExecute
     const long errorCode = ((flags & wxEXEC_SYNC) ? -1 : 0);

@@ -341,7 +341,7 @@ pascal OSErr FSpGetFullPath( const FSSpec *spec,
 //
 
 // debug helper
-inline void wxLogMimeDebug(const wxChar* szMsg, OSStatus status)
+inline void wxLogMimeDebug(const wxChar* WXUNUSED_UNLESS_DEBUG(szMsg), OSStatus WXUNUSED_UNLESS_DEBUG(status))
 {
     wxLogDebug(wxString::Format(wxT("%s  LINE:%i  OSERROR:%i"), szMsg, __LINE__, (int)status));
 }
@@ -349,14 +349,14 @@ inline void wxLogMimeDebug(const wxChar* szMsg, OSStatus status)
 // in case we're compiling in non-GUI mode
 class WXDLLEXPORT wxIcon;
 
-bool wxFileTypeImpl::SetCommand(const wxString& cmd, const wxString& verb, bool overwriteprompt)
+bool wxFileTypeImpl::SetCommand(const wxString& WXUNUSED(cmd), const wxString& WXUNUSED(verb), bool WXUNUSED(overwriteprompt))
 {
     wxASSERT_MSG( m_manager != NULL , wxT("Bad wxFileType") );
 
     return false;
 }
 
-bool wxFileTypeImpl::SetDefaultIcon(const wxString& strIcon, int index)
+bool wxFileTypeImpl::SetDefaultIcon(const wxString& WXUNUSED(strIcon), int WXUNUSED(index))
 {
     wxASSERT_MSG( m_manager != NULL , wxT("Bad wxFileType") );
 
@@ -608,7 +608,7 @@ size_t wxFileTypeImpl::GetAllCommands(wxArrayString * verbs,
     return ulCount;
 }
 
-void wxMimeTypesManagerImpl::Initialize(int mailcapStyles, const wxString& extraDir)
+void wxMimeTypesManagerImpl::Initialize(int WXUNUSED(mailcapStyles), const wxString& WXUNUSED(extraDir))
 {
     wxASSERT_MSG(m_hIC == NULL, wxT("Already initialized wxMimeTypesManager!"));
 

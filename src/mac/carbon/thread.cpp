@@ -430,7 +430,7 @@ private:
     bool m_isOk ;
 };
 
-wxMutexInternal::wxMutexInternal( wxMutexType mutexType )
+wxMutexInternal::wxMutexInternal( wxMutexType WXUNUSED(mutexType) )
 {
     m_isOk = false;
     m_critRegion = kInvalidID;
@@ -1278,7 +1278,7 @@ unsigned long wxThread::GetCurrentId()
     return (unsigned long)MPCurrentTaskID();
 }
 
-bool wxThread::SetConcurrency( size_t level )
+bool wxThread::SetConcurrency( size_t WXUNUSED(level) )
 {
     // Cannot be set in MacOS.
     return false;
