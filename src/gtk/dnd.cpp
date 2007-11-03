@@ -901,6 +901,16 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
                 g_lastButtonNumber,  // number of mouse button which started drag
                 (GdkEvent*) g_lastMouseEvent );
 
+    if ( !context )
+    {
+        // this can happen e.g. if gdk_pointer_grab() failed
+        g_blockEventsOnDrag = false;
+
+        UnregisterWindow();
+
+        return wxDragError;
+    }
+
     m_dragContext = context;
 
     PrepareIcon( action, context );
