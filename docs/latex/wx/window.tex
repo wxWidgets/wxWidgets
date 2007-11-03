@@ -219,6 +219,26 @@ called by the user code.
 \docparam{child}{Child window to add.}
 
 
+\membersection{wxWindow::AlwaysShowScrollbars}\label{wxwindowalwaysshowscrollbars}
+
+\func{void}{AlwaysShowScrollbars}{\param{bool}{ hflag}, \param{bool}{ vflag}}
+
+Call this function to force one or both scrollbars to be always shown, even if
+the window is big enough to show its entire contents without scrolling.
+
+\newsince{2.9.0}
+
+\wxheading{Parameters}
+
+\docparam{hflag}{Whether the horizontal scroll bar should always be visible.}
+
+\docparam{vflag}{Whether the vertical scroll bar should always be visible.}
+
+\wxheading{Remarks}
+
+This function is currently only implemented under Mac/Carbon.
+
+
 \membersection{wxWindow::CacheBestSize}\label{wxwindowcachebestsize}
 
 \constfunc{void}{CacheBestSize}{\param{const wxSize\& }{size}}
@@ -1684,6 +1704,21 @@ Returns {\tt true} if the window is retained, {\tt false} otherwise.
 \wxheading{Remarks}
 
 Retained windows are only available on X platforms.
+
+
+\membersection{wxWindow::IsScrollbarAlwaysShown}\label{wxwindowisscrollbaralwaysshown}
+
+\func{bool}{IsScrollbarAlwaysShown}{\param{int}{ orient}}
+
+Return whether a scrollbar is always shown.
+
+\wxheading{Parameters}
+
+\docparam{orient}{Orientation to check, either {\tt wxHORIZONTAL} or {\tt wxVERTICAL}.}
+
+\wxheading{See also}
+
+\helpref{wxWindow::AlwaysShowScrollbars}{wxwindowalwaysshowscrollbars}
 
 
 \membersection{wxWindow::IsShown}\label{wxwindowisshown}

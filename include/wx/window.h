@@ -1044,6 +1044,20 @@ public:
     bool PageUp() { return ScrollPages(-1); }
     bool PageDown() { return ScrollPages(1); }
 
+        // call this to always show one or both scrollbars, even if the window
+        // is big enough to not require them
+    virtual void AlwaysShowScrollbars(bool WXUNUSED(horz) = true,
+                                      bool WXUNUSED(vert) = true)
+    {
+    }
+
+        // return true if AlwaysShowScrollbars() had been called before for the
+        // corresponding orientation
+    virtual bool IsScrollbarAlwaysShown(int WXUNUSED(orient)) const
+    {
+        return false;
+    }
+
     // context-sensitive help
     // ----------------------
 
@@ -1248,7 +1262,6 @@ protected:
 
     // implementation of Navigate() and NavigateIn()
     virtual bool DoNavigateIn(int flags);
-
 
 #if wxUSE_CONSTRAINTS
     // satisfy the constraints for the windows but don't set the window sizes

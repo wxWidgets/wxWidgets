@@ -65,7 +65,7 @@ public:
     virtual void Freeze();
     virtual void Thaw();
     virtual bool IsFrozen() const;
-    
+
     virtual void Update() ;
     virtual void ClearBackground();
 
@@ -86,6 +86,7 @@ protected:
     virtual void DoEnable( bool enable );
     virtual void OnEnabled( bool enabled );
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
+
 public:
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
                                int range, bool refresh = true );
@@ -95,6 +96,13 @@ public:
     virtual int GetScrollRange( int orient ) const;
     virtual void ScrollWindow( int dx, int dy,
                                const wxRect* rect = (wxRect *) NULL );
+    virtual void AlwaysShowScrollbars(bool horz = true, bool vert = true);
+    virtual bool IsScrollbarAlwaysShown(int orient) const
+    {
+        return orient == wxHORIZONTAL ? m_hScrollBarAlwaysShown
+                                      : m_vScrollBarAlwaysShown;
+    }
+
     virtual bool Reparent( wxWindowBase *newParent );
 
 #if wxUSE_DRAG_AND_DROP
@@ -126,7 +134,7 @@ public:
     virtual bool SetTransparent(wxByte alpha);
     virtual bool CanSetTransparent();
     virtual wxByte GetTransparent() const ;
-    
+
     // event handlers
     // --------------
     void OnSetFocus( wxFocusEvent& event );
@@ -302,6 +310,8 @@ protected:
 
     wxScrollBar*        m_hScrollBar ;
     wxScrollBar*        m_vScrollBar ;
+    bool                m_hScrollBarAlwaysShown;
+    bool                m_vScrollBarAlwaysShown;
     wxString            m_label ;
 
     // set to true if we do a sharp clip at the content area of this window
@@ -348,6 +358,11 @@ protected:
 private:
     // common part of all ctors
     void Init();
+
+    // show/hide scrollbars as needed, common part of SetScrollbar() and
+    // AlwaysShowScrollbars()
+    void DoUpdateScrollbarVisibility();
+
 
     WXEVENTHANDLERREF    m_macControlEventHandler ;
 

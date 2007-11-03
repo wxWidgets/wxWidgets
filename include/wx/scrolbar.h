@@ -52,6 +52,9 @@ public:
                               int range, int pageSize,
                               bool refresh = true) = 0;
 
+    // implementation-only
+    bool IsNeeded() const { return GetRange() > GetThumbSize(); }
+
 private:
     DECLARE_NO_COPY_CLASS(wxScrollBarBase)
 };

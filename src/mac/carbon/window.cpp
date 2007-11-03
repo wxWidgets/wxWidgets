@@ -980,6 +980,9 @@ void wxWindowMac::Init()
 
     m_hScrollBar = NULL ;
     m_vScrollBar = NULL ;
+    m_hScrollBarAlwaysShown = false;
+    m_vScrollBarAlwaysShown = false;
+
     m_macBackgroundBrush = wxNullBrush ;
 
     m_macIsUserPane = true;
@@ -2453,6 +2456,26 @@ void wxWindowMac::SetScrollPos(int orient, int pos, bool refresh)
     }
 }
 
+void
+wxWindowMac::AlwaysShowScrollbars(bool hflag, bool vflag)
+{
+    bool needVisibilityUpdate = false;
+
+    if ( m_hScrollBarAlwaysShown != hflag )
+    {
+        m_hScrollBarAlwaysShown = hflag;
+        needVisibilityUpdate = true;
+    }
+
+    if ( m_vScrollBarAlwaysShown != vflag )
+    {
+        m_vScrollBarAlwaysShown = vflag;
+        needVisibilityUpdate = true;
+    }
+
+    if ( needVisibilityUpdate )
+        DoUpdateScrollbarVisibility();
+}
 //
 // we draw borders and grow boxes, are already set up and clipped in the current port / cgContextRef
 // our own window origin is at leftOrigin/rightOrigin
@@ -2555,39 +2578,29 @@ void wxWindowMac::RemoveChild( wxWindowBase *child )
     wxWindowBase::RemoveChild( child ) ;
 }
 
-// New function that will replace some of the above.
-void wxWindowMac::SetScrollbar(int orient, int pos, int thumbVisible,
-    int range, bool refresh)
+void wxWindowMac::DoUpdateScrollbarVisibility()
 {
-    bool showScroller;
     bool triggerSizeEvent = false;
 
-    if ( orient == wxHORIZONTAL )
+    if ( m_hScrollBar )
     {
-        if ( m_hScrollBar )
-        {
-            showScroller = ((range != 0) && (range > thumbVisible));
-            if ( m_hScrollBar->IsShown() != showScroller )
-            {
-                m_hScrollBar->Show( showScroller );
-                triggerSizeEvent = true;
-            }
+        bool showHScrollBar = m_hScrollBarAlwaysShown || m_hScrollBar->IsNeeded();
 
-            m_hScrollBar->SetScrollbar( pos , thumbVisible , range , thumbVisible , refresh ) ;
+        if ( m_hScrollBar->IsShown() != showHScrollBar )
+        {
+            m_hScrollBar->Show( showHScrollBar );
+            triggerSizeEvent = true;
         }
     }
-    else
-    {
-        if ( m_vScrollBar )
-        {
-            showScroller = ((range != 0) && (range > thumbVisible));
-            if ( m_vScrollBar->IsShown() != showScroller )
-            {
-                m_vScrollBar->Show( showScroller ) ;
-                triggerSizeEvent = true;
-            }
 
-            m_vScrollBar->SetScrollbar( pos , thumbVisible , range , thumbVisible , refresh ) ;
+    if ( m_vScrollBar)
+    {
+        bool showVScrollBar = m_vScrollBarAlwaysShown || m_vScrollBar->IsNeeded();
+
+        if ( m_vScrollBar->IsShown() != showVScrollBar )
+        {
+            m_vScrollBar->Show( showVScrollBar ) ;
+            triggerSizeEvent = true;
         }
     }
 
@@ -2598,6 +2611,18 @@ void wxWindowMac::SetScrollbar(int orient, int pos, int thumbVisible,
         event.SetEventObject(this);
         GetEventHandler()->ProcessEvent(event);
     }
+}
+
+// New function that will replace some of the above.
+void wxWindowMac::SetScrollbar(int orient, int pos, int thumb,
+                               int range, bool refresh)
+{
+    if ( orient == wxHORIZONTAL && m_hScrollBar )
+        m_hScrollBar->SetScrollbar(pos, thumb, range, thumb, refresh);
+    else if ( orient == wxVERTICAL && m_vScrollBar )
+        m_vScrollBar->SetScrollbar(pos, thumb, range, thumb, refresh);
+
+    DoUpdateScrollbarVisibility();
 }
 
 // Does a physical scroll
