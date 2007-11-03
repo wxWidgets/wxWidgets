@@ -402,7 +402,7 @@ dnl Always default to no. Only special cases require this.
 DEFAULT_wxUSE_OBJC_UNIQUIFYING=no
 
 
-for toolkit in `echo $ALL_TOOLKITS`; do
+for toolkit in $ALL_TOOLKITS; do
   LINE=`grep "wxUSE_$toolkit=" ${wx_arg_cache_file}`
   if test "x$LINE" != "x" ; then
     has_toolkit_in_cache=1
@@ -974,7 +974,7 @@ if test "$wxUSE_GUI" = "yes"; then
 
     if test "$TOOLKIT_GIVEN" = 1; then
       dnl convert "yes", "any" or a number to 1 and "no" to 0
-      for toolkit in `echo $ALL_TOOLKITS`; do
+      for toolkit in $ALL_TOOLKITS; do
         var=wxUSE_$toolkit
         eval "value=\$${var}"
         if test "x$value" = "xno"; then
@@ -989,7 +989,7 @@ if test "$wxUSE_GUI" = "yes"; then
       done
     else
       dnl try to guess the most apropriate toolkit for this platform
-      for toolkit in `echo $ALL_TOOLKITS`; do
+      for toolkit in $ALL_TOOLKITS; do
         if test "$has_toolkit_in_cache" != 1; then
           var=DEFAULT_DEFAULT_wxUSE_$toolkit
         else
@@ -1034,7 +1034,7 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
 
     dnl cache the wxUSE_<TOOLKIT> values too
-    for toolkit in `echo $ALL_TOOLKITS`; do
+    for toolkit in $ALL_TOOLKITS; do
       var=wxUSE_$toolkit
       eval "value=\$${var}"
       if test "x$value" != x; then
@@ -2559,7 +2559,8 @@ if test "$wxUSE_LIBJPEG" != "no" ; then
             fi
         fi
     fi
-else dnl wxUSE_LIBJPEG = "no"
+else
+    dnl wxUSE_LIBJPEG = "no"
     if test "$wxUSE_LIBTIFF" = "builtin"; then
         dnl we have to prevent the builtin libtiff configure from building the
         dnl library with JPEG support as this was explicitly disabled by user,
@@ -7861,21 +7862,22 @@ if test "$wxWITH_SUBDIRS" != "no"; then
 dnl Configure samples, demos etc. directories, but only if they are present:
 if test "$wxUSE_GUI" = "yes"; then
     SUBDIRS="samples demos utils"
-else dnl we build wxBase only
+else
+    dnl we build wxBase only
     dnl there are no wxBase programs in demos
     SUBDIRS="samples utils"
 fi
 dnl Add tests to the list of subdirs if cppunit 1.8.0+ is detected
 AM_PATH_CPPUNIT(1.8.0, [SUBDIRS="$SUBDIRS tests"])
 
-for subdir in `echo $SUBDIRS`; do
+for subdir in $SUBDIRS; do
     if test -d ${srcdir}/${subdir} ; then
         if test "$wxUSE_GUI" = "yes"; then
             if test ${subdir} = "samples"; then
                 dnl only take those samples which compile in the current
                 dnl configuration and which exist
                 makefiles="samples/Makefile.in $makefiles"
-                for sample in `echo $SAMPLES_SUBDIRS`; do
+                for sample in $SAMPLES_SUBDIRS; do
                     if test -d $srcdir/samples/$sample; then
                         makefiles="samples/$sample/Makefile.in $makefiles"
                     fi
@@ -7889,7 +7891,8 @@ for subdir in `echo $SUBDIRS`; do
                 disabled=/`echo X $disabled | sed 's@ @/|/@g'`/
                 makefiles=`(cd $srcdir ; find $subdir -name Makefile.in) | $EGREP -v "$disabled"`
             fi
-        else dnl we build wxBase only
+        else
+            dnl we build wxBase only
             dnl don't take all samples/utils, just those which build with
             dnl wxBase
             if test ${subdir} = "samples"; then
@@ -7903,7 +7906,8 @@ for subdir in `echo $SUBDIRS`; do
                                    $makefiles"
                     fi
                 done
-            else dnl assume that everything compiles for tests
+            else
+                dnl assume that everything compiles for tests
                 makefiles=`(cd $srcdir ; find $subdir -name Makefile.in)`
             fi
         fi
