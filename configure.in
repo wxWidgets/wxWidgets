@@ -1048,7 +1048,7 @@ if test "$wxUSE_GUI" = "yes"; then
           fi
         fi
         if test "$value" = 1; then
-          toolkit_echo=`echo $toolkit | tr "[[A-Z]]" "[[a-z]]"`
+          toolkit_echo=`echo $toolkit | tr A-Z a-z`
           AC_MSG_RESULT($toolkit_echo)
         fi
       fi
@@ -3468,7 +3468,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
     if test "$TOOLKIT" = "PM" ; then
         TOOLKIT_DIR="os2"
     else
-        TOOLKIT_DIR=`echo ${TOOLKIT} | tr "[[A-Z]]" "[[a-z]]"`
+        TOOLKIT_DIR=`echo ${TOOLKIT} | tr A-Z a-z`
     fi
 
     if test "$wxUSE_UNIVERSAL" = "yes"; then
@@ -3858,7 +3858,7 @@ if test "$wxUSE_DEBUG_INFO" = "yes"; then
     DEBUG_INFO=1
 fi
 
-WX_VERSION_TAG=`echo WX${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}_${WX_RELEASE} | tr "[[a-z]]" "[[A-Z]]"`
+WX_VERSION_TAG=`echo WX${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}_${WX_RELEASE} | tr a-z A-Z`
 
 TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}"
 
@@ -7462,7 +7462,7 @@ AC_SUBST(UNICODE)
 AC_SUBST(BUILD)
 AC_SUBST(DEBUG_INFO)
 AC_SUBST(DEBUG_FLAG)
-TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr "[[A-Z]]" "[[a-z]]"`
+TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr A-Z a-z`
 AC_SUBST(TOOLKIT_LOWERCASE)
 AC_SUBST(TOOLKIT_VERSION)
 AC_SUBST(SAMPLES_RPATH_FLAG)
@@ -7535,7 +7535,7 @@ then
 
                 if $CXX -o conftest$PROGRAM_EXT conftest.cpp >/dev/null 2>&1
                 then
-                    if tr -dc '[a-z]' < conftest$PROGRAM_EXT |
+                    if tr -dc a-z < conftest$PROGRAM_EXT |
                         grep awidetest >/dev/null
                     then
                         wx_cv_gcc_pch_bug=no
