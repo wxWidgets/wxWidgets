@@ -23,6 +23,8 @@
     #include "wx/gdicmn.h"
 #endif
 
+#include "wx/scopeguard.h"
+
 #include <gtk/gtk.h>
 
 //----------------------------------------------------------------------------
@@ -813,10 +815,8 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     if (g_lastMouseEvent == NULL)
         return wxDragNone;
 
-    // disabled for now
-    g_blockEventsOnDrag = true;
-
-    RegisterWindow();
+    GTKConnectDragSignals();
+    wxON_BLOCK_EXIT_OBJ0(*this, wxDropSource::GTKDisconnectDragSignals);
 
     m_waiting = true;
 
@@ -850,6 +850,12 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
                 g_lastButtonNumber,  // number of mouse button which started drag
                 (GdkEvent*) g_lastMouseEvent );
 
+    if ( !context )
+    {
+        // this can happen e.g. if gdk_pointer_grab() failed
+        return wxDragError;
+    }
+
     m_dragContext = context;
 
     PrepareIcon( action, context );
@@ -861,16 +867,15 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     if ( m_retValue == wxDragNone )
          m_retValue = wxDragCancel;
 
-    g_blockEventsOnDrag = false;
-
-    UnregisterWindow();
-
     return m_retValue;
 }
 
-void wxDropSource::RegisterWindow()
+void wxDropSource::GTKConnectDragSignals()
 {
-    if (!m_widget) return;
+    if (!m_widget)
+        return;
+
+    g_blockEventsOnDrag = true;
 
     g_signal_connect (m_widget, "drag_data_get",
                       G_CALLBACK (source_drag_data_get), this);
@@ -879,10 +884,12 @@ void wxDropSource::RegisterWindow()
 
 }
 
-void wxDropSource::UnregisterWindow()
+void wxDropSource::GTKDisconnectDragSignals()
 {
     if (!m_widget)
         return;
+
+    g_blockEventsOnDrag = false;
 
     g_signal_handlers_disconnect_by_func (m_widget,
                                           (gpointer) source_drag_data_get,

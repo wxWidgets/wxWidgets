@@ -80,10 +80,6 @@ public:
     // start drag action
     virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
 
-    // GTK implementation
-    void RegisterWindow();
-    void UnregisterWindow();
-
     void PrepareIcon( int action, GdkDragContext *context );
 
     GtkWidget       *m_widget;
@@ -103,6 +99,11 @@ private:
     void SetIcons(const wxIcon& copy,
                   const wxIcon& move,
                   const wxIcon& none);
+
+    // GTK implementation
+    void GTKConnectDragSignals();
+    void GTKDisconnectDragSignals();
+
 };
 
 #endif // _WX_GTK_DND_H_
