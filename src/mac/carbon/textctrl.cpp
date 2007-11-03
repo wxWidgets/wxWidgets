@@ -1835,61 +1835,121 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
 {
     TXNTypeAttributes typeAttr[4] ;
     RGBColor color ;
-    int attrCount = 0 ;
+    size_t typeAttrCount = 0 ;
+
+    TXNMargins margins;
+    TXNControlTag    controlTags[4];
+    TXNControlData   controlData[4];
+    size_t controlAttrCount = 0;
+    
+    TXNTab* tabs = NULL;
+    
+    bool relayout = false;
 
     if ( style.HasFont() )
     {
+        wxASSERT( typeAttrCount < WXSIZEOF(typeAttr) );
         const wxFont &font = style.GetFont() ;
-
-#if 0 // old version
-        Str255 fontName = "\pMonaco" ;
-        SInt16 fontSize = 12 ;
-        Style fontStyle = normal ;
-        wxMacStringToPascal( font.GetFaceName() , fontName ) ;
-        fontSize = font.GetPointSize() ;
-        if ( font.GetUnderlined() )
-            fontStyle |= underline ;
-        if ( font.GetWeight() == wxBOLD )
-            fontStyle |= bold ;
-        if ( font.GetStyle() == wxITALIC )
-            fontStyle |= italic ;
-
-        typeAttr[attrCount].tag = kTXNQDFontNameAttribute ;
-        typeAttr[attrCount].size = kTXNQDFontNameAttributeSize ;
-        typeAttr[attrCount].data.dataPtr = (void*)fontName ;
-        attrCount++ ;
-
-        typeAttr[attrCount].tag = kTXNQDFontSizeAttribute ;
-        typeAttr[attrCount].size = kTXNFontSizeAttributeSize ;
-        typeAttr[attrCount].data.dataValue = (fontSize << 16) ;
-        attrCount++ ;
-
-        typeAttr[attrCount].tag = kTXNQDFontStyleAttribute ;
-        typeAttr[attrCount].size = kTXNQDFontStyleAttributeSize ;
-        typeAttr[attrCount].data.dataValue = fontStyle ;
-        attrCount++ ;
-#else
-        typeAttr[attrCount].tag = kTXNATSUIStyle ;
-        typeAttr[attrCount].size = kTXNATSUIStyleSize ;
-        typeAttr[attrCount].data.dataPtr = font.MacGetATSUStyle() ;
-        attrCount++ ;
-#endif
+        typeAttr[typeAttrCount].tag = kTXNATSUIStyle ;
+        typeAttr[typeAttrCount].size = kTXNATSUIStyleSize ;
+        typeAttr[typeAttrCount].data.dataPtr = font.MacGetATSUStyle() ;
+        typeAttrCount++ ;
     }
 
     if ( style.HasTextColour() )
     {
+        wxASSERT( typeAttrCount < WXSIZEOF(typeAttr) );
         color = MAC_WXCOLORREF(style.GetTextColour().GetPixel()) ;
 
-        typeAttr[attrCount].tag = kTXNQDFontColorAttribute ;
-        typeAttr[attrCount].size = kTXNQDFontColorAttributeSize ;
-        typeAttr[attrCount].data.dataPtr = (void*) &color ;
-        attrCount++ ;
+        typeAttr[typeAttrCount].tag = kTXNQDFontColorAttribute ;
+        typeAttr[typeAttrCount].size = kTXNQDFontColorAttributeSize ;
+        typeAttr[typeAttrCount].data.dataPtr = (void*) &color ;
+        typeAttrCount++ ;
+    }
+    
+    if ( style.HasAlignment() )
+    {
+        wxASSERT( controlAttrCount < WXSIZEOF(controlTags) );
+        SInt32 align;
+        
+        switch ( style.GetAlignment() )
+        {
+            case wxTEXT_ALIGNMENT_LEFT:
+                align = kTXNFlushLeft;
+                break;
+            case wxTEXT_ALIGNMENT_CENTRE:
+                align = kTXNCenter;
+                break;
+            case wxTEXT_ALIGNMENT_RIGHT:
+                align = kTXNFlushRight;
+                break;
+            case wxTEXT_ALIGNMENT_JUSTIFIED:
+                align = kTXNFullJust;
+                break;  
+            default :
+            case wxTEXT_ALIGNMENT_DEFAULT:
+                align = kTXNFlushDefault;
+                break;
+        }
+        
+        controlTags[controlAttrCount] = kTXNJustificationTag ;
+        controlData[controlAttrCount].sValue = align ;
+        controlAttrCount++ ;
     }
 
-    if ( attrCount > 0 )
+    if ( style.HasLeftIndent() || style.HasRightIndent() )
     {
-        verify_noerr( TXNSetTypeAttributes( m_txn , attrCount , typeAttr, from , to ) );
-        // unfortunately the relayout is not automatic
+        wxASSERT( controlAttrCount < WXSIZEOF(controlTags) );
+        controlTags[controlAttrCount] = kTXNMarginsTag;
+        controlData[controlAttrCount].marginsPtr = &margins;
+        verify_noerr( TXNGetTXNObjectControls (m_txn, 1 ,
+                                &controlTags[controlAttrCount], &controlData[controlAttrCount]) );
+        if ( style.HasLeftIndent() )
+        {
+            margins.leftMargin = style.GetLeftIndent() / 254.0 * 72 + 0.5;
+        }
+        if ( style.HasRightIndent() )
+        {
+            margins.rightMargin = style.GetRightIndent() / 254.0 * 72 + 0.5;
+        }
+        controlAttrCount++ ;
+    }
+    
+    if ( style.HasTabs() )
+    {
+        const wxArrayInt& tabarray = style.GetTabs();
+        // unfortunately Mac only applies a tab distance, not individually different tabs
+        controlTags[controlAttrCount] = kTXNTabSettingsTag;
+        if ( tabarray.size() > 0 )
+            controlData[controlAttrCount].tabValue.value = tabarray[0] / 254.0 * 72 + 0.5;
+        else
+            controlData[controlAttrCount].tabValue.value = 72 ; 
+
+        controlData[controlAttrCount].tabValue.tabType = kTXNLeftTab;
+        controlAttrCount++ ;
+    }
+    
+    // unfortunately the relayout is not automatic
+    if ( controlAttrCount > 0 )
+    {
+        verify_noerr( TXNSetTXNObjectControls (m_txn, false /* don't clear all */, controlAttrCount,
+                                controlTags, controlData) );
+        relayout = true;
+    }
+    
+    if ( typeAttrCount > 0 )
+    {
+        verify_noerr( TXNSetTypeAttributes( m_txn , typeAttrCount, typeAttr, from , to ) );
+        relayout = true;
+    }
+    
+    if ( tabs != NULL )
+    {
+        delete[] tabs;
+    }
+    
+    if ( relayout )
+    {
         TXNRecalcTextLayout( m_txn );
     }
 }
