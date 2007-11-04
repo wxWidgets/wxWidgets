@@ -73,7 +73,12 @@
 #include "wx/filesys.h"
 
 #if defined(__WXMAC__)
-    #include  "wx/mac/private.h"  // includes mac headers
+    #include "wx/mac/private.h"  // includes mac headers
+#endif
+
+#if defined(__WXOSX__)
+    #include "wx/mac/corefoundation/cfstring.h"
+    #include "wx/mac/corefoundation/cfref.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -2860,7 +2865,7 @@ bool wxLocale::AddCatalog(const wxString& szDomain,
 // accessors for locale-dependent data
 // ----------------------------------------------------------------------------
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__)
 
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
@@ -2900,7 +2905,33 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
     return str;
 }
 
-#else // !__WXMSW__
+#elif defined(__WXOSX__)
+
+/* static */
+wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
+{
+    wxCFRef<CFLocaleRef> userLocaleRef(CFLocaleCopyCurrent());
+    CFTypeRef cfstr;
+    switch ( index )
+    {
+        case wxLOCALE_THOUSANDS_SEP:
+            cfstr = CFLocaleGetValue(userLocaleRef, kCFLocaleGroupingSeparator);
+            break;
+
+        case wxLOCALE_DECIMAL_POINT:
+            cfstr = CFLocaleGetValue(userLocaleRef, kCFLocaleDecimalSeparator);
+            break;
+
+        default:
+            wxFAIL_MSG( "Unknown locale info" );
+    }
+
+    wxMacCFStringHolder
+        str(CFStringCreateCopy(NULL, static_cast<CFStringRef>(cfstr)));
+    return str.AsString();
+}
+
+#else // !__WXMSW__ && !__WXMAC__
 
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
@@ -2937,7 +2968,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
     }
 }
 
-#endif // __WXMSW__/!__WXMSW__
+#endif // platform
 
 // ----------------------------------------------------------------------------
 // global functions and variables
