@@ -52,6 +52,40 @@
 // get HTREEITEM from wxTreeItemId
 #define HITEM(item)     ((HTREEITEM)(((item).m_pItem)))
 
+
+// older SDKs are missing these
+#ifndef TVN_ITEMCHANGINGA
+
+#define TVN_ITEMCHANGINGA (TVN_FIRST-16)
+#define TVN_ITEMCHANGINGW (TVN_FIRST-17)
+
+typedef struct tagNMTVITEMCHANGE
+{
+    NMHDR hdr;
+    UINT uChanged;
+    HTREEITEM hItem;
+    UINT uStateNew;
+    UINT uStateOld;
+    LPARAM lParam;
+} NMTVITEMCHANGE;
+
+#endif
+
+
+// this global variable is used on vista systems for preventing unwanted
+// item state changes in the vista tree control.  It is only used in
+// multi-select mode on vista systems.
+
+static HTREEITEM gs_unlockItem = NULL;
+
+class TreeItemUnlocker
+{
+public:
+    TreeItemUnlocker(HTREEITEM item) { gs_unlockItem = item; }
+    ~TreeItemUnlocker() { gs_unlockItem = NULL; }
+};
+
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -64,6 +98,8 @@ static bool IsItemSelected(HWND hwndTV, HTREEITEM hItem)
     tvi.mask = TVIF_STATE | TVIF_HANDLE;
     tvi.stateMask = TVIS_SELECTED;
     tvi.hItem = hItem;
+
+    TreeItemUnlocker unlocker(hItem);
 
     if ( !TreeView_GetItem(hwndTV, &tvi) )
     {
@@ -80,6 +116,8 @@ static bool SelectItem(HWND hwndTV, HTREEITEM hItem, bool select = true)
     tvi.stateMask = TVIS_SELECTED;
     tvi.state = select ? TVIS_SELECTED : 0;
     tvi.hItem = hItem;
+
+    TreeItemUnlocker unlocker(hItem);
 
     if ( TreeView_SetItem(hwndTV, &tvi) == -1 )
     {
@@ -804,6 +842,8 @@ bool wxTreeCtrl::DoGetItem(wxTreeViewItem *tvItem) const
 
 void wxTreeCtrl::DoSetItem(wxTreeViewItem *tvItem)
 {
+    TreeItemUnlocker unlocker(tvItem->hItem);
+
     if ( TreeView_SetItem(GetHwnd(), tvItem) == -1 )
     {
         wxLogLastError(wxT("TreeView_SetItem"));
@@ -2563,6 +2603,36 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 }
             }
             break;
+
+
+        // Vista's tree control has introduced some problems with our
+        // multi-selection tree.  When TreeView_SelectItem() is called,
+        // the wrong items are deselected.
+        
+        // Fortunately, Vista provides a new notification, TVN_ITEMCHANGING
+        // that can be used to regulate this incorrect behavior.  The
+        // following messages will allow only the unlocked item's selection
+        // state to change
+        case TVN_ITEMCHANGINGA:
+        case TVN_ITEMCHANGINGW:
+            {
+                // we only need to handles these in multi-select trees
+                if ( HasFlag(wxTR_MULTIPLE) )
+                {
+                    // get info about the item about to be changed
+                    NMTVITEMCHANGE* info = (NMTVITEMCHANGE*)lParam;
+                    if (info->hItem != gs_unlockItem)
+                    {
+                        // item's state is locked, don't allow the change
+                        // returning 1 will disallow the change
+                        *result = 1; 
+                        return true;
+                    }
+                }
+
+                // allow the state change
+            }
+            return false;
 
         // NB: MSLU is broken and sends TVN_SELCHANGEDA instead of
         //     TVN_SELCHANGEDW in Unicode mode under Win98. Therefore
