@@ -43,7 +43,7 @@ public:
     virtual void SetSelection(long from, long to);
     virtual void GetSelection(long *from, long *to) const;
 
-    virtual void AutoComplete(const wxArrayString& choices);
+    virtual bool AutoComplete(const wxArrayString& choices);
 
     virtual bool IsEditable() const;
     virtual void SetEditable(bool editable);

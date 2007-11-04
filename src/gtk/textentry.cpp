@@ -221,10 +221,10 @@ void wxTextEntry::GetSelection(long *from, long *to) const
 // auto completion
 // ----------------------------------------------------------------------------
 
-void wxTextEntry::AutoComplete(const wxArrayString& choices)
+bool wxTextEntry::AutoComplete(const wxArrayString& choices)
 {
     GtkEntry * const entry = GTK_ENTRY(GetEditable());
-    wxCHECK_RET( entry, "auto completion doesn't work with this control" );
+    wxCHECK_MSG(entry, false, "auto completion doesn't work with this control");
 
     GtkListStore * const store = gtk_list_store_new(1, G_TYPE_STRING);
     GtkTreeIter iter;
@@ -244,6 +244,7 @@ void wxTextEntry::AutoComplete(const wxArrayString& choices)
     gtk_entry_completion_set_text_column(completion, 0);
     gtk_entry_set_completion(entry, completion);
     g_object_unref(completion);
+    return true;
 }
 
 // ----------------------------------------------------------------------------
