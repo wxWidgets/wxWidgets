@@ -557,8 +557,8 @@ wxMacAppMenuEventHandler( EventHandlerCallRef handler , EventRef event , void *d
                 wxWindow *win = menu->GetInvokingWindow();
                 if (win)
                     win->GetEventHandler()->ProcessEvent(wxevent);
-                }
             }
+        }
     }
 #endif
     return eventNotHandledErr;
@@ -576,72 +576,23 @@ static pascal OSStatus wxMacAppCommandEventHandler( EventHandlerCallRef handler 
     wxMenuItem* item = NULL ;
     wxMenu* itemMenu = wxFindMenuFromMacCommand( command , item ) ;
     int id = wxMacCommandToId( command.commandID ) ;
-
+    
     if ( item )
     {
         wxASSERT( itemMenu != NULL ) ;
-
+        
         switch ( cEvent.GetKind() )
         {
             case kEventProcessCommand :
-            {
-                if (item->IsCheckable())
-                    item->Check( !item->IsChecked() ) ;
-
-                if ( itemMenu->SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) )
-                    result = noErr ;
-            }
-            break ;
-
-        case kEventCommandUpdateStatus:
-            {
-                wxUpdateUIEvent event(id);
-                event.SetEventObject( itemMenu );
-
-                bool processed = false;
-
-                // Try the menu's event handler
-                {
-                    wxEvtHandler *handler = itemMenu->GetEventHandler();
-                    if ( handler )
-                        processed = handler->ProcessEvent(event);
-                }
-
-                // Try the window the menu was popped up from
-                // (and up through the hierarchy)
-                if ( !processed )
-                {
-                    const wxMenuBase *menu = itemMenu;
-                    while ( menu )
-                    {
-                        wxWindow *win = menu->GetInvokingWindow();
-                        if ( win )
-                        {
-                            processed = win->GetEventHandler()->ProcessEvent(event);
-                            break;
-                        }
-
-                        menu = menu->GetParent();
-                    }
-                }
-
-                if ( processed )
-                {
-                    // if anything changed, update the changed attribute
-                    if (event.GetSetText())
-                        itemMenu->SetLabel(id, event.GetText());
-                    if (event.GetSetChecked())
-                        itemMenu->Check(id, event.GetChecked());
-                    if (event.GetSetEnabled())
-                        itemMenu->Enable(id, event.GetEnabled());
-
-                    result = noErr ;
-                }
-            }
-            break ;
-
-        default :
-            break ;
+                result = itemMenu->MacHandleCommandProcess( item, id );
+                break ;
+                
+            case kEventCommandUpdateStatus:
+                result = itemMenu->MacHandleCommandUpdateStatus( item, id );
+                break ;
+                
+            default :
+                break ;
         }
     }
     return result ;
