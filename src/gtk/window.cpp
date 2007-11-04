@@ -1122,26 +1122,24 @@ gtk_window_key_press_callback( GtkWidget *widget,
 
     // win is a control: tab can be propagated up
     if ( !ret &&
-         ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab)) &&
-// VZ: testing for wxTE_PROCESS_TAB shouldn't be done here - the control may
-//     have this style, yet choose not to process this particular TAB in which
-//     case TAB must still work as a navigational character
-// JS: enabling again to make consistent with other platforms
-//     (with wxTE_PROCESS_TAB you have to call Navigate to get default
-//     navigation behaviour)
+         (gdk_event->keyval == GDK_Tab || gdk_event->keyval == GDK_ISO_Left_Tab)
 #if wxUSE_TEXTCTRL
-         (! (win->HasFlag(wxTE_PROCESS_TAB) && win->IsKindOf(CLASSINFO(wxTextCtrl)) )) &&
+         && !(win->HasFlag(wxTE_PROCESS_TAB) && wxDynamicCast(win, wxTextCtrl))
 #endif
-         win->GetParent() && (win->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
+       )
     {
-        wxNavigationKeyEvent new_event;
-        new_event.SetEventObject( win->GetParent() );
-        // GDK reports GDK_ISO_Left_Tab for SHIFT-TAB
-        new_event.SetDirection( (gdk_event->keyval == GDK_Tab) );
-        // CTRL-TAB changes the (parent) window, i.e. switch notebook page
-        new_event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) );
-        new_event.SetCurrentFocus( win );
-        ret = win->GetParent()->GetEventHandler()->ProcessEvent( new_event );
+        wxWindow * const parent = win->GetParent();
+        if ( parent && parent->HasFlag(wxTAB_TRAVERSAL) )
+        {
+            wxNavigationKeyEvent new_event;
+            new_event.SetEventObject( parent );
+            // GDK reports GDK_ISO_Left_Tab for SHIFT-TAB
+            new_event.SetDirection( (gdk_event->keyval == GDK_Tab) );
+            // CTRL-TAB changes the (parent) window, i.e. switch notebook page
+            new_event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) );
+            new_event.SetCurrentFocus( win );
+            ret = parent->GetEventHandler()->ProcessEvent( new_event );
+        }
     }
 
     return ret;
