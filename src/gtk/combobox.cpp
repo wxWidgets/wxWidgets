@@ -780,35 +780,25 @@ void wxComboBox::SetSelection( int n )
 
 void wxComboBox::OnChar( wxKeyEvent &event )
 {
-    if ( event.GetKeyCode() == WXK_RETURN )
+    switch ( event.GetKeyCode() )
     {
-        // GTK automatically selects an item if its in the list
-        wxCommandEvent eventEnter(wxEVT_COMMAND_TEXT_ENTER, GetId());
-        eventEnter.SetString( GetValue() );
-        eventEnter.SetInt( GetSelection() );
-        eventEnter.SetEventObject( this );
-
-        if (!GetEventHandler()->ProcessEvent( eventEnter ))
-        {
-            // This will invoke the dialog default action, such
-            // as the clicking the default button.
-
-            wxWindow *top_frame = m_parent;
-            while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
-                top_frame = top_frame->GetParent();
-
-            if (top_frame && GTK_IS_WINDOW(top_frame->m_widget))
+        case WXK_RETURN:
+            if ( HasFlag(wxTE_PROCESS_ENTER) )
             {
-                GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
+                // GTK automatically selects an item if its in the list
+                wxCommandEvent eventEnter(wxEVT_COMMAND_TEXT_ENTER, GetId());
+                eventEnter.SetString( GetValue() );
+                eventEnter.SetInt( GetSelection() );
+                eventEnter.SetEventObject( this );
 
-                if (window->default_widget)
-                        gtk_widget_activate (window->default_widget);
+                if ( GetEventHandler()->ProcessEvent(eventEnter) )
+                {
+                    // Catch GTK event so that GTK doesn't open the drop
+                    // down list upon RETURN.
+                    return;
+                }
             }
-        }
-
-        // Catch GTK event so that GTK doesn't open the drop
-        // down list upon RETURN.
-        return;
+            break;
     }
 
     event.Skip();
