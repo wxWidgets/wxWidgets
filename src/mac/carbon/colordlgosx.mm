@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        colordlg.cpp
+// Name:        src/mac/carbon/colordlg.mm
 // Purpose:     wxColourDialog class. NOTE: you can use the generic class
 //              if you wish, instead of implementing this.
 // Author:      Ryan Norton
@@ -17,6 +17,8 @@
 // ---------------------------------------------------------------------------
 // headers
 // ---------------------------------------------------------------------------
+
+#include "wx/wxprec.h"
 
 #include "wx/mac/colordlg.h"
 #include "wx/fontdlg.h"
