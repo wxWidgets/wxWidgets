@@ -1124,6 +1124,8 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
     WindowClass wclass = 0;
     WindowAttributes attr = kWindowNoAttributes ;
     WindowGroupRef group = NULL ;
+	bool activationScopeSet = false;
+	WindowActivationScope activationScope = kWindowActivationScopeNone;
 
     if ( HasFlag( wxFRAME_TOOL_WINDOW) )
     {
@@ -1143,7 +1145,9 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
         }
         else
         {
-            wclass = kPlainWindowClass ;
+            wclass = kPlainWindowClass;
+			activationScopeSet = true;
+			activationScope = kWindowActivationScopeNone;
         }
     }
     else if ( HasFlag( wxPOPUP_WINDOW ) )
@@ -1255,6 +1259,11 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
     verify_noerr( CreateWindowGroup( kWindowGroupAttrMoveTogether | kWindowGroupAttrLayerTogether | kWindowGroupAttrHideOnCollapse, &overlaygroup ));
     verify_noerr( SetWindowGroupParent( overlaygroup, GetWindowGroup( (WindowRef) m_macWindow )));
     verify_noerr( SetWindowGroup( (WindowRef) m_macWindow , overlaygroup ));
+  
+	if ( activationScopeSet )
+	{
+		verify_noerr( SetWindowActivationScope( (WindowRef) m_macWindow , activationScope ));
+	}
   
     // the create commands are only for content rect,
     // so we have to set the size again as structure bounds
