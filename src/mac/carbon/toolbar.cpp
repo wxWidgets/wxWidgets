@@ -129,7 +129,11 @@ public:
         if ( m_toolbarItemRef )
         {
             CFIndex count = CFGetRetainCount( m_toolbarItemRef ) ;
-            wxASSERT_MSG( count == 1 , wxT("Reference Count of native tool was not 1 in wxToolBarTool destructor") );
+			// different behaviour under Leopard
+			if ( UMAGetSystemVersion() < 0x1050 )
+			{
+				wxASSERT_MSG( count == 1 , wxT("Reference Count of native tool was not 1 in wxToolBarTool destructor") );
+			}
             wxTheApp->MacAddToAutorelease(m_toolbarItemRef);
             CFRelease(m_toolbarItemRef);
             m_toolbarItemRef = NULL;
@@ -892,8 +896,11 @@ wxToolBar::~wxToolBar()
             MacInstallNativeToolbar( false );
 
         CFIndex count = CFGetRetainCount( m_macHIToolbarRef ) ;
-        wxASSERT_MSG( count == 1 , wxT("Reference Count of native control was not 1 in wxToolBar destructor") );
-
+		// Leopard seems to have one refcount more, so we cannot check reliably at the moment
+		if ( UMAGetSystemVersion() < 0x1050 )
+		{
+			wxASSERT_MSG( count == 1 , wxT("Reference Count of native control was not 1 in wxToolBar destructor") );
+		}
         CFRelease( (HIToolbarRef)m_macHIToolbarRef );
         m_macHIToolbarRef = NULL;
     }
