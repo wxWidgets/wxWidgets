@@ -23,7 +23,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_HYPERLINKCTRL && defined(__WXGTK210__)
+#if wxUSE_HYPERLINKCTRL && defined(__WXGTK210__) && !defined(__WXUNIVERSAL__)
 
 #include "wx/hyperlink.h"
 

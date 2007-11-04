@@ -3979,7 +3979,7 @@ void wxWindowGTK::ApplyWidgetStyle(bool forceStyle)
 
 void wxWindowGTK::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    wxSuspendStyleEvents s(this);
+    wxSuspendStyleEvents s(static_cast<wxWindow*>(this));
 
     if (m_wxwindow)
         gtk_widget_modify_style(m_wxwindow, style);

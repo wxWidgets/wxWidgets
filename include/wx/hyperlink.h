@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_HYPERLINK_H__
-#define _WX_HYPERLINK_H__
+#ifndef _WX_HYPERLINK_H_
+#define _WX_HYPERLINK_H_
 
 #include "wx/defs.h"
 
@@ -143,7 +143,7 @@ typedef void (wxEvtHandler::*wxHyperlinkEventFunction)(wxHyperlinkEvent&);
 
 
 
-#if defined(__WXGTK210__)
+#if defined(__WXGTK210__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/hyperlink.h"
 #else
     #include "wx/generic/hyperlink.h"
@@ -153,4 +153,4 @@ typedef void (wxEvtHandler::*wxHyperlinkEventFunction)(wxHyperlinkEvent&);
 
 #endif // wxUSE_HYPERLINKCTRL
 
-#endif // _WX_HYPERLINK_H__
+#endif // _WX_HYPERLINK_H_
