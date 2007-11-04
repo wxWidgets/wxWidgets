@@ -327,7 +327,8 @@ void wxApp::MacReopenApp()
             wxTopLevelWindow* win = (wxTopLevelWindow*) node->GetData();
             if ( !win->IsShown() )
             {
-                if ( firstHidden == NULL /* && wxDynamicCast( win, wxFrame ) */ )
+                // make sure we don't show 'virtual toplevel windows' like wxTaskBarIconWindow
+                if ( firstHidden == NULL && ( wxDynamicCast( win, wxFrame ) || wxDynamicCast( win, wxDialog ) ) )
                    firstHidden = win ;
             } 
             else if ( win->IsIconized() )
