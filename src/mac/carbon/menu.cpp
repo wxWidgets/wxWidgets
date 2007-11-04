@@ -554,6 +554,82 @@ void wxMenu::MacAfterDisplay( bool isSubMenu )
     }
 }
 
+wxInt32 wxMenu::MacHandleCommandProcess( wxMenuItem* item, int id, wxWindow* targetWindow )
+{
+    OSStatus result = eventNotHandledErr ;
+    if (item->IsCheckable())
+        item->Check( !item->IsChecked() ) ;
+
+    if ( SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) )
+        result = noErr ;
+    else
+    {
+        if ( targetWindow != NULL )
+        {
+            wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED , id);
+            event.SetEventObject(targetWindow);
+            event.SetInt(item->IsCheckable() ? item->IsChecked() : -1);
+
+            if ( targetWindow->GetEventHandler()->ProcessEvent(event) )
+                result = noErr ;
+        }
+    }
+    return result;
+}
+
+wxInt32 wxMenu::MacHandleCommandUpdateStatus( wxMenuItem* item, int id, wxWindow* targetWindow )
+{
+    OSStatus result = eventNotHandledErr ;
+    wxUpdateUIEvent event(id);
+    event.SetEventObject( this );
+
+    bool processed = false;
+
+    // Try the menu's event handler
+    {
+        wxEvtHandler *handler = GetEventHandler();
+        if ( handler )
+            processed = handler->ProcessEvent(event);
+    }
+
+    // Try the window the menu was popped up from
+    // (and up through the hierarchy)
+    if ( !processed )
+    {
+        const wxMenuBase *menu = this;
+        while ( menu )
+        {
+            wxWindow *win = menu->GetInvokingWindow();
+            if ( win )
+            {
+                processed = win->GetEventHandler()->ProcessEvent(event);
+                break;
+            }
+
+            menu = menu->GetParent();
+        }
+    }
+
+    if ( !processed && targetWindow != NULL)
+    {
+        processed = targetWindow->GetEventHandler()->ProcessEvent(event);
+    }
+    
+    if ( processed )
+    {
+        // if anything changed, update the changed attribute
+        if (event.GetSetText())
+            SetLabel(id, event.GetText());
+        if (event.GetSetChecked())
+            Check(id, event.GetChecked());
+        if (event.GetSetEnabled())
+            Enable(id, event.GetEnabled());
+
+        result = noErr ;
+    }
+    return result;
+}
+
 // Menu Bar
 
 /*
