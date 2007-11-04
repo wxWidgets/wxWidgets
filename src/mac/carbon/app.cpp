@@ -321,18 +321,24 @@ void wxApp::MacReopenApp()
     else
     {
         wxTopLevelWindow* firstIconized = NULL ;
+        wxTopLevelWindow* firstHidden = NULL ;
         while (node)
         {
             wxTopLevelWindow* win = (wxTopLevelWindow*) node->GetData();
-            if ( !win->IsIconized() )
+            if ( !win->IsShown() )
             {
-                firstIconized = NULL ;
-                break ;
+                if ( firstHidden == NULL /* && wxDynamicCast( win, wxFrame ) */ )
+                   firstHidden = win ;
+            } 
+            else if ( win->IsIconized() )
+            { 
+                if ( firstIconized == NULL )
+                    firstIconized = win ;
             }
             else
             {
-                if ( firstIconized == NULL )
-                    firstIconized = win ;
+                // we do have a visible, non-iconized toplevelwindow -> do nothing
+                return;
             }
 
             node = node->GetNext();
@@ -340,6 +346,8 @@ void wxApp::MacReopenApp()
 
         if ( firstIconized )
             firstIconized->Iconize( false ) ;
+        else if ( firstHidden )
+            firstHidden->Show( true );
     }
 }
 
