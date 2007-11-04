@@ -747,6 +747,9 @@ bool wxTextCtrl::Create( wxWindow *parent,
     if (style & wxTE_READONLY)
         GTKSetEditable();
 
+    if (style & wxTE_PROCESS_ENTER)
+        GTKSetActivatesDefault();
+
     // left justification (alignment) is the default anyhow
     if ( style & (wxTE_RIGHT | wxTE_CENTRE) )
         GTKSetJustification();
@@ -824,9 +827,19 @@ void wxTextCtrl::GTKSetEditable()
 
 void wxTextCtrl::GTKSetVisibility()
 {
-    // VZ: shouldn't we assert if wxTE_PASSWORD is set for multiline control?
-    if ( IsSingleLine() )
-        gtk_entry_set_visibility(GTK_ENTRY(m_text), !HasFlag(wxTE_PASSWORD));
+    wxCHECK_RET( IsSingleLine(),
+                 "wxTE_PASSWORD is for single line text controls only" );
+
+    gtk_entry_set_visibility(GTK_ENTRY(m_text), !HasFlag(wxTE_PASSWORD));
+}
+
+void wxTextCtrl::GTKSetActivatesDefault()
+{
+    wxCHECK_RET( IsSingleLine(),
+                 "wxTE_PROCESS_ENTER is for single line text controls only" );
+
+    gtk_entry_set_activates_default(GTK_ENTRY(m_text),
+                                    !HasFlag(wxTE_PROCESS_ENTER));
 }
 
 void wxTextCtrl::GTKSetWrapMode()
@@ -905,6 +918,9 @@ void wxTextCtrl::SetWindowStyleFlag(long style)
 
     if ( (style & wxTE_PASSWORD) != (styleOld & wxTE_PASSWORD) )
         GTKSetVisibility();
+
+    if ( (style & wxTE_PROCESS_ENTER) != (styleOld & wxTE_PROCESS_ENTER) )
+        GTKSetActivatesDefault();
 
     static const long flagsWrap = wxTE_WORDWRAP | wxTE_CHARWRAP | wxTE_DONTWRAP;
     if ( (style & flagsWrap) != (styleOld & flagsWrap) )
@@ -1536,29 +1552,6 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
             event.SetString(GetValue());
             if ( GetEventHandler()->ProcessEvent(event) )
                 return;
-        }
-
-        // FIXME: this is not the right place to do it, wxDialog::OnCharHook()
-        //        probably is
-        if ( IsSingleLine() )
-        {
-            // This will invoke the dialog default action, such
-            // as the clicking the default button.
-
-            wxWindow *top_frame = m_parent;
-            while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
-                top_frame = top_frame->GetParent();
-
-            if (top_frame && GTK_IS_WINDOW(top_frame->m_widget))
-            {
-                GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
-
-                if (window->default_widget)
-                {
-                    gtk_widget_activate (window->default_widget);
-                    return;
-                }
-            }
         }
     }
 

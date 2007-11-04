@@ -176,6 +176,7 @@ protected:
     // set the given characteristic)
     void GTKSetEditable();
     void GTKSetVisibility();
+    void GTKSetActivatesDefault();
     void GTKSetWrapMode();
     void GTKSetJustification();
 
