@@ -94,9 +94,16 @@ public:
     bool HasSelection() const;
     virtual wxString GetStringSelection() const;
 
+    
+    // auto-completion
+    // ---------------
+
+    virtual void AutoComplete(const wxArrayString& WXUNUSED(choices)) { }
+
 
     // status
     // ------
+
     virtual bool IsEditable() const = 0;
     virtual void SetEditable(bool editable) = 0;
 

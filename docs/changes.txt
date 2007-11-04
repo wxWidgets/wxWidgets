@@ -185,6 +185,7 @@ All (Unix):
 
 All (GUI):
 
+- Added wxTextCtrl::AutoComplete()
 - Added wxH[V]ScrolledWindow (Brad Anderson, Bryan Petty).
 - Added wxDC::StretchBlit() for wxMac and wxMSW (Vince Harron).
 - Added support for drop down toolbar buttons (Tim Kosse).

@@ -43,14 +43,12 @@ public:
     virtual void SetSelection(long from, long to);
     virtual void GetSelection(long *from, long *to) const;
 
-    // status
+    virtual void AutoComplete(const wxArrayString& choices);
+
     virtual bool IsEditable() const;
     virtual void SetEditable(bool editable);
 
-    // set the max number of characters which may be entered in a single line
-    // text control
     virtual void SetMaxLength(unsigned long len);
-
 
     // implementation only from now on
     void SendMaxLenEvent();
