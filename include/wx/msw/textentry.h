@@ -42,6 +42,8 @@ public:
         { DoSetSelection(from, to); }
     virtual void GetSelection(long *from, long *to) const;
 
+    virtual bool AutoCompleteFileNames();
+
     virtual bool IsEditable() const;
     virtual void SetEditable(bool editable);
 

@@ -30,8 +30,13 @@
 #if wxUSE_TEXTCTRL || wxUSE_COMBOBOX
 
 #include "wx/textentry.h"
+#include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
+
+#ifndef SHACF_FILESYS_ONLY
+    #define SHACF_FILESYS_ONLY 0x00000010
+#endif
 
 #define GetEditHwnd() ((HWND)(GetEditHWND()))
 
@@ -133,6 +138,39 @@ void wxTextEntry::GetSelection(long *from, long *to) const
         *from = dwStart;
     if ( to )
         *to = dwEnd;
+}
+
+bool wxTextEntry::AutoCompleteFileNames()
+{
+    typedef HRESULT (WINAPI *SHAutoComplete_t)(HWND, DWORD);
+    static SHAutoComplete_t s_pfnSHAutoComplete = (SHAutoComplete_t)-1;
+    static wxDynamicLibrary s_dllShlwapi;
+    if ( s_pfnSHAutoComplete == (SHAutoComplete_t)-1 )
+    {
+        wxLogNull noLog;
+
+        if ( !s_dllShlwapi.Load(_T("shlwapi.dll"), wxDL_VERBATIM) )
+        {
+            s_pfnSHAutoComplete = NULL;
+        }
+        else
+        {
+            wxDL_INIT_FUNC(s_pfn, SHAutoComplete, s_dllShlwapi);
+        }
+    }
+
+    if ( !s_pfnSHAutoComplete )
+        return false;
+
+    HRESULT hr = (*s_pfnSHAutoComplete)(GetEditHwnd(), SHACF_FILESYS_ONLY);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(_T("SHAutoComplete()"), hr);
+
+        return false;
+    }
+
+    return true;
 }
 
 bool wxTextEntry::IsEditable() const

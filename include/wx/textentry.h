@@ -98,7 +98,20 @@ public:
     // auto-completion
     // ---------------
 
-    virtual void AutoComplete(const wxArrayString& WXUNUSED(choices)) { }
+    // these functions allow to auto-complete the text already entered into the
+    // control using either the given fixed list of strings, the paths from the
+    // file system or, in the future, an arbitrary user-defined completer
+    //
+    // they all return true if completion was enabled or false on error (most
+    // commonly meaning that this functionality is not available under the
+    // current platform)
+
+    virtual bool AutoComplete(const wxArrayString& WXUNUSED(choices))
+    {
+        return false;
+    }
+
+    virtual bool AutoCompleteFileNames() { return false; }
 
 
     // status
