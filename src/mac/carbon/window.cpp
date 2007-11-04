@@ -2459,8 +2459,15 @@ void  wxWindowMac::MacPaintGrowBox()
         CGPoint cgpoint = CGPointMake( rect.right - size , rect.bottom - size ) ;
         CGContextSaveGState( cgContext );
         
-        wxMacCoreGraphicsColour bkgnd( m_macBackgroundBrush ) ;
-        bkgnd.Apply( cgContext );
+        if ( m_macBackgroundBrush.Ok() && m_macBackgroundBrush.GetStyle() != wxTRANSPARENT )
+        {
+            wxMacCoreGraphicsColour bkgnd( m_macBackgroundBrush ) ;
+            bkgnd.Apply( cgContext );
+        }
+        else
+        {
+            CGContextSetRGBFillColor( cgContext, 1.0, 1.0 , 1.0 , 1.0 ); 
+        }
         CGContextFillRect( cgContext, cgrect );
         CGContextRestoreGState( cgContext );
     }
