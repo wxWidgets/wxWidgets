@@ -92,25 +92,29 @@ Major new features in 2.8 release
 -----
 
 All (GUI):
-- wxGraphicsContext implementations now all have the pixel's center at 0.5,0.5, 
-  avoiding differences in anti-aliasing between platforms
+
+- wxGraphicsContext implementations now all have the pixel's center at (0.5,0.5), 
+  avoiding differences in anti-aliasing between platforms.
 
 wxMSW:
 
 - Correct (harmless) warnings given for forward-declared DLL-exported classes
-  by mingw32 4.2 (Tim Stahlhut)
+  by mingw32 4.2 (Tim Stahlhut).
 
 wxGTK:
 
 - Added gtk.window.force-background-colour wxSystemOptions option to work around
   a background colour bug in the gtk-qt theme under KDE.
+- wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW) now returns the background
+  colour of text controls.
 
 wxMac:
-- multiline textcontrols now support attributes for margins and alignement, only
-  a single tab distance can be set though
-- deactivated refcounting checks when running under leopard for the toolbar implementation
-  as the implementation there seems to be different
-- fixed 'Reopen' application behaviour (not always was a window shown when reopening the app)
+
+- Multiline textcontrols now support attributes for margins and alignement; only
+  a single tab distance can be set though.
+- Deactivated refcounting checks when running under leopard for the toolbar implementation
+  as the implementation there seems to be different.
+- Fixed 'Reopen' application behaviour (a window was not always shown when reopening the app).
 
 
 2.8.6

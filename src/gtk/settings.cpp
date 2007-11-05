@@ -42,6 +42,7 @@ struct wxSystemObjects
              m_colHighlight,
              m_colHighlightText,
              m_colListBox,
+             m_colWindow,
              m_colBtnText,
              m_colMenuItemHighlight,
              m_colTooltip,
@@ -52,6 +53,21 @@ struct wxSystemObjects
 
 static wxSystemObjects gs_objects;
 
+void wxClearGtkSystemObjects()
+{
+    gs_objects.m_colBtnFace = wxColour();
+    gs_objects.m_colBtnShadow = wxColour();
+    gs_objects.m_colBtnHighlight = wxColour();
+    gs_objects.m_colHighlightText = wxColour();
+    gs_objects.m_colListBox = wxColour();
+    gs_objects.m_colWindow = wxColour();
+    gs_objects.m_colBtnText = wxColour();
+    gs_objects.m_colMenuItemHighlight = wxColour();
+    gs_objects.m_colTooltip = wxColour();
+    gs_objects.m_colTooltipText = wxColour();
+    gs_objects.m_fontSystem = wxNullFont;
+}
+
 // ----------------------------------------------------------------------------
 // wxSystemSettings implementation
 // ----------------------------------------------------------------------------
@@ -61,7 +77,8 @@ enum wxGtkWidgetType
 {
     wxGTK_BUTTON,
     wxGTK_LIST,
-    wxGTK_MENUITEM
+    wxGTK_MENUITEM,
+    wxGTK_TEXTCTRL
 };
 
 // the colour we need
@@ -88,6 +105,10 @@ static bool GetColourFromGTKWidget(GdkColor& gdkColor,
 
         case wxGTK_BUTTON:
             widget = gtk_button_new();
+            break;
+
+        case wxGTK_TEXTCTRL:
+            widget = gtk_text_view_new();
             break;
 
         case wxGTK_LIST:
@@ -176,7 +197,15 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             break;
 
         case wxSYS_COLOUR_WINDOW:
-            color = *wxWHITE;
+            if (!gs_objects.m_colWindow.Ok())
+            {
+                gdkColor.red =
+                gdkColor.green =
+                gdkColor.blue = 0xFFFF;
+                GetColourFromGTKWidget(gdkColor, wxGTK_TEXTCTRL, GTK_STATE_NORMAL, wxGTK_BASE);
+                gs_objects.m_colWindow = wxColor(gdkColor);
+            }
+            color = gs_objects.m_colWindow;
             break;
 
         case wxSYS_COLOUR_3DDKSHADOW:
