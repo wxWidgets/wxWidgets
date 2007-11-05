@@ -85,15 +85,12 @@ wxTextEntry *wxTextValidator::GetTextEntry()
     }
 #endif
 
-    // FIXME: in wxMotif wxComboBox doesn't derive from wxTextCtrl yet
-#ifndef __WXMOTIF__
 #if wxUSE_COMBOBOX
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxComboBox)))
     {
         return (wxComboBox*)m_validatorWindow;
     }
 #endif
-#endif // !__WXMOTIF__
 
     wxFAIL_MSG(
         _T("wxTextValidator can only be used with wxTextCtrl or wxComboBox")

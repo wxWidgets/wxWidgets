@@ -226,7 +226,7 @@ void wxComboBox::DoDeleteOneItem(unsigned int n)
     AdjustDropDownListSize();
 }
 
-void wxComboBox::DoClear()
+void wxComboBox::Clear()
 {
 #ifdef LESSTIF_VERSION
     XmListDeleteAllItems (GetXmList(this));
@@ -237,9 +237,10 @@ void wxComboBox::DoClear()
     }
 #endif
 
-    wxControlWithItems::DoClear();
     m_noStrings = 0;
     AdjustDropDownListSize();
+
+    wxTextEntry::Clear();
 }
 
 void wxComboBox::SetSelection (int n)
@@ -262,7 +263,7 @@ void wxComboBox::SetSelection (int n)
     m_inSetSelection = false;
 }
 
-int wxComboBox::GetSelection (void) const
+int wxComboBox::GetSelection() const
 {
     return wxDoGetSelectionInList( GetXmList( this ) );
 }
@@ -277,11 +278,6 @@ int wxComboBox::FindString(const wxString& s, bool WXUNUSED(bCase)) const
     // FIXME: back to base class for not supported value of bCase
 
     return wxDoFindStringInList( GetXmList( this ), s );
-}
-
-void wxComboBox::SetEditable(bool WXUNUSED(editable))
-{
-    // TODO
 }
 
 void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,

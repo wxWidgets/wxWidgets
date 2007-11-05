@@ -1364,6 +1364,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/motif/statbox.cpp
     src/motif/stattext.cpp
     src/motif/textctrl.cpp
+    src/motif/textentry.cpp
     src/motif/timer.cpp
     src/motif/toolbar.cpp
     src/motif/toplevel.cpp
@@ -1371,7 +1372,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/motif/window.cpp
     src/motif/xmcombo/xmcombo.c
     <!-- Generic files used by wxMotif: -->
-    src/generic/animateg.cpp
     src/generic/clrpickerg.cpp
     src/generic/collpaneg.cpp
     src/generic/colrdlgg.cpp
@@ -1388,7 +1388,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/tabg.cpp
 </set>
 <set var="MOTIF_HDR" hints="files">
-    wx/generic/animate.h
     wx/generic/clrpickerg.h
     wx/generic/collpaneg.h
     wx/generic/colrdlgg.h
@@ -1453,6 +1452,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/motif/statbox.h
     wx/motif/stattext.h
     wx/motif/textctrl.h
+    wx/motif/textentry.h
     wx/motif/tglbtn.h
     wx/motif/toolbar.h
     wx/motif/toplevel.h
@@ -2911,6 +2911,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/unix/taskbarx11.h
 </set>
 
+<set var="ADVANCED_MOTIF_SRC" hints="files">
+    src/generic/animateg.cpp
+</set>
+
+<set var="ADVANCED_MOTIF_HDR" hints="files">
+    wx/generic/animate.h
+</set>
+
 <set var="ADVANCED_GTK_SRC" hints="files">
     src/gtk/aboutdlg.cpp
     src/gtk/animate.cpp
@@ -3482,7 +3490,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_SRC)</if>
         <if cond="TOOLKIT=='MAC'">$(ADVANCED_MAC_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(ADVANCED_COCOA_SRC)</if>
-        <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_SRC)</if>
+        <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_SRC) $(ADVANCED_MOTIF_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_UNIX_SRC) $(ADVANCED_GTK_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_SRC) $(ADVANCED_GTK1_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_SRC)</if>
@@ -3494,7 +3502,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_HDR)</if>
         <if cond="TOOLKIT=='MAC'">$(ADVANCED_MAC_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(ADVANCED_COCOA_HDR)</if>
-        <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_HDR)</if>
+        <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_HDR) $(ADVANCED_MOTIF_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_UNIX_HDR) $(ADVANCED_GTK_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_HDR) $(ADVANCED_GTK1_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_HDR)</if>

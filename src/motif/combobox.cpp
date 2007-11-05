@@ -236,68 +236,6 @@ int wxComboBox::FindString(const wxString& s, bool WXUNUSED(bCase)) const
     return wxNOT_FOUND;
 }
 
-// Clipboard operations
-void wxComboBox::Copy()
-{
-    XmComboBoxCopy((Widget) m_mainWidget, CurrentTime);
-}
-
-void wxComboBox::Cut()
-{
-    XmComboBoxCut((Widget) m_mainWidget, CurrentTime);
-}
-
-void wxComboBox::Paste()
-{
-    XmComboBoxPaste((Widget) m_mainWidget);
-}
-
-void wxComboBox::SetEditable(bool WXUNUSED(editable))
-{
-    // TODO
-}
-
-void wxComboBox::SetInsertionPoint(long pos)
-{
-    XmComboBoxSetInsertionPosition ((Widget) m_mainWidget, (XmTextPosition) pos);
-}
-
-void wxComboBox::SetInsertionPointEnd()
-{
-    XmTextPosition pos = XmComboBoxGetLastPosition ((Widget) m_mainWidget);
-    XmComboBoxSetInsertionPosition ((Widget) m_mainWidget, (XmTextPosition) (pos + 1));
-}
-
-long wxComboBox::GetInsertionPoint() const
-{
-    return (long) XmComboBoxGetInsertionPosition ((Widget) m_mainWidget);
-}
-
-wxTextPos wxComboBox::GetLastPosition() const
-{
-    return (wxTextPos) XmComboBoxGetLastPosition ((Widget) m_mainWidget);
-}
-
-void wxComboBox::Replace(long from, long to, const wxString& value)
-{
-    XmComboBoxReplace ((Widget) m_mainWidget, (XmTextPosition) from,
-                       (XmTextPosition) to,
-                       value.char_str());
-}
-
-void wxComboBox::Remove(long from, long to)
-{
-    XmComboBoxSetSelection ((Widget) m_mainWidget, (XmTextPosition) from, (XmTextPosition) to,
-                      (Time) 0);
-    XmComboBoxRemove ((Widget) m_mainWidget);
-}
-
-void wxComboBox::SetSelection(long from, long to)
-{
-    XmComboBoxSetSelection ((Widget) m_mainWidget, (XmTextPosition) from, (XmTextPosition) to,
-                      (Time) 0);
-}
-
 void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
                           XmComboBoxSelectionCallbackStruct * cbs)
 {
@@ -364,6 +302,11 @@ wxSize wxComboBox::DoGetBestSize() const
     }
     else
         return wxWindow::DoGetBestSize();
+}
+
+WXWidget wxComboBox::GetTextWidget() const
+{
+    return (WXWidget)XmComboBoxGetEditWidget((Widget) m_mainWidget);
 }
 
 #endif // XmVersion < 2000

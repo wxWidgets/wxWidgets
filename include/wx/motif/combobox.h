@@ -13,12 +13,12 @@
 #define _WX_COMBOBOX_H_
 
 #include "wx/choice.h"
+#include "wx/textentry.h"
 
 // Combobox item
-class WXDLLEXPORT wxComboBox: public wxChoice
+class WXDLLEXPORT wxComboBox : public wxChoice,
+                               public wxTextEntry
 {
-    DECLARE_DYNAMIC_CLASS(wxComboBox)
-
 public:
     wxComboBox() { m_inSetSelection = false; }
     virtual ~wxComboBox();
@@ -69,34 +69,30 @@ public:
         const wxValidator& validator = wxDefaultValidator,
         const wxString& name = wxComboBoxNameStr);
 
+    // resolve ambiguities among virtual functions inherited from both base
+    // classes
+    virtual void Clear();
+    virtual wxString GetValue() const { return wxTextEntry::GetValue(); }
+    virtual void SetValue(const wxString& value);
+    virtual wxString GetStringSelection() const
+        { return wxChoice::GetStringSelection(); }
+
+    virtual void SetSelection(long from, long to)
+        { wxTextEntry::SetSelection(from, to); }
+    virtual void GetSelection(long *from, long *to) const
+        { wxTextEntry::GetSelection(from, to); }
+
+
     // implementation of wxControlWithItems
     virtual int DoInsertItems(const wxArrayStringsAdapter& items,
                               unsigned int pos,
                               void **clientData, wxClientDataType type);
     virtual void DoDeleteOneItem(unsigned int n);
-    virtual void DoClear();
     virtual int GetSelection() const ;
     virtual void SetSelection(int n);
     virtual int FindString(const wxString& s, bool bCase = false) const;
     virtual wxString GetString(unsigned int n) const ;
     virtual void SetString(unsigned int n, const wxString& s);
-
-    // Text field functions
-    virtual wxString GetValue() const ;
-    virtual void SetValue(const wxString& value);
-
-    // Clipboard operations
-    virtual void Copy();
-    virtual void Cut();
-    virtual void Paste();
-    virtual void SetInsertionPoint(long pos);
-    virtual void SetInsertionPointEnd();
-    virtual long GetInsertionPoint() const ;
-    virtual wxTextPos GetLastPosition() const ;
-    virtual void Replace(long from, long to, const wxString& value);
-    virtual void Remove(long from, long to);
-    virtual void SetSelection(long from, long to);
-    virtual void SetEditable(bool editable);
 
     // Implementation
     virtual void ChangeFont(bool keepOriginalSize = true);
@@ -105,11 +101,14 @@ public:
     WXWidget GetTopWidget() const { return m_mainWidget; }
     WXWidget GetMainWidget() const { return m_mainWidget; }
 
-    virtual wxSize DoGetBestSize() const;
 protected:
+    virtual wxSize DoGetBestSize() const;
     virtual void DoSetSize(int x, int y,
-        int width, int height,
-        int sizeFlags = wxSIZE_AUTO);
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
+
+    virtual WXWidget GetTextWidget() const;
+
 private:
     // only implemented for native combo box
     void AdjustDropDownListSize();
@@ -117,7 +116,8 @@ private:
     // implementation detail, should really be private
 public:
     bool m_inSetSelection;
+
+    DECLARE_DYNAMIC_CLASS(wxComboBox)
 };
 
-#endif
-// _WX_COMBOBOX_H_
+#endif // _WX_COMBOBOX_H_
