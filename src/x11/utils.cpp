@@ -83,7 +83,7 @@ void wxFlushEvents()
     // ??
 }
 
-bool wxCheckForInterrupt(wxWindow *wnd)
+bool wxCheckForInterrupt(wxWindow *WXUNUSED(wnd))
 {
     wxFAIL_MSG(wxT("wxCheckForInterrupt not yet implemented."));
     return false;

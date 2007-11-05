@@ -38,7 +38,7 @@ struct MacTimerInfo
     EventLoopTimerRef   m_timerRef;
 };
 
-static pascal void wxProcessTimer( EventLoopTimerRef theTimer, void *data )
+static pascal void wxProcessTimer( EventLoopTimerRef WXUNUSED(theTimer), void *data )
 {
     if ( data == NULL )
         return;

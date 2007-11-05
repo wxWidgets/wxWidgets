@@ -101,7 +101,7 @@ WXHMETAFILE wxMetaFile::GetHMETAFILE() const
     return (WXHMETAFILE) M_METAFILEDATA->m_metafile;
 }
 
-bool wxMetaFile::SetClipboard(int width, int height)
+bool wxMetaFile::SetClipboard(int WXUNUSED(width), int WXUNUSED(height))
 {
     bool success = true;
 

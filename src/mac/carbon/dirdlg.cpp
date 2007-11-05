@@ -64,7 +64,7 @@ static pascal void NavEventProc(
 wxDirDialog::wxDirDialog(wxWindow *parent,
                          const wxString& message,
                          const wxString& defaultPath,
-                         long style,
+                         long WXUNUSED(style),
                          const wxPoint& WXUNUSED(pos),
                          const wxSize& WXUNUSED(size),
                          const wxString& WXUNUSED(name))

@@ -1363,7 +1363,7 @@ GdkBitmap *wxBitmap::GetBitmap() const
     return M_BMPDATA->m_bitmap;
 }
 
-void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
+void *wxBitmap::GetRawData(wxPixelDataBase& WXUNUSED(data), int WXUNUSED(bpp))
 {
     return NULL;
 }

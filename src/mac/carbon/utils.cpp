@@ -463,7 +463,7 @@ wxString wxMacFindFolder( short        vol,
 
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
-bool wxCheckForInterrupt(wxWindow *wnd)
+bool wxCheckForInterrupt(wxWindow *WXUNUSED(wnd))
 {
     // TODO
     return false;
@@ -932,7 +932,7 @@ bool wxMacControl::NeedsFocusRect() const
     return m_needsFocusRect;
 }
 
-void wxMacControl::VisibilityChanged(bool shown)
+void wxMacControl::VisibilityChanged(bool WXUNUSED(shown))
 {
 }
 
@@ -1286,7 +1286,11 @@ DataBrowserItemDataUPP gDataBrowserItemDataUPP = NULL;
 DataBrowserItemNotificationUPP gDataBrowserItemNotificationUPP = NULL;
 DataBrowserItemCompareUPP gDataBrowserItemCompareUPP = NULL;
 
-wxMacDataBrowserControl::wxMacDataBrowserControl( wxWindow* peer, const wxPoint& pos, const wxSize& size, long style) : wxMacControl( peer )
+wxMacDataBrowserControl::wxMacDataBrowserControl( wxWindow* peer,
+                                                  const wxPoint& pos,
+                                                  const wxSize& size,
+                                                  long WXUNUSED(style))
+                       : wxMacControl( peer )
 {
     Rect bounds = wxMacGetBoundsForControl( peer, pos, size );
     OSStatus err = ::CreateDataBrowserControl(
@@ -1626,7 +1630,7 @@ const wxString& wxMacDataItem::GetLabel() const
     return m_label;
 }
 
-bool wxMacDataItem::IsLessThan(wxMacDataItemBrowserControl *owner ,
+bool wxMacDataItem::IsLessThan(wxMacDataItemBrowserControl *WXUNUSED(owner) ,
     const wxMacDataItem* rhs,
     DataBrowserPropertyID sortProperty) const
 {
@@ -1643,7 +1647,7 @@ bool wxMacDataItem::IsLessThan(wxMacDataItemBrowserControl *owner ,
     return retval;
 }
 
-OSStatus wxMacDataItem::GetSetData( wxMacDataItemBrowserControl *owner ,
+OSStatus wxMacDataItem::GetSetData( wxMacDataItemBrowserControl *WXUNUSED(owner) ,
     DataBrowserPropertyID property,
     DataBrowserItemDataRef itemData,
     bool changeValue )
@@ -1675,9 +1679,9 @@ OSStatus wxMacDataItem::GetSetData( wxMacDataItemBrowserControl *owner ,
     return err;
 }
 
-void wxMacDataItem::Notification(wxMacDataItemBrowserControl *owner ,
-    DataBrowserItemNotification message,
-    DataBrowserItemDataRef itemData ) const
+void wxMacDataItem::Notification(wxMacDataItemBrowserControl *WXUNUSED(owner) ,
+    DataBrowserItemNotification WXUNUSED(message),
+    DataBrowserItemDataRef WXUNUSED(itemData) ) const
 {
 }
 

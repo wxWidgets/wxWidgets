@@ -81,7 +81,7 @@ bool wxControl::ProcessCommand( wxCommandEvent &event )
     return GetEventHandler()->ProcessEvent( event );
 }
 
-void  wxControl::OnKeyDown( wxKeyEvent &event )
+void  wxControl::OnKeyDown( wxKeyEvent &WXUNUSED(event) )
 {
     if ( m_peer == NULL || !m_peer->Ok() )
         return;

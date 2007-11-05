@@ -98,31 +98,8 @@ bool wxEventLoopImpl::ProcessEvent(XEvent *event)
     return false;
 }
 
-bool wxEventLoopImpl::PreProcessEvent(XEvent *event)
+bool wxEventLoopImpl::PreProcessEvent(XEvent *WXUNUSED(event))
 {
-    // TODO
-#if 0
-    HWND hWnd = msg->hwnd;
-    wxWindow *wndThis = wxGetWindowFromHWND((WXHWND)hWnd);
-
-
-    // try translations first; find the youngest window with a translation
-    // table.
-    wxWindow *wnd;
-    for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
-    {
-        if ( wnd->MSWTranslateMessage((WXMSG *)msg) )
-            return true;
-    }
-
-    // Anyone for a non-translation message? Try youngest descendants first.
-    for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
-    {
-        if ( wnd->MSWProcessMessage((WXMSG *)msg) )
-            return true;
-    }
-#endif
-
     return false;
 }
 

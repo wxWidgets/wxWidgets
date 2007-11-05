@@ -132,9 +132,9 @@ wxInt32 wxCheckBox::MacControlHit( WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENT
 // Bitmap checkbox
 bool wxBitmapCheckBox::Create(wxWindow *parent,
     wxWindowID id,
-    const wxBitmap *label,
-    const wxPoint& pos,
-    const wxSize& size,
+    const wxBitmap *WXUNUSED(label),
+    const wxPoint& WXUNUSED(pos),
+    const wxSize& WXUNUSED(size),
     long style,
     const wxValidator& wxVALIDATOR_PARAM(validator),
     const wxString& name)
@@ -158,7 +158,7 @@ bool wxBitmapCheckBox::Create(wxWindow *parent,
     return false;
 }
 
-void wxBitmapCheckBox::SetLabel(const wxBitmap *bitmap)
+void wxBitmapCheckBox::SetLabel(const wxBitmap *WXUNUSED(bitmap))
 {
     // TODO
     wxFAIL_MSG(wxT("wxBitmapCheckBox::SetLabel() not yet implemented"));
@@ -169,7 +169,7 @@ void wxBitmapCheckBox::SetSize(int x, int y, int width, int height, int sizeFlag
     wxControl::SetSize( x , y , width , height , sizeFlags ) ;
 }
 
-void wxBitmapCheckBox::SetValue(bool val)
+void wxBitmapCheckBox::SetValue(bool WXUNUSED(val))
 {
     // TODO
     wxFAIL_MSG(wxT("wxBitmapCheckBox::SetValue() not yet implemented"));

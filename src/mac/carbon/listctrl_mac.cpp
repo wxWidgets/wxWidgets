@@ -259,11 +259,11 @@ protected:
                                     Rect *maxEditTextRect,
                                     Boolean *shrinkToFit);
 
-    static pascal Boolean  DataBrowserHitTestProc(ControlRef browser,
-                                    DataBrowserItemID itemID,
-                                    DataBrowserPropertyID property,
-                                    const Rect *theRect,
-                                    const Rect *mouseRect) { return true; }
+    static pascal Boolean  DataBrowserHitTestProc(ControlRef WXUNUSED(browser),
+                                    DataBrowserItemID WXUNUSED(itemID),
+                                    DataBrowserPropertyID WXUNUSED(property),
+                                    const Rect *WXUNUSED(theRect),
+                                    const Rect *WXUNUSED(mouseRect)) { return true; }
 
     virtual bool        ConfirmEditText(DataBrowserItemID item,
                                     DataBrowserPropertyID property,
@@ -1848,7 +1848,7 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 }
 
 // End label editing, optionally cancelling the edit
-bool wxListCtrl::EndEditLabel(bool cancel)
+bool wxListCtrl::EndEditLabel(bool WXUNUSED(cancel))
 {
     // TODO: generic impl. doesn't have this method - is it needed for us?
     if (m_genericImpl)
@@ -2364,7 +2364,7 @@ wxMacListCtrlItem::~wxMacListCtrlItem()
 
 void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
     DataBrowserItemNotification message,
-    DataBrowserItemDataRef itemData ) const
+    DataBrowserItemDataRef WXUNUSED(itemData) ) const
 {
 
     wxMacDataBrowserListCtrlControl *lb = wxDynamicCast(owner, wxMacDataBrowserListCtrlControl);
@@ -2538,11 +2538,11 @@ pascal Boolean wxMacDataBrowserListCtrlControl::DataBrowserEditTextProc(
 }
 
 bool wxMacDataBrowserListCtrlControl::ConfirmEditText(
-        DataBrowserItemID itemID,
-        DataBrowserPropertyID property,
-        CFStringRef theString,
-        Rect *maxEditTextRect,
-        Boolean *shrinkToFit)
+        DataBrowserItemID WXUNUSED(itemID),
+        DataBrowserPropertyID WXUNUSED(property),
+        CFStringRef WXUNUSED(theString),
+        Rect *WXUNUSED(maxEditTextRect),
+        Boolean *WXUNUSED(shrinkToFit))
 {
     return false;
 }
@@ -2601,7 +2601,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
         DataBrowserItemID itemID,
         DataBrowserPropertyID property,
         DataBrowserItemState itemState,
-        const Rect *itemRect,
+        const Rect *WXUNUSED(itemRect),
         SInt16 gdDepth,
         Boolean colorDevice)
 {
@@ -2923,7 +2923,7 @@ OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemI
 
 void wxMacDataBrowserListCtrlControl::ItemNotification(DataBrowserItemID itemID,
     DataBrowserItemNotification message,
-    DataBrowserItemDataRef itemData )
+    DataBrowserItemDataRef WXUNUSED(itemData) )
 {
     // we want to depend on as little as possible to make sure tear-down of controls is safe
     if ( message == kDataBrowserItemRemoved)

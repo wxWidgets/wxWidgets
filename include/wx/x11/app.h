@@ -84,7 +84,7 @@ public:
     PangoContext* GetPangoContext();
 #endif
 
-    wxXVisualInfo* GetVisualInfo(WXDisplay* display)
+    wxXVisualInfo* GetVisualInfo(WXDisplay* WXUNUSED(display))
     {
         // this should be implemented correctly for wxBitmap to work
         // with multiple display

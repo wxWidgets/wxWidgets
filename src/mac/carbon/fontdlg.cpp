@@ -58,7 +58,10 @@ static const EventTypeSpec eventList[] =
 } ;
 
 
-pascal OSStatus wxMacCarbonFontPanelHandler(EventHandlerCallRef nextHandler, EventRef event, void *userData)
+pascal OSStatus
+wxMacCarbonFontPanelHandler(EventHandlerCallRef WXUNUSED(nextHandler),
+                            EventRef event,
+                            void *userData)
 {
     OSStatus result = eventNotHandledErr ;
     wxFontDialog *fontdialog = (wxFontDialog*) userData ;
@@ -183,7 +186,7 @@ wxFontDialog::~wxFontDialog()
 {
 }
 
-bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
+bool wxFontDialog::Create(wxWindow *WXUNUSED(parent), const wxFontData& data)
 {
     m_fontData = data;
     return true ;

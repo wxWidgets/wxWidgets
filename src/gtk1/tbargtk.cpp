@@ -482,7 +482,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
     return true;
 }
 
-bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *toolBase)
+bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 {
     wxToolBarTool *tool = (wxToolBarTool *)toolBase;
 

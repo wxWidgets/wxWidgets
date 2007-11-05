@@ -169,15 +169,6 @@ void wxComboBox::DoSetSize(int x, int y, int width, int WXUNUSED(height), int si
     wxWindow::DoSetSize(x, y, width, DoGetBestSize().y, sizeFlags);
 }
 
-wxString wxComboBox::GetValue() const
-{
-    char* s = XmTextGetString (GetXmText (this));
-    wxString str(s);
-    if (s)
-        XtFree (s);
-    return str;
-}
-
 void wxComboBox::SetString(unsigned int n, const wxString& s)
 {
     wxXmString text(s);
@@ -288,67 +279,9 @@ int wxComboBox::FindString(const wxString& s, bool WXUNUSED(bCase)) const
     return wxDoFindStringInList( GetXmList( this ), s );
 }
 
-// Clipboard operations
-void wxComboBox::Copy()
-{
-    XmTextCopy( GetXmText(this), CurrentTime );
-}
-
-void wxComboBox::Cut()
-{
-    XmTextCut( GetXmText(this), CurrentTime );
-}
-
-void wxComboBox::Paste()
-{
-    XmTextPaste( GetXmText(this) );
-}
-
 void wxComboBox::SetEditable(bool WXUNUSED(editable))
 {
     // TODO
-}
-
-void wxComboBox::SetInsertionPoint(long pos)
-{
-    XmTextSetInsertionPosition( GetXmText(this), (XmTextPosition)pos );
-}
-
-void wxComboBox::SetInsertionPointEnd()
-{
-    SetInsertionPoint( GetLastPosition() );
-}
-
-long wxComboBox::GetInsertionPoint() const
-{
-    return (long)XmTextGetInsertionPosition( GetXmText(this) );
-}
-
-wxTextPos wxComboBox::GetLastPosition() const
-{
-    XmTextPosition pos = XmTextGetLastPosition( GetXmText(this) );
-    return (long)pos;
-}
-
-void wxComboBox::Replace(long from, long to, const wxString& value)
-{
-    XmTextReplace( GetXmText(this), (XmTextPosition)from, (XmTextPosition)to,
-                   value.char_str() );
-}
-
-void wxComboBox::Remove(long from, long to)
-{
-    SetSelection( from, to );
-    XmTextRemove( GetXmText(this) );
-}
-
-void wxComboBox::SetSelection(long from, long to)
-{
-    if( to == -1 )
-        to = GetLastPosition();
-
-    XmTextSetSelection( GetXmText(this), (XmTextPosition)from,
-                        (XmTextPosition)to, (Time)0 );
 }
 
 void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
@@ -444,6 +377,11 @@ wxSize wxComboBox::DoGetBestSize() const
     }
     else
         return wxWindow::DoGetBestSize();
+}
+
+WXWidget wxComboBox::GetTextWidget() const
+{
+    return (WXWidget)GetXmText(this);
 }
 
 #endif // XmVersion >= 2000

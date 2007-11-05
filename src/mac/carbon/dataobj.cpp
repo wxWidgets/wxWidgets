@@ -189,7 +189,8 @@ bool wxDataObject::IsSupportedFormat( const wxDataFormat& rFormat, Direction vDi
 // ----------------------------------------------------------------------------
 
 #if wxUSE_UNICODE
-void wxTextDataObject::GetAllFormats( wxDataFormat *formats, wxDataObjectBase::Direction dir ) const
+void wxTextDataObject::GetAllFormats(wxDataFormat *formats,
+                                     wxDataObjectBase::Direction WXUNUSED(dir)) const
 {
     *formats++ = wxDataFormat( wxDF_TEXT );
     *formats = wxDataFormat( wxDF_UNICODETEXT );
@@ -239,7 +240,7 @@ size_t wxFileDataObject::GetDataSize() const
     return buffLength + 1;
 }
 
-bool wxFileDataObject::SetData( size_t nSize, const void *pBuf )
+bool wxFileDataObject::SetData( size_t WXUNUSED(nSize), const void *pBuf )
 {
     wxString filenames;
 

@@ -70,7 +70,7 @@ wxWindow* wxReparenter::sm_newParent = NULL;
 wxString wxReparenter::sm_name;
 bool wxReparenter::sm_exactMatch = false;
 
-static int ErrorHandler(Display* dpy, XErrorEvent* event)
+static int ErrorHandler(Display* WXUNUSED(dpy), XErrorEvent* WXUNUSED(event))
 {
     Xerror = True;
     return False;

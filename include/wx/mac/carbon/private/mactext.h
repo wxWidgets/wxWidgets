@@ -39,10 +39,10 @@ public :
 
 
     virtual bool HasOwnContextMenu() const
-    { return false ; }
+        { return false ; }
 
-    virtual bool SetupCursor( const wxPoint& pt )
-    { return false ; }
+    virtual bool SetupCursor( const wxPoint& WXUNUSED(pt) )
+        { return false ; }
 
     virtual void Clear() ;
     virtual bool CanUndo() const;
@@ -55,7 +55,7 @@ public :
     virtual void ShowPosition(long WXUNUSED(pos)) ;
     virtual int GetLineLength(long lineNo) const ;
     virtual wxString GetLineText(long lineNo) const ;
-    virtual void CheckSpelling(bool check) { }
+    virtual void CheckSpelling(bool WXUNUSED(check)) { }
 
 #ifndef __WXMAC_OSX__
     virtual void            MacControlUserPaneDrawProc(wxInt16 part) = 0 ;

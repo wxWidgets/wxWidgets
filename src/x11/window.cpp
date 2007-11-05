@@ -1416,7 +1416,10 @@ WXWindow wxWindowX11::GetClientAreaWindow() const
 // TranslateXXXEvent() functions
 // ----------------------------------------------------------------------------
 
-bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Window window, XEvent *xevent)
+bool wxTranslateMouseEvent(wxMouseEvent& wxevent,
+                           wxWindow *win,
+                           Window WXUNUSED(window),
+                           XEvent *xevent)
 {
     switch (XEventGetType(xevent))
     {
@@ -1648,7 +1651,8 @@ wxWindow *wxWindowBase::GetCapture()
 // position.
 wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 {
-    return wxFindWindowAtPoint(wxGetMousePosition());
+    pt = wxGetMousePosition();
+    return wxFindWindowAtPoint(pt);
 }
 
 void wxGetMouseState(int& rootX, int& rootY, unsigned& maskReturn)

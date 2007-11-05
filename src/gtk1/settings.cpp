@@ -357,7 +357,8 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
     }
 }
 
-int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
+int
+wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(win))
 {
     switch (index)
     {

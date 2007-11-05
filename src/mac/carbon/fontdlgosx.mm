@@ -105,12 +105,14 @@
 
 - (IBAction)cancelPressed:(id)sender
 {
+    wxUnusedVar(sender);
     m_shouldClose = YES ;
     [NSApp stopModal];
 }
 
 - (IBAction)okPressed:(id)sender
 {
+    wxUnusedVar(sender);
     m_okPressed = YES ;
     m_shouldClose = YES ;
     [NSApp stopModal];
@@ -135,7 +137,7 @@
 
 extern "C" int RunMixedFontDialog(wxFontDialog* dialog) ;
 
-int RunMixedFontDialog(wxFontDialog* dialog)
+int RunMixedFontDialog(wxFontDialog* WXUNUSED(dialog))
 {
     int retval = wxID_CANCEL ;
 

@@ -36,7 +36,8 @@ extern wxWindowGTK   *g_delayedFocus;
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_checkbox_toggled_callback(GtkWidget *widget, wxCheckBox *cb)
+static void gtk_checkbox_toggled_callback(GtkWidget *WXUNUSED(widget),
+                                          wxCheckBox *cb)
 {
     if (g_isIdle) wxapp_install_idle_handler();
 

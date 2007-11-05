@@ -132,8 +132,10 @@ wxTaskBarIconImpl::~wxTaskBarIconImpl()
 // 1) To handle wxTaskBarIcon menu events (see below for why)
 // 2) To handle events from the dock when it requests a menu
 //-----------------------------------------------------------------------------
-pascal OSStatus wxDockEventHandler( EventHandlerCallRef inHandlerCallRef,
-                                    EventRef inEvent, void *pData )
+pascal OSStatus
+wxDockEventHandler(EventHandlerCallRef WXUNUSED(inHandlerCallRef),
+                   EventRef inEvent,
+                   void *pData)
 {
     // Get the parameters we want from the event
     wxDockTaskBarIcon* pTB = (wxDockTaskBarIcon*) pData;
@@ -388,7 +390,7 @@ bool wxDockTaskBarIcon::IsIconInstalled() const
 //
 // Sets the icon for the dock CGImage functions and SetApplicationDockTileImage
 //-----------------------------------------------------------------------------
-bool wxDockTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
+bool wxDockTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& WXUNUSED(tooltip))
 {
     // convert the wxIcon into a wxBitmap so we can perform some
     // wxBitmap operations with it

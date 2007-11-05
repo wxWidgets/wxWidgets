@@ -140,12 +140,12 @@ wxNotebook::~wxNotebook()
 // wxNotebook accessors
 // ----------------------------------------------------------------------------
 
-void wxNotebook::SetPadding(const wxSize& padding)
+void wxNotebook::SetPadding(const wxSize& WXUNUSED(padding))
 {
     // unsupported by OS
 }
 
-void wxNotebook::SetTabSize(const wxSize& sz)
+void wxNotebook::SetTabSize(const wxSize& WXUNUSED(sz))
 {
     // unsupported by OS
 }
@@ -565,7 +565,7 @@ bool wxNotebook::DoPhase(int WXUNUSED(nPhase))
 
 #endif // wxUSE_CONSTRAINTS
 
-void wxNotebook::Command(wxCommandEvent& event)
+void wxNotebook::Command(wxCommandEvent& WXUNUSED(event))
 {
     wxFAIL_MSG(wxT("wxNotebook::Command not implemented"));
 }

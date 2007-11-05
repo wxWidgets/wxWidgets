@@ -69,8 +69,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog)
 
 - (BOOL)windowShouldClose:(id)sender
 {
+    wxUnusedVar(sender);
+
     m_bIsClosed = true;
-    
+
     [NSApp abortModal];
     [NSApp stopModal];
     return YES;
@@ -100,7 +102,7 @@ wxColourDialog::wxColourDialog(wxWindow *parent, wxColourData *data)
 bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
 {
     m_dialogParent = parent;
-  
+
     if (data)
         m_colourData = *data;
 
@@ -109,7 +111,7 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
     //	events and window stuff for cocoa for carbon
     //	applications.
     //
-    //	This is also the only call here that is 
+    //	This is also the only call here that is
     //	10.2+ specific (the rest is OSX only),
     //	which, ironically, the carbon font
     //	panel requires.
@@ -128,16 +130,16 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
                                         alpha:1.0]
         ];
     else
-        [[NSColorPanel sharedColorPanel] setColor:[NSColor blackColor]];        
-        
+        [[NSColorPanel sharedColorPanel] setColor:[NSColor blackColor]];
+
     //We're done - free up the pool
     [thePool release];
-    
+
     return bOK;
 }
 int wxColourDialog::ShowModal()
 {
-    //Start the pool.  Required for carbon interaction 
+    //Start the pool.  Required for carbon interaction
     //(For those curious, the only thing that happens
     //if you don't do this is a bunch of error
     //messages about leaks on the console,
@@ -152,27 +154,27 @@ int wxColourDialog::ShowModal()
     //we can tell if a window has closed/open or not
     wxCPWCDelegate* theCPDelegate = [[wxCPWCDelegate alloc] init];
     [theColorPanel setDelegate:theCPDelegate];
-      
+
             //
             //	Start the color panel modal loop
             //
             NSModalSession session = [NSApp beginModalSessionForWindow:theColorPanel];
-            for (;;) 
+            for (;;)
             {
                 [NSApp runModalSession:session];
-                
+
                 //If the color panel is closed, return the font panel modal loop
                 if ([theCPDelegate isClosed])
                     break;
             }
             [NSApp endModalSession:session];
-    
+
     //free up the memory for the delegates - we don't need them anymore
     [theCPDelegate release];
-                                            
+
     //Get the shared color panel along with the chosen color and set the chosen color
     NSColor* theColor = [[theColorPanel color] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
-                                    
+
     m_colourData.m_dataColour.Set(
                                 (unsigned char) ([theColor redComponent] * 255.0),
                                 (unsigned char) ([theColor greenComponent] * 255.0),

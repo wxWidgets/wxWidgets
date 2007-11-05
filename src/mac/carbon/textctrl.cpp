@@ -1128,7 +1128,9 @@ wxMacTextControl::~wxMacTextControl()
 {
 }
 
-void wxMacTextControl::SetStyle(long start, long end, const wxTextAttr& style)
+void wxMacTextControl::SetStyle(long WXUNUSED(start),
+                                long WXUNUSED(end),
+                                const wxTextAttr& WXUNUSED(style))
 {
 }
 
@@ -1149,7 +1151,7 @@ bool wxMacTextControl::CanPaste() const
     return false ;
 }
 
-void wxMacTextControl::SetEditable(bool editable)
+void wxMacTextControl::SetEditable(bool WXUNUSED(editable))
 {
 }
 
@@ -1193,12 +1195,14 @@ void wxMacTextControl::Redo()
 {
 }
 
-long wxMacTextControl::XYToPosition(long x, long y) const
+long wxMacTextControl::XYToPosition(long WXUNUSED(x), long WXUNUSED(y)) const
 {
     return 0 ;
 }
 
-bool wxMacTextControl::PositionToXY(long pos, long *x, long *y) const
+bool wxMacTextControl::PositionToXY(long WXUNUSED(pos),
+                                    long *WXUNUSED(x),
+                                    long *WXUNUSED(y)) const
 {
     return false ;
 }
@@ -1471,7 +1475,7 @@ bool wxMacUnicodeTextControl::CanPaste() const
     return true ;
 }
 
-void wxMacUnicodeTextControl::SetEditable(bool editable)
+void wxMacUnicodeTextControl::SetEditable(bool WXUNUSED(editable))
 {
 #if 0 // leads to problem because text cannot be selected anymore
     SetData<Boolean>( kControlEditTextPart , kControlEditTextLockedTag , (Boolean) !editable ) ;
@@ -1729,7 +1733,8 @@ TXNFrameOptions wxMacMLTEControl::FrameOptionsFromWXStyle( long wxStyle )
     return frameOptions ;
 }
 
-void wxMacMLTEControl::AdjustCreationAttributes( const wxColour &background, bool visible )
+void wxMacMLTEControl::AdjustCreationAttributes(const wxColour &background,
+                                                bool WXUNUSED(visible))
 {
     TXNControlTag iControlTags[] =
         {
@@ -1884,7 +1889,9 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
     }
 }
 
-void wxMacMLTEControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle )
+void wxMacMLTEControl::SetFont(const wxFont & font,
+                               const wxColour& foreground,
+                               long WXUNUSED(windowStyle))
 {
     wxMacEditHelper help( m_txn ) ;
     TXNSetAttribute( wxTextAttr( foreground, wxNullColour, font ), kTXNStartOffset, kTXNEndOffset ) ;
@@ -2531,7 +2538,7 @@ void wxMacMLTEClassicControl::SetRect( Rect *r )
     MacUpdatePosition() ;
 }
 
-void wxMacMLTEClassicControl::MacControlUserPaneDrawProc(wxInt16 thePart)
+void wxMacMLTEClassicControl::MacControlUserPaneDrawProc(wxInt16 WXUNUSED(thePart))
 {
     wxTextCtrl* textctrl = (wxTextCtrl*)GetControlReference( m_controlRef );
     if ( textctrl == NULL )
@@ -2572,7 +2579,7 @@ wxInt16 wxMacMLTEClassicControl::MacControlUserPaneHitTestProc(wxInt16 x, wxInt1
     return result;
 }
 
-wxInt16 wxMacMLTEClassicControl::MacControlUserPaneTrackingProc( wxInt16 x, wxInt16 y, void* actionProc )
+wxInt16 wxMacMLTEClassicControl::MacControlUserPaneTrackingProc( wxInt16 x, wxInt16 y, void* WXUNUSED(actionProc) )
 {
     ControlPartCode result = kControlNoPart;
 
@@ -2690,7 +2697,7 @@ wxInt16 wxMacMLTEClassicControl::MacControlUserPaneFocusProc(wxInt16 action)
     return focusResult;
 }
 
-void wxMacMLTEClassicControl::MacControlUserPaneBackgroundProc( void *info )
+void wxMacMLTEClassicControl::MacControlUserPaneBackgroundProc( void *WXUNUSED(info) )
 {
 }
 

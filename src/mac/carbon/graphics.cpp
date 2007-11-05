@@ -985,7 +985,7 @@ public :
     virtual void * GetNativePath() const { return m_path; }
 
     // give the native path returned by GetNativePath() back (there might be some deallocations necessary)
-    virtual void UnGetNativePath(void *p) const {}
+    virtual void UnGetNativePath(void *WXUNUSED(p)) const {}
 
     // transforms each point of this path by the matrix
     virtual void Transform( const wxGraphicsMatrixData* matrix );

@@ -529,7 +529,7 @@ PicHandle wxBitmapRefData::GetPictHandle()
 }
 
 #ifdef __WXMAC_OSX__
-void wxMacMemoryBufferReleaseProc(void *info, const void *data, size_t size)
+void wxMacMemoryBufferReleaseProc(void *info, const void *data, size_t WXUNUSED(size))
 {
     wxMemoryBuffer* membuf = (wxMemoryBuffer*) info ;
 
@@ -1597,8 +1597,11 @@ public:
 IMPLEMENT_DYNAMIC_CLASS(wxPICTResourceHandler, wxBitmapHandler)
 
 
-bool wxPICTResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-          int desiredWidth, int desiredHeight)
+bool wxPICTResourceHandler::LoadFile(wxBitmap *bitmap,
+                                     const wxString& name,
+                                     long WXUNUSED(flags),
+                                     int WXUNUSED(desiredWidth),
+                                     int WXUNUSED(desiredHeight))
 {
 #if wxUSE_METAFILE
     Str255 theName ;
@@ -1633,7 +1636,7 @@ void wxBitmap::InitStandardHandlers()
 // raw bitmap access support
 // ----------------------------------------------------------------------------
 
-void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
+void *wxBitmap::GetRawData(wxPixelDataBase& data, int WXUNUSED(bpp))
 {
     if ( !Ok() )
         // no bitmap, no data (raw or otherwise)
@@ -1646,7 +1649,7 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
     return BeginRawAccess() ;
 }
 
-void wxBitmap::UngetRawData(wxPixelDataBase& dataBase)
+void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(dataBase))
 {
     EndRawAccess() ;
 }

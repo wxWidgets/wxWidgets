@@ -370,7 +370,7 @@ protected :
 template <typename procType, typename uppType , uppType (*newUPP)(procType) , void (*disposeUPP)(uppType) > class wxMacUPP
 {
 public :
-    wxMacUPP( procType proc )
+    wxMacUPP( procType WXUNUSED(proc) )
     {
         m_upp = NULL;
         m_upp = (*newUPP)( NULL );

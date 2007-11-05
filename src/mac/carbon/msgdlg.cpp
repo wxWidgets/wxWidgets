@@ -28,7 +28,7 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
                                  const wxString& message,
                                  const wxString& caption,
                                  long style,
-                                 const wxPoint& pos)
+                                 const wxPoint& WXUNUSED(pos))
                : wxMessageDialogBase(parent, message, caption, style)
 {
     m_yes = _("Yes");

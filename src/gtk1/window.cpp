@@ -428,7 +428,7 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
 
 // make it extern because wxStaticText needs to disconnect this one
 extern "C" {
-void wxgtk_window_size_request_callback(GtkWidget *widget,
+void wxgtk_window_size_request_callback(GtkWidget *WXUNUSED(widget),
                                         GtkRequisition *requisition,
                                         wxWindow *win)
 {
@@ -446,7 +446,7 @@ void wxgtk_window_size_request_callback(GtkWidget *widget,
 
 extern "C" {
 static
-void wxgtk_combo_size_request_callback(GtkWidget *widget,
+void wxgtk_combo_size_request_callback(GtkWidget *WXUNUSED(widget),
                                        GtkRequisition *requisition,
                                        wxComboBox *win)
 {
@@ -478,7 +478,7 @@ void wxgtk_combo_size_request_callback(GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static int gtk_window_expose_callback( GtkWidget *widget,
+static int gtk_window_expose_callback( GtkWidget *WXUNUSED(widget),
                                        GdkEventExpose *gdk_event,
                                        wxWindow *win )
 {
@@ -1862,7 +1862,9 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk_event, wxWindowGTK *win )
+static gint gtk_window_focus_out_callback( GtkWidget *WXUNUSED(widget),
+                                           GdkEventFocus *WXUNUSED(gdk_event),
+                                           wxWindowGTK *win )
 {
     DEBUG_MAIN_THREAD
 
@@ -2168,7 +2170,7 @@ wxWindow *wxWindowBase::DoFindFocus()
 
 extern "C" {
 static gint
-gtk_window_realized_callback( GtkWidget *m_widget, wxWindow *win )
+gtk_window_realized_callback( GtkWidget *WXUNUSED(widget), wxWindow *win )
 {
     DEBUG_MAIN_THREAD
 
@@ -2228,7 +2230,7 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
 extern "C" {
 static
 void gtk_wxwindow_size_callback( GtkWidget* WXUNUSED_UNLESS_XIM(widget),
-                                 GtkAllocation* WXUNUSED_UNLESS_XIM(alloc),
+                                 GtkAllocation* WXUNUSED(alloc),
                                  wxWindowGTK* WXUNUSED_UNLESS_XIM(win) )
 {
     if (g_isIdle)

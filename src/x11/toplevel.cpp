@@ -299,7 +299,7 @@ bool wxTopLevelWindowX11::Show(bool show)
 // wxTopLevelWindowX11 maximize/minimize
 // ----------------------------------------------------------------------------
 
-void wxTopLevelWindowX11::Maximize(bool maximize)
+void wxTopLevelWindowX11::Maximize(bool WXUNUSED(maximize))
 {
     // TODO
 }
@@ -312,6 +312,12 @@ bool wxTopLevelWindowX11::IsMaximized() const
 
 void wxTopLevelWindowX11::Iconize(bool iconize)
 {
+    if ( !iconize )
+    {
+        Restore();
+        return;
+    }
+
     if (!m_iconized && GetMainWindow())
     {
         if (XIconifyWindow(wxGlobalDisplay(),

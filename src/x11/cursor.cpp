@@ -123,15 +123,17 @@ wxCursor::wxCursor( int cursorId )
 #endif
 }
 
-wxCursor::wxCursor(const char bits[], int width, int  height,
-                   int hotSpotX, int hotSpotY,
-                   const char maskBits[], wxColour *fg, wxColour *bg)
+wxCursor::wxCursor(const char WXUNUSED(bits)[],
+                   int WXUNUSED(width), int WXUNUSED(height),
+                   int WXUNUSED(hotSpotX), int WXUNUSED(hotSpotY),
+                   const char WXUNUSED(maskBits)[],
+                   wxColour *WXUNUSED(fg), wxColour *WXUNUSED(bg))
 {
    wxFAIL_MSG( wxT("wxCursor creation from bits not yet implemented") );
 }
 
 #if wxUSE_IMAGE
-wxCursor::wxCursor( const wxImage & image )
+wxCursor::wxCursor( const wxImage & WXUNUSED(image) )
 {
    wxFAIL_MSG( wxT("wxCursor creation from wxImage not yet implemented") );
 }

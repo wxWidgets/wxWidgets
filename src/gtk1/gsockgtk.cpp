@@ -25,7 +25,7 @@
 extern "C" {
 static
 void _GSocket_GDK_Input(gpointer data,
-                        gint source,
+                        gint WXUNUSED(source),
                         GdkInputCondition condition)
 {
   GSocket *socket = (GSocket *)data;

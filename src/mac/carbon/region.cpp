@@ -207,7 +207,7 @@ bool wxRegion::DoCombine(const wxRegion& region, wxRegionOp op)
 //# Information on region
 //-----------------------------------------------------------------------------
 
-bool wxRegion::DoIsEqual(const wxRegion& region) const
+bool wxRegion::DoIsEqual(const wxRegion& WXUNUSED(region)) const
 {
     wxFAIL_MSG( _T("not implemented") );
 
@@ -358,7 +358,7 @@ wxRegionIterator::wxRegionIterator(const wxRegion& region)
  */
 
 OSStatus wxMacRegionToRectsCounterCallback(
-    UInt16 message, RgnHandle region, const Rect *rect, void *data )
+    UInt16 message, RgnHandle WXUNUSED(region), const Rect *WXUNUSED(rect), void *data )
 {
     long *m_numRects = (long*) data ;
     if ( message == kQDRegionToRectsMsgInit )
@@ -381,7 +381,7 @@ public :
 };
 
 OSStatus wxMacRegionToRectsSetterCallback(
-    UInt16 message, RgnHandle region, const Rect *rect, void *data )
+    UInt16 message, RgnHandle WXUNUSED(region), const Rect *rect, void *data )
 {
     if (message == kQDRegionToRectsMsgParse)
     {

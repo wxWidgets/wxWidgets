@@ -480,7 +480,7 @@ void wxMDIClientWindow::DoGetClientSize(int *x, int *y) const
 }
 
 // Explicitly call default scroll behaviour
-void wxMDIClientWindow::OnScroll(wxScrollEvent& event)
+void wxMDIClientWindow::OnScroll(wxScrollEvent& WXUNUSED(event))
 {
 }
 

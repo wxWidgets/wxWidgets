@@ -295,7 +295,7 @@ void wxApp::MacOpenFile(const wxString & fileName )
 #endif
 }
 
-void wxApp::MacOpenURL(const wxString & url )
+void wxApp::MacOpenURL(const wxString & WXUNUSED(url) )
 {
 }
 
@@ -543,7 +543,9 @@ static const EventTypeSpec eventList[] =
 } ;
 
 static pascal OSStatus
-wxMacAppMenuEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+wxMacAppMenuEventHandler( EventHandlerCallRef WXUNUSED(handler),
+                          EventRef event,
+                          void *WXUNUSED(data) )
 {
     wxMacCarbonEvent cEvent( event ) ;
     MenuRef menuRef = cEvent.GetParameter<MenuRef>(kEventParamDirectObject) ;
@@ -596,7 +598,10 @@ wxMacAppMenuEventHandler( EventHandlerCallRef handler , EventRef event , void *d
     return eventNotHandledErr;
 }
 
-static pascal OSStatus wxMacAppCommandEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+static pascal OSStatus
+wxMacAppCommandEventHandler( EventHandlerCallRef WXUNUSED(handler) ,
+                             EventRef event ,
+                             void *WXUNUSED(data) )
 {
     OSStatus result = eventNotHandledErr ;
 
@@ -679,7 +684,10 @@ static pascal OSStatus wxMacAppCommandEventHandler( EventHandlerCallRef handler 
     return result ;
 }
 
-static pascal OSStatus wxMacAppApplicationEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+static pascal OSStatus
+wxMacAppApplicationEventHandler( EventHandlerCallRef WXUNUSED(handler) ,
+                                 EventRef event ,
+                                 void *WXUNUSED(data) )
 {
     OSStatus result = eventNotHandledErr ;
     switch ( GetEventKind( event ) )
@@ -760,9 +768,16 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacAppEventHandler )
 
 #ifdef __WXDEBUG__
 
-pascal static void wxMacAssertOutputHandler(OSType componentSignature, UInt32 options,
-    const char *assertionString, const char *exceptionLabelString,
-    const char *errorString, const char *fileName, long lineNumber, void *value, ConstStr255Param outputMsg)
+pascal static void
+wxMacAssertOutputHandler(OSType WXUNUSED(componentSignature),
+                         UInt32 WXUNUSED(options),
+                         const char *assertionString,
+                         const char *exceptionLabelString,
+                         const char *errorString,
+                         const char *fileName,
+                         long lineNumber,
+                         void *value,
+                         ConstStr255Param WXUNUSED(outputMsg))
 {
     // flow into assert handling
     wxString fileNameStr ;
@@ -800,13 +815,7 @@ pascal static void wxMacAssertOutputHandler(OSType componentSignature, UInt32 op
 #endif //__WXDEBUG__
 
 #ifdef __WXMAC_OSX__
-extern "C"
-{
-   // m_macEventPosted run loop source callback:
-   void macPostedEventCallback(void *unused);
-}
-
-void macPostedEventCallback(void *unused)
+extern "C" void macPostedEventCallback(void *WXUNUSED(unused))
 {
     wxTheApp->ProcessPendingEvents();
 }
@@ -1134,7 +1143,7 @@ wxApp::wxApp()
 #endif
 }
 
-void wxApp::OnIdle(wxIdleEvent& event)
+void wxApp::OnIdle(wxIdleEvent& WXUNUSED(event))
 {
     wxMacProcessNotifierEvents();
 
@@ -1272,7 +1281,7 @@ void wxApp::MacDoOneEvent()
 }
 
 // virtual
-void wxApp::MacHandleUnhandledEvent( WXEVENTREF evr )
+void wxApp::MacHandleUnhandledEvent( WXEVENTREF WXUNUSED(evr) )
 {
     // Override to process unhandled events as you please
 }

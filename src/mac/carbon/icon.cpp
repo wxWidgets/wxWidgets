@@ -95,15 +95,15 @@ int wxIcon::GetDepth() const
     return 32;
 }
 
-void wxIcon::SetDepth( int depth )
+void wxIcon::SetDepth( int WXUNUSED(depth) )
 {
 }
 
-void wxIcon::SetWidth( int width )
+void wxIcon::SetWidth( int WXUNUSED(width) )
 {
 }
 
-void wxIcon::SetHeight( int height )
+void wxIcon::SetHeight( int WXUNUSED(height) )
 {
 }
 
@@ -259,7 +259,7 @@ void wxIconRefData::Free()
 IMPLEMENT_DYNAMIC_CLASS(wxICONResourceHandler, wxBitmapHandler)
 
 bool  wxICONResourceHandler::LoadFile(
-    wxBitmap *bitmap, const wxString& name, long flags,
+    wxBitmap *bitmap, const wxString& name, long WXUNUSED(flags),
     int desiredWidth, int desiredHeight )
 {
     wxIcon icon ;

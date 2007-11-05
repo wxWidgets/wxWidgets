@@ -49,7 +49,8 @@ void UMACleanupToolbox()
 {
 }
 
-void UMAInitToolbox( UInt16 inMoreMastersCalls, bool isEmbedded )
+void UMAInitToolbox( UInt16 WXUNUSED(inMoreMastersCalls),
+                     bool WXUNUSED(isEmbedded) )
 {
     ::InitCursor();
 

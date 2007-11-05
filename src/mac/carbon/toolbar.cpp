@@ -244,7 +244,7 @@ static const EventTypeSpec eventList[] =
 #endif
 };
 
-static pascal OSStatus wxMacToolBarToolControlEventHandler( EventHandlerCallRef handler, EventRef event, void *data )
+static pascal OSStatus wxMacToolBarToolControlEventHandler( EventHandlerCallRef WXUNUSED(handler), EventRef event, void *data )
 {
     OSStatus result = eventNotHandledErr;
     ControlRef controlRef;
@@ -326,7 +326,7 @@ static const EventTypeSpec toolBarEventList[] =
     { kEventClassToolbarItem, kEventToolbarItemPerformAction },
 };
 
-static pascal OSStatus wxMacToolBarCommandEventHandler( EventHandlerCallRef handler, EventRef event, void *data )
+static pascal OSStatus wxMacToolBarCommandEventHandler( EventHandlerCallRef WXUNUSED(handler), EventRef event, void *data )
 {
     OSStatus result = eventNotHandledErr;
 
@@ -769,7 +769,9 @@ static const EventTypeSpec kToolbarEvents[] =
     { kEventClassToolbar, kEventToolbarCreateItemWithIdentifier },
 };
 
-static OSStatus ToolbarDelegateHandler( EventHandlerCallRef inCallRef, EventRef inEvent, void* inUserData )
+static OSStatus ToolbarDelegateHandler(EventHandlerCallRef WXUNUSED(inCallRef),
+                                       EventRef inEvent,
+                                       void* WXUNUSED(inUserData))
 {
     OSStatus result = eventNotHandledErr;
     // Not yet needed

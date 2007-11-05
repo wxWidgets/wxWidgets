@@ -96,24 +96,9 @@ bool wxScreenDC::StartDrawingOnTop( wxWindow *window )
     return StartDrawingOnTop( &rect );
 }
 
-bool wxScreenDC::StartDrawingOnTop( wxRect *rectIn )
+bool wxScreenDC::StartDrawingOnTop( wxRect *WXUNUSED(rectIn) )
 {
     // VZ: should we do the same thing that wxMotif wxScreenDC does here?
-#if 0
-    wxRect rect;
-    if ( rectIn )
-    {
-        rect = *rectIn;
-    }
-    else
-    {
-        rect.x =
-        rect.y = 0;
-
-        DoGetSize(&rect.width, &rect.height);
-    }
-#endif // 0
-
     return true;
 }
 

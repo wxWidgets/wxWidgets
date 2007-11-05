@@ -89,9 +89,9 @@ static void wxGtkTextInsert(GtkWidget *text,
 extern "C" {
 static void
 gtk_insert_text_callback(GtkEditable *editable,
-                         const gchar *new_text,
-                         gint new_text_length,
-                         gint *position,
+                         const gchar *WXUNUSED(new_text),
+                         gint WXUNUSED(new_text_length),
+                         gint *WXUNUSED(position),
                          wxTextCtrl *win)
 {
     if (g_isIdle)
@@ -130,7 +130,7 @@ gtk_insert_text_callback(GtkEditable *editable,
 
 extern "C" {
 static void
-gtk_text_changed_callback( GtkWidget *widget, wxTextCtrl *win )
+gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
     if ( win->IgnoreTextUpdate() )
         return;
@@ -718,7 +718,7 @@ void wxTextCtrl::DoEnable( bool enable )
 // wxGTK-specific: called recursively by Enable,
 // to give widgets an oppprtunity to correct their colours after they
 // have been changed by Enable
-void wxTextCtrl::OnEnabled( bool enable )
+void wxTextCtrl::OnEnabled( bool WXUNUSED(enable) )
 {
     if ( IsSingleLine() )
         return;

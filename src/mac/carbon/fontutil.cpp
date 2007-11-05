@@ -81,7 +81,7 @@ bool wxGetNativeFontEncoding( wxFontEncoding encoding, wxNativeEncodingInfo *inf
     return true;
 }
 
-bool wxTestFontEncoding( const wxNativeEncodingInfo& info )
+bool wxTestFontEncoding( const wxNativeEncodingInfo& WXUNUSED(info) )
 {
     // basically we should be able to support every encoding via the OS
     return true;

@@ -34,6 +34,12 @@
 bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
                                           bool fixedWidthOnly)
 {
+    if ( fixedWidthOnly )
+    {
+        wxFAIL_MSG( "enumerating only fixed width fonts not supported" );
+        return false;
+    }
+
     //
     // From Apple's QA 1471 http://developer.apple.com/qa/qa2006/qa1471.html
     //
@@ -104,7 +110,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
     return true;
 }
 
-bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
+bool wxFontEnumerator::EnumerateEncodings(const wxString& WXUNUSED(family))
 {
     wxFAIL_MSG(wxT("wxFontEnumerator::EnumerateEncodings() not yet implemented"));
 

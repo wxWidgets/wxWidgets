@@ -216,7 +216,7 @@ void wxSlider::SetRange(int minValue, int maxValue)
 }
 
 // For trackbars only
-void wxSlider::SetTickFreq(int n, int pos)
+void wxSlider::SetTickFreq(int n, int WXUNUSED(pos))
 {
     // TODO
     m_tickFreq = n;
@@ -267,12 +267,12 @@ int wxSlider::GetSelStart() const
     return 0;
 }
 
-void wxSlider::SetSelection(int minPos, int maxPos)
+void wxSlider::SetSelection(int WXUNUSED(minPos), int WXUNUSED(maxPos))
 {
     // TODO
 }
 
-void wxSlider::SetThumbLength(int len)
+void wxSlider::SetThumbLength(int WXUNUSED(len))
 {
     // TODO
 }
@@ -283,7 +283,7 @@ int wxSlider::GetThumbLength() const
     return 0;
 }
 
-void wxSlider::SetTick(int tickPos)
+void wxSlider::SetTick(int WXUNUSED(tickPos))
 {
     // TODO
 }
@@ -294,7 +294,9 @@ void wxSlider::Command(wxCommandEvent &event)
     ProcessCommand(event);
 }
 
-void wxSlider::MacHandleControlClick( WXWidget control, wxInt16 controlpart, bool mouseStillDown )
+void wxSlider::MacHandleControlClick(WXWidget WXUNUSED(control),
+                                     wxInt16 WXUNUSED(controlpart),
+                                     bool WXUNUSED(mouseStillDown))
 {
     // Whatever the native value is, we may need to invert it for calling
     // SetValue and putting the possibly inverted value in the event
@@ -313,7 +315,8 @@ void wxSlider::MacHandleControlClick( WXWidget control, wxInt16 controlpart, boo
     GetEventHandler()->ProcessEvent( cevent );
 }
 
-wxInt32 wxSlider::MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF mevent )
+wxInt32 wxSlider::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler),
+                                WXEVENTREF WXUNUSED(mevent))
 {
     // Whatever the native value is, we may need to invert it for calling
     // SetValue and putting the possibly inverted value in the event
@@ -340,7 +343,7 @@ wxInt32 wxSlider::MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF mevent )
 //
 void wxSlider::DoSetSizeHints( int minW, int minH,
     int maxW, int maxH,
-    int incW, int incH )
+    int WXUNUSED(incW), int WXUNUSED(incH) )
 {
     wxSize size = GetBestSize();
 

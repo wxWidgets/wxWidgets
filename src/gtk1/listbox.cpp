@@ -93,9 +93,9 @@ static gint wxlistbox_idle_callback( gpointer gdata )
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_listitem_focus_in_callback( GtkWidget *widget,
-                                          GdkEvent *WXUNUSED(event),
-                                          wxWindow *win )
+static gint gtk_listitem_focus_in_callback( GtkWidget *WXUNUSED(widget),
+                                            GdkEvent *WXUNUSED(event),
+                                            wxWindow *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -127,7 +127,9 @@ static gint gtk_listitem_focus_in_callback( GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_listitem_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk_event, wxWindowGTK *win )
+static gint gtk_listitem_focus_out_callback( GtkWidget *WXUNUSED(widget),
+                                             GdkEventFocus *WXUNUSED(gdk_event),
+                                             wxWindowGTK *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -433,7 +435,7 @@ static void gtk_listitem_deselect_callback( GtkWidget *widget, wxListBox *listbo
 
 extern "C" {
 static gint
-gtk_listbox_realized_callback( GtkWidget *m_widget, wxListBox *win )
+gtk_listbox_realized_callback( GtkWidget *WXUNUSED(widget), wxListBox *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -565,8 +567,7 @@ wxListBox::~wxListBox()
 
     Clear();
 
-    if (m_strings)
-      delete m_strings;
+    delete m_strings;
 }
 
 // ----------------------------------------------------------------------------
@@ -1007,23 +1008,8 @@ GtkWidget *wxListBox::GetConnectWidget()
 
 bool wxListBox::IsOwnGtkWindow( GdkWindow *window )
 {
-    return true;
-
-#if 0
-    if (m_widget->window == window) return true;
-
-    if (GTK_WIDGET(m_list)->window == window) return true;
-
-    GList *child = m_list->children;
-    while (child)
-    {
-        GtkWidget *bin = GTK_WIDGET( child->data );
-        if (bin->window == window) return true;
-        child = child->next;
-    }
-
-    return false;
-#endif
+    return m_widget->window == window ||
+                GTK_WIDGET(m_list)->window == window;
 }
 
 void wxListBox::DoApplyWidgetStyle(GtkRcStyle *style)

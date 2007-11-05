@@ -435,7 +435,7 @@ wxMacListBoxItem::~wxMacListBoxItem()
 
 void wxMacListBoxItem::Notification(wxMacDataItemBrowserControl *owner ,
     DataBrowserItemNotification message,
-    DataBrowserItemDataRef itemData ) const
+    DataBrowserItemDataRef WXUNUSED(itemData) ) const
 {
     wxMacDataBrowserListControl *lb = wxDynamicCast(owner,wxMacDataBrowserListControl);
 

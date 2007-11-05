@@ -237,7 +237,7 @@ struct wxExposeInfo
 };
 
 extern "C"
-Bool wxX11ExposePredicate (Display *display, XEvent *xevent, XPointer arg)
+Bool wxX11ExposePredicate (Display *WXUNUSED(display), XEvent *xevent, XPointer arg)
 {
     wxExposeInfo *info = (wxExposeInfo*) arg;
 
@@ -630,7 +630,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 
 // This should be redefined in a derived class for
 // handling property change events for XAtom IPC.
-bool wxApp::HandlePropertyChange(WXEvent *event)
+bool wxApp::HandlePropertyChange(WXEvent *WXUNUSED(event))
 {
     // by default do nothing special
     // TODO: what to do for X11

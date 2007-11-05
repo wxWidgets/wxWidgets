@@ -183,7 +183,7 @@ wxRendererGTK::DrawSplitterBorder(wxWindow * WXUNUSED(win),
 
 void
 wxRendererGTK::DrawSplitterSash(wxWindow *win,
-                                wxDC& dc,
+                                wxDC& WXUNUSED(dc),
                                 const wxSize& size,
                                 wxCoord position,
                                 wxOrientation orient,
@@ -297,7 +297,7 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
 }
 
 void
-wxRendererGTK::DrawDropArrow(wxWindow *win,
+wxRendererGTK::DrawDropArrow(wxWindow *WXUNUSED(win),
                              wxDC& dc,
                              const wxRect& rect,
                              int flags)

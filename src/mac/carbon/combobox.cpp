@@ -345,8 +345,13 @@ bool wxComboBox::Create(wxWindow *parent,
     const wxValidator& validator,
     const wxString& name)
 {
-    return Create( parent, id, value, pos, size, 0, NULL,
-                   style, validator, name );
+    if ( !Create( parent, id, value, pos, size, 0, NULL,
+                   style, validator, name ) )
+        return false;
+
+    Append(choices);
+
+    return true;
 }
 
 bool wxComboBox::Create(wxWindow *parent,

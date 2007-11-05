@@ -145,7 +145,7 @@ void wxOverlayImpl::EndDrawing( wxWindowDC* dc)
     CGContextSynchronize( m_overlayContext );
 }
 
-void wxOverlayImpl::Clear(wxWindowDC* dc)
+void wxOverlayImpl::Clear(wxWindowDC* WXUNUSED(dc))
 {
     wxASSERT_MSG( IsOk() , _("You cannot Clear an overlay that is not inited") );
     CGRect box  = CGRectMake( m_x - 1, m_y - 1 , m_width + 2 , m_height + 2 );

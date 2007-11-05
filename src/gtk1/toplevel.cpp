@@ -170,9 +170,9 @@ static gint gtk_frame_focus_in_callback( GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_frame_focus_out_callback( GtkWidget *widget,
+static gint gtk_frame_focus_out_callback( GtkWidget *WXUNUSED(widget),
                                           GdkEventFocus *WXUNUSED(gdk_event),
-                                          wxTopLevelWindowGTK *win )
+                                          wxTopLevelWindowGTK *WXUNUSED(win) )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -1117,7 +1117,7 @@ void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
 // frame state: maximized/iconized/normal
 // ----------------------------------------------------------------------------
 
-void wxTopLevelWindowGTK::Maximize(bool maximize)
+void wxTopLevelWindowGTK::Maximize(bool WXUNUSED(maximize))
 {
     wxFAIL_MSG( _T("not implemented") );
 }

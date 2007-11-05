@@ -28,8 +28,8 @@ struct MacGSocketData
 // We will store the main loop's reference when Initialize is called
 static CFRunLoopRef s_mainRunLoop = NULL;
 
-void Mac_Socket_Callback(CFSocketRef s, CFSocketCallBackType callbackType,
-                         CFDataRef address, const void* data, void* info)
+void Mac_Socket_Callback(CFSocketRef WXUNUSED(s), CFSocketCallBackType callbackType,
+                         CFDataRef WXUNUSED(address), const void* data, void* info)
 {
   GSocket* socket = (GSocket*)info;
   struct MacGSocketData* macdata;

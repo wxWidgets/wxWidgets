@@ -71,7 +71,7 @@ public :
 
     virtual void SetDescriptiveText(const wxString& text);
     virtual wxString GetDescriptiveText() const;
-    
+
 protected :
     virtual void CreateControl( wxTextCtrl* peer, const Rect* bounds, CFStringRef crf );
 
@@ -79,7 +79,9 @@ private:
     wxMenu* m_menu;
 } ;
 
-void wxMacSearchFieldControl::CreateControl( wxTextCtrl* /*peer*/, const Rect* bounds, CFStringRef crf )
+void wxMacSearchFieldControl::CreateControl(wxTextCtrl* WXUNUSED(peer),
+                                            const Rect* bounds,
+                                            CFStringRef WXUNUSED(crf))
 {
     OptionBits attributes = 0;
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
@@ -274,6 +276,8 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
     InstallControlEventHandler( m_peer->GetControlRef(), GetwxMacSearchControlEventHandlerUPP(),
         GetEventTypeCount(eventList), eventList, this,
         (EventHandlerRef *)&searchEventHandler);
+
+    SetValue(value);
 
     return true;
 }

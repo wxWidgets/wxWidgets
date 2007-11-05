@@ -170,7 +170,9 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
     return true;
 }
 
-int wxPalette::GetPixel(unsigned char red, unsigned char green, unsigned char blue) const
+int wxPalette::GetPixel(unsigned char WXUNUSED(red),
+                        unsigned char WXUNUSED(green),
+                        unsigned char WXUNUSED(blue)) const
 {
     if ( !m_refData )
         return wxNOT_FOUND;

@@ -625,7 +625,8 @@ void wxWindowDC::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCoord 
 }
 
 void wxWindowDC::DoDrawPolygon( int n, wxPoint points[],
-                                wxCoord xoffset, wxCoord yoffset, int fillStyle )
+                                wxCoord xoffset, wxCoord yoffset,
+                                int WXUNUSED(fillStyle) )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
@@ -1606,9 +1607,11 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 #endif
 }
 
-void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, double angle )
+void wxWindowDC::DoDrawRotatedText(const wxString& WXUNUSED(text),
+                                   wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
+                                   double WXUNUSED(angle))
 {
-    // later
+    wxFAIL_MSG( "not implemented" );
 }
 
 void wxWindowDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *height,
@@ -2137,7 +2140,7 @@ void wxWindowDC::SetBackgroundMode( int mode )
     }
 }
 
-void wxWindowDC::SetPalette( const wxPalette& palette )
+void wxWindowDC::SetPalette( const wxPalette& WXUNUSED(palette) )
 {
 #if 0
     if (m_window)

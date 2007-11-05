@@ -149,7 +149,9 @@ void wxSpinButton::MacHandleValueChanged( int inc )
     }
 }
 
-void wxSpinButton::MacHandleControlClick( WXWidget control, wxInt16 controlpart, bool mouseStillDown )
+void wxSpinButton::MacHandleControlClick(WXWidget WXUNUSED(control),
+                                         wxInt16 controlpart,
+                                         bool WXUNUSED(mouseStillDown))
 {
     int nScrollInc = 0;
 
@@ -170,7 +172,8 @@ void wxSpinButton::MacHandleControlClick( WXWidget control, wxInt16 controlpart,
     MacHandleValueChanged( nScrollInc ) ;
 }
 
-wxInt32 wxSpinButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF event )
+wxInt32 wxSpinButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler),
+                                    WXEVENTREF WXUNUSED(event))
 {
 #if 0
     // these have been handled by the live action proc already

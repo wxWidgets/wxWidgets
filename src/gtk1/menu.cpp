@@ -148,14 +148,14 @@ static void DoCommonMenuCallbackCode(wxMenu *menu, wxMenuEvent& event)
 
 extern "C" {
 
-static void gtk_menu_open_callback( GtkWidget *widget, wxMenu *menu )
+static void gtk_menu_open_callback( GtkWidget *WXUNUSED(widget), wxMenu *menu )
 {
     wxMenuEvent event(wxEVT_MENU_OPEN, -1, menu);
 
     DoCommonMenuCallbackCode(menu, event);
 }
 
-static void gtk_menu_close_callback( GtkWidget *widget, wxMenuBar *menubar )
+static void gtk_menu_close_callback( GtkWidget *WXUNUSED(widget), wxMenuBar *menubar )
 {
     if ( !menubar->GetMenuCount() )
     {

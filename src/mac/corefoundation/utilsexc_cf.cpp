@@ -143,7 +143,7 @@ extern "C" {
 #include <mach/mach.h>
 }
 
-void wxMAC_MachPortEndProcessDetect(CFMachPortRef port, void *data)
+void wxMAC_MachPortEndProcessDetect(CFMachPortRef WXUNUSED(port), void *data)
 {
     wxEndProcessData *proc_data = (wxEndProcessData*)data;
     wxLogDebug(wxT("Process ended"));
@@ -240,7 +240,11 @@ int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
     Called due to source signal detected by the CFRunLoop.
     This is nearly identical to the wxGTK equivalent.
  */
-extern "C" void WXCF_EndProcessDetector(CFSocketRef s, CFSocketCallBackType callbackType, CFDataRef address, void const *data, void *info)
+extern "C" void WXCF_EndProcessDetector(CFSocketRef s,
+                                        CFSocketCallBackType WXUNUSED(callbackType),
+                                        CFDataRef WXUNUSED(address),
+                                        void const *WXUNUSED(data),
+                                        void *info)
 {
     wxEndProcessData * const proc_data = static_cast<wxEndProcessData*>(info);
 

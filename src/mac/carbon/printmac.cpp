@@ -281,7 +281,7 @@ bool wxMacCarbonPrintData::TransferTo( wxPrintData &data )
     return true ;
 }
 
-void wxMacCarbonPrintData::TransferFrom( wxPageSetupData *data )
+void wxMacCarbonPrintData::TransferFrom( wxPageSetupData *WXUNUSED(data) )
 {
     // should we setup the page rect here ?
     // since MacOS sometimes has two same paper rects with different
@@ -562,7 +562,7 @@ wxDC* wxMacPrinter::PrintDialog(wxWindow *parent)
     return dc;
 }
 
-bool wxMacPrinter::Setup(wxWindow *parent)
+bool wxMacPrinter::Setup(wxWindow *WXUNUSED(parent))
 {
 #if 0
     wxPrintDialog dialog(parent, & m_printDialogData);

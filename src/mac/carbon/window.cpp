@@ -268,7 +268,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                         float alpha = 1.0 ;
                         {
                             wxWindow* iter = thisWindow ;
-                            while ( iter ) 
+                            while ( iter )
                             {
                                 alpha *= (float) iter->GetTransparent()/255.0 ;
                                 if ( iter->IsTopLevel() )
@@ -316,7 +316,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
         case kEventControlHiliteChanged :
             thisWindow->MacHiliteChanged() ;
             break ;
-            
+
         case kEventControlActivate :
         case kEventControlDeactivate :
             // FIXME: we should have a virtual function for this!
@@ -405,7 +405,10 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
     return result ;
 }
 
-static pascal OSStatus wxMacWindowServiceEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+static pascal OSStatus
+wxMacWindowServiceEventHandler(EventHandlerCallRef WXUNUSED(handler),
+                               EventRef event,
+                               void *data)
 {
     OSStatus result = eventNotHandledErr ;
 
@@ -549,7 +552,7 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
 	On the other hand, it can be useful for some applications to react to uncommitted text (for example,
 	to update a status display), as long as it does not disrupt the inline input session. Ideally, wx
 	should add new event types to support advanced text input. For now, I would keep things as they are.
-	
+
 	However, the code that was being used caused additional problems:
                     UInt32 message = (0  << 8) + ((char)uniChars[pos] );
 	Since it simply truncated the unichar to the last byte, it ended up causing weird bugs with inline
@@ -620,7 +623,10 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
     return result ;
 }
 
-static pascal OSStatus wxMacWindowCommandEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+static pascal OSStatus
+wxMacWindowCommandEventHandler(EventHandlerCallRef WXUNUSED(handler),
+                               EventRef event,
+                               void *data)
 {
     OSStatus result = eventNotHandledErr ;
     wxWindowMac* focus = (wxWindowMac*) data ;
@@ -1147,7 +1153,7 @@ void wxWindowMac::MacChildAdded()
         m_hScrollBar->Raise() ;
 }
 
-void wxWindowMac::MacPostControlCreate(const wxPoint& pos, const wxSize& size)
+void wxWindowMac::MacPostControlCreate(const wxPoint& WXUNUSED(pos), const wxSize& size)
 {
     wxASSERT_MSG( m_peer != NULL && m_peer->Ok() , wxT("No valid mac control") ) ;
 
@@ -1394,7 +1400,7 @@ void wxWindowMac::SetDropTarget(wxDropTarget *pDropTarget)
 #endif
 
 // Old-style File Manager Drag & Drop
-void wxWindowMac::DragAcceptFiles(bool accept)
+void wxWindowMac::DragAcceptFiles(bool WXUNUSED(accept))
 {
     // TODO:
 }
@@ -1402,8 +1408,10 @@ void wxWindowMac::DragAcceptFiles(bool accept)
 // Returns the size of the native control. In the case of the toplevel window
 // this is the content area root control
 
-void wxWindowMac::MacGetPositionAndSizeFromControl(int& x, int& y,
-                                           int& w, int& h) const
+void wxWindowMac::MacGetPositionAndSizeFromControl(int& WXUNUSED(x),
+                                                   int& WXUNUSED(y),
+                                                   int& WXUNUSED(w),
+                                                   int& WXUNUSED(h)) const
 {
     wxFAIL_MSG( wxT("Not currently supported") ) ;
 }
@@ -1763,7 +1771,7 @@ bool wxWindowMac::SetCursor(const wxCursor& cursor)
         HIGetMousePosition(kHICoordSpaceWindow, window, &hiPoint);
         pt.h = hiPoint.x;
         pt.v = hiPoint.y;
- #else 
+ #else
         CGrafPtr savePort ;
         Boolean swapped = QDSwapPort( GetWindowPort( window ) , &savePort ) ;
 
@@ -2178,7 +2186,7 @@ void wxWindowMac::MacPropagateVisibilityChanged()
 #endif
 }
 
-void wxWindowMac::OnEnabled(bool enabled)
+void wxWindowMac::OnEnabled(bool WXUNUSED(enabled))
 {
 #if !TARGET_API_MAC_OSX
     MacEnabledStateChanged() ;
@@ -2304,7 +2312,7 @@ void wxWindowMac::GetTextExtent(const wxString& string, int *x, int *y,
  * we always intersect with the entire window, not only with the client area
  */
 
-void wxWindowMac::Refresh(bool eraseBack, const wxRect *rect)
+void wxWindowMac::Refresh(bool WXUNUSED(eraseBack), const wxRect *rect)
 {
     if ( m_peer == NULL )
         return ;
@@ -2364,7 +2372,7 @@ wxWindowMac *wxGetActiveWindow()
 }
 
 // Coordinates relative to the window
-void wxWindowMac::WarpPointer(int x_pos, int y_pos)
+void wxWindowMac::WarpPointer(int WXUNUSED(x_pos), int WXUNUSED(y_pos))
 {
     // We really don't move the mouse programmatically under Mac.
 }
@@ -2442,7 +2450,7 @@ int wxWindowMac::GetScrollThumb(int orient) const
     return 0;
 }
 
-void wxWindowMac::SetScrollPos(int orient, int pos, bool refresh)
+void wxWindowMac::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
 {
     if ( orient == wxHORIZONTAL )
     {
@@ -2481,7 +2489,7 @@ wxWindowMac::AlwaysShowScrollbars(bool hflag, bool vflag)
 // our own window origin is at leftOrigin/rightOrigin
 //
 
-void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
+void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(rightOrigin) )
 {
     if ( IsTopLevel() )
         return ;
@@ -2494,7 +2502,7 @@ void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
     m_peer->GetRect( &rect ) ;
     InsetRect( &rect, -1 , -1 ) ;
 
-#if wxMAC_USE_CORE_GRAPHICS 
+#if wxMAC_USE_CORE_GRAPHICS
     {
         CGRect cgrect = CGRectMake( rect.left , rect.top , rect.right - rect.left ,
             rect.bottom - rect.top ) ;
@@ -2848,7 +2856,7 @@ bool wxWindowMac::MacSetupCursor( const wxPoint& pt )
     return cursor.Ok() ;
 }
 
-wxString wxWindowMac::MacGetToolTipString( wxPoint &pt )
+wxString wxWindowMac::MacGetToolTipString( wxPoint &WXUNUSED(pt) )
 {
 #if wxUSE_TOOLTIPS
     if ( m_tooltip )
@@ -3102,7 +3110,7 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
                 eventNc.SetEventObject( child );
                 if ( !child->GetEventHandler()->ProcessEvent( eventNc ) )
                 {
-#if wxMAC_USE_CORE_GRAPHICS 
+#if wxMAC_USE_CORE_GRAPHICS
                     child->MacPaintBorders(0, 0) ;
 #else
                     {
@@ -3376,7 +3384,7 @@ void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
     }
 }
 
-void wxWindowMac::OnPaint( wxPaintEvent & event )
+void wxWindowMac::OnPaint( wxPaintEvent & WXUNUSED(event) )
 {
     if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL
          && GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT )
@@ -3385,7 +3393,9 @@ void wxWindowMac::OnPaint( wxPaintEvent & event )
             (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
 }
 
-void wxWindowMac::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED( mouseStillDown ) )
+void wxWindowMac::MacHandleControlClick(WXWidget WXUNUSED(control),
+                                        wxInt16 WXUNUSED(controlpart),
+                                        bool WXUNUSED(mouseStillDown))
 {
 }
 
@@ -3446,7 +3456,7 @@ bool wxWindowMac::CanSetTransparent()
 #endif
 }
 
-wxByte wxWindowMac::GetTransparent() const 
+wxByte wxWindowMac::GetTransparent() const
 {
     return m_macAlpha ;
 }
