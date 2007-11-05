@@ -10,14 +10,13 @@
 #ifndef __GTKFILEDLGH__
 #define __GTKFILEDLGH__
 
-#include "wx/generic/filedlgg.h"
 #include "wx/gtk/filectrl.h"    // for wxGtkFileChooser
 
 //-------------------------------------------------------------------------
 // wxFileDialog
 //-------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxFileDialog: public wxGenericFileDialog
+class WXDLLIMPEXP_CORE wxFileDialog: public wxFileDialogBase
 {
 public:
     wxFileDialog() { }

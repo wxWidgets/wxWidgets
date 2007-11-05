@@ -194,9 +194,6 @@ wxSaveFileSelector(const wxString& what,
     #include "wx/motif/filedlg.h"
 #elif defined(__WXGTK24__)
     #include "wx/gtk/filedlg.h"     // GTK+ > 2.4 has native version
-#elif defined(__WXGTK20__)
-    #define wxHAS_GENERIC_FILEDIALOG
-    #include "wx/generic/filedlgg.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk1/filedlg.h"
 #elif defined(__WXMAC__)

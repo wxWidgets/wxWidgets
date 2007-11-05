@@ -10,7 +10,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_FILEDLG && defined(__WXGTK24__)
+#if wxUSE_FILEDLG 
 
 #include "wx/filedlg.h"
 
@@ -112,7 +112,6 @@ static void gtk_filedialog_response_callback(GtkWidget *w,
 static void gtk_filedialog_update_preview_callback(GtkFileChooser *chooser,
                                                    gpointer user_data)
 {
-#if GTK_CHECK_VERSION(2,4,0)
     GtkWidget *preview = GTK_WIDGET(user_data);
 
     wxGtkString filename(gtk_file_chooser_get_preview_filename(chooser));
@@ -128,10 +127,6 @@ static void gtk_filedialog_update_preview_callback(GtkFileChooser *chooser,
         g_object_unref (pixbuf);
 
     gtk_file_chooser_set_preview_widget_active(chooser, have_preview);
-#else
-    wxUnusedVar(chooser);
-    wxUnusedVar(user_data);
-#endif // GTK+ 2.4+
 }
 
 } // extern "C"
@@ -141,9 +136,9 @@ static void gtk_filedialog_update_preview_callback(GtkFileChooser *chooser,
 // wxFileDialog
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFileDialog,wxGenericFileDialog)
+IMPLEMENT_DYNAMIC_CLASS(wxFileDialog,wxFileDialogBase)
 
-BEGIN_EVENT_TABLE(wxFileDialog,wxGenericFileDialog)
+BEGIN_EVENT_TABLE(wxFileDialog,wxFileDialogBase)
     EVT_BUTTON(wxID_OK, wxFileDialog::OnFakeOk)
 END_EVENT_TABLE()
 
@@ -154,17 +149,15 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                            long style, const wxPoint& pos,
                            const wxSize& sz,
                            const wxString& name)
-    : wxGenericFileDialog(parent, message, defaultDir, defaultFileName,
-                          wildCard, style, pos, sz, name, true )
+    : wxFileDialogBase()
 {
-    if (gtk_check_version(2,4,0))
+    parent = GetParentForModalDialog(parent);
+    
+    if (!wxFileDialogBase::Create(parent, message, defaultDir, defaultFileName,
+                                  wildCard, style, pos, sz, name))
     {
-        wxGenericFileDialog::Create( parent, message, defaultDir,
-                                     defaultFileName, wildCard, style, pos );
         return;
     }
-
-    parent = GetParentForModalDialog(parent);
 
     if (!PreCreation(parent, pos, wxDefaultSize) ||
         !CreateBase(parent, wxID_ANY, pos, wxDefaultSize, style,
@@ -271,7 +264,6 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
         }
     }
 
-#if GTK_CHECK_VERSION(2,4,0)
     if ( style & wxFD_PREVIEW )
     {
         GtkWidget *previewImage = gtk_image_new();
@@ -282,162 +274,92 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                          G_CALLBACK(gtk_filedialog_update_preview_callback),
                          previewImage);
     }
-#endif // GTK+ 2.4+
 }
 
 void wxFileDialog::OnFakeOk( wxCommandEvent &event )
 {
-    if (!gtk_check_version(2,4,0))
-        EndDialog(wxID_OK);
-    else
-        wxGenericFileDialog::OnOk( event );
+    EndDialog(wxID_OK);
 }
 
 int wxFileDialog::ShowModal()
 {
-    if (!gtk_check_version(2,4,0))
-        return wxDialog::ShowModal();
-    else
-        return wxGenericFileDialog::ShowModal();
+    return wxDialog::ShowModal();
 }
 
 bool wxFileDialog::Show( bool show )
 {
-    if (!gtk_check_version(2,4,0))
-        return wxDialog::Show( show );
-    else
-        return wxGenericFileDialog::Show( show );
+    return wxDialog::Show( show );
 }
 
-void wxFileDialog::DoSetSize(int x, int y, int width, int height, int sizeFlags )
+void wxFileDialog::DoSetSize(int WXUNUSED(x), int WXUNUSED(y), 
+                             int WXUNUSED(width), int WXUNUSED(height), 
+                             int WXUNUSED(sizeFlags))
 {
-    if (!m_wxwindow)
-        return;
-    else
-        wxGenericFileDialog::DoSetSize( x, y, width, height, sizeFlags );
 }
 
 wxString wxFileDialog::GetPath() const
 {
-    if (!gtk_check_version(2,4,0))
-    {
-        return m_fc.GetPath();
-    }
-
-    return wxGenericFileDialog::GetPath();
+    return m_fc.GetPath();
 }
 
 void wxFileDialog::GetFilenames(wxArrayString& files) const
 {
-    if (!gtk_check_version(2,4,0))
-    {
-        m_fc.GetFilenames( files );
-    }
-    else
-        wxGenericFileDialog::GetFilenames( files );
+    m_fc.GetFilenames( files );
 }
 
 void wxFileDialog::GetPaths(wxArrayString& paths) const
 {
-    if (!gtk_check_version(2,4,0))
-    {
-        m_fc.GetPaths( paths );
-    }
-    else
-        wxGenericFileDialog::GetPaths( paths );
+    m_fc.GetPaths( paths );
 }
 
 void wxFileDialog::SetMessage(const wxString& message)
 {
-    if (!gtk_check_version(2,4,0))
-    {
-        m_message = message;
-        SetTitle(message);
-    }
-    else
-        wxGenericFileDialog::SetMessage( message );
+    m_message = message;
+    SetTitle(message);
 }
 
 void wxFileDialog::SetPath(const wxString& path)
 {
-    if (!gtk_check_version(2,4,0))
-    {
-        m_fc.SetPath( path );
-    }
-    else
-        wxGenericFileDialog::SetPath( path );
+    m_fc.SetPath( path );
 }
 
 void wxFileDialog::SetDirectory(const wxString& dir)
 {
-    if (!gtk_check_version(2,4,0))
-    {
-        m_fc.SetDirectory( dir );
-    }
-    else
-        wxGenericFileDialog::SetDirectory( dir );
+    m_fc.SetDirectory( dir );
 }
 
 wxString wxFileDialog::GetDirectory() const
 {
-    if (!gtk_check_version(2,4,0))
-    {
-        m_fc.GetDirectory();
-    }
-
-    return wxGenericFileDialog::GetDirectory();
+    return m_fc.GetDirectory();
 }
 
 void wxFileDialog::SetFilename(const wxString& name)
 {
-    if (!gtk_check_version(2,4,0))
-    {
-        if (HasFdFlag(wxFD_SAVE))
-            gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget), wxGTK_CONV(name));
-        else
-            SetPath(wxFileName(GetDirectory(), name).GetFullPath());
-    }
+    if (HasFdFlag(wxFD_SAVE))
+        gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget), wxGTK_CONV(name));
     else
-        wxGenericFileDialog::SetFilename( name );
+        SetPath(wxFileName(GetDirectory(), name).GetFullPath());
 }
 
 wxString wxFileDialog::GetFilename() const
 {
-    if (!gtk_check_version(2,4,0))
-        return m_fc.GetFilename();
-    else
-        return wxGenericFileDialog::GetFilename();
+    return m_fc.GetFilename();
 }
 
 void wxFileDialog::SetWildcard(const wxString& wildCard)
 {
-    if (!gtk_check_version(2,4,0))
-    {
-        m_fc.SetWildcard( wildCard );
-    }
-    else
-        wxGenericFileDialog::SetWildcard( wildCard );
+    m_fc.SetWildcard( wildCard );
 }
 
 void wxFileDialog::SetFilterIndex(int filterIndex)
 {
 
-    if (!gtk_check_version(2,4,0))
-    {
-       m_fc.SetFilterIndex( filterIndex);
-    }
-    else
-        wxGenericFileDialog::SetFilterIndex( filterIndex );
+    m_fc.SetFilterIndex( filterIndex);
 }
 
 int wxFileDialog::GetFilterIndex() const
 {
-    if (!gtk_check_version(2,4,0))
-    {
-        return m_fc.GetFilterIndex();
-    }
-    else
-                return wxGenericFileDialog::GetFilterIndex();
+    return m_fc.GetFilterIndex();
 }
 
-#endif // wxUSE_FILEDLG &&  __WXGTK24__
+#endif // wxUSE_FILEDLG 

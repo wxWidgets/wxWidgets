@@ -9,10 +9,12 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef FILECTRL_H
-#define FILECTRL_H
+
+#ifndef _WX_GTK_FILECTRL_H_
+#define _WX_GTK_FILECTRL_H_
 
 #include "wx/control.h"
+#include "wx/filectrl.h"
 
 extern WXDLLEXPORT_DATA(const wxChar) wxFileSelectorDefaultWildcardStr[];
 
@@ -115,5 +117,5 @@ protected:
 
 #endif // wxUSE_FILECTRL
 
-#endif    // FILECTRL_H
+#endif // _WX_GTK_FILECTRL_H_
 

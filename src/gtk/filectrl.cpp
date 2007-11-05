@@ -369,18 +369,13 @@ bool wxGtkFileCtrl::SetDirectory( const wxString& dir )
 
 bool wxGtkFileCtrl::SetFilename( const wxString& name )
 {
-    if ( !gtk_check_version( 2, 4, 0 ) )
+    if ( HasFlag( wxFC_SAVE ) )
     {
-        if ( HasFlag( wxFC_SAVE ) )
-        {
-            gtk_file_chooser_set_current_name( m_fcWidget, wxGTK_CONV( name ) );
-            return true;
-        }
-        else
-            return SetPath( wxFileName( GetDirectory(), name ).GetFullPath() );
+        gtk_file_chooser_set_current_name( m_fcWidget, wxGTK_CONV( name ) );
+        return true;
     }
-
-    return false;
+    else
+        return SetPath( wxFileName( GetDirectory(), name ).GetFullPath() );
 }
 
 void wxGtkFileCtrl::SetWildcard( const wxString& wildCard )
@@ -422,12 +417,8 @@ void wxGtkFileCtrl::GetFilenames( wxArrayString& files ) const
 
 void wxGtkFileCtrl::ShowHidden(bool show)
 {
-#ifdef __WXGTK26__    
-    gtk_file_chooser_set_show_hidden(m_fcWidget, show);
-#else
-    //  gtk_file_chooser_set_show_hidden only in 2.6
+    // gtk_file_chooser_set_show_hidden() is new in 2.6
     g_object_set (G_OBJECT (m_fcWidget), "show-hidden", show, NULL);
-#endif    
 }
 
 #endif 
