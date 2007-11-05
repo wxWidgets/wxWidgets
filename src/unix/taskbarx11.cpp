@@ -124,7 +124,7 @@ BEGIN_EVENT_TABLE(wxTaskBarIconArea, wxTaskBarIconAreaBase)
 END_EVENT_TABLE()
 
 wxTaskBarIconArea::wxTaskBarIconArea(wxTaskBarIcon *icon, const wxBitmap &bmp)
-    : wxTaskBarIconAreaBase(), m_icon(icon), m_pos(0,0)
+    : wxTaskBarIconAreaBase(), m_icon(icon), m_bmp(bmp)
 {
 #if defined(__WXGTK20__) && defined(TASKBAR_ICON_AREA_BASE_INCLUDED)
     m_invokingWindow = icon;
