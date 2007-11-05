@@ -15,6 +15,8 @@
 // and should probably be replaced with int anyhow)
 typedef long wxTextPos;
 
+class WXDLLIMPEXP_FWD_BASE wxArrayString;
+
 // ----------------------------------------------------------------------------
 // wxTextEntryBase
 // ----------------------------------------------------------------------------
