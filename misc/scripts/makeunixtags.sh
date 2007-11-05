@@ -12,6 +12,7 @@
 function create_tags()
 {
 ctags --totals --c++-kinds=+px --language-force=c++ \
+	--exclude=include/wx/vms_x_fix.h \
 	-I WXDLLEXPORT_DATA+ -I WXDLLEXPORT \
 	-I WXDLLIMPEXP_DATA_ADV+ -I WXDLLIMPEXP_ADV \
 	-I WXDLLIMPEXP_DATA_AUI+ -I WXDLLIMPEXP_AUI \
