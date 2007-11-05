@@ -40,9 +40,118 @@
 
 #define GetEditHwnd() ((HWND)(GetEditHWND()))
 
+// ----------------------------------------------------------------------------
+// wxIEnumString implements IEnumString interface
+// ----------------------------------------------------------------------------
+
+#if wxUSE_OLE
+
+#include "wx/msw/ole/oleutils.h"
+#include <shldisp.h>
+
+DEFINE_GUID(CLSID_AutoComplete,
+    0x00bb2763, 0x6a77, 0x11d0, 0xa5, 0x35, 0x00, 0xc0, 0x4f, 0xd7, 0xd0, 0x62);
+
+class wxIEnumString : public IEnumString
+{
+public:
+    wxIEnumString(const wxArrayString& strings) : m_strings(strings)
+    {
+        m_index = 0;
+    }
+
+    DECLARE_IUNKNOWN_METHODS;
+
+    virtual HRESULT STDMETHODCALLTYPE Next(ULONG celt,
+                                           LPOLESTR *rgelt,
+                                           ULONG *pceltFetched)
+    {
+        if ( !rgelt || (!pceltFetched && celt > 1) )
+            return E_POINTER;
+
+        ULONG pceltFetchedDummy;
+        if ( !pceltFetched )
+            pceltFetched = &pceltFetchedDummy;
+
+        *pceltFetched = 0;
+
+        for ( const unsigned count = m_strings.size(); celt--; ++m_index )
+        {
+            if ( m_index == count )
+                return S_FALSE;
+
+            const wxWX2WCbuf wcbuf(m_strings[m_index].wc_str());
+            const size_t size = (wcslen(wcbuf) + 1)*sizeof(wchar_t);
+            void *olestr = CoTaskMemAlloc(size);
+            if ( !olestr )
+                return E_OUTOFMEMORY;
+
+            memcpy(olestr, wcbuf, size);
+
+            *rgelt++ = wx_static_cast(LPOLESTR, olestr);
+
+            ++(*pceltFetched);
+        }
+
+        return S_OK;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE Skip(ULONG celt)
+    {
+        m_index += celt;
+        if ( m_index > m_strings.size() )
+        {
+            m_index = m_strings.size();
+            return S_FALSE;
+        }
+
+        return S_OK;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE Reset()
+    {
+        m_index = 0;
+
+        return S_OK;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE Clone(IEnumString **ppEnum)
+    {
+        if ( !ppEnum )
+            return E_POINTER;
+
+        wxIEnumString *e = new wxIEnumString(m_strings);
+        e->m_index = m_index;
+
+        e->AddRef();
+        *ppEnum = e;
+
+        return S_OK;
+    }
+
+private:
+    const wxArrayString m_strings;
+    unsigned m_index;
+
+    DECLARE_NO_COPY_CLASS(wxIEnumString)
+};
+
+BEGIN_IID_TABLE(wxIEnumString)
+    ADD_IID(Unknown)
+    ADD_IID(EnumString)
+END_IID_TABLE;
+
+IMPLEMENT_IUNKNOWN_METHODS(wxIEnumString)
+
+#endif // wxUSE_OLE
+
 // ============================================================================
 // wxTextEntry implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// operations on text
+// ----------------------------------------------------------------------------
 
 void wxTextEntry::WriteText(const wxString& text)
 {
@@ -60,6 +169,10 @@ void wxTextEntry::Remove(long from, long to)
     WriteText(wxString());
 }
 
+// ----------------------------------------------------------------------------
+// clipboard operations
+// ----------------------------------------------------------------------------
+
 void wxTextEntry::Copy()
 {
     ::SendMessage(GetEditHwnd(), WM_COPY, 0, 0);
@@ -74,6 +187,10 @@ void wxTextEntry::Paste()
 {
     ::SendMessage(GetEditHwnd(), WM_PASTE, 0, 0);
 }
+
+// ----------------------------------------------------------------------------
+// undo/redo
+// ----------------------------------------------------------------------------
 
 void wxTextEntry::Undo()
 {
@@ -97,6 +214,10 @@ bool wxTextEntry::CanRedo() const
     // see comment in Redo()
     return CanUndo();
 }
+
+// ----------------------------------------------------------------------------
+// insertion point and selection
+// ----------------------------------------------------------------------------
 
 void wxTextEntry::SetInsertionPoint(long pos)
 {
@@ -140,6 +261,12 @@ void wxTextEntry::GetSelection(long *from, long *to) const
         *to = dwEnd;
 }
 
+// ----------------------------------------------------------------------------
+// auto-completion
+// ----------------------------------------------------------------------------
+
+#if wxUSE_OLE
+
 bool wxTextEntry::AutoCompleteFileNames()
 {
     typedef HRESULT (WINAPI *SHAutoComplete_t)(HWND, DWORD);
@@ -173,6 +300,65 @@ bool wxTextEntry::AutoCompleteFileNames()
     return true;
 }
 
+bool wxTextEntry::AutoComplete(const wxArrayString& choices)
+{
+    // create an object exposing IAutoComplete interface (don't go for
+    // IAutoComplete2 immediately as, presumably, it might be not available on
+    // older systems as otherwise why do we have both -- although in practice I
+    // don't know when can this happen)
+    IAutoComplete *pAutoComplete = NULL;
+    HRESULT hr = CoCreateInstance
+                 (
+                    CLSID_AutoComplete,
+                    NULL,
+                    CLSCTX_INPROC_SERVER,
+                    IID_IAutoComplete,
+                    wx_reinterpret_cast(void **, &pAutoComplete)
+                 );
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(_T("CoCreateInstance(CLSID_AutoComplete)"), hr);
+        return false;
+    }
+
+    // associate it with our strings
+    wxIEnumString *pEnumString = new wxIEnumString(choices);
+    pEnumString->AddRef();
+    hr = pAutoComplete->Init(GetEditHwnd(), pEnumString, NULL, NULL);
+    pEnumString->Release();
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(_T("IAutoComplete::Init"), hr);
+        return false;
+    }
+
+    // if IAutoComplete2 is available, set more user-friendly options
+    IAutoComplete2 *pAutoComplete2 = NULL;
+    hr = pAutoComplete->QueryInterface
+                        (
+                           IID_IAutoComplete2,
+                           wx_reinterpret_cast(void **, &pAutoComplete2)
+                        );
+    if ( SUCCEEDED(hr) )
+    {
+        pAutoComplete2->SetOptions(ACO_AUTOSUGGEST | ACO_UPDOWNKEYDROPSLIST);
+        pAutoComplete2->Release();
+    }
+
+    // the docs are unclear about when can we release it but it seems safe to
+    // do it immediately, presumably the edit control itself keeps a reference
+    // to the auto completer object
+    pAutoComplete->Release();
+
+    return true;
+}
+
+#endif // wxUSE_OLE
+
+// ----------------------------------------------------------------------------
+// editable state
+// ----------------------------------------------------------------------------
+
 bool wxTextEntry::IsEditable() const
 {
     return !(::GetWindowLong(GetEditHwnd(), GWL_STYLE) & ES_READONLY);
@@ -182,6 +368,10 @@ void wxTextEntry::SetEditable(bool editable)
 {
     ::SendMessage(GetEditHwnd(), EM_SETREADONLY, !editable, 0);
 }
+
+// ----------------------------------------------------------------------------
+// max length
+// ----------------------------------------------------------------------------
 
 void wxTextEntry::SetMaxLength(unsigned long len)
 {
