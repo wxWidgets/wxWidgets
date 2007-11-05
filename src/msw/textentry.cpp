@@ -140,6 +140,13 @@ public:
     }
 
 private:
+    // dtor doesn't have to be virtual as we're only ever deleted from our own
+    // Release() and are not meant to be derived form anyhow, but making it
+    // virtual silences gcc warnings; making it private makes it impossible to
+    // (mistakenly) delete us directly instead of calling Release()
+    virtual ~wxIEnumString() { }
+
+
     const wxArrayString m_strings;
     unsigned m_index;
 
