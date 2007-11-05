@@ -61,15 +61,15 @@ static const EventTypeSpec eventList[] =
     { kEventClassMouse, kEventMouseDown },
     { kEventClassMouse, kEventMouseMoved },
     { kEventClassMouse, kEventMouseDragged },
-    
+
     { kEventClassKeyboard, kEventRawKeyDown } ,
     { kEventClassKeyboard, kEventRawKeyRepeat } ,
     { kEventClassKeyboard, kEventRawKeyUp } ,
     { kEventClassKeyboard, kEventRawKeyModifiersChanged } ,
-    
+
     { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent } ,
     { kEventClassTextInput, kEventTextInputUpdateActiveInputArea } ,
-    
+
 #if DEBUG_WEBKIT_SIZING == 1
     { kEventClassControl, kEventControlBoundsChanged } ,
 #endif
@@ -87,7 +87,7 @@ static pascal OSStatus wxWebKitKeyEventHandler( EventHandlerCallRef handler , Ev
     OSStatus result = eventNotHandledErr ;
     wxMacCarbonEvent cEvent( event ) ;
 
-    wxWebKitCtrl* thisWindow = (wxWebKitCtrl*) data ;    
+    wxWebKitCtrl* thisWindow = (wxWebKitCtrl*) data ;
     wxWindow* focus = thisWindow ;
 
     unsigned char charCode ;
@@ -224,9 +224,9 @@ static pascal OSStatus wxWebKitCtrlEventHandler( EventHandlerCallRef handler , E
         tlw = thisWindow->MacGetTopLevelWindow();
 
     cEvent.GetParameter( kEventParamDirectObject , &controlRef ) ;
-    
+
     wxWindow* currentMouseWindow = thisWindow ;
-    
+
     if ( wxApp::s_captureWindow )
         currentMouseWindow = wxApp::s_captureWindow;
 
@@ -237,13 +237,13 @@ static pascal OSStatus wxWebKitCtrlEventHandler( EventHandlerCallRef handler , E
             result = wxWebKitKeyEventHandler(handler, event, data);
             break;
         }
-        
+
         case kEventClassTextInput:
         {
             result = wxMacUnicodeTextEventHandler(handler, event, data);
             break;
         }
-        
+
         case kEventClassMouse:
         {
             switch ( GetEventKind( event ) )
@@ -255,11 +255,11 @@ static pascal OSStatus wxWebKitCtrlEventHandler( EventHandlerCallRef handler , E
                 {
                     wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
                     SetupMouseEvent( wxevent , cEvent ) ;
-                    
+
                     currentMouseWindow->ScreenToClient( &wxevent.m_x , &wxevent.m_y ) ;
                     wxevent.SetEventObject( currentMouseWindow ) ;
                     wxevent.SetId( currentMouseWindow->GetId() ) ;
-                    
+
                     if ( currentMouseWindow->GetEventHandler()->ProcessEvent(wxevent) )
                     {
                         result = noErr;
@@ -334,19 +334,19 @@ inline NSString* wxNSStringWithWxString(const wxString &wxstring)
 inline int wxNavTypeFromWebNavType(int type){
     if (type == WebNavigationTypeLinkClicked)
         return wxWEBKIT_NAV_LINK_CLICKED;
-    
+
     if (type == WebNavigationTypeFormSubmitted)
         return wxWEBKIT_NAV_FORM_SUBMITTED;
-        
+
     if (type == WebNavigationTypeBackForward)
         return wxWEBKIT_NAV_BACK_NEXT;
-        
+
     if (type == WebNavigationTypeReload)
         return wxWEBKIT_NAV_RELOAD;
-        
+
     if (type == WebNavigationTypeFormResubmitted)
         return wxWEBKIT_NAV_FORM_RESUBMITTED;
-        
+
     return wxWEBKIT_NAV_OTHER;
 }
 
@@ -426,7 +426,7 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
     HIWebViewCreate( m_peer->GetControlRefAddr() );
 
     m_webView = (WebView*) HIWebViewGetWebView( m_peer->GetControlRef() );
-    
+
     MacPostControlCreate(pos, size);
     HIViewSetVisible( m_peer->GetControlRef(), true );
     [m_webView setHidden:false];
@@ -443,11 +443,11 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
     // Register event listener interfaces
     MyFrameLoadMonitor* myFrameLoadMonitor = [[MyFrameLoadMonitor alloc] initWithWxWindow: this];
     [m_webView setFrameLoadDelegate:myFrameLoadMonitor];
-    
+
     // this is used to veto page loads, etc.
     MyPolicyDelegate* myPolicyDelegate = [[MyPolicyDelegate alloc] initWithWxWindow: this];
     [m_webView setPolicyDelegate:myPolicyDelegate];
-    
+
     LoadURL(m_currentURL);
     return true;
 }
@@ -536,7 +536,7 @@ wxString wxWebKitCtrl::GetPageSource(){
 wxString wxWebKitCtrl::GetSelection(){
     if ( !m_webView )
         return wxEmptyString;
-        
+
     NSString* selectedText = [[m_webView selectedDOMRange] toString];
     return wxStringWithNSString( selectedText );
 }
@@ -544,7 +544,7 @@ wxString wxWebKitCtrl::GetSelection(){
 bool wxWebKitCtrl::CanIncreaseTextSize(){
     if ( !m_webView )
         return false;
-        
+
     if ([m_webView canMakeTextLarger])
         return true;
     else
@@ -554,7 +554,7 @@ bool wxWebKitCtrl::CanIncreaseTextSize(){
 void wxWebKitCtrl::IncreaseTextSize(){
     if ( !m_webView )
         return;
-        
+
     if (CanIncreaseTextSize())
         [m_webView makeTextLarger:(WebView*)m_webView];
 }
@@ -562,7 +562,7 @@ void wxWebKitCtrl::IncreaseTextSize(){
 bool wxWebKitCtrl::CanDecreaseTextSize(){
     if ( !m_webView )
         return false;
-        
+
     if ([m_webView canMakeTextSmaller])
         return true;
     else
@@ -572,7 +572,7 @@ bool wxWebKitCtrl::CanDecreaseTextSize(){
 void wxWebKitCtrl::DecreaseTextSize(){
     if ( !m_webView )
         return;
-        
+
     if (CanDecreaseTextSize())
         [m_webView makeTextSmaller:(WebView*)m_webView];
 }
@@ -588,17 +588,17 @@ void wxWebKitCtrl::SetPageSource(const wxString& source, const wxString& baseUrl
 void wxWebKitCtrl::Print(bool showPrompt){
     if ( !m_webView )
         return;
-    
-    id view = [[[m_webView mainFrame] frameView] documentView]; 
-    NSPrintOperation *op = [NSPrintOperation printOperationWithView:view printInfo: [NSPrintInfo sharedPrintInfo]]; 
+
+    id view = [[[m_webView mainFrame] frameView] documentView];
+    NSPrintOperation *op = [NSPrintOperation printOperationWithView:view printInfo: [NSPrintInfo sharedPrintInfo]];
     if (showPrompt){
         [op setShowsPrintPanel: showPrompt];
         // in my tests, the progress bar always freezes and it stops the whole print operation.
         // do not turn this to true unless there is a workaround for the bug.
         [op setShowsProgressPanel: false];
     }
-    // Print it. 
-    [op runOperation]; 
+    // Print it.
+    [op runOperation];
 }
 
 void wxWebKitCtrl::MakeEditable(bool enable){
@@ -618,23 +618,23 @@ bool wxWebKitCtrl::IsEditable(){
 int wxWebKitCtrl::GetScrollPos(){
     id result = [[m_webView windowScriptObject] evaluateWebScript:@"document.body.scrollTop"];
     return [result intValue];
-}   
+}
 
 void wxWebKitCtrl::SetScrollPos(int pos){
     if ( !m_webView )
         return;
-        
-    wxString javascript; 
+
+    wxString javascript;
     javascript.Printf(wxT("document.body.scrollTop = %d;"), pos);
     [[m_webView windowScriptObject] evaluateWebScript:(NSString*)wxNSStringWithWxString( javascript )];
 }
 
 wxString wxWebKitCtrl::RunScript(const wxString& javascript){
     if ( !m_webView )
-        return wxEmptyString;    
-        
+        return wxEmptyString;
+
     id result = [[m_webView windowScriptObject] evaluateWebScript:(NSString*)wxNSStringWithWxString( javascript )];
-    
+
     NSString* resultAsString;
     wxString resultAsWxString = wxEmptyString;
     NSString* className = NSStringFromClass([result class]);
@@ -670,7 +670,7 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
 
     NSRect frame = [m_webView frame];
     NSRect bounds = [m_webView bounds];
-    
+
 #if DEBUG_WEBKIT_SIZING
     fprintf(stderr,"Carbon window x=%d, y=%d, width=%d, height=%d\n", GetPosition().x, GetPosition().y, GetSize().x, GetSize().y);
     fprintf(stderr, "Cocoa window frame x=%G, y=%G, width=%G, height=%G\n", frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
@@ -684,9 +684,9 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
     }
 
     // since we no longer use parent coordinates, we always want 0,0.
-    int x = 0; 
+    int x = 0;
     int y = 0;
-    
+
     HIRect rect;
     rect.origin.x = x;
     rect.origin.y = y;
@@ -697,9 +697,9 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
 
     // NB: In most cases, when calling HIViewConvertRect, what people want is to use GetRootControl(),
     // and this tripped me up at first. But in fact, what we want is the root view, because we need to
-    // make the y origin relative to the very top of the window, not its contents, since we later flip 
-    // the y coordinate for Cocoa. 
-    HIViewConvertRect (&rect, m_peer->GetControlRef(), 
+    // make the y origin relative to the very top of the window, not its contents, since we later flip
+    // the y coordinate for Cocoa.
+    HIViewConvertRect (&rect, m_peer->GetControlRef(),
                                 HIViewGetRoot( (WindowRef) MacGetTopLevelWindowRef() ) );
 
     x = (int)rect.origin.x;
@@ -721,7 +721,7 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
     frame.origin.x = x;
     frame.origin.y = y;
     [m_webView setFrame:frame];
-   
+
     if (IsShown())
         [(WebView*)m_webView display];
     event.Skip();
@@ -791,6 +791,8 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 
 - (void)webView:(WebView *)sender didFailLoadWithError:(NSError*) error forFrame:(WebFrame *)frame
 {
+    wxUnusedVar(error);
+
     if (webKitWindow && frame == [sender mainFrame]){
         NSString *url = [[[[frame dataSource] request] URL] absoluteString];
         wxWebKitStateChangedEvent thisEvent(webKitWindow);
@@ -803,6 +805,8 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 
 - (void)webView:(WebView *)sender didFailProvisionalLoadWithError:(NSError*) error forFrame:(WebFrame *)frame
 {
+    wxUnusedVar(error);
+
     if (webKitWindow && frame == [sender mainFrame]){
         NSString *url = [[[[frame provisionalDataSource] request] URL] absoluteString];
         wxWebKitStateChangedEvent thisEvent(webKitWindow);
@@ -832,20 +836,23 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 
 - (void)webView:(WebView *)sender decidePolicyForNavigationAction:(NSDictionary *)actionInformation request:(NSURLRequest *)request frame:(WebFrame *)frame decisionListener:(id<WebPolicyDecisionListener>)listener
 {
+    wxUnusedVar(sender);
+    wxUnusedVar(frame);
+
     wxWebKitBeforeLoadEvent thisEvent(webKitWindow);
 
-    // Get the navigation type. 
-    NSNumber *n = [actionInformation objectForKey:WebActionNavigationTypeKey]; 
+    // Get the navigation type.
+    NSNumber *n = [actionInformation objectForKey:WebActionNavigationTypeKey];
     int actionType = [n intValue];
     thisEvent.SetNavigationType( wxNavTypeFromWebNavType(actionType) );
-    
+
     NSString *url = [[request URL] absoluteString];
     thisEvent.SetURL( wxStringWithNSString( url ) );
-    
+
     if (webKitWindow && webKitWindow->GetEventHandler())
         webKitWindow->GetEventHandler()->ProcessEvent(thisEvent);
 
-	if (thisEvent.IsCancelled())
+    if (thisEvent.IsCancelled())
         [listener ignore];
     else
         [listener use];

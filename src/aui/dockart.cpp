@@ -415,6 +415,9 @@ wxFont wxAuiDefaultDockArt::GetFont(int id)
 void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, const wxRect& rect)
 {
 #if defined(__WXMAC__)
+    wxUnusedVar(window);
+    wxUnusedVar(orientation);
+
     HIRect splitterRect = CGRectMake( rect.x , rect.y , rect.width , rect.height );
     CGContextRef cgContext ;
 #if wxMAC_USE_CORE_GRAPHICS

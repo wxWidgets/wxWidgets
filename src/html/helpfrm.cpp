@@ -226,12 +226,12 @@ void wxHtmlHelpFrame::UseConfig(wxConfigBase *config, const wxString& rootPath)
 }
 
 #ifdef __WXMAC__
-void wxHtmlHelpFrame::OnClose(wxCommandEvent& event)
+void wxHtmlHelpFrame::OnClose(wxCommandEvent& WXUNUSED(event))
 {
     Close(true);
 }
 
-void wxHtmlHelpFrame::OnAbout(wxCommandEvent& event)
+void wxHtmlHelpFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox(wxT("wxWidgets HTML Help Viewer (c) 1998-2006, Vaclav Slavik et al"), wxT("HelpView"),
         wxICON_INFORMATION|wxOK, this);
