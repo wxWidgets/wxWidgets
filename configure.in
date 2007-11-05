@@ -2708,7 +2708,7 @@ if test "$wxUSE_GUI" = "yes"; then
 
     WXGTK12=
     WXGTK127=
-    WXGTK20=
+    WXGTK2=
     WXGPE=
 
     if test "$wxUSE_COCOA" = 1 ; then
@@ -2770,7 +2770,7 @@ if test "$wxUSE_GUI" = "yes"; then
                             fi
                     esac
 
-                    AM_PATH_GTK_2_0(2.0.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
+                    AM_PATH_GTK_2_0(2.4.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
 
                     dnl Solaris also requires -lX11 for static lib
                     case "${host}" in
@@ -2811,7 +2811,7 @@ if test "$wxUSE_GUI" = "yes"; then
         fi
 
         case "$wx_cv_lib_gtk" in
-            2.0)    WXGTK20=1
+            2.0)    WXGTK2=1
                     TOOLKIT_VERSION=2
                     ;;
             1.2.7)  WXGTK127=1
@@ -2830,7 +2830,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                     ;;
         esac
 
-        if test "$WXGTK20" = 1; then
+        if test "$WXGTK2" = 1; then
             save_CFLAGS="$CFLAGS"
             save_LIBS="$LIBS"
             CFLAGS="$wx_cv_cflags_gtk $CFLAGS"
@@ -2858,7 +2858,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                            [
                             AC_DEFINE(__WXGTK210__)
                             AC_DEFINE(__WXGTK26__)
-                            AC_DEFINE(__WXGTK24__)
                             AC_MSG_RESULT([yes])
                             ac_wxgtk210=1
                            ],
@@ -2880,33 +2879,12 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                             ],
                             [
                                 AC_DEFINE(__WXGTK26__)
-                                AC_DEFINE(__WXGTK24__)
                                 AC_MSG_RESULT([yes])
                                 ac_wxgtk26=1
                             ],
                             [
                                 AC_MSG_RESULT([no])
                                 ac_wxgtk26=0
-                            ])
-            fi
-
-            if test "$ac_wxgtk26" = 0; then
-                dnl test if we have at least GTK+ 2.4:
-                AC_MSG_CHECKING([if GTK+ is version >= 2.4])
-                AC_TRY_COMPILE([
-                                #include <gtk/gtk.h>
-                            ],
-                            [
-                                #if !GTK_CHECK_VERSION(2,4,0)
-                                Not GTK+ 2.4
-                                #endif
-                            ],
-                            [
-                                AC_DEFINE(__WXGTK24__)
-                                AC_MSG_RESULT([yes])
-                            ],
-                            [
-                                AC_MSG_RESULT([no])
                             ])
             fi
 
@@ -5044,8 +5022,8 @@ else
   fi
 fi
 
-if test "$WXGTK20" = 1 ; then
-  AC_DEFINE_UNQUOTED(__WXGTK20__,$WXGTK20)
+if test "$WXGTK2" = 1 ; then
+  AC_DEFINE_UNQUOTED(__WXGTK20__,$WXGTK2)
   WXGTK12=1
 fi
 
@@ -5401,7 +5379,7 @@ if test "$wxUSE_SOUND" = "yes"; then
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sound"
 fi
 
-if test "$WXGTK20" = 1; then
+if test "$WXGTK2" = 1; then
     PKG_PROG_PKG_CONFIG()
 
     if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
@@ -7475,7 +7453,7 @@ AC_SUBST(CPPUNIT_LIBS)
 case "$TOOLKIT" in
     GTK)
         TOOLKIT_DESC="GTK+"
-        if test "$WXGTK20" = 1; then
+        if test "$WXGTK2" = 1; then
             TOOLKIT_DESC="$TOOLKIT_DESC 2"
             if test "$wxUSE_GTKPRINT" = "yes" ; then
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA GTK+ printing";
