@@ -1,5 +1,5 @@
 rem Uncomment the next line to set the version; used also in wxWidgets.iss
-SET WXW_VER=2.8.6
+SET WXW_VER=2.8.7-rc1
 
 
 if (%WXW_VER%)==() SET WXW_VER=CVS
@@ -16,7 +16,7 @@ echo Building wxWidgets-%WXW_VER% docs... > c:\temp.log
 
 set WXWIN=c:\wx\wxw28b
 set DAILY=c:\daily28b
-set PATH=%PATH%;C:\wx\wxw26b\utils\tex2rtf\src\vc_based;C:\wx\Gnu\bin;c:\progra~1\htmlhe~1;C:\PROGRA~1\INNOSE~1
+set PATH=%PATH%;C:\wx\WXWIDG~1.0\utils\tex2rtf\src\vc_based;C:\wx\Gnu\bin;c:\progra~1\htmlhe~1;C:\PROGRA~1\INNOSE~1
 set PATH=%PATH%;C:\Program Files\gs\gs8.51\lib;C:\Program Files\gs\gs8.51\bin
 echo %PATH% >> c:\temp.log
 
