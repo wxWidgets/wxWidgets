@@ -104,36 +104,6 @@ them to the clipboard.
 \item Built-in support for many file formats (BMP, PNG, JPEG, GIF, XPM, PNM, PCX).
 \end{itemize}
 
-\begin{comment}
-\section{Changes from version 2.0}\label{versionchanges20}
-
-These are a few of the differences between versions 2.0 and 2.2.
-
-Removals:
-
-\begin{itemize}\itemsep=0pt
-\item GTK 1.0 no longer supported.
-\end{itemize}
-
-Additions and changes:
-
-\begin{itemize}\itemsep=0pt
-\item Corrected many classes to conform better to documented behaviour.
-\item Added handlers for more image formats (Now GIF, JPEG, PCX, BMP, XPM, PNG, PNM).
-\item Improved support for socket and network functions.
-\item Support for different national font encodings.
-\item Sizer based layout system.
-\item HTML widget and help system.
-\item Added some controls (e.g. wxSpinCtrl) and supplemented many.
-\item Many optical improvements to GTK port.
-\item Support for menu accelerators in GTK port.
-\item Enhanced and improved support for scrolling, including child windows.
-\item Complete rewrite of clipboard and drag and drop classes.
-\item Improved support for ODBC databases.
-\item Improved tab traversal in dialogs.
-\end{itemize}
-\end{comment}
-
 \section{wxWidgets requirements}\label{requirements}
 
 To make use of wxWidgets, you currently need one of the following setups.
@@ -146,29 +116,31 @@ To make use of wxWidgets, you currently need one of the following setups.
 port), Borland C++, Watcom C++, Cygwin, MinGW, Metrowerks CodeWarrior,
 Digital Mars C++. See {\tt install.txt} for details about compiler 
 version supported.
-\item At least 100 MB of disk space for source tree and additional space for 
-libraries and application building (depends on compiler and build settings).
 \end{enumerate}
 
 (b) Unix:
 
 \begin{enumerate}\itemsep=0pt
-\item Almost any C++ compiler, including GNU C++ (EGCS 1.1.1 or above).
-\item Almost any Unix workstation, and one of: GTK+ 1.2, GTK+ 2.0, Motif 1.2 or higher, Lesstif.
-If using the wxX11 port, no such widget set is required.
-\item At least 100 MB of disk space for source tree and additional space for 
-libraries and application building (depends on compiler and build settings).
+\item Almost any C++ compiler, including GNU C++ and many Unix vendors
+compilers such as Sun CC, HP-UX aCC or SGI mipsPro.
+\item Almost any Unix workstation, and one of: GTK+ 2.4 or higher (GTK+ 1.2.10
+may still be supported but wxGTK1 port is not maintained any longer and lacks
+many features of wxGTK2), Motif 1.2 or higher or Lesstif. If using the wxX11
+port, no such widget set is required.
 \end{enumerate}
 
 (c) Mac OS/Mac OS X:
 
 \begin{enumerate}\itemsep=0pt
-\item A PowerPC Mac running Mac OS 8.6/9.x (eg. Classic) or Mac OS X 10.x.
-\item CodeWarrior 5.3, 6 or 7 for Classic Mac OS.
-\item The Apple Developer Tools (eg. GNU C++), CodeWarrior 7 or above for Mac OS X.
-\item At least 100 MB of disk space for source tree and additional space for 
-libraries and application building (depends on compiler and build settings).
+\item A PowerPC or Intel Mac running Mac OS X 10.3 or higher
+\item The Apple Developer Tools (eg. GNU C++) or MetroWerks CodeWarrior (not
+actively supported)
 \end{enumerate}
+
+Under all platforms it's recommended to have large amounts of free hard disk
+space. The exact amount needed depends on the port, compiler and build
+configurations but to give an example, a debug build of the library may take up
+to 500MB.
 
 \section{Availability and location of wxWidgets}\label{where}
 
