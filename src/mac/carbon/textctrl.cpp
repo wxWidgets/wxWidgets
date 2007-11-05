@@ -419,32 +419,27 @@ void wxTextCtrl::CreatePeer(
         forceMLTE = true ;
     }
 #endif
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-    forceMLTE = false;
-#endif
 
-#ifdef __WXMAC_OSX__
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
+    if ( UMAGetSystemVersion() >= 0x1050 )
+        forceMLTE = false ;
+
     if ( UMAGetSystemVersion() >= 0x1030 && !forceMLTE )
     {
         if ( m_windowStyle & wxTE_MULTILINE )
             m_peer = new wxMacMLTEHIViewControl( this , str , pos , size , style ) ;
     }
-#endif
 
     if ( !m_peer )
     {
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
         if ( !(m_windowStyle & wxTE_MULTILINE) && !forceMLTE )
-#endif
         {
             m_peer = new wxMacUnicodeTextControl( this , str , pos , size , style ) ;
         }
     }
-#endif
 
-    // the horizontal single line scrolling bug that made us keep 
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
+    // the horizontal single line scrolling bug that made us keep the classic implementation
+    // is fixed in 10.5
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
     if ( !m_peer )
         m_peer = new wxMacMLTEClassicControl( this , str , pos , size , style ) ;
 #endif
