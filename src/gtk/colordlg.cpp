@@ -16,7 +16,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_COLOURDLG && defined(__WXGTK20__)
+#if wxUSE_COLOURDLG
 
 #include "wx/colordlg.h"
 
@@ -140,5 +140,5 @@ void wxColourDialog::DialogToColourData()
     g_free(pal);
 }
 
-#endif // wxUSE_COLOURDLG && defined(__WXGTK20__)
+#endif // wxUSE_COLOURDLG
 

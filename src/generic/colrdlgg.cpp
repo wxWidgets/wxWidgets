@@ -16,7 +16,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_COLOURDLG && (!defined(__WXGTK20__) || defined(__WXUNIVERSAL__))
+#if wxUSE_COLOURDLG
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -581,4 +581,4 @@ void wxGenericColourDialog::OnBlueSlider(wxCommandEvent& WXUNUSED(event))
 
 #endif // wxUSE_SLIDER
 
-#endif // wxUSE_COLOURDLG && !defined(__WXGTK20__)
+#endif // wxUSE_COLOURDLG

@@ -493,7 +493,7 @@ void wxButtonToolBar::OnCommand(wxCommandEvent& event)
 }
 
 // paints a border
-void wxButtonToolBar::OnPaint(wxPaintEvent& event)
+void wxButtonToolBar::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
 

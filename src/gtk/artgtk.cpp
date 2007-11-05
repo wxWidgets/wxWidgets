@@ -257,11 +257,8 @@ wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
         stockid = id.ToAscii();
 
     GdkPixbuf *pixbuf = CreateStockIcon(stockid, stocksize);
-
-    if (!pixbuf && !gtk_check_version(2,4,0))
-    {
+    if (!pixbuf)
         pixbuf = CreateThemeIcon(stockid, stocksize, size);
-    }
 
     if (pixbuf && size != wxDefaultSize &&
         (size.x != gdk_pixbuf_get_width(pixbuf) ||

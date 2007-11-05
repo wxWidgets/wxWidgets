@@ -276,7 +276,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     }
 }
 
-void wxFileDialog::OnFakeOk( wxCommandEvent &event )
+void wxFileDialog::OnFakeOk(wxCommandEvent& WXUNUSED(event))
 {
     EndDialog(wxID_OK);
 }

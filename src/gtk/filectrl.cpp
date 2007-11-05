@@ -16,7 +16,7 @@
 
 #include "wx/filectrl.h"
 
-#if defined(__WXGTK24__) && !defined(__WXUNIVERSAL__)
+#if !defined(__WXUNIVERSAL__)
 
 #ifndef WX_PRECOMP
 #    include "wx/sizer.h"
@@ -421,8 +421,6 @@ void wxGtkFileCtrl::ShowHidden(bool show)
     g_object_set (G_OBJECT (m_fcWidget), "show-hidden", show, NULL);
 }
 
-#endif 
-    // wxUSE_FILECTRL
+#endif // wxUSE_FILECTRL
 
-#endif
-    // if defined(__WXGTK24__) && !defined(__WXUNIVERSAL__)
+#endif // !defined(__WXUNIVERSAL__)

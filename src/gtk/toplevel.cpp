@@ -405,18 +405,8 @@ static gboolean property_notify_event(
     if (event->state == GDK_PROPERTY_NEW_VALUE && event->atom == property &&
         win->IsDecorCacheable() && !win->IsFullScreen())
     {
-        Atom xproperty;
-#if GTK_CHECK_VERSION(2, 2, 0)
-        if (gtk_check_version(2, 2, 0) == NULL)
-        {
-            xproperty = gdk_x11_atom_to_xatom_for_display(
-                gdk_drawable_get_display(event->window), property);
-        }
-        else
-#endif
-        {
-            xproperty = gdk_x11_atom_to_xatom(property);
-        }
+        Atom xproperty = gdk_x11_atom_to_xatom_for_display(
+                            gdk_drawable_get_display(event->window), property);
         Atom type;
         int format;
         gulong nitems, bytes_after;
@@ -514,24 +504,19 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         }
         else
         {
-#if GTK_CHECK_VERSION(2,1,0)
-            if (!gtk_check_version(2,1,0))
+            if (style & wxFRAME_TOOL_WINDOW)
             {
-                if (style & wxFRAME_TOOL_WINDOW)
-                {
-                    gtk_window_set_type_hint(GTK_WINDOW(m_widget),
-                                             GDK_WINDOW_TYPE_HINT_UTILITY);
+                gtk_window_set_type_hint(GTK_WINDOW(m_widget),
+                                         GDK_WINDOW_TYPE_HINT_UTILITY);
 
-                    // On some WMs, like KDE, a TOOL_WINDOW will still show
-                    // on the taskbar, but on Gnome a TOOL_WINDOW will not.
-                    // For consistency between WMs and with Windows, we
-                    // should set the NO_TASKBAR flag which will apply
-                    // the set_skip_taskbar_hint if it is available,
-                    // ensuring no taskbar entry will appear.
-                    style |= wxFRAME_NO_TASKBAR;
-                }
+                // On some WMs, like KDE, a TOOL_WINDOW will still show
+                // on the taskbar, but on Gnome a TOOL_WINDOW will not.
+                // For consistency between WMs and with Windows, we
+                // should set the NO_TASKBAR flag which will apply
+                // the set_skip_taskbar_hint if it is available,
+                // ensuring no taskbar entry will appear.
+                style |= wxFRAME_NO_TASKBAR;
             }
-#endif
         }
     }
 
@@ -544,25 +529,15 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
                                       GTK_WINDOW(topParent->m_widget) );
     }
 
-#if GTK_CHECK_VERSION(2,2,0)
-    if (!gtk_check_version(2,2,0))
+    if (style & wxFRAME_NO_TASKBAR)
     {
-        if (style & wxFRAME_NO_TASKBAR)
-        {
-            gtk_window_set_skip_taskbar_hint(GTK_WINDOW(m_widget), TRUE);
-        }
+        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(m_widget), TRUE);
     }
-#endif
 
-#ifdef __WXGTK24__
-    if (!gtk_check_version(2,4,0))
+    if (style & wxSTAY_ON_TOP)
     {
-        if (style & wxSTAY_ON_TOP)
-        {
-            gtk_window_set_keep_above(GTK_WINDOW(m_widget), TRUE);
-        }
+        gtk_window_set_keep_above(GTK_WINDOW(m_widget), TRUE);
     }
-#endif
 
 #if 0
     if (!name.empty())
@@ -723,12 +698,11 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
         wxGetFullScreenMethodX11((WXDisplay*)GDK_DISPLAY(),
                                  (WXWindow)GDK_ROOT_WINDOW());
 
-#if GTK_CHECK_VERSION(2,2,0)
     // NB: gtk_window_fullscreen() uses freedesktop.org's WMspec extensions
     //     to switch to fullscreen, which is not always available. We must
     //     check if WM supports the spec and use legacy methods if it
     //     doesn't.
-    if ( (method == wxX11_FS_WMSPEC) && !gtk_check_version(2,2,0) )
+    if ( method == wxX11_FS_WMSPEC )
     {
         if (show)
             gtk_window_fullscreen( GTK_WINDOW( m_widget ) );
@@ -736,7 +710,6 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
             gtk_window_unfullscreen( GTK_WINDOW( m_widget ) );
     }
     else
-#endif // GTK+ >= 2.2.0
     {
         GdkWindow *window = m_widget->window;
 
@@ -751,15 +724,11 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
             gint client_x, client_y, root_x, root_y;
             gint width, height;
 
-            if (method != wxX11_FS_WMSPEC)
-            {
-                // don't do it always, Metacity hates it
-                m_fsSaveGdkFunc = m_gdkFunc;
-                m_fsSaveGdkDecor = m_gdkDecor;
-                m_gdkFunc = m_gdkDecor = 0;
-                gdk_window_set_decorations(window, (GdkWMDecoration)0);
-                gdk_window_set_functions(window, (GdkWMFunction)0);
-            }
+            m_fsSaveGdkFunc = m_gdkFunc;
+            m_fsSaveGdkDecor = m_gdkDecor;
+            m_gdkFunc = m_gdkDecor = 0;
+            gdk_window_set_decorations(window, (GdkWMDecoration)0);
+            gdk_window_set_functions(window, (GdkWMFunction)0);
 
             gdk_window_get_origin (m_widget->window, &root_x, &root_y);
             gdk_window_get_geometry (m_widget->window, &client_x, &client_y,
@@ -775,14 +744,10 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
         }
         else // hide
         {
-            if (method != wxX11_FS_WMSPEC)
-            {
-                // don't do it always, Metacity hates it
-                m_gdkFunc = m_fsSaveGdkFunc;
-                m_gdkDecor = m_fsSaveGdkDecor;
-                gdk_window_set_decorations(window, (GdkWMDecoration)m_gdkDecor);
-                gdk_window_set_functions(window, (GdkWMFunction)m_gdkFunc);
-            }
+            m_gdkFunc = m_fsSaveGdkFunc;
+            m_gdkDecor = m_fsSaveGdkDecor;
+            gdk_window_set_decorations(window, (GdkWMDecoration)m_gdkDecor);
+            gdk_window_set_functions(window, (GdkWMFunction)m_gdkFunc);
 
             wxSetFullScreenStateX11((WXDisplay*)GDK_DISPLAY(),
                                     (WXWindow)GDK_ROOT_WINDOW(),
@@ -1189,10 +1154,8 @@ void wxTopLevelWindowGTK::RequestUserAttention(int flags)
 
 void wxTopLevelWindowGTK::SetWindowStyleFlag( long style )
 {
-#if defined(__WXGTK24__) || GTK_CHECK_VERSION(2,2,0)
     // Store which styles were changed
     long styleChanges = style ^ m_windowStyle;
-#endif
 
     // Process wxWindow styles. This also updates the internal variable
     // Therefore m_windowStyle bits carry now the _new_ style values
@@ -1202,16 +1165,17 @@ void wxTopLevelWindowGTK::SetWindowStyleFlag( long style )
     if (!m_widget)
         return;
 
-#ifdef __WXGTK24__
-    if ( (styleChanges & wxSTAY_ON_TOP) && !gtk_check_version(2,4,0) )
-        gtk_window_set_keep_above(GTK_WINDOW(m_widget), m_windowStyle & wxSTAY_ON_TOP);
-#endif // GTK+ 2.4
-#if GTK_CHECK_VERSION(2,2,0)
-    if ( (styleChanges & wxFRAME_NO_TASKBAR) && !gtk_check_version(2,2,0) )
+    if ( styleChanges & wxSTAY_ON_TOP )
     {
-        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(m_widget), m_windowStyle & wxFRAME_NO_TASKBAR);
+        gtk_window_set_keep_above(GTK_WINDOW(m_widget),
+                                  m_windowStyle & wxSTAY_ON_TOP);
     }
-#endif // GTK+ 2.2
+
+    if ( styleChanges & wxFRAME_NO_TASKBAR )
+    {
+        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(m_widget),
+                                         m_windowStyle & wxFRAME_NO_TASKBAR);
+    }
 }
 
 /* Get the X Window between child and the root window.

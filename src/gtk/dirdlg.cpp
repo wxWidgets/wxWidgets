@@ -20,7 +20,7 @@
 
 
 
-#if wxUSE_DIRDLG && defined( __WXGTK24__ )
+#if wxUSE_DIRDLG
 
 #include "wx/dirdlg.h"
 
@@ -83,126 +83,95 @@ static void gtk_dirdialog_response_callback(GtkWidget *w,
 // wxDirDialog
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxDirDialog,wxGenericDirDialog)
+IMPLEMENT_DYNAMIC_CLASS(wxDirDialog, wxDialog)
 
-BEGIN_EVENT_TABLE(wxDirDialog,wxGenericDirDialog)
+BEGIN_EVENT_TABLE(wxDirDialog, wxDirDialogBase)
     EVT_BUTTON(wxID_OK, wxDirDialog::OnFakeOk)
 END_EVENT_TABLE()
 
-wxDirDialog::wxDirDialog(wxWindow* parent, const wxString& title,
-                        const wxString& defaultPath, long style,
-                        const wxPoint& pos, const wxSize& sz,
-                        const wxString& name)
+wxDirDialog::wxDirDialog(wxWindow* parent,
+                         const wxString& title,
+                         const wxString& defaultPath,
+                         long style,
+                         const wxPoint& pos,
+                         const wxSize& WXUNUSED(sz),
+                         const wxString& WXUNUSED(name))
 {
-    if (!gtk_check_version(2,4,0))
+    m_message = title;
+
+    parent = GetParentForModalDialog(parent);
+
+    if (!PreCreation(parent, pos, wxDefaultSize) ||
+        !CreateBase(parent, wxID_ANY, pos, wxDefaultSize, style,
+                wxDefaultValidator, wxT("dirdialog")))
     {
-        m_message = title;
-
-        parent = GetParentForModalDialog(parent);
-
-        if (!PreCreation(parent, pos, wxDefaultSize) ||
-            !CreateBase(parent, wxID_ANY, pos, wxDefaultSize, style,
-                    wxDefaultValidator, wxT("dirdialog")))
-        {
-            wxFAIL_MSG( wxT("wxDirDialog creation failed") );
-            return;
-        }
-
-        GtkWindow* gtk_parent = NULL;
-        if (parent)
-            gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
-
-        m_widget = gtk_file_chooser_dialog_new(
-                       wxGTK_CONV(m_message),
-                       gtk_parent,
-                       GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-                       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                       GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-                       NULL);
-
-        gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_ACCEPT);
-
-        // gtk_widget_hide_on_delete is used here to avoid that Gtk automatically destroys
-        // the dialog when the user press ESC on the dialog: in that case a second call to
-        // ShowModal() would result in a bunch of Gtk-CRITICAL errors...
-        g_signal_connect (G_OBJECT(m_widget),
-                        "delete_event",
-                        G_CALLBACK (gtk_widget_hide_on_delete),
-                        (gpointer)this);
-
-        // local-only property could be set to false to allow non-local files to be loaded.
-        // In that case get/set_uri(s) should be used instead of get/set_filename(s) everywhere
-        // and the GtkFileChooserDialog should probably also be created with a backend,
-        // e.g "gnome-vfs", "default", ... (gtk_file_chooser_dialog_new_with_backend).
-        // Currently local-only is kept as the default - true:
-        // gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(m_widget), true);
-
-        g_signal_connect (m_widget, "response",
-            G_CALLBACK (gtk_dirdialog_response_callback), this);
-
-        if ( !defaultPath.empty() )
-            gtk_file_chooser_set_current_folder( GTK_FILE_CHOOSER(m_widget),
-                    defaultPath.fn_str() );
+        wxFAIL_MSG( wxT("wxDirDialog creation failed") );
+        return;
     }
-    else
-        wxGenericDirDialog::Create(parent, title, defaultPath, style, pos, sz, name);
+
+    GtkWindow* gtk_parent = NULL;
+    if (parent)
+        gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
+
+    m_widget = gtk_file_chooser_dialog_new(
+                   wxGTK_CONV(m_message),
+                   gtk_parent,
+                   GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+                   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                   GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                   NULL);
+
+    gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_ACCEPT);
+
+    // gtk_widget_hide_on_delete is used here to avoid that Gtk automatically destroys
+    // the dialog when the user press ESC on the dialog: in that case a second call to
+    // ShowModal() would result in a bunch of Gtk-CRITICAL errors...
+    g_signal_connect (G_OBJECT(m_widget),
+                    "delete_event",
+                    G_CALLBACK (gtk_widget_hide_on_delete),
+                    (gpointer)this);
+
+    // local-only property could be set to false to allow non-local files to be loaded.
+    // In that case get/set_uri(s) should be used instead of get/set_filename(s) everywhere
+    // and the GtkFileChooserDialog should probably also be created with a backend,
+    // e.g "gnome-vfs", "default", ... (gtk_file_chooser_dialog_new_with_backend).
+    // Currently local-only is kept as the default - true:
+    // gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(m_widget), true);
+
+    g_signal_connect (m_widget, "response",
+        G_CALLBACK (gtk_dirdialog_response_callback), this);
+
+    if ( !defaultPath.empty() )
+        gtk_file_chooser_set_current_folder( GTK_FILE_CHOOSER(m_widget),
+                defaultPath.fn_str() );
 }
 
-void wxDirDialog::OnFakeOk( wxCommandEvent &event )
+void wxDirDialog::OnFakeOk(wxCommandEvent& WXUNUSED(event))
 {
-    if (!gtk_check_version(2,4,0))
-        EndDialog(wxID_OK);
-    else
-        wxGenericDirDialog::OnOK( event );
-}
-
-int wxDirDialog::ShowModal()
-{
-    if (!gtk_check_version(2,4,0))
-        return wxDialog::ShowModal();
-    else
-        return wxGenericDirDialog::ShowModal();
-}
-
-bool wxDirDialog::Show( bool show )
-{
-    if (!gtk_check_version(2,4,0))
-        return wxDialog::Show( show );
-    else
-        return wxGenericDirDialog::Show( show );
+    EndDialog(wxID_OK);
 }
 
 void wxDirDialog::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
     if (!m_wxwindow)
         return;
-    else
-        wxGenericDirDialog::DoSetSize( x, y, width, height, sizeFlags );
+
+    wxDirDialogBase::DoSetSize( x, y, width, height, sizeFlags );
 }
 
 void wxDirDialog::SetPath(const wxString& dir)
 {
-    if (!gtk_check_version(2,4,0))
+    if (wxDirExists(dir))
     {
-        if (wxDirExists(dir))
-        {
-            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
-                                                dir.fn_str());
-        }
+        gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
+                                            dir.fn_str());
     }
-    else
-        wxGenericDirDialog::SetPath( dir );
 }
 
 wxString wxDirDialog::GetPath() const
 {
-    if (!gtk_check_version(2,4,0))
-    {
-        wxGtkString str(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget)));
-        return wxString(str, *wxConvFileName);
-    }
-
-    return wxGenericDirDialog::GetPath();
+    wxGtkString str(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget)));
+    return wxString(str, *wxConvFileName);
 }
 
 #endif // wxUSE_DIRDLG

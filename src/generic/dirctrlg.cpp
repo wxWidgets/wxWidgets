@@ -1330,7 +1330,7 @@ void wxDirFilterListCtrl::FillFilterList(const wxString& filter, int defaultFilt
 // wxFileIconsTable icons
 // ----------------------------------------------------------------------------
 
-#ifndef __WXGTK24__
+#ifndef __WXGTK20__
 /* Computer (c) Julian Smart */
 static const char * file_icons_tbl_computer_xpm[] = {
 /* columns rows colors chars-per-pixel */
@@ -1395,7 +1395,7 @@ static const char * file_icons_tbl_computer_xpm[] = {
 " dfffffffffffffd",
 "                "
 };
-#endif // GTK+ < 2.4
+#endif // !GTK+ 2
 
 // ----------------------------------------------------------------------------
 // wxFileIconsTable & friends
@@ -1464,7 +1464,7 @@ void wxFileIconsTable::Create()
                                                    wxART_CMN_DIALOG,
                                                    wxSize(16, 16)));
     // computer
-#ifdef __WXGTK24__
+#ifdef __WXGTK20__
     // GTK24 uses this icon in the file open dialog
     m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_HARDDISK,
                                                    wxART_CMN_DIALOG,

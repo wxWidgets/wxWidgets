@@ -1453,10 +1453,7 @@ gtk_window_button_press_callback( GtkWidget *widget,
 
     wxEventType event_type = wxEVT_NULL;
 
-    // GdkDisplay is a GTK+ 2.2.0 thing
-#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2, 2, 0)
     if ( gdk_event->type == GDK_2BUTTON_PRESS &&
-            !gtk_check_version(2,2,0) &&
             gdk_event->button >= 1 && gdk_event->button <= 3 )
     {
         // Reset GDK internal timestamp variables in order to disable GDK
@@ -1466,7 +1463,6 @@ gtk_window_button_press_callback( GtkWidget *widget,
         display->button_click_time[1] = 0;
         display->button_click_time[0] = 0;
     }
-#endif // GTK 2+
 
     if (gdk_event->button == 1)
     {

@@ -17,7 +17,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_COLLPANE && defined(__WXGTK24__) && !defined(__WXUNIVERSAL__)
+#if wxUSE_COLLPANE && !defined(__WXUNIVERSAL__)
 
 #include "wx/collpane.h"
 #include "wx/toplevel.h"
@@ -25,6 +25,15 @@
 #include "wx/panel.h"
 
 #include "wx/gtk/private.h"
+
+// the lines below duplicate the same definitions in collpaneg.cpp, if we have
+// another implementation of this class we should extract them to a common file
+
+const wxChar wxCollapsiblePaneNameStr[] = wxT("collapsiblePane");
+
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_COLLPANE_CHANGED)
+
+IMPLEMENT_DYNAMIC_CLASS(wxCollapsiblePaneEvent, wxCommandEvent)
 
 // ============================================================================
 // implementation
@@ -153,9 +162,9 @@ gtk_collapsiblepane_insert_callback(wxWindowGTK* parent, wxWindowGTK* child)
 // wxCollapsiblePane
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxCollapsiblePane, wxGenericCollapsiblePane)
+IMPLEMENT_DYNAMIC_CLASS(wxCollapsiblePane, wxControl)
 
-BEGIN_EVENT_TABLE(wxCollapsiblePane, wxGenericCollapsiblePane)
+BEGIN_EVENT_TABLE(wxCollapsiblePane, wxCollapsiblePaneBase)
     EVT_SIZE(wxCollapsiblePane::OnSize)
 END_EVENT_TABLE()
 
@@ -168,10 +177,6 @@ bool wxCollapsiblePane::Create(wxWindow *parent,
                                const wxValidator& val,
                                const wxString& name)
 {
-    if (gtk_check_version(2,4,0))
-        return wxGenericCollapsiblePane::Create(parent, id, label,
-                                                pos, size, style, val, name);
-
     m_bIgnoreNextChange = false;
 
     if ( !PreCreation( parent, pos, size ) ||
@@ -211,60 +216,42 @@ bool wxCollapsiblePane::Create(wxWindow *parent,
 
 wxSize wxCollapsiblePane::DoGetBestSize() const
 {
-    if (!gtk_check_version(2,4,0))
-    {
-        wxASSERT_MSG( m_widget, wxT("DoGetBestSize called before creation") );
+    wxASSERT_MSG( m_widget, wxT("DoGetBestSize called before creation") );
 
-        GtkRequisition req;
-        req.width = 2;
-        req.height = 2;
-        (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(m_widget) )->size_request )
-                (m_widget, &req );
+    GtkRequisition req;
+    req.width = 2;
+    req.height = 2;
+    (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(m_widget) )->size_request )
+            (m_widget, &req );
 
-        // notice that we do not cache our best size here as it changes
-        // all times the user expands/hide our pane
-        return wxSize(req.width, req.height);
-    }
-
-    return wxGenericCollapsiblePane::DoGetBestSize();
+    // notice that we do not cache our best size here as it changes
+    // all times the user expands/hide our pane
+    return wxSize(req.width, req.height);
 }
 
 void wxCollapsiblePane::Collapse(bool collapse)
 {
-    if (!gtk_check_version(2,4,0))
-    {
-        // optimization
-        if (IsCollapsed() == collapse)
-            return;
+    // optimization
+    if (IsCollapsed() == collapse)
+        return;
 
-        // do not send event in next signal handler call
-        m_bIgnoreNextChange = true;
-        gtk_expander_set_expanded(GTK_EXPANDER(m_widget), !collapse);
-    }
-    else
-        wxGenericCollapsiblePane::Collapse(collapse);
+    // do not send event in next signal handler call
+    m_bIgnoreNextChange = true;
+    gtk_expander_set_expanded(GTK_EXPANDER(m_widget), !collapse);
 }
 
 bool wxCollapsiblePane::IsCollapsed() const
 {
-    if (!gtk_check_version(2,4,0))
-        return !gtk_expander_get_expanded(GTK_EXPANDER(m_widget));
-
-    return wxGenericCollapsiblePane::IsCollapsed();
+    return !gtk_expander_get_expanded(GTK_EXPANDER(m_widget));
 }
 
 void wxCollapsiblePane::SetLabel(const wxString &str)
 {
-    if (!gtk_check_version(2,4,0))
-    {
-        gtk_expander_set_label(GTK_EXPANDER(m_widget), wxGTK_CONV(str));
+    gtk_expander_set_label(GTK_EXPANDER(m_widget), wxGTK_CONV(str));
 
-        // FIXME: we need to update our collapsed width in some way but using GetBestSize()
-        // we may get the size of the control with the pane size summed up if we are expanded!
-        //m_szCollapsed.x = GetBestSize().x;
-    }
-    else
-        wxGenericCollapsiblePane::SetLabel(str);
+    // FIXME: we need to update our collapsed width in some way but using GetBestSize()
+    // we may get the size of the control with the pane size summed up if we are expanded!
+    //m_szCollapsed.x = GetBestSize().x;
 }
 
 void wxCollapsiblePane::OnSize(wxSizeEvent &ev)
@@ -287,5 +274,5 @@ void wxCollapsiblePane::OnSize(wxSizeEvent &ev)
     m_pPane->Layout();
 }
 
-#endif // wxUSE_COLLPANE && defined(__WXGTK24__) && !defined(__WXUNIVERSAL__)
+#endif // wxUSE_COLLPANE && !defined(__WXUNIVERSAL__)
 

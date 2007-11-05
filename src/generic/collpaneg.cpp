@@ -88,7 +88,7 @@ bool wxGenericCollapsiblePane::Create(wxWindow *parent,
 
     // FIXME: at least under wxCE and wxGTK1 the background is black if we don't do
     //        this, no idea why...
-#if defined(__WXWINCE__) || (defined(__WXGTK__) && !defined(__WXGTK20__))
+#if defined(__WXWINCE__) || defined(__WXGTK__)
     SetBackgroundColour(parent->GetBackgroundColour());
 #endif
 
@@ -259,8 +259,6 @@ int wxGenericCollapsiblePane::GetBorder() const
 {
 #if defined( __WXMAC__ )
     return 6;
-#elif defined(__WXGTK20__)
-    return 3;
 #elif defined(__WXMSW__)
     wxASSERT(m_pButton);
     return m_pButton->ConvertDialogToPixels(wxSize(2, 0)).x;

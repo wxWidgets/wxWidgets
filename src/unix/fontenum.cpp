@@ -68,46 +68,29 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
         return false;
     }
 
-#if defined(__WXGTK20__) || !defined(HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE)
-    if ( fixedWidthOnly
-#if defined(__WXGTK24__)
-        && (gtk_check_version(2,4,0) != NULL)
-#endif
-       )
-    {
-        OnFacename( wxT("monospace") );
-    }
-    else // !fixedWidthOnly
-#endif // __WXGTK20__ || !HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE
-    {
-        PangoFontFamily **families = NULL;
-        gint n_families = 0;
-        pango_context_list_families (
+    PangoFontFamily **families = NULL;
+    gint n_families = 0;
+    pango_context_list_families (
 #ifdef __WXGTK20__
-            gtk_widget_get_pango_context( wxGetRootWindow() ),
+        gtk_widget_get_pango_context( wxGetRootWindow() ),
 #else
-            wxTheApp->GetPangoContext(),
+        wxTheApp->GetPangoContext(),
 #endif
-            &families, &n_families );
-        qsort (families, n_families, sizeof (PangoFontFamily *), wxCompareFamilies);
+        &families, &n_families );
+    qsort (families, n_families, sizeof (PangoFontFamily *), wxCompareFamilies);
 
-        for (int i=0; i<n_families; i++)
+    for ( int i = 0; i < n_families; i++ )
+    {
+#if defined(__WXGTK20__) || defined(HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE)
+        if ( !fixedWidthOnly ||
+            pango_font_family_is_monospace(families[i]) )
+#endif
         {
-#if defined(__WXGTK24__) || defined(HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE)
-            if (!fixedWidthOnly || (
-#ifdef __WXGTK24__
-                !gtk_check_version(2,4,0) &&
-#endif
-                pango_font_family_is_monospace(families[i])
-                                   ) )
-#endif
-            {
-                const gchar *name = pango_font_family_get_name(families[i]);
-                OnFacename(wxString(name, wxConvUTF8));
-            }
+            const gchar *name = pango_font_family_get_name(families[i]);
+            OnFacename(wxString(name, wxConvUTF8));
         }
-        g_free(families);
     }
+    g_free(families);
 
     return true;
 }

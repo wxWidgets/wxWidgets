@@ -16,9 +16,6 @@
 class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxStaticLine;
 
-// class name
-extern WXDLLIMPEXP_DATA_CORE(const wxChar) wxCollapsiblePaneNameStr[];
-
 // ----------------------------------------------------------------------------
 // wxGenericCollapsiblePane
 // ----------------------------------------------------------------------------

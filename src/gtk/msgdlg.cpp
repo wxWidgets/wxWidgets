@@ -16,7 +16,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_MSGDLG && defined(__WXGTK20__) && !defined(__WXGPE__)
+#if wxUSE_MSGDLG && !defined(__WXGPE__)
 
 #include "wx/msgdlg.h"
 
@@ -179,4 +179,4 @@ int wxMessageDialog::ShowModal()
 }
 
 
-#endif // wxUSE_MSGDLG && defined(__WXGTK20__) && !defined(__WXGPE__)
+#endif // wxUSE_MSGDLG && !defined(__WXGPE__)

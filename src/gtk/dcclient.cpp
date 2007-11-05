@@ -399,11 +399,7 @@ void wxGTKWindowImplDC::SetUpDC( bool isMemDC )
     /* background colour */
     m_backgroundBrush = *wxWHITE_BRUSH;
     m_backgroundBrush.GetColour().CalcPixel( m_cmap );
-#ifdef __WXGTK24__
     const GdkColor *bg_col = m_backgroundBrush.GetColour().GetColor();
-#else
-          GdkColor *bg_col = m_backgroundBrush.GetColour().GetColor();
-#endif
 
     /* m_textGC */
     m_textForegroundColour.CalcPixel( m_cmap );
@@ -1139,13 +1135,6 @@ void wxGTKWindowImplDC::DoDrawBitmap( const wxBitmap &bitmap,
     if ((w != ww) || (h != hh))
         use_bitmap = use_bitmap.Rescale( 0, 0, ww, hh, ww, hh );
 
-    // NB: We can't render pixbufs with GTK+ < 2.2, we need to use pixmaps code.
-    //     Pixbufs-based bitmaps with alpha channel don't have a mask, so we
-    //     have to call GetPixmap() here -- it converts the pixbuf into pixmap
-    //     and also creates the mask as a side-effect:
-    if (gtk_check_version(2,2,0))
-        use_bitmap.GetPixmap();
-
     // apply mask if any
     GdkBitmap *mask = (GdkBitmap *) NULL;
     if (useMask && use_bitmap.GetMask())
@@ -1199,8 +1188,7 @@ void wxGTKWindowImplDC::DoDrawBitmap( const wxBitmap &bitmap,
     }
     else
     {
-#if GTK_CHECK_VERSION(2,2,0)
-        if (!gtk_check_version(2,2,0) && use_bitmap.HasPixbuf())
+        if (use_bitmap.HasPixbuf())
         {
             gdk_draw_pixbuf(m_window, use_gc,
                             use_bitmap.GetPixbuf(),
@@ -1208,7 +1196,6 @@ void wxGTKWindowImplDC::DoDrawBitmap( const wxBitmap &bitmap,
                             GDK_RGB_DITHER_NORMAL, xx, yy);
         }
         else
-#endif
         {
             gdk_draw_drawable(m_window, use_gc,
                               use_bitmap.GetPixmap(),

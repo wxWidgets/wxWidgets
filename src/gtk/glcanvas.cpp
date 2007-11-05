@@ -193,37 +193,21 @@ bool wxGLCanvas::Create(wxWindow *parent,
     GdkVisual *visual;
     GdkColormap *colormap;
 
-    // MR: This needs a fix for lower gtk+ versions too. Might need to rethink logic (FIXME)
-#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2,2,0)
-    if (!gtk_check_version(2,2,0))
+    wxWindow::Create( parent, id, pos, size, style, name );
+
+    m_glWidget = m_wxwindow;
+
+    GdkScreen *screen = gtk_widget_get_screen( m_glWidget );
+    colormap = gdk_screen_get_default_colormap(screen);
+    visual = gdk_colormap_get_visual(colormap);
+
+    if (GDK_VISUAL_XVISUAL(visual)->visualid != xvi->visualid)
     {
-        wxWindow::Create( parent, id, pos, size, style, name );
-
-        m_glWidget = m_wxwindow;
-
-        GdkScreen *screen = gtk_widget_get_screen( m_glWidget );
-        colormap = gdk_screen_get_default_colormap(screen);
-        visual = gdk_colormap_get_visual(colormap);
-
-        if (GDK_VISUAL_XVISUAL(visual)->visualid != xvi->visualid)
-        {
-            visual = gdk_x11_screen_lookup_visual( screen, xvi->visualid );
-            colormap = gdk_colormap_new(visual, FALSE);
-        }
-
-        gtk_widget_set_colormap( m_glWidget, colormap );
+        visual = gdk_x11_screen_lookup_visual( screen, xvi->visualid );
+        colormap = gdk_colormap_new(visual, FALSE);
     }
-    else
-#endif // GTK+ >= 2.2
-    {
-        visual = gdkx_visual_get( xvi->visualid );
-        colormap = gdk_colormap_new( visual, TRUE );
 
-        gtk_widget_push_colormap( colormap );
-
-        wxWindow::Create( parent, id, pos, size, style, name );
-        m_glWidget = m_wxwindow;
-    }
+    gtk_widget_set_colormap( m_glWidget, colormap );
 
     gtk_widget_set_double_buffered( m_glWidget, FALSE );
 
@@ -233,11 +217,6 @@ bool wxGLCanvas::Create(wxWindow *parent,
     g_signal_connect(m_wxwindow, "map",           G_CALLBACK(gtk_glwindow_map_callback),      this);
     g_signal_connect(m_wxwindow, "expose_event",  G_CALLBACK(gtk_glwindow_expose_callback),   this);
     g_signal_connect(m_widget,   "size_allocate", G_CALLBACK(gtk_glcanvas_size_callback),     this);
-
-    if (gtk_check_version(2,2,0) != NULL)
-    {
-        gtk_widget_pop_colormap();
-    }
 
 #if WXWIN_COMPATIBILITY_2_8
     // if our parent window is already visible, we had been realized before we

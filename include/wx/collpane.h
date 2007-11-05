@@ -19,6 +19,8 @@
 
 #include "wx/control.h"
 
+// class name
+extern WXDLLIMPEXP_DATA_CORE(const wxChar) wxCollapsiblePaneNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxCollapsiblePaneBase: interface for wxCollapsiblePane
@@ -90,7 +92,7 @@ typedef void (wxEvtHandler::*wxCollapsiblePaneEventFunction)(wxCollapsiblePaneEv
     wx__DECLARE_EVT1(wxEVT_COMMAND_COLLPANE_CHANGED, id, wxCollapsiblePaneEventHandler(fn))
 
 
-#if defined(__WXGTK24__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/collpane.h"
 #else
     #include "wx/generic/collpaneg.h"

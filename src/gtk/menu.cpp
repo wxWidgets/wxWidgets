@@ -1695,8 +1695,6 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 
 #endif // wxUSE_MENUS_NATIVE
 
-#ifdef __WXGTK20__
-
 #include <gtk/gtk.h>
 
 const char *wxGetStockGtkID(wxWindowID id)
@@ -1814,7 +1812,5 @@ bool wxGetStockGtkAccelerator(const char *id, GdkModifierType *mod, guint *key)
 
     return false;
 }
-
-#endif // __WXGTK20__
 
 #endif // wxUSE_MENUS

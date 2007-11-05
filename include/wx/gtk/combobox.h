@@ -11,6 +11,8 @@
 #ifndef _WX_GTK_COMBOBOX_H_
 #define _WX_GTK_COMBOBOX_H_
 
+typedef struct _GtkEntry GtkEntry;
+
 //-----------------------------------------------------------------------------
 // wxComboBox
 //-----------------------------------------------------------------------------
@@ -94,7 +96,6 @@ public:
 
     virtual void SetFocus();
 
-    void OnSize( wxSizeEvent &event );
     void OnChar( wxKeyEvent &event );
 
     // Standard event handling
@@ -131,7 +132,6 @@ public:
 
 protected:
     // From wxWindowGTK:
-    virtual void DoApplyWidgetStyle(GtkRcStyle *style);
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
     // From wxItemContainer:
@@ -149,6 +149,9 @@ protected:
     // Widgets that use the style->base colour for the BG colour should
     // override this and return true.
     virtual bool UseGTKStyleBase() const { return true; }
+
+    // return the GtkEntry part of the combobox
+    GtkEntry *GetEntry() const;
 
 private:
     // From wxTextEntry:

@@ -451,7 +451,8 @@ bool wxGenericDragImage::Hide()
 }
 
 // More efficient: erase and redraw simultaneously if possible
-bool wxGenericDragImage::RedrawImage(const wxPoint& oldPos, const wxPoint& newPos,
+bool wxGenericDragImage::RedrawImage(const wxPoint& WXUNUSED(oldPos),
+                                     const wxPoint& newPos,
                                      bool eraseOld, bool drawNew)
 {
     if (!m_windowDC)

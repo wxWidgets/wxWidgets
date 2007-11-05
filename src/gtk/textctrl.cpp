@@ -198,14 +198,9 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
         wxGtkTextRemoveTagsWithPrefix(text_buffer, "WXINDENT", start, end);
 
         // Convert indent from 1/10th of a mm into pixels
-        float factor;
-#if GTK_CHECK_VERSION(2,2,0)
-        if (!gtk_check_version(2,2,0))
-            factor = (float)gdk_screen_get_width(gtk_widget_get_screen(text)) /
+        float factor =
+            (float)gdk_screen_get_width(gtk_widget_get_screen(text)) /
                       gdk_screen_get_width_mm(gtk_widget_get_screen(text)) / 10;
-        else
-#endif
-            factor = (float)gdk_screen_width() / gdk_screen_width_mm() / 10;
 
         const int indent = (int)(factor * attr.GetLeftIndent());
         const int subIndent = (int)(factor * attr.GetLeftSubIndent());
@@ -260,14 +255,9 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
         if (!tag)
         {
             // Factor to convert from 1/10th of a mm into pixels
-            float factor;
-#if GTK_CHECK_VERSION(2,2,0)
-            if (!gtk_check_version(2,2,0))
-                factor = (float)gdk_screen_get_width(gtk_widget_get_screen(text)) /
+            float factor =
+                (float)gdk_screen_get_width(gtk_widget_get_screen(text)) /
                           gdk_screen_get_width_mm(gtk_widget_get_screen(text)) / 10;
-            else
-#endif
-                factor = (float)gdk_screen_width() / gdk_screen_width_mm() / 10;
 
             PangoTabArray* tabArray = pango_tab_array_new(tabs.GetCount(), TRUE);
             for (size_t i = 0; i < tabs.GetCount(); i++)
@@ -857,17 +847,7 @@ void wxTextCtrl::GTKSetWrapMode()
     else if ( HasFlag( wxTE_WORDWRAP ) )
         wrap = GTK_WRAP_WORD;
     else // HasFlag(wxTE_BESTWRAP) always true as wxTE_BESTWRAP == 0
-    {
-        // GTK_WRAP_WORD_CHAR seems to be new in GTK+ 2.4
-#ifdef __WXGTK24__
-        if ( !gtk_check_version(2,4,0) )
-        {
-            wrap = GTK_WRAP_WORD_CHAR;
-        }
-        else
-#endif // __WXGTK24__
-        wrap = GTK_WRAP_WORD;
-    }
+        wrap = GTK_WRAP_WORD_CHAR;
 
     gtk_text_view_set_wrap_mode( GTK_TEXT_VIEW( m_text ), wrap );
 }
@@ -888,23 +868,16 @@ void wxTextCtrl::GTKSetJustification()
     }
     else // single line
     {
-#ifdef __WXGTK24__
-        // gtk_entry_set_alignment was introduced in gtk+-2.3.5
-        if (!gtk_check_version(2,4,0))
-        {
-            gfloat align;
-            if ( HasFlag(wxTE_RIGHT) )
-                align = 1.0;
-            else if ( HasFlag(wxTE_CENTRE) )
-                align = 0.5;
-            else // single line
-                align = 0.0;
+        gfloat align;
+        if ( HasFlag(wxTE_RIGHT) )
+            align = 1.0;
+        else if ( HasFlag(wxTE_CENTRE) )
+            align = 0.5;
+        else // single line
+            align = 0.0;
 
-            gtk_entry_set_alignment(GTK_ENTRY(m_text), align);
-        }
-#endif // __WXGTK24__
+        gtk_entry_set_alignment(GTK_ENTRY(m_text), align);
     }
-
 }
 
 void wxTextCtrl::SetWindowStyleFlag(long style)

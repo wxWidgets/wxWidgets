@@ -178,57 +178,52 @@ wxCursor::wxCursor( const wxImage & image )
     bool bHasMask = image.HasMask();
     int imagebitcount = (w*h)/8;
 
-#ifdef __WXGTK24__
-    if (!gtk_check_version(2,4,0))
+    if ( gdk_display_supports_cursor_color(gdk_display_get_default()) )
     {
-        if ( gdk_display_supports_cursor_color(gdk_display_get_default()) )
+        unsigned char rMask = 0,
+                      gMask = 0,
+                      bMask = 0;
+        if (bHasMask)
         {
-            unsigned char rMask = 0,
-                          gMask = 0,
-                          bMask = 0;
-            if (bHasMask)
-            {
-                rMask = image.GetMaskRed();
-                gMask = image.GetMaskGreen();
-                bMask = image.GetMaskBlue();
-            }
-
-            GdkPixbuf *pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, true, 8, w, h);
-            unsigned char *alpha = image.HasAlpha() ? image.GetAlpha() : NULL;
-            unsigned char *out = gdk_pixbuf_get_pixels(pixbuf);
-            int rowpad = gdk_pixbuf_get_rowstride(pixbuf) - 4 * w;
-            for ( int y = 0; y < h; y++, out += rowpad )
-            {
-                for ( int x = 0; x < w; x++, out += 4, rgbBits += 3 )
-                {
-                    out[0] = rgbBits[0];
-                    out[1] = rgbBits[1];
-                    out[2] = rgbBits[2];
-                    if (bHasMask &&
-                        out[0] == rMask && out[1] == gMask && out[2] == bMask)
-                        out[3] = 0;
-                    else
-                        out[3] = alpha ? *alpha : 255;
-                    if ( alpha )
-                        ++alpha;
-                }
-            }
-
-            int hotSpotX, hotSpotY;
-            GetHotSpot(image, hotSpotX, hotSpotY);
-
-            m_refData = new wxCursorRefData;
-            M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixbuf
-                                 (
-                                  gdk_display_get_default(),
-                                  pixbuf,
-                                  hotSpotX, hotSpotY
-                                 );
-            g_object_unref (pixbuf);
-            return;
+            rMask = image.GetMaskRed();
+            gMask = image.GetMaskGreen();
+            bMask = image.GetMaskBlue();
         }
+
+        GdkPixbuf *pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, true, 8, w, h);
+        unsigned char *alpha = image.HasAlpha() ? image.GetAlpha() : NULL;
+        unsigned char *out = gdk_pixbuf_get_pixels(pixbuf);
+        int rowpad = gdk_pixbuf_get_rowstride(pixbuf) - 4 * w;
+        for ( int y = 0; y < h; y++, out += rowpad )
+        {
+            for ( int x = 0; x < w; x++, out += 4, rgbBits += 3 )
+            {
+                out[0] = rgbBits[0];
+                out[1] = rgbBits[1];
+                out[2] = rgbBits[2];
+                if (bHasMask &&
+                    out[0] == rMask && out[1] == gMask && out[2] == bMask)
+                    out[3] = 0;
+                else
+                    out[3] = alpha ? *alpha : 255;
+                if ( alpha )
+                    ++alpha;
+            }
+        }
+
+        int hotSpotX, hotSpotY;
+        GetHotSpot(image, hotSpotX, hotSpotY);
+
+        m_refData = new wxCursorRefData;
+        M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixbuf
+                             (
+                              gdk_display_get_default(),
+                              pixbuf,
+                              hotSpotX, hotSpotY
+                             );
+        g_object_unref (pixbuf);
+        return;
     }
-#endif // GTK+ 2.4+
 
     unsigned char * bits = new unsigned char [imagebitcount];
     unsigned char * maskBits = new unsigned char [imagebitcount];

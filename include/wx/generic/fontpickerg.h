@@ -19,9 +19,6 @@
 // wxGenericFontButton: a button which brings up a wxColourDialog
 //-----------------------------------------------------------------------------
 
-#define wxFONTBTN_DEFAULT_STYLE \
-    (wxFNTP_FONTDESC_AS_LABEL | wxFNTP_USEFONT_FOR_LABEL)
-
 class WXDLLIMPEXP_CORE wxGenericFontButton : public wxButton,
                                              public wxFontPickerWidgetBase
 {

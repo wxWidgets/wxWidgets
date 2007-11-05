@@ -17,7 +17,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_COLOURPICKERCTRL && defined(__WXGTK24__)
+#if wxUSE_COLOURPICKERCTRL
 
 #include "wx/clrpicker.h"
 
@@ -51,7 +51,7 @@ static void gtk_clrbutton_setcolor_callback(GtkColorButton *widget,
 // wxColourButton
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxColourButton, wxGenericColourButton)
+IMPLEMENT_DYNAMIC_CLASS(wxColourButton, wxButton)
 
 bool wxColourButton::Create( wxWindow *parent, wxWindowID id,
                         const wxColour &col,
@@ -59,32 +59,27 @@ bool wxColourButton::Create( wxWindow *parent, wxWindowID id,
                         long style, const wxValidator& validator,
                         const wxString &name )
 {
-    if (!gtk_check_version(2,4,0))
+    if (!PreCreation( parent, pos, size ) ||
+        !wxControl::CreateBase(parent, id, pos, size, style, validator, name))
     {
-        if (!PreCreation( parent, pos, size ) ||
-            !wxControl::CreateBase(parent, id, pos, size, style, validator, name))
-        {
-            wxFAIL_MSG( wxT("wxColourButton creation failed") );
-            return false;
-        }
-
-        m_colour = col;
-        m_widget = gtk_color_button_new_with_color( m_colour.GetColor() );
-        gtk_widget_show(m_widget);
-
-        // GtkColourButton signals
-        g_signal_connect(m_widget, "color-set",
-                        G_CALLBACK(gtk_clrbutton_setcolor_callback), this);
-
-
-        m_parent->DoAddChild( this );
-
-        PostCreation(size);
-        SetInitialSize(size);
+        wxFAIL_MSG( wxT("wxColourButton creation failed") );
+        return false;
     }
-    else
-        return wxGenericColourButton::Create(parent, id, col, pos, size,
-                                             style, validator, name);
+
+    m_colour = col;
+    m_widget = gtk_color_button_new_with_color( m_colour.GetColor() );
+    gtk_widget_show(m_widget);
+
+    // GtkColourButton signals
+    g_signal_connect(m_widget, "color-set",
+                    G_CALLBACK(gtk_clrbutton_setcolor_callback), this);
+
+
+    m_parent->DoAddChild( this );
+
+    PostCreation(size);
+    SetInitialSize(size);
+
     return true;
 }
 
@@ -94,10 +89,7 @@ wxColourButton::~wxColourButton()
 
 void wxColourButton::UpdateColour()
 {
-    if (!gtk_check_version(2,4,0))
-        gtk_color_button_set_color(GTK_COLOR_BUTTON(m_widget), m_colour.GetColor());
-    else
-        wxGenericColourButton::UpdateColour();
+    gtk_color_button_set_color(GTK_COLOR_BUTTON(m_widget), m_colour.GetColor());
 }
 
-#endif      // wxUSE_COLOURPICKERCTRL && defined(__WXGTK24__)
+#endif // wxUSE_COLOURPICKERCTRL

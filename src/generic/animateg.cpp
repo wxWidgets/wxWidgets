@@ -15,7 +15,7 @@
   #pragma hdrstop
 #endif  //__BORLANDC__
 
-#if wxUSE_ANIMATIONCTRL && (!defined(__WXGTK20__) || defined(__WXUNIVERSAL__))
+#if wxUSE_ANIMATIONCTRL
 
 #include "wx/animate.h"
 
@@ -687,5 +687,5 @@ void wxAnimationCtrl::OnSize(wxSizeEvent &WXUNUSED(event))
     }
 }
 
-#endif      // wxUSE_ANIMATIONCTRL
+#endif // wxUSE_ANIMATIONCTRL
 

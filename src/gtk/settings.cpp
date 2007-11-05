@@ -399,28 +399,16 @@ static bool GetFrameExtents(GdkWindow* window, int* left, int* right, int* top, 
 {
     bool success = false;
     Atom property = 0;
-#if GTK_CHECK_VERSION(2, 2, 0)
-    if (gtk_check_version(2, 2, 0) == NULL)
+    if (gdk_x11_screen_supports_net_wm_hint(
+            gdk_drawable_get_screen(window),
+            gdk_atom_intern("_NET_FRAME_EXTENTS", false)))
     {
-        if (gdk_x11_screen_supports_net_wm_hint(
-                gdk_drawable_get_screen(window),
-                gdk_atom_intern("_NET_FRAME_EXTENTS", false)))
-        {
-            success = true;
-            property = gdk_x11_get_xatom_by_name_for_display(
-                gdk_drawable_get_display(window),
-                "_NET_FRAME_EXTENTS");
-        }
+        success = true;
+        property = gdk_x11_get_xatom_by_name_for_display(
+            gdk_drawable_get_display(window),
+            "_NET_FRAME_EXTENTS");
     }
-    else
-#endif
-    {
-        if (gdk_net_wm_supports(gdk_atom_intern("_NET_FRAME_EXTENTS", false)))
-        {
-            success = true;
-            property = gdk_x11_get_xatom_by_name("_NET_FRAME_EXTENTS");
-        }
-    }
+
     if (success)
     {
         Atom type;
@@ -451,6 +439,14 @@ static bool GetFrameExtents(GdkWindow* window, int* left, int* right, int* top, 
         }
     }
     return success;
+}
+
+// helper: return the GtkSettings either for the screen the current window is
+// on or for the default screen if window is NULL
+static GtkSettings *GetSettingsForWindowScreen(GdkWindow *window)
+{
+    return window ? gtk_settings_get_for_screen(gdk_drawable_get_screen(window))
+                  : gtk_settings_get_default();
 }
 
 int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
@@ -499,55 +495,29 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
 
         case wxSYS_CURSOR_X:
         case wxSYS_CURSOR_Y:
-#ifdef __WXGTK24__
-            if (!gtk_check_version(2,4,0))
-            {
-                if (window)
-                    return gdk_display_get_default_cursor_size(gdk_drawable_get_display(window));
-                else
-                    return gdk_display_get_default_cursor_size(gdk_display_get_default());
-            }
-            else
-#endif
-                return 16;
+                return gdk_display_get_default_cursor_size(
+                            window ? gdk_drawable_get_display(window)
+                                   : gdk_display_get_default());
 
         case wxSYS_DCLICK_X:
         case wxSYS_DCLICK_Y:
             gint dclick_distance;
-#if GTK_CHECK_VERSION(2,2,0)
-            if (window && !gtk_check_version(2,2,0))
-                g_object_get(gtk_settings_get_for_screen(gdk_drawable_get_screen(window)),
-                                "gtk-double-click-distance", &dclick_distance, NULL);
-            else
-#endif
-                g_object_get(gtk_settings_get_default(),
-                                "gtk-double-click-distance", &dclick_distance, NULL);
+            g_object_get(GetSettingsForWindowScreen(window),
+                            "gtk-double-click-distance", &dclick_distance, NULL);
 
             return dclick_distance * 2;
 
         case wxSYS_DCLICK_MSEC:
             gint dclick;
-            g_object_get(gtk_settings_get_default(),
+            g_object_get(GetSettingsForWindowScreen(window),
                             "gtk-double-click-time", &dclick, NULL);
             return dclick;
 
         case wxSYS_DRAG_X:
         case wxSYS_DRAG_Y:
             gint drag_threshold;
-#if GTK_CHECK_VERSION(2,2,0)
-            if (window && !gtk_check_version(2,2,0))
-            {
-                g_object_get(
-                        gtk_settings_get_for_screen(gdk_drawable_get_screen(window)),
-                        "gtk-dnd-drag-threshold",
-                        &drag_threshold, NULL);
-            }
-            else
-#endif
-            {
-                g_object_get(gtk_settings_get_default(),
-                             "gtk-dnd-drag-threshold", &drag_threshold, NULL);
-            }
+            g_object_get(GetSettingsForWindowScreen(window),
+                            "gtk-dnd-drag-threshold", &drag_threshold, NULL);
 
             // The correct thing here would be to double the value
             // since that is what the API wants. But the values
@@ -557,28 +527,25 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
 
             return drag_threshold;
 
-        // MBN: ditto for icons
-        case wxSYS_ICON_X:     return 32;
-        case wxSYS_ICON_Y:     return 32;
+        case wxSYS_ICON_X:
+        case wxSYS_ICON_Y:
+            return 32;
 
         case wxSYS_SCREEN_X:
-#if GTK_CHECK_VERSION(2,2,0)
-            if (window && !gtk_check_version(2,2,0))
+            if (window)
                 return gdk_screen_get_width(gdk_drawable_get_screen(window));
             else
-#endif
                 return gdk_screen_width();
 
         case wxSYS_SCREEN_Y:
-#if GTK_CHECK_VERSION(2,2,0)
-            if (window && !gtk_check_version(2,2,0))
+            if (window)
                 return gdk_screen_get_height(gdk_drawable_get_screen(window));
             else
-#endif
                 return gdk_screen_height();
 
-        case wxSYS_HSCROLL_Y:  return 15;
-        case wxSYS_VSCROLL_X:  return 15;
+        case wxSYS_HSCROLL_Y:
+        case wxSYS_VSCROLL_X:
+            return 15;
 
         case wxSYS_CAPTION_Y:
             if (!window)
