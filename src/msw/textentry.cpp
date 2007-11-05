@@ -24,6 +24,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/arrstr.h"
     #include "wx/string.h"
 #endif // WX_PRECOMP
 
@@ -33,10 +34,6 @@
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
-
-#ifndef SHACF_FILESYS_ONLY
-    #define SHACF_FILESYS_ONLY 0x00000010
-#endif
 
 #define GetEditHwnd() ((HWND)(GetEditHWND()))
 
@@ -48,6 +45,19 @@
 
 #include "wx/msw/ole/oleutils.h"
 #include <shldisp.h>
+
+#if defined(__MINGW32__)
+    // needed for IID_IAutoComplete, IID_IAutoComplete2 and ACO_AUTOSUGGEST
+    #include <shlguid.h>
+#endif
+
+#ifndef ACO_UPDOWNKEYDROPSLIST
+    #define ACO_UPDOWNKEYDROPSLIST 0x20
+#endif
+
+#ifndef SHACF_FILESYS_ONLY
+    #define SHACF_FILESYS_ONLY 0x00000010
+#endif
 
 DEFINE_GUID(CLSID_AutoComplete,
     0x00bb2763, 0x6a77, 0x11d0, 0xa5, 0x35, 0x00, 0xc0, 0x4f, 0xd7, 0xd0, 0x62);
