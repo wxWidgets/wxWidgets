@@ -451,7 +451,7 @@ bool wxGenericDragImage::Hide()
 }
 
 // More efficient: erase and redraw simultaneously if possible
-bool wxGenericDragImage::RedrawImage(const wxPoint& WXUNUSED(oldPos),
+bool wxGenericDragImage::RedrawImage(const wxPoint& oldPos,
                                      const wxPoint& newPos,
                                      bool eraseOld, bool drawNew)
 {
@@ -459,6 +459,8 @@ bool wxGenericDragImage::RedrawImage(const wxPoint& WXUNUSED(oldPos),
         return false;
 
 #ifdef wxHAS_NATIVE_OVERLAY
+    wxUnusedVar(oldPos);
+
     wxDCOverlay dcoverlay( m_overlay, (wxWindowDC*) m_windowDC ) ;
     if ( eraseOld )
         dcoverlay.Clear() ;
