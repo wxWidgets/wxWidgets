@@ -169,11 +169,7 @@ int wxColour::GetPixel() const
     return M_COLDATA->m_color.pixel;
 }
 
-#ifdef __WXGTK24__
 const GdkColor *wxColour::GetColor() const
-#else
-      GdkColor *wxColour::GetColor() const
-#endif
 {
     wxCHECK_MSG( Ok(), NULL, wxT("invalid colour") );
 
