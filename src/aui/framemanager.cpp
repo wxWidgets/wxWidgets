@@ -435,13 +435,18 @@ static void RemovePaneFromDocks(wxAuiDockInfoArray& docks,
 // dock has rows with numbers 0,2,5, they will become 0,1,2
 static void RenumberDockRows(wxAuiDockInfoPtrArray& docks)
 {
-    int i, dock_count, j, pane_count;
+    int i, dock_count;
     for (i = 0, dock_count = docks.GetCount(); i < dock_count; ++i)
     {
         wxAuiDockInfo& dock = *docks.Item(i);
         dock.dock_row = i;
-        for (j = 0, pane_count = dock.panes.GetCount(); j < pane_count; ++j)
-            dock.panes.Item(j)->dock_row = i;
+        
+        // (BIW) I believe these lines are wrong because they are modifying
+        // the original pane structures, which should be avoided as much
+        // as possible.
+        
+        //for (j = 0, pane_count = dock.panes.GetCount(); j < pane_count; ++j)
+        //    dock.panes.Item(j)->dock_row = i;
     }
 }
 
