@@ -18,11 +18,10 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/sysopt.h"
 #include "wx/apptrait.h"
-
 #include "wx/process.h"
 #include "wx/sysopt.h"
-
 #include "wx/unix/execute.h"
 
 #include "wx/gtk/private/timer.h"
@@ -144,8 +143,11 @@ void *wxGetDisplay()
 
 void wxDisplaySize( int *width, int *height )
 {
-    if (width) *width = gdk_screen_width();
-    if (height) *height = gdk_screen_height();
+    int marginX = wxSystemOptions::GetOptionInt(wxT("gtk.desktopmargin.x"));
+    int marginY = wxSystemOptions::GetOptionInt(wxT("gtk.desktopmargin.y"));
+
+    if (width) *width = gdk_screen_width() - marginX;
+    if (height) *height = gdk_screen_height() - marginY;
 }
 
 void wxDisplaySizeMM( int *width, int *height )

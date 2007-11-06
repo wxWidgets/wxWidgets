@@ -53,6 +53,8 @@ setting it to $0$ makes it always unavailable.}
 environment determination. Supported values are \texttt{GNOME} and \texttt{KDE}.}
 \twocolitem{gtk.window.force-background-colour}{If 1, the backgrounds of windows with the wxBG\_STYLE\_COLOUR background style are cleared forcibly instead
 of relying on the underlying GTK+ window colour. This works around a display problem when running applications under KDE with the gtk-qt theme installed (0.6 and below).}
+\twocolitem{gtk.desktopmargin.x}{The horizontal margin to subtract from the desktop size when Xinerama is not available.}
+\twocolitem{gtk.desktopmargin.y}{The vertical margin to subtract from the desktop size when Xinerama is not available.}
 \end{twocollist}
 
 \wxheading{Mac}
@@ -86,15 +88,6 @@ A reasonable default is used if not specified.}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf Option}}{{\bf Value}}
 \twocolitem{motif.largebuttons}{If 1, uses a bigger default size for wxButtons.}
-\end{twocollist}
-
-\wxheading{All}
-
-\twocolwidtha{7cm}
-\begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf Option}}{{\bf Value}}
-\twocolitem{sizer.desktopmargin.x}{The horizontal margin to subtract from the desktop size when computing the maximum top-level window size in wxSizer::Fit.}
-\twocolitem{sizer.desktopmargin.y}{The vertical margin to subtract from the desktop size when computing the maximum top-level window size in wxSizer::Fit.}
 \end{twocollist}
 
 The compile-time option to include or exclude this functionality
