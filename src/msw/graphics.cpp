@@ -1123,11 +1123,11 @@ void wxGDIPlusContext::GetTextExtent( const wxString &str, wxDouble *width, wxDo
         f->GetSize() / ffamily.GetEmHeight(FontStyleRegular);
 
     if ( height )
-        *height = rHeight * factorY + 0.5 ;
+        *height = rHeight * factorY;
     if ( descent )
-        *descent = rDescent * factorY + 0.5 ;
+        *descent = rDescent * factorY;
     if ( externalLeading )
-        *externalLeading = (rHeight - rAscent - rDescent) * factorY + 0.5 ;
+        *externalLeading = (rHeight - rAscent - rDescent) * factorY;
     // measuring empty strings is not guaranteed, so do it by hand
     if ( str.IsEmpty())
     {
@@ -1142,12 +1142,14 @@ void wxGDIPlusContext::GetTextExtent( const wxString &str, wxDouble *width, wxDo
         StringFormat strFormat;
         CharacterRange strRange(0,wcslen(s));
         strFormat.SetMeasurableCharacterRanges(1,&strRange);
+        strFormat.SetFormatFlags(StringFormatFlagsMeasureTrailingSpaces);
+
         Region region ;
         m_context->MeasureCharacterRanges(s, -1 , f,layoutRect, &strFormat,1,&region) ;
         RectF bbox ;
         region.GetBounds(&bbox,m_context);
         if ( width )
-            *width = bbox.GetRight()-bbox.GetLeft()+0.5;
+            *width = bbox.GetRight()-bbox.GetLeft();
     }
 }
 
@@ -1176,6 +1178,7 @@ void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble
         ranges[i].Length = 1 ;
     }
     strFormat.SetMeasurableCharacterRanges(len,ranges);
+    strFormat.SetFormatFlags(StringFormatFlagsMeasureTrailingSpaces);
     m_context->MeasureCharacterRanges(ws, -1 , f,layoutRect, &strFormat,1,regions) ;
 
     RectF bbox ;
