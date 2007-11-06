@@ -31,6 +31,10 @@
     #include "wx/toplevel.h"
 #endif // WX_PRECOMP
 
+#if wxUSE_SYSTEM_OPTIONS
+#include "wx/sysopt.h"
+#endif
+
 #include "wx/listimpl.cpp"
 
 
@@ -792,6 +796,13 @@ wxSize wxSizer::Fit( wxWindow *window )
             }
 
             sizeMax = wxDisplay(disp).GetClientArea().GetSize();
+
+#if wxUSE_SYSTEM_OPTIONS
+            int marginX = wxSystemOptions::GetOptionInt(wxT("sizer.desktopmargin.x"));
+            int marginY = wxSystemOptions::GetOptionInt(wxT("sizer.desktopmargin.y"));
+            sizeMax.x -= marginX;
+            sizeMax.y -= marginY;
+#endif
         }
     }
 
