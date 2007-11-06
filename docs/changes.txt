@@ -107,8 +107,6 @@ wxGTK:
   a background colour bug in the gtk-qt theme under KDE.
 - wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW) now returns the background
   colour of text controls.
-- Added gtk.desktopmargin.x/y system options to allow windows to fit the desktop
-  when Xinerama is not available.
 
 wxMac:
 
