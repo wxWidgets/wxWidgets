@@ -41,9 +41,9 @@ class wxGnomeVFSLibrary
 public:
     wxGnomeVFSLibrary();
     ~wxGnomeVFSLibrary();
+    bool IsOk();
 
 private:
-    bool IsOk();
     bool InitializeMethods();
 
     wxDynamicLibrary m_libGnomeVFS;
@@ -56,8 +56,8 @@ private:
 public:
     wxDL_METHOD_DEFINE( gboolean, gnome_vfs_init,
         (), (), FALSE )
-    wxDL_METHOD_DEFINE( void, gnome_vfs_shutdown,
-        (), (), /**/ )
+    wxDL_VOIDMETHOD_DEFINE( gnome_vfs_shutdown,
+        (), () )
 
     wxDL_METHOD_DEFINE( GnomeVFSResult, gnome_vfs_mime_set_icon,
         (const char *mime_type, const char *filename), (mime_type, filename), GNOME_VFS_OK )
@@ -82,8 +82,8 @@ bool wxGnomeVFSLibrary::IsOk()
 
 bool wxGnomeVFSLibrary::InitializeMethods()
 {
-    wxDL_METHOD_LOAD( m_libGnomeVFS, gnome_vfs_init )
-    wxDL_METHOD_LOAD( m_libGnomeVFS, gnome_vfs_shutdown )
+    wxDL_METHOD_LOAD( m_libGnomeVFS, gnome_vfs_init );
+    wxDL_METHOD_LOAD( m_libGnomeVFS, gnome_vfs_shutdown );
 
     return true;
 }
