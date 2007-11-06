@@ -1359,6 +1359,7 @@ bool wxMacUnicodeTextControl::Create( wxTextCtrl *wxPeer,
 {
     m_font = wxPeer->GetFont() ;
     m_windowStyle = style ;
+    m_selection.selStart = m_selection.selEnd = 0;
     Rect bounds = wxMacGetBoundsForControl( wxPeer , pos , size ) ;
     wxString st = str ;
     wxMacConvertNewlines10To13( &st ) ;
