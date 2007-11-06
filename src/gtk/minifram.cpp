@@ -94,18 +94,20 @@ static gboolean gtk_window_own_expose_callback(GtkWidget* widget, GdkEventExpose
          (style & wxTINY_CAPTION_VERT)))
     {
         dc.SetFont( *wxSMALL_FONT );
-        int height = dc.GetCharHeight();
 
         wxBrush brush( LightContrastColour( wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT) ) );
         dc.SetBrush( brush );
         dc.SetPen( *wxTRANSPARENT_PEN );
-        dc.DrawRectangle( 3, 3, win->m_width - 7, height );
+        dc.DrawRectangle( win->m_miniEdge-1, 
+                          win->m_miniEdge-1, 
+                          win->m_width - (2*(win->m_miniEdge-1)),
+                          15  );
 
         dc.SetTextForeground( *wxWHITE );
-        dc.DrawText( win->GetTitle(), 6, 3 );
+        dc.DrawText( win->GetTitle(), 6, 4 );
 
         if (style & wxCLOSE_BOX)
-            dc.DrawBitmap( win->m_closeButton, win->m_width-19, 2, true );
+            dc.DrawBitmap( win->m_closeButton, win->m_width-18, 3, true );
     }
     return false;
 }
