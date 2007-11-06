@@ -430,6 +430,9 @@ static void RemovePaneFromDocks(wxAuiDockInfoArray& docks,
     }
 }
 
+/*
+// This function works fine, and may be used in the future
+
 // RenumberDockRows() takes a dock and assigns sequential numbers
 // to existing rows.  Basically it takes out the gaps; so if a
 // dock has rows with numbers 0,2,5, they will become 0,1,2
@@ -441,14 +444,12 @@ static void RenumberDockRows(wxAuiDockInfoPtrArray& docks)
         wxAuiDockInfo& dock = *docks.Item(i);
         dock.dock_row = i;
         
-        // (BIW) I believe these lines are wrong because they are modifying
-        // the original pane structures, which should be avoided as much
-        // as possible.
-        
-        //for (j = 0, pane_count = dock.panes.GetCount(); j < pane_count; ++j)
-        //    dock.panes.Item(j)->dock_row = i;
+        int j, pane_count;
+        for (j = 0, pane_count = dock.panes.GetCount(); j < pane_count; ++j)
+            dock.panes.Item(j)->dock_row = i;
     }
 }
+*/
 
 
 // SetActivePane() sets the active pane, as well as cycles through
@@ -2174,7 +2175,6 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
 
         // find any top docks in this layer
         FindDocks(docks, wxAUI_DOCK_TOP, layer, -1, arr);
-        RenumberDockRows(arr);
         if (!arr.IsEmpty())
         {
             for (row = 0, row_count = arr.GetCount(); row < row_count; ++row)
@@ -2189,7 +2189,6 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
 
         // find any left docks in this layer
         FindDocks(docks, wxAUI_DOCK_LEFT, layer, -1, arr);
-        RenumberDockRows(arr);
         if (!arr.IsEmpty())
         {
             for (row = 0, row_count = arr.GetCount(); row < row_count; ++row)
@@ -2228,7 +2227,6 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
 
         // find any right docks in this layer
         FindDocks(docks, wxAUI_DOCK_RIGHT, layer, -1, arr);
-        RenumberDockRows(arr);
         if (!arr.IsEmpty())
         {
             for (row = arr.GetCount()-1; row >= 0; --row)
@@ -2241,7 +2239,6 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
 
         // find any bottom docks in this layer
         FindDocks(docks, wxAUI_DOCK_BOTTOM, layer, -1, arr);
-        RenumberDockRows(arr);
         if (!arr.IsEmpty())
         {
             for (row = arr.GetCount()-1; row >= 0; --row)
