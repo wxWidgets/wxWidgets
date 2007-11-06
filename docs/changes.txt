@@ -95,6 +95,8 @@ All (GUI):
 
 - wxGraphicsContext implementations now all have the pixel's center at (0.5,0.5), 
   avoiding differences in anti-aliasing between platforms.
+- Added sizer.desktopmargin.x/y system options so wxSizer::Fit can allow
+  for decorations.
 
 wxMSW:
 
