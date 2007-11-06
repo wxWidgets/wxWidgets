@@ -110,6 +110,8 @@ public:
 
     virtual bool IsDoubleBuffered() const { return false; }
 
+    GdkWindow* GTKGetDrawingWindow() const;
+
     // implementation
     // --------------
 

@@ -109,12 +109,10 @@ gtk_dialog_realized_callback( GtkWidget * WXUNUSED(widget), wxPopupWindow *win )
 
 static void wxInsertChildInPopupWin(wxWindowGTK* parent, wxWindowGTK* child)
 {
-    gtk_pizza_put( GTK_PIZZA(parent->m_wxwindow),
-                   child->m_widget,
-                   child->m_x,
-                   child->m_y,
-                   child->m_width,
-                   child->m_height );
+    gtk_widget_set_size_request(
+        child->m_widget, child->m_width, child->m_height);
+    gtk_fixed_put(
+        GTK_FIXED(parent->m_wxwindow), child->m_widget, child->m_x, child->m_y);
 
     if (parent->HasFlag(wxTAB_TRAVERSAL))
     {
@@ -165,7 +163,7 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     g_signal_connect (m_widget, "delete_event",
                       G_CALLBACK (gtk_dialog_delete_callback), this);
 
-    m_wxwindow = gtk_pizza_new();
+    m_wxwindow = wxPizza::New(m_windowStyle);
     gtk_widget_show( m_wxwindow );
     GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
 

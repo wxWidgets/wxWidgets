@@ -26,7 +26,6 @@
     #include <gpe/init.h>
 #endif
 
-#include "wx/gtk/win_gtk.h"
 #include "wx/gtk/private.h"
 #include "wx/apptrait.h"
 

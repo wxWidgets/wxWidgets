@@ -184,6 +184,8 @@ public:
     // fire off capture lost events.
     void GTKReleaseMouseAndNotify();
 
+    GdkWindow* GTKGetDrawingWindow() const;
+
 protected:
     // Override GTKWidgetNeedsMnemonic and return true if your
     // needs to set its mnemonic widget, such as for a

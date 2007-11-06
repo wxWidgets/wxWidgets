@@ -33,7 +33,6 @@
 #endif
 
 #include <gtk/gtk.h>
-#include "wx/gtk/win_gtk.h"
 
 // ----------------------------------------------------------------------------
 // wxRendererGTK: our wxRendererNative implementation

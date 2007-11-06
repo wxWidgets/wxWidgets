@@ -33,7 +33,7 @@
 #endif
 
 #ifdef __WXGTK__
-#include "wx/gtk/win_gtk.h"
+#include <gtk/gtk.h>
 #endif
 
 #include "wx/graphics.h"

@@ -41,7 +41,6 @@
 
 #ifdef __WXGTK__
 #include <gtk/gtk.h>
-#include "wx/gtk/win_gtk.h"
 #include "wx/renderer.h"
 #endif
 
@@ -467,12 +466,12 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
 
     if (!window) return;
     if (!window->m_wxwindow) return;
-    if (!GTK_PIZZA(window->m_wxwindow)->bin_window) return;
+    if (!GTK_WIDGET_DRAWABLE(window->m_wxwindow)) return;
 
     gtk_paint_handle
     (
         window->m_wxwindow->style,
-        GTK_PIZZA(window->m_wxwindow)->bin_window,
+        window->GTKGetDrawingWindow(),
         // flags & wxCONTROL_CURRENT ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL,
         GTK_STATE_NORMAL,
         GTK_SHADOW_NONE,

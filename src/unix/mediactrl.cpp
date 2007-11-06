@@ -37,7 +37,7 @@
 #include "wx/thread.h"              // wxMutex/wxMutexLocker
 
 #ifdef __WXGTK__
-#    include "wx/gtk/win_gtk.h"
+    #include <gtk/gtk.h>
 #    include <gdk/gdkx.h>           // for GDK_WINDOW_XWINDOW
 #endif
 
@@ -282,7 +282,7 @@ static gboolean gtk_window_expose_callback(GtkWidget *widget,
     if(event->count > 0)
         return FALSE;
 
-    GdkWindow *window = GTK_PIZZA(be->GetControl()->m_wxwindow)->bin_window;
+    GdkWindow *window = be->GetControl()->GTKGetDrawingWindow();
 
     // I've seen this reccommended somewhere...
     // TODO: Is this needed? Maybe it is just cruft...
@@ -320,7 +320,7 @@ static gboolean gtk_window_expose_callback(GtkWidget *widget,
 //-----------------------------------------------------------------------------
 #ifdef __WXGTK__
 extern "C" {
-static gint gtk_window_realize_callback(GtkWidget* theWidget,
+static gint gtk_window_realize_callback(GtkWidget*,
                                         wxGStreamerMediaBackend* be)
 {
     DEBUG_MAIN_THREAD // TODO: Is this neccessary?
@@ -333,7 +333,7 @@ static gint gtk_window_realize_callback(GtkWidget* theWidget,
     wxYield();    // FIXME: RN: X Server gets an error/crash if I don't do
                   //       this or a messagebox beforehand?!?!??
 
-    GdkWindow *window = GTK_PIZZA(theWidget)->bin_window;
+    GdkWindow *window = be->GetControl()->GTKGetDrawingWindow();
     wxASSERT(window);
 
     gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(be->m_xoverlay),
@@ -737,7 +737,7 @@ void wxGStreamerMediaBackend::SetupXOverlay()
     else
     {
         wxYield(); // see realize callback...
-        GdkWindow *window = GTK_PIZZA(m_ctrl->m_wxwindow)->bin_window;
+        GdkWindow *window = m_ctrl->m_wxwindow->GTKGetDrawingWindow();
         wxASSERT(window);
 #endif
 

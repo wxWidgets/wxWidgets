@@ -4224,3 +4224,11 @@ void wxWinModule::OnExit()
     if (g_eraseGC)
         gdk_gc_unref( g_eraseGC );
 }
+
+GdkWindow* wxWindowGTK::GTKGetDrawingWindow() const
+{
+    GdkWindow* window = NULL;
+    if (m_wxwindow)
+        window = GTK_PIZZA(m_wxwindow)->bin_window;
+    return window;
+}

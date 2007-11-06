@@ -26,8 +26,6 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 
-#include "wx/gtk/win_gtk.h"
-
 #if WXWIN_COMPATIBILITY_2_8
 
 //-----------------------------------------------------------------------------
@@ -234,7 +232,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
 
 Window wxGLCanvas::GetXWindow() const
 {
-    GdkWindow *window = GTK_PIZZA(m_wxwindow)->bin_window;
+    GdkWindow *window = m_wxwindow->window;
     return window ? GDK_WINDOW_XWINDOW(window) : 0;
 }
 

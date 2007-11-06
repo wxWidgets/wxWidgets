@@ -27,7 +27,6 @@
 
 #ifdef __WXGTK20__
     #include <gtk/gtk.h>
-    #include "wx/gtk/win_gtk.h"
 #endif
 
 // we only have to do it here when we use wxStatusBarGeneric in addition to the
@@ -204,7 +203,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
         if (GetLayoutDirection() == wxLayout_RightToLeft)
         {
             gtk_paint_resize_grip( m_widget->style,
-                               GTK_PIZZA(m_wxwindow)->bin_window,
+                               GTKGetDrawingWindow(),
                                (GtkStateType) GTK_WIDGET_STATE (m_widget),
                                NULL,
                                m_widget,
@@ -215,7 +214,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
         else
         {
             gtk_paint_resize_grip( m_widget->style,
-                               GTK_PIZZA(m_wxwindow)->bin_window,
+                               GTKGetDrawingWindow(),
                                (GtkStateType) GTK_WIDGET_STATE (m_widget),
                                NULL,
                                m_widget,
@@ -423,7 +422,7 @@ void wxStatusBarGeneric::OnLeftDown(wxMouseEvent& event)
         if (!GTK_IS_WINDOW (ancestor))
             return;
 
-        GdkWindow *source = GTK_PIZZA(m_wxwindow)->bin_window;
+        GdkWindow *source = GTKGetDrawingWindow();
 
         int org_x = 0;
         int org_y = 0;
@@ -470,7 +469,7 @@ void wxStatusBarGeneric::OnRightDown(wxMouseEvent& event)
         if (!GTK_IS_WINDOW (ancestor))
             return;
 
-        GdkWindow *source = GTK_PIZZA(m_wxwindow)->bin_window;
+        GdkWindow *source = GTKGetDrawingWindow();
 
         int org_x = 0;
         int org_y = 0;

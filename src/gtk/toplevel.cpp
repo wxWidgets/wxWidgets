@@ -557,7 +557,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     gtk_container_add( GTK_CONTAINER(m_widget), m_mainWidget );
 
     // m_wxwindow is the client area
-    m_wxwindow = gtk_pizza_new_no_scroll();
+    m_wxwindow = wxPizza::New();
     gtk_widget_show( m_wxwindow );
     gtk_container_add( GTK_CONTAINER(m_mainWidget), m_wxwindow );
 
@@ -1105,8 +1105,7 @@ bool wxTopLevelWindowGTK::SetShape(const wxRegion& region)
     GdkWindow *window = NULL;
     if (m_wxwindow)
     {
-        window = GTK_PIZZA(m_wxwindow)->bin_window;
-        do_shape_combine_region(window, region);
+        do_shape_combine_region(m_wxwindow->window, region);
     }
     window = m_widget->window;
     return do_shape_combine_region(window, region);

@@ -28,7 +28,6 @@
 #include "wx/fontutil.h"
 #include "wx/scrolwin.h"
 
-#include "wx/gtk/win_gtk.h"
 #include "wx/gtk/private.h"
 
 #include <gdk/gdkx.h>
@@ -311,8 +310,7 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     m_layout = pango_layout_new( m_context );
     m_fontdesc = pango_font_description_copy( widget->style->font_desc );
 
-    GtkPizza *pizza = GTK_PIZZA( widget );
-    m_window = pizza->bin_window;
+    m_window = widget->window;
 
     // Window not realized ?
     if (!m_window)

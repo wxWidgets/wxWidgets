@@ -112,19 +112,19 @@
    can find in m_widget (defined in wxWindow)
 
    When the class has a client area for drawing into and for containing children
-   it has to handle the client area widget (of the type GtkPizza, defined in
-   win_gtk.c), but there could be any number of widgets, handled by a class
+   it has to handle the client area widget (of the type wxPizza, defined in
+   win_gtk.cpp), but there could be any number of widgets, handled by a class.
    The common rule for all windows is only, that the widget that interacts with
    the rest of GTK must be referenced in m_widget and all other widgets must be
    children of this widget on the GTK level. The top-most widget, which also
    represents the client area, must be in the m_wxwindow field and must be of
-   the type GtkPizza.
+   the type wxPizza.
 
    As I said, the window classes that display a GTK native widget only have
    one widget, so in the case of e.g. the wxButton class m_widget holds a
    pointer to a GtkButton widget. But windows with client areas (for drawing
    and children) have a m_widget field that is a pointer to a GtkScrolled-
-   Window and a m_wxwindow field that is pointer to a GtkPizza and this
+   Window and a m_wxwindow field that is pointer to a wxPizza and this
    one is (in the GTK sense) a child of the GtkScrolledWindow.
 
    If the m_wxwindow field is set, then all input to this widget is inter-
@@ -138,10 +138,10 @@
    clicking on a scrollbar belonging to scrolled window will inevitably move
    the window. In wxWidgets, the scrollbar will only emit an event, send this
    to (normally) a wxScrolledWindow and that class will call ScrollWindow()
-   which actually moves the window and its sub-windows. Note that GtkPizza
+   which actually moves the window and its sub-windows. Note that wxPizza
    memorizes how much it has been scrolled but that wxWidgets forgets this
    so that the two coordinates systems have to be kept in synch. This is done
-   in various places using the pizza->xoffset and pizza->yoffset values.
+   in various places using the pizza->m_scroll_x and pizza->m_scroll_y values.
 
    III)
 
@@ -312,92 +312,6 @@ static void GetScrollbarWidth(GtkWidget* widget, int& w, int& h)
     }
 }
 
-static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
-{
-    // wxUniversal widgets draw the borders and scrollbars themselves
-#ifndef __WXUNIVERSAL__
-    if (!win->m_hasVMT)
-        return;
-
-    int dx = 0;
-    int dy = 0;
-    if (GTK_WIDGET_NO_WINDOW (widget))
-    {
-        dx += widget->allocation.x;
-        dy += widget->allocation.y;
-    }
-
-    int x = dx;
-    int y = dy;
-
-    int dw = 0;
-    int dh = 0;
-    if (win->m_hasScrolling)
-    {
-        GetScrollbarWidth(widget, dw, dh);
-
-        if (win->GetLayoutDirection() == wxLayout_RightToLeft)
-        {
-            // This is actually wrong for old GTK+ version
-            // which do not display the scrollbar on the
-            // left side in RTL
-            x += dw;
-        }
-    }
-
-    int w = widget->allocation.width-dw;
-    int h = widget->allocation.height-dh;
-
-    if (win->HasFlag(wxRAISED_BORDER))
-    {
-        gtk_paint_shadow (widget->style,
-                          widget->window,
-                          GTK_STATE_NORMAL,
-                          GTK_SHADOW_OUT,
-                          NULL, NULL, NULL, // FIXME: No clipping?
-                          x, y, w, h );
-        return;
-    }
-
-    if (win->HasFlag(wxSUNKEN_BORDER))
-    {
-        gtk_paint_shadow (widget->style,
-                          widget->window,
-                          GTK_STATE_NORMAL,
-                          GTK_SHADOW_IN,
-                          NULL, NULL, NULL, // FIXME: No clipping?
-                          x, y, w, h );
-        return;
-    }
-
-    if (win->HasFlag(wxSIMPLE_BORDER))
-    {
-        GdkGC *gc;
-        gc = gdk_gc_new( widget->window );
-        gdk_gc_set_foreground( gc, &widget->style->black );
-        gdk_draw_rectangle( widget->window, gc, FALSE, x, y, w-1, h-1 );
-        g_object_unref (gc);
-        return;
-    }
-#endif // __WXUNIVERSAL__
-}
-
-//-----------------------------------------------------------------------------
-// "expose_event" of m_widget
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static gboolean
-gtk_window_own_expose_callback( GtkWidget *widget,
-                                GdkEventExpose *gdk_event,
-                                wxWindowGTK *win )
-{
-    if (gdk_event->count == 0)
-        draw_frame(widget, win);
-    return false;
-}
-}
-
 //-----------------------------------------------------------------------------
 // "size_request" of m_widget
 //-----------------------------------------------------------------------------
@@ -471,18 +385,9 @@ gtk_window_expose_callback( GtkWidget *widget,
 {
     DEBUG_MAIN_THREAD
 
-    // This callback gets called in drawing-idle time under
-    // GTK 2.0, so we don't need to defer anything to idle
-    // time anymore.
-
-    GtkPizza *pizza = GTK_PIZZA( widget );
-    if (gdk_event->window != pizza->bin_window)
-    {
-        // block expose events on GTK_WIDGET(pizza)->window,
-        //   all drawing is done on pizza->bin_window
-        return true;
-    }
-
+    // if this event is for the border-only GdkWindow
+    if (gdk_event->window != widget->window)
+        return false;
 
 #if 0
     if (win->GetName())
@@ -517,6 +422,53 @@ gtk_window_expose_callback( GtkWidget *widget,
     return FALSE;
 }
 }
+
+//-----------------------------------------------------------------------------
+// "expose_event" from m_widget, for drawing border
+//-----------------------------------------------------------------------------
+
+#ifndef __WXUNIVERSAL__
+extern "C" {
+static gboolean
+expose_event_border(GtkWidget* widget, GdkEventExpose* event, wxWindow* win)
+{
+    // if this event is not for the GdkWindow the border is drawn on
+    if (win->m_wxwindow == win->m_widget && event->window == widget->window)
+        return false;
+
+    int x = 0;
+    int y = 0;
+    // GtkScrolledWindow is GTK_NO_WINDOW
+    if (GTK_WIDGET_NO_WINDOW(widget))
+    {
+        x = widget->allocation.x;
+        y = widget->allocation.y;
+    }
+    int w = win->m_wxwindow->allocation.width;
+    int h = win->m_wxwindow->allocation.height;
+    if (win->HasFlag(wxBORDER_SIMPLE))
+    {
+        GdkGC* gc;
+        gc = gdk_gc_new(event->window);
+        gdk_gc_set_foreground(gc, &widget->style->black);
+        gdk_draw_rectangle(event->window, gc, false, x, y, w - 1, h - 1);
+        g_object_unref(gc);
+    }
+    else
+    {
+        GtkShadowType shadow = GTK_SHADOW_IN;
+        if (win->HasFlag(wxBORDER_RAISED))
+            shadow = GTK_SHADOW_OUT;
+        gtk_paint_shadow(
+            widget->style, event->window, GTK_STATE_NORMAL,
+            shadow, &event->area, widget, NULL, x, y, w, h);
+    }
+
+    // no further painting is needed for border-only GdkWindow
+    return win->m_wxwindow == win->m_widget;
+}
+}
+#endif // !__WXUNIVERSAL__
 
 //-----------------------------------------------------------------------------
 // "key_press_event" from any window
@@ -1244,7 +1196,7 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
     if ((win->m_wxwindow) && (win->GetLayoutDirection() == wxLayout_RightToLeft))
     {
         // origin in the upper right corner
-        int window_width = gtk_pizza_get_rtl_offset( GTK_PIZZA(win->m_wxwindow) );
+        int window_width = win->m_wxwindow->allocation.width;
         event.m_x = window_width - event.m_x;
     }
 
@@ -1294,9 +1246,9 @@ wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
 
     if (win->m_wxwindow)
     {
-        GtkPizza *pizza = GTK_PIZZA(win->m_wxwindow);
-        xx += gtk_pizza_get_xoffset( pizza );
-        yy += gtk_pizza_get_yoffset( pizza );
+        wxPizza* pizza = WX_PIZZA(win->m_wxwindow);
+        xx += pizza->m_scroll_x;
+        yy += pizza->m_scroll_y;
     }
 
     wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
@@ -1863,8 +1815,7 @@ wx_window_focus_callback(GtkWidget *widget,
                          GtkDirectionType WXUNUSED(direction),
                          wxWindowGTK *win)
 {
-    // the default handler for focus signal in GtkPizza (or, rather, in
-    // GtkScrolledWindow from which GtkPizza inherits this behaviour) sets
+    // the default handler for focus signal in GtkScrolledWindow sets
     // focus to the window itself even if it doesn't accept focus, i.e. has no
     // GTK_CAN_FOCUS in its style -- work around this by forcibly preventing
     // the signal from reaching gtk_scrolled_window_focus() if we don't have
@@ -2031,15 +1982,14 @@ gtk_scrollbar_button_release_event(GtkRange* range, GdkEventButton*, wxWindow* w
 //-----------------------------------------------------------------------------
 
 static void
-gtk_window_realized_callback( GtkWidget *m_widget, wxWindow *win )
+gtk_window_realized_callback(GtkWidget* widget, wxWindow* win)
 {
     DEBUG_MAIN_THREAD
 
     if (win->m_imData)
     {
-        GtkPizza *pizza = GTK_PIZZA( m_widget );
         gtk_im_context_set_client_window( win->m_imData->context,
-                                          pizza->bin_window );
+                                          widget->window);
     }
 
     // We cannot set colours and fonts before the widget
@@ -2068,9 +2018,10 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxWindow* win)
     int h = alloc->height;
     if (win->m_wxwindow)
     {
-        const int border = GTK_CONTAINER(win->m_wxwindow)->border_width;
-        w -= 2 * border;
-        h -= 2 * border;
+        int border_x, border_y;
+        WX_PIZZA(win->m_wxwindow)->get_border_widths(border_x, border_y);
+        w -= 2 * border_x;
+        h -= 2 * border_y;
         if (w < 0) w = 0;
         if (h < 0) h = 0;
     }
@@ -2197,16 +2148,14 @@ static void wxInsertChildInWindow( wxWindowGTK* parent, wxWindowGTK* child )
 {
     /* the window might have been scrolled already, do we
        have to adapt the position */
-    GtkPizza *pizza = GTK_PIZZA(parent->m_wxwindow);
-    child->m_x += gtk_pizza_get_xoffset( pizza );
-    child->m_y += gtk_pizza_get_yoffset( pizza );
+    wxPizza* pizza = WX_PIZZA(parent->m_wxwindow);
+    child->m_x += pizza->m_scroll_x;
+    child->m_y += pizza->m_scroll_y;
 
-    gtk_pizza_put( GTK_PIZZA(parent->m_wxwindow),
-                     child->m_widget,
-                     child->m_x,
-                     child->m_y,
-                     child->m_width,
-                     child->m_height );
+    gtk_widget_set_size_request(
+        child->m_widget, child->m_width, child->m_height);
+    gtk_fixed_put(
+        GTK_FIXED(parent->m_wxwindow), child->m_widget, child->m_x, child->m_y);
 }
 
 //-----------------------------------------------------------------------------
@@ -2337,31 +2286,13 @@ bool wxWindowGTK::Create( wxWindow *parent,
         return false;
     }
 
+    m_wxwindow = wxPizza::New(m_windowStyle);
     if (!HasFlag(wxHSCROLL) && !HasFlag(wxVSCROLL))
-    {
-        m_wxwindow = gtk_pizza_new_no_scroll();
-
-#ifndef __WXUNIVERSAL__
-        if (HasFlag(wxSIMPLE_BORDER))
-            gtk_container_set_border_width((GtkContainer*)m_wxwindow, 1);
-        else if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
-            gtk_container_set_border_width((GtkContainer*)m_wxwindow, 2);
-#endif // __WXUNIVERSAL__
-
         m_widget = m_wxwindow;
-    }
     else
     {
-        m_wxwindow = gtk_pizza_new();
-
-#ifndef __WXUNIVERSAL__
-        if (HasFlag(wxSIMPLE_BORDER))
-            gtk_container_set_border_width((GtkContainer*)m_wxwindow, 1);
-        else if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
-            gtk_container_set_border_width((GtkContainer*)m_wxwindow, 2);
-#endif // __WXUNIVERSAL__
-
         m_widget = gtk_scrolled_window_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
+        gtk_container_set_resize_mode(GTK_CONTAINER(m_widget), GTK_RESIZE_QUEUE);
 
         GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(m_widget);
 
@@ -2516,7 +2447,7 @@ void wxWindowGTK::PostCreation()
                               G_CALLBACK (gtk_window_expose_callback), this);
 
             if (GetLayoutDirection() == wxLayout_LeftToRight)
-                gtk_widget_set_redraw_on_allocate( GTK_WIDGET(m_wxwindow), HasFlag( wxFULL_REPAINT_ON_RESIZE ) );
+                gtk_widget_set_redraw_on_allocate(m_wxwindow, HasFlag(wxFULL_REPAINT_ON_RESIZE));
         }
 
         // Create input method handler
@@ -2528,9 +2459,14 @@ void wxWindowGTK::PostCreation()
         g_signal_connect (m_imData->context, "commit",
                           G_CALLBACK (gtk_wxwindow_commit_cb), this);
 
-        // these are called when the "sunken" or "raised" borders are drawn
-        g_signal_connect (m_widget, "expose_event",
-                          G_CALLBACK (gtk_window_own_expose_callback), this);
+        // border drawing
+#ifndef __WXUNIVERSAL__
+        if (HasFlag(wxBORDER_SIMPLE | wxBORDER_RAISED | wxBORDER_SUNKEN))
+        {
+            g_signal_connect(m_widget, "expose_event",
+                G_CALLBACK(expose_event_border), this);
+        }
+#endif
     }
 
     // focus handling
@@ -2684,9 +2620,9 @@ bool wxWindowGTK::Destroy()
 
 void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
 {
+    gtk_widget_set_size_request(m_widget, width, height);
     // inform the parent to perform the move
-    gtk_pizza_set_size( GTK_PIZZA(m_parent->m_wxwindow), m_widget, x, y, width, height );
-
+    WX_PIZZA(m_parent->m_wxwindow)->move(m_widget, x, y);
 }
 
 void wxWindowGTK::ConstrainSize()
@@ -2740,9 +2676,9 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
 
     if (m_parent->m_wxwindow)
     {
-        GtkPizza *pizza = GTK_PIZZA(m_parent->m_wxwindow);
-        m_x = x + gtk_pizza_get_xoffset(pizza);
-        m_y = y + gtk_pizza_get_yoffset(pizza);
+        wxPizza* pizza = WX_PIZZA(m_parent->m_wxwindow);
+        m_x = x + pizza->m_scroll_x;
+        m_y = y + pizza->m_scroll_y;
 
         int left_border = 0;
         int right_border = 0;
@@ -2838,7 +2774,7 @@ void wxWindowGTK::OnInternalIdle()
 
         if (m_wxwindow && (m_wxwindow != m_widget))
         {
-            GdkWindow *window = GTK_PIZZA(m_wxwindow)->bin_window;
+            GdkWindow *window = m_wxwindow->window;
             if (window)
                 gdk_window_set_cursor( window, cursor.GetCursor() );
 
@@ -2894,9 +2830,10 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
         if (m_hasScrolling)
             GetScrollbarWidth(m_widget, dw, dh);
 
-        const int border = GTK_CONTAINER(m_wxwindow)->border_width;
-        dw += 2 * border;
-        dh += 2 * border;
+        int border_x, border_y;
+        WX_PIZZA(m_wxwindow)->get_border_widths(border_x, border_y);
+        dw += 2 * border_x;
+        dh += 2 * border_y;
 
         w -= dw;
         h -= dh;
@@ -2918,16 +2855,16 @@ void wxWindowGTK::DoGetPosition( int *x, int *y ) const
     int dy = 0;
     if (!IsTopLevel() && m_parent && m_parent->m_wxwindow)
     {
-        GtkPizza *pizza = GTK_PIZZA(m_parent->m_wxwindow);
-        dx = gtk_pizza_get_xoffset( pizza );
-        dy = gtk_pizza_get_yoffset( pizza );
+        wxPizza* pizza = WX_PIZZA(m_parent->m_wxwindow);
+        dx = pizza->m_scroll_x;
+        dy = pizza->m_scroll_y;
     }
 
     if (m_x == -1 && m_y == -1)
     {
         GdkWindow *source = (GdkWindow *) NULL;
         if (m_wxwindow)
-            source = GTK_PIZZA(m_wxwindow)->bin_window;
+            source = m_wxwindow->window;
         else
             source = m_widget->window;
 
@@ -2957,7 +2894,7 @@ void wxWindowGTK::DoClientToScreen( int *x, int *y ) const
 
     GdkWindow *source = (GdkWindow *) NULL;
     if (m_wxwindow)
-        source = GTK_PIZZA(m_wxwindow)->bin_window;
+        source = m_wxwindow->window;
     else
         source = m_widget->window;
 
@@ -2994,7 +2931,7 @@ void wxWindowGTK::DoScreenToClient( int *x, int *y ) const
 
     GdkWindow *source = (GdkWindow *) NULL;
     if (m_wxwindow)
-        source = GTK_PIZZA(m_wxwindow)->bin_window;
+        source = m_wxwindow->window;
     else
         source = m_widget->window;
 
@@ -3394,7 +3331,7 @@ wxWindowGTK::AdjustForLayoutDirection(wxCoord x,
                                       wxCoord WXUNUSED(width),
                                       wxCoord WXUNUSED(widthTotal)) const
 {
-    // We now mirrors the coordinates of RTL windows in GtkPizza
+    // We now mirror the coordinates of RTL windows in wxPizza
     return x;
 }
 
@@ -3577,7 +3514,7 @@ void wxWindowGTK::WarpPointer( int x, int y )
 
     GdkWindow *window = (GdkWindow*) NULL;
     if (m_wxwindow)
-        window = GTK_PIZZA(m_wxwindow)->bin_window;
+        window = m_wxwindow->window;
     else
         window = GetConnectWidget()->window;
 
@@ -3638,7 +3575,7 @@ void wxWindowGTK::Refresh(bool WXUNUSED(eraseBackground),
 
     if (m_wxwindow)
     {
-        if (!GTK_PIZZA(m_wxwindow)->bin_window) return;
+        if (m_wxwindow->window == NULL) return;
 
         GdkRectangle gdk_rect,
                     *p;
@@ -3658,7 +3595,7 @@ void wxWindowGTK::Refresh(bool WXUNUSED(eraseBackground),
             p = NULL;
         }
 
-        gdk_window_invalidate_rect( GTK_PIZZA(m_wxwindow)->bin_window, p, TRUE );
+        gdk_window_invalidate_rect(m_wxwindow->window, p, true);
     }
 }
 
@@ -3675,8 +3612,8 @@ void wxWindowGTK::Update()
 
 void wxWindowGTK::GtkUpdate()
 {
-    if (m_wxwindow && GTK_PIZZA(m_wxwindow)->bin_window)
-        gdk_window_process_updates( GTK_PIZZA(m_wxwindow)->bin_window, FALSE );
+    if (m_wxwindow && m_wxwindow->window)
+        gdk_window_process_updates(m_wxwindow->window, false);
     if (m_widget && m_widget->window && (m_wxwindow != m_widget))
         gdk_window_process_updates( m_widget->window, FALSE );
 
@@ -3724,8 +3661,7 @@ void wxWindowGTK::GtkSendPaintEvents()
         m_updateRegion.Clear();
 
         gint width;
-        gdk_window_get_geometry( GTK_PIZZA(m_wxwindow)->bin_window,
-                                 NULL, NULL, &width, NULL, NULL );
+        gdk_drawable_get_size(m_wxwindow->window, &width, NULL);
 
         wxRegionIterator upd( m_nativeUpdateRegion );
         while (upd)
@@ -3742,9 +3678,6 @@ void wxWindowGTK::GtkSendPaintEvents()
             ++upd;
         }
     }
-
-    // widget to draw on
-    GtkPizza *pizza = GTK_PIZZA (m_wxwindow);
 
     if (GetThemeEnabled() && (GetBackgroundStyle() == wxBG_STYLE_SYSTEM))
     {
@@ -3765,7 +3698,7 @@ void wxWindowGTK::GtkSendPaintEvents()
                 rect.height = upd.GetHeight();
 
                 gtk_paint_flat_box( parent->m_widget->style,
-                            pizza->bin_window,
+                            m_wxwindow->window,
                             (GtkStateType)GTK_WIDGET_STATE(m_wxwindow),
                             GTK_SHADOW_NONE,
                             &rect,
@@ -3992,7 +3925,7 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
         GdkWindow *window;
         if ( m_wxwindow )
         {
-            window = GTK_PIZZA(m_wxwindow)->bin_window;
+            window = m_wxwindow->window;
         }
         else
         {
@@ -4065,7 +3998,7 @@ bool wxWindowGTK::GTKIsOwnWindow(GdkWindow *window) const
 
 GdkWindow *wxWindowGTK::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
-    return m_wxwindow ? GTK_PIZZA(m_wxwindow)->bin_window : m_widget->window;
+    return m_wxwindow ? m_wxwindow->window : m_widget->window;
 }
 
 bool wxWindowGTK::SetFont( const wxFont &font )
@@ -4088,7 +4021,7 @@ void wxWindowGTK::DoCaptureMouse()
 
     GdkWindow *window = (GdkWindow*) NULL;
     if (m_wxwindow)
-        window = GTK_PIZZA(m_wxwindow)->bin_window;
+        window = m_wxwindow->window;
     else
         window = GetConnectWidget()->window;
 
@@ -4121,7 +4054,7 @@ void wxWindowGTK::DoReleaseMouse()
 
     GdkWindow *window = (GdkWindow*) NULL;
     if (m_wxwindow)
-        window = GTK_PIZZA(m_wxwindow)->bin_window;
+        window = m_wxwindow->window;
     else
         window = GetConnectWidget()->window;
 
@@ -4297,10 +4230,7 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 
     m_clipPaintRegion = true;
 
-    if (GetLayoutDirection() == wxLayout_RightToLeft)
-        gtk_pizza_scroll( GTK_PIZZA(m_wxwindow), dx, -dy );
-    else
-        gtk_pizza_scroll( GTK_PIZZA(m_wxwindow), -dx, -dy );
+    WX_PIZZA(m_wxwindow)->scroll(dx, dy);
 
     m_clipPaintRegion = false;
 
@@ -4407,4 +4337,12 @@ void wxAddGrab(wxWindow* window)
 void wxRemoveGrab(wxWindow* window)
 {
     gtk_grab_remove( (GtkWidget*) window->GetHandle() );
+}
+
+GdkWindow* wxWindowGTK::GTKGetDrawingWindow() const
+{
+    GdkWindow* window = NULL;
+    if (m_wxwindow)
+        window = m_wxwindow->window;
+    return window;
 }
