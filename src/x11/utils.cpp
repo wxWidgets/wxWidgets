@@ -235,17 +235,6 @@ void wxDisplaySizeMM(int *width, int *height)
         *height = DisplayHeightMM(dpy, DefaultScreen (dpy));
 }
 
-void wxClientDisplayRect(int *x, int *y, int *width, int *height)
-{
-    // This is supposed to return desktop dimensions minus any window
-    // manager panels, menus, taskbars, etc.  If there is a way to do that
-    // for this platform please fix this function, otherwise it defaults
-    // to the entire desktop.
-    if (x) *x = 0;
-    if (y) *y = 0;
-    wxDisplaySize(width, height);
-}
-
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {
     return wxGenericFindWindowAtPoint(pt);

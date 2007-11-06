@@ -196,6 +196,7 @@ All (GUI):
 - Added wxBG_STYLE_TRANSPARENT background style (Julian Scheid)
 - Added XRCSIZERITEM() macro for obtaining sizers from XRC (Brian Vanderburg II)
 - New and improved wxFileCtrl (Diaa Sami and Marcin Wojdyr)
+- Implemented wxGetClientDisplayRect() correctly for X11-based ports
 - Added wxEventBlocker class (Francesco Montorsi).
 - Added wxFile/DirPickerCtrl::Get/SetFile/DirName() (Francesco Montorsi).
 - Added wxSizerFlags::Top() and Bottom().

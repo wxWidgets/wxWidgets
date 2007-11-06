@@ -92,6 +92,14 @@ public:
     }
 
     virtual wxRect GetGeometry() const { return m_rect; }
+    virtual wxRect GetClientArea() const
+    {
+        // we intentionally don't cache the result here because the client
+        // display area may change (e.g. the user resized or hid a panel) and
+        // we don't currently react to its changes
+        return IsPrimary() ? wxGetClientDisplayRect() : m_rect;
+    }
+
     virtual wxString GetName() const { return wxString(); }
 
     virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const;
@@ -315,3 +323,85 @@ bool wxDisplayImplX11::ChangeMode(const wxVideoMode& WXUNUSED(mode))
 }
 
 #endif /* wxUSE_DISPLAY */
+
+#include "wx/utils.h"
+
+#include <X11/Xatom.h>
+
+// TODO: make this a full-fledged class and move to a public header
+class wxX11Ptr
+{
+public:
+    wxX11Ptr(void *ptr = NULL) : m_ptr(ptr) { }
+    ~wxX11Ptr() { if ( m_ptr ) XFree(m_ptr); }
+
+private:
+    void *m_ptr;
+
+    DECLARE_NO_COPY_CLASS(wxX11Ptr)
+};
+
+// NB: this function is implemented using X11 and not GDK calls as it's shared
+//     by wxGTK[12], wxX11 and wxMotif ports
+void wxClientDisplayRect(int *x, int *y, int *width, int *height)
+{
+    Display * const dpy = wxGetX11Display();
+    wxCHECK_RET( dpy, _T("can't be called before initializing the GUI") );
+
+    const Atom atomWorkArea = XInternAtom(dpy, "_NET_WORKAREA", True);
+    if ( atomWorkArea )
+    {
+        long *workareas = NULL;
+        unsigned long numItems;
+        unsigned long bytesRemaining;
+        Atom actualType;
+        int format;
+
+        if ( XGetWindowProperty
+             (
+                dpy,
+                XDefaultRootWindow(dpy),
+                atomWorkArea,
+                0,                          // offset of data to retrieve
+                4,                          // number of items to retrieve
+                False,                      // don't delete property
+                XA_CARDINAL,                // type of the items to get
+                &actualType,
+                &format,
+                &numItems,
+                &bytesRemaining,
+                (unsigned char **)&workareas
+             ) == Success && workareas )
+        {
+            wxX11Ptr x11ptr(workareas); // ensure it will be freed
+
+            if ( actualType != XA_CARDINAL ||
+                    format != 32 || // FIXME: what is this 32?
+                        numItems != 4 )
+            {
+                wxLogDebug(_T("XGetWindowProperty(\"_NET_WORKAREA\") failed"));
+                return;
+            }
+
+            if ( x )
+                *x = workareas[0];
+            if ( y )
+                *y = workareas[1];
+            if ( width )
+                *width = workareas[2];
+            if ( height )
+                *height = workareas[3];
+
+            return;
+        }
+    }
+
+    // if we get here, _NET_WORKAREA is not supported so return the entire
+    // screen size as fall back
+    if (x)
+        *x = 0;
+    if (y)
+        *y = 0;
+    wxDisplaySize(width, height);
+}
+
