@@ -855,9 +855,6 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-    // this shouldn't happen: wxFrame, wxMDIParentFrame and wxMDIChildFrame have m_wxwindow
-    wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid frame") );
-
     // avoid recursions
     if (m_resizing)
         return;
