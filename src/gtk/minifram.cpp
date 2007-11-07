@@ -167,12 +167,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
         }
     }
 
-    wxClientDC dc(win);
-    dc.SetFont( *wxSMALL_FONT );
-    int height = dc.GetCharHeight() + 1;
-
-
-    if (y > height) return TRUE;
+    if (y > win->m_miniEdge-1 + 15) return TRUE;
 
     gdk_window_raise( win->m_widget->window );
 
