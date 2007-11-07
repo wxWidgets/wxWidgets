@@ -375,8 +375,11 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
         {
             wxX11Ptr x11ptr(workareas); // ensure it will be freed
 
+            // check that we retrieved the property of the expected type and
+            // that we did get back 4 longs (32 is the format for long), as
+            // requested
             if ( actualType != XA_CARDINAL ||
-                    format != 32 || // FIXME: what is this 32?
+                    format != 32 ||
                         numItems != 4 )
             {
                 wxLogDebug(_T("XGetWindowProperty(\"_NET_WORKAREA\") failed"));
