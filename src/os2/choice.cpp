@@ -207,7 +207,7 @@ void wxChoice::SetString(unsigned int n, const wxString& rsStr)
     LONG  nIndexType = 0;
     void* pData;
 
-    if ( m_clientDataItemsType != wxClientData_None )
+    if ( HasClientData() )
     {
         pData = DoGetItemClientData(n);
     }
