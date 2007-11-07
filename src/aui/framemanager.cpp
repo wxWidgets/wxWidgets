@@ -74,6 +74,8 @@ IMPLEMENT_CLASS(wxAuiManager, wxEvtHandler)
 
 const int auiToolBarLayer = 10;
 
+#ifndef __WXGTK20__
+
 
 class wxPseudoTransparentFrame : public wxFrame
 {
@@ -207,6 +209,72 @@ BEGIN_EVENT_TABLE(wxPseudoTransparentFrame, wxFrame)
     EVT_WINDOW_CREATE(wxPseudoTransparentFrame::OnWindowCreate)
 #endif
 END_EVENT_TABLE()
+
+
+#else
+  // __WXGTK20__
+
+#include "wx/gtk/private.h"
+
+static void
+gtk_pseudo_window_realized_callback( GtkWidget *m_widget, void *WXUNUSED(win) )
+{
+        wxSize disp = wxGetDisplaySize();
+        int amount = 128;
+        wxRegion region;
+        for (int y=0; y<disp.y; y++)
+                {
+                    // Reverse the order of the bottom 4 bits
+                    int j=((y&8)?1:0)|((y&4)?2:0)|((y&2)?4:0)|((y&1)?8:0);
+                    if ((j*16+8)<amount)
+                        region.Union(0, y, disp.x, 1);
+                }
+        gdk_window_shape_combine_region(m_widget->window, region.GetRegion(), 0, 0);
+}
+
+
+class wxPseudoTransparentFrame: public wxFrame
+{
+public:
+    wxPseudoTransparentFrame(wxWindow* parent = NULL,
+                wxWindowID id = wxID_ANY,
+                const wxString& title = wxEmptyString,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE,
+                const wxString &name = wxT("frame"))
+    {
+         if (!CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
+            return;
+
+        m_title = title;
+        
+        m_widget = gtk_window_new( GTK_WINDOW_POPUP );
+
+        g_signal_connect( m_widget, "realize",
+                      G_CALLBACK (gtk_pseudo_window_realized_callback), this );
+        
+        GdkColor col;
+        col.red = 128 * 256;
+        col.green = 192 * 256;
+        col.blue = 255 * 256;
+        gtk_widget_modify_bg( m_widget, GTK_STATE_NORMAL, &col );
+    }
+
+    bool SetTransparent(wxByte WXUNUSED(alpha))
+    {
+        return true;
+    }
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxPseudoTransparentFrame)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxPseudoTransparentFrame, wxFrame)
+
+#endif
+ // __WXGTK20__
+
 
 
 // -- static utility functions --

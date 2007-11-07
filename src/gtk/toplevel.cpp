@@ -829,10 +829,6 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
 {
     wxCHECK_RET( m_widget, wxT("invalid frame") );
 
-    // this shouldn't happen: wxFrame, wxMDIParentFrame and wxMDIChildFrame have m_wxwindow
-    wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid frame") );
-
-
     // deal with the position first
     int old_x = m_x;
     int old_y = m_y;
