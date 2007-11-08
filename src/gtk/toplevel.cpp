@@ -366,13 +366,20 @@ gtk_frame_map_callback( GtkWidget* widget,
             win->m_width = rect.width;
             win->m_height = rect.height;
             decorSize = size;
-            wxSizeEvent event(win->GetSize(), win->GetId());
-            event.SetEventObject(win);
-            win->GetEventHandler()->ProcessEvent(event);
         }
     }
 
     win->SetIconizeState(false);
+
+    // Because GetClientSize() returns (0,0) when IsIconized() is true,
+    // a size event must be sent here, just in case GetClientSize() was
+    // called while iconized.
+    // This specifically happens when restoring a tlw that was "rolled up"
+    // with some WMs.
+    wxSizeEvent event(win->GetSize(), win->GetId());
+    event.SetEventObject(win);
+    win->GetEventHandler()->ProcessEvent(event);
+
     return false;
 }
 }
