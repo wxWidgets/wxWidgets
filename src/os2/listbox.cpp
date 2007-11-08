@@ -510,9 +510,9 @@ void wxListBox::SetString(unsigned int n, const wxString& rsString)
     void*          pOldData = NULL;
     wxClientData*  pOldObjData = NULL;
 
-    if (m_clientDataItemsType == wxClientData_Void)
+    if ( HasClientUntypedData() )
         pOldData = GetClientData(n);
-    else if (m_clientDataItemsType == wxClientData_Object)
+    else if ( HasClientObjectData() )
         pOldObjData = GetClientObject(n);
 
     //
