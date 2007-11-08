@@ -108,6 +108,7 @@ wxGTK:
   a background colour bug in the gtk-qt theme under KDE.
 - wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW) now returns the background
   colour of text controls.
+- wxFrame::ShowFullScreen now preserves the menubar's accelerators.
 
 wxMac:
 
