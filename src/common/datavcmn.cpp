@@ -386,6 +386,11 @@ bool wxDataViewIndexListModel::SetValue( const wxVariant &variant,
     return SetValue( variant, GetRow(item), col );
 }
 
+bool wxDataViewIndexListModel::GetAttr( const wxDataViewItem &item, unsigned int col, wxDataViewItemAttr &attr )
+{
+    return GetAttr( GetRow(item), col, attr );
+}
+
 wxDataViewItem wxDataViewIndexListModel::GetParent( const wxDataViewItem & WXUNUSED(item) ) const
 {
     return wxDataViewItem(0);

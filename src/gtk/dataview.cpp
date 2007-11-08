@@ -1475,6 +1475,18 @@ void wxDataViewTextRenderer::SetAlignment( int align )
     g_value_unset( &gvalue );
 }
 
+// --------------------------------------------------------- 
+// wxDataViewTextRendererAttr
+// --------------------------------------------------------- 
+
+IMPLEMENT_CLASS(wxDataViewTextRendererAttr,wxDataViewTextRenderer)
+
+wxDataViewTextRendererAttr::wxDataViewTextRendererAttr( const wxString &varianttype, 
+                            wxDataViewCellMode mode, int align ) :
+   wxDataViewTextRenderer( varianttype, mode, align )
+{
+}
+    
 // ---------------------------------------------------------
 // wxDataViewBitmapRenderer
 // ---------------------------------------------------------
@@ -2112,10 +2124,82 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
 
     cell->SetValue( value );
 
-#if 0
-    wxListItemAttr attr;
-    wx_model->GetAttr( item, attr, cell->GetOwner()->GetModelColumn() );
+    if (cell->GtkHasAttributes())
+    {
+        wxDataViewItemAttr attr;
+        bool colour_set = false;
+        bool style_set = false;
+        bool weight_set = false;
+        
+        if (wx_model->GetAttr( item, cell->GetOwner()->GetModelColumn(), attr ))
+        {
+            // this must be a GtkCellRendererText
+            wxColour colour = attr.GetColour();
+            if (colour.IsOk())
+            {
+                const GdkColor * const gcol = colour.GetColor();
 
+                GValue gvalue = { 0, };
+                g_value_init( &gvalue, GDK_TYPE_COLOR );
+                g_value_set_boxed( &gvalue, gcol );
+                g_object_set_property( G_OBJECT(renderer), "foreground_gdk", &gvalue );
+                g_value_unset( &gvalue );
+                
+                colour_set = true;
+            }
+            
+            if (attr.GetItalic())
+            {
+                GValue gvalue = { 0, };
+                g_value_init( &gvalue, PANGO_TYPE_STYLE );
+                g_value_set_enum( &gvalue, PANGO_STYLE_ITALIC );
+                g_object_set_property( G_OBJECT(renderer), "style", &gvalue );
+                g_value_unset( &gvalue );
+                
+                style_set = true;
+            }
+            
+            if (attr.GetBold())
+            {
+                GValue gvalue = { 0, };
+                g_value_init( &gvalue, PANGO_TYPE_WEIGHT );
+                g_value_set_enum( &gvalue, PANGO_WEIGHT_BOLD );
+                g_object_set_property( G_OBJECT(renderer), "weight", &gvalue );
+                g_value_unset( &gvalue );
+                
+                weight_set = true;
+            }
+        }
+        
+        if (!style_set)
+        {
+            GValue gvalue = { 0, };
+            g_value_init( &gvalue, G_TYPE_BOOLEAN );
+            g_value_set_boolean( &gvalue, FALSE );
+            g_object_set_property( G_OBJECT(renderer), "style-set", &gvalue );
+            g_value_unset( &gvalue );
+        }
+        
+        if (!weight_set)
+        {
+            GValue gvalue = { 0, };
+            g_value_init( &gvalue, G_TYPE_BOOLEAN );
+            g_value_set_boolean( &gvalue, FALSE );
+            g_object_set_property( G_OBJECT(renderer), "weight-set", &gvalue );
+            g_value_unset( &gvalue );
+        }
+        
+        if (!colour_set)
+        {
+            GValue gvalue = { 0, };
+            g_value_init( &gvalue, G_TYPE_BOOLEAN );
+            g_value_set_boolean( &gvalue, FALSE );
+            g_object_set_property( G_OBJECT(renderer), "foreground-set", &gvalue );
+            g_value_unset( &gvalue );
+        }
+    }
+
+#if 0
     if (attr.HasBackgroundColour())
     {
         wxColour colour = attr.GetBackgroundColour();

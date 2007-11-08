@@ -78,11 +78,20 @@ public:
 
     // Create DC on request
     virtual wxDC *GetDC();
+    
+    void SetHasAttr( bool set )  { m_hasAttr = set; }
+    void SetAttr( const wxDataViewItemAttr &attr ) { m_attr = attr; }
+    bool GetWantsAttr() { return m_wantsAttr; }
 
 private:
     wxDC                        *m_dc;
     int                          m_align;
     wxDataViewCellMode           m_mode;
+    
+protected:
+    bool                         m_wantsAttr;
+    bool                         m_hasAttr;
+    wxDataViewItemAttr           m_attr;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRenderer)
@@ -128,11 +137,28 @@ public:
     virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
     virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
         
-private:
+protected:
     wxString   m_text;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer)
+};
+
+// ---------------------------------------------------------
+// wxDataViewTextRendererAttr
+// ---------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewTextRendererAttr: public wxDataViewTextRenderer
+{
+public:
+    wxDataViewTextRendererAttr( const wxString &varianttype = wxT("string"),
+                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                            int align = wxDVR_DEFAULT_ALIGNMENT );
+
+    bool Render( wxRect cell, wxDC *dc, int state );
+        
+protected:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRendererAttr)
 };
 
 // ---------------------------------------------------------

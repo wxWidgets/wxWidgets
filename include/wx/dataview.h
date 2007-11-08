@@ -20,7 +20,6 @@
 #include "wx/textctrl.h"
 #include "wx/bitmap.h"
 #include "wx/variant.h"
-#include "wx/listctrl.h"
 #include "wx/dynarray.h"
 #include "wx/icon.h"
 
@@ -118,6 +117,42 @@ private:
 };
 
 
+
+// ----------------------------------------------------------------------------
+// wxDataViewItemAttr: a structure containing the visual attributes of an item
+// ----------------------------------------------------------------------------
+
+// TODO: this should be renamed to wxItemAttr or something general like this
+
+class WXDLLIMPEXP_ADV wxDataViewItemAttr
+{
+public:
+    // ctors
+    wxDataViewItemAttr() 
+    { 
+        m_bold = false;
+        m_italic = false;
+    }
+
+    // setters
+    void SetColour(const wxColour& colour) { m_colour = colour; }
+    void SetBold( bool set ) { m_bold = set; }
+    void SetItalic( bool set ) { m_italic = set; }
+    
+    // accessors
+    bool HasColour() const { return m_colour.Ok(); }
+    const wxColour& GetColour() const { return m_colour; }
+    
+    bool GetBold() const { return m_bold; }
+    bool GetItalic() const { return m_italic; }
+
+private:
+    wxColour m_colour;
+    bool     m_bold;
+    bool     m_italic;
+};
+
+
 // ---------------------------------------------------------
 // wxDataViewModel
 // ---------------------------------------------------------
@@ -142,6 +177,10 @@ public:
     // set value, call ValueChanged() afterwards!
     virtual bool SetValue( const wxVariant &variant,
                            const wxDataViewItem &item, unsigned int col ) = 0;
+
+    // Get text attribute, return false of default attributes should be used
+    virtual bool GetAttr( const wxDataViewItem &WXUNUSED(item), unsigned int WXUNUSED(col), wxDataViewItemAttr &WXUNUSED(attr) )
+        { return false; }
 
     // define hierachy
     virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const = 0;
@@ -197,6 +236,9 @@ public:
     virtual bool SetValue( const wxVariant &variant,
                            unsigned int row, unsigned int col ) = 0;
 
+    virtual bool GetAttr( unsigned int WXUNUSED(row), unsigned int WXUNUSED(col), wxDataViewItemAttr &WXUNUSED(attr) )
+        { return false; }
+        
     void RowPrepended();
     void RowInserted( unsigned int before );
     void RowAppended();
@@ -221,6 +263,7 @@ public:
                            const wxDataViewItem &item, unsigned int col ) const;
     virtual bool SetValue( const wxVariant &variant,
                            const wxDataViewItem &item, unsigned int col );
+    virtual bool GetAttr( const wxDataViewItem &item, unsigned int col, wxDataViewItemAttr &attr );
     virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const;
     virtual bool IsContainer( const wxDataViewItem &item ) const;
     virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const;

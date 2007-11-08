@@ -40,64 +40,6 @@
 
 
 // -------------------------------------
-// MySpinCtrlInPlaceRenderer
-// -------------------------------------
-
-class MySpinCtrlInPlaceRenderer: public wxDataViewCustomRenderer
-{
-public:
-    MySpinCtrlInPlaceRenderer() :
-        wxDataViewCustomRenderer( wxT("long"), wxDATAVIEW_CELL_EDITABLE ) { }
-    
-    
-    virtual bool HasEditorCtrl()
-        { 
-            return true; 
-        }
-    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
-        { 
-            long l = value;
-            return new wxSpinCtrl( parent, wxID_ANY, wxEmptyString, 
-                    labelRect.GetTopLeft(), labelRect.GetSize(), -0, -1, 2010, l );
-        }
-    virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value )
-        { 
-            wxSpinCtrl *sc = (wxSpinCtrl*) editor;
-            long l = sc->GetValue();
-            value = l;
-            return true;
-        }
-        
-    bool Render( wxRect rect, wxDC *dc, int WXUNUSED(state) )
-    {
-        wxString str;
-        str.Printf( wxT("%d"), (int) m_data );
-        dc->SetTextForeground( *wxBLACK );
-        dc->DrawText( str, rect.x, rect.y );
-        return true;
-    }
-    wxSize GetSize() const
-    {
-        return wxSize(80,16);
-    }
-    bool SetValue( const wxVariant &value )
-    {
-        m_data = value.GetLong();
-        return true;
-    }
-    bool GetValue( wxVariant &value ) const
-    {
-        value = m_data;
-        return true;
-    }
-    
-private:
-    long    m_data;
-};
-
-
-
-// -------------------------------------
 // MyMusicModel
 // -------------------------------------
 
@@ -444,13 +386,27 @@ public:
         {
             wxDataViewIconText data( "test", m_icon );
             variant << data;
-        }
-        else
+        } else
+        if (col==2)
         {
-            wxString str;
-            str.Printf( "row %d col %d", row, col );
-            variant = str;
+            if ((row % 2) == 1)
+                variant = "Blue";
+            else
+                variant = "Italic";
         }
+    }
+    
+    virtual bool GetAttr( unsigned int row, unsigned int col, wxDataViewItemAttr &attr )
+    {
+        if (col != 2)
+            return false;
+            
+        if ((row % 2) == 1)
+            attr.SetColour( *wxBLUE );
+        else
+            attr.SetItalic( true );
+        
+        return true;            
     }
 
     virtual bool SetValue( const wxVariant &variant, 
@@ -651,7 +607,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     m_music_model = new MyMusicModel;
     m_musicCtrl->AssociateModel( m_music_model.get() );
 
-    wxDataViewColumn *col = m_musicCtrl->AppendTextColumn( "Title", 0, wxDATAVIEW_CELL_INERT, 200, 
+    /* wxDataViewColumn *col = */ m_musicCtrl->AppendTextColumn( "Title", 0, wxDATAVIEW_CELL_INERT, 200, 
                                      DEFAULT_ALIGN, wxDATAVIEW_COL_SORTABLE );
 #if 0 
     // Call this and sorting is enabled
@@ -680,7 +636,10 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     
     m_listCtrl->AppendTextColumn( "editable string", 0, wxDATAVIEW_CELL_EDITABLE, 120 );
     m_listCtrl->AppendIconTextColumn( "icon", 1, wxDATAVIEW_CELL_INERT, 60 );
-    m_listCtrl->AppendTextColumn( "index", 2, wxDATAVIEW_CELL_INERT, 120 );
+    
+    wxDataViewTextRendererAttr *ra = new wxDataViewTextRendererAttr;
+    column = new wxDataViewColumn( "attributes", ra, 2 );
+    m_listCtrl->AppendColumn( column );
     
     data_sizer->Add( m_listCtrl, 2, wxGROW );
  
@@ -716,7 +675,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 
 
 /* XPM */
-static char *small1_xpm[] = {
+static const char *small1_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 16 6 1",
 ". c Black",
