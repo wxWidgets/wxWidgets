@@ -67,6 +67,11 @@ DEFINE_EVENT_TYPE(wxEVT_AUI_FIND_MANAGER)
     #include "wx/mac/private.h"
 #endif
 
+#ifdef __WXMSW__
+    #include "wx/msw/wrapwin.h"
+    #include "wx/msw/private.h"
+#endif
+
 IMPLEMENT_DYNAMIC_CLASS(wxAuiManagerEvent, wxEvent)
 IMPLEMENT_CLASS(wxAuiManager, wxEvtHandler)
 
@@ -248,12 +253,12 @@ public:
             return;
 
         m_title = title;
-        
+
         m_widget = gtk_window_new( GTK_WINDOW_POPUP );
 
         g_signal_connect( m_widget, "realize",
                       G_CALLBACK (gtk_pseudo_window_realized_callback), this );
-        
+
         GdkColor col;
         col.red = 128 * 256;
         col.green = 192 * 256;
@@ -265,7 +270,7 @@ public:
     {
         return true;
     }
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxPseudoTransparentFrame)
 };
@@ -291,10 +296,14 @@ static void DrawResizeHint(wxDC& dc, const wxRect& rect)
     wxBitmap stipple = wxPaneCreateStippleBitmap();
     wxBrush brush(stipple);
     dc.SetBrush(brush);
+#ifdef __WXMSW__
+    PatBlt(GetHdcOf(dc), rect.GetX(), rect.GetY(), rect.GetWidth(), rect.GetHeight(), PATINVERT);
+#else
     dc.SetPen(*wxTRANSPARENT_PEN);
 
     dc.SetLogicalFunction(wxXOR);
     dc.DrawRectangle(rect);
+#endif
 }
 
 
@@ -511,7 +520,7 @@ static void RenumberDockRows(wxAuiDockInfoPtrArray& docks)
     {
         wxAuiDockInfo& dock = *docks.Item(i);
         dock.dock_row = i;
-        
+
         int j, pane_count;
         for (j = 0, pane_count = dock.panes.GetCount(); j < pane_count; ++j)
             dock.panes.Item(j)->dock_row = i;
@@ -4435,7 +4444,7 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
             {
                 ClosePane(pane);
             }
-            
+
             Update();
         }
     }
