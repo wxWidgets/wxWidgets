@@ -85,10 +85,15 @@ private:
 // implementation
 // ============================================================================
 
+// GTK+ about dialog is modeless, keep track of it in this variable
+static GtkAboutDialog *gs_aboutDialog = NULL;
+
 extern "C" void
 wxGtkAboutDialogOnClose(GtkAboutDialog *about)
 {
     gtk_widget_destroy(GTK_WIDGET(about));
+    if ( about == gs_aboutDialog )
+        gs_aboutDialog = NULL;
 }
 
 extern "C" void
@@ -103,7 +108,11 @@ void wxAboutBox(const wxAboutDialogInfo& info)
 {
     if ( !gtk_check_version(2,6,0) )
     {
-        GtkAboutDialog * const dlg = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
+        // don't create another dialog if one is already present
+        if ( !gs_aboutDialog )
+            gs_aboutDialog = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
+
+        GtkAboutDialog * const dlg = gs_aboutDialog;
         gtk_about_dialog_set_name(dlg, wxGTK_CONV_SYS(info.GetName()));
         if ( info.HasVersion() )
             gtk_about_dialog_set_version(dlg, wxGTK_CONV_SYS(info.GetVersion()));
@@ -171,7 +180,7 @@ void wxAboutBox(const wxAboutDialogInfo& info)
         g_signal_connect(dlg, "response",
                             G_CALLBACK(wxGtkAboutDialogOnClose), NULL);
 
-        gtk_widget_show(GTK_WIDGET(dlg));
+        gtk_window_present(GTK_WINDOW(dlg));
         return;
     }
 
