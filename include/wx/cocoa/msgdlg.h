@@ -13,23 +13,38 @@
 
 DECLARE_WXCOCOA_OBJC_CLASS(NSAlert);
 
+#ifndef wxUSE_COCOA_NATIVE_MSGDLG
+// trunk: Always use Cocoa dialog
+// 2.8: Only use Cocoa dialog if ABI incompatible features is on
+// Build both on both branches (there was no wxCocoaMessageDialog class so it's not an ABI issue)
+    #if 1/* wxUSE_ABI_INCOMPATIBLE_FEATURES */
+        #define wxUSE_COCOA_NATIVE_MSGDLG 1
+    #else
+        #define wxUSE_COCOA_NATIVE_MSGDLG 0
+    #endif
+#endif
 
+#if defined(__WX_COMPILING_COCOA_MSGDLG_MM__) || wxUSE_COCOA_NATIVE_MSGDLG
+    #define wxMessageDialog wxCocoaMessageDialog
+#else
+    #include "wx/generic/msgdlgg.h"
+    #define wxMessageDialog wxGenericMessageDialog
+#endif
 
-#define wxMessageDialog wxCocoaMessageDialog
 //-------------------------------------------------------------------------
 // wxMsgDialog
 //-------------------------------------------------------------------------
 
 
 
-class WXDLLEXPORT wxMessageDialog: public wxMessageDialogBase
+class WXDLLEXPORT wxCocoaMessageDialog: public wxMessageDialogBase
 {
-    DECLARE_DYNAMIC_CLASS(wxMessageDialog)
-    DECLARE_NO_COPY_CLASS(wxMessageDialog)
+    DECLARE_DYNAMIC_CLASS(wxCocoaMessageDialog)
+    DECLARE_NO_COPY_CLASS(wxCocoaMessageDialog)
 
 
 public:
-    wxMessageDialog(wxWindow *parent,
+    wxCocoaMessageDialog(wxWindow *parent,
                     const wxString& message,
                     const wxString& caption = wxMessageBoxCaptionStr,
                     long style = wxOK|wxCENTRE,
