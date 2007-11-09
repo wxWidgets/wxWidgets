@@ -181,6 +181,41 @@ wxRendererGTK::GetTreeWidget()
     return s_tree;
 }
 
+// used elsewhere
+GtkWidget *GetEntryWidget()
+{
+    static GtkWidget *s_entry = NULL;
+    static GtkWidget *s_window = NULL;
+
+    if ( !s_entry )
+    {
+        s_window = gtk_window_new( GTK_WINDOW_POPUP );
+        gtk_widget_realize( s_window );
+        s_entry = gtk_entry_new();
+        gtk_container_add( GTK_CONTAINER(s_window), s_entry );
+        gtk_widget_realize( s_entry );
+    }
+
+    return s_entry;
+}
+
+// used elsewhere
+GtkWidget *GetScrolledWidget()
+{
+    static GtkWidget *s_entry = NULL;
+    static GtkWidget *s_window = NULL;
+
+    if ( !s_entry )
+    {
+        s_window = gtk_window_new( GTK_WINDOW_POPUP );
+        gtk_widget_realize( s_window );
+        s_entry = gtk_scrolled_window_new( NULL, NULL);
+        gtk_container_add( GTK_CONTAINER(s_window), s_entry );
+        gtk_widget_realize( s_entry );
+    }
+
+    return s_entry;
+}
 
 // This one just gets the button used by the column header.  Although it's
 // still a gtk_button the themes will typically differentiate and draw them

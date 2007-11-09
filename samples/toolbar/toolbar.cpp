@@ -88,21 +88,40 @@ class MyMiniControl: public wxControl
 {
 public:
     MyMiniControl( wxWindow *parent ) :
-      wxControl( parent, -1, wxDefaultPosition, wxSize(70,22), wxBORDER_SUNKEN, wxDefaultValidator, "MyMiniControl" )
+      wxControl( parent, -1, wxDefaultPosition, wxSize(80,22), wxBORDER_SUNKEN, wxDefaultValidator, "MyMiniControl" )
     {
+        m_hasFocus = false;
     }
     void OnPaint(wxPaintEvent &WXUNUSED(event))
     {
        wxPaintDC dc(this);
-       dc.SetPen( *wxWHITE_PEN );
-       dc.SetBrush( *wxGREEN_BRUSH );
+       dc.SetPen( *wxTRANSPARENT_PEN );
+       dc.SetBrush( *wxWHITE_BRUSH );
        wxSize size = GetClientSize();
        dc.DrawRectangle( 0,0,size.x,size.y );
+       if (m_hasFocus)
+          dc.DrawText( "Focussed", 1,1 );
+    }
+    void OnSetFocus(wxFocusEvent &WXUNUSED(event))
+    {
+       m_hasFocus = true;
+       Refresh();
+    }
+    void OnKillFocus(wxFocusEvent &WXUNUSED(event))
+    {
+       m_hasFocus = false;
+       Refresh();
     }
     virtual wxSize GetBestSize()
     {
-        return wxSize(70,22);
+        return wxSize(80,22);
     }
+    virtual bool AcceptsFocus()
+    {
+        return true;
+    }
+    
+    bool m_hasFocus;
 
 private:
     DECLARE_EVENT_TABLE()
@@ -110,6 +129,8 @@ private:
 
 BEGIN_EVENT_TABLE(MyMiniControl, wxControl)
     EVT_PAINT(MyMiniControl::OnPaint)
+    EVT_SET_FOCUS(MyMiniControl::OnSetFocus)
+    EVT_KILL_FOCUS(MyMiniControl::OnKillFocus)
 END_EVENT_TABLE()
 
 
@@ -318,7 +339,7 @@ bool MyApp::OnInit()
     // Create the main frame window
     MyFrame* frame = new MyFrame((wxFrame *) NULL, wxID_ANY,
                                  _T("wxToolBar Sample"),
-                                  wxPoint(100, 100), wxSize(550, 300));
+                                  wxPoint(100, 100), wxSize(550, 500));
 
     frame->Show(true);
 
@@ -656,7 +677,25 @@ MyFrame::MyFrame(wxFrame* parent,
     m_panel->SetSizer(sizer);
     if (m_extraToolBar)
         sizer->Add(m_extraToolBar, 0, wxEXPAND, 0);
+    sizer->Add(0,0,6);
     sizer->Add(m_textWindow, 1, wxEXPAND, 0);
+
+    wxControl *control;    
+    control = new wxControl( m_panel, -1, wxPoint(30,20), wxSize(50,50), wxBORDER_SUNKEN );
+    control = new wxControl( m_panel, -1, wxPoint(130,20), wxSize(50,50), wxBORDER_SIMPLE );
+    control = new wxControl( m_panel, -1, wxPoint(230,20), wxSize(50,50), wxBORDER_RAISED );
+    control = new wxControl( m_panel, -1, wxPoint(330,20), wxSize(50,50), wxBORDER_THEME );
+    
+    wxScrolledWindow *scrolled;
+    scrolled = new wxScrolledWindow( m_panel, -1, wxPoint(30,120), wxSize(80,80), wxHSCROLL|wxVSCROLL | wxBORDER_SUNKEN );
+    scrolled->SetVirtualSize(400,400);
+    scrolled->SetScrollRate(10,10);
+    scrolled = new wxScrolledWindow( m_panel, -1, wxPoint(130,120), wxSize(80,80), wxHSCROLL|wxVSCROLL | wxBORDER_SIMPLE );
+    scrolled->SetVirtualSize(400,400);
+    scrolled->SetScrollRate(10,10);
+    scrolled = new wxScrolledWindow( m_panel, -1, wxPoint(230,120), wxSize(80,80), wxHSCROLL|wxVSCROLL | wxBORDER_RAISED );
+    scrolled->SetVirtualSize(400,400);
+    scrolled->SetScrollRate(10,10);
 }
 
 void MyFrame::LayoutChildren()

@@ -9,6 +9,7 @@
 
 #include "wx/defs.h"
 #include "wx/gtk/win_gtk.h"
+#include "gtk/gtk.h"
 
 /*
 wxPizza is a custom GTK+ widget derived from GtkFixed.  A custom widget
@@ -166,6 +167,9 @@ static void realize(GtkWidget* widget)
         else
             gdk_window_reparent(widget->window, pizza->m_backing_window, border_x, border_y);
         gdk_window_resize(widget->window, w, h);
+        
+        widget->style = gtk_style_attach (widget->style, pizza->m_backing_window);
+        gtk_style_set_background (widget->style, pizza->m_backing_window, GTK_STATE_NORMAL);
     }
 }
 
@@ -356,6 +360,8 @@ void wxPizza::scroll(int dx, int dy)
     }
 }
 
+extern GtkWidget *GetEntryWidget();
+
 void wxPizza::get_border_widths(int& x, int& y)
 {
     x = y = 0;
@@ -363,13 +369,11 @@ void wxPizza::get_border_widths(int& x, int& y)
         x = y = 1;
     else if (m_border_style)
     {
-        GtkWidget* widget = GTK_WIDGET(this);
-        if (widget->style)
+        GtkWidget *entry_widget = GetEntryWidget();
+        if (entry_widget->style)
         {
-            x = widget->style->xthickness;
-            y = widget->style->ythickness;
-            x = 1;
-            y = 1;
+            x = entry_widget->style->xthickness;
+            y = entry_widget->style->ythickness;
         }
     }
 }
