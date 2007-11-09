@@ -174,6 +174,13 @@ void wxFrameBase::SendSizeEvent()
     wxSizeEvent event( GetSize(), GetId() );
     event.SetEventObject( this );
     GetEventHandler()->AddPendingEvent( event );
+
+#ifdef __WXGTK__
+    // SendSizeEvent is typically called when a toolbar is shown
+    // or hidden, but sending the size event alone is not enough
+    // to trigger a full layout.
+    ((wxFrame*)this)->GtkOnSize();
+#endif
 }
 
 
