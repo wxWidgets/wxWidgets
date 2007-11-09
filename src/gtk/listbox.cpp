@@ -206,7 +206,6 @@ static void gtk_tree_entry_destroy_cb(GtkTreeEntry* entry,
 //-----------------------------------------------------------------------------
 // Sorting callback (standard CmpNoCase return value)
 //-----------------------------------------------------------------------------
-#include <iostream>
 
 extern "C" {
 static gint gtk_listbox_sort_callback(GtkTreeModel * WXUNUSED(model),
