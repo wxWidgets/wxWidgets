@@ -25,10 +25,11 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSAlert);
     #endif
 #endif
 
-#if defined(__WX_COMPILING_COCOA_MSGDLG_MM__) || wxUSE_COCOA_NATIVE_MSGDLG
+#include "wx/generic/msgdlgg.h"
+
+#if wxUSE_COCOA_NATIVE_MSGDLG
     #define wxMessageDialog wxCocoaMessageDialog
 #else
-    #include "wx/generic/msgdlgg.h"
     #define wxMessageDialog wxGenericMessageDialog
 #endif
 
