@@ -369,16 +369,21 @@ gtk_frame_map_callback( GtkWidget* widget,
         }
     }
 
+    const bool wasIconized = win->IsIconized();
+
     win->SetIconizeState(false);
 
-    // Because GetClientSize() returns (0,0) when IsIconized() is true,
-    // a size event must be sent here, just in case GetClientSize() was
-    // called while iconized.
-    // This specifically happens when restoring a tlw that was "rolled up"
-    // with some WMs.
-    wxSizeEvent event(win->GetSize(), win->GetId());
-    event.SetEventObject(win);
-    win->GetEventHandler()->ProcessEvent(event);
+    if (wasIconized)
+    {
+        // Because GetClientSize() returns (0,0) when IsIconized() is true,
+        // a size event must be generated, just in case GetClientSize() was
+        // called while iconized. This specifically happens when restoring a
+        // tlw that was "rolled up" with some WMs.
+        // Queue a resize rather than sending size event directly to allow
+        // children to be made visible first.
+        win->m_oldClientWidth = 0;
+        gtk_widget_queue_resize(win->m_wxwindow);
+    }
 
     return false;
 }
@@ -437,9 +442,8 @@ static gboolean property_notify_event(
                 if (win->m_width  < 0) win->m_width  = 0;
                 if (win->m_height < 0) win->m_height = 0;
                 decorSize = size;
-                wxSizeEvent event(win->GetSize(), win->GetId());
-                event.SetEventObject(win);
-                win->GetEventHandler()->ProcessEvent(event);
+                win->m_oldClientWidth = 0;
+                gtk_widget_queue_resize(win->m_wxwindow);
             }
         }
         if (data)
