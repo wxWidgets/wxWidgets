@@ -3,6 +3,7 @@
 // Purpose:     wxMessageDialog class
 // Author:      Gareth Simpson
 // Created:     2007-10-29
+// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -49,11 +50,11 @@ public:
                     const wxString& caption = wxMessageBoxCaptionStr,
                     long style = wxOK|wxCENTRE,
                     const wxPoint& pos = wxDefaultPosition);
-						
-	virtual ~wxCocoaMessageDialog();
 
-	virtual int ShowModal();
-	
+    virtual ~wxCocoaMessageDialog();
+
+    virtual int ShowModal();
+
     // customization of the message box
     virtual bool SetYesNoLabels(const wxString& yes,const wxString& no);
     virtual bool SetYesNoCancelLabels(const wxString& yes, const wxString& no, const wxString& cancel);
@@ -65,12 +66,12 @@ protected:
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
                            int WXUNUSED(width), int WXUNUSED(height),
                            int WXUNUSED(sizeFlags) = wxSIZE_AUTO) {}
-	
+
 private:
-	wxString m_yes,
-			 m_no,
-			 m_ok,
-			 m_cancel;
+    wxString m_yes,
+             m_no,
+             m_ok,
+             m_cancel;
 
 };
 
