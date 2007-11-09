@@ -84,6 +84,36 @@ enum Positions
 // classes
 // ----------------------------------------------------------------------------
 
+class MyMiniControl: public wxControl
+{
+public:
+    MyMiniControl( wxWindow *parent ) :
+      wxControl( parent, -1, wxDefaultPosition, wxSize(70,22), wxBORDER_SUNKEN, wxDefaultValidator, "MyMiniControl" )
+    {
+    }
+    void OnPaint(wxPaintEvent &WXUNUSED(event))
+    {
+       wxPaintDC dc(this);
+       dc.SetPen( *wxWHITE_PEN );
+       dc.SetBrush( *wxGREEN_BRUSH );
+       wxSize size = GetClientSize();
+       dc.DrawRectangle( 0,0,size.x,size.y );
+    }
+    virtual wxSize GetBestSize()
+    {
+        return wxSize(70,22);
+    }
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(MyMiniControl, wxControl)
+    EVT_PAINT(MyMiniControl::OnPaint)
+END_EVENT_TABLE()
+
+
+
 // Define a new application
 class MyApp : public wxApp
 {
@@ -438,6 +468,8 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
 
         wxSearchCtrl *srch = new wxSearchCtrl( toolBar, -1, wxT("xx"), wxDefaultPosition, wxSize(80,wxDefaultCoord), wxSUNKEN_BORDER );
         toolBar->AddControl( srch );
+        
+        toolBar->AddControl( new MyMiniControl( toolBar) );
     }
 #endif // toolbars which don't support controls
 
