@@ -24,10 +24,11 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSAlert);
     #endif
 #endif
 
-#if defined(__WX_COMPILING_COCOA_MSGDLG_MM__) || wxUSE_COCOA_NATIVE_MSGDLG
+#include "wx/generic/msgdlgg.h"
+
+#if wxUSE_COCOA_NATIVE_MSGDLG
     #define wxMessageDialog wxCocoaMessageDialog
 #else
-    #include "wx/generic/msgdlgg.h"
     #define wxMessageDialog wxGenericMessageDialog
 #endif
 
@@ -37,7 +38,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSAlert);
 
 
 
-class WXDLLEXPORT wxCocoaMessageDialog: public wxMessageDialogBase
+class WXDLLEXPORT wxCocoaMessageDialog: public wxDialog, public wxMessageDialogBase
 {
     DECLARE_DYNAMIC_CLASS(wxCocoaMessageDialog)
     DECLARE_NO_COPY_CLASS(wxCocoaMessageDialog)
@@ -66,6 +67,10 @@ protected:
                            int WXUNUSED(width), int WXUNUSED(height),
                            int WXUNUSED(sizeFlags) = wxSIZE_AUTO) {}
 	
+    // 2.8: These are in the base class in trunk:
+    wxString m_message,
+             m_extendedMessage,
+             m_caption;
 private:
 	wxString m_yes,
 			 m_no,
