@@ -406,6 +406,8 @@ void wxURL::SetProxy(const wxString& url_proxy)
 class wxURLModule : public wxModule
 {
 public:
+    wxURLModule();
+
     virtual bool OnInit();
     virtual void OnExit();
 
@@ -414,6 +416,13 @@ private:
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxURLModule, wxModule)
+
+wxURLModule::wxURLModule()
+{
+    // we must be cleaned up before wxSocketModule as otherwise deleting
+    // ms_proxyDefault from our OnExit() won't work (and can actually crash)
+    AddDependency(wxClassInfo::FindClass(_T("wxSocketModule")));
+}
 
 bool wxURLModule::OnInit()
 {
