@@ -338,9 +338,34 @@ gtk_window_expose_callback( GtkWidget *widget,
 {
     DEBUG_MAIN_THREAD
 
+    wxPizza *pizza = WX_PIZZA(widget);
+    GdkWindow *backing_window = pizza->m_backing_window;
+
+    int w = widget->allocation.width;
+    int h = widget->allocation.height;
+    
     // if this event is for the border-only GdkWindow
-    if (gdk_event->window != widget->window)
-        return false;
+    if (backing_window && gdk_event->window == pizza->m_backing_window)
+    {
+        if (win->HasFlag(wxBORDER_SIMPLE))
+        {
+            GdkGC* gc = gdk_gc_new(gdk_event->window);
+            gdk_gc_set_foreground(gc, &widget->style->black);
+            gdk_draw_rectangle(gdk_event->window, gc, false, 0, 0, w - 1, h - 1);
+            g_object_unref(gc);
+        }
+        else
+        {
+            GtkShadowType shadow = GTK_SHADOW_IN;
+            if (win->HasFlag(wxBORDER_RAISED))
+                shadow = GTK_SHADOW_OUT;
+            gtk_paint_shadow(
+                widget->style, gdk_event->window, GTK_STATE_NORMAL,
+                shadow, NULL, widget, "viewport", 0, 0, w, h);
+        }
+        
+        return TRUE;
+    }
 
 #if 0
     if (win->GetName())
@@ -372,7 +397,7 @@ gtk_window_expose_callback( GtkWidget *widget,
     win->GtkSendPaintEvents();
 
     // Let parent window draw window-less widgets
-    return FALSE;
+    return TRUE;
 }
 }
 
@@ -380,7 +405,8 @@ gtk_window_expose_callback( GtkWidget *widget,
 // "expose_event" from m_widget, for drawing border
 //-----------------------------------------------------------------------------
 
-#ifndef __WXUNIVERSAL__
+#if 0
+ndef __WXUNIVERSAL__
 extern "C" {
 static gboolean
 expose_event_border(GtkWidget* widget, GdkEventExpose* event, wxWindow* win)
@@ -414,7 +440,7 @@ expose_event_border(GtkWidget* widget, GdkEventExpose* event, wxWindow* win)
             shadow = GTK_SHADOW_OUT;
         gtk_paint_shadow(
             widget->style, event->window, GTK_STATE_NORMAL,
-            shadow, &event->area, widget, NULL, x, y, w, h);
+            shadow, &event->area, widget, "entry", x, y, w, h);
     }
 
     // no further painting is needed for border-only GdkWindow
@@ -2413,7 +2439,8 @@ void wxWindowGTK::PostCreation()
                           G_CALLBACK (gtk_wxwindow_commit_cb), this);
 
         // border drawing
-#ifndef __WXUNIVERSAL__
+#if 0
+ndef __WXUNIVERSAL__
         if (HasFlag(wxBORDER_SIMPLE | wxBORDER_RAISED | wxBORDER_SUNKEN))
         {
             g_signal_connect(m_widget, "expose_event",
@@ -3622,6 +3649,7 @@ void wxWindowGTK::GtkSendPaintEvents()
         }
     }
 
+#if 0
     if (GetThemeEnabled() && (GetBackgroundStyle() == wxBG_STYLE_SYSTEM))
     {
         // find ancestor from which to steal background
@@ -3671,10 +3699,14 @@ void wxWindowGTK::GtkSendPaintEvents()
 
         GetEventHandler()->ProcessEvent(erase_event);
     }
-
+    
     wxNcPaintEvent nc_paint_event( GetId() );
     nc_paint_event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( nc_paint_event );
+#endif
+ 
+    if (GetName() == "MyMiniControl")
+       wxPrintf( "MyMini paint\n" );
 
     wxPaintEvent paint_event( GetId() );
     paint_event.SetEventObject( this );

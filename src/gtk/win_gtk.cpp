@@ -368,6 +368,8 @@ void wxPizza::get_border_widths(int& x, int& y)
         {
             x = widget->style->xthickness;
             y = widget->style->ythickness;
+            x = 1;
+            y = 1;
         }
     }
 }
