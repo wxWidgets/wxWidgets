@@ -35,17 +35,28 @@ public:
 
     virtual int ShowModal();
 
+    // wxMSW-specific implementation from now on
+    // -----------------------------------------
+
+    // called from the hook procedure on CDN_INITDONE reception
+    virtual void MSWOnInitDone(WXHWND hDlg);
+
 protected:
 
 #if !(defined(__SMARTPHONE__) && defined(__WXWINCE__))
     virtual void DoMoveWindow(int x, int y, int width, int height);
+    virtual void DoCentre(int dir);
     virtual void DoGetSize( int *width, int *height ) const;
     virtual void DoGetPosition( int *x, int *y ) const;
 #endif // !(__SMARTPHONE__ && __WXWINCE__)
 
 private:
     wxArrayString m_fileNames;
+
+    // remember if our SetPosition() or Centre() (which requires special
+    // treatment) was called
     bool m_bMovedWindow;
+    int m_centreDir;        // nothing to do if 0
 
     DECLARE_DYNAMIC_CLASS(wxFileDialog)
     DECLARE_NO_COPY_CLASS(wxFileDialog)

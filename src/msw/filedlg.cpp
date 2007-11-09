@@ -64,8 +64,15 @@
 // globals
 // ----------------------------------------------------------------------------
 
-// standard dialog size
+// standard dialog size for the old Windows systems where the dialog wasn't
+// resizeable
 static wxRect gs_rectDialog(0, 0, 428, 266);
+
+// we have no way to retrieve the dialog size before it is shown so calling
+// Centre() before ShowModal() doesn't work correctly (and we can't do it
+// after), hence we set a special flag and recenter the dialog when it's about
+// to be shown
+static bool gs_centerDialog = false;
 
 // ============================================================================
 // implementation
@@ -90,16 +97,9 @@ wxFileDialogHookFunction(HWND      hDlg,
                 OFNOTIFY *pNotifyCode = wx_reinterpret_cast(OFNOTIFY *, lParam);
                 if ( pNotifyCode->hdr.code == CDN_INITDONE )
                 {
-                    // note that we need to move the parent window: hDlg is a
-                    // child of it when OFN_EXPLORER is used
-                    ::SetWindowPos
-                      (
-                        ::GetParent(hDlg),
-                        HWND_TOP,
-                        gs_rectDialog.x, gs_rectDialog.y,
-                        0, 0,
-                        SWP_NOZORDER | SWP_NOSIZE
-                      );
+                    wx_reinterpret_cast(wxFileDialog *,
+                                        pNotifyCode->lpOFN->lCustData)
+                        ->MSWOnInitDone((WXHWND)hDlg);
                  }
             }
             break;
@@ -138,14 +138,15 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     // NB: all style checks are done by wxFileDialogBase::Create
 
     m_bMovedWindow = false;
+    m_centreDir = 0;
 
     // Must set to zero, otherwise the wx routines won't size the window
     // the second time you call the file dialog, because it thinks it is
     // already at the requested size.. (when centering)
     gs_rectDialog.x =
     gs_rectDialog.y = 0;
-
 }
+
 void wxFileDialog::GetPaths(wxArrayString& paths) const
 {
     paths.Empty();
@@ -185,7 +186,6 @@ void wxFileDialog::DoGetPosition(int *x, int *y) const
         *y = gs_rectDialog.y;
 }
 
-
 void wxFileDialog::DoGetSize(int *width, int *height) const
 {
     if ( width )
@@ -196,13 +196,64 @@ void wxFileDialog::DoGetSize(int *width, int *height) const
 
 void wxFileDialog::DoMoveWindow(int x, int y, int WXUNUSED(w), int WXUNUSED(h))
 {
-    m_bMovedWindow = true;
-
     gs_rectDialog.x = x;
     gs_rectDialog.y = y;
 
-    // size of the dialog can't be changed because the controls are not laid
-    // out correctly then
+    // our HWND is only set when we're called from MSWOnInitDone(), test if
+    // this is the case
+    HWND hwnd = GetHwnd();
+    if ( hwnd )
+    {
+        // size of the dialog can't be changed because the controls are not
+        // laid out correctly then
+       ::SetWindowPos(hwnd, HWND_TOP, x, y, 0, 0, SWP_NOZORDER | SWP_NOSIZE);
+    }
+    else // just remember that we were requested to move the window
+    {
+        m_bMovedWindow = true;
+
+        // if Centre() had been called before, it shouldn't be taken into
+        // account now
+        m_centreDir = 0;
+    }
+}
+
+void wxFileDialog::DoCentre(int dir)
+{
+    m_centreDir = dir;
+    m_bMovedWindow = true;
+
+    // it's unnecessary to do anything else at this stage as we'll redo it in
+    // MSWOnInitDone() anyhow
+}
+
+void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
+{
+    // note the the dialog is the parent window: hDlg is a child of it when
+    // OFN_EXPLORER is used
+    HWND hFileDlg = ::GetParent((HWND)hDlg);
+
+    // set HWND so that our DoMoveWindow() works correctly
+    SetHWND((WXHWND)hFileDlg);
+
+    if ( m_centreDir )
+    {
+        // now we have the real dialog size, remember it
+        RECT rect;
+        GetWindowRect(hFileDlg, &rect);
+        gs_rectDialog = wxRectFromRECT(rect);
+
+        // and position the window correctly: notice that we must use the base
+        // class version as our own doesn't do anything except setting flags
+        wxFileDialogBase::DoCentre(m_centreDir);
+    }
+    else // need to just move it to the correct place
+    {
+        SetPosition(gs_rectDialog.GetPosition());
+    }
+
+    // we shouldn't destroy this HWND
+    SetHWND(NULL);
 }
 
 // helper used below in ShowModal(): style is used to determine whether to show
@@ -367,6 +418,7 @@ int wxFileDialog::ShowModal()
 
     of.Flags             = msw_flags;
     of.lpfnHook          = wxFileDialogHookFunction;
+    of.lCustData         = (LPARAM)this;
 
     wxArrayString wildDescriptions, wildFilters;
 
