@@ -27,3 +27,5 @@ contrib/docs/latex/svg/*.tex
 contrib/docs/latex/svg/*.ini
 contrib/docs/latex/svg/*.sty
 
+docs/tech/*.txt
+docs/tech/*.htm
