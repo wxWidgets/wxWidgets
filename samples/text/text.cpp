@@ -1828,10 +1828,9 @@ void RichTextFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
                 alignment = wxT("left-aligned");
             else if (attr.GetAlignment() == wxTEXT_ALIGNMENT_JUSTIFIED)
                 alignment = wxT("justified");
-            msg.Printf(wxT("Facename: %s, wxColour(%d, %d, %d), %s"),
-                (const wxChar*) facename,
+            msg.Printf( "Facename: %s, wxColour(%d, %d, %d), %s", facename,
                 attr.GetTextColour().Red(), attr.GetTextColour().Green(), attr.GetTextColour().Blue(),
-                (const wxChar*) alignment);
+                alignment );
 
             if (attr.HasFont())
             {
