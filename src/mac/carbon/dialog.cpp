@@ -53,13 +53,6 @@ bool wxDialog::Create( wxWindow *parent,
     if ( !wxTopLevelWindow::Create( parent, id, title, pos, size, style, name ) )
         return false;
 
-#if TARGET_API_MAC_OSX
-    HIViewRef growBoxRef = 0 ;
-    OSStatus err = HIViewFindByID( HIViewGetRoot( (WindowRef)m_macWindow ), kHIViewWindowGrowBoxID, &growBoxRef  );
-    if ( err == noErr && growBoxRef != 0 )
-        HIGrowBoxViewSetTransparent( growBoxRef, true ) ;
-#endif
-
     return true;
 }
 
@@ -116,6 +109,8 @@ bool wxDialog::Show(bool show)
         // usually will result in TransferDataToWindow() being called
         InitDialog();
 
+    HiliteMenu(0);
+
     if ( m_isModalStyle )
     {
         if ( show )
@@ -145,13 +140,19 @@ void wxDialog::DoShowModal()
 
     SetFocus() ;
 
-#if TARGET_CARBON
-    BeginAppModalStateForWindow(  (WindowRef) MacGetWindowRef()) ;
-#else
-    // TODO : test whether parent gets disabled
-    bool formerModal = s_macIsInModalLoop ;
-    s_macIsInModalLoop = true ;
-#endif
+    WindowRef windowRef = (WindowRef) MacGetWindowRef();
+    WindowGroupRef windowGroup;
+    WindowGroupRef formerParentGroup;
+    bool resetGroupParent = false;
+
+    if ( GetParent() == NULL )
+    {
+        windowGroup = GetWindowGroup(windowRef) ;
+        formerParentGroup = GetWindowGroupParent( windowGroup );
+        SetWindowGroupParent( windowGroup, GetWindowGroupOfClass( kMovableModalWindowClass ) );
+        resetGroupParent = true;
+    }
+    BeginAppModalStateForWindow(windowRef) ;
 
     while ( IsModal() )
     {
@@ -159,12 +160,11 @@ void wxDialog::DoShowModal()
         // calls process idle itself
     }
 
-#if TARGET_CARBON
-    EndAppModalStateForWindow( (WindowRef) MacGetWindowRef() ) ;
-#else
-    // TODO probably reenable the parent window if any
-    s_macIsInModalLoop = formerModal ;
-#endif
+    EndAppModalStateForWindow(windowRef) ;
+    if ( resetGroupParent )
+    {
+        SetWindowGroupParent( windowGroup , formerParentGroup );
+    }
 }
 
 

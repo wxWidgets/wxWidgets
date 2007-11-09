@@ -16,6 +16,7 @@
 #ifndef WX_PRECOMP
     #include "wx/panel.h"
     #include "wx/toplevel.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/stockitem.h"
@@ -122,14 +123,12 @@ wxSize wxButton::DoGetBestSize() const
         return wxSize( 20 , 20 ) ;
 
     wxSize sz = GetDefaultSize() ;
-    int charspace = 8 ;
 
     switch (GetWindowVariant())
     {
         case wxWINDOW_VARIANT_NORMAL:
         case wxWINDOW_VARIANT_LARGE:
             sz.y = 20 ;
-            charspace = 10 ;
             break;
 
         case wxWINDOW_VARIANT_SMALL:
@@ -148,14 +147,54 @@ wxSize wxButton::DoGetBestSize() const
     m_peer->GetBestRect( &bestsize ) ;
 
     int wBtn;
-    if ( EmptyRect( &bestsize ) )
+    if ( EmptyRect( &bestsize ) || ( GetWindowStyle() & wxBU_EXACTFIT) )
     {
-        wBtn = m_label.length() * charspace + 12 ;
+        Point bounds;
+
+        ControlFontStyleRec controlFont;
+        OSStatus err = m_peer->GetData<ControlFontStyleRec>( kControlEntireControl, kControlFontStyleTag, &controlFont );
+        verify_noerr( err );
+
+        SInt16 baseline;
+        wxMacCFStringHolder str( m_label,  m_font.GetEncoding() );
+
+#ifndef __LP64__
+        if ( m_font.MacGetThemeFontID() != kThemeCurrentPortFont )
+        {
+            err = GetThemeTextDimensions(
+                (!m_label.empty() ? (CFStringRef)str : CFSTR(" ")),
+                m_font.MacGetThemeFontID(), kThemeStateActive, false, &bounds, &baseline );
+            verify_noerr( err );
+        }
+        else
+#endif
+        {
+#if wxMAC_USE_CORE_GRAPHICS
+            wxClientDC dc(const_cast<wxButton*>(this));
+            wxCoord width, height ;
+            dc.GetTextExtent( m_label , &width, &height);
+            bounds.h = width;
+            bounds.v = height;
+#else
+            wxMacWindowStateSaver sv( this );
+            ::TextFont( m_font.MacGetFontNum() );
+            ::TextSize( (short)(m_font.MacGetFontSize()) );
+            ::TextFace( m_font.MacGetFontStyle() );
+
+            err = GetThemeTextDimensions(
+                (!m_label.empty() ? (CFStringRef)str : CFSTR(" ")),
+                kThemeCurrentPortFont, kThemeStateActive, false, &bounds, &baseline );
+            verify_noerr( err );
+#endif
+        }
+
+        wBtn = bounds.h + sz.y;
     }
     else
     {
         wBtn = bestsize.right - bestsize.left ;
-        sz.y = bestsize.bottom - bestsize.top ;
+        // non 'normal' window variants don't return the correct height
+        // sz.y = bestsize.bottom - bestsize.top ;
     }
 
     if ((wBtn > sz.x) || ( GetWindowStyle() & wxBU_EXACTFIT))

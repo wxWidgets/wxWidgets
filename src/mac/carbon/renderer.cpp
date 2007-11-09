@@ -57,6 +57,11 @@ public:
         wxOrientation orient,
         int flags = 0 );
 
+    virtual void DrawCheckBox(wxWindow *win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags = 0);
+
     virtual void DrawComboBoxDropButton(wxWindow *win,
                                         wxDC& dc,
                                         const wxRect& rect,
@@ -151,8 +156,13 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
         CGContextTranslateCTM( cgContext, 0, bounds.bottom - bounds.top );
         CGContextScaleCTM( cgContext, 1, -1 );
 
-        HIShapeReplacePathInCGContext( HIShapeCreateWithQDRgn( (RgnHandle) dc.m_macCurrentClipRgn ), cgContext );
-        CGContextClip( cgContext );
+        HIShapeRef shape = HIShapeCreateWithQDRgn( (RgnHandle) dc.m_macCurrentClipRgn );
+        if ( shape != 0 )
+        {
+            HIShapeReplacePathInCGContext( shape , cgContext );
+            CFRelease( shape );
+            CGContextClip( cgContext );
+        }
         HIViewConvertRect( &headerRect, (HIViewRef) win->GetHandle(), (HIViewRef) win->MacGetTopLevelWindow()->GetHandle() );
 #endif
 
@@ -462,6 +472,8 @@ wxRendererMac::DrawMacThemeButton(wxWindow *win,
             drawInfo.kind = kind;
             drawInfo.state = (flags & wxCONTROL_DISABLED) ? kThemeStateInactive : kThemeStateActive;
             drawInfo.value = (flags & wxCONTROL_SELECTED) ? kThemeButtonOn : kThemeButtonOff;
+            if (flags & wxCONTROL_UNDETERMINED)
+                drawInfo.value = kThemeButtonMixed;
             drawInfo.adornment = adornment;
 
             HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
@@ -474,6 +486,18 @@ wxRendererMac::DrawMacThemeButton(wxWindow *win,
     }
 }
 
+void
+wxRendererMac::DrawCheckBox(wxWindow *win,
+                            wxDC& dc,
+                            const wxRect& rect,
+                            int flags)
+{
+    if (flags & wxCONTROL_CHECKED)
+        flags |= wxCONTROL_SELECTED;
+
+    DrawMacThemeButton(win, dc, rect, flags,
+                       kThemeCheckBox, kThemeAdornmentNone);
+}
 
 void
 wxRendererMac::DrawComboBoxDropButton(wxWindow *win,

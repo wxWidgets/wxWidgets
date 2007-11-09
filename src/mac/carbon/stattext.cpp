@@ -95,6 +95,7 @@ wxSize wxStaticText::DoGetBestSize() const
         SInt16 baseline;
         wxMacCFStringHolder str( m_label,  m_font.GetEncoding() );
 
+#ifndef __LP64__
         if ( m_font.MacGetThemeFontID() != kThemeCurrentPortFont )
         {
             err = GetThemeTextDimensions(
@@ -103,6 +104,7 @@ wxSize wxStaticText::DoGetBestSize() const
             verify_noerr( err );
         }
         else
+#endif
         {
     #if wxMAC_USE_CORE_GRAPHICS
             wxClientDC dc(const_cast<wxStaticText*>(this));

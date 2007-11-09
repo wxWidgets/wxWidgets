@@ -23,11 +23,6 @@
 
 #include "wx/mac/private.h"
 
-#ifndef __DARWIN__
-    #include <Scrap.h>
-#endif
-
-
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -86,6 +81,8 @@ wxDragResult wxDropTarget::OnData(
 bool wxDropTarget::CurrentDragHasSupportedFormat()
 {
     bool supported = false;
+    if (m_dataObject == NULL)
+        return false;
 
     if ( gTrackingGlobals.m_currentSource != NULL )
     {
@@ -112,27 +109,11 @@ bool wxDropTarget::CurrentDragHasSupportedFormat()
 
     if ( !supported )
     {
-        UInt16 items;
-        ItemReference theItem;
-        FlavorType theType;
-        UInt16 flavors = 0;
+        PasteboardRef   pasteboard;
 
-        CountDragItems( (DragReference)m_currentDrag, &items );
-        for (UInt16 index = 1; index <= items && !supported; ++index)
+        if ( GetDragPasteboard( (DragReference)m_currentDrag, &pasteboard ) == noErr )
         {
-            flavors = 0;
-            GetDragItemReferenceNumber( (DragReference)m_currentDrag, index, &theItem );
-            CountDragItemFlavors( (DragReference)m_currentDrag, theItem, &flavors );
-
-            for ( UInt16 flavor = 1; flavor <= flavors; ++flavor )
-            {
-                GetFlavorType( (DragReference)m_currentDrag, theItem, flavor, &theType );
-                if ( m_dataObject->IsSupportedFormat( wxDataFormat( theType ) ) )
-                {
-                    supported = true;
-                    break;
-                }
-            }
+            supported = m_dataObject->HasDataInPasteboard( pasteboard );
         }
     }
 
@@ -185,116 +166,15 @@ bool wxDropTarget::GetData()
 
     if ( !transferred )
     {
-        UInt16 items;
-        OSErr result;
-        ItemReference theItem;
-        FlavorType theType;
-        FlavorFlags theFlags;
-        UInt16 flavors;
-        wxString filenamesPassed;
+        PasteboardRef   pasteboard;
 
-        CountDragItems( (DragReference)m_currentDrag, &items );
-        for (UInt16 index = 1; index <= items; ++index)
+        if ( GetDragPasteboard(  (DragReference)m_currentDrag, &pasteboard ) == noErr )
         {
-            flavors = 0;
-            GetDragItemReferenceNumber( (DragReference)m_currentDrag, index, &theItem );
-            CountDragItemFlavors( (DragReference)m_currentDrag, theItem, &flavors );
-            wxDataFormat preferredFormat = m_dataObject->GetPreferredFormat( wxDataObject::Set );
-            bool hasPreferredFormat = false;
-
-            for (UInt16 flavor = 1; flavor <= flavors; ++flavor)
-            {
-                result = GetFlavorType( (DragReference)m_currentDrag, theItem, flavor, &theType );
-                wxDataFormat format( theType );
-                if (preferredFormat == format)
-                {
-                    hasPreferredFormat = true;
-                    break;
-                }
-            }
-
-            for (UInt16 flavor = 1; flavor <= flavors; ++flavor)
-            {
-                result = GetFlavorType( (DragReference)m_currentDrag, theItem, flavor, &theType );
-                wxDataFormat format( theType );
-                if ((hasPreferredFormat && format == preferredFormat)
-                    || (!hasPreferredFormat && m_dataObject->IsSupportedFormat( format )))
-                {
-                    result = GetFlavorFlags( (DragReference)m_currentDrag, theItem, theType, &theFlags );
-                    if (result == noErr)
-                    {
-                        Size dataSize;
-                        Ptr theData;
-
-                        GetFlavorDataSize( (DragReference)m_currentDrag, theItem, theType, &dataSize );
-                        if (theType == kScrapFlavorTypeText)
-                        {
-                            // this increment is only valid for allocating:
-                            // on the next GetFlavorData call it is reset again to the original value
-                            dataSize++;
-                        }
-                        else if (theType == kScrapFlavorTypeUnicode)
-                        {
-                            // this increment is only valid for allocating:
-                            // on the next GetFlavorData call it is reset again to the original value
-                            dataSize++;
-                            dataSize++;
-                        }
-
-                        if (dataSize > 0)
-                            theData = new char[dataSize];
-                        else
-                            theData = NULL;
-
-                        GetFlavorData( (DragReference)m_currentDrag, theItem, theType, (void*)theData, &dataSize, 0L );
-                        switch (theType)
-                        {
-                        case kScrapFlavorTypeText:
-                            theData[dataSize] = 0;
-                            m_dataObject->SetData( wxDataFormat(wxDF_TEXT), dataSize, theData );
-                            break;
-
-#if wxUSE_UNICODE
-                        case kScrapFlavorTypeUnicode:
-                            theData[dataSize + 0] =
-                            theData[dataSize + 1] = 0;
-                            m_dataObject->SetData( wxDataFormat(wxDF_UNICODETEXT), dataSize, theData );
-                            break;
-#endif
-
-                        case kDragFlavorTypeHFS:
-                            if (theData != NULL)
-                            {
-                                HFSFlavor* theFile = (HFSFlavor*)theData;
-#ifndef __LP64__
-                                wxString name = wxMacFSSpec2MacFilename( &theFile->fileSpec );
-
-                                if (!name.empty())
-                                    filenamesPassed += name + wxT("\n");
-#endif
-                            }
-                            break;
-
-                        default:
-                            m_dataObject->SetData( format, dataSize, theData );
-                            break;
-                        }
-
-                        delete [] theData;
-                    }
-                    break;
-                }
-            }
-        }
-
-        if (filenamesPassed.length() > 0)
-        {
-            wxCharBuffer buf = filenamesPassed.fn_str();
-            m_dataObject->SetData( wxDataFormat(wxDF_FILENAME), strlen( buf ), (const char*)buf );
+            transferred = m_dataObject->GetFromPasteboard( pasteboard );
         }
     }
 
-    return true;
+    return transferred;
 }
 
 //-------------------------------------------------------------------------
@@ -332,6 +212,16 @@ wxDropSource::~wxDropSource()
 {
 }
 
+OSStatus wxMacPromiseKeeper( PasteboardRef inPasteboard, PasteboardItemID inItem, CFStringRef inFlavorType,
+              void *inContext )
+{
+    OSStatus  err = noErr;
+    
+    // we might add promises here later, inContext is the wxDropSource*
+
+    return err;
+}
+
 wxDragResult wxDropSource::DoDragDrop(int flags)
 {
     wxASSERT_MSG( m_data, wxT("Drop source: no data") );
@@ -341,114 +231,61 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
     DragReference theDrag;
     RgnHandle dragRegion;
-
-    if (NewDrag( &theDrag ) != noErr)
-        return wxDragNone;
-
+    OSStatus err = noErr;
+    PasteboardRef   pasteboard;
+    
     // add data to drag
-    size_t formatCount = m_data->GetFormatCount();
-    wxDataFormat *formats = new wxDataFormat[formatCount];
-    m_data->GetAllFormats( formats );
-    ItemReference theItem = (ItemReference) 1;
-
-    for ( size_t i = 0; i < formatCount; ++i )
+    
+    err = PasteboardCreate( kPasteboardUniqueName, &pasteboard );
+    if ( err != noErr )
+        return wxDragNone;
+    
+    // we add a dummy promise keeper because of strange messages when linking against carbon debug
+	err = PasteboardSetPromiseKeeper( pasteboard, wxMacPromiseKeeper, this );
+    if ( err != noErr )
     {
-        size_t dataSize = m_data->GetDataSize( formats[i] );
-        Ptr dataPtr = new char[dataSize];
-        m_data->GetDataHere( formats[i], dataPtr );
-        OSType type = formats[i].GetFormatId();
-        if ( type == 'TEXT' || type == 'utxt' )
-        {
-            if ( dataSize > 0 )
-                dataSize--;
-            dataPtr[ dataSize ] = 0;
-            if ( type == 'utxt' )
-            {
-                if ( dataSize > 0 )
-                    dataSize--;
-                dataPtr[ dataSize ] = 0;
-            }
-
-            AddDragItemFlavor( theDrag, theItem, type, dataPtr, dataSize, 0 );
-        }
-        else if (type == kDragFlavorTypeHFS )
-        {
-            HFSFlavor  theFlavor;
-            OSErr err = noErr;
-#ifndef __LP64__
-            CInfoPBRec cat;
-
-            wxMacFilename2FSSpec( wxString( dataPtr, *wxConvCurrent ), &theFlavor.fileSpec );
-
-            memset( &cat, 0, sizeof(cat) );
-            cat.hFileInfo.ioNamePtr = theFlavor.fileSpec.name;
-            cat.hFileInfo.ioVRefNum = theFlavor.fileSpec.vRefNum;
-            cat.hFileInfo.ioDirID = theFlavor.fileSpec.parID;
-            cat.hFileInfo.ioFDirIndex = 0;
-            err = PBGetCatInfoSync( &cat );
-#endif
-          if (err == noErr)
-            {
-#ifndef __LP64__
-                theFlavor.fdFlags = cat.hFileInfo.ioFlFndrInfo.fdFlags;
-                if (theFlavor.fileSpec.parID == fsRtParID)
-                {
-                    theFlavor.fileCreator = 'MACS';
-                    theFlavor.fileType = 'disk';
-                }
-                else if ((cat.hFileInfo.ioFlAttrib & ioDirMask) != 0)
-                {
-                    theFlavor.fileCreator = 'MACS';
-                    theFlavor.fileType = 'fold';
-                }
-                else
-                {
-                    theFlavor.fileCreator = cat.hFileInfo.ioFlFndrInfo.fdCreator;
-                    theFlavor.fileType = cat.hFileInfo.ioFlFndrInfo.fdType;
-                }
-#endif
-                AddDragItemFlavor( theDrag, theItem, type, &theFlavor, sizeof(theFlavor), 0 );
-            }
-        }
-        else
-        {
-            AddDragItemFlavor( theDrag, theItem, type, dataPtr, dataSize, 0 );
-        }
-
-        delete [] dataPtr;
+        CFRelease( pasteboard );
+        return wxDragNone;
     }
-
-    delete [] formats;
-
+    
+	err = PasteboardClear( pasteboard );
+    if ( err != noErr )
+    {
+        CFRelease( pasteboard );
+        return wxDragNone;
+    }
+	PasteboardSynchronize( pasteboard );
+    
+    m_data->AddToPasteboard( pasteboard, 1 );
+    
+    if (NewDragWithPasteboard( pasteboard , &theDrag) != noErr)
+    {
+        CFRelease( pasteboard );
+        return wxDragNone;
+    }
+    
     dragRegion = NewRgn();
     RgnHandle tempRgn = NewRgn();
 
-    EventRecord* ev = NULL;
-
-#if !TARGET_CARBON // TODO
-    ev = (EventRecord*) wxTheApp->MacGetCurrentEvent();
-#else
     EventRecord rec;
-    ev = &rec;
-    wxMacConvertEventToRecord( (EventRef) wxTheApp->MacGetCurrentEvent(), &rec );
-#endif
+    ConvertEventRefToEventRecord(  (EventRef) wxTheApp->MacGetCurrentEvent(), &rec );
 
     const short dragRegionOuterBoundary = 10;
     const short dragRegionInnerBoundary = 9;
 
     SetRectRgn(
         dragRegion,
-        ev->where.h - dragRegionOuterBoundary,
-        ev->where.v  - dragRegionOuterBoundary,
-        ev->where.h + dragRegionOuterBoundary,
-        ev->where.v + dragRegionOuterBoundary );
+        rec.where.h - dragRegionOuterBoundary,
+        rec.where.v  - dragRegionOuterBoundary,
+        rec.where.h + dragRegionOuterBoundary,
+        rec.where.v + dragRegionOuterBoundary );
 
     SetRectRgn(
         tempRgn,
-        ev->where.h - dragRegionInnerBoundary,
-        ev->where.v - dragRegionInnerBoundary,
-        ev->where.h + dragRegionInnerBoundary,
-        ev->where.v + dragRegionInnerBoundary );
+        rec.where.h - dragRegionInnerBoundary,
+        rec.where.v - dragRegionInnerBoundary,
+        rec.where.h + dragRegionInnerBoundary,
+        rec.where.v + dragRegionInnerBoundary );
 
     DiffRgn( dragRegion, tempRgn, dragRegion );
     DisposeRgn( tempRgn );
@@ -460,9 +297,11 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     gTrackingGlobals.m_result = wxDragNone;
     gTrackingGlobals.m_flags = flags;
 
-    TrackDrag( theDrag, ev, dragRegion );
+    err = TrackDrag( theDrag, &rec, dragRegion );
+    
     DisposeRgn( dragRegion );
     DisposeDrag( theDrag );
+    CFRelease( pasteboard );
     gTrackingGlobals.m_currentSource = NULL;
 
     return gTrackingGlobals.m_result;
@@ -614,7 +453,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(
                     if ( trackingGlobals->m_currentTarget )
                     {
                         trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag );
-                        trackingGlobals->m_currentTarget->OnDragOver( localx, localy, result );
+                        result = trackingGlobals->m_currentTarget->OnDragOver( localx, localy, result );
                     }
                 }
 

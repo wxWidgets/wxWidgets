@@ -181,6 +181,22 @@ bool wxRadioBox::Enable(unsigned int item, bool enable)
     return current->Enable( enable );
 }
 
+bool wxRadioBox::IsItemEnabled(unsigned int item) const
+{
+    if (!IsValid( item ))
+        return false;
+
+    unsigned int i = 0;
+    wxRadioButton *current = m_radioButtonCycle;
+    while (i != item)
+    {
+        i++;
+        current = current->NextInCycle();
+    }
+
+    return current->IsEnabled();
+}
+
 // Returns the radiobox label
 //
 wxString wxRadioBox::GetLabel() const
@@ -308,6 +324,23 @@ bool wxRadioBox::Show(unsigned int item, bool show)
 
     return current->Show( show );
 }
+
+bool wxRadioBox::IsItemShown(unsigned int item) const
+{
+    if (!IsValid( item ))
+        return false;
+
+    unsigned int i = 0;
+    wxRadioButton *current = m_radioButtonCycle;
+    while (i != item)
+    {
+        i++;
+        current = current->NextInCycle();
+    }
+
+    return current->IsShown();
+}
+
 
 // Simulates the effect of the user issuing a command to the item
 //

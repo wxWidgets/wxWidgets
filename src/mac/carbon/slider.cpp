@@ -252,7 +252,7 @@ void wxSlider::SetLineSize(int lineSize)
 int wxSlider::GetLineSize() const
 {
     // TODO
-    return 0;
+    return m_lineSize;
 }
 
 int wxSlider::GetSelEnd() const

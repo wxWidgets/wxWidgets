@@ -141,109 +141,89 @@ wxDockEventHandler(EventHandlerCallRef WXUNUSED(inHandlerCallRef),
     wxDockTaskBarIcon* pTB = (wxDockTaskBarIcon*) pData;
     const UInt32 eventClass = GetEventClass(inEvent);
     const UInt32 eventKind = GetEventKind(inEvent);
+    
+    OSStatus err = eventNotHandledErr;
 
     // Handle wxTaskBar menu events (note that this is a global event handler
     // so it will actually get called by all commands/menus)
-    if ((eventClass == kEventClassCommand) && (eventKind == kEventCommandProcess))
+    if ((eventClass == kEventClassCommand) && (eventKind == kEventCommandProcess || eventKind == kEventCommandUpdateStatus ))
     {
         // if we have no taskbar menu quickly pass it back to wxApp
-        if (pTB->m_pMenu == NULL)
-            return eventNotHandledErr;
-
-        // This is the real reason why we need this. Normally menus
-        // get handled in wxMacAppEventHandler
-        //
-        // pascal OSStatus wxMacAppEventHandler(EventHandlerCallRef handler,
-        //                                      EventRef event, void *data)
-        //
-        // However, in the case of a taskbar menu call
-        // command.menu.menuRef IS NULL!
-        // Which causes the wxApp handler just to skip it.
-        MenuRef taskbarMenuRef = MAC_WXHMENU(pTB->m_pMenu->GetHMenu());
-        OSStatus err;
-
-        // get the HICommand from the event
-        HICommand command;
-        err = GetEventParameter(
-            inEvent, kEventParamDirectObject,
-            typeHICommand, NULL,
-            sizeof(HICommand), NULL, &command );
-        if (err == noErr)
+        if (pTB->m_pMenu != NULL)
         {
-            // Obtain the REAL menuRef and the menuItemIndex in the real menuRef
-            //
-            // NOTE: menuRef is generally used here for submenus, as
-            // GetMenuItemRefCon could give an incorrect wxMenuItem if we pass
-            // just the top level wxTaskBar menu
-            MenuItemIndex menuItemIndex;
-            MenuRef menuRef;
+            // This is the real reason why we need this. Normally menus
+            // get handled in wxMacAppEventHandler
+            // However, in the case of a taskbar menu call
+            // command.menu.menuRef IS NULL!
+            // Which causes the wxApp handler just to skip it.
 
-            err = GetIndMenuItemWithCommandID(
-                taskbarMenuRef,
-                command.commandID,
-                1, &menuRef, &menuItemIndex );
-            if (err == noErr)
+            // get the HICommand from the event
+            HICommand command;
+            if (GetEventParameter(inEvent, kEventParamDirectObject,
+                typeHICommand, NULL,sizeof(HICommand), NULL, &command ) == noErr)
             {
-                MenuCommand id = command.commandID;
-                wxMenuItem *item = NULL;
+                // Obtain the REAL menuRef and the menuItemIndex in the real menuRef
+                //
+                // NOTE: menuRef is generally used here for submenus, as
+                // GetMenuItemRefCon could give an incorrect wxMenuItem if we pass
+                // just the top level wxTaskBar menu
+                MenuItemIndex menuItemIndex;
+                MenuRef menuRef;
+                MenuRef taskbarMenuRef = MAC_WXHMENU(pTB->m_pMenu->GetHMenu());
 
-                if (id != 0) // get the wxMenuItem reference from the MenuRef
-                    GetMenuItemRefCon( menuRef, menuItemIndex, (URefCon*) &item );
-
-                if (item)
+                // the next command is only successful if it was a command from the taskbar menu
+                // otherwise we pass it on
+                if (GetIndMenuItemWithCommandID(taskbarMenuRef,command.commandID,
+                    1, &menuRef, &menuItemIndex ) == noErr)
                 {
-                    // Handle items that are checkable
-                    // FIXME: Doesn't work (at least on 10.2)!
-                    if (item->IsCheckable())
-                        item->Check( !item->IsChecked() );
+                    wxMenu* itemMenu = wxFindMenuFromMacMenu( menuRef ) ;
+                    int id = wxMacCommandToId( command.commandID ) ;
+                    wxMenuItem *item = NULL;
 
-                    // send the wxEvent to the wxMenu
-                    item->GetMenu()->SendEvent( id, item->IsCheckable() ? item->IsChecked() : -1 );
+                    if (id != 0) // get the wxMenuItem reference from the MenuRef
+                        GetMenuItemRefCon( menuRef, menuItemIndex, (URefCon*) &item );
 
-                    // successfully handled the event
-                    err = noErr;
+                    if (item && itemMenu )
+                    {
+                        if ( eventKind == kEventCommandProcess )
+                            err = itemMenu->MacHandleCommandProcess( item, id );
+                        else if ( eventKind == kEventCommandUpdateStatus )
+                            err = itemMenu->MacHandleCommandUpdateStatus( item, id );
+                    }
                 }
             }
         } //end if noErr on getting HICommand from event
-
-        // return whether we handled the event or not
-        return err;
     }
-
-    // We better have a kEventClassApplication/kEventAppGetDockTileMenu combo here,
-    // otherwise something is truly funky
-    wxASSERT(eventClass == kEventClassApplication &&
-             eventKind == kEventAppGetDockTileMenu);
-
-    // process the right click events
-    // NB: This may result in double or even triple-creation of the menus
-    // We need to do this for 2.4 compat, however
-    wxTaskBarIconEvent downevt(wxEVT_TASKBAR_RIGHT_DOWN, NULL);
-    pTB->m_parent->ProcessEvent(downevt);
-
-    wxTaskBarIconEvent upevt(wxEVT_TASKBAR_RIGHT_UP, NULL);
-    pTB->m_parent->ProcessEvent(upevt);
-
-    // create popup menu
-    wxMenu* menu = pTB->DoCreatePopupMenu();
-
-    OSStatus err = eventNotHandledErr;
-
-    if (menu != NULL)
+    else if ((eventClass == kEventClassApplication) && (eventKind == kEventAppGetDockTileMenu ))
     {
-        // note to self - a MenuRef *is* a MenuHandle
-        MenuRef hMenu = MAC_WXHMENU(menu->GetHMenu());
+        // process the right click events
+        // NB: This may result in double or even triple-creation of the menus
+        // We need to do this for 2.4 compat, however
+        wxTaskBarIconEvent downevt(wxEVT_TASKBAR_RIGHT_DOWN, NULL);
+        pTB->m_parent->ProcessEvent(downevt);
 
-        // When SetEventParameter is called it will decrement
-        // the reference count of the menu - we need to make
-        // sure it stays around in the wxMenu class here
-        CFRetain(hMenu);
+        wxTaskBarIconEvent upevt(wxEVT_TASKBAR_RIGHT_UP, NULL);
+        pTB->m_parent->ProcessEvent(upevt);
 
-        // set the actual dock menu
-        err = SetEventParameter(
-            inEvent, kEventParamMenuRef,
-            typeMenuRef, sizeof(MenuRef), &hMenu );
-        verify_noerr( err );
+        // create popup menu
+        wxMenu* menu = pTB->DoCreatePopupMenu();
+
+        if (menu != NULL)
+        {
+            // note to self - a MenuRef *is* a MenuHandle
+            MenuRef hMenu = MAC_WXHMENU(menu->GetHMenu());
+
+            // When SetEventParameter is called it will decrement
+            // the reference count of the menu - we need to make
+            // sure it stays around in the wxMenu class here
+            CFRetain(hMenu);
+
+            // set the actual dock menu
+            err = SetEventParameter(
+                inEvent, kEventParamMenuRef,
+                typeMenuRef, sizeof(MenuRef), &hMenu );
+            verify_noerr( err );
+        }
     }
 
     return err;
@@ -319,6 +299,7 @@ wxDockTaskBarIcon::wxDockTaskBarIcon(wxTaskBarIcon* parent)
     EventTypeSpec tbEventList[] =
     {
         { kEventClassCommand, kEventProcessCommand },
+        { kEventClassCommand, kEventCommandUpdateStatus },
         { kEventClassApplication, kEventAppGetDockTileMenu }
     };
 

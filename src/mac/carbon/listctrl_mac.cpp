@@ -102,7 +102,7 @@ wxEND_HANDLERS_TABLE()
 wxCONSTRUCTOR_5( wxListCtrl , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
 
 /*
- TODO : Expose more information of a list's layout etc. via appropriate objects (à la NotebookPageInfo)
+ TODO : Expose more information of a list's layout etc. via appropriate objects (ï¿  la NotebookPageInfo)
 */
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxControl)
@@ -2770,19 +2770,29 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     }
 
     HIThemeTextHorizontalFlush hFlush = kHIThemeTextHorizontalFlushLeft;
-    UInt16 fontID = kThemeViewsFont;
+    HIThemeTextInfo info;
+
+#ifdef __LP64__
+    info.version = kHIThemeTextInfoVersionOne;
+    info.fontID = kThemeViewsFont;
+    if (font.Ok())
+    {
+        info.fontID = kThemeSpecifiedFont;
+        info.font = (CTFontRef) font.MacGetCTFont();
+    }
+#else
+    info.version = kHIThemeTextInfoVersionZero;
+    info.fontID = kThemeViewsFont;
 
     if (font.Ok())
     {
         if (font.GetFamily() != wxFONTFAMILY_DEFAULT)
-            fontID = font.MacGetThemeFontID();
+            info.fontID = font.MacGetThemeFontID();
 
-// FIXME: replace these with CG or ATSUI calls so we can remove this #ifndef.
-#ifndef __LP64__
         ::TextSize( (short)(font.MacGetFontSize()) ) ;
         ::TextFace( font.MacGetFontStyle() ) ;
-#endif
     }
+#endif
 
     wxListItem item;
     list->GetColumn(listColumn, item);
@@ -2799,10 +2809,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
         }
     }
 
-    HIThemeTextInfo info;
-    info.version = kHIThemeTextInfoVersionZero;
     info.state = active ? kThemeStateActive : kThemeStateInactive;
-    info.fontID = fontID;
     info.horizontalFlushness = hFlush;
     info.verticalFlushness = kHIThemeTextVerticalFlushCenter;
     info.options = kHIThemeTextBoxOptionNone;
@@ -2818,8 +2825,10 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
 
     CGContextRestoreGState(context);
 
+#ifndef __LP64__
     if (savedState != NULL)
         SetThemeDrawingState(savedState, true);
+#endif
 }
 
 OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemID,
@@ -2867,13 +2876,19 @@ OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemI
                 if ( list && list->HasFlag( wxLC_EDIT_LABELS ) )
                 {
                     verify_noerr(SetDataBrowserItemDataBooleanValue( itemData, true ));
+                    err = noErr ;
                 }
                 break ;
             default :
                 if ( property >= kMinColumnId )
                 {
-                    wxMacCFStringHolder cfStr(text);
-                    verify_noerr( ::SetDataBrowserItemDataText( itemData, cfStr) );
+                    wxMacCFStringHolder cfStr;
+
+                    if (!text.IsEmpty()){
+                        cfStr.Assign( text, wxLocale::GetSystemEncoding() );
+                        err = ::SetDataBrowserItemDataText( itemData, cfStr );
+                        err = noErr;
+                    }
 
 
 
@@ -2944,7 +2959,6 @@ void wxMacDataBrowserListCtrlControl::ItemNotification(DataBrowserItemID itemID,
         bool trigger = false;
 
         wxListEvent event( wxEVT_COMMAND_LIST_ITEM_SELECTED, list->GetId() );
-        bool isSingle = (list->GetWindowStyle() & wxLC_SINGLE_SEL) != 0;
 
         event.SetEventObject( list );
         if ( !list->IsVirtual() )
@@ -2964,8 +2978,9 @@ void wxMacDataBrowserListCtrlControl::ItemNotification(DataBrowserItemID itemID,
         {
             case kDataBrowserItemDeselected:
                 event.SetEventType(wxEVT_COMMAND_LIST_ITEM_DESELECTED);
-                if ( !isSingle )
-                    trigger = !IsSelectionSuppressed();
+                // as the generic implementation is also triggering this
+                // event for single selection, we do the same (different than listbox)
+                trigger = !IsSelectionSuppressed();
                 break;
 
             case kDataBrowserItemSelected:

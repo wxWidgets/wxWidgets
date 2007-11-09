@@ -44,10 +44,8 @@ wxMemoryDC::~wxMemoryDC()
     {
 #if wxMAC_USE_CORE_GRAPHICS
         m_selected.EndRawAccess() ;
-        CGContextRef bmCtx = (CGContextRef) m_graphicContext->GetNativeContext() ;
         delete m_graphicContext ;
         m_graphicContext = NULL ;
-        CGContextRelease( bmCtx ) ;
 #else
 // TODO: UnlockPixels( GetGWorldPixMap(MAC_WXHBITMAP(m_selected.GetHBITMAP())) );
 #endif
@@ -60,10 +58,8 @@ void wxMemoryDC::DoSelect( const wxBitmap& bitmap )
     {
 #if wxMAC_USE_CORE_GRAPHICS
         m_selected.EndRawAccess() ;
-        CGContextRef bmCtx = (CGContextRef) m_graphicContext->GetNativeContext() ;
         delete m_graphicContext ;
         m_graphicContext = NULL ;
-        CGContextRelease( bmCtx ) ;
 #else
 // TODO: UnlockPixels( GetGWorldPixMap(MAC_WXHBITMAP(m_selected.GetHBITMAP())) );
 #endif
@@ -75,30 +71,16 @@ void wxMemoryDC::DoSelect( const wxBitmap& bitmap )
 #if wxMAC_USE_CORE_GRAPHICS
         if ( m_selected.GetDepth() != 1 )
             m_selected.UseAlpha() ;
-        void * data = m_selected.BeginRawAccess() ;
-
-        int bitsPerComp = 8 ;
-        int bytesPerPixel = 4 ;
-        int w = bitmap.GetWidth() ;
-        int h = bitmap.GetHeight() ;
-		m_width = w;
-		m_height = h;
-
-        // TODO: should this be kCGImageAlphaPremultiplied[First,Last] ?
-        CGImageAlphaInfo a = kCGImageAlphaNoneSkipFirst ;
-
+        m_selected.BeginRawAccess() ;
+		m_width = bitmap.GetWidth();
+		m_height = bitmap.GetHeight();
         CGColorSpaceRef genericColorSpace  = wxMacGetGenericRGBColorSpace();
-        CGContextRef bmCtx = CGBitmapContextCreate( data , w, h, bitsPerComp , bytesPerPixel * w , genericColorSpace, a );
-        wxASSERT_MSG( bmCtx , wxT("Unable to create bitmap context") ) ;
+        CGContextRef bmCtx = (CGContextRef) m_selected.GetHBITMAP();
 
         if ( bmCtx )
         {
             CGContextSetFillColorSpace( bmCtx, genericColorSpace );
             CGContextSetStrokeColorSpace( bmCtx, genericColorSpace );
-
-            CGContextTranslateCTM( bmCtx , 0 ,  m_selected.GetHeight() ) ;
-            CGContextScaleCTM( bmCtx , 1 , -1 ) ;
-
 			SetGraphicsContext( wxGraphicsContext::CreateFromNative( bmCtx ) );
         }
         m_ok = (m_graphicContext != NULL) ;

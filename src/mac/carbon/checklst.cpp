@@ -89,6 +89,7 @@ bool wxCheckListBox::Create(
 
     // this will be increased by our Append command
     wxMacDataBrowserCheckListControl* control = new wxMacDataBrowserCheckListControl( this, pos, size, style );
+    // TODO CHECK control->SetClientDataType( m_clientDataItemsType );
     m_peer = control;
 
     MacPostControlCreate(pos,size);

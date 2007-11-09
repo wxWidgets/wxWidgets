@@ -75,13 +75,13 @@ int wxMessageDialog::ShowModal()
 
     AlertType alertType = kAlertPlainAlert;
     if (style & wxICON_EXCLAMATION)
-        alertType = kAlertNoteAlert;
+        alertType = kAlertCautionAlert;
     else if (style & wxICON_HAND)
         alertType = kAlertStopAlert;
     else if (style & wxICON_INFORMATION)
         alertType = kAlertNoteAlert;
     else if (style & wxICON_QUESTION)
-        alertType = kAlertCautionAlert;
+        alertType = kAlertNoteAlert;
 
 
     // work out what to display

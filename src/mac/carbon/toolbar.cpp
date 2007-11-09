@@ -129,7 +129,11 @@ public:
         if ( m_toolbarItemRef )
         {
             CFIndex count = CFGetRetainCount( m_toolbarItemRef ) ;
-            wxASSERT_MSG( count == 1 , wxT("Reference Count of native tool was not 1 in wxToolBarTool destructor") );
+			// different behaviour under Leopard
+			if ( UMAGetSystemVersion() < 0x1050 )
+			{
+                wxASSERT_MSG( count == 1 , wxT("Reference Count of native tool was not 1 in wxToolBarTool destructor") );
+			}
             wxTheApp->MacAddToAutorelease(m_toolbarItemRef);
             CFRelease(m_toolbarItemRef);
             m_toolbarItemRef = NULL;
@@ -476,12 +480,15 @@ void wxToolBarTool::UpdateToggleImage( bool toggle )
         dc.DrawBitmap( m_bmpNormal, 0, 0, true );
         dc.SelectObject( wxNullBitmap );
         ControlButtonContentInfo info;
-        wxMacCreateBitmapButton( &info, bmp, kControlContentIconRef );
+        wxMacCreateBitmapButton( &info, bmp );
         SetControlData( m_controlHandle, 0, kControlIconContentTag, sizeof(info), (Ptr)&info );
 #if wxMAC_USE_NATIVE_TOOLBAR
         if (m_toolbarItemRef != NULL)
         {
-            HIToolbarItemSetIconRef( m_toolbarItemRef, info.u.iconRef );
+            ControlButtonContentInfo info2;
+            wxMacCreateBitmapButton( &info2, bmp, kControlContentCGImageRef);
+            HIToolbarItemSetImage( m_toolbarItemRef, info2.u.imageRef );
+            wxMacReleaseBitmapButton( &info2 );
         }
 #endif
         wxMacReleaseBitmapButton( &info );
@@ -489,12 +496,15 @@ void wxToolBarTool::UpdateToggleImage( bool toggle )
     else
     {
         ControlButtonContentInfo info;
-        wxMacCreateBitmapButton( &info, m_bmpNormal, kControlContentIconRef );
+        wxMacCreateBitmapButton( &info, m_bmpNormal );
         SetControlData( m_controlHandle, 0, kControlIconContentTag, sizeof(info), (Ptr)&info );
 #if wxMAC_USE_NATIVE_TOOLBAR
         if (m_toolbarItemRef != NULL)
         {
-            HIToolbarItemSetIconRef( m_toolbarItemRef, info.u.iconRef );
+            ControlButtonContentInfo info2;
+            wxMacCreateBitmapButton( &info2, m_bmpNormal, kControlContentCGImageRef);
+            HIToolbarItemSetImage( m_toolbarItemRef, info2.u.imageRef );
+            wxMacReleaseBitmapButton( &info2 );
         }
 #endif
         wxMacReleaseBitmapButton( &info );
@@ -850,7 +860,7 @@ bool wxToolBar::Create(
 #if wxMAC_USE_NATIVE_TOOLBAR
     if (parent->IsKindOf(CLASSINFO(wxFrame)) && wxSystemOptions::GetOptionInt(wxT("mac.toolbar.no-native")) != 1)
     {
-        wxString labelStr = wxString::Format( wxT("%xd"), (int)this );
+        wxString labelStr = wxString::Format( wxT("%p"), this );
         err = HIToolbarCreate(
           wxMacCFStringHolder( labelStr, wxFont::GetDefaultEncoding() ), 0,
           (HIToolbarRef*) &m_macHIToolbarRef );
@@ -889,8 +899,11 @@ wxToolBar::~wxToolBar()
             MacInstallNativeToolbar( false );
 
         CFIndex count = CFGetRetainCount( m_macHIToolbarRef ) ;
-        wxASSERT_MSG( count == 1 , wxT("Reference Count of native control was not 1 in wxToolBar destructor") );
-
+		// Leopard seems to have one refcount more, so we cannot check reliably at the moment
+		if ( UMAGetSystemVersion() < 0x1050 )
+		{
+            wxASSERT_MSG( count == 1 , wxT("Reference Count of native control was not 1 in wxToolBar destructor") );
+		}
         CFRelease( (HIToolbarRef)m_macHIToolbarRef );
         m_macHIToolbarRef = NULL;
     }
@@ -1462,8 +1475,14 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
     tool->Attach( this );
 
 #if wxMAC_USE_NATIVE_TOOLBAR
-    HIToolbarItemRef item;
-#endif
+    wxString label = tool->GetLabel();
+    if (m_macHIToolbarRef && !label.empty() )
+    {
+        // strip mnemonics from the label for compatibility
+        // with the usual labels in wxStaticText sense
+        label = wxStripMenuCodes(label);
+    }
+#endif // wxMAC_USE_NATIVE_TOOLBAR
 
     switch (tool->GetStyle())
     {
@@ -1501,11 +1520,15 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
             {
                 wxASSERT( tool->GetControlHandle() == NULL );
                 ControlButtonContentInfo info;
-                wxMacCreateBitmapButton( &info, tool->GetNormalBitmap(), kControlContentIconRef );
+                wxMacCreateBitmapButton( &info, tool->GetNormalBitmap() );
 
                 if ( UMAGetSystemVersion() >= 0x1000)
                 {
+                    // contrary to the docs this control only works with iconrefs
+                    ControlButtonContentInfo info;
+                    wxMacCreateBitmapButton( &info, tool->GetNormalBitmap(), kControlContentIconRef );
                     CreateIconControl( window, &toolrect, &info, false, &controlHandle );
+                    wxMacReleaseBitmapButton( &info );
                 }
                 else
                 {
@@ -1520,19 +1543,25 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 #if wxMAC_USE_NATIVE_TOOLBAR
                 if (m_macHIToolbarRef != NULL)
                 {
-                    wxString labelStr = wxString::Format(wxT("%xd"), (int)tool);
+                    HIToolbarItemRef item;
+                    wxString labelStr = wxString::Format(wxT("%p"), tool);
                     err = HIToolbarItemCreate(
                         wxMacCFStringHolder(labelStr, wxFont::GetDefaultEncoding()),
                         kHIToolbarItemCantBeRemoved | kHIToolbarItemAnchoredLeft | kHIToolbarItemAllowDuplicates, &item );
                     if (err  == noErr)
                     {
+                        ControlButtonContentInfo info2;
+                        wxMacCreateBitmapButton( &info2, tool->GetNormalBitmap(), kControlContentCGImageRef);
+
                         InstallEventHandler(
                             HIObjectGetEventTarget(item), GetwxMacToolBarEventHandlerUPP(),
                             GetEventTypeCount(toolBarEventList), toolBarEventList, tool, NULL );
-
-                        HIToolbarItemSetIconRef( item, info.u.iconRef );
+                        HIToolbarItemSetLabel( item, wxMacCFStringHolder(label, m_font.GetEncoding()) );
+                        HIToolbarItemSetImage( item, info2.u.imageRef );
                         HIToolbarItemSetCommandID( item, kHIToolbarCommandPressAction );
                         tool->SetToolbarItemRef( item );
+
+                        wxMacReleaseBitmapButton( &info2 );
                     }
                 }
                 else
@@ -1560,7 +1589,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
             if (m_macHIToolbarRef != NULL)
             {
                 wxCHECK_MSG( tool->GetControl(), false, _T("control must be non-NULL") );
-
+                HIToolbarItemRef    item;
                 HIViewRef viewRef = (HIViewRef) tool->GetControl()->GetHandle() ;
                 CFDataRef data = CFDataCreate( kCFAllocatorDefault , (UInt8*) &viewRef , sizeof(viewRef) ) ;
                 err = HIToolbarCreateItemWithIdentifier((HIToolbarRef) m_macHIToolbarRef,kControlToolbarItemClassID,
@@ -1585,19 +1614,6 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
         default:
             break;
     }
-
-#if wxMAC_USE_NATIVE_TOOLBAR
-    wxString label = tool->GetLabel();
-    if (m_macHIToolbarRef && !label.empty() )
-    {
-        // strip mnemonics from the label for compatibility
-        // with the usual labels in wxStaticText sense
-        label = wxStripMenuCodes(label);
-
-        HIToolbarItemSetLabel(item,
-                              wxMacCFStringHolder(label, m_font.GetEncoding()));
-    }
-#endif // wxMAC_USE_NATIVE_TOOLBAR
 
     if ( err == noErr )
     {

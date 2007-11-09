@@ -943,6 +943,7 @@ void wxMacControl::SuperChangedPosition()
 void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle )
 {
     m_font = font;
+#ifndef __LP64__
     ControlFontStyleRec fontStyle;
     if ( font.MacGetThemeFontID() != kThemeCurrentPortFont )
     {
@@ -993,6 +994,7 @@ void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , l
     }
 
     ::SetControlFontStyle( m_controlRef , &fontStyle );
+#endif
 }
 
 void wxMacControl::SetBackground( const wxBrush &WXUNUSED(brush) )
@@ -2181,7 +2183,15 @@ void * wxMacDataItemBrowserControl::MacGetClientData( unsigned int n) const
 
 void wxMacDataItemBrowserControl::MacScrollTo( unsigned int n )
 {
-    RevealItem( GetItemFromLine( n) , kDataBrowserRevealWithoutSelecting );
+    UInt32 top , left ;
+    GetScrollPosition( &top , &left ) ;
+    wxMacDataItem * item = (wxMacDataItem*) GetItemFromLine( n );
+
+    UInt16 height ;
+    GetRowHeight( (DataBrowserItemID) item , &height ) ;
+    SetScrollPosition( n * ((UInt32)height) , left ) ;
+
+    RevealItem( item , kDataBrowserRevealWithoutSelecting );
 }
 
 

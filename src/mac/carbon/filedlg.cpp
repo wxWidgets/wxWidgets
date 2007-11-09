@@ -83,12 +83,14 @@ static pascal void NavEventProc(
                 ::NavCustomControl(ioParams->context, kNavCtlSetLocation, (void *) &theLocation);
         }
 
-        NavMenuItemSpec  menuItem;
-        menuItem.version = kNavMenuItemSpecVersion;
-        menuItem.menuCreator = 'WXNG';
-        menuItem.menuType = data->currentfilter;
-        wxMacStringToPascal( data->name[data->currentfilter] , (StringPtr)(menuItem.menuItemName) ) ;
-        ::NavCustomControl(ioParams->context, kNavCtlSelectCustomType, &menuItem);
+        if( data->extensions.GetCount() > 0 )
+        {
+            NavMenuItemSpec  menuItem;
+            memset( &menuItem, 0, sizeof(menuItem) );
+            menuItem.version = kNavMenuItemSpecVersion;
+            menuItem.menuType = data->currentfilter;
+            ::NavCustomControl(ioParams->context, kNavCtlSelectCustomType, &menuItem);
+        }
     }
     else if ( inSelector == kNavCBPopupMenuSelect )
     {
@@ -112,7 +114,7 @@ static pascal void NavEventProc(
                 sfilename = cfString.AsString() ;
 
                 int pos = sfilename.Find('.', true) ;
-                if ( pos != wxNOT_FOUND )
+                if ( pos != wxNOT_FOUND && extension != wxT("*") )
                 {
                     sfilename = sfilename.Left(pos+1)+extension ;
                     cfString.Assign( sfilename , wxFONTENCODING_DEFAULT ) ;
@@ -228,34 +230,6 @@ static Boolean CheckFile( const wxString &filename , OSType type , OpenUserDataR
     return true ;
 }
 
-#if !TARGET_API_MAC_OSX
-static pascal Boolean CrossPlatformFileFilter(CInfoPBPtr myCInfoPBPtr, void *dataPtr)
-{
-    OpenUserDataRecPtr data = (OpenUserDataRecPtr) dataPtr ;
-    // return true if this item is invisible or a file
-
-    Boolean visibleFlag;
-    Boolean folderFlag;
-
-    visibleFlag = ! (myCInfoPBPtr->hFileInfo.ioFlFndrInfo.fdFlags & kIsInvisible);
-    folderFlag = (myCInfoPBPtr->hFileInfo.ioFlAttrib & 0x10);
-
-    // because the semantics of the filter proc are "true means don't show
-    // it" we need to invert the result that we return
-
-    if ( !visibleFlag )
-        return true ;
-
-    if ( !folderFlag )
-    {
-        wxString file = wxMacMakeStringFromPascal( myCInfoPBPtr->hFileInfo.ioNamePtr ) ;
-        return !CheckFile( file , myCInfoPBPtr->hFileInfo.ioFlFndrInfo.fdType , data ) ;
-    }
-
-    return false ;
-}
-#endif
-
 // end wxmac
 
 wxFileDialog::wxFileDialog(
@@ -281,11 +255,8 @@ pascal Boolean CrossPlatformFilterCallback(
         // filter string.
         // However, packages should be dealt with like files and not like folders. So
         // check if a folder is a package before deciding what to do.
-        FSRef fsref;
         NavFileOrFolderInfo* theInfo = (NavFileOrFolderInfo*) info ;
-        AECoerceDesc (theItem, typeFSRef, theItem);
-        if ( AEGetDescData (theItem, &fsref, sizeof (FSRef)) != noErr)
-            return true;
+        FSRef fsref;
 
         if ( theInfo->isFolder )
         {
@@ -305,10 +276,15 @@ pascal Boolean CrossPlatformFilterCallback(
                  !(lsInfo.flags & (kLSItemInfoIsApplication | kLSItemInfoIsPackage)) )
                 return true;
         }
-
-        wxString file = wxMacFSRefToPath( &fsref ) ;
-        return CheckFile( file , theInfo->fileAndFolder.fileInfo.finderInfo.fdType , data ) ;
-
+        else
+        {
+            AECoerceDesc (theItem, typeFSRef, theItem);
+            if ( AEGetDescData (theItem, &fsref, sizeof (FSRef)) == noErr)
+            {
+                wxString file = wxMacFSRefToPath( &fsref ) ;
+                return CheckFile( file , theInfo->fileAndFolder.fileInfo.finderInfo.fdType , data ) ;
+            }
+        }
     }
 
     return true;
@@ -402,7 +378,10 @@ int wxFileDialog::ShowModal()
         ::DisposeNavObjectFilterUPP(navFilterUPP);
 
     if (err != noErr)
+    {
+        ::NavDialogDispose(dialog);
         return wxID_CANCEL;
+    }
 
     NavReplyRecord navReply;
     err = ::NavDialogGetReply(dialog, &navReply);
@@ -433,6 +412,7 @@ int wxFileDialog::ShowModal()
             if (!thePath)
             {
                 ::NavDisposeReply(&navReply);
+                ::NavDialogDispose(dialog);
                 return wxID_CANCEL;
             }
 
@@ -449,6 +429,7 @@ int wxFileDialog::ShowModal()
     }
 
     ::NavDisposeReply(&navReply);
+    ::NavDialogDispose(dialog);
 
     return (err == noErr) ? wxID_OK : wxID_CANCEL;
 }

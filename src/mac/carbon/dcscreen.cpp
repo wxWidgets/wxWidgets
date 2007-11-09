@@ -18,6 +18,10 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
 
+// TODO : for the Screenshot use case, which doesn't work in Quartz
+// we should do a GetAsBitmap using something like
+// http://www.cocoabuilder.com/archive/message/cocoa/2005/8/13/144256
+
 // Create a DC representing the whole screen
 wxScreenDC::wxScreenDC()
 {

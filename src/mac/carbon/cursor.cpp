@@ -31,6 +31,7 @@ class WXDLLEXPORT wxCursorRefData: public wxBitmapRefData
 {
     DECLARE_NO_COPY_CLASS(wxCursorRefData)
 
+    friend class wxBitmap;
     friend class wxCursor;
 
 public:
@@ -38,33 +39,20 @@ public:
     virtual ~wxCursorRefData();
 
 protected:
+#if wxMAC_USE_COCOA
+    WX_NSCursor m_hCursor;
+#else
     WXHCURSOR     m_hCursor;
     bool        m_disposeHandle;
     bool        m_releaseHandle;
     bool        m_isColorCursor;
     long        m_themeCursor;
+#endif
 };
 
 #define M_CURSORDATA wx_static_cast(wxCursorRefData*, m_refData)
 
-const short kwxCursorBullseye = 0;
-const short kwxCursorBlank = 1;
-const short kwxCursorPencil = 2;
-const short kwxCursorMagnifier = 3;
-const short kwxCursorNoEntry = 4;
-const short kwxCursorPaintBrush = 5;
-const short kwxCursorPointRight = 6;
-const short kwxCursorPointLeft = 7;
-const short kwxCursorQuestionArrow = 8;
-const short kwxCursorRightArrow = 9;
-const short kwxCursorSizeNS = 10;
-const short kwxCursorSize = 11;
-const short kwxCursorSizeNESW = 12;
-const short kwxCursorSizeNWSE = 13;
-const short kwxCursorRoller = 14;
-const short kwxCursorLast = kwxCursorRoller;
-
-Cursor gMacCursors[kwxCursorLast+1] =
+ClassicCursor gMacCursors[kwxCursorLast+1] =
 {
 
 {
@@ -191,6 +179,7 @@ Cursor gMacCursors[kwxCursorLast+1] =
 
 wxCursor    gMacCurrentCursor ;
 
+#if !wxMAC_USE_COCOA
 CursHandle wxGetStockCursor( int number )
 {
     wxASSERT_MSG( number >= 0 && number <=kwxCursorLast , wxT("invalid stock cursor id") ) ;
@@ -206,20 +195,28 @@ CursHandle wxGetStockCursor( int number )
 #endif
     return c ;
 }
+#endif
 
 wxCursorRefData::wxCursorRefData()
 {
     SetWidth( 16 );
     SetHeight( 16 );
     m_hCursor = NULL;
+#if wxMAC_USE_COCOA
+#else
     m_disposeHandle = false;
     m_releaseHandle = false;
     m_isColorCursor = false;
     m_themeCursor = -1;
+#endif
 }
 
 wxCursorRefData::~wxCursorRefData()
 {
+#if wxMAC_USE_COCOA
+    if ( m_hCursor )
+        wxMacCocoaRelease(m_hCursor);
+#else
     if ( m_isColorCursor )
     {
 #ifndef __LP64__
@@ -235,6 +232,7 @@ wxCursorRefData::~wxCursorRefData()
         // we don't release the resource since it may already
         // be in use again
     }
+#endif
 }
 
 wxCursor::wxCursor()
@@ -284,9 +282,14 @@ WXHCURSOR wxCursor::GetHCURSOR() const
 
 bool wxCursor::IsOk() const
 {
+#if wxMAC_USE_COCOA
+    return GetHCURSOR() != NULL;
+#else
     return (m_refData != NULL && ( M_CURSORDATA->m_hCursor != NULL || M_CURSORDATA->m_themeCursor != -1 ) ) ;
+#endif
 }
 
+#if !wxMAC_USE_COCOA
 short GetCTabIndex( CTabHandle colors , RGBColor *col )
 {
     short retval = 0 ;
@@ -307,19 +310,28 @@ short GetCTabIndex( CTabHandle colors , RGBColor *col )
 
     return retval ;
 }
+#endif
 
 #if wxUSE_IMAGE
 
 void wxCursor::CreateFromImage(const wxImage & image)
 {
     m_refData = new wxCursorRefData;
-
+    int hotSpotX = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
+    int hotSpotY = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
+#if wxMAC_USE_COCOA
+    wxBitmap bmp( image );
+    CGImageRef cgimage = wxMacCreateCGImageFromBitmap(bmp);
+    if ( cgimage )
+    {
+        M_CURSORDATA->m_hCursor = wxMacCocoaCreateCursorFromCGImage( cgimage, hotSpotX, hotSpotY ); 
+        CFRelease( cgimage );
+    }
+#else
 #ifndef __LP64__
     int w = 16;
     int h = 16;
 
-    int hotSpotX = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
-    int hotSpotY = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
     int image_w = image.GetWidth();
     int image_h = image.GetHeight();
 
@@ -446,7 +458,7 @@ void wxCursor::CreateFromImage(const wxImage & image)
     M_CURSORDATA->m_hCursor = ch ;
     M_CURSORDATA->m_isColorCursor = true ;
 #endif
-
+#endif
 }
 
 #endif //wxUSE_IMAGE
@@ -456,6 +468,9 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
     m_refData = new wxCursorRefData;
     if ( flags == wxBITMAP_TYPE_MACCURSOR_RESOURCE )
     {
+#if wxMAC_USE_COCOA
+        wxFAIL_MSG( wxT("Not implemented") );
+#else
 #ifndef __LP64__
         Str255 theName ;
         wxMacStringToPascal( cursor_file , theName ) ;
@@ -490,6 +505,7 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
             }
         }
 #endif
+#endif
     }
     else
     {
@@ -512,7 +528,9 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
 wxCursor::wxCursor(int cursor_type)
 {
     m_refData = new wxCursorRefData;
-
+#if wxMAC_USE_COCOA
+    M_CURSORDATA->m_hCursor = wxMacCocoaCreateStockCursor( cursor_type );
+#else
     switch (cursor_type)
     {
     case wxCURSOR_COPY_ARROW:
@@ -615,11 +633,16 @@ wxCursor::wxCursor(int cursor_type)
 
     if ( M_CURSORDATA->m_themeCursor == -1 )
         M_CURSORDATA->m_releaseHandle = true;
+#endif
 }
 
 void wxCursor::MacInstall() const
 {
     gMacCurrentCursor = *this ;
+#if wxMAC_USE_COCOA
+    if ( IsOk() )
+        wxMacCocoaSetCursor( M_CURSORDATA->m_hCursor );
+#else
     if ( m_refData && M_CURSORDATA->m_themeCursor != -1 )
     {
         SetThemeCursor( M_CURSORDATA->m_themeCursor ) ;
@@ -637,6 +660,7 @@ void wxCursor::MacInstall() const
     {
         SetThemeCursor( kThemeArrowCursor ) ;
     }
+#endif
 }
 
 wxCursor::~wxCursor()

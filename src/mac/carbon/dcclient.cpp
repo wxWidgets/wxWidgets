@@ -226,6 +226,7 @@ wxBitmap wxWindowDC::DoGetAsBitmap(const wxRect *subrect) const
     wxBitmap bmp = wxBitmap(width, height, 32);
     wxAlphaPixelData pixData(bmp, wxPoint(0,0), wxSize(width, height));
 
+    pixData.UseAlpha();
     wxAlphaPixelData::Iterator p(pixData);
     for (int y=0; y<height; y++) {
         wxAlphaPixelData::Iterator rowStart = p;
@@ -257,6 +258,7 @@ wxClientDC::wxClientDC()
 wxClientDC::wxClientDC(wxWindow *window) :
     wxWindowDC( window )
 {
+    wxCHECK_RET( window, _T("invalid window in wxClientDC") );
     wxPoint origin = window->GetClientAreaOrigin() ;
     m_window->GetClientSize( &m_width , &m_height);
     SetDeviceOrigin( origin.x, origin.y );
@@ -265,6 +267,7 @@ wxClientDC::wxClientDC(wxWindow *window) :
 #else
 wxClientDC::wxClientDC(wxWindow *window)
 {
+    wxCHECK_RET( window, _T("invalid window in wxClientDC") );
     m_window = window ;
     wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
     if (!rootwindow)

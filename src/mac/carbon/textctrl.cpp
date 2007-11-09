@@ -52,10 +52,6 @@
 #endif
 
 #ifndef __DARWIN__
-#include <Scrap.h>
-#endif
-
-#ifndef __DARWIN__
 #include <MacTextEditor.h>
 #include <ATSUnicode.h>
 #include <TextCommon.h>
@@ -261,7 +257,6 @@ public :
 protected :
     HIViewRef m_scrollView ;
     HIViewRef m_textView ;
-    EventHandlerRef m_textEventHandlerRef ;
 };
 
 #endif
@@ -424,32 +419,27 @@ void wxTextCtrl::CreatePeer(
         forceMLTE = true ;
     }
 #endif
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-    forceMLTE = false;
-#endif
 
-#ifdef __WXMAC_OSX__
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
+    if ( UMAGetSystemVersion() >= 0x1050 )
+        forceMLTE = false;
+
     if ( UMAGetSystemVersion() >= 0x1030 && !forceMLTE )
     {
         if ( m_windowStyle & wxTE_MULTILINE )
             m_peer = new wxMacMLTEHIViewControl( this , str , pos , size , style ) ;
     }
-#endif
 
     if ( !m_peer )
     {
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
         if ( !(m_windowStyle & wxTE_MULTILINE) && !forceMLTE )
-#endif
         {
             m_peer = new wxMacUnicodeTextControl( this , str , pos , size , style ) ;
         }
     }
-#endif
 
-    // the horizontal single line scrolling bug that made us keep
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
+    // the horizontal single line scrolling bug that made us keep the classic implementation
+    // is fixed in 10.5
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
     if ( !m_peer )
         m_peer = new wxMacMLTEClassicControl( this , str , pos , size , style ) ;
 #endif
@@ -1373,6 +1363,7 @@ bool wxMacUnicodeTextControl::Create( wxTextCtrl *wxPeer,
 {
     m_font = wxPeer->GetFont() ;
     m_windowStyle = style ;
+    m_selection.selStart = m_selection.selEnd = 0;
     Rect bounds = wxMacGetBoundsForControl( wxPeer , pos , size ) ;
     wxString st = str ;
     wxMacConvertNewlines10To13( &st ) ;
@@ -1387,14 +1378,13 @@ bool wxMacUnicodeTextControl::Create( wxTextCtrl *wxPeer,
 
     InstallControlEventHandler( m_controlRef , GetwxMacUnicodeTextControlEventHandlerUPP(),
                                 GetEventTypeCount(unicodeTextControlEventList), unicodeTextControlEventList, this,
-                                &m_focusHandlerRef);
+                                NULL);
 
     return true;
 }
 
 wxMacUnicodeTextControl::~wxMacUnicodeTextControl()
 {
-    ::RemoveEventHandler( m_focusHandlerRef );
 }
 
 void wxMacUnicodeTextControl::VisibilityChanged(bool shown)
@@ -1805,10 +1795,26 @@ void wxMacMLTEControl::AdjustCreationAttributes(const wxColour &background,
             options |=
                 kTXNSupportEditCommandProcessing
                 | kTXNSupportEditCommandUpdating
-                | kTXNSupportSpellCheckCommandProcessing
-                | kTXNSupportSpellCheckCommandUpdating
                 | kTXNSupportFontCommandProcessing
                 | kTXNSupportFontCommandUpdating;
+
+            // only spell check when not read-only 
+            // use system options for the default
+            bool checkSpelling = false ; 
+            if ( !(m_windowStyle & wxTE_READONLY) )
+            {   
+#if wxUSE_SYSTEM_OPTIONS
+                if ( wxSystemOptions::HasOption( wxMAC_TEXTCONTROL_USE_SPELL_CHECKER ) && (wxSystemOptions::GetOptionInt( wxMAC_TEXTCONTROL_USE_SPELL_CHECKER ) == 1) )
+                {
+                    checkSpelling = true ;
+                }
+#endif
+            }
+            
+            if ( checkSpelling )
+                options |=
+                    kTXNSupportSpellCheckCommandProcessing
+                    | kTXNSupportSpellCheckCommandUpdating;              
 
             TXNSetCommandEventSupport( m_txn , options ) ;
         }
@@ -1830,61 +1836,121 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
 {
     TXNTypeAttributes typeAttr[4] ;
     RGBColor color ;
-    int attrCount = 0 ;
+    size_t typeAttrCount = 0 ;
+
+    TXNMargins margins;
+    TXNControlTag    controlTags[4];
+    TXNControlData   controlData[4];
+    size_t controlAttrCount = 0;
+    
+    TXNTab* tabs = NULL;
+    
+    bool relayout = false;
 
     if ( style.HasFont() )
     {
-        wxFont font(style.GetFont()) ;
-
-#if 0 // old version
-        Str255 fontName = "\pMonaco" ;
-        SInt16 fontSize = 12 ;
-        Style fontStyle = normal ;
-        wxMacStringToPascal( font.GetFaceName() , fontName ) ;
-        fontSize = font.GetPointSize() ;
-        if ( font.GetUnderlined() )
-            fontStyle |= underline ;
-        if ( font.GetWeight() == wxBOLD )
-            fontStyle |= bold ;
-        if ( font.GetStyle() == wxITALIC )
-            fontStyle |= italic ;
-
-        typeAttr[attrCount].tag = kTXNQDFontNameAttribute ;
-        typeAttr[attrCount].size = kTXNQDFontNameAttributeSize ;
-        typeAttr[attrCount].data.dataPtr = (void*)fontName ;
-        attrCount++ ;
-
-        typeAttr[attrCount].tag = kTXNQDFontSizeAttribute ;
-        typeAttr[attrCount].size = kTXNFontSizeAttributeSize ;
-        typeAttr[attrCount].data.dataValue = (fontSize << 16) ;
-        attrCount++ ;
-
-        typeAttr[attrCount].tag = kTXNQDFontStyleAttribute ;
-        typeAttr[attrCount].size = kTXNQDFontStyleAttributeSize ;
-        typeAttr[attrCount].data.dataValue = fontStyle ;
-        attrCount++ ;
-#else
-        typeAttr[attrCount].tag = kTXNATSUIStyle ;
-        typeAttr[attrCount].size = kTXNATSUIStyleSize ;
-        typeAttr[attrCount].data.dataPtr = font.MacGetATSUStyle() ;
-        attrCount++ ;
-#endif
+        wxASSERT( typeAttrCount < WXSIZEOF(typeAttr) );
+        const wxFont &font = style.GetFont() ;
+        typeAttr[typeAttrCount].tag = kTXNATSUIStyle ;
+        typeAttr[typeAttrCount].size = kTXNATSUIStyleSize ;
+        typeAttr[typeAttrCount].data.dataPtr = font.MacGetATSUStyle() ;
+        typeAttrCount++ ;
     }
 
     if ( style.HasTextColour() )
     {
+        wxASSERT( typeAttrCount < WXSIZEOF(typeAttr) );
         color = MAC_WXCOLORREF(style.GetTextColour().GetPixel()) ;
 
-        typeAttr[attrCount].tag = kTXNQDFontColorAttribute ;
-        typeAttr[attrCount].size = kTXNQDFontColorAttributeSize ;
-        typeAttr[attrCount].data.dataPtr = (void*) &color ;
-        attrCount++ ;
+        typeAttr[typeAttrCount].tag = kTXNQDFontColorAttribute ;
+        typeAttr[typeAttrCount].size = kTXNQDFontColorAttributeSize ;
+        typeAttr[typeAttrCount].data.dataPtr = (void*) &color ;
+        typeAttrCount++ ;
+    }
+    
+    if ( style.HasAlignment() )
+    {
+        wxASSERT( controlAttrCount < WXSIZEOF(controlTags) );
+        SInt32 align;
+        
+        switch ( style.GetAlignment() )
+        {
+            case wxTEXT_ALIGNMENT_LEFT:
+                align = kTXNFlushLeft;
+                break;
+            case wxTEXT_ALIGNMENT_CENTRE:
+                align = kTXNCenter;
+                break;
+            case wxTEXT_ALIGNMENT_RIGHT:
+                align = kTXNFlushRight;
+                break;
+            case wxTEXT_ALIGNMENT_JUSTIFIED:
+                align = kTXNFullJust;
+                break;  
+            default :
+            case wxTEXT_ALIGNMENT_DEFAULT:
+                align = kTXNFlushDefault;
+                break;
+        }
+        
+        controlTags[controlAttrCount] = kTXNJustificationTag ;
+        controlData[controlAttrCount].sValue = align ;
+        controlAttrCount++ ;
     }
 
-    if ( attrCount > 0 )
+    if ( style.HasLeftIndent() || style.HasRightIndent() )
     {
-        verify_noerr( TXNSetTypeAttributes( m_txn , attrCount , typeAttr, from , to ) );
-        // unfortunately the relayout is not automatic
+        wxASSERT( controlAttrCount < WXSIZEOF(controlTags) );
+        controlTags[controlAttrCount] = kTXNMarginsTag;
+        controlData[controlAttrCount].marginsPtr = &margins;
+        verify_noerr( TXNGetTXNObjectControls (m_txn, 1 ,
+                                &controlTags[controlAttrCount], &controlData[controlAttrCount]) );
+        if ( style.HasLeftIndent() )
+        {
+            margins.leftMargin = style.GetLeftIndent() / 254.0 * 72 + 0.5;
+        }
+        if ( style.HasRightIndent() )
+        {
+            margins.rightMargin = style.GetRightIndent() / 254.0 * 72 + 0.5;
+        }
+        controlAttrCount++ ;
+    }
+    
+    if ( style.HasTabs() )
+    {
+        const wxArrayInt& tabarray = style.GetTabs();
+        // unfortunately Mac only applies a tab distance, not individually different tabs
+        controlTags[controlAttrCount] = kTXNTabSettingsTag;
+        if ( tabarray.size() > 0 )
+            controlData[controlAttrCount].tabValue.value = tabarray[0] / 254.0 * 72 + 0.5;
+        else
+            controlData[controlAttrCount].tabValue.value = 72 ; 
+
+        controlData[controlAttrCount].tabValue.tabType = kTXNLeftTab;
+        controlAttrCount++ ;
+    }
+    
+    // unfortunately the relayout is not automatic
+    if ( controlAttrCount > 0 )
+    {
+        verify_noerr( TXNSetTXNObjectControls (m_txn, false /* don't clear all */, controlAttrCount,
+                                controlTags, controlData) );
+        relayout = true;
+    }
+    
+    if ( typeAttrCount > 0 )
+    {
+        verify_noerr( TXNSetTypeAttributes( m_txn , typeAttrCount, typeAttr, from , to ) );
+        relayout = true;
+    }
+    
+    if ( tabs != NULL )
+    {
+        delete[] tabs;
+    }
+    
+    if ( relayout )
+    {
         TXNRecalcTextLayout( m_txn );
     }
 }
@@ -1905,21 +1971,16 @@ void wxMacMLTEControl::SetStyle( long start, long end, const wxTextAttr& style )
 
 void wxMacMLTEControl::Copy()
 {
-    ClearCurrentScrap();
     TXNCopy( m_txn );
-    TXNConvertToPublicScrap();
 }
 
 void wxMacMLTEControl::Cut()
 {
-    ClearCurrentScrap();
     TXNCut( m_txn );
-    TXNConvertToPublicScrap();
 }
 
 void wxMacMLTEControl::Paste()
 {
-    TXNConvertFromPublicScrap();
     TXNPaste( m_txn );
 }
 
@@ -1983,7 +2044,10 @@ void wxMacMLTEControl::Remove( long from , long to )
 
 void wxMacMLTEControl::GetSelection( long* from, long* to) const
 {
-    TXNGetSelection( m_txn , (TXNOffset*) from , (TXNOffset*) to ) ;
+    TXNOffset f,t ;
+    TXNGetSelection( m_txn , &f , &t ) ;
+    *from = f;
+    *to = t;
 }
 
 void wxMacMLTEControl::SetSelection( long from , long to )
@@ -2263,7 +2327,7 @@ int wxMacMLTEControl::GetLineLength(long lineNo) const
     return theLength ;
 }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
 
 // ----------------------------------------------------------------------------
 // MLTE control implementation (classic part)
@@ -3080,12 +3144,11 @@ wxMacMLTEHIViewControl::wxMacMLTEHIViewControl( wxTextCtrl *wxPeer,
 
     InstallControlEventHandler( m_textView , GetwxMacTextControlEventHandlerUPP(),
                                 GetEventTypeCount(eventList), eventList, this,
-                                &m_textEventHandlerRef);
+                                NULL);
 }
 
 wxMacMLTEHIViewControl::~wxMacMLTEHIViewControl()
 {
-    ::RemoveEventHandler( m_textEventHandlerRef ) ;
 }
 
 OSStatus wxMacMLTEHIViewControl::SetFocus( ControlFocusPart focusPart )
@@ -3096,6 +3159,9 @@ OSStatus wxMacMLTEHIViewControl::SetFocus( ControlFocusPart focusPart )
 bool wxMacMLTEHIViewControl::HasFocus() const
 {
     ControlRef control ;
+    if ( GetUserFocusWindow() == NULL )
+        return false;
+        
     GetKeyboardFocus( GetUserFocusWindow() , &control ) ;
     return control == m_textView ;
 }

@@ -13,7 +13,7 @@
 // declarations
 // ============================================================================
 
-// CAUTION : This is not functional yet
+// CAUTION : This is only experimental stuff right now
 
 // ----------------------------------------------------------------------------
 // headers
@@ -32,6 +32,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/popupwin.h"
+#include "wx/tooltip.h"
 
 #include "wx/mac/private.h"    
 
@@ -39,79 +40,131 @@
 // implementation
 // ============================================================================
 
+wxPopupWindow::~wxPopupWindow()
+{
+    if ( m_popupWindowRef )
+    {
+#if wxUSE_TOOLTIPS
+        wxToolTip::NotifyWindowDelete(m_popupWindowRef) ;
+#endif
+        wxPendingDelete.Append( new wxMacDeferredWindowDeleter( (WindowRef) m_popupWindowRef ) ) ;
+    }
+}
+
 bool wxPopupWindow::Create(wxWindow *parent, int flags)
 {
+    m_macIsUserPane = false ;
+
     // popup windows are created hidden by default
     Hide();
 
-    return wxPopupWindowBase::Create(parent) &&
-               wxWindow::Create(parent, wxID_ANY,
-                                wxDefaultPosition, wxDefaultSize,
-                                flags | wxPOPUP_WINDOW);
-}
+    if ( ! wxPopupWindowBase::Create(parent) )
+        return false;
 
-void wxPopupWindow::DoGetPosition(int *x, int *y) const
-{
-    // the position of a "top level" window such as this should be in
-    // screen coordinates, not in the client ones which MSW gives us
-    // (because we are a child window)
-    wxPopupWindowBase::DoGetPosition(x, y);
+    WindowClass wclass = kHelpWindowClass;
+    WindowAttributes attr = kWindowCompositingAttribute ;
+    WindowRef parentWindow =(WindowRef) parent->MacGetTopLevelWindowRef();
 
-    GetParent()->ClientToScreen(x, y);
-}
-
-/*
-WXDWORD wxPopupWindow::MSWGetStyle(long flags, WXDWORD *exstyle) const
-{
-    // we only honour the border flags, the others don't make sense for us
-    WXDWORD style = wxWindow::MSWGetStyle(flags & wxBORDER_MASK, exstyle);
-
-    if ( exstyle )
+    Rect bounds = { 0,0,0,0 };
+    OSStatus err = ::CreateNewWindow( wclass , attr , &bounds , (WindowRef*)&m_popupWindowRef ) ;
+    if ( err == noErr )
     {
-        // a popup window floats on top of everything
-        *exstyle |= WS_EX_TOPMOST | WS_EX_TOOLWINDOW;
+//        SetWindowGroup( (WindowRef) m_popupWindowRef, GetWindowGroup(parentWindow));    //  Put them in the same group so that their window layers are consistent
+}
+
+    m_peer = new wxMacControl(this , true /*isRootControl*/) ;
+
+    HIViewFindByID( HIViewGetRoot( (WindowRef) m_popupWindowRef ) , kHIViewWindowContentID ,
+        m_peer->GetControlRefAddr() ) ;
+    if ( !m_peer->Ok() )
+{
+        // compatibility mode fallback
+        GetRootControl( (WindowRef) m_popupWindowRef , m_peer->GetControlRefAddr() ) ;
+        if ( !m_peer->Ok() )
+            CreateRootControl( (WindowRef) m_popupWindowRef , m_peer->GetControlRefAddr() ) ;
     }
 
-    return style;
+    // the root control level handler
+    MacInstallEventHandler( (WXWidget) m_peer->GetControlRef() ) ;
+
+    // the frame window event handler
+    InstallStandardEventHandler( GetWindowEventTarget(MAC_WXHWND(m_popupWindowRef)) ) ;
+    // MacInstallTopLevelWindowEventHandler() ;
+        
+    if ( parent )
+        parent->AddChild(this);
+
+    return true;
 }
 
-WXHWND wxPopupWindow::MSWGetParent() const
+void wxPopupWindow::DoMoveWindow(int x, int y, int width, int height)
 {
-    // we must be a child of the desktop to be able to extend beyond the parent
-    // window client area (like the comboboxes drop downs do)
-    //
-    // NB: alternative implementation would be to use WS_POPUP instead of
-    //     WS_CHILD but then showing a popup would deactivate the parent which
-    //     is ugly and working around this, although possible, is even more
-    //     ugly
-    // GetDesktopWindow() is not always supported on WinCE, and if
-    // it is, it often returns NULL.
-#ifdef __WXWINCE__
-    return 0;
-#else
-    return (WXHWND)::GetDesktopWindow();
-#endif
+    Rect bounds = { y , x , y + height , x + width } ;
+    verify_noerr(SetWindowBounds( (WindowRef) m_popupWindowRef, kWindowStructureRgn , &bounds )) ;
+    wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
 }
-*/
+
+void wxPopupWindow::DoGetPosition( int *x, int *y ) const
+    {
+    Rect bounds ;
+
+    verify_noerr(GetWindowBounds((WindowRef) m_popupWindowRef, kWindowStructureRgn , &bounds )) ;
+
+    if (x)
+       *x = bounds.left ;
+    if (y)
+       *y = bounds.top ;
+    }
+
+void wxPopupWindow::DoGetSize( int *width, int *height ) const
+{
+    Rect bounds ;
+
+    verify_noerr(GetWindowBounds((WindowRef) m_popupWindowRef, kWindowStructureRgn , &bounds )) ;
+
+    if (width)
+       *width = bounds.right - bounds.left ;
+    if (height)
+       *height = bounds.bottom - bounds.top ;
+}
+
+void wxPopupWindow::DoGetClientSize( int *width, int *height ) const
+{
+    Rect bounds ;
+
+    verify_noerr(GetWindowBounds((WindowRef) m_popupWindowRef, kWindowContentRgn , &bounds )) ;
+
+    if (width)
+       *width = bounds.right - bounds.left ;
+    if (height)
+       *height = bounds.bottom - bounds.top ;
+}
 
 bool wxPopupWindow::Show(bool show)
 {
     if ( !wxWindowMac::Show(show) )
         return false;
-/*
+
     if ( show )
     {
-        // raise to top of z order
-        if (!::SetWindowPos(GetHwnd(), HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE))
-        {
-            wxLogLastError(_T("SetWindowPos"));
-        }
+        ::ShowWindow( (WindowRef)m_popupWindowRef );
+        ::SelectWindow( (WindowRef)m_popupWindowRef ) ;
 
-        // and set it as the foreground window so the mouse can be captured
-        ::SetForegroundWindow(GetHwnd());
+        // because apps expect a size event to occur at this moment
+        wxSizeEvent event(GetSize() , m_windowId);
+        event.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(event);
     }
-*/
+    else
+        {
+        ::HideWindow( (WindowRef)m_popupWindowRef );
+    }
     return true;
+}
+
+WXWindow wxPopupWindow::MacGetPopupWindowRef() const
+{
+    return m_popupWindowRef;
 }
 
 #endif // #if wxUSE_POPUPWIN

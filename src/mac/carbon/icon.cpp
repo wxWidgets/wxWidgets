@@ -152,18 +152,34 @@ bool wxIcon::LoadFile(
         }
         else
         {
-#if 0
-            Str255 theName ;
-            OSType theType ;
-            wxMacStringToPascal( name , theName ) ;
+        	IconRef iconRef = NULL ;
+        	
+        	// first look in the resource fork
+        	if ( iconRef == NULL )
+        	{
+	        	Str255 theName ;
 
-            Handle resHandle = GetNamedResource( 'cicn' , theName ) ;
-            if ( resHandle != 0L )
+	        	wxMacStringToPascal( filename , theName ) ;
+	        	Handle resHandle = GetNamedResource( 'icns' , theName ) ;
+	        	if ( resHandle != 0L )
+	        	{
+					IconFamilyHandle iconFamily = (IconFamilyHandle) resHandle ;
+                    HLock((Handle) iconFamily);
+                    OSStatus err = GetIconRefFromIconFamilyPtr( *iconFamily, GetHandleSize((Handle) iconFamily), &iconRef );
+                    HUnlock((Handle) iconFamily);
+                    wxASSERT_MSG( err == noErr , wxT("Error when constructing icon ref") );
+                    ReleaseResource( resHandle ) ;
+	        	}
+  			}
+            if ( iconRef == NULL )
             {
-                GetResInfo( resHandle , &theId , &theType , theName ) ;
-                ReleaseResource( resHandle ) ;
+                // TODO add other attempts to load it from files etc here
             }
-#endif
+	   		if ( iconRef )
+	   		{
+               	m_refData = new wxIconRefData( (WXHICON) iconRef ) ;
+	        	return true ;
+	   		}      	
         }
 
         if ( theId != 0 )
