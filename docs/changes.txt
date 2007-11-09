@@ -266,6 +266,20 @@ wxX11:
 - Make Enter key activate the default button (David Hart).
 
 
+2.8.7
+-----
+
+wxMSW:
+
+- Correct (harmless) warnings given for forward-declared DLL-exported classes
+  by mingw32 4.2 (Tim Stahlhut)
+
+wxGTK:
+
+- Added gtk.window.force-background-colour wxSystemOptions option to work around
+  a background colour bug in the gtk-qt theme under KDE.
+
+
 2.8.6
 -----
 
