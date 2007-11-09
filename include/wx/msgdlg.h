@@ -111,11 +111,12 @@ protected:
 
 #if defined(__WX_COMPILING_MSGDLGG_CPP__) || \
     defined(__WXUNIVERSAL__) || defined(__WXGPE__) || \
-    defined(__WXCOCOA__) || \
     (defined(__WXGTK__) && !defined(__WXGTK20__))
     #include "wx/generic/msgdlgg.h"
 
     #define wxMessageDialog wxGenericMessageDialog
+#elif defined(__WXCOCOA__)
+	#include "wx/cocoa/msgdlg.h"
 #elif defined(__WXPALMOS__)
     #include "wx/palmos/msgdlg.h"
 #elif defined(__WXMSW__)
