@@ -1,5 +1,5 @@
 /* XPM */
-static char *copy_xpm[] = {
+static const char *copy_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 15 23 1",
 "+ c #769CDA",
