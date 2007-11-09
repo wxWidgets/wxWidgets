@@ -58,7 +58,7 @@ private:
 #elif defined(__WXMAC__)
 #include "wx/mac/msgdlg.h"
 #elif defined(__WXCOCOA__)
-#include "wx/generic/msgdlgg.h"
+#include "wx/cocoa/msgdlg.h"
 #elif defined(__WXPM__)
 #include "wx/os2/msgdlg.h"
 #endif
