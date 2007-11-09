@@ -78,6 +78,7 @@ public:
     // adding a CFType object to be released only at the end of the current event cycle (increases the
     // refcount of the object passed), needed in case we are in the middle of an event concering an object
     // we want to delete and cannot do it immediately
+    // TODO change semantics to be in line with cocoa (make autrelease NOT increase the count)
     void                  MacAddToAutorelease( void* cfrefobj );
 public:
     static wxWindow*      s_captureWindow ;

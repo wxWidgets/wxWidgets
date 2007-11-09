@@ -54,6 +54,8 @@ public:
     void SetRadioGroupEnd(int end);
 
 private:
+    void DoUpdateItemBitmap( WXHMENU menu, wxUint16 index) ;
+
     void UncheckRadio() ;
 
     // the positions of the first and last items of the radio group this item

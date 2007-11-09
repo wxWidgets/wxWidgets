@@ -58,6 +58,14 @@
     #define wxMAC_USE_NATIVE_TOOLBAR 1
 #endif
 
+/*
+ * using mixins of cocoa functionality
+ */
+ 
+#ifndef wxMAC_USE_COCOA
+    #define wxMAC_USE_COCOA 0
+#endif
+
 #endif
     /* _WX_MAC_CHKCONF_H_ */
 

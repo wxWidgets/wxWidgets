@@ -51,6 +51,9 @@ public:
     bool Create(const wxNativeFontInfo& info);
 
     bool MacCreateThemeFont( wxUint16 themeFontID ) ;
+#ifdef __LP64__
+	bool MacCreateUIFont( wxUint32 coreTextFontType );
+#endif
     
     virtual ~wxFont();
 
@@ -84,19 +87,24 @@ public:
 
     // Mac-specific, risks to change, don't use in portable code
     
+#ifndef __LP64__    
     // 'old' Quickdraw accessors
-    
     short MacGetFontNum() const;
     short MacGetFontSize() const;
     wxByte  MacGetFontStyle() const;
     
     // 'new' ATSUI accessors
-    
     wxUint32 MacGetATSUFontID() const;
     wxUint32 MacGetATSUAdditionalQDStyles() const;
     wxUint16 MacGetThemeFontID() const ;
+
     // Returns an ATSUStyle not ATSUStyle*
     void* MacGetATSUStyle() const ; 
+#else
+    const void * MacGetCTFont() const;
+    // soon to be removed for 64bit, Returns an ATSUStyle not ATSUStyle*
+    void* MacGetATSUStyle() const ; 
+#endif
     
 private:
     void Unshare();

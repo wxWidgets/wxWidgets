@@ -145,7 +145,7 @@ public:
 
     void MacOnScroll( wxScrollEvent&event );
 
-    bool AcceptsFocus() const;
+    virtual bool AcceptsFocus() const;
 
     virtual bool IsDoubleBuffered() const { return true; }
 
@@ -170,6 +170,7 @@ public:
     // because it is called from its destructor via DeleteChildren
     virtual void        RemoveChild( wxWindowBase *child );
     virtual void        MacPaintBorders( int left , int top ) ;
+    void                MacPaintGrowBox();
 
     // invalidates the borders and focus area around the control;
     // must not be virtual as it will be called during destruction
@@ -321,11 +322,13 @@ protected:
 
     virtual bool        MacIsChildOfClientArea( const wxWindow* child ) const ;
 
+    bool                MacHasScrollBarCorner() const;
     void                MacCreateScrollBars( long style ) ;
     void                MacRepositionScrollBars() ;
     void                MacUpdateControlFont() ;
 
     void                MacPropagateVisibilityChanged() ;
+    void                MacPropagateEnabledStateChanged() ;
     void                MacPropagateHiliteChanged() ;
 
     // implement the base class pure virtuals

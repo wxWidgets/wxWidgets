@@ -109,11 +109,12 @@ OSStatus UMAGetHelpMenuDontCreate(
 
 OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState ) ;
 
-// Clipboard support
-
-OSStatus UMAPutScrap( Size size , OSType type , void *data ) ;
-
 #define GetWindowUpdateRgn( inWindow , updateRgn ) GetWindowRegion( inWindow , kWindowUpdateRgn, updateRgn )
+
+// Quartz 
+
+CGDataProviderRef UMACGDataProviderCreateWithCFData( CFDataRef data );
+CGDataConsumerRef UMACGDataConsumerCreateWithCFData( CFMutableDataRef data );
 
 #endif // wxUSE_GUI
 
