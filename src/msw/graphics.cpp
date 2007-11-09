@@ -281,6 +281,12 @@ public:
     virtual void StrokePath( const wxGraphicsPath& p );
     virtual void FillPath( const wxGraphicsPath& p , int fillStyle = wxODDEVEN_RULE );
 
+	// stroke lines connecting each of the points
+    virtual void StrokeLines( size_t n, const wxPoint2DDouble *points);
+
+    // draws a polygon
+    virtual void DrawLines( size_t n, const wxPoint2DDouble *points, int fillStyle = wxODDEVEN_RULE );
+
     virtual void Translate( wxDouble dx , wxDouble dy );
     virtual void Scale( wxDouble xScale , wxDouble yScale );
     virtual void Rotate( wxDouble angle );
@@ -316,6 +322,26 @@ private:
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusContext)
 };
+
+class WXDLLIMPEXP_CORE wxGDIPlusMeasuringContext : public wxGDIPlusContext
+{
+public:
+    wxGDIPlusMeasuringContext( wxGraphicsRenderer* renderer ) : wxGDIPlusContext( renderer , m_hdc = GetDC(NULL) )
+    {
+    }
+    wxGDIPlusMeasuringContext()
+    {
+    }
+
+    virtual ~wxGDIPlusMeasuringContext()
+    {
+        ReleaseDC( NULL, m_hdc );
+    }
+
+private:
+    HDC m_hdc ;
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusMeasuringContext)
+} ;
 
 //-----------------------------------------------------------------------------
 // wxGDIPlusPen implementation
@@ -846,6 +872,27 @@ void * wxGDIPlusMatrixData::GetNativeMatrix() const
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxGDIPlusContext,wxGraphicsContext)
+IMPLEMENT_DYNAMIC_CLASS(wxGDIPlusMeasuringContext,wxGDIPlusContext)
+
+class wxGDIPlusOffsetHelper
+{
+public :
+    wxGDIPlusOffsetHelper( Graphics* gr , bool offset )
+    {
+        m_gr = gr;
+        m_offset = offset;
+        if ( m_offset )
+            m_gr->TranslateTransform( 0.5, 0.5 );
+    }
+    ~wxGDIPlusOffsetHelper( )
+    {
+        if ( m_offset )
+            m_gr->TranslateTransform( -0.5, -0.5 );
+    }
+public :
+    Graphics* m_gr;
+    bool m_offset;
+} ;
 
 wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc  )
     : wxGraphicsContext(renderer)
@@ -885,6 +932,8 @@ void wxGDIPlusContext::Init()
 
 void wxGDIPlusContext::SetDefaults()
 {
+    m_context->SetTextRenderingHint(TextRenderingHintSystemDefault);
+    m_context->SetPixelOffsetMode(PixelOffsetModeHalf);
     m_context->SetSmoothingMode(SmoothingModeHighQuality);
     m_state1 = m_context->Save();
     m_state2 = m_context->Save();
@@ -917,10 +966,45 @@ void wxGDIPlusContext::ResetClip()
     m_context->ResetClip();
 }
 
+void wxGDIPlusContext::StrokeLines( size_t n, const wxPoint2DDouble *points)
+{
+	if ( !m_pen.IsNull() )
+	{
+        wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
+		Point *cpoints = new Point[n];
+		for (size_t i = 0; i < n; i++)
+		{
+			cpoints[i].X = (int)(points[i].m_x );
+			cpoints[i].Y = (int)(points[i].m_y );
+
+		} // for (size_t i = 0; i < n; i++)
+		m_context->DrawLines( ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen() , cpoints , n ) ;
+		delete[] cpoints;
+	}
+}
+
+void wxGDIPlusContext::DrawLines( size_t n, const wxPoint2DDouble *points, int WXUNUSED(fillStyle) )
+{
+    wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
+	Point *cpoints = new Point[n];
+	for (size_t i = 0; i < n; i++)
+	{
+		cpoints[i].X = (int)(points[i].m_x );
+		cpoints[i].Y = (int)(points[i].m_y );
+
+	} // for (int i = 0; i < n; i++)
+	if ( !m_brush.IsNull() )
+		m_context->FillPolygon( ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush() , cpoints , n ) ;
+	if ( !m_pen.IsNull() )
+		m_context->DrawLines( ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen() , cpoints , n ) ;
+	delete[] cpoints;
+}
+
 void wxGDIPlusContext::StrokePath( const wxGraphicsPath& path )
 {
     if ( !m_pen.IsNull() )
     {
+        wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
         m_context->DrawPath( ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen() , (GraphicsPath*) path.GetNativePath() );
     }
 }
@@ -929,6 +1013,7 @@ void wxGDIPlusContext::FillPath( const wxGraphicsPath& path , int fillStyle )
 {
     if ( !m_brush.IsNull() )
     {
+        wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
         ((GraphicsPath*) path.GetNativePath())->SetFillMode( fillStyle == wxODDEVEN_RULE ? FillModeAlternate : FillModeWinding);
         m_context->FillPath( ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush() ,
             (GraphicsPath*) path.GetNativePath());
@@ -1030,7 +1115,7 @@ void wxGDIPlusContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, 
     else
     {
         image = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),(HPALETTE)bmp.GetPalette()->GetHPALETTE());
-        if ( GetPixelFormatSize(image->GetPixelFormat()) == 32 )
+        if ( bmp.HasAlpha() && GetPixelFormatSize(image->GetPixelFormat()) == 32 )
         {
             size_t width = image->GetWidth();
             size_t height = image->GetHeight();
@@ -1056,18 +1141,20 @@ void wxGDIPlusContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, 
 
 void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
+    // the built-in conversion fails when there is alpha in the HICON (eg XP style icons), we can only
+    // find out by looking at the bitmap data whether there really was alpha in it
     HICON hIcon = (HICON)icon.GetHICON();
     ICONINFO iconInfo ;
     // IconInfo creates the bitmaps for color and mask, we must dispose of them after use
     if (!GetIconInfo(hIcon,&iconInfo))
         return;
 
-    BITMAP iconBmpData ;
-    GetObject(iconInfo.hbmColor,sizeof(BITMAP),&iconBmpData);
     Bitmap interim(iconInfo.hbmColor,NULL);
 
     Bitmap* image = NULL ;
 
+    // if it's not 32 bit, it doesn't have an alpha channel, note that since the conversion doesn't
+    // work correctly, asking IsAlphaPixelFormat at this point fails as well
     if( GetPixelFormatSize(interim.GetPixelFormat())!= 32 )
     {
         image = Bitmap::FromHICON(hIcon);
@@ -1081,8 +1168,28 @@ void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxD
 
         interim.LockBits(&bounds, ImageLockModeRead,
             interim.GetPixelFormat(),&data);
+        
+        bool hasAlpha = false;
+        for ( size_t y = 0 ; y < height && !hasAlpha ; ++y)
+        {
+            for( size_t x = 0 ; x < width && !hasAlpha; ++x)
+            {
+                ARGB *dest = (ARGB*)((BYTE*)data.Scan0 + data.Stride*y + x*4);
+                if ( ( *dest & Color::AlphaMask ) != 0 )
+                    hasAlpha = true;
+            }
+        }
+
+        if ( hasAlpha )
+        {
         image = new Bitmap(data.Width, data.Height, data.Stride,
             PixelFormat32bppARGB , (BYTE*) data.Scan0);
+        }
+        else
+        {
+            image = Bitmap::FromHICON(hIcon);
+        }
+
         interim.UnlockBits(&data);
     }
 
@@ -1100,8 +1207,7 @@ void wxGDIPlusContext::DrawText( const wxString &str, wxDouble x, wxDouble y )
 
     wxWCharBuffer s = str.wc_str( *wxConvUI );
     m_context->DrawString( s , -1 , ((wxGDIPlusFontData*)m_font.GetRefData())->GetGDIPlusFont() ,
-            PointF( x , y ) , ((wxGDIPlusFontData*)m_font.GetRefData())->GetGDIPlusBrush() );
-    // TODO m_backgroundMode == wxSOLID
+            PointF( x , y ) , StringFormat::GenericTypographic() , ((wxGDIPlusFontData*)m_font.GetRefData())->GetGDIPlusBrush() );
 }
 
 void wxGDIPlusContext::GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
@@ -1136,20 +1242,14 @@ void wxGDIPlusContext::GetTextExtent( const wxString &str, wxDouble *width, wxDo
     }
     else
     {
-        // MeasureString does return a rectangle that is way too large, so it is
-        // not usable here
         RectF layoutRect(0,0, 100000.0f, 100000.0f);
-        StringFormat strFormat;
-        CharacterRange strRange(0,wcslen(s));
-        strFormat.SetMeasurableCharacterRanges(1,&strRange);
-        strFormat.SetFormatFlags(StringFormatFlagsMeasureTrailingSpaces);
+        StringFormat strFormat( StringFormat::GenericTypographic() );
+        strFormat.SetFormatFlags( StringFormatFlagsMeasureTrailingSpaces | strFormat.GetFormatFlags() ); 
 
-        Region region ;
-        m_context->MeasureCharacterRanges(s, -1 , f,layoutRect, &strFormat,1,&region) ;
-        RectF bbox ;
-        region.GetBounds(&bbox,m_context);
+        RectF bounds ;
+        m_context->MeasureString((const wchar_t *) s , wcslen(s) , f, layoutRect, &strFormat, &bounds ) ;
         if ( width )
-            *width = bbox.GetRight()-bbox.GetLeft();
+            *width = bounds.Width;
     }
 }
 
@@ -1167,22 +1267,21 @@ void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble
     wxASSERT_MSG(text.length() == len , wxT("GetPartialTextExtents not yet implemented for multichar situations"));
 
     RectF layoutRect(0,0, 100000.0f, 100000.0f);
-    StringFormat strFormat;
+    StringFormat strFormat( StringFormat::GenericTypographic() );
 
     CharacterRange* ranges = new CharacterRange[len] ;
     Region* regions = new Region[len];
-    size_t i;
-    for( i = 0 ; i < len ; ++i)
+    for( size_t i = 0 ; i < len ; ++i)
     {
         ranges[i].First = i ;
         ranges[i].Length = 1 ;
     }
     strFormat.SetMeasurableCharacterRanges(len,ranges);
-    strFormat.SetFormatFlags(StringFormatFlagsMeasureTrailingSpaces);
+    strFormat.SetFormatFlags( StringFormatFlagsMeasureTrailingSpaces | strFormat.GetFormatFlags() ); 
     m_context->MeasureCharacterRanges(ws, -1 , f,layoutRect, &strFormat,1,regions) ;
 
     RectF bbox ;
-    for ( i = 0 ; i < len ; ++i)
+    for ( size_t i = 0 ; i < len ; ++i)
     {
         regions[i].GetBounds(&bbox,m_context);
         widths[i] = bbox.GetRight()-bbox.GetLeft();
@@ -1352,9 +1451,7 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxMemoryDC& dc)
 wxGraphicsContext * wxGDIPlusRenderer::CreateMeasuringContext()
 {
     EnsureIsLoaded();
-    return NULL;
-    // TODO use GetDC(NULL) but then we have to release it from the context
-    //return new wxGDIPlusContext(this,(HDC) dc.GetHDC());
+    return new wxGDIPlusMeasuringContext(this);
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContextFromNativeContext( void * context )
