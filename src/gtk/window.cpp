@@ -326,45 +326,6 @@ void wxgtk_window_size_request_callback(GtkWidget * WXUNUSED(widget),
 }
 }
 
-#if wxUSE_COMBOBOX
-
-extern "C" {
-static
-void wxgtk_combo_size_request_callback(GtkWidget * WXUNUSED(widget),
-                                       GtkRequisition *requisition,
-                                       wxWindow* win)
-{
-    // This callback is actually hooked into the text entry
-    // of the combo box, not the GtkHBox.
-
-    int w, h;
-    win->GetSize( &w, &h );
-    if (w < 2)
-        w = 2;
-    if (h < 2)
-        h = 2;
-
-    GtkCombo *gcombo = GTK_COMBO(win->m_widget);
-
-    GtkRequisition entry_req;
-    entry_req.width = 2;
-    entry_req.height = 2;
-    (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(gcombo->entry) )->size_request )
-        (gcombo->entry, &entry_req );
-
-    GtkRequisition button_req;
-    button_req.width = 2;
-    button_req.height = 2;
-    (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(gcombo->button) )->size_request )
-        (gcombo->button, &button_req );
-
-    requisition->width = w - button_req.width;
-    requisition->height = entry_req.height;
-}
-}
-
-#endif // wxUSE_COMBOBOX
-
 //-----------------------------------------------------------------------------
 // "expose_event" of m_wxwindow
 //-----------------------------------------------------------------------------
@@ -2533,16 +2494,6 @@ void wxWindowGTK::PostCreation()
 #endif
     }
 
-#if wxUSE_COMBOBOX
-    if (GTK_IS_COMBO(m_widget))
-    {
-        GtkCombo *gcombo = GTK_COMBO(m_widget);
-
-        g_signal_connect (gcombo->entry, "size_request",
-                          G_CALLBACK (wxgtk_combo_size_request_callback),
-                          this);
-    } else
-#endif // wxUSE_COMBOBOX
 #ifdef GTK_IS_FILE_CHOOSER_BUTTON
     if (!gtk_check_version(2,6,0) && GTK_IS_FILE_CHOOSER_BUTTON(m_widget))
     {
