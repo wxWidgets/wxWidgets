@@ -68,12 +68,6 @@
 // resizeable
 static wxRect gs_rectDialog(0, 0, 428, 266);
 
-// we have no way to retrieve the dialog size before it is shown so calling
-// Centre() before ShowModal() doesn't work correctly (and we can't do it
-// after), hence we set a special flag and recenter the dialog when it's about
-// to be shown
-static bool gs_centerDialog = false;
-
 // ============================================================================
 // implementation
 // ============================================================================
