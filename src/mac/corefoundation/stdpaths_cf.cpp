@@ -166,7 +166,11 @@ wxString wxStandardPathsCF::GetExecutablePath() const
     processinfo.processAppSpec = &fsSpec;
 
     GetProcessInformation( &procno , &processinfo ) ;
+#ifdef __LP64__
+    return wxMacFSRefToPath(&fsRef);
+#else
     return wxMacFSSpec2MacFilename(&fsSpec);
+#endif
 #else
     return wxStandardPathsBase::GetExecutablePath();
 #endif
