@@ -41,7 +41,12 @@
 // wxIEnumString implements IEnumString interface
 // ----------------------------------------------------------------------------
 
-#if wxUSE_OLE
+// standard VC6 SDK (WINVER == 0x0400) does not know about IAutoComplete
+#if wxUSE_OLE && (WINVER >= 0x0500)
+    #define HAS_AUTOCOMPLETE
+#endif
+
+#ifdef HAS_AUTOCOMPLETE
 
 #include "wx/msw/ole/oleutils.h"
 #include <shldisp.h>
@@ -160,7 +165,7 @@ END_IID_TABLE;
 
 IMPLEMENT_IUNKNOWN_METHODS(wxIEnumString)
 
-#endif // wxUSE_OLE
+#endif // HAS_AUTOCOMPLETE
 
 // ============================================================================
 // wxTextEntry implementation
@@ -282,10 +287,9 @@ void wxTextEntry::GetSelection(long *from, long *to) const
 // auto-completion
 // ----------------------------------------------------------------------------
 
-#if wxUSE_OLE
-
 bool wxTextEntry::AutoCompleteFileNames()
 {
+#ifdef HAS_AUTOCOMPLETE
     typedef HRESULT (WINAPI *SHAutoComplete_t)(HWND, DWORD);
     static SHAutoComplete_t s_pfnSHAutoComplete = (SHAutoComplete_t)-1;
     static wxDynamicLibrary s_dllShlwapi;
@@ -313,12 +317,15 @@ bool wxTextEntry::AutoCompleteFileNames()
 
         return false;
     }
-
     return true;
+#else // !HAS_AUTOCOMPLETE
+    return false;
+#endif // HAS_AUTOCOMPLETE/!HAS_AUTOCOMPLETE
 }
 
 bool wxTextEntry::AutoComplete(const wxArrayString& choices)
 {
+#ifdef HAS_AUTOCOMPLETE
     // create an object exposing IAutoComplete interface (don't go for
     // IAutoComplete2 immediately as, presumably, it might be not available on
     // older systems as otherwise why do we have both -- although in practice I
@@ -366,11 +373,11 @@ bool wxTextEntry::AutoComplete(const wxArrayString& choices)
     // do it immediately, presumably the edit control itself keeps a reference
     // to the auto completer object
     pAutoComplete->Release();
-
     return true;
+#else // !HAS_AUTOCOMPLETE
+    return false;
+#endif // HAS_AUTOCOMPLETE/!HAS_AUTOCOMPLETE
 }
-
-#endif // wxUSE_OLE
 
 // ----------------------------------------------------------------------------
 // editable state
