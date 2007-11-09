@@ -60,6 +60,9 @@ public:
     virtual bool IsMaximized() const;
     virtual void Iconize(bool iconize = true);
     virtual bool IsIconized() const;
+#ifndef __WXUNIVERSAL__
+    virtual void SetIcons(const wxIconBundle& icons);
+#endif
     virtual void Restore();
 
     virtual bool SetShape(const wxRegion& region);
@@ -118,6 +121,7 @@ protected:
     virtual void DoGetSize( int *width, int *height ) const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual void DoGetClientSize(int *width, int *height) const;
+    virtual void DoCentre(int dir);
 
     // is the frame currently iconized?
     bool m_iconized;
@@ -139,6 +143,12 @@ private :
     // logic & checks cease to work as expected. To set the metal appearance, use SetExtraStyle.
     void MacSetMetalAppearance( bool on ) ;
     void MacSetUnifiedAppearance( bool on ) ;
+    // binary compatible workaround TODO REPLACE
+    void DoMacCreateRealWindow( wxWindow *parent, const wxString& title,
+                                      const wxPoint& pos,
+                                      const wxSize& size,
+                                      long style,
+                                      const wxString& name );
 
     WXEVENTHANDLERREF    m_macEventHandler ;
 
@@ -146,6 +156,6 @@ private :
 };
 
 // list of all frames and modeless dialogs
-extern WXDLLEXPORT_DATA(wxWindowList) wxModelessWindows;
+extern WXDLLEXPORT_DATA(wxWindowList) wxModelessWindows; 
 
 #endif // _WX_MSW_TOPLEVEL_H_
