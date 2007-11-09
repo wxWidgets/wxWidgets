@@ -269,6 +269,10 @@ wxX11:
 2.8.7
 -----
 
+All:
+
+- Fixed bug with default proxy destruction in wxURL (Axel Gembe)
+
 wxMSW:
 
 - Correct (harmless) warnings given for forward-declared DLL-exported classes
