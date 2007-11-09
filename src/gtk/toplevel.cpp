@@ -31,6 +31,10 @@
     #include "wx/app.h"
 #endif
 
+#if wxUSE_TOOLBAR
+#include "wx/toolbar.h"
+#endif
+
 #include "wx/gtk/private.h"
 #include "wx/evtloop.h"
 
@@ -774,13 +778,33 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
     {
         // Preserve menubar accelerators during full-screen operation
         wxFrame* frame = wxDynamicCast(this, wxFrame);
-        if (frame && frame->GetMenuBar())
+        if (frame)
         {
-            wxAcceleratorTable table(wxCreateAcceleratorTableForMenuBar(frame->GetMenuBar()));
-            if (table.IsOk())
-                SetAcceleratorTable(table);
+            if (frame->GetMenuBar())
+            {
+                wxAcceleratorTable table(wxCreateAcceleratorTableForMenuBar(frame->GetMenuBar()));
+                if (table.IsOk())
+                    SetAcceleratorTable(table);
+            }
+#if wxUSE_TOOLBAR
+            if (frame->GetToolBar() && frame->GetToolBar()->IsShown())
+            {
+                frame->GetToolBar()->Show(false);
+            }
+#endif
         }
     }
+#if wxUSE_TOOLBAR
+    else
+    {
+        // FIXME: we need to remember whether the toolbar was previously hidden
+        wxFrame* frame = wxDynamicCast(this, wxFrame);
+        if (frame && frame->GetToolBar())
+        {
+            frame->GetToolBar()->Show(true);
+	}
+    }
+#endif
 
     m_fsIsShowing = show;
 
