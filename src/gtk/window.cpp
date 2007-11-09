@@ -39,14 +39,6 @@
 
 #include <ctype.h>
 
-// FIXME: Due to a hack we use GtkCombo in here, which is deprecated since gtk2.3.0
-#include <gtk/gtkversion.h>
-#if defined(GTK_DISABLE_DEPRECATED) && GTK_CHECK_VERSION(2,3,0)
-    #undef GTK_DISABLE_DEPRECATED
-    #include <gtk/gtkcombo.h>
-    #define GTK_DISABLE_DEPRECATED
-#endif
-
 #include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
 #include <gdk/gdkkeysyms.h>
