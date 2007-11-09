@@ -509,6 +509,50 @@ wxGraphicsContext::~wxGraphicsContext()
 {
 }
 
+bool wxGraphicsContext::StartDoc( const wxString& message ) 
+{
+    return true;
+}
+    
+void wxGraphicsContext::EndDoc()
+{
+}
+
+void wxGraphicsContext::StartPage( wxDouble width, wxDouble height )
+{
+}
+    
+void wxGraphicsContext::EndPage()
+{
+}
+
+void wxGraphicsContext::Flush()
+{
+}
+
+#if 0
+void wxGraphicsContext::SetAlpha( wxDouble WXUNUSED(alpha) )
+{
+}
+    
+wxDouble wxGraphicsContext::GetAlpha() const
+{
+    return 1.0;
+}
+#endif
+
+void wxGraphicsContext::GetSize( wxDouble* width, wxDouble* height)
+{
+    *width = 10000.0;
+    *height = 10000.0;
+}
+
+void wxGraphicsContext::GetDPI( wxDouble* dpiX, wxDouble* dpiY)
+{
+    *dpiX = 72.0;
+    *dpiY = 72.0;
+}
+
 // sets the pen
 void wxGraphicsContext::SetPen( const wxGraphicsPen& pen ) 
 {
@@ -579,12 +623,15 @@ void wxGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, w
 void wxGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, const wxGraphicsBrush& backgroundBrush ) 
 {
     wxGraphicsBrush formerBrush = m_brush;
+	wxGraphicsPen formerPen = m_pen;
     wxDouble width;
     wxDouble height;
     wxDouble descent;
     wxDouble externalLeading;
     GetTextExtent( str , &width, &height, &descent, &externalLeading );
     SetBrush( backgroundBrush );
+	// to make sure our 'OffsetToPixelBoundaries' doesn't move the fill shape
+	SetPen( wxNullGraphicsPen );
 
     wxGraphicsPath path = CreatePath();
     path.AddRectangle( x , y, width, height );
@@ -592,11 +639,13 @@ void wxGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, c
 
     DrawText( str, x ,y);
     SetBrush( formerBrush );
+	SetPen( formerPen );
 }
 
 void wxGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle, const wxGraphicsBrush& backgroundBrush )
 {
     wxGraphicsBrush formerBrush = m_brush;
+	wxGraphicsPen formerPen = m_pen;
 
     wxDouble width;
     wxDouble height;
@@ -604,6 +653,8 @@ void wxGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, w
     wxDouble externalLeading;
     GetTextExtent( str , &width, &height, &descent, &externalLeading );
     SetBrush( backgroundBrush );
+	// to make sure our 'OffsetToPixelBoundaries' doesn't move the fill shape
+	SetPen( wxNullGraphicsPen );
 
     wxGraphicsPath path = CreatePath();
     path.MoveToPoint( x , y );
@@ -615,6 +666,7 @@ void wxGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, w
     FillPath( path );
     DrawText( str, x ,y, angle);
     SetBrush( formerBrush );
+	SetPen( formerPen );
 }
 
 void wxGraphicsContext::StrokeLine( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2)

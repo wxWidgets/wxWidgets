@@ -27,6 +27,9 @@
     #include "wx/region.h"
 #endif
 
+#ifdef __WXMAC__
+#include "wx/mac/private.h"
+#endif
 //-----------------------------------------------------------------------------
 // constants
 //-----------------------------------------------------------------------------
@@ -138,6 +141,30 @@ void wxGCDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
     m_graphicContext->DrawIcon( icon , x, y, w, h );
 }
 
+bool wxGCDC::StartDoc( const wxString& WXUNUSED(message) ) 
+{
+    return false;
+}
+
+void wxGCDC::EndDoc() 
+{
+}
+
+void wxGCDC::StartPage()
+{
+}
+
+void wxGCDC::EndPage() 
+{
+}
+    
+void wxGCDC::Flush()
+{
+#ifdef __WXMAC__
+    CGContextFlush( (CGContextRef) m_graphicContext->GetNativeContext() );
+#endif
+}
+
 void wxGCDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
 {
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoSetClippingRegion - invalid DC") );
@@ -168,7 +195,7 @@ void wxGCDC::DoSetClippingRegionAsRegion( const wxRegion &region )
 
     if (region.Empty())
     {
-        DestroyClippingRegion();
+        //DestroyClippingRegion();
         return;
     }
 
@@ -204,7 +231,7 @@ void wxGCDC::DestroyClippingRegion()
     // so we must explicitely make sure it only covers the area we want it to draw
     int width, height ;
     GetSize( &width , &height ) ;
-    m_graphicContext->Clip( DeviceToLogicalX(0) , DeviceToLogicalY(0) , width, height );
+    m_graphicContext->Clip( DeviceToLogicalX(0) , DeviceToLogicalY(0) , DeviceToLogicalXRel(width), DeviceToLogicalYRel(height) );
     
     m_graphicContext->SetPen( m_pen );
     m_graphicContext->SetBrush( m_brush );
@@ -501,7 +528,6 @@ void wxGCDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
     if ( !m_logicalFunctionSupported )
         return;
 
-    wxGraphicsPath path = m_graphicContext->CreatePath();
     m_graphicContext->PushState();
     m_graphicContext->Translate(x+w/2.0,y+h/2.0);
     wxDouble factor = ((wxDouble) w) / h;
@@ -509,8 +535,27 @@ void wxGCDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
 
     // since these angles (ea,sa) are measured counter-clockwise, we invert them to
     // get clockwise angles
+    if ( m_brush.GetStyle() != wxTRANSPARENT )
+    {
+        wxGraphicsPath path = m_graphicContext->CreatePath();
+        path.MoveToPoint( 0, 0 );
+        path.AddLineToPoint( h / 2.0 * cos(DegToRad(sa)) , h / 2.0 * sin(DegToRad(-sa)) );
+        path.AddLineToPoint( h / 2.0 * cos(DegToRad(ea)) , h / 2.0 * sin(DegToRad(-ea)) );
+        path.AddLineToPoint( 0, 0 );
+        m_graphicContext->FillPath( path );
+
+        path = m_graphicContext->CreatePath();
+        path.AddArc( 0, 0, h/2.0 , DegToRad(-sa) , DegToRad(-ea), sa > ea );
+        m_graphicContext->FillPath( path );
+        m_graphicContext->StrokePath( path );
+    }
+    else
+    {
+        wxGraphicsPath path = m_graphicContext->CreatePath();
     path.AddArc( 0, 0, h/2.0 , DegToRad(-sa) , DegToRad(-ea), sa > ea );
     m_graphicContext->DrawPath( path );
+    }
+
     m_graphicContext->PopState();
 }
 
@@ -746,7 +791,8 @@ bool wxGCDC::DoStretchBlit(
 
     if ( logical_func == wxNO_OP )
         return true;
-    else if ( logical_func != wxCOPY )
+    else if ( !m_graphicContext->SetLogicalFunction( logical_func ) )
+    
     {
         wxFAIL_MSG( wxT("Blitting is only supported with wxCOPY logical operation.") );
         return false;
@@ -785,6 +831,9 @@ bool wxGCDC::DoStretchBlit(
         wxFAIL_MSG( wxT("Cannot Blit. Unable to get contents of DC as bitmap.") );
         return false;
     }
+
+    // reset logical function
+    m_graphicContext->SetLogicalFunction( m_logicalFunction );
 
     return true;
 }
@@ -844,13 +893,13 @@ void wxGCDC::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *heig
     m_graphicContext->GetTextExtent( str, &w, &h, &d, &e );
 
     if ( height )
-        *height = (wxCoord)h;
+        *height = (wxCoord)(h+0.5);
     if ( descent )
-        *descent = (wxCoord)d;
+        *descent = (wxCoord)(d+0.5);
     if ( externalLeading )
-        *externalLeading = (wxCoord)e;
+        *externalLeading = (wxCoord)(e+0.5);
     if ( width )
-        *width = (wxCoord)w;
+        *width = (wxCoord)(w+0.5);
 
     if ( theFont )
     {
@@ -905,8 +954,8 @@ void wxGCDC::Clear(void)
 
 void wxGCDC::DoGetSize(int *width, int *height) const
 {
-    *width = 1000;
-    *height = 1000;
+    *width = 10000;
+    *height = 10000;
 }
 
 void wxGCDC::DoGradientFillLinear(const wxRect& rect,
