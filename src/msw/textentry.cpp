@@ -90,7 +90,7 @@ public:
             if ( m_index == count )
                 return S_FALSE;
 
-            const wxWX2WCbuf wcbuf(m_strings[m_index].wc_str());
+            const wxWX2WCbuf wcbuf = m_strings[m_index].wc_str();
             const size_t size = (wcslen(wcbuf) + 1)*sizeof(wchar_t);
             void *olestr = CoTaskMemAlloc(size);
             if ( !olestr )
