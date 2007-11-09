@@ -409,6 +409,22 @@ public:
     // create a context that can be used for measuring texts only, no drawing allowed
     static wxGraphicsContext * Create();
 
+    // begin a new document (relevant only for printing / pdf etc) if there is a progress dialog, message will be shown
+    virtual bool StartDoc( const wxString& message ) ;
+    
+    // done with that document (relevant only for printing / pdf etc) 
+    virtual void EndDoc();
+
+    // opens a new page  (relevant only for printing / pdf etc) with the given size in points 
+    // (if both are null the default page size will be used)
+    virtual void StartPage( wxDouble width = 0, wxDouble height = 0 );
+    
+    // ends the current page  (relevant only for printing / pdf etc) 
+    virtual void EndPage();
+    
+    // make sure that the current content of this context is immediately visible
+    virtual void Flush();
+
     wxGraphicsPath CreatePath() const;
     
     virtual wxGraphicsPen CreatePen(const wxPen& pen) const;
@@ -437,10 +453,10 @@ public:
     // pops a stored state from the stack
     virtual void PopState() = 0;
 
-    // clips drawings to the region, combined to current clipping region
+    // clips drawings to the region intersected with the current clipping region
     virtual void Clip( const wxRegion &region ) = 0;
 
-    // clips drawings to the rect
+    // clips drawings to the rect intersected with the current clipping region
     virtual void Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) = 0;
     
     // resets the clipping to original extent
@@ -455,6 +471,19 @@ public:
     // sets the current logical function, returns true if it supported
     virtual bool SetLogicalFunction(int function) ;
 
+    // returns the size of the graphics context in device coordinates
+    virtual void GetSize( wxDouble* width, wxDouble* height);
+
+    // returns the resolution of the graphics context in device points per inch
+    virtual void GetDPI( wxDouble* dpiX, wxDouble* dpiY);
+    
+#if 0
+    // sets the current alpha on this context
+    virtual void SetAlpha( wxDouble alpha );
+    
+    // returns the alpha on this context
+    virtual wxDouble GetAlpha() const;
+#endif
     //
     // transformation : changes the current transformation matrix CTM of the context
     //

@@ -199,6 +199,9 @@ public:
     virtual void StartPage() { }
     virtual void EndPage() { }
 
+    // flushing the content of this dc immediately eg onto screen
+    virtual void Flush() { }
+
     // bounding box
 
     virtual void CalcBoundingBox(wxCoord x, wxCoord y)

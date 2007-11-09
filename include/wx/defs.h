@@ -2552,7 +2552,7 @@ typedef void*       WXDisplay;
 
 #endif
 
-#ifdef __WXCOCOA__
+#if defined( __WXCOCOA__ ) || ( defined(__WXMAC__) && defined(__DARWIN__) )
 
 /* Definitions of 32-bit/64-bit types
  * These are typedef'd exactly the same way in newer OS X headers so
@@ -2647,8 +2647,14 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSTextStorage);
 DECLARE_WXCOCOA_OBJC_CLASS(NSThread);
 DECLARE_WXCOCOA_OBJC_CLASS(NSWindow);
 DECLARE_WXCOCOA_OBJC_CLASS(NSView);
+#ifdef __WXMAC__
+// things added for __WXMAC__
+DECLARE_WXCOCOA_OBJC_CLASS(NSString);
+#else
+// things only for __WXCOCOA__
 typedef WX_NSView WXWidget; /*  wxWidgets BASE definition */
-#endif /*  __WXCOCOA__ */
+#endif
+#endif /*  __WXCOCOA__  || ( __WXMAC__ &__DARWIN__)*/
 
 #if defined(__WXPALMOS__)
 
