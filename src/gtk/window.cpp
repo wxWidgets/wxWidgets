@@ -52,6 +52,8 @@
     #define GTK_DISABLE_DEPRECATED
 #endif
 
+#define USE_STYLE_SET_CALLBACK 1
+
 #include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
 #include <gdk/gdkkeysyms.h>
@@ -2148,7 +2150,65 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
     }
 }
 
+//-----------------------------------------------------------------------------
+// "style_set"
+//-----------------------------------------------------------------------------
+
+static
+void gtk_window_style_set_callback( GtkWidget *widget,
+                               GtkStyle *previous_style,
+                               wxWindow* win )
+{
+    if (win && previous_style)
+    {
+        wxSysColourChangedEvent event;
+        event.SetEventObject(win);
+
+        win->GTKProcessEvent( event );
+    }
+}
+
 } // extern "C"
+
+// Connect/disconnect style-set
+
+void wxConnectStyleSet(wxWindow* win)
+{
+    if (win->m_wxwindow)
+        g_signal_connect (win->m_wxwindow, "style_set",
+                              G_CALLBACK (gtk_window_style_set_callback), win);
+}
+
+void wxDisconnectStyleSet(wxWindow* win)
+{
+  if (win->m_wxwindow)
+      g_signal_handlers_disconnect_by_func (win->m_wxwindow,
+                                          (gpointer) gtk_window_style_set_callback,
+                                              win);
+}
+
+// Helper to suspend colour change event event processing while we change a widget's style
+class wxSuspendStyleEvents
+{
+public:
+  wxSuspendStyleEvents(wxWindow* win)
+  {
+    m_win = win;
+#if USE_STYLE_SET_CALLBACK
+    if (win->IsTopLevel())
+      wxDisconnectStyleSet(win);
+#endif
+  }
+  ~wxSuspendStyleEvents()
+  {
+#if USE_STYLE_SET_CALLBACK
+    if (m_win->IsTopLevel())
+      wxConnectStyleSet(m_win);
+#endif
+  }
+
+  wxWindow* m_win;
+};
 
 // ----------------------------------------------------------------------------
 // this wxWindowBase function is implemented here (in platform-specific file)
@@ -2588,6 +2648,12 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
                       G_CALLBACK (gtk_window_enter_callback), this);
     g_signal_connect (widget, "leave_notify_event",
                       G_CALLBACK (gtk_window_leave_callback), this);
+
+#if USE_STYLE_SET_CALLBACK
+    if (IsTopLevel() && m_wxwindow)
+        g_signal_connect (m_wxwindow, "style_set",
+                              G_CALLBACK (gtk_window_style_set_callback), this);
+#endif
 }
 
 bool wxWindowGTK::Destroy()
@@ -3939,6 +4005,8 @@ void wxWindowGTK::ApplyWidgetStyle(bool forceStyle)
 
 void wxWindowGTK::DoApplyWidgetStyle(GtkRcStyle *style)
 {
+    wxSuspendStyleEvents s(this);
+
     if (m_wxwindow)
         gtk_widget_modify_style(m_wxwindow, style);
     else
