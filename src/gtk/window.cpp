@@ -397,7 +397,7 @@ gtk_window_expose_callback( GtkWidget *widget,
     win->GtkSendPaintEvents();
 
     // Let parent window draw window-less widgets
-    return TRUE;
+    return FALSE;
 }
 }
 
