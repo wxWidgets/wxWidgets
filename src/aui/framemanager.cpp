@@ -586,12 +586,18 @@ wxAuiManager::wxAuiManager(wxWindow* managed_wnd, unsigned int flags)
 
 wxAuiManager::~wxAuiManager()
 {
+    // NOTE: It's possible that the windows have already been destroyed by the
+    // time this dtor is called, so this loop can result in memory access via
+    // invalid pointers, resulting in a crash.  So it will be disabled while
+    // waiting for a better solution.
+#if 0
     for ( size_t i = 0; i < m_panes.size(); i++ )
     {
         wxAuiPaneInfo& pinfo = m_panes[i];
         if (pinfo.window && !pinfo.window->GetParent())
             delete pinfo.window;
     }
+#endif
 
     delete m_art;
 }
