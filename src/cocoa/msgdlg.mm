@@ -50,8 +50,8 @@ wxCocoaMessageDialog::wxCocoaMessageDialog(wxWindow *parent,
                         const wxPoint& pos) : wxDialog(parent,message,caption,style)
 {
 
-    //m_caption = caption;
-    //m_message = message;
+    m_caption = caption;
+    m_message = message;
 
     //wxTopLevelWindows.Append((wxWindowBase*)this);
     wxTopLevelWindows.Append(this);
