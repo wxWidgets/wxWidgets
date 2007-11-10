@@ -207,7 +207,7 @@ Format-specific notes:
                 <!-- all wx libraries should have been already specified, thus
                     $(__liblist) should contain the full list... -->
                 <set var="__liblist" append="1">base</set>
-                <ldlibs>`$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs $(','.join(__liblist.split()))`</ldlibs>
+                <ldflags>`$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs $(','.join(__liblist.split()))`</ldflags>
             </if>
             <if cond="value!='base'">
                 <set var="__liblist" append="1">$(value)</set>
