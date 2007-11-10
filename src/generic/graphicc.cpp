@@ -11,11 +11,13 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/dc.h"
-
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
+
+#if wxUSE_GRAPHICS_CONTEXT
+
+#include "wx/dc.h"
 
 #ifndef WX_PRECOMP
 #include "wx/image.h"
@@ -32,14 +34,8 @@
 #include "wx/module.h"
 #endif
 
-#ifdef __WXGTK__
-#include <gtk/gtk.h>
-#endif
-
 #include "wx/graphics.h"
 #include "wx/rawbmp.h"
-
-#if wxUSE_GRAPHICS_CONTEXT
 
 #include <vector>
 
@@ -101,7 +97,6 @@ static inline double RadToDeg(double deg)
 
 #include <cairo.h>
 #ifdef __WXGTK__
-#include "wx/gtk/win_gtk.h"
 #include <gtk/gtk.h>
 #include "wx/fontutil.h"
 #endif
@@ -1072,22 +1067,17 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
 #ifdef __WXGTK__
     // something along these lines (copied from dcclient)
 
-    GtkWidget *widget = window->m_wxwindow;
-
     // Some controls don't have m_wxwindow - like wxStaticBox, but the user
     // code should still be able to create wxClientDCs for them, so we will
     // use the parent window here then.
-    if ( !widget )
+    if (window->m_wxwindow == NULL)
     {
         window = window->GetParent();
-        widget = window->m_wxwindow;
     }
 
-    wxASSERT_MSG( widget, wxT("wxCairoContext needs a widget") );
+    wxASSERT_MSG( window->m_wxwindow, wxT("wxCairoContext needs a widget") );
 
-    wxPizza *pizza = WX_PIZZA( widget );
-    GdkDrawable* drawable = pizza->m_backing_window;
-    Init( gdk_cairo_create( drawable ) ) ;
+    Init(gdk_cairo_create(window->GTKGetDrawingWindow()));
 #endif
 }
 
@@ -1117,7 +1107,7 @@ void wxCairoContext::Clip( const wxRegion& region )
     while (ri)
     {
         path.AddRectangle(ri.GetX(), ri.GetY(), ri.GetW(), ri.GetH());
-        ri++;
+        ++ri;
     }
     
     // Put it in the context
