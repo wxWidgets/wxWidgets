@@ -191,6 +191,7 @@ All (GUI):
 - Added support for drop down toolbar buttons (Tim Kosse).
 - Added support for labels for toolbar controls (Vince Harron).
 - Added wxMessageDialog::SetMessage() and SetExtendedMessage().
+- Added wxListCtrl::Set/GetColumnsOrder() (Yury Voronov)
 - Added wxWindow::AlwaysShowScrollbars() (Julian Scheid)
 - Added wxMouseEvent::GetClickCount() (Julian Scheid)
 - Added wxBG_STYLE_TRANSPARENT background style (Julian Scheid)

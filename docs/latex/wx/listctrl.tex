@@ -115,6 +115,22 @@ functions that take a \helpref{wxListEvent}{wxlistevent} argument.
 \twocolitem{{\bf EVT\_LIST\_CACHE\_HINT(id, func)}}{Prepare cache for a virtual list control}
 \end{twocollist}%
 
+\wxheading{Column ordering}
+
+In report view, the control has several columns which are identified by their
+internal indices. By default, these indices correspond to their order on
+screen, i.e. the column $0$ appears first (in the left-to-right or maybe
+right-to-left if the current language uses this writing direction), the column
+$1$ next and so on. However it is possible to reorder the columns visual order
+using \helpref{SetColumnsOrder}{wxlistctrlsetcolumnsorder} method and the
+user can also rearrange the columns interactively by dragging them. In this
+case, the index of the column is not the same as its order and the functions
+\helpref{GetColumnOrder}{wxlistctrlgetcolumnorder} and 
+\helpref{GetColumnIndexFromOrder}{wxlistctrlgetcolumnindexfromorder} should be
+used to translate between them.
+
+Please notice that current column reordering is implemented only in wxMSW.
+
 \wxheading{See also}
 
 \helpref{wxListCtrl overview}{wxlistctrloverview}, \helpref{wxListView}{wxlistview}, \helpref{wxListBox}{wxlistbox},\rtfsp
@@ -319,6 +335,28 @@ Returns the number of columns.
 \constfunc{int}{GetColumnWidth}{\param{int }{col}}
 
 Gets the column width (report view only).
+
+
+\membersection{wxListCtrl::GetColumnIndexFromOrder}\label{wxlistctrlgetcolumnindexfromorder}
+
+\constfunc{int}{GetColumnIndexFromOrder}{\param{int }{order}}
+
+Gets the column number by visual order index (report view only).
+
+
+\membersection{wxListCtrl::GetColumnOrder}\label{wxlistctrlgetcolumnorder}
+
+\constfunc{int}{GetColumnOrder}{\param{int }{col}}
+
+Gets the column visual order index (valid in report view only).
+
+
+\membersection{wxListCtrl::GetColumnsOrder}\label{wxlistctrlgetcolumnsorder}
+
+\constfunc{wxArrayInt}{GetColumnsOrder}{\void}
+
+Returns the array containing the orders of all columns. On error, an empty
+array is returned.
 
 
 \membersection{wxListCtrl::GetCountPerPage}\label{wxlistctrlgetcountperpage}
@@ -834,6 +872,17 @@ wxLIST\_AUTOSIZE will resize the column to the length of its longest item. wxLIS
 will resize the column to the length of the header (Win32) or 80 pixels (other platforms).
 
 In small or normal icon view, {\it col} must be -1, and the column width is set for all columns.
+
+
+\membersection{wxListCtrl::SetColumnsOrder}\label{wxlistctrlsetcolumnsorder}
+
+\constfunc{bool}{SetColumnOrder}{\param{const wxArrayInt\& }{orders}}
+
+Sets the order of all columns at once. The \arg{orders} array must have the
+same number elements as the number of columns and contain each position exactly
+once.
+
+This function is valid in report view only.
 
 
 \membersection{wxListCtrl::SetImageList}\label{wxlistctrlsetimagelist}

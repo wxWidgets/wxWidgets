@@ -342,8 +342,17 @@ bool wxListCtrl::Create(wxWindow *parent,
     // styles because it's prettier (and also because wxGTK does it like this)
     if ( InReportView() && wxApp::GetComCtl32Version() >= 470 )
     {
-        ::SendMessage(GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE,
-                      0, LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT | LVS_EX_SUBITEMIMAGES);
+        ::SendMessage
+        (
+            GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE, 0,
+            LVS_EX_LABELTIP |
+            LVS_EX_FULLROWSELECT |
+            LVS_EX_SUBITEMIMAGES |
+            // normally this should be governed by a style as it's probably not
+            // always appropriate, but we don't have any free styles left and
+            // it seems better to enable it by default than disable
+            LVS_EX_HEADERDRAGDROP
+        );
     }
 
     return true;
@@ -662,6 +671,68 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
 
     return ListView_SetColumnWidth(GetHwnd(), col, width) != 0;
 }
+
+// ----------------------------------------------------------------------------
+// columns order
+// ----------------------------------------------------------------------------
+
+int wxListCtrl::GetColumnOrder(int col) const
+{
+    const int numCols = GetColumnCount();
+    wxCHECK_MSG( col >= 0 && col < numCols, -1, _T("Col index out of bounds") );
+
+    wxArrayInt indexArray(numCols);
+
+    if ( !ListView_GetColumnOrderArray(GetHwnd(), numCols, &indexArray[0]) )
+        return -1;
+
+    return indexArray[col];
+}
+
+int wxListCtrl::GetColumnIndexFromOrder(int order) const
+{
+    const int numCols = GetColumnCount();
+    wxASSERT_MSG( order >= 0 && order < numCols, _T("Col order out of bounds") );
+
+    wxArrayInt indexArray(numCols);
+
+    if ( !ListView_GetColumnOrderArray(GetHwnd(), numCols, &indexArray[0]) )
+        return -1;
+
+    for ( int col = 0; col < numCols; col++ )
+    {
+        if ( indexArray[col] == order )
+            return col;
+    }
+
+    wxFAIL_MSG( _T("no column with with given order?") );
+
+    return -1;
+}
+
+// Gets the column order for all columns
+wxArrayInt wxListCtrl::GetColumnsOrder() const
+{
+    const int numCols = GetColumnCount();
+
+    wxArrayInt orders(numCols);
+    if ( !ListView_GetColumnOrderArray(GetHwnd(), numCols, &orders[0]) )
+        orders.clear();
+
+    return orders;
+}
+
+// Sets the column order for all columns
+bool wxListCtrl::SetColumnsOrder(const wxArrayInt& orders)
+{
+    const int numCols = GetColumnCount();
+
+    wxCHECK_MSG( orders.size() == (size_t)numCols, false,
+                    _T("wrong number of elements in column orders array") );
+
+    return ListView_SetColumnOrderArray(GetHwnd(), numCols, &orders[0]) != 0;
+}
+
 
 // Gets the number of items that can fit vertically in the
 // visible area of the list control (list or report view)
@@ -2750,14 +2821,22 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
 
             dc.SetPen(pen);
             dc.SetBrush(*wxTRANSPARENT_BRUSH);
+
+            int numCols = GetColumnCount();
+            int* indexArray = new int[numCols];
+            BOOL rv = ListView_GetColumnOrderArray( GetHwnd(), numCols, indexArray );
+            wxASSERT_MSG( rv == TRUE, _T("invalid column index array in OnPaint()") );
+
             int x = itemRect.GetX();
-            for (int col = 0; col < GetColumnCount(); col++)
+            for (int col = 0; col < numCols; col++)
             {
-                int colWidth = GetColumnWidth(col);
+                int colWidth = GetColumnWidth(indexArray[col]);
                 x += colWidth ;
                 dc.DrawLine(x-1, firstItemRect.GetY() - gap,
                             x-1, itemRect.GetBottom());
             }
+
+            delete indexArray;
         }
     }
 }
