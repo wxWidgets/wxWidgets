@@ -940,7 +940,7 @@ dnl ---------------------------------------------------------------------------
 
 WX_ARG_FEATURE(dccache,     [  --enable-dccache        cache temporary wxDC objects (Win32 only)], wxUSE_DC_CACHEING)
 WX_ARG_FEATURE(ps-in-msw,   [  --enable-ps-in-msw      use PS printing in wxMSW (Win32 only)], wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
-WX_ARG_FEATURE(ownerdrawn,  [  --enable-ownerdrawn     use owner drawn controls (Win32 only)], wxUSE_OWNER_DRAWN)
+WX_ARG_FEATURE(ownerdrawn,  [  --enable-ownerdrawn     use owner drawn controls (Win32 and OS/2 only)], wxUSE_OWNER_DRAWN)
 WX_ARG_FEATURE(uxtheme,     [  --enable-uxtheme        enable support for Windows XP themed look (Win32 only)], wxUSE_UXTHEME)
 WX_ARG_FEATURE(wxdib,       [  --enable-wxdib          use wxDIB class (Win32 only)], wxUSE_DIB)
 
@@ -6976,6 +6976,16 @@ if test "$wxUSE_WIZARDDLG" = "yes"; then
 fi
 
 dnl ---------------------------------------------------------------------------
+dnl options used under wxMSW and wxPM
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_MSW" = 1 -o "$wxUSE_PM" = 1; then
+    if test "$wxUSE_OWNER_DRAWN" = "yes"; then
+        AC_DEFINE(wxUSE_OWNER_DRAWN)
+    fi
+fi
+
+dnl ---------------------------------------------------------------------------
 dnl wxMSW-only options
 dnl ---------------------------------------------------------------------------
 
@@ -6987,10 +6997,6 @@ if test "$wxUSE_MSW" = 1 ; then
 
     if test "$wxUSE_DIB" = "yes"; then
         AC_DEFINE(wxUSE_WXDIB)
-    fi
-
-    if test "$wxUSE_OWNER_DRAWN" = "yes"; then
-        AC_DEFINE(wxUSE_OWNER_DRAWN)
     fi
 
     if test "$wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW" = "yes"; then

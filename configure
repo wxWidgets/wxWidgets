@@ -1841,7 +1841,7 @@ Optional Features:
   --enable-icocur         use Windows ICO and CUR formats
   --enable-dccache        cache temporary wxDC objects (Win32 only)
   --enable-ps-in-msw      use PS printing in wxMSW (Win32 only)
-  --enable-ownerdrawn     use owner drawn controls (Win32 only)
+  --enable-ownerdrawn     use owner drawn controls (Win32 and OS/2 only)
   --enable-uxtheme        enable support for Windows XP themed look (Win32 only)
   --enable-wxdib          use wxDIB class (Win32 only)
   --disable-largefile     omit support for large files
@@ -5090,7 +5090,7 @@ fi
           { echo "$as_me:$LINENO: result: $result" >&5
 echo "${ECHO_T}$result" >&6; }
 
-if test "$USE_OS2" = "1"; then
+if test "$USE_OS2" = 1; then
     DEFAULT_wxUSE_OMF=no
 
           enablestring=
@@ -24643,7 +24643,7 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
-        if test "$ac_cv_sizeof_long_long" != "0"; then
+        if test "$ac_cv_sizeof_long_long" != 0; then
                         CPPFLAGS="-D_INCLUDE_LONGLONG $CPPFLAGS"
         fi
     ;;
@@ -25579,7 +25579,7 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
-if test "$ac_cv_sizeof_wchar_t" != "0"; then
+if test "$ac_cv_sizeof_wchar_t" != 0; then
     wxUSE_WCHAR_T=yes
 else
     wxUSE_WCHAR_T=no
@@ -34427,9 +34427,9 @@ echo $ECHO_N "checking if we need -lXp and/or -lSM -lICE... $ECHO_C" >&6; }
         libsm_ice_link=""
         libs_found=0
         for libp in "" " -lXp"; do
-            if test "$libs_found" = "0"; then
+            if test "$libs_found" = 0; then
                 for libsm_ice in "" " -lSM -lICE"; do
-                    if test "$libs_found" = "0"; then
+                    if test "$libs_found" = 0; then
                         save_LIBS="$LIBS"
                         LIBS="$GUI_TK_LIBRARY -lXm ${libp} -lXmu -lXext -lXt${libsm_ice} -lX11"
                         save_CFLAGS=$CFLAGS
@@ -34501,7 +34501,7 @@ rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
             fi
         done
 
-        if test "$libs_found" = "0"; then
+        if test "$libs_found" = 0; then
             { echo "$as_me:$LINENO: result: can't find the right libraries" >&5
 echo "${ECHO_T}can't find the right libraries" >&6; }
             { { echo "$as_me:$LINENO: error: can't link a simple motif program" >&5
@@ -35101,9 +35101,9 @@ fi
 
 
 if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_UTF8" = "auto" ; then
-    if test "$USE_UNIX" = "1" -a "$wxUSE_DARWIN" != "1" ; then
+    if test "$USE_UNIX" = 1 -a "$wxUSE_DARWIN" != 1 ; then
         wxUSE_UNICODE_UTF8=yes
-    elif test "$USE_OS2" = "1" ; then
+    elif test "$USE_OS2" = 1 ; then
                                 wxUSE_UNICODE_UTF8=yes
     else
         wxUSE_UNICODE_UTF8=no
@@ -35470,11 +35470,11 @@ fi
 
 USE_OPENGL=0
 if test "$wxUSE_OPENGL" = "yes"; then
-    if test "$wxUSE_MGL" = 1 -o "$wxUSE_DFB" = "1"; then
+    if test "$wxUSE_MGL" = 1 -o "$wxUSE_DFB" = 1; then
         { echo "$as_me:$LINENO: WARNING: wxGLCanvas not implemented for this port, library will be compiled without it." >&5
 echo "$as_me: WARNING: wxGLCanvas not implemented for this port, library will be compiled without it." >&2;}
         wxUSE_OPENGL="no"
-    elif test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = "1"; then
+    elif test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
@@ -38970,7 +38970,7 @@ _ACEOF
     fi
 fi
 
-if test "$wxUSE_STACKWALKER" = "yes" -a "$USE_WIN32" != "1" -a "$USE_UNIX" != "1"; then
+if test "$wxUSE_STACKWALKER" = "yes" -a "$USE_WIN32" != 1 -a "$USE_UNIX" != 1; then
     { echo "$as_me:$LINENO: WARNING: wxStackWalker is only available on Win32 and UNIX... disabled" >&5
 echo "$as_me: WARNING: wxStackWalker is only available on Win32 and UNIX... disabled" >&2;}
     wxUSE_STACKWALKER=no
@@ -44289,7 +44289,7 @@ _ACEOF
 
 fi
 
-if test "$USE_UNIX" = "1" ; then
+if test "$USE_UNIX" = 1 ; then
         if test "$wxUSE_MGL" != 1; then
                                 { echo "$as_me:$LINENO: checking for SNDCTL_DSP_SPEED in sys/soundcard.h" >&5
 echo $ECHO_N "checking for SNDCTL_DSP_SPEED in sys/soundcard.h... $ECHO_C" >&6; }
@@ -44417,7 +44417,7 @@ fi
 
 WITH_PLUGIN_SDL=0
 if test "$wxUSE_SOUND" = "yes"; then
-  if test "$USE_UNIX" = "1" ; then
+  if test "$USE_UNIX" = 1 ; then
     if test "$wxUSE_LIBSDL" != "no"; then
 
 # Check whether --with-sdl-prefix was given.
@@ -45375,7 +45375,7 @@ _ACEOF
 fi
 
 if test "$wxUSE_DEBUGREPORT" = "yes"; then
-    if test "$USE_UNIX" != "1" -a "$USE_WIN32" != "1"; then
+    if test "$USE_UNIX" != 1 -a "$USE_WIN32" != 1; then
         { echo "$as_me:$LINENO: WARNING: Creating debug reports not currently supported on this system, disabled" >&5
 echo "$as_me: WARNING: Creating debug reports not currently supported on this system, disabled" >&2;}
         wxUSE_DEBUGREPORT=no
@@ -46438,7 +46438,7 @@ fi
 
 
 if test "$wxUSE_SOCKETS" = "yes"; then
-    if test "$wxUSE_MGL" = "1"; then
+    if test "$wxUSE_MGL" = 1; then
         { echo "$as_me:$LINENO: WARNING: wxSocket not yet supported under MGL... disabled" >&5
 echo "$as_me: WARNING: wxSocket not yet supported under MGL... disabled" >&2;}
         wxUSE_SOCKETS="no"
@@ -47127,7 +47127,7 @@ echo "${ECHO_T}$wxUSE_JOYSTICK" >&6; }
         fi
 
         else
-                if test "$wxUSE_MGL" != "1"; then
+                if test "$wxUSE_MGL" != 1; then
 
 for ac_header in linux/joystick.h
 do
@@ -48633,6 +48633,16 @@ _ACEOF
 fi
 
 
+if test "$wxUSE_MSW" = 1 -o "$wxUSE_PM" = 1; then
+    if test "$wxUSE_OWNER_DRAWN" = "yes"; then
+        cat >>confdefs.h <<\_ACEOF
+#define wxUSE_OWNER_DRAWN 1
+_ACEOF
+
+    fi
+fi
+
+
 if test "$wxUSE_MSW" = 1 ; then
 
     if test "$wxUSE_DC_CACHEING" = "yes"; then
@@ -48645,13 +48655,6 @@ _ACEOF
     if test "$wxUSE_DIB" = "yes"; then
         cat >>confdefs.h <<\_ACEOF
 #define wxUSE_WXDIB 1
-_ACEOF
-
-    fi
-
-    if test "$wxUSE_OWNER_DRAWN" = "yes"; then
-        cat >>confdefs.h <<\_ACEOF
-#define wxUSE_OWNER_DRAWN 1
 _ACEOF
 
     fi
@@ -48691,7 +48694,7 @@ fi
 
 
 if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
-   if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = "1"; then
+   if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
       cat >>confdefs.h <<\_ACEOF
 #define wxUSE_GRAPHICS_CONTEXT 1
 _ACEOF
