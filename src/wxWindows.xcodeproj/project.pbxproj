@@ -34,6 +34,8 @@
 		40011CBD0893D5B400E4DE95 /* utilsexc_base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40011CBB0893D5B400E4DE95 /* utilsexc_base.cpp */; };
 		40011F3C0897D8DF00E4DE95 /* setup0.h in Headers */ = {isa = PBXBuildFile; fileRef = 40011F3B0897D8DF00E4DE95 /* setup0.h */; };
 		40011F3D0897D8DF00E4DE95 /* setup0.h in Headers */ = {isa = PBXBuildFile; fileRef = 40011F3B0897D8DF00E4DE95 /* setup0.h */; };
+		400226620CE644C0007F534D /* utilscocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 400226610CE644C0007F534D /* utilscocoa.mm */; };
+		400226630CE644C0007F534D /* utilscocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 400226610CE644C0007F534D /* utilscocoa.mm */; };
 		400EDEB3089D4FFD00E848D9 /* propdlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 400EDEB2089D4FFD00E848D9 /* propdlg.cpp */; };
 		400EDEB4089D4FFD00E848D9 /* propdlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 400EDEB2089D4FFD00E848D9 /* propdlg.cpp */; };
 		401640E607F94B2800A8837A /* imaglist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 401640E507F94B2800A8837A /* imaglist.cpp */; };
@@ -488,8 +490,6 @@
 		4086C757063AB2FF00D4CD53 /* dlgcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A85FF701FA022B0175ACA7 /* dlgcmn.cpp */; };
 		4086C758063AB2FF00D4CD53 /* dircmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A85FF601FA022B0175ACA7 /* dircmn.cpp */; };
 		4086C759063AB2FF00D4CD53 /* dcbase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A85FF401FA022B0175ACA7 /* dcbase.cpp */; };
-		4086C75A063AB2FF00D4CD53 /* dbtable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A85FF301FA022B0175ACA7 /* dbtable.cpp */; };
-		4086C75B063AB2FF00D4CD53 /* db.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A85FF101FA022B0175ACA7 /* db.cpp */; };
 		4086C75C063AB2FF00D4CD53 /* datstrm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A85FF001FA022B0175ACA7 /* datstrm.cpp */; };
 		4086C75D063AB2FF00D4CD53 /* datetime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A85FEF01FA022B0175ACA7 /* datetime.cpp */; };
 		4086C75E063AB2FF00D4CD53 /* ctrlsub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A85FEC01FA022B0175ACA7 /* ctrlsub.cpp */; };
@@ -786,7 +786,6 @@
 		4086C8AD063AB2FF00D4CD53 /* dpycmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA0CB57D0450773900000102 /* dpycmn.cpp */; };
 		4086C8AE063AB2FF00D4CD53 /* rgncmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA0CB57E0450773900000102 /* rgncmn.cpp */; };
 		4086C8AF063AB2FF00D4CD53 /* appbase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA60175604D43A2700000080 /* appbase.cpp */; };
-		4086C8B0063AB2FF00D4CD53 /* dbgrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA60175904D43A5400000080 /* dbgrid.cpp */; };
 		4086C8B1063AB2FF00D4CD53 /* fldlgcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA60175C04D43A8100000080 /* fldlgcmn.cpp */; };
 		4086C8B2063AB2FF00D4CD53 /* fmapbase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA60175D04D43A8100000080 /* fmapbase.cpp */; };
 		4086C8B3063AB2FF00D4CD53 /* stopwatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA60175E04D43A8100000080 /* stopwatch.cpp */; };
@@ -827,8 +826,6 @@
 		4086CA6A063AB30000D4CD53 /* dlgcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A85FF701FA022B0175ACA7 /* dlgcmn.cpp */; };
 		4086CA6B063AB30000D4CD53 /* dircmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A85FF601FA022B0175ACA7 /* dircmn.cpp */; };
 		4086CA6C063AB30000D4CD53 /* dcbase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A85FF401FA022B0175ACA7 /* dcbase.cpp */; };
-		4086CA6D063AB30000D4CD53 /* dbtable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A85FF301FA022B0175ACA7 /* dbtable.cpp */; };
-		4086CA6E063AB30000D4CD53 /* db.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A85FF101FA022B0175ACA7 /* db.cpp */; };
 		4086CA6F063AB30000D4CD53 /* datstrm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A85FF001FA022B0175ACA7 /* datstrm.cpp */; };
 		4086CA70063AB30000D4CD53 /* datetime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A85FEF01FA022B0175ACA7 /* datetime.cpp */; };
 		4086CA71063AB30000D4CD53 /* ctrlsub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A85FEC01FA022B0175ACA7 /* ctrlsub.cpp */; };
@@ -1125,7 +1122,6 @@
 		4086CBC0063AB30000D4CD53 /* dpycmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA0CB57D0450773900000102 /* dpycmn.cpp */; };
 		4086CBC1063AB30000D4CD53 /* rgncmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA0CB57E0450773900000102 /* rgncmn.cpp */; };
 		4086CBC2063AB30000D4CD53 /* appbase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA60175604D43A2700000080 /* appbase.cpp */; };
-		4086CBC3063AB30000D4CD53 /* dbgrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA60175904D43A5400000080 /* dbgrid.cpp */; };
 		4086CBC4063AB30000D4CD53 /* fldlgcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA60175C04D43A8100000080 /* fldlgcmn.cpp */; };
 		4086CBC5063AB30000D4CD53 /* fmapbase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA60175D04D43A8100000080 /* fmapbase.cpp */; };
 		4086CBC6063AB30000D4CD53 /* stopwatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA60175E04D43A8100000080 /* stopwatch.cpp */; };
@@ -1482,6 +1478,7 @@
 		0A98CD2207172992007B4289 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		40011CBB0893D5B400E4DE95 /* utilsexc_base.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = utilsexc_base.cpp; path = mac/corefoundation/utilsexc_base.cpp; sourceTree = SOURCE_ROOT; };
 		40011F3B0897D8DF00E4DE95 /* setup0.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = setup0.h; path = wx/mac/setup0.h; sourceTree = "<group>"; };
+		400226610CE644C0007F534D /* utilscocoa.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = utilscocoa.mm; sourceTree = "<group>"; };
 		400EDEB2089D4FFD00E848D9 /* propdlg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = propdlg.cpp; sourceTree = "<group>"; };
 		401640E507F94B2800A8837A /* imaglist.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = imaglist.cpp; sourceTree = "<group>"; };
 		402AB2540AFF554A00C0D0C9 /* arcall.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = arcall.cpp; sourceTree = "<group>"; };
@@ -1863,7 +1860,6 @@
 		CA0CB57E0450773900000102 /* rgncmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = rgncmn.cpp; sourceTree = "<group>"; };
 		CA0CB57F0450773900000102 /* taskbarcmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = taskbarcmn.cpp; sourceTree = "<group>"; };
 		CA60175604D43A2700000080 /* appbase.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = appbase.cpp; sourceTree = "<group>"; };
-		CA60175904D43A5400000080 /* dbgrid.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = dbgrid.cpp; sourceTree = "<group>"; };
 		CA60175C04D43A8100000080 /* fldlgcmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = fldlgcmn.cpp; sourceTree = "<group>"; };
 		CA60175D04D43A8100000080 /* fmapbase.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = fmapbase.cpp; sourceTree = "<group>"; };
 		CA60175E04D43A8100000080 /* stopwatch.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = stopwatch.cpp; sourceTree = "<group>"; };
@@ -2251,8 +2247,6 @@
 		F5A85FEC01FA022B0175ACA7 /* ctrlsub.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = ctrlsub.cpp; path = common/ctrlsub.cpp; sourceTree = SOURCE_ROOT; };
 		F5A85FEF01FA022B0175ACA7 /* datetime.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = datetime.cpp; path = common/datetime.cpp; sourceTree = SOURCE_ROOT; };
 		F5A85FF001FA022B0175ACA7 /* datstrm.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = datstrm.cpp; path = common/datstrm.cpp; sourceTree = SOURCE_ROOT; };
-		F5A85FF101FA022B0175ACA7 /* db.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = db.cpp; path = common/db.cpp; sourceTree = SOURCE_ROOT; };
-		F5A85FF301FA022B0175ACA7 /* dbtable.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = dbtable.cpp; path = common/dbtable.cpp; sourceTree = SOURCE_ROOT; };
 		F5A85FF401FA022B0175ACA7 /* dcbase.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = dcbase.cpp; path = common/dcbase.cpp; sourceTree = SOURCE_ROOT; };
 		F5A85FF601FA022B0175ACA7 /* dircmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = dircmn.cpp; path = common/dircmn.cpp; sourceTree = SOURCE_ROOT; };
 		F5A85FF701FA022B0175ACA7 /* dlgcmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = dlgcmn.cpp; path = common/dlgcmn.cpp; sourceTree = SOURCE_ROOT; };
@@ -3426,9 +3420,6 @@
 				F5A85FF401FA022B0175ACA7 /* dcbase.cpp */,
 				404DB2710ADD429D00687775 /* dcbufcmn.cpp */,
 				402AB2560AFF554A00C0D0C9 /* dcgraph.cpp */,
-				F5A85FF101FA022B0175ACA7 /* db.cpp */,
-				CA60175904D43A5400000080 /* dbgrid.cpp */,
-				F5A85FF301FA022B0175ACA7 /* dbtable.cpp */,
 				40ADC34908156AE40009DA36 /* debugrpt.cpp */,
 				F5A85FF601FA022B0175ACA7 /* dircmn.cpp */,
 				F5A85FF701FA022B0175ACA7 /* dlgcmn.cpp */,
@@ -3728,8 +3719,6 @@
 		F5A8619901FA022C0175ACA7 /* mac/carbon */ = {
 			isa = PBXGroup;
 			children = (
-				40AA0F7D0CCBE720002A2ED8 /* databrow.cpp */,
-				40AA0F7E0CCBE720002A2ED8 /* dataview.cpp */,
 				40D2C9A20BCBA64400973B64 /* artmac.cpp */,
 				404DAED30ADD137500687775 /* aboutdlg.cpp */,
 				F5A8619A01FA022C0175ACA7 /* accel.cpp */,
@@ -3749,7 +3738,9 @@
 				F5A861AB01FA022C0175ACA7 /* control.cpp */,
 				F5A861AD01FA022C0175ACA7 /* cursor.cpp */,
 				F5A861AE01FA022C0175ACA7 /* data.cpp */,
+				40AA0F7D0CCBE720002A2ED8 /* databrow.cpp */,
 				F5A861AF01FA022C0175ACA7 /* dataobj.cpp */,
+				40AA0F7E0CCBE720002A2ED8 /* dataview.cpp */,
 				F5A861B001FA022C0175ACA7 /* dc.cpp */,
 				40AF90E407C8B18C006A6D3C /* dccg.cpp */,
 				F5A861B101FA022C0175ACA7 /* dcclient.cpp */,
@@ -3822,6 +3813,7 @@
 				F5A8620401FA022C0175ACA7 /* toplevel.cpp */,
 				F5A8620601FA022C0175ACA7 /* uma.cpp */,
 				F5A8620701FA022C0175ACA7 /* utils.cpp */,
+				400226610CE644C0007F534D /* utilscocoa.mm */,
 				F5A8620801FA022C0175ACA7 /* utilsexc.cpp */,
 				F5A8620A01FA022C0175ACA7 /* window.cpp */,
 			);
@@ -4180,8 +4172,6 @@
 				4086C757063AB2FF00D4CD53 /* dlgcmn.cpp in Sources */,
 				4086C758063AB2FF00D4CD53 /* dircmn.cpp in Sources */,
 				4086C759063AB2FF00D4CD53 /* dcbase.cpp in Sources */,
-				4086C75A063AB2FF00D4CD53 /* dbtable.cpp in Sources */,
-				4086C75B063AB2FF00D4CD53 /* db.cpp in Sources */,
 				4086C75C063AB2FF00D4CD53 /* datstrm.cpp in Sources */,
 				4086C75D063AB2FF00D4CD53 /* datetime.cpp in Sources */,
 				4086C75E063AB2FF00D4CD53 /* ctrlsub.cpp in Sources */,
@@ -4478,7 +4468,6 @@
 				4086C8AD063AB2FF00D4CD53 /* dpycmn.cpp in Sources */,
 				4086C8AE063AB2FF00D4CD53 /* rgncmn.cpp in Sources */,
 				4086C8AF063AB2FF00D4CD53 /* appbase.cpp in Sources */,
-				4086C8B0063AB2FF00D4CD53 /* dbgrid.cpp in Sources */,
 				4086C8B1063AB2FF00D4CD53 /* fldlgcmn.cpp in Sources */,
 				4086C8B2063AB2FF00D4CD53 /* fmapbase.cpp in Sources */,
 				4086C8B3063AB2FF00D4CD53 /* stopwatch.cpp in Sources */,
@@ -4816,6 +4805,7 @@
 				40D33A290CCC7A2A000852B8 /* filectrlcmn.cpp in Sources */,
 				40D33A320CCC7A60000852B8 /* xh_propdlg.cpp in Sources */,
 				40D33A330CCC7A60000852B8 /* xh_srchctrl.cpp in Sources */,
+				400226620CE644C0007F534D /* utilscocoa.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4842,8 +4832,6 @@
 				4086CA6A063AB30000D4CD53 /* dlgcmn.cpp in Sources */,
 				4086CA6B063AB30000D4CD53 /* dircmn.cpp in Sources */,
 				4086CA6C063AB30000D4CD53 /* dcbase.cpp in Sources */,
-				4086CA6D063AB30000D4CD53 /* dbtable.cpp in Sources */,
-				4086CA6E063AB30000D4CD53 /* db.cpp in Sources */,
 				4086CA6F063AB30000D4CD53 /* datstrm.cpp in Sources */,
 				4086CA70063AB30000D4CD53 /* datetime.cpp in Sources */,
 				4086CA71063AB30000D4CD53 /* ctrlsub.cpp in Sources */,
@@ -5140,7 +5128,6 @@
 				4086CBC0063AB30000D4CD53 /* dpycmn.cpp in Sources */,
 				4086CBC1063AB30000D4CD53 /* rgncmn.cpp in Sources */,
 				4086CBC2063AB30000D4CD53 /* appbase.cpp in Sources */,
-				4086CBC3063AB30000D4CD53 /* dbgrid.cpp in Sources */,
 				4086CBC4063AB30000D4CD53 /* fldlgcmn.cpp in Sources */,
 				4086CBC5063AB30000D4CD53 /* fmapbase.cpp in Sources */,
 				4086CBC6063AB30000D4CD53 /* stopwatch.cpp in Sources */,
@@ -5478,6 +5465,7 @@
 				40D33A2B0CCC7A2A000852B8 /* filectrlcmn.cpp in Sources */,
 				40D33A340CCC7A60000852B8 /* xh_propdlg.cpp in Sources */,
 				40D33A350CCC7A60000852B8 /* xh_srchctrl.cpp in Sources */,
+				400226630CE644C0007F534D /* utilscocoa.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
