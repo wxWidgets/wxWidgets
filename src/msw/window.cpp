@@ -2219,13 +2219,6 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
 
                 case VK_RETURN:
                     {
-                        if ( (lDlgCode & DLGC_WANTMESSAGE) && !bCtrlDown )
-                        {
-                            // control wants to process Enter itself, don't
-                            // call IsDialogMessage() which would consume it
-                            return false;
-                        }
-
 #if wxUSE_BUTTON
                         // currently active button should get enter press even
                         // if there is a default button elsewhere so check if
@@ -2247,9 +2240,32 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                         }
                         else // not a button itself, do we have default button?
                         {
-                            wxTopLevelWindow *
-                                tlw = wxDynamicCast(wxGetTopLevelParent(this),
-                                                    wxTopLevelWindow);
+                            // check if this window or any of its ancestors
+                            // wants the message for itself (we always reserve
+                            // Ctrl-Enter for dialog navigation though)
+                            wxWindow *win = this;
+                            if ( !bCtrlDown )
+                            {
+                                while ( win && !win->IsTopLevel() )
+                                {
+                                    if ( lDlgCode & DLGC_WANTMESSAGE )
+                                    {
+                                        // as it wants to process Enter itself,
+                                        // don't call IsDialogMessage() which
+                                        // would consume it
+                                        return false;
+                                    }
+
+                                    win = win->GetParent();
+                                }
+                            }
+                            else // bCtrlDown
+                            {
+                                win = wxGetTopLevelParent(win);
+                            }
+
+                            wxTopLevelWindow * const
+                                tlw = wxDynamicCast(win, wxTopLevelWindow);
                             if ( tlw )
                             {
                                 btn = wxDynamicCast(tlw->GetDefaultItem(),
