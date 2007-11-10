@@ -565,7 +565,7 @@ wxDEPRECATED(
 );
 
 #if wxUSE_ACCEL
-class WXDLLEXPORT wxAcceleratorEntry;
+class WXDLLIMPEXP_FWD_CORE wxAcceleratorEntry;
 
 // use wxAcceleratorEntry::Create() or FromString() methods instead
 wxDEPRECATED(

@@ -21,14 +21,14 @@
 // forward declaration
 // -----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGenericTreeItem;
+class WXDLLIMPEXP_FWD_CORE wxGenericTreeItem;
 
-class WXDLLEXPORT wxTreeItemData;
+class WXDLLIMPEXP_FWD_CORE wxTreeItemData;
 
-class WXDLLEXPORT wxTreeRenameTimer;
-class WXDLLEXPORT wxTreeFindTimer;
-class WXDLLEXPORT wxTreeTextCtrl;
-class WXDLLEXPORT wxTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxTreeRenameTimer;
+class WXDLLIMPEXP_FWD_CORE wxTreeFindTimer;
+class WXDLLIMPEXP_FWD_CORE wxTreeTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
 // -----------------------------------------------------------------------------
 // wxGenericTreeCtrl - the tree control

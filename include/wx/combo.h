@@ -46,8 +46,8 @@
 #include "wx/renderer.h" // this is needed for wxCONTROL_XXX flags
 #include "wx/bitmap.h" // wxBitmap used by-value
 
-class WXDLLIMPEXP_CORE wxTextCtrl;
-class WXDLLEXPORT wxComboPopup;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxComboPopup;
 
 //
 // New window styles for wxComboCtrlBase

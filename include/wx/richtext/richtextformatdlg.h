@@ -30,8 +30,8 @@
 #include "wx/richtext/richtextbuffer.h"
 #include "wx/richtext/richtextstyles.h"
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextFormattingDialog;
-class WXDLLIMPEXP_CORE wxImageList;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextFormattingDialog;
+class WXDLLIMPEXP_FWD_CORE wxImageList;
 
 /*!
  * Flags determining the pages and buttons to be created in the dialog

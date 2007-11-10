@@ -22,8 +22,8 @@
  * For conditions of distribution and use, see the accompanying README file.
  */
 
-class WXDLLEXPORT wxImage;
-class WXDLLEXPORT wxPalette;
+class WXDLLIMPEXP_FWD_CORE wxImage;
+class WXDLLIMPEXP_FWD_CORE wxPalette;
 
 /*
  * wxQuantize

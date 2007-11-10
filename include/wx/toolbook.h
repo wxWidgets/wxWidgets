@@ -18,8 +18,8 @@
 
 #include "wx/bookctrl.h"
 
-class WXDLLEXPORT wxToolBarBase;
-class WXDLLEXPORT wxCommandEvent;
+class WXDLLIMPEXP_FWD_CORE wxToolBarBase;
+class WXDLLIMPEXP_FWD_CORE wxCommandEvent;
 
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING;

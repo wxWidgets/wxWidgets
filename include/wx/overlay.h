@@ -28,8 +28,8 @@
 // internal code
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxOverlayImpl;
-class WXDLLEXPORT wxWindowDC;
+class WXDLLIMPEXP_FWD_CORE wxOverlayImpl;
+class WXDLLIMPEXP_FWD_CORE wxWindowDC;
 
 class WXDLLEXPORT wxOverlay
 {

@@ -15,15 +15,15 @@
 #include "wx/string.h"
 #include "wx/platinfo.h"
 
-class WXDLLIMPEXP_BASE wxObject;
-class WXDLLEXPORT wxAppTraits;
+class WXDLLIMPEXP_FWD_BASE wxObject;
+class WXDLLIMPEXP_FWD_BASE wxAppTraits;
 #if wxUSE_FONTMAP
-    class WXDLLEXPORT wxFontMapper;
+    class WXDLLIMPEXP_FWD_CORE wxFontMapper;
 #endif // wxUSE_FONTMAP
-class WXDLLIMPEXP_BASE wxLog;
-class WXDLLIMPEXP_BASE wxMessageOutput;
-class WXDLLEXPORT wxRendererNative;
-class WXDLLIMPEXP_BASE wxString;
+class WXDLLIMPEXP_FWD_BASE wxLog;
+class WXDLLIMPEXP_FWD_BASE wxMessageOutput;
+class WXDLLIMPEXP_FWD_CORE wxRendererNative;
+class WXDLLIMPEXP_FWD_BASE wxString;
 
 class GSocketGUIFunctionsTable;
 
@@ -32,7 +32,7 @@ class GSocketGUIFunctionsTable;
 // wxAppTraits: this class defines various configurable aspects of wxApp
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxStandardPathsBase;
+class WXDLLIMPEXP_FWD_BASE wxStandardPathsBase;
 
 class WXDLLIMPEXP_BASE wxAppTraitsBase
 {

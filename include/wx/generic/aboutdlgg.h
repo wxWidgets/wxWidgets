@@ -17,9 +17,9 @@
 
 #include "wx/dialog.h"
 
-class WXDLLIMPEXP_ADV  wxAboutDialogInfo;
-class WXDLLIMPEXP_CORE wxSizer;
-class WXDLLIMPEXP_CORE wxSizerFlags;
+class WXDLLIMPEXP_FWD_ADV wxAboutDialogInfo;
+class WXDLLIMPEXP_FWD_CORE wxSizer;
+class WXDLLIMPEXP_FWD_CORE wxSizerFlags;
 
 // ----------------------------------------------------------------------------
 // wxGenericAboutDialog: generic "About" dialog implementation

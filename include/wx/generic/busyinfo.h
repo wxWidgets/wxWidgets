@@ -14,8 +14,8 @@
 
 #if wxUSE_BUSYINFO
 
-class WXDLLIMPEXP_CORE wxFrame;
-class WXDLLIMPEXP_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxFrame;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 //--------------------------------------------------------------------------------
 // wxBusyInfo

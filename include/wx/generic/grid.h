@@ -55,21 +55,21 @@ extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxGridNameStr[];
 // forward declarations
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxGrid;
-class WXDLLIMPEXP_ADV wxGridCellAttr;
-class WXDLLIMPEXP_ADV wxGridCellAttrProviderData;
-class WXDLLIMPEXP_ADV wxGridColLabelWindow;
-class WXDLLIMPEXP_ADV wxGridCornerLabelWindow;
-class WXDLLIMPEXP_ADV wxGridRowLabelWindow;
-class WXDLLIMPEXP_ADV wxGridWindow;
-class WXDLLIMPEXP_ADV wxGridTypeRegistry;
-class WXDLLIMPEXP_ADV wxGridSelection;
+class WXDLLIMPEXP_FWD_ADV wxGrid;
+class WXDLLIMPEXP_FWD_ADV wxGridCellAttr;
+class WXDLLIMPEXP_FWD_ADV wxGridCellAttrProviderData;
+class WXDLLIMPEXP_FWD_ADV wxGridColLabelWindow;
+class WXDLLIMPEXP_FWD_ADV wxGridCornerLabelWindow;
+class WXDLLIMPEXP_FWD_ADV wxGridRowLabelWindow;
+class WXDLLIMPEXP_FWD_ADV wxGridWindow;
+class WXDLLIMPEXP_FWD_ADV wxGridTypeRegistry;
+class WXDLLIMPEXP_FWD_ADV wxGridSelection;
 
-class WXDLLEXPORT wxCheckBox;
-class WXDLLEXPORT wxComboBox;
-class WXDLLEXPORT wxTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxCheckBox;
+class WXDLLIMPEXP_FWD_CORE wxComboBox;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 #if wxUSE_SPINCTRL
-class WXDLLEXPORT wxSpinCtrl;
+class WXDLLIMPEXP_FWD_CORE wxSpinCtrl;
 #endif
 
 // ----------------------------------------------------------------------------

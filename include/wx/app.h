@@ -29,7 +29,7 @@ class WXDLLIMPEXP_FWD_BASE wxLog;
 class WXDLLIMPEXP_FWD_BASE wxMessageOutput;
 
 #if wxUSE_GUI
-    class WXDLLEXPORT wxEventLoop;
+    class WXDLLIMPEXP_FWD_BASE wxEventLoop;
     struct WXDLLIMPEXP_FWD_CORE wxVideoMode;
 #endif
 
