@@ -103,6 +103,7 @@ static inline double RadToDeg(double deg)
 #ifdef __WXGTK__
 #include "wx/gtk/win_gtk.h"
 #include <gtk/gtk.h>
+#include "wx/fontutil.h"
 #endif
 
 #ifdef __WXMSW__
@@ -301,17 +302,24 @@ public:
     ~wxCairoFontData();
 
     virtual void Apply( wxGraphicsContext* context );
+#ifdef __WXGTK__
+    const PangoFontDescription* GetFont() const { return m_font; }
+#endif
 private :
-    wxCharBuffer m_fontName;
     double m_size;
-    cairo_font_slant_t m_slant;
-    cairo_font_weight_t m_weight;
     double m_red;
     double m_green;
     double m_blue;
     double m_alpha;
+#ifdef __WXMAC__
     cairo_font_face_t *m_font;
-    wxFont m_wxFont;
+#elif defined(__WXGTK__)
+    PangoFontDescription* m_font;
+#else
+    wxCharBuffer m_fontName;
+    cairo_font_slant_t m_slant;
+    cairo_font_weight_t m_weight;
+#endif
 };
 
 class WXDLLIMPEXP_CORE wxCairoContext : public wxGraphicsContext
@@ -482,17 +490,17 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
         break;
 
     case wxLONG_DASH :
-        m_lengths = dotted ;
+        m_lengths = dashed ;
         m_count = WXSIZEOF(dashed);
         break;
 
     case wxSHORT_DASH :
-        m_lengths = dotted ;
+        m_lengths = short_dashed ;
         m_count = WXSIZEOF(short_dashed);
         break;
 
     case wxDOT_DASH :
-        m_lengths = dotted ;
+        m_lengths = dotted_dashed ;
         m_count = WXSIZEOF(dotted_dashed);
         break;
 
@@ -701,38 +709,40 @@ wxCairoFontData::wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &fo
     m_green = col.Green()/255.0; 
     m_blue = col.Blue()/255.0;
     m_alpha = col.Alpha()/255.0;
-
     m_size = font.GetPointSize();
+
+#ifdef __WXMAC__
+    m_font = cairo_atsui_font_face_create_for_atsu_font_id( font.MacGetATSUFontID() );
+#elif defined(__WXGTK__)
+    m_font = pango_font_description_copy( font.GetNativeFontInfo()->description );
+#else
     m_fontName = font.GetFaceName().mb_str(wxConvUTF8);
     m_slant = font.GetStyle() == wxFONTSTYLE_ITALIC ? CAIRO_FONT_SLANT_ITALIC:CAIRO_FONT_SLANT_NORMAL;
     m_weight = font.GetWeight() == wxFONTWEIGHT_BOLD ? CAIRO_FONT_WEIGHT_BOLD:CAIRO_FONT_WEIGHT_NORMAL;
-#ifdef __WXMAC__
-    m_font = cairo_atsui_font_face_create_for_atsu_font_id( font.MacGetATSUFontID() );
-#endif
-#ifdef __WXMSW__
-#endif
-#ifdef __WXGTK__
-    // Pango implementation uses the native descriptor
-    m_font = NULL;
-    m_wxFont = font;
 #endif
 }
 
 wxCairoFontData::~wxCairoFontData()
 {
+#ifdef __WXMAC__
     cairo_font_face_destroy( m_font );
+#elif defined(__WXGTK__)
+    pango_font_description_free( m_font );
+#else
+#endif
 }
 
 void wxCairoFontData::Apply( wxGraphicsContext* context )
 {
-#ifdef __WXGTK__
-    // Pango handled differently
-#else
     cairo_t * ctext = (cairo_t*) context->GetNativeContext();
     cairo_set_source_rgba(ctext,m_red,m_green, m_blue,m_alpha);
-    cairo_set_font_face(ctext, m_font );
-    // TODO UNDERLINE
-    // TODO FIX SIZE
+#ifdef __WXGTK__
+    // the rest is done using Pango layouts
+#elif defined(__WXMAC__)
+    cairo_set_font_face(ctext, m_font);
+#else
+    cairo_select_font_face(ctext, m_fontName, m_slant, m_weights );
+    cairo_set_font_size(ctext, m_size );
 #endif
 }
 
@@ -875,7 +885,7 @@ void wxCairoPathData::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h)
     }
 }
 
-bool wxCairoPathData::Contains( wxDouble x, wxDouble y, int fillStyle ) const
+bool wxCairoPathData::Contains( wxDouble x, wxDouble y, int WXUNUSED(fillStyle) ) const
 {
     return cairo_in_stroke( m_pathContext, x, y) != 0;
 }
@@ -1075,8 +1085,8 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
 
     wxASSERT_MSG( widget, wxT("wxCairoContext needs a widget") );
 
-    GtkPizza *pizza = GTK_PIZZA( widget );
-    GdkDrawable* drawable = pizza->bin_window;
+    wxPizza *pizza = WX_PIZZA( widget );
+    GdkDrawable* drawable = pizza->m_backing_window;
     Init( gdk_cairo_create( drawable ) ) ;
 #endif
 }
@@ -1325,16 +1335,17 @@ void wxCairoContext::DrawText( const wxString &str, wxDouble x, wxDouble y )
 {
     if ( m_font.IsNull() || str.empty())
         return;
-    
+
 #ifdef __WXGTK__
-    const wxCharBuffer data = wxGTK_CONV( str );
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( str );
     if ( !data )
         return;
     size_t datalen = strlen(data);
-  
+    ((wxCairoFontData*)m_font.GetRefData())->Apply(this);
+
     PangoLayout *layout = pango_cairo_create_layout (m_context);
-    pango_layout_set_font_description( m_layout, m_wxFont->GetNativeFontInfo()->description);
-    pango_layout_set_text (layout, data, datalen);
+    pango_layout_set_font_description( layout, ((wxCairoFontData*)m_font.GetRefData())->GetFont());
+    pango_layout_set_text(layout, data, datalen);
     cairo_move_to(m_context, x, y);
     pango_cairo_show_layout (m_context, layout);
 
@@ -1371,13 +1382,13 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
     int w, h;
   
     PangoLayout *layout = pango_cairo_create_layout (m_context);
-    pango_layout_set_font_description( layout, m_wxFont->GetNativeFontInfo()->description);
-    const wxCharBuffer dataUTF8 = wxGTK_CONV_FONT(str, m_wxFont);
-    if ( !dataUTF8 )
+    pango_layout_set_font_description( layout, ((wxCairoFontData*)m_font.GetRefData())->GetFont());
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( str );
+    if ( !data )
     {
         return;
     }
-    pango_layout_set_text( layout, dataUTF8, strlen(dataUTF8) );
+    pango_layout_set_text( layout, data, strlen(data) );
     pango_layout_get_pixel_size (layout, &w, &h);
     if ( width )
         *width = w;
