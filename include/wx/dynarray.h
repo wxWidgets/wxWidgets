@@ -438,6 +438,7 @@ public:                                                               \
     bool operator !=(const itor& it) const { return m_ptr != it.m_ptr; }\
   };                                                                  \
                                                                       \
+  name(size_type n) { assign(n, value_type()); }                      \
   name(size_type n, const_reference v) { assign(n, v); }              \
   name(const_iterator first, const_iterator last)                     \
     { assign(first, last); }                                          \
