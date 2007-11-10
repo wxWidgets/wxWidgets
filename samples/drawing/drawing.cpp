@@ -77,6 +77,7 @@ enum ScreenToShow
     Show_Splines,
 #if wxUSE_GRAPHICS_CONTEXT
     Show_Alpha,
+    Show_Graphics,
 #endif
     Show_Gradient,
     Show_Max
@@ -193,6 +194,7 @@ protected:
     void DrawWithLogicalOps(wxDC& dc);
 #if wxUSE_GRAPHICS_CONTEXT
     void DrawAlpha(wxDC& dc);
+    void DrawGraphics(wxGraphicsContext* gc);
 #endif
     void DrawRegions(wxDC& dc);
     void DrawCircles(wxDC& dc);
@@ -241,6 +243,7 @@ enum
     File_ShowSplines,
 #if wxUSE_GRAPHICS_CONTEXT
     File_ShowAlpha,
+    File_ShowGraphics,
 #endif
     File_ShowGradients,
     MenuShow_Last = File_ShowGradients,
@@ -962,6 +965,121 @@ void MyCanvas::DrawAlpha(wxDC& dc)
 
 #endif
 
+#if wxUSE_GRAPHICS_CONTEXT
+
+const int BASE  = 80.0;
+const int BASE2 = BASE/2;
+const int BASE4 = BASE/4;
+
+static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
+
+
+// modeled along Robin Dunn's GraphicsContext.py sample
+
+void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
+{
+    wxFont font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    gc->SetFont(font,*wxBLACK);
+    
+    // make a path that contains a circle and some lines, centered at 0,0
+    wxGraphicsPath path = gc->CreatePath() ;
+    path.AddCircle( 0, 0, BASE2 );
+    path.MoveToPoint(0, -BASE2);
+    path.AddLineToPoint(0, BASE2);
+    path.MoveToPoint(-BASE2, 0);
+    path.AddLineToPoint(BASE2, 0);
+    path.CloseSubpath();
+    path.AddRectangle(-BASE4, -BASE4/2, BASE2, BASE4);
+    
+    // Now use that path to demonstrate various capbilites of the grpahics context
+    gc->PushState(); // save current translation/scale/other state 
+    gc->Translate(60, 75); // reposition the context origin
+
+    gc->SetPen(wxPen("navy", 1));
+    gc->SetBrush(wxBrush("pink"));
+    
+    for( int i = 0 ; i < 3 ; ++i )
+    {
+        wxString label;
+        switch( i )
+        {
+            case 0 :
+                label = "StrokePath";
+                break;
+            case 1 :
+                label = "FillPath";
+                break;
+            case 2 :
+                label = "DrawPath";
+                break;
+        }
+        wxDouble w, h;
+        gc->GetTextExtent(label, &w, &h, NULL, NULL);
+        gc->DrawText(label, -w/2, -BASE2-h-4);
+        switch( i )
+        {
+            case 0 :
+                gc->StrokePath(path);
+                break;
+            case 1 :
+                gc->FillPath(path);
+                break;
+            case 2 :
+                gc->DrawPath(path);
+                break;
+        }
+        gc->Translate(2*BASE, 0);
+    }
+            
+    gc->PopState(); // restore saved state
+    gc->PushState(); // save it again
+    gc->Translate(60, 200); // offset to the lower part of the window
+        
+    gc->DrawText("Scale", 0, -BASE2);
+    gc->Translate(0, 20);
+
+    gc->SetBrush(wxBrush(wxColour(178,  34,  34, 128)));// 128 == half transparent
+    for( int i = 0 ; i < 8 ; ++i )
+    {
+        gc->Scale(1.08, 1.08); // increase scale by 8%
+        gc->Translate(5,5);    
+        gc->DrawPath(path);
+    }
+
+    gc->PopState(); // restore saved state
+    gc->PushState(); // save it again
+    gc->Translate(400, 200); 
+    
+    gc->DrawText("Rotate", 0, -BASE2);
+
+    // Move the origin over to the next location
+    gc->Translate(0, 75);
+
+    // draw our path again, rotating it about the central point,
+    // and changing colors as we go
+    for ( int angle = 0 ; angle < 360 ; angle += 30 )
+    {
+        gc->PushState(); // save this new current state so we can 
+        //  pop back to it at the end of the loop
+        wxImage::RGBValue val = wxImage::HSVtoRGB(wxImage::HSVValue(float(angle)/360, 1, 1));
+        gc->SetBrush(wxBrush(wxColour(val.red, val.green, val.blue, 64)));
+        gc->SetPen(wxPen(wxColour(val.red, val.green, val.blue, 128)));
+        
+        // use translate to artfully reposition each drawn path
+        gc->Translate(1.5 * BASE2 * cos(DegToRad(angle)),
+                     1.5 * BASE2 * sin(DegToRad(angle)));
+                     
+        // use Rotate to rotate the path
+        gc->Rotate(DegToRad(angle));
+
+        // now draw it
+        gc->DrawPath(path);
+        gc->PopState();
+    }
+    gc->PopState();
+}
+#endif
+
 void MyCanvas::DrawCircles(wxDC& dc)
 {
     int x = 100,
@@ -1343,6 +1461,9 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
         case Show_Alpha:
             DrawAlpha(dc);
             break;
+        case Show_Graphics:
+            DrawGraphics(gdc.GetGraphicsContext());
+            break;
 #endif
 
         case Show_Gradient:
@@ -1416,6 +1537,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #endif
     menuFile->Append(File_ShowSplines, _T("&Splines screen\tF11"));
     menuFile->Append(File_ShowGradients, _T("&Gradients screen\tF12"));
+#if wxUSE_GRAPHICS_CONTEXT
+     menuFile->Append(File_ShowGraphics, _T("&Graphics screen\tF13"));
+#endif
     menuFile->AppendSeparator();
     menuFile->AppendCheckItem(File_Clip, _T("&Clip\tCtrl-C"), _T("Clip/unclip drawing"));
 #if wxUSE_GRAPHICS_CONTEXT
