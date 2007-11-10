@@ -559,7 +559,7 @@ WX_ARG_ENABLE(mslu,          [  --enable-mslu           use MS Layer for Unicode
 WX_ARG_ENABLE_PARAM(utf8,    [  --enable-utf8           use UTF-8 representation for strings (Unix only)], wxUSE_UNICODE_UTF8)
 WX_ARG_ENABLE(utf8only,      [  --enable-utf8only      only support UTF-8 locales in UTF-8 build (Unix only)], wxUSE_UNICODE_UTF8_LOCALE)
 WX_ARG_ENABLE(extended_rtti, [  --enable-extended_rtti  use extended RTTI (XTI)], wxUSE_EXTENDED_RTTI)
-if test "$USE_OS2" = "1"; then
+if test "$USE_OS2" = 1; then
     DEFAULT_wxUSE_OMF=no
     WX_ARG_ENABLE(omf,     [  --enable-omf            use OMF object format], wxUSE_OMF)
 fi
@@ -1558,7 +1558,7 @@ case "${host}" in
     ;;
     *-hp-hpux* )
         AC_CHECK_SIZEOF(long long, 0)
-        if test "$ac_cv_sizeof_long_long" != "0"; then
+        if test "$ac_cv_sizeof_long_long" != 0; then
             dnl HPUX 10.20 headers need this define in order to use long long definitions
             CPPFLAGS="-D_INCLUDE_LONGLONG $CPPFLAGS"
         fi
@@ -1587,7 +1587,7 @@ AC_CHECK_SIZEOF(wchar_t, 0,
         #include <stdio.h>
     ]
 )
-if test "$ac_cv_sizeof_wchar_t" != "0"; then
+if test "$ac_cv_sizeof_wchar_t" != 0; then
     wxUSE_WCHAR_T=yes
 else
     wxUSE_WCHAR_T=no
@@ -3218,9 +3218,9 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         libsm_ice_link=""
         libs_found=0
         for libp in "" " -lXp"; do
-            if test "$libs_found" = "0"; then
+            if test "$libs_found" = 0; then
                 for libsm_ice in "" " -lSM -lICE"; do
-                    if test "$libs_found" = "0"; then
+                    if test "$libs_found" = 0; then
                         save_LIBS="$LIBS"
                         LIBS="$GUI_TK_LIBRARY -lXm ${libp} -lXmu -lXext -lXt${libsm_ice} -lX11"
                         save_CFLAGS=$CFLAGS
@@ -3253,7 +3253,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             fi
         done
 
-        if test "$libs_found" = "0"; then
+        if test "$libs_found" = 0; then
             AC_MSG_RESULT([can't find the right libraries])
             AC_MSG_ERROR([can't link a simple motif program])
         fi
@@ -3485,9 +3485,9 @@ dnl ---------------------------------------------------------------------------
 dnl If UTF-8 support wasn't explicitly enabled or disabled, enable it only
 dnl for ports where it makes sense by default (GTK+, DirectFB):
 if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_UTF8" = "auto" ; then
-    if test "$USE_UNIX" = "1" -a "$wxUSE_DARWIN" != "1" ; then
+    if test "$USE_UNIX" = 1 -a "$wxUSE_DARWIN" != 1 ; then
         wxUSE_UNICODE_UTF8=yes
-    elif test "$USE_OS2" = "1" ; then
+    elif test "$USE_OS2" = 1 ; then
         dnl wide char support is quite incomplete in libc;
         dnl UTF-8 might actually work when evaluating/setting
         dnl code pages correctly, even for ports other than GTK20.
@@ -3597,10 +3597,10 @@ dnl ---------------------------------------------------------------------------
 
 USE_OPENGL=0
 if test "$wxUSE_OPENGL" = "yes"; then
-    if test "$wxUSE_MGL" = 1 -o "$wxUSE_DFB" = "1"; then
+    if test "$wxUSE_MGL" = 1 -o "$wxUSE_DFB" = 1; then
         AC_MSG_WARN([wxGLCanvas not implemented for this port, library will be compiled without it.])
         wxUSE_OPENGL="no"
-    elif test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = "1"; then
+    elif test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
@@ -4331,7 +4331,7 @@ if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
     fi
 fi
 
-if test "$wxUSE_STACKWALKER" = "yes" -a "$USE_WIN32" != "1" -a "$USE_UNIX" != "1"; then
+if test "$wxUSE_STACKWALKER" = "yes" -a "$USE_WIN32" != 1 -a "$USE_UNIX" != 1; then
     AC_MSG_WARN([wxStackWalker is only available on Win32 and UNIX... disabled])
     wxUSE_STACKWALKER=no
 fi
@@ -5308,7 +5308,7 @@ fi
 
 dnl Unix implementation needs additional checks because audio support
 dnl comes in many favours:
-if test "$USE_UNIX" = "1" ; then
+if test "$USE_UNIX" = 1 ; then
     dnl mmedia doesn't compile with wxMGL, remove this if this is ever fixed
     if test "$wxUSE_MGL" != 1; then
         dnl it's not enough to check for just the header because OSS under NetBSD
@@ -5351,7 +5351,7 @@ fi
 
 WITH_PLUGIN_SDL=0
 if test "$wxUSE_SOUND" = "yes"; then
-  if test "$USE_UNIX" = "1" ; then
+  if test "$USE_UNIX" = 1 ; then
     if test "$wxUSE_LIBSDL" != "no"; then
       AM_PATH_SDL([1.2.0],
                   [
@@ -5538,7 +5538,7 @@ if test "$wxUSE_STACKWALKER" = "yes"; then
 fi
 
 if test "$wxUSE_DEBUGREPORT" = "yes"; then
-    if test "$USE_UNIX" != "1" -a "$USE_WIN32" != "1"; then
+    if test "$USE_UNIX" != 1 -a "$USE_WIN32" != 1; then
         AC_MSG_WARN([Creating debug reports not currently supported on this system, disabled])
         wxUSE_DEBUGREPORT=no
     else
@@ -5869,7 +5869,7 @@ dnl ------------------------------------------------------------------------
 
 dnl VZ: the GUI hooks wxSocket needs are not implemented yet in some toolkits
 if test "$wxUSE_SOCKETS" = "yes"; then
-    if test "$wxUSE_MGL" = "1"; then
+    if test "$wxUSE_MGL" = 1; then
         AC_MSG_WARN([wxSocket not yet supported under MGL... disabled])
         wxUSE_SOCKETS="no"
     fi
@@ -6103,7 +6103,7 @@ if test "$wxUSE_GUI" = "yes" -a "$wxUSE_JOYSTICK" = "yes"; then
     dnl joystick support is only for Linux 2.1.x or greater
     else
         dnl wxJoystick not supported by wxMGL at all
-        if test "$wxUSE_MGL" != "1"; then
+        if test "$wxUSE_MGL" != 1; then
             dnl notice the dummy includes argument: without it, AC_CHECK_HEADER
             dnl checks only whether the header can be preprocessed, not that it
             dnl can be compiled and in Linux 2.6.16 joystick.h is present but
@@ -7021,7 +7021,7 @@ dnl wxGraphicsContext
 dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
-   if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = "1"; then
+   if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
       AC_DEFINE(wxUSE_GRAPHICS_CONTEXT)
    elif test "$wxUSE_GTK" != 1; then
       dnl for other builds we'll just wing it for now...
