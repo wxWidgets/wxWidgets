@@ -1140,7 +1140,7 @@ void wxCairoContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
     cairo_append_path(m_context, cp);
 
     // clip to that path
-//    cairo_clip(m_context);
+    cairo_clip(m_context);
     path.UnGetNativePath(cp);  
 }
 
