@@ -2438,55 +2438,11 @@ if test "$wxUSE_LIBPNG" != "no" ; then
 fi
 
 dnl ------------------------------------------------------------------------
-dnl Check for tiff library
-dnl ------------------------------------------------------------------------
-
-TIFF_LINK=
-TIFF_PREREQ_LINKS=-lm
-if test "$wxUSE_LIBTIFF" != "no" ; then
-    AC_DEFINE(wxUSE_LIBTIFF)
-
-    if test "$wxUSE_LIBTIFF" = "sys" -o "$wxUSE_LIBTIFF" = "yes" ; then
-        dnl libtiff may depend on libjpeg and libz so use them in the test
-        dnl below or it would fail
-        if test "$wxUSE_LIBJPEG" = "sys"; then
-            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $JPEG_LINK"
-        fi
-        if test "$wxUSE_ZLIB" = "sys"; then
-            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $ZLIB_LINK"
-        fi
-        AC_CHECK_HEADER(tiffio.h,
-                        [
-                            AC_CHECK_LIB(tiff, TIFFError,
-                                         TIFF_LINK=" -ltiff",
-                                         ,
-                                         $TIFF_PREREQ_LINKS)
-                        ],
-                        [],
-                        [ ]
-                       )
-
-        if test "x$TIFF_LINK" = "x" ; then
-            if test "$wxUSE_LIBTIFF" = "sys" ; then
-                AC_MSG_ERROR([system tiff library not found! Use --with-libtiff=builtin to use built-in version])
-            else
-                AC_MSG_WARN([system tiff library not found, will use built-in instead])
-                wxUSE_LIBTIFF=builtin
-            fi
-        else
-            dnl we are using the system library
-            wxUSE_LIBTIFF=sys
-        fi
-    fi
-    if test "$wxUSE_LIBTIFF" = "builtin" ; then
-        AC_CONFIG_SUBDIRS([src/tiff])
-    fi
-fi
-
-dnl ------------------------------------------------------------------------
 dnl Check for jpeg library
 dnl ------------------------------------------------------------------------
 
+dnl this check must be done before the check for libtiff as libtiff uses
+dnl libjpeg itself
 JPEG_LINK=
 if test "$wxUSE_LIBJPEG" != "no" ; then
     AC_DEFINE(wxUSE_LIBJPEG)
@@ -2559,16 +2515,60 @@ if test "$wxUSE_LIBJPEG" != "no" ; then
             fi
         fi
     fi
-else
-    dnl wxUSE_LIBJPEG = "no"
-    if test "$wxUSE_LIBTIFF" = "builtin"; then
-        dnl we have to prevent the builtin libtiff configure from building the
-        dnl library with JPEG support as this was explicitly disabled by user,
-        dnl but unfortunately it needs --disable-jpeg and not --without-libjpeg
-        dnl (which will be passed to it anyhow as configure passes arguments to
-        dnl the top-level script to all the other ones called recursively), so
-        dnl we need to hack around this
-        ac_configure_args="$ac_configure_args --disable-jpeg"
+fi
+
+dnl ------------------------------------------------------------------------
+dnl Check for tiff library
+dnl ------------------------------------------------------------------------
+
+TIFF_LINK=
+TIFF_PREREQ_LINKS=-lm
+if test "$wxUSE_LIBTIFF" != "no" ; then
+    AC_DEFINE(wxUSE_LIBTIFF)
+
+    if test "$wxUSE_LIBTIFF" = "sys" -o "$wxUSE_LIBTIFF" = "yes" ; then
+        dnl libtiff may depend on libjpeg and libz so use them in the test
+        dnl below or it would fail
+        if test "$wxUSE_LIBJPEG" = "sys"; then
+            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $JPEG_LINK"
+        fi
+        if test "$wxUSE_ZLIB" = "sys"; then
+            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $ZLIB_LINK"
+        fi
+        AC_CHECK_HEADER(tiffio.h,
+                        [
+                            AC_CHECK_LIB(tiff, TIFFError,
+                                         TIFF_LINK=" -ltiff",
+                                         ,
+                                         $TIFF_PREREQ_LINKS)
+                        ],
+                        [],
+                        [ ]
+                       )
+
+        if test "x$TIFF_LINK" = "x" ; then
+            if test "$wxUSE_LIBTIFF" = "sys" ; then
+                AC_MSG_ERROR([system tiff library not found! Use --with-libtiff=builtin to use built-in version])
+            else
+                AC_MSG_WARN([system tiff library not found, will use built-in instead])
+                wxUSE_LIBTIFF=builtin
+            fi
+        else
+            dnl we are using the system library
+            wxUSE_LIBTIFF=sys
+        fi
+    fi
+    if test "$wxUSE_LIBTIFF" = "builtin" ; then
+        if test "$wxUSE_LIBJPEG" = "no"; then
+            dnl we have to prevent the builtin libtiff configure from building the
+            dnl library with JPEG support as this was explicitly disabled by user,
+            dnl but unfortunately it needs --disable-jpeg and not --without-libjpeg
+            dnl (which will be passed to it anyhow as configure passes arguments to
+            dnl the top-level script to all the other ones called recursively), so
+            dnl we need to hack around this
+            ac_configure_args="$ac_configure_args --disable-jpeg"
+        fi
+        AC_CONFIG_SUBDIRS([src/tiff])
     fi
 fi
 
