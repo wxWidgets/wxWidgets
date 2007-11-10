@@ -509,7 +509,7 @@ wxGraphicsContext::~wxGraphicsContext()
 {
 }
 
-bool wxGraphicsContext::StartDoc( const wxString& message ) 
+bool wxGraphicsContext::StartDoc(const wxString& WXUNUSED(message)) 
 {
     return true;
 }
@@ -518,7 +518,8 @@ void wxGraphicsContext::EndDoc()
 {
 }
 
-void wxGraphicsContext::StartPage( wxDouble width, wxDouble height )
+void wxGraphicsContext::StartPage(wxDouble WXUNUSED(width),
+                                  wxDouble WXUNUSED(height))
 {
 }
     
