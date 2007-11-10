@@ -61,8 +61,11 @@ wxIcon::wxIcon(WXHICON icon, const wxSize& size)
         AcquireIconRef( (IconRef) icon ) ;
 
     m_refData = new wxIconRefData( icon ) ;
-    M_ICONDATA->SetWidth( size.x ) ;
-    M_ICONDATA->SetHeight( size.y ) ;
+    if ( (size.x != -1) && (size.y != -1) )
+    {
+        M_ICONDATA->SetWidth( size.x ) ;
+        M_ICONDATA->SetHeight( size.y ) ;
+    }
 }
 
 wxIcon::~wxIcon()
