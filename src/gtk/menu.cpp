@@ -798,11 +798,14 @@ void wxMenuItem::SetItemLabel( const wxString& str )
     oldLabel = wxStripMenuCodes(oldLabel);
     oldLabel.Replace(wxT("_"), wxT(""));
     wxString label1 = wxStripMenuCodes(str);
+#if wxUSE_ACCEL
     wxString oldhotkey = GetHotKey();    // Store the old hotkey in Ctrl-foo format
     wxCharBuffer oldbuf = wxGTK_CONV_SYS( GetGtkHotKey(*this) );  // and as <control>foo
+#endif // wxUSE_ACCEL
 
     DoSetText(str);
 
+#if wxUSE_ACCEL
     if (oldLabel == label1 &&
         oldhotkey == GetHotKey())    // Make sure we can change a hotkey even if the label is unaltered
         return;
@@ -877,6 +880,7 @@ void wxMenuItem::SetItemLabel( const wxString& str )
                                            accel_key,
                                            accel_mods );
     }
+#endif // wxUSE_FILECTRL
 }
 
 // NOTE: this function is different from the similar functions GTKProcessMnemonics()
@@ -1179,11 +1183,11 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
 
     }
 
+#if wxUSE_ACCEL
     guint accel_key;
     GdkModifierType accel_mods;
     wxCharBuffer buf = wxGTK_CONV_SYS( GetGtkHotKey(*mitem) );
 
-    // wxPrintf( wxT("item: %s hotkey %s\n"), mitem->GetItemLabel().c_str(), GetGtkHotKey(*mitem).c_str() );
     if (buf[(size_t)0] != '\0')
     {
         gtk_accelerator_parse( (const char*) buf, &accel_key, &accel_mods);
@@ -1208,6 +1212,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
                                         accel_mods,
                                         GTK_ACCEL_VISIBLE);
     }
+#endif // wxUSE_FILECTRL
 
     if (pos == -1)
         gtk_menu_shell_append(GTK_MENU_SHELL(m_menu), menuItem);

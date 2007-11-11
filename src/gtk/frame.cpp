@@ -110,7 +110,7 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
         *height = 0;
 }
 
-#if wxUSE_MENUS
+#if wxUSE_MENUS && wxUSE_ACCEL
 // Helper for wxCreateAcceleratorTableForMenuBar
 static void wxAddAccelerators(wxList& accelEntries, wxMenu* menu)
 {
@@ -166,21 +166,21 @@ static wxAcceleratorTable wxCreateAcceleratorTableForMenuBar(wxMenuBar* menuBar)
 
     return table;
 }
-#endif
+#endif // wxUSE_MENUS && wxUSE_ACCEL
 
 bool wxFrame::ShowFullScreen(bool show, long style)
 {
     if (!wxFrameBase::ShowFullScreen(show, style))
         return false;
 
-#if wxUSE_MENUS
+#if wxUSE_MENUS && wxUSE_ACCEL
     if (show && GetMenuBar())
     {
         wxAcceleratorTable table(wxCreateAcceleratorTableForMenuBar(GetMenuBar()));
         if (table.IsOk())
             SetAcceleratorTable(table);
     }
-#endif
+#endif // wxUSE_MENUS && wxUSE_ACCEL
 
     wxWindow* const bar[] = {
 #if wxUSE_MENUS
