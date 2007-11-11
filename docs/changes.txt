@@ -93,7 +93,7 @@ Major new features in 2.8 release
 
 All:
 
-- Fixed bug with default proxy destruction in wxURL (Axel Gembe)
+- Fixed bug with default proxy destruction in wxURL (Axel Gembe).
 
 All (GUI):
 
@@ -113,6 +113,7 @@ wxGTK:
 - wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW) now returns the background
   colour of text controls.
 - wxFrame::ShowFullScreen now preserves the menubar's accelerators.
+- Implemented wxGetClientDisplayRect() correctly for wxGTK and X11-based ports.
 
 wxMac:
 
