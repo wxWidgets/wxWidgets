@@ -2941,6 +2941,7 @@ bool wxWindowOS2::OS2Create( PSZ            zClass,
     long                 lControlId = 0L;
     wxWindowCreationHook vHook(this);
     wxString             sClassName((wxChar*)zClass);
+    wxString             sTitle(zTitle ? zTitle : wxEmptyString);
 
     OS2GetCreateWindowCoords( rPos
                              ,rSize
@@ -2969,7 +2970,7 @@ bool wxWindowOS2::OS2Create( PSZ            zClass,
     }
     m_hWnd = (WXHWND)::WinCreateWindow( (HWND)OS2GetParent()
                                        ,sClassName.c_str()
-                                       ,(zTitle ? zTitle : wxEmptyString)
+                                       ,sTitle.c_str()
                                        ,(ULONG)dwStyle
                                        ,(LONG)0L
                                        ,(LONG)0L

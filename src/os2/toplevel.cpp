@@ -484,8 +484,8 @@ bool wxTopLevelWindowOS2::CreateFrame( const wxString& rsTitle,
      hFrame = ::WinCreateStdWindow( hParent
                                    ,ulStyleFlags          // frame-window style
                                    ,(PULONG)&lFlags       // window style
-                                   ,wxFrameClassName // class name
-                                   ,rsTitle.c_str()  // window title
+                                   ,wxString(wxFrameClassName).c_str() // class name
+                                   ,rsTitle.c_str()       // window title
                                    ,0L                    // default client style
                                    ,NULLHANDLE            // resource in executable file
                                    ,0                     // resource id
