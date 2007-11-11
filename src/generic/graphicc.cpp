@@ -1328,7 +1328,7 @@ void wxCairoContext::DrawText( const wxString &str, wxDouble x, wxDouble y )
         return;
 
 #ifdef __WXGTK__
-    const wxCharBuffer data = wxConvUTF8.cWC2MB( str );
+    const wxCharBuffer data = str.utf8_str();
     if ( !data )
         return;
     size_t datalen = strlen(data);
@@ -1374,7 +1374,7 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
   
     PangoLayout *layout = pango_cairo_create_layout (m_context);
     pango_layout_set_font_description( layout, ((wxCairoFontData*)m_font.GetRefData())->GetFont());
-    const wxCharBuffer data = wxConvUTF8.cWC2MB( str );
+    const wxCharBuffer data = str.utf8_str();
     if ( !data )
     {
         return;
