@@ -735,6 +735,7 @@ void wxCairoFontData::Apply( wxGraphicsContext* context )
     // the rest is done using Pango layouts
 #elif defined(__WXMAC__)
     cairo_set_font_face(ctext, m_font);
+    cairo_set_font_size(ctext, m_size );
 #else
     cairo_select_font_face(ctext, m_fontName, m_slant, m_weights );
     cairo_set_font_size(ctext, m_size );
@@ -1407,6 +1408,17 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
     {
         cairo_font_extents_t fe;
         cairo_font_extents(m_context, &fe);
+        
+        // some backends have negative descents
+        
+        if ( fe.descent < 0 )
+            fe.descent = -fe.descent;
+    
+        if ( fe.height < (fe.ascent + fe.descent ) )
+        {
+            // some backends are broken re height ... (eg currently ATSUI)
+            fe.height = fe.ascent + fe.descent;
+        }
     
         if (height)
             *height = fe.height;
@@ -1498,6 +1510,9 @@ private :
 IMPLEMENT_DYNAMIC_CLASS(wxCairoRenderer,wxGraphicsRenderer)
 
 static wxCairoRenderer gs_cairoGraphicsRenderer;
+// temporary hack to allow creating a cairo context on any platform
+extern wxGraphicsRenderer* gCairoRenderer;
+wxGraphicsRenderer* gCairoRenderer = &gs_cairoGraphicsRenderer;
 
 #ifdef __WXGTK__
 wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
