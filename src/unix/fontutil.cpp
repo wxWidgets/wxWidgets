@@ -316,9 +316,11 @@ bool wxNativeFontInfo::FromString(const wxString& s)
 
     description = pango_font_description_from_string(wxPANGO_CONV(str));
 
+#if wxUSE_FONTENUM
     // ensure a valid facename is selected
     if (!wxFontEnumerator::IsValidFacename(GetFaceName()))
         SetFaceName(wxNORMAL_FONT->GetFaceName());
+#endif // wxUSE_FONTENUM
 
     return true;
 }

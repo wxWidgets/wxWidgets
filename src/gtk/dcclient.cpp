@@ -469,6 +469,11 @@ bool wxGTKWindowImplDC::DoFloodFill(wxCoord x, wxCoord y,
 
     return wxDoFloodFill( GetOwner(), x, y, col, style);
 #else
+    wxUnusedVar(x);
+    wxUnusedVar(y);
+    wxUnusedVar(col);
+    wxUnusedVar(style);
+
     return false;
 #endif
 }
@@ -488,6 +493,10 @@ bool wxGTKWindowImplDC::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) cons
     col->Set(image.GetRed(0, 0), image.GetGreen(0, 0), image.GetBlue(0, 0));
     return true;
 #else // !wxUSE_IMAGE
+    wxUnusedVar(x1);
+    wxUnusedVar(y1);
+    wxUnusedVar(col);
+
     return false;
 #endif // wxUSE_IMAGE/!wxUSE_IMAGE
 }
@@ -1736,7 +1745,12 @@ void wxGTKWindowImplDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCo
     // update the bounding box
     CalcBoundingBox(x + minX, y + minY);
     CalcBoundingBox(x + maxX, y + maxY);
-#endif // wxUSE_IMAGE
+#else // !wxUSE_IMAGE
+    wxUnusedVar(text);
+    wxUnusedVar(x);
+    wxUnusedVar(y);
+    wxUnusedVar(angle);
+#endif // wxUSE_IMAGE/!wxUSE_IMAGE
 }
 
 void wxGTKWindowImplDC::DoGetTextExtent(const wxString &string,

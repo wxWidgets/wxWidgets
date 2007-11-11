@@ -192,7 +192,9 @@ wxSizer *wxDialogBase::CreateButtonSizer(long flags)
     {
         sizer = CreateStdDialogButtonSizer(flags);
     }
-#endif // wxUSE_BUTTON
+#else // !wxUSE_BUTTON
+    wxUnusedVar(flags);
+#endif // wxUSE_BUTTON/!wxUSE_BUTTON
 
 #endif // __SMARTPHONE__/!__SMARTPHONE__
 

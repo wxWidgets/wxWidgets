@@ -133,6 +133,8 @@ bool wxFrameBase::IsOneOfBars(const wxWindow *win) const
         return true;
 #endif // wxUSE_TOOLBAR
 
+    wxUnusedVar(win);
+
     return false;
 }
 
@@ -212,6 +214,8 @@ bool wxFrameBase::ProcessCommand(int id)
     GetEventHandler()->ProcessEvent(commandEvent);
     return true;
 #else // !wxUSE_MENUS
+    wxUnusedVar(id);
+
     return false;
 #endif // wxUSE_MENUS/!wxUSE_MENUS
 }

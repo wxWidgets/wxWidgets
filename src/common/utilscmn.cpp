@@ -1242,13 +1242,19 @@ wxFindWindowByName (const wxString& name, wxWindow * parent)
 
 // Returns menu item id or wxNOT_FOUND if none.
 int
-wxFindMenuItemId (wxFrame * frame, const wxString& menuString, const wxString& itemString)
+wxFindMenuItemId(wxFrame *frame,
+                 const wxString& menuString,
+                 const wxString& itemString)
 {
 #if wxUSE_MENUS
     wxMenuBar *menuBar = frame->GetMenuBar ();
     if ( menuBar )
         return menuBar->FindMenuItem (menuString, itemString);
-#endif // wxUSE_MENUS
+#else // !wxUSE_MENUS
+    wxUnusedVar(frame);
+    wxUnusedVar(menuString);
+    wxUnusedVar(itemString);
+#endif // wxUSE_MENUS/!wxUSE_MENUS
 
     return wxNOT_FOUND;
 }

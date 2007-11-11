@@ -701,6 +701,9 @@ bool wxBitmap::SaveFile( const wxString &name, wxBitmapType type, const wxPalett
     wxImage image = ConvertToImage();
     return image.Ok() && image.SaveFile(name, type);
 #else // !wxUSE_IMAGE
+    wxUnusedVar(name);
+    wxUnusedVar(type);
+
     return false;
 #endif // wxUSE_IMAGE
 }
