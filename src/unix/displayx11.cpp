@@ -326,6 +326,23 @@ bool wxDisplayImplX11::ChangeMode(const wxVideoMode& WXUNUSED(mode))
 
 #include "wx/utils.h"
 
+#if wxUSE_LIBHILDON
+
+void wxClientDisplayRect(int *x, int *y, int *width, int *height)
+{
+    // TODO: don't hardcode display size
+    if ( x )
+        *x = 0;
+    if ( y )
+        *y = 0;
+    if ( width )
+        *width = 672;
+    if ( height )
+        *height = 396;
+}
+
+#else // !wxUSE_LIBHILDON
+
 #include <X11/Xatom.h>
 
 // TODO: make this a full-fledged class and move to a public header
@@ -408,3 +425,4 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
     wxDisplaySize(width, height);
 }
 
+#endif // wxUSE_LIBHILDON/!wxUSE_LIBHILDON
