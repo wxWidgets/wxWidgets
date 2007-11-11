@@ -201,7 +201,7 @@ void wxMenu::UpdateAccel(
         //
         // Find the (new) accel for this item
         //
-        wxAcceleratorEntry*         pAccel = wxAcceleratorEntry::Create(pItem->GetText());
+        wxAcceleratorEntry*         pAccel = wxAcceleratorEntry::Create(pItem->GetItemLabel());
 
         if (pAccel)
             pAccel->m_command = pItem->GetId();
@@ -323,7 +323,7 @@ bool wxMenu::DoInsertOrAppend( wxMenuItem* pItem,
             //
             rItem.afStyle |= MIS_TEXT;
         }
-        pData = (char*) pItem->GetText().wx_str();
+        pData = (char*) pItem->GetItemLabel().wx_str();
     }
 
     if (nPos == (size_t)-1)
