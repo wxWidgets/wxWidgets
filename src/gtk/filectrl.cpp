@@ -16,7 +16,7 @@
 
 #include "wx/filectrl.h"
 
-#if !defined(__WXUNIVERSAL__)
+#if wxUSE_FILECTRL && !defined(__WXUNIVERSAL__)
 
 #ifndef WX_PRECOMP
 #    include "wx/sizer.h"
@@ -423,4 +423,4 @@ void wxGtkFileCtrl::ShowHidden(bool show)
 
 #endif // wxUSE_FILECTRL
 
-#endif // !defined(__WXUNIVERSAL__)
+#endif // wxUSE_FILECTRL && !defined(__WXUNIVERSAL__)
