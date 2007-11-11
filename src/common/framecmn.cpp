@@ -439,7 +439,7 @@ void wxFrameBase::DoGiveHelp(const wxString& help, bool show)
 
     statbar->SetStatusText(text, m_statusBarPane);
 #else
-    wxUnusedVar(text);
+    wxUnusedVar(help);
     wxUnusedVar(show);
 #endif // wxUSE_STATUSBAR
 }
