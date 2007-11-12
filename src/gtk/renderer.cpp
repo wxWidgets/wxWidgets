@@ -30,6 +30,7 @@
     #include "wx/window.h"
     #include "wx/dcclient.h"
     #include "wx/settings.h"
+    #include "wx/module.h"
 #endif
 
 #include <gtk/gtk.h>
@@ -95,9 +96,10 @@ public:
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
-private:
-    // FIXME: shouldn't we destroy these windows somewhere?
+    class Module;
+    friend class Module;
 
+private:
     // used by DrawPushButton and DrawDropArrow
     static GtkWidget *GetButtonWidget();
 
@@ -109,11 +111,40 @@ private:
 
     // Used by DrawHeaderButton
     static GtkWidget *GetHeaderButtonWidget();
+
+    static GtkWidget* GetSplitterWidget();
+
+    // container for created widgets
+    static GtkContainer* GetContainer();
+    static GtkWidget* ms_container;
 };
+
+// Module for destroying created widgets
+class wxRendererGTK::Module: public wxModule
+{
+public:
+    virtual bool OnInit()
+    {
+        return true;
+    }
+    virtual void OnExit()
+    {
+        if (wxRendererGTK::ms_container)
+        {
+            GtkWidget* parent =
+                gtk_widget_get_parent(wxRendererGTK::ms_container);
+            gtk_widget_destroy(parent);
+        }
+    }
+    DECLARE_DYNAMIC_CLASS(wxRendererGTK::Module)
+};
+IMPLEMENT_DYNAMIC_CLASS(wxRendererGTK::Module, wxModule)
 
 // ============================================================================
 // implementation
 // ============================================================================
+
+GtkWidget* wxRendererGTK::ms_container;
 
 /* static */
 wxRendererNative& wxRendererNative::GetDefault()
@@ -127,18 +158,26 @@ wxRendererNative& wxRendererNative::GetDefault()
 // helper functions
 // ----------------------------------------------------------------------------
 
+GtkContainer* wxRendererGTK::GetContainer()
+{
+    if (ms_container == NULL)
+    {
+        GtkWidget* window = gtk_window_new(GTK_WINDOW_POPUP);
+        ms_container = gtk_fixed_new();
+        gtk_container_add(GTK_CONTAINER(window), ms_container);
+    }
+    return GTK_CONTAINER(ms_container);
+}
+
 GtkWidget *
 wxRendererGTK::GetButtonWidget()
 {
     static GtkWidget *s_button = NULL;
-    static GtkWidget *s_window = NULL;
 
     if ( !s_button )
     {
-        s_window = gtk_window_new( GTK_WINDOW_POPUP );
-        gtk_widget_realize( s_window );
         s_button = gtk_button_new();
-        gtk_container_add( GTK_CONTAINER(s_window), s_button );
+        gtk_container_add(GetContainer(), s_button);
         gtk_widget_realize( s_button );
     }
 
@@ -149,14 +188,11 @@ GtkWidget *
 wxRendererGTK::GetCheckButtonWidget()
 {
     static GtkWidget *s_button = NULL;
-    static GtkWidget *s_window = NULL;
 
     if ( !s_button )
     {
-        s_window = gtk_window_new( GTK_WINDOW_POPUP );
-        gtk_widget_realize( s_window );
         s_button = gtk_check_button_new();
-        gtk_container_add( GTK_CONTAINER(s_window), s_button );
+        gtk_container_add(GetContainer(), s_button);
         gtk_widget_realize( s_button );
     }
 
@@ -167,14 +203,11 @@ GtkWidget *
 wxRendererGTK::GetTreeWidget()
 {
     static GtkWidget *s_tree = NULL;
-    static GtkWidget *s_window = NULL;
 
     if ( !s_tree )
     {
         s_tree = gtk_tree_view_new();
-        s_window = gtk_window_new( GTK_WINDOW_POPUP );
-        gtk_widget_realize( s_window );
-        gtk_container_add( GTK_CONTAINER(s_window), s_tree );
+        gtk_container_add(GetContainer(), s_tree);
         gtk_widget_realize( s_tree );
     }
 
@@ -220,6 +253,18 @@ wxRendererGTK::GetHeaderButtonWidget()
     return s_button;
 }
 
+GtkWidget* wxRendererGTK::GetSplitterWidget()
+{
+    static GtkWidget* widget;
+    if (widget == NULL)
+    {
+        widget = gtk_vpaned_new();
+        gtk_container_add(GetContainer(), widget);
+        gtk_widget_realize(widget);
+    }
+    return widget;
+}
+
 // ----------------------------------------------------------------------------
 // list/tree controls drawing
 // ----------------------------------------------------------------------------
@@ -234,7 +279,7 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
 {
 
     GtkWidget *button = GetHeaderButtonWidget();
-    
+
     GdkWindow* gdk_window = NULL;
 #if wxUSE_NEW_DC
     wxImplDC *impl = dc.GetImpl();
@@ -326,14 +371,10 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
 // splitter sash drawing
 // ----------------------------------------------------------------------------
 
-static int GetGtkSplitterFullSize()
+static int GetGtkSplitterFullSize(GtkWidget* widget)
 {
-    static GtkWidget *s_paned = NULL;
-    if (s_paned == NULL)
-        s_paned = gtk_vpaned_new();
-
     gint handle_size;
-    gtk_widget_style_get (s_paned, "handle_size", &handle_size, NULL);
+    gtk_widget_style_get(widget, "handle_size", &handle_size, NULL);
 
     return handle_size;
 }
@@ -344,7 +385,7 @@ wxRendererGTK::GetSplitterParams(const wxWindow *WXUNUSED(win))
     // we don't draw any border, hence 0 for the second field
     return wxSplitterRenderParams
            (
-               GetGtkSplitterFullSize(),
+               GetGtkSplitterFullSize(GetSplitterWidget()),
                0,
                true     // hot sensitive
            );
@@ -385,7 +426,7 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
 
-    wxCoord full_size = GetGtkSplitterFullSize();
+    wxCoord full_size = GetGtkSplitterFullSize(GetSplitterWidget());
 
     // are we drawing vertical or horizontal splitter?
     const bool isVert = orient == wxVERTICAL;
@@ -510,7 +551,7 @@ wxRendererGTK::DrawCheckBox(wxWindow *WXUNUSED(win),
                             int flags )
 {
     GtkWidget *button = GetCheckButtonWidget();
-    
+
     GdkWindow* gdk_window = NULL;
 #if wxUSE_NEW_DC
     wxImplDC *impl = dc.GetImpl();
