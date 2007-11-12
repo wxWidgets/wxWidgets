@@ -14,7 +14,7 @@
 
 #include "wx/button.h"
 
-extern WXDLLEXPORT_DATA(const wxChar) wxCheckBoxNameStr[];
+extern WXDLLEXPORT_DATA(const char) wxCheckBoxNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxToggleButton: a push button

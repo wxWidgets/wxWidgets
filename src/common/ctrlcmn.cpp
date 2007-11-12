@@ -36,7 +36,7 @@
     #include "wx/utils.h"       // for wxStripMenuCodes()
 #endif
 
-const wxChar wxControlNameStr[] = wxT("control");
+const char wxControlNameStr[] = "control";
 
 // ============================================================================
 // implementation

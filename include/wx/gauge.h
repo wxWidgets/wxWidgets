@@ -41,7 +41,7 @@
     #define wxGAUGE_EMULATE_INDETERMINATE_MODE 0
 #endif
 
-extern WXDLLEXPORT_DATA(const wxChar) wxGaugeNameStr[];
+extern WXDLLEXPORT_DATA(const char) wxGaugeNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxGauge: a progress bar

@@ -93,7 +93,7 @@
     #include "dos.h"
 #endif
 
-extern WXDLLEXPORT_DATA(const wxChar) wxFileSelectorDefaultWildcardStr[];
+extern WXDLLEXPORT_DATA(const char) wxFileSelectorDefaultWildcardStr[];
 
 // If compiled under Windows, this macro can cause problems
 #ifdef GetFirstChild

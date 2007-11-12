@@ -25,8 +25,8 @@
 
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
-extern WXDLLEXPORT_DATA(const wxChar) wxGetTextFromUserPromptStr[];
-extern WXDLLEXPORT_DATA(const wxChar) wxGetPasswordFromUserPromptStr[];
+extern WXDLLEXPORT_DATA(const char) wxGetTextFromUserPromptStr[];
+extern WXDLLEXPORT_DATA(const char) wxGetPasswordFromUserPromptStr[];
 
 #define wxTextEntryDialogStyle (wxOK | wxCANCEL | wxCENTRE | wxWS_EX_VALIDATE_RECURSIVELY)
 

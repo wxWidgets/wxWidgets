@@ -18,7 +18,7 @@
 
 #include "wx/dialog.h"
 
-WXDLLEXPORT_DATA(extern const wxChar) wxMessageBoxCaptionStr[];
+WXDLLEXPORT_DATA(extern const char) wxMessageBoxCaptionStr[];
 
 class WXDLLEXPORT wxMessageDialogBase : public wxDialog
 {

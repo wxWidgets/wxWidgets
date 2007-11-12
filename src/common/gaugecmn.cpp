@@ -31,7 +31,7 @@
 
 #include "wx/gauge.h"
 
-const wxChar wxGaugeNameStr[] = wxT("gauge");
+const char wxGaugeNameStr[] = "gauge";
 
 // ============================================================================
 // implementation

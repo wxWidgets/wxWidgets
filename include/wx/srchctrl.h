@@ -37,7 +37,7 @@
 // constants
 // ----------------------------------------------------------------------------
 
-extern WXDLLEXPORT_DATA(const wxChar) wxSearchCtrlNameStr[];
+extern WXDLLEXPORT_DATA(const char) wxSearchCtrlNameStr[];
 
 BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, 1119)

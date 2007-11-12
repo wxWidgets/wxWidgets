@@ -19,8 +19,8 @@
 #include "wx/toplevel.h"      // the base class
 
 // the default names for various classs
-extern WXDLLEXPORT_DATA(const wxChar) wxStatusLineNameStr[];
-extern WXDLLEXPORT_DATA(const wxChar) wxToolBarNameStr[];
+extern WXDLLEXPORT_DATA(const char) wxStatusLineNameStr[];
+extern WXDLLEXPORT_DATA(const char) wxToolBarNameStr[];
 
 class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxMenuBar;

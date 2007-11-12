@@ -10,26 +10,6 @@
 #ifndef __GTKGAUGEH__
 #define __GTKGAUGEH__
 
-#include "wx/defs.h"
-
-#if wxUSE_GAUGE
-
-#include "wx/object.h"
-#include "wx/list.h"
-#include "wx/control.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_FWD_CORE wxGauge;
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern WXDLLIMPEXP_CORE const wxChar wxGaugeNameStr[];
-
 //-----------------------------------------------------------------------------
 // wxGaugeBox
 //-----------------------------------------------------------------------------
@@ -96,8 +76,6 @@ protected:
 private:
     DECLARE_DYNAMIC_CLASS(wxGauge)
 };
-
-#endif
 
 #endif
     // __GTKGAUGEH__

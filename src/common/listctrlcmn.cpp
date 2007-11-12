@@ -23,7 +23,7 @@
 
 #include "wx/listctrl.h"
 
-const wxChar wxListCtrlNameStr[] = wxT("listCtrl");
+const char wxListCtrlNameStr[] = "listCtrl";
 
 // ListCtrl events
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_BEGIN_DRAG)

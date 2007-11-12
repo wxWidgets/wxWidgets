@@ -39,45 +39,45 @@ wxAcceleratorTable wxNullAcceleratorTable;
 #endif // wxUSE_ACCEL
 
 // Default window names
-extern WXDLLEXPORT_DATA(const wxChar) wxButtonNameStr[] = wxT("button");
-extern WXDLLEXPORT_DATA(const wxChar) wxCheckBoxNameStr[] = wxT("check");
-extern WXDLLEXPORT_DATA(const wxChar) wxComboBoxNameStr[] = wxT("comboBox");
-extern WXDLLEXPORT_DATA(const wxChar) wxDialogNameStr[] = wxT("dialog");
-extern WXDLLEXPORT_DATA(const wxChar) wxFrameNameStr[] = wxT("frame");
-extern WXDLLEXPORT_DATA(const wxChar) wxStaticBoxNameStr[] = wxT("groupBox");
-extern WXDLLEXPORT_DATA(const wxChar) wxListBoxNameStr[] = wxT("listBox");
-extern WXDLLEXPORT_DATA(const wxChar) wxStaticLineNameStr[] = wxT("staticLine");
-extern WXDLLEXPORT_DATA(const wxChar) wxStaticTextNameStr[] = wxT("staticText");
-extern WXDLLEXPORT_DATA(const wxChar) wxStaticBitmapNameStr[] = wxT("staticBitmap");
-extern WXDLLEXPORT_DATA(const wxChar) wxNotebookNameStr[] = wxT("notebook");
-extern WXDLLEXPORT_DATA(const wxChar) wxPanelNameStr[] = wxT("panel");
-extern WXDLLEXPORT_DATA(const wxChar) wxRadioBoxNameStr[] = wxT("radioBox");
-extern WXDLLEXPORT_DATA(const wxChar) wxRadioButtonNameStr[] = wxT("radioButton");
-extern WXDLLEXPORT_DATA(const wxChar) wxBitmapRadioButtonNameStr[] = wxT("radioButton");
-extern WXDLLEXPORT_DATA(const wxChar) wxScrollBarNameStr[] = wxT("scrollBar");
-extern WXDLLEXPORT_DATA(const wxChar) wxSliderNameStr[] = wxT("slider");
-extern WXDLLEXPORT_DATA(const wxChar) wxStatusLineNameStr[] = wxT("status_line");
-extern WXDLLEXPORT_DATA(const wxChar) wxTextCtrlNameStr[] = wxT("text");
-extern WXDLLEXPORT_DATA(const wxChar) wxTreeCtrlNameStr[] = wxT("treeCtrl");
-extern WXDLLEXPORT_DATA(const wxChar) wxToolBarNameStr[] = wxT("toolbar");
+extern WXDLLEXPORT_DATA(const char) wxButtonNameStr[] = "button";
+extern WXDLLEXPORT_DATA(const char) wxCheckBoxNameStr[] = "check";
+extern WXDLLEXPORT_DATA(const char) wxComboBoxNameStr[] = "comboBox";
+extern WXDLLEXPORT_DATA(const char) wxDialogNameStr[] = "dialog";
+extern WXDLLEXPORT_DATA(const char) wxFrameNameStr[] = "frame";
+extern WXDLLEXPORT_DATA(const char) wxStaticBoxNameStr[] = "groupBox";
+extern WXDLLEXPORT_DATA(const char) wxListBoxNameStr[] = "listBox";
+extern WXDLLEXPORT_DATA(const char) wxStaticLineNameStr[] = "staticLine";
+extern WXDLLEXPORT_DATA(const char) wxStaticTextNameStr[] = "staticText";
+extern WXDLLEXPORT_DATA(const char) wxStaticBitmapNameStr[] = "staticBitmap";
+extern WXDLLEXPORT_DATA(const char) wxNotebookNameStr[] = "notebook";
+extern WXDLLEXPORT_DATA(const char) wxPanelNameStr[] = "panel";
+extern WXDLLEXPORT_DATA(const char) wxRadioBoxNameStr[] = "radioBox";
+extern WXDLLEXPORT_DATA(const char) wxRadioButtonNameStr[] = "radioButton";
+extern WXDLLEXPORT_DATA(const char) wxBitmapRadioButtonNameStr[] = "radioButton";
+extern WXDLLEXPORT_DATA(const char) wxScrollBarNameStr[] = "scrollBar";
+extern WXDLLEXPORT_DATA(const char) wxSliderNameStr[] = "slider";
+extern WXDLLEXPORT_DATA(const char) wxStatusLineNameStr[] = "status_line";
+extern WXDLLEXPORT_DATA(const char) wxTextCtrlNameStr[] = "text";
+extern WXDLLEXPORT_DATA(const char) wxTreeCtrlNameStr[] = "treeCtrl";
+extern WXDLLEXPORT_DATA(const char) wxToolBarNameStr[] = "toolbar";
 
 // Default messages
-extern WXDLLEXPORT_DATA(const wxChar) wxMessageBoxCaptionStr[] = wxT("Message");
-extern WXDLLEXPORT_DATA(const wxChar) wxFileSelectorPromptStr[] = wxT("Select a file");
-extern WXDLLEXPORT_DATA(const wxChar) wxDirSelectorPromptStr[] = wxT("Select a directory");
+extern WXDLLEXPORT_DATA(const char) wxMessageBoxCaptionStr[] = "Message";
+extern WXDLLEXPORT_DATA(const char) wxFileSelectorPromptStr[] = "Select a file";
+extern WXDLLEXPORT_DATA(const char) wxDirSelectorPromptStr[] = "Select a directory";
 
 // Other default strings
-extern WXDLLEXPORT_DATA(const wxChar) wxFileSelectorDefaultWildcardStr[] =
+extern WXDLLEXPORT_DATA(const char) wxFileSelectorDefaultWildcardStr[] =
 #if defined(__WXMSW__) || defined(__OS2__)
-    wxT("*.*")
+    "*.*"
 #else // Unix/Mac
-    wxT("*")
+    "*"
 #endif
     ;
-extern WXDLLEXPORT_DATA(const wxChar) wxDirDialogNameStr[] = wxT("wxDirCtrl");
-extern WXDLLEXPORT_DATA(const wxChar) wxDirDialogDefaultFolderStr[] = wxT("/");
+extern WXDLLEXPORT_DATA(const char) wxDirDialogNameStr[] = "wxDirCtrl";
+extern WXDLLEXPORT_DATA(const char) wxDirDialogDefaultFolderStr[] = "/";
 
-extern WXDLLEXPORT_DATA(const wxChar) wxFileDialogNameStr[] = wxT("filedlg");
+extern WXDLLEXPORT_DATA(const char) wxFileDialogNameStr[] = "filedlg";
 #if defined(__WXMSW__) || defined(__OS2__)
 WXDLLEXPORT_DATA(const wxChar *) wxUserResourceStr = wxT("TEXT");
 #endif

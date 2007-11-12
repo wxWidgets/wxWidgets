@@ -30,7 +30,7 @@ class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
 // global data
 //-----------------------------------------------------------------------------
 
-extern WXDLLEXPORT_DATA(const wxChar) wxStatusLineNameStr[];
+extern WXDLLEXPORT_DATA(const char) wxStatusLineNameStr[];
 
 //-----------------------------------------------------------------------------
 // wxMDIParentFrame

@@ -29,7 +29,7 @@
 #define wxST_ELLIPSIZE_END         0x0010
 
 
-extern WXDLLEXPORT_DATA(const wxChar) wxStaticTextNameStr[];
+extern WXDLLEXPORT_DATA(const char) wxStaticTextNameStr[];
 
 class WXDLLEXPORT wxStaticTextBase : public wxControl
 {

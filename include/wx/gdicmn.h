@@ -829,7 +829,7 @@ extern WXDLLEXPORT_DATA(wxIconBundle) wxNullIconBundle;
 
 extern WXDLLEXPORT_DATA(wxColourDatabase*)  wxTheColourDatabase;
 
-extern WXDLLEXPORT_DATA(const wxChar) wxPanelNameStr[];
+extern WXDLLEXPORT_DATA(const char) wxPanelNameStr[];
 
 extern WXDLLEXPORT_DATA(const wxSize) wxDefaultSize;
 extern WXDLLEXPORT_DATA(const wxPoint) wxDefaultPosition;

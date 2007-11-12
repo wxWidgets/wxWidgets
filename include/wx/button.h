@@ -47,7 +47,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 
-extern WXDLLEXPORT_DATA(const wxChar) wxButtonNameStr[];
+extern WXDLLEXPORT_DATA(const char) wxButtonNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxButton: a push button

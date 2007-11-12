@@ -20,9 +20,9 @@
 // constants
 // ----------------------------------------------------------------------------
 
-extern WXDLLEXPORT_DATA(const wxChar) wxDirDialogNameStr[];
-extern WXDLLEXPORT_DATA(const wxChar) wxDirDialogDefaultFolderStr[];
-extern WXDLLEXPORT_DATA(const wxChar) wxDirSelectorPromptStr[];
+extern WXDLLEXPORT_DATA(const char) wxDirDialogNameStr[];
+extern WXDLLEXPORT_DATA(const char) wxDirDialogDefaultFolderStr[];
+extern WXDLLEXPORT_DATA(const char) wxDirSelectorPromptStr[];
 
 #define wxDD_CHANGE_DIR         0x0100
 #define wxDD_DIR_MUST_EXIST     0x0200

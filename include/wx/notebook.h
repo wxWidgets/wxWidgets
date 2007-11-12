@@ -54,7 +54,7 @@ enum
 
 typedef wxWindow wxNotebookPage;  // so far, any window can be a page
 
-extern WXDLLEXPORT_DATA(const wxChar) wxNotebookNameStr[];
+extern WXDLLEXPORT_DATA(const char) wxNotebookNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxNotebookBase: define wxNotebook interface
