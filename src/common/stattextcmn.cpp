@@ -37,8 +37,6 @@
     #include "wx/containr.h"
 #endif
 
-#if wxUSE_STATTEXT
-
 const wxChar *wxMarkupEntities[][wxMARKUP_ENTITY_MAX] =
 {
     // the entities handled by SetLabel() when wxST_MARKUP is used and their referenced string
@@ -47,6 +45,7 @@ const wxChar *wxMarkupEntities[][wxMARKUP_ENTITY_MAX] =
     { wxT("&"),     wxT("<"),    wxT(">"),    wxT("'"),      wxT("\"")     }
 };
 
+#if wxUSE_STATTEXT
 
 // ----------------------------------------------------------------------------
 // wxTextWrapper

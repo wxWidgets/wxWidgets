@@ -25,6 +25,7 @@
 #include "wx/accel.h"
 #include "wx/stockitem.h"
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/mnemonics.h"
 
 // FIXME: is this right? somehow I don't think so (VZ)
 
@@ -46,79 +47,6 @@ static const int wxGTK_TITLE_ID = -3;
 #if wxUSE_ACCEL
 static wxString GetGtkHotKey( const wxMenuItem& item );
 #endif
-
-//-----------------------------------------------------------------------------
-// idle system
-//-----------------------------------------------------------------------------
-
-static wxString wxReplaceUnderscore( const wxString& title )
-{
-    // GTK 1.2 wants to have "_" instead of "&" for accelerators
-    wxString str;
-
-    for ( wxString::const_iterator pc = title.begin(); pc != title.end(); ++pc )
-    {
-        if ((*pc == wxT('&')) && (pc+1 != title.end()) && (*(pc+1) == wxT('&')))
-        {
-            // "&" is doubled to indicate "&" instead of accelerator
-            ++pc;
-            str << wxT('&');
-        }
-        else if (*pc == wxT('&'))
-        {
-            str << wxT('_');
-        }
-        else
-        {
-            if ( *pc == wxT('_') )
-            {
-                // underscores must be doubled to prevent them from being
-                // interpreted as accelerator character prefix by GTK
-                str << *pc;
-            }
-
-            str << *pc;
-        }
-    }
-
-    // wxPrintf( wxT("before %s after %s\n"), title.c_str(), str.c_str() );
-
-    return str;
-}
-
-static wxString wxConvertFromGTKToWXLabel(const wxString& gtkLabel)
-{
-    wxString label;
-    for ( const wxChar *pc = gtkLabel.c_str(); *pc; pc++ )
-    {
-        // '_' is the escape character for GTK+.
-
-        if ( *pc == wxT('_') && *(pc+1) == wxT('_'))
-        {
-            // An underscore was escaped.
-            label += wxT('_');
-            pc++;
-        }
-        else if ( *pc == wxT('_') )
-        {
-            // Convert GTK+ hotkey symbol to wxWidgets/Windows standard
-            label += wxT('&');
-        }
-        else if ( *pc == wxT('&') )
-        {
-            // Double the ampersand to escape it as far as wxWidgets is concerned
-            label += wxT("&&");
-        }
-        else
-        {
-            // don't remove ampersands '&' since if we have them in the menu title
-            // it means that they were doubled to indicate "&" instead of accelerator
-            label += *pc;
-        }
-    }
-
-    return label;
-}
 
 //-----------------------------------------------------------------------------
 // activate message from GTK
@@ -367,7 +295,7 @@ bool wxMenuBar::Append( wxMenu *menu, const wxString &title )
 
 bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title, int pos)
 {
-    wxString str( wxReplaceUnderscore( title ) );
+    const wxString str(wxConvertMnemonicsToGTK(title));
 
     // This doesn't have much effect right now.
     menu->SetTitle( str );
@@ -443,7 +371,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
 static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString, const wxString &itemString )
 {
-    if (wxMenuItem::GetLabelText(wxConvertFromGTKToWXLabel(menu->GetTitle())) == wxMenuItem::GetLabelText(menuString))
+    if (wxMenuItem::GetLabelText(wxConvertMnemonicsFromGTK(menu->GetTitle())) == wxMenuItem::GetLabelText(menuString))
     {
         int res = menu->FindItem( itemString );
         if (res != wxNOT_FOUND)
@@ -536,7 +464,7 @@ wxString wxMenuBar::GetMenuLabel( size_t pos ) const
 
     wxMenu* menu = node->GetData();
 
-    return wxConvertFromGTKToWXLabel(menu->GetTitle());
+    return wxConvertMnemonicsFromGTK(menu->GetTitle());
 }
 
 void wxMenuBar::SetMenuLabel( size_t pos, const wxString& label )
@@ -547,7 +475,7 @@ void wxMenuBar::SetMenuLabel( size_t pos, const wxString& label )
 
     wxMenu* menu = node->GetData();
 
-    const wxString str( wxReplaceUnderscore( label ) );
+    const wxString str(wxConvertMnemonicsToGTK(label));
 
     menu->SetTitle( str );
 
@@ -785,9 +713,9 @@ wxString wxMenuItemBase::GetLabelText(const wxString& text)
 
 wxString wxMenuItem::GetItemLabel() const
 {
-    wxString label = wxConvertFromGTKToWXLabel(m_text);
+    wxString label = wxConvertMnemonicsFromGTK(m_text);
     if (!m_hotKey.IsEmpty())
-        label = label + wxT("\t") + m_hotKey;
+        label << "\t" << m_hotKey;
     return label;
 }
 

@@ -4524,6 +4524,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_listbox.o \
 	monodll_mdi.o \
 	monodll_menu.o \
+	monodll_mnemonics.o \
 	monodll_msgdlg.o \
 	monodll_notebook.o \
 	monodll_radiobox.o \
@@ -6403,6 +6404,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_listbox.o \
 	monolib_mdi.o \
 	monolib_menu.o \
+	monolib_mnemonics.o \
 	monolib_msgdlg.o \
 	monolib_notebook.o \
 	monolib_radiobox.o \
@@ -8559,6 +8561,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_listbox.o \
 	coredll_mdi.o \
 	coredll_menu.o \
+	coredll_mnemonics.o \
 	coredll_msgdlg.o \
 	coredll_notebook.o \
 	coredll_radiobox.o \
@@ -10053,6 +10056,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_listbox.o \
 	corelib_mdi.o \
 	corelib_menu.o \
+	corelib_mnemonics.o \
 	corelib_msgdlg.o \
 	corelib_notebook.o \
 	corelib_radiobox.o \
@@ -13734,6 +13738,9 @@ monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
 
 monodll_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
+
+monodll_mnemonics.o: $(srcdir)/src/gtk/mnemonics.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/mnemonics.cpp
 
 monodll_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(MONODLL_ODEP)
 	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/gtk/treeentry_gtk.c
@@ -18186,6 +18193,9 @@ monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
 
 monolib_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
+
+monolib_mnemonics.o: $(srcdir)/src/gtk/mnemonics.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/mnemonics.cpp
 
 monolib_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(MONOLIB_ODEP)
 	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/gtk/treeentry_gtk.c
@@ -23965,6 +23975,9 @@ coredll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(COREDLL_ODEP)
 coredll_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
 
+coredll_mnemonics.o: $(srcdir)/src/gtk/mnemonics.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/mnemonics.cpp
+
 coredll_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(COREDLL_ODEP)
 	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $(srcdir)/src/gtk/treeentry_gtk.c
 
@@ -27033,6 +27046,9 @@ corelib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(CORELIB_ODEP)
 
 corelib_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
+
+corelib_mnemonics.o: $(srcdir)/src/gtk/mnemonics.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/mnemonics.cpp
 
 corelib_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(CORELIB_ODEP)
 	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $(srcdir)/src/gtk/treeentry_gtk.c

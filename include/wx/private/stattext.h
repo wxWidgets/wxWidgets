@@ -67,6 +67,8 @@ private:
     bool m_eol;
 };
 
+#endif // wxUSE_STATTEXT
+
 enum
 {
     wxMARKUP_ENTITY_AMP,
@@ -91,7 +93,5 @@ enum
 //    wxMarkupEntities[wxMARKUP_ELEMENT_VALUE][wxMARKUP_ENTITY_GT] == ">"
 //
 extern const wxChar *wxMarkupEntities[wxMARKUP_ELEMENT_MAX][wxMARKUP_ENTITY_MAX];
-
-#endif // wxUSE_STATTEXT
 
 #endif // _WX_PRIVATE_STATTEXT_H_

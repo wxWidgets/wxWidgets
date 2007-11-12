@@ -1056,6 +1056,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/listbox.cpp
     src/gtk/mdi.cpp
     src/gtk/menu.cpp
+    src/gtk/mnemonics.cpp
     src/gtk/msgdlg.cpp
     src/gtk/notebook.cpp
     src/gtk/radiobox.cpp
