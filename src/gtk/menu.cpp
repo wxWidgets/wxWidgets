@@ -40,7 +40,11 @@
 // we use normal item but with a special id for the menu title
 static const int wxGTK_TITLE_ID = -3;
 
-extern "C" static void gtk_menu_clicked_callback(GtkWidget *widget, wxMenu *menu);
+// forward declare it as it's used by wxMenuBar too when using Hildon
+extern "C"
+{
+    static void gtk_menu_clicked_callback(GtkWidget *widget, wxMenu *menu);
+}
 
 //-----------------------------------------------------------------------------
 // idle system
