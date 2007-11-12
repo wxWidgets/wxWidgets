@@ -40,6 +40,8 @@ wxUniChar::value_type wxUniChar::FromHi8bit(char c)
 {
 #if wxUSE_UTF8_LOCALE_ONLY
     wxFAIL_MSG( "invalid UTF-8 character" );
+    wxUnusedVar(c);
+
     return wxT('?'); // FIXME-UTF8: what to use as failure character?
 #else
     wchar_t buf[2];
@@ -57,6 +59,8 @@ char wxUniChar::ToHi8bit(wxUniChar::value_type c)
 {
 #if wxUSE_UTF8_LOCALE_ONLY
     wxFAIL_MSG( "character cannot be converted to single UTF-8 byte" );
+    wxUnusedVar(c);
+
     return '?'; // FIXME-UTF8: what to use as failure character?
 #else
     wchar_t in = c;
