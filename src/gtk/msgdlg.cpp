@@ -27,6 +27,10 @@
 #include "wx/gtk/private.h"
 #include <gtk/gtk.h>
 
+#if wxUSE_LIBHILDON
+    #include <hildon-widgets/hildon-note.h>
+#endif // wxUSE_LIBHILDON
+
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
 
 wxMessageDialog::wxMessageDialog(wxWindow *parent,
@@ -43,6 +47,32 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
 
 void wxMessageDialog::GTKCreateMsgDialog()
 {
+    GtkWindow * const parent = m_parent ? GTK_WINDOW(m_parent->m_widget) : NULL;
+
+#if wxUSE_LIBHILDON
+    const char *stockIcon;
+    if ( m_dialogStyle & wxICON_ERROR )
+        stockIcon = "qgn_note_gene_syserror";
+    else if ( m_dialogStyle & wxICON_EXCLAMATION )
+        stockIcon = "qgn_note_gene_syswarning";
+    else if ( m_dialogStyle & wxICON_INFORMATION )
+        stockIcon = "qgn_note_info";
+    else if ( m_dialogStyle & wxICON_QUESTION )
+        stockIcon = "qgn_note_confirm";
+    else
+        stockIcon = "";
+
+    // there is no generic note creation function in public API so we have no
+    // choice but to use g_object_new() directly
+    m_widget = (GtkWidget *)g_object_new
+               (
+                HILDON_TYPE_NOTE,
+                "note_type", HILDON_NOTE_CONFIRMATION_BUTTON_TYPE,
+                "description", (const char *)GetFullMessage().utf8_str(),
+                "icon", stockIcon,
+                NULL
+               );
+#else // !wxUSE_LIBHILDON
     GtkMessageType type = GTK_MESSAGE_ERROR;
     GtkButtonsType buttons = GTK_BUTTONS_OK;
 
@@ -85,13 +115,12 @@ void wxMessageDialog::GTKCreateMsgDialog()
         needsExtMessage = true;
     }
     else // extended message not needed or not supported
-#endif // GTK+ 2.4+
+#endif // GTK+ 2.6+
     {
         message = GetFullMessage();
     }
 
-    m_widget = gtk_message_dialog_new(m_parent ? GTK_WINDOW(m_parent->m_widget)
-                                              : NULL,
+    m_widget = gtk_message_dialog_new(parent,
                                       GTK_DIALOG_MODAL,
                                       type,
                                       buttons,
@@ -108,31 +137,49 @@ void wxMessageDialog::GTKCreateMsgDialog()
             (const char *)wxGTK_CONV(m_extendedMessage)
         );
     }
-#endif // GTK+ 2.4+
+#endif // GTK+ 2.6+
+#endif // wxUSE_LIBHILDON/!wxUSE_LIBHILDON
 
     if (m_caption != wxMessageBoxCaptionStr)
         gtk_window_set_title(GTK_WINDOW(m_widget), wxGTK_CONV(m_caption));
 
-    if (m_dialogStyle & wxYES_NO)
+    // we need to add dialogs manually when using Yes/No/Cancel dialog as GTK+
+    // doesn't support it natively and when using Hildon we add all the buttons
+    // manually as it doesn't support too many of the combinations we have
+    GtkDialog * const dlg = GTK_DIALOG(m_widget);
+    if ( m_dialogStyle & wxYES_NO )
     {
-        if (m_dialogStyle & wxCANCEL)
+        if ( m_dialogStyle & wxCANCEL )
         {
-            gtk_dialog_add_button(GTK_DIALOG(m_widget), GTK_STOCK_NO,
-                                  GTK_RESPONSE_NO);
-            gtk_dialog_add_button(GTK_DIALOG(m_widget), GTK_STOCK_CANCEL,
-                                  GTK_RESPONSE_CANCEL);
-            gtk_dialog_add_button(GTK_DIALOG(m_widget), GTK_STOCK_YES,
-                                  GTK_RESPONSE_YES);
+            gtk_dialog_add_button(dlg, GTK_STOCK_NO, GTK_RESPONSE_NO);
+            gtk_dialog_add_button(dlg, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+            gtk_dialog_add_button(dlg, GTK_STOCK_YES, GTK_RESPONSE_YES);
         }
-        if (m_dialogStyle & wxNO_DEFAULT)
-            gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_NO);
-        else
-            gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_YES);
-    }
+#if wxUSE_LIBHILDON
+        else // just Yes/No
+        {
+            gtk_dialog_add_button(dlg, GTK_STOCK_NO, GTK_RESPONSE_NO);
+            gtk_dialog_add_button(dlg, GTK_STOCK_YES, GTK_RESPONSE_YES);
+        }
+#endif // wxUSE_LIBHILDON
 
-    if (m_parent)
-        gtk_window_set_transient_for(GTK_WINDOW(m_widget),
-                                     GTK_WINDOW(m_parent->m_widget));
+        gtk_dialog_set_default_response(dlg,
+                                        m_dialogStyle & wxNO_DEFAULT
+                                            ? GTK_RESPONSE_NO
+                                            : GTK_RESPONSE_YES);
+    }
+#if wxUSE_LIBHILDON
+    else // Ok or Ok/Cancel dialog
+    {
+        gtk_dialog_add_button(dlg, GTK_STOCK_OK, GTK_RESPONSE_OK);
+        if ( m_dialogStyle & wxCANCEL )
+            gtk_dialog_add_button(dlg, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+    }
+#endif // wxUSE_LIBHILDON
+
+    // VZ: isn't this done by GTK+ itself?
+    if (parent)
+        gtk_window_set_transient_for(GTK_WINDOW(m_widget), parent);
 }
 
 int wxMessageDialog::ShowModal()
