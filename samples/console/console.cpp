@@ -4194,7 +4194,6 @@ static void TestSemaphore()
     #include "wx/snglinst.h"
 #endif // TEST_SNGLINST
 
-#include "wx/filename.h"
 int main(int argc, char **argv)
 {
 #if wxUSE_UNICODE
