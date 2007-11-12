@@ -24,6 +24,7 @@ extern WXDLLEXPORT_DATA(const wxChar) wxToolBarNameStr[];
 
 class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxMenuBar;
+class WXDLLIMPEXP_FWD_CORE wxMenuItem;
 class WXDLLIMPEXP_FWD_CORE wxStatusBar;
 class WXDLLIMPEXP_FWD_CORE wxToolBar;
 
