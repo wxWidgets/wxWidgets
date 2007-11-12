@@ -193,6 +193,7 @@ struct wxCmdLineParserData
     void SetArguments(int argc, char **argv);
 #if wxUSE_UNICODE
     void SetArguments(int argc, wxChar **argv);
+    void SetArguments(int argc, const wxCmdLineArgsArray& argv);
 #endif // wxUSE_UNICODE
     void SetArguments(const wxString& cmdline);
 
@@ -238,6 +239,12 @@ void wxCmdLineParserData::SetArguments(int argc, wxChar **argv)
     {
         m_arguments.push_back(argv[n]);
     }
+}
+
+void wxCmdLineParserData::SetArguments(int WXUNUSED(argc),
+                                       const wxCmdLineArgsArray& argv)
+{
+    m_arguments = argv.GetArguments();
 }
 
 #endif // wxUSE_UNICODE
@@ -306,6 +313,11 @@ void wxCmdLineParser::SetCmdLine(int argc, char **argv)
 #if wxUSE_UNICODE
 
 void wxCmdLineParser::SetCmdLine(int argc, wxChar **argv)
+{
+    m_data->SetArguments(argc, argv);
+}
+
+void wxCmdLineParser::SetCmdLine(int argc, const wxCmdLineArgsArray& argv)
 {
     m_data->SetArguments(argc, argv);
 }

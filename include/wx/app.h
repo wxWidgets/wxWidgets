@@ -19,6 +19,7 @@
 
 #include "wx/event.h"       // for the base class
 #include "wx/build.h"
+#include "wx/cmdargs.h"     // for wxCmdLineArgsArray used by wxApp::argv
 #include "wx/init.h"        // we must declare wxEntry()
 #include "wx/intl.h"        // for wxLayoutDirection
 
@@ -316,8 +317,17 @@ public:
 
 
     // command line arguments (public for backwards compatibility)
-    int      argc;
-    wxChar **argv;
+    int argc;
+
+    // this object is implicitly convertible to either "char**" (traditional
+    // type of argv parameter of main()) or to "wchar_t **" (for compatibility
+    // with Unicode build in previous wx versions and because the command line
+    // can, in pr
+#if wxUSE_UNICODE
+    wxCmdLineArgsArray argv;
+#else
+    char **argv;
+#endif
 
 protected:
     // the function which creates the traits object when GetTraits() needs it

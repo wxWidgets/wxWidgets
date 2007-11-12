@@ -1519,6 +1519,10 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_helpwin.o \
 	$(OBJS)\monodll_automtn.o \
 	$(OBJS)\monodll_uuid.o \
+	$(OBJS)\monodll_clrpickerg.o \
+	$(OBJS)\monodll_collpaneg.o \
+	$(OBJS)\monodll_filepickerg.o \
+	$(OBJS)\monodll_fontpickerg.o \
 	$(OBJS)\monodll_statusbr.o \
 	$(OBJS)\monodll_prntdlgg.o \
 	$(OBJS)\monodll_accel.o \
@@ -1668,15 +1672,11 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_buttonbar.o \
 	$(OBJS)\monodll_choicdgg.o \
 	$(OBJS)\monodll_choicbkg.o \
-	$(OBJS)\monodll_clrpickerg.o \
-	$(OBJS)\monodll_collpaneg.o \
 	$(OBJS)\monodll_combog.o \
 	$(OBJS)\monodll_dcpsg.o \
 	$(OBJS)\monodll_dirctrlg.o \
 	$(OBJS)\monodll_dragimgg.o \
 	$(OBJS)\monodll_filectrlg.o \
-	$(OBJS)\monodll_filepickerg.o \
-	$(OBJS)\monodll_fontpickerg.o \
 	$(OBJS)\monodll_listbkg.o \
 	$(OBJS)\monodll_logg.o \
 	$(OBJS)\monodll_numdlgg.o \
@@ -1751,11 +1751,16 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_automtn.o \
 	$(OBJS)\monodll_uuid.o \
 	$(OBJS)\monodll_accel.o \
+	$(OBJS)\monodll_animateg.o \
+	$(OBJS)\monodll_clrpickerg.o \
+	$(OBJS)\monodll_collpaneg.o \
 	$(OBJS)\monodll_colrdlgg.o \
 	$(OBJS)\monodll_dirdlgg.o \
 	$(OBJS)\monodll_fdrepdlg.o \
 	$(OBJS)\monodll_filedlgg.o \
+	$(OBJS)\monodll_filepickerg.o \
 	$(OBJS)\monodll_fontdlgg.o \
+	$(OBJS)\monodll_fontpickerg.o \
 	$(OBJS)\monodll_listctrl.o \
 	$(OBJS)\monodll_mdig.o \
 	$(OBJS)\monodll_msgdlgg.o \
@@ -1901,15 +1906,11 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_buttonbar.o \
 	$(OBJS)\monodll_choicdgg.o \
 	$(OBJS)\monodll_choicbkg.o \
-	$(OBJS)\monodll_clrpickerg.o \
-	$(OBJS)\monodll_collpaneg.o \
 	$(OBJS)\monodll_combog.o \
 	$(OBJS)\monodll_dcpsg.o \
 	$(OBJS)\monodll_dirctrlg.o \
 	$(OBJS)\monodll_dragimgg.o \
 	$(OBJS)\monodll_filectrlg.o \
-	$(OBJS)\monodll_filepickerg.o \
-	$(OBJS)\monodll_fontpickerg.o \
 	$(OBJS)\monodll_listbkg.o \
 	$(OBJS)\monodll_logg.o \
 	$(OBJS)\monodll_numdlgg.o \
@@ -1937,7 +1938,6 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavcmn.o \
 	$(OBJS)\monodll_hyperlnkcmn.o \
 	$(OBJS)\monodll_aboutdlgg.o \
-	$(OBJS)\monodll_animateg.o \
 	$(OBJS)\monodll_bmpcboxg.o \
 	$(OBJS)\monodll_calctrl.o \
 	$(OBJS)\monodll_datavgen.o \
@@ -1956,6 +1956,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_tipdlg.o \
 	$(OBJS)\monodll_wizard.o \
 	$(OBJS)\monodll_taskbarcmn.o \
+	$(OBJS)\monodll_animateg.o \
 	$(OBJS)\monodll_aboutdlg.o \
 	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
@@ -1968,7 +1969,6 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavcmn.o \
 	$(OBJS)\monodll_hyperlnkcmn.o \
 	$(OBJS)\monodll_aboutdlgg.o \
-	$(OBJS)\monodll_animateg.o \
 	$(OBJS)\monodll_bmpcboxg.o \
 	$(OBJS)\monodll_calctrl.o \
 	$(OBJS)\monodll_datavgen.o \
@@ -1987,6 +1987,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_tipdlg.o \
 	$(OBJS)\monodll_wizard.o \
 	$(OBJS)\monodll_taskbarcmn.o \
+	$(OBJS)\monodll_animateg.o \
 	$(OBJS)\monodll_aboutdlg.o \
 	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
@@ -2163,6 +2164,10 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_helpwin.o \
 	$(OBJS)\monolib_automtn.o \
 	$(OBJS)\monolib_uuid.o \
+	$(OBJS)\monolib_clrpickerg.o \
+	$(OBJS)\monolib_collpaneg.o \
+	$(OBJS)\monolib_filepickerg.o \
+	$(OBJS)\monolib_fontpickerg.o \
 	$(OBJS)\monolib_statusbr.o \
 	$(OBJS)\monolib_prntdlgg.o \
 	$(OBJS)\monolib_accel.o \
@@ -2312,15 +2317,11 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_buttonbar.o \
 	$(OBJS)\monolib_choicdgg.o \
 	$(OBJS)\monolib_choicbkg.o \
-	$(OBJS)\monolib_clrpickerg.o \
-	$(OBJS)\monolib_collpaneg.o \
 	$(OBJS)\monolib_combog.o \
 	$(OBJS)\monolib_dcpsg.o \
 	$(OBJS)\monolib_dirctrlg.o \
 	$(OBJS)\monolib_dragimgg.o \
 	$(OBJS)\monolib_filectrlg.o \
-	$(OBJS)\monolib_filepickerg.o \
-	$(OBJS)\monolib_fontpickerg.o \
 	$(OBJS)\monolib_listbkg.o \
 	$(OBJS)\monolib_logg.o \
 	$(OBJS)\monolib_numdlgg.o \
@@ -2395,11 +2396,16 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_automtn.o \
 	$(OBJS)\monolib_uuid.o \
 	$(OBJS)\monolib_accel.o \
+	$(OBJS)\monolib_animateg.o \
+	$(OBJS)\monolib_clrpickerg.o \
+	$(OBJS)\monolib_collpaneg.o \
 	$(OBJS)\monolib_colrdlgg.o \
 	$(OBJS)\monolib_dirdlgg.o \
 	$(OBJS)\monolib_fdrepdlg.o \
 	$(OBJS)\monolib_filedlgg.o \
+	$(OBJS)\monolib_filepickerg.o \
 	$(OBJS)\monolib_fontdlgg.o \
+	$(OBJS)\monolib_fontpickerg.o \
 	$(OBJS)\monolib_listctrl.o \
 	$(OBJS)\monolib_mdig.o \
 	$(OBJS)\monolib_msgdlgg.o \
@@ -2545,15 +2551,11 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_buttonbar.o \
 	$(OBJS)\monolib_choicdgg.o \
 	$(OBJS)\monolib_choicbkg.o \
-	$(OBJS)\monolib_clrpickerg.o \
-	$(OBJS)\monolib_collpaneg.o \
 	$(OBJS)\monolib_combog.o \
 	$(OBJS)\monolib_dcpsg.o \
 	$(OBJS)\monolib_dirctrlg.o \
 	$(OBJS)\monolib_dragimgg.o \
 	$(OBJS)\monolib_filectrlg.o \
-	$(OBJS)\monolib_filepickerg.o \
-	$(OBJS)\monolib_fontpickerg.o \
 	$(OBJS)\monolib_listbkg.o \
 	$(OBJS)\monolib_logg.o \
 	$(OBJS)\monolib_numdlgg.o \
@@ -2581,7 +2583,6 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavcmn.o \
 	$(OBJS)\monolib_hyperlnkcmn.o \
 	$(OBJS)\monolib_aboutdlgg.o \
-	$(OBJS)\monolib_animateg.o \
 	$(OBJS)\monolib_bmpcboxg.o \
 	$(OBJS)\monolib_calctrl.o \
 	$(OBJS)\monolib_datavgen.o \
@@ -2600,6 +2601,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_tipdlg.o \
 	$(OBJS)\monolib_wizard.o \
 	$(OBJS)\monolib_taskbarcmn.o \
+	$(OBJS)\monolib_animateg.o \
 	$(OBJS)\monolib_aboutdlg.o \
 	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
@@ -2612,7 +2614,6 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavcmn.o \
 	$(OBJS)\monolib_hyperlnkcmn.o \
 	$(OBJS)\monolib_aboutdlgg.o \
-	$(OBJS)\monolib_animateg.o \
 	$(OBJS)\monolib_bmpcboxg.o \
 	$(OBJS)\monolib_calctrl.o \
 	$(OBJS)\monolib_datavgen.o \
@@ -2631,6 +2632,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_tipdlg.o \
 	$(OBJS)\monolib_wizard.o \
 	$(OBJS)\monolib_taskbarcmn.o \
+	$(OBJS)\monolib_animateg.o \
 	$(OBJS)\monolib_aboutdlg.o \
 	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
@@ -2732,6 +2734,10 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_helpwin.o \
 	$(OBJS)\coredll_automtn.o \
 	$(OBJS)\coredll_uuid.o \
+	$(OBJS)\coredll_clrpickerg.o \
+	$(OBJS)\coredll_collpaneg.o \
+	$(OBJS)\coredll_filepickerg.o \
+	$(OBJS)\coredll_fontpickerg.o \
 	$(OBJS)\coredll_statusbr.o \
 	$(OBJS)\coredll_prntdlgg.o \
 	$(OBJS)\coredll_accel.o \
@@ -2881,15 +2887,11 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_buttonbar.o \
 	$(OBJS)\coredll_choicdgg.o \
 	$(OBJS)\coredll_choicbkg.o \
-	$(OBJS)\coredll_clrpickerg.o \
-	$(OBJS)\coredll_collpaneg.o \
 	$(OBJS)\coredll_combog.o \
 	$(OBJS)\coredll_dcpsg.o \
 	$(OBJS)\coredll_dirctrlg.o \
 	$(OBJS)\coredll_dragimgg.o \
 	$(OBJS)\coredll_filectrlg.o \
-	$(OBJS)\coredll_filepickerg.o \
-	$(OBJS)\coredll_fontpickerg.o \
 	$(OBJS)\coredll_listbkg.o \
 	$(OBJS)\coredll_logg.o \
 	$(OBJS)\coredll_numdlgg.o \
@@ -2964,11 +2966,16 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_automtn.o \
 	$(OBJS)\coredll_uuid.o \
 	$(OBJS)\coredll_accel.o \
+	$(OBJS)\coredll_animateg.o \
+	$(OBJS)\coredll_clrpickerg.o \
+	$(OBJS)\coredll_collpaneg.o \
 	$(OBJS)\coredll_colrdlgg.o \
 	$(OBJS)\coredll_dirdlgg.o \
 	$(OBJS)\coredll_fdrepdlg.o \
 	$(OBJS)\coredll_filedlgg.o \
+	$(OBJS)\coredll_filepickerg.o \
 	$(OBJS)\coredll_fontdlgg.o \
+	$(OBJS)\coredll_fontpickerg.o \
 	$(OBJS)\coredll_listctrl.o \
 	$(OBJS)\coredll_mdig.o \
 	$(OBJS)\coredll_msgdlgg.o \
@@ -3114,15 +3121,11 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_buttonbar.o \
 	$(OBJS)\coredll_choicdgg.o \
 	$(OBJS)\coredll_choicbkg.o \
-	$(OBJS)\coredll_clrpickerg.o \
-	$(OBJS)\coredll_collpaneg.o \
 	$(OBJS)\coredll_combog.o \
 	$(OBJS)\coredll_dcpsg.o \
 	$(OBJS)\coredll_dirctrlg.o \
 	$(OBJS)\coredll_dragimgg.o \
 	$(OBJS)\coredll_filectrlg.o \
-	$(OBJS)\coredll_filepickerg.o \
-	$(OBJS)\coredll_fontpickerg.o \
 	$(OBJS)\coredll_listbkg.o \
 	$(OBJS)\coredll_logg.o \
 	$(OBJS)\coredll_numdlgg.o \
@@ -3204,6 +3207,10 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_helpwin.o \
 	$(OBJS)\corelib_automtn.o \
 	$(OBJS)\corelib_uuid.o \
+	$(OBJS)\corelib_clrpickerg.o \
+	$(OBJS)\corelib_collpaneg.o \
+	$(OBJS)\corelib_filepickerg.o \
+	$(OBJS)\corelib_fontpickerg.o \
 	$(OBJS)\corelib_statusbr.o \
 	$(OBJS)\corelib_prntdlgg.o \
 	$(OBJS)\corelib_accel.o \
@@ -3353,15 +3360,11 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_buttonbar.o \
 	$(OBJS)\corelib_choicdgg.o \
 	$(OBJS)\corelib_choicbkg.o \
-	$(OBJS)\corelib_clrpickerg.o \
-	$(OBJS)\corelib_collpaneg.o \
 	$(OBJS)\corelib_combog.o \
 	$(OBJS)\corelib_dcpsg.o \
 	$(OBJS)\corelib_dirctrlg.o \
 	$(OBJS)\corelib_dragimgg.o \
 	$(OBJS)\corelib_filectrlg.o \
-	$(OBJS)\corelib_filepickerg.o \
-	$(OBJS)\corelib_fontpickerg.o \
 	$(OBJS)\corelib_listbkg.o \
 	$(OBJS)\corelib_logg.o \
 	$(OBJS)\corelib_numdlgg.o \
@@ -3436,11 +3439,16 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_automtn.o \
 	$(OBJS)\corelib_uuid.o \
 	$(OBJS)\corelib_accel.o \
+	$(OBJS)\corelib_animateg.o \
+	$(OBJS)\corelib_clrpickerg.o \
+	$(OBJS)\corelib_collpaneg.o \
 	$(OBJS)\corelib_colrdlgg.o \
 	$(OBJS)\corelib_dirdlgg.o \
 	$(OBJS)\corelib_fdrepdlg.o \
 	$(OBJS)\corelib_filedlgg.o \
+	$(OBJS)\corelib_filepickerg.o \
 	$(OBJS)\corelib_fontdlgg.o \
+	$(OBJS)\corelib_fontpickerg.o \
 	$(OBJS)\corelib_listctrl.o \
 	$(OBJS)\corelib_mdig.o \
 	$(OBJS)\corelib_msgdlgg.o \
@@ -3586,15 +3594,11 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_buttonbar.o \
 	$(OBJS)\corelib_choicdgg.o \
 	$(OBJS)\corelib_choicbkg.o \
-	$(OBJS)\corelib_clrpickerg.o \
-	$(OBJS)\corelib_collpaneg.o \
 	$(OBJS)\corelib_combog.o \
 	$(OBJS)\corelib_dcpsg.o \
 	$(OBJS)\corelib_dirctrlg.o \
 	$(OBJS)\corelib_dragimgg.o \
 	$(OBJS)\corelib_filectrlg.o \
-	$(OBJS)\corelib_filepickerg.o \
-	$(OBJS)\corelib_fontpickerg.o \
 	$(OBJS)\corelib_listbkg.o \
 	$(OBJS)\corelib_logg.o \
 	$(OBJS)\corelib_numdlgg.o \
@@ -3636,7 +3640,6 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_datavcmn.o \
 	$(OBJS)\advdll_hyperlnkcmn.o \
 	$(OBJS)\advdll_aboutdlgg.o \
-	$(OBJS)\advdll_animateg.o \
 	$(OBJS)\advdll_bmpcboxg.o \
 	$(OBJS)\advdll_calctrl.o \
 	$(OBJS)\advdll_datavgen.o \
@@ -3655,6 +3658,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_tipdlg.o \
 	$(OBJS)\advdll_wizard.o \
 	$(OBJS)\advdll_taskbarcmn.o \
+	$(OBJS)\advdll_animateg.o \
 	$(OBJS)\advdll_aboutdlg.o \
 	$(OBJS)\advdll_sound.o \
 	$(OBJS)\advdll_taskbar.o \
@@ -3667,7 +3671,6 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_datavcmn.o \
 	$(OBJS)\advdll_hyperlnkcmn.o \
 	$(OBJS)\advdll_aboutdlgg.o \
-	$(OBJS)\advdll_animateg.o \
 	$(OBJS)\advdll_bmpcboxg.o \
 	$(OBJS)\advdll_calctrl.o \
 	$(OBJS)\advdll_datavgen.o \
@@ -3686,6 +3689,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_tipdlg.o \
 	$(OBJS)\advdll_wizard.o \
 	$(OBJS)\advdll_taskbarcmn.o \
+	$(OBJS)\advdll_animateg.o \
 	$(OBJS)\advdll_aboutdlg.o \
 	$(OBJS)\advdll_sound.o \
 	$(OBJS)\advdll_taskbar.o \
@@ -3705,7 +3709,6 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_datavcmn.o \
 	$(OBJS)\advlib_hyperlnkcmn.o \
 	$(OBJS)\advlib_aboutdlgg.o \
-	$(OBJS)\advlib_animateg.o \
 	$(OBJS)\advlib_bmpcboxg.o \
 	$(OBJS)\advlib_calctrl.o \
 	$(OBJS)\advlib_datavgen.o \
@@ -3724,6 +3727,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_tipdlg.o \
 	$(OBJS)\advlib_wizard.o \
 	$(OBJS)\advlib_taskbarcmn.o \
+	$(OBJS)\advlib_animateg.o \
 	$(OBJS)\advlib_aboutdlg.o \
 	$(OBJS)\advlib_sound.o \
 	$(OBJS)\advlib_taskbar.o \
@@ -3736,7 +3740,6 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_datavcmn.o \
 	$(OBJS)\advlib_hyperlnkcmn.o \
 	$(OBJS)\advlib_aboutdlgg.o \
-	$(OBJS)\advlib_animateg.o \
 	$(OBJS)\advlib_bmpcboxg.o \
 	$(OBJS)\advlib_calctrl.o \
 	$(OBJS)\advlib_datavgen.o \
@@ -3755,6 +3758,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_tipdlg.o \
 	$(OBJS)\advlib_wizard.o \
 	$(OBJS)\advlib_taskbarcmn.o \
+	$(OBJS)\advlib_animateg.o \
 	$(OBJS)\advlib_aboutdlg.o \
 	$(OBJS)\advlib_sound.o \
 	$(OBJS)\advlib_taskbar.o \
@@ -6290,6 +6294,26 @@ $(OBJS)\monodll_uuid.o: ../../src/msw/ole/uuid.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_clrpickerg.o: ../../src/generic/clrpickerg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_collpaneg.o: ../../src/generic/collpaneg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_filepickerg.o: ../../src/generic/filepickerg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_fontpickerg.o: ../../src/generic/fontpickerg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
 $(OBJS)\monodll_statusbr.o: ../../src/generic/statusbr.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
@@ -7145,16 +7169,6 @@ $(OBJS)\monodll_choicbkg.o: ../../src/generic/choicbkg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_clrpickerg.o: ../../src/generic/clrpickerg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_collpaneg.o: ../../src/generic/collpaneg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_combog.o: ../../src/generic/combog.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7176,16 +7190,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_filectrlg.o: ../../src/generic/filectrlg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_filepickerg.o: ../../src/generic/filepickerg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_fontpickerg.o: ../../src/generic/fontpickerg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -7285,6 +7289,18 @@ $(OBJS)\monodll_vscroll.o: ../../src/generic/vscroll.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_animateg.o: ../../src/generic/animateg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),1)
+$(OBJS)\monodll_animateg.o: ../../src/generic/animateg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_animatecmn.o: ../../src/common/animatecmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7301,11 +7317,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_aboutdlgg.o: ../../src/generic/aboutdlgg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_animateg.o: ../../src/generic/animateg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -8475,6 +8486,26 @@ $(OBJS)\monolib_uuid.o: ../../src/msw/ole/uuid.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_clrpickerg.o: ../../src/generic/clrpickerg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_collpaneg.o: ../../src/generic/collpaneg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_filepickerg.o: ../../src/generic/filepickerg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_fontpickerg.o: ../../src/generic/fontpickerg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
 $(OBJS)\monolib_statusbr.o: ../../src/generic/statusbr.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
@@ -9330,16 +9361,6 @@ $(OBJS)\monolib_choicbkg.o: ../../src/generic/choicbkg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_clrpickerg.o: ../../src/generic/clrpickerg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_collpaneg.o: ../../src/generic/collpaneg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_combog.o: ../../src/generic/combog.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9361,16 +9382,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_filectrlg.o: ../../src/generic/filectrlg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_filepickerg.o: ../../src/generic/filepickerg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_fontpickerg.o: ../../src/generic/fontpickerg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -9470,6 +9481,18 @@ $(OBJS)\monolib_vscroll.o: ../../src/generic/vscroll.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_animateg.o: ../../src/generic/animateg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),1)
+$(OBJS)\monolib_animateg.o: ../../src/generic/animateg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_animatecmn.o: ../../src/common/animatecmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9486,11 +9509,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_aboutdlgg.o: ../../src/generic/aboutdlgg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_animateg.o: ../../src/generic/animateg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10393,6 +10411,9 @@ $(OBJS)\coredll_treectrl.o: ../../src/msw/treectrl.cpp
 $(OBJS)\coredll_fontdlg.o: ../../src/msw/fontdlg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\coredll_animateg.o: ../../src/generic/animateg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\coredll_colrdlgg.o: ../../src/generic/colrdlgg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -10710,6 +10731,26 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_uuid.o: ../../src/msw/ole/uuid.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_clrpickerg.o: ../../src/generic/clrpickerg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_collpaneg.o: ../../src/generic/collpaneg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_filepickerg.o: ../../src/generic/filepickerg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_fontpickerg.o: ../../src/generic/fontpickerg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -11569,16 +11610,6 @@ $(OBJS)\coredll_choicbkg.o: ../../src/generic/choicbkg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_clrpickerg.o: ../../src/generic/clrpickerg.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_collpaneg.o: ../../src/generic/collpaneg.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_combog.o: ../../src/generic/combog.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -11600,16 +11631,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_filectrlg.o: ../../src/generic/filectrlg.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_filepickerg.o: ../../src/generic/filepickerg.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_fontpickerg.o: ../../src/generic/fontpickerg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -11802,6 +11823,9 @@ $(OBJS)\corelib_treectrl.o: ../../src/msw/treectrl.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_fontdlg.o: ../../src/msw/fontdlg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\corelib_animateg.o: ../../src/generic/animateg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_colrdlgg.o: ../../src/generic/colrdlgg.cpp
@@ -12121,6 +12145,26 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_uuid.o: ../../src/msw/ole/uuid.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_clrpickerg.o: ../../src/generic/clrpickerg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_collpaneg.o: ../../src/generic/collpaneg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_filepickerg.o: ../../src/generic/filepickerg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_fontpickerg.o: ../../src/generic/fontpickerg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -12980,16 +13024,6 @@ $(OBJS)\corelib_choicbkg.o: ../../src/generic/choicbkg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_clrpickerg.o: ../../src/generic/clrpickerg.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_collpaneg.o: ../../src/generic/collpaneg.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_combog.o: ../../src/generic/combog.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -13011,16 +13045,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_filectrlg.o: ../../src/generic/filectrlg.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_filepickerg.o: ../../src/generic/filepickerg.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_fontpickerg.o: ../../src/generic/fontpickerg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -13140,9 +13164,6 @@ $(OBJS)\advdll_hyperlnkcmn.o: ../../src/common/hyperlnkcmn.cpp
 $(OBJS)\advdll_aboutdlgg.o: ../../src/generic/aboutdlgg.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\advdll_animateg.o: ../../src/generic/animateg.cpp
-	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\advdll_bmpcboxg.o: ../../src/generic/bmpcboxg.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -13197,6 +13218,9 @@ $(OBJS)\advdll_wizard.o: ../../src/generic/wizard.cpp
 $(OBJS)\advdll_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advdll_animateg.o: ../../src/generic/animateg.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advdll_aboutdlg.o: ../../src/msw/aboutdlg.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -13225,9 +13249,6 @@ $(OBJS)\advlib_hyperlnkcmn.o: ../../src/common/hyperlnkcmn.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_aboutdlgg.o: ../../src/generic/aboutdlgg.cpp
-	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\advlib_animateg.o: ../../src/generic/animateg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_bmpcboxg.o: ../../src/generic/bmpcboxg.cpp
@@ -13282,6 +13303,9 @@ $(OBJS)\advlib_wizard.o: ../../src/generic/wizard.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_animateg.o: ../../src/generic/animateg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_aboutdlg.o: ../../src/msw/aboutdlg.cpp

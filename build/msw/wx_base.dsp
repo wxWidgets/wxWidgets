@@ -1515,6 +1515,10 @@ SOURCE=..\..\include\wx\clntdata.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\cmdargs.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\cmdline.h
 # End Source File
 # Begin Source File

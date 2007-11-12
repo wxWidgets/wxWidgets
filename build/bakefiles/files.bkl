@@ -412,6 +412,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/chartype.h
     wx/chkconf.h
     wx/clntdata.h
+    wx/cmdargs.h
     wx/cmdline.h
     wx/confbase.h
     wx/config.h
