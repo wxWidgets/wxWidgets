@@ -143,29 +143,15 @@
 // Unicode support
 // ----------------------------------------------------------------------------
 
-// Set wxUSE_UNICODE to 1 to compile wxWidgets in Unicode mode: wxChar will be
-// defined as wchar_t, wxString will use Unicode internally. If you set this
-// to 1, you must use wxT() macro for all literal strings in the program.
-//
-// Unicode is currently only fully supported under Windows NT/2000/XP
-// (Windows 9x doesn't support it and the programs compiled in Unicode mode
-// will not run under 9x -- but see wxUSE_UNICODE_MSLU below).
-//
-// Default is 0 (but only because of makefiles)
-//
-// Recommended setting: 1
+// These settings are obsolete: the library is always built in Unicode mode
+// now, only set wxUSE_UNICODE to 0 to compile legacy code in ANSI mode if
+// absolutely necessary -- updating it is strongly recommended as the ANSI mode
+// will disappear completely in future wxWidgets releases.
 #ifndef wxUSE_UNICODE
-    #define wxUSE_UNICODE 0
+    #define wxUSE_UNICODE 1
 #endif
 
-// Setting wxUSE_WCHAR_T to 1 gives you some degree of Unicode support without
-// compiling the program in Unicode mode. More precisely, it will be possible
-// to construct wxString from a wide (Unicode) string and convert any wxString
-// to Unicode.
-//
-// Default is 1
-//
-// Recommended setting: 1
+// wxUSE_WCHAR_T is required by wxWidgets now, don't change.
 #define wxUSE_WCHAR_T 1
 
 // ----------------------------------------------------------------------------
