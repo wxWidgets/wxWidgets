@@ -1036,7 +1036,12 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
 : wxGraphicsContext(renderer)
 {
 #ifdef __WXGTK__
+#if wxUSE_NEW_DC
+    wxGTKImplDC *impldc = (wxGTKImplDC*) dc.GetImpl();
+    Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
+#else  
     Init( gdk_cairo_create( dc.m_window ) );
+#endif
 #endif
 #ifdef __WXMAC__
     int width, height;
