@@ -328,6 +328,7 @@ bool wxDisplayImplX11::ChangeMode(const wxVideoMode& WXUNUSED(mode))
 
 #include "wx/utils.h"
 
+#include <X11/Xlib.h>
 #include <X11/Xatom.h>
 
 // TODO: make this a full-fledged class and move to a public header
