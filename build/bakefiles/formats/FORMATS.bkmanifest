@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 
-<bakefile-manifest>
+<bakefile-manifest xmlns="http://www.bakefile.org/schema/bakefile-formats">
     
     <format id="rpmspec">
         <description>
