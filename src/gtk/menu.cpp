@@ -40,6 +40,8 @@
 // we use normal item but with a special id for the menu title
 static const int wxGTK_TITLE_ID = -3;
 
+extern "C" static void gtk_menu_clicked_callback(GtkWidget *widget, wxMenu *menu);
+
 //-----------------------------------------------------------------------------
 // idle system
 //-----------------------------------------------------------------------------
@@ -295,18 +297,42 @@ bool wxMenuBar::Append( wxMenu *menu, const wxString &title )
 
 bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title, int pos)
 {
-    const wxString str(wxConvertMnemonicsToGTK(title));
-
-    // This doesn't have much effect right now.
-    menu->SetTitle( str );
-
-    // The "m_owner" is the "menu item"
-    menu->m_owner = gtk_menu_item_new_with_mnemonic( wxGTK_CONV( str ) );
     menu->SetLayoutDirection(GetLayoutDirection());
 
-    gtk_widget_show( menu->m_owner );
+#if wxUSE_LIBHILDON
+    // if the menu has only one item, append it directly to the top level menu
+    // instead of inserting a useless submenu
+    if ( menu->GetMenuItemCount() == 1 )
+    {
+        wxMenuItem * const item = menu->FindItemByPosition(0);
 
-    gtk_menu_item_set_submenu( GTK_MENU_ITEM(menu->m_owner), menu->m_menu );
+        // remove both mnemonics and accelerator: neither is useful under Maemo
+        const wxString str(wxStripMenuCodes(item->GetItemLabel()));
+
+        if ( item->IsSubMenu() )
+            return GtkAppend(item->GetSubMenu(), str, pos);
+
+        menu->m_owner = gtk_menu_item_new_with_mnemonic( wxGTK_CONV( str ) );
+
+        g_signal_connect(menu->m_owner, "activate",
+                          G_CALLBACK(gtk_menu_clicked_callback), menu);
+        item->SetMenuItem(menu->m_owner);
+    }
+    else
+#endif // wxUSE_LIBHILDON/!wxUSE_LIBHILDON
+    {
+        const wxString str(wxConvertMnemonicsToGTK(title));
+
+        // This doesn't have much effect right now.
+        menu->SetTitle( str );
+
+        // The "m_owner" is the "menu item"
+        menu->m_owner = gtk_menu_item_new_with_mnemonic( wxGTK_CONV( str ) );
+
+        gtk_menu_item_set_submenu( GTK_MENU_ITEM(menu->m_owner), menu->m_menu );
+    }
+
+    gtk_widget_show( menu->m_owner );
 
     if (pos == -1)
         gtk_menu_shell_append( GTK_MENU_SHELL(m_menubar), menu->m_owner );
