@@ -909,6 +909,7 @@ ifndef DEBIAN_WX_DEFAULT_VERSION
 		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pycrust.1    \
 		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pyshell.1    \
 		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/xrced.1      \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/editra.1     \
 		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/helpviewer.1 \
 		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pyalacarte.1 \
 		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pyalamode.1  \
@@ -924,10 +925,11 @@ ifndef DEBIAN_WX_DEFAULT_VERSION
 	cp wxPython/wx/py/PyCrust_32.png        debian/$(package_gtk_py_tools)/usr/share/pixmaps/pycrust.png
 	cp wxPython/wx/py/PyCrust_32.png        debian/$(package_gtk_py_tools)/usr/share/pixmaps/pyshell.png
 	cp wxPython/wx/tools/XRCed/XRCed_32.png debian/$(package_gtk_py_tools)/usr/share/pixmaps/xrced.png
+	cp wx/tools/Editra/pixmaps/editra.png   debian/$(package_gtk_py_tools)/usr/share/pixmaps/editra.png
 	cp debian/pycrust.desktop               debian/$(package_gtk_py_tools)/usr/share/applications
 	cp debian/pyshell.desktop               debian/$(package_gtk_py_tools)/usr/share/applications
 	cp debian/xrced.desktop                 debian/$(package_gtk_py_tools)/usr/share/applications
-
+	cp debian/editra.desktop                debian/$(package_gtk_py_tools)/usr/share/applications
 endif
 	rm -r debian/$(package_gtk_py_lib)/usr/bin
 
