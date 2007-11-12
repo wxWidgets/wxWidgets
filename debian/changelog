@@ -1,3 +1,12 @@
+wxwidgets2.8 (2.8.7.0-0) unstable; urgency=low
+
+  * wxPython: New version of XRCed from Google SoC project
+  * wxPython: Added the Editra programmer's editor to the wxPython tools.
+  * wxFrame::ShowFullScreen now preserves the menubar's accelerators.
+  * wxGetClientDisplayRect correctly implemented for wxGTK and wxX11 ports.
+
+ -- Robin Dunn <robin@alldunn.com>  Mon, 9 Nov 2007 17:38:01 -0700
+
 wxwidgets2.8 (2.8.6.1-0) unstable; urgency=low
 
   * wxPython: Add wx.Window.GetGtkWidget.
