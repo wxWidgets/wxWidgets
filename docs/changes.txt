@@ -197,7 +197,6 @@ All (GUI):
 - Added wxBG_STYLE_TRANSPARENT background style (Julian Scheid)
 - Added XRCSIZERITEM() macro for obtaining sizers from XRC (Brian Vanderburg II)
 - New and improved wxFileCtrl (Diaa Sami and Marcin Wojdyr)
-- Implemented wxGetClientDisplayRect() correctly for X11-based ports
 - Added wxEventBlocker class (Francesco Montorsi).
 - Added wxFile/DirPickerCtrl::Get/SetFile/DirName() (Francesco Montorsi).
 - Added wxSizerFlags::Top() and Bottom().
@@ -272,17 +271,18 @@ wxX11:
 
 All:
 
-- Fixed bug with default proxy destruction in wxURL (Axel Gembe)
+- Fixed bug with default proxy destruction in wxURL (Axel Gembe).
 
 wxMSW:
 
 - Correct (harmless) warnings given for forward-declared DLL-exported classes
-  by mingw32 4.2 (Tim Stahlhut)
+  by mingw32 4.2 (Tim Stahlhut).
 
 wxGTK:
 
 - Added gtk.window.force-background-colour wxSystemOptions option to work around
   a background colour bug in the gtk-qt theme under KDE.
+- Implemented wxGetClientDisplayRect() correctly for wxGTK and X11-based ports.
 
 
 2.8.6
