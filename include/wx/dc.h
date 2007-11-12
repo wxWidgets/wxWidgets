@@ -518,6 +518,9 @@ public:
 
     wxImplDC *GetImpl()
         { return m_pimpl; }
+    const wxImplDC *GetImpl() const
+        { return m_pimpl; }
+
 
     bool IsOk() const 
         { return m_pimpl && m_pimpl->IsOk(); }
