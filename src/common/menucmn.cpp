@@ -852,5 +852,4 @@ wxString wxMenuBarBase::GetLabelTop(size_t pos) const
 }
 #endif
 
-
 #endif // wxUSE_MENUS

@@ -20,6 +20,10 @@
 
 #include <gtk/gtk.h>
 
+#if wxUSE_LIBHILDON
+    #include <hildon-widgets/hildon-window.h>
+#endif // wxUSE_LIBHILDON
+
 // ----------------------------------------------------------------------------
 // event tables
 // ----------------------------------------------------------------------------
@@ -267,11 +271,15 @@ void wxFrame::DetachMenuBar()
 
     if ( m_frameMenuBar )
     {
+#if wxUSE_LIBHILDON
+        hildon_window_set_menu(HILDON_WINDOW(m_widget), NULL);
+#else // !wxUSE_LIBHILDON
         m_frameMenuBar->UnsetInvokingWindow( this );
 
         gtk_widget_ref( m_frameMenuBar->m_widget );
 
         gtk_container_remove( GTK_CONTAINER(m_mainWidget), m_frameMenuBar->m_widget );
+#endif // wxUSE_LIBHILDON/!wxUSE_LIBHILDON
     }
 
     wxFrameBase::DetachMenuBar();
@@ -286,6 +294,10 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
 
     if (m_frameMenuBar)
     {
+#if wxUSE_LIBHILDON
+        hildon_window_set_menu(HILDON_WINDOW(m_widget),
+                               GTK_MENU(m_frameMenuBar->m_menubar));
+#else // !wxUSE_LIBHILDON
         m_frameMenuBar->SetInvokingWindow( this );
 
         m_frameMenuBar->SetParent(this);
@@ -309,6 +321,7 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
         gtk_widget_set_size_request(menuBar->m_widget, -1, -1);
 
         gtk_widget_show( m_frameMenuBar->m_widget );
+#endif // wxUSE_LIBHILDON/!wxUSE_LIBHILDON
     }
     // make sure next size_allocate causes a wxSizeEvent
     m_oldClientWidth = 0;

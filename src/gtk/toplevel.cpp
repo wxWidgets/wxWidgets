@@ -45,6 +45,11 @@
 // XA_CARDINAL
 #include <X11/Xatom.h>
 
+#if wxUSE_LIBHILDON
+    #include <hildon-widgets/hildon-program.h>
+    #include <hildon-widgets/hildon-window.h>
+#endif // wxUSE_LIBHILDON
+
 // ----------------------------------------------------------------------------
 // data
 // ----------------------------------------------------------------------------
@@ -503,6 +508,14 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     //     e.g. in wxTaskBarIconAreaGTK
     if (m_widget == NULL)
     {
+#if wxUSE_LIBHILDON
+        // we must create HildonWindow and not a normal GtkWindow as the latter
+        // doesn't look correctly in Maemo environment and it must also be
+        // registered with the main program object
+        m_widget = hildon_window_new();
+        hildon_program_add_window(wxTheApp->GetHildonProgram(),
+                                  HILDON_WINDOW(m_widget));
+#else // !wxUSE_LIBHILDON
         m_widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
         if (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)
         {
@@ -529,6 +542,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
                 style |= wxFRAME_NO_TASKBAR;
             }
         }
+#endif // wxUSE_LIBHILDON/!wxUSE_LIBHILDON
     }
 
     wxWindow *topParent = wxGetTopLevelParent(m_parent);
@@ -665,6 +679,11 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 
 wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
 {
+#if wxUSE_LIBHILDON
+    hildon_program_remove_window(wxTheApp->GetHildonProgram(),
+                                 HILDON_WINDOW(m_widget));
+#endif // wxUSE_LIBHILDON
+
     if (m_grabbed)
     {
         wxFAIL_MSG(_T("Window still grabbed"));

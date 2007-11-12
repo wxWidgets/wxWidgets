@@ -174,6 +174,12 @@ void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long st
     m_style = style;
     m_invokingWindow = NULL;
 
+#if wxUSE_LIBHILDON
+    // Hildon window uses a single menu instead of a menu bar, so wxMenuBar is
+    // the same as menu in this case
+    m_widget =
+    m_menubar = gtk_menu_new();
+#else // !wxUSE_LIBHILDON
     if (!PreCreation( NULL, wxDefaultPosition, wxDefaultSize ) ||
         !CreateBase( NULL, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, wxT("menubar") ))
     {
@@ -197,6 +203,7 @@ void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long st
     PostCreation();
 
     ApplyWidgetStyle();
+#endif // wxUSE_LIBHILDON/!wxUSE_LIBHILDON
 
     for (size_t i = 0; i < n; ++i )
         Append(menus[i], titles[i]);
@@ -207,7 +214,6 @@ void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long st
     //     can't pass the menu which was closed in wxMenuEvent object
     g_signal_connect (m_menubar, "deactivate",
                       G_CALLBACK (gtk_menu_close_callback), this);
-
 }
 
 wxMenuBar::wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long style)

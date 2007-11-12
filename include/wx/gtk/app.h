@@ -18,6 +18,10 @@
 class WXDLLIMPEXP_FWD_BASE wxMutex;
 #endif
 
+#if wxUSE_LIBHILDON
+typedef struct _HildonProgram HildonProgram;
+#endif // wxUSE_LIBHILDON
+
 //-----------------------------------------------------------------------------
 // wxApp
 //-----------------------------------------------------------------------------
@@ -58,6 +62,10 @@ public:
     // must return XVisualInfo pointer (it is not freed by caller)
     virtual void *GetXVisualInfo() { return NULL; }
 
+#if wxUSE_LIBHILDON
+    // Maemo-specific method: get the main program object
+    HildonProgram *GetHildonProgram() const { return m_hildonProgram; }
+#endif // wxUSE_LIBHILDON
 
     // implementation only from now on
     // -------------------------------
@@ -79,6 +87,10 @@ private:
     wxMutex* m_idleMutex;
 #endif
     guint m_idleSourceId;
+
+#if wxUSE_LIBHILDON
+    HildonProgram *m_hildonProgram;
+#endif // wxUSE_LIBHILDON
 
     DECLARE_DYNAMIC_CLASS(wxApp)
 };

@@ -29,6 +29,10 @@
 #include "wx/gtk/private.h"
 #include "wx/apptrait.h"
 
+#if wxUSE_LIBHILDON
+    #include <hildon-widgets/hildon-program.h>
+#endif // wxUSE_LIBHILDON
+
 #include <gdk/gdkx.h>
 
 //-----------------------------------------------------------------------------
@@ -316,6 +320,15 @@ bool wxApp::OnInitGui()
             }
         }
     }
+
+#if wxUSE_LIBHILDON
+    m_hildonProgram = hildon_program_get_instance();
+    if ( !m_hildonProgram )
+    {
+        wxLogError(_("Unable to initialize Hildon program"));
+        return false;
+    }
+#endif // wxUSE_LIBHILDON
 
     return true;
 }
