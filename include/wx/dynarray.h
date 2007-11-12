@@ -120,6 +120,10 @@ classexp name : public std::vector<T>                               \
 public:                                                             \
   typedef wxArray_SortFunction<T>::CMPFUNC CMPFUNC;                 \
 public:                                                             \
+  name() : std::vector<T>() { }                                     \
+  name(size_type n) : std::vector<T>(n) { }                         \
+  name(size_type n, const_reference v) : std::vector<T>(n, v) { }   \
+                                                                    \
   void Empty() { clear(); }                                         \
   void Clear() { clear(); }                                         \
   void Alloc(size_t uiSize) { reserve(uiSize); }                    \
@@ -282,6 +286,10 @@ typedef int (CMPFUNC_CONV *CMPFUNC##T)(T *pItem1, T *pItem2);         \
 classexp name : public base                                           \
 {                                                                     \
 public:                                                               \
+  name() : base() { }                                                 \
+  name(size_type n) : base(n) { }                                     \
+  name(size_type n, const_reference v) : base(n, v) { }               \
+                                                                      \
   T& operator[](size_t uiIndex) const                                 \
     { return (T&)(base::operator[](uiIndex)); }                       \
   T& Item(size_t uiIndex) const                                       \
