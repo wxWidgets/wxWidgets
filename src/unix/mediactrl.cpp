@@ -129,30 +129,6 @@
 #define wxGSTREAMER_TIMEOUT (100 * GST_MSECOND) // Max 100 milliseconds
 
 //-----------------------------------------------------------------------------
-// wxGTK Debugging and idle stuff
-//-----------------------------------------------------------------------------
-#ifdef __WXGTK__
-
-#   ifdef __WXDEBUG__
-#       if wxUSE_THREADS
-#           define DEBUG_MAIN_THREAD \
-                if (wxThread::IsMain() && g_mainThreadLocked) \
-                    wxPrintf(wxT("gui reentrance"));
-#       else
-#           define DEBUG_MAIN_THREAD
-#       endif
-#   else
-#      define DEBUG_MAIN_THREAD
-#   endif // Debug
-
-#ifndef __WXGTK20__
-extern void wxapp_install_idle_handler();
-extern bool g_isIdle;
-#endif
-extern bool g_mainThreadLocked;
-#endif // wxGTK
-
-//-----------------------------------------------------------------------------
 //  wxLogTrace mask string
 //-----------------------------------------------------------------------------
 #define wxTRACE_GStreamer wxT("GStreamer")
@@ -282,7 +258,7 @@ static gboolean gtk_window_expose_callback(GtkWidget *widget,
     if(event->count > 0)
         return FALSE;
 
-    GdkWindow *window = be->GetControl()->GTKGetDrawingWindow();
+    GdkWindow *window = widget->window;
 
     // I've seen this reccommended somewhere...
     // TODO: Is this needed? Maybe it is just cruft...
@@ -320,20 +296,12 @@ static gboolean gtk_window_expose_callback(GtkWidget *widget,
 //-----------------------------------------------------------------------------
 #ifdef __WXGTK__
 extern "C" {
-static gint gtk_window_realize_callback(GtkWidget*,
+static gint gtk_window_realize_callback(GtkWidget* widget,
                                         wxGStreamerMediaBackend* be)
 {
-    DEBUG_MAIN_THREAD // TODO: Is this neccessary?
-
-#ifndef __WXGTK20__
-    if (g_isIdle)   // FIXME: Why is needed? For wxYield? ??
-        wxapp_install_idle_handler();
-#endif
-
-    wxYield();    // FIXME: RN: X Server gets an error/crash if I don't do
-                  //       this or a messagebox beforehand?!?!??
-
-    GdkWindow *window = be->GetControl()->GTKGetDrawingWindow();
+    gdk_flush();
+    
+    GdkWindow *window = widget->window;
     wxASSERT(window);
 
     gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(be->m_xoverlay),
@@ -736,8 +704,9 @@ void wxGStreamerMediaBackend::SetupXOverlay()
     }
     else
     {
-        wxYield(); // see realize callback...
-        GdkWindow *window = m_ctrl->m_wxwindow->GTKGetDrawingWindow();
+        gdk_flush();
+    
+        GdkWindow *window = m_ctrl->m_wxwindow->window;
         wxASSERT(window);
 #endif
 
