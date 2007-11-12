@@ -73,9 +73,6 @@ public:
     // removes the mnemonics characters
     static wxString RemoveMnemonics(const wxString& str);
 
-    // escapes the mnemonics characters ('&') by doubling them
-    static wxString EscapeMnemonics(const wxString& str);
-
 
     // controls by default inherit the colours of their parents, if a
     // particular control class doesn't want to do it, it can override
