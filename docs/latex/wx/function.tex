@@ -493,6 +493,11 @@ normal way which usually just means that the application will be terminated.
 Calling wxHandleFatalExceptions() with {\it doIt} equal to false will restore
 this default behaviour.
 
+Notice that this function is only available if 
+\texttt{wxUSE\_ON\_FATAL\_EXCEPTION} is $1$ and under Windows platform this
+requires a compiler with support for SEH (structured exception handling) which
+currently means only Microsoft Visual C++ or a recent Borland C++ version.
+
 
 \membersection{::wxInitAllImageHandlers}\label{wxinitallimagehandlers}
 
