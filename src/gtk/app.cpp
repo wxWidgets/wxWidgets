@@ -521,16 +521,21 @@ void wxApp::CleanUp()
 {
     if (m_idleSourceId != 0)
         g_source_remove(m_idleSourceId);
-#if wxUSE_THREADS
-    delete m_idleMutex;
-    m_idleMutex = NULL;
-#endif
+
     // release reference acquired by Initialize()
     g_type_class_unref(g_type_class_peek(GTK_TYPE_WIDGET));
 
     gdk_threads_leave();
 
     wxAppBase::CleanUp();
+
+    // delete this mutex as late as possible as it's used from WakeUpIdle(), in
+    // particular do it after calling the base class CleanUp() which can result
+    // in it being called
+#if wxUSE_THREADS
+    delete m_idleMutex;
+    m_idleMutex = NULL;
+#endif
 }
 
 void wxApp::WakeUpIdle()
