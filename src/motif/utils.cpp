@@ -639,7 +639,7 @@ WXWidget wxCreateBorderWidget( WXWidget parent, long style )
                                     NULL
                                    );
     }
-    else if (style & wxSUNKEN_BORDER)
+    else if ((style & wxSUNKEN_BORDER) || (style & wxBORDER_THEME))
     {
         borderWidget = XtVaCreateManagedWidget
                                    (

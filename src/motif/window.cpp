@@ -230,6 +230,11 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
                       long style,
                       const wxString& name)
 {
+    // Get default border
+    wxBorder border = GetBorder(style);
+    style &= ~wxBORDER_MASK;
+    style |= border;
+
     wxCHECK_MSG( parent, false, "can't create wxWindow without parent" );
 
     CreateBase(parent, id, pos, size, style, wxDefaultValidator, name);

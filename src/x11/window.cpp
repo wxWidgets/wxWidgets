@@ -122,6 +122,11 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
 {
     wxCHECK_MSG( parent, false, wxT("can't create wxWindow without parent") );
 
+    // Get default border
+    wxBorder border = GetBorder(style);
+    style &= ~wxBORDER_MASK;
+    style |= border;
+
     CreateBase(parent, id, pos, size, style, wxDefaultValidator, name);
 
     parent->AddChild(this);
@@ -164,7 +169,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
 
 #if wxUSE_TWO_WINDOWS
     bool need_two_windows =
-        ((( wxSUNKEN_BORDER | wxRAISED_BORDER | wxSIMPLE_BORDER | wxHSCROLL | wxVSCROLL ) & m_windowStyle) != 0);
+        ((( wxSUNKEN_BORDER | wxBORDER_THEME | wxRAISED_BORDER | wxSIMPLE_BORDER | wxHSCROLL | wxVSCROLL ) & m_windowStyle) != 0);
 #else
     bool need_two_windows = false;
 #endif
@@ -230,7 +235,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
         }
 #endif
 
-        if (HasFlag( wxSUNKEN_BORDER) || HasFlag( wxRAISED_BORDER))
+        if (HasFlag(wxSUNKEN_BORDER) || HasFlag(wxRAISED_BORDER) || HasFlag(wxBORDER_THEME))
         {
             pos2.x = 2;
             pos2.y = 2;
