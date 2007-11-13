@@ -208,24 +208,21 @@ class WXDLLEXPORT wxBasicString
 {
 public:
     // ctors & dtor
-    wxBasicString(const char *sz);
     wxBasicString(const wxString& str);
+    wxBasicString(const wxBasicString& bstr);
     ~wxBasicString();
 
-    void Init(const char* sz);
+    wxBasicString& operator=(const wxBasicString& bstr);
 
     // accessors
-    // just get the string
-    operator BSTR() const { return m_wzBuf; }
-    // retrieve a copy of our string - caller must SysFreeString() it later!
-    BSTR Get() const { return SysAllocString(m_wzBuf); }
+        // just get the string
+    operator BSTR() const { return m_bstrBuf; }
+        // retrieve a copy of our string - caller must SysFreeString() it later!
+    BSTR Get() const { return SysAllocString(m_bstrBuf); }
 
 private:
-    // @@@ not implemented (but should be)
-    wxBasicString(const wxBasicString&);
-    wxBasicString& operator=(const wxBasicString&);
-
-    OLECHAR *m_wzBuf;     // actual string
+    // actual string
+    BSTR m_bstrBuf;
 };
 
 #if wxUSE_VARIANT

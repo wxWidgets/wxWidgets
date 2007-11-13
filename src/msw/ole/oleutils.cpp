@@ -91,49 +91,25 @@ WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr)
 // wxBasicString
 // ----------------------------------------------------------------------------
 
-// ctor takes an ANSI string and transforms it to Unicode
-wxBasicString::wxBasicString(const char *sz)
-{
-    Init(sz);
-}
-
-// ctor takes an ANSI or Unicode string and transforms it to Unicode
 wxBasicString::wxBasicString(const wxString& str)
 {
-#if wxUSE_UNICODE
-    m_wzBuf = new OLECHAR[str.length() + 1];
-    memcpy(m_wzBuf, str.c_str(), str.length()*2);
-    m_wzBuf[str.length()] = L'\0';
-#else
-    Init(str.c_str());
-#endif
+    m_bstrBuf = SysAllocString(str.wc_str(*wxConvCurrent));
 }
 
-// Takes an ANSI string and transforms it to Unicode
-void wxBasicString::Init(const char *sz)
+wxBasicString::wxBasicString(const wxBasicString& src)
 {
-    // get the size of required buffer
-    UINT lenAnsi = strlen(sz);
-#ifdef __MWERKS__
-    UINT lenWide = lenAnsi * 2 ;
-#else
-    UINT lenWide = mbstowcs(NULL, sz, lenAnsi);
-#endif
-
-    if ( lenWide > 0 ) {
-        m_wzBuf = new OLECHAR[lenWide + 1];
-        mbstowcs(m_wzBuf, sz, lenAnsi);
-        m_wzBuf[lenWide] = L'\0';
-    }
-    else {
-        m_wzBuf = NULL;
-    }
+    m_bstrBuf = src.Get();
 }
 
-// dtor frees memory
+wxBasicString& wxBasicString::operator=(const wxBasicString& src)
+{
+    SysReAllocString(&m_bstrBuf, src);
+    return *this;
+}
+
 wxBasicString::~wxBasicString()
 {
-  delete [] m_wzBuf;
+    SysFreeString(m_bstrBuf);
 }
 
 #if wxUSE_DATAOBJ
