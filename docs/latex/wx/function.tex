@@ -2969,6 +2969,26 @@ to \helpref{wxBase64Encode}{wxbase64encode}.
 This macro returns the concatenation of two tokens \arg{x} and \arg{y}.
 
 
+\membersection{wxDECLARE\_APP}\label{wxdeclareapp}
+
+\func{}{wxDECLARE\_APP}{className}
+
+This is used in headers to create a forward declaration of the
+\helpref{wxGetApp}{wxgetapp} function implemented by
+\helpref{wxIMPLEMENT\_APP}{wximplementapp}. It creates the declaration
+{\tt className\& wxGetApp(void)}.
+
+Example:
+
+\begin{verbatim}
+  wxDECLARE_APP(MyApp)
+\end{verbatim}
+
+\wxheading{Include files}
+
+<wx/app.h>
+
+
 \membersection{wxDYNLIB\_FUNCTION}\label{wxdynlibfunction}
 
 \func{}{wxDYNLIB\_FUNCTION}{\param{}{type}, \param{}{name}, \param{}{dynlib}}
