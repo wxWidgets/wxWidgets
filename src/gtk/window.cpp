@@ -2034,11 +2034,8 @@ void gtk_window_style_set_callback( GtkWidget *WXUNUSED(widget),
                                GtkStyle *previous_style,
                                wxWindow* win )
 {
-    //wxLogDebug(wxT("gtk_window_style_set_callback"));
     if (win && previous_style)
     {
-        wxString name(win->GetName());
-        //wxLogDebug(wxT("gtk_window_style_set_callback %s"), name.c_str());
         wxSysColourChangedEvent event;
         event.SetEventObject(win);
 
@@ -2048,40 +2045,28 @@ void gtk_window_style_set_callback( GtkWidget *WXUNUSED(widget),
 
 } // extern "C"
 
-// Connect/disconnect style-set
-
-void wxConnectStyleSet(wxWindow* win)
-{
-    if (win->m_wxwindow)
-        g_signal_connect (win->m_wxwindow, "style_set",
-                              G_CALLBACK (gtk_window_style_set_callback), win);
-}
-
-void wxDisconnectStyleSet(wxWindow* win)
-{
-  if (win->m_wxwindow)
-      g_signal_handlers_disconnect_by_func (win->m_wxwindow,
-                                          (gpointer) gtk_window_style_set_callback,
-                                              win);
-}
-
 // Helper to suspend colour change event event processing while we change a widget's style
 class wxSuspendStyleEvents
 {
 public:
-  wxSuspendStyleEvents(wxWindow* win)
-  {
-    m_win = win;
-    if (win->IsTopLevel())
-      wxDisconnectStyleSet(win);
-  }
-  ~wxSuspendStyleEvents()
-  {
-    if (m_win->IsTopLevel())
-      wxConnectStyleSet(m_win);
-  }
+    wxSuspendStyleEvents(wxWindow* win)
+    {
+        m_win = NULL;
+        if (win->m_wxwindow && win->IsTopLevel())
+        {
+            m_win = win;
+            g_signal_handlers_block_by_func(
+                m_win->m_wxwindow, (void*)gtk_window_style_set_callback, m_win);
+        }
+    }
+    ~wxSuspendStyleEvents()
+    {
+        if (m_win)
+            g_signal_handlers_unblock_by_func(
+                m_win->m_wxwindow, (void*)gtk_window_style_set_callback, m_win);
+    }
 
-  wxWindow* m_win;
+    wxWindow* m_win;
 };
 
 // ----------------------------------------------------------------------------
