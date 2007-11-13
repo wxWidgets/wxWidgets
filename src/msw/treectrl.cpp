@@ -2147,6 +2147,38 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                 }
                 break;
 
+            case WM_RBUTTONDOWN:
+                // default handler removes the highlight from the currently
+                // focused item when right mouse button is pressed on another
+                // one but keeps the remaining items highlighted, which is
+                // confusing, so override this default behaviour for tree with
+                // multiple selections
+                if ( isMultiple )
+                {
+                    if ( !IsItemSelected(GetHwnd(), htItem) )
+                    {
+                        UnselectAll();
+                        SelectItem(htItem);
+                        ::SetFocus(GetHwnd(), htItem);
+                    }
+
+                    // fire EVT_RIGHT_DOWN
+                    HandleMouseEvent(nMsg, x, y, wParam);
+                    
+                    // send NM_RCLICK
+                    NMHDR nmhdr;
+                    nmhdr.hwndFrom = GetHwnd();
+                    nmhdr.idFrom = ::GetWindowLong(GetHwnd(), GWL_ID);
+                    nmhdr.code = NM_RCLICK;
+                    ::SendMessage(::GetParent(GetHwnd()), WM_NOTIFY,
+                                  nmhdr.idFrom, (LPARAM)&nmhdr);
+
+                    // prevent tree control default processing, as we've
+                    // already done everything                   
+                    processed = true;
+                }
+                break;
+
             case WM_MOUSEMOVE:
 #ifndef __WXWINCE__
                 if ( m_htClickedItem )
