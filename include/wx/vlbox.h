@@ -202,7 +202,7 @@ public:
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
 protected:
-	virtual wxBorder GetDefaultBorder() const { return GetDefaultBorderForControl(); }
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_THEME; }
 
     // the derived class must implement this function to actually draw the item
     // with the given index on the provided DC

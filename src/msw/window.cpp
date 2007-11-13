@@ -1288,28 +1288,11 @@ void wxWindowMSW::MSWUpdateStyle(long flagsOld, long exflagsOld)
 
 wxBorder wxWindowMSW::GetDefaultBorderForControl() const
 {
-    // we want to automatically give controls a sunken style (confusingly,
-    // it may not really mean sunken at all as we map it to WS_EX_CLIENTEDGE
-    // which is not sunken at all under Windows XP -- rather, just the default)
-
-#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
-    return wxBORDER_SIMPLE;
-#else
-#if wxUSE_UXTHEME
-    if (CanApplyThemeBorder())
-    {
-        wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
-        if (theme)
-            return wxBORDER_THEME;
-    }
-#endif
-    return wxBORDER_SUNKEN;
-#endif
+    return wxBORDER_THEME;
 }
 
 wxBorder wxWindowMSW::GetDefaultBorder() const
 {
-    // return GetDefaultBorderForControl();
     return wxWindowBase::GetDefaultBorder();
 }
 

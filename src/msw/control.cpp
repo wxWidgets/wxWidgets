@@ -246,8 +246,6 @@ wxSize wxControl::DoGetBestSize() const
 wxBorder wxControl::GetDefaultBorder() const
 {
     return wxControlBase::GetDefaultBorder();
-
-//  return GetDefaultBorderForControl();
 }
 
 // This is a helper for all wxControls made with UPDOWN native control.
