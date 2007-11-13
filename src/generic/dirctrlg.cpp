@@ -562,8 +562,6 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     if ((style & wxDIRCTRL_3D_INTERNAL) == 0)
         treeStyle |= wxNO_BORDER;
-    else
-        treeStyle |= wxBORDER_SUNKEN;
 
     m_treeCtrl = CreateTreeCtrl(this, wxID_TREECTRL,
                                 wxPoint(0,0), GetClientSize(), treeStyle);

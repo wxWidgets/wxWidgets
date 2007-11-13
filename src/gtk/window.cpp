@@ -2226,12 +2226,18 @@ bool wxWindowGTK::Create( wxWindow *parent,
                           long style,
                           const wxString &name  )
 {
+    // Get default border
+    wxBorder border = GetBorder(style);
+    style &= ~wxBORDER_MASK;
+    style |= border;
+    
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( wxT("wxWindowGTK creation failed") );
         return false;
     }
+
 
     m_wxwindow = wxPizza::New(m_windowStyle);
     if (!HasFlag(wxHSCROLL) && !HasFlag(wxVSCROLL))
@@ -2408,7 +2414,7 @@ void wxWindowGTK::PostCreation()
 
         // border drawing
 #ifndef __WXUNIVERSAL__
-        if (HasFlag(wxBORDER_SIMPLE | wxBORDER_RAISED | wxBORDER_SUNKEN))
+        if (HasFlag(wxBORDER_SIMPLE | wxBORDER_RAISED | wxBORDER_SUNKEN | wxBORDER_THEME))
         {
             g_signal_connect(m_widget, "expose_event",
                 G_CALLBACK(expose_event_border), this);
