@@ -26,7 +26,7 @@ Frames and dialogs are similar in wxWidgets, but only dialogs may be modal.
 \twocolitem{\helpref{wxWizard}{wxwizard}}{A wizard dialog}
 \end{twocollist}
 
-See also {\bf Common dialogs}.
+See also the \helpref{Common dialogs overview}{commondialogsoverview}.
 
 {\large {\bf Miscellaneous windows}}
 
@@ -97,6 +97,7 @@ that are not static can have \helpref{validators}{wxvalidator} associated with t
 \twocolitem{\helpref{wxCheckBox}{wxcheckbox}}{Checkbox control}
 \twocolitem{\helpref{wxCheckListBox}{wxchecklistbox}}{A listbox with a checkbox to the left of each item}
 \twocolitem{\helpref{wxChoice}{wxchoice}}{Choice control (a combobox without the editable area)}
+\twocolitem{\helpref{wxCollapsiblePane}{wxcollapsiblepane}}{A panel which can be shown/hidden by the user}
 \twocolitem{\helpref{wxComboBox}{wxcombobox}}{A choice with an editable area}
 \twocolitem{\helpref{wxComboCtrl}{wxcomboctrl}}{A combobox with application defined popup}
 \twocolitem{\helpref{wxDataViewCtrl}{wxdataviewctrl}}{A control to tabular or tree like data}
@@ -194,6 +195,13 @@ These are the classes relevant to constraints-based window layout.
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\helpref{wxIndividualLayoutConstraint}{wxindividuallayoutconstraint}}{Represents a single constraint dimension}
 \twocolitem{\helpref{wxLayoutConstraints}{wxlayoutconstraints}}{Represents the constraints for a window class}
+\end{twocollist}
+
+Other layouting classes:
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxLayoutAlgorithm}{wxlayoutalgorithm}}{An alternative window layout facility}
 \end{twocollist}
 
 {\large {\bf Device contexts}}
@@ -534,6 +542,7 @@ overview}{wxfileoverview} for more details.
 \twocolitem{\helpref{wxTempFile}{wxtempfile}}{Class to safely replace an existing file}
 \twocolitem{\helpref{wxTextFile}{wxtextfile}}{Class for working with text files as with arrays of lines}
 \twocolitem{\helpref{wxStandardPaths}{wxstandardpaths}}{Paths for standard directories}
+\twocolitem{\helpref{wxPathList}{wxpathlist}}{A class to help search multiple paths}
 \end{twocollist}
 
 {\large {\bf Stream classes}}
@@ -618,6 +627,7 @@ and paragraph formatting.
 
 \twocolwidtha{6cm}
 \begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxRichTextAttr}{wxrichtextattr}}{Attributes specifying rich text styling.}
 \twocolitem{\helpref{wxRichTextCtrl}{wxrichtextctrl}}{A rich text control.}
 \twocolitem{\helpref{wxRichTextBuffer}{wxrichtextbuffer}}{The content of a rich text control.}
 \twocolitem{\helpref{wxRichTextCharacterStyleDefinition}{wxrichtextcharacterstyledefinition}}{Definition of character styling.}
@@ -636,6 +646,16 @@ and paragraph formatting.
 \twocolitem{\helpref{wxRichTextPrinting}{wxrichtextprinting}}{A class for easy printing of rich text buffers.}
 \twocolitem{\helpref{wxRichTextPrintout}{wxrichtextprintout}}{A class used by wxRichTextPrinting.}
 \twocolitem{\helpref{wxRichTextHeaderFooterData}{wxrichtextheaderfooterdata}}{Header and footer data specification.}
+\end{twocollist}
+
+{\large {\bf Scintilla text editor classes}}
+
+wxWidgets also provides a wrapper around the Scintilla text editor control, which is
+a control for plain-text editing with support for highlighting, smart indentation, etc.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxStyledTextCtrl}{wxstyledtextctrl}}{A wxWidgets implementation of the Scintilla source code editing component.}
 \end{twocollist}
 
 {\large {\bf Virtual file system classes}}
@@ -686,19 +706,37 @@ from specifications stored in an XML format.
 \twocolitem{\helpref{wxToolTip}{wxtooltip}}{Class implementing tooltips}
 \end{twocollist}
 
-{\large {\bf Miscellaneous}}
+{\large {\bf Multimedia classes}}
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxMediaCtrl}{wxmediactrl}}{Display multimedia contents.}
+\end{twocollist}
+
+{\large {\bf OpenGL classes}}
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxGLCanvas}{wxglcanvas}}{Canvas that you can render OpenGL calls to.}
+\twocolitem{\helpref{wxGLContext}{wxglcontext}}{Class to ease sharing of OpenGL data resources.}
+\end{twocollist}
+
+{\large {\bf Application and process-management classes}}
 
 \twocolwidtha{6cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\helpref{wxApp}{wxapp}}{Application class}
-\twocolitem{\helpref{wxCaret}{wxcaret}}{A caret (cursor) object}
 \twocolitem{\helpref{wxCmdLineParser}{wxcmdlineparser}}{Command line parser class}
-\twocolitem{\helpref{wxConfig}{wxconfigbase}}{Classes for configuration reading/writing (using either INI files or registry)}
 \twocolitem{\helpref{wxDllLoader}{wxdllloader}}{Class to work with shared libraries.}
-\twocolitem{\helpref{wxGLCanvas}{wxglcanvas}}{Canvas that you can render OpenGL calls to.}
-\twocolitem{\helpref{wxGLContext}{wxglcontext}}{Class to ease sharing of OpenGL data resources.}
-\twocolitem{\helpref{wxLayoutAlgorithm}{wxlayoutalgorithm}}{An alternative window layout facility}
 \twocolitem{\helpref{wxProcess}{wxprocess}}{Process class}
+\end{twocollist}
+
+{\large {\bf Miscellaneous}}
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxCaret}{wxcaret}}{A caret (cursor) object}
+\twocolitem{\helpref{wxConfig}{wxconfigbase}}{Classes for configuration reading/writing (using either INI files or registry)}
 \twocolitem{\helpref{wxTimer}{wxtimer}}{Timer class}
 \twocolitem{\helpref{wxStopWatch}{wxstopwatch}}{Stop watch class}
 \twocolitem{\helpref{wxMimeTypesManager}{wxmimetypesmanager}}{MIME-types manager class}
