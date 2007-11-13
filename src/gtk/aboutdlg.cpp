@@ -40,6 +40,11 @@ namespace
 class GtkArray
 {
 public:
+    // Create empty GtkArray
+    GtkArray() : m_strings(0), m_count(0)
+    {
+    }
+    
     // Create GtkArray from wxArrayString. Note that the created object is
     // only valid as long as 'a' is!
     GtkArray(const wxArrayString& a)
@@ -116,12 +121,20 @@ void wxAboutBox(const wxAboutDialogInfo& info)
         gtk_about_dialog_set_name(dlg, wxGTK_CONV_SYS(info.GetName()));
         if ( info.HasVersion() )
             gtk_about_dialog_set_version(dlg, wxGTK_CONV_SYS(info.GetVersion()));
+        else
+            gtk_about_dialog_set_version(dlg, NULL);
         if ( info.HasCopyright() )
             gtk_about_dialog_set_copyright(dlg, wxGTK_CONV_SYS(info.GetCopyright()));
+        else
+            gtk_about_dialog_set_copyright(dlg, NULL);
         if ( info.HasDescription() )
             gtk_about_dialog_set_comments(dlg, wxGTK_CONV_SYS(info.GetDescription()));
+        else
+            gtk_about_dialog_set_comments(dlg, NULL);
         if ( info.HasLicence() )
             gtk_about_dialog_set_license(dlg, wxGTK_CONV_SYS(info.GetLicence()));
+        else
+            gtk_about_dialog_set_license(dlg, NULL);
 
         wxIcon icon = info.GetIcon();
         if ( icon.Ok() )
@@ -141,13 +154,25 @@ void wxAboutBox(const wxAboutDialogInfo& info)
                 wxGTK_CONV_SYS(info.GetWebSiteDescription())
             );
         }
+        else
+        {
+            gtk_about_dialog_set_website(dlg, NULL);
+            gtk_about_dialog_set_website_label(dlg, NULL);
+            gtk_about_dialog_set_url_hook(NULL, NULL, NULL);
+        }
 
         if ( info.HasDevelopers() )
             gtk_about_dialog_set_authors(dlg, GtkArray(info.GetDevelopers()));
+        else
+            gtk_about_dialog_set_authors(dlg, GtkArray());
         if ( info.HasDocWriters() )
             gtk_about_dialog_set_documenters(dlg, GtkArray(info.GetDocWriters()));
+        else
+            gtk_about_dialog_set_documenters(dlg, GtkArray());
         if ( info.HasArtists() )
             gtk_about_dialog_set_artists(dlg, GtkArray(info.GetArtists()));
+        else
+            gtk_about_dialog_set_artists(dlg, GtkArray());
 
         wxString transCredits;
         if ( info.HasTranslators() )
@@ -176,6 +201,8 @@ void wxAboutBox(const wxAboutDialogInfo& info)
 
         if ( !transCredits.empty() )
             gtk_about_dialog_set_translator_credits(dlg, wxGTK_CONV_SYS(transCredits));
+        else
+            gtk_about_dialog_set_translator_credits(dlg, NULL);
 
         g_signal_connect(dlg, "response",
                             G_CALLBACK(wxGtkAboutDialogOnClose), NULL);
