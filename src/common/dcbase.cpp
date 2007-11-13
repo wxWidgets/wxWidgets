@@ -334,6 +334,33 @@ wxImplDC* wxNativeDCFactory::CreateScreenDC( wxScreenDC *owner )
 #endif
 }
 
+wxImpleDC *wxNativeDCFactory::CreatePrinterDC( wxPrinterDC *ownder, const wxPrintData &data )
+{
+#if defined(__WXMSW__)
+    return new wxWindowsPrinterImplDC( owner );
+#elif defined(__WXGTK20__)
+    return new wxGTKPrinterImplDC( owner );
+#elif defined(__WXGTK__)
+    return new wxGTKPrinterImplDC( owner );
+#elif defined(__WXMAC__)
+    return new wxMacPrinterImplDC( owner );
+#elif defined(__WXCOCOA__)
+    return new wxCocoaPrinterImplDC( owner );
+#elif defined(__WXMOTIF__)
+    return new wxMotifPrinterImplDC( owner );
+#elif defined(__WXX11__)
+    return new wxX11PrinterImplDC( owner );
+#elif defined(__WXMGL__)
+    return new wxMGLPrinterImplDC( owner );
+#elif defined(__WXDFB__)
+    return new wxDFBPrinterImplDC( owner );
+#elif defined(__WXPM__)
+    return new wxPMPrinterImplDC( owner );
+#elif defined(__PALMOS__)
+    return new wxPalmPrinterImplDC( owner );
+#endif
+}
+
 //-----------------------------------------------------------------------------
 // wxWindowDC
 //-----------------------------------------------------------------------------

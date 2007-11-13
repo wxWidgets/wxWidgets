@@ -145,7 +145,7 @@ wxGtkPrintFactory::CreatePrintSetupDialog(wxWindow * WXUNUSED(parent),
 
 wxDC* wxGtkPrintFactory::CreatePrinterDC( const wxPrintData& data )
 {
-    return new wxGtkPrintDC(data);
+    return new wxGtkPrinterDC(data);
 }
 
 bool wxGtkPrintFactory::HasOwnPrintToFile()
@@ -894,7 +894,7 @@ void wxGtkPrinter::BeginPrint(wxPrintout *printout, GtkPrintOperation *operation
     SetPrintContext(context);
     native->SetPrintContext( context );
 
-    wxGtkPrintDC *printDC = new wxGtkPrintDC( printdata );
+    wxGtkPrinterDC *printDC = new wxGtkPrinterDC( printdata );
     m_dc = printDC;
 
     if (!m_dc->IsOk())
@@ -902,7 +902,7 @@ void wxGtkPrinter::BeginPrint(wxPrintout *printout, GtkPrintOperation *operation
         if (sm_lastError != wxPRINTER_CANCELLED)
         {
             sm_lastError = wxPRINTER_ERROR;
-            wxFAIL_MSG(_("The wxGtkPrintDC cannot be used."));
+            wxFAIL_MSG(_("The wxGtkPrinterDC cannot be used."));
         }
         return;
     }
@@ -1065,7 +1065,7 @@ wxDC* wxGtkPrinter::PrintDialog( wxWindow *parent )
     }
 
     m_printDialogData = dialog.GetPrintDialogData();
-    return new wxGtkPrintDC( m_printDialogData.GetPrintData() );
+    return new wxGtkPrinterDC( m_printDialogData.GetPrintData() );
 }
 
 bool wxGtkPrinter::Setup( wxWindow * WXUNUSED(parent) )
@@ -1075,7 +1075,7 @@ bool wxGtkPrinter::Setup( wxWindow * WXUNUSED(parent) )
 }
 
 //-----------------------------------------------------------------------------
-// wxGtkPrintDC
+// wxGtkPrinterDC
 //-----------------------------------------------------------------------------
 
 #define XLOG2DEV(x)     ((double)(LogicalToDeviceX(x)) * m_DEV2PS)
@@ -1083,9 +1083,9 @@ bool wxGtkPrinter::Setup( wxWindow * WXUNUSED(parent) )
 #define YLOG2DEV(x)     ((double)(LogicalToDeviceY(x)) * m_DEV2PS)
 #define YLOG2DEVREL(x)  ((double)(LogicalToDeviceYRel(x)) * m_DEV2PS)
 
-IMPLEMENT_CLASS(wxGtkPrintDC, wxDC)
+IMPLEMENT_CLASS(wxGtkPrinterDC, wxDC)
 
-wxGtkPrintDC::wxGtkPrintDC( const wxPrintData& data )
+wxGtkPrinterDC::wxGtkPrinterDC( const wxPrintData& data )
 {
     m_printData = data;
 
@@ -1125,18 +1125,18 @@ wxGtkPrintDC::wxGtkPrintDC( const wxPrintData& data )
     gs_cairo->cairo_translate(m_cairo, -ml, -mt);
 }
 
-wxGtkPrintDC::~wxGtkPrintDC()
+wxGtkPrinterDC::~wxGtkPrinterDC()
 {
     g_object_unref(m_context);
     g_object_unref(m_layout);
 }
 
-bool wxGtkPrintDC::IsOk() const
+bool wxGtkPrinterDC::IsOk() const
 {
     return m_gpc != NULL;
 }
 
-bool wxGtkPrintDC::DoFloodFill(wxCoord WXUNUSED(x1),
+bool wxGtkPrinterDC::DoFloodFill(wxCoord WXUNUSED(x1),
                                wxCoord WXUNUSED(y1),
                                const wxColour& WXUNUSED(col),
                                int WXUNUSED(style))
@@ -1147,7 +1147,7 @@ bool wxGtkPrintDC::DoFloodFill(wxCoord WXUNUSED(x1),
     return false;
 }
 
-void wxGtkPrintDC::DoGradientFillConcentric(const wxRect& rect, const wxColour& initialColour, const wxColour& destColour, const wxPoint& circleCenter)
+void wxGtkPrinterDC::DoGradientFillConcentric(const wxRect& rect, const wxColour& initialColour, const wxColour& destColour, const wxPoint& circleCenter)
 {
     wxCoord xC = circleCenter.x;
     wxCoord yC = circleCenter.y;
@@ -1193,7 +1193,7 @@ void wxGtkPrintDC::DoGradientFillConcentric(const wxRect& rect, const wxColour& 
     CalcBoundingBox(xR+w, yR+h);
 }
 
-void wxGtkPrintDC::DoGradientFillLinear(const wxRect& rect, const wxColour& initialColour, const wxColour& destColour, wxDirection nDirection)
+void wxGtkPrinterDC::DoGradientFillLinear(const wxRect& rect, const wxColour& initialColour, const wxColour& destColour, wxDirection nDirection)
 {
     wxCoord x = rect.x;
     wxCoord y = rect.y;
@@ -1243,7 +1243,7 @@ void wxGtkPrintDC::DoGradientFillLinear(const wxRect& rect, const wxColour& init
     CalcBoundingBox(x+w, y+h);
 }
 
-bool wxGtkPrintDC::DoGetPixel(wxCoord WXUNUSED(x1),
+bool wxGtkPrinterDC::DoGetPixel(wxCoord WXUNUSED(x1),
                               wxCoord WXUNUSED(y1),
                               wxColour * WXUNUSED(col)) const
 {
@@ -1251,7 +1251,7 @@ bool wxGtkPrintDC::DoGetPixel(wxCoord WXUNUSED(x1),
     return false;
 }
 
-void wxGtkPrintDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
+void wxGtkPrinterDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
     if  (m_pen.GetStyle() == wxTRANSPARENT) return;
 
@@ -1264,7 +1264,7 @@ void wxGtkPrintDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
     CalcBoundingBox( x2, y2 );
 }
 
-void wxGtkPrintDC::DoCrossHair(wxCoord x, wxCoord y)
+void wxGtkPrinterDC::DoCrossHair(wxCoord x, wxCoord y)
 {
     int w, h;
     DoGetSize(&w, &h);
@@ -1281,7 +1281,7 @@ void wxGtkPrintDC::DoCrossHair(wxCoord x, wxCoord y)
     CalcBoundingBox( w, h );
 }
 
-void wxGtkPrintDC::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2,wxCoord xc,wxCoord yc)
+void wxGtkPrinterDC::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2,wxCoord xc,wxCoord yc)
 {
     double dx = x1 - xc;
     double dy = y1 - yc;
@@ -1333,7 +1333,7 @@ void wxGtkPrintDC::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2,wxCoord
     CalcBoundingBox (x2, y2);
 }
 
-void wxGtkPrintDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
+void wxGtkPrinterDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
 {
     gs_cairo->cairo_save( m_cairo );
 
@@ -1359,7 +1359,7 @@ void wxGtkPrintDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,dou
     CalcBoundingBox( x+w, y+h );
 }
 
-void wxGtkPrintDC::DoDrawPoint(wxCoord x, wxCoord y)
+void wxGtkPrinterDC::DoDrawPoint(wxCoord x, wxCoord y)
 {
     if  (m_pen.GetStyle() == wxTRANSPARENT) return;
 
@@ -1372,7 +1372,7 @@ void wxGtkPrintDC::DoDrawPoint(wxCoord x, wxCoord y)
     CalcBoundingBox( x, y );
 }
 
-void wxGtkPrintDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
+void wxGtkPrinterDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
     if (m_pen.GetStyle() == wxTRANSPARENT) return;
 
@@ -1392,7 +1392,7 @@ void wxGtkPrintDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord
     gs_cairo->cairo_stroke ( m_cairo);
 }
 
-void wxGtkPrintDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
+void wxGtkPrinterDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
 {
     if (n==0) return;
 
@@ -1426,12 +1426,12 @@ void wxGtkPrintDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoo
     gs_cairo->cairo_restore(m_cairo);
 }
 
-void wxGtkPrintDC::DoDrawPolyPolygon(int n, int count[], wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
+void wxGtkPrinterDC::DoDrawPolyPolygon(int n, int count[], wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
 {
     wxDC::DoDrawPolyPolygon( n, count, points, xoffset, yoffset, fillStyle );
 }
 
-void wxGtkPrintDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxGtkPrinterDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     width--;
     height--;
@@ -1449,7 +1449,7 @@ void wxGtkPrintDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord 
     CalcBoundingBox( x + width, y + height );
 }
 
-void wxGtkPrintDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
+void wxGtkPrinterDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
 {
     width--;
     height--;
@@ -1497,7 +1497,7 @@ void wxGtkPrintDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, w
     CalcBoundingBox(x+width,y+height);
 }
 
-void wxGtkPrintDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxGtkPrinterDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     width--;
     height--;
@@ -1523,7 +1523,7 @@ void wxGtkPrintDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord he
 }
 
 #if wxUSE_SPLINES
-void wxGtkPrintDC::DoDrawSpline(const wxPointList *points)
+void wxGtkPrinterDC::DoDrawSpline(const wxPointList *points)
 {
     SetPen (m_pen);
 
@@ -1582,7 +1582,7 @@ void wxGtkPrintDC::DoDrawSpline(const wxPointList *points)
 }
 #endif // wxUSE_SPLINES
 
-bool wxGtkPrintDC::DoBlit(wxCoord xdest, wxCoord ydest,
+bool wxGtkPrinterDC::DoBlit(wxCoord xdest, wxCoord ydest,
                           wxCoord width, wxCoord height,
                           wxDC *source, wxCoord xsrc, wxCoord ysrc,
                           int rop, bool useMask,
@@ -1607,14 +1607,14 @@ bool wxGtkPrintDC::DoBlit(wxCoord xdest, wxCoord ydest,
     return true;
 }
 
-void wxGtkPrintDC::DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y )
+void wxGtkPrinterDC::DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y )
 {
     DoDrawBitmap( icon, x, y, true );
 }
 
-void wxGtkPrintDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool useMask )
+void wxGtkPrinterDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool useMask )
 {
-    wxCHECK_RET( bitmap.IsOk(), wxT("Invalid bitmap in wxGtkPrintDC::DoDrawBitmap"));
+    wxCHECK_RET( bitmap.IsOk(), wxT("Invalid bitmap in wxGtkPrinterDC::DoDrawBitmap"));
 
     cairo_surface_t* surface;
     x = wxCoord(XLOG2DEV(x));
@@ -1725,12 +1725,12 @@ void wxGtkPrintDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, b
     gs_cairo->cairo_restore(m_cairo);
 }
 
-void wxGtkPrintDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y )
+void wxGtkPrinterDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y )
 {
     DoDrawRotatedText( text, x, y, 0.0 );
 }
 
-void wxGtkPrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle)
+void wxGtkPrinterDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle)
 {
     double xx = XLOG2DEV(x);
     double yy = YLOG2DEV(y);
@@ -1842,7 +1842,7 @@ void wxGtkPrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
     CalcBoundingBox (x + w, y + h);
 }
 
-void wxGtkPrintDC::Clear()
+void wxGtkPrinterDC::Clear()
 {
 // Clear does nothing for printing, but keep the code
 // for later reuse 
@@ -1855,7 +1855,7 @@ void wxGtkPrintDC::Clear()
 */
 }
 
-void wxGtkPrintDC::SetFont( const wxFont& font )
+void wxGtkPrinterDC::SetFont( const wxFont& font )
 {
     m_font = font;
 
@@ -1876,7 +1876,7 @@ void wxGtkPrintDC::SetFont( const wxFont& font )
     }
 }
 
-void wxGtkPrintDC::SetPen( const wxPen& pen )
+void wxGtkPrinterDC::SetPen( const wxPen& pen )
 {
     if (!pen.Ok()) return;
 
@@ -1955,7 +1955,7 @@ void wxGtkPrintDC::SetPen( const wxPen& pen )
     }
 }
 
-void wxGtkPrintDC::SetBrush( const wxBrush& brush )
+void wxGtkPrinterDC::SetBrush( const wxBrush& brush )
 {
     if (!brush.Ok()) return;
 
@@ -2048,7 +2048,7 @@ void wxGtkPrintDC::SetBrush( const wxBrush& brush )
     }
 }
 
-void wxGtkPrintDC::SetLogicalFunction( int function )
+void wxGtkPrinterDC::SetLogicalFunction( int function )
 {
     if (function == wxCLEAR)
         gs_cairo->cairo_set_operator (m_cairo, CAIRO_OPERATOR_CLEAR);
@@ -2066,7 +2066,7 @@ void wxGtkPrintDC::SetLogicalFunction( int function )
         gs_cairo->cairo_set_operator (m_cairo, CAIRO_OPERATOR_SOURCE);
 }
 
-void wxGtkPrintDC::SetBackground( const wxBrush& brush )
+void wxGtkPrinterDC::SetBackground( const wxBrush& brush )
 {
     m_backgroundBrush = brush;
     gs_cairo->cairo_save(m_cairo);
@@ -2077,7 +2077,7 @@ void wxGtkPrintDC::SetBackground( const wxBrush& brush )
     gs_cairo->cairo_restore(m_cairo);
 }
 
-void wxGtkPrintDC::SetBackgroundMode(int mode)
+void wxGtkPrinterDC::SetBackgroundMode(int mode)
 {
     if (mode == wxSOLID)
         m_backgroundMode = wxSOLID;
@@ -2085,38 +2085,38 @@ void wxGtkPrintDC::SetBackgroundMode(int mode)
         m_backgroundMode = wxTRANSPARENT;
 }
 
-void wxGtkPrintDC::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxGtkPrinterDC::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     gs_cairo->cairo_rectangle ( m_cairo, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEVREL(width), YLOG2DEVREL(height));
     gs_cairo->cairo_clip(m_cairo);
 }
 
-void wxGtkPrintDC::DestroyClippingRegion()
+void wxGtkPrinterDC::DestroyClippingRegion()
 {
     gs_cairo->cairo_reset_clip(m_cairo);
 }
 
-bool wxGtkPrintDC::StartDoc(const wxString& WXUNUSED(message))
+bool wxGtkPrinterDC::StartDoc(const wxString& WXUNUSED(message))
 {
     return true;
 }
 
-void wxGtkPrintDC::EndDoc()
+void wxGtkPrinterDC::EndDoc()
 {
     return;
 }
 
-void wxGtkPrintDC::StartPage()
+void wxGtkPrinterDC::StartPage()
 {
     return;
 }
 
-void wxGtkPrintDC::EndPage()
+void wxGtkPrinterDC::EndPage()
 {
     return;
 }
 
-wxCoord wxGtkPrintDC::GetCharHeight() const
+wxCoord wxGtkPrinterDC::GetCharHeight() const
 {
     pango_layout_set_text( m_layout, "H", 1 );
 
@@ -2126,7 +2126,7 @@ wxCoord wxGtkPrintDC::GetCharHeight() const
     return wxRound( h * m_PS2DEV );
 }
 
-wxCoord wxGtkPrintDC::GetCharWidth() const
+wxCoord wxGtkPrinterDC::GetCharWidth() const
 {
     pango_layout_set_text( m_layout, "H", 1 );
 
@@ -2136,7 +2136,7 @@ wxCoord wxGtkPrintDC::GetCharWidth() const
     return wxRound( w * m_PS2DEV );
 }
 
-void wxGtkPrintDC::DoGetTextExtent(const wxString& string, wxCoord *width, wxCoord *height,
+void wxGtkPrinterDC::DoGetTextExtent(const wxString& string, wxCoord *width, wxCoord *height,
                      wxCoord *descent,
                      wxCoord *externalLeading,
                      const wxFont *theFont ) const
@@ -2194,7 +2194,7 @@ void wxGtkPrintDC::DoGetTextExtent(const wxString& string, wxCoord *width, wxCoo
     pango_layout_set_font_description( m_layout, m_fontdesc );
 }
 
-void wxGtkPrintDC::DoGetSize(int* width, int* height) const
+void wxGtkPrinterDC::DoGetSize(int* width, int* height) const
 {
     GtkPageSetup *setup = gtk_print_context_get_page_setup( m_gpc );
 
@@ -2204,7 +2204,7 @@ void wxGtkPrintDC::DoGetSize(int* width, int* height) const
         *height = wxRound( gtk_page_setup_get_paper_height( setup, GTK_UNIT_POINTS ) * m_PS2DEV );
 }
 
-void wxGtkPrintDC::DoGetSizeMM(int *width, int *height) const
+void wxGtkPrinterDC::DoGetSizeMM(int *width, int *height) const
 {
     GtkPageSetup *setup = gtk_print_context_get_page_setup( m_gpc );
 
@@ -2214,23 +2214,23 @@ void wxGtkPrintDC::DoGetSizeMM(int *width, int *height) const
         *height = wxRound( gtk_page_setup_get_paper_height( setup, GTK_UNIT_MM ) );
 }
 
-wxSize wxGtkPrintDC::GetPPI() const
+wxSize wxGtkPrinterDC::GetPPI() const
 {
     return wxSize( (int)m_resolution, (int)m_resolution );
 }
 
-void wxGtkPrintDC::SetPrintData(const wxPrintData& data)
+void wxGtkPrinterDC::SetPrintData(const wxPrintData& data)
 {
     m_printData = data;
 }
 
-void wxGtkPrintDC::SetResolution(int WXUNUSED(ppi))
+void wxGtkPrinterDC::SetResolution(int WXUNUSED(ppi))
 {
     // We can't change ppi of the GtkPrintContext.
     // TODO: should we really support this?
 }
 
-int wxGtkPrintDC::GetResolution()
+int wxGtkPrinterDC::GetResolution()
 {
     return m_resolution;
 }

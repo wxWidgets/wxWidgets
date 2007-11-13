@@ -204,14 +204,14 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-// wxGnomePrintDC
+// wxGnomePrinterDC
 //-----------------------------------------------------------------------------
 
-class wxGnomePrintDC: public wxDC
+class wxGnomePrinterDC: public wxDC
 {
 public:
-    wxGnomePrintDC( const wxPrintData& data );
-    virtual ~wxGnomePrintDC();
+    wxGnomePrinterDC( const wxPrintData& data );
+    virtual ~wxGnomePrinterDC();
 
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
@@ -254,7 +254,7 @@ protected:
     void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 #if wxUSE_SPLINES
     void DoDrawSpline(const wxPointList *points);
-#endif // wxUSE_SPLINES
+#endif 
     bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
             wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop = wxCOPY, bool useMask = false,
             wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
@@ -292,8 +292,8 @@ private:
     void makeEllipticalPath(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxGnomePrintDC)
-    DECLARE_NO_COPY_CLASS(wxGnomePrintDC)
+    DECLARE_DYNAMIC_CLASS(wxGnomePrinterDC)
+    DECLARE_NO_COPY_CLASS(wxGnomePrinterDC)
 };
 
 // ----------------------------------------------------------------------------

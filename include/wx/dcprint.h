@@ -16,6 +16,34 @@
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
+#if wxUSE_NEW_DC
+
+#include "wx/dc.h"
+
+//-----------------------------------------------------------------------------
+// wxPrinterDC
+//-----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxPrinterImplDCBase
+{
+public:
+    wxPrinterImplDCBase() { }
+
+    virtual wxRect DoGetPaperRect() = 0;
+};
+
+
+class WXDLLIMPEXP_CORE wxPrinterDC: public wxDC
+{
+public:
+    wxPrinterDC( const wxPrintData& data );
+    
+    wxRect GetPaperRect();
+};
+
+#else
+
+
 #if defined(__WXPALMOS__)
 #include "wx/palmos/dcprint.h"
 #elif defined(__WXMSW__)
@@ -28,6 +56,7 @@
 #include "wx/mac/dcprint.h"
 #endif
 
+#endif // wxUSE_NEW_DC
 #endif // wxUSE_PRINTING_ARCHITECTURE
 #endif
     // _WX_DCPRINT_H_BASE_

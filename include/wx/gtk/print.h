@@ -215,14 +215,14 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-// wxGtkPrintDC
+// wxGtkPrinterDC
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGtkPrintDC: public wxDC
+class WXDLLIMPEXP_CORE wxGtkPrinterDC: public wxDC
 {
 public:
-    wxGtkPrintDC( const wxPrintData& data );
-    virtual ~wxGtkPrintDC();
+    wxGtkPrinterDC( const wxPrintData& data );
+    virtual ~wxGtkPrinterDC();
 
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
@@ -267,7 +267,7 @@ protected:
     void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 #if wxUSE_SPLINES
     void DoDrawSpline(const wxPointList *points);
-#endif // wxUSE_SPLINES
+#endif
     bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
             wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop = wxCOPY, bool useMask = false,
             wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
@@ -304,8 +304,8 @@ private:
     double                  m_PS2DEV;
     double                  m_DEV2PS;
 
-    DECLARE_DYNAMIC_CLASS(wxGtkPrintDC)
-    DECLARE_NO_COPY_CLASS(wxGtkPrintDC)
+    DECLARE_DYNAMIC_CLASS(wxGtkPrinterDC)
+    DECLARE_NO_COPY_CLASS(wxGtkPrinterDC)
 };
 
 // ----------------------------------------------------------------------------

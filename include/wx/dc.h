@@ -41,6 +41,8 @@ class WXDLLIMPEXP_FWD_CORE wxPaintDC;
 class WXDLLIMPEXP_FWD_CORE wxWindowDC;
 class WXDLLIMPEXP_FWD_CORE wxScreenDC;
 class WXDLLIMPEXP_FWD_CORE wxMemoryDC;
+class WXDLLIMPEXP_FWD_CORE wxPrinterDC;
+#include "wx/cmndata.h"
 #else
 class WXDLLIMPEXP_FWD_CORE wxDCBase;
 #endif
@@ -131,6 +133,7 @@ public:
     virtual wxImplDC* CreateMemoryDC( wxMemoryDC *owner, wxBitmap &bitmap ) = 0;
     virtual wxImplDC* CreateMemoryDC( wxMemoryDC *owner, wxDC *dc ) = 0;
     virtual wxImplDC* CreateScreenDC( wxScreenDC *owner ) = 0;
+    virtual wxImplDC* CreatePrinterDC( wxPrinterDC *owner, const wxPrintData &data  ) = 0;
     
     static void SetDCFactory( wxDCFactory *factory );
     static wxDCFactory *GetFactory();
@@ -157,6 +160,7 @@ public:
     virtual wxImplDC* CreateMemoryDC( wxMemoryDC *owner, wxBitmap &bitmap );
     virtual wxImplDC* CreateMemoryDC( wxMemoryDC *owner, wxDC *dc );
     virtual wxImplDC* CreateScreenDC( wxScreenDC *owner );
+    virtual wxImplDC* CreatePrinterDC( wxPrinterDC *owner, const wxPrintData &data  );
 };
 
 //-----------------------------------------------------------------------------

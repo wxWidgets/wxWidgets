@@ -52,5 +52,6 @@ private:
 #include "wx/os2/dcscreen.h"
 #endif
 
+
 #endif
     // _WX_DCSCREEN_H_BASE_
