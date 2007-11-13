@@ -81,10 +81,8 @@ here are some of the benefits:
 \item You get the source.
 \item Available on a variety of popular platforms.
 \item Works with almost all popular C++ compilers and Python.
-\item Over 50 example programs.
+\item Over 70 example programs.
 \item Over 1000 pages of printable and on-line documentation.
-\item Includes Tex2RTF, to allow you to produce your own documentation
-in Windows Help, HTML and Word RTF formats.
 \item Simple-to-use, object-oriented API.
 \item Flexible event system.
 \item Graphics calls include lines, rounded rectangles, splines, polylines, etc.
@@ -102,6 +100,8 @@ them to the clipboard.
 \item Network support via a family of socket and protocol classes.
 \item Support for platform independent image processing.
 \item Built-in support for many file formats (BMP, PNG, JPEG, GIF, XPM, PNM, PCX).
+\item Includes Tex2RTF, to allow you to produce your own documentation
+in Windows Help, HTML and Word RTF formats.
 \end{itemize}
 
 \section{wxWidgets requirements}\label{requirements}
@@ -154,36 +154,54 @@ You can also buy a CD-ROM using the form on the Web site.
 
 \section{Acknowledgements}\label{acknowledgements}
 
-Thanks are due to AIAI for being willing to release the original version of
-wxWidgets into the public domain, and to our patient partners.
+The following is the list of the core, active developers of wxWidgets which keep
+it running and have provided an invaluable, extensive and high-quality amount of
+changes over the many of years of wxWidgets' life:
 
-We would particularly like to thank the following for their contributions to wxWidgets, and the many others who have been involved in
-the project over the years. Apologies for any unintentional omissions from this list. 
+\begin{description}\itemsep=0pt
+\item Julian Smart
+\item Vadim Zeitlin
+\item Robert Roebling
+\item Robin Dunn
+\item Stefan Csomor
+\item Vaclav Slavik
+\item Paul Cornett
+\item Wlodzimierz `ABX' Skiba
+\item Chris Elliott
+\item David Elliott
+\item Kevin Hock
+\item Stefan Neis
+\item Michael Wetherell
+\end{description}
+
+We would particularly like to thank the following peoples for their contributions 
+to wxWidgets, and the many others who have been involved in the project over the years. 
+Apologies for any unintentional omissions from this alphabetic list:
  
 Yiorgos Adamopoulos, Jamshid Afshar, Alejandro Aguilar-Sierra, AIAI, 
 Patrick Albert, Karsten Ballueder, Mattia Barbon, Michael Bedward, 
 Kai Bendorf, Yura Bidus, Keith Gary Boyce, Chris Breeze, Pete Britton, 
 Ian Brown, C. Buckley, Marco Cavallini, Dmitri Chubraev, Robin Corbet, Cecil Coupe, 
-Stefan Csomor, Andrew Davison, Gilles Depeyrot, Neil Dudman, Robin Dunn, 
-Hermann Dunkel, Jos van Eijndhoven, Chris Elliott, David Elliott, Tom Felici, 
-Thomas Fettig, Matthew Flatt, Pasquale Foggia, Josep Fortiana, Todd Fries, 
+Andrew Davison, Gilles Depeyrot, Neil Dudman, Hermann Dunkel, Jos van Eijndhoven, 
+Tom Felici, Thomas Fettig, Matthew Flatt, Pasquale Foggia, Josep Fortiana, Todd Fries, 
 Dominic Gallagher, Guillermo Rodriguez Garcia, Wolfram Gloger, Norbert Grotz, 
 Stefan Gunter, Bill Hale, Patrick Halke, Stefan Hammes, Guillaume Helle, 
-Harco de Hilster, Kevin Hock, Cord Hockemeyer, Markus Holzem, Olaf Klein, Leif Jensen, 
+Harco de Hilster, Cord Hockemeyer, Markus Holzem, Olaf Klein, Leif Jensen, 
 Bart Jourquin, Guilhem Lavaux, Ron Lee, Jan Lessner, Nicholas Liebmann, 
-Torsten Liermann, Per Lindqvist, Thomas Runge, Tatu M\"{a}nnist\"{o}, 
-Scott Maxwell, Thomas Myers, Oliver Niedung, Stefan Neis, Ryan Norton, Hernan Otero, 
+Torsten Liermann, Per Lindqvist, Francesco Montorsi, Thomas Runge, Tatu M\"{a}nnist\"{o}, 
+Scott Maxwell, Thomas Myers, Oliver Niedung, Ryan Norton, Hernan Otero, 
 Ian Perrigo, Timothy Peters, Giordano Pezzoli, Harri Pasanen, Thomaso Paoletti, 
-Garrett Potts, Marcel Rasche, Robert Roebling, Dino Scaringella, 
-Jobst Schmalenbach, Arthur Seaton, Paul Shirley, Wlodzimierz `ABX' Skiba, 
-Vaclav Slavik, Julian Smart, Stein Somers, Petr Smilauer, Neil Smith, 
-Kari Syst\"{a}, George Tasker, Arthur Tetzlaff-Deas, Jonathan Tonberg, 
-Jyrki Tuomi, Janos Vegh, Andrea Venturoli, David Webster, Otto Wyss, 
-Vadim Zeitlin, Xiaokun Zhu, Edward Zimmermann.
+Garrett Potts, Marcel Rasche, Dino Scaringella, Jobst Schmalenbach, Arthur Seaton, 
+Paul Shirley, Stein Somers, Petr Smilauer, Neil Smith, Kari Syst\"{a}, George Tasker, 
+Arthur Tetzlaff-Deas, Jonathan Tonberg, Jyrki Tuomi, Janos Vegh, Andrea Venturoli, 
+David Webster, Otto Wyss, Xiaokun Zhu, Edward Zimmermann.
+
+Many thanks also to AIAI for being willing to release the original version of
+wxWidgets into the public domain, and to our patient partners.
 
 `Graphplace', the basis for the wxGraphLayout library, is copyright Dr. Jos
 T.J. van Eijndhoven of Eindhoven University of Technology. The code has
-been used in wxGraphLayout with his permission.
+been used in wxGraphLayout (not in wxWidgets anymore) with his permission.
 
 We also acknowledge the author of XFIG, the excellent Unix drawing tool,
 from the source of which we have borrowed some spline drawing code.
@@ -378,8 +396,8 @@ are described in the \helpref{Byte order macros}{byteordermacros} section.
 One of the purposes of wxWidgets is to reduce the need for conditional
 compilation in source code, which can be messy and confusing to follow.
 However, sometimes it is necessary to incorporate platform-specific
-features (such as metafile use under MS Windows). The symbols
-listed in the file {\tt symbols.txt} may be used for this purpose,
+features (such as metafile use under MS Windows). The \helpref{wxUSE\_*}{wxusedef} 
+symbols listed in the file {\tt setup.h} may be used for this purpose,
 along with any user-supplied ones.
 
 \section{C++ issues}\label{cpp}
@@ -443,30 +461,35 @@ in Microsoft C++.
 When building an application which may be used under different
 environments, one difficulty is coping with documents which may be
 moved to different directories on other machines. Saving a file which
-has pointers to full pathnames is going to be inherently unportable. One
-approach is to store filenames on their own, with no directory
-information.  The application searches through a number of locally
-defined directories to find the file. To support this, the class {\bf
-wxPathList} makes adding directories and searching for files easy, and
-the global function {\bf wxFileNameFromPath} allows the application to
-strip off the filename from the path if the filename must be stored.
-This has undesirable ramifications for people who have documents of the
-same name in different directories.
+has pointers to full pathnames is going to be inherently unportable.
 
-As regards the limitations of DOS 8+3 single-case filenames versus
-unrestricted Unix filenames, the best solution is to use DOS filenames
-for your application, and also for document filenames {\it if} the user
-is likely to be switching platforms regularly. Obviously this latter
-choice is up to the application user to decide.  Some programs (such as
-YACC and LEX) generate filenames incompatible with DOS; the best
-solution here is to have your Unix makefile rename the generated files
-to something more compatible before transferring the source to DOS.
-Transferring DOS files to Unix is no problem, of course, apart from EOL
-conversion for which there should be a utility available (such as
-dos2unix).
+One approach is to store filenames on their own, with no directory
+information. The application then searches into a list of standard
+paths (platform-specific) through the use of \helpref{wxStandardPaths}{wxstandardpaths}.
 
-See also the File Functions section of the reference manual for
-descriptions of miscellaneous file handling functions.
+Eventually you may want to use also the \helpref{wxPathList}{wxpathlist} class.
+
+Nowadays the limitations of DOS 8+3 filenames doesn't apply anymore.
+Most modern operating systems allow at least 255 characters in the filename;
+the exact maximum length, as well as the characters allowed in the filenames, 
+are OS-specific so you should try to avoid extremely long (> 255 chars) filenames
+and/or filenames with non-ANSI characters.
+
+Another thing you need to keep in mind is that all Windows operating systems
+are case-insensitive, while Unix operating systems (Linux, Mac, etc) are
+case-sensitive.
+
+Also, for text files, different OSes use different End Of Lines (EOL).
+Windows uses CR+LF convention, Linux uses LF only, Mac CR only.
+
+The \helpref{wxTextFile}{wxtextfile},\helpref{wxTextInputStream}{wxtextinputstream},
+\helpref{wxTextOutputStream}{wxtextoutputstream} classes help to abstract
+from these differences.
+Of course, there are also 3rd party utilities such as \tt{dos2unix} and \tt{unix2dos}
+which do the EOL conversions.
+
+See also the \helpref{File Functions}{filefunctions} section of the reference 
+manual for the description of miscellaneous file handling functions.
 
 \chapter{Utilities and libraries supplied with wxWidgets}\label{utilities}
 \setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
