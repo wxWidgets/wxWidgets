@@ -16,7 +16,7 @@
 
 #include "wx/frame.h"
 
-WXDLLEXPORT_DATA(extern const wxChar) wxStatusLineNameStr[];
+WXDLLEXPORT_DATA(extern const char) wxStatusLineNameStr[];
 
 class WXDLLIMPEXP_FWD_CORE wxMDIClientWindow;
 class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;

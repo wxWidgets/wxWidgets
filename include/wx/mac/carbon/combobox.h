@@ -15,7 +15,7 @@
 #include "wx/containr.h"
 #include "wx/choice.h"
 
-WXDLLEXPORT_DATA(extern const wxChar) wxComboBoxNameStr[];
+WXDLLEXPORT_DATA(extern const char) wxComboBoxNameStr[];
 
 // forward declaration of private implementation classes
 

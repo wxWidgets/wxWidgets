@@ -16,7 +16,7 @@
 #include "wx/slider.h"
 #include "wx/stattext.h"
 
-WXDLLEXPORT_DATA(extern const wxChar) wxSliderNameStr[];
+WXDLLEXPORT_DATA(extern const char) wxSliderNameStr[];
 
 // Slider
 class WXDLLEXPORT wxSlider: public wxSliderBase

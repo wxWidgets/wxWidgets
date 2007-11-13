@@ -14,7 +14,7 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const wxChar) wxGaugeNameStr[];
+WXDLLEXPORT_DATA(extern const char) wxGaugeNameStr[];
 
 // Group box
 class WXDLLEXPORT wxGauge: public wxGaugeBase
