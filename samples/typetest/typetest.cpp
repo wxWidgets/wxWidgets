@@ -922,12 +922,12 @@ void MyApp::DoMIMEDemo(wxCommandEvent& WXUNUSED(event))
                                _T("XyZ %s"),
                                _T("XyZ -p %s"),
                                _T("The one and only XYZ format file"),
-                               _T("xyz"), _T("123"), NULL),
+                               _T("xyz"), _T("123"), wxNullPtr),
                 wxFileTypeInfo(_T("text/html"),
                                _T("lynx %s"),
                                _T("lynx -dump %s | lpr"),
                                _T("HTML document (from fallback)"),
-                               _T("htm"), _T("html"), NULL),
+                               _T("htm"), _T("html"), wxNullPtr),
 
                 // must terminate the table with this!
                 wxFileTypeInfo()
