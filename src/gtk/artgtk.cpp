@@ -33,7 +33,7 @@
     // gtk_object_sink
     #undef GTK_DISABLE_DEPRECATED
 #endif
-#include <gtk/gtk.h>
+#include "wx/gtk/private.h"
 
 // compatibility with older GTK+ versions:
 #ifndef GTK_STOCK_FILE
