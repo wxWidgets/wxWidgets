@@ -53,7 +53,7 @@ wxStandardPathsBase& wxStandardPathsBase::Get()
 
 wxString wxStandardPathsBase::GetExecutablePath() const
 {
-    if ( !wxTheApp || !wxTheApp->argv )
+    if ( !wxTheApp || ! (bool) wxTheApp->argv )
         return wxEmptyString;
 
     wxString argv0 = wxTheApp->argv[0];
