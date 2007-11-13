@@ -413,13 +413,17 @@ void wxStdRenderer::DrawBorder(wxDC& dc,
     switch ( border )
     {
         case wxBORDER_SUNKEN:
+        case wxBORDER_THEME:
             DrawSunkenBorder(dc, &rect);
             break;
 
+        // wxBORDER_DOUBLE and wxBORDER_THEME are currently the same value.
+#if 0
         case wxBORDER_DOUBLE:
             DrawAntiSunkenBorder(dc, &rect);
             DrawExtraBorder(dc, &rect);
             break;
+#endif
 
         case wxBORDER_STATIC:
             DrawStaticBorder(dc, &rect);
@@ -458,6 +462,7 @@ wxRect wxStdRenderer::GetBorderDimensions(wxBorder border) const
 
         case wxBORDER_RAISED:
         case wxBORDER_SUNKEN:
+        case wxBORDER_THEME:
             width = 2;
             break;
 

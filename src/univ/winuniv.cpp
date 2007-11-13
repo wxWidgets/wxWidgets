@@ -145,6 +145,11 @@ bool wxWindow::Create(wxWindow *parent,
                       long style,
                       const wxString& name)
 {
+    // Get default border
+    wxBorder border = GetBorder(style);
+    style &= ~wxBORDER_MASK;
+    style |= border;
+
     long actualStyle = style;
 
     // we add wxCLIP_CHILDREN to get the same ("natural") behaviour under MSW
@@ -665,7 +670,7 @@ void wxWindow::OnSize(wxSizeEvent& event)
             }
         }
         else
-        if (HasFlag( wxSUNKEN_BORDER ) || HasFlag( wxRAISED_BORDER ))
+        if (HasFlag( wxSUNKEN_BORDER ) || HasFlag( wxRAISED_BORDER ) || HasFlag( wxBORDER_THEME ))
         {
             if (newSize.y > m_oldSize.y)
             {
