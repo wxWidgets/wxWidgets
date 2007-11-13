@@ -2155,6 +2155,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- Native color/font dialogs -->
     src/mac/carbon/fontdlgosx.mm
     src/mac/carbon/colordlgosx.mm
+    <!-- cocoa bridge -->
+    src/mac/carbon/utilscocoa.mm
 </if>
 </set>
 
