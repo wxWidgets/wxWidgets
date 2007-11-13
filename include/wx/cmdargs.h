@@ -26,7 +26,7 @@
 // as it's used for compatibility, it tries to look as much as traditional
 // (char **) argv as possible, in particular it provides implicit conversions
 // to "char **" and also array-like operator[]
-class wxCmdLineArgsArray
+class WXDLLIMPEXP_BASE wxCmdLineArgsArray
 {
 public:
     wxCmdLineArgsArray() { m_argsA = NULL; m_argsW = NULL; }
@@ -80,6 +80,12 @@ public:
         return !m_args.empty();
     }
 
+    // and the same for "if ( !argv )" checks
+    bool operator!() const
+    {
+        return m_args.empty();
+    }
+
     wxString operator[](size_t n) const
     {
         return m_args[n];
@@ -92,9 +98,13 @@ public:
         return m_args[n];
     }
 
-    // this is the only method of this class which doesn't exist solely for
-    // compatibility purposes: it allows to access the arguments as a
-    // convenient array of wxStrings
+
+    // convenience methods, i.e. not existing only for backwards compatibility
+
+    // do we have any arguments at all?
+    bool IsEmpty() const { return m_args.empty(); }
+
+    // access the arguments as a convenient array of wxStrings
     const wxArrayString& GetArguments() const { return m_args; }
 
     ~wxCmdLineArgsArray()
@@ -128,6 +138,13 @@ private:
 
     DECLARE_NO_COPY_CLASS(wxCmdLineArgsArray)
 };
+
+// provide global operator overload for compatibility with the existing code
+// doing things like "if ( condition && argv )"
+inline operator&&(bool cond, const wxCmdLineArgsArray& array)
+{
+    return cond && !array.IsEmpty();
+}
 
 #endif // wxUSE_UNICODE
 

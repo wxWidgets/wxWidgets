@@ -177,7 +177,7 @@ bool wxAppConsoleBase::Initialize(int& argcOrig, wxChar **argvOrig)
 #endif
 
 #ifndef __WXPALMOS__
-    if ( m_appName.empty() && (bool) argv )
+    if ( m_appName.empty() && argv )
     {
         // the application name is, by default, the name of its executable file
         wxFileName::SplitPath(argv[0], NULL, &m_appName, NULL);
