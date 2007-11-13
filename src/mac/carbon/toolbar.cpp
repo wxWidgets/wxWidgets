@@ -1500,6 +1500,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 #if wxMAC_USE_NATIVE_TOOLBAR
                 if (m_macHIToolbarRef != NULL)
                 {
+                    HIToolbarItemRef item;
                     err = HIToolbarItemCreate(
                         kHIToolbarSeparatorIdentifier,
                         kHIToolbarItemCantBeRemoved | kHIToolbarItemIsSeparator | kHIToolbarItemAllowDuplicates,
