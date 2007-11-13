@@ -2261,15 +2261,27 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                             wxWindow *win = this;
                             if ( !bCtrlDown )
                             {
+                                // this will contain the dialog code of this
+                                // window and all of its parent windows
+                                LONG lDlgCode2 = lDlgCode;
+
                                 while ( win && !win->IsTopLevel() )
                                 {
-                                    if ( lDlgCode & DLGC_WANTMESSAGE )
+                                    if ( lDlgCode2 & DLGC_WANTMESSAGE )
                                     {
                                         // as it wants to process Enter itself,
                                         // don't call IsDialogMessage() which
                                         // would consume it
                                         return false;
                                     }
+
+                                    lDlgCode2 = ::SendMessage
+                                                  (
+                                                    GetHwndOf(win),
+                                                    WM_GETDLGCODE,
+                                                    0,
+                                                    0
+                                                  );
 
                                     win = win->GetParent();
                                 }
