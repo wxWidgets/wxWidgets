@@ -371,7 +371,7 @@ static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
         return;
     }
 
-    if (win->HasFlag(wxSUNKEN_BORDER))
+    if (win->HasFlag(wxSUNKEN_BORDER) || win->HasFlag(wxBORDER_THEME))
     {
         gtk_draw_shadow( widget->style,
                          widget->window,
@@ -2495,6 +2495,11 @@ bool wxWindowGTK::Create( wxWindow *parent,
                           long style,
                           const wxString &name  )
 {
+    // Get default border
+    wxBorder border = GetBorder(style);
+    style &= ~wxBORDER_MASK;
+    style |= border;
+
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
@@ -2526,7 +2531,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
     {
         gtk_pizza_set_shadow_type( pizza, GTK_MYSHADOW_OUT );
     }
-    else if (HasFlag(wxSUNKEN_BORDER))
+    else if (HasFlag(wxSUNKEN_BORDER) || HasFlag(wxBORDER_THEME))
     {
         gtk_pizza_set_shadow_type( pizza, GTK_MYSHADOW_IN );
     }
@@ -2989,7 +2994,7 @@ void wxWindowGTK::DoSetClientSize( int width, int height )
         int dh = 0;
 
 #ifndef __WXUNIVERSAL__
-        if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
+        if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER) || HasFlag(wxBORDER_THEME))
         {
             /* when using GTK 1.2 we set the shadow border size to 2 */
             dw += 2 * 2;
@@ -3053,7 +3058,7 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
         int dh = 0;
 
 #ifndef __WXUNIVERSAL__
-        if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
+        if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER) || HasFlag(wxBORDER_THEME))
         {
             /* when using GTK 1.2 we set the shadow border size to 2 */
             dw += 2 * 2;
