@@ -33,7 +33,7 @@
 // Define this only if native implementation includes all features
 #define wxCOMBOCONTROL_FULLY_FEATURED
 
-extern WXDLLIMPEXP_DATA_CORE(const wxChar) wxComboBoxNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxComboBoxNameStr[];
 
 class WXDLLEXPORT wxComboCtrl : public wxComboCtrlBase
 {
