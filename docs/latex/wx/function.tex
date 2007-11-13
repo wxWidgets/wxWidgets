@@ -9,7 +9,7 @@
 %% License:     wxWindows license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Functions}\label{functions}
+\chapter{Functions and macros}\label{functions}
 \setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
 \setfooter{\thepage}{}{}{}{}{\thepage}
 
@@ -2848,7 +2848,7 @@ Passes data to the clipboard.
 The clipboard must have previously been opened for this call to succeed.
 
 
-\section{Miscellaneous functions}\label{miscellany}
+\section{Miscellaneous functions and macros}\label{miscellany}
 
 
 \membersection{wxBase64Decode}\label{wxbase64decode}
@@ -3740,6 +3740,59 @@ been compiled on a big-endian architecture, the value will be unchanged.
 Use these macros to read data from and write data to a file that stores
 data in big-endian format.
 
+
+\membersection{wxFORCE\_LINK\_THIS\_MODULE}\label{wxforcelinkthismodule}
+
+\func{}{wxFORCE\_LINK\_THIS\_MODULE}{moduleName}
+
+This macro can be used in conjunction with the
+\helpref{wxFORCE\_LINK\_MODULE}{wxforcelinkmodule} macro to force
+the linker to include in its output a specific object file.
+
+In particular, you should use this macro in the source file which you want
+to force for inclusion. The \tt{moduleName} needs to be a name not already
+in use in other \tt{wxFORCE\_LINK\_THIS\_MODULE} macros, but is not required
+to be e.g. the same name of the source file (even if it's a good choice).
+
+\wxheading{Include files}
+
+<wx/link.h>
+
+
+\membersection{wxFORCE\_LINK\_MODULE}\label{wxforcelinkmodule}
+
+\func{}{wxFORCE\_LINK\_MODULE}{moduleName}
+
+This macro can be used in conjunction with the
+\helpref{wxFORCE\_LINK\_THIS\_MODULE}{wxforcelinkthismodule} macro to force
+the linker to include in its output a specific object file.
+
+In particular, you should use this macro in a source file which you know
+for sure is linked in the output (e.g. the source file containing the "main()"
+of your app). The \tt{moduleName} is the name of the module you want to forcefully link
+(i.e. the name you used in the relative \helpref{wxFORCE\_LINK\_THIS\_MODULE}{wxforcelinkthismodule} macro.
+
+\wxheading{Include files}
+
+<wx/link.h>
+
+
+\membersection{wxIMPLEMENT\_APP}\label{wximplementapp}
+
+\func{}{wxIMPLEMENT\_APP}{className}
+
+This is used in the application class implementation file to make the application class 
+known to wxWidgets for dynamic construction. You use this as:
+
+\begin{verbatim}
+  wxIMPLEMENT_APP(MyApp)
+\end{verbatim}
+
+See also \helpref{wxDECLARE\_APP}{wxdeclareapp}.
+
+\wxheading{Include files}
+
+<wx/app.h>
 
 
 \section{RTTI functions}\label{rttimacros}
