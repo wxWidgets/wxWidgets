@@ -8,12 +8,14 @@ See wx.bkl for platform-independent notes.
 Format-specific notes:
 
 * autoconf:
-        Beware that you have to use AM_OPTIONS_WXCONFIG and
-        AM_PATH_WXCONFIG in your configure.in to get at least the
+        Beware that you have to use WX_CONFIG_OPTIONS and
+        WX_CONFIG_CHECK in your configure.in to get at least the
         WX_CPPFLAGS, WX_CFLAGS, WX_CXXFLAGS, WX_LIBS option values defined.
+
         To detect the WX_* option values typically you also want to use
-        the AM_WXPRESETS_OPTIONS and AM_WXPRESETS_CHECKS macros
-        (see wxpresets.m4 for more info).
+        the WX_STANDARD_OPTIONS, WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS,
+        WX_CONFIG_CHECK and finally WX_DETECT_STANDARD_OPTION_VALUES macros
+        (see wxwin.m4 for more info).
 
 -->
 
@@ -194,7 +196,7 @@ Format-specific notes:
             </action>
         </if>
 
-        <!-- we need this but the trick used in default-values above
+        <!-- we need these vars but the trick used in the default values above
              prevents bakefile from detecting it: -->
         <set var="FORMAT_OUTPUT_VARIABLES" append="1">WX_CONFIG WX_VERSION</set>
 
@@ -205,7 +207,7 @@ Format-specific notes:
         <define-tag name="wx-lib" rules="exe,dll,module">
             <if cond="value=='base'">
                 <!-- all wx libraries should have been already specified, thus
-                    $(__liblist) should contain the full list... -->
+                    $(__liblist) should contain the full list of required wxlibs... -->
                 <set var="__liblist" append="1">base</set>
                 <ldflags>`$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs $(','.join(__liblist.split()))`</ldflags>
             </if>
