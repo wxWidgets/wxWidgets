@@ -82,6 +82,10 @@ all the parameters.
 \param{long}{ style = wxAC\_DEFAULT\_STYLE},\rtfsp
 \param{const wxString\& }{name = ``animationctrl"}}
 
+After control creation you must explicitely call \helpref{Play}{wxanimationctrlplay}
+to start to play the animation. Until that function won't be called, the first frame
+of the animation is displayed.
+
 \wxheading{Parameters}
 
 \docparam{parent}{Parent window, must be non-\NULL.}
@@ -98,9 +102,6 @@ all the parameters.
 
 \docparam{name}{Control name.}
 
-After control creation you must explicitely call \helpref{Play}{wxanimationctrlplay}
-to start to play the animation. Until that function won't be called, the first frame
-of the animation is displayed.
 
 \wxheading{Return value}
 
