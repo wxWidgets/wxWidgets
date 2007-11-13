@@ -3200,6 +3200,10 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
                                bool select,
                                const wxBitmap& bitmap)
 {
+    wxASSERT_MSG(page, wxT("page pointer must be non-NULL"));
+    if (!page)
+        return false;
+    
     page->Reparent(this);
 
     wxAuiNotebookPage info;
