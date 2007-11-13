@@ -922,14 +922,14 @@ ifndef DEBIAN_WX_DEFAULT_VERSION
 	mkdir -p debian/$(package_gtk_py_tools)/usr/share/pixmaps
 	mkdir -p debian/$(package_gtk_py_tools)/usr/share/applications
 
-	cp wxPython/wx/py/PyCrust_32.png        debian/$(package_gtk_py_tools)/usr/share/pixmaps/pycrust.png
-	cp wxPython/wx/py/PyCrust_32.png        debian/$(package_gtk_py_tools)/usr/share/pixmaps/pyshell.png
-	cp wxPython/wx/tools/XRCed/XRCed_32.png debian/$(package_gtk_py_tools)/usr/share/pixmaps/xrced.png
-	cp wx/tools/Editra/pixmaps/editra.png   debian/$(package_gtk_py_tools)/usr/share/pixmaps/editra.png
-	cp debian/pycrust.desktop               debian/$(package_gtk_py_tools)/usr/share/applications
-	cp debian/pyshell.desktop               debian/$(package_gtk_py_tools)/usr/share/applications
-	cp debian/xrced.desktop                 debian/$(package_gtk_py_tools)/usr/share/applications
-	cp debian/editra.desktop                debian/$(package_gtk_py_tools)/usr/share/applications
+	cp wxPython/wx/py/PyCrust_32.png               debian/$(package_gtk_py_tools)/usr/share/pixmaps/pycrust.png
+	cp wxPython/wx/py/PyCrust_32.png               debian/$(package_gtk_py_tools)/usr/share/pixmaps/pyshell.png
+	cp wxPython/wx/tools/XRCed/XRCed_32.png        debian/$(package_gtk_py_tools)/usr/share/pixmaps/xrced.png
+	cp wxPython/wx/tools/Editra/pixmaps/editra.png debian/$(package_gtk_py_tools)/usr/share/pixmaps/editra.png
+	cp debian/pycrust.desktop                      debian/$(package_gtk_py_tools)/usr/share/applications
+	cp debian/pyshell.desktop                      debian/$(package_gtk_py_tools)/usr/share/applications
+	cp debian/xrced.desktop                        debian/$(package_gtk_py_tools)/usr/share/applications
+	cp debian/editra.desktop                       debian/$(package_gtk_py_tools)/usr/share/applications
 endif
 	rm -r debian/$(package_gtk_py_lib)/usr/bin
 
