@@ -49,6 +49,7 @@ public:
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual void Command(wxCommandEvent& event);
     virtual bool HasTransparentBackground() { return true; }
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
