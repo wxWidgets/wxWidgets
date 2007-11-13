@@ -29,12 +29,14 @@ class WXDLLEXPORT wxComboBoxBase : public wxItemContainer,
                                    public wxTextEntry
 {
 public:
-    // override this to disambiguate between two base classes versions
+    // override these methods to disambiguate between two base classes versions
     virtual void Clear()
     {
         wxTextEntry::Clear();
         wxItemContainer::Clear();
     }
+
+    bool IsEmpty() const { return wxItemContainer::IsEmpty(); }
 
     // also bring in GetSelection() versions of both base classes in scope
     //
