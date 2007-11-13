@@ -225,8 +225,10 @@
         <define>$(WXDEBUG_DEFINE)</define>
         <define>__WXMSW__</define>
 
-        <include>$(WX_DIR)$(WXLIBINCLUDE)</include>
-        <include>$(WX_DIR)/include</include>
+        <if cond="FORMAT!='xcode2'">
+            <include>$(WX_DIR)$(WXLIBINCLUDE)</include>
+            <include>$(WX_DIR)/include</include>
+        </if>
     </template>
 
 
@@ -277,7 +279,9 @@
 
     <!-- template for wx executables/dlls: -->
     <template id="wx" template="wx-lib">
-        <lib-path>$(WX_DIR)$(WXLIBPATH)</lib-path>
+        <if cond="FORMAT!='xcode2'">
+            <lib-path>$(WX_DIR)$(WXLIBPATH)</lib-path>
+        </if>
 
         <!-- wx libs must come before 3rd party and sys libs, this is
              the place where the hack explained above is carried on: -->

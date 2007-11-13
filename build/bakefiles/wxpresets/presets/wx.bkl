@@ -270,7 +270,8 @@
 
 
 
-    <!-- this is just a wrapper that includes the real implementation: -->
+    <!--                    REAL IMPLEMENTATION                     -->
+    <!--                                                            -->
 
     <set var="__wx_included_impl">0</set>
 
@@ -280,6 +281,13 @@
     </if>
 
     <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
+        <include file="wx_win32.bkl"/>
+        <set var="__wx_included_impl">1</set>
+    </if>
+
+    <if cond="FORMAT=='xcode2'">
+        <!-- xCode2 is an IDE and thus reuses almost nothing from unix part of wxpresets;
+             better use the win32 part! -->
         <include file="wx_win32.bkl"/>
         <set var="__wx_included_impl">1</set>
     </if>
@@ -395,7 +403,7 @@
                     <command cond="TOOLSET in ['win32','os2','dos']">
                         if not exist $(nativePaths(_DIRNAME)) mkdir $(nativePaths(_DIRNAME))
                     </command>
-            </modify-target>
+                </modify-target>
 
                 <!-- the following code is mostly equivalent to a:
                           <dependency-of>$(id)</dependency-of>
