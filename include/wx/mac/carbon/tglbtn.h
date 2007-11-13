@@ -13,7 +13,7 @@
 #ifndef _WX_TOGGLEBUTTON_H_
 #define _WX_TOGGLEBUTTON_H_
 
-WXDLLEXPORT_DATA(extern const wxChar) wxCheckBoxNameStr[];
+WXDLLEXPORT_DATA(extern const char) wxCheckBoxNameStr[];
 
 // Checkbox item (single checkbox)
 class WXDLLEXPORT wxToggleButton : public wxControl
