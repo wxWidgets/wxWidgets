@@ -2260,10 +2260,10 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                             if ( !bCtrlDown )
                             {
                                 // this will contain the dialog code of this
-                                // window and all of its parent windows
+                                // window and all of its parent windows in turn
                                 LONG lDlgCode2 = lDlgCode;
 
-                                while ( win && !win->IsTopLevel() )
+                                while ( win )
                                 {
                                     if ( lDlgCode2 & DLGC_WANTMESSAGE )
                                     {
@@ -2273,6 +2273,13 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                                         return false;
                                     }
 
+                                    // don't propagate keyboard messages beyond
+                                    // the first top level window parent
+                                    if ( win->IsTopLevel() )
+                                        break;
+
+                                    win = win->GetParent();
+
                                     lDlgCode2 = ::SendMessage
                                                   (
                                                     GetHwndOf(win),
@@ -2280,8 +2287,6 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                                                     0,
                                                     0
                                                   );
-
-                                    win = win->GetParent();
                                 }
                             }
                             else // bCtrlDown
