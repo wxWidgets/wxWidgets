@@ -921,6 +921,10 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
                 wxLogMessage(_T("Selection = '%s' (len = %u)"),
                              sel.c_str(),
                              (unsigned int) sel.length());
+
+                const wxString text = GetLineText(line);
+                wxLogMessage(_T("Current line: \"%s\"; length = %lu"),
+                             text.c_str(), text.length());
             }
             break;
 
