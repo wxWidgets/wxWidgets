@@ -92,6 +92,9 @@ public:
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event);
 
 protected:
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const;
+
     // creates the control (calls wxWindowBase::CreateBase inside) and adds it
     // to the list of parents children
     bool CreateControl(wxWindowBase *parent,

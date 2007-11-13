@@ -37,6 +37,10 @@ public:
                  long style = 0,
                  const wxValidator& val = wxDefaultValidator,
                  const wxString &name = wxCheckBoxNameStr );
+
+protected:
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
 private:
     DECLARE_DYNAMIC_CLASS(wxToggleButton)
 

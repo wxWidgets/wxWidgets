@@ -52,8 +52,8 @@ public:
     virtual bool CanApplyThemeBorder() const { return false; }
 
 protected:
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
     virtual wxSize DoGetBestSize() const;
-    virtual wxBorder GetDefaultBorder() const;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxToggleButton)

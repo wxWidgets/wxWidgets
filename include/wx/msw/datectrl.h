@@ -61,6 +61,7 @@ public:
     virtual bool CanApplyThemeBorder() const { return false; }
 
 protected:
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
     virtual wxSize DoGetBestSize() const;
 
     // the date currently shown by the control, may be invalid

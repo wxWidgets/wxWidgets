@@ -1244,7 +1244,8 @@ public:
     // area (normal windows can't, but e.g. menubar or statusbar can):
     virtual bool CanBeOutsideClientArea() const { return false; }
 
-    // returns true if the platform should explicitly apply a theme border
+    // returns true if the platform should explicitly apply a theme border. Currently
+    // used only by Windows
     virtual bool CanApplyThemeBorder() const { return true; }
 
 protected:
@@ -1409,7 +1410,7 @@ protected:
     // this allows you to implement standard control borders without
     // repeating the code in different classes that are not derived from
     // wxControl
-    virtual wxBorder GetDefaultBorderForControl() const { return wxBORDER_SUNKEN; }
+    virtual wxBorder GetDefaultBorderForControl() const { return wxBORDER_THEME; }
 
     // Get the default size for the new window if no explicit size given. TLWs
     // have their own default size so this is just for non top-level windows.

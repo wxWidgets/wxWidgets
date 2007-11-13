@@ -116,9 +116,6 @@ protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual wxSize DoGetBestSize() const;
 
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
-
-
     // the labels windows, if any
     wxSubwindows *m_labels;
 

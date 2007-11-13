@@ -46,9 +46,6 @@ public:
 protected:
     virtual wxSize DoGetBestSize() const;
 
-    // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const;
-
 #ifndef __WXWINCE__
 public:
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);

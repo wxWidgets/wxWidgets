@@ -86,6 +86,9 @@ public:
     virtual bool CanApplyThemeBorder() const { return false; }
 
 protected:
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
     // common part of all ctors
     void Init() { m_lastAcceptedSelection = wxID_NONE; }
 

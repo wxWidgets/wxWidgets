@@ -158,6 +158,12 @@ wxString wxControlBase::RemoveMnemonics(const wxString& str)
     return wxStripMenuCodes(str, wxStrip_Mnemonics);
 }
 
+wxBorder wxControlBase::GetDefaultBorder() const
+{
+    return wxBORDER_THEME;
+}
+
+
 // ----------------------------------------------------------------------------
 // wxStaticBitmap
 // ----------------------------------------------------------------------------

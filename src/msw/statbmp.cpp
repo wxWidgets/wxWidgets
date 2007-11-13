@@ -171,11 +171,6 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     return true;
 }
 
-wxBorder wxStaticBitmap::GetDefaultBorder() const
-{
-    return wxBORDER_NONE;
-}
-
 WXDWORD wxStaticBitmap::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);

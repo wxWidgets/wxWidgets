@@ -138,11 +138,6 @@ bool wxStaticBox::Create(wxWindow *parent,
     return true;
 }
 
-wxBorder wxStaticBox::GetDefaultBorder() const
-{
-    return wxBORDER_NONE;
-}
-
 WXDWORD wxStaticBox::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     long styleWin = wxStaticBoxBase::MSWGetStyle(style, exstyle);

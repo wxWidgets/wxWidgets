@@ -243,6 +243,9 @@ protected:
         SetSelection_SendEvent = 1
     };
 
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
     // set the selection to the given page, sending the events (which can
     // possibly prevent the page change from taking place) if SendEvent flag is
     // included

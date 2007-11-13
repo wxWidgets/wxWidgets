@@ -58,7 +58,6 @@ public:
     virtual bool CanApplyThemeBorder() const { return false; }
 
 protected:
-    virtual wxBorder GetDefaultBorder() const;
     virtual wxSize DoGetBestSize() const;
 
     // ctor/dtor helpers

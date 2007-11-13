@@ -72,6 +72,9 @@ public:
 
 protected:      // functions required for wxST_ELLIPSIZE_* support
 
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
     // just calls RemoveMarkup & Ellipsize on the original label.
     virtual wxString GetEllipsizedLabelWithoutMarkup() const;
 

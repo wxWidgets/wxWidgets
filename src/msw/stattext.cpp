@@ -100,11 +100,6 @@ bool wxStaticText::Create(wxWindow *parent,
     return true;
 }
 
-wxBorder wxStaticText::GetDefaultBorder() const
-{
-    return wxBORDER_NONE;
-}
-
 WXDWORD wxStaticText::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
@@ -220,9 +215,9 @@ void wxStaticText::SetLabel(const wxString& label)
     if ( HasFlag(wxST_ELLIPSIZE_END) &&
           wxGetOsVersion() == wxOS_WINDOWS_NT )
     {
-        // adding SS_ENDELLIPSIS or SS_ENDELLIPSIS "disables" the correct 
-        // newline handling in static texts: the newlines in the labels are 
-        // shown as square. Thus we don't use it even on newer OS when 
+        // adding SS_ENDELLIPSIS or SS_ENDELLIPSIS "disables" the correct
+        // newline handling in static texts: the newlines in the labels are
+        // shown as square. Thus we don't use it even on newer OS when
         // the static label contains a newline.
         if ( label.Contains(wxT('\n')) )
             styleReal &= ~SS_ENDELLIPSIS;

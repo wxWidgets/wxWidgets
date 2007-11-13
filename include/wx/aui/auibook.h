@@ -455,6 +455,8 @@ public:
     bool IsDragging() const { return m_is_dragging; }
 
 protected:
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
     void OnPaint(wxPaintEvent& evt);
     void OnEraseBackground(wxEraseEvent& evt);
@@ -580,6 +582,8 @@ public:
     // virtual bool AcceptsFocus() const { return false; }
 
 protected:
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
     // these can be overridden
     virtual void UpdateTabCtrlHeight();

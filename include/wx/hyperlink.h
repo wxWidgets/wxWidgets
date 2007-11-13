@@ -69,6 +69,8 @@ public:
     //       wxWindow::Get/SetFont, wxWindow::Get/SetCursor are important !
 
 protected:
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
     // checks for validity some of the ctor/Create() function parameters
     void CheckParams(const wxString& label, const wxString& url, long style);
 

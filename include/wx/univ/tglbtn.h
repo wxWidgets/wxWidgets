@@ -57,6 +57,8 @@ public:
     bool GetValue() const { return m_value; }
 
 protected:
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
     // the current value
     bool m_value;
 

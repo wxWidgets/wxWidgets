@@ -45,6 +45,9 @@ public:
     virtual bool HasTransparentBackground() { return true; }
 
 protected:
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
     virtual wxSize DoGetBestSize() const;
 
     DECLARE_NO_COPY_CLASS(wxStaticBitmapBase)

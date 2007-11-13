@@ -1309,8 +1309,37 @@ wxBorder wxWindowMSW::GetDefaultBorderForControl() const
 
 wxBorder wxWindowMSW::GetDefaultBorder() const
 {
-    return GetDefaultBorderForControl();
+    // return GetDefaultBorderForControl();
+    return wxWindowBase::GetDefaultBorder();
 }
+
+// Translate wxBORDER_THEME (and other border styles if necessary to the value
+// that makes most sense for this Windows environment
+wxBorder wxWindowMSW::TranslateBorder(wxBorder border) const
+{
+#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
+    if (border == wxBORDER_THEME || border == wxBORDER_SUNKEN || border == wxBORDER_SIMPLE)
+        return wxBORDER_SIMPLE;
+    else
+        return wxBORDER_NONE;
+#else
+#if wxUSE_UXTHEME
+    if (border == wxBORDER_THEME)
+    {
+        if (CanApplyThemeBorder())
+        {
+            wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
+            if (theme)
+                return wxBORDER_THEME;
+        }
+    }
+#endif
+    return border;
+#endif
+
+    return border;
+}
+
 
 WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
 {
@@ -1341,7 +1370,10 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     if ( flags & wxHSCROLL )
         style |= WS_HSCROLL;
 
-    const wxBorder border = GetBorder(flags);
+    const wxBorder border = TranslateBorder(GetBorder(flags));
+
+    // After translation, border is now optimized for the specific version of Windows
+    // and theme engine presence.
 
     // WS_BORDER is only required for wxBORDER_SIMPLE
     if ( border == wxBORDER_SIMPLE )
@@ -3260,7 +3292,8 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
         case WM_NCCALCSIZE:
             {
                 wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
-                if (theme && GetBorder() == wxBORDER_THEME)
+                const wxBorder border = TranslateBorder(GetBorder());
+                if (theme && border == wxBORDER_THEME)
                 {
                     // first ask the widget to calculate the border size
                     rc.result = MSWDefWindowProc(message, wParam, lParam);
@@ -3300,7 +3333,8 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
         case WM_NCPAINT:
             {
                 wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
-                if (theme && GetBorder() == wxBORDER_THEME)
+                const wxBorder border = TranslateBorder(GetBorder());
+                if (theme && border == wxBORDER_THEME)
                 {
                     // first ask the widget to paint its non-client area, such as scrollbars, etc.
                     rc.result = MSWDefWindowProc(message, wParam, lParam);

@@ -49,6 +49,7 @@ public:
     virtual void Command(wxCommandEvent& event);
 
 protected:
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
     virtual wxSize DoGetBestSize() const;
 
 private:

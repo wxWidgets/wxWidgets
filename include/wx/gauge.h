@@ -88,6 +88,8 @@ public:
     virtual bool AcceptsFocus() const { return false; }
 
 protected:
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
     // the max position
     int m_rangeMax;
 

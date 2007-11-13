@@ -50,6 +50,9 @@ public:
     virtual bool AcceptsFocus() const { return false; }
 
 protected:
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
     // set the right size for the right dimension
     wxSize AdjustSize(const wxSize& size) const
     {

@@ -448,6 +448,10 @@ protected:
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const;
 
+    // Translate wxBORDER_THEME (and other border styles if necessary to the value
+    // that makes most sense for this Windows environment
+    virtual wxBorder TranslateBorder(wxBorder border) const;
+
 #if wxUSE_MENUS_NATIVE
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
 #endif // wxUSE_MENUS_NATIVE

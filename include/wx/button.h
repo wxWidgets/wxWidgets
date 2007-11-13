@@ -78,6 +78,9 @@ public:
     static wxSize GetDefaultSize();
 
 protected:
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
     DECLARE_NO_COPY_CLASS(wxButtonBase)
 };
 

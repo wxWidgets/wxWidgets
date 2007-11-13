@@ -105,6 +105,9 @@ public:
 
 protected:
 
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
     // adjust value according to wxSL_INVERSE style
     virtual int ValueInvertOrNot(int value) const
     {
