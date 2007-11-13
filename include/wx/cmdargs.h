@@ -141,7 +141,7 @@ private:
 
 // provide global operator overload for compatibility with the existing code
 // doing things like "if ( condition && argv )"
-inline operator&&(bool cond, const wxCmdLineArgsArray& array)
+inline bool operator&&(bool cond, const wxCmdLineArgsArray& array)
 {
     return cond && !array.IsEmpty();
 }
