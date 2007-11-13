@@ -43,6 +43,10 @@
     #include "wx/log.h"
 #endif
 
+#ifdef HAVE_LANGINFO_H
+    #include <langinfo.h>
+#endif
+
 #ifdef __WXWINCE__
     // there is no errno.h under CE apparently
     #define wxSET_ERRNO(value)
@@ -1152,7 +1156,7 @@ static bool wxIsLocaleUtf8()
             return true;
         }
     }
-#endif
+#endif // HAVE_LANGINFO_H
 
     // check if we're running under the "C" locale: it is 7bit subset
     // of UTF-8, so it can be safely used with the UTF-8 build:
