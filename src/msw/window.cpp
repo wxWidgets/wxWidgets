@@ -1319,8 +1319,6 @@ wxBorder wxWindowMSW::TranslateBorder(wxBorder border) const
 #endif
     return border;
 #endif
-
-    return border;
 }
 
 
