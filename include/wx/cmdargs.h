@@ -85,6 +85,13 @@ public:
         return m_args[n];
     }
 
+    // we must provide this overload for g++ 3.4 which can't choose between
+    // our operator[](size_t) and ::operator[](char**, int) otherwise
+    wxString operator[](int n) const
+    {
+        return m_args[n];
+    }
+
     // this is the only method of this class which doesn't exist solely for
     // compatibility purposes: it allows to access the arguments as a
     // convenient array of wxStrings
