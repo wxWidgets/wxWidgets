@@ -1036,7 +1036,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     // a little hack to use the command line argument for encoding testing
     if ( wxTheApp->argc == 2 )
     {
-        switch ( wxTheApp->argv[1][0] )
+        switch ( (wxChar)wxTheApp->argv[1][0] )
         {
             case '2':
                 m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
