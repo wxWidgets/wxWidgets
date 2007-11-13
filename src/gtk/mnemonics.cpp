@@ -23,6 +23,7 @@
     #pragma hdrstop
 #endif
 
+#include "wx/log.h"
 #include "wx/private/stattext.h"        // for wxMarkupEntities
 
 #include "wx/gtk/private/mnemonics.h"
