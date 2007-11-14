@@ -32,7 +32,7 @@
 
 const wxChar wxEditableListBoxNameStr[] = wxT("editableListBox");
 
-static char * eledit_xpm[] = {
+static const char * eledit_xpm[] = {
 "16 16 3 1",
 "   c None",
 ".  c #000000",
@@ -54,7 +54,7 @@ static char * eledit_xpm[] = {
 "                ",
 "                "};
 
-static char * elnew_xpm[] = {
+static const char * elnew_xpm[] = {
 "16 16 5 1",
 "   c None",
 ".  c #7F7F7F",
@@ -78,7 +78,7 @@ static char * elnew_xpm[] = {
 "                ",
 "                "};
 
-static char * eldel_xpm[] = {
+static const char * eldel_xpm[] = {
 "16 16 3 1",
 "   c None",
 ".  c #7F0000",
@@ -100,7 +100,7 @@ static char * eldel_xpm[] = {
 "   .         .  ",
 "                "};
 
-static char * eldown_xpm[] = {
+static const char * eldown_xpm[] = {
 "16 16 2 1",
 "   c None",
 ".  c #000000",
@@ -121,7 +121,7 @@ static char * eldown_xpm[] = {
 "                ",
 "                "};
 
-static char * elup_xpm[] = {
+static const char * elup_xpm[] = {
 "16 16 2 1",
 "   c None",
 ".  c #000000",
