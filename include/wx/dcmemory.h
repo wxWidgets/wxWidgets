@@ -22,18 +22,6 @@
 // wxMemoryDC
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxMemoryImplDCBase
-{
-public:
-    wxMemoryImplDCBase() { }
-
-    virtual void DoSelect(const wxBitmap& bmp) = 0;
-    
-    virtual const wxBitmap& DoGetSelectedBitmap() const = 0;
-    virtual wxBitmap& DoGetSelectedBitmap() = 0;
-};
-
-
 class WXDLLIMPEXP_CORE wxMemoryDC: public wxDC
 {
 public:

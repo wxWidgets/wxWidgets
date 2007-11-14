@@ -205,6 +205,21 @@ wxDialog *wxNativePrintFactory::CreatePrintSetupDialog( wxWindow *parent,
 #endif
 }
 
+#if wxUSE_NEW_DC
+
+wxImplDC* wxNativePrintFactory::CreatePrinterImplDC( wxPrinterDC *owner, const wxPrintData& data )
+{
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+    return new wxWindowsPrinterDCImpl( owner, data );
+#elif defined(__WXMAC__)
+    return new wxMacPrinterDCImpl( owner, data );
+#else
+    return new wxPostScriptImplDC( owner, data );
+#endif
+}
+
+#else
+
 wxDC* wxNativePrintFactory::CreatePrinterDC( const wxPrintData& data )
 {
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
@@ -215,6 +230,8 @@ wxDC* wxNativePrintFactory::CreatePrinterDC( const wxPrintData& data )
     return new wxPostScriptDC(data);
 #endif
 }
+
+#endif
 
 bool wxNativePrintFactory::HasOwnPrintToFile()
 {

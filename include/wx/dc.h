@@ -434,14 +434,19 @@ public:
 
 
     virtual void DoDrawLines(int n, wxPoint points[],
-                             wxCoord xoffset, wxCoord yoffset) = 0;
+                             wxCoord xoffset, wxCoord yoffset ) = 0;
+    virtual void DrawLines(const wxPointList *list,
+                           wxCoord xoffset, wxCoord yoffset );
+                           
     virtual void DoDrawPolygon(int n, wxPoint points[],
                                wxCoord xoffset, wxCoord yoffset,
                                int fillStyle = wxODDEVEN_RULE) = 0;
     virtual void DoDrawPolyPolygon(int n, int count[], wxPoint points[],
                                wxCoord xoffset, wxCoord yoffset,
                                int fillStyle);
-
+    void DrawPolygon(const wxPointList *list,
+                     wxCoord xoffset, wxCoord yoffset,
+                     int fillStyle );
 
 
 #if wxUSE_SPLINES
@@ -450,6 +455,26 @@ public:
     virtual void DoDrawSpline(const wxPointList *points);
 #endif
     
+    // ---------------------------------------------------------
+    // wxMemoryDC Impl API
+
+    virtual void DoSelect(const wxBitmap& WXUNUSED(bmp))
+       { }
+    
+    virtual const wxBitmap& GetSelectedBitmap() const
+        { return wxNullBitmap; }
+    virtual wxBitmap& GetSelectedBitmap()
+        { return wxNullBitmap; }
+  
+    // ---------------------------------------------------------
+    // wxPrinterDC Impl API
+
+    virtual wxRect GetPaperRect()
+        { int w = 0; int h = 0; DoGetSize( &w, &h ); return wxRect(0,0,w,h); }
+        
+    virtual int GetResolution()
+        { return -1; }
+
 private:
     wxDC    *m_owner;
 
@@ -562,6 +587,9 @@ public:
     wxSize GetPPI() const
         { return m_pimpl->GetPPI(); }
 
+    virtual int GetResolution()
+        { return m_pimpl->GetResolution(); }
+        
     // Right-To-Left (RTL) modes
     
     void SetLayoutDirection(wxLayoutDirection dir)
@@ -847,30 +875,31 @@ public:
     void DrawLines(int n, wxPoint points[],
                    wxCoord xoffset = 0, wxCoord yoffset = 0)
         { m_pimpl->DoDrawLines(n, points, xoffset, yoffset); }
-
-#if 0
-    // needs to be removed
     void DrawLines(const wxPointList *list,
                    wxCoord xoffset = 0, wxCoord yoffset = 0)
-#endif
+        { m_pimpl->DrawLines( list, xoffset, yoffset ); }      
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED( void DrawLines(const wxList *list,
+                                 wxCoord xoffset = 0, wxCoord yoffset = 0) );
+#endif  // WXWIN_COMPATIBILITY_2_8
 
     void DrawPolygon(int n, wxPoint points[],
                      wxCoord xoffset = 0, wxCoord yoffset = 0,
                      int fillStyle = wxODDEVEN_RULE)
         { m_pimpl->DoDrawPolygon(n, points, xoffset, yoffset, fillStyle); }
-
-#if 0
-    // needs to be removed
     void DrawPolygon(const wxPointList *list,
                      wxCoord xoffset = 0, wxCoord yoffset = 0,
                      int fillStyle = wxODDEVEN_RULE)
         { m_pimpl->DrawPolygon( list, xoffset, yoffset, fillStyle ); }
-#endif
-
     void DrawPolyPolygon(int n, int count[], wxPoint points[],
                          wxCoord xoffset = 0, wxCoord yoffset = 0,
                          int fillStyle = wxODDEVEN_RULE)
         { m_pimpl->DoDrawPolyPolygon(n, count, points, xoffset, yoffset, fillStyle); }
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED( void DrawPolygon(const wxList *list,
+                     wxCoord xoffset = 0, wxCoord yoffset = 0,
+                     int fillStyle = wxODDEVEN_RULE) );
+#endif  // WXWIN_COMPATIBILITY_2_8
 
     void DrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
         { m_pimpl->DoDrawRectangle(x, y, width, height); }
@@ -1477,6 +1506,9 @@ public:
     // Resolution in Pixels per inch
     virtual wxSize GetPPI() const = 0;
 
+    virtual int GetResolution()
+        { return -1; }
+        
     virtual bool Ok() const { return IsOk(); }
     virtual bool IsOk() const { return m_ok; }
 

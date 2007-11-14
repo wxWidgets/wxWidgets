@@ -186,12 +186,12 @@ wxBitmap wxGTKMemoryImplDC::DoGetAsBitmap(const wxRect *subrect) const
     return subrect ? bmp.GetSubBitmap(*subrect) : bmp;
 }
 
-const wxBitmap& wxGTKMemoryImplDC::DoGetSelectedBitmap() const
+const wxBitmap& wxGTKMemoryImplDC::GetSelectedBitmap() const
 {
     return m_selected;
 }
 
-wxBitmap& wxGTKMemoryImplDC::DoGetSelectedBitmap()
+wxBitmap& wxGTKMemoryImplDC::GetSelectedBitmap()
 {
     return m_selected;
 }

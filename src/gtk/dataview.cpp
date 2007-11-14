@@ -937,11 +937,20 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
     {
         wxRect renderrect( rect.x, rect.y, rect.width, rect.height );
         wxWindowDC* dc = (wxWindowDC*) cell->GetDC();
+#if wxUSE_NEW_DC
+        wxGTKWindowImplDC *impldc = (wxGTKWindowImplDC *) dc->GetImpl();
+        if (impldc->m_window == NULL)
+        {
+            impldc->m_window = window;
+            impldc->SetUpDC();
+        }
+#else
         if (dc->m_window == NULL)
         {
             dc->m_window = window;
             dc->SetUpDC();
         }
+#endif   
 
         int state = 0;
         if (flags & GTK_CELL_RENDERER_SELECTED)
@@ -1651,6 +1660,20 @@ class wxDataViewCtrlDC: public wxWindowDC
 public:
     wxDataViewCtrlDC( wxDataViewCtrl *window )
     {
+#if wxUSE_NEW_DC
+        wxGTKWindowImplDC *impl = (wxGTKWindowImplDC*) GetImpl();
+        
+        GtkWidget *widget = window->m_treeview;
+        // Set later
+        impl->m_window = NULL;
+
+        impl->m_context = window->GtkGetPangoDefaultContext();
+        impl->m_layout = pango_layout_new( impl->m_context );
+        impl->m_fontdesc = pango_font_description_copy( widget->style->font_desc );
+
+        impl->m_cmap = gtk_widget_get_colormap( widget ? widget : window->m_widget );
+        
+#else
         GtkWidget *widget = window->m_treeview;
         // Set later
         m_window = NULL;
@@ -1660,7 +1683,7 @@ public:
         m_fontdesc = pango_font_description_copy( widget->style->font_desc );
 
         m_cmap = gtk_widget_get_colormap( widget ? widget : window->m_widget );
-
+#endif
         // Set m_window later
         // SetUpDC();
         // m_owner = window;

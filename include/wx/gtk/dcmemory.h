@@ -18,7 +18,7 @@
 
 
 #if wxUSE_NEW_DC
-class WXDLLIMPEXP_CORE wxGTKMemoryImplDC : public wxGTKWindowImplDC, public wxMemoryImplDCBase
+class WXDLLIMPEXP_CORE wxGTKMemoryImplDC : public wxGTKWindowImplDC
 #else
 #define wxGTKMemoryImplDC wxMemoryDC
 class WXDLLIMPEXP_CORE wxMemoryDC : public wxWindowDC, public wxMemoryDCBase
@@ -48,19 +48,19 @@ public:
     virtual void SetTextForeground( const wxColour &col );
     virtual void SetTextBackground( const wxColour &col );
 
-    // implementation
-    wxBitmap GetSelectedBitmap() const { return m_selected; }
-
 protected:
     // overridden from wxImplDC
     virtual void DoGetSize( int *width, int *height ) const;
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const;
 
-    // overridden from wxMemoryImplDCBase
+    // overridden for wxMemoryDC Impl
     virtual void DoSelect(const wxBitmap& bitmap);
-    virtual const wxBitmap& DoGetSelectedBitmap() const;
-    virtual wxBitmap& DoGetSelectedBitmap();
 
+public:
+    virtual const wxBitmap& GetSelectedBitmap() const;
+    virtual wxBitmap& GetSelectedBitmap();
+
+private:
     wxBitmap  m_selected;
     
 private:

@@ -91,7 +91,11 @@ public:
     virtual wxPageSetupDialogBase *CreatePageSetupDialog( wxWindow *parent,
                                                           wxPageSetupDialogData * data = NULL );
 
+#if wxUSE_NEW_DC
+    virtual wxImplDC* CreatePrinterImplDC( wxPrinterDC *owner, const wxPrintData& data );
+#else
     virtual wxDC* CreatePrinterDC( const wxPrintData& data );
+#endif
 
     virtual bool HasPrintSetupDialog();
     virtual wxDialog *CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data );
@@ -207,11 +211,20 @@ private:
 // wxGnomePrinterDC
 //-----------------------------------------------------------------------------
 
-class wxGnomePrinterDC: public wxDC
+#if wxUSE_NEW_DC
+class wxGnomePrinterImplDC : public wxImplDC
+#else
+#define wxGnomePrinterImplDC wxGnomePrinterDC
+class wxGnomePrinterDC : public wxDC
+#endif
 {
 public:
+#if wxUSE_NEW_DC
+    wxGnomePrinterImplDC( wxPrinterDC *owner, const wxPrintData& data );
+#else
     wxGnomePrinterDC( const wxPrintData& data );
-    virtual ~wxGnomePrinterDC();
+#endif
+    virtual ~wxGnomePrinterImplDC();
 
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
@@ -235,8 +248,6 @@ public:
     virtual int GetDepth() const { return 24; }
     void SetBackgroundMode(int WXUNUSED(mode)) { }
     void SetPalette(const wxPalette& WXUNUSED(palette)) { }
-    static void SetResolution(int ppi);
-    static int GetResolution();
 
 protected:
     bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col, int style=wxFLOOD_SURFACE );
@@ -274,6 +285,10 @@ protected:
     void SetPrintData(const wxPrintData& data);
     wxPrintData& GetPrintData() { return m_printData; }
 
+    // overriden for wxPrinterDC Impl
+    virtual wxRect GetPaperRect();
+    virtual int GetResolution();
+
 private:
     wxPrintData             m_printData;
     PangoContext           *m_context;
@@ -292,8 +307,8 @@ private:
     void makeEllipticalPath(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxGnomePrinterDC)
-    DECLARE_NO_COPY_CLASS(wxGnomePrinterDC)
+    DECLARE_DYNAMIC_CLASS(wxGnomePrinterImplDC)
+    DECLARE_NO_COPY_CLASS(wxGnomePrinterImplDC)
 };
 
 // ----------------------------------------------------------------------------

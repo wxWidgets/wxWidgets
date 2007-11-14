@@ -53,7 +53,11 @@ public:
     virtual wxPageSetupDialogBase *CreatePageSetupDialog( wxWindow *parent,
                                                           wxPageSetupDialogData * data = NULL );
 
+#if wxUSE_NEW_DC
+    virtual wxImplDC* CreatePrinterImplDC( wxPrinterDC *owner, const wxPrintData& data );
+#else
     virtual wxDC* CreatePrinterDC( const wxPrintData& data );
+#endif
 
     virtual bool HasPrintSetupDialog();
     virtual wxDialog *CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data );
@@ -218,11 +222,20 @@ private:
 // wxGtkPrinterDC
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGtkPrinterDC: public wxDC
+#if wxUSE_NEW_DC
+class WXDLLIMPEXP_CORE wxGtkPrinterImplDC : public wxImplDC
+#else
+#define wxGtkPrinterImplDC wxGtkPrinterDC
+class WXDLLIMPEXP_CORE wxGtkPrinterDC : public wxDC
+#endif
 {
 public:
+#if wxUSE_NEW_DC
+    wxGtkPrinterImplDC( wxPrinterDC *owner, const wxPrintData& data );
+#else
     wxGtkPrinterDC( const wxPrintData& data );
-    virtual ~wxGtkPrinterDC();
+#endif
+    virtual ~wxGtkPrinterImplDC();
 
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
@@ -247,7 +260,10 @@ public:
     void SetBackgroundMode(int mode);
     void SetPalette(const wxPalette& WXUNUSED(palette)) { }
     void SetResolution(int ppi);
-    int GetResolution();
+    
+    // overriden for wxPrinterDC Impl
+    virtual int GetResolution();
+    virtual wxRect GetPaperRect();
 
 protected:
     bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col, int style=wxFLOOD_SURFACE );
@@ -304,8 +320,8 @@ private:
     double                  m_PS2DEV;
     double                  m_DEV2PS;
 
-    DECLARE_DYNAMIC_CLASS(wxGtkPrinterDC)
-    DECLARE_NO_COPY_CLASS(wxGtkPrinterDC)
+    DECLARE_DYNAMIC_CLASS(wxGtkPrinterImplDC)
+    DECLARE_NO_COPY_CLASS(wxGtkPrinterImplDC)
 };
 
 // ----------------------------------------------------------------------------

@@ -16,6 +16,7 @@
 #if wxUSE_PRINTING_ARCHITECTURE && wxUSE_POSTSCRIPT
 
 #include "wx/dc.h"
+#include "wx/dcprint.h"
 #include "wx/dialog.h"
 #include "wx/module.h"
 #include "wx/cmndata.h"
@@ -25,7 +26,10 @@
 // wxPostScriptDC
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPostScriptDC: public wxDC
+
+#if wxUSE_NEW_DC
+
+class WXDLLEXPORT wxPostScriptDC : public wxDC
 {
 public:
     wxPostScriptDC();
@@ -33,7 +37,35 @@ public:
     // Recommended constructor
     wxPostScriptDC(const wxPrintData& printData);
     
-    virtual ~wxPostScriptDC();
+private:
+    DECLARE_DYNAMIC_CLASS(wxPostScriptDC)
+};
+
+#endif
+
+#if wxUSE_NEW_DC
+class WXDLLEXPORT wxPostScriptImplDC : public wxImplDC
+#else
+#define wxPostScriptImplDC wxPostScriptDC
+class WXDLLEXPORT wxPostScriptDC : public wxDC
+#endif
+{
+public:
+#if wxUSE_NEW_DC
+    wxPostScriptImplDC( wxPrinterDC *owner );
+    wxPostScriptImplDC( wxPrinterDC *owner, const wxPrintData& data );
+    wxPostScriptImplDC( wxPostScriptDC *owner );
+    wxPostScriptImplDC( wxPostScriptDC *owner, const wxPrintData& data );
+#else
+    wxPostScriptDC();
+
+    // Recommended constructor
+    wxPostScriptDC(const wxPrintData& printData);
+#endif
+    
+    void Init();
+
+    virtual ~wxPostScriptImplDC();
 
     virtual bool Ok() const { return IsOk(); }
     virtual bool IsOk() const;
@@ -83,12 +115,12 @@ public:
 
     virtual int GetDepth() const { return 24; }
 
-    static void SetResolution(int ppi);
-    static int GetResolution();
-
     void PsPrint( const wxString& psdata );
-
-private:
+    
+    // Overrridden for wxPrinterDC Impl
+    
+    virtual int GetResolution();
+    virtual wxRect GetPaperRect();
 
 protected:
     bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col, int style = wxFLOOD_SURFACE);
@@ -106,7 +138,7 @@ protected:
     void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 #if wxUSE_SPLINES
     void DoDrawSpline(const wxPointList *points);
-#endif // wxUSE_SPLINES
+#endif
     bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                 wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop = wxCOPY, bool useMask = false,
                 wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
@@ -136,7 +168,7 @@ protected:
     double            m_pageHeight;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPostScriptDC)
+    DECLARE_DYNAMIC_CLASS(wxPostScriptImplDC)
 };
 
 #endif

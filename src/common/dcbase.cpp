@@ -28,7 +28,9 @@
 #include "wx/dcclient.h"
 #include "wx/dcmemory.h"
 #include "wx/dcscreen.h"
+#include "wx/dcprint.h"
 #include "wx/dcbuffer.h" // for IMPLEMENT_DYNAMIC_CLASS
+#include "wx/prntbase.h"
 
 #ifndef WX_PRECOMP
     #include "wx/math.h"
@@ -334,31 +336,10 @@ wxImplDC* wxNativeDCFactory::CreateScreenDC( wxScreenDC *owner )
 #endif
 }
 
-wxImpleDC *wxNativeDCFactory::CreatePrinterDC( wxPrinterDC *ownder, const wxPrintData &data )
+wxImplDC *wxNativeDCFactory::CreatePrinterDC( wxPrinterDC *owner, const wxPrintData &data )
 {
-#if defined(__WXMSW__)
-    return new wxWindowsPrinterImplDC( owner );
-#elif defined(__WXGTK20__)
-    return new wxGTKPrinterImplDC( owner );
-#elif defined(__WXGTK__)
-    return new wxGTKPrinterImplDC( owner );
-#elif defined(__WXMAC__)
-    return new wxMacPrinterImplDC( owner );
-#elif defined(__WXCOCOA__)
-    return new wxCocoaPrinterImplDC( owner );
-#elif defined(__WXMOTIF__)
-    return new wxMotifPrinterImplDC( owner );
-#elif defined(__WXX11__)
-    return new wxX11PrinterImplDC( owner );
-#elif defined(__WXMGL__)
-    return new wxMGLPrinterImplDC( owner );
-#elif defined(__WXDFB__)
-    return new wxDFBPrinterImplDC( owner );
-#elif defined(__WXPM__)
-    return new wxPMPrinterImplDC( owner );
-#elif defined(__PALMOS__)
-    return new wxPalmPrinterImplDC( owner );
-#endif
+    wxPrintFactory *factory = wxPrintFactory::GetFactory();
+    return factory->CreatePrinterImplDC( owner, data );
 }
 
 //-----------------------------------------------------------------------------
@@ -429,50 +410,22 @@ void wxMemoryDC::SelectObject(wxBitmap& bmp)
     if (bmp.IsOk())
         bmp.UnShare();
 
-#ifdef __WXGTK__
-    wxGTKMemoryImplDC *mem_pimpl = wxDynamicCast( m_pimpl, wxGTKMemoryImplDC );
-#else
-    // TODO
-#endif
-    if (mem_pimpl)
-        mem_pimpl->DoSelect(bmp);
+    GetImpl()->DoSelect(bmp);
 }
 
 void wxMemoryDC::SelectObjectAsSource(const wxBitmap& bmp)
 {
-#ifdef __WXGTK__
-    wxGTKMemoryImplDC *mem_pimpl = wxDynamicCast( m_pimpl, wxGTKMemoryImplDC );
-#else
-    // TODO
-#endif
-    mem_pimpl->DoSelect(bmp);
+    GetImpl()->DoSelect(bmp);
 }
 
 const wxBitmap& wxMemoryDC::GetSelectedBitmap() const
 {
-#ifdef __WXGTK__
-    wxGTKMemoryImplDC *mem_pimpl = wxDynamicCast( m_pimpl, wxGTKMemoryImplDC );
-#else
-    // TODO
-#endif
-    if (mem_pimpl)
-        return mem_pimpl->DoGetSelectedBitmap();
-
-    return wxNullBitmap;    
+    return GetImpl()->GetSelectedBitmap();
 }
 
 wxBitmap& wxMemoryDC::GetSelectedBitmap()
 {
-#ifdef __WXGTK__
-    wxGTKMemoryImplDC *mem_pimpl = wxDynamicCast( m_pimpl, wxGTKMemoryImplDC );
-#else
-    // TODO
-#endif
-    
-    if (mem_pimpl)
-        return mem_pimpl->DoGetSelectedBitmap();
-   
-    return wxNullBitmap;    
+    return GetImpl()->GetSelectedBitmap();
 }
 
     
@@ -504,6 +457,24 @@ wxScreenDC::wxScreenDC()
 {
     wxDCFactory *factory = wxDCFactory::GetFactory();
     m_pimpl = factory->CreateScreenDC( this );
+}
+
+//-----------------------------------------------------------------------------
+// wxPrinterDC
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxPrinterDC, wxDC)
+
+wxPrinterDC::wxPrinterDC()
+{
+    wxDCFactory *factory = wxDCFactory::GetFactory();
+    // m_pimpl = factory->CreatePrinterDC( this, data );
+}
+
+wxPrinterDC::wxPrinterDC( const wxPrintData &data )
+{
+    wxDCFactory *factory = wxDCFactory::GetFactory();
+    m_pimpl = factory->CreatePrinterDC( this, data );
 }
 
 //-----------------------------------------------------------------------------
@@ -760,9 +731,9 @@ void wxImplDC::GetMultiLineTextExtent(const wxString& text,
             heightTextTotal = 0, heightLineDefault = 0, heightLine = 0;
 
     wxString curLine;
-    for ( const wxChar *pc = text; ; pc++ )
+    for ( wxString::const_iterator pc = text.begin(); ; ++pc )
     {
-        if ( *pc == _T('\n') || *pc == _T('\0') )
+        if ( pc == text.end() || *pc == _T('\n') )
         {
             if ( curLine.empty() )
             {
@@ -793,14 +764,13 @@ void wxImplDC::GetMultiLineTextExtent(const wxString& text,
                 heightTextTotal += heightLine;
             }
 
-            if ( *pc == _T('\n') )
+            if ( pc == text.end() )
+            {
+               break;
+            }
+            else // '\n'
             {
                curLine.clear();
-            }
-            else
-            {
-               // the end of string
-               break;
             }
         }
         else
@@ -1089,6 +1059,7 @@ static bool wx_spline_add_point(double x, double y)
 
 static void wx_spline_draw_point_array(wxDC *dc)
 {
+    dc->DrawLines(&wx_spline_point_list, 0, 0 );
     wxPointList::compatibility_iterator node = wx_spline_point_list.GetFirst();
     while (node)
     {

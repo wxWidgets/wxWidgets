@@ -2302,7 +2302,7 @@ void wxGTKWindowImplDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width
     wxCoord xx, yy, ww, hh;
     m_currentClippingRegion.GetBox( xx, yy, ww, hh );
 #if wxUSE_NEW_DC
-    wxImplDC::DoSetClippingRegion( xx, yy, ww, hh );
+    wxGTKImplDC::DoSetClippingRegion( xx, yy, ww, hh );
 #else
     wxDC::DoSetClippingRegion( xx, yy, ww, hh );
 #endif
@@ -2338,7 +2338,7 @@ void wxGTKWindowImplDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
     wxCoord xx, yy, ww, hh;
     m_currentClippingRegion.GetBox( xx, yy, ww, hh );
 #if wxUSE_NEW_DC
-    wxImplDC::DoSetClippingRegion( xx, yy, ww, hh );
+    wxGTKImplDC::DoSetClippingRegion( xx, yy, ww, hh );
 #else
     wxDC::DoSetClippingRegion( xx, yy, ww, hh );
 #endif

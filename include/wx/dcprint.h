@@ -24,21 +24,17 @@
 // wxPrinterDC
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxPrinterImplDCBase
-{
-public:
-    wxPrinterImplDCBase() { }
-
-    virtual wxRect DoGetPaperRect() = 0;
-};
-
-
 class WXDLLIMPEXP_CORE wxPrinterDC: public wxDC
 {
 public:
+    wxPrinterDC();
     wxPrinterDC( const wxPrintData& data );
     
     wxRect GetPaperRect();
+    int GetResolution();
+    
+private:
+    DECLARE_DYNAMIC_CLASS()
 };
 
 #else
