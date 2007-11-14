@@ -120,6 +120,8 @@ public:
     bool OnKeyDown(wxKeyEvent& event);
 
 protected:
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
     // override the base class methods dealing with window positioning/sizing
     // as we must move/size the buttons as well
     virtual void DoMoveWindow(int x, int y, int width, int height);

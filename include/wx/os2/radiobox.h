@@ -165,6 +165,7 @@ public:
     wxString GetLabel(int nItem) const;
 
 protected:
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
     virtual wxSize DoGetBestSize(void) const;
     virtual void   DoSetSize( int nX
                              ,int nY

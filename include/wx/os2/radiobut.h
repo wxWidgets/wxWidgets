@@ -66,6 +66,7 @@ public:
     virtual void    SetFocus(void);
 
 protected:
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
     virtual wxSize DoGetBestSize() const;
 
 private:

@@ -96,6 +96,8 @@ protected:
 #endif // wxUSE_TOOLTIPS
     }
 
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
     // return the number of items in major direction (which depends on whether
     // we have wxRA_SPECIFY_COLS or wxRA_SPECIFY_ROWS style)
     unsigned int GetMajorDim() const { return m_majorDim; }

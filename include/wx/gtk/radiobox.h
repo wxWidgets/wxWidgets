@@ -142,6 +142,8 @@ public:
     wxRadioBoxButtonsInfoList   m_buttonsInfo;
 
 protected:
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
 #if wxUSE_TOOLTIPS
     virtual void DoSetItemToolTip(unsigned int n, wxToolTip *tooltip);
 #endif

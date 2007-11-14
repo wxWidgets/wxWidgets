@@ -48,6 +48,8 @@ public:
     // clears the selection in the radiobuttons in the cycle
     // and returns the old selection (if any)
     wxRadioButton* ClearSelections();
+protected:
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 private:
     wxRadioButton* AddInCycle(wxRadioButton* cycle);
     void RemoveFromCycle();
