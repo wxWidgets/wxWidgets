@@ -245,7 +245,7 @@
     <!-- The directory where wxWidgets is installed: -->
     <if cond="not isdefined('WX_DIR')">
         <set var="WX_DIR_DEFAULT" overwrite="0">$(DOLLAR)($(ENV_VAR)WXWIN)</set>
-        <option name="WX_DIR" category="path">
+        <option name="WX_DIR" category="path" never_empty="1">
             <default-value>$(WX_DIR_DEFAULT)</default-value>
             <description>
                 The directory where wxWidgets library is installed
