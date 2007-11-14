@@ -477,6 +477,21 @@ wxPrinterDC::wxPrinterDC( const wxPrintData &data )
     m_pimpl = factory->CreatePrinterDC( this, data );
 }
 
+wxPrinterDC::~wxPrinterDC()
+{
+}
+
+wxRect wxPrinterDC::GetPaperRect()
+{
+    return GetImpl()->GetPaperRect();
+}
+
+int wxPrinterDC::GetResolution()
+{
+    return GetImpl()->GetResolution();
+}
+
+
 //-----------------------------------------------------------------------------
 // wxImplDC
 //-----------------------------------------------------------------------------

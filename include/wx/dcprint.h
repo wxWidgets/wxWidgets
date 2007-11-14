@@ -29,6 +29,7 @@ class WXDLLIMPEXP_CORE wxPrinterDC: public wxDC
 public:
     wxPrinterDC();
     wxPrinterDC( const wxPrintData& data );
+    ~wxPrinterDC();
     
     wxRect GetPaperRect();
     int GetResolution();
