@@ -418,13 +418,13 @@ void wxRichTextFontPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc.SetTextForeground(GetForegroundColour());
         dc.SetClippingRegion(2, 2, size.x-4, size.y-4);
         dc.DrawText(text, cx, cy);
-        
+
         if (GetTextEffects() & wxTEXT_ATTR_EFFECT_STRIKETHROUGH)
         {
             dc.SetPen(wxPen(GetForegroundColour(), 1));
             dc.DrawLine(cx, (int) (cy + h/2 + 0.5), cx + w, (int) (cy + h/2 + 0.5));
         }
-        
+
         dc.DestroyClippingRegion();
     }
 }
@@ -470,9 +470,16 @@ END_EVENT_TABLE()
 
 IMPLEMENT_CLASS(wxRichTextColourSwatchCtrl, wxControl)
 
-wxRichTextColourSwatchCtrl::wxRichTextColourSwatchCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style):
-    wxControl(parent, id, pos, size, style)
+wxRichTextColourSwatchCtrl::wxRichTextColourSwatchCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style)
 {
+    if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
+#ifdef __WXMSW__
+        style |= GetThemedBorderStyle();
+#else
+        style |= wxBORDER_SUNKEN;
+#endif
+    wxControl::Create(parent, id, pos, size, style);
+
     SetColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     SetBackgroundStyle(wxBG_STYLE_COLOUR);
 }
@@ -496,7 +503,7 @@ void wxRichTextColourSwatchCtrl::OnMouseEvent(wxMouseEvent& event)
         wxColourDialog *dialog = new wxColourDialog(parent, &data);
         // Crashes on wxMac (no m_peer)
 #ifndef __WXMAC__
-        dialog->SetTitle(_("Background colour"));
+        dialog->SetTitle(_("Colour"));
 #endif
         if (dialog->ShowModal() == wxID_OK)
         {
@@ -528,6 +535,13 @@ END_EVENT_TABLE()
 wxRichTextFontListBox::wxRichTextFontListBox(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     const wxSize& size, long style)
 {
+    if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
+#ifdef __WXMSW__
+        style |= GetThemedBorderStyle();
+#else
+        style |= wxBORDER_SUNKEN;
+#endif
+
     Init();
     Create(parent, id, pos, size, style);
 }

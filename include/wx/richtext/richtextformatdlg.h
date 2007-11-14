@@ -218,9 +218,16 @@ DECLARE_EVENT_TABLE()
 class WXDLLIMPEXP_RICHTEXT wxRichTextFontPreviewCtrl : public wxWindow
 {
 public:
-    wxRichTextFontPreviewCtrl(wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& sz = wxDefaultSize, long style = 0) :
-        wxWindow(parent, id, pos, sz, style)
+    wxRichTextFontPreviewCtrl(wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& sz = wxDefaultSize, long style = 0)
     {
+        if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
+#ifdef __WXMSW__
+            style |= GetThemedBorderStyle();
+#else
+            style |= wxBORDER_SUNKEN;
+#endif
+        wxWindow::Create(parent, id, pos, sz, style);
+
         SetBackgroundColour(*wxWHITE);
         m_textEffects = 0;
     }
