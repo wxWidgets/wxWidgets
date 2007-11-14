@@ -835,7 +835,7 @@ bool wxRichTextStyleListCtrl::Create(wxWindow* parent, wxWindowID id, const wxPo
 #ifdef __WXMSW__
         listBoxStyle = GetThemedBorderStyle();
 #else
-        listBoxStyle = wxBORDER_SIMPLE;
+        listBoxStyle = wxBORDER_SUNKEN;
 #endif
     }
     else
