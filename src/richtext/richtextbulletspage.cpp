@@ -156,7 +156,7 @@ void wxRichTextBulletsPage::CreateControls()
     itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     wxArrayString m_styleListBoxStrings;
-    m_styleListBox = new wxListBox( itemPanel1, ID_RICHTEXTBULLETSPAGE_STYLELISTBOX, wxDefaultPosition, wxSize(-1, 140), m_styleListBoxStrings, wxLB_SINGLE );
+    m_styleListBox = new wxListBox( itemPanel1, ID_RICHTEXTBULLETSPAGE_STYLELISTBOX, wxDefaultPosition, wxSize(-1, 90), m_styleListBoxStrings, wxLB_SINGLE );
     m_styleListBox->SetHelpText(_("The available bullet styles."));
     if (wxRichTextBulletsPage::ShowToolTips())
         m_styleListBox->SetToolTip(_("The available bullet styles."));
@@ -243,7 +243,7 @@ void wxRichTextBulletsPage::CreateControls()
         m_symbolFontCtrl->SetToolTip(_("Available fonts."));
     itemBoxSizer18->Add(m_symbolFontCtrl, 0, wxGROW|wxALL, 5);
 
-    itemBoxSizer18->Add(5, 5, 1, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    itemBoxSizer18->Add(5, 5, 1, wxALIGN_CENTER_HORIZONTAL, 5);
 
     wxStaticText* itemStaticText27 = new wxStaticText( itemPanel1, ID_RICHTEXTBULLETSPAGE_NAMESTATIC, _("S&tandard bullet name:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer18->Add(itemStaticText27, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
@@ -255,7 +255,7 @@ void wxRichTextBulletsPage::CreateControls()
         m_bulletNameCtrl->SetToolTip(_("A standard bullet name."));
     itemBoxSizer18->Add(m_bulletNameCtrl, 0, wxGROW|wxALL, 5);
 
-    itemBoxSizer18->Add(5, 5, 1, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    itemBoxSizer18->Add(5, 5, 1, wxALIGN_CENTER_HORIZONTAL, 5);
 
     wxStaticText* itemStaticText30 = new wxStaticText( itemPanel1, ID_RICHTEXTBULLETSPAGE_NUMBERSTATIC, _("&Number:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer18->Add(itemStaticText30, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
@@ -266,13 +266,13 @@ void wxRichTextBulletsPage::CreateControls()
         m_numberCtrl->SetToolTip(_("The list item number."));
     itemBoxSizer18->Add(m_numberCtrl, 0, wxGROW|wxALL, 5);
 
-    itemBoxSizer3->Add(5, 5, 1, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    itemBoxSizer3->Add(5, 5, 0, wxALIGN_CENTER_HORIZONTAL, 5);
 
-    m_previewCtrl = new wxRichTextCtrl( itemPanel1, ID_RICHTEXTBULLETSPAGE_PREVIEW_CTRL, wxEmptyString, wxDefaultPosition, wxSize(350, 180), wxSUNKEN_BORDER|wxVSCROLL|wxTE_READONLY );
+    m_previewCtrl = new wxRichTextCtrl( itemPanel1, ID_RICHTEXTBULLETSPAGE_PREVIEW_CTRL, wxEmptyString, wxDefaultPosition, wxSize(350, 100), wxVSCROLL|wxTE_READONLY );
     m_previewCtrl->SetHelpText(_("Shows a preview of the bullet settings."));
     if (wxRichTextBulletsPage::ShowToolTips())
         m_previewCtrl->SetToolTip(_("Shows a preview of the bullet settings."));
-    itemBoxSizer3->Add(m_previewCtrl, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    itemBoxSizer3->Add(m_previewCtrl, 1, wxGROW|wxALL, 5);
 
 ////@end wxRichTextBulletsPage content construction
 

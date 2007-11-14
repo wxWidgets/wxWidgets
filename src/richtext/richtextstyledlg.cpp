@@ -190,7 +190,7 @@ void wxRichTextStyleOrganiserDialog::CreateControls()
     wxStaticText* itemStaticText6 = new wxStaticText( itemDialog1, wxID_STATIC, _("&Styles:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
-    m_stylesListBox = new wxRichTextStyleListCtrl( itemDialog1, ID_RICHTEXTSTYLEORGANISERDIALOG_STYLES, wxDefaultPosition, wxSize(280, 350), wxSIMPLE_BORDER|listCtrlStyle );
+    m_stylesListBox = new wxRichTextStyleListCtrl( itemDialog1, ID_RICHTEXTSTYLEORGANISERDIALOG_STYLES, wxDefaultPosition, wxSize(280, 260), listCtrlStyle );
     m_stylesListBox->SetHelpText(_("The available styles."));
     if (wxRichTextStyleOrganiserDialog::ShowToolTips())
         m_stylesListBox->SetToolTip(_("The available styles."));
@@ -202,7 +202,7 @@ void wxRichTextStyleOrganiserDialog::CreateControls()
     wxStaticText* itemStaticText9 = new wxStaticText( itemDialog1, ID_RICHTEXTSTYLEORGANISERDIALOG_CURRENT_STYLE, _(" "), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer8->Add(itemStaticText9, 0, wxGROW|wxLEFT|wxRIGHT|wxTOP, 5);
 
-    m_previewCtrl = new wxRichTextCtrl( itemDialog1, ID_RICHTEXTSTYLEORGANISERDIALOG_PREVIEW, wxEmptyString, wxDefaultPosition, wxSize(310, 200), wxSIMPLE_BORDER|wxVSCROLL|wxTE_READONLY );
+    m_previewCtrl = new wxRichTextCtrl( itemDialog1, ID_RICHTEXTSTYLEORGANISERDIALOG_PREVIEW, wxEmptyString, wxDefaultPosition, wxSize(250, 200), wxVSCROLL|wxTE_READONLY );
     m_previewCtrl->SetHelpText(_("The style preview."));
     if (wxRichTextStyleOrganiserDialog::ShowToolTips())
         m_previewCtrl->SetToolTip(_("The style preview."));

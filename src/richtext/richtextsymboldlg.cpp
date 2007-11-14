@@ -302,7 +302,13 @@ BEGIN_EVENT_TABLE( wxSymbolPickerDialog, wxDialog )
     EVT_COMBOBOX( ID_SYMBOLPICKERDIALOG_FROM, wxSymbolPickerDialog::OnFromUnicodeSelected )
 #endif
 
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOS2__) || defined(__WXMGL__) || defined(__WXMOTIF__) || defined(__WXCOCOA__) || defined(__WXX11__) || defined(__WXPALMOS__)
     EVT_UPDATE_UI( wxID_OK, wxSymbolPickerDialog::OnOkUpdate )
+#endif
+
+#if defined(__WXMAC__)
+    EVT_UPDATE_UI( wxID_OK, wxSymbolPickerDialog::OnOkUpdate )
+#endif
 
 ////@end wxSymbolPickerDialog event table entries
 
@@ -334,7 +340,7 @@ bool wxSymbolPickerDialog::Create( const wxString& symbol, const wxString& fontN
     m_symbol = symbol;
 
 ////@begin wxSymbolPickerDialog creation
-    SetExtraStyle(GetExtraStyle()|wxWS_EX_BLOCK_EVENTS|wxDIALOG_EX_CONTEXTHELP);
+    SetExtraStyle(wxWS_EX_BLOCK_EVENTS|wxDIALOG_EX_CONTEXTHELP);
     wxDialog::Create( parent, id, caption, pos, size, style );
 
     CreateControls();
@@ -393,10 +399,10 @@ void wxSymbolPickerDialog::CreateControls()
     wxStaticText* itemStaticText6 = new wxStaticText( itemDialog1, wxID_STATIC, _("&Font:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxString* m_fontCtrlStrings = NULL;
-    m_fontCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_FONT, wxEmptyString, wxDefaultPosition, wxSize(240, -1), 0, m_fontCtrlStrings, wxCB_READONLY );
+    wxArrayString m_fontCtrlStrings;
+    m_fontCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_FONT, _T(""), wxDefaultPosition, wxSize(240, -1), m_fontCtrlStrings, wxCB_READONLY );
     m_fontCtrl->SetHelpText(_("The font from which to take the symbol."));
-    if (ShowToolTips())
+    if (wxSymbolPickerDialog::ShowToolTips())
         m_fontCtrl->SetToolTip(_("The font from which to take the symbol."));
     itemBoxSizer5->Add(m_fontCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
@@ -409,16 +415,16 @@ void wxSymbolPickerDialog::CreateControls()
 #endif
 
 #if defined(__UNICODE__)
-    wxString* m_subsetCtrlStrings = NULL;
-    m_subsetCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_SUBSET, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, m_subsetCtrlStrings, wxCB_READONLY );
+    wxArrayString m_subsetCtrlStrings;
+    m_subsetCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_SUBSET, _T(""), wxDefaultPosition, wxDefaultSize, m_subsetCtrlStrings, wxCB_READONLY );
     m_subsetCtrl->SetHelpText(_("Shows a Unicode subset."));
-    if (ShowToolTips())
+    if (wxSymbolPickerDialog::ShowToolTips())
         m_subsetCtrl->SetToolTip(_("Shows a Unicode subset."));
     itemBoxSizer5->Add(m_subsetCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 #endif
 
-    m_symbolsCtrl = new wxSymbolListCtrl( itemDialog1, ID_SYMBOLPICKERDIALOG_LISTCTRL, wxDefaultPosition, wxSize(500, 240), wxSIMPLE_BORDER );
+    m_symbolsCtrl = new wxSymbolListCtrl( itemDialog1, ID_SYMBOLPICKERDIALOG_LISTCTRL, wxDefaultPosition, wxSize(500, 200), 0 );
     itemBoxSizer3->Add(m_symbolsCtrl, 1, wxGROW|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer12 = new wxBoxSizer(wxHORIZONTAL);
@@ -432,9 +438,9 @@ void wxSymbolPickerDialog::CreateControls()
     wxStaticText* itemStaticText15 = new wxStaticText( itemDialog1, wxID_STATIC, _("&Character code:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer12->Add(itemStaticText15, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    m_characterCodeCtrl = new wxTextCtrl( itemDialog1, ID_SYMBOLPICKERDIALOG_CHARACTERCODE, wxEmptyString, wxDefaultPosition, wxSize(140, -1), wxTE_READONLY|wxTE_CENTRE );
+    m_characterCodeCtrl = new wxTextCtrl( itemDialog1, ID_SYMBOLPICKERDIALOG_CHARACTERCODE, _T(""), wxDefaultPosition, wxSize(140, -1), wxTE_READONLY|wxTE_CENTRE );
     m_characterCodeCtrl->SetHelpText(_("The character code."));
-    if (ShowToolTips())
+    if (wxSymbolPickerDialog::ShowToolTips())
         m_characterCodeCtrl->SetToolTip(_("The character code."));
     itemBoxSizer12->Add(m_characterCodeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
@@ -447,20 +453,19 @@ void wxSymbolPickerDialog::CreateControls()
 #endif
 
 #if defined(__UNICODE__)
-    wxString m_fromUnicodeCtrlStrings[] = {
-        _("ASCII"),
-        _("Unicode")
-    };
-    m_fromUnicodeCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_FROM, _("ASCII"), wxDefaultPosition, wxDefaultSize, 2, m_fromUnicodeCtrlStrings, wxCB_READONLY );
+    wxArrayString m_fromUnicodeCtrlStrings;
+    m_fromUnicodeCtrlStrings.Add(_("ASCII"));
+    m_fromUnicodeCtrlStrings.Add(_("Unicode"));
+    m_fromUnicodeCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_FROM, _("ASCII"), wxDefaultPosition, wxDefaultSize, m_fromUnicodeCtrlStrings, wxCB_READONLY );
     m_fromUnicodeCtrl->SetStringSelection(_("ASCII"));
     m_fromUnicodeCtrl->SetHelpText(_("The range to show."));
-    if (ShowToolTips())
+    if (wxSymbolPickerDialog::ShowToolTips())
         m_fromUnicodeCtrl->SetToolTip(_("The range to show."));
     itemBoxSizer12->Add(m_fromUnicodeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 #endif
 
-#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXPM__) || defined(__WXMGL__) || defined(__WXMOTIF__) || defined(__WXCOCOA__) || defined(__WXX11__) || defined(__WXPALMOS__)
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOS2__) || defined(__WXMGL__) || defined(__WXMOTIF__) || defined(__WXCOCOA__) || defined(__WXX11__) || defined(__WXPALMOS__)
     wxBoxSizer* itemBoxSizer20 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer3->Add(itemBoxSizer20, 0, wxGROW, 5);
 
@@ -469,13 +474,13 @@ void wxSymbolPickerDialog::CreateControls()
     wxButton* itemButton22 = new wxButton( itemDialog1, wxID_OK, _("Insert"), wxDefaultPosition, wxDefaultSize, 0 );
     itemButton22->SetDefault();
     itemButton22->SetHelpText(_("Inserts the chosen symbol."));
-    if (ShowToolTips())
+    if (wxSymbolPickerDialog::ShowToolTips())
         itemButton22->SetToolTip(_("Inserts the chosen symbol."));
     itemBoxSizer20->Add(itemButton22, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxButton* itemButton23 = new wxButton( itemDialog1, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
     itemButton23->SetHelpText(_("Closes the dialog without inserting a symbol."));
-    if (ShowToolTips())
+    if (wxSymbolPickerDialog::ShowToolTips())
         itemButton23->SetToolTip(_("Closes the dialog without inserting a symbol."));
     itemBoxSizer20->Add(itemButton23, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
@@ -489,14 +494,14 @@ void wxSymbolPickerDialog::CreateControls()
 
     wxButton* itemButton26 = new wxButton( itemDialog1, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
     itemButton26->SetHelpText(_("Closes the dialog without inserting a symbol."));
-    if (ShowToolTips())
+    if (wxSymbolPickerDialog::ShowToolTips())
         itemButton26->SetToolTip(_("Closes the dialog without inserting a symbol."));
     itemBoxSizer24->Add(itemButton26, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxButton* itemButton27 = new wxButton( itemDialog1, wxID_OK, _("Insert"), wxDefaultPosition, wxDefaultSize, 0 );
     itemButton27->SetDefault();
     itemButton27->SetHelpText(_("Inserts the chosen symbol."));
-    if (ShowToolTips())
+    if (wxSymbolPickerDialog::ShowToolTips())
         itemButton27->SetToolTip(_("Inserts the chosen symbol."));
     itemBoxSizer24->Add(itemButton27, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
@@ -787,6 +792,10 @@ bool wxSymbolListCtrl::Create(wxWindow *parent,
                         const wxString& name)
 {
     style |= wxWANTS_CHARS | wxFULL_REPAINT_ON_RESIZE;
+
+    if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
+        style |= wxBORDER_THEME;
+
     if ( !wxVScrolledWindow::Create(parent, id, pos, size, style, name) )
         return false;
 

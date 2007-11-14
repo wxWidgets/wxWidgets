@@ -130,13 +130,13 @@ void wxRichTextFontPage::CreateControls()
 
     m_faceTextCtrl = new wxTextCtrl( itemPanel1, ID_RICHTEXTFONTPAGE_FACETEXTCTRL, _T(""), wxDefaultPosition, wxDefaultSize, 0 );
     m_faceTextCtrl->SetHelpText(_("Type a font name."));
-    if (ShowToolTips())
+    if (wxRichTextFontPage::ShowToolTips())
         m_faceTextCtrl->SetToolTip(_("Type a font name."));
     itemBoxSizer5->Add(m_faceTextCtrl, 0, wxGROW|wxLEFT|wxRIGHT|wxTOP, 5);
 
-    m_faceListBox = new wxRichTextFontListBox( itemPanel1, ID_RICHTEXTFONTPAGE_FACELISTBOX, wxDefaultPosition, wxSize(200, 140), wxSIMPLE_BORDER );
+    m_faceListBox = new wxRichTextFontListBox( itemPanel1, ID_RICHTEXTFONTPAGE_FACELISTBOX, wxDefaultPosition, wxSize(200, 100), 0 );
     m_faceListBox->SetHelpText(_("Lists the available fonts."));
-    if (ShowToolTips())
+    if (wxRichTextFontPage::ShowToolTips())
         m_faceListBox->SetToolTip(_("Lists the available fonts."));
     itemBoxSizer5->Add(m_faceListBox, 1, wxGROW|wxALL|wxFIXED_MINSIZE, 5);
 
@@ -148,14 +148,14 @@ void wxRichTextFontPage::CreateControls()
 
     m_sizeTextCtrl = new wxTextCtrl( itemPanel1, ID_RICHTEXTFONTPAGE_SIZETEXTCTRL, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
     m_sizeTextCtrl->SetHelpText(_("Type a size in points."));
-    if (ShowToolTips())
+    if (wxRichTextFontPage::ShowToolTips())
         m_sizeTextCtrl->SetToolTip(_("Type a size in points."));
     itemBoxSizer9->Add(m_sizeTextCtrl, 0, wxGROW|wxLEFT|wxRIGHT|wxTOP, 5);
 
-    wxString* m_sizeListBoxStrings = NULL;
-    m_sizeListBox = new wxListBox( itemPanel1, ID_RICHTEXTFONTPAGE_SIZELISTBOX, wxDefaultPosition, wxSize(50, -1), 0, m_sizeListBoxStrings, wxLB_SINGLE );
+    wxArrayString m_sizeListBoxStrings;
+    m_sizeListBox = new wxListBox( itemPanel1, ID_RICHTEXTFONTPAGE_SIZELISTBOX, wxDefaultPosition, wxSize(50, -1), m_sizeListBoxStrings, wxLB_SINGLE );
     m_sizeListBox->SetHelpText(_("Lists font sizes in points."));
-    if (ShowToolTips())
+    if (wxRichTextFontPage::ShowToolTips())
         m_sizeListBox->SetToolTip(_("Lists font sizes in points."));
     itemBoxSizer9->Add(m_sizeListBox, 1, wxALIGN_CENTER_HORIZONTAL|wxALL|wxFIXED_MINSIZE, 5);
 
@@ -168,10 +168,10 @@ void wxRichTextFontPage::CreateControls()
     wxStaticText* itemStaticText15 = new wxStaticText( itemPanel1, wxID_STATIC, _("Font st&yle:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer14->Add(itemStaticText15, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
-    wxString* m_styleCtrlStrings = NULL;
-    m_styleCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_STYLECTRL, _T(""), wxDefaultPosition, wxDefaultSize, 0, m_styleCtrlStrings, wxCB_READONLY );
+    wxArrayString m_styleCtrlStrings;
+    m_styleCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_STYLECTRL, _T(""), wxDefaultPosition, wxDefaultSize, m_styleCtrlStrings, wxCB_READONLY );
     m_styleCtrl->SetHelpText(_("Select regular or italic style."));
-    if (ShowToolTips())
+    if (wxRichTextFontPage::ShowToolTips())
         m_styleCtrl->SetToolTip(_("Select regular or italic style."));
     itemBoxSizer14->Add(m_styleCtrl, 0, wxGROW|wxALL, 5);
 
@@ -181,10 +181,10 @@ void wxRichTextFontPage::CreateControls()
     wxStaticText* itemStaticText18 = new wxStaticText( itemPanel1, wxID_STATIC, _("Font &weight:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer17->Add(itemStaticText18, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
-    wxString* m_weightCtrlStrings = NULL;
-    m_weightCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_WEIGHTCTRL, _T(""), wxDefaultPosition, wxDefaultSize, 0, m_weightCtrlStrings, wxCB_READONLY );
+    wxArrayString m_weightCtrlStrings;
+    m_weightCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_WEIGHTCTRL, _T(""), wxDefaultPosition, wxDefaultSize, m_weightCtrlStrings, wxCB_READONLY );
     m_weightCtrl->SetHelpText(_("Select regular or bold."));
-    if (ShowToolTips())
+    if (wxRichTextFontPage::ShowToolTips())
         m_weightCtrl->SetToolTip(_("Select regular or bold."));
     itemBoxSizer17->Add(m_weightCtrl, 0, wxGROW|wxALL, 5);
 
@@ -194,10 +194,10 @@ void wxRichTextFontPage::CreateControls()
     wxStaticText* itemStaticText21 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Underlining:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer20->Add(itemStaticText21, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
-    wxString* m_underliningCtrlStrings = NULL;
-    m_underliningCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_UNDERLINING_CTRL, _T(""), wxDefaultPosition, wxDefaultSize, 0, m_underliningCtrlStrings, wxCB_READONLY );
+    wxArrayString m_underliningCtrlStrings;
+    m_underliningCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_UNDERLINING_CTRL, _T(""), wxDefaultPosition, wxDefaultSize, m_underliningCtrlStrings, wxCB_READONLY );
     m_underliningCtrl->SetHelpText(_("Select underlining or no underlining."));
-    if (ShowToolTips())
+    if (wxRichTextFontPage::ShowToolTips())
         m_underliningCtrl->SetToolTip(_("Select underlining or no underlining."));
     itemBoxSizer20->Add(m_underliningCtrl, 0, wxGROW|wxALL, 5);
 
@@ -209,7 +209,7 @@ void wxRichTextFontPage::CreateControls()
 
     m_colourCtrl = new wxRichTextColourSwatchCtrl( itemPanel1, ID_RICHTEXTFONTPAGE_COLOURCTRL, wxDefaultPosition, wxSize(40, 20), wxSIMPLE_BORDER );
     m_colourCtrl->SetHelpText(_("Click to change the text colour."));
-    if (ShowToolTips())
+    if (wxRichTextFontPage::ShowToolTips())
         m_colourCtrl->SetToolTip(_("Click to change the text colour."));
     itemBoxSizer23->Add(m_colourCtrl, 0, wxALIGN_LEFT|wxALL, 5);
 
@@ -219,22 +219,22 @@ void wxRichTextFontPage::CreateControls()
     m_strikethroughCtrl = new wxCheckBox( itemPanel1, ID_RICHTEXTFONTPAGE_STRIKETHROUGHCTRL, _("&Strikethrough"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
     m_strikethroughCtrl->SetValue(false);
     m_strikethroughCtrl->SetHelpText(_("Check to show a line through the text."));
-    if (ShowToolTips())
+    if (wxRichTextFontPage::ShowToolTips())
         m_strikethroughCtrl->SetToolTip(_("Check to show a line through the text."));
     itemBoxSizer26->Add(m_strikethroughCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     m_capitalsCtrl = new wxCheckBox( itemPanel1, ID_RICHTEXTFONTPAGE_CAPSCTRL, _("Ca&pitals"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
     m_capitalsCtrl->SetValue(false);
     m_capitalsCtrl->SetHelpText(_("Check to show the text in capitals."));
-    if (ShowToolTips())
+    if (wxRichTextFontPage::ShowToolTips())
         m_capitalsCtrl->SetToolTip(_("Check to show the text in capitals."));
     itemBoxSizer26->Add(m_capitalsCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    itemBoxSizer3->Add(5, 5, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    itemBoxSizer3->Add(5, 5, 0, wxALIGN_CENTER_HORIZONTAL, 5);
 
-    m_previewCtrl = new wxRichTextFontPreviewCtrl( itemPanel1, ID_RICHTEXTFONTPAGE_PREVIEWCTRL, wxDefaultPosition, wxSize(100, 80), wxSIMPLE_BORDER );
+    m_previewCtrl = new wxRichTextFontPreviewCtrl( itemPanel1, ID_RICHTEXTFONTPAGE_PREVIEWCTRL, wxDefaultPosition, wxSize(100, 60), 0 );
     m_previewCtrl->SetHelpText(_("Shows a preview of the font settings."));
-    if (ShowToolTips())
+    if (wxRichTextFontPage::ShowToolTips())
         m_previewCtrl->SetToolTip(_("Shows a preview of the font settings."));
     itemBoxSizer3->Add(m_previewCtrl, 0, wxGROW|wxALL, 5);
 

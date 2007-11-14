@@ -393,6 +393,17 @@ BEGIN_EVENT_TABLE(wxRichTextFontPreviewCtrl, wxWindow)
     EVT_PAINT(wxRichTextFontPreviewCtrl::OnPaint)
 END_EVENT_TABLE()
 
+wxRichTextFontPreviewCtrl::wxRichTextFontPreviewCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& sz, long style)
+{
+    if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
+        style |= wxBORDER_THEME;
+
+    wxWindow::Create(parent, id, pos, sz, style);
+
+    SetBackgroundColour(*wxWHITE);
+    m_textEffects = 0;
+}
+
 void wxRichTextFontPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
@@ -469,9 +480,13 @@ END_EVENT_TABLE()
 
 IMPLEMENT_CLASS(wxRichTextColourSwatchCtrl, wxControl)
 
-wxRichTextColourSwatchCtrl::wxRichTextColourSwatchCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style):
-    wxControl(parent, id, pos, size, style)
+wxRichTextColourSwatchCtrl::wxRichTextColourSwatchCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style)
 {
+    if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
+        style |= wxBORDER_THEME;
+
+    wxControl::Create(parent, id, pos, size, style);
+
     SetColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     SetBackgroundStyle(wxBG_STYLE_COLOUR);
 }
@@ -495,7 +510,7 @@ void wxRichTextColourSwatchCtrl::OnMouseEvent(wxMouseEvent& event)
         wxColourDialog *dialog = new wxColourDialog(parent, &data);
         // Crashes on wxMac (no m_peer)
 #ifndef __WXMAC__
-        dialog->SetTitle(_("Background colour"));
+        dialog->SetTitle(_("Colour"));
 #endif
         if (dialog->ShowModal() == wxID_OK)
         {
@@ -534,6 +549,9 @@ wxRichTextFontListBox::wxRichTextFontListBox(wxWindow* parent, wxWindowID id, co
 bool wxRichTextFontListBox::Create(wxWindow* parent, wxWindowID id, const wxPoint& pos,
         const wxSize& size, long style)
 {
+    if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
+        style |= wxBORDER_THEME;
+
     return wxHtmlListBox::Create(parent, id, pos, size, style);
 }
 

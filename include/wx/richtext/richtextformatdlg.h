@@ -218,12 +218,7 @@ DECLARE_EVENT_TABLE()
 class WXDLLIMPEXP_RICHTEXT wxRichTextFontPreviewCtrl : public wxWindow
 {
 public:
-    wxRichTextFontPreviewCtrl(wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& sz = wxDefaultSize, long style = 0) :
-        wxWindow(parent, id, pos, sz, style)
-    {
-        SetBackgroundColour(*wxWHITE);
-        m_textEffects = 0;
-    }
+    wxRichTextFontPreviewCtrl(wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& sz = wxDefaultSize, long style = 0);
 
     void SetTextEffects(int effects) { m_textEffects = effects; }
     int GetTextEffects() const { return m_textEffects; }

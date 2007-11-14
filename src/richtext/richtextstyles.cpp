@@ -814,6 +814,9 @@ wxRichTextStyleListCtrl::wxRichTextStyleListCtrl(wxWindow* parent, wxWindowID id
 bool wxRichTextStyleListCtrl::Create(wxWindow* parent, wxWindowID id, const wxPoint& pos,
         const wxSize& size, long style)
 {
+    if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
+        style |= wxBORDER_THEME;
+
     wxControl::Create(parent, id, pos, size, style);
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
@@ -822,7 +825,13 @@ bool wxRichTextStyleListCtrl::Create(wxWindow* parent, wxWindowID id, const wxPo
 
     bool showSelector = ((style & wxRICHTEXTSTYLELIST_HIDE_TYPE_SELECTOR) == 0);
 
-    m_styleListBox = new wxRichTextStyleListBox(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, showSelector ? wxBORDER_DEFAULT : wxBORDER_NONE);
+    wxBorder listBoxStyle;
+    if (showSelector)
+        listBoxStyle = wxBORDER_THEME;
+    else
+        listBoxStyle = wxBORDER_NONE;
+
+    m_styleListBox = new wxRichTextStyleListBox(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, listBoxStyle);
 
     wxBoxSizer* boxSizer = new wxBoxSizer(wxVERTICAL);
 
