@@ -302,8 +302,8 @@ GtkWidget* wxPizza::New(long windowStyle)
     pizza->m_scroll_x = 0;
     pizza->m_scroll_y = 0;
     pizza->m_is_scrollable = (windowStyle & (wxHSCROLL | wxVSCROLL)) != 0;
-    pizza->m_border_style =
-        int(windowStyle & (wxBORDER_SIMPLE | wxBORDER_RAISED | wxBORDER_SUNKEN | wxBORDER_THEME));
+    // mask off border styles not useable with wxPizza
+    pizza->m_border_style = int(windowStyle & BORDER_STYLES);
     gtk_fixed_set_has_window(GTK_FIXED(widget), true);
     gtk_widget_add_events(widget,
         GDK_EXPOSURE_MASK |
