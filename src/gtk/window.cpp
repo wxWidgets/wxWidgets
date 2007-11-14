@@ -2414,7 +2414,7 @@ void wxWindowGTK::PostCreation()
 
         // border drawing
 #ifndef __WXUNIVERSAL__
-        if (HasFlag(wxBORDER_SIMPLE | wxBORDER_RAISED | wxBORDER_SUNKEN | wxBORDER_THEME))
+        if (HasFlag(wxPizza::BORDER_STYLES))
         {
             g_signal_connect(m_widget, "expose_event",
                 G_CALLBACK(expose_event_border), this);

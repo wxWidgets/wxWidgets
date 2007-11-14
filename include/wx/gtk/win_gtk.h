@@ -17,6 +17,10 @@
 
 struct WXDLLIMPEXP_CORE wxPizza
 {
+    // borders styles which can be used with wxPizza
+    enum { BORDER_STYLES =
+        wxBORDER_SIMPLE | wxBORDER_RAISED | wxBORDER_SUNKEN | wxBORDER_THEME };
+
     static GtkWidget* New(long windowStyle = 0);
     static GType type();
     void move(GtkWidget* widget, int x, int y);
