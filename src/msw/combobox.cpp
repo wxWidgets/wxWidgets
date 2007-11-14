@@ -610,12 +610,12 @@ void wxComboBox::OnUpdatePaste(wxUpdateUIEvent& event)
 
 void wxComboBox::OnUpdateUndo(wxUpdateUIEvent& event)
 {
-    event.Enable( CanUndo() );
+    event.Enable( IsEditable() && CanUndo() );
 }
 
 void wxComboBox::OnUpdateRedo(wxUpdateUIEvent& event)
 {
-    event.Enable( CanRedo() );
+    event.Enable( IsEditable() && CanRedo() );
 }
 
 void wxComboBox::OnUpdateDelete(wxUpdateUIEvent& event)
