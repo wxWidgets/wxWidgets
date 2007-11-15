@@ -465,11 +465,11 @@ wxRect wxStdRenderer::GetBorderDimensions(wxBorder border) const
         case wxBORDER_THEME:
             width = 2;
             break;
-
+#if 0
         case wxBORDER_DOUBLE:
             width = 3;
             break;
-
+#endif
         default:
             wxFAIL_MSG(_T("unknown border type"));
             // fall through
@@ -696,7 +696,7 @@ void wxStdRenderer::DrawRadioButton(wxDC& dc,
         DrawCheckOrRadioButton(dc, label, bitmap, rect, flags, align, indexAccel);
     else
         DrawCheckOrRadioButton(dc, label, GetRadioBitmap(flags), rect, flags, align, indexAccel);
-    
+
 }
 
 void wxStdRenderer::DrawCheckOrRadioButton(wxDC& dc,
