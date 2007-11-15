@@ -461,13 +461,14 @@ wxRect wxStdRenderer::GetBorderDimensions(wxBorder border) const
 
         case wxBORDER_RAISED:
         case wxBORDER_SUNKEN:
+        case wxBORDER_THEME:
             width = 2;
             break;
-
+#if 0
         case wxBORDER_DOUBLE:
             width = 3;
             break;
-
+#endif
         default:
             wxFAIL_MSG(_T("unknown border type"));
             // fall through
