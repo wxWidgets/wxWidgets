@@ -69,7 +69,7 @@ wxColourDialogHookProc(HWND hwnd,
         CHOOSECOLOR *pCC = (CHOOSECOLOR *)lParam;
         wxColourDialog *dialog = (wxColourDialog *)pCC->lCustData;
 
-        const wxString& title = dialog->GetTitle();
+        const wxString title = dialog->GetTitle();
         if ( !title.empty() )
             ::SetWindowText(hwnd, title.wx_str());
 
