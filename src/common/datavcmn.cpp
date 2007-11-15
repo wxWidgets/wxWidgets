@@ -314,22 +314,22 @@ wxDataViewIndexListModel::~wxDataViewIndexListModel()
 
 void wxDataViewIndexListModel::RowPrepended()
 {
+    m_ordered = false;
+    
     unsigned int id = m_lastIndex++;
     m_hash.Insert( (void*) id, 0 );
     wxDataViewItem item( (void*) id );
     ItemAdded( wxDataViewItem(0), item );
-    
-    m_ordered = false;
 }
 
 void wxDataViewIndexListModel::RowInserted( unsigned int before )
 {
+    m_ordered = false;
+    
     unsigned int id = m_lastIndex++;
     m_hash.Insert( (void*) id, before );
     wxDataViewItem item( (void*) id );
     ItemAdded( wxDataViewItem(0), item );
-    
-    m_ordered = false;
 }
 
 void wxDataViewIndexListModel::RowAppended()
