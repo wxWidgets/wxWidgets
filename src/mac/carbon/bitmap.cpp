@@ -149,12 +149,10 @@ void wxMacReleaseBitmapButton( ControlButtonContentInfo*info )
     {
         // owned by the bitmap, no release here
     }
-#if defined( __WXMAC_OSX__ ) && MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
     else if ( info->contentType == kControlContentCGImageRef )
     {
         CGImageRelease( info->u.imageRef ) ;
     }
-#endif
     else
     {
         wxFAIL_MSG(wxT("Unexpected bitmap type") ) ;
