@@ -234,7 +234,7 @@ template<> inline EventParamType wxMacGetEventParamType<HISize>() { return typeH
 template<> inline EventParamType wxMacGetEventParamType<HIRect>() { return typeHIRect; }
 template<> inline EventParamType wxMacGetEventParamType<void*>() { return typeVoidPtr; }
 #endif
-#if TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2 )
+#if TARGET_API_MAC_OSX
 template<> inline EventParamType wxMacGetEventParamType<CFDictionaryRef>() { return typeCFDictionaryRef; }
 #endif
 template<> inline EventParamType wxMacGetEventParamType<Collection>() { return typeCollection; }
