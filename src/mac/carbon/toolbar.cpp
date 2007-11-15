@@ -1743,7 +1743,7 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
     bool drawMetalTheme = MacGetTopLevelWindow()->MacGetMetalAppearance();
     bool minimumUmaAvailable = (UMAGetSystemVersion() >= 0x1030);
 
-#if wxMAC_USE_CORE_GRAPHICS && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
+#if wxMAC_USE_CORE_GRAPHICS
     if ( !drawMetalTheme && minimumUmaAvailable )
     {
         HIThemePlacardDrawInfo info;

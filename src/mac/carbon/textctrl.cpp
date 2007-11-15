@@ -235,11 +235,7 @@ protected :
     TXNObject m_txn ;
 } ;
 
-#if TARGET_API_MAC_OSX
-
 // implementation available under OSX
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
 
 class wxMacMLTEHIViewControl : public wxMacMLTEControl
 {
@@ -258,10 +254,6 @@ protected :
     HIViewRef m_scrollView ;
     HIViewRef m_textView ;
 };
-
-#endif
-
-#endif
 
 // 'classic' MLTE implementation
 
@@ -1522,7 +1514,6 @@ void wxMacUnicodeTextControl::WriteText( const wxString& str )
     wxString st = str ;
     wxMacConvertNewlines10To13( &st ) ;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
     if ( HasFocus() )
     {
         wxMacCFStringHolder cf(st , m_font.GetEncoding() ) ;
@@ -1530,7 +1521,6 @@ void wxMacUnicodeTextControl::WriteText( const wxString& str )
         SetData<CFStringRef>( 0, kControlEditTextInsertCFStringRefTag, &value );
     }
     else
-#endif
     {
         wxString val = GetStringValue() ;
         long start , end ;
@@ -1690,9 +1680,7 @@ TXNFrameOptions wxMacMLTEControl::FrameOptionsFromWXStyle( long wxStyle )
 {
     TXNFrameOptions frameOptions = kTXNDontDrawCaretWhenInactiveMask;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
     frameOptions |= kTXNDoFontSubstitutionMask;
-#endif
 
     if ( ! (wxStyle & wxTE_NOHIDESEL) )
         frameOptions |= kTXNDontDrawSelectionWhenInactiveMask ;
@@ -3022,10 +3010,6 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
 // MLTE control implementation (OSX part)
 // ----------------------------------------------------------------------------
 
-#if TARGET_API_MAC_OSX
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
-
 // tiger multi-line textcontrols with no CR in the entire content
 // don't scroll automatically, so we need a hack.
 // This attempt only works 'before' the key (ie before CallNextEventHandler)
@@ -3185,10 +3169,5 @@ void wxMacMLTEHIViewControl::SetBackground( const wxBrush &brush )
     CGColorSpaceRelease( rgbSpace );
 #endif
 }
-
-#endif // MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
-
-
-#endif
 
 #endif // wxUSE_TEXTCTRL

@@ -80,7 +80,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 
         case wxSYS_COLOUR_HIGHLIGHT:
 
-#if 0 && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3)
+#if 0
             // NB: enable this case as desired
             colorBrushID = kThemeBrushAlternatePrimaryHighlightColor;
 #else
@@ -105,7 +105,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break ;
 
         case wxSYS_COLOUR_HIGHLIGHTTEXT :
-#if 0 && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3)
+#if 0 
             // NB: enable this case as desired
             resultColor = *wxWHITE ;
 #else

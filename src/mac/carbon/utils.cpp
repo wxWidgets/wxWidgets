@@ -1895,9 +1895,7 @@ void wxMacDataItemBrowserControl::InsertColumn(int colId, DataBrowserPropertyTyp
     columnDesc.propertyDesc.propertyID = (kMinColumnId + colId);
     columnDesc.propertyDesc.propertyType = colType;
     columnDesc.propertyDesc.propertyFlags = kDataBrowserListViewSortableColumn;
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
     columnDesc.propertyDesc.propertyFlags |= kDataBrowserListViewTypeSelectColumn;
-#endif
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
     columnDesc.propertyDesc.propertyFlags |= kDataBrowserListViewNoGapForIconInHeaderButton;
 #endif

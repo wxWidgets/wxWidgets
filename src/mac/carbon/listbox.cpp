@@ -542,9 +542,7 @@ wxMacDataBrowserListControl::wxMacDataBrowserListControl( wxWindow *peer, const 
     columnDesc.propertyDesc.propertyID = kTextColumnId;
     columnDesc.propertyDesc.propertyType = kDataBrowserTextType;
     columnDesc.propertyDesc.propertyFlags = kDataBrowserTableViewSelectionColumn;
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
     columnDesc.propertyDesc.propertyFlags |= kDataBrowserListViewTypeSelectColumn;
-#endif
 
     verify_noerr( AddColumn( &columnDesc, kDataBrowserListViewAppendColumn ) );
 
@@ -553,9 +551,7 @@ wxMacDataBrowserListControl::wxMacDataBrowserListControl( wxWindow *peer, const 
     columnDesc.propertyDesc.propertyID = kNumericOrderColumnId;
     columnDesc.propertyDesc.propertyType = kDataBrowserPropertyRelevanceRankPart;
     columnDesc.propertyDesc.propertyFlags = kDataBrowserTableViewSelectionColumn;
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
     columnDesc.propertyDesc.propertyFlags |= kDataBrowserListViewTypeSelectColumn;
-#endif
 
     verify_noerr( AddColumn( &columnDesc, kDataBrowserListViewAppendColumn ) );
 

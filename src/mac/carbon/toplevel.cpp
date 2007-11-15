@@ -1205,12 +1205,10 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
         wclass = kDocumentWindowClass ;
         attr |= kWindowInWindowMenuAttribute ;
     }
-#if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
     else if ( HasFlag( wxFRAME_DRAWER ) )
     {
         wclass = kDrawerWindowClass;
     }
-#endif  //10.2 and up
     else
     {
         if ( HasFlag( wxMINIMIZE_BOX ) || HasFlag( wxMAXIMIZE_BOX ) ||
@@ -1718,32 +1716,9 @@ wxUint32 wxTopLevelWindowMac::MacGetWindowAttributes() const
 
 void wxTopLevelWindowMac::MacPerformUpdates()
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
     // for composited windows this also triggers a redraw of all
     // invalid views in the window
-    if ( UMAGetSystemVersion() >= 0x1030 )
-        HIWindowFlush((WindowRef) m_macWindow) ;
-    else
-#endif
-    {
-        // the only way to trigger the redrawing on earlier systems is to call
-        // ReceiveNextEvent
-
-        EventRef currentEvent = (EventRef) wxTheApp->MacGetCurrentEvent() ;
-        UInt32 currentEventClass = 0 ;
-        if ( currentEvent != NULL )
-        {
-            currentEventClass = ::GetEventClass( currentEvent ) ;
-            ::GetEventKind( currentEvent ) ;
-        }
-
-        if ( currentEventClass != kEventClassMenu )
-        {
-            // when tracking a menu, strange redraw errors occur if we flush now, so leave..
-            EventRef theEvent;
-            ReceiveNextEvent( 0 , NULL , kEventDurationNoWait , false , &theEvent ) ;
-        }
-    }
+    HIWindowFlush((WindowRef) m_macWindow) ;
 }
 
 // Attracts the users attention to this window if the application is

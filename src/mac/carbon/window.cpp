@@ -153,17 +153,6 @@ void wxMacWindowToNative( const wxWindow* window , Rect *rect )
 // Carbon Events
 // ---------------------------------------------------------------------------
 
-#if TARGET_API_MAC_OSX
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_3
-enum
-{
-    kEventControlVisibilityChanged = 157
-};
-#endif
-
-#endif
-
 static const EventTypeSpec eventList[] =
 {
     { kEventClassCommand, kEventProcessCommand } ,
@@ -2667,13 +2656,7 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
             m_peer->SetNeedsDisplay() ;
 #else
             // this would be the preferred version for fast drawing controls
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-            if ( UMAGetSystemVersion() >= 0x1030 )
-                HIViewRender(m_peer->GetControlRef()) ;
-            else
-#endif
-                Update() ;
+            HIViewRender(m_peer->GetControlRef()) ;
 #endif
         }
 

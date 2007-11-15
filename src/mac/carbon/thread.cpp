@@ -36,9 +36,6 @@
 #include "wx/mac/uma.h"
 #endif
 
-#include "wx/mac/macnotfy.h"
-
-
 // the possible states of the thread:
 // ("=>" shows all possible transitions from this state)
 enum wxThreadState

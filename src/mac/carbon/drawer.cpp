@@ -16,7 +16,7 @@
 
 #include "wx/mac/private.h"
 
-#if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
+#if defined( __WXMAC__ )
 
 #include "wx/mac/carbon/drawer.h"
 
@@ -197,5 +197,4 @@ wxDirection WindowEdgeToDirection(OptionBits edge)
     return direction;
 }
 
-#endif // defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
-
+#endif // defined( __WXMAC__ ) 

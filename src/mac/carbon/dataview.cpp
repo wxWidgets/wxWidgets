@@ -907,12 +907,12 @@ bool wxDataViewCtrl::AppendColumn(wxDataViewColumn* dataViewColumnPtr)
 #endif
     if (dataViewColumnPtr->GetRenderer()->GetMode() == wxDATAVIEW_CELL_EDITABLE)
       columnDescription.propertyDesc.propertyFlags |= kDataBrowserPropertyIsEditable;
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
+
     if ((columnDescription.propertyDesc.propertyType == kDataBrowserTextType) ||
         (columnDescription.propertyDesc.propertyType == kDataBrowserIconAndTextType) ||
         (columnDescription.propertyDesc.propertyType == kDataBrowserDateTimeType))
       columnDescription.propertyDesc.propertyFlags |= kDataBrowserListViewTypeSelectColumn;
-#endif
+
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
     columnDescription.propertyDesc.propertyFlags |= kDataBrowserListViewNoGapForIconInHeaderButton;
 #endif

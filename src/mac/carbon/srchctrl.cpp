@@ -37,9 +37,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxSearchCtrl, wxSearchCtrlBase)
 // wxMacSearchFieldControl
 // ============================================================================
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
-
-
 static const EventTypeSpec eventList[] =
 {
     { kEventClassSearchField, kEventSearchFieldCancelClicked } ,
@@ -194,8 +191,6 @@ wxString wxMacSearchFieldControl::GetDescriptiveText() const
         return wxEmptyString;
     }
 }
-
-#endif
 
 // ============================================================================
 // implementation
@@ -414,12 +409,10 @@ void wxSearchCtrl::CreatePeer(
            const wxSize& size, long style )
 {
 #ifdef __WXMAC_OSX__
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
     if ( UMAGetSystemVersion() >= 0x1030 )
     {
         m_peer = new wxMacSearchFieldControl( this , str , pos , size , style );
     }
-#endif
 #endif
     if ( !m_peer )
     {
