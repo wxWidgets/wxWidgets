@@ -361,7 +361,7 @@ unsigned int wxDataViewIndexListModel::GetRow( const wxDataViewItem &item ) cons
 {
     if (m_ordered)
     {
-        unsigned int pos = (unsigned int) item.GetID();
+        unsigned int pos = wxPtrToUInt(item.GetID());
         return pos-1;
     }
     
@@ -387,8 +387,8 @@ int wxDataViewIndexListModel::Compare(const wxDataViewItem& item1,
 {
     if (m_ordered)
     {
-        unsigned int pos1 = (unsigned int) item1.GetID();
-        unsigned int pos2 = (unsigned int) item2.GetID();
+        unsigned int pos1 = wxPtrToUInt(item1.GetID());
+        unsigned int pos2 = wxPtrToUInt(item2.GetID());
         
         if (ascending)
             return pos1 - pos2;
