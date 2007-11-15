@@ -299,6 +299,8 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
 
 wxDataViewIndexListModel::wxDataViewIndexListModel( unsigned int initial_size )
 {
+    m_ordered = true;
+
     // build initial index
     unsigned int i;
     for (i = 1; i < initial_size+1; i++)
@@ -316,6 +318,8 @@ void wxDataViewIndexListModel::RowPrepended()
     m_hash.Insert( (void*) id, 0 );
     wxDataViewItem item( (void*) id );
     ItemAdded( wxDataViewItem(0), item );
+    
+    m_ordered = false;
 }
 
 void wxDataViewIndexListModel::RowInserted( unsigned int before )
@@ -324,6 +328,8 @@ void wxDataViewIndexListModel::RowInserted( unsigned int before )
     m_hash.Insert( (void*) id, before );
     wxDataViewItem item( (void*) id );
     ItemAdded( wxDataViewItem(0), item );
+    
+    m_ordered = false;
 }
 
 void wxDataViewIndexListModel::RowAppended()
@@ -353,6 +359,12 @@ void wxDataViewIndexListModel::RowValueChanged( unsigned int row, unsigned int c
 
 unsigned int wxDataViewIndexListModel::GetRow( const wxDataViewItem &item ) const
 {
+    if (m_ordered)
+    {
+        unsigned int pos = (unsigned int) item.GetID();
+        return pos-1;
+    }
+    
     // assert for not found
     return (unsigned int) m_hash.Index( item.GetID() );
 }
@@ -363,11 +375,27 @@ wxDataViewItem wxDataViewIndexListModel::GetItem( unsigned int row ) const
     return wxDataViewItem( m_hash[row] );
 }
 
+bool wxDataViewIndexListModel::HasDefaultCompare() const
+{ 
+    return !m_ordered;
+}
+
 int wxDataViewIndexListModel::Compare(const wxDataViewItem& item1,
                                       const wxDataViewItem& item2,
                                       unsigned int WXUNUSED(column),
                                       bool ascending)
 {
+    if (m_ordered)
+    {
+        unsigned int pos1 = (unsigned int) item1.GetID();
+        unsigned int pos2 = (unsigned int) item2.GetID();
+        
+        if (ascending)
+            return pos1 - pos2;
+        else 
+            return pos2 - pos1;
+    }
+    
     if (ascending)
         return GetRow(item1) - GetRow(item2);
 

@@ -255,7 +255,7 @@ public:
 
     virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
                          unsigned int column, bool ascending );
-    virtual bool HasDefaultCompare() const { return true; }
+    virtual bool HasDefaultCompare() const;
 
     // implement base methods
 
@@ -271,6 +271,7 @@ public:
 private:
     wxDataViewItemArray m_hash;
     unsigned int m_lastIndex;
+    bool m_ordered;
 };
 
 
