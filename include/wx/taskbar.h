@@ -61,7 +61,7 @@ private:
     #include "wx/msw/taskbar.h"
 #elif defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__)
     #include "wx/unix/taskbarx11.h"
-#elif defined (__WXMAC__) && defined(__WXMAC_OSX__)
+#elif defined (__WXMAC__) 
     #include "wx/mac/taskbarosx.h"
 #elif defined (__WXCOCOA__)
     #include "wx/cocoa/taskbar.h"

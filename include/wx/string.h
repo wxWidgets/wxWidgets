@@ -934,7 +934,7 @@ public:
   wxString(const wxString& stringSrc) : m_impl(stringSrc.m_impl) { }
 
     // string containing nRepeat copies of ch
-  wxString(wxUniChar ch, size_t nRepeat = 1)
+  wxString(wxUniChar ch, size_t nRepeat = 1 )
     { assign(nRepeat, ch); }
   wxString(size_t nRepeat, wxUniChar ch)
     { assign(nRepeat, ch); }
@@ -1372,11 +1372,7 @@ public:
 #if wxUSE_WCHAR_T
     const wxWCharBuffer wc_str(const wxMBConv& conv = wxConvLibc) const;
 #endif // wxUSE_WCHAR_T
-#ifdef __WXOSX__
     const wxCharBuffer fn_str() const { return wxConvFile.cWC2WX( wc_str( wxConvLocal ) ); }
-#else
-    const wxChar* fn_str() const { return c_str(); }
-#endif
 #endif // Unicode/ANSI
 
   // overloaded assignment

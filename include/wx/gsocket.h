@@ -174,8 +174,6 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf);
 
 # if defined(__WINDOWS__)
 #  include "wx/msw/gsockmsw.h"
-# elif defined(__WXMAC__) && !defined(__DARWIN__)
-#  include "wx/mac/gsockmac.h"
 # else
 #  include "wx/unix/gsockunx.h"
 # endif

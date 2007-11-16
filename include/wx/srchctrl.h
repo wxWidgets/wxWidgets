@@ -17,8 +17,7 @@
 
 #include "wx/textctrl.h"
 
-#if !defined(__WXUNIVERSAL__) && defined(__WXMAC__) && defined(__WXMAC_OSX__) \
-        && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3)
+#if !defined(__WXUNIVERSAL__) && defined(__WXMAC__) 
     // search control was introduced in Mac OS X 10.3 Panther
     #define wxUSE_NATIVE_SEARCH_CONTROL 1
 

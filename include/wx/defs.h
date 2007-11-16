@@ -2513,42 +2513,23 @@ typedef unsigned short  WXWORD;
 
 typedef WX_OPAQUE_TYPE(CIconHandle ) * WXHICON ;
 typedef WX_OPAQUE_TYPE(PicHandle ) * WXHMETAFILE ;
-
-
-/* typedef void*       WXWidget; */
-/* typedef void*       WXWindow; */
 typedef WX_OPAQUE_TYPE(ControlRef ) * WXWidget ;
 typedef WX_OPAQUE_TYPE(WindowRef) * WXWindow ;
+
 typedef void*       WXDisplay;
 
-/* typedef WindowPtr       WXHWND; */
-/* typedef Handle          WXHANDLE; */
-/* typedef CIconHandle     WXHICON; */
-/* typedef unsigned long   WXHFONT; */
-/* typedef MenuHandle      WXHMENU; */
-/* typedef unsigned long   WXHPEN; */
-/* typedef unsigned long   WXHBRUSH; */
-/* typedef unsigned long   WXHPALETTE; */
-/* typedef CursHandle      WXHCURSOR; */
-/* typedef RgnHandle       WXHRGN; */
-/* typedef unsigned long   WXHACCEL; */
-/* typedef unsigned long   WXHINSTANCE; */
-/* typedef unsigned long   WXHIMAGELIST; */
-/* typedef unsigned long   WXHGLOBAL; */
-/* typedef GrafPtr         WXHDC; */
-/* typedef unsigned int    WXWPARAM; */
-/* typedef long            WXLPARAM; */
-/* typedef void *          WXRGNDATA; */
-/* typedef void *          WXMSG; */
-/* typedef unsigned long   WXHCONV; */
-/* typedef unsigned long   WXHKEY; */
-/* typedef void *          WXDRAWITEMSTRUCT; */
-/* typedef void *          WXMEASUREITEMSTRUCT; */
-/* typedef void *          WXLPCREATESTRUCT; */
-/* typedef int (*WXFARPROC)(); */
+// a few native types
 
-/* typedef WindowPtr       WXWindow; */
-/* typedef ControlHandle   WXWidget; */
+typedef const void * CFTypeRef;
+
+typedef const struct __CFString * CFStringRef;
+typedef struct __CFString * CFMutableStringRef;
+
+typedef struct __CFRunLoopSource * CFRunLoopSourceRef;
+
+#define DECLARE_WXMAC_OPAQUE_REF( name ) typedef struct Opaque##name* name;
+
+DECLARE_WXMAC_OPAQUE_REF( PasteboardRef );
 
 #endif
 

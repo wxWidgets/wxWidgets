@@ -32,7 +32,7 @@
 #ifdef __WXMAC__
 #    if defined(__MACH__)
 #        define __WXMAC_OSX__
-#        define __WXMAC_CARBON__
+#        define __WXMAC_CARBON__ /* for backwards compat in user code still defined */
 #        include <AvailabilityMacros.h>
 #        ifndef MAC_OS_X_VERSION_10_4
 #           define MAC_OS_X_VERSION_10_4 1040
@@ -45,11 +45,7 @@
 #            include "wx/mac/carbon/config_xcode.h"
 #        endif
 #    else
-#        if TARGET_CARBON
-#            define __WXMAC_CARBON__
-#        else
-#            define __WXMAC_CLASSIC__
-#        endif
+#        error "only mach-o configurations are supported"
 #    endif
 #endif
 
