@@ -514,17 +514,17 @@ void wxMacNativeToRect( const Rect *n , wxRect* wx );
 void wxMacPointToNative( const wxPoint* wx , Point *n );
 void wxMacNativeToPoint( const Point *n , wxPoint* wx );
 
-wxWindow *              wxFindControlFromMacControl(ControlRef inControl );
-wxTopLevelWindowMac*    wxFindWinFromMacWindow( WindowRef inWindow );
-wxMenu*                 wxFindMenuFromMacMenu(MenuRef inMenuRef);
+WXDLLIMPEXP_CORE wxWindow * wxFindControlFromMacControl(ControlRef inControl );
+WXDLLIMPEXP_CORE wxTopLevelWindowMac* wxFindWinFromMacWindow( WindowRef inWindow );
+WXDLLIMPEXP_CORE wxMenu* wxFindMenuFromMacMenu(MenuRef inMenuRef);
 
-int                     wxMacCommandToId( UInt32 macCommandId );
-UInt32                  wxIdToMacCommand( int wxId );
-wxMenu*                 wxFindMenuFromMacCommand( const HICommand &macCommandId , wxMenuItem* &item );
+WXDLLIMPEXP_CORE int wxMacCommandToId( UInt32 macCommandId );
+WXDLLIMPEXP_CORE UInt32 wxIdToMacCommand( int wxId );
+WXDLLIMPEXP_CORE wxMenu* wxFindMenuFromMacCommand( const HICommand &macCommandId , wxMenuItem* &item );
 
 extern wxWindow* g_MacLastWindow;
-pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , EventRef event , void *data );
-Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin = true );
+WXDLLIMPEXP_CORE pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , EventRef event , void *data );
+WXDLLIMPEXP_CORE Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin = true );
 
 ControlActionUPP GetwxMacLiveScrollbarActionProc();
 
