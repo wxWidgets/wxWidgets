@@ -79,6 +79,19 @@ cp $SCRIPTDIR/create_archives.sh $APPDIR/distrib/scripts
 chmod +x $APPDIR/distrib/scripts/create_archives.sh
 $APPDIR/distrib/scripts/create_archives.sh --all
 
+#rebake the bakefiles for os2
+if [ $rebake = "yes" ]; then
+  if [ ! -d $WX_SRC_DIR/build/bakefiles ]; then
+       mkdir $WX_SRC_DIR/build/bakefiles
+  fi
+	 
+  cd $WX_SRC_DIR/build/bakefiles
+   rm .ba*
+   bakefile_gen  -f watcom -d ../os2/Bakefiles.os2.bkgen
+fi
+		     
+$APPDIR/distrib/scripts/create_archives.sh --wxos2
+
 # copy all the archives we created to the master machine's deliver directory
 cp $APPDIR/deliver/*.zip $START_DIR/$DIST_DIR
 cp $APPDIR/deliver/*.tar.gz $START_DIR/$DIST_DIR
