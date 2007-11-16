@@ -108,6 +108,7 @@ wxMSW:
   by mingw32 4.2 (Tim Stahlhut).
 - Fixed a bug whereby acclerators including Enter were not processed
   when a tree control was focused.
+- Fixed AUI hint drawing bug on Vista.
 
 wxGTK:
 
