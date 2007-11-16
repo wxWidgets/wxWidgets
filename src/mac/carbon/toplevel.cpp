@@ -442,18 +442,6 @@ ControlRef wxMacFindSubControl( wxTopLevelWindowMac* toplevelWindow, const Point
     return NULL ;
 }
 
-ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow , const Point& location , WindowRef window , ControlPartCode *outPart )
-{
-#if TARGET_API_MAC_OSX
-    if ( UMAGetSystemVersion() >= 0x1030 )
-        return FindControlUnderMouse( location , window , outPart ) ;
-#endif
-
-    ControlRef rootControl = NULL ;
-    verify_noerr( GetRootControl( window , &rootControl ) ) ;
-
-    return wxMacFindSubControl( toplevelWindow , location , rootControl , outPart ) ;
-}
 
 #define NEW_CAPTURE_HANDLING 1
 
@@ -620,13 +608,7 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
             // if built-in find control is finding the wrong control (ie static box instead of overlaid
             // button, we cannot let the standard handler do its job, but must handle manually
 
-            if ( ( cEvent.GetKind() == kEventMouseDown )
-#ifdef __WXMAC_OSX__
-                &&
-                (FindControlUnderMouse(windowMouseLocation , window , &dummyPart) !=
-                wxMacFindControlUnderMouse( toplevelWindow , windowMouseLocation , window , &dummyPart ) )
-#endif
-                )
+            if ( cEvent.GetKind() == kEventMouseDown )
             {
                 if ( currentMouseWindow->MacIsReallyEnabled() )
                 {

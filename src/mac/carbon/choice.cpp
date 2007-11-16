@@ -268,12 +268,10 @@ wxSize wxChoice::DoGetBestSize() const
     int lbHeight = 20;
     int wLine;
 
-#if TARGET_CARBON
     SInt32 metric ;
 
     GetThemeMetric( kThemeMetricPopupButtonHeight , &metric );
     lbHeight = metric ;
-#endif
 
     {
 #if wxMAC_USE_CORE_GRAPHICS

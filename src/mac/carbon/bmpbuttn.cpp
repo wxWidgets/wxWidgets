@@ -118,7 +118,6 @@ bool wxBitmapButton::Create( wxWindow *parent,
         m_bmpNormal = bitmap;
 
 
-#ifdef __WXMAC_OSX__
     if ( HasFlag( wxBORDER_NONE ) )
     {
 		// contrary to the docs this control only works with iconrefs
@@ -128,7 +127,6 @@ bool wxBitmapButton::Create( wxWindow *parent,
                 &bounds, &info, false, m_peer->GetControlRefAddr() );
     }
     else
-#endif
     {
         wxMacCreateBitmapButton( &info, m_bmpNormal );
         err = CreateBevelButtonControl(
@@ -158,7 +156,6 @@ void wxBitmapButton::SetBitmapLabel( const wxBitmap& bitmap )
 
     ControlButtonContentInfo info;
 
-#ifdef __WXMAC_OSX__
     if ( HasFlag( wxBORDER_NONE ) )
     {        
         wxMacCreateBitmapButton( &info, m_bmpNormal, kControlContentIconRef );
@@ -166,7 +163,6 @@ void wxBitmapButton::SetBitmapLabel( const wxBitmap& bitmap )
             m_peer->SetData( kControlIconPart, kControlIconContentTag, info );
     }
     else
-#endif
     {
         wxMacCreateBitmapButton( &info, m_bmpNormal );
         if ( info.contentType != kControlNoContent )

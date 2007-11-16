@@ -64,9 +64,7 @@ void wxDialog::SetModal( bool flag )
 
         wxModelessWindows.DeleteObject( this );
 
-#if TARGET_CARBON
         SetWindowModality( (WindowRef)MacGetWindowRef(), kWindowModalityAppModal, NULL ) ;
-#endif
     }
     else
     {
@@ -127,10 +125,6 @@ bool wxDialog::Show(bool show)
 
     return true;
 }
-
-#if !TARGET_CARBON
-extern bool s_macIsInModalLoop ;
-#endif
 
 void wxDialog::DoShowModal()
 {

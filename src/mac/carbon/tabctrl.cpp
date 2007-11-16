@@ -56,10 +56,7 @@ bool wxTabCtrl::Create( wxWindow *parent,
         tabsize = kControlTabSizeSmall ;
     else if ( GetWindowVariant() == wxWINDOW_VARIANT_MINI )
     {
-        if (UMAGetSystemVersion() >= 0x1030 )
-            tabsize = 3 ;
-        else
-            tabsize = kControlSizeSmall;
+        tabsize = 3 ;
     }
 
     m_peer = new wxMacControl( this );

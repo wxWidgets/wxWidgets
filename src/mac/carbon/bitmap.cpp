@@ -28,12 +28,8 @@
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
 IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
 
-#ifdef __DARWIN__
-    #include <ApplicationServices/ApplicationServices.h>
-    #include <QuickTime/QuickTime.h>
-#else
-    #include <PictUtils.h>
-#endif
+#include <ApplicationServices/ApplicationServices.h>
+#include <QuickTime/QuickTime.h>
 
 #include "wx/mac/uma.h"
 
@@ -171,10 +167,7 @@ void wxBitmapRefData::Init()
     m_bytesPerRow = 0;
     m_ok = false ;
     m_bitmapMask = NULL ;
-
-#ifdef __WXMAC_OSX__
     m_cgImageRef = NULL ;
-#endif
 
     m_iconRef = NULL ;
     m_pictHandle = NULL ;
@@ -304,7 +297,6 @@ void *wxBitmapRefData::BeginRawAccess()
 
     ++m_rawAccessCount ;
 
-#ifdef __WXMAC_OSX__
     // we must destroy an existing cached image, as
     // the bitmap data may change now
     if ( m_cgImageRef )
@@ -312,7 +304,6 @@ void *wxBitmapRefData::BeginRawAccess()
         CGImageRelease( m_cgImageRef ) ;
         m_cgImageRef = NULL ;
     }
-#endif
 
     return m_memBuf.GetData() ;
 }
@@ -687,7 +678,6 @@ PicHandle wxBitmapRefData::GetPictHandle()
     return m_pictHandle ;
 }
 
-#ifdef __WXMAC_OSX__
 void wxMacMemoryBufferReleaseProc(void *info, const void *data, size_t WXUNUSED(size))
 {
     wxMemoryBuffer* membuf = (wxMemoryBuffer*) info ;
@@ -704,7 +694,7 @@ CGImageRef wxBitmapRefData::CGImageCreate() const
     CGImageRef image ;
     if ( m_rawAccessCount > 0 || m_cgImageRef == NULL )
     {
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4) && wxMAC_USE_CORE_GRAPHICS
+#if wxMAC_USE_CORE_GRAPHICS
         if ( UMAGetSystemVersion() >= 0x1040 && m_depth != 1 && m_bitmapMask == NULL )
         {
             if ( m_bitmapMask )
@@ -809,7 +799,6 @@ CGImageRef wxBitmapRefData::CGImageCreate() const
 
     return image ;
 }
-#endif
 
 #if wxMAC_USE_CORE_GRAPHICS 
 CGContextRef wxBitmapRefData::GetBitmapContext() const
@@ -871,13 +860,11 @@ void wxBitmapRefData::Free()
 {
     wxASSERT_MSG( m_rawAccessCount == 0 , wxT("Bitmap still selected when destroyed") ) ;
 
-#ifdef __WXMAC_OSX__
     if ( m_cgImageRef )
     {
         CGImageRelease( m_cgImageRef ) ;
         m_cgImageRef = NULL ;
     }
-#endif
 
     if ( m_iconRef )
     {
@@ -1130,14 +1117,12 @@ void wxBitmap::EndRawAccess()
     M_BITMAPDATA->EndRawAccess() ;
 }
 
-#ifdef __WXMAC_OSX__
 WXCGIMAGEREF wxBitmap::CGImageCreate() const
 {
     wxCHECK_MSG( Ok(), NULL , wxT("invalid bitmap") ) ;
 
     return M_BITMAPDATA->CGImageCreate() ;
 }
-#endif
 
 wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
 {

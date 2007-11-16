@@ -58,14 +58,11 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
         // Later on, the staticbox's font height is added to this.
         extraTop = 0;
 
-        if ( UMAGetSystemVersion() >= 0x1030 ) // Panther
-        {
-            // As indicated by the HIG, Panther needs an extra border of 11
-            // pixels (otherwise overlapping occurs at the top). The "other"
-            // border has to be 11.
-            extraTop = 11;
-            other = 11;
-        }
+        // As indicated by the HIG, Panther needs an extra border of 11
+        // pixels (otherwise overlapping occurs at the top). The "other"
+        // border has to be 11.
+        extraTop = 11;
+        other = 11;
     }
 
     *borderTop = extraTop;

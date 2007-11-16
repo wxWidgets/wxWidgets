@@ -509,9 +509,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
             }
             else
             {
-#if TARGET_CARBON
                 if ( UMAGetSystemVersion() >= 0x1000 )
-#endif
                 {
 #if !wxMAC_USE_CORE_GRAPHICS
                     GrafPtr thePort ;

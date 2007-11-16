@@ -24,10 +24,6 @@
 
 #include "wx/mac/uma.h"
 
-#ifndef __DARWIN__
-#include <Appearance.h>
-#endif
-
 IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
 
 BEGIN_EVENT_TABLE(wxCheckListBox, wxListBox)

@@ -389,8 +389,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(
             {
                 wxWindow *win = NULL;
                 ControlPartCode controlPart;
-                ControlRef control = wxMacFindControlUnderMouse(
-                    toplevel, localMouse, theWindow, &controlPart );
+                ControlRef control = FindControlUnderMouse( localMouse, theWindow, &controlPart );
                 if ( control )
                     win = wxFindControlFromMacControl( control );
                 else

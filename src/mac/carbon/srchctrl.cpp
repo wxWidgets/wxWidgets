@@ -408,16 +408,7 @@ void wxSearchCtrl::CreatePeer(
            const wxPoint& pos,
            const wxSize& size, long style )
 {
-#ifdef __WXMAC_OSX__
-    if ( UMAGetSystemVersion() >= 0x1030 )
-    {
-        m_peer = new wxMacSearchFieldControl( this , str , pos , size , style );
-    }
-#endif
-    if ( !m_peer )
-    {
-        wxTextCtrl::CreatePeer( str, pos, size, style );
-    }
+    m_peer = new wxMacSearchFieldControl( this , str , pos , size , style );
 }
 
 #endif // wxUSE_NATIVE_SEARCH_CONTROL

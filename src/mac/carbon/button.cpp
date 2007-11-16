@@ -61,7 +61,6 @@ bool wxButton::Create(wxWindow *parent,
     }
     else if ( label.Find('\n' ) == wxNOT_FOUND && label.Find('\r' ) == wxNOT_FOUND)
     {
-#if TARGET_API_MAC_OSX
         // Button height is static in Mac, can't be changed, so we need to force it here
         if ( GetWindowVariant() == wxWINDOW_VARIANT_NORMAL || GetWindowVariant() == wxWINDOW_VARIANT_LARGE )
         {
@@ -78,8 +77,6 @@ bool wxButton::Create(wxWindow *parent,
             bounds.bottom = bounds.top + 15 ;
             m_maxHeight = 15 ;
         }
-#endif
-
         err = CreatePushButtonControl(
             MAC_WXHWND(parent->MacGetTopLevelWindowRef()),
             &bounds, CFSTR(""), m_peer->GetControlRefAddr() );

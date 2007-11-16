@@ -465,7 +465,6 @@ void wxMenu::MacBeforeDisplay( bool isSubMenu )
         }
         else // normal item
         {
-#if TARGET_CARBON
             // what we do here is to hide the special items which are
             // shown in the application menu anyhow -- it doesn't make
             // sense to show them in their normal place as well
@@ -520,7 +519,6 @@ void wxMenu::MacBeforeDisplay( bool isSubMenu )
                                               0 );
                 }
             }
-#endif // TARGET_CARBON
         }
 
         previousItem = item ;
@@ -751,7 +749,6 @@ void wxMenuBar::MacInstallMenuBar()
         helpMenuHandle = NULL ;
     }
 
-#if TARGET_CARBON
     if ( UMAGetSystemVersion() >= 0x1000 && wxApp::s_macPreferencesMenuItemId)
     {
         wxMenuItem *item = FindItem( wxApp::s_macPreferencesMenuItemId , NULL ) ;
@@ -773,7 +770,6 @@ void wxMenuBar::MacInstallMenuBar()
         else
             EnableMenuCommand( NULL , kHICommandQuit ) ;
     }
-#endif
 
     wxString strippedHelpMenuTitle = wxStripMenuCodes( wxApp::s_macHelpMenuTitleName ) ;
     wxString strippedTranslatedHelpMenuTitle = wxStripMenuCodes( wxString( _("&Help") ) ) ;

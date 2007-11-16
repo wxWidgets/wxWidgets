@@ -25,21 +25,12 @@
 #include "wx/sysopt.h"
 
 
-#ifdef __WXMAC_OSX__
 const short kwxMacToolBarToolDefaultWidth = 16;
 const short kwxMacToolBarToolDefaultHeight = 16;
 const short kwxMacToolBarTopMargin = 4;
 const short kwxMacToolBarLeftMargin =  4;
 const short kwxMacToolBorder = 0;
 const short kwxMacToolSpacing = 6;
-#else
-const short kwxMacToolBarToolDefaultWidth = 24;
-const short kwxMacToolBarToolDefaultHeight = 22;
-const short kwxMacToolBarTopMargin = 2;
-const short kwxMacToolBarLeftMargin = 2;
-const short kwxMacToolBorder = 4;
-const short kwxMacToolSpacing = 0;
-#endif
 
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
@@ -243,9 +234,7 @@ private:
 static const EventTypeSpec eventList[] =
 {
     { kEventClassControl, kEventControlHit },
-#ifdef __WXMAC_OSX__
     { kEventClassControl, kEventControlHitTest },
-#endif
 };
 
 static pascal OSStatus wxMacToolBarToolControlEventHandler( EventHandlerCallRef WXUNUSED(handler), EventRef event, void *data )
@@ -266,11 +255,7 @@ static pascal OSStatus wxMacToolBarToolControlEventHandler( EventHandlerCallRef 
                 {
                     bool    shouldToggle;
 
-#ifdef __WXMAC_OSX__
                     shouldToggle = !tbartool->IsToggled();
-#else
-                    shouldToggle = (GetControl32BitValue( (ControlRef)(tbartool->GetControlHandle()) ) != 0);
-#endif
 
                     tbar->ToggleTool( tbartool->GetId(), shouldToggle );
                 }
@@ -281,7 +266,6 @@ static pascal OSStatus wxMacToolBarToolControlEventHandler( EventHandlerCallRef 
             }
             break;
 
-#ifdef __WXMAC_OSX__
         case kEventControlHitTest:
             {
                 HIPoint pt = cEvent.GetParameter<HIPoint>(kEventParamMouseLocation);
@@ -295,7 +279,6 @@ static pascal OSStatus wxMacToolBarToolControlEventHandler( EventHandlerCallRef 
                 result = noErr;
             }
             break;
-#endif
 
         default:
             break;
@@ -451,7 +434,6 @@ void wxToolBarTool::SetPosition( const wxPoint& position )
     else
     {
         // separator
-#ifdef __WXMAC_OSX__
         Rect contrlRect;
         GetControlBounds( m_controlHandle, &contrlRect );
         int former_mac_x = contrlRect.left;
@@ -459,13 +441,11 @@ void wxToolBarTool::SetPosition( const wxPoint& position )
 
         if ( mac_x != former_mac_x || mac_y != former_mac_y )
             UMAMoveControl( m_controlHandle, mac_x, mac_y );
-#endif
     }
 }
 
 void wxToolBarTool::UpdateToggleImage( bool toggle )
 {
-#ifdef __WXMAC_OSX__
     if ( toggle )
     {
         int w = m_bmpNormal.GetWidth();
@@ -516,9 +496,6 @@ void wxToolBarTool::UpdateToggleImage( bool toggle )
         sizeof(transform), (Ptr)&transform );
     HIViewSetNeedsDisplay( m_controlHandle, true );
 
-#else
-    ::SetControl32BitValue( m_controlHandle, toggle );
-#endif
 }
 
 wxToolBarTool::wxToolBarTool(
@@ -1741,10 +1718,9 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
     GetSize( &w, &h );
 
     bool drawMetalTheme = MacGetTopLevelWindow()->MacGetMetalAppearance();
-    bool minimumUmaAvailable = (UMAGetSystemVersion() >= 0x1030);
 
 #if wxMAC_USE_CORE_GRAPHICS
-    if ( !drawMetalTheme && minimumUmaAvailable )
+    if ( !drawMetalTheme  )
     {
         HIThemePlacardDrawInfo info;
         memset( &info, 0, sizeof(info) );
@@ -1768,7 +1744,7 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
     {
         wxMacPortSetter helper( &dc );
 
-        if ( !drawMetalTheme || !minimumUmaAvailable )
+        if ( !drawMetalTheme )
         {
             Rect toolbarrect = { dc.YLOG2DEVMAC(0), dc.XLOG2DEVMAC(0),
                 dc.YLOG2DEVMAC(h), dc.XLOG2DEVMAC(w) };

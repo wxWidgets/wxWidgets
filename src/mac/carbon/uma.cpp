@@ -18,19 +18,6 @@
 #include "wx/toplevel.h"
 #include "wx/dc.h"
 
-#ifndef __DARWIN__
-#  include <MacTextEditor.h>
-#  include <Navigation.h>
-#  if defined(TARGET_CARBON)
-#    if PM_USE_SESSION_APIS
-#      include <PMCore.h>
-#    endif
-#    include <PMApplication.h>
-#  else
-#    include <Printing.h>
-#  endif
-#endif
-
 #include "wx/mac/uma.h"
 
 // since we have decided that we only support 8.6 upwards we are
@@ -116,14 +103,8 @@ MenuRef UMANewMenu( SInt16 id , const wxString& title , wxFontEncoding encoding 
     wxString str = wxStripMenuCodes( title ) ;
     MenuRef menu ;
 
-#if TARGET_CARBON
     CreateNewMenu( id , 0 , &menu ) ;
     SetMenuTitleWithCFString( menu , wxMacCFStringHolder(str , encoding ) ) ;
-#else
-    Str255 ptitle ;
-    wxMacStringToPascal( str , ptitle ) ;
-    menu = ::NewMenu( id , ptitle ) ;
-#endif
 
     return menu ;
 }
@@ -132,14 +113,7 @@ void UMASetMenuTitle( MenuRef menu , const wxString& title , wxFontEncoding enco
 {
     wxString str = wxStripMenuCodes( title ) ;
 
-#if TARGET_CARBON
     SetMenuTitleWithCFString( menu , wxMacCFStringHolder(str , encoding) ) ;
-
-#else
-    Str255 ptitle ;
-    wxMacStringToPascal( str , ptitle ) ;
-    SetMenuTitle( menu , ptitle ) ;
-#endif
 }
 
 void UMASetMenuItemText( MenuRef menu,  MenuItemIndex item, const wxString& title, wxFontEncoding encoding )
@@ -147,14 +121,7 @@ void UMASetMenuItemText( MenuRef menu,  MenuItemIndex item, const wxString& titl
     // we don't strip the accels here anymore, must be done before
     wxString str = title ;
 
-#if TARGET_CARBON
     SetMenuItemTextWithCFString( menu , item , wxMacCFStringHolder(str , encoding) ) ;
-
-#else
-    Str255 ptitle ;
-    wxMacStringToPascal( str , ptitle ) ;
-    SetMenuItemText( menu , item , ptitle ) ;
-#endif
 }
 
 UInt32 UMAMenuEvent( EventRecord *inEvent )
@@ -346,54 +313,6 @@ void UMAInsertMenuItem( MenuRef menu , const wxString& title, wxFontEncoding enc
     UMASetMenuItemShortcut( menu , item+1 , entry ) ;
 }
 
-// quickdraw
-
-#if !TARGET_CARBON
-
-int gPrOpenCounter = 0 ;
-
-OSStatus UMAPrOpen()
-{
-    OSErr err = noErr ;
-
-    ++gPrOpenCounter ;
-
-    if ( gPrOpenCounter == 1 )
-    {
-        PrOpen() ;
-        err = PrError() ;
-        wxASSERT( err == noErr ) ;
-    }
-
-    return err ;
-}
-
-OSStatus UMAPrClose()
-{
-    OSErr err = noErr ;
-
-    wxASSERT( gPrOpenCounter >= 1 ) ;
-
-    if ( gPrOpenCounter == 1 )
-    {
-        PrClose() ;
-        err = PrError() ;
-        wxASSERT( err == noErr ) ;
-    }
-
-    --gPrOpenCounter ;
-
-    return err ;
-}
-
-pascal QDGlobalsPtr GetQDGlobalsPtr() ;
-pascal QDGlobalsPtr GetQDGlobalsPtr()
-{
-    return QDGlobalsPtr (* (Ptr*) LMGetCurrentA5 ( ) - 0xCA);
-}
-
-#endif
-
 void UMAShowWatchCursor()
 {
     SetThemeCursor(kThemeWatchCursor);
@@ -410,11 +329,7 @@ GrafPtr UMAGetWindowPort( WindowRef inWindowRef )
 {
     wxASSERT( inWindowRef != NULL ) ;
 
-#if TARGET_CARBON
     return (GrafPtr) GetWindowPort( inWindowRef ) ;
-#else
-    return (GrafPtr) inWindowRef ;
-#endif
 }
 
 void UMADisposeWindow( WindowRef inWindowRef )
@@ -426,128 +341,34 @@ void UMADisposeWindow( WindowRef inWindowRef )
 
 void UMASetWTitle( WindowRef inWindowRef , const wxString& title , wxFontEncoding encoding )
 {
-#if TARGET_CARBON
     SetWindowTitleWithCFString( inWindowRef , wxMacCFStringHolder(title , encoding) ) ;
-
-#else
-    Str255 ptitle ;
-    wxMacStringToPascal( title , ptitle ) ;
-    SetWTitle( inWindowRef , ptitle ) ;
-#endif
 }
 
 // appearance additions
 
 void UMASetControlTitle( ControlRef inControl , const wxString& title , wxFontEncoding encoding )
 {
-#if TARGET_CARBON
     SetControlTitleWithCFString( inControl , wxMacCFStringHolder(title , encoding) ) ;
-
-#else
-    Str255 ptitle ;
-    wxMacStringToPascal( title , ptitle ) ;
-    SetControlTitle( inControl , ptitle ) ;
-#endif
 }
 
 void UMAActivateControl( ControlRef inControl )
 {
-#if TARGET_API_MAC_OSX
     ::ActivateControl( inControl ) ;
-
-#else
-    // we have to add the control after again to the update rgn
-    // otherwise updates get lost
-    if ( !IsControlActive( inControl ) )
-    {
-        bool visible = IsControlVisible( inControl ) ;
-        if ( visible )
-            SetControlVisibility( inControl , false , false ) ;
-
-        ::ActivateControl( inControl ) ;
-
-        if ( visible )
-        {
-            SetControlVisibility( inControl , true , false ) ;
-
-            Rect ctrlBounds ;
-            InvalWindowRect( GetControlOwner(inControl), UMAGetControlBoundsInWindowCoords(inControl, &ctrlBounds) ) ;
-        }
-    }
-#endif
 }
 
 void UMAMoveControl( ControlRef inControl , short x , short y )
 {
-#if TARGET_API_MAC_OSX
     ::MoveControl( inControl , x , y ) ;
-
-#else
-    bool visible = IsControlVisible( inControl ) ;
-    if ( visible )
-    {
-        SetControlVisibility( inControl , false , false ) ;
-        Rect ctrlBounds ;
-        InvalWindowRect( GetControlOwner(inControl), GetControlBounds(inControl, &ctrlBounds) ) ;
-    }
-
-    ::MoveControl( inControl , x , y ) ;
-
-    if ( visible )
-    {
-        SetControlVisibility( inControl , true , false ) ;
-        Rect ctrlBounds ;
-        InvalWindowRect( GetControlOwner(inControl), GetControlBounds(inControl, &ctrlBounds) ) ;
-    }
-#endif
 }
 
 void UMASizeControl( ControlRef inControl , short x , short y )
 {
-#if TARGET_API_MAC_OSX
     ::SizeControl( inControl , x , y ) ;
-
-#else
-    bool visible = IsControlVisible( inControl ) ;
-    if ( visible )
-    {
-        SetControlVisibility( inControl , false , false ) ;
-        Rect ctrlBounds ;
-        InvalWindowRect( GetControlOwner(inControl), GetControlBounds(inControl, &ctrlBounds) ) ;
-    }
-
-    ::SizeControl( inControl , x , y ) ;
-
-    if ( visible )
-    {
-        SetControlVisibility( inControl , true , false ) ;
-        Rect ctrlBounds ;
-        InvalWindowRect( GetControlOwner(inControl), GetControlBounds(inControl, &ctrlBounds) ) ;
-    }
-#endif
 }
 
 void UMADeactivateControl( ControlRef inControl )
 {
-#if TARGET_API_MAC_OSX
     ::DeactivateControl( inControl ) ;
-
-#else
-    // we have to add the control after again to the update rgn
-    // otherwise updates get lost
-    bool visible = IsControlVisible( inControl ) ;
-    if ( visible )
-        SetControlVisibility( inControl , false , false ) ;
-
-    ::DeactivateControl( inControl ) ;
-
-    if ( visible )
-    {
-        SetControlVisibility( inControl , true , false ) ;
-        Rect ctrlBounds ;
-        InvalWindowRect( GetControlOwner(inControl), UMAGetControlBoundsInWindowCoords(inControl, &ctrlBounds) ) ;
-    }
-#endif
 }
 
 // shows the control and adds the region to the update region
@@ -639,11 +460,6 @@ OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState )
 #endif
 }
 
-#if !TARGET_CARBON
-static OSStatus helpMenuStatus = noErr ;
-static MenuItemIndex firstCustomItemIndex = 0 ;
-#endif
-
 static OSStatus UMAGetHelpMenu(
     MenuRef *        outHelpMenu,
     MenuItemIndex *  outFirstCustomItemIndex,
@@ -654,7 +470,6 @@ static OSStatus UMAGetHelpMenu(
     MenuItemIndex *  outFirstCustomItemIndex,
     bool             allowHelpMenuCreation)
 {
-#if TARGET_CARBON
     static bool s_createdHelpMenu = false ;
 
     if ( !s_createdHelpMenu && !allowHelpMenuCreation )
@@ -665,21 +480,6 @@ static OSStatus UMAGetHelpMenu(
     OSStatus status = HMGetHelpMenu( outHelpMenu , outFirstCustomItemIndex ) ;
     s_createdHelpMenu = ( status == noErr ) ;
     return status ;
-#else
-    wxUnusedVar( allowHelpMenuCreation ) ;
-    MenuRef helpMenuHandle ;
-
-    helpMenuStatus = HMGetHelpMenuHandle( &helpMenuHandle ) ;
-    if ( firstCustomItemIndex == 0 && helpMenuStatus == noErr )
-        firstCustomItemIndex = CountMenuItems( helpMenuHandle ) + 1 ;
-
-    if ( outFirstCustomItemIndex )
-        *outFirstCustomItemIndex = firstCustomItemIndex ;
-
-    *outHelpMenu = helpMenuHandle ;
-
-    return helpMenuStatus ;
-#endif
 }
 
 OSStatus UMAGetHelpMenu(

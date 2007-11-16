@@ -326,12 +326,6 @@ int wxListBox::DoListHitTest(const wxPoint& inpoint) const
 
     wxPoint point = inpoint;
 
-    // interestingly enough 10.2 (and below?) have GetDataBrowserItemPartBounds
-    // giving root window coordinates but 10.3 and above give client coordinates
-    // so we only compare using root window coordinates on 10.3 and up
-    if ( UMAGetSystemVersion() < 0x1030 )
-        MacClientToRootWindow(&point.x, &point.y);
-
     // get column property ID (req. for call to itempartbounds)
     DataBrowserTableViewColumnID colId = 0;
     err = GetDataBrowserTableViewColumnProperty(m_peer->GetControlRef(), 0, &colId);

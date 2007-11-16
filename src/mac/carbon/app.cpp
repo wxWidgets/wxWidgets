@@ -766,6 +766,8 @@ extern "C" void macPostedEventCallback(void *WXUNUSED(unused))
     wxTheApp->ProcessPendingEvents();
 }
 
+ProcessSerialNumber gAppProcess ;
+
 bool wxApp::Initialize(int& argc, wxChar **argv)
 {
     // Mac-specific
@@ -795,6 +797,8 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     if ( !wxAppBase::Initialize(argc, argv) )
         return false;
+
+    GetCurrentProcess(&gAppProcess);
 
 #if wxUSE_INTL
     wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());

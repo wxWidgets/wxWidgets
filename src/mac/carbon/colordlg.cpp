@@ -21,9 +21,6 @@
 IMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog)
 
 #include "wx/mac/private.h"
-#ifndef __DARWIN__
-#include <ColorPicker.h>
-#endif
 
 /*
  * wxColourDialog
@@ -52,7 +49,6 @@ int wxColourDialog::ShowModal()
 {
     RGBColor currentColor = *((RGBColor*)m_colourData.m_dataColour.GetPixel()) ;
 
-#if TARGET_API_MAC_OSX
     NColorPickerInfo info;
     OSStatus err ;
     memset(&info, 0, sizeof(info)) ;
@@ -72,18 +68,6 @@ int wxColourDialog::ShowModal()
 
         return wxID_OK;
     }
-#else
-    RGBColor newColor ;
-    Point where ;
-
-    where.h = where.v = -1;
-
-    if (GetColor( where, "\pSelect a new palette color.", &currentColor, &newColor ))
-    {
-        m_colourData.m_dataColour.Set( (WXCOLORREF*) &newColor ) ;
-        return wxID_OK;
-    }
-#endif
     return wxID_CANCEL;
 }
 

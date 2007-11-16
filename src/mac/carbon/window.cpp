@@ -329,11 +329,9 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 Boolean focusEverything = false ;
                 ControlPartCode controlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode );
 
-#ifdef __WXMAC_OSX__
                 if ( cEvent.GetParameter<Boolean>(kEventParamControlFocusEverything , &focusEverything ) == noErr )
                 {
                 }
-#endif
 
                 if ( thisWindow->MacIsUserPane() )
                     result = noErr ;
@@ -1156,17 +1154,9 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
             break ;
 
         case wxWINDOW_VARIANT_MINI :
-           if (UMAGetSystemVersion() >= 0x1030 )
-            {
-                // not always defined in the headers
-                size = 3 ;
-                themeFont = 109 ;
-            }
-            else
-            {
-                size = kControlSizeSmall;
-                themeFont = kThemeSmallSystemFont ;
-            }
+            // not always defined in the headers
+            size = 3 ;
+            themeFont = 109 ;
             break ;
 
         case wxWINDOW_VARIANT_LARGE :
@@ -1730,7 +1720,7 @@ bool wxWindowMac::SetCursor(const wxCursor& cursor)
 
         GetMouse( &pt ) ;
 #endif
-        control = wxMacFindControlUnderMouse( tlw , pt , window , &part ) ;
+        control = FindControlUnderMouse( pt , window , &part ) ;
         if ( control )
             mouseWin = wxFindControlFromMacControl( control ) ;
 
@@ -1842,13 +1832,7 @@ void wxWindowMac::MacInvalidateBorders()
     RectRgn( updateOuter, &rect ) ;
     DiffRgn( updateOuter, updateInner , updateOuter ) ;
 
-#ifdef __WXMAC_OSX__
     GetParent()->m_peer->SetNeedsDisplay( updateOuter ) ;
-#else
-    WindowRef tlw = (WindowRef) MacGetTopLevelWindowRef() ;
-    if ( tlw )
-        InvalWindowRgn( tlw , updateOuter ) ;
-#endif
 
     DisposeRgn( updateOuter ) ;
     DisposeRgn( updateInner ) ;

@@ -671,7 +671,6 @@ void wxMacWakeUp()
     SameProcess( &gAppProcess , &psn , &isSame );
     if ( isSame )
     {
-#if TARGET_CARBON
         OSStatus err = noErr;
 
 #if 0
@@ -697,9 +696,6 @@ void wxMacWakeUp()
                             kEventAttributeNone );
         err = PostEventToQueue(GetMainEventQueue(), wakeupEvent,
                                kEventPriorityHigh );
-#endif
-#else
-        PostEvent( nullEvent , 0 );
 #endif
     }
     else
@@ -2207,7 +2203,6 @@ OSStatus wxMacControl::SetTabEnabled( SInt16 tabNo , bool enable )
 // Quartz Support
 //
 
-#ifdef __WXMAC_OSX__
 // snippets from Sketch Sample from Apple :
 
 #define kGenericRGBProfilePathStr "/System/Library/ColorSync/Profiles/Generic RGB Profile.icc"
@@ -2277,7 +2272,6 @@ CGColorSpaceRef wxMacGetGenericRGBColorSpace()
 
     return genericRGBColorSpace;
 }
-#endif
 
 #ifndef __LP64__
 

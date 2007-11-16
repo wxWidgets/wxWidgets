@@ -41,88 +41,34 @@ static const wxChar *TRACE_CLIPBOARD = wxT("clipboard");
 
 IMPLEMENT_DYNAMIC_CLASS(wxClipboard, wxObject)
 
-// in order to keep the binary interface the same this class
-// serves just to have a few additional member variables inside
-// the clipboard class
-
-class wxMacBinaryCompatHelper : public wxDataObject
-{
-public :
-    wxMacBinaryCompatHelper() 
-    {
-        m_trueData = NULL;
-    }
-
-    ~wxMacBinaryCompatHelper() 
-    {
-        if (m_trueData != NULL)
-    {
-            delete m_trueData;
-            m_trueData = NULL;
-        }
-    }
-
-    virtual wxDataFormat GetPreferredFormat(Direction dir = Get) const 
-        {
-        return wxDataFormat();
-    }
-
-    virtual size_t GetFormatCount(Direction dir = Get) const 
-                {
-        return 0;
-                    }
-
-    virtual void GetAllFormats(wxDataFormat *formats,
-                               Direction dir = Get) const
-                {
-    }
-
-    virtual size_t GetDataSize(const wxDataFormat& format) const
-    {
-        return 0;
-    }
-
-    virtual bool GetDataHere(const wxDataFormat& format, void *buf) const
-    {
-        return false;
-    }
-
-    // only relevant from here on
-
-    wxDataObject* m_trueData;
-    wxCFRef<PasteboardRef> m_pasteboard;
-};
-
-#define M_CLIPBOARD ((wxMacBinaryCompatHelper*)m_data)
-
 wxClipboard::wxClipboard()
 {
     m_open = false;
-    m_data = new wxMacBinaryCompatHelper() ;
+    m_data = NULL ;
     PasteboardRef clipboard = 0;
     OSStatus err = PasteboardCreate( kPasteboardClipboard, &clipboard );
     if (err != noErr)
     {
         wxLogSysError( wxT("Failed to create the clipboard.") );
     }
-    M_CLIPBOARD->m_pasteboard.reset(clipboard);
+    m_pasteboard.reset(clipboard);
 }
 
 wxClipboard::~wxClipboard()
 {
-    M_CLIPBOARD->m_pasteboard.reset((PasteboardRef)0);
-        delete m_data;
+    m_pasteboard.reset((PasteboardRef)0);
+    delete m_data;
 }
 
 void wxClipboard::Clear()
 {
-    if (M_CLIPBOARD->m_trueData != NULL)
+    if (m_data != NULL)
     {
-        delete M_CLIPBOARD->m_trueData;
-        M_CLIPBOARD->m_trueData = NULL;
+        delete m_data;
+        m_data = NULL;
     }
 
-    OSStatus err = PasteboardClear( M_CLIPBOARD->m_pasteboard );
+    OSStatus err = PasteboardClear( m_pasteboard );
     if (err != noErr)
     {
         wxLogSysError( wxT("Failed to empty the clipboard.") );
@@ -174,13 +120,13 @@ bool wxClipboard::AddData( wxDataObject *data )
     // we can only store one wxDataObject
     Clear();
 
-    PasteboardSyncFlags syncFlags = PasteboardSynchronize( M_CLIPBOARD->m_pasteboard );
+    PasteboardSyncFlags syncFlags = PasteboardSynchronize( m_pasteboard );
     wxCHECK_MSG( !(syncFlags&kPasteboardModified), false, wxT("clipboard modified after clear") );
     wxCHECK_MSG( (syncFlags&kPasteboardClientIsOwner), false, wxT("client couldn't own clipboard") );
 
-    M_CLIPBOARD->m_trueData = data;
+    m_data = data;
 
-    data->AddToPasteboard( M_CLIPBOARD->m_pasteboard, 1 );
+    data->AddToPasteboard( m_pasteboard, 1 );
 
     return true;
 }
@@ -194,18 +140,18 @@ void wxClipboard::Close()
     // Get rid of cached object.
     // If this is not done, copying data from
     // another application will only work once
-    if (M_CLIPBOARD->m_trueData)
+    if (m_data)
     {
-        delete M_CLIPBOARD->m_trueData;
-        M_CLIPBOARD->m_trueData = (wxDataObject*) NULL;
+        delete m_data;
+        m_data = (wxDataObject*) NULL;
     }
 }
 
 bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )
 {
-    if ( M_CLIPBOARD->m_trueData )
-        return M_CLIPBOARD->m_trueData->IsSupported( dataFormat );
-    return wxDataObject::IsFormatInPasteboard( M_CLIPBOARD->m_pasteboard, dataFormat );
+    if ( m_data )
+        return m_data->IsSupported( dataFormat );
+    return wxDataObject::IsFormatInPasteboard( m_pasteboard, dataFormat );
 }
 
 bool wxClipboard::GetData( wxDataObject& data )
@@ -222,14 +168,14 @@ bool wxClipboard::GetData( wxDataObject& data )
 
     bool transferred = false;
 
-    if ( M_CLIPBOARD->m_trueData )
+    if ( m_data )
     {
         for (size_t i = 0; !transferred && i < formatcount; i++)
         {
             wxDataFormat format = array[ i ];
-            if ( M_CLIPBOARD->m_trueData->IsSupported( format ) )
+            if ( m_data->IsSupported( format ) )
             {
-                int dataSize = M_CLIPBOARD->m_trueData->GetDataSize( format );
+                int dataSize = m_data->GetDataSize( format );
                 transferred = true;
 
                 if (dataSize == 0)
@@ -239,7 +185,7 @@ bool wxClipboard::GetData( wxDataObject& data )
                 else
                 {
                     char *d = new char[ dataSize ];
-                    M_CLIPBOARD->m_trueData->GetDataHere( format, (void*)d );
+                    m_data->GetDataHere( format, (void*)d );
                     data.SetData( format, dataSize, d );
                     delete [] d;
                 }
@@ -250,7 +196,7 @@ bool wxClipboard::GetData( wxDataObject& data )
     // get formats from wxDataObjects
     if ( !transferred )
     {
-        transferred = data.GetFromPasteboard( M_CLIPBOARD->m_pasteboard ) ;
+        transferred = data.GetFromPasteboard( m_pasteboard ) ;
     }
 
     delete [] array;

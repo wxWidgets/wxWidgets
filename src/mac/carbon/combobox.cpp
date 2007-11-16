@@ -50,16 +50,11 @@ MenuHandle NewUniqueMenu()
 // ----------------------------------------------------------------------------
 
 // the margin between the text control and the choice
-#if TARGET_API_MAC_OSX
 // margin should be bigger on OS X due to blue highlight
 // around text control.
 static const wxCoord MARGIN = 4;
 // this is the border a focus rect on OSX is needing
 static const int    TEXTFOCUSBORDER = 3 ;
-#else
-static const wxCoord MARGIN = 2;
-static const int    TEXTFOCUSBORDER = 0 ;
-#endif
 
 
 // ----------------------------------------------------------------------------

@@ -45,29 +45,8 @@
 #include "wx/filefn.h"
 #include "wx/sysopt.h"
 
-#if defined(__BORLANDC__) && !defined(__WIN32__)
-    #include <alloc.h>
-#elif !defined(__MWERKS__) && !defined(__GNUWIN32) && !defined(__DARWIN__)
-    #include <malloc.h>
-#endif
-
-#ifndef __DARWIN__
-#include <MacTextEditor.h>
-#include <ATSUnicode.h>
-#include <TextCommon.h>
-#include <TextEncodingConverter.h>
-#endif
-
 #include "wx/mac/uma.h"
 #include "wx/mac/carbon/private/mactext.h"
-
-#ifndef __WXMAC_OSX__
-enum
-{
-    kTXNVisibilityTag = 'visb' // set the visibility state of the object
-};
-#endif
-
 
 class wxMacFunctor
 {
@@ -302,7 +281,6 @@ private :
     Rect                    m_txnControlBounds ;
     Rect                    m_txnVisBounds ;
 
-#ifdef __WXMAC_OSX__
     static pascal void TXNScrollActionProc( ControlRef controlRef , ControlPartCode partCode ) ;
     static pascal void TXNScrollInfoProc(
         SInt32 iValue, SInt32 iMaximumValue,
@@ -312,7 +290,6 @@ private :
     SInt32                  m_lastHorizontalValue ;
     ControlRef              m_sbVertical ;
     SInt32                  m_lastVerticalValue ;
-#endif
 };
 
 
@@ -415,7 +392,7 @@ void wxTextCtrl::CreatePeer(
     if ( UMAGetSystemVersion() >= 0x1050 )
         forceMLTE = false;
 
-    if ( UMAGetSystemVersion() >= 0x1030 && !forceMLTE )
+    if ( !forceMLTE )
     {
         if ( m_windowStyle & wxTE_MULTILINE )
             m_peer = new wxMacMLTEHIViewControl( this , str , pos , size , style ) ;
@@ -1741,26 +1718,23 @@ void wxMacMLTEControl::AdjustCreationAttributes(const wxColour &background,
     // setting the default font:
     // under 10.2 this causes a visible caret, therefore we avoid it
 
-    if ( UMAGetSystemVersion() >= 0x1030 )
+    Str255 fontName ;
+    SInt16 fontSize ;
+    Style fontStyle ;
+
+    GetThemeFont( kThemeSystemFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
+
+    TXNTypeAttributes typeAttr[] =
     {
-        Str255 fontName ;
-        SInt16 fontSize ;
-        Style fontStyle ;
+        { kTXNQDFontNameAttribute , kTXNQDFontNameAttributeSize , { (void*) fontName } } ,
+        { kTXNQDFontSizeAttribute , kTXNFontSizeAttributeSize , { (void*) (fontSize << 16) } } ,
+        { kTXNQDFontStyleAttribute , kTXNQDFontStyleAttributeSize , { (void*) normal } } ,
+    } ;
 
-        GetThemeFont( kThemeSystemFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
-
-        TXNTypeAttributes typeAttr[] =
-        {
-            { kTXNQDFontNameAttribute , kTXNQDFontNameAttributeSize , { (void*) fontName } } ,
-            { kTXNQDFontSizeAttribute , kTXNFontSizeAttributeSize , { (void*) (fontSize << 16) } } ,
-            { kTXNQDFontStyleAttribute , kTXNQDFontStyleAttributeSize , { (void*) normal } } ,
-        } ;
-
-        err = TXNSetTypeAttributes(
-            m_txn, sizeof(typeAttr) / sizeof(TXNTypeAttributes),
-            typeAttr, kTXNStartOffset, kTXNEndOffset );
-        verify_noerr( err );
-    }
+    err = TXNSetTypeAttributes(
+        m_txn, sizeof(typeAttr) / sizeof(TXNTypeAttributes),
+        typeAttr, kTXNStartOffset, kTXNEndOffset );
+    verify_noerr( err );
 
     if ( m_windowStyle & wxTE_PASSWORD )
     {
@@ -2327,8 +2301,6 @@ int wxMacMLTEControl::GetLineLength(long lineNo) const
 // while this can be solved on 10.3 by reassigning them the correct place, on 10.2 there is
 // no way out, therefore we are using our own implementation and our own scrollbars ....
 
-#ifdef __WXMAC_OSX__
-
 TXNScrollInfoUPP gTXNScrollInfoProc = NULL ;
 ControlActionUPP gTXNScrollActionProc = NULL ;
 
@@ -2432,7 +2404,6 @@ pascal void wxMacMLTEClassicControl::TXNScrollActionProc( ControlRef controlRef 
             mlte->m_lastVerticalValue = newValue ;
     }
 }
-#endif
 
 // make correct activations
 void wxMacMLTEClassicControl::MacActivatePaneText(bool setActive)
@@ -2502,7 +2473,6 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
         m_txnVisBounds = visBounds ;
         wxMacWindowClipper cl( textctrl ) ;
 
-#ifdef __WXMAC_OSX__
         if ( m_sbHorizontal || m_sbVertical )
         {
             int w = bounds.right - bounds.left ;
@@ -2563,13 +2533,6 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
             m_txnControlBounds.bottom - (m_sbHorizontal ? 14 : 0),
             m_txnControlBounds.right - (m_sbVertical ? 14 : 0),
             m_txnFrameID );
-#endif
-#else
-
-        TXNSetFrameBounds(
-            m_txn, m_txnControlBounds.top, m_txnControlBounds.left,
-            wxMax( m_txnControlBounds.bottom, m_txnControlBounds.top ),
-            wxMax( m_txnControlBounds.right, m_txnControlBounds.left ), m_txnFrameID );
 #endif
 
         // the SetFrameBounds method under Classic sometimes does not correctly scroll a selection into sight after a
@@ -2807,8 +2770,6 @@ void wxMacMLTEClassicControl::SuperChangedPosition()
     wxMacControl::SuperChangedPosition() ;
 }
 
-#ifdef __WXMAC_OSX__
-
 ControlUserPaneDrawUPP gTPDrawProc = NULL;
 ControlUserPaneHitTestUPP gTPHitProc = NULL;
 ControlUserPaneTrackingUPP gTPTrackProc = NULL;
@@ -2891,8 +2852,6 @@ static pascal void wxMacControlUserPaneBackgroundProc(ControlRef control, Contro
 }
 #endif
 
-#endif // __WXMAC_OSX__
-
 // TXNRegisterScrollInfoProc
 
 OSStatus wxMacMLTEClassicControl::DoCreate()
@@ -2901,7 +2860,6 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
     OSStatus err = noErr ;
 
     // set up our globals
-#ifdef __WXMAC_OSX__
     if (gTPDrawProc == NULL) gTPDrawProc = NewControlUserPaneDrawUPP(wxMacControlUserPaneDrawProc);
     if (gTPHitProc == NULL) gTPHitProc = NewControlUserPaneHitTestUPP(wxMacControlUserPaneHitTestProc);
     if (gTPTrackProc == NULL) gTPTrackProc = NewControlUserPaneTrackingUPP(wxMacControlUserPaneTrackingProc);
@@ -2912,14 +2870,12 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
 
     if (gTXNScrollInfoProc == NULL ) gTXNScrollInfoProc = NewTXNScrollInfoUPP(TXNScrollInfoProc) ;
     if (gTXNScrollActionProc == NULL ) gTXNScrollActionProc = NewControlActionUPP(TXNScrollActionProc) ;
-#endif
 
     // set the initial settings for our private data
 
     m_txnWindow = GetControlOwner(m_controlRef);
     m_txnPort = (GrafPtr) GetWindowPort(m_txnWindow);
 
-#ifdef __WXMAC_OSX__
     // set up the user pane procedures
     SetControlData(m_controlRef, kControlEntireControl, kControlUserPaneDrawProcTag, sizeof(gTPDrawProc), &gTPDrawProc);
     SetControlData(m_controlRef, kControlEntireControl, kControlUserPaneHitTestProcTag, sizeof(gTPHitProc), &gTPHitProc);
@@ -2928,7 +2884,6 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
     SetControlData(m_controlRef, kControlEntireControl, kControlUserPaneKeyDownProcTag, sizeof(gTPKeyProc), &gTPKeyProc);
     SetControlData(m_controlRef, kControlEntireControl, kControlUserPaneActivateProcTag, sizeof(gTPActivateProc), &gTPActivateProc);
     SetControlData(m_controlRef, kControlEntireControl, kControlUserPaneFocusProcTag, sizeof(gTPFocusProc), &gTPFocusProc);
-#endif
 
     // calculate the rectangles used by the control
     UMAGetControlBoundsInWindowCoords( m_controlRef, &bounds );
@@ -2945,7 +2900,6 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
     // create the new edit field
     TXNFrameOptions frameOptions = FrameOptionsFromWXStyle( m_windowStyle );
 
-#ifdef __WXMAC_OSX__
     // the scrollbars are not correctly embedded but are inserted at the root:
     // this gives us problems as we have erratic redraws even over the structure area
 
@@ -2975,8 +2929,6 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
         frameOptions &= ~(kTXNWantHScrollBarMask | kTXNDrawGrowIconMask);
     }
 
-#endif
-
     err = TXNNewObject(
         NULL, m_txnWindow, &bounds, frameOptions,
         kTXNTextEditStyleFrameType, kTXNTextensionFile, kTXNSystemDefaultEncoding,
@@ -2996,9 +2948,7 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
     verify_noerr( TXNSetTXNObjectControls( m_txn, false, toptag, iControlTags, iControlData ) );
 #endif
 
-#ifdef __WXMAC_OSX__
     TXNRegisterScrollInfoProc( m_txn, gTXNScrollInfoProc, (SInt32)this );
-#endif
 
     SetGWorld( origPort , origDev ) ;
 

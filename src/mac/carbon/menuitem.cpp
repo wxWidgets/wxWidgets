@@ -100,7 +100,6 @@ void wxMenuItem::UpdateItemStatus()
     if ( IsSeparator() )
         return ;
 
-#if TARGET_CARBON
     if ( UMAGetSystemVersion() >= 0x1000 && GetId() == wxApp::s_macPreferencesMenuItemId)
     {
         if ( !IsEnabled() )
@@ -116,7 +115,6 @@ void wxMenuItem::UpdateItemStatus()
         else
             EnableMenuCommand( NULL , kHICommandQuit ) ;
     }
-#endif
 
     {
         MenuHandle mhandle = MAC_WXHMENU(m_parentMenu->GetHMenu()) ;
@@ -163,7 +161,6 @@ void wxMenuItem::UpdateItemText()
 void wxMenuItem::Enable(bool bDoEnable)
 {
     if (( m_isEnabled != bDoEnable
-#if TARGET_CARBON
       // avoid changing menuitem state when menu is disabled
       // eg. BeginAppModalStateForWindow() will disable menus and ignore this change
       // which in turn causes m_isEnabled to become out of sync with real menuitem state
@@ -172,7 +169,6 @@ void wxMenuItem::Enable(bool bDoEnable)
          || (   GetId() == wxApp::s_macPreferencesMenuItemId
              || GetId() == wxApp::s_macExitMenuItemId
              || GetId() == wxApp::s_macAboutMenuItemId
-#endif
          ))
     {
         wxMenuItemBase::Enable( bDoEnable ) ;

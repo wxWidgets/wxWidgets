@@ -52,15 +52,7 @@
 #endif
 #endif
 
-#if defined __WXMAC__ && defined __DARWIN__/*TARGET_CARBON*/
-#ifdef __APPLE_CC__
 #include <Carbon/Carbon.h>
-#else
-#include <Carbon.h>
-#endif
-#else
-#include <Sound.h>
-#endif
 
 //quicktime media layer only required for mac emulation on pc
 #ifndef __WXMAC__

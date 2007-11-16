@@ -134,7 +134,6 @@ wxMacDataBrowserTableViewControl::wxMacDataBrowserTableViewControl(wxWindow* pee
       flags |= kDataBrowserSelectOnlyOne;
     (void) this->SetSelectionFlags(flags);
   } /* if */
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
   OptionBits attributes; // variable definition
   
   if (this->GetAttributes(&attributes) == noErr) // get default settings
@@ -145,7 +144,6 @@ wxMacDataBrowserTableViewControl::wxMacDataBrowserTableViewControl(wxWindow* pee
       attributes &= ~kDataBrowserAttributeListViewDrawColumnDividers;
     (void) this->SetAttributes(attributes);
   } /* if */
-#endif
   if ((style & wxDV_NO_HEADER) != 0)
     this->SetHeaderButtonHeight(0);
 } /* wxMacDataBrowserTableViewControl::wxMacDataBrowserTableViewControl(wxWindow*, wxPoint const&, wxSize const&, long) */
@@ -190,12 +188,10 @@ OSStatus wxMacDataBrowserTableViewControl::EnableCellSizeModification(bool enabl
   return ::SetDataBrowserTableViewGeometry(this->GetControlRef(),enableWidth,enableHeight);
 } /* wxMacDataBrowserTableViewControl::EnableCellSizeModification(bool, bool) */
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
 OSStatus wxMacDataBrowserTableViewControl::GetAttributes(OptionBits* attributes)
 {
   return ::DataBrowserGetAttributes(this->GetControlRef(),attributes);
 } /* wxMacDataBrowserTableViewControl::GetAttributes(OptionBits*) */
-#endif
 
 OSStatus wxMacDataBrowserTableViewControl::GetColumnWidth(DataBrowserPropertyID propertyID, UInt16* width) const
 {
@@ -232,12 +228,10 @@ OSStatus wxMacDataBrowserTableViewControl::GetScrollPosition( UInt32 *top , UInt
     return GetDataBrowserScrollPosition(this->m_controlRef, top , left );
 }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
 OSStatus wxMacDataBrowserTableViewControl::SetAttributes(OptionBits attributes)
 {
   return ::DataBrowserChangeAttributes(this->GetControlRef(),attributes,~attributes);
 } /* wxMacDataBrowserTableViewControl::SetAttributes(OptionBits) */
-#endif
 
 OSStatus wxMacDataBrowserTableViewControl::SetColumnWidth(DataBrowserPropertyID propertyID, UInt16 width)
 {

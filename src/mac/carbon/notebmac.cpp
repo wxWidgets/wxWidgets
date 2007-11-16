@@ -105,10 +105,7 @@ bool wxNotebook::Create( wxWindow *parent,
     switch (GetWindowVariant())
     {
         case wxWINDOW_VARIANT_MINI:
-            if ( UMAGetSystemVersion() >= 0x1030 )
-                tabsize = 3 ;
-            else
-                tabsize = kControlSizeSmall;
+            tabsize = 3 ;
             break;
 
         case wxWINDOW_VARIANT_SMALL:
