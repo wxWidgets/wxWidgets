@@ -288,7 +288,7 @@
 // Default is 1
 //
 // Recommended setting: 1 if you want to support multiple languages
-#define wxUSE_PRINTF_POS_PARAMS      0
+#define wxUSE_PRINTF_POS_PARAMS      1
 
 // ----------------------------------------------------------------------------
 // non GUI features selection
@@ -762,6 +762,15 @@
 
 // wxProperty[Value/Form/List] classes, used by Dialog Editor
 #define wxUSE_PROPSHEET 1
+
+
+// wxMiniFrame class: a frame with narrow title bar
+//
+// Default is 1.
+//
+// Recommended setting: 1 (it doesn't cost almost anything)
+#define wxUSE_MINIFRAME 1
+
 
 // wxComboCtrl and related classes: combobox with custom popup window and
 // not necessarily a listbox.
