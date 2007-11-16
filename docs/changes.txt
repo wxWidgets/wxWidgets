@@ -100,11 +100,14 @@ All (GUI):
 - wxGraphicsContext implementations now all have the pixel's center at (0.5,0.5),
   avoiding differences in anti-aliasing between platforms.
 - wxChoicebook now vertically centres a left-aligned controller.
+- Improved borders and size of rich text dialogs.
 
 wxMSW:
 
 - Correct (harmless) warnings given for forward-declared DLL-exported classes
   by mingw32 4.2 (Tim Stahlhut).
+- Fixed a bug whereby acclerators including Enter were not processed
+  when a tree control was focused.
 
 wxGTK:
 
@@ -112,6 +115,7 @@ wxGTK:
   a background colour bug in the gtk-qt theme under KDE.
 - wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW) now returns the background
   colour of text controls.
+- wxSysColourChangedEvent now sent when styles change.
 - wxFrame::ShowFullScreen now preserves the menubar's accelerators.
 - Implemented wxGetClientDisplayRect() correctly for wxGTK and X11-based ports.
 
