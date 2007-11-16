@@ -129,10 +129,8 @@ public:
     virtual void AddChild(wxXmlNode *child);
     virtual bool InsertChild(wxXmlNode *child, wxXmlNode *before_node);
     virtual bool RemoveChild(wxXmlNode *child);
-    virtual void AddAttribute(const wxString& name, const wxString& value)
-        { AddProperty(name, value); }
-    virtual bool DeleteAttribute(const wxString& name)
-        { return DeleteProperty(name); }
+    virtual void AddAttribute(const wxString& name, const wxString& value);
+    virtual bool DeleteAttribute(const wxString& name);
 
     // access methods:
     wxXmlNodeType GetType() const { return m_type; }
@@ -170,8 +168,7 @@ public:
     void SetChildren(wxXmlNode *child) { m_children = child; }
 
     void SetAttributes(wxXmlAttribute *attr) { m_attrs = attr; }
-    virtual void AddAttribute(wxXmlAttribute *attr)
-        { AddProperty(attr); }
+    virtual void AddAttribute(wxXmlAttribute *attr);
 
 #if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED( inline wxXmlAttribute *GetProperties() const );

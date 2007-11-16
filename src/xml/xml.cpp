@@ -252,6 +252,21 @@ bool wxXmlNode::RemoveChild(wxXmlNode *child)
     }
 }
 
+void wxXmlNode::AddAttribute(const wxString& name, const wxString& value)
+{
+    AddProperty(name, value);
+}
+
+void wxXmlNode::AddAttribute(wxXmlAttribute *attr)
+{
+    AddProperty(attr);
+}
+
+bool wxXmlNode::DeleteAttribute(const wxString& name)
+{
+    return DeleteProperty(name);
+}
+
 void wxXmlNode::AddProperty(const wxString& name, const wxString& value)
 {
     AddProperty(new wxXmlAttribute(name, value, NULL));
