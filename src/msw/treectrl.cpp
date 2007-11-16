@@ -1948,7 +1948,11 @@ bool wxTreeCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
 {
     if ( msg->message == WM_KEYDOWN )
     {
-        if ( msg->wParam == VK_RETURN )
+        const bool isAltDown = ::GetKeyState(VK_MENU) < 0;
+
+        // Only eat VK_RETURN if not being used by the application in conjunction with
+        // modifiers
+        if ( msg->wParam == VK_RETURN && !wxIsCtrlDown() && !wxIsShiftDown() && !isAltDown)
         {
             // we need VK_RETURN to generate wxEVT_COMMAND_TREE_ITEM_ACTIVATED
             return false;
@@ -2164,7 +2168,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 
                     // fire EVT_RIGHT_DOWN
                     HandleMouseEvent(nMsg, x, y, wParam);
-                    
+
                     // send NM_RCLICK
                     NMHDR nmhdr;
                     nmhdr.hwndFrom = GetHwnd();
@@ -2174,7 +2178,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                                   nmhdr.idFrom, (LPARAM)&nmhdr);
 
                     // prevent tree control default processing, as we've
-                    // already done everything                   
+                    // already done everything
                     processed = true;
                 }
                 break;
@@ -2640,7 +2644,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         // Vista's tree control has introduced some problems with our
         // multi-selection tree.  When TreeView_SelectItem() is called,
         // the wrong items are deselected.
-        
+
         // Fortunately, Vista provides a new notification, TVN_ITEMCHANGING
         // that can be used to regulate this incorrect behavior.  The
         // following messages will allow only the unlocked item's selection
@@ -2657,7 +2661,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     {
                         // item's state is locked, don't allow the change
                         // returning 1 will disallow the change
-                        *result = 1; 
+                        *result = 1;
                         return true;
                     }
                 }
