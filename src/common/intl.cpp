@@ -76,11 +76,6 @@
     #include "wx/mac/private.h"  // includes mac headers
 #endif
 
-#if defined(__WXOSX__)
-    #include "wx/mac/corefoundation/cfstring.h"
-    #include "wx/mac/corefoundation/cfref.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // simple types
 // ----------------------------------------------------------------------------
@@ -2477,11 +2472,7 @@ wxFontEncoding wxLocale::GetSystemEncoding()
     }
 #elif defined(__WXMAC__)
     TextEncoding encoding = 0 ;
-#if TARGET_CARBON
     encoding = CFStringGetSystemEncoding() ;
-#else
-    UpgradeScriptInfoToTextEncoding ( smSystemScript , kTextLanguageDontCare , kTextRegionDontCare , NULL , &encoding ) ;
-#endif
     return wxMacGetFontEncFromSystemEnc( encoding ) ;
 #elif defined(__UNIX_LIKE__) && wxUSE_FONTMAP
     const wxString encname = GetSystemEncodingName();

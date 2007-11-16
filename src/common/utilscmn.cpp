@@ -1055,9 +1055,6 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
     err = ICStart(&inst, 'STKA'); // put your app creator code here
     if (err == noErr)
     {
-#if !TARGET_CARBON
-        err = ICFindConfigFile(inst, 0, NULL);
-#endif
         if (err == noErr)
         {
             ConstStr255Param hint = 0;
