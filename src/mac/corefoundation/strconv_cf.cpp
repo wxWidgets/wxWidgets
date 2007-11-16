@@ -57,15 +57,12 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
         return result;
 }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
 // Provide a constant for the wchat_t encoding used by the host platform.
 #ifdef WORDS_BIGENDIAN
     static const CFStringEncoding wxCFStringEncodingWcharT = kCFStringEncodingUTF32BE;
 #else
     static const CFStringEncoding wxCFStringEncodingWcharT = kCFStringEncodingUTF32LE;
 #endif
-
-#endif /* MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4 */
 
     size_t wxMBConv_cf::ToWChar(wchar_t * dst, size_t dstSize, const char * src, size_t srcSize) const
     {
@@ -101,7 +98,6 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
  * to UTF32.  If we are then run against a pre-Tiger system, the encoding
  * won't be available so we'll defer to the string->UTF-16->UTF-32 conversion.
  */
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
         if(CFStringIsEncodingAvailable(wxCFStringEncodingWcharT))
         {
             CFRange fullStringRange = CFRangeMake(0, CFStringGetLength(theString));
@@ -132,7 +128,6 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
             return usedBufLen / sizeof(wchar_t);
         }
         else
-#endif /* MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4 */
         {
             // NOTE: Includes NULL iff source did
             /* NOTE: This is an approximation.  The eventual UTF-32 will    
@@ -175,7 +170,6 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
  * from UTF32.  If we are then run against a pre-Tiger system, the encoding
  * won't be available so we'll defer to the UTF-32->UTF-16->string conversion.
  */
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
         if(CFStringIsEncodingAvailable(wxCFStringEncodingWcharT))
         {
             theString = wxCFRef<CFStringRef>(CFStringCreateWithBytes(
@@ -186,7 +180,6 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
                     false));
         }
         else
-#endif /* MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4 */
         {
             wxMBConvUTF16 converter;
             size_t cbUniBuffer = converter.FromWChar( NULL, 0, src, srcSize );

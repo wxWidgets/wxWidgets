@@ -40,11 +40,7 @@
 #include "wx/mac/corefoundation/cfstring.h"
 
 // Default path style
-#ifdef __WXMAC_OSX__
 #define kDefaultPathStyle kCFURLPOSIXPathStyle
-#else
-#define kDefaultPathStyle kCFURLHFSPathStyle
-#endif
 
 //===========================================================================
 //  IMPLEMENTATION

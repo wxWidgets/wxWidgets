@@ -32,19 +32,10 @@
 #endif
 #include "wx/mac/corefoundation/cfstring.h"
 
-#if defined(__DARWIN__)
 #include <CoreFoundation/CFBundle.h>
 #include <CoreFoundation/CFURL.h>
-#else
-#include <CFBundle.h>
-#include <CFURL.h>
-#endif
 
-#if defined(__WXCOCOA__) || defined(__WXMAC_OSX__)
 #define kDefaultPathStyle kCFURLPOSIXPathStyle
-#else
-#define kDefaultPathStyle kCFURLHFSPathStyle
-#endif
 
 // ============================================================================
 // implementation
