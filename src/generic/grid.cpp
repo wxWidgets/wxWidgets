@@ -6298,7 +6298,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
             {
                 if ( CanDragRowSize() && CanDragGridSize() )
-                    ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW);
+                    ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, NULL, false);
             }
         }
         else if ( dragCol >= 0 )
@@ -6308,7 +6308,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
             {
                 if ( CanDragColSize() && CanDragGridSize() )
-                    ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL);
+                    ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, NULL, false);
             }
         }
         else // Neither on a row or col edge
