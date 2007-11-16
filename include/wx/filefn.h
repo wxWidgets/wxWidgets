@@ -326,8 +326,12 @@ enum wxFileKind
             #if defined(__OS2__) && defined(__WATCOMC__)
                 #define   wxStat       _stat
             #else
-                #define   wxStat       wxPOSIX_IDENT(stat)
-            #endif
+                #if defined (__BORLANDC__)
+                    #define   wxStat       _stat //wxPOSIX_IDENT(stat)
+                #else
+                    #define   wxStat       wxPOSIX_IDENT(stat)
+                #endif // !borland
+            #endif // !watcom
         #endif
     #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
