@@ -394,8 +394,12 @@ void wxEntryCleanup()
     {
         wxTheApp->CleanUp();
 
-        delete wxTheApp;
+        // reset the global pointer to it to NULL before destroying it as in
+        // some circumstances this can result in executing the code using
+        // wxTheApp and using half-destroyed object is no good
+        wxAppConsole * const app = wxApp::GetInstance();
         wxApp::SetInstance(NULL);
+        delete app;
     }
 
 
