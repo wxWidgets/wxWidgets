@@ -16,18 +16,6 @@
 #include "wx/print.h"
 #include "wx/mac/private.h"
 
-#if TARGET_CARBON && !defined(__DARWIN__)
-#  include <PMApplication.h>
-#endif
-
-#ifndef __DARWIN__
-#  include "Printing.h"
-#endif
-
-#if !PM_USE_SESSION_APIS
-#error "only Carbon Printing Session API is supported"
-#endif
-
 class WXDLLEXPORT wxMacCarbonPrintData : public wxPrintNativeDataBase
 {
 public :
