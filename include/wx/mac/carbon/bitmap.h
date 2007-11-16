@@ -166,10 +166,9 @@ public:
     // returns the 'native' implementation, a GWorldPtr for the content and one for the mask 
     WXHBITMAP GetHBITMAP( WXHBITMAP * mask = NULL ) const;
 
-#ifdef __WXMAC_OSX__
     // returns a CGImageRef which must released after usage with CGImageRelease
     WXCGIMAGEREF CGImageCreate() const ;
-#endif
+
     // get read only access to the underlying buffer
     void *GetRawAccess() const ;
     // brackets to the underlying OS structure for read/write access

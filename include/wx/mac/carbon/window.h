@@ -236,17 +236,6 @@ public:
     wxList&             GetSubcontrols() { return m_subControls; }
     WXEVENTHANDLERREF   MacGetControlEventHandler() { return m_macControlEventHandler ; }
 
-#ifndef __WXMAC_OSX__
-    virtual void            MacControlUserPaneDrawProc(wxInt16 part) ;
-    virtual wxInt16         MacControlUserPaneHitTestProc(wxInt16 x, wxInt16 y) ;
-    virtual wxInt16         MacControlUserPaneTrackingProc(wxInt16 x, wxInt16 y, void* actionProc) ;
-    virtual void            MacControlUserPaneIdleProc() ;
-    virtual wxInt16         MacControlUserPaneKeyDownProc(wxInt16 keyCode, wxInt16 charCode, wxInt16 modifiers) ;
-    virtual void            MacControlUserPaneActivateProc(bool activating) ;
-    virtual wxInt16         MacControlUserPaneFocusProc(wxInt16 action) ;
-    virtual void            MacControlUserPaneBackgroundProc(void* info) ;
-#endif
-
     // translate wxWidgets coords into ones suitable
     // to be passed to CreateControl calls
     //

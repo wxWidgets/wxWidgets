@@ -16,54 +16,10 @@
 
 #include "wx/defs.h"
 
-#ifdef __DARWIN__
-#    include <Carbon/Carbon.h>
-#else
-#    include <Debugging.h>
-#    include <Quickdraw.h>
-#    include <Appearance.h>
-#    include <Folders.h>
-#    include <Controls.h>
-#    include <ControlDefinitions.h>
-#    include <LowMem.h>
-#    include <Gestalt.h>
-#    include <FixMath.h>
-#    include <CoreServices.h>
-#endif
+#include <Carbon/Carbon.h>
 
-#if UNIVERSAL_INTERFACES_VERSION < 0x0342
-    #error "please update to Apple's latest universal headers from http://developer.apple.com/sdk/"
-#endif
-
-#ifndef MAC_OS_X_VERSION_10_3
-    #define MAC_OS_X_VERSION_10_3 1030
-#endif
-
-#ifndef MAC_OS_X_VERSION_10_4
-    #define MAC_OS_X_VERSION_10_4 1040
-#endif
-
-#ifndef MAC_OS_X_VERSION_10_5
-    #define MAC_OS_X_VERSION_10_5 1050
-#endif
-
-#ifdef __WXMAC_CARBON__
 #include "wx/mac/corefoundation/cfstring.h"
 #include "wx/mac/corefoundation/cfdataref.h"
-#endif
-
-#ifndef FixedToInt
-// as macro in FixMath.h for 10.3
-inline Fixed    IntToFixed( int inInt )
-{
-    return (((SInt32) inInt) << 16);
-}
-
-inline int    FixedToInt( Fixed inFixed )
-{
-    return (((SInt32) inFixed) >> 16);
-}
-#endif
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
 typedef UInt32 URefCon;
@@ -227,16 +183,12 @@ template<> inline EventParamType wxMacGetEventParamType<SInt16>() { return typeS
 template<> inline EventParamType wxMacGetEventParamType<SInt32>() { return typeSInt32; }
 template<> inline EventParamType wxMacGetEventParamType<UInt32>() { return typeUInt32; }
 template<> inline EventParamType wxMacGetEventParamType<RGBColor>() { return typeRGBColor; }
-#if TARGET_API_MAC_OSX
 template<> inline EventParamType wxMacGetEventParamType<HICommand>() { return typeHICommand; }
 template<> inline EventParamType wxMacGetEventParamType<HIPoint>() { return typeHIPoint; }
 template<> inline EventParamType wxMacGetEventParamType<HISize>() { return typeHISize; }
 template<> inline EventParamType wxMacGetEventParamType<HIRect>() { return typeHIRect; }
 template<> inline EventParamType wxMacGetEventParamType<void*>() { return typeVoidPtr; }
-#endif
-#if TARGET_API_MAC_OSX
 template<> inline EventParamType wxMacGetEventParamType<CFDictionaryRef>() { return typeCFDictionaryRef; }
-#endif
 template<> inline EventParamType wxMacGetEventParamType<Collection>() { return typeCollection; }
 template<> inline EventParamType wxMacGetEventParamType<CGContextRef>() { return typeCGContextRef; }
 /*
@@ -473,9 +425,7 @@ private :
 #if wxUSE_TIMER 
     wxMacToolTipTimer* m_timer ;
 #endif
-#if TARGET_CARBON
     wxMacCFStringHolder m_helpTextRef ;
-#endif
 } ;
 
 /*
@@ -654,9 +604,8 @@ public :
     // invalidates this control and all children
     virtual void InvalidateWithChildren();
     virtual void SetDrawingEnabled( bool enable );
-#ifdef __WXMAC_OSX__
     virtual bool GetNeedsDisplay() const;
-#endif
+
     // where is in native window relative coordinates
     virtual void SetNeedsDisplay( RgnHandle where );
     // where is in native window relative coordinates
@@ -1225,12 +1174,8 @@ private:
 
 #endif // wxMAC_USE_CORE_GRAPHICS
 
-#ifdef __WXMAC_OSX__
-
 CGColorSpaceRef wxMacGetGenericRGBColorSpace(void);
 void wxMacMemoryBufferReleaseProc(void *info, const void *data, size_t size);
-
-#endif
 
 class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
 {
@@ -1269,9 +1214,7 @@ public:
 #endif // wxUSE_PALETTE
 
     wxMask *      m_bitmapMask; // Optional mask
-#ifdef __WXMAC_OSX__
     CGImageRef    CGImageCreate() const;
-#endif
 
     // returns true if the bitmap has a size that
     // can be natively transferred into a true icon
@@ -1305,9 +1248,8 @@ private :
     wxMemoryBuffer m_memBuf;
     int           m_rawAccessCount;
     bool          m_ok;
-#ifdef __WXMAC_OSX__
     mutable CGImageRef    m_cgImageRef;
-#endif
+
     IconRef       m_iconRef;
     PicHandle     m_pictHandle;
 #if wxMAC_USE_CORE_GRAPHICS
@@ -1354,8 +1296,6 @@ public :
 protected :
     WindowRef m_macWindow ;
 } ;
-
-ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow, const Point& location , WindowRef window , ControlPartCode *outPart );
 
 #ifndef __LP64__
 

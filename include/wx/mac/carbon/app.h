@@ -17,10 +17,6 @@
 #include "wx/gdicmn.h"
 #include "wx/event.h"
 
-#ifdef __WXMAC_OSX__
-typedef struct __CFRunLoopSource * CFRunLoopSourceRef;
-#endif
-
 class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxWindowMac;
 class WXDLLIMPEXP_FWD_CORE wxApp ;
@@ -92,9 +88,7 @@ private:
     WXEVENTHANDLERREF     m_macEventHandler ;
     WXEVENTHANDLERCALLREF m_macCurrentEventHandlerCallRef ;
     WXEVENTREF            m_macCurrentEvent ;
-#ifdef __WXMAC_OSX__
     CFRunLoopSourceRef    m_macEventPosted ;
-#endif
 
 public:
     static long           s_macAboutMenuItemId ;
