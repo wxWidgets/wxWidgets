@@ -21,6 +21,8 @@
 #include "wx/module.h"
 #include "wx/dataobj.h"     // for wxDataFormat
 
+#include "wx/mac/corefoundation/cfref.h"
+
 //-----------------------------------------------------------------------------
 // wxClipboard
 //-----------------------------------------------------------------------------
@@ -66,6 +68,7 @@ public:
 private:
     wxDataObject     *m_data;
     bool              m_open;
+    wxCFRef<PasteboardRef> m_pasteboard;
 };
 
 #endif // wxUSE_CLIPBOARD
