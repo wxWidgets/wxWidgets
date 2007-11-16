@@ -129,6 +129,11 @@ Changes in behaviour which may result in compilation errors
   derives from wxObject; instead of using wxDynamicCast with wxVariantData you
   can use the macro wxDynamicCastVariantData with the same arguments.
 
+- wxWindow::Next/PrevControlId() don't exist any more as they can't be
+  implemented correctly any longer because automatically generated ids are not
+  necessarily allocated consecutively any more. Use GetChildren() to find the
+  next/previous control sibling instead.
+
 
 Deprecated methods and their replacements
 -----------------------------------------
