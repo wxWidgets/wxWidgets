@@ -1772,6 +1772,13 @@ enum wxKeyType
 /*  Standard menu IDs */
 enum
 {
+    /*
+       These ids delimit the range used by automatically-generated ids
+       (i.e. those used when wxID_ANY is specified during construction).
+     */
+    wxID_AUTO_LOWEST = -32000,
+    wxID_AUTO_HIGHEST = -2000,
+
     /* no id matches this one when compared to it */
     wxID_NONE = -3,
 
