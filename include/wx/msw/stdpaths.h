@@ -19,6 +19,13 @@
 class WXDLLIMPEXP_BASE wxStandardPaths : public wxStandardPathsBase
 {
 public:
+    wxStandardPaths()
+    {
+        UseAppInfo(AppInfo_AppName | AppInfo_VendorName);
+    }
+
+    ~wxStandardPaths() { }
+
     // implement base class pure virtuals
     virtual wxString GetExecutablePath() const;
     virtual wxString GetConfigDir() const;

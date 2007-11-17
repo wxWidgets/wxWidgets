@@ -77,6 +77,15 @@ wxStandardPathsBase& wxAppTraitsBase::GetStandardPaths()
     return gs_stdPaths;
 }
 
+wxStandardPathsBase::wxStandardPathsBase()
+{
+    // Set the default information that is used when
+    // forming some paths (by AppendAppInfo).
+    // Derived classes can call this in their constructors
+    // to set the platform-specific settings
+    UseAppInfo(AppInfo_AppName);
+}
+
 wxStandardPathsBase::~wxStandardPathsBase()
 {
     // nothing to do here
@@ -104,23 +113,41 @@ wxString wxStandardPathsBase::GetTempDir() const
 }
 
 /* static */
-wxString wxStandardPathsBase::AppendAppName(const wxString& dir)
+wxString wxStandardPathsBase::AppendPathComponent(const wxString& dir, const wxString& component)
 {
     wxString subdir(dir);
 
     // empty string indicates that an error has occurred, don't touch it then
     if ( !subdir.empty() )
     {
-        const wxString appname = wxTheApp->GetAppName();
-        if ( !appname.empty() )
+        if ( !component.empty() )
         {
             const wxChar ch = *(subdir.end() - 1);
             if ( !wxFileName::IsPathSeparator(ch) && ch != _T('.') )
                 subdir += wxFileName::GetPathSeparator();
 
-            subdir += appname;
+            subdir += component;
         }
     }
 
     return subdir;
 }
+
+
+wxString wxStandardPathsBase::AppendAppInfo(const wxString& dir) const
+{
+    wxString subdir(dir);
+
+    if ( UsesAppInfo(AppInfo_VendorName) )
+    {
+        subdir = AppendPathComponent(subdir, wxTheApp->GetVendorName());
+    }
+
+    if ( UsesAppInfo(AppInfo_AppName) )
+    {
+        subdir = AppendPathComponent(subdir, wxTheApp->GetAppName());
+    }
+
+    return subdir;
+}
+

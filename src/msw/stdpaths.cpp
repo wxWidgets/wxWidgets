@@ -281,7 +281,7 @@ wxString wxStandardPaths::GetExecutablePath() const
 
 wxString wxStandardPaths::GetConfigDir() const
 {
-    return AppendAppName(DoGetDirectory(CSIDL_COMMON_APPDATA));
+    return AppendAppInfo(DoGetDirectory(CSIDL_COMMON_APPDATA));
 }
 
 wxString wxStandardPaths::GetUserConfigDir() const
@@ -298,12 +298,12 @@ wxString wxStandardPaths::GetDataDir() const
 
 wxString wxStandardPaths::GetUserDataDir() const
 {
-    return AppendAppName(GetUserConfigDir());
+    return AppendAppInfo(GetUserConfigDir());
 }
 
 wxString wxStandardPaths::GetUserLocalDataDir() const
 {
-    return AppendAppName(DoGetDirectory(CSIDL_LOCAL_APPDATA));
+    return AppendAppInfo(DoGetDirectory(CSIDL_LOCAL_APPDATA));
 }
 
 wxString wxStandardPaths::GetPluginsDir() const

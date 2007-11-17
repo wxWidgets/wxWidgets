@@ -49,12 +49,14 @@ wxStandardPathsCF::wxStandardPathsCF()
                  : m_bundle(CFBundleGetMainBundle())
 {
     CFRetain(m_bundle);
+    UseAppInfo(AppInfo_AppName | AppInfo_VendorName);
 }
 
 wxStandardPathsCF::wxStandardPathsCF(wxCFBundleRef bundle)
                  : m_bundle(bundle)
 {
     CFRetain(m_bundle);
+    UseAppInfo(AppInfo_AppName | AppInfo_VendorName);
 }
 
 wxStandardPathsCF::~wxStandardPathsCF()
@@ -170,18 +172,18 @@ wxString wxStandardPathsCF::GetExecutablePath() const
 wxString wxStandardPathsCF::GetLocalDataDir() const
 {
 #ifdef __WXMAC__
-    return AppendAppName(wxMacFindFolder((short)kLocalDomain, kApplicationSupportFolderType, kCreateFolder));
+    return AppendAppInfo(wxMacFindFolder((short)kLocalDomain, kApplicationSupportFolderType, kCreateFolder));
 #else
-    return AppendAppName(wxT("/Library/Application Support"));
+    return AppendAppInfo(wxT("/Library/Application Support"));
 #endif
 }
 
 wxString wxStandardPathsCF::GetUserDataDir() const
 {
 #ifdef __WXMAC__
-    return AppendAppName(wxMacFindFolder((short)kUserDomain, kApplicationSupportFolderType, kCreateFolder));
+    return AppendAppInfo(wxMacFindFolder((short)kUserDomain, kApplicationSupportFolderType, kCreateFolder));
 #else
-    return AppendAppName(wxFileName::GetHomeDir() + _T("/Library/Application Support"));
+    return AppendAppInfo(wxFileName::GetHomeDir() + _T("/Library/Application Support"));
 #endif
 }
 

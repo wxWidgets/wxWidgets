@@ -280,3 +280,24 @@ automatically, portable programs should call this function. Usually the prefix
 is set during program configuration if using GNU autotools and so it is enough
 to pass its value defined in \texttt{config.h} to this function.
 
+
+\membersection{wxStandardPaths::UseAppInfo}\label{wxstandardpathsuseappinfo}
+
+\func{void}{UseAppInfo}{\param{int }{info}}
+
+Controls what application information is used when constructing paths that
+should be unique to this program, such as the application data directory, the
+plugins directory on Unix, etc.
+
+Valid values for \arg{info} are \texttt{AppInfo\_None} and either one or
+combination of \texttt{AppInfo\_AppName} and \texttt{AppInfo\_VendorName}. The
+first one tells this class to not use neither application nor vendor name in
+the paths.
+
+By default, only the application name is used under Unix systems but both
+application and vendor names are used under Windows and Mac.
+
+\wxheading{See also}
+
+\helpref{wxApp::SetAppName}{wxappsetappname}, \helpref{wxApp::SetVendorName}{wxappsetvendorname}
+

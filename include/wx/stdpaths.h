@@ -39,6 +39,15 @@ public:
         ResourceCat_Max
     };
 
+    // what should we use to construct paths unique to this application:
+    // (AppInfo_AppName and AppInfo_VendorName can be combined together)
+    enum
+    {
+        AppInfo_None       = 0,  // nothing
+        AppInfo_AppName    = 1,  // the application name
+        AppInfo_VendorName = 2   // the vendor name
+    };
+
 
     // return the global standard paths object
     static wxStandardPathsBase& Get();
@@ -126,13 +135,32 @@ public:
     virtual wxString GetTempDir() const;
 
 
+    // ctor for the base class
+    wxStandardPathsBase();
+
     // virtual dtor for the base class
     virtual ~wxStandardPathsBase();
 
+    // Information used by AppendAppInfo
+    void UseAppInfo(int info)
+    {
+        m_usedAppInfo = info;
+    }
+
+    bool UsesAppInfo(int info) const { return (m_usedAppInfo & info) != 0; }
+
+
 protected:
-    // append "/appname" suffix if the app name is set (doesn't append the
-    // slash if dir already ends with a slash or dot)
-    static wxString AppendAppName(const wxString& dir);
+    // append the path component, with a leading path seperator if a
+    // path seperator or dot (.) is not already at the end of dir
+    static wxString AppendPathComponent(const wxString& dir, const wxString& component);
+
+    // append application information determined by m_usedAppInfo to dir
+    wxString AppendAppInfo(const wxString& dir) const;
+
+
+    // combination of AppInfo_XXX flags used by AppendAppInfo()
+    int m_usedAppInfo;
 };
 
 #if wxUSE_STDPATHS
