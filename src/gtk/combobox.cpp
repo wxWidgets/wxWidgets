@@ -111,10 +111,16 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
         return false;
     }
 
-    if(HasFlag(wxCB_SORT))
+    if (HasFlag(wxCB_SORT))
         m_strings = new wxSortedArrayString();
 
     m_widget = gtk_combo_box_entry_new_text();
+
+    if (HasFlag(wxBORDER_NONE))
+    {
+        // Doesn't seem to work
+        // g_object_set (m_widget, "has-frame", FALSE, NULL);
+    }
 
     GtkEntry * const entry = GetEntry();
 
