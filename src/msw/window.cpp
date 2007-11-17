@@ -5020,7 +5020,7 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
     event.m_aux1Down = (flags & MK_XBUTTON1) != 0;
     event.m_aux2Down = (flags & MK_XBUTTON2) != 0;
 #endif // wxHAS_XBUTTON
-    event.m_altDown = ::GetKeyState(VK_MENU) < 0;
+    event.m_altDown = ::wxIsAltDown();
 
 #ifndef __WXWINCE__
     event.SetTimestamp(::GetMessageTime());
@@ -6061,9 +6061,9 @@ wxMouseState wxGetMouseState()
     ms.SetAux2Down(wxIsKeyDown(VK_XBUTTON2));
 #endif // wxHAS_XBUTTON
 
-    ms.SetControlDown(wxIsKeyDown(VK_CONTROL));
-    ms.SetShiftDown(wxIsKeyDown(VK_SHIFT));
-    ms.SetAltDown(wxIsKeyDown(VK_MENU));
+    ms.SetControlDown(wxIsCtrlDown ());
+    ms.SetShiftDown  (wxIsShiftDown());
+    ms.SetAltDown    (wxIsAltDown  ());
 //    ms.SetMetaDown();
 
     return ms;

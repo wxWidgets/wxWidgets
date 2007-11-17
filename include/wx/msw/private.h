@@ -311,21 +311,32 @@ HCURSOR wxBitmapToHCURSOR(const wxBitmap& bmp, int hotSpotX, int hotSpotY);
     #define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
 #endif // GET_X_LPARAM
 
-// get the current state of SHIFT/CTRL keys
+// get the current state of SHIFT/CTRL/ALT keys
+inline bool wxIsModifierDown(int vk)
+{
+    // GetKeyState() returns different negative values on WinME and WinNT,
+    // so simply test for negative value.
+    return ::GetKeyState(vk) < 0;
+}
+
 inline bool wxIsShiftDown()
 {
-//    return (::GetKeyState(VK_SHIFT) & 0x100) != 0;
-    // Returns different negative values on WinME and WinNT,
-    // so simply test for negative value.
-    return ::GetKeyState(VK_SHIFT) < 0;
+    return wxIsModifierDown(VK_SHIFT);
 }
 
 inline bool wxIsCtrlDown()
 {
-//    return (::GetKeyState(VK_CONTROL) & 0x100) != 0;
-    // Returns different negative values on WinME and WinNT,
-    // so simply test for negative value.
-    return ::GetKeyState(VK_CONTROL) < 0;
+    return wxIsModifierDown(VK_CONTROL);
+}
+
+inline bool wxIsAltDown()
+{
+    return wxIsModifierDown(VK_MENU);
+}
+
+inline bool wxIsAnyModifierDown()
+{
+    return wxIsShiftDown() || wxIsCtrlDown() || wxIsAltDown();
 }
 
 // wrapper around GetWindowRect() and GetClientRect() APIs doing error checking

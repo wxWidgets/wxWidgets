@@ -1948,11 +1948,9 @@ bool wxTreeCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
 {
     if ( msg->message == WM_KEYDOWN )
     {
-        const bool isAltDown = ::GetKeyState(VK_MENU) < 0;
-
-        // Only eat VK_RETURN if not being used by the application in conjunction with
-        // modifiers
-        if ( msg->wParam == VK_RETURN && !wxIsCtrlDown() && !wxIsShiftDown() && !isAltDown)
+        // Only eat VK_RETURN if not being used by the application in
+        // conjunction with modifiers
+        if ( (msg->wParam == VK_RETURN) && !wxIsAnyModifierDown() )
         {
             // we need VK_RETURN to generate wxEVT_COMMAND_TREE_ITEM_ACTIVATED
             return false;
@@ -2607,8 +2605,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 // fabricate the lParam and wParam parameters sufficiently
                 // similar to the ones from a "real" WM_KEYDOWN so that
                 // CreateKeyEvent() works correctly
-                const bool isAltDown = ::GetKeyState(VK_MENU) < 0;
-                WXLPARAM lParam = (isAltDown ? KF_ALTDOWN : 0) << 16;
+                WXLPARAM lParam = (wxIsAltDown() ? KF_ALTDOWN : 0) << 16;
 
                 WXWPARAM wParam = info->wVKey;
 
@@ -2626,7 +2623,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                                                 wParam);
 
                 // a separate event for Space/Return
-                if ( !wxIsCtrlDown() && !wxIsShiftDown() && !isAltDown &&
+                if ( !wxIsAnyModifierDown() &&
                      ((info->wVKey == VK_SPACE) || (info->wVKey == VK_RETURN)) )
                 {
                    wxTreeItemId item;
