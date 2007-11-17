@@ -1520,10 +1520,12 @@ void wxGridCellChoiceEditor::Create(wxWindow* parent,
                                     wxWindowID id,
                                     wxEvtHandler* evtHandler)
 {
+    int style = wxBORDER_NONE;
+    if (!m_allowOthers)
+        style |= wxCB_READONLY;
     m_control = new wxComboBox(parent, id, wxEmptyString,
                                wxDefaultPosition, wxDefaultSize,
-                               m_choices,
-                               m_allowOthers ? 0 : wxCB_READONLY);
+                               m_choices, style );
 
     wxGridCellEditor::Create(parent, id, evtHandler);
 }
@@ -2204,8 +2206,7 @@ wxSize wxGridCellBoolRenderer::GetBestSize(wxGrid& grid,
         wxSize size = checkbox->GetBestSize();
         wxCoord checkSize = size.y + 2 * wxGRID_CHECKMARK_MARGIN;
 
-        // FIXME wxGTK::wxCheckBox::GetBestSize() gives "wrong" result
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXMOTIF__)
         checkSize -= size.y / 2;
 #endif
 
@@ -2234,7 +2235,7 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
     if ( size.x >= minSize || size.y >= minSize )
     {
         // and even leave (at least) 1 pixel margin
-        size.x = size.y = minSize - 2;
+        size.x = size.y = minSize;
     }
 
     // draw a border around checkmark
@@ -2275,26 +2276,11 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
         value = wxGridCellBoolEditor::IsTrueValue(cellval);
     }
 
-    if ( value )
-    {
-        wxRect rectMark = rectBorder;
-
-#ifdef __WXMSW__
-        // MSW DrawCheckMark() is weird (and should probably be changed...)
-        rectMark.Inflate(-wxGRID_CHECKMARK_MARGIN / 2);
-        rectMark.x++;
-        rectMark.y++;
-#else
-        rectMark.Inflate(-wxGRID_CHECKMARK_MARGIN);
-#endif
-
-        dc.SetTextForeground(attr.GetTextColour());
-        dc.DrawCheckMark(rectMark);
-    }
-
-    dc.SetBrush(*wxTRANSPARENT_BRUSH);
-    dc.SetPen(wxPen(attr.GetTextColour(), 1, wxSOLID));
-    dc.DrawRectangle(rectBorder);
+    int flags = 0;
+    if (value)
+        flags |= wxCONTROL_CHECKED; 
+        
+    wxRendererNative::Get().DrawCheckBox( &grid, dc, rectBorder, flags );
 }
 
 // ----------------------------------------------------------------------------
@@ -8473,7 +8459,7 @@ void wxGrid::ShowCellEditControl()
                 if (rect.GetRight() > client_right)
                     rect.SetRight( client_right - 1 );
             }
-
+            
             editor->SetCellAttr( attr );
             editor->SetSize( rect );
             if (nXMove != 0)
