@@ -38,13 +38,30 @@ For example:
   class MyModule: public wxModule
   {
   public:
-      wxDDEModule() { AddDependency(CLASSINFO(wxDDEModule)); }
+      MyModule() { AddDependency(CLASSINFO(wxDDEModule)); }
       virtual bool OnInit() { ... code using DDE ... }
       virtual void OnExit() { ... }
 
   private:
-      DECLARE_DYNAMIC_CLASS(wxDDEModule)
+      DECLARE_DYNAMIC_CLASS(MyModule)
   };
+
+  IMPLEMENT_DYNAMIC_CLASS(MyModule, wxModule)
+
+  // Another module which uses DDE in its OnInit()
+  // but uses a named dependency
+  class MyModule2: public wxModule
+  {
+  public:
+      MyModule2() { AddDependency("wxDDEModule"); }
+      virtual bool OnInit() { ... code using DDE ... }
+      virtual void OnExit() { ... }
+
+  private:
+      DECLARE_DYNAMIC_CLASS(MyModule2)
+  };
+
+  IMPLEMENT_DYNAMIC_CLASS(MyModule2, wxModule)
 \end{verbatim}
 
 \wxheading{Derived from}
@@ -80,16 +97,26 @@ Destructor.
 
 \func{void}{AddDependency}{\param{wxClassInfo * }{dep}}
 
+\func{void}{AddDependency}{\param{const char * }{classname}}
+
 Call this function from the constructor of the derived class. \arg{dep} must be
 the \helpref{CLASSINFO}{classinfo} of a wxModule-derived class and the
 corresponding module will be loaded \emph{before} and unloaded \emph{after}
 this module.
+
+The second version of this function allows a dependency to be added by
+name without access to the class info.  This is useful when a module is
+declared entirely in a source file and there is no header for the declaration
+of the module needed by \helpref{CLASSINFO}{classinfo}, however errors are
+not detected until run-time, instead of compile-time, then.
 
 Note that circular dependencies are detected and result in a fatal error.
 
 \wxheading{Parameters}
 
 \docparam{dep}{The class information object for the dependent module.}
+
+\docparam{classname}{The class name of the dependent module.}
 
 
 \membersection{wxModule::OnExit}\label{wxmoduleonexit}
