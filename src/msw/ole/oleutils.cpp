@@ -75,6 +75,11 @@ WXDLLEXPORT BSTR wxConvertStringToOle(const wxString& str)
 
 WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr)
 {
+    // NULL BSTR is equivalent to an empty string (this is the convention used
+    // by VB and hence we must follow it)
+    if ( !bStr )
+        return wxString();
+
 #if wxUSE_UNICODE
     wxString str(bStr);
 #else
