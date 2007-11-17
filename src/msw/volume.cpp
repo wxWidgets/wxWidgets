@@ -264,6 +264,17 @@ static void BuildListFromNN(wxArrayString& list, NETRESOURCE* pResSrc,
                 {
                     wxString filename(pRes->lpRemoteName);
 
+                    // if the drive is unavailable, FilteredAdd() can hang for
+                    // a long time and, moreover, its failure appears to be not
+                    // cached so this will happen every time we use it, so try
+                    // a much quicker wxDirExists() test (which still hangs but
+                    // for much shorter time) for locally mapped drives first
+                    // to try to avoid this
+                    if ( pRes->lpLocalName &&
+                            *pRes->lpLocalName &&
+                                !wxDirExists(pRes->lpLocalName) )
+                        continue;
+
                     if (!filename.empty())
                     {
                         if (filename.Last() != '\\')
