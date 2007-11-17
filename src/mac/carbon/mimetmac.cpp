@@ -398,9 +398,8 @@ wxFileTypeImpl::GetPrintCommand(
 // we need to go straight to launch services
 //
 
-#if defined(__DARWIN__)
-
 //on darwin, use launch services
+
 #include <ApplicationServices/ApplicationServices.h>
 
 wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
@@ -456,74 +455,6 @@ wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
 
     return wxEmptyString;
 }
-
-#else //carbon/classic implementation
-
-
-wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
-{
-    wxASSERT_MSG( m_manager != NULL , wxT("Bad wxFileType") );
-
-    if (verb == wxT("open"))
-    {
-        ICMapEntry entry;
-        ICGetMapEntry( (ICInstance) m_manager->m_hIC,
-                       (Handle) m_manager->m_hDatabase,
-                       m_lIndex, &entry);
-
-        //The entry in the mimetype database only contains the app
-        //that's registered - it may not exist... we need to remap the creator
-        //type and find the right application
-
-        // THIS IS REALLY COMPLICATED :\.
-        // There are a lot of conversions going on here.
-        Str255 outName;
-        FSSpec outSpec;
-        OSErr err = FindApplication( entry.fileCreator, false, outName, &outSpec );
-        if (err != noErr)
-            return wxEmptyString;
-
-        Handle outPathHandle;
-        short outPathSize;
-        err = FSpGetFullPath( &outSpec, &outPathSize, &outPathHandle );
-        if (err == noErr)
-        {
-            char* szPath = *outPathHandle;
-            wxString sClassicPath(szPath, wxConvLocal, outPathSize);
-
-#if defined(__DARWIN__)
-            // Classic Path --> Unix (OSX) Path
-            CFURLRef finalURL = CFURLCreateWithFileSystemPath(
-                kCFAllocatorDefault,
-                wxMacCFStringHolder(sClassicPath, wxLocale::GetSystemEncoding()),
-                kCFURLHFSPathStyle,
-                false ); //false == not a directory
-
-            //clean up memory from the classic path handle
-            DisposeHandle( outPathHandle );
-
-            if (finalURL)
-            {
-                CFStringRef cfsUnixPath = CFURLCopyFileSystemPath(finalURL, kCFURLPOSIXPathStyle);
-                CFRelease(finalURL);
-
-                // PHEW!  Success!
-                if (cfsUnixPath)
-                    return wxMacCFStringHolder(cfsUnixPath).AsString(wxLocale::GetSystemEncoding());
-            }
-#else //classic HFS path acceptable
-            return sClassicPath;
-#endif
-        }
-        else
-        {
-            wxLogMimeDebug(wxT("FSpGetFullPath failed."), (OSStatus)err);
-        }
-    }
-
-    return wxEmptyString;
-}
-#endif //!DARWIN
 
 bool wxFileTypeImpl::GetDescription(wxString *desc) const
 {
@@ -1681,10 +1612,8 @@ wxFileType* wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
         wxLogDebug(wxT("No main bundle"));
     }
 
-#if defined(__DARWIN__)
     if (!bInfoSuccess)
         return NULL;
-#endif
 
     // on mac you have to embed it into the mac's file reference resource ('FREF' I believe)
     // or, alternately, you could just add an entry to m_hDatabase, but you'd need to get
@@ -1991,10 +1920,8 @@ wxMimeTypesManagerImpl::Unassociate(wxFileType *pFileType)
         wxLogDebug(wxT("No main bundle"));
     }
 
-#if defined(__DARWIN__)
     if (!bInfoSuccess)
         return false;
-#endif
 
     // this should be as easy as removing the entry from the database
     // and then saving the database

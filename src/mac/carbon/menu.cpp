@@ -469,9 +469,8 @@ void wxMenu::MacBeforeDisplay( bool isSubMenu )
             // shown in the application menu anyhow -- it doesn't make
             // sense to show them in their normal place as well
             if ( item->GetId() == wxApp::s_macAboutMenuItemId ||
-                ( UMAGetSystemVersion() >= 0x1000 && (
                     item->GetId() == wxApp::s_macPreferencesMenuItemId ||
-                    item->GetId() == wxApp::s_macExitMenuItemId ) ) )
+                    item->GetId() == wxApp::s_macExitMenuItemId )
 
             {
                 ChangeMenuItemAttributes( MAC_WXHMENU( GetHMenu() ),
@@ -749,7 +748,7 @@ void wxMenuBar::MacInstallMenuBar()
         helpMenuHandle = NULL ;
     }
 
-    if ( UMAGetSystemVersion() >= 0x1000 && wxApp::s_macPreferencesMenuItemId)
+    if ( wxApp::s_macPreferencesMenuItemId)
     {
         wxMenuItem *item = FindItem( wxApp::s_macPreferencesMenuItemId , NULL ) ;
         if ( item == NULL || !(item->IsEnabled()) )
@@ -762,7 +761,7 @@ void wxMenuBar::MacInstallMenuBar()
     // enabled unless it is added by the application and then disabled, otherwise
     // a program would be required to add an item with wxID_EXIT in order to get the
     // Quit menu item to be enabled, which seems a bit burdensome.
-    if ( UMAGetSystemVersion() >= 0x1000 && wxApp::s_macExitMenuItemId)
+    if ( wxApp::s_macExitMenuItemId)
     {
         wxMenuItem *item = FindItem( wxApp::s_macExitMenuItemId , NULL ) ;
         if ( item != NULL && !(item->IsEnabled()) )

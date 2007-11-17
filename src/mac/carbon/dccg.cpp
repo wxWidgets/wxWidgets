@@ -2234,17 +2234,14 @@ void wxDC::Clear(void)
                     wxFAIL_MSG( wxT("There shouldn't be theme backgrounds under Quartz") ) ;
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-                    if ( UMAGetSystemVersion() >= 0x1030 )
+                    HIThemeBackgroundDrawInfo drawInfo ;
+                    drawInfo.version = 0 ;
+                    drawInfo.state = kThemeStateActive ;
+                    drawInfo.kind = m_backgroundBrush.MacGetThemeBackground( NULL ) ;
+                    if ( drawInfo.kind == kThemeBackgroundMetal )
                     {
-                        HIThemeBackgroundDrawInfo drawInfo ;
-                        drawInfo.version = 0 ;
-                        drawInfo.state = kThemeStateActive ;
-                        drawInfo.kind = m_backgroundBrush.MacGetThemeBackground( NULL ) ;
-                        if ( drawInfo.kind == kThemeBackgroundMetal )
-                        {
-                            HIThemeDrawBackground( &rect, &drawInfo, cg, kHIThemeOrientationNormal ) ;
-                            HIThemeApplyBackground( &rect, &drawInfo, cg, kHIThemeOrientationNormal ) ;
-                        }
+                        HIThemeDrawBackground( &rect, &drawInfo, cg, kHIThemeOrientationNormal ) ;
+                        HIThemeApplyBackground( &rect, &drawInfo, cg, kHIThemeOrientationNormal ) ;
                     }
 #endif
                 }

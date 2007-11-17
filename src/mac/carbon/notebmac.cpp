@@ -405,7 +405,7 @@ void wxNotebook::MacSetupTabs()
         info.name = cflabel ;
         m_peer->SetData<ControlTabInfoRecV1>( ii + 1, kControlTabInfoTag, &info ) ;
 
-        if ( GetImageList() && GetPageImage(ii) >= 0 && UMAGetSystemVersion() >= 0x1020 )
+        if ( GetImageList() && GetPageImage(ii) >= 0 )
         {
             const wxBitmap bmap = GetImageList()->GetBitmap( GetPageImage( ii ) ) ;
             if ( bmap.Ok() )

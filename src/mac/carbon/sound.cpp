@@ -71,7 +71,7 @@
 static wxTimer* lastSoundTimer=NULL;
 static bool lastSoundIsPlaying=false;
 
-#if !defined(__DARWIN__) || !defined(__LP64__)
+#if !defined(__LP64__)
 #define USE_QUICKTIME 1
 #else
 #define USE_QUICKTIME 0

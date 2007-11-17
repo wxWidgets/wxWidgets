@@ -31,7 +31,7 @@
 #include <limits>
 
 #if defined(__MWERKS__) && wxUSE_UNICODE
-#if __MWERKS__ < 0x4100 || !defined(__DARWIN__)
+#if __MWERKS__ < 0x4100 
     #include <wtime.h>
 #endif
 #endif

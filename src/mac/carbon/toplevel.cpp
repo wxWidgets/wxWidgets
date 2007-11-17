@@ -1222,10 +1222,7 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
         if ( HasFlag( wxCLOSE_BOX) )
             attr |= kWindowCloseBoxAttribute ;
     }
-
-    // turn on live resizing (OS X only)
-    if (UMAGetSystemVersion() >= 0x1000)
-        attr |= kWindowLiveResizeAttribute;
+    attr |= kWindowLiveResizeAttribute;
 
     if ( HasFlag(wxSTAY_ON_TOP) )
         group = GetWindowGroupOfClass(kUtilityWindowClass) ;
@@ -1399,11 +1396,9 @@ bool wxTopLevelWindowMac::Show(bool show)
     if ( !wxTopLevelWindowBase::Show(show) )
         return false;
 
-    bool plainTransition = false;
+    bool plainTransition = true;
 
 #if wxUSE_SYSTEM_OPTIONS
-    // code contributed by Ryan Wilcox December 18, 2003
-    plainTransition = UMAGetSystemVersion() >= 0x1000 ;
     if ( wxSystemOptions::HasOption(wxMAC_WINDOW_PLAIN_TRANSITION) )
         plainTransition = ( wxSystemOptions::GetOptionInt( wxMAC_WINDOW_PLAIN_TRANSITION ) == 1 ) ;
 #endif

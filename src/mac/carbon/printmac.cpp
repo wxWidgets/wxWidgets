@@ -509,17 +509,14 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
             }
             else
             {
-                if ( UMAGetSystemVersion() >= 0x1000 )
-                {
 #if !wxMAC_USE_CORE_GRAPHICS
-                    GrafPtr thePort ;
-                    GetPort( &thePort ) ;
+                GrafPtr thePort ;
+                GetPort( &thePort ) ;
 #endif
-                    wxSafeYield(win,true);
+                wxSafeYield(win,true);
 #if !wxMAC_USE_CORE_GRAPHICS
-                    SetPort( thePort ) ;
+                SetPort( thePort ) ;
 #endif
-                }
                 dc->StartPage();
                 keepGoing = printout->OnPrintPage(pn);
                 dc->EndPage();

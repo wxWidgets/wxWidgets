@@ -100,7 +100,7 @@ void wxMenuItem::UpdateItemStatus()
     if ( IsSeparator() )
         return ;
 
-    if ( UMAGetSystemVersion() >= 0x1000 && GetId() == wxApp::s_macPreferencesMenuItemId)
+    if ( GetId() == wxApp::s_macPreferencesMenuItemId)
     {
         if ( !IsEnabled() )
             DisableMenuCommand( NULL , kHICommandPreferences ) ;
@@ -108,7 +108,7 @@ void wxMenuItem::UpdateItemStatus()
             EnableMenuCommand( NULL , kHICommandPreferences ) ;
     }
 
-    if ( UMAGetSystemVersion() >= 0x1000 && GetId() == wxApp::s_macExitMenuItemId)
+    if ( GetId() == wxApp::s_macExitMenuItemId)
     {
         if ( !IsEnabled() )
             DisableMenuCommand( NULL , kHICommandQuit ) ;

@@ -613,8 +613,7 @@ static pascal void ListBoxDrawProc(
         // TODO: switch over to wxSystemSettingsNative::GetColour() when kThemeBrushSecondaryHighlightColor
         // is incorporated Panther DB starts using kThemeBrushSecondaryHighlightColor
         // for inactive browser highlighting
-        Gestalt( gestaltSystemVersion, &systemVersion );
-        if ( (systemVersion >= 0x00001030) && !IsControlActive( browser ) )
+        if ( !IsControlActive( browser ) )
             colorBrushID = kThemeBrushSecondaryHighlightColor;
         else
             colorBrushID = kThemeBrushPrimaryHighlightColor;
