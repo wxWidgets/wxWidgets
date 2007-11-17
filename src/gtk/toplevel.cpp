@@ -54,7 +54,9 @@
 // data
 // ----------------------------------------------------------------------------
 
-extern int              g_openDialogs;
+// this is incremented while a modal dialog is shown
+int wxOpenModalDialogsCount = 0;
+
 extern wxWindowGTK     *g_delayedFocus;
 
 // the frame that is currently active (i.e. its child has focus). It is
@@ -275,7 +277,7 @@ gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget),
                            wxTopLevelWindowGTK *win )
 {
     if (win->IsEnabled() &&
-        (g_openDialogs == 0 || (win->GetExtraStyle() & wxTOPLEVEL_EX_DIALOG) ||
+        (wxOpenModalDialogsCount == 0 || (win->GetExtraStyle() & wxTOPLEVEL_EX_DIALOG) ||
          win->IsGrabbed()))
         win->Close();
 

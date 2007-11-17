@@ -20,12 +20,8 @@
 
 #include <gtk/gtk.h>
 
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-// Don't allow window closing if there are open dialogs
-int g_openDialogs;
+// this is defined in src/gtk/toplevel.cpp
+extern int wxOpenModalDialogsCount;
 
 //-----------------------------------------------------------------------------
 // wxDialog
@@ -120,7 +116,7 @@ int wxDialog::ShowModal()
 
     m_modalShowing = true;
 
-    g_openDialogs++;
+    wxOpenModalDialogsCount++;
 
     // NOTE: gtk_window_set_modal internally calls gtk_grab_add() !
     gtk_window_set_modal(GTK_WINDOW(m_widget), TRUE);
@@ -129,7 +125,7 @@ int wxDialog::ShowModal()
 
     gtk_window_set_modal(GTK_WINDOW(m_widget), FALSE);
 
-    g_openDialogs--;
+    wxOpenModalDialogsCount--;
 
     return GetReturnCode();
 }
