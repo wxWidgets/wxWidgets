@@ -53,8 +53,11 @@ public:
 
     // the id for a popup menu is really its menu handle (as required by
     // ::AppendMenu() API), so this function will return either the id or the
-    // menu handle depending on what we're
-    int GetRealId() const;
+    // menu handle depending on what we are
+    //
+    // notice that it also returns the id as an unsigned int, as required by
+    // Win32 API
+    unsigned GetMSWId() const;
 
     // mark item as belonging to the given radio group
     void SetAsRadioGroupStart();

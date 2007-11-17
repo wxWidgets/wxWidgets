@@ -97,7 +97,7 @@ typedef struct tagMENUINFO
 // ----------------------------------------------------------------------------
 
 // the (popup) menu title has this special id
-static const int idMenuTitle = -3;
+static const UINT idMenuTitle = (UINT)-3;
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -399,7 +399,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         flags |= MF_POPUP;
     }
     else {
-        id = pItem->GetId();
+        id = pItem->GetMSWId();
     }
 
 
@@ -564,7 +564,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 
 
     // if we just appended the title, highlight it
-    if ( (int)id == idMenuTitle )
+    if ( id == idMenuTitle )
     {
         // visually select the menu title
         SetDefaultMenuItem(GetHmenu(), id);
@@ -731,7 +731,7 @@ void wxMenu::SetTitle(const wxString& label)
         if ( !label.empty() )
         {
             if ( !::InsertMenu(hMenu, 0u, MF_BYPOSITION | MF_STRING,
-                               (unsigned)idMenuTitle, m_title.wx_str()) ||
+                               idMenuTitle, m_title.wx_str()) ||
                  !::InsertMenu(hMenu, 1u, MF_BYPOSITION, (unsigned)-1, NULL) )
             {
                 wxLogLastError(wxT("InsertMenu"));
@@ -767,7 +767,7 @@ void wxMenu::SetTitle(const wxString& label)
 #else
             if ( !ModifyMenu(hMenu, 0u,
                              MF_BYPOSITION | MF_STRING,
-                             (unsigned)idMenuTitle, m_title.wx_str()) )
+                             idMenuTitle, m_title.wx_str()) )
             {
                 wxLogLastError(wxT("ModifyMenu"));
             }
@@ -779,7 +779,7 @@ void wxMenu::SetTitle(const wxString& label)
     // put the title string in bold face
     if ( !m_title.empty() )
     {
-        SetDefaultMenuItem(GetHmenu(), (UINT)idMenuTitle);
+        SetDefaultMenuItem(GetHmenu(), idMenuTitle);
     }
 #endif // Win32
 }

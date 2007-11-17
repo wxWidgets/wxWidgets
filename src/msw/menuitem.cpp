@@ -186,9 +186,14 @@ wxMenuItem::~wxMenuItem()
 // ----
 
 // return the id for calling Win32 API functions
-int wxMenuItem::GetRealId() const
+unsigned wxMenuItem::GetMSWId() const
 {
-    return m_subMenu ? (int)m_subMenu->GetHMenu() : GetId();
+    // we must use ids in unsigned short range with Windows functions, if we
+    // pass ids > USHRT_MAX to them they get very confused (e.g. start
+    // generating WM_COMMAND messages with negative high word of wParam), so
+    // use the cast to ensure the id is in range
+    return m_subMenu ? wx_reinterpret_cast(unsigned, m_subMenu->GetHMenu())
+                     : wx_static_cast(unsigned short, GetId());
 }
 
 // get item state
@@ -201,7 +206,7 @@ bool wxMenuItem::IsChecked() const
     if ( GetId() == wxID_SEPARATOR )
         return false ;
 
-    int flag = ::GetMenuState(GetHMenuOf(m_parentMenu), GetId(), MF_BYCOMMAND);
+    int flag = ::GetMenuState(GetHMenuOf(m_parentMenu), GetMSWId(), MF_BYCOMMAND);
 
     return (flag & MF_CHECKED) != 0;
 }
@@ -245,7 +250,7 @@ void wxMenuItem::Enable(bool enable)
         return;
 
     long rc = EnableMenuItem(GetHMenuOf(m_parentMenu),
-                             GetRealId(),
+                             GetMSWId(),
                              MF_BYCOMMAND |
                              (enable ? MF_ENABLED : MF_GRAYED));
 
@@ -327,7 +332,7 @@ void wxMenuItem::Check(bool check)
     else // check item
     {
         if ( ::CheckMenuItem(hmenu,
-                             GetRealId(),
+                             GetMSWId(),
                              MF_BYCOMMAND | flags) == (DWORD)-1 )
         {
             wxFAIL_MSG( _T("CheckMenuItem() failed, item not in the menu?") );
@@ -364,7 +369,7 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
     m_parentMenu->UpdateAccel(this);
 #endif // wxUSE_ACCEL
 
-    UINT id = GetRealId();
+    UINT id = GetMSWId();
     UINT flagsOld = ::GetMenuState(hMenu, id, MF_BYCOMMAND);
     if ( flagsOld == 0xFFFFFFFF )
     {

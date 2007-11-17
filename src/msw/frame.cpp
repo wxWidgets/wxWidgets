@@ -946,8 +946,11 @@ bool wxFrame::HandleSize(int WXUNUSED(x), int WXUNUSED(y), WXUINT id)
     return false;
 }
 
-bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
+bool wxFrame::HandleCommand(WXWORD id_, WXWORD cmd, WXHWND control)
 {
+    // sign extend to int from short before comparing with the other int ids
+    int id = (signed short)id_;
+
     if ( control )
     {
         // In case it's e.g. a toolbar.
