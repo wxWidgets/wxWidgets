@@ -94,36 +94,36 @@ class WXDLLIMPEXP_FWD_CORE wxBitmap;
 //
 // Controls
 //
-WXDLLEXPORT_DATA(extern const wxChar) wxButtonNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxCheckBoxNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxChoiceNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxComboBoxNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxDialogNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxFrameNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxGaugeNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxStaticBoxNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxListBoxNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxStaticLineNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxStaticTextNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxStaticBitmapNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxPanelNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxRadioBoxNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxRadioButtonNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxBitmapRadioButtonNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxScrollBarNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxSliderNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxTextCtrlNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxToolBarNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxStatusLineNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxGetTextFromUserPromptStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxMessageBoxCaptionStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxFileSelectorPromptStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxFileSelectorDefaultWildcardStr[];
+WXDLLEXPORT_DATA(extern const char)   wxButtonNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxCheckBoxNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxChoiceNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxComboBoxNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxDialogNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxFrameNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxGaugeNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxStaticBoxNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxListBoxNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxStaticLineNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxStaticTextNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxStaticBitmapNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxPanelNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxRadioBoxNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxRadioButtonNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxBitmapRadioButtonNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxScrollBarNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxSliderNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxTextCtrlNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxToolBarNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxStatusLineNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxGetTextFromUserPromptStr[];
+WXDLLEXPORT_DATA(extern const char)   wxMessageBoxCaptionStr[];
+WXDLLEXPORT_DATA(extern const char)   wxFileSelectorPromptStr[];
+WXDLLEXPORT_DATA(extern const char)   wxFileSelectorDefaultWildcardStr[];
 WXDLLEXPORT_DATA(extern const wxChar*) wxInternalErrorStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxFatalErrorStr;
-WXDLLEXPORT_DATA(extern const wxChar) wxTreeCtrlNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxDirDialogNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxDirDialogDefaultFolderStr[];
+WXDLLEXPORT_DATA(extern const char)   wxTreeCtrlNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxDirDialogNameStr[];
+WXDLLEXPORT_DATA(extern const char)   wxDirDialogDefaultFolderStr[];
 
 //
 // Class names
