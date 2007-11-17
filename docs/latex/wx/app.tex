@@ -236,6 +236,21 @@ different visuals, false otherwise.
 \helpref{SetUseBestVisual}{wxappsetusebestvisual}
 
 
+\membersection{wxApp::GetVendorDisplayName}\label{wxappgetvendordisplayname}
+
+\constfunc{wxString}{GetVendorDisplayName}{\void}
+
+Returns the user-readable vendor name. The difference between this string
+and the one returned by \helpref{GetVendorName}{wxappgetvendorname} is that this one
+is meant to be shown to the user and so should be used for the window titles,
+page headers and so on while the other one should be only used internally, e.g.
+for the file names or configuration file keys.
+
+By default, returns the same string as \helpref{GetVendorName}{wxappgetvendorname}.
+
+\newsince{2.9.0}
+
+
 \membersection{wxApp::GetVendorName}\label{wxappgetvendorname}
 
 \constfunc{wxString}{GetVendorName}{\void}
@@ -696,6 +711,14 @@ needs to use the top window.
 
 \helpref{wxApp::GetTopWindow}{wxappgettopwindow}, \helpref{wxApp::OnInit}{wxapponinit}
 
+
+\membersection{wxApp::SetVendorDisplayName}\label{wxappsetvendordisplayname}
+
+\func{void}{SetVendorDisplayName}{\param{const wxString\& }{name}}
+
+Set the vendor name to be used in the user-visible places. See
+\helpref{GetVendorDisplayName}{wxappgetvendordisplayname} for more about
+the differences between the display name and name.
 
 
 \membersection{wxApp::SetVendorName}\label{wxappsetvendorname}

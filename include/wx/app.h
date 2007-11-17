@@ -143,6 +143,19 @@ public:
     const wxString& GetVendorName() const { return m_vendorName; }
     void SetVendorName(const wxString& name) { m_vendorName = name; }
 
+        // set/get the vendor display name:  the display name is shown
+        // in titles/reports/dialogs to the user, while the vendor name
+        // is used in some areas such as wxConfig, wxStandardPaths, etc
+    const wxString& GetVendorDisplayName() const
+    {
+        return m_vendorDisplayName.empty() ? GetVendorName()
+                                           : m_vendorDisplayName;
+    }
+    void SetVendorDisplayName(const wxString& name)
+    {
+        m_vendorDisplayName = name;
+    }
+
 
     // cmd line parsing stuff
     // ----------------------
@@ -346,7 +359,8 @@ protected:
     wxEventLoopBase *CreateMainLoop();
 
     // application info (must be set from the user code)
-    wxString m_vendorName,        // vendor name (e.g. "ACME Inc")
+    wxString m_vendorName,        // vendor name ("acme")
+             m_vendorDisplayName, // vendor display name (e.g. "ACME Inc")
              m_appName,           // app name ("myapp")
              m_appDisplayName,    // app display name ("My Application")
              m_className;         // class name
