@@ -736,16 +736,15 @@ wxGDIObjListBase::~wxGDIObjListBase()
 
 wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, int style)
 {
-    for (wxList::compatibility_iterator node = list.GetFirst(); node; node = node->GetNext())
+    for ( wxList::compatibility_iterator node = list.GetFirst();
+          node;
+          node = node->GetNext() )
     {
-        wxPen *each_pen = (wxPen *) node->GetData ();
-        if (
-                each_pen->GetWidth () == width &&
-                each_pen->GetStyle () == style &&
-                each_pen->GetColour ().Red () == colour.Red () &&
-                each_pen->GetColour ().Green () == colour.Green () &&
-                each_pen->GetColour ().Blue () == colour.Blue ())
-            return each_pen;
+        wxPen * const pen = (wxPen *) node->GetData();
+        if ( pen->GetWidth () == width &&
+                pen->GetStyle () == style &&
+                    pen->GetColour() == colour )
+            return pen;
     }
 
     wxPen* pen = NULL;
@@ -761,15 +760,13 @@ wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, int style)
 
 wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, int style)
 {
-    for (wxList::compatibility_iterator node = list.GetFirst(); node; node = node->GetNext())
+    for ( wxList::compatibility_iterator node = list.GetFirst();
+          node;
+          node = node->GetNext() )
     {
-        wxBrush *each_brush = (wxBrush *) node->GetData ();
-        if (
-                each_brush->GetStyle () == style &&
-                each_brush->GetColour ().Red () == colour.Red () &&
-                each_brush->GetColour ().Green () == colour.Green () &&
-                each_brush->GetColour ().Blue () == colour.Blue ())
-            return each_brush;
+        wxBrush * const brush = (wxBrush *) node->GetData ();
+        if ( brush->GetStyle () == style && brush->GetColour() == colour )
+            return brush;
     }
 
     wxBrush* brush = NULL;
