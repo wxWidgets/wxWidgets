@@ -747,6 +747,10 @@ void wxGenericDirCtrl::OnExpandItem(wxTreeEvent &event)
         m_rootId = m_treeCtrl->GetRootItem();
 
     ExpandDir(parentId);
+    if ( m_treeCtrl->GetChildrenCount(parentId, false) == 0 )
+    {
+        m_treeCtrl->SetItemHasChildren(parentId, false);
+    }
 }
 
 void wxGenericDirCtrl::OnCollapseItem(wxTreeEvent &event )
@@ -846,7 +850,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
     dirs.Sort(wxDirCtrlStringCompareFunction);
 
     // Now do the filenames -- but only if we're allowed to
-    if ((GetWindowStyle() & wxDIRCTRL_DIR_ONLY) == 0)
+    if (!HasFlag(wxDIRCTRL_DIR_ONLY))
     {
         d.Open(dirName);
 
@@ -893,20 +897,16 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
         m_treeCtrl->SetItemImage( id, wxFileIconsTable::folder_open,
                                   wxTreeItemIcon_Expanded );
 
-        // Has this got any children? If so, make it expandable.
-        // (There are two situations when a dir has children: either it
-        // has subdirectories or it contains files that weren't filtered
-        // out. The latter only applies to dirctrl with files.)
-        if ( dir_item->HasSubDirs() ||
-             (((GetWindowStyle() & wxDIRCTRL_DIR_ONLY) == 0) &&
-               dir_item->HasFiles(m_currentFilterStr)) )
-        {
-            m_treeCtrl->SetItemHasChildren(id);
-        }
+        // assume that it does have children by default as it can take a long
+        // time to really check for this (think remote drives...)
+        //
+        // and if we're wrong, we'll correct it later in OnExpandItem() if
+        // the user really tries to open this item
+        m_treeCtrl->SetItemHasChildren(id);
     }
 
     // Add the sorted filenames
-    if ((GetWindowStyle() & wxDIRCTRL_DIR_ONLY) == 0)
+    if (!HasFlag(wxDIRCTRL_DIR_ONLY))
     {
         for (i = 0; i < filenames.GetCount(); i++)
         {
@@ -1021,7 +1021,7 @@ bool wxGenericDirCtrl::ExpandPath(const wxString& path)
     {
         m_treeCtrl->Expand(lastId);
     }
-    if ((GetWindowStyle() & wxDIRCTRL_SELECT_FIRST) && data->m_isDir)
+    if (HasFlag(wxDIRCTRL_SELECT_FIRST) && data->m_isDir)
     {
         // Find the first file in this directory
         wxTreeItemIdValue cookie;
