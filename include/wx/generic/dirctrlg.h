@@ -166,6 +166,10 @@ public:
     // Collapse the entire tree
     virtual void CollapseTree();
 
+
+    // overridden base class methods
+    virtual void SetFocus();
+
 protected:
     virtual void ExpandRoot();
     virtual void ExpandDir(wxTreeItemId parentId);

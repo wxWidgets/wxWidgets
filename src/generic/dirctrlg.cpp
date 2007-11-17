@@ -664,6 +664,13 @@ void wxGenericDirCtrl::SetupSections()
         AddSection(paths[n], names[n], icons[n]);
 }
 
+void wxGenericDirCtrl::SetFocus()
+{
+    // we don't need focus ourselves, give it to the tree so that the user
+    // could navigate it
+    m_treeCtrl->SetFocus();
+}
+
 void wxGenericDirCtrl::OnBeginEditItem(wxTreeEvent &event)
 {
     // don't rename the main entry "Sections"
