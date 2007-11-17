@@ -650,12 +650,10 @@ void wxGridCellTextEditor::DoCreate(wxWindow* parent,
                                     wxEvtHandler* evtHandler,
                                     long style)
 {
-#if defined(__WXMSW__)
     style |= wxTE_PROCESS_ENTER |
              wxTE_PROCESS_TAB |
              wxTE_AUTO_SCROLL |
              wxNO_BORDER;
-#endif
 
     m_control = new wxTextCtrl(parent, id, wxEmptyString,
                                wxDefaultPosition, wxDefaultSize,
