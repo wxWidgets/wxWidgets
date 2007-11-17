@@ -33,6 +33,7 @@
     #endif
     #include "wx/intl.h"
     #include "wx/hashmap.h"
+    #include "wx/filefn.h"
 #endif // WX_PRECOMP
 
 #include "wx/dir.h"
