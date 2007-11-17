@@ -80,6 +80,13 @@ public:
     void *optval, int *optlen);
   GSocketError SetSockOpt(int level, int optname,
     const void *optval, int optlen);
+
+  void SetInitialSocketBuffers(int recv, int send)
+  {
+      m_initialRecvBufferSize = recv;
+      m_initialSendBufferSize = send;
+  }
+
 protected:
   GSocketError Input_Timeout();
   GSocketError Output_Timeout();
@@ -89,6 +96,8 @@ protected:
   int Send_Stream(const char *buffer, int size);
   int Send_Dgram(const char *buffer, int size);
   bool m_ok;
+  int m_initialRecvBufferSize;
+  int m_initialSendBufferSize;
 
 /* TODO: Make these protected */
 public:

@@ -72,6 +72,12 @@ public:
         const void *optval, int optlen);
     virtual void Detected_Read();
     virtual void Detected_Write();
+    void SetInitialSocketBuffers(int recv, int send)
+    {
+        m_initialRecvBufferSize = recv;
+        m_initialSendBufferSize = send;
+    }
+
 protected:
     void Enable(GSocketEvent event);
     void Disable(GSocketEvent event);
@@ -82,6 +88,8 @@ protected:
     int Send_Stream(const char *buffer, int size);
     int Send_Dgram(const char *buffer, int size);
     bool m_ok;
+    int m_initialRecvBufferSize;
+    int m_initialSendBufferSize;
 public:
     /* DFE: We can't protect these data member until the GUI code is updated */
     /* protected: */

@@ -1303,6 +1303,10 @@ bool wxSocketClient::DoConnect(wxSockAddress& addr_man, wxSockAddress* local, bo
       m_socket->SetLocal(la);
   }
 
+#if defined(__WXMSW__) || defined(__WXGTK__)
+  m_socket->SetInitialSocketBuffers(m_initialRecvBufferSize, m_initialSendBufferSize);
+#endif
+
   m_socket->SetPeer(addr_man.GetAddress());
   err = m_socket->Connect(GSOCK_STREAMED);
 

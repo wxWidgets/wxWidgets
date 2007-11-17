@@ -541,6 +541,8 @@ GSocket::GSocket()
   m_timeout             = 10*60*1000;
                                 /* 10 minutes * 60 sec * 1000 millisec */
   m_establishing        = false;
+  m_initialRecvBufferSize = -1;
+  m_initialSendBufferSize = -1;
 
   assert(gs_gui_functions);
   /* Per-socket GUI-specific initialization */
@@ -1018,6 +1020,11 @@ GSocketError GSocket::Connect(GSocketStream stream)
     setsockopt(m_fd, SOL_SOCKET, SO_REUSEPORT, (const char*)&arg, sizeof(arg));
 #endif
   }
+
+  if (m_initialRecvBufferSize >= 0)
+    setsockopt(m_fd, SOL_SOCKET, SO_RCVBUF, (const char*)&m_initialRecvBufferSize, sizeof(m_initialRecvBufferSize));
+  if (m_initialSendBufferSize >= 0)
+    setsockopt(m_fd, SOL_SOCKET, SO_SNDBUF, (const char*)&m_initialSendBufferSize, sizeof(m_initialSendBufferSize));
 
   // If a local address has been set, then we need to bind to it before calling connect
   if (m_local && m_local->m_addr)

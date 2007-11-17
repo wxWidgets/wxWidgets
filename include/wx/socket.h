@@ -263,8 +263,21 @@ public:
 
   bool WaitOnConnect(long seconds = -1, long milliseconds = 0);
 
+  // Sets initial socket buffer sizes using the SO_SNDBUF and SO_RCVBUF options
+  // before calling connect (either one can be -1 to leave it unchanged)
+  void SetInitialSocketBuffers(int recv, int send)
+  {
+      m_initialRecvBufferSize = recv;
+      m_initialSendBufferSize = send;
+  }
+
 private:
-  virtual bool DoConnect(wxSockAddress& addr, wxSockAddress* local, bool wait = true);
+  virtual bool
+      DoConnect(wxSockAddress& addr, wxSockAddress* local, bool wait = true);
+
+  // buffer sizes, -1 if unset and defaults should be used
+  int m_initialRecvBufferSize;
+  int m_initialSendBufferSize;
 
   DECLARE_NO_COPY_CLASS(wxSocketClient)
 };
