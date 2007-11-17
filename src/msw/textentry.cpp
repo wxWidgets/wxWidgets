@@ -51,7 +51,7 @@
 #include "wx/msw/ole/oleutils.h"
 #include <shldisp.h>
 
-#if defined(__MINGW32__)
+#if defined(__MINGW32__) || defined (__WATCOMC__)
     // needed for IID_IAutoComplete, IID_IAutoComplete2 and ACO_AUTOSUGGEST
     #include <shlguid.h>
 #endif
