@@ -14,6 +14,7 @@
 
 #include "wx/object.h"
 #include "wx/list.h"
+#include "wx/arrstr.h"
 #include "wx/dynarray.h"
 
 // declare a linked list of modules
