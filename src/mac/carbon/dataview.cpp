@@ -22,8 +22,6 @@
 
 #ifndef WX_PRECOMP
   #include "wx/timer.h"
-  #include "wx/settings.h"
-  #include "wx/dcclient.h"
 #endif
 
 #include "wx/icon.h"
@@ -112,6 +110,67 @@ static DataBrowserItemID* CreateDataBrowserItemIDArray(size_t& noOfEntries, wxDa
  // done:
   return itemIDs;
 } /* CreateDataBrowserItemIDArray(size_t&, wxDataViewItemArray const&) */
+
+static bool InitializeColumnDescription(DataBrowserListViewColumnDesc& columnDescription, wxDataViewColumn const* columnPtr, DataBrowserPropertyID columnPropertyID, wxMacCFStringHolder const& title)
+{
+ // set properties for the column:
+  columnDescription.propertyDesc.propertyID    = columnPropertyID;
+  columnDescription.propertyDesc.propertyType  = columnPtr->GetRenderer()->GetPropertyType();
+  columnDescription.propertyDesc.propertyFlags = kDataBrowserListViewSelectionColumn; // make the column selectable
+  if (columnPtr->IsSortable())
+    columnDescription.propertyDesc.propertyFlags |= kDataBrowserListViewSortableColumn;
+#if 0
+  if (columnPtr->IsMovable())
+    columnDescription.propertyDesc.propertyFlags |= kDataBrowserListViewMovableColumn;
+#endif
+  if (columnPtr->GetRenderer()->GetMode() == wxDATAVIEW_CELL_EDITABLE)
+    columnDescription.propertyDesc.propertyFlags |= kDataBrowserPropertyIsEditable;
+  if ((columnDescription.propertyDesc.propertyType == kDataBrowserTextType) ||
+      (columnDescription.propertyDesc.propertyType == kDataBrowserIconAndTextType) ||
+      (columnDescription.propertyDesc.propertyType == kDataBrowserDateTimeType))
+    columnDescription.propertyDesc.propertyFlags |= kDataBrowserListViewTypeSelectColumn; // enables generally the possibility to have user input for the mentioned types
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+  columnDescription.propertyDesc.propertyFlags |= kDataBrowserListViewNoGapForIconInHeaderButton;
+#endif
+ // set header's properties:
+  columnDescription.headerBtnDesc.version = kDataBrowserListViewLatestHeaderDesc;
+  if (columnPtr->IsResizeable())
+  {
+    columnDescription.headerBtnDesc.minimumWidth = 0;
+    columnDescription.headerBtnDesc.maximumWidth = 30000; // 32767 is the theoretical maximum though but 30000 looks nicer
+  } /* if */
+  else
+  {
+    columnDescription.headerBtnDesc.minimumWidth = columnPtr->GetWidth();
+    columnDescription.headerBtnDesc.maximumWidth = columnPtr->GetWidth();
+  } /* if */
+  columnDescription.headerBtnDesc.titleOffset = 0;
+  columnDescription.headerBtnDesc.titleString = ::CFStringCreateCopy(kCFAllocatorDefault,title);
+  columnDescription.headerBtnDesc.initialOrder       = kDataBrowserOrderIncreasing; // choose one of the orders as "undefined" is not supported anyway (s. ControlDefs.h in the HIToolbox framework)
+  columnDescription.headerBtnDesc.btnFontStyle.flags = kControlUseFontMask | kControlUseJustMask;
+  switch (columnPtr->GetAlignment())
+  {
+    case wxALIGN_CENTER:
+    case wxALIGN_CENTER_HORIZONTAL:
+      columnDescription.headerBtnDesc.btnFontStyle.just = teCenter;
+      break;
+    case wxALIGN_LEFT:
+      columnDescription.headerBtnDesc.btnFontStyle.just = teFlushLeft;
+      break;
+    case wxALIGN_RIGHT:
+      columnDescription.headerBtnDesc.btnFontStyle.just = teFlushRight;
+      break;
+    default:
+      columnDescription.headerBtnDesc.btnFontStyle.just = teFlushDefault;
+  } /* switch */
+  columnDescription.headerBtnDesc.btnFontStyle.font  = kControlFontViewSystemFont;
+  columnDescription.headerBtnDesc.btnFontStyle.style = normal;
+  columnDescription.headerBtnDesc.btnContentInfo.contentType = kControlContentIconRef;
+  if (columnPtr->GetBitmap().Ok())
+    columnDescription.headerBtnDesc.btnContentInfo.u.iconRef = columnPtr->GetBitmap().GetBitmapData()->GetIconRef();
+ // done:
+  return true;
+} /* InitializeColumnDescription(DataBrowserListViewColumnDesc&, wxDataViewColumn const*, DataBrowserPropertyID, wxMacCFStringHolder const&) */
 
 //-----------------------------------------------------------------------------
 // local function pointers
@@ -384,9 +443,7 @@ wxDataViewCustomRenderer::~wxDataViewCustomRenderer(void)
 void wxDataViewCustomRenderer::RenderText( const wxString &text, int xoffset, wxRect cell, wxDC *dc, int state )
 {
     wxDataViewCtrl *view = GetOwner()->GetOwner();
-    wxColour col = (state & wxDATAVIEW_CELL_SELECTED) ?
-                        wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) :
-                        view->GetForegroundColour();
+    wxColour col = (state & wxDATAVIEW_CELL_SELECTED) ? wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) : view->GetForegroundColour();
     dc->SetTextForeground(col);
     dc->DrawText( text, cell.x + xoffset, cell.y + ((cell.height - dc->GetCharHeight()) / 2));
 }
@@ -413,10 +470,10 @@ void wxDataViewCustomRenderer::SetDC(wxDC* newDCPtr)
   this->m_DCPtr = newDCPtr;
 } /* wxDataViewCustomRenderer::SetDC(wxDC*) */
 
-WXDataBrowserPropertyType wxDataViewCustomRenderer::GetPropertyType() const
+WXDataBrowserPropertyType wxDataViewCustomRenderer::GetPropertyType(void) const
 {
-    return kDataBrowserCustomType;
-}
+  return kDataBrowserCustomType;
+} /* wxDataViewCustomRenderer::GetPropertyType(void) const */
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewCustomRenderer, wxDataViewRenderer)
 
@@ -442,12 +499,34 @@ bool wxDataViewTextRenderer::Render(void)
     return false;
 } /* wxDataViewTextRenderer::Render(void) */
 
-WXDataBrowserPropertyType wxDataViewTextRenderer::GetPropertyType() const
+WXDataBrowserPropertyType wxDataViewTextRenderer::GetPropertyType(void) const
 {
-    return kDataBrowserTextType;
-}
+  return kDataBrowserTextType;
+} /* wxDataViewTextRenderer::GetPropertyType(void) const */
 
 IMPLEMENT_CLASS(wxDataViewTextRenderer,wxDataViewRenderer)
+
+// --------------------------------------------------------- 
+// wxDataViewTextRendererAttr
+// --------------------------------------------------------- 
+#pragma mark -
+wxDataViewTextRendererAttr::wxDataViewTextRendererAttr(wxString const& varianttype, wxDataViewCellMode mode, int align)
+                           :wxDataViewTextRenderer(varianttype,mode,align)
+{
+} /* wxDataViewTextRendererAttr::wxDataViewTextRendererAttr(wxString const&, wxDataViewCellMode, int) */
+    
+IMPLEMENT_CLASS(wxDataViewTextRendererAttr,wxDataViewTextRenderer)
+
+// ---------------------------------------------------------
+// wxDataViewTextRendererAttr
+// ---------------------------------------------------------
+
+wxDataViewTextRendererAttr::wxDataViewTextRendererAttr(wxString const& varianttype, wxDataViewCellMode mode, int align)
+                       :wxDataViewTextRenderer(varianttype,mode,align)
+{
+}
+
+IMPLEMENT_CLASS(wxDataViewTextRendererAttr,wxDataViewTextRenderer)
 
 // ---------------------------------------------------------
 // wxDataViewBitmapRenderer
@@ -474,10 +553,10 @@ bool wxDataViewBitmapRenderer::Render(void)
     return false;
 } /* wxDataViewBitmapRenderer::Render(void) */
 
-WXDataBrowserPropertyType wxDataViewBitmapRenderer::GetPropertyType() const
+WXDataBrowserPropertyType wxDataViewBitmapRenderer::GetPropertyType(void) const
 {
-    return kDataBrowserIconType;
-}
+  return kDataBrowserIconType;
+} /* wxDataViewBitmapRenderer::GetPropertyType(void) const */
 
 IMPLEMENT_CLASS(wxDataViewBitmapRenderer,wxDataViewRenderer)
 
@@ -509,10 +588,10 @@ bool wxDataViewIconTextRenderer::Render(void)
     return false;
 } /* wxDataViewIconTextRenderer::Render(void) */
 
-WXDataBrowserPropertyType wxDataViewIconTextRenderer::GetPropertyType() const
+WXDataBrowserPropertyType wxDataViewIconTextRenderer::GetPropertyType(void) const
 {
-    return kDataBrowserIconAndTextType;
-}
+  return kDataBrowserIconAndTextType;
+} /* wxDataViewIconTextRenderer::GetPropertyType(void) const */
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewIconTextRenderer,wxDataViewRenderer)
 
@@ -534,10 +613,10 @@ bool wxDataViewToggleRenderer::Render(void)
     return false;
 } /* wxDataViewToggleRenderer::Render(void) */
 
-WXDataBrowserPropertyType wxDataViewToggleRenderer::GetPropertyType() const
+WXDataBrowserPropertyType wxDataViewToggleRenderer::GetPropertyType(void) const
 {
-    return kDataBrowserCheckboxType;
-}
+  return kDataBrowserCheckboxType;
+} /* wxDataViewToggleRenderer::GetPropertyType(void) const */
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewToggleRenderer,wxDataViewRenderer)
 
@@ -560,10 +639,10 @@ bool wxDataViewProgressRenderer::Render(void)
     return false;
 } /* wxDataViewProgressRenderer::Render(void) */
 
-WXDataBrowserPropertyType wxDataViewProgressRenderer::GetPropertyType() const
+WXDataBrowserPropertyType wxDataViewProgressRenderer::GetPropertyType(void) const
 {
-    return kDataBrowserProgressBarType;
-}
+  return kDataBrowserProgressBarType;
+} /* wxDataViewProgressRenderer::GetPropertyType(void) const */
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewProgressRenderer,wxDataViewRenderer)
 
@@ -584,10 +663,10 @@ bool wxDataViewDateRenderer::Render(void)
     return false;
 } /* wxDataViewDateRenderer::Render(void) */
 
-WXDataBrowserPropertyType wxDataViewDateRenderer::GetPropertyType() const
+WXDataBrowserPropertyType wxDataViewDateRenderer::GetPropertyType(void) const
 {
-    return kDataBrowserDateTimeType;
-}
+  return kDataBrowserDateTimeType;
+} /* wxDataViewDateRenderer::GetPropertyType(void) const */
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewDateRenderer,wxDataViewRenderer)
 
@@ -871,108 +950,51 @@ bool wxDataViewCtrl::AssociateModel(wxDataViewModel* model)
   return true;
 } /* wxDataViewCtrl::AssociateModel(wxDataViewModel*) */
 
-bool wxDataViewCtrl::AppendColumn(wxDataViewColumn* dataViewColumnPtr)
+bool wxDataViewCtrl::AppendColumn(wxDataViewColumn* columnPtr)
 {
+  DataBrowserListViewColumnDesc columnDescription;
+
   DataBrowserPropertyID NewPropertyID;
 
   wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
 
+  wxMacCFStringHolder title(columnPtr->GetTitle(),this->m_font.Ok() ? this->m_font.GetEncoding() : wxLocale::GetSystemEncoding());
+
 
  // first, some error checking:
-  wxCHECK_MSG(MacDataViewListCtrlPtr != NULL,                                            false,_("m_peer is not or incorrectly initialized"));
-  wxCHECK_MSG(dataViewColumnPtr != NULL,                                                 false,_("Column pointer must not be NULL."));
-  wxCHECK_MSG(dataViewColumnPtr->GetRenderer() != NULL,                                  false,_("Column does not have a renderer."));
-  wxCHECK_MSG(this->GetModel() != NULL,                                                  false,_("No model associated with control."));
-  wxCHECK_MSG((dataViewColumnPtr->GetModelColumn() >= 0) &&
-              (dataViewColumnPtr->GetModelColumn() < this->GetModel()->GetColumnCount()),false,_("Column's model column has no equivalent in the associated model."));
-  if ((MacDataViewListCtrlPtr->GetFreePropertyID(&NewPropertyID) == noErr) && this->wxDataViewCtrlBase::AppendColumn(dataViewColumnPtr))
+  wxCHECK_MSG(MacDataViewListCtrlPtr != NULL,                                    false,_("m_peer is not or incorrectly initialized"));
+  wxCHECK_MSG(columnPtr != NULL,                                                 false,_("Column pointer must not be NULL."));
+  wxCHECK_MSG(columnPtr->GetRenderer() != NULL,                                  false,_("Column does not have a renderer."));
+  wxCHECK_MSG(this->GetModel() != NULL,                                          false,_("No model associated with control."));
+  wxCHECK_MSG((columnPtr->GetModelColumn() >= 0) &&
+              (columnPtr->GetModelColumn() < this->GetModel()->GetColumnCount()),false,_("Column's model column has no equivalent in the associated model."));
+
+ // try to get new ID for the column:
+  wxCHECK_MSG(MacDataViewListCtrlPtr->GetFreePropertyID(&NewPropertyID) == noErr,false,_("Cannot create new column's ID. Probably max. number of columns reached."));
+ // full column variable initialization:
+  columnPtr->SetPropertyID(NewPropertyID);
+ // add column to wxWidget's internal structure:
+  wxCHECK_MSG(this->wxDataViewCtrlBase::AppendColumn(columnPtr) &&
+              this->m_ColumnPointers.insert(ColumnPointerHashMapType::value_type(NewPropertyID,columnPtr)).second,false,_("Could not add column to internal structures."));
+ // create a column description and add column to the native control:
+  wxCHECK_MSG(::InitializeColumnDescription(columnDescription,columnPtr,NewPropertyID,title),                 false,_("Column description could not be initialized."));
+  wxCHECK_MSG(MacDataViewListCtrlPtr->AddColumn(&columnDescription,kDataBrowserListViewAppendColumn) == noErr,false,_("Column could not be added."));
+
+ // final adjustments for the layout:
+  wxCHECK_MSG(MacDataViewListCtrlPtr->SetColumnWidth(NewPropertyID,columnPtr->GetWidth()) == noErr,false,_("Column width could not be set."));
+
+ // make sure that the data is up-to-date...
+ // if the newly appended column is the first column add the initial data to the control and mark the column as an expander column,
+ // otherwise ask the control to 'update' the data in the newly appended column:
+  if (this->GetColumnCount() == 1)
   {
-   // insert column into hash map:
-    this->m_ColumnPointers.insert(ColumnPointerHashMapType::value_type(NewPropertyID,dataViewColumnPtr));
-
-   // variable definitions:
-    DataBrowserListViewColumnDesc columnDescription;
-    wxMacCFStringHolder           cfTitle(dataViewColumnPtr->GetTitle(),(this->m_font.Ok() ? this->m_font.GetEncoding() : wxLocale::GetSystemEncoding()));
-
-   // initialize column description:
-    dataViewColumnPtr->SetPropertyID(NewPropertyID);
-    columnDescription.propertyDesc.propertyID = NewPropertyID;
-    columnDescription.propertyDesc.propertyType = DataBrowserPropertyType(dataViewColumnPtr->GetRenderer()->GetPropertyType());
-    columnDescription.propertyDesc.propertyFlags = kDataBrowserListViewSelectionColumn; // make the column selectable
-    if (dataViewColumnPtr->IsSortable())
-      columnDescription.propertyDesc.propertyFlags |= kDataBrowserListViewSortableColumn;
-#if 0
-    if (dataViewColumnPtr->IsMovable())
-      columnDescription.propertyDesc.propertyFlags |= kDataBrowserListViewMovableColumn;
-#endif
-    if (dataViewColumnPtr->GetRenderer()->GetMode() == wxDATAVIEW_CELL_EDITABLE)
-      columnDescription.propertyDesc.propertyFlags |= kDataBrowserPropertyIsEditable;
-
-    if ((columnDescription.propertyDesc.propertyType == kDataBrowserTextType) ||
-        (columnDescription.propertyDesc.propertyType == kDataBrowserIconAndTextType) ||
-        (columnDescription.propertyDesc.propertyType == kDataBrowserDateTimeType))
-      columnDescription.propertyDesc.propertyFlags |= kDataBrowserListViewTypeSelectColumn;
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    columnDescription.propertyDesc.propertyFlags |= kDataBrowserListViewNoGapForIconInHeaderButton;
-#endif
-    columnDescription.headerBtnDesc.version = kDataBrowserListViewLatestHeaderDesc;
-    if (dataViewColumnPtr->IsResizeable())
-    {
-      columnDescription.headerBtnDesc.minimumWidth = 0;
-      columnDescription.headerBtnDesc.maximumWidth = 30000;
-    } /* if */
-    else
-    {
-      columnDescription.headerBtnDesc.minimumWidth = dataViewColumnPtr->GetWidth();
-      columnDescription.headerBtnDesc.maximumWidth = dataViewColumnPtr->GetWidth();
-    } /* if */
-    columnDescription.headerBtnDesc.titleOffset = 0;
-    columnDescription.headerBtnDesc.titleString = cfTitle; // we cannot directly use the wxMacCFStringHolder constructor call because then the CFStringRef is released
-                                                           // having called 'AddColumn' where the title (CFStringRef) is going to be used
-    columnDescription.headerBtnDesc.initialOrder = kDataBrowserOrderIncreasing;
-    columnDescription.headerBtnDesc.btnFontStyle.flags = kControlUseFontMask | kControlUseJustMask;
-    switch (dataViewColumnPtr->GetAlignment())
-    {
-      case wxALIGN_CENTER:
-      case wxALIGN_CENTER_HORIZONTAL:
-        columnDescription.headerBtnDesc.btnFontStyle.just = teCenter;
-        break;
-      case wxALIGN_LEFT:
-        columnDescription.headerBtnDesc.btnFontStyle.just = teFlushLeft;
-        break;
-      case wxALIGN_RIGHT:
-        columnDescription.headerBtnDesc.btnFontStyle.just = teFlushRight;
-        break;
-      default:
-        columnDescription.headerBtnDesc.btnFontStyle.just = teFlushDefault;
-    } /* switch */
-    columnDescription.headerBtnDesc.btnFontStyle.font  = kControlFontViewSystemFont;
-    columnDescription.headerBtnDesc.btnFontStyle.style = normal;
-    columnDescription.headerBtnDesc.btnContentInfo.contentType = kControlContentIconRef;
-    if (dataViewColumnPtr->GetBitmap().Ok())
-      columnDescription.headerBtnDesc.btnContentInfo.u.iconRef = dataViewColumnPtr->GetBitmap().GetBitmapData()->GetIconRef();
-   // add column:
-    wxCHECK_MSG(MacDataViewListCtrlPtr->AddColumn(&columnDescription,kDataBrowserListViewAppendColumn) == noErr,false,_("Column could not be added."));
-
-   // final adjustments for the layout:
-    wxCHECK_MSG(MacDataViewListCtrlPtr->SetColumnWidth(NewPropertyID,dataViewColumnPtr->GetWidth()) == noErr,false,_("Column width could not be set."));
-
-   // make sure that the data is up-to-date...
-   // if the newly appended column is the first column add the initial data to the control and mark the column as an expander column,
-   // otherwise ask the control to 'update' the data in the newly appended column:
-    if (this->GetColumnCount() == 1)
-    {
-      this->SetExpanderColumn(dataViewColumnPtr);
-      this->AddChildrenLevel(wxDataViewItem());
-    } /* if */
-    else
-      MacDataViewListCtrlPtr->UpdateItems(kDataBrowserNoItem,0,NULL,kDataBrowserItemNoProperty,NewPropertyID);
-   // done:
-    return true;
+    this->SetExpanderColumn(columnPtr);
+    this->AddChildrenLevel(wxDataViewItem());
   } /* if */
   else
-    return false;
+    MacDataViewListCtrlPtr->UpdateItems(kDataBrowserNoItem,0,NULL,kDataBrowserItemNoProperty,NewPropertyID);
+ // done:
+  return true;
 } /* wxDataViewCtrl::AppendColumn(wxDataViewColumn*) */
 
 bool wxDataViewCtrl::ClearColumns(void)
@@ -1043,6 +1065,53 @@ int wxDataViewCtrl::GetColumnPosition(wxDataViewColumn const* columnPtr) const
   else
     return wxNOT_FOUND;
 } /* wxDataViewCtrl::GetColumnPosition(wxDataViewColumn const*) const */
+
+bool wxDataViewCtrl::PrependColumn(wxDataViewColumn* columnPtr)
+{
+  DataBrowserListViewColumnDesc columnDescription;
+
+  DataBrowserPropertyID NewPropertyID;
+
+  wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+
+  wxMacCFStringHolder title(columnPtr->GetTitle(),this->m_font.Ok() ? this->m_font.GetEncoding() : wxLocale::GetSystemEncoding());
+
+
+ // first, some error checking:
+  wxCHECK_MSG(MacDataViewListCtrlPtr != NULL,                                    false,_("m_peer is not or incorrectly initialized"));
+  wxCHECK_MSG(columnPtr != NULL,                                                 false,_("Column pointer must not be NULL."));
+  wxCHECK_MSG(columnPtr->GetRenderer() != NULL,                                  false,_("Column does not have a renderer."));
+  wxCHECK_MSG(this->GetModel() != NULL,                                          false,_("No model associated with control."));
+  wxCHECK_MSG((columnPtr->GetModelColumn() >= 0) &&
+              (columnPtr->GetModelColumn() < this->GetModel()->GetColumnCount()),false,_("Column's model column has no equivalent in the associated model."));
+
+ // try to get new ID for the column:
+  wxCHECK_MSG(MacDataViewListCtrlPtr->GetFreePropertyID(&NewPropertyID) == noErr,false,_("Cannot create new column's ID. Probably max. number of columns reached."));
+ // full column variable initialization:
+  columnPtr->SetPropertyID(NewPropertyID);
+ // add column to wxWidget's internal structure:
+  wxCHECK_MSG(this->wxDataViewCtrlBase::AppendColumn(columnPtr) &&
+              this->m_ColumnPointers.insert(ColumnPointerHashMapType::value_type(NewPropertyID,columnPtr)).second,false,_("Could not add column to internal structures."));
+ // create a column description and add column to the native control:
+  wxCHECK_MSG(::InitializeColumnDescription(columnDescription,columnPtr,NewPropertyID,title),false,_("Column description could not be initialized."));
+  wxCHECK_MSG(MacDataViewListCtrlPtr->AddColumn(&columnDescription,0) == noErr,              false,_("Column could not be added."));
+
+ // final adjustments for the layout:
+  wxCHECK_MSG(MacDataViewListCtrlPtr->SetColumnWidth(NewPropertyID,columnPtr->GetWidth()) == noErr,false,_("Column width could not be set."));
+
+ // make sure that the data is up-to-date...
+ // if the newly appended column is the first column add the initial data to the control and mark the column as an expander column,
+ // otherwise ask the control to 'update' the data in the newly appended column:
+  if (this->GetColumnCount() == 1)
+  {
+    this->SetExpanderColumn(columnPtr);
+    this->AddChildrenLevel(wxDataViewItem());
+  } /* if */
+  else
+    MacDataViewListCtrlPtr->UpdateItems(kDataBrowserNoItem,0,NULL,kDataBrowserItemNoProperty,NewPropertyID);
+ // done:
+  return true;
+} /* wxDataViewCtrl::PrependColumn(wxDataViewColumn*) */
 
 void wxDataViewCtrl::Collapse(wxDataViewItem const& item)
 {

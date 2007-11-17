@@ -9,32 +9,23 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef wxUSE_GENERICDATAVIEWCTRL
+
+#include <limits>
+
 #include "wx/wxprec.h"
-
-#if wxUSE_DATAVIEWCTRL
-#if !defined(wxUSE_GENERICDATAVIEWCTRL) || wxUSE_GENERICDATAVIEWCTRL == 0
-
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/toplevel.h"
     #include "wx/font.h"
-    #include "wx/settings.h"
 #endif
 
 #include "wx/dataview.h"
 #include "wx/utils.h"
 
-#include "wx/mac/private.h"
 #include "wx/mac/carbon/databrow.h"
+#include "wx/mac/private.h"
 #include "wx/mac/uma.h"
-
-#include <limits>
-
-#if defined(__MWERKS__) && wxUSE_UNICODE
-#if __MWERKS__ < 0x4100 
-    #include <wtime.h>
-#endif
-#endif
 
 // ============================================================================
 // wxMacDataBrowserTableViewControl
@@ -134,6 +125,7 @@ wxMacDataBrowserTableViewControl::wxMacDataBrowserTableViewControl(wxWindow* pee
       flags |= kDataBrowserSelectOnlyOne;
     (void) this->SetSelectionFlags(flags);
   } /* if */
+
   OptionBits attributes; // variable definition
   
   if (this->GetAttributes(&attributes) == noErr) // get default settings
@@ -144,6 +136,7 @@ wxMacDataBrowserTableViewControl::wxMacDataBrowserTableViewControl(wxWindow* pee
       attributes &= ~kDataBrowserAttributeListViewDrawColumnDividers;
     (void) this->SetAttributes(attributes);
   } /* if */
+
   if ((style & wxDV_NO_HEADER) != 0)
     this->SetHeaderButtonHeight(0);
 } /* wxMacDataBrowserTableViewControl::wxMacDataBrowserTableViewControl(wxWindow*, wxPoint const&, wxSize const&, long) */
@@ -938,4 +931,3 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
 
 
 #endif // wxUSE_GENERICDATAVIEWCTRL
-#endif // wxUSE_DATAVIEWCTRL

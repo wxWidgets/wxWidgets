@@ -10,15 +10,19 @@
 #ifndef _WX_MACCARBONDATAVIEWCTRL_H_
 #define _WX_MACCARBONDATAVIEWCTRL_H_
 
-typedef void* DataBrowserItemDataRef;
+// --------------------------------------------------------
+// Type definitions to mask native types
+// --------------------------------------------------------
+
+typedef void*         WXDataBrowserItemDataRef;
 typedef unsigned long WXDataBrowserPropertyType;
-typedef wxUint32 WXDataBrowserPropertyID;
+typedef wxUint32      WXDataBrowserPropertyID;
 
 // ---------------------------------------------------------
 // wxDataViewRenderer
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewRenderer: public wxDataViewRendererBase
+class WXDLLIMPEXP_ADV wxDataViewRenderer : public wxDataViewRendererBase
 {
 public:
 //
@@ -56,7 +60,7 @@ public:
 //
 // implementation
 //
-  DataBrowserItemDataRef GetDataReference(void) const
+  WXDataBrowserItemDataRef GetDataReference(void) const
   {
     return this->m_dataReference;
   }
@@ -65,12 +69,12 @@ public:
     return this->m_value;
   }
 
-  virtual WXDataBrowserPropertyType GetPropertyType() const = 0;
+  virtual WXDataBrowserPropertyType GetPropertyType(void) const = 0;
 
   virtual bool Render(void) = 0; // a call to the appropriate data browser function filling the data reference with the stored datum;
                                  // returns 'true' if the data value could be rendered, 'false' otherwise
 
-  void SetDataReference(DataBrowserItemDataRef const& newDataReference)
+  void SetDataReference(WXDataBrowserItemDataRef const& newDataReference)
   {
     this->m_dataReference = newDataReference;
   }
@@ -79,7 +83,7 @@ private:
 //
 // variables
 //
-  DataBrowserItemDataRef m_dataReference; // data reference of the data browser; the data will be assigned to this reference during rendering
+  WXDataBrowserItemDataRef m_dataReference; // data reference of the data browser; the data will be assigned to this reference during rendering
 
   int m_alignment; // contains the alignment flags
 
@@ -186,7 +190,7 @@ public:
   virtual bool Render(void); // declared in wxDataViewRenderer but will not be used here, therefore calling this function will
                              // return 'true' without having done anything
 
-  virtual WXDataBrowserPropertyType GetPropertyType() const;
+  virtual WXDataBrowserPropertyType GetPropertyType(void) const;
 
   void SetDC(wxDC* newDCPtr); // this method takes ownership of the pointer
 
@@ -225,7 +229,7 @@ public:
 //
 // implementation
 //
-  virtual WXDataBrowserPropertyType GetPropertyType() const;
+  virtual WXDataBrowserPropertyType GetPropertyType(void) const;
 
 protected:
 private:
@@ -268,7 +272,7 @@ public:
 //
 // implementation
 //
-  virtual WXDataBrowserPropertyType GetPropertyType() const;
+  virtual WXDataBrowserPropertyType GetPropertyType(void) const;
 
 protected:
 private:
@@ -292,7 +296,7 @@ public:
 //
 // implementation
 //
-  virtual WXDataBrowserPropertyType GetPropertyType() const;
+  virtual WXDataBrowserPropertyType GetPropertyType(void) const;
   
 protected:
 private:
@@ -316,7 +320,7 @@ public:
 //
 // implementation
 //
-  virtual WXDataBrowserPropertyType GetPropertyType() const;
+  virtual WXDataBrowserPropertyType GetPropertyType(void) const;
 
 protected:
 private:
@@ -341,7 +345,7 @@ public:
 //
 // implementation
 //
-  virtual WXDataBrowserPropertyType GetPropertyType() const;
+  virtual WXDataBrowserPropertyType GetPropertyType(void) const;
 
 protected:
 private:
@@ -365,7 +369,7 @@ public:
 //
 // implementation
 //
-  virtual WXDataBrowserPropertyType GetPropertyType() const;
+  virtual WXDataBrowserPropertyType GetPropertyType(void) const;
 
 protected:
 private:
@@ -521,6 +525,7 @@ public:
   virtual wxDataViewColumn* GetColumn(unsigned int pos) const;
   virtual unsigned int GetColumnCount(void) const;
   virtual int GetColumnPosition(wxDataViewColumn const* columnPtr) const;
+  virtual bool PrependColumn(wxDataViewColumn* columnPtr);
 
   virtual void Collapse(wxDataViewItem const& item);
   virtual void EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr=NULL);

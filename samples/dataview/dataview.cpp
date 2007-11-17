@@ -705,7 +705,7 @@ static const char *small1_xpm[] = {
 
 void MyFrame::OnTestTreeCtrl(wxCommandEvent& WXUNUSED(event) )
 {
-    wxDialog dialog( this, -1, "Test wxDataViewTreeStore" );
+    wxDialog dialog( this, -1, wxString(wxT("Test wxDataViewTreeStore")));
     
     wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
     

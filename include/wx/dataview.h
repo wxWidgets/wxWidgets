@@ -468,8 +468,8 @@ public:
     const wxBitmap &GetBitmap() const       { return m_bitmap; }
     unsigned int GetModelColumn() const     { return static_cast<unsigned int>(m_model_column); }
 
-    wxDataViewCtrl *GetOwner()              { return m_owner; }
-    wxDataViewRenderer* GetRenderer()       { return m_renderer; }
+    wxDataViewCtrl *GetOwner() const        { return m_owner; }
+    wxDataViewRenderer* GetRenderer() const { return m_renderer; }
 
 protected:
     wxDataViewRenderer      *m_renderer;
@@ -909,7 +909,7 @@ public:
     virtual unsigned int GetColumnCount() const
         { return 1; };
     virtual wxString GetColumnType( unsigned int WXUNUSED(col) ) const
-        { return "wxDataViewIconText"; }
+        { return wxT("wxDataViewIconText"); }
 
     wxDataViewTreeStoreNode *FindNode( const wxDataViewItem &item ) const;
     wxDataViewTreeStoreContainerNode *FindContainerNode( const wxDataViewItem &item ) const;
