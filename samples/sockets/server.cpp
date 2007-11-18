@@ -173,7 +173,11 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
                            wxTE_MULTILINE | wxTE_READONLY);
 
   // Create the address - defaults to localhost:0 initially
+#if wxUSE_IPV6
+  wxIPV6address addr;
+#else
   wxIPV4address addr;
+#endif
   addr.Service(3000);
 
   // Create the socket

@@ -163,7 +163,24 @@ GSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname,
 unsigned long GAddress_INET_GetHostAddress(GAddress *address);
 unsigned short GAddress_INET_GetPort(GAddress *address);
 
-/* TODO: Define specific parts (INET6, UNIX) */
+#if wxUSE_IPV6
+
+GSocketError GAddress_INET6_SetHostName(GAddress *address, const char *hostname);
+GSocketError GAddress_INET6_SetAnyAddress(GAddress *address);
+GSocketError GAddress_INET6_SetHostAddress(GAddress *address,
+                                          struct in6_addr hostaddr);
+GSocketError GAddress_INET6_SetPortName(GAddress *address, const char *port,
+                                       const char *protocol);
+GSocketError GAddress_INET6_SetPort(GAddress *address, unsigned short port);
+
+GSocketError GAddress_INET6_GetHostName(GAddress *address, char *hostname,
+                                       size_t sbuf);
+GSocketError GAddress_INET6_GetHostAddress(GAddress *address,struct in6_addr *hostaddr);
+unsigned short GAddress_INET6_GetPort(GAddress *address);
+
+#endif // wxUSE_IPV6
+
+/* TODO: Define specific parts (UNIX) */
 
 GSocketError GAddress_UNIX_SetPath(GAddress *address, const char *path);
 GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf);

@@ -384,6 +384,7 @@ dnl features disabled by default
 DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_DATAVIEWCTRL=no
 DEFAULT_wxUSE_GRAPHICS_CONTEXT=no
+DEFAULT_wxUSE_IPV6=no
 DEFAULT_wxUSE_MEDIACTRL=no
 DEFAULT_wxUSE_TAB_DIALOG=no
 DEFAULT_wxUSE_GSTREAMER8=no
@@ -609,6 +610,7 @@ WX_ARG_FEATURE(ftp,           [  --enable-ftp            use wxFTP (requires wxP
 WX_ARG_FEATURE(http,          [  --enable-http           use wxHTTP (requires wxProtocol], wxUSE_PROTOCOL_HTTP)
 WX_ARG_FEATURE(fileproto,     [  --enable-fileproto      use wxFileProto class (requires wxProtocol], wxUSE_PROTOCOL_FILE)
 WX_ARG_FEATURE(sockets,       [  --enable-sockets        use socket/network classes], wxUSE_SOCKETS)
+WX_ARG_FEATURE(ipv6,          [  --enable-ipv6           enable IPv6 support in wxSocket], wxUSE_IPV6)
 WX_ARG_FEATURE(ole,           [  --enable-ole            use OLE classes (Win32 only)], wxUSE_OLE)
 WX_ARG_FEATURE(dataobj,       [  --enable-dataobj        use data object classes], wxUSE_DATAOBJ)
 
@@ -6026,6 +6028,33 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
 fi
 
 if test "$wxUSE_SOCKETS" = "yes" ; then
+    if test "$wxUSE_IPV6" = "yes"; then
+        AC_CACHE_CHECK(
+            [whether we have sockaddr_in6],
+            [wx_cv_type_sockaddr_in6],
+            [
+                AC_TRY_COMPILE(
+                    [
+                        #include <sys/types.h>
+                        #include <sys/socket.h>
+                        #include <netinet/in.h>
+                    ],
+                    [
+                        struct sockaddr_in6 sa6;
+                    ],
+                    wx_cv_type_sockaddr_in6=yes,
+                    wx_cv_type_sockaddr_in6=no
+                )
+            ]
+        )
+
+        if test "$wx_cv_type_sockaddr_in6"="yes"; then
+            AC_DEFINE(wxUSE_IPV6)
+        else
+            AC_MSG_WARN([IPv6 support not available... disabled])
+        fi
+    fi
+
     AC_DEFINE(wxUSE_SOCKETS)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sockets"
 fi

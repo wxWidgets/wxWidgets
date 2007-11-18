@@ -247,6 +247,8 @@
 
 #define wxUSE_SOCKETS       0
 
+#define wxUSE_IPV6          0
+
 #define wxUSE_FILESYSTEM    0
 
 #define wxUSE_FS_ZIP        0

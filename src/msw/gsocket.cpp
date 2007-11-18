@@ -88,6 +88,13 @@
 #  define WX_SOCKLEN_T int
 #endif
 
+#if wxUSE_IPV6
+typedef struct sockaddr_storage wxSockAddr;
+#else
+typedef struct sockaddr wxSockAddr;
+#endif
+
+
 /* Table of GUI-related functions. We must call them indirectly because
  * of wxBase and GUI separation: */
 
@@ -181,7 +188,7 @@ GSocket::GSocket()
   m_dobind          = true;
   m_initialRecvBufferSize = -1;
   m_initialSendBufferSize = -1;
-   
+
   assert(gs_gui_functions);
   /* Per-socket GUI-specific initialization */
   m_ok = gs_gui_functions->Init_Socket(this);
@@ -301,7 +308,7 @@ GSocketError GSocket::SetPeer(GAddress *address)
 GAddress *GSocket::GetLocal()
 {
   GAddress *address;
-  struct sockaddr addr;
+  wxSockAddr addr;
   WX_SOCKLEN_T size = sizeof(addr);
   GSocketError err;
 
@@ -318,7 +325,7 @@ GAddress *GSocket::GetLocal()
     return NULL;
   }
 
-  if (getsockname(m_fd, &addr, &size) == SOCKET_ERROR)
+  if (getsockname(m_fd, (sockaddr*)&addr, &size) == SOCKET_ERROR)
   {
     m_error = GSOCK_IOERR;
     return NULL;
@@ -331,7 +338,7 @@ GAddress *GSocket::GetLocal()
      return NULL;
   }
 
-  if ((err = _GAddress_translate_from(address, &addr, size)) != GSOCK_NOERROR)
+  if ((err = _GAddress_translate_from(address, (sockaddr*)&addr, size)) != GSOCK_NOERROR)
   {
      GAddress_destroy(address);
      m_error = err;
@@ -441,7 +448,7 @@ GSocketError GSocket::SetServer()
 GSocket *GSocket::WaitConnection()
 {
   GSocket *connection;
-  struct sockaddr from;
+  wxSockAddr from;
   WX_SOCKLEN_T fromlen = sizeof(from);
   GSocketError err;
   u_long arg = 1;
@@ -475,7 +482,7 @@ GSocket *GSocket::WaitConnection()
     return NULL;
   }
 
-  connection->m_fd = accept(m_fd, &from, &fromlen);
+  connection->m_fd = accept(m_fd, (sockaddr*)&from, &fromlen);
 
   if (connection->m_fd == INVALID_SOCKET)
   {
@@ -500,7 +507,7 @@ GSocket *GSocket::WaitConnection()
     m_error = GSOCK_MEMERR;
     return NULL;
   }
-  err = _GAddress_translate_from(connection->m_peer, &from, fromlen);
+  err = _GAddress_translate_from(connection->m_peer, (sockaddr*)&from, fromlen);
   if (err != GSOCK_NOERROR)
   {
     GAddress_destroy(connection->m_peer);
@@ -1164,12 +1171,12 @@ int GSocket::Recv_Stream(char *buffer, int size)
 
 int GSocket::Recv_Dgram(char *buffer, int size)
 {
-  struct sockaddr from;
+  wxSockAddr from;
   WX_SOCKLEN_T fromlen = sizeof(from);
   int ret;
   GSocketError err;
 
-  ret = recvfrom(m_fd, buffer, size, 0, &from, &fromlen);
+  ret = recvfrom(m_fd, buffer, size, 0, (sockaddr*)&from, &fromlen);
 
   if (ret == SOCKET_ERROR)
     return SOCKET_ERROR;
@@ -1184,7 +1191,7 @@ int GSocket::Recv_Dgram(char *buffer, int size)
       return -1;
     }
   }
-  err = _GAddress_translate_from(m_peer, &from, fromlen);
+  err = _GAddress_translate_from(m_peer, (sockaddr*)&from, fromlen);
   if (err != GSOCK_NOERROR)
   {
     GAddress_destroy(m_peer);
@@ -1352,7 +1359,7 @@ GSocketError _GAddress_translate_from(GAddress *address,
     case AF_UNIX:
       address->m_family = GSOCK_UNIX;
       break;
-#ifdef AF_INET6
+#if wxUSE_IPV6
     case AF_INET6:
       address->m_family = GSOCK_INET6;
       break;
@@ -1578,6 +1585,175 @@ unsigned short GAddress_INET_GetPort(GAddress *address)
   addr = (struct sockaddr_in *)address->m_addr;
   return ntohs(addr->sin_port);
 }
+
+
+#if wxUSE_IPV6
+/*
+ * -------------------------------------------------------------------------
+ * Internet IPv6 address family
+ * -------------------------------------------------------------------------
+ */
+#include "ws2tcpip.h"
+
+#ifdef __VISUALC__
+    #pragma comment(lib,"ws2_32")
+#endif // __VISUALC__
+
+GSocketError _GAddress_Init_INET6(GAddress *address)
+{
+  struct in6_addr any_address = IN6ADDR_ANY_INIT;
+  address->m_len  = sizeof(struct sockaddr_in6);
+  address->m_addr = (struct sockaddr *) malloc(address->m_len);
+  if (address->m_addr == NULL)
+  {
+    address->m_error = GSOCK_MEMERR;
+    return GSOCK_MEMERR;
+  }
+  memset(address->m_addr,0,address->m_len);
+
+  address->m_family = GSOCK_INET6;
+  address->m_realfamily = AF_INET6;
+  ((struct sockaddr_in6 *)address->m_addr)->sin6_family = AF_INET6;
+  ((struct sockaddr_in6 *)address->m_addr)->sin6_addr = any_address;
+
+  return GSOCK_NOERROR;
+}
+
+GSocketError GAddress_INET6_SetHostName(GAddress *address, const char *hostname)
+{
+  assert(address != NULL);
+  CHECK_ADDRESS(address, INET6);
+
+  addrinfo hints;
+  memset( & hints, 0, sizeof( hints ) );
+  hints.ai_family = AF_INET6;
+  addrinfo * info = 0;
+  if ( getaddrinfo( hostname, "0", & hints, & info ) || ! info )
+  {
+    address->m_error = GSOCK_NOHOST;
+    return GSOCK_NOHOST;
+  }
+
+  memcpy( address->m_addr, info->ai_addr, info->ai_addrlen );
+  freeaddrinfo( info );
+  return GSOCK_NOERROR;
+}
+
+GSocketError GAddress_INET6_SetAnyAddress(GAddress *address)
+{
+  assert(address != NULL);
+
+  CHECK_ADDRESS(address, INET6);
+
+  struct in6_addr addr;
+  memset( & addr, 0, sizeof( addr ) );
+  return GAddress_INET6_SetHostAddress(address, addr);
+}
+GSocketError GAddress_INET6_SetHostAddress(GAddress *address,
+                                          struct in6_addr hostaddr)
+{
+  assert(address != NULL);
+
+  CHECK_ADDRESS(address, INET6);
+
+  ((struct sockaddr_in6 *)address->m_addr)->sin6_addr = hostaddr;
+
+  return GSOCK_NOERROR;
+}
+
+GSocketError GAddress_INET6_SetPortName(GAddress *address, const char *port,
+                                       const char *protocol)
+{
+  struct servent *se;
+  struct sockaddr_in6 *addr;
+
+  assert(address != NULL);
+  CHECK_ADDRESS(address, INET6);
+
+  if (!port)
+  {
+    address->m_error = GSOCK_INVPORT;
+    return GSOCK_INVPORT;
+  }
+
+  se = getservbyname(port, protocol);
+  if (!se)
+  {
+    if (isdigit(port[0]))
+    {
+      int port_int;
+
+      port_int = atoi(port);
+      addr = (struct sockaddr_in6 *)address->m_addr;
+      addr->sin6_port = htons((u_short) port_int);
+      return GSOCK_NOERROR;
+    }
+
+    address->m_error = GSOCK_INVPORT;
+    return GSOCK_INVPORT;
+  }
+
+  addr = (struct sockaddr_in6 *)address->m_addr;
+  addr->sin6_port = se->s_port;
+
+  return GSOCK_NOERROR;
+}
+
+GSocketError GAddress_INET6_SetPort(GAddress *address, unsigned short port)
+{
+  struct sockaddr_in6 *addr;
+
+  assert(address != NULL);
+  CHECK_ADDRESS(address, INET6);
+
+  addr = (struct sockaddr_in6 *)address->m_addr;
+  addr->sin6_port = htons(port);
+
+  return GSOCK_NOERROR;
+}
+
+GSocketError GAddress_INET6_GetHostName(GAddress *address, char *hostname, size_t sbuf)
+{
+  struct hostent *he;
+  char *addr_buf;
+  struct sockaddr_in6 *addr;
+
+  assert(address != NULL);
+  CHECK_ADDRESS(address, INET6);
+
+  addr = (struct sockaddr_in6 *)address->m_addr;
+  addr_buf = (char *)&(addr->sin6_addr);
+
+  he = gethostbyaddr(addr_buf, sizeof(addr->sin6_addr), AF_INET6);
+  if (he == NULL)
+  {
+    address->m_error = GSOCK_NOHOST;
+    return GSOCK_NOHOST;
+  }
+
+  strncpy(hostname, he->h_name, sbuf);
+
+  return GSOCK_NOERROR;
+}
+
+GSocketError GAddress_INET6_GetHostAddress(GAddress *address,struct in6_addr *hostaddr)
+{
+  assert(address != NULL);
+  assert(hostaddr != NULL);
+  CHECK_ADDRESS_RETVAL(address, INET6, GSOCK_INVADDR);
+  *hostaddr = ( (struct sockaddr_in6 *)address->m_addr )->sin6_addr;
+  return GSOCK_NOERROR;
+}
+
+unsigned short GAddress_INET6_GetPort(GAddress *address)
+{
+  assert(address != NULL);
+  CHECK_ADDRESS_RETVAL(address, INET6, 0);
+
+  return ntohs( ((struct sockaddr_in6 *)address->m_addr)->sin6_port );
+}
+
+#endif // wxUSE_IPV6
 
 /*
  * -------------------------------------------------------------------------

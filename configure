@@ -1670,6 +1670,7 @@ Optional Features:
   --enable-http           use wxHTTP (requires wxProtocol
   --enable-fileproto      use wxFileProto class (requires wxProtocol
   --enable-sockets        use socket/network classes
+  --enable-ipv6           enable IPv6 support in wxSocket
   --enable-ole            use OLE classes (Win32 only)
   --enable-dataobj        use data object classes
   --enable-ipc            use interprocess communication (wxSocket etc.)
@@ -2934,6 +2935,7 @@ DEFAULT_wxUSE_OPENGL=no
 DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_DATAVIEWCTRL=no
 DEFAULT_wxUSE_GRAPHICS_CONTEXT=no
+DEFAULT_wxUSE_IPV6=no
 DEFAULT_wxUSE_MEDIACTRL=no
 DEFAULT_wxUSE_TAB_DIALOG=no
 DEFAULT_wxUSE_GSTREAMER8=no
@@ -6485,6 +6487,62 @@ fi
             fi
           else
             result=$wxUSE_SOCKETS
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-ipv6" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-ipv6... $ECHO_C" >&6; }
+          # Check whether --enable-ipv6 was given.
+if test "${enable_ipv6+set}" = set; then
+  enableval=$enable_ipv6;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_ipv6='wxUSE_IPV6=yes'
+                          else
+                            wx_cv_use_ipv6='wxUSE_IPV6=no'
+                          fi
+                          cache=yes
+
+else
+
+                          LINE=`grep "^wxUSE_IPV6=" ${wx_arg_cache_file}`
+                          if test "x$LINE" != x ; then
+                              eval "DEFAULT_$LINE"
+                              cache=yes
+                          else
+                              cache=no
+                          fi
+
+                          wx_cv_use_ipv6='wxUSE_IPV6=${'DEFAULT_wxUSE_IPV6":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_ipv6"
+          if test "x$cache" = xyes; then
+            echo "wxUSE_IPV6=$wxUSE_IPV6" >> ${wx_arg_cache_file}.tmp
+          fi
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_IPV6 = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_IPV6
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -46982,6 +47040,78 @@ _ACEOF
 fi
 
 if test "$wxUSE_SOCKETS" = "yes" ; then
+    if test "$wxUSE_IPV6" = "yes"; then
+        { echo "$as_me:$LINENO: checking whether we have sockaddr_in6" >&5
+echo $ECHO_N "checking whether we have sockaddr_in6... $ECHO_C" >&6; }
+if test "${wx_cv_type_sockaddr_in6+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+                cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                        #include <sys/types.h>
+                        #include <sys/socket.h>
+                        #include <netinet/in.h>
+
+int
+main ()
+{
+
+                        struct sockaddr_in6 sa6;
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  wx_cv_type_sockaddr_in6=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	wx_cv_type_sockaddr_in6=no
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+fi
+{ echo "$as_me:$LINENO: result: $wx_cv_type_sockaddr_in6" >&5
+echo "${ECHO_T}$wx_cv_type_sockaddr_in6" >&6; }
+
+        if test "$wx_cv_type_sockaddr_in6"="yes"; then
+            cat >>confdefs.h <<\_ACEOF
+#define wxUSE_IPV6 1
+_ACEOF
+
+        else
+            { echo "$as_me:$LINENO: WARNING: IPv6 support not available... disabled" >&5
+echo "$as_me: WARNING: IPv6 support not available... disabled" >&2;}
+        fi
+    fi
+
     cat >>confdefs.h <<\_ACEOF
 #define wxUSE_SOCKETS 1
 _ACEOF

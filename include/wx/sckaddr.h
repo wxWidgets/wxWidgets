@@ -121,13 +121,10 @@ private:
 
 #if wxUSE_IPV6
 
-// Experimental Only:
-//
-// IPV6 has not yet been implemented in socket layer
 class WXDLLIMPEXP_NET wxIPV6address : public wxIPaddress {
   DECLARE_DYNAMIC_CLASS(wxIPV6address)
 private:
-  struct sockaddr_in6 *m_addr;
+  wxString m_origHostname;
 public:
   wxIPV6address();
   wxIPV6address(const wxIPV6address& other);
@@ -137,7 +134,7 @@ public:
   //
   //                          hostname
   //                          3ffe:ffff:0100:f101:0210:a4ff:fee3:9566
-  // compact (base85)         Itu&-ZQ82s>J%s99FJXT
+  // compact (base85)         Itu&-ZQ82s>J%s99FJXT (depends on platform api)
   // compressed format        ::1
   // ipv4 mapped              ::ffff:1.2.3.4
   virtual bool Hostname(const wxString& name);

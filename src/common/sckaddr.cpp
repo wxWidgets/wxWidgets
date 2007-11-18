@@ -237,7 +237,7 @@ wxIPV6address::wxIPV6address()
 }
 
 wxIPV6address::wxIPV6address(const wxIPV6address& other)
-             : wxIPaddress(other)
+             : wxIPaddress(other), m_origHostname(other.m_origHostname)
 {
 }
 
@@ -252,68 +252,119 @@ bool wxIPV6address::Hostname(const wxString& name)
     wxLogWarning( _("Trying to solve a NULL hostname: giving up") );
     return false;
   }
-  return (GAddress_INET_SetHostName(m_address, name.mb_str()) == GSOCK_NOERROR);
+  m_origHostname = name;
+  return (GAddress_INET6_SetHostName(m_address, name.mb_str()) == GSOCK_NOERROR);
 }
 
-bool wxIPV6address::Hostname(unsigned char[16] WXUNUSED(addr))
+bool wxIPV6address::Hostname(unsigned char addr[16])
 {
-  return true;
+  wxString name;
+  unsigned short wk[8];
+  for ( int i = 0; i < 8; ++i )
+  {
+    wk[i] = addr[2*i];
+    wk[i] <<= 8;
+    wk[i] |= addr[2*i+1];
+  }
+  name.Printf("%x:%x:%x:%x:%x:%x:%x:%x",
+              wk[0], wk[1], wk[2], wk[3], wk[4], wk[5], wk[6], wk[7]);
+  return Hostname(name);
 }
 
 bool wxIPV6address::Service(const wxString& name)
 {
-  return (GAddress_INET_SetPortName(m_address, name.mb_str(), "tcp") == GSOCK_NOERROR);
+  return (GAddress_INET6_SetPortName(m_address, name.mb_str(), "tcp") == GSOCK_NOERROR);
 }
 
 bool wxIPV6address::Service(unsigned short port)
 {
-  return (GAddress_INET_SetPort(m_address, port) == GSOCK_NOERROR);
+  return (GAddress_INET6_SetPort(m_address, port) == GSOCK_NOERROR);
 }
 
 bool wxIPV6address::LocalHost()
 {
-  return (GAddress_INET_SetHostName(m_address, "localhost") == GSOCK_NOERROR);
+  return (GAddress_INET6_SetHostName(m_address, "localhost") == GSOCK_NOERROR);
 }
 
 bool wxIPV6address::IsLocalHost() const
 {
-  return (Hostname() == wxT("localhost") || IPAddress() == wxT("127.0.0.1"));
+  if ( Hostname() == "localhost" )
+      return true;
+
+  wxString addr = IPAddress();
+  return addr == wxT("::1") ||
+            addr == wxT("0:0:0:0:0:0:0:1") ||
+                addr == wxT("::ffff:127.0.0.1");
 }
 
 bool wxIPV6address::BroadcastAddress()
 {
-  return (GAddress_INET_SetBroadcastAddress(m_address) == GSOCK_NOERROR);
+    wxFAIL_MSG( "not implemented" );
+
+    return false;
 }
 
 bool wxIPV6address::AnyAddress()
 {
-  return (GAddress_INET_SetAnyAddress(m_address) == GSOCK_NOERROR);
+  return (GAddress_INET6_SetAnyAddress(m_address) == GSOCK_NOERROR);
 }
 
 wxString wxIPV6address::IPAddress() const
 {
-    unsigned long raw =  GAddress_INET_GetHostAddress(m_address);
-    return wxString::Format(
-        _T("%u.%u.%u.%u"),
-        (unsigned char)((raw>>24) & 0xff),
-        (unsigned char)((raw>>16) & 0xff),
-        (unsigned char)((raw>>8) & 0xff),
-        (unsigned char)(raw & 0xff)
-        );
+    unsigned char addr[16];
+    GAddress_INET6_GetHostAddress(m_address,(in6_addr*)addr);
+
+    wxUint16 words[8];
+    int i,
+        prefix_zero_count = 0;
+    for ( i = 0; i < 8; ++i )
+    {
+        words[i] = addr[i*2];
+        words[i] <<= 8;
+        words[i] |= addr[i*2+1];
+        if ( i == prefix_zero_count && words[i] == 0 )
+            ++prefix_zero_count;
+    }
+
+    wxString result;
+    if ( prefix_zero_count == 8 )
+    {
+        result = wxT( "::" );
+    }
+    else if ( prefix_zero_count == 6 && words[5] == 0xFFFF )
+    {
+        // IPv4 mapped
+        result.Printf("::ffff:%d.%d.%d.%d",
+                      addr[12], addr[13], addr[14], addr[15]);
+    }
+    else // general case
+    {
+        result = ":";
+        for ( i = prefix_zero_count; i < 8; ++i )
+        {
+            result += wxString::Format(":%x", words[i]);
+        }
+    }
+
+    return result;
 }
 
 wxString wxIPV6address::Hostname() const
 {
    char hostname[1024];
-
    hostname[0] = 0;
-   GAddress_INET_GetHostName(m_address, hostname, 1024);
+
+   if ( GAddress_INET6_GetHostName(m_address,
+                                   hostname,
+                                   WXSIZEOF(hostname)) != GSOCK_NOERROR )
+       return wxEmptyString;
+
    return wxString::FromAscii(hostname);
 }
 
 unsigned short wxIPV6address::Service() const
 {
-  return GAddress_INET_GetPort(m_address);
+  return GAddress_INET6_GetPort(m_address);
 }
 
 #endif // wxUSE_IPV6

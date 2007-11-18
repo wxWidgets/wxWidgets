@@ -57,6 +57,12 @@
 #undef __WINDOWS__
 #endif
 
+// For IPv6 support, we must include winsock2.h before winsock.h, and
+// windows.h include winsock.h so do it before including it
+#if wxUSE_IPV6
+    #include <winsock2.h>
+#endif
+
 #include <windows.h>
 
 #if defined(__WXWINCE__) && !defined(__WINDOWS__)
@@ -105,4 +111,5 @@ WXDLLEXPORT int wxMSLU_GetSaveFileNameW(void *ofn);
 #endif // wxUSE_UNICODE_MSLU
 
 #endif // _WX_WRAPWIN_H_
+
 
