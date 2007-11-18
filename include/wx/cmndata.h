@@ -37,7 +37,7 @@ public:
 
     wxColourData();
     wxColourData(const wxColourData& data);
-    void operator=(const wxColourData&);
+    wxColourData& operator=(const wxColourData& data);
     virtual ~wxColourData();
 
     void SetChooseFull(bool flag) { m_chooseFull = flag; }

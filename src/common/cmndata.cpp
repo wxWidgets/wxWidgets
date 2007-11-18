@@ -78,7 +78,7 @@ wxColourData::wxColourData()
 }
 
 wxColourData::wxColourData(const wxColourData& data)
-    : wxObject()
+            : wxObject()
 {
     (*this) = data;
 }
@@ -102,13 +102,15 @@ wxColour wxColourData::GetCustomColour(int i)
     return m_custColours[i];
 }
 
-void wxColourData::operator=(const wxColourData& data)
+wxColourData& wxColourData::operator=(const wxColourData& data)
 {
     for (int i = 0; i < WXSIZEOF(m_custColours); i++)
         m_custColours[i] = data.m_custColours[i];
 
     m_dataColour = data.m_dataColour;
     m_chooseFull = data.m_chooseFull;
+
+    return *this;
 }
 
 // ----------------------------------------------------------------------------
