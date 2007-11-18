@@ -138,6 +138,16 @@ Override this for a different sorting behaviour.
 See also \helpref{HasDefaultCompare}{wxdataviewmodelhasdefaultcompare}.
 
 
+\membersection{wxDataViewModel::GetAttr}\label{wxdataviewmodelgetattr}
+
+\func{bool}{GetAttr}{\param{const wxDataViewItem\& }{item}, \param{unsigned int }{col}, \param{wxDataViewItemAttr\& }{attr}}
+
+Oberride this to indicate that the item has special font attributes.
+This only affects the 
+\helpref{wxDataViewTextRendererText}{wxdataviewtextrendererattr} renderer.
+
+See also \helpref{wxDataViewItemAttr}{wxdataviewitemattr}.
+
 \membersection{wxDataViewModel::GetColumnCount}\label{wxdataviewmodelgetcolumncount}
 
 \constfunc{virtual unsigned int}{GetColumnCount}{\void}

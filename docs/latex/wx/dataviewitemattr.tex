@@ -1,0 +1,54 @@
+\section{\class{wxDataViewItemAttr}}\label{wxdataviewitemattr}
+
+This class is used to indicate to a \helpref{wxDataViewCtrl}{wxdataviewctrl}
+that a certain \helpref{Item}{wxdataviewitem} has extra font attributes
+for its renderer. For this, it is required to override 
+\helpref{wxDataViewModel::GetAttr}{wxdataviewmodelgetattr}.
+
+Attributes are currently only supported by 
+\helpref{wxDataViewTextRendererText}{wxdataviewtextrendererattr}.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/dataview.h>
+
+\wxheading{Library}
+
+\helpref{wxAdv}{librarieslist}
+
+
+\wxheading{Data structures}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxDataViewItemAttr::wxDataViewItemAttr}\label{wxdataviewitemattrwxdataviewitemattr}
+
+\func{}{wxDataViewItemAttr}{\void}
+
+Constructor.
+
+
+\membersection{wxDataViewItemAttr::SetBold}\label{wxdataviewitemattrsetbold}
+
+\func{void}{SetBold}{\param{bool }{set}}
+
+Call this to indicate that the item shall be displayed in bold text.
+
+\membersection{wxDataViewItemAttr::SetColour}\label{wxdataviewitemattrsetcolour}
+
+\func{void}{SetColour}{\param{const wxColour\& }{colour}}
+
+Call this to indicate that the item shall be displayed with
+that colour.
+
+\membersection{wxDataViewItemAttr::SetItalic}\label{wxdataviewitemattrsetitalic}
+
+\func{void}{SetItalic}{\param{bool }{set}}
+
+Call this to indicate that the item shall be displayed in italic text.
+

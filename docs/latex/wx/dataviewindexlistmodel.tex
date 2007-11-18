@@ -38,6 +38,16 @@ Destructor.
 
 Compare method that sorts the items by their index.
 
+\membersection{wxDataViewIndexListModel::GetAttr}\label{wxdataviewindexlistmodelgetattr}
+
+\func{bool}{GetAttr}{\param{unsigned int }{row}, \param{unsigned int }{col}, \param{wxDataViewItemAttr\& }{attr}}
+
+Oberride this to indicate that the row has special font attributes.
+This only affects the 
+\helpref{wxDataViewTextRendererText}{wxdataviewtextrendererattr} renderer.
+
+See also \helpref{wxDataViewItemAttr}{wxdataviewitemattr}.
+
 \membersection{wxDataViewIndexListModel::GetItem}\label{wxdataviewindexlistmodelgetitem}
 
 \constfunc{wxDataViewItem}{GetItem}{\param{unsigned int }{row}}

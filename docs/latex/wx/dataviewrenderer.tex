@@ -7,6 +7,7 @@ render the individual cells. One instance of a renderer class is
 owned by \helpref{wxDataViewColumn}{wxdataviewcolumn}. There is
 a number of ready-to-use renderers provided:
 \helpref{wxDataViewTextRenderer}{wxdataviewtextrenderer},
+\helpref{wxDataViewTextRendererAttr}{wxdataviewtextrendererattr},
 \helpref{wxDataViewIconTextRenderer}{wxdataviewicontextrenderer},
 \helpref{wxDataViewToggleRenderer}{wxdataviewtogglerenderer},
 \helpref{wxDataViewProgressRenderer}{wxdataviewprogressrenderer},
@@ -160,8 +161,38 @@ in-place editing if desired.
 
 \membersection{wxDataViewTextRenderer::wxDataViewTextRenderer}\label{wxdataviewtextrendererwxdataviewtextrenderer}
 
-\func{}{wxDataViewTextRenderer}{\param{const wxString\& }{varianttype = wxT("string")}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}}
+\func{}{wxDataViewTextRenderer}{\param{const wxString\& }{varianttype = "string"}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}}
 
+
+\section{\class{wxDataViewTextRendererAttr}}\label{wxdataviewtextrendererattr}
+
+The same as \helpref{wxDataViewTextRenderer}{wxdataviewtextrenderer} but with
+support for font attributes. Font attributes are currently only supported
+under GTK+ and MSW.
+
+See also \helpref{wxDataViewModel::GetAttr}{wxdataviewmodelgetattr} and
+\helpref{wxDataViewAttr}{wxdataviewattr}.
+
+\wxheading{Derived from}
+
+\helpref{wxDataViewTextRenderer}{wxdataviewtextrenderer}
+
+\wxheading{Include files}
+
+<wx/dataview.h>
+
+\wxheading{Library}
+
+\helpref{wxAdv}{librarieslist}
+
+\wxheading{Data structures}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxDataViewTextRendererAttr::wxDataViewTextRendererAttr}\label{wxdataviewtextrendererattrwxdataviewtextrendererattr}
+
+\func{}{wxDataViewTextRendererAttr}{\param{const wxString\& }{varianttype = "string"}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{align = wxDVR\_DEFAULT\_ALIGNMENT}}
 
 
 \section{\class{wxDataViewProgressRenderer}}\label{wxdataviewprogressrenderer}
@@ -187,7 +218,7 @@ wxDataViewProgressRenderer
 
 \membersection{wxDataViewProgressRenderer::wxDataViewProgressRenderer}\label{wxdataviewprogressrendererwxdataviewprogressrenderer}
 
-\func{}{wxDataViewProgressRenderer}{\param{const wxString\& }{label = wxEmptyString}, \param{const wxString\& }{varianttype = wxT("long")}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}}
+\func{}{wxDataViewProgressRenderer}{\param{const wxString\& }{label = wxEmptyString}, \param{const wxString\& }{varianttype = long"}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}}
 
 
 \section{\class{wxDataViewIconText}}\label{wxdataviewicontext}
@@ -264,7 +295,7 @@ operator.
 
 \membersection{wxDataViewIconTextRenderer::wxDataViewIconTextRenderer}\label{wxdataviewtogglerendererwxdataviewicontextrenderer}
 
-\func{}{wxDataViewIconTextRenderer}{\param{const wxString\& }{varianttype = wxT("wxDataViewIconText")}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}}
+\func{}{wxDataViewIconTextRenderer}{\param{const wxString\& }{varianttype = "wxDataViewIconText"}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}}
 
 
 \section{\class{wxDataViewToggleRenderer}}\label{wxdataviewtogglerenderer}
@@ -289,7 +320,7 @@ wxDataViewToggleRenderer
 
 \membersection{wxDataViewToggleRenderer::wxDataViewToggleRenderer}\label{wxdataviewtogglerendererwxdataviewtogglerenderer}
 
-\func{}{wxDataViewToggleRenderer}{\param{const wxString\& }{varianttype = wxT("bool")}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}}
+\func{}{wxDataViewToggleRenderer}{\param{const wxString\& }{varianttype = "bool"}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}}
 
 
 \section{\class{wxDataViewBitmapRenderer}}\label{wxdataviewbitmaprenderer}
@@ -314,7 +345,7 @@ wxDataViewBitmapRenderer
 
 \membersection{wxDataViewBitmapRenderer::wxDataViewBitmapRenderer}\label{wxdataviewbitmaprendererwxdataviewbitmaprenderer}
 
-\func{}{wxDataViewBitmapRenderer}{\param{const wxString\& }{varianttype = wxT("wxBitmap")}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}}
+\func{}{wxDataViewBitmapRenderer}{\param{const wxString\& }{varianttype = "wxBitmap"}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}}
 
 
 \section{\class{wxDataViewDateRenderer}}\label{wxdataviewdaterenderer}
@@ -340,7 +371,7 @@ wxDataViewDateRenderer
 
 \membersection{wxDataViewDateRenderer::wxDataViewDateRenderer}\label{wxdataviewdaterendererwxdataviewdaterenderer}
 
-\func{}{wxDataViewDateRenderer}{\param{const wxString\& }{varianttype = wxT("datetime")}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_ACTIVATABLE}}
+\func{}{wxDataViewDateRenderer}{\param{const wxString\& }{varianttype = "datetime"}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_ACTIVATABLE}}
 
 
 \section{\class{wxDataViewCustomRenderer}}\label{wxdataviewcustomrenderer}
@@ -379,7 +410,7 @@ in order to end the editing.
 
 \membersection{wxDataViewCustomRenderer::wxDataViewCustomRenderer}\label{wxdataviewcustomrendererwxdataviewcustomrenderer}
 
-\func{}{wxDataViewCustomRenderer}{\param{const wxString\& }{varianttype = wxT("string")}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{bool }{no\_init = false}}
+\func{}{wxDataViewCustomRenderer}{\param{const wxString\& }{varianttype = "string"}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{bool }{no\_init = false}}
 
 Constructor.
 
