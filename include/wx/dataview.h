@@ -210,6 +210,9 @@ public:
     virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
                          unsigned int column, bool ascending );
     virtual bool HasDefaultCompare() const { return false; }
+    
+    // internal
+    virtual bool IsIndexListModel() const { return false; }
 
 protected:
     // the user should not delete this class directly: he should use DecRef() instead!
@@ -266,10 +269,15 @@ public:
     virtual bool IsContainer( const wxDataViewItem &item ) const;
     virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const;
 
+    // internal
+    virtual bool IsIndexListModel() const { return true; }
+    unsigned int GetLastIndex() const { return m_lastIndex; }
+    
 private:
     wxDataViewItemArray m_hash;
     unsigned int m_lastIndex;
     bool m_ordered;
+    bool m_useHash;
 };
 
 
