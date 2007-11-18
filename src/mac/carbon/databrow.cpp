@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/mac/carbon/databrow.cpp
 // Purpose:     Classes and functions for the Carbon data browser
-// Author:      
+// Author:
 // Modified by:
 // Created:     2007-05-18
 // RCS-ID:      $Id$
@@ -9,11 +9,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef wxUSE_GENERICDATAVIEWCTRL
+#include "wx/wxprec.h"
+
+#if wxUSE_DATAVIEWCTRL && !defined(wxUSE_GENERICDATAVIEWCTRL)
 
 #include <limits>
 
-#include "wx/wxprec.h"
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/toplevel.h"
@@ -127,7 +128,7 @@ wxMacDataBrowserTableViewControl::wxMacDataBrowserTableViewControl(wxWindow* pee
   } /* if */
 
   OptionBits attributes; // variable definition
-  
+
   if (this->GetAttributes(&attributes) == noErr) // get default settings
   {
     if ((style & wxDV_VERT_RULES) != 0)
@@ -313,7 +314,7 @@ OSStatus wxMacDataBrowserTableViewControl::IsUsedPropertyID(DataBrowserPropertyI
  // lead to a large overhead for the call but returns an error code if the property id does not exist, here we use the function that returns
  // the column position for the property id:
   DataBrowserTableViewColumnIndex index;
-  
+
   return ::GetDataBrowserTableViewColumnPosition(this->m_controlRef,propertyID,&index);
 } /* wxMacDataBrowserTableViewControl::IsUsedPropertyId(DataBrowserPropertyID) const */
 
@@ -357,8 +358,8 @@ OSStatus wxMacDataBrowserTableViewControl::AddItems(DataBrowserItemID container,
 OSStatus wxMacDataBrowserTableViewControl::GetFreeItemID(DataBrowserItemID* id) const
 {
   ItemCount NoOfItems;
-  
-  
+
+
   verify_noerr(this->GetItemCount(&NoOfItems));
   if (NoOfItems == 0)
   {
@@ -407,7 +408,7 @@ OSStatus wxMacDataBrowserTableViewControl::IsUsedItemID(DataBrowserItemID itemID
  // lead to a large overhead for the call but returns an error code if the property id does not exist, here we use the function that returns
  // the column position for the property id:
   DataBrowserTableViewColumnIndex index;
-  
+
   return ::GetDataBrowserTableViewItemRow(this->m_controlRef,itemID,&index);
 } /* wxMacDataBrowserTableViewControl::IsUsedItemID(DataBrowserItemID) const */
 
@@ -434,7 +435,7 @@ size_t wxMacDataBrowserTableViewControl::GetSelectedItemIDs(wxArrayDataBrowserIt
 {
   DataBrowserItemID* itemIDPtr;
   Handle handle(::NewHandle(0));
-  
+
   size_t NoOfItems;
 
 
@@ -551,9 +552,9 @@ Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserCompareProc(DataBrow
   DataBrowserSortOrder sortOrder;
 
   DataBrowserTableViewColumnIndex columnIndex;
-  
+
   wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetPeer()));
-  
+
 
   wxCHECK_MSG(dataViewCtrlPtr != NULL,            false,_("Pointer to data view control not set correctly."));
   wxCHECK_MSG(dataViewCtrlPtr->GetModel() != NULL,false,_("Pointer to model not set correctly."));
@@ -575,7 +576,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowse
   wxDataViewColumn* dataViewColumnPtr;
 
   wxDataViewCtrl* dataViewCtrlPtr;
-  
+
   wxDataViewCustomRenderer* dataViewCustomRendererPtr;
 
   wxVariant dataToRender;
@@ -610,11 +611,11 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowse
   content.left   += 5;
   content.right  -= 3;
   content.bottom -= 3;
- // extra space for the scrollbars: 
+ // extra space for the scrollbars:
   content.bottom -= wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
   content.right  -= wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
 
- // make sure that 'Render' can draw only in the allowed area:  
+ // make sure that 'Render' can draw only in the allowed area:
   dataViewCustomRendererPtr->GetDC()->SetClippingRegion(content.left,content.top,content.right-content.left+1,content.bottom-content.top+1);
   (void) (dataViewCustomRendererPtr->Render(wxRect(static_cast<int>(rectangle->left),static_cast<int>(rectangle->top),
                                                    static_cast<int>(1+rectangle->right-rectangle->left),static_cast<int>(1+rectangle->bottom-rectangle->top)),
@@ -628,7 +629,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
   {
    // variable definitions:
     wxDataViewCtrl* dataViewCtrlPtr;
-    
+
     dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(this->GetPeer());
     wxCHECK_MSG(dataViewCtrlPtr != NULL,errDataBrowserNotConfigured,_("Pointer to data view control not set correctly."));
     if (dataViewCtrlPtr->IsDeleting())
@@ -639,7 +640,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
       DataBrowserTableViewColumnIndex columnIndex;
       OSStatus                        errorStatus;
       wxDataViewColumn*               dataViewColumnPtr;
-      
+
       wxCHECK_MSG(dataViewCtrlPtr->GetModel() != NULL,errDataBrowserNotConfigured,_("Pointer to model not set correctly."));
       errorStatus = this->GetColumnIndex(propertyID,&columnIndex);
       wxCHECK_MSG(errorStatus == noErr,errorStatus,_("Could not determine column index"));
@@ -708,7 +709,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
       wxVariant         variant;
       wxDataViewColumn* dataViewColumnPtr;
       wxDataViewCtrl*   dataViewCtrlPtr;
-      
+
       dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(this->GetPeer());
       wxCHECK_MSG(dataViewCtrlPtr             != NULL,errDataBrowserNotConfigured,_("Pointer to data view control not set correctly."));
       wxCHECK_MSG(dataViewCtrlPtr->GetModel() != NULL,errDataBrowserNotConfigured,_("Pointer to model not set correctly."));
@@ -732,11 +733,11 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
           {
            // variable definitions:
             wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetPeer()));
-            
+
             wxCHECK_MSG(dataViewCtrlPtr != NULL,errDataBrowserNotConfigured,_("Pointer to data view control not set correctly."));
            // initialize wxWidget event:
             wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING,dataViewCtrlPtr->GetId()); // variable definition
-            
+
             dataViewEvent.SetEventObject(dataViewCtrlPtr);
             dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
            // finally send the equivalent wxWidget event:
@@ -748,11 +749,11 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
           {
            // variable definitions:
             wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetPeer()));
-            
+
             wxCHECK_MSG(dataViewCtrlPtr != NULL,errDataBrowserNotConfigured,_("Pointer to data view control not set correctly."));
            // initialize wxWidget event:
             wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING,dataViewCtrlPtr->GetId()); // variable definition
-              
+
             dataViewEvent.SetEventObject(dataViewCtrlPtr);
             dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
            // finally send the equivalent wxWidget event:
@@ -764,7 +765,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
           {
            // variable definition:
             wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetPeer()));
-            
+
             wxCHECK_MSG(dataViewCtrlPtr             != NULL,errDataBrowserNotConfigured,_("Pointer to data view control not set correctly."));
             wxCHECK_MSG(dataViewCtrlPtr->GetModel() != NULL,errDataBrowserNotConfigured,_("Pointer to model not set correctly."));
             return ::SetDataBrowserItemDataBooleanValue(itemData,dataViewCtrlPtr->GetModel()->IsContainer(wxDataViewItem(reinterpret_cast<void*>(itemID))));
@@ -790,7 +791,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
         {
          // initialize wxWidget event:
           wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED,dataViewCtrlPtr->GetId()); // variable definition
-          
+
           dataViewEvent.SetEventObject(dataViewCtrlPtr);
           dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
          // finally send the equivalent wxWidget event:
@@ -801,7 +802,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
         {
          // initialize wxWidget event:
           wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED,dataViewCtrlPtr->GetId()); // variable definition
-          
+
           dataViewEvent.SetEventObject(dataViewCtrlPtr);
           dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
          // finally send the equivalent wxWidget event:
@@ -813,30 +814,9 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
       case kDataBrowserEditStarted:
         {
          // initialize wxWidget event:
-          DataBrowserPropertyID propertyID;  
+          DataBrowserPropertyID propertyID;
           wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED,dataViewCtrlPtr->GetId()); // variable definition
-          
-          dataViewEvent.SetEventObject(dataViewCtrlPtr);
-          dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
-          if (this->GetPropertyID(itemData,&propertyID) == noErr)
-          {
-           // variable definition and initialization:
-            DataBrowserTableViewColumnIndex columnIndex;
-            
-            wxCHECK_RET(this->GetColumnIndex(propertyID,&columnIndex),_("Column index not found."));
-            dataViewEvent.SetColumn(columnIndex);
-            dataViewEvent.SetDataViewColumn(dataViewCtrlPtr->GetColumnPtr(propertyID));          
-          } /* if */
-         // finally send the equivalent wxWidget event:
-          dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
-        } /* block */
-        break;
-      case kDataBrowserEditStopped:
-        {
-         // initialize wxWidget event:
-          DataBrowserPropertyID propertyID;  
-          wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE,dataViewCtrlPtr->GetId()); // variable definition
-          
+
           dataViewEvent.SetEventObject(dataViewCtrlPtr);
           dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
           if (this->GetPropertyID(itemData,&propertyID) == noErr)
@@ -846,7 +826,28 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
 
             wxCHECK_RET(this->GetColumnIndex(propertyID,&columnIndex),_("Column index not found."));
             dataViewEvent.SetColumn(columnIndex);
-            dataViewEvent.SetDataViewColumn(dataViewCtrlPtr->GetColumnPtr(propertyID));          
+            dataViewEvent.SetDataViewColumn(dataViewCtrlPtr->GetColumnPtr(propertyID));
+          } /* if */
+         // finally send the equivalent wxWidget event:
+          dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
+        } /* block */
+        break;
+      case kDataBrowserEditStopped:
+        {
+         // initialize wxWidget event:
+          DataBrowserPropertyID propertyID;
+          wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE,dataViewCtrlPtr->GetId()); // variable definition
+
+          dataViewEvent.SetEventObject(dataViewCtrlPtr);
+          dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
+          if (this->GetPropertyID(itemData,&propertyID) == noErr)
+          {
+           // variable definition and initialization:
+            DataBrowserTableViewColumnIndex columnIndex;
+
+            wxCHECK_RET(this->GetColumnIndex(propertyID,&columnIndex),_("Column index not found."));
+            dataViewEvent.SetColumn(columnIndex);
+            dataViewEvent.SetDataViewColumn(dataViewCtrlPtr->GetColumnPtr(propertyID));
           } /* if */
          // finally send the equivalent wxWidget event:
           dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
@@ -891,7 +892,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
             wxDataViewColumn* const columnPtr = dataViewCtrlPtr->GetColumn(i);
            // variable definition:
             UInt16 columnWidth;
-            
+
             wxCHECK_RET(this->GetColumnWidth(columnPtr->GetPropertyID(),&columnWidth) == noErr,_("Column width could not be determined"));
             columnPtr->SetWidthVariable(columnWidth);
           } /* for */
@@ -902,7 +903,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
           {
             DataBrowserSortOrder            sortOrder;
             DataBrowserTableViewColumnIndex columnIndex;
-            
+
             if ((this->GetSortOrder(&sortOrder) == noErr) && (this->GetColumnIndex(propertyID,&columnIndex) == noErr))
             {
              // variable definition and initialization:
@@ -930,4 +931,4 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
 } /* wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(DataBrowserItemID, DataBrowserItemNotification, DataBrowserItemDataRef) */
 
 
-#endif // wxUSE_GENERICDATAVIEWCTRL
+#endif // wxUSE_DATAVIEWCTRL && !wxUSE_GENERICDATAVIEWCTRL
