@@ -21,10 +21,12 @@
 #include "wx/mac/carbon/databrow.h"
 
 #ifndef WX_PRECOMP
-  #include "wx/timer.h"
+    #include "wx/timer.h"
+    #include "wx/settings.h"
+    #include "wx/dcclient.h"
+    #include "wx/icon.h"
 #endif
 
-#include "wx/icon.h"
 #include "wx/renderer.h"
 
 //-----------------------------------------------------------------------------
@@ -515,17 +517,6 @@ wxDataViewTextRendererAttr::wxDataViewTextRendererAttr(wxString const& variantty
 {
 } /* wxDataViewTextRendererAttr::wxDataViewTextRendererAttr(wxString const&, wxDataViewCellMode, int) */
     
-IMPLEMENT_CLASS(wxDataViewTextRendererAttr,wxDataViewTextRenderer)
-
-// ---------------------------------------------------------
-// wxDataViewTextRendererAttr
-// ---------------------------------------------------------
-
-wxDataViewTextRendererAttr::wxDataViewTextRendererAttr(wxString const& varianttype, wxDataViewCellMode mode, int align)
-                       :wxDataViewTextRenderer(varianttype,mode,align)
-{
-}
-
 IMPLEMENT_CLASS(wxDataViewTextRendererAttr,wxDataViewTextRenderer)
 
 // ---------------------------------------------------------
