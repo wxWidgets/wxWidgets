@@ -249,7 +249,7 @@ bool MyApp::OnInit()
       i ++;
       if (i < argc)
       {
-        wxChar *s = argv[i];
+        const wxChar *s = argv[i];
         i ++;
         if (wxStrcmp(s, _T("ansi")) == 0 || wxStrcmp(s, _T("pc")) == 0 || wxStrcmp(s, _T("mac")) == 0 ||
             wxStrcmp(s, _T("pca")) == 0)
