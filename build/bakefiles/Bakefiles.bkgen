@@ -44,8 +44,12 @@
 
     <!-- List of output formats to generate: -->
     <add-formats>
-        autoconf,borland,dmars_smake,dmars,mingw,msvc,msvc6prj,msevc4prj,msvs2005prj,watcom
+        autoconf,borland,dmars_smake,dmars,mingw,msvc,msvc6prj,msevc4prj,watcom
     </add-formats>
+
+    <!-- FIXME: Bakefile cannot handle dependencies on external .vcproj files
+                yet, so we can't generate samples projects for now: -->
+    <add-formats files="wx.bkl">msvs2005prj</add-formats>
 
     <del-formats files="../../samples/*.bkl">
         autoconf,msvc6prj,msevc4prj,msvs2005prj
