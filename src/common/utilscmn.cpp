@@ -99,6 +99,10 @@
     #include <shellapi.h> // needed for SHELLEXECUTEINFO
 #endif
 
+#if wxUSE_GUI && defined(__WXGTK__)
+    #include <gtk/gtk.h>    // for GTK_XXX_VERSION constants
+#endif
+
 #if wxUSE_BASE
 
 // ----------------------------------------------------------------------------
@@ -1392,7 +1396,10 @@ void wxInfoMessageBox(wxWindow* parent)
                wxPlatformInfo::Get().GetToolkitMajorVersion(),
                wxPlatformInfo::Get().GetToolkitMinorVersion(),
 #ifdef __WXGTK__
-               wxString::Format(_T("\nThe compile-time GTK+ version is %d.%d.%d."), GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION).c_str()
+               wxString::Format("\nThe compile-time GTK+ version is %d.%d.%d.",
+                                GTK_MAJOR_VERSION,
+                                GTK_MINOR_VERSION,
+                                GTK_MICRO_VERSION).c_str()
 #else
                wxEmptyString
 #endif
