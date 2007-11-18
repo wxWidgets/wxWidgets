@@ -195,7 +195,7 @@ wxBitmap wxWindowDC::DoGetAsBitmap(const wxRect *subrect) const
     // call this method when a Blit is performed with it as a source.
     if (!m_window)
         return wxNullBitmap;
-        
+
     ControlRef handle = (ControlRef) m_window->GetHandle();
     if ( !handle )
         return wxNullBitmap;
@@ -226,7 +226,6 @@ wxBitmap wxWindowDC::DoGetAsBitmap(const wxRect *subrect) const
     wxBitmap bmp = wxBitmap(width, height, 32);
     wxAlphaPixelData pixData(bmp, wxPoint(0,0), wxSize(width, height));
 
-    pixData.UseAlpha();
     wxAlphaPixelData::Iterator p(pixData);
     for (int y=0; y<height; y++) {
         wxAlphaPixelData::Iterator rowStart = p;

@@ -1547,6 +1547,8 @@ WXHBITMAP wxBitmap::GetHBITMAP(WXHBITMAP* mask) const
 #if !wxMAC_USE_CORE_GRAPHICS
     return WXHBITMAP(M_BITMAPDATA->GetHBITMAP((GWorldPtr*)mask));
 #else
+    wxUnusedVar(mask);
+
     return WXHBITMAP(M_BITMAPDATA->GetBitmapContext());
 #endif
 }

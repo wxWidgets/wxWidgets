@@ -1760,11 +1760,11 @@ void wxMacMLTEControl::AdjustCreationAttributes(const wxColour &background,
                 | kTXNSupportFontCommandProcessing
                 | kTXNSupportFontCommandUpdating;
 
-            // only spell check when not read-only 
+            // only spell check when not read-only
             // use system options for the default
-            bool checkSpelling = false ; 
+            bool checkSpelling = false ;
             if ( !(m_windowStyle & wxTE_READONLY) )
-            {   
+            {
 #if wxUSE_SYSTEM_OPTIONS
                 if ( wxSystemOptions::HasOption( wxMAC_TEXTCONTROL_USE_SPELL_CHECKER ) && (wxSystemOptions::GetOptionInt( wxMAC_TEXTCONTROL_USE_SPELL_CHECKER ) == 1) )
                 {
@@ -1772,11 +1772,11 @@ void wxMacMLTEControl::AdjustCreationAttributes(const wxColour &background,
                 }
 #endif
             }
-            
+
             if ( checkSpelling )
                 options |=
                     kTXNSupportSpellCheckCommandProcessing
-                    | kTXNSupportSpellCheckCommandUpdating;              
+                    | kTXNSupportSpellCheckCommandUpdating;
 
             TXNSetCommandEventSupport( m_txn , options ) ;
         }
@@ -1794,6 +1794,11 @@ void wxMacMLTEControl::SetBackground( const wxBrush &brush )
     TXNSetBackground( m_txn , &tback );
 }
 
+static inline int wxConvertToTXN(int x)
+{
+    return wx_static_cast(int, x / 254.0 * 72 + 0.5);
+}
+
 void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , long to )
 {
     TXNTypeAttributes typeAttr[4] ;
@@ -1804,9 +1809,9 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
     TXNControlTag    controlTags[4];
     TXNControlData   controlData[4];
     size_t controlAttrCount = 0;
-    
+
     TXNTab* tabs = NULL;
-    
+
     bool relayout = false;
 
     if ( style.HasFont() )
@@ -1829,12 +1834,12 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
         typeAttr[typeAttrCount].data.dataPtr = (void*) &color ;
         typeAttrCount++ ;
     }
-    
+
     if ( style.HasAlignment() )
     {
         wxASSERT( controlAttrCount < WXSIZEOF(controlTags) );
         SInt32 align;
-        
+
         switch ( style.GetAlignment() )
         {
             case wxTEXT_ALIGNMENT_LEFT:
@@ -1848,13 +1853,13 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
                 break;
             case wxTEXT_ALIGNMENT_JUSTIFIED:
                 align = kTXNFullJust;
-                break;  
+                break;
             default :
             case wxTEXT_ALIGNMENT_DEFAULT:
                 align = kTXNFlushDefault;
                 break;
         }
-        
+
         controlTags[controlAttrCount] = kTXNJustificationTag ;
         controlData[controlAttrCount].sValue = align ;
         controlAttrCount++ ;
@@ -1869,29 +1874,29 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
                                 &controlTags[controlAttrCount], &controlData[controlAttrCount]) );
         if ( style.HasLeftIndent() )
         {
-            margins.leftMargin = style.GetLeftIndent() / 254.0 * 72 + 0.5;
+            margins.leftMargin = wxConvertToTXN(style.GetLeftIndent());
         }
         if ( style.HasRightIndent() )
         {
-            margins.rightMargin = style.GetRightIndent() / 254.0 * 72 + 0.5;
+            margins.rightMargin = wxConvertToTXN(style.GetRightIndent());
         }
         controlAttrCount++ ;
     }
-    
+
     if ( style.HasTabs() )
     {
         const wxArrayInt& tabarray = style.GetTabs();
         // unfortunately Mac only applies a tab distance, not individually different tabs
         controlTags[controlAttrCount] = kTXNTabSettingsTag;
         if ( tabarray.size() > 0 )
-            controlData[controlAttrCount].tabValue.value = tabarray[0] / 254.0 * 72 + 0.5;
+            controlData[controlAttrCount].tabValue.value = wxConvertToTXN(tabarray[0]);
         else
-            controlData[controlAttrCount].tabValue.value = 72 ; 
+            controlData[controlAttrCount].tabValue.value = 72 ;
 
         controlData[controlAttrCount].tabValue.tabType = kTXNLeftTab;
         controlAttrCount++ ;
     }
-    
+
     // unfortunately the relayout is not automatic
     if ( controlAttrCount > 0 )
     {
@@ -1899,18 +1904,18 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
                                 controlTags, controlData) );
         relayout = true;
     }
-    
+
     if ( typeAttrCount > 0 )
     {
         verify_noerr( TXNSetTypeAttributes( m_txn , typeAttrCount, typeAttr, from , to ) );
         relayout = true;
     }
-    
+
     if ( tabs != NULL )
     {
         delete[] tabs;
     }
-    
+
     if ( relayout )
     {
         TXNRecalcTextLayout( m_txn );
@@ -3095,7 +3100,7 @@ bool wxMacMLTEHIViewControl::HasFocus() const
     ControlRef control ;
     if ( GetUserFocusWindow() == NULL )
         return false;
-        
+
     GetKeyboardFocus( GetUserFocusWindow() , &control ) ;
     return control == m_textView ;
 }

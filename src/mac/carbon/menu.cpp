@@ -574,7 +574,9 @@ wxInt32 wxMenu::MacHandleCommandProcess( wxMenuItem* item, int id, wxWindow* tar
     return result;
 }
 
-wxInt32 wxMenu::MacHandleCommandUpdateStatus( wxMenuItem* item, int id, wxWindow* targetWindow )
+wxInt32 wxMenu::MacHandleCommandUpdateStatus(wxMenuItem* WXUNUSED(item),
+                                             int id,
+                                             wxWindow* targetWindow)
 {
     OSStatus result = eventNotHandledErr ;
     wxUpdateUIEvent event(id);
@@ -611,7 +613,7 @@ wxInt32 wxMenu::MacHandleCommandUpdateStatus( wxMenuItem* item, int id, wxWindow
     {
         processed = targetWindow->GetEventHandler()->ProcessEvent(event);
     }
-    
+
     if ( processed )
     {
         // if anything changed, update the changed attribute

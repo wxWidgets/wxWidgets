@@ -40,15 +40,15 @@ class wxMetafileRefData: public wxGDIRefData
 public:
 #if wxMAC_USE_CORE_GRAPHICS
     // creates a metafile from memory, assumes ownership
-    wxMetafileRefData(CFDataRef data);    
+    wxMetafileRefData(CFDataRef data);
 #else
     // creates a metafile from memory, assumes ownership
-    wxMetafileRefData(PicHandle data);    
+    wxMetafileRefData(PicHandle data);
 #endif
     // prepares a recording metafile
-    wxMetafileRefData( int width, int height);    
+    wxMetafileRefData( int width, int height);
     // prepares a metafile to be read from a file (if filename is not empty)
-    wxMetafileRefData( const wxString& filename);    
+    wxMetafileRefData( const wxString& filename);
     virtual ~wxMetafileRefData();
 
     void Init();
@@ -188,7 +188,7 @@ void wxMetafileRefData::Close()
 
     CGContextRelease(m_context);
     m_context = NULL;
-    
+
     UpdateDocumentFromData();
 #else
     ClosePicture();
@@ -196,7 +196,7 @@ void wxMetafileRefData::Close()
 }
 
 #if wxMAC_USE_CORE_GRAPHICS
-void wxMetafileRefData::UpdateDocumentFromData() 
+void wxMetafileRefData::UpdateDocumentFromData()
 {
     wxCFRef<CGDataProviderRef> provider(UMACGDataProviderCreateWithCFData(m_data));
     m_pdfDoc.reset(CGPDFDocumentCreateWithProvider(provider));
@@ -204,8 +204,8 @@ void wxMetafileRefData::UpdateDocumentFromData()
     {
         CGPDFPageRef page = CGPDFDocumentGetPage( m_pdfDoc, 1 );
         CGRect rect = CGPDFPageGetBoxRect ( page, kCGPDFMediaBox);
-        m_width = rect.size.width;
-        m_height = rect.size.height;
+        m_width = wx_static_cast(int, rect.size.width);
+        m_height = wx_static_cast(int, rect.size.height);
     }
 }
 #endif
@@ -283,7 +283,8 @@ void wxMetafile::SetPICT(void* pictHandle)
     wxCFRef<CGDataProviderRef> provider(UMACGDataProviderCreateWithCFData(data));
     QDPictRef pictRef = QDPictCreateWithProvider(provider);
     CGRect rect = QDPictGetBounds(pictRef);
-    m_refData = new wxMetafileRefData( rect.size.width, rect.size.height );
+    m_refData = new wxMetafileRefData(wx_static_cast(int, rect.size.width),
+                                      wx_static_cast(int, rect.size.height));
     QDPictDrawToCGContext( ((wxMetafileRefData*) m_refData)->GetContext(), rect, pictRef );
     CFRelease( data );
     QDPictRelease( pictRef );
@@ -413,14 +414,14 @@ bool wxMetafileDataObject::GetDataHere(void *buf) const
 #if wxMAC_USE_CORE_GRAPHICS
     wxMetafileRefData* refData = M_METAFILEREFDATA(m_metafile);
     if ( refData )
-    {   
+    {
         CFIndex length = refData->GetData().GetLength();
         if ( length > 0 )
         {
             result = true ;
             refData->GetData().GetBytes(CFRangeMake(0,length), (UInt8 *) buf);
         }
-    } 
+    }
 #else
     Handle pictH = (Handle)(*((wxMetafile*)&m_metafile)).GetHMETAFILE();
     result = (pictH != NULL);

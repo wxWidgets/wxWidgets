@@ -140,7 +140,7 @@ void UMAEnableMenuItem( MenuRef inMenu , MenuItemIndex inItem , bool enable)
 void UMAAppendSubMenuItem( MenuRef menu , const wxString& title, wxFontEncoding encoding , SInt16 id )
 {
     AppendMenuItemTextWithCFString( menu,
-                                CFSTR("A"), 0, 0,NULL); 
+                                CFSTR("A"), 0, 0,NULL);
     UMASetMenuItemText( menu, (SInt16) ::CountMenuItems(menu), title , encoding );
     SetMenuItemHierarchicalID( menu , CountMenuItems( menu ) , id ) ;
 }
@@ -148,8 +148,8 @@ void UMAAppendSubMenuItem( MenuRef menu , const wxString& title, wxFontEncoding 
 void UMAInsertSubMenuItem( MenuRef menu , const wxString& title, wxFontEncoding encoding , MenuItemIndex item , SInt16 id  )
 {
     InsertMenuItemTextWithCFString( menu,
-                CFSTR("A"), item, 0, 0); 
-                
+                CFSTR("A"), item, 0, 0);
+
     UMASetMenuItemText( menu, item+1, title , encoding );
     SetMenuItemHierarchicalID( menu , item+1 , id ) ;
 }
@@ -295,7 +295,7 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEn
 void UMAAppendMenuItem( MenuRef menu , const wxString& title, wxFontEncoding encoding , wxAcceleratorEntry *entry )
 {
     AppendMenuItemTextWithCFString( menu,
-                                CFSTR("A"), 0, 0,NULL); 
+                                CFSTR("A"), 0, 0,NULL);
     // don't attempt to interpret metacharacters like a '-' at the beginning (would become a separator otherwise)
     ChangeMenuItemAttributes( menu , ::CountMenuItems(menu), kMenuItemAttrIgnoreMeta , 0 ) ;
     UMASetMenuItemText(menu, (SInt16) ::CountMenuItems(menu), title , encoding );
@@ -305,7 +305,7 @@ void UMAAppendMenuItem( MenuRef menu , const wxString& title, wxFontEncoding enc
 void UMAInsertMenuItem( MenuRef menu , const wxString& title, wxFontEncoding encoding , MenuItemIndex item , wxAcceleratorEntry *entry )
 {
     InsertMenuItemTextWithCFString( menu,
-                CFSTR("A"), item, 0, 0); 
+                CFSTR("A"), item, 0, 0);
 
     // don't attempt to interpret metacharacters like a '-' at the beginning (would become a separator otherwise)
     ChangeMenuItemAttributes( menu , item+1, kMenuItemAttrIgnoreMeta , 0 ) ;
@@ -584,7 +584,9 @@ size_t UMAPutBytesCFRefCallback( void *info, const void *bytes, size_t count )
     return count;
 }
 
-void UMAReleaseCFDataProviderCallback( void *info, const void *data, size_t count )
+void UMAReleaseCFDataProviderCallback(void *info,
+                                      const void *WXUNUSED(data),
+                                      size_t WXUNUSED(count))
 {
     if ( info )
         CFRelease( (CFDataRef) info );
@@ -600,7 +602,7 @@ CGDataProviderRef UMACGDataProviderCreateWithCFData( CFDataRef data )
 {
     if ( data == NULL )
         return NULL;
-        
+
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
     if( &CGDataProviderCreateWithCFData != NULL )
     {
@@ -622,7 +624,7 @@ CGDataConsumerRef UMACGDataConsumerCreateWithCFData( CFMutableDataRef data )
 {
     if ( data == NULL )
         return NULL;
-        
+
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
     if( &CGDataConsumerCreateWithCFData != NULL )
     {
