@@ -447,8 +447,6 @@ bool wxApp::OnInitGui()
 
 wxApp::wxApp()
 {
-    argc = 0;
-    argv = NULL;
     m_nPrintMode = wxPRINT_WINDOWS;
     m_hMq = 0;
     m_maxSocketHandles = 0;
@@ -458,23 +456,11 @@ wxApp::wxApp()
 
 wxApp::~wxApp()
 {
-    //
-    // Delete command-line args
-    //
-#if wxUSE_UNICODE
-    int                             i;
-
-    for (i = 0; i < argc; i++)
-    {
-        delete[] argv[i];
-    }
-    delete[] argv;
-#endif
 } // end of wxApp::~wxApp
 
 bool gbInOnIdle = false;
 
-void wxApp::OnIdle( wxIdleEvent& rEvent )
+void wxApp::OnIdle( wxIdleEvent& WXUNUSED(rEvent) )
 {
     //
     // Avoid recursion (via ProcessEvent default case)
