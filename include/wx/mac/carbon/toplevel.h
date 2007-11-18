@@ -60,9 +60,6 @@ public:
     virtual bool IsMaximized() const;
     virtual void Iconize(bool iconize = true);
     virtual bool IsIconized() const;
-#ifndef __WXUNIVERSAL__
-    virtual void SetIcons(const wxIconBundle& icons);
-#endif
     virtual void Restore();
 
     virtual bool SetShape(const wxRegion& region);
@@ -129,7 +126,7 @@ protected:
     // should the frame be maximized when it will be shown? set by Maximize()
     // when it is called while the frame is hidden
     bool m_maximizeOnShow;
- 
+
     WXWindow m_macWindow ;
 
     wxWindowMac* m_macFocus ;
@@ -156,6 +153,6 @@ private :
 };
 
 // list of all frames and modeless dialogs
-extern WXDLLEXPORT_DATA(wxWindowList) wxModelessWindows; 
+extern WXDLLEXPORT_DATA(wxWindowList) wxModelessWindows;
 
 #endif // _WX_MSW_TOPLEVEL_H_

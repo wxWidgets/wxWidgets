@@ -314,11 +314,11 @@ void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
     if( thisButtonIsFakeRight && ( mouseChord & 1U ) )
         mouseChord = ((mouseChord & ~1U) | 2U);
 
-    if(mouseChord & 1U) 
+    if(mouseChord & 1U)
                 wxevent.m_leftDown = true ;
-    if(mouseChord & 2U) 
+    if(mouseChord & 2U)
                 wxevent.m_rightDown = true ;
-    if(mouseChord & 4U) 
+    if(mouseChord & 4U)
                 wxevent.m_middleDown = true ;
 
     // translate into wx types
@@ -604,7 +604,6 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
                     currentMouseWindow->SetFocus();
             }
 
-            ControlPartCode dummyPart ;
             // if built-in find control is finding the wrong control (ie static box instead of overlaid
             // button, we cannot let the standard handler do its job, but must handle manually
 
@@ -1065,13 +1064,6 @@ wxPoint wxTopLevelWindowMac::GetClientAreaOrigin() const
     return wxPoint(0, 0) ;
 }
 
-#ifndef __WXUNIVERSAL__
-void wxTopLevelWindowMac::SetIcons( const wxIconBundle& icons )
-{
-// { SetIcon( icons.GetIcon( -1 ) ); }
-}
-#endif
-
 void  wxTopLevelWindowMac::MacSetBackgroundBrush( const wxBrush &brush )
 {
     wxTopLevelWindowBase::MacSetBackgroundBrush( brush ) ;
@@ -1108,7 +1100,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow(
 }
 
 void  wxTopLevelWindowMac::DoMacCreateRealWindow(
-    wxWindow* parent, 
+    wxWindow* parent,
     const wxString& title,
     const wxPoint& pos,
     const wxSize& size,
@@ -1142,8 +1134,8 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
     WindowClass wclass = 0;
     WindowAttributes attr = kWindowNoAttributes ;
     WindowGroupRef group = NULL ;
-	bool activationScopeSet = false;
-	WindowActivationScope activationScope = kWindowActivationScopeNone;
+    bool activationScopeSet = false;
+    WindowActivationScope activationScope = kWindowActivationScopeNone;
 
     if ( HasFlag( wxFRAME_TOOL_WINDOW) )
     {
@@ -1164,8 +1156,8 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
         else
         {
             wclass = kPlainWindowClass ;
-			activationScopeSet = true;
-			activationScope = kWindowActivationScopeNone;
+            activationScopeSet = true;
+            activationScope = kWindowActivationScopeNone;
         }
     }
     else if ( HasFlag( wxPOPUP_WINDOW ) )
@@ -1236,7 +1228,7 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
         if( parenttlw )
             group = GetWindowGroupParent( GetWindowGroup( parenttlw ) );
     }
-        
+
     attr |= kWindowCompositingAttribute;
 #if 0 // wxMAC_USE_CORE_GRAPHICS ; TODO : decide on overall handling of high dpi screens (pixel vs userscale)
     attr |= kWindowFrameworkScaledAttribute;
@@ -1267,16 +1259,16 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
     wxCHECK_RET( err == noErr, wxT("Mac OS error when trying to create new window") );
 
     // setup a separate group for each window, so that overlays can be handled easily
-    
+
     WindowGroupRef overlaygroup = NULL;
     verify_noerr( CreateWindowGroup( kWindowGroupAttrMoveTogether | kWindowGroupAttrLayerTogether | kWindowGroupAttrHideOnCollapse, &overlaygroup ));
     verify_noerr( SetWindowGroupParent( overlaygroup, GetWindowGroup( (WindowRef) m_macWindow )));
     verify_noerr( SetWindowGroup( (WindowRef) m_macWindow , overlaygroup ));
-  
-	if ( activationScopeSet )
-	{
-		verify_noerr( SetWindowActivationScope( (WindowRef) m_macWindow , activationScope ));
-	}
+
+    if ( activationScopeSet )
+    {
+        verify_noerr( SetWindowActivationScope( (WindowRef) m_macWindow , activationScope ));
+    }
 
     // the create commands are only for content rect,
     // so we have to set the size again as structure bounds
