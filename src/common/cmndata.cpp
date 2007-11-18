@@ -89,14 +89,14 @@ wxColourData::~wxColourData()
 
 void wxColourData::SetCustomColour(int i, const wxColour& colour)
 {
-    wxCHECK_RET( (i >= 0 && i < 16), _T("custom colour index out of range") );
+    wxCHECK_RET( (i >= 0 && i < WXSIZEOF(m_custColours)), _T("custom colour index out of range") );
 
     m_custColours[i] = colour;
 }
 
 wxColour wxColourData::GetCustomColour(int i)
 {
-    wxCHECK_MSG( (i >= 0 && i < 16), wxColour(0,0,0),
+    wxCHECK_MSG( (i >= 0 && i < WXSIZEOF(m_custColours)), wxColour(0,0,0),
                  _T("custom colour index out of range") );
 
     return m_custColours[i];
@@ -104,12 +104,75 @@ wxColour wxColourData::GetCustomColour(int i)
 
 void wxColourData::operator=(const wxColourData& data)
 {
-    int i;
-    for (i = 0; i < 16; i++)
+    for (int i = 0; i < WXSIZEOF(m_custColours); i++)
         m_custColours[i] = data.m_custColours[i];
 
-    m_dataColour = (wxColour&)data.m_dataColour;
+    m_dataColour = data.m_dataColour;
     m_chooseFull = data.m_chooseFull;
+}
+
+// ----------------------------------------------------------------------------
+// [de]serialization
+// ----------------------------------------------------------------------------
+
+// separator used between different fields
+static const char wxCOL_DATA_SEP = ',';
+
+wxString wxColourData::ToString() const
+{
+    wxString str(m_chooseFull ? '1' : '0');
+
+    for ( int i = 0; i < WXSIZEOF(m_custColours); i++ )
+    {
+        str += wxCOL_DATA_SEP;
+
+        const wxColour& clr = m_custColours[i];
+        if ( clr.IsOk() )
+            str += clr.GetAsString(wxC2S_HTML_SYNTAX);
+    }
+
+    return str;
+}
+
+bool wxColourData::FromString(const wxString& str)
+{
+    wxString token;
+    int n = -1; // index of the field, -1 corresponds to m_chooseFull
+    for ( wxString::const_iterator i = str.begin(); i != str.end(); ++i )
+    {
+        if ( *i == wxCOL_DATA_SEP )
+        {
+            if ( n == -1 )
+            {
+                if ( token == '0' )
+                    m_chooseFull = false;
+                else if ( token == '1' )
+                    m_chooseFull = true;
+                else // only '0' and '1' are used in ToString()
+                    return false;
+            }
+            else // custom colour
+            {
+                if ( n == WXSIZEOF(m_custColours) )
+                    return false;   // too many custom colours
+
+                // empty strings are used by ToString() for colours not used
+                if ( token.empty() )
+                    m_custColours[n] = wxNullColour;
+                else if ( !m_custColours[n].Set(token) )
+                    return false;   // invalid colour string
+            }
+
+            token.clear();
+            n++;
+        }
+        else // continuation of the current field
+        {
+            token += *i;
+        }
+    }
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------

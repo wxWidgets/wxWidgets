@@ -26,11 +26,18 @@
 class WXDLLIMPEXP_FWD_CORE wxPrintNativeDataBase;
 
 
-class WXDLLEXPORT wxColourData: public wxObject
+class WXDLLEXPORT wxColourData : public wxObject
 {
 public:
+    // number of custom colours we store
+    enum
+    {
+        NUM_CUSTOM = 16
+    };
+
     wxColourData();
     wxColourData(const wxColourData& data);
+    void operator=(const wxColourData&);
     virtual ~wxColourData();
 
     void SetChooseFull(bool flag) { m_chooseFull = flag; }
@@ -39,15 +46,18 @@ public:
     const wxColour& GetColour() const { return m_dataColour; }
     wxColour& GetColour() { return m_dataColour; }
 
-    // Array of 16 custom colours
+    // These functions modify colours in an internal array of NUM_CUSTOM custom
+    // colours
     void SetCustomColour(int i, const wxColour& colour);
     wxColour GetCustomColour(int i);
 
-    void operator=(const wxColourData& data);
+    // Serialize the object to a string and restore it from it
+    wxString ToString() const;
+    bool FromString(const wxString& str);
 
-public:
+public: // TODO: make these fields private
     wxColour        m_dataColour;
-    wxColour        m_custColours[16];
+    wxColour        m_custColours[NUM_CUSTOM];
     bool            m_chooseFull;
 
 private:

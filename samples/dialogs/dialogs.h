@@ -211,6 +211,7 @@ public:
 
 #if wxUSE_COLOURDLG
     void ChooseColour(wxCommandEvent& event);
+    void GetColour(wxCommandEvent& event);
 #endif // wxUSE_COLOURDLG
 
 #if wxUSE_FONTDLG
@@ -341,6 +342,7 @@ public:
 enum
 {
     DIALOGS_CHOOSE_COLOUR = wxID_HIGHEST,
+    DIALOGS_GET_COLOUR,
     DIALOGS_CHOOSE_COLOUR_GENERIC,
     DIALOGS_CHOOSE_FONT,
     DIALOGS_CHOOSE_FONT_GENERIC,

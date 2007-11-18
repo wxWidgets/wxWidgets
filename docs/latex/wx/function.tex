@@ -2109,7 +2109,7 @@ customization.
 
 \membersection{::wxGetColourFromUser}\label{wxgetcolourfromuser}
 
-\func{wxColour}{wxGetColourFromUser}{\param{wxWindow *}{parent}, \param{const wxColour\& }{colInit}, \param{const wxString\& }{caption = wxEmptyString}}
+\func{wxColour}{wxGetColourFromUser}{\param{wxWindow *}{parent}, \param{const wxColour\& }{colInit}, \param{const wxString\& }{caption = wxEmptyString}, \param{wxColourData *}{data = \NULL}}
 
 Shows the colour selection dialog and returns the colour selected by user or
 invalid colour (use \helpref{wxColour:IsOk}{wxcolourisok} to test whether a colour
@@ -2122,6 +2122,10 @@ is valid) if the dialog was cancelled.
 \docparam{colInit}{If given, this will be the colour initially selected in the dialog.}
 
 \docparam{caption}{If given, this will be used for the dialog caption.}
+
+\docparam{data}{Optional object storing additional colour dialog settings, such
+as custom colours. If none is provided the same settings as the last time are
+used.}
 
 \wxheading{Include files}
 

@@ -119,6 +119,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
 #if wxUSE_COLOURDLG
     EVT_MENU(DIALOGS_CHOOSE_COLOUR,                 MyFrame::ChooseColour)
+    EVT_MENU(DIALOGS_GET_COLOUR,                    MyFrame::GetColour)
 #endif // wxUSE_COLOURDLG
 
 #if wxUSE_FONTDLG
@@ -271,7 +272,8 @@ bool MyApp::OnInit()
     wxMenu *choices_menu = new wxMenu;
 
     #if wxUSE_COLOURDLG
-        choices_menu->Append(DIALOGS_CHOOSE_COLOUR, _T("&Choose colour"));
+        choices_menu->Append(DIALOGS_CHOOSE_COLOUR, _T("&Choose bg colour"));
+        choices_menu->Append(DIALOGS_GET_COLOUR, _T("&Choose fg colour"));
     #endif // wxUSE_COLOURDLG
 
     #if wxUSE_FONTDLG
@@ -463,16 +465,10 @@ MyFrame::MyFrame(wxWindow *parent,
 
 #if wxUSE_COLOURDLG
     m_clrData.SetChooseFull(true);
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < wxColourData::NUM_CUSTOM; i++)
     {
-        m_clrData.SetCustomColour(
-          i,
-          wxColour(
-            (unsigned char)(i*16),
-            (unsigned char)(i*16),
-            (unsigned char)(i*16)
-          )
-        );
+        unsigned char n = i*16;
+        m_clrData.SetCustomColour(i, wxColour(n, n, n));
     }
 #endif // wxUSE_COLOURDLG
 
@@ -482,13 +478,14 @@ MyFrame::MyFrame(wxWindow *parent,
 }
 
 #if wxUSE_COLOURDLG
-void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event) )
+
+void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event))
 {
     m_clrData.SetColour(myCanvas->GetBackgroundColour());
 
     wxColourDialog dialog(this, &m_clrData);
-    dialog.SetTitle(_T("Choose the background colour"));
-    if (dialog.ShowModal() == wxID_OK)
+    dialog.SetTitle(_("Please choose the background colour"));
+    if ( dialog.ShowModal() == wxID_OK )
     {
         m_clrData = dialog.GetColourData();
         myCanvas->SetBackgroundColour(m_clrData.GetColour());
@@ -496,7 +493,25 @@ void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event) )
         myCanvas->Refresh();
     }
 }
+
+void MyFrame::GetColour(wxCommandEvent& WXUNUSED(event))
+{
+    wxColour clr = wxGetColourFromUser
+                   (
+                    this,
+                    wxGetApp().m_canvasTextColour,
+                    "Please choose the foreground colour"
+                   );
+    if ( clr.IsOk() )
+    {
+        wxGetApp().m_canvasTextColour = clr;
+        myCanvas->Refresh();
+    }
+    //else: dialog cancelled by user
+}
+
 #endif // wxUSE_COLOURDLG
+
 
 #if USE_COLOURDLG_GENERIC
 void MyFrame::ChooseColourGeneric(wxCommandEvent& WXUNUSED(event))
