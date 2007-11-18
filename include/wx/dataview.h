@@ -228,8 +228,6 @@ public:
     wxDataViewIndexListModel( unsigned int initial_size = 0 );
     ~wxDataViewIndexListModel();
 
-    virtual unsigned int GetRowCount() = 0;
-
     virtual void GetValue( wxVariant &variant,
                            unsigned int row, unsigned int col ) const = 0;
 
