@@ -78,6 +78,11 @@ public:
     // Responds to colour changes
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
+    // true if the status bar shows the size grip: for this it must have
+    // wxST_SIZEGRIP style and the window it is attached to must be resizeable
+    // and not maximized
+    bool ShowsSizeGrip() const;
+
 protected:
     // common part of all ctors
     void Init();

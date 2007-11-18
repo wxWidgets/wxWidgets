@@ -80,14 +80,14 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
     SetFont(*wxSMALL_FONT);
 #endif
 
-	wxCoord y;
-	{
-		// Set the height according to the font and the border size
-		wxClientDC dc(this);
-		dc.SetFont(GetFont());
+    wxCoord y;
+    {
+        // Set the height according to the font and the border size
+        wxClientDC dc(this);
+        dc.SetFont(GetFont());
 
-		dc.GetTextExtent(_T("X"), NULL, &y );
-	}
+        dc.GetTextExtent(_T("X"), NULL, &y );
+    }
     int height = (int)( (11*y)/10 + 2*GetBorderY());
 
     SetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, height);
@@ -189,17 +189,27 @@ void wxStatusBarGeneric::SetStatusWidths(int n, const int widths_field[])
     wxStatusBarBase::SetStatusWidths(n, widths_field);
 }
 
+bool wxStatusBarGeneric::ShowsSizeGrip() const
+{
+    if ( !HasFlag(wxST_SIZEGRIP) )
+        return false;
+
+    wxTopLevelWindow * const
+        tlw = wxDynamicCast(wxGetTopLevelParent(GetParent()), wxTopLevelWindow);
+    return tlw && !tlw->IsMaximized() && tlw->HasFlag(wxRESIZE_BORDER);
+}
+
 void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
 
 #ifdef __WXGTK20__
     // Draw grip first
-    if (HasFlag( wxST_SIZEGRIP ))
+    if ( ShowsSizeGrip() )
     {
         int width, height;
         GetClientSize(&width, &height);
-        
+
         if (GetLayoutDirection() == wxLayout_RightToLeft)
         {
             gtk_paint_resize_grip( m_widget->style,
@@ -223,7 +233,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
                                width-height-2, 2, height-2, height-4 );
         }
     }
-#endif
+#endif // __WXGTK20__
 
     if (GetFont().Ok())
         dc.SetFont(GetFont());
@@ -415,7 +425,7 @@ void wxStatusBarGeneric::OnLeftDown(wxMouseEvent& event)
     int width, height;
     GetClientSize(&width, &height);
 
-    if (HasFlag( wxST_SIZEGRIP ) && (event.GetX() > width-height))
+    if ( ShowsSizeGrip()  && (event.GetX() > width-height) )
     {
         GtkWidget *ancestor = gtk_widget_get_toplevel( m_widget );
 
@@ -462,7 +472,7 @@ void wxStatusBarGeneric::OnRightDown(wxMouseEvent& event)
     int width, height;
     GetClientSize(&width, &height);
 
-    if (HasFlag( wxST_SIZEGRIP ) && (event.GetX() > width-height))
+    if ( ShowsSizeGrip() && (event.GetX() > width-height) )
     {
         GtkWidget *ancestor = gtk_widget_get_toplevel( m_widget );
 
