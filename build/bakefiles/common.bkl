@@ -753,7 +753,8 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
     <define-tag name="wx-lib" rules="exe,dll,module">
         <sys-lib>$(wxwin.libToLink(value))</sys-lib>
         <ldlibs>$(wxwin.extraLdflags(value))</ldlibs>
-        <if cond="IS_MSVC_PRJ=='1' and MONOLITHIC=='0'">
+        <!-- msvs2005x* formats don't support external dependencies yet: -->
+        <if cond="FORMAT in ['msvc6prj','msevc4prj'] and MONOLITHIC=='0'">
             <depends-on-dsp>$(wxwin.makeDspDependency(value))</depends-on-dsp>
         </if>
     </define-tag>
