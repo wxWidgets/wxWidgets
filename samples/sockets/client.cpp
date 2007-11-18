@@ -287,18 +287,16 @@ void MyFrame::OnOpenConnectionIPv6(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OpenConnection(int family)
 {
   wxIPaddress * addr;
+  wxIPV4address addr4;
 #if wxUSE_IPV6
   wxIPV6address addr6;
-  wxIPV4address addr4;
-  if(family==AF_INET6)
-  {
-    addr = & addr6;
-  } else {
-    addr = & addr4;
-  }
+  if ( family==AF_INET6 )
+    addr = &addr6;
+  else
+    addr = &addr4;
 #else
-  wxIPV4address addr4;
-  addr = & addr4;
+  wxUnusedVar(family);
+  addr = &addr4;
 #endif
 
   m_menuSocket->Enable(CLIENT_OPEN, false);
