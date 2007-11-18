@@ -13,11 +13,13 @@
 #define _WX_COMBOBOX_H_
 
 #include "wx/choice.h"
+#include "wx/textentry.h"
 
 #if wxUSE_COMBOBOX
 
 // Combobox item
-class WXDLLEXPORT wxComboBox : public wxChoice
+class WXDLLEXPORT wxComboBox : public wxChoice,
+                               public wxTextEntry
 {
 
  public:
@@ -94,35 +96,22 @@ class WXDLLEXPORT wxComboBox : public wxChoice
                 ,const wxString&      rsName = wxComboBoxNameStr
                );
 
-    //
-    // List functions: see wxChoice
-    //
-    virtual wxString GetValue(void) const;
-    virtual void     SetValue(const wxString& rsValue);
+    // resolve ambiguities among virtual functions inherited from both base
+    // classes
+    virtual void Clear();
+    virtual wxString GetValue() const;
+    virtual void SetValue(const wxString& value);
+    virtual wxString GetStringSelection() const
+        { return wxChoice::GetStringSelection(); }
 
-    //
-    // Clipboard operations
-    //
-    virtual void Copy();
-    virtual void Cut();
-    virtual void Paste();
-
-    virtual void        SetInsertionPoint(long lPos);
-    virtual void        SetInsertionPointEnd(void);
-    virtual long        GetInsertionPoint(void) const;
-    virtual wxTextPos   GetLastPosition(void) const;
-    virtual void        Replace( long            lFrom
-                                ,long            lTo
-                                ,const wxString& rsValue
-                               );
-    virtual void        Remove( long lFrom
-                               ,long lTo
-                              );
     inline virtual void SetSelection(int n) { wxChoice::SetSelection(n); }
-    virtual void        SetSelection( long lFrom
-                                     ,long lTo
-                                    );
-    virtual void        SetEditable(bool bEditable);
+    virtual void SetSelection(long from, long to)
+        { wxTextEntry::SetSelection(from, to); }
+    virtual int GetSelection() const { return wxChoice::GetSelection(); }
+    virtual void GetSelection(long *from, long *to) const
+        { wxTextEntry::GetSelection(from, to); }
+
+    virtual bool IsEditable() const;
 
     virtual bool        OS2Command( WXUINT uParam
                                    ,WXWORD wId
@@ -133,6 +122,10 @@ class WXDLLEXPORT wxComboBox : public wxChoice
                                       );
 
 private:
+    // implement wxTextEntry pure virtual: it implements all the operations for
+    // the simple EDIT controls
+    virtual WXHWND GetEditHWND() const { return m_hWnd; }
+
     DECLARE_DYNAMIC_CLASS(wxComboBox)
 }; // end of CLASS wxComboBox
 

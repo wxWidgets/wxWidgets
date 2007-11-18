@@ -185,6 +185,10 @@ protected:
     bool m_bSkipUpdate;
 
 private:
+    // implement wxTextEntry pure virtual: it implements all the operations for
+    // the simple EDIT controls
+    virtual WXHWND GetEditHWND() const { return m_hWnd; }
+
     bool                            m_bIsMLE;
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxTextCtrl)
