@@ -89,14 +89,14 @@ wxColourData::~wxColourData()
 
 void wxColourData::SetCustomColour(int i, const wxColour& colour)
 {
-    wxCHECK_RET( (i >= 0 && i < WXSIZEOF(m_custColours)), _T("custom colour index out of range") );
+    wxCHECK_RET( i >= 0 && i < NUM_CUSTOM, _T("custom colour index out of range") );
 
     m_custColours[i] = colour;
 }
 
 wxColour wxColourData::GetCustomColour(int i)
 {
-    wxCHECK_MSG( (i >= 0 && i < WXSIZEOF(m_custColours)), wxColour(0,0,0),
+    wxCHECK_MSG( i >= 0 && i < NUM_CUSTOM, wxColour(0,0,0),
                  _T("custom colour index out of range") );
 
     return m_custColours[i];
@@ -104,7 +104,7 @@ wxColour wxColourData::GetCustomColour(int i)
 
 wxColourData& wxColourData::operator=(const wxColourData& data)
 {
-    for (int i = 0; i < WXSIZEOF(m_custColours); i++)
+    for ( int i = 0; i < NUM_CUSTOM; i++)
         m_custColours[i] = data.m_custColours[i];
 
     m_dataColour = data.m_dataColour;
@@ -124,7 +124,7 @@ wxString wxColourData::ToString() const
 {
     wxString str(m_chooseFull ? '1' : '0');
 
-    for ( int i = 0; i < WXSIZEOF(m_custColours); i++ )
+    for ( int i = 0; i < NUM_CUSTOM; i++ )
     {
         str += wxCOL_DATA_SEP;
 
