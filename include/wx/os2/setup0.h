@@ -1221,4 +1221,13 @@
 
 /* --- end common options --- */
 
+/*
+ * Unix-specific options
+ */
+#define wxUSE_SELECT_DISPATCHER 1
+#define wxUSE_EPOLL_DISPATCHER 0
+
+#define wxUSE_UNICODE_UTF8 0
+#define wxUSE_UTF8_LOCALE_ONLY 0
+
 #endif // _WX_SETUP_H_

@@ -15,7 +15,13 @@
 
 #if wxUSE_SELECT_DISPATCHER
 
-#include <sys/types.h>
+#ifdef __WATCOMC__
+  #include <types.h>
+  #include <sys/ioctl.h>
+  #include <sys/select.h>
+#else
+  #include <sys/types.h>
+#endif
 
 #include "wx/private/fdiodispatcher.h"
 
