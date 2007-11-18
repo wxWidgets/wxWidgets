@@ -1365,6 +1365,43 @@ int wxMessageBox(const wxString& message, const wxString& caption, long style,
     return wxCANCEL;
 }
 
+void wxInfoMessageBox(wxWindow* parent)
+{
+    // don't translate these strings, they're for diagnostics purposes only
+    wxString msg;
+    msg.Printf(_T("wxWidgets Library (%s port)\n")
+               _T("Version %d.%d.%d%s%s, compiled at %s %s\n")
+               _T("Runtime version of toolkit used is %d.%d.%s\n")
+               _T("Copyright (c) 1995-2007 wxWidgets team"),
+               wxPlatformInfo::Get().GetPortIdName().c_str(),
+               wxMAJOR_VERSION,
+               wxMINOR_VERSION,
+               wxRELEASE_NUMBER,
+#if wxUSE_UNICODE
+               L" (Unicode)",
+#else
+               wxEmptyString,
+#endif
+#ifdef __WXDEBUG__
+               _T(" Debug build"),
+#else
+               wxEmptyString,
+#endif
+               __TDATE__,
+               __TTIME__,
+               wxPlatformInfo::Get().GetToolkitMajorVersion(),
+               wxPlatformInfo::Get().GetToolkitMinorVersion(),
+#ifdef __WXGTK__
+               wxString::Format(_T("\nThe compile-time GTK+ version is %d.%d.%d."), GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION).c_str()
+#else
+               wxEmptyString
+#endif
+               );
+    wxMessageBox(msg, _T("wxWidgets information"),
+                 wxICON_INFORMATION | wxOK,
+                 parent);
+}
+
 #endif // wxUSE_MSGDLG
 
 #if wxUSE_TEXTDLG

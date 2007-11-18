@@ -207,7 +207,10 @@ class MyFrame: public wxFrame
 public:
     MyFrame(wxWindow *parent, const wxString& title);
 
+#if wxUSE_MSGDLG
     void MessageBox(wxCommandEvent& event);
+    void MessageBoxInfo(wxCommandEvent& event);
+#endif // wxUSE_MSGDLG
 
 #if wxUSE_COLOURDLG
     void ChooseColour(wxCommandEvent& event);
@@ -347,6 +350,7 @@ enum
     DIALOGS_CHOOSE_FONT,
     DIALOGS_CHOOSE_FONT_GENERIC,
     DIALOGS_MESSAGE_BOX,
+    DIALOGS_MESSAGE_BOX_WXINFO,
     DIALOGS_SINGLE_CHOICE,
     DIALOGS_MULTI_CHOICE,
     DIALOGS_TEXT_ENTRY,

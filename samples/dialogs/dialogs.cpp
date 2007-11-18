@@ -115,8 +115,10 @@ END_EVENT_TABLE()
 
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+#if wxUSE_MSGDLG
     EVT_MENU(DIALOGS_MESSAGE_BOX,                   MyFrame::MessageBox)
-
+    EVT_MENU(DIALOGS_MESSAGE_BOX_WXINFO,            MyFrame::MessageBoxInfo)
+#endif // wxUSE_MSGDLG
 #if wxUSE_COLOURDLG
     EVT_MENU(DIALOGS_CHOOSE_COLOUR,                 MyFrame::ChooseColour)
     EVT_MENU(DIALOGS_GET_COLOUR,                    MyFrame::GetColour)
@@ -353,7 +355,11 @@ bool MyApp::OnInit()
 #endif // wxUSE_DIRDLG
 
 
-#if wxUSE_STARTUP_TIPS || wxUSE_PROGRESSDLG || wxUSE_BUSYINFO || wxUSE_LOG_DIALOG
+#if wxUSE_STARTUP_TIPS || \
+    wxUSE_PROGRESSDLG || \
+    wxUSE_BUSYINFO || \
+    wxUSE_LOG_DIALOG || \
+    wxUSE_MSGDLG
 
     wxMenu *info_menu = new wxMenu;
 
@@ -372,6 +378,11 @@ bool MyApp::OnInit()
     #if wxUSE_LOG_DIALOG
        info_menu->Append(DIALOGS_LOG_DIALOG, _T("&Log dialog\tCtrl-L"));
     #endif // wxUSE_LOG_DIALOG
+
+    #if wxUSE_MSGDLG
+        info_menu->Append(DIALOGS_MESSAGE_BOX_WXINFO,
+                             _T("&wxWidgets information\tCtrl-I"));
+    #endif // wxUSE_MSGDLG
 
     menuDlg->Append(wxID_ANY,_T("&Informative dialogs"),info_menu);
 
@@ -611,6 +622,7 @@ void MyFrame::LogDialog(wxCommandEvent& WXUNUSED(event))
 }
 #endif // wxUSE_LOG_DIALOG
 
+#if wxUSE_MSGDLG
 void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
 {
     wxMessageDialog dialog(NULL,
@@ -646,8 +658,14 @@ void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
     }
 }
 
+void MyFrame::MessageBoxInfo(wxCommandEvent& WXUNUSED(event))
+{
+    ::wxInfoMessageBox(this);
+}
+#endif // wxUSE_MSGDLG
+
 #if wxUSE_NUMBERDLG
-void MyFrame::NumericEntry(wxCommandEvent& WXUNUSED(event) )
+void MyFrame::NumericEntry(wxCommandEvent& WXUNUSED(event))
 {
     long res = wxGetNumberFromUser( _T("This is some text, actually a lot of text.\n")
                                     _T("Even two rows of text."),

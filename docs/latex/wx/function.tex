@@ -169,6 +169,7 @@ the corresponding topic.
 \helpref{wxGetenv}{wxgetenvmacro}\\
 \helpref{wxHandleFatalExceptions}{wxhandlefatalexceptions}\\
 \helpref{wxICON}{wxiconmacro}\\
+\helpref{wxInfoMessageBox}{wxinfomessagebox}\\
 \helpref{wxINTXX\_SWAP\_ALWAYS}{intswapalways}\\
 \helpref{wxINTXX\_SWAP\_ON\_BE}{intswaponbe}\\
 \helpref{wxINTXX\_SWAP\_ON\_LE}{intswaponle}\\
@@ -2353,6 +2354,23 @@ elements as {\it choices} or {\it aChoices}!
 \perlnote{In wxPerl there is just an array reference in place of {\tt n}
 and {\tt choices}, and the client data array must have the
 same length as the choices array.}
+
+
+\membersection{::wxInfoMessageBox}\label{wxinfomessagebox}
+
+\func{void}{wxInfoMessageBox}{\param{wxWindow (}{parent = \NULL}}
+
+Shows a message box with the information about the wxWidgets build used,
+including its version, most important build parameters and the version of the
+underlying GUI toolkit. This is mainly used for diagnostic purposes and can be
+invoked by Ctrl-Alt-middle clicking on any wxWindow which doesn't otherwise
+handle this event.
+
+\newsince{2.9.0}
+
+\wxheading{Include files}
+
+<wx/utils.h>
 
 
 \membersection{::wxIsBusy}\label{wxisbusy}
