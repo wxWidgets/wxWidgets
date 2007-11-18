@@ -25,7 +25,6 @@
     <!-- These wildcards match all .bkl files in wxWidgets tree: -->
     <input>
         wx.bkl
-        ../../contrib/build/*/*.bkl
         ../../samples/*.bkl
         ../../samples/*/*.bkl
         ../../samples/*/*/*.bkl
@@ -35,10 +34,6 @@
         ../../utils/*.bkl
         ../../utils/*/*.bkl
         ../../utils/*/*/*.bkl
-        ../../contrib/samples/*.bkl
-        ../../contrib/samples/*/*.bkl
-        ../../contrib/samples/*/*/*.bkl
-        ../../contrib/utils/*/*.bkl
         ../../tests/*.bkl
     </input>
 
@@ -70,7 +65,6 @@
     <del-formats files="../../samples/console/*">msevc4prj</del-formats>
     <del-formats files="../../utils/HelpGen/src/*">msevc4prj</del-formats>
     <del-formats files="../../utils/wxrc/*">msevc4prj</del-formats>
-    <del-formats files="../../contrib/utils/wxrc/*">msevc4prj</del-formats>
     <del-formats files="../../tests/*">msevc4prj</del-formats>
 
     <!-- HtmlCtrl sample is Cocoa only (autoconf format) -->
@@ -116,13 +110,6 @@
     </add-flags>
     <add-flags files="wx.bkl" formats="msevc4prj">
         -o../wince/wx.vcw
-    </add-flags>
-    <add-flags files="../../contrib/build/*/*.bkl" formats="autoconf">
-        -o../../contrib/src/$(INPUT_FILE_BASENAME_NOEXT)/Makefile.in
-    </add-flags>
-    <add-flags files="../../contrib/build/*/*.bkl"
-               formats="mingw,borland,dmars_smake,dmars,watcom,msvc,msvc6prj,msevc4prj,msvs2003prj,msvs2005prj">
-        -DSRCDIR=../../src/$(INPUT_FILE_BASENAME_NOEXT)
     </add-flags>
 
 

@@ -38,7 +38,7 @@ def mk_wxid(id):
     return wxid
 
 
-# All libs that are part of the main library (i.e. non-contrib):
+# All libs that are part of the main library:
 MAIN_LIBS = ['mono', 'base', 'core', 'adv', 'html', 'xml', 'net',
              'media', 'qa', 'xrc', 'aui', 'richtext', 'stc']
 # List of library names/ids for categories with different names:
@@ -83,12 +83,12 @@ def libToLink(wxlibname):
        For one of main libraries, libToLink('foo') returns '$(WXLIB_FOO)' which
        must be defined in common.bkl as either nothing (in monolithic build) or
        mkLibName('foo') (otherwise).
-       For contrib libraries, it returns mkDllName(wxlibname).       
        """
     if wxlibname in MAIN_LIBS:
         return '$(WXLIB_%s)' % wxlibname.upper()
     else:
         return mkLibName(wxlibname)
+
 
 def extraLdflags(wxlibname):
     if wxlibname in EXTRALIBS:
@@ -151,7 +151,3 @@ def headersOnly(files):
 def makeDspDependency(lib):
     """Returns suitable entry for <depends-on-dsp> for main libs."""
     return '%s:$(nativePaths(WXTOPDIR))build\\msw\\wx_%s.dsp' % (lib,lib)
-
-def makeContribDspDependency(lib):
-    """Returns suitable entry for <depends-on-dsp> for contrib libs."""
-    return '%s:$(nativePaths(WXTOPDIR))contrib\\build\\%s\\%s.dsp' % (lib,lib,lib)

@@ -746,7 +746,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
     </define-rule>
 
     <!-- =============================================================== -->
-    <!--               Support for wxWidgets samples and contrib:        -->
+    <!--               Support for wxWidgets samples:                    -->
     <!-- =============================================================== -->
 
     <!-- Link against one wxWin library. Value must be literal! -->

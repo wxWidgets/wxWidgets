@@ -3,8 +3,6 @@
 
 <makefile>
     
-    <set var="file_common_samples_included">1</set>
-    
     <if cond="not isdefined('OUT_OF_TREE_MAKEFILES')">
         <set var="OUT_OF_TREE_MAKEFILES">0</set>
     </if>
