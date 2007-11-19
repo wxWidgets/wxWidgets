@@ -499,7 +499,7 @@ bool wxDataViewIndexListModel::IsContainer( const wxDataViewItem &item ) const
 
 unsigned int wxDataViewIndexListModel::GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const
 {
-    if (m_useHash)
+    if (!m_useHash)
         return 0;  // error
         
     if (item.IsOk())
