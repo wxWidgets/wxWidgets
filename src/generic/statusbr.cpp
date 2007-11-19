@@ -23,6 +23,7 @@
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
     #include "wx/dcclient.h"
+    #include "wx/toplevel.h"
 #endif
 
 #ifdef __WXGTK20__
