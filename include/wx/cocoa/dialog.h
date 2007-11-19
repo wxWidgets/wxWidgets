@@ -17,8 +17,6 @@
 #include "wx/panel.h"
 #include "wx/cocoa/NSPanel.h"
 
-WXDLLEXPORT_DATA(extern const wxChar) wxDialogNameStr[];
-
 // ========================================================================
 // wxDialog
 // ========================================================================
