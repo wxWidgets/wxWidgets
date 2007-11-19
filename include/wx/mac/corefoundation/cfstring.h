@@ -7,6 +7,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
+// Usage:       Darwin (base library)
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_CFSTRINGHOLDER_H__

@@ -76,7 +76,7 @@
     #include "wx/mac/private.h"  // includes mac headers
 #endif
 
-#if defined(__WXOSX__)
+#if defined(__DARWIN__)
 	#include "wx/mac/corefoundation/cfref.h"
 	#include <CoreFoundation/CFLocale.h>
 	#include "wx/mac/corefoundation/cfstring.h"
@@ -2902,7 +2902,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
     return str;
 }
 
-#elif defined(__WXOSX__)
+#elif defined(__DARWIN__)
 
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
@@ -2928,7 +2928,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
     return str.AsString();
 }
 
-#else // !__WXMSW__ && !__WXMAC__
+#else // !__WXMSW__ && !__DARWIN__
 
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)

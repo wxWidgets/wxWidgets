@@ -7,6 +7,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
+// Usage:       Darwin (base library)
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
