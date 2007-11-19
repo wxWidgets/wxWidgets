@@ -425,8 +425,11 @@ public:
     bool Cleared();
     void Resort()
     {
-        SortPrepare();
-        m_root->Resort();
+        if (m_root)
+        {
+            SortPrepare();
+            m_root->Resort();
+        }
         UpdateDisplay();
     }
 
@@ -2408,14 +2411,24 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         {
             // get the cell value and set it into the renderer
             wxVariant value;
-            wxDataViewTreeNode * node = GetTreeNodeByRow(item);
-            if( node == NULL )
-                continue;
+            wxDataViewTreeNode *node = NULL;
+            wxDataViewItem dataitem;
+            
+            if (m_root)
+            {
+                node = GetTreeNodeByRow(item);
+                if( node == NULL )
+                    continue;
 
-            wxDataViewItem dataitem = node->GetItem();
+                dataitem = node->GetItem();
 
-            if ((i > 0) && model->IsContainer(dataitem) && !model->HasContainerColumns(dataitem))
-                continue;
+                if ((i > 0) && model->IsContainer(dataitem) && !model->HasContainerColumns(dataitem))
+                    continue;
+            }
+            else
+            {
+                dataitem = wxDataViewItem( (void*) item );
+            }
 
             model->GetValue( value, dataitem, col->GetModelColumn());
             cell->SetValue( value );
@@ -2433,9 +2446,11 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             cell_rect.y = item * m_lineHeight;
 
             //Draw the expander here.
-            int indent = node->GetIndentLevel();
-            if( col == expander )
+            int indent = 0;
+            if ((m_root) && (col == expander))
             {
+                indent = node->GetIndentLevel();
+                
                 //Calculate the indent first
                 indent = cell_rect.x + GetOwner()->GetIndent() * indent;
 
@@ -2460,9 +2475,11 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 }
                 else
                 {
-                     // I am wandering whether we should draw dot lines between tree nodes
-                     delete node;
-                     //Yes, if the node does not have any child, it must be a leaf which mean that it is a temporarily created by GetTreeNodeByRow
+                     // I am wondering whether we should draw dot lines between tree nodes
+                     if (node)
+                         delete node;
+                     // Yes, if the node does not have any child, it must be a leaf which 
+                     // mean that it is a temporarily created by GetTreeNodeByRow
                 }
 
                  //force the expander column to left-center align
@@ -2859,9 +2876,16 @@ private:
 
 wxDataViewItem wxDataViewMainWindow::GetItemByRow(unsigned int row) const
 {
-    RowToItemJob job( row, -2 );
-    Walker( m_root , job );
-    return job.GetResult();
+    if (!m_root)
+    {
+        return wxDataViewItem( (void*) row );
+    }
+    else
+    {
+        RowToItemJob job( row, -2 );
+        Walker( m_root , job );
+        return job.GetResult();
+    }
 }
 
 class RowToTreeNodeJob: public DoJob
@@ -2934,9 +2958,16 @@ private:
 
 wxDataViewTreeNode * wxDataViewMainWindow::GetTreeNodeByRow(unsigned int row)
 {
-    RowToTreeNodeJob job( row , -2, m_root );
-    Walker( m_root , job );
-    return job.GetResult();
+    if (!m_root)
+    {
+        return NULL;
+    }
+    else
+    {
+        RowToTreeNodeJob job( row , -2, m_root );
+        Walker( m_root , job );
+        return job.GetResult();
+    }
 }
 
 wxDataViewEvent wxDataViewMainWindow::SendExpanderEvent( wxEventType type, const wxDataViewItem & item )
@@ -3123,7 +3154,15 @@ wxRect wxDataViewMainWindow::GetItemRect( const wxDataViewItem & item, const wxD
 
 int wxDataViewMainWindow::RecalculateCount()
 {
-    return m_root->GetSubTreeCount();
+    if (!m_root)
+    {
+        wxDataViewIndexListModel *list_model = (wxDataViewIndexListModel*) GetOwner()->GetModel();
+        return list_model->GetLastIndex();
+    }
+    else
+    {
+        return m_root->GetSubTreeCount();
+    }
 }
 
 class ItemToRowJob : public DoJob
@@ -3177,26 +3216,33 @@ int wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item)
     if( model == NULL )
         return -1;
 
-    if( !item.IsOk() )
-        return -1;
-
-    //Compose the a parent-chain of the finding item
-    ItemList list;
-    wxDataViewItem * pItem = NULL;
-    list.DeleteContents( true );
-    wxDataViewItem it( item );
-    while( it.IsOk() )
+    if (!m_root)
     {
-        pItem = new wxDataViewItem( it );
-        list.Insert( pItem );
-        it = model->GetParent( it );
+        return wxPtrToUInt( item.GetID() );
     }
-    pItem = new wxDataViewItem( );
-    list.Insert( pItem );
+    else
+    {
+        if( !item.IsOk() )
+            return -1;
 
-    ItemToRowJob job( item, list.begin() );
-    Walker(m_root , job );
-    return job.GetResult();
+        //Compose the a parent-chain of the finding item
+        ItemList list;
+        wxDataViewItem * pItem = NULL;
+        list.DeleteContents( true );
+        wxDataViewItem it( item );
+        while( it.IsOk() )
+        {
+            pItem = new wxDataViewItem( it );
+            list.Insert( pItem );
+            it = model->GetParent( it );
+        }
+        pItem = new wxDataViewItem( );
+        list.Insert( pItem );
+
+        ItemToRowJob job( item, list.begin() );
+        Walker(m_root , job );
+        return job.GetResult();
+    }
 }
 
 void BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item, wxDataViewTreeNode * node)
@@ -3232,6 +3278,12 @@ void BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item, wxDataVie
 void wxDataViewMainWindow::BuildTree(wxDataViewModel * model)
 {
     DestroyTree();
+
+    if (GetOwner()->GetModel()->IsIndexListModel())
+    {
+        m_count = -1 ;
+        return;
+    }
 
     m_root = new wxDataViewTreeNode( NULL );
     m_root->SetHasChildren(true);
@@ -3405,7 +3457,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
     //Test whether the mouse is hovered on the tree item button
     bool hover = false;
-    if (GetOwner()->GetExpanderColumn() == col)
+    if ((m_root) && (GetOwner()->GetExpanderColumn() == col))
     {
         wxDataViewTreeNode * node = GetTreeNodeByRow(current);
         if( node!=NULL && node->HasChildren() )
@@ -3530,7 +3582,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
         //Process the event of user clicking the expander
         bool expander = false;
-        if (GetOwner()->GetExpanderColumn() == col)
+        if ((m_root) && (GetOwner()->GetExpanderColumn() == col))
         {
             wxDataViewTreeNode * node = GetTreeNodeByRow(current);
             if( node!=NULL && node->HasChildren() )

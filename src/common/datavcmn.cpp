@@ -299,7 +299,7 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
 
 wxDataViewIndexListModel::wxDataViewIndexListModel( unsigned int initial_size )
 {
-#ifdef __WXGTK__
+#ifndef __WXMAC__
     m_useHash = false;
 #else
     m_useHash = true;
