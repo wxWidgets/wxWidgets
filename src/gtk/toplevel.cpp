@@ -682,8 +682,12 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
 {
 #if wxUSE_LIBHILDON
-    hildon_program_remove_window(wxTheApp->GetHildonProgram(),
-                                 HILDON_WINDOW(m_widget));
+    // it can also be a (standard) dialog
+    if ( HILDON_IS_WINDOW(m_widget) )
+    {
+        hildon_program_remove_window(wxTheApp->GetHildonProgram(),
+                                     HILDON_WINDOW(m_widget));
+    }
 #endif // wxUSE_LIBHILDON
 
     if (m_grabbed)
