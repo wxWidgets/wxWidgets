@@ -51,8 +51,24 @@
 
 /*
     __WXOSX__ is a common define to wxMac (Carbon) and wxCocoa ports under OS X.
+
+    DO NOT use this define in base library code.  Although wxMac has its own
+    private base library (and thus __WXOSX__,__WXMAC__ and related defines are
+    valid there), wxCocoa shares its library with other ports like wxGTK and wxX11.
+
+    To keep wx authors from screwing this up, only enable __WXOSX__ for wxCocoa when
+    not compiling the base library.  We determine this by first checking if
+    wxUSE_BASE is not defined.  If it is not defined, then we're not buildling
+    the base library, and possibly not building wx at all (but actually building
+    user code that's using wx). If it is defined then we must check to make sure
+    it is not true.  If it is true, we're building base.
+
+    If you want it in the common darwin base library then use __DARWIN__.  You
+    can use any Darwin-available libraries like CoreFoundation but please avoid
+    using OS X libraries like Carbon or CoreServices.
+
  */
-#if defined(__WXMAC_OSX__) || defined(__WXCOCOA__)
+#if defined(__WXMAC_OSX__) || (defined(__WXCOCOA__) && (!defined(wxUSE_BASE) || !wxUSE_BASE))
 #   define __WXOSX__
 #endif
 
