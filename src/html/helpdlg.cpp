@@ -88,7 +88,7 @@ bool wxHtmlHelpDialog::Create(wxWindow* parent, wxWindowID id,
 
     item4->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* item6 = new wxButton(item1, wxID_OK, _("&Close"), wxDefaultPosition, wxDefaultSize, 0);
+    wxButton* item6 = new wxButton(item1, wxID_OK, _("Close"), wxDefaultPosition, wxDefaultSize, 0);
     item4->Add(item6, 0, wxALIGN_CENTER_VERTICAL|wxALL, 10);
 #ifdef __WXMAC__
     // Add some space for the resize handle
