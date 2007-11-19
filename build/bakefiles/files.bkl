@@ -171,9 +171,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_MAC_SRC" hints="files">
     src/mac/carbon/dirmac.cpp
     src/mac/carbon/mimetmac.cpp
-    src/mac/carbon/utilsexc.cpp
     src/mac/carbon/thread.cpp
-    src/mac/carbon/macnotfy.cpp
     <!-- One would think MoreFilesX is only for OS X but it seems to
          apply to CarbonLib as well (FSRefMakeFSSpec) -->
     src/mac/carbon/morefilex/MoreFilesX.c
@@ -205,6 +203,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/morefile/MoreFiles.c
     src/mac/carbon/morefile/MoreFilesExtras.c
     src/mac/carbon/morefile/Search.c
+    src/mac/carbon/utilsexc.cpp
 </set>
 <!-- set var="BASE_MAC_CARBONLIB_HDR" hints="files">
 </set -->
