@@ -76,6 +76,12 @@
     #include "wx/mac/private.h"  // includes mac headers
 #endif
 
+#if defined(__WXOSX__)
+	#include "wx/mac/corefoundation/cfref.h"
+	#include <CoreFoundation/CFLocale.h>
+	#include "wx/mac/corefoundation/cfstring.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // simple types
 // ----------------------------------------------------------------------------
