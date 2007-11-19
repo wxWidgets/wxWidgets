@@ -3231,6 +3231,11 @@ void BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item, wxDataVie
 
 void wxDataViewMainWindow::BuildTree(wxDataViewModel * model)
 {
+    DestroyTree();
+
+    m_root = new wxDataViewTreeNode( NULL );
+    m_root->SetHasChildren(true);
+
     //First we define a invalid item to fetch the top-level elements
     wxDataViewItem item;
     SortPrepare();
@@ -3255,9 +3260,12 @@ void DestroyTreeHelper( wxDataViewTreeNode * node )
 
 void wxDataViewMainWindow::DestroyTree()
 {
-    DestroyTreeHelper(m_root);
-    m_root->SetSubTreeCount(0);
-    m_count = 0 ;
+    if (m_root)
+    {
+        DestroyTreeHelper(m_root);
+        m_count = 0;
+        m_root = NULL;
+    }
 }
 
 void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
@@ -3784,6 +3792,8 @@ bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
 
     model->AddNotifier( m_notifier );
 
+    m_clientArea->DestroyTree();
+    
     m_clientArea->BuildTree(model);
 
     m_clientArea->UpdateDisplay();
