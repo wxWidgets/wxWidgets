@@ -188,7 +188,9 @@ wxApp::wxApp()
 #endif // __WXDEBUG__
 
     argc = 0;
+#if !wxUSE_UNICODE
     argv = NULL;
+#endif
     m_cocoaApp = NULL;
     m_cocoaAppDelegate = NULL;
 }
