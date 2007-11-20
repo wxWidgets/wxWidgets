@@ -58,7 +58,6 @@ TOOLCHAIN_FULLNAME = @TOOLCHAIN_FULLNAME@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_XML = @EXTRALIBS_XML@
 EXTRALIBS_HTML = @EXTRALIBS_HTML@
-EXTRALIBS_MEDIA = @EXTRALIBS_MEDIA@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 EXTRALIBS_OPENGL = @EXTRALIBS_OPENGL@
 EXTRALIBS_SDL = @EXTRALIBS_SDL@
@@ -1798,6 +1797,8 @@ COND_TOOLKIT__BASE_MACOSX_HDR =  \
 	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfdataref.h \
+	wx/mac/corefoundation/cfref.h \
 	wx/mac/corefoundation/cfstring.h \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h \
@@ -1817,6 +1818,8 @@ COND_TOOLKIT_COCOA_BASE_MACOSX_HDR =  \
 	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfdataref.h \
+	wx/mac/corefoundation/cfref.h \
 	wx/mac/corefoundation/cfstring.h \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h \
@@ -1836,12 +1839,16 @@ COND_TOOLKIT_GTK_BASE_MACOSX_HDR =  \
 	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfdataref.h \
+	wx/mac/corefoundation/cfref.h \
 	wx/mac/corefoundation/cfstring.h \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h \
 	wx/mac/corefoundation/private/strconv_cf.h
 @COND_TOOLKIT_GTK@BASE_MACOSX_HDR = $(COND_TOOLKIT_GTK_BASE_MACOSX_HDR)
 COND_TOOLKIT_MAC_BASE_MACOSX_HDR =  \
+	wx/mac/corefoundation/cfdataref.h \
+	wx/mac/corefoundation/cfref.h \
 	wx/mac/corefoundation/cfstring.h \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h \
@@ -1870,6 +1877,8 @@ COND_TOOLKIT_MOTIF_BASE_MACOSX_HDR =  \
 	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfdataref.h \
+	wx/mac/corefoundation/cfref.h \
 	wx/mac/corefoundation/cfstring.h \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h \
@@ -1889,6 +1898,8 @@ COND_TOOLKIT_X11_BASE_MACOSX_HDR =  \
 	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfdataref.h \
+	wx/mac/corefoundation/cfref.h \
 	wx/mac/corefoundation/cfstring.h \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h \
@@ -12201,7 +12212,7 @@ distclean: clean
 @COND_SHARED_0_USE_STC_1@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wxscintilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 
 @COND_MONOLITHIC_1_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(MONODLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxregex___depname) $(__monodll___win32rc) $(__wxscintilla_library_link_DEP)
-@COND_MONOLITHIC_1_SHARED_1@	$(SHARED_LD_CXX) $@ $(MONODLL_OBJECTS) $(__wxscintilla_library_link_LIBR) $(LDFLAGS)   -L$(LIBDIRNAME) $(__monodll___macinstnamecmd) $(__monodll___importlib) $(__monodll___soname_flags) $(WXMACVERSION_CMD)  $(LIBS) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_XML) $(EXTRALIBS_HTML) $(EXTRALIBS_MEDIA) $(PLUGIN_ADV_EXTRALIBS) $(__wxscintilla_library_link_LIBR_1)
+@COND_MONOLITHIC_1_SHARED_1@	$(SHARED_LD_CXX) $@ $(MONODLL_OBJECTS) $(__wxscintilla_library_link_LIBR) $(LDFLAGS)   -L$(LIBDIRNAME) $(__monodll___macinstnamecmd) $(__monodll___importlib) $(__monodll___soname_flags) $(WXMACVERSION_CMD)  $(LIBS) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_XML) $(EXTRALIBS_HTML) $(PLUGIN_ADV_EXTRALIBS) $(__wxscintilla_library_link_LIBR_1)
 @COND_MONOLITHIC_1_SHARED_1@	
 @COND_MONOLITHIC_1_SHARED_1@	$(__monodll___so_symlinks_cmd)
 
@@ -12379,7 +12390,7 @@ distclean: clean
 @COND_MONOLITHIC_0_USE_GUI_1@wxadv: $(____wxadv_namedll_DEP) $(____wxadv_namelib_DEP)
 
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(MEDIADLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxregex___depname) $(__mediadll___win32rc) $(__coredll___depname) $(__basedll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@	$(SHARED_LD_CXX) $@ $(MEDIADLL_OBJECTS) -L$(LIBDIRNAME) -L$(LIBDIRNAME) $(LDFLAGS)   -L$(LIBDIRNAME) $(__mediadll___macinstnamecmd) $(__mediadll___importlib) $(__mediadll___soname_flags) $(WXMACVERSION_CMD)  $(LIBS) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX) $(EXTRALIBS_MEDIA)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@	$(SHARED_LD_CXX) $@ $(MEDIADLL_OBJECTS) -L$(LIBDIRNAME) -L$(LIBDIRNAME) $(LDFLAGS)   -L$(LIBDIRNAME) $(__mediadll___macinstnamecmd) $(__mediadll___importlib) $(__mediadll___soname_flags) $(WXMACVERSION_CMD)  $(LIBS) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@	
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@	$(__mediadll___so_symlinks_cmd)
 

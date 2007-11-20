@@ -160,6 +160,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/corefoundation/utilsexc_base.cpp
 </set>
 <set var="BASE_COREFOUNDATION_HDR" hints="files">
+    wx/mac/corefoundation/cfdataref.h
+    wx/mac/corefoundation/cfref.h
     wx/mac/corefoundation/cfstring.h
     wx/mac/corefoundation/hid.h
     wx/mac/corefoundation/stdpaths.h
