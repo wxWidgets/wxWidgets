@@ -332,27 +332,8 @@ fi
 ])
 
 dnl ---------------------------------------------------------------------------
-dnl override AC_ARG_ENABLE/WITH to cache the results in .cache file
+dnl override AC_ARG_ENABLE/WITH to handle options defaults
 dnl ---------------------------------------------------------------------------
-
-AC_DEFUN([WX_ARG_CACHE_INIT],
-        [
-          wx_arg_cache_file="configarg.cache"
-          echo "loading argument cache $wx_arg_cache_file"
-          rm -f ${wx_arg_cache_file}.tmp
-          touch ${wx_arg_cache_file}.tmp
-          touch ${wx_arg_cache_file}
-        ])
-
-AC_DEFUN([WX_ARG_CACHE_FLUSH],
-        [
-          echo "saving argument cache $wx_arg_cache_file"
-          mv ${wx_arg_cache_file}.tmp ${wx_arg_cache_file}
-        ])
-
-dnl return the name of the variable to store the value of the given
-dnl WX_ARG_WITH/ENABLE option
-AC_DEFUN([WX_ARG_CACHE_NAME],)
 
 dnl this macro checks for a three-valued command line --with argument:
 dnl   possible arguments are 'yes', 'no', 'sys', or 'builtin'
@@ -377,24 +358,12 @@ AC_DEFUN([WX_ARG_SYS_WITH],
                         else
                           AC_MSG_ERROR([Invalid value for --with-$1: should be yes, no, sys, or builtin])
                         fi
-                        cache=yes
                       ],
                       [
-                        LINE=`grep "^$3=" ${wx_arg_cache_file}`
-                        if test "x$LINE" != x ; then
-                            eval "DEFAULT_$LINE"
-                            cache=yes
-                        else
-                            cache=no
-                        fi
-
                         AS_TR_SH(wx_cv_use_$1)='$3=${'DEFAULT_$3":-$wxUSE_ALL_FEATURES}"
                       ])
 
           eval "$AS_TR_SH(wx_cv_use_$1)"
-          if test "x$cache" = xyes; then
-            echo "$3=$$3" >> ${wx_arg_cache_file}.tmp
-          fi
 
           if test "$$3" = yes; then
             AC_MSG_RESULT(yes)
@@ -409,7 +378,7 @@ AC_DEFUN([WX_ARG_SYS_WITH],
           fi
         ])
 
-dnl this macro checks for a command line argument and caches the result
+dnl this macro simply checks for a command line argument
 dnl usage: WX_ARG_WITH(option, helpmessage, variable-name, [withstring])
 AC_DEFUN([WX_ARG_WITH],
         [
@@ -430,24 +399,12 @@ AC_DEFUN([WX_ARG_WITH],
                         else
                           AS_TR_SH(wx_cv_use_$1)='$3=no'
                         fi
-                        cache=yes
                       ],
                       [
-                        LINE=`grep "^$3=" ${wx_arg_cache_file}`
-                        if test "x$LINE" != x ; then
-                            eval "DEFAULT_$LINE"
-                            cache=yes
-                        else
-                            cache=no
-                        fi
-
                         AS_TR_SH(wx_cv_use_$1)='$3=${'DEFAULT_$3":-$defaultval}"
                       ])
 
           eval "$AS_TR_SH(wx_cv_use_$1)"
-          if test "x$cache" = xyes; then
-            echo "$3=$$3" >> ${wx_arg_cache_file}.tmp
-          fi
 
           if test x"$withstring" = xwithout; then
             if test $$3 = yes; then
@@ -495,24 +452,12 @@ AC_DEFUN([WX_ARG_ENABLE],
                           else
                             AS_TR_SH(wx_cv_use_$1)='$3=no'
                           fi
-                          cache=yes
                         ],
                         [
-                          LINE=`grep "^$3=" ${wx_arg_cache_file}`
-                          if test "x$LINE" != x ; then
-                              eval "DEFAULT_$LINE"
-                              cache=yes
-                          else
-                              cache=no
-                          fi
-
                           AS_TR_SH(wx_cv_use_$1)='$3=${'DEFAULT_$3":-$defaultval}"
                         ])
 
           eval "$AS_TR_SH(wx_cv_use_$1)"
-          if test "x$cache" = xyes; then
-            echo "$3=$$3" >> ${wx_arg_cache_file}.tmp
-          fi
 
           if test x"$enablestring" = xdisable; then
             if test $$3 = yes; then
@@ -545,8 +490,7 @@ dnl
 dnl  --enable-foo       wxUSE_FOO=yes
 dnl  --disable-foo      wxUSE_FOO=no
 dnl  --enable-foo=bar   wxUSE_FOO=bar
-dnl  <not given>        value from configarg.cache or
-dnl                     wxUSE_FOO=$DEFAULT_wxUSE_FOO
+dnl  <not given>        wxUSE_FOO=$DEFAULT_wxUSE_FOO
 dnl
 AC_DEFUN([WX_ARG_ENABLE_PARAM],
         [
@@ -555,24 +499,12 @@ AC_DEFUN([WX_ARG_ENABLE_PARAM],
           AC_ARG_ENABLE($1, [$2],
                         [
                           wx_cv_use_$1="$3='$enableval'"
-                          cache=yes
                         ],
                         [
-                          LINE=`grep "^$3=" ${wx_arg_cache_file}`
-                          if test "x$LINE" != x ; then
-                            eval "DEFAULT_$LINE"
-                            cache=yes
-                          else
-                            cache=no
-                          fi
-
                           wx_cv_use_$1='$3='$DEFAULT_$3
                         ])
 
           eval "$wx_cv_use_$1"
-          if test "x$cache" = xyes; then
-            echo "$3=$$3" >> ${wx_arg_cache_file}.tmp
-          fi
 
           AC_MSG_RESULT([$$3])
         ])
