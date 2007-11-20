@@ -3278,7 +3278,7 @@ wxWindowGTK::AdjustForLayoutDirection(wxCoord x,
     return x;
 }
 
-void wxWindowGTK::DoMoveInTabOrder(wxWindow *win, MoveKind move)
+void wxWindowGTK::DoMoveInTabOrder(wxWindow *win, WindowOrder move)
 {
     wxWindowBase::DoMoveInTabOrder(win, move);
     m_dirtyTabOrder = true;

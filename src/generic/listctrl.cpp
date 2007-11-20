@@ -5021,6 +5021,7 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
 
     m_mainWin = new wxListMainWindow( this, wxID_ANY, wxPoint(0, 0), size, style );
 
+#ifdef __WXMAC__
     // Human Interface Guidelines ask us for a special font in this case
     if ( GetWindowVariant() == wxWINDOW_VARIANT_NORMAL )
     {
@@ -5028,11 +5029,13 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
         font.MacCreateThemeFont( kThemeViewsFont );
         SetFont( font );
     }
+#endif
 
     if ( InReportView() )
     {
         CreateHeaderWindow();
 
+#ifdef __WXMAC__
         if (m_headerWin)
         {
             wxFont font;
@@ -5040,6 +5043,7 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
             m_headerWin->SetFont( font );
             CalculateAndSetHeaderHeight();
         }
+#endif
 
         if ( HasFlag(wxLC_NO_HEADER) )
             // VZ: why do we create it at all then?

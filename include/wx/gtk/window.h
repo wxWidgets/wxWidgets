@@ -337,7 +337,7 @@ protected:
     // common part of all ctors (not virtual because called from ctor)
     void Init();
 
-    virtual void DoMoveInTabOrder(wxWindow *win, MoveKind move);
+    virtual void DoMoveInTabOrder(wxWindow *win, WindowOrder move);
     virtual bool DoNavigateIn(int flags);
 
 

@@ -19,6 +19,7 @@
     #include "wx/app.h"
     #include "wx/toplevel.h"
     #include "wx/font.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/dataview.h"
