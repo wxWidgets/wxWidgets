@@ -110,7 +110,6 @@ private:
 };
 #endif
 
-#if wxMAC_USE_CORE_GRAPHICS
 class WXDLLEXPORT wxMacCGContextStateSaver
 {
     DECLARE_NO_COPY_CLASS(wxMacCGContextStateSaver)
@@ -129,7 +128,6 @@ private:
     CGContextRef m_cg;
 };
 
-#endif
 /*
 class wxMacDrawingHelper
 {
@@ -1095,85 +1093,6 @@ protected:
     CGFloat* m_patternColorComponents;
 } ;
 
-#if wxMAC_USE_CORE_GRAPHICS && !wxUSE_GRAPHICS_CONTEXT
-
-class WXDLLEXPORT wxMacCGPath : public wxGraphicPath
-{
-    DECLARE_NO_COPY_CLASS(wxMacCGPath)
-public :
-    wxMacCGPath();
-    ~wxMacCGPath();
-
-    //  Starts a new subpath at
-    void MoveToPoint( wxCoord x1 , wxCoord y1 );
-    void AddLineToPoint( wxCoord x1 , wxCoord y1 );
-    void AddQuadCurveToPoint( wxCoord cx1, wxCoord cy1, wxCoord x1, wxCoord y1 );
-    void AddRectangle( wxCoord x, wxCoord y, wxCoord w, wxCoord h );
-    void AddCircle( wxCoord x, wxCoord y , wxCoord r );
-
-    // draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2)
-    virtual void AddArcToPoint( wxCoord x1, wxCoord y1 , wxCoord x2, wxCoord y2, wxCoord r ) ;
-    virtual void AddArc( wxCoord x, wxCoord y, wxCoord r, double startAngle, double endAngle, bool clockwise ) ;
-
-    // closes the current subpath
-    void CloseSubpath();
-
-    CGPathRef GetPath() const;
-private :
-    CGMutablePathRef m_path;
-};
-
-class WXDLLEXPORT wxMacCGContext : public wxGraphicContext
-{
-    DECLARE_NO_COPY_CLASS(wxMacCGContext)
-
-public:
-    wxMacCGContext( CGrafPtr port );
-    wxMacCGContext( CGContextRef cgcontext );
-    wxMacCGContext();
-    virtual ~wxMacCGContext();
-
-    virtual void Clip( const wxRegion &region );
-    virtual void StrokePath( const wxGraphicPath *p );
-    virtual void DrawPath( const wxGraphicPath *p , int fillStyle = wxWINDING_RULE );
-    virtual void FillPath( const wxGraphicPath *p , const wxColor &fillColor , int fillStyle = wxWINDING_RULE );
-
-    virtual wxGraphicPath* CreatePath();
-    virtual void SetPen( const wxPen &pen ) ;
-    virtual void SetBrush( const wxBrush &brush );
-    CGContextRef GetNativeContext();
-    void SetNativeContext( CGContextRef cg );
-    CGPathDrawingMode GetDrawingMode() const { return m_mode; }
-
-    virtual void Translate( wxCoord dx , wxCoord dy );
-    virtual void Scale( wxCoord xScale , wxCoord yScale );
-    virtual void DrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, wxCoord w, wxCoord h );
-    virtual void DrawIcon( const wxIcon &icon, wxCoord x, wxCoord y, wxCoord w, wxCoord h );
-    virtual void PushState();
-    virtual void PopState();
-
-    virtual void DrawText( const wxString &str, wxCoord x, wxCoord y, double angle ) ;
-
-    virtual void GetTextExtent( const wxString &str, wxCoord *width, wxCoord *height,
-                            wxCoord *descent, wxCoord *externalLeading ) const ;
-
-    virtual void GetPartialTextExtents(const wxString& text, wxArrayInt& widths) const ;
-
-    virtual void SetFont( const wxFont &font ) ;
-
-    virtual void SetTextColor( const wxColour &col ) ;
-private:
-    CGContextRef m_cgContext;
-    CGrafPtr m_qdPort;
-    CGPathDrawingMode m_mode;
-    ATSUStyle m_macATSUIStyle ;
-    wxPen m_pen;
-    wxBrush m_brush;
-    wxColor m_textForegroundColor ;
-};
-
-#endif // wxMAC_USE_CORE_GRAPHICS
-
 CGColorSpaceRef wxMacGetGenericRGBColorSpace(void);
 void wxMacMemoryBufferReleaseProc(void *info, const void *data, size_t size);
 
@@ -1229,12 +1148,9 @@ public:
 
     // returns a Pict from the bitmap content
     PicHandle     GetPictHandle();
-#if wxMAC_USE_CORE_GRAPHICS
+
     CGContextRef  GetBitmapContext() const;
-#else
-    GWorldPtr     GetHBITMAP(GWorldPtr * mask = NULL ) const;
-    void          UpdateAlphaMask() const;
-#endif
+
     int           GetBytesPerRow() const { return m_bytesPerRow; }
 private :
     bool Create(int width , int height , int depth);
@@ -1252,14 +1168,8 @@ private :
 
     IconRef       m_iconRef;
     PicHandle     m_pictHandle;
-#if wxMAC_USE_CORE_GRAPHICS
+
     CGContextRef  m_hBitmap;
-#else
-    GWorldPtr     m_hBitmap;
-    GWorldPtr     m_hMaskBitmap;
-    wxMemoryBuffer m_maskMemBuf;
-    int            m_maskBytesPerRow;
-#endif
 };
 
 class WXDLLEXPORT wxIconRefData : public wxGDIRefData

@@ -37,11 +37,11 @@ class WXDLLEXPORT wxWindowDC: public wxDC
     virtual void DoGetSize( int *width, int *height ) const;
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const; 
     wxWindow     *m_window;
-#if wxMAC_USE_CORE_GRAPHICS
+
 	bool		m_release;
 	int			m_width;
 	int			m_height;
-#endif
+
 };
 
 
@@ -58,9 +58,6 @@ class WXDLLEXPORT wxClientDC: public wxWindowDC
   virtual ~wxClientDC(void);
 
 protected:
-#if !wxMAC_USE_CORE_GRAPHICS
-  virtual void DoGetSize( int *width, int *height ) const;
-#endif
 };
 
 class WXDLLEXPORT wxPaintDC: public wxWindowDC
@@ -76,9 +73,6 @@ class WXDLLEXPORT wxPaintDC: public wxWindowDC
   virtual ~wxPaintDC(void);
 
 protected:
-#if !wxMAC_USE_CORE_GRAPHICS
-  virtual void DoGetSize( int *width, int *height ) const;
-#endif
 };
 
 #endif

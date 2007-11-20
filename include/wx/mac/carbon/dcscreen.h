@@ -29,9 +29,7 @@ class WXDLLEXPORT wxScreenDC: public wxWindowDC
   static bool StartDrawingOnTop(wxRect* WXUNUSED(rect) = NULL) { return TRUE; }
   static bool EndDrawingOnTop() { return TRUE; }
  private:
-#if wxMAC_USE_CORE_GRAPHICS
 	void* m_overlayWindow;
-#endif
 };
 
 #endif

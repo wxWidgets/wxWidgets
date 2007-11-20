@@ -259,10 +259,8 @@ public:
     // the 'true' OS level control for this wxWindow
     wxMacControl*       GetPeer() const { return m_peer ; }
 
-#if wxMAC_USE_CORE_GRAPHICS
     void *              MacGetCGContextRef() { return m_cgContextRef ; }
     void                MacSetCGContextRef(void * cg) { m_cgContextRef = cg ; }
-#endif
 
 protected:
     // For controls like radio buttons which are genuinely composite
@@ -274,9 +272,7 @@ protected:
     // the peer object, allowing for cleaner API support
     wxMacControl *       m_peer ;
 
-#if wxMAC_USE_CORE_GRAPHICS
     void *              m_cgContextRef ;
-#endif
 
     // cache the clipped rectangles within the window hierarchy
     void                MacUpdateClippedRects() const ;
