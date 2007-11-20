@@ -109,9 +109,9 @@ DEFAULT_wxUSE_PM=0
 DEFAULT_wxUSE_X11=0
 DEFAULT_wxUSE_DFB=0
 
-dnl these are the values which are really default for the given platform -
-dnl they're not cached and are only used if no --with-toolkit was given *and*
-dnl nothing was found in the cache
+dnl these are the values which are really default for the given platform:
+dnl they're used if no --with-<toolkit> options were given to detect the
+dnl toolkit to use by default for the target platform
 DEFAULT_DEFAULT_wxUSE_COCOA=0
 DEFAULT_DEFAULT_wxUSE_GTK=0
 DEFAULT_DEFAULT_wxUSE_MAC=0
@@ -361,8 +361,6 @@ dnl platform should be changed, it can be done here too)
 dnl
 dnl NB: see also DEFAULT_wxUSE<toolkit> variables defined above
 
-WX_ARG_CACHE_INIT
-
 dnl it's only necessary to list the options which should be disabled by
 dnl default, all the rest have default value of "yes" (or, rather, of
 dnl wxUSE_ALL_FEATURES which is the only which has to be set to "yes" by
@@ -402,21 +400,6 @@ DEFAULT_wxUSE_GTK2=yes
 
 dnl Always default to no. Only special cases require this.
 DEFAULT_wxUSE_OBJC_UNIQUIFYING=no
-
-
-for toolkit in $ALL_TOOLKITS; do
-  LINE=`grep "wxUSE_$toolkit=" ${wx_arg_cache_file}`
-  if test "x$LINE" != "x" ; then
-    has_toolkit_in_cache=1
-    eval "DEFAULT_$LINE"
-    eval "CACHE_$toolkit=1"
-
-    LINE=`grep "wx${toolkit}_VERSION=" ${wx_arg_cache_file}`
-    if test "x$LINE" != "x" ; then
-        eval "DEFAULT_$LINE"
-    fi
-  fi
-done
 
 dnl ===========================
 dnl deal with configure options
@@ -469,8 +452,7 @@ if test "$wxUSE_UNIVERSAL" = "yes"; then
 fi
 
 dnl we use AC_ARG_WITH and not WX_ARG_WITH for the toolkit options as they
-dnl shouldn't default to wxUSE_ALL_FEATURES, and we don't need to cache them
-dnl automatically
+dnl shouldn't default to wxUSE_ALL_FEATURES
 AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 2 (default), 1 or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(mac,           [  --with-mac              use Mac OS X], [wxUSE_MAC="$withval" CACHE_MAC=1 TOOLKIT_GIVEN=1])
@@ -515,16 +497,6 @@ AC_MSG_CHECKING([for --with-macosx-sdk])
 AC_ARG_WITH(macosx-sdk,    [  --with-macosx-sdk=PATH  use an OS X SDK at PATH], [
         wxUSE_MACOSX_SDK=$withval
         wx_cv_use_macosx_sdk="wxUSE_MACOSX_SDK=$withval"
-        echo "wxUSE_MACOSX_SDK=$wxUSE_MACOSX_SDK" >> ${wx_arg_cache_file}.tmp
-    ], [
-        # NOTE: Empty string on purpose so that --without-macosx-sdk (thus no)
-        # will override --enable-universal_binary's automatic SDK usage.
-        wxUSE_MACOSX_SDK=
-        LINE=`grep "^wxUSE_MACOSX_SDK=" ${wx_arg_cache_file}`
-        if test "x$LINE" != x ; then
-            eval "$LINE"
-            echo "$LINE" >> ${wx_arg_cache_file}.tmp
-        fi
     ])
 AC_MSG_RESULT([$wxUSE_MACOSX_SDK])
 
@@ -532,17 +504,6 @@ AC_MSG_CHECKING([for --with-macosx-version-min])
 AC_ARG_WITH(macosx-version-min,    [  --with-macosx-version-min=VER   build binaries which require at least this OS X version], [
         wxUSE_MACOSX_VERSION_MIN=$withval
         wx_cv_use_macosx_version_min="wxUSE_MACOSX_VERSION_MIN=$withval"
-        echo "wxUSE_MACOSX_VERSION_MIN=$wxUSE_MACOSX_VERSION_MIN" >> ${wx_arg_cache_file}.tmp
-    ], [
-        # default "yes" because when not using an SDK it means the same as no
-        # but when using an SDK it means to use the SDK version
-        wxUSE_MACOSX_VERSION_MIN=yes
-        # See if there is a value in the cache
-        LINE=`grep "^wxUSE_MACOSX_VERSION_MIN=" ${wx_arg_cache_file}`
-        if test "x$LINE" != x ; then
-            eval "$LINE"
-            echo "$LINE" >> ${wx_arg_cache_file}.tmp
-        fi
     ])
 AC_MSG_RESULT([$wxUSE_MACOSX_VERSION_MIN])
 
@@ -950,9 +911,6 @@ WX_ARG_FEATURE(wxdib,       [  --enable-wxdib          use wxDIB class (Win32 on
 fi
 dnl for GUI only
 
-dnl cache the options values before (may be) aborting below
-WX_ARG_CACHE_FLUSH
-
 dnl check that no more than one toolkit is given and that if none are given that
 dnl we have a default one
 
@@ -993,16 +951,7 @@ if test "$wxUSE_GUI" = "yes"; then
     else
       dnl try to guess the most apropriate toolkit for this platform
       for toolkit in $ALL_TOOLKITS; do
-        if test "$has_toolkit_in_cache" != 1; then
-          var=DEFAULT_DEFAULT_wxUSE_$toolkit
-        else
-          var=DEFAULT_wxUSE_$toolkit
-
-          eval "version=\$DEFAULT_wx${toolkit}_VERSION"
-          if test "x$version" != "x"; then
-            eval "wx${toolkit}_VERSION=$version"
-          fi
-        fi
+        var=DEFAULT_DEFAULT_wxUSE_$toolkit
         eval "wxUSE_$toolkit=\$${var}"
       done
     fi
@@ -1026,7 +975,7 @@ if test "$wxUSE_GUI" = "yes"; then
         AC_MSG_ERROR(Please specify a toolkit -- cannot determine the default for ${host})
       ;;
       *)
-        AC_MSG_ERROR(Please specify at most one toolkit (maybe some are cached in configarg.cache?))
+        AC_MSG_ERROR(Please specify at most one toolkit)
     esac
 
     # to be removed when --disable-gtk2 isn't needed
@@ -1036,25 +985,13 @@ if test "$wxUSE_GUI" = "yes"; then
         wxGTK_VERSION=1
     fi
 
-    dnl cache the wxUSE_<TOOLKIT> values too
     for toolkit in $ALL_TOOLKITS; do
-      var=wxUSE_$toolkit
-      eval "value=\$${var}"
-      if test "x$value" != x; then
-        cache_var=CACHE_$toolkit
-        eval "cache=\$${cache_var}"
-        if test "$cache" = 1; then
-          echo "$var=$value" >> ${wx_arg_cache_file}
-          eval "version=\$wx${toolkit}_VERSION"
-          if test "x$version" != "x"; then
-            echo "wx${toolkit}_VERSION=$version" >> ${wx_arg_cache_file}
-          fi
-        fi
+        var=wxUSE_$toolkit
+        eval "value=\$${var}"
         if test "$value" = 1; then
           toolkit_echo=`echo $toolkit | tr A-Z a-z`
           AC_MSG_RESULT($toolkit_echo)
         fi
-      fi
     done
 else
     if test "x$host_alias" != "x"; then
@@ -1882,7 +1819,7 @@ if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
         if test "$wx_cv_class_stdbasicstring" != yes; then
             if test "$wxUSE_STL" = "yes"; then
                 AC_MSG_ERROR([Can't use --enable-stl without $std_string or std::basic_string<$char_type>])
-            elif grep wxUSE_STD_STRING $wx_arg_cache_file >/dev/null; then
+            elif test "$wxUSE_STD_STRING" = "yes"; then
                 AC_MSG_ERROR([Can't use --enable-std_string without $std_string or std::basic_string<$char_type>])
             else
                 AC_MSG_WARN([No $std_string or std::basic_string<$char_type>, switching to --disable-std_string])
@@ -1898,7 +1835,7 @@ if test "$wxUSE_STD_IOSTREAM" = "yes"; then
                    [#include <iostream>])
 
     if test "$wxUSE_STD_IOSTREAM" != "yes"; then
-        if grep wxUSE_STD_IOSTREAM $wx_arg_cache_file >/dev/null; then
+        if test "$wxUSE_STD_IOSTREAM" = "yes"; then
             AC_MSG_ERROR([Can't use --enable-std_iostreams without std::istream and std::ostream])
         else
             AC_MSG_WARN([No std::iostreams, switching to --disable-std_iostreams])
@@ -7127,7 +7064,7 @@ if test "$wxUSE_MEDIACTRL" = "yes"; then
 
         if test "$wxUSE_GSTREAMER" = "yes"; then
             CPPFLAGS="$GST_CFLAGS $CPPFLAGS"
-            LIBS="$GST_LIBS $LIBS"
+            EXTRALIBS_MEDIA="$GST_LIBS"
 
             AC_DEFINE(wxUSE_GSTREAMER)
         else
@@ -7369,7 +7306,7 @@ EXTRALIBS_XML="$EXPAT_LINK"
 EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_STC="-lwxscintilla${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK $EXTRALIBS_HILDON $EXTRALIBS_GNOMEVFS $EXTRALIBS_GNOMEPRINT`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK $EXTRALIBS_HILDON $EXTRALIBS_GNOMEVFS $EXTRALIBS_GNOMEPRINT $EXTRALIBS_MEDIA`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"
