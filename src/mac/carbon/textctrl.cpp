@@ -174,23 +174,14 @@ public :
 
     virtual bool HasOwnContextMenu() const
     {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-        if ( UMAGetSystemVersion() >= 0x1040 )
-        {
-            TXNCommandEventSupportOptions options ;
-            TXNGetCommandEventSupport( m_txn , & options ) ;
-            return options & kTXNSupportEditCommandProcessing ;
-        }
-#endif
-
-        return false ;
+        TXNCommandEventSupportOptions options ;
+        TXNGetCommandEventSupport( m_txn , & options ) ;
+        return options & kTXNSupportEditCommandProcessing ;
     }
 
     virtual void CheckSpelling(bool check)
     {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    TXNSetSpellCheckAsYouType( m_txn, (Boolean) check );
-#endif
+        TXNSetSpellCheckAsYouType( m_txn, (Boolean) check );
     }
     virtual void Clear() ;
 
@@ -1028,52 +1019,6 @@ bool wxTextCtrl::MacSetupCursor( const wxPoint& pt )
         return true ;
 }
 
-#if !TARGET_API_MAC_OSX
-
-// user pane implementation
-
-void wxTextCtrl::MacControlUserPaneDrawProc(wxInt16 part)
-{
-    GetPeer()->MacControlUserPaneDrawProc( part ) ;
-}
-
-wxInt16 wxTextCtrl::MacControlUserPaneHitTestProc(wxInt16 x, wxInt16 y)
-{
-    return GetPeer()->MacControlUserPaneHitTestProc( x , y ) ;
-}
-
-wxInt16 wxTextCtrl::MacControlUserPaneTrackingProc(wxInt16 x, wxInt16 y, void* actionProc)
-{
-    return GetPeer()->MacControlUserPaneTrackingProc( x , y , actionProc ) ;
-}
-
-void wxTextCtrl::MacControlUserPaneIdleProc()
-{
-    GetPeer()->MacControlUserPaneIdleProc( ) ;
-}
-
-wxInt16 wxTextCtrl::MacControlUserPaneKeyDownProc(wxInt16 keyCode, wxInt16 charCode, wxInt16 modifiers)
-{
-    return GetPeer()->MacControlUserPaneKeyDownProc( keyCode , charCode , modifiers ) ;
-}
-
-void wxTextCtrl::MacControlUserPaneActivateProc(bool activating)
-{
-    GetPeer()->MacControlUserPaneActivateProc( activating ) ;
-}
-
-wxInt16 wxTextCtrl::MacControlUserPaneFocusProc(wxInt16 action)
-{
-    return GetPeer()->MacControlUserPaneFocusProc( action ) ;
-}
-
-void wxTextCtrl::MacControlUserPaneBackgroundProc(void* info)
-{
-    GetPeer()->MacControlUserPaneBackgroundProc( info ) ;
-}
-
-#endif
-
 // ----------------------------------------------------------------------------
 // implementation base class
 // ----------------------------------------------------------------------------
@@ -1250,8 +1195,6 @@ int wxMacTextControl::GetLineLength(long lineNo) const
 // ----------------------------------------------------------------------------
 // standard unicode control implementation
 // ----------------------------------------------------------------------------
-
-#if TARGET_API_MAC_OSX
 
 // the current unicode textcontrol implementation has a bug : only if the control
 // is currently having the focus, the selection can be retrieved by the corresponding
@@ -1509,8 +1452,6 @@ void wxMacUnicodeTextControl::WriteText( const wxString& str )
     }
 }
 
-#endif
-
 // ----------------------------------------------------------------------------
 // MLTE control implementation (common part)
 // ----------------------------------------------------------------------------
@@ -1748,40 +1689,36 @@ void wxMacMLTEControl::AdjustCreationAttributes(const wxColour &background,
     tback.bg.color = MAC_WXCOLORREF( background.GetPixel() );
     TXNSetBackground( m_txn , &tback );
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    if ( UMAGetSystemVersion() >= 0x1040 )
+
+    TXNCommandEventSupportOptions options ;
+    if ( TXNGetCommandEventSupport( m_txn, &options ) == noErr )
     {
-        TXNCommandEventSupportOptions options ;
-        if ( TXNGetCommandEventSupport( m_txn, &options ) == noErr )
-        {
-            options |=
-                kTXNSupportEditCommandProcessing
-                | kTXNSupportEditCommandUpdating
-                | kTXNSupportFontCommandProcessing
-                | kTXNSupportFontCommandUpdating;
+        options |=
+            kTXNSupportEditCommandProcessing
+            | kTXNSupportEditCommandUpdating
+            | kTXNSupportFontCommandProcessing
+            | kTXNSupportFontCommandUpdating;
 
-            // only spell check when not read-only
-            // use system options for the default
-            bool checkSpelling = false ;
-            if ( !(m_windowStyle & wxTE_READONLY) )
-            {
+        // only spell check when not read-only 
+        // use system options for the default
+        bool checkSpelling = false ; 
+        if ( !(m_windowStyle & wxTE_READONLY) )
+        {   
 #if wxUSE_SYSTEM_OPTIONS
-                if ( wxSystemOptions::HasOption( wxMAC_TEXTCONTROL_USE_SPELL_CHECKER ) && (wxSystemOptions::GetOptionInt( wxMAC_TEXTCONTROL_USE_SPELL_CHECKER ) == 1) )
-                {
-                    checkSpelling = true ;
-                }
-#endif
+            if ( wxSystemOptions::HasOption( wxMAC_TEXTCONTROL_USE_SPELL_CHECKER ) && (wxSystemOptions::GetOptionInt( wxMAC_TEXTCONTROL_USE_SPELL_CHECKER ) == 1) )
+            {
+                checkSpelling = true ;
             }
-
-            if ( checkSpelling )
-                options |=
-                    kTXNSupportSpellCheckCommandProcessing
-                    | kTXNSupportSpellCheckCommandUpdating;
-
-            TXNSetCommandEventSupport( m_txn , options ) ;
-        }
-    }
 #endif
+        }
+        
+        if ( checkSpelling )
+            options |=
+                kTXNSupportSpellCheckCommandProcessing
+                | kTXNSupportSpellCheckCommandUpdating;              
+
+        TXNSetCommandEventSupport( m_txn , options ) ;
+    }
 }
 
 void wxMacMLTEControl::SetBackground( const wxBrush &brush )
@@ -2985,13 +2922,10 @@ static pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler
     {
         case kEventTextInputUnicodeForKeyEvent :
         {
-            if ( UMAGetSystemVersion() >= 0x1040 )
-            {
-                TXNOffset from , to ;
-                TXNGetSelection( focus->GetTXNObject() , &from , &to ) ;
-                if ( from == to )
-                    TXNShowSelection( focus->GetTXNObject() , kTXNShowStart );
-            }
+            TXNOffset from , to ;
+            TXNGetSelection( focus->GetTXNObject() , &from , &to ) ;
+            if ( from == to )
+                TXNShowSelection( focus->GetTXNObject() , kTXNShowStart );
             result = CallNextEventHandler(handler,event);
             break;
         }
