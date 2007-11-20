@@ -33,6 +33,10 @@
 
 #include <string.h>
 
+// the trace mask we use with wxLogTrace() - call
+// wxLog::AddTraceMask(TRACE_CLIPBOARD) to enable the trace messages from here
+// (there will be a *lot* of them!)
+#define TRACE_CLIPBOARD _T("clipboard")
 
 IMPLEMENT_DYNAMIC_CLASS(wxClipboard, wxObject)
 
