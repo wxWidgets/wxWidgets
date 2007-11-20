@@ -1418,7 +1418,10 @@ void wxMacUnicodeTextControl::SetSelection( long from , long to )
     else
     {
         from = wxMin(textLength,wxMax(from,0)) ;
-        to = wxMax(0,wxMin(textLength,to)) ;
+        if ( to == -1 )
+            to = textLength;
+        else
+            to = wxMax(0,wxMin(textLength,to)) ;
     }
 
     sel.selStart = from ;
@@ -1931,7 +1934,7 @@ void wxMacMLTEControl::Replace( long from , long to , const wxString &str )
     wxMacWindowClipper c( m_peer ) ;
 #endif
 
-    TXNSetSelection( m_txn, from, to ) ;
+    TXNSetSelection( m_txn, from, to == -1 ? kTXNEndOffset : to ) ;
     TXNClear( m_txn ) ;
     SetTXNData( value, kTXNUseCurrentSelection, kTXNUseCurrentSelection ) ;
 }
@@ -1964,7 +1967,7 @@ void wxMacMLTEControl::SetSelection( long from , long to )
     if ((from == -1) && (to == -1))
         TXNSelectAll( m_txn );
     else
-        TXNSetSelection( m_txn, from, to );
+        TXNSetSelection( m_txn, from, to == -1 ? kTXNEndOffset : to );
 
     TXNShowSelection( m_txn, kTXNShowStart );
 }
