@@ -133,15 +133,9 @@ void wxCriticalSection::Leave()
 // wxMutex implementation
 // ----------------------------------------------------------------------------
 
-#if TARGET_API_MAC_OSX
 #define wxUSE_MAC_SEMAPHORE_MUTEX 0
 #define wxUSE_MAC_CRITICAL_REGION_MUTEX 1
 #define wxUSE_MAC_PTHREADS_MUTEX 0
-#else
-#define wxUSE_MAC_SEMAPHORE_MUTEX 0
-#define wxUSE_MAC_CRITICAL_REGION_MUTEX 1
-#define wxUSE_MAC_PTHREADS_MUTEX 0
-#endif
 
 #if wxUSE_MAC_PTHREADS_MUTEX
 
@@ -1252,9 +1246,7 @@ bool wxThread::IsMain()
 
 void wxThread::Yield()
 {
-#if TARGET_API_MAC_OSX
     CFRunLoopRunInMode( kCFRunLoopDefaultMode , 0 , true ) ;
-#endif
 
     MPYield();
 }

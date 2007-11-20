@@ -11,8 +11,6 @@
 
 #include "wx/wxprec.h"
 
-#if wxUSE_GRAPHICS_CONTEXT && wxMAC_USE_CORE_GRAPHICS
-
 #include "wx/graphics.h"
 
 #ifndef WX_PRECOMP
@@ -36,15 +34,8 @@
 
 #include "wx/mac/private.h"
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
 typedef float CGFloat;
-#endif
-#ifndef wxMAC_USE_CORE_GRAPHICS_BLEND_MODES
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    #define wxMAC_USE_CORE_GRAPHICS_BLEND_MODES 1
-#else
-    #define wxMAC_USE_CORE_GRAPHICS_BLEND_MODES 0
-#endif
 #endif
 
 //-----------------------------------------------------------------------------
@@ -169,22 +160,7 @@ public :
 
     void StrokeLineSegments( CGContextRef ctxRef , const CGPoint pts[] , size_t count )
     {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-        if ( CGContextStrokeLineSegments!=NULL  )
-        {
-            CGContextStrokeLineSegments( ctxRef , pts , count );
-        }
-        else
-#endif
-        {
-            CGContextBeginPath( ctxRef );
-            for (size_t i = 0; i < count; i += 2)
-            {
-                CGContextMoveToPoint(ctxRef, pts[i].x, pts[i].y);
-                CGContextAddLineToPoint(ctxRef, pts[i+1].x, pts[i+1].y);
-            }
-            CGContextStrokePath(ctxRef);
-        }
+        CGContextStrokeLineSegments( ctxRef , pts , count );
     }
 
     virtual void Render( CGContextRef ctxRef )
@@ -531,36 +507,9 @@ wxMacCoreGraphicsColour::wxMacCoreGraphicsColour( const wxBrush &brush )
     {
         if ( brush.MacGetBrushKind() == kwxMacBrushTheme )
         {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-            if ( UMAGetSystemVersion()  >= 0x1040 )
-            {
-                CGColorRef color ;
-                HIThemeBrushCreateCGColor( brush.MacGetTheme(), &color );
-                m_color.Set( color ) ;
-            }
-            else
-#endif
-            {
-                if( brush.MacGetTheme() == kThemeBrushDialogBackgroundActive )
-                {
-                    // striped background is a pattern, we have to emulate it
-                    
-                    m_isPattern = true;
-                    m_patternColorComponents = new CGFloat[1] ;
-                    m_patternColorComponents[0] = 1.0;
-                    m_colorSpace.Set( CGColorSpaceCreatePattern( NULL ) );
-                    m_pattern.Set( *( new ImagePattern( &gs_stripedback_bmp , CGAffineTransformMakeScale( 1,-1 ) ) ) );
-                }
-                else
-                {
-                    // as close as we can get, unfortunately < 10.4 things get difficult
-                    RGBColor color;
-                    GetThemeBrushAsColor( brush.MacGetTheme(), 32, true, &color );
-                    CGFloat components[4] = {  (CGFloat) color.red / 65536,
-                        (CGFloat) color.green / 65536, (CGFloat) color.blue / 65536, 1 } ;
-                    m_color.Set( CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ) ;
-                }
-            }
+            CGColorRef color ;
+            HIThemeBrushCreateCGColor( brush.MacGetTheme(), &color );
+            m_color.Set( color ) ;
         }
         else
         {
@@ -898,23 +847,7 @@ void wxMacCoreGraphicsMatrixData::Invert()
 // returns true if the elements of the transformation matrix are equal ?
 bool wxMacCoreGraphicsMatrixData::IsEqual( const wxGraphicsMatrixData* t) const
 {
-    const CGAffineTransform* tm = (CGAffineTransform*) t->GetNativeMatrix();
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    if ( CGAffineTransformEqualToTransform!=NULL )
-    {
-        return CGAffineTransformEqualToTransform(m_matrix, *((CGAffineTransform*) t->GetNativeMatrix()));
-    }
-    else
-#endif
-    {
-        return (
-            m_matrix.a == tm->a &&
-            m_matrix.b == tm->b &&
-            m_matrix.c == tm->c &&
-            m_matrix.d == tm->d &&
-            m_matrix.tx == tm->tx &&
-            m_matrix.ty == tm->ty ) ;
-    }
+    return CGAffineTransformEqualToTransform(m_matrix, *((CGAffineTransform*) t->GetNativeMatrix()));
 }
 
 // return true if this is the identity matrix
@@ -1153,18 +1086,7 @@ void wxMacCoreGraphicsPathData::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wx
 
 bool wxMacCoreGraphicsPathData::Contains( wxDouble x, wxDouble y, int fillStyle) const
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    if ( CGPathContainsPoint!=NULL )
-    {
-        return CGPathContainsPoint( m_path, NULL, CGPointMake(x,y), fillStyle == wxODDEVEN_RULE );
-    }
-    else
-#endif
-    {
-        // TODO : implementation for 10.3
-        CGRect bounds = CGPathGetBoundingBox( m_path ) ;
-        return CGRectContainsPoint( bounds, CGPointMake(x,y) ) == 1;
-    }
+    return CGPathContainsPoint( m_path, NULL, CGPointMake(x,y), fillStyle == wxODDEVEN_RULE );
 }
 
 //
@@ -1471,25 +1393,14 @@ bool wxMacCoreGraphicsContext::SetLogicalFunction( int function )
     if ( function == wxCOPY )
     {
         retval = true;
-#if wxMAC_USE_CORE_GRAPHICS_BLEND_MODES
-        if ( CGContextSetBlendMode != NULL )
-        {
-            CGContextSetBlendMode( m_cgContext, kCGBlendModeNormal );
-            CGContextSetShouldAntialias( m_cgContext, true );
-        }
-#endif
+        CGContextSetBlendMode( m_cgContext, kCGBlendModeNormal );
     }
     else if ( function == wxINVERT || function == wxXOR )
     {
-#if wxMAC_USE_CORE_GRAPHICS_BLEND_MODES
-        if ( CGContextSetBlendMode != NULL )
-        {
-            // change color to white
-            CGContextSetBlendMode( m_cgContext, kCGBlendModeExclusion );
-            CGContextSetShouldAntialias( m_cgContext, false );
-            retval = true;
-        }
-#endif
+        // change color to white
+        CGContextSetBlendMode( m_cgContext, kCGBlendModeExclusion );
+        CGContextSetShouldAntialias( m_cgContext, false );
+        retval = true;
     }
     
     if (retval)
@@ -2253,6 +2164,3 @@ wxGraphicsFont wxMacCoreGraphicsRenderer::CreateFont( const wxFont &font , const
         return wxNullGraphicsFont;
 }
 
-
-
-#endif // wxMAC_USE_CORE_GRAPHICS

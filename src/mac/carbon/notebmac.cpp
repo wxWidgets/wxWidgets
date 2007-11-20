@@ -326,7 +326,6 @@ int wxNotebook::HitTest(const wxPoint& pt, long * flags) const
 {
     int resultV = wxNOT_FOUND;
 
-#if TARGET_API_MAC_OSX
     const int countPages = GetPageCount();
 
     // we have to convert from Client to Window relative coordinates
@@ -367,7 +366,6 @@ int wxNotebook::HitTest(const wxPoint& pt, long * flags) const
 
     if ( outPart >= 1 && outPart <= countPages )
         resultV = outPart - 1 ;
-#endif // TARGET_API_MAC_OSX
 
     if (flags != NULL)
     {
@@ -424,13 +422,7 @@ void wxNotebook::MacSetupTabs()
         m_peer->SetTabEnabled( ii + 1, true ) ;
     }
 
-#if wxMAC_USE_CORE_GRAPHICS
     Refresh();
-#else
-    Rect bounds;
-    m_peer->GetRectInWindowCoords( &bounds ) ;
-    InvalWindowRect( (WindowRef)MacGetTopLevelWindowRef(), &bounds );
-#endif
 }
 
 wxRect wxNotebook::GetPageRect() const

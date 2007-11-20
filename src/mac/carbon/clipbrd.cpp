@@ -144,6 +144,9 @@ void wxClipboard::Close()
 
 bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )
 {
+    wxLogTrace(TRACE_CLIPBOARD, wxT("Checking if format %s is available"),
+               dataFormat.GetId().c_str());
+
     if ( m_data )
         return m_data->IsSupported( dataFormat );
     return wxDataObject::IsFormatInPasteboard( m_pasteboard, dataFormat );

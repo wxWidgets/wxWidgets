@@ -103,7 +103,6 @@ int wxMessageDialog::ShowModal()
     }
 
 
-#if TARGET_API_MAC_OSX
     if ( !wxIsMainThread() )
     {
         CFStringRef defaultButtonTitle = NULL;
@@ -163,7 +162,6 @@ int wxMessageDialog::ShowModal()
             resultbutton = buttonId[exitButton];
     }
     else
-#endif
     {
         short result;
 

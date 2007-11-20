@@ -154,26 +154,22 @@ bool wxMacCarbonPrintData::TransferFrom( const wxPrintData &data )
         PMSetColorMode( (PMPrintSettings) m_macPrintSettings, kPMBlackAndWhite ) ;
 #endif
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    if ( PMSetDuplex!=NULL )
+    PMDuplexMode mode = 0 ;
+    switch( data.GetDuplex() )
     {
-        PMDuplexMode mode = 0 ;
-        switch( data.GetDuplex() )
-        {
-            case wxDUPLEX_HORIZONTAL :
-                mode = kPMDuplexNoTumble ;
-                break ;
-            case wxDUPLEX_VERTICAL :
-                mode = kPMDuplexTumble ;
-                break ;
-            case wxDUPLEX_SIMPLEX :
-            default :
-                mode = kPMDuplexNone ;
-                break ;
-        }
-        PMSetDuplex( (PMPrintSettings) m_macPrintSettings, mode ) ;
+        case wxDUPLEX_HORIZONTAL :
+            mode = kPMDuplexNoTumble ;
+            break ;
+        case wxDUPLEX_VERTICAL :
+            mode = kPMDuplexTumble ;
+            break ;
+        case wxDUPLEX_SIMPLEX :
+        default :
+            mode = kPMDuplexNone ;
+            break ;
     }
-#endif
+    PMSetDuplex( (PMPrintSettings) m_macPrintSettings, mode ) ;
+
     // PMQualityMode not yet accessible via API
     // todo paperSize
 
@@ -240,26 +236,21 @@ bool wxMacCarbonPrintData::TransferTo( wxPrintData &data )
     if ( err == noErr )
         data.SetColour( !(color == kPMBlackAndWhite) ) ;
 #endif
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    if ( PMGetDuplex!=NULL )
+    PMDuplexMode mode = 0 ;
+    PMGetDuplex( (PMPrintSettings) m_macPrintSettings, &mode ) ;
+    switch( mode )
     {
-        PMDuplexMode mode = 0 ;
-        PMGetDuplex( (PMPrintSettings) m_macPrintSettings, &mode ) ;
-        switch( mode )
-        {
-            case kPMDuplexNoTumble :
-                data.SetDuplex(wxDUPLEX_HORIZONTAL);
-                break ;
-            case kPMDuplexTumble :
-                data.SetDuplex(wxDUPLEX_VERTICAL);
-                break ;
-            case kPMDuplexNone :
-            default :
-                data.SetDuplex(wxDUPLEX_SIMPLEX);
-                break ;
-        }
+        case kPMDuplexNoTumble :
+            data.SetDuplex(wxDUPLEX_HORIZONTAL);
+            break ;
+        case kPMDuplexTumble :
+            data.SetDuplex(wxDUPLEX_VERTICAL);
+            break ;
+        case kPMDuplexNone :
+        default :
+            data.SetDuplex(wxDUPLEX_SIMPLEX);
+            break ;
     }
-#endif
     // PMQualityMode not yet accessible via API
     
     PMPaper paper ;
@@ -509,14 +500,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
             }
             else
             {
-#if !wxMAC_USE_CORE_GRAPHICS
-                GrafPtr thePort ;
-                GetPort( &thePort ) ;
-#endif
                 wxSafeYield(win,true);
-#if !wxMAC_USE_CORE_GRAPHICS
-                SetPort( thePort ) ;
-#endif
                 dc->StartPage();
                 keepGoing = printout->OnPrintPage(pn);
                 dc->EndPage();

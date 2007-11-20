@@ -248,7 +248,6 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 #endif
 
                 {
-#if wxMAC_USE_CORE_GRAPHICS
                     bool created = false ;
                     CGContextRef cgContext = NULL ;
                     OSStatus err = cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef, &cgContext) ;
@@ -278,18 +277,14 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                             CGContextClearRect( cgContext, bounds );
                         }
 
-
-#endif
                         if ( thisWindow->MacDoRedraw( updateRgn , cEvent.GetTicks() ) )
                             result = noErr ;
 
-#if wxMAC_USE_CORE_GRAPHICS
                         thisWindow->MacSetCGContextRef( NULL ) ;
                     }
 
                     if ( created )
                         CGContextRelease( cgContext ) ;
-#endif
                 }
 
                 if ( allocatedRgn )
@@ -919,10 +914,7 @@ void wxWindowMac::Init()
     m_peer = NULL ;
     m_frozenness = 0 ;
     m_macAlpha = 255 ;
-
-#if wxMAC_USE_CORE_GRAPHICS
     m_cgContextRef = NULL ;
-#endif
 
     // as all windows are created with WS_VISIBLE style...
     m_isShown = true;
@@ -2435,7 +2427,6 @@ void  wxWindowMac::MacPaintGrowBox()
     if ( IsTopLevel() )
         return ;
 
-#if wxMAC_USE_CORE_GRAPHICS
     if ( MacHasScrollBarCorner() )
     {
         Rect rect ;
@@ -2462,7 +2453,6 @@ void  wxWindowMac::MacPaintGrowBox()
         CGContextFillRect( cgContext, cgrect );
         CGContextRestoreGState( cgContext );
     }
-#endif
 }
 
 void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(rightOrigin) )
@@ -2477,7 +2467,6 @@ void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(right
     m_peer->GetRect( &rect ) ;
     InsetRect( &rect, -1 , -1 ) ;
 
-#if wxMAC_USE_CORE_GRAPHICS
     {
         CGRect cgrect = CGRectMake( rect.left , rect.top , rect.right - rect.left ,
             rect.bottom - rect.top ) ;
@@ -2527,33 +2516,6 @@ void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(right
         }
 #endif
     }
- #else
-    {
-        wxTopLevelWindowMac* top = MacGetTopLevelWindow();
-        if ( top )
-        {
-            wxPoint pt(0, 0) ;
-            wxMacControl::Convert( &pt , GetParent()->m_peer , top->m_peer ) ;
-            OffsetRect( &rect , pt.x , pt.y ) ;
-        }
-
-        if ( HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
-            DrawThemeEditTextFrame( &rect, IsEnabled() ? kThemeStateActive : kThemeStateInactive ) ;
-        else if ( HasFlag(wxSIMPLE_BORDER) )
-            DrawThemeListBoxFrame( &rect, IsEnabled() ? kThemeStateActive : kThemeStateInactive ) ;
-
-        if ( hasFocus )
-            DrawThemeFocusRect( &rect , true ) ;
-   // TODO REMOVE
-   /*
-        if ( hasBothScrollbars ) // hasBothScrollbars is not declared
-        {
-            // GetThemeStandaloneGrowBoxBounds
-            // DrawThemeStandaloneNoGrowBox
-        }
-   */
-    }
-#endif
 }
 
 void wxWindowMac::RemoveChild( wxWindowBase *child )
@@ -2736,9 +2698,7 @@ void wxWindowMac::OnSetFocus( wxFocusEvent& event )
 
     if ( MacGetTopLevelWindow() && m_peer->NeedsFocusRect() )
     {
-#if wxMAC_USE_CORE_GRAPHICS
         GetParent()->Refresh() ;
-#else
         wxMacWindowStateSaver sv( this ) ;
         Rect rect ;
 
@@ -2766,7 +2726,6 @@ void wxWindowMac::OnSetFocus( wxFocusEvent& event )
             // we have to invalidate things, we cannot simple redraw
             MacInvalidateBorders() ;
         }
-#endif
     }
 
     event.Skip();
@@ -3086,16 +3045,7 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
                 eventNc.SetEventObject( child );
                 if ( !child->GetEventHandler()->ProcessEvent( eventNc ) )
                 {
-#if wxMAC_USE_CORE_GRAPHICS
                     child->MacPaintBorders(0, 0) ;
-#else
-                    {
-                        wxWindowDC dc(this) ;
-                        dc.SetClippingRegion(wxRegion(updatergn));
-                        wxMacPortSetter helper(&dc) ;
-                        child->MacPaintBorders(0, 0) ;
-                    }
-#endif
                 }
             }
         }
@@ -3485,7 +3435,6 @@ bool wxWindowMac::Reparent(wxWindowBase *newParentBase)
 
 bool wxWindowMac::SetTransparent(wxByte alpha)
 {
-#if wxMAC_USE_CORE_GRAPHICS
     SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
 
     if ( alpha != m_macAlpha )
@@ -3494,19 +3443,12 @@ bool wxWindowMac::SetTransparent(wxByte alpha)
         Refresh() ;
     }
     return true ;
-#else
-    return false ;
-#endif
 }
 
 
 bool wxWindowMac::CanSetTransparent()
 {
-#if wxMAC_USE_CORE_GRAPHICS
     return true ;
-#else
-    return false ;
-#endif
 }
 
 wxByte wxWindowMac::GetTransparent() const

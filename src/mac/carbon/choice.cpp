@@ -274,62 +274,28 @@ wxSize wxChoice::DoGetBestSize() const
     lbHeight = metric ;
 
     {
-#if wxMAC_USE_CORE_GRAPHICS
         wxClientDC dc(const_cast<wxChoice*>(this));
-#else
-        wxMacPortStateHelper st( UMAGetWindowPort( (WindowRef) MacGetTopLevelWindowRef() ) ) ;
-        if ( m_font.Ok() )
-        {
-            ::TextFont( m_font.MacGetFontNum() ) ;
-            ::TextSize( m_font.MacGetFontSize() ) ;
-            ::TextFace( m_font.MacGetFontStyle() ) ;
-        }
-        else
-        {
-            ::TextFont( kFontIDMonaco ) ;
-            ::TextSize( 9 ) ;
-            ::TextFace( 0 ) ;
-        }
-#endif
+
         // Find the widest line
         for(unsigned int i = 0; i < GetCount(); i++)
         {
             wxString str(GetString(i));
-#if wxMAC_USE_CORE_GRAPHICS
+
             wxCoord width, height ;
             dc.GetTextExtent( str , &width, &height);
             wLine = width ;
-#else
-#if wxUSE_UNICODE
-            Point bounds = { 0, 0 } ;
-            SInt16 baseline ;
 
-            ::GetThemeTextDimensions( wxMacCFStringHolder( str , m_font.GetEncoding() ) ,
-                kThemeCurrentPortFont,
-                kThemeStateActive,
-                false,
-                &bounds,
-                &baseline );
-
-            wLine = bounds.h ;
-#else
-            wLine = ::TextWidth( str.c_str() , 0 , str.length() ) ;
-#endif
-#endif
             lbWidth = wxMax( lbWidth, wLine ) ;
         }
 
         // Add room for the popup arrow
         lbWidth += 2 * lbHeight ;
-#if wxMAC_USE_CORE_GRAPHICS
+
         wxCoord width, height ;
         dc.GetTextExtent( wxT("X"), &width, &height);
         int cx = width ;
         lbHeight += 4;
-#else
-        // And just a bit more
-        int cx = ::TextWidth( "X" , 0 , 1 ) ;
-#endif
+
         lbWidth += cx ;
     }
 

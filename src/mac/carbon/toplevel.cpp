@@ -658,14 +658,13 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
         {
             EventModifiers modifiers = cEvent.GetParameter<EventModifiers>(kEventParamKeyModifiers, typeUInt32) ;
             Point clickLocation = windowMouseLocation ;
-#if TARGET_API_MAC_OSX
+
             HIPoint hiPoint ;
             hiPoint.x = clickLocation.h ;
             hiPoint.y = clickLocation.v ;
             HIViewConvertPoint( &hiPoint , (ControlRef) toplevelWindow->GetHandle() , control  ) ;
             clickLocation.h = (int)hiPoint.x ;
             clickLocation.v = (int)hiPoint.y ;
-#endif // TARGET_API_MAC_OSX
 
             HandleControlClick( control , clickLocation , modifiers , (ControlActionUPP ) -1 ) ;
             result = noErr ;
@@ -1301,12 +1300,10 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
     }
 #endif
 
-#if TARGET_API_MAC_OSX
     if ( m_macWindow != NULL )
     {
         MacSetUnifiedAppearance( true ) ;
     }
-#endif
 
     HIViewRef growBoxRef = 0 ;
     err = HIViewFindByID( HIViewGetRoot( (WindowRef)m_macWindow ), kHIViewWindowGrowBoxID, &growBoxRef  );
@@ -1519,7 +1516,6 @@ void wxTopLevelWindowMac::SetExtraStyle(long exStyle)
 
     wxTopLevelWindowBase::SetExtraStyle( exStyle ) ;
 
-#if TARGET_API_MAC_OSX
     if ( m_macWindow != NULL )
     {
         bool metal = GetExtraStyle() & wxFRAME_EX_METAL ;
@@ -1532,7 +1528,6 @@ void wxTopLevelWindowMac::SetExtraStyle(long exStyle)
             MacSetMetalAppearance( metal ) ;
         }
     }
-#endif
 }
 
 bool wxTopLevelWindowMac::SetBackgroundStyle(wxBackgroundStyle style)
@@ -1621,53 +1616,37 @@ void wxTopLevelWindowMac::DoCentre(int dir)
 
 void wxTopLevelWindowMac::MacSetMetalAppearance( bool set )
 {
-#if TARGET_API_MAC_OSX
     if ( MacGetUnifiedAppearance() )
         MacSetUnifiedAppearance( false ) ;
 
     MacChangeWindowAttributes( set ? kWindowMetalAttribute : kWindowNoAttributes ,
         set ? kWindowNoAttributes : kWindowMetalAttribute ) ;
-#endif
 }
 
 bool wxTopLevelWindowMac::MacGetMetalAppearance() const
 {
-#if TARGET_API_MAC_OSX
     return MacGetWindowAttributes() & kWindowMetalAttribute ;
-#else
-    return false;
-#endif
 }
 
 void wxTopLevelWindowMac::MacSetUnifiedAppearance( bool set )
 {
-#if TARGET_API_MAC_OSX
-    if ( UMAGetSystemVersion() >= 0x1040 )
-    {
-        if ( MacGetMetalAppearance() )
-            MacSetMetalAppearance( false ) ;
+    if ( MacGetMetalAppearance() )
+        MacSetMetalAppearance( false ) ;
 
-        MacChangeWindowAttributes( set ? kWindowUnifiedTitleAndToolbarAttribute : kWindowNoAttributes ,
-            set ? kWindowNoAttributes : kWindowUnifiedTitleAndToolbarAttribute) ;
+    MacChangeWindowAttributes( set ? kWindowUnifiedTitleAndToolbarAttribute : kWindowNoAttributes ,
+        set ? kWindowNoAttributes : kWindowUnifiedTitleAndToolbarAttribute) ;
 
-        // For some reason, Tiger uses white as the background color for this appearance,
-        // while most apps using it use the typical striped background. Restore that behavior
-        // for wx.
-        // TODO: Determine if we need this on Leopard as well. (should be harmless either way,
-        // though)
-        SetBackgroundColour( wxSYS_COLOUR_WINDOW ) ;
-    }
-#endif
+    // For some reason, Tiger uses white as the background color for this appearance,
+    // while most apps using it use the typical striped background. Restore that behavior
+    // for wx.
+    // TODO: Determine if we need this on Leopard as well. (should be harmless either way,
+    // though)
+    SetBackgroundColour( wxSYS_COLOUR_WINDOW ) ;
 }
 
 bool wxTopLevelWindowMac::MacGetUnifiedAppearance() const
 {
-#if TARGET_API_MAC_OSX
-    if ( UMAGetSystemVersion() >= 0x1040 )
-        return MacGetWindowAttributes() & kWindowUnifiedTitleAndToolbarAttribute ;
-    else
-#endif
-        return false;
+    return MacGetWindowAttributes() & kWindowUnifiedTitleAndToolbarAttribute ;
 }
 
 void wxTopLevelWindowMac::MacChangeWindowAttributes( wxUint32 attributesToSet , wxUint32 attributesToClear )

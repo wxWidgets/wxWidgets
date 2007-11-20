@@ -218,52 +218,17 @@ wxSize wxListBox::DoGetBestSize() const
     int wLine;
 
     {
-#if wxMAC_USE_CORE_GRAPHICS
         wxClientDC dc(const_cast<wxListBox*>(this));
         dc.SetFont(GetFont());
-#else
-        wxMacPortStateHelper st( UMAGetWindowPort( (WindowRef)MacGetTopLevelWindowRef() ) );
 
-        // TODO: clean this up
-        if ( m_font.Ok() )
-        {
-            ::TextFont( m_font.MacGetFontNum() );
-            ::TextSize( m_font.MacGetFontSize() );
-            ::TextFace( m_font.MacGetFontStyle() );
-        }
-        else
-        {
-            ::TextFont( kFontIDMonaco );
-            ::TextSize( 9 );
-            ::TextFace( 0 );
-        }
-#endif
         // Find the widest line
         for (unsigned int i = 0; i < GetCount(); i++)
         {
             wxString str( GetString( i ) );
-#if wxMAC_USE_CORE_GRAPHICS
+
             wxCoord width, height ;
             dc.GetTextExtent( str , &width, &height);
             wLine = width ;
-#else
-#if wxUSE_UNICODE
-            Point bounds = {0, 0};
-            SInt16 baseline;
-
-            // NB: what if m_font.Ok() == false ???
-            ::GetThemeTextDimensions(
-                wxMacCFStringHolder( str, m_font.GetEncoding() ),
-                kThemeCurrentPortFont,
-                kThemeStateActive,
-                false,
-                &bounds,
-                &baseline );
-            wLine = bounds.h;
-#else
-            wLine = ::TextWidth( str.c_str(), 0, str.length() );
-#endif
-#endif
             lbWidth = wxMax( lbWidth, wLine );
         }
 
@@ -272,13 +237,10 @@ wxSize wxListBox::DoGetBestSize() const
 
         // And just a bit more
         int cy = 12;
-#if wxMAC_USE_CORE_GRAPHICS
+
         wxCoord width, height ;
         dc.GetTextExtent( wxT("XX") , &width, &height);
         int cx = width ;
-#else
-        int cx = ::TextWidth( "XX", 0, 1 );
-#endif
         lbWidth += cx;
 
         // don't make the listbox too tall (limit height to around 10 items)

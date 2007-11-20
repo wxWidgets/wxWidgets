@@ -92,11 +92,7 @@ wxMacDataBrowserTableViewControl::wxMacDataBrowserTableViewControl(wxWindow* pee
   if (gDataBrowserTableViewItemNotificationUPP == NULL)
   {
     gDataBrowserTableViewItemNotificationUPP =
-#if TARGET_API_MAC_OSX
       (DataBrowserItemNotificationUPP) NewDataBrowserItemNotificationWithItemUPP(wxMacDataBrowserTableViewControl::DataBrowserItemNotificationProc);
-#else
-      NewDataBrowserItemNotificationUPP(wxMacDataBrowserTableViewControl::DataBrowserItemNotificationProc);
-#endif
   }
 
   DataBrowserCallbacks       callbacks;

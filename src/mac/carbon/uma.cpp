@@ -558,7 +558,6 @@ Rect * UMAGetControlBoundsInWindowCoords( ControlRef theControl, Rect *bounds )
 {
     GetControlBounds( theControl , bounds ) ;
 
-#if TARGET_API_MAC_OSX
     WindowRef tlwref = GetControlOwner( theControl ) ;
 
     wxTopLevelWindowMac* tlwwx = wxFindWinFromMacWindow( tlwref ) ;
@@ -569,7 +568,6 @@ Rect * UMAGetControlBoundsInWindowCoords( ControlRef theControl, Rect *bounds )
         HIViewConvertPoint( &hiPoint , HIViewGetSuperview(theControl) , rootControl ) ;
         OffsetRect( bounds , (short) hiPoint.x , (short) hiPoint.y ) ;
     }
-#endif
 
     return bounds ;
 }
@@ -603,21 +601,7 @@ CGDataProviderRef UMACGDataProviderCreateWithCFData( CFDataRef data )
     if ( data == NULL )
         return NULL;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    if( &CGDataProviderCreateWithCFData != NULL )
-    {
-        return CGDataProviderCreateWithCFData( data );
-    }
-#endif
-
-    // make sure we keep it until done
-    CFRetain( data );
-    CGDataProviderRef provider = CGDataProviderCreateWithData( (void*) data , CFDataGetBytePtr( data ) ,
-        CFDataGetLength( data ), UMAReleaseCFDataProviderCallback );
-    // if provider couldn't be created, release the data again
-    if ( provider == NULL )
-        CFRelease( data );
-    return provider;
+    return CGDataProviderCreateWithCFData( data );
 }
 
 CGDataConsumerRef UMACGDataConsumerCreateWithCFData( CFMutableDataRef data )
@@ -625,22 +609,7 @@ CGDataConsumerRef UMACGDataConsumerCreateWithCFData( CFMutableDataRef data )
     if ( data == NULL )
         return NULL;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    if( &CGDataConsumerCreateWithCFData != NULL )
-    {
-        return CGDataConsumerCreateWithCFData( data );
-    }
-#endif
-    // make sure we keep it until done
-    CFRetain( data );
-    CGDataConsumerCallbacks callbacks;
-    callbacks.putBytes = UMAPutBytesCFRefCallback;
-    callbacks.releaseConsumer = UMAReleaseCFDataConsumerCallback;
-    CGDataConsumerRef consumer = CGDataConsumerCreate( data , &callbacks );
-    // if consumer couldn't be created, release the data again
-    if ( consumer == NULL )
-        CFRelease( data );
-    return consumer;
+    return CGDataConsumerCreateWithCFData( data );
 }
 #endif  // wxUSE_GUI
 

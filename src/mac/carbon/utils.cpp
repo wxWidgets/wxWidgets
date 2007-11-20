@@ -43,22 +43,9 @@
 #endif
 
 #if wxUSE_GUI
-#if TARGET_API_MAC_OSX
     #include <CoreServices/CoreServices.h>
-#else
-    #include <DriverServices.h>
-    #include <Multiprocessing.h>
-#endif
-
-#ifdef __DARWIN__
     #include <Carbon/Carbon.h>
-#else
-    #include <ATSUnicode.h>
-    #include <TextCommon.h>
-    #include <TextEncodingConverter.h>
-#endif
-
-#include "wx/mac/private/timer.h"
+    #include "wx/mac/private/timer.h"
 #endif // wxUSE_GUI
 
 #include "wx/evtloop.h"
@@ -203,12 +190,7 @@ bool wxCheckForInterrupt(wxWindow *WXUNUSED(wnd))
 void wxGetMousePosition( int* x, int* y )
 {
     Point pt;
-#if wxMAC_USE_CORE_GRAPHICS
     GetGlobalMouse(&pt);
-#else
-    GetMouse( &pt );
-    LocalToGlobal( &pt );
-#endif
     *x = pt.h;
     *y = pt.v;
 };
@@ -222,10 +204,7 @@ bool wxColourDisplay()
 // Returns depth of screen
 int wxDisplayDepth()
 {
-    int theDepth = 8;
-#if wxMAC_USE_CORE_GRAPHICS
-    theDepth = (int) CGDisplayBitsPerPixel(CGMainDisplayID());
-#else
+    int theDepth = (int) CGDisplayBitsPerPixel(CGMainDisplayID());
     Rect globRect;
     SetRect(&globRect, -32760, -32760, 32760, 32760);
     GDHandle    theMaxDevice;
@@ -233,30 +212,19 @@ int wxDisplayDepth()
     theMaxDevice = GetMaxDevice(&globRect);
     if (theMaxDevice != NULL)
         theDepth = (**(**theMaxDevice).gdPMap).pixelSize;
-#endif
+
     return theDepth;
 }
 
 // Get size of display
 void wxDisplaySize(int *width, int *height)
 {
-#if wxMAC_USE_CORE_GRAPHICS
     // TODO adapt for multi-displays
     CGRect bounds = CGDisplayBounds(CGMainDisplayID());
     if ( width )
         *width = (int)bounds.size.width ;
     if ( height )
         *height = (int)bounds.size.height;
-#else
-    BitMap screenBits;
-    GetQDGlobalsScreenBits( &screenBits );
-
-    if (width != NULL)
-        *width = screenBits.bounds.right - screenBits.bounds.left;
-
-    if (height != NULL)
-        *height = screenBits.bounds.bottom - screenBits.bounds.top;
-#endif
 }
 
 void wxDisplaySizeMM(int *width, int *height)
@@ -564,13 +532,8 @@ OSStatus wxMacControl::SetData(ControlPartCode inPartCode , ResType inTag , Size
 
 OSStatus wxMacControl::SendEvent( EventRef event , OptionBits inOptions )
 {
-#if TARGET_API_MAC_OSX
     return SendEventToEventTargetWithOptions( event,
         HIObjectGetEventTarget( (HIObjectRef) m_controlRef ), inOptions );
-#else
-    #pragma unused(inOptions)
-    return SendEventToEventTarget(event,GetControlEventTarget( m_controlRef ) );
-#endif
 }
 
 OSStatus wxMacControl::SendHICommand( HICommand &command , OptionBits inOptions )
@@ -1623,9 +1586,7 @@ void wxMacDataItemBrowserControl::InsertColumn(int colId, DataBrowserPropertyTyp
     columnDesc.propertyDesc.propertyType = colType;
     columnDesc.propertyDesc.propertyFlags = kDataBrowserListViewSortableColumn;
     columnDesc.propertyDesc.propertyFlags |= kDataBrowserListViewTypeSelectColumn;
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
     columnDesc.propertyDesc.propertyFlags |= kDataBrowserListViewNoGapForIconInHeaderButton;
-#endif
 
     verify_noerr( AddColumn( &columnDesc, kDataBrowserListViewAppendColumn ) );
 
@@ -1981,24 +1942,7 @@ CGColorSpaceRef wxMacGetGenericRGBColorSpace()
 
     if (genericRGBColorSpace == NULL)
     {
-        if ( UMAGetSystemVersion() >= 0x1040 )
-        {
-            genericRGBColorSpace.Set( CGColorSpaceCreateWithName( CFSTR("kCGColorSpaceGenericRGB") ) );
-        }
-        else
-        {
-            CMProfileRef genericRGBProfile = wxMacOpenGenericProfile();
-
-            if (genericRGBProfile)
-            {
-                genericRGBColorSpace.Set( CGColorSpaceCreateWithPlatformColorSpace(genericRGBProfile) );
-
-                wxASSERT_MSG( genericRGBColorSpace != NULL, wxT("couldn't create the generic RGB color space") );
-
-                // we opened the profile so it is up to us to close it
-                CMCloseProfile(genericRGBProfile);
-            }
-        }
+        genericRGBColorSpace.Set( CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB ) );
     }
 
     return genericRGBColorSpace;
@@ -2020,7 +1964,6 @@ wxMacPortSaver::~wxMacPortSaver()
 
 void wxMacGlobalToLocal( WindowRef window , Point*pt )
 {
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_4
     HIPoint p = CGPointMake( pt->h, pt->v );
     HIViewRef contentView ;
     // TODO check toolbar offset
@@ -2028,14 +1971,10 @@ void wxMacGlobalToLocal( WindowRef window , Point*pt )
     HIPointConvert( &p, kHICoordSpace72DPIGlobal, NULL, kHICoordSpaceView, contentView );
     pt->h = p.x;
     pt->v = p.y;
-#else
-    QDGlobalToLocalPoint( GetWindowPort(window), pt ) ;
-#endif
 }
 
 void wxMacLocalToGlobal( WindowRef window , Point*pt )
 {
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_4
     HIPoint p = CGPointMake( pt->h, pt->v );
     HIViewRef contentView ;
     // TODO check toolbar offset
@@ -2043,9 +1982,6 @@ void wxMacLocalToGlobal( WindowRef window , Point*pt )
     HIPointConvert( &p, kHICoordSpaceView, contentView, kHICoordSpace72DPIGlobal, NULL );
     pt->h = p.x;
     pt->v = p.y;
-#else
-    QDLocalToGlobalPoint( GetWindowPort(window), pt ) ;
-#endif
 }
 
 #endif // wxUSE_GUI

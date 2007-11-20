@@ -383,17 +383,10 @@ bool wxToolBarTool::DoEnable( bool enable )
 
         if ( m_controlHandle != NULL )
         {
-#if TARGET_API_MAC_OSX
             if ( enable )
                 EnableControl( m_controlHandle );
             else
                 DisableControl( m_controlHandle );
-#else
-            if ( enable )
-                ActivateControl( m_controlHandle );
-            else
-                DeactivateControl( m_controlHandle );
-#endif
         }
     }
 
@@ -1719,7 +1712,6 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
 
     bool drawMetalTheme = MacGetTopLevelWindow()->MacGetMetalAppearance();
 
-#if wxMAC_USE_CORE_GRAPHICS
     if ( !drawMetalTheme  )
     {
         HIThemePlacardDrawInfo info;
@@ -1735,57 +1727,6 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
     {
         // leave the background as it is (striped or metal)
     }
-
-#else
-
-    const bool drawBorder = true;
-
-    if (drawBorder)
-    {
-        wxMacPortSetter helper( &dc );
-
-        if ( !drawMetalTheme )
-        {
-            Rect toolbarrect = { dc.YLOG2DEVMAC(0), dc.XLOG2DEVMAC(0),
-                dc.YLOG2DEVMAC(h), dc.XLOG2DEVMAC(w) };
-
-#if 0
-            if ( toolbarrect.left < 0 )
-                toolbarrect.left = 0;
-            if ( toolbarrect.top < 0 )
-                toolbarrect.top = 0;
-#endif
-
-            UMADrawThemePlacard( &toolbarrect, IsEnabled() ? kThemeStateActive : kThemeStateInactive );
-        }
-        else
-        {
-#if TARGET_API_MAC_OSX
-            HIRect hiToolbarrect = CGRectMake(
-                dc.YLOG2DEVMAC(0), dc.XLOG2DEVMAC(0),
-                dc.YLOG2DEVREL(h), dc.XLOG2DEVREL(w) );
-            CGContextRef cgContext;
-            Rect bounds;
-
-            GetPortBounds( (CGrafPtr) dc.m_macPort, &bounds );
-            QDBeginCGContext( (CGrafPtr) dc.m_macPort, &cgContext );
-
-            CGContextTranslateCTM( cgContext, 0, bounds.bottom - bounds.top );
-            CGContextScaleCTM( cgContext, 1, -1 );
-
-            HIThemeBackgroundDrawInfo drawInfo;
-            drawInfo.version = 0;
-            drawInfo.state = kThemeStateActive;
-            drawInfo.kind = kThemeBackgroundMetal;
-            HIThemeApplyBackground( &hiToolbarrect, &drawInfo, cgContext, kHIThemeOrientationNormal );
-
-#ifndef __LP64__
-            QDEndCGContext( (CGrafPtr) dc.m_macPort, &cgContext );
-#endif
-#endif
-        }
-    }
-#endif
 
     event.Skip();
 }

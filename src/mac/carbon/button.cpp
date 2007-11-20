@@ -166,23 +166,11 @@ wxSize wxButton::DoGetBestSize() const
         else
 #endif
         {
-#if wxMAC_USE_CORE_GRAPHICS
             wxClientDC dc(const_cast<wxButton*>(this));
             wxCoord width, height ;
             dc.GetTextExtent( m_label , &width, &height);
             bounds.h = width;
             bounds.v = height;
-#else
-            wxMacWindowStateSaver sv( this );
-            ::TextFont( m_font.MacGetFontNum() );
-            ::TextSize( (short)(m_font.MacGetFontSize()) );
-            ::TextFace( m_font.MacGetFontStyle() );
-
-            err = GetThemeTextDimensions(
-                (!m_label.empty() ? (CFStringRef)str : CFSTR(" ")),
-                kThemeCurrentPortFont, kThemeStateActive, false, &bounds, &baseline );
-            verify_noerr( err );
-#endif
         }
 
         wBtn = bounds.h + sz.y;

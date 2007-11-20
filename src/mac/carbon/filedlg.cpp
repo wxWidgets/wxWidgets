@@ -341,10 +341,8 @@ int wxFileDialog::ShowModal()
         if (numFilters < 2)
             dialogCreateOptions.optionFlags |= kNavPreserveSaveFileExtension;
 
-#if TARGET_API_MAC_OSX
         if (!(m_windowStyle & wxFD_OVERWRITE_PROMPT))
             dialogCreateOptions.optionFlags |= kNavDontConfirmReplacement;
-#endif
 
         err = ::NavCreatePutFileDialog(
             &dialogCreateOptions,
