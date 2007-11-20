@@ -40,10 +40,6 @@
 #        ifndef MAC_OS_X_VERSION_10_5
 #           define MAC_OS_X_VERSION_10_5 1050
 #        endif
-#        ifdef __WXMAC_XCODE__
-#            include <unistd.h>
-#            include "wx/mac/carbon/config_xcode.h"
-#        endif
 #    else
 #        error "only mach-o configurations are supported"
 #    endif
@@ -72,6 +68,12 @@
 #   define __WXOSX__
 #endif
 
+#ifdef __WXOSX__
+#    ifdef __WXMAC_XCODE__
+#        include <unistd.h>
+#        include "wx/mac/carbon/config_xcode.h"
+#    endif
+#endif
 /*
    first define Windows symbols if they're not defined on the command line: we
    can autodetect everything we need if _WIN32 is defined
