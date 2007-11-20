@@ -2540,7 +2540,7 @@ DECLARE_WXMAC_OPAQUE_REF( PasteboardRef );
 
 #endif
 
-#if defined( __WXCOCOA__ ) || ( defined(__WXMAC__) && defined(__DARWIN__) )
+#if defined( __WXCOCOA__ ) || defined(__WXMAC__) 
 
 /* Definitions of 32-bit/64-bit types
  * These are typedef'd exactly the same way in newer OS X headers so
