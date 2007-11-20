@@ -272,6 +272,14 @@ wxX11:
 - Make Enter key activate the default button (David Hart).
 
 
+2.8.8
+-----
+
+All (GUI):
+
+- Added wxWindow::GetNextSibling() and GetPrevSibling()
+
+
 2.8.7
 -----
 

@@ -631,9 +631,9 @@ public:
         // move this window just before/after the specified one in tab order
         // (the other window must be our sibling!)
     void MoveBeforeInTabOrder(wxWindow *win)
-        { DoMoveInTabOrder(win, MoveBefore); }
+        { DoMoveInTabOrder(win, OrderBefore); }
     void MoveAfterInTabOrder(wxWindow *win)
-        { DoMoveInTabOrder(win, MoveAfter); }
+        { DoMoveInTabOrder(win, OrderAfter); }
 
 
     // parent/children relations
@@ -645,6 +645,11 @@ public:
 
     // needed just for extended runtime
     const wxWindowList& GetWindowChildren() const { return GetChildren() ; }
+
+        // get the window before/after this one in the parents children list,
+        // returns NULL if this is the first/last window
+    wxWindow *GetPrevSibling() const { return DoGetSibling(OrderBefore); }
+    wxWindow *GetNextSibling() const { return DoGetSibling(OrderAfter); }
 
         // get the parent or the parent of the parent
     wxWindow *GetParent() const { return m_parent; }
@@ -1257,13 +1262,17 @@ protected:
     virtual bool TryValidator(wxEvent& event);
     virtual bool TryParent(wxEvent& event);
 
-    // common part of MoveBefore/AfterInTabOrder()
-    enum MoveKind
+    enum WindowOrder
     {
-        MoveBefore,     // insert before the given window
-        MoveAfter       // insert after the given window
+        OrderBefore,     // insert before the given window
+        OrderAfter       // insert after the given window
     };
-    virtual void DoMoveInTabOrder(wxWindow *win, MoveKind move);
+
+    // common part of GetPrev/NextSibling()
+    wxWindow *DoGetSibling(WindowOrder order) const;
+
+    // common part of MoveBefore/AfterInTabOrder()
+    virtual void DoMoveInTabOrder(wxWindow *win, WindowOrder move);
 
     // implementation of Navigate() and NavigateIn()
     virtual bool DoNavigateIn(int flags);

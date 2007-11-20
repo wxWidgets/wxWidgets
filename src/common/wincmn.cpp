@@ -2636,6 +2636,27 @@ bool wxWindowBase::TryParent(wxEvent& event)
 }
 
 // ----------------------------------------------------------------------------
+// window relationships
+// ----------------------------------------------------------------------------
+
+wxWindow *wxWindowBase::DoGetSibling(WindowOrder order) const
+{
+    wxCHECK_MSG( GetParent(), NULL,
+                    _T("GetPrev/NextSibling() don't work for TLWs!") );
+
+    wxWindowList& siblings = GetParent()->GetChildren();
+    wxWindowList::compatibility_iterator i = siblings.Find(this);
+    wxCHECK_MSG( i, NULL, _T("window not a child of its parent?") );
+
+    if ( order == OrderBefore )
+        i = i->GetPrevious();
+    else // OrderAfter
+        i = i->GetNext();
+
+    return i ? i->GetData() : NULL;
+}
+
+// ----------------------------------------------------------------------------
 // keyboard navigation
 // ----------------------------------------------------------------------------
 
@@ -2654,7 +2675,7 @@ bool wxWindowBase::DoNavigateIn(int flags)
 #endif // wxHAS_NATIVE_TAB_TRAVERSAL/!wxHAS_NATIVE_TAB_TRAVERSAL
 }
 
-void wxWindowBase::DoMoveInTabOrder(wxWindow *win, MoveKind move)
+void wxWindowBase::DoMoveInTabOrder(wxWindow *win, WindowOrder move)
 {
     // check that we're not a top level window
     wxCHECK_RET( GetParent(),
@@ -2674,7 +2695,7 @@ void wxWindowBase::DoMoveInTabOrder(wxWindow *win, MoveKind move)
     // can't just move the node around
     wxWindow *self = (wxWindow *)this;
     siblings.DeleteObject(self);
-    if ( move == MoveAfter )
+    if ( move == OrderAfter )
     {
         i = i->GetNext();
     }
@@ -2683,7 +2704,7 @@ void wxWindowBase::DoMoveInTabOrder(wxWindow *win, MoveKind move)
     {
         siblings.Insert(i, self);
     }
-    else // MoveAfter and win was the last sibling
+    else // OrderAfter and win was the last sibling
     {
         siblings.Append(self);
     }

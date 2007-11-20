@@ -1197,6 +1197,20 @@ name in the window constructor or via \helpref{wxWindow::SetName}{wxwindowsetnam
 \helpref{wxWindow::SetName}{wxwindowsetname}
 
 
+\membersection{wxWindow::GetNextSibling}\label{wxwindowgetnextsibling}
+
+\constfunc{wxWindow *}{GetNextSibling}{\void}
+
+Returns the next window after this one among the parent children or \NULL if
+this window is the last child.
+
+\newsince{2.8.8}
+
+\wxheading{See also}
+
+\helpref{GetPrevSibling}{wxwindowgetprevsibling}
+
+
 \membersection{wxWindow::GetParent}\label{wxwindowgetparent}
 
 \constfunc{virtual wxWindow*}{GetParent}{\void}
@@ -1268,6 +1282,20 @@ method:\par
 \wxheading{See also}
 
 \helpref{GetScreenPosition}{wxwindowgetscreenposition}
+
+
+\membersection{wxWindow::GetPrevSibling}\label{wxwindowgetprevsibling}
+
+\constfunc{wxWindow *}{GetPrevSibling}{\void}
+
+Returns the previous window before this one among the parent children or \NULL if
+this window is the first child.
+
+\newsince{2.8.8}
+
+\wxheading{See also}
+
+\helpref{GetNextSibling}{wxwindowgetnextsibling}
 
 
 \membersection{wxWindow::GetRect}\label{wxwindowgetrect}
