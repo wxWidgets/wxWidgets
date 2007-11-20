@@ -38,13 +38,8 @@ IMPLEMENT_ABSTRACT_CLASS(wxMetafileDC, wxDC)
 class wxMetafileRefData: public wxGDIRefData
 {
 public:
-#if wxMAC_USE_CORE_GRAPHICS
     // creates a metafile from memory, assumes ownership
     wxMetafileRefData(CFDataRef data);
-#else
-    // creates a metafile from memory, assumes ownership
-    wxMetafileRefData(PicHandle data);
-#endif
     // prepares a recording metafile
     wxMetafileRefData( int width, int height);
     // prepares a metafile to be read from a file (if filename is not empty)
@@ -56,53 +51,34 @@ public:
     int GetWidth() const { return m_width; }
     int GetHeight() const { return m_height; }
 
-#if wxMAC_USE_CORE_GRAPHICS
     CGPDFDocumentRef GetPDFDocument() const { return m_pdfDoc; }
     void UpdateDocumentFromData() ;
 
     const wxCFDataRef& GetData() const { return m_data; }
     CGContextRef GetContext() const { return m_context; }
-#else
-    PicHandle GetHandle() const { return m_metafile; }
-#endif
+
     // ends the recording
     void Close();
 private:
-#if wxMAC_USE_CORE_GRAPHICS
     wxCFDataRef m_data;
     wxCFRef<CGPDFDocumentRef> m_pdfDoc;
     CGContextRef m_context;
-#else
-    PicHandle m_metafile;
-#endif
+
     int m_width ;
     int m_height ;
 };
 
-#if !wxMAC_USE_CORE_GRAPHICS
-wxMetafileRefData::wxMetafileRefData(PicHandle pict)
-{
-    Init();
-    m_metafile = pict;
-
-    Rect r;
-    wxMacGetPictureBounds( m_metafile, &r );
-    m_width = r.right - r.left;
-    m_height = r.bottom - r.top;
-}
-#else
 wxMetafileRefData::wxMetafileRefData(CFDataRef data) :
     m_data(data)
 {
     Init();
     UpdateDocumentFromData();
 }
-#endif
 
 wxMetafileRefData::wxMetafileRefData( const wxString& filename )
 {
     Init();
-#if wxMAC_USE_CORE_GRAPHICS
+
     if ( !filename.empty() )
     {
         wxCFRef<CFMutableStringRef> cfMutableString(CFStringCreateMutableCopy(NULL, 0, wxMacCFStringHolder(filename)));
@@ -110,10 +86,6 @@ wxMetafileRefData::wxMetafileRefData( const wxString& filename )
         wxCFRef<CFURLRef> url(CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kCFURLPOSIXPathStyle, false));
         m_pdfDoc.reset(CGPDFDocumentCreateWithURL(url));
     }
-#else
-    wxASSERT_MSG( filename.empty(), wxT("no file-based metafile support yet") );
-    m_metafile = NULL;
-#endif
 }
 
 
@@ -123,7 +95,7 @@ wxMetafileRefData::wxMetafileRefData( int width, int height)
 
     m_width = width;
     m_height = height;
-#if wxMAC_USE_CORE_GRAPHICS
+
     CGRect r = CGRectMake( 0 , 0 , width  , height );
 
     CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault, 0);
@@ -133,12 +105,7 @@ wxMetafileRefData::wxMetafileRefData( int width, int height)
     CGDataConsumerRelease( dataConsumer );
     if ( m_context )
     {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-        if ( &CGPDFContextBeginPage != NULL )
-            CGPDFContextBeginPage(m_context, NULL);
-        else
-#endif
-            CGContextBeginPage(m_context, &r);
+        CGPDFContextBeginPage(m_context, NULL);
 
         CGColorSpaceRef genericColorSpace  = wxMacGetGenericRGBColorSpace();
 
@@ -148,54 +115,29 @@ wxMetafileRefData::wxMetafileRefData( int width, int height)
         CGContextTranslateCTM( m_context , 0 ,  height ) ;
         CGContextScaleCTM( m_context , 1 , -1 ) ;
     }
-#else
-    Rect r = { 0, 0, height, width };
-    m_metafile = OpenPicture( &r ) ;
-#endif
 }
 
 wxMetafileRefData::~wxMetafileRefData()
 {
-#if! wxMAC_USE_CORE_GRAPHICS
-    if (m_metafile)
-    {
-        KillPicture( (PicHandle)m_metafile );
-        m_metafile = NULL;
-    }
-#endif
 }
 
 void wxMetafileRefData::Init()
 {
-#if wxMAC_USE_CORE_GRAPHICS
     m_context = NULL;
-#else
-    m_metafile = NULL;
-#endif
     m_width = -1;
     m_height = -1;
 }
 
 void wxMetafileRefData::Close()
 {
-#if wxMAC_USE_CORE_GRAPHICS
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    if ( &CGPDFContextEndPage != NULL )
-        CGPDFContextEndPage(m_context);
-    else
-#endif
-        CGContextEndPage(m_context);
+    CGPDFContextEndPage(m_context);
 
     CGContextRelease(m_context);
     m_context = NULL;
 
     UpdateDocumentFromData();
-#else
-    ClosePicture();
-#endif
 }
 
-#if wxMAC_USE_CORE_GRAPHICS
 void wxMetafileRefData::UpdateDocumentFromData()
 {
     wxCFRef<CGDataProviderRef> provider(UMACGDataProviderCreateWithCFData(m_data));
@@ -208,7 +150,6 @@ void wxMetafileRefData::UpdateDocumentFromData()
         m_height = wx_static_cast(int, rect.size.height);
     }
 }
-#endif
 
 wxMetaFile::wxMetaFile(const wxString& file)
 {
@@ -221,20 +162,12 @@ wxMetaFile::~wxMetaFile()
 
 bool wxMetaFile::IsOk() const
 {
-#if wxMAC_USE_CORE_GRAPHICS
     return (M_METAFILEDATA && (M_METAFILEDATA->GetData() != NULL));
-#else
-    return (M_METAFILEDATA && (M_METAFILEDATA->GetHandle() != NULL));
-#endif
 }
 
 WXHMETAFILE wxMetaFile::GetHMETAFILE() const
 {
-#if wxMAC_USE_CORE_GRAPHICS
     return (WXHMETAFILE) (CFDataRef) M_METAFILEDATA->GetData();
-#else
-    return (WXHMETAFILE) M_METAFILEDATA->GetHandle();
-#endif
 }
 
 bool wxMetaFile::SetClipboard(int WXUNUSED(width), int WXUNUSED(height))
@@ -265,18 +198,13 @@ void wxMetafile::SetHMETAFILE(WXHMETAFILE mf)
 {
     UnRef();
 
-#if wxMAC_USE_CORE_GRAPHICS
     m_refData = new wxMetafileRefData((CFDataRef)mf);
-#else
-    m_refData = new wxMetafileRefData((PicHandle)mf);
-#endif
 }
 
 void wxMetafile::SetPICT(void* pictHandle)
 {
     UnRef();
 
-#if wxMAC_USE_CORE_GRAPHICS
     Handle picHandle = (Handle) pictHandle;
     HLock(picHandle);
     CFDataRef data = CFDataCreateWithBytesNoCopy( kCFAllocatorDefault, (const UInt8*) *picHandle, GetHandleSize(picHandle), kCFAllocatorNull);
@@ -289,9 +217,6 @@ void wxMetafile::SetPICT(void* pictHandle)
     CFRelease( data );
     QDPictRelease( pictRef );
     ((wxMetafileRefData*) m_refData)->Close();
-#else
-    m_refData = new wxMetafileRefData((PicHandle)pictHandle);
-#endif
 }
 
 bool wxMetaFile::Play(wxDC *dc)
@@ -303,7 +228,6 @@ bool wxMetaFile::Play(wxDC *dc)
         return false;
 
     {
-#if wxMAC_USE_CORE_GRAPHICS
         CGContextRef cg = (CGContextRef) dc->GetGraphicsContext()->GetNativeContext();
         CGPDFDocumentRef doc = M_METAFILEDATA->GetPDFDocument();
         CGPDFPageRef page = CGPDFDocumentGetPage( doc, 1 );
@@ -311,12 +235,6 @@ bool wxMetaFile::Play(wxDC *dc)
         CGContextDrawPDFPage( cg, page );
 //        CGContextTranslateCTM( cg, 0, bounds.size.width );
 //        CGContextScaleCTM( cg, 1, -1 );
-#else
-        PicHandle pict = (PicHandle)GetHMETAFILE();
-        wxMacPortSetter helper( dc );
-        Rect picFrame;
-        DrawPicture( pict, wxMacGetPictureBounds( pict, &picFrame ) );
-#endif
     }
 
     return true;
@@ -352,16 +270,9 @@ wxMetaFileDC::wxMetaFileDC(
     wxMetafileRefData* metafiledata = new wxMetafileRefData(width, height);
     m_metaFile->UnRef();
     m_metaFile->SetRefData( metafiledata );
-#if wxMAC_USE_CORE_GRAPHICS
+
     SetGraphicsContext( wxGraphicsContext::CreateFromNative(metafiledata->GetContext()));
     m_ok = (m_graphicContext != NULL) ;
-#else
-    Rect r = { 0, 0, height, width };
-    RectRgn( (RgnHandle)m_macBoundaryClipRgn, &r );
-    CopyRgn( (RgnHandle)m_macBoundaryClipRgn, (RgnHandle)m_macCurrentClipRgn );
-    ::GetPort( (GrafPtr*)&m_macPort );
-    m_ok = true;
-#endif
 
     SetMapMode( wxMM_TEXT );
 }
@@ -383,11 +294,9 @@ void wxMetaFileDC::DoGetSize(int *width, int *height) const
 
 wxMetaFile *wxMetaFileDC::Close()
 {
-#if wxMAC_USE_CORE_GRAPHICS
     delete m_graphicContext;
     m_graphicContext = NULL;
     m_ok = false;
-#endif
 
     M_METAFILEREFDATA(*m_metaFile)->Close();
 
@@ -397,21 +306,17 @@ wxMetaFile *wxMetaFileDC::Close()
 #if wxUSE_DATAOBJ
 size_t wxMetafileDataObject::GetDataSize() const
 {
-#if wxMAC_USE_CORE_GRAPHICS
     CFIndex length = 0;
     wxMetafileRefData* refData = M_METAFILEREFDATA(m_metafile);
     if ( refData )
         length = refData->GetData().GetLength();
     return length;
-#else
-    return GetHandleSize( (Handle) (*((wxMetafile*)&m_metafile)).GetHMETAFILE() );
-#endif
 }
 
 bool wxMetafileDataObject::GetDataHere(void *buf) const
 {
     bool result = false;
-#if wxMAC_USE_CORE_GRAPHICS
+
     wxMetafileRefData* refData = M_METAFILEREFDATA(m_metafile);
     if ( refData )
     {
@@ -422,29 +327,14 @@ bool wxMetafileDataObject::GetDataHere(void *buf) const
             refData->GetData().GetBytes(CFRangeMake(0,length), (UInt8 *) buf);
         }
     }
-#else
-    Handle pictH = (Handle)(*((wxMetafile*)&m_metafile)).GetHMETAFILE();
-    result = (pictH != NULL);
-
-    if (result)
-        memcpy( buf, *pictH, GetHandleSize( pictH ) );
-
-#endif
     return result;
 }
 
 bool wxMetafileDataObject::SetData(size_t len, const void *buf)
 {
-#if wxMAC_USE_CORE_GRAPHICS
     wxMetafileRefData* metafiledata = new wxMetafileRefData(wxCFRefFromGet(wxCFDataRef((UInt8*)buf, len).get()));
     m_metafile.UnRef();
     m_metafile.SetRefData( metafiledata );
-#else
-    Handle handle = NewHandle( len );
-    SetHandleSize( handle, len );
-    memcpy( *handle, buf, len );
-    m_metafile.SetHMETAFILE( (WXHMETAFILE) handle );
-#endif
     return true;
 }
 #endif
