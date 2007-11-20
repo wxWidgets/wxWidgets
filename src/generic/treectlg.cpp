@@ -790,7 +790,7 @@ void wxGenericTreeCtrl::Init()
 
     m_lastOnSame = false;
 
-#ifdef __WXMAC_CARBON__
+#ifdef __WXMAC__
     m_normalFont.MacCreateThemeFont( kThemeViewsFont ) ;
 #else
     m_normalFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
@@ -2250,7 +2250,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         {
             int flags = wxCONTROL_SELECTED;
             if (m_hasFocus
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
                 && IsControlActive( (ControlRef)GetHandle() )
 #endif
             )
@@ -2390,7 +2390,7 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
 
         wxColour colText;
         if ( item->IsSelected()
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
             // On wxMac, if the tree doesn't have the focus we draw an empty
             // rectangle, so we want to make sure that the text is visible
             // against the normal background, not the highlightbackground, so

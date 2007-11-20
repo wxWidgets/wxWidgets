@@ -7202,7 +7202,7 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
         return;
     }
 
-#if !(defined(__WXMAC__) && wxMAC_USE_CORE_GRAPHICS)
+#if !defined(__WXMAC__)
     wxClientDC dc( m_gridWin );
     PrepareDC( dc );
 #endif
@@ -7228,7 +7228,7 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
             // Otherwise refresh redraws the highlight!
             m_currentCellCoords = coords;
 
-#if defined(__WXMAC__) && wxMAC_USE_CORE_GRAPHICS
+#if defined(__WXMAC__)
             m_gridWin->Refresh(true /*, & r */);
 #else
             DrawGridCellArea( dc, cells );
@@ -7240,7 +7240,7 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
     m_currentCellCoords = coords;
 
     wxGridCellAttr *attr = GetCellAttr( coords );
-#if !(defined(__WXMAC__) && wxMAC_USE_CORE_GRAPHICS)
+#if !defined(__WXMAC__) 
     DrawCellHighlight( dc, attr );
 #endif
     attr->DecRef();
@@ -7813,7 +7813,6 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
     int rightCol = GetColPos( internalXToCol(right) );
     int bottomRow = internalYToRow(bottom);
 
-#if !defined(__WXMAC__) || wxMAC_USE_CORE_GRAPHICS
     wxRegion clippedcells(0, 0, cw, ch);
 
     int i, j, cell_rows, cell_cols;
@@ -7841,30 +7840,6 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
             }
         }
     }
-#else
-    wxRegion clippedcells( left, top, right - left, bottom - top );
-
-    int i, j, cell_rows, cell_cols;
-    wxRect rect;
-
-    for (j=topRow; j<=bottomRow; j++)
-    {
-        for (i=leftCol; i<=rightCol; i++)
-        {
-            GetCellSize( j, i, &cell_rows, &cell_cols );
-            if ((cell_rows > 1) || (cell_cols > 1))
-            {
-                rect = CellToRect(j, i);
-                clippedcells.Subtract(rect);
-            }
-            else if ((cell_rows < 0) || (cell_cols < 0))
-            {
-                rect = CellToRect(j + cell_rows, i + cell_cols);
-                clippedcells.Subtract(rect);
-            }
-        }
-    }
-#endif
 
     dc.SetClippingRegion( clippedcells );
 

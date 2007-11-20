@@ -213,8 +213,10 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     // following the mouse movement while it drags the sash, without it we only
     // draw the sash at the new position but only resize the windows when the
     // dragging is finished
-#if defined( __WXMAC__ ) && defined(TARGET_API_MAC_OSX) && TARGET_API_MAC_OSX == 1
-    bool isLive = true ; // FIXME: why?
+#if defined( __WXMAC__ ) 
+    // FIXME : this should be usable also with no live update, but then this
+    // currently is not visible
+    bool isLive = true;
 #else
     bool isLive = HasFlag(wxSP_LIVE_UPDATE);
 #endif

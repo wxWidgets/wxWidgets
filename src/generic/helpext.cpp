@@ -15,7 +15,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_HELP && !defined(__WXWINCE__) && (!defined(__WXMAC__) || defined(__WXMAC_OSX__))
+#if wxUSE_HELP && !defined(__WXWINCE__)
 
 #ifndef WX_PRECOMP
     #include "wx/list.h"

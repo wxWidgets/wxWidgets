@@ -1415,7 +1415,7 @@ bool wxListLineData::SetAttributes(wxDC *dc,
 #ifdef __WXMAC__
     {
         if (m_owner->HasFocus()
-#ifdef __WXMAC__
+#if !defined(__WXUNIVERSAL__)
                 && IsControlActive( (ControlRef)m_owner->GetHandle() )
 #endif
         )
@@ -1479,7 +1479,7 @@ void wxListLineData::Draw( wxDC *dc )
         {
             int flags = wxCONTROL_SELECTED;
             if (m_owner->HasFocus()
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
                 && IsControlActive( (ControlRef)m_owner->GetHandle() )
 #endif
             )
@@ -5021,7 +5021,6 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
 
     m_mainWin = new wxListMainWindow( this, wxID_ANY, wxPoint(0, 0), size, style );
 
-#ifdef  __WXMAC_CARBON__
     // Human Interface Guidelines ask us for a special font in this case
     if ( GetWindowVariant() == wxWINDOW_VARIANT_NORMAL )
     {
@@ -5029,13 +5028,11 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
         font.MacCreateThemeFont( kThemeViewsFont );
         SetFont( font );
     }
-#endif
 
     if ( InReportView() )
     {
         CreateHeaderWindow();
 
-#ifdef  __WXMAC_CARBON__
         if (m_headerWin)
         {
             wxFont font;
@@ -5043,7 +5040,6 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
             m_headerWin->SetFont( font );
             CalculateAndSetHeaderHeight();
         }
-#endif
 
         if ( HasFlag(wxLC_NO_HEADER) )
             // VZ: why do we create it at all then?
