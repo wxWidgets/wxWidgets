@@ -184,6 +184,7 @@ static const EventTypeSpec eventList[] =
     { kEventClassControl , kEventControlActivate } ,
     { kEventClassControl , kEventControlDeactivate } ,
 #endif
+    { kEventClassControl , kEventControlGetFocusPart } ,
     { kEventClassControl , kEventControlSetFocusPart } ,
 
     { kEventClassService , kEventServiceGetTypes },
@@ -326,6 +327,14 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 #endif // TARGET_API_MAC_OSX
 
         // we emulate this event under Carbon CFM
+        case kEventControlGetFocusPart :
+            if ( thisWindow->MacIsUserPane() )
+            {
+                // kHIViewEntireView and kHIViewNoPart have the same code, needed for Leopard
+                cEvent.SetParameter<ControlPartCode>(kEventParamControlPart , kHIViewEntireView );
+                result = noErr ;
+            }
+            break ;
         case kEventControlSetFocusPart :
             {
                 Boolean focusEverything = false ;
@@ -339,7 +348,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 
                 if ( thisWindow->MacIsUserPane() )
                     result = noErr ;
-
+                
                 if ( controlPart == kControlFocusNoPart )
                 {
 #if wxUSE_CARET
@@ -347,6 +356,8 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                         thisWindow->GetCaret()->OnKillFocus();
 #endif
 
+                    wxLogTrace(_T("Focus"), _T("focus lost(%p)"), wx_static_cast(void*, thisWindow));
+                    
                     static bool inKillFocusEvent = false ;
 
                     if ( !inKillFocusEvent )
@@ -361,6 +372,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 else
                 {
                     // panel wants to track the window which was the last to have focus in it
+                    wxLogTrace(_T("Focus"), _T("focus set(%p)"), wx_static_cast(void*, thisWindow));
                     wxChildFocusEvent eventFocus((wxWindow*)thisWindow);
                     thisWindow->GetEventHandler()->ProcessEvent(eventFocus);
 
@@ -1269,11 +1281,15 @@ void wxWindowMac::SetFocus()
 
     // as we cannot rely on the control features to find out whether we are in full keyboard mode,
     // we can only leave in case of an error
+    
+    wxLogTrace(_T("Focus"), _T("SetFocus(%p)"), wx_static_cast(void*, this));
+
     OSStatus err = m_peer->SetFocus( kControlFocusNextPart ) ;
     if ( err == errCouldntSetFocus )
         return ;
 
-    SetUserFocusWindow( (WindowRef)MacGetTopLevelWindowRef() );
+    if ( GetUserFocusWindow() != (WindowRef)MacGetTopLevelWindowRef() )
+        SetUserFocusWindow( (WindowRef)MacGetTopLevelWindowRef() );
 
 #if !TARGET_API_MAC_OSX
     // emulate carbon events when running under CarbonLib where they are not natively available
@@ -2731,6 +2747,9 @@ wxWindow *wxWindowBase::DoFindFocus()
 {
     ControlRef control ;
     GetKeyboardFocus( GetUserFocusWindow() , &control ) ;
+    wxLogTrace(_T("Focus"), _T("FindFocus(windowref=%p, peer =%p, wxwindow = %p)"), 
+                wx_static_cast(void*, GetUserFocusWindow()), wx_static_cast(void*, control)
+               , wx_static_cast(void*, wxFindControlFromMacControl( control )));
     return (wxWindow*)wxFindControlFromMacControl( control ) ;
 }
 
