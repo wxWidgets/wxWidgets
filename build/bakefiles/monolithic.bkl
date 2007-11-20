@@ -19,6 +19,7 @@
         <sources>$(MONOLIB_SRC) $(PLUGIN_MONOLIB_SRC)</sources>
         <ldlibs>$(EXTRALIBS_XML)</ldlibs>
         <ldlibs>$(EXTRALIBS_HTML)</ldlibs>
+        <ldlibs>$(EXTRALIBS_MEDIA)</ldlibs>
         <ldlibs>$(PLUGIN_MONOLIB_EXTRALIBS)</ldlibs>
         <msvc-headers>$(ALL_HEADERS)</msvc-headers>
         <!-- STC stuff, should this be conditionalized? -->

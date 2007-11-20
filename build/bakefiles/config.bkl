@@ -339,6 +339,7 @@ to run the tests, include CppUnit library here.
         <option name="EXTRALIBS"/>
         <option name="EXTRALIBS_XML"/>
         <option name="EXTRALIBS_HTML"/>
+        <option name="EXTRALIBS_MEDIA"/>
         <option name="EXTRALIBS_GUI"/>
         <option name="EXTRALIBS_OPENGL"/>
         <option name="EXTRALIBS_SDL"/>
@@ -390,6 +391,7 @@ it if SHARED=1 unless you know what you are doing.
         <set var="EXTRALIBS"/>
         <set var="EXTRALIBS_XML"/>
         <set var="EXTRALIBS_HTML"/>
+        <set var="EXTRALIBS_MEDIA"/>
         <set var="EXTRALIBS_GUI"/>
         <set var="EXTRALIBS_OPENGL">
             <if cond="COMPILER=='wat' and TOOLKIT=='MSW'">opengl32.lib glu32.lib</if>
