@@ -136,6 +136,11 @@ All (GUI):
 
 - Added wxWindow::GetNextSibling() and GetPrevSibling()
 
+All (Unix):
+
+- Fixed shared libraries to not depend on GStreamer when built with
+  --enable-media; only wxMedia library depends on it now.
+
 
 2.8.7
 -----
