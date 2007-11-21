@@ -3842,8 +3842,6 @@ dnl   defines pid_t if not already defined
 AC_TYPE_PID_T
 dnl   defines size_t if not already defined
 AC_TYPE_SIZE_T
-dnl   defines uid_t and gid_t if not already defined
-AC_TYPE_UID_T
 
 dnl sets HAVE_SSIZE_T if ssize_t is defined
 AC_CHECK_TYPES(ssize_t)
