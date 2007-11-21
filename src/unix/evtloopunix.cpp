@@ -27,6 +27,7 @@
 #endif
 
 #include <errno.h>
+#include "wx/apptrait.h"
 #include "wx/evtloop.h"
 #include "wx/thread.h"
 #include "wx/module.h"
@@ -183,6 +184,12 @@ void wxConsoleEventLoop::OnNextIteration()
 
     // call the signal handlers for any signals we caught recently
     wxTheApp->CheckSignal();
+}
+
+
+wxEventLoopBase *wxConsoleAppTraits::CreateEventLoop()
+{
+    return new wxEventLoop();
 }
 
 #endif // wxUSE_CONSOLE_EVENTLOOP
