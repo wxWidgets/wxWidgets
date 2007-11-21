@@ -251,6 +251,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 
 <set var="BASE_OS2_SRC" hints="files">
+    src/common/fdiodispatcher.cpp
+    src/common/selectdispatcher.cpp
+    src/unix/appunix.cpp
+    src/unix/evtloopunix.cpp
     src/os2/dir.cpp
     src/os2/mimetype.cpp
     src/os2/stdpaths.cpp
@@ -261,8 +265,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_AND_GUI_OS2_SRC" hints="files">
 </set>
 <set var="BASE_OS2_HDR" hints="files">
+    wx/private/fdiodispatcher.h
+    wx/private/selectdispatcher.h
     wx/os2/apptbase.h
     wx/os2/apptrait.h
+    wx/unix/evtloop.h
     wx/os2/mimetype.h
     wx/os2/private.h
     wx/os2/stdpaths.h
