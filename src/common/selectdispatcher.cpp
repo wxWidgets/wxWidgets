@@ -31,6 +31,7 @@
 #endif
 
 #ifdef HAVE_SYS_SELECT_H
+    #include <sys/time.h>
     #include <sys/select.h>
 #endif
 
