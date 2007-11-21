@@ -1,7 +1,22 @@
 build/wince/wx.vcw
 build/wince/wx_*.vcp
 
-build/wince/missing
+build/wince/missing/*.h*
+build/wince/missing/ext/h*
+build/wince/missing/gtk/*.h*
+build/wince/missing/machine/*.h*
+build/wince/missing/sys/*.h*
+build/wince/missing/Carbon/*.h*
+build/wince/missing/CoreFoundation/*.h*
+build/wince/missing/CoreServices/*.h*
+build/wince/missing/GL/*.h*
+build/wince/missing/OpenGL/*.h*
+build/wince/missing/pango/*.h*
+build/wince/missing/X11/*.h*
+build/wince/missing/Xm/*.h*
+build/wince/missing/AGL/*.h*
+build/wince/missing/gdk/*.h*
+
 
 samples/access/access.vcp
 samples/access/access.vcw
