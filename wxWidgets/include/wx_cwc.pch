@@ -1,0 +1,32 @@
+#if __option (profile)
+#ifdef __MACH__
+	#pragma precompile_target "wx_Mach_prof.mch"
+#elif __POWERPC__
+	#pragma precompile_target "wx_Carbon_prof.mch"
+#else
+	#error "illegal processor for carbon"
+#endif
+#else
+#ifdef __MACH__
+	#pragma precompile_target "wx_Mach.mch"
+#elif __POWERPC__
+	#pragma precompile_target "wx_Carbon.mch"
+#else
+	#error "illegal processor for carbon"
+#endif
+#endif
+
+#pragma once on
+#undef WX_PRECOMP
+#define wxUSE_GUI 1
+#define TARGET_CARBON 1
+#define OLDP2C 1
+#ifdef __MACH__
+	#define __DARWIN__
+	#define __CF_USE_FRAMEWORK_INCLUDES__
+	#define __NOEXTENSIONS__
+	#define __UNIX__
+	#define __UNIX_LIKE__
+#endif
+
+#include "wx/wx_cw_cm.h"

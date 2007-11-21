@@ -1,0 +1,126 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        stackframe.tex
+%% Purpose:     wxStackFrame documentation
+%% Author:      Vadim Zeitlin
+%% Created:     2005-01-19
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2005 Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxStackFrame}}\label{wxstackframe}
+
+
+wxStackFrame represents a single stack frame, or a single function in the call
+stack, and is used exclusively together with 
+\helpref{wxStackWalker}{wxstackwalker}, see there for a more detailed
+discussion.
+
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/stackwalk.h>
+
+Only available if \texttt{wxUSE\_STACKWALKER} is $1$, currently only
+implemented for Win32 and Unix versions using recent version of GNU libc.
+
+\wxheading{See also}
+
+\helpref{wxStackWalker}{wxstackwalker}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxStackFrame::GetAddress}\label{wxstackframegetaddress}
+
+\constfunc{void*}{GetAddress}{\void}
+
+Return the address of this frame.
+
+
+\membersection{wxStackFrame::GetFileName}\label{wxstackframegetfilename}
+
+\constfunc{wxString}{GetFileName}{\void}
+
+Return the name of the file containing this frame, empty if
+unavailable (typically because debug info is missing).
+
+Use \helpref{HasSourceLocation}{wxstackframehassourcelocation} to check whether
+the file name is available.
+
+
+\membersection{wxStackFrame::GetLevel}\label{wxstackframegetlevel}
+
+\constfunc{size\_t}{GetLevel}{\void}
+
+Get the level of this frame (deepest/innermost one is $0$).
+
+
+\membersection{wxStackFrame::GetLine}\label{wxstackframegetline}
+
+\constfunc{size\_t}{GetLine}{\void}
+
+Return the line number of this frame, $0$ if unavailable.
+
+\wxheading{See also}
+
+\helpref{GetFileName}{wxstackframegetfilename}
+
+
+\membersection{wxStackFrame::GetModule}\label{wxstackframegetmodule}
+
+\constfunc{wxString}{GetModule}{\void}
+
+Get the module this function belongs to (empty if not available).
+
+
+\membersection{wxStackFrame::GetName}\label{wxstackframegetname}
+
+\constfunc{wxString}{GetName}{\void}
+
+Return the unmangled (if possible) name of the function containing this
+frame.
+
+
+\membersection{wxStackFrame::GetOffset}\label{wxstackframegetoffset}
+
+\constfunc{size\_t}{GetOffset}{\void}
+
+Return the return address of this frame.
+
+
+\membersection{wxStackFrame::GetParam}\label{wxstackframegetparam}
+
+\constfunc{bool}{GetParam}{\param{size\_t }{n}, \param{wxString * }{type}, \param{wxString * }{name}, \param{wxString * }{value}}
+
+Get the name, type and value (in text form) of the given parameter.
+Any pointer may be \texttt{NULL} if you're not interested in the corresponding
+value.
+
+Return \true if at least some values could be retrieved.
+
+This function currently is only implemented under Win32 and requires a PDB
+file.
+
+
+\membersection{wxStackFrame::GetParamCount}\label{wxstackframegetparamcount}
+
+\constfunc{size\_t}{GetParamCount}{\void}
+
+Return the number of parameters of this function (may return $0$ if we
+can't retrieve the parameters info even although the function does have
+parameters).
+
+
+\membersection{wxStackFrame::HasSourceLocation}\label{wxstackframehassourcelocation}
+
+\constfunc{bool}{HasSourceLocation}{\void}
+
+Return \true if we have the file name and line number for this frame.
+
+

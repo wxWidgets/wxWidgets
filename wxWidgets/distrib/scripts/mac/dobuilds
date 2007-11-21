@@ -1,0 +1,34 @@
+#!/bin/sh
+
+HOMEDIR="$PWD"
+
+BUILDDIR_ROOT="$PWD/builds"
+
+export WXROOT="$HOMEDIR/../../.."
+
+do_builds {
+    PORT=$1
+    BUILDDIR=$BUILDDIR_ROOT/$PORT
+    mkdir -p $BUILDDIR
+    pushd $BUILDDIR
+    
+    # TODO: add the lipo universal builds to this
+    export WXROOT="$HOMEDIR/../../.."
+    export INSTALLDIR="$BUILDDIR/install-ansi"
+    $HOMEDIR/macbuild $PORT
+    
+    export INSTALLDIR="$BUILDDIR/install-unicode"
+    $HOMEDIR/macbuild $PORT unicode
+    
+    export INSTALLDIR="$BUILDDIR/install-static-ansi"
+    $HOMEDIR/macbuild $PORT static
+    
+    export INSTALLDIR="$BUILDDIR/install-static-unicode"
+    $HOMEDIR/macbuild $PORT static unicode
+    
+    popd
+}
+
+do_builds "carbon"
+
+do_builds "cocoa"

@@ -1,0 +1,151 @@
+% -----------------------------------------------------------------------------
+% wxZlibInputStream
+% -----------------------------------------------------------------------------
+\section{\class{wxZlibInputStream}}\label{wxzlibinputstream}
+
+This filter stream decompresses a stream that is in zlib or gzip format.
+Note that reading the gzip format requires zlib version 1.2.1 or greater,
+(the builtin version does support gzip format).
+
+The stream is not seekable, \helpref{SeekI()}{wxinputstreamseeki} returns
+ {\it wxInvalidOffset}. Also \helpref{GetSize()}{wxstreambasegetsize} is
+not supported, it always returns $0$.
+
+\wxheading{Derived from}
+
+\helpref{wxFilterInputStream}{wxfilterinputstream}
+
+\wxheading{Include files}
+
+<wx/zstream.h>
+
+\wxheading{See also}
+
+\helpref{wxInputStream}{wxinputstream}, 
+ \helpref{wxZlibOutputStream}{wxzliboutputstream}.
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxZlibInputStream::wxZlibInputStream}\label{wxzlibinputstreamwxzlibinputstream}
+
+\func{}{wxZlibInputStream}{\param{wxInputStream\&}{ stream}, \param{int}{ flags = wxZLIB\_AUTO}}
+
+\func{}{wxZlibInputStream}{\param{wxInputStream*}{ stream}, \param{int}{ flags = wxZLIB\_AUTO}}
+
+If the parent stream is passed as a pointer then the new filter stream
+takes ownership of it. If it is passed by reference then it does not.
+
+The {\it flags} wxZLIB\_ZLIB and wxZLIB\_GZIP specify whether the input data
+is in zlib or gzip format. If wxZLIB\_AUTO is used, then zlib will
+autodetect the stream type, this is the default.
+
+If {\it flags} is wxZLIB\_NO\_HEADER, then the data is assumed to be a raw
+deflate stream without either zlib or gzip headers. This is a lower level
+mode, which is not usually used directly. It can be used to read a raw
+deflate stream embedded in a higher level protocol.
+
+%if WXWIN_COMPATIBILITY_2_4
+This version is not by default compatible with the output produced by
+the version of {\it wxZlibOutputStream} in wxWidgets 2.4.x. However,
+there is a compatibility mode, which is switched on by passing
+wxZLIB\_24COMPATIBLE for flags. Note that in when operating in compatibility
+mode error checking is very much reduced.
+%endif
+
+The following symbols can be use for the flags:
+
+\begin{verbatim}
+// Flags
+enum {
+#if WXWIN_COMPATIBILITY_2_4
+    wxZLIB_24COMPATIBLE = 4, // read v2.4.x data without error
+#endif
+    wxZLIB_NO_HEADER = 0,    // raw deflate stream, no header or checksum
+    wxZLIB_ZLIB = 1,         // zlib header and checksum
+    wxZLIB_GZIP = 2,         // gzip header and checksum, requires zlib 1.2.1+
+    wxZLIB_AUTO = 3          // autodetect header zlib or gzip
+};
+\end{verbatim}
+
+\membersection{wxZlibInputStream::CanHandleGZip}\label{wxzlibinputstreamcanhandlegzip}
+
+\func{static bool}{CanHandleGZip}{\void}
+
+Returns true if zlib library in use can handle gzip compressed data.
+
+% -----------------------------------------------------------------------------
+% wxZlibOutputStream
+% -----------------------------------------------------------------------------
+\section{\class{wxZlibOutputStream}}\label{wxzliboutputstream}
+
+This stream compresses all data written to it. The compressed output can be
+in zlib or gzip format.
+Note that writing the gzip format requires zlib version 1.2.1 or greater
+(the builtin version does support gzip format).
+
+The stream is not seekable, \helpref{SeekO()}{wxoutputstreamseeko} returns
+ {\it wxInvalidOffset}.
+
+\wxheading{Derived from}
+
+\helpref{wxFilterOutputStream}{wxfilteroutputstream}
+
+\wxheading{Include files}
+
+<wx/zstream.h>
+
+\wxheading{See also}
+
+\helpref{wxOutputStream}{wxoutputstream},
+ \helpref{wxZlibInputStream}{wxzlibinputstream}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxZlibOutputStream::wxZlibOutputStream}\label{wxzliboutputstreamwxzliboutputstream}
+
+\func{}{wxZlibOutputStream}{\param{wxOutputStream\&}{ stream}, \param{int}{ level = -1}, \param{int}{ flags = wxZLIB\_ZLIB}}
+
+\func{}{wxZlibOutputStream}{\param{wxOutputStream*}{ stream}, \param{int}{ level = -1}, \param{int}{ flags = wxZLIB\_ZLIB}}
+
+Creates a new write-only compressed stream. {\it level} means level of 
+compression. It is number between 0 and 9 (including these values) where
+0 means no compression and 9 best but slowest compression. -1 is default
+value (currently equivalent to 6).
+
+If the parent stream is passed as a pointer then the new filter stream
+takes ownership of it. If it is passed by reference then it does not.
+
+The {\it flags} wxZLIB\_ZLIB and wxZLIB\_GZIP specify whether the output data
+will be in zlib or gzip format. wxZLIB\_ZLIB is the default.
+
+If {\it flags} is wxZLIB\_NO\_HEADER, then a raw deflate stream is output
+without either zlib or gzip headers. This is a lower level
+mode, which is not usually used directly. It can be used to embed a raw
+deflate stream in a higher level protocol.
+
+The following symbols can be use for the compression level and flags:
+
+\begin{verbatim}
+// Compression level
+enum {
+    wxZ_DEFAULT_COMPRESSION = -1,
+    wxZ_NO_COMPRESSION = 0,
+    wxZ_BEST_SPEED = 1,
+    wxZ_BEST_COMPRESSION = 9
+};
+
+// Flags
+enum {
+    wxZLIB_NO_HEADER = 0,   // raw deflate stream, no header or checksum
+    wxZLIB_ZLIB = 1,        // zlib header and checksum
+    wxZLIB_GZIP = 2         // gzip header and checksum, requires zlib 1.2.1+
+};
+\end{verbatim}
+
+\membersection{wxZlibOutputStream::CanHandleGZip}\label{wxoutputstreamcanhandlegzip}
+
+\func{static bool}{CanHandleGZip}{\void}
+
+Returns true if zlib library in use can handle gzip compressed data.
+

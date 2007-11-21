@@ -1,0 +1,211 @@
+\section{\class{wxCondition}}\label{wxcondition}
+
+wxCondition variables correspond to pthread conditions or to Win32 event
+objects. They may be used in a multithreaded application to wait until the
+given condition becomes true which happens when the condition becomes signaled.
+
+For example, if a worker thread is doing some long task and another thread has
+to wait until it is finished, the latter thread will wait on the condition
+object and the worker thread will signal it on exit (this example is not
+perfect because in this particular case it would be much better to just 
+\helpref{Wait()}{wxthreadwait} for the worker thread, but if there are several
+worker threads it already makes much more sense).
+
+Note that a call to \helpref{Signal()}{wxconditionsignal} may happen before the
+other thread calls \helpref{Wait()}{wxconditionwait} and, just as with the
+pthread conditions, the signal is then lost and so if you want to be sure that
+you don't miss it you must keep the mutex associated with the condition
+initially locked and lock it again before calling 
+\helpref{Signal()}{wxconditionsignal}. Of course, this means that this call is
+going to block until \helpref{Wait()}{wxconditionwait} is called by another
+thread.
+
+\wxheading{Example}
+
+This example shows how a main thread may launch a worker thread which starts
+running and then waits until the main thread signals it to continue:
+
+\begin{verbatim}
+class MySignallingThread : public wxThread
+{
+public:
+    MySignallingThread(wxMutex *mutex, wxCondition *condition)
+    {
+        m_mutex = mutex;
+        m_condition = condition;
+
+        Create();
+    }
+
+    virtual ExitCode Entry()
+    {
+        ... do our job ...
+
+        // tell the other(s) thread(s) that we're about to terminate: we must
+        // lock the mutex first or we might signal the condition before the
+        // waiting threads start waiting on it!
+        wxMutexLocker lock(*m_mutex);
+        m_condition->Broadcast(); // same as Signal() here -- one waiter only
+
+        return 0;
+    }
+
+private:
+    wxCondition *m_condition;
+    wxMutex *m_mutex;
+};
+
+int main()
+{
+    wxMutex mutex;
+    wxCondition condition(mutex);
+
+    // the mutex should be initially locked
+    mutex.Lock();
+
+    // create and run the thread but notice that it won't be able to
+    // exit (and signal its exit) before we unlock the mutex below
+    MySignallingThread *thread = new MySignallingThread(&mutex, &condition);
+
+    thread->Run();
+
+    // wait for the thread termination: Wait() atomically unlocks the mutex
+    // which allows the thread to continue and starts waiting
+    condition.Wait();
+
+    // now we can exit
+    return 0;
+}
+\end{verbatim}
+
+Of course, here it would be much better to simply use a joinable thread and
+call \helpref{wxThread::Wait}{wxthreadwait} on it, but this example does
+illustrate the importance of properly locking the mutex when using
+wxCondition.
+
+\wxheading{Constants}
+
+The following return codes are returned by wxCondition member functions:
+
+\begin{verbatim}
+enum wxCondError
+{
+    wxCOND_NO_ERROR = 0,    // successful completion
+    wxCOND_INVALID,         // object hasn't been initialized successfully
+    wxCOND_TIMEOUT,         // WaitTimeout() has timed out
+    wxCOND_MISC_ERROR       // some other error
+};
+\end{verbatim}
+
+\wxheading{Derived from}
+
+None.
+
+\wxheading{Include files}
+
+<wx/thread.h>
+
+\wxheading{See also}
+
+\helpref{wxThread}{wxthread}, \helpref{wxMutex}{wxmutex}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxCondition::wxCondition}\label{wxconditionctor}
+
+\func{}{wxCondition}{\param{wxMutex\& }{mutex}}
+
+Default and only constructor. The {\it mutex} must be locked by the caller
+before calling \helpref{Wait}{wxconditionwait} function.
+
+Use \helpref{IsOk}{wxconditionisok} to check if the object was successfully
+initialized.
+
+\membersection{wxCondition::\destruct{wxCondition}}\label{wxconditiondtor}
+
+\func{}{\destruct{wxCondition}}{\void}
+
+Destroys the wxCondition object. The destructor is not virtual so this class
+should not be used polymorphically.
+
+\membersection{wxCondition::Broadcast}\label{wxconditionbroadcast}
+
+\func{void}{Broadcast}{\void}
+
+Broadcasts to all waiting threads, waking all of them up. Note that this method
+may be called whether the mutex associated with this condition is locked or
+not.
+
+\wxheading{See also}
+
+\helpref{wxCondition::Signal}{wxconditionsignal}
+
+\membersection{wxCondition::IsOk}\label{wxconditionisok}
+
+\constfunc{bool}{IsOk}{\void}
+
+Returns {\tt true} if the object had been initialized successfully, {\tt false} 
+if an error occurred.
+
+\membersection{wxCondition::Signal}\label{wxconditionsignal}
+
+\func{void}{Signal}{\void}
+
+Signals the object waking up at most one thread. If several threads are waiting
+on the same condition, the exact thread which is woken up is undefined. If no
+threads are waiting, the signal is lost and the condition would have to be
+signalled again to wake up any thread which may start waiting on it later.
+
+Note that this method may be called whether the mutex associated with this
+condition is locked or not.
+
+\wxheading{See also}
+
+\helpref{wxCondition::Broadcast}{wxconditionbroadcast}
+
+\membersection{wxCondition::Wait}\label{wxconditionwait}
+
+\func{wxCondError}{Wait}{\void}
+
+Waits until the condition is signalled.
+
+This method atomically releases the lock on the mutex associated with this
+condition (this is why it must be locked prior to calling Wait) and puts the
+thread to sleep until \helpref{Signal}{wxconditionsignal} or 
+\helpref{Broadcast}{wxconditionbroadcast} is called. It then locks the mutex
+again and returns.
+
+Note that even if \helpref{Signal}{wxconditionsignal} had been called before
+Wait without waking up any thread, the thread would still wait for another one
+and so it is important to ensure that the condition will be signalled after
+Wait or the thread may sleep forever.
+
+\wxheading{Return value}
+
+Returns {\tt wxCOND\_NO\_ERROR} on success, another value if an error occurred.
+
+\wxheading{See also}
+
+\helpref{WaitTimeout}{wxconditionwaittimeout}
+
+
+\membersection{wxCondition::WaitTimeout}\label{wxconditionwaittimeout}
+
+\func{wxCondError}{WaitTimeout}{\param{unsigned long}{ milliseconds}}
+
+Waits until the condition is signalled or the timeout has elapsed.
+
+This method is identical to \helpref{Wait}{wxconditionwait} except that it
+returns, with the return code of {\tt wxCOND\_TIMEOUT} as soon as the given
+timeout expires.
+
+\wxheading{Parameters}
+
+\docparam{milliseconds}{Timeout in milliseconds}
+
+\wxheading{Return value}
+
+Returns {\tt wxCOND\_NO\_ERROR} if the condition was signalled, 
+{\tt wxCOND\_TIMEOUT} if the timeout elapsed before this happened or another
+error code from wxCondError enum.
+

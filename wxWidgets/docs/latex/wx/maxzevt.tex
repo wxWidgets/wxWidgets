@@ -1,0 +1,48 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        maxzevt.tex
+%% Purpose:     wxMaximizeEvent documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2001 Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxMaximizeEvent}}\label{wxmaximizeevent}
+
+An event being sent when the frame is maximized or restored.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/event.h>
+
+\wxheading{Event table macros}
+
+To process a maximize event, use this event handler macro to direct input to a
+member function that takes a wxMaximizeEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_MAXIMIZE(func)}}{Process a wxEVT\_MAXIMIZE event.}
+\end{twocollist}%
+
+\wxheading{See also}
+
+\helpref{Event handling overview}{eventhandlingoverview},\rtfsp
+\helpref{wxTopLevelWindow::Maximize}{wxtoplevelwindowmaximize},\rtfsp
+\helpref{wxTopLevelWindow::IsMaximized}{wxtoplevelwindowismaximized}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxMaximizeEvent::wxMaximizeEvent}\label{wxmaximizeeventctor}
+
+\func{}{wxMaximizeEvent}{\param{int }{id = 0}}
+
+Constructor.
+

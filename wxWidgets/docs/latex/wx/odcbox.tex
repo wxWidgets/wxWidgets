@@ -1,0 +1,221 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        odcbox.tex
+%% Purpose:     wxOwnerDrawnComboBox docs
+%% Author:      Jaakko Salli
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Jaakko Salli
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxOwnerDrawnComboBox}}\label{wxownerdrawncombobox}
+
+wxOwnerDrawnComboBox is a combobox with owner-drawn list items.
+In essence, it is a \helpref{wxComboCtrl}{wxcomboctrl} with
+\helpref{wxVListBox}{wxvlistbox} popup and \helpref{wxControlWithItems}{wxcontrolwithitems}
+interface.
+
+Implementing item drawing and measuring is similar to \helpref{wxVListBox}{wxvlistbox}.
+Application needs to subclass wxOwnerDrawnComboBox and implement
+\helpref{OnDrawItem()}{wxownerdrawncomboboxondrawitem}, \helpref{OnMeasureItem()}{wxownerdrawncomboboxonmeasureitem}
+and \helpref{OnMeasureItemWidth()}{wxownerdrawncomboboxonmeasureitemwidth}.
+
+
+\wxheading{Derived from}
+
+\helpref{wxComboCtrl}{wxcomboctrl}\\
+\helpref{wxControlWithItems}{wxcontrolwithitems}\\
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<odcombo.h>
+
+\wxheading{Window styles}
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxODCB\_DCLICK\_CYCLES}}{Double-clicking cycles item
+if wxCB\_READONLY is also used. Synonymous with wxCC\_SPECIAL\_DCLICK.}
+\twocolitem{\windowstyle{wxODCB\_STD\_CONTROL\_PAINT}}{Control itself is not
+custom painted using OnDrawItem. Even if this style is not used, writable
+wxOwnerDrawnComboBox is never custom painted unless SetCustomPaintWidth is
+called.}
+\end{twocollist}
+
+See also \helpref{wxComboCtrl window styles}{wxcomboctrl} and
+base \helpref{window styles overview}{windowstyles}.
+
+\wxheading{Event handling}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_COMBOBOX(id, func)}}{Process a wxEVT\_COMMAND\_COMBOBOX\_SELECTED event,
+when an item on the list is selected. Note that calling
+\helpref{GetValue}{wxcomboctrlgetvalue} returns the new value of selection.}
+\end{twocollist}
+
+See also events emitted by \helpref{wxComboCtrl}{wxcomboctrl}.
+
+\wxheading{See also}
+
+\helpref{wxComboCtrl}{wxcomboctrl}, \helpref{wxComboBox}{wxcombobox}, \helpref{wxVListBox}{wxvlistbox},
+\rtfsp\helpref{wxCommandEvent}{wxcommandevent}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxOwnerDrawnComboBox::wxOwnerDrawnComboBox}\label{wxownerdrawncomboboxctor}
+
+\func{}{wxOwnerDrawnComboBox}{\void}
+
+Default constructor.
+
+\func{}{wxOwnerDrawnComboBox}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{value = ``"}, \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{int}{ n = 0}, \param{const wxString }{choices[] = NULL},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``comboBox"}}
+
+\func{}{wxOwnerDrawnComboBox}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{value}, \param{const wxPoint\&}{ pos}, \param{const wxSize\&}{ size},\rtfsp
+\param{const wxArrayString\& }{choices},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``comboBox"}}
+
+Constructor, creating and showing a owner-drawn combobox.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Window identifier. A value of -1 indicates a default value.}
+
+\docparam{value}{Initial selection string. An empty string indicates no selection.}
+
+\docparam{pos}{Window position.}
+
+\docparam{size}{Window size. If the default size (-1, -1) is specified then the window is sized
+appropriately.}
+
+\docparam{n}{Number of strings with which to initialise the control.}
+
+\docparam{choices}{An array of strings with which to initialise the control.}
+
+\docparam{style}{Window style. See \helpref{wxOwnerDrawnComboBox}{wxownerdrawncombobox}.}
+
+\docparam{validator}{Window validator.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxOwnerDrawnComboBox::Create}{wxownerdrawncomboboxcreate}, \helpref{wxValidator}{wxvalidator}
+
+
+\membersection{wxOwnerDrawnComboBox::\destruct{wxOwnerDrawnComboBox}}\label{wxownerdrawncomboboxdtor}
+
+\func{}{\destruct{wxOwnerDrawnComboBox}}{\void}
+
+Destructor, destroying the owner-drawn combobox.
+
+
+\membersection{wxOwnerDrawnComboBox::Create}\label{wxownerdrawncomboboxcreate}
+
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{value = ``"}, \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{int}{ n}, \param{const wxString }{choices[]},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``comboBox"}}
+
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{value}, \param{const wxPoint\&}{ pos}, \param{const wxSize\&}{ size},\rtfsp
+\param{const wxArrayString\& }{choices},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``comboBox"}}
+
+Creates the combobox for two-step construction. Derived classes
+should call or replace this function. See
+\helpref{wxOwnerDrawnComboBox::wxOwnerDrawnComboBox}{wxownerdrawncomboboxctor}\rtfsp
+for further details.
+
+
+\membersection{wxOwnerDrawnComboBox::GetWidestItem}\label{wxownerdrawncomboboxgetwidestitem}
+
+\constfunc{int}{GetWidestItem}{\void}
+
+Returns index to the widest item in the list.
+
+
+\membersection{wxOwnerDrawnComboBox::GetWidestItemWidth}\label{wxownerdrawncomboboxgetwidestitemwidth}
+
+\constfunc{int}{GetWidestItemWidth}{\void}
+
+Returns width of the widest item in the list.
+
+
+\membersection{wxOwnerDrawnComboBox::OnDrawBackground}\label{wxownerdrawncomboboxondrawbackground}
+
+\constfunc{void}{OnDrawBackground}{\param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{item}, \param{int }{flags}}
+
+This method is used to draw the items background and, maybe, a border around it.
+
+The base class version implements a reasonable default behaviour which consists
+in drawing the selected item with the standard background colour and drawing a
+border around the item if it is either selected or current.
+
+\wxheading{Remarks}
+
+\arg{flags} has the same meaning as with \helpref{OnDrawItem}{wxownerdrawncomboboxondrawitem}.
+
+
+\membersection{wxOwnerDrawnComboBox::OnDrawItem}\label{wxownerdrawncomboboxondrawitem}
+
+\constfunc{void}{OnDrawItem}{\param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{item}, \param{int }{flags}}
+
+The derived class may implement this function to actually draw the item
+with the given index on the provided DC. If function is not implemented,
+the item text is simply drawn, as if the control was a normal combobox.
+
+\wxheading{Parameters}
+
+\docparam{dc}{The device context to use for drawing}
+
+\docparam{rect}{The bounding rectangle for the item being drawn (DC clipping
+region is set to this rectangle before calling this function)}
+
+\docparam{item}{The index of the item to be drawn}
+
+\docparam{flags}{Combines any of the following flag values:}
+
+\twocolwidtha{7cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\tt wxODCB\_PAINTING\_CONTROL}}{Combo control is being
+painted, instead of a list item. Argument item may be wxNOT\_FOUND in this
+case.}
+\twocolitem{{\tt wxODCB\_PAINTING\_SELECTED}}{An item with selection
+background is being painted. DC text colour should already be correct.}
+\end{twocollist}
+
+
+\membersection{wxOwnerDrawnComboBox::OnMeasureItem}\label{wxownerdrawncomboboxonmeasureitem}
+
+\constfunc{wxCoord}{OnMeasureItem}{\param{size\_t }{item}}
+
+The derived class may implement this method to return the height of the
+specified item (in pixels).
+
+The default implementation returns text height, as if this control was
+a normal combobox.
+
+
+\membersection{wxOwnerDrawnComboBox::OnMeasureItemWidth}\label{wxownerdrawncomboboxonmeasureitemwidth}
+
+\constfunc{wxCoord}{OnMeasureItemWidth}{\param{size\_t }{item}}
+
+The derived class may implement this method to return the width of the
+specified item (in pixels). If -1 is returned, then the item text width
+is used.
+
+The default implementation returns -1.
+

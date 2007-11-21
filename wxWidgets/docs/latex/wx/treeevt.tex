@@ -1,0 +1,123 @@
+\section{\class{wxTreeEvent}}\label{wxtreeevent}
+
+A tree event holds information about events associated with wxTreeCtrl objects.
+
+\wxheading{Derived from}
+
+\helpref{wxNotifyEvent}{wxnotifyevent}\\
+\helpref{wxCommandEvent}{wxcommandevent}\\
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/treectrl.h>
+
+\wxheading{Event table macros}
+
+To process input from a tree control, use these event handler macros to direct input to member
+functions that take a wxTreeEvent argument.
+
+\twocolwidtha{9cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_TREE\_BEGIN\_DRAG(id, func)}}{The user has started dragging an item with the left mouse button. The event handler must call {\bf wxTreeEvent::Allow()} for the drag operation to continue.}
+\twocolitem{{\bf EVT\_TREE\_BEGIN\_RDRAG(id, func)}}{The user has started dragging an item with the right mouse button. The event handler must call {\bf wxTreeEvent::Allow()} for the drag operation to continue.}
+\twocolitem{{\bf EVT\_TREE\_BEGIN\_LABEL\_EDIT(id, func)}}{Begin editing a label. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
+\twocolitem{{\bf EVT\_TREE\_END\_DRAG(id, func)}}{The user has released the mouse after dragging an item.}
+\twocolitem{{\bf EVT\_TREE\_END\_LABEL\_EDIT(id, func)}}{The user has finished editing a label. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
+\twocolitem{{\bf EVT\_TREE\_DELETE\_ITEM(id, func)}}{A tree item has been deleted.}
+% they're not very (or at all) useful currently
+%\twocolitem{{\bf EVT\_TREE\_GET\_INFO(id, func)}}{Request information from the application.}
+%\twocolitem{{\bf EVT\_TREE\_SET\_INFO(id, func)}}{Information is being supplied.}
+\twocolitem{{\bf EVT\_TREE\_ITEM\_ACTIVATED(id, func)}}{An item has been activated (e.g. double clicked).}
+\twocolitem{{\bf EVT\_TREE\_ITEM\_COLLAPSED(id, func)}}{The item has been collapsed.}
+\twocolitem{{\bf EVT\_TREE\_ITEM\_COLLAPSING(id, func)}}{The item is being collapsed. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
+\twocolitem{{\bf EVT\_TREE\_ITEM\_EXPANDED(id, func)}}{The item has been expanded.}
+\twocolitem{{\bf EVT\_TREE\_ITEM\_EXPANDING(id, func)}}{The item is being expanded. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
+\twocolitem{{\bf EVT\_TREE\_ITEM\_RIGHT\_CLICK(id, func)}}{The user has clicked the item with the right mouse button.}
+\twocolitem{{\bf EVT\_TREE\_ITEM\_MIDDLE\_CLICK(id, func)}}{The user has clicked the item with the middle mouse button.}
+\twocolitem{{\bf EVT\_TREE\_KEY\_DOWN(id, func)}}{A key has been pressed.}
+\twocolitem{{\bf EVT\_TREE\_SEL\_CHANGED(id, func)}}{Selection has changed.}
+\twocolitem{{\bf EVT\_TREE\_SEL\_CHANGING(id, func)}}{Selection is changing. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
+\twocolitem{{\bf EVT\_TREE\_KEY\_DOWN(id, func)}}{A key has been pressed.}
+\twocolitem{{\bf EVT\_TREE\_ITEM\_GETTOOLTIP(id, func)}}{The opportunity to set the item tooltip
+is being given to the application (call wxTreeEvent::SetToolTip). Windows only.}
+\twocolitem{{\bf EVT\_TREE\_ITEM\_MENU(id, func)}}{The context menu for the selected item has been requested, either by a right click or by using the menu key.}
+\twocolitem{{\bf EVT\_TREE\_STATE\_IMAGE\_CLICK(id, func)}}{The state image has been clicked. Windows only.}
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{wxTreeCtrl}{wxtreectrl}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxTreeEvent::wxTreeEvent}\label{wxtreeeventctor}
+
+\func{}{wxTreeEvent}{\param{wxEventType }{commandType}, \param{wxTreeCtrl *}{tree}, \param{const wxTreeItemId\&}{item = wxTreeItemId()}}
+
+Constructor, used by wxWidgets itself only.
+
+
+\membersection{wxTreeEvent::GetKeyCode}\label{wxtreeeventgetkeycode}
+
+\constfunc{int}{GetKeyCode}{}
+
+Returns the key code if the event is a key event. Use 
+\helpref{GetKeyEvent}{wxtreeeventgetkeyevent} to get the values of the
+modifier keys for this event (i.e. Shift or Ctrl).
+
+
+\membersection{wxTreeEvent::GetItem}\label{wxtreeeventgetitem}
+
+\constfunc{wxTreeItemId}{GetItem}{}
+
+Returns the item (valid for all events).
+
+
+\membersection{wxTreeEvent::GetKeyEvent}\label{wxtreeeventgetkeyevent}
+
+\constfunc{const wxKeyEvent\&}{GetKeyEvent}{}
+
+Returns the key event for {\tt EVT\_TREE\_KEY\_DOWN} events.
+
+
+\membersection{wxTreeEvent::GetLabel}\label{wxtreeeventgetlabel}
+
+\constfunc{const wxString\&}{GetLabel}{}
+
+Returns the label if the event is a begin or end edit label event.
+
+
+\membersection{wxTreeEvent::GetOldItem}\label{wxtreeeventgetolditem}
+
+\constfunc{wxTreeItemId}{GetOldItem}{}
+
+Returns the old item index (valid for EVT\_TREE\_ITEM\_CHANGING and CHANGED events)
+
+
+\membersection{wxTreeEvent::GetPoint}\label{wxtreeeventgetpoint}
+
+\constfunc{wxPoint}{GetPoint}{}
+
+Returns the position of the mouse pointer if the event is a drag or menu-context event.
+In both cases the position is in client coordinates - i.e. relative to the wxTreeCtrl
+window (so that you can pass it directly to e.g. \helpref{wxWindow::PopupMenu}{wxwindowpopupmenu}).
+
+
+\membersection{wxTreeEvent::IsEditCancelled}\label{wxtreeeventiseditcancelled}
+
+\constfunc{bool}{IsEditCancelled}{}
+
+Returns true if the label edit was cancelled. This should be
+called from within an EVT\_TREE\_END\_LABEL\_EDIT handler.
+
+
+\membersection{wxTreeEvent::SetToolTip}\label{wxtreeeventsettooltip}
+
+\func{void}{SetToolTip}{\param{const wxString\&}{ tooltip}}
+
+Set the tooltip for the item (valid for EVT\_TREE\_ITEM\_GETTOOLTIP events).
+Windows only.
+

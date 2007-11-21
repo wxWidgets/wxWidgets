@@ -1,0 +1,12 @@
+.gdb_history
+config.cache
+configarg.cache
+config.status
+wx-config
+config.log
+stamp-h.in
+Makefile
+setup.h
+*tags
+.DS_Store
+autom4te.cache

@@ -1,0 +1,164 @@
+\section{Writing non-English applications}\label{nonenglishoverview}
+
+This article describes how to write applications that communicate with
+the user in a language other than English. Unfortunately many languages use
+different charsets under Unix and Windows (and other platforms, to make
+the situation even more complicated). These charsets usually differ in so
+many characters that it is impossible to use the same texts under all
+platforms.
+
+The wxWidgets library provides a mechanism that helps you avoid distributing many
+identical, only differently encoded, packages with your application 
+(e.g. help files and menu items in iso8859-13 and windows-1257). Thanks
+to this mechanism you can, for example, distribute only iso8859-13 data 
+and it will be handled transparently under all systems.
+
+Please read \helpref{Internationalization}{internationalization} which
+describes the locales concept.
+
+In the following text, wherever {\it iso8859-2} and {\it windows-1250} are
+used, any encodings are meant and any encodings may be substituted there.
+
+\wxheading{Locales}
+
+The best way to ensure correctly displayed texts in a GUI across platforms
+is to use locales. Write your in-code messages in English or without 
+diacritics and put real messages into the message catalog (see 
+\helpref{Internationalization}{internationalization}).
+
+A standard .po file begins with a header like this:
+
+\begin{verbatim}
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1999-02-19 16:03+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+\end{verbatim}
+
+Note this particular line:
+
+\begin{verbatim}
+"Content-Type: text/plain; charset=CHARSET\n"
+\end{verbatim}
+
+It specifies the charset used by the catalog. All strings in the catalog
+are encoded using this charset.
+
+You have to fill in proper charset information. Your .po file may look like this
+after doing so: 
+
+\begin{verbatim}
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1999-02-19 16:03+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso8859-2\n"
+"Content-Transfer-Encoding: 8bit\n"
+\end{verbatim}
+
+(Make sure that the header is {\bf not} marked as {\it fuzzy}.)
+
+wxWidgets is able to use this catalog under any supported platform
+(although iso8859-2 is a Unix encoding and is normally not understood by
+Windows).
+
+How is this done? When you tell the wxLocale class to load a message catalog that
+contains a correct header, it checks the charset. The catalog is then converted
+to the charset used (see
+\helpref{wxLocale::GetSystemEncoding}{wxlocalegetsystemencoding} and
+\helpref{wxLocale::GetSystemEncodingName}{wxlocalegetsystemencodingname}) by
+the user's operating system. This is the default behaviour of the
+\helpref{wxLocale}{wxlocale} class; you can disable it by {\bf not} passing
+{\tt wxLOCALE\_CONV\_ENCODING} to \helpref{wxLocale::Init}{wxlocaleinit}.
+
+\wxheading{Non-English strings or 8-bit characters in the source code}
+
+By convention, you should only use characters without diacritics (i.e. 7-bit
+ASCII strings) for msgids in the source code and write them in English.
+
+If you port software to wxWindows, you may be confronted with legacy source
+code containing non-English string literals. Instead of translating the strings
+in the source code to English and putting the original strings into message
+catalog, you may configure wxWidgets to use non-English msgids and translate to
+English using message catalogs:
+
+\begin{enumerate}
+\item{If you use the program {\tt xgettext} to extract the strings from
+the source code, specify the option {\tt --from-code=<source code charset>}.}
+\item{Specify the source code language and charset as arguments to
+\helpref{wxLocale::AddCatalog}{wxlocaleaddcatalog}. For example:
+\begin{verbatim}
+locale.AddCatalog(_T("myapp"),
+                  wxLANGUAGE_GERMAN, _T("iso-8859-1"));
+\end{verbatim}
+}
+\end{enumerate}
+
+\wxheading{Font mapping}
+
+You can use \helpref{wxMBConv classes}{mbconvclasses} and 
+\helpref{wxFontMapper}{wxfontmapper} to display text:
+
+\begin{verbatim}
+if (!wxFontMapper::Get()->IsEncodingAvailable(enc, facename))
+{
+   wxFontEncoding alternative;
+   if (wxFontMapper::Get()->GetAltForEncoding(enc, &alternative,
+                                              facename, false))
+   {
+       wxCSConv convFrom(wxFontMapper::Get()->GetEncodingName(enc));
+       wxCSConv convTo(wxFontMapper::Get()->GetEncodingName(alternative));
+       text = wxString(text.mb_str(convFrom), convTo);
+   }
+   else
+       ...failure (or we may try iso8859-1/7bit ASCII)...
+}
+...display text...
+\end{verbatim}
+
+\wxheading{Converting data}
+
+You may want to store all program data (created documents etc.) in
+the same encoding, let's say {\tt utf-8}. You can use
+\helpref{wxCSConv}{wxcsconv} class to convert data to the encoding used by the
+system your application is running on (see
+\helpref{wxLocale::GetSystemEncoding}{wxlocalegetsystemencoding}).
+
+\wxheading{Help files}
+
+If you're using \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller} there is
+no problem at all. You only need to make sure that all the HTML files contain
+the META tag, e.g.
+
+\begin{verbatim}
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-2">
+\end{verbatim}
+
+and that the hhp project file contains one additional line in the {\tt OPTIONS}
+section:
+
+\begin{verbatim}
+Charset=iso8859-2
+\end{verbatim}
+
+This additional entry tells the HTML help controller what encoding is used
+in contents and index tables.
+

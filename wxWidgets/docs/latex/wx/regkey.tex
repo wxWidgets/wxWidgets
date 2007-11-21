@@ -1,0 +1,274 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        regkey.tex
+%% Purpose:     wxRegKey docs
+%% Author:      Ryan Norton <wxprojects@comcast.net>, C.C.Chakkaradeep
+%% Modified by:
+%% Created:     2/5/2005
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Ryan Norton (C.C.Chakkaradeep?)
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxRegKey}}\label{wxregkey}
+
+wxRegKey is a class representing the Windows registry (it is only available
+under Windows). One can create, query and delete registry keys using this
+class.
+
+The Windows registry is easy to understand. There are five registry keys,
+namely:
+
+\begin{enumerate}\itemsep=0pt
+\item HKEY\_CLASSES\_ROOT (HKCR)
+\item HKEY\_CURRENT\_USER (HKCU)
+\item HKEY\_LOCAL\_MACHINE (HKLM)
+\item HKEY\_CURRENT\_CONFIG (HKCC)
+\item HKEY\_USERS (HKU)
+\end{enumerate}
+
+After creating a key, it can hold a value. The values can be:
+
+\begin{enumerate}\itemsep=0pt
+\item String Value
+\item Binary Value
+\item DWORD Value
+\item Multi String Value
+\item Expandable String Value
+\end{enumerate}
+
+\wxheading{Derived from}
+
+None
+
+\wxheading{Include files}
+
+<wx/msw/registry.h>
+
+\wxheading{Example}
+
+\begin{verbatim}
+wxRegKey *pRegKey = new wxRegKey("HKEY_LOCAL_MACHINE\\Software\\MyKey");
+
+//will create the Key if it does not exist
+if( !pRegKey->Exists() )
+    pRegKey->Create();
+
+//will create a new value MYVALUE and set it to 12
+pRegKey->SetValue("MYVALUE",12);
+
+//Query for the Value and Retrieve it
+long lMyVal;
+wxString strTemp;
+pRegKey->QueryValue("MYVALUE",&lMyVal); 
+strTemp.Printf("%d",lMyVal);
+wxMessageBox(strTemp,"Registry Value",0,this);
+
+//Retrive the number of SubKeys and enumerate them
+size_t nSubKeys;
+pRegKey->GetKeyInfo(&nSubKeys,NULL,NULL,NULL);
+
+pRegKey->GetFirstKey(strTemp,1);
+for(int i=0;i<nSubKeys;i++)
+{
+     wxMessageBox(strTemp,"SubKey Name",0,this);
+     pRegKey->GetNextKey(strTemp,1);
+}
+\end{verbatim}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxRegKey::wxRegKey}\label{wxregkeyctor}
+
+\func{}{wxRegKey}{\void}
+
+The Constructor to set to HKCR
+
+\func{}{wxRegKey}{\param{const wxString\&}{ strKey}}
+
+The constructor to set the full name of the key.
+
+\func{}{wxRegKey}{\param{const wxRegKey\&}{ keyParent}, \param{const wxString\&}{ strKey}}
+
+The constructor to set the full name of the key under a previously created parent.
+
+
+\membersection{wxRegKey::Close}\label{wxregkeyclose}
+
+\func{void}{Close}{\void}
+
+Closes the key.
+
+
+\membersection{wxRegKey::Create}\label{wxregkeycreate}
+
+\func{bool}{Create}{\param{bool }{bOkIfExists = true}}
+
+Creates the key. Will fail if the key already exists and {\it bOkIfExists} is false.
+
+
+\membersection{wxRegKey::DeleteSelf}\label{wxregkeydeleteself}
+
+\func{void}{DeleteSelf}{\void}
+
+Deletes this key and all of its subkeys and values recursively.
+
+
+\membersection{wxRegKey::DeleteKey}\label{wxregkeydeletekey}
+
+\func{void}{DeleteKey}{\param{const wxChar *}{szKey}}
+
+Deletes the subkey with all of its subkeys/values recursively.
+
+
+\membersection{wxRegKey::DeleteValue}\label{wxregkeydeletevalue}
+
+\func{void}{DeleteValue}{\param{const wxChar *}{szKey}}
+
+Deletes the named value.
+
+
+\membersection{wxRegKey::Exists}\label{wxregkeyexists}
+
+\constfunc{static bool}{Exists}{\void}
+
+Returns true if the key exists.
+
+
+\membersection{wxRegKey::GetName}\label{wxregkeygetname}
+
+\constfunc{wxString}{GetName}{\param{bool }{bShortPrefix = true}}
+
+Gets the name of the registry key.
+
+
+\membersection{wxRegKey::GetFirstKey}\label{wxregkeygetfirstkey}
+
+\func{bool}{GetFirstKey}{\param{wxString\&}{ strKeyName}, \param{long\&}{ lIndex}}
+
+Gets the first key.
+
+
+\membersection{wxRegKey::GetFirstValue}\label{wxregkeygetfirstvalue}
+
+\func{bool}{GetFirstValue}{\param{wxString\&}{ strValueName}, \param{long\&}{ lIndex}}
+
+Gets the first value of this key.
+
+
+\membersection{wxRegKey::GetKeyInfo}\label{wxregkeygetkeyinfo}
+
+\constfunc{bool}{Exists}{\param{size\_t *}{pnSubKeys}, \param{size\_t *}{pnValues}, \param{size\_t *}{pnMaxValueLen}}
+
+Gets information about the key.
+
+\wxheading{Parameters}
+
+\docparam{pnSubKeys}{The number of subkeys.}
+
+\docparam{pnMaxKeyLen}{The maximum length of the subkey name.}
+
+\docparam{pnValues}{The number of values.}
+
+
+\membersection{wxRegKey::GetNextKey}\label{wxregkeygetnextkey}
+
+\constfunc{bool}{GetNextKey}{\param{wxString\&}{ strKeyName}, \param{long\&}{ lIndex}}
+
+Gets the next key.
+
+
+\membersection{wxRegKey::GetNextValue}\label{wxregkeygetnextvalue}
+
+\constfunc{bool}{GetNextValue}{\param{wxString\&}{ strValueName}, \param{long\&}{ lIndex}}
+
+Gets the next key value for this key.
+
+
+\membersection{wxRegKey::HasValue}\label{wxregkeyhasvalue}
+
+\constfunc{bool}{HasValue}{\param{const wxChar *}{szValue}}
+
+Returns true if the value exists.
+
+
+\membersection{wxRegKey::HasValues}\label{wxregkeyhasvalues}
+
+\constfunc{bool}{HasValues}{\void}
+
+Returns true if any values exist.
+
+
+\membersection{wxRegKey::HasSubKey}\label{wxregkeyhassubkey}
+
+\constfunc{bool}{HasSubKey}{\param{const wxChar *}{szKey}}
+
+Returns true if given subkey exists.
+
+
+\membersection{wxRegKey::HasSubKeys}\label{wxregkeyhassubkeys}
+
+\constfunc{bool}{HasSubKeys}{\void}
+
+Returns true if any subkeys exist.
+
+
+\membersection{wxRegKey::IsEmpty}\label{wxregkeyisempty}
+
+\constfunc{bool}{IsEmpty}{\void}
+
+Returns true if this key is empty, nothing under this key.
+
+
+\membersection{wxRegKey::IsOpened}\label{wxregkeyisopened}
+
+\constfunc{bool}{IsOpened}{\void}
+
+Returns true if the key is opened.
+
+
+\membersection{wxRegKey::Open}\label{wxregkeyopen}
+
+\func{bool}{Open}{\param{AccessMode }{mode = Write}}
+
+Explicitly opens the key. This method also allows the key to be opened in
+read-only mode by passing \texttt{wxRegKey::Read} instead of default 
+\texttt{wxRegKey::Write} parameter.
+
+
+\membersection{wxRegKey::QueryValue}\label{wxregkeyqueryvalue}
+
+\constfunc{bool}{QueryValue}{\param{const wxChar *}{szValue}, \param{wxString\&}{ strValue}}
+
+Retrieves the string value.
+
+\constfunc{bool}{QueryValue}{\param{const wxChar *}{szValue}, \param{long *}{plValue}}
+
+Retrieves the numeric value.
+
+
+\membersection{wxRegKey::Rename}\label{wxregkeyrename}
+
+\func{bool}{Rename}{\param{const wxChar *}{ szNewName}}
+
+Renames the key.
+
+
+\membersection{wxRegKey::RenameValue}\label{wxregkeyrenamevalue}
+
+\func{bool}{RenameValue}{\param{const wxChar *}{szValueOld}, \param{const wxChar *}{szValueNew}}
+
+Renames a value.
+
+
+\membersection{wxRegKey::SetValue}\label{wxregkeysetvalue}
+
+\func{bool}{SetValue}{\param{const wxChar *}{szValue}, \param{long}{ lValue}}
+
+\func{bool}{SetValue}{\param{const wxChar *}{szValue}, \param{const wxString\&}{ strValue}}
+
+\func{bool}{SetValue}{\param{const wxChar *}{szValue}, \param{const wxMemoryBuffer\&}{ buf}}
+
+Sets the given \arg{szValue} which must be numeric, string or binary depending
+on the overload used. If the value doesn't exist, it is created.
+

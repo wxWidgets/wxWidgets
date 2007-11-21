@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <include file="../../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="test" template="wx_sample" template_append="wx_append">
+        <sources>test.cpp</sources>
+        <wx-lib>html</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>net</wx-lib>
+        <wx-lib>base</wx-lib>
+        <win32-res>test.rc</win32-res>
+    </exe>
+
+    <wx-data id="data">
+        <files>
+            f.html fft.html imagemap.htm imagemap.png pic.png pic2.bmp
+            tables.htm test.htm listtest.htm i18n.gif 8859_2.htm cp1250.htm
+            regres.htm foo.png subsup.html
+        </files>
+    </wx-data>
+
+</makefile>

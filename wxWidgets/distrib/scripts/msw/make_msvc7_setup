@@ -1,0 +1,8 @@
+MSVCDir=$MSVS7_DIR/VC7
+VCINSTALLDIR=$MSVS7_DIR
+FrameworkSDKDir=$MSVS7_DIR/SDK/v1.1
+FrameworkDir=$NET_FrameworkDir
+FrameworkVersion=v1.1.4322
+export PATH=$MSVS7_DIR:$MSVCDir/BIN:$MSVS7_DIR/Common7/Tools:$MSVS7_DIR/Common7/Tools/bin/prerelease:$MSVS7_DIR/Common7/Tools/bin:$FrameworkSDKDir/bin:$FrameworkDir/$FrameworkVersion:$PATH
+export INCLUDE=$MSVCDir/ATLMFC/INCLUDE:$MSVCDir/INCLUDE:$MSVCDir/PlatformSDK/include/prerelease:$MSVCDir/PlatformSDK/include:$FrameworkSDKDir/include:$INCLUDE
+export LIB=$MSVCDir/ATLMFC/LIB:$MSVCDir/LIB:$MSVCDir/PlatformSDK/lib/prerelease:$MSVCDir/PlatformSDK/lib:$FrameworkSDKDir/lib:$LIB

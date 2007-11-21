@@ -1,0 +1,15 @@
+General ToDo
+------------
+
+Please see also:
+
+  docs/gtk/todo.txt
+  docs/motif/todo.txt
+  docs/msw/todo.txt
+
+- Fix wxStream: problems with Eol(), LastCount(), buffering
+
+- Fix wxHTTP/wxFTP which are currently broken, fix/rewrite wxURL
+
+- Add wxUSE_HOTKEY and any other missing options to configure.
+

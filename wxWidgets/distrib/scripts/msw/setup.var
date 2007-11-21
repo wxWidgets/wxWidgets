@@ -1,0 +1,155 @@
+### List of variables for the purposes of generating an application's
+### setup.exe
+
+CYGPATH=
+if [ "$OSTYPE" = "cygwin" ]; then
+  CYGPATH=cygpath
+fi
+
+#-------------------------------------------------------------------------
+# The application name
+#-------------------------------------------------------------------------
+
+APPNAME=wxwin
+
+#-------------------------------------------------------------------------
+# The application title
+#-------------------------------------------------------------------------
+
+APPTITLE="wxWidgets"
+
+#-------------------------------------------------------------------------
+# The application author (copyright holder)
+#-------------------------------------------------------------------------
+
+AUTHOR="The wxWidgets Team"
+
+#-------------------------------------------------------------------------
+# The application vendor (organisation)
+#-------------------------------------------------------------------------
+
+VENDOR="Anthemion"
+
+#-------------------------------------------------------------------------
+# The application data file extension
+#-------------------------------------------------------------------------
+
+APPEXTENSION=
+
+#-------------------------------------------------------------------------
+# The symbol to use when querying for the version number (not used)
+#-------------------------------------------------------------------------
+
+VERSIONSYMBOL=wxVERSION
+
+#-------------------------------------------------------------------------
+# The top-level directory of the application source tree
+#-------------------------------------------------------------------------
+
+APPDIR=C:/wx2dev/wxWidgets
+if [ ! $CYGPATH = "" ]; then
+  APPDIR=`$CYGPATH "$APPDIR"`
+fi
+
+#-------------------------------------------------------------------------
+# The destination directory of the setup
+#-------------------------------------------------------------------------
+
+DESTDIR=$APPDIR/deliver
+
+#-------------------------------------------------------------------------
+# The temporary image directory to use when preparing the setup
+#-------------------------------------------------------------------------
+
+SETUPIMAGEDIR=$APPDIR/deliver/wxWidgets-$VERSION
+
+#-------------------------------------------------------------------------
+# The name of the file with $VERSIONSYMBOL in it
+#-------------------------------------------------------------------------
+
+VERSIONSYMBOLFILE=$APPDIR/include/wx/version.h
+
+#-------------------------------------------------------------------------
+# The locations of the project's Inno Setup header and footer files
+#-------------------------------------------------------------------------
+
+INNOTOP=$APPDIR/distrib/msw/innotop.txt
+INNOBOTTOM=$APPDIR/distrib/msw/innobott.txt
+
+#-------------------------------------------------------------------------
+# The location of the generated setup script
+#-------------------------------------------------------------------------
+
+SETUPSCRIPTNAME=$APPDIR/distrib/msw/wxwin2.iss
+
+#-------------------------------------------------------------------------
+# The locations of the readme and license files
+#-------------------------------------------------------------------------
+
+READMEFILE=$APPDIR/docs/readme.txt
+READMEAFTERFILE=$APPDIR/docs/msw/install.txt
+LICENSEFILE=$APPDIR/docs/licence.txt
+
+#-------------------------------------------------------------------------
+# The binary to include in the setup
+#-------------------------------------------------------------------------
+
+APPBINARY=$APPDIR/src/ReleaseStable/$APPNAME.exe
+#APPBINARY=$APPDIR/src/ReleaseDev/$APPNAME.exe
+
+#-------------------------------------------------------------------------
+# The location of the setup compiler
+#-------------------------------------------------------------------------
+
+#SETUPCOMPILER="c:/Program Files/Inno Setup 4/compil32.exe"
+SETUPCOMPILER="c:/Program Files/Inno Setup 5/compil32.exe"
+if [ ! $CYGPATH = "" ]; then
+  SETUPCOMPILER=`$CYGPATH "$SETUPCOMPILER"`
+fi
+
+#-------------------------------------------------------------------------
+# Whether we will compress the binary (0 or 1).
+# Use --upx or --no-upx to override this default value.
+#-------------------------------------------------------------------------
+
+UPX=0
+
+#-------------------------------------------------------------------------
+# Whether we will make a manual (0 or 1)
+# Use --make-manual or --no-make-manual to override this default value.
+#-------------------------------------------------------------------------
+
+MAKEMANUAL=0
+
+#-------------------------------------------------------------------------
+# The manual filename(s)
+#-------------------------------------------------------------------------
+
+MANUALFILES=wx.chm
+
+#-------------------------------------------------------------------------
+# The directory containing the manual source. We assume
+# that there is a Makefile in this directory for making the
+# manual.
+#-------------------------------------------------------------------------
+
+MANUALDIR=$APPDIR/docs
+
+#-------------------------------------------------------------------------
+# The resources file to compile, if any (e.g. myapp.bin).
+# This is just a zip containing files to be used by the
+# application, usually stored in src/resources.
+#
+# If this is left empty, no resources will be compiled.
+#-------------------------------------------------------------------------
+
+RESOURCESFILE=
+
+#-------------------------------------------------------------------------
+# The directory containing the resources.
+#
+# If this is left empty, no resources will be compiled.
+#-------------------------------------------------------------------------
+
+RESOURCESDIR=
+

@@ -1,0 +1,78 @@
+\section{\class{wxMenuEvent}}\label{wxmenuevent}
+
+This class is used for a variety of menu-related events. Note that
+these do not include menu command events, which are
+handled using \helpref{wxCommandEvent}{wxcommandevent} objects.
+
+The default handler for wxEVT\_MENU\_HIGHLIGHT displays help
+text in the first field of the status bar.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/event.h>
+
+\wxheading{Event table macros}
+
+To process a menu event, use these event handler macros to direct input to member
+functions that take a wxMenuEvent argument. They can only be processed by
+a menubar's frame.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_MENU\_OPEN(func)}}{A menu is about to be opened. On Windows,
+this is only sent once for each navigation of the menubar (up until all menus have closed).}
+\twocolitem{{\bf EVT\_MENU\_CLOSE(func)}}{A menu has been just closed.}
+\twocolitem{{\bf EVT\_MENU\_HIGHLIGHT(id, func)}}{The menu item with the
+specified id has been highlighted: used to show help prompts in the status bar
+by \helpref{wxFrame}{wxframe}}
+\twocolitem{{\bf EVT\_MENU\_HIGHLIGHT\_ALL(func)}}{A menu item has been
+highlighted, i.e. the currently selected menu item has changed.}
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{Command events}{wxcommandevent},\\
+\helpref{Event handling overview}{eventhandlingoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxMenuEvent::wxMenuEvent}\label{wxmenueventctor}
+
+\func{}{wxMenuEvent}{\param{WXTYPE }{id = 0}, \param{int }{id = 0}, \param{wxMenu* }{menu = NULL}}
+
+Constructor.
+
+
+\membersection{wxMenuEvent::GetMenu}\label{wxmenueventgetmenu}
+
+\constfunc{wxMenu *}{GetMenu}{\void}
+
+Returns the menu which is being opened or closed. This method should only be
+used with the \texttt{OPEN} and \texttt{CLOSE} events and even for them the
+returned pointer may be \NULL in some ports.
+
+
+\membersection{wxMenuEvent::GetMenuId}\label{wxmenueventgetmenuid}
+
+\constfunc{int}{GetMenuId}{\void}
+
+Returns the menu identifier associated with the event. This method should be
+only used with the {\tt HIGHLIGHT} events.
+
+
+\membersection{wxMenuEvent::IsPopup}\label{wxmenueventispopup}
+
+\constfunc{bool}{IsPopup}{\void}
+
+Returns {\tt true} if the menu which is being opened or closed is a popup menu, 
+{\tt false} if it is a normal one.
+
+This method should only be used with the {\tt OPEN} and {\tt CLOSE} events.
+
+

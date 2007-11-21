@@ -1,0 +1,86 @@
+
+\section{\class{wxGBSizerItem}}\label{wxgbsizeritem}
+
+The wxGBSizerItem class is used by the 
+\helpref{wxGridBagSizer}{wxgridbagsizer} for tracking the items in the
+sizer. It adds grid position and spanning information to the normal 
+\helpref{wxSizerItem}{wxsizeritem} by adding
+\helpref{wxGBPosition}{wxgbposition} and \helpref{wxGBSpan}{wxgbspan}
+attrbibutes. Most of the time you will not need to use a
+wxGBSizerItem directly in your code, but there are a couple of cases
+where it is handy.
+
+\wxheading{Derived from}
+
+\helpref{wxSizerItem}{wxsizeritem}
+
+\wxheading{Include files}
+
+<wx/gbsizer.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxGBSizerItem::wxGBSizerItem}\label{wxgbsizeritemwxgbsizeritem}
+
+\func{}{wxGBSizerItem}{\param{int }{width}, \param{int }{height}, \param{const wxGBPosition\& }{pos}, \param{const wxGBSpan\& }{span}, \param{int }{flag}, \param{int }{border}, \param{wxObject* }{userData}}
+
+Construct a sizer item for tracking a spacer.
+
+\func{}{wxGBSizerItem}{\param{wxWindow* }{window}, \param{const wxGBPosition\& }{pos}, \param{const wxGBSpan\& }{span}, \param{int }{flag}, \param{int }{border}, \param{wxObject* }{userData}}
+
+Construct a sizer item for tracking a window.
+
+\func{}{wxGBSizerItem}{\param{wxSizer* }{sizer}, \param{const wxGBPosition\& }{pos}, \param{const wxGBSpan\& }{span}, \param{int }{flag}, \param{int }{border}, \param{wxObject* }{userData}}
+
+Construct a sizer item for tracking a subsizer.
+
+\membersection{wxGBSizerItem::GetEndPos}\label{wxgbsizeritemgetendpos}
+
+\func{void}{GetEndPos}{\param{int\& }{row}, \param{int\& }{col}}
+
+Get the row and column of the endpoint of this item
+
+\membersection{wxGBSizerItem::GetPos}\label{wxgbsizeritemgetpos}
+
+\constfunc{wxGBPosition}{GetPos}{\void}
+
+\constfunc{void}{GetPos}{\param{int\& }{row}, \param{int\& }{col}}
+
+Get the grid position of the item.
+
+\membersection{wxGBSizerItem::GetSpan}\label{wxgbsizeritemgetspan}
+
+\constfunc{wxGBSpan}{GetSpan}{\void}
+
+\constfunc{void}{GetSpan}{\param{int\& }{rowspan}, \param{int\& }{colspan}}
+
+Get the row and column spanning of the item.
+
+\membersection{wxGBSizerItem::Intersects}\label{wxgbsizeritemintersects}
+
+\func{bool}{Intersects}{\param{const wxGBSizerItem\& }{other}}
+
+Returns true if this item and the other item instersect
+
+\func{bool}{Intersects}{\param{const wxGBPosition\& }{pos}, \param{const wxGBSpan\& }{span}}
+
+Returns true if the given pos/span would intersect with this item.
+
+\membersection{wxGBSizerItem::SetPos}\label{wxgbsizeritemsetpos}
+
+\func{bool}{SetPos}{\param{const wxGBPosition\& }{pos}}
+
+If the item is already a member of a sizer then first ensure that
+there is no other item that would intersect with this one at the new
+position, then set the new position. Returns true if the change is
+successful and after the next Layout the item will be moved.
+
+\membersection{wxGBSizerItem::SetSpan}\label{wxgbsizeritemsetspan}
+
+\func{bool}{SetSpan}{\param{const wxGBSpan\& }{span}}
+
+If the item is already a member of a sizer then first ensure that
+there is no other item that would intersect with this one with its new
+spanning size, then set the new spanning. Returns true if the change
+is successful and after the next Layout the item will be resized.
+

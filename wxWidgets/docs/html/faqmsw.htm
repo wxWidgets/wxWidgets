@@ -1,0 +1,576 @@
+
+<HTML>
+
+<HEAD>
+<TITLE>wxWidgets for Windows FAQ</TITLE>
+</HEAD>
+
+<BODY BGCOLOR=#FFFFFF TEXT=#000000 VLINK="#00376A" LINK="#00529C" ALINK="#313063">
+
+<font face="Arial, Lucida Sans, Helvetica">
+
+<table width=100% border=0 cellpadding=3 cellspacing=0>
+<tr>
+<td bgcolor="#004080" align=left height=24 background="images/bluetitlegradient.gif">
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
+<b>wxWidgets for Windows FAQ</b>
+</font>
+</td>
+</tr>
+</table>
+
+<P>
+
+See also <a href="faq.htm">top-level FAQ page</a>.
+<hr>
+<h3>List of questions in this category</h3>
+<ul>
+<li><a href="#platforms">Which Windows platforms are supported?</a></li>
+<li><a href="#wince">What about Windows CE?</a></li>
+<li><a href="#winxp">What do I need to do for Windows XP?</a></li>
+<li><a href="#compilers">What compilers are supported?</a></li>
+<li><a href="#bestcompiler">Which is the best compiler to use with wxWidgets?</a></li>
+<li><a href="#unicode">Is Unicode supported?</a></li>
+<li><a href="#doublebyte">Does wxWidgets support double byte fonts (Chinese/Japanese/Korean etc.)?</a></li>
+<li><a href="#dll">Can you compile wxWidgets as a DLL?</a></li>
+<li><a href="#exesize">How can I reduce executable size?</a></li>
+<li><a href="#mfc">Is wxWidgets compatible with MFC?</a></li>
+<li><a href="#setuph">Why do I get errors about setup.h not being found?</a></li>
+<li><a href="#asuffix">Why do I get errors about FooBarA when I only use FooBar in my program?</a></li>
+<li><a href="#newerrors">Why my code fails to compile with strange errors about new operator?</a></li>
+<li><a href="#mfcport">How do I port MFC applications to wxWidgets?</a></li>
+<li><a href="#crash">Why do I sometimes get bizarre crash problems using VC++ 5/6?</a></li>
+<li><a href="#makefiles">How are the wxWidgets makefiles edited under Windows?</a></li>
+<li><a href="#vcdebug">How do you use VC++&#39;s memory leak checking instead of that in wxWidgets?</a></li>
+<li><a href="#shortcutproblem">Why are menu hotkeys or shortcuts not working in my application?</a></li>
+<li><a href="#regconfig">Why can I not write to the HKLM part of the registry with wxRegConfig?</a></li>
+<li><a href="#access">Is MS Active Accessibility supported?</a></li>
+<li><a href="#dspfmt">Why does Visual C++ complain about corrupted project files?</a></li>
+<li><a href="#crtmismatch">Visual C++ gives errors about multiply defined symbols, what can I do?</a></li>
+<li><a href="#directx">Why do I get compilation errors when using wxWidgets with DirectShow?</a></li>
+<li><a href="#handlewm">How do I handle Windows messages in my wxWidgets program?</a></li>
+</ul>
+<hr>
+
+<h3><a name="platforms">Which Windows platforms are supported?</a></h3>
+
+wxWidgets can be used to develop and deliver applications on Windows 95, Windows 98, Windows NT,
+Windows 2000, Windows XP, and Windows Vista. A Windows CE
+port is also available (see below).<P>
+
+16-bit compilation is only supported for wxWidgets 2.4 and previous versions,
+using Visual C++ 1.5 and Borland BC++ 4 to 5.
+<P>
+
+wxWidgets for Windows will also compile on Unix with gcc using Wine from <a href="http://www.winehq.org" target=_top>WineHQ</a>.
+The resulting executables are Unix binaries that work with the Wine Windows API emulator.<P>
+
+You can also compile wxWidgets for Windows on Unix with Cygwin or Mingw32, resulting
+in executables that will run on Windows. So in theory you could write your applications
+using wxGTK or wxMotif, then check/debug your wxWidgets for Windows
+programs with Wine, and finally produce an ix86 Windows executable using Cygwin/Mingw32,
+without ever needing a copy of Microsoft Windows. See the Technical Note on the Web site detailing cross-compilation.<P>
+
+<h3><a name="wince">What about Windows CE?</a></h3>
+
+This port supports Pocket PC 2002/2003 and MS Smartphone 2002/2003, using
+Embedded Visual C++ 3 or 4. For further information, see the wxMSW section in
+the wxWidgets Reference Manual, and also the <a href="http://www.wxwidgets.org/embedded.htm#wxwince">wxEmbedded</a> page.<P>
+
+<h3><a name="winxp">What do I need to do for Windows XP?</a></h3>
+
+From wxWidgets 2.5, the XP manifest is included in wx/msw/wx.rc and
+so your application will be themed automatically so long as you include wx.rc
+in your own .rc file.<P>
+
+For versions of wxWidgets below 2.5, you need to provide the manifest
+explicitly, as follows.<p>
+
+In the same directory as you have your executable (e.g. foo.exe) you
+put a file called foo.exe.manifest in which you have something like
+the following:
+
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+&lt;assembly
+   xmlns="urn:schemas-microsoft-com:asm.v1"
+   manifestVersion="1.0"&gt;
+&lt;assemblyIdentity
+    processorArchitecture="x86"
+    version="5.1.0.0"
+    type="win32"
+    name="foo.exe"/&gt;
+    &lt;description&gt;Foo program&lt;/description&gt;
+    &lt;dependency&gt;
+    &lt;dependentAssembly&gt;
+    &lt;assemblyIdentity
+         type="win32"
+         name="Microsoft.Windows.Common-Controls"
+         version="6.0.0.0"
+         publicKeyToken="6595b64144ccf1df"
+         language="*"
+         processorArchitecture="x86"/&gt;
+    &lt;/dependentAssembly&gt;
+    &lt;/dependency&gt;
+&lt;/assembly&gt;
+</pre>
+
+If you want to add it to your application permanently,
+you can also include it in your .rc file using this
+line:<P>
+
+<PRE>
+  1 24 "winxp.manifest"
+</PRE>
+
+For an explanation of this syntax, please see
+<a href="http://delphi.about.com/library/bluc/text/uc111601a.htm" target=_new>this
+article</a>.
+<P>
+
+<h3><a name="compilers">What compilers are supported?</a></h3>
+
+Please see the wxWidgets for Windows install.txt file for up-to-date information, but
+currently the following are known to work:<P>
+
+<ul>
+<li>Visual C++ 1.5, 4.0, 5.0, 6.0, 7.0, 7.1
+<li>Borland C++ 4.5, 5.0, 5.5
+<li>Borland C++Builder 1.0, 3.0, X
+<li>Watcom C++ 10.6 (Win32), OpenWatcom 1.0
+<li>Cygwin (using configure)
+<li>Mingw32
+<li>MetroWerks CodeWarrior (many versions)
+<li>Digital Mars 8.34+
+</ul>
+<P>
+
+
+<h3><a name="bestcompiler">Which is the best compiler to use with wxWidgets?</a></h3>
+
+It&#39;s partly a matter of taste, but some people prefer Visual C++ since the debugger is very
+good, it&#39;s very stable, the documentation is extensive, and it generates small executables.
+Since project files are plain text, it&#39;s easy for me to generate appropriate project files
+for wxWidgets samples.<P>
+
+Borland C++ is fine - and very fast - but it&#39;s hard (impossible?) to use the debugger without using project files, and
+the debugger is nowhere near up to VC++&#39;s quality. The IDE isn&#39;t great.<P>
+
+C++Builder&#39;s power isn&#39;t really used with wxWidgets since it needs integration with its
+own class library (VCL). For wxWidgets, I&#39;ve only used it with makefiles, in which case
+it&#39;s almost identical to BC++ 5.0 (the same makefiles can be used).<P>
+
+You can&#39;t beat Cygwin&#39;s price (free), and you can debug adequately using gdb. However, it&#39;s
+quite slow to compile since it does not use precompiled headers.<P>
+
+CodeWarrior is cross-platform - you can debug and generate Windows executables from a Mac, but not
+the other way around I think - but the IDE is, to my mind, a bit primitive.<P>
+
+Watcom C++ is a little slow and the debugger is not really up to today&#39;s standards.<P>
+
+Among the free compilers the best choice seem to be Borland C++ command line
+tools and mingw32 (port of gcc to Win32). Both of them are supported by
+wxWidgets. However BC++ has trouble compiling large executables statically,
+so you need to dynamically link the wxWidgets libraries.<p>
+
+<h3><a name="unicode">Is Unicode supported?</a></h3>
+
+Yes, Unicode is fully supported under Windows NT/2000 and there is limited
+support for it under Windows 9x using <a
+href="http://www.microsoft.com/globaldev/handson/dev/mslu_announce.mspx">MSLU</a>.
+<p>
+
+<h3><a name="doublebyte">Does wxWidgets support double byte fonts (Chinese/Japanese/Korean etc.)?</a></h3>
+
+For Japanese under Win2000, it seems that wxWidgets has no problems working
+with double byte char sets (meaning DBCS, not Unicode). First you have to
+install Japanese support on your Win2K system and choose for ANSI translation
+<tt>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Nls\CodePage=932</tt>
+(default is 1252 for Western). Then you can see all the Japanese letters in
+wxWidgets applications.
+<p>
+
+<h3><a name="dll">Can you compile wxWidgets as a DLL?</a></h3>
+
+Yes (using the Visual C++ or Borland C++ makefile), but be aware that distributing DLLs is a thorny issue
+and you may be better off compiling statically-linked applications, unless you&#39;re
+delivering a suite of separate programs, or you&#39;re compiling a lot of wxWidgets applications
+and have limited hard disk space.<P>
+
+With a DLL approach, and with different versions and configurations of wxWidgets
+needing to be catered for, the end user may end up with a host of large DLLs in his or her Windows system directory,
+negating the point of using DLLs. Of course, this is not a problem just associated with
+wxWidgets!
+<P>
+
+<h3><a name="exesize">How can I reduce executable size?</a></h3>
+
+You can compile wxWidgets as a DLL (see above, VC++/BC++ only at present). You should also
+compile your programs for release using non-debugging and space-optimisation options, but
+take with VC++ 5/6 space optimisation: it can sometimes cause problems.<P>
+
+If you want to distribute really small executables, you can
+use <a href="http://www.un4seen.com/petite/" target=_top>Petite</a>
+by Ian Luck. This nifty utility compresses Windows executables by around 50%, so your 500KB executable
+will shrink to a mere 250KB. With this sort of size, there is reduced incentive to
+use DLLs. Another good compression tool (probably better than Petite) is <a href="http://upx.sourceforge.net/" target=_top>UPX</a>.
+<P>
+
+Please do not be surprised if MinGW produces a statically-linked minimal executable of 1 MB. Firstly, gcc
+produces larger executables than some compilers. Secondly, this figure will
+include most of the overhead of wxWidgets, so as your application becomes more
+complex, the overhead becomes proportionally less significant. And thirdly, trading executable compactness
+for the enormous increase in productivity you get with wxWidgets is almost always well worth it.<P>
+
+If you have a really large executable compiled with MinGW (for example 20MB) then
+you need to configure wxWidgets to compile without debugging information: see
+docs/msw/install.txt for details. You may find that using configure instead
+of makefile.g95 is easier, particularly since you can maintain debug and
+release versions of the library simultaneously, in different directories.
+Also, run &#39;strip&#39; after linking to remove all traces of debug info.
+<P>
+
+<H3><a name="mfc">Is wxWidgets compatible with MFC?</a></H3>
+
+There is a sample which demonstrates MFC and wxWidgets code co-existing in the same
+application. However, don&#39;t expect to be able to enable wxWidgets windows with OLE-2
+functionality using MFC.<P>
+
+<H3><a name="setuph">Why do I get errors about setup.h not being found?</a></H3>
+
+When you build the wxWidgets library, setup.h is copied
+from include/wx/msw/setup.h to e.g. lib/vc_msw/mswd/wx/setup.h (the path
+depends on the configuration you&#39;re building). So you need to add
+this include path if building using the static Debug library:<P>
+
+lib/vc_lib/mswd<P>
+
+or if building the static Release library, lib/vc_lib/msw.<P>
+
+See also the <a href="http://wiki.wxwidgets.org/wiki.pl?Table_Of_Contents">wxWiki Contents</a>
+for more information.<P>
+
+
+<H3><a name="asuffix">Why do I get errors about FooBarA when I only use FooBar in my program?</H3>
+
+If you get errors like
+<p>
+<center>
+<tt>no matching function for call to &#39;wxDC::DrawTextA(const char[5], int,
+int)&#39;</tt>
+</center>
+<p>
+or similar ones for the other functions, i.e. the compiler error messages
+mention the function with the <tt>&#39;A&#39;</tt> suffix while you didn&#39;t
+use it in your code, the explanation is that you had included
+<tt>&#60;windows.h&#062;</tt> header which redefines many symbols to have such
+suffix (or <tt>&#39;W&#39;</tt> in the Unicode builds).
+
+<p>
+The fix is to either not include <tt>&#60;windows.h&#62;</tt> at all or include
+<tt>"wx/msw/winundef.h"</tt> immediately after it.
+
+<H3><a name="newerrors">Why my code fails to compile with strange errors about new operator?</a></H3>
+
+The most common cause of this problem is the memory debugging settings in
+<tt>wx/msw/setup.h</tt>. You have several choices:
+
+<ul>
+    <li> Either disable overloading the global operator new completely by
+         setting <tt>wxUSE_GLOBAL_MEMORY_OPERATORS</tt> and
+         <tt>wxUSE_DEBUG_NEW_ALWAYS</tt> to 0 in this file
+    <li> Or leave them on but do <tt>#undef new</tt> after including any
+         wxWidgets headers, like this the memory debugging will be still on
+         for wxWidgets sources but off for your own code
+</ul>
+
+Notice that IMHO the first solution is preferable for VC++ users who can use
+the <a href="#vcdebug">VC++ CRT memory debugging features</a> instead.
+
+<H3><a name="mfcport">How do I port MFC applications to wxWidgets?</a></H3>
+
+Set up your interface from scratch using wxWidgets (especially <a href="http://www.robeling.de" target=_top>wxDesigner</a>
+or <a href="http://www.anthemion.co.uk/dialogblocks/" target=_new>DialogBlocks</a> --
+it&#39;ll save you a <i>lot</i> of time) and when you have a shell prepared, you can start
+&#39;pouring in&#39; code from the MFC app, with appropriate
+modifications. This is the approach I have used, and I found
+it very satisfactory. A two-step process then - reproduce the bare
+interface first, then wire it up afterwards. That way you deal
+with each area of complexity separately. Don&#39;t try to think MFC
+and wxWidgets simultaneously from the beginning - it is easier to
+reproduce the initial UI by looking at the behaviour of the MFC
+app, not its code.
+
+<H3><a name="crash">Why do I sometimes get bizarre crash problems using VC++ 5/6?</a></H3>
+
+Some crash problems can be due to inconsistent compiler
+options (and of course this isn&#39;t limited to wxWidgets).
+If strange/weird/impossible things start to happen please
+check (dumping IDE project file as makefile and doing text comparison
+if necessary) that the project settings, especially the list of defined
+symbols, struct packing, etc. are exactly the same for all items in
+the project. After this, delete everything (including PCH) and recompile.<P>
+
+VC++ 5&#39;s optimization code seems to be broken and can
+cause problems: this can be seen when deleting an object Dialog
+Editor, in Release mode with optimizations on. If in doubt,
+switch off optimisations, although this will result in much
+larger executables. It seems possible that the library can be created with
+strong optimization, so long as the application is not strongly
+optimized. For example, in wxWidgets project, set to &#39;Minimum
+Size&#39;. In Dialog Editor project, set to &#39;Customize: Favor Small
+Code&#39; (and no others). This will then work.<P>
+
+<H3><a name="makefiles">How are the wxWidgets makefiles edited under Windows?</a></H3>
+
+wxWidgets 2.5.x and above uses Bakefile to generate makefiles, which
+is described in technical note 16 under docs/tech in your distribution.<p>
+
+For 2.4.x, there is a system written by Vadim Zeitlin that
+generates the makefiles from templates using tmake.<P>
+
+Here are Vadim&#39;s notes on tmake:<P>
+
+<blockquote>
+To use these new makefiles, you don&#39;t need anything (but see below).
+However, you should NOT modify them because these files will be
+rewritten when I regenerate them using tmake the next time. So, if
+you find a problem with any of these makefiles (say, makefile.b32)
+you&#39;ll need to modify the corresponding template (b32.t in this
+example) and regenerate the makefile using tmake.<P>
+
+tmake can be found at
+<a href="http://www.troll.no/freebies/tmake.html" target=_new>www.troll.no/freebies/tmake.html</a>.
+It&#39;s a Perl5 program and so it needs Perl (doh). There is a binary for 
+Windows (available from the same page), but I haven&#39;t used it, so
+I don&#39;t know if it works as flawlessly as "perl tmake" does (note
+for people knowing Perl: don&#39;t try to run tmake with -w, it won&#39;t
+do you any good). Using it extremely simple: to regenerate makefile.b32
+just go to distrib/msw/tmake and type<P>
+
+<pre>tmake -t b32 wxwin.pro -o ../../src/msw/makefile.b32</pre><P>
+
+The makefiles are untested - I don&#39;t have any of Borland, Watcom  or
+Symantec and I don&#39;t have enough diskspace to recompile even with
+VC6 using makefiles. The new makefiles are as close as possible to the
+old ones, but not closer: in fact, there has been many strange things
+(should I say bugs?) in some of makefiles, some files were not compiled
+without any reason etc. Please test them and notify me about any problems.
+Better yet, modify the template files to generate the correct makefiles
+and check them in.<P>
+
+The templates are described in tmake ref manual (1-2 pages of text)
+and are quite simple. They do contain some Perl code, but my Perl is
+primitive (very C like) so it should be possible for anybody to make
+trivial modifications to it (I hope that only trivial modifications
+will be needed). I&#39;ve tagged the ol makefiles as MAKEFILES_WITHOUT_TMAKE
+in the cvs, so you can always retrieve them and compare the new ones,
+this will make it easier to solve the problems you might have.<P>
+
+Another important file is filelist.txt: it contains the list of all
+files to be compiled. Some of them are only compiled in 16/32 bit mode.
+Some other are only compiled with some compilers (others can&#39;t compile
+them) - all this info is contained in this file.<P>
+
+So now adding a new file to wxWidgets is as easy as modifying filelist.txt
+(and Makefile.ams for Unix ports) and regenerating the makefiles - no
+need to modify all files manually any more.<P>
+
+ Finally, there is also a file vc6.t which I use myself: this one
+generates a project file for VC++ 6.0 (I didn&#39;t create vc5.t because
+I don&#39;t need it and can&#39;t test it, but it should be trivial to create
+one from vc6.t - probably the only things to change would be the
+version number in the very beginning and the /Z option - VC5 doesn&#39;t
+support edit-and=continue). This is not an officially supported way
+of building wxWidgets (that is, nobody guarantees that it will work),
+but it has been very useful to me and I hope it will be also for
+others. To generate wxWidgets.dsp run<P>
+
+<pre>tmake -t vc6 wxwin.pro -o ../../wxWidgets.dsp</pre><P>
+
+Then just include this project in any workspace or open it from VC IDE
+and it will create a new workspace for you.<P>
+
+If all goes well, I&#39;m planning to create a template file for Makefile.ams
+under src/gtk and src/motif and also replace all makefiles in the samples
+subdirectories with the project files from which all the others will be
+generated. At least it will divide the number of files in samples
+directory by 10 (and the number of files to be maintained too).
+</blockquote>
+
+<P>
+
+<H3><a name="vcdebug">How do you use VC++&#39;s memory leak checking instead of that in wxWidgets?</a></H3>
+
+Vadim Zeitlin:
+
+<pre>
+On the VC++ level, it&#39;s just the matter of calling _CrtSetDbgFlag() in the very
+beginning of the program. In wxWidgets, this is done automatically when
+compiling with VC++ in debug mode unless wxUSE_GLOBAL_MEMORY_OPERATORS or
+__NO_VC_CRTDBG__ are defined - this check is done in wx/msw/msvcrt.h which
+is included from app.cpp which then calls wxCrtSetDbgFlag() without any
+ifdefs.
+
+This works quite well: at the end of the program, all leaked blocks with their
+malloc count are shown. This number (malloc count) can be used to determine
+where exactly the object was allocated: for this it&#39;s enough to set the variable
+_crtBreakAlloc (look in VC98\crt\srs\dbgheap.c line 326) to this number and
+a breakpoint will be triggered when the block with this number is allocated.
+
+For simple situations it works like a charm. For something more complicated
+like reading uninitialized memory a specialized tool is probably better...
+
+Regards,
+VZ
+</pre>
+
+<P>
+
+<H3><a name="shortcutproblem">Why are menu hotkeys or shortcuts not working in my application?</a></H3>
+
+This can happen if you have a child window intercepting EVT_CHAR events and swallowing
+all keyboard input. You should ensure that event.Skip() is called for all input that
+isn&#39;used by the event handler.<P>
+
+It can also happen if you append the submenu to the parent
+menu {\it before} you have added your menu items. Do the append {\it after} adding
+your items, or accelerators may not be registered properly.<P>
+
+<H3><a name="#regconfig">Why can I not write to the HKLM part of the registry with wxRegConfig?</a></H3>
+
+Currently this is not possible because the wxConfig family of classes is
+supposed to deal with per-user application configuration data, and HKLM is
+only supposed to be writeable by a user with Administrator privileges. In theory,
+only installers should write to HKLM. This is still a point debated by the
+wxWidgets developers. There are at least two ways to work around it if you really
+need to write to HKLM.<P>
+
+First, you can use wxRegKey directly, for example:
+
+<pre>
+    wxRegKey regKey;
+
+    wxString idName(wxT("HKEY_LOCAL_MACHINE\\SOFTWARE\\My Company\\My Product\\Stuff\\"));
+    idName += packid;
+
+    regKey.SetName(idName);
+
+    {
+        wxLogNull dummy; 
+        if (!regKey.Create())
+        {
+            idName = wxT("HKEY_CURRENT_USER\\SOFTWARE\\My Company\\My Product\\Stuff\\");
+            idName += packid;
+            regKey.SetName(idName);
+            if (!regKey.Create())
+                return FALSE;
+        }
+    }
+
+    if (!regKey.SetValue(wxT("THING"), (long) thing)) err += 1;
+
+    regKey.Close();
+
+</pre>
+
+Or, you can employ this trick suggested by Istvan Kovacs:
+
+<pre>
+class myGlobalConfig : public wxConfig
+{
+    myGlobalConfig() :
+        wxConfig ("myApp", "myCompany", "", "", wxCONFIG_USE_GLOBAL_FILE)
+{};
+    bool Write(const wxString& key, const wxString& value);
+}
+
+bool myGlobalConfig::Write (const wxString& key, const wxString& value)
+{
+    wxString path = wxString ("SOFTWARE\\myCompany\\myApp\\") + wxPathOnly(key);
+    wxString new_path = path.Replace ("/", "\\", true);
+    wxString new_key = wxFileNameFromPath (key);
+    LocalKey().SetName (wxRegKey::HKLM, path);
+    return wxConfig::Write (new_key, value);
+}
+</pre>
+
+<H3><a name="#access">Is MS Active Accessibility supported?</a></H3>
+
+This is being worked on. Please see <a href="http://www.wxwidgets.org/access.htm">this page</a>
+for the current status.
+
+<P>
+
+
+<h3><a name="#dspfmt">Why does Visual C++ complain about corrupted project files?</a></h3>
+
+If you have downloaded the wxWidgets sources from the cvs using a Unix cvs
+client or downloaded a daily snapshot in <tt>.tar.gz</tt> format, it is likely
+that the project files have Unix line endings (LF) instead of the DOS ones (CR
+LF). However all versions of Visual C++ up to and including 7.1 can only open
+the files with the DOS line endings, so you must transform the files to this
+format using any of the thousands ways to do it.
+<p>
+Of course, another possibility is to always use only the Windows cvs client
+and to avoid this problem completely.
+<p>
+
+<h3><a name="#crtmismatch">Visual C++ gives errors about multiply defined symbols, what can I do?</a></h3>
+
+If you get errors like this
+
+<pre>
+MSVCRTD.lib(MSVCRTD.dll) : error LNK2005: _xxxxxx already defined in LIBCD.lib(yyyyy.obj)
+</pre>
+
+when linking your project, this means that you used different versions of CRT
+(C Run-Time) library for wxWindows (or possibly another library) and the main
+project. Visual C++ provides static or dynamic and multithread safe or not
+versions of CRT for each of debug and release builds, for a total of 8
+libraries. You can choose among them by going to the "Code generation"
+page/subitem of the "C++" tab/item in the project proprieties dialog in VC6/7.
+<p>
+To avoid problems, you <strong>must</strong> use the same one for all
+components of your project. wxWindows uses multithread safe DLL version of the
+CRT which is a good choice but may be problematic when distributing your
+applications if you don&#39;t include the CRT DLL in your installation -- in this
+case you may decide to switch to using a static CRT version. If you build with
+<tt>wxUSE_THREADS == 0</tt> you may also use the non MT-safe version as it is
+slightly smaller and faster.
+<p>
+But the most important thing is to use the <strong>same</strong> CRT setting for
+all components of your project.
+
+<h3><a name="#directx">Why do I get compilation errors when using wxWidgets with DirectShow?</a></h3>
+
+If you get errors when including Microsoft DirectShow or DirectDraw headers,
+the following message from Peter Whaite could help:
+<blockquote>
+&gt; This causes compilation errors within DirectShow:
+&gt;
+&gt; wxutil.h(125) : error C2065: &#39;EXECUTE_ASSERT&#39; : undeclared identifier
+&gt; amfilter.h(1099) : error C2065: &#39;ASSERT&#39; : undeclared identifier
+
+The reason for this is that __WXDEBUG__ is also used by the DXSDK (9.0
+in my case) to &#39;#pragma once&#39; the contents of
+DXSDK/Samples/C++/DirectShow/BaseClasses/wxdebug.h.  So if __WXDEBUG__
+is defined, then wxdebug.h doesn&#39;t get included, and the assert macros
+don&#39;t get defined.  You have to #undef __WXDEBUG__ before including the
+directshow baseclass&#39;s &lt;streams.h&gt;.
+</blockquote>
+
+
+<h3><a name="#handlewm">How do I handle Windows messages in my wxWidgets program?</a></h3>
+
+To handle a Windows message you need to override a virtual
+<tt>MSWWindowProc()</tt> method in a wxWindow-derived class. You should then
+test if <tt>nMsg</tt> parameter is the message you need to process and perform
+the necessary action if it is or call the base class method otherwise.
+
+
+</font>
+
+</BODY>
+
+</HTML>

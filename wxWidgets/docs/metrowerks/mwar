@@ -1,0 +1,17 @@
+#! /bin/sh
+if test "x$1" '!=' "xrcu"; then
+	echo "$0: this isn't really ar.  Only rcu is supported" >&2
+	exit 1
+fi
+if test "x$2" == "x"; then
+	echo "$0: no archive file specified" >&2
+	exit 1
+fi
+if test "x$3" == "x"; then
+	echo "$0: no archive members specified" >&2
+	exit 1
+fi
+outputfile="$2"
+shift
+shift
+/Users/dfe/bin/mw8.3/realmw/mwld -xm l -o "$outputfile" "$@"

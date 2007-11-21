@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="listctrl" template="wx_sample" template_append="wx_append">
+        <sources>listtest.cpp</sources>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <win32-res>listtest.rc</win32-res>
+    </exe>
+
+</makefile>

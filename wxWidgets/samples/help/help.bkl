@@ -1,0 +1,60 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="help" template="wx_sample" template_append="wx_append">
+        <sources>demo.cpp</sources>
+        <wx-lib>html</wx-lib>
+        <wx-lib>adv</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <win32-res>demo.rc</win32-res>
+    </exe>
+
+    <wx-data id="data">
+        <files>
+            back.gif
+            bullet.bmp
+            contents.gif
+            cshelp.txt
+            doc.chm
+            doc.cnt
+            doc.hhc
+            doc.hhk
+            doc.hhp
+            doc.hlp
+            doc.hpj
+            doc.zip
+            forward.gif
+            up.gif
+        </files>
+    </wx-data>
+
+    <wx-data id="data_doc">
+        <dstdir>$(BUILDDIR)/doc</dstdir>
+        <srcdir>$(SRCDIR)/doc</srcdir>
+        <files>
+            aindex.html
+            ClassGraph.class
+            ClassGraphPanel.class
+            ClassLayout.class
+            down.gif
+            dxxgifs.tex
+            HIER.html
+            HIERjava.html
+            icon1.gif
+            icon2.gif
+            index.html
+            logo.gif
+            NavigatorButton.class
+            USE_HELP.html
+            wx204.htm
+            wx34.htm
+            wxExtHelpController.html
+            wxhelp.map
+            wx.htm
+        </files>
+    </wx-data>
+
+</makefile>

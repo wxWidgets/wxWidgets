@@ -1,0 +1,7 @@
+* Implement toggle buttons
+* Implement popup windows
+* Implement joystick support
+* Fix wxGetKeyState using HID and GetKeys and low memory keymap
+* Add sound manager part to wxSound and commit it as classic also
+* Focus rectangles are off on smaller text controls on 10.2 (10.3 also?)
+

@@ -1,0 +1,111 @@
+\section{\class{wxStaticText}}\label{wxstatictext}
+
+A static text control displays one or more lines of read-only text.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/stattext.h>
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxALIGN\_LEFT}}{Align the text to the left}
+\twocolitem{\windowstyle{wxALIGN\_RIGHT}}{Align the text to the right}
+\twocolitem{\windowstyle{wxALIGN\_CENTRE}}{Center the text (horizontally)}
+\twocolitem{\windowstyle{wxST\_NO\_AUTORESIZE}}{By default, the control will
+adjust its size to exactly fit to the size of the text when 
+\helpref{SetLabel}{wxstatictextsetlabel} is called. If this style flag is
+given, the control will not change its size (this style is especially useful
+with controls which also have wxALIGN\_RIGHT or CENTER style because otherwise
+they won't make sense any longer after a call to SetLabel)}
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{See also}
+
+\helpref{wxStaticBitmap}{wxstaticbitmap}, \helpref{wxStaticBox}{wxstaticbox}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxStaticText::wxStaticText}\label{wxstatictextconstr}
+
+\func{}{wxStaticText}{\void}
+
+Default constructor.
+
+\func{}{wxStaticText}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{label}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = 0}, \param{const wxString\& }{name = ``staticText"}}
+
+Constructor, creating and showing a text control.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Should not be NULL.}
+
+\docparam{id}{Control identifier. A value of -1 denotes a default value.}
+
+\docparam{label}{Text label.}
+
+\docparam{pos}{Window position.}
+
+\docparam{size}{Window size.}
+
+\docparam{style}{Window style. See \helpref{wxStaticText}{wxstatictext}.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxStaticText::Create}{wxstatictextcreate}
+
+
+\membersection{wxStaticText::Create}\label{wxstatictextcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{label}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = 0}, \param{const wxString\& }{name = ``staticText"}}
+
+Creation function, for two-step construction. For details see \helpref{wxStaticText::wxStaticText}{wxstatictextconstr}.
+
+
+\membersection{wxStaticText::GetLabel}\label{wxstatictextgetlabel}
+
+\constfunc{wxString}{GetLabel}{\void}
+
+Returns the contents of the control.
+
+
+\membersection{wxStaticText::SetLabel}\label{wxstatictextsetlabel}
+
+\func{virtual void}{SetLabel}{\param{const wxString\& }{ label}}
+
+Sets the static text label and updates the controls size to exactly fit the
+label unless the control has wxST\_NO\_AUTORESIZE flag.
+
+\wxheading{Parameters}
+
+\docparam{label}{The new label to set. It may contain newline characters.}
+
+
+\membersection{wxStaticText::Wrap}\label{wxstatictextwrpa}
+
+\func{void}{Wrap}{\param{int }{width}}
+
+This functions wraps the controls label so that each of its lines becomes at
+most \arg{width} pixels wide if possible (the lines are broken at words
+boundaries so it might not be the case if words are too long). If \arg{width}
+is negative, no wrapping is done.
+
+\newsince{2.6.2}
+

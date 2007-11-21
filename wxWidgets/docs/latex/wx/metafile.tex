@@ -1,0 +1,132 @@
+\section{\class{wxMetafile}}\label{wxmetafile}
+
+A {\bf wxMetafile} represents the MS Windows metafile object, so metafile
+operations have no effect in X. In wxWidgets, only sufficient functionality
+has been provided for copying a graphic to the clipboard; this may be extended
+in a future version. Presently, the only way of creating a metafile
+is to use a wxMetafileDC.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/metafile.h>
+
+\wxheading{See also}
+
+\helpref{wxMetafileDC}{wxmetafiledc}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxMetafile::wxMetafile}\label{wxmetafilector}
+
+\func{}{wxMetafile}{\param{const wxString\& }{filename = ""}}
+
+Constructor. If a filename is given, the Windows disk metafile is
+read in. Check whether this was performed successfully by
+using the \helpref{wxMetafile:IsOk}{wxmetafileisok} member.
+
+\membersection{wxMetafile::\destruct{wxMetafile}}\label{wxmetafiledtor}
+
+\func{}{\destruct{wxMetafile}}{\void}
+
+Destructor.
+See \helpref{reference-counted object destruction}{refcountdestruct} for more info.
+
+\membersection{wxMetafile::IsOk}\label{wxmetafileisok}
+
+\func{bool}{Ok}{\void}
+
+Returns true if the metafile is valid.
+
+\membersection{wxMetafile::Play}\label{wxmetafileplay}
+
+\func{bool}{Play}{\param{wxDC *}{dc}}
+
+Plays the metafile into the given device context, returning
+true if successful.
+
+\membersection{wxMetafile::SetClipboard}\label{wxmetafilesetclipboard}
+
+\func{bool}{SetClipboard}{\param{int}{ width = 0}, \param{int}{ height = 0}}
+
+Passes the metafile data to the clipboard. The metafile can no longer be
+used for anything, but the wxMetafile object must still be destroyed by
+the application.
+
+Below is a example of metafile, metafile device context and clipboard use
+from the {\tt hello.cpp} example. Note the way the metafile dimensions
+are passed to the clipboard, making use of the device context's ability
+to keep track of the maximum extent of drawing commands.
+
+\begin{verbatim}
+  wxMetafileDC dc;
+  if (dc.Ok())
+  {
+    Draw(dc, false);
+    wxMetafile *mf = dc.Close();
+    if (mf)
+    {
+      bool success = mf->SetClipboard((int)(dc.MaxX() + 10), (int)(dc.MaxY() + 10));
+      delete mf;
+    }
+  }
+\end{verbatim}
+
+\section{\class{wxMetafileDC}}\label{wxmetafiledc}
+
+This is a type of device context that allows a metafile object to be
+created (Windows only), and has most of the characteristics of a normal
+\rtfsp{\bf wxDC}. The \helpref{wxMetafileDC::Close}{wxmetafiledcclose} member must be called after drawing into the
+device context, to return a metafile. The only purpose for this at
+present is to allow the metafile to be copied to the clipboard (see \helpref{wxMetafile}{wxmetafile}).
+
+Adding metafile capability to an application should be easy if you
+already write to a wxDC; simply pass the wxMetafileDC to your drawing
+function instead. You may wish to conditionally compile this code so it
+is not compiled under X (although no harm will result if you leave it
+in).
+
+Note that a metafile saved to disk is in standard Windows metafile format,
+and cannot be imported into most applications. To make it importable,
+call the function \helpref{::wxMakeMetafilePlaceable}{wxmakemetafileplaceable} after
+closing your disk-based metafile device context.
+
+\wxheading{Derived from}
+
+\helpref{wxDC}{wxdc}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/metafile.h>
+
+\wxheading{See also}
+
+\helpref{wxMetafile}{wxmetafile}, \helpref{wxDC}{wxdc}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxMetafileDC::wxMetafileDC}\label{wxmetafiledcctor}
+
+\func{}{wxMetafileDC}{\param{const wxString\& }{filename = ""}}
+
+Constructor. If no filename is passed, the metafile is created
+in memory.
+
+\membersection{wxMetafileDC::\destruct{wxMetafileDC}}\label{wxmetafiledcdtor}
+
+\func{}{\destruct{wxMetafileDC}}{\void}
+
+Destructor.
+
+\membersection{wxMetafileDC::Close}\label{wxmetafiledcclose}
+
+\func{wxMetafile *}{Close}{\void}
+
+This must be called after the device context is finished with. A
+metafile is returned, and ownership of it passes to the calling
+application (so it should be destroyed explicitly).
+

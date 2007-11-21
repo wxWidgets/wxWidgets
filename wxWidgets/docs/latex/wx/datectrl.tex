@@ -1,0 +1,191 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        datectrl.tex
+%% Purpose:     wxDatePickerCtrl documentation
+%% Author:      Vadim Zeitlin
+%% Created:     2005-01-15
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2005 Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxDatePickerCtrl}}\label{wxdatepickerctrl}
+
+This control allows the user to select a date. Unlike 
+\helpref{wxCalendarCtrl}{wxcalendarctrl}, which is a relatively big control,
+wxDatePickerCtrl is implemented as a small window showing the currently selected date.
+The control can be edited using the keyboard, and can also display a popup
+window for more user-friendly date selection, depending on the styles used and
+the platform, except PalmOS where date is selected using native dialog.
+
+It is only available if \texttt{wxUSE\_DATEPICKCTRL} is set to $1$.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/datectrl.h>
+
+(only available if \texttt{wxUSE\_DATEPICKCTRL} is set to $1$)
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxDP\_SPIN}}{Creates a control without a month calendar
+drop down but with spin-control-like arrows to change individual date
+components. This style is not supported by the generic version.}
+\twocolitem{\windowstyle{wxDP\_DROPDOWN}}{Creates a control with a month
+calendar drop-down part from which the user can select a date.}
+\twocolitem{\windowstyle{wxDP\_DEFAULT}}{Creates a control with the style
+that is best supported for the current platform (currently wxDP\_SPIN
+under Windows and wxDP\_DROPDOWN elsewhere).}
+\twocolitem{\windowstyle{wxDP\_ALLOWNONE}}{With this style, the control allows
+the user to not enter any valid date at all. Without it - the default - the control always has some valid date.}
+\twocolitem{\windowstyle{wxDP\_SHOWCENTURY}}{Forces display of the century in
+the default date format. Without this style the century could be displayed, or
+not, depending on the default date representation in the system.}
+\end{twocollist}
+
+\wxheading{Event handling}
+
+\twocolwidtha{7cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_DATE\_CHANGED(id, func)}}{This event fires when the user
+changes the current selection in the control.}
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{wxCalendarCtrl}{wxcalendarctrl},\\
+\helpref{wxDateEvent}{wxdateevent}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDatePickerCtrl::wxDatePickerCtrl}\label{wxdatepickerctrlctor}
+
+\func{}{wxDatePickerCtrl}{\param{wxWindow *}{parent},\rtfsp
+\param{wxWindowID}{ id},\rtfsp
+\param{const wxDateTime\& }{dt = wxDefaultDateTime},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxDP\_DEFAULT | wxDP\_SHOWCENTURY},\rtfsp
+\param{const wxValidator\& }{validator = wxDefaultValidator},
+\param{const wxString\& }{name = ``datectrl"}}
+
+Initializes the object and calls \helpref{Create}{wxdatepickerctrlcreate} with
+all the parameters.
+
+
+\membersection{wxDatePickerCtrl::Create}\label{wxdatepickerctrlcreate}
+
+\func{bool}{Create}{\param{wxWindow *}{parent},\rtfsp
+\param{wxWindowID}{ id},\rtfsp
+\param{const wxDateTime\& }{dt = wxDefaultDateTime},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxDP\_DEFAULT | wxDP\_SHOWCENTURY},\rtfsp
+\param{const wxValidator\& }{validator = wxDefaultValidator},
+\param{const wxString\& }{name = ``datectrl"}}
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window, must not be non-\texttt{NULL}.}
+
+\docparam{id}{The identifier for the control.}
+
+\docparam{dt}{The initial value of the control, if an invalid date (such as the
+default value) is used, the control is set to today.}
+
+\docparam{pos}{Initial position.}
+
+\docparam{size}{Initial size. If left at default value, the control chooses its
+own best size by using the height approximately equal to a text control and
+width large enough to show the date string fully.}
+
+\docparam{style}{The window style, should be left at $0$ as there are no
+special styles for this control in this version.}
+
+\docparam{validator}{Validator which can be used for additional date checks.}
+
+\docparam{name}{Control name.}
+
+\wxheading{Return value}
+
+\true if the control was successfully created or \false if creation failed.
+
+
+\membersection{wxDatePickerCtrl::GetRange}\label{wxdatepickerctrlgetrange}
+
+\constfunc{bool}{GetRange}{\param{wxDateTime *}{dt1}, \param{wxDateTime }{*dt2}}
+
+If the control had been previously limited to a range of dates using 
+\helpref{SetRange()}{wxdatepickerctrlsetrange}, returns the lower and upper
+bounds of this range. If no range is set (or only one of the bounds is set),
+ \arg{dt1} and/or \arg{dt2} are set to be invalid.
+
+\wxheading{Parameters}
+
+\docparam{dt1}{Pointer to the object which receives the lower range limit or
+becomes invalid if it is not set. May be \texttt{NULL} if the caller is not
+interested in lower limit}
+
+\docparam{dt2}{Same as above but for the upper limit}
+
+\wxheading{Return value}
+
+\false if no range limits are currently set, \true if at least one bound is
+set.
+
+
+\membersection{wxDatePickerCtrl::GetValue}\label{wxdatepickerctrlgetvalue}
+
+\constfunc{wxDateTime}{GetValue}{\void}
+
+Returns the currently selected. If there is no selection or the selection is
+outside of the current range, an invalid object is returned.
+
+\membersection{wxDatePickerCtrl::SetFormat}\label{wxdatepickerctrlsetformat}
+
+\func{void}{SetFormat}{\param{const wxChar*}{ format}}
+
+Please note that this function is only available in the generic version of this
+control. The native version always uses the current system locale.
+
+Sets the display format for the date in the control. See wxDateTime for the
+meaning of format strings.
+
+\wxheading{Remarks}
+
+If the format parameter is invalid,
+the behaviour is undefined.
+
+
+\membersection{wxDatePickerCtrl::SetRange}\label{wxdatepickerctrlsetrange}
+
+\func{void}{SetRange}{\param{const wxDateTime\&}{ dt1}, \param{const wxDateTime\&}{ dt2}}
+
+Sets the valid range for the date selection. If \arg{dt1} is valid, it becomes
+the earliest date (inclusive) accepted by the control. If \arg{dt2} is valid,
+it becomes the latest possible date.
+
+\wxheading{Remarks}
+
+If the current value of the control is outside of the newly set range bounds,
+the behaviour is undefined.
+
+
+\membersection{wxDatePickerCtrl::SetValue}\label{wxdatepickerctrlsetvalue}
+
+\func{void}{SetValue}{\param{const wxDateTime\&}{ dt}}
+
+Changes the current value of the control. The date should be valid and included
+in the currently selected range, if any.
+
+Calling this method does not result in a date change event.
+

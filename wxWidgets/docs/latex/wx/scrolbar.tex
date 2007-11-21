@@ -1,0 +1,297 @@
+\section{\class{wxScrollBar}}\label{wxscrollbar}
+
+A wxScrollBar is a control that represents a horizontal or
+vertical scrollbar. It is distinct from the two scrollbars that some windows
+provide automatically, but the two types of scrollbar share the way
+events are received.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/scrolbar.h>
+
+\wxheading{Remarks}
+
+A scrollbar has the following main attributes: {\it range}, {\it thumb size}, {\it page size}, and {\it position}.
+
+The range is the total number of units associated with the view represented by the scrollbar.
+For a table with 15 columns, the range would be 15.
+
+The thumb size is the number of units that are currently visible. For the table example, the window
+might be sized so that only 5 columns are currently visible, in which case the application would
+set the thumb size to 5. When the thumb size becomes the same as or greater than the range,
+the scrollbar will be automatically hidden on most platforms.
+
+The page size is the number of units that the scrollbar should scroll by, when `paging' through
+the data. This value is normally the same as the thumb size length, because
+it is natural to assume that the visible window size defines a page.
+
+The scrollbar position is the current thumb position.
+
+Most applications will find it convenient to provide a function called {\bf AdjustScrollbars} which can
+be called initially, from an {\bf OnSize} event handler, and whenever the application data
+changes in size. It will adjust the view, object and page size according
+to the size of the window and the size of the data.
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxSB\_HORIZONTAL}}{Specifies a horizontal scrollbar.}
+\twocolitem{\windowstyle{wxSB\_VERTICAL}}{Specifies a vertical scrollbar.}
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\input scrolevt.inc
+
+\wxheading{See also}
+
+\helpref{Scrolling overview}{scrollingoverview},\rtfsp
+\helpref{Event handling overview}{eventhandlingoverview},\rtfsp
+\helpref{wxScrolledWindow}{wxscrolledwindow}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxScrollBar::wxScrollBar}\label{wxscrollbarctor}
+
+\func{}{wxScrollBar}{\void}
+
+Default constructor.
+
+\func{}{wxScrollBar}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxSB\_HORIZONTAL}, \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{const wxString\& }{name = ``scrollBar"}}
+
+Constructor, creating and showing a scrollbar.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must be non-NULL.}
+
+\docparam{id}{Window identifier. A value of -1 indicates a default value.}
+
+\docparam{pos}{Window position. If the position (-1, -1) is specified then a default position is chosen.}
+
+\docparam{size}{Window size. If the default size (-1, -1) is specified then a default size is chosen.}
+
+\docparam{style}{Window style. See \helpref{wxScrollBar}{wxscrollbar}.}
+
+\docparam{validator}{Window validator.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxScrollBar::Create}{wxscrollbarcreate}, \helpref{wxValidator}{wxvalidator}
+
+
+\membersection{wxScrollBar::\destruct{wxScrollBar}}\label{wxscrollbardtor}
+
+\func{void}{\destruct{wxScrollBar}}{\void}
+
+Destructor, destroying the scrollbar.
+
+
+\membersection{wxScrollBar::Create}\label{wxscrollbarcreate}
+
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxSB\_HORIZONTAL}, \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{const wxString\& }{name = ``scrollBar"}}
+
+Scrollbar creation function called by the scrollbar constructor.
+See \helpref{wxScrollBar::wxScrollBar}{wxscrollbarctor} for details.
+
+
+\membersection{wxScrollBar::GetRange}\label{wxscrollbargetrange}
+
+\constfunc{int}{GetRange}{\void}
+
+Returns the length of the scrollbar.
+
+\wxheading{See also}
+
+\helpref{wxScrollBar::SetScrollbar}{wxscrollbarsetscrollbar}
+
+
+\membersection{wxScrollBar::GetPageSize}\label{wxscrollbargetpagesize}
+
+\constfunc{int}{GetPageSize}{\void}
+
+Returns the page size of the scrollbar. This is the number of scroll units
+that will be scrolled when the user pages up or down. Often it is the
+same as the thumb size.
+
+\wxheading{See also}
+
+\helpref{wxScrollBar::SetScrollbar}{wxscrollbarsetscrollbar}
+
+
+\membersection{wxScrollBar::GetThumbPosition}\label{wxscrollbargetthumbposition}
+
+\constfunc{int}{GetThumbPosition}{\void}
+
+Returns the current position of the scrollbar thumb.
+
+\wxheading{See also}
+
+\helpref{wxScrollBar::SetThumbPosition}{wxscrollbarsetthumbposition}
+
+
+\membersection{wxScrollBar::GetThumbSize}\label{wxscrollbargetthumbsize}
+
+\constfunc{int}{GetThumbSize}{\void}
+
+Returns the thumb or `view' size.
+
+\wxheading{See also}
+
+\helpref{wxScrollBar::SetScrollbar}{wxscrollbarsetscrollbar}
+
+\begin{comment}
+
+\membersection{wxScrollBar::SetObjectLength}\label{wxscrollbarsetobjectlength}
+
+\func{void}{SetObjectLength}{\param{int}{ objectLength}}
+
+Sets the object length for the scrollbar. This is the total object size (virtual size). You must
+call \helpref{SetViewLength}{wxscrollbarsetviewlength} {\it before} calling SetObjectLength.
+
+\wxheading{Parameters}
+
+\docparam{objectLength}{The object length of the scrollbar.}
+
+\wxheading{Remarks}
+
+Example: you are implementing scrollbars on a text window, where text lines have a maximum width
+of 100 characters. Your text window has a current width of 60 characters. So the view length is 60,
+and the object length is 100. The scrollbar will then enable you to scroll to see the other 40 characters.
+
+You will need to call {\bf SetViewLength} and {\bf SetObjectLength} whenever there
+is a change in the size of the window (the view size) or the size of the
+contents (the object length).
+
+\wxheading{See also}
+
+\helpref{wxScrollBar::GetObjectLength}{wxscrollbargetobjectlength}
+
+
+\membersection{wxScrollBar::SetPageSize}\label{wxscrollbarsetpagesize}
+
+\func{void}{SetPageSize}{\param{int}{ pageSize}}
+
+Sets the page size for the scrollbar. This is the number of scroll units which are scrolled when the
+user pages down (clicks on the scrollbar outside the thumbtrack area).
+
+\wxheading{Parameters}
+
+\docparam{pageSize}{The page size in scroll units.}
+
+\wxheading{Remarks}
+
+At present, this needs to be called {\it before} other set functions.
+
+\wxheading{See also}
+
+\helpref{wxScrollBar::GetPageSize}{wxscrollbargetpagesize}
+\end{comment}
+
+
+\membersection{wxScrollBar::SetThumbPosition}\label{wxscrollbarsetthumbposition}
+
+\func{void}{SetThumbPosition}{\param{int}{ viewStart}}
+
+Sets the position of the scrollbar.
+
+\wxheading{Parameters}
+
+\docparam{viewStart}{The position of the scrollbar thumb.}
+
+\wxheading{See also}
+
+\helpref{wxScrollBar::GetThumbPosition}{wxscrollbargetthumbposition}
+
+
+\membersection{wxScrollBar::SetScrollbar}\label{wxscrollbarsetscrollbar}
+
+\func{virtual void}{SetScrollbar}{\param{int }{position},\rtfsp
+\param{int }{thumbSize}, \param{int }{range},\rtfsp
+\param{int }{pageSize},\rtfsp
+\param{const bool }{refresh = true}}
+
+Sets the scrollbar properties.
+
+\wxheading{Parameters}
+
+\docparam{position}{The position of the scrollbar in scroll units.}
+
+\docparam{thumbSize}{The size of the thumb, or visible portion of the scrollbar, in scroll units.}
+
+\docparam{range}{The maximum position of the scrollbar.}
+
+\docparam{pageSize}{The size of the page size in scroll units. This is the number of units
+the scrollbar will scroll when it is paged up or down. Often it is the same as
+the thumb size.}
+
+\docparam{refresh}{true to redraw the scrollbar, false otherwise.}
+
+\wxheading{Remarks}
+
+Let's say you wish to display 50 lines of text, using the same font.
+The window is sized so that you can only see 16 lines at a time.
+
+You would use:
+
+{\small%
+\begin{verbatim}
+  scrollbar->SetScrollbar(0, 16, 50, 15);
+\end{verbatim}
+}
+
+The page size is 1 less than the thumb size so that the last line of the previous
+page will be visible on the next page, to help orient the user.
+
+Note that with the window at this size, the thumb position can never go
+above 50 minus 16, or 34.
+
+You can determine how many lines are currently visible by dividing the current view
+size by the character height in pixels.
+
+When defining your own scrollbar behaviour, you will always need to recalculate
+the scrollbar settings when the window size changes. You could therefore put your
+scrollbar calculations and SetScrollbar
+call into a function named AdjustScrollbars, which can be called initially and also
+from a \helpref{wxSizeEvent}{wxsizeevent} event handler function.
+
+\wxheading{See also}
+
+\helpref{Scrolling overview}{scrollingoverview},\rtfsp
+\helpref{wxWindow::SetScrollbar}{wxwindowsetscrollbar}, \helpref{wxScrolledWindow}{wxscrolledwindow}
+
+
+\begin{comment}
+
+\membersection{wxScrollBar::SetViewLength}\label{wxscrollbarsetviewlength}
+
+\func{void}{SetViewLength}{\param{int}{ viewLength}}
+
+Sets the view length for the scrollbar.
+
+\wxheading{Parameters}
+
+\docparam{viewLength}{View length.}
+
+\wxheading{See also}
+
+\helpref{wxScrollBar::GetViewLength}{wxscrollbargetviewlength}
+\end{comment}
+

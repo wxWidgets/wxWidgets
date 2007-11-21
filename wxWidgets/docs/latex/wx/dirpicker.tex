@@ -1,0 +1,135 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        dirpicker.tex
+%% Purpose:     wxDirPickerCtrl documentation
+%% Author:      Francesco Montorsi
+%% Created:     2006-05-12
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2006 Francesco Montorsi
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxDirPickerCtrl}}\label{wxdirpickerctrl}
+
+This control allows the user to select a directory. The generic implementation is
+a button which brings up a \helpref{wxDirDialog}{wxdirdialog} when clicked. Native implementation
+may differ but this is usually a (small) widget which give access to the dir-chooser
+dialog.
+It is only available if \texttt{wxUSE\_DIRPICKERCTRL} is set to $1$ (the default).
+
+\wxheading{Derived from}
+
+\helpref{wxPickerBase}{wxpickerbase}\\
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/filepicker.h>
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxDIRP\_DEFAULT\_STYLE}}{The default style: includes
+wxDIRP\_DIR\_MUST\_EXIST and, under wxMSW only, wxDIRP\_USE\_TEXTCTRL.}
+\twocolitem{\windowstyle{wxDIRP\_USE\_TEXTCTRL}}{Creates a text control to the left of the
+picker button which is completely managed by the \helpref{wxDirPickerCtrl}{wxdirpickerctrl}
+and which can be used by the user to specify a path (see \helpref{SetPath}{wxdirpickerctrlsetpath}).
+The text control is automatically synchronized with button's value. Use functions defined in \helpref{wxPickerBase}{wxpickerbase} to modify the text control.}
+
+\twocolitem{\windowstyle{wxDIRP\_DIR\_MUST\_EXIST}}{Creates a picker which allows to select only existing directories. wxGTK control always adds this flag internally as it does not support its absence.}
+\twocolitem{\windowstyle{wxDIRP\_CHANGE\_DIR}}{Change current working directory on each user directory selection change.}
+
+\end{twocollist}
+
+\wxheading{Event handling}
+
+To process a directory picker event, use these event handler macros to direct input to member
+functions that take a \helpref{wxFileDirPickerEvent}{wxfiledirpickerevent} argument.
+
+\twocolwidtha{7cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_DIRPICKER\_CHANGED(id, func)}}{The user changed the
+directory selected in the control either using the button or using text control
+(see wxDIRP\_USE\_TEXTCTRL; note that in this case the event is fired only if
+the user's input is valid, e.g. an existing directory path).}
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{wxDirDialog}{wxdirdialog},\\
+\helpref{wxFileDirPickerEvent}{wxfiledirpickerevent}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDirPickerCtrl::wxDirPickerCtrl}\label{wxdirpickerctrlctor}
+
+\func{}{wxDirPickerCtrl}{\param{wxWindow *}{parent},\rtfsp
+\param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{path = wxEmptyString},\rtfsp
+\param{const wxString\& }{message = ``Select a folder"},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxDIRP\_DEFAULT\_STYLE},\rtfsp
+\param{const wxValidator\& }{validator = wxDefaultValidator},
+\param{const wxString\& }{name = ``dirpickerctrl"}}
+
+Initializes the object and calls \helpref{Create}{wxdirpickerctrlcreate} with
+all the parameters.
+
+
+\membersection{wxDirPickerCtrl::Create}\label{wxdirpickerctrlcreate}
+
+\func{bool}{Create}{\param{wxWindow *}{parent},\rtfsp
+\param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{path = wxEmptyString},\rtfsp
+\param{const wxString\& }{message = ``Select a folder"},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxDIRP\_DEFAULT\_STYLE},\rtfsp
+\param{const wxValidator\& }{validator = wxDefaultValidator},
+\param{const wxString\& }{name = ``dirpickerctrl"}}
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window, must not be non-\texttt{NULL}.}
+
+\docparam{id}{The identifier for the control.}
+
+\docparam{path}{The initial directory shown in the control. Must be a valid path to a directory or the empty string.}
+
+\docparam{message}{The message shown to the user in the \helpref{wxDirDialog}{wxdirdialog} shown by the control.}
+
+\docparam{pos}{Initial position.}
+
+\docparam{size}{Initial size.}
+
+\docparam{style}{The window style, see {\tt wxDIRP\_*} flags.}
+
+\docparam{validator}{Validator which can be used for additional date checks.}
+
+\docparam{name}{Control name.}
+
+\wxheading{Return value}
+
+\true if the control was successfully created or \false if creation failed.
+
+
+\membersection{wxDirPickerCtrl::GetPath}\label{wxdirpickerctrlgetpath}
+
+\constfunc{wxString}{GetPath}{\void}
+
+Returns the absolute path of the currently selected directory.
+
+
+\membersection{wxDirPickerCtrl::SetPath}\label{wxdirpickerctrlsetpath}
+
+\func{void}{SetPath}{\param{const wxString \&}{dirname}}
+
+Sets the absolute path of the currently selected directory. This must be a valid directory if
+{\tt wxDIRP\_DIR\_MUST\_EXIST} style was given.
+
+

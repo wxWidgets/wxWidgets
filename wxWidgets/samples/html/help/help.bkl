@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <include file="../../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="htmlhelp" template="wx_sample" template_append="wx_append">
+        <sources>help.cpp</sources>
+        <wx-lib>html</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <win32-res>help.rc</win32-res>
+    </exe>
+
+    <wx-data id="data">
+        <dstdir>$(BUILDDIR)/helpfiles</dstdir>
+        <srcdir>$(SRCDIR)/helpfiles</srcdir>
+        <files>
+            Index.hhk
+            another.hhc
+            another.hhp
+            another.htm
+            book1.htm
+            book2.htm
+            contents.hhc
+            main.htm
+            page2-b.htm
+            testing.hhp
+        </files>
+    </wx-data>
+
+</makefile>

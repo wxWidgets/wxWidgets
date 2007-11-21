@@ -1,0 +1,4 @@
+
+This document is always out of date. Please
+see the bug list on SourceForge or one of
+the mailing lists.

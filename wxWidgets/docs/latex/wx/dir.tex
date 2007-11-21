@@ -1,0 +1,233 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        dir.tex
+%% Purpose:     wxDir documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     04.04.00
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxDir}}\label{wxdir}
+
+wxDir is a portable equivalent of Unix {open/read/close}dir functions which
+allow enumerating of the files in a directory. wxDir allows to enumerate files
+as well as directories.
+
+wxDir also provides a flexible way to enumerate files recursively using 
+\helpref{Traverse}{wxdirtraverse} or a simpler 
+\helpref{GetAllFiles}{wxdirgetallfiles} function.
+
+Example of use:
+
+\begin{verbatim}
+    wxDir dir(wxGetCwd());
+
+    if ( !dir.IsOpened() )
+    {
+        // deal with the error here - wxDir would already log an error message
+        // explaining the exact reason of the failure
+        return;
+    }
+
+    puts("Enumerating object files in current directory:");
+
+    wxString filename;
+
+    bool cont = dir.GetFirst(&filename, filespec, flags);
+    while ( cont )
+    {
+        printf("%s\n", filename.c_str());
+
+        cont = dir.GetNext(&filename);
+    }
+\end{verbatim}
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Constants}
+
+These flags define what kind of filename is included in the list of files
+enumerated by GetFirst/GetNext.
+
+{\small
+\begin{verbatim}
+enum
+{
+    wxDIR_FILES     = 0x0001,       // include files
+    wxDIR_DIRS      = 0x0002,       // include directories
+    wxDIR_HIDDEN    = 0x0004,       // include hidden files
+    wxDIR_DOTDOT    = 0x0008,       // include '.' and '..'
+
+    // by default, enumerate everything except '.' and '..'
+    wxDIR_DEFAULT   = wxDIR_FILES | wxDIR_DIRS | wxDIR_HIDDEN
+}
+\end{verbatim}
+}
+
+\wxheading{Include files}
+
+<wx/dir.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDir::wxDir}\label{wxdirwxdir}
+
+\func{}{wxDir}{\void}
+
+Default constructor, use \helpref{Open()}{wxdiropen} afterwards.
+
+\func{}{wxDir}{\param{const wxString\& }{dir}}
+
+Opens the directory for enumeration, use \helpref{IsOpened()}{wxdirisopened} 
+to test for errors.
+
+
+\membersection{wxDir::\destruct{wxDir}}\label{wxdirdtor}
+
+\func{}{\destruct{wxDir}}{\void}
+
+Destructor cleans up the associated resources. It is not virtual and so this
+class is not meant to be used polymorphically.
+
+
+\membersection{wxDir::Exists}\label{wxdirexists}
+
+\func{static bool}{Exists}{\param{const wxString\& }{dir}}
+
+Test for existence of a directory with the given name
+
+
+\membersection{wxDir::GetAllFiles}\label{wxdirgetallfiles}
+
+\func{static size\_t}{GetAllFiles}{\param{const wxString\& }{dirname}, \param{wxArrayString *}{files}, \param{const wxString\& }{filespec = wxEmptyString}, \param{int }{flags = wxDIR\_DEFAULT}}
+
+The function appends the names of all the files under directory {\it dirname} 
+to the array {\it files} (note that its old content is preserved). Only files
+matching the {\it filespec} are taken, with empty spec matching all the files.
+
+The {\it flags} parameter should always include {\tt wxDIR\_FILES} or the array
+would be unchanged and should include {\tt wxDIR\_DIRS} flag to recurse into
+subdirectories (both flags are included in the value by default).
+
+See also: \helpref{Traverse}{wxdirtraverse}
+
+
+\membersection{wxDir::FindFirst}\label{wxdirfindfirst}
+
+\func{static wxString}{FindFirst}{\param{const wxString\& }{dirname}, \param{const wxString\& }{filespec}, \param{int }{flags = wxDIR\_DEFAULT}}
+
+The function returns the path of the first file matching the given \arg{filespec}
+or an empty string if there are no files matching it.
+
+The \arg{flags} parameter may or may not include {\tt wxDIR\_FILES}, the
+function always behaves as if it were specified. By default, \arg{flags} 
+includes {\tt wxDIR\_DIRS} and so the function recurses into the subdirectories
+but if this flag is not specified, the function restricts the search only to
+the directory \arg{dirname} itself.
+
+See also: \helpref{Traverse}{wxdirtraverse}
+
+
+\membersection{wxDir::GetFirst}\label{wxdirgetfirst}
+
+\constfunc{bool}{GetFirst}{\param{wxString* }{filename}, \param{const wxString\& }{filespec = wxEmptyString}, \param{int }{flags = wxDIR\_DEFAULT}}
+
+Start enumerating all files matching {\it filespec} (or all files if it is
+empty) and {\it flags}, return \true on success.
+
+
+\membersection{wxDir::GetName}\label{wxdirgetname}
+
+\constfunc{wxString}{GetName}{\void}
+
+Returns the name of the directory itself. The returned string does not have the
+trailing path separator (slash or backslash).
+
+
+\membersection{wxDir::GetNext}\label{wxdirgetnext}
+
+\constfunc{bool}{GetNext}{\param{wxString* }{filename}}
+
+Continue enumerating files which satisfy the criteria specified by the last
+call to \helpref{GetFirst}{wxdirgetfirst}.
+
+
+\membersection{wxDir::GetTotalSize}\label{wxdirgettotalsize}
+
+\func{static wxULongLong}{GetTotalSize}{\param{const wxString\& }{dir}, \param{wxArrayString* }{filesSkipped = NULL}}
+
+Returns the size (in bytes) of all files recursively found in {\tt dir} or
+{\tt wxInvalidSize} in case of error.
+
+In case it happens that while traversing folders a file's size can not be read,
+that file is added to the {\tt filesSkipped} array, if not \NULL, and then
+skipped.
+This usually happens with some special folders which are locked by the operating system
+or by another process. Remember that when {\tt filesSkipped->GetCount()} is not zero,
+then the returned value is not 100\% accurate and, if the skipped files were big, it could be
+far from real size of the directory.
+
+See also: \helpref{wxFileName::GetHumanReadableSize}{wxfilenamegethumanreadablesize},
+\helpref{wxGetDiskSpace}{wxgetdiskspace}
+
+
+\membersection{wxDir::HasFiles}\label{wxdirhasfiles}
+
+\func{bool}{HasFiles}{\param{const wxString\& }{filespec = wxEmptyString}}
+
+Returns {\tt true} if the directory contains any files matching the given 
+{\it filespec}. If {\it filespec} is empty, look for any files at all. In any
+case, even hidden files are taken into account.
+
+
+\membersection{wxDir::HasSubDirs}\label{wxdirhassubdirs}
+
+\func{bool}{HasSubDirs}{\param{const wxString\& }{dirspec = wxEmptyString}}
+
+Returns {\tt true} if the directory contains any subdirectories (if a non
+empty {\it filespec} is given, only check for directories matching it).
+The hidden subdirectories are taken into account as well.
+
+
+\membersection{wxDir::IsOpened}\label{wxdirisopened}
+
+\constfunc{bool}{IsOpened}{\void}
+
+Returns true if the directory was successfully opened by a previous call to 
+\helpref{Open}{wxdiropen}.
+
+
+\membersection{wxDir::Open}\label{wxdiropen}
+
+\func{bool}{Open}{\param{const wxString\& }{dir}}
+
+Open the directory for enumerating, returns {\tt true} on success
+or {\tt false} if an error occurred.
+
+
+\membersection{wxDir::Traverse}\label{wxdirtraverse}
+
+\func{size\_t}{Traverse}{\param{wxDirTraverser\& }{sink}, \param{const wxString\& }{filespec = wxEmptyString}, \param{int }{flags = wxDIR\_DEFAULT}}
+
+Enumerate all files and directories under the given directory recursively
+calling the element of the provided \helpref{wxDirTraverser}{wxdirtraverser} 
+object for each of them.
+
+More precisely, the function will really recurse into subdirectories if 
+{\it flags} contains {\tt wxDIR\_DIRS} flag. It will ignore the files (but
+still possibly recurse into subdirectories) if {\tt wxDIR\_FILES} flag is
+given.
+
+For each found directory, \helpref{sink.OnDir()}{wxdirtraverserondir} is called
+and \helpref{sink.OnFile()}{wxdirtraverseronfile} is called for every file.
+Depending on the return value, the enumeration may continue or stop.
+
+The function returns the total number of files found or {\tt (size\_t)-1} on
+error.
+
+See also: \helpref{GetAllFiles}{wxdirgetallfiles}
+

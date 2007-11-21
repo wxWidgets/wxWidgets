@@ -1,0 +1,44 @@
+\section{\class{wxStaticBoxSizer}}\label{wxstaticboxsizer}
+
+wxStaticBoxSizer is a sizer derived from wxBoxSizer but adds a static
+box around the sizer. This static box may be either created independently or
+the sizer may create it itself as a convenience. In any case, the sizer owns
+the \helpref{wxStaticBox}{wxstaticbox} control and will delete it if it is
+deleted.
+
+\wxheading{Derived from}
+
+\helpref{wxBoxSizer}{wxboxsizer}\\
+\helpref{wxSizer}{wxsizer}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/sizer.h>
+
+\wxheading{See also}
+
+\helpref{wxSizer}{wxsizer}, \helpref{wxStaticBox}{wxstaticbox}, \helpref{wxBoxSizer}{wxboxsizer}, \helpref{Sizer overview}{sizeroverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxStaticBoxSizer::wxStaticBoxSizer}\label{wxstaticboxsizerwxstaticboxsizer}
+
+\func{}{wxStaticBoxSizer}{\param{wxStaticBox* }{box}, \param{int }{orient}}
+
+\func{}{wxStaticBoxSizer}{\param{int }{orient}, \param{wxWindow }{*parent}, \param{const wxString\& }{label = wxEmptyString}}
+
+The first constructor uses an already existing static box. It takes the
+associated static box and the orientation \arg{orient}, which can be either
+\texttt{wxVERTICAL} or \texttt{wxHORIZONTAL} as parameters.
+
+The second one creates a new static box with the given label and parent window.
+
+
+\membersection{wxStaticBoxSizer::GetStaticBox}\label{wxstaticboxsizergetstaticbox}
+
+\func{wxStaticBox*}{GetStaticBox}{\void}
+
+Returns the static box associated with the sizer.
+

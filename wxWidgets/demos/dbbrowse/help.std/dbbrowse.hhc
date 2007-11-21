@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<!-- Sitemap 1.0 -->
+</HEAD><BODY>
+<OBJECT type="text/site properties">
+ <param name="ImageType" value="Folder">
+</OBJECT>
+<UL>
+ <LI> <OBJECT type="text/sitemap">
+  <param name="Name" value="Pictograms used in these Help Files">
+   <param name="ID" value=34>
+  <param name="Local" value="picgrams.htm">
+  </OBJECT>
+ <LI> <OBJECT type="text/sitemap">
+  <param name="Name" value="DBBrowser">
+   <param name="ID" value=34>
+  <param name="Local" value="dbbrowse.htm">
+  </OBJECT>
+ <UL>
+  <LI> <OBJECT type="text/sitemap">
+   <param name="Name" value="Where has DBBrowser been Compilied ?">
+   <param name="Local" value="compiler.htm">
+   </OBJECT>
+  <LI> <OBJECT type="text/sitemap">
+   <param name="Name" value="Used Icons (.ICO / .XPM)">
+   <param name="Local" value="icons.htm">
+   </OBJECT>
+  <LI> <OBJECT type="text/sitemap">
+   <param name="Name" value="Start Parameter (Language/Locale Support)">
+   <param name="Local" value="startprm.htm">
+   </OBJECT>
+  <LI> <OBJECT type="text/sitemap">
+   <param name="Name" value="What does not Work ?">
+   <param name="Local" value="problems.htm">
+   </OBJECT>
+  <LI> <OBJECT type="text/sitemap">
+   <param name="Name" value="What / When are new Functions planned ?">
+   <param name="Local" value="todo.htm">
+   </OBJECT>
+ </UL>
+ <LI> <OBJECT type="text/sitemap">
+  <param name="Name" value="Remstar ODBC">
+  <param name="Local" value="remstar.htm">
+  </OBJECT>
+ <UL>
+  <LI> <OBJECT type="text/sitemap">
+   <param name="Name" value="wxDB Class">
+   <param name="Local" value="wxdb.htm">
+   </OBJECT>
+  <UL>
+   <LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="new wxDB::GetColumns (Discription)">
+    <param name="Local" value="getcol.htm">
+    </OBJECT>
+   <LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="new wxDB::GetColumns (How to Use)">
+    <param name="Local" value="getcolsh.htm">
+    </OBJECT>
+  </UL>
+  <LI> <OBJECT type="text/sitemap">
+   <param name="Name" value="wxTable Class">
+   <param name="Local" value="wxtable.htm">
+   </OBJECT>
+ </UL>
+</UL>
+</BODY></HTML>

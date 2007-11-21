@@ -1,0 +1,290 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        graphicsfont.tex
+%% Purpose:     wxGraphicsFont class documentation
+%% Author:      Stefan Csomor
+%% Modified by:
+%% Created:     08.06.2004
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Stefan Csomor
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxGraphicsContext}}\label{wxgraphicscontext}
+
+A wxGraphicsContext instance is the object that is drawn upon. It is created by a renderer using the CreateContext calls.., this can be either directly using a renderer 
+instance, or indirectly using the static convenience CreateXXX functions of wxGraphicsContext that always delegate the task to the default renderer.
+
+\wxheading{Derived from}
+
+\helpref{wxGraphicsObject}{wxgraphicsobject}
+
+\wxheading{Include files}
+
+<wx/graphics.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxGraphicsContext::Create}\label{wxgraphicscontextcreate}
+
+\func{wxGraphicsContext*}{Create}{\param{const wxWindowDC\& }{dc}}
+
+Creates a wxGraphicsContext from a wxWindowDC (eg a wxPaintDC).
+
+\func{wxGraphicsContext*}{Create}{\param{wxWindow* }{window}}
+
+Creates a wxGraphicsContext from a wxWindow.
+
+\wxheading{See also}
+
+\helpref{wxGraphicsRenderer:: CreateContext}{wxgraphicsrenderercreatecontext}
+
+\membersection{wxGraphicsContext::CreateFromNative}\label{wxgraphicscontextcreatefromnative}
+
+Creates a wxGraphicsContext from a native context. This native context must be eg a CGContextRef for Core Graphics, a Graphics pointer for GDIPlus or a 
+cairo\_t pointer for cairo.
+
+\func{wxGraphicsContext*}{CreateFromNative}{\param{void * }{context}}
+
+Creates a wxGraphicsContext from a native window. 
+
+\wxheading{See also}
+
+\helpref{wxGraphicsRenderer:: CreateContextFromNativeContext}{wxgraphicsrenderercreatecontextfromnativecontext}
+
+\membersection{wxGraphicsContext::CreateFromNativeWindow}\label{wxgraphicscontextcreatefromnativewindow}
+
+\func{wxGraphicsContext*}{CreateFromNativeWindow}{\param{void * }{window}}
+
+\wxheading{See also}
+
+\helpref{wxGraphicsRenderer:: CreateContextFromNativeWindow}{wxgraphicsrenderercreatecontextfromnativewindow}
+
+\membersection{wxGraphicsContext::CreatePen}\label{wxgraphicscontextcreatepen}
+
+\constfunc{wxGraphicsPen}{CreatePen}{\param{const wxPen\& }{pen}}
+
+Creates a native pen from a wxPen.
+
+\membersection{wxGraphicsContext::CreateBrush}\label{wxgraphicscontextcreatebrush}
+
+\constfunc{wxGraphicsBrush}{CreateBrush}{\param{const wxBrush\& }{brush}}
+
+Creates a native brush from a wxBrush.
+
+\membersection{wxGraphicsContext::CreateRadialGradientBrush}\label{wxgraphicscontextcreateradialgradientbrush}
+
+\constfunc{wxGraphicsBrush}{CreateRadialGradientBrush}{\param{wxDouble }{xo}, \param{wxDouble }{yo}, \param{wxDouble }{xc}, \param{wxDouble }{yc}, 
+\param{wxDouble }{radius}, \param{const wxColour\& }{oColor}, \param{const wxColour\& }{cColor}}
+
+Creates a native brush, having a radial gradient originating at (xo,yc) with color oColour and ends on a circle around (xc,yc) with radius r and color cColour
+
+\membersection{wxGraphicsContext::CreateLinearGradientBrush}\label{wxgraphicscontextcreatelineargradientbrush}
+
+\constfunc{wxGraphicsBrush}{CreateLinearGradientBrush}{\param{wxDouble }{x1}, \param{wxDouble }{y1}, \param{wxDouble }{x2}, \param{wxDouble }{y2}, 
+\param{const }{wxColour\&c1}, \param{const }{wxColour\&c2}}
+
+Creates a native brush, having a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
+
+\membersection{wxGraphicsContext::CreateFont}\label{wxgraphicscontextcreatefont}
+
+\constfunc{wxGraphicsFont}{CreateFont}{\param{const wxFont\& }{font}, \param{const wxColour\& }{col = *wxBLACK}}
+
+Creates a native graphics font from a wxFont and a text colour.
+
+\membersection{wxGraphicsContext::CreateMatrix}\label{wxgraphicscontextcreatematrix}
+
+\constfunc{wxGraphicsMatrix}{CreateMatrix}{\param{wxDouble }{a = 1.0}, \param{wxDouble }{b = 0.0}, \param{wxDouble }{c = 0.0}, \param{wxDouble }{d = 1.0}, 
+\param{wxDouble }{tx = 0.0}, \param{wxDouble }{ty = 0.0}}
+
+Creates a native affine transformation matrix from the passed in values. The defaults result in an identity matrix.
+
+\membersection{wxGraphicsContext::CreatePath}\label{wxgraphicscontextcreatepath}
+
+\constfunc{wxGraphicsPath}{CreatePath}{\void}
+
+Creates a native graphics path which is initially empty.
+
+\membersection{wxGraphicsContext::Clip}\label{wxgraphicscontextclip}
+
+\func{void}{Clip}{\param{const wxRegion\& }{region}}
+
+Clips drawings to the region, combined to current clipping region
+
+\func{void}{Clip}{\param{wxDouble }{x}, \param{wxDouble }{y}, \param{wxDouble }{w}, \param{wxDouble }{h}}
+
+Clips drawings to the rectangle.
+
+\membersection{wxGraphicsContext::ResetClip}\label{wxgraphicscontextresetclip}
+
+\func{void}{ResetClip}{\void}
+
+Resets the clipping to original shape.
+
+\membersection{wxGraphicsContext::DrawBitmap}\label{wxgraphicscontextdrawbitmap}
+
+\func{void}{DrawBitmap}{\param{const wxBitmap\& }{bmp}, \param{wxDouble }{x}, \param{wxDouble }{y}, \param{wxDouble }{w}, \param{wxDouble }{h}}
+
+Draws the bitmap. In case of a mono bitmap, this is treated as a mask and the current brushed is used for filling.
+
+\membersection{wxGraphicsContext::DrawEllipse}\label{wxgraphicscontextdrawellipse}
+
+\func{void}{DrawEllipse}{\param{wxDouble }{x}, \param{wxDouble }{y}, \param{wxDouble }{w}, \param{wxDouble }{h}}
+
+Draws an ellipse.
+
+\membersection{wxGraphicsContext::DrawIcon}\label{wxgraphicscontextdrawicon}
+
+\func{void}{DrawIcon}{\param{const wxIcon\& }{icon}, \param{wxDouble }{x}, \param{wxDouble }{y}, \param{wxDouble }{w}, \param{wxDouble }{h}}
+
+Draws the icon.
+
+
+\membersection{wxGraphicsContext::DrawLines}\label{wxgraphicscontextdrawlines}
+
+\func{void}{DrawLines}{\param{size\_t }{n}, \param{const wxPoint2DDouble* }{points}, \param{int }{fillStyle = wxODDEVEN\_RULE}}
+
+Draws a polygon.
+
+
+\membersection{wxGraphicsContext::DrawPath}\label{wxgraphicscontextdrawpath}
+
+\func{void}{DrawPath}{\param{const wxGraphicsPath\& }{path}, \param{int }{fillStyle = wxODDEVEN\_RULE}}
+
+Draws the path by first filling and then stroking.
+
+
+\membersection{wxGraphicsContext::DrawRectangle}\label{wxgraphicscontextdrawrectangle}
+
+\func{void}{DrawRectangle}{\param{wxDouble }{x}, \param{wxDouble }{y}, \param{wxDouble }{w}, \param{wxDouble }{h}}
+
+Draws a rectangle.
+
+
+\membersection{wxGraphicsContext::DrawRoundedRectangle}\label{wxgraphicscontextdrawroundedrectangle}
+
+\func{void}{DrawRoundedRectangle}{\param{wxDouble }{x}, \param{wxDouble }{y}, \param{wxDouble }{w}, \param{wxDouble }{h}, \param{wxDouble }{radius}}
+
+Draws a rounded rectangle.
+
+\membersection{wxGraphicsContext::DrawText}\label{wxgraphicscontextdrawtext}
+
+\func{void}{DrawText}{\param{const wxString\& }{str}, \param{wxDouble }{x}, \param{wxDouble }{y}, \param{wxDouble }{angle}}
+
+\func{void}{DrawText}{\param{const wxString\& }{str}, \param{wxDouble }{x}, \param{wxDouble }{y}}
+
+Draws a text at the defined position, at the given angle.
+
+\membersection{wxGraphicsContext::FillPath}\label{wxgraphicscontextfillpath}
+
+\func{void}{FillPath}{\param{const wxGraphicsPath\& }{path}, \param{int }{fillStyle = wxODDEVEN\_RULE}}
+
+Fills the path with the current brush.
+
+\membersection{wxGraphicsContext::StrokePath}\label{wxgraphicscontextstrokepath}
+
+\func{void}{StrokePath}{\param{const wxGraphicsPath\& }{path}}
+
+Strokes along a path with the current pen.
+
+
+\membersection{wxGraphicsContext::GetNativeContext}\label{wxgraphicscontextgetnativecontext}
+
+\func{void *}{GetNativeContext}{\void}
+
+Returns the native context (CGContextRef for Core Graphics, Graphics pointer for GDIPlus and cairo\_t pointer for cairo).
+
+\membersection{wxGraphicsContext::GetPartialTextExtents}\label{wxgraphicscontextgetpartialtextextents}
+
+\constfunc{void}{GetPartialTextExtents}{\param{const wxString\& }{text}, \param{wxArrayDouble\& }{widths}}
+
+Fills the {\it widths} array with the widths from the beginning of 
+{\it text} to the corresponding character of {\it text}.  
+
+\membersection{wxGraphicsContext::GetTextExtent}\label{wxgraphicscontextgettextextent}
+
+\constfunc{void}{GetTextExtent}{\param{const wxString\& }{text}, \param{wxDouble* }{width}, \param{wxDouble* }{height}, \param{wxDouble* }{descent}, 
+\param{wxDouble* }{externalLeading}}
+
+Gets the dimensions of the string using the currently selected font.
+\rtfsp{\it string} is the text string to measure, {\it w} and {\it h} are
+the total width and height respectively, {\it descent} is the
+dimension from the baseline of the font to the bottom of the
+descender, and {\it externalLeading} is any extra vertical space added
+to the font by the font designer (usually is zero).
+
+\membersection{wxGraphicsContext::Rotate}\label{wxgraphicscontextrotate}
+
+\func{void}{Rotate}{\param{wxDouble }{angle}}
+
+Rotates the current transformation matrix (radians),
+
+\membersection{wxGraphicsContext::Scale}\label{wxgraphicscontextscale}
+
+\func{void}{Scale}{\param{wxDouble }{xScale}, \param{wxDouble }{yScale}}
+
+Scales the current transformation matrix.
+
+\membersection{wxGraphicsContext::Translate}\label{wxgraphicscontexttranslate}
+
+\func{void}{Translate}{\param{wxDouble }{dx}, \param{wxDouble }{dy}}
+
+Translates the current transformation matrix.
+
+\membersection{wxGraphicsContext::GetTransform}\label{wxgraphicscontextgettransform}
+
+\constfunc{wxGraphicsMatrix}{GetTransform}{\void}
+
+Gets the current transformation matrix of this context.
+
+\membersection{wxGraphicsContext::SetTransform}\label{wxgraphicscontextsettransform}
+
+\func{void}{SetTransform}{\param{const wxGraphicsMatrix\& }{matrix}}
+
+Sets the current transformation matrix of this context
+
+\membersection{wxGraphicsContext::ConcatTransform}\label{wxgraphicscontextconcattransform}
+
+\func{void}{ConcatTransform}{\param{const wxGraphicsMatrix\& }{matrix}}
+
+Concatenates the passed in transform with the current transform of this context
+
+\membersection{wxGraphicsContext::SetBrush}\label{wxgraphicscontextsetbrush}
+
+\func{void}{SetBrush}{\param{const wxBrush\& }{brush}}
+
+\func{void}{SetBrush}{\param{const wxGraphicsBrush\& }{brush}}
+
+Sets the brush for filling paths.
+
+\membersection{wxGraphicsContext::SetFont}\label{wxgraphicscontextsetfont}
+
+\func{void}{SetFont}{\param{const wxFont\& }{font}, \param{const wxColour\& }{colour}}
+
+
+\func{void}{SetFont}{\param{const wxGraphicsFont\& }{font}}
+
+Sets the font for drawing text.
+
+
+\membersection{wxGraphicsContext::SetPen}\label{wxgraphicscontextsetpen}
+
+\func{void}{SetPen}{\param{const wxGraphicsPen\& }{pen}}
+
+\func{void}{SetPen}{\param{const wxPen\& }{pen}}
+
+Sets the pen used for stroking.
+
+\membersection{wxGraphicsContext::StrokeLine}\label{wxgraphicscontextstrokeline}
+
+\func{void}{StrokeLine}{\param{wxDouble }{x1}, \param{wxDouble }{y1}, \param{wxDouble }{x2}, \param{wxDouble }{y2}}
+
+Strokes a single line.
+
+\membersection{wxGraphicsContext::StrokeLines}\label{wxgraphicscontextstrokelines}
+
+\func{void}{StrokeLines}{\param{size\_t }{n}, \param{const wxPoint2DDouble* }{beginPoints}, \param{const wxPoint2DDouble* }{endPoints}}
+
+\func{void}{StrokeLines}{\param{size\_t }{n}, \param{const wxPoint2DDouble* }{points}}
+
+Stroke disconnected lines from begin to end points, fastest method available for this purpose.
+

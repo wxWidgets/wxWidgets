@@ -1,0 +1,30 @@
+\section{\class{wxGDIObject}}\label{wxgdiobject}
+
+This class allows platforms to implement functionality to optimise GDI objects, such
+as wxPen, wxBrush and wxFont. On Windows, the underling GDI objects are a scarce resource
+and are cleaned up when a usage count goes to zero. On some platforms this
+class may not have any special functionality.
+
+Since the functionality of this class is platform-specific, it is not documented here in detail.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/gdiobj.h>
+
+\wxheading{See also}
+
+\helpref{wxPen}{wxpen}, \helpref{wxBrush}{wxbrush}, \helpref{wxFont}{wxfont}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxGDIObject::wxGDIObject}\label{wxgdiobjectconstr}
+
+\func{}{wxGDIObject}{\void}
+
+Default constructor.
+
+

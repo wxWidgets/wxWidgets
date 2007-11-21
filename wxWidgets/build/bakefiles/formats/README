@@ -1,0 +1,6 @@
+
+This directory contains misc Bakefile backends that are wxWidgets-specific:
+
+wx24dsp     - generates wx2.4-compatible VC++ project file (src/wxWindows.dsp)
+rpmspec     - generates part of .spec files with list of wxBase headers
+cbx_unix    - Borland C++BuilderX project files for configure-based build

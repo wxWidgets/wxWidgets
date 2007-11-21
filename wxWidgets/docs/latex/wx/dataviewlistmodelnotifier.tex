@@ -1,0 +1,90 @@
+
+\section{\class{wxDataViewListModelNotifier}}\label{wxdataviewlistmodelnotifier}
+
+A wxDataViewListModelNotifier instance is owned by a
+\helpref{wxDataViewListModel}{wxdataviewlistmodel}
+and mostly mirrors its interface. See the documentation
+of that class for further information.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/dataview.h>
+
+
+\membersection{wxDataViewListModelNotifier::wxDataViewListModelNotifier}\label{wxdataviewlistmodelnotifierwxdataviewlistmodelnotifier}
+
+\func{}{wxDataViewListModelNotifier}{\void}
+
+Constructor.
+
+\membersection{wxDataViewListModelNotifier::\destruct{wxDataViewListModelNotifier}}\label{wxdataviewlistmodelnotifierdtor}
+
+\func{}{\destruct{wxDataViewListModelNotifier}}{\void}
+
+Destructor.
+
+\membersection{wxDataViewListModelNotifier::Cleared}\label{wxdataviewlistmodelnotifiercleared}
+
+\func{bool}{Cleared}{\void}
+
+Called by owning list model.
+
+\membersection{wxDataViewListModelNotifier::GetOwner}\label{wxdataviewlistmodelnotifiergetowner}
+
+\func{wxDataViewListModel*}{GetOwner}{\void}
+
+Returns the owning \helpref{wxDataViewListModel}{wxdataviewlistmodel}.
+
+\membersection{wxDataViewListModelNotifier::RowAppended}\label{wxdataviewlistmodelnotifierrowappended}
+
+\func{bool}{RowAppended}{\void}
+
+Called by owning list model.
+
+\membersection{wxDataViewListModelNotifier::RowChanged}\label{wxdataviewlistmodelnotifierrowchanged}
+
+\func{bool}{RowChanged}{\param{unsigned int }{row}}
+
+Called by owning list model.
+
+\membersection{wxDataViewListModelNotifier::RowDeleted}\label{wxdataviewlistmodelnotifierrowdeleted}
+
+\func{bool}{RowDeleted}{\param{unsigned int }{row}}
+
+Called by owning list model.
+
+\membersection{wxDataViewListModelNotifier::RowInserted}\label{wxdataviewlistmodelnotifierrowinserted}
+
+\func{bool}{RowInserted}{\param{unsigned int }{before}}
+
+Called by owning list model.
+
+\membersection{wxDataViewListModelNotifier::RowPrepended}\label{wxdataviewlistmodelnotifierrowprepended}
+
+\func{bool}{RowPrepended}{\void}
+
+Called by owning list model.
+
+\membersection{wxDataViewListModelNotifier::RowsReordered}\label{wxdataviewlistmodelnotifierrowsreordered}
+
+\func{bool}{RowsReordered}{\param{unsigned int* }{new\_order}}
+
+Called by owning list model.
+
+\membersection{wxDataViewListModelNotifier::SetOwner}\label{wxdataviewlistmodelnotifiersetowner}
+
+\func{void}{SetOwner}{\param{wxDataViewListModel* }{owner}}
+
+Set the owning \helpref{wxDataViewListModel}{wxdataviewlistmodel}. This
+method is called by the \helpref{wxDataViewListModel::AddNotifier}{wxdataviewlistmodeladdnotifier}.
+
+\membersection{wxDataViewListModelNotifier::ValueChanged}\label{wxdataviewlistmodelnotifiervaluechanged}
+
+\func{bool}{ValueChanged}{\param{unsigned int }{col}, \param{unsigned int }{row}}
+
+Called by owning list model.
+

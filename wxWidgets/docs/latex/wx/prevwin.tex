@@ -1,0 +1,189 @@
+\section{\class{wxPreviewCanvas}}\label{wxpreviewcanvas}
+
+A preview canvas is the default canvas used by the print preview
+system to display the preview.
+
+\wxheading{Derived from}
+
+\helpref{wxScrolledWindow}{wxscrolledwindow}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxevthandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/print.h>
+
+\wxheading{See also}
+
+\helpref{wxPreviewFrame}{wxpreviewframe}, \helpref{wxPreviewControlBar}{wxpreviewcontrolbar},\rtfsp
+\helpref{wxPrintPreview}{wxprintpreview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPreviewCanvas::wxPreviewCanvas}\label{wxpreviewcanvasctor}
+
+\func{}{wxPreviewCanvas}{\param{wxPrintPreview* }{preview}, \param{wxWindow* }{parent},
+ \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},
+ \param{long}{ style = 0}, \param{const wxString\& }{name = ``canvas"}}
+
+Constructor.
+
+\membersection{wxPreviewCanvas::\destruct{wxPreviewCanvas}}\label{wxpreviewcanvasdtor}
+
+\func{}{\destruct{wxPreviewCanvas}}{\void}
+
+Destructor.
+
+\membersection{wxPreviewCanvas::OnPaint}\label{wxpreviewcanvasonpaint}
+
+\func{void}{OnPaint}{\param{wxPaintEvent\& }{event}}
+
+Calls \helpref{wxPrintPreview::PaintPage}{wxprintpreviewpaintpage} to refresh the canvas.
+
+\section{\class{wxPreviewControlBar}}\label{wxpreviewcontrolbar}
+
+This is the default implementation of the preview control bar, a panel
+with buttons and a zoom control. You can derive a new class from this and
+override some or all member functions to change the behaviour and appearance;
+or you can leave it as it is.
+
+\wxheading{Derived from}
+
+\helpref{wxPanel}{wxpanel}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/print.h>
+
+\wxheading{See also}
+
+\helpref{wxPreviewFrame}{wxpreviewframe}, \helpref{wxPreviewCanvas}{wxpreviewcanvas},\rtfsp
+\helpref{wxPrintPreview}{wxprintpreview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPreviewControlBar::wxPreviewControlbar}\label{wxpreviewcontrolbarctor}
+
+\func{}{wxPreviewControlBar}{\param{wxPrintPreview* }{preview}, \param{long}{ buttons}, \param{wxWindow* }{parent},
+ \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},
+ \param{long}{ style = 0}, \param{const wxString\& }{name = ``panel"}}
+
+Constructor.
+
+The buttons parameter may be a combination of the following, using the bitwise `or' operator.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxPREVIEW\_PRINT}{Create a print button.}
+\twocolitem{wxPREVIEW\_NEXT}{Create a next page button.}
+\twocolitem{wxPREVIEW\_PREVIOUS}{Create a previous page button.}
+\twocolitem{wxPREVIEW\_ZOOM}{Create a zoom control.}
+\twocolitem{wxPREVIEW\_DEFAULT}{Equivalent to a combination of wxPREVIEW\_PREVIOUS, wxPREVIEW\_NEXT and
+wxPREVIEW\_ZOOM.}
+\end{twocollist}
+
+\membersection{wxPreviewControlBar::\destruct{wxPreviewControlBar}}\label{wxpreviewcontrolbardtor}
+
+\func{}{\destruct{wxPreviewControlBar}}{\void}
+
+Destructor.
+
+\membersection{wxPreviewControlBar::CreateButtons}\label{wxpreviewcontrolbarcreatebuttons}
+
+\func{void}{CreateButtons}{\void}
+
+Creates buttons, according to value of the button style flags.
+
+\membersection{wxPreviewControlBar::GetPrintPreview}\label{wxpreviewcontrolbargetprintpreview}
+
+\func{wxPrintPreview *}{GetPrintPreview}{\void}
+
+Gets the print preview object associated with the control bar.
+
+\membersection{wxPreviewControlBar::GetZoomControl}\label{wxpreviewcontrolbargetzoomcontrol}
+
+\func{int}{GetZoomControl}{\void}
+
+Gets the current zoom setting in percent.
+
+\membersection{wxPreviewControlBar::SetZoomControl}\label{wxpreviewcontrolbarsetzoomcontrol}
+
+\func{void}{SetZoomControl}{\param{int }{percent}}
+
+Sets the zoom control.
+
+\section{\class{wxPreviewFrame}}\label{wxpreviewframe}
+
+This class provides the default method of managing the print preview interface.
+Member functions may be overridden to replace functionality, or the
+class may be used without derivation.
+
+\wxheading{Derived from}
+
+\helpref{wxFrame}{wxframe}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/print.h>
+
+\wxheading{See also}
+
+\helpref{wxPreviewCanvas}{wxpreviewcanvas}, \helpref{wxPreviewControlBar}{wxpreviewcontrolbar},\rtfsp
+\helpref{wxPrintPreview}{wxprintpreview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPreviewFrame::wxPreviewFrame}\label{wxpreviewframector}
+
+\func{}{wxPreviewFrame}{\param{wxPrintPreview* }{preview}, \param{wxWindow* }{parent}, \param{const wxString\& }{title},
+ \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& size }{size = wxDefaultSize},
+ \param{long}{ style = wxDEFAULT\_FRAME\_STYLE}, \param{const wxString\& }{name = ``frame"}}
+
+Constructor. Pass a print preview object plus other normal frame arguments.
+The print preview object will be destroyed by the frame when it closes.
+
+\membersection{wxPreviewFrame::\destruct{wxPreviewFrame}}\label{wxpreviewframedtor}
+
+\func{}{\destruct{wxPreviewFrame}}{\void}
+
+Destructor. 
+
+\membersection{wxPreviewFrame::CreateControlBar}\label{wxpreviewframecreatecontrolbar}
+
+\func{void}{CreateControlBar}{\void}
+
+Creates a wxPreviewControlBar. Override this function to allow
+a user-defined preview control bar object to be created.
+
+\membersection{wxPreviewFrame::CreateCanvas}\label{wxpreviewframecreatecanvas}
+
+\func{void}{CreateCanvas}{\void}
+
+Creates a wxPreviewCanvas. Override this function to allow
+a user-defined preview canvas object to be created.
+
+\membersection{wxPreviewFrame::Initialize}\label{wxpreviewframeinitialize}
+
+\func{void}{Initialize}{\void}
+
+Creates the preview canvas and control bar, and calls
+wxWindow::MakeModal(true) to disable other top-level windows
+in the application.
+
+This function should be called by the application prior to
+showing the frame.
+
+\membersection{wxPreviewFrame::OnCloseWindow}\label{wxpreviewframeonclosewindow}
+
+\func{void}{OnCloseWindow}{\param{wxCloseEvent\&}{ event}}
+
+Enables the other frames in the application, and deletes the print preview
+object, implicitly deleting any printout objects associated with the print
+preview object.
+

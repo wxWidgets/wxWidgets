@@ -1,0 +1,145 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        tchanges.tex
+%% Purpose:     Changes & Explanation of changes 
+%% Author:      Ryan Norton <wxprojects@comcast.net> (special thanks to ABX)
+%% Modified by: All wxWidgets Developers
+%% Created:     11/18/2004
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% NOTE: Explanations of changes are no longer put in changes.txt -
+%% instead they are put here
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Changes since 2.4.x}\label{changes}
+
+Listed here are the deprecated and incompatible changes made to wxWidgets.
+
+For other changes (such as additional features, bug fixes, etc.) see the changes.txt file located in the docs directory of your wxWidgets directory.
+
+\subsection{Incompatible changes since 2.4.x}\label{incompatiblesince24}
+
+\wxheading{wxEvent and its derivatives losing public variable members}
+
+\helpref{wxEvent}{wxevent} and its \helpref{derivatives}{eventhandlingoverview} do not have their public variable members public any more.
+Please use Get/Set accessors.
+
+\wxheading{New window repainting behaviour}
+
+Windows are no longer fully repainted when resized; use the new style \windowstyle{wxFULL\_REPAINT\_ON\_RESIZE} to force this (\windowstyle{wxNO\_FULL\_REPAINT\_ON\_RESIZE} still exists but doesn't do anything any more, this behaviour is default now).
+
+\wxheading{Window class member changes}
+
+wxWindow::m\_font and m\_backgroundColour/m\_foregroundColour are no longer always set, use \helpref{GetFont()}{wxwindowgetfont}, \helpref{GetBack}{wxwindowgetbackgroundcolour}/\helpref{ForegroundColour()}{wxwindowgetforegroundcolour} to access them, and they will be dynamically determined if necessary.
+
+\wxheading{Sizers Internal Overhaul}
+
+\helpref{The sizers}{sizeroverview} have had some fundamental internal changes in the 2.5.2 and 2.5.3 releases intended to make them do more of the "Right Thing" but also be as backwards compatible as possible. First a bit about how things used to work:
+
+\begin{itemize}\itemsep=0pt
+\item The size that a window had when \helpref{Add()}{wxsizeradd}ed to the sizer was assumed to be its minimal size, and that size would always be used by default when calculating layout size and positions, and the sizer itself would keep track of that minimal size.
+\item If the window item was \helpref{Add()}{wxsizeradd}ed with the \windowstyle{wxADJUST\_MINSIZE} flag then when layout was calculated the item's \helpref{GetBestSize}{wxwindowgetbestsize} would be used to reset the minimal size that the sizer used.
+\end{itemize}
+
+The main thrust of the new sizer changes was to make behaviour like \windowstyle{wxADJUST\_MINSIZE} be the default, and also to push the tracking of the minimal size to the window itself (since it knows its own needs) instead of having the sizer take care of it.  Consequently these changes were made:
+
+\begin{itemize}\itemsep=0pt
+\item The \windowstyle{wxFIXED\_MINSIZE} flag was added to allow for the old behaviour.  When this flag is used the size a window has when \helpref{Add()}{wxsizeradd}ed to the sizer will be treated as its minimal size and it will not be readjusted on each layout.
+\item The minimum size stored in wxWindow and settable with \helpref{SetSizeHints}{wxwindowsetsizehints} or \helpref{SetMinSize}{wxwindowsetminsize} will by default be used by the sizer (if it was set) as the minimal size of the sizer item.  If the minsize was not set (or was only partially set) then the window's best size is fetched and it is used instead of (or blended with) the minsize.  \helpref{wxWindow::GetBestFittingSize}{wxwindowgetbestfittingsize} was added to facilitate getting the size to be used by the sizers.
+\item The best size of a window is cached so it doesn't need to be recalculated on every layout. \helpref{wxWindow::InvalidateBestSize}{wxwindowinvalidatebestsize} was added and should be called (usually just internally in control methods) whenever something is done that would make the best size change.
+\item All \helpref{wxControls}{wxcontrol} were changed to set the minsize to what is passed to the constructor or their Create method, and also to set the real size of the control to the blending of the minsize and bestsize.  \helpref{wxWindow::SetBestFittingSize}{wxwindowsetbestfittingsize} was added to help with this, although most controls don't need to call it directly because it is called indirectly via the \helpref{SetInitialBestSize}{wxwindowsetinitialbestsize} called in the base classes.
+\end{itemize}
+
+At this time, the only situation known not to work the same as before is the following:
+
+\begin{verbatim}
+win = new SomeWidget(parent);
+win->SetSize(SomeNonDefaultSize);
+sizer->Add(win);
+\end{verbatim}
+
+In this case the old code would have used the new size as the minimum, but now the sizer will use the default size as the minimum rather than the size set later.  It is an easy fix though, just move the specification of the size to the constructor (assuming that SomeWidget will set its minsize there like the rest of the controls do) or call \helpref{SetMinSize}{wxwindowsetminsize} instead of \helpref{SetSize}{wxwindowsetsize}.
+
+In order to fit well with this new scheme of things, all \helpref{wxControls}{wxcontrol} or custom controls should do the following things. (Depending on how they are used you may also want to do the same thing for non-control custom windows.)
+
+\begin{itemize}\itemsep=0pt
+\item Either override or inherit a meaningful \helpref{DoGetBestSize}{wxwindowdogetbestsize} method that calculates whatever size is "best" for the control.  Once that size is calculated then there should normally be a call to \helpref{CacheBestSize}{wxwindowcachebestsize} to save it for later use, unless for some reason you want the best size to be recalculated on every layout.
+\item Any method that changes the attributes of the control such that the best size will change should call \helpref{InvalidateBestSize}{wxwindowinvalidatebestsize} so it will be recalculated the next time it is needed.
+\item The control's constructor and/or Create method should ensure that the minsize is set to the size passed in, and that the control is sized to a blending of the min size and best size.  This can be done by calling \helpref{SetBestFittingSize}{wxwindowsetbestfittingsize}.
+\end{itemize}
+
+\wxheading{Massive wxURL Rewrite}
+
+\helpref{wxURL}{wxurl} has undergone some radical changes.
+
+\begin{itemize}\itemsep=0pt
+\item Many accessors of \helpref{wxURL}{wxurl} - GetHostName, GetProtocolName, and GetPath, have been replaced by its parent's (\helpref{wxURI}{wxuri}) counterparts - \helpref{GetServer}{wxurigetserver}, \helpref{GetScheme}{wxurigetscheme}, and \helpref{GetPath}{wxurigetpath}, respectively.
+\item ConvertToValidURI has been replaced by \helpref{wxURI}{wxuri}.  Do not use ConvertToValidURI for future applications.
+\item ConvertFromURI has been replaced by \helpref{wxURI::Unescape}{wxuriunescape}.
+\end{itemize}
+
+
+\wxheading{Minor incompatible changes since 2.4.x}
+
+\begin{itemize}\itemsep=0pt
+\item no initialization/cleanup can be done in wxApp's constructor or destructor because they are now called much earlier/later than before; please move any exiting code from there to \helpref{wxApp::OnInit()}{wxapponinit}/\helpref{OnExit()}{wxapponexit} 
+\item also, \helpref{OnExit()}{wxapponexit} is not called if \helpref{OnInit()}{wxapponinit} fails
+\item finally the program exit code is \helpref{OnRun()}{wxapponrun} return value, not \helpref{OnExit()}{wxapponexit} one
+\item \texttt{wxTheApp} can't be assigned to any longer, use \helpref{wxApp::SetInstance()}{wxappsetinstance} instead
+\item \helpref{wxFileType::GetIcon()}{wxfiletypegeticon} returns \helpref{wxIconLocation}{wxiconlocation}, not \helpref{wxIcon}{wxicon}
+\item wxColourDatabase is not a \helpref{wxList}{wxlist} any more, use AddColour to add new colours
+\item wxWindow::Clear() is now called ClearBackground()
+\item pointer returned by wxFont::GetNativeFontInfo() must not be deleted now
+\item wxMouseEvent::Moving() doesn't return true if mouse is being dragged any more
+\item (most) controls now inherit parents colours by default, override ShouldInheritColours() to return false if you don't want this to happen
+\item \helpref{wxApp::SendIdleEvents()}{wxappsendidleevents} now takes 2 arguments
+\item wxTabView::GetLayers() changed return type from \helpref{wxList\&}{wxlist} to wxTabLayerList\& (when WXWIN\_COMPATIBILITY\_2\_4 == 0)
+\item wxID\_SEPARATOR (id used for the menu separators) value changed from -1 to -2
+\item wxGetNumberFromUser() is now in separate wx/numdlg.h, not wx/textdlg.h
+\item wxChoice and wxCombobox now handle their size in the same way as in all the other ports under MSW, new code is actually correct but different from weird stuff they were doing before so the behaviour of your programs might change
+\item \helpref{wxTaskBarIcon}{wxtaskbaricon} objects must now be destroyed before the application can exit.  Previously, the application terminated if there were no top level windows; now it terminates if there are no top level windows or taskbar icons left.
+\item \helpref{wxZlibInputStream}{wxzlibinputstream} is not by default compatible with the output of the 2.4.x version of \helpref{wxZlibOutputStream}{wxzliboutputstream}. However, there is a compatibility mode, switched on by passing wxZLIB\_24COMPATIBLE to the constructor.
+\item when WXWIN\_COMPATIBILITY\_2\_4 == 0 \helpref{wxHashTable}{wxhashtable} uses a new implementation not using \helpref{wxList}{wxlist} keyed interface (the same used when wxUSE\_STL == 1), the only incompatibility being that Next() returns a wxHashTable::Node* instead of a wxNode*.
+\item non-const wxDC methods GetBackground(), GetBrush(), GetFont() and GetPen() as well as wxWindow methods GetFont() and GetCursor() don't exist any more, please fix your code -- it never worked correctly anyhow if you modified the objects returned by these methods so you should simply switch to using const methods.
+\item \helpref{wxWindow::GetFont()}{wxwindowgetfont} now returns \helpref{wxFont}{wxfont} object instead of reference
+\item EVT\_XXX macros are now type-safe; code that uses wrong type for event handler's argument will no longer compile.
+\item Identical functionality of wxFileDialog::ParseWildcard, wxGenericDirCtrl::ParseFilter, Motif and MSW parsing native dialogs is now accessible in ::wxParseCommonDialogsFilter
+\item wxNotebookSizer and wxBookCtrlSizer are now deprecated -- they are no longer needed, you can treat wxNotebook as any other control and put it directly into the sizer that was wxNotebookSizer's parent sizer in old code.
+\item \helpref{wxFile}{wxfile} methods now return either wxFileOffset or wxFileSize\_t which may be a 64 bit integer type, even on 32 bit platforms, instead of off\_t and so the return value of \helpref{wxFile::Length()}{wxfilelength}, for example, shouldn't be assigned to off\_t variable any more (the compiler might warn you about this)
+\item wxListItem::m\_data is now of type wxUIntPtr, not long, for compatibility with 64 bit systems
+\item wxSizer::Add/Insert returns pointer to wxSizerItem just added so conditions writeen with if(Add(..)==true) will not work. Use if(Add(..)) instead.
+\item New \helpref{wxBrush::IsHatch()}{wxbrushishatch} checking for brush type replaces IS\_HATCH macro.
+\item wxSystemSettings::GetSystem*() members deprecated and replaced with wxSystemSettings::Get*().
+\end{itemize}
+
+\subsection{Deprecated changes since 2.4.x}\label{deprecatedsince24}
+
+\begin{itemize}\itemsep=0pt
+\item wxURL::GetInputStream() and similar functionality has been deprecated in favor of other ways of connecting, such as though sockets or wxFileSystem.
+\item wxDocManager::GetNoHistoryFiles() renamed to \helpref{GetHistoryFilesCount()}{wxdocmanagergethistoryfilescount}
+\item wxSizer::Remove(wxWindow *), use Detach() instead (it is more clear)
+\item wxSizer::Set/GetOption(): use Set/GetProportion() instead
+\item wxKeyEvent::KeyCode(): use GetKeyCode instead
+\item wxList::Number, First, Last, Nth: use GetCount, GetFirst/Last, Item instead
+\item wxNode::Next, Previous, Data: use GetNext, GetPrevious, GetData instead
+\item wxListBase::operator wxList\&(): use typesafe lists instead
+\item wxTheFontMapper: use \helpref{wxFontMapper::Get()}{wxfontmapperget} instead
+\item wxStringHashTable: use wxHashMap instead
+\item wxHashTableLong: use wxHashMap instead
+\item wxArrayString::GetStringArray: use wxCArrayString or alternative wxWidgets methods taking wxArrayString
+\item wxArrayString::Remove(index, count): use RemoveAt instead
+\item wxTreeItemId conversion to long is deprecated and shouldn't be used
+\item wxTreeCtrl::GetFirst/NextChild() 2nd argument now has type wxTreeItemIdValue and not long, please change declarations of "cookie"s in your code accordingly -- otherwise your code won't work on 64 bit platforms
+\item (MSW only) wxWindow::GetUseCtl3D(), GetTransparentBackground() and SetTransparent() as well as wxNO\_3D and wxUSER\_COLOURS styles
+\item \helpref{wxList}{wxlist} keyed interface: use \helpref{wxHashMap}{wxhashmap} instead
+\item wxColourDatabase::FindColour(): use \helpref{Find()}{wxcolourdatabasefind} instead (NOTE: it has a different return type)
+\item wxHashTable::Next: use wxHashTable::Node* or wxHashTable::compatibility\_iterator to store the return value
+\item wxWave class; use wxSound instead
+\item The wxHIDE\_READONLY flag for wxFileDialog was not implemented and has now been removed
+\item wxTaskBarIcon::OnXXX() virtual methods: use events instead
+\item obsolete and not used wxUSE\_GENERIC\_DIALOGS\_IN\_MSW has been removed
+\item wxDbTable::wxDbTable with wxChar* deprecated, same with wxString\& instead.
+\end{itemize}
+

@@ -1,0 +1,42 @@
+
+[Icons]
+    Name: {group}\Tex2rtf; Filename: {app}\bin\tex2rtf.exe; WorkingDir: {app}\bin; IconFilename: {app}\bin\tex2rtf.exe; IconIndex: 0
+    Name: {group}\Tex2rtf Help; Filename: {app}\bin\tex2rtf.chm; WorkingDir: {app}\bin; IconIndex: 0; Flags: useapppaths
+    Name: {group}\Changes; Filename: {app}\docs\changes.txt; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
+    Name: {group}\Readme; Filename: {app}\docs\readme.txt; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
+    Name: {group}\Compiling wxWidgets; Filename: {app}\docs\msw\install.txt; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
+    Name: {group}\wxWidgets Manual; Filename: {app}\docs\htmlhelp\wx.chm; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
+;    Name: {group}\Tutorial; Filename: {app}\docs\pdf\wxTutorial.pdf; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
+    Name: {group}\Document Index; Filename: {app}\docs\html\index.htm; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
+    Name: {group}\Widgets Sample; Filename: {app}\bin\widgets.exe; WorkingDir: {app}\bin; IconFilename: {app}\bin\widgets.exe; IconIndex: 0
+    Name: "{group}\Uninstall wxWidgets %VERSION%"; Filename: "{uninstallexe}"
+
+[INI]
+
+[Registry]
+    Root: HKCU; SubKey: Environment; ValueName: WXWIN; ValueType: string; ValueData: {app}; Flags: createvalueifdoesntexist uninsdeletevalue
+; if bakefile is installed, tell it where to find wx presets
+    Root: HKCU; SubKey: Environment; ValueName: BAKEFILE_PATHS; ValueType: expandsz; ValueData: %wxwin%/build/bakefiles/wxpresets; Flags: createvalueifdoesntexist uninsdeletevalue
+
+[UninstallDelete]
+
+[InstallDelete]
+
+[Run]
+
+[UninstallRun]
+
+
+; ==============================================
+; The lines below are used by ScriptMaker
+; They are not required by Inno Setup
+; DO NOT DELETE THEM or you may be unable to reload the script
+
+;[ScriptSetup]
+;VerNum=2.5.2
+;InnoVer=1.3
+;AddVerTo=AppVerName
+;SetupFilename=setup.exe
+;OutputFolder=C:\wx2dev\wxWidgets\deliver
+;CopyrightText=Copyright © The wxWidgets Team
+

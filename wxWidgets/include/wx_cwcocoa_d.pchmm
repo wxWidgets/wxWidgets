@@ -1,0 +1,38 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        include/wx_cwcocoa_d.pchmm
+// Purpose:     Metrowerks Obj-C++ Precompiled Header File (wxCocoa Debug)
+// Author:      Tommy Tian (tommy.tian@webex.com)
+// Modified by: David Elliott
+// Created:     10/04/2004
+// RCS-ID:      $Id$
+// Copyright:   (c) Tommy Tian
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
+#if __option (profile)	
+	#error "profiling is not supported for debug targets"
+#else
+#if __mwlinker__
+	#pragma precompile_target "wx_cocoaMacOSXmm_d.mch"
+#else
+	#pragma precompile_target "wx_cocoaMach-Omm_d.mch"
+#endif
+#endif
+
+#pragma once on
+#define WX_PRECOMP
+#define __WXDEBUG__ 1
+#define wxUSE_GUI 1
+#define TARGET_CARBON 1
+#define OLDP2C 1
+#ifdef __MACH__
+	#define __DARWIN__
+	#define __CF_USE_FRAMEWORK_INCLUDES__
+	#define __NOEXTENSIONS__
+	#define __UNIX__
+	#define __UNIX_LIKE__
+#endif
+#include "wx/wx_cwcocoa_cm.h"
+#ifdef WX_PRECOMP
+#include "wx/wxprec.h"
+#endif

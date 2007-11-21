@@ -1,0 +1,335 @@
+\section{\class{wxComboBox}}\label{wxcombobox}
+
+A combobox is like a combination of an edit control and a listbox. It can be
+displayed as static list with editable or read-only text field; or a drop-down list with
+text field; or a drop-down list without a text field.
+
+A combobox permits a single selection only. Combobox items are numbered from zero.
+
+If you need a customized combobox, have a look at \helpref{wxComboCtrl}{wxcomboctrl},
+\helpref{wxOwnerDrawnComboBox}{wxownerdrawncombobox}, \helpref{wxComboPopup}{wxcombopopup}
+and the ready-to-use \helpref{wxBitmapComboBox}{wxbitmapcombobox}.
+
+\wxheading{Derived from}
+
+\helpref{wxControlWithItems}{wxcontrolwithitems}\\
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/combobox.h>
+
+\wxheading{Window styles}
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxCB\_SIMPLE}}{Creates a combobox with a permanently displayed list. Windows only. }
+\twocolitem{\windowstyle{wxCB\_DROPDOWN}}{Creates a combobox with a drop-down list.}
+\twocolitem{\windowstyle{wxCB\_READONLY}}{Same as wxCB\_DROPDOWN but only the
+strings specified as the combobox choices can be selected, it is impossible to
+select (even from a program) a string which is not in the choices list.}
+\twocolitem{\windowstyle{wxCB\_SORT}}{Sorts the entries in the list alphabetically.}
+\twocolitem{\windowstyle{wxTE\_PROCESS\_ENTER}}{The control will generate
+the event wxEVT\_COMMAND\_TEXT\_ENTER (otherwise pressing Enter key
+is either processed internally by the control or used for navigation between
+dialog controls). Windows only.}
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{Event handling}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_COMBOBOX(id, func)}}{Process a wxEVT\_COMMAND\_COMBOBOX\_SELECTED event,
+when an item on the list is selected. Note that calling
+\helpref{GetValue}{wxcomboboxgetvalue} returns the new value of selection.}
+\twocolitem{{\bf EVT\_TEXT(id, func)}}{Process a wxEVT\_COMMAND\_TEXT\_UPDATED event,
+when the combobox text changes.}
+\twocolitem{{\bf EVT\_TEXT\_ENTER(id, func)}}{Process a wxEVT\_COMMAND\_TEXT\_ENTER event,
+when <RETURN> is pressed in the combobox.}
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{wxListBox}{wxlistbox}, \helpref{wxTextCtrl}{wxtextctrl}, \helpref{wxChoice}{wxchoice},
+\rtfsp\helpref{wxCommandEvent}{wxcommandevent}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxComboBox::wxComboBox}\label{wxcomboboxctor}
+
+\func{}{wxComboBox}{\void}
+
+Default constructor.
+
+\func{}{wxComboBox}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{value = ``"}, \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{int}{ n = 0}, \param{const wxString }{choices[] = NULL},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``comboBox"}}
+
+\func{}{wxComboBox}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{value}, \param{const wxPoint\&}{ pos}, \param{const wxSize\&}{ size},\rtfsp
+\param{const wxArrayString\& }{choices},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``comboBox"}}
+
+Constructor, creating and showing a combobox.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Window identifier. A value of -1 indicates a default value.}
+
+\docparam{value}{Initial selection string. An empty string indicates no selection.}
+
+\docparam{pos}{Window position.}
+
+\docparam{size}{Window size. If the default size (-1, -1) is specified then the window is sized
+appropriately.}
+
+\docparam{n}{Number of strings with which to initialise the control.}
+
+\docparam{choices}{An array of strings with which to initialise the control.}
+
+\docparam{style}{Window style. See \helpref{wxComboBox}{wxcombobox}.}
+
+\docparam{validator}{Window validator.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxComboBox::Create}{wxcomboboxcreate}, \helpref{wxValidator}{wxvalidator}
+
+\pythonnote{The wxComboBox constructor in wxPython reduces the {\tt n}
+and {\tt choices} arguments are to a single argument, which is
+a list of strings.}
+
+\perlnote{In wxPerl there is just an array reference in place of {\tt n}
+and {\tt choices}.}
+
+
+\membersection{wxComboBox::\destruct{wxComboBox}}\label{wxcomboboxdtor}
+
+\func{}{\destruct{wxComboBox}}{\void}
+
+Destructor, destroying the combobox.
+
+
+\membersection{wxComboBox::Create}\label{wxcomboboxcreate}
+
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{value = ``"}, \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{int}{ n}, \param{const wxString }{choices[]},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``comboBox"}}
+
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{value}, \param{const wxPoint\&}{ pos}, \param{const wxSize\&}{ size},\rtfsp
+\param{const wxArrayString\& }{choices},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``comboBox"}}
+
+Creates the combobox for two-step construction. Derived classes
+should call or replace this function. See \helpref{wxComboBox::wxComboBox}{wxcomboboxctor}\rtfsp
+for further details.
+
+
+\membersection{wxComboBox::CanCopy}\label{wxcomboboxcancopy}
+
+\constfunc{bool}{CanCopy}{\void}
+
+Returns true if the combobox is editable and there is a text selection to copy to the clipboard.
+Only available on Windows.
+
+
+\membersection{wxComboBox::CanCut}\label{wxcomboboxcancut}
+
+\constfunc{bool}{CanCut}{\void}
+
+Returns true if the combobox is editable and there is a text selection to copy to the clipboard.
+Only available on Windows.
+
+
+\membersection{wxComboBox::CanPaste}\label{wxcomboboxcanpaste}
+
+\constfunc{bool}{CanPaste}{\void}
+
+Returns true if the combobox is editable and there is text on the clipboard that can be pasted into the
+text field. Only available on Windows.
+
+
+\membersection{wxComboBox::CanRedo}\label{wxcomboboxcanredo}
+
+\constfunc{bool}{CanRedo}{\void}
+
+Returns true if the combobox is editable and the last undo can be redone.
+Only available on Windows.
+
+
+\membersection{wxComboBox::CanUndo}\label{wxcomboboxcanundo}
+
+\constfunc{bool}{CanUndo}{\void}
+
+Returns true if the combobox is editable and the last edit can be undone.
+Only available on Windows.
+
+
+\membersection{wxComboBox::Copy}\label{wxcomboboxcopy}
+
+\func{void}{Copy}{\void}
+
+Copies the selected text to the clipboard.
+
+
+\membersection{wxComboBox::Cut}\label{wxcomboboxcut}
+
+\func{void}{Cut}{\void}
+
+Copies the selected text to the clipboard and removes the selection.
+
+
+\membersection{wxComboBox::GetCurrentSelection}\label{wxcomboboxgetcurrentselection}
+
+\constfunc{int}{GetCurrentSelection}{\void}
+
+This function does the same things as 
+\helpref{wxChoice::GetCurrentSelection}{wxchoicegetcurrentselection} and
+returns the item currently selected in the dropdown list if it's open or the
+same thing as \helpref{GetSelection}{wxcontrolwithitemsgetselection} otherwise.
+
+
+\membersection{wxComboBox::GetInsertionPoint}\label{wxcomboboxgetinsertionpoint}
+
+\constfunc{long}{GetInsertionPoint}{\void}
+
+Returns the insertion point for the combobox's text field.
+
+\textbf{Note:} Under wxMSW, this function always returns $0$ if the combobox
+doesn't have the focus.
+
+
+\membersection{wxComboBox::GetLastPosition}\label{wxcomboboxgetlastposition}
+
+\constfunc{virtual wxTextPos}{GetLastPosition}{\void}
+
+Returns the last position in the combobox text field.
+
+
+\membersection{wxComboBox::GetSelection}\label{wxcomboboxgetselection}
+
+\constfunc{void}{GetSelection}{\param{long *}{from}, \param{long *}{to}}
+
+This is the same as \helpref{wxTextCtrl::GetSelection}{wxtextctrlgetselection} 
+for the text control which is part of the combobox. Notice that this is a
+different method from \helpref{wxControlWithItems::GetSelection}{wxcontrolwithitemsgetselection}.
+
+Currently this method is only implemented in wxMSW and wxGTK.
+
+
+\membersection{wxComboBox::GetValue}\label{wxcomboboxgetvalue}
+
+\constfunc{wxString}{GetValue}{\void}
+
+Returns the current value in the combobox text field.
+
+
+\membersection{wxComboBox::Paste}\label{wxcomboboxpaste}
+
+\func{void}{Paste}{\void}
+
+Pastes text from the clipboard to the text field.
+
+
+\membersection{wxComboBox::Redo}\label{wxcomboboxredo}
+
+\func{void}{Redo}{\void}
+
+Redoes the last undo in the text field. Windows only.
+
+
+\membersection{wxComboBox::Replace}\label{wxcomboboxreplace}
+
+\func{void}{Replace}{\param{long}{ from}, \param{long}{ to}, \param{const wxString\& }{text}}
+
+Replaces the text between two positions with the given text, in the combobox text field.
+
+\wxheading{Parameters}
+
+\docparam{from}{The first position.}
+
+\docparam{to}{The second position.}
+
+\docparam{text}{The text to insert.}
+
+
+\membersection{wxComboBox::Remove}\label{wxcomboboxremove}
+
+\func{void}{Remove}{\param{long}{ from}, \param{long}{ to}}
+
+Removes the text between the two positions in the combobox text field.
+
+\wxheading{Parameters}
+
+\docparam{from}{The first position.}
+
+\docparam{to}{The last position.}
+
+
+\membersection{wxComboBox::SetInsertionPoint}\label{wxcomboboxsetinsertionpoint}
+
+\func{void}{SetInsertionPoint}{\param{long}{ pos}}
+
+Sets the insertion point in the combobox text field.
+
+\wxheading{Parameters}
+
+\docparam{pos}{The new insertion point.}
+
+
+\membersection{wxComboBox::SetInsertionPointEnd}\label{wxcomboboxsetinsertionpointend}
+
+\func{void}{SetInsertionPointEnd}{\void}
+
+Sets the insertion point at the end of the combobox text field.
+
+
+\membersection{wxComboBox::SetSelection}\label{wxcomboboxsetselection}
+
+\func{void}{SetSelection}{\param{long}{ from}, \param{long}{ to}}
+
+Selects the text between the two positions, in the combobox text field.
+
+\wxheading{Parameters}
+
+\docparam{from}{The first position.}
+
+\docparam{to}{The second position.}
+
+\pythonnote{This method is called {\tt SetMark} in wxPython, {\tt SetSelection}
+name is kept for
+\helpref{wxControlWithItems::SetSelection}{wxcontrolwithitemssetselection}.}
+
+
+\membersection{wxComboBox::SetValue}\label{wxcomboboxsetvalue}
+
+\func{void}{SetValue}{\param{const wxString\& }{text}}
+
+Sets the text for the combobox text field.
+
+{\bf NB:} For a combobox with {\tt wxCB\_READONLY} style the string must be in
+the combobox choices list, otherwise the call to SetValue() is ignored.
+
+\wxheading{Parameters}
+
+\docparam{text}{The text to set.}
+
+
+\membersection{wxComboBox::Undo}\label{wxcomboboxundo}
+
+\func{void}{Undo}{\void}
+
+Undoes the last edit in the text field. Windows only.
+

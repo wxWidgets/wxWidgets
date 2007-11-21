@@ -1,0 +1,113 @@
+\section{\class{wxClientData}}\label{wxclientdata}
+
+All classes deriving from \helpref{wxEvtHandler}{wxevthandler}
+(such as all controls and \helpref{wxApp}{wxapp})
+can hold arbitrary data which is here referred to as "client data".
+This is useful e.g. for scripting languages which need to handle
+shadow objects for most of wxWidgets' classes and which store
+a handle to such a shadow class as client data in that class.
+This data can either be of type void - in which case the data
+{\it container} does not take care of freeing the data again
+or it is of type wxClientData or its derivatives. In that case the
+container (e.g. a control) will free the memory itself later.
+Note that you {\it must not} assign both void data and data
+derived from the wxClientData class to a container.
+
+Some controls can hold various items and these controls can
+additionally hold client data for each item. This is the case for
+\helpref{wxChoice}{wxchoice}, \helpref{wxComboBox}{wxcombobox}
+and \helpref{wxListBox}{wxlistbox}. \helpref{wxTreeCtrl}{wxtreectrl}
+has a specialized class \helpref{wxTreeItemData}{wxtreeitemdata}
+for each item in the tree.
+
+If you want to add client data to your own classes, you may
+use the mix-in class \helpref{wxClientDataContainer}{wxclientdatacontainer}.
+
+\wxheading{Include files}
+
+<wx/clntdata.h>
+
+\wxheading{See also}
+
+\helpref{wxEvtHandler}{wxevthandler}, \helpref{wxTreeItemData}{wxtreeitemdata},
+\helpref{wxStringClientData}{wxstringclientdata}, \helpref{wxClientDataContainer}{wxclientdatacontainer}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxClientData::wxClientData}\label{wxclientdatawxclientdata}
+
+\func{}{wxClientData}{\void}
+
+Constructor.
+
+\membersection{wxClientData::\destruct{wxClientData}}\label{wxclientdatadtor}
+
+\func{}{\destruct{wxClientData}}{\void}
+
+Virtual destructor.
+
+\section{\class{wxClientDataContainer}}\label{wxclientdatacontainer}
+
+This class is a mixin that provides storage and management of "client
+data." This data can either be of type void - in which case the data
+{\it container} does not take care of freeing the data again
+or it is of type wxClientData or its derivatives. In that case the
+container will free the memory itself later.
+Note that you {\it must not} assign both void data and data
+derived from the wxClientData class to a container.
+
+NOTE: This functionality is currently duplicated in wxEvtHandler in
+order to avoid having more than one vtable in that class hierarchy.
+
+\wxheading{See also}
+
+\helpref{wxEvtHandler}{wxevthandler}, \helpref{wxClientData}{wxclientdata}
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/clntdata.h>
+
+\wxheading{Data structures}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxClientDataContainer::wxClientDataContainer}\label{wxclientdatacontainerwxclientdatacontainer}
+
+\func{}{wxClientDataContainer}{\void}
+
+
+\membersection{wxClientDataContainer::\destruct{wxClientDataContainer}}\label{wxclientdatacontainerdtor}
+
+\func{}{\destruct{wxClientDataContainer}}{\void}
+
+
+\membersection{wxClientDataContainer::GetClientData}\label{wxclientdatacontainergetclientdata}
+
+\constfunc{void*}{GetClientData}{\void}
+
+Get the untyped client data.
+
+\membersection{wxClientDataContainer::GetClientObject}\label{wxclientdatacontainergetclientobject}
+
+\constfunc{wxClientData*}{GetClientObject}{\void}
+
+Get a pointer to the client data object.
+
+\membersection{wxClientDataContainer::SetClientData}\label{wxclientdatacontainersetclientdata}
+
+\func{void}{SetClientData}{\param{void* }{data}}
+
+Set the untyped client data.
+
+\membersection{wxClientDataContainer::SetClientObject}\label{wxclientdatacontainersetclientobject}
+
+\func{void}{SetClientObject}{\param{wxClientData* }{data}}
+
+Set the client data object. Any previous object will be deleted.
+

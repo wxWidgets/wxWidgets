@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=PyShell
+Comment=GUI Python Shell
+Exec=/usr/bin/pyshell
+Icon=/usr/share/pixmaps/pyshell.png
+Terminal=false
+Type=Application
+Categories=Application;Development;
+StartupNotify=true

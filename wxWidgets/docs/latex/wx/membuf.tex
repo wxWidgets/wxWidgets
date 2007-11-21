@@ -1,0 +1,130 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        membuf.tex
+%% Purpose:     wxMemoryBuffer class documentation
+%% Author:      Roger Gammans
+%% Modified by:
+%% Created:     08.06.2004
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Roger Gammans
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxMemoryBuffer}}\label{wxmemorybuffer}
+
+A {\bf wxMemoryBuffer} is a useful data structure for storing arbitrary sized blocks
+of memory. wxMemoryBuffer guarantees deletion of the memory block when the object
+is destroyed. 
+
+\wxheading{Derived from}
+
+None
+
+\wxheading{Include files}
+
+<wx/buffer.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxMemoryBuffer::wxMemoryBuffer}\label{wxmemorybufferctor}
+
+\func{}{wxMemoryBuffer}{\param{const wxMemoryBuffer\&}{ src}}
+
+Copy constructor, refcounting is used for performance , but wxMemoryBuffer
+is not a copy-on-write structure so changes made to one buffer effect
+all copies made from it.
+
+\func{}{wxMemoryBuffer}{\param{size\_t}{ size}}
+
+Create a new buffer.
+
+\docparam{size}{size of new buffer.}
+
+\membersection{wxMemoryBuffer::GetData}\label{wxmemorybuffergetdata}
+
+\func{void* }{GetData}{\void}
+
+Return a pointer to the data in the buffer.
+
+\membersection{wxMemoryBuffer::GetBufSize}\label{wxmemorybuffergetbufsize}
+
+\func{size\_t}{GetBufSize}{\void}
+
+Returns the size of the buffer.
+
+\membersection{wxMemoryBuffer::GetDataLen}\label{wxmemorybuffergetdatalen}
+
+\func{size\_t}{GetDataLen}{\void}
+
+Returns the length of the valid data in the buffer.
+
+\membersection{wxMemoryBuffer::SetBufSize}\label{wxmemorybuffersetbufsize}
+
+\func{void}{SetBufSize}{\param{size\_t}{ size}}
+
+Ensures the buffer has at least {\it size} bytes available.
+
+\membersection{wxMemoryBuffer::SetDataLen}\label{wxmemorybuffersetdatalen}
+
+\func{void}{SetDataLen}{\param{size\_t}{ size}}
+
+Sets the length of the data stored in the buffer.  Mainly useful for truncating existing data.
+
+\docparam{size}{New length of the valid data in the buffer. This is
+distinct from the allocated size}
+
+\membersection{wxMemoryBuffer::GetWriteBuf}\label{wxmemorybuffergetwritebuf}
+
+\func{void *}{GetWriteBuf}{\param{size\_t}{ sizeNeeded}}
+
+Ensure the buffer is big enough and return a pointer to the
+buffer which can be used to directly write into the buffer
+up to {\it sizeNeeded} bytes.
+
+\membersection{wxMemoryBuffer::UngetWriteBuf}\label{wxmemorybufferungetwritebuf}
+
+\func{void}{UngetWriteBuf}{\param{size\_t}{ sizeUsed}}
+
+Update the buffer after completing a direct write, which
+you must have used GetWriteBuf() to initialise.
+
+\docparam{sizeUsed}{The amount of data written in to buffer
+by the direct write}
+
+\membersection{wxMemoryBuffer::GetAppendBuf}\label{wxmemorybuffergetappendbuf}
+
+\func{void *}{GetAppendBuf}{\param{size\_t}{ sizeNeeded}}
+
+Ensure that the buffer is big enough and return a pointer to the start
+of the empty space in the buffer. This pointer can be used to directly 
+write data into the buffer, this new data will be appended to
+the existing data.
+
+\docparam{sizeNeeded}{Amount of extra space required in the buffer for
+the append operation}
+
+\membersection{wxMemoryBuffer::UngetAppendBuf}\label{wxmemorybufferungetappendbuf}
+
+\func{void}{UngetAppendBuf}{\param{size\_t}{ sizeUsed}}
+
+Update the length after completing a direct append, which
+you must have used GetAppendBuf() to initialise.
+
+\docparam{sizeUsed}{This is the amount of new data that has been 
+appended.}
+
+\membersection{wxMemoryBuffer::AppendByte}\label{wxmemorybufferappendbyte}
+
+\func{void}{AppendByte}{\param{char}{ data}}
+
+Append a single byte to the buffer.
+
+\docparam{data}{New byte to append to the buffer.}
+
+\membersection{wxMemoryBuffer::AppendData}\label{wxmemorybufferappenddata}
+
+\func{void}{AppendData}{\param{void*}{ data}, \param{size\_t}{ len}}
+
+Single call to append a data block to the buffer.
+
+\docparam{data}{Pointer to block to append to the buffer.}
+\docparam{len}{Length of data to append.}

@@ -1,0 +1,61 @@
+
+\section{\class{wxGBPosition}}\label{wxgbposition}
+
+This class represents the position of an item in a virtual grid of
+rows and columns managed by a \helpref{wxGridBagSizer}{wxgridbagsizer}.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/gbsizer.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxGBPosition::wxGBPosition}\label{wxgbpositionwxgbposition}
+
+\func{}{wxGBPosition}{\void}
+
+\func{}{wxGBPosition}{\param{int }{row}, \param{int }{col}}
+
+Construct a new wxGBPosition, optionally setting the row and column.
+The default is (0,0).
+
+\membersection{wxGBPosition::GetCol}\label{wxgbpositiongetcol}
+
+\constfunc{int}{GetCol}{\void}
+
+Get the current column value.
+
+\membersection{wxGBPosition::GetRow}\label{wxgbpositiongetrow}
+
+\constfunc{int}{GetRow}{\void}
+
+Get the current row value.
+
+\membersection{wxGBPosition::SetCol}\label{wxgbpositionsetcol}
+
+\func{void}{SetCol}{\param{int }{col}}
+
+Set a new column value.
+
+\membersection{wxGBPosition::SetRow}\label{wxgbpositionsetrow}
+
+\func{void}{SetRow}{\param{int }{row}}
+
+Set a new row value.
+
+\membersection{wxGBPosition::operator!}\label{wxgbpositionoperatorunknown}
+
+\constfunc{bool}{operator!}{\param{const wxGBPosition\& }{p}}
+
+Is the wxGBPosition valid?  (An invalid wxGBPosition is (-1,-1). )
+
+\membersection{wxGBPosition::operator==}\label{wxgbpositionoperatorequal}
+
+\constfunc{bool operator}{operator==}{\param{const wxGBPosition\& }{p}}
+
+Compare equality of two wxGBPositions.
+

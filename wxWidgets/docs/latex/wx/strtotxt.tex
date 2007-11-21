@@ -1,0 +1,76 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        strtotxt.tex
+%% Purpose:     wxStreamToTextRedirector documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     19.10.01
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2001 Vadim Zeitlin <vadim@wxwindows.org>
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxStreamToTextRedirector}}\label{wxstreamtotextredirector}
+
+This class can be used to (temporarily) redirect all output sent to a C++
+ostream object to a \helpref{wxTextCtrl}{wxtextctrl} instead.
+
+{\bf NB:} Some compilers and/or build configurations don't support multiply
+inheriting \helpref{wxTextCtrl}{wxtextctrl} from {\tt std::streambuf} in which
+case this class is not compiled in. You also must have {\tt wxUSE\_STD\_IOSTREAM} 
+option on (i.e. set to $1$) in your setup.h to be able to use it. Under Unix,
+specify {\tt --enable-std\_iostreams} switch when running configure for this.
+
+Example of usage:
+{\small%
+\begin{verbatim}
+  using namespace std;
+
+  wxTextCtrl *text = new wxTextCtrl(...);
+
+  {
+    wxStreamToTextRedirector redirect(text);
+
+    // this goes to the text control
+    cout << "Hello, text!" << endl;
+  }
+
+  // this goes somewhere else, presumably to stdout
+  cout << "Hello, console!" << endl;
+\end{verbatim}
+}%
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/textctrl.h>
+
+\wxheading{See also}
+
+\helpref{wxTextCtrl}{wxtextctrl}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxStreamToTextRedirector::wxStreamToTextRedirector}\label{wxstreamtotextredirectorctor}
+
+\func{}{wxStreamToTextRedirector}{\param{wxTextCtrl }{*text}, \param{ostream *}{ostr = NULL}}
+
+The constructor starts redirecting output sent to {\it ostr} or {\it cout} for
+the default parameter value to the text control {\it text}.
+
+\wxheading{Parameters}
+
+\docparam{text}{The text control to append output too, must be non-NULL}
+
+\docparam{ostr}{The C++ stream to redirect, {\it cout} is used if it is NULL}
+
+\membersection{wxStreamToTextRedirector::\destruct{wxStreamToTextRedirector}}\label{wxstreamtotextredirectordtor}
+
+\func{}{\destruct{wxStreamToTextRedirector}}{\void}
+
+When a wxStreamToTextRedirector object is destroyed, the redirection is ended
+and any output sent to the C++ ostream which had been specified at the time of
+the object construction will go to its original destination.
+

@@ -1,0 +1,42 @@
+\section{\class{wxPasswordEntryDialog}}\label{wxpasswordentrydialog}
+
+This class represents a dialog that requests a one-line password string from the user.
+It is implemented as a generic wxWidgets dialog.
+
+\wxheading{Derived from}
+
+\helpref{wxTextEntryDialog}{wxtextentrydialog}\\
+\helpref{wxDialog}{wxdialog}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/textdlg.h>
+
+\wxheading{See also}
+
+\helpref{wxPassowrdEntryDialog overview}{wxpasswordentrydialogoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPasswordEntryDialog::wxPasswordEntryDialog}\label{wxpasswordentrydialogctor}
+
+\func{}{wxPasswordEntryDialog}{\param{wxWindow* }{parent}, \param{const wxString\& }{message},\rtfsp
+\param{const wxString\& }{caption = "Enter password"}, \param{const wxString\& }{defaultValue = ""}, \param{long }{style = wxOK \pipe wxCANCEL \pipe wxCENTRE}, \param{const wxPoint\& }{pos = wxDefaultPosition}}
+
+Constructor. Use \helpref{wxTextEntryDialog::ShowModal}{wxtextentrydialogshowmodal} to show the dialog.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window.}
+
+\docparam{message}{Message to show on the dialog.}
+
+\docparam{defaultValue}{The default value, which may be the empty string.}
+
+\docparam{style}{A dialog style, specifying the buttons (wxOK, wxCANCEL)
+and an optional wxCENTRE style. You do not need to specify the \windowstyle{wxTE\_PASSWORD} style, it is always applied.}
+
+\docparam{pos}{Dialog position.}

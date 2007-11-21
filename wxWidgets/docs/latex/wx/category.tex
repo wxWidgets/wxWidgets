@@ -1,0 +1,726 @@
+\chapter{Classes by category}\label{classesbycat}
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+A classification of wxWidgets classes by category.
+
+{\large {\bf Managed windows}}
+
+There are several types of window that are directly controlled by the
+window manager (such as MS Windows, or the Motif Window Manager).
+Frames and dialogs are similar in wxWidgets, but only dialogs may be modal.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxTopLevelWindow}{wxtoplevelwindow}}{Any top level window, dialog or frame}
+\twocolitem{\helpref{wxDialog}{wxdialog}}{Dialog box}
+\twocolitem{\helpref{wxFrame}{wxframe}}{Normal frame}
+\twocolitem{\helpref{wxMDIChildFrame}{wxmdichildframe}}{MDI child frame}
+\twocolitem{\helpref{wxMDIParentFrame}{wxmdiparentframe}}{MDI parent frame}
+\twocolitem{\helpref{wxMiniFrame}{wxminiframe}}{A frame with a small title bar}
+\twocolitem{\helpref{wxPropertySheetDialog}{wxpropertysheetdialog}}{Property sheet dialog}
+\twocolitem{\helpref{wxSplashScreen}{wxsplashscreen}}{Splash screen class}
+%\twocolitem{\helpref{wxTabbedDialog}{wxtabbeddialog}}{Tabbed dialog
+%(deprecated, use wxNotebook instead)}
+\twocolitem{\helpref{wxTipWindow}{wxtipwindow}}{Shows text in a small window}
+\twocolitem{\helpref{wxWizard}{wxwizard}}{A wizard dialog}
+\end{twocollist}
+
+See also {\bf Common dialogs}.
+
+{\large {\bf Miscellaneous windows}}
+
+The following are a variety of classes that are derived from wxWindow.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxPanel}{wxpanel}}{A window whose colour changes according to current user settings}
+\twocolitem{\helpref{wxScrolledWindow}{wxscrolledwindow}}{Window with automatically managed scrollbars}
+\twocolitem{\helpref{wxGrid}{wxgrid}}{A grid (table) window}
+\twocolitem{\helpref{wxSplitterWindow}{wxsplitterwindow}}{Window which can be split vertically or horizontally}
+\twocolitem{\helpref{wxStatusBar}{wxstatusbar}}{Implements the status bar on a frame}
+\twocolitem{\helpref{wxToolBar}{wxtoolbar}}{Toolbar class}
+%\twocolitem{\helpref{wxTabbedPanel}{wxtabbedpanel}}{Tabbed panel (to be replaced with wxNotebook)}
+\twocolitem{\helpref{wxNotebook}{wxnotebook}}{Notebook class}
+\twocolitem{\helpref{wxListbook}{wxlistbook}}{Similar to notebook but using list control}
+\twocolitem{\helpref{wxChoicebook}{wxchoicebook}}{Similar to notebook but using choice control}
+\twocolitem{\helpref{wxTreebook}{wxtreebook}}{Similar to notebook but using tree control}
+\twocolitem{\helpref{wxSashWindow}{wxsashwindow}}{Window with four optional sashes that can be dragged}
+\twocolitem{\helpref{wxSashLayoutWindow}{wxsashlayoutwindow}}{Window that can be involved in an IDE-like layout arrangement}
+\twocolitem{\helpref{wxVScrolledWindow}{wxvscrolledwindow}}{As wxScrolledWindow but supports lines of variable height}
+\twocolitem{\helpref{wxWizardPage}{wxwizardpage}}{A base class for the page in wizard dialog.}
+\twocolitem{\helpref{wxWizardPageSimple}{wxwizardpagesimple}}{A page in wizard dialog.}
+\end{twocollist}
+
+{\large {\bf Common dialogs}}
+
+\overview{Overview}{commondialogsoverview}
+
+Common dialogs are ready-made dialog classes which are frequently used
+in an application.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxDialog}{wxdialog}}{Base class for common dialogs}
+\twocolitem{\helpref{wxColourDialog}{wxcolourdialog}}{Colour chooser dialog}
+\twocolitem{\helpref{wxDirDialog}{wxdirdialog}}{Directory selector dialog}
+\twocolitem{\helpref{wxFileDialog}{wxfiledialog}}{File selector dialog}
+\twocolitem{\helpref{wxFindReplaceDialog}{wxfindreplacedialog}}{Text search/replace dialog}
+\twocolitem{\helpref{wxMultiChoiceDialog}{wxmultichoicedialog}}{Dialog to get one or more selections from a list}
+\twocolitem{\helpref{wxSingleChoiceDialog}{wxsinglechoicedialog}}{Dialog to get a single selection from a list and return the string}
+\twocolitem{\helpref{wxTextEntryDialog}{wxtextentrydialog}}{Dialog to get a single line of text from the user}
+\twocolitem{\helpref{wxPasswordEntryDialog}{wxpasswordentrydialog}}{Dialog to get a password from the user}
+\twocolitem{\helpref{wxFontDialog}{wxfontdialog}}{Font chooser dialog}
+\twocolitem{\helpref{wxPageSetupDialog}{wxpagesetupdialog}}{Standard page setup dialog}
+\twocolitem{\helpref{wxPrintDialog}{wxprintdialog}}{Standard print dialog}
+\twocolitem{\helpref{wxProgressDialog}{wxprogressdialog}}{Progress indication dialog}
+\twocolitem{\helpref{wxMessageDialog}{wxmessagedialog}}{Simple message box dialog}
+\twocolitem{\helpref{wxSymbolPickerDialog}{wxsymbolpickerdialog}}{Symbol selector dialog}
+\twocolitem{\helpref{wxRichTextFormattingDialog}{wxrichtextformattingdialog}}{A dialog for formatting the content of a wxRichTextCtrl}
+\twocolitem{\helpref{wxWizard}{wxwizard}}{A wizard dialog.}
+\end{twocollist}
+
+{\large {\bf Controls}}
+
+Typically, these are small windows which provide interaction with the user. Controls
+that are not static can have \helpref{validators}{wxvalidator} associated with them.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxAnimationCtrl}{wxanimationctrl}}{A control to display an animation}
+\twocolitem{\helpref{wxControl}{wxcontrol}}{The base class for controls}
+\twocolitem{\helpref{wxButton}{wxbutton}}{Push button control, displaying text}
+\twocolitem{\helpref{wxBitmapButton}{wxbitmapbutton}}{Push button control, displaying a bitmap}
+\twocolitem{\helpref{wxBitmapComboBox}{wxbitmapcombobox}}{A combobox with bitmaps next to text items}
+\twocolitem{\helpref{wxToggleButton}{wxtogglebutton}}{A button which stays pressed when clicked by user.}
+\twocolitem{\helpref{wxCalendarCtrl}{wxcalendarctrl}}{Control showing an entire calendar month}
+\twocolitem{\helpref{wxCheckBox}{wxcheckbox}}{Checkbox control}
+\twocolitem{\helpref{wxCheckListBox}{wxchecklistbox}}{A listbox with a checkbox to the left of each item}
+\twocolitem{\helpref{wxChoice}{wxchoice}}{Choice control (a combobox without the editable area)}
+\twocolitem{\helpref{wxComboBox}{wxcombobox}}{A choice with an editable area}
+\twocolitem{\helpref{wxComboCtrl}{wxcomboctrl}}{A combobox with application defined popup}
+\twocolitem{\helpref{wxDataViewCtrl}{wxdataviewctrl}}{A control to tabular or tree like data}
+\twocolitem{\helpref{wxGauge}{wxgauge}}{A control to represent a varying quantity, such as time remaining}
+\twocolitem{\helpref{wxGenericDirCtrl}{wxgenericdirctrl}}{A control for displaying a directory tree}
+\twocolitem{\helpref{wxHtmlListBox}{wxhtmllistbox}}{An abstract class for creating listboxes showing HTML content}
+\twocolitem{\helpref{wxSimpleHtmlListBox}{wxsimplehtmllistbox}}{A listbox showing HTML content}
+\twocolitem{\helpref{wxStaticBox}{wxstaticbox}}{A static, or group box for visually grouping related controls}
+\twocolitem{\helpref{wxListBox}{wxlistbox}}{A list of strings for single or multiple selection}
+\twocolitem{\helpref{wxListCtrl}{wxlistctrl}}{A control for displaying lists of strings and/or icons, plus a multicolumn report view}
+\twocolitem{\helpref{wxListView}{wxlistview}}{A simpler interface ({\it fa\c{c}ade}) for wxListCtrl in report mode}
+\twocolitem{\helpref{wxOwnerDrawnComboBox}{wxownerdrawncombobox}}{A combobox with owner-drawn list items}
+\twocolitem{\helpref{wxRichTextCtrl}{wxrichtextctrl}}{Generic rich text editing control}
+\twocolitem{\helpref{wxTextCtrl}{wxtextctrl}}{Single or multiline text editing control}
+\twocolitem{\helpref{wxTreeCtrl}{wxtreectrl}}{Tree (hierarchy) control}
+\twocolitem{\helpref{wxScrollBar}{wxscrollbar}}{Scrollbar control}
+\twocolitem{\helpref{wxSpinButton}{wxspinbutton}}{A spin or `up-down' control}
+\twocolitem{\helpref{wxSpinCtrl}{wxspinctrl}}{A spin control - i.e. spin button and text control}
+\twocolitem{\helpref{wxStaticText}{wxstatictext}}{One or more lines of non-editable text}
+\twocolitem{\helpref{wxHyperlinkCtrl}{wxhyperlinkctrl}}{A static text which opens an URL when clicked}
+\twocolitem{\helpref{wxStaticBitmap}{wxstaticbitmap}}{A control to display a bitmap}
+\twocolitem{\helpref{wxRadioBox}{wxradiobox}}{A group of radio buttons}
+\twocolitem{\helpref{wxRadioButton}{wxradiobutton}}{A round button to be used with others in a mutually exclusive way}
+\twocolitem{\helpref{wxSlider}{wxslider}}{A slider that can be dragged by the user}
+\twocolitem{\helpref{wxVListBox}{wxvlistbox}}{A listbox supporting variable height rows}
+\end{twocollist}
+
+
+{\large {\bf Miscellaneous pickers}}
+
+A picker control is a control whose appearance and behaviour is highly platform-dependent.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxColourPickerCtrl}{wxcolourpickerctrl}}{A control which allows the user to choose a colour}
+\twocolitem{\helpref{wxDirPickerCtrl}{wxdirpickerctrl}}{A control which allows the user to choose a directory}
+\twocolitem{\helpref{wxFilePickerCtrl}{wxfilepickerctrl}}{A control which allows the user to choose a file}
+\twocolitem{\helpref{wxFontPickerCtrl}{wxfontpickerctrl}}{A control which allows the user to choose a font}
+\twocolitem{\helpref{wxDatePickerCtrl}{wxdatepickerctrl}}{Small date picker control}
+\end{twocollist}
+
+
+{\large {\bf Menus}}
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxMenu}{wxmenu}}{Displays a series of menu items for selection}
+\twocolitem{\helpref{wxMenuBar}{wxmenubar}}{Contains a series of menus for use with a frame}
+\twocolitem{\helpref{wxMenuItem}{wxmenuitem}}{Represents a single menu item}
+\end{twocollist}
+
+{\large {\bf wxAUI - advanced user interface}}
+
+This is a new set of classes for writing a customizable application
+interface with built-in docking, floatable panes and a flexible
+MDI-like interface. Further classes for custom notebooks with
+draggable tabs etc. are in progress. See also \helpref{wxAUI overview}{wxauioverview}.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxAuiManager}{wxauimanager}}{The central class for managing the interface}
+\twocolitem{\helpref{wxAuiNotebook}{wxauinotebook}}{A replacement notebook class with extra features}
+\twocolitem{\helpref{wxAuiPaneInfo}{wxauipaneinfo}}{Describes a single pane}
+\twocolitem{\helpref{wxAuiDockArt}{wxauidockart}}{Art and metrics provider for customizing the docking user interface}
+\twocolitem{\helpref{wxAuiTabArt}{wxauitabart}}{Art and metrics provider for customizing the notebook user interface}
+\end{twocollist}
+
+
+{\large {\bf Window layout}}
+
+There are two different systems for laying out windows (and dialogs in particular).
+One is based upon so-called sizers and it requires less typing, thinking and calculating
+and will in almost all cases produce dialogs looking equally well on all platforms, the
+other is based on so-called constraints and is deprecated, though still available.
+
+\overview{Sizer overview}{sizeroverview} describes sizer-based layout.
+
+These are the classes relevant to sizer-based layout.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxSizer}{wxsizer}}{Abstract base class}
+\twocolitem{\helpref{wxGridSizer}{wxgridsizer}}{A sizer for laying out windows in a grid with all fields having the same size}
+\twocolitem{\helpref{wxFlexGridSizer}{wxflexgridsizer}}{A sizer for laying out windows in a flexible grid}
+\twocolitem{\helpref{wxGridBagSizer}{wxgridbagsizer}}{Another grid sizer that lets you specify the cell an item is in, and items can span rows and/or columns.}
+\twocolitem{\helpref{wxBoxSizer}{wxboxsizer}}{A sizer for laying out windows in a row or column}
+\twocolitem{\helpref{wxStaticBoxSizer}{wxstaticboxsizer}}{Same as wxBoxSizer, but with a surrounding static box}
+\end{twocollist}
+
+\overview{Constraints overview}{constraintsoverview} describes constraints-based layout.
+
+These are the classes relevant to constraints-based window layout.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxIndividualLayoutConstraint}{wxindividuallayoutconstraint}}{Represents a single constraint dimension}
+\twocolitem{\helpref{wxLayoutConstraints}{wxlayoutconstraints}}{Represents the constraints for a window class}
+\end{twocollist}
+
+{\large {\bf Device contexts}}
+
+\overview{Overview}{dcoverview}
+
+Device contexts are surfaces that may be drawn on, and provide an
+abstraction that allows parameterisation of your drawing code
+by passing different device contexts.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxAutoBufferedPaintDC}{wxautobufferedpaintdc}}{A helper device context for double buffered drawing inside \textbf{OnPaint}.}
+\twocolitem{\helpref{wxBufferedDC}{wxbuffereddc}}{A helper device context for double buffered drawing.}
+\twocolitem{\helpref{wxBufferedPaintDC}{wxbufferedpaintdc}}{A helper device context for double buffered drawing inside \textbf{OnPaint}.}
+\twocolitem{\helpref{wxClientDC}{wxclientdc}}{A device context to access the client area outside {\bf OnPaint} events}
+\twocolitem{\helpref{wxPaintDC}{wxpaintdc}}{A device context to access the client area inside {\bf OnPaint} events}
+\twocolitem{\helpref{wxWindowDC}{wxwindowdc}}{A device context to access the non-client area}
+\twocolitem{\helpref{wxScreenDC}{wxscreendc}}{A device context to access the entire screen}
+\twocolitem{\helpref{wxDC}{wxdc}}{The device context base class}
+\twocolitem{\helpref{wxMemoryDC}{wxmemorydc}}{A device context for drawing into bitmaps}
+\twocolitem{\helpref{wxMetafileDC}{wxmetafiledc}}{A device context for drawing into metafiles}
+\twocolitem{\helpref{wxMirrorDC}{wxmirrordc}}{A proxy device context allowing for simple mirroring.}
+\twocolitem{\helpref{wxPostScriptDC}{wxpostscriptdc}}{A device context for drawing into PostScript files}
+\twocolitem{\helpref{wxPrinterDC}{wxprinterdc}}{A device context for drawing to printers}
+\end{twocollist}
+
+{\large {\bf Graphics device interface}}
+
+\overview{Bitmaps overview}{wxbitmapoverview}
+
+These classes are related to drawing on device contexts and windows.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxColour}{wxcolour}}{Represents the red, blue and green elements of a colour}
+\twocolitem{\helpref{wxDCClipper}{wxdcclipper}}{Wraps the operations of setting and destroying the clipping region}
+\twocolitem{\helpref{wxBitmap}{wxbitmap}}{Represents a bitmap}
+\twocolitem{\helpref{wxBrush}{wxbrush}}{Used for filling areas on a device context}
+\twocolitem{\helpref{wxBrushList}{wxbrushlist}}{The list of previously-created brushes}
+\twocolitem{\helpref{wxCursor}{wxcursor}}{A small, transparent bitmap representing the cursor}
+\twocolitem{\helpref{wxFont}{wxfont}}{Represents fonts}
+\twocolitem{\helpref{wxFontList}{wxfontlist}}{The list of previously-created fonts}
+\twocolitem{\helpref{wxIcon}{wxicon}}{A small, transparent bitmap for assigning to frames and drawing on device contexts}
+\twocolitem{\helpref{wxImage}{wximage}}{A platform-independent image class}
+\twocolitem{\helpref{wxImageList}{wximagelist}}{A list of images, used with some controls}
+\twocolitem{\helpref{wxMask}{wxmask}}{Represents a mask to be used with a bitmap for transparent drawing}
+\twocolitem{\helpref{wxPen}{wxpen}}{Used for drawing lines on a device context}
+\twocolitem{\helpref{wxPenList}{wxpenlist}}{The list of previously-created pens}
+\twocolitem{\helpref{wxPalette}{wxpalette}}{Represents a table of indices into RGB values}
+\twocolitem{\helpref{wxRegion}{wxregion}}{Represents a simple or complex region on a window or device context}
+\twocolitem{\helpref{wxRendererNative}{wxrenderernative}}{Abstracts high-level drawing primitives}
+\end{twocollist}
+
+{\large {\bf Events}}
+
+\overview{Overview}{eventhandlingoverview}
+
+An event object contains information about a specific event. Event handlers
+(usually member functions) have a single, event argument.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxActivateEvent}{wxactivateevent}}{A window or application activation event}
+\twocolitem{\helpref{wxCalendarEvent}{wxcalendarevent}}{Used with \helpref{wxCalendarCtrl}{wxcalendarctrl}}
+\twocolitem{\helpref{wxCalculateLayoutEvent}{wxcalculatelayoutevent}}{Used to calculate window layout}
+\twocolitem{\helpref{wxChildFocusEvent}{wxchildfocusevent}}{A child window focus event}
+\twocolitem{\helpref{wxClipboardTextEvent}{wxclipboardtextevent}}{A clipboard copy/cut/paste treebook event event}
+\twocolitem{\helpref{wxCloseEvent}{wxcloseevent}}{A close window or end session event}
+\twocolitem{\helpref{wxCommandEvent}{wxcommandevent}}{An event from a variety of standard controls}
+\twocolitem{\helpref{wxContextMenuEvent}{wxcontextmenuevent}}{An event generated when the user issues a context menu command}
+\twocolitem{\helpref{wxDateEvent}{wxdateevent}}{Used with \helpref{wxDatePickerCtrl}{wxdatepickerctrl}}
+\twocolitem{\helpref{wxDialUpEvent}{wxdialupevent}}{Event send by \helpref{wxDialUpManager}{wxdialupmanager}}
+\twocolitem{\helpref{wxDropFilesEvent}{wxdropfilesevent}}{A drop files event}
+\twocolitem{\helpref{wxEraseEvent}{wxeraseevent}}{An erase background event}
+\twocolitem{\helpref{wxEvent}{wxevent}}{The event base class}
+\twocolitem{\helpref{wxFindDialogEvent}{wxfinddialogevent}}{Event sent by
+\helpref{wxFindReplaceDialog}{wxfindreplacedialog}}
+\twocolitem{\helpref{wxFocusEvent}{wxfocusevent}}{A window focus event}
+\twocolitem{\helpref{wxKeyEvent}{wxkeyevent}}{A keypress event}
+\twocolitem{\helpref{wxIconizeEvent}{wxiconizeevent}}{An iconize/restore event}
+\twocolitem{\helpref{wxIdleEvent}{wxidleevent}}{An idle event}
+\twocolitem{\helpref{wxInitDialogEvent}{wxinitdialogevent}}{A dialog initialisation event}
+\twocolitem{\helpref{wxJoystickEvent}{wxjoystickevent}}{A joystick event}
+\twocolitem{\helpref{wxListEvent}{wxlistevent}}{A list control event}
+\twocolitem{\helpref{wxMaximizeEvent}{wxmaximizeevent}}{A maximize event}
+\twocolitem{\helpref{wxMenuEvent}{wxmenuevent}}{A menu event}
+\twocolitem{\helpref{wxMouseCaptureChangedEvent}{wxmousecapturechangedevent}}{A mouse capture changed event}
+\twocolitem{\helpref{wxMouseCaptureLostEvent}{wxmousecapturelostevent}}{A mouse capture lost event}
+\twocolitem{\helpref{wxMouseEvent}{wxmouseevent}}{A mouse event}
+\twocolitem{\helpref{wxMoveEvent}{wxmoveevent}}{A move event}
+\twocolitem{\helpref{wxNotebookEvent}{wxnotebookevent}}{A notebook control event}
+\twocolitem{\helpref{wxNotifyEvent}{wxnotifyevent}}{A notification event, which can be vetoed}
+\twocolitem{\helpref{wxPaintEvent}{wxpaintevent}}{A paint event}
+\twocolitem{\helpref{wxProcessEvent}{wxprocessevent}}{A process ending event}
+\twocolitem{\helpref{wxQueryLayoutInfoEvent}{wxquerylayoutinfoevent}}{Used to query layout information}
+\twocolitem{\helpref{wxRichTextEvent}{wxrichtextevent}}{A rich text editing event}
+\twocolitem{\helpref{wxScrollEvent}{wxscrollevent}}{A scroll event from sliders, stand-alone scrollbars and spin buttons}
+\twocolitem{\helpref{wxScrollWinEvent}{wxscrollwinevent}}{A scroll event from scrolled windows}
+\twocolitem{\helpref{wxSizeEvent}{wxsizeevent}}{A size event}
+\twocolitem{\helpref{wxSocketEvent}{wxsocketevent}}{A socket event}
+\twocolitem{\helpref{wxSpinEvent}{wxspinevent}}{An event from \helpref{wxSpinButton}{wxspinbutton}}
+\twocolitem{\helpref{wxSplitterEvent}{wxsplitterevent}}{An event from \helpref{wxSplitterWindow}{wxsplitterwindow}}
+\twocolitem{\helpref{wxSysColourChangedEvent}{wxsyscolourchangedevent}}{A system colour change event}
+\twocolitem{\helpref{wxTimerEvent}{wxtimerevent}}{A timer expiration event}
+\twocolitem{\helpref{wxTreebookEvent}{wxtreebookevent}}{A treebook control event}
+\twocolitem{\helpref{wxTreeEvent}{wxtreeevent}}{A tree control event}
+\twocolitem{\helpref{wxUpdateUIEvent}{wxupdateuievent}}{A user interface update event}
+\twocolitem{\helpref{wxWindowCreateEvent}{wxwindowcreateevent}}{A window creation event}
+\twocolitem{\helpref{wxWindowDestroyEvent}{wxwindowdestroyevent}}{A window destruction event}
+\twocolitem{\helpref{wxWizardEvent}{wxwizardevent}}{A wizard event}
+\end{twocollist}
+
+{\large {\bf Validators}}
+
+\overview{Overview}{validatoroverview}
+
+These are the window validators, used for filtering and validating
+user input.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxValidator}{wxvalidator}}{Base validator class}
+\twocolitem{\helpref{wxTextValidator}{wxtextvalidator}}{Text control validator class}
+\twocolitem{\helpref{wxGenericValidator}{wxgenericvalidator}}{Generic control validator class}
+\end{twocollist}
+
+{\large {\bf Data structures}}
+
+These are the data structure classes supported by wxWidgets.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxCmdLineParser}{wxcmdlineparser}}{Command line parser class}
+\twocolitem{\helpref{wxDateSpan}{wxdatespan}}{A logical time interval.}
+\twocolitem{\helpref{wxDateTime}{wxdatetime}}{A class for date/time manipulations}
+%\twocolitem{\helpref{wxExpr}{wxexpr}}{A class for flexible I/O}
+%\twocolitem{\helpref{wxExprDatabase}{wxexprdatabase}}{A class for flexible I/O}
+\twocolitem{\helpref{wxArray}{wxarray}}{A dynamic array implementation}
+\twocolitem{\helpref{wxArrayString}{wxarraystring}}{An efficient container for storing \helpref{wxString}{wxstring} objects}
+\twocolitem{\helpref{wxHashMap}{wxhashmap}}{A simple hash map implementation}
+\twocolitem{\helpref{wxHashSet}{wxhashset}}{A simple hash set implementation}
+\twocolitem{\helpref{wxHashTable}{wxhashtable}}{A simple hash table implementation (deprecated, use wxHashMap)}
+% \twocolitem{\helpref{wxHashTableLong}{wxhashtablelong}}{A wxHashTable version for storing long data}
+\twocolitem{\helpref{wxList}{wxlist}}{A simple linked list implementation}
+\twocolitem{\helpref{wxLongLong}{wxlonglong}}{A portable 64 bit integer type}
+\twocolitem{\helpref{wxNode}{wxnode}}{Represents a node in the wxList implementation}
+\twocolitem{\helpref{wxObject}{wxobject}}{The root class for most wxWidgets classes}
+\twocolitem{\helpref{wxPathList}{wxpathlist}}{A class to help search multiple paths}
+\twocolitem{\helpref{wxPoint}{wxpoint}}{Representation of a point}
+\twocolitem{\helpref{wxRect}{wxrect}}{A class representing a rectangle}
+\twocolitem{\helpref{wxRegEx}{wxregex}}{Regular expression support}
+\twocolitem{\helpref{wxRegion}{wxregion}}{A class representing a region}
+\twocolitem{\helpref{wxString}{wxstring}}{A string class}
+\twocolitem{\helpref{wxStringTokenizer}{wxstringtokenizer}}{A class for interpreting a string as a list of tokens or words}
+\twocolitem{\helpref{wxRealPoint}{wxrealpoint}}{Representation of a point using floating point numbers}
+\twocolitem{\helpref{wxSize}{wxsize}}{Representation of a size}
+\twocolitem{\helpref{wxTimeSpan}{wxtimespan}}{A time interval.}
+\twocolitem{\helpref{wxURI}{wxuri}}{Represents a Uniform Resource Identifier}
+\twocolitem{\helpref{wxVariant}{wxvariant}}{A class for storing arbitrary types that may change at run-time}
+\end{twocollist}
+
+{\large {\bf Run-time class information system}}
+
+\overview{Overview}{runtimeclassoverview}
+
+wxWidgets supports run-time manipulation of class information, and dynamic
+creation of objects given class names.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxClassInfo}{wxclassinfo}}{Holds run-time class information}
+\twocolitem{\helpref{wxObject}{wxobject}}{Root class for classes with run-time information}
+\twocolitem{\helpref{RTTI macros}{rttimacros}}{Macros for manipulating run-time information}
+\end{twocollist}
+
+{\large {\bf Logging features}}
+
+\overview{Overview}{wxlogoverview}
+
+wxWidgets provides several classes and functions for message logging.
+Please see the \helpref{wxLog overview}{wxlogoverview} for more details.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxLog}{wxlog}}{The base log class}
+\twocolitem{\helpref{wxLogStderr}{wxlogstderr}}{Log messages to a C STDIO stream}
+\twocolitem{\helpref{wxLogStream}{wxlogstream}}{Log messages to a C++ iostream}
+\twocolitem{\helpref{wxLogTextCtrl}{wxlogtextctrl}}{Log messages to a \helpref{wxTextCtrl}{wxtextctrl}}
+\twocolitem{\helpref{wxLogWindow}{wxlogwindow}}{Log messages to a log frame}
+\twocolitem{\helpref{wxLogGui}{wxloggui}}{Default log target for GUI programs}
+\twocolitem{\helpref{wxLogNull}{wxlognull}}{Temporarily suppress message logging}
+\twocolitem{\helpref{wxLogChain}{wxlogchain}}{Allows to chain two log targets}
+\twocolitem{\helpref{wxLogPassThrough}{wxlogpassthrough}}{Allows to filter the log messages}
+\twocolitem{\helpref{wxStreamToTextRedirector}{wxstreamtotextredirector}}{Allows
+to redirect output sent to {\tt cout} to a \helpref{wxTextCtrl}{wxtextctrl}}
+\twocolitem{\helpref{Log functions}{logfunctions}}{Error and warning logging functions}
+\end{twocollist}
+
+{\large {\bf Debugging features}}
+
+\overview{Overview}{debuggingoverview}
+
+wxWidgets supports some aspects of debugging an application through
+classes, functions and macros.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxDebugContext}{wxdebugcontext}}{Provides memory-checking facilities}
+\twocolitem{\helpref{Debugging macros}{debugmacros}}{Debug macros for assertion and checking}
+\twocolitem{\helpref{WXDEBUG\_NEW}{debugnew}}{Use this macro to give further debugging information}
+\twocolitem{\helpref{wxDebugReport}{wxdebugreport}}{Base class for creating debug reports in case of a program crash.}
+\twocolitem{\helpref{wxDebugReportCompress}{wxdebugreportcompress}}{Class for creating compressed debug reports.}
+\twocolitem{\helpref{wxDebugReportUpload}{wxdebugreportupload}}{Class for uploading compressed debug reports via HTTP.}
+\twocolitem{\helpref{wxDebugReportPreview}{wxdebugreportpreview}}{Abstract base class for previewing the contents of a debug report.}
+\twocolitem{\helpref{wxDebugReportPreviewStd}{wxdebugreportpreviewstd}}{Standard implementation of wxDebugReportPreview.}
+\end{twocollist}
+
+{\large {\bf Networking classes}}
+
+wxWidgets provides its own classes for socket based networking.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxDialUpManager}{wxdialupmanager}}{Provides functions to check the status of network connection and to establish one}
+\twocolitem{\helpref{wxIPV4address}{wxipv4address}}{Represents an Internet address}
+\twocolitem{\helpref{wxIPaddress}{wxipaddress}}{Represents an Internet address}
+\twocolitem{\helpref{wxSocketBase}{wxsocketbase}}{Represents a socket base object}
+\twocolitem{\helpref{wxSocketClient}{wxsocketclient}}{Represents a socket client}
+\twocolitem{\helpref{wxSocketServer}{wxsocketserver}}{Represents a socket server}
+\twocolitem{\helpref{wxSocketEvent}{wxsocketevent}}{A socket event}
+\twocolitem{\helpref{wxFTP}{wxftp}}{FTP protocol class}
+\twocolitem{\helpref{wxHTTP}{wxhttp}}{HTTP protocol class}
+\twocolitem{\helpref{wxURL}{wxurl}}{Represents a Universal Resource Locator}
+\end{twocollist}
+
+
+{\large {\bf Interprocess communication}}
+
+\overview{Overview}{ipcoverview}
+
+wxWidgets provides simple interprocess communications facilities
+based on Windows DDE, but available on most platforms using TCP.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxClient}{wxclient}, \helpref{wxDDEClient}{wxddeclient}}{Represents a client}
+\twocolitem{\helpref{wxConnection}{wxconnection}, \helpref{wxDDEConnection}{wxddeconnection}}{Represents the connection between a client and a server}
+\twocolitem{\helpref{wxServer}{wxserver}, \helpref{wxDDEServer}{wxddeserver}}{Represents a server}
+%\twocolitem{\helpref{wxSocketHandler}{wxsockethandler}}{Represents a socket handler}
+\end{twocollist}
+
+{\large {\bf Document/view framework}}
+
+\overview{Overview}{docviewoverview}
+
+wxWidgets supports a document/view framework which provides
+housekeeping for a document-centric application.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxDocument}{wxdocument}}{Represents a document}
+\twocolitem{\helpref{wxView}{wxview}}{Represents a view}
+\twocolitem{\helpref{wxDocTemplate}{wxdoctemplate}}{Manages the relationship between a document class and a view class}
+\twocolitem{\helpref{wxDocManager}{wxdocmanager}}{Manages the documents and views in an application}
+\twocolitem{\helpref{wxDocChildFrame}{wxdocchildframe}}{A child frame for showing a document view}
+\twocolitem{\helpref{wxDocParentFrame}{wxdocparentframe}}{A parent frame to contain views}
+%\twocolitem{\helpref{wxMDIDocChildFrame}{wxmdidocchildframe}}{An MDI child frame for showing a document view}
+%\twocolitem{\helpref{wxMDIDocParentFrame}{wxmdidocparentframe}}{An MDI parent frame to contain views}
+\end{twocollist}
+
+{\large {\bf Printing framework}}
+
+\overview{Overview}{printingoverview}
+
+A printing and previewing framework is implemented to
+make it relatively straightforward to provide document printing
+facilities.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxPreviewFrame}{wxpreviewframe}}{Frame for displaying a print preview}
+\twocolitem{\helpref{wxPreviewCanvas}{wxpreviewcanvas}}{Canvas for displaying a print preview}
+\twocolitem{\helpref{wxPreviewControlBar}{wxpreviewcontrolbar}}{Standard control bar for a print preview}
+\twocolitem{\helpref{wxPrintDialog}{wxprintdialog}}{Standard print dialog}
+\twocolitem{\helpref{wxPageSetupDialog}{wxpagesetupdialog}}{Standard page setup dialog}
+\twocolitem{\helpref{wxPrinter}{wxprinter}}{Class representing the printer}
+\twocolitem{\helpref{wxPrinterDC}{wxprinterdc}}{Printer device context}
+\twocolitem{\helpref{wxPrintout}{wxprintout}}{Class representing a particular printout}
+\twocolitem{\helpref{wxPrintPreview}{wxprintpreview}}{Class representing a print preview}
+\twocolitem{\helpref{wxPrintData}{wxprintdata}}{Represents information about the document being printed}
+\twocolitem{\helpref{wxPrintDialogData}{wxprintdialogdata}}{Represents information about the print dialog}
+\twocolitem{\helpref{wxPageSetupDialogData}{wxpagesetupdialogdata}}{Represents information about the page setup dialog}
+\end{twocollist}
+
+{\large {\bf Drag and drop and clipboard classes}}
+
+\overview{Drag and drop and clipboard overview}{wxdndoverview}
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxDataObject}{wxdataobject}}{Data object class}
+\twocolitem{\helpref{wxDataFormat}{wxdataformat}}{Represents a data format}
+\twocolitem{\helpref{wxTextDataObject}{wxtextdataobject}}{Text data object class}
+\twocolitem{\helpref{wxFileDataObject}{wxfiledataobject}}{File data object class}
+\twocolitem{\helpref{wxBitmapDataObject}{wxbitmapdataobject}}{Bitmap data object class}
+\twocolitem{\helpref{wxURLDataObject}{wxurldataobject}}{URL data object class}
+\twocolitem{\helpref{wxCustomDataObject}{wxcustomdataobject}}{Custom data object class}
+\twocolitem{\helpref{wxClipboard}{wxclipboard}}{Clipboard class}
+\twocolitem{\helpref{wxDropTarget}{wxdroptarget}}{Drop target class}
+\twocolitem{\helpref{wxFileDropTarget}{wxfiledroptarget}}{File drop target class}
+\twocolitem{\helpref{wxTextDropTarget}{wxtextdroptarget}}{Text drop target class}
+\twocolitem{\helpref{wxDropSource}{wxdropsource}}{Drop source class}
+\end{twocollist}
+
+{\large {\bf File related classes}}
+
+wxWidgets has several small classes to work with disk files, see \helpref{file classes
+overview}{wxfileoverview} for more details.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxFileName}{wxfilename}}{Operations with the file name and attributes}
+\twocolitem{\helpref{wxDir}{wxdir}}{Class for enumerating files/subdirectories.}
+\twocolitem{\helpref{wxDirTraverser}{wxdirtraverser}}{Class used together with wxDir for recursively enumerating the files/subdirectories}
+\twocolitem{\helpref{wxFile}{wxfile}}{Low-level file input/output class.}
+\twocolitem{\helpref{wxFFile}{wxffile}}{Another low-level file input/output class.}
+\twocolitem{\helpref{wxTempFile}{wxtempfile}}{Class to safely replace an existing file}
+\twocolitem{\helpref{wxTextFile}{wxtextfile}}{Class for working with text files as with arrays of lines}
+\twocolitem{\helpref{wxStandardPaths}{wxstandardpaths}}{Paths for standard directories}
+\end{twocollist}
+
+{\large {\bf Stream classes}}
+
+wxWidgets has its own set of stream classes, as an alternative to often buggy standard stream
+libraries, and to provide enhanced functionality.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxStreamBase}{wxstreambase}}{Stream base class}
+\twocolitem{\helpref{wxStreamBuffer}{wxstreambuffer}}{Stream buffer class}
+\twocolitem{\helpref{wxInputStream}{wxinputstream}}{Input stream class}
+\twocolitem{\helpref{wxOutputStream}{wxoutputstream}}{Output stream class}
+\twocolitem{\helpref{wxCountingOutputStream}{wxcountingoutputstream}}{Stream class for querying what size a stream would have.}
+\twocolitem{\helpref{wxFilterInputStream}{wxfilterinputstream}}{Filtered input stream class}
+\twocolitem{\helpref{wxFilterOutputStream}{wxfilteroutputstream}}{Filtered output stream class}
+\twocolitem{\helpref{wxBufferedInputStream}{wxbufferedinputstream}}{Buffered input stream class}
+\twocolitem{\helpref{wxBufferedOutputStream}{wxbufferedoutputstream}}{Buffered output stream class}
+\twocolitem{\helpref{wxMemoryInputStream}{wxmeminputstream}}{Memory input stream class}
+\twocolitem{\helpref{wxMemoryOutputStream}{wxmemoutputstream}}{Memory output stream class}
+\twocolitem{\helpref{wxDataInputStream}{wxdatainputstream}}{Platform-independent binary data input stream class}
+\twocolitem{\helpref{wxDataOutputStream}{wxdataoutputstream}}{Platform-independent binary data output stream class}
+\twocolitem{\helpref{wxTextInputStream}{wxtextinputstream}}{Platform-independent text data input stream class}
+\twocolitem{\helpref{wxTextOutputStream}{wxtextoutputstream}}{Platform-independent text data output stream class}
+\twocolitem{\helpref{wxFileInputStream}{wxfileinputstream}}{File input stream class}
+\twocolitem{\helpref{wxFileOutputStream}{wxfileoutputstream}}{File output stream class}
+\twocolitem{\helpref{wxFFileInputStream}{wxffileinputstream}}{Another file input stream class}
+\twocolitem{\helpref{wxFFileOutputStream}{wxffileoutputstream}}{Another file output stream class}
+\twocolitem{\helpref{wxTempFileOutputStream}{wxtempfileoutputstream}}{Stream to safely replace an existing file}
+\twocolitem{\helpref{wxStringInputStream}{wxstringinputstream}}{String input stream class}
+\twocolitem{\helpref{wxStringOutputStream}{wxstringoutputstream}}{String output stream class}
+\twocolitem{\helpref{wxZlibInputStream}{wxzlibinputstream}}{Zlib and gzip (compression) input stream class}
+\twocolitem{\helpref{wxZlibOutputStream}{wxzliboutputstream}}{Zlib and gzip (compression) output stream class}
+\twocolitem{\helpref{wxZipInputStream}{wxzipinputstream}}{Input stream for reading from ZIP archives}
+\twocolitem{\helpref{wxZipOutputStream}{wxzipoutputstream}}{Output stream for writing from ZIP archives}
+\twocolitem{\helpref{wxTarInputStream}{wxtarinputstream}}{Input stream for reading from tar archives}
+\twocolitem{\helpref{wxTarOutputStream}{wxtaroutputstream}}{Output stream for writing from tar archives}
+\twocolitem{\helpref{wxSocketInputStream}{wxsocketinputstream}}{Socket input stream class}
+\twocolitem{\helpref{wxSocketOutputStream}{wxsocketoutputstream}}{Socket output stream class}
+\end{twocollist}
+
+{\large {\bf Threading classes}}
+
+\overview{Multithreading overview}{wxthreadoverview}
+
+wxWidgets provides a set of classes to make use of the native thread
+capabilities of the various platforms.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxThread}{wxthread}}{Thread class}
+\twocolitem{\helpref{wxThreadHelper}{wxthreadhelper}}{Manages background threads easily}
+\twocolitem{\helpref{wxMutex}{wxmutex}}{Mutex class}
+\twocolitem{\helpref{wxMutexLocker}{wxmutexlocker}}{Mutex locker utility class}
+\twocolitem{\helpref{wxCriticalSection}{wxcriticalsection}}{Critical section class}
+\twocolitem{\helpref{wxCriticalSectionLocker}{wxcriticalsectionlocker}}{Critical section locker utility class}
+\twocolitem{\helpref{wxCondition}{wxcondition}}{Condition class}
+\twocolitem{\helpref{wxSemaphore}{wxsemaphore}}{Semaphore class}
+\end{twocollist}
+
+{\large {\bf HTML classes}}
+
+wxWidgets provides a set of classes to display text in HTML format. These
+class include a help system based on the HTML widget.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}}{HTML help controller class}
+\twocolitem{\helpref{wxHtmlWindow}{wxhtmlwindow}}{HTML window class}
+\twocolitem{\helpref{wxHtmlEasyPrinting}{wxhtmleasyprinting}}{Simple class for printing HTML}
+\twocolitem{\helpref{wxHtmlPrintout}{wxhtmlprintout}}{Generic HTML wxPrintout class}
+\twocolitem{\helpref{wxHtmlParser}{wxhtmlparser}}{Generic HTML parser class}
+\twocolitem{\helpref{wxHtmlTagHandler}{wxhtmltaghandler}}{HTML tag handler, pluginable into wxHtmlParser}
+\twocolitem{\helpref{wxHtmlWinParser}{wxhtmlwinparser}}{HTML parser class for wxHtmlWindow}
+\twocolitem{\helpref{wxHtmlWinTagHandler}{wxhtmlwintaghandler}}{HTML tag handler, pluginable into wxHtmlWinParser}
+\end{twocollist}
+
+{\large {\bf Rich text classes}}
+
+wxWidgets provides a set of generic classes to edit and print simple rich text with character
+and paragraph formatting.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxRichTextCtrl}{wxrichtextctrl}}{A rich text control.}
+\twocolitem{\helpref{wxRichTextBuffer}{wxrichtextbuffer}}{The content of a rich text control.}
+\twocolitem{\helpref{wxRichTextAttr}{wxrichtextattr}}{Attributes specifying rich text styling.}
+\twocolitem{\helpref{wxRichTextCharacterStyleDefinition}{wxrichtextcharacterstyledefinition}}{Definition of character styling.}
+\twocolitem{\helpref{wxRichTextParagraphStyleDefinition}{wxrichtextparagraphstyledefinition}}{Definition of paragraph styling.}
+\twocolitem{\helpref{wxRichTextListStyleDefinition}{wxrichtextliststyledefinition}}{Definition of list styling.}
+\twocolitem{\helpref{wxRichTextStyleSheet}{wxrichtextstylesheet}}{A set of style definitions.}
+\twocolitem{\helpref{wxRichTextStyleComboCtrl}{wxrichtextstylecomboctrl}}{A drop-down control for applying styles.}
+\twocolitem{\helpref{wxRichTextStyleListBox}{wxrichtextstylelistbox}}{A listbox for applying styles.}
+\twocolitem{\helpref{wxRichTextStyleOrganiserDialog}{wxrichtextstyleorganiserdialog}}{A dialog that can be used for managing or browsing styles.}
+\twocolitem{\helpref{wxRichTextEvent}{wxrichtextevent}}{A rich text event.}
+\twocolitem{\helpref{wxRichTextRange}{wxrichtextrange}}{Specification for ranges in a rich text control or buffer.}
+\twocolitem{\helpref{wxRichTextFileHandler}{wxrichtextfilehandler}}{File handler base class.}
+\twocolitem{\helpref{wxRichTextHTMLHandler}{wxrichtexthtmlhandler}}{A handler for converting rich text to HTML.}
+\twocolitem{\helpref{wxRichTextXMLHandler}{wxrichtextxmlhandler}}{A handler for loading and saving rich text XML.}
+\twocolitem{\helpref{wxRichTextFormattingDialog}{wxrichtextformattingdialog}}{A dialog for rich text formatting.}
+\twocolitem{\helpref{wxRichTextPrinting}{wxrichtextprinting}}{A class for easy printing of rich text buffers.}
+\twocolitem{\helpref{wxRichTextPrintout}{wxrichtextprintout}}{A class used by wxRichTextPrinting.}
+\twocolitem{\helpref{wxRichTextHeaderFooterData}{wxrichtextheaderfooterdata}}{Header and footer data specification.}
+\end{twocollist}
+
+{\large {\bf Virtual file system classes}}
+
+wxWidgets provides a set of classes that implement an extensible virtual file system,
+used internally by the HTML classes.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxFSFile}{wxfsfile}}{Represents a file in the virtual file system}
+\twocolitem{\helpref{wxFileSystem}{wxfilesystem}}{Main interface for the virtual file system}
+\twocolitem{\helpref{wxFileSystemHandler}{wxfilesystemhandler}}{Class used to announce file system type}
+\end{twocollist}
+
+{\large {\bf XML classes}}
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxXmlDocument}{wxxmldocument}}{A class to parse XML files.}
+\twocolitem{\helpref{wxXmlNode}{wxxmlnode}}{A class which represents XML nodes.}
+\twocolitem{\helpref{wxXmlProperty}{wxxmlproperty}}{A class which represents XML properties.}
+\end{twocollist}
+
+{\large {\bf XML-based resource system classes}}
+
+\overview{XML-based resource system (XRC) overview}{xrcoverview}
+
+Resources allow your application to create controls and other user interface elements
+from specifications stored in an XML format.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxXmlResource}{wxxmlresource}}{The main class for working with resources.}
+\twocolitem{\helpref{wxXmlResourceHandler}{wxxmlresourcehandler}}{The base class for XML resource handlers.}
+\end{twocollist}
+
+{\large {\bf Online help}}
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxHelpController}{wxhelpcontroller}}{Family of classes for controlling help windows}
+\twocolitem{\helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}}{HTML help controller class}
+\twocolitem{\helpref{wxContextHelp}{wxcontexthelp}}{Class to put application into context-sensitive help mode}
+\twocolitem{\helpref{wxContextHelpButton}{wxcontexthelpbutton}}{Button class for putting application into context-sensitive help mode}
+\twocolitem{\helpref{wxHelpProvider}{wxhelpprovider}}{Abstract class for context-sensitive help provision}
+\twocolitem{\helpref{wxSimpleHelpProvider}{wxsimplehelpprovider}}{Class for simple context-sensitive help provision}
+\twocolitem{\helpref{wxHelpControllerHelpProvider}{wxhelpcontrollerhelpprovider}}{Class for context-sensitive help provision via a help controller}
+\twocolitem{\helpref{wxToolTip}{wxtooltip}}{Class implementing tooltips}
+\end{twocollist}
+
+{\large {\bf Database classes}}
+
+\overview{Database classes overview}{odbcoverview}
+
+wxWidgets provides a set of classes for accessing Microsoft's ODBC (Open Database Connectivity)
+product, donated by Remstar. This is known as wxODBC.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxDb}{wxdb}}{ODBC database connection}
+\twocolitem{\helpref{wxDbTable}{wxdbtable}}{Provides access to a database table}
+\twocolitem{\helpref{wxDbInf}{wxdbinf}}{}
+\twocolitem{\helpref{wxDbTableInf}{wxdbtableinf}}{}
+\twocolitem{\helpref{wxDbColDef}{wxdbcoldef}}{}
+\twocolitem{\helpref{wxDbColInf}{wxdbcolinf}}{}
+\twocolitem{\helpref{wxDbColDataPtr}{wxdbcoldataptr}}{}
+\twocolitem{\helpref{wxDbColFor}{wxdbcolfor}}{}
+\twocolitem{\helpref{wxDbConnectInf}{wxdbconnectinf}}{}
+\twocolitem{\helpref{wxDbIdxDef}{wxdbidxdef}}{}
+\end{twocollist}
+
+{\large {\bf Miscellaneous}}
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxApp}{wxapp}}{Application class}
+\twocolitem{\helpref{wxCaret}{wxcaret}}{A caret (cursor) object}
+\twocolitem{\helpref{wxCmdLineParser}{wxcmdlineparser}}{Command line parser class}
+\twocolitem{\helpref{wxConfig}{wxconfigbase}}{Classes for configuration reading/writing (using either INI files or registry)}
+\twocolitem{\helpref{wxDllLoader}{wxdllloader}}{Class to work with shared libraries.}
+\twocolitem{\helpref{wxGLCanvas}{wxglcanvas}}{Canvas that you can render OpenGL calls to.}
+\twocolitem{\helpref{wxGLContext}{wxglcontext}}{Class to ease sharing of OpenGL data resources.}
+\twocolitem{\helpref{wxLayoutAlgorithm}{wxlayoutalgorithm}}{An alternative window layout facility}
+\twocolitem{\helpref{wxProcess}{wxprocess}}{Process class}
+\twocolitem{\helpref{wxTimer}{wxtimer}}{Timer class}
+\twocolitem{\helpref{wxStopWatch}{wxstopwatch}}{Stop watch class}
+\twocolitem{\helpref{wxMimeTypesManager}{wxmimetypesmanager}}{MIME-types manager class}
+\twocolitem{\helpref{wxSystemSettings}{wxsystemsettings}}{System settings class for obtaining various global parameters}
+\twocolitem{\helpref{wxSystemOptions}{wxsystemoptions}}{System options class for run-time configuration}
+\twocolitem{\helpref{wxAcceleratorTable}{wxacceleratortable}}{Accelerator table}
+\twocolitem{\helpref{wxAutomationObject}{wxautomationobject}}{OLE automation class}
+\twocolitem{\helpref{wxFontMapper}{wxfontmapper}}{Font mapping, finding suitable font for given encoding}
+\twocolitem{\helpref{wxEncodingConverter}{wxencodingconverter}}{Encoding conversions}
+\twocolitem{\helpref{wxCalendarDateAttr}{wxcalendardateattr}}{Used with \helpref{wxCalendarCtrl}{wxcalendarctrl}}
+\twocolitem{\helpref{wxQuantize}{wxquantize}}{Class to perform quantization, or colour reduction}
+\twocolitem{\helpref{wxSingleInstanceChecker}{wxsingleinstancechecker}}{Check that only single program instance is running}
+\end{twocollist}

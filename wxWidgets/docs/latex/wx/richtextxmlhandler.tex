@@ -1,0 +1,115 @@
+\section{\class{wxRichTextXMLHandler}}\label{wxrichtextxmlhandler}
+
+A handler for loading and saving content in an XML format specific
+to wxRichTextBuffer. You can either add the handler to the buffer
+and load and save through the buffer or control API, or you can
+create an instance of the handler on the stack and call its
+functions directly.
+
+\wxheading{Handler flags}
+
+The following flags can be used with this handler, via
+the handler's SetFlags function or the buffer or control's
+SetHandlerFlags function:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxRICHTEXT\_HANDLER\_INCLUDE\_STYLESHEET}}{Include the style sheet in loading and saving operations.}
+\end{twocollist}
+
+\wxheading{Derived from}
+
+\helpref{wxRichTextFileHandler}{wxrichtextfilehandler}
+
+\wxheading{Include files}
+
+<wx/richtext/richtextxml.h>
+
+\wxheading{Data structures}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRichTextXMLHandler::wxRichTextXMLHandler}\label{wxrichtextxmlhandlerwxrichtextxmlhandler}
+
+\func{}{wxRichTextXMLHandler}{\param{const wxString\& }{name = wxT("XML")}, \param{const wxString\& }{ext = wxT("xml")}, \param{int }{type = wxRICHTEXT\_TYPE\_XML}}
+
+Constructor.
+
+\membersection{wxRichTextXMLHandler::CanLoad}\label{wxrichtextxmlhandlercanload}
+
+\constfunc{bool}{CanLoad}{\void}
+
+Returns \true.
+
+\membersection{wxRichTextXMLHandler::CanSave}\label{wxrichtextxmlhandlercansave}
+
+\constfunc{bool}{CanSave}{\void}
+
+Returns \true.
+
+\membersection{wxRichTextXMLHandler::CreateStyle}\label{wxrichtextxmlhandlercreatestyle}
+
+\func{wxString}{CreateStyle}{\param{const wxTextAttrEx\& }{attr}, \param{bool }{isPara = false}}
+
+Creates XML code for a given character or paragraph style.
+
+\membersection{wxRichTextXMLHandler::DoLoadFile}\label{wxrichtextxmlhandlerdoloadfile}
+
+\func{bool}{DoLoadFile}{\param{wxRichTextBuffer* }{buffer}, \param{wxInputStream\& }{stream}}
+
+Loads buffer context from the given stream.
+
+\membersection{wxRichTextXMLHandler::DoSaveFile}\label{wxrichtextxmlhandlerdosavefile}
+
+\func{bool}{DoSaveFile}{\param{wxRichTextBuffer* }{buffer}, \param{wxOutputStream\& }{stream}}
+
+Saves buffer context to the given stream.
+
+\membersection{wxRichTextXMLHandler::ExportXML}\label{wxrichtextxmlhandlerexportxml}
+
+\func{bool}{ExportXML}{\param{wxOutputStream\& }{stream}, \param{wxMBConv* }{convMem}, \param{wxMBConv* }{convFile}, \param{wxRichTextObject\& }{obj}, \param{int }{level}}
+
+Recursively exports an object to the stream.
+
+\membersection{wxRichTextXMLHandler::GetNodeContent}\label{wxrichtextxmlhandlergetnodecontent}
+
+\func{wxString}{GetNodeContent}{\param{wxXmlNode* }{node}}
+
+Helper function: gets node context.
+
+\membersection{wxRichTextXMLHandler::GetParamNode}\label{wxrichtextxmlhandlergetparamnode}
+
+\func{wxXmlNode*}{GetParamNode}{\param{wxXmlNode* }{node}, \param{const wxString\& }{param}}
+
+Helper function: gets a named parameter from the XML node.
+
+\membersection{wxRichTextXMLHandler::GetParamValue}\label{wxrichtextxmlhandlergetparamvalue}
+
+\func{wxString}{GetParamValue}{\param{wxXmlNode* }{node}, \param{const wxString\& }{param}}
+
+Helper function: gets a named parameter from the XML node.
+
+\membersection{wxRichTextXMLHandler::GetStyle}\label{wxrichtextxmlhandlergetstyle}
+
+\func{bool}{GetStyle}{\param{wxTextAttrEx\& }{attr}, \param{wxXmlNode* }{node}, \param{bool }{isPara = false}}
+
+Helper function: gets style parameters from the given XML node.
+
+\membersection{wxRichTextXMLHandler::GetText}\label{wxrichtextxmlhandlergettext}
+
+\func{wxString}{GetText}{\param{wxXmlNode* }{node}, \param{const wxString\& }{param = wxEmptyString}, \param{bool }{translate = false}}
+
+Helper function: gets text from the node.
+
+\membersection{wxRichTextXMLHandler::HasParam}\label{wxrichtextxmlhandlerhasparam}
+
+\func{bool}{HasParam}{\param{wxXmlNode* }{node}, \param{const wxString\& }{param}}
+
+Helper function: returns \true if the node has the given parameter.
+
+\membersection{wxRichTextXMLHandler::ImportXML}\label{wxrichtextxmlhandlerimportxml}
+
+\func{bool}{ImportXML}{\param{wxRichTextBuffer* }{buffer}, \param{wxXmlNode* }{node}}
+
+Recursively imports an object.
+

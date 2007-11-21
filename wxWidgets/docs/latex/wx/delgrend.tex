@@ -1,0 +1,70 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        delgrend.tex
+%% Purpose:     wxDelegateRendererNative documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     11.08.03
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxDelegateRendererNative}}\label{wxdelegaterenderernative}
+
+wxDelegateRendererNative allows reuse of renderers code by forwarding all the 
+\helpref{wxRendererNative}{wxrenderernative} methods to the given object and
+thus allowing you to only modify some of its methods -- without having to
+reimplement all of them.
+
+Note that the ``normal'', inheritance-based approach, doesn't work with the
+renderers as it is impossible to derive from a class unknown at compile-time
+and the renderer is only chosen at run-time. So suppose that you want to only
+add something to the drawing of the tree control buttons but leave all the
+other methods unchanged -- the only way to do it, considering that the renderer
+class which you want to customize might not even be written yet when you write
+your code (it could be written later and loaded from a DLL during run-time), is
+by using this class.
+
+Except for the constructor, it has exactly the same methods as 
+\helpref{wxRendererNative}{wxrenderernative} and their implementation is
+trivial: they are simply forwarded to the real renderer. Note that the ``real''
+renderer may, in turn, be a wxDelegateRendererNative as well and that there may
+be arbitrarily many levels like this -- but at the end of the chain there must
+be a real renderer which does the drawing.
+
+\wxheading{Derived from}
+
+\helpref{wxRendererNative}{wxrenderernative}
+
+\wxheading{Include files}
+
+<wx/renderer.h>
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDelegateRendererNative::wxDelegateRendererNative}\label{wxdelegaterenderernativector}
+
+\func{}{wxDelegateRendererNative}{\void}
+
+\func{}{wxDelegateRendererNative}{\param{wxRendererNative\& }{rendererNative}}
+
+The default constructor does the same thing as the other one except that it
+uses the \helpref{generic renderer}{wxrenderernativegetgeneric} instead of the
+user-specified \arg{rendererNative}.
+
+In any case, this sets up the delegate renderer object to follow all calls to
+the specified real renderer.
+
+Note that this object does \emph{not} take ownership of (i.e. won't delete)
+\arg{rendererNative}.
+
+
+\membersection{wxDelegateRendererNative::DrawXXX}\label{wxdelegaterenderernativedrawxxx}
+
+\func{}{DrawXXX}{\param{}{$\ldots$}}
+
+This class also provides all the virtual methods of 
+\helpref{wxRendererNative}{wxrenderernative}, please refer to that class
+documentation for the details.
+

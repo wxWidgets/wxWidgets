@@ -1,0 +1,62 @@
+
+\section{\class{wxGBSpan}}\label{wxgbspan}
+
+This class is used to hold the row and column spanning attributes of
+items in a \helpref{wxGridBagSizer}{wxgridbagsizer}.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/gbsizer.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxGBSpan::wxGBSpan}\label{wxgbspanwxgbspan}
+
+\func{}{wxGBSpan}{\void}
+
+\func{}{wxGBSpan}{\param{int }{rowspan}, \param{int }{colspan}}
+
+Construct a new wxGBSpan, optionally setting the rowspan and colspan.
+The default is (1,1).  (Meaning that the item occupies one cell in
+each direction.
+
+\membersection{wxGBSpan::GetColspan}\label{wxgbspangetcolspan}
+
+\constfunc{int}{GetColspan}{\void}
+
+Get the current colspan value.
+
+\membersection{wxGBSpan::GetRowspan}\label{wxgbspangetrowspan}
+
+\constfunc{int}{GetRowspan}{\void}
+
+Get the current rowspan value.
+
+\membersection{wxGBSpan::SetColspan}\label{wxgbspansetcolspan}
+
+\func{void}{SetColspan}{\param{int }{colspan}}
+
+Set a new colspan value.
+
+\membersection{wxGBSpan::SetRowspan}\label{wxgbspansetrowspan}
+
+\func{void}{SetRowspan}{\param{int }{rowspan}}
+
+Set a new rowspan value.
+
+\membersection{wxGBSpan::operator!}\label{wxgbspanoperatorunknown}
+
+\constfunc{bool}{operator!}{\param{const wxGBSpan\& }{o}}
+
+Is the wxGBSpan valid?  (An invalid wxGBSpan is (-1,-1). )
+
+\membersection{wxGBSpan::operator==}\label{wxgbspanoperatorequal}
+
+\constfunc{bool operator}{operator==}{\param{const wxGBSpan\& }{o}}
+
+Compare equality of two wxGBSpans.
+

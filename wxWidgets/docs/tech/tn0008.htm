@@ -1,0 +1,144 @@
+<HTML>
+
+<HEAD>
+<TITLE>How to learn wxWidgets programming</TITLE>
+</HEAD>
+
+<BODY BGCOLOR=#FFFFFF TEXT=#000000 LINK=#FF0000 VLINK=#000000>
+
+<font face="Arial, Lucida Sans, Helvetica">
+
+<a name="top"></a>
+
+<table align=center width=100% border=4 cellpadding=5 cellspacing=0>
+<tr>
+<td bgcolor="#660000" align=left colspan=2>
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
+How to learn wxWidgets programming
+</font>
+</td>
+</tr>
+</table>
+
+<P>
+
+The following is a response by Edward Ream to a common question,
+"What's the best way to learn wxWidgets [and C++]?".<P>
+
+Date: Sun, 04 Jun 2000 14:37:06 -0500<BR>
+From: "Edward K. Ream" <edream@tds.net> <BR>
+To: wx-users@wxwidgets.org<BR>
+Subject: Re: [wx-users] How to learn using wx-windows <BR>
+Reply-To: wx-users@wxwidgets.org<P>
+
+&gt; Reading the Linux Journal article on wxpython, and having used wxclips<BR>
+&gt; I got interested in wxwidgets as a development interface. However, the<BR>
+&gt; programming experience I got is old, and from a former generation (For-<BR>
+&gt; tran). I'd like to refresh my experience and start in C++.  Will<BR>
+&gt; wx-windows be a very high step to take?<P>
+
+I'm new to wxWidgets myself, but I'd like to answer this question
+anyway. In the past two years I've learned two similar frameworks
+(Apple's Yellow Box, aka NextStep/OpenStep and Borland's C++
+Builder/Delphi) and last year I became a C++ enthusiast after 20 years
+of using C.<P>
+
+<B>About C++.</B><P>
+
+The major Aha for me was that the complexity of C++ doesn't matter in
+practice.  What _does_ matter is that C++ allows you to do simple things
+simply, more simply than C.  With a system like wxWidgets you will be
+creating objects and then using those objects to call methods.  So don't
+be afraid of C++: you'll only be using the easy tip of the
+iceberg.<P>
+
+Besides the C++ Programming Language, by Bjarne Stroustrup, the
+"official" guide to C++, I highly recommend Inside the C++ Object Model,
+by Stanley B. Lippman.  (Lippman was one of the C++ honchos at Bell
+Labs.)  This book will tell you what _not_ to do, as well as why
+everything in C++ is as it is.  If you are confused by anything in C++,
+Lippman's book is the cure.<P>
+
+<B>About applications frameworks.</B><P>
+
+Application frameworks such as wxWidgets are organized around a set of
+cooperating classes.  Take a look at the main application class, wxApp,
+some frame and panel classes, graphics classes, menu classes, control
+classes, etc.  In general, to do anything in a framework involves
+creating an object of the specified type, then doing something with that
+object.<P>
+
+For example, suppose you want to create a menu bar.  A menu bar is
+composed of a single menu bar object of type(class) wxMenuBar that
+contains menu objects of type wxMenu.  Each menu object contains menu
+item objects of type wxMenuItem.  So you create the menu bar object,
+then create all the menu objects (creating the menu item objects along
+the way) and finally "attach" the menu objects to the menu bar object
+using a call to the wxMenuBar::Append method.<P>
+
+As an overview I would look at the "Alphabetical class reference"
+section of the reference manual.  I find the HTML version to be the
+easiest to use:  you can browse very quickly through it.  Here's how to
+read this (very large) reference:<P>
+
+<ol>
+<li>Get an overview of the kinds of classes involved.  The class names
+will tell you a lot about what each class does.  Open some of the
+classes, in particular, wxApp (the main application object), wxFrame,
+wxControl (the base class for all controls) and one or two controls,
+like wxButton.
+
+<li>When scanning a class for the first several times, read the
+introductory remarks and quickly scan the list of methods of the class
+to get a general idea about what kinds of operations can be done to
+objects of the class.  You are not looking for detail at this stage,
+just for the big picture.  In particular, what classes exist and how do
+they work together.
+
+<li>Pay particular attention to the classes from which a class is
+derived.  For example, a button (an object of type wxButton) is derived
+from the wxControl, wxWindow, wxEvtHandler and wxObject classes.  What
+does this mean?  It means that a button _is_ a control, and a button
+_is_ a window, and a button _is_ an event handler and a button _is_ an
+object.  So you must understand the parent classes of an object to
+understand the object itself.
+
+For example, if b is a button you can invoke b.m for any of method m of
+the wxControl, wxWindow, wxEvtHandler or wxObject classes.  You are not
+limited to just the methods of wxButton!  This is one of the keys of
+object oriented programming.
+</ol>
+
+Some other tips:<P>
+
+Read some sample code.  You will find that almost none of the C++
+language is actually being used; it's just endlessly creating objects
+and then calling methods using those objects.<P>
+
+Learn as much as you can about the String class; after using a good
+String class you'll never want to use C's string functions again. 
+wxWidgets contains other nifty utility classes as well.<P>
+
+The application class, wxApp, contains the main event loop.  Learn about
+event handling and event tables (reading sample code will help). Almost
+everything in this kind of application framework happens as the result
+of an event and your app is essentially doing nothing but responding to
+events.  Having the event loop written for you is a major, major
+benefit.<P>
+
+I hope this helps. Perhaps we can work together in learning about
+wxWidgets.  Please feel free to ask me any questions you might have.  If
+I've made any blunders in this posting I hope the wxWidgets experts will
+correct me gently.<P>
+
+Edward<BR>
+--------------------------------------------------------------------<BR>
+Edward K. Ream   email:  edream@tds.net<BR>
+Leo: Literate Editor with Outlines<BR>
+Leo: http:&#47;&#47;personalpages.tds.net/~edream/front.html<BR>
+--------------------------------------------------------------------<P>
+
+</font>
+
+</body>
+</html>

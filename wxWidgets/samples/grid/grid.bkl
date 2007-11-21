@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="grid" template="wx_sample" template_append="wx_append">
+        <sources>griddemo.cpp</sources>
+        <wx-lib>adv</wx-lib>
+        <wx-lib>html</wx-lib>
+        <wx-lib>xml</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <win32-res>griddemo.rc</win32-res>
+    </exe>
+
+</makefile>

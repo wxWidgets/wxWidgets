@@ -1,0 +1,128 @@
+% ----------------------------------------------------------------------------
+% CLASS: wxIPaddress
+% ----------------------------------------------------------------------------
+\section{\class{wxIPaddress}}\label{wxipaddress}
+
+wxIPaddress is an abstract base class for all internet protocol address 
+objects. Currently, only \helpref{wxIPV4address}{wxipv4address} 
+is implemented. An experimental implementation for IPV6, wxIPV6address,
+is being developed.
+
+\wxheading{Derived from}
+
+\helpref{wxSockAddress}{wxsockaddress}
+
+\wxheading{Include files}
+
+<wx/socket.h>
+
+% ----------------------------------------------------------------------------
+% MEMBERS
+% ----------------------------------------------------------------------------
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+%
+% Hostname
+%
+
+\membersection{wxIPaddress::Hostname}\label{wxipaddresshostname}
+
+\func{virtual bool}{Hostname}{\param{const wxString\&}{ hostname}}
+
+Set the address to {\it hostname}, which can be a host name
+or an IP-style address in a format dependent on implementation.
+
+\wxheading{Return value}
+
+Returns true on success, false if something goes wrong
+(invalid hostname or invalid IP address).
+
+\func{virtual wxString}{Hostname}{\void}
+
+Returns the hostname which matches the IP address.
+
+%
+% IPAddress
+%
+
+\membersection{wxIPaddress::IPAddress}\label{wxipaddressipaddress}
+
+\func{virtual wxString}{IPAddress}{\void}
+
+Returns a wxString containing the IP address.
+
+%
+% Service
+%
+
+\membersection{wxIPaddress::Service}\label{wxipaddressservice}
+
+\func{virtual bool}{Service}{\param{const wxString\&}{ service}}
+
+Set the port to that corresponding to the specified {\it service}.
+
+\wxheading{Return value}
+
+Returns true on success, false if something goes wrong
+(invalid service).
+
+\func{virtual bool}{Service}{\param{unsigned short}{ service}}
+
+Set the port to that corresponding to the specified {\it service}.
+
+\wxheading{Return value}
+
+Returns true on success, false if something goes wrong
+(invalid service).
+
+\func{virtual unsigned short}{Service}{\void}
+
+Returns the current service.
+
+%
+% AnyAddress
+%
+
+\membersection{wxIPaddress::AnyAddress}\label{wxIPaddressanyaddress}
+
+\func{virtual bool}{AnyAddress}{\void}
+
+Internally, this is the same as setting the IP address
+to {\bf INADDR\_ANY}.
+
+On IPV4 implementations, 0.0.0.0
+
+On IPV6 implementations, ::
+
+\wxheading{Return value}
+
+Returns true on success, false if something went wrong.
+
+%
+% LocalHost
+%
+
+\membersection{wxIPaddress::LocalHost}\label{wxIPaddresslocalhost}
+
+\func{virtual bool}{LocalHost}{\void}
+
+Set address to localhost. 
+
+On IPV4 implementations, 127.0.0.1
+
+On IPV6 implementations, ::1
+
+\wxheading{Return value}
+
+Returns true on success, false if something went wrong.
+
+\membersection{wxIPaddress::IsLocalHost}\label{wxIPaddressislocalhost}
+
+\func{virtual bool}{IsLocalHost}{\void}
+
+Determines if current address is set to localhost. 
+
+\wxheading{Return value}
+
+Returns true if address is localhost, false if internet address.
+

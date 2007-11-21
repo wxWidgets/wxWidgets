@@ -1,0 +1,11 @@
+% makeidx.sty 20-Jan-87   modified for international usage
+%
+% Modified by J.Schrod (TeXsys).
+% according to the suggestion of H.Partl (TU Wien) in german.sty
+% to make caption names adaptable to other languages.
+ 
+\@ifundefined{seeterm}{\def\seeterm{see}}{} % <-----------
+ 
+\def\see#1#2{{\em \seeterm\/} #1}
+\def\printindex{\@input{\jobname.ind}}
+ 

@@ -1,0 +1,215 @@
+\section{\class{wxFileDialog}}\label{wxfiledialog}
+
+This class represents the file chooser dialog.
+
+\wxheading{Derived from}
+
+\helpref{wxDialog}{wxdialog}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/filedlg.h>
+
+\wxheading{Window styles}
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxFD\_DEFAULT\_STYLE}}{Equivalent to wxFD\_OPEN.}
+\twocolitem{\windowstyle{wxFD\_OPEN}}{This is an open dialog; usually this means that the default button's label of the dialog is "Open". Cannot be combined with wxFD\_SAVE.}
+\twocolitem{\windowstyle{wxFD\_SAVE}}{This is a save dialog; usually this means that the default button's label of the dialog is "Save". Cannot be combined with wxFD\_OPEN.}
+\twocolitem{{\windowstyle wxFD\_OVERWRITE\_PROMPT}}{For save dialog only: prompt for a confirmation if a file will be overwritten.}
+\twocolitem{{\windowstyle wxFD\_FILE\_MUST\_EXIST}}{For open dialog only: the user may only select files that actually exist.}
+\twocolitem{{\windowstyle wxFD\_MULTIPLE}}{For open dialog only: allows selecting multiple files.}
+\twocolitem{{\windowstyle wxFD\_CHANGE\_DIR}}{Change the current working directory to the directory where the file(s) chosen by the user are.}
+\twocolitem{{\windowstyle wxFD\_PREVIEW}}{Show the preview of the selected files (currently only supported by wxGTK using GTK+ 2.4 or later).}
+\end{twocollist}
+
+{\bf NB:} Previous versions of wxWidgets used {\tt wxFD\_CHANGE\_DIR} by default
+under MS Windows which allowed the program to simply remember the last
+directory where user selected the files to open/save. This (desired)
+functionality must be implemented in the program itself now (manually remember
+the last path used and pass it to the dialog the next time it is called) or
+by using this flag.
+
+
+\wxheading{See also}
+
+\helpref{wxFileDialog overview}{wxfiledialogoverview}, \helpref{wxFileSelector}{wxfileselector}
+
+\wxheading{Remarks}
+
+Pops up a file selector box. In Windows and GTK2.4+, this is the common
+file selector dialog. In X, this is a file selector box with somewhat less
+functionality. The path and filename are distinct elements of a full file pathname.
+If path is ``", the current directory will be used. If filename is ``",
+no default filename will be supplied. The wildcard determines what files
+are displayed in the file selector, and file extension supplies a type
+extension for the required filename.
+
+Both the X and Windows versions implement a wildcard filter. Typing a
+filename containing wildcards (*, ?) in the filename text item, and
+clicking on Ok, will result in only those files matching the pattern being
+displayed. The wildcard may be a specification for multiple
+types of file with a description for each, such as:
+
+\begin{verbatim}
+ "BMP and GIF files (*.bmp;*.gif)|*.bmp;*.gif|PNG files (*.png)|*.png"
+\end{verbatim}
+
+It must be noted that wildcard support in the native Motif file
+dialog is quite limited: only one alternative is supported,
+and it is displayed without the descriptive test; ``BMP files (*.bmp)|*.bmp''
+is displayed as ``*.bmp'', and both
+``BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif'' and
+``Image files|*.bmp;*.gif'' are errors.
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFileDialog::wxFileDialog}\label{wxfiledialogctor}
+
+\func{}{wxFileDialog}{\param{wxWindow* }{parent}, \param{const wxString\& }{message = "Choose a file"},\rtfsp
+\param{const wxString\& }{defaultDir = ""}, \param{const wxString\& }{defaultFile = ``"},\rtfsp
+\param{const wxString\& }{wildcard = ``*.*"}, \param{long }{style = wxFD\_DEFAULT\_STYLE}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{sz = wxDefaultSize}, \param{const wxString\& }{name = "filedlg"}}
+
+Constructor. Use \helpref{wxFileDialog::ShowModal}{wxfiledialogshowmodal} to show the dialog.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window.}
+
+\docparam{message}{Message to show on the dialog.}
+
+\docparam{defaultDir}{The default directory, or the empty string.}
+
+\docparam{defaultFile}{The default filename, or the empty string.}
+
+\docparam{wildcard}{A wildcard, such as ``*.*" or ``BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".
+
+Note that the native Motif dialog has some limitations with respect to
+wildcards; see the Remarks section above.}
+
+\docparam{style}{A dialog style. See wxFD\_* styles for more info.}
+
+\docparam{pos}{Dialog position. Not implemented.}
+
+\docparam{size}{Dialog size. Not implemented.}
+
+\docparam{name}{Dialog name. Not implemented.}
+
+
+\membersection{wxFileDialog::\destruct{wxFileDialog}}\label{wxfiledialogdtor}
+
+\func{}{\destruct{wxFileDialog}}{\void}
+
+Destructor.
+
+\membersection{wxFileDialog::GetDirectory}\label{wxfiledialoggetdirectory}
+
+\constfunc{wxString}{GetDirectory}{\void}
+
+Returns the default directory.
+
+\membersection{wxFileDialog::GetFilename}\label{wxfiledialoggetfilename}
+
+\constfunc{wxString}{GetFilename}{\void}
+
+Returns the default filename.
+
+\membersection{wxFileDialog::GetFilenames}\label{wxfiledialoggetfilenames}
+
+\constfunc{void}{GetFilenames}{\param{wxArrayString\& }{filenames}}
+
+Fills the array {\it filenames} with the names of the files chosen. This
+function should only be used with the dialogs which have {\tt wxFD\_MULTIPLE} style,
+use \helpref{GetFilename}{wxfiledialoggetfilename} for the others.
+
+Note that under Windows, if the user selects shortcuts, the filenames
+include paths, since the application cannot determine the full path
+of each referenced file by appending the directory containing the shortcuts
+to the filename.
+
+\membersection{wxFileDialog::GetFilterIndex}\label{wxfiledialoggetfilterindex}
+
+\constfunc{int}{GetFilterIndex}{\void}
+
+Returns the index into the list of filters supplied, optionally, in the wildcard parameter.
+Before the dialog is shown, this is the index which will be used when the dialog is first displayed.
+After the dialog is shown, this is the index selected by the user.
+
+\membersection{wxFileDialog::GetMessage}\label{wxfiledialoggetmessage}
+
+\constfunc{wxString}{GetMessage}{\void}
+
+Returns the message that will be displayed on the dialog.
+
+\membersection{wxFileDialog::GetPath}\label{wxfiledialoggetpath}
+
+\constfunc{wxString}{GetPath}{\void}
+
+Returns the full path (directory and filename) of the selected file.
+
+\membersection{wxFileDialog::GetPaths}\label{wxfiledialoggetpaths}
+
+\constfunc{void}{GetPaths}{\param{wxArrayString\& }{paths}}
+
+Fills the array {\it paths} with the full paths of the files chosen. This
+function should only be used with the dialogs which have {\tt wxFD\_MULTIPLE} style,
+use \helpref{GetPath}{wxfiledialoggetpath} for the others.
+
+\membersection{wxFileDialog::GetWildcard}\label{wxfiledialoggetwildcard}
+
+\constfunc{wxString}{GetWildcard}{\void}
+
+Returns the file dialog wildcard.
+
+\membersection{wxFileDialog::SetDirectory}\label{wxfiledialogsetdirectory}
+
+\func{void}{SetDirectory}{\param{const wxString\& }{directory}}
+
+Sets the default directory.
+
+\membersection{wxFileDialog::SetFilename}\label{wxfiledialogsetfilename}
+
+\func{void}{SetFilename}{\param{const wxString\& }{setfilename}}
+
+Sets the default filename.
+
+\membersection{wxFileDialog::SetFilterIndex}\label{wxfiledialogsetfilterindex}
+
+\func{void}{SetFilterIndex}{\param{int }{filterIndex}}
+
+Sets the default filter index, starting from zero.
+
+\membersection{wxFileDialog::SetMessage}\label{wxfiledialogsetmessage}
+
+\func{void}{SetMessage}{\param{const wxString\& }{message}}
+
+Sets the message that will be displayed on the dialog.
+
+\membersection{wxFileDialog::SetPath}\label{wxfiledialogsetpath}
+
+\func{void}{SetPath}{\param{const wxString\& }{path}}
+
+Sets the path (the combined directory and filename that will be returned when the dialog is dismissed).
+
+\membersection{wxFileDialog::SetWildcard}\label{wxfiledialogsetwildcard}
+
+\func{void}{SetWildcard}{\param{const wxString\& }{wildCard}}
+
+Sets the wildcard, which can contain multiple file types, for example:
+
+``BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
+
+Note that the native Motif dialog has some limitations with respect to
+wildcards; see the Remarks section above.
+
+\membersection{wxFileDialog::ShowModal}\label{wxfiledialogshowmodal}
+
+\func{int}{ShowModal}{\void}
+
+Shows the dialog, returning wxID\_OK if the user pressed OK, and wxID\_CANCEL
+otherwise.
+
+

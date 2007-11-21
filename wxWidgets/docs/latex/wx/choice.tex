@@ -1,0 +1,169 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        treectrl.tex
+%% Purpose:     wxChoice documentation
+%% Author:      wxWidgets Team
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxChoice}}\label{wxchoice}
+
+A choice item is used to select one of a list of strings. Unlike a
+listbox, only the selection is visible until the user pulls down the
+menu of choices.
+
+\wxheading{Derived from}
+
+\helpref{wxControlWithItems}{wxcontrolwithitems}\\
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/choice.h>
+
+\wxheading{Window styles}
+
+There are no special styles for wxChoice.
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{Event handling}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_CHOICE(id, func)}}{Process a wxEVT\_COMMAND\_CHOICE\_SELECTED event,
+when an item on the list is selected.}
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{wxListBox}{wxlistbox}, \helpref{wxComboBox}{wxcombobox},
+\rtfsp\helpref{wxCommandEvent}{wxcommandevent}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxChoice::wxChoice}\label{wxchoicector}
+
+\func{}{wxChoice}{\void}
+
+Default constructor.
+
+\func{}{wxChoice}{\param{wxWindow *}{parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxPoint\& }{pos}, \param{const wxSize\&}{ size},\rtfsp
+\param{int}{ n}, \param{const wxString }{choices[]},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``choice"}}
+
+\func{}{wxChoice}{\param{wxWindow *}{parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxPoint\& }{pos}, \param{const wxSize\&}{ size},\rtfsp
+\param{const wxArrayString\& }{choices},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``choice"}}
+
+Constructor, creating and showing a choice.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Window identifier. A value of -1 indicates a default value.}
+
+\docparam{pos}{Window position.}
+
+\docparam{size}{Window size. If the default size (-1, -1) is specified then the choice is sized
+appropriately.}
+
+\docparam{n}{Number of strings with which to initialise the choice control.}
+
+\docparam{choices}{An array of strings with which to initialise the choice control.}
+
+\docparam{style}{Window style. See \helpref{wxChoice}{wxchoice}.}
+
+\docparam{validator}{Window validator.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxChoice::Create}{wxchoicecreate}, \helpref{wxValidator}{wxvalidator}
+
+\pythonnote{The wxChoice constructor in wxPython reduces the {\tt n}
+and {\tt choices} arguments are to a single argument, which is
+a list of strings.}
+
+\perlnote{In wxPerl there is just an array reference in place of {\tt n}
+and {\tt choices}.}
+
+
+\membersection{wxChoice::\destruct{wxChoice}}\label{wxchoicedtor}
+
+\func{}{\destruct{wxChoice}}{\void}
+
+Destructor, destroying the choice item.
+
+
+\membersection{wxChoice::Create}\label{wxchoicecreate}
+
+\func{bool}{Create}{\param{wxWindow *}{parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxPoint\& }{pos}, \param{const wxSize\&}{ size},\rtfsp
+\param{int}{ n}, \param{const wxString }{choices[]},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{const wxString\& }{name = ``choice"}}
+
+\func{bool}{Create}{\param{wxWindow *}{parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxPoint\& }{pos}, \param{const wxSize\&}{ size},\rtfsp
+\param{const wxArrayString\& }{choices},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{const wxString\& }{name = ``choice"}}
+
+Creates the choice for two-step construction. See \helpref{wxChoice::wxChoice}{wxchoicector}.
+
+
+\membersection{wxChoice::GetColumns}\label{wxchoicegetcolumns}
+
+\constfunc{int}{GetColumns}{\void}
+
+Gets the number of columns in this choice item.
+
+\wxheading{Remarks}
+
+This is implemented for Motif only and always returns $1$ for the other
+platforms.
+
+
+\membersection{wxChoice::GetCurrentSelection}\label{wxchoicegetcurrentselection}
+
+\constfunc{int}{GetCurrentSelection}{\void}
+
+Unlike \helpref{GetSelection}{wxcontrolwithitemsgetselection} which only
+returns the accepted selection value, i.e. the selection in the control once
+the user closes the dropdown list, this function returns the current selection.
+That is, while the dropdown list is shown, it returns the currently selected
+item in it. When it is not shown, its result is the same as for the other
+function.
+
+\newsince{2.6.2} (before this version
+\helpref{GetSelection}{wxcontrolwithitemsgetselection} itself behaved like
+this).
+
+
+\membersection{wxChoice::SetColumns}\label{wxchoicesetcolumns}
+
+\func{void}{SetColumns}{\param{int}{ n = 1}}
+
+Sets the number of columns in this choice item.
+
+\wxheading{Parameters}
+
+\docparam{n}{Number of columns.}
+
+\wxheading{Remarks}
+
+This is implemented for Motif only and doesn't do anything under other
+platforms.
+

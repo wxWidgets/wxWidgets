@@ -1,0 +1,47 @@
+; Inno Setup Script
+; Created with ScriptMaker Version 1.3.22
+; 14 February 2001 at 10:38
+
+[Setup]
+    MinVersion=4.0,4.0
+    AppName=Tex2RTF TEX2RTFVERSION
+    AppId=Tex2RTF
+    CreateUninstallRegKey=1
+    UsePreviousAppDir=1
+    UsePreviousGroup=1
+    AppVersion=TEX2RTFVERSION
+    AppVerName=Tex2RTF TEX2RTFVERSION
+    AppCopyright=Copyright © Julian Smart and others, 2002
+;    BackColor=$FF0000
+;    BackColor2=$000000
+    BackColor=$800000
+    BackColor2=$C71F1F
+    BackColorDirection=toptobottom
+    WindowShowCaption=1
+    WindowStartMaximized=1
+    WindowVisible=1
+    WindowResizable=1
+    UninstallLogMode=Append
+    DirExistsWarning=auto
+    UninstallFilesDir={app}
+    DisableDirPage=0
+    DisableStartupPrompt=1
+    CreateAppDir=1
+    DisableProgramGroupPage=0
+    AlwaysCreateUninstallIcon=1
+    Uninstallable=1
+    UninstallIconName=Uninstall Tex2RTF TEX2RTFVERSION
+    UninstallDisplayName=Tex2RTF TEX2RTFVERSION
+    DefaultDirName={pf}\Tex2RTF
+    DefaultGroupName=Tex2RTF TEX2RTFVERSION
+    MessagesFile=compiler:default.isl
+    DiskSpanning=0
+    DiskSize=1457664
+    DiskClusterSize=512
+    ReserveBytes=0
+    UseSetupLdr=1
+    LicenseFile=c:\wx2dev\wxWidgets\utils\tex2rtf\docs\licence.txt
+    InfoAfterFile=c:\wx2dev\wxWidgets\utils\tex2rtf\docs\readme.txt
+    SourceDir=c:\wx2dev\wxWidgets\deliver\tex2rtf
+    OutputDir=c:\wx2dev\wxWidgets\deliver
+

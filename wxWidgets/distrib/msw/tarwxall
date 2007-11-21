@@ -1,0 +1,111 @@
+#!/bin/sh
+# tarwxall: make up a tar.gz distribution of wxAll
+# Supply a source (e.g. ~/wx2) and destination (e.g. ~/wx2/deliver)
+
+# We can't use e.g. this:
+# ls `cat $SRC/distrib/msw/makefile.rsp` zip -@ -u $DEST/wxWidgets-$VERSION-gen.zip
+# because there's not enough space on the command line, plus we need to ignore the
+# blank lines.
+
+TAR=tar
+ARCH=`arch`
+if [ "$ARCH" = "ppc" ]; then
+  TAR=gnutar
+fi
+
+expandlines()
+{
+    toexpand=$1
+    outputfile=$2
+
+    rm -f $outputfile
+    touch $outputfile
+    for line in `cat $toexpand` ; do
+      if [ "$line" != "" ]; then
+        ls $line >> $outputfile
+      fi
+    uniq < $outputfile > /tmp/uniqtemp.txt
+    mv /tmp/uniqtemp.txt $outputfile
+    done
+}
+
+
+init=""
+if [ "$1" = "" ]
+then
+  echo Usage: tarwxall wx-dir output-dir version
+  exit
+fi
+
+if [ "$2" = "" ]
+then
+  echo Usage: tarwxall wx-dir output-dir version
+  exit
+fi
+
+if [ "$3" = "" ]
+then
+  echo Usage: tarwxall wx-dir output-dir version
+  exit
+fi
+
+WXVER=$3
+
+echo About to archive wxAll:
+echo   From   $1
+echo   To     $2
+echo CTRL-C if this is not correct.
+read dummy
+
+cd $1
+
+echo Removing backup files...
+rm *~ */*~ */*/*~ */*/*/*~ */*/*/*/*~
+
+rm -f $2/wxAll-${WXVER}*.tar.gz
+
+### wxAll: all distributions in one giant archive
+cd $1
+cat $1/distrib/msw/generic.rsp $1/distrib/msw/msw.rsp $1/distrib/msw/wince.rsp $1/distrib/msw/vc.rsp $1/distrib/msw/cw.rsp $1/distrib/msw/cw_mac.rsp $1/distrib/msw/gtk.rsp $1/distrib/msw/x11.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/mac.rsp $1/distrib/msw/cocoa.rsp $1/distrib/msw/os2.rsp $1/distrib/msw/x11.rsp $1/distrib/msw/univ.rsp $1/distrib/msw/mgl.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/deprecated.rsp $1/distrib/msw/utilmake.rsp $1/distrib/msw/utils.rsp $1/distrib/msw/mmedia.rsp $1/distrib/msw/tex2rtf.rsp $1/distrib/msw/stc.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp $1/distrib/msw/docsrc.rsp | uniq > /tmp/wxall_in.txt
+expandlines /tmp/wxall_in.txt /tmp/wxall.txt
+$TAR cf $2/wxAll-${WXVER}.tar -T /tmp/wxall.txt
+
+echo Re-tarring wxAll in a subdirectory...
+cd $2
+rm -f -r wxWidgets-${WXVER}
+mkdir wxWidgets-${WXVER}
+
+# If we have the full set of VC++ project files,
+# get them
+if [ -f $2/extra/wxWidgets-${WXVER}-VC.zip ]; then
+  unzip -o $2/extra/wxWidgets-${WXVER}-VC.zip
+else
+  echo "Warning - did not find $2/deliver/extra/wxWidgets-${WXVER}-VC.zip"
+fi
+
+cd wxWidgets-${WXVER}
+$TAR xf ../wxAll-${WXVER}.tar
+
+# Translate all .dsp and .dsw files to DOS format
+unix2dos --unix2dos `cat $1/distrib/msw/vc.rsp`
+
+# Copy OS/2 specific configure files
+cp $1/distrib/os2/os2-specific.zip docs/os2
+
+# Copy the OS/2 files which probably haven't been copied yet
+mkdir include/wx/os2
+mkdir src/os2
+cp $1/include/wx/os2/*.H include/wx/os2
+cp $1/src/os2/*.CPP $1/src/os2/*.I src/os2
+
+# Make all OS/2 files lower case
+$1/distrib/msw/namedown include/wx/os2/*.H
+$1/distrib/msw/namedown src/os2/*.CPP src/os2/*.I
+
+cd ..
+
+rm -f wxAll-${WXVER}.tar
+$TAR cf $2/wxAll-${WXVER}.tar wxWidgets-${WXVER}/*
+rm -f -r wxWidgets-${WXVER}
+gzip $2/wxAll-${WXVER}.tar
+

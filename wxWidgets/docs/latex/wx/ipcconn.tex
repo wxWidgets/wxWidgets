@@ -1,0 +1,220 @@
+\section{\class{wxConnection}}\label{wxconnection}
+
+A wxConnection object represents the connection between a client
+and a server. It is created by making a connection using a\rtfsp
+\helpref{wxClient}{wxclient} object, or by the acceptance of a
+connection by a\rtfsp \helpref{wxServer}{wxserver} object. The
+bulk of a DDE-like (Dynamic Data Exchange) conversation is
+controlled by calling members in a {\bf wxConnection} object or
+by overriding its members. The actual DDE-based implementation
+using wxDDEConnection is available on Windows only, but a
+platform-independent, socket-based version of this API is
+available using wxTCPConnection, which has the same API.
+
+An application should normally derive a new connection class from
+wxConnection, in order to override the communication event
+handlers to do something interesting.
+
+\wxheading{Derived from}
+
+wxConnectionBase\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/ipc.h>
+
+\wxheading{Types}
+
+\index{wxIPCFormat}wxIPCFormat is defined as follows:
+
+\begin{verbatim}
+enum wxIPCFormat
+{
+  wxIPC_INVALID =          0,
+  wxIPC_TEXT =             1,  /* CF_TEXT */
+  wxIPC_BITMAP =           2,  /* CF_BITMAP */
+  wxIPC_METAFILE =         3,  /* CF_METAFILEPICT */
+  wxIPC_SYLK =             4,
+  wxIPC_DIF =              5,
+  wxIPC_TIFF =             6,
+  wxIPC_OEMTEXT =          7,  /* CF_OEMTEXT */
+  wxIPC_DIB =              8,  /* CF_DIB */
+  wxIPC_PALETTE =          9,
+  wxIPC_PENDATA =          10,
+  wxIPC_RIFF =             11,
+  wxIPC_WAVE =             12,
+  wxIPC_UNICODETEXT =      13,
+  wxIPC_ENHMETAFILE =      14,
+  wxIPC_FILENAME =         15, /* CF_HDROP */
+  wxIPC_LOCALE =           16,
+  wxIPC_PRIVATE =          20
+};
+\end{verbatim}
+
+\wxheading{See also}
+
+\helpref{wxClient}{wxclient}, \helpref{wxServer}{wxserver},
+\helpref{Interprocess communications overview}{ipcoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxConnection::wxConnection}\label{wxconnectionctor}
+
+\func{}{wxConnection}{\void}
+
+\func{}{wxConnection}{\param{char* }{buffer}, \param{int}{ size}}
+
+Constructs a connection object. If no user-defined connection
+object is to be derived from wxConnection, then the constructor
+should not be called directly, since the default connection
+object will be provided on requesting (or accepting) a
+connection. However, if the user defines his or her own derived
+connection object, the \helpref{wxServer::OnAcceptConnection}{wxserveronacceptconnection}\rtfsp
+and/or \helpref{wxClient::OnMakeConnection}{wxclientonmakeconnection} 
+members should be replaced by functions which construct the new
+connection object.
+
+If the arguments of the wxConnection constructor are void then
+the wxConnection object manages its own connection buffer,
+allocating memory as needed. A programmer-supplied buffer cannot
+be increased if necessary, and the program will assert if it is
+not large enough. The programmer-supplied buffer is included
+mainly for backwards compatibility.
+
+\membersection{wxConnection::Advise}\label{wxconnectionadvise}
+
+\func{bool}{Advise}{\param{const wxString\& }{item}, \param{char* }{data}, \param{int}{ size = -1}, \param{wxIPCFormat}{ format = wxCF\_TEXT}}
+
+Called by the server application to advise the client of a change
+in the data associated with the given item. Causes the client
+connection's \helpref{wxConnection::OnAdvise}{wxconnectiononadvise} member
+to be called. Returns true if successful.
+
+\membersection{wxConnection::Execute}\label{wxconnectionexecute}
+
+\func{bool}{Execute}{\param{char* }{data}, \param{int}{ size = -1}, \param{wxIPCFormat}{ format = wxCF\_TEXT}}
+
+Called by the client application to execute a command on the
+server. Can also be used to transfer arbitrary data to the server
+(similar to \helpref{wxConnection::Poke}{wxconnectionpoke} in
+that respect). Causes the server connection's \helpref{wxConnection::OnExecute}{wxconnectiononexecute} 
+member to be called. Returns true if successful.
+
+\membersection{wxConnection::Disconnect}\label{wxconnectiondisconnect}
+
+\func{bool}{Disconnect}{\void}
+
+Called by the client or server application to disconnect from the
+other program; it causes the \helpref{wxConnection::OnDisconnect}{wxconnectionondisconnect} 
+message to be sent to the corresponding connection object in the
+other program. Returns true if successful or already disconnected.
+The application that calls {\bf Disconnect} must explicitly delete
+its side of the connection.
+
+\membersection{wxConnection::OnAdvise}\label{wxconnectiononadvise}
+
+\func{virtual bool}{OnAdvise}{\param{const wxString\& }{topic}, \param{const wxString\& }{item}, \param{char* }{data}, \param{int}{ size}, \param{wxIPCFormat}{ format}}
+
+Message sent to the client application when the server notifies
+it of a change in the data associated with the given item, using
+\helpref{Advise}{wxconnectionadvise}.
+
+\membersection{wxConnection::OnDisconnect}\label{wxconnectionondisconnect}
+
+\func{virtual bool}{OnDisconnect}{\void}
+
+Message sent to the client or server application when the other
+application notifies it to end the connection. The default
+behaviour is to delete the connection object and return true, so
+applications should generally override {\bf OnDisconnect}
+(finally calling the inherited method as well) so that they know
+the connection object is no longer available.
+
+\membersection{wxConnection::OnExecute}\label{wxconnectiononexecute}
+
+\func{virtual bool}{OnExecute}{\param{const wxString\& }{topic}, \param{char* }{data}, \param{int}{ size}, \param{wxIPCFormat}{ format}}
+
+Message sent to the server application when the client notifies
+it to execute the given data, using \helpref{Execute}{wxconnectionexecute}.
+Note that there is no item associated with this message.
+
+\membersection{wxConnection::OnPoke}\label{wxconnectiononpoke}
+
+\func{virtual bool}{OnPoke}{\param{const wxString\& }{topic}, \param{const wxString\& }{item}, \param{char* }{data}, \param{int}{ size}, \param{wxIPCFormat}{ format}}
+
+Message sent to the server application when the client notifies it to
+accept the given data.
+
+\membersection{wxConnection::OnRequest}\label{wxconnectiononrequest}
+
+\func{virtual char*}{OnRequest}{\param{const wxString\& }{topic}, \param{const wxString\& }{item}, \param{int *}{size}, \param{wxIPCFormat}{ format}}
+
+Message sent to the server application when the client calls 
+\helpref{wxConnection::Request}{wxconnectionrequest}. The
+server's \helpref{OnRequest}{wxconnectiononrequest} method
+should respond by returning a character string, or NULL to
+indicate no data, and setting *size. The character string must of
+course persist after the call returns.
+
+\membersection{wxConnection::OnStartAdvise}\label{wxconnectiononstartadvise}
+
+\func{virtual bool}{OnStartAdvise}{\param{const wxString\& }{topic}, \param{const wxString\& }{item}}
+
+Message sent to the server application by the client, when the client
+wishes to start an `advise loop' for the given topic and item. The
+server can refuse to participate by returning false.
+
+\membersection{wxConnection::OnStopAdvise}\label{wxconnectiononstopadvise}
+
+\func{virtual bool}{OnStopAdvise}{\param{const wxString\& }{topic}, \param{const wxString\& }{item}}
+
+Message sent to the server application by the client, when the client
+wishes to stop an `advise loop' for the given topic and item. The
+server can refuse to stop the advise loop by returning false, although
+this doesn't have much meaning in practice.
+
+\membersection{wxConnection::Poke}\label{wxconnectionpoke}
+
+\func{bool}{Poke}{\param{const wxString\& }{item}, \param{char* }{data}, \param{int}{ size = -1}, \param{wxIPCFormat}{ format = wxCF\_TEXT}}
+
+Called by the client application to poke data into the server.
+Can be used to transfer arbitrary data to the server. Causes the
+server connection's \helpref{wxConnection::OnPoke}{wxconnectiononpoke} member to
+be called. If size is -1 the size is computed from the string
+length of data.
+
+Returns true if successful.
+
+\membersection{wxConnection::Request}\label{wxconnectionrequest}
+
+\func{char*}{Request}{\param{const wxString\& }{item}, \param{int *}{size}, \param{wxIPCFormat}{ format = wxIPC\_TEXT}}
+
+Called by the client application to request data from the server.
+Causes the server connection's \helpref{wxConnection::OnRequest}{wxconnectiononrequest} 
+member to be called. Size may be NULL or a pointer to a variable
+to receive the size of the requested item.
+
+Returns a character string (actually a pointer to the
+connection's buffer) if successful, NULL otherwise. This buffer
+does not need to be deleted.
+
+\membersection{wxConnection::StartAdvise}\label{wxconnectionstartadvise}
+
+\func{bool}{StartAdvise}{\param{const wxString\& }{item}}
+
+Called by the client application to ask if an advise loop can be
+started with the server. Causes the server connection's 
+\helpref{wxConnection::OnStartAdvise}{wxconnectiononstartadvise}\rtfsp
+member to be called. Returns true if the server okays it, false
+otherwise.
+
+\membersection{wxConnection::StopAdvise}\label{wxconnectionstopadvise}
+
+\func{bool}{StopAdvise}{\param{const wxString\& }{item}}
+
+Called by the client application to ask if an advise loop can be
+stopped. Causes the server connection's \helpref{wxConnection::OnStopAdvise}{wxconnectiononstopadvise} 
+member to be called. Returns true if the server okays it, false
+otherwise.
+

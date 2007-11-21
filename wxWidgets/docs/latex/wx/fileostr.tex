@@ -1,0 +1,58 @@
+% -----------------------------------------------------------------------------
+% wxFileOutputStream
+% -----------------------------------------------------------------------------
+\section{\class{wxFileOutputStream}}\label{wxfileoutputstream}
+
+This class represents data written to a file. There are actually
+two such groups of classes: this one is based on \helpref{wxFile}{wxfile} 
+whereas \helpref{wxFFileInputStream}{wxffileinputstream} is based in
+the \helpref{wxFFile}{wxffile} class.
+
+Note that \helpref{SeekO()}{wxoutputstreamseeko} 
+can seek beyond the end of the stream (file) and will thus not return 
+{\it wxInvalidOffset} for that.
+
+\wxheading{Derived from}
+
+\helpref{wxOutputStream}{wxoutputstream}
+
+\wxheading{Include files}
+
+<wx/wfstream.h>
+
+\wxheading{See also}
+
+\helpref{wxBufferedOutputStream}{wxbufferedoutputstream}, \helpref{wxFileInputStream}{wxfileinputstream}, \helpref{wxFFileInputStream}{wxffileinputstream}
+
+% ----------
+% Members
+% ----------
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFileOutputStream::wxFileOutputStream}\label{wxfileoutputstreamctor}
+
+\func{}{wxFileOutputStream}{\param{const wxString\&}{ ofileName}}
+
+Creates a new file with {\it ofilename} name and initializes the stream in
+write-only mode. 
+
+\func{}{wxFileOutputStream}{\param{wxFile\&}{ file}}
+
+Initializes a file stream in write-only mode using the file I/O object {\it file}.
+
+\func{}{wxFileOutputStream}{\param{int}{ fd}}
+
+Initializes a file stream in write-only mode using the file descriptor {\it fd}.
+
+\membersection{wxFileOutputStream::\destruct{wxFileOutputStream}}\label{wxfileoutputstreamdtor}
+
+\func{}{\destruct{wxFileOutputStream}}{\void}
+
+Destructor.
+
+\membersection{wxFileOutputStream::IsOk}\label{wxfileoutputstreamisok}
+
+\constfunc{bool}{IsOk}{\void}
+
+Returns true if the stream is initialized and ready.
+

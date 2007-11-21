@@ -1,0 +1,24 @@
+/* XPM */
+static char *horiz_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 3 1",
+"  c None",
+". c Black",
+"X c Yellow",
+/* pixels */
+"                ",
+"      .....     ",
+"      .XXX.     ",
+"      .XXX.     ",
+"      .XXX.     ",
+"      .....     ",
+"                ",
+"                ",
+"   ...........  ",
+"   .XXXXXXXXX.  ",
+"   .XXXXXXXXX.  ",
+"   .XXXXXXXXX.  ",
+"   .XXXXXXXXX.  ",
+"   ...........  ",
+"                "
+};

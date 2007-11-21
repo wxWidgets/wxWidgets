@@ -1,0 +1,49 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        sostream.tex
+%% Purpose:     wxStringOutputStream docs
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     2004-09-19
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2004 Vadim Zeitlin
+%% License:     wxWindows licence
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxStringOutputStream}}\label{wxstringoutputstream}
+
+This class implements an output stream which writes data either to a
+user-provided or internally allocated string. Note that currently this stream
+does not support seeking but can tell its current position.
+
+\wxheading{Derived from}
+
+\helpref{wxOutputStream}{wxoutputstream}
+
+\wxheading{Include files}
+
+<wx/sstream.h>
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxStringOutputStream::wxStringOutputStream}\label{wxstringoutputstreamctor}
+
+\func{}{wxStringOutputStream}{\param{wxString}{ *str = \texttt{NULL}}}
+
+If the provided pointer is non-\texttt{NULL}, data will be written to it.
+Otherwise, an internal string is used for the data written to this stream, use 
+\helpref{GetString()}{wxstringoutputstreamgetstring} to get access to it.
+
+If \arg{str} is used, data written to the stream is appended to the current
+contents of it, i.e. the string is not cleared here. However if it is not
+empty, the positions returned by \helpref{TellO}{wxoutputstreamtello} will be
+offset by the initial string length, i.e. initial stream position will be the
+initial length of the string and not $0$.
+
+
+\membersection{wxStringOutputStream::GetString}\label{wxstringoutputstreamgetstring}
+
+\constfunc{const wxString\&}{GetString}{\void}
+
+Returns the string containing all the data written to the stream so far.
+

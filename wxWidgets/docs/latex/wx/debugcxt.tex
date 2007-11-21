@@ -1,0 +1,275 @@
+\section{\class{wxDebugContext}}\label{wxdebugcontext}
+
+A class for performing various debugging and memory tracing
+operations. Full functionality (such as printing out objects
+currently allocated) is only present in a debugging build of wxWidgets,
+i.e. if the \_\_WXDEBUG\_\_ symbol is defined. wxDebugContext
+and related functions and macros can be compiled out by setting
+wxUSE\_DEBUG\_CONTEXT to 0 is setup.h
+
+\wxheading{Derived from}
+
+No parent class.
+
+\wxheading{Include files}
+
+<wx/memory.h>
+
+\wxheading{See also}
+
+\overview{Overview}{wxdebugcontextoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDebugContext::Check}\label{wxdebugcontextcheck}
+
+\func{int}{Check}{\void}
+
+Checks the memory blocks for errors, starting from the currently set
+checkpoint.
+
+\wxheading{Return value}
+
+Returns the number of errors,
+so a value of zero represents success. Returns -1 if an error
+was detected that prevents further checking.
+
+\membersection{wxDebugContext::Dump}\label{wxdebugcontextdump}
+
+\func{bool}{Dump}{\void}
+
+Performs a memory dump from the currently set checkpoint, writing to the
+current debug stream. Calls the {\bf Dump} member function for each wxObject
+derived instance.
+
+\wxheading{Return value}
+
+true if the function succeeded, false otherwise.
+
+\membersection{wxDebugContext::GetCheckPrevious}\label{wxdebugcontextgetcheckprevious}
+
+\func{bool}{GetCheckPrevious}{\void}
+
+Returns true if the memory allocator checks all previous memory blocks for errors.
+By default, this is false since it slows down execution considerably.
+
+\wxheading{See also}
+
+\helpref{wxDebugContext::SetCheckPrevious}{wxdebugcontextsetcheckprevious}
+
+\membersection{wxDebugContext::GetDebugMode}\label{wxdebugcontextgetdebugmode}
+
+\func{bool}{GetDebugMode}{\void}
+
+Returns true if debug mode is on. If debug mode is on, the wxObject new and delete
+operators store or use information about memory allocation. Otherwise,
+a straight malloc and free will be performed by these operators.
+
+\wxheading{See also}
+
+\helpref{wxDebugContext::SetDebugMode}{wxdebugcontextsetdebugmode}
+
+\membersection{wxDebugContext::GetLevel}\label{wxdebugcontextgetlevel}
+
+\func{int}{GetLevel}{\void}
+
+Gets the debug level (default 1). The debug level is used by the wxTraceLevel function and
+the WXTRACELEVEL macro to specify how detailed the trace information is; setting
+a different level will only have an effect if trace statements in the application
+specify a value other than one.
+
+This is obsolete, replaced by \helpref{wxLog}{wxlog} functionality.
+
+\wxheading{See also}
+
+\helpref{wxDebugContext::SetLevel}{wxdebugcontextsetlevel}
+
+\membersection{wxDebugContext::GetStream}\label{wxdebugcontextgetstream}
+
+\func{ostream\&}{GetStream}{\void}
+
+Returns the output stream associated with the debug context.
+
+This is obsolete, replaced by \helpref{wxLog}{wxlog} functionality.
+
+\wxheading{See also}
+
+\helpref{wxDebugContext::SetStream}{wxdebugcontextsetstream}
+
+\membersection{wxDebugContext::GetStreamBuf}\label{wxdebugcontextgetstreambuf}
+
+\func{streambuf*}{GetStreamBuf}{\void}
+
+Returns a pointer to the output stream buffer associated with the debug context.
+There may not necessarily be a stream buffer if the stream has been set
+by the user.
+
+This is obsolete, replaced by \helpref{wxLog}{wxlog} functionality.
+
+\membersection{wxDebugContext::HasStream}\label{wxdebugcontexthasstream}
+
+\func{bool}{HasStream}{\void}
+
+Returns true if there is a stream currently associated
+with the debug context.
+
+This is obsolete, replaced by \helpref{wxLog}{wxlog} functionality.
+
+\wxheading{See also}
+
+\helpref{wxDebugContext::SetStream}{wxdebugcontextsetstream}, \helpref{wxDebugContext::GetStream}{wxdebugcontextgetstream}
+
+\membersection{wxDebugContext::PrintClasses}\label{wxdebugcontextprintclasses}
+
+\func{bool}{PrintClasses}{\void}
+
+Prints a list of the classes declared in this application, giving derivation
+and whether instances of this class can be dynamically created.
+
+\wxheading{See also}
+
+\helpref{wxDebugContext::PrintStatistics}{wxdebugcontextprintstatistics}
+
+\membersection{wxDebugContext::PrintStatistics}\label{wxdebugcontextprintstatistics}
+
+\func{bool}{PrintStatistics}{\param{bool}{ detailed = true}}
+
+Performs a statistics analysis from the currently set checkpoint, writing
+to the current debug stream. The number of object and non-object
+allocations is printed, together with the total size.
+
+\wxheading{Parameters}
+
+\docparam{detailed}{If true, the function will also print how many
+objects of each class have been allocated, and the space taken by
+these class instances.}
+
+\wxheading{See also}
+
+\helpref{wxDebugContext::PrintStatistics}{wxdebugcontextprintstatistics}
+
+\membersection{wxDebugContext::SetCheckpoint}\label{wxdebugcontextsetcheckpoint}
+
+\func{void}{SetCheckpoint}{\param{bool}{ all = false}}
+
+Sets the current checkpoint: Dump and PrintStatistics operations will
+be performed from this point on. This allows you to ignore allocations
+that have been performed up to this point.
+
+\wxheading{Parameters}
+
+\docparam{all}{If true, the checkpoint is reset to include all
+memory allocations since the program started.}
+
+\membersection{wxDebugContext::SetCheckPrevious}\label{wxdebugcontextsetcheckprevious}
+
+\func{void}{SetCheckPrevious}{\param{bool}{ check}}
+
+Tells the memory allocator to check all previous memory blocks for errors.
+By default, this is false since it slows down execution considerably.
+
+\wxheading{See also}
+
+\helpref{wxDebugContext::GetCheckPrevious}{wxdebugcontextgetcheckprevious}
+
+\membersection{wxDebugContext::SetDebugMode}\label{wxdebugcontextsetdebugmode}
+
+\func{void}{SetDebugMode}{\param{bool}{ debug}}
+
+Sets the debug mode on or off. If debug mode is on, the wxObject new and delete
+operators store or use information about memory allocation. Otherwise,
+a straight malloc and free will be performed by these operators.
+
+By default, debug mode is on if \_\_WXDEBUG\_\_ is defined. If the application
+uses this function, it should make sure that all object memory allocated
+is deallocated with the same value of debug mode. Otherwise, the
+delete operator might try to look for memory information that does not
+exist.
+
+\wxheading{See also}
+
+\helpref{wxDebugContext::GetDebugMode}{wxdebugcontextgetdebugmode}
+
+\membersection{wxDebugContext::SetFile}\label{wxdebugcontextsetfile}
+
+\func{bool}{SetFile}{\param{const wxString\& }{filename}}
+
+Sets the current debug file and creates a stream. This will delete any existing
+stream and stream buffer. By default, the debug context stream
+outputs to the debugger (Windows) or standard error (other platforms).
+
+\membersection{wxDebugContext::SetLevel}\label{wxdebugcontextsetlevel}
+
+\func{void}{SetLevel}{\param{int}{ level}}
+
+Sets the debug level (default 1). The debug level is used by the wxTraceLevel function and
+the WXTRACELEVEL macro to specify how detailed the trace information is; setting
+a different level will only have an effect if trace statements in the application
+specify a value other than one.
+
+This is obsolete, replaced by \helpref{wxLog}{wxlog} functionality.
+
+\wxheading{See also}
+
+\helpref{wxDebugContext::GetLevel}{wxdebugcontextgetlevel}
+
+\membersection{wxDebugContext::SetStandardError}\label{wxdebugcontextsetstandarderror}
+
+\func{bool}{SetStandardError}{\void}
+
+Sets the debugging stream to be the debugger (Windows) or standard error (other platforms).
+This is the default setting. The existing stream will be flushed and deleted.
+
+This is obsolete, replaced by \helpref{wxLog}{wxlog} functionality.
+
+\membersection{wxDebugContext::SetStream}\label{wxdebugcontextsetstream}
+
+\func{void}{SetStream}{\param{ostream* }{stream}, \param{streambuf* }{streamBuf = NULL}}
+
+Sets the stream and optionally, stream buffer associated with the debug context.
+This operation flushes and deletes the existing stream (and stream buffer if any).
+
+This is obsolete, replaced by \helpref{wxLog}{wxlog} functionality.
+
+\wxheading{Parameters}
+
+\docparam{stream}{Stream to associate with the debug context. Do not set this to NULL.}
+
+\docparam{streamBuf}{Stream buffer to associate with the debug context.}
+
+\wxheading{See also}
+
+\helpref{wxDebugContext::GetStream}{wxdebugcontextgetstream}, \helpref{wxDebugContext::HasStream}{wxdebugcontexthasstream}
+
+\section{\class{wxDebugStreamBuf}}\label{wxdebugstreambuf}
+
+This class allows you to treat debugging output in a similar
+(stream-based) fashion on different platforms. Under
+Windows, an ostream constructed with this buffer outputs
+to the debugger, or other program that intercepts debugging
+output. On other platforms, the output goes to standard error (cerr).
+
+This is soon to be obsolete, replaced by \helpref{wxLog}{wxlog} functionality.
+
+\wxheading{Derived from}
+
+streambuf
+
+\wxheading{Include files}
+
+<wx/memory.h>
+
+\wxheading{Example}
+
+\begin{verbatim}
+  wxDebugStreamBuf streamBuf;
+  ostream stream(&streamBuf);
+
+  stream << "Hello world!" << endl;
+\end{verbatim}
+
+\wxheading{See also}
+
+\overview{Overview}{wxdebugcontextoverview}
+
+

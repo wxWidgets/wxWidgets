@@ -1,0 +1,54 @@
+\section{\class{wxMBConvFile}}\label{wxmbconvfile}
+
+This class used to define the class instance 
+{\bf wxConvFileName}, but nowadays {\bf wxConvFileName} is
+either of type wxConvLibc (on most platforms) or wxConvUTF8
+(on MacOS X). {\bf wxConvFileName} converts filenames between 
+filesystem multibyte encoding and Unicode. {\bf wxConvFileName} 
+can also be set to a something else at run-time which is used 
+e.g. by wxGTK to use a class which checks the environment 
+variable {\bf G\_FILESYSTEM\_ENCODING} indicating that filenames 
+should not be interpreted as UTF8 and also for converting 
+invalid UTF8 characters (e.g. if there is a filename in iso8859\_1)
+to strings with octal values. 
+
+Since some platforms (such as Win32) use Unicode in the filenames,
+and others (such as Unix) use multibyte encodings, this class should only
+be used directly if wxMBFILES is defined to 1. A convenience macro,
+wxFNCONV, is defined to wxConvFileName->cWX2MB in this case. You could
+use it like this:
+
+\begin{verbatim}
+wxChar *name = wxT("rawfile.doc");
+FILE *fil = fopen(wxFNCONV(name), "r");
+\end{verbatim}
+
+(although it would be better to use wxFopen(name, wxT("r")) in this case.)
+
+\wxheading{Derived from}
+
+\helpref{wxMBConv}{wxmbconv}
+
+\wxheading{Include files}
+
+<wx/strconv.h>
+
+\wxheading{See also}
+
+\helpref{wxMBConv classes overview}{mbconvclasses}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxMBConvFile::MB2WC}\label{wxmbconvfilemb2wc}
+
+\constfunc{size\_t}{MB2WC}{\param{wchar\_t* }{buf}, \param{const char* }{psz}, \param{size\_t }{n}}
+
+Converts from multibyte filename encoding to Unicode. Returns the size of the destination buffer.
+
+\membersection{wxMBConvFile::WC2MB}\label{wxmbconvfilewc2mb}
+
+\constfunc{size\_t}{WC2MB}{\param{char* }{buf}, \param{const wchar\_t* }{psz}, \param{size\_t }{n}}
+
+Converts from Unicode to multibyte filename encoding. Returns the size of the destination buffer.
+

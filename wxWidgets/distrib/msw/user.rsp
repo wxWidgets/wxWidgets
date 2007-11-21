@@ -1,0 +1,17 @@
+user/Makefile
+
+user/wxConvert/*.cpp
+user/wxConvert/*.h
+user/wxConvert/Makefile
+
+user/wxFile/*.cpp
+user/wxFile/*.h
+user/wxFile/Makefile
+user/wxFile/*.xpm
+
+user/wxTest/*.cpp
+user/wxTest/*.h
+user/wxTest/Makefile
+user/wxTest/*.xpm
+user/wxTest/*.png
+

@@ -1,0 +1,74 @@
+\section{\class{wxTreeItemData}}\label{wxtreeitemdata}
+
+wxTreeItemData is some (arbitrary) user class associated with some item. The
+main advantage of having this class is that wxTreeItemData objects are
+destroyed automatically by the tree and, as this class has virtual destructor,
+it means that the memory and any other resources associated with a tree item
+will be automatically freed when it is deleted. Note that we don't use wxObject
+as the base class for wxTreeItemData because the size of this class is
+critical: in many applications, each tree leaf will have wxTreeItemData
+associated with it and the number of leaves may be quite big.
+
+Also please note that because the objects of this class are deleted by the tree
+using the operator {\tt delete}, they must always be allocated on the heap
+using {\tt new}.
+
+\wxheading{Derived from}
+
+\helpref{wxClientData}{wxclientdata}
+
+\wxheading{Include files}
+
+<wx/treectrl.h>
+
+\wxheading{See also}
+
+\helpref{wxTreeCtrl}{wxtreectrl}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxTreeItemData::wxTreeItemData}\label{wxtreeitemdatactor}
+
+\func{}{wxTreeItemData}{\void}
+
+Default constructor.
+
+\pythonnote{The wxPython version of this constructor optionally
+accepts any Python object as a parameter.  This object is then
+associated with the tree item using the wxTreeItemData as a
+container.
+
+In addition, the following methods are added in wxPython for accessing
+the object:
+
+\indented{2cm}{\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf GetData()}}{Returns a reference to the Python Object}
+\twocolitem{{\bf SetData(obj)}}{Associates a new Python Object with the
+wxTreeItemData}
+\end{twocollist}}
+}
+
+\perlnote{In wxPerl the constructor accepts as parameter an optional scalar,
+ and stores it as client data. You may retrieve this data by calling
+ {\bf GetData()}, and set it by calling {\bf SetData( data ).}
+}
+
+\membersection{wxTreeItemData::\destruct{wxTreeItemData}}\label{wxtreeitemdatadtor}
+
+\func{void}{\destruct{wxTreeItemData}}{\void}
+
+Virtual destructor.
+
+\membersection{wxTreeItemData::GetId}\label{wxtreeitemdatagetid}
+
+\func{const wxTreeItemId\&}{GetId}{\void}
+
+Returns the item associated with this node.
+
+\membersection{wxTreeItemData::SetId}\label{wxtreeitemdatasetid}
+
+\func{void}{SetId}{\param{const wxTreeItemId\&}{ id}}
+
+Sets the item associated with this node.
+
+

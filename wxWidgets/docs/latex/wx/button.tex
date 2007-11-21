@@ -1,0 +1,160 @@
+\section{\class{wxButton}}\label{wxbutton}
+
+A button is a control that contains a text string,
+and is one of the most common elements of a GUI. It may be placed on a
+\rtfsp\helpref{dialog box}{wxdialog} or \helpref{panel}{wxpanel}, or indeed
+almost any other window.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/button.h>
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxBU\_LEFT}}{Left-justifies the label. Windows and GTK+ only.}
+\twocolitem{\windowstyle{wxBU\_TOP}}{Aligns the label to the top of the button. Windows and GTK+ only.}
+\twocolitem{\windowstyle{wxBU\_RIGHT}}{Right-justifies the bitmap label. Windows and GTK+ only.}
+\twocolitem{\windowstyle{wxBU\_BOTTOM}}{Aligns the label to the bottom of the button. Windows and GTK+ only.}
+\twocolitem{\windowstyle{wxBU\_EXACTFIT}}{Creates the button as small as possible instead of making it of the standard size (which is the default behaviour ).}
+\twocolitem{\windowstyle{wxNO\_BORDER}}{Creates a flat button. Windows and GTK+ only.}
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{Event handling}
+
+\twocolwidtha{7cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_BUTTON(id, func)}}{Process a wxEVT\_COMMAND\_BUTTON\_CLICKED event,
+when the button is clicked.}
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{wxBitmapButton}{wxbitmapbutton}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxButton::wxButton}\label{wxbuttonctor}
+
+\func{}{wxButton}{\void}
+
+Default constructor.
+
+\func{}{wxButton}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id}, \param{const wxString\& }{label = wxEmptyString},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``button"}}
+
+Constructor, creating and showing a button.
+
+The preferred way to create standard buttons is to use default value of
+\arg{label}. If no label is supplied and \arg{id} is one of standard IDs from
+\helpref{this list}{stockitems}, standard label will be used. In addition to
+that, the button will be decorated with stock icons under GTK+ 2.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Button identifier. A value of \texttt{wxID\_ANY} indicates a default value.}
+
+\docparam{label}{Text to be displayed on the button.}
+
+\docparam{pos}{Button position.}
+
+\docparam{size}{Button size. If the default size is specified then the button is sized
+appropriately for the text.}
+
+\docparam{style}{Window style. See \helpref{wxButton}{wxbutton}.}
+
+\docparam{validator}{Window validator.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxButton::Create}{wxbuttoncreate}, \helpref{wxValidator}{wxvalidator}
+
+\membersection{wxButton::\destruct{wxButton}}\label{wxbuttondtor}
+
+\func{}{\destruct{wxButton}}{\void}
+
+Destructor, destroying the button.
+
+\membersection{wxButton::Create}\label{wxbuttoncreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id}, \param{const wxString\& }{label = wxEmptyString},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator}, \param{const wxString\& }{name = ``button"}}
+
+Button creation function for two-step creation. For more details, see
+\helpref{wxButton::wxButton}{wxbuttonctor}.
+
+\membersection{wxButton::GetLabel}\label{wxbuttongetlabel}
+
+\constfunc{wxString}{GetLabel}{\void}
+
+Returns the string label for the button.
+
+\wxheading{Return value}
+
+The button's label.
+
+\wxheading{See also}
+
+\helpref{wxButton::SetLabel}{wxbuttonsetlabel}
+
+\membersection{wxButton::GetDefaultSize}\label{wxbuttongetdefaultsize}
+
+\func{wxSize}{GetDefaultSize}{\void}
+
+Returns the default size for the buttons. It is advised to make all the dialog
+buttons of the same size and this function allows to retrieve the (platform and
+current font dependent size) which should be the best suited for this.
+
+\membersection{wxButton::SetDefault}\label{wxbuttonsetdefault}
+
+\func{void}{SetDefault}{\void}
+
+This sets the button to be the default item for the panel or dialog
+box.
+
+\wxheading{Remarks}
+
+Under Windows, only dialog box buttons respond to this function.  As
+normal under Windows and Motif, pressing return causes the default button to
+be depressed when the return key is pressed. See also \helpref{wxWindow::SetFocus}{wxwindowsetfocus}\rtfsp
+which sets the keyboard focus for windows and text panel items,\rtfsp
+and \helpref{wxTopLevelWindow::SetDefaultItem}{wxtoplevelwindowsetdefaultitem}.
+
+Note that under Motif, calling this function immediately after
+creation of a button and before the creation of other buttons
+will cause misalignment of the row of buttons, since default
+buttons are larger. To get around this, call {\it SetDefault}\rtfsp
+after you have created a row of buttons: wxWidgets will
+then set the size of all buttons currently on the panel to
+the same size.
+
+\membersection{wxButton::SetLabel}\label{wxbuttonsetlabel}
+
+\func{void}{SetLabel}{\param{const wxString\& }{label}}
+
+Sets the string label for the button.
+
+\wxheading{Parameters}
+
+\docparam{label}{The label to set.}
+
+\wxheading{See also}
+
+\helpref{wxButton::GetLabel}{wxbuttongetlabel}
+

@@ -1,0 +1,197 @@
+\section{\class{wxEvent}}\label{wxevent}
+
+An event is a structure holding information about an event passed to a
+callback or member function. {\bf wxEvent} used to be a multipurpose
+event object, and is an abstract base class for other event classes (see below).
+
+For more information about events, see the \helpref{Event handling overview}{eventhandlingoverview}.
+
+\perlnote{In wxPerl custom event classes should be derived from
+\texttt{Wx::PlEvent} and \texttt{Wx::PlCommandEvent}.}
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/event.h>
+
+\wxheading{See also}
+
+\helpref{wxCommandEvent}{wxcommandevent},\rtfsp
+\helpref{wxMouseEvent}{wxmouseevent}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxEvent::wxEvent}\label{wxeventctor}
+
+\func{}{wxEvent}{\param{int }{id = 0}, \param{wxEventType }{eventType = {\tt wxEVT\_NULL}}}
+
+Constructor. Should not need to be used directly by an application.
+
+
+\membersection{wxEvent::m\_propagationLevel}\label{wxeventmpropagationlevel}
+
+
+\member{int}{m\_propagationLevel}
+
+Indicates how many levels the event can propagate. This member is protected and
+should typically only be set in the constructors of the derived classes. It
+may be temporarily changed by \helpref{StopPropagation}{wxeventstoppropagation} 
+and \helpref{ResumePropagation}{wxeventresumepropagation} and tested with 
+\helpref{ShouldPropagate}{wxeventshouldpropagate}.
+
+The initial value is set to either {\tt wxEVENT\_PROPAGATE\_NONE} (by
+default) meaning that the event shouldn't be propagated at all or to 
+{\tt wxEVENT\_PROPAGATE\_MAX} (for command events) meaning that it should be
+propagated as much as necessary.
+
+Any positive number means that the event should be propagated but no more than
+the given number of times. E.g. the propagation level may be set to $1$ to
+propagate the event to its parent only, but not to its grandparent.
+
+
+\membersection{wxEvent::Clone}\label{wxeventclone}
+
+\constfunc{virtual wxEvent*}{Clone}{\void}
+
+Returns a copy of the event.
+
+Any event that is posted to the wxWidgets event system for later action (via
+\helpref{wxEvtHandler::AddPendingEvent}{wxevthandleraddpendingevent} or
+\helpref{wxPostEvent}{wxpostevent}) must implement this method. All wxWidgets
+events fully implement this method, but any derived events implemented by the
+user should also implement this method just in case they (or some event
+derived from them) are ever posted.
+
+All wxWidgets events implement a copy constructor, so the easiest way of
+implementing the Clone function is to implement a copy constructor for
+a new event (call it MyEvent) and then define the Clone function like this:
+
+\begin{verbatim}
+    wxEvent *Clone(void) const { return new MyEvent(*this); }
+\end{verbatim}
+
+
+\membersection{wxEvent::GetEventObject}\label{wxeventgeteventobject}
+
+\func{wxObject*}{GetEventObject}{\void}
+
+Returns the object (usually a window) associated with the
+event, if any.
+
+
+\membersection{wxEvent::GetEventType}\label{wxeventgeteventtype}
+
+\func{wxEventType}{GetEventType}{\void}
+
+Returns the identifier of the given event type,
+such as \texttt{wxEVT\_COMMAND\_BUTTON\_CLICKED}.
+
+
+\membersection{wxEvent::GetId}\label{wxeventgetid}
+
+\constfunc{int}{GetId}{\void}
+
+Returns the identifier associated with this event, such as a button command id.
+
+
+\membersection{wxEvent::GetSkipped}\label{wxeventgetskipped}
+
+\constfunc{bool}{GetSkipped}{\void}
+
+Returns true if the event handler should be skipped, false otherwise.
+
+
+\membersection{wxEvent::GetTimestamp}\label{wxeventgettimestamp}
+
+\func{long}{GetTimestamp}{\void}
+
+Gets the timestamp for the event. The timestamp is the time in milliseconds
+since some fixed moment (\emph{not} necessarily the standard Unix Epoch, so
+only differences between the timestamps and not their absolute values usually
+make sense).
+
+
+\membersection{wxEvent::IsCommandEvent}\label{wxeventiscommandevent}
+
+\constfunc{bool}{IsCommandEvent}{\void}
+
+Returns true if the event is or is derived from
+\helpref{wxCommandEvent}{wxcommandevent} else it returns false.
+Note: Exists only for optimization purposes.
+
+
+\membersection{wxEvent::ResumePropagation}\label{wxeventresumepropagation}
+
+\func{void}{ResumePropagation}{\param{int }{propagationLevel}}
+
+Sets the propagation level to the given value (for example returned from an
+earlier call to \helpref{StopPropagation}{wxeventstoppropagation}).
+
+
+\membersection{wxEvent::SetEventObject}\label{wxeventseteventobject}
+
+\func{void}{SetEventObject}{\param{wxObject* }{object}}
+
+Sets the originating object.
+
+
+\membersection{wxEvent::SetEventType}\label{wxeventseteventtype}
+
+\func{void}{SetEventType}{\param{wxEventType }{type}}
+
+Sets the event type.
+
+
+\membersection{wxEvent::SetId}\label{wxeventsetid}
+
+\func{void}{SetId}{\param{int}{ id}}
+
+Sets the identifier associated with this event, such as a button command id.
+
+
+\membersection{wxEvent::SetTimestamp}\label{wxeventsettimestamp}
+
+\func{void}{SetTimestamp}{\param{long }{timeStamp}}
+
+Sets the timestamp for the event.
+
+
+\membersection{wxEvent::ShouldPropagate}\label{wxeventshouldpropagate}
+
+\constfunc{bool}{ShouldPropagate}{\void}
+
+Test if this event should be propagated or not, i.e. if the propagation level
+is currently greater than $0$.
+
+
+\membersection{wxEvent::Skip}\label{wxeventskip}
+
+\func{void}{Skip}{\param{bool}{ skip = true}}
+
+This method can be used inside an event handler to control whether further
+event handlers bound to this event will be called after the current one
+returns. Without Skip() (or equivalently if Skip(false) is used),
+the event will not be processed any more. If Skip(true) is called, the event
+processing system continues searching for a further handler function for this
+event, even though it has been processed already in the current handler.
+
+In general, it is recommended to skip all non-command events to allow the
+default handling to take place. The command events are, however, normally not
+skipped as usually a single command such as a button click or menu item
+selection must only be processed by one handler.
+
+
+\membersection{wxEvent::StopPropagation}\label{wxeventstoppropagation}
+
+\func{int}{StopPropagation}{\void}
+
+Stop the event from propagating to its parent window.
+
+Returns the old propagation level value which may be later passed to 
+\helpref{ResumePropagation}{wxeventresumepropagation} to allow propagating the
+event again.
+

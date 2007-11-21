@@ -1,0 +1,46 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        iconloc.tex
+%% Purpose:     wxIconLocation documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     21.06.03
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxIconLocation}}\label{wxiconlocation}
+
+wxIconLocation is a tiny class describing the location of an (external, i.e.
+not embedded into the application resources) icon. For most platforms it simply
+contains the file name but under some others (notably Windows) the same file
+may contain multiple icons and so this class also stores the index of the icon
+inside the file.
+
+In any case, its details should be of no interest to the application code and
+most of them are not even documented here (on purpose) as it is only meant to
+be used as an opaque class: the application may get the object of this class
+from somewhere and the only reasonable thing to do with it later is to create
+a \helpref{wxIcon}{wxicon} from it.
+
+\wxheading{Derived from}
+
+None.
+
+\wxheading{Include files}
+
+<wx/iconloc.h>
+
+\wxheading{See also}
+
+\helpref{wxIcon}{wxicon}, \helpref{wxFileType::GetIcon}{wxfiletypegeticon}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxIconLocation::IsOk}\label{wxiconlocationisok}
+
+\constfunc{bool}{IsOk}{\void}
+
+Returns {\tt true} if the object is valid, i.e. was properly initialized, and 
+{\tt false} otherwise.
+

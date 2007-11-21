@@ -1,0 +1,253 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        xmlnode.tex
+%% Purpose:     wxXmlDocument documentation
+%% Author:      Francesco Montorsi
+%% Created:     2006-04-18
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2006 Francesco Montorsi
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxXmlDocument}}\label{wxxmldocument}
+
+This class holds XML data/document as parsed by XML parser in the root node.
+
+wxXmlDocument internally uses the expat library which comes with wxWidgets to parse the given stream.
+
+A simple example of using XML classes is:
+
+\begin{verbatim}
+wxXmlDocument doc;
+if (!doc.Load(wxT("myfile.xml")))
+    return false;
+
+// start processing the XML file
+if (doc.GetRoot()->GetName() != wxT("myroot-node"))
+    return false;
+
+wxXmlNode *child = doc.GetRoot()->GetChildren();
+while (child) {
+
+    if (child->GetName() == wxT("tag1")) {
+
+        // process text enclosed by <tag1></tag1>
+        wxString content = child->GetNodeContent();
+
+        ...
+
+
+        // process properties of <tag1>
+        wxString propvalue1 = 
+            child->GetPropVal(wxT("prop1"), 
+                              wxT("default-value"));
+        wxString propvalue2 = 
+            child->GetPropVal(wxT("prop2"), 
+                              wxT("default-value"));
+
+        ...
+
+    } else if (child->GetName() == wxT("tag2")) {
+
+        // process tag2 ...
+    }
+
+    child = child->GetNext();
+}
+\end{verbatim}
+
+{\bf Note:} if you want to preserve the original formatting of the loaded file including whitespaces
+and indentation, you need to turn off whitespace-only textnode removal and automatic indentation:
+
+\begin{verbatim}
+wxXmlDocument doc;
+doc.Load(wxT("myfile.xml"), wxT("UTF-8"), wxXMLDOC_KEEP_WHITESPACE_NODES);
+
+// myfile2.xml will be indentic to myfile.xml saving it this way:
+doc.Save(wxT("myfile2.xml"), wxXML_NO_INDENTATION);
+\end{verbatim}
+
+Using default parameters, you will get a reformatted document which in general is different from
+the original loaded content:
+
+\begin{verbatim}
+wxXmlDocument doc;
+doc.Load(wxT("myfile.xml"));
+doc.Save(wxT("myfile2.xml"));  // myfile2.xml != myfile.xml
+\end{verbatim}
+
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/xml/xml.h>
+
+\wxheading{See also}
+
+\helpref{wxXmlNode}{wxxmlnode}, \helpref{wxXmlProperty}{wxxmlproperty}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+
+\membersection{wxXmlDocument::wxXmlDocument}\label{wxxmldocumentwxxmldocument}
+
+\func{}{wxXmlDocument}{\void}
+
+
+\func{}{wxXmlDocument}{\param{const wxString\& }{filename}, \param{const wxString\& }{encoding = wxT("UTF-8")}, \param{int }{flags = wxXMLDOC\_NONE}}
+
+Loads the given {\it filename} using the given encoding. See \helpref{Load}{wxxmldocumentload}.
+
+\func{}{wxXmlDocument}{\param{wxInputStream\& }{stream}, \param{const wxString\& }{encoding = wxT("UTF-8")}, \param{int }{flags = wxXMLDOC\_NONE}}
+
+Loads the XML document from given stream using the given encoding. See \helpref{Load}{wxxmldocumentload}.
+
+\func{}{wxXmlDocument}{\param{const wxXmlDocument\& }{doc}}
+
+Copy constructor. Deep copies all the XML tree of the given document.
+
+
+\membersection{wxXmlDocument::\destruct{wxXmlDocument}}\label{wxxmldocumentdtor}
+
+\func{}{\destruct{wxXmlDocument}}{\void}
+
+Virtual destructor. Frees the document root node.
+
+
+
+\membersection{wxXmlDocument::DetachRoot}\label{wxxmldocumentdetachroot}
+
+\func{wxXmlNode*}{DetachRoot}{\void}
+
+Detaches the document root node and returns it. The document root node will be set to \NULL
+and thus \helpref{IsOk}{wxxmldocumentisok} will return \false after calling this function.
+
+Note that the caller is reponsible for deleting the returned node in order to avoid memory leaks.
+
+
+
+\membersection{wxXmlDocument::GetEncoding}\label{wxxmldocumentgetencoding}
+
+\constfunc{wxString}{GetEncoding}{\void}
+
+Returns encoding of in-memory representation of the document
+(same as passed to \helpref{Load}{wxxmldocumentload} or constructor, defaults to UTF-8).
+
+NB: this is meaningless in Unicode build where data are stored as {\tt wchar\_t*}.
+
+
+
+\membersection{wxXmlDocument::GetFileEncoding}\label{wxxmldocumentgetfileencoding}
+
+\constfunc{wxString}{GetFileEncoding}{\void}
+
+Returns encoding of document (may be empty).
+
+Note: this is the encoding original file was saved in, {\bf not} the
+encoding of in-memory representation!
+
+
+
+\membersection{wxXmlDocument::GetRoot}\label{wxxmldocumentgetroot}
+
+\constfunc{wxXmlNode*}{GetRoot}{\void}
+
+Returns the root node of the document.
+
+
+
+\membersection{wxXmlDocument::GetVersion}\label{wxxmldocumentgetversion}
+
+\constfunc{wxString}{GetVersion}{\void}
+
+Returns the version of document.
+This is the value in the {\tt <?xml version="1.0"?>} header of the XML document.
+If the version property was not explicitely given in the header, this function
+returns an empty string.
+
+
+
+\membersection{wxXmlDocument::IsOk}\label{wxxmldocumentisok}
+
+\constfunc{bool}{IsOk}{\void}
+
+Returns \true if the document has been loaded successfully.
+
+
+
+\membersection{wxXmlDocument::Load}\label{wxxmldocumentload}
+
+\func{bool}{Load}{\param{const wxString\& }{filename}, \param{const wxString\& }{encoding = wxT("UTF-8")}, \param{int }{flags = wxXMLDOC\_NONE}}
+
+Parses {\it filename} as an xml document and loads its data.
+
+If {\tt flags} does not contain {\tt wxXMLDOC\_KEEP\_WHITESPACE\_NODES}, then, while loading, all nodes of
+type {\tt wxXML\_TEXT\_NODE} (see \helpref{wxXmlNode}{wxxmlnode}) are automatically skipped if they
+contain whitespaces only.
+The removal of these nodes makes the load process slightly faster and requires less memory however
+makes impossible to recreate exactly the loaded text with a \helpref{Save}{wxxmldocumentsave} call later.
+Read the initial description of this class for more info.
+
+Returns \true on success, \false otherwise.
+
+\func{bool}{Load}{\param{wxInputStream\& }{stream}, \param{const wxString\& }{encoding = wxT("UTF-8")}, \param{int }{flags = wxXMLDOC\_NONE}}
+
+Like above but takes the data from given input stream.
+
+
+\membersection{wxXmlDocument::Save}\label{wxxmldocumentsave}
+
+\constfunc{bool}{Save}{\param{const wxString\& }{filename}, \param{int }{indentstep = 1}}
+
+Saves XML tree creating a file named with given string.
+
+If {\tt indentstep} is greater than or equal to zero, then, while saving, an automatic indentation
+is added with steps composed by {\tt indentstep} spaces.
+If {\tt indentstep} is {\tt wxXML\_NO\_INDENTATION}, then, automatic indentation is turned off.
+
+\constfunc{bool}{Save}{\param{wxOutputStream\& }{stream}, \param{int }{indentstep = 1}}
+
+Saves XML tree in the given output stream. See other overload for a description of {\tt indentstep}.
+
+
+\membersection{wxXmlDocument::SetEncoding}\label{wxxmldocumentsetencoding}
+
+\func{void}{SetEncoding}{\param{const wxString\& }{enc}}
+
+Sets the enconding of the document.
+
+
+\membersection{wxXmlDocument::SetFileEncoding}\label{wxxmldocumentsetfileencoding}
+
+\func{void}{SetFileEncoding}{\param{const wxString\& }{encoding}}
+
+Sets the enconding of the file which will be used to save the document.
+
+
+\membersection{wxXmlDocument::SetRoot}\label{wxxmldocumentsetroot}
+
+\func{void}{SetRoot}{\param{wxXmlNode* }{node}}
+
+Sets the root node of this document. Deletes previous root node.
+Use \helpref{DetachRoot}{wxxmldocumentdetachroot} and then 
+\helpref{SetRoot}{wxxmldocumentsetroot} if you want
+to replace the root node without deleting the old document tree.
+
+
+\membersection{wxXmlDocument::SetVersion}\label{wxxmldocumentsetversion}
+
+\func{void}{SetVersion}{\param{const wxString\& }{version}}
+
+Sets the version of the XML file which will be used to save the document.
+
+
+\membersection{wxXmlDocument::operator=}\label{wxxmldocumentoperatorassign}
+
+\func{wxXmlDocument\& operator}{operator=}{\param{const wxXmlDocument\& }{doc}}
+
+Deep copies the given document.
+

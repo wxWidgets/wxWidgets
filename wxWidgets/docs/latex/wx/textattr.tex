@@ -1,0 +1,281 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxTextAttr %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxTextAttr}}\label{wxtextattr}
+
+wxTextAttr represents the character and paragraph attributes, or style, for a range of text in a\rtfsp
+\helpref{wxTextCtrl}{wxtextctrl}.
+
+When setting up a wxTextAttr object, pass a bitlist mask to SetFlags to indicate
+which style elements should be changed. As a convenience, when you call a
+setter such as SetFont, the relevant bit will be set.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/textctrl.h>
+
+\wxheading{Typedefs}
+
+\texttt{wxTextPos} is the type containing the index of a position in a text
+control. \texttt{wxTextCoord} contains the index of a column or a row in the
+control.
+
+Note that although both of these types should probably have been unsigned, due
+to backwards compatibility reasons, are defined as \texttt{long} currently.
+Their use (instead of plain \texttt{long}) is still encouraged as it makes the
+code more readable.
+
+\wxheading{Constants}
+
+The following values can be passed to SetAlignment to determine
+paragraph alignment.
+
+{\small
+\begin{verbatim}
+enum wxTextAttrAlignment
+{
+    wxTEXT_ALIGNMENT_DEFAULT,
+    wxTEXT_ALIGNMENT_LEFT,
+    wxTEXT_ALIGNMENT_CENTRE,
+    wxTEXT_ALIGNMENT_CENTER = wxTEXT_ALIGNMENT_CENTRE,
+    wxTEXT_ALIGNMENT_RIGHT,
+    wxTEXT_ALIGNMENT_JUSTIFIED
+};
+\end{verbatim}
+}
+
+These values are passed in a bitlist to SetFlags to determine
+what attributes will be considered when setting the attributes
+for a text control.
+
+{\small
+\begin{verbatim}
+#define wxTEXT_ATTR_TEXT_COLOUR             0x0001
+#define wxTEXT_ATTR_BACKGROUND_COLOUR       0x0002
+#define wxTEXT_ATTR_FONT_FACE               0x0004
+#define wxTEXT_ATTR_FONT_SIZE               0x0008
+#define wxTEXT_ATTR_FONT_WEIGHT             0x0010
+#define wxTEXT_ATTR_FONT_ITALIC             0x0020
+#define wxTEXT_ATTR_FONT_UNDERLINE          0x0040
+#define wxTEXT_ATTR_FONT \
+  wxTEXT_ATTR_FONT_FACE | wxTEXT_ATTR_FONT_SIZE | wxTEXT_ATTR_FONT_WEIGHT \
+| wxTEXT_ATTR_FONT_ITALIC | wxTEXT_ATTR_FONT_UNDERLINE
+#define wxTEXT_ATTR_ALIGNMENT               0x0080
+#define wxTEXT_ATTR_LEFT_INDENT             0x0100
+#define wxTEXT_ATTR_RIGHT_INDENT            0x0200
+#define wxTEXT_ATTR_TABS                    0x0400
+\end{verbatim}
+}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxTextAttr::wxTextAttr}\label{wxtextattrctor}
+
+\func{}{wxTextAttr}{\void}
+
+\func{}{wxTextAttr}{\param{const wxColour\& }{colText}, \param{const wxColour\& }{colBack = wxNullColour},
+ \param{const wxFont\& }{font = wxNullFont}, \param{wxTextAttrAlignment }{alignment = wxTEXT\_ALIGNMENT\_DEFAULT}}
+
+The constructors initialize one or more of the text foreground colour, background
+colour, font, and alignment. The values not initialized in the constructor can be set
+later, otherwise \helpref{wxTextCtrl::SetStyle}{wxtextctrlsetstyle} will use
+the default values for them.
+
+
+\membersection{wxTextAttr::GetAlignment}\label{wxtextattrgetalignment}
+
+\constfunc{wxTextAttrAlignment}{GetAlignment}{\void}
+
+Returns the paragraph alignment.
+
+
+\membersection{wxTextAttr::GetBackgroundColour}\label{wxtextattrgetbackgroundcolour}
+
+\constfunc{const wxColour\&}{GetBackgroundColour}{\void}
+
+Return the background colour specified by this attribute.
+
+
+\membersection{wxTextAttr::GetFont}\label{wxtextattrgetfont}
+
+\constfunc{const wxFont\&}{GetFont}{\void}
+
+Return the text font specified by this attribute.
+
+
+\membersection{wxTextAttr::GetLeftIndent}\label{wxtextattrgetleftindent}
+
+\constfunc{int}{GetLeftIndent}{\void}
+
+Returns the left indent in tenths of a millimetre.
+
+
+\membersection{wxTextAttr::GetLeftSubIndent}\label{wxtextattrgetleftsubindent}
+
+\constfunc{int}{GetLeftSubIndent}{\void}
+
+Returns the left sub indent for all lines but the first line in a paragraph in
+tenths of a millimetre.
+
+
+\membersection{wxTextAttr::GetRightIndent}\label{wxtextattrgetrightindent}
+
+\constfunc{int}{GetRightIndent}{\void}
+
+Returns the right indent in tenths of a millimetre.
+
+
+\membersection{wxTextAttr::GetTabs}\label{wxtextattrgettabs}
+
+\constfunc{const wxArrayInt\&}{GetTabs}{\void}
+
+Returns the array of integers representing the tab stops. Each
+array element specifies the tab stop in tenths of a millimetre.
+
+
+\membersection{wxTextAttr::GetTextColour}\label{wxtextattrgettextcolour}
+
+\constfunc{const wxColour\&}{GetTextColour}{\void}
+
+Return the text colour specified by this attribute.
+
+
+\membersection{wxTextAttr::HasAlignment}\label{wxtextattrhasalignment}
+
+\constfunc{bool}{HasAlignment}{\void}
+
+Returns {\tt true} if this style specifies the text alignment.
+
+
+\membersection{wxTextAttr::HasBackgroundColour}\label{wxtextattrhasbackgroundcolour}
+
+\constfunc{bool}{HasBackgroundColour}{\void}
+
+Returns {\tt true} if this style specifies the background colour to use.
+
+
+\membersection{wxTextAttr::HasFont}\label{wxtextattrhasfont}
+
+\constfunc{bool}{HasFont}{\void}
+
+Returns {\tt true} if this style specifies the font to use.
+
+
+\membersection{wxTextAttr::HasLeftIndent}\label{wxtextattrhasleftindent}
+
+\constfunc{bool}{HasLeftIndent}{\void}
+
+Returns {\tt true} if this style specifies the left indent.
+
+
+\membersection{wxTextAttr::HasRightIndent}\label{wxtextattrhasrightindent}
+
+\constfunc{bool}{HasRightIndent}{\void}
+
+Returns {\tt true} if this style specifies the right indent.
+
+
+\membersection{wxTextAttr::HasTabs}\label{wxtextattrhastabs}
+
+\constfunc{bool}{HasTabs}{\void}
+
+Returns {\tt true} if this style specifies any tabstobs.
+
+
+\membersection{wxTextAttr::HasTextColour}\label{wxtextattrhastextcolour}
+
+\constfunc{bool}{HasTextColour}{\void}
+
+Returns {\tt true} if this style specifies the foreground colour to use.
+
+
+\membersection{wxTextAttr::GetFlags}\label{wxtextattrgetflags}
+
+\func{long}{GetFlags}{\void}
+
+Returns a bitlist indicating which attributes will be set.
+
+
+\membersection{wxTextAttr::IsDefault}\label{wxtextattrisdefault}
+
+\constfunc{bool}{IsDefault}{\void}
+
+Returns {\tt true} if this style specifies any non-default attributes.
+
+
+\membersection{wxTextAttr::Merge}\label{wxtextattrmerge}
+
+\func{void}{Merge}{\param{const wxTextAttr\&}{ overlay}}
+
+Copies all defined/valid properties from \arg{overlay} to current object.
+
+\func{static wxTextAttr}{Merge}{\param{const wxTextAttr\&}{ base}, \param{const wxTextAttr\&}{ overlay}}
+
+Creates a new {\tt wxTextAttr} which is a merge of \arg{base} and 
+\arg{overlay}. Properties defined in \arg{overlay} take precedence over those
+in \arg{base}. Properties undefined/invalid in both are undefined in the
+result.
+
+
+\membersection{wxTextAttr::SetAlignment}\label{wxtextattrsetalignment}
+
+\func{void}{SetAlignment}{\param{wxTextAttrAlignment}{ alignment}}
+
+Sets the paragraph alignment.
+
+
+\membersection{wxTextAttr::SetBackgroundColour}\label{wxtextattrsetbackgroundcolour}
+
+\func{void}{SetBackgroundColour}{\param{const wxColour\& }{colour}}
+
+Sets the background colour.
+
+
+\membersection{wxTextAttr::SetFlags}\label{wxtextattrsetflags}
+
+\func{void}{SetFlags}{\param{long}{ flags}}
+
+Pass a bitlist indicating which attributes will be set.
+
+
+\membersection{wxTextAttr::SetFont}\label{wxtextattrsetfont}
+
+\func{void}{SetFont}{\param{const wxFont\&}{ font}}
+
+Sets the text font.
+
+
+\membersection{wxTextAttr::SetLeftIndent}\label{wxtextattrsetleftindent}
+
+\func{void}{SetLeftIndent}{\param{int }{indent}, \param{int }{subIndent = 0}}
+
+Sets the left indent in tenths of a millimetre.
+subIndent sets the indent for all lines but the first line in a paragraph
+relative to the first line.
+
+
+\membersection{wxTextAttr::SetRightIndent}\label{wxtextattrsetrightindent}
+
+\func{void}{SetRightIndent}{\param{int }{indent}}
+
+Sets the right indent in tenths of a millimetre.
+
+
+\membersection{wxTextAttr::SetTabs}\label{wxtextattrsettabs}
+
+\func{void}{SetTabs}{\param{const wxArrayInt\&}{ tabs}}
+
+Sets the array of integers representing the tab stops. Each
+array element specifies the tab stop in tenths of a millimetre.
+
+
+\membersection{wxTextAttr::SetTextColour}\label{wxtextattrsettextcolour}
+
+\func{void}{SetTextColour}{\param{const wxColour\& }{colour}}
+
+Sets the text colour.
+

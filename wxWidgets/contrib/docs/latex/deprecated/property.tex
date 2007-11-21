@@ -1,0 +1,107 @@
+\section{\class{wxProperty}}\label{wxproperty}
+
+The {\bf wxProperty} class represents a property, with a \helpref{wxPropertyValue}{wxpropertyvalue}\rtfsp
+containing the actual value, a name a role, an optional validator, and
+an optional associated window. 
+
+A property might correspond to an actual C++ data member, or it
+might correspond to a conceptual property, such as the width of a window.
+There is no explicit data member {\it wxWindow::width}, but it may be convenient
+to invent such a property for the purposes of editing attributes of the window.
+The properties in the property sheet can be mapped to ``reality" by
+whatever means (in this case by calling wxWindow::SetSize when the user has
+finished editing the property sheet).
+
+A validator may be associated with the property in order to ensure that this and
+only this validator will be used for editing and validating the property.
+An alternative method is to use the {\it role} parameter to specify what kind
+of validator would be appropriate; for example, specifying ``filename" for the role
+would allow the property view to find an appropriate validator at edit time.
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxProperty::wxProperty}
+
+\func{void}{wxProperty}{\void}
+
+\func{void}{wxProperty}{\param{wxProperty\& }{prop}}
+
+\func{void}{wxProperty}{\param{wxString}{ name}, \param{wxString}{ role}, \param{wxPropertyValidator *}{validator=NULL}}
+
+\func{void}{wxProperty}{\param{wxString}{ name}, \param{const wxPropertyValue\&}{ val}, \param{wxString}{ role}, \param{wxPropertyValidator *}{validator=NULL}}
+
+Constructors.
+
+\membersection{wxProperty::\destruct{wxProperty}}
+
+\func{void}{\destruct{wxProperty}}{\void}
+
+Destructor. Destroys the wxPropertyValue, and the property validator if there is one. However, if the
+actual C++ value in the wxPropertyValue is a pointer, the data in that variable is not destroyed.
+
+\membersection{wxProperty::GetValue}
+
+\func{wxPropertyValue\&}{GetValue}{\void}
+
+Returns a reference to the property value.
+
+\membersection{wxProperty::GetValidator}
+
+\func{wxPropertyValidator *}{GetValidator}{\void}
+
+Returns a pointer to the associated property validator (if any).
+
+\membersection{wxProperty::GetName}
+
+\func{wxString\&}{GetName}{\void}
+
+Returns the name of the property.
+
+\membersection{wxProperty::GetRole}
+
+\func{wxRole\&}{GetRole}{\void}
+
+Returns the role of the property, to be used when choosing an appropriate validator.
+
+\membersection{wxProperty::GetWindow}
+
+\func{wxWindow *}{GetWindow}{\void}
+
+Returns the window associated with the property (if any).
+
+\membersection{wxProperty::SetValue}
+
+\func{void}{SetValue}{\param{wxPropertyValue\&}{ val}}
+
+Sets the value of the property.
+
+\membersection{wxProperty::SetName}
+
+\func{void}{SetName}{\param{wxString\&}{ name}}
+
+Sets the name of the property.
+
+\membersection{wxProperty::SetRole}
+
+\func{void}{SetRole}{\param{wxString\&}{ role}}
+
+Sets the role  of the property.
+
+\membersection{wxProperty::SetValidator}
+
+\func{void}{SetValidator}{\param{wxPropertyValidator *}{validator}}
+
+Sets the validator: this will be deleted when the property is deleted.
+
+\membersection{wxProperty::SetWindow}
+
+\func{void}{SetWindow}{\param{wxWindow *}{win}}
+
+Sets the window associated with the property.
+
+\membersection{wxProperty::operator $=$}
+
+\func{void}{operator $=$}{\param{const wxPropertyValue\&}{ val}}
+
+Assignment operator.
+

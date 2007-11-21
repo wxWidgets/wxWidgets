@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="console" template="wx_sample_console"
+                      template_append="wx_append_base">
+        <sources>console.cpp</sources>
+        <wx-lib>net</wx-lib>
+        <wx-lib>odbc</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+    <wx-data id="data">
+        <files>testdata.fc</files>
+    </wx-data>
+
+</makefile>

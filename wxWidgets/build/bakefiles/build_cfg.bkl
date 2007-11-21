@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <!--
+    Generate build.cfg file on Windows, with settings used to build
+    the library.
+    -->
+
+    <if cond="FORMAT not in ['autoconf','msvc6prj','msevc4prj','msvs2005prj','cbuilderx'] and
+              TOOLKIT in ['PM','MSW','MGL','MOTIF']">
+
+        <set var="BUILD_CFG_FILE" make_var="1">
+            $(SETUPHDIR)$(DIRSEP)build.cfg
+        </set>
+
+        <action id="build_cfg_file">
+            <is-phony>1</is-phony>
+            <dependency-of>all</dependency-of>
+            <depends>libdir_setup</depends>
+            <command>
+                @echo WXVER_MAJOR=$(WXVER_MAJOR) >$(BUILD_CFG_FILE)
+                @echo WXVER_MINOR=$(WXVER_MINOR) >>$(BUILD_CFG_FILE)
+                @echo WXVER_RELEASE=$(WXVER_RELEASE) >>$(BUILD_CFG_FILE)
+                @echo BUILD=$(BUILD) >>$(BUILD_CFG_FILE)
+                @echo MONOLITHIC=$(MONOLITHIC) >>$(BUILD_CFG_FILE)
+                @echo SHARED=$(SHARED) >>$(BUILD_CFG_FILE)
+                @echo UNICODE=$(UNICODE) >>$(BUILD_CFG_FILE)
+                @echo WXUNIV=$(WXUNIV) >>$(BUILD_CFG_FILE)
+                @echo CFG=$(CFG) >>$(BUILD_CFG_FILE)
+                @echo VENDOR=$(VENDOR) >>$(BUILD_CFG_FILE)
+                @echo OFFICIAL_BUILD=$(OFFICIAL_BUILD) >>$(BUILD_CFG_FILE)
+                @echo DEBUG_FLAG=$(DEBUG_FLAG) >>$(BUILD_CFG_FILE)
+                @echo DEBUG_INFO=$(DEBUG_INFO) >>$(BUILD_CFG_FILE)
+                @echo RUNTIME_LIBS=$(RUNTIME_LIBS) >>$(BUILD_CFG_FILE)
+                @echo MSLU=$(MSLU) >>$(BUILD_CFG_FILE)
+                @echo USE_EXCEPTIONS=$(USE_EXCEPTIONS) >>$(BUILD_CFG_FILE)
+                @echo USE_THREADS=$(USE_THREADS) >>$(BUILD_CFG_FILE)
+                @echo USE_GUI=$(USE_GUI) >>$(BUILD_CFG_FILE)
+                @echo USE_HTML=$(USE_HTML) >>$(BUILD_CFG_FILE)
+                @echo USE_MEDIA=$(USE_MEDIA) >>$(BUILD_CFG_FILE)
+                @echo USE_ODBC=$(USE_ODBC) >>$(BUILD_CFG_FILE)
+                @echo USE_OPENGL=$(USE_OPENGL) >>$(BUILD_CFG_FILE)
+                @echo USE_QA=$(USE_QA) >>$(BUILD_CFG_FILE)
+		@echo USE_GDIPLUS=$(USE_GDIPLUS) >>$(BUILD_CFG_FILE)
+                @echo COMPILER=$(COMPILER) >>$(BUILD_CFG_FILE)
+                @echo CC=$(CC) >>$(BUILD_CFG_FILE)
+                @echo CXX=$(CXX) >>$(BUILD_CFG_FILE)
+                @echo CFLAGS=$(CFLAGS) >>$(BUILD_CFG_FILE)
+                @echo CPPFLAGS=$(CPPFLAGS) >>$(BUILD_CFG_FILE)
+                @echo CXXFLAGS=$(CXXFLAGS) >>$(BUILD_CFG_FILE)
+                @echo LDFLAGS=$(LDFLAGS) >>$(BUILD_CFG_FILE)
+            </command>
+        </action>
+
+    </if>
+
+</makefile>

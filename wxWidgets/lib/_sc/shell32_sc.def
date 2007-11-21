@@ -1,0 +1,16 @@
+LIBRARY shell32
+EXETYPE NT
+SUBSYSTEM WINDOWS
+EXPORTS
+    _ExtractIconA@12 = ExtractIconA
+    _ExtractIconExA@20 = ExtractIconExA
+    _DragQueryPoint@8 = DragQueryPoint
+    _DragFinish@4 = DragFinish
+    _DragQueryFileA@16 = DragQueryFileA
+    _DragAcceptFiles@8 = DragAcceptFiles
+    _SHGetMalloc@4 = SHGetMalloc
+    _SHGetPathFromIDListA@8 = SHGetPathFromIDListA
+    _SHBrowseForFolderA@4 = SHBrowseForFolderA
+    _Shell_NotifyIconA@8 = Shell_NotifyIconA
+
+

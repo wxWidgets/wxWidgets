@@ -1,0 +1,102 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        stackwalker.tex
+%% Purpose:     wxStackWalker documentation
+%% Author:      Vadim Zeitlin
+%% Created:     2005-01-19
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2005 Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxStackWalker}}\label{wxstackwalker}
+
+wxStackWalker allows an application to enumerate, or walk, the stack frames (the function callstack).
+It is mostly useful in only two situations:
+inside \helpref{wxApp::OnFatalException}{wxapponfatalexception} function to
+programmatically get the location of the crash and, in debug builds, in
+\helpref{wxApp::OnAssertFailure}{wxapponassertfailure} to report the caller of the failed
+assert.
+
+wxStackWalker works by repeatedly calling
+the \helpref{OnStackFrame}{wxstackwalkeronstackframe} method for each frame in the
+stack, so to use it you must derive your own class from it and override this
+method.
+
+This class will not return anything except raw stack frame addresses if the
+debug information is not available. Under Win32 this means that the PDB file
+matching the program being executed should be present. Note that if you use
+Microsoft Visual C++ compiler, you can create PDB files even for the programs
+built in release mode and it doesn't affect the program size (at least if you
+don't forget to add \texttt{/opt:ref} option which is suppressed by using
+\texttt{/debug} linker option by default but should be always enabled for
+release builds). Under Unix, you need to compile your program with debugging
+information (usually using \texttt{-g} compiler and linker options) to get the
+file and line numbers information, however function names should be available
+even without it. Of course, all this is only true if you build using a recent
+enough version of GNU libc which provides the \texttt{backtrace()} function
+needed to walk the stack.
+
+\helpref{debugging overview}{debuggingoverview} for how to make it available.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/stackwalk.h>
+
+Only available if \texttt{wxUSE\_STACKWALKER} is $1$, currently only
+implemented for Win32 and Unix versions using recent version of GNU libc.
+
+\wxheading{See also}
+
+\helpref{wxStackFrame}{wxstackframe}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxStackWalker::wxStackWalker}\label{wxstackwalkerwxstackwalker}
+
+\func{}{wxStackWalker}{\void}
+
+Constructor does nothing, use \helpref{Walk()}{wxstackwalkerwalk} to walk the
+stack.
+
+
+\membersection{wxStackWalker::\destruct{wxStackWalker}}\label{wxstackwalkerdtor}
+
+\func{}{\destruct{wxStackWalker}}{\void}
+
+Destructor does nothing neither but should be virtual as this class is used as
+a base one.
+
+
+\membersection{wxStackWalker::OnStackFrame}\label{wxstackwalkeronstackframe}
+
+\func{void}{OnStackFrame}{\param{const wxStackFrame\& }{frame}}
+
+This function must be overrided to process the given frame.
+
+
+\membersection{wxStackWalker::Walk}\label{wxstackwalkerwalk}
+
+\func{void}{Walk}{\param{size\_t }{skip = 1}, \param{size\_t }{maxDepth = 200}}
+
+Enumerate stack frames from the current location, skipping the initial
+number of them (this can be useful when Walk() is called from some known
+location and you don't want to see the first few frames anyhow; also
+notice that Walk() frame itself is not included if skip $\ge 1$).
+
+Up to \arg{maxDepth} frames are walked from the innermost to the outermost one.
+
+
+\membersection{wxStackWalker::WalkFromException}\label{wxstackwalkerwalkfromexception}
+
+\func{void}{WalkFromException}{\void}
+
+Enumerate stack frames from the location of uncaught exception.
+This method can only be called from
+\helpref{wxApp::OnFatalException()}{wxapponfatalexception}.
+

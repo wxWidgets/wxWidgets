@@ -1,0 +1,89 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <if cond="FORMAT=='autoconf'">
+        <option name="wxUSE_LIBTIFF"/>
+        <set var="LIB_TIFF">
+            <if cond="wxUSE_LIBTIFF=='builtin' and USE_GUI=='1'">
+                wxtiff$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+            </if>
+        </set>
+    </if>
+    <if cond="FORMAT!='autoconf'">
+        <set var="wxUSE_LIBTIFF">
+            <!-- NB: libtiff doesn't compile on WinCE -->
+            <if cond="FORMAT=='msevc4prj'">no</if>
+            <if cond="FORMAT!='msevc4prj'">builtin</if>
+        </set>
+        <set var="LIB_TIFF">
+            <if cond="wxUSE_LIBTIFF=='builtin' and USE_GUI=='1'">
+                wxtiff$(WXDEBUGFLAG)$(HOST_SUFFIX)
+            </if>
+        </set>
+    </if>
+    <set var="INC_TIFF">
+        <if cond="wxUSE_LIBTIFF=='builtin'">$(TOP_SRCDIR)src/tiff</if>
+    </set>
+
+    <set var="TIFF_PLATFORM_SRC">
+        <if cond="PLATFORM_UNIX=='1'">src/tiff/tif_unix.c</if>
+        <if cond="PLATFORM_MACOSX=='1'">src/tiff/tif_unix.c</if>
+        <if cond="PLATFORM_OS2=='1' and FORMAT!='watcom'">src/tiff/tif_unix.c</if>
+        <if cond="PLATFORM_OS2=='1' and FORMAT=='watcom'">src/tiff/tif_os2.c</if>
+        <if cond="PLATFORM_WIN32=='1'">src/tiff/tif_win32.c</if>
+        <if cond="PLATFORM_MACOS=='1'">src/tiff/tif_apple.c</if>
+        <if cond="PLATFORM_MSDOS=='1'">src/tiff/tif_msdos.c</if>
+    </set>
+
+    <lib id="wxtiff" template="3rdparty_lib"
+         cond="wxUSE_LIBTIFF=='builtin' and USE_GUI=='1' and BUILDING_LIB=='1'">
+        <dirname>$(LIBDIRNAME)</dirname>
+        <include>$(INC_ZLIB)</include>
+        <include>$(INC_JPEG)</include>
+        <cflags-borland>-w-8004 -w-8012 -w-8057 -w-8060 -w-8066</cflags-borland>
+        <cflags-dmars>-w2</cflags-dmars>
+        <cflags-watcom>-wcd=124</cflags-watcom>
+        <define cond="PLATFORM_OS2=='1' and FORMAT=='watcom'">OS2_32</define>
+        <define cond="PLATFORM_MSDOS=='1' and FORMAT=='watcom'">__MSDOS__</define>
+        <sources>
+            $(TIFF_PLATFORM_SRC)
+            src/tiff/tif_aux.c
+            src/tiff/tif_close.c
+            src/tiff/tif_codec.c
+            src/tiff/tif_color.c
+            src/tiff/tif_compress.c
+            src/tiff/tif_dir.c
+            src/tiff/tif_dirinfo.c
+            src/tiff/tif_dirread.c
+            src/tiff/tif_dirwrite.c
+            src/tiff/tif_dumpmode.c
+            src/tiff/tif_error.c
+            src/tiff/tif_extension.c
+            src/tiff/tif_fax3.c
+            src/tiff/tif_fax3sm.c
+            src/tiff/tif_getimage.c
+            src/tiff/tif_jpeg.c
+            src/tiff/tif_flush.c
+            src/tiff/tif_lzw.c
+            src/tiff/tif_luv.c
+            src/tiff/tif_next.c
+            src/tiff/tif_open.c
+            src/tiff/tif_packbits.c
+            src/tiff/tif_pixarlog.c
+            src/tiff/tif_predict.c
+            src/tiff/tif_print.c
+            src/tiff/tif_read.c
+            src/tiff/tif_swab.c
+            src/tiff/tif_strip.c
+            src/tiff/tif_thunder.c
+            src/tiff/tif_tile.c
+            src/tiff/tif_version.c
+            src/tiff/tif_warning.c
+            src/tiff/tif_write.c
+            src/tiff/tif_zip.c
+        </sources>
+    </lib>
+
+</makefile>

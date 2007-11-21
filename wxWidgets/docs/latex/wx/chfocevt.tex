@@ -1,0 +1,53 @@
+\section{\class{wxChildFocusEvent}}\label{wxchildfocusevent}
+
+A child focus event is sent to a (parent-)window when one of its child windows gains focus,
+so that the window could restore the focus back to its corresponding child
+if it loses it now and regains later.
+
+Notice that child window is the direct child of the window receiving event.
+Use \helpref{FindFocus}{wxwindowfindfocus} to retreive the window which is actually getting focus. 
+
+\wxheading{Derived from}
+
+\helpref{wxCommandEvent}{wxcommandevent}\\
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/event.h>
+
+\wxheading{Event table macros}
+
+To process a child focus event, use this event handler macro to direct input to a member
+function that takes a wxChildFocusEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_CHILD\_FOCUS(func)}}{Process a wxEVT\_CHILD\_FOCUS event.}
+\end{twocollist}%
+
+\wxheading{See also}
+
+\helpref{Event handling overview}{eventhandlingoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxChildFocusEvent::wxChildFocusEvent}\label{wxchildfocuseventctor}
+
+\func{}{wxChildFocusEvent}{\param{wxWindow *}{win = NULL}}
+
+Constructor.
+
+\wxheading{Parameters}
+
+\docparam{win}{The direct child which is (or which contains the window which is) receiving the focus.}
+
+
+\membersection{wxChildFocusEvent::GetWindow}\label{wxchildfocuseventgetwindow}
+
+Returns the direct child which receives the focus, or a (grand-)parent of the control receiving the focus.
+
+To get the actually focused control use \helpref{wxWindow::FindFocus}{wxwindowfindfocus}.
+

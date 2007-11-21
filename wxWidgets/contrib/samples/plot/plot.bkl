@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../../build/bakefiles/common_samples.bkl"/>
+    <include file="../../../build/bakefiles/common_contrib.bkl"/>
+
+    <exe id="plot" template="wx_contrib_sample" template_append="wx_append">
+        <sources>
+            plot.cpp
+        </sources>
+        <contrib-lib>plot</contrib-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <win32-res>plot.rc</win32-res>
+    </exe>
+    
+</makefile>

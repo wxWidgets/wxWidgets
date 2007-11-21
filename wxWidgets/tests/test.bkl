@@ -1,0 +1,106 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <include file="../build/bakefiles/common_samples.bkl"/>
+
+    <template id="wx_test">
+        <cppflags>$(CPPUNIT_CFLAGS)</cppflags>
+        <ldflags>$(CPPUNIT_LIBS)</ldflags>
+
+        <if cond="WX_DISABLE_PRECOMP_HEADERS=='0'">
+            <if cond="FORMAT!='autoconf' and TOOLKIT=='MSW'">
+                <sources>dummy.cpp</sources>
+                <precomp-headers-gen>dummy.cpp</precomp-headers-gen>
+            </if>
+            <precomp-headers-header>testprec.h</precomp-headers-header>
+            <precomp-headers>on</precomp-headers>
+            <precomp-headers-file>testprec_$(id)</precomp-headers-file>
+        </if>
+    </template>
+
+    <exe id="test" template="wx_sample_console,wx_test"
+                   template_append="wx_append_base">
+        <sources>
+            test.cpp
+            archive/archivetest.cpp
+            archive/ziptest.cpp
+            archive/tartest.cpp
+            arrays/arrays.cpp
+            datetime/datetimetest.cpp
+            fileconf/fileconftest.cpp
+            filekind/filekind.cpp
+            filename/filenametest.cpp
+            filesys/filesystest.cpp
+            fontmap/fontmaptest.cpp
+            formatconverter/formatconvertertest.cpp
+            hashes/hashes.cpp
+            lists/lists.cpp
+            longlong/longlongtest.cpp
+            mbconv/convautotest.cpp
+            mbconv/mbconvtest.cpp
+            regex/regextest.cpp
+            regex/wxregextest.cpp
+            scopeguard/scopeguardtest.cpp
+            strings/strings.cpp
+            strings/stdstrings.cpp
+            strings/tokenizer.cpp
+            strings/unicode.cpp
+            strings/crt.cpp
+            strings/vsnprintf.cpp
+            streams/bstream.cpp
+            streams/datastreamtest.cpp
+            streams/ffilestream.cpp
+            streams/fileback.cpp
+            streams/filestream.cpp
+            streams/largefile.cpp
+            streams/memstream.cpp
+            streams/sstream.cpp
+            streams/tempfile.cpp
+            streams/textstreamtest.cpp
+            streams/zlibstream.cpp
+            textfile/textfiletest.cpp
+            uris/uris.cpp
+        </sources>
+        <wx-lib>net</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+
+    <exe id="test_gui" template="wx_sample,wx_test"
+                       template_append="wx_append"
+         cond="USE_GUI=='1'">
+
+        <!-- link against GUI libraries, but be a console app: -->
+        <app-type>console</app-type>
+
+        <sources>
+            test.cpp
+            geometry/rect.cpp
+            geometry/size.cpp
+            geometry/point.cpp
+        </sources>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+
+    <wx-data id="data">
+        <files>testdata.fc</files>
+    </wx-data>
+
+
+
+    <!-- BENCHMARKS -->
+
+    <exe id="printfbench" template="wx_sample_console,wx_test"
+                          template_append="wx_append_base">
+        <sources>
+            benchmarks/printfbench.cpp
+        </sources>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+
+</makefile>

@@ -1,0 +1,85 @@
+\section{\class{wxClassInfo}}\label{wxclassinfo}
+
+This class stores meta-information about classes. Instances of this class are
+not generally defined directly by an application, but indirectly through use
+of macros such as {\bf DECLARE\_DYNAMIC\_CLASS} and {\bf IMPLEMENT\_DYNAMIC\_CLASS}.
+
+\wxheading{Derived from}
+
+No parent class.
+
+\wxheading{Include files}
+
+<wx/object.h>
+
+\wxheading{See also}
+
+\helpref{Overview}{wxclassinfooverview}, \helpref{wxObject}{wxobject}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxClassInfo::wxClassInfo}\label{wxclassinfoctor}
+
+\func{}{wxClassInfo}{\param{const wxChar * }{className}, \param{const wxClassInfo * }{baseClass1}, \param{const wxClassInfo * }{baseClass2},
+ \param{int}{ size}, \param{wxObjectConstructorFn }{fn}}
+
+Constructs a wxClassInfo object. The supplied macros implicitly construct objects of this
+class, so there is no need to create such objects explicitly in an application.
+
+\membersection{wxClassInfo::CreateObject}\label{wxclassinfocreateobject}
+
+\constfunc{wxObject*}{CreateObject}{\void}
+
+Creates an object of the appropriate kind. Returns NULL if the class has not been declared
+dynamically creatable (typically, it is an abstract class).
+
+\membersection{wxClassInfo::FindClass}\label{wxclassinfofindclass}
+
+\func{static wxClassInfo *}{FindClass}{\param{wxChar * }{name}}
+
+Finds the wxClassInfo object for a class of the given string name.
+
+\membersection{wxClassInfo::GetBaseClassName1}\label{wxclassinfogetbaseclassname1}
+
+\constfunc{wxChar *}{GetBaseClassName1}{\void}
+
+Returns the name of the first base class (NULL if none).
+
+\membersection{wxClassInfo::GetBaseClassName2}\label{wxclassinfogetbaseclassname2}
+
+\constfunc{wxChar *}{GetBaseClassName2}{\void}
+
+Returns the name of the second base class (NULL if none).
+
+\membersection{wxClassInfo::GetClassName}\label{wxclassinfogetclassname}
+
+\constfunc{wxChar *}{GetClassName}{\void}
+
+Returns the string form of the class name.
+
+\membersection{wxClassInfo::GetSize}\label{wxclassinfogetsize}
+
+\constfunc{int}{GetSize}{\void}
+
+Returns the size of the class.
+
+\membersection{wxClassInfo::InitializeClasses}\label{wxclassinfoinitializeclasses}
+
+\func{static void}{InitializeClasses}{\void}
+
+Initializes pointers in the wxClassInfo objects for fast execution
+of IsKindOf. Called in base wxWidgets library initialization.
+
+\membersection{wxClassInfo::IsDynamic}\label{wxclassinfoisdynamic}
+
+\constfunc{bool}{IsDynamic}{\void}
+
+Returns true if this class info can create objects of the associated class.
+
+\membersection{wxClassInfo::IsKindOf}\label{wxclassinfoiskindof}
+
+\func{bool}{IsKindOf}{\param{wxClassInfo* }{info}}
+
+Returns true if this class is a kind of (inherits from) the given class.
+
+

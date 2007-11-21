@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../build/bakefiles/common_samples.bkl"/>
+
+    <if cond="OUT_OF_TREE_MAKEFILES=='1'">
+        <set var="USE_ODBC">1</set>
+    </if>
+
+    <exe id="dbtest" 
+         cond="USE_ODBC=='1'"
+         template="wx_sample" template_append="wx_append">
+        <sources>dbtest.cpp listdb.cpp</sources>
+        <wx-lib>dbgrid</wx-lib>
+        <wx-lib>odbc</wx-lib>
+        <wx-lib>adv</wx-lib>
+        <wx-lib>html</wx-lib>
+        <wx-lib>xml</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <win32-res>dbtest.rc</win32-res>
+    </exe>
+
+</makefile>

@@ -1,0 +1,159 @@
+\section{\class{wxListEvent}}\label{wxlistevent}
+
+A list event holds information about events associated with wxListCtrl objects.
+
+\wxheading{Derived from}
+
+\helpref{wxNotifyEvent}{wxnotifyevent}\\
+\helpref{wxCommandEvent}{wxcommandevent}\\
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/listctrl.h>
+
+\wxheading{Event table macros}
+
+To process input from a list control, use these event handler macros to direct input to member
+functions that take a wxListEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_LIST\_BEGIN\_DRAG(id, func)}}{Begin dragging with the left mouse button.}
+\twocolitem{{\bf EVT\_LIST\_BEGIN\_RDRAG(id, func)}}{Begin dragging with the right mouse button.}
+\twocolitem{{\bf EVT\_LIST\_BEGIN\_LABEL\_EDIT(id, func)}}{Begin editing a label. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
+\twocolitem{{\bf EVT\_LIST\_END\_LABEL\_EDIT(id, func)}}{Finish editing a label. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
+\twocolitem{{\bf EVT\_LIST\_DELETE\_ITEM(id, func)}}{Delete an item.}
+\twocolitem{{\bf EVT\_LIST\_DELETE\_ALL\_ITEMS(id, func)}}{Delete all items.}
+\twocolitem{{\bf EVT\_LIST\_ITEM\_SELECTED(id, func)}}{The item has been selected.}
+\twocolitem{{\bf EVT\_LIST\_ITEM\_DESELECTED(id, func)}}{The item has been deselected.}
+\twocolitem{{\bf EVT\_LIST\_ITEM\_ACTIVATED(id, func)}}{The item has been activated (ENTER or double click).}
+\twocolitem{{\bf EVT\_LIST\_ITEM\_FOCUSED(id, func)}}{The currently focused item has changed.}
+\twocolitem{{\bf EVT\_LIST\_ITEM\_MIDDLE\_CLICK(id, func)}}{The middle mouse button has been clicked on an item.}
+\twocolitem{{\bf EVT\_LIST\_ITEM\_RIGHT\_CLICK(id, func)}}{The right mouse button has been clicked on an item.}
+\twocolitem{{\bf EVT\_LIST\_KEY\_DOWN(id, func)}}{A key has been pressed.}
+\twocolitem{{\bf EVT\_LIST\_INSERT\_ITEM(id, func)}}{An item has been inserted.}
+\twocolitem{{\bf EVT\_LIST\_COL\_CLICK(id, func)}}{A column ({\bf m\_col}) has been left-clicked.}
+\twocolitem{{\bf EVT\_LIST\_COL\_RIGHT\_CLICK(id, func)}}{A column ({\bf m\_col}) (which can be $-1$ if the click occurred outside any column) has been right-clicked.}
+\twocolitem{{\bf EVT\_LIST\_COL\_BEGIN\_DRAG(id, func)}}{The user started resizing a column - can be vetoed.}
+\twocolitem{{\bf EVT\_LIST\_COL\_DRAGGING(id, func)}}{The divider between columns is being dragged.}
+\twocolitem{{\bf EVT\_LIST\_COL\_END\_DRAG(id, func)}}{A column has been resized by the user.}
+\twocolitem{{\bf EVT\_LIST\_CACHE\_HINT(id, func)}}{Prepare cache for a virtual list control}
+\end{twocollist}%
+
+\wxheading{See also}
+
+\helpref{wxListCtrl}{wxlistctrl}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxListEvent::wxListEvent}\label{wxlisteventctor}
+
+\func{}{wxListEvent}{\param{WXTYPE }{commandType = 0}, \param{int }{id = 0}}
+
+Constructor.
+
+
+\membersection{wxListEvent::GetCacheFrom}\label{wxlisteventgetcachefrom}
+
+\constfunc{long}{GetCacheFrom}{\void}
+
+For {\tt EVT\_LIST\_CACHE\_HINT} event only: return the first item which the
+list control advises us to cache.
+
+
+\membersection{wxListEvent::GetCacheTo}\label{wxlisteventgetcacheto}
+
+\constfunc{long}{GetCacheTo}{\void}
+
+For {\tt EVT\_LIST\_CACHE\_HINT} event only: return the last item (inclusive)
+which the list control advises us to cache.
+
+
+\membersection{wxListEvent::GetKeyCode}\label{wxlisteventgetkeycode}
+
+\constfunc{int}{GetKeyCode}{\void}
+
+Key code if the event is a keypress event.
+
+
+\membersection{wxListEvent::GetIndex}\label{wxlisteventgetindex}
+
+\constfunc{long}{GetIndex}{\void}
+
+The item index.
+
+
+\membersection{wxListEvent::GetColumn}\label{wxlisteventgetcolumn}
+
+\constfunc{int}{GetColumn}{\void}
+
+The column position: it is only used with {\tt COL} events. For the column
+dragging events, it is the column to the left of the divider being dragged, for
+the column click events it may be $-1$ if the user clicked in the list control
+header outside any column.
+
+
+\membersection{wxListEvent::GetPoint}\label{wxlisteventgetpoint}
+
+\constfunc{wxPoint}{GetPoint}{\void}
+
+The position of the mouse pointer if the event is a drag event.
+
+
+
+\membersection{wxListEvent::GetLabel}\label{wxlisteventgetlabel}
+
+\constfunc{const wxString\&}{GetLabel}{\void}
+
+The (new) item label for \texttt{EVT\_LIST\_END\_LABEL\_EDIT} event.
+
+
+\membersection{wxListEvent::GetText}\label{wxlisteventgettext}
+
+\constfunc{const wxString\&}{GetText}{\void}
+
+The text.
+
+
+\membersection{wxListEvent::GetImage}\label{wxlisteventgetimage}
+
+\constfunc{int}{GetImage}{\void}
+
+The image.
+
+
+\membersection{wxListEvent::GetData}\label{wxlisteventgetdata}
+
+\constfunc{long}{GetData}{\void}
+
+The data.
+
+
+\membersection{wxListEvent::GetMask}\label{wxlisteventgetmask}
+
+\constfunc{long}{GetMask}{\void}
+
+The mask.
+
+
+\membersection{wxListEvent::GetItem}\label{wxlisteventgetitem}
+
+\constfunc{const wxListItem\&}{GetItem}{\void}
+
+An item object, used by some events. See also \helpref{wxListCtrl::SetItem}{wxlistctrlsetitem}.
+
+
+\membersection{wxListEvent::IsEditCancelled}\label{wxlisteventiseditcancelled}
+
+\constfunc{bool}{IsEditCancelled}{\void}
+
+This method only makes sense for \texttt{EVT\_LIST\_END\_LABEL\_EDIT} message
+and returns \true if it the label editing has been cancelled by the user
+(\helpref{GetLabel}{wxlisteventgetlabel} returns an empty string in this case
+but it doesn't allow the application to distinguish between really cancelling the edit and
+the admittedly rare case when the user wants to rename it to an empty string).
+
+

@@ -1,0 +1,257 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        dynlib.tex
+%% Purpose:     wxDynamicLibrary and wxDynamicLibraryDetails documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     14.01.02 (extracted from dllload.tex)
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxDynamicLibrary}}\label{wxdynamiclibrary}
+
+wxDynamicLibrary is a class representing dynamically loadable library
+(Windows DLL, shared library under Unix etc.). Just create an object of
+this class to load a library and don't worry about unloading it -- it will be
+done in the objects destructor automatically.
+
+% deprecated now...
+%
+%\wxheading{See also}
+%
+%\helpref{wxDllLoader}{wxdllloader}
+
+\wxheading{Derived from}
+
+No base class.
+
+\wxheading{Include files}
+
+<wx/dynlib.h>
+
+(only available if \texttt{wxUSE\_DYNLIB\_CLASS} is set to $1$)
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDynamicLibrary::wxDynamicLibrary}\label{wxdynamiclibrarywxdynamiclibrary}
+
+\func{}{wxDynamicLibrary}{\void}
+
+\func{}{wxDynamicLibrary}{\param{const wxString\& }{name}, \param{int }{flags = wxDL\_DEFAULT}}
+
+Constructor. Second form calls \helpref{Load}{wxdynamiclibraryload}.
+
+
+\membersection{wxDynamicLibrary::CanonicalizeName}\label{wxdynamiclibrarycanonicalizename}
+
+\func{static wxString}{CanonicalizeName}{\param{const wxString\& }{name}, \param{wxDynamicLibraryCategory}{ cat = wxDL\_LIBRARY}}
+
+Returns the platform-specific full name for the library called \arg{name}. E.g.
+it adds a {\tt ".dll"} extension under Windows and {\tt "lib"} prefix and 
+{\tt ".so"}, {\tt ".sl"} or maybe {\tt ".dylib"} extension under Unix.
+
+The possible values for \arg{cat} are:
+
+\begin{twocollist}
+    \twocolitem{wxDL\_LIBRARY}{normal library}
+    \twocolitem{wxDL\_MODULE}{a loadable module or plugin}
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{CanonicalizePluginName}{wxdynamiclibrarycanonicalizepluginname}
+
+
+
+\membersection{wxDynamicLibrary::CanonicalizePluginName}\label{wxdynamiclibrarycanonicalizepluginname}
+
+\func{static wxString}{CanonicalizePluginName}{\param{const wxString\& }{name}, \param{wxPluginCategory}{ cat = wxDL\_PLUGIN\_GUI}}
+
+This function does the same thing as 
+\helpref{CanonicalizeName}{wxdynamiclibrarycanonicalizename} but for wxWidgets
+plugins. The only difference is that compiler and version information are added
+to the name to ensure that the plugin which is going to be loaded will be
+compatible with the main program.
+
+The possible values for \arg{cat} are:
+
+\begin{twocollist}
+    \twocolitem{wxDL\_PLUGIN\_GUI}{plugin which uses GUI classes (default)}
+    \twocolitem{wxDL\_PLUGIN\_BASE}{plugin which only uses wxBase}
+\end{twocollist}
+
+
+\membersection{wxDynamicLibrary::Detach}\label{wxdynamiclibrarydetach}
+
+\func{wxDllType}{Detach}{\void}
+
+Detaches this object from its library handle, i.e. the object will not unload
+the library any longer in its destructor but it is now the callers
+responsibility to do this using \helpref{Unload}{wxdynamiclibraryunload}.
+
+
+\membersection{wxDynamicLibrary::GetSymbol}\label{wxdynamiclibrarygetsymbol}
+
+\constfunc{void *}{GetSymbol}{\param{const wxString\& }{name}}
+
+Returns pointer to symbol {\it name} in the library or NULL if the library
+contains no such symbol.
+
+\wxheading{See also}
+
+\helpref{wxDYNLIB\_FUNCTION}{wxdynlibfunction}
+
+
+\membersection{wxDynamicLibrary::GetSymbolAorW}\label{wxdynamiclibrarygetsymbolaorw}
+
+\constfunc{void *}{GetSymbolAorW}{\param{const wxString\& }{name}}
+
+This function is available only under Windows as it is only useful when
+dynamically loading symbols from standard Windows DLLs. Such functions have
+either \texttt{'A'} (in ANSI build) or \texttt{'W'} (in Unicode, or wide
+character build) suffix if they take string parameters. Using this function you
+can use just the base name of the function and the correct suffix is appende
+automatically depending on the current build. Otherwise, this method is
+identical to \helpref{GetSymbol}{wxdynamiclibrarygetsymbol}.
+
+
+\membersection{wxDynamicLibrary::GetProgramHandle}\label{wxdynamiclibrarygetprogramhandle}
+
+\func{static wxDllType}{GetProgramHandle}{\void}
+
+Return a valid handle for the main program itself or \texttt{NULL} if symbols
+from the main program can't be loaded on this platform.
+
+
+\membersection{wxDynamicLibrary::HasSymbol}\label{wxdynamiclibraryhassymbol}
+
+\constfunc{bool}{HasSymbol}{\param{const wxString\& }{name}}
+
+Returns \true if the symbol with the given \arg{name} is present in the dynamic
+library, \false otherwise. Unlike \helpref{GetSymbol}{wxdynamiclibrarygetsymbol},
+this function doesn't log an error message if the symbol is not found.
+
+\newsince{2.5.4}
+
+
+\membersection{wxDynamicLibrary::IsLoaded}\label{wxdynamiclibraryisloaded}
+
+\constfunc{bool}{IsLoaded}{\void}
+
+Returns \true if the library was successfully loaded, \false otherwise.
+
+
+\membersection{wxDynamicLibrary::ListLoaded}\label{wxdynamiclibrarylistloaded}
+
+\func{static wxDynamicLibraryDetailsArray}{ListLoaded}{\void}
+
+This static method returns an \helpref{array}{wxarray} containing the details
+of all modules loaded into the address space of the current project, the array
+elements are object of \texttt{wxDynamicLibraryDetails} class. The array will
+be empty if an error occurred.
+
+This method is currently implemented only under Win32 and Linux and is useful
+mostly for diagnostics purposes.
+
+
+\membersection{wxDynamicLibrary::Load}\label{wxdynamiclibraryload}
+
+\func{bool}{Load}{\param{const wxString\& }{name}, \param{int }{flags = wxDL\_DEFAULT}}
+
+Loads DLL with the given \arg{name} into memory. The \arg{flags} argument can
+be a combination of the following bits:
+
+\begin{twocollist}
+\twocolitem{wxDL\_LAZY}{equivalent of RTLD\_LAZY under Unix, ignored elsewhere}
+\twocolitem{wxDL\_NOW}{equivalent of RTLD\_NOW under Unix, ignored elsewhere}
+\twocolitem{wxDL\_GLOBAL}{equivalent of RTLD\_GLOBAL under Unix, ignored elsewhere}
+\twocolitem{wxDL\_VERBATIM}{don't try to append the appropriate extension to
+the library name (this is done by default).}
+\twocolitem{wxDL\_DEFAULT}{default flags, same as wxDL\_NOW currently}
+\end{twocollist}
+
+Returns \true if the library was successfully loaded, \false otherwise.
+
+
+\membersection{wxDynamicLibrary::Unload}\label{wxdynamiclibraryunload}
+
+\func{void}{Unload}{\void}
+
+\func{static void}{Unload}{\param{wxDllType }{handle}}
+
+Unloads the library from memory. wxDynamicLibrary object automatically calls
+this method from its destructor if it had been successfully loaded.
+
+The second version is only used if you need to keep the library in memory
+during a longer period of time than the scope of the wxDynamicLibrary object.
+In this case you may call \helpref{Detach}{wxdynamiclibrarydetach} and store
+the handle somewhere and call this static method later to unload it.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxDynamicLibraryDetails}}\label{wxdynamiclibrarydetails}
+
+This class is used for the objects returned by 
+\helpref{wxDynamicLibrary::ListLoaded}{wxdynamiclibrarylistloaded} method and
+contains the information about a single module loaded into the address space of
+the current process. A module in this context may be either a dynamic library
+or the main program itself.
+
+\wxheading{Derived from}
+
+No base class.
+
+\wxheading{Include files}
+
+<wx/dynlib.h>
+
+(only available if \texttt{wxUSE\_DYNLIB\_CLASS} is set to $1$)
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDynamicLibraryDetails::GetName}\label{wxdynamiclibrarygetname}
+
+\constfunc{wxString}{GetName}{\void}
+
+Returns the base name of this module, e.g. \texttt{kernel32.dll} or 
+\texttt{libc-2.3.2.so}.
+
+
+\membersection{wxDynamicLibraryDetails::GetPath}\label{wxdynamiclibrarygetpath}
+
+\constfunc{wxString}{GetPath}{\void}
+
+Returns the full path of this module if available, e.g. 
+\texttt{c:$\backslash$windows$\backslash$system32$\backslash$kernel32.dll} or 
+\texttt{/lib/libc-2.3.2.so}.
+
+
+\membersection{wxDynamicLibraryDetails::GetAddress}\label{wxdynamiclibrarygetaddress}
+
+\constfunc{bool}{GetAddress}{\param{void **}{addr}, \param{size\_t }{*len}}
+
+Retrieves the load address and the size of this module.
+
+\wxheading{Parameters}
+
+\docparam{addr}{the pointer to the location to return load address in, may be
+\texttt{NULL}}
+
+\docparam{len}{pointer to the location to return the size of this module in
+memory in, may be \texttt{NULL}}
+
+\wxheading{Return value}
+
+\true if the load address and module size were retrieved, \false if this
+information is not available.
+
+
+\membersection{wxDynamicLibraryDetails::GetVersion}\label{wxdynamiclibrarygetversion}
+
+\constfunc{wxString}{GetVersion}{\void}
+
+Returns the version of this module, e.g. \texttt{5.2.3790.0} or 
+\texttt{2.3.2}. The returned string is empty if the version information is not
+available.
+

@@ -1,0 +1,150 @@
+\section{\class{wxRichTextFileHandler}}\label{wxrichtextfilehandler}
+
+This is the base class for file handlers, for loading and/or saving content
+associated with a \helpref{wxRichTextBuffer}{wxrichtextbuffer}.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/richtext/richtextbuffer.h>
+
+\wxheading{Data structures}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRichTextFileHandler::wxRichTextFileHandler}\label{wxrichtextfilehandlerwxrichtextfilehandler}
+
+\func{}{wxRichTextFileHandler}{\param{const wxString\& }{name = wxEmptyString}, \param{const wxString\& }{ext = wxEmptyString}, \param{int }{type = 0}}
+
+Constructor.
+
+\membersection{wxRichTextFileHandler::CanHandle}\label{wxrichtextfilehandlercanhandle}
+
+\constfunc{bool}{CanHandle}{\param{const wxString\& }{filename}}
+
+Override this function and return \true if this handler can we handle {\it filename}. By default,
+this function checks the extension.
+
+\membersection{wxRichTextFileHandler::CanLoad}\label{wxrichtextfilehandlercanload}
+
+\constfunc{bool}{CanLoad}{\void}
+
+Override and return \true if this handler can load content.
+
+\membersection{wxRichTextFileHandler::CanSave}\label{wxrichtextfilehandlercansave}
+
+\constfunc{bool}{CanSave}{\void}
+
+Override and return \true if this handler can save content.
+
+\membersection{wxRichTextFileHandler::DoLoadFile}\label{wxrichtextfilehandlerdoloadfile}
+
+\func{bool}{DoLoadFile}{\param{wxRichTextBuffer* }{buffer}, \param{wxInputStream\& }{stream}}
+
+Override to load content from {\it stream} into {\it buffer}.
+
+\membersection{wxRichTextFileHandler::DoSaveFile}\label{wxrichtextfilehandlerdosavefile}
+
+\func{bool}{DoSaveFile}{\param{wxRichTextBuffer* }{buffer}, \param{wxOutputStream\& }{stream}}
+
+Override to save content to {\it stream} from {\it buffer}.
+
+\membersection{wxRichTextFileHandler::GetEncoding}\label{wxrichtextfilehandlergetencoding}
+
+\constfunc{const wxString\&}{GetEncoding}{\void}
+
+Returns the encoding associated with the handler (if any).
+
+\membersection{wxRichTextFileHandler::GetExtension}\label{wxrichtextfilehandlergetextension}
+
+\constfunc{wxString}{GetExtension}{\void}
+
+Returns the extension associated with the handler.
+
+\membersection{wxRichTextFileHandler::GetFlags}\label{wxrichtextfilehandlergetflags}
+
+\constfunc{int}{GetFlags}{\void}
+
+Returns flags that change the behaviour of loading or saving. See the documentation for each
+handler class to see what flags are relevant for each handler.
+
+\membersection{wxRichTextFileHandler::GetName}\label{wxrichtextfilehandlergetname}
+
+\constfunc{wxString}{GetName}{\void}
+
+Returns the name of the handler.
+
+\membersection{wxRichTextFileHandler::GetType}\label{wxrichtextfilehandlergettype}
+
+\constfunc{int}{GetType}{\void}
+
+Returns the type of the handler.
+
+\membersection{wxRichTextFileHandler::IsVisible}\label{wxrichtextfilehandlerisvisible}
+
+\constfunc{bool}{IsVisible}{\void}
+
+Returns \true if this handler should be visible to the user.
+
+\membersection{wxRichTextFileHandler::LoadFile}\label{wxrichtextfilehandlerloadfile}
+
+\func{bool}{LoadFile}{\param{wxRichTextBuffer* }{buffer}, \param{wxInputStream\& }{stream}}
+
+\func{bool}{LoadFile}{\param{wxRichTextBuffer* }{buffer}, \param{const wxString\& }{filename}}
+
+Loads content from a stream or file. Not all handlers will implement file loading.
+
+\membersection{wxRichTextFileHandler::SaveFile}\label{wxrichtextfilehandlersavefile}
+
+\func{bool}{SaveFile}{\param{wxRichTextBuffer* }{buffer}, \param{wxOutputStream\& }{stream}}
+
+\func{bool}{SaveFile}{\param{wxRichTextBuffer* }{buffer}, \param{const wxString\& }{filename}}
+
+Saves content to a stream or file. Not all handlers will implement file saving.
+
+\membersection{wxRichTextFileHandler::SetEncoding}\label{wxrichtextfilehandlersetencoding}
+
+\func{void}{SetEncoding}{\param{const wxString\& }{encoding}}
+
+Sets the encoding to use when saving a file. If empty, a suitable encoding is chosen.
+
+\membersection{wxRichTextFileHandler::SetExtension}\label{wxrichtextfilehandlersetextension}
+
+\func{void}{SetExtension}{\param{const wxString\& }{ext}}
+
+Sets the default extension to recognise.
+
+\membersection{wxRichTextFileHandler::SetFlags}\label{wxrichtextfilehandlersetflags}
+
+\func{void}{SetFlags}{\param{int }{flags}}
+
+Sets flags that change the behaviour of loading or saving. See the documentation for each
+handler class to see what flags are relevant for each handler.
+
+You call this function directly if you are using a file handler explicitly (without
+going through the text control or buffer LoadFile/SaveFile API). Or, you can
+call the control or buffer's SetHandlerFlags function to set the flags that will
+be used for subsequent load and save operations.
+
+\membersection{wxRichTextFileHandler::SetName}\label{wxrichtextfilehandlersetname}
+
+\func{void}{SetName}{\param{const wxString\& }{name}}
+
+Sets the name of the handler.
+
+\membersection{wxRichTextFileHandler::SetType}\label{wxrichtextfilehandlersettype}
+
+\func{void}{SetType}{\param{int }{type}}
+
+Sets the handler type.
+
+\membersection{wxRichTextFileHandler::SetVisible}\label{wxrichtextfilehandlersetvisible}
+
+\func{void}{SetVisible}{\param{bool }{visible}}
+
+Sets whether the handler should be visible to the user (via the application's load and save
+dialogs).
+

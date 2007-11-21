@@ -1,0 +1,30 @@
+#if __option (profile)	
+	#error "profiling is not supported for debug targets"
+#else
+#ifdef __MACH__
+	#pragma precompile_target "wx_Mach_d.mch"
+#elif __POWERPC__
+	#pragma precompile_target "wx_Carbon_d.mch"
+#else
+	#error "illegal processor for carbon"
+#endif
+#endif
+#pragma once on
+#undef WX_PRECOMP
+#define __WXDEBUG__ 1
+#define wxUSE_GUI 1
+#define TARGET_CARBON 1
+#define OLDP2C 1
+#ifdef __MACH__
+	#define __DARWIN__
+	#define __CF_USE_FRAMEWORK_INCLUDES__
+	#define __NOEXTENSIONS__
+	#define __UNIX__
+	#define __UNIX_LIKE__
+#endif
+
+#include "wx/wx_cw_cm.h"
+#ifdef __WXMSW__
+    #include <windows.h>
+    #include "wx/msw/winundef.h"
+#endif

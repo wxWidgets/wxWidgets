@@ -1,0 +1,139 @@
+\section{\class{wxRichTextStyleOrganiserDialog}}\label{wxrichtextstyleorganiserdialog}
+
+This class shows a style sheet and allows the user to edit, add and remove styles.
+It can also be used as a style browser, for example if the application is not
+using a permanent \helpref{wxRichTextStyleComboCtrl}{wxrichtextstylecomboctrl} or \helpref{wxRichTextStyleListCtrl}{wxrichtextstylelistctrl} to
+present styles.
+ 
+\wxheading{Derived from}
+
+\helpref{wxDialog}{wxdialog}
+
+\wxheading{Include files}
+
+<wx/richtext/richtextstyledlg.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRichTextStyleOrganiserDialog::wxRichTextStyleOrganiserDialog}\label{wxrichtextstyleorganiserdialogwxrichtextstyleorganiserdialog}
+
+\func{}{wxRichTextStyleOrganiserDialog}{\param{int }{flags}, \param{wxRichTextStyleSheet* }{sheet}, \param{wxRichTextCtrl* }{ctrl}, \param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxString\& }{caption = \_("Style Organiser")}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = wxDEFAULT\_DIALOG\_STYLE|wxRESIZE\_BORDER|wxSYSTEM\_MENU|wxCLOSE\_BOX}}
+
+\func{}{wxRichTextStyleOrganiserDialog}{\void}
+
+Constructors.
+
+To create a dialog, pass a bitlist of {\it flags} (see below), a style sheet, a text control to apply a selected style to (or NULL), followed by the usual window parameters.
+
+To specify the operations available to the user, pass a combination of these values to {\it flags}:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxRICHTEXT\_ORGANISER\_DELETE\_STYLES}}{Provides a button for deleting styles.}
+\twocolitem{\windowstyle{wxRICHTEXT\_ORGANISER\_CREATE\_STYLES}}{Provides buttons for creating styles.}
+\twocolitem{\windowstyle{wxRICHTEXT\_ORGANISER\_APPLY\_STYLES}}{Provides a button for applying the currently selected style to the selection.}
+\twocolitem{\windowstyle{wxRICHTEXT\_ORGANISER\_EDIT\_STYLES}}{Provides a button for editing styles.}
+\twocolitem{\windowstyle{wxRICHTEXT\_ORGANISER\_RENAME\_STYLES}}{Provides a button for renaming styles.}
+\twocolitem{\windowstyle{wxRICHTEXT\_ORGANISER\_OK\_CANCEL}}{Provides OK and Cancel buttons.}
+\twocolitem{\windowstyle{wxRICHTEXT\_ORGANISER\_RENUMBER}}{Provides a checkbox for specifying that the selection should be renumbered.}
+\end{twocollist}
+
+The following flags determine what will be displayed in the style list:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxRICHTEXT\_ORGANISER\_SHOW\_CHARACTER}}{Displays character styles only.}
+\twocolitem{\windowstyle{wxRICHTEXT\_ORGANISER\_SHOW\_PARAGRAPH}}{Displays paragraph styles only.}
+\twocolitem{\windowstyle{wxRICHTEXT\_ORGANISER\_SHOW\_LIST}}{Displays list styles only.}
+\twocolitem{\windowstyle{wxRICHTEXT\_ORGANISER\_SHOW\_ALL}}{Displays all styles.}
+\end{twocollist}
+
+The following symbols define commonly-used combinations of flags:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxRICHTEXT\_ORGANISER\_ORGANISE}}{Enable all style editing operations so the dialog behaves as a style organiser.}
+\twocolitem{\windowstyle{wxRICHTEXT\_ORGANISER\_BROWSE}}{Show a list of all styles and their previews, but only allow application of a style or
+cancellation of the dialog. This makes the dialog behave as a style browser.}
+\twocolitem{\windowstyle{wxRICHTEXT\_ORGANISER\_BROWSE\_NUMBERING}}{Enables only list style browsing, plus a control to specify renumbering. This
+allows the dialog to be used for applying list styles to the selection.}
+\end{twocollist}
+
+\membersection{wxRichTextStyleOrganiserDialog::ApplyStyle}\label{wxrichtextstyleorganiserdialogapplystyle}
+
+\func{bool}{ApplyStyle}{\param{wxRichTextCtrl* }{ctrl = NULL}}
+
+Applies the selected style to selection in the given control or the control passed to the constructor.
+
+\membersection{wxRichTextStyleOrganiserDialog::Create}\label{wxrichtextstyleorganiserdialogcreate}
+
+\func{bool}{Create}{\param{int }{flags}, \param{wxRichTextStyleSheet* }{sheet}, \param{wxRichTextCtrl* }{ctrl}, \param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxString\& }{caption = \_("Style Organiser")}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = wxDEFAULT\_DIALOG\_STYLE|wxRESIZE\_BORDER|wxSYSTEM\_MENU|wxCLOSE\_BOX}}
+
+Creates the dialog. See \membersection{wxRichTextStyleOrganiserDialog::wxRichTextStyleOrganiserDialog}{wxrichtextstyleorganiserdialogwxrichtextstyleorganiserdialog} for details.
+
+\membersection{wxRichTextStyleOrganiserDialog::GetFlags}\label{wxrichtextstyleorganiserdialoggetflags}
+
+\constfunc{int}{GetFlags}{\void}
+
+Returns the flags used to control the interface presented to the user.
+
+\membersection{wxRichTextStyleOrganiserDialog::GetRestartNumbering}\label{wxrichtextstyleorganiserdialoggetrestartnumbering}
+
+\constfunc{bool}{GetRestartNumbering}{\void}
+
+Returns \true if the user has opted to restart numbering.
+
+\membersection{wxRichTextStyleOrganiserDialog::GetRichTextCtrl}\label{wxrichtextstyleorganiserdialoggetrichtextctrl}
+
+\constfunc{wxRichTextCtrl*}{GetRichTextCtrl}{\void}
+
+Returns the associated rich text control (if any).
+
+\membersection{wxRichTextStyleOrganiserDialog::GetSelectedStyle}\label{wxrichtextstyleorganiserdialoggetselectedstyle}
+
+\constfunc{wxString}{GetSelectedStyle}{\void}
+
+Returns selected style name.
+
+\membersection{wxRichTextStyleOrganiserDialog::GetSelectedStyleDefinition}\label{wxrichtextstyleorganiserdialoggetselectedstyledefinition}
+
+\constfunc{wxRichTextStyleDefinition*}{GetSelectedStyleDefinition}{\void}
+
+Returns selected style definition.
+
+\membersection{wxRichTextStyleOrganiserDialog::GetStyleSheet}\label{wxrichtextstyleorganiserdialoggetstylesheet}
+
+\constfunc{wxRichTextStyleSheet*}{GetStyleSheet}{\void}
+
+Returns the associated style sheet.
+
+\membersection{wxRichTextStyleOrganiserDialog::SetFlags}\label{wxrichtextstyleorganiserdialogsetflags}
+
+\func{void}{SetFlags}{\param{int }{flags}}
+
+Sets the flags used to control the interface presented to the user.
+
+\membersection{wxRichTextStyleOrganiserDialog::SetRestartNumbering}\label{wxrichtextstyleorganiserdialogsetrestartnumbering}
+
+\func{void}{SetRestartNumbering}{\param{bool }{restartNumbering}}
+
+Checks or unchecks the restart numbering checkbox.
+
+\membersection{wxRichTextStyleOrganiserDialog::SetRichTextCtrl}\label{wxrichtextstyleorganiserdialogsetrichtextctrl}
+
+\func{void}{SetRichTextCtrl}{\param{wxRichTextCtrl* }{ctrl}}
+
+Sets the control to be associated with the dialog, for the purposes of applying a style to the selection.
+
+\membersection{wxRichTextStyleOrganiserDialog::SetShowToolTips}\label{wxrichtextstyleorganiserdialogsetshowtooltips}
+
+\func{void}{SetShowToolTips}{\param{bool }{show}}
+
+Determines whether tooltips will be shown.
+
+\membersection{wxRichTextStyleOrganiserDialog::SetStyleSheet}\label{wxrichtextstyleorganiserdialogsetstylesheet}
+
+\func{void}{SetStyleSheet}{\param{wxRichTextStyleSheet* }{sheet}}
+
+Sets the associated style sheet.
+

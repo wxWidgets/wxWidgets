@@ -1,0 +1,10 @@
+* Classes that are still complete stubs:
+wxPen
+wxRegion
+wxIcon
+wxCursor
+wxFont
+wxFontEnumerator
+
+* Dynamically linked library
+- wxCocoa doesn't yet have enough implementation to compile to a dylib.

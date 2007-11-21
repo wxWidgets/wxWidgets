@@ -1,0 +1,33 @@
+\section{wxGTK port}\label{wxgtkport}
+
+wxGTK is a port of wxWidgets using the GTK+ library.
+It makes use of GTK+'s native widgets wherever possible and uses
+wxWidgets' generic controls when needed. GTK+ itself has been
+ported to a number of systems, but so far only the original X11
+version is supported. Support for other GTK+ backends is planned,
+such as the new DirectFB backend.
+
+All work is being done on GTK+ version 2.0 and above. Support for
+GTK+ 1.2 will be deprecated in a later release.
+
+You will need GTK+ 2.0 or higher which is available from:
+
+\urlref{http://www.gtk.org}{http://www.gtk.org}
+
+The newer version of GTK+ you use, the more native widgets and
+features will be utilized. We have gone to a great extent to
+allow compiling wxWidgets applications with a latest version of
+GTK+, with the resulting binary working on systems even with a
+much lower version of GTK+. You will have to ensure that the
+application is launched with lazy symbol binding for that.
+
+In order to configure wxWidgets to compile wxGTK you will 
+need use the {\tt --with-gtk} argument to the {\tt configure} script.
+This is the default for many systems.
+
+GTK+ 1.2 can still be used, albeit discouraged. For that you can
+pass {\tt --with-gtk=1} to the {\tt configure} script.
+
+For further information, please see the files in docs/gtk
+in the distribution.
+

@@ -1,0 +1,277 @@
+\section{\class{wxProcess}}\label{wxprocess}
+
+The objects of this class are used in conjunction with the
+\helpref{wxExecute}{wxexecute} function. When a wxProcess object is passed to
+wxExecute(), its \helpref{OnTerminate()}{wxprocessonterminate} virtual method
+is called when the process terminates. This allows the program to be
+(asynchronously) notified about the process termination and also retrieve its
+exit status which is unavailable from wxExecute() in the case of
+asynchronous execution.
+
+Please note that if the process termination notification is processed by the
+parent, it is responsible for deleting the wxProcess object which sent it.
+However, if it is not processed, the object will delete itself and so the
+library users should only delete those objects whose notifications have been
+processed (and call \helpref{Detach()}{wxprocessdetach} for others).
+
+wxProcess also supports IO redirection of the child process. For this, you have
+to call its \helpref{Redirect}{wxprocessredirect} method before passing it to
+\helpref{wxExecute}{wxexecute}. If the child process was launched successfully,
+\helpref{GetInputStream}{wxprocessgetinputstream},
+\helpref{GetOutputStream}{wxprocessgetoutputstream} and
+\helpref{GetErrorStream}{wxprocessgeterrorstream} can then be used to retrieve
+the streams corresponding to the child process standard output, input and
+error output respectively.
+
+\perlnote{In wxPerl this class has an additional {\tt Destroy} method,
+for explicit destruction.}
+
+\wxheading{Derived from}
+
+\helpref{wxEvtHandler}{wxevthandler}
+
+\wxheading{Include files}
+
+<wx/process.h>
+
+\wxheading{See also}
+
+\helpref{wxExecute}{wxexecute}\\
+\helpref{exec sample}{sampleexec}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxProcess::wxProcess}\label{wxprocessctor}
+
+\func{}{wxProcess}{\param{wxEvtHandler *}{ parent = NULL}, \param{int}{ id = -1}}
+
+\func{}{wxProcess}{\param{int }{flags}}
+
+Constructs a process object. {\it id} is only used in the case you want to
+use wxWidgets events. It identifies this object, or another window that will
+receive the event.
+
+If the {\it parent} parameter is different from NULL, it will receive
+a wxEVT\_END\_PROCESS notification event (you should insert EVT\_END\_PROCESS
+macro in the event table of the parent to handle it) with the given {\it id}.
+
+The second constructor creates an object without any associated parent (and
+hence no id neither) but allows to specify the {\it flags} which can have the
+value of {\tt wxPROCESS\_DEFAULT} or {\tt wxPROCESS\_REDIRECT}. Specifying the
+former value has no particular effect while using the latter one is equivalent
+to calling \helpref{Redirect}{wxprocessredirect}.
+
+\wxheading{Parameters}
+
+\docparam{parent}{The event handler parent.}
+
+\docparam{id}{id of an event.}
+
+\docparam{flags}{either {\tt wxPROCESS\_DEFAULT} or {\tt wxPROCESS\_REDIRECT}}
+
+\membersection{wxProcess::\destruct{wxProcess}}\label{wxprocessdtor}
+
+\func{}{\destruct{wxProcess}}{\void}
+
+Destroys the wxProcess object.
+
+\membersection{wxProcess::CloseOutput}\label{wxprocesscloseoutput}
+
+\func{void}{CloseOutput}{\void}
+
+Closes the output stream (the one connected to the stdin of the child
+process). This function can be used to indicate to the child process that
+there is no more data to be read - usually, a filter program will only
+terminate when the input stream is closed.
+
+\membersection{wxProcess::Detach}\label{wxprocessdetach}
+
+\func{void}{Detach}{\void}
+
+Normally, a wxProcess object is deleted by its parent when it receives the
+notification about the process termination. However, it might happen that the
+parent object is destroyed before the external process is terminated (e.g. a
+window from which this external process was launched is closed by the user)
+and in this case it {\bf should not delete} the wxProcess object, but
+{\bf should call Detach()} instead. After the wxProcess object is detached
+from its parent, no notification events will be sent to the parent and the
+object will delete itself upon reception of the process termination
+notification.
+
+\membersection{wxProcess::GetErrorStream}\label{wxprocessgeterrorstream}
+
+\constfunc{wxInputStream* }{GetErrorStream}{\void}
+
+Returns an input stream which corresponds to the standard error output (stderr)
+of the child process.
+
+\membersection{wxProcess::GetInputStream}\label{wxprocessgetinputstream}
+
+\constfunc{wxInputStream* }{GetInputStream}{\void}
+
+It returns an input stream corresponding to the standard output stream of the
+subprocess. If it is NULL, you have not turned on the redirection.
+See \helpref{wxProcess::Redirect}{wxprocessredirect}.
+
+\membersection{wxProcess::GetOutputStream}\label{wxprocessgetoutputstream}
+
+\constfunc{wxOutputStream* }{GetOutputStream}{\void}
+
+It returns an output stream correspoding to the input stream of the subprocess.
+If it is NULL, you have not turned on the redirection.
+See \helpref{wxProcess::Redirect}{wxprocessredirect}.
+
+\membersection{wxProcess::IsErrorAvailable}\label{wxprocessiserroravailable}
+
+\constfunc{bool}{IsErrorAvailable}{\void}
+
+Returns {\tt true} if there is data to be read on the child process standard
+error stream.
+
+\wxheading{See also}
+
+\helpref{IsInputAvailable}{wxprocessisinputavailable}
+
+\membersection{wxProcess::IsInputAvailable}\label{wxprocessisinputavailable}
+
+\constfunc{bool}{IsInputAvailable}{\void}
+
+Returns {\tt true} if there is data to be read on the child process standard
+output stream. This allows to write simple (and extremely inefficient)
+polling-based code waiting for a better mechanism in future wxWidgets versions.
+
+See the \helpref{exec sample}{sampleexec} for an example of using this
+function.
+
+\wxheading{See also}
+
+\helpref{IsInputOpened}{wxprocessisinputopened}
+
+\membersection{wxProcess::IsInputOpened}\label{wxprocessisinputopened}
+
+\constfunc{bool}{IsInputOpened}{\void}
+
+Returns {\tt true} if the child process standard output stream is opened.
+
+\membersection{wxProcess::Kill}\label{wxprocesskill}
+
+\func{static wxKillError}{Kill}{\param{int}{ pid}, \param{wxSignal}{ signal = wxSIGNONE}, \param{int }{flags = wxKILL\_NOCHILDREN}}
+
+Send the specified signal to the given process. Possible signal values are:
+
+\begin{verbatim}
+enum wxSignal
+{
+    wxSIGNONE = 0,  // verify if the process exists under Unix
+    wxSIGHUP,
+    wxSIGINT,
+    wxSIGQUIT,
+    wxSIGILL,
+    wxSIGTRAP,
+    wxSIGABRT,
+    wxSIGEMT,
+    wxSIGFPE,
+    wxSIGKILL,      // forcefully kill, dangerous!
+    wxSIGBUS,
+    wxSIGSEGV,
+    wxSIGSYS,
+    wxSIGPIPE,
+    wxSIGALRM,
+    wxSIGTERM       // terminate the process gently
+};
+\end{verbatim}
+
+{\tt wxSIGNONE}, {\tt wxSIGKILL} and {\tt wxSIGTERM} have the same meaning
+under both Unix and Windows but all the other signals are equivalent to
+{\tt wxSIGTERM} under Windows.
+
+The {\it flags} parameter can be wxKILL\_NOCHILDREN (the default),
+or wxKILL\_CHILDREN, in which case the child processes of this
+process will be killed too. Note that under Unix, for wxKILL\_CHILDREN
+to work you should have created the process passing wxEXEC\_MAKE\_GROUP\_LEADER.
+
+Returns the element of {\tt wxKillError} enum:
+
+\begin{verbatim}
+enum wxKillError
+{
+    wxKILL_OK,              // no error
+    wxKILL_BAD_SIGNAL,      // no such signal
+    wxKILL_ACCESS_DENIED,   // permission denied
+    wxKILL_NO_PROCESS,      // no such process
+    wxKILL_ERROR            // another, unspecified error
+};
+\end{verbatim}
+
+\wxheading{See also}
+
+\helpref{wxProcess::Exists}{wxprocessexists},\rtfsp
+\helpref{wxKill}{wxkill},\rtfsp
+\helpref{Exec sample}{sampleexec}
+
+\membersection{wxProcess::Exists}\label{wxprocessexists}
+
+\func{static bool}{Exists}{\param{int}{ pid}}
+
+Returns {\tt true} if the given process exists in the system.
+
+\wxheading{See also}
+
+\helpref{wxProcess::Kill}{wxprocesskill},\rtfsp
+\helpref{Exec sample}{sampleexec}
+
+\membersection{wxProcess::OnTerminate}\label{wxprocessonterminate}
+
+\func{void}{OnTerminate}{\param{int}{ pid}, \param{int}{ status}}
+
+It is called when the process with the pid {\it pid} finishes.
+It raises a wxWidgets event when it isn't overridden.
+
+\docparam{pid}{The pid of the process which has just terminated.}
+
+\docparam{status}{The exit code of the process.}
+
+\membersection{wxProcess::Open}\label{wxprocessopen}
+
+\func{static wxProcess *}{Open}{\param{const wxString\& }{cmd}, \param{int }{flags = wxEXEC\_ASYNC}}
+
+This static method replaces the standard {\tt popen()} function: it launches
+the process specified by the {\it cmd} parameter and returns the wxProcess
+object which can be used to retrieve the streams connected to the standard
+input, output and error output of the child process.
+
+If the process couldn't be launched, {\tt NULL} is returned. Note that in any
+case the returned pointer should {\bf not} be deleted, rather the process
+object will be destroyed automatically when the child process terminates. This
+does mean that the child process should be told to quit before the main program
+exits to avoid memory leaks.
+
+\wxheading{Parameters}
+
+\docparam{cmd}{The command to execute, including optional arguments.}
+\docparam{flags}{The flags to pass to \helpref{wxExecute}{wxexecute}.
+  NOTE: wxEXEC\_SYNC should not be used.}
+
+\wxheading{Return value}
+
+A pointer to new wxProcess object or {\tt NULL} on error.
+
+\wxheading{See also}
+
+\helpref{wxExecute}{wxexecute}
+
+\membersection{wxProcess::GetPid}\label{wxprocessgetpid}
+
+\constfunc{long}{GetPid}{\void}
+
+Returns the process ID of the process launched by \helpref{Open}{wxprocessopen}.
+
+\membersection{wxProcess::Redirect}\label{wxprocessredirect}
+
+\func{void}{Redirect}{\void}
+
+Turns on redirection. wxExecute will try to open a couple of pipes
+to catch the subprocess stdio. The caught input stream is returned by
+GetOutputStream() as a non-seekable stream. The caught output stream is returned
+by GetInputStream() as a non-seekable stream.
+

@@ -1,0 +1,126 @@
+
+<HTML>
+
+<HEAD>
+<TITLE>wxWidgets for GTK FAQ</TITLE>
+</HEAD>
+
+<BODY BGCOLOR=#FFFFFF TEXT=#000000 VLINK="#00376A" LINK="#00529C" ALINK="#313063">
+
+<font face="Arial, Lucida Sans, Helvetica">
+
+<table width=100% border=0 cellpadding=3 cellspacing=0>
+<tr>
+<td bgcolor="#004080" align=left height=24 background="images/bluetitlegradient.gif">
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
+<b>wxWidgets for GTK FAQ</b>
+</font>
+</td>
+</tr>
+</table>
+
+<P>
+
+See also <a href="faq.htm">top-level FAQ page</a> 
+and <a href="faqunx.htm">Unix FAQ page</a>.
+<hr>
+<h3>List of questions in this category</h3>
+
+<ul>
+<li><a href="#wxgtk">What is wxWidgets for GTK+?</a></li>
+<li><a href="#locale">Why doesn&#39;t reading floating point numbers work when using wxWidgets?</a></li>
+<li><a href="#gnome">Does wxGTK have GNOME support?</a></li>
+<li><a href="#redhat">Warning about GTK libraries supplied with RedHat</a></li>
+<li><a href="#bincompat">What range of Intel Linux platforms will a given application binary be usable on?</a></li>
+<li><a href="#static">Can I statically link the GTK+ library?</a></li>
+<li><a href="#charinframe">Why does my simple program using <tt>EVT_CHAR</tt> not work?</a></li>
+<li><a href="#debugging">How do I trace the cause of an X11 error such as BadMatch?</a></li>
+</ul>
+
+<hr>
+
+<h3><a name="wxgtk">What is wxWidgets for GTK?</a></h3>
+
+wxWidgets for GTK is a port of wxWidgets to the <a href="http://www.gimp.org/gtk" target=_top>GTK+ toolkit</a>,
+which is freely available for most flavours of Unix with X. wxWidgets for GTK is
+often abbreviated to wxGTK. wxGTK has a separate home page <a href="http://www.freiburg.linux.de/~wxxt" target=_top>here</a>.
+<P>
+
+<h3><a name="locale">Why doesn&#39;t reading floating point numbers work when using wxWidgets?</a></h3>
+
+If your program reads the floating point numbers in the format <tt>123.45</tt>
+from a file, it may suddenly start returning just <tt>123</tt> instead of the
+correct value on some systems -- which is all the more mysterious as the same
+code in a standalone program works just fine.
+
+<p>
+The explanation is that GTK+ changes the current locale on program startup. If
+the decimal point character in the current locale is not the period (for
+example, it is comma in the French locale), all the standard C functions won&#39;t
+recognize the numbers such as above as floating point ones any more.
+
+<p>
+The solution is to either use your own function for reading the floating point
+numbers (probably the best one) or to call <tt>setlocale(LC_NUMERIC, "C")</tt>
+before reading from file and restore the old locale back afterwards if needed.
+
+<h3><a name="gnome">Does wxGTK have GNOME support?</a></h3>
+
+Currently wxGTK does not have any features that would involve dependence on any desktop
+environment&#39;s libraries, so it can work on GNOME, KDE and with other window managers
+without installation hassles. Some GNOME and KDE integration features are file based, and
+so may be added without dependence on libraries. Other features may be supported in the
+future, probably as a separate library.
+<P>
+
+<h3><a name="redhat">Warning about GTK+ libraries supplied with RedHat</a></h3>
+
+It seems that some versions of RedHat include a badly patched version of GTK+ (not wxGTK)
+which causes some trouble with wxWidgets&#39; socket code. Common symptoms are that when
+a client tries to establish a connection to an existing server which refuses the request,
+the client will get notified twice, first getting a LOST event and then a CONNECT event.
+This problem can be solved by updating GTK with an official distribution of the library.
+<P>
+
+<h3><a name="bincompat">What range of Intel Linux platforms will a given application binary be usable on?</h3>
+
+Robert Roebling replies:<P>
+
+&#34;The important thing is the libc version that your app
+is linked against. The most recent version is 2.2.5
+and programs linked against it will not run with version
+2.1.X so that you will fare best if you compile your app
+on a 2.1.X system. It will then run on practically all
+Linux distros (if you link you app statically against
+the image libraries and std C++ lib).&#34;
+<P>
+
+<h3><a name="#static">Can I statically link the GTK+ library?</a></h3>
+
+No, this is not possible. It leads to crashes in GTK+.
+<P>
+
+<h3><a name="#charinframe">Why does my simple program using
+<tt>EVT_CHAR</tt> not work?</a></h3>
+
+In wxGTK, the frames never get focus and so can never receive <tt>CHAR</tt>
+nor <tt>KEY</tt> events so an <tt>EVT_CHAR</tt> handler for a frame will be
+never called. To receive these events, you should create a <tt>wxPanel</tt>
+inside the frame and register the key event handlers for the panel, not the
+frame.
+
+<p>
+
+<h3><a name="#debugging">How do I trace the cause of an X11 error such as BadMatch?</h3>
+
+When a fatal X11 error occurs, the application quits with no stack trace.
+To find out where the problem is, put a breakpoint on g_log (<tt>b g_log</tt>
+in gdb).
+
+<p>
+
+</font>
+
+</BODY>
+
+</HTML>

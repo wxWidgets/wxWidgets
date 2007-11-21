@@ -1,0 +1,12 @@
+include/wx/unix/*.h
+include/wx/univ/*.h
+
+src/unix/*.cpp
+src/unix/*.c
+src/univ/*.cpp
+src/univ/*.c
+src/univ/*.lst
+src/univ/themes/*.cpp
+
+docs/univ/*.txt
+

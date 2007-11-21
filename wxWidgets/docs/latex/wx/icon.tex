@@ -1,0 +1,366 @@
+\section{\class{wxIcon}}\label{wxicon}
+
+An icon is a small rectangular bitmap usually used for denoting a
+minimized application. It differs from a wxBitmap in always
+having a mask associated with it for transparent drawing. On some platforms,
+icons and bitmaps are implemented identically, since there is no real distinction between
+a wxBitmap with a mask and an icon; and there is no specific icon format on
+some platforms (X-based applications usually standardize on XPMs for small bitmaps
+and icons). However, some platforms (such as Windows) make the distinction, so
+a separate class is provided.
+
+\wxheading{Derived from}
+
+\helpref{wxBitmap}{wxbitmap}\\
+\helpref{wxGDIObject}{wxgdiobject}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/icon.h>
+
+\wxheading{Predefined objects}
+
+Objects:
+
+{\bf wxNullIcon}
+
+\wxheading{Remarks}
+
+It is usually desirable to associate a pertinent icon with a frame. Icons
+can also be used for other purposes, for example with \helpref{wxTreeCtrl}{wxtreectrl} 
+and \helpref{wxListCtrl}{wxlistctrl}.
+
+Icons have different formats on different platforms.
+Therefore, separate icons will usually be created for the different
+environments.  Platform-specific methods for creating a {\bf wxIcon}\rtfsp
+structure are catered for, and this is an occasion where conditional
+compilation will probably be required.
+
+Note that a new icon must be created for every time the icon is to be
+used for a new window. In Windows, the icon will not be
+reloaded if it has already been used. An icon allocated to a frame will
+be deleted when the frame is deleted.
+
+For more information please see \helpref{Bitmap and icon overview}{wxbitmapoverview}.
+
+\wxheading{See also}
+
+\helpref{Bitmap and icon overview}{wxbitmapoverview}, \helpref{supported bitmap file formats}{supportedbitmapformats}, 
+\helpref{wxDC::DrawIcon}{wxdcdrawicon}, \helpref{wxCursor}{wxcursor}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxIcon::wxIcon}\label{wxiconctor}
+
+\func{}{wxIcon}{\void}
+
+Default constructor.
+
+\func{}{wxIcon}{\param{const wxIcon\& }{icon}}
+
+Copy constructor.
+
+\func{}{wxIcon}{\param{void*}{ data}, \param{int}{ type}, \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
+
+Creates an icon from the given data, which can be of arbitrary type.
+
+\func{}{wxIcon}{\param{const char}{ bits[]}, \param{int}{ width}, \param{int}{ height}\\
+  \param{int}{ depth = 1}}
+
+Creates an icon from an array of bits.
+
+\func{}{wxIcon}{\param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
+
+Creates a new icon.
+
+\func{}{wxIcon}{\param{char**}{ bits}}
+
+\func{}{wxIcon}{\param{const char**}{ bits}}
+
+Creates an icon from XPM data.
+
+\func{}{wxIcon}{\param{const wxString\& }{name}, \param{wxBitmapType}{ type},
+  \param{int}{ desiredWidth = -1}, \param{int}{ desiredHeight = -1}}
+
+Loads an icon from a file or resource.
+
+\func{}{wxIcon}{\param{const wxIconLocation\& }{loc}}
+
+Loads an icon from the specified \helpref{location}{wxiconlocation}.
+
+\wxheading{Parameters}
+
+\docparam{bits}{Specifies an array of pixel values.}
+
+\docparam{width}{Specifies the width of the icon.}
+
+\docparam{height}{Specifies the height of the icon.}
+
+\docparam{desiredWidth}{Specifies the desired width of the icon. This
+parameter only has an effect in Windows (32-bit) where icon resources can contain
+several icons of different sizes.}
+
+\docparam{desiredWidth}{Specifies the desired height of the icon. This
+parameter only has an effect in Windows (32-bit) where icon resources can contain
+several icons of different sizes.}
+
+\docparam{depth}{Specifies the depth of the icon. If this is omitted, the display depth of the
+screen is used.}
+
+\docparam{name}{This can refer to a resource name under MS Windows, or a filename under MS Windows and X.
+Its meaning is determined by the {\it flags} parameter.}
+
+\docparam{loc}{The object describing the location of the native icon, see 
+\helpref{wxIconLocation}{wxiconlocation}.}
+
+\docparam{type}{May be one of the following:
+
+\twocolwidtha{5cm}
+\begin{twocollist}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_ICO}}{Load a Windows icon file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_ICO\_RESOURCE}}{Load a Windows icon from the resource database.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_GIF}}{Load a GIF bitmap file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_XBM}}{Load an X bitmap file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_XPM}}{Load an XPM bitmap file.}
+%\twocolitem{\indexit{wxBITMAP\_TYPE\_RESOURCE}}{Load a Windows resource name.}
+\end{twocollist}
+
+The validity of these flags depends on the platform and wxWidgets configuration.
+If all possible wxWidgets settings are used, the Windows platform supports ICO file, ICO resource,
+XPM data, and XPM file. Under wxGTK, the available formats are BMP file, XPM data, XPM file, and PNG file.
+Under wxMotif, the available formats are XBM data, XBM file, XPM data, XPM file.}
+
+\wxheading{Remarks}
+
+The first form constructs an icon object with no data; an assignment or another member function such as Create
+or LoadFile must be called subsequently.
+
+The second and third forms provide copy constructors. Note that these do not copy the
+icon data, but instead a pointer to the data, keeping a reference count. They are therefore
+very efficient operations.
+
+The fourth form constructs an icon from data whose type and value depends on
+the value of the {\it type} argument.
+
+The fifth form constructs a (usually monochrome) icon from an array of pixel values, under both
+X and Windows.
+
+The sixth form constructs a new icon.
+
+The seventh form constructs an icon from pixmap (XPM) data, if wxWidgets has been configured
+to incorporate this feature.
+
+To use this constructor, you must first include an XPM file. For
+example, assuming that the file {\tt mybitmap.xpm} contains an XPM array
+of character pointers called mybitmap:
+
+\begin{verbatim}
+#include "mybitmap.xpm"
+
+...
+
+wxIcon *icon = new wxIcon(mybitmap);
+\end{verbatim}
+
+A macro, wxICON, is available which creates an icon using an XPM
+on the appropriate platform, or an icon resource on Windows.
+
+\begin{verbatim}
+wxIcon icon(wxICON(mondrian));
+
+// Equivalent to:
+
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
+wxIcon icon(mondrian_xpm);
+#endif
+
+#if defined(__WXMSW__)
+wxIcon icon("mondrian");
+#endif
+\end{verbatim}
+
+The eighth form constructs an icon from a file or resource. {\it name} can refer
+to a resource name under MS Windows, or a filename under MS Windows and X.
+
+Under Windows, {\it type} defaults to wxBITMAP\_TYPE\_ICO\_RESOURCE.
+Under X, {\it type} defaults to wxBITMAP\_TYPE\_XPM.
+
+\wxheading{See also}
+
+
+\membersection{wxIcon::CopyFromBitmap}\label{wxiconcopyfrombitmap}
+
+\func{void}{CopyFromBitmap}{\param{const wxBitmap\&}{ bmp}}
+
+Copies {\it bmp} bitmap to this icon. Under MS Windows the bitmap
+must have mask colour set.
+
+
+\helpref{wxIcon::LoadFile}{wxiconloadfile}
+
+\perlnote{Constructors supported by wxPerl are:\par
+\begin{itemize}
+\item{Wx::Icon->new( width, height, depth = -1 )}
+\item{Wx::Icon->new( name, type, desiredWidth = -1, desiredHeight = -1 )}
+\item{Wx::Icon->newFromBits( bits, width, height, depth = 1 )}
+\item{Wx::Icon->newFromXPM( data )}
+\end{itemize}
+}
+
+\membersection{wxIcon::\destruct{wxIcon}}\label{wxicondtor}
+
+\func{}{\destruct{wxIcon}}{\void}
+
+Destructor.
+See \helpref{reference-counted object destruction}{refcountdestruct} for more info.
+
+If the application omits to delete the icon explicitly, the icon will be
+destroyed automatically by wxWidgets when the application exits.
+
+Do not delete an icon that is selected into a memory device context.
+
+\membersection{wxIcon::GetDepth}\label{wxicongetdepth}
+
+\constfunc{int}{GetDepth}{\void}
+
+Gets the colour depth of the icon. A value of 1 indicates a
+monochrome icon.
+
+\membersection{wxIcon::GetHeight}\label{wxicongetheight}
+
+\constfunc{int}{GetHeight}{\void}
+
+Gets the height of the icon in pixels.
+
+\membersection{wxIcon::GetWidth}\label{wxicongetwidth}
+
+\constfunc{int}{GetWidth}{\void}
+
+Gets the width of the icon in pixels.
+
+\wxheading{See also}
+
+\helpref{wxIcon::GetHeight}{wxicongetheight}
+
+\membersection{wxIcon::LoadFile}\label{wxiconloadfile}
+
+\func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{wxBitmapType}{ type}}
+
+Loads an icon from a file or resource.
+
+\wxheading{Parameters}
+
+\docparam{name}{Either a filename or a Windows resource name.
+The meaning of {\it name} is determined by the {\it type} parameter.}
+
+\docparam{type}{One of the following values:
+
+\twocolwidtha{5cm}
+\begin{twocollist}
+\twocolitem{{\bf wxBITMAP\_TYPE\_ICO}}{Load a Windows icon file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_ICO\_RESOURCE}}{Load a Windows icon from the resource database.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_GIF}}{Load a GIF bitmap file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_XBM}}{Load an X bitmap file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_XPM}}{Load an XPM bitmap file.}
+\end{twocollist}
+
+The validity of these flags depends on the platform and wxWidgets configuration.}
+
+\wxheading{Return value}
+
+true if the operation succeeded, false otherwise.
+
+\wxheading{See also}
+
+\helpref{wxIcon::wxIcon}{wxiconctor}
+
+\membersection{wxIcon::IsOk}\label{wxiconisok}
+
+\constfunc{bool}{IsOk}{\void}
+
+Returns true if icon data is present.
+
+\begin{comment}
+\membersection{wxIcon::SaveFile}\label{wxiconsavefile}
+
+\func{bool}{SaveFile}{\param{const wxString\& }{name}, \param{wxBitmapType}{ type}, \param{wxPalette* }{palette = NULL}}
+
+Saves an icon in the named file.
+
+\wxheading{Parameters}
+
+\docparam{name}{A filename. The meaning of {\it name} is determined by the {\it type} parameter.}
+
+\docparam{type}{One of the following values:
+
+\twocolwidtha{5cm}
+\begin{twocollist}
+\twocolitem{{\bf wxBITMAP\_TYPE\_ICO}}{Save a Windows icon file.}
+%\twocolitem{{\bf wxBITMAP\_TYPE\_GIF}}{Save a GIF icon file.}
+%\twocolitem{{\bf wxBITMAP\_TYPE\_XBM}}{Save an X bitmap file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_XPM}}{Save an XPM bitmap file.}
+\end{twocollist}
+
+The validity of these flags depends on the platform and wxWidgets configuration.}
+
+\docparam{palette}{An optional palette used for saving the icon.}
+
+\wxheading{Return value}
+
+true if the operation succeeded, false otherwise.
+
+\wxheading{Remarks}
+
+Depending on how wxWidgets has been configured, not all formats may be available.
+
+\wxheading{See also}
+
+\helpref{wxIcon::LoadFile}{wxiconloadfile}
+\end{comment}
+
+\membersection{wxIcon::SetDepth}\label{wxiconsetdepth}
+
+\func{void}{SetDepth}{\param{int }{depth}}
+
+Sets the depth member (does not affect the icon data).
+
+\wxheading{Parameters}
+
+\docparam{depth}{Icon depth.}
+
+\membersection{wxIcon::SetHeight}\label{wxiconsetheight}
+
+\func{void}{SetHeight}{\param{int }{height}}
+
+Sets the height member (does not affect the icon data).
+
+\wxheading{Parameters}
+
+\docparam{height}{Icon height in pixels.}
+
+\membersection{wxIcon::SetWidth}\label{wxiconsetwidth}
+
+\func{void}{SetWidth}{\param{int }{width}}
+
+Sets the width member (does not affect the icon data).
+
+\wxheading{Parameters}
+
+\docparam{width}{Icon width in pixels.}
+
+\membersection{wxIcon::operator $=$}\label{wxiconassign}
+
+\func{wxIcon\& }{operator $=$}{\param{const wxIcon\& }{icon}}
+
+Assignment operator, using \helpref{reference counting}{trefcount}.
+
+\wxheading{Parameters}
+
+\docparam{icon}{Icon to assign.}
+
+\wxheading{Return value}
+
+Returns 'this' object.
+
+

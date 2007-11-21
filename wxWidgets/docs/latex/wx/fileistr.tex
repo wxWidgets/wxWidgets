@@ -1,0 +1,54 @@
+\section{\class{wxFileInputStream}}\label{wxfileinputstream}
+
+This class represents data read in from a file. There are actually
+two such groups of classes: this one is based on \helpref{wxFile}{wxfile} 
+whereas \helpref{wxFFileInputStream}{wxffileinputstream} is based in
+the \helpref{wxFFile}{wxffile} class.
+
+Note that \helpref{SeekI()}{wxinputstreamseeki} 
+can seek beyond the end of the stream (file) and will thus not return 
+{\it wxInvalidOffset} for that.
+
+\wxheading{Derived from}
+
+\helpref{wxInputStream}{wxinputstream}
+
+\wxheading{Include files}
+
+<wx/wfstream.h>
+
+\wxheading{See also}
+
+\helpref{wxBufferedInputStream}{wxbufferedinputstream}, \helpref{wxFileOutputStream}{wxfileoutputstream}, \helpref{wxFFileOutputStream}{wxffileoutputstream}
+
+% ----------
+% Members
+% ----------
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFileInputStream::wxFileInputStream}\label{wxfileinputstreamctor}
+
+\func{}{wxFileInputStream}{\param{const wxString\&}{ ifileName}}
+
+Opens the specified file using its {\it ifilename} name in read-only mode.
+
+\func{}{wxFileInputStream}{\param{wxFile\&}{ file}}
+
+Initializes a file stream in read-only mode using the file I/O object {\it file}.
+
+\func{}{wxFileInputStream}{\param{int}{ fd}}
+
+Initializes a file stream in read-only mode using the specified file descriptor.
+
+\membersection{wxFileInputStream::\destruct{wxFileInputStream}}\label{wxfileinputstreamdtor}
+
+\func{}{\destruct{wxFileInputStream}}{\void}
+
+Destructor.
+
+\membersection{wxFileInputStream::IsOk}\label{wxfileinputstreamisok}
+
+\constfunc{bool}{IsOk}{\void}
+
+Returns true if the stream is initialized and ready.
+

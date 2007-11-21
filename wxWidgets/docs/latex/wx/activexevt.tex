@@ -1,0 +1,75 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        activexevt.tex
+%% Purpose:     wxActiveXEvent docs
+%% Author:      Ryan Norton <wxprojects@comcast.net>
+%% Modified by:
+%% Created:     01/30/2005
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Ryan Norton
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxActiveXEvent}}\label{wxactivexevent}
+
+An event class for handling activex events passed from
+\helpref{wxActiveXContainer}{wxactivexcontainer}. ActiveX events are basically
+a function call with the parameters passed through an array of wxVariants along
+with a return value that is a wxVariant itself. What type the parameters or
+return value are depends on the context (i.e. what the .idl specifies).
+
+Note that unlike the third party wxActiveX function names are not supported.
+
+\wxheading{Derived from}
+
+\helpref{wxCommandEvent}{wxcommandevent}
+
+\wxheading{Include files}
+
+<wx/msw/ole/activex.h>
+
+\wxheading{Event table macros}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_ACTIVEX(func)}}{
+Sent when the activex control hosted by \helpref{wxActiveXContainer}{wxactivexcontainer}
+recieves an activex event.}
+\end{twocollist}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxActiveXEvent::ParamCount}\label{wxactivexeventparamcount}
+
+\constfunc{size\_t}{ParamCount}{\void}
+
+Obtains the number of parameters passed through the activex event.
+
+
+\membersection{wxActiveXEvent::ParamType}\label{wxactivexeventparamtype}
+
+\constfunc{wxString}{ParamType}{\param{size\_t }{idx}}
+
+Obtains the param type of the param number idx specifies as a string.
+
+
+\membersection{wxActiveXEvent::ParamName}\label{wxactivexeventparamname}
+
+\constfunc{wxString}{ParamName}{\param{size\_t }{idx}}
+
+Obtains the param name of the param number idx specifies as a string.
+
+
+\membersection{wxActiveXEvent::operator[]}\label{wxactivexeventoparray}
+
+\func{wxVariant&}{operator[]}{\param{size\_t }{idx}}
+
+Obtains the actual parameter value specified by idx.
+
+
+\membersection{wxActiveXEvent::GetDispatchId}\label{wxactivexeventgetdispatchid}
+
+\constfunc{DISPID}{GetDispatchId}{\param{int }{idx}}
+
+Returns the dispatch id of this activex event. This is the numeric value from
+the .idl file specified by the id().
+

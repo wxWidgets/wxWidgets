@@ -1,0 +1,1085 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        listctrl.tex
+%% Purpose:     wxListCtrl docs
+%% Author:
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxListCtrl}}\label{wxlistctrl}
+
+A list control presents lists in a number of formats: list view, report view,
+icon view and small icon view. In any case, elements are numbered from zero.
+For all these modes, the items are stored in the control and must be added to
+it using \helpref{InsertItem}{wxlistctrlinsertitem} method.
+
+A special case of report view quite different from the other modes of the list
+control is a virtual control in which the items data (including text, images
+and attributes) is managed by the main program and is requested by the control
+itself only when needed which allows to have controls with millions of items
+without consuming much memory. To use virtual list control you must use
+\helpref{SetItemCount}{wxlistctrlsetitemcount} first and overload at least
+\helpref{OnGetItemText}{wxlistctrlongetitemtext} (and optionally
+\helpref{OnGetItemImage}{wxlistctrlongetitemimage} or \helpref{OnGetItemColumnImage}{wxlistctrlongetitemcolumnimage} and
+\helpref{OnGetItemAttr}{wxlistctrlongetitemattr}) to return the information
+about the items when the control requests it. Virtual list control can be used
+as a normal one except that no operations which can take time proportional to
+the number of items in the control happen -- this is required to allow having a
+practically infinite number of items. For example, in a multiple selection
+virtual list control, the selections won't be sent when many items are selected
+at once because this could mean iterating over all the items.
+
+Using many of wxListCtrl features is shown in the
+\helpref{corresponding sample}{samplelistctrl}.
+
+To intercept events from a list control, use the event table macros described
+in \helpref{wxListEvent}{wxlistevent}.
+
+{\bf Mac Note:} Starting with 2.8, wxListCtrl uses a native implementation for 
+report mode, and uses a generic implementation for other modes. You can use the
+generic implementation for report mode as well by setting the
+mac.listctrl.always\_use\_generic \helpref{wxSystemOption}{wxsystemoptions} to
+1.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/listctrl.h>
+
+\wxheading{Window styles}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxLC\_LIST}}{Multicolumn list view, with optional small icons.
+Columns are computed automatically, i.e. you don't set columns as in wxLC\_REPORT. In other words,
+the list wraps, unlike a wxListBox.}
+\twocolitem{\windowstyle{wxLC\_REPORT}}{Single or multicolumn report view, with optional header.}
+\twocolitem{\windowstyle{wxLC\_VIRTUAL}}{The application provides items text on demand. May only be used with wxLC\_REPORT.}
+\twocolitem{\windowstyle{wxLC\_ICON}}{Large icon view, with optional labels.}
+\twocolitem{\windowstyle{wxLC\_SMALL\_ICON}}{Small icon view, with optional labels.}
+\twocolitem{\windowstyle{wxLC\_ALIGN\_TOP}}{Icons align to the top. Win32 default, Win32 only. }
+\twocolitem{\windowstyle{wxLC\_ALIGN\_LEFT}}{Icons align to the left. }
+\twocolitem{\windowstyle{wxLC\_AUTOARRANGE}}{Icons arrange themselves. Win32 only. }
+\twocolitem{\windowstyle{wxLC\_EDIT\_LABELS}}{Labels are editable: the application will be notified when editing starts.}
+\twocolitem{\windowstyle{wxLC\_NO\_HEADER}}{No header in report mode. }
+\twocolitem{\windowstyle{wxLC\_SINGLE\_SEL}}{Single selection (default is multiple).}
+\twocolitem{\windowstyle{wxLC\_SORT\_ASCENDING}}{Sort in ascending order (must still supply a comparison callback in SortItems.}
+\twocolitem{\windowstyle{wxLC\_SORT\_DESCENDING}}{Sort in descending order (must still supply a comparison callback in SortItems.}
+\twocolitem{\windowstyle{wxLC\_HRULES}}{Draws light horizontal rules between rows in report mode.}
+\twocolitem{\windowstyle{wxLC\_VRULES}}{Draws light vertical rules between columns in report mode.}
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{Event handling}
+
+To process input from a list control, use these event handler macros to direct input to member
+functions that take a \helpref{wxListEvent}{wxlistevent} argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_LIST\_BEGIN\_DRAG(id, func)}}{Begin dragging with the left mouse button.}
+\twocolitem{{\bf EVT\_LIST\_BEGIN\_RDRAG(id, func)}}{Begin dragging with the right mouse button.}
+\twocolitem{{\bf EVT\_LIST\_BEGIN\_LABEL\_EDIT(id, func)}}{Begin editing a label. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
+\twocolitem{{\bf EVT\_LIST\_END\_LABEL\_EDIT(id, func)}}{Finish editing a label. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
+\twocolitem{{\bf EVT\_LIST\_DELETE\_ITEM(id, func)}}{Delete an item.}
+\twocolitem{{\bf EVT\_LIST\_DELETE\_ALL\_ITEMS(id, func)}}{Delete all items.}
+%\twocolitem{{\bf EVT\_LIST\_GET\_INFO(id, func)}}{Request information from the application, usually the item text.}
+%\twocolitem{{\bf EVT\_LIST\_SET\_INFO(id, func)}}{Information is being supplied (not implemented).}
+\twocolitem{{\bf EVT\_LIST\_ITEM\_SELECTED(id, func)}}{The item has been selected.}
+\twocolitem{{\bf EVT\_LIST\_ITEM\_DESELECTED(id, func)}}{The item has been deselected.}
+\twocolitem{{\bf EVT\_LIST\_ITEM\_ACTIVATED(id, func)}}{The item has been activated (ENTER or double click).}
+\twocolitem{{\bf EVT\_LIST\_ITEM\_FOCUSED(id, func)}}{The currently focused item has changed.}
+\twocolitem{{\bf EVT\_LIST\_ITEM\_MIDDLE\_CLICK(id, func)}}{The middle mouse button has been clicked on an item.}
+\twocolitem{{\bf EVT\_LIST\_ITEM\_RIGHT\_CLICK(id, func)}}{The right mouse button has been clicked on an item.}
+\twocolitem{{\bf EVT\_LIST\_KEY\_DOWN(id, func)}}{A key has been pressed.}
+\twocolitem{{\bf EVT\_LIST\_INSERT\_ITEM(id, func)}}{An item has been inserted.}
+\twocolitem{{\bf EVT\_LIST\_COL\_CLICK(id, func)}}{A column ({\bf m\_col}) has been left-clicked.}
+\twocolitem{{\bf EVT\_LIST\_COL\_RIGHT\_CLICK(id, func)}}{A column ({\bf m\_col}) has been right-clicked.}
+\twocolitem{{\bf EVT\_LIST\_COL\_BEGIN\_DRAG(id, func)}}{The user started resizing a column - can be vetoed.}
+\twocolitem{{\bf EVT\_LIST\_COL\_DRAGGING(id, func)}}{The divider between columns is being dragged.}
+\twocolitem{{\bf EVT\_LIST\_COL\_END\_DRAG(id, func)}}{A column has been resized by the user.}
+\twocolitem{{\bf EVT\_LIST\_CACHE\_HINT(id, func)}}{Prepare cache for a virtual list control}
+\end{twocollist}%
+
+\wxheading{See also}
+
+\helpref{wxListCtrl overview}{wxlistctrloverview}, \helpref{wxListView}{wxlistview}, \helpref{wxListBox}{wxlistbox},\rtfsp
+\helpref{wxTreeCtrl}{wxtreectrl}, \helpref{wxImageList}{wximagelist}, \helpref{wxListEvent}{wxlistevent},
+\helpref{wxListItem}{wxlistitem}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxListCtrl::wxListCtrl}\label{wxlistctrlctor}
+
+\func{}{wxListCtrl}{\void}
+
+Default constructor.
+
+\func{}{wxListCtrl}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxLC\_ICON}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = wxListCtrlNameStr}}
+
+Constructor, creating and showing a list control.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Window identifier. A value of -1 indicates a default value.}
+
+\docparam{pos}{Window position.}
+
+\docparam{size}{Window size. If the default size (-1, -1) is specified then the window is sized
+appropriately.}
+
+\docparam{style}{Window style. See \helpref{wxListCtrl}{wxlistctrl}.}
+
+\docparam{validator}{Window validator.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxListCtrl::Create}{wxlistctrlcreate}, \helpref{wxValidator}{wxvalidator}
+
+
+\membersection{wxListCtrl::\destruct{wxListCtrl}}\label{wxlistctrldtor}
+
+\func{void}{\destruct{wxListCtrl}}{\void}
+
+Destructor, destroying the list control.
+
+
+\membersection{wxListCtrl::Arrange}\label{wxlistctrlarrange}
+
+\func{bool}{Arrange}{\param{int }{flag = wxLIST\_ALIGN\_DEFAULT}}
+
+Arranges the items in icon or small icon view. This only has effect on Win32. {\it flag} is one of:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxLIST\_ALIGN\_DEFAULT}{Default alignment.}
+\twocolitem{wxLIST\_ALIGN\_LEFT}{Align to the left side of the control.}
+\twocolitem{wxLIST\_ALIGN\_TOP}{Align to the top side of the control.}
+\twocolitem{wxLIST\_ALIGN\_SNAP\_TO\_GRID}{Snap to grid.}
+\end{twocollist}
+
+
+\membersection{wxListCtrl::AssignImageList}\label{wxlistctrlassignimagelist}
+
+\func{void}{AssignImageList}{\param{wxImageList*}{ imageList}, \param{int }{which}}
+
+Sets the image list associated with the control and
+takes ownership of it (i.e. the control will, unlike when using
+SetImageList, delete the list when destroyed). {\it which} is one of
+wxIMAGE\_LIST\_NORMAL, wxIMAGE\_LIST\_SMALL, wxIMAGE\_LIST\_STATE (the last is unimplemented).
+
+\wxheading{See also}
+
+\helpref{wxListCtrl::SetImageList}{wxlistctrlsetimagelist}
+
+
+\membersection{wxListCtrl::ClearAll}\label{wxlistctrlclearall}
+
+\func{void}{ClearAll}{}
+
+Deletes all items and all columns.
+
+
+\membersection{wxListCtrl::Create}\label{wxlistctrlcreate}
+
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxLC\_ICON}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = wxListCtrlNameStr}}
+
+Creates the list control. See \helpref{wxListCtrl::wxListCtrl}{wxlistctrlctor} for further details.
+
+
+\membersection{wxListCtrl::DeleteAllItems}\label{wxlistctrldeleteallitems}
+
+\func{bool}{DeleteAllItems}{}
+
+Deletes all items in the list control.
+
+{\bf NB:} This function does {\it not} send the
+{\tt wxEVT\_COMMAND\_LIST\_DELETE\_ITEM} event because deleting many items
+from the control would be too slow then (unlike \helpref{DeleteItem}{wxlistctrldeleteitem}).
+
+
+\membersection{wxListCtrl::DeleteColumn}\label{wxlistctrldeletecolumn}
+
+\func{bool}{DeleteColumn}{\param{int }{col}}
+
+Deletes a column.
+
+
+\membersection{wxListCtrl::DeleteItem}\label{wxlistctrldeleteitem}
+
+\func{bool}{DeleteItem}{\param{long }{item}}
+
+Deletes the specified item. This function sends the
+{\tt wxEVT\_COMMAND\_LIST\_DELETE\_ITEM} event for the item being deleted.
+
+See also: \helpref{DeleteAllItems}{wxlistctrldeleteallitems}
+
+
+\membersection{wxListCtrl::EditLabel}\label{wxlistctrledit}
+
+\func{void}{EditLabel}{\param{long }{item}}
+
+Starts editing the label of the given item. This function generates a
+EVT\_LIST\_BEGIN\_LABEL\_EDIT event which can be vetoed so that no
+text control will appear for in-place editing.
+
+If the user changed the label (i.e. s/he does not press ESC or leave
+the text control without changes, a EVT\_LIST\_END\_LABEL\_EDIT event
+will be sent which can be vetoed as well.
+
+
+\membersection{wxListCtrl::EnsureVisible}\label{wxlistctrlensurevisible}
+
+\func{bool}{EnsureVisible}{\param{long }{item}}
+
+Ensures this item is visible.
+
+
+\membersection{wxListCtrl::FindItem}\label{wxlistctrlfinditem}
+
+\func{long}{FindItem}{\param{long }{start}, \param{const wxString\& }{str}, \param{const bool }{partial = false}}
+
+Find an item whose label matches this string, starting from {\it start} or
+the beginning if {\it start} is -1. The string comparison is case
+insensitive. If {\it partial} is true then this method will look for
+items which begin with {\it str}.
+
+\func{long}{FindItem}{\param{long }{start}, \param{long }{data}}
+
+Find an item whose data matches this data, starting from {\it start} or
+the beginning if 'start' is -1.
+
+\func{long}{FindItem}{\param{long }{start}, \param{const wxPoint\& }{pt}, \param{int }{direction}}
+
+Find an item nearest this position in the specified direction, starting from
+{\it start} or the beginning if {\it start} is -1.
+
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{{\bf FindItem(start, str, partial=false)}}{}
+\twocolitem{{\bf FindItemData(start, data)}}{}
+\twocolitem{{\bf FindItemAtPos(start, point, direction)}}{}
+\end{twocollist}}
+}
+
+\perlnote{In wxPerl there are three methods instead of a single overloaded
+method:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{{\bf FindItem( start, str, partial = false ) }}{}
+\twocolitem{{\bf FindItemData( start, data ) }}{}
+\twocolitem{{\bf FindItemAtPos( start, point, direction )}}{}
+\end{twocollist}
+}}
+
+
+\membersection{wxListCtrl::GetColumn}\label{wxlistctrlgetcolumn}
+
+\constfunc{bool}{GetColumn}{\param{int }{col}, \param{wxListItem\& }{item}}
+
+Gets information about this column. See \helpref{wxListCtrl::SetItem}{wxlistctrlsetitem} for more
+information.
+
+\perlnote{In wxPerl this method takes only the {\bf col} parameter and
+  returns a Wx::ListItem ( or undef ).}
+
+
+\membersection{wxListCtrl::GetColumnCount}\label{wxlistctrlgetcolumncount}
+
+\constfunc{int}{GetColumnCount}{\void}
+
+Returns the number of columns.
+
+
+\membersection{wxListCtrl::GetColumnWidth}\label{wxlistctrlgetcolumnwidth}
+
+\constfunc{int}{GetColumnWidth}{\param{int }{col}}
+
+Gets the column width (report view only).
+
+
+\membersection{wxListCtrl::GetCountPerPage}\label{wxlistctrlgetcountperpage}
+
+\constfunc{int}{GetCountPerPage}{\void}
+
+Gets the number of items that can fit vertically in the
+visible area of the list control (list or report view)
+or the total number of items in the list control (icon
+or small icon view).
+
+
+\membersection{wxListCtrl::GetEditControl}\label{wxlistctrlgeteditcontrol}
+
+\constfunc{wxTextCtrl *}{GetEditControl}{\void}
+
+Returns the edit control being currently used to edit a label. Returns {\tt NULL}
+if no label is being edited.
+
+{\bf NB:} It is currently only implemented for wxMSW and the generic version,
+not for the native Mac OS X version.
+
+
+\membersection{wxListCtrl::GetImageList}\label{wxlistctrlgetimagelist}
+
+\constfunc{wxImageList*}{GetImageList}{\param{int }{which}}
+
+Returns the specified image list. {\it which} may be one of:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxIMAGE\_LIST\_NORMAL}}{The normal (large icon) image list.}
+\twocolitem{\windowstyle{wxIMAGE\_LIST\_SMALL}}{The small icon image list.}
+\twocolitem{\windowstyle{wxIMAGE\_LIST\_STATE}}{The user-defined state image list (unimplemented).}
+\end{twocollist}
+
+
+\membersection{wxListCtrl::GetItem}\label{wxlistctrlgetitem}
+
+\constfunc{bool}{GetItem}{\param{wxListItem\& }{info}}
+
+Gets information about the item. See \helpref{wxListCtrl::SetItem}{wxlistctrlsetitem} for more
+information.
+
+You must call {\it info.SetId()} to the ID of item you're interested in
+before calling this method.
+
+\pythonnote{The wxPython version of this method takes an integer parameter
+for the item ID, an optional integer for the column number, and
+returns the wxListItem object.}
+
+\perlnote{In wxPerl this method takes as parameter the {\bf ID} of the item
+and ( optionally ) the column, and returns a Wx::ListItem object.}
+
+
+\membersection{wxListCtrl::GetItemBackgroundColour}\label{wxlistctrlgetitembackgroundcolour}
+
+\constfunc{wxColour}{GetItemBackgroundColour}{\param{long }{item}}
+
+Returns the colour for this item. If the item has no specific colour, returns
+an invalid colour (and not the default background control of the control
+itself).
+
+\wxheading{See also}
+
+\helpref{GetItemTextColour}{wxlistctrlgetitemtextcolour}
+
+
+\membersection{wxListCtrl::GetItemCount}\label{wxlistctrlgetitemcount}
+
+\constfunc{int}{GetItemCount}{\void}
+
+Returns the number of items in the list control.
+
+
+\membersection{wxListCtrl::GetItemData}\label{wxlistctrlgetitemdata}
+
+\constfunc{long}{GetItemData}{\param{long }{item}}
+
+Gets the application-defined data associated with this item.
+
+
+\membersection{wxListCtrl::GetItemFont}\label{wxlistctrlgetitemfont}
+
+\constfunc{wxFont}{GetItemFont}{\param{long }{item}}
+
+Returns the item's font.
+
+
+\membersection{wxListCtrl::GetItemPosition}\label{wxlistctrlgetitemposition}
+
+\constfunc{bool}{GetItemPosition}{\param{long }{item}, \param{wxPoint\& }{pos}}
+
+Returns the position of the item, in icon or small icon view.
+
+\pythonnote{The wxPython version of this method accepts only the item
+ID and returns the wxPoint.}
+
+\perlnote{In wxPerl this method takes only the {\bf item} parameter and
+returns a Wx::Point ( or undef ).}
+
+
+\membersection{wxListCtrl::GetItemRect}\label{wxlistctrlgetitemrect}
+
+\constfunc{bool}{GetItemRect}{\param{long }{item}, \param{wxRect\& }{rect}, \param{int }{code = wxLIST\_RECT\_BOUNDS}}
+
+Returns the rectangle representing the item's size and position, in physical
+coordinates.
+
+{\it code} is one of wxLIST\_RECT\_BOUNDS, wxLIST\_RECT\_ICON, wxLIST\_RECT\_LABEL.
+
+\pythonnote{The wxPython version of this method accepts only the item
+ID and code and returns the wxRect.}
+
+\perlnote{In wxPerl this method takes only the {\bf item} parameter and
+returns a Wx::Rect ( or undef ).}
+
+
+
+\membersection{wxListCtrl::GetSubItemRect}\label{wxlistctrlgetsubitemrect}
+
+\constfunc{bool}{GetSubItemRect}{\param{long }{item}, \param{long }{subItem}, \param{wxRect\& }{rect}, \param{int }{code = wxLIST\_RECT\_BOUNDS}}
+
+Returns the rectangle representing the size and position, in physical
+coordinates, of the given subitem, i.e. the part of the row \arg{item} in the
+column \arg{subItem}.
+
+This method is only meaningfull when the wxListCtrl is in the report mode. If
+\arg{subItem} parameter is equal to the special value 
+\texttt{wxLIST\_GETSUBITEMRECT\_WHOLEITEM} the return value is the same as
+for \helpref{GetItemRect}{wxlistctrlgetitemrect}.
+
+\arg{code} can be one of \texttt{wxLIST\_RECT\_BOUNDS}, 
+\texttt{wxLIST\_RECT\_ICON} or \texttt{wxLIST\_RECT\_LABEL}.
+
+\newsince{2.7.0}
+
+
+\membersection{wxListCtrl::GetItemSpacing}\label{wxlistctrlgetitemspacing}
+
+\constfunc{wxSize}{GetItemSpacing}{\void}
+
+Retrieves the spacing between icons in pixels: horizontal spacing is returned
+as \texttt{x} component of the \helpref{wxSize}{wxsize} object and the vertical
+spacing as its \texttt{y} component.
+
+
+
+\membersection{wxListCtrl::GetItemState}\label{wxlistctrlgetitemstate}
+
+\constfunc{int}{GetItemState}{\param{long }{item}, \param{long }{stateMask}}
+
+Gets the item state. For a list of state flags, see \helpref{wxListCtrl::SetItem}{wxlistctrlsetitem}.
+
+The {\bf stateMask} indicates which state flags are of interest.
+
+
+\membersection{wxListCtrl::GetItemText}\label{wxlistctrlgetitemtext}
+
+\constfunc{wxString}{GetItemText}{\param{long }{item}}
+
+Gets the item text for this item.
+
+
+\membersection{wxListCtrl::GetItemTextColour}\label{wxlistctrlgetitemtextcolour}
+
+\constfunc{wxColour}{GetItemTextColour}{\param{long }{item}}
+
+Returns the colour for this item. If the item has no specific colour, returns
+an invalid colour (and not the default foreground control of the control itself
+as this wouldn't allow distinguishing between items having the same colour as
+the current control foreground and items with default colour which, hence, have
+always the same colour as the control).
+
+
+\membersection{wxListCtrl::GetNextItem}\label{wxlistctrlgetnextitem}
+
+\constfunc{long}{GetNextItem}{\param{long }{item}, \param{int }{geometry = wxLIST\_NEXT\_ALL}, \param{int }{state = wxLIST\_STATE\_DONTCARE}}
+
+Searches for an item with the given geometry or state, starting from
+{\it item} but excluding the {\it item} itself. If {\it item} is -1,
+the first item that matches the specified flags will be returned.
+
+Returns the first item with given state following {\it item} or -1 if
+no such item found.
+
+This function may be used to find all selected items in the control like this:
+
+\begin{verbatim}
+    long item = -1;
+    for ( ;; )
+    {
+        item = listctrl->GetNextItem(item,
+                                     wxLIST_NEXT_ALL,
+                                     wxLIST_STATE_SELECTED);
+        if ( item == -1 )
+            break;
+
+        // this item is selected - do whatever is needed with it
+        wxLogMessage("Item %ld is selected.", item);
+    }
+\end{verbatim}
+
+{\it geometry} can be one of:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxLIST\_NEXT\_ABOVE}{Searches for an item above the specified item.}
+\twocolitem{wxLIST\_NEXT\_ALL}{Searches for subsequent item by index.}
+\twocolitem{wxLIST\_NEXT\_BELOW}{Searches for an item below the specified item.}
+\twocolitem{wxLIST\_NEXT\_LEFT}{Searches for an item to the left of the specified item.}
+\twocolitem{wxLIST\_NEXT\_RIGHT}{Searches for an item to the right of the specified item.}
+\end{twocollist}
+
+{\bf NB:} this parameter is only supported by wxMSW currently and ignored on
+other platforms.
+
+{\it state} can be a bitlist of the following:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxLIST\_STATE\_DONTCARE}{Don't care what the state is.}
+\twocolitem{wxLIST\_STATE\_DROPHILITED}{The item indicates it is a drop target.}
+\twocolitem{wxLIST\_STATE\_FOCUSED}{The item has the focus.}
+\twocolitem{wxLIST\_STATE\_SELECTED}{The item is selected.}
+\twocolitem{wxLIST\_STATE\_CUT}{The item is selected as part of a cut and paste operation.}
+\end{twocollist}
+
+
+\membersection{wxListCtrl::GetSelectedItemCount}\label{wxlistctrlgetselecteditemcount}
+
+\constfunc{int}{GetSelectedItemCount}{\void}
+
+Returns the number of selected items in the list control.
+
+
+\membersection{wxListCtrl::GetTextColour}\label{wxlistctrlgettextcolour}
+
+\constfunc{wxColour}{GetTextColour}{\void}
+
+Gets the text colour of the list control.
+
+
+\membersection{wxListCtrl::GetTopItem}\label{wxlistctrlgettopitem}
+
+\constfunc{long}{GetTopItem}{\void}
+
+Gets the index of the topmost visible item when in
+list or report view.
+
+
+
+\membersection{wxListCtrl::GetViewRect}\label{wxlistctrlgetviewrect}
+
+\constfunc{wxRect}{GetViewRect}{\void}
+
+Returns the rectangle taken by all items in the control. In other words, if the
+controls client size were equal to the size of this rectangle, no scrollbars
+would be needed and no free space would be left.
+
+Note that this function only works in the icon and small icon views, not in
+list or report views (this is a limitation of the native Win32 control).
+
+
+
+\membersection{wxListCtrl::HitTest}\label{wxlistctrlhittest}
+
+\constfunc{long}{HitTest}{\param{const wxPoint\& }{point}, \param{int\& }{flags}, \param{long *}{ptrSubItem}}
+
+Determines which item (if any) is at the specified point,
+giving details in {\it flags}. Returns index of the item or {\tt wxNOT\_FOUND}
+if no item is at the specified point.
+{\it flags} will be a combination of the following flags:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxLIST\_HITTEST\_ABOVE}{Above the client area.}
+\twocolitem{wxLIST\_HITTEST\_BELOW}{Below the client area.}
+\twocolitem{wxLIST\_HITTEST\_NOWHERE}{In the client area but below the last item.}
+\twocolitem{wxLIST\_HITTEST\_ONITEMICON}{On the bitmap associated with an item.}
+\twocolitem{wxLIST\_HITTEST\_ONITEMLABEL}{On the label (string) associated with an item.}
+\twocolitem{wxLIST\_HITTEST\_ONITEMRIGHT}{In the area to the right of an item.}
+\twocolitem{wxLIST\_HITTEST\_ONITEMSTATEICON}{On the state icon for a tree view item that is in a user-defined state.}
+\twocolitem{wxLIST\_HITTEST\_TOLEFT}{To the right of the client area.}
+\twocolitem{wxLIST\_HITTEST\_TORIGHT}{To the left of the client area.}
+\twocolitem{wxLIST\_HITTEST\_ONITEM}{Combination of wxLIST\_HITTEST\_ONITEMICON, wxLIST\_HITTEST\_ONITEMLABEL,
+wxLIST\_HITTEST\_ONITEMSTATEICON.}
+\end{twocollist}
+
+If \arg{ptrSubItem} is not \NULL and the wxListCtrl is in the report
+mode the subitem (or column) number will also be provided. 
+This feature is only available in version 2.7.0 or higher and is currently only
+implemented under wxMSW and requires at least comctl32.dll of verion 4.70 on
+the host system or the value stored in \arg{ptrSubItem} will be always -1. To
+compile this feature into wxWidgets library you need to have access to
+commctrl.h of version 4.70 that is provided by Microsoft.
+
+\pythonnote{A tuple of values is returned in the wxPython version of
+this method. The first value is the item id and the second is the
+flags value mentioned above.}
+
+\perlnote{In wxPerl this method only takes the {\bf point} parameter
+  and returns a 2-element list {\tt ( item, flags )}.}
+
+
+\membersection{wxListCtrl::InsertColumn}\label{wxlistctrlinsertcolumn}
+
+\func{long}{InsertColumn}{\param{long }{col}, \param{wxListItem\& }{info}}
+
+\func{long}{InsertColumn}{\param{long }{col}, \param{const wxString\& }{heading}, \param{int }{format = wxLIST\_FORMAT\_LEFT},\rtfsp
+\param{int }{width = -1}}
+
+For report view mode (only), inserts a column. For more details, see \helpref{wxListCtrl::SetItem}{wxlistctrlsetitem}.
+
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{{\bf InsertColumn(col, heading, format=wxLIST\_FORMAT\_LEFT,
+width=-1)}}{Creates a column using a header string only.}
+\twocolitem{{\bf InsertColumnItem(col, item)}}{Creates a column using a
+wxListItem.}
+\end{twocollist}}
+}
+
+
+\membersection{wxListCtrl::InsertItem}\label{wxlistctrlinsertitem}
+
+\func{long}{InsertItem}{\param{wxListItem\& }{info}}
+
+Inserts an item, returning the index of the new item if successful,
+-1 otherwise.
+
+\func{long}{InsertItem}{\param{long }{index}, \param{const wxString\& }{label}}
+
+Inserts a string item.
+
+\func{long}{InsertItem}{\param{long }{index}, \param{int }{imageIndex}}
+
+Inserts an image item.
+
+\func{long}{InsertItem}{\param{long }{index}, \param{const wxString\& }{label}, \param{int }{imageIndex}}
+
+Insert an image/string item.
+
+\wxheading{Parameters}
+
+\docparam{info}{wxListItem object}
+
+\docparam{index}{Index of the new item, supplied by the application}
+
+\docparam{label}{String label}
+
+\docparam{imageIndex}{index into the image list associated with this control and view style}
+
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf InsertItem(item)}}{Inserts an item using a wxListItem.}
+\twocolitem{{\bf InsertStringItem(index, label)}}{Inserts a string item.}
+\twocolitem{{\bf InsertImageItem(index, imageIndex)}}{Inserts an image item.}
+\twocolitem{{\bf InsertImageStringItem(index, label, imageIndex)}}{Insert an image/string item.}
+\end{twocollist}}
+}
+
+\perlnote{In wxPerl there are four methods instead of a single overloaded
+method:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{{\bf InsertItem( item )}}{Inserts a Wx::ListItem}
+\twocolitem{{\bf InsertStringItem( index, label )}}{Inserts a string item}
+\twocolitem{{\bf InsertImageItem( index, imageIndex )}}{Inserts an image item}
+\twocolitem{{\bf InsertImageStringItem( index, label, imageIndex )}}{Inserts
+ an item with a string and an image}
+\end{twocollist}
+}}
+
+
+\membersection{wxListCtrl::OnGetItemAttr}\label{wxlistctrlongetitemattr}
+
+\constfunc{virtual wxListItemAttr *}{OnGetItemAttr}{\param{long }{item}}
+
+This function may be overloaded in the derived class for a control with
+{\tt wxLC\_VIRTUAL} style. It should return the attribute for the
+for the specified {\tt item} or {\tt NULL} to use the default appearance
+parameters.
+
+wxListCtrl will not delete the pointer or keep a reference of it. You can 
+return the same wxListItemAttr pointer for every OnGetItemAttr call.
+
+The base class version always returns {\tt NULL}.
+
+\wxheading{See also}
+
+\helpref{OnGetItemImage}{wxlistctrlongetitemimage},\\
+\helpref{OnGetItemColumnImage}{wxlistctrlongetitemcolumnimage},\\
+\helpref{OnGetItemText}{wxlistctrlongetitemtext}
+
+
+\membersection{wxListCtrl::OnGetItemImage}\label{wxlistctrlongetitemimage}
+
+\constfunc{virtual int}{OnGetItemImage}{\param{long }{item}}
+
+This function must be overloaded in the derived class for a control with
+{\tt wxLC\_VIRTUAL} style having an \helpref{image list}{wxlistctrlsetimagelist}
+(if the control doesn't have an image list, it is not necessary to overload
+ it). It should return the index of the items image in the controls image list
+or $-1$ for no image.
+In a control with {\tt wxLC\_REPORT} style, OnGetItemImage only gets called for
+the first column of each line.
+
+The base class version always returns $-1$.
+
+\wxheading{See also}
+
+\helpref{OnGetItemText}{wxlistctrlongetitemtext},\\
+\helpref{OnGetItemColumnImage}{wxlistctrlongetitemcolumnimage},\\
+\helpref{OnGetItemAttr}{wxlistctrlongetitemattr}
+
+\membersection{wxListCtrl::OnGetItemColumnImage}\label{wxlistctrlongetitemcolumnimage}
+
+\constfunc{virtual int}{OnGetItemColumnImage}{\param{long }{item}, \param{long }{column}}
+
+Overload this function in the derived class for a control with
+{\tt wxLC\_VIRTUAL} and {\tt wxLC\_REPORT} styles in order to specify the image
+index for the given line and column.
+
+The base class version always calls OnGetItemImage for the first column, else
+it returns $-1$.
+
+\wxheading{See also}
+
+\helpref{OnGetItemText}{wxlistctrlongetitemtext},\\
+\helpref{OnGetItemImage}{wxlistctrlongetitemimage},\\
+\helpref{OnGetItemAttr}{wxlistctrlongetitemattr}
+
+\membersection{wxListCtrl::OnGetItemText}\label{wxlistctrlongetitemtext}
+
+\constfunc{virtual wxString}{OnGetItemText}{\param{long }{item}, \param{long }{column}}
+
+This function {\bf must} be overloaded in the derived class for a control with
+{\tt wxLC\_VIRTUAL} style. It should return the string containing the text of
+the given {\it column} for the specified {\tt item}.
+
+\wxheading{See also}
+
+\helpref{SetItemCount}{wxlistctrlsetitemcount},\\
+\helpref{OnGetItemImage}{wxlistctrlongetitemimage},\\
+\helpref{OnGetItemColumnImage}{wxlistctrlongetitemcolumnimage},\\
+\helpref{OnGetItemAttr}{wxlistctrlongetitemattr}
+
+
+\membersection{wxListCtrl::RefreshItem}\label{wxlistctrlrefreshitem}
+
+\func{void}{RefreshItem}{\param{long }{item}}
+
+Redraws the given {\it item}. This is only useful for the virtual list controls
+as without calling this function the displayed value of the item doesn't change
+even when the underlying data does change.
+
+\wxheading{See also}
+
+\helpref{RefreshItems}{wxlistctrlrefreshitems}
+
+
+
+\membersection{wxListCtrl::RefreshItems}\label{wxlistctrlrefreshitems}
+
+\func{void}{RefreshItems}{\param{long }{itemFrom}, \param{long }{itemTo}}
+
+Redraws the items between {\it itemFrom} and {\it itemTo}. The starting item
+must be less than or equal to the ending one.
+
+Just as \helpref{RefreshItem}{wxlistctrlrefreshitem} this is only useful for
+virtual list controls.
+
+
+
+\membersection{wxListCtrl::ScrollList}\label{wxlistctrlscrolllist}
+
+\func{bool}{ScrollList}{\param{int }{dx}, \param{int }{dy}}
+
+Scrolls the list control. If in icon, small icon or report view mode,
+{\it dx} specifies the number of pixels to scroll. If in list view mode,
+{\it dx} specifies the number of columns to scroll. {\it dy} always specifies
+the number of pixels to scroll vertically.
+
+{\bf NB:} This method is currently only implemented in the Windows version.
+
+
+\membersection{wxListCtrl::SetBackgroundColour}\label{wxlistctrlsetbackgroundcolour}
+
+\func{void}{SetBackgroundColour}{\param{const wxColour\& }{col}}
+
+Sets the background colour (GetBackgroundColour already implicit in
+wxWindow class).
+
+
+\membersection{wxListCtrl::SetColumn}\label{wxlistctrlsetcolumn}
+
+\func{bool}{SetColumn}{\param{int }{col}, \param{wxListItem\& }{item}}
+
+Sets information about this column. See \helpref{wxListCtrl::SetItem}{wxlistctrlsetitem} for more
+information.
+
+
+\membersection{wxListCtrl::SetColumnWidth}\label{wxlistctrlsetcolumnwidth}
+
+\func{bool}{SetColumnWidth}{\param{int }{col}, \param{int }{width}}
+
+Sets the column width.
+
+{\it width} can be a width in pixels or wxLIST\_AUTOSIZE (-1) or wxLIST\_AUTOSIZE\_USEHEADER (-2).
+wxLIST\_AUTOSIZE will resize the column to the length of its longest item. wxLIST\_AUTOSIZE\_USEHEADER
+will resize the column to the length of the header (Win32) or 80 pixels (other platforms).
+
+In small or normal icon view, {\it col} must be -1, and the column width is set for all columns.
+
+
+\membersection{wxListCtrl::SetImageList}\label{wxlistctrlsetimagelist}
+
+\func{void}{SetImageList}{\param{wxImageList*}{ imageList}, \param{int }{which}}
+
+Sets the image list associated with the control. {\it which} is one of
+wxIMAGE\_LIST\_NORMAL, wxIMAGE\_LIST\_SMALL, wxIMAGE\_LIST\_STATE (the last is unimplemented).
+
+This method does not take ownership of the image list, you have to
+delete it yourself.
+
+\wxheading{See also}
+
+\helpref{wxListCtrl::AssignImageList}{wxlistctrlassignimagelist}
+
+
+
+\membersection{wxListCtrl::SetItem}\label{wxlistctrlsetitem}
+
+\func{bool}{SetItem}{\param{wxListItem\& }{info}}
+
+\func{long}{SetItem}{\param{long }{index}, \param{int }{col}, \param{const }{wxString\& label}, \param{int }{imageId = -1}}
+
+Sets information about the item.
+
+wxListItem is a class with the following members:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{long m\_mask}{Indicates which fields are valid. See the list of valid mask flags below.}
+\twocolitem{long m\_itemId}{The zero-based item position.}
+\twocolitem{int m\_col}{Zero-based column, if in report mode.}
+\twocolitem{long m\_state}{The state of the item. See the list of valid state flags below.}
+\twocolitem{long m\_stateMask}{A mask indicating which state flags are valid. See the list of valid state flags below.}
+\twocolitem{wxString m\_text}{The label/header text.}
+\twocolitem{int m\_image}{The zero-based index into an image list.}
+\twocolitem{long m\_data}{Application-defined data.}
+\twocolitem{int m\_format}{For columns only: the format. Can be wxLIST\_FORMAT\_LEFT, wxLIST\_FORMAT\_RIGHT or
+wxLIST\_FORMAT\_CENTRE.}
+\twocolitem{int m\_width}{For columns only: the column width.}
+\end{twocollist}
+
+The {\bf m\_mask} member contains a bitlist specifying which of the other fields are valid. The flags are:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxLIST\_MASK\_STATE}{The {\bf m\_state} field is valid.}
+\twocolitem{wxLIST\_MASK\_TEXT}{The {\bf m\_text} field is valid.}
+\twocolitem{wxLIST\_MASK\_IMAGE}{The {\bf m\_image} field is valid.}
+\twocolitem{wxLIST\_MASK\_DATA}{The {\bf m\_data} field is valid.}
+\twocolitem{wxLIST\_MASK\_WIDTH}{The {\bf m\_width} field is valid.}
+\twocolitem{wxLIST\_MASK\_FORMAT}{The {\bf m\_format} field is valid.}
+\end{twocollist}
+
+The {\bf m\_stateMask} and {\bf m\_state} members take flags from the following:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxLIST\_STATE\_DONTCARE}{Don't care what the state is. Win32 only. }
+\twocolitem{wxLIST\_STATE\_DROPHILITED}{The item is highlighted to receive a drop event. Win32 only. }
+\twocolitem{wxLIST\_STATE\_FOCUSED}{The item has the focus.}
+\twocolitem{wxLIST\_STATE\_SELECTED}{The item is selected.}
+\twocolitem{wxLIST\_STATE\_CUT}{The item is in the cut state. Win32 only. }
+\end{twocollist}
+
+The wxListItem object can also contain item-specific colour and font
+information: for this you need to call one of SetTextColour(),
+SetBackgroundColour() or SetFont() functions on it passing it the colour/font
+to use. If the colour/font is not specified, the default list control
+colour/font is used.
+
+\func{long}{SetItem}{\param{long }{index}, \param{int }{col}, \param{const wxString\& }{label}, \param{int }{imageId = -1}}
+
+Sets a string field at a particular column.
+
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{{\bf SetItem(item)}}{Sets information about the given wxListItem.}
+\twocolitem{{\bf SetStringItem(index, col, label, imageId)}}{Sets a
+string or image at a given location.}
+\end{twocollist}}
+}
+
+\membersection{wxListCtrl::SetItemBackgroundColour}\label{wxlistctrlsetitembackgroundcolour}
+
+\func{void}{SetItemBackgroundColour}{\param{long }{item}, \param{const wxColour\& }{col}}
+
+Sets the background colour for this item. This function only works in report view.
+
+The colour can be retrieved using
+\helpref{GetItemBackgroundColour}{wxlistctrlgetitembackgroundcolour}.
+
+
+
+\membersection{wxListCtrl::SetItemCount}\label{wxlistctrlsetitemcount}
+
+\func{void}{SetItemCount}{\param{long }{count}}
+
+This method can only be used with virtual list controls. It is used to indicate
+to the control the number of items it contains. After calling it, the main
+program should be ready to handle calls to various item callbacks (such as
+\helpref{OnGetItemText}{wxlistctrlongetitemtext}) for all items in the range
+from $0$ to {\it count}.
+
+
+\membersection{wxListCtrl::SetItemData}\label{wxlistctrlsetitemdata}
+
+\func{bool}{SetItemData}{\param{long }{item}, \param{long }{data}}
+
+Associates application-defined data with this item.
+
+Notice that this function cannot be used to associate pointers with the control
+items, use \helpref{SetItemPtrData}{wxlistctrlsetitemptrdata} instead.
+
+
+\membersection{wxListCtrl::SetItemFont}\label{wxlistctrlsetitemfont}
+
+\func{void}{SetItemFont}{\param{long }{item}, \param{const wxFont\& }{font}}
+
+Sets the item's font.
+
+
+\membersection{wxListCtrl::SetItemImage}\label{wxlistctrlsetitemimage}
+
+\func{bool}{SetItemImage}{\param{long }{item}, \param{int }{image}}
+
+Sets the image associated with the item. The image is an index into the
+image list associated with the list control. In report view, this only sets
+the image for the first column.
+
+\func{bool}{SetItemImage}{\param{long }{item}, \param{int }{image}, \param{int }{selImage}}
+
+Sets the unselected and selected images associated with the item. The images are indices into the
+image list associated with the list control. This form is deprecated: {\it selImage} is not
+used.
+
+
+\membersection{wxListCtrl::SetItemColumnImage}\label{wxlistctrlsetitemcolumnimage}
+
+\func{bool}{SetItemImage}{\param{long }{item}, \param{long }{column}\param{int }{image}}
+
+Sets the image associated with the item. In report view, you can specify the column.
+The image is an index into the image list associated with the list control.
+
+
+\membersection{wxListCtrl::SetItemPosition}\label{wxlistctrlsetitemposition}
+
+\func{bool}{SetItemPosition}{\param{long }{item}, \param{const wxPoint\& }{pos}}
+
+Sets the position of the item, in icon or small icon view. Windows only.
+
+
+\membersection{wxListCtrl::SetItemPtrData}\label{wxlistctrlsetitemptrdata}
+
+\func{bool}{SetItemPtrData}{\param{long }{item}, \param{wxUIntPtr }{data}}
+
+Associates application-defined data with this item. The \arg{data} parameter may
+be either an integer or a pointer cast to the \texttt{wxUIntPtr} type which is
+guaranteed to be large enough to be able to contain all integer types and
+pointers.
+
+\newsince{2.8.4}
+
+
+\membersection{wxListCtrl::SetItemState}\label{wxlistctrlsetitemstate}
+
+\func{bool}{SetItemState}{\param{long }{item}, \param{long }{state}, \param{long }{stateMask}}
+
+Sets the item state. For a list of state flags, see \helpref{wxListCtrl::SetItem}{wxlistctrlsetitem}.
+
+The {\bf stateMask} indicates which state flags are valid.
+
+
+\membersection{wxListCtrl::SetItemText}\label{wxlistctrlsetitemtext}
+
+\func{void}{SetItemText}{\param{long }{item}, \param{const wxString\& }{text}}
+
+Sets the item text for this item.
+
+
+\membersection{wxListCtrl::SetItemTextColour}\label{wxlistctrlsetitemtextcolour}
+
+\func{void}{SetItemTextColour}{\param{long }{item}, \param{const wxColour\& }{col}}
+
+Sets the colour for this item. This function only works in report view.
+
+The colour can be retrieved using
+\helpref{GetItemTextColour}{wxlistctrlgetitemtextcolour}.
+
+
+\membersection{wxListCtrl::SetSingleStyle}\label{wxlistctrlsetsinglestyle}
+
+\func{void}{SetSingleStyle}{\param{long }{style}, \param{const bool }{add = true}}
+
+Adds or removes a single window style.
+
+
+\membersection{wxListCtrl::SetTextColour}\label{wxlistctrlsettextcolour}
+
+\func{void}{SetTextColour}{\param{const wxColour\& }{col}}
+
+Sets the text colour of the list control.
+
+
+\membersection{wxListCtrl::SetWindowStyleFlag}\label{wxlistctrlsetwindowstyleflag}
+
+\func{void}{SetWindowStyleFlag}{\param{long }{style}}
+
+Sets the whole window style, deleting all items.
+
+\membersection{wxListCtrl::SortItems}\label{wxlistctrlsortitems}
+
+\func{bool}{SortItems}{\param{wxListCtrlCompare }{fnSortCallBack}, \param{long }{data}}
+
+Call this function to sort the items in the list control. Sorting is done
+using the specified {\it fnSortCallBack} function. This function must have the
+following prototype:
+
+\begin{verbatim}
+int wxCALLBACK wxListCompareFunction(long item1, long item2, long sortData)
+\end{verbatim}
+
+It is called each time when the two items must be compared and should return 0
+if the items are equal, negative value if the first item is less than the
+second one and positive value if the first one is greater than the second one
+(the same convention as used by {\tt qsort(3)}).
+
+\wxheading{Parameters}
+
+\docparam{item1}{client data associated with the first item ({\bf NOT} the index).}
+
+\docparam{item2}{client data associated with the second item ({\bf NOT} the index).}
+
+\docparam{data}{the value passed to SortItems() itself.}
+
+Notice that the control may only be sorted on client data associated with the
+items, so you {\bf must} use \helpref{SetItemData}{wxlistctrlsetitemdata} if
+you want to be able to sort the items in the control.
+
+Please see the \helpref{listctrl sample}{samplelistctrl} for an example of
+using this function.
+
+\pythonnote{wxPython uses the sortData parameter to pass the Python
+function to call, so it is not available for programmer use.  Call
+SortItems with a reference to a callable object that expects two
+parameters.}
+
+\perlnote{In wxPerl the comparison function must take just two parameters;
+however, you may use a closure to achieve an effect similar to the
+SortItems third parameter.}
+

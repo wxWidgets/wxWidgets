@@ -1,0 +1,89 @@
+\section{\class{wxSashEvent}}\label{wxsashevent}
+
+A sash event is sent when the sash of a \helpref{wxSashWindow}{wxsashwindow} has been
+dragged by the user.
+
+\wxheading{Derived from}
+
+\helpref{wxCommandEvent}{wxcommandevent}\\
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/sashwin.h>
+
+\wxheading{Event table macros}
+
+To process an activate event, use these event handler macros to direct input to a member
+function that takes a wxSashEvent argument.
+
+\twocolwidtha{7cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_SASH\_DRAGGED(id, func)}}{Process a wxEVT\_SASH\_DRAGGED event,
+when the user has finished dragging a sash.}
+\twocolitem{{\bf EVT\_SASH\_DRAGGED\_RANGE(id1, id2, func)}}{Process a wxEVT\_SASH\_DRAGGED\_RANGE event,
+when the user has finished dragging a sash. The event handler is called when windows with ids in the
+given range have their sashes dragged.}
+\end{twocollist}
+
+\wxheading{Data structures}
+
+{\small
+\begin{verbatim}
+enum wxSashDragStatus
+{
+    wxSASH_STATUS_OK,
+    wxSASH_STATUS_OUT_OF_RANGE
+};
+\end{verbatim}
+}
+
+\wxheading{Remarks}
+
+When a sash belonging to a sash window is dragged by the user, and then released,
+this event is sent to the window, where it may be processed by an event table
+entry in a derived class, a plug-in event handler or an ancestor class.
+
+Note that the wxSashWindow doesn't change the window's size itself. It relies on the application's
+event handler to do that. This is because the application may have to handle other consequences
+of the resize, or it may wish to veto it altogether. The event handler should
+look at the drag rectangle: see \helpref{wxSashEvent::GetDragRect}{wxsasheventgetdragrect} to see
+what the new size of the window would be if the resize were to be applied. It should
+also call \helpref{wxSashEvent::GetDragStatus}{wxsasheventgetdragstatus} to see whether the
+drag was OK or out of the current allowed range.
+
+\wxheading{See also}
+
+\helpref{wxSashWindow}{wxsashwindow},\rtfsp
+\helpref{Event handling overview}{eventhandlingoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxSashEvent::wxSashEvent}\label{wxsasheventctor}
+
+\func{}{wxSashEvent}{\param{int }{id = 0}, \param{wxSashEdgePosition}{ edge = wxSASH\_NONE}}
+
+Constructor.
+
+\membersection{wxSashEvent::GetEdge}\label{wxsasheventgetedge}
+
+\constfunc{wxSashEdgePosition}{GetEdge}{\void}
+
+Returns the dragged edge. The return value is one of wxSASH\_TOP, wxSASH\_RIGHT, wxSASH\_BOTTOM, wxSASH\_LEFT.
+
+\membersection{wxSashEvent::GetDragRect}\label{wxsasheventgetdragrect}
+
+\constfunc{wxRect}{GetDragRect}{\void}
+
+Returns the rectangle representing the new size the window would be if the resize was applied. It is
+up to the application to set the window size if required.
+
+\membersection{wxSashEvent::GetDragStatus}\label{wxsasheventgetdragstatus}
+
+\constfunc{wxSashDragStatus}{GetDragStatus}{\void}
+
+Returns the status of the sash: one of wxSASH\_STATUS\_OK, wxSASH\_STATUS\_OUT\_OF\_RANGE.
+If the drag caused the notional bounding box of the window to flip over, for example, the drag will be out of rage.
+
+

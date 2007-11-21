@@ -1,0 +1,254 @@
+#!/bin/sh
+# tardist: make up a tar.gz distribution of wxWidgets 2
+# Supply a source (e.g. ~/wx2) and destination (e.g. ~/wx2/deliver)
+
+# We can't use e.g. this:
+# ls `cat $SRC/distrib/msw/makefile.rsp` zip -@ -u $DEST/wxWidgets-$VERSION-gen.zip
+# because there's not enough space on the command line, plus we need to ignore the
+# blank lines.
+
+PROGNAME=$0
+WXSRC=$1
+WXDEST=$2
+WXVER=$3
+
+# for docopyreadmefiles and docopysetup_h
+SCRIPTDIR=$WXSRC/distrib/scripts
+. $SCRIPTDIR/utils.inc
+
+TAR=tar
+ARCH=`arch`
+if [ "$ARCH" = "ppc" ]; then
+  TAR=gnutar
+fi
+
+expandlines()
+{
+    toexpand=$1
+    outputfile=$2
+
+    rm -f $outputfile
+    touch $outputfile
+    for line in `cat $toexpand` ; do
+      if [ "$line" != "" ]; then
+        ls $line >> $outputfile
+      fi
+    uniq < $outputfile > /tmp/uniqtemp.txt
+    mv /tmp/uniqtemp.txt $outputfile
+    done
+}
+
+doinit()
+{
+  cd $WXSRC
+  echo Removing backup files...
+  rm *~ */*~ */*/*~ */*/*/*~ */*/*/*/*~
+
+  rm -f $WXDEST/wx*-${WXVER}*.tar.gz
+  # Copy setup files
+  cp $WXSRC/include/wx/msw/setup0.h $WXSRC/include/wx/msw/setup.h
+  cp $WXSRC/include/wx/univ/setup0.h $WXSRC/include/wx/univ/setup.h
+
+  # Copy readme and other files
+  docopydocs $WXSRC $WXDEST
+
+  # Make .mo files
+  cd $WXSRC/locale
+  make allmo
+}
+
+dospinwxmac()
+{
+echo Tarring wxMac...
+### wxMac
+cp $WXSRC/include/wx/mac/setup0.h $WXSRC/include/wx/setup.h
+cp $WXSRC/include/wx/mac/setup0.h $WXSRC/include/wx/mac/setup.h
+cd $WXSRC
+cat $SCRIPTDIR/manifests/mac.rsp $SCRIPTDIR/manifests/cocoa.rsp $SCRIPTDIR/manifests/generic.rsp $SCRIPTDIR/manifests/cw_mac.rsp $SCRIPTDIR/manifests/tex2rtf.rsp $SCRIPTDIR/manifests/utils.rsp $SCRIPTDIR/manifests/ogl.rsp $SCRIPTDIR/manifests/stc.rsp $SCRIPTDIR/manifests/xml.rsp $SCRIPTDIR/manifests/contrib.rsp $SCRIPTDIR/manifests/deprecated.rsp $SCRIPTDIR/manifests/makefile.rsp $SCRIPTDIR/manifests/tiff.rsp $SCRIPTDIR/manifests/jpeg.rsp > /tmp/wxmac_in.txt
+expandlines /tmp/wxmac_in.txt /tmp/wxmac.txt
+$TAR cf $WXDEST/wxMac-${WXVER}.tar -T /tmp/wxmac.txt
+
+rm -f $WXSRC/include/wx/setup.h
+
+echo Re-tarring wxMac in a subdirectory...
+cd $WXDEST
+mkdir wxMac-${WXVER}
+cd wxMac-${WXVER}
+
+$TAR xf ../wxMac-${WXVER}.tar
+rm -f -r contrib/src/mmedia contrib/samples/mmedia
+echo Copying readme files...
+cp $WXSRC/docs/mac/readme.txt README-MAC.txt
+cp $WXSRC/docs/mac/install.txt INSTALL-MAC.txt
+
+cd ..
+rm -f wxMac-${WXVER}.tar
+$TAR cf $WXDEST/wxMac-${WXVER}.tar wxMac-${WXVER}/*
+rm -f -r wxMac-${WXVER}
+gzip $WXDEST/wxMac-${WXVER}.tar
+}
+
+### wxUniv: universal-specific files
+#cd $WXSRC
+#cat $SCRIPTDIR/manifests/univ.rsp > /tmp/wxuniv_in.txt
+#expandlines /tmp/wxuniv_in.txt /tmp/wxuniv.txt
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-Univ.tar -T /tmp/wxuniv.txt
+#
+#echo Re-tarring wxUniversal in a subdirectory...
+#cd $WXDEST
+#mkdir wxWidgets-${WXVER}
+#cd wxWidgets-${WXVER}
+#$TAR xf ../wxWidgets-${WXVER}-Univ.tar
+#cd ..
+#rm -f wxWidgets-${WXVER}-Univ.tar
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-Univ.tar wxWidgets-${WXVER}/*
+#rm -f -r wxWidgets-${WXVER}
+#gzip $WXDEST/wxWidgets-${WXVER}-Univ.tar
+
+dospinwxall()
+{
+echo Tarring wxAll...
+
+### wxAll: all distributions in one giant archive
+cd $WXSRC
+cat $SCRIPTDIR/manifests/generic.rsp $SCRIPTDIR/manifests/msw.rsp $SCRIPTDIR/manifests/wince.rsp $SCRIPTDIR/manifests/vc.rsp $SCRIPTDIR/manifests/cw.rsp $SCRIPTDIR/manifests/cw_mac.rsp $SCRIPTDIR/manifests/gtk.rsp $SCRIPTDIR/manifests/x11.rsp $SCRIPTDIR/manifests/motif.rsp $SCRIPTDIR/manifests/mac.rsp $SCRIPTDIR/manifests/cocoa.rsp $SCRIPTDIR/manifests/os2.rsp $SCRIPTDIR/manifests/palmos.rsp $SCRIPTDIR/manifests/x11.rsp $SCRIPTDIR/manifests/univ.rsp $SCRIPTDIR/manifests/mgl.rsp $SCRIPTDIR/manifests/contrib.rsp $SCRIPTDIR/manifests/deprecated.rsp $SCRIPTDIR/manifests/utilmake.rsp $SCRIPTDIR/manifests/utils.rsp $SCRIPTDIR/manifests/mmedia.rsp $SCRIPTDIR/manifests/tex2rtf.rsp $SCRIPTDIR/manifests/stc.rsp $SCRIPTDIR/manifests/xml.rsp $SCRIPTDIR/manifests/ogl.rsp $SCRIPTDIR/manifests/makefile.rsp $SCRIPTDIR/manifests/tiff.rsp $SCRIPTDIR/manifests/jpeg.rsp $SCRIPTDIR/manifests/docsrc.rsp | uniq > /tmp/wxall_in.txt
+expandlines /tmp/wxall_in.txt /tmp/wxall.txt
+$TAR cf $WXDEST/wxWidgets-${WXVER}.tar -T /tmp/wxall.txt
+
+echo Re-tarring wxAll in a subdirectory...
+cd $WXDEST
+mkdir wxWidgets-${WXVER}
+
+cd wxWidgets-${WXVER}
+
+# If we have the full set of VC++ project files,
+# get them
+if [ -f $WXDEST/extra/wxWidgets-${WXVER}-VC.zip ]; then
+  unzip -o $WXDEST/extra/wxWidgets-${WXVER}-VC.zip
+else
+  echo "Warning - did not find $WXDEST/deliver/extra/wxWidgets-${WXVER}-VC.zip"
+fi
+
+# If we have the full set of eVC++ project files,
+# get them
+if [ -f $WXDEST/extra/wxWidgets-${WXVER}-eVC.zip ]; then
+  unzip -o $WXDEST/extra/wxWidgets-${WXVER}-eVC.zip
+else
+  echo "Warning - did not find $WXDEST/deliver/extra/wxWidgets-${WXVER}-eVC.zip"
+fi
+
+# If we have the full set of DMC project files,
+# get them
+if [ -f $WXDEST/extra/wxWidgets-${WXVER}-DMC.zip ]; then
+  unzip -o $WXDEST/extra/wxWidgets-${WXVER}-DMC.zip
+else
+  echo "Warning - did not find $WXDEST/deliver/extra/wxWidgets-${WXVER}-DMC.zip"
+fi
+
+$TAR xf ../wxWidgets-${WXVER}.tar
+
+# Translate all .dsp and .dsw files to DOS format
+unix2dos --unix2dos `cat $SCRIPTDIR/manifests/vc.rsp`
+
+cd ..
+rm -f wxWidgets-${WXVER}.tar
+$TAR cf $WXDEST/wxWidgets-${WXVER}.tar wxWidgets-${WXVER}/*
+rm -f -r wxWidgets-${WXVER}
+gzip -c $WXDEST/wxWidgets-${WXVER}.tar > $WXDEST/wxWidgets-${WXVER}.tar.gz
+bzip2 $WXDEST/wxWidgets-${WXVER}.tar
+}
+
+domakedocs()
+{
+  mkdir -p $WXSRC/docs/html/wx
+  mkdir -p $WXSRC/docs/html/tex2rtf
+  mkdir -p $WXSRC/docs/html/fl
+  mkdir -p $WXSRC/docs/html/ogl
+  mkdir -p $WXSRC/docs/htb
+
+  rm -f -r $WXSRC/docs/html/wx/*.htm*
+  rm -f -r $WXSRC/docs/htb/wx.htb
+
+  echo Making HTML wxWidgets manual...
+  cd $WXSRC/docs/latex/wx
+  cp *.gif $WXSRC/docs/html/wx
+  tex2rtf manual.tex $WXSRC/docs/html/wx/wx.htm -twice -html
+
+  echo Making HTB wxWidgets manual...
+  cd $WXSRC/docs/html/wx
+  zip -q $WXSRC/docs/htb/wx.htb *.html *.gif *.hhp *.hhc *.hhk
+
+  echo Done making manuals.
+}
+
+init=""
+if [ "$1" = "" ]
+then
+  echo Usage: tardist wx-dir output-dir version
+  exit
+fi
+
+if [ "$2" = "" ]
+then
+  echo Usage: tardist wx-dir output-dir version
+  exit
+fi
+
+if [ "$3" = "" ]
+then
+  echo Usage: tardist wx-dir output-dir version
+  exit
+fi
+
+SPINWXALL=0
+SPINWXMAC=0
+SPINEVERYTHING=0
+SILENT=0
+
+usage()
+{
+    echo Usage: $PROGNAME "src-dir dest-dir version-number [ options ]"
+    echo Options:
+    echo "    --help         Display this help message"
+    echo "    --wxall        Spin wxAll"
+    echo "    --wxmac        Spin wxMac"
+    echo "    --all          Spin EVERYTHING"
+    echo "    --silent       Don't ask for confirmation before running"
+
+    exit 1
+}
+
+# Process command line options.
+shift 3
+for i in "$@"; do
+    case "$i" in
+	--wxall) SPINWXALL=1 ;;
+	--wxmac) SPINWXMAC=1 ;;
+	--all) SPINEVERYTHING=1 ;;
+	--silent) SILENT=1 ;;
+	*)
+	    usage
+	    exit
+	    ;;
+    esac
+done
+
+if [ "$SILENT" = "0" ]; then
+  echo About to archive wxWidgets:
+  echo   From    $WXSRC
+  echo   To      $WXDEST
+  echo   Version $WXVER
+  echo CTRL-C if this is not correct.
+  read dummy
+fi
+
+doinit
+
+if [ "$SPINWXMAC" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxmac
+fi
+
+if [ "$SPINWXALL" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxall
+fi
+

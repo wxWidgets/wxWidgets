@@ -1,0 +1,401 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        region.tex
+%% Purpose:     wxRegion documentation
+%% Author:      wxTeam
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxTeam
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxRegion}}\label{wxregion}
+
+A wxRegion represents a simple or complex region on a device context or window.
+
+This class uses \helpref{reference counting and copy-on-write}{trefcount}
+internally so that assignments between two instances of this class are very
+cheap. You can therefore use actual objects instead of pointers without
+efficiency problems. If an instance of this class is changed it will create
+its own data internally so that other instances, which previously shared the
+data using the reference counting, are not affected.
+
+\wxheading{Derived from}
+
+\helpref{wxGDIObject}{wxgdiobject}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/region.h>
+
+\wxheading{See also}
+
+\helpref{wxRegionIterator}{wxregioniterator}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxRegion::wxRegion}\label{wxregionctor}
+
+\func{}{wxRegion}{\void}
+
+Default constructor.
+
+\func{}{wxRegion}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxCoord}{ width}, \param{wxCoord}{ height}}
+
+Constructs a rectangular region with the given position and size.
+
+\func{}{wxRegion}{\param{const wxPoint\&}{ topLeft}, \param{const wxPoint\&}{ bottomRight}}
+
+Constructs a rectangular region from the top left point and the bottom right point.
+
+\func{}{wxRegion}{\param{const wxRect\&}{ rect}}
+
+Constructs a rectangular region a wxRect object.
+
+\func{}{wxRegion}{\param{const wxRegion\&}{ region}}
+
+Copy constructor, uses \helpref{reference counting}{trefcount}.
+
+\func{}{wxRegion}{\param{size\_t}{ n}, \param{const wxPoint }{*points}, \param{int }{fillStyle = wxWINDING\_RULE}}
+
+Constructs a region corresponding to the polygon made of {\it n} points in the
+provided array. {\it fillStyle} parameter may have values
+{\tt wxWINDING\_RULE} or {\tt wxODDEVEN\_RULE}.
+
+\func{}{wxRegion}{\param{const wxBitmap\&}{ bmp}}
+
+\func{}{wxRegion}{\param{const wxBitmap\&}{ bmp},
+                  \param{const wxColour\&}{ transColour},
+                  \param{int}{ tolerance = 0}}
+
+Constructs a region using the non-transparent pixels of a bitmap.  See
+\helpref{Union}{wxregionunion} for more details.
+
+
+
+\membersection{wxRegion::\destruct{wxRegion}}\label{wxregiondtor}
+
+\func{}{\destruct{wxRegion}}{\void}
+
+Destructor.
+See \helpref{reference-counted object destruction}{refcountdestruct} for more info.
+
+
+\membersection{wxRegion::Clear}\label{wxregionclear}
+
+\func{void}{Clear}{\void}
+
+Clears the current region.
+
+
+\membersection{wxRegion::Contains}\label{wxregioncontains}
+
+\constfunc{wxRegionContain}{Contains}{\param{long\& }{x}, \param{long\& }{y}}
+
+Returns a value indicating whether the given point is contained within the region.
+
+\constfunc{wxRegionContain}{Contains}{\param{const wxPoint\&}{ pt}}
+
+Returns a value indicating whether the given point is contained within the region.
+
+\constfunc{wxRegionContain}{Contains}{\param{long\& }{x}, \param{long\& }{y}, \param{long\& }{width}, \param{long\& }{height}}
+
+Returns a value indicating whether the given rectangle is contained within the region.
+
+\constfunc{wxRegionContain}{Contains}{\param{const wxRect\& }{rect}}
+
+Returns a value indicating whether the given rectangle is contained within the region.
+
+\wxheading{Return value}
+
+The return value is one of wxOutRegion, wxPartRegion and wxInRegion.
+
+On Windows, only wxOutRegion and wxInRegion are returned; a value wxInRegion then indicates that
+all or some part of the region is contained in this region.
+
+
+\membersection{wxRegion::ConvertToBitmap}\label{wxregionconverttobitmap}
+
+\constfunc{wxBitmap}{ConvertToBitmap}{}
+
+Convert the region to a black and white bitmap with the white pixels
+being inside the region.
+
+
+\membersection{wxRegion::GetBox}\label{wxregiongetbox}
+
+\constfunc{void}{GetBox}{\param{wxCoord\& }{x}, \param{wxCoord\& }{y}, \param{wxCoord\& }{width}, \param{wxCoord\& }{height}}
+
+Returns the outer bounds of the region.
+
+\constfunc{wxRect}{GetBox}{\void}
+
+Returns the outer bounds of the region.
+
+
+\membersection{wxRegion::Intersect}\label{wxregionintersect}
+
+\func{bool}{Intersect}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxCoord}{ width}, \param{wxCoord}{ height}}
+
+Finds the intersection of this region and another, rectangular region, specified using position and size.
+
+\func{bool}{Intersect}{\param{const wxRect\&}{ rect}}
+
+Finds the intersection of this region and another, rectangular region.
+
+\func{bool}{Intersect}{\param{const wxRegion\&}{ region}}
+
+Finds the intersection of this region and another region.
+
+\wxheading{Return value}
+
+{\tt true} if successful, {\tt false} otherwise.
+
+\wxheading{Remarks}
+
+Creates the intersection of the two regions, that is, the parts which are in both regions. The result
+is stored in this region.
+
+
+\membersection{wxRegion::IsEmpty}\label{wxregionisempty}
+
+\constfunc{bool}{IsEmpty}{\void}
+
+Returns {\tt true} if the region is empty, {\tt false} otherwise.
+
+
+\membersection{wxRegion::IsEqual}\label{wxregionisequal}
+
+\constfunc{bool}{IsEqual}{\param{const wxRegion\& }{region}}
+
+Returns {\tt true} if the region is equal to, i.e. covers the same area as,
+another one. Note that if both this region and \arg{region} are invalid, they
+are considered to be equal.
+
+
+\membersection{wxRegion::Subtract}\label{wxregionsubtract}
+
+\func{bool}{Subtract}{\param{const wxRect\&}{ rect}}
+
+Subtracts a rectangular region from this region.
+
+\func{bool}{Subtract}{\param{const wxRegion\&}{ region}}
+
+Subtracts a region from this region.
+
+\wxheading{Return value}
+
+{\tt true} if successful, {\tt false} otherwise.
+
+\wxheading{Remarks}
+
+This operation combines the parts of 'this' region that are not part of the second region.
+The result is stored in this region.
+
+
+\membersection{wxRegion::Offset}\label{wxregionoffset}
+
+\func{bool}{Offset}{\param{wxCoord}{ x}, \param{wxCoord}{ y}}
+
+\func{bool}{Offset}{\param{const wxPoint\& }{ pt}}
+
+Moves the region by the specified offsets in horizontal and vertical
+directions.
+
+\wxheading{Return value}
+
+{\tt true} if successful, {\tt false} otherwise (the region is unchanged then).
+
+
+\membersection{wxRegion::Union}\label{wxregionunion}
+
+\func{bool}{Union}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxCoord}{ width}, \param{wxCoord}{ height}}
+
+Finds the union of this region and another, rectangular region, specified using position and size.
+
+\func{bool}{Union}{\param{const wxRect\&}{ rect}}
+
+Finds the union of this region and another, rectangular region.
+
+\func{bool}{Union}{\param{const wxRegion\&}{ region}}
+
+Finds the union of this region and another region.
+
+\func{bool}{Union}{\param{const wxBitmap\&}{ bmp}}
+
+Finds the union of this region and the non-transparent pixels of a
+bitmap. Bitmap's mask is used to determine transparency. If the bitmap doesn't
+have a mask, solid rectangle of bitmap's dimensions is used.
+
+\func{bool}{Union}{\param{const wxBitmap\&}{ bmp},
+                  \param{const wxColour\&}{ transColour},
+                  \param{int}{ tolerance = 0}}
+
+Finds the union of this region and the non-transparent pixels of a
+bitmap. Colour to be treated as transparent is specified in the
+\arg{transColour} argument, along with an
+optional colour tolerance value.
+
+\wxheading{Return value}
+
+{\tt true} if successful, {\tt false} otherwise.
+
+\wxheading{Remarks}
+
+This operation creates a region that combines all of this region and the second region.
+The result is stored in this region.
+
+
+\membersection{wxRegion::Xor}\label{wxregionxor}
+
+\func{bool}{Xor}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxCoord}{ width}, \param{wxCoord}{ height}}
+
+Finds the Xor of this region and another, rectangular region, specified using position and size.
+
+\func{bool}{Xor}{\param{const wxRect\&}{ rect}}
+
+Finds the Xor of this region and another, rectangular region.
+
+\func{bool}{Xor}{\param{const wxRegion\&}{ region}}
+
+Finds the Xor of this region and another region.
+
+\wxheading{Return value}
+
+{\tt true} if successful, {\tt false} otherwise.
+
+\wxheading{Remarks}
+
+This operation creates a region that combines all of this region and the second region, except
+for any overlapping areas. The result is stored in this region.
+
+
+\membersection{wxRegion::operator $=$}\label{wxregionassign}
+
+\func{void}{operator $=$}{\param{const wxRegion\&}{ region}}
+
+Assignment operator, using \helpref{reference counting}{trefcount}.
+
+
+
+\section{\class{wxRegionIterator}}\label{wxregioniterator}
+
+This class is used to iterate through the rectangles in a region,
+typically when examining the damaged regions of a window within an OnPaint call.
+
+To use it, construct an iterator object on the stack and loop through the
+regions, testing the object and incrementing the iterator at the end of the loop.
+
+See \helpref{wxPaintEvent}{wxpaintevent} for an example of use.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/region.h>
+
+\wxheading{See also}
+
+\helpref{wxPaintEvent}{wxpaintevent}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxRegionIterator::wxRegionIterator}\label{wxregioniteratorctor}
+
+\func{}{wxRegionIterator}{\void}
+
+Default constructor.
+
+\func{}{wxRegionIterator}{\param{const wxRegion\&}{ region}}
+
+Creates an iterator object given a region.
+
+
+\membersection{wxRegionIterator::GetX}\label{wxregioniteratorgetx}
+
+\constfunc{wxCoord}{GetX}{\void}
+
+Returns the x value for the current region.
+
+
+\membersection{wxRegionIterator::GetY}\label{wxregioniteratorgety}
+
+\constfunc{wxCoord}{GetY}{\void}
+
+Returns the y value for the current region.
+
+
+\membersection{wxRegionIterator::GetW}\label{wxregioniteratorgetw}
+
+\constfunc{wxCoord}{GetW}{\void}
+
+An alias for GetWidth.
+
+
+\membersection{wxRegionIterator::GetHeight}\label{wxregioniteratorgetheight}
+
+\constfunc{wxCoord}{GetHeight}{\void}
+
+Returns the height value for the current region.
+
+
+\membersection{wxRegionIterator::GetH}\label{wxregioniteratorgeth}
+
+\constfunc{wxCoord}{GetH}{\void}
+
+An alias for GetHeight.
+
+
+\membersection{wxRegionIterator::GetRect}\label{wxregioniteratorgetrect}
+
+\constfunc{wxRect}{GetRect}{\void}
+
+Returns the current rectangle.
+
+
+\membersection{wxRegionIterator::GetWidth}\label{wxregioniteratorgetwidth}
+
+\constfunc{wxCoord}{GetWidth}{\void}
+
+Returns the width value for the current region.
+
+
+\membersection{wxRegionIterator::HaveRects}\label{wxregioniteratorhaverects}
+
+\constfunc{bool}{HaveRects}{\void}
+
+Returns {\tt true} if there are still some rectangles; otherwise returns {\tt false}.
+
+
+\membersection{wxRegionIterator::Reset}\label{wxregioniteratorreset}
+
+\func{void}{Reset}{\void}
+
+Resets the iterator to the beginning of the rectangles.
+
+\func{void}{Reset}{\param{const wxRegion\&}{ region}}
+
+Resets the iterator to the given region.
+
+
+\membersection{wxRegionIterator::operator $++$}\label{wxregioniteratorinc}
+
+\func{void}{operator $++$}{\void}
+
+Increment operator. Increments the iterator to the next region.
+
+\pythonnote{A wxPython alias for this operator is called {\tt Next}.}
+
+
+\membersection{wxRegionIterator::operator bool}\label{wxregioniteratorbool}
+
+\constfunc{}{operator bool}{\void}
+
+Returns {\tt true} if there are still some rectangles; otherwise returns {\tt false}.
+
+You can use this to test the iterator object as if it were of type bool.
+

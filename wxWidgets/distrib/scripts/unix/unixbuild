@@ -1,0 +1,52 @@
+#!/bin/sh
+
+if [ "$WXROOT" = "" ]; then
+  scriptDir="$(cd $(dirname $0);pwd)"
+  WXROOT=$scriptDir/../../..
+fi
+
+. $WXROOT/distrib/scripts/includes/configure_build.inc
+
+WXPYTHON=0
+UNICODE=0
+DEBUG=0
+STATIC=0
+PORT=""
+
+# Process command line options.
+for i in "$@"; do
+    case "$i" in
+    unicode)       UNICODE=1 ;;
+    ansi)          UNICODE=0 ;;
+    debug)         DEBUG=1 ;;
+    wxpython)      WXPYTHON=1 ;;
+    gtk2)          PORT="gtk2" ;;
+    gtk)           PORT="gtk" ;;
+    x11)           PORT="x11" ;;
+    motif)         PORT="motif" ;;
+    static)        STATIC=1 ;;
+    *)
+        usage
+        exit
+        ;;
+    esac
+done
+
+if [ "$PORT" != "" ]; then
+    OTHER_OPTS="--with-$PORT "
+fi
+
+do_build
+
+if [ $? != 0 ]; then
+    exit $?
+fi
+
+make prefix=$INSTALLDIR install
+
+if [ "$WXPYTHON" = "1" ]; then
+    make -C contrib/src/gizmos prefix=$INSTALLDIR install
+    make -C contrib/src/stc prefix=$INSTALLDIR install
+fi
+
+cd $OLDDIR

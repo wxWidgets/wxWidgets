@@ -1,0 +1,10 @@
+clientM5.mcp
+clientM*Data
+serverM5.mcp
+serverM*Data
+*Classic?Debug*
+*Classic?Release*
+*Carbon?Debug*
+*Carbon?Release*
+client
+server

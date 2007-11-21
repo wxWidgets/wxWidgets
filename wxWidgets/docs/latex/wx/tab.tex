@@ -1,0 +1,242 @@
+\section{\class{wxTabbedDialog}}\label{wxtabbeddialog}
+
+A dialog suitable for handling tabs.
+
+Please note that the preferred class for programming tabbed windows is \helpref{wxNotebook}{wxnotebook}.
+This class is retained for backward compatibility.
+
+\wxheading{Derived from}
+
+\helpref{wxDialog}{wxdialog}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/tab.h>
+
+\wxheading{See also}
+
+\helpref{Tab classes overview}{wxtaboverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxTabbedDialog::wxTabbedDialog}
+
+\func{}{wxTabbedDialog}{\param{wxWindow *}{parent}, \param{wxWindowID }{id},
+ \param{const wxString\& }{title}, \param{const wxPoint\&}{ pos}, \param{const wxSize\&}{ size},
+ \param{long}{ style=wxDEFAULT\_DIALOG\_STYLE}, \param{const wxString\& }{name="dialogBox"}}
+
+Constructor.
+
+\membersection{wxTabbedDialog::\destruct{wxTabbedDialog}}
+
+\func{}{\destruct{wxTabbedDialog}}{\void}
+
+Destructor. This destructor deletes the tab view associated with the dialog box.
+If you do not wish this to happen, set the tab view to NULL before destruction (for example,
+in the OnCloseWindow event handler).
+
+\membersection{wxTabbedDialog::SetTabView}
+
+\func{void}{SetTabView}{\param{wxTabView *}{view}}
+
+Sets the tab view associated with the dialog box.
+
+\membersection{wxTabbedDialog::GetTabView}
+
+\func{wxTabView *}{GetTabView}{\void}
+
+Returns the tab view associated with the dialog box.
+
+\section{\class{wxTabbedPanel}}\label{wxtabbedpanel}
+
+A panel suitable for handling tabs.
+
+Please note that the preferred class for programming tabbed windows is \helpref{wxNotebook}{wxnotebook}.
+This class is retained for backward compatibility.
+
+\wxheading{Derived from}
+
+\helpref{wxPanel}{wxpanel}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/tab.h>
+
+\wxheading{See also}
+
+\helpref{Tab classes overview}{wxtaboverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxTabbedPanel::wxTabbedPanel}
+
+\func{}{wxTabbedPanel}{\param{wxWindow *}{parent}, \param{wxWindowID}{ id},
+ \param{const wxPoint\&}{ pos}, \param{const wxSize\&}{ size},
+ \param{long}{ style=0}, \param{const wxString\& }{name="panel"}}
+
+Constructor.
+
+\membersection{wxTabbedPanel::SetTabView}
+
+\func{void}{SetTabView}{\param{wxTabView *}{view}}
+
+Sets the tab view associated with the panel.
+
+\membersection{wxTabbedPanel::GetTabView}
+
+\func{wxTabView *}{GetTabView}{\void}
+
+Returns the tab view associated with the panel.
+
+\section{\class{wxTabControl}}\label{wxtabcontrol}
+
+You will rarely need to use this class directly.
+
+Please note that the preferred class for programming tabbed windows is \helpref{wxNotebook}{wxnotebook}.
+This class is retained for backward compatibility.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/tab.h>
+
+\wxheading{See also}
+
+\overview{Tab classes overview}{wxtaboverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxTabControl::wxTabControl}
+
+\func{void}{wxTabControl}{\param{wxTabView *}{view = NULL}}
+
+Constructor.
+
+\membersection{wxTabControl::GetColPosition}
+
+\func{int}{GetColPosition}{\void}
+
+Returns the position of the tab in the tab column.
+
+\membersection{wxTabControl::GetFont}
+
+\func{wxFont *}{GetFont}{\void}
+
+Returns the font to be used for this tab.
+
+\membersection{wxTabControl::GetHeight}
+
+\func{int}{GetHeight}{\void}
+
+Returns the tab height.
+
+\membersection{wxTabControl::GetId}
+
+\func{int}{GetId}{\void}
+
+Returns the tab identifier.
+
+\membersection{wxTabControl::GetLabel}
+
+\func{wxString}{GetLabel}{\void}
+
+Returns the tab label.
+
+\membersection{wxTabControl::GetRowPosition}
+
+\func{int}{GetRowPosition}{\void}
+
+Returns the position of the tab in the layer or row.
+
+\membersection{wxTabControl::GetSelected}
+
+\func{bool}{GetSelected}{\void}
+
+Returns the selected flag.
+
+\membersection{wxTabControl::GetWidth}
+
+\func{int}{GetWidth}{\void}
+
+Returns the tab width.
+
+\membersection{wxTabControl::GetX}
+
+\func{int}{GetX}{\void}
+
+Returns the x offset from the top-left of the view area.
+
+\membersection{wxTabControl::GetY}
+
+\func{int}{GetY}{\void}
+
+Returns the y offset from the top-left of the view area.
+
+\membersection{wxTabControl::HitTest}
+
+\func{bool}{HitTest}{\param{int}{ x}, \param{int}{ y}}
+
+Returns true if the point x, y is within the tab area.
+
+\membersection{wxTabControl::OnDraw}
+
+\func{void}{OnDraw}{\param{wxDC\& }{dc}, \param{bool}{ lastInRow}}
+
+Draws the tab control on the given device context.
+
+\membersection{wxTabControl::SetColPosition}
+
+\func{void}{SetColPosition}{\param{int}{ pos}}
+
+Sets the position in the column.
+
+\membersection{wxTabControl::SetFont}
+
+\func{void}{SetFont}{\param{wxFont *}{font}}
+
+Sets the font to be used for this tab.
+
+\membersection{wxTabControl::SetId}
+
+\func{void}{SetId}{\param{int}{ id}}
+
+Sets the tab identifier.
+
+\membersection{wxTabControl::SetLabel}
+
+\func{void}{SetLabel}{\param{const wxString\& }{str}}
+
+Sets the label for the tab.
+
+\membersection{wxTabControl::SetPosition}
+
+\func{void}{SetPosition}{\param{int}{ x}, \param{int}{ y}}
+
+Sets the x and y offsets for this tab, measured from the top-left of the view area.
+
+\membersection{wxTabControl::SetRowPosition}
+
+\func{void}{SetRowPosition}{\param{int}{ pos}}
+
+Sets the position on the layer (row).
+
+\membersection{wxTabControl::SetSelected}
+
+\func{void}{SetSelected}{\param{bool }{selected}}
+
+Sets the selection flag for this tab (does not set the current tab for the view;
+use wxTabView::SetSelectedTab for that).
+
+\membersection{wxTabControl::SetSize}
+
+\func{void}{SetSize}{\param{int}{ width}, \param{int}{ height}}
+
+Sets the width and height for this tab.
+

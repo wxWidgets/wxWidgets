@@ -1,0 +1,171 @@
+\section{\class{wxRichTextStyleSheet}}\label{wxrichtextstylesheet}
+
+A style sheet contains named paragraph and character styles that make it
+easy for a user to apply combinations of attributes to a \helpref{wxRichTextCtrl}{wxrichtextctrl}.
+
+You can use a \helpref{wxRichTextStyleListBox}{wxrichtextstylelistbox} in your
+user interface to show available styles to the user, and allow application
+of styles to the control.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/richtext/richtextstyles.h>
+
+\wxheading{Data structures}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRichTextStyleSheet::wxRichTextStyleSheet}\label{wxrichtextstylesheetwxrichtextstylesheet}
+
+\func{}{wxRichTextStyleSheet}{\void}
+
+Constructor.
+
+\membersection{wxRichTextStyleSheet::\destruct{wxRichTextStyleSheet}}\label{wxrichtextstylesheetdtor}
+
+\func{}{\destruct{wxRichTextStyleSheet}}{\void}
+
+Destructor.
+
+\membersection{wxRichTextStyleSheet::AddCharacterStyle}\label{wxrichtextstylesheetaddcharacterstyle}
+
+\func{bool}{AddCharacterStyle}{\param{wxRichTextCharacterStyleDefinition* }{def}}
+
+Adds a definition to the character style list.
+
+\membersection{wxRichTextStyleSheet::AddListStyle}\label{wxrichtextstylesheetaddliststyle}
+
+\func{bool}{AddListStyle}{\param{wxRichTextListStyleDefinition* }{def}}
+
+Adds a definition to the list style list.
+
+\membersection{wxRichTextStyleSheet::AddParagraphStyle}\label{wxrichtextstylesheetaddparagraphstyle}
+
+\func{bool}{AddParagraphStyle}{\param{wxRichTextParagraphStyleDefinition* }{def}}
+
+Adds a definition to the paragraph style list.
+
+\membersection{wxRichTextStyleSheet::AddStyle}\label{wxrichtextstylesheetaddstyle}
+
+\func{bool}{AddStyle}{\param{wxRichTextStyleDefinition* }{def}}
+
+Adds a definition to the appropriate style list.
+
+\membersection{wxRichTextStyleSheet::DeleteStyles}\label{wxrichtextstylesheetdeletestyles}
+
+\func{void}{DeleteStyles}{\void}
+
+Deletes all styles.
+
+\membersection{wxRichTextStyleSheet::FindCharacterStyle}\label{wxrichtextstylesheetfindcharacterstyle}
+
+\constfunc{wxRichTextCharacterStyleDefinition*}{FindCharacterStyle}{\param{const wxString\& }{name}}
+
+Finds a character definition by name.
+
+\membersection{wxRichTextStyleSheet::FindListStyle}\label{wxrichtextstylesheetfindliststyle}
+
+\constfunc{wxRichTextListStyleDefinition*}{FindListStyle}{\param{const wxString\& }{name}}
+
+Finds a list definition by name.
+
+\membersection{wxRichTextStyleSheet::FindParagraphStyle}\label{wxrichtextstylesheetfindparagraphstyle}
+
+\constfunc{wxRichTextParagraphStyleDefinition*}{FindParagraphStyle}{\param{const wxString\& }{name}}
+
+Finds a paragraph definition by name.
+
+\membersection{wxRichTextStyleSheet::FindStyle}\label{wxrichtextstylesheetfindstyle}
+
+\constfunc{wxRichTextStyleDefinition*}{FindStyle}{\param{const wxString\& }{name}}
+
+Finds a style definition by name.
+
+\membersection{wxRichTextStyleSheet::GetCharacterStyle}\label{wxrichtextstylesheetgetcharacterstyle}
+
+\constfunc{wxRichTextCharacterStyleDefinition*}{GetCharacterStyle}{\param{size\_t }{n}}
+
+Returns the {\it n}th character style.
+
+\membersection{wxRichTextStyleSheet::GetCharacterStyleCount}\label{wxrichtextstylesheetgetcharacterstylecount}
+
+\constfunc{size\_t}{GetCharacterStyleCount}{\void}
+
+Returns the number of character styles.
+
+\membersection{wxRichTextStyleSheet::GetDescription}\label{wxrichtextstylesheetgetdescription}
+
+\constfunc{const wxString\&}{GetDescription}{\void}
+
+Returns the style sheet's description.
+
+\membersection{wxRichTextStyleSheet::GetListStyle}\label{wxrichtextstylesheetgetliststyle}
+
+\constfunc{wxRichTextListStyleDefinition*}{GetListStyle}{\param{size\_t }{n}}
+
+Returns the {\it n}th list style.
+
+\membersection{wxRichTextStyleSheet::GetListStyleCount}\label{wxrichtextstylesheetgetliststylecount}
+
+\constfunc{size\_t}{GetListStyleCount}{\void}
+
+Returns the number of list styles.
+
+\membersection{wxRichTextStyleSheet::GetName}\label{wxrichtextstylesheetgetname}
+
+\constfunc{const wxString\&}{GetName}{\void}
+
+Returns the style sheet's name.
+
+\membersection{wxRichTextStyleSheet::GetParagraphStyle}\label{wxrichtextstylesheetgetparagraphstyle}
+
+\constfunc{wxRichTextParagraphStyleDefinition*}{GetParagraphStyle}{\param{size\_t }{n}}
+
+Returns the {\it n}th paragraph style.
+
+\membersection{wxRichTextStyleSheet::GetParagraphStyleCount}\label{wxrichtextstylesheetgetparagraphstylecount}
+
+\constfunc{size\_t}{GetParagraphStyleCount}{\void}
+
+Returns the number of paragraph styles.
+
+\membersection{wxRichTextStyleSheet::RemoveCharacterStyle}\label{wxrichtextstylesheetremovecharacterstyle}
+
+\func{bool}{RemoveCharacterStyle}{\param{wxRichTextStyleDefinition* }{def}, \param{bool }{deleteStyle = false}}
+
+Removes a character style.
+
+\membersection{wxRichTextStyleSheet::RemoveListStyle}\label{wxrichtextstylesheetremoveliststyle}
+
+\func{bool}{RemoveListStyle}{\param{wxRichTextStyleDefinition* }{def}, \param{bool }{deleteStyle = false}}
+
+Removes a list style.
+
+\membersection{wxRichTextStyleSheet::RemoveParagraphStyle}\label{wxrichtextstylesheetremoveparagraphstyle}
+
+\func{bool}{RemoveParagraphStyle}{\param{wxRichTextStyleDefinition* }{def}, \param{bool }{deleteStyle = false}}
+
+Removes a paragraph style.
+
+\membersection{wxRichTextStyleSheet::RemoveStyle}\label{wxrichtextstylesheetremovestyle}
+
+\func{bool}{RemoveStyle}{\param{wxRichTextStyleDefinition* }{def}, \param{bool }{deleteStyle = false}}
+
+Removes a style.
+
+\membersection{wxRichTextStyleSheet::SetDescription}\label{wxrichtextstylesheetsetdescription}
+
+\func{void}{SetDescription}{\param{const wxString\& }{descr}}
+
+Sets the style sheet's description.
+
+\membersection{wxRichTextStyleSheet::SetName}\label{wxrichtextstylesheetsetname}
+
+\func{void}{SetName}{\param{const wxString\& }{name}}
+
+Sets the style sheet's name.
+

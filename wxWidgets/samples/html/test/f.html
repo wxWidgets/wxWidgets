@@ -1,0 +1,2445 @@
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>wxWindow</title></head>
+<BODY BGCOLOR="#FFFFFF">
+<A NAME="wxwindow"></A><CENTER>
+<A HREF="http://www.wx.org/wx.zip#zip:wx.htm#anchor">Contents</A> <A HREF="wx22.htm#classref">Up</A> <A HREF="wx259.htm#wxwave">&lt;&lt;</A> <A HREF="wx261.htm#wxwindowdc">&gt;&gt;</A> </CENTER><HR>
+
+<H2>wxWindow</H2>
+<P>
+wxWindow is the base class for all windows.  Any
+children of the window will be deleted automatically by the destructor
+before the window itself is deleted.<P>
+<B><FONT COLOR="#FF0000">Derived from</FONT></B><P>
+<A HREF="wx85.htm#wxevthandler">wxEvtHandler</A><BR>
+
+<A HREF="wx158.htm#wxobject">wxObject</A><P>
+<B><FONT COLOR="#FF0000">Include files</FONT></B><P>
+&lt;wx/window.h&gt;<P>
+<B><FONT COLOR="#FF0000">Window styles</FONT></B><P>
+The following styles can apply to all windows, although they will not always make sense for a particular
+window class.<P>
+
+<TABLE BORDER>
+
+
+<TR><TD VALIGN=TOP>
+<B>wxSIMPLE_BORDER</B>
+</TD>
+
+<TD VALIGN=TOP>
+Displays a thin border around the window. wxBORDER is the old name
+for this style.
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>wxDOUBLE_BORDER</B>
+</TD>
+
+<TD VALIGN=TOP>
+Displays a double border. Windows only.
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>wxSUNKEN_BORDER</B>
+</TD>
+
+<TD VALIGN=TOP>
+Displays a sunken border.
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>wxRAISED_BORDER</B>
+</TD>
+
+<TD VALIGN=TOP>
+Displays a raised border.
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>wxSTATIC_BORDER</B>
+</TD>
+
+<TD VALIGN=TOP>
+Displays a border suitable for a static control.
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>wxTRANSPARENT_WINDOW</B>
+</TD>
+
+<TD VALIGN=TOP>
+The window is transparent, that is, it will not receive paint
+events. Windows only.
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>wxTAB_TRAVERSAL</B>
+</TD>
+
+<TD VALIGN=TOP>
+Use this to enable tab traversal for non-dialog windows.
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>wxVSCROLL</B>
+</TD>
+
+<TD VALIGN=TOP>
+Use this style to enable a vertical scrollbar.
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>wxHSCROLL</B>
+</TD>
+
+<TD VALIGN=TOP>
+Use this style to enable a horizontal scrollbar.
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>wxCLIP_CHILDREN</B>
+</TD>
+
+<TD VALIGN=TOP>
+Use this style to eliminate flicker caused by the background being
+repainted, then children being painted over them. Windows-only.
+</TD></TR>
+
+
+</TABLE>
+<P>
+See also <A HREF="wx305.htm#windowstyles">window styles overview</A>.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
+<B><FONT COLOR="#FF0000">Members</FONT></B><P>
+<A HREF="#topic1026">wxWindow::wxWindow</A><BR>
+<A HREF="#topic1027">wxWindow::~wxWindow</A><BR>
+<A HREF="#topic1028">wxWindow::AddChild</A><BR>
+<A HREF="#wxwindowcapturemouse">wxWindow::CaptureMouse</A><BR>
+<A HREF="#wxwindowcenter">wxWindow::Center</A><BR>
+<A HREF="#wxwindowcentre">wxWindow::Centre</A><BR>
+<A HREF="#wxwindowclear">wxWindow::Clear</A><BR>
+<A HREF="#topic1029">wxWindow::ClientToScreen</A><BR>
+<A HREF="#wxwindowclose">wxWindow::Close</A><BR>
+<A HREF="#wxwindowconvertdialogtopixels">wxWindow::ConvertDialogToPixels</A><BR>
+<A HREF="#wxwindowconvertpixelstodialog">wxWindow::ConvertPixelsToDialog</A><BR>
+<A HREF="#wxwindowdestroy">wxWindow::Destroy</A><BR>
+<A HREF="#topic1030">wxWindow::DestroyChildren</A><BR>
+<A HREF="#wxwindowdragacceptfiles">wxWindow::DragAcceptFiles</A><BR>
+<A HREF="#wxwindowenable">wxWindow::Enable</A><BR>
+<A HREF="#wxwindowfindfocus">wxWindow::FindFocus</A><BR>
+<A HREF="#wxwindowfindwindow">wxWindow::FindWindow</A><BR>
+<A HREF="#wxwindowfit">wxWindow::Fit</A><BR>
+<A HREF="#wxwindowgetbackgroundcolour">wxWindow::GetBackgroundColour</A><BR>
+<A HREF="#topic1031">wxWindow::GetCharHeight</A><BR>
+<A HREF="#topic1032">wxWindow::GetCharWidth</A><BR>
+<A HREF="#topic1033">wxWindow::GetChildren</A><BR>
+<A HREF="#wxwindowgetclientsize">wxWindow::GetClientSize</A><BR>
+<A HREF="#wxwindowgetconstraints">wxWindow::GetConstraints</A><BR>
+<A HREF="#wxwindowgetdefaultitem">wxWindow::GetDefaultItem</A><BR>
+<A HREF="#wxwindowgetdroptarget">wxWindow::GetDropTarget</A><BR>
+<A HREF="#wxwindowgeteventhandler">wxWindow::GetEventHandler</A><BR>
+<A HREF="#wxwindowgetfont">wxWindow::GetFont</A><BR>
+<A HREF="#wxwindowgetforegroundcolour">wxWindow::GetForegroundColour</A><BR>
+<A HREF="#topic1034">wxWindow::GetGrandParent</A><BR>
+<A HREF="#topic1035">wxWindow::GetHandle</A><BR>
+<A HREF="#wxwindowgetid">wxWindow::GetId</A><BR>
+<A HREF="#topic1036">wxWindow::GetPosition</A><BR>
+<A HREF="#topic1037">wxWindow::GetLabel</A><BR>
+<A HREF="#wxwindowgetname">wxWindow::GetName</A><BR>
+<A HREF="#topic1038">wxWindow::GetParent</A><BR>
+<A HREF="#wxwindowgetrect">wxWindow::GetRect</A><BR>
+<A HREF="#wxwindowgetreturncode">wxWindow::GetReturnCode</A><BR>
+<A HREF="#wxwindowgetscrollthumb">wxWindow::GetScrollThumb</A><BR>
+<A HREF="#wxwindowgetscrollpos">wxWindow::GetScrollPos</A><BR>
+<A HREF="#wxwindowgetscrollrange">wxWindow::GetScrollRange</A><BR>
+<A HREF="#wxwindowgetsize">wxWindow::GetSize</A><BR>
+<A HREF="#topic1039">wxWindow::GetTextExtent</A><BR>
+<A HREF="#wxwindowgettitle">wxWindow::GetTitle</A><BR>
+<A HREF="#wxwindowgetupdateregion">wxWindow::GetUpdateRegion</A><BR>
+<A HREF="#topic1040">wxWindow::GetWindowStyleFlag</A><BR>
+<A HREF="#wxwindowinitdialog">wxWindow::InitDialog</A><BR>
+<A HREF="#wxwindowisenabled">wxWindow::IsEnabled</A><BR>
+<A HREF="#wxwindowisretained">wxWindow::IsRetained</A><BR>
+<A HREF="#wxwindowisshown">wxWindow::IsShown</A><BR>
+<A HREF="#wxwindowlayout">wxWindow::Layout</A><BR>
+<A HREF="#wxwindowloadfromresource">wxWindow::LoadFromResource</A><BR>
+<A HREF="#wxwindowlower">wxWindow::Lower</A><BR>
+<A HREF="#wxwindowmakemodal">wxWindow::MakeModal</A><BR>
+<A HREF="#wxwindowmove">wxWindow::Move</A><BR>
+<A HREF="#wxwindowonactivate">wxWindow::OnActivate</A><BR>
+<A HREF="#wxwindowonchar">wxWindow::OnChar</A><BR>
+<A HREF="#wxwindowoncharhook">wxWindow::OnCharHook</A><BR>
+<A HREF="#wxwindowoncommand">wxWindow::OnCommand</A><BR>
+<A HREF="#wxwindowonclose">wxWindow::OnClose</A><BR>
+<A HREF="#wxwindowonclosewindow">wxWindow::OnCloseWindow</A><BR>
+<A HREF="#wxwindowondropfiles">wxWindow::OnDropFiles</A><BR>
+<A HREF="#wxwindowonerasebackground">wxWindow::OnEraseBackground</A><BR>
+<A HREF="#wxwindowonkeydown">wxWindow::OnKeyDown</A><BR>
+<A HREF="#wxwindowonkeyup">wxWindow::OnKeyUp</A><BR>
+<A HREF="#wxwindowonkillfocus">wxWindow::OnKillFocus</A><BR>
+<A HREF="#wxwindowonidle">wxWindow::OnIdle</A><BR>
+<A HREF="#wxwindowoninitdialog">wxWindow::OnInitDialog</A><BR>
+<A HREF="#wxwindowonmenuhighlight">wxWindow::OnMenuHighlight</A><BR>
+<A HREF="#wxwindowonmouseevent">wxWindow::OnMouseEvent</A><BR>
+<A HREF="#wxwindowonmove">wxWindow::OnMove</A><BR>
+<A HREF="#wxwindowonpaint">wxWindow::OnPaint</A><BR>
+<A HREF="#wxwindowonscroll">wxWindow::OnScroll</A><BR>
+<A HREF="#wxwindowonsetfocus">wxWindow::OnSetFocus</A><BR>
+<A HREF="#wxwindowonsize">wxWindow::OnSize</A><BR>
+<A HREF="#wxwindowonsyscolourchanged">wxWindow::OnSysColourChanged</A><BR>
+<A HREF="#wxwindowpopeventhandler">wxWindow::PopEventHandler</A><BR>
+<A HREF="#wxwindowpopupmenu">wxWindow::PopupMenu</A><BR>
+<A HREF="#wxwindowpusheventhandler">wxWindow::PushEventHandler</A><BR>
+<A HREF="#wxwindowraise">wxWindow::Raise</A><BR>
+<A HREF="#wxwindowrefresh">wxWindow::Refresh</A><BR>
+<A HREF="#wxwindowreleasemouse">wxWindow::ReleaseMouse</A><BR>
+<A HREF="#wxwindowremovechild">wxWindow::RemoveChild</A><BR>
+<A HREF="#wxwindowscreentoclient">wxWindow::ScreenToClient</A><BR>
+<A HREF="#wxwindowscrollwindow">wxWindow::ScrollWindow</A><BR>
+<A HREF="#wxwindowsetacceleratortable">wxWindow::SetAcceleratorTable</A><BR>
+<A HREF="#wxwindowsetautolayout">wxWindow::SetAutoLayout</A><BR>
+<A HREF="#wxwindowsetbackgroundcolour">wxWindow::SetBackgroundColour</A><BR>
+<A HREF="#wxwindowsetclientsize">wxWindow::SetClientSize</A><BR>
+<A HREF="#wxwindowsetcursor">wxWindow::SetCursor</A><BR>
+<A HREF="#wxwindowseteventhandler">wxWindow::SetEventHandler</A><BR>
+<A HREF="#wxwindowsetconstraints">wxWindow::SetConstraints</A><BR>
+<A HREF="#wxwindowsetdroptarget">wxWindow::SetDropTarget</A><BR>
+<A HREF="#wxwindowsetfocus">wxWindow::SetFocus</A><BR>
+<A HREF="#wxwindowsetfont">wxWindow::SetFont</A><BR>
+<A HREF="#wxwindowsetforegroundcolour">wxWindow::SetForegroundColour</A><BR>
+<A HREF="#wxwindowsetid">wxWindow::SetId</A><BR>
+<A HREF="#wxwindowsetname">wxWindow::SetName</A><BR>
+<A HREF="#wxwindowsetpalette">wxWindow::SetPalette</A><BR>
+<A HREF="#wxwindowsetreturncode">wxWindow::SetReturnCode</A><BR>
+<A HREF="#wxwindowsetscrollbar">wxWindow::SetScrollbar</A><BR>
+<A HREF="#wxwindowsetscrollpos">wxWindow::SetScrollPos</A><BR>
+<A HREF="#wxwindowsetsize">wxWindow::SetSize</A><BR>
+<A HREF="#wxwindowsetsizehints">wxWindow::SetSizeHints</A><BR>
+<A HREF="#wxwindowsettitle">wxWindow::SetTitle</A><BR>
+<A HREF="#topic1041">wxWindow::Show</A><BR>
+<A HREF="#wxwindowtransferdatafromwindow">wxWindow::TransferDataFromWindow</A><BR>
+<A HREF="#wxwindowtransferdatatowindow">wxWindow::TransferDataToWindow</A><BR>
+<A HREF="#wxwindowvalidate">wxWindow::Validate</A><BR>
+<A HREF="#wxwindowwarppointer">wxWindow::WarpPointer</A><BR>
+<P>
+
+<HR>
+<A NAME="topic1026"></A>
+<H3>wxWindow::wxWindow</H3>
+<P>
+<B></B> <B>wxWindow</B>()<P>
+Default constructor.<P>
+<B></B> <B>wxWindow</B>(<B>wxWindow*</B><I> parent</I>, <B>wxWindowID </B><I>id</I>,
+ <B>const wxPoint&amp; </B><I>pos = wxDefaultPosition</I>,
+ <B>const wxSize&amp; </B><I>size = wxDefaultSize</I>,
+ <B>long </B><I>style = 0</I>,
+ <B>const wxString&amp; </B><I>name = wxPanelNameStr</I>)<P>
+Constructs a window, which can be a child of a frame, dialog or any other non-control window.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>parent</I><UL><UL>
+Pointer to a parent window.</UL></UL>
+<P>
+<I>id</I><UL><UL>
+Window identifier. If -1, will automatically create an identifier.</UL></UL>
+<P>
+<I>pos</I><UL><UL>
+Window position. wxDefaultPosition is (-1, -1) which indicates that wxWindows
+should generate a default position for the window. If using the wxWindow class directly, supply
+an actual position.</UL></UL>
+<P>
+<I>size</I><UL><UL>
+Window size. wxDefaultSize is (-1, -1) which indicates that wxWindows
+should generate a default size for the window.</UL></UL>
+<P>
+<I>style</I><UL><UL>
+Window style. For generic window styles, please see <A HREF="wx260.htm#wxwindow">wxWindow</A>.</UL></UL>
+<P>
+<I>name</I><UL><UL>
+Window name.</UL></UL>
+<P>
+
+<HR>
+<A NAME="topic1027"></A>
+<H3>wxWindow::~wxWindow</H3>
+<P>
+<B></B> <B>~wxWindow</B>()<P>
+Destructor. Deletes all subwindows, then deletes itself. Instead of using
+the <B>delete</B> operator explicitly, you should normally
+use <A HREF="wx260.htm#wxwindowdestroy">wxWindow::Destroy</A> so that wxWindows
+can delete a window only when it is safe to do so, in idle time.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx296.htm#windowdeletionoverview">Window deletion overview</A>,
+<A HREF="wx260.htm#wxwindowonclosewindow">wxWindow::OnCloseWindow</A>,
+<A HREF="wx260.htm#wxwindowdestroy">wxWindow::Destroy</A>,
+<A HREF="wx45.htm#wxcloseevent">wxCloseEvent</A><P>
+
+<HR>
+<A NAME="topic1028"></A>
+<H3>wxWindow::AddChild</H3>
+<P>
+<B>virtual void</B> <B>AddChild</B>(<B>wxWindow* </B><I>child</I>)<P>
+Adds a child window.  This is called automatically by window creation
+functions so should not be required by the application programmer.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>child</I><UL><UL>
+Child window to add.</UL></UL>
+<P>
+
+<HR>
+<A NAME="wxwindowcapturemouse"></A>
+<H3>wxWindow::CaptureMouse</H3>
+<P>
+<B>virtual void</B> <B>CaptureMouse</B>()<P>
+Directs all mouse input to this window. Call <A HREF="wx260.htm#wxwindowreleasemouse">wxWindow::ReleaseMouse</A> to
+release the capture.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowreleasemouse">wxWindow::ReleaseMouse</A><P>
+
+<HR>
+<A NAME="wxwindowcenter"></A>
+<H3>wxWindow::Center</H3>
+<P>
+<B>void</B> <B>Center</B>(<B>int</B><I> direction</I>)<P>
+A synonym for <A HREF="wx260.htm#wxwindowcentre">Centre</A>.<P>
+
+<HR>
+<A NAME="wxwindowcentre"></A>
+<H3>wxWindow::Centre</H3>
+<P>
+<B>virtual void</B> <B>Centre</B>(<B>int</B><I> direction = wxHORIZONTAL</I>)<P>
+Centres the window.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>direction</I><UL><UL>
+Specifies the direction for the centering. May be <TT>wxHORIZONTAL</TT>, <TT>wxVERTICAL</TT>
+or <TT>wxBOTH</TT>.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+The actual behaviour depends on the derived window. For a frame or dialog box,
+centring is relative to the whole display. For a panel item, centring is
+relative to the panel.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowcenter">wxWindow::Center</A><P>
+
+<HR>
+<A NAME="wxwindowclear"></A>
+<H3>wxWindow::Clear</H3>
+<P>
+<B>void</B> <B>Clear</B>()<P>
+Clears the window by filling it with the current background colour. Does not
+cause an erase background event to be generated.<P>
+
+<HR>
+<A NAME="topic1029"></A>
+<H3>wxWindow::ClientToScreen</H3>
+<P>
+<B>virtual void</B> <B>ClientToScreen</B>(<B>int* </B><I>x</I>, <B>int* </B><I>y</I>) <B>const</B><P>
+<B>virtual wxPoint</B> <B>ClientToScreen</B>(<B>const wxPoint&amp;</B><I> pt</I>) <B>const</B><P>
+Converts to screen coordinates from coordinates relative to this window.<P>
+<I>x</I><UL><UL>
+A pointer to a integer value for the x coordinate. Pass the client coordinate in, and
+a screen coordinate will be passed out.</UL></UL>
+<P>
+<I>y</I><UL><UL>
+A pointer to a integer value for the y coordinate. Pass the client coordinate in, and
+a screen coordinate will be passed out.</UL></UL>
+<P>
+<I>pt</I><UL><UL>
+The client position for the second form of the function.</UL></UL>
+<P>
+<B><FONT COLOR="#0000C8">wxPython note:</FONT></B><BR>
+ In place of a single overloaded method name, wxPython
+implements the following methods:<P>
+
+<UL><UL>
+
+<TABLE>
+
+
+<TR><TD VALIGN=TOP>
+<B>ClientToScreen(point)</B>
+</TD>
+
+<TD VALIGN=TOP>
+Accepts and returns a wxPoint
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>ClientToScreenXY(x, y)</B>
+</TD>
+
+<TD VALIGN=TOP>
+Returns a 2-tuple, (x, y)
+</TD></TR>
+
+
+</TABLE>
+</UL></UL>
+
+<P>
+
+
+<HR>
+<A NAME="wxwindowclose"></A>
+<H3>wxWindow::Close</H3>
+<P>
+<B>virtual bool</B> <B>Close</B>(<B>const bool</B><I> force = FALSE</I>)<P>
+The purpose of this call is to provide a safer way of destroying a window than using
+the <I>delete</I> operator.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>force</I><UL><UL>
+FALSE if the window's close handler should be able to veto the destruction
+of this window, TRUE if it cannot.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+Close calls the <A HREF="wx45.htm#wxcloseevent">close handler</A> for the window, providing an opportunity for the window to
+choose whether to destroy the window.<P>
+The close handler should check whether the window is being deleted forcibly,
+using <A HREF="wx45.htm#wxcloseeventgetforce">wxCloseEvent::GetForce</A>, in which case it should
+destroy the window using <A HREF="wx260.htm#wxwindowdestroy">wxWindow::Destroy</A>.<P>
+Applies to managed windows (wxFrame and wxDialog classes) only.<P>
+<I>Note</I> that calling Close does not guarantee that the window will be destroyed; but it
+provides a way to simulate a manual close of a window, which may or may not be implemented by
+destroying the window. The default implementation of wxDialog::OnCloseWindow does not
+necessarily delete the dialog, since it will simply simulate an wxID_CANCEL event which
+itself only hides the dialog.<P>
+To guarantee that the window will be destroyed, call <A HREF="wx260.htm#wxwindowdestroy">wxWindow::Destroy</A> instead.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx296.htm#windowdeletionoverview">Window deletion overview</A>,
+<A HREF="wx260.htm#wxwindowonclosewindow">wxWindow::OnCloseWindow</A>,
+<A HREF="wx260.htm#wxwindowdestroy">wxWindow::Destroy</A>,
+<A HREF="wx45.htm#wxcloseevent">wxCloseEvent</A><P>
+
+<HR>
+<A NAME="wxwindowconvertdialogtopixels"></A>
+<H3>wxWindow::ConvertDialogToPixels</H3>
+<P>
+<B>wxPoint</B> <B>ConvertDialogToPixels</B>(<B>const wxPoint&amp;</B><I> pt</I>)<P>
+<B>wxSize</B> <B>ConvertDialogToPixels</B>(<B>const wxSize&amp;</B><I> sz</I>)<P>
+Converts a point or size from dialog units to pixels.<P>
+For the x dimension, the dialog units are multiplied by the average character width
+and then divided by 4.<P>
+For the y dimension, the dialog units are multiplied by the average character height
+and then divided by 8.<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+Dialog units are used for maintaining a dialog's proportions even if the font changes.
+Dialogs created using Dialog Editor optionally use dialog units.<P>
+You can also use these functions programmatically. A convenience macro is defined:<P>
+<FONT SIZE=2>
+<PRE>
+#define wxDLG_UNIT(parent, pt) parent-&gt;ConvertDialogToPixels(pt)
+</PRE>
+</FONT><P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowconvertpixelstodialog">wxWindow::ConvertPixelsToDialog</A><P>
+<B><FONT COLOR="#0000C8">wxPython note:</FONT></B><BR>
+ In place of a single overloaded method name, wxPython
+implements the following methods:<P>
+
+<UL><UL>
+
+<TABLE>
+
+
+<TR><TD VALIGN=TOP>
+<B>ConvertDialogPointToPixels(point)</B>
+</TD>
+
+<TD VALIGN=TOP>
+Accepts and returns a wxPoint
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>ConvertDialogSizeToPixels(size)</B>
+</TD>
+
+<TD VALIGN=TOP>
+Accepts and returns a wxSize
+</TD></TR>
+
+
+</TABLE>
+</UL></UL>
+<P>
+Additionally, the following helper functions are defined:<P>
+
+<UL><UL>
+
+<TABLE>
+
+
+<TR><TD VALIGN=TOP>
+<B>wxDLG_PNT(win, point)</B>
+</TD>
+
+<TD VALIGN=TOP>
+Converts a wxPoint from dialog
+units to pixels
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>wxDLG_SZE(win, size)</B>
+</TD>
+
+<TD VALIGN=TOP>
+Converts a wxSize from dialog
+units to pixels
+</TD></TR>
+
+
+</TABLE>
+</UL></UL>
+
+<P>
+
+
+<HR>
+<A NAME="wxwindowconvertpixelstodialog"></A>
+<H3>wxWindow::ConvertPixelsToDialog</H3>
+<P>
+<B>wxPoint</B> <B>ConvertPixelsToDialog</B>(<B>const wxPoint&amp;</B><I> pt</I>)<P>
+<B>wxSize</B> <B>ConvertPixelsToDialog</B>(<B>const wxSize&amp;</B><I> sz</I>)<P>
+Converts a point or size from pixels to dialog units.<P>
+For the x dimension, the pixels are multiplied by 4 and then divided by the average
+character width.<P>
+For the y dimension, the pixels are multipled by 8 and then divided by the average
+character height.<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+Dialog units are used for maintaining a dialog's proportions even if the font changes.
+Dialogs created using Dialog Editor optionally use dialog units.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowconvertdialogtopixels">wxWindow::ConvertDialogToPixels</A><P>
+
+<B><FONT COLOR="#0000C8">wxPython note:</FONT></B><BR>
+ In place of a single overloaded method name, wxPython
+implements the following methods:<P>
+
+<UL><UL>
+
+<TABLE>
+
+
+<TR><TD VALIGN=TOP>
+<B>ConvertDialogPointToPixels(point)</B>
+</TD>
+
+<TD VALIGN=TOP>
+Accepts and returns a wxPoint
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>ConvertDialogSizeToPixels(size)</B>
+</TD>
+
+<TD VALIGN=TOP>
+Accepts and returns a wxSize
+</TD></TR>
+
+
+</TABLE>
+</UL></UL>
+
+<P>
+
+<HR>
+<A NAME="wxwindowdestroy"></A>
+<H3>wxWindow::Destroy</H3>
+<P>
+<B>virtual bool</B> <B>Destroy</B>()<P>
+Destroys the window safely. Use this function instead of the delete operator, since
+different window classes can be destroyed differently. Frames and dialogs
+are not destroyed immediately when this function is called - they are added
+to a list of windows to be deleted on idle time, when all the window's events
+have been processed. This prevents problems with events being sent to non-existant
+windows.<P>
+<B><FONT COLOR="#FF0000">Return value</FONT></B><P>
+TRUE if the window has either been successfully deleted, or it has been added
+to the list of windows pending real deletion.<P>
+
+<HR>
+<A NAME="topic1030"></A>
+<H3>wxWindow::DestroyChildren</H3>
+<P>
+<B>virtual void</B> <B>DestroyChildren</B>()<P>
+Destroys all children of a window.  Called automatically by the destructor.<P>
+
+<HR>
+<A NAME="wxwindowdragacceptfiles"></A>
+<H3>wxWindow::DragAcceptFiles</H3>
+<P>
+<B>virtual void</B> <B>DragAcceptFiles</B>(<B>const bool</B><I> accept</I>)<P>
+Enables or disables elibility for drop file events (OnDropFiles).<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>accept</I><UL><UL>
+If TRUE, the window is eligible for drop file events. If FALSE, the window
+will not accept drop file events.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+Windows only.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowondropfiles">wxWindow::OnDropFiles</A><P>
+
+<HR>
+<A NAME="wxwindowenable"></A>
+<H3>wxWindow::Enable</H3>
+<P>
+<B>virtual void</B> <B>Enable</B>(<B>const bool</B><I> enable</I>)<P>
+Enable or disable the window for user input.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>enable</I><UL><UL>
+If TRUE, enables the window for input. If FALSE, disables the window.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowisenabled">wxWindow::IsEnabled</A><P>
+
+<HR>
+<A NAME="wxwindowfindfocus"></A>
+<H3>wxWindow::FindFocus</H3>
+<P>
+<B>static wxWindow*</B> <B>FindFocus</B>()<P>
+Finds the window or control which currently has the keyboard focus.<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+Note that this is a static function, so it can be called without needing a wxWindow pointer.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowsetfocus">wxWindow::SetFocus</A><P>
+
+<HR>
+<A NAME="wxwindowfindwindow"></A>
+<H3>wxWindow::FindWindow</H3>
+<P>
+<B>wxWindow*</B> <B>FindWindow</B>(<B>long</B><I> id</I>)<P>
+Find a child of this window, by identifier.<P>
+<B>wxWindow*</B> <B>FindWindow</B>(<B>const wxString&amp;</B><I> name</I>)<P>
+Find a child of this window, by name.<P>
+<B><FONT COLOR="#0000C8">wxPython note:</FONT></B><BR>
+ In place of a single overloaded method name, wxPython
+implements the following methods:<P>
+
+<UL><UL>
+
+<TABLE>
+
+
+<TR><TD VALIGN=TOP>
+<B>FindWindowById(id)</B>
+</TD>
+
+<TD VALIGN=TOP>
+Accepts an integer
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>FindWindowByName(name)</B>
+</TD>
+
+<TD VALIGN=TOP>
+Accepts a string
+</TD></TR>
+
+
+</TABLE>
+</UL></UL>
+
+<P>
+
+<HR>
+<A NAME="wxwindowfit"></A>
+<H3>wxWindow::Fit</H3>
+<P>
+<B>virtual void</B> <B>Fit</B>()<P>
+Sizes the window so that it fits around its subwindows.<P>
+
+<HR>
+<A NAME="wxwindowgetbackgroundcolour"></A>
+<H3>wxWindow::GetBackgroundColour</H3>
+<P>
+<B>virtual wxColour</B> <B>GetBackgroundColour</B>() <B>const</B><P>
+Returns the background colour of the window.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowsetbackgroundcolour">wxWindow::SetBackgroundColour</A>,
+<A HREF="wx260.htm#wxwindowsetforegroundcolour">wxWindow::SetForegroundColour</A>,
+<A HREF="wx260.htm#wxwindowgetforegroundcolour">wxWindow::GetForegroundColour</A>,
+<A HREF="wx260.htm#wxwindowonerasebackground">wxWindow::OnEraseBackground</A><P>
+
+<HR>
+<A NAME="topic1031"></A>
+<H3>wxWindow::GetCharHeight</H3>
+<P>
+<B>virtual int</B> <B>GetCharHeight</B>() <B>const</B><P>
+Returns the character height for this window.<P>
+
+<HR>
+<A NAME="topic1032"></A>
+<H3>wxWindow::GetCharWidth</H3>
+<P>
+<B>virtual int</B> <B>GetCharWidth</B>() <B>const</B><P>
+Returns the average character width for this window.<P>
+
+<HR>
+<A NAME="topic1033"></A>
+<H3>wxWindow::GetChildren</H3>
+<P>
+<B>wxList&amp;</B> <B>GetChildren</B>()<P>
+Returns a reference to the list of the window's children.<P>
+
+<HR>
+<A NAME="wxwindowgetclientsize"></A>
+<H3>wxWindow::GetClientSize</H3>
+<P>
+<B>virtual void</B> <B>GetClientSize</B>(<B>int* </B><I>width</I>, <B>int* </B><I>height</I>) <B>const</B><P>
+<B>virtual wxSize</B> <B>GetClientSize</B>() <B>const</B><P>
+This gets the size of the window 'client area' in pixels.  The client area is the
+area which may be drawn on by the programmer, excluding title bar, border etc.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>width</I><UL><UL>
+Receives the client width in pixels.</UL></UL>
+<P>
+<I>height</I><UL><UL>
+Receives the client height in pixels.</UL></UL>
+<P>
+<B><FONT COLOR="#0000C8">wxPython note:</FONT></B><BR>
+ In place of a single overloaded method name, wxPython
+implements the following methods:<P>
+
+<UL><UL>
+
+<TABLE>
+
+
+<TR><TD VALIGN=TOP>
+<B>wxGetClientSizeTuple()</B>
+</TD>
+
+<TD VALIGN=TOP>
+Returns a 2-tuple of (width, height)
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>wxGetClientSize()</B>
+</TD>
+
+<TD VALIGN=TOP>
+Returns a wxSize object
+</TD></TR>
+
+
+</TABLE>
+</UL></UL>
+
+<P>
+
+<HR>
+<A NAME="wxwindowgetconstraints"></A>
+<H3>wxWindow::GetConstraints</H3>
+<P>
+<B>wxLayoutConstraints*</B> <B>GetConstraints</B>() <B>const</B><P>
+Returns a pointer to the window's layout constraints, or NULL if there are none.<P>
+
+<HR>
+<A NAME="wxwindowgetdefaultitem"></A>
+<H3>wxWindow::GetDefaultItem</H3>
+<P>
+<B>wxButton*</B> <B>GetDefaultItem</B>() <B>const</B><P>
+Returns a pointer to the button which is the default for this window, or NULL.<P>
+
+<HR>
+<A NAME="wxwindowgetdroptarget"></A>
+<H3>wxWindow::GetDropTarget</H3>
+<P>
+<B>wxDropTarget*</B> <B>GetDropTarget</B>() <B>const</B><P>
+Returns the associated drop target, which may be NULL.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowsetdroptarget">wxWindow::SetDropTarget</A>,
+<A HREF="wx312.htm#wxdndoverview">Drag and drop overview</A><P>
+
+<HR>
+<A NAME="wxwindowgeteventhandler"></A>
+<H3>wxWindow::GetEventHandler</H3>
+<P>
+<B>wxEvtHandler*</B> <B>GetEventHandler</B>() <B>const</B><P>
+Returns the event handler for this window. By default, the window is its
+own event handler.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowseteventhandler">wxWindow::SetEventHandler</A>,
+<A HREF="wx260.htm#wxwindowpusheventhandler">wxWindow::PushEventHandler</A>,
+<A HREF="wx260.htm#wxwindowpusheventhandler">wxWindow::PopEventHandler</A>,
+<A HREF="wx85.htm#wxevthandlerprocessevent">wxEvtHandler::ProcessEvent</A>,
+<A HREF="wx85.htm#wxevthandler">wxEvtHandler</A><P>
+
+<HR>
+<A NAME="wxwindowgetfont"></A>
+<H3>wxWindow::GetFont</H3>
+<P>
+<B>wxFont&amp;</B> <B>GetFont</B>() <B>const</B><P>
+Returns a reference to the font for this window.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowsetfont">wxWindow::SetFont</A><P>
+
+<HR>
+<A NAME="wxwindowgetforegroundcolour"></A>
+<H3>wxWindow::GetForegroundColour</H3>
+<P>
+<B>virtual wxColour</B> <B>GetForegroundColour</B>()<P>
+Returns the foreground colour of the window.<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+The interpretation of foreground colour is open to interpretation according
+to the window class; it may be the text colour or other colour, or it may not
+be used at all.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowsetforegroundcolour">wxWindow::SetForegroundColour</A>,
+<A HREF="wx260.htm#wxwindowsetbackgroundcolour">wxWindow::SetBackgroundColour</A>,
+<A HREF="wx260.htm#wxwindowgetbackgroundcolour">wxWindow::GetBackgroundColour</A><P>
+
+<HR>
+<A NAME="topic1034"></A>
+<H3>wxWindow::GetGrandParent</H3>
+<P>
+<B>wxWindow*</B> <B>GetGrandParent</B>() <B>const</B><P>
+Returns the grandparent of a window, or NULL if there isn't one.<P>
+
+<HR>
+<A NAME="topic1035"></A>
+<H3>wxWindow::GetHandle</H3>
+<P>
+<B>void*</B> <B>GetHandle</B>() <B>const</B><P>
+Returns the platform-specific handle of the physical window. Cast it to an appropriate
+handle, such as <B>HWND</B> for Windows or <B>Widget</B> for Motif.<P>
+
+<HR>
+<A NAME="wxwindowgetid"></A>
+<H3>wxWindow::GetId</H3>
+<P>
+<B>int</B> <B>GetId</B>() <B>const</B><P>
+Returns the identifier of the window.<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+Each window has an integer identifier. If the application has not provided one,
+an identifier will be generated.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowsetid">wxWindow::SetId</A>
+<A HREF="wx299.htm#windowids">Window identifiers</A><P>
+
+<HR>
+<A NAME="topic1036"></A>
+<H3>wxWindow::GetPosition</H3>
+<P>
+<B>virtual void</B> <B>GetPosition</B>(<B>int* </B><I>x</I>, <B>int* </B><I>y</I>) <B>const</B><P>
+This gets the position of the window in pixels, relative to the parent window or
+if no parent, relative to the whole display.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>x</I><UL><UL>
+Receives the x position of the window.</UL></UL>
+<P>
+<I>y</I><UL><UL>
+Receives the y position of the window.</UL></UL>
+<P>
+<B><FONT COLOR="#0000C8">wxPython note:</FONT></B><BR>
+ In place of a single overloaded method name, wxPython
+implements the following methods:<P>
+
+<UL><UL>
+
+<TABLE>
+
+
+<TR><TD VALIGN=TOP>
+<B>GetPosition()</B>
+</TD>
+
+<TD VALIGN=TOP>
+Returns a wxPoint
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>GetPositionTuple()</B>
+</TD>
+
+<TD VALIGN=TOP>
+Returns a tuple (x, y)
+</TD></TR>
+
+
+</TABLE>
+</UL></UL>
+
+<P>
+
+<HR>
+<A NAME="topic1037"></A>
+<H3>wxWindow::GetLabel</H3>
+<P>
+<B>virtual wxString&amp; </B> <B>GetLabel</B>() <B>const</B><P>
+Generic way of getting a label from any window, for
+identification purposes.<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+The interpretation of this function differs from class to class.
+For frames and dialogs, the value returned is the title. For buttons or static text controls, it is
+the button text. This function can be useful for meta-programs (such as testing
+tools or special-needs access programs) which need to identify windows
+by name.<P>
+
+<HR>
+<A NAME="wxwindowgetname"></A>
+<H3>wxWindow::GetName</H3>
+<P>
+<B>virtual wxString&amp; </B> <B>GetName</B>() <B>const</B><P>
+Returns the window's name.<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+This name is not guaranteed to be unique; it is up to the programmer to supply an appropriate
+name in the window constructor or via <A HREF="wx260.htm#wxwindowsetname">wxWindow::SetName</A>.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowsetname">wxWindow::SetName</A><P>
+
+<HR>
+<A NAME="topic1038"></A>
+<H3>wxWindow::GetParent</H3>
+<P>
+<B>virtual wxWindow*</B> <B>GetParent</B>() <B>const</B><P>
+Returns the parent of the window, or NULL if there is no parent.<P>
+
+<HR>
+<A NAME="wxwindowgetrect"></A>
+<H3>wxWindow::GetRect</H3>
+<P>
+<B>virtual wxRect</B> <B>GetRect</B>() <B>const</B><P>
+Returns the size and position of the window as a <A HREF="wx193.htm#wxrect">wxRect</A> object.<P>
+
+<HR>
+<A NAME="wxwindowgetreturncode"></A>
+<H3>wxWindow::GetReturnCode</H3>
+<P>
+<B>int</B> <B>GetReturnCode</B>()<P>
+Gets the return code for this window.<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+A return code is normally associated with a modal dialog, where <A HREF="wx71.htm#wxdialogshowmodal">wxDialog::ShowModal</A> returns
+a code to the application.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowsetreturncode">wxWindow::SetReturnCode</A>, <A HREF="wx71.htm#wxdialogshowmodal">wxDialog::ShowModal</A>,
+<A HREF="wx71.htm#wxdialogendmodal">wxDialog::EndModal</A><P>
+
+<HR>
+<A NAME="wxwindowgetscrollthumb"></A>
+<H3>wxWindow::GetScrollThumb</H3>
+<P>
+<B>virtual int</B> <B>GetScrollThumb</B>(<B>int </B><I>orientation</I>)<P>
+Returns the built-in scrollbar thumb size.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowsetscrollbar">wxWindow::SetScrollbar</A><P>
+
+<HR>
+<A NAME="wxwindowgetscrollpos"></A>
+<H3>wxWindow::GetScrollPos</H3>
+<P>
+<B>virtual int</B> <B>GetScrollPos</B>(<B>int </B><I>orientation</I>)<P>
+Returns the built-in scrollbar position.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+See <A HREF="wx260.htm#wxwindowsetscrollbar">wxWindow::SetScrollbar</A><P>
+
+<HR>
+<A NAME="wxwindowgetscrollrange"></A>
+<H3>wxWindow::GetScrollRange</H3>
+<P>
+<B>virtual int</B> <B>GetScrollRange</B>(<B>int </B><I>orientation</I>)<P>
+Returns the built-in scrollbar range.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowsetscrollbar">wxWindow::SetScrollbar</A><P>
+
+<HR>
+<A NAME="wxwindowgetsize"></A>
+<H3>wxWindow::GetSize</H3>
+<P>
+<B>virtual void</B> <B>GetSize</B>(<B>int* </B><I>width</I>, <B>int* </B><I>height</I>) <B>const</B><P>
+<B>virtual wxSize</B> <B>GetSize</B>() <B>const</B><P>
+This gets the size of the entire window in pixels.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>width</I><UL><UL>
+Receives the window width.</UL></UL>
+<P>
+<I>height</I><UL><UL>
+Receives the window height.</UL></UL>
+<P>
+<B><FONT COLOR="#0000C8">wxPython note:</FONT></B><BR>
+ In place of a single overloaded method name, wxPython
+implements the following methods:<P>
+
+<UL><UL>
+
+<TABLE>
+
+
+<TR><TD VALIGN=TOP>
+<B>GetSize()</B>
+</TD>
+
+<TD VALIGN=TOP>
+Returns a wxSize
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>GetSizeTuple()</B>
+</TD>
+
+<TD VALIGN=TOP>
+Returns a 2-tuple (width, height)
+</TD></TR>
+
+
+</TABLE>
+</UL></UL>
+
+<P>
+
+<HR>
+<A NAME="topic1039"></A>
+<H3>wxWindow::GetTextExtent</H3>
+<P>
+<B>virtual void</B> <B>GetTextExtent</B>(<B>const wxString&amp; </B><I>string</I>, <B>int* </B><I>x</I>, <B>int* </B><I>y</I>,
+ <B>int* </B><I>descent = NULL</I>, <B>int* </B><I>externalLeading = NULL</I>,
+ <B>const wxFont* </B><I>font = NULL</I>, <B>const bool</B><I> use16 = FALSE</I>) <B>const</B><P>
+Gets the dimensions of the string as it would be drawn on the
+window with the currently selected font.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>string</I><UL><UL>
+String whose extent is to be measured.</UL></UL>
+<P>
+<I>x</I><UL><UL>
+Return value for width.</UL></UL>
+<P>
+<I>y</I><UL><UL>
+Return value for height.</UL></UL>
+<P>
+<I>descent</I><UL><UL>
+Return value for descent (optional).</UL></UL>
+<P>
+<I>externalLeading</I><UL><UL>
+Return value for external leading (optional).</UL></UL>
+<P>
+<I>font</I><UL><UL>
+Font to use instead of the current window font (optional).</UL></UL>
+<P>
+<I>use16</I><UL><UL>
+If TRUE, <I>string</I> contains 16-bit characters. The default is FALSE.</UL></UL>
+<P>
+
+<B><FONT COLOR="#0000C8">wxPython note:</FONT></B><BR>
+ In place of a single overloaded method name, wxPython
+implements the following methods:<P>
+
+<UL><UL>
+
+<TABLE>
+
+
+<TR><TD VALIGN=TOP>
+<B>GetTextExtent(string)</B>
+</TD>
+
+<TD VALIGN=TOP>
+Returns a 2-tuple,  (width, height)
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>GetFullTextExtent(string, font=NULL)</B>
+</TD>
+
+<TD VALIGN=TOP>
+Returns a
+4-tuple, (width, height, descent, externalLeading)
+</TD></TR>
+
+
+</TABLE>
+</UL></UL>
+
+<P>
+
+
+<HR>
+<A NAME="wxwindowgettitle"></A>
+<H3>wxWindow::GetTitle</H3>
+<P>
+<B>virtual wxString</B> <B>GetTitle</B>()<P>
+Gets the window's title. Applicable only to frames and dialogs.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowsettitle">wxWindow::SetTitle</A><P>
+
+<HR>
+<A NAME="wxwindowgetupdateregion"></A>
+<H3>wxWindow::GetUpdateRegion</H3>
+<P>
+<B>virtual wxRegion</B> <B>GetUpdateRegion</B>() <B>const</B><P>
+Returns the region specifying which parts of the window have been damaged. Should
+only be called within an <A HREF="wx260.htm#wxwindowonpaint">OnPaint</A> event handler.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx195.htm#wxregion">wxRegion</A>, <A HREF="wx196.htm#wxregioniterator">wxRegionIterator</A>, <A HREF="wx260.htm#wxwindowonpaint">wxWindow::OnPaint</A><P>
+
+<HR>
+<A NAME="topic1040"></A>
+<H3>wxWindow::GetWindowStyleFlag</H3>
+<P>
+<B>long</B> <B>GetWindowStyleFlag</B>() <B>const</B><P>
+Gets the window style that was passed to the consructor or <B>Create</B> member.<P>
+
+<HR>
+<A NAME="wxwindowinitdialog"></A>
+<H3>wxWindow::InitDialog</H3>
+<P>
+<B>void</B> <B>InitDialog</B>()<P>
+Sends an <A HREF="wx260.htm#wxwindowoninitdialog">wxWindow::OnInitDialog</A> event, which
+in turn transfers data to the dialog via validators.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowoninitdialog">wxWindow::OnInitDialog</A><P>
+
+<HR>
+<A NAME="wxwindowisenabled"></A>
+<H3>wxWindow::IsEnabled</H3>
+<P>
+<B>virtual bool</B> <B>IsEnabled</B>() <B>const</B><P>
+Returns TRUE if the window is enabled for input, FALSE otherwise.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowenable">wxWindow::Enable</A><P>
+
+<HR>
+<A NAME="wxwindowisretained"></A>
+<H3>wxWindow::IsRetained</H3>
+<P>
+<B>virtual bool</B> <B>IsRetained</B>() <B>const</B><P>
+Returns TRUE if the window is retained, FALSE otherwise.<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+Retained windows are only available on X platforms.<P>
+
+<HR>
+<A NAME="wxwindowisshown"></A>
+<H3>wxWindow::IsShown</H3>
+<P>
+<B>virtual bool</B> <B>IsShown</B>() <B>const</B><P>
+Returns TRUE if the window is shown, FALSE if it has been hidden.<P>
+
+<HR>
+<A NAME="wxwindowlayout"></A>
+<H3>wxWindow::Layout</H3>
+<P>
+<B>void</B> <B>Layout</B>()<P>
+Invokes the constraint-based layout algorithm for this window. It is called
+automatically by the default <B>wxWindow::OnSize</B> member.<P>
+
+<HR>
+<A NAME="wxwindowloadfromresource"></A>
+<H3>wxWindow::LoadFromResource</H3>
+<P>
+<B>virtual bool</B> <B>LoadFromResource</B>(<B>wxWindow* </B><I>parent</I>,
+<B>const wxString&amp; </B><I>resourceName</I>, <B>const wxResourceTable* </B><I>resourceTable = NULL</I>)<P>
+Loads a panel or dialog from a resource file.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>parent</I><UL><UL>
+Parent window.</UL></UL>
+<P>
+<I>resourceName</I><UL><UL>
+The name of the resource to load.</UL></UL>
+<P>
+<I>resourceTable</I><UL><UL>
+The resource table to load it from. If this is NULL, the
+default resource table will be used.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Return value</FONT></B><P>
+TRUE if the operation succeeded, otherwise FALSE.<P>
+
+<HR>
+<A NAME="wxwindowlower"></A>
+<H3>wxWindow::Lower</H3>
+<P>
+<B>void</B> <B>Lower</B>()<P>
+Lowers the window to the bottom of the window hierarchy if it is a managed window (dialog
+or frame).<P>
+
+<HR>
+<A NAME="wxwindowmakemodal"></A>
+<H3>wxWindow::MakeModal</H3>
+<P>
+<B>virtual void</B> <B>MakeModal</B>(<B>const bool </B><I>flag</I>)<P>
+Disables all other windows in the application so that
+the user can only interact with this window.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>flag</I><UL><UL>
+If TRUE, this call disables all other windows in the application so that
+the user can only interact with this window. If FALSE, the effect is reversed.</UL></UL>
+<P>
+
+<HR>
+<A NAME="wxwindowmove"></A>
+<H3>wxWindow::Move</H3>
+<P>
+<B>void</B> <B>Move</B>(<B>int</B><I> x</I>, <B>int</B><I> y</I>)<P>
+<B>void</B> <B>Move</B>(<B>const wxPoint&amp;</B><I> pt</I>)<P>
+Moves the window to the given position.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>x</I><UL><UL>
+Required x position.</UL></UL>
+<P>
+<I>y</I><UL><UL>
+Required y position.</UL></UL>
+<P>
+<I>pt</I><UL><UL>
+<A HREF="wx171.htm#wxpoint">wxPoint</A> object representing the position.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+Implementations of SetSize can also implicitly implement the
+wxWindow::Move function, which is defined in the base wxWindow class
+as the call:<P>
+<PRE>
+  SetSize(x, y, -1, -1, wxSIZE_USE_EXISTING);
+</PRE>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowsetsize">wxWindow::SetSize</A><P>
+<B><FONT COLOR="#0000C8">wxPython note:</FONT></B><BR>
+ In place of a single overloaded method name, wxPython
+implements the following methods:<P>
+
+<UL><UL>
+
+<TABLE>
+
+
+<TR><TD VALIGN=TOP>
+<B>Move(point)</B>
+</TD>
+
+<TD VALIGN=TOP>
+Accepts a wxPoint
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>MoveXY(x, y)</B>
+</TD>
+
+<TD VALIGN=TOP>
+Accepts a pair of integers
+</TD></TR>
+
+
+</TABLE>
+</UL></UL>
+
+<P>
+
+<HR>
+<A NAME="wxwindowonactivate"></A>
+<H3>wxWindow::OnActivate</H3>
+<P>
+<B>void</B> <B>OnActivate</B>(<B>wxActivateEvent&amp;</B><I> event</I>)<P>
+Called when a window is activated or deactivated.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>event</I><UL><UL>
+Object containing activation information.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+If the window is being activated, <A HREF="wx25.htm#wxactivateeventgetactive">wxActivateEvent::GetActive</A> returns TRUE,
+otherwise it returns FALSE (it is being deactivated).<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx25.htm#wxactivateevent">wxActivateEvent</A>,
+<A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
+
+<HR>
+<A NAME="wxwindowonchar"></A>
+<H3>wxWindow::OnChar</H3>
+<P>
+<B>void</B> <B>OnChar</B>(<B>wxKeyEvent&amp;</B><I> event</I>)<P>
+Called when the user has pressed a key that is not a modifier (SHIFT, CONTROL or ALT).<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>event</I><UL><UL>
+Object containing keypress information. See <A HREF="wx124.htm#wxkeyevent">wxKeyEvent</A> for
+details about this class.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+This member function is called in response to a keypress. To intercept this event,
+use the EVT_CHAR macro in an event table definition. Your <B>OnChar</B> handler may call this
+default function to achieve default keypress functionality.<P>
+Note that the ASCII values do not have explicit key codes: they are passed as ASCII
+values.<P>
+Note that not all keypresses can be intercepted this way. If you wish to intercept modifier
+keypresses, then you will need to use <A HREF="wx260.htm#wxwindowonkeydown">wxWindow::OnKeyDown</A> or
+<A HREF="wx260.htm#wxwindowonkeyup">wxWindow::OnKeyUp</A>.<P>
+Most, but not all, windows allow keypresses to be intercepted.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowonkeydown">wxWindow::OnKeyDown</A>, <A HREF="wx260.htm#wxwindowonkeyup">wxWindow::OnKeyUp</A>,
+<A HREF="wx124.htm#wxkeyevent">wxKeyEvent</A>, <A HREF="wx260.htm#wxwindowoncharhook">wxWindow::OnCharHook</A>,
+<A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
+
+<HR>
+<A NAME="wxwindowoncharhook"></A>
+<H3>wxWindow::OnCharHook</H3>
+<P>
+<B>void</B> <B>OnCharHook</B>(<B>wxKeyEvent&amp;</B><I> event</I>)<P>
+This member is called to allow the window to intercept keyboard events
+before they are processed by child windows.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>event</I><UL><UL>
+Object containing keypress information. See <A HREF="wx124.htm#wxkeyevent">wxKeyEvent</A> for
+details about this class.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+This member function is called in response to a keypress, if the window is active. To intercept this event,
+use the EVT_CHAR_HOOK macro in an event table definition. If you do not process a particular
+keypress, call <A HREF="wx84.htm#wxeventskip">wxEvent::Skip</A> to allow default processing.<P>
+An example of using this function is in the implementation of escape-character processing for wxDialog,
+where pressing ESC dismisses the dialog by <B>OnCharHook</B> 'forging' a cancel button press event.<P>
+Note that the ASCII values do not have explicit key codes: they are passed as ASCII
+values.<P>
+This function is only relevant to top-level windows (frames and dialogs), and under
+Windows only.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx124.htm#wxkeyevent">wxKeyEvent</A>, <A HREF="wx260.htm#wxwindowoncharhook">wxWindow::OnCharHook</A>,
+<A HREF="wx26.htm#wxapponcharhook">wxApp::OnCharHook</A>,
+<A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
+
+<HR>
+<A NAME="wxwindowoncommand"></A>
+<H3>wxWindow::OnCommand</H3>
+<P>
+<B>virtual void</B> <B>OnCommand</B>(<B>wxEvtHandler&amp; </B><I>object</I>, <B>wxCommandEvent&amp; </B><I>event</I>)<P>
+This virtual member function is called if the control does not handle the command event.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>object</I><UL><UL>
+Object receiving the command event.</UL></UL>
+<P>
+<I>event</I><UL><UL>
+Command event</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+This virtual function is provided mainly for backward compatibility. You can also intercept commands
+from child controls by using an event table, with identifiers or identifier ranges to identify
+the control(s) in question.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx52.htm#wxcommandevent">wxCommandEvent</A>,
+<A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
+
+<HR>
+<A NAME="wxwindowonclose"></A>
+<H3>wxWindow::OnClose</H3>
+<P>
+<B>virtual bool</B> <B>OnClose</B>()<P>
+Called when the user has tried to close a a frame
+or dialog box using the window manager (X) or system menu (Windows).<P>
+<B>Note:</B> This is an obsolete function.
+It is superceded by the <A HREF="wx260.htm#wxwindowonclosewindow">wxWindow::OnCloseWindow</A> event
+handler.<P>
+<B><FONT COLOR="#FF0000">Return value</FONT></B><P>
+If TRUE is returned by OnClose, the window will be deleted by the system, otherwise the
+attempt will be ignored. Do not delete the window from within this handler, although
+you may delete other windows.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx296.htm#windowdeletionoverview">Window deletion overview</A>,
+<A HREF="wx260.htm#wxwindowclose">wxWindow::Close</A>,
+<A HREF="wx260.htm#wxwindowonclosewindow">wxWindow::OnCloseWindow</A>,
+<A HREF="wx45.htm#wxcloseevent">wxCloseEvent</A><P>
+
+<HR>
+<A NAME="wxwindowonclosewindow"></A>
+<H3>wxWindow::OnCloseWindow</H3>
+<P>
+<B>void</B> <B>OnCloseWindow</B>(<B>wxCloseEvent&amp; </B><I>event</I>)<P>
+This is an event handler function called when the user has tried to close a a frame
+or dialog box using the window manager (X) or system menu (Windows). It is
+called via the <A HREF="wx260.htm#wxwindowclose">wxWindow::Close</A> function, so
+that the application can also invoke the handler programmatically.<P>
+Use the EVT_CLOSE event table macro to handle close events.<P>
+You should check whether the application is forcing the deletion of the window
+using <A HREF="wx45.htm#wxcloseeventgetforce">wxCloseEvent::GetForce</A>. If this is TRUE,
+destroy the window using <A HREF="wx260.htm#wxwindowdestroy">wxWindow::Destroy</A>.
+If not, it is up to you whether you respond by destroying the window.<P>
+(Note: GetForce is now superceded by CanVeto. So to test whether forced destruction of
+the window is required, test for the negative of CanVeto. If CanVeto returns FALSE,
+it is not possible to skip window deletion.)<P>
+If you don't destroy the window, you should call <A HREF="wx45.htm#wxcloseeventveto">wxCloseEvent::Veto</A> to
+let the calling code know that you did not destroy the window. This allows the <A HREF="wx260.htm#wxwindowclose">wxWindow::Close</A> function
+to return TRUE or FALSE depending on whether the close instruction was honoured or not.<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+The <A HREF="wx260.htm#wxwindowonclose">wxWindow::OnClose</A> virtual function remains
+for backward compatibility with earlier versions of wxWindows. The
+default <B>OnCloseWindow</B> handler for wxFrame and wxDialog will call <B>OnClose</B>,
+destroying the window if it returns TRUE or if the close is being forced.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx296.htm#windowdeletionoverview">Window deletion overview</A>,
+<A HREF="wx260.htm#wxwindowclose">wxWindow::Close</A>,
+<A HREF="wx260.htm#wxwindowonclose">wxWindow::OnClose</A>,
+<A HREF="wx260.htm#wxwindowdestroy">wxWindow::Destroy</A>,
+<A HREF="wx45.htm#wxcloseevent">wxCloseEvent</A>,
+<A HREF="wx26.htm#wxapponqueryendsession">wxApp::OnQueryEndSession</A>,
+<A HREF="wx26.htm#wxapponendsession">wxApp::OnEndSession</A><P>
+
+<HR>
+<A NAME="wxwindowondropfiles"></A>
+<H3>wxWindow::OnDropFiles</H3>
+<P>
+<B>void</B> <B>OnDropFiles</B>(<B>wxDropFilesEvent&amp;</B><I> event</I>)<P>
+Called when files have been dragged from the file manager to the window.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>event</I><UL><UL>
+Drop files event. For more information, see <A HREF="wx80.htm#wxdropfilesevent">wxDropFilesEvent</A>.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+The window must have previously been enabled for dropping by calling
+<A HREF="wx260.htm#wxwindowdragacceptfiles">wxWindow::DragAcceptFiles</A>.<P>
+This event is only generated under Windows.<P>
+To intercept this event, use the EVT_DROP_FILES macro in an event table definition.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx80.htm#wxdropfilesevent">wxDropFilesEvent</A>, <A HREF="wx260.htm#wxwindowdragacceptfiles">wxWindow::DragAcceptFiles</A>,
+<A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
+
+<HR>
+<A NAME="wxwindowonerasebackground"></A>
+<H3>wxWindow::OnEraseBackground</H3>
+<P>
+<B>void</B> <B>OnEraseBackground</B>(<B>wxEraseEvent&amp;</B><I> event</I>)<P>
+Called when the background of the window needs to be erased.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>event</I><UL><UL>
+Erase background event. For more information, see <A HREF="wx83.htm#wxeraseevent">wxEraseEvent</A>.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+This event is only generated under Windows.<P>
+To intercept this event, use the EVT_ERASE_BACKGROUND macro in an event table definition.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx83.htm#wxeraseevent">wxEraseEvent</A>, <A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
+
+<HR>
+<A NAME="wxwindowonkeydown"></A>
+<H3>wxWindow::OnKeyDown</H3>
+<P>
+<B>void</B> <B>OnKeyDown</B>(<B>wxKeyEvent&amp;</B><I> event</I>)<P>
+Called when the user has pressed a key, before it is translated into an ASCII value using other
+modifier keys that might be pressed at the same time.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>event</I><UL><UL>
+Object containing keypress information. See <A HREF="wx124.htm#wxkeyevent">wxKeyEvent</A> for
+details about this class.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+This member function is called in response to a key down event. To intercept this event,
+use the EVT_KEY_DOWN macro in an event table definition. Your <B>OnKeyDown</B> handler may call this
+default function to achieve default keypress functionality.<P>
+Note that not all keypresses can be intercepted this way. If you wish to intercept special
+keys, such as shift, control, and function keys, then you will need to use <A HREF="wx260.htm#wxwindowonkeydown">wxWindow::OnKeyDown</A> or
+<A HREF="wx260.htm#wxwindowonkeyup">wxWindow::OnKeyUp</A>.<P>
+Most, but not all, windows allow keypresses to be intercepted.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowonchar">wxWindow::OnChar</A>, <A HREF="wx260.htm#wxwindowonkeyup">wxWindow::OnKeyUp</A>,
+<A HREF="wx124.htm#wxkeyevent">wxKeyEvent</A>, <A HREF="wx260.htm#wxwindowoncharhook">wxWindow::OnCharHook</A>,
+<A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
+
+<HR>
+<A NAME="wxwindowonkeyup"></A>
+<H3>wxWindow::OnKeyUp</H3>
+<P>
+<B>void</B> <B>OnKeyUp</B>(<B>wxKeyEvent&amp;</B><I> event</I>)<P>
+Called when the user has released a key.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>event</I><UL><UL>
+Object containing keypress information. See <A HREF="wx124.htm#wxkeyevent">wxKeyEvent</A> for
+details about this class.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+This member function is called in response to a key up event. To intercept this event,
+use the EVT_KEY_UP macro in an event table definition. Your <B>OnKeyUp</B> handler may call this
+default function to achieve default keypress functionality.<P>
+Note that not all keypresses can be intercepted this way. If you wish to intercept special
+keys, such as shift, control, and function keys, then you will need to use <A HREF="wx260.htm#wxwindowonkeydown">wxWindow::OnKeyDown</A> or
+<A HREF="wx260.htm#wxwindowonkeyup">wxWindow::OnKeyUp</A>.<P>
+Most, but not all, windows allow key up events to be intercepted.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowonchar">wxWindow::OnChar</A>, <A HREF="wx260.htm#wxwindowonkeydown">wxWindow::OnKeyDown</A>,
+<A HREF="wx124.htm#wxkeyevent">wxKeyEvent</A>, <A HREF="wx260.htm#wxwindowoncharhook">wxWindow::OnCharHook</A>,
+<A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
+
+<HR>
+<A NAME="wxwindowonkillfocus"></A>
+<H3>wxWindow::OnKillFocus</H3>
+<P>
+<B>void</B> <B>OnKillFocus</B>(<B>wxFocusEvent&amp; </B><I>event</I>)<P>
+Called when a window's focus is being killed.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>event</I><UL><UL>
+The focus event. For more information, see <A HREF="wx99.htm#wxfocusevent">wxFocusEvent</A>.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+To intercept this event, use the macro EVT_KILL_FOCUS in an event table definition.<P>
+Most, but not all, windows respond to this event.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx99.htm#wxfocusevent">wxFocusEvent</A>, <A HREF="wx260.htm#wxwindowonsetfocus">wxWindow::OnSetFocus</A>,
+<A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
+
+<HR>
+<A NAME="wxwindowonidle"></A>
+<H3>wxWindow::OnIdle</H3>
+<P>
+<B>void</B> <B>OnIdle</B>(<B>wxIdleEvent&amp; </B><I>event</I>)<P>
+Provide this member function for any processing which needs to be done
+when the application is idle.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx26.htm#wxapponidle">wxApp::OnIdle</A>, <A HREF="wx113.htm#wxidleevent">wxIdleEvent</A><P>
+
+<HR>
+<A NAME="wxwindowoninitdialog"></A>
+<H3>wxWindow::OnInitDialog</H3>
+<P>
+<B>void</B> <B>OnInitDialog</B>(<B>wxInitDialogEvent&amp;</B><I> event</I>)<P>
+Default handler for the wxEVT_INIT_DIALOG event. Calls <A HREF="wx260.htm#wxwindowtransferdatatowindow">wxWindow::TransferDataToWindow</A>.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>event</I><UL><UL>
+Dialog initialisation event.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+Gives the window the default behaviour of transferring data to child controls via
+the validator that each control has.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx255.htm#wxvalidator">wxValidator</A>, <A HREF="wx260.htm#wxwindowtransferdatatowindow">wxWindow::TransferDataToWindow</A><P>
+
+<HR>
+<A NAME="wxwindowonmenuhighlight"></A>
+<H3>wxWindow::OnMenuHighlight</H3>
+<P>
+<B>void</B> <B>OnMenuHighlight</B>(<B>wxMenuEvent&amp; </B><I>event</I>)<P>
+Called when a menu select is received from a menu bar: that is, the
+mouse cursor is over a menu item, but the left mouse button has not been
+pressed.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>event</I><UL><UL>
+The menu highlight event. For more information, see <A HREF="wx143.htm#wxmenuevent">wxMenuEvent</A>.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+You can choose any member function to receive
+menu select events, using the EVT_MENU_HIGHLIGHT macro for individual menu items or EVT_MENU_HIGHLIGHT_ALL macro
+for all menu items.<P>
+The default implementation for <A HREF="wx104.htm#wxframeonmenuhighlight">wxFrame::OnMenuHighlight</A> displays help
+text in the first field of the status bar.<P>
+This function was known as <B>OnMenuSelect</B> in earlier versions of wxWindows, but this was confusing
+since a selection is normally a left-click action.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx143.htm#wxmenuevent">wxMenuEvent</A>,
+<A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
+
+
+<HR>
+<A NAME="wxwindowonmouseevent"></A>
+<H3>wxWindow::OnMouseEvent</H3>
+<P>
+<B>void</B> <B>OnMouseEvent</B>(<B>wxMouseEvent&amp;</B><I> event</I>)<P>
+Called when the user has initiated an event with the
+mouse.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>event</I><UL><UL>
+The mouse event. See <A HREF="wx150.htm#wxmouseevent">wxMouseEvent</A> for
+more details.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+Most, but not all, windows respond to this event.<P>
+To intercept this event, use the EVT_MOUSE_EVENTS macro in an event table definition, or individual
+mouse event macros such as EVT_LEFT_DOWN.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx150.htm#wxmouseevent">wxMouseEvent</A>,
+<A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
+
+<HR>
+<A NAME="wxwindowonmove"></A>
+<H3>wxWindow::OnMove</H3>
+<P>
+<B>void</B> <B>OnMove</B>(<B>wxMoveEvent&amp; </B><I>event</I>)<P>
+Called when a window is moved.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>event</I><UL><UL>
+The move event. For more information, see <A HREF="wx151.htm#wxmoveevent">wxMoveEvent</A>.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+Use the EVT_MOVE macro to intercept move events.<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+Not currently implemented.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx151.htm#wxmoveevent">wxMoveEvent</A>,
+<A HREF="wx104.htm#wxframeonsize">wxFrame::OnSize</A>,
+<A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
+
+<HR>
+<A NAME="wxwindowonpaint"></A>
+<H3>wxWindow::OnPaint</H3>
+<P>
+<B>void</B> <B>OnPaint</B>(<B>wxPaintEvent&amp; </B><I>event</I>)<P>
+Sent to the event handler when the window must be refreshed.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>event</I><UL><UL>
+Paint event. For more information, see <A HREF="wx164.htm#wxpaintevent">wxPaintEvent</A>.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+Use the EVT_PAINT macro in an event table definition to intercept paint events.<P>
+In a paint event handler, the application should always create a <A HREF="wx163.htm#wxpaintdc">wxPaintDC</A> object.<P>
+For example:<P>
+<FONT SIZE=2><PRE>
+  void MyWindow::OnPaint(wxPaintEvent& event)
+  {
+      wxPaintDC dc(this);
+
+      DrawMyDocument(dc);
+  }
+</PRE>
+</FONT>You can optimize painting by retrieving the rectangles
+that have been damaged and only repainting these. The rectangles are in
+terms of the client area, and are unscrolled, so you will need to do
+some calculations using the current view position to obtain logical,
+scrolled units.<P>
+Here is an example of using the <A HREF="wx196.htm#wxregioniterator">wxRegionIterator</A> class:<P>
+<FONT SIZE=2><PRE>
+// Called when window needs to be repainted.
+void MyWindow::OnPaint(wxPaintEvent& event)
+{
+  wxPaintDC dc(this);
+
+  // Find Out where the window is scrolled to
+  int vbX,vbY;                     // Top left corner of client
+  ViewStart(&vbX,&vbY);
+
+  int vX,vY,vW,vH;                 // Dimensions of client area in pixels
+  wxRegionIterator upd(GetUpdateRegion()); // get the update rect list
+
+  while (upd)
+  {
+    vX = upd.GetX();
+    vY = upd.GetY();
+    vW = upd.GetW();
+    vH = upd.GetH();
+
+    // Alternatively we can do this:
+    // wxRect rect;
+    // upd.GetRect(&rect);
+
+    // Repaint this rectangle
+    ...some code...
+
+    upd ++ ;
+  }
+}
+</PRE>
+</FONT><B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx164.htm#wxpaintevent">wxPaintEvent</A>,
+<A HREF="wx163.htm#wxpaintdc">wxPaintDC</A>,
+<A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
+
+<HR>
+<A NAME="wxwindowonscroll"></A>
+<H3>wxWindow::OnScroll</H3>
+<P>
+<B>void</B> <B>OnScroll</B>(<B>wxScrollEvent&amp; </B><I>event</I>)<P>
+Called when a scroll event is received from one of the window's built-in scrollbars.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>event</I><UL><UL>
+Command event. Retrieve the new scroll position by
+calling <A HREF="wx202.htm#wxscrolleventgetposition">wxScrollEvent::GetPosition</A>, and the
+scrollbar orientation by calling <A HREF="wx202.htm#wxscrolleventgetorientation">wxScrollEvent::GetOrientation</A>.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+Note that it is not possible to distinguish between horizontal and vertical scrollbars
+until the function is executing (you can't have one function for vertical, another
+for horizontal events).<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx202.htm#wxscrollevent">wxScrollEvent</A>,
+<A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
+
+<HR>
+<A NAME="wxwindowonsetfocus"></A>
+<H3>wxWindow::OnSetFocus</H3>
+<P>
+<B>void</B> <B>OnSetFocus</B>(<B>wxFocusEvent&amp; </B><I>event</I>)<P>
+Called when a window's focus is being set.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>event</I><UL><UL>
+The focus event. For more information, see <A HREF="wx99.htm#wxfocusevent">wxFocusEvent</A>.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+To intercept this event, use the macro EVT_SET_FOCUS in an event table definition.<P>
+Most, but not all, windows respond to this event.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx99.htm#wxfocusevent">wxFocusEvent</A>, <A HREF="wx260.htm#wxwindowonkillfocus">wxWindow::OnKillFocus</A>,
+<A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
+
+<HR>
+<A NAME="wxwindowonsize"></A>
+<H3>wxWindow::OnSize</H3>
+<P>
+<B>void</B> <B>OnSize</B>(<B>wxSizeEvent&amp; </B><I>event</I>)<P>
+Called when the window has been resized.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>event</I><UL><UL>
+Size event. For more information, see <A HREF="wx206.htm#wxsizeevent">wxSizeEvent</A>.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+You may wish to use this for frames to resize their child windows as appropriate.<P>
+Note that the size passed is of
+the whole window: call <A HREF="wx260.htm#wxwindowgetclientsize">wxWindow::GetClientSize</A> for the area which may be
+used by the application.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx206.htm#wxsizeevent">wxSizeEvent</A>,
+<A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
+
+<HR>
+<A NAME="wxwindowonsyscolourchanged"></A>
+<H3>wxWindow::OnSysColourChanged</H3>
+<P>
+<B>void</B> <B>OnSysColourChanged</B>(<B>wxOnSysColourChangedEvent&amp; </B><I>event</I>)<P>
+Called when the user has changed the system colours.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>event</I><UL><UL>
+System colour change event. For more information, see <A HREF="wx227.htm#wxsyscolourchangedevent">wxSysColourChangedEvent</A>.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx227.htm#wxsyscolourchangedevent">wxSysColourChangedEvent</A>,
+<A HREF="wx299.htm#eventhandlingoverview">Event handling overview</A><P>
+
+<HR>
+<A NAME="wxwindowpopeventhandler"></A>
+<H3>wxWindow::PopEventHandler</H3>
+<P>
+<B>wxEvtHandler*</B> <B>PopEventHandler</B>(<B>bool </B><I>deleteHandler = FALSE</I>) <B>const</B><P>
+Removes and returns the top-most event handler on the event handler stack.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>deleteHandler</I><UL><UL>
+If this is TRUE, the handler will be deleted after it is removed. The
+default value is FALSE.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowseteventhandler">wxWindow::SetEventHandler</A>,
+<A HREF="wx260.htm#wxwindowgeteventhandler">wxWindow::GetEventHandler</A>,
+<A HREF="wx260.htm#wxwindowpusheventhandler">wxWindow::PushEventHandler</A>,
+<A HREF="wx85.htm#wxevthandlerprocessevent">wxEvtHandler::ProcessEvent</A>,
+<A HREF="wx85.htm#wxevthandler">wxEvtHandler</A><P>
+
+<HR>
+<A NAME="wxwindowpopupmenu"></A>
+<H3>wxWindow::PopupMenu</H3>
+<P>
+<B>virtual bool</B> <B>PopupMenu</B>(<B>wxMenu* </B><I>menu</I>, <B>int </B><I>x</I>, <B>int </B><I>y</I>)<P>
+Pops up the given menu at the specified coordinates, relative to this
+window, and returns control when the user has dismissed the menu. If a
+menu item is selected, the callback defined for the menu is called with
+wxMenu and wxCommandEvent reference arguments. The callback should access
+the commandInt member of the event to check the selected menu identifier.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>menu</I><UL><UL>
+Menu to pop up.</UL></UL>
+<P>
+<I>x</I><UL><UL>
+Required x position for the menu to appear.</UL></UL>
+<P>
+<I>y</I><UL><UL>
+Required y position for the menu to appear.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx140.htm#wxmenu">wxMenu</A><P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+Just before the menu is popped up, <A HREF="wx140.htm#wxmenuupdateui">wxMenu::UpdateUI</A> is called
+to ensure that the menu items are in the correct state.<P>
+
+<HR>
+<A NAME="wxwindowpusheventhandler"></A>
+<H3>wxWindow::PushEventHandler</H3>
+<P>
+<B>void</B> <B>PushEventHandler</B>(<B>wxEvtHandler* </B><I>handler</I>)<P>
+Pushes this event handler onto the event stack for the window.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>handler</I><UL><UL>
+Specifies the handler to be pushed.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+An event handler is an object that is capable of processing the events
+sent to a window. By default, the window is its own event handler, but
+an application may wish to substitute another, for example to allow
+central implementation of event-handling for a variety of different
+window classes.<P>
+<A HREF="wx260.htm#wxwindowpusheventhandler">wxWindow::PushEventHandler</A> allows
+an application to set up a chain of event handlers, where an event not handled by one event handler is
+handed to the next one in the chain. Use <A HREF="wx260.htm#wxwindowpopeventhandler">wxWindow::PopEventHandler</A> to
+remove the event handler.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowseteventhandler">wxWindow::SetEventHandler</A>,
+<A HREF="wx260.htm#wxwindowgeteventhandler">wxWindow::GetEventHandler</A>,
+<A HREF="wx260.htm#wxwindowpusheventhandler">wxWindow::PopEventHandler</A>,
+<A HREF="wx85.htm#wxevthandlerprocessevent">wxEvtHandler::ProcessEvent</A>,
+<A HREF="wx85.htm#wxevthandler">wxEvtHandler</A><P>
+
+<HR>
+<A NAME="wxwindowraise"></A>
+<H3>wxWindow::Raise</H3>
+<P>
+<B>void</B> <B>Raise</B>()<P>
+Raises the window to the top of the window hierarchy if it is a managed window (dialog
+or frame).<P>
+
+<HR>
+<A NAME="wxwindowrefresh"></A>
+<H3>wxWindow::Refresh</H3>
+<P>
+<B>virtual void</B> <B>Refresh</B>(<B>const bool</B><I> eraseBackground = TRUE</I>, <B>const wxRect* </B><I>rect
+= NULL</I>)<P>
+Causes a message or event to be generated to repaint the
+window.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>eraseBackground</I><UL><UL>
+If TRUE, the background will be
+erased.</UL></UL>
+<P>
+<I>rect</I><UL><UL>
+If non-NULL, only the given rectangle will
+be treated as damaged.</UL></UL>
+<P>
+
+<HR>
+<A NAME="wxwindowreleasemouse"></A>
+<H3>wxWindow::ReleaseMouse</H3>
+<P>
+<B>virtual void</B> <B>ReleaseMouse</B>()<P>
+Releases mouse input captured with <A HREF="wx260.htm#wxwindowcapturemouse">wxWindow::CaptureMouse</A>.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowcapturemouse">wxWindow::CaptureMouse</A><P>
+
+<HR>
+<A NAME="wxwindowremovechild"></A>
+<H3>wxWindow::RemoveChild</H3>
+<P>
+<B>virtual void</B> <B>RemoveChild</B>(<B>wxWindow* </B><I>child</I>)<P>
+Removes a child window.  This is called automatically by window deletion
+functions so should not be required by the application programmer.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>child</I><UL><UL>
+Child window to remove.</UL></UL>
+<P>
+
+<HR>
+<A NAME="wxwindowscreentoclient"></A>
+<H3>wxWindow::ScreenToClient</H3>
+<P>
+<B>virtual void</B> <B>ScreenToClient</B>(<B>int* </B><I>x</I>, <B>int* </B><I>y</I>) <B>const</B><P>
+<B>virtual wxPoint</B> <B>ScreenToClient</B>(<B>const wxPoint&amp; </B><I>pt</I>) <B>const</B><P>
+Converts from screen to client window coordinates.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>x</I><UL><UL>
+Stores the screen x coordinate and receives the client x coordinate.</UL></UL>
+<P>
+<I>y</I><UL><UL>
+Stores the screen x coordinate and receives the client x coordinate.</UL></UL>
+<P>
+<I>pt</I><UL><UL>
+The screen position for the second form of the function.</UL></UL>
+<P>
+<B><FONT COLOR="#0000C8">wxPython note:</FONT></B><BR>
+ In place of a single overloaded method name, wxPython
+implements the following methods:<P>
+
+<UL><UL>
+
+<TABLE>
+
+
+<TR><TD VALIGN=TOP>
+<B>ScreenToClient(point)</B>
+</TD>
+
+<TD VALIGN=TOP>
+Accepts and returns a wxPoint
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>ScreenToClientXY(x, y)</B>
+</TD>
+
+<TD VALIGN=TOP>
+Returns a 2-tuple, (x, y)
+</TD></TR>
+
+
+</TABLE>
+</UL></UL>
+
+<P>
+
+
+<HR>
+<A NAME="wxwindowscrollwindow"></A>
+<H3>wxWindow::ScrollWindow</H3>
+<P>
+<B>virtual void</B> <B>ScrollWindow</B>(<B>int </B><I>dx</I>, <B>int </B><I>dy</I>, <B>const wxRect*</B><I> rect = NULL</I>)<P>
+Physically scrolls the pixels in the window.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>dx</I><UL><UL>
+Amount to scroll horizontally.</UL></UL>
+<P>
+<I>dy</I><UL><UL>
+Amount to scroll vertically.</UL></UL>
+<P>
+<I>rect</I><UL><UL>
+Rectangle to invalidate. If this is NULL, the whole window is invalidated. If you
+pass a rectangle corresponding to the area of the window exposed by the scroll, your painting handler
+can optimise painting by checking for the invalidated region.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+Available only under Windows.<P>
+Use this function to optimise your scrolling implementations, to minimise the area that must be
+redrawn.<P>
+
+<HR>
+<A NAME="wxwindowsetacceleratortable"></A>
+<H3>wxWindow::SetAcceleratorTable</H3>
+<P>
+<B>virtual void</B> <B>SetAcceleratorTable</B>(<B>const wxAcceleratorTable&amp;</B><I> accel</I>)<P>
+Sets the accelerator table for this window. See <A HREF="wx24.htm#wxacceleratortable">wxAcceleratorTable</A>.<P>
+
+<HR>
+<A NAME="wxwindowsetautolayout"></A>
+<H3>wxWindow::SetAutoLayout</H3>
+<P>
+<B>void</B> <B>SetAutoLayout</B>(<B>const bool</B><I> autoLayout</I>)<P>
+Determines whether the <A HREF="wx260.htm#wxwindowlayout">wxWindow::Layout</A> function will
+be called automatically when the window is resized.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>autoLayout</I><UL><UL>
+Set this to TRUE if you wish the Layout function to be called
+from within wxWindow::OnSize functions.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowsetconstraints">wxWindow::SetConstraints</A><P>
+
+<HR>
+<A NAME="wxwindowsetbackgroundcolour"></A>
+<H3>wxWindow::SetBackgroundColour</H3>
+<P>
+<B>virtual void</B> <B>SetBackgroundColour</B>(<B>const wxColour&amp; </B><I>colour</I>)<P>
+Sets the background colour of the window.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>colour</I><UL><UL>
+The colour to be used as the background colour.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+The background colour is usually painted by the default
+<A HREF="wx260.htm#wxwindowonerasebackground">wxWindow::OnEraseBackground</A> event handler function.<P>
+Note that setting the background colour does not cause an immediate refresh, so you
+may wish to call <A HREF="wx260.htm#wxwindowclear">wxWindow::Clear</A> or <A HREF="wx260.htm#wxwindowrefresh">wxWindow::Refresh</A> after
+calling this function.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowgetbackgroundcolour">wxWindow::GetBackgroundColour</A>,
+<A HREF="wx260.htm#wxwindowsetforegroundcolour">wxWindow::SetForegroundColour</A>,
+<A HREF="wx260.htm#wxwindowgetforegroundcolour">wxWindow::GetForegroundColour</A>,
+<A HREF="wx260.htm#wxwindowclear">wxWindow::Clear</A>,
+<A HREF="wx260.htm#wxwindowrefresh">wxWindow::Refresh</A>,
+<A HREF="wx260.htm#wxwindowonerasebackground">wxWindow::OnEraseBackground</A><P>
+
+<HR>
+<A NAME="wxwindowsetclientsize"></A>
+<H3>wxWindow::SetClientSize</H3>
+<P>
+<B>virtual void</B> <B>SetClientSize</B>(<B>int</B><I> width</I>, <B>int</B><I> height</I>)<P>
+<B>virtual void</B> <B>SetClientSize</B>(<B>const wxSize&amp;</B><I> size</I>)<P>
+This sets the size of the window client area in pixels. Using this function to size a window
+tends to be more device-independent than <A HREF="wx260.htm#wxwindowsetsize">wxWindow::SetSize</A>, since the application need not
+worry about what dimensions the border or title bar have when trying to fit the window
+around panel items, for example.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>width</I><UL><UL>
+The required client area width.</UL></UL>
+<P>
+<I>height</I><UL><UL>
+The required client area height.</UL></UL>
+<P>
+<I>size</I><UL><UL>
+The required client size.</UL></UL>
+<P>
+<B><FONT COLOR="#0000C8">wxPython note:</FONT></B><BR>
+ In place of a single overloaded method name, wxPython
+implements the following methods:<P>
+
+<UL><UL>
+
+<TABLE>
+
+
+<TR><TD VALIGN=TOP>
+<B>SetClientSize(size)</B>
+</TD>
+
+<TD VALIGN=TOP>
+Accepts a wxSize
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>SetClientSizeWH(width, height)</B>
+</TD>
+
+<TD VALIGN=TOP>
+
+</TD></TR>
+
+
+</TABLE>
+</UL></UL>
+
+<P>
+
+<HR>
+<A NAME="wxwindowsetcursor"></A>
+<H3>wxWindow::SetCursor</H3>
+<P>
+<B>virtual void</B> <B>SetCursor</B>(<B>const wxCursor&amp;</B><I>cursor</I>)<P>
+Sets the window's cursor. Notice that setting the cursor for this window does
+not set it for its children so you'll need to explicitly call SetCursor() for
+them too if you need it.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>cursor</I><UL><UL>
+Specifies the cursor that the window should normally display.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx268.htm#wxsetcursor">::wxSetCursor</A>, <A HREF="wx59.htm#wxcursor">wxCursor</A><P>
+
+<HR>
+<A NAME="wxwindowseteventhandler"></A>
+<H3>wxWindow::SetEventHandler</H3>
+<P>
+<B>void</B> <B>SetEventHandler</B>(<B>wxEvtHandler* </B><I>handler</I>)<P>
+Sets the event handler for this window.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>handler</I><UL><UL>
+Specifies the handler to be set.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+An event handler is an object that is capable of processing the events
+sent to a window. By default, the window is its own event handler, but
+an application may wish to substitute another, for example to allow
+central implementation of event-handling for a variety of different
+window classes.<P>
+It is usually better to use <A HREF="wx260.htm#wxwindowpusheventhandler">wxWindow::PushEventHandler</A> since
+this sets up a chain of event handlers, where an event not handled by one event handler is
+handed to the next one in the chain.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowgeteventhandler">wxWindow::GetEventHandler</A>,
+<A HREF="wx260.htm#wxwindowpusheventhandler">wxWindow::PushEventHandler</A>,
+<A HREF="wx260.htm#wxwindowpusheventhandler">wxWindow::PopEventHandler</A>,
+<A HREF="wx85.htm#wxevthandlerprocessevent">wxEvtHandler::ProcessEvent</A>,
+<A HREF="wx85.htm#wxevthandler">wxEvtHandler</A><P>
+
+<HR>
+<A NAME="wxwindowsetconstraints"></A>
+<H3>wxWindow::SetConstraints</H3>
+<P>
+<B>void</B> <B>SetConstraints</B>(<B>wxLayoutConstraints* </B><I>constraints</I>)<P>
+Sets the window to have the given layout constraints. The window
+will then own the object, and will take care of its deletion.
+If an existing layout constraints object is already owned by the
+window, it will be deleted.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>constraints</I><UL><UL>
+The constraints to set. Pass NULL to disassociate and delete the window's
+constraints.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+You must call <A HREF="wx260.htm#wxwindowsetautolayout">wxWindow::SetAutoLayout</A> to tell a window to use
+the constraints automatically in OnSize; otherwise, you must
+override OnSize and call Layout explicitly.<P>
+
+<HR>
+<A NAME="wxwindowsetdroptarget"></A>
+<H3>wxWindow::SetDropTarget</H3>
+<P>
+<B>void</B> <B>SetDropTarget</B>(<B>wxDropTarget*</B><I> target</I>)<P>
+Associates a drop target with this window.<P>
+If the window already has a drop target, it is deleted.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowgetdroptarget">wxWindow::GetDropTarget</A>,
+<A HREF="wx312.htm#wxdndoverview">Drag and drop overview</A><P>
+
+<HR>
+<A NAME="wxwindowsetfocus"></A>
+<H3>wxWindow::SetFocus</H3>
+<P>
+<B>virtual void</B> <B>SetFocus</B>()<P>
+This sets the window to receive keyboard input.<P>
+
+<HR>
+<A NAME="wxwindowsetfont"></A>
+<H3>wxWindow::SetFont</H3>
+<P>
+<B>void</B> <B>SetFont</B>(<B>const wxFont&amp; </B><I>font</I>)<P>
+Sets the font for this window.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>font</I><UL><UL>
+Font to associate with this window.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowgetfont">wxWindow::GetFont</A><P>
+
+<HR>
+<A NAME="wxwindowsetforegroundcolour"></A>
+<H3>wxWindow::SetForegroundColour</H3>
+<P>
+<B>virtual void</B> <B>SetForegroundColour</B>(<B>const wxColour&amp; </B><I>colour</I>)<P>
+Sets the foreground colour of the window.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>colour</I><UL><UL>
+The colour to be used as the foreground colour.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+The interpretation of foreground colour is open to interpretation according
+to the window class; it may be the text colour or other colour, or it may not
+be used at all.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowgetforegroundcolour">wxWindow::GetForegroundColour</A>,
+<A HREF="wx260.htm#wxwindowsetbackgroundcolour">wxWindow::SetBackgroundColour</A>,
+<A HREF="wx260.htm#wxwindowgetbackgroundcolour">wxWindow::GetBackgroundColour</A><P>
+
+<HR>
+<A NAME="wxwindowsetid"></A>
+<H3>wxWindow::SetId</H3>
+<P>
+<B>void</B> <B>SetId</B>(<B>int</B><I> id</I>)<P>
+Sets the identifier of the window.<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+Each window has an integer identifier. If the application has not provided one,
+an identifier will be generated. Normally, the identifier should be provided
+on creation and should not be modified subsequently.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowgetid">wxWindow::GetId</A>,
+<A HREF="wx299.htm#windowids">Window identifiers</A><P>
+
+<HR>
+<A NAME="wxwindowsetname"></A>
+<H3>wxWindow::SetName</H3>
+<P>
+<B>virtual void</B> <B>SetName</B>(<B>const wxString&amp; </B><I>name</I>)<P>
+Sets the window's name.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>name</I><UL><UL>
+A name to set for the window.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowgetname">wxWindow::GetName</A><P>
+
+<HR>
+<A NAME="wxwindowsetpalette"></A>
+<H3>wxWindow::SetPalette</H3>
+<P>
+<B>virtual void</B> <B>SetPalette</B>(<B>wxPalette* </B><I>palette</I>)<P>
+Obsolete - use <A HREF="wx65.htm#wxdcsetpalette">wxDC::SetPalette</A> instead.<P>
+
+<HR>
+<A NAME="wxwindowsetreturncode"></A>
+<H3>wxWindow::SetReturnCode</H3>
+<P>
+<B>void</B> <B>SetReturnCode</B>(<B>int </B><I>retCode</I>)<P>
+Sets the return code for this window.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>retCode</I><UL><UL>
+The integer return code, usually a control identifier.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+A return code is normally associated with a modal dialog, where <A HREF="wx71.htm#wxdialogshowmodal">wxDialog::ShowModal</A> returns
+a code to the application. The function <A HREF="wx71.htm#wxdialogendmodal">wxDialog::EndModal</A> calls <B>SetReturnCode</B>.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowgetreturncode">wxWindow::GetReturnCode</A>, <A HREF="wx71.htm#wxdialogshowmodal">wxDialog::ShowModal</A>,
+<A HREF="wx71.htm#wxdialogendmodal">wxDialog::EndModal</A><P>
+
+<HR>
+<A NAME="wxwindowsetscrollbar"></A>
+<H3>wxWindow::SetScrollbar</H3>
+<P>
+<B>virtual void</B> <B>SetScrollbar</B>(<B>int </B><I>orientation</I>, <B>int </B><I>position</I>,
+<B>int </B><I>thumbSize</I>, <B>int </B><I>range</I>,
+<B>const bool </B><I>refresh = TRUE</I>)<P>
+Sets the scrollbar properties of a built-in scrollbar.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>orientation</I><UL><UL>
+Determines the scrollbar whose page size is to be set. May be wxHORIZONTAL or wxVERTICAL.</UL></UL>
+<P>
+<I>position</I><UL><UL>
+The position of the scrollbar in scroll units.</UL></UL>
+<P>
+<I>thumbSize</I><UL><UL>
+The size of the thumb, or visible portion of the scrollbar, in scroll units.</UL></UL>
+<P>
+<I>range</I><UL><UL>
+The maximum position of the scrollbar.</UL></UL>
+<P>
+<I>refresh</I><UL><UL>
+TRUE to redraw the scrollbar, FALSE otherwise.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+Let's say you wish to display 50 lines of text, using the same font.
+The window is sized so that you can only see 16 lines at a time.<P>
+You would use:<P>
+<FONT SIZE=2><PRE>
+  SetScrollbar(wxVERTICAL, 0, 16, 50);
+</PRE>
+</FONT><P>
+Note that with the window at this size, the thumb position can never go
+above 50 minus 16, or 34.<P>
+You can determine how many lines are currently visible by dividing the current view
+size by the character height in pixels.<P>
+When defining your own scrollbar behaviour, you will always need to recalculate
+the scrollbar settings when the window size changes. You could therefore put your
+scrollbar calculations and SetScrollbar
+call into a function named AdjustScrollbars, which can be called initially and also
+from your <A HREF="wx260.htm#wxwindowonsize">wxWindow::OnSize</A> event handler function.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx297.htm#scrollingoverview">Scrolling overview</A>,
+<A HREF="wx201.htm#wxscrollbar">wxScrollBar</A>, <A HREF="wx203.htm#wxscrolledwindow">wxScrolledWindow</A><P>
+
+<HR>
+<A NAME="wxwindowsetscrollpos"></A>
+<H3>wxWindow::SetScrollPos</H3>
+<P>
+<B>virtual void</B> <B>SetScrollPos</B>(<B>int </B><I>orientation</I>, <B>int </B><I>pos</I>, <B>const bool </B><I>refresh = TRUE</I>)<P>
+Sets the position of one of the built-in scrollbars.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>orientation</I><UL><UL>
+Determines the scrollbar whose position is to be set. May be wxHORIZONTAL or wxVERTICAL.</UL></UL>
+<P>
+<I>pos</I><UL><UL>
+Position in scroll units.</UL></UL>
+<P>
+<I>refresh</I><UL><UL>
+TRUE to redraw the scrollbar, FALSE otherwise.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+This function does not directly affect the contents of the window: it is up to the
+application to take note of scrollbar attributes and redraw contents accordingly.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowsetscrollbar">wxWindow::SetScrollbar</A>,
+<A HREF="wx260.htm#wxwindowsetscrollpos">wxWindow::GetScrollPos</A>,
+<A HREF="wx260.htm#wxwindowgetscrollthumb">wxWindow::GetScrollThumb</A>,
+<A HREF="wx201.htm#wxscrollbar">wxScrollBar</A>, <A HREF="wx203.htm#wxscrolledwindow">wxScrolledWindow</A><P>
+
+<HR>
+<A NAME="wxwindowsetsize"></A>
+<H3>wxWindow::SetSize</H3>
+<P>
+<B>virtual void</B> <B>SetSize</B>(<B>int</B><I> x</I>, <B>int</B><I> y</I>, <B>int</B><I> width</I>, <B>int</B><I> height</I>,
+ <B>int</B><I> sizeFlags = wxSIZE_AUTO</I>)<P>
+<B>virtual void</B> <B>SetSize</B>(<B>const wxRect&amp;</B><I> rect</I>)<P>
+Sets the size and position of the window in pixels.<P>
+<B>virtual void</B> <B>SetSize</B>(<B>int</B><I> width</I>, <B>int</B><I> height</I>)<P>
+<B>virtual void</B> <B>SetSize</B>(<B>const wxSize&amp;</B><I> size</I>)<P>
+Sets the size of the window in pixels.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>x</I><UL><UL>
+Required x position in pixels, or -1 to indicate that the existing
+value should be used.</UL></UL>
+<P>
+<I>y</I><UL><UL>
+Required y position in pixels, or -1 to indicate that the existing
+value should be used.</UL></UL>
+<P>
+<I>width</I><UL><UL>
+Required width in pixels, or -1 to indicate that the existing
+value should be used.</UL></UL>
+<P>
+<I>height</I><UL><UL>
+Required height position in pixels, or -1 to indicate that the existing
+value should be used.</UL></UL>
+<P>
+<I>size</I><UL><UL>
+<A HREF="wx205.htm#wxsize">wxSize</A> object for setting the size.</UL></UL>
+<P>
+<I>rect</I><UL><UL>
+<A HREF="wx193.htm#wxrect">wxRect</A> object for setting the position and size.</UL></UL>
+<P>
+<I>sizeFlags</I><UL><UL>
+Indicates the interpretation of other parameters. It is a bit list of the following:<P>
+<B>wxSIZE_AUTO_WIDTH</B>: a -1 width value is taken to indicate
+a wxWindows-supplied default width.<BR>
+
+<B>wxSIZE_AUTO_HEIGHT</B>: a -1 height value is taken to indicate
+a wxWindows-supplied default width.<BR>
+
+<B>wxSIZE_AUTO</B>: -1 size values are taken to indicate
+a wxWindows-supplied default size.<BR>
+
+<B>wxSIZE_USE_EXISTING</B>: existing dimensions should be used
+if -1 values are supplied.<BR>
+
+<B>wxSIZE_ALLOW_MINUS_ONE</B>: allow dimensions of -1 and less to be interpreted
+as real dimensions, not default values.
+</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+The second form is a convenience for calling the first form with default
+x and y parameters, and must be used with non-default width and height values.<P>
+The first form sets the position and optionally size, of the window.
+Parameters may be -1 to indicate either that a default should be supplied
+by wxWindows, or that the current value of the dimension should be used.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowmove">wxWindow::Move</A><P>
+<B><FONT COLOR="#0000C8">wxPython note:</FONT></B><BR>
+ In place of a single overloaded method name, wxPython
+implements the following methods:<P>
+
+<UL><UL>
+
+<TABLE>
+
+
+<TR><TD VALIGN=TOP>
+<B>SetDimensions(x, y, width, height, sizeFlags=wxSIZE_AUTO)</B>
+</TD>
+
+<TD VALIGN=TOP>
+
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>SetSize(size)</B>
+</TD>
+
+<TD VALIGN=TOP>
+
+</TD></TR>
+
+
+<TR><TD VALIGN=TOP>
+<B>SetPosition(point)</B>
+</TD>
+
+<TD VALIGN=TOP>
+
+</TD></TR>
+
+
+</TABLE>
+</UL></UL>
+
+<P>
+
+<HR>
+<A NAME="wxwindowsetsizehints"></A>
+<H3>wxWindow::SetSizeHints</H3>
+<P>
+<B>virtual void</B> <B>SetSizeHints</B>(<B>int</B><I> minW=-1</I>, <B>int</B><I> minH=-1</I>, <B>int</B><I> maxW=-1</I>, <B>int</B><I> maxH=-1</I>,
+ <B>int</B><I> incW=-1</I>, <B>int</B><I> incH=-1</I>)<P>
+Allows specification of minimum and maximum window sizes, and window size increments.
+If a pair of values is not set (or set to -1), the default values will be used.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>minW</I><UL><UL>
+Specifies the minimum width allowable.</UL></UL>
+<P>
+<I>minH</I><UL><UL>
+Specifies the minimum height allowable.</UL></UL>
+<P>
+<I>maxW</I><UL><UL>
+Specifies the maximum width allowable.</UL></UL>
+<P>
+<I>maxH</I><UL><UL>
+Specifies the maximum height allowable.</UL></UL>
+<P>
+<I>incW</I><UL><UL>
+Specifies the increment for sizing the width (Motif/Xt only).</UL></UL>
+<P>
+<I>incH</I><UL><UL>
+Specifies the increment for sizing the height (Motif/Xt only).</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">Remarks</FONT></B><P>
+If this function is called, the user will not be able to size the window outside the
+given bounds.<P>
+The resizing increments are only significant under Motif or Xt.<P>
+
+<HR>
+<A NAME="wxwindowsettitle"></A>
+<H3>wxWindow::SetTitle</H3>
+<P>
+<B>virtual void</B> <B>SetTitle</B>(<B>const wxString&amp; </B><I>title</I>)<P>
+Sets the window's title. Applicable only to frames and dialogs.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>title</I><UL><UL>
+The window's title.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowgettitle">wxWindow::GetTitle</A><P>
+
+<HR>
+<A NAME="topic1041"></A>
+<H3>wxWindow::Show</H3>
+<P>
+<B>virtual bool</B> <B>Show</B>(<B>const bool</B><I> show</I>)<P>
+Shows or hides the window.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>show</I><UL><UL>
+If TRUE, displays the window and brings it to the front. Otherwise,
+hides the window.</UL></UL>
+<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowisshown">wxWindow::IsShown</A><P>
+
+<HR>
+<A NAME="wxwindowtransferdatafromwindow"></A>
+<H3>wxWindow::TransferDataFromWindow</H3>
+<P>
+<B>virtual bool</B> <B>TransferDataFromWindow</B>()<P>
+Transfers values from child controls to data areas specified by their validators. Returns
+FALSE if a transfer failed.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowtransferdatatowindow">wxWindow::TransferDataToWindow</A>,
+<A HREF="wx255.htm#wxvalidator">wxValidator</A>, <A HREF="wx260.htm#wxwindowvalidate">wxWindow::Validate</A><P>
+
+<HR>
+<A NAME="wxwindowtransferdatatowindow"></A>
+<H3>wxWindow::TransferDataToWindow</H3>
+<P>
+<B>virtual bool</B> <B>TransferDataToWindow</B>()<P>
+Transfers values to child controls from data areas specified by their validators.<P>
+<B><FONT COLOR="#FF0000">Return value</FONT></B><P>
+Returns FALSE if a transfer failed.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowtransferdatafromwindow">wxWindow::TransferDataFromWindow</A>,
+<A HREF="wx255.htm#wxvalidator">wxValidator</A>, <A HREF="wx260.htm#wxwindowvalidate">wxWindow::Validate</A><P>
+
+<HR>
+<A NAME="wxwindowvalidate"></A>
+<H3>wxWindow::Validate</H3>
+<P>
+<B>virtual bool</B> <B>Validate</B>()<P>
+Validates the current values of the child controls using their validators.<P>
+<B><FONT COLOR="#FF0000">Return value</FONT></B><P>
+Returns FALSE if any of the validations failed.<P>
+<B><FONT COLOR="#FF0000">See also</FONT></B><P>
+<A HREF="wx260.htm#wxwindowtransferdatafromwindow">wxWindow::TransferDataFromWindow</A>,
+<A HREF="wx260.htm#wxwindowtransferdatafromwindow">wxWindow::TransferDataFromWindow</A>,
+<A HREF="wx255.htm#wxvalidator">wxValidator</A><P>
+
+<HR>
+<A NAME="wxwindowwarppointer"></A>
+<H3>wxWindow::WarpPointer</H3>
+<P>
+<B>void</B> <B>WarpPointer</B>(<B>int</B><I> x</I>, <B>int</B><I> y</I>)<P>
+Moves the pointer to the given position on the window.<P>
+<B><FONT COLOR="#FF0000">Parameters</FONT></B><P>
+<I>x</I><UL><UL>
+The new x position for the cursor.</UL></UL>
+<P>
+<I>y</I><UL><UL>
+The new y position for the cursor.</UL></UL>
+<P>
+
+</BODY></HTML>

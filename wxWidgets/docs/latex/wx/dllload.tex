@@ -1,0 +1,152 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        dllload.tex
+%% Purpose:     wxDllLoader documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     02.04.00
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxDllLoader}}\label{wxdllloader}
+
+\textbf{Deprecation note: } This class is deprecated since version 2.4 and is
+not compiled in by default in version 2.6 and will be removed in 2.8. Please
+use \helpref{wxDynamicLibrary}{wxdynamiclibrary} instead.
+
+
+wxDllLoader is a class providing an interface similar to Unix's {\tt
+dlopen()}. It is used by the wxLibrary framework and manages the actual
+loading of shared libraries and the resolving of symbols in them. There are no
+instances of this class, it simply serves as a namespace for its static member
+functions.
+
+Please note that class \helpref{wxDynamicLibrary}{wxdynamiclibrary} provides 
+alternative, friendlier interface to wxDllLoader.
+
+The terms {\it DLL} and {\it shared library/object} will both be used in the
+documentation to refer to the same thing: a {\tt .dll} file under Windows or 
+{\tt .so} or {\tt .sl} one under Unix.
+
+Example of using this class to dynamically load the {\tt strlen()} function:
+
+\begin{verbatim}
+#if defined(__WXMSW__)
+    static const wxChar *LIB_NAME = _T("kernel32");
+    static const wxChar *FUNC_NAME = _T("lstrlenA");
+#elif defined(__UNIX__)
+    static const wxChar *LIB_NAME = _T("/lib/libc-2.0.7.so");
+    static const wxChar *FUNC_NAME = _T("strlen");
+#endif
+
+    wxDllType dllHandle = wxDllLoader::LoadLibrary(LIB_NAME);
+    if ( !dllHandle )
+    {
+        ... error ...
+    }
+    else
+    {
+        typedef int (*strlenType)(char *);
+        strlenType pfnStrlen = (strlenType)wxDllLoader::GetSymbol(dllHandle, FUNC_NAME);
+        if ( !pfnStrlen )
+        {
+            ... error ...
+        }
+        else
+        {
+            if ( pfnStrlen("foo") != 3 )
+            {
+                ... error ...
+            }
+            else
+            {
+                ... ok! ...
+            }
+        }
+
+        wxDllLoader::UnloadLibrary(dllHandle);
+    }
+\end{verbatim}
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/dynlib.h>
+
+\wxheading{Data structures}
+
+This header defines a platform-dependent {\tt wxDllType} typedef which stores
+a handle to a loaded DLLs on the given platform.
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDllLoader::GetDllExt}\label{wxdllloadergetdllext}
+
+\func{static wxString}{GetDllExt}{\void}
+
+Returns the string containing the usual extension for shared libraries for the
+given systems (including the leading dot if not empty).
+
+For example, this function will return {\tt ".dll"} under Windows or (usually) 
+{\tt ".so"} under Unix.
+
+\membersection{wxDllLoader::GetProgramHandle}\label{wxdllloadergetprogramhandle}
+
+\func{wxDllType}{GetProgramHandle}{\void}
+
+This function returns a valid handle for the main program itself. Notice that
+the {\tt NULL} return value is valid for some systems (i.e. doesn't mean that
+the function failed).
+
+{\bf NB:} This function is Unix specific. It will always fail under Windows
+or OS/2.
+
+\membersection{wxDllLoader::GetSymbol}\label{wxdllloadergetsymbol}
+
+\func{void *}{GetSymbol}{\param{wxDllType }{dllHandle}, \param{const wxString\& }{name}}
+
+This function resolves a symbol in a loaded DLL, such as a variable or
+function name.
+
+Returned value will be {\tt NULL} if the symbol was not found in the DLL or if
+an error occurred.
+
+\wxheading{Parameters}
+
+\docparam{dllHandle}{Valid handle previously returned by 
+\helpref{LoadLibrary}{wxdllloaderloadlibrary}}
+
+\docparam{name}{Name of the symbol.}
+
+\membersection{wxDllLoader::LoadLibrary}\label{wxdllloaderloadlibrary}
+
+\func{wxDllType}{LoadLibrary}{\param{const wxString \& }{libname}, \param{bool* }{success = NULL}}
+
+This function loads a shared library into memory, with {\it libname} being the
+name of the library: it may be either the full name including path and
+(platform-dependent) extension, just the basename (no path and no extension)
+or a basename with extension. In the last two cases, the library will be
+searched in all standard locations.
+
+Returns a handle to the loaded DLL. Use {\it success} parameter to test if it
+is valid. If the handle is valid, the library must be unloaded later with 
+\helpref{UnloadLibrary}{wxdllloaderunloadlibrary}.
+
+\wxheading{Parameters}
+
+\docparam{libname}{Name of the shared object to load.}
+
+\docparam{success}{May point to a bool variable which will be set to true or
+false; may also be {\tt NULL}.}
+
+\membersection{wxDllLoader::UnloadLibrary}\label{wxdllloaderunloadlibrary}
+
+\func{void}{UnloadLibrary}{\param{wxDllType }{dllhandle}}
+
+This function unloads the shared library. The handle {\it dllhandle} must have
+been returned by \helpref{LoadLibrary}{wxdllloaderloadlibrary} previously.
+

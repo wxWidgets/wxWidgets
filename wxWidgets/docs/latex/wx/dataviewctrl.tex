@@ -1,0 +1,230 @@
+
+\section{\class{wxDataViewCtrl}}\label{wxdataviewctrl}
+
+This class and its documentation are work in progress and
+certainly subject to change.
+
+wxDataViewCtrl is planned to be a control to display data either
+in a tree like fashion or in a tabular form or both. Currently,
+only the tabular form is implemented. wxDataViewCtrl doesn't
+get its data from the user through virtual functions or events,
+instead you need to write your own 
+\helpref{wxDataViewListModel}{wxdataviewlistmodel} and associate
+it with this control. Then you need to add a number of
+\helpref{wxDataViewColumn}{wxdataviewcolumn} to this control to
+define what each column shall display. Each wxDataViewColumn
+in turn owns 1 instance of a 
+\helpref{wxDataViewRenderer}{wxdataviewrenderer} to render its
+cells. A number of standard renderers for rendering text, dates,
+images, toggle, a progress bar etc. are provided. Additionally,
+the user can write custom renderes deriving from 
+\helpref{wxDataViewCustomRenderer}{wxdataviewcustomrenderer}
+for displaying anything.
+
+All data transfer from the control to the model and the user
+code is done through \helpref{wxVariant}{wxvariant} which can
+be extended to support more data formats as necessary. 
+Accordingly, all type information uses the strings returned
+from \helpref{wxVariant::GetType}{wxvariantgettype}.
+
+So far, this control has only be implemented for GTK+ and
+there are only barely working stubs for a generic implementation.
+It is planned to implement the control natively under OS X
+and use generic code under Windows (and elsewhere).
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxDV\_SINGLE}}{Single selection mode. This is the default.}
+\twocolitem{\windowstyle{wxDV\_MULTIPLE}}{Multiple selection mode.}
+\end{twocollist}
+
+
+\wxheading{Event handling}
+
+To process input from a dataview control, use the following event handler
+macros to direct input to member functions that take a 
+\helpref{wxDataViewEvent}{wxdataviewevent} argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+
+\twocolitem{{\bf EVT\_DATAVIEW\_ROW\_SELECTED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_ROW\_SELECTED event.}
+\twocolitem{{\bf EVT\_DATAVIEW\_ROW\_ACTIVATED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_ROW\_ACTIVATED event.}
+\twocolitem{{\bf EVT\_DATAVIEW\_COLUMN\_HEADER\_CLICK(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_COLUMN\_HEADER\_CLICKED event.}
+\twocolitem{{\bf EVT\_DATAVIEW\_COLUMN\_HEADER\_RIGHT\_CLICK(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_COLUMN\_HEADER\_RIGHT\_CLICKED event.}
+
+\end{twocollist}
+
+
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}
+
+\wxheading{Include files}
+
+<wx/dataview.h>
+
+
+\membersection{wxDataViewCtrl::wxDataViewCtrl}\label{wxdataviewctrlwxdataviewctrl}
+
+\func{}{wxDataViewCtrl}{\void}
+
+\func{}{wxDataViewCtrl}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}}
+
+Constructor. Calls \helpref{Create}{wxdataviewctrlcreate}.
+
+\membersection{wxDataViewCtrl::\destruct{wxDataViewCtrl}}\label{wxdataviewctrldtor}
+
+\func{}{\destruct{wxDataViewCtrl}}{\void}
+
+Destructor.
+
+\membersection{wxDataViewCtrl::AppendColumn}\label{wxdataviewctrlappendcolumn}
+
+\func{virtual bool}{AppendColumn}{\param{wxDataViewColumn* }{col}}
+
+Add a \helpref{wxDataViewColumn}{wxdataviewcolumn} to the control. Note
+that there is a number of short cut methods which implicitly create
+a \helpref{wxDataViewColumn}{wxdataviewcolumn} and a 
+\helpref{wxDataViewRenderer}{wxdataviewrenderer} for it (see below).
+
+
+\membersection{wxDataViewCtrl::AppendBitmapColumn}\label{wxdataviewctrlappendbitmapcolumn}
+
+\func{bool}{AppendBitmapColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
+
+\func{bool}{AppendBitmapColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
+
+Appends a column for rendering a bitmap.
+
+\membersection{wxDataViewCtrl::AppendDateColumn}\label{wxdataviewctrlappenddatecolumn}
+
+\func{bool}{AppendDateColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_ACTIVATABLE}, \param{int }{width = -1}}
+
+\func{bool}{AppendDateColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_ACTIVATABLE}, \param{int }{width = -1}}
+
+Appends a column for rendering a date.
+
+\membersection{wxDataViewCtrl::AppendProgressColumn}\label{wxdataviewctrlappendprogresscolumn}
+
+\func{bool}{AppendProgressColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 80}}
+
+\func{bool}{AppendProgressColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 80}}
+
+Appends a column for rendering a progress indicator.
+
+\membersection{wxDataViewCtrl::AppendTextColumn}\label{wxdataviewctrlappendtextcolumn}
+
+\func{bool}{AppendTextColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
+
+\func{bool}{AppendTextColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = -1}}
+
+Appends a column for rendering text.
+
+\membersection{wxDataViewCtrl::AppendToggleColumn}\label{wxdataviewctrlappendtogglecolumn}
+
+\func{bool}{AppendToggleColumn}{\param{const wxString\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 30}}
+
+\func{bool}{AppendToggleColumn}{\param{const wxBitmap\& }{label}, \param{unsigned int }{model\_column}, \param{wxDataViewCellMode }{mode = wxDATAVIEW\_CELL\_INERT}, \param{int }{width = 30}}
+
+Appends a column for rendering a toggle.
+
+\membersection{wxDataViewCtrl::AssociateModel}\label{wxdataviewctrlassociatemodel}
+
+\func{virtual bool}{AssociateModel}{\param{wxDataViewListModel* }{model}}
+
+Associates a \helpref{wxDataViewListModel}{wxdataviewlistmodel} with the
+control. In the future this should be changed to supporting any data
+model including a to-be-written wxDataViewTreeModel.
+
+\membersection{wxDataViewCtrl::Create}\label{wxdataviewctrlcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}}
+
+Create the control. Useful for two step creation.
+
+\membersection{wxDataViewCtrl::ClearColumns}\label{wxdataviewctrlclearcolumns}
+
+\func{virtual bool}{ClearColumns}{\void}
+
+Removes all columns.
+
+\membersection{wxDataViewCtrl::ClearSelection}\label{wxdataviewctrlclearselection}
+
+\func{void}{ClearSelection}{\void}
+
+Unselects all rows.
+
+\membersection{wxDataViewCtrl::DeleteColumn}\label{wxdataviewctrldeletecolumn}
+
+\func{virtual bool}{DeleteColumn}{\param{unsigned int }{pos}}
+
+Deletes given column.
+
+\membersection{wxDataViewCtrl::GetColumn}\label{wxdataviewctrlgetcolumn}
+
+\func{virtual wxDataViewColumn*}{GetColumn}{\param{unsigned int }{pos}}
+
+Returns pointer to the column.
+
+\membersection{wxDataViewCtrl::GetModel}\label{wxdataviewctrlgetmodel}
+
+\func{virtual wxDataViewListModel*}{GetModel}{\void}
+
+Returns pointer to the data model associated with the
+control (if any).
+
+\membersection{wxDataViewCtrl::GetNumberOfColumns}\label{wxdataviewctrlgetnumberofcolumns}
+
+\func{virtual unsigned int}{GetNumberOfColumns}{\void}
+
+Returns the number of columns.
+
+\membersection{wxDataViewCtrl::GetSelection}\label{wxdataviewctrlgetselection}
+
+\constfunc{virtual int}{GetSelection}{\void}
+
+Returns the index of the currently selected row. It will 
+return -1 if no row is selected and the index of the first
+selected row if more than one row are selected.
+
+\membersection{wxDataViewCtrl::GetSelections}\label{wxdataviewctrlgetselections}
+
+\constfunc{virtual int}{GetSelections}{\param{wxArrayInt\& }{aSelections}}
+
+Returns the number of selected rows and fills an array of int
+with the indeces of the selected rows.
+
+\membersection{wxDataViewCtrl::IsSelected}\label{wxdataviewctrlisselected}
+
+\constfunc{virtual bool}{IsSelected}{\param{unsigned int }{row}}
+
+Returns {\it true} if the row is selected, {\it false} otherwise.
+
+\membersection{wxDataViewCtrl::SetSelection}\label{wxdataviewctrlsetselection}
+
+\func{virtual void}{SetSelection}{\param{int }{row}}
+
+Sets the selection. Use -1 to unselect all rows.
+
+\membersection{wxDataViewCtrl::SetSelectionRange}\label{wxdataviewctrlsetselectionrange}
+
+\func{virtual void}{SetSelectionRange}{\param{unsigned int }{from}, \param{unsigned int }{to}}
+
+Set a range of selection.
+
+\membersection{wxDataViewCtrl::SetSelections}\label{wxdataviewctrlsetselections}
+
+\func{virtual void}{SetSelections}{\param{const wxArrayInt\& }{aSelections}}
+
+Set the selection to the array of int.
+
+\membersection{wxDataViewCtrl::Unselect}\label{wxdataviewctrlunselect}
+
+\func{virtual void}{Unselect}{\param{unsigned int }{row}}
+
+Unselect a particular row.
+

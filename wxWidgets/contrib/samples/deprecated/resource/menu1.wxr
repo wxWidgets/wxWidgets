@@ -1,0 +1,13 @@
+
+static char *menu1 = "menu(name = 'menu1',\
+  menu = \
+  [\
+    ['&File', 1, '', \
+      ['&Dialog box test', 2, ''],\
+      [],\
+      ['&Exit', 4, '']\
+    ],\
+    ['&Help', 5, '', \
+      ['&About', 6, '']\
+    ]\
+  ]).";

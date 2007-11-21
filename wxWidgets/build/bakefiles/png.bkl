@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <if cond="FORMAT=='autoconf'">
+        <option name="wxUSE_LIBPNG"/>
+        <set var="LIB_PNG">
+            <if cond="wxUSE_LIBPNG=='builtin' and USE_GUI=='1'">
+                wxpng$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+            </if>
+        </set>
+    </if>
+    <if cond="FORMAT!='autoconf'">
+        <set var="wxUSE_LIBPNG">builtin</set>
+        <set var="LIB_PNG">
+            <if cond="wxUSE_LIBPNG=='builtin' and USE_GUI=='1'">
+                wxpng$(WXDEBUGFLAG)$(HOST_SUFFIX)
+            </if>
+        </set>
+    </if>
+    <set var="INC_PNG">
+        <if cond="wxUSE_LIBPNG=='builtin'">$(TOP_SRCDIR)src/png</if>
+    </set>
+
+    <lib id="wxpng" template="3rdparty_lib"
+         cond="wxUSE_LIBPNG=='builtin' and USE_GUI=='1' and BUILDING_LIB=='1'">
+        <dirname>$(LIBDIRNAME)</dirname>
+        <include>$(INC_ZLIB)</include>
+        <cflags-borland>-w-8004</cflags-borland>
+        <cflags-watcom>-wcd=124</cflags-watcom>
+        <sources>
+            src/png/png.c
+            src/png/pngerror.c
+            src/png/pnggccrd.c
+            src/png/pngget.c
+            src/png/pngmem.c
+            src/png/pngpread.c
+            src/png/pngread.c
+            src/png/pngrio.c
+            src/png/pngrtran.c
+            src/png/pngrutil.c
+            src/png/pngset.c
+            src/png/pngtrans.c
+            src/png/pngvcrd.c
+            src/png/pngwio.c
+            src/png/pngwrite.c
+            src/png/pngwtran.c
+            src/png/pngwutil.c
+        </sources>
+    </lib>
+
+</makefile>

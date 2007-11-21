@@ -1,0 +1,173 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        backwardcompat.tex
+%% Purpose:     Explains how much and what kind of backward compatibility users
+%%              can expect
+%% Author:      M.J.Wetherell
+%% RCS-ID:      $Id$
+%% Copyright:   2005 M.J.Wetherell
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Backward compatibility}\label{backwardcompatibility}
+
+Many of the GUIs and platforms supported by wxWidgets are continuously
+evolving, and some of the new platforms wxWidgets now supports were quite
+unimaginable even a few years ago. In this environment wxWidgets must also
+evolve in order to support these new features and platforms.
+
+However the goal of wxWidgets is not only to provide a consistent
+programming interface across many platforms, but also to provide an
+interface that is reasonably stable over time, to help protect its users
+from some of the uncertainty of the future.
+
+\subsection{The version numbering scheme}\label{versionnumbering}
+
+wxWidgets version numbers can have up to four components, with trailing
+zeros sometimes omitted:
+
+\begin{verbatim}
+    major.minor.release.sub-release
+\end{verbatim}
+
+A {\em stable} release of wxWidgets will have an even number for {\tt
+minor}, e.g. {\tt 2.6.0}.
+
+Stable, in this context, means that the API is not changing. In truth, some
+changes are permitted, but only those that are backward compatible. For
+example, you can expect later {\tt 2.6.x.x} releases, such as {\tt 2.6.1}
+and {\tt 2.6.2} to be backward compatible with their predecessor.
+
+When it becomes necessary to make changes which are not wholly backward
+compatible, the stable branch is forked, creating a new {\em development}
+branch of wxWidgets. This development branch will have an odd number
+for {\tt minor}, for example {\tt 2.7.x.x}. Releases from this branch are
+known as {\em development snapshots}.
+
+The stable branch and the development branch will then be developed in
+parallel for some time. When it is no longer useful to continue developing
+the stable branch, the development branch is renamed and becomes a new
+stable branch, for example {\tt 2.8.0}. And the process begins again.
+
+This is how the tension between keeping the interface stable, and allowing
+the library to evolve is managed.
+
+You can expect the versions with the same major and {\em even} minor
+version number to be compatible, but between minor versions there will be
+incompatibilities. Compatibility is not broken gratuitously however, so
+many applications will require no changes or only small changes to work
+with the new version.
+
+\subsection{Source level compatibility}\label{sourcecompatibility}
+
+Later releases from a stable branch are backward compatible with earlier
+releases from the same branch at the {\em source} level.
+
+This means that, for example, if you develop your application using
+wxWidgets {\tt 2.6.0} then it should also compile fine with all later {\tt
+2.6.x} versions. The converse is also true providing you avoid any new
+features not present in the earlier version. For example if you develop
+using {\tt 2.6.1} your program will compile fine with wxWidgets {\tt 2.6.0}
+providing you don't use any {\tt 2.6.1} specific features.
+
+For some platforms binary compatibility is also supported, see 'Library
+binary compatibility' below.
+
+Between minor versions, for example between {\tt 2.2.x}, {\tt 2.4.x} and {\tt
+2.6.x}, there will be some incompatibilities. Wherever possible the old way
+of doing something is kept alongside the new for a time wrapped inside:
+
+\begin{verbatim}
+    #if WXWIN_COMPATIBILITY_2_4
+        /* deprecated feature */
+        ...
+    #endif
+\end{verbatim}
+
+By default the {\tt WXWIN\_COMPATIBILITY{\it \_X\_X}} macro is set
+to 1 for the previous stable branch, for example
+in {\tt 2.6.x} {\tt WXWIN\_COMPATIBILITY\_2\_4 = 1}. For the next earlier
+stable branch the default is 0, so {\tt WXWIN\_COMPATIBILITY\_2\_2 = 0}
+for {\tt 2.6.x}. Earlier than that, obsolete features are removed.
+
+These macros can be changed in {\tt setup.h}. Or on UNIX-like systems you can
+set them using the {\tt --disable-compat24} and {\tt --enable-compat22}
+options to {\tt configure}.
+
+They can be useful in two ways:
+
+\begin{enumerate}
+\item Changing {\tt WXWIN\_COMPATIBILITY\_2\_4} to 0 can be useful to
+find uses of deprecated features in your program.
+\item Changing {\tt WXWIN\_COMPATIBILITY\_2\_2} to 1 can be useful to
+compile a program developed using {\tt 2.2.x} that no longer compiles
+with {\tt 2.6.x}.
+\end{enumerate}
+
+A program requiring one of these macros to be 1 will become
+incompatible with some future version of wxWidgets, and you should consider
+updating it.
+
+\subsection{Library binary compatibility}\label{libbincompatibility}
+
+For some platforms, releases from a stable branch are not only source level
+compatible but can also be {\em binary compatible}.
+
+Binary compatibility makes it possible to get the maximum benefit from
+using shared libraries, also known as dynamic link libraries (DLLs) on
+Windows or dynamic shared libraries on OS X.
+
+For example, suppose several applications are installed on a system requiring
+wxWidgets {\tt 2.6.0}, {\tt 2.6.1} and {\tt 2.6.2}. Since {\tt 2.6.2} is
+backward compatible with the earlier versions, it should be enough to
+install just wxWidgets {\tt 2.6.2} shared libraries, and all the applications
+should be able to use them. If binary compatibility is not supported, then all
+the required versions {\tt 2.6.0}, {\tt 2.6.1} and {\tt 2.6.2} must be
+installed side by side.
+
+Achieving this, without the user being required to have the source code
+and recompile everything, places many extra constraints on the changes
+that can be made within the stable branch. So it is not supported for all
+platforms, and not for all versions of wxWidgets. To date it has mainly
+been supported by wxGTK for UNIX-like platforms.
+
+Another practical consideration is that for binary compatibility to work,
+all the applications and libraries must have been compiled with compilers
+that are capable of producing compatible code; that is, they must use the
+same ABI (Application Binary Interface). Unfortunately most different C++
+compilers do not produce code compatible with each other, and often even
+different versions of the same compiler are not compatible.
+
+\subsection{Application binary compatibility}\label{appbincompatibility}
+
+The most important aspect of binary compatibility is that applications
+compiled with one version of wxWidgets, e.g. {\tt 2.6.1}, continue to work
+with shared libraries of a later binary compatible version, for example {\tt
+2.6.2}.
+
+The converse can also be useful however. That is, it can be useful for a
+developer using a later version, e.g. {\tt 2.6.2} to be able to create binary
+application packages that will work with all binary compatible versions of
+the shared library starting with, for example {\tt 2.6.0}.
+
+To do this the developer must, of course, avoid any features not available
+in the earlier versions. However this is not necessarily enough; in some
+cases an application compiled with a later version may depend on it even
+though the same code would compile fine against an earlier version.
+% thinks: a situation we should try to avoid.
+
+To help with this, a preprocessor symbol {\tt wxABI\_VERSION} can be defined
+during the compilation of the application (this would usually be done in the
+application's makefile or project settings). It should be set to the lowest
+version that is being targeted, as a number with two decimal digits for each
+component, for example {\tt wxABI\_VERSION=20600} for {\tt 2.6.0}.
+
+Setting {\tt wxABI\_VERSION} should prevent the application from implicitly
+depending on a later version of wxWidgets, and also disables any new features
+in the API, giving a compile time check that the source is compatible with
+the versions of wxWidgets being targeted.
+
+Uses of {\tt wxABI\_VERSION} are stripped out of the wxWidgets sources when
+each new development branch is created. Therefore it is only useful to help
+achieve compatibility with earlier versions with the same major
+and {\em even} minor version numbers. It won't, for example, help you write
+code compatible with {\tt 2.4.x} using wxWidgets {\tt 2.6.x}.

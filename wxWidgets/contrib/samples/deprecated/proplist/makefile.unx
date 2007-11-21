@@ -1,0 +1,23 @@
+# Purpose: makefile for proplist example (Unix)
+# Created: 2000-03-15
+
+CXX = $(shell wx-config --cxx)
+
+PROGRAM = proplist
+
+OBJECTS = $(PROGRAM).o
+
+# implementation
+
+.SUFFIXES:	.o .cpp
+
+.cpp.o :
+	$(CXX) -c `wx-config --cxxflags` -o $@ $<
+
+all:    $(PROGRAM)
+
+$(PROGRAM):	$(OBJECTS)
+	$(CXX) -o $(PROGRAM) $(OBJECTS) `wx-config --libs`
+
+clean:
+	rm -f *.o $(PROGRAM)

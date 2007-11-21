@@ -1,0 +1,127 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        checklst.tex
+%% Purpose:     wxCheckListBox documentation
+%% Author:      wxWidgets Team
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxCheckListBox}}\label{wxchecklistbox}
+
+A checklistbox is like a listbox, but allows items to be checked or unchecked.
+
+When using this class under Windows wxWidgets must be compiled with USE\_OWNER\_DRAWN set to 1.
+
+Only the new functions for this class are documented; see also \helpref{wxListBox}{wxlistbox}.
+
+Please note that wxCheckListBox uses client data in its implementation,
+and therefore this is not available to the application.
+
+\wxheading{Derived from}
+
+\helpref{wxListBox}{wxlistbox}\\
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/checklst.h>
+
+\wxheading{Window styles}
+
+See \helpref{wxListBox}{wxlistbox}.
+
+\wxheading{Event handling}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_CHECKLISTBOX(id, func)}}{Process a wxEVT\_COMMAND\_CHECKLISTBOX\_TOGGLED event,
+when an item in the check list box is checked or unchecked.}
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{wxListBox}{wxlistbox}, \helpref{wxChoice}{wxchoice}, \helpref{wxComboBox}{wxcombobox}, \helpref{wxListCtrl}{wxlistctrl},
+\rtfsp\helpref{wxCommandEvent}{wxcommandevent}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxCheckListBox::wxCheckListBox}\label{wxchecklistboxctor}
+
+\func{}{wxCheckListBox}{\void}
+
+Default constructor.
+
+\func{}{wxCheckListBox}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{int}{ n}, \param{const wxString }{choices[] = NULL},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listBox"}}
+
+\func{}{wxCheckListBox}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxPoint\&}{ pos}, \param{const wxSize\&}{ size},\rtfsp
+\param{const wxArrayString\& }{choices},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``listBox"}}
+
+Constructor, creating and showing a list box.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Window identifier. A value of -1 indicates a default value.}
+
+\docparam{pos}{Window position.}
+
+\docparam{size}{Window size. If the default size (-1, -1) is specified then the window is sized
+appropriately.}
+
+\docparam{n}{Number of strings with which to initialise the control.}
+
+\docparam{choices}{An array of strings with which to initialise the control.}
+
+\docparam{style}{Window style. See \helpref{wxCheckListBox}{wxchecklistbox}.}
+
+\docparam{validator}{Window validator.}
+
+\docparam{name}{Window name.}
+
+\pythonnote{The wxCheckListBox constructor in wxPython reduces the {\tt n}
+and {\tt choices} arguments are to a single argument, which is
+a list of strings.}
+
+\perlnote{In wxPerl there is just an array reference in place of {\tt n}
+and {\tt choices}.}
+
+\membersection{wxCheckListBox::\destruct{wxCheckListBox}}\label{wxchecklistboxdtor}
+
+\func{void}{\destruct{wxCheckListBox}}{\void}
+
+Destructor, destroying the list box.
+
+\membersection{wxCheckListBox::Check}\label{wxchecklistboxcheck}
+
+\func{void}{Check}{\param{int }{item}, \param{bool}{ check = true}}
+
+Checks the given item. Note that calling this method doesn't result in
+wxEVT\_COMMAND\_CHECKLISTBOX\_TOGGLE being emitted.
+
+\wxheading{Parameters}
+
+\docparam{item}{Index of item to check.}
+
+\docparam{check}{true if the item is to be checked, false otherwise.}
+
+\membersection{wxCheckListBox::IsChecked}\label{wxchecklistboxischecked}
+
+\constfunc{bool}{IsChecked}{\param{unsigned int}{ item}}
+
+Returns true if the given item is checked, false otherwise.
+
+\wxheading{Parameters}
+
+\docparam{item}{Index of item whose check status is to be returned.}

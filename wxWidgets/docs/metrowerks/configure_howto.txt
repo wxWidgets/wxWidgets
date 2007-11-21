@@ -1,0 +1,242 @@
+Title:      Metrowerks w/ configure HOWTO
+Author:     David Elliott
+Id:         $Id$
+
+=== Introduction to Metrowerks command line tools ===
+
+Since CodeWarrior version 8, Metrowerks has provided command-line compilers
+hosted on OS X.  There are three available targets.
+
+1) Mac OS X/PPC
+Compiler:   mwcc
+Linker:     mwld
+-- File formats --
+Executable:         Mach-O
+Shared Library:     Mach-O (bundle, dylib, etc.)
+Static Library:     CodeWarrior
+Object:             CodeWarrior
+
+2) Mach-O/PPC
+Compiler:   mwccppc
+Linker:     mwldppc
+-- File formats --
+Executable:         Mach-O
+Shared Library:     Mach-O (bundle, dylib, etc.)
+Static Library:     Archived (ar) Mach-O (.a files)
+Object:             Mach-O .o files
+
+3) Mac/PPC
+Compiler:   mwpefcc
+Linker:     mwpefld
+-- File formats --
+Executable:         PEF
+Shared Library:     PEF ("code fragments")
+Static Library:     CodeWarrior
+Object:             CodeWarrior
+
+As you can see, only one of these targets produces Mach-O .o files that
+normal ar and ranlib could hope to handle.  It's no matter though,
+really all that ar and ranlib do is create a static library (.a) from a
+collection of .o files.  This can be emulated by a shell script which
+calls the appropriate mwld.  I've provided one called mwar which does this.
+For ranlib simply use true since mwar does all of the work.
+
+=== Metrowerks Environment Variables ===
+
+In order for any of these programs to work some environment variables
+must be set.  The compiler must know where to look for headers (CIncludes).
+The linker needs to know where to look for libraries (Libraries) such as
+those specified on the commandline with -l as well as crt1.o (or sometimes
+mwcrt1.o) for OS X.  The linker also needs to know if any additional
+libraries should be linked into executables (LibraryFiles).  Finally,
+on OS X the linker needs to know where to look for Frameworks (FrameworkPaths).
+These are controlled by the following environment variables:
+
+1) Mac OS X/PPC
+CIncludes:          MWCMacOSXPPCIncludes
+Libraries:          MWMacOSXPPCLibraries
+LibraryFiles:       MWMacOSXPPCLibraryFiles
+FrameworkPaths:     MWFrameworkPaths
+
+2) Mach-O/PPC
+CIncludes:          MWCMachPPCIncludes
+Libraries:          MWMachPPCLibraries
+LibraryFiles:       MWMachPPCLibraryFiles
+FrameworkPaths:     MWFrameworkPaths
+
+3) Mac/PPC
+CIncludes:          MWPEFCIncludes
+Libraries:          MWPEFLibraries
+LibraryFiles:       MWPEFLibraryFiles
+FrameworkPaths:     (N/A)
+Notes (mwldppc 3.0.3 build 343):
+The environment variables (including MWPEFLibraries) aren't read until after
+the command line options have been parsed!  The command line option parser
+actually tries to do the linking from within the parser and thus -l options
+which don't have a -L specifying where to look for the library do not work.
+Yes, this means that MWPEFLibraries is essentially useless AFAICT.
+
+I have provided an example mwvars.sh.  It's what I use with CW 8.3.  YMMV.
+
+=== Compiling wxWidgets targetting Mac OS X with Metrowerks ===
+
+With recent wxWidgets (2.5.5) it is possible to compile using the
+Metrowerks tools with minimal effort.  You may use either mwcc/mwld
+or mwccppc/mwldppc.  Ideally you will have the tools on your path
+on your path as well as the mwar script I've provided.  You will also
+have had to source mwvars.sh (either yourself or by sourcing it from
+your .profile or .bash_profile).
+
+Before beginning I strongly recommend you write a simple C++ hello world
+program.  I recommend #include <iostream> and cout << "Hello World" << endl;.
+This will ensure your C++ standard library is working.  Note that
+you can compile this using mwcc hello.cpp.  You will find a hello.cpp.o
+file as well as an a.out file if the compiler and linker were successful.
+Assuming your compiler can produce a.out you're ready to begin.
+
+As per usual, I recommend building outside the source tree.
+From the source tree (workingDirectory$ is the prompt)
+
+wxWidgets$ mkdir ../BUILD_MACd_CW8
+wxWidgets$ cd ../BUILD_MACd_CW8
+BUILD_MACd_CW8$ ../wxWidgets/configure --enable-debug --disable-shared CC=mwcc CXX=mwcc LD=mwld AR=mwar RANLIB=true
+[ configure hopefully succeeds ]
+BUILD_MACd_CW8$ make
+[ make hopefully succeeds ]
+BUILD_MACd_CW8$ make -C samples/minimal
+[ minimal make succeeds ]
+BUILD_MACd_CW8$ ./samples/minimal/minimal.app/Contents/MacOS/minimal
+[ minimal runs and your prompt will return when you Quit the app ]
+
+The important options are CC=mwcc CXX=mwcc LD=mwld AR=mwar RANLIB=true
+Right now you also need --disable-shared.  Eventually I hope to add the
+ability to created shared libraries.
+
+If you wish to use the Mach-O compilers instead of the Mac OS X compilers
+then use CC=mwccppc CXX=mwccppc LD=mwldppc.  You don't need a special
+AR or RANLIB with this compiler.
+
+At the moment, precompiled headers aren't supported though you don't need
+to pass --disable-precomp-headers since the Makefiles know they can't do PCH.
+I hope to add this soon.
+
+As you can see, this is not wildly different from compiling using any
+other compiler (for instance GCC).  The same files that would be compiled
+by gcc are now compiled by mwcc.  The same files that would be linked
+by the combination of ar and ranlib are now linked using the mwar shell
+script that calls mwld to do the work and using true in place of ranlib.
+The same files that would be linked using ld (i.e. the executable sample)
+are linked using mwld.
+
+
+=== Compiling wxWidgets targetting Mac OS (Carbon) with Metrowerks ===
+
+Compiling for Mac OS PEF Carbon is not really more or less difficult
+than compiling for OS X.  However, there is still some work left to do.
+
+In particular, the -lCarbonLib and -lQuickTimeLib options to the linker don't
+work because of the aforementioned bug in mwpefld. To fix this you can add
+-L/path/to/Universal/Libraries/StubLibraries to LDFLAGS.  Unfortunately
+because autoconf (2.59) doesn't always use eval appropriately you cannot
+have spaces in the path.  What I recommend is to make a symlink from
+/Applications/Metrowerks CodeWarrior 8.0/Metrowerks CodeWarrior/MacOS Support to some path which can be accessed without using spaces.
+Something like this:
+~$ ln -snf "/Applications/Metrowerks CodeWarrior 8.0/Metrowerks CodeWarrior/MacOS Support" MW_MacOS
+
+There is also a problem with the samples Makefiles.  Currently they clear
+the resource fork of the executable rather than append to it.  This
+can be remedied by adding the -a option to Rez before making in that
+sample's directory.  I hope to fix this soon.
+
+Assuming you work around these it's pretty straightforward:
+
+wxWidgets$ mkdir ../BUILD_MACCARBONd_CW8
+wxWidgets$ cd ../BUILD_MACCARBONd_CW8
+BUILD_MACCARBONd_CW8$ ../wxWidgets/configure --host=powerpc-apple-macos --enable-debug --disable-shared CC=mwpefcc CXX=mwpefcc LD=mwpefld AR=mwpefar RANLIB=true LDFLAGS=-L/Users/yourname/MW_MacOS/Universal/Libraries/StubLibraries
+[ configure hopefully succeeds ]
+BUILD_MACd_CW8$ make
+[ make hopefully succeeds ]
+BUILD_MACd_CW8$ make -C samples/minimal
+[ minimal make succeeds ]
+BUILD_MACd_CW8$ /System/Library/Frameworks/Carbon.framework/Versions/A/Support/LaunchCFMApp ./samples/minimal/minimal
+[ minimal runs and your prompt will return when you Quit the app ]
+
+Unlike the OS X case not many people compile wxMac Carbon PEF using configure.
+From time to time there may be minor problems.  Please report these using
+the sourceforge bug tracker.
+
+=== Other Metrowerks notes ===
+--- Object file extension ---
+By default, the mw compilers when used with the -c option will append .o
+to the source filename (following symlinks even).  This is in contrast to
+normal compilers which replace the files extension with .o.  To get the
+normal behavior you must add -ext o to the compiler options.  The wxWidgets
+configure script does this and the macros to check for this are part of
+Bakefile (bakefile.sourceforge.net).
+
+--- Static library extension ---
+The CodeWarrior IDE typically uses the .lib extension for CodeWarrior static
+libraries and .a for Mach-O static libraries (ar/ranlib archives).  The
+wxWidgets makefiles always use .a.  This isn't really a problem just be
+aware that the .a files aren't really ar/ranlib archives and aren't useable
+by anything other than CodeWarrior itself.
+
+--- IDE ---
+As far as I know it should be possible to use libraries created by
+the command line tools from the IDE.  For instance, you could compile
+wxWidgets using this method but continue to use the IDE for your application.
+Personally, I prefer sticking with the command line so I haven't tried this.
+
+--- OS X SDKs ---
+Before CodeWarrior 9.3 the usage of SDKs (those in /Developer/SDKs) is
+impossible.  You might think that it would work simply be prefacing any
+/System or /usr paths with the SDK path when setting the environment variables.
+Unfortunately, the libraries and frameworks inside these SDKs contain absolute
+paths to libraries and frameworks which they depend on.  Thus, the linker
+attempts to load the non-SDK version to satisfy the dependency.
+
+To ensure an app will work correctly on previous versions of the OS you
+can use Apple's availability macros.
+
+--- CodeWarrior 8.3 and Panther ---
+CodeWarrior 8.3 has some problems running on Panther.  When using the IDE
+version it is typical to change the OS X directory to the 10.2 SDK.
+Unfortunately, this is impossible with the command line compiler due to
+the aforementioned bug.  Thus, the only solution is to allow CodeWarrior
+8.3 to work with Panther's headers.  Fortunately, this isn't as hard
+as some people (particularly those at Metrowerks) would make you think.
+
+First of all, there are issues with Apple's headers declaring conflicting
+types.  Particularly with respect to wchar_t.  Now, I'm sure you're
+aware of the "(wchar_t Support fix)" directory.  What you need to do
+is create another one called "(wchar_t Support Panther fix)" using the 
+provided machine/ansi.h file which contains some minor changes from
+the Metrowerks version.
+
+Secondly, there is an issue with crt1.o.  Apple's position is that
+/usr/lib/crt1.o is intended to be used only with Apple's GCC.
+Metrowerks does provide an mwcrt1.o and when you're using the IDE you
+can perfectly well use it instead of Apple's crt1.o.  Unfortunately,
+when you are using mwld it has crt1.o hardcoded.  Very fortunately, it
+has only the filename encoded and it searches the libraries path!
+What I do is symlink "Mac OS X Support/Libraries/Startup/mwcrt1.o" to
+crt1.o in the same directory.
+
+--- MSL on OS X ---
+In mwvar.sh for the Mac OS X/PPC toolchain I've used MSL C++ with the
+BSD CRT.  To do this I used the .a files.  Earlier I used the .lib files
+but these also require the MSL C .lib.  AFAIK using this would cause
+the MSL CRT to be used and I think I don't want that unless I'm using
+the MSL CRT headers.  It did work although I never tested it with
+anything too complex.  I suspect it would have failed although I'm
+wondering how it works with the CW projects because I think they do
+link with the MSL_C libs.  This is probably very wrong.
+
+If you do decide to use the MSL_C libs you'll need to add
+"MSL/MSL_C/MSL_MacOS/Src/console_OS_X.c".  Unfortunately,
+mwld is a linker and doesn't understand C source code.  Thus you must
+compile this file and use the compiled version.
+
+What I did was simply run mwcc -c console_OS_X.c to generate a
+console_OS_X.c.o object file.  This file must be in MWMacOSXPPCLibraryFiles.
+

@@ -1,0 +1,201 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        filepicker.tex
+%% Purpose:     wxFilePickerCtrl and wxFileDirPickerEvent documentation
+%% Author:      Francesco Montorsi
+%% Created:     2006-05-12
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2006 Francesco Montorsi
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxFilePickerCtrl}}\label{wxfilepickerctrl}
+
+This control allows the user to select a file. The generic implementation is
+a button which brings up a \helpref{wxFileDialog}{wxfiledialog} when clicked. Native implementation
+may differ but this is usually a (small) widget which give access to the file-chooser
+dialog.
+It is only available if \texttt{wxUSE\_FILEPICKERCTRL} is set to $1$ (the default).
+
+\wxheading{Derived from}
+
+\helpref{wxPickerBase}{wxpickerbase}\\
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/filepicker.h>
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxFLP\_DEFAULT\_STYLE}}{The default style: includes
+wxFLP\_OPEN | wxFLP\_FILE\_MUST\_EXIST and, under wxMSW only,
+wxFLP\_USE\_TEXTCTRL.}
+\twocolitem{\windowstyle{wxFLP\_USE\_TEXTCTRL}}{Creates a text control to the left of the
+picker button which is completely managed by the \helpref{wxFilePickerCtrl}{wxfilepickerctrl}
+and which can be used by the user to specify a path (see \helpref{SetPath}{wxfilepickerctrlsetpath}).
+The text control is automatically synchronized with button's value. Use functions defined in \helpref{wxPickerBase}{wxpickerbase} to modify the text control.}
+\twocolitem{\windowstyle{wxFLP\_OPEN}}{Creates a picker which allows the user to select a file to open.}
+\twocolitem{\windowstyle{wxFLP\_SAVE}}{Creates a picker which allows the user to select a file to save.}
+\twocolitem{\windowstyle{wxFLP\_OVERWRITE\_PROMPT}}{Can be combined with wxFLP\_SAVE only: ask confirmation to the user before selecting a file.}
+\twocolitem{\windowstyle{wxFLP\_FILE\_MUST\_EXIST}}{Can be combined with wxFLP\_OPEN only: the selected file must be an existing file.}
+\twocolitem{\windowstyle{wxFLP\_CHANGE\_DIR}}{Change current working directory on each user file selection change.}
+
+NB: the wxFD\_MULTIPLE style of wxFileDialog is not supported!
+
+\end{twocollist}
+
+\wxheading{Event handling}
+
+To process a file picker event, use these event handler macros to direct input to member
+functions that take a \helpref{wxFileDirPickerEvent}{wxfiledirpickerevent} argument.
+
+\twocolwidtha{7cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_FILEPICKER\_CHANGED(id, func)}}{The user changed the file
+selected in the control either using the button or using text control (see
+wxFLP\_USE\_TEXTCTRL; note that in this case the event is fired only if the
+user's input is valid, e.g. an existing file path if wxFLP\_FILE\_MUST\_EXIST
+was given).}
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{wxFileDialog}{wxfiledialog},\\
+\helpref{wxFileDirPickerEvent}{wxfiledirpickerevent}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFilePickerCtrl::wxFilePickerCtrl}\label{wxfilepickerctrlctor}
+
+\func{}{wxFilePickerCtrl}{\param{wxWindow *}{parent},\rtfsp
+\param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{path = wxEmptyString},\rtfsp
+\param{const wxString\& }{message = ``Select a file"},\rtfsp
+\param{const wxString\& }{wildcard = ``*.*"},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxFLP\_DEFAULT\_STYLE},\rtfsp
+\param{const wxValidator\& }{validator = wxDefaultValidator},
+\param{const wxString\& }{name = ``filepickerctrl"}}
+
+Initializes the object and calls \helpref{Create}{wxfilepickerctrlcreate} with
+all the parameters.
+
+
+\membersection{wxFilePickerCtrl::Create}\label{wxfilepickerctrlcreate}
+
+\func{bool}{Create}{\param{wxWindow *}{parent},\rtfsp
+\param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{path = wxEmptyString},\rtfsp
+\param{const wxString\& }{message = ``Select a file"},\rtfsp
+\param{const wxString\& }{wildcard = ``*.*"},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxFLP\_DEFAULT\_STYLE},\rtfsp
+\param{const wxValidator\& }{validator = wxDefaultValidator},
+\param{const wxString\& }{name = ``filepickerctrl"}}
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window, must not be non-\texttt{NULL}.}
+
+\docparam{id}{The identifier for the control.}
+
+\docparam{path}{The initial file shown in the control. Must be a valid path to a file or the empty string.}
+
+\docparam{message}{The message shown to the user in the \helpref{wxFileDialog}{wxfiledialog} shown by the control.}
+
+\docparam{wildcard}{A wildcard which defines user-selectable files (use the same syntax as for \helpref{wxFileDialog}{wxfiledialog}'s wildcards).}
+
+\docparam{pos}{Initial position.}
+
+\docparam{size}{Initial size.}
+
+\docparam{style}{The window style, see {\tt wxFLP\_*} flags.}
+
+\docparam{validator}{Validator which can be used for additional date checks.}
+
+\docparam{name}{Control name.}
+
+\wxheading{Return value}
+
+\true if the control was successfully created or \false if creation failed.
+
+
+\membersection{wxFilePickerCtrl::GetPath}\label{wxfilepickerctrlgetpath}
+
+\constfunc{wxString}{GetPath}{\void}
+
+Returns the absolute path of the currently selected file.
+
+
+\membersection{wxFilePickerCtrl::SetPath}\label{wxfilepickerctrlsetpath}
+
+\func{void}{SetPath}{\param{const wxString \&}{filename}}
+
+Sets the absolute path of the currently selected file. This must be a valid file if
+the {\tt wxFLP\_FILE\_MUST\_EXIST} style was given.
+
+
+
+%% wxFileDirPickerEvent documentation
+
+\section{\class{wxFileDirPickerEvent}}\label{wxfiledirpickerevent}
+
+This event class is used for the events generated by
+\helpref{wxFilePickerCtrl}{wxfilepickerctrl} and by \helpref{wxDirPickerCtrl}{wxdirpickerctrl}.
+
+\wxheading{Derived from}
+
+\helpref{wxCommandEvent}{wxcommandevent}\\
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/filepicker.h>
+
+\wxheading{Event handling}
+
+To process input from a wxFilePickerCtrl or from a wxDirPickerCtrl, use one of these event handler macros to
+direct input to member function that take a \helpref{wxFileDirPickerEvent}{wxfiledirpickerevent} argument:
+
+\twocolwidtha{7cm}
+\begin{twocollist}
+\twocolitem{{\bf EVT\_FILEPICKER\_CHANGED(id, func)}}{Generated whenever the selected file changes.}
+\twocolitem{{\bf EVT\_DIRPICKER\_CHANGED(id, func)}}{Generated whenever the selected directory changes.}
+\end{twocollist}%
+
+
+\wxheading{See also}
+
+\helpref{wxfilepickerctrl}{wxfilepickerctrl}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFileDirPickerEvent::wxFileDirPickerEvent}\label{wxfiledirpickereventctor}
+
+\func{}{wxFileDirPickerEvent}{\param{wxEventType}{ type}, \param{wxObject *}{ generator}, \param{int}{ id}, \param{const wxString&}{ path}}
+
+The constructor is not normally used by the user code.
+
+
+\membersection{wxFileDirPickerEvent::GetPath}\label{wxfiledirpickereventgetpath}
+
+\constfunc{wxString}{GetPath}{\void}
+
+Retrieve the absolute path of the file/directory the user has just selected.
+
+
+\membersection{wxFileDirPickerEvent::SetPath}\label{wxfiledirpickereventsetpath}
+
+\func{void}{SetPath}{\param{const wxString \&}{path}}
+
+Set the absolute path of the file/directory associated with the event.
+

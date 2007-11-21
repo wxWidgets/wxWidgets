@@ -1,0 +1,86 @@
+\section{\class{wxStaticBox}}\label{wxstaticbox}
+
+A static box is a rectangle drawn around other panel items to denote
+a logical grouping of items.
+
+Please note that a static box should {\bf not} be used as the parent for the
+controls it contains, instead they should be siblings of each other. Although
+using a static box as a parent might work in some versions of wxWidgets, it
+results in a crash under, for example, wxGTK. 
+
+Also, please note that because of this, the order in which you create new 
+controls is important. Create your wxStaticBox control {\bf before} any 
+siblings that are to appear inside the wxStaticBox in order to preserve the 
+correct Z-Order of controls.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/statbox.h>
+
+\wxheading{Window styles}
+
+There are no special styles for this control.
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{See also}
+
+\helpref{wxStaticText}{wxstatictext}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxStaticBox::wxStaticBox}\label{wxstaticboxctor}
+
+\func{}{wxStaticBox}{\void}
+
+Default constructor.
+
+\func{}{wxStaticBox}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{label},\rtfsp
+\param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = 0}, \param{const wxString\& }{name = ``staticBox"}}
+
+Constructor, creating and showing a static box.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Window identifier. A value of -1 indicates a default value.}
+
+\docparam{label}{Text to be displayed in the static box, the empty string for no label.}
+
+\docparam{pos}{Window position. If the position (-1, -1) is specified then a default position is chosen.}
+
+\docparam{size}{Checkbox size. If the size (-1, -1) is specified then a default size is chosen.}
+
+\docparam{style}{Window style. See \helpref{wxStaticBox}{wxstaticbox}.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxStaticBox::Create}{wxstaticboxcreate}
+
+\membersection{wxStaticBox::\destruct{wxStaticBox}}\label{wxstaticboxdtor}
+
+\func{void}{\destruct{wxStaticBox}}{\void}
+
+Destructor, destroying the group box.
+
+\membersection{wxStaticBox::Create}\label{wxstaticboxcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{label},\rtfsp
+\param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = 0}, \param{const wxString\& }{name = ``staticBox"}}
+
+Creates the static box for two-step construction. See \helpref{wxStaticBox::wxStaticBox}{wxstaticboxctor}\rtfsp
+for further details.
+
+

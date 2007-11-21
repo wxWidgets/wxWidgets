@@ -1,0 +1,18 @@
+<HTML>
+<HEAD>
+<!-- Sitemap 1.0 -->
+</HEAD><BODY>
+<OBJECT type="text/site properties">
+	<param name="ImageType" value="Folder">
+</OBJECT>
+<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Project file">
+			<param name="Local" value="another.hhp">
+		     </OBJECT>
+	       	<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Contents file">
+			<param name="Local" value="another.hhc">
+		     </OBJECT>
+</UL>
+</BODY></HTML>

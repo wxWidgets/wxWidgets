@@ -1,0 +1,98 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        graphicsrenderer.tex
+%% Purpose:     wxGraphicsRenderer class documentation
+%% Author:      Stefan Csomor
+%% Modified by:
+%% Created:     08.06.2004
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Stefan Csomor
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxGraphicsRenderer}}\label{wxgraphicsrenderer}
+
+A wxGraphicsRenderer is the instance corresponding to the rendering engine used. There may be multiple instances on a system, if there are different rendering engines present, but there is always one instance per engine, eg there is ONE core graphics renderer instance on OSX. This instance is pointed back to by all objects created by it (wxGraphicsContext, wxGraphicsPath etc). Therefore you can create ag additional instances of paths etc. by calling GetRenderer() and then using the appropriate CreateXXX function.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/graphics.h>
+
+\wxheading{Data structures}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxGraphicsRenderer::GetDefaultRenderer}\label{wxgraphicsrenderergetdefaultrenderer}
+
+\func{wxGraphicsRenderer*}{GetDefaultRenderer}{\void}
+
+Returns the default renderer on this platform. On OS X this is the Core Graphics (a.k.a. Quartz 2D) renderer, on MSW the GDIPlus renderer, and on GTK we currently default to the cairo renderer.
+
+\membersection{wxGraphicsRenderer::CreateContext}\label{wxgraphicsrenderercreatecontext}
+
+\func{wxGraphicsContext *}{CreateContext}{\param{const wxWindowDC\& }{dc}}
+
+Creates a wxGraphicsContext from a wxWindowDC (eg a wxPaintDC).
+
+\func{wxGraphicsContext *}{CreateContext}{\param{wxWindow* }{window}}
+
+Creates a wxGraphicsContext from a wxWindow.
+
+\membersection{wxGraphicsRenderer::CreateContextFromNativeContext}\label{wxgraphicsrenderercreatecontextfromnativecontext}
+
+\func{wxGraphicsContext *}{CreateContextFromNativeContext}{\param{void * }{context}}
+
+Creates a wxGraphicsContext from a native context. This native context must be eg a CGContextRef for Core Graphics, a Graphics pointer for GDIPlus or a cairo\_t pointer for cairo.
+
+\membersection{wxGraphicsRenderer::CreateContextFromNativeWindow}\label{wxgraphicsrenderercreatecontextfromnativewindow}
+
+\func{wxGraphicsContext *}{CreateContextFromNativeWindow}{\param{void * }{window}}
+
+Creates a wxGraphicsContext from a native window. 
+
+\membersection{wxGraphicsRenderer::CreatePen}\label{wxgraphicsrenderercreatepen}
+
+\func{wxGraphicsPen}{CreatePen}{\param{const wxPen\& }{pen}}
+
+Creates a native pen from a wxPen.
+
+\membersection{wxGraphicsRenderer::CreateBrush}\label{wxgraphicsrenderercreatebrush}
+
+\func{wxGraphicsBrush}{CreateBrush}{\param{const wxBrush\& }{brush}}
+
+Creates a native brush from a wxBrush.
+
+\membersection{wxGraphicsRenderer::CreateLinearGradientBrush}\label{wxgraphicsrenderercreatelineargradientbrush}
+
+\func{wxGraphicsBrush}{CreateLinearGradientBrush}{\param{wxDouble }{x1}, \param{wxDouble }{y1}, \param{wxDouble }{x2}, \param{wxDouble }{y2}, \param{const }{wxColour\&c1}, \param{const }{wxColour\&c2}}
+
+Creates a native brush, having a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
+
+\membersection{wxGraphicsRenderer::CreateRadialGradientBrush}\label{wxgraphicsrenderercreateradialgradientbrush}
+
+\func{wxGraphicsBrush}{CreateRadialGradientBrush}{\param{wxDouble }{xo}, \param{wxDouble }{yo}, \param{wxDouble }{xc}, \param{wxDouble }{yc}, \param{wxDouble }{radius}, \param{const wxColour\& }{oColour}, \param{const wxColour\& }{cColour}}
+
+Creates a native brush, having a radial gradient originating at (xo,yc) with color oColour and ends on a circle around (xc,yc) with radius r and color cColour
+
+\membersection{wxGraphicsRenderer::CreateFont}\label{wxgraphicsrenderercreatefont}
+
+\func{wxGraphicsFont}{CreateFont}{\param{const wxFont\& }{font}, \param{const wxColour\& }{col = *wxBLACK}}
+
+Creates a native graphics font from a wxFont and a text colour.
+
+\membersection{wxGraphicsRenderer::CreateMatrix}\label{wxgraphicsrenderercreatematrix}
+
+\func{wxGraphicsMatrix}{CreateMatrix}{\param{wxDouble }{a = 1.0}, \param{wxDouble }{b = 0.0}, \param{wxDouble }{c = 0.0}, \param{wxDouble }{d = 1.0}, \param{wxDouble }{tx = 0.0}, \param{wxDouble }{ty = 0.0}}
+
+Creates a native affine transformation matrix from the passed in values. The defaults result in an identity matrix.
+
+\membersection{wxGraphicsRenderer::CreatePath}\label{wxgraphicsrenderercreatepath}
+
+\func{wxGraphicsPath}{CreatePath}{\void}
+
+Creates a native graphics path which is initially empty.
+
+

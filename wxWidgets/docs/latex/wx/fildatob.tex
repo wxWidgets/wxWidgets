@@ -1,0 +1,55 @@
+\section{\class{wxFileDataObject}}\label{wxfiledataobject}
+
+wxFileDataObject is a specialization of \helpref{wxDataObject}{wxdataobject} 
+for file names. The program works with it just as if it were a list of absolute file
+names, but internally it uses the same format as
+Explorer and other compatible programs under Windows or GNOME/KDE filemanager
+under Unix which makes it possible to receive files from them using this
+class.
+
+{\bf Warning:} Under all non-Windows platforms this class is currently
+"input-only", i.e. you can receive the files from another application, but
+copying (or dragging) file(s) from a wxWidgets application is not currently
+supported. PS: GTK2 should work as well.
+
+\wxheading{Virtual functions to override}
+
+None.
+
+\wxheading{Derived from}
+
+\helpref{wxDataObjectSimple}{wxdataobjectsimple}\\
+\helpref{wxDataObject}{wxdataobject}
+
+\wxheading{Include files}
+
+<wx/dataobj.h>
+
+\wxheading{See also}
+
+\helpref{wxDataObject}{wxdataobject}, 
+\helpref{wxDataObjectSimple}{wxdataobjectsimple}, 
+\helpref{wxTextDataObject}{wxtextdataobject}, 
+\helpref{wxBitmapDataObject}{wxbitmapdataobject}, 
+\helpref{wxDataObject}{wxdataobject}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFileDataObject}\label{wxfiledataobjectwxfiledataobject}
+
+\func{}{wxFileDataObject}{\void}
+
+Constructor.
+
+\membersection{wxFileDataObject::AddFile}\label{wxfiledataobjectaddfile}
+
+\func{virtual void}{AddFile}{\param{const wxString\& }{file}}
+
+{\bf MSW only:} adds a file to the file list represented by this data object.
+
+\membersection{wxFileDataObject::GetFilenames}\label{wxfiledataobjectgetfilenames}
+
+\constfunc{const wxArrayString\& }{GetFilenames}{\void}
+
+Returns the \helpref{array}{wxarraystring} of file names.
+

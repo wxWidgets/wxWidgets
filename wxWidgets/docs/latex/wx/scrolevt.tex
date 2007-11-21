@@ -1,0 +1,54 @@
+\section{\class{wxScrollEvent}}\label{wxscrollevent}
+
+A scroll event holds information about events sent from stand-alone
+\helpref{scrollbars}{wxscrollbar} and \helpref{sliders}{wxslider}. Note that
+starting from wxWidgets 2.1, scrolled windows send the 
+\helpref{wxScrollWinEvent}{wxscrollwinevent} which does not derive from
+wxCommandEvent, but from wxEvent directly - don't confuse these two kinds of
+events and use the event table macros mentioned below only for the
+scrollbar-like controls.
+
+\wxheading{Derived from}
+
+\helpref{wxCommandEvent}{wxcommandevent}\\
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/event.h>
+
+\input scrolevt.inc
+
+\wxheading{Remarks}
+
+Note that unless specifying a scroll control identifier, you will need to test for scrollbar
+orientation with \helpref{wxScrollEvent::GetOrientation}{wxscrolleventgetorientation}, since
+horizontal and vertical scroll events are processed using the same event handler.
+
+\wxheading{See also}
+
+\helpref{wxScrollBar}{wxscrollbar}, \helpref{wxSlider}{wxslider}, \helpref{wxSpinButton}{wxspinbutton}, \\
+\helpref{wxScrollWinEvent}{wxscrollwinevent}, \helpref{Event handling overview}{eventhandlingoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxScrollEvent::wxScrollEvent}\label{wxscrolleventctor}
+
+\func{}{wxScrollEvent}{\param{WXTYPE }{commandType = 0}, \param{int }{id = 0}, \param{int}{ pos = 0},
+\rtfsp\param{int}{ orientation = 0}}
+
+Constructor.
+
+\membersection{wxScrollEvent::GetOrientation}\label{wxscrolleventgetorientation}
+
+\constfunc{int}{GetOrientation}{\void}
+
+Returns wxHORIZONTAL or wxVERTICAL, depending on the orientation of the scrollbar.
+
+\membersection{wxScrollEvent::GetPosition}\label{wxscrolleventgetposition}
+
+\constfunc{int}{GetPosition}{\void}
+
+Returns the position of the scrollbar.
+

@@ -1,0 +1,43 @@
+\section{\class{wxPropertyListFrame}}\label{wxpropertylistframe}
+
+The {\bf wxPropertyListFrame} class is a prepackaged frame which can
+be used for viewing a property list. Pass a property list view object, and the frame
+will pass OnClose messages to the view class for processing.
+
+Call Initialize to create the panel and associate the view; override OnCreatePanel
+if you wish to use a panel class other than the default wxPropertyListPanel.
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPropertyListFrame::wxPropertyListFrame}
+
+\func{void}{wxPropertyListFrame}{\param{wxPropertyListView *}{view}, \param{wxFrame *}{parent}, \param{char *}{title},
+ \param{int}{ x=-1}, \param{int}{ y=-1}, \param{int}{ width=-1}, \param{int}{height=-1},
+ \param{long}{ style=wxSDI $\|$ wxDEFAULT\_FRAME}, \param{char *}{name=``frame"}}
+
+Constructor.
+
+\membersection{wxPropertyListFrame::\destruct{wxPropertyListFrame}}
+
+\func{void}{\destruct{wxPropertyListFrame}}{\void}
+
+Destructor.
+
+\membersection{wxPropertyListFrame::GetPropertyPanel}
+
+\func{wxPanel *}{GetPropertyPanel}{\void}
+
+Returns the panel associated with the frame.
+
+\membersection{wxPropertyListFrame::Initialize}
+
+\func{bool}{Initialize}{\void}
+
+Must be called to create the panel and associate the view with the panel and frame.
+
+\membersection{wxPropertyListFrame::OnCreatePanel}
+
+\func{wxPanel *}{OnCreatePanel}{\param{wxFrame *}{parent}, \param{wxPropertyListView *}{view}}
+
+Creates a panel. Override this to create a panel type other than wxPropertyListPanel.
+

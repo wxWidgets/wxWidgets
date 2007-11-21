@@ -1,0 +1,152 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        graphicspath.tex
+%% Purpose:     wxGraphicsPath class documentation
+%% Author:      Stefan Csomor
+%% Modified by:
+%% Created:     08.06.2004
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Stefan Csomor
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxGraphicsPath}}\label{wxgraphicspath}
+
+A wxGraphicsPath is a native representation of an geometric path. The contents are specific an private to the respective renderer. Instances are ref counted and can 
+therefore be assigned as usual. The only way to get a valid instance is via a CreatePath call on the graphics context or the renderer instance.
+
+\wxheading{Derived from}
+
+\helpref{wxGraphicsObject}{wxgraphicsobject}
+
+\wxheading{Include files}
+
+<wx/graphics.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxGraphicsPath::MoveToPoint}\label{wxgraphicspathmovetopoint}
+
+\func{void}{MoveToPoint}{\param{wxDouble }{x}, \param{wxDouble }{y}}
+
+\func{void}{MoveToPoint}{\param{const wxPoint2DDouble\& }{p}}
+
+Begins a new subpath at (x,y)
+
+\membersection{wxGraphicsPath::AddArc}\label{wxgraphicspathaddarc}
+
+\func{void}{AddArc}{\param{wxDouble }{x}, \param{wxDouble }{y}, \param{wxDouble }{r}, \param{wxDouble }{startAngle}, \param{wxDouble }{endAngle},
+ \param{bool }{clockwise}}
+
+Adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle.
+
+\func{void}{AddArc}{\param{const wxPoint2DDouble\& }{c}, \param{wxDouble }{r}, \param{wxDouble }{startAngle}, \param{wxDouble }{endAngle}, 
+\param{bool }{clockwise}}
+
+\membersection{wxGraphicsPath::AddArcToPoint}\label{wxgraphicspathaddarctopoint}
+
+\func{void}{AddArcToPoint}{\param{wxDouble }{x1}, \param{wxDouble }{y1}, \param{wxDouble }{x2}, \param{wxDouble }{y2}, \param{wxDouble }{r}}
+
+Appends a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1).
+
+\membersection{wxGraphicsPath::AddCircle}\label{wxgraphicspathaddcircle}
+
+\func{void}{AddCircle}{\param{wxDouble }{x}, \param{wxDouble }{y}, \param{wxDouble }{r}}
+
+Appends a circle around (x,y) with radius r as a new closed subpath.
+
+\membersection{wxGraphicsPath::AddCurveToPoint}\label{wxgraphicspathaddcurvetopoint}
+
+\func{void}{AddCurveToPoint}{\param{wxDouble }{cx1}, \param{wxDouble }{cy1}, \param{wxDouble }{cx2}, \param{wxDouble }{cy2}, \param{wxDouble }{x}, 
+\param{wxDouble }{y}}
+
+Adds a cubic Bezier curve from the current point, using two control points and an end point.
+
+\func{void}{AddCurveToPoint}{\param{const wxPoint2DDouble\& }{c1}, \param{const wxPoint2DDouble\& }{c2}, \param{const wxPoint2DDouble\& }{e}}
+
+\membersection{wxGraphicsPath::AddEllipse}\label{wxgraphicspathaddellipse}
+
+\func{void}{AddEllipse}{\param{wxDouble }{x}, \param{wxDouble }{y}, \param{wxDouble }{w}, \param{wxDouble }{h}}
+
+Appends an ellipse fitting into the passed in rectangle.
+
+\membersection{wxGraphicsPath::AddLineToPoint}\label{wxgraphicspathaddlinetopoint}
+
+\func{void}{AddLineToPoint}{\param{wxDouble }{x}, \param{wxDouble }{y}}
+
+Adds a straight line from the current point to (x,y).
+
+\func{void}{AddLineToPoint}{\param{const wxPoint2DDouble\& }{p}}
+
+\membersection{wxGraphicsPath::AddPath}\label{wxgraphicspathaddpath}
+
+\func{void}{AddPath}{\param{const wxGraphicsPath\& }{path}}
+
+Adds another path.
+
+\membersection{wxGraphicsPath::AddQuadCurveToPoint}\label{wxgraphicspathaddquadcurvetopoint}
+
+\func{void}{AddQuadCurveToPoint}{\param{wxDouble }{cx}, \param{wxDouble }{cy}, \param{wxDouble }{x}, \param{wxDouble }{y}}
+
+Adds a quadratic Bezier curve from the current point, using a control point and an end point.
+
+\membersection{wxGraphicsPath::AddRectangle}\label{wxgraphicspathaddrectangle}
+
+\func{void}{AddRectangle}{\param{wxDouble }{x}, \param{wxDouble }{y}, \param{wxDouble }{w}, \param{wxDouble }{h}}
+
+Appends a rectangle as a new closed subpath.
+
+\membersection{wxGraphicsPath::AddRoundedRectangle}\label{wxgraphicspathaddroundedrectangle}
+
+\func{void}{AddRoundedRectangle}{\param{wxDouble }{x}, \param{wxDouble }{y}, \param{wxDouble }{w}, \param{wxDouble }{h}, \param{wxDouble }{radius}}
+
+Appends a rounded rectangle as a new closed subpath.
+
+\membersection{wxGraphicsPath::CloseSubpath}\label{wxgraphicspathclosesubpath}
+
+\func{void}{CloseSubpath}{\void}
+
+Closes the current sub-path.
+
+\membersection{wxGraphicsPath::Contains}\label{wxgraphicspathcontains}
+
+\constfunc{bool}{Contains}{\param{const wxPoint2DDouble\& }{c}, \param{int }{fillStyle = wxODDEVEN\_RULE}}
+
+\constfunc{bool}{Contains}{\param{wxDouble }{x}, \param{wxDouble }{y}, \param{int }{fillStyle = wxODDEVEN\_RULE}}
+
+Returns true if the point is within the path.
+
+\membersection{wxGraphicsPath::GetBox}\label{wxgraphicspathgetbox}
+
+\constfunc{wxRect2DDouble}{GetBox}{\void}
+
+\constfunc{void}{GetBox}{\param{wxDouble* }{x}, \param{wxDouble* }{y}, \param{wxDouble* }{w}, \param{wxDouble* }{h}}
+
+Gets the bounding box enclosing all points (possibly including control points).
+
+\membersection{wxGraphicsPath::GetCurrentPoint}\label{wxgraphicspathgetcurrentpoint}
+
+\constfunc{void}{GetCurrentPoint}{\param{wxDouble* }{x}, \param{wxDouble* }{y}}
+
+\constfunc{wxPoint2DDouble}{GetCurrentPoint}{\void}
+
+Gets the last point of the current path, (0,0) if not yet set.
+
+\membersection{wxGraphicsPath::Transform}\label{wxgraphicspathtransform}
+
+\func{void}{Transform}{\param{const wxGraphicsMatrix\& }{matrix}}
+
+Transforms each point of this path by the matrix.
+
+\membersection{wxGraphicsPath::GetNativePath}\label{wxgraphicspathgetnativepath}
+
+\constfunc{void *}{GetNativePath}{\void}
+
+Returns the native path (CGPathRef for Core Graphics, Path pointer for GDIPlus and a cairo\_path\_t pointer for cairo).
+
+\membersection{wxGraphicsPath::UnGetNativePath}\label{wxgraphicspathungetnativepath}
+
+\constfunc{void}{UnGetNativePath}{\param{void* }{p}}
+
+Gives back the native path returned by GetNativePath() because there might be some deallocations necessary (eg on cairo the native path returned by 
+GetNativePath is newly allocated each time).
+

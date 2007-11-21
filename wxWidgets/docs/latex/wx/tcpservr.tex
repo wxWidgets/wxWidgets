@@ -1,0 +1,49 @@
+\section{\class{wxTCPServer}}\label{wxtcpserver}
+
+A wxTCPServer object represents the server part of a client-server conversation.
+It emulates a DDE-style protocol, but uses TCP/IP which is available on most platforms.
+
+A DDE-based implementation for Windows is available using \helpref{wxDDEServer}{wxddeserver}.
+
+\wxheading{Derived from}
+
+wxServerBase\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/sckipc.h>
+
+\wxheading{See also}
+
+\helpref{wxTCPClient}{wxtcpclient}, \helpref{wxTCPConnection}{wxtcpconnection}, \helpref{IPC overview}{ipcoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxTCPServer::wxTCPServer}\label{wxtcpserverctor}
+
+\func{}{wxTCPServer}{\void}
+
+Constructs a server object.
+
+\membersection{wxTCPServer::Create}\label{wxtcpservercreate}
+
+\func{bool}{Create}{\param{const wxString\& }{service}}
+
+Registers the server using the given service name. Under Unix, the
+string must contain an integer id which is used as an Internet port
+number. false is returned if the call failed (for example, the port
+number is already in use).
+
+\membersection{wxTCPServer::OnAcceptConnection}\label{wxtcpserveronacceptconnection}
+
+\func{virtual wxConnectionBase *}{OnAcceptConnection}{\param{const wxString\& }{topic}}
+
+When a client calls {\bf MakeConnection}, the server receives the
+message and this member is called. The application should derive a
+member to intercept this message and return a connection object of
+either the standard wxTCPConnection type, or of a user-derived type. If the
+topic is ``STDIO'', the application may wish to refuse the connection.
+Under Unix, when a server is created the OnAcceptConnection message is
+always sent for standard input and output.
+

@@ -1,0 +1,232 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        hyperlink.tex
+%% Purpose:     wxHyperlinkCtrl documentation
+%% Author:      Otto Wyss
+%% Modified by: Francesco Montorsi
+%% Created:     25.4.2004
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2004 wxCode, Francesco Montorsi
+%% License:     wxWindows
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxHyperlinkCtrl}}\label{wxhyperlinkctrl}
+
+This class shows a static text element which links to an URL.
+Appearance and behaviour is completely customizable. In fact, when the user
+clicks on the hyperlink, a \helpref{wxHyperlinkEvent}{wxhyperlinkevent} is
+sent but if that event is not handled (or it's skipped; see
+\helpref{wxEvent::Skip}{wxeventskip}), then a call to
+\helpref{wxLaunchDefaultBrowser}{wxlaunchdefaultbrowser} is done with the
+hyperlink's URL.
+
+Note that standard \helpref{wxWindow}{wxwindow} functions like \helpref{SetBackgroundColour}{wxwindowsetbackgroundcolour}, \helpref{SetFont}{wxwindowsetfont}, \helpref{SetCursor}{wxwindowsetcursor}, \helpref{SetLabel}{wxwindowsetlabel} can be used to customize appearance of the hyperlink.
+
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+
+\wxheading{Include files}
+
+<wx/hyperlink.h>
+
+
+\wxheading{Window styles}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxHL\_ALIGN\_LEFT}}{Align the text to the left.}
+\twocolitem{\windowstyle{wxHL\_ALIGN\_RIGHT}}{Align the text to the right.}
+\twocolitem{\windowstyle{wxHL\_ALIGN\_CENTRE}}{Center the text (horizontally).}
+\twocolitem{\windowstyle{wxHL\_CONTEXTMENU}}{Pop up a context menu when the hyperlink is right-clicked. The context menu contains a \texttt{``Copy URL"} menu item which is automatically handled by the hyperlink and which just copies in the clipboard the URL (not the label) of the control.}
+\twocolitem{\windowstyle{wxHL\_DEFAULT\_STYLE}}{The default style for wxHyperlinkCtrl: \texttt{wxNO\_BORDER|wxHL\_CONTEXTMENU|wxHL\_ALIGN\_CENTRE}.}
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
+
+\wxheading{Event handling}
+
+To process input from an hyperlink control, use these event handler macros to
+direct input to member functions that take a
+\helpref{wxHyperlinkEvent}{wxhyperlinkevent} argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_HYPERLINK(id, func)}}{The hyperlink was (left) clicked. If this event is not handled in user's code (or it's skipped; see \helpref{wxEvent::Skip}{wxeventskip}), then a call to \helpref{wxLaunchDefaultBrowser}{wxlaunchdefaultbrowser} is done with the hyperlink's URL.}
+\end{twocollist}
+
+
+\wxheading{See also}
+
+\helpref{wxURL}{wxurl}, \helpref{wxHyperlinkEvent}{wxhyperlinkevent}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxHyperlinkCtrl::wxHyperLink}\label{wxhyperlinkctrlctor}
+
+\func{}{wxHyperLink}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id}, \param{const wxString \&}{ label}, \param{const wxString \&}{ url}, \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style}, \param{const wxString\& }{name = ``hyperlink"}}
+
+Constructor. See \helpref{Create}{wxhyperlinkctrlcreate} for more info.
+
+
+\membersection{wxHyperlinkCtrl::Create}\label{wxhyperlinkctrlcreate}
+
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id}, \param{const wxString \&}{ label}, \param{const wxString \&}{ url}, \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style}, \param{const wxString\& }{name = ``hyperlink"}}
+
+Creates the hyperlink control.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be \NULL.}
+
+\docparam{id}{Window identifier. A value of wxID\_ANY indicates a default value.}
+
+\docparam{label}{The label of the hyperlink.}
+
+\docparam{url}{The URL associated with the given label.}
+
+\docparam{pos}{Window position.}
+
+\docparam{size}{Window size. If the wxDefaultSize is specified then the window is sized
+appropriately.}
+
+\docparam{style}{Window style. See \helpref{wxHyperlinkCtrl}{wxhyperlinkctrl}.}
+
+\docparam{validator}{Window validator.}
+
+\docparam{name}{Window name.}
+
+
+\membersection{wxHyperlinkCtrl::GetHoverColour}\label{wxhyperlinkctrlgethovercolour}
+
+\constfunc{wxColour}{GetHoverColour}{\void}
+
+Returns the colour used to print the label of the hyperlink when the mouse is over the control.
+
+
+\membersection{wxHyperlinkCtrl::SetHoverColour}\label{wxhyperlinkctrlsethovercolour}
+
+\func{void}{SetHoverColour}{\param{const wxColour \&}{ colour}}
+
+Sets the colour used to print the label of the hyperlink when the mouse is over the control.
+
+
+\membersection{wxHyperlinkCtrl::GetNormalColour}\label{wxhyperlinkctrlgetnormalcolour}
+
+\constfunc{wxColour}{GetNormalColour}{\void}
+
+Returns the colour used to print the label when the link has never been clicked before
+(i.e. the link has not been {\it visited}) and the mouse is not over the control.
+
+
+\membersection{wxHyperlinkCtrl::SetNormalColour}\label{wxhyperlinkctrlsetnormalcolour}
+
+\func{void}{SetNormalColour}{\param{const wxColour \&}{ colour}}
+
+Sets the colour used to print the label when the link has never been clicked before
+(i.e. the link has not been {\it visited}) and the mouse is not over the control.
+
+
+\membersection{wxHyperlinkCtrl::GetVisitedColour}\label{wxhyperlinkctrlgetvisitedcolour}
+
+\constfunc{wxColour}{GetVisitedColour}{\void}
+
+Returns the colour used to print the label when the mouse is not over the control
+and the link has already been clicked before (i.e. the link has been {\it visited}).
+
+
+\membersection{wxHyperlinkCtrl::SetVisitedColour}\label{wxhyperlinkctrlsetvisitedcolour}
+
+\func{void}{SetVisitedColour}{\param{const wxColour \&}{ colour}}
+
+Sets the colour used to print the label when the mouse is not over the control
+and the link has already been clicked before (i.e. the link has been {\it visited}).
+
+
+\membersection{wxHyperlinkCtrl::GetVisited}\label{wxhyperlinkctrlgetvisited}
+
+\constfunc{bool}{GetVisited}{\void}
+
+Returns \true if the hyperlink has already been clicked by the user at least one time.
+
+
+\membersection{wxHyperlinkCtrl::SetVisited}\label{wxhyperlinkctrlsetvisited}
+
+\func{void}{SetVisited}{\param{bool}{ visited = true}}
+
+Marks the hyperlink as visited (see \helpref{SetVisitedColour}{wxhyperlinkctrlsetvisitedcolour}).
+
+
+\membersection{wxHyperlinkCtrl::GetURL}\label{wxhyperlinkctrlgeturl}
+
+\constfunc{wxString}{GetURL}{\void}
+
+Returns the URL associated with the hyperlink.
+
+
+\membersection{wxHyperlinkCtrl::SetURL}\label{wxhyperlinkctrlseturl}
+
+\func{void}{SetURL}{\param{const wxString \&}{ url}}
+
+Sets the URL associated with the hyperlink.
+
+
+
+
+
+
+\section{\class{wxHyperlinkEvent}}\label{wxhyperlinkevent}
+
+This event class is used for the events generated by
+\helpref{wxHyperlinkCtrl}{wxhyperlinkctrl}.
+
+\wxheading{Derived from}
+
+\helpref{wxCommandEvent}{wxcommandevent}\\
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/hyperlink.h>
+
+\wxheading{Event handling}
+
+To process input from a wxHyperlinkCtrl, use one of these event handler macros to
+direct input to member function that take a
+\helpref{wxHyperlinkEvent}{wxhyperlinkevent} argument:
+
+\twocolwidtha{7cm}
+\begin{twocollist}
+\twocolitem{{\bf EVT\_HYPERLINK(id, func)}}{User clicked on an hyperlink.}
+\end{twocollist}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxHyperlinkEvent::wxHyperlinkEvent}\label{wxhyperlinkeventctor}
+
+\func{}{wxHyperlinkEvent}{\param{wxObject *}{ generator}, \param{int}{ id}, \param{const wxString \&}{ url}}
+
+The constructor is not normally used by the user code.
+
+
+\membersection{wxHyperlinkEvent::GetURL}\label{wxhyperlinkeventgeturl}
+
+\constfunc{wxString}{GetURL}{\void}
+
+Returns the URL of the hyperlink where the user has just clicked.
+
+
+\membersection{wxHyperlinkEvent::SetURL}\label{wxhyperlinkeventseturl}
+
+\func{void}{SetURL}{\param{const wxString \&}{ url}}
+
+Sets the URL associated with the event.
+

@@ -1,0 +1,109 @@
+\section{\class{wxMiniFrame}}\label{wxminiframe}
+
+A miniframe is a frame with a small title bar. It is suitable for floating toolbars that must not
+take up too much screen area.
+
+\wxheading{Derived from}
+
+\helpref{wxFrame}{wxframe}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/minifram.h>
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxICONIZE}}{Display the frame iconized (minimized) (Windows only).}
+\twocolitem{\windowstyle{wxCAPTION}}{Puts a caption on the frame.}
+\twocolitem{\windowstyle{wxMINIMIZE}}{Identical to {\bf wxICONIZE}.}
+\twocolitem{\windowstyle{wxMINIMIZE\_BOX}}{Displays a minimize box on the frame (Windows and Motif only).}
+\twocolitem{\windowstyle{wxMAXIMIZE}}{Displays the frame maximized (Windows only).}
+\twocolitem{\windowstyle{wxMAXIMIZE\_BOX}}{Displays a maximize box on the frame (Windows and Motif only).}
+\twocolitem{\windowstyle{wxCLOSE\_BOX}}{Displays a close box on the frame.}
+\twocolitem{\windowstyle{wxSTAY\_ON\_TOP}}{Stay on top of other windows (Windows only).}
+\twocolitem{\windowstyle{wxSYSTEM\_MENU}}{Displays a system menu (Windows and Motif only).}
+\twocolitem{\windowstyle{wxTINY\_CAPTION\_HORIZ}}{This style is obsolete and
+not used any longer.}
+\twocolitem{\windowstyle{wxTINY\_CAPTION\_VERT}}{This style is obsolete and not
+used any longer.}
+\twocolitem{\windowstyle{wxRESIZE\_BORDER}}{Displays a resizeable border around the window.}
+\end{twocollist}
+
+\wxheading{Remarks}
+
+This class has miniframe functionality under Windows and GTK, i.e. the presence
+of mini frame will not be noted in the task bar and focus behaviour is different.
+On other platforms, it behaves like a normal frame.
+
+\wxheading{See also}
+
+\helpref{wxMDIParentFrame}{wxmdiparentframe}, \helpref{wxMDIChildFrame}{wxmdichildframe},\rtfsp
+\helpref{wxFrame}{wxframe}, \helpref{wxDialog}{wxdialog}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxMiniFrame::wxMiniFrame}\label{wxminiframector}
+
+\func{}{wxMiniFrame}{\void}
+
+Default constructor.
+
+\func{}{wxMiniFrame}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
+\param{const wxString\& }{title}, \param{const wxPoint\&}{ pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style = wxCAPTION | wxRESIZE\_BORDER},\rtfsp
+\param{const wxString\& }{name = ``frame"}}
+
+Constructor, creating the window.
+
+\wxheading{Parameters}
+
+\docparam{parent}{The window parent. This may be NULL. If it is non-NULL, the frame will
+always be displayed on top of the parent window on Windows.}
+
+\docparam{id}{The window identifier. It may take a value of -1 to indicate a default value.}
+
+\docparam{title}{The caption to be displayed on the frame's title bar.}
+
+\docparam{pos}{The window position. A value of (-1, -1) indicates a default position, chosen by
+either the windowing system or wxWidgets, depending on platform.}
+
+\docparam{size}{The window size. A value of (-1, -1) indicates a default size, chosen by
+either the windowing system or wxWidgets, depending on platform.}
+
+\docparam{style}{The window style. See \helpref{wxMiniFrame}{wxminiframe}.}
+
+\docparam{name}{The name of the window. This parameter is used to associate a name with the item,
+allowing the application user to set Motif resource values for
+individual windows.}
+
+\wxheading{Remarks}
+
+The frame behaves like a normal frame on non-Windows platforms.
+
+\wxheading{See also}
+
+\helpref{wxMiniFrame::Create}{wxminiframecreate}
+
+\membersection{wxMiniFrame::\destruct{wxMiniFrame}}\label{wxminiframedtor}
+
+\func{void}{\destruct{wxMiniFrame}}{\void}
+
+Destructor. Destroys all child windows and menu bar if present.
+
+\membersection{wxMiniFrame::Create}\label{wxminiframecreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
+\param{const wxString\& }{title}, \param{const wxPoint\&}{ pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style = wxCAPTION | wxRESIZE\_BORDER},\rtfsp
+\param{const wxString\& }{name = ``frame"}}
+
+Used in two-step frame construction. See \helpref{wxMiniFrame::wxMiniFrame}{wxminiframector}\rtfsp
+for further details.
+
+
+

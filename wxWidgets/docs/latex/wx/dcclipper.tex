@@ -1,0 +1,62 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        dcclipper.tex
+%% Purpose:     wxDCClipper documentation
+%% Author:      Vadim Zeitlin
+%% Created:     2006-04-10
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2006 Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxDCClipper}}\label{wxdcclipper}
+
+wxDCClipper is a small helper class for setting a clipping region on a 
+\helpref{wxDC}{wxdc} and unsetting it automatically. An object of wxDCClipper
+class is typically created on the stack so that it is automatically destroyed
+when the object goes out of scope. A typical usage example:
+
+\begin{verbatim}
+    void MyFunction(wxDC& dc)
+    {
+        wxDCClipper clip(rect);
+        ... drawing functions here are affected by clipping rect ...
+    }
+
+    void OtherFunction()
+    {
+        wxDC dc;
+        MyFunction(dc);
+        ... drawing functions here are not affected by clipping rect ...
+    }
+\end{verbatim}
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/dc.h>
+
+\wxheading{See also}
+
+\helpref{wxDC::SetClippingRegion}{wxdcsetclippingregion}
+
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDCClipper::wxDCClipper}\label{wxdcclipperctor}
+
+\func{}{wxDCClipper}{\param{wxDC\& }{dc}, \param{const wxRegion\& }{r}}
+
+\func{}{wxDCClipper}{\param{wxDC\& }{dc}, \param{const wxRect\& }{rect}}
+
+\func{}{wxDCClipper}{\param{wxDC\& }{dc}, \param{int }{x}, \param{int }{y}, \param{int }{w}, \param{int }{h}}
+
+Sets the clipping region to the specified region \arg{r} or rectangle specified
+by either a single \arg{rect} parameter or its position (\arg{x} and \arg{y})
+and size (\arg{w} ad \arg{h}).
+
+The clipping region is automatically unset when this object is destroyed.
+

@@ -1,0 +1,238 @@
+
+<HTML>
+
+<HEAD>
+<TITLE>wxWidgets for Mac FAQ</TITLE>
+</HEAD>
+
+<BODY BGCOLOR=#FFFFFF TEXT=#000000 VLINK="#00376A" LINK="#00529C" ALINK="#313063">
+
+<font face="Arial, Lucida Sans, Helvetica">
+
+<table width=100% border=0 cellpadding=3 cellspacing=0>
+<tr>
+<td bgcolor="#004080" align=left height=24 background="images/bluetitlegradient.gif">
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
+<b>wxWidgets for Mac FAQ</b>
+</font>
+</td>
+</tr>
+</table>
+
+<P>
+
+See also <a href="faq.htm">top-level FAQ page</a>.
+<hr>
+<h3>List of questions in this category</h3>
+<ul>
+<li><a href="#release">Where should I download wxMac from?</a></li>
+<li><a href="#macplat">Which Mac platforms are supported?</a></li>
+<li><a href="#compilers">What compilers are supported?</a></li>
+<li><a href="#conflicts">What can I do if I get conflicts between different installed versions of wxWidgets?</a></li>
+<li><a href="#filetypes">How does CVS handle file types/creators under Mac OS 8.x /9.x?</a></li>
+<li><a href="#filetypesx">How does CVS handle file types/creators under Mac OS X? </a></li>
+<!--
+<li><a href="#cwpro53">What steps are required to build wxMac using CodeWarrior Pro 5.3?</a></li>
+-->
+<li><a href="#buildx">What steps are required to build wxMac under Mac OS X?</a></li>
+<li><a href="#settings">What important settings are required in the CodeWarrior Project Preferences?</a></li>
+<li><a href="#smarterrors">What are the smart preprocessing errors with the Apple Developer Tools?</a></li>
+<li><a href="#aboutmenu">How does wxMac support the standard Apple About menu item and Help menu?</a></li>
+<li><a href="#findericon">How do I add an icon to my application?</a></li>
+<li><a href="#switching">How can I easily switch between different versions of wxWidgets in CodeWarrior?</a></li>
+</ul>
+<hr>
+
+<h3><a name="release">Where should I download wxMac from?</a></h3>
+
+Please see the <a href="dl_mac2.htm">downloads page</a>.
+<P>
+The author of this port is <a href="mailto:csomor@advancedconcepts.ch">Stefan Csomor</a>.
+<P>
+
+<h3><a name="macplat">Which Mac platforms are supported?</a></h3>
+
+wxWidgets can be used to develop and deliver applications on Mac OS X and Mac Classic (e.g. Mac OS 8.x/9.x) both as Carbon and non-Carbon applications.
+However the Mac OS X port is the most actively developed one, and Mac Classic will not be supported
+after 2.6. wxMac works best with Mac OS X 10.3 and above.
+<P>
+
+<h3><a name="compilers">What compilers are supported?</a></h3>
+
+Under Classic Mac OS, MetroWerks CodeWarrior Pro 6 (or above) is required to build wxMac.
+<P>
+Under Mac OS X, the Developer Tools are sufficient to build wxMac. CodeWarrior Pro 6 can also be used to build the Carbon targets.
+<P>
+
+<h3><a name="conflicts">What can I do if I get conflicts between different installed versions of wxWidgets?</a></h3>
+
+Some versions of Mac OS X install an older version of wxMac than the one you may be using
+for development. This can cause conflicts, such as link errors when building your
+applications. A user reports:<p>
+
+<blockquote>
+I got it to work. I removed the original wxMac build-release folder  
+and recompiled wxMac following instructions in your book. I then ran  
+"sudo make install" which I didn't do the first time. I figured I  
+could now run wx-config --cxxflags from my home directory because
+/usr/local/bin/wx-config was in my $PATH. However, OSX 10.4 installed
+a version of wxWidgets. When I ran wx-config I was getting wx 2.5
+libs instead of the 2.6.1 libs I just compiled. When I ran
+"/usr/local/bin/wx-config --cxxflags" and "/usr/local/bin/wx-config --libs"  
+and pasted that output into XCode preferences, everything worked fine.
+</blockquote>
+<p>
+
+<h3><a name="filetypes">How does CVS handle file types/creators under Mac OS 8.x/9.x?</a></h3>
+
+Before checking out the wxWidgets code using a CVS client under Mac OS 8.x/9.x, be sure your computer is set up to treat <code>xpm</code> and <code>xbm</code> images correctly:
+<ul>
+<li>bring up the Internet control panel, select the <i>Advanced Options</i> tab, click on the <i>File Mapping</i> icon from the list at the left and see if there are is an entry for ".xpm" files and another for ".xbm".
+<li>if an entry exists, click <i>Change...</i> and make sure <i>File Type</i> is <code>TEXT</code> (just those four capital letters); correct it if necessary. If there is no entry, make one with type set to <code>TEXT</code> and creator set to anything you like; reasonable choices include <code>GKON</code> (Graphic Converter) or <code>CWIE</code> (CodeWarrior).
+<li>if you want to edit <code>xpm</code> or <code>xbm</code> files in CodeWarrior, set up a file mapping in the CodeWarrior project settings for analogous to ".h" files.
+</ul>
+<P>
+
+<h3><a name="filetypesx">How does CVS handle file types/creators under Mac OS X?</a></h3>
+
+The Mac OS X CVS client does not handle file types and creators at all (just like every Unix command line CVS client). This is an issue only when the checked out files will also be used under Mac OS 8.x/9.x.
+<P>
+All files checked out under Mac OS X will be untyped and CodeWarrior will not recognize them correctly. To correct this, use the autotyper provided in the CVS sources:
+<ul>
+<li>decode and decompress the file <code>wxWidgets/docs/mac/TypeAsMetrowerksText.sea.hqx</code>
+<li>drag the wxWidgets CVS sandbox directory onto the autotyper and most of the files will be typed according to the file extension
+</ul>
+<P>
+
+<!--
+<h3><a name="cwpro53">What steps are required to build wxMac using CodeWarrior Pro 5.3?</a></h3>
+
+The latest build for Carbon support lead to a few changes that you will have to follow in order to successfully compile the code.
+This is also necessary even if you don&#39;want to build the Carbon targets.
+
+<ol>
+<li>you need CodeWarrior Pro 5.3, i.e. 5.0 with all the upgrades
+<li>you have to download the Universal Interfaces 3.3.2 or later from the Apple Developer web site, Universal Interfaces 3.4 is required for Carbon Printing support
+<li>put the Universal folder into the MacOS Support folder and replace older versions
+<li>remove from the MacOS Support folder the separate OpenTransport folder
+<li>open the file MacOS Support:MacHeaders:MacHeaders.c and add the line
+        <pre>#include &lt;ControlDefinitions.h&gt;</pre>
+        after the line
+        <pre>#include &lt;Controls.h&gt;</pre>
+<li>rebuild all MacHeaders from the MacHeaders.mcp project in the same folder
+</ol>
+<P>
+Build the projects (<code>makemac6.mcp</code> for CodeWarrior Pro 6; <code>makemac.mpc</code> for CodeWarrior Pro 5) in the following five directories:
+<ul>
+<li>wxWidgets:src:
+<li>wxWidgets:src:jpeg:
+<li>wxWidgets:src:png:
+<li>wxWidgets:src:tiff:
+<li>wxWidgets:src:zlib:
+</ul>
+<P>
+-->
+
+<h3><a name="buildx">What steps are required to build wxMac under Mac OS X?</a></h3>
+
+You need to have the Apple Developer Tools installed. The Developer Tools CD is one of the 3 CDs that are delivered with Mac OS X but must be installed in addition to the default Mac OS X installation.
+<P>
+Building wxMac completely without configure is not supported.
+<P>
+Building wxWidgets directly in the CVS sandbox is not recommended. Instead, wxWidgets should be built in a directory configured relatively to the CVS sandbox.
+For instance, to build wxMac with configure, start in the base wxWidgets directory and type:
+<ul>
+<li><code>mkdir macbuild</code>
+<li><code>cd macbuild</code>
+<li><code>../configure</code> <b>or</b> <code>../configure --enable-debug</code>
+<li><code>make</code>
+</ul>
+<P>
+
+<h3><a name="settings">What important settings are required in the CodeWarrior Project Preferences?</a></h3>
+
+For some reasons the CodeWarrior project settings may get changed and this may lead to the inability to compile a certain target. In order to verify the settings click on the target tab, double click on the respective target and then select the following items on the tree-view on the left. Here are the important checks:
+
+<ol>
+
+<li>under <code>Target/Access Paths</code>, make sure the first user include does not have a folder icon for recursive search.
+
+<li> under <code>Language Settings/C/C++ Language</code>, make sure that the only checked items are:
+<ul>
+<li><code>Enable C++ Exceptions</code>
+<li><code>Enable RTTI</code>
+<li><code>Enable bool Support</code>
+<li><code>Enable wchar_t Support</code>
+<li><code>Relaxed Pointer Type Rules</code>
+<li><code>Use Unsigned Chars</code>
+</ul>
+
+<li>under <code>Language Settings/C/C++ Warnings</code>, make sure that the only checked items are:
+<ul>
+<li><code>Illegal Pragmas</code>
+<li><code>Extended Error Checking</code>
+<li><code>Inconsistent Use of 'class' and 'struct' Keywords</code>
+<li><code>Hidden Virtual Functions</code> but be aware that the framework itself has some of these beauty spots
+</ul>
+
+<li>under <code>Linker/PPC Linker</code>, make sure that the following items are checked:
+<ul>
+<li><code>Dead-strip Static Initialization Code</code> in order to avoid including libraries that are not needed, especially as things like <a href="http://developer.apple.com/opengl/index.html">OpenGL</a> get added to the projects and sources
+</ul>
+
+</ol>
+<P>
+
+<h3><a name="smarterrors">What are the smart preprocessing errors with the Apple Developer Tools?</a></h3>
+
+Smart preprocessing is activated with the <code>-cpp-precomp</code> option and allows much faster preprocessing of the source files by loading precompiled Carbon header files. This option speeds up the compilation of wxMac by a factor of 2 at least.
+When compiling wxMac  using the Apple Developer Tools, the following error is displayed for certain files:
+<ul>
+<li><code>cpp-precomp: warning: errors during smart preprocessing, retrying in basic mode</code>
+</ul>
+
+This error is due to the smart precompiler which does not fully understand C++ syntax and reverts to basic preprocessing when a smart preprocessing error occurs.
+This error can sometimes be corrected or avoided by modifying the source code. However, leaving these errors is not a problem since the preprocessor automatically switches to basic preprocessing if necessary.
+<P>
+
+<h3><a name="aboutmenu">How does wxMac support the standard Apple About menu item and Help menu?</a></h3>
+
+Because wxWidgets does not have a specific API for the <i>About</i> menu item or the <i>Help</i> menu, the Mac OS port uses some static variables to help the engine make the right decisions:
+<ul>
+<li>It assumes that the <i>About</i> menu item is part of a <i>Help</i> menu.
+<li>The title of the <i>Help</i> menu is stored in <code>wxApp::s_macHelpMenuTitleName</code>, it defaults to "&amp;Help", but you can change it in your constructor to your specific menu title.
+<li>The item Id of the <i>About</i> menu is stored in <code>wxApp::s_macAboutMenuItemID</code>, it defaults to <code>wxID_ABOUT</code>, but can be changed as well to suit your needs.
+<li>The other items of the wxWidgets help menu are appended to the Mac OS <i>Help</i> menu and the translation of Ids is handled transparently for your application.
+</ul>
+<P>
+
+<h3><a name="findericon">How do I add an icon to my application?</a></h3>
+
+If you have Mac OS X, you have the icns editor somewhere in the
+Utilities folder. Create an icon using this tool and DeRez it, so that you have a .r
+file with a 'icns' resource with id (-16455). Include this .r file in
+your project and in the CodeWarrior Settings add a check mark under Linker:Output
+Flags/Finder Flags/Has Custom Icon.
+<P>
+
+<h3><a name="switching">How can I easily switch between different versions of wxWidgets in CodeWarrior?</a></h3>
+
+Sometimes you want to test your application against different versions
+of wxWidgets, for example a stable version of wxWidgets versus a development version.
+The easiest way to do this is to create a symbolic path.<P>
+
+Under Edit-Preferences in General:Source Trees, type a name (for example WXWIN)
+and choose a path for it. Now reselect your include and lib paths for a last
+time, in the settings for each configuration, but make them relative to the symbolic name.
+<P>
+
+From now on you can just change the path associated with the symbolic name.
+
+<P>
+
+
+</font>
+
+</BODY>
+
+</HTML>

@@ -1,0 +1,90 @@
+\section{\class{wxGridSizer}}\label{wxgridsizer}
+
+A grid sizer is a sizer which lays out its children in a two-dimensional
+table with all table fields having the same size,
+i.e. the width of each field is the width of the widest child,
+the height of each field is the height of the tallest child.
+
+\wxheading{Derived from}
+
+\helpref{wxSizer}{wxsizer}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/sizer.h>
+
+\wxheading{See also}
+
+\helpref{wxSizer}{wxsizer}, \helpref{Sizer overview}{sizeroverview}
+
+\membersection{wxGridSizer::wxGridSizer}\label{wxgridsizerwxgridsizer}
+
+\func{}{wxGridSizer}{\param{int }{rows}, \param{int }{cols}, \param{int }{vgap}, \param{int }{hgap}}
+
+\func{}{wxGridSizer}{\param{int }{cols}, \param{int }{vgap = 0}, \param{int }{hgap = 0}}
+
+Constructor for a wxGridSizer. {\it rows} and {\it cols} determine the number of
+columns and rows in the sizer - if either of the parameters is zero, it will be
+calculated to form the total number of children in the sizer, thus making the
+sizer grow dynamically. {\it vgap} and {\it hgap} define extra space between
+all children.
+
+\membersection{wxGridSizer::GetCols}\label{wxgridsizergetcols}
+
+\func{int}{GetCols}{}
+
+Returns the number of columns in the sizer.
+
+
+\membersection{wxGridSizer::GetHGap}\label{wxgridsizergethgap}
+
+\func{int}{GetHGap}{}
+
+Returns the horizontal gap (in pixels) between cells in the sizer.
+
+
+\membersection{wxGridSizer::GetRows}\label{wxgridsizergetrows}
+
+\func{int}{GetRows}{}
+
+Returns the number of rows in the sizer.
+
+
+\membersection{wxGridSizer::GetVGap}\label{wxgridsizergetvgap}
+
+\func{int}{GetVGap}{}
+
+Returns the vertical gap (in pixels) between the cells in the sizer.
+
+
+\membersection{wxGridSizer::SetCols}\label{wxgridsizersetcols}
+
+\func{void}{SetCols}{\param{int }{cols}}
+
+Sets the number of columns in the sizer.
+
+
+\membersection{wxGridSizer::SetHGap}\label{wxgridsizersethgap}
+
+\func{void}{SetHGap}{\param{int }{gap}}
+
+Sets the horizontal gap (in pixels) between cells in the sizer.
+
+
+\membersection{wxGridSizer::SetRows}\label{wxgridsizersetrows}
+
+\func{void}{SetRows}{\param{int }{rows}}
+
+Sets the number of rows in the sizer.
+
+
+\membersection{wxGridSizer::SetVGap}\label{wxgridsizersetvgap}
+
+\func{void}{SetVGap}{\param{int }{gap}}
+
+Sets the vertical gap (in pixels) between the cells in the sizer.
+
+
+
+

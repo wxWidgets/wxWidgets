@@ -1,0 +1,342 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        htmllbox.tex
+%% Purpose:     wxHtmlListBox and wxSimpleHtmlListBox documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     01.06.03
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxHtmlListBox}}\label{wxhtmllistbox}
+
+wxHtmlListBox is an implementation of \helpref{wxVListBox}{wxvlistbox} which
+shows HTML content in the listbox rows. This is still an abstract base class
+and you will need to derive your own class from it (see htlbox sample for the
+example) but you will only need to override a single
+\helpref{OnGetItem()}{wxhtmllistboxongetitem} function.
+
+\wxheading{Derived from}
+
+\helpref{wxVListBox}{wxvlistbox}\\
+\helpref{wxVScrolledWindow}{wxvscrolledwindow}\\
+\helpref{wxPanel}{wxpanel}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/htmllbox.h>
+
+\wxheading{See also}
+
+\helpref{wxSimpleHtmlListBox}{wxsimplehtmllistbox}
+
+
+\wxheading{Event handling}
+
+To process input from a wxHtmlListBox, use these event handler macros to direct input to member
+functions that take a \helpref{wxHtmlCellEvent}{wxhtmlcellevent} argument or a \helpref{wxHtmlLinkEvent}{wxhtmllinkevent}.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_HTML\_CELL\_CLICKED(id, func)}}{A \helpref{wxHtmlCell}{wxhtmlcell} was clicked.}
+\twocolitem{{\bf EVT\_HTML\_CELL\_HOVER(id, func)}}{The mouse passed over a \helpref{wxHtmlCell}{wxhtmlcell}.}
+\twocolitem{{\bf EVT\_HTML\_LINK\_CLICKED(id, func)}}{A \helpref{wxHtmlCell}{wxhtmlcell} which contains an hyperlink was clicked.}
+\end{twocollist}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxHtmlListBox::wxHtmlListBox}\label{wxhtmllistboxwxhtmllistbox}
+
+\func{}{wxHtmlListBox}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}, \param{const wxString\& }{name = wxHtmlListBoxNameStr}}
+
+Normal constructor which calls \helpref{Create()}{wxhtmllistboxcreate}
+internally.
+
+\func{}{wxHtmlListBox}{\void}
+
+Default constructor, you must call \helpref{Create()}{wxhtmllistboxcreate}
+later.
+
+
+\membersection{wxHtmlListBox::\destruct{wxHtmlListBox}}\label{wxhtmllistboxdtor}
+
+\func{}{\destruct{wxHtmlListBox}}{\void}
+
+Destructor cleans up whatever resources we use.
+
+
+\membersection{wxHtmlListBox::Create}\label{wxhtmllistboxcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}, \param{const wxString\& }{name = wxHtmlListBoxNameStr}}
+
+Creates the control and optionally sets the initial number of items in it
+(it may also be set or changed later with
+\helpref{SetItemCount()}{wxvlistboxsetitemcount}).
+
+There are no special styles defined for wxHtmlListBox, in particular the
+wxListBox styles (with the exception of {\tt wxLB\_MULTIPLE}) can not be used here.
+
+Returns {\tt true} on success or {\tt false} if the control couldn't be created
+
+
+\membersection{wxHtmlListBox::GetFileSystem}\label{wxhtmllistboxgetfilesystem}
+
+\func{wxFileSystem\&}{GetFileSystem}{\void}
+
+\constfunc{const wxFileSystem\&}{GetFileSystem}{\void}
+
+Returns the \helpref{wxFileSystem}{wxfilesystem} used by the HTML parser of
+this object. The file system object is used to resolve the paths in HTML
+fragments displayed in the control and you should use
+\helpref{wxFileSystem::ChangePathTo}{wxfilesystemchangepathto} if you use
+relative paths for the images or other resources embedded in your HTML.
+
+
+\membersection{wxHtmlListBox::GetSelectedTextBgColour}\label{wxhtmllistboxgetselectedtextbgcolour}
+
+\constfunc{wxColour}{GetSelectedTextBgColour}{\param{const wxColour\& }{colBg}}
+
+This virtual function may be overridden to change the appearance of the
+background of the selected cells in the same way as
+\helpref{GetSelectedTextColour}{wxhtmllistboxgetselectedtextcolour}.
+
+It should be rarely, if ever, used because
+\helpref{SetSelectionBackground}{wxvlistboxsetselectionbackground} allows to
+change the selection background for all cells at once and doing anything more
+fancy is probably going to look strangely.
+
+\wxheading{See also}
+
+\helpref{GetSelectedTextColour}{wxhtmllistboxgetselectedtextcolour}
+
+
+\membersection{wxHtmlListBox::GetSelectedTextColour}\label{wxhtmllistboxgetselectedtextcolour}
+
+\constfunc{wxColour}{GetSelectedTextColour}{\param{const wxColour\& }{colFg}}
+
+This virtual function may be overridden to customize the appearance of the
+selected cells. It is used to determine how the colour {\it colFg} is going to
+look inside selection. By default all original colours are completely ignored
+and the standard, system-dependent, selection colour is used but the program
+may wish to override this to achieve some custom appearance.
+
+\wxheading{See also}
+
+\helpref{GetSelectedTextBgColour}{wxhtmllistboxgetselectedtextbgcolour},\\
+\helpref{SetSelectionBackground}{wxvlistboxsetselectionbackground},\\
+\helpref{wxSystemSettings::GetColour}{wxsystemsettingsgetcolour}
+
+
+\membersection{wxHtmlListBox::OnGetItem}\label{wxhtmllistboxongetitem}
+
+\constfunc{wxString}{OnGetItem}{\param{size\_t }{n}}
+
+This method must be implemented in the derived class and should return
+the body (i.e. without {\tt <html>} nor {\tt <body>} tags) of the HTML fragment
+for the given item.
+
+Note that this function should always return a text fragment for the \arg{n} item
+which renders with the same height both when it is selected and when it's not:
+i.e. if you call, inside your OnGetItem() implementation, {\tt IsSelected(n)} to
+make the items appear differently when they are selected, then you should make sure
+that the returned HTML fragment will render with the same height or else you'll
+see some artifacts when the user selects an item.
+
+\membersection{wxHtmlListBox::OnGetItemMarkup}\label{wxhtmllistboxongetitemmarkup}
+
+\constfunc{wxString}{OnGetItemMarkup}{\param{size\_t }{n}}
+
+This function may be overridden to decorate HTML returned by
+\helpref{OnGetItem()}{wxhtmllistboxongetitem}.
+
+\membersection{wxHtmlListBox::OnLinkClicked}\label{wxhtmlistboxonlinkclicked}
+
+\func{virtual void}{OnLinkClicked}{\param{size\_t }{n}, \param{const wxHtmlLinkInfo\& }{link}}
+
+Called when the user clicks on hypertext link. Does nothing by default.
+Overloading this method is deprecated; intercept the event instead.
+
+\wxheading{Parameters}
+
+\docparam{n}{Index of the item containing the link.}
+
+\docparam{link}{Description of the link.}
+
+\wxheading{See also}
+
+See also \helpref{wxHtmlLinkInfo}{wxhtmllinkinfo}.
+
+
+
+
+
+
+
+%
+% wxSimpleHtmlListBox
+%
+
+
+\section{\class{wxSimpleHtmlListBox}}\label{wxsimplehtmllistbox}
+
+wxSimpleHtmlListBox is an implementation of \helpref{wxHtmlListBox}{wxhtmllistbox} which
+shows HTML content in the listbox rows.
+
+Unlike \helpref{wxHtmlListBox}{wxhtmllistbox}, this is not an abstract class and thus it
+has the advantage that you can use it without deriving your own class from it.
+However, it also has the disadvantage that this is not a virtual control and thus it's not
+well-suited for those cases where you need to show a huge number of items: every time you
+add/insert a string, it will be stored internally and thus will take memory.
+
+The interface exposed by wxSimpleHtmlListBox fully implements the
+\helpref{wxControlWithItems}{wxcontrolwithitems} interface, thus you should refer to
+\helpref{wxControlWithItems}{wxcontrolwithitems}'s documentation for the API reference
+for adding/removing/retrieving items in the listbox.
+Also note that the \helpref{wxVListBox::SetItemCount}{wxvlistboxsetitemcount} function is
+{\tt protected} in wxSimpleHtmlListBox's context so that you cannot call it directly,
+wxSimpleHtmlListBox will do it for you.
+
+Note: in case you need to append a lot of items to the control at once, make sure to use the
+\helpref{Append(const wxArrayString \&)}{wxcontrolwithitemsappend} function.
+
+Thus the only difference between a \helpref{wxListBox}{wxlistbox} and a wxSimpleHtmlListBox
+is that the latter stores strings which can contain HTML fragments (see the list of
+\helpref{tags supported by wxHTML}{htmltagssupported}).
+
+Note that the HTML strings you fetch to wxSimpleHtmlListBox should not contain the {\tt <html>} 
+or {\tt <body>} tags.
+
+
+\wxheading{Derived from}
+
+\helpref{wxHtmlListBox}{wxhtmllistbox}, \helpref{wxControlWithItems}{wxcontrolwithitems}\\
+\helpref{wxVListBox}{wxvlistbox}\\
+\helpref{wxVScrolledWindow}{wxvscrolledwindow}\\
+\helpref{wxPanel}{wxpanel}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/htmllbox.h>
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxHLB\_DEFAULT\_STYLE}}{The default style: wxSUNKEN\_BORDER}
+\twocolitem{\windowstyle{wxHLB\_MULTIPLE}}{Multiple-selection list: the user can toggle multiple
+items on and off.}
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{Event handling}
+
+A wxSimpleHtmlListBox emits the same events used by \helpref{wxListBox}{wxlistbox} and by
+\helpref{wxHtmlListBox}{wxhtmllistbox}.
+
+The event handlers for the following events take a \helpref{wxCommandEvent}{wxcommandevent}:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_LISTBOX(id, func)}}{Process a wxEVT\_COMMAND\_LISTBOX\_SELECTED event,
+when an item on the list is selected.}
+\twocolitem{{\bf EVT\_LISTBOX\_DCLICK(id, func)}}{Process a wxEVT\_COMMAND\_LISTBOX\_DOUBLECLICKED event,
+when the listbox is double-clicked.}
+\end{twocollist}
+
+The event handlers for the following events take a \helpref{wxHtmlCellEvent}{wxhtmlcellevent}
+or a \helpref{wxHtmlLinkEvent}{wxhtmllinkevent}:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_HTML\_CELL\_CLICKED(id, func)}}{A \helpref{wxHtmlCell}{wxhtmlcell} was clicked.}
+\twocolitem{{\bf EVT\_HTML\_CELL\_HOVER(id, func)}}{The mouse passed over a \helpref{wxHtmlCell}{wxhtmlcell}.}
+\twocolitem{{\bf EVT\_HTML\_LINK\_CLICKED(id, func)}}{A \helpref{wxHtmlCell}{wxhtmlcell} which contains an hyperlink was clicked.}
+\end{twocollist}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxSimpleHtmlListBox::wxSimpleHtmlListBox}\label{wxsimplehtmllistboxctor}
+
+\func{}{wxHtmlListBox}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{int}{ n = 0}, \param{const wxString }{choices[] = NULL},\rtfsp
+\param{long}{ style = wxHLB\_DEFAULT\_STYLE}, \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{const wxString\& }{name = ``simpleHtmlListBox"}}
+
+\func{}{wxHtmlListBox}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxPoint\&}{ pos}, \param{const wxSize\&}{ size},\rtfsp
+\param{const wxArrayString\& }{choices},\rtfsp
+\param{long}{ style = wxHLB\_DEFAULT\_STYLE}, \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{const wxString\& }{name = ``simpleHtmlListBox"}}
+
+Constructor, creating and showing the HTML list box.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Window identifier. A value of -1 indicates a default value.}
+
+\docparam{pos}{Window position.}
+
+\docparam{size}{Window size. If the default size (-1, -1) is specified then the window is sized
+appropriately.}
+
+\docparam{n}{Number of strings with which to initialise the control.}
+
+\docparam{choices}{An array of strings with which to initialise the control.}
+
+\docparam{style}{Window style. See {\tt wxHLB\_*} flags.}
+
+\docparam{validator}{Window validator.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxSimpleHtmlListBox::Create}{wxsimplehtmllistboxcreate}
+
+
+
+\func{}{wxSimpleHtmlListBox}{\void}
+
+Default constructor, you must call \helpref{Create()}{wxsimplehtmllistboxcreate}
+later.
+
+
+\membersection{wxSimpleHtmlListBox::\destruct{wxSimpleHtmlListBox}}\label{wxsimplehtmllistboxdtor}
+
+\func{}{\destruct{wxSimpleHtmlListBox}}{\void}
+
+Frees the array of stored items and relative client data.
+
+
+\membersection{wxSimpleHtmlListBox::Create}\label{wxsimplehtmllistboxcreate}
+
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{int}{ n}, \param{const wxString }{choices[] = NULL},\rtfsp
+\param{long}{ style = wxHLB\_DEFAULT\_STYLE}, \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{const wxString\& }{name = ``simpleHtmlListBox"}}
+
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxPoint\&}{ pos}, \param{const wxSize\&}{ size},\rtfsp
+\param{const wxArrayString\& }{choices},\rtfsp
+\param{long}{ style = wxHLB\_DEFAULT\_STYLE}, \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{const wxString\& }{name = ``simpleHtmlListBox"}}
+
+Creates the HTML listbox for two-step construction. 
+See \helpref{wxSimpleHtmlListBox::wxSimpleHtmlListBox}{wxsimplehtmllistboxctor} for further details.
+

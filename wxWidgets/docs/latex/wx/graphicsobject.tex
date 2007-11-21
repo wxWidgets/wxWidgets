@@ -1,0 +1,41 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        graphicsobject.tex
+%% Purpose:     wxGraphicsObject class documentation
+%% Author:      Stefan Csomor
+%% Modified by:
+%% Created:     08.06.2004
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Stefan Csomor
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxGraphicsObject}}\label{wxgraphicsobject}
+
+This class is the superclass of native graphics objects like pens etc. It allows reference counting. Not instantiated by user code.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/graphics.h>
+
+\wxheading{See also}
+
+\helpref{wxGraphicsBrush}{wxgraphicsbrush}, \helpref{wxGraphicsPen}{wxgraphicspen}, \helpref{wxGraphicsMatrix}{wxgraphicsmatrix}, \helpref{wxGraphicsPath}{wxgraphicspath}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxGraphicsObject::GetRenderer}\label{wxgraphicsobjectgetrenderer}
+
+\constfunc{wxGraphicsRenderer*}{GetRenderer}{\void}
+
+Returns the renderer that was used to create this instance, or NULL if it has not been initialized yet
+
+\membersection{wxGraphicsObject::IsNull}\label{wxgraphicsobjectisnull}
+
+\constfunc{bool}{IsNull}{\void}
+
+Is this object valid (false) or still empty (true)?
+

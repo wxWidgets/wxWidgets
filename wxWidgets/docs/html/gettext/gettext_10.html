@@ -1,0 +1,656 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.54
+     from gettext.texi on 25 January 1999 -->
+
+<TITLE>GNU gettext utilities - The Maintainer's View</TITLE>
+<link href="gettext_11.html" rel=Next>
+<link href="gettext_9.html" rel=Previous>
+<link href="gettext_toc.html" rel=ToC>
+
+</HEAD>
+<BODY>
+<p>Go to the <A HREF="gettext_1.html">first</A>, <A HREF="gettext_9.html">previous</A>, <A HREF="gettext_11.html">next</A>, <A HREF="gettext_12.html">last</A> section, <A HREF="gettext_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC67" HREF="gettext_toc.html#TOC67">The Maintainer's View</A></H1>
+
+<P>
+The maintainer of a package has many responsibilities.  One of them
+is ensuring that the package will install easily on many platforms,
+and that the magic we described earlier (see section <A HREF="gettext_7.html#SEC35">The User's View</A>) will work
+for installers and end users.
+
+</P>
+<P>
+Of course, there are many possible ways by which GNU <CODE>gettext</CODE>
+might be integrated in a distribution, and this chapter does not cover
+them in all generality.  Instead, it details one possible approach which
+is especially adequate for many free software distributions following GNU
+standards, or even better, Gnits standards, because GNU <CODE>gettext</CODE>
+is purposely for helping the internationalization of the whole GNU
+project, and as many other good free packages as possible.  So, the
+maintainer's view presented here presumes that the package already has
+a <TT>`configure.in'</TT> file and uses GNU Autoconf.
+
+</P>
+<P>
+Nevertheless, GNU <CODE>gettext</CODE> may surely be useful for free packages
+not following GNU standards and conventions, but the maintainers of such
+packages might have to show imagination and initiative in organizing
+their distributions so <CODE>gettext</CODE> work for them in all situations.
+There are surely many, out there.
+
+</P>
+<P>
+Even if <CODE>gettext</CODE> methods are now stabilizing, slight adjustments
+might be needed between successive <CODE>gettext</CODE> versions, so you
+should ideally revise this chapter in subsequent releases, looking
+for changes.
+
+</P>
+
+
+
+<H2><A NAME="SEC68" HREF="gettext_toc.html#TOC68">Flat or Non-Flat Directory Structures</A></H2>
+
+<P>
+Some free software packages are distributed as <CODE>tar</CODE> files which unpack
+in a single directory, these are said to be <STRONG>flat</STRONG> distributions.
+Other free software packages have a one level hierarchy of subdirectories, using
+for example a subdirectory named <TT>`doc/'</TT> for the Texinfo manual and
+man pages, another called <TT>`lib/'</TT> for holding functions meant to
+replace or complement C libraries, and a subdirectory <TT>`src/'</TT> for
+holding the proper sources for the package.  These other distributions
+are said to be <STRONG>non-flat</STRONG>.
+
+</P>
+<P>
+For now, we cannot say much about flat distributions.  A flat
+directory structure has the disadvantage of increasing the difficulty
+of updating to a new version of GNU <CODE>gettext</CODE>.  Also, if you have
+many PO files, this could somewhat pollute your single directory.
+In the GNU <CODE>gettext</CODE> distribution, the <TT>`misc/'</TT> directory
+contains a shell script named <TT>`combine-sh'</TT>.  That script may
+be used for combining all the C files of the <TT>`intl/'</TT> directory
+into a pair of C files (one <TT>`.c'</TT> and one <TT>`.h'</TT>).  Those two
+generated files would fit more easily in a flat directory structure,
+and you will then have to add these two files to your project.
+
+</P>
+<P>
+Maybe because GNU <CODE>gettext</CODE> itself has a non-flat structure,
+we have more experience with this approach, and this is what will be
+described in the remaining of this chapter.  Some maintainers might
+use this as an opportunity to unflatten their package structure.
+Only later, once gained more experience adapting GNU <CODE>gettext</CODE>
+to flat distributions, we might add some notes about how to proceed
+in flat situations.
+
+</P>
+
+
+<H2><A NAME="SEC69" HREF="gettext_toc.html#TOC69">Prerequisite Works</A></H2>
+
+<P>
+There are some works which are required for using GNU <CODE>gettext</CODE>
+in one of your package.  These works have some kind of generality
+that escape the point by point descriptions used in the remainder
+of this chapter.  So, we describe them here.
+
+</P>
+
+<UL>
+<LI>
+
+Before attempting to use you should install some other packages first.
+Ensure that recent versions of GNU <CODE>m4</CODE>, GNU Autoconf and GNU
+<CODE>gettext</CODE> are already installed at your site, and if not, proceed
+to do this first.  If you got to install these things, beware that
+GNU <CODE>m4</CODE> must be fully installed before GNU Autoconf is even
+<EM>configured</EM>.
+
+To further ease the task of a package maintainer the <CODE>automake</CODE>
+package was designed and implemented.  GNU <CODE>gettext</CODE> now uses this
+tool and the <TT>`Makefile'</TT>s in the <TT>`intl/'</TT> and <TT>`po/'</TT>
+therefore know about all the goals necessary for using <CODE>automake</CODE>
+and <TT>`libintl'</TT> in one project.
+
+Those four packages are only needed to you, as a maintainer; the
+installers of your own package and end users do not really need any of
+GNU <CODE>m4</CODE>, GNU Autoconf, GNU <CODE>gettext</CODE>, or GNU <CODE>automake</CODE>
+for successfully installing and running your package, with messages
+properly translated.  But this is not completely true if you provide
+internationalized shell scripts within your own package: GNU
+<CODE>gettext</CODE> shall then be installed at the user site if the end users
+want to see the translation of shell script messages.
+
+<LI>
+
+Your package should use Autoconf and have a <TT>`configure.in'</TT> file.
+If it does not, you have to learn how.  The Autoconf documentation
+is quite well written, it is a good idea that you print it and get
+familiar with it.
+
+<LI>
+
+Your C sources should have already been modified according to
+instructions given earlier in this manual.  See section <A HREF="gettext_3.html#SEC13">Preparing Program Sources</A>.
+
+<LI>
+
+Your <TT>`po/'</TT> directory should receive all PO files submitted to you
+by the translator teams, each having <TT>`<VAR>ll</VAR>.po'</TT> as a name.
+This is not usually easy to get translation
+work done before your package gets internationalized and available!
+Since the cycle has to start somewhere, the easiest for the maintainer
+is to start with absolutely no PO files, and wait until various
+translator teams get interested in your package, and submit PO files.
+
+</UL>
+
+<P>
+It is worth adding here a few words about how the maintainer should
+ideally behave with PO files submissions.  As a maintainer, your role is
+to authenticate the origin of the submission as being the representative
+of the appropriate translating teams of the Translation Project (forward
+the submission to <TT>`translation@iro.umontreal.ca'</TT> in case of doubt),
+to ensure that the PO file format is not severely broken and does not
+prevent successful installation, and for the rest, to merely to put these
+PO files in <TT>`po/'</TT> for distribution.
+
+</P>
+<P>
+As a maintainer, you do not have to take on your shoulders the
+responsibility of checking if the translations are adequate or
+complete, and should avoid diving into linguistic matters.  Translation
+teams drive themselves and are fully responsible of their linguistic
+choices for the Translation Project.  Keep in mind that translator teams are <EM>not</EM>
+driven by maintainers.  You can help by carefully redirecting all
+communications and reports from users about linguistic matters to the
+appropriate translation team, or explain users how to reach or join
+their team.  The simplest might be to send them the <TT>`ABOUT-NLS'</TT> file.
+
+</P>
+<P>
+Maintainers should <EM>never ever</EM> apply PO file bug reports
+themselves, short-cutting translation teams.  If some translator has
+difficulty to get some of her points through her team, it should not be
+an issue for her to directly negotiate translations with maintainers.
+Teams ought to settle their problems themselves, if any.  If you, as
+a maintainer, ever think there is a real problem with a team, please
+never try to <EM>solve</EM> a team's problem on your own.
+
+</P>
+
+
+<H2><A NAME="SEC70" HREF="gettext_toc.html#TOC70">Invoking the <CODE>gettextize</CODE> Program</A></H2>
+
+<P>
+Some files are consistently and identically needed in every package
+internationalized through GNU <CODE>gettext</CODE>.  As a matter of
+convenience, the <CODE>gettextize</CODE> program puts all these files right
+in your package.  This program has the following synopsis:
+
+</P>
+
+<PRE>
+gettextize [ <VAR>option</VAR>... ] [ <VAR>directory</VAR> ]
+</PRE>
+
+<P>
+and accepts the following options:
+
+</P>
+<DL COMPACT>
+
+<DT><SAMP>`-c'</SAMP>
+<DD>
+<DT><SAMP>`--copy'</SAMP>
+<DD>
+Copy the needed files instead of making symbolic links.  Using links
+would allow the package to always use the latest <CODE>gettext</CODE> code
+available on the system, but it might disturb some mechanism the
+maintainer is used to apply to the sources.  Because running
+<CODE>gettextize</CODE> is easy there shouldn't be problems with using copies.
+
+<DT><SAMP>`-f'</SAMP>
+<DD>
+<DT><SAMP>`--force'</SAMP>
+<DD>
+Force replacement of files which already exist.
+
+<DT><SAMP>`-h'</SAMP>
+<DD>
+<DT><SAMP>`--help'</SAMP>
+<DD>
+Display this help and exit.
+
+<DT><SAMP>`--version'</SAMP>
+<DD>
+Output version information and exit.
+
+</DL>
+
+<P>
+If <VAR>directory</VAR> is given, this is the top level directory of a
+package to prepare for using GNU <CODE>gettext</CODE>.  If not given, it
+is assumed that the current directory is the top level directory of
+such a package.
+
+</P>
+<P>
+The program <CODE>gettextize</CODE> provides the following files.  However,
+no existing file will be replaced unless the option <CODE>--force</CODE>
+(<CODE>-f</CODE>) is specified.
+
+</P>
+
+<OL>
+<LI>
+
+The <TT>`ABOUT-NLS'</TT> file is copied in the main directory of your package,
+the one being at the top level.  This file gives the main indications
+about how to install and use the Native Language Support features
+of your program.  You might elect to use a more recent copy of this
+<TT>`ABOUT-NLS'</TT> file than the one provided through <CODE>gettextize</CODE>,
+if you have one handy.  You may also fetch a more recent copy of file
+<TT>`ABOUT-NLS'</TT> from Translation Project sites, and from most GNU
+archive sites.
+
+<LI>
+
+A <TT>`po/'</TT> directory is created for eventually holding
+all translation files, but initially only containing the file
+<TT>`po/Makefile.in.in'</TT> from the GNU <CODE>gettext</CODE> distribution.
+(beware the double <SAMP>`.in'</SAMP> in the file name). If the <TT>`po/'</TT>
+directory already exists, it will be preserved along with the files
+it contains, and only <TT>`Makefile.in.in'</TT> will be overwritten.
+
+<LI>
+
+A <TT>`intl/'</TT> directory is created and filled with most of the files
+originally in the <TT>`intl/'</TT> directory of the GNU <CODE>gettext</CODE>
+distribution.  Also, if option <CODE>--force</CODE> (<CODE>-f</CODE>) is given,
+the <TT>`intl/'</TT> directory is emptied first.
+
+</OL>
+
+<P>
+If your site support symbolic links, <CODE>gettextize</CODE> will not
+actually copy the files into your package, but establish symbolic
+links instead.  This avoids duplicating the disk space needed in
+all packages.  Merely using the <SAMP>`-h'</SAMP> option while creating the
+<CODE>tar</CODE> archive of your distribution will resolve each link by an
+actual copy in the distribution archive.  So, to insist, you really
+should use <SAMP>`-h'</SAMP> option with <CODE>tar</CODE> within your <CODE>dist</CODE>
+goal of your main <TT>`Makefile.in'</TT>.
+
+</P>
+<P>
+It is interesting to understand that most new files for supporting
+GNU <CODE>gettext</CODE> facilities in one package go in <TT>`intl/'</TT>
+and <TT>`po/'</TT> subdirectories.  One distinction between these two
+directories is that <TT>`intl/'</TT> is meant to be completely identical
+in all packages using GNU <CODE>gettext</CODE>, while all newly created
+files, which have to be different, go into <TT>`po/'</TT>.  There is a
+common <TT>`Makefile.in.in'</TT> in <TT>`po/'</TT>, because the <TT>`po/'</TT>
+directory needs its own <TT>`Makefile'</TT>, and it has been designed so
+it can be identical in all packages.
+
+</P>
+
+
+<H2><A NAME="SEC71" HREF="gettext_toc.html#TOC71">Files You Must Create or Alter</A></H2>
+
+<P>
+Besides files which are automatically added through <CODE>gettextize</CODE>,
+there are many files needing revision for properly interacting with
+GNU <CODE>gettext</CODE>.  If you are closely following GNU standards for
+Makefile engineering and auto-configuration, the adaptations should
+be easier to achieve.  Here is a point by point description of the
+changes needed in each.
+
+</P>
+<P>
+So, here comes a list of files, each one followed by a description of
+all alterations it needs.  Many examples are taken out from the GNU
+<CODE>gettext</CODE> 0.10.35 distribution itself.  You may indeed
+refer to the source code of the GNU <CODE>gettext</CODE> package, as it
+is intended to be a good example and master implementation for using
+its own functionality.
+
+</P>
+
+
+
+<H3><A NAME="SEC72" HREF="gettext_toc.html#TOC72"><TT>`POTFILES.in'</TT> in <TT>`po/'</TT></A></H3>
+
+<P>
+The <TT>`po/'</TT> directory should receive a file named
+<TT>`POTFILES.in'</TT>.  This file tells which files, among all program
+sources, have marked strings needing translation.  Here is an example
+of such a file:
+
+</P>
+
+<PRE>
+# List of source files containing translatable strings.
+# Copyright (C) 1995 Free Software Foundation, Inc.
+
+# Common library files
+lib/error.c
+lib/getopt.c
+lib/xmalloc.c
+
+# Package source files
+src/gettextp.c
+src/msgfmt.c
+src/xgettext.c
+</PRE>
+
+<P>
+Dashed comments and white lines are ignored.  All other lines
+list those source files containing strings marked for translation
+(see section <A HREF="gettext_3.html#SEC15">How Marks Appears in Sources</A>), in a notation relative to the top level
+of your whole distribution, rather than the location of the
+<TT>`POTFILES.in'</TT> file itself.
+
+</P>
+
+
+<H3><A NAME="SEC73" HREF="gettext_toc.html#TOC73"><TT>`configure.in'</TT> at top level</A></H3>
+
+
+<OL>
+<LI>Declare the package and version.
+
+This is done by a set of lines like these:
+
+
+<PRE>
+PACKAGE=gettext
+VERSION=0.10.35
+AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE")
+AC_DEFINE_UNQUOTED(VERSION, "$VERSION")
+AC_SUBST(PACKAGE)
+AC_SUBST(VERSION)
+</PRE>
+
+Of course, you replace <SAMP>`gettext'</SAMP> with the name of your package,
+and <SAMP>`0.10.35'</SAMP> by its version numbers, exactly as they
+should appear in the packaged <CODE>tar</CODE> file name of your distribution
+(<TT>`gettext-0.10.35.tar.gz'</TT>, here).
+
+<LI>Declare the available translations.
+
+This is done by defining <CODE>ALL_LINGUAS</CODE> to the white separated,
+quoted list of available languages, in a single line, like this:
+
+
+<PRE>
+ALL_LINGUAS="de fr"
+</PRE>
+
+This example means that German and French PO files are available, so
+that these languages are currently supported by your package.  If you
+want to further restrict, at installation time, the set of installed
+languages, this should not be done by modifying <CODE>ALL_LINGUAS</CODE> in
+<TT>`configure.in'</TT>, but rather by using the <CODE>LINGUAS</CODE> environment
+variable (see section <A HREF="gettext_7.html#SEC37">Magic for Installers</A>).
+
+<LI>Check for internationalization support.
+
+Here is the main <CODE>m4</CODE> macro for triggering internationalization
+support.  Just add this line to <TT>`configure.in'</TT>:
+
+
+<PRE>
+AM_GNU_GETTEXT
+</PRE>
+
+This call is purposely simple, even if it generates a lot of configure
+time checking and actions.
+
+<LI>Have output files created.
+
+The <CODE>AC_OUTPUT</CODE> directive, at the end of your <TT>`configure.in'</TT>
+file, needs to be modified in two ways:
+
+
+<PRE>
+AC_OUTPUT([<VAR>existing configuration files</VAR> intl/Makefile po/Makefile.in],
+<VAR>existing additional actions</VAR>])
+</PRE>
+
+The modification to the first argument to <CODE>AC_OUTPUT</CODE> asks
+for substitution in the <TT>`intl/'</TT> and <TT>`po/'</TT> directories.
+Note the <SAMP>`.in'</SAMP> suffix used for <TT>`po/'</TT> only.  This is because
+the distributed file is really <TT>`po/Makefile.in.in'</TT>.
+
+</OL>
+
+
+
+<H3><A NAME="SEC74" HREF="gettext_toc.html#TOC74"><TT>`aclocal.m4'</TT> at top level</A></H3>
+
+<P>
+If you do not have an <TT>`aclocal.m4'</TT> file in your distribution,
+the simplest is taking a copy of <TT>`aclocal.m4'</TT> from
+GNU <CODE>gettext</CODE>.  But to be precise, you only need macros
+<CODE>AM_LC_MESSAGES</CODE>, <CODE>AM_WITH_NLS</CODE> and <CODE>AM_GNU_GETTEXT</CODE>,
+and <CODE>AM_PATH_PROG_WITH_TEST</CODE>, which is called by <CODE>AM_WITH_NLS</CODE>,
+so you may use an editor and remove macros you do not need.
+
+</P>
+<P>
+If you already have an <TT>`aclocal.m4'</TT> file, then you will have
+to merge the said macros into your <TT>`aclocal.m4'</TT>.  Note that if
+you are upgrading from a previous release of GNU <CODE>gettext</CODE>, you
+should most probably <EM>replace</EM> the said macros, as they usually
+change a little from one release of GNU <CODE>gettext</CODE> to the next.
+Their contents may vary as we get more experience with strange systems
+out there.
+
+</P>
+<P>
+These macros check for the internationalization support functions
+and related informations.  Hopefully, once stabilized, these macros
+might be integrated in the standard Autoconf set, because this
+piece of <CODE>m4</CODE> code will be the same for all projects using GNU
+<CODE>gettext</CODE>.
+
+</P>
+
+
+<H3><A NAME="SEC75" HREF="gettext_toc.html#TOC75"><TT>`acconfig.h'</TT> at top level</A></H3>
+
+<P>
+If you do not have an <TT>`acconfig.h'</TT> file in your distribution, the
+simplest is use take a copy of <TT>`acconfig.h'</TT> from GNU
+<CODE>gettext</CODE>.  But to be precise, you only need the lines and comments
+for <CODE>ENABLE_NLS</CODE>, <CODE>HAVE_CATGETS</CODE>, <CODE>HAVE_GETTEXT</CODE> and
+<CODE>HAVE_LC_MESSAGES</CODE>, <CODE>HAVE_STPCPY</CODE>, <CODE>PACKAGE</CODE> and
+<CODE>VERSION</CODE>, so you may use an editor and remove everything else.  If
+you already have an <TT>`acconfig.h'</TT> file, then you should merge the
+said definitions into your <TT>`acconfig.h'</TT>.
+
+</P>
+
+
+<H3><A NAME="SEC76" HREF="gettext_toc.html#TOC76"><TT>`Makefile.in'</TT> at top level</A></H3>
+
+<P>
+Here are a few modifications you need to make to your main, top-level
+<TT>`Makefile.in'</TT> file.
+
+</P>
+
+<OL>
+<LI>
+
+Add the following lines near the beginning of your <TT>`Makefile.in'</TT>,
+so the <SAMP>`dist:'</SAMP> goal will work properly (as explained further down):
+
+
+<PRE>
+PACKAGE = @PACKAGE@
+VERSION = @VERSION@
+</PRE>
+
+<LI>
+
+Add file <TT>`ABOUT-NLS'</TT> to the <CODE>DISTFILES</CODE> definition, so the file gets
+distributed.
+
+<LI>
+
+Wherever you process subdirectories in your <TT>`Makefile.in'</TT>, be sure
+you also process dir subdirectories <SAMP>`intl'</SAMP> and <SAMP>`po'</SAMP>.  Special
+rules in the <TT>`Makefiles'</TT> take care for the case where no
+internationalization is wanted.
+
+If you are using Makefiles, either generated by automake, or hand-written
+so they carefully follow the GNU coding standards, the effected goals for
+which the new subdirectories must be handled include <SAMP>`installdirs'</SAMP>,
+<SAMP>`install'</SAMP>, <SAMP>`uninstall'</SAMP>, <SAMP>`clean'</SAMP>, <SAMP>`distclean'</SAMP>.
+
+Here is an example of a canonical order of processing.  In this
+example, we also define <CODE>SUBDIRS</CODE> in <CODE>Makefile.in</CODE> for it
+to be further used in the <SAMP>`dist:'</SAMP> goal.
+
+
+<PRE>
+SUBDIRS = doc lib @INTLSUB@ src @POSUB@
+</PRE>
+
+that you will have to adapt to your own package.
+
+<LI>
+
+A delicate point is the <SAMP>`dist:'</SAMP> goal, as both
+<TT>`intl/Makefile'</TT> and <TT>`po/Makefile'</TT> will later assume that the
+proper directory has been set up from the main <TT>`Makefile'</TT>.  Here is
+an example at what the <SAMP>`dist:'</SAMP> goal might look like:
+
+
+<PRE>
+distdir = $(PACKAGE)-$(VERSION)
+dist: Makefile
+	rm -fr $(distdir)
+	mkdir $(distdir)
+	chmod 777 $(distdir)
+	for file in $(DISTFILES); do \
+	  ln $$file $(distdir) 2&#62;/dev/null || cp -p $$file $(distdir); \
+	done
+	for subdir in $(SUBDIRS); do \
+	  mkdir $(distdir)/$$subdir || exit 1; \
+	  chmod 777 $(distdir)/$$subdir; \
+	  (cd $$subdir &#38;&#38; $(MAKE) $@) || exit 1; \
+	done
+	tar chozf $(distdir).tar.gz $(distdir)
+	rm -fr $(distdir)
+</PRE>
+
+</OL>
+
+
+
+<H3><A NAME="SEC77" HREF="gettext_toc.html#TOC77"><TT>`Makefile.in'</TT> in <TT>`src/'</TT></A></H3>
+
+<P>
+Some of the modifications made in the main <TT>`Makefile.in'</TT> will
+also be needed in the <TT>`Makefile.in'</TT> from your package sources,
+which we assume here to be in the <TT>`src/'</TT> subdirectory.  Here are
+all the modifications needed in <TT>`src/Makefile.in'</TT>:
+
+</P>
+
+<OL>
+<LI>
+
+In view of the <SAMP>`dist:'</SAMP> goal, you should have these lines near the
+beginning of <TT>`src/Makefile.in'</TT>:
+
+
+<PRE>
+PACKAGE = @PACKAGE@
+VERSION = @VERSION@
+</PRE>
+
+<LI>
+
+If not done already, you should guarantee that <CODE>top_srcdir</CODE>
+gets defined.  This will serve for <CODE>cpp</CODE> include files.  Just add
+the line:
+
+
+<PRE>
+top_srcdir = @top_srcdir@
+</PRE>
+
+<LI>
+
+You might also want to define <CODE>subdir</CODE> as <SAMP>`src'</SAMP>, later
+allowing for almost uniform <SAMP>`dist:'</SAMP> goals in all your
+<TT>`Makefile.in'</TT>.  At list, the <SAMP>`dist:'</SAMP> goal below assume that
+you used:
+
+
+<PRE>
+subdir = src
+</PRE>
+
+<LI>
+
+You should ensure that the final linking will use <CODE>@INTLLIBS@</CODE> as
+a library.  An easy way to achieve this is to manage that it gets into
+<CODE>LIBS</CODE>, like this:
+
+
+<PRE>
+LIBS = @INTLLIBS@ @LIBS@
+</PRE>
+
+In most packages internationalized with GNU <CODE>gettext</CODE>, one will
+find a directory <TT>`lib/'</TT> in which a library containing some helper
+functions will be build.  (You need at least the few functions which the
+GNU <CODE>gettext</CODE> Library itself needs.)  However some of the functions
+in the <TT>`lib/'</TT> also give messages to the user which of course should be
+translated, too.  Taking care of this it is not enough to place the support
+library (say <TT>`libsupport.a'</TT>) just between the <CODE>@INTLLIBS@</CODE>
+and <CODE>@LIBS@</CODE> in the above example.  Instead one has to write this:
+
+
+<PRE>
+LIBS = ../lib/libsupport.a @INTLLIBS@ ../lib/libsupport.a @LIBS@
+</PRE>
+
+<LI>
+
+You should also ensure that directory <TT>`intl/'</TT> will be searched for
+C preprocessor include files in all circumstances.  So, you have to
+manage so both <SAMP>`-I../intl'</SAMP> and <SAMP>`-I$(top_srcdir)/intl'</SAMP> will
+be given to the C compiler.
+
+<LI>
+
+Your <SAMP>`dist:'</SAMP> goal has to conform with others.  Here is a
+reasonable definition for it:
+
+
+<PRE>
+distdir = ../$(PACKAGE)-$(VERSION)/$(subdir)
+dist: Makefile $(DISTFILES)
+	for file in $(DISTFILES); do \
+	  ln $$file $(distdir) 2&#62;/dev/null || cp -p $$file $(distdir); \
+	done
+</PRE>
+
+</OL>
+
+<P><HR><P>
+<p>Go to the <A HREF="gettext_1.html">first</A>, <A HREF="gettext_9.html">previous</A>, <A HREF="gettext_11.html">next</A>, <A HREF="gettext_12.html">last</A> section, <A HREF="gettext_toc.html">table of contents</A>.
+</BODY>
+</HTML>

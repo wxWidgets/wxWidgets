@@ -1,0 +1,63 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        rendver.tex
+%% Purpose:     wxRendererVersion documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     11.08.03
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxRendererVersion}}\label{wxrendererversion}
+
+This simple struct represents the \helpref{wxRendererNative}{wxrenderernative} 
+interface version and is only used as the return value of 
+\helpref{wxRendererNative::GetVersion}{wxrenderernativegetversion}.
+
+The version has two components: the version itself and the age. If the main
+program and the renderer have different versions they are never compatible with
+each other because the version is only changed when an existing virtual
+function is modified or removed. The age, on the other hand, is incremented
+each time a new virtual method is added and so, at least for the compilers
+using a common C++ object model, the calling program is compatible with any
+renderer which has the age greater or equal to its age. This verification is
+done by \helpref{IsCompatible}{wxrenderernativeiscompatible} method.
+
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/renderer.h>
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRendererVersion::IsCompatible}\label{wxrenderernativeiscompatible}
+
+\func{static bool}{IsCompatible}{\param{const wxRendererVersion\& }{ver}}
+
+Checks if the main program is compatible with the renderer having the version 
+\arg{ver}, returns \true if it is and \false otherwise.
+
+This method is used by 
+\helpref{wxRendererNative::Load}{wxrenderernativeload} to determine whether a
+renderer can be used.
+
+
+\membersection{wxRendererVersion::version}\label{wxrendererversionversion}
+
+\member{const int}{version}
+
+The version component.
+
+
+\membersection{wxRendererVersion::age}\label{wxrendererversionage}
+
+\member{const int}{age}
+
+The age component.
+

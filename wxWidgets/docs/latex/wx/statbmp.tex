@@ -1,0 +1,134 @@
+\section{\class{wxStaticBitmap}}\label{wxstaticbitmap}
+
+A static bitmap control displays a bitmap. It is meant for display of the
+small icons in the dialog boxes and is not meant to be a general purpose image
+display control. In particular, under Windows 9x the size of bitmap is limited
+to $64*64$ pixels and thus you should use your own control if you want to
+display larger images portably.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/statbmp.h>
+
+\wxheading{Window styles}
+
+There are no special styles for this control.
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{See also}
+
+\helpref{wxStaticBitmap}{wxstaticbitmap}, \helpref{wxStaticBox}{wxstaticbox}
+
+\wxheading{Remarks}
+
+The bitmap to be displayed should have a small number of colours, such as 16, to avoid
+palette problems.
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxStaticBitmap::wxStaticBitmap}\label{wxstaticbitmapconstr}
+
+\func{}{wxStaticBitmap}{\void}
+
+Default constructor.
+
+\func{}{wxStaticBitmap}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxBitmap\& }{label}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = 0}, \param{const wxString\& }{name = ``staticBitmap"}}
+
+Constructor, creating and showing a static bitmap control.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Should not be NULL.}
+
+\docparam{id}{Control identifier. A value of -1 denotes a default value.}
+
+\docparam{label}{Bitmap label.}
+
+\docparam{pos}{Window position.}
+
+\docparam{size}{Window size.}
+
+\docparam{style}{Window style. See \helpref{wxStaticBitmap}{wxstaticbitmap}.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxStaticBitmap::Create}{wxstaticbitmapcreate}
+
+
+\membersection{wxStaticBitmap::Create}\label{wxstaticbitmapcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxBitmap\& }{label}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = 0}, \param{const wxString\& }{name = ``staticBitmap"}}
+
+Creation function, for two-step construction. For details see \helpref{wxStaticBitmap::wxStaticBitmap}{wxstaticbitmapconstr}.
+
+
+\membersection{wxStaticBitmap::GetBitmap}\label{wxstaticbitmapgetbitmap}
+
+\constfunc{wxBitmap}{GetBitmap}{\void}
+
+Returns the bitmap currently used in the control. Notice that this method can
+be called even if \helpref{SetIcon}{wxstaticbitmapseticon} had been used.
+
+\wxheading{See also}
+
+\helpref{wxStaticBitmap::SetBitmap}{wxstaticbitmapsetbitmap}
+
+
+\membersection{wxStaticBitmap::GetIcon}\label{wxstaticbitmapgeticon}
+
+\constfunc{wxIcon}{GetIcon}{\void}
+
+Returns the icon currently used in the control. Notice that this method can
+only be called if \helpref{SetIcon}{wxstaticbitmapseticon} had been used: an icon
+can't be retrieved from the control if a bitmap had been set (using 
+\helpref{SetBitmap}{wxstaticbitmapsetbitmap}).
+
+\wxheading{See also}
+
+\helpref{wxStaticBitmap::SetIcon}{wxstaticbitmapseticon}
+
+
+\membersection{wxStaticBitmap::SetBitmap}\label{wxstaticbitmapsetbitmap}
+
+\func{virtual void}{SetBitmap}{\param{const wxBitmap\& }{ label}}
+
+Sets the bitmap label.
+
+\wxheading{Parameters}
+
+\docparam{label}{The new bitmap.}
+
+\wxheading{See also}
+
+\helpref{wxStaticBitmap::GetBitmap}{wxstaticbitmapgetbitmap}
+
+
+\membersection{wxStaticBitmap::SetIcon}\label{wxstaticbitmapseticon}
+
+\func{virtual void}{SetIcon}{\param{const wxIcon\& }{ label}}
+
+Sets the label to the given icon.
+
+\wxheading{Parameters}
+
+\docparam{label}{The new icon.}
+
+\wxheading{See also}
+
+\helpref{wxStaticBitmap::GetIcon}{wxstaticbitmapgeticon}
+

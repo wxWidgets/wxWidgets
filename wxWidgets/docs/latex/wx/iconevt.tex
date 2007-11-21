@@ -1,0 +1,57 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        iconevt.tex
+%% Purpose:     wxIconizeEvent documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2001 Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxIconizeEvent}}\label{wxiconizeevent}
+
+An event being sent when the frame is iconized (minimized) or restored.
+
+Currently only wxMSW and wxGTK generate such events.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/event.h>
+
+\wxheading{Event table macros}
+
+To process an iconize event, use this event handler macro to direct input to a
+member function that takes a wxIconizeEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_ICONIZE(func)}}{Process a wxEVT\_ICONIZE event.}
+\end{twocollist}%
+
+\wxheading{See also}
+
+\helpref{Event handling overview}{eventhandlingoverview},\rtfsp
+\helpref{wxTopLevelWindow::Iconize}{wxtoplevelwindowiconize},\rtfsp
+\helpref{wxTopLevelWindow::IsIconized}{wxtoplevelwindowisiconized}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxIconizeEvent::wxIconizeEvent}\label{wxiconizeeventctor}
+
+\func{}{wxIconizeEvent}{\param{int }{id = 0}, \param{bool }{iconized = true}}
+
+Constructor.
+
+\membersection{wxIconizeEvent::Iconized}\label{wxiconizeeventiconized}
+
+\constfunc{bool}{Iconized}{\void}
+
+Returns {\tt true} if the frame has been iconized, {\tt false} if it has been
+restored.
+

@@ -1,0 +1,5 @@
+utils/HelpGen/Makefile.in
+utils/HelpGen/src/Makefile.in
+utils/makegen/Makefile.in
+utils/helpview/Makefile.in
+utils/helpview/src/Makefile.in

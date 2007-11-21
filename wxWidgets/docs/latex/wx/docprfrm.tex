@@ -1,0 +1,85 @@
+\section{\class{wxDocParentFrame}}\label{wxdocparentframe}
+
+The wxDocParentFrame class provides a default top-level frame for
+applications using the document/view framework. This class can only be used for SDI (not MDI) parent frames.
+
+It cooperates with the \helpref{wxView}{wxview}, \helpref{wxDocument}{wxdocument},
+\rtfsp\helpref{wxDocManager}{wxdocmanager} and \helpref{wxDocTemplates}{wxdoctemplate} classes.
+
+See the example application in {\tt samples/docview}.
+
+\wxheading{Derived from}
+
+\helpref{wxFrame}{wxframe}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/docview.h>
+
+\wxheading{See also}
+
+\helpref{Document/view overview}{docviewoverview}, \helpref{wxFrame}{wxframe}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDocParentFrame::wxDocParentFrame}\label{wxdocparentframector}
+
+\func{}{wxDocParentFrame}{\void}
+
+Default constructor.
+
+\func{}{wxDocParentFrame}{\param{wxDocManager*}{ manager}, \param{wxFrame *}{parent}, \param{wxWindowID}{ id},
+ \param{const wxString\& }{title}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
+ \param{const wxSize\&}{ size = wxDefaultSize},
+ \param{long}{ style = wxDEFAULT\_FRAME\_STYLE}, \param{const wxString\& }{name = "frame"}}
+
+Constructor.
+
+\membersection{wxDocParentFrame::\destruct{wxDocParentFrame}}\label{wxdocparentframedtor}
+
+\func{}{\destruct{wxDocParentFrame}}{\void}
+
+Destructor.
+
+\membersection{wxDocParentFrame::Create}\label{wxdocparentframecreate}
+
+\func{bool}{Create}{\param{wxDocManager*}{ manager}, \param{wxFrame *}{parent}, \param{wxWindowID}{ id},
+ \param{const wxString\& }{title}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
+ \param{const wxSize\&}{ size = wxDefaultSize},
+ \param{long}{ style = wxDEFAULT\_FRAME\_STYLE}, \param{const wxString\& }{name = "frame"}}
+
+Used in two-step construction.
+
+\membersection{wxDocParentFrame::GetDocumentManager}\label{wxdocparentframegetdocumentmanager}
+
+\constfunc{wxDocManager *}{GetDocumentManager}{\void}
+
+Returns the associated \helpref{document manager object}{wxdocmanager}.
+
+
+
+\membersection{wxDocParentFrame::OnCloseWindow}\label{wxdocparentframeonclosewindow}
+
+\func{void}{OnCloseWindow}{\param{wxCloseEvent\&}{ event}}
+
+Deletes all views and documents. If no user input cancelled the
+operation, the frame will be destroyed and the application will exit.
+
+Since understanding how document/view clean-up takes place can be difficult,
+the implementation of this function is shown below.
+
+\begin{verbatim}
+void wxDocParentFrame::OnCloseWindow(wxCloseEvent& event)
+{
+  if (m_docManager->Clear(!event.CanVeto()))
+  {
+    this->Destroy();
+  }
+  else
+    event.Veto();
+}
+\end{verbatim}
+

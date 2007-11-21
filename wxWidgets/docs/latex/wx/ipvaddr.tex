@@ -1,0 +1,111 @@
+% ----------------------------------------------------------------------------
+% CLASS: wxIPV4address
+% ----------------------------------------------------------------------------
+\section{\class{wxIPV4address}}\label{wxipv4address}
+
+\wxheading{Derived from}
+
+\helpref{wxIPaddress}{wxipaddress}
+
+\wxheading{Include files}
+
+<wx/socket.h>
+
+% ----------------------------------------------------------------------------
+% MEMBERS
+% ----------------------------------------------------------------------------
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+%
+% Hostname
+%
+
+\membersection{wxIPV4address::Hostname}\label{wxipv4addresshostname}
+
+\func{bool}{Hostname}{\param{const wxString\&}{ hostname}}
+
+Set the address to {\it hostname}, which can be a host name
+or an IP-style address in dot notation (a.b.c.d)
+
+\wxheading{Return value}
+
+Returns true on success, false if something goes wrong
+(invalid hostname or invalid IP address).
+
+\func{wxString}{Hostname}{\void}
+
+Returns the hostname which matches the IP address.
+
+%
+% IPAddress
+%
+
+\membersection{wxIPV4address::IPAddress}\label{wxipv4addressipaddress}
+
+\func{wxString}{IPAddress}{\void}
+
+Returns a wxString containing the IP address in dot quad (127.0.0.1) format.
+
+%
+% Service
+%
+
+\membersection{wxIPV4address::Service}\label{wxipv4addressservice}
+
+\func{bool}{Service}{\param{const wxString\&}{ service}}
+
+Set the port to that corresponding to the specified {\it service}.
+
+\wxheading{Return value}
+
+Returns true on success, false if something goes wrong
+(invalid service).
+
+\func{bool}{Service}{\param{unsigned short}{ service}}
+
+Set the port to that corresponding to the specified {\it service}.
+
+\wxheading{Return value}
+
+Returns true on success, false if something goes wrong
+(invalid service).
+
+\func{unsigned short}{Service}{\void}
+
+Returns the current service.
+
+%
+% AnyAddress
+%
+
+\membersection{wxIPV4address::AnyAddress}\label{wxipv4addressanyaddress}
+
+\func{bool}{AnyAddress}{\void}
+
+Set address to any of the addresses of the current machine. Whenever
+possible, use this function instead of \helpref{wxIPV4address::LocalHost}{wxipv4addresslocalhost},
+as this correctly handles multi-homed hosts and avoids other small
+problems. Internally, this is the same as setting the IP address
+to {\bf INADDR\_ANY}.
+
+\wxheading{Return value}
+
+Returns true on success, false if something went wrong.
+
+%
+% LocalHost
+%
+
+\membersection{wxIPV4address::LocalHost}\label{wxipv4addresslocalhost}
+
+\func{bool}{LocalHost}{\void}
+
+Set address to localhost (127.0.0.1). Whenever possible, use the 
+\helpref{wxIPV4address::AnyAddress}{wxipv4addressanyaddress},
+function instead of this one, as this will correctly handle multi-homed
+hosts and avoid other small problems.
+
+\wxheading{Return value}
+
+Returns true on success, false if something went wrong.
+

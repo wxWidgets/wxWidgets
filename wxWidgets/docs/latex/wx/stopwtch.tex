@@ -1,0 +1,64 @@
+\section{\class{wxStopWatch}}\label{wxstopwatch}
+
+The wxStopWatch class allow you to measure time intervals. For example, you may
+use it to measure the time elapsed by some function:
+
+\begin{verbatim}
+    wxStopWatch sw;
+    CallLongRunningFunction();
+    wxLogMessage("The long running function took %ldms to execute",
+                 sw.Time());
+    sw.Pause();
+    ... stopwatch is stopped now ...
+    sw.Resume();
+    CallLongRunningFunction();
+    wxLogMessage("And calling it twice took $ldms in all", sw.Time());
+\end{verbatim}
+
+\wxheading{Include files}
+
+<wx/stopwatch.h>
+
+\wxheading{See also}
+
+\helpref{::wxStartTimer}{wxstarttimer}, \helpref{::wxGetElapsedTime}{wxgetelapsedtime}, \helpref{wxTimer}{wxtimer}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxStopWatch::wxStopWatch}\label{wxstopwatchctor}
+
+\func{}{wxStopWatch}{\void}
+
+Constructor. This starts the stop watch.
+
+\membersection{wxStopWatch::Pause}\label{wxstopwatchpause}
+
+\func{void}{Pause}{\void}
+
+Pauses the stop watch. Call \helpref{wxStopWatch::Resume}{wxstopwatchresume} to resume 
+time measuring again.
+
+If this method is called several times, {\tt Resume()} must be called the same
+number of times to really resume the stop watch. You may, however, call 
+\helpref{Start}{wxstopwatchstart} to resume it unconditionally.
+
+\membersection{wxStopWatch::Resume}\label{wxstopwatchresume}
+
+\func{void}{Resume}{\void}
+
+Resumes the stop watch which had been paused with 
+\helpref{wxStopWatch::Pause}{wxstopwatchpause}.
+
+\membersection{wxStopWatch::Start}\label{wxstopwatchstart}
+
+\func{void}{Start}{\param{long}{ milliseconds = 0}}
+
+(Re)starts the stop watch with a given initial value.
+
+\membersection{wxStopWatch::Time}\label{wxstopwatchtime}
+
+\constfunc{long}{Time}{\void}\label{wxstopwatchtime}
+
+Returns the time in milliseconds since the start (or restart) or the last call of 
+\helpref{wxStopWatch::Pause}{wxstopwatchpause}.
+

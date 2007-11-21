@@ -1,0 +1,85 @@
+#!/bin/sh
+# tarwxall: make up a tar.gz distribution of wxX11
+# Supply a source (e.g. ~/wx2) and destination (e.g. ~/wx2/deliver)
+
+# We can't use e.g. this:
+# ls `cat $SRC/distrib/msw/makefile.rsp` zip -@ -u $DEST/wxWidgets-$VERSION-gen.zip
+# because there's not enough space on the command line, plus we need to ignore the
+# blank lines.
+
+TAR=tar
+ARCH=`arch`
+if [ "$ARCH" = "ppc" ]; then
+  TAR=gnutar
+fi
+
+expandlines()
+{
+    toexpand=$1
+    outputfile=$2
+
+    rm -f $outputfile
+    touch $outputfile
+    for line in `cat $toexpand` ; do
+      if [ "$line" != "" ]; then
+        ls $line >> $outputfile
+      fi
+    uniq < $outputfile > /tmp/uniqtemp.txt
+    mv /tmp/uniqtemp.txt $outputfile
+    done
+}
+
+
+init=""
+if [ "$1" = "" ]
+then
+  echo Usage: tarwxx11 wx-dir output-dir version
+  exit
+fi
+
+if [ "$2" = "" ]
+then
+  echo Usage: tarwxx11 wx-dir output-dir version
+  exit
+fi
+
+if [ "$3" = "" ]
+then
+  echo Usage: tarwxx11 wx-dir output-dir version
+  exit
+fi
+
+WXVER=$3
+
+echo About to archive wxAll:
+echo   From   $1
+echo   To     $2
+echo CTRL-C if this is not correct.
+read dummy
+
+cd $1
+
+echo Removing backup files...
+rm *~ */*~ */*/*~ */*/*/*~ */*/*/*/*~
+
+rm -f $2/wxX11-${WXVER}*.tar.gz
+rm -f $2/wxX11-${WXVER}
+
+### wxX11: combined wxMotif and wxX11 distributions
+cd $1
+cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/x11.rsp $1/distrib/msw/univ.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/deprecated.rsp $1/distrib/msw/utils.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxx11_in.txt
+expandlines /tmp/wxx11_in.txt /tmp/wxx11.txt
+$TAR cf $2/wxX11-${WXVER}.tar -T /tmp/wxx11.txt
+
+echo Re-tarring wxX11 in a subdirectory...
+cd $2
+mkdir wxX11-${WXVER}
+cd wxX11-${WXVER}
+$TAR xf ../wxX11-${WXVER}.tar
+cd ..
+rm -f wxX11-${WXVER}.tar
+$TAR cf $2/wxX11-${WXVER}.tar wxX11-${WXVER}/*
+rm -f -r wxX11-${WXVER}
+gzip $2/wxX11-${WXVER}.tar
+
+

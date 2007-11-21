@@ -1,0 +1,25 @@
+--- ansi.h.old	Mon Mar 29 19:47:26 2004
++++ ansi.h	Mon Mar 29 19:55:56 2004
+@@ -38,6 +38,11 @@
+ 	#define _BSD_RUNE_T_	__WCHAR_TYPE__			/* rune_t */
+ 	
++        
++	#ifndef WCHAR_MIN
+ 	#define WCHAR_MIN	((wchar_t) 0x80000000U)
++	#endif
++	#ifndef WCHAR_MAX
+ 	#define WCHAR_MAX	((wchar_t) 0x7FFFFFFFU)
++	#endif
+ 	
+ 	typedef wchar_t	wint_t;
+@@ -49,5 +54,9 @@
+ 
+ #ifndef _ANSI_SOURCE
+-	typedef _BSD_WCHAR_T_	rune_t;
++ #ifndef _BSD_RUNE_T_DEFINED_
++  #define _BSD_RUNE_T_DEFINED_
++  typedef _BSD_RUNE_T_ rune_t;
++ #endif
++  /*	typedef _BSD_WCHAR_T_	rune_t; */
+ #endif
+ 

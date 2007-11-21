@@ -1,0 +1,96 @@
+\subsection{Help Files Format}\label{helpformat}
+
+wxHTML library uses a reduced version of MS HTML Workshop format.
+Tex2RTF can produce these files when generating HTML, if you set {\bf htmlWorkshopFiles} to {\bf true} in
+your tex2rtf.ini file.
+
+(See \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller} for help controller description.)
+
+A {\bf book} consists of three files: header file, contents file and index file.
+You can make a regular zip archive of these files, plus the HTML and any image files,
+for wxHTML (or helpview) to read; and the .zip file can optionally be renamed to .htb.
+
+\wxheading{Header file (.hhp)}
+
+Header file must contain these lines (and may contain additional lines which are ignored) :
+
+\begin{verbatim}
+Contents file=<filename.hhc>
+Index file=<filename.hhk>
+Title=<title of your book>
+Default topic=<default page to be displayed.htm>
+\end{verbatim}
+
+All filenames (including the Default topic) are relative to the 
+location of .hhp file.
+
+{\bf Localization note:} In addition, .hhp file may contain line
+
+\begin{verbatim}
+Charset=<rfc_charset>
+\end{verbatim}
+
+which specifies what charset (e.g. "iso8859\_1") was used in contents
+and index files. Please note that this line is incompatible with
+MS HTML Help Workshop and it would either silently remove it or complain
+with some error. See also 
+\helpref{Writing non-English applications}{nonenglishoverview}.
+
+\wxheading{Contents file (.hhc)}
+
+Contents file has HTML syntax and it can be parsed by regular HTML parser. It contains exactly one list
+({\tt <ul>}....{\tt </ul>} statement):
+
+\begin{verbatim}
+<ul>
+
+  <li> <object type="text/sitemap">
+           <param name="Name" value="@topic name@">
+           <param name="ID" value=@numeric_id@>
+           <param name="Local" value="@filename.htm@">
+       </object>
+  <li> <object type="text/sitemap">
+           <param name="Name" value="@topic name@">
+           <param name="ID" value=@numeric_id@>
+           <param name="Local" value="@filename.htm@">
+       </object>
+  ...    
+
+</ul>
+\end{verbatim}
+
+You can modify value attributes of param tags. {\it topic name} is name of chapter/topic as is displayed in
+contents, {\it filename.htm} is HTML page name (relative to .hhp file) and {\it numeric\_id} is optional 
+- it is used only when you use \helpref{wxHtmlHelpController::Display(int)}{wxhtmlhelpcontrollerdisplay}
+
+Items in the list may be nested - one {\tt <li>} statement may contain a {\tt <ul>} sub-statement:
+
+\begin{verbatim}
+<ul>
+
+  <li> <object type="text/sitemap">
+           <param name="Name" value="Top node">
+           <param name="Local" value="top.htm">
+       </object>
+       <ul>
+         <li> <object type="text/sitemap">
+              <param name="Name" value="subnode in topnode">
+              <param name="Local" value="subnode1.htm">
+              </object>
+      ...
+       </ul>
+       
+  <li> <object type="text/sitemap">
+           <param name="Name" value="Another Top">
+           <param name="Local" value="top2.htm">
+       </object>
+  ...    
+
+</ul>
+\end{verbatim}
+
+\wxheading{Index file (.hhk)}
+
+Index files have same format as contents file except that ID params are ignored and sublists are {\bf not} 
+allowed.
+

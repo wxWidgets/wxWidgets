@@ -1,0 +1,27 @@
+#!/bin/sh
+
+HOMEDIR="$PWD"
+
+BUILDDIR_ROOT="$PWD/builds"
+
+do_builds {
+    PORT=$1
+    BUILDDIR=$BUILDDIR_ROOT/$PORT
+    mkdir -p $BUILDDIR
+    cd $BUILDDIR
+    
+    export WXROOT="$HOMEDIR/../../.."
+    export INSTALLDIR="$BUILDDIR/install-ansi"
+    $HOMEDIR/unixbuild $PORT
+    
+    export INSTALLDIR="$BUILDDIR/install-unicode"
+    $HOMEDIR/unixbuild $PORT unicode
+    
+    export INSTALLDIR="$BUILDDIR/install-static-ansi"
+    $HOMEDIR/unixbuild $PORT static
+    
+    export INSTALLDIR="$BUILDDIR/install-static-unicode"
+    $HOMEDIR/unixbuild $PORT static unicode
+}
+
+do_builds "gtk2"

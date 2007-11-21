@@ -1,0 +1,456 @@
+\section{\class{wxLocale}}\label{wxlocale}
+
+wxLocale class encapsulates all language-dependent settings and is a
+generalization of the C locale concept.
+
+In wxWidgets this class manages message catalogs which contain the translations
+of the strings used to the current language.
+
+\perlnote{In wxPerl you can't use the '\_' function name, so
+the {\tt Wx::Locale} module can export the {\tt gettext} and 
+{\tt gettext\_noop} under any given name. 
+
+\begin{verbatim}
+  # this imports gettext ( equivalent to Wx::GetTranslation
+  # and gettext_noop ( a noop )
+  # into your module
+  use Wx::Locale qw(:default);
+
+  # ....
+
+  # use the functions
+  print gettext( ``Panic!'' ); 
+
+  button = Wx::Button->new( window, -1, gettext( ``Label'' ) );
+\end{verbatim}
+
+If you need to translate a lot of strings, then adding gettext( ) around
+each one is a long task ( that is why \_( ) was introduced ), so just choose
+a shorter name for gettext:
+
+\begin{verbatim}
+  #
+  use Wx::Locale 'gettext' => 't',
+                 'gettext_noop' => 'gettext_noop';
+
+  # ...
+
+  # use the functions
+  print t( ``Panic!!'' );
+
+  # ...
+\end{verbatim}
+}%
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{See also}
+
+\helpref{Internationalization overview}{internationalization},\\
+\helpref{Internat sample}{sampleinternat}
+
+\wxheading{Include files}
+
+<wx/intl.h>
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+
+\membersection{Supported languages}\label{wxlanguage}
+
+See \helpref{list of recognized language constants}{languagecodes}.
+These constants may be used to specify the language
+in \helpref{Init}{wxlocaleinit} and are returned by 
+\helpref{GetSystemLanguage}{wxlocalegetsystemlanguage}:
+
+
+\membersection{wxLocale::wxLocale}\label{wxlocaledefctor}
+
+\func{}{wxLocale}{\void}
+
+This is the default constructor and it does nothing to initialize the object: 
+\helpref{Init()}{wxlocaleinit} must be used to do that.
+
+\func{}{wxLocale}{\param{int }{language}, \param{int }{flags =
+                          wxLOCALE\_LOAD\_DEFAULT | wxLOCALE\_CONV\_ENCODING}}
+
+See \helpref{Init()}{wxlocaleinit} for parameters description.
+
+\func{}{wxLocale}{\param{const char }{*szName}, \param{const char }{*szShort = NULL}, \param{const char }{*szLocale = NULL}, \param{bool }{bLoadDefault = true}, \param{bool }{bConvertEncoding = false}}
+
+See \helpref{Init()}{wxlocaleinit} for parameters description.
+
+The call of this function has several global side effects which you should
+understand: first of all, the application locale is changed - note that this
+will affect many of standard C library functions such as printf() or strftime().
+Second, this wxLocale object becomes the new current global locale for the
+application and so all subsequent calls to wxGetTranslation() will try to
+translate the messages using the message catalogs for this locale.
+
+
+
+\membersection{wxLocale::\destruct{wxLocale}}\label{wxlocaledtor}
+
+\func{}{\destruct{wxLocale}}{\void}
+
+The destructor, like the constructor, also has global side effects: the previously
+set locale is restored and so the changes described in 
+\helpref{Init}{wxlocaleinit} documentation are rolled back.
+
+
+\membersection{wxLocale::AddCatalog}\label{wxlocaleaddcatalog}
+
+\func{bool}{AddCatalog}{\param{const char }{*szDomain}}
+
+\func{bool}{AddCatalog}{\param{const char }{*szDomain}, \param{wxLanguage}{msgIdLanguage}, \param{const char }{*msgIdCharset}}
+
+Add a catalog for use with the current locale: it is searched for in standard
+places (current directory first, then the system one), but you may also prepend
+additional directories to the search path with 
+\helpref{AddCatalogLookupPathPrefix()}{wxlocaleaddcataloglookuppathprefix}.
+
+All loaded catalogs will be used for message lookup by
+\helpref{GetString()}{wxlocalegetstring} for the current locale.
+
+Returns true if catalog was successfully loaded, false otherwise (which might
+mean that the catalog is not found or that it isn't in the correct format).
+
+The second form of this method takes two additional arguments,
+\arg{msgIdLanguage} and \arg{msgIdCharset}.
+
+\arg{msgIdLanguage} specifies the language of "msgid" strings in source code
+(i.e. arguments to \helpref{GetString}{wxlocalegetstring},
+\helpref{wxGetTranslation}{wxgettranslation} and the 
+\helpref{\_()}{underscore} macro). It is used if AddCatalog cannot find any
+catalog for current language: if the language is same as source code language,
+then strings from source code are used instead. 
+
+\arg{msgIdCharset} lets you specify the charset used for msgids in sources
+in case they use 8-bit characters (e.g. German or French strings).  This
+argument has no effect in Unicode build, because literals in sources are
+Unicode strings; you have to use compiler-specific method of setting the right
+charset when compiling with Unicode.
+
+By default (i.e. when you use the first form), msgid strings are assumed
+to be in English and written only using 7-bit ASCII characters.
+
+If you have to deal with non-English strings or 8-bit characters in the source
+code, see the instructions in 
+\helpref{Writing non-English applications}{nonenglishoverview}.
+
+
+\membersection{wxLocale::AddCatalogLookupPathPrefix}\label{wxlocaleaddcataloglookuppathprefix}
+
+\func{void}{AddCatalogLookupPathPrefix}{\param{const wxString\& }{prefix}}
+
+Add a prefix to the catalog lookup path: the message catalog files will be
+looked up under prefix/<lang>/LC\_MESSAGES, prefix/<lang> and prefix
+(in this order).
+
+This only applies to subsequent invocations of AddCatalog().
+
+\membersection{wxLocale::AddLanguage}\label{wxlocaleaddlanguage}
+
+\func{static void}{AddLanguage}{\param{const wxLanguageInfo\& }{info}}
+
+Adds custom, user-defined language to the database of known languages. This
+database is used in conjunction with the first form of 
+\helpref{Init}{wxlocaleinit}. 
+
+wxLanguageInfo is defined as follows:
+
+\begin{verbatim}
+struct WXDLLEXPORT wxLanguageInfo
+{
+    int Language;                   // wxLanguage id
+    wxString CanonicalName;         // Canonical name, e.g. fr_FR
+#ifdef __WIN32__
+    wxUint32 WinLang, WinSublang;   // Win32 language identifiers
+                                    // (LANG_xxxx, SUBLANG_xxxx)
+#endif
+    wxString Description;           // human-readable name of the language
+};
+\end{verbatim}
+
+
+{\it Language} should be greater than wxLANGUAGE\_USER\_DEFINED.
+
+\perlnote{In wxPerl Wx::LanguageInfo has only one method:\par
+Wx::LanguageInfo->new( language, canonicalName, WinLang, WinSubLang, Description )}
+
+
+\membersection{wxLocale::FindLanguageInfo}\label{wxlocalefindlanguageinfo}
+
+\func{static wxLanguageInfo *}{FindLanguageInfo}{\param{const wxString\& }{locale}}
+
+This function may be used to find the language description structure for the
+given locale, specified either as a two letter ISO language code (for example,
+"pt"), a language code followed by the country code ("pt\_BR") or a full, human
+readable, language description ("Portuguese-Brazil").
+
+Returns the information for the given language or {\tt NULL} if this language
+is unknown. Note that even if the returned pointer is valid, the caller should
+{\it not} delete it.
+
+\wxheading{See also}
+
+\helpref{GetLanguageInfo}{wxlocalegetlanguageinfo}
+
+
+\membersection{wxLocale::GetCanonicalName}\label{wxlocalegetcanonicalname}
+
+\constfunc{wxString}{GetCanonicalName}{\void}
+
+Returns the canonical form of current locale name. Canonical form is the
+one that is used on UNIX systems: it is a two- or five-letter string in xx or
+xx\_YY format, where xx is ISO 639 code of language and YY is ISO 3166 code of
+the country. Examples are "en", "en\_GB", "en\_US" or "fr\_FR".
+
+This form is internally used when looking up message catalogs.
+
+Compare \helpref{GetSysName}{wxlocalegetsysname}.
+
+
+
+
+\membersection{wxLocale::GetLanguage}\label{wxlocalegetlanguage}
+
+\constfunc{int}{GetLanguage}{\void}
+
+Returns \helpref{wxLanguage}{wxlanguage} constant of current language.
+Note that you can call this function only if you used the form of
+\helpref{Init}{wxlocaleinit} that takes wxLanguage argument.
+
+
+\membersection{wxLocale::GetLanguageInfo}\label{wxlocalegetlanguageinfo}
+
+\constfunc{static wxLanguageInfo *}{GetLanguageInfo}{\param{int }{lang}}
+
+Returns a pointer to wxLanguageInfo structure containing information about the
+given language or {\tt NULL} if this language is unknown. Note that even if the
+returned pointer is valid, the caller should {\it not} delete it.
+
+See \helpref{AddLanguage}{wxlocaleaddlanguage} for the wxLanguageInfo
+description.
+
+As with \helpref{Init}{wxlocaleinit}, \texttt{wxLANGUAGE\_DEFAULT} has the
+special meaning if passed as an argument to this function and in this case the
+result of \helpref{GetSystemLanguage()}{wxlocalegetsystemlanguage} is used.
+
+
+\membersection{wxLocale::GetLanguageName}\label{wxlocalegetlanguagename}
+
+\constfunc{static wxString}{GetLanguageName}{\param{int }{lang}}
+
+Returns English name of the given language or empty string if this
+language is unknown.
+
+See \helpref{GetLanguageInfo}{wxlocalegetlanguageinfo} for a remark about
+special meaning of \texttt{wxLANGUAGE\_DEFAULT}.
+
+
+\membersection{wxLocale::GetLocale}\label{wxlocalegetlocale}
+
+\constfunc{const char*}{GetLocale}{\void}
+
+Returns the locale name as passed to the constructor or 
+\helpref{Init()}{wxlocaleinit}. This is full, human-readable name,
+e.g. "English" or "French".
+
+
+
+\membersection{wxLocale::GetName}\label{wxlocalegetname}
+
+\constfunc{const wxString\&}{GetName}{\void}
+
+Returns the current short name for the locale (as given to the constructor or
+the Init() function).
+
+
+\membersection{wxLocale::GetString}\label{wxlocalegetstring}
+
+\constfunc{const char*}{GetString}{\param{const char }{*szOrigString}, \param{const char }{*szDomain = NULL}}
+
+\constfunc{const char*}{GetString}{\param{const char }{*szOrigString}, \param{const char }{*szOrigString2}, \param{size\_t }{n}, \param{const char }{*szDomain = NULL}}
+
+Retrieves the translation for a string in all loaded domains unless the szDomain
+parameter is specified (and then only this catalog/domain is searched).
+
+Returns original string if translation is not available
+(in this case an error message is generated the first time
+a string is not found; use \helpref{wxLogNull}{wxlogoverview} to suppress it).
+
+The second form is used when retrieving translation of string that has
+different singular and plural form in English or different plural forms in some
+other language. It takes two extra arguments: \arg{szOrigString}
+parameter must contain the singular form of the string to be converted.
+It is also used as the key for the search in the catalog.
+The \arg{szOrigString2} parameter is the plural form (in English).
+The parameter \arg{n} is used to determine the plural form.  If no
+message catalog is found \arg{szOrigString} is returned if `n == 1',
+otherwise \arg{szOrigString2}.
+See \urlref{GNU gettext manual}{http://www.gnu.org/manual/gettext/html\_chapter/gettext\_10.html\#SEC150} for additional information on plural forms handling.
+
+This method is called by the \helpref{wxGetTranslation}{wxgettranslation}
+function and \helpref{\_()}{underscore} macro.
+
+\wxheading{Remarks}
+
+Domains are searched in the last to first order, i.e. catalogs
+added later override those added before.
+
+
+\membersection{wxLocale::GetHeaderValue}\label{wxlocalegetheadervalue}
+
+\constfunc{wxString}{GetHeaderValue}{\param{const char }{*szHeader}, \param{const char }{*szDomain = NULL}}
+
+Returns the header value for header \arg{szHeader}. The search for \arg{szHeader} is case sensitive. If an \arg{szDomain}
+is passed, this domain is searched. Else all domains will be searched until a header has been found.
+The return value is the value of the header if found. Else this will be empty.
+
+\membersection{wxLocale::GetSysName}\label{wxlocalegetsysname}
+
+\constfunc{wxString}{GetSysName}{\void}
+
+Returns current platform-specific locale name as passed to setlocale().
+
+Compare \helpref{GetCanonicalName}{wxlocalegetcanonicalname}.
+
+
+
+\membersection{wxLocale::GetSystemEncoding}\label{wxlocalegetsystemencoding}
+
+\constfunc{static wxFontEncoding}{GetSystemEncoding}{\void}
+
+Tries to detect the user's default font encoding.
+Returns \helpref{wxFontEncoding}{wxfont} value or 
+{\bf wxFONTENCODING\_SYSTEM} if it couldn't be determined.
+
+
+\membersection{wxLocale::GetSystemEncodingName}\label{wxlocalegetsystemencodingname}
+
+\constfunc{static wxString}{GetSystemEncodingName}{\void}
+
+Tries to detect the name of the user's default font encoding. This string isn't
+particularly useful for the application as its form is platform-dependent and
+so you should probably use 
+\helpref{GetSystemEncoding}{wxlocalegetsystemencoding} instead.
+
+Returns a user-readable string value or an empty string if it couldn't be
+determined.
+
+
+\membersection{wxLocale::GetSystemLanguage}\label{wxlocalegetsystemlanguage}
+
+\constfunc{static int}{GetSystemLanguage}{\void}
+
+Tries to detect the user's default language setting.
+Returns \helpref{wxLanguage}{wxlanguage} value or 
+ {\bf wxLANGUAGE\_UNKNOWN} if the language-guessing algorithm failed.
+
+
+
+\membersection{wxLocale::Init}\label{wxlocaleinit}
+
+
+\func{bool}{Init}{\param{int }{language = wxLANGUAGE\_DEFAULT}, \param{int }{flags =
+                          wxLOCALE\_LOAD\_DEFAULT | wxLOCALE\_CONV\_ENCODING}}
+
+\func{bool}{Init}{\param{const char }{*szName}, \param{const char }{*szShort = NULL}, \param{const char }{*szLocale = NULL}, \param{bool }{bLoadDefault = true}, \param{bool }{bConvertEncoding = false}}
+
+The second form is deprecated, use the first one unless you know what you are
+doing. 
+
+
+\wxheading{Parameters}
+
+\docparam{language}{\helpref{wxLanguage}{wxlanguage} identifier of the locale. 
+wxLANGUAGE\_DEFAULT has special meaning -- wxLocale will use system's default 
+language (see \helpref{GetSystemLanguage}{wxlocalegetsystemlanguage}).}
+
+\docparam{flags}{Combination of the following:
+
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxLOCALE\_LOAD\_DEFAULT}}{Load the message catalog
+for the given locale containing the translations of standard wxWidgets messages
+automatically.}
+\twocolitem{\windowstyle{wxLOCALE\_CONV\_ENCODING}}{Automatically convert message
+catalogs to platform's default encoding. Note that it will do only basic 
+conversion between well-known pair like iso8859-1 and windows-1252 or
+iso8859-2 and windows-1250. See \helpref{Writing non-English applications}{nonenglishoverview} for detailed
+description of this behaviour. Note that this flag is meaningless in Unicode build.}
+\end{twocollist}
+}
+
+\docparam{szName}{The name of the locale. Only used in diagnostic messages.}
+
+\docparam{szShort}{The standard 2 letter locale abbreviation; it is used as the
+directory prefix when looking for the message catalog files.}
+
+\docparam{szLocale}{The parameter for the call to setlocale(). Note that it is
+platform-specific.}
+
+\docparam{bLoadDefault}{May be set to false to prevent loading of the message catalog
+for the given locale containing the translations of standard wxWidgets messages.
+This parameter would be rarely used in normal circumstances.}
+
+\docparam{bConvertEncoding}{May be set to true to do automatic conversion of message
+catalogs to platform's native encoding. Note that it will do only basic 
+conversion between well-known pair like iso8859-1 and windows-1252 or
+iso8859-2 and windows-1250. 
+See \helpref{Writing non-English applications}{nonenglishoverview} for detailed
+description of this behaviour.}
+
+
+The call of this function has several global side effects which you should
+understand: first of all, the application locale is changed - note that this
+will affect many of standard C library functions such as printf() or strftime().
+Second, this wxLocale object becomes the new current global locale for the
+application and so all subsequent calls to
+\helpref{wxGetTranslation()}{wxgettranslation} will try to
+translate the messages using the message catalogs for this locale.
+
+Returns true on success or false if the given locale couldn't be set.
+
+
+\membersection{wxLocale::IsAvailable}\label{wxlocaleisavailable}
+
+\func{static bool}{IsAvailable}{\param{int }{lang}}
+
+Check whether the operating system and/or C run time environment supports
+this locale. For example in Windows 2000 and Windows XP, support for many
+locales is not installed by default. Returns \true if the locale is
+supported.
+
+The argument \arg{lang} is the wxLanguage identifier. To obtain this for a
+given a two letter ISO language code, use 
+\helpref{FindLanguageInfo}{wxlocalefindlanguageinfo} to obtain its
+wxLanguageInfo structure. See \helpref{AddLanguage}{wxlocaleaddlanguage} for
+the wxLanguageInfo description.
+
+\newsince{2.7.1}. 
+
+
+\membersection{wxLocale::IsLoaded}\label{wxlocaleisloaded}
+
+\constfunc{bool}{IsLoaded}{\param{const char* }{domain}}
+
+Check if the given catalog is loaded, and returns true if it is.
+
+According to GNU gettext tradition, each catalog
+normally corresponds to 'domain' which is more or less the application name.
+
+See also: \helpref{AddCatalog}{wxlocaleaddcatalog}
+
+
+\membersection{wxLocale::IsOk}\label{wxlocaleisok}
+
+\constfunc{bool}{IsOk}{\void}
+
+Returns true if the locale could be set successfully.
+

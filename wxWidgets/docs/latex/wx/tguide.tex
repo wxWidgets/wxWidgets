@@ -1,0 +1,51 @@
+\section{Writing a wxWidgets application: a rough guide}\label{roughguide}
+
+To set a wxWidgets application going, you will need to derive a \helpref{wxApp}{wxapp} class and
+override \helpref{wxApp::OnInit}{wxapponinit}.
+
+An application must have a top-level \helpref{wxFrame}{wxframe} or \helpref{wxDialog}{wxdialog} window.
+Each frame may contain one or more instances of classes such as \helpref{wxPanel}{wxpanel}, \helpref{wxSplitterWindow}{wxsplitterwindow}\rtfsp
+or other windows and controls.
+
+A frame can have a \helpref{wxMenuBar}{wxmenubar}, a \helpref{wxToolBar}{wxtoolbar}, a status line, and a \helpref{wxIcon}{wxicon} for
+when the frame is iconized.
+
+A \helpref{wxPanel}{wxpanel} is used to place controls (classes derived from \helpref{wxControl}{wxcontrol})
+which are used for user interaction. Examples of controls are \helpref{wxButton}{wxbutton},
+\rtfsp\helpref{wxCheckBox}{wxcheckbox}, \helpref{wxChoice}{wxchoice}, \helpref{wxListBox}{wxlistbox},
+\rtfsp\helpref{wxRadioBox}{wxradiobox}, \helpref{wxSlider}{wxslider}.
+
+Instances of \helpref{wxDialog}{wxdialog} can also be used for controls and they have
+the advantage of not requiring a separate frame.
+
+Instead of creating a dialog box and populating it with items, it is possible to choose
+one of the convenient common dialog classes, such as \helpref{wxMessageDialog}{wxmessagedialog}\rtfsp
+and \helpref{wxFileDialog}{wxfiledialog}.
+
+You never draw directly onto a window - you use a {\it device context} (DC). \helpref{wxDC}{wxdc} is
+the base for \helpref{wxClientDC}{wxclientdc}, \helpref{wxPaintDC}{wxpaintdc}, \helpref{wxMemoryDC}{wxmemorydc}, \helpref{wxPostScriptDC}{wxpostscriptdc},
+\rtfsp\helpref{wxMemoryDC}{wxmemorydc}, \helpref{wxMetafileDC}{wxmetafiledc} and \helpref{wxPrinterDC}{wxprinterdc}.
+If your drawing functions have {\bf wxDC} as a parameter, you can pass any of these DCs
+to the function, and thus use the same code to draw to several different devices.
+You can draw using the member functions of {\bf wxDC}, such as \helpref{wxDC::DrawLine}{wxdcdrawline}\rtfsp
+and \helpref{wxDC::DrawText}{wxdcdrawtext}. Control colour on a window (\helpref{wxColour}{wxcolour}) with
+brushes (\helpref{wxBrush}{wxbrush}) and pens (\helpref{wxPen}{wxpen}).
+
+To intercept events, you add a DECLARE\_EVENT\_TABLE macro to the window class declaration,
+and put a BEGIN\_EVENT\_TABLE ... END\_EVENT\_TABLE block in the implementation file. Between these
+macros, you add event macros which map the event (such as a mouse click) to a member function.
+These might override predefined event handlers such as for \helpref{wxKeyEvent}{wxkeyevent} and
+\rtfsp\helpref{wxMouseEvent}{wxmouseevent}.
+
+Most modern applications will have an on-line, hypertext help system; for this, you
+need wxHelp and the \helpref{wxHelpController}{wxhelpcontroller} class to control
+wxHelp.
+
+GUI applications aren't all graphical wizardry. List and hash table needs are
+catered for by \helpref{wxList}{wxlist} and \helpref{wxHashMap}{wxhashmap}.
+You will undoubtedly need some platform-independent \helpref{file functions}{filefunctions},
+and you may find it handy to maintain and search a list of paths using \helpref{wxPathList}{wxpathlist}.
+There's a \helpref{miscellany}{miscellany} of operating system and other functions.
+
+See also \helpref{Classes by Category}{classesbycat} for a list of classes.
+

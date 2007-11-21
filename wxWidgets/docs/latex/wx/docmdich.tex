@@ -1,0 +1,93 @@
+\section{\class{wxDocMDIChildFrame}}\label{wxdocmdichildframe}
+
+The wxDocMDIChildFrame class provides a default frame for displaying documents
+on separate windows. This class can only be used for MDI child frames.
+
+The class is part of the document/view framework supported by wxWidgets,
+and cooperates with the \helpref{wxView}{wxview}, \helpref{wxDocument}{wxdocument},
+\rtfsp\helpref{wxDocManager}{wxdocmanager} and \helpref{wxDocTemplate}{wxdoctemplate} classes.
+
+See the example application in {\tt samples/docview}.
+
+\wxheading{Derived from}
+
+\helpref{wxMDIChildFrame}{wxmdichildframe}\\
+\helpref{wxFrame}{wxframe}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/docmdi.h>
+
+\wxheading{See also}
+
+\helpref{Document/view overview}{docviewoverview}, \helpref{wxMDIChildFrame}{wxmdichildframe}
+
+\membersection{wxDocMDIChildFrame::m\_childDocument}\label{wxdocmdichildframemchilddocument}
+
+\member{wxDocument*}{m\_childDocument}
+
+The document associated with the frame.
+
+\membersection{wxDocMDIChildFrame::m\_childView}\label{wxdocmdichildframemchildview}
+
+\member{wxView*}{m\_childView}
+
+The view associated with the frame.
+
+\membersection{wxDocMDIChildFrame::wxDocMDIChildFrame}\label{wxdocmdichildframector}
+
+\func{}{wxDocMDIChildFrame}{\param{wxDocument* }{doc}, \param{wxView* }{view}, \param{wxFrame* }{parent},
+ \param{wxWindowID}{ id}, \param{const wxString\& }{title}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
+ \param{const wxSize\&}{ size = wxDefaultSize},
+ \param{long}{ style = wxDEFAULT\_FRAME\_STYLE}, \param{const wxString\& }{name = ``frame"}}
+
+Constructor.
+
+\membersection{wxDocMDIChildFrame::\destruct{wxDocMDIChildFrame}}\label{wxdocmdichildframedtor}
+
+\func{}{\destruct{wxDocMDIChildFrame}}{\void}
+
+Destructor.
+
+\membersection{wxDocMDIChildFrame::GetDocument}\label{wxdocmdichildframegetdocument}
+
+\constfunc{wxDocument*}{GetDocument}{\void}
+
+Returns the document associated with this frame.
+
+\membersection{wxDocMDIChildFrame::GetView}\label{wxdocmdichildframegetview}
+
+\constfunc{wxView*}{GetView}{\void}
+
+Returns the view associated with this frame.
+
+\membersection{wxDocMDIChildFrame::OnActivate}\label{wxdocmdichildframeonactivate}
+
+\func{void}{OnActivate}{\param{wxActivateEvent}{ event}}
+
+Sets the currently active view to be the frame's view. You may need
+to override (but still call) this function in order to set the keyboard
+focus for your subwindow.
+
+\membersection{wxDocMDIChildFrame::OnCloseWindow}\label{wxdocmdichildframeonclosewindow}
+
+\func{void}{OnCloseWindow}{\param{wxCloseEvent\&}{ event}}
+
+Closes and deletes the current view and document.
+
+\membersection{wxDocMDIChildFrame::SetDocument}\label{wxdocmdichildframesetdocument}
+
+\func{void}{SetDocument}{\param{wxDocument *}{doc}}
+
+Sets the document for this frame.
+
+\membersection{wxDocMDIChildFrame::SetView}\label{wxdocmdichildframesetview}
+
+\func{void}{SetView}{\param{wxView *}{view}}
+
+Sets the view for this frame.
+
+

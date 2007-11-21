@@ -1,0 +1,35 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        sistream.tex
+%% Purpose:     wxStringInputStream docs
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     2004-09-19
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2004 Vadim Zeitlin
+%% License:     wxWindows licence
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxStringInputStream}}\label{wxstringinputstream}
+
+This class implements an input stream which reads data from a string. It
+supports seeking.
+
+\wxheading{Derived from}
+
+\helpref{wxInputStream}{wxinputstream}
+
+\wxheading{Include files}
+
+<wx/sstream.h>
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxStringInputStream::wxStringInputStream}\label{wxstringinputstreamctor}
+
+\func{}{wxStringInputStream}{\param{const wxString\&}{ s}}
+
+Creates a new read-only stream using the specified string. Note that the string
+is copied by the stream so if the original string is modified after using this
+constructor, changes to it are not reflected when reading from stream. 
+

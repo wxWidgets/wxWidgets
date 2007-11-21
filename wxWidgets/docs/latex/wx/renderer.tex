@@ -1,0 +1,276 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        renderer.tex
+%% Purpose:     wxRenderer and wxRendererNative documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     06.08.03
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxRendererNative}}\label{wxrenderernative}
+
+First, a brief introduction to wxRenderer and why it is needed.
+
+Usually wxWidgets uses the underlying low level GUI system to draw all the
+controls - this is what we mean when we say that it is a ``native'' framework.
+However not all controls exist under all (or even any) platforms and in this
+case wxWidgets provides a default, generic, implementation of them written in
+wxWidgets itself.
+
+These controls don't have the native appearance if only the standard
+line drawing and other graphics primitives are used, because the native
+appearance is different under different platforms while the lines are always
+drawn in the same way.
+
+This is why we have renderers: wxRenderer is a class which virtualizes the
+drawing, i.e. it abstracts the drawing operations and allows you to draw say, a
+button, without caring about exactly how this is done. Of course, as we
+can draw the button differently in different renderers, this also allows us to
+emulate the native look and feel.
+
+So the renderers work by exposing a large set of high-level drawing functions
+which are used by the generic controls. There is always a default global
+renderer but it may be changed or extended by the user, see 
+\helpref{Render sample}{samplerender}.
+
+All drawing functions take some standard parameters:
+\begin{itemize}
+\item \arg{win} is the window being drawn. It is normally not used and when
+it is it should only be used as a generic \helpref{wxWindow}{wxwindow} 
+(in order to get its low level handle, for example), but you should
+\emph{not} assume that it is of some given type as the same renderer
+function may be reused for drawing different kinds of control.
+\item \arg{dc} is the \helpref{wxDC}{wxdc} to draw on. Only this device
+context should be used for drawing. It is not necessary to restore
+pens and brushes for it on function exit but, on the other hand, you
+shouldn't assume that it is in any specific state on function entry:
+the rendering functions should always prepare it.
+\item \arg{rect} the bounding rectangle for the element to be drawn.
+\item \arg{flags} the optional flags (none by default) which can be a
+combination of the \texttt{wxCONTROL\_XXX} constants below.
+\end{itemize}
+
+Note that each drawing function restores the \helpref{wxDC}{wxdc} attributes if
+it changes them, so it is safe to assume that the same pen, brush and colours
+that were active before the call to this function are still in effect after it.
+
+
+\wxheading{Constants}
+
+The following rendering flags are defined:
+
+\begin{verbatim}
+enum
+{
+    wxCONTROL_DISABLED   = 0x00000001,  // control is disabled
+    wxCONTROL_FOCUSED    = 0x00000002,  // currently has keyboard focus
+    wxCONTROL_PRESSED    = 0x00000004,  // (button) is pressed
+    wxCONTROL_ISDEFAULT  = 0x00000008,  // only applies to the buttons
+    wxCONTROL_ISSUBMENU  = wxCONTROL_ISDEFAULT, // only for menu items
+    wxCONTROL_EXPANDED   = wxCONTROL_ISDEFAULT, // only for the tree items
+    wxCONTROL_CURRENT    = 0x00000010,  // mouse is currently over the control
+    wxCONTROL_SELECTED   = 0x00000020,  // selected item in e.g. listbox
+    wxCONTROL_CHECKED    = 0x00000040,  // (check/radio button) is checked
+    wxCONTROL_CHECKABLE  = 0x00000080,  // (menu) item can be checked
+    wxCONTROL_UNDETERMINED = wxCONTROL_CHECKABLE  // (check) undetermined state
+};
+\end{verbatim}
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/renderer.h>
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxRendererNative::\destruct{wxRendererNative}}\label{wxrenderernativedtor}
+
+\func{}{\destruct{wxRendererNative}}{\void}
+
+Virtual destructor as for any base class.
+
+
+\membersection{wxRendererNative::DrawCheckBox}\label{wxrenderernativedrawcheckbox}
+
+\func{void}{DrawCheckBox}{\param{wxWindow *}{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags}}
+
+Draw a check box (used by wxDataViewCtrl).
+
+\arg{flags} may have the \texttt{wxCONTROL\_CHECKED}, \texttt{wxCONTROL\_CURRENT} or
+\texttt{wxCONTROL\_UNDETERMINED} bit set.
+
+
+\membersection{wxRendererNative::DrawComboBoxDropButton}\label{wxrenderernativedrawcomboboxdropbutton}
+
+\func{void}{DrawComboBoxDropButton}{\param{wxWindow *}{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags}}
+
+Draw a button like the one used by \helpref{wxComboBox}{wxcombobox} to show a
+drop down window. The usual appearance is a downwards pointing arrow.
+
+\arg{flags} may have the \texttt{wxCONTROL\_PRESSED} or \texttt{wxCONTROL\_CURRENT} bit set.
+
+
+\membersection{wxRendererNative::DrawDropArrow}\label{wxrenderernativedrawdroparrow}
+
+\func{void}{DrawDropArrow}{\param{wxWindow *}{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags}}
+
+Draw a drop down arrow that is suitable for use outside a combo box. Arrow will have
+transparent background.
+
+\arg{rect} is not entirely filled by the arrow. Instead, you should use bounding
+rectangle of a drop down button which arrow matches the size you need.
+\arg{flags} may have the \texttt{wxCONTROL\_PRESSED} or \texttt{wxCONTROL\_CURRENT} bit set.
+
+
+\membersection{wxRendererNative::DrawHeaderButton}\label{wxrenderernativedrawheaderbutton}
+
+\func{int}{DrawHeaderButton}{\param{wxWindow* }{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags = 0}, \param{wxHeaderSortIconType }{sortArrow = wxHDR\_SORT\_ICON\_NONE}, \param{wxHeaderButtonParams* }{params = NULL}}
+
+Draw the header control button (used, for example, by
+\helpref{wxListCtrl}{wxlistctrl}).  Depending on platforms the
+\arg{flags} parameter may support the \texttt{wxCONTROL\_SELECTED}
+\texttt{wxCONTROL\_DISABLED} and \texttt{wxCONTROL\_CURRENT} bits.
+The \arg{sortArrow} parameter can be one of
+\texttt{wxHDR\_SORT\_ICON\_NONE}, \texttt{wxHDR\_SORT\_ICON\_UP}, or
+\texttt{wxHDR\_SORT\_ICON\_DOWN}.  Additional values controlling the
+drawing of a text or bitmap label can be passed in \arg{params}.  The
+value returned is the optimal width to contain the the unabreviated
+label text or bitmap, the sort arrow if present, and internal margins.
+
+
+
+\membersection{wxRendererNative::DrawItemSelectionRect}\label{wxrenderernativedrawitemselectionrect}
+
+\func{void}{DrawItemSelectionRect}{\param{wxWindow* }{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags = 0}}
+
+Draw a selection rectangle underneath the text as used e.g. in a 
+\helpref{wxListCtrl}{wxlistctrl}. The supported \arg{flags} are
+\texttt{wxCONTROL\_SELECTED} for items which are selected (e.g. often a blue
+rectangle) and \texttt{wxCONTROL\_CURRENT} for the item that has the focus
+(often a dotted line around the item's text). \texttt{wxCONTROL\_FOCUSED} may
+be used to indicate if the control has the focus (othewise the the selection
+rectangle is e.g. often grey and not blue). This may be ignored by the renderer
+or deduced by the code directly from the \arg{win}.
+
+
+\membersection{wxRendererNative::DrawPushButton}\label{wxrenderernativedrawpushbutton}
+
+\func{void}{DrawPushButton}{\param{wxWindow *}{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags}}
+
+Draw a blank push button that looks very similar to \helpref{wxButton}{wxbutton}.
+
+\arg{flags} may have the \texttt{wxCONTROL\_PRESSED}, \texttt{wxCONTROL\_CURRENT} or
+\texttt{wxCONTROL\_ISDEFAULT} bit set.
+
+
+\membersection{wxRendererNative::DrawSplitterBorder}\label{wxrenderernativedrawsplitterborder}
+
+\func{void}{DrawSplitterBorder}{\param{wxWindow* }{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags = 0}}
+
+Draw the border for sash window: this border must be such that the sash
+drawn by \helpref{DrawSash}{wxrenderernativedrawsplittersash} blends into it
+well.
+
+
+\membersection{wxRendererNative::DrawSplitterSash}\label{wxrenderernativedrawsplittersash}
+
+\func{void}{DrawSplitterSash}{\param{wxWindow* }{win}, \param{wxDC\& }{dc}, \param{const wxSize\& }{size}, \param{wxCoord }{position}, \param{wxOrientation }{orient}, \param{int }{flags = 0}}
+
+Draw a sash. The \arg{orient} parameter defines whether the sash should be
+vertical or horizontal and how the \arg{position} should be interpreted.
+
+
+\membersection{wxRendererNative::DrawTreeItemButton}\label{wxrenderernativedrawtreeitembutton}
+
+\func{void}{DrawTreeItemButton}{\param{wxWindow* }{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags = 0}}
+
+Draw the expanded/collapsed icon for a tree control item. To draw an expanded
+button the \arg{flags} parameter must contain {\tt wxCONTROL\_EXPANDED} bit.
+
+
+\membersection{wxRendererNative::Get}\label{wxrenderernativeget}
+
+\func{wxRendererNative\&}{Get}{\void}
+
+Return the currently used renderer.
+
+
+\membersection{wxRendererNative::GetDefault}\label{wxrenderernativegetdefault}
+
+\func{wxRendererNative\&}{GetDefault}{\void}
+
+Return the default (native) implementation for this platform -- this is also
+the one used by default but this may be changed by calling 
+\helpref{Set}{wxrenderernativeset} in which case the return value of this
+method may be different from the return value of \helpref{Get}{wxrenderernativeget}.
+
+
+\membersection{wxRendererNative::GetGeneric}\label{wxrenderernativegetgeneric}
+
+\func{wxRendererNative\&}{GetGeneric}{\void}
+
+Return the generic implementation of the renderer. Under some platforms, this
+is the default renderer implementation, others have platform-specific default
+renderer which can be retrieved by calling \helpref{GetDefault}{wxrenderernativegetdefault}.
+
+
+\membersection{wxRendererNative::GetHeaderButtonHeight}\label{wxrenderernativegetheaderbuttonheight}
+
+\func{int}{GetHeaderButtonHeight}{\param{const wxWindow* }{win}}
+
+Returns the height of a header button, either a fixed platform height if available, or a 
+generic height based on the window's font.
+
+
+\membersection{wxRendererNative::GetSplitterParams}\label{wxrenderernativegetsplitterparams}
+
+\func{wxSplitterRenderParams}{GetSplitterParams}{\param{const wxWindow* }{win}}
+
+Get the splitter parameters, see 
+\helpref{wxSplitterRenderParams}{wxsplitterrenderparams}.
+
+
+\membersection{wxRendererNative::GetVersion}\label{wxrenderernativegetversion}
+
+\constfunc{wxRendererVersion}{GetVersion}{\void}
+
+This function is used for version checking: \helpref{Load}{wxrenderernativeload} 
+refuses to load any shared libraries implementing an older or incompatible
+version.
+
+The implementation of this method is always the same in all renderers (simply
+construct \helpref{wxRendererVersion}{wxrendererversion} using the 
+{\tt wxRendererVersion::Current\_XXX} values), but it has to be in the derived,
+not base, class, to detect mismatches between the renderers versions and so you
+have to implement it anew in all renderers.
+
+
+\membersection{wxRendererNative::Load}\label{wxrenderernativeload}
+
+\func{wxRendererNative*}{Load}{\param{const wxString\& }{name}}
+
+Load the renderer from the specified DLL, the returned pointer must be
+deleted by caller if not {\tt NULL} when it is not used any more.
+
+The \arg{name} should be just the base name of the renderer and not the full
+name of the DLL file which is constructed differently (using 
+\helpref{wxDynamicLibrary::CanonicalizePluginName}{wxdynamiclibrarycanonicalizepluginname}) 
+on different systems.
+
+
+\membersection{wxRendererNative::Set}\label{wxrenderernativeset}
+
+\func{wxRendererNative*}{Set}{\param{wxRendererNative* }{renderer}}
+
+Set the renderer to use, passing {\tt NULL} reverts to using the default
+renderer (the global renderer must always exist).
+
+Return the previous renderer used with Set() or {\tt NULL} if none.
+

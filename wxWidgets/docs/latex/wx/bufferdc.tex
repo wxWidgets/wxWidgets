@@ -1,0 +1,204 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        bufferdc.tex
+%% Purpose:     wxBufferedDC documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     07.02.04
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2004 Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxBufferedDC}}\label{wxbuffereddc}
+
+This class provides a simple way to avoid flicker: when drawing on it,
+everything is in fact first drawn on an in-memory buffer (a
+\helpref{wxBitmap}{wxbitmap}) and then copied to the screen, using the
+associated wxDC, only once, when this object is destroyed. wxBufferedDC itself
+is typically associated with \helpref{wxClientDC}{wxclientdc}, if you want to
+use it in your \texttt{EVT\_PAINT} handler, you should look at
+\helpref{wxBufferedPaintDC}{wxbufferedpaintdc} instead.
+
+When used like this, a valid \arg{dc} must be specified in the constructor
+while the \arg{buffer} bitmap doesn't have to be explicitly provided, by
+default this class will allocate the bitmap of required size itself. However
+using a dedicated bitmap can speed up the redrawing process by eliminating the
+repeated creation and destruction of a possibly big bitmap. Otherwise,
+wxBufferedDC can be used in the same way as any other device context. 
+
+There is another possible use for wxBufferedDC is to use it to maintain a
+backing store for the window contents. In this case, the associated \arg{dc}
+may be \NULL but a valid backing store bitmap should be specified.
+
+Finally, please note that GTK+ 2.0 as well as OS X provide double buffering
+themselves natively. You can either use \helpref{wxWindow::IsDoubleBuffered}{wxwindowisdoublebuffered} 
+to determine whether you need to use buffering or not, or use 
+\helpref{wxAutoBufferedPaintDC}{wxautobufferedpaintdc} to avoid needless double
+buffering on the systems which already do it automatically.
+
+\wxheading{Derived from}
+
+\helpref{wxMemoryDC}{wxmemorydc}\\
+\helpref{wxDC}{wxdc}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/dcbuffer.h>
+
+\wxheading{See also}
+
+\helpref{wxDC}{wxdc},\rtfsp
+\helpref{wxMemoryDC}{wxmemorydc},\rtfsp
+\helpref{wxBufferedPaintDC}{wxbufferedpaintdc},\rtfsp
+\helpref{wxAutoBufferedPaintDC}{wxautobufferedpaintdc}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxBufferedDC::wxBufferedDC}\label{wxbuffereddcctor}
+
+\func{}{wxBufferedDC}{\void}
+
+\func{}{wxBufferedDC}{\param{wxDC *}{dc}, \param{const wxSize\& }{area}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
+
+\func{}{wxBufferedDC}{\param{wxDC *}{dc}, \param{wxBitmap\& }{buffer}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
+
+If you use the first, default, constructor, you must call one of the 
+\helpref{Init}{wxbuffereddcinit} methods later in order to use the object.
+
+The other constructors initialize the object immediately and \texttt{Init()} 
+must not be called after using them.
+
+\wxheading{Parameters}
+
+\docparam{dc}{The underlying DC: everything drawn to this object will be
+flushed to this DC when this object is destroyed.  You may pass NULL
+in order to just initialize the buffer, and not flush it.}
+
+\docparam{area}{The size of the bitmap to be used for buffering (this bitmap is
+created internally when it is not given explicitly).}
+
+\docparam{buffer}{Explicitly provided bitmap to be used for buffering: this is
+the most efficient solution as the bitmap doesn't have to be recreated each
+time but it also requires more memory as the bitmap is never freed. The bitmap
+should have appropriate size, anything drawn outside of its bounds is clipped.}
+
+\docparam{style}{wxBUFFER\_CLIENT\_AREA to indicate that just the client area of
+the window is buffered, or wxBUFFER\_VIRTUAL\_AREA to indicate that the buffer bitmap
+covers the virtual area (in which case PrepareDC is automatically called for the actual window
+device context).}
+
+\membersection{wxBufferedDC::Init}\label{wxbuffereddcinit}
+
+\func{void}{Init}{\param{wxDC *}{dc}, \param{const wxSize\& }{area}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
+
+\func{void}{Init}{\param{wxDC *}{dc}, \param{wxBitmap\& }{buffer}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
+
+These functions initialize the object created using the default constructor.
+Please see \helpref{constructors documentation}{wxbuffereddcctor} for details.
+
+
+% VZ: UnMask() intentionally not documented, we might want to make it private
+
+
+\membersection{wxBufferedDC::\destruct{wxBufferedDC}}\label{wxbuffereddcdtor}
+
+Copies everything drawn on the DC so far to the underlying DC associated with
+this object, if any.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxBufferedPaintDC}}\label{wxbufferedpaintdc}
+
+This is a subclass of \helpref{wxBufferedDC}{wxbuffereddc} which can be used
+inside of an \texttt{OnPaint()} event handler. Just create an object of this class instead
+of \helpref{wxPaintDC}{wxpaintdc} and make sure \helpref{wxWindow::SetBackgroundStyle}{wxwindowgetbackgroundstyle}
+is called with wxBG\_STYLE\_CUSTOM somewhere in the class initialization code, and that's all
+you have to do to (mostly) avoid flicker. The only thing to watch out for is that if you are
+using this class together with \helpref{wxScrolledWindow}{wxscrolledwindow}, you probably
+do \textbf{not} want to call \helpref{PrepareDC}{wxscrolledwindowpreparedc} on it as it
+already does this internally for the real underlying wxPaintDC.
+
+\wxheading{Derived from}
+
+\helpref{wxBufferedDC}{wxbuffereddc}\\
+\helpref{wxMemoryDC}{wxmemorydc}\\
+\helpref{wxDC}{wxdc}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/dcbuffer.h>
+
+\wxheading{See also}
+
+\helpref{wxDC}{wxdc},\rtfsp
+\helpref{wxBufferedDC}{wxbuffereddc},\rtfsp
+\helpref{wxAutoBufferedPaintDC}{wxautobufferedpaintdc}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxBufferedPaintDC::wxBufferedPaintDC}\label{wxbufferedpaintdcctor}
+
+\func{}{wxBufferedPaintDC}{\param{wxWindow *}{window}, \param{wxBitmap\& }{buffer}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
+
+\func{}{wxBufferedPaintDC}{\param{wxWindow *}{window}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
+
+As with \helpref{wxBufferedDC}{wxbuffereddcctor}, you may either provide the
+bitmap to be used for buffering or let this object create one internally (in
+the latter case, the size of the client part of the window is used).
+
+Pass wxBUFFER\_CLIENT\_AREA for the {\it style} parameter to indicate that just the client area of
+the window is buffered, or wxBUFFER\_VIRTUAL\_AREA to indicate that the buffer bitmap
+covers the virtual area (in which case PrepareDC is automatically called for the actual window
+device context).
+
+\membersection{wxBufferedPaintDC::\destruct{wxBufferedPaintDC}}\label{wxbufferedpaintdcdtor}
+
+Copies everything drawn on the DC so far to the window associated with this
+object, using a \helpref{wxPaintDC}{wxpaintdc}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxAutoBufferedPaintDC}}\label{wxautobufferedpaintdc}
+
+This wxDC derivative can be used inside of an \texttt{OnPaint()} event handler to achieve
+double-buffered drawing. Just create an object of this class instead of \helpref{wxPaintDC}{wxpaintdc}
+and make sure \helpref{wxWindow::SetBackgroundStyle}{wxwindowgetbackgroundstyle} is called
+with wxBG\_STYLE\_CUSTOM somewhere in the class initialization code, and that's all you have
+to do to (mostly) avoid flicker.
+
+The difference between \helpref{wxBufferedPaintDC}{wxbufferedpaintdc} and this class,
+is the lightweigthness - on platforms which have native double-buffering, wxAutoBufferedPaintDC is simply
+a typedef of wxPaintDC. Otherwise, it is a typedef of wxBufferedPaintDC.
+
+
+\wxheading{Derived from}
+
+\helpref{wxBufferedPaintDC}{wxbufferedpaintdc}\\
+\helpref{wxPaintDC}{wxpaintdc}\\
+\helpref{wxDC}{wxdc}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/dcbuffer.h>
+
+\wxheading{See also}
+
+\helpref{wxDC}{wxdc},\rtfsp
+\helpref{wxBufferedPaintDC}{wxbufferedpaintdc}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxAutoBufferedPaintDC::wxAutoBufferedPaintDC}\label{wxautobufferedpaintdcctor}
+
+\func{}{wxAutoBufferedPaintDC}{\param{wxWindow *}{window}}
+
+Constructor. Pass a pointer to the window on which you wish to paint.
+

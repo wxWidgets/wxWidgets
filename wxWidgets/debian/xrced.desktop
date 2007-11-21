@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=XRCed
+Comment=wxPython XRC resource editor and UI designer
+Exec=/usr/bin/xrced
+Icon=/usr/share/pixmaps/xrced.png
+Terminal=false
+Type=Application
+Categories=Application;Development;
+StartupNotify=true

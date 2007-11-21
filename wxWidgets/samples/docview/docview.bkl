@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="docview" template="wx_sample" template_append="wx_append">
+        <sources>docview.cpp doc.cpp view.cpp</sources>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <win32-res>docview.rc</win32-res>
+        <mac-res>chart.r doc.r docview.r mondrian.r</mac-res>
+    </exe>
+
+</makefile>

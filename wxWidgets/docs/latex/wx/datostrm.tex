@@ -1,0 +1,129 @@
+\section{\class{wxDataOutputStream}}\label{wxdataoutputstream}
+
+This class provides functions that write binary data types in a
+portable way. Data can be written in either big-endian or little-endian
+format, little-endian being the default on all architectures.
+
+If you want to write data to text files (or streams) use 
+\helpref{wxTextOutputStream}{wxtextoutputstream} instead.
+
+The << operator is overloaded and you can use this class like a standard 
+C++ iostream. See \helpref{wxDataInputStream}{wxdatainputstream} for its 
+usage and caveats.
+
+See also \helpref{wxDataInputStream}{wxdatainputstream}. 
+
+\wxheading{Derived from}
+
+None
+
+\wxheading{Include files}
+
+<wx/datstrm.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDataOutputStream::wxDataOutputStream}\label{wxdataoutputstreamctor}
+
+\func{}{wxDataOutputStream}{\param{wxOutputStream\&}{ stream}}
+
+\func{}{wxDataOutputStream}{\param{wxOutputStream\&}{ stream}, \param{wxMBConv\&}{ conv = wxMBConvUTF8}}
+
+Constructs a datastream object from an output stream. Only write methods will
+be available. The second form is only available in Unicode build of wxWidgets.
+
+\wxheading{Parameters}
+
+\docparam{stream}{The output stream.}
+
+\docparam{conv}{Charset conversion object object used to encoding Unicode 
+strings before writing them to the stream
+in Unicode mode (see \helpref{wxDataOutputStream::WriteString}{wxdataoutputstreamwritestring}
+documentation for detailed description). Note that you must not destroy
+{\it conv} before you destroy this wxDataOutputStream instance! It is
+recommended to use default value (UTF-8).}
+
+\membersection{wxDataOutputStream::\destruct{wxDataOutputStream}}\label{wxdataoutputstreamdtor}
+
+\func{}{\destruct{wxDataOutputStream}}{\void}
+
+Destroys the wxDataOutputStream object.
+
+\membersection{wxDataOutputStream::BigEndianOrdered}\label{wxdataoutputstreambigendianorder}
+
+\func{void}{BigEndianOrdered}{\param{bool}{ be\_order}}
+
+If {\it be\_order} is true, all data will be written in big-endian
+order, e.g. for reading on a Sparc or from Java-Streams (which
+always use big-endian order), otherwise data will be written in
+little-endian order.
+ 
+\membersection{wxDataOutputStream::Write8}\label{wxdataoutputstreamwrite8}
+
+\func{void}{Write8}{{\param wxUint8 }{i8}}
+
+Writes the single byte {\it i8} to the stream.
+
+\func{void}{Write8}{\param{const wxUint8 *}{buffer}, \param{size\_t }{size}}
+
+Writes an array of bytes to the stream. The amount of bytes to write is
+specified with the {\it size} variable.
+
+\membersection{wxDataOutputStream::Write16}\label{wxdataoutputstreamwrite16}
+
+\func{void}{Write16}{{\param wxUint16 }{i16}}
+
+Writes the 16 bit unsigned integer {\it i16} to the stream.
+
+\func{void}{Write16}{\param{const wxUint16 *}{buffer}, \param{size\_t }{size}}
+
+Writes an array of 16 bit unsigned integer to the stream. The amount of
+16 bit unsigned integer to write is specified with the {\it size} variable.
+
+\membersection{wxDataOutputStream::Write32}\label{wxdataoutputstreamwrite32}
+
+\func{void}{Write32}{{\param wxUint32 }{i32}}
+
+Writes the 32 bit unsigned integer {\it i32} to the stream.
+
+\func{void}{Write32}{\param{const wxUint32 *}{buffer}, \param{size\_t }{size}}
+
+Writes an array of 32 bit unsigned integer to the stream. The amount of
+32 bit unsigned integer to write is specified with the {\it size} variable.
+
+\membersection{wxDataOutputStream::Write64}\label{wxdataoutputstreamwrite64}
+
+\func{void}{Write64}{{\param wxUint64 }{i64}}
+
+Writes the 64 bit unsigned integer {\it i64} to the stream.
+
+\func{void}{Write64}{\param{const wxUint64 *}{buffer}, \param{size\_t }{size}}
+
+Writes an array of 64 bit unsigned integer to the stream. The amount of
+64 bit unsigned integer to write is specified with the {\it size} variable.
+
+\membersection{wxDataOutputStream::WriteDouble}\label{wxdataoutputstreamwritedouble}
+
+\func{void}{WriteDouble}{{\param double }{f}}
+
+Writes the double {\it f} to the stream using the IEEE format.
+
+\func{void}{WriteDouble}{\param{const double *}{buffer}, \param{size\_t }{size}}
+
+Writes an array of double to the stream. The amount of double to write is
+specified with the {\it size} variable.
+
+\membersection{wxDataOutputStream::WriteString}\label{wxdataoutputstreamwritestring}
+
+\func{void}{WriteString}{{\param const wxString\&}{string}}
+
+Writes {\it string} to the stream. Actually, this method writes the size of
+the string before writing {\it string} itself.
+
+In ANSI build of wxWidgets, the string is written to the stream in exactly
+same way it is represented in memory. In Unicode build, however, the string
+is first converted to multibyte representation with {\it conv} object passed
+to stream's constructor (consequently, ANSI application can read data 
+written by Unicode application, as long as they agree on encoding) and this
+representation is written to the stream. UTF-8 is used by default.
+

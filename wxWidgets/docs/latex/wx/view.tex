@@ -1,0 +1,212 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        view.tex
+%% Purpose:     wxView documentation
+%% Author:      wxWidgets Team
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxView}}\label{wxview}
+
+The view class can be used to model the viewing and editing component of
+an application's file-based data. It is part of the document/view framework supported by wxWidgets,
+and cooperates with the \helpref{wxDocument}{wxdocument}, \helpref{wxDocTemplate}{wxdoctemplate}
+and \helpref{wxDocManager}{wxdocmanager} classes.
+
+\wxheading{Derived from}
+
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/docview.h>
+
+\wxheading{See also}
+
+\helpref{wxView overview}{wxviewoverview}, \helpref{wxDocument}{wxdocument}, \helpref{wxDocTemplate}{wxdoctemplate},\rtfsp
+\helpref{wxDocManager}{wxdocmanager}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxView::m\_viewDocument}\label{wxviewmviewdocument}
+
+\member{wxDocument*}{m\_viewDocument}
+
+The document associated with this view. There may be more than one view per
+document, but there can never be more than one document for one view.
+
+\membersection{wxView::m\_viewFrame}\label{wxviewmviewframe}
+
+\member{wxFrame*}{m\_viewFrame}
+
+Frame associated with the view, if any.
+
+\membersection{wxView::m\_viewTypeName}\label{wxviewmviewtypename}
+
+\member{wxString}{m\_viewTypeName}
+
+The view type name given to the wxDocTemplate constructor, copied to this
+variable when the view is created. Not currently used by the framework.
+
+\membersection{wxView::wxView}\label{wxviewctor}
+
+\func{}{wxView}{\void}
+
+Constructor. Define your own default constructor to initialize application-specific
+data.
+
+\membersection{wxView::\destruct{wxView}}\label{wxviewdtor}
+
+\func{}{\destruct{wxView}}{\void}
+
+Destructor. Removes itself from the document's list of views.
+
+\membersection{wxView::Activate}\label{wxviewactivate}
+
+\func{virtual void}{Activate}{\param{bool}{ activate}}
+
+Call this from your view frame's OnActivate member to tell the framework which view is
+currently active. If your windowing system doesn't call OnActivate, you may need to
+call this function from any place where you know the view must
+be active, and the framework will need to get the current view.
+
+The prepackaged view frame wxDocChildFrame calls wxView::Activate from its OnActivate member.
+
+This function calls wxView::OnActivateView.
+
+\membersection{wxView::Close}\label{wxviewclose}
+
+\func{virtual bool}{Close}{\param{bool}{ deleteWindow = true}}
+
+Closes the view by calling OnClose. If {\it deleteWindow} is true, this function should
+delete the window associated with the view.
+
+\membersection{wxView::GetDocument}\label{wxviewgetdocument}
+
+\constfunc{wxDocument*}{GetDocument}{\void}
+
+Gets a pointer to the document associated with the view.
+
+\membersection{wxView::GetDocumentManager}\label{wxviewgetdocumentmanager}
+
+\constfunc{wxDocManager*}{GetDocumentManager}{\void}
+
+Returns a pointer to the document manager instance associated with this view.
+
+\membersection{wxView::GetFrame}\label{wxviewgetframe}
+
+\func{wxWindow *}{GetFrame}{\void}
+
+Gets the frame associated with the view (if any). Note that this ``frame'' is
+not a wxFrame at all in the generic MDI implementation which uses the notebook
+pages instead of the frames and this is why this method returns a wxWindow and
+not a wxFrame.
+
+\membersection{wxView::GetViewName}\label{wxviewgetviewname}
+
+\constfunc{wxString}{GetViewName}{\void}
+
+Gets the name associated with the view (passed to the wxDocTemplate constructor).
+Not currently used by the framework.
+
+\membersection{wxView::OnActivateView}\label{wxviewonactivateview}
+
+\func{virtual void}{OnActivateView}{\param{bool }{activate}, \param{wxView *}{activeView}, \param{wxView *}{deactiveView}}
+
+Called when a view is activated by means of wxView::Activate. The default implementation does
+nothing.
+
+\membersection{wxView::OnChangeFilename}\label{wxviewonchangefilename}
+
+\func{virtual void}{OnChangeFilename}{\void}
+
+Called when the filename has changed. The default implementation constructs a
+suitable title and sets the title of the view frame (if any).
+
+\membersection{wxView::OnClose}\label{wxviewonclose}
+
+\func{virtual bool}{OnClose}{\param{bool}{ deleteWindow}}
+
+Implements closing behaviour. The default implementation calls wxDocument::Close
+to close the associated document. Does not delete the view. The application
+may wish to do some cleaning up operations in this function, {\it if} a
+call to wxDocument::Close succeeded. For example, if your views
+all share the same window, you need to disassociate the window from the view
+and perhaps clear the window. If {\it deleteWindow} is true, delete the
+frame associated with the view.
+
+\membersection{wxView::OnClosingDocument}\label{wxviewonclosingdocument}
+
+\func{virtual void}{OnClosingDoocument}{\void}
+
+Override this to clean up the view when the document is being
+closed.
+
+\membersection{wxView::OnCreate}\label{wxviewoncreate}
+
+\func{virtual bool}{OnCreate}{\param{wxDocument* }{doc}, \param{long}{ flags}}
+
+wxDocManager or wxDocument creates a wxView via a wxDocTemplate.
+Just after the wxDocTemplate creates the wxView, it calls
+wxView::OnCreate. In its OnCreate member function, the wxView can create a wxDocChildFrame
+or a derived class. This wxDocChildFrame provides user interface
+elements to view and/or edit the contents of the wxDocument.
+
+By default, simply returns true. If the function returns false, the
+view will be deleted.
+
+\membersection{wxView::OnCreatePrintout}\label{wxviewoncreateprintout}
+
+\func{virtual wxPrintout*}{OnCreatePrintout}{\void}
+
+If the printing framework is enabled in the library, this function returns a
+\rtfsp\helpref{wxPrintout}{wxprintout} object for the purposes of printing. It should create a new object
+every time it is called; the framework will delete objects it creates.
+
+By default, this function returns an instance of wxDocPrintout, which prints
+and previews one page by calling wxView::OnDraw.
+
+Override to return an instance of a class other than wxDocPrintout.
+
+\membersection{wxView::OnDraw}\label{onviewondraw}
+
+\func{virtual void}{OnDraw}{\param{wxDC* }{dc}}
+
+Override this function to render the view on the given device context.
+
+\membersection{wxView::OnUpdate}\label{onviewonupdate}
+
+\func{virtual void}{OnUpdate}{\param{wxView* }{sender}, \param{wxObject* }{hint}}
+
+Called when the view should be updated. {\it sender} is a pointer to the view
+that sent the update request, or NULL if no single view requested the update (for instance,
+when the document is opened). {\it hint} is as yet unused but may in future contain
+application-specific information for making updating more efficient.
+
+\membersection{wxView::SetDocument}\label{wxviewsetdocument}
+
+\func{void}{SetDocument}{\param{wxDocument* }{doc}}
+
+Associates the given document with the view. Normally called by the
+framework.
+
+\membersection{wxView::SetFrame}\label{wxviewsetframe}
+
+\func{void}{SetFrame}{\param{wxWindow* }{frame}}
+
+Sets the frame associated with this view. The application should call this
+if possible, to tell the view about the frame.
+
+See \helpref{GetFrame}{wxviewgetframe} for the explanation about the mismatch
+between the ``Frame'' in the method name and the type of its parameter.
+
+\membersection{wxView::SetViewName}\label{wxviewsetviewname}
+
+\func{void}{SetViewName}{\param{const wxString\& }{name}}
+
+Sets the view type name. Should only be called by the framework.
+

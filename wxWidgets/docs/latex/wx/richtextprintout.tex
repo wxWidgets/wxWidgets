@@ -1,0 +1,84 @@
+\section{\class{wxRichTextPrintout}}\label{wxrichtextprintout}
+
+This class implements print layout for \helpref{wxRichTextBuffer}{wxrichtextbuffer}. Instead of using it directly, you
+should normally use the \helpref{wxRichTextPrinting}{wxrichtextprinting} class.
+
+\wxheading{Derived from}
+
+\helpref{wxPrintout}{wxprintout}
+
+\wxheading{Include files}
+
+<wx/richtext/richtextprint.h>
+
+\wxheading{Data structures}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRichTextPrintout::wxRichTextPrintout}\label{wxrichtextprintoutwxrichtextprintout}
+
+\func{}{wxRichTextPrintout}{\param{const wxString\& }{title = wxT("Printout")}}
+
+Constructor.
+
+\membersection{wxRichTextPrintout::CalculateScaling}\label{wxrichtextprintoutcalculatescaling}
+
+\func{void}{CalculateScaling}{\param{wxDC* }{dc}, \param{wxRect\& }{textRect}, \param{wxRect\& }{headerRect}, \param{wxRect\& }{footerRect}}
+
+Calculates scaling and text, header and footer rectangles.
+
+\membersection{wxRichTextPrintout::GetHeaderFooterData}\label{wxrichtextprintoutgetheaderfooterdata}
+
+\constfunc{const wxRichTextHeaderFooterData\&}{GetHeaderFooterData}{\void}
+
+Returns the header and footer data associated with the printout.
+
+\membersection{wxRichTextPrintout::GetPageInfo}\label{wxrichtextprintoutgetpageinfo}
+
+\func{void}{GetPageInfo}{\param{int* }{minPage}, \param{int* }{maxPage}, \param{int* }{selPageFrom}, \param{int* }{selPageTo}}
+
+Gets the page information.
+
+\membersection{wxRichTextPrintout::GetRichTextBuffer}\label{wxrichtextprintoutgetrichtextbuffer}
+
+\constfunc{wxRichTextBuffer*}{GetRichTextBuffer}{\void}
+
+Returns a pointer to the buffer being rendered.
+
+\membersection{wxRichTextPrintout::HasPage}\label{wxrichtextprintouthaspage}
+
+\func{bool}{HasPage}{\param{int }{page}}
+
+Returns \true if the given page exists in the printout.
+
+\membersection{wxRichTextPrintout::OnPreparePrinting}\label{wxrichtextprintoutonprepareprinting}
+
+\func{void}{OnPreparePrinting}{\void}
+
+Prepares for printing, laying out the buffer and calculating pagination.
+
+\membersection{wxRichTextPrintout::OnPrintPage}\label{wxrichtextprintoutonprintpage}
+
+\func{bool}{OnPrintPage}{\param{int }{page}}
+
+Does the actual printing for this page.
+
+\membersection{wxRichTextPrintout::SetHeaderFooterData}\label{wxrichtextprintoutsetheaderfooterdata}
+
+\func{void}{SetHeaderFooterData}{\param{const wxRichTextHeaderFooterData\& }{data}}
+
+Sets the header and footer data associated with the printout.
+
+\membersection{wxRichTextPrintout::SetMargins}\label{wxrichtextprintoutsetmargins}
+
+\func{void}{SetMargins}{\param{int }{top = 252}, \param{int }{bottom = 252}, \param{int }{left = 252}, \param{int }{right = 252}}
+
+Sets margins in 10ths of millimetre. Defaults to 1 inch for margins.
+
+\membersection{wxRichTextPrintout::SetRichTextBuffer}\label{wxrichtextprintoutsetrichtextbuffer}
+
+\func{void}{SetRichTextBuffer}{\param{wxRichTextBuffer* }{buffer}}
+
+Sets the buffer to print. wxRichTextPrintout does not manage this pointer; it should
+be managed by the calling code, such as wxRichTextPrinting.
+

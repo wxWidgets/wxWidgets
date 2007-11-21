@@ -1,0 +1,154 @@
+\section{\class{wxPropertySheetDialog}}\label{wxpropertysheetdialog}
+
+This class represents a property sheet dialog: a tabbed dialog
+for showing settings. It is optimized to show flat tabs
+on PocketPC devices, and can be customized to use different
+controllers instead of the default notebook style.
+
+To use this class, call \helpref{wxPropertySheetDialog::Create}{wxpropertysheetdialogcreate} from your own
+Create function. Then call \helpref{CreateButtons}{wxpropertysheetdialogcreatebuttons}, and create pages, adding them to the book control.
+Finally call \helpref{LayoutDialog}{wxpropertysheetdialoglayoutdialog}.
+
+For example:
+
+\begin{verbatim}
+bool MyPropertySheetDialog::Create(...)
+{
+    if (!wxPropertySheetDialog::Create(...))
+        return false;
+
+    CreateButtons(wxOK|wxCANCEL|wxHELP);
+
+    // Add page
+    wxPanel* panel = new wxPanel(GetBookCtrl(), ...);
+    GetBookCtrl()->AddPage(panel, wxT("General"));
+
+    LayoutDialog();
+    return true;
+}
+\end{verbatim}
+
+If necessary, override CreateBookCtrl and AddBookCtrl to create and add a different
+kind of book control. You would then need to use two-step construction for the dialog.
+Or, change the style of book control by calling \helpref{SetSheetStyle}{wxpropertysheetdialogsetsheetstyle} 
+before calling Create.
+
+The dialogs sample shows this class being used with notebook and toolbook controllers (for
+Windows-style and Mac-style settings dialogs).
+
+\wxheading{Derived from}
+
+\helpref{wxDialog}{wxdialog}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/propdlg.h>
+<wx/generic/propdlg.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPropertySheetDialog::wxPropertySheetDialog}\label{wxpropertysheetdialogctor}
+
+\func{}{wxPropertySheetDialog}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
+\param{const wxString\& }{title},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxDEFAULT\_DIALOG\_STYLE},\rtfsp
+\param{const wxString\& }{name = ``dialogBox"}}
+
+Constructor.
+
+\membersection{wxPropertySheetDialog::AddBookCtrl}\label{wxpropertysheetdialogaddbookctrl}
+
+\func{virtual void}{AddBookCtrl}{\param{wxSizer* }{sizer}}
+
+Override this if you wish to add the book control in a way different from the
+standard way (for example, using different spacing).
+
+\membersection{wxPropertySheetDialog::Create}\label{wxpropertysheetdialogcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
+\param{const wxString\& }{title},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxDEFAULT\_DIALOG\_STYLE},\rtfsp
+\param{const wxString\& }{name = ``dialogBox"}}
+
+Call this from your own Create function, before adding buttons and pages.
+
+\membersection{wxPropertySheetDialog::CreateBookCtrl}\label{wxpropertysheetdialogcreatebookctrl}
+
+\func{virtual wxBookCtrlBase*}{CreateBookCtrl}{\void}
+
+Override this if you wish to create a different kind of book control; by default, the value
+passed to \helpref{SetSheetStyle}{wxpropertysheetdialogsetsheetstyle} is used to determine the control.
+The default behaviour is to create a notebook except on Smartphone, where a choicebook is used.
+
+\membersection{wxPropertySheetDialog::CreateButtons}\label{wxpropertysheetdialogcreatebuttons}
+
+\func{void}{CreateButtons}{\param{int }{flags=wxOK|wxCANCEL}}
+
+Call this to create the buttons for the dialog. This calls \helpref{wxDialog::CreateButtonSizer}{wxdialogcreatebuttonsizer}, and
+the flags are the same. On PocketPC, no buttons are created.
+
+\membersection{wxPropertySheetDialog::GetBookCtrl}\label{wxpropertysheetdialoggetbookctrl}
+
+\constfunc{wxBookCtrlBase*}{GetBookCtrl}{\void}
+
+Returns the book control that will contain your settings pages.
+
+\membersection{wxPropertySheetDialog::GetInnerSizer}\label{wxpropertysheetdialoggetinnersizer}
+
+\constfunc{wxSizer*}{GetInnerSizer}{\void}
+
+Returns the inner sizer that contains the book control and button sizer.
+
+\membersection{wxPropertySheetDialog::GetSheetStyle}\label{wxpropertysheetdialoggetsheetstyle}
+
+\constfunc{long}{GetSheetStyle}{\void}
+
+Returns the sheet style. See \helpref{SetSheetStyle}{wxpropertysheetdialogsetsheetstyle} for
+permissable values.
+
+\membersection{wxPropertySheetDialog::LayoutDialog}\label{wxpropertysheetdialoglayoutdialog}
+
+\func{void}{LayoutDialog}{\param{int}{ centreFlags=wxBOTH}}
+
+Call this to lay out the dialog. On PocketPC, this does nothing, since the dialog will be shown
+full-screen, and the layout will be done when the dialog receives a size event.
+
+\membersection{wxPropertySheetDialog::SetBookCtrl}\label{wxpropertysheetdialogsetbookctrl}
+
+\func{void}{SetBookCtrl}{\param{wxBookCtrlBase* }{bookCtrl}}
+
+Sets the book control used for the dialog. You will normally not need to use this.
+
+\membersection{wxPropertySheetDialog::SetInnerSizer}\label{wxpropertysheetdialogsetinnersizer}
+
+\func{void}{SetInnerSizer}{\param{wxSizer*}{ sizer}}
+
+Sets the inner sizer that contains the book control and button sizer. You will normally not need to use this.
+
+\membersection{wxPropertySheetDialog::SetSheetStyle}\label{wxpropertysheetdialogsetsheetstyle}
+
+\func{void}{SetSheetStyle}{\param{long}{ style}}
+
+You can customize the look and feel of the dialog by setting the sheet style. It is
+a bit list of the following values:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxPROPSHEET\_DEFAULT}{Uses the default look and feel for the controller window,
+normally a notebook except on Smartphone where a choice control is used.}
+\twocolitem{wxPROPSHEET\_NOTEBOOK}{Uses a notebook for the controller window.}
+\twocolitem{wxPROPSHEET\_TOOLBOOK}{Uses a toolbook for the controller window.}
+\twocolitem{wxPROPSHEET\_CHOICEBOOK}{Uses a choicebook for the controller window.}
+\twocolitem{wxPROPSHEET\_LISTBOOK}{Uses a listbook for the controller window.}
+\twocolitem{wxPROPSHEET\_TREEBOOK}{Uses a treebook for the controller window.}
+\twocolitem{wxPROPSHEET\_SHRINKTOFIT}{Shrinks the dialog window to fit the currently selected page (common behaviour for
+property sheets on Mac OS X).}
+\end{twocollist}
+

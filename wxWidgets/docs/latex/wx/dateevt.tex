@@ -1,0 +1,42 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        dateevt.tex
+%% Purpose:     wxDateEvent documentation
+%% Author:      Vadim Zeitlin
+%% Created:     2005-01-15
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2005 Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxDateEvent}}\label{wxdateevent}
+
+This event class holds information about a date change and is used together
+with \helpref{wxDatePickerCtrl}{wxdatepickerctrl}. It also serves as a base class
+for \helpref{wxCalendarEvent}{wxcalendarevent}.
+
+\wxheading{Derived from}
+
+\helpref{wxCommandEvent}{wxcommandevent}\\
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/dateevt.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDateEvent::GetDate}\label{wxdateeventgetdate}
+
+\constfunc{const wxDateTime\&}{GetDate}{\void}
+
+Returns the date.
+
+
+\membersection{wxDateEvent::SetDate}\label{wxdateeventsetdate}
+
+\func{void}{SetDate}{\param{const wxDateTime\&}{ date}}
+
+Sets the date carried by the event, normally only used by the library
+internally.
+

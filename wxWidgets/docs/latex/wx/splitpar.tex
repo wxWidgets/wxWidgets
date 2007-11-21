@@ -1,0 +1,47 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        splitpar.tex
+%% Purpose:     wxSplitterRenderParams documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     11.08.03
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{\class{wxSplitterRenderParams}}\label{wxsplitterrenderparams}
+
+This is just a simple {\tt struct} used as a return value of 
+\helpref{wxRendererNative::GetSplitterParams}{wxrenderernativegetsplitterparams}.
+
+It doesn't have any methods and all of its fields are constant and so can be
+only examined but not modified.
+
+\wxheading{Include files}
+
+<wx/renderer.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxEvent::widthSash}\label{wxeventwidthsash}
+
+\member{const wxCoord}{widthSash}
+
+The width of the splitter sash.
+
+
+\membersection{wxSplitterRenderParams::border}\label{wxsplitterrenderparamsborder}
+
+\member{const wxCoord}{border}
+
+The width of the border drawn by the splitter inside it, may be $0$.
+
+
+\membersection{wxSplitterRenderParams::isHotSensitive}\label{wxsplitterrenderparamsishotsensitive}
+
+\member{const bool}{isHotSensitive}
+
+\true if the sash changes appearance when the mouse passes over it, \false
+otherwise.
+

@@ -1,0 +1,116 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        fontenum.tex
+%% Purpose:     wxFontEnumerator documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     03.11.99
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxFontEnumerator}}\label{wxfontenumerator}
+
+wxFontEnumerator enumerates either all available fonts on the system or only
+the ones with given attributes - either only fixed-width (suited for use in
+programs such as terminal emulators and the like) or the fonts available in
+the given \helpref{encoding}{wxfontencodingoverview}.
+
+To do this, you just have to call one of EnumerateXXX() functions - either 
+\helpref{EnumerateFacenames}{wxfontenumeratorenumeratefacenames} or 
+\helpref{EnumerateEncodings}{wxfontenumeratorenumerateencodings} and the
+corresponding callback (\helpref{OnFacename}{wxfontenumeratoronfacename} or 
+\helpref{OnFontEncoding}{wxfontenumeratoronfontencoding}) will be called
+repeatedly until either all fonts satisfying the specified criteria are
+exhausted or the callback returns false.
+
+\wxheading{Virtual functions to override}
+
+Either \helpref{OnFacename}{wxfontenumeratoronfacename} or 
+\helpref{OnFontEncoding}{wxfontenumeratoronfontencoding} should be overridden
+depending on whether you plan to call 
+\helpref{EnumerateFacenames}{wxfontenumeratorenumeratefacenames} or 
+\helpref{EnumerateEncodings}{wxfontenumeratorenumerateencodings}. Of course,
+if you call both of them, you should override both functions.
+
+\wxheading{Derived from}
+
+None
+
+\wxheading{Include files}
+
+<wx/fontenum.h>
+
+\wxheading{See also}
+
+\helpref{Font encoding overview}{wxfontencodingoverview}, 
+\helpref{Font sample}{samplefont}, 
+\helpref{wxFont}{wxfont}, 
+\helpref{wxFontMapper}{wxfontmapper}
+
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFontEnumerator::EnumerateFacenames}\label{wxfontenumeratorenumeratefacenames}
+
+\func{virtual bool}{EnumerateFacenames}{
+    \param{wxFontEncoding }{encoding = wxFONTENCODING\_SYSTEM},
+    \param{bool }{fixedWidthOnly = false}}
+
+Call \helpref{OnFacename}{wxfontenumeratoronfacename} for each font which
+supports given encoding (only if it is not wxFONTENCODING\_SYSTEM) and is of
+fixed width (if \arg{fixedWidthOnly} is true).
+
+Calling this function with default arguments will result in enumerating all
+fonts available on the system.
+
+
+\membersection{wxFontEnumerator::EnumerateEncodings}\label{wxfontenumeratorenumerateencodings}
+
+\func{virtual bool}{EnumerateEncodings}{\param{const wxString\& }{font = ""}}
+
+Call \helpref{OnFontEncoding}{wxfontenumeratoronfontencoding} for each
+encoding supported by the given font - or for each encoding supported by at
+least some font if {\it font} is not specified.
+
+
+\membersection{wxFontEnumerator::GetEncodings}\label{wxfontenumeratorgetencodings}
+
+\func{static wxArrayString}{GetEncodings}{\param{const wxString\&}{ facename = ""}}
+
+Return array of strings containing all encodings found by 
+\helpref{EnumerateEncodings}{wxfontenumeratorenumerateencodings}.
+
+
+\membersection{wxFontEnumerator::GetFacenames}\label{wxfontenumeratorgetfacenames}
+
+\func{static wxArrayString}{GetFacenames}{\param{wxFontEncoding }{encoding = wxFONTENCODING\_SYSTEM}, \param{bool }{fixedWidthOnly = false}}
+
+Return array of strings containing all facenames found by 
+\helpref{EnumerateFacenames}{wxfontenumeratorenumeratefacenames}.
+
+
+\membersection{wxFontEnumerator::IsValidFacename}\label{wxfontenumeratorisvalidfacename}
+
+\func{static bool}{IsValidFacename}{\param{const wxString \&}{ facename}}
+
+Returns \true if the given string is valid face name, i.e. it's the face name of an installed
+font and it can safely be used with \helpref{wxFont::SetFaceName}{wxfontsetfacename}.
+
+
+\membersection{wxFontEnumerator::OnFacename}\label{wxfontenumeratoronfacename}
+
+\func{virtual bool}{OnFacename}{\param{const wxString\& }{font}}
+
+Called by \helpref{EnumerateFacenames}{wxfontenumeratorenumeratefacenames} for
+each match. Return true to continue enumeration or false to stop it.
+
+
+\membersection{wxFontEnumerator::OnFontEncoding}\label{wxfontenumeratoronfontencoding}
+
+\func{virtual bool}{OnFontEncoding}{\param{const wxString\& }{font}, \param{const wxString\& }{encoding}}
+
+Called by \helpref{EnumerateEncodings}{wxfontenumeratorenumerateencodings} for
+each match. Return true to continue enumeration or false to stop it.
+

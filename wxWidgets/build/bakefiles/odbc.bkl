@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <if cond="FORMAT=='autoconf'">
+        <option name="wxUSE_ODBC"/>
+        <set var="LIB_ODBC">
+            <if cond="wxUSE_ODBC=='builtin'">wxodbc$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)</if>
+        </set>
+    </if>
+    <if cond="FORMAT!='autoconf'">
+        <set var="wxUSE_ODBC">
+            <if cond="PLATFORM_UNIX=='1'">builtin</if>
+            <if cond="PLATFORM_UNIX=='0'">0</if>
+        </set>
+        <set var="LIB_ODBC">
+            <if cond="wxUSE_ODBC=='builtin'">wxodbc$(WXDEBUGFLAG)$(HOST_SUFFIX)</if>
+        </set>
+    </if>
+    <set var="INC_ODBC">
+        <if cond="wxUSE_ODBC=='builtin'">$(TOP_SRCDIR)src/odbc</if>
+    </set>
+
+    <lib id="wxodbc" template="3rdparty_lib"
+         cond="wxUSE_ODBC=='builtin' and BUILDING_LIB=='1'">
+        <dirname>$(LIBDIRNAME)</dirname>
+        <sources>
+            src/iodbc/catalog.c
+            src/iodbc/connect.c
+            src/iodbc/dlf.c
+            src/iodbc/dlproc.c
+            src/iodbc/execute.c
+            src/iodbc/fetch.c
+            src/iodbc/hdbc.c
+            src/iodbc/henv.c
+            src/iodbc/herr.c
+            src/iodbc/hstmt.c
+            src/iodbc/info.c
+            src/iodbc/itrace.c
+            src/iodbc/misc.c
+            src/iodbc/prepare.c
+            src/iodbc/result.c
+        </sources>
+    </lib>
+
+</makefile>

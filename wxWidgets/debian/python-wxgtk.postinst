@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+WXPYTHONDIR="=WXPYDIR"
+PYVERS="=PYVERS"
+
+for PY in $PYVERS; do
+    update-alternatives --install /usr/lib/python$PY/site-packages/wx.pth  \
+	wx-python$PY.pth	                                           \
+	/usr/lib/wx/python$PY/wx=V.pth       =PRIO
+done
+
+#DEBHELPER#
+

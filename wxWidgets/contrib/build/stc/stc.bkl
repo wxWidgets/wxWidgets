@@ -1,0 +1,125 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <set var="WX_DISABLE_PRECOMP_HEADERS">1</set>
+    <include file="../../../build/bakefiles/common_contrib.bkl"/>
+
+    <set var="STC_SRC">
+        <!-- wx binding: -->
+        PlatWX.cpp
+        ScintillaWX.cpp
+        stc.cpp
+        <!-- Scintilla: -->
+        scintilla/src/AutoComplete.cxx
+        scintilla/src/CallTip.cxx
+        scintilla/src/CellBuffer.cxx
+        scintilla/src/CharClassify.cxx
+        scintilla/src/ContractionState.cxx
+        scintilla/src/Document.cxx
+        scintilla/src/DocumentAccessor.cxx
+        scintilla/src/Editor.cxx
+        scintilla/src/ExternalLexer.cxx
+        scintilla/src/Indicator.cxx
+        scintilla/src/KeyMap.cxx
+        scintilla/src/KeyWords.cxx
+        scintilla/src/LexAPDL.cxx
+        scintilla/src/LexAU3.cxx
+        scintilla/src/LexAVE.cxx
+        scintilla/src/LexAda.cxx
+        scintilla/src/LexAsm.cxx
+        scintilla/src/LexAsn1.cxx
+        scintilla/src/LexBaan.cxx
+        scintilla/src/LexBash.cxx
+        scintilla/src/LexBasic.cxx
+        scintilla/src/LexBullant.cxx
+        scintilla/src/LexCLW.cxx
+        scintilla/src/LexCPP.cxx
+        scintilla/src/LexCSS.cxx
+        scintilla/src/LexCaml.cxx
+        scintilla/src/LexCsound.cxx
+        scintilla/src/LexConf.cxx
+        scintilla/src/LexCrontab.cxx
+        scintilla/src/LexEScript.cxx
+        scintilla/src/LexEiffel.cxx
+        scintilla/src/LexErlang.cxx
+        scintilla/src/LexFlagship.cxx
+        scintilla/src/LexForth.cxx
+        scintilla/src/LexFortran.cxx
+        scintilla/src/LexGui4Cli.cxx
+        scintilla/src/LexHTML.cxx
+        scintilla/src/LexHaskell.cxx
+        scintilla/src/LexInno.cxx
+        scintilla/src/LexKix.cxx
+        scintilla/src/LexLisp.cxx
+        scintilla/src/LexLout.cxx
+        scintilla/src/LexLua.cxx
+        scintilla/src/LexMMIXAL.cxx
+        scintilla/src/LexMPT.cxx
+        scintilla/src/LexMSSQL.cxx
+        scintilla/src/LexMatlab.cxx
+        scintilla/src/LexMetapost.cxx
+        scintilla/src/LexNsis.cxx
+        scintilla/src/LexOpal.cxx
+        scintilla/src/LexOthers.cxx
+        scintilla/src/LexPB.cxx
+        scintilla/src/LexPOV.cxx
+        scintilla/src/LexPS.cxx
+        scintilla/src/LexPascal.cxx
+        scintilla/src/LexPerl.cxx
+        scintilla/src/LexPython.cxx
+        scintilla/src/LexRebol.cxx
+        scintilla/src/LexRuby.cxx
+        scintilla/src/LexSQL.cxx
+        scintilla/src/LexSmalltalk.cxx
+        scintilla/src/LexTADS3.cxx
+        scintilla/src/LexScriptol.cxx
+        scintilla/src/LexSpecman.cxx
+        scintilla/src/LexSpice.cxx
+        scintilla/src/LexTCL.cxx
+        scintilla/src/LexTeX.cxx
+        scintilla/src/LexVB.cxx
+        scintilla/src/LexVHDL.cxx
+        scintilla/src/LexVerilog.cxx
+        scintilla/src/LexYAML.cxx
+        scintilla/src/LineMarker.cxx
+        scintilla/src/PropSet.cxx
+        scintilla/src/RESearch.cxx
+        scintilla/src/ScintillaBase.cxx
+        scintilla/src/Style.cxx
+        scintilla/src/StyleContext.cxx
+        scintilla/src/UniConversion.cxx
+        scintilla/src/ViewStyle.cxx
+        scintilla/src/WindowAccessor.cxx
+        scintilla/src/XPM.cxx
+    </set>
+
+    <headers template="wx_contrib_headers">
+        <files>
+            wx/stc/stc.h
+        </files>
+    </headers>
+
+    <template id="stc_base">
+        <include>$(SRCDIR)/scintilla/include</include>
+        <include>$(SRCDIR)/scintilla/src</include>
+        <define>__WX__</define>
+        <define>SCI_LEXER</define>
+        <define>LINK_LEXERS</define>
+        <sources>$(STC_SRC)</sources>
+        <cppflags-borland>-w-8027</cppflags-borland>
+    </template>
+
+    <dll id="stcdll" template="wx_contrib_dll,stc_base" cond="SHARED=='1'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_STC</define>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+    </dll>
+
+    <lib id="stclib" template="wx_contrib_lib,stc_base" cond="SHARED=='0'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">stc=stclib+stcdll</set>
+
+</makefile>

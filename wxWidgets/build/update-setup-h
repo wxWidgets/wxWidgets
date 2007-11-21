@@ -1,0 +1,88 @@
+#!/bin/sh
+##############################################################################
+# Name:       build/update-setup.h
+# Purpose:    run from root wx directory to update wx/*/setup.h files: those
+#             having special comment markers in them will be update using
+#             include/wx/setup_inc.h contents
+# Created:    2005-01-15
+# RCS-ID:     $Id$
+# Copyright:  (c) 2005 Vadim Zeitlin <vadim@wxwindows.org>
+# Licence:    wxWindows licence
+##############################################################################
+
+rc=0
+
+error()
+{
+    echo $* 1>&2
+}
+
+msg()
+{
+    # TODO: only output from here if "quiet" option is not given
+    echo "$*"
+}
+
+# write all the common options to stdout, massaging them specially if they are
+# meant to be included in a configure input file setup.h.in (the name of the
+# file the common options are meant to be included in is the parameter)
+cat_common_options_for()
+{
+    # get rid of the copyright header on top of the file
+    cmd="sed '1,/^$/d' include/wx/setup_inc.h"
+
+    # the file used for configure is special: we need to get rid of C++
+    # comments in it because it is included by some C code and we also have to
+    # set all options to 0 by default as they're put to 1 only by configure
+    # (and hence any #ifdefs setting default values for them become unneeded)
+    if [ $1 = "setup.h.in" ]; then
+        cmd="$cmd | sed -e '/^\/\//d' \
+                        -e 's@ *//.*\$@@' \
+                        -e 's/# *define \(.\+\) \+1 *\$/#define \1 0/'"
+    fi
+
+    eval $cmd
+}
+
+# update the single setup.h file passed in as the parameter if it is out of
+# date
+update_single_setup_h()
+{
+    if [ include/wx/setup_inc.h -ot $1 ]; then
+        echo "Skipping $1 which is already up to date."
+        return 0
+    fi
+
+    echo -n "Updating $1 ..."
+
+    tmp=$i.$$.tmp
+    sed -e '/^\/\* --- start common options --- \*\/$/q' $1 > $tmp &&
+    cat_common_options_for $1 >> $tmp &&
+    sed -n -e '/^\/\* --- end common options --- \*\/$/,$p' $1 >> $tmp &&
+    mv $tmp $1
+
+    if [ $? -ne 0 ]; then
+        msg " FAILED"
+        error "$0: failed to update file $1"
+        rc=2
+    else
+        msg " ok"
+    fi
+}
+
+# entry point
+if [ ! -f wxwin.m4 ]; then
+    error "$0: must be ran from root wx directory"
+    exit 1
+fi
+
+update_single_setup_h include/wx/msw/setup0.h
+update_single_setup_h include/wx/msw/wince/setup.h
+update_single_setup_h include/wx/mac/setup0.h
+update_single_setup_h include/wx/palmos/setup0.h
+update_single_setup_h include/wx/os2/setup0.h
+update_single_setup_h include/wx/motif/setup0.h
+update_single_setup_h setup.h.in
+
+exit $rc
+

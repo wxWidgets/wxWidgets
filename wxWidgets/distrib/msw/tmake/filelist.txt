@@ -1,0 +1,1730 @@
+###############################################################################
+# File:    src/msw/filelist.cpp
+# Purpose: The list of source files for MSW version of wxWindows.
+# Author:  Vadim Zeitlin
+# Created: 14.07.99
+# Version: $Id$
+#
+# Format of this file: TAB separated columns. The first column contains the
+# filename, the second the file type (roughly corresponds to the directory)
+#  BaseOnly	/src/common but only needed for the wxBase compilation
+#  Generic	/src/generic
+#  Common	/src/common
+#  MSW	/src/msw
+#  Mac	/src/mac for Mac OS X with Apple Developer Tools
+#  Cocoa        /src/cocoa
+#  Motif	/src/motif
+#  Univ	/src/univ or src/univ/themes
+#  Unix	/src/unix
+#  GTK	/src/gtk
+#  MGL	/src/mgl
+#  Micro	/src/msw for MicroWindows
+#  OS2	/src/os2
+#  X11	/src/x11
+#  HTML	/src/html
+#
+# 'H' suffix means these are headers, not .cpp files
+#
+#  WXH	/include/wx
+#  GTKH	/include/wx/gtk
+#  MacH	/include/wx/mac
+#  MotifH	/include/wx/motif
+#  MSWH	/include/wx/msw
+#  OS2H	/include/wx/os2
+#  MGLH /include/wx/mgl
+#  X11H	/include/wx/x11
+#  GenericH	/include/wx/generic
+#  HtmlH	/include/wx/html
+#  ProtoH	/include/wx/protocol
+#  UnivH	/include/wx/univ
+#  UnixH	/include/wx/unix
+#
+# 'R' suffix means these are resource files
+#
+#  MacR	/src/mac
+#
+# The third column may be empty or contain some additional info about this
+# file (only compile it in 16bit mode, don't compile it with this or that
+# compiler, &c)
+#
+# Known flags:
+#  Base	makes part of the base library too
+#  NotWin32	not used under Win32, but used under Win16
+#  Win32Only	only can be compiled under Win32
+#  Generic	generic code which might be used instead of native one
+#  OLE	OLE file (needs Win32 and a decent compiler)
+#  Socket	Socket file (currently doesn't compile under Win16)
+#  NotMSW	Not required for the MSW port
+#  NotMac	Not required for the MAC port under Mac OS X
+#  NotCocoa	Not required for the Cocoa port under Mac OS X
+#  NotMGL	Not required for the MGL port
+#  NotMicro	Not required for the MicroWindows port
+#  NotGTK	Not required for the GTK port
+#  NotX	Not required for the Motif port
+#  NotX11	Not required for the X11 port
+#  NotOS2	Not required for the os2Pm port
+#  NotUniv	Not required for the wxUniversal
+#  LowLevel	Low level GUI toolkit file, used by wxUniversal as well
+#  Theme	implements a wxUniv theme
+#  Motif	used by Motif, even if in another port's directory
+###############################################################################
+
+# File name 	Type	Flags
+
+accel.cpp	Generic	NotMSW,NotX,NotOS2,NotMac
+busyinfo.cpp	Generic
+calctrl.cpp	Generic
+caret.cpp	Generic	NotMSW,NotMicro
+choicdgg.cpp	Generic
+colrdlgg.cpp	Generic	Generic
+dcbuffer.cpp	Generic
+dcpsg.cpp	Generic
+dirctrlg.cpp	Generic
+dirdlgg.cpp	Generic	NotWin32
+dragimgg.cpp	Generic	NotOS2
+fdrepdlg.cpp	Generic	NotMSW
+filedlgg.cpp	Generic	Generic,NotX,NotOS2,NotMac
+fontdlgg.cpp	Generic	Generic,NotOS2
+grid.cpp	Generic
+gridctrl.cpp	Generic
+gridsel.cpp	Generic
+helpext.cpp	Generic	Generic
+imaglist.cpp	Generic	NotWin32
+laywin.cpp	Generic
+listctrl.cpp	Generic	NotWin32
+logg.cpp	Generic
+mdig.cpp	Generic	NotWin32,NotGTK,NotMac
+msgdlgg.cpp	Generic	Generic
+notebook.cpp	Generic	NotWin32,NotGTK,NotOS2,NotMGL,NotX11,NotMac,NotMicro
+numdlgg.cpp	Generic
+paletteg.cpp	Generic	NotMSW,NotX,NotOS2,NotMGL,NotX11,NotMac,NotMicro
+panelg.cpp	Generic
+printps.cpp	Generic	NotMSW
+prntdlgg.cpp	Generic	NotMSW
+progdlgg.cpp	Generic
+sashwin.cpp	Generic
+scrlwing.cpp	Generic
+selstore.cpp	Generic
+spinctlg.cpp	Generic
+splash.cpp	Generic
+splitter.cpp	Generic
+statline.cpp	Generic	NotMSW,NotGTK,NotOS2,NotMGL,NotX11,NotMac,NotCocoa,NotMicro
+statusbr.cpp	Generic	NotMGL,NotX11,NotMicro
+tabg.cpp	Generic	NotWin32,NotOS2
+tbarsmpl.cpp	Generic
+textdlgg.cpp	Generic
+timer.cpp	Generic	LowLevel,NotMSW,NotX,NotGTK,NotOS2,NotMac,NotMicro
+tipdlg.cpp	Generic
+tipwin.cpp	Generic
+treectlg.cpp	Generic
+wizard.cpp	Generic
+
+accesscmn.cpp	Common
+appbase.cpp	Common	Base
+appcmn.cpp	Common
+artprov.cpp	Common
+artstd.cpp	Common
+bmpbase.cpp	Common	NotGTK,NotOS2,NotMSW,NotMicro
+choiccmn.cpp	Common
+clipcmn.cpp	Common
+clntdata.cpp	Common	Base
+cmdline.cpp	Common	Base
+cmdproc.cpp	Common
+cmndata.cpp	Common
+config.cpp	Common	Base
+containr.cpp	Common
+cshelp.cpp	Common
+ctrlcmn.cpp	Common
+ctrlsub.cpp	Common
+datacmn.cpp	Common	
+datetime.cpp	Common	Base
+datstrm.cpp	Common	Base
+db.cpp	Common	Win32Only,Base
+dbgrid.cpp	Common	Win32Only,NotMac
+dbtable.cpp	Common	Win32Only,Base
+dcbase.cpp	Common
+dircmn.cpp	Common	Base
+dlgcmn.cpp	Common
+dndcmn.cpp	Common
+dobjcmn.cpp	Common
+docmdi.cpp	Common
+docview.cpp	Common
+dpycmn.cpp	Common
+dseldlg.cpp	Common
+dynarray.cpp	Common	Base
+dynlib.cpp	Common	Base
+dynload.cpp	Common	Base
+effects.cpp	Common
+encconv.cpp	Common	Base
+event.cpp	Common	Base
+extended.c	Common	Base
+fddlgcmn.cpp	Common
+ffile.cpp	Common	Base
+file.cpp	Common	Base
+fileconf.cpp	Common	Base
+filefn.cpp	Common	Base
+filename.cpp	Common	Base
+filesys.cpp	Common	Base
+fldlgcmn.cpp	Common
+fmapbase.cpp	Common	Base
+fontcmn.cpp	Common
+fontmap.cpp	Common
+framecmn.cpp	Common
+toplvcmn.cpp	Common
+fs_inet.cpp	Common	Base
+fs_mem.cpp	Common	Base
+fs_zip.cpp	Common	Base
+ftp.cpp	Common	Socket,Base
+gaugecmn.cpp	Common
+gdicmn.cpp	Common
+geometry.cpp	Common
+gifdecod.cpp	Common
+hash.cpp	Common	Base
+hashmap.cpp	Common	Base
+helpbase.cpp	Common
+http.cpp	Common	Socket,Base
+iconbndl.cpp	Common
+imagall.cpp	Common
+imagbmp.cpp	Common
+image.cpp	Common
+imagfill.cpp	Common
+imaggif.cpp	Common
+imagiff.cpp	Common
+imagjpeg.cpp	Common	Win32Only
+imagpcx.cpp	Common	Win32Only
+imagpng.cpp	Common	Win32Only
+imagpnm.cpp	Common	Win32Only
+imagtiff.cpp	Common	Win32Only
+imagxpm.cpp	Common
+init.cpp	BaseOnly
+intl.cpp	Common	Base
+ipcbase.cpp	Common	Base
+layout.cpp	Common
+lboxcmn.cpp	Common
+list.cpp	Common	Base
+log.cpp	Common	Base
+longlong.cpp	Common	Base
+matrix.cpp	Common
+memory.cpp	Common	Base
+menucmn.cpp	Common
+mimecmn.cpp	Common	Win32Only,Base
+module.cpp	Common	Base
+msgout.cpp	Common	Base
+mstream.cpp	Common	Base
+nbkbase.cpp	Common
+object.cpp	Common	Base
+paper.cpp	Common
+popupcmn.cpp	Common
+prntbase.cpp	Common
+process.cpp	Common	Win32Only,Base
+protocol.cpp	Common	Socket,Base
+quantize.cpp	Common
+radiocmn.cpp	Common
+regex.cpp	Common	Base
+rgncmn.cpp	Common
+sckaddr.cpp	Common	Socket,Base
+sckfile.cpp	Common	Socket,Base
+sckipc.cpp	Common	Socket,Base
+sckstrm.cpp	Common	Socket,Base
+settcmn.cpp	Common
+sizer.cpp	Common
+socket.cpp	Common	Socket,Base
+statbar.cpp	Common
+stopwatch.cpp	Common	Base
+strconv.cpp	Common	Base
+stream.cpp	Common	Base
+string.cpp	Common	Base
+sysopt.cpp	Common	Base
+taskbarcmn.cpp	Common	NotMac
+tbarbase.cpp	Common
+textbuf.cpp	Common	Base
+textcmn.cpp	Common
+textfile.cpp	Common	Base
+timercmn.cpp	Common
+tokenzr.cpp	Common	Base
+treebase.cpp	Common
+txtstrm.cpp	Common	Base
+unzip.c	Common	Base
+url.cpp	Common	Socket,Base
+utilscmn.cpp	Common	Base
+valgen.cpp	Common
+validate.cpp	Common
+valtext.cpp	Common
+variant.cpp	Common	Base
+wfstream.cpp	Common	Base
+wincmn.cpp	Common
+wxchar.cpp	Common	Base
+xpmdecod.cpp	Common
+zipstrm.cpp	Common	Base
+zstream.cpp	Common	Base
+
+access.cpp	MSW
+gsocket.c	MSW	Socket,Base
+gsockmsw.c	MSW	Socket,Base
+accel.cpp	MSW
+access.cpp	MSW	OLE
+app.cpp	MSW	LowLevel
+automtn.cpp	MSW	OLE,LowLevel
+basemsw.cpp	MSW	Base
+bitmap.cpp	MSW	LowLevel
+bmpbuttn.cpp	MSW
+brush.cpp	MSW	LowLevel
+button.cpp	MSW
+caret.cpp	MSW	LowLevel
+checkbox.cpp	MSW
+checklst.cpp	MSW
+choice.cpp	MSW
+clipbrd.cpp	MSW	LowLevel
+colordlg.cpp	MSW
+colour.cpp	MSW	LowLevel
+combobox.cpp	MSW
+control.cpp	MSW
+cursor.cpp	MSW	LowLevel
+data.cpp	MSW	LowLevel
+dataobj.cpp	MSW	OLE,LowLevel
+dc.cpp	MSW	LowLevel
+dcclient.cpp	MSW	LowLevel
+dcmemory.cpp	MSW	LowLevel
+dcprint.cpp	MSW	LowLevel
+dcscreen.cpp	MSW	LowLevel
+dde.cpp	MSW	LowLevel,Base
+dialog.cpp	MSW
+dialup.cpp	MSW	LowLevel
+dib.cpp	MSW	LowLevel
+dir.cpp	MSW	Base
+dirdlg.cpp	MSW	Win32Only,LowLevel
+display.cpp	MSW	Win32Only,LowLevel
+dragimag.cpp	MSW
+dropsrc.cpp	MSW	OLE,LowLevel
+droptgt.cpp	MSW	OLE,LowLevel
+enhmeta.cpp	MSW	Win32Only,LowLevel
+helpbest.cpp	MSW	Win32Only,LowLevel
+evtloop.cpp	MSW	LowLevel
+fdrepdlg.cpp	MSW	Win32Only
+# FIXME: the generic implementation doesn't work under MSW, so we must
+#        the native dialog under MSW
+filedlg.cpp	MSW
+font.cpp	MSW	LowLevel
+fontdlg.cpp	MSW
+fontenum.cpp	MSW	LowLevel
+fontutil.cpp	MSW	LowLevel
+frame.cpp	MSW
+gauge95.cpp	MSW	Win32Only
+gdiimage.cpp	MSW	LowLevel
+gdiobj.cpp	MSW	LowLevel
+glcanvas.cpp	MSW	LowLevel
+helpchm.cpp	MSW	Win32Only,LowLevel
+helpwin.cpp	MSW	LowLevel
+icon.cpp	MSW	LowLevel
+imaglist.cpp	MSW	Win32Only
+iniconf.cpp	MSW
+joystick.cpp	MSW	LowLevel
+listbox.cpp	MSW
+listctrl.cpp	MSW	Win32Only
+main.cpp	MSW	LowLevel,Base
+mdi.cpp	MSW
+menu.cpp	MSW
+menuitem.cpp	MSW
+metafile.cpp	MSW
+mimetype.cpp	MSW	Win32Only,Base
+minifram.cpp	MSW	LowLevel
+msgdlg.cpp	MSW
+mslu.cpp	MSW
+nativdlg.cpp	MSW
+notebook.cpp	MSW	Win32Only
+oleutils.cpp	MSW	OLE,LowLevel
+ownerdrw.cpp	MSW
+palette.cpp	MSW	LowLevel
+pen.cpp	MSW	LowLevel
+penwin.cpp	MSW
+popupwin.cpp	MSW	LowLevel
+printdlg.cpp	MSW
+printwin.cpp	MSW
+radiobox.cpp	MSW
+radiobut.cpp	MSW
+regconf.cpp	MSW	Win32Only,Base,LowLevel
+region.cpp	MSW	LowLevel
+registry.cpp	MSW	Win32Only,Base,LowLevel
+scrolbar.cpp	MSW
+settings.cpp	MSW	LowLevel
+slider95.cpp	MSW	Win32Only
+slidrmsw.cpp	MSW	NotWin32
+snglinst.cpp	MSW	Base,LowLevel
+spinbutt.cpp	MSW
+spinctrl.cpp	MSW
+statbmp.cpp	MSW
+statbox.cpp	MSW
+statbr95.cpp	MSW	Win32Only
+statline.cpp	MSW
+stattext.cpp	MSW
+tabctrl.cpp	MSW
+taskbar.cpp	MSW	Win32Only,LowLevel
+tbar95.cpp	MSW	Win32Only
+tbarmsw.cpp	MSW	NotWin32
+textctrl.cpp	MSW
+tglbtn.cpp	MSW
+thread.cpp	MSW	Win32Only,Base,LowLevel
+timer.cpp	MSW	LowLevel
+tooltip.cpp	MSW	Win32Only,LowLevel
+toplevel.cpp	MSW	LowLevel
+treectrl.cpp	MSW	Win32Only
+utils.cpp	MSW	Base,LowLevel
+utilsexc.cpp	MSW	Base,LowLevel
+utilsgui.cpp	MSW	LowLevel
+uuid.cpp	MSW	OLE,LowLevel
+uxtheme.cpp	MSW
+volume.cpp	MSW	Base
+wave.cpp	MSW	LowLevel
+window.cpp	MSW	LowLevel
+
+baseunix.cpp	Unix	Base
+dialup.cpp	Unix	NotMac
+dir.cpp	Unix	Base,NotMac
+fontenum.cpp	Unix	NotCocoa,NotMac,NotMGL,NotMicro
+fontutil.cpp	Unix	NotCocoa,NotMac,NotMGL,NotMicro
+gsocket.c	Unix	Base,NotMac
+mimetype.cpp	Unix	Base,NotMac,NotMicro
+snglinst.cpp	Unix	Base
+taskbarx11.cpp	Unix	NotCocoa,NotMac,NotMGL,NotMicro
+threadpsx.cpp	Unix	Base,NotMac
+# not yet
+# utilsgui.cpp	Unix
+utilsunx.cpp	Unix	Base
+utilsx11.cpp	Unix	NotMac,NotMGL,NotMicro
+
+bmpbuttn.cpp	Univ
+button.cpp	Univ
+checkbox.cpp	Univ
+checklst.cpp	Univ
+choice.cpp	Univ
+colschem.cpp	Univ
+combobox.cpp	Univ
+control.cpp	Univ
+dialog.cpp	Univ
+framuniv.cpp	Univ
+topluniv.cpp	Univ
+gauge.cpp	Univ
+inpcons.cpp	Univ
+inphand.cpp	Univ
+listbox.cpp	Univ
+menu.cpp	Univ
+notebook.cpp	Univ
+radiobox.cpp	Univ
+radiobut.cpp	Univ
+renderer.cpp	Univ
+scrarrow.cpp	Univ
+scrolbar.cpp	Univ
+scrthumb.cpp	Univ
+slider.cpp	Univ
+spinbutt.cpp	Univ
+statbmp.cpp	Univ
+statbox.cpp	Univ
+statline.cpp	Univ
+stattext.cpp	Univ
+statusbr.cpp	Univ
+textctrl.cpp	Univ
+toolbar.cpp	Univ
+theme.cpp	Univ
+gtk.cpp	Univ	Theme
+winuniv.cpp	Univ
+win32.cpp	Univ	Theme
+metal.cpp	Univ	Theme
+
+gsockgtk.c	GTK	LowLevel
+win_gtk.c	GTK	LowLevel
+app.cpp	GTK	LowLevel
+bitmap.cpp	GTK	LowLevel
+bmpbuttn.cpp	GTK
+brush.cpp	GTK	LowLevel
+button.cpp	GTK
+checkbox.cpp	GTK
+checklst.cpp	GTK
+choice.cpp	GTK
+clipbrd.cpp	GTK	LowLevel
+colour.cpp	GTK	LowLevel
+combobox.cpp	GTK
+control.cpp	GTK
+cursor.cpp	GTK	LowLevel
+data.cpp	GTK	LowLevel
+dataobj.cpp	GTK	LowLevel
+dc.cpp	GTK	LowLevel
+dcclient.cpp	GTK	LowLevel
+dcmemory.cpp	GTK	LowLevel
+dcscreen.cpp	GTK	LowLevel
+dialog.cpp	GTK
+dnd.cpp	GTK	LowLevel
+evtloop.cpp	GTK	LowLevel
+font.cpp	GTK	LowLevel
+fontdlg.cpp	GTK
+frame.cpp	GTK
+toplevel.cpp	GTK	LowLevel
+gauge.cpp	GTK
+gdiobj.cpp	GTK	LowLevel
+icon.cpp	GTK	LowLevel
+joystick.cpp	GTK
+listbox.cpp	GTK
+main.cpp	GTK	LowLevel
+mdi.cpp	GTK
+menu.cpp	GTK
+minifram.cpp	GTK
+msgdlg.cpp	GTK
+notebook.cpp	GTK
+pen.cpp	GTK	LowLevel
+popupwin.cpp	GTK	LowLevel
+radiobox.cpp	GTK
+radiobut.cpp	GTK
+region.cpp	GTK	LowLevel
+scrolbar.cpp	GTK
+scrolwin.cpp	GTK
+settings.cpp	GTK	LowLevel
+slider.cpp	GTK
+spinbutt.cpp	GTK
+spinctrl.cpp	GTK
+statbmp.cpp	GTK
+statbox.cpp	GTK
+statline.cpp	GTK
+stattext.cpp	GTK
+tbargtk.cpp	GTK
+textctrl.cpp	GTK
+tglbtn.cpp	GTK
+timer.cpp	GTK	LowLevel
+tooltip.cpp	GTK	LowLevel
+utilsgtk.cpp	GTK	LowLevel
+utilsres.cpp	GTK
+wave.cpp	GTK
+window.cpp	GTK	LowLevel
+
+gsocket.c	Mac	Socket
+accel.cpp	Mac
+aga.cpp	Mac
+app.cpp	Mac
+bitmap.cpp	Mac
+bmpbuttn.cpp	Mac
+brush.cpp	Mac
+button.cpp	Mac
+checkbox.cpp	Mac
+checklst.cpp	Mac
+choice.cpp	Mac
+clipbrd.cpp	Mac
+colordlg.cpp	Mac
+colour.cpp	Mac
+combobox.cpp	Mac
+control.cpp	Mac
+cursor.cpp	Mac
+data.cpp	Mac
+dataobj.cpp	Mac
+dc.cpp	Mac
+dcclient.cpp	Mac
+dcmemory.cpp	Mac
+dcprint.cpp	Mac
+dcscreen.cpp	Mac
+dialog.cpp	Mac
+dirdlg.cpp	Mac
+dirmac.cpp	Mac
+dnd.cpp	Mac
+filedlg.cpp	Mac
+font.cpp	Mac
+fontdlg.cpp	Mac
+fontenum.cpp	Mac
+fontutil.cpp	Mac
+frame.cpp	Mac
+gauge.cpp	Mac
+gdiobj.cpp	Mac
+icon.cpp	Mac
+joystick.cpp	Mac
+listbox.cpp	Mac
+macnotfy.cpp	Mac
+mdi.cpp	Mac
+menu.cpp	Mac
+menuitem.cpp	Mac
+metafile.cpp	Mac
+mimetmac.cpp	Mac
+minifram.cpp	Mac
+msgdlg.cpp	Mac
+notebmac.cpp	Mac
+palette.cpp	Mac
+pen.cpp	Mac
+printdlg.cpp	Mac
+printmac.cpp	Mac
+radiobox.cpp	Mac
+radiobut.cpp	Mac
+region.cpp	Mac
+scrolbar.cpp	Mac
+settings.cpp	Mac
+slider.cpp	Mac
+spinbutt.cpp	Mac
+statbmp.cpp	Mac
+statbox.cpp	Mac
+statbrma.cpp	Mac
+statlmac.cpp	Mac
+stattext.cpp	Mac
+tabctrl.cpp	Mac
+textctrl.cpp	Mac
+thread.cpp	Mac
+timer.cpp	Mac
+toplevel.cpp	Mac
+toolbar.cpp	Mac
+tooltip.cpp	Mac
+uma.cpp	Mac
+utils.cpp	Mac
+utilsexc.cpp	Mac
+wave.cpp	Mac
+window.cpp	Mac
+
+# NS wrapper classes
+NSBox.mm	Cocoa
+NSButton.mm	Cocoa
+NSControl.mm	Cocoa
+NSMenu.mm	Cocoa
+NSPanel.mm	Cocoa
+NSTextField.mm	Cocoa
+NSView.mm	Cocoa
+NSWindow.mm	Cocoa
+# wx implementations
+app.mm	Cocoa
+bmpbuttn.mm	Cocoa
+bitmap.mm	Cocoa
+brush.cpp	Cocoa
+button.mm	Cocoa
+checkbox.mm	Cocoa
+checklst.mm	Cocoa
+choice.mm	Cocoa
+colour.mm	Cocoa
+control.mm	Cocoa
+cursor.mm	Cocoa
+data.cpp	Cocoa
+dc.mm	Cocoa
+dcclient.mm	Cocoa
+dcmemory.cpp	Cocoa
+dcscreen.cpp	Cocoa
+dialog.mm	Cocoa
+font.cpp	Cocoa
+fontutil.cpp	Cocoa
+frame.mm	Cocoa
+gdiobj.cpp	Cocoa
+gsockcocoa.c	Cocoa
+icon.cpp	Cocoa
+listbox.mm	Cocoa
+main.cpp	Cocoa
+menu.mm	Cocoa
+menuitem.mm	Cocoa
+pen.cpp	Cocoa
+radiobox.mm	Cocoa
+radiobut.mm	Cocoa
+region.cpp	Cocoa
+settings.cpp	Cocoa
+slider.mm	Cocoa
+statbmp.mm	Cocoa
+statbox.mm	Cocoa
+statline2.mm	Cocoa
+stattext.mm	Cocoa
+textctrl.mm	Cocoa
+toplevel.mm	Cocoa
+utils.cpp	Cocoa
+utilsexc.cpp	Cocoa
+window.mm	Cocoa
+
+gsockmot.c	Motif	Socket
+accel.cpp	Motif
+app.cpp	Motif
+bmpbuttn.cpp	Motif
+bmpmotif.cpp	Motif
+button.cpp	Motif
+checkbox.cpp	Motif
+checklst.cpp	Motif
+choice.cpp	Motif
+clipbrd.cpp	Motif
+colour.cpp	Motif
+combobox.cpp	Motif
+combobox_native.cpp	Motif
+control.cpp	Motif
+cursor.cpp	Motif
+data.cpp	Motif
+dataobj.cpp	Motif
+dc.cpp	Motif
+dcclient.cpp	Motif
+dcmemory.cpp	Motif
+dcscreen.cpp	Motif
+dialog.cpp	Motif
+evtloop.cpp	Motif
+filedlg.cpp	Motif
+font.cpp	Motif
+frame.cpp	Motif
+gauge.cpp	Motif
+gdiobj.cpp	Motif
+glcanvas.cpp	Motif
+icon.cpp	Motif
+listbox.cpp	Motif
+main.cpp	Motif
+mdi.cpp	Motif
+menu.cpp	Motif
+menuitem.cpp	Motif
+minifram.cpp	Motif
+msgdlg.cpp	Motif
+palette.cpp	Motif
+radiobox.cpp	Motif
+radiobut.cpp	Motif
+scrolbar.cpp	Motif
+settings.cpp	Motif
+slider.cpp	Motif
+spinbutt.cpp	Motif
+statbmp.cpp	Motif
+statbox.cpp	Motif
+stattext.cpp	Motif
+toolbar.cpp	Motif
+textctrl.cpp	Motif
+timer.cpp	Motif
+toplevel.cpp	Motif
+utils.cpp	Motif
+window.cpp	Motif
+
+gsockx11.c	X11	Socket
+nanox.c	X11
+app.cpp	X11
+bitmap.cpp	X11	Motif
+brush.cpp	X11	Motif
+clipbrd.cpp	X11
+colour.cpp	X11
+cursor.cpp	X11
+data.cpp	X11
+dataobj.cpp	X11
+dc.cpp	X11
+dcclient.cpp	X11
+dcmemory.cpp	X11
+dcscreen.cpp	X11
+dcscreen.cpp	X11
+evtloop.cpp	X11
+font.cpp	X11
+gdiobj.cpp	X11
+glcanvas.cpp	X11
+icon.cpp	X11
+joystick.cpp	X11
+main.cpp	X11
+minifram.cpp	X11
+palette.cpp	X11
+pen.cpp	X11	Motif
+popupwin.cpp	X11
+region.cpp	X11	Motif
+reparent.cpp	X11
+settings.cpp	X11
+toplevel.cpp	X11
+utils.cpp	X11
+utilsx.cpp	X11	Motif
+window.cpp	X11
+
+accel.cpp	OS2
+app.cpp	OS2
+bitmap.cpp	OS2
+bmpbuttn.cpp	OS2
+brush.cpp	OS2
+button.cpp	OS2
+checkbox.cpp	OS2
+checklst.cpp	OS2
+choice.cpp	OS2
+clipbrd.cpp	OS2
+colour.cpp	OS2
+combobox.cpp	OS2
+control.cpp	OS2
+cursor.cpp	OS2
+data.cpp	OS2
+dataobj.cpp	OS2
+dc.cpp	OS2
+dcclient.cpp	OS2
+dcmemory.cpp	OS2
+dcprint.cpp	OS2
+dcscreen.cpp	OS2
+dialog.cpp	OS2
+#dialup.cpp	OS2
+dir.cpp	OS2	Base
+dnd.cpp	OS2
+filedlg.cpp	OS2
+font.cpp	OS2
+fontdlg.cpp	OS2
+fontenum.cpp	OS2
+fontutil.cpp	OS2
+frame.cpp	OS2
+gauge.cpp	OS2
+gdiimage.cpp	OS2
+gdiobj.cpp	OS2
+helpwin.cpp	OS2
+icon.cpp	OS2
+iniconf.cpp	OS2
+joystick.cpp	OS2
+listbox.cpp	OS2
+main.cpp	OS2
+menu.cpp	OS2
+menuitem.cpp	OS2
+metafile.cpp	OS2
+mimetype.cpp	OS2
+msgdlg.cpp	OS2
+nativdlg.cpp	OS2
+notebook.cpp	OS2
+ownerdrw.cpp	OS2
+palette.cpp	OS2
+pen.cpp	OS2
+print.cpp	OS2
+radiobox.cpp	OS2
+radiobut.cpp	OS2
+region.cpp	OS2
+scrolbar.cpp	OS2
+settings.cpp	OS2
+slider.cpp	OS2
+spinbutt.cpp	OS2
+spinctrl.cpp	OS2
+statbmp.cpp	OS2
+statbox.cpp	OS2
+statline.cpp	OS2
+stattext.cpp	OS2
+tabctrl.cpp	OS2
+textctrl.cpp	OS2
+timer.cpp	OS2
+thread.cpp	OS2
+toolbar.cpp	OS2
+tooltip.cpp	OS2
+toplevel.cpp	OS2
+utils.cpp	OS2	Base
+utilsexc.cpp	OS2	Base
+wave.cpp	OS2
+window.cpp	OS2
+gsocket.c	OS2
+gsockpm.c	OS2
+
+helpdata.cpp	HTML
+helpfrm.cpp	HTML
+helpctrl.cpp	HTML
+htmlcell.cpp	HTML
+htmlfilt.cpp	HTML
+htmlpars.cpp	HTML
+htmltag.cpp	HTML
+htmlwin.cpp	HTML
+winpars.cpp	HTML
+m_fonts.cpp	HTML
+m_hline.cpp	HTML
+m_image.cpp	HTML
+m_layout.cpp	HTML
+m_links.cpp	HTML
+m_list.cpp	HTML
+m_dflist.cpp	HTML
+m_pre.cpp	HTML
+m_tables.cpp	HTML
+m_style.cpp	HTML
+htmprint.cpp	HTML
+
+arrimpl.cpp	WXH	Base
+listimpl.cpp	WXH	Base
+access.h	WXH
+accel.h	WXH
+access.h	WXH
+app.h	WXH	Base
+apptrait.h	WXH	Base
+artprov.h	WXH
+bitmap.h	WXH
+bmpbuttn.h	WXH
+brush.h	WXH
+buffer.h	WXH	Base
+build.h	WXH	Base
+busyinfo.h	WXH
+button.h	WXH
+calctrl.h	WXH
+caret.h	WXH
+checkbox.h	WXH
+checklst.h	WXH
+chkconf.h	WXH	Base
+choicdlg.h	WXH
+choice.h	WXH
+clipbrd.h	WXH
+clntdata.h	WXH	Base
+cmdline.h	WXH	Base
+cmdproc.h	WXH
+cmndata.h	WXH
+colordlg.h	WXH
+colour.h	WXH
+combobox.h	WXH
+confbase.h	WXH	Base
+config.h	WXH	Base
+containr.h	WXH
+control.h	WXH
+cshelp.h	WXH
+ctrlsub.h	WXH
+cursor.h	WXH
+dataobj.h	WXH
+datetime.h	WXH	Base
+datetime.inl	WXH	Base
+datstrm.h	WXH	Base
+db.h	WXH	Base
+dbgrid.h	WXH
+dbtable.h	WXH	Base
+dc.h	WXH
+dcclient.h	WXH
+dcbuffer.h	WXH
+dcmemory.h	WXH
+dcprint.h	WXH
+dcps.h	WXH
+dcscreen.h	WXH
+dde.h	WXH	Base
+debug.h	WXH	Base
+defs.h	WXH	Base
+dialog.h	WXH
+dialup.h	WXH
+dir.h	WXH	Base
+dirctrl.h	WXH
+dirdlg.h	WXH
+display.h	WXH
+dnd.h	WXH
+docmdi.h	WXH
+docview.h	WXH
+dragimag.h	WXH
+dynarray.h	WXH	Base
+dynlib.h	WXH	Base
+dynload.h	WXH	Base
+effects.h	WXH
+encconv.h	WXH	Base
+event.h	WXH	Base
+fdrepdlg.h	WXH
+features.h	WXH	Base
+ffile.h	WXH	Base
+file.h	WXH	Base
+fileconf.h	WXH	Base
+filedlg.h	WXH
+filefn.h	WXH	Base
+filename.h	WXH	Base
+filesys.h	WXH	Base
+fmappriv.h	WXH	Base
+font.h	WXH
+fontdlg.h	WXH
+fontenc.h	WXH	Base
+fontenum.h	WXH
+fontmap.h	WXH	Base
+fontutil.h	WXH
+frame.h	WXH
+toplevel.h	WXH
+fs_inet.h	WXH	Base
+fs_zip.h	WXH	Base
+fs_mem.h	WXH	Base
+gauge.h	WXH
+gdicmn.h	WXH
+gdiobj.h	WXH
+geometry.h	WXH
+gifdecod.h	WXH
+xpmdecod.h	WXH
+dbkeyg.h	WXH	Base
+glcanvas.h	WXH
+grid.h	WXH
+gsocket.h	WXH	Base
+hash.h	WXH	Base
+hashmap.h	WXH	Base
+help.h	WXH
+helpbase.h	WXH
+helpwin.h	WXH
+icon.h	WXH
+iconbndl.h	WXH
+image.h	WXH
+imaggif.h	WXH
+imagiff.h	WXH
+imagbmp.h	WXH
+imagpng.h	WXH
+imagpcx.h	WXH
+imagpnm.h	WXH
+imagxpm.h	WXH
+imagtiff.h	WXH
+imagjpeg.h	WXH
+imaglist.h	WXH
+intl.h	WXH	Base
+iosfwrap.h	WXH	Base
+ioswrap.h	WXH	Base
+ipc.h	WXH	Base
+ipcbase.h	WXH	Base
+isql.h	WXH	Base
+isqlext.h	WXH	Base
+joystick.h	WXH
+layout.h	WXH
+laywin.h	WXH
+list.h	WXH	Base
+listbox.h	WXH
+listctrl.h	WXH
+listbase.h	WXH
+log.h	WXH	Base
+longlong.h	WXH	Base
+math.h	WXH	Base
+matrix.h	WXH
+mdi.h	WXH
+memory.h	WXH	Base
+memconf.h	WXH	Base
+memtext.h	WXH	Base
+menu.h	WXH
+menuitem.h	WXH
+metafile.h	WXH
+mimetype.h	WXH	Base
+minifram.h	WXH
+module.h	WXH	Base
+msgdlg.h	WXH
+msgout.h	WXH	Base
+mslu.cpp	MSW	Base
+mstream.h	WXH	Base
+notebook.h	WXH
+object.h	WXH	Base
+ownerdrw.h	WXH
+palette.h	WXH
+panel.h	WXH
+paper.h	WXH
+pen.h	WXH
+platform.h	WXH	Base
+popupwin.h	WXH
+print.h	WXH
+printdlg.h	WXH
+prntbase.h	WXH
+process.h	WXH	Base
+progdlg.h	WXH
+quantize.h	WXH
+radiobox.h	WXH
+radiobut.h	WXH
+rawbmp.h	WXH
+regex.h	WXH	Base
+region.h	WXH
+sashwin.h	WXH
+sckaddr.h	WXH	Base
+sckipc.h	WXH	Base
+sckstrm.h	WXH	Base
+scrolbar.h	WXH
+scrolwin.h	WXH
+selstore.h	WXH
+settings.h	WXH
+sizer.h	WXH
+slider.h	WXH
+socket.h	WXH	Base
+snglinst.h	WXH	Base
+spinbutt.h	WXH
+spinctrl.h	WXH
+splash.h	WXH
+splitter.h	WXH
+stack.h	WXH
+statbmp.h	WXH
+statbox.h	WXH
+statline.h	WXH
+stattext.h	WXH
+statusbr.h	WXH
+strconv.h	WXH	Base
+stream.h	WXH	Base
+string.h	WXH	Base
+sysopt.h	WXH	Base
+tab.h	WXH
+tabctrl.h	WXH
+taskbar.h	WXH
+tbarbase.h	WXH
+tbarsmpl.h	WXH
+textbuf.h	WXH	Base
+textctrl.h	WXH
+textdlg.h	WXH
+textfile.h	WXH	Base
+tglbtn.h	WXH
+thread.h	WXH	Base
+thrimpl.cpp	WXH	Base
+timer.h	WXH	Base
+tipdlg.h	WXH
+tipwin.h	WXH
+tokenzr.h	WXH	Base
+toolbar.h	WXH
+tooltip.h	WXH
+treebase.h	WXH
+treectrl.h	WXH
+txtstrm.h	WXH	Base
+types.h	WXH
+url.h	WXH	Base
+utils.h	WXH	Base
+valgen.h	WXH
+validate.h	WXH
+valtext.h	WXH
+variant.h	WXH	Base
+vector.h	WXH	Base
+version.h	WXH	Base
+volume.h	WXH	Base
+wave.h	WXH
+wfstream.h	WXH	Base
+window.h	WXH
+wizard.h	WXH
+wx.h	WXH	Base
+wx_cw.h	WXH
+wx_cw_cm.h	WXH
+wx_cw_d.h	WXH
+wxchar.h	WXH	Base
+wxhtml.h	WXH
+wxprec.h	WXH	Base
+zipstrm.h	WXH	Base
+zstream.h	WXH	Base
+
+accel.h	GTKH
+app.h	GTKH
+bitmap.h	GTKH
+bmpbuttn.h	GTKH
+brush.h	GTKH
+button.h	GTKH
+checkbox.h	GTKH
+checklst.h	GTKH
+choice.h	GTKH
+clipbrd.h	GTKH
+colour.h	GTKH
+combobox.h	GTKH
+control.h	GTKH
+cursor.h	GTKH
+dataform.h	GTKH
+dataobj.h	GTKH
+dataobj2.h	GTKH
+dc.h	GTKH
+dcclient.h	GTKH
+dcmemory.h	GTKH
+dcscreen.h	GTKH
+dialog.h	GTKH
+dnd.h	GTKH
+filedlg.h	GTKH
+font.h	GTKH
+fontdlg.h	GTKH
+frame.h	GTKH
+toplevel.h	GTKH
+gauge.h	GTKH
+gdiobj.h	GTKH
+glcanvas.h	GTKH
+icon.h	GTKH
+joystick.h	GTKH
+listbox.h	GTKH
+mdi.h	GTKH
+menu.h	GTKH
+menuitem.h	GTKH
+minifram.h	GTKH
+msgdlg.h	GTKH
+notebook.h	GTKH
+pen.h	GTKH
+popupwin.h	GTKH
+radiobox.h	GTKH
+radiobut.h	GTKH
+region.h	GTKH
+scrolbar.h	GTKH
+scrolwin.h	GTKH
+slider.h	GTKH
+spinbutt.h	GTKH
+spinctrl.h	GTKH
+statbmp.h	GTKH
+statbox.h	GTKH
+statline.h	GTKH
+stattext.h	GTKH
+tbargtk.h	GTKH
+textctrl.h	GTKH
+tglbtn.h	GTKH
+timer.h	GTKH
+tooltip.h	GTKH
+treectrl.h	GTKH
+wave.h	GTKH
+win_gtk.h	GTKH
+window.h	GTKH
+
+accel.h	MacH
+aga.h	MacH
+app.h	MacH
+bitmap.h	MacH
+bmpbuttn.h	MacH
+brush.h	MacH
+button.h	MacH
+checkbox.h	MacH
+checklst.h	MacH
+choice.h	MacH
+clipbrd.h	MacH
+colordlg.h	MacH
+colour.h	MacH
+combobox.h	MacH
+control.h	MacH
+cursor.h	MacH
+dataform.h	MacH
+dataobj.h	MacH
+dataobj2.h	MacH
+dc.h	MacH
+dcclient.h	MacH
+dcmemory.h	MacH
+dcprint.h	MacH
+dcscreen.h	MacH
+dialog.h	MacH
+dirdlg.h	MacH
+dnd.h	MacH
+filedlg.h	MacH
+font.h	MacH
+fontdlg.h	MacH
+frame.h	MacH
+gauge.h	MacH
+gdiobj.h	MacH
+glcanvas.h	MacH
+gsockmac.h	MacH
+helpxxxx.h	MacH
+icon.h	MacH
+imaglist.h	MacH
+joystick.h	MacH
+listbox.h	MacH
+listctrl.h	MacH
+macnotfy.h	MacH
+macsock.h	MacH
+mdi.h	MacH
+menu.h	MacH
+menuitem.h	MacH
+metafile.h	MacH
+mimetype.h	MacH
+minifram.h	MacH
+msgdlg.h	MacH
+notebook.h	MacH
+palette.h	MacH
+pen.h	MacH
+pnghand.h	MacH
+pngread.h	MacH
+print.h	MacH
+printdlg.h	MacH
+printmac.h	MacH
+private.h	MacH
+radiobox.h	MacH
+radiobut.h	MacH
+region.h	MacH
+scrolbar.h	MacH
+settings.h	MacH
+slider.h	MacH
+spinbutt.h	MacH
+spinctrl.h	MacH
+statbmp.h	MacH
+statbox.h	MacH
+statline.h	MacH
+stattext.h	MacH
+statusbr.h	MacH
+tabctrl.h	MacH
+textctrl.h	MacH
+timer.h	MacH
+toolbar.h	MacH
+tooltip.h	MacH
+toplevel.h	MacH
+treectrl.h	MacH
+uma.h	MacH
+wave.h	MacH
+window.h	MacH
+
+# NS wrapper classes
+NSBox.h	CocoaH
+NSButton.h	CocoaH
+NSControl.h	CocoaH
+NSMenu.h	CocoaH
+NSPanel.h	CocoaH
+NSTextField.h	CocoaH
+NSView.h	CocoaH
+NSWindow.h	CocoaH
+ObjcAssociate.h	CocoaH
+ObjcPose.h	CocoaH
+# wx implementations
+app.h	CocoaH
+bitmap.h	CocoaH
+bmpbuttn.h	CocoaH
+brush.h	CocoaH
+button.h	CocoaH
+checkbox.h	CocoaH
+checklst.h	CocoaH
+choice.h	CocoaH
+colour.h	CocoaH
+control.h	CocoaH
+cursor.h	CocoaH
+dc.h	CocoaH
+dcclient.h	CocoaH
+dcmemory.h	CocoaH
+dcscreen.h	CocoaH
+dialog.h	CocoaH
+font.h	CocoaH
+frame.h	CocoaH
+gdiobj.h	CocoaH
+icon.h	CocoaH
+listbox.h	CocoaH
+menu.h	CocoaH
+menuitem.h	CocoaH
+pen.h	CocoaH
+radiobox.h	CocoaH
+radiobut.h	CocoaH
+region.h	CocoaH
+slider.h	CocoaH
+statbmp.h	CocoaH
+statbox.h	CocoaH
+statline.h	CocoaH
+stattext.h	CocoaH
+textctrl.h	CocoaH
+toplevel.h	CocoaH
+window.h	CocoaH
+
+accel.h	MotifH
+app.h	MotifH
+bmpbuttn.h	MotifH
+bmpmotif.h	MotifH
+button.h	MotifH
+checkbox.h	MotifH
+checklst.h	MotifH
+choice.h	MotifH
+clipbrd.h	MotifH
+colour.h	MotifH
+combobox.h	MotifH
+control.h	MotifH
+cursor.h	MotifH
+dataform.h	MotifH
+dataobj.h	MotifH
+dataobj2.h	MotifH
+dc.h	MotifH
+dcclient.h	MotifH
+dcmemory.h	MotifH
+dcprint.h	MotifH
+dcscreen.h	MotifH
+dialog.h	MotifH
+dnd.h	MotifH
+filedlg.h	MotifH
+font.h	MotifH
+frame.h	MotifH
+gauge.h	MotifH
+gdiobj.h	MotifH
+glcanvas.h	MotifH
+icon.h	MotifH
+listbox.h	MotifH
+mdi.h	MotifH
+menu.h	MotifH
+menuitem.h	MotifH
+minifram.h	MotifH
+msgdlg.h	MotifH
+palette.h	MotifH
+print.h	MotifH
+private.h	MotifH
+radiobox.h	MotifH
+radiobut.h	MotifH
+scrolbar.h	MotifH
+settings.h	MotifH
+slider.h	MotifH
+spinbutt.h	MotifH
+statbmp.h	MotifH
+statbox.h	MotifH
+stattext.h	MotifH
+textctrl.h	MotifH
+tglbtn.h	MotifH
+timer.h	MotifH
+toolbar.h	MotifH
+toplevel.h	MotifH
+window.h	MotifH
+
+app.h	X11H
+bitmap.h	X11H	Motif
+brush.h	X11H	Motif
+clipbrd.h	X11H
+colour.h	X11H
+cursor.h	X11H
+dataform.h	X11H
+dataobj.h	X11H
+dataobj2.h	X11H
+dc.h	X11H
+dcclient.h	X11H
+dcmemory.h	X11H
+dcprint.h	X11H
+dcscreen.h	X11H
+dnd.h	X11H
+font.h	X11H
+gdiobj.h	X11H
+glcanvas.h	X11H
+icon.h	X11H
+joystick.h	X11H
+minifram.h	X11H
+palette.h	X11H
+pen.h	X11H	Motif
+print.h	X11H
+private.h	X11H
+privx.h	X11H	Motif
+region.h	X11H	Motif
+reparent.h	X11H
+textctrl.h	X11H
+toplevel.h	X11H
+window.h	X11H
+
+app.h	MGLH
+bitmap.h	MGLH
+brush.h	MGLH
+clipbrd.h	MGLH
+colour.h	MGLH
+cursor.h	MGLH
+dc.h	MGLH
+dcclient.h	MGLH
+dcmemory.h	MGLH
+dcscreen.h	MGLH
+font.h	MGLH
+fontutil.h	MGLH
+gdiobj.h	MGLH
+icon.h	MGLH
+palette.h	MGLH
+pen.h	MGLH
+popupwin.h	MGLH
+private.h	MGLH
+region.h	MGLH
+toplevel.h	MGLH
+window.h	MGLH
+
+access.h	MSWH
+accel.h	MSWH
+app.h	MSWH
+apptbase.h	MSWH	Base
+apptrait.h	MSWH	Base
+bitmap.h	MSWH
+bmpbuttn.h	MSWH
+brush.h	MSWH
+button.h	MSWH
+caret.h	MSWH
+checkbox.h	MSWH
+checklst.h	MSWH
+choice.h	MSWH
+clipbrd.h	MSWH
+colordlg.h	MSWH
+colour.h	MSWH
+combobox.h	MSWH
+control.h	MSWH
+cursor.h	MSWH
+dc.h	MSWH
+dcclient.h	MSWH
+dcmemory.h	MSWH
+dcprint.h	MSWH
+dcscreen.h	MSWH
+dde.h	MSWH	Base
+dialog.h	MSWH
+dib.h	MSWH
+dirdlg.h	MSWH
+dragimag.h	MSWH
+enhmeta.h	MSWH	Win32Only
+fdrepdlg.h	MSWH
+filedlg.h	MSWH
+font.h	MSWH
+fontdlg.h	MSWH
+frame.h	MSWH
+gauge95.h	MSWH
+gccpriv.h	MSWH	Base
+gdiimage.h	MSWH
+gdiobj.h	MSWH
+glcanvas.h	MSWH
+helpbest.h	MSWH
+helpchm.h	MSWH
+helpwin.h	MSWH
+icon.h	MSWH
+imaglist.h	MSWH
+iniconf.h	MSWH
+joystick.h	MSWH
+listbox.h	MSWH
+listctrl.h	MSWH
+mdi.h	MSWH
+menu.h	MSWH
+menuitem.h	MSWH
+metafile.h	MSWH
+mimetype.h	MSWH	Win32Only,Base
+minifram.h	MSWH
+missing.h	MSWH
+msgdlg.h	MSWH
+mslu.h	MSWH
+msvcrt.h	MSWH
+notebook.h	MSWH
+palette.h	MSWH
+pen.h	MSWH
+printdlg.h	MSWH
+printwin.h	MSWH
+private.h	MSWH
+radiobox.h	MSWH
+radiobut.h	MSWH
+regconf.h	MSWH
+region.h	MSWH
+registry.h	MSWH
+scrolbar.h	MSWH
+setup0.h	MSWH
+slider95.h	MSWH
+spinctrl.h	MSWH
+spinbutt.h	MSWH
+statbmp.h	MSWH
+statbox.h	MSWH
+statbr95.h	MSWH
+statline.h	MSWH
+stattext.h	MSWH
+tabctrl.h	MSWH
+taskbar.h	MSWH
+tbar95.h	MSWH
+tbarmsw.h	MSWH
+textctrl.h	MSWH
+tglbtn.h	MSWH
+timer.h	MSWH
+tooltip.h	MSWH
+toplevel.h	MSWH
+treectrl.h	MSWH
+wave.h	MSWH
+window.h	MSWH
+winundef.h	MSWH	Base
+
+access.h	MSWH	OLE
+automtn.h	MSWH	OLE
+dataform.h	MSWH	OLE
+dataobj.h	MSWH	OLE
+dataobj2.h	MSWH	OLE
+dropsrc.h	MSWH	OLE
+droptgt.h	MSWH	OLE
+oleutils.h	MSWH	OLE
+uuid.h	MSWH	OLE
+
+# blank.cur	MSWH
+# bullseye.cur	MSWH
+# child.ico	MSWH
+# clock.cur	MSWH
+# error.ico	MSWH
+# hand.cur	MSWH
+# heart.cur	MSWH
+# info.ico	MSWH
+# magnif1.cur	MSWH
+# mdi.ico	MSWH
+# noentry.cur	MSWH
+# pbrush.cur	MSWH
+# pencil.cur	MSWH
+# pntleft.cur	MSWH
+# pntright.cur	MSWH
+# query.cur	MSWH
+# question.ico	MSWH
+# roller.cur	MSWH
+# size.cur	MSWH
+# std.ico	MSWH
+# tip.ico	MSWH
+# warning.ico	MSWH
+# watch1.cur	MSWH
+# disable.bmp	MSWH
+# wx.rc	MSWH
+
+accel.h	OS2H
+dataobj.h	OS2H
+helpwin.h	OS2H
+pngread.h	OS2H
+statline.h	OS2H
+app.h	OS2H
+dataobj2.h	OS2H
+icon.h	OS2H
+stattext.h	OS2H
+bitmap.h	OS2H
+dc.h	OS2H
+tabctrl.h	OS2H
+dcclient.h	OS2H
+print.h	OS2H
+bmpbuttn.h	OS2H
+dcmemory.h	OS2H
+iniconf.h	OS2H
+private.h	OS2H
+textctrl.h	OS2H
+brush.h	OS2H
+dcprint.h	OS2H
+joystick.h	OS2H
+timer.h	OS2H
+dcscreen.h	OS2H
+listbox.h	OS2H
+button.h	OS2H
+dialog.h	OS2H
+radiobox.h	OS2H
+toolbar.h	OS2H
+checkbox.h	OS2H
+radiobut.h	OS2H
+tooltip.h	OS2H
+checklst.h	OS2H
+dnd.h	OS2H
+menu.h	OS2H
+region.h	OS2H
+menuitem.h	OS2H
+choice.h	OS2H
+filedlg.h	OS2H
+metafile.h	OS2H
+scrolbar.h	OS2H
+wave.h	OS2H
+clipbrd.h	OS2H
+font.h	OS2H
+minifram.h	OS2H
+settings.h	OS2H
+window.h	OS2H
+fontdlg.h	OS2H
+msgdlg.h	OS2H
+colour.h	OS2H
+frame.h	OS2H
+setup0.h	OS2H
+combobox.h	OS2H
+gauge.h	OS2H
+notebook.h	OS2H
+control.h	OS2H
+gdiimage.h	OS2H
+palette.h	OS2H
+slider.h	OS2H
+cursor.h	OS2H
+gdiobj.h	OS2H
+spinbutt.h	OS2H
+gsockos2.h	OS2H
+pen.h	OS2H
+spinctrl.h	OS2H
+statbmp.h	OS2H
+dataform.h	OS2H
+pnghand.h	OS2H
+statbox.h	OS2H
+toplevel.h	OS2H
+
+apptbase.h	UnixH	Base
+apptrait.h	UnixH	Base
+execute.h	UnixH
+fontutil.h	UnixH
+gsockunx.h	UnixH	Base
+mimetype.h	UnixH	Base
+pipe.h	UnixH	Base
+taskbarx11.h	UnixH
+utilsx11.h	UnixH
+
+file.h	ProtoH	Base
+ftp.h	ProtoH	Base
+http.h	ProtoH	Base
+protocol.h	ProtoH	Base
+
+forcelnk.h	HtmlH
+helpdata.h	HtmlH
+helpfrm.h	HtmlH
+helpctrl.h	HtmlH
+htmlcell.h	HtmlH
+htmldefs.h	HtmlH
+htmlfilt.h	HtmlH
+htmlpars.h	HtmlH
+htmltag.h	HtmlH
+htmlwin.h	HtmlH
+winpars.h	HtmlH
+m_templ.h	HtmlH
+htmprint.h	HtmlH
+
+accel.h	GenericH
+calctrl.h	GenericH
+caret.h	GenericH
+choicdgg.h	GenericH
+colrdlgg.h	GenericH
+dcpsg.h	GenericH
+dirctrlg.h	GenericH
+dirdlgg.h	GenericH	NotWin32
+dragimgg.h	GenericH	NotWin32
+fdrepdlg.h	GenericH	NotMSW
+fontdlgg.h	GenericH
+filedlgg.h	GenericH
+grid.h	GenericH
+gridctrl.h	GenericH
+gridg.h	GenericH
+helpext.h	GenericH
+imaglist.h	GenericH
+laywin.h	GenericH
+listctrl.h	GenericH	NotWin32
+mdig.h	GenericH	NotWin32,NotGTK,NotMac
+msgdlgg.h	GenericH
+notebook.h	GenericH
+paletteg.h	GenericH	NotMSW,NotX,NotX11,NotOS2
+panelg.h	GenericH
+printps.h	GenericH
+prntdlgg.h	GenericH
+progdlgg.h	GenericH
+sashwin.h	GenericH
+scrolwin.h	GenericH
+spinctlg.h	GenericH
+splash.h	GenericH
+splitter.h	GenericH
+statline.h	GenericH	NotMSW,NotMac,NotCocoa,NotMGL,NotMicro,NotGTK,NotX11,NotOS2,NotUniv
+statusbr.h	GenericH
+tabg.h	GenericH	NotWin32
+textdlgg.h	GenericH
+timer.h	GenericH
+treectlg.h	GenericH	NotWin32
+wizard.h	GenericH
+
+app.h	UnivH
+bmpbuttn.h	UnivH
+button.h	UnivH
+checkbox.h	UnivH
+checklst.h	UnivH
+choice.h	UnivH
+colschem.h	UnivH
+combobox.h	UnivH
+control.h	UnivH
+dialog.h	UnivH
+frame.h	UnivH
+toplevel.h	UnivH
+gauge.h	UnivH
+inpcons.h	UnivH
+inphand.h	UnivH
+listbox.h	UnivH
+menu.h	UnivH
+menuitem.h	UnivH
+notebook.h	UnivH
+radiobox.h	UnivH
+radiobut.h	UnivH
+renderer.h	UnivH
+scrarrow.h	UnivH
+scrolbar.h	UnivH
+scrthumb.h	UnivH
+scrtimer.h	UnivH
+setup.h	UnivH
+slider.h	UnivH
+spinbutt.h	UnivH
+statbmp.h	UnivH
+statbox.h	UnivH
+statline.h	UnivH
+stattext.h	UnivH
+statusbr.h	UnivH
+textctrl.h	UnivH	NotX11
+theme.h	UnivH
+toolbar.h	UnivH
+window.h	UnivH
+
+# wxMGL:
+colour.cpp	MGL	LowLevel
+dc.cpp	MGL	LowLevel
+gdiobj.cpp	MGL	LowLevel
+palette.cpp	MGL	LowLevel
+region.cpp	MGL	LowLevel
+brush.cpp	MGL	LowLevel
+pen.cpp	MGL	LowLevel
+font.cpp	MGL	LowLevel
+data.cpp	MGL	LowLevel
+fontenum.cpp	MGL	LowLevel
+fontutil.cpp	MGL	LowLevel
+evtloop.cpp	MGL	LowLevel
+app.cpp	MGL	LowLevel
+bitmap.cpp	MGL	LowLevel
+dirmgl.cpp	MGL	LowLevel
+clipbrd.cpp	MGL	LowLevel
+cursor.cpp	MGL	LowLevel
+dcclient.cpp	MGL	LowLevel
+dcmemory.cpp	MGL	LowLevel
+dcscreen.cpp	MGL	LowLevel
+toplevel.cpp	MGL	LowLevel
+icon.cpp	MGL	LowLevel
+settings.cpp	MGL	LowLevel
+window.cpp	MGL	LowLevel
+utils.cpp	MGL	LowLevel
+
+#wxMicroWindows
+app.cpp	Micro	LowLevel
+bitmap.cpp	Micro	LowLevel
+brush.cpp	Micro	LowLevel
+caret.cpp	Micro	LowLevel
+colour.cpp	Micro	LowLevel
+cursor.cpp	Micro	LowLevel
+data.cpp	Micro	LowLevel
+dc.cpp	Micro	LowLevel
+dcclient.cpp	Micro	LowLevel
+dcmemory.cpp	Micro	LowLevel
+dcprint.cpp	Micro	LowLevel
+dcscreen.cpp	Micro	LowLevel
+evtloop.cpp	Micro	LowLevel
+font.cpp	Micro	LowLevel
+fontenum.cpp	Micro	LowLevel
+fontutil.cpp	Micro	LowLevel
+gdiimage.cpp	Micro	LowLevel
+gdiobj.cpp	Micro	LowLevel
+icon.cpp	Micro	LowLevel
+main.cpp	Micro	LowLevel
+microwin.cpp	Micro	LowLevel
+pen.cpp	Micro	LowLevel
+region.cpp	Micro	LowLevel
+settings.cpp	Micro	LowLevel
+snglinst.cpp	Micro	LowLevel
+timer.cpp	Micro	LowLevel
+toplevel.cpp	Micro	LowLevel
+utils.cpp	Micro	LowLevel
+window.cpp	Micro	LowLevel
+
+apprsrc.r	MacR
+carbrsrc.r	MacR
+corersrc.r	MacR
+
+# vi: set noet ts=16 nolist:

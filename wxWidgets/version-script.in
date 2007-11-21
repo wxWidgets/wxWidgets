@@ -1,0 +1,138 @@
+#
+# $Id$
+#
+# Notes:
+#
+# Remove all of the tags below except for the last one when creating new
+# development branch.
+#
+# Once a symbol has been included in a stable release of wxWidgets its version
+# cannot be changed.
+#
+# With each new release a section should be added containing any new symbols,
+# for example:
+#
+#   # public symbols added in release 2.6.2 (please keep in alphabetical order):
+#   @WX_VERSION_TAG@.2 {
+#       global:
+#           *wxChoice*GetCurrentSelection*;
+#   };
+#
+# If a symbols should have been added in this way, but is forgotten then it
+# cannot be added in the next release. This is because it has already been
+# released with the generic branch version due to the final wildcard below,
+# and once released its version cannot be changed.
+
+
+# public symbols added in 2.8.7 (please keep in alphabetical order):
+@WX_VERSION_TAG@.7 {
+    global:
+	*wxStaticBox*AcceptsFocus*;
+	*wxAuiPaneInfo*DockFixed*;
+};
+
+# public symbols added in 2.8.5 (please keep in alphabetical order):
+@WX_VERSION_TAG@.5 {
+    global:
+        *wxAuiTabContainer*IsTabVisible*;
+        *wxAuiTabContainer*MakeTabVisible*;
+        *wxAuiTabCtrl*IsDragging*;
+        *wxAuiTabCtrl*OnChar*;
+        *wxAuiTabCtrl*OnKillFocus*;
+        *wxAuiTabCtrl*OnMiddleDown*;
+        *wxAuiTabCtrl*OnMiddleUp*;
+        *wxAuiTabCtrl*OnRightDown*;
+        *wxAuiTabCtrl*OnRightUp*;
+        *wxAuiTabCtrl*OnSetFocus*;
+        *wxAuiTabCtrl*OnLeftDClick*;
+        *wxAuiNotebook*AdvanceSelection*;
+        *wxAuiNotebook*GetHeightForPageHeight*;
+        *wxAuiNotebook*GetTabCtrlHeight*;
+        *wxAuiNotebook*OnTabBgDClick*;
+        *wxAuiNotebook*OnTabMiddleDown*;
+        *wxAuiNotebook*OnTabMiddleUp*;
+        *wxAuiNotebook*OnTabRightDown*;
+        *wxAuiNotebook*OnTabRightUp*;
+        *wxAuiNotebook*OnNavigationKey*;
+        *wxAuiNotebook*SetFont*;
+        *wxAuiNotebook*SetMeasuringFont*;
+        *wxAuiNotebook*SetNormalFont*;
+        *wxAuiNotebook*SetSelectedFont*;
+        *wxAuiNotebook*ShowWindowMenu*;
+        *wxDocument*GetUserReadableName*;
+        *wxEventHashTable*ReconstructAll*;
+        *wxHtmlEasyPrinting*GetParentWindow*;
+        *wxHtmlEasyPrinting*SetParentWindow*;
+        *wxLog*DoCreateOnDemand*;
+        *wxLogChain*DetachOldLog*;
+        *wxMemoryFSHandler*AddFileWithMimeType*;
+        *wxMenuBar*GetMenuLabel*;
+        *wxMenuBarBase*SetMenuLabel*;
+        *wxMenuBarBase*GetMenuLabelText*;
+        *wxMenuBase*GetLabelText*;
+        *wxMenuItemBase*SetItemLabel*;
+        *wxMenuItemBase*GetItemLabelText*;
+        *wxMenuItemBase*GetLabelText*;
+        *wxMenuItem*GetItemLabel*;
+        *wxMetafileDC*DoGetTextExtent*;
+        *wxSetLaunchDefaultBrowserImpl*;
+        *wxWindowMSW*GetThemedBorderStyle*;
+        *wxWizard*GetBitmap*;
+        *wxWizard*SetBitmap*;
+        *wxPropertySheetDialogXmlHandler*;
+};
+
+# public symbols added in 2.8.4 (please keep in alphabetical order):
+@WX_VERSION_TAG@.4 {
+    global:
+        *wxListCtrl*SetItemPtrData*;
+        # wxString::To/From8BitData()
+        *wxString*To8BitData*;
+        *wxString*From8BitData*;
+        # wxString::[w]char_str()
+        *wxString*char_str*;
+        # wxWritable[W]CharBuffer
+        *wxWritableCharBuffer*;
+        *wxWritableWCharBuffer*;
+};
+
+# public symbols added in 2.8.2 (please keep in alphabetical order):
+@WX_VERSION_TAG@.2 {
+    global:
+        # wxFileHistory::Set/GetBaseId()
+        *wxFileHistory*etBaseId*;
+        *wxSafeConvert*;
+        *wxSearchCtrl*SetDescriptiveText*;
+        *wxSearchCtrl*GetDescriptiveText*;
+        *wxSizerFlags*Bottom*;
+        *wxSizerFlags*FixedMinSize*;
+        *wxSizerFlags*Shaped*;
+        *wxSizerFlags*Top*;
+        *wxToolBar*SetToolNormalBitmap;
+        *wxToolBar*SetToolDisabledBitmap;
+};
+
+# public symbols added in 2.8.1 (please keep in alphabetical order):
+@WX_VERSION_TAG@.1 {
+    global:
+        # wx{Dir|File}Dialog::Get/SetStyle()
+        *wxFileDialog*etStyle*;
+        *wxDirDialog*etStyle*;
+        # Mac OS X only, but it still must go in IIUC
+        *wxListCtrl*SetFocus*;
+        *wxListCtrl*OnChar*;
+        *wxListCtrl*OnRightDown*;
+        *wxListCtrl*OnMiddleDown*;
+        *wxListCtrl*FireMouseEvent*;
+        # wxTreeCtrl::CollapseAll[Children]() and IsEmpty
+        *wxTreeCtrl*CollapseAll*;
+        *wxTreeCtrl*IsEmpty*;
+};
+
+# symbols available since the beginning of this branch are only given
+# generic branch tag (don't remove this!):
+
+@WX_VERSION_TAG@ {
+    global:
+        *;
+};

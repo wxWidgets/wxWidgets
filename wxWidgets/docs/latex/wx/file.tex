@@ -1,0 +1,348 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        file.tex
+%% Purpose:     wxFile documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     14.01.02 (extracted from file.tex)
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxFile}}\label{wxfile}
+
+A wxFile performs raw file I/O. This is a very small class designed to
+minimize the overhead of using it - in fact, there is hardly any overhead at
+all, but using it brings you automatic error checking and hides differences
+between platforms and compilers. wxFile also automatically closes the file in
+its destructor making it unnecessary to worry about forgetting to do it.
+wxFile is a wrapper around {\tt file descriptor.} - see also 
+\helpref{wxFFile}{wxffile} for a wrapper around {\tt FILE} structure.
+
+{\tt wxFileOffset} is used by the wxFile functions which require offsets as 
+parameter or return them. If the platform supports it, wxFileOffset is a typedef
+for a native 64 bit integer, otherwise a 32 bit integer is used for wxFileOffset.
+
+\wxheading{Derived from}
+
+None.
+
+\wxheading{Include files}
+
+<wx/file.h>
+
+\wxheading{Constants}
+
+wx/file.h defines the following constants:
+
+\begin{verbatim}
+#define wxS_IRUSR 00400
+#define wxS_IWUSR 00200
+#define wxS_IXUSR 00100
+
+#define wxS_IRGRP 00040
+#define wxS_IWGRP 00020
+#define wxS_IXGRP 00010
+
+#define wxS_IROTH 00004
+#define wxS_IWOTH 00002
+#define wxS_IXOTH 00001
+
+// default mode for the new files: corresponds to umask 022
+#define wxS_DEFAULT  (wxS_IRUSR | wxS_IWUSR | wxS_IRGRP | wxS_IWGRP | wxS_IROTH | wxS_IWOTH)
+\end{verbatim}
+
+These constants define the file access rights and are used with 
+\helpref{wxFile::Create}{wxfilecreate} and \helpref{wxFile::Open}{wxfileopen}.
+
+The {\it OpenMode} enumeration defines the different modes for opening a file,
+it is defined inside wxFile class so its members should be specified with {\it wxFile::} scope
+resolution prefix. It is also used with \helpref{wxFile::Access}{wxfileaccess} function.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt%
+\twocolitem{{\bf wxFile::read}}{Open file for reading or test if it can be opened for reading with Access()}
+\twocolitem{{\bf wxFile::write}}{Open file for writing deleting the contents of the file if it already exists
+or test if it can be opened for writing with Access()}
+\twocolitem{{\bf wxFile::read\_write}}{Open file for reading and writing; can not be used with Access()}
+\twocolitem{{\bf wxFile::write\_append}}{Open file for appending: the file is opened for writing, but the old
+contents of the file is not erased and the file pointer is initially placed at the end of the file;
+can not be used with Access(). This is the same as {\bf wxFile::write} if the
+file doesn't exist.}
+\twocolitem{{\bf wxFile::write\_excl}}{Open the file securely for writing (Uses O\_EXCL | O\_CREAT).
+Will fail if the file already exists, else create and open it atomically.  Useful for opening temporary files without being vulnerable to race exploits.}
+\end{twocollist}
+
+Other constants defined elsewhere but used by wxFile functions are wxInvalidOffset which represents an
+invalid value of type {\it wxFileOffset} and is returned by functions returning {\it wxFileOffset} on error and the seek
+mode constants used with \helpref{Seek()}{wxfileseek}:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt%
+\twocolitem{{\bf wxFromStart}}{Count offset from the start of the file}
+\twocolitem{{\bf wxFromCurrent}}{Count offset from the current position of the file pointer}
+\twocolitem{{\bf wxFromEnd}}{Count offset from the end of the file (backwards)}
+\end{twocollist}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxFile::wxFile}\label{wxfilector}
+
+\func{}{wxFile}{\void}
+
+Default constructor.
+
+\func{}{wxFile}{\param{const char*}{ filename}, \param{wxFile::OpenMode}{ mode = wxFile::read}}
+
+Opens a file with the given mode. As there is no way to return whether the
+operation was successful or not from the constructor you should test the
+return value of \helpref{IsOpened}{wxfileisopened} to check that it didn't
+fail.
+
+\func{}{wxFile}{\param{int}{ fd}}
+
+Associates the file with the given file descriptor, which has already been opened.
+
+\wxheading{Parameters}
+
+\docparam{filename}{The filename.}
+
+\docparam{mode}{The mode in which to open the file. May be one of {\bf wxFile::read}, {\bf wxFile::write} and {\bf wxFile::read\_write}.}
+
+\docparam{fd}{An existing file descriptor (see \helpref{Attach()}{wxfileattach} for the list of predefined descriptors)}
+
+
+\membersection{wxFile::\destruct{wxFile}}\label{wxfiledtor}
+
+\func{}{\destruct{wxFile}}{\void}
+
+Destructor will close the file.
+
+{\bf NB:} it is not virtual so you should not use wxFile polymorphically.
+
+
+\membersection{wxFile::Access}\label{wxfileaccess}
+
+\func{static bool}{Access}{\param{const char *}{ name}, \param{OpenMode}{ mode}}
+
+This function verifies if we may access the given file in specified mode. Only
+values of wxFile::read or wxFile::write really make sense here.
+
+
+\membersection{wxFile::Attach}\label{wxfileattach}
+
+\func{void}{Attach}{\param{int}{ fd}}
+
+Attaches an existing file descriptor to the wxFile object. Example of predefined
+file descriptors are 0, 1 and 2 which correspond to stdin, stdout and stderr (and
+have symbolic names of {\bf wxFile::fd\_stdin}, {\bf wxFile::fd\_stdout} and {\bf wxFile::fd\_stderr}).
+
+The descriptor should be already opened and it will be closed by wxFile
+object.
+
+
+\membersection{wxFile::Close}\label{wxfileclose}
+
+\func{void}{Close}{\void}
+
+Closes the file.
+
+
+\membersection{wxFile::Create}\label{wxfilecreate}
+
+\func{bool}{Create}{\param{const char*}{ filename}, \param{bool}{ overwrite = false}, \param{int }{access = wxS\_DEFAULT}}
+
+Creates a file for writing. If the file already exists, setting {\bf overwrite} to true
+will ensure it is overwritten.
+
+
+\membersection{wxFile::Detach}\label{wxfiledetach}
+
+\func{void}{Detach}{\void}
+
+Get back a file descriptor from wxFile object - the caller is responsible for closing the file if this
+descriptor is opened. \helpref{IsOpened()}{wxfileisopened} will return false after call to Detach().
+
+
+\membersection{wxFile::fd}\label{wxfilefd}
+
+\constfunc{int}{fd}{\void}
+
+Returns the file descriptor associated with the file.
+
+
+\membersection{wxFile::Eof}\label{wxfileeof}
+
+\constfunc{bool}{Eof}{\void}
+
+Returns true if the end of the file has been reached.
+
+Note that the behaviour of the file pointer based class 
+\helpref{wxFFile}{wxffile} is different as \helpref{wxFFile::Eof}{wxffileeof} 
+will return true here only if an attempt has been made to read 
+{\it past} the last byte of the file, while wxFile::Eof() will return true
+even before such attempt is made if the file pointer is at the last position
+in the file.
+
+Note also that this function doesn't work on unseekable file descriptors
+(examples include pipes, terminals and sockets under Unix) and an attempt to
+use it will result in an error message in such case. So, to read the entire
+file into memory, you should write a loop which uses 
+\helpref{Read}{wxfileread} repeatedly and tests its return condition instead
+of using Eof() as this will not work for special files under Unix.
+
+
+\membersection{wxFile::Exists}\label{wxfileexists}
+
+\func{static bool}{Exists}{\param{const char*}{ filename}}
+
+Returns true if the given name specifies an existing regular file (not a
+directory or a link)
+
+
+\membersection{wxFile::Flush}\label{wxfileflush}
+
+\func{bool}{Flush}{\void}
+
+Flushes the file descriptor.
+
+Note that wxFile::Flush is not implemented on some Windows compilers
+due to a missing fsync function, which reduces the usefulness of this function
+(it can still be called but it will do nothing on unsupported compilers).
+
+
+\membersection{wxFile::GetKind}\label{wxfilegetfilekind}
+
+\constfunc{wxFileKind}{GetKind}{\void}
+
+Returns the type of the file. Possible return values are:
+
+\begin{verbatim}
+enum wxFileKind
+{
+  wxFILE_KIND_UNKNOWN,
+  wxFILE_KIND_DISK,     // a file supporting seeking to arbitrary offsets
+  wxFILE_KIND_TERMINAL, // a tty
+  wxFILE_KIND_PIPE      // a pipe
+};
+
+\end{verbatim}
+
+
+\membersection{wxFile::IsOpened}\label{wxfileisopened}
+
+\constfunc{bool}{IsOpened}{\void}
+
+Returns true if the file has been opened.
+
+
+\membersection{wxFile::Length}\label{wxfilelength}
+
+\constfunc{wxFileOffset}{Length}{\void}
+
+Returns the length of the file.
+
+
+\membersection{wxFile::Open}\label{wxfileopen}
+
+\func{bool}{Open}{\param{const char*}{ filename}, \param{wxFile::OpenMode}{ mode = wxFile::read}}
+
+Opens the file, returning true if successful.
+
+\wxheading{Parameters}
+
+\docparam{filename}{The filename.}
+
+\docparam{mode}{The mode in which to open the file. May be one of {\bf wxFile::read}, {\bf wxFile::write} and {\bf wxFile::read\_write}.}
+
+
+\membersection{wxFile::Read}\label{wxfileread}
+
+\func{size\_t}{Read}{\param{void*}{ buffer}, \param{size\_t}{ count}}
+
+Reads the specified number of bytes into a buffer, returning the actual number read.
+
+\wxheading{Parameters}
+
+\docparam{buffer}{A buffer to receive the data.}
+
+\docparam{count}{The number of bytes to read.}
+
+\wxheading{Return value}
+
+The number of bytes read, or the symbol {\bf wxInvalidOffset} (-1) if there was an error.
+
+
+\membersection{wxFile::Seek}\label{wxfileseek}
+
+\func{wxFileOffset}{Seek}{\param{wxFileOffset }{ofs}, \param{wxSeekMode }{mode = wxFromStart}}
+
+Seeks to the specified position.
+
+\wxheading{Parameters}
+
+\docparam{ofs}{Offset to seek to.}
+
+\docparam{mode}{One of {\bf wxFromStart}, {\bf wxFromEnd}, {\bf wxFromCurrent}.}
+
+\wxheading{Return value}
+
+The actual offset position achieved, or wxInvalidOffset on failure.
+
+
+\membersection{wxFile::SeekEnd}\label{wxfileseekend}
+
+\func{wxFileOffset}{SeekEnd}{\param{wxFileOffset }{ofs = 0}}
+
+Moves the file pointer to the specified number of bytes relative to the end of
+the file. For example, \texttt{SeekEnd($-5$)} would position the pointer $5$
+bytes before the end.
+
+\wxheading{Parameters}
+
+\docparam{ofs}{Number of bytes before the end of the file.}
+
+\wxheading{Return value}
+
+The actual offset position achieved, or wxInvalidOffset on failure.
+
+
+\membersection{wxFile::Tell}\label{wxfiletell}
+
+\constfunc{wxFileOffset}{Tell}{\void}
+
+Returns the current position or wxInvalidOffset if file is not opened or if another
+error occurred.
+
+
+\membersection{wxFile::Write}\label{wxfilewrite}
+
+\func{size\_t}{Write}{\param{const void*}{ buffer}, \param{size\_t}{ count}}
+
+Writes the specified number of bytes from a buffer.
+
+\wxheading{Parameters}
+
+\docparam{buffer}{A buffer containing the data.}
+
+\docparam{count}{The number of bytes to write.}
+
+\wxheading{Return value}
+
+the number of bytes actually written
+
+
+\membersection{wxFile::Write}\label{wxfilewrites}
+
+\func{bool}{Write}{\param{const wxString\& }{s}, \param{wxMBConv\&}{ conv = wxConvUTF8}}
+
+Writes the contents of the string to the file, returns true on success.
+
+The second argument is only meaningful in Unicode build of wxWidgets when
+{\it conv} is used to convert {\it s} to multibyte representation.
+
+Note that this method only works with {\tt NUL}-terminated strings, if you want
+to write data with embedded {\tt NUL}s to the file you should use the other 
+\helpref{Write() overload}{wxfilewrite}.
+

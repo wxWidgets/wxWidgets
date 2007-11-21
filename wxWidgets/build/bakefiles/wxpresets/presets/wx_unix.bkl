@@ -1,0 +1,136 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<!--
+Presents for building wxWidgets applications using Autoconf or GNU toosets.
+See wx.bkl for platform-independent notes.
+
+Usage:
+    Options WX_CPPFLAGS, WX_CFLAGS, WX_CXXFLAGS, WX_LIBS are defined.
+
+
+Format-specific notes:
+
+* autoconf:
+        Beware that you have to use AM_OPTIONS_WXCONFIG and
+        AM_PATH_WXCONFIG in your configure.in!
+
+-->
+
+
+<makefile>
+
+    <!-- ============================================================== -->
+    <!--                           Autoconf                             -->
+    <!-- ============================================================== -->
+
+    <if cond="FORMAT=='autoconf'">
+        <!-- Autoconf backend is simplicity itself thanks to wx-config... -->
+        <option name="WX_CFLAGS"/>
+        <option name="WX_CXXFLAGS"/>
+        <option name="WX_CPPFLAGS"/>
+        <option name="WX_LIBS"/>
+        <option name="WX_RESCOMP"/>
+    </if>
+
+    <!-- ============================================================== -->
+    <!--                   GNU makefiles for Unix                       -->
+    <!-- ============================================================== -->
+
+    <if cond="FORMAT=='gnu'">
+        <set var="WX_CONFIG_DEFAULT" overwrite="0">wx-config</set>
+        <option name="WX_CONFIG">
+            <default-value>$(WX_CONFIG_DEFAULT)</default-value>
+            <description>Location and arguments of wx-config script</description>
+        </option>
+        <option name="WX_CFLAGS">
+            <default-value>`$(DOLLAR)(WX_CONFIG) --cflags`</default-value>
+            <description>C flags to use with wxWidgets code</description>
+        </option>
+        <option name="WX_CXXFLAGS">
+            <default-value>`$(DOLLAR)(WX_CONFIG) --cxxflags`</default-value>
+            <description>C++ flags to use with wxWidgets code</description>
+        </option>
+        <option name="WX_CPPFLAGS">
+            <default-value>`$(DOLLAR)(WX_CONFIG) --cppflags`</default-value>
+            <description>C preprocessor flags to use with wxWidgets code</description>
+        </option>
+        <option name="WX_RESCOMP">
+            <default-value>`$(DOLLAR)(WX_CONFIG) --rescomp`</default-value>
+            <description>wxWidgets resource compiler and flags</description>
+        </option>
+
+        <!-- we need this but the trick used in default-values above
+             prevents bakefile from detecting it: -->
+        <set var="FORMAT_OUTPUT_VARIABLES" append="1">WX_CONFIG</set>
+    </if>
+
+    <!-- ============================================================== -->
+    <!--                          Common code                           -->
+    <!-- ============================================================== -->
+
+    <if cond="FORMAT not in ['gnu','autoconf']">
+        <error>
+            Don't include presets/wx_unix.bkl directly, use presets/wx.bkl.
+        </error>
+    </if>
+
+    <!--
+         We need to re-define the WINDRES resource compiler name to the resource compiler
+         returned by 'wx-config - -rescomp' since this option returns both the name of the
+         resource compiler to use (windres) and the flags required for that compiler.
+
+         This line typically does something *only* when the Makefile.in generated
+         using this bakefile, is used on Windows with MSYS (when using Cygwin, resources
+         are not compiled at all).
+         Without this line, in fact, when compiling with MSYS on Windows, the - -include-dir
+         option which tells windres to look in wxWidgets\include folder would be missing and
+         then windres would fail to find the wxMSW resources.
+
+         NOTE: overwriting the WINDRES variable we add wxWidgets resource flags to
+               all targets which include this bakefile; this could be useless to those
+               targets which are not wx-based eventually present in that bakefile but
+               in any case it shouldn't do any harm.
+    -->
+    <set var="WINDRES">$(WX_RESCOMP)</set>
+
+    <template id="wx-lib">
+        <cxxflags>$(WX_CXXFLAGS)</cxxflags>
+        <cflags>$(WX_CFLAGS)</cflags>
+    </template>
+
+    <template id="wx" template="wx-lib">
+        <!--
+            Don't include the $(WX_LIBS) variable in linker options here since
+            it would make impossible for the user to obtain the right library
+            order when he needs to specify, *before* WX_LIBS, its own libraries
+            that depend on wxWidgets libraries; to avoid this, we include
+            $(WX_LIBS) as soon as we found the <wx-lib>base</wx-lib> tag which
+            the user should always put *after* all other wx-dependent libraries
+        -->
+    </template>
+
+    <!-- VERY IMPORTANT: <wx-lib>base</wx-lib> must be the last wx-lib tag
+                         in all your bakefiles !!
+    -->
+    <define-tag name="wx-lib" rules="exe,dll,module">
+        <if cond="FORMAT=='autoconf' and value=='base'">
+            <!-- all wx-dependent libraries should have been already listed
+                 thus we can now add WX_LIBS to the linker line -->
+            <ldflags>$(WX_LIBS)</ldflags>
+        </if>
+        <if cond="FORMAT=='gnu' and value=='base'">
+            <!-- all wx libraries should have been already specified, thus
+                  $(__liblist) should contain the full list... -->
+            <set var="__liblist" append="1">base</set>
+            <ldflags>`$(WX_CONFIG) --libs $(','.join(__liblist.split()))`</ldflags>
+        </if>
+        <if cond="FORMAT=='gnu' and value!='base'">
+            <set var="__liblist" append="1">$(value)</set>
+        </if>
+        <if cond="value not in ALLLIB_LIST.split()">
+            <error>Unknown wxWidgets library given in the wx-lib tag</error>
+        </if>
+    </define-tag>
+
+</makefile>

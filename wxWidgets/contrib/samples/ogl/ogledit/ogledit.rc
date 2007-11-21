@@ -1,0 +1,4 @@
+ogl             ICON    ogl.ico
+
+#include "wx/msw/wx.rc"
+

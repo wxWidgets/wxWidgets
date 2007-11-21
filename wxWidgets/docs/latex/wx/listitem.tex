@@ -1,0 +1,210 @@
+\section{\class{wxListItem}}\label{wxlistitem}
+
+This class stores information about a wxListCtrl item or column.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/listctrl.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxListItem::wxListItem}\label{wxlistitemwxlistitem}
+
+\func{}{wxListItem}{\void}
+
+Constructor.
+
+\membersection{wxListItem::Clear}\label{wxlistitemclear}
+
+\func{void}{Clear}{\void}
+
+Resets the item state to the default.
+
+\membersection{wxListItem::GetAlign}\label{wxlistitemgetalign}
+
+\constfunc{wxListColumnFormat}{GetAlign}{\void}
+
+Returns the alignment for this item. Can be one of
+wxLIST\_FORMAT\_LEFT, wxLIST\_FORMAT\_RIGHT or wxLIST\_FORMAT\_CENTRE.
+
+\membersection{wxListItem::GetBackgroundColour}\label{wxlistitemgetbackgroundcolour}
+
+\constfunc{wxColour}{GetBackgroundColour}{\void}
+
+Returns the background colour for this item.
+
+\membersection{wxListItem::GetColumn}\label{wxlistitemgetcolumn}
+
+\constfunc{int}{GetColumn}{\void}
+
+Returns the zero-based column; meaningful only in report mode.
+
+\membersection{wxListItem::GetData}\label{wxlistitemgetdata}
+
+\constfunc{long}{GetData}{\void}
+
+Returns client data associated with the control. Please note that
+client data is associated with the item and not with subitems.
+
+\membersection{wxListItem::GetFont}\label{wxlistitemgetfont}
+
+\constfunc{wxFont}{GetFont}{\void}
+
+Returns the font used to display the item.
+
+\membersection{wxListItem::GetId}\label{wxlistitemgetid}
+
+\constfunc{long}{GetId}{\void}
+
+Returns the zero-based item position.
+
+\membersection{wxListItem::GetImage}\label{wxlistitemgetimage}
+
+\constfunc{int}{GetImage}{\void}
+
+Returns the zero-based index of the image
+associated with the item into the image list.
+
+\membersection{wxListItem::GetMask}\label{wxlistitemgetmask}
+
+\constfunc{long}{GetMask}{\void}
+
+Returns a bit mask indicating which fields of the structure are valid;
+can be any combination of the following values:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxLIST\_MASK\_STATE}{{\bf GetState} is valid.}
+\twocolitem{wxLIST\_MASK\_TEXT}{{\bf GetText} is valid.}
+\twocolitem{wxLIST\_MASK\_IMAGE}{{\bf GetImage} is valid.}
+\twocolitem{wxLIST\_MASK\_DATA}{{\bf GetData} is valid.}
+\twocolitem{wxLIST\_MASK\_WIDTH}{{\bf GetWidth} is valid.}
+\twocolitem{wxLIST\_MASK\_FORMAT}{{\bf GetFormat} is valid.}
+\end{twocollist}
+
+\membersection{wxListItem::GetState}\label{wxlistitemgetstate}
+
+\constfunc{long}{GetState}{\void}
+
+Returns a bit field representing the state of the item. Can be any
+combination of:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxLIST\_STATE\_DONTCARE}{Don't care what the state is. Win32 only. }
+\twocolitem{wxLIST\_STATE\_DROPHILITED}{The item is highlighted to receive a drop event. Win32 only. }
+\twocolitem{wxLIST\_STATE\_FOCUSED}{The item has the focus.}
+\twocolitem{wxLIST\_STATE\_SELECTED}{The item is selected.}
+\twocolitem{wxLIST\_STATE\_CUT}{The item is in the cut state. Win32 only. }
+\end{twocollist}
+
+\membersection{wxListItem::GetText}\label{wxlistitemgettext}
+
+\constfunc{const wxString\&}{GetText}{\void}
+
+Returns the label/header text.
+
+\membersection{wxListItem::GetTextColour}\label{wxlistitemgettextcolour}
+
+\constfunc{wxColour}{GetTextColour}{\void}
+
+Returns the text colour.
+
+\membersection{wxListItem::GetWidth}\label{wxlistitemgetwidth}
+
+\constfunc{int}{GetWidth}{\void}
+
+Meaningful only for column headers in report mode. Returns the column width.
+
+\membersection{wxListItem::SetAlign}\label{wxlistitemsetalign}
+
+\func{void}{SetAlign}{\param{wxListColumnFormat }{align}}
+
+Sets the alignment for the item. See also
+\helpref{wxListItem::GetAlign}{wxlistitemgetalign}
+
+\membersection{wxListItem::SetBackgroundColour}\label{wxlistitemsetbackgroundcolour}
+
+\func{void}{SetBackgroundColour}{\param{const wxColour\& }{colBack}}
+
+Sets the background colour for the item.
+
+\membersection{wxListItem::SetColumn}\label{wxlistitemsetcolumn}
+
+\func{void}{SetColumn}{\param{int }{col}}
+
+Sets the zero-based column. Meaningful only in report mode.
+
+\membersection{wxListItem::SetData}\label{wxlistitemsetdata}
+
+\func{void}{SetData}{\param{long }{data}}
+
+\func{void}{SetData}{\param{void* }{data}}
+
+Sets client data for the item. Please note that
+client data is associated with the item and not with subitems.
+
+\membersection{wxListItem::SetFont}\label{wxlistitemsetfont}
+
+\func{void}{SetFont}{\param{const wxFont\& }{font}}
+
+Sets the font for the item.
+
+\membersection{wxListItem::SetId}\label{wxlistitemsetid}
+
+\func{void}{SetId}{\param{long }{id}}
+
+Sets the zero-based item position.
+
+\membersection{wxListItem::SetImage}\label{wxlistitemsetimage}
+
+\func{void}{SetImage}{\param{int }{image}}
+
+Sets the zero-based index of the image associated with the item
+into the image list.
+
+\membersection{wxListItem::SetMask}\label{wxlistitemsetmask}
+
+\func{void}{SetMask}{\param{long }{mask}}
+
+Sets the mask of valid fields. See \helpref{wxListItem::GetMask}{wxlistitemgetmask}.
+
+\membersection{wxListItem::SetState}\label{wxlistitemsetstate}
+
+\func{void}{SetState}{\param{long }{state}}
+
+Sets the item state flags (note that the valid state flags are influenced
+by the value of the state mask, see
+\helpref{wxListItem::SetStateMask}{wxlistitemsetstatemask}).
+See \helpref{wxListItem::GetState}{wxlistitemgetstate} for valid flag
+values.
+
+\membersection{wxListItem::SetStateMask}\label{wxlistitemsetstatemask}
+
+\func{void}{SetStateMask}{\param{long }{stateMask}}
+
+Sets the bitmask that is used to determine which of the state flags
+are to be set. See also \helpref{wxListItem::SetState}{wxlistitemsetstate}.
+
+\membersection{wxListItem::SetText}\label{wxlistitemsettext}
+
+\func{void}{SetText}{\param{const wxString\& }{text}}
+
+Sets the text label for the item.
+
+\membersection{wxListItem::SetTextColour}\label{wxlistitemsettextcolour}
+
+\func{void}{SetTextColour}{\param{const wxColour\& }{colText}}
+
+Sets the text colour for the item.
+
+\membersection{wxListItem::SetWidth}\label{wxlistitemsetwidth}
+
+\func{void}{SetWidth}{\param{int }{width}}
+
+Meaningful only for column headers in report mode. Sets the column width.
+

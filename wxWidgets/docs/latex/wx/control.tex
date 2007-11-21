@@ -1,0 +1,65 @@
+\section{\class{wxControl}}\label{wxcontrol}
+
+This is the base class for a control or ``widget''.
+
+A control is generally a small window which processes user input and/or
+displays one or more item of data.
+
+\wxheading{Derived from}
+
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/control.h>
+
+\wxheading{See also}
+
+\helpref{wxValidator}{wxvalidator}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxControl::Command}\label{wxcontrolcommand}
+
+\func{void}{Command}{\param{wxCommandEvent\& }{event}}
+
+Simulates the effect of the user issuing a command to the item. See \helpref{wxCommandEvent}{wxcommandevent}.
+
+
+\membersection{wxControl::GetLabel}\label{wxcontrolgetlabel}
+
+\constfunc{const wxString\&}{GetLabel}{\void}
+
+Returns the control's text.
+
+Note that the returned string contains the mnemonics (\texttt{\&} characters) if
+any, use \helpref{wxControl::GetLabelText}{wxcontrolgetlabeltext} if they are
+undesired.
+
+
+\membersection{wxControl::GetLabelText}\label{wxcontrolgetlabeltext}
+
+\constfunc{const wxString\&}{GetLabelText}{\void}
+
+\func{static const wxString\&}{GetLabelText}{\param{const wxString\& }{label}}
+
+Returns the control's label or the given \arg{label} string for the static
+version without the mnemonics characters.
+
+
+\membersection{wxControl::SetLabel}\label{wxcontrolsetlabel}
+
+\func{void}{SetLabel}{\param{const wxString\& }{label}}
+
+Sets the item's text.
+
+The \texttt{\&} characters in the \arg{label} are special and indicate that the
+following character is a mnemonic for this control and can be used to activate
+it from the keyboard (typically by using \textit{Alt} key in combination with
+it). To insert a literal ampersand character, you need to double it, i.e. use 
+\texttt{"\&\&"}.
+
+

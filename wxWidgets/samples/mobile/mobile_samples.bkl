@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../build/bakefiles/config.bkl"/>
+    
+    <template id="sub">
+        <dir>$(id)</dir>
+        <installable>no</installable>
+        <dependency-of>all</dependency-of>
+    </template>
+
+    <subproject id="styles" template="sub"/>
+    <subproject id="wxedit" template="sub"/>
+
+</makefile>

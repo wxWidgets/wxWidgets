@@ -1,0 +1,6 @@
+ICON     1   PRELOAD   "mondros2.ico"
+#include "H:\DEV\WX2\wxWindows\include\wx\os2\wx.rc"
+
+#define MINIMAL_QUIT 	1
+#define MINIMAL_ABOUT 	102
+

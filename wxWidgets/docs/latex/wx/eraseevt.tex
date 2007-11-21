@@ -1,0 +1,57 @@
+\section{\class{wxEraseEvent}}\label{wxeraseevent}
+
+An erase event is sent when a window's background needs to be repainted.
+
+On some platforms, such as GTK+, this event is simulated (simply generated just before the
+paint event) and may cause flicker. It is therefore recommended that
+you set the text background colour explicitly in order to prevent flicker.
+The default background colour under GTK+ is grey.
+
+To intercept this event, use the EVT\_ERASE\_BACKGROUND macro in an event table definition.
+
+You must call wxEraseEvent::GetDC and use the returned device context if it is non-NULL.
+If it is NULL, create your own temporary wxClientDC object. 
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/event.h>
+
+\wxheading{Event table macros}
+
+To process an erase event, use this event handler macro to direct input to a member
+function that takes a wxEraseEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_ERASE\_BACKGROUND(func)}}{Process a wxEVT\_ERASE\_BACKGROUND event.}
+\end{twocollist}%
+
+\wxheading{Remarks}
+
+Use the device context returned by \helpref{GetDC}{wxeraseeventgetdc} to draw on,
+don't create a wxPaintDC in the event handler.
+
+\wxheading{See also}
+
+%\helpref{wxWindow::OnEraseBackground}{wxwindowonerasebackground},
+\helpref{Event handling overview}{eventhandlingoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxEraseEvent::wxEraseEvent}\label{wxeraseeventctor}
+
+\func{}{wxEraseEvent}{\param{int }{id = 0}, \param{wxDC* }{dc = NULL}}
+
+Constructor.
+
+\membersection{wxEraseEvent::GetDC}\label{wxeraseeventgetdc}
+
+\constfunc{wxDC*}{GetDC}{\void}
+
+Returns the device context associated with the erase event to draw on.
+

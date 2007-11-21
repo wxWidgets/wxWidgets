@@ -1,0 +1,119 @@
+\section{wxApp overview}\label{wxappoverview}
+
+Classes: \helpref{wxApp}{wxapp}
+
+A wxWidgets application does not have a {\it main} procedure; the equivalent is the
+\rtfsp\helpref{OnInit}{wxapponinit} member defined for a class derived from wxApp.\rtfsp
+\rtfsp{\it OnInit} will usually create a top window as a bare minimum.
+
+Unlike in earlier versions of wxWidgets, OnInit does not return a frame. Instead it
+returns a boolean value which indicates whether processing should continue (true) or not (false).
+You call \helpref{wxApp::SetTopWindow}{wxappsettopwindow} to let wxWidgets know
+about the top window.
+
+Note that the program's command line arguments, represented by {\it argc} 
+and {\it argv}, are available from within wxApp member functions.
+
+An application closes by destroying all windows. Because all frames must
+be destroyed for the application to exit, it is advisable to use parent
+frames wherever possible when creating new frames, so that deleting the
+top level frame will automatically delete child frames. The alternative
+is to explicitly delete child frames in the top-level frame's \helpref{wxCloseEvent}{wxcloseevent}\rtfsp
+handler.
+
+In emergencies the \helpref{wxExit}{wxexit} function can be called to kill the
+application however normally the application shuts down automatically, 
+\helpref{see below}{wxappshutdownoverview}.
+
+An example of defining an application follows:
+
+\begin{verbatim}
+class DerivedApp : public wxApp
+{
+public:
+  virtual bool OnInit();
+};
+
+IMPLEMENT_APP(DerivedApp)
+
+bool DerivedApp::OnInit()
+{
+  wxFrame *the_frame = new wxFrame(NULL, ID_MYFRAME, argv[0]);
+  ...
+  the_frame->Show(true);
+  SetTopWindow(the_frame);
+
+  return true;
+}
+\end{verbatim}
+
+Note the use of IMPLEMENT\_APP(appClass), which allows wxWidgets to dynamically create an instance of the application object
+at the appropriate point in wxWidgets initialization. Previous versions of wxWidgets used
+to rely on the creation of a global application object, but this is no longer recommended,
+because required global initialization may not have been performed at application object
+construction time.
+
+You can also use DECLARE\_APP(appClass) in a header file to declare the wxGetApp function which returns
+a reference to the application object. Otherwise you can only use the global 
+\texttt{wxTheApp} pointer which is of type \texttt{wxApp *}.
+
+
+\subsection{Application shutdown}\label{wxappshutdownoverview}
+
+The application normally shuts down when the last of its top level windows is
+closed. This is normally the expected behaviour and means that it is enough to
+call \helpref{Close()}{wxwindowclose} in response to the {\tt "Exit"} menu
+command if your program has a single top level window. If this behaviour is not
+desirable \helpref{wxApp::SetExitOnFrameDelete}{wxappsetexitonframedelete} can
+be called to change it. Note that starting from wxWidgets 2.3.3 such logic
+doesn't apply for the windows shown before the program enters the main loop: in
+other words, you can safely show a dialog from 
+\helpref{wxApp::OnInit}{wxapponinit} and not be afraid that your application
+terminates when this dialog -- which is the last top level window for the
+moment -- is closed.
+
+
+Another aspect of the application shutdown is \helpref{OnExit}{wxapponexit} 
+which is called when the application exits but {\it before} wxWidgets cleans up
+its internal structures. You should delete all wxWidgets object that you
+created by the time OnExit finishes. In particular, do {\bf not} destroy them
+from application class' destructor!
+
+For example, this code may crash:
+
+\begin{verbatim}
+class MyApp : public wxApp
+{
+ public:
+    wxCHMHelpController m_helpCtrl;
+    ...
+};
+\end{verbatim}
+
+The reason for that is that {\tt m\_helpCtrl} is a member object and is 
+thus destroyed from MyApp destructor. But MyApp object is deleted after 
+wxWidgets structures that wxCHMHelpController depends on were 
+uninitialized! The solution is to destroy HelpCtrl in {\it OnExit}:
+
+\begin{verbatim}
+class MyApp : public wxApp
+{
+ public:
+    wxCHMHelpController *m_helpCtrl;
+    ...
+};
+
+bool MyApp::OnInit()
+{
+  ...
+  m_helpCtrl = new wxCHMHelpController;
+  ...
+}
+
+int MyApp::OnExit()
+{
+  delete m_helpCtrl;
+  return 0;
+}
+\end{verbatim}
+

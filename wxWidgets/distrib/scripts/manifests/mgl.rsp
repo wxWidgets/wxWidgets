@@ -1,0 +1,13 @@
+install-mgl.txt
+readme-mgl.txt
+
+build/mgl/*
+
+include/wx/mgl/*.h
+include/wx/mgl/private/*.h
+src/mgl/*.cpp
+src/mgl/*.lst
+
+include/wx/msdos/*.h
+src/msdos/*.cpp
+

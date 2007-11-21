@@ -1,0 +1,33 @@
+LIBRARY wsock32
+EXETYPE NT
+SUBSYSTEM WINDOWS
+EXPORTS
+    _WSACleanup@0 = WSACleanup
+    _gethostbyaddr@12 = gethostbyaddr
+    _gethostbyname@4 = gethostbyname
+    _gethostname@8 = gethostname
+    _WSAStartup@8 = WSAStartup
+
+
+    _ntohs@4 = ntohs
+    _htons@4 = htons
+    _getservbyname@8 = getservbyname
+    _inet_addr@4 = inet_addr
+    _sendto@24 = sendto
+    _send@16 = send
+    _recvfrom@24 = recvfrom
+    _recv@16 = recv
+    ___WSAFDIsSet@8 = __WSAFDIsSet
+    _select@20 = select
+    _WSAGetLastError@0 = WSAGetLastError
+    _getsockname@12 = getsockname
+    _getsockopt@20 = getsockopt
+    _bind@12 = bind
+    _ioctlsocket@12 = ioctlsocket
+    _socket@12 = socket
+    _connect@12 = connect
+    _accept@12 = accept
+    _listen@8 = listen
+    _shutdown@8 = shutdown
+    _closesocket@4 = closesocket
+    _WSAAsyncSelect@16 = WSAAsyncSelect

@@ -1,0 +1,144 @@
+\section{\class{wxDataInputStream}}\label{wxdatainputstream}
+
+This class provides functions that read binary data types in a
+portable way. Data can be read in either big-endian or little-endian
+format, little-endian being the default on all architectures.
+
+If you want to read data from text files (or streams) use 
+\helpref{wxTextInputStream}{wxtextinputstream} instead.
+
+The >> operator is overloaded and you can use this class like a standard C++ iostream.
+Note, however, that the arguments are the fixed size types wxUint32, wxInt32 etc
+and on a typical 32-bit computer, none of these match to the "long" type (wxInt32
+is defined as signed int on 32-bit architectures) so that you cannot use long. To avoid
+problems (here and elsewhere), make use of the wxInt32, wxUint32, etc types.
+
+For example:
+
+\begin{verbatim}
+  wxFileInputStream input( "mytext.dat" );
+  wxDataInputStream store( input );
+  wxUint8 i1;
+  float f2;
+  wxString line;
+
+  store >> i1;       // read a 8 bit integer.
+  store >> i1 >> f2; // read a 8 bit integer followed by float.
+  store >> line;     // read a text line
+\end{verbatim}
+
+See also \helpref{wxDataOutputStream}{wxdataoutputstream}. 
+
+\wxheading{Derived from}
+
+None
+
+\wxheading{Include files}
+
+<wx/datstrm.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDataInputStream::wxDataInputStream}\label{wxdatainputstreamctor}
+
+\func{}{wxDataInputStream}{\param{wxInputStream\&}{ stream}}
+
+\func{}{wxDataInputStream}{\param{wxInputStream\&}{ stream}, \param{wxMBConv\&}{ conv = wxMBConvUTF8}}
+
+Constructs a datastream object from an input stream. Only read methods will
+be available. The second form is only available in Unicode build of wxWidgets.
+
+\wxheading{Parameters}
+
+\docparam{stream}{The input stream.}
+
+\docparam{conv}{Charset conversion object object used to decode strings in Unicode 
+mode (see \helpref{wxDataInputStream::ReadString}{wxdatainputstreamreadstring}
+documentation for detailed description). Note that you must not destroy
+{\it conv} before you destroy this wxDataInputStream instance!}
+
+\membersection{wxDataInputStream::\destruct{wxDataInputStream}}\label{wxdatainputstreamdtor}
+
+\func{}{\destruct{wxDataInputStream}}{\void}
+
+Destroys the wxDataInputStream object.
+
+\membersection{wxDataInputStream::BigEndianOrdered}\label{wxdatainputstreambigendianordered}
+
+\func{void}{BigEndianOrdered}{\param{bool}{ be\_order}}
+
+If {\it be\_order} is true, all data will be read in big-endian
+order, such as written by programs on a big endian architecture 
+(e.g. Sparc) or written by Java-Streams (which always use 
+big-endian order).
+  
+\membersection{wxDataInputStream::Read8}\label{wxdatainputstreamread8}
+
+\func{wxUint8}{Read8}{\void}
+
+Reads a single byte from the stream.
+
+\func{void}{Read8}{\param{wxUint8 *}{buffer}, \param{size\_t }{size}}
+
+Reads bytes from the stream in a specified buffer. The amount of
+bytes to read is specified by the {\it size} variable.
+
+\membersection{wxDataInputStream::Read16}\label{wxdatainputstreamread16}
+
+\func{wxUint16}{Read16}{\void}
+
+Reads a 16 bit unsigned integer from the stream.
+
+\func{void}{Read16}{\param{wxUint16 *}{buffer}, \param{size\_t }{size}}
+
+Reads 16 bit unsigned integers from the stream in a specified buffer. the
+amount of 16 bit unsigned integer to read is specified by the {\it size} variable.
+
+\membersection{wxDataInputStream::Read32}\label{wxdatainputstreamread32}
+
+\func{wxUint32}{Read32}{\void}
+
+Reads a 32 bit unsigned integer from the stream.
+
+\func{void}{Read32}{\param{wxUint32 *}{buffer}, \param{size\_t }{size}}
+
+Reads 32 bit unsigned integers from the stream in a specified buffer. the amount of
+32 bit unsigned integer to read is specified by the {\it size} variable.
+
+\membersection{wxDataInputStream::Read64}\label{wxdatainputstreamread64}
+
+\func{wxUint64}{Read64}{\void}
+
+Reads a 64 bit unsigned integer from the stream.
+
+\func{void}{Read64}{\param{wxUint64 *}{buffer}, \param{size\_t }{size}}
+
+Reads 64 bit unsigned integers from the stream in a specified buffer. the amount of
+64 bit unsigned integer to read is specified by the {\it size} variable.
+
+\membersection{wxDataInputStream::ReadDouble}\label{wxdatainputstreamreaddouble}
+
+\func{double}{ReadDouble}{\void}
+
+Reads a double (IEEE encoded) from the stream.
+
+\func{void}{ReadDouble}{\param{double *}{buffer}, \param{size\_t }{size}}
+
+Reads double data (IEEE encoded) from the stream in a specified buffer. the amount of
+double to read is specified by the {\it size} variable.
+
+\membersection{wxDataInputStream::ReadString}\label{wxdatainputstreamreadstring}
+
+\func{wxString}{ReadString}{\void}
+
+Reads a string from a stream. Actually, this function first reads a long 
+integer specifying the length of the string (without the last null character) 
+and then reads the string.
+
+In Unicode build of wxWidgets, the fuction first reads multibyte (char*)
+string from the stream and then converts it to Unicode using the {\it conv}
+object passed to constructor and returns the result as wxString. You are
+responsible for using the same convertor as when writing the stream.
+
+See also \helpref{wxDataOutputStream::WriteString}{wxdataoutputstreamwritestring}.
+

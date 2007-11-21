@@ -1,0 +1,249 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        regex.tex
+%% Purpose:     wxRegEx documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     14.07.01
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2001 Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxRegEx}}\label{wxregex}
+
+wxRegEx represents a regular expression.  This class provides support
+for regular expressions matching and also replacement.
+
+It is built on top of either the system library (if it has support
+for POSIX regular expressions - which is the case of the most modern
+Unices) or uses the built in Henry Spencer's library.  Henry Spencer
+would appreciate being given credit in the documentation of software
+which uses his library, but that is not a requirement.
+
+Regular expressions, as defined by POSIX, come in two flavours: {\it extended}
+and {\it basic}.  The builtin library also adds a third flavour
+of expression \helpref{advanced}{wxresyn}, which is not available
+when using the system library.
+
+Unicode is fully supported only when using the builtin library.
+When using the system library in Unicode mode, the expressions and data
+are translated to the default 8-bit encoding before being passed to
+the library.
+
+On platforms where a system library is available, the default is to use
+the builtin library for Unicode builds, and the system library otherwise.
+It is possible to use the other if preferred by selecting it when building
+the wxWidgets.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Data structures}
+
+Flags for regex compilation to be used with \helpref{Compile()}{wxregexcompile}:
+
+\begin{verbatim}
+enum
+{
+    // use extended regex syntax
+    wxRE_EXTENDED = 0,
+    
+    // use advanced RE syntax (built-in regex only)
+#ifdef wxHAS_REGEX_ADVANCED
+    wxRE_ADVANCED = 1,
+#endif
+
+    // use basic RE syntax
+    wxRE_BASIC    = 2,
+
+    // ignore case in match
+    wxRE_ICASE    = 4,
+
+    // only check match, don't set back references
+    wxRE_NOSUB    = 8,
+
+    // if not set, treat '\n' as an ordinary character, otherwise it is
+    // special: it is not matched by '.' and '^' and '$' always match
+    // after/before it regardless of the setting of wxRE_NOT[BE]OL
+    wxRE_NEWLINE  = 16,
+
+    // default flags
+    wxRE_DEFAULT  = wxRE_EXTENDED
+}
+\end{verbatim}
+
+Flags for regex matching to be used with \helpref{Matches()}{wxregexmatches}.
+
+These flags are mainly useful when doing several matches in a long string
+to prevent erroneous matches for {\tt '\textasciicircum'} and {\tt '\$'}:
+
+\begin{verbatim}
+enum
+{
+    // '^' doesn't match at the start of line
+    wxRE_NOTBOL = 32,
+
+    // '$' doesn't match at the end of line
+    wxRE_NOTEOL = 64
+}
+\end{verbatim}
+
+\wxheading{Examples}
+
+A bad example of processing some text containing email addresses (the example
+is bad because the real email addresses can have more complicated form than
+{\tt user@host.net}):
+
+\begin{verbatim}
+wxString text;
+...
+wxRegEx reEmail = wxT("([^@]+)@([[:alnum:].-_].)+([[:alnum:]]+)");
+if ( reEmail.Matches(text) )
+{
+    wxString text = reEmail.GetMatch(email);
+    wxString username = reEmail.GetMatch(email, 1);
+    if ( reEmail.GetMatch(email, 3) == wxT("com") ) // .com TLD?
+    {
+        ...
+    }
+}
+
+// or we could do this to hide the email address
+size_t count = reEmail.ReplaceAll(text, wxT("HIDDEN@\\2\\3"));
+printf("text now contains %u hidden addresses", count);
+\end{verbatim}
+
+\wxheading{Include files}
+
+<wx/regex.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRegEx::wxRegEx}\label{wxregexwxregex}
+
+\func{}{wxRegEx}{\void}
+
+Default ctor: use \helpref{Compile()}{wxregexcompile} later.
+
+\func{}{wxRegEx}{\param{const wxString\& }{expr}, \param{int }{flags = wxRE\_DEFAULT}}
+
+Create and compile the regular expression, use 
+\helpref{IsValid}{wxregexisvalid} to test for compilation errors.
+
+\membersection{wxRegEx::\destruct{wxRegEx}}\label{wxregexdtor}
+
+\func{}{\destruct{wxRegEx}}{\void}
+
+dtor not virtual, don't derive from this class
+
+\membersection{wxRegEx::Compile}\label{wxregexcompile}
+
+\func{bool}{Compile}{\param{const wxString\& }{pattern}, \param{int }{flags = wxRE\_DEFAULT}}
+
+Compile the string into regular expression, return {\tt true} if ok or {\tt false} 
+if string has a syntax error.
+
+\membersection{wxRegEx::IsValid}\label{wxregexisvalid}
+
+\constfunc{bool}{IsValid}{\void}
+
+Return {\tt true} if this is a valid compiled regular expression, {\tt false} 
+otherwise.
+
+\membersection{wxRegEx::GetMatch}\label{wxregexgetmatch}
+
+\constfunc{bool}{GetMatch}{\param{size\_t* }{start}, \param{size\_t* }{len}, \param{size\_t }{index = 0}}
+
+Get the start index and the length of the match of the expression
+(if {\it index} is $0$) or a bracketed subexpression ({\it index} different
+from $0$).
+
+May only be called after successful call to \helpref{Matches()}{wxregexmatches} 
+and only if {\tt wxRE\_NOSUB} was {\bf not} used in 
+\helpref{Compile()}{wxregexcompile}.
+
+Returns {\tt false} if no match or if an error occurred.
+
+\constfunc{wxString}{GetMatch}{\param{const wxString\& }{text}, \param{size\_t }{index = 0}}
+
+Returns the part of string corresponding to the match where {\it index} is
+interpreted as above. Empty string is returned if match failed
+
+May only be called after successful call to \helpref{Matches()}{wxregexmatches} 
+and only if {\tt wxRE\_NOSUB} was {\bf not} used in 
+\helpref{Compile()}{wxregexcompile}.
+
+\membersection{wxRegEx::GetMatchCount}\label{wxregexgetmatchcount}
+
+\constfunc{size\_t}{GetMatchCount}{\void}
+
+Returns the size of the array of matches, i.e. the number of bracketed
+subexpressions plus one for the expression itself, or $0$ on error.
+
+May only be called after successful call to \helpref{Compile()}{wxregexcompile}.
+and only if {\tt wxRE\_NOSUB} was {\bf not} used.
+
+\membersection{wxRegEx::Matches}\label{wxregexmatches}
+
+\constfunc{bool}{Matches}{\param{const wxChar* }{text}, \param{int }{flags = 0}}
+
+\constfunc{bool}{Matches}{\param{const wxChar* }{text}, \param{int }{flags}, \param{size\_t }{len}}
+
+\constfunc{bool}{Matches}{\param{const wxString\& }{text}, \param{int }{flags = 0}}
+
+Matches the precompiled regular expression against the string {\it text},
+returns {\tt true} if matches and {\tt false} otherwise.
+
+{\it Flags} may be combination of {\tt wxRE\_NOTBOL} and {\tt wxRE\_NOTEOL}.
+
+Some regex libraries assume that the text given is null terminated, while
+others require the length be given as a separate parameter. Therefore for
+maximum portability assume that {\it text} cannot contain embedded nulls.
+
+When the {\it Matches(const wxChar *text, int flags = 0)} form is used,
+a {\it wxStrlen()} will be done internally if the regex library requires the
+length. When using {\it Matches()} in a loop
+the {\it Matches(text, flags, len)} form can be used instead, making it
+possible to avoid a {\it wxStrlen()} inside the loop.
+
+May only be called after successful call to \helpref{Compile()}{wxregexcompile}.
+
+\membersection{wxRegEx::Replace}\label{wxregexreplace}
+
+\constfunc{int}{Replace}{\param{wxString* }{text}, \param{const wxString\& }{replacement}, \param{size\_t }{maxMatches = 0}}
+
+Replaces the current regular expression in the string pointed to by
+{\it text}, with the text in {\it replacement} and return number of matches
+replaced (maybe $0$ if none found) or $-1$ on error.
+
+The replacement text may contain back references {\tt $\backslash$number} which will be
+replaced with the value of the corresponding subexpression in the
+pattern match. {\tt $\backslash$0} corresponds to the entire match and {\tt \&} is a
+synonym for it. Backslash may be used to quote itself or {\tt \&} character.
+
+{\it maxMatches} may be used to limit the number of replacements made, setting
+it to $1$, for example, will only replace first occurrence (if any) of the
+pattern in the text while default value of $0$ means replace all.
+
+\membersection{wxRegEx::ReplaceAll}\label{wxregexreplaceall}
+
+\constfunc{int}{ReplaceAll}{\param{wxString* }{text}, \param{const wxString\& }{replacement}}
+
+Replace all occurrences: this is actually a synonym for 
+\helpref{Replace()}{wxregexreplace}.
+
+\wxheading{See also}
+
+\helpref{ReplaceFirst}{wxregexreplacefirst}
+
+\membersection{wxRegEx::ReplaceFirst}\label{wxregexreplacefirst}
+
+\constfunc{int}{ReplaceFirst}{\param{wxString* }{text}, \param{const wxString\& }{replacement}}
+
+Replace the first occurrence.
+
+\wxheading{See also}
+
+\helpref{Replace}{wxregexreplace}
+

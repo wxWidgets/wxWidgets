@@ -1,0 +1,81 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Untitled Document</title>
+</head>
+
+<body>
+<p><font size="5"><b>Setting up your environment to automatically generate wxWidgets releases.</b></font></p>
+<p><b><font size="4">Contents</font></b></p>
+<ul>
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#checklist">Software checklist</a></li>
+  <li><a href="#sshd">Setting up sshd</a></li>
+  <li><a href="#configuring">Configuring your environment </a></li>
+  <li><a href="#running">Running the  automated release system </a></li>
+</ul>
+<p><b><font size="4">Overview<a name="overview"></a></font></b></p>
+<p>The wxWidgets automated release system works by preparing a tarball of the CVS tree with the specified tag, then pushing that tag to the Windows, Linux and Mac build machines to perform the various steps required to create the tarballs, generate the docs, and perform test builds. In order for it to be able to do this, the release process needs to be broken up into two components:</p>
+<ul>
+  <li>The build management machine, which we'll refer to as the MANAGER, that performs pre- and post-flight steps, monitors the builds for errors, keeps a running log of the various processes on the build machines, and halts the release process in case a fatal error has occurred.</li>
+  <li>The   build machines, which we'll call the BUILDERS,  are accessed via sshd and perform the actual build steps. You will need 3 BUILDER machines - one Win box, one Linux box, and one Mac OS X box. </li>
+</ul>
+<p>Note that for the purposes of this document, I will refer to the root wxWidgets source tree directory using the name wxSrc. So the readme file, for example, would be located at wxSrc/readme.txt. </p>
+<p><b><font size="4">Software checklist </font></b><a name="checklist"></a></p>
+<p>On all platforms, you will need to have the following programs installed. Unless otherwise specified, the package is available from the OS vendor (or Cygwin on Windows).</p>
+<p>On all machines:  </p>
+<ul>
+  <li>OpenSSH, for ssh and sshd</li>
+  <li>make</li>
+  <li>bash shell   </li>
+  <li>Cygwin (Windows) </li>
+  <li>Apple Developer Tools (OS X) </li>
+</ul>
+<p>On the MANAGER box: </p>
+<ul>
+  <li>ReleaseForge (for uploading, announcing releases) </li>
+  <li>Bakefile (if re-baking) </li>
+  <li>scp/sftp</li>
+  <li>Python 2.4 (should work with Python 2.3 too, but I've only tested against 2.4) </li>
+  <li>TaskRunner (located in the wxPython/distrib/all dir) </li>
+  <li>Cygwin if Win (MANAGER not yet tested on Windows box) </li>
+</ul>
+<p>On BUILDERS:</p>
+<ul>
+  <li>Tools necessary to build using the various compilers we support. </li>
+  <li>Mac OS X needs to have unix2dos installed. You can get it from http://osxgnu.org.</li>
+  
+  </ul>
+<p>On the doc building machine (Win only right now...):</p>
+<ul>
+  <li>nmake</li>
+  <li>HTML Help Workshop</li>
+</ul>
+<p><b>NOTE: </b>There is a script wxSrc/distrib/scripts/build-environ.sh which will install Bakefile, TaskRunner and ReleaseForge for you if you do not have them installed. Note you currently need to use this installer for ReleaseForge as it removes a bug with the command line mode upon install.  </p>
+<p><b>NOTE 2: </b>You will also need to create C:\wx2dev and C:\transit directories on Win, and ~/wx2dev on Unix and Mac. In the future these dirs will probably be auto-created. </p>
+<p>Once you have the required software installed, you will need to setup sshd on the 3 BUILDER boxes so that the MANAGER box can send files to them and send them commands. ssh is used to communicate between the MANAGER and BUILDERS. </p>
+<p><b><font size="4">Setting up sshd </font></b><a name="sshd"></a></p>
+<p><b>Windows</b></p>
+<p>You will need to setup sshd to run as a Windows XP process, which isn't too complicated but unfortunately takes a few more steps than setting *nix sshd. Instructions on how to do this can be found here: </p>
+<p><a href="http://lee.org/reading/computers/sshd/cygwin-sshd.html">http://lee.org/reading/computers/sshd/cygwin-sshd.html</a></p>
+<p><b>Mac</b> </p>
+<p>The ability to run sshd is built into OS X (at least, on 10.3+). To turn it on, go to Apple menu-&gt;System Preferences. Then select &quot;Sharing&quot; and check the &quot;Remote login&quot; box. </p>
+<p><b>Linux</b></p>
+<p>I used Fedora Core 4 for my Linux box, and there sshd came with the system, and I simply needed to enable it from the Desktop-&gt;System Settings-&gt;Server Settings-&gt;Services dialog. </p>
+<p><b>Enabling remote login via ssh</b></p>
+<p>Once you've setup sshd on the BUILDERS, you will also need to create an ssh key on the MASTER build machine and distribute it to the BUILDERS. First, run ssh-keygen to create your public/private key on the MASTER build machine:</p>
+<p>master@: ssh-keygen -t rsa</p>
+<p>It will ask you if you want to use a passphrase. Usually, it is recommended that you create a passphrase, but if you don't want to enter a password when logging in (which you'll want for completely automated builds) and are behind a private network, just hit RETURN. This will create two files: ~/.ssh/id_rsa and ~/.ssh/id_rsa.pub. Then, the next step is to  distribute the public key to the BUILDERS. To do this, run the following command: </p>
+<p>scp ~/.ssh/id_rsa.pub &lt;BUILDER_ALIAS_OR_IP&gt;:~/.ssh/authorized_keys2</p>
+<p>Once you copy the file over, you will be able to perform ssh and scp commands on the BUILDER without logging in. Note that if you are concerned about security, another way to handle the login is to create a passphrase and then use a tool such as ssh-agent to automatically log you in.  </p>
+<p><b><font size="4">Configuring your environment </font></b><a name="configuring"></a></p>
+<p>The only thing left to do before running the automated release system is to configure it to match your environment. There are two ways of doing this. First, you can modify the wxSrc/distrib/scripts/build-environ.cfg file and specify your own values. Second, you can create a ~/wxrelease-environ.cfg file and store your values there. (They will override the values loaded from build-environ.cfg.) Although I hope to further document the options later, necessary options and some documentation on them can be found by reading the wxSrc/distrib/scripts/build-environ.cfg file. </p>
+<p><b><font size="4">Running the automated release system</font></b><a name="running"></a></p>
+<p>You should now be ready to run the automated release process. To start it, do the following (assumes you are using a terminal in the root wx directory):</p>
+<p>cd distrib<br>
+  python2.4 ./scripts/build_controller.py</p>
+<p>Then, watch the build process move forward and do it's magic. If all goes well, the results should be placed in wxSrc/deliver on the MASTER build machine.  </p>
+<p>&nbsp;</p>
+<p>&nbsp; </p>
+</body>
+</html>

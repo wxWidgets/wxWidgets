@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <include file="../../../build/bakefiles/common_contrib.bkl"/>
+
+    <set var="NETUTILS_SRC">
+        email.cpp
+        smapi.cpp
+        web.cpp
+    </set>
+
+    <headers template="wx_contrib_headers">
+        <files>
+            wx/net/email.h
+            wx/net/msg.h
+            wx/net/smapi.h
+            wx/net/web.h
+        </files>
+    </headers>
+
+    <dll id="netutilsdll" template="wx_contrib_dll" cond="SHARED=='1'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_NETUTILS</define>
+        <sources>$(NETUTILS_SRC)</sources>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <cppflags-dmars>-w3</cppflags-dmars>
+    </dll>
+    
+    <lib id="netutilslib" template="wx_contrib_lib" cond="SHARED=='0'">
+        <sources>$(NETUTILS_SRC)</sources>
+        <cppflags-dmars>-w3</cppflags-dmars>
+    </lib>
+    
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">netutils=netutilslib+netutilsdll</set>
+
+</makefile>

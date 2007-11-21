@@ -1,0 +1,155 @@
+\section{\class{wxMutex}}\label{wxmutex}
+
+A mutex object is a synchronization object whose state is set to signaled when
+it is not owned by any thread, and nonsignaled when it is owned. Its name comes
+from its usefulness in coordinating mutually-exclusive access to a shared
+resource as only one thread at a time can own a mutex object.
+
+Mutexes may be recursive in the sense that a thread can lock a mutex which it
+had already locked before (instead of dead locking the entire process in this
+situation by starting to wait on a mutex which will never be released while the
+thread is waiting) but using them is not recommended and they are {\bf not}
+recursive by default. The reason for this is that recursive mutexes are not
+supported by all Unix flavours and, worse, they cannot be used with 
+\helpref{wxCondition}{wxcondition}.
+
+For example, when several threads use the data stored in the linked list,
+modifications to the list should only be allowed to one thread at a time
+because during a new node addition the list integrity is temporarily broken
+(this is also called {\it program invariant}).
+
+\wxheading{Example}
+
+{\small%
+\begin{verbatim}
+    // this variable has an "s_" prefix because it is static: seeing an "s_" in
+    // a multithreaded program is in general a good sign that you should use a
+    // mutex (or a critical section)
+    static wxMutex *s_mutexProtectingTheGlobalData;
+
+    // we store some numbers in this global array which is presumably used by
+    // several threads simultaneously
+    wxArrayInt s_data;
+
+    void MyThread::AddNewNode(int num)
+    {
+        // ensure that no other thread accesses the list
+        s_mutexProtectingTheGlobalList->Lock();
+
+        s_data.Add(num);
+
+        s_mutexProtectingTheGlobalList->Unlock();
+    }
+
+    // return true the given number is greater than all array elements
+    bool MyThread::IsGreater(int num)
+    {
+        // before using the list we must acquire the mutex
+        wxMutexLocker lock(s_mutexProtectingTheGlobalData);
+
+        size_t count = s_data.Count();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            if ( s_data[n] > num )
+                return false;
+        }
+
+        return true;
+    }
+\end{verbatim}
+}
+
+Notice how wxMutexLocker was used in the second function to ensure that the
+mutex is unlocked in any case: whether the function returns true or false
+(because the destructor of the local object {\it lock} is always called). Using
+this class instead of directly using wxMutex is, in general safer and is even
+more so if your program uses C++ exceptions.
+
+\wxheading{Constants}
+
+\begin{verbatim}
+enum wxMutexType
+{
+    // normal mutex: try to always use this one
+    wxMUTEX_DEFAULT,
+
+    // recursive mutex: don't use these ones with wxCondition
+    wxMUTEX_RECURSIVE
+};
+\end{verbatim}
+
+\wxheading{Derived from}
+
+None.
+
+\wxheading{Include files}
+
+<wx/thread.h>
+
+\wxheading{See also}
+
+\helpref{wxThread}{wxthread}, \helpref{wxCondition}{wxcondition}, 
+\helpref{wxMutexLocker}{wxmutexlocker}, \helpref{wxCriticalSection}{wxcriticalsection}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxMutex::wxMutex}\label{wxmutexctor}
+
+\func{}{wxMutex}{\param{wxMutexType }{type = {\tt wxMUTEX\_DEFAULT}}}
+
+Default constructor.
+
+\membersection{wxMutex::\destruct{wxMutex}}\label{wxmutexdtor}
+
+\func{}{\destruct{wxMutex}}{\void}
+
+Destroys the wxMutex object.
+
+\membersection{wxMutex::Lock}\label{wxmutexlock}
+
+\func{wxMutexError}{Lock}{\void}
+
+Locks the mutex object.
+
+\wxheading{Return value}
+
+One of:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxMUTEX\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf wxMUTEX\_DEAD\_LOCK}}{A deadlock situation was detected.}
+\end{twocollist}
+
+\membersection{wxMutex::TryLock}\label{wxmutextrylock}
+
+\func{wxMutexError}{TryLock}{\void}
+
+Tries to lock the mutex object. If it can't, returns immediately with an error.
+
+\wxheading{Return value}
+
+One of:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxMUTEX\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf wxMUTEX\_BUSY}}{The mutex is already locked by another thread.}
+\end{twocollist}
+
+\membersection{wxMutex::Unlock}\label{wxmutexunlock}
+
+\func{wxMutexError}{Unlock}{\void}
+
+Unlocks the mutex object.
+
+\wxheading{Return value}
+
+One of:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxMUTEX\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf wxMUTEX\_UNLOCKED}}{The calling thread doesn't own the mutex.}
+\end{twocollist}
+

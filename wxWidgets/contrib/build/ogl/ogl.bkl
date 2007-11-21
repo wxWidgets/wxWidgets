@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <include file="../../../build/bakefiles/common_contrib.bkl"/>
+
+    <set var="OGL_SRC">
+        basic2.cpp
+	canvas.cpp
+	divided.cpp
+	mfutils.cpp
+	oglmisc.cpp
+	basic.cpp
+	composit.cpp
+	drawn.cpp
+	bmpshape.cpp
+	constrnt.cpp
+	lines.cpp
+	ogldiag.cpp
+    </set>
+
+    <headers template="wx_contrib_headers">
+        <files>
+            wx/ogl/basic.h
+            wx/ogl/basicp.h
+            wx/ogl/bmpshape.h
+            wx/ogl/canvas.h
+            wx/ogl/composit.h
+            wx/ogl/constrnt.h
+            wx/ogl/divided.h
+            wx/ogl/drawn.h
+            wx/ogl/drawnp.h
+            wx/ogl/lines.h
+            wx/ogl/linesp.h
+            wx/ogl/mfutils.h
+            wx/ogl/misc.h
+            wx/ogl/ogldiag.h
+            wx/ogl/ogl.h
+        </files>
+    </headers>
+
+    <dll id="ogldll" template="wx_contrib_dll" cond="SHARED=='1'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_OGL</define>
+        <sources>$(OGL_SRC)</sources>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+    </dll>
+
+    <lib id="ogllib" template="wx_contrib_lib" cond="SHARED=='0'">
+        <sources>$(OGL_SRC)</sources>
+    </lib>
+    
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">ogl=ogllib+ogldll</set>
+
+</makefile>

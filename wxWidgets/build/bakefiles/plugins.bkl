@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+     
+    <!-- ================================================================ -->
+    <!--                        Unix audio plugins                        -->
+    <!-- ================================================================ -->
+    
+    <wx-base-plugin id="sound_sdl" cond="WITH_PLUGIN_SDL=='1'">
+        <sources>$(UNIX_SOUND_SRC_SDL)</sources>
+        <ldlibs>$(EXTRALIBS_SDL)</ldlibs>
+    </wx-base-plugin>
+
+
+</makefile>

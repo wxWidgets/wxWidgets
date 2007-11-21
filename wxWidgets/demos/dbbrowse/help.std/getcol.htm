@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML><HEAD><TITLE>DBBrowser Help : Remstar ODBC Classes</TITLE></HEAD>
+<BODY BGCOLOR=#C6DFC6><CENTER><IMG SRC="../help.png/logo.png" WIDTH=17 HEIGHT=18></CENTER><BR><CENTER><B>DBBrowser<BR>Mark Johnson, Berlin Germany<BR>mj10777@gmx.net</B><HR></CENTER>
+<!----------------------------------------------------------------------------------------------------------->
+ <TABLE BORDER=1><TBODY><TR BGCOLOR=#CCFFFF>
+  <TH><B><H3><IMG SRC="../help.png/remstar.png" WIDTH=125 HEIGHT=123><BR>Remstar ODBC Classes :<BR>The new wxDB::GetColumns() Function<BR>Description</H3><BR>(English)</B></TH>
+ </TR></TBODY></TABLE><P>
+ <B>Stand: 2000-01-23.01-mj10777</B><HR>
+<!-------------------------------------------------------------->
+ <TABLE BORDER=1><TBODY><TR>
+  <TH BGCOLOR=#CCFFFF><B>There are 2 new wxDB Functions : </B></TH>
+ </TR></TBODY></TABLE>
+<!-------------------------------->
+ <A NAME="GETCOLUMNS">
+ <TABLE BORDER=1><TBODY><TR>
+  <TH BGCOLOR=#FFFFAA><B><A HREF="#GETCOLUMNS">wxColInf *wxDB::GetColumns(char *tableName, int *numCols, const char *userID)</A></B></TH>
+ </TR></TBODY></TABLE>
+ <TABLE BORDER=1><TBODY><TR>
+  <TH BGCOLOR=#FFFFE0><B>This Function stores all (<I><FONT color=#FF0000>int numCols) information from the Table (<I><FONT color=#FF0000>char *tableName</I>).<BR>It returns the result in a <A HREF="#WXCOLINF">wxColInf</A> Stucture (Class)</B></TH>
+ </TR></TBODY></TABLE>
+<!-------------------------------->
+ <A NAME="GETKEYFIELDS"><P>
+ <TABLE BORDER=1><TBODY><TR>
+  <TH BGCOLOR=#FFFFAA><B><A HREF="#GETKEYFIELDS">int wxDB::GetKeyFields(char *tableName, wxColInf* colInf,int noCols)</A></B></TH>
+ </TR></TBODY></TABLE>
+ <TABLE BORDER=1><TBODY><TR>
+  <TH BGCOLOR=#FFFFE0><B>Tries to find out if any (<I><FONT color=#FF0000>int noCols</I>) of the columns (<I><FONT color=#FF0000>wxColInf* colInf</I>)<BR> in the Table (<I><FONT color=#FF0000>char *tableName</I>) are <IMG SRC="../help.png/key.png" WIDTH=15 HEIGHT=16>&nbsp;Primary or <IMG SRC="../help.png/keyf.png" WIDTH=15 HEIGHT=16>&nbsp;Foreign Keys.<HR>This Function is only called from GetColumns().</B></TH>
+ </TR></TBODY></TABLE><HR>
+<!----------------------------------------------------------------------------------------------------------->
+ <TABLE BORDER=1><TBODY><TR>
+  <TH BGCOLOR=#CCFFFF><B>There are 4 new wxDB Classes (Structures) : </B></TH>
+ </TR></TBODY></TABLE>
+<!-------------------------------->
+ <A NAME="WXDBINF"><P>
+ <TABLE BORDER=1><TBODY><TR>
+  <TH BGCOLOR=#FFFFAA><B><A HREF="#WXDBINF">wxDbInf</A></B></TH>
+ </TR></TBODY></TABLE>
+ <TABLE BORDER=1><TBODY><TR>
+  <TH BGCOLOR=#FFFFE0>
+   <B>This Class stores all ODBC-Information for a Database :<HR>
+      Catalog Entry (<I><FONT color=#FF0000>char catalog[128+1]</I>),<BR>
+      Schema (<I><FONT color=#FF0000>char schema[128+1]</I>)<BR>
+      the number of Tables found(<I><FONT color=#FF0000>int numTables</I>)<BR>
+      and a Pointer (<I><A HREF="#WXTABLEINF">wxTableInf*</A><FONT color=#FF0000> pTableInf</I>) Structure is stored.
+   </B></TH>
+ </TR></TBODY></TABLE>
+<!-------------------------------->
+ <A NAME="WXTABLEINF"><P>
+ <TABLE BORDER=1><TBODY><TR>
+  <TH BGCOLOR=#FFFFAA><B><A HREF="#WXTABLEINF">wxTableInf</A></B></TH>
+ </TR></TBODY></TABLE>
+ <TABLE BORDER=1><TBODY><TR>
+  <TH BGCOLOR=#FFFFE0>
+   <B>This Class stores all ODBC-Information about a Table :<HR>
+      Table-Name (<I><FONT color=#FF0000>char tableName[DB_MAX_TABLE_NAME_LEN+1]</I>),<BR>
+      Table-Type (<I><FONT color=#FF0000>char tableType[254+1]</I>) - "TABLE", "SYSTEM TABLE" etc. ,<BR>
+      Table-Remarks (<I><FONT color=#FF0000>char tableRemarks[254+1]</I>),<BR>
+      the number of Columns found(<I><FONT color=#FF0000>int numCols</I>)<BR>
+      and a Pointer (<I><A HREF="#WXCOLINF">wxColInf*</A><FONT color=#FF0000> pColInf</I>) Structure is stored.
+   </B></TH>
+ </TR></TBODY></TABLE>
+<!-------------------------------->
+ <A NAME="WXCOLINF"><P>
+ <TABLE BORDER=1><TBODY><TR>
+  <TH BGCOLOR=#FFFFAA><B><A HREF="#WXCOLINF">wxColInf</A></B></TH>
+ </TR></TBODY></TABLE>
+ <TABLE BORDER=1><TBODY><TR>
+  <TH BGCOLOR=#FFFFE0>
+   <B>This Class stores all ODBC-Information about a Column :<HR>
+      Catalog Entry (<I><FONT color=#FF0000>char catalog[128+1]</I>),<BR>
+      Schema (<I><FONT color=#FF0000>char schema[128+1]</I>)<BR>
+      Table-Name (<I><FONT color=#FF0000>char tableName[DB_MAX_TABLE_NAME_LEN+1]</I>),<BR>
+      Column-Name (<I><FONT color=#FF0000>char colName[DB_MAX_COLUMN_NAME_LEN+1]</I>),<BR>
+      Datatype (from SQL) (<I><FONT color=#FF0000>SWORD sqlDataType</I>),<BR>
+      Data-Name(from SQL) (<I><FONT color=#FF0000>char typeName[128+1]</I>),<BR>
+      Column size(from SQL) (<I><FONT color=#FF0000>SWORD columnSize</I>),<BR>
+      Buffer length(from SQL) (<I><FONT color=#FF0000>SWORD bufferLength</I>),<BR>
+      Decimal digits(from SQL) (<I><FONT color=#FF0000>short decimalDigits</I>),<BR>
+      numPrecRadix (from SQL) (<I><FONT color=#FF0000>short numPrecRadix</I>),<BR>
+      Nullable (from SQL) (<I><FONT color=#FF0000>short nullable</I>),<BR>
+      Remarks (<I><FONT color=#FF0000>char remarks[254+1]</I>),<BR>
+      Datatype (from wxDB) (<I><FONT color=#FF0000>int dbDataType</I>),<BR>
+      Primary-Key (<I><FONT color=#FF0000>int PkCol</I>) 0=No; 1= First Key, 2 = Second Key etc.,<BR>
+      Tables that use this Key as a Foreign Key(<I><FONT color=#FF0000>char PkTableName[DB_MAX_TABLE_NAME_LEN+1]</I>),<BR>
+      Foreign-Key (<I><FONT color=#FF0000>int FkCol</I>) 0=No; 1= First Key, 2 = Second Key etc.,<BR>
+      Table-Name where this Foreign-Key is Primary Key(<I><FONT color=#FF0000>char FkTableName[DB_MAX_TABLE_NAME_LEN+1]</I>),<BR>
+      and a Pointer (<I><A HREF="#WXCOLFOR">wxColFor*</A><FONT color=#FF0000> pColFor</I>) Structure is stored.
+   </B></TH>
+ </TR></TBODY></TABLE>
+<!-------------------------------->
+ <A NAME="WXCOLFOR"><P>
+ <TABLE BORDER=1><TBODY><TR>
+  <TH BGCOLOR=#FFFFAA><B><A HREF="#WXCOLFOR">wxColFor</A></B></TH>
+ </TR></TBODY></TABLE>
+ <TABLE BORDER=1><TBODY><TR>
+  <TH BGCOLOR=#FFFFE0>
+   <B>This Class stores how this Column should be formatted in a String : <HR>
+      Output String (<I><FONT color=#FF0000>wxString s_Field</I>),<BR>
+      Formatted Objects (TIMESTAMP needs 7) (<I><FONT color=#FF0000>wxString s_Format[7]</I>),<BR>
+      Formatted Objects  (<I><FONT color=#FF0000>wxString s_Menge[7]</I>),<BR>
+      Formatted Objects (TT MM YYYY HH MM SS m) (<I><FONT color=#FF0000>int i_Menge[7]</I>),<BR>
+      National (0=timestamp,1=EU,2=UK,3=International,4=US)<I><FONT color=#FF0000>int i_Nation</I>),<BR>
+      Datatype (from wxDB) (<I><FONT color=#FF0000>int I_dbDataType</I>),<BR>
+      Datatype (from SQL) (<I><FONT color=#FF0000>SWORD i_sqlDataType</I>),<HR>
+      int Format(int Nation, int dbDataType,SWORD sqlDataType,short columnSize,short decimalDigits);<BR>
+      The Formatted Objects receive Standard Values and Format() is called.<BR>
+      The Programmers can, if they want something special , change these Values and call Format() again
+   </B></TH>
+ </TR></TBODY></TABLE>
+ <TABLE BORDER=1><TBODY><TR>
+  <TH BGCOLOR=#FFBBBB><B>This class is most definitely very much underdeveloped !<BR>It was made so that the DBGrid could be realised.<BR>Changes here are probable. (Suggestions welcomed)</B></TH>
+ </TR></TBODY></TABLE><P>
+<!----------------------------------------------------------------------------------------------------------->
+ <TABLE BORDER=1><TBODY><TR>
+  <TH BGCOLOR=#FFF777><B>Well now, <A HREF="getcolsh.htm">that makes everything clear</A> does't it?</B></TH>
+ </TR></TBODY></TABLE><HR>
+<!----------------------------------------------------------------------------------------------------------->
+</BODY></HTML>

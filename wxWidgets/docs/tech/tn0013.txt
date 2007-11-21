@@ -1,0 +1,160 @@
+                      How to prepare wxGTK distribution
+                      =================================
+
+0. Introduction
+---------------
+
+This note explains what should be done, step by step, to prepare the packages
+for a wxGTK distribution. Note that the same instructions should be used for
+the other Unix-based ports including wxMotif, wxX11 and wxBase.
+
+See distrib/msw/makerpm for a script that embodies some of the steps
+below.
+
+1. Preparing the sources
+------------------------
+
+a) Do a fresh checkout using the command
+
+   cvs -d :pserver:anoncvs@cvs.wxwidgets.org:/packs/cvsroots/wxwidgets co wxGTK
+
+   NB: if you realize later that some needed files were not checked out
+       by this command, please modify CVSROOT/modules to include the missing
+       files so that it works for the next release!
+
+   You also need the samples, demos and contrib directories, so change to
+   wxWidgets directory created by the first cvs command and do "cvs up -d"
+   for each of them. Of course, you can also check out everything (use
+   wxWidgets module name instead of wxGTK) if the bandwidth and disk space
+   are not a problem.
+
+b) Create a build directory under wxWidgets, e.g. I use "gtk-release",
+   "cd" to it and run configure: the options don't really matter, you can use
+   something like
+
+       ../configure -C --without-subdirs
+
+   to make it run a bit faster.
+
+c) Then type "make -j1 dist bzip-dist-only". This should create the
+   following files;
+
+   wxGTK-${version}.tar.bz2
+   wxGTK-demos-${version}.tar.bz2
+   wxGTK-samples-${version}.tar.bz2
+   wxGTK-${version}.tar.gz
+   wxGTK-demos-${version}.tar.gz
+   wxGTK-samples-${version}.tar.gz
+
+   where version is something like 2.3.2.
+
+   Note 1: "-j1" is needed now because make dist target is broken and doesn't
+           allow parallelizing, if your make is aliased to "make -j4" (like
+           mine), it simply won't work.
+
+   Note 2: there are also dist-only and bzip-dist targets, the "-only" suffix
+           means to just create the archive supposing that the files
+           themselves are already under _dist_dir/wxGTK-${version} where
+           "make dist" creates them
+
+2. Building the RPMs
+--------------------
+
+Note that we didn't check if the library actually could be built -- this is
+because it is done during this step, during the RPM generation. If, for
+whatever reason, you don't build the RPMs, you must have checked previously
+that the library could be built -- nothing worse than a release which doesn't
+even compile!
+
+The rest of this section applies to a system with RPM installed (Redhat in my
+case).
+
+a) Setting up the RPM tree: you should have the RPM tree set up properly
+   before doing anything else. If you are going to build the RPMs as root,
+   you already have one under /usr/src/redhat and can just build there.
+   Otherwise you may do it (without root rights) in any directory RPM_ROOT.
+   RPM_ROOT should have the following subdirectories: BUILD, RPMS, SOURCES,
+   SPECS and SRPMS. RPMS should contain i386, i686 and noarch. You should
+   also create the file ~/.rpmmacros containing at least a line like this:
+   "%_topdir /biton/zeitlin/rpm" (replace the directory with $RPM_ROOT, of
+   course)
+
+   In either case, put the file wxGTK-${version}.tar.bz2 in SOURCES
+   subdirectory and wxGTK.spec in SPECS one (hint: you can just link them from
+   there -- like this you won't forget to update them after redoing "make
+   dist").
+
+b) Start RPM build by going to RPM_ROOT directory and typing "rpm -ba
+   SPECS/wxGTK.spec". It may be a good idea to append "2>&1 | tee wxGTK.out"
+   (or "|& tee" if you're using the one true shell ;-) as it might be not
+   easy to detect errors in the verbose rpm output if anything goes wrong.
+
+   Then wait (and pray that nothing goes wrong because if anything does
+   you'll have to restart from the very beginning because rpm doesn't allow
+   to short circuit the package generation).
+
+   If everything goes well, this should produce many files in SRPMS and
+   RPMS/i386 subdirectories.
+
+   Use "rpm -ba --with gtk2" to build GTK+2 version of wxGTK and use
+   "rpm -ba --with gtk2 --with unicode" to build GTK+2 Unicode build
+   (these are defaults, you can use --without option to change this).
+
+   Note: you may want to set the environment variable SMP to 3 or 4 on an
+         SMP machine to speed up the build (it uses "make -j$SMP" if the
+         variable is set)
+
+c) Test the resulting RPMs: install them using "rpm -i" (or "rpm -U) as usual
+   and try to build some samples using makefile.unx ("make -f makefile.unx")
+   so that they use wx-config in the PATH and not from the build tree
+
+3. Building the DEBs
+--------------------
+
+This is explained in more details in debian/README.HowToBuild.txt.
+
+
+4. Uploading the files
+----------------------
+
+All files should be uploaded (via FTP) to several locations.
+
+a) incoming.sourceforge.net, go to project admin page on sf.net and choose
+   add/edit releases for more details
+
+b) ftp://biolpc22.york.ac.uk/pub (Julian has the password)
+
+5. Announcing the release
+-------------------------
+
++ update www.wxwidgets.org
+
++ FreshMeat:
+   - http://freshmeat.net/projects/wxwidgets/
+   - hit "new release" at the top
+   - follow the step by step
+
++ wx-announce mailing list: mailto:wx-announce@lists.wxwidgets.org
+
+   The standard announcement text is in docs/publicity/announce.txt
+
++ GnomeFiles:
+   - http://www.gnomefiles.org/app.php/wxWidgets
+     (only for stable releases, probably need Robert's account)
+
++ MacNN:
+   - http://www.macnn.com
+   - Contact or Contribute or something
+
++ MacRumors:
+   - http://www.macrumors.com
+   - Contact or Contribute or something
+
++ Apple Developers Connection:
+    mailto: adcnews@apple.com
+
++ LinuxDevices.com:
+    Interesting for wxUniversal.
+
++ The Python mailing list:
+

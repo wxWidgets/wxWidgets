@@ -1,0 +1,8 @@
+
+// For /plot.cpp
+plot_up_bmp             BITMAP  "wx/plot/plot_up.bmp"
+plot_dwn_bmp            BITMAP  "wx/plot/plot_dwn.bmp"
+plot_enl_bmp            BITMAP  "wx/plot/plot_enl.bmp"
+plot_shr_bmp            BITMAP  "wx/plot/plot_shr.bmp"
+plot_zin_bmp            BITMAP  "wx/plot/plot_zin.bmp"
+plot_zot_bmp            BITMAP  "wx/plot/plot_zot.bmp"

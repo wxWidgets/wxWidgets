@@ -1,0 +1,180 @@
+\section{\class{wxSymbolPickerDialog}}\label{wxsymbolpickerdialog}
+
+wxSymbolPickerDialog presents the user with a choice of fonts and a grid
+of available characters. This modal dialog provides the application with
+a selected symbol and optional font selection.
+
+Although this dialog is contained in the rich text library, the dialog
+is generic and can be used in other contexts.
+
+To use the dialog, pass a default symbol specified as a string, an initial font name,
+and a current font name. The difference between the initial font and
+current font is that the initial font determines what the font control will be
+set to when the dialog shows - an empty string will show the selection {\it normal text}.
+The current font, on the other hand, is used by the dialog to determine what font
+to display the characters in, even when no initial font is selected.
+This allows the user (and application) to distinguish between inserting a
+symbol in the current font, and inserting it with a specified font.
+
+When the dialog is dismissed, the application can get the selected symbol
+with GetSymbol and test whether a font was specified with UseNormalFont,
+fetching the specified font with GetFontName.
+
+Here's a realistic example, inserting the supplied symbol into a
+rich text control in either the current font or specified font.
+
+\begin{verbatim}
+    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
+
+    wxTextAttrEx attr;
+    attr.SetFlags(wxTEXT_ATTR_FONT);
+    ctrl->GetStyle(ctrl->GetInsertionPoint(), attr);
+
+    wxString currentFontName;
+    if (attr.HasFont() && attr.GetFont().Ok())
+        currentFontName = attr.GetFont().GetFaceName();
+
+    // Don't set the initial font in the dialog (so the user is choosing
+    // 'normal text', i.e. the current font) but do tell the dialog
+    // what 'normal text' is.
+
+    wxSymbolPickerDialog dlg(wxT("*"), wxEmptyString, currentFontName, this);
+
+    if (dlg.ShowModal() == wxID_OK)
+    {
+        if (dlg.HasSelection())
+        {
+            long insertionPoint = ctrl->GetInsertionPoint();
+
+            ctrl->WriteText(dlg.GetSymbol());
+
+            if (!dlg.UseNormalFont())
+            {
+                wxFont font(attr.GetFont());
+                font.SetFaceName(dlg.GetFontName());
+                attr.SetFont(font);
+                ctrl->SetStyle(insertionPoint, insertionPoint+1, attr);
+            }
+        }
+    }
+\end{verbatim}
+
+\wxheading{Derived from}
+
+\helpref{wxDialog}{wxdialog}
+
+\wxheading{Include files}
+
+<wx/richtext/richtextsymboldlg.h>
+
+\wxheading{Data structures}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxSymbolPickerDialog::wxSymbolPickerDialog}\label{wxsymbolpickerdialogwxsymbolpickerdialog}
+
+\func{}{wxSymbolPickerDialog}{\param{const wxString\& }{symbol}, \param{const wxString\& }{initialFont}, \param{const wxString\& }{normalTextFont}, \param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxString\& }{title = \_("Symbols")}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = wxDEFAULT\_DIALOG\_STYLE|wxRESIZE\_BORDER|wxCLOSE\_BOX}}
+
+\func{}{wxSymbolPickerDialog}{\void}
+
+Constructors.
+
+\wxheading{Parameters}
+
+\docparam{symbol}{The initial symbol to show. Specify a single character in a string, or an empty string.}
+
+\docparam{initialFont}{The initial font to be displayed in the font list. If empty, the item {\it normal text} will be selected.}
+
+\docparam{normalTextFont}{The font the dialog will use to display the symbols if the initial font is empty.}
+
+\docparam{parent}{The dialog's parent.}
+
+\docparam{id}{The dialog's identifier.}
+
+\docparam{title}{The dialog's caption.}
+
+\docparam{pos}{The dialog's position.}
+
+\docparam{size}{The dialog's size.}
+
+\docparam{style}{The dialog's window style.}
+
+\membersection{wxSymbolPickerDialog::Create}\label{wxsymbolpickerdialogcreate}
+
+\func{bool}{Create}{\param{const wxString\& }{symbol}, \param{const wxString\& }{initialFont}, \param{const wxString\& }{normalTextFont}, \param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxString\& }{title = \_("Symbols")}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = wxDEFAULT\_DIALOG\_STYLE|wxRESIZE\_BORDER|wxCLOSE\_BOX}}
+
+Creation: see \helpref{the constructor}{wxsymbolpickerdialogwxsymbolpickerdialog} for details about the parameters.
+
+\membersection{wxSymbolPickerDialog::GetFontName}\label{wxsymbolpickerdialoggetfontname}
+
+\constfunc{wxString}{GetFontName}{\void}
+
+Returns the font name (the font reflected in the font list).
+
+\membersection{wxSymbolPickerDialog::GetFromUnicode}\label{wxsymbolpickerdialoggetfromunicode}
+
+\constfunc{bool}{GetFromUnicode}{\void}
+
+Returns \true if the dialog is showing the full range of Unicode characters.
+
+\membersection{wxSymbolPickerDialog::GetNormalTextFontName}\label{wxsymbolpickerdialoggetnormaltextfontname}
+
+\constfunc{wxString}{GetNormalTextFontName}{\void}
+
+Gets the font name used for displaying symbols in the absence of a selected font.
+
+\membersection{wxSymbolPickerDialog::GetSymbol}\label{wxsymbolpickerdialoggetsymbol}
+
+\constfunc{wxString}{GetSymbol}{\void}
+
+Gets the current or initial symbol as a string.
+
+\membersection{wxSymbolPickerDialog::GetSymbolChar}\label{wxsymbolpickerdialoggetsymbolchar}
+
+\constfunc{int}{GetSymbolChar}{\void}
+
+Gets the selected symbol character as an integer.
+
+\membersection{wxSymbolPickerDialog::HasSelection}\label{wxsymbolpickerdialoghasselection}
+
+\constfunc{bool}{HasSelection}{\void}
+
+Returns \true if a symbol is selected.
+
+\membersection{wxSymbolPickerDialog::SetFontName}\label{wxsymbolpickerdialogsetfontname}
+
+\func{void}{SetFontName}{\param{const wxString\& }{value}}
+
+Sets the initial/selected font name.
+
+\membersection{wxSymbolPickerDialog::SetFromUnicode}\label{wxsymbolpickerdialogsetfromunicode}
+
+\func{void}{SetFromUnicode}{\param{bool }{value}}
+
+Sets the internal flag indicating that the full Unicode range should be displayed.
+
+\membersection{wxSymbolPickerDialog::SetNormalTextFontName}\label{wxsymbolpickerdialogsetnormaltextfontname}
+
+\func{void}{SetNormalTextFontName}{\param{const wxString\& }{value}}
+
+Sets the name of the font to be used in the absence of a selected font.
+
+\membersection{wxSymbolPickerDialog::SetSymbol}\label{wxsymbolpickerdialogsetsymbol}
+
+\func{void}{SetSymbol}{\param{const wxString\& }{value}}
+
+Sets the symbol as a one or zero character string.
+
+\membersection{wxSymbolPickerDialog::SetUnicodeMode}\label{wxsymbolpickerdialogsetunicodemode}
+
+\func{void}{SetUnicodeMode}{\param{bool }{unicodeMode}}
+
+Sets Unicode display mode.
+
+\membersection{wxSymbolPickerDialog::UseNormalFont}\label{wxsymbolpickerdialogusenormalfont}
+
+\constfunc{bool}{UseNormalFont}{\void}
+
+Returns true if the has specified normal text - that is, there is no selected font.
+

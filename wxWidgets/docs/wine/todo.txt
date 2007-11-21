@@ -1,0 +1,10 @@
+
+-------------------- High priority ---------------------
+
+
+-------------------- Medium priority ---------------------
+
+Fix the configure script to work with Wine.  
+
+-------------------- Low priority ---------------------
+    

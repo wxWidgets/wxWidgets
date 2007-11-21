@@ -1,0 +1,132 @@
+\section{\class{wxTextValidator}}\label{wxtextvalidator}
+
+wxTextValidator validates text controls, providing a variety of filtering behaviours.
+
+For more information, please see \helpref{Validator overview}{validatoroverview}.
+
+\wxheading{Derived from}
+
+\helpref{wxValidator}{wxvalidator}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/valtext.h>
+
+\wxheading{See also}
+
+\helpref{Validator overview}{validatoroverview}, \helpref{wxValidator}{wxvalidator},
+\helpref{wxGenericValidator}{wxgenericvalidator}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxTextValidator::wxTextValidator}\label{wxtextvalidatorctor}
+
+\func{}{wxTextValidator}{\param{const wxTextValidator\&}{ validator}}
+
+Copy constructor.
+
+\func{}{wxTextValidator}{\param{long}{ style = wxFILTER\_NONE}, \param{wxString* }{valPtr = NULL}}
+
+Constructor, taking a style and optional pointer to a wxString variable.
+
+\wxheading{Parameters}
+
+\docparam{style}{A bitlist of flags, which can be:
+
+\twocolwidtha{5cm}
+\begin{twocollist}
+\twocolitem{{\bf wxFILTER\_NONE}}{No filtering takes place.}
+\twocolitem{{\bf wxFILTER\_ASCII}}{Non-ASCII characters are filtered out.}
+\twocolitem{{\bf wxFILTER\_ALPHA}}{Non-alpha characters are filtered out.}
+\twocolitem{{\bf wxFILTER\_ALPHANUMERIC}}{Non-alphanumeric characters are filtered out.}
+\twocolitem{{\bf wxFILTER\_NUMERIC}}{Non-numeric characters are filtered out.}
+\twocolitem{{\bf wxFILTER\_INCLUDE\_LIST}}{Use an include list. The validator
+checks if the user input is on the list, complaining if not. See 
+\helpref{wxTextValidator::SetIncludes}{wxtextvalidatorsetincludes}.}
+\twocolitem{{\bf wxFILTER\_EXCLUDE\_LIST}}{Use an exclude list. The validator
+checks if the user input is on the list, complaining if it is. See 
+\helpref{wxTextValidator::SetExcludes}{wxtextvalidatorsetexcludes}.}
+\twocolitem{{\bf wxFILTER\_INCLUDE\_CHAR\_LIST}}{Use an include list. The validator
+checks if each input character is in the list (one character per list element), complaining if not.
+See \helpref{wxTextValidator::SetIncludes}{wxtextvalidatorsetincludes}.}
+\twocolitem{{\bf wxFILTER\_EXCLUDE\_CHAR\_LIST}}{Use an include list. The validator
+checks if each input character is in the list (one character per list element), complaining if it is.
+See \helpref{wxTextValidator::SetExcludes}{wxtextvalidatorsetexcludes}.}
+\end{twocollist}
+}
+
+\docparam{valPtr}{A pointer to a wxString variable that contains the value. This variable
+should have a lifetime equal to or longer than the validator lifetime (which is usually
+determined by the lifetime of the window). % If NULL, the validator uses its own internal storage for the value. NOT true
+}
+
+\membersection{wxTextValidator::Clone}\label{wxtextvalidatorclone}
+
+\constfunc{virtual wxValidator*}{Clone}{\void}
+
+Clones the text validator using the copy constructor.
+
+\membersection{wxTextValidator::GetExcludes}\label{wxtextvalidatorgetexcludes}
+
+\constfunc{wxArrayString\&}{GetExcludes}{\void}
+
+Returns a reference to the exclude list (the list of invalid values).
+
+\membersection{wxTextValidator::GetIncludes}\label{wxtextvalidatorgetincludes}
+
+\constfunc{wxArrayString\&}{GetIncludes}{\void}
+
+Returns a reference to the include list (the list of valid values).
+
+\membersection{wxTextValidator::GetStyle}\label{wxtextvalidatorgetstyle}
+
+\constfunc{long}{GetStyle}{\void}
+
+Returns the validator style.
+
+\membersection{wxTextValidator::OnChar}\label{wxtextvalidatoronchar}
+
+\func{void}{OnChar}{\param{wxKeyEvent\&}{ event}}
+
+Receives character input from the window and filters it according to the
+current validator style.
+
+\membersection{wxTextValidator::SetExcludes}\label{wxtextvalidatorsetexcludes}
+
+\func{void}{SetExcludes}{\param{const wxArrayString\&}{ stringList}}
+
+Sets the exclude list (invalid values for the user input).
+
+\membersection{wxTextValidator::SetIncludes}\label{wxtextvalidatorsetincludes}
+
+\func{void}{SetIncludes}{\param{const wxArrayString\&}{ stringList}}
+
+Sets the include list (valid values for the user input).
+
+\membersection{wxTextValidator::SetStyle}\label{wxtextvalidatorsetstyle}
+
+\func{void}{SetStyle}{\param{long}{ style}}
+
+Sets the validator style.
+
+\membersection{wxTextValidator::TransferFromWindow}\label{wxtextvalidatortransferfromwindow}
+
+\func{virtual bool}{TransferFromWindow}{}
+
+Transfers the value in the text control to the string.
+
+\membersection{wxTextValidator::TransferToWindow}\label{wxtextvalidatortransfertowindow}
+
+\func{virtual bool}{TransferToWindow}{}
+
+Transfers the string value to the text control.
+
+\membersection{wxTextValidator::Validate}\label{wxtextvalidatorvalidate}
+
+\func{virtual bool}{Validate}{\param{wxWindow*}{ parent}}
+
+Validates the window contents against the include or exclude lists, depending
+on the validator style.
+

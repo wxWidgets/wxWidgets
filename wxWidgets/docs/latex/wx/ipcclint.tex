@@ -1,0 +1,86 @@
+\section{\class{wxClient}}\label{wxclient}
+
+A wxClient object represents the client part of a client-server
+DDE-like (Dynamic Data Exchange) conversation. The actual
+DDE-based implementation using wxDDEClient is available on Windows
+only, but a platform-independent, socket-based version of this
+API is available using wxTCPClient, which has the same API.
+
+To create a client which can communicate with a suitable server,
+you need to derive a class from wxConnection and another from
+wxClient. The custom wxConnection class will intercept
+communications in a `conversation' with a server, and the custom
+wxClient is required so that a user-overridden
+\helpref{wxClient::OnMakeConnection}{wxclientonmakeconnection} 
+member can return a wxConnection of the required class, when a
+connection is made. Look at the IPC sample and the 
+\helpref{Interprocess communications overview}{ipcoverview} for
+an example of how to do this.
+
+\wxheading{Derived from}
+
+wxClientBase\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/ipc.h>
+
+\wxheading{See also}
+
+\helpref{wxServer}{wxserver}, 
+\helpref{wxConnection}{wxconnection}, \helpref{Interprocess communications overview}{ipcoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxClient::wxClient}\label{wxclientctor}
+
+\func{}{wxClient}{\void}
+
+Constructs a client object.
+
+\membersection{wxClient::MakeConnection}\label{wxclientmakeconnection}
+
+\func{wxConnectionBase *}{MakeConnection}{\param{const wxString\& }{host}, \param{const wxString\& }{service}, \param{const wxString\& }{topic}}
+
+Tries to make a connection with a server by host (machine name
+under UNIX - use 'localhost' for same machine; ignored when using
+native DDE in Windows), service name and topic string. If the
+server allows a connection, a wxConnection object will be
+returned. The type of wxConnection returned can be altered by
+overriding the 
+\helpref{wxClient::OnMakeConnection}{wxclientonmakeconnection} 
+member to return your own derived connection object.
+
+Under Unix, the service name may be either an integer port
+identifier in which case an Internet domain socket will be used
+for the communications, or a valid file name (which shouldn't
+exist and will be deleted afterwards) in which case a Unix domain
+socket is created.
+
+{\bf SECURITY NOTE:} Using Internet domain sockets if extremely
+insecure for IPC as there is absolutely no access control for
+them, use Unix domain sockets whenever possible!
+
+\membersection{wxClient::OnMakeConnection}\label{wxclientonmakeconnection}
+
+\func{wxConnectionBase *}{OnMakeConnection}{\void}
+
+Called by \helpref{wxClient::MakeConnection}{wxclientmakeconnection}, by
+default this simply returns a new wxConnection object. Override
+this method to return a wxConnection descendant customised for the
+application.
+
+The advantage of deriving your own connection class is that it
+will enable you to intercept messages initiated by the server,
+such as \helpref{wxConnection::OnAdvise}{wxconnectiononadvise}. You
+may also want to store application-specific data in instances of
+the new class.
+
+\membersection{wxClient::ValidHost}\label{wxclientvalidhost}
+
+\func{bool}{ValidHost}{\param{const wxString\& }{host}}
+
+Returns true if this is a valid host name, false otherwise. This always
+returns true under MS Windows.
+

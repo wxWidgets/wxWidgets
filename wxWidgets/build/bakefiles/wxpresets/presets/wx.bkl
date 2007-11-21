@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<!--
+    Presets for building wxWidgets applications.
+
+    FIXME: docs
+-->
+
+
+<makefile>
+
+    <!-- this variable identifies the version of the wx presets.
+         this is changed only when major changes to wxpresets take place. -->
+    <set var="WX_PRESETS_VERSION">3</set>
+
+    <!-- list of known libraries used by wx-lib tag defined in wx_unix.bkl and wx_win32.bkl -->
+    <set var="LIB_LIST">
+        base core net xml odbc xrc html adv media gl dbgrid qa aui richtext
+    </set>
+
+    <!-- NOTE: refer to the NET contrib using NETUTILS instead of NET
+               (which is already in LIB_LIST) -->
+    <set var="CONTRIBLIB_LIST">animate applet deprecated fl foldbar gizmos mmedia netutils ogl plot stc svg</set>
+    <set var="ALLLIB_LIST">$(LIB_LIST) $(CONTRIBLIB_LIST)</set>
+
+    <!-- this is a temporary variable until there is non general    -->
+    <!-- function in bakefiles for returning native markup for      -->
+    <!-- reading envrionment variables                              -->
+    <set var="ENV_VAR">
+        <if cond="FORMAT=='watcom'">%</if>
+        <if cond="FORMAT!='watcom'"></if>
+    </set>
+
+
+    <!-- The directory where wxWidgets is installed: -->
+    <if cond="not isdefined('WX_DIR')">
+        <set var="WX_DIR_DEFAULT" overwrite="0">$(DOLLAR)($(ENV_VAR)WXWIN)</set>
+        <option name="WX_DIR" category="path">
+            <default-value>$(WX_DIR_DEFAULT)</default-value>
+            <description>
+                The directory where wxWidgets library is installed
+            </description>
+        </option>
+    </if>
+
+
+
+    <!-- this is just a wrapper that includes the real implementation: -->
+
+    <set var="__wx_included_impl">0</set>
+
+    <if cond="FORMAT in ['autoconf','gnu']">
+        <include file="wx_unix.bkl"/>
+        <set var="__wx_included_impl">1</set>
+    </if>
+
+    <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
+        <include file="wx_win32.bkl"/>
+        <set var="__wx_included_impl">1</set>
+    </if>
+
+    <if cond="__wx_included_impl=='0'">
+        <error>This format is not (yet) supported by wx preset.</error>
+    </if>
+
+</makefile>

@@ -1,0 +1,9 @@
+Using and modifying the BC++ IDE files
+======================================
+
+
+Please use wxWidgets 2.4.x - this is not currently supported in wxWidgets 2.6.0
+
+
+
+

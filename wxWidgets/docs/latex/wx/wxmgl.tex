@@ -1,0 +1,27 @@
+\section{wxMGL port}\label{wxmglport}
+
+wxMGL is a port of wxWidgets using the MGL library available
+from SciTech as the underlying graphics backend. wxMGL draws
+its widgets using the wxUniversal widget set which is now
+part of wxWidgets. MGL itself runs on a variety of platforms
+including DOS, Linux hardware (similar to the Linux framebuffer)
+and various graphics systems such as Win32, X11 and OS/2.
+Note that currently MGL for Linux runs only on x86-based systems.
+
+You will need wxWidgets 2.3.3 or higher and MGL 5.0 or higher.
+The latter is available from
+
+\urlref{http://www.scitechsoft.com/products/product\_download.html}{http://www.scitechsoft.com/products/product\_download.html}
+
+In order to configure wxWidgets to compile wxMGL you will
+need to type:
+
+\begin{verbatim}
+  configure --with-mgl --with-universal
+\end{verbatim}
+
+Under DOS, wxMGL uses a dmake based make system.
+
+For further information, please see the files in docs/mgl
+in the distribution.
+

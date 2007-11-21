@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+    
+    <if cond="not isdefined('file_common_samples_included')">
+        <include file="common.bkl"/>
+    </if>
+    
+    <set var="CONTRIB_HDR_DIR" overwrite="0">$(SRCDIR)/../../include</set>
+    
+    <!-- =============================================================== -->
+    <!--                      Contrib lib helpers:                       -->
+    <!-- =============================================================== -->
+
+    <template id="wx_contrib_lib" template="wx_lib_b">
+        <include>$(CONTRIB_HDR_DIR)</include>
+    </template>
+    
+    <if cond="isdefined('file_common_samples_included')">
+        <template id="wx_contrib_sample" template="wx_sample">
+            <include>$(CONTRIB_HDR_DIR)</include>
+        </template>
+        <template id="wx_contrib_util" template="wx_util">
+            <include>$(CONTRIB_HDR_DIR)</include>
+        </template>
+    </if>
+    
+    <template id="wx_contrib_dll"
+              template="wx_dll_b" template_append="wx_append">
+        <include>$(CONTRIB_HDR_DIR)</include>
+    </template>
+    
+    <template id="wx_contrib_headers">
+        <srcdir>$(CONTRIB_HDR_DIR)</srcdir>
+        <install-to>$(INCLUDEDIR)/wx-$(WX_RELEASE)$(WX_FLAVOUR)</install-to>
+    </template>
+
+    <!-- Link against one contrib library. Value must be literal! -->
+    <define-tag name="contrib-lib" rules="exe,dll,module">
+        <sys-lib>$(wxwin.libToLink(value))</sys-lib>
+        <ldlibs>$(wxwin.extraLdflags(value))</ldlibs>
+        <if cond="IS_MSVC_PRJ=='1' and MONOLITHIC=='0'">
+            <depends-on-dsp>
+                $(wxwin.makeContribDspDependency(value))
+            </depends-on-dsp>
+        </if>
+    </define-tag>
+
+</makefile>

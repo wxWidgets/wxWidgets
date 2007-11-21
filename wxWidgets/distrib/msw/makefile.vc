@@ -1,0 +1,300 @@
+# File:     makefile.vc
+# Author:   Julian Smart
+# Created:  1997
+# Updated:
+# Copyright: (c) 1997, Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile : Builds wxWidgets library wx.lib for VC++ (32-bit)
+# Arguments:
+#
+# FINAL=1 argument to nmake to build version with no debugging info.
+# dll builds a library (wxdll.lib) suitable for creating DLLs
+#
+WXDIR=$(WXWIN)
+THISDIR=$(WXWIN)\distrib\msw
+DOCDIR = $(WXDIR)\docs
+WAITFLAG=/w
+# Making documents
+docs:   allhlp allhtml allpdfrtf allhtb allhtmlhelp
+alldocs: docs
+hlp:    wxhlp
+wxhlp:  $(DOCDIR)/winhelp/wx.hlp
+rtf:    $(DOCDIR)/winhelp/wx.rtf
+pdfrtf:    $(DOCDIR)/pdf/wx.rtf
+html:	wxhtml
+htb:	$(DOCDIR)\htb\wx.htb
+wxhtml:	$(DOCDIR)\html\wx\wx_contents.html
+htmlhelp: $(DOCDIR)\htmlhelp\wx.chm
+ps:     wxps
+wxps:	$(WXDIR)\docs\ps\wx.ps
+
+allhlp: wxhlp
+
+#        cd $(WXDIR)\utils\dialoged\src
+#        nmake -f makefile.vc hlp
+#        cd $(WXDIR)\utils\tex2rtf\src
+#        nmake -f makefile.vc hlp
+#        cd $(WXDIR)\contrib\src\fl
+#        nmake -f makefile.vc hlp
+#        cd $(THISDIR)
+
+allhtml: wxhtml
+
+#        cd $(WXDIR)\utils\dialoged\src
+#        nmake -f makefile.vc html
+#        cd $(WXDIR)\utils\tex2rtf\src
+#        nmake -f makefile.vc html
+#        cd $(WXDIR)\contrib\src\fl
+#        cd $(THISDIR)
+
+allhtmlhelp: htmlhelp
+ 
+#       cd $(WXDIR)\utils\dialoged\src
+#        nmake -f makefile.vc htmlhelp
+#        cd $(WXDIR)\utils\tex2rtf\src
+#        nmake -f makefile.vc htmlhelp
+#        cd $(WXDIR)\contrib\src\fl
+#        nmake -f makefile.vc htmlhelp
+#        cd $(THISDIR)
+
+allhtb: htb
+
+#        cd $(WXDIR)\utils\dialoged\src
+#        nmake -f makefile.vc htb
+#        cd $(WXDIR)\utils\tex2rtf\src
+#        nmake -f makefile.vc htb
+#        cd $(WXDIR)\contrib\src\fl
+#        nmake -f makefile.vc htb
+#        cd $(THISDIR)
+
+allps: wxps referencps
+        cd $(WXDIR)\utils\dialoged\src
+        nmake -f makefile.vc ps
+        cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc ps
+        cd $(WXDIR)\contrib\src\fl
+        nmake -f makefile.vc ps
+        cd $(THISDIR)
+
+allpdfrtf: pdfrtf
+#        cd $(WXDIR)\utils\dialoged\src
+#        nmake -f makefile.vc pdfrtf
+#        cd $(WXDIR)\utils\tex2rtf\src
+#        nmake -f makefile.vc pdfrtf
+#        cd $(WXDIR)\contrib\src\fl
+#        nmake -f makefile.vc pdfrtf
+#        cd $(THISDIR)
+
+$(DOCDIR)/winhelp/wx.hlp:         $(DOCDIR)/latex/wx/wx.rtf $(DOCDIR)/latex/wx/wx.hpj
+        cd $(DOCDIR)/latex/wx
+	-mkdir $(DOCDIR)\winhelp
+        -erase wx.ph
+        hc wx
+        -erase $(DOCDIR)\winhelp\wx.hlp
+        -erase $(DOCDIR)\winhelp\wx.cnt
+        move wx.hlp $(DOCDIR)\winhelp\wx.hlp
+        move wx.cnt $(DOCDIR)\winhelp\wx.cnt
+        cd $(THISDIR)
+
+$(DOCDIR)/latex/wx/wx.rtf:         $(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)/latex/wx/manual.tex
+        cd $(DOCDIR)\latex\wx
+        -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/wx/manual.tex $(DOCDIR)/latex/wx/wx.rtf -twice -winhelp
+        cd $(THISDIR)
+
+$(DOCDIR)/pdf/wx.rtf:         $(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)/latex/wx/manual.tex
+        cd $(DOCDIR)\latex\wx
+	-mkdir $(DOCDIR)\pdf
+        -copy *.wmf $(DOCDIR)\pdf
+        -copy *.bmp $(DOCDIR)\pdf
+        -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/wx/manual.tex $(DOCDIR)/pdf/wx.rtf -twice -rtf
+        cd $(THISDIR)
+
+# This target does two sets of HTML: one using a style sheet, for
+# the purposes of the CHM file, and one without.
+$(DOCDIR)\html\wx\wx_contents.html:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex\wx\body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)\latex\wx\manual.tex
+        cd $(DOCDIR)\latex\wx
+        -mkdir $(DOCDIR)\html\wx
+        copy *.gif $(DOCDIR)\html\wx
+        -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\html\wx\wx.htm -twice -html
+        -mkdir $(DOCDIR)\mshtml
+        -mkdir $(DOCDIR)\mshtml\wx
+        copy *.gif $(DOCDIR)\mshtml\wx
+        -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\mshtml\wx\wx.htm -twice -html -macros $(DOCDIR)\latex\wx\tex2rtf_css.ini
+        -erase $(DOCDIR)\html\wx\*.con
+        -erase $(DOCDIR)\html\wx\*.ref
+        -erase $(DOCDIR)\latex\wx\*.con
+        -erase $(DOCDIR)\latex\wx\*.ref
+         cd $(THISDIR)
+
+$(DOCDIR)\htmlhelp\wx.chm : $(DOCDIR)\html\wx\wx_contents.html $(DOCDIR)\mshtml\wx\wx_contents.html $(DOCDIR)\mshtml\wx\wx.hhp
+	cd $(DOCDIR)\mshtml\wx
+    copy $(DOCDIR)\latex\wx\wx.css .
+	-hhc wx.hhp
+    -mkdir ..\..\htmlhelp
+    -erase $(DOCDIR)\htmlhelp\wx.chm
+    move wx.chm ..\..\htmlhelp
+	cd $(THISDIR)
+
+$(WXDIR)\docs\latex\wx\manual.dvi:	$(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/manual.tex
+	cd $(WXDIR)\docs\latex\wx
+        -latex manual
+        -latex manual
+        -makeindx manual
+        -bibtex manual
+        -latex manual
+        -latex manual
+        cd $(THISDIR)
+
+$(WXDIR)\docs\ps\wx.ps:	$(WXDIR)\docs\latex\wx\manual.dvi
+	cd $(WXDIR)\docs\latex\wx
+        -dvips32 -o wx.ps manual
+        move wx.ps $(WXDIR)\docs\ps\wx.ps
+        cd $(THISDIR)
+
+$(WXDIR)\docs\latex\wx\referenc.dvi:	$(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)/latex/wx/referenc.tex
+	cd $(WXDIR)\docs\latex\wx
+        -latex referenc
+        -latex referenc
+        -makeindx referenc
+        -bibtex referenc
+        -latex referenc
+        -latex referenc
+        cd $(THISDIR)
+
+$(WXDIR)\docs\ps\referenc.ps:	$(WXDIR)\docs\latex\wx\referenc.dvi
+	cd $(WXDIR)\docs\latex\wx
+        -dvips32 -o referenc.ps referenc
+        move referenc.ps $(WXDIR)\docs\ps\referenc.ps
+        cd $(THISDIR)
+
+# An htb file is a zip file containing the .htm, .gif, .hhp, .hhc and .hhk
+# files, renamed to htb.
+# This can then be used with e.g. helpview.
+# Optionally, a cached version of the .hhp file can be generated with hhp2cached.
+$(DOCDIR)\htb\wx.htb: $(DOCDIR)\html\wx\wx_contents.html
+	cd $(WXDIR)\docs\html\wx
+    -erase wx.zip wx.htb
+    zip wx.zip *.html *.gif *.hhp *.hhc *.hhk
+    -mkdir $(DOCDIR)\htb
+    move wx.zip $(DOCDIR)\htb\wx.htb
+    cd $(THISDIR)
+
+# In order to force document reprocessing
+touchmanual:
+    -touch $(WXDIR)\docs\latex\wx\manual.tex
+
+updatedocs: touchmanual alldocs
+
+cleandocs:
+    -erase $(DOCDIR)\winhelp\wx.hlp
+    -erase $(DOCDIR)\winhelp\wx.cnt
+    -erase $(DOCDIR)\html\wx\*.html
+    -erase $(DOCDIR)\pdf\wx.rtf
+    -erase $(DOCDIR)\latex\wx\wx.rtf
+    -erase $(DOCDIR)\latex\wx\WX.PH
+    -erase $(DOCDIR)\htmlhelp\wx.chm
+    -erase $(DOCDIR)\htb\wx.htb
+
+# Only clean the online help, not PDF RTF
+cleanonlinehelp:
+    -erase $(DOCDIR)\winhelp\wx.hlp
+    -erase $(DOCDIR)\winhelp\wx.cnt
+    -erase $(DOCDIR)\html\wx\*.html
+    -erase $(DOCDIR)\latex\wx\wx.rtf
+    -erase $(DOCDIR)\latex\wx\WX.PH
+    -erase $(DOCDIR)\latex\wx\wx.hpj
+    -erase $(DOCDIR)\htmlhelp\wx.chm
+    -erase $(DOCDIR)\mshtml\wx\*.html
+    -erase $(DOCDIR)\htb\wx.htb
+
+# Start Word, running the GeneratePDF macro. MakeManual.dot should be in the
+# Office StartUp folder, and PDFMaker should be installed.
+updatepdf:  # touchmanual pdfrtf
+    start $(WAITFLAG) "winword d:\wx2\wxWidgets\docs\pdf\wx.rtf /mGeneratePDF"
+
+
+MFTYPE=vc
+makefile.$(MFTYPE) : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\msw\tmake\$(MFTYPE).t
+	cd $(WXWIN)\distrib\msw\tmake
+	tmake -t $(MFTYPE) wxwin.pro -o makefile.$(MFTYPE)
+	copy makefile.$(MFTYPE) $(WXWIN)\src\msw
+
+######################
+# Tex2RTF
+######################
+
+TEX2RTFDOCDIR=$(WXDIR)\utils\tex2rtf\docs
+
+tex2rtfhtml: $(DOCDIR)\html\tex2rtf\t2rtf.htm
+tex2rtfhtmlhelp: $(DOCDIR)\htmlhelp\tex2rtf.chm
+tex2rtfhtb:	$(DOCDIR)\htb\tex2rtf.htb
+tex2rtfhlp: $(DOCDIR)\winhelp\tex2rtf.hlp
+tex2rtfpdfrtf: $(DOCDIR)\pdf\tex2rtf.rtf
+tex2rtfps: $(WXDIR)\docs\ps\tex2rtf.ps
+
+$(DOCDIR)\winhelp\tex2rtf.hlp:         $(TEX2RTFDOCDIR)\tex2rtf.rtf $(TEX2RTFDOCDIR)\tex2rtf.hpj
+        cd $(TEX2RTFDOCDIR)
+        -erase tex2rtf.ph
+        hc tex2rtf
+        copy tex2rtf.hlp $(DOCDIR)\winhelp\tex2rtf.hlp
+        copy tex2rtf.cnt $(DOCDIR)\winhelp\tex2rtf.cnt
+        cd $(THISDIR)
+
+$(TEX2RTFDOCDIR)\tex2rtf.rtf: $(DOCSOURCES)
+        cd $(TEX2RTFDOCDIR)
+        -start /w tex2rtf $(TEX2RTFDOCDIR)\tex2rtf.tex $(TEX2RTFDOCDIR)\tex2rtf.rtf -twice -winhelp
+        cd $(THISDIR)
+
+$(DOCDIR)\pdf\tex2rtf.rtf: $(DOCSOURCES)
+        cd $(TEX2RTFDOCDIR)
+        -copy *.wmf $(DOCDIR)\pdf
+        -copy *.bmp $(DOCDIR)\pdf
+        -start /w tex2rtf $(TEX2RTFDOCDIR)\tex2rtf.tex $(DOCDIR)\pdf\tex2rtf.rtf -twice -rtf
+        cd $(THISDIR)
+
+$(DOCDIR)\html\tex2rtf\t2rtf.htm:         $(DOCSOURCES)
+        cd $(TEX2RTFDOCDIR)
+        -mkdir $(DOCDIR)\html\tex2rtf
+        -copy *.gif $(DOCDIR)\html\tex2rtf
+        -start /w tex2rtf $(TEX2RTFDOCDIR)\tex2rtf.tex $(DOCDIR)\html\tex2rtf\t2rtf.htm -twice -html
+        -erase $(DOCDIR)\html\tex2rtf\*.con
+        -erase $(DOCDIR)\html\tex2rtf\*.ref
+        cd $(THISDIR)
+
+$(DOCDIR)\htmlhelp\tex2rtf.chm : $(DOCDIR)\html\tex2rtf\t2rtf.htm $(DOCDIR)\html\tex2rtf\t2rtf.hhp
+	cd $(DOCDIR)\html\tex2rtf
+	-hhc t2rtf.hhp
+    move t2rtf.chm $(DOCDIR)\htmlhelp\tex2rtf.chm
+	cd $(THISDIR)
+
+# An htb file is a zip file containing the .htm, .gif, .hhp, .hhc and .hhk
+# files, renamed to htb.
+# This can then be used with e.g. helpview.
+# Optionally, a cached version of the .hhp file can be generated with hhp2cached.
+$(DOCDIR)\htb\tex2rtf.htb: $(DOCDIR)\html\tex2rtf\t2rtf.htm
+	cd $(DOCDIR)\html\tex2rtf
+    -erase tex2rtf.zip tex2rtf.htb
+    zip tex2rtf.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -mkdir $(DOCDIR)\htb
+    move tex2rtf.zip $(DOCDIR)\htb\tex2rtf.htb
+    cd $(THISDIR)
+
+$(TEX2RTFDOCDIR)\tex2rtf.dvi:	$(DOCSOURCES)
+	cd $(TEX2RTFDOCDIR)
+        -latex tex2rtf
+        -latex tex2rtf
+        -makeindx tex2rtf
+        -bibtex tex2rtf
+        -latex tex2rtf
+        -latex tex2rtf
+        cd $(THISDIR)
+
+$(WXDIR)\docs\ps\tex2rtf.ps:	$(TEX2RTFDOCDIR)\tex2rtf.dvi
+	cd $(TEX2RTFDOCDIR)
+        -dvips32 -o tex2rtf.ps tex2rtf
+        copy tex2rtf.ps $(WXDIR)\docs\ps\tex2rtf.ps
+        cd $(THISDIR)
+
+

@@ -1,0 +1,472 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        arc.tex
+%% Purpose:     Overview of the archive classes
+%% Author:      M.J.Wetherell
+%% RCS-ID:      $Id$
+%% Copyright:   2004 M.J.Wetherell
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Archive formats such as zip}\label{wxarc}
+
+The archive classes handle archive formats such as zip, tar, rar and cab.
+Currently \helpref{wxZip}{wxzipinputstream}
+and \helpref{wxTar}{wxtarinputstream} classes are included.
+
+For each archive type, there are the following classes (using zip here
+as an example):
+
+\begin{twocollist}\twocolwidtha{4cm}
+\twocolitem{\helpref{wxZipInputStream}{wxzipinputstream}}{Input stream}
+\twocolitem{\helpref{wxZipOutputStream}{wxzipoutputstream}}{Output stream}
+\twocolitem{\helpref{wxZipEntry}{wxzipentry}}{Holds the meta-data for an
+entry (e.g. filename, timestamp, etc.)}
+\end{twocollist}
+
+There are also abstract wxArchive classes that can be used to write code
+that can handle any of the archive types,
+see '\helpref{Generic archive programming}{wxarcgeneric}'.
+Also see \helpref{wxFileSystem}{fs} for a higher level interface that
+can handle archive files in a generic way.
+
+The classes are designed to handle archives on both seekable streams such
+as disk files, or non-seekable streams such as pipes and sockets
+(see '\helpref{Archives on non-seekable streams}{wxarcnoseek}').
+
+\wxheading{See also}
+
+\helpref{wxFileSystem}{fs}
+
+
+\subsection{Creating an archive}\label{wxarccreate}
+
+\helpref{Archive formats such as zip}{wxarc}
+
+Call \helpref{PutNextEntry()}{wxarchiveoutputstreamputnextentry} to
+create each new entry in the archive, then write the entry's data.
+Another call to PutNextEntry() closes the current entry and begins the next.
+
+For example:
+
+\begin{verbatim}
+    wxFFileOutputStream out(_T("test.zip"));
+    wxZipOutputStream zip(out);
+    wxTextOutputStream txt(zip);
+    wxString sep(wxFileName::GetPathSeparator());
+
+    zip.PutNextEntry(_T("entry1.txt"));
+    txt << _T("Some text for entry1.txt\n");
+
+    zip.PutNextEntry(_T("subdir") + sep + _T("entry2.txt"));
+    txt << _T("Some text for subdir/entry2.txt\n");
+
+\end{verbatim}
+
+The name of each entry can be a full path, which makes it possible to
+store entries in subdirectories.
+
+
+\subsection{Extracting an archive}\label{wxarcextract}
+
+\helpref{Archive formats such as zip}{wxarc}
+
+\helpref{GetNextEntry()}{wxarchiveinputstreamgetnextentry} returns a pointer
+to entry object containing the meta-data for the next entry in the archive
+(and gives away ownership). Reading from the input stream then returns the
+entry's data. Eof() becomes true after an attempt has been made to read past
+the end of the entry's data.
+
+When there are no more entries, GetNextEntry() returns NULL and sets Eof().
+
+\begin{verbatim}
+    auto_ptr<wxZipEntry> entry;
+
+    wxFFileInputStream in(_T("test.zip"));
+    wxZipInputStream zip(in);
+
+    while (entry.reset(zip.GetNextEntry()), entry.get() != NULL)
+    {
+        // access meta-data
+        wxString name = entry->GetName();
+        // read 'zip' to access the entry's data
+    }
+
+\end{verbatim}
+
+
+\subsection{Modifying an archive}\label{wxarcmodify}
+
+\helpref{Archive formats such as zip}{wxarc}
+
+To modify an existing archive, write a new copy of the archive to a new file,
+making any necessary changes along the way and transferring any unchanged
+entries using \helpref{CopyEntry()}{wxarchiveoutputstreamcopyentry}.
+For archive types which compress entry data, CopyEntry() is likely to be
+much more efficient than transferring the data using Read() and Write()
+since it will copy them without decompressing and recompressing them.
+
+In general modifications are not possible without rewriting the archive,
+though it may be possible in some limited cases. Even then, rewriting the
+archive is usually a better choice since a failure can be handled without
+losing the whole
+archive. \helpref{wxTempFileOutputStream}{wxtempfileoutputstream} can
+be helpful to do this.
+
+For example to delete all entries matching the pattern "*.txt":
+
+\begin{verbatim}
+    auto_ptr<wxFFileInputStream> in(new wxFFileInputStream(_T("test.zip")));
+    wxTempFileOutputStream out(_T("test.zip"));
+
+    wxZipInputStream inzip(*in);
+    wxZipOutputStream outzip(out);
+
+    auto_ptr<wxZipEntry> entry;
+
+    // transfer any meta-data for the archive as a whole (the zip comment
+    // in the case of zip)
+    outzip.CopyArchiveMetaData(inzip);
+
+    // call CopyEntry for each entry except those matching the pattern
+    while (entry.reset(inzip.GetNextEntry()), entry.get() != NULL)
+        if (!entry->GetName().Matches(_T("*.txt")))
+            if (!outzip.CopyEntry(entry.release(), inzip))
+                break;
+
+    // close the input stream by releasing the pointer to it, do this
+    // before closing the output stream so that the file can be replaced
+    in.reset();
+
+    // you can check for success as follows
+    bool success = inzip.Eof() && outzip.Close() && out.Commit();
+
+\end{verbatim}
+
+
+\subsection{Looking up an archive entry by name}\label{wxarcbyname}
+
+\helpref{Archive formats such as zip}{wxarc}
+
+Also see \helpref{wxFileSystem}{fs} for a higher level interface that is
+more convenient for accessing archive entries by name.
+
+To open just one entry in an archive, the most efficient way is
+to simply search for it linearly by calling
+ \helpref{GetNextEntry()}{wxarchiveinputstreamgetnextentry} until the
+required entry is found. This works both for archives on seekable and
+non-seekable streams.
+
+The format of filenames in the archive is likely to be different
+from the local filename format. For example zips and tars use
+unix style names, with forward slashes as the path separator,
+and absolute paths are not allowed. So if on Windows the file
+"C:$\backslash$MYDIR$\backslash$MYFILE.TXT" is stored, then when reading
+the entry back \helpref{GetName()}{wxarchiveentryname} will return
+"MYDIR$\backslash$MYFILE.TXT". The conversion into the internal format
+and back has lost some information.
+
+So to avoid ambiguity when searching for an entry matching a local name,
+it is better to convert the local name to the archive's internal format
+and search for that:
+
+\begin{verbatim}
+    auto_ptr<wxZipEntry> entry;
+
+    // convert the local name we are looking for into the internal format
+    wxString name = wxZipEntry::GetInternalName(localname);
+
+    // open the zip
+    wxFFileInputStream in(_T("test.zip"));
+    wxZipInputStream zip(in);
+
+    // call GetNextEntry() until the required internal name is found
+    do {
+        entry.reset(zip.GetNextEntry());
+    }
+    while (entry.get() != NULL && entry->GetInternalName() != name);
+
+    if (entry.get() != NULL) {
+        // read the entry's data...
+    }
+
+\end{verbatim}
+
+To access several entries randomly, it is most efficient to transfer the
+entire catalogue of entries to a container such as a std::map or a
+ \helpref{wxHashMap}{wxhashmap} then entries looked up by name can be
+opened using the \helpref{OpenEntry()}{wxarchiveinputstreamopenentry} method.
+
+\begin{verbatim}
+    WX_DECLARE_STRING_HASH_MAP(wxZipEntry*, ZipCatalog);
+    ZipCatalog::iterator it;
+    wxZipEntry *entry;
+    ZipCatalog cat;
+
+    // open the zip
+    wxFFileInputStream in(_T("test.zip"));
+    wxZipInputStream zip(in);
+
+    // load the zip catalog
+    while ((entry = zip.GetNextEntry()) != NULL) {
+        wxZipEntry*& current = cat[entry->GetInternalName()];
+        // some archive formats can have multiple entries with the same name
+        // (e.g. tar) though it is an error in the case of zip
+        delete current;
+        current = entry;
+    }
+
+    // open an entry by name
+    if ((it = cat.find(wxZipEntry::GetInternalName(localname))) != cat.end()) {
+        zip.OpenEntry(*it->second);
+        // ... now read entry's data
+    }
+
+\end{verbatim}
+
+To open more than one entry simultaneously you need more than one
+underlying stream on the same archive:
+
+\begin{verbatim}
+    // opening another entry without closing the first requires another
+    // input stream for the same file
+    wxFFileInputStream in2(_T("test.zip"));
+    wxZipInputStream zip2(in2);
+    if ((it = cat.find(wxZipEntry::GetInternalName(local2))) != cat.end())
+        zip2.OpenEntry(*it->second);
+
+\end{verbatim}
+
+
+\subsection{Generic archive programming}\label{wxarcgeneric}
+
+\helpref{Archive formats such as zip}{wxarc}
+
+Also see \helpref{wxFileSystem}{fs} for a higher level interface that
+can handle archive files in a generic way.
+
+The specific archive classes, such as the wxZip classes, inherit from
+the following abstract classes which can be used to write code that can
+handle any of the archive types:
+
+\begin{twocollist}\twocolwidtha{5cm}
+\twocolitem{\helpref{wxArchiveInputStream}{wxarchiveinputstream}}{Input stream}
+\twocolitem{\helpref{wxArchiveOutputStream}{wxarchiveoutputstream}}{Output stream}
+\twocolitem{\helpref{wxArchiveEntry}{wxarchiveentry}}{Holds the meta-data for an
+entry (e.g. filename)}
+\end{twocollist}
+
+In order to able to write generic code it's necessary to be able to create
+instances of the classes without knowing which archive type is being used.
+To allow this there is a class factory for each archive type, derived from
+ \helpref{wxArchiveClassFactory}{wxarchiveclassfactory}, that can create
+the other classes.
+
+For example, given {\it wxArchiveClassFactory* factory}, streams and
+entries can be created like this:
+
+\begin{verbatim}
+    // create streams without knowing their type
+    auto_ptr<wxArchiveInputStream> inarc(factory->NewStream(in));
+    auto_ptr<wxArchiveOutputStream> outarc(factory->NewStream(out));
+
+    // create an empty entry object
+    auto_ptr<wxArchiveEntry> entry(factory->NewEntry());
+
+\end{verbatim}
+
+For the factory itself, the static member
+ \helpref{wxArchiveClassFactory::Find()}{wxarchiveclassfactoryfind}.
+can be used to find a class factory that can handle a given file
+extension or mime type. For example, given {\it filename}:
+
+\begin{verbatim}
+    const wxArchiveClassFactory *factory;
+    factory = wxArchiveClassFactory::Find(filename, wxSTREAM_FILEEXT);
+
+    if (factory)
+        stream = factory->NewStream(new wxFFileInputStream(filename));
+
+\end{verbatim}
+
+{\it Find} does not give away ownership of the returned pointer, so it
+does not need to be deleted.
+
+There are similar class factories for the filter streams that handle the
+compression and decompression of a single stream, such as wxGzipInputStream.
+These can be found using
+ \helpref{wxFilterClassFactory::Find()}{wxfilterclassfactoryfind}.
+
+For example, to list the contents of archive {\it filename}:
+
+\begin{verbatim}
+    auto_ptr<wxInputStream> in(new wxFFileInputStream(filename));
+
+    if (in->IsOk())
+    {
+        // look for a filter handler, e.g. for '.gz'
+        const wxFilterClassFactory *fcf;
+        fcf = wxFilterClassFactory::Find(filename, wxSTREAM_FILEEXT);
+        if (fcf) {
+            in.reset(fcf->NewStream(in.release()));
+            // pop the extension, so if it was '.tar.gz' it is now just '.tar'
+            filename = fcf->PopExtension(filename);
+        }
+
+        // look for a archive handler, e.g. for '.zip' or '.tar'
+        const wxArchiveClassFactory *acf;
+        acf = wxArchiveClassFactory::Find(filename, wxSTREAM_FILEEXT);
+        if (acf) {
+            auto_ptr<wxArchiveInputStream> arc(acf->NewStream(in.release()));
+            auto_ptr<wxArchiveEntry> entry;
+
+            // list the contents of the archive
+            while ((entry.reset(arc->GetNextEntry())), entry.get() != NULL)
+                std::wcout << entry->GetName().c_str() << "\n";
+        }
+        else {
+            wxLogError(_T("can't handle '%s'"), filename.c_str());
+        }
+    }
+
+\end{verbatim}
+
+
+\subsection{Archives on non-seekable streams}\label{wxarcnoseek}
+
+\helpref{Archive formats such as zip}{wxarc}
+
+In general, handling archives on non-seekable streams is done in the same
+way as for seekable streams, with a few caveats.
+
+The main limitation is that accessing entries randomly using
+ \helpref{OpenEntry()}{wxarchiveinputstreamopenentry} 
+is not possible, the entries can only be accessed sequentially in the order 
+they are stored within the archive.
+
+For each archive type, there will also be other limitations which will
+depend on the order the entries' meta-data is stored within the archive.
+These are not too difficult to deal with, and are outlined below.
+
+\wxheading{PutNextEntry and the entry size}
+
+When writing archives, some archive formats store the entry size before
+the entry's data (tar has this limitation, zip doesn't). In this case
+the entry's size must be passed to
+ \helpref{PutNextEntry()}{wxarchiveoutputstreamputnextentry} or an error
+occurs.
+
+This is only an issue on non-seekable streams, since otherwise the archive
+output stream can seek back and fix up the header once the size of the
+entry is known.
+
+For generic programming, one way to handle this is to supply the size
+whenever it is known, and rely on the error message from the output
+stream when the operation is not supported.
+
+\wxheading{GetNextEntry and the weak reference mechanism}
+
+Some archive formats do not store all an entry's meta-data before the
+entry's data (zip is an example). In this case, when reading from a
+non-seekable stream, \helpref{GetNextEntry()}{wxarchiveinputstreamgetnextentry} 
+can only return a partially populated \helpref{wxArchiveEntry}{wxarchiveentry}
+object - not all the fields are set.
+
+The input stream then keeps a weak reference to the entry object and
+updates it when more meta-data becomes available. A weak reference being
+one that does not prevent you from deleting the wxArchiveEntry object - the
+input stream only attempts to update it if it is still around.
+
+The documentation for each archive entry type gives the details
+of what meta-data becomes available and when. For generic programming,
+when the worst case must be assumed, you can rely on all the fields
+of wxArchiveEntry being fully populated when GetNextEntry() returns,
+with the the following exceptions:
+
+\begin{twocollist}\twocolwidtha{3cm}
+\twocolitem{\helpref{GetSize()}{wxarchiveentrysize}}{Guaranteed to be
+available after the entry has been read to \helpref{Eof()}{wxinputstreameof},
+or \helpref{CloseEntry()}{wxarchiveinputstreamcloseentry} has been called}
+\twocolitem{\helpref{IsReadOnly()}{wxarchiveentryisreadonly}}{Guaranteed to
+be available after the end of the archive has been reached, i.e. after
+GetNextEntry() returns NULL and Eof() is true}
+\end{twocollist}
+
+This mechanism allows \helpref{CopyEntry()}{wxarchiveoutputstreamcopyentry}
+to always fully preserve entries' meta-data. No matter what order order
+the meta-data occurs within the archive, the input stream will always
+have read it before the output stream must write it.
+
+\wxheading{wxArchiveNotifier}
+
+Notifier objects can be used to get a notification whenever an input
+stream updates a \helpref{wxArchiveEntry}{wxarchiveentry} object's data
+via the weak reference mechanism.
+
+Consider the following code which renames an entry in an archive.
+This is the usual way to modify an entry's meta-data, simply set the
+required field before writing it with
+ \helpref{CopyEntry()}{wxarchiveoutputstreamcopyentry}:
+
+\begin{verbatim}
+    auto_ptr<wxArchiveInputStream> arc(factory->NewStream(in));
+    auto_ptr<wxArchiveOutputStream> outarc(factory->NewStream(out));
+    auto_ptr<wxArchiveEntry> entry;
+
+    outarc->CopyArchiveMetaData(*arc);
+
+    while (entry.reset(arc->GetNextEntry()), entry.get() != NULL) {
+        if (entry->GetName() == from)
+            entry->SetName(to);
+        if (!outarc->CopyEntry(entry.release(), *arc))
+            break;
+    }
+
+    bool success = arc->Eof() && outarc->Close();
+
+\end{verbatim}
+
+However, for non-seekable streams, this technique cannot be used for
+fields such as \helpref{IsReadOnly()}{wxarchiveentryisreadonly},
+which are not necessarily set when
+ \helpref{GetNextEntry()}{wxarchiveinputstreamgetnextentry} returns. In
+this case a \helpref{wxArchiveNotifier}{wxarchivenotifier} can be used:
+
+\begin{verbatim}
+class MyNotifier : public wxArchiveNotifier
+{
+public:
+    void OnEntryUpdated(wxArchiveEntry& entry) { entry.SetIsReadOnly(false); }
+};
+
+\end{verbatim}
+
+The meta-data changes are done in your notifier's
+ \helpref{OnEntryUpdated()}{wxarchivenotifieronentryupdated} method,
+then \helpref{SetNotifier()}{wxarchiveentrynotifier} is called before
+CopyEntry():
+
+\begin{verbatim}
+    auto_ptr<wxArchiveInputStream> arc(factory->NewStream(in));
+    auto_ptr<wxArchiveOutputStream> outarc(factory->NewStream(out));
+    auto_ptr<wxArchiveEntry> entry;
+    MyNotifier notifier;
+
+    outarc->CopyArchiveMetaData(*arc);
+
+    while (entry.reset(arc->GetNextEntry()), entry.get() != NULL) {
+        entry->SetNotifier(notifier);
+        if (!outarc->CopyEntry(entry.release(), *arc))
+            break;
+    }
+
+    bool success = arc->Eof() && outarc->Close();
+
+\end{verbatim}
+
+SetNotifier() calls OnEntryUpdated() immediately, then the input
+stream calls it again whenever it sets more fields in the entry. Since
+OnEntryUpdated() will be called at least once, this technique always
+works even when it is not strictly necessary to use it. For example,
+changing the entry name can be done this way too and it works on seekable
+streams as well as non-seekable.
+

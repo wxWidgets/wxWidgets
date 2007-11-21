@@ -1,0 +1,134 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        semaphore.tex
+%% Purpose:     wxSemaphore documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     02.04.02
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2002 Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxSemaphore}}\label{wxsemaphore}
+
+wxSemaphore is a counter limiting the number of threads concurrently accessing
+a shared resource. This counter is always between $0$ and the maximum value
+specified during the semaphore creation. When the counter is strictly greater
+than $0$, a call to \helpref{Wait}{wxsemaphorewait} returns immediately and
+decrements the counter. As soon as it reaches $0$, any subsequent calls to
+\helpref{Wait}{wxsemaphorewait} block and only return when the semaphore
+counter becomes strictly positive again as the result of calling 
+\helpref{Post}{wxsemaphorepost} which increments the counter.
+
+In general, semaphores are useful to restrict access to a shared resource
+which can only be accessed by some fixed number of clients at the same time. For
+example, when modeling a hotel reservation system a semaphore with the counter
+equal to the total number of available rooms could be created. Each time a room
+is reserved, the semaphore should be acquired by calling 
+\helpref{Wait}{wxsemaphorewait} and each time a room is freed it should be
+released by calling \helpref{Post}{wxsemaphorepost}.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/thread.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxSemaphore::wxSemaphore}\label{wxsemaphorewxsemaphore}
+
+\func{}{wxSemaphore}{\param{int }{initialcount = 0}, \param{int }{maxcount = 0}}
+
+Specifying a {\it maxcount} of $0$ actually makes wxSemaphore behave as if
+there is no upper limit. If maxcount is $1$, the semaphore behaves exactly as a
+mutex.
+
+{\it initialcount} is the initial value of the semaphore which must be between
+$0$ and {\it maxcount} (if it is not set to $0$).
+
+\membersection{wxSemaphore::\destruct{wxSemaphore}}\label{wxsemaphoredtor}
+
+\func{}{\destruct{wxSemaphore}}{\void}
+
+Destructor is not virtual, don't use this class polymorphically.
+
+\membersection{wxSemaphore::Post}\label{wxsemaphorepost}
+
+\func{wxSemaError }{Post}{\void}
+
+Increments the semaphore count and signals one of the waiting
+threads in an atomic way. Returns wxSEMA\_OVERFLOW if the count
+would increase the counter past the maximum.
+
+\wxheading{Return value}
+
+One of:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxSEMA\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf wxSEMA\_INVALID}}{Semaphore hasn't been initialized successfully.}
+\twocolitem{{\bf wxSEMA\_OVERFLOW}}{Post() would increase counter past the max.}
+\twocolitem{{\bf wxSEMA\_MISC\_ERROR}}{Miscellaneous error.}
+\end{twocollist}
+
+
+\membersection{wxSemaphore::TryWait}\label{wxsemaphoretrywait}
+
+\func{wxSemaError }{TryWait}{\void}
+
+Same as \helpref{Wait()}{wxsemaphorewait}, but returns immediately.
+
+\wxheading{Return value}
+
+One of:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxSEMA\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf wxSEMA\_INVALID}}{Semaphore hasn't been initialized successfully.}
+\twocolitem{{\bf wxSEMA\_BUSY}}{Returned by TryWait() if Wait() would block, i.e. the count is zero.}
+\twocolitem{{\bf wxSEMA\_MISC\_ERROR}}{Miscellaneous error.}
+\end{twocollist}
+
+
+\membersection{wxSemaphore::Wait}\label{wxsemaphorewait}
+
+\func{wxSemaError }{Wait}{\void}
+
+Wait indefinitely until the semaphore count becomes strictly positive
+and then decrement it and return.
+
+\wxheading{Return value}
+
+One of:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxSEMA\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf wxSEMA\_INVALID}}{Semaphore hasn't been initialized successfully.}
+\twocolitem{{\bf wxSEMA\_MISC\_ERROR}}{Miscellaneous error.}
+\end{twocollist}
+
+\membersection{wxSemaphore::WaitTimeout}\label{wxsemaphorewaittimeout}
+
+\func{wxSemaError }{WaitTimeout}{\param{unsigned
+long}{timeout\_millis}}
+
+Same as \helpref{Wait()}{wxsemaphorewait}, but with a timeout
+limit.
+
+\wxheading{Return value}
+
+One of:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxSEMA\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf wxSEMA\_INVALID}}{Semaphore hasn't been initialized successfully.}
+\twocolitem{{\bf wxSEMA\_TIMEOUT}}{Timeout occurred without receiving semaphore.}
+\twocolitem{{\bf wxSEMA\_MISC\_ERROR}}{Miscellaneous error.}
+\end{twocollist}

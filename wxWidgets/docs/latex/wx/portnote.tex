@@ -1,0 +1,18 @@
+\chapter{Platform details}\label{platformdetails}
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+wxWidgets defines a common API across platforms, but uses the native graphical
+user interface (GUI) on each platform, so your program will take on the native
+look and feel that users are familiar with. Unfortunately native toolkits and
+hardware do not always support the functionality that the wxWidgets API
+requires. This chapter collects notes about differences among supported platforms and ports.
+
+\input wxgtk.tex
+\input wxmsw.tex
+\input wxmac.tex
+\input wxpalm.tex
+\input wxos2.tex
+\input wxmgl.tex
+\input wxx11.tex
+

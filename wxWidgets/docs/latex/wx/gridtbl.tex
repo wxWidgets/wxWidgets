@@ -1,0 +1,232 @@
+\section{\class{wxGridTableBase}}\label{wxgridtablebase}
+
+Grid table classes.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/grid.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxGridTableBase::wxGridTableBase}\label{wxgridtablebasewxgridtablebase}
+
+\func{}{wxGridTableBase}{\void}
+
+\membersection{wxGridTableBase::\destruct{wxGridTableBase}}\label{wxgridtablebasedtor}
+
+\func{}{\destruct{wxGridTableBase}}{\void}
+
+\membersection{wxGridTableBase::GetNumberRows}\label{wxgridtablebasegetnumberrows}
+
+\func{int}{GetNumberRows}{\void}
+
+You must override these functions in a derived table class.
+
+\membersection{wxGridTableBase::GetNumberCols}\label{wxgridtablebasegetnumbercols}
+
+\func{int}{GetNumberCols}{\void}
+
+
+\membersection{wxGridTableBase::IsEmptyCell}\label{wxgridtablebaseisemptycell}
+
+\func{bool}{IsEmptyCell}{\param{int }{row}, \param{int }{col}}
+
+
+\membersection{wxGridTableBase::GetValue}\label{wxgridtablebasegetvalue}
+
+\func{wxString}{GetValue}{\param{int }{row}, \param{int }{col}}
+
+
+\membersection{wxGridTableBase::SetValue}\label{wxgridtablebasesetvalue}
+
+\func{void}{SetValue}{\param{int }{row}, \param{int }{col}, \param{const wxString\& }{value}}
+
+
+\membersection{wxGridTableBase::GetTypeName}\label{wxgridtablebasegettypename}
+
+\func{wxString}{GetTypeName}{\param{int }{row}, \param{int }{col}}
+
+Data type determination and value access.
+
+\membersection{wxGridTableBase::CanGetValueAs}\label{wxgridtablebasecangetvalueas}
+
+\func{bool}{CanGetValueAs}{\param{int }{row}, \param{int }{col}, \param{const wxString\& }{typeName}}
+
+
+\membersection{wxGridTableBase::CanSetValueAs}\label{wxgridtablebasecansetvalueas}
+
+\func{bool}{CanSetValueAs}{\param{int }{row}, \param{int }{col}, \param{const wxString\& }{typeName}}
+
+
+\membersection{wxGridTableBase::GetValueAsLong}\label{wxgridtablebasegetvalueaslong}
+
+\func{long}{GetValueAsLong}{\param{int }{row}, \param{int }{col}}
+
+
+\membersection{wxGridTableBase::GetValueAsDouble}\label{wxgridtablebasegetvalueasdouble}
+
+\func{double}{GetValueAsDouble}{\param{int }{row}, \param{int }{col}}
+
+
+\membersection{wxGridTableBase::GetValueAsBool}\label{wxgridtablebasegetvalueasbool}
+
+\func{bool}{GetValueAsBool}{\param{int }{row}, \param{int }{col}}
+
+
+\membersection{wxGridTableBase::SetValueAsLong}\label{wxgridtablebasesetvalueaslong}
+
+\func{void}{SetValueAsLong}{\param{int }{row}, \param{int }{col}, \param{long }{value}}
+
+
+\membersection{wxGridTableBase::SetValueAsDouble}\label{wxgridtablebasesetvalueasdouble}
+
+\func{void}{SetValueAsDouble}{\param{int }{row}, \param{int }{col}, \param{double }{value}}
+
+
+\membersection{wxGridTableBase::SetValueAsBool}\label{wxgridtablebasesetvalueasbool}
+
+\func{void}{SetValueAsBool}{\param{int }{row}, \param{int }{col}, \param{bool }{value}}
+
+
+\membersection{wxGridTableBase::GetValueAsCustom}\label{wxgridtablebasegetvalueascustom}
+
+\func{void*}{GetValueAsCustom}{\param{int }{row}, \param{int }{col}, \param{const wxString\& }{typeName}}
+
+For user defined types
+
+
+\membersection{wxGridTableBase::SetValueAsCustom}\label{wxgridtablebasesetvalueascustom}
+
+\func{void}{SetValueAsCustom}{\param{int }{row}, \param{int }{col}, \param{const wxString\& }{typeName}, \param{void* }{value}}
+
+
+\membersection{wxGridTableBase::SetView}\label{wxgridtablebasesetview}
+
+\func{void}{SetView}{\param{wxGrid* }{grid}}
+
+Overriding these is optional
+
+
+\membersection{wxGridTableBase::GetView}\label{wxgridtablebasegetview}
+
+\constfunc{wxGrid *}{GetView}{\void}
+
+
+\membersection{wxGridTableBase::Clear}\label{wxgridtablebaseclear}
+
+\func{void}{Clear}{\void}
+
+
+\membersection{wxGridTableBase::InsertRows}\label{wxgridtablebaseinsertrows}
+
+\func{bool}{InsertRows}{\param{size\_t }{pos = 0}, \param{size\_t }{numRows = 1}}
+
+
+\membersection{wxGridTableBase::AppendRows}\label{wxgridtablebaseappendrows}
+
+\func{bool}{AppendRows}{\param{size\_t }{numRows = 1}}
+
+
+\membersection{wxGridTableBase::DeleteRows}\label{wxgridtablebasedeleterows}
+
+\func{bool}{DeleteRows}{\param{size\_t }{pos = 0}, \param{size\_t }{numRows = 1}}
+
+
+\membersection{wxGridTableBase::InsertCols}\label{wxgridtablebaseinsertcols}
+
+\func{bool}{InsertCols}{\param{size\_t }{pos = 0}, \param{size\_t }{numCols = 1}}
+
+
+\membersection{wxGridTableBase::AppendCols}\label{wxgridtablebaseappendcols}
+
+\func{bool}{AppendCols}{\param{size\_t }{numCols = 1}}
+
+
+\membersection{wxGridTableBase::DeleteCols}\label{wxgridtablebasedeletecols}
+
+\func{bool}{DeleteCols}{\param{size\_t }{pos = 0}, \param{size\_t }{numCols = 1}}
+
+
+\membersection{wxGridTableBase::GetRowLabelValue}\label{wxgridtablebasegetrowlabelvalue}
+
+\func{wxString}{GetRowLabelValue}{\param{int }{row}}
+
+
+\membersection{wxGridTableBase::GetColLabelValue}\label{wxgridtablebasegetcollabelvalue}
+
+\func{wxString}{GetColLabelValue}{\param{int }{col}}
+
+
+\membersection{wxGridTableBase::SetRowLabelValue}\label{wxgridtablebasesetrowlabelvalue}
+
+\func{void}{SetRowLabelValue}{\param{int }{WXUNUSED(row)}, \param{const }{wxString\&}}
+
+
+\membersection{wxGridTableBase::SetColLabelValue}\label{wxgridtablebasesetcollabelvalue}
+
+\func{void}{SetColLabelValue}{\param{int }{WXUNUSED(col)}, \param{const }{wxString\&}}
+
+
+\membersection{wxGridTableBase::SetAttrProvider}\label{wxgridtablebasesetattrprovider}
+
+\func{void}{SetAttrProvider}{\param{wxGridCellAttrProvider* }{attrProvider}}
+
+Attribute handling
+give us the attr provider to use - we take ownership of the pointer
+
+
+\membersection{wxGridTableBase::GetAttrProvider}\label{wxgridtablebasegetattrprovider}
+
+\constfunc{wxGridCellAttrProvider*}{GetAttrProvider}{\void}
+
+get the currently used attr provider (may be NULL)
+
+
+\membersection{wxGridTableBase::CanHaveAttributes}\label{wxgridtablebasecanhaveattributes}
+
+\func{bool}{CanHaveAttributes}{\void}
+
+Does this table allow attributes?  Default implementation creates
+a wxGridCellAttrProvider if necessary.
+
+
+\membersection{wxGridTableBase::UpdateAttrRows}\label{wxgridtablebaseupdateattrrows}
+
+\func{void}{UpdateAttrRows}{\param{size\_t }{pos}, \param{int }{numRows}}
+
+change row/col number in attribute if needed
+
+
+\membersection{wxGridTableBase::UpdateAttrCols}\label{wxgridtablebaseupdateattrcols}
+
+\func{void}{UpdateAttrCols}{\param{size\_t }{pos}, \param{int }{numCols}}
+
+
+\membersection{wxGridTableBase::GetAttr}\label{wxgridtablebasegetattr}
+
+\func{wxGridCellAttr*}{GetAttr}{\param{int }{row}, \param{int }{col}}
+
+by default forwarded to wxGridCellAttrProvider if any. May be
+overridden to handle attributes directly in the table.
+
+
+\membersection{wxGridTableBase::SetAttr}\label{wxgridtablebasesetattr}
+
+\func{void}{SetAttr}{\param{wxGridCellAttr* }{attr}, \param{int }{row}, \param{int }{col}}
+
+these functions take ownership of the pointer
+
+
+\membersection{wxGridTableBase::SetRowAttr}\label{wxgridtablebasesetrowattr}
+
+\func{void}{SetRowAttr}{\param{wxGridCellAttr* }{attr}, \param{int }{row}}
+
+
+\membersection{wxGridTableBase::SetColAttr}\label{wxgridtablebasesetcolattr}
+
+\func{void}{SetColAttr}{\param{wxGridCellAttr* }{attr}, \param{int }{col}}
+

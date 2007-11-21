@@ -1,0 +1,131 @@
+\chapter{Libraries list}\label{librarieslist}
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+Starting from version 2.5.0 wxWidgets can be built either as a single large
+library (this is called the {\it monolithic build}) or as several smaller
+libraries ({\it multilib build}). Multilib build is the default.
+
+wxWidgets library is divided into libraries briefly described below. This
+diagram show dependencies between them:
+
+\begin{center}
+\image{}{libs.gif}
+\end{center}
+
+{\large {\bf wxAui}}
+
+This contains the Advanced User Interface docking library.
+
+{\large {\bf wxBase}}
+
+Every wxWidgets application must link against this library. It contains
+mandatory classes that any wxWidgets code depends on (e.g.
+ \helpref{wxString}{wxstring}) and portability classes that abstract
+differences between platforms. wxBase can be used to develop console mode
+applications, it does not require any GUI libraries or running X Window System
+on Unix.
+
+{\large {\bf wxNet}}
+
+Classes for network access:
+
+\begin{itemize}
+\item{ wxSocket classes (\helpref{wxSocketClient}{wxsocketclient},
+ \helpref{wxSocketServer}{wxsocketserver} and related classes) }
+\item{ \helpref{wxSocketOutputStream}{wxsocketoutputstream} and
+ \helpref{wxSocketInputStream}{wxsocketinputstream} }
+\item{ sockets-based IPC classes (\helpref{wxTCPServer}{wxddeserver},
+ \helpref{wxTCPClient}{wxddeclient} and
+ \helpref{wxTCPConnection}{wxddeconnection}) }
+\item{ \helpref{wxURL}{wxurl} }
+\item{ wxInternetFSHandler (a \helpref{wxFileSystem handler}{fs}) }
+Requires wxBase.
+\end{itemize}
+
+{\large {\bf wxRichText}}
+
+This contains generic rich text control functionality.
+
+{\large {\bf wxXML}}
+
+This library contains simple classes for parsing XML documents. Note that
+their API {\em will} change in the future and backward
+compatibility will not be preserved. Use of this library in your applications
+is not recommended, it is only meant for use by XML resources system. Future
+versions of wxWidgets will contain new XML handling classes with DOM-like API.
+Requires wxBase.
+
+{\large {\bf wxCore}}
+
+Basic GUI classes such as GDI classes or controls are in this library. All
+wxWidgets GUI applications must link against this library, only console mode
+applications don't.
+
+{\large {\bf wxAdvanced}}
+
+Advanced or rarely used GUI classes:
+
+\begin{itemize}\itemsep=0pt
+\item{ wxBufferedDC }
+\item{ \helpref{wxCalendarCtrl}{wxcalendarctrl} }
+\item{ \helpref{wxGrid classes}{gridoverview} }
+\item{ \helpref{wxJoystick}{wxjoystick} }
+\item{ \helpref{wxLayoutAlgorithm}{wxlayoutalgorithm} }
+\item{ \helpref{wxSplashScreen}{wxsplashscreen} }
+\item{ \helpref{wxTaskBarIcon}{wxtaskbaricon} }
+\item{ \helpref{wxSound}{wxsound} }
+\item{ \helpref{wxWizard}{wxwizard} }
+\item{ \helpref{wxSashLayoutWindow}{wxsashlayoutwindow} }
+\item{ \helpref{wxSashWindow}{wxsashwindow} }
+\end{itemize}
+
+Requires wxCore and wxBase.
+
+{\large {\bf wxMedia}}
+
+Miscellaneous classes related to multimedia. Currently this library only
+contains \helpref{wxMediaCtrl}{wxmediactrl} but more classes will be added in
+the future.
+
+Requires wxCore and wxBase.
+
+{\large {\bf wxGL}}
+
+This library contains \helpref{wxGLCanvas}{wxglcanvas} class for integrating
+OpenGL library with wxWidgets. Unlike all others, this library is {\em not}
+ part of the monolithic library, it is always built as separate library.
+Requires wxCore and wxBase.
+
+{\large {\bf wxHTML}}
+
+Simple HTML renderer and other \helpref{HTML rendering classes}{wxhtml} are
+contained in this library, as well as
+ \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller},
+ \helpref{wxBestHelpController}{wxhelpcontroller} and
+ \helpref{wxHtmlListBox}{wxhtmllistbox}. Requires wxCore and wxBase.
+
+{\large {\bf wxODBC}}
+
+\helpref{Database classes}{odbcoverview}. Requires wxBase.
+
+{\large {\bf wxQA}}
+
+This is the library containing extra classes for quality assurance. Currently
+it only contains \helpref{wxDebugReport}{wxdebugreport} and related classes,
+but more will be added to it in the future.
+
+Requires wxCore, wxBase and wxXML.
+
+{\large {\bf wxDbGrid}}
+
+\helpref{wxDbGridTableBase}{wxdbgridtablebase} class which combines 
+ \helpref{wxGrid}{wxgrid} and \helpref{wxDbTable}{wxdbtable}. 
+Requires wxODBC and wxAdvanced.
+
+{\large {\bf wxXRC}}
+
+This library contains \helpref{wxXmlResource}{wxxmlresource} class that
+provides access to XML resource files in XRC format.
+Requires wxXML, wxCore, wxAdvanced and wxHTML.
+

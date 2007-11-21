@@ -1,0 +1,88 @@
+\section{\class{wxListItemAttr}}\label{wxlistitemattr}
+
+Represents the attributes (color, font, \ldots) of a
+\helpref{wxListCtrl}{wxlistctrl} \helpref{wxListItem}{wxlistctrl}.
+
+\wxheading{Include files}
+
+<wx/listctrl.h>
+
+\wxheading{See also}
+
+\helpref{wxListCtrl overview}{wxlistctrloverview}, \helpref{wxListCtrl}{wxlistctrl}, \helpref{wxListItem}{wxlistitem}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxListItemAttr::wxListItemAttr}\label{wxlistitemattrctor}
+
+\func{}{wxListItemAttr}{\void}
+
+Default constructor.
+
+\func{}{wxListItemAttr}{\param{const wxColour&}{ colText}, \param{const wxColour&}{ colBack}, \param{const wxFont&}{ font}}
+
+Construct a wxListItemAttr with the specified foreground and
+background colors and font.
+
+\membersection{wxListItemAttr::GetBackgroundColour}\label{wxlistitemattrgetbackgroundcolour}
+
+\constfunc{const wxColour\&}{GetBackgroundColour}{\void}
+
+Returns the currently set background color.
+
+
+\membersection{wxListItemAttr::GetFont}\label{wxlistitemattrgetfont}
+
+\constfunc{const wxFont\&}{GetFont}{\void}
+
+Returns the currently set font.
+
+
+\membersection{wxListItemAttr::GetTextColour}\label{wxlistitemattrgettextcolour}
+
+\constfunc{const wxColour\&}{GetTextColour}{\void}
+
+Returns the currently set text color.
+
+
+\membersection{wxListItemAttr::HasBackgroundColour}\label{wxlistitemattrhasbackgroundcolour}
+
+\constfunc{bool}{HasBackgroundColour}{\void}
+
+Returns \true if the currently set background color is valid.
+
+
+\membersection{wxListItemAttr::HasFont}\label{wxlistitemattrhasfont}
+
+\constfunc{bool}{HasFont}{\void}
+
+Returns \true if the currently set font is valid.
+
+
+\membersection{wxListItemAttr::HasTextColour}\label{wxlistitemattrhastextcolour}
+
+\constfunc{bool}{HasTextColour}{\void}
+
+Returns \true if the currently set text color is valid.
+
+
+\membersection{wxListItemAttr::SetBackgroundColour}\label{wxlistitemattrsetbackgroundcolour}
+
+\func{void}{SetBackgroundColour}{\param{const wxColour\& }{colour}}
+
+Sets a new background color.
+
+
+\membersection{wxListItemAttr::SetFont}\label{wxlistitemattrsetfont}
+
+\func{void}{SetFont}{\param{const wxFont\& }{font}}
+
+Sets a new font.
+
+
+\membersection{wxListItemAttr::SetTextColour}\label{wxlistitemattrsettextcolour}
+
+\func{void}{SetTextColour}{\param{const wxColour\& }{colour}}
+
+Sets a new text color.
+

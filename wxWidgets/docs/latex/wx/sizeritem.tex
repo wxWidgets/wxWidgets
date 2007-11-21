@@ -1,0 +1,255 @@
+
+\section{\class{wxSizerItem}}\label{wxsizeritem}
+
+The wxSizerItem class is used to track the position, size and other
+attributes of each item managed by a \helpref{wxSizer}{wxsizer}. It is not
+usually necessary to use this class because the sizer elements can also be
+identified by their positions or window or sizer pointers but sometimes it may
+be more convenient to use it directly.
+
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/sizer.h>
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxSizerItem::wxSizerItem}\label{wxsizeritemwxsizeritem}
+
+\func{}{wxSizerItem}{\param{int }{width}, \param{int }{height}, \param{int }{proportion}, \param{int }{flag}, \param{int }{border}, \param{wxObject* }{userData}}
+
+Construct a sizer item for tracking a spacer.
+
+
+\func{}{wxSizerItem}{\param{wxWindow* }{window}, \param{const wxSizerFlags\& }{flags}}
+
+\func{}{wxSizerItem}{\param{wxWindow* }{window}, \param{int }{proportion}, \param{int }{flag}, \param{int }{border}, \param{wxObject* }{userData}}
+
+Construct a sizer item for tracking a window.
+
+
+\func{}{wxSizerItem}{\param{wxSizer* }{window}, \param{const wxSizerFlags\& }{flags}}
+
+\func{}{wxSizerItem}{\param{wxSizer* }{sizer}, \param{int }{proportion}, \param{int }{flag}, \param{int }{border}, \param{wxObject* }{userData}}
+
+Construct a sizer item for tracking a subsizer.
+
+
+
+\membersection{wxSizerItem::\destruct{wxSizerItem}}\label{wxsizeritemdtor}
+
+\func{}{\destruct{wxSizerItem}}{\void}
+
+Deletes the user data and subsizer, if any.
+
+
+\membersection{wxSizerItem::CalcMin}\label{wxsizeritemcalcmin}
+
+\func{wxSize}{CalcMin}{\void}
+
+Calculates the minimum desired size for the item, including any space
+needed by borders.
+
+
+\membersection{wxSizerItem::DeleteWindows}\label{wxsizeritemdeletewindows}
+
+\func{void}{DeleteWindows}{\void}
+
+Destroy the window or the windows in a subsizer, depending on the type
+of item.
+
+
+\membersection{wxSizerItem::DetachSizer}\label{wxsizeritemdetachsizer}
+
+\func{void}{DetachSizer}{\void}
+
+Enable deleting the SizerItem without destroying the contained sizer.
+
+
+\membersection{wxSizerItem::GetBorder}\label{wxsizeritemgetborder}
+
+\constfunc{int}{GetBorder}{\void}
+
+Return the border attribute.
+
+\membersection{wxSizerItem::GetFlag}\label{wxsizeritemgetflag}
+
+\constfunc{int}{GetFlag}{\void}
+
+Return the flags attribute.
+
+
+\membersection{wxSizerItem::GetMinSize}\label{wxsizeritemgetminsize}
+
+\constfunc{wxSize}{GetMinSize}{\void}
+
+Get the minimum size needed for the item.
+
+\membersection{wxSizerItem::GetPosition}\label{wxsizeritemgetposition}
+
+\constfunc{wxPoint}{GetPosition}{\void}
+
+What is the current position of the item, as set in the last Layout.
+
+\membersection{wxSizerItem::GetProportion}\label{wxsizeritemgetproportion}
+
+\constfunc{int}{GetProportion}{\void}
+
+Get the proportion item attribute.
+
+\membersection{wxSizerItem::GetRatio}\label{wxsizeritemgetratio}
+
+\constfunc{float}{GetRatio}{\void}
+
+Get the ration item attribute.
+
+\membersection{wxSizerItem::GetRect}\label{wxsizeritemgetrect}
+
+\func{wxRect}{GetRect}{\void}
+
+Get the rectangle of the item on the parent window, excluding borders.
+
+\membersection{wxSizerItem::GetSize}\label{wxsizeritemgetsize}
+
+\constfunc{wxSize}{GetSize}{\void}
+
+Get the current size of the item, as set in the last Layout.
+
+\membersection{wxSizerItem::GetSizer}\label{wxsizeritemgetsizer}
+
+\constfunc{wxSizer*}{GetSizer}{\void}
+
+If this item is tracking a sizer, return it.  NULL otherwise.
+
+
+\membersection{wxSizerItem::GetSpacer}\label{wxsizeritemgetspacer}
+
+\constfunc{const wxSize\&}{GetSpacer}{\void}
+
+If this item is tracking a spacer, return its size.
+
+
+\membersection{wxSizerItem::GetUserData}\label{wxsizeritemgetuserdata}
+
+\constfunc{wxObject*}{GetUserData}{\void}
+
+Get the userData item attribute.
+
+
+\membersection{wxSizerItem::GetWindow}\label{wxsizeritemgetwindow}
+
+\constfunc{wxWindow*}{GetWindow}{\void}
+
+If this item is tracking a window then return it.  NULL otherwise.
+
+
+\membersection{wxSizerItem::IsSizer}\label{wxsizeritemissizer}
+
+\constfunc{bool}{IsSizer}{\void}
+
+Is this item a sizer?
+
+
+\membersection{wxSizerItem::IsShown}\label{wxsizeritemisshown}
+
+\constfunc{bool}{IsShown}{\void}
+
+Returns \true if this item is a window or a spacer and it is shown or if this
+item is a sizer and not all its elements are hidden. In other words, for sizer
+items, all of the child elements must be hidden for the sizer itself to be
+considered hidden.
+
+
+\membersection{wxSizerItem::IsSpacer}\label{wxsizeritemisspacer}
+
+\constfunc{bool}{IsSpacer}{\void}
+
+Is this item a spacer?
+
+
+\membersection{wxSizerItem::IsWindow}\label{wxsizeritemiswindow}
+
+\constfunc{bool}{IsWindow}{\void}
+
+Is this item a window?
+
+
+\membersection{wxSizerItem::SetBorder}\label{wxsizeritemsetborder}
+
+\func{void}{SetBorder}{\param{int }{border}}
+
+Set the border item attribute.
+
+\membersection{wxSizerItem::SetDimension}\label{wxsizeritemsetdimension}
+
+\func{void}{SetDimension}{\param{const wxPoint\& }{pos}, \param{const wxSize\& }{size}}
+
+Set the position and size of the space allocated to the sizer, and
+adjust the position and size of the item to be within that space
+taking alignment and borders into account.
+
+
+\membersection{wxSizerItem::SetFlag}\label{wxsizeritemsetflag}
+
+\func{void}{SetFlag}{\param{int }{flag}}
+
+Set the flag  item attribute.
+
+
+\membersection{wxSizerItem::SetInitSize}\label{wxsizeritemsetinitsize}
+
+\func{void}{SetInitSize}{\param{int }{x}, \param{int }{y}}
+
+
+\membersection{wxSizerItem::SetProportion}\label{wxsizeritemsetproportion}
+
+\func{void}{SetProportion}{\param{int }{proportion}}
+
+Set the proportion item attribute.
+
+\membersection{wxSizerItem::SetRatio}\label{wxsizeritemsetratio}
+
+\func{void}{SetRatio}{\param{int }{width}, \param{int }{height}}
+
+\func{void}{SetRatio}{\param{wxSize }{size}}
+
+\func{void}{SetRatio}{\param{float }{ratio}}
+
+Set the ratio item attribute.
+
+
+\membersection{wxSizerItem::SetSizer}\label{wxsizeritemsetsizer}
+
+\func{void}{SetSizer}{\param{wxSizer* }{sizer}}
+
+Set the sizer tracked by this item.
+
+
+\membersection{wxSizerItem::SetSpacer}\label{wxsizeritemsetspacer}
+
+\func{void}{SetSpacer}{\param{const wxSize\& }{size}}
+
+Set the size of the spacer tracked by this item.
+
+
+\membersection{wxSizerItem::SetWindow}\label{wxsizeritemsetwindow}
+
+\func{void}{SetWindow}{\param{wxWindow* }{window}}
+
+Set the window to be tracked by thsi item.
+
+
+\membersection{wxSizerItem::Show}\label{wxsizeritemshow}
+
+\func{void}{Show}{\param{bool }{show}}
+
+Set the show item attribute, which sizers use to determine if the item
+is to be made part of the layout or not.  If the item is tracking a
+window then it is shown or hidden as needed.
+

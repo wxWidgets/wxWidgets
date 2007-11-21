@@ -1,0 +1,7 @@
+#! /bin/sh
+set -e
+
+update-alternatives --remove wx-config /usr/lib/wx/config/=H-msw-ansi-debug-=V
+
+#DEBHELPER#
+

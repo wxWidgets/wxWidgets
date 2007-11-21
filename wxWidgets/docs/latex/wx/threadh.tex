@@ -1,0 +1,101 @@
+\section{\class{wxThreadHelper}}\label{wxthreadhelper}
+
+The wxThreadHelper class is a mix-in class that manages a single background
+thread.  By deriving from wxThreadHelper, a class can implement the thread
+code in its own \helpref{wxThreadHelper::Entry}{wxthreadhelperentry} method
+and easily share data and synchronization objects between the main thread
+and the worker thread.  Doing this prevents the awkward passing of pointers
+that is needed when the original object in the main thread needs to
+synchronize with its worker thread in its own wxThread derived object.
+
+For example, \helpref{wxFrame}{wxframe} may need to make some calculations
+in a background thread and then display the results of those calculations in
+the main window.
+
+Ordinarily, a \helpref{wxThread}{wxthread} derived object would be created
+with the calculation code implemented in
+\helpref{wxThread::Entry}{wxthreadentry}.  To access the inputs to the
+calculation, the frame object would often to pass a pointer to itself to the
+thread object.  Similarly, the frame object would hold a pointer to the
+thread object.  Shared data and synchronization objects could be stored in
+either object though the object without the data would have to access the
+data through a pointer.
+
+However, with wxThreadHelper, the frame object and the thread object are
+treated as the same object.  Shared data and synchronization variables are
+stored in the single object, eliminating a layer of indirection and the
+associated pointers.
+
+\wxheading{Derived from}
+
+None.
+
+\wxheading{Include files}
+
+<wx/thread.h>
+
+\wxheading{See also}
+
+\helpref{wxThread}{wxthread}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxThreadHelper::wxThreadHelper}\label{wxthreadhelperctor}
+
+\func{}{wxThreadHelper}{\void}
+
+This constructor simply initializes a member variable.
+
+\membersection{wxThreadHelper::m\_thread}\label{wxthreadhelpermthread}
+
+\member{wxThread *}{m\_thread}
+
+the actual \helpref{wxThread}{wxthread} object.
+
+\membersection{wxThreadHelper::\destruct{wxThreadHelper}}\label{wxthreadhelperdtor}
+
+\func{}{\destruct{wxThreadHelper}}{\void}
+
+The destructor frees the resources associated with the thread.
+
+\membersection{wxThreadHelper::Create}\label{wxthreadhelpercreate}
+
+\func{wxThreadError}{Create}{\param{unsigned int }{stackSize = 0}}
+
+Creates a new thread. The thread object is created in the suspended state, and you
+should call \helpref{GetThread()->Run()}{wxthreadrun} to start running
+it.  You may optionally specify the stack size to be allocated to it (Ignored on
+platforms that don't support setting it explicitly, eg. Unix).
+
+\wxheading{Return value}
+
+One of:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxTHREAD\_NO\_ERROR}}{There was no error.}
+\twocolitem{{\bf wxTHREAD\_NO\_RESOURCE}}{There were insufficient resources to create a new thread.}
+\twocolitem{{\bf wxTHREAD\_RUNNING}}{The thread is already running.}
+\end{twocollist}
+
+\membersection{wxThreadHelper::Entry}\label{wxthreadhelperentry}
+
+\func{virtual ExitCode}{Entry}{\void}
+
+This is the entry point of the thread. This function is pure virtual and must
+be implemented by any derived class. The thread execution will start here.
+
+The returned value is the thread exit code which is only useful for
+joinable threads and is the value returned by
+\helpref{GetThread()->Wait()}{wxthreadwait}.
+
+This function is called by wxWidgets itself and should never be called
+directly.
+
+\membersection{wxThreadHelper::GetThread}\label{wxthreadhelpergetthread}
+
+\func{wxThread *}{GetThread}{\void}
+
+This is a public function that returns the \helpref{wxThread}{wxthread} object
+associated with the thread.
+

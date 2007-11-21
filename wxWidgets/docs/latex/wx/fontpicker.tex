@@ -1,0 +1,206 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        fontpicker.tex
+%% Purpose:     wxFontPickerCtrl and wxFontPickerEvent documentation
+%% Author:      Francesco Montorsi
+%% Created:     2006-04-17
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2006 Francesco Montorsi
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxFontPickerCtrl}}\label{wxfontpickerctrl}
+
+This control allows the user to select a font. The generic implementation is
+a button which brings up a \helpref{wxFontDialog}{wxfontdialog} when clicked. Native implementation
+may differ but this is usually a (small) widget which give access to the font-chooser
+dialog.
+It is only available if \texttt{wxUSE\_FONTPICKERCTRL} is set to $1$ (the default).
+
+\wxheading{Derived from}
+
+\helpref{wxPickerBase}{wxpickerbase}\\
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/fontpicker.h>
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxFNTP\_DEFAULT\_STYLE}}{The default style:
+wxFNTP\_FONTDESC\_AS\_LABEL | wxFNTP\_USEFONT\_FOR\_LABEL.}
+\twocolitem{\windowstyle{wxFNTP\_USE\_TEXTCTRL}}{Creates a text control to the left of the
+picker button which is completely managed by the \helpref{wxFontPickerCtrl}{wxfontpickerctrl}
+and which can be used by the user to specify a font (see \helpref{SetSelectedFont}{wxfontpickerctrlsetselectedfont}).
+The text control is automatically synchronized with button's value. Use functions defined in \helpref{wxPickerBase}{wxpickerbase} to modify the text control.}
+\twocolitem{\windowstyle{wxFNTP\_FONTDESC\_AS\_LABEL}}{Keeps the label of the button updated with the fontface name and the font size. E.g. choosing "Times New Roman bold, italic with size 10" from the fontdialog, will update the label (overwriting any previous label) with the "Times New Roman, 10" text.}
+\twocolitem{\windowstyle{wxFNTP\_USEFONT\_FOR\_LABEL}}{Uses the currently selected font to draw the label of the button.}
+\end{twocollist}
+
+\wxheading{Event handling}
+
+To process a font picker event, use these event handler macros to direct input to member
+functions that take a \helpref{wxFontPickerEvent}{wxfontpickerevent} argument.
+
+\twocolwidtha{7cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_FONTPICKER\_CHANGED(id, func)}}{The user changed the font
+selected in the control either using the button or using text control (see
+wxFNTP\_USE\_TEXTCTRL; note that in this case the event is fired only if the
+user's input is valid, i.e. recognizable). }
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{wxFontDialog}{wxfontdialog},\\
+\helpref{wxFontPickerEvent}{wxfontpickerevent}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFontPickerCtrl::wxFontPickerCtrl}\label{wxfontpickerctrlctor}
+
+\func{}{wxFontPickerCtrl}{\param{wxWindow *}{parent},\rtfsp
+\param{wxWindowID}{ id},\rtfsp
+\param{const wxFont\& }{font = wxNullFont},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxFNTP\_DEFAULT\_STYLE},\rtfsp
+\param{const wxValidator\& }{validator = wxDefaultValidator},
+\param{const wxString\& }{name = ``fontpickerctrl"}}
+
+Initializes the object and calls \helpref{Create}{wxfontpickerctrlcreate} with
+all the parameters.
+
+
+\membersection{wxFontPickerCtrl::Create}\label{wxfontpickerctrlcreate}
+
+\func{bool}{Create}{\param{wxWindow *}{parent},\rtfsp
+\param{wxWindowID}{ id},\rtfsp
+\param{const wxFont\& }{font = wxNullFont},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxFNTP\_DEFAULT\_STYLE},\rtfsp
+\param{const wxValidator\& }{validator = wxDefaultValidator},
+\param{const wxString\& }{name = ``fontpickerctrl"}}
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window, must not be non-\texttt{NULL}.}
+
+\docparam{id}{The identifier for the control.}
+
+\docparam{font}{The initial font shown in the control. If \texttt{wxNullFont} 
+is given, the default font is used.}
+
+\docparam{pos}{Initial position.}
+
+\docparam{size}{Initial size.}
+
+\docparam{style}{The window style, see {\tt wxFNTP\_*} flags.}
+
+\docparam{validator}{Validator which can be used for additional date checks.}
+
+\docparam{name}{Control name.}
+
+\wxheading{Return value}
+
+\true if the control was successfully created or \false if creation failed.
+
+
+\membersection{wxFontPickerCtrl::GetSelectedFont}\label{wxfontpickerctrlgetselectedfont}
+
+\constfunc{wxFont}{GetSelectedFont}{\void}
+
+Returns the currently selected font.
+Note that this function is completely different from \helpref{wxWindow::GetFont}{wxwindowgetfont}.
+
+
+\membersection{wxFontPickerCtrl::SetSelectedFont}\label{wxfontpickerctrlsetselectedfont}
+
+\func{void}{SetSelectedFont}{\param{const wxFont \&}{font}}
+
+Sets the currently selected font.
+Note that this function is completely different from \helpref{wxWindow::SetFont}{wxwindowsetfont}.
+
+
+\membersection{wxFontPickerCtrl::GetMaxPointSize}\label{wxfontpickerctrlgetmaxpointsize}
+
+\constfunc{unsigned int}{GetMaxPointSize}{\void}
+
+Returns the maximum point size value allowed for the user-chosen font.
+
+
+\membersection{wxFontPickerCtrl::SetMaxPointSize}\label{wxfontpickerctrlsetmaxpointsize}
+
+\func{void}{GetMaxPointSize}{\param{unsigned int}{ max}}
+
+Sets the maximum point size value allowed for the user-chosen font.
+The default value is 100. Note that big fonts can require a lot of memory and CPU time
+both for creation and for rendering; thus, specially because the user has the option to specify
+the fontsize through a text control (see wxFNTP\_USE\_TEXTCTRL), it's a good idea to put a limit
+to the maximum font size when huge fonts do not make much sense.
+
+
+
+
+%% wxFontPickerEvent documentation
+
+\section{\class{wxFontPickerEvent}}\label{wxfontpickerevent}
+
+This event class is used for the events generated by
+\helpref{wxFontPickerCtrl}{wxfontpickerctrl}.
+
+\wxheading{Derived from}
+
+\helpref{wxCommandEvent}{wxcommandevent}\\
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/fontpicker.h>
+
+\wxheading{Event handling}
+
+To process input from a wxFontPickerCtrl, use one of these event handler macros to
+direct input to member function that take a
+\helpref{wxFontPickerEvent}{wxfontpickerevent} argument:
+
+\twocolwidtha{7cm}
+\begin{twocollist}
+\twocolitem{{\bf EVT\_FONTPICKER\_CHANGED(id, func)}}{Generated whenever the selected font changes.}
+\end{twocollist}%
+
+
+\wxheading{See also}
+
+\helpref{wxFontPickerCtrl}{wxfontpickerctrl}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFontPickerEvent::wxFontPickerEvent}\label{wxfontpickereventctor}
+
+\func{}{wxFontPickerEvent}{\param{wxObject *}{ generator}, \param{int}{ id}, \param{const wxFont\&}{ font}}
+
+The constructor is not normally used by the user code.
+
+
+\membersection{wxFontPickerEvent::GetFont}\label{wxfontpickereventgetfont}
+
+\constfunc{wxFont}{GetFont}{\void}
+
+Retrieve the font the user has just selected.
+
+
+\membersection{wxFontPickerEvent::SetFont}\label{wxfontpickereventsetfont}
+
+\func{void}{SetFont}{\param{const wxFont \&}{ f}}
+
+Set the font associated with the event.
+

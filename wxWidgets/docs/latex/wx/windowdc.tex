@@ -1,0 +1,37 @@
+\section{\class{wxWindowDC}}\label{wxwindowdc}
+
+A wxWindowDC must be constructed if an application wishes to paint on the
+whole area of a window (client and decorations).
+This should normally be constructed as a temporary stack object; don't store
+a wxWindowDC object.
+
+To draw on a window from inside {\bf OnPaint}, construct a \helpref{wxPaintDC}{wxpaintdc} object.
+
+To draw on the client area of a window from outside {\bf OnPaint}, construct a \helpref{wxClientDC}{wxclientdc} object.
+
+To draw on the whole window including decorations, construct a \helpref{wxWindowDC}{wxwindowdc} object
+(Windows only).
+
+\wxheading{Derived from}
+
+\helpref{wxDC}{wxdc}
+
+\wxheading{Include files}
+
+<wx/dcclient.h>
+
+\wxheading{See also}
+
+\helpref{wxDC}{wxdc}, \helpref{wxMemoryDC}{wxmemorydc}, \helpref{wxPaintDC}{wxpaintdc},\rtfsp
+\helpref{wxClientDC}{wxclientdc}, \helpref{wxScreenDC}{wxscreendc}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxWindowDC::wxWindowDC}\label{wxwindowdcwxwindowdc}
+
+\func{}{wxWindowDC}{\param{wxWindow*}{ window}}
+
+Constructor. Pass a pointer to the window on which you wish to paint.
+
+
+

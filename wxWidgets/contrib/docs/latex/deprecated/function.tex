@@ -1,0 +1,361 @@
+\chapter{Functions}\label{functions}
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}
+
+Deprecated functions and macros defined in wxWindows are described here: you can
+either look up a function using the alphabetical listing of them or find it in
+the corresponding topic.
+
+\section{Alphabetical functions and macros list}
+
+%\helpref{wxGetResource}{wxgetresource}\\
+%\helpref{wxLoadUserResource}{wxloaduserresource}\\
+%\helpref{wxMakeMetafilePlaceable}{wxmakemetafileplaceable}\\
+%\helpref{wxNewId}{wxnewid}\\
+\helpref{wxLoadFromResource}{wxloadfromresource}\\
+\helpref{wxResourceAddIdentifier}{wxresourceaddidentifier}\\
+\helpref{wxResourceClear}{wxresourceclear}\\
+\helpref{wxResourceCreateBitmap}{wxresourcecreatebitmap}\\
+\helpref{wxResourceCreateIcon}{wxresourcecreateicon}\\
+\helpref{wxResourceCreateMenuBar}{wxresourcecreatemenubar}\\
+\helpref{wxResourceGetIdentifier}{wxresourcegetidentifier}\\
+\helpref{wxResourceParseData}{wxresourcedata}\\
+\helpref{wxResourceParseFile}{wxresourceparsefile}\\
+\helpref{wxResourceParseString}{wxresourceparsestring}\\
+\helpref{wxResourceRegisterBitmapData}{registerbitmapdata}\\
+\helpref{wxResourceRegisterIconData}{wxresourceregistericondata}\\
+%\helpref{wxSetPrinterCommand}{wxsetprintercommand}\\
+%\helpref{wxSetPrinterFile}{wxsetprinterfile}\\
+%\helpref{wxSetPrinterMode}{wxsetprintermode}\\
+%\helpref{wxSetPrinterOptions}{wxsetprinteroptions}\\
+%\helpref{wxSetPrinterOrientation}{wxsetprinterorientation}\\
+%\helpref{wxSetPrinterPreviewCommand}{wxsetprinterpreviewcommand}\\
+%\helpref{wxSetPrinterScaling}{wxsetprinterscaling}\\
+%\helpref{wxSetPrinterTranslation}{wxsetprintertranslation}\\
+
+\section{Printer settings}\label{printersettings}
+
+{\bf NB:} These routines are obsolete and should no longer be used!
+
+The following functions are used to control PostScript printing. Under
+Windows, PostScript output can only be sent to a file.
+
+\wxheading{Include files}
+
+<wx/dcps.h>
+
+\membersection{::wxGetPrinterCommand}\label{wxgetprintercommand}
+
+\func{wxString}{wxGetPrinterCommand}{\void}
+
+Gets the printer command used to print a file. The default is {\tt lpr}.
+
+\membersection{::wxGetPrinterFile}\label{wxgetprinterfile}
+
+\func{wxString}{wxGetPrinterFile}{\void}
+
+Gets the PostScript output filename.
+
+\membersection{::wxGetPrinterMode}\label{wxgetprintermode}
+
+\func{int}{wxGetPrinterMode}{\void}
+
+Gets the printing mode controlling where output is sent (PS\_PREVIEW, PS\_FILE or PS\_PRINTER).
+The default is PS\_PREVIEW.
+
+\membersection{::wxGetPrinterOptions}\label{wxgetprinteroptions}
+
+\func{wxString}{wxGetPrinterOptions}{\void}
+
+Gets the additional options for the print command (e.g. specific printer). The default is nothing.
+
+\membersection{::wxGetPrinterOrientation}\label{wxgetprinterorientation}
+
+\func{int}{wxGetPrinterOrientation}{\void}
+
+Gets the orientation (PS\_PORTRAIT or PS\_LANDSCAPE). The default is PS\_PORTRAIT.
+
+\membersection{::wxGetPrinterPreviewCommand}\label{wxgetprinterpreviewcommand}
+
+\func{wxString}{wxGetPrinterPreviewCommand}{\void}
+
+Gets the command used to view a PostScript file. The default depends on the platform.
+
+\membersection{::wxGetPrinterScaling}\label{wxgetprinterscaling}
+
+\func{void}{wxGetPrinterScaling}{\param{float *}{x}, \param{float *}{y}}
+
+Gets the scaling factor for PostScript output. The default is 1.0, 1.0.
+
+\membersection{::wxGetPrinterTranslation}\label{wxgetprintertranslation}
+
+\func{void}{wxGetPrinterTranslation}{\param{float *}{x}, \param{float *}{y}}
+
+Gets the translation (from the top left corner) for PostScript output. The default is 0.0, 0.0.
+
+\membersection{::wxSetPrinterCommand}\label{wxsetprintercommand}
+
+\func{void}{wxSetPrinterCommand}{\param{const wxString\& }{command}}
+
+Sets the printer command used to print a file. The default is {\tt lpr}.
+
+\membersection{::wxSetPrinterFile}\label{wxsetprinterfile}
+
+\func{void}{wxSetPrinterFile}{\param{const wxString\& }{filename}}
+
+Sets the PostScript output filename.
+
+\membersection{::wxSetPrinterMode}\label{wxsetprintermode}
+
+\func{void}{wxSetPrinterMode}{\param{int }{mode}}
+
+Sets the printing mode controlling where output is sent (PS\_PREVIEW, PS\_FILE or PS\_PRINTER).
+The default is PS\_PREVIEW.
+
+\membersection{::wxSetPrinterOptions}\label{wxsetprinteroptions}
+
+\func{void}{wxSetPrinterOptions}{\param{const wxString\& }{options}}
+
+Sets the additional options for the print command (e.g. specific printer). The default is nothing.
+
+\membersection{::wxSetPrinterOrientation}\label{wxsetprinterorientation}
+
+\func{void}{wxSetPrinterOrientation}{\param{int}{ orientation}}
+
+Sets the orientation (PS\_PORTRAIT or PS\_LANDSCAPE). The default is PS\_PORTRAIT.
+
+\membersection{::wxSetPrinterPreviewCommand}\label{wxsetprinterpreviewcommand}
+
+\func{void}{wxSetPrinterPreviewCommand}{\param{const wxString\& }{command}}
+
+Sets the command used to view a PostScript file. The default depends on the platform.
+
+\membersection{::wxSetPrinterScaling}\label{wxsetprinterscaling}
+
+\func{void}{wxSetPrinterScaling}{\param{float }{x}, \param{float }{y}}
+
+Sets the scaling factor for PostScript output. The default is 1.0, 1.0.
+
+\membersection{::wxSetPrinterTranslation}\label{wxsetprintertranslation}
+
+\func{void}{wxSetPrinterTranslation}{\param{float }{x}, \param{float }{y}}
+
+Sets the translation (from the top left corner) for PostScript output. The default is 0.0, 0.0.
+
+\section{Resource functions}\label{resourcefunctions}
+
+\overview{Resource functions}{resourceformats}
+
+This section details functions for manipulating wxWindows (.WXR) resource
+files and loading user interface elements from resources.
+
+\normalbox{Please note that this use of the word `resource' is different from that used when talking
+about initialisation file resource reading and writing, using such functions
+as wxWriteResource and wxGetResource. It is just an unfortunate clash of terminology.}
+
+\helponly{For an overview of the wxWindows resource mechanism, see \helpref{the wxWindows resource system}{resourceformats}.}
+
+See also \helpref{wxWindow::LoadFromResource}{wxwindowloadfromresource} for
+loading from resource data.
+
+\membersection{wxLoadFromResource}\label{wxloadfromresource}
+
+\func{virtual bool}{LoadFromResource}{\param{wxWindow* thisWindow}, \param{wxWindow* }{parent},\rtfsp
+\param{const wxString\& }{resourceName}, \param{const wxResourceTable* }{resourceTable = NULL}}
+
+Loads a panel or dialog from a resource file.
+
+\wxheading{Parameters}
+
+\docparam{thisWindow}{Window to load the resource into.}
+
+\docparam{parent}{Parent window.}
+
+\docparam{resourceName}{The name of the resource to load.}
+
+\docparam{resourceTable}{The resource table to load it from. If this is NULL, the
+default resource table will be used.}
+
+\wxheading{Return value}
+
+{\tt true} if the operation succeeded, otherwise {\tt false}.
+
+\membersection{::wxResourceAddIdentifier}\label{wxresourceaddidentifier}
+
+\func{bool}{wxResourceAddIdentifier}{\param{const wxString\& }{name}, \param{int }{value}}
+
+Used for associating a name with an integer identifier (equivalent to dynamically\rtfsp
+{\tt\#}defining a name to an integer). Unlikely to be used by an application except
+perhaps for implementing resource functionality for interpreted languages.
+
+\membersection{::wxResourceClear}\label{wxresourceclear}
+
+\func{void}{wxResourceClear}{\void}
+
+Clears the wxWindows resource table.
+
+\membersection{::wxResourceCreateBitmap}\label{wxresourcecreatebitmap}
+
+\func{wxBitmap *}{wxResourceCreateBitmap}{\param{const wxString\& }{resource}}
+
+Creates a new bitmap from a file, static data, or Windows resource, given a valid
+wxWindows bitmap resource identifier. For example, if the .WXR file contains
+the following:
+
+\begin{verbatim}
+static const wxString\& project_resource = "bitmap(name = 'project_resource',\
+  bitmap = ['project', wxBITMAP_TYPE_BMP_RESOURCE, 'WINDOWS'],\
+  bitmap = ['project.xpm', wxBITMAP_TYPE_XPM, 'X']).";
+\end{verbatim}
+
+then this function can be called as follows:
+
+\begin{verbatim}
+  wxBitmap *bitmap  = wxResourceCreateBitmap("project_resource");
+\end{verbatim}
+
+\membersection{::wxResourceCreateIcon}\label{wxresourcecreateicon}
+
+\func{wxIcon *}{wxResourceCreateIcon}{\param{const wxString\& }{resource}}
+
+Creates a new icon from a file, static data, or Windows resource, given a valid
+wxWindows icon resource identifier. For example, if the .WXR file contains
+the following:
+
+\begin{verbatim}
+static const wxString\& project_resource = "icon(name = 'project_resource',\
+  icon = ['project', wxBITMAP_TYPE_ICO_RESOURCE, 'WINDOWS'],\
+  icon = ['project', wxBITMAP_TYPE_XBM_DATA, 'X']).";
+\end{verbatim}
+
+then this function can be called as follows:
+
+\begin{verbatim}
+  wxIcon *icon = wxResourceCreateIcon("project_resource");
+\end{verbatim}
+
+\membersection{::wxResourceCreateMenuBar}\label{wxresourcecreatemenubar}
+
+\func{wxMenuBar *}{wxResourceCreateMenuBar}{\param{const wxString\& }{resource}}
+
+Creates a new menu bar given a valid wxWindows menubar resource
+identifier. For example, if the .WXR file contains the following:
+
+\begin{verbatim}
+static const wxString\& menuBar11 = "menu(name = 'menuBar11',\
+  menu = \
+  [\
+    ['&File', 1, '', \
+      ['&Open File', 2, 'Open a file'],\
+      ['&Save File', 3, 'Save a file'],\
+      [],\
+      ['E&xit', 4, 'Exit program']\
+    ],\
+    ['&Help', 5, '', \
+      ['&About', 6, 'About this program']\
+    ]\
+  ]).";
+\end{verbatim}
+
+then this function can be called as follows:
+
+\begin{verbatim}
+  wxMenuBar *menuBar = wxResourceCreateMenuBar("menuBar11");
+\end{verbatim}
+
+
+\membersection{::wxResourceGetIdentifier}\label{wxresourcegetidentifier}
+
+\func{int}{wxResourceGetIdentifier}{\param{const wxString\& }{name}}
+
+Used for retrieving the integer value associated with an identifier.
+A zero value indicates that the identifier was not found.
+
+See \helpref{wxResourceAddIdentifier}{wxresourceaddidentifier}.
+
+\membersection{::wxResourceParseData}\label{wxresourcedata}
+
+\func{bool}{wxResourceParseData}{\param{const wxString\& }{resource}, \param{wxResourceTable *}{table = NULL}}
+
+Parses a string containing one or more wxWindows resource objects. If
+the resource objects are global static data that are included into the
+C++ program, then this function must be called for each variable
+containing the resource data, to make it known to wxWindows.
+
+{\it resource} should contain data in the following form:
+
+\begin{verbatim}
+dialog(name = 'dialog1',
+  style = 'wxCAPTION | wxDEFAULT_DIALOG_STYLE',
+  title = 'Test dialog box',
+  x = 312, y = 234, width = 400, height = 300,
+  modal = 0,
+  control = [1000, wxStaticBox, 'Groupbox', '0', 'group6', 5, 4, 380, 262,
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],
+  control = [1001, wxTextCtrl, '', 'wxTE_MULTILINE', 'text3',
+      156, 126, 200, 70, 'wxWindows is a multi-platform, GUI toolkit.',
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]]).
+\end{verbatim}
+
+This function will typically be used after including a {\tt .wxr} file into
+a C++ program as follows:
+
+\begin{verbatim}
+#include "dialog1.wxr"
+\end{verbatim}
+
+Each of the contained resources will declare a new C++ variable, and each
+of these variables should be passed to wxResourceParseData.
+
+\membersection{::wxResourceParseFile}\label{wxresourceparsefile}
+
+\func{bool}{wxResourceParseFile}{\param{const wxString\& }{filename}, \param{wxResourceTable *}{table = NULL}}
+
+Parses a file containing one or more wxWindows resource objects
+in C++-compatible syntax. Use this function to dynamically load
+wxWindows resource data.
+
+\membersection{::wxResourceParseString}\label{wxresourceparsestring}
+
+\func{bool}{wxResourceParseString}{\param{char *}{s}, \param{wxResourceTable *}{table = NULL}}
+
+Parses a string containing one or more wxWindows resource objects. If
+the resource objects are global static data that are included into the
+C++ program, then this function must be called for each variable
+containing the resource data, to make it known to wxWindows.
+
+{\it resource} should contain data with the following form:
+
+\begin{verbatim}
+dialog(name = 'dialog1',
+  style = 'wxCAPTION | wxDEFAULT_DIALOG_STYLE',
+  title = 'Test dialog box',
+  x = 312, y = 234, width = 400, height = 300,
+  modal = 0,
+  control = [1000, wxStaticBox, 'Groupbox', '0', 'group6', 5, 4, 380, 262,
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],
+  control = [1001, wxTextCtrl, '', 'wxTE_MULTILINE', 'text3',
+      156, 126, 200, 70, 'wxWindows is a multi-platform, GUI toolkit.',
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]]).
+\end{verbatim}
+
+This function will typically be used after calling \helpref{wxLoadUserResource}{wxloaduserresource} to
+load an entire {\tt .wxr file} into a string.
+
+\membersection{::wxResourceRegisterBitmapData}\label{registerbitmapdata}
+
+\func{bool}{wxResourceRegisterBitmapData}{\param{const wxString\& }{name}, \param{char *}{xbm\_data}, \param{int }{width},
+\param{int }{height}, \param{wxResourceTable *}{table = NULL}}
+
+\func{bool}{wxResourceRegisterBitmapData}{\param{const wxString\& }{name}, \param{char **}{xpm\_data}}
+
+Makes {\tt\#}included XBM or XPM bitmap data known to the wxWindows resource system.
+This is required if other resources will use the bitmap data, since otherwise there
+is no connection between names used in resources, and the global bitmap data.
+
+\membersection{::wxResourceRegisterIconData}\label{wxresourceregistericondata}
+
+Another name for \helpref{wxResourceRegisterBitmapData}{registerbitmapdata}.
+

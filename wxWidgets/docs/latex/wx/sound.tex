@@ -1,0 +1,115 @@
+\section{\class{wxSound}}\label{wxsound}
+
+This class represents a short sound (loaded from Windows WAV file), that
+can be stored in memory and played. Currently this class is implemented
+on Windows and Unix (and uses either 
+\urlref{Open Sound System}{http://www.opensound.com/oss.html} or 
+\urlref{Simple DirectMedia Layer}{http://www.libsdl.org/}).
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/sound.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxSound::wxSound}\label{wxsoundctor}
+
+\func{}{wxSound}{\void}
+
+Default constructor.
+
+\func{}{wxSound}{\param{const wxString\&}{ fileName}, \param{bool}{ isResource = false}}
+
+Constructs a wave object from a file or, under Windows, from a Windows
+resource. Call \helpref{wxSound::IsOk}{wxsoundisok} to determine whether this
+succeeded.
+
+\wxheading{Parameters}
+
+\docparam{fileName}{The filename or Windows resource.}
+
+\docparam{isResource}{\true if {\it fileName} is a resource, \false if it is a filename.}
+
+
+\membersection{wxSound::\destruct{wxSound}}\label{wxsounddtor}
+
+\func{}{\destruct{wxSound}}{\void}
+
+Destroys the wxSound object.
+
+
+\membersection{wxSound::Create}\label{wxsoundcreate}
+
+\func{bool}{Create}{\param{const wxString\&}{ fileName}, \param{bool}{ isResource = \false}}
+
+Constructs a wave object from a file or resource.
+
+\wxheading{Parameters}
+
+\docparam{fileName}{The filename or Windows resource.}
+
+\docparam{isResource}{\true if {\it fileName} is a resource, \false if it is a filename.}
+
+\wxheading{Return value}
+
+\true if the call was successful, \false otherwise.
+
+
+\membersection{wxSound::IsOk}\label{wxsoundisok}
+
+\constfunc{bool}{IsOk}{\void}
+
+Returns \true if the object contains a successfully loaded file or resource, \false otherwise.
+
+
+\membersection{wxSound::IsPlaying}\label{wxsoundisplaying}
+
+\constfunc{static bool}{IsPlaying}{\void}
+
+Returns \true if a sound is played at the moment.
+
+This method is currently not implemented under Windows.
+
+
+\membersection{wxSound::Play}\label{wxsoundplay}
+
+\constfunc{bool}{Play}{\param{unsigned }{ flags = wxSOUND\_ASYNC}}
+
+\func{static bool}{Play}{\param{const wxString\& }{filename}, \param{unsigned}{ flags = wxSOUND\_ASYNC}}
+
+Plays the sound file. If another sound is playing, it will be interrupted.
+Returns \true on success, \false otherwise. Note that in general it is possible
+to delete the object which is being asynchronously played any time after
+calling this function and the sound would continue playing, however this
+currently doesn't work under Windows for sound objects loaded from memory data.
+
+The possible values for \arg{flags} are:
+
+\begin{twocollist}
+\twocolitem{wxSOUND\_SYNC}{{\tt Play} will block and wait until the sound is
+replayed.}
+\twocolitem{wxSOUND\_ASYNC}{Sound is played asynchronously, 
+{\tt Play} returns immediately}
+\twocolitem{wxSOUND\_ASYNC | wxSOUND\_LOOP}{Sound is played asynchronously
+and loops until another sound is played, 
+\helpref{wxSound::Stop}{wxsoundstop} is called or the program terminates.}
+\end{twocollist}
+
+The static form is shorthand for this code:
+
+\begin{verbatim}
+wxSound(filename).Play(flags);
+\end{verbatim}
+
+
+\membersection{wxSound::Stop}\label{wxsoundstop}
+
+\func{static void}{Stop}{\void}
+
+If a sound is played, this function stops it.
+

@@ -1,0 +1,96 @@
+\section{\class{wxMemoryDC}}\label{wxmemorydc}
+
+A memory device context provides a means to draw graphics onto a bitmap. When
+drawing in to a mono-bitmap, using {\tt wxWHITE}, {\tt wxWHITE\_PEN} and
+{\tt wxWHITE\_BRUSH}
+will draw the background colour (i.e. 0) whereas all other colours will draw the
+foreground colour (i.e. 1).
+
+\wxheading{Derived from}
+
+\helpref{wxDC}{wxdc}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/dcmemory.h>
+
+\wxheading{Remarks}
+
+A bitmap must be selected into the new memory DC before it may be used
+for anything.  Typical usage is as follows:
+
+\begin{verbatim}
+  // Create a memory DC
+  wxMemoryDC temp_dc;
+  temp_dc.SelectObject(test_bitmap);
+
+  // We can now draw into the memory DC...
+  // Copy from this DC to another DC.
+  old_dc.Blit(250, 50, BITMAP_WIDTH, BITMAP_HEIGHT, temp_dc, 0, 0);
+\end{verbatim}
+
+Note that the memory DC {\it must} be deleted (or the bitmap selected out of it) before a bitmap
+can be reselected into another memory DC.
+
+\wxheading{See also}
+
+\helpref{wxBitmap}{wxbitmap}, \helpref{wxDC}{wxdc}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxMemoryDC::wxMemoryDC}\label{wxmemorydcctor}
+
+\func{}{wxMemoryDC}{\void}
+
+Constructs a new memory device context.
+
+Use the \helpref{IsOk}{wxdcisok} member to test whether the constructor was successful
+in creating a usable device context.
+Don't forget to select a bitmap into the DC before drawing on it.
+
+\func{}{wxMemoryDC}{\param{wxBitmap\& }{bitmap}}
+
+Constructs a new memory device context and calls \helpref{SelectObject}{wxmemorydcselectobject}
+with the given bitmap.
+Use the \helpref{IsOk}{wxdcisok} member to test whether the constructor was successful
+in creating a usable device context.
+
+
+\membersection{wxMemoryDC::SelectObject}\label{wxmemorydcselectobject}
+
+\func{void}{SelectObject}{\param{wxBitmap\& }{bitmap}}
+
+Works exactly like \helpref{SelectObjectAsSource}{wxmemorydcselectobjectassource} but
+this is the function you should use when you select a bitmap because you want to modify
+it, e.g. drawing on this DC.
+
+Be careful to use this function and not \helpref{SelectObjectAsSource}{wxmemorydcselectobjectassource}
+when you want to modify the bitmap you are selecting otherwise you may incurr in some
+problems related to wxBitmap being a reference counted object
+(see \helpref{reference counting overview}{trefcount}).
+
+\wxheading{See also}
+
+\helpref{wxDC::DrawBitmap}{wxdcdrawbitmap}
+
+
+
+\membersection{wxMemoryDC::SelectObjectAsSource}\label{wxmemorydcselectobjectassource}
+
+\func{void}{SelectObjectAsSource}{\param{const wxBitmap\& }{bitmap}}
+
+Selects the given bitmap into the device context, to use as the memory
+bitmap. Selecting the bitmap into a memory DC allows you to draw into
+the DC (and therefore the bitmap) and also to use \helpref{wxDC::Blit}{wxdcblit} to copy
+the bitmap to a window. For this purpose, you may find \helpref{wxDC::DrawIcon}{wxdcdrawicon}\rtfsp
+easier to use instead.
+
+If the argument is wxNullBitmap (or some other uninitialised wxBitmap) the current bitmap is
+selected out of the device context, and the original bitmap restored, allowing the current bitmap to
+be destroyed safely.
+
+\wxheading{See also}
+
+\helpref{wxMemoryDC::SelectObject}{wxmemorydcselectobject}
+

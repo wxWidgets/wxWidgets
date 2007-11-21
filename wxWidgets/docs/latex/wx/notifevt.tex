@@ -1,0 +1,62 @@
+\section{\class{wxNotifyEvent}}\label{wxnotifyevent}
+
+This class is not used by the event handlers by itself, but is a base class
+for other event classes (such as \helpref{wxNotebookEvent}{wxnotebookevent}).
+
+It (or an object of a derived class) is sent when the controls state is being
+changed and allows the program to \helpref{Veto()}{wxnotifyeventveto} this
+change if it wants to prevent it from happening.
+
+\wxheading{Derived from}
+
+\helpref{wxCommandEvent}{wxcommandevent}\\
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/event.h>
+
+\wxheading{Event table macros}
+
+None
+
+\wxheading{See also}
+
+\helpref{wxNotebookEvent}{wxnotebookevent}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxNotifyEvent::wxNotifyEvent}\label{wxnotifyeventconstr}
+
+\func{}{wxNotifyEvent}{\param{wxEventType}{ eventType = wxEVT\_NULL}, \param{int}{ id = 0}}
+
+Constructor (used internally by wxWidgets only).
+
+\membersection{wxNotifyEvent::Allow}\label{wxnotifyeventallow}
+
+\func{void}{Allow}{\void}
+
+This is the opposite of \helpref{Veto()}{wxnotifyeventveto}: it explicitly
+allows the event to be processed. For most events it is not necessary to call
+this method as the events are allowed anyhow but some are forbidden by default
+(this will be mentioned in the corresponding event description).
+
+\membersection{wxNotifyEvent::IsAllowed}\label{wxnotifyeventisallowed}
+
+\constfunc{bool}{IsAllowed}{\void}
+
+Returns true if the change is allowed (\helpref{Veto()}{wxnotifyeventveto} 
+hasn't been called) or false otherwise (if it was).
+
+\membersection{wxNotifyEvent::Veto}\label{wxnotifyeventveto}
+
+\func{void}{Veto}{\void}
+
+Prevents the change announced by this event from happening.
+
+It is in general a good idea to notify the user about the reasons for vetoing
+the change because otherwise the applications behaviour (which just refuses to
+do what the user wants) might be quite surprising.
+

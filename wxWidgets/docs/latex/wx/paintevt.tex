@@ -1,0 +1,101 @@
+\section{\class{wxPaintEvent}}\label{wxpaintevent}
+
+A paint event is sent when a window's contents needs to be repainted.
+
+Please notice that in general it is impossible to change the drawing of a
+standard control (such as \helpref{wxButton}{wxbutton}) and so you shouldn't
+attempt to handle paint events for them as even if it might work on some
+platforms, this is inherently not portable and won't work everywhere.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/event.h>
+
+\wxheading{Event table macros}
+
+To process a paint event, use this event handler macro to direct input to a member
+function that takes a wxPaintEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_PAINT(func)}}{Process a wxEVT\_PAINT event.}
+\end{twocollist}%
+
+\wxheading{See also}
+
+%\helpref{wxWindow::OnPaint}{wxwindowonpaint}, 
+\helpref{Event handling overview}{eventhandlingoverview}
+
+\wxheading{Remarks}
+
+Note that In a paint event handler, the application must {\it always} create a \helpref{wxPaintDC}{wxpaintdc} object,
+even if you do not use it. Otherwise, under MS Windows, refreshing for this and other windows will go wrong.
+
+For example:
+
+\small{%
+\begin{verbatim}
+  void MyWindow::OnPaint(wxPaintEvent& event)
+  {
+      wxPaintDC dc(this);
+
+      DrawMyDocument(dc);
+  }
+\end{verbatim}
+}%
+
+You can optimize painting by retrieving the rectangles
+that have been damaged and only repainting these. The rectangles are in
+terms of the client area, and are unscrolled, so you will need to do
+some calculations using the current view position to obtain logical,
+scrolled units.
+
+Here is an example of using the \helpref{wxRegionIterator}{wxregioniterator} class:
+
+{\small%
+\begin{verbatim}
+// Called when window needs to be repainted.
+void MyWindow::OnPaint(wxPaintEvent& event)
+{
+  wxPaintDC dc(this);
+
+  // Find Out where the window is scrolled to
+  int vbX,vbY;                     // Top left corner of client
+  GetViewStart(&vbX,&vbY);
+
+  int vX,vY,vW,vH;                 // Dimensions of client area in pixels
+  wxRegionIterator upd(GetUpdateRegion()); // get the update rect list
+
+  while (upd)
+  {
+    vX = upd.GetX();
+    vY = upd.GetY();
+    vW = upd.GetW();
+    vH = upd.GetH();
+
+    // Alternatively we can do this:
+    // wxRect rect(upd.GetRect());
+
+    // Repaint this rectangle
+    ...some code...
+
+    upd ++ ;
+  }
+}
+\end{verbatim}
+}%
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPaintEvent::wxPaintEvent}\label{wxpainteventctor}
+
+\func{}{wxPaintEvent}{\param{int }{id = 0}}
+
+Constructor.
+

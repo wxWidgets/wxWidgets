@@ -1,0 +1,158 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxSearchCtrl %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxSearchCtrl}}\label{wxsearchctrl}
+
+A search control is a composite control with a search button, a text 
+control, and a cancel button.
+
+\wxheading{Derived from}
+
+\helpref{wxTextCtrl}{wxtextctrl}\\
+streambuf\\
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/srchctrl.h>
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxTE\_PROCESS\_ENTER}}{The control will generate
+the event wxEVT\_COMMAND\_TEXT\_ENTER (otherwise pressing Enter key
+is either processed internally by the control or used for navigation between
+dialog controls).}
+\twocolitem{\windowstyle{wxTE\_PROCESS\_TAB}}{The control will receive
+wxEVT\_CHAR events for TAB pressed - normally, TAB is used for passing to the
+next control in a dialog instead. For the control created with this style,
+you can still use Ctrl-Enter to pass to the next control from the keyboard.}
+\twocolitem{\windowstyle{wxTE\_NOHIDESEL}}{By default, the Windows text control
+doesn't show the selection when it doesn't have focus - use this style to force
+it to always show it. It doesn't do anything under other platforms.}
+\twocolitem{\windowstyle{wxTE\_LEFT}}{The text in the control will be left-justified (default).}
+\twocolitem{\windowstyle{wxTE\_CENTRE}}{The text in the control will be centered (currently wxMSW and wxGTK2 only).}
+\twocolitem{\windowstyle{wxTE\_RIGHT}}{The text in the control will be right-justified (currently wxMSW and wxGTK2 only).}
+\twocolitem{\windowstyle{wxTE\_CAPITALIZE}}{On PocketPC and Smartphone, causes the first letter to be capitalized.}
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles} and \helpref{wxSearchCtrl::wxSearchCtrl}{wxsearchctrlctor}.
+
+\wxheading{Event handling}
+
+To process input from a search control, use these event handler macros to direct input to member
+functions that take a \helpref{wxCommandEvent}{wxcommandevent} argument. To retrieve actual search
+queries, use EVT\_TEXT and EVT\_TEXT\_ENTER events, just as you would with \helpref{wxTextCtrl}{wxtextctrl}.
+
+\twocolwidtha{9cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_SEARCHCTRL\_SEARCH\_BTN(id, func)}}{Respond to a wxEVT\_SEARCHCTRL\_SEARCH\_BTN event,
+generated when the search button is clicked. Note that this does not initiate a search.}
+\twocolitem{{\bf EVT\_SEARCHCTRL\_CANCEL\_BTN(id, func)}}{Respond to a wxEVT\_SEARCHCTRL\_CANCEL\_BTN event,
+generated when the cancel button is clicked.}
+\end{twocollist}%
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxSearchCtrl::wxSearchCtrl}\label{wxsearchctrlctor}
+
+\func{}{wxSearchCtrl}{\void}
+
+Default constructor.
+
+\func{}{wxSearchCtrl}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{value = ``"}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = wxSearchCtrlNameStr}}
+
+Constructor, creating and showing a text control.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Should not be NULL.}
+
+\docparam{id}{Control identifier. A value of -1 denotes a default value.}
+
+\docparam{value}{Default text value.}
+
+\docparam{pos}{Text control position.}
+
+\docparam{size}{Text control size.}
+
+\docparam{style}{Window style. See \helpref{wxSearchCtrl}{wxsearchctrl}.}
+
+\docparam{validator}{Window validator.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxTextCtrl::Create}{wxtextctrlcreate}, \helpref{wxValidator}{wxvalidator}
+
+
+\membersection{wxSearchCtrl::\destruct{wxSearchCtrl}}\label{wxsearchctrldtor}
+
+\func{}{\destruct{wxSearchCtrl}}{\void}
+
+Destructor, destroying the search control.
+
+
+\membersection{wxSearchCtrl::SetMenu}\label{wxsearchctrlsetmenu}
+
+\func{virtual void}{SetMenu}{\param{wxMenu* }{ menu}}
+
+Sets the search control's menu object.  If there is already a menu associated with
+the search control it is deleted.
+
+
+\wxheading{Parameters}
+
+\docparam{menu}{Menu to attach to the search control.}
+
+\membersection{wxSearchCtrl::GetMenu}\label{wxsearchctrlgetmenu}
+
+\func{virtual wxMenu*}{GetMenu}{\void}
+
+Returns a pointer to the search control's menu object or NULL if there is no 
+menu attached.
+
+
+\membersection{wxSearchCtrl::ShowSearchButton}\label{wxsearchctrlshowsearchbutton}
+
+\func{virtual void}{ShowSearchButton}{\param{bool }{ show}}
+
+Sets the search button visibility value on the search control.  
+If there is a menu attached, the search button will be visible regardless of the search
+button visibility value. 
+
+This has no effect in Mac OS X v10.3
+
+
+\membersection{wxSearchCtrl::IsSearchButtonVisible}\label{wxsearchctrlissearchbuttonvisible}
+
+\func{virtual bool}{IsSearchButtonVisible}{\void}
+
+Returns the search button visibility value.  
+If there is a menu attached, the search button will be visible regardless of the search
+button visibility value. 
+
+This always returns false in Mac OS X v10.3
+
+
+\membersection{wxSearchCtrl::ShowCancelButton}\label{wxsearchctrlshowcancelbutton}
+
+\func{virtual void}{ShowCancelButton}{\param{bool }{ show}}
+
+Shows or hides the cancel button.
+
+
+\membersection{wxSearchCtrl::IsCancelButtonVisible}\label{wxsearchctrliscancelbuttonvisible}
+
+\func{virtual bool}{IsCancelButtonVisible}{\void}
+
+Indicates whether the cancel button is visible.
+

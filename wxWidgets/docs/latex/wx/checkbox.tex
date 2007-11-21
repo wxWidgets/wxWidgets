@@ -1,0 +1,171 @@
+\section{\class{wxCheckBox}}\label{wxcheckbox}
+
+A checkbox is a labelled box which by default is either on (checkmark is
+visible) or off (no checkmark). Optionally (when the wxCHK\_3STATE style flag
+is set) it can have a third state, called the mixed or undetermined state.
+Often this is used as a "Does Not Apply" state.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/checkbox.h>
+
+\wxheading{Window styles}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxCHK\_2STATE}}{Create a 2-state checkbox. This is the default.}
+\twocolitem{\windowstyle{wxCHK\_3STATE}}{Create a 3-state checkbox.
+Not implemented in wxMGL, wxOS2 and wxGTK built against GTK+ 1.2.}
+\twocolitem{\windowstyle{wxCHK\_ALLOW\_3RD\_STATE\_FOR\_USER}}{By default a user can't set a 3-state checkbox
+to the third state. It can only be done from code. Using this flags allows the user to set the checkbox to the third state by clicking. }
+\twocolitem{\windowstyle{wxALIGN\_RIGHT}}{Makes the text appear on the left of the checkbox.}
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{Event handling}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_CHECKBOX(id, func)}}{Process a wxEVT\_COMMAND\_CHECKBOX\_CLICKED event,
+when the checkbox is clicked.}
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{wxRadioButton}{wxradiobutton}, \helpref{wxCommandEvent}{wxcommandevent}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxCheckBox::wxCheckBox}\label{wxcheckboxctor}
+
+\func{}{wxCheckBox}{\void}
+
+Default constructor.
+
+\func{}{wxCheckBox}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{label}, \param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize}, \param{long}{ style = 0},\rtfsp
+\param{const wxValidator\& }{val}, \param{const wxString\& }{name = ``checkBox"}}
+
+Constructor, creating and showing a checkbox.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Checkbox identifier. A value of -1 indicates a default value.}
+
+\docparam{label}{Text to be displayed next to the checkbox.}
+
+\docparam{pos}{Checkbox position. If the position (-1, -1) is specified then a default position is chosen.}
+
+\docparam{size}{Checkbox size. If the default size (-1, -1) is specified then a default size is chosen.}
+
+\docparam{style}{Window style. See \helpref{wxCheckBox}{wxcheckbox}.}
+
+\docparam{validator}{Window validator.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxCheckBox::Create}{wxcheckboxcreate}, \helpref{wxValidator}{wxvalidator}
+
+\membersection{wxCheckBox::\destruct{wxCheckBox}}\label{wxcheckboxdtor}
+
+\func{}{\destruct{wxCheckBox}}{\void}
+
+Destructor, destroying the checkbox.
+
+\membersection{wxCheckBox::Create}\label{wxcheckboxcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{label}, \param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize}, \param{long}{ style = 0},\rtfsp
+\param{const wxValidator\& }{val}, \param{const wxString\& }{name = ``checkBox"}}
+
+Creates the checkbox for two-step construction. See \helpref{wxCheckBox::wxCheckBox}{wxcheckboxctor}\rtfsp
+for details.
+
+\membersection{wxCheckBox::GetValue}\label{wxcheckboxgetvalue}
+
+\constfunc{bool}{GetValue}{\void}
+
+Gets the state of a 2-state checkbox.
+
+\wxheading{Return value}
+
+Returns \true if it is checked, \false otherwise.
+
+\membersection{wxCheckBox::Get3StateValue}\label{wxcheckboxgetthreestatevalue}
+
+\constfunc{wxCheckBoxState}{Get3StateValue}{\void}
+
+Gets the state of a 3-state checkbox.
+
+\wxheading{Return value}
+
+Returns wxCHK\_UNCHECKED when the checkbox is unchecked, wxCHK\_CHECKED
+ when it is checked and wxCHK\_UNDETERMINED when it's in the undetermined
+state. Asserts when the function is used with a 2-state checkbox.
+
+\membersection{wxCheckBox::Is3rdStateAllowedForUser}\label{wxcheckboxis3rdstateallowedforuser}
+
+\constfunc{bool}{Is3rdStateAllowedForUser}{\void}
+
+Returns whether or not the user can set the checkbox to the third state.
+
+\wxheading{Return value}
+
+Returns \true if the user can set the third state of this checkbox, \false if it can only be set
+programmatically or if it's a 2-state checkbox.
+
+\membersection{wxCheckBox::Is3State}\label{wxcheckboxis3state}
+
+\constfunc{bool}{Is3State}{\void}
+
+Returns whether or not the checkbox is a 3-state checkbox.
+
+\wxheading{Return value}
+
+Returns \true if this checkbox is a 3-state checkbox, \false if it's a 2-state checkbox.
+
+\membersection{wxCheckBox::IsChecked}\label{wxcheckboxischecked}
+
+\constfunc{bool}{IsChecked}{\void}
+
+This is just a maybe more readable synonym for 
+\helpref{GetValue}{wxcheckboxgetvalue}: just as the latter, it returns 
+\true if the checkbox is checked and \false otherwise.
+
+\membersection{wxCheckBox::SetValue}\label{wxcheckboxsetvalue}
+
+\func{void}{SetValue}{\param{bool}{ state}}
+
+Sets the checkbox to the given state. This does not cause a
+wxEVT\_COMMAND\_CHECKBOX\_CLICKED event to get emitted.
+
+\wxheading{Parameters}
+
+\docparam{state}{If \true, the check is on, otherwise it is off.}
+
+\membersection{wxCheckBox::Set3StateValue}\label{wxcheckboxset3statevalue}
+
+\func{void}{Set3StateValue}{\param{const wxCheckBoxState}{ state}}
+
+Sets the checkbox to the given state. This does not cause a
+wxEVT\_COMMAND\_CHECKBOX\_CLICKED event to get emitted.
+
+\wxheading{Parameters}
+
+\docparam{state}{Can be one of: wxCHK\_UNCHECKED (Check is off), wxCHK\_CHECKED
+ (Check is on) or wxCHK\_UNDETERMINED (Check is mixed). Asserts when the checkbox
+ is a 2-state checkbox and setting the state to wxCHK\_UNDETERMINED.}

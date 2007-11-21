@@ -1,0 +1,573 @@
+#!/bin/sh
+# tardist: make up a tar.gz distribution of wxWidgets 2
+# Supply a source (e.g. ~/wx2) and destination (e.g. ~/wx2/deliver)
+
+# We can't use e.g. this:
+# ls `cat $SRC/distrib/msw/makefile.rsp` zip -@ -u $DEST/wxWidgets-$VERSION-gen.zip
+# because there's not enough space on the command line, plus we need to ignore the
+# blank lines.
+
+TAR=tar
+ARCH=`arch`
+if [ "$ARCH" = "ppc" ]; then
+  TAR=gnutar
+fi
+
+expandlines()
+{
+    toexpand=$1
+    outputfile=$2
+
+    rm -f $outputfile
+    touch $outputfile
+    for line in `cat $toexpand` ; do
+      if [ "$line" != "" ]; then
+        ls $line >> $outputfile
+      fi
+    uniq < $outputfile > /tmp/uniqtemp.txt
+    mv /tmp/uniqtemp.txt $outputfile
+    done
+}
+
+doinit()
+{
+  cd $WXSRC
+  echo Removing backup files...
+  rm *~ */*~ */*/*~ */*/*/*~ */*/*/*/*~
+
+  rm -f $WXDEST/wx*-${WXVER}*.tar.gz
+  # Copy setup files
+  cp $WXSRC/include/wx/msw/setup0.h $WXSRC/include/wx/msw/setup.h
+  cp $WXSRC/include/wx/univ/setup0.h $WXSRC/include/wx/univ/setup.h
+
+  # Copy readme and other files
+
+  cp $WXSRC/docs/readme.txt $WXDEST/readme-${WXVER}.txt
+  cp $WXSRC/docs/changes.txt $WXDEST/changes-${WXVER}.txt
+
+  cp $WXSRC/docs/mgl/readme.txt $WXDEST/readme-mgl-${WXVER}.txt
+  cp $WXSRC/docs/mgl/install.txt $WXDEST/install-mgl-${WXVER}.txt
+
+  cp $WXSRC/docs/x11/readme.txt $WXDEST/readme-x11-${WXVER}.txt
+#  cp $WXSRC/docs/x11/readme-nanox.txt $WXDEST/readme-nanox-${WXVER}.txt
+  cp $WXSRC/docs/x11/install.txt $WXDEST/install-x11-${WXVER}.txt
+
+  cp $WXSRC/docs/motif/readme.txt $WXDEST/readme-motif-${WXVER}.txt
+  cp $WXSRC/docs/motif/install.txt $WXDEST/install-motif-${WXVER}.txt
+
+  cp $WXSRC/docs/msw/readme.txt $WXDEST/readme-msw-${WXVER}.txt
+  cp $WXSRC/docs/msw/install.txt $WXDEST/install-msw-${WXVER}.txt
+
+  cp $WXSRC/docs/gtk/readme.txt $WXDEST/readme-gtk-${WXVER}.txt
+  cp $WXSRC/docs/gtk/install.txt $WXDEST/install-gtk-${WXVER}.txt
+
+  cp $WXSRC/docs/mac/readme.txt $WXDEST/readme-mac-${WXVER}.txt
+  cp $WXSRC/docs/mac/install.txt $WXDEST/install-mac-${WXVER}.txt
+
+  cp $WXSRC/docs/cocoa/readme.txt $WXDEST/readme-cocoa-${WXVER}.txt
+  cp $WXSRC/docs/cocoa/install.txt $WXDEST/install-cocoa-${WXVER}.txt
+
+  cp $WXSRC/docs/os2/install.txt $WXDEST/install-os2-${WXVER}.txt
+
+  # Make .mo files
+  cd $WXSRC/locale
+  make allmo
+}
+
+dospinwxgtk()
+{
+echo Tarring wxGTK...
+
+cd $WXSRC
+cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/deprecated.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/tex2rtf.rsp $WXSRC/distrib/msw/gtk.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxgtk_in.txt
+expandlines /tmp/wxgtk_in.txt /tmp/wxgtk.txt
+$TAR cf $WXDEST/wxGTK-${WXVER}.tar -T /tmp/wxgtk.txt
+
+echo Re-tarring wxGTK in a subdirectory...
+cd $WXDEST
+mkdir wxGTK-${WXVER}
+cd wxGTK-${WXVER}
+$TAR xf ../wxGTK-${WXVER}.tar
+echo Copying readme files...
+cp $WXSRC/docs/gtk/readme.txt README-GTK.txt
+cp $WXSRC/docs/gtk/install.txt INSTALL-GTK.txt
+cp $WXSRC/docs/readme.txt README.txt
+cp $WXSRC/docs/changes.txt CHANGES.txt
+cp $WXSRC/docs/licence.txt LICENCE.txt
+cp $WXSRC/docs/lgpl.txt COPYING.LIB
+cd ..
+rm -f wxGTK-${WXVER}.tar
+$TAR cf $WXDEST/wxGTK-${WXVER}.tar wxGTK-${WXVER}/*
+rm -f -r wxGTK-${WXVER}
+gzip $WXDEST/wxGTK-${WXVER}.tar
+}
+
+dospinwxmotif()
+{
+echo Tarring wxMotif...
+
+cd $WXSRC
+cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/motif.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/deprecated.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxmotif_in.txt
+expandlines /tmp/wxmotif_in.txt /tmp/wxmotif.txt
+$TAR cf $WXDEST/wxMotif-${WXVER}.tar -T /tmp/wxmotif.txt
+
+echo Re-tarring wxMotif in a subdirectory...
+cd $WXDEST
+mkdir wxMotif-${WXVER}
+cd wxMotif-${WXVER}
+$TAR xf ../wxMotif-${WXVER}.tar
+echo Copying readme files...
+cp $WXSRC/docs/motif/readme.txt README-MOTIF.txt
+cp $WXSRC/docs/motif/install.txt INSTALL-MOTIF.txt
+cp $WXSRC/docs/readme.txt README.txt
+cp $WXSRC/docs/changes.txt CHANGES.txt
+cp $WXSRC/docs/licence.txt LICENCE.txt
+cp $WXSRC/docs/lgpl.txt COPYING.LIB
+cd ..
+rm -f wxMotif-${WXVER}.tar
+$TAR cf $WXDEST/wxMotif-${WXVER}.tar wxMotif-${WXVER}/*
+rm -f -r wxMotif-${WXVER}
+gzip $WXDEST/wxMotif-${WXVER}.tar
+}
+
+dospinwxx11()
+{
+echo Tarring wxX11...
+
+### wxX11: combined wxMotif and wxX11 distributions
+cd $WXSRC
+cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/motif.rsp $WXSRC/distrib/msw/x11.rsp $WXSRC/distrib/msw/univ.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/deprecated.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxx11_in.txt
+expandlines /tmp/wxx11_in.txt /tmp/wxx11.txt
+$TAR cf $WXDEST/wxX11-${WXVER}.tar -T /tmp/wxx11.txt
+
+echo Re-tarring wxX11 in a subdirectory...
+cd $WXDEST
+mkdir wxX11-${WXVER}
+cd wxX11-${WXVER}
+$TAR xf ../wxX11-${WXVER}.tar
+echo Copying readme files...
+cp $WXSRC/docs/motif/readme.txt README-MOTIF.txt
+cp $WXSRC/docs/motif/install.txt INSTALL-MOTIF.txt
+cp $WXSRC/docs/x11/readme.txt README-X11.txt
+cp $WXSRC/docs/x11/install.txt INSTALL-X11.txt
+cp $WXSRC/docs/readme.txt README.txt
+cp $WXSRC/docs/changes.txt CHANGES.txt
+cp $WXSRC/docs/licence.txt LICENCE.txt
+cp $WXSRC/docs/lgpl.txt COPYING.LIB
+cd ..
+rm -f wxX11-${WXVER}.tar
+$TAR cf $WXDEST/wxX11-${WXVER}.tar wxX11-${WXVER}/*
+rm -f -r wxX11-${WXVER}
+gzip $WXDEST/wxX11-${WXVER}.tar
+}
+
+### wxMSW
+# cd $WXSRC
+# cat $WXSRC/distrib/msw/msw.rsp $WXSRC/distrib/msw/vc.rsp $WXSRC/distrib/msw/bc.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/deprecated.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxmsw_in.txt
+# expandlines /tmp/wxmsw_in.txt /tmp/wxmsw.txt
+# $TAR cf $WXDEST/wxMSW-${WXVER}.tar -T /tmp/wxmsw.txt
+# gzip $WXDEST/wxMSW-${WXVER}.tar
+
+dospinwxmac()
+{
+echo Tarring wxMac...
+### wxMac
+cp $WXSRC/include/wx/mac/setup0.h $WXSRC/include/wx/setup.h
+cp $WXSRC/include/wx/mac/setup0.h $WXSRC/include/wx/mac/setup.h
+cd $WXSRC
+cat $WXSRC/distrib/msw/mac.rsp $WXSRC/distrib/msw/cocoa.rsp $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/cw_mac.rsp $WXSRC/distrib/msw/tex2rtf.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/deprecated.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxmac_in.txt
+expandlines /tmp/wxmac_in.txt /tmp/wxmac.txt
+$TAR cf $WXDEST/wxMac-${WXVER}.tar -T /tmp/wxmac.txt
+
+rm -f $WXSRC/include/wx/setup.h
+
+echo Re-tarring wxMac in a subdirectory...
+cd $WXDEST
+mkdir wxMac-${WXVER}
+cd wxMac-${WXVER}
+
+# If we have the full set of Mac CW project files,
+# get them
+if [ -f $WXDEST/extra/wxWidgets-${WXVER}-CW-Mac.zip ]; then
+  unzip -o $WXDEST/extra/wxWidgets-${WXVER}-CW-Mac.zip
+else
+  echo "Warning - did not find $WXDEST/deliver/extra/wxWidgets-${WXVER}-CW-Mac.zip"
+fi
+
+$TAR xf ../wxMac-${WXVER}.tar
+rm -f -r contrib/src/mmedia contrib/samples/mmedia
+echo Copying readme files...
+cp $WXSRC/docs/mac/readme.txt README-MAC.txt
+cp $WXSRC/docs/mac/install.txt INSTALL-MAC.txt
+cp $WXSRC/docs/readme.txt README.txt
+cp $WXSRC/docs/changes.txt CHANGES.txt
+cp $WXSRC/docs/licence.txt LICENCE.txt
+cp $WXSRC/docs/lgpl.txt COPYING.LIB
+cd ..
+rm -f wxMac-${WXVER}.tar
+$TAR cf $WXDEST/wxMac-${WXVER}.tar wxMac-${WXVER}/*
+rm -f -r wxMac-${WXVER}
+gzip $WXDEST/wxMac-${WXVER}.tar
+}
+
+### wxUniv: universal-specific files
+#cd $WXSRC
+#cat $WXSRC/distrib/msw/univ.rsp > /tmp/wxuniv_in.txt
+#expandlines /tmp/wxuniv_in.txt /tmp/wxuniv.txt
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-Univ.tar -T /tmp/wxuniv.txt
+#
+#echo Re-tarring wxUniversal in a subdirectory...
+#cd $WXDEST
+#mkdir wxWidgets-${WXVER}
+#cd wxWidgets-${WXVER}
+#$TAR xf ../wxWidgets-${WXVER}-Univ.tar
+#cd ..
+#rm -f wxWidgets-${WXVER}-Univ.tar
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-Univ.tar wxWidgets-${WXVER}/*
+#rm -f -r wxWidgets-${WXVER}
+#gzip $WXDEST/wxWidgets-${WXVER}-Univ.tar
+
+dospinwxall()
+{
+echo Tarring wxAll...
+
+### wxAll: all distributions in one giant archive
+cd $WXSRC
+cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/msw.rsp $WXSRC/distrib/msw/wince.rsp $WXSRC/distrib/msw/vc.rsp $WXSRC/distrib/msw/cw.rsp $WXSRC/distrib/msw/cw_mac.rsp $WXSRC/distrib/msw/gtk.rsp $WXSRC/distrib/msw/x11.rsp $WXSRC/distrib/msw/motif.rsp $WXSRC/distrib/msw/mac.rsp $WXSRC/distrib/msw/cocoa.rsp $WXSRC/distrib/msw/os2.rsp $WXSRC/distrib/msw/palmos.rsp $WXSRC/distrib/msw/x11.rsp $WXSRC/distrib/msw/univ.rsp $WXSRC/distrib/msw/mgl.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/deprecated.rsp $WXSRC/distrib/msw/utilmake.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/mmedia.rsp $WXSRC/distrib/msw/tex2rtf.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp $WXSRC/distrib/msw/docsrc.rsp | uniq > /tmp/wxall_in.txt
+expandlines /tmp/wxall_in.txt /tmp/wxall.txt
+$TAR cf $WXDEST/wxWidgets-${WXVER}.tar -T /tmp/wxall.txt
+
+echo Re-tarring wxAll in a subdirectory...
+cd $WXDEST
+mkdir wxWidgets-${WXVER}
+
+cd wxWidgets-${WXVER}
+
+# If we have the full set of VC++ project files,
+# get them
+if [ -f $WXDEST/extra/wxWidgets-${WXVER}-VC.zip ]; then
+  unzip -o $WXDEST/extra/wxWidgets-${WXVER}-VC.zip
+else
+  echo "Warning - did not find $WXDEST/deliver/extra/wxWidgets-${WXVER}-VC.zip"
+fi
+
+# If we have the full set of eVC++ project files,
+# get them
+if [ -f $WXDEST/extra/wxWidgets-${WXVER}-eVC.zip ]; then
+  unzip -o $WXDEST/extra/wxWidgets-${WXVER}-eVC.zip
+else
+  echo "Warning - did not find $WXDEST/deliver/extra/wxWidgets-${WXVER}-eVC.zip"
+fi
+
+# If we have the full set of DMC project files,
+# get them
+if [ -f $WXDEST/extra/wxWidgets-${WXVER}-DMC.zip ]; then
+  unzip -o $WXDEST/extra/wxWidgets-${WXVER}-DMC.zip
+else
+  echo "Warning - did not find $WXDEST/deliver/extra/wxWidgets-${WXVER}-DMC.zip"
+fi
+
+# If we have the full set of Mac CW project files,
+# get them
+if [ -f $WXDEST/extra/wxWidgets-${WXVER}-CW-Mac.zip ]; then
+  unzip -o $WXDEST/extra/wxWidgets-${WXVER}-CW-Mac.zip
+else
+  echo "Warning - did not find $WXDEST/deliver/extra/wxWidgets-${WXVER}-CW-Mac.zip"
+fi
+
+$TAR xf ../wxWidgets-${WXVER}.tar
+
+# Translate all .dsp and .dsw files to DOS format
+unix2dos --unix2dos `cat $WXSRC/distrib/msw/vc.rsp`
+
+echo Copying readme files...
+cp $WXSRC/docs/readme.txt README.txt
+cp $WXSRC/docs/changes.txt CHANGES.txt
+cp $WXSRC/docs/licence.txt LICENCE.txt
+cp $WXSRC/docs/lgpl.txt COPYING.LIB
+cp $WXSRC/docs/motif/readme.txt README-MOTIF.txt
+cp $WXSRC/docs/motif/install.txt INSTALL-MOTIF.txt
+cp $WXSRC/docs/x11/readme.txt README-X11.txt
+cp $WXSRC/docs/x11/install.txt INSTALL-X11.txt
+cp $WXSRC/docs/mac/readme.txt README-MAC.txt
+cp $WXSRC/docs/mac/install.txt INSTALL-MAC.txt
+cp $WXSRC/docs/mgl/readme.txt README-MGL.txt
+cp $WXSRC/docs/mgl/install.txt INSTALL-MGL.txt
+cp $WXSRC/docs/palmos/readme.txt README-PALMOS.txt
+#cp $WXSRC/docs/os2/readme.txt README-OS2.txt
+cp $WXSRC/docs/os2/install.txt INSTALL-OS2.txt
+
+cd ..
+rm -f wxWidgets-${WXVER}.tar
+$TAR cf $WXDEST/wxWidgets-${WXVER}.tar wxWidgets-${WXVER}/*
+rm -f -r wxWidgets-${WXVER}
+gzip -c $WXDEST/wxWidgets-${WXVER}.tar > $WXDEST/wxWidgets-${WXVER}.tar.gz
+bzip2 $WXDEST/wxWidgets-${WXVER}.tar
+}
+
+domakedocs()
+{
+  mkdir -p $WXSRC/docs/html/wx
+  mkdir -p $WXSRC/docs/html/tex2rtf
+  mkdir -p $WXSRC/docs/html/fl
+  mkdir -p $WXSRC/docs/html/ogl
+  mkdir -p $WXSRC/docs/htb
+
+  rm -f -r $WXSRC/docs/html/wx/*.htm*
+  rm -f -r $WXSRC/docs/htb/wx.htb
+
+  echo Making HTML wxWidgets manual...
+  cd $WXSRC/docs/latex/wx
+  cp *.gif $WXSRC/docs/html/wx
+  tex2rtf manual.tex $WXSRC/docs/html/wx/wx.htm -twice -html
+
+  echo Making HTB wxWidgets manual...
+  cd $WXSRC/docs/html/wx
+  zip -q $WXSRC/docs/htb/wx.htb *.html *.gif *.hhp *.hhc *.hhk
+
+  echo Done making manuals.
+}
+
+dospinwxdocs()
+{
+  # First make the docs
+  domakedocs
+
+echo Tarring wxDocs...
+
+### Doc sources
+#cd $WXSRC
+#cat $WXSRC/distrib/msw/docsrc.rsp > /tmp/docsrc_in.txt
+#expandlines /tmp/docsrc_in.txt /tmp/docsrc.txt
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-doc.tar -T /tmp/docsrc.txt
+#
+#echo Re-tarring docs in a subdirectory...
+#cd $WXDEST
+#mkdir wxWidgets-${WXVER}
+#cd wxWidgets-${WXVER}
+#$TAR xf ../wxWidgets-${WXVER}-doc.tar
+#cd ..
+#rm -f wxWidgets-${WXVER}-doc.tar
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-doc.tar wxWidgets-${WXVER}/*
+#rm -f -r wxWidgets-${WXVER}
+#gzip $WXDEST/wxWidgets-${WXVER}-doc.tar
+
+### HTML docs
+cd $WXSRC
+cat $WXSRC/distrib/msw/wx_html.rsp > /tmp/html_in.txt
+expandlines /tmp/html_in.txt /tmp/html.txt
+$TAR cf $WXDEST/wxWidgets-${WXVER}-HTML.tar -T /tmp/html.txt
+
+echo Re-tarring HTML in a subdirectory...
+cd $WXDEST
+mkdir wxWidgets-${WXVER}
+cd wxWidgets-${WXVER}
+$TAR xf ../wxWidgets-${WXVER}-HTML.tar
+cd ..
+rm -f wxWidgets-${WXVER}-HTML.tar
+$TAR cf $WXDEST/wxWidgets-${WXVER}-HTML.tar wxWidgets-${WXVER}/*
+rm -f -r wxWidgets-${WXVER}
+gzip $WXDEST/wxWidgets-${WXVER}-HTML.tar
+
+### HTB docs
+cd $WXSRC
+cat $WXSRC/distrib/msw/wx_htb.rsp > /tmp/htb_in.txt
+expandlines /tmp/htb_in.txt /tmp/htb.txt
+$TAR cf $WXDEST/wxWidgets-${WXVER}-HTB.tar -T /tmp/htb.txt
+
+echo Re-tarring HTB in a subdirectory...
+cd $WXDEST
+mkdir wxWidgets-${WXVER}
+cd wxWidgets-${WXVER}
+$TAR xf ../wxWidgets-${WXVER}-HTB.tar
+cd ..
+rm -f wxWidgets-${WXVER}-HTB.tar
+$TAR cf $WXDEST/wxWidgets-${WXVER}-HTB.tar wxWidgets-${WXVER}/*
+rm -f -r wxWidgets-${WXVER}
+gzip $WXDEST/wxWidgets-${WXVER}-HTB.tar
+
+### PDF docs
+cd $WXSRC
+cat $WXSRC/distrib/msw/wx_pdf.rsp > /tmp/pdf_in.txt
+expandlines /tmp/pdf_in.txt /tmp/pdf.txt
+$TAR cf $WXDEST/wxWidgets-${WXVER}-PDF.tar -T /tmp/pdf.txt
+
+echo Re-tarring PDF in a subdirectory...
+cd $WXDEST
+mkdir wxWidgets-${WXVER}
+cd wxWidgets-${WXVER}
+$TAR xf ../wxWidgets-${WXVER}-PDF.tar
+cd ..
+rm -f wxWidgets-${WXVER}-PDF.tar
+$TAR cf $WXDEST/wxWidgets-${WXVER}-PDF.tar wxWidgets-${WXVER}/*
+rm -f -r wxWidgets-${WXVER}
+gzip $WXDEST/wxWidgets-${WXVER}-PDF.tar
+}
+
+### Tex2RTF
+#cd $WXSRC
+#cat $WXSRC/distrib/msw/tex2rtf.rsp > /tmp/tex2rtf_in.txt
+#expandlines /tmp/tex2rtf_in.txt /tmp/tex2rtf.txt
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-tex2rtf.tar -T /tmp/tex2rtf.txt
+#
+#echo Re-tarring Tex2RTF in a subdirectory...
+#cd $WXDEST
+#mkdir wxWidgets-${WXVER}
+#cd wxWidgets-${WXVER}
+#$TAR xf ../wxWidgets-${WXVER}-tex2rtf.tar
+#cd ..
+#rm -f wxWidgets-${WXVER}-tex2rtf.tar
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-tex2rtf.tar wxWidgets-${WXVER}/*
+#rm -f -r wxWidgets-${WXVER}
+#gzip $WXDEST/wxWidgets-${WXVER}-tex2rtf.tar
+
+### OGL
+#cd $WXSRC
+#cat $WXSRC/distrib/msw/ogl.rsp > /tmp/ogl_in.txt
+#expandlines /tmp/ogl_in.txt /tmp/ogl.txt
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-ogl.tar -T /tmp/ogl.txt
+#
+#echo Re-tarring OGL in a subdirectory...
+#cd $WXDEST
+#mkdir wxWidgets-${WXVER}
+#cd wxWidgets-${WXVER}
+#$TAR xf ../wxWidgets-${WXVER}-ogl.tar
+#cd ..
+#rm -f wxWidgets-${WXVER}-ogl.tar
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-ogl.tar wxWidgets-${WXVER}/*
+#rm -f -r wxWidgets-${WXVER}
+#gzip $WXDEST/wxWidgets-${WXVER}-ogl.tar
+
+### JPEG
+#cd $WXSRC
+#cat $WXSRC/distrib/msw/jpeg.rsp > /tmp/jpeg_in.txt
+#expandlines /tmp/jpeg_in.txt /tmp/jpeg.txt
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-jpeg.tar -T /tmp/jpeg.txt
+#
+#echo Re-tarring jpeg in a subdirectory...
+#cd $WXDEST
+#mkdir wxWidgets-${WXVER}
+#cd wxWidgets-${WXVER}
+#$TAR xf ../wxWidgets-${WXVER}-jpeg.tar
+#cd ..
+#rm -f wxWidgets-${WXVER}-jpeg.tar
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-jpeg.tar wxWidgets-${WXVER}/*
+#rm -f -r wxWidgets-${WXVER}
+#gzip $WXDEST/wxWidgets-${WXVER}-jpeg.tar
+
+### TIFF
+#cd $WXSRC
+#cat $WXSRC/distrib/msw/tiff.rsp > /tmp/tiff_in.txt
+#expandlines /tmp/tiff_in.txt /tmp/tiff.txt
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-tiff.tar -T /tmp/tiff.txt
+#
+#echo Re-tarring docs in a subdirectory...
+#cd $WXDEST
+#mkdir wxWidgets-${WXVER}
+#cd wxWidgets-${WXVER}
+#$TAR xf ../wxWidgets-${WXVER}-tiff.tar
+#cd ..
+#rm -f wxWidgets-${WXVER}-tiff.tar
+#$TAR cf $WXDEST/wxWidgets-${WXVER}-tiff.tar wxWidgets-${WXVER}/*
+#rm -f -r wxWidgets-${WXVER}
+#gzip $WXDEST/wxWidgets-${WXVER}-tiff.tar
+
+init=""
+if [ "$1" = "" ]
+then
+  echo Usage: tardist wx-dir output-dir version
+  exit
+fi
+
+if [ "$2" = "" ]
+then
+  echo Usage: tardist wx-dir output-dir version
+  exit
+fi
+
+if [ "$3" = "" ]
+then
+  echo Usage: tardist wx-dir output-dir version
+  exit
+fi
+
+PROGNAME=$0
+WXSRC=$1
+WXDEST=$2
+WXVER=$3
+
+SPINWXALL=0
+SPINWXX11=0
+SPINWXGTK=0
+SPINWXMOTIF=0
+SPINWXMAC=0
+SPINWXDOCS=0
+SPINEVERYTHING=0
+
+usage()
+{
+    echo Usage: $PROGNAME "src-dir dest-dir version-number [ options ]"
+    echo Options:
+    echo "    --help         Display this help message"
+    echo "    --wxall        Spin wxAll"
+    echo "    --wxgtk        Spin wxGTK"
+    echo "    --wxmotif      Spin wxMotif"
+    echo "    --wxmac        Spin wxMac"
+    echo "    --wxx11        Spin wxX11"
+    echo "    --wxdocs       Spin docs"
+    echo "    --all          Spin EVERYTHING"
+
+    exit 1
+}
+
+# Process command line options.
+shift 3
+for i in "$@"; do
+    case "$i" in
+	--wxall) SPINWXALL=1 ;;
+	--wxx11) SPINWXX11=1 ;;
+	--wxgtk) SPINWXGTK=1 ;;
+	--wxmotif) SPINWXMOTIF=1 ;;
+	--wxmac) SPINWXMAC=1 ;;
+	--wxdocs) SPINWXDOCS=1 ;;
+	--all) SPINEVERYTHING=1 ;;
+	*)
+	    usage
+	    exit
+	    ;;
+    esac
+done
+
+echo About to archive wxWidgets:
+echo   From    $WXSRC
+echo   To      $WXDEST
+echo   Version $WXVER
+echo CTRL-C if this is not correct.
+read dummy
+
+doinit
+
+if [ "$SPINWXX11" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxx11
+fi
+
+if [ "$SPINWXGTK" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxgtk
+fi
+
+if [ "$SPINWXMAC" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxmac
+fi
+
+if [ "$SPINWXMOTIF" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxmotif
+fi
+
+if [ "$SPINWXDOCS" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxdocs
+fi
+
+if [ "$SPINWXALL" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxall
+fi
+

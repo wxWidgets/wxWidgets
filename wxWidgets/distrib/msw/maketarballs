@@ -1,0 +1,350 @@
+#!/bin/sh
+# Makes the wxWidgets tarballs with 'make dist'
+
+doupdatecvs()
+{
+  cd $WXSRC
+  echo Updating from CVS...
+  cvswx update -d -P
+}
+
+dospinwxgtk()
+{
+  echo Making wxGTK tarballs...
+
+  if [ ! -d $WXDEST ]; then
+    mkdir $WXDEST
+  fi
+
+  rm -f -r $WXDEST/wxgtk
+  mkdir $WXDEST/wxgtk
+  mkdir $WXDEST/wxgtk/release
+
+  cd $WXSRC
+  cd locale
+  make allmo
+  cd $WXDEST/wxgtk/release
+  echo Configuring...
+  $WXSRC/configure --no-recursion
+  echo Making...
+  make -j1 dist bzip-dist-only
+  mv $WXDEST/wxgtk/release/*.gz $WXDEST/wxgtk/release/*.bz2 $WXDEST
+}
+
+dospinwxmgl()
+{
+  echo Making wxMGL tarballs...
+
+  if [ ! -d $WXDEST ]; then
+    mkdir $WXDEST
+  fi
+
+  rm -f -r $WXDEST/wxmgl
+  mkdir $WXDEST/wxmgl
+  mkdir $WXDEST/wxmgl/release
+
+  cd $WXSRC
+  cd locale
+  make allmo
+  cd $WXDEST/wxmgl/release
+  echo Configuring...
+  $WXSRC/configure --no-recursion --with-mgl
+  echo Making...
+  make -j1 dist bzip-dist-only
+  mv $WXDEST/wxmgl/release/*.gz $WXDEST/wxmgl/release/*.bz2 $WXDEST
+}
+
+dospinwxbase()
+{
+  echo Making wxBase tarballs...
+
+  if [ ! -d $WXDEST ]; then
+    mkdir $WXDEST
+  fi
+
+  rm -f -r $WXDEST/wxbase
+  mkdir $WXDEST/wxbase
+  mkdir $WXDEST/wxbase/release
+
+  cd $WXSRC
+  cd locale
+  make allmo
+  cd $WXDEST/wxbase/release
+  echo Configuring...
+  $WXSRC/configure --no-recursion --disable-gui
+  echo Making...
+  make -j1 dist bzip-dist-only
+  mv $WXDEST/wxbase/release/*.gz $WXDEST/wxbase/release/*.bz2 $WXDEST
+}
+
+dospinwxx11()
+{
+  echo Making wxX11 tarballs...
+
+  if [ ! -d $WXDEST ]; then
+    mkdir $WXDEST
+  fi
+
+  rm -f -r $WXDEST/wxx11
+  mkdir $WXDEST/wxx11
+  mkdir $WXDEST/wxx11/release
+
+  cd $WXSRC
+  cd locale
+  make allmo
+  cd $WXDEST/wxx11/release
+  echo Configuring...
+  $WXSRC/configure --with-x11 --no-recursion
+  echo Making...
+  make -j1 dist bzip-dist-only
+
+  cp $WXDEST/wxx11/release/*.tar.gz $WXDEST
+  cp $WXDEST/wxx11/release/*.tar.bz2 $WXDEST
+}
+
+dospinwxmotif()
+{
+  echo Making wxMotif tarballs...
+
+  if [ ! -d $WXDEST ]; then
+    mkdir $WXDEST
+  fi
+
+  rm -f -r $WXDEST/wxmotif
+  mkdir $WXDEST/wxmotif
+  mkdir $WXDEST/wxmotif/release
+
+  cd $WXSRC
+  cd locale
+  make allmo
+  cd $WXDEST/wxmotif/release
+  echo Configuring...
+  $WXSRC/configure --with-motif --no-recursion
+  echo Making...
+  make -j1 dist bzip-dist-only
+
+  cp $WXDEST/wxmotif/release/*.tar.gz $WXDEST
+  cp $WXDEST/wxmotif/release/*.tar.bz2 $WXDEST
+
+  echo Rearchiving wxMotif tarballs to change wxMOTIF to wxMotif...
+  cd $WXDEST
+  mkdir wxMotif.tmp
+  cd wxMotif.tmp
+  rm -f -r *
+  tar xfz ../wxMOTIF-$WXVER.tar.gz
+  mv wxMOTIF-$WXVER wxMotif-$WXVER
+  rm -f ../wxMOTIF-$WXVER.tar.gz
+  rm -f ../wxMOTIF-$WXVER.tar.bz2
+  tar cf ../wxMotif-$WXVER.tar *
+  gzip -c ../wxMotif-$WXVER.tar > ../wxMotif-$WXVER.tar.gz
+  bzip2 -f9 ../wxMotif-$WXVER.tar
+  cd ..
+  rm -f -r wxMotif.tmp
+#  rm -f -r $WXDEST/wxmotif
+}
+
+dospinwxmac()
+{
+  echo Making wxMac tarballs...
+
+  if [ ! -d $WXDEST ]; then
+    mkdir $WXDEST
+  fi
+
+  rm -f -r $WXDEST/wxmac
+  mkdir $WXDEST/wxmac
+  mkdir $WXDEST/wxmac/release
+
+  cd $WXSRC
+  cd locale
+  make allmo
+  cd $WXDEST/wxmac/release
+  echo Configuring...
+  $WXSRC/configure --with-mac --no-recursion
+  echo Making...
+  make -j1 dist bzip-dist-only
+
+  cp $WXDEST/wxmac/release/*.tar.gz $WXDEST
+  cp $WXDEST/wxmac/release/*.tar.bz2 $WXDEST
+
+  echo Rearchiving wxMac tarballs to change wxMAC to wxMAC...
+  cd $WXDEST
+  mkdir wxMac.tmp
+  cd wxMac.tmp
+  rm -f -r *
+  tar xfz ../wxMac-$WXVER.tar.gz
+  mv wxMAC-$WXVER wxMac-$WXVER
+  rm -f ../wxMAC-$WXVER.tar.gz
+  rm -f ../wxMAC-$WXVER.tar.bz2
+  tar cf ../wxMac-$WXVER.tar *
+  gzip -c ../wxMac-$WXVER.tar > ../wxMac-$WXVER.tar.gz
+  bzip2 -f9 ../wxMac-$WXVER.tar
+  cd ..
+  rm -f -r wxMac.tmp
+
+  rm -f -r $WXDEST/wxmac
+}
+
+docopydocs()
+{
+  cp $WXSRC/docs/readme.txt $WXDEST/readme-${WXVER}.txt
+  cp $WXSRC/docs/changes.txt $WXDEST/changes-${WXVER}.txt
+  cp $WXSRC/docs/mgl/readme.txt $WXDEST/readme-mgl-${WXVER}.txt
+  cp $WXSRC/docs/mgl/install.txt $WXDEST/install-mgl-${WXVER}.txt
+  cp $WXSRC/docs/x11/readme.txt $WXDEST/readme-x11-${WXVER}.txt
+  cp $WXSRC/docs/x11/readme-nanox.txt $WXDEST/readme-nanox-${WXVER}.txt
+  cp $WXSRC/docs/x11/install.txt $WXDEST/install-x11-${WXVER}.txt
+  cp $WXSRC/docs/motif/readme.txt $WXDEST/readme-motif-${WXVER}.txt
+  cp $WXSRC/docs/motif/install.txt $WXDEST/install-motif-${WXVER}.txt
+  cp $WXSRC/docs/msw/readme.txt $WXDEST/readme-msw-${WXVER}.txt
+  cp $WXSRC/docs/msw/install.txt $WXDEST/install-msw-${WXVER}.txt
+  cp $WXSRC/docs/gtk/readme.txt $WXDEST/readme-gtk-${WXVER}.txt
+  cp $WXSRC/docs/gtk/install.txt $WXDEST/install-gtk-${WXVER}.txt
+  cp $WXSRC/docs/mac/readme.txt $WXDEST/readme-mac-${WXVER}.txt
+  cp $WXSRC/docs/mac/install.txt $WXDEST/install-mac-${WXVER}.txt
+  cp $WXSRC/docs/os2/install.txt $WXDEST/install-os2-${WXVER}.txt
+}
+
+dospindocs()
+{
+  mkdir -p $WXSRC/docs/html/wx
+  mkdir -p $WXSRC/docs/html/tex2rtf
+  mkdir -p $WXSRC/docs/html/fl
+  mkdir -p $WXSRC/docs/html/ogl
+  mkdir -p $WXSRC/docs/htb
+
+  rm -f -r $WXSRC/docs/html/wx/*.htm*
+  rm -f -r $WXSRC/docs/htb/wx.htb
+
+  echo Making HTML wxWidgets manual...
+  cd $WXSRC/docs/latex/wx
+  cp *.gif $WXSRC/docs/html/wx
+  tex2rtf manual.tex $WXSRC/docs/html/wx/wx.htm -twice -html
+
+  echo Making HTB wxWidgets manual...
+  cd $WXSRC/docs/html/wx
+  zip -q $WXSRC/docs/htb/wx.htb *.html *.gif *.hhp *.hhc *.hhk
+
+  echo Archiving manuals...
+  # TODO
+
+  echo Done making manuals.
+}
+
+PROGNAME=$0
+WXSRC=$1
+WXDEST=$2
+WXVER=$3
+
+SPINWXX11=0
+SPINWXGTK=0
+SPINWXMOTIF=0
+SPINWXMAC=0
+SPINWXBASE=0
+SPINWXMGL=0
+SPINDOCS=0
+SPINEVERYTHING=0
+UPDATECVS=0
+SILENT=0
+
+usage()
+{
+    echo Usage: $PROGNAME "src-dir dest-dir version-number [ options ]"
+    echo Options:
+    echo "    --help         Display this help message"
+    echo "    --wxgtk        Spin wxGTK"
+    echo "    --wxbase       Spin wxBase"
+    echo "    --wxx11        Spin wxX11"
+    echo "    --wxmotif      Spin wxMotif"
+    echo "    --wxmac        Spin wxMac"
+    echo "    --wxmgl        Spin wxMGL"
+    echo "    --docs         Spin docs"
+    echo "    --all          Spin EVERYTHING"
+    echo "    --updatecvs    Update from CVS"
+
+    exit 1
+}
+
+init=""
+if [ "$1" = "" ]
+then
+  usage
+  exit
+fi
+
+if [ "$2" = "" ]
+then
+  usage
+  exit
+fi
+
+if [ "$3" = "" ]
+then
+  usage
+  exit
+fi
+
+# Process command line options.
+shift 3
+for i in "$@"; do
+    case "$i" in
+	--wxx11) SPINWXX11=1 ;;
+	--wxgtk) SPINWXGTK=1 ;;
+	--wxmac) SPINWXMAC=1 ;;
+	--wxbase) SPINWXBASE=1 ;;
+	--wxmgl) SPINWXMGL=1 ;;
+	--wxmotif) SPINWXMOTIF=1 ;;
+	--all) SPINEVERYTHING=1 ;;
+	--updatecvs) UPDATECVS=1 ;;
+	--silent) SILENT=1 ;;
+	*)
+	    usage
+	    exit
+	    ;;
+    esac
+done
+
+echo About to make wxWidgets RPMs:
+echo   From    $WXSRC
+echo   To      $WXDEST
+echo   Version $WXVER
+
+# we don't want this when batch building tarballs.
+if [ "$SILENT" = "0" ]; then
+  echo CTRL-C if this is not correct.
+  read dummy
+fi
+
+if [ "$UPDATECVS" = "1" ]; then
+  doupdatecvs
+fi
+
+if [ "$SPINWXX11" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxx11
+fi
+
+if [ "$SPINWXGTK" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxgtk
+fi
+
+if [ "$SPINWXMOTIF" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxmotif
+fi
+
+if [ "$SPINWXMAC" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxmac
+fi
+
+if [ "$SPINWXMGL" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxmgl
+fi
+
+if [ "$SPINWXBASE" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxbase
+fi
+
+if [ "$SPINDOCS" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospindocs
+fi
+
+docopydocs

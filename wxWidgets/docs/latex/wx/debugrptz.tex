@@ -1,0 +1,40 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        debugrptz.tex
+%% Purpose:     wxDebugReportCompress documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     2005-03-21
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Vadim Zeitlin 2005
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxDebugReportCompress}}\label{wxdebugreportcompress}
+
+wxDebugReportCompress is a \helpref{wxDebugReport}{wxdebugreport} which
+compresses all the files in this debug report into a single .ZIP file in its
+\texttt{\textit{Process()}} function.
+
+\wxheading{Derived from}
+
+\helpref{wxDebugReport}{wxdebugreport}
+
+\wxheading{Include files}
+
+<wx/debugrpt.h>
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDebugReportCompress::wxDebugReportCompress}\label{wxdebugreportcompresswxdebugreportcompress}
+
+\func{}{wxDebugReportCompress}{\void}
+
+Default constructor does nothing special.
+
+\membersection{wxDebugReportCompress::GetCompressedFileName}\label{wxdebugreportcompressgetcompressedfilename}
+
+\constfunc{const wxString\&}{GetCompressedFileName}{\void}
+
+Returns the full path of the compressed file (empty if creation failed).
+

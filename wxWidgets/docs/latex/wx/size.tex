@@ -1,0 +1,225 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        size.tex
+%% Purpose:     wxSize documentation
+%% Author:      wxTeam
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxTeam
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxSize}}\label{wxsize}
+
+A {\bf wxSize} is a useful data structure for graphics operations.
+It simply contains integer {\it width} and {\it height} members.
+
+wxSize is used throughout wxWidgets as well as wxPoint which, although almost
+equivalent to wxSize, has a different meaning: wxPoint represents a position
+while wxSize - the size.
+
+\pythonnote{wxPython defines aliases for the {\tt x} and {\tt y} members
+named {\tt width} and {\tt height} since it makes much more sense for
+sizes.
+}
+
+\wxheading{Derived from}
+
+None
+
+\wxheading{Include files}
+
+<wx/gdicmn.h>
+
+\wxheading{See also}
+
+\helpref{wxPoint}{wxpoint}, \helpref{wxRealPoint}{wxrealpoint}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxSize::wxSize}\label{wxsizector}
+
+\func{}{wxSize}{\void}
+
+\func{}{wxSize}{\param{int}{ width}, \param{int}{ height}}
+
+Creates a size object.
+
+
+
+\membersection{wxSize::DecBy}\label{wxsizedecby}
+
+\func{void}{DecBy}{\param{const wxSize\& }{size}}
+
+\func{void}{DecBy}{\param{int }{dx}, \param{int }{dy}}
+
+\func{void}{DecBy}{\param{int }{d}}
+
+Decreases the size in x- and y- directions
+
+\begin{enumerate}
+    \item By \arg{size.x} and \arg{size.y} for the first overload
+    \item By \arg{dx} and \arg{dy} for the second one
+    \item By \arg{d} and \arg{d} for the third one
+\end{enumerate}
+
+\wxheading{See also}
+
+\helpref{IncBy}{wxsizeincby}
+
+
+\membersection{wxSize::DecTo}\label{wxsizedecto}
+
+\func{void}{DecTo}{\param{const wxSize\& }{size}}
+
+Decrements this object so that both of its dimensions are not greater than the
+corresponding dimensions of the \arg{size}.
+
+\wxheading{See also}
+
+\helpref{IncTo}{wxsizeincto}
+
+
+\membersection{wxSize::IsFullySpecified}\label{wxsizeisfullyspecified}
+
+\constfunc{bool}{IsFullySpecified}{\void}
+
+Returns \true if neither of the size object components is equal to $-1$, which
+is used as default for the size values in wxWidgets (hence the predefined
+\texttt{wxDefaultSize} has both of its components equal to $-1$).
+
+This method is typically used before calling
+\helpref{SetDefaults}{wxsizesetdefaults}.
+
+
+\membersection{wxSize::GetWidth}\label{wxsizegetwidth}
+
+\constfunc{int}{GetWidth}{\void}
+
+Gets the width member.
+
+
+\membersection{wxSize::GetHeight}\label{wxsizegetheight}
+
+\constfunc{int}{GetHeight}{\void}
+
+Gets the height member.
+
+
+\membersection{wxSize::IncBy}\label{wxsizeincby}
+
+\func{void}{IncBy}{\param{const wxSize\& }{size}}
+
+\func{void}{IncBy}{\param{int }{dx}, \param{int }{dy}}
+
+\func{void}{IncBy}{\param{int }{d}}
+
+Increases the size in x- and y- directions
+
+\begin{enumerate}
+    \item By \arg{size.x} and \arg{size.y} for the first overload
+    \item By \arg{dx} and \arg{dy} for the second one
+    \item By \arg{d} and \arg{d} for the third one
+\end{enumerate}
+
+\wxheading{See also}
+
+\helpref{DecBy}{wxsizedecby}
+
+
+\membersection{wxSize::IncTo}\label{wxsizeincto}
+
+\func{void}{IncTo}{\param{const wxSize\& }{size}}
+
+Increments this object so that both of its dimensions are not less than the
+corresponding dimensions of the \arg{size}.
+
+\wxheading{See also}
+
+\helpref{DecTo}{wxsizedecto}
+
+
+
+\membersection{wxSize::Scale}\label{wxsizescale}
+
+\func{wxSize\&}{Scale}{\param{float}{ xscale}, \param{float}{ yscale}}
+
+Scales the dimensions of this object by the given factors.
+If you want to scale both dimensions by the same factor you can also use
+the \helpref{operator *=}{wxsizeoperators}
+
+Returns a reference to this object (so that you can concatenate other operations in the same line).
+
+
+\membersection{wxSize::Set}\label{wxsizeset}
+
+\func{void}{Set}{\param{int}{ width}, \param{int}{ height}}
+
+Sets the width and height members.
+
+
+\membersection{wxSize::SetDefaults}\label{wxsizesetdefaults}
+
+\func{void}{SetDefaults}{\param{const wxSize\& }{sizeDefault}}
+
+Combine this size object with another one replacing the default (i.e. equal
+to $-1$) components of this object with those of the other. It is typically
+used like this:
+\begin{verbatim}
+    if ( !size.IsFullySpecified() )
+    {
+        size.SetDefaults(GetDefaultSize());
+    }
+\end{verbatim}
+
+\wxheading{See also}
+
+\helpref{IsFullySpecified}{wxsizeisfullyspecified}
+
+
+\membersection{wxSize::SetHeight}\label{wxsizesetheight}
+
+\func{void}{SetHeight}{\param{int}{ height}}
+
+Sets the height.
+
+
+\membersection{wxSize::SetWidth}\label{wxsizesetwidth}
+
+\func{void}{SetWidth}{\param{int}{ width}}
+
+Sets the width.
+
+
+\membersection{Operators}\label{wxsizeoperators}
+
+\func{void}{operator $=$}{\param{const wxSize\& }{sz}}
+
+Assignment operator.
+
+
+\constfunc{bool}{operator $==$}{\param{const wxSize\& }{sz}}
+
+\constfunc{bool}{operator $!=$}{\param{const wxSize\& }{sz}}
+
+\func{wxSize}{operator $+$}{\param{const wxSize\& }{sz}}
+
+\func{wxSize}{operator $-$}{\param{const wxSize\& }{sz}}
+
+\func{wxSize\&}{operator $+=$}{\param{const wxSize\& }{sz}}
+
+\func{wxSize\&}{operator $-=$}{\param{const wxSize\& }{sz}}
+
+Operators for comparison, sum and subtraction between \helpref{wxSize}{wxsize} objects.
+
+
+\func{wxSize}{operator $/$}{\param{int }{factor}}
+
+\func{wxSize}{operator $*$}{\param{int }{factor}}
+
+\func{wxSize\&}{operator $/=$}{\param{int }{factor}}
+
+\func{wxSize\&}{operator $*=$}{\param{int }{factor}}
+
+Operators for division and multiplication between a \helpref{wxSize}{wxsize} object and an integer.
+

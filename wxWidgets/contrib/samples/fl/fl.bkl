@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../../build/bakefiles/common_samples.bkl"/>
+    <include file="../../../build/bakefiles/common_contrib.bkl"/>
+
+    <template id="fl_sample"
+              template="wx_contrib_sample" template_append="wx_append">
+        <define>BMP_DIR="bitmaps/"</define>
+        <sources>$(id).cpp</sources>
+        <win32-res>$(id).rc</win32-res>
+        <contrib-lib>fl</contrib-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+    </template>
+
+    <exe id="fl_demo1" template="fl_sample"/>
+    <exe id="fl_demo2" template="fl_sample"/>
+    <exe id="fl_sample1" template="fl_sample"/>
+    <exe id="fl_sample2" template="fl_sample"/>
+    <exe id="fl_sample3" template="fl_sample"/>
+
+    <wx-data id="data_files">
+        <dstdir>$(BUILDDIR)/bitmaps</dstdir>
+        <srcdir>$(SRCDIR)/bitmaps</srcdir>
+        <files>
+            bookmarks.bmp
+            class_icon.bmp
+            class_icon1.bmp
+            copy.bmp
+            cut.bmp
+            file_icon.bmp
+            folder_icon.bmp
+            help_icon.bmp
+            new.bmp
+            nextmark.bmp
+            open.bmp
+            paste.bmp
+            prevmark.bmp
+            res_icon.bmp
+            save.bmp
+            saveall.bmp
+            search.bmp
+            start95_dp.bmp
+            start95_pr.bmp
+            tile.bmp
+        </files>
+    </wx-data>
+
+
+</makefile>

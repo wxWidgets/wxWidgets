@@ -1,0 +1,56 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        tbook.tex
+%% Purpose:     wxBookCtrl overview
+%% Author:      Wlodzimierz ABX Skiba
+%% Modified by:
+%% Created:     11/18/2004
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{wxBookCtrl overview}\label{wxbookctrloverview}
+
+Classes: \helpref{wxNotebook}{wxnotebook}, \helpref{wxListbook}{wxlistbook}, \helpref{wxChoicebook}{wxchoicebook},
+\helpref{wxTreebook}{wxtreebook}, \helpref{wxToolbook}{wxtoolbook}
+
+\subsection{Introduction}\label{wxbookctrlintro}
+
+A book control is a convenient way of displaying multiple pages of information,
+displayed one page at a time. wxWidgets has five variants of this control:
+
+\begin{itemize}\itemsep=0pt
+\item \helpref{wxNotebook}{wxnotebook}: uses a row of tabs
+\item \helpref{wxListbook}{wxlistbook}: controlled by a \helpref{wxListCtrl}{wxlistctrl}
+\item \helpref{wxChoicebook}{wxchoicebook}: controlled by a \helpref{wxChoice}{wxchoice}
+\item \helpref{wxTreebook}{wxtreebook}: controlled by a \helpref{wxTreeCtrl}{wxtreectrl}
+\item \helpref{wxToolbook}{wxtoolbook}: controlled by a \helpref{wxToolBar}{wxtoolbar}
+\end{itemize}
+
+See \helpref{Notebook sample}{samplenotebook} for an example of wxBookCtrl usage.
+
+\subsection{Best book}\label{wxbestbookctrl}
+
+wxBookCtrl is mapped to the class best suited for a given platform.
+Currently it provides \helpref{wxChoicebook}{wxchoicebook} for smartphones equipped with
+WinCE, and \helpref{wxNotebook}{wxnotebook} for all other platforms. The mapping consists of:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxBookCtrl}{wxChoicebook or wxNotebook}
+\twocolitem{wxBookCtrlEvent}{wxChoicebookEvent or wxNotebookEvent}
+\twocolitem{wxEVT\_COMMAND\_BOOKCTRL\_PAGE\_CHANGED}{wxEVT\_COMMAND\_CHOICEBOOK\_PAGE\_CHANGED or wxEVT\_COMMAND\_NOTEBOOK\_PAGE\_CHANGED}
+\twocolitem{wxEVT\_COMMAND\_BOOKCTRL\_PAGE\_CHANGING}{wxEVT\_COMMAND\_CHOICEBOOK\_PAGE\_CHANGING or wxEVT\_COMMAND\_NOTEBOOK\_PAGE\_CHANGING}
+\twocolitem{EVT\_BOOKCTRL\_PAGE\_CHANGED(id, fn)}{EVT\_CHOICEBOOK\_PAGE\_CHANGED(id, fn) or EVT\_NOTEBOOK\_PAGE\_CHANGED(id, fn)}
+\twocolitem{EVT\_BOOKCTRL\_PAGE\_CHANGING(id, fn)}{EVT\_CHOICEBOOK\_PAGE\_CHANGING(id, fn) or EVT\_NOTEBOOK\_PAGE\_CHANGING(id, fn)}
+\end{twocollist}
+
+For orientation of the book controller, use following flags in style:
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxBK\_TOP}}{controller above pages}
+\twocolitem{\windowstyle{wxBK\_BOTTOM}}{controller below pages}
+\twocolitem{\windowstyle{wxBK\_LEFT}}{controller on the left}
+\twocolitem{\windowstyle{wxBK\_RIGHT}}{controller on the right}
+\twocolitem{\windowstyle{wxBK\_DEFAULT}}{native controller placement}
+\end{twocollist}

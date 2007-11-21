@@ -1,0 +1,156 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        keycode.tex
+%% Purpose:     wxKeyCode values enumerated
+%% Author:      wxWidgets Team
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Keycodes}\label{keycodes}
+
+\wxheading{Include files}
+
+<wx/defs.h>
+
+Keypresses are represented by an enumerated type, wxKeyCode. The possible
+values are the ASCII character codes, plus the following:
+
+{\small
+\begin{verbatim}
+    WXK_BACK    = 8
+    WXK_TAB     = 9
+    WXK_RETURN  = 13
+    WXK_ESCAPE  = 27
+    WXK_SPACE   = 32
+    WXK_DELETE  = 127
+
+    // These are by design not compatible with unicode characters.
+    // If you want to get a unicode character from a key event use
+    // wxKeyEvent::GetUnicodeKey instead.
+    WXK_START   = 300
+    WXK_LBUTTON
+    WXK_RBUTTON
+    WXK_CANCEL
+    WXK_MBUTTON
+    WXK_CLEAR
+    WXK_SHIFT
+    WXK_ALT
+    WXK_CONTROL
+    WXK_MENU
+    WXK_PAUSE
+    WXK_CAPITAL
+    WXK_END
+    WXK_HOME
+    WXK_LEFT
+    WXK_UP
+    WXK_RIGHT
+    WXK_DOWN
+    WXK_SELECT
+    WXK_PRINT
+    WXK_EXECUTE
+    WXK_SNAPSHOT
+    WXK_INSERT
+    WXK_HELP
+    WXK_NUMPAD0
+    WXK_NUMPAD1
+    WXK_NUMPAD2
+    WXK_NUMPAD3
+    WXK_NUMPAD4
+    WXK_NUMPAD5
+    WXK_NUMPAD6
+    WXK_NUMPAD7
+    WXK_NUMPAD8
+    WXK_NUMPAD9
+    WXK_MULTIPLY
+    WXK_ADD
+    WXK_SEPARATOR
+    WXK_SUBTRACT
+    WXK_DECIMAL
+    WXK_DIVIDE
+    WXK_F1
+    WXK_F2
+    WXK_F3
+    WXK_F4
+    WXK_F5
+    WXK_F6
+    WXK_F7
+    WXK_F8
+    WXK_F9
+    WXK_F10
+    WXK_F11
+    WXK_F12
+    WXK_F13
+    WXK_F14
+    WXK_F15
+    WXK_F16
+    WXK_F17
+    WXK_F18
+    WXK_F19
+    WXK_F20
+    WXK_F21
+    WXK_F22
+    WXK_F23
+    WXK_F24
+    WXK_NUMLOCK
+    WXK_SCROLL
+    WXK_PAGEUP,
+    WXK_PAGEDOWN,
+
+    WXK_NUMPAD_SPACE,
+    WXK_NUMPAD_TAB,
+    WXK_NUMPAD_ENTER,
+    WXK_NUMPAD_F1,
+    WXK_NUMPAD_F2,
+    WXK_NUMPAD_F3,
+    WXK_NUMPAD_F4,
+    WXK_NUMPAD_HOME,
+    WXK_NUMPAD_LEFT,
+    WXK_NUMPAD_UP,
+    WXK_NUMPAD_RIGHT,
+    WXK_NUMPAD_DOWN,
+    WXK_NUMPAD_PAGEUP,
+    WXK_NUMPAD_PAGEDOWN,
+    WXK_NUMPAD_END,
+    WXK_NUMPAD_BEGIN,
+    WXK_NUMPAD_INSERT,
+    WXK_NUMPAD_DELETE,
+    WXK_NUMPAD_EQUAL,
+    WXK_NUMPAD_MULTIPLY,
+    WXK_NUMPAD_ADD,
+    WXK_NUMPAD_SEPARATOR,
+    WXK_NUMPAD_SUBTRACT,
+    WXK_NUMPAD_DECIMAL,
+    WXK_NUMPAD_DIVIDE,
+
+    // the following key codes are only generated under Windows currently
+    WXK_WINDOWS_LEFT,
+    WXK_WINDOWS_RIGHT,
+    WXK_WINDOWS_MENU,
+    WXK_COMMAND,
+
+    // Hardware-specific buttons
+    WXK_SPECIAL1 = 193,
+    WXK_SPECIAL2,
+    WXK_SPECIAL3,
+    WXK_SPECIAL4,
+    WXK_SPECIAL5,
+    WXK_SPECIAL6,
+    WXK_SPECIAL7,
+    WXK_SPECIAL8,
+    WXK_SPECIAL9,
+    WXK_SPECIAL10,
+    WXK_SPECIAL11,
+    WXK_SPECIAL12,
+    WXK_SPECIAL13,
+    WXK_SPECIAL14,
+    WXK_SPECIAL15,
+    WXK_SPECIAL16,
+    WXK_SPECIAL17,
+    WXK_SPECIAL18,
+    WXK_SPECIAL19,
+    WXK_SPECIAL20
+\end{verbatim}
+}

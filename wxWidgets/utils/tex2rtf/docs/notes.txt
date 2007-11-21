@@ -1,0 +1,140 @@
+Implementation notes
+--------------------
+
+Files
+-----
+
+The library tex2any.lib contains the generic Latex parser.
+It comprises tex2any.cc, tex2any.h and texutils.cc.
+
+The executable Tex2RTF is made up of tex2any.lib,
+tex2rtf.cc (main driver and user interface), and specific
+drivers for generating output: rtfutils.cc, htmlutil.cc
+and xlputils.cc.
+
+Data structures
+---------------
+
+Class declarations are found in tex2any.h.
+
+TexMacroDef holds a macro (Latex command) definition: name, identifier,
+number of arguments, whether it should be ignored, etc. Integer
+identifiers are used for each Latex command for efficiency when
+generating output. A hash table MacroDefs stores all the TexMacroDefs,
+indexed on command name.
+
+Each unit of a Latex file is stored in a TexChunk. A TexChunk can be
+a macro, argument or just a string: a TexChunk macro has child
+chunks for the arguments, and each argument will have one or more
+children for representing another command or a simple string.
+
+Parsing
+-------
+
+Parsing is relatively add hoc. read_a_line reads in a line at a time,
+doing some processing for file commands (e.g. input, verbatiminclude).
+File handles are stored in a stack so file input commands may be nested.
+
+ParseArg parses an argument (which might be the whole Latex input,
+which is treated as an argument) or a single command, or a command
+argument. The parsing gets a little hairy because an environment,
+a normal command and bracketed commands (e.g. {\bf thing}) all get
+parsed into the same format. An environment, for example,
+is usually a one-argument command, as is {\bf thing}. It also
+deals with user-defined macros.
+
+Whilst parsing, the function MatchMacro gets called to
+attempt to find a command following a backslash (or the
+start of an environment). ParseMacroBody parses the
+arguments of a command when one is found.
+
+Generation
+----------
+
+The upshot of parsing is a hierarchy of TexChunks.
+TraverseFromDocument calls the recursive TraverseFromChunk,
+and is called by the 'client' converter application to
+start the generation process. TraverseFromChunk
+calls the two functions OnMacro and OnArgument,
+twice for each chunk to allow for preprocessing
+and postprocessing of each macro or argument.
+
+The client defines OnMacro and OnArgument to test
+the command identifier, and output the appropriate
+code. To help do this, the function TexOutput
+outputs to the current stream(s), and
+SetCurrentOutput(s) allows the setting of one
+or two output streams for the output to be sent to.
+Usually two outputs at a time are sufficient for
+hypertext applications where a title is likely
+to appear in an index and as a section header.
+
+There are support functions for getting the string
+data for the current chunk (GetArgData) and the
+current chunk (GetArgChunk). If you have a handle
+on a chunk, you can output it several times by calling
+TraverseChildrenFromChunk (not TraverseFromChunk because
+that causes infinite recursion).
+
+The client (here, Tex2RTF) also defines OnError and OnInform output
+functions appropriate to the desired user interface.
+
+References
+----------
+
+Adding, finding and resolving references are supported
+with functions from texutils.cc. WriteTexReferences
+and ReadTexReferences allow saving and reading references
+between conversion processes, rather like real LaTeX.
+
+Bibliography
+------------
+
+Again texutils.cc provides functions for reading in .bib files and
+resolving references. The function OutputBibItem gives a generic way
+outputting bibliography items, by 'faking' calls to OnMacro and
+OnArgument, allowing the existing low-level client code to take care of
+formatting.
+
+Units
+-----
+
+Unit parsing code is in texutils.cc as ParseUnitArgument. It converts
+units to points.
+
+Common errors
+-------------
+
+1) Macro not found: \end{center} ...
+
+Rewrite:
+
+\begin{center}
+{\large{\underline{A}}}
+\end{center}
+
+as:
+
+\begin{center}
+{\large \underline{A}}
+\end{center}
+
+2) Tables crash RTF. Set 'compatibility ' to TRUE in .ini file; also
+check for \\ end of row characters on their own on a line, insert
+correct number of ampersands for the number of columns.  E.g.
+
+hello & world\\
+\\
+
+becomes
+
+hello & world\\
+&\\
+
+3) If list items indent erratically, try increasing
+listItemIndent to give more space between label and following text.
+A global replace of '\item [' to '\item[' may also be helpful to remove
+unnecessary space before the item label.
+
+4) Missing figure or section references: ensure all labels _directly_ follow captions
+or sections (no intervening white space).

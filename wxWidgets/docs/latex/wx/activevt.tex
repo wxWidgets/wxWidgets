@@ -1,0 +1,60 @@
+\section{\class{wxActivateEvent}}\label{wxactivateevent}
+
+An activate event is sent when a window or application is being activated
+or deactivated.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/event.h>
+
+\wxheading{Event table macros}
+
+To process an activate event, use these event handler macros to direct input to a member
+function that takes a wxActivateEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_ACTIVATE(func)}}{Process a wxEVT\_ACTIVATE event.}
+\twocolitem{{\bf EVT\_ACTIVATE\_APP(func)}}{Process a wxEVT\_ACTIVATE\_APP event.}
+\twocolitem{{\bf EVT\_HIBERNATE(func)}}{Process a hibernate event, supplying the member function.
+This event applies to wxApp only, and only on Windows SmartPhone and PocketPC. It is generated when the
+system is low on memory; the application should free up as much memory as possible, and restore
+full working state when it receives a wxEVT\_ACTIVATE or wxEVT\_ACTIVATE\_APP event.}
+\end{twocollist}%
+
+\wxheading{Remarks}
+
+A top-level window (a dialog or frame) receives an activate event when it is
+being activated or deactivated. This is indicated visually by the title
+bar changing colour, and a subwindow gaining the keyboard focus.
+
+An application is activated or deactivated when one of its frames becomes activated,
+or a frame becomes inactivated resulting in all application frames being inactive.
+
+Please note that usually you should call \helpref{event.Skip()}{wxeventskip} in
+your handlers for these events as not doing so can result in strange effects.
+
+\wxheading{See also}
+
+\helpref{Event handling overview}{eventhandlingoverview},\rtfsp
+\helpref{wxApp::IsActive}{wxappisactive}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxActivateEvent::wxActivateEvent}\label{wxactivateeventctor}
+
+\func{}{wxActivateEvent}{\param{WXTYPE }{eventType = 0}, \param{bool}{ active = true}, \param{int }{id = 0}}
+
+Constructor.
+
+\membersection{wxActivateEvent::GetActive}\label{wxactivateeventgetactive}
+
+\constfunc{bool}{GetActive}{\void}
+
+Returns true if the application or window is being activated, false otherwise.
+

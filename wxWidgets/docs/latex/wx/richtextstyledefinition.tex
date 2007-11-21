@@ -1,0 +1,84 @@
+\section{\class{wxRichTextStyleDefinition}}\label{wxrichtextstyledefinition}
+
+This is a base class for paragraph and character styles.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/richtext/richtextstyles.h>
+
+\wxheading{Data structures}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRichTextStyleDefinition::wxRichTextStyleDefinition}\label{wxrichtextstyledefinitionwxrichtextstyledefinition}
+
+\func{}{wxRichTextStyleDefinition}{\param{const wxString\& }{name = wxEmptyString}}
+
+Constructor.
+
+\membersection{wxRichTextStyleDefinition::\destruct{wxRichTextStyleDefinition}}\label{wxrichtextstyledefinitiondtor}
+
+\func{}{\destruct{wxRichTextStyleDefinition}}{\void}
+
+Destructor.
+
+\membersection{wxRichTextStyleDefinition::GetBaseStyle}\label{wxrichtextstyledefinitiongetbasestyle}
+
+\constfunc{const wxString\&}{GetBaseStyle}{\void}
+
+Returns the style on which this style is based.
+
+\membersection{wxRichTextStyleDefinition::GetDescription}\label{wxrichtextstyledefinitiongetdescription}
+
+\constfunc{const wxString\&}{GetDescription}{\void}
+
+Returns the style's description.
+
+\membersection{wxRichTextStyleDefinition::GetName}\label{wxrichtextstyledefinitiongetname}
+
+\constfunc{const wxString\&}{GetName}{\void}
+
+Returns the style name.
+
+\membersection{wxRichTextStyleDefinition::GetStyle}\label{wxrichtextstyledefinitiongetstyle}
+
+\func{wxRichTextAttr\&}{GetStyle}{\void}
+
+\constfunc{const wxRichTextAttr\&}{GetStyle}{\void}
+
+Returns the attributes associated with this style.
+
+\membersection{wxRichTextStyleDefinition::GetStyleMergedWithBase}\label{wxrichtextstyledefinitiongetstylemergedwithbase}
+
+\constfunc{wxRichTextAttr}{GetStyleMergedWithBase}{\param{wxRichTextStyleSheet*}{ sheet}}
+
+Returns the style attributes combined with the attributes of the specified base style, if any. This function works recursively.
+
+\membersection{wxRichTextStyleDefinition::SetBaseStyle}\label{wxrichtextstyledefinitionsetbasestyle}
+
+\func{void}{SetBaseStyle}{\param{const wxString\& }{name}}
+
+Sets the name of the style that this style is based on.
+
+\membersection{wxRichTextStyleDefinition::SetDescription}\label{wxrichtextstyledefinitionsetdescription}
+
+\func{void}{SetDescription}{\param{const wxString\& }{descr}}
+
+Sets the style description.
+
+\membersection{wxRichTextStyleDefinition::SetName}\label{wxrichtextstyledefinitionsetname}
+
+\func{void}{SetName}{\param{const wxString\& }{name}}
+
+Sets the name of the style.
+
+\membersection{wxRichTextStyleDefinition::SetStyle}\label{wxrichtextstyledefinitionsetstyle}
+
+\func{void}{SetStyle}{\param{const wxRichTextAttr\& }{style}}
+
+Sets the attributes for this style.
+

@@ -1,0 +1,258 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.54
+     from gettext.texi on 25 January 1999 -->
+
+<TITLE>GNU gettext utilities - Producing Binary MO Files</TITLE>
+<link href="gettext_7.html" rel=Next>
+<link href="gettext_5.html" rel=Previous>
+<link href="gettext_toc.html" rel=ToC>
+
+</HEAD>
+<BODY>
+<p>Go to the <A HREF="gettext_1.html">first</A>, <A HREF="gettext_5.html">previous</A>, <A HREF="gettext_7.html">next</A>, <A HREF="gettext_12.html">last</A> section, <A HREF="gettext_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC32" HREF="gettext_toc.html#TOC32">Producing Binary MO Files</A></H1>
+
+
+
+<H2><A NAME="SEC33" HREF="gettext_toc.html#TOC33">Invoking the <CODE>msgfmt</CODE> Program</A></H2>
+
+
+<PRE>
+Usage: msgfmt [<VAR>option</VAR>] <VAR>filename</VAR>.po ...
+</PRE>
+
+<DL COMPACT>
+
+<DT><SAMP>`-a <VAR>number</VAR>'</SAMP>
+<DD>
+<DT><SAMP>`--alignment=<VAR>number</VAR>'</SAMP>
+<DD>
+Align strings to <VAR>number</VAR> bytes (default: 1).
+
+<DT><SAMP>`-h'</SAMP>
+<DD>
+<DT><SAMP>`--help'</SAMP>
+<DD>
+Display this help and exit.
+
+<DT><SAMP>`--no-hash'</SAMP>
+<DD>
+Binary file will not include the hash table.
+
+<DT><SAMP>`-o <VAR>file</VAR>'</SAMP>
+<DD>
+<DT><SAMP>`--output-file=<VAR>file</VAR>'</SAMP>
+<DD>
+Specify output file name as <VAR>file</VAR>.
+
+<DT><SAMP>`--strict'</SAMP>
+<DD>
+Direct the program to work strictly following the Uniforum/Sun
+implementation.  Currently this only affects the naming of the output
+file.  If this option is not given the name of the output file is the
+same as the domain name.  If the strict Uniforum mode is enable the
+suffix <TT>`.mo'</TT> is added to the file name if it is not already
+present.
+
+We find this behaviour of Sun's implementation rather silly and so by
+default this mode is <EM>not</EM> selected.
+
+<DT><SAMP>`-v'</SAMP>
+<DD>
+<DT><SAMP>`--verbose'</SAMP>
+<DD>
+Detect and diagnose input file anomalies which might represent
+translation errors.  The <CODE>msgid</CODE> and <CODE>msgstr</CODE> strings are
+studied and compared.  It is considered abnormal that one string
+starts or ends with a newline while the other does not.
+
+Also, if the string represents a format string used in a
+<CODE>printf</CODE>-like function both strings should have the same number of
+<SAMP>`%'</SAMP> format specifiers, with matching types.  If the flag
+<CODE>c-format</CODE> or <CODE>possible-c-format</CODE> appears in the special
+comment <KBD>#,</KBD> for this entry a check is performed.  For example, the
+check will diagnose using <SAMP>`%.*s'</SAMP> against <SAMP>`%s'</SAMP>, or <SAMP>`%d'</SAMP>
+against <SAMP>`%s'</SAMP>, or <SAMP>`%d'</SAMP> against <SAMP>`%x'</SAMP>.  It can even handle
+positional parameters.
+
+Normally the <CODE>xgettext</CODE> program automatically decides whether a
+string is a format string or not.  This algorithm is not perfect,
+though.  It might regard a string as a format string though it is not
+used in a <CODE>printf</CODE>-like function and so <CODE>msgfmt</CODE> might report
+errors where there are none.  Or the other way round: a string is not
+regarded as a format string but it is used in a <CODE>printf</CODE>-like
+function.
+
+So solve this problem the programmer can dictate the decision to the
+<CODE>xgettext</CODE> program (see section <A HREF="gettext_3.html#SEC17">Special Comments preceding Keywords</A>).  The translator should not
+consider removing the flag from the <KBD>#,</KBD> line.  This "fix" would be
+reversed again as soon as <CODE>msgmerge</CODE> is called the next time.
+
+<DT><SAMP>`-V'</SAMP>
+<DD>
+<DT><SAMP>`--version'</SAMP>
+<DD>
+Output version information and exit.
+
+</DL>
+
+<P>
+If input file is <SAMP>`-'</SAMP>, standard input is read.  If output file
+is <SAMP>`-'</SAMP>, output is written to standard output.
+
+</P>
+
+
+<H2><A NAME="SEC34" HREF="gettext_toc.html#TOC34">The Format of GNU MO Files</A></H2>
+
+<P>
+The format of the generated MO files is best described by a picture,
+which appears below.
+
+</P>
+<P>
+The first two words serve the identification of the file.  The magic
+number will always signal GNU MO files.  The number is stored in the
+byte order of the generating machine, so the magic number really is
+two numbers: <CODE>0x950412de</CODE> and <CODE>0xde120495</CODE>.  The second
+word describes the current revision of the file format.  For now the
+revision is 0.  This might change in future versions, and ensures
+that the readers of MO files can distinguish new formats from old
+ones, so that both can be handled correctly.  The version is kept
+separate from the magic number, instead of using different magic
+numbers for different formats, mainly because <TT>`/etc/magic'</TT> is
+not updated often.  It might be better to have magic separated from
+internal format version identification.
+
+</P>
+<P>
+Follow a number of pointers to later tables in the file, allowing
+for the extension of the prefix part of MO files without having to
+recompile programs reading them.  This might become useful for later
+inserting a few flag bits, indication about the charset used, new
+tables, or other things.
+
+</P>
+<P>
+Then, at offset <VAR>O</VAR> and offset <VAR>T</VAR> in the picture, two tables
+of string descriptors can be found.  In both tables, each string
+descriptor uses two 32 bits integers, one for the string length,
+another for the offset of the string in the MO file, counting in bytes
+from the start of the file.  The first table contains descriptors
+for the original strings, and is sorted so the original strings
+are in increasing lexicographical order.  The second table contains
+descriptors for the translated strings, and is parallel to the first
+table: to find the corresponding translation one has to access the
+array slot in the second array with the same index.
+
+</P>
+<P>
+Having the original strings sorted enables the use of simple binary
+search, for when the MO file does not contain an hashing table, or
+for when it is not practical to use the hashing table provided in
+the MO file.  This also has another advantage, as the empty string
+in a PO file GNU <CODE>gettext</CODE> is usually <EM>translated</EM> into
+some system information attached to that particular MO file, and the
+empty string necessarily becomes the first in both the original and
+translated tables, making the system information very easy to find.
+
+</P>
+<P>
+The size <VAR>S</VAR> of the hash table can be zero.  In this case, the
+hash table itself is not contained in the MO file.  Some people might
+prefer this because a precomputed hashing table takes disk space, and
+does not win <EM>that</EM> much speed.  The hash table contains indices
+to the sorted array of strings in the MO file.  Conflict resolution is
+done by double hashing.  The precise hashing algorithm used is fairly
+dependent of GNU <CODE>gettext</CODE> code, and is not documented here.
+
+</P>
+<P>
+As for the strings themselves, they follow the hash file, and each
+is terminated with a <KBD>NUL</KBD>, and this <KBD>NUL</KBD> is not counted in
+the length which appears in the string descriptor.  The <CODE>msgfmt</CODE>
+program has an option selecting the alignment for MO file strings.
+With this option, each string is separately aligned so it starts at
+an offset which is a multiple of the alignment value.  On some RISC
+machines, a correct alignment will speed things up.
+
+</P>
+<P>
+Nothing prevents a MO file from having embedded <KBD>NUL</KBD>s in strings.
+However, the program interface currently used already presumes
+that strings are <KBD>NUL</KBD> terminated, so embedded <KBD>NUL</KBD>s are
+somewhat useless.  But MO file format is general enough so other
+interfaces would be later possible, if for example, we ever want to
+implement wide characters right in MO files, where <KBD>NUL</KBD> bytes may
+accidently appear.
+
+</P>
+<P>
+This particular issue has been strongly debated in the GNU
+<CODE>gettext</CODE> development forum, and it is expectable that MO file
+format will evolve or change over time.  It is even possible that many
+formats may later be supported concurrently.  But surely, we have to
+start somewhere, and the MO file format described here is a good start.
+Nothing is cast in concrete, and the format may later evolve fairly
+easily, so we should feel comfortable with the current approach.
+
+</P>
+
+<PRE>
+        byte
+             +------------------------------------------+
+          0  | magic number = 0x950412de                |
+             |                                          |
+          4  | file format revision = 0                 |
+             |                                          |
+          8  | number of strings                        |  == N
+             |                                          |
+         12  | offset of table with original strings    |  == O
+             |                                          |
+         16  | offset of table with translation strings |  == T
+             |                                          |
+         20  | size of hashing table                    |  == S
+             |                                          |
+         24  | offset of hashing table                  |  == H
+             |                                          |
+             .                                          .
+             .    (possibly more entries later)         .
+             .                                          .
+             |                                          |
+          O  | length &#38; offset 0th string  ----------------.
+      O + 8  | length &#38; offset 1st string  ------------------.
+              ...                                    ...   | |
+O + ((N-1)*8)| length &#38; offset (N-1)th string           |  | |
+             |                                          |  | |
+          T  | length &#38; offset 0th translation  ---------------.
+      T + 8  | length &#38; offset 1st translation  -----------------.
+              ...                                    ...   | | | |
+T + ((N-1)*8)| length &#38; offset (N-1)th translation      |  | | | |
+             |                                          |  | | | |
+          H  | start hash table                         |  | | | |
+              ...                                    ...   | | | |
+  H + S * 4  | end hash table                           |  | | | |
+             |                                          |  | | | |
+             | NUL terminated 0th string  &#60;----------------' | | |
+             |                                          |    | | |
+             | NUL terminated 1st string  &#60;------------------' | |
+             |                                          |      | |
+              ...                                    ...       | |
+             |                                          |      | |
+             | NUL terminated 0th translation  &#60;---------------' |
+             |                                          |        |
+             | NUL terminated 1st translation  &#60;-----------------'
+             |                                          |
+              ...                                    ...
+             |                                          |
+             +------------------------------------------+
+</PRE>
+
+<P><HR><P>
+<p>Go to the <A HREF="gettext_1.html">first</A>, <A HREF="gettext_5.html">previous</A>, <A HREF="gettext_7.html">next</A>, <A HREF="gettext_12.html">last</A> section, <A HREF="gettext_toc.html">table of contents</A>.
+</BODY>
+</HTML>

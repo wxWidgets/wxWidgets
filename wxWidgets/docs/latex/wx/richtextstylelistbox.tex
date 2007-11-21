@@ -1,0 +1,298 @@
+\section{\class{wxRichTextStyleComboCtrl}}\label{wxrichtextstylecomboctrl}
+
+This is a combo control that can display the styles in a \helpref{wxRichTextStyleSheet}{wxrichtextstylesheet},
+and apply the selection to an associated \helpref{wxRichTextCtrl}{wxrichtextctrl}.
+
+See {\tt samples/richtext} for an example of how to use it.
+
+\wxheading{Derived from}
+
+\helpref{wxComboCtrl}{wxcomboctrl}
+
+\wxheading{Include files}
+
+<wx/richtext/richtextstyles.h>
+
+\wxheading{See also}
+
+\helpref{wxRichTextStyleListBox}{wxrichtextstylelistbox}, \helpref{wxRichTextCtrl overview}{wxrichtextctrloverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRichTextStyleComboCtrl::wxRichTextStyleComboCtrl}\label{wxrichtextstylecomboctrlwxrichtextstylecomboctrl}
+
+\func{}{wxRichTextStyleComboCtrl}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}}
+
+Constructor.
+
+\membersection{wxRichTextStyleComboCtrl::\destruct{wxRichTextStyleComboCtrl}}\label{wxrichtextstylecomboctrldtor}
+
+\func{}{\destruct{wxRichTextStyleComboCtrl}}{\void}
+
+Destructor.
+
+\membersection{wxRichTextStyleComboCtrl::GetRichTextCtrl}\label{wxrichtextstylecomboctrlgetrichtextctrl}
+
+\constfunc{wxRichTextCtrl*}{GetRichTextCtrl}{\void}
+
+Returns the \helpref{wxRichTextCtrl}{wxrichtextctrl} associated with this control.
+
+\membersection{wxRichTextStyleComboCtrl::GetStyleSheet}\label{wxrichtextstylecomboctrlgetstylesheet}
+
+\constfunc{wxRichTextStyleSheet*}{GetStyleSheet}{\void}
+
+Returns the style sheet associated with this control.
+
+\membersection{wxRichTextStyleComboCtrl::SetRichTextCtrl}\label{wxrichtextstylecomboctrlsetrichtextctrl}
+
+\func{void}{SetRichTextCtrl}{\param{wxRichTextCtrl* }{ctrl}}
+
+Associates the control with a \helpref{wxRichTextCtrl}{wxrichtextctrl}.
+
+\membersection{wxRichTextStyleComboCtrl::SetStyleSheet}\label{wxrichtextstylecomboctrlsetstylesheet}
+
+\func{void}{SetStyleSheet}{\param{wxRichTextStyleSheet* }{styleSheet}}
+
+Associates the control with a style sheet.
+
+\membersection{wxRichTextStyleComboCtrl::UpdateStyles}\label{wxrichtextstylecomboctrlupdatestyles}
+
+\func{void}{UpdateStyles}{\void}
+
+Updates the combo control from the associated style sheet.
+
+
+\section{\class{wxRichTextStyleListBox}}\label{wxrichtextstylelistbox}
+
+This is a listbox that can display the styles in a \helpref{wxRichTextStyleSheet}{wxrichtextstylesheet},
+and apply the selection to an associated \helpref{wxRichTextCtrl}{wxrichtextctrl}.
+
+See {\tt samples/richtext} for an example of how to use it.
+
+\wxheading{Derived from}
+
+\helpref{wxHtmlListBox}{wxhtmllistbox}
+
+\wxheading{Include files}
+
+<wx/richtext/richtextstyles.h>
+
+\wxheading{See also}
+
+\helpref{wxRichTextStyleComboCtrl}{wxrichtextstylecomboctrl}, \helpref{wxRichTextCtrl overview}{wxrichtextctrloverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRichTextStyleListBox::wxRichTextStyleListBox}\label{wxrichtextstylelistboxwxrichtextstylelistbox}
+
+\func{}{wxRichTextStyleListBox}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}}
+
+Constructor.
+
+\membersection{wxRichTextStyleListBox::\destruct{wxRichTextStyleListBox}}\label{wxrichtextstylelistboxdtor}
+
+\func{}{\destruct{wxRichTextStyleListBox}}{\void}
+
+Destructor.
+
+\membersection{wxRichTextStyleListBox::ApplyStyle}\label{wxrichtextstylelistboxapplystyle}
+
+\func{void}{ApplyStyle}{\param{int }{i}}
+
+Applies the {\it i}th style to the associated rich text control.
+
+\membersection{wxRichTextStyleListBox::ConvertTenthsMMToPixels}\label{wxrichtextstylelistboxconverttenthsmmtopixels}
+
+\constfunc{int}{ConvertTenthsMMToPixels}{\param{wxDC\& }{dc}, \param{int }{units}}
+
+Converts units in tenths of a millimetre to device units.
+
+\membersection{wxRichTextStyleListBox::CreateHTML}\label{wxrichtextstylelistboxcreatehtml}
+
+\constfunc{wxString}{CreateHTML}{\param{wxRichTextStyleDefinition* }{def}}
+
+Creates a suitable HTML fragment for a definition.
+
+\membersection{wxRichTextStyleListBox::GetApplyOnSelection}\label{wxrichtextstylelistboxgetapplyonselection}
+
+\constfunc{bool}{GetApplyOnSelection}{\void}
+
+If the return value is \true, clicking on a style name in the list will immediately
+apply the style to the associated rich text control.
+
+\membersection{wxRichTextStyleListBox::GetRichTextCtrl}\label{wxrichtextstylelistboxgetrichtextctrl}
+
+\constfunc{wxRichTextCtrl*}{GetRichTextCtrl}{\void}
+
+Returns the \helpref{wxRichTextCtrl}{wxrichtextctrl} associated with this listbox.
+
+\membersection{wxRichTextStyleListBox::GetStyle}\label{wxrichtextstylelistboxgetstyle}
+
+\constfunc{wxRichTextStyleDefinition*}{GetStyle}{\param{size\_t }{i}}
+
+Gets a style for a listbox index.
+
+\membersection{wxRichTextStyleListBox::GetStyleSheet}\label{wxrichtextstylelistboxgetstylesheet}
+
+\constfunc{wxRichTextStyleSheet*}{GetStyleSheet}{\void}
+
+Returns the style sheet associated with this listbox.
+
+\membersection{wxRichTextStyleListBox::GetStyleType}\label{wxrichtextstylelistboxgetstyletype}
+
+\constfunc{wxRichTextStyleListBox::wxRichTextStyleType}{GetStyleType}{\void}
+
+Returns the type of style to show in the list box.
+
+\membersection{wxRichTextStyleListBox::OnGetItem}\label{wxrichtextstylelistboxongetitem}
+
+\constfunc{wxString}{OnGetItem}{\param{size\_t }{n}}
+
+Returns the HTML for this item.
+
+\membersection{wxRichTextStyleListBox::OnLeftDown}\label{wxrichtextstylelistboxonleftdown}
+
+\func{void}{OnLeftDown}{\param{wxMouseEvent\& }{event}}
+
+Implements left click behaviour, applying the clicked style to the wxRichTextCtrl.
+
+\membersection{wxRichTextStyleListBox::OnSelect}\label{wxrichtextstylelistboxonselect}
+
+\func{void}{OnSelect}{\param{wxCommandEvent\& }{event}}
+
+Reacts to selection.
+
+\membersection{wxRichTextStyleListBox::SetApplyOnSelection}\label{wxrichtextstylelistboxsetapplyonselection}
+
+\func{void}{SetApplyOnSelection}{\param{bool }{applyOnSelection}}
+
+If {\it applyOnSelection} is \true, clicking on a style name in the list will immediately
+apply the style to the associated rich text control.
+
+\membersection{wxRichTextStyleListBox::SetRichTextCtrl}\label{wxrichtextstylelistboxsetrichtextctrl}
+
+\func{void}{SetRichTextCtrl}{\param{wxRichTextCtrl* }{ctrl}}
+
+Associates the listbox with a \helpref{wxRichTextCtrl}{wxrichtextctrl}.
+
+\membersection{wxRichTextStyleListBox::SetStyleSheet}\label{wxrichtextstylelistboxsetstylesheet}
+
+\func{void}{SetStyleSheet}{\param{wxRichTextStyleSheet* }{styleSheet}}
+
+Associates the control with a style sheet.
+
+\membersection{wxRichTextStyleListBox::SetStyleType}\label{wxrichtextstylelistboxsetstyletype}
+
+\func{void}{SetStyleType}{\param{wxRichTextStyleListBox::wxRichTextStyleType }{styleType}}
+
+Sets the style type to display. One of wxRichTextStyleListBox::wxRICHTEXT\_STYLE\_ALL, wxRichTextStyleListBox::wxRICHTEXT\_STYLE\_PARAGRAPH,
+wxRichTextStyleListBox::wxRICHTEXT\_STYLE\_CHARACTER and wxRichTextStyleListBox::wxRICHTEXT\_STYLE\_LIST.
+
+\membersection{wxRichTextStyleListBox::UpdateStyles}\label{wxrichtextstylelistboxupdatestyles}
+
+\func{void}{UpdateStyles}{\void}
+
+Updates the list from the associated style sheet.
+
+
+\section{\class{wxRichTextStyleListCtrl}}\label{wxrichtextstylelistctrl}
+
+This class incorporates a \helpref{wxRichTextStyleListBox}{wxrichtextstylelistbox} and
+a choice control that allows the user to select the category of style to view.
+It is demonstrated in the wxRichTextCtrl sample in {\tt samples/richtext}.
+
+To use wxRichTextStyleListCtrl, add the control to your window hierarchy and
+call \helpref{SetStyleType}{wxrichtextstylelistctrlsetstyletype} with
+one of wxRichTextStyleListBox::wxRICHTEXT\_STYLE\_ALL, wxRichTextStyleListBox::wxRICHTEXT\_STYLE\_PARAGRAPH,
+wxRichTextStyleListBox::wxRICHTEXT\_STYLE\_CHARACTER and wxRichTextStyleListBox::wxRICHTEXT\_STYLE\_LIST to set the current view.
+Associate the control with a style sheet and rich text control with SetStyleSheet and SetRichTextCtrl,
+so that when a style is double-clicked, it is applied to the selection.
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxRICHTEXTSTYLELIST\_HIDE\_TYPE\_SELECTOR}}{This style hides the category selection control.}
+\end{twocollist}
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}
+
+\wxheading{Include files}
+
+<wx/richtext/richtextstyles.h>
+
+\wxheading{Data structures}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRichTextStyleListCtrl::wxRichTextStyleListCtrl}\label{wxrichtextstylelistctrlwxrichtextstylelistctrl}
+
+\func{}{wxRichTextStyleListCtrl}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}}
+
+\func{}{wxRichTextStyleListCtrl}{\void}
+
+Constructors.
+
+\membersection{wxRichTextStyleListCtrl::Create}\label{wxrichtextstylelistctrlcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}}
+
+Creates the windows.
+
+\membersection{wxRichTextStyleListCtrl::GetRichTextCtrl}\label{wxrichtextstylelistctrlgetrichtextctrl}
+
+\constfunc{wxRichTextCtrl*}{GetRichTextCtrl}{\void}
+
+Returns the associated rich text control, if any.
+
+\membersection{wxRichTextStyleListCtrl::GetStyleChoice}\label{wxrichtextstylelistctrlgetstylechoice}
+
+\constfunc{wxChoice*}{GetStyleChoice}{\void}
+
+Returns the wxChoice control used for selecting the style category.
+
+\membersection{wxRichTextStyleListCtrl::GetStyleListBox}\label{wxrichtextstylelistctrlgetstylelistbox}
+
+\constfunc{wxRichTextStyleListBox*}{GetStyleListBox}{\void}
+
+Returns the wxListBox control used to view the style list.
+
+\membersection{wxRichTextStyleListCtrl::GetStyleSheet}\label{wxrichtextstylelistctrlgetstylesheet}
+
+\constfunc{wxRichTextStyleSheet*}{GetStyleSheet}{\void}
+
+Returns the associated style sheet, if any.
+
+\membersection{wxRichTextStyleListCtrl::GetStyleType}\label{wxrichtextstylelistctrlgetstyletype}
+
+\constfunc{wxRichTextStyleListBox::wxRichTextStyleType}{GetStyleType}{\void}
+
+Returns the type of style to show in the list box.
+
+\membersection{wxRichTextStyleListCtrl::SetRichTextCtrl}\label{wxrichtextstylelistctrlsetrichtextctrl}
+
+\func{void}{SetRichTextCtrl}{\param{wxRichTextCtrl* }{ctrl}}
+
+Associates the control with a wxRichTextCtrl.
+
+\membersection{wxRichTextStyleListCtrl::SetStyleSheet}\label{wxrichtextstylelistctrlsetstylesheet}
+
+\func{void}{SetStyleSheet}{\param{wxRichTextStyleSheet* }{styleSheet}}
+
+Associates the control with a style sheet.
+
+\membersection{wxRichTextStyleListCtrl::SetStyleType}\label{wxrichtextstylelistctrlsetstyletype}
+
+\func{void}{SetStyleType}{\param{wxRichTextStyleListBox::wxRichTextStyleType }{styleType}}
+
+Sets the style type to display. One of wxRichTextStyleListBox::wxRICHTEXT\_STYLE\_ALL, wxRichTextStyleListBox::wxRICHTEXT\_STYLE\_PARAGRAPH,
+wxRichTextStyleListBox::wxRICHTEXT\_STYLE\_CHARACTER and wxRichTextStyleListBox::wxRICHTEXT\_STYLE\_LIST.
+
+\membersection{wxRichTextStyleListCtrl::UpdateStyles}\label{wxrichtextstylelistctrlupdatestyles}
+
+\func{void}{UpdateStyles}{\void}
+
+Updates the style list box. 
+

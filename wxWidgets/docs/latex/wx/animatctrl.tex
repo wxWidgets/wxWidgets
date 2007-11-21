@@ -1,0 +1,185 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        animatctrl.tex
+%% Purpose:     wxAnimationCtrl documentation
+%% Author:      Francesco Montorsi
+%% Created:     24-9-2006
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2006 Francesco Montorsi
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxAnimationCtrl}}\label{wxanimationctrl}
+
+This is a static control which displays an animation.
+wxAnimationCtrl API is simple as possible and won't give you full control on the
+animation; if you need it then use \helpref{wxMediaCtrl}{wxmediactrl}.
+
+This control is useful to display a (small) animation while doing a long task
+(e.g. a "throbber").
+
+It is only available if \texttt{wxUSE\_ANIMATIONCTRL} is set to $1$ (the default).
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/animate.h>
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxAC\_DEFAULT\_STYLE}}{The default style: wxNO\_BORDER.}
+\twocolitem{\windowstyle{wxAC\_NO\_AUTORESIZE}}{By default, the control will adjust
+its size to exactly fit to the size of the animation when \helpref{SetAnimation}{wxanimationctrlsetanimation}
+is called. If this style flag is given, the control will not change its size}
+\end{twocollist}
+
+%\wxheading{Event handling}
+%
+%\twocolwidtha{7cm}%
+%\begin{twocollist}\itemsep=0pt
+%\twocolitem{{\bf EVT\_ANIMATION\_END(id, func)}}{}
+%\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{wxAnimation}{wxanimation}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxAnimationCtrl::wxAnimationCtrl}\label{wxanimationctrlctor}
+
+\func{}{wxAnimationCtrl}{\param{wxWindow *}{parent},\rtfsp
+\param{wxWindowID}{ id},\rtfsp
+\param{const wxAnimation\& }{anim},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxAC\_DEFAULT\_STYLE},\rtfsp
+\param{const wxString\& }{name = ``animationctrl"}}
+
+Initializes the object and calls \helpref{Create}{wxanimationctrlcreate} with
+all the parameters.
+
+
+\membersection{wxAnimationCtrl::Create}\label{wxanimationctrlcreate}
+
+\func{bool}{Create}{\param{wxWindow *}{parent},\rtfsp
+\param{wxWindowID}{ id},\rtfsp
+\param{const wxAnimation\& }{anim},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxAC\_DEFAULT\_STYLE},\rtfsp
+\param{const wxString\& }{name = ``animationctrl"}}
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window, must be non-\NULL.}
+
+\docparam{id}{The identifier for the control.}
+
+\docparam{anim}{The initial animation shown in the control.}
+
+\docparam{pos}{Initial position.}
+
+\docparam{size}{Initial size.}
+
+\docparam{style}{The window style, see {\tt wxAC\_*} flags.}
+
+\docparam{name}{Control name.}
+
+After control creation you must explicitely call \helpref{Play}{wxanimationctrlplay}
+to start to play the animation. Until that function won't be called, the first frame
+of the animation is displayed.
+
+\wxheading{Return value}
+
+\true if the control was successfully created or \false if creation failed.
+
+
+\membersection{wxAnimationCtrl::GetAnimation}\label{wxanimationctrlgetanimation}
+
+\constfunc{wxAnimation}{GetAnimation}{\void}
+
+Returns the animation associated with this control.
+
+
+\membersection{wxAnimationCtrl::GetInactiveBitmap}\label{wxanimationctrlgetinactivebitmap}
+
+\constfunc{wxBitmap}{GetInactiveBitmap}{\void}
+
+Returns the inactive bitmap shown in this control when the;
+see \helpref{SetInactiveBitmap}{wxanimationctrlsetinactivebitmap} for more info.
+
+
+\membersection{wxAnimationCtrl::IsPlaying}\label{wxanimationctrlisplaying}
+
+\constfunc{bool}{IsPlaying}{\void}
+
+Returns \true if the animation is being played.
+
+
+\membersection{wxAnimationCtrl::LoadFile}\label{wxanimationctrlloadfile}
+
+\func{bool}{LoadFile}{\param{const wxString \&}{ file}, \param{wxAnimationType }{ animType = wxANIMATION\_TYPE\_ANY}}
+
+Loads the animation from the given file and calls \helpref{SetAnimation}{wxanimationctrlsetanimation}.
+See \helpref{wxAnimation::LoadFile}{wxanimationloadfile} for more info.
+
+
+\membersection{wxAnimationCtrl::Play}\label{wxanimationctrlplay}
+
+\func{bool}{Play}{\void}
+
+Starts playing the animation.
+The animation is always played in loop mode (unless the last frame of the animation
+has an infinite delay time) and always start from the first frame
+(even if you \helpref{stopped}{wxanimationctrlstop} it while some other frame was
+displayed).
+
+
+\membersection{wxAnimationCtrl::SetAnimation}\label{wxanimationctrlsetanimation}
+
+\func{void}{SetAnimation}{\param{const wxAnimation \&}{ anim}}
+
+Sets the animation to play in this control.
+If the previous animation is being played, it's \helpref{Stopped}{wxanimationctrlstop}.
+
+Until \helpref{Play}{wxanimationctrlplay} isn't called, a static image, the first
+frame of the given animation or the background colour will be shown
+(see \helpref{SetInactiveBitmap}{wxanimationctrlsetinactivebitmap} for more info).
+
+
+\membersection{wxAnimationCtrl::SetInactiveBitmap}\label{wxanimationctrlsetinactivebitmap}
+
+\func{void}{SetInactiveBitmap}{\param{const wxBitmap\& }{bmp}}
+
+Sets the bitmap to show on the control when it's not playing an animation.
+If you set as inactive bitmap {\tt wxNullBitmap} (which is the default), then the
+first frame of the animation is instead shown when the control is inactive; in this case,
+if there's no valid animation associated with the control (see \helpref{SetAnimation}{wxanimationctrlsetanimation}),
+then the background colour of the window is shown.
+
+If the control is not playing the animation, the given bitmap will be immediately
+shown, otherwise it will be shown as soon as \helpref{Stop}{wxanimationctrlstop}
+is called.
+
+Note that the inactive bitmap, if smaller than the control's size, will be centered in
+the control; if bigger, it will be stretched to fit it.
+
+
+\membersection{wxAnimationCtrl::Stop}\label{wxanimationctrlstop}
+
+\func{void}{Stop}{\void}
+
+Stops playing the animation.
+The control will show the first frame of the animation, a custom static image or
+the window's background colour as specified by the
+last \helpref{SetInactiveBitmap}{wxanimationctrlsetinactivebitmap} call.
+

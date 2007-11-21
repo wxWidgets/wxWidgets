@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../../build/bakefiles/common_samples.bkl"/>
+    <include file="../../../build/bakefiles/common_contrib.bkl"/>
+
+    <if cond="FORMAT=='autoconf'">
+        <option name="EXTRALIBS_ESD"/>
+    </if>
+
+    <exe id="mmboard" template="wx_contrib_sample" template_append="wx_append">
+        <sources>
+            mmboard.cpp
+            mmbman.cpp
+        </sources>
+        <contrib-lib>mmedia</contrib-lib>
+        <ldlibs cond="FORMAT=='autoconf'">$(EXTRALIBS_ESD)</ldlibs>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <win32-res>mmboard.rc</win32-res>
+    </exe>
+
+</makefile>

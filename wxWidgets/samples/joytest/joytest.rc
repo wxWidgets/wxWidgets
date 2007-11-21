@@ -1,0 +1,5 @@
+aaaa                    ICON    "mondrian.ico"
+joyicon                 ICON    "mondrian.ico"
+
+#include "wx/msw/wx.rc"
+

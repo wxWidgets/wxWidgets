@@ -1,0 +1,191 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; wxWidgets Life Sample AppInstall INF
+;   This sample INF file is used as the input file for "Cabwiz.exe".
+;   Along with sample binary files, it will create multiple (2) CAB files,
+;   for the following types of devices:
+;       - Pocket PC 2003  ARM CPU
+;       - Pocket PC 2003  X86 CPU (for use in the Pocket PC 2003 emulator) 
+;
+; These variables can be used:
+; %CE1% \Program Files
+; %CE2% \Windows
+; %CE3% \Windows Desktop
+; %CE4% \Windows\StartUp
+; %CE5% \My Documents
+; %CE6% \Program Files\Accessories
+; %CE7% \Program Files\Communication
+; %CE8% \Program Files\Games
+; %CE9% \Program Files\Pocket Outlook
+; %CE10% \Program Files\Office
+; %CE11% \Windows\Programs
+; %CE12% \Windows\Accessories
+; %CE13% \Windows\Communications
+; %CE14% \Windows\Programs\Games
+; %CE15% \Windows\Fonts
+; %CE16% \Windows\Recent
+; %CE17% \Windows\Favorites
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Required "Version" section. 
+;   Contains INF version information
+[Version]
+Signature   = "$Windows NT$"	; Should be $Windows NT$ or $Windows 98$ or other OS name
+Provider    = "wxWidgets"       ; full app name will be "<Provider> <AppName>"
+CESignature = "$Windows CE$"	; Must be $Windows CE$
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Required "CEStrings" section
+;   Specific strings used by Windows CE AppInstall
+[CEStrings]
+AppName     = "Life" ; full app name will be "<Provider> <AppName>"
+InstallDir  = %CE8%\%AppName%    ; "\Program Files\Games\Life" (default install directory, which can be changed by end user.)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Optional "Strings" section
+;   Contains string substitutions replacing the key string (enclosed with percent symbols) with the value string
+;   For this example, it will store language-dependent strings
+[Strings]
+LinkFilename	= "Life"
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Required "CEDevice" section
+;   Specifies the various types of CAB files that will be generated
+[CEDevice]
+;UnsupportedPlatforms    = "HPC","Jupiter","Palm PC2"
+;VersionMin 		= 3.0
+;VersionMax		= 5.0
+; The following string is required to stop a warning about legacy apps.
+; You could also set VersionMin to 4.21 for PC2003, but it won't run on
+; PC2002 devices.
+; Possible BuildMax values:
+; 0xA0000000 	Application supports square screens (240x240 pixels).
+; 0xC0000000 	Application supports screen rotation.
+; 0xE0000000 	Application supports square screens and screen rotation.
+BuildMax = 0xE0000000
+
+[CEDevice.PPC2003_ARM]
+ProcessorType           = 2577      ; ARM CPU
+
+;[CEDevice.PPC2003_x86]
+;ProcessorType           = 686      ; x86 CPU for emulator
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Required "SourceDisksNames" section
+;   Specifies the source directories of the binary files
+;   Format:     
+;	<source ID> = ,<label>,,<source directory>
+;       <source ID> will be used to specify the source files belonging to this directory
+;       <label> is unused
+;       <source directory> is the relative or absolute directory of the source files
+[SourceDisksNames]              	; CPU-independent files
+1 = ,"Common Files",,Common     	; files are in the relative path "common"
+
+[SourceDisksNames.PPC2003_ARM]   	; ARM-specific files for Pocket PC 2003
+2 = ,"PPC ARM Files",,ARM_bins 	; files are in the relative path "ARM_bins"
+
+;[SourceDisksNames.PPC2003_x86]
+;2 = ,"PPC x86 Files",,x86emu_bins 	; files are in the relative path "x86emu_bins"
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Required "SourceDisksFiles" section
+;   Specifies the source filenames that will be packaged in the CAB files
+;   Format:     
+;	<filename> = <source ID>
+;       <filename> is the source filename (enclose in doublequotes for long filenames)
+;       <source ID> is the ID used in [SourceDisksNames] to specify the source directory
+[SourceDisksFiles]
+    ; CPU-independent files
+"life.htp"    = 1        ; the main help file (a dummy in this case)
+; "life.bin"         = 1   ; binary resources file (if provided: this is purely an example)
+"breeder.lif"          = 1     ; example data file
+    ; CPU-specific files
+"life.exe"             = 2     ; main executable
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Required "DefaultInstall" section
+;   Specifies the INF sections for file copying, registry settings and creating shortcuts
+;   INF sections that are not listed here will not be used
+[DefaultInstall]
+CopyFiles   = Files.Windows,Files.InstallDir,Files.DocumentsDir ; Required INF sections that lists the files to be copied
+AddReg      = Reg.Version1			; Required INF sections that lists the registry entries to be created
+CEShortcuts = Links				; Optional INF sections that lists the shortcuts to be created
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Required "DestinationDirs" section
+;   Specifies the directories to use for the file copy lists
+;   Format:     
+;	<section name> = 0,<dest directory>
+;       <section name> is the section name used in "[DefaultInstall] CopyFiles"
+;       <dest directory> is the destination directory, using an absolute device path, the directory macros, or the install directory %InstallDir%
+[DestinationDirs]
+Files.Windows       = 0,%CE2%           ; "\Windows" directory
+Files.InstallDir    = 0,%InstallDir%	; "\Program Files\Games\Life" directory (%CE8%\%AppName%)
+DefaultDestDir      = 0,%InstallDir%    ; "\Program Files\Games\Life" directory (%CE8%\%AppName%)
+Files.DocumentsDir    = 0,%CE5%\Life	; "\My Documents\Life" directory
+
+; Files to go into the My Documents folder
+[Files.DocumentsDir]
+"breeder.lif"
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Required sections specified in "[DefaultInstall] CopyFiles" key
+;   Specifies the files to copy
+;   Format:     
+;	<dest filename>,<source filename>,,<copy flags>
+;       <dest filename> is the destination filename (or the source filename if <source filename> is empty)
+;       <source filename> is the source filename
+;       <copy flags> is the copy flags to use
+[Files.Windows]
+"life.htp"
+
+[Files.InstallDir]
+"life.exe"
+; "life.bin"
+"readme.txt"
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Required sections specified in "[DefaultInstall] AddReg" key
+;   Specifies the registry entries to create
+;   Format:     
+;	<reg root>,<reg key>,<reg val>,<reg flags>,<reg data>[,<reg data>]
+;       <reg root> is HKCR, HKLM or HKCU
+;       <reg key> is the registry key name
+;       <reg val> is the registry value name, which is set to "default" if empty
+;       <reg flags> is the registry type/flags to use
+;       <reg data> is the numeric/string registry data, which depends on the <reg flags> used
+[Reg.Version1]
+    ; Set a sample application version number, using the TYPE_DWORD registry type
+HKLM,Software\Microsoft\%AppName%,MajorVersion,0x00010001,1
+HKLM,Software\Microsoft\%AppName%,MinorVersion,0x00010001,0
+
+    ; Set a sample default player name, using the TYPE_SZ registry type.  Also, do not replace if already exists.
+; HKCU,Software\Microsoft\%AppName%,"DefaultPlayer",0x00000002,%PlayerName%
+    ; Set a sample high score list (4 string multi-string), using the TYPE_MULTI_SZ registry type.  Also, do not replace if already exists.
+; HKCU,Software\Microsoft\%AppName%,"HighScores",0x00010002,%HighScorer1%,"200",%HighScorer2%,"100"
+    ; Set a sample binary stream (8-bytes), using the BINARY registry type
+; HKLM,Software\Microsoft\%AppName%,"ProductID",0x00000001,2,F,B,3,0,A,6,D
+    ; Associate .LIF files with the "Life.exe" executable
+; HKCR,.LIF,,0x00000000,LifeFile
+; HKCR,LifeFile\Shell\Open\Command,,0x00000000,"""%InstallDir%\Life.exe""" %%1
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Sections specified in "[DefaultInstall] CEShortcuts" key
+;   Specifies the shortcuts to create
+;   Format:     
+;	<shortcut filename>,<shortcut type>,<target file/path>[,<standard dest path>]
+;       <shortcut filename> is the filename of the shortcut
+;       <shortcut type> specifies if the shortcut is to a file or a folder
+;       <target file/path> is the target filename or pathname, which depends on the <shortcut type> flag used
+;       <standard dest path> is an optional destination directory macro (or %InstallDir%) to use
+[Links]
+%LinkFilename%,0,"life.exe",%CE14%         ; shortcut to a file, created in the standard destination path %CE14%
+

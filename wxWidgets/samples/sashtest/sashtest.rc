@@ -1,0 +1,9 @@
+aaaa                    ICON        "sashtest.ico"
+
+wxSTD_MDIPARENTFRAME    ICON        "sashtest.ico"
+wxSTD_MDICHILDFRAME     ICON        "sashtest.ico"
+
+sashtest_icn            ICON        "sashtest.ico"
+
+#include "wx/msw/wx.rc"
+

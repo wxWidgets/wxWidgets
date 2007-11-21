@@ -1,0 +1,162 @@
+
+\section{\class{wxGridBagSizer}}\label{wxgridbagsizer}
+
+A \helpref{wxSizer}{wxsizer} that can lay out items in a virtual grid
+like a \helpref{wxFlexGridSizer}{wxflexgridsizer} but in this case
+explicit positioning of the items is allowed using 
+\helpref{wxGBPosition}{wxgbposition}, and items can optionally span
+more than one row and/or column using \helpref{wxGBSpan}{wxgbspan}.
+
+\wxheading{Derived from}
+
+\helpref{wxFlexGridSizer}{wxflexgridsizer}\\
+\helpref{wxGridSizer}{wxgridsizer}\\
+\helpref{wxSizer}{wxsizer}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/gbsizer.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxGridBagSizer::wxGridBagSizer}\label{wxgridbagsizerwxgridbagsizer}
+
+\func{}{wxGridBagSizer}{\param{int }{vgap = 0}, \param{int }{hgap = 0}}
+
+Constructor, with optional parameters to specify the gap between the
+rows and columns.
+
+\membersection{wxGridBagSizer::Add}\label{wxgridbagsizeradd}
+
+\func{wxSizerItem*}{Add}{\param{wxWindow* }{window}, \param{const wxGBPosition\& }{pos}, \param{const wxGBSpan\& }{span = wxDefaultSpan}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+
+\func{wxSizerItem*}{Add}{\param{wxSizer* }{sizer}, \param{const wxGBPosition\& }{pos}, \param{const wxGBSpan\& }{span = wxDefaultSpan}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+
+\func{wxSizerItem*}{Add}{\param{int }{width}, \param{int }{height}, \param{const wxGBPosition\& }{pos}, \param{const wxGBSpan\& }{span = wxDefaultSpan}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+
+\func{wxSizerItem*}{Add}{\param{wxGBSizerItem* }{item}}
+
+The Add methods return a valid pointer if the item was successfully placed at the
+given position, NULL if something was already there.
+
+\membersection{wxGridBagSizer::CalcMin}\label{wxgridbagsizercalcmin}
+
+\func{wxSize}{CalcMin}{\void}
+
+Called when the managed size of the sizer is needed or when layout
+needs done.
+
+\membersection{wxGridBagSizer::CheckForIntersection}\label{wxgridbagsizercheckforintersection}
+
+\func{bool}{CheckForIntersection}{\param{wxGBSizerItem* }{item}, \param{wxGBSizerItem* }{excludeItem = NULL}}
+
+\func{bool}{CheckForIntersection}{\param{const wxGBPosition\& }{pos}, \param{const wxGBSpan\& }{span}, \param{wxGBSizerItem* }{excludeItem = NULL}}
+
+Look at all items and see if any intersect (or would overlap) the given
+item. Returns true if so, false if there would be no overlap. If an
+excludeItem is given then it will not be checked for intersection, for
+example it may be the item we are checking the position of.
+
+\membersection{wxGridBagSizer::FindItem}\label{wxgridbagsizerfinditem}
+
+\func{wxGBSizerItem*}{FindItem}{\param{wxWindow* }{window}}
+
+\func{wxGBSizerItem*}{FindItem}{\param{wxSizer* }{sizer}}
+
+Find the sizer item for the given window or subsizer, returns NULL if
+not found. (non-recursive)
+
+\membersection{wxGridBagSizer::FindItemAtPoint}\label{wxgridbagsizerfinditematpoint}
+
+\func{wxGBSizerItem*}{FindItemAtPoint}{\param{const wxPoint\& }{pt}}
+
+Return the sizer item located at the point given in pt, or NULL if
+there is no item at that point. The (x,y) coordinates in pt correspond
+to the client coordinates of the window using the sizer for
+layout. (non-recursive)
+
+\membersection{wxGridBagSizer::FindItemAtPosition}\label{wxgridbagsizerfinditematposition}
+
+\func{wxGBSizerItem*}{FindItemAtPosition}{\param{const wxGBPosition\& }{pos}}
+
+Return the sizer item for the given grid cell, or NULL if there is no
+item at that position. (non-recursive)
+
+\membersection{wxGridBagSizer::FindItemWithData}\label{wxgridbagsizerfinditemwithdata}
+
+\func{wxGBSizerItem*}{FindItemWithData}{\param{const wxObject* }{userData}}
+
+Return the sizer item that has a matching user data (it only compares
+pointer values) or NULL if not found. (non-recursive)
+
+\membersection{wxGridBagSizer::GetCellSize}\label{wxgridbagsizergetcellsize}
+
+\constfunc{wxSize}{GetCellSize}{\param{int }{row}, \param{int }{col}}
+
+Get the size of the specified cell, including hgap and vgap. Only
+valid after a Layout.
+
+\membersection{wxGridBagSizer::GetEmptyCellSize}\label{wxgridbagsizergetemptycellsize}
+
+\constfunc{wxSize}{GetEmptyCellSize}{\void}
+
+Get the size used for cells in the grid with no item.
+
+\membersection{wxGridBagSizer::GetItemPosition}\label{wxgridbagsizergetitemposition}
+
+\func{wxGBPosition}{GetItemPosition}{\param{wxWindow* }{window}}
+
+\func{wxGBPosition}{GetItemPosition}{\param{wxSizer* }{sizer}}
+
+\func{wxGBPosition}{GetItemPosition}{\param{size\_t }{index}}
+
+Get the grid position of the specified item.
+
+\membersection{wxGridBagSizer::GetItemSpan}\label{wxgridbagsizergetitemspan}
+
+\func{wxGBSpan}{GetItemSpan}{\param{wxWindow* }{window}}
+
+\func{wxGBSpan}{GetItemSpan}{\param{wxSizer* }{sizer}}
+
+\func{wxGBSpan}{GetItemSpan}{\param{size\_t }{index}}
+
+Get the row/col spanning of the specified item
+
+\membersection{wxGridBagSizer::RecalcSizes}\label{wxgridbagsizerrecalcsizes}
+
+\func{void}{RecalcSizes}{\void}
+
+Called when the managed size of the sizer is needed or when layout
+needs done.
+
+\membersection{wxGridBagSizer::SetEmptyCellSize}\label{wxgridbagsizersetemptycellsize}
+
+\func{void}{SetEmptyCellSize}{\param{const wxSize\& }{sz}}
+
+Set the size used for cells in the grid with no item.
+
+\membersection{wxGridBagSizer::SetItemPosition}\label{wxgridbagsizersetitemposition}
+
+\func{bool}{SetItemPosition}{\param{wxWindow* }{window}, \param{const wxGBPosition\& }{pos}}
+
+\func{bool}{SetItemPosition}{\param{wxSizer* }{sizer}, \param{const wxGBPosition\& }{pos}}
+
+\func{bool}{SetItemPosition}{\param{size\_t }{index}, \param{const wxGBPosition\& }{pos}}
+
+Set the grid position of the specified item. Returns true on success.
+If the move is not allowed (because an item is already there) then
+false is returned. 
+
+\membersection{wxGridBagSizer::SetItemSpan}\label{wxgridbagsizersetitemspan}
+
+\func{bool}{SetItemSpan}{\param{wxWindow* }{window}, \param{const wxGBSpan\& }{span}}
+
+\func{bool}{SetItemSpan}{\param{wxSizer* }{sizer}, \param{const wxGBSpan\& }{span}}
+
+\func{bool}{SetItemSpan}{\param{size\_t }{index}, \param{const wxGBSpan\& }{span}}
+
+Set the row/col spanning of the specified item. Returns true on
+success. If the move is not allowed (because an item is already there)
+then false is returned.
+

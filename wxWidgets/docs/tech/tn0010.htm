@@ -1,0 +1,212 @@
+<HTML>
+
+<HEAD>
+<TITLE>Compiling wxWidgets applications in the VC++ IDE</TITLE>
+
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" TEXT=#000000 LINK=#FF0000 VLINK=#000000>
+
+<font face="Arial, Lucida Sans, Helvetica">
+
+<a name="top"></a>
+
+<table width=100% border=0 cellpadding=5 cellspacing=0>
+<tr>
+<td bgcolor="#C4ECF9">
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#000000">
+Compiling wxWidgets applications in the VC++ IDE
+</font>
+</td>
+</tr>
+</table>
+
+<P>
+
+<CENTER>
+<a href="#wxwin2">Settings for wxWidgets 2.2</a> / <a href="#wxwin1">Settings for wxWidgets 1.68</a>
+</CENTER>
+
+<P>
+
+To compile wxWidgets samples and applications using the VC++ 5.0 or 6.0 IDE (having compiled wxWidgets
+using the makefile or project file provided), the following
+steps and settings should be used.<P>
+
+<H2>Steps</H2>
+
+<ol>
+<li>Create a new WIN32 Application project.
+<li>Add the .cpp and .rc files for your project.
+<li>Apply the settings listed below to the project, replacing c:\wx2 with your wxWidgets
+installation path.
+</ol>
+
+<P>
+
+<H2><a name="wxwin2">Settings for wxWidgets 2.2</a></H2>
+
+These settings apply to wxWidgets 2.1.14 and above but most of them are not
+necessary any longer for wxWidgets 2.3+.<P>
+
+<DL>
+<DT><B>General</B><DD>
+The <B>Output files</B> and <B>Intermediate files</B> directory fields should be Debug
+for the Debug configuration, and Release for the Release configuration.<P>
+
+<DT><B>Debug: General</B><DD>
+The <B>Executable for debug sessions</B> field should be altered to be the path and name
+you'd expect (it may have generated a different name).<P>
+
+<DT><B>C/C++: Preprocessor</B><DD>
+The <B>Preprocessor definitions</B> field should contain the following symbols for Debug:<P>
+
+<PRE>
+WIN32,_DEBUG,_WINDOWS,__WINDOWS__,__WXMSW__,__WXDEBUG__,WXDEBUG=1,
+__WIN32__,WINVER=0x0400,STRICT
+</PRE>
+<P>
+and these for Release:<P>
+
+<PRE>
+NDEBUG,WIN32,_WINDOWS,__WINDOWS__,__WXMSW__,__WIN32__,
+WINVER=0x0400,STRICT</PRE>
+<P>
+The <B>Additional include directories</B> field should contain the following:<P>
+<PRE>
+c:\wx2\include,c:\wx2\contrib\include
+</PRE>
+<P>(and of course any other directories you wish to use in your project).<P>
+
+<DT><B>C/C++: Precompiled Headers</B><DD>
+
+The <B>Not using precompiled headers</B> or <B>Automatic use of precompiled headers</B>
+button should be selected.<P>
+
+<DT><B>C/C++: Code Generation</B><DD>
+
+The <B>Use run-time library</B> control should be set to <B>Debug Multithreaded DLL</B> (Debug)
+or <B>Multithreaded DLL</B> (Release).<P>
+
+<DT><B>Link: Input</B><DD>
+
+The <B>Object/library modules</B> field should contain:
+
+<PRE>
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib
+ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib
+winmm.lib wxmsw25d.lib wxbase25d.lib wxpngd.lib wxzlibd.lib wxjpegd.lib wxtiffd.lib
+</PRE>
+
+for the Debug configuration and
+
+<PRE>
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib
+ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib
+winmm.lib wxmsw25.lib wxbase25.lib wxpng.lib wxzlib.lib wxjpeg.lib wxtiff.lib
+</PRE>
+
+for the Release configuration.<P>
+
+The <B>Ignore libraries</B> field should contain:
+
+<PRE>
+libcd.lib,libcid.lib,msvcrt.lib
+</PRE>
+
+for the Debug configuration and
+
+<PRE>
+libc.lib,libci.lib,msvcrtd.lib
+</PRE>
+
+for the Release configuration.<P>
+
+The <B>Additional library path</B> field should contain
+
+<PRE>
+c:\wx2\lib,c:\wx2\contrib\lib
+</PRE>
+
+for both Debug and Release configurations.
+
+<P>
+
+<DT><B>Resources</B><DD>
+
+Select your .rc file. The <B>Additional resource include directories</B> field should contain:
+
+<PRE>
+c:\wx2\include;c:\wx2\contrib\include
+</PRE>
+
+</DL>
+
+<HR>
+
+<H2><a name="wxwin1">Settings for wxWidgets 1.68</a></H2>
+
+Note: these have not yet been checked.<P>
+
+<DL>
+<DT><B>Debug: General</B><DD>
+The <B>Executable for debug sessions</B> field should be altered to be the path and name
+you'd expect (it may have generated a different name).<P>
+
+<DT><B>General</B><DD>
+The <B>Output directories</B> fields can be made blank if you want the objects
+and executable to be created in the project directory and not a subdirectory.<P>
+
+<DT><B>C/C++: Preprocessor</B><DD>
+The <B>Preprocessor definitions</B> field should contain the following symbols:<P>
+<PRE>
+WIN32,_DEBUG,_WINDOWS,wx_msw,DEBUG=1,WINVER=0x0400,STRICT
+</PRE>
+<P>
+The <B>Additional include directories</B> field should contain the following:<P>
+<PRE>
+../../include/base,../../include/msw
+</PRE>
+<P>(and of course any other directories you wish to use in your project).<P>
+
+<DT><B>C/C++: Precompiled Headers</B><DD>
+
+The <B>Not using precompiled headers</B> or <B>Automatic use of precompiled headers</B>
+button should be selected (I can't find a way of using the wxWidgets PCH file).<P>
+
+<DT><B>C/C++: Code Generation</B><DD>
+
+The <B>Use run-time library</B> control should be set to <B>Multithreaded DLL</B>. This
+sets the compiler switch to /MD to match the wxWidgets makefile.<P>
+
+<DT><B>Link: Input</B><DD>
+
+The <B>Object/library modules</B> field should contain:
+
+<PRE>
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib
+shell32.lib odbc32.lib odbccp32.lib comctl32.lib
+../../lib/wx.lib ../../src/msw/dummy.obj
+</PRE>
+
+The <B>Ignore libraries</B> field should contain:
+
+<PRE>
+libcd.lib,libcid.lib
+</PRE>
+
+<P>
+
+<DT><B>Resources</B><DD>
+
+Select your .rc file. The <B>Additional resource include directories</B> field should contain:
+
+<PRE>
+..\..\include\msw;..\..\contrib\fafa
+</PRE>
+
+</DL>
+
+</BODY>
+
+</HTML>

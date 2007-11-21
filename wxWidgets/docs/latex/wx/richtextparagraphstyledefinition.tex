@@ -1,0 +1,40 @@
+\section{\class{wxRichTextParagraphStyleDefinition}}\label{wxrichtextparagraphstyledefinition}
+
+This class represents a paragraph style definition, usually added to a \helpref{wxRichTextStyleSheet}{wxrichtextstylesheet}.
+
+\wxheading{Derived from}
+
+\helpref{wxRichTextStyleDefinition}{wxrichtextstyledefinition}
+
+\wxheading{Include files}
+
+<wx/richtext/richtextstyles.h>
+
+\wxheading{Data structures}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRichTextParagraphStyleDefinition::wxRichTextParagraphStyleDefinition}\label{wxrichtextparagraphstyledefinitionwxrichtextparagraphstyledefinition}
+
+\func{}{wxRichTextParagraphStyleDefinition}{\param{const wxString\& }{name = wxEmptyString}}
+
+Constructor.
+
+\membersection{wxRichTextParagraphStyleDefinition::\destruct{wxRichTextParagraphStyleDefinition}}\label{wxrichtextparagraphstyledefinitiondtor}
+
+\func{}{\destruct{wxRichTextParagraphStyleDefinition}}{\void}
+
+Destructor.
+
+\membersection{wxRichTextParagraphStyleDefinition::GetNextStyle}\label{wxrichtextparagraphstyledefinitiongetnextstyle}
+
+\constfunc{const wxString\&}{GetNextStyle}{\void}
+
+Returns the style that should normally follow this style.
+
+\membersection{wxRichTextParagraphStyleDefinition::SetNextStyle}\label{wxrichtextparagraphstyledefinitionsetnextstyle}
+
+\func{void}{SetNextStyle}{\param{const wxString\& }{name}}
+
+Sets the style that should normally follow this style.
+

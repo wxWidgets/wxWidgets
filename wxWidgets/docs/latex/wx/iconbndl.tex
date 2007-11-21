@@ -1,0 +1,70 @@
+\section{\class{wxIconBundle}}\label{wxiconbundle}
+
+This class contains multiple copies of an icon in different sizes,
+see also \helpref{wxDialog::SetIcons}{wxdialogseticons} and
+\helpref{wxTopLevelWindow::SetIcons}{wxtoplevelwindowseticons}.
+
+\wxheading{Derived from}
+
+No base class
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxIconBundle::wxIconBundle}\label{wxiconbundlewxiconbundle}
+
+\func{}{wxIconBundle}{\void}
+
+Default constructor.
+
+\func{}{wxIconBundle}{\param{const wxString\& }{file}, \param{long }{type}}
+
+Initializes the bundle with the icon(s) found in the file.
+
+\func{}{wxIconBundle}{\param{const wxIcon\& }{icon}}
+
+Initializes the bundle with a single icon.
+
+\func{}{wxIconBundle}{\param{const wxIconBundle\& }{ic}}
+
+Copy constructor.
+
+\membersection{wxIconBundle::\destruct{wxIconBundle}}\label{wxiconbundledtor}
+
+\func{}{\destruct{wxIconBundle}}{\void}
+
+Destructor.
+
+\membersection{wxIconBundle::AddIcon}\label{wxiconbundleaddicon}
+
+\func{void}{AddIcon}{\param{const wxString\& }{file}, \param{long }{type}}
+
+Adds all the icons contained in the file to the bundle;
+if the collection already contains icons with the same
+width and height, they are replaced by the new ones.
+
+\func{void}{AddIcon}{\param{const wxIcon\& }{icon}}
+
+Adds the icon to the collection; if the collection already
+contains an icon with the same width and height, it is
+replaced by the new one.
+
+\membersection{wxIconBundle::GetIcon}\label{wxiconbundlegeticon}
+
+\constfunc{const wxIcon\&}{GetIcon}{\param{const wxSize\& }{size}}
+
+Returns the icon with the given size; if no such icon exists,
+returns the icon with size wxSYS\_ICON\_X/wxSYS\_ICON\_Y;
+if no such icon exists,
+returns the first icon in the bundle. If size = wxSize( -1, -1 ),
+returns the icon with size wxSYS\_ICON\_X/wxSYS\_ICON\_Y.
+
+\constfunc{const wxIcon\&}{GetIcon}{\param{wxCoord }{size = -1}}
+
+Same as GetIcon( wxSize( size, size ) ).
+
+\membersection{wxIconBundle::operator=}\label{wxiconbundleoperatorassign}
+
+\func{const wxIconBundle\&}{operator=}{\param{const wxIconBundle\& }{ic}}
+
+Assignment operator.
+

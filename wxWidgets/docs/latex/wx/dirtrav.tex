@@ -1,0 +1,109 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        dirtrav.tex
+%% Purpose:     wxDirTraverser documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     14.01.02 (extracted from dir.tex)
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxDirTraverser}}\label{wxdirtraverser}
+
+wxDirTraverser is an abstract interface which must be implemented by objects
+passed to \helpref{Traverse}{wxdirtraverse} function.
+
+Example of use (this works almost like \helpref{GetAllFiles}{wxdirgetallfiles}):
+
+\begin{verbatim}
+    class wxDirTraverserSimple : public wxDirTraverser
+    {
+    public:
+        wxDirTraverserSimple(wxArrayString& files) : m_files(files) { }
+
+        virtual wxDirTraverseResult OnFile(const wxString& filename)
+        {
+            m_files.Add(filename);
+            return wxDIR_CONTINUE;
+        }
+
+        virtual wxDirTraverseResult OnDir(const wxString& WXUNUSED(dirname))
+        {
+            return wxDIR_CONTINUE;
+        }
+
+    private:
+        wxArrayString& m_files;
+    };
+
+    // get the names of all files in the array
+    wxArrayString files;
+    wxDirTraverserSimple traverser(files);
+
+    wxDir dir(dirname);
+    dir.Traverse(traverser);
+\end{verbatim}
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Constants}
+
+The elements of {\tt wxDirTraverseResult} are the possible return values of the
+callback functions:
+
+{\small
+\begin{verbatim}
+enum wxDirTraverseResult
+{
+    wxDIR_IGNORE = -1,      // ignore this directory but continue with others
+    wxDIR_STOP,             // stop traversing
+    wxDIR_CONTINUE          // continue into this directory
+};
+\end{verbatim}
+}
+
+\wxheading{Include files}
+
+<wx/dir.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxDirTraverser::OnDir}\label{wxdirtraverserondir}
+
+\func{virtual wxDirTraverseResult}{OnDir}{\param{const wxString\& }{dirname}}
+
+This function is called for each directory. It may return {\tt wxSIR\_STOP} 
+to abort traversing completely, {\tt wxDIR\_IGNORE} to skip this directory but
+continue with others or {\tt wxDIR\_CONTINUE} to enumerate all files and
+subdirectories in this directory.
+
+This is a pure virtual function and must be implemented in the derived class.
+
+
+\membersection{wxDirTraverser::OnFile}\label{wxdirtraverseronfile}
+
+\func{virtual wxDirTraverseResult}{OnFile}{\param{const wxString\& }{filename}}
+
+This function is called for each file. It may return {\tt wxDIR\_STOP} to abort
+traversing (for example, if the file being searched is found) or 
+{\tt wxDIR\_CONTINUE} to proceed.
+
+This is a pure virtual function and must be implemented in the derived class.
+
+
+\membersection{wxDirTraverser::OnOpenError}\label{wxopenerrortraverseronopenerror}
+
+\func{virtual wxDirTraverseResult}{OnOpenError}{\param{const wxString\& }{openerrorname}}
+
+This function is called for each directory which we failed to open for
+enumerating. It may return {\tt wxSIR\_STOP} to abort traversing completely,
+{\tt wxDIR\_IGNORE} to skip this directory but continue with others or 
+{\tt wxDIR\_CONTINUE} to retry opening this directory once again.
+
+The base class version always returns {\tt wxDIR\_IGNORE}.
+
+

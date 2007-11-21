@@ -1,0 +1,185 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        palette.tex
+%% Purpose:     wxPalette docs
+%% Author:
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxPalette}}\label{wxpalette}
+
+A palette is a table that maps pixel values to RGB colours. It allows the
+colours of a low-depth bitmap, for example, to be mapped to the available
+colours in a display. The notion of palettes is becoming more and more
+obsolete nowadays and only the MSW port is still using a native palette.
+All other ports use generic code which is basically just an array of
+colours. 
+
+It is likely that in the future the only use for palettes within wxWidgets
+will be for representing colour indeces from images (such as GIF or PNG).
+The image handlers for these formats have been modified to create a palette
+if there is such information in the original image file (usually 256 or less
+colour images). See \helpref{wxImage}{wximage} for more information.
+
+%TODO: topic overview for wxPalette.
+\wxheading{Derived from}
+
+\helpref{wxGDIObject}{wxgdiobject}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/palette.h>
+
+\wxheading{Predefined objects}
+
+Objects:
+
+{\bf wxNullPalette}
+
+\wxheading{See also}
+
+\helpref{wxDC::SetPalette}{wxdcsetpalette}, \helpref{wxBitmap}{wxbitmap}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPalette::wxPalette}\label{wxpalettector}
+
+\func{}{wxPalette}{\void}
+
+Default constructor.
+
+\func{}{wxPalette}{\param{const wxPalette\&}{ palette}}
+
+Copy constructor, uses \helpref{reference counting}{trefcount}.
+
+\func{}{wxPalette}{\param{int}{ n}, \param{const unsigned char* }{red},\\
+ \param{const unsigned char* }{green}, \param{const unsigned char* }{blue}}
+
+Creates a palette from arrays of size {\it n}, one for each
+red, blue or green component.
+
+\wxheading{Parameters}
+
+\docparam{palette}{A pointer or reference to the palette to copy.}
+
+\docparam{n}{The number of indices in the palette.}
+
+\docparam{red}{An array of red values.}
+
+\docparam{green}{An array of green values.}
+
+\docparam{blue}{An array of blue values.}
+
+\wxheading{See also}
+
+\helpref{wxPalette::Create}{wxpalettecreate}
+
+\perlnote{In wxPerl the third constructor form takes as parameters
+  3 array references ( they must be of the same length ).}
+
+\membersection{wxPalette::\destruct{wxPalette}}\label{wxpalettedtor}
+
+\func{}{\destruct{wxPalette}}{\void}
+
+Destructor.
+See \helpref{reference-counted object destruction}{refcountdestruct} for more info.
+
+\membersection{wxPalette::Create}\label{wxpalettecreate}
+
+\func{bool}{Create}{\param{int}{ n}, \param{const unsigned char* }{red},\rtfsp
+ \param{const unsigned char* }{green}, \param{const unsigned char* }{blue}}
+
+Creates a palette from arrays of size {\it n}, one for each
+red, blue or green component.
+
+\wxheading{Parameters}
+
+\docparam{n}{The number of indices in the palette.}
+
+\docparam{red}{An array of red values.}
+
+\docparam{green}{An array of green values.}
+
+\docparam{blue}{An array of blue values.}
+
+\wxheading{Return value}
+
+true if the creation was successful, false otherwise.
+
+\wxheading{See also}
+
+\helpref{wxPalette::wxPalette}{wxpalettector}
+
+\membersection{wxPalette::GetColoursCount}\label{wxpalettegetcolourscount}
+
+\constfunc{int}{GetColoursCount}{\void}
+
+Returns number of entries in palette.
+
+\membersection{wxPalette::GetPixel}\label{wxpalettegetpixel}
+
+\constfunc{int}{GetPixel}{\param{unsigned char }{red}, \param{unsigned char }{green},\rtfsp
+ \param{unsigned char }{blue}}
+
+Returns a pixel value (index into the palette) for the given RGB values.
+
+\wxheading{Parameters}
+
+\docparam{red}{Red value.}
+
+\docparam{green}{Green value.}
+
+\docparam{blue}{Blue value.}
+
+\wxheading{Return value}
+
+The nearest palette index or {\tt wxNOT\_FOUND} for unexpected errors.
+
+\wxheading{See also}
+
+\helpref{wxPalette::GetRGB}{wxpalettegetrgb}
+
+\membersection{wxPalette::GetRGB}\label{wxpalettegetrgb}
+
+\constfunc{bool}{GetRGB}{\param{int}{ pixel}, \param{const unsigned char* }{red}, \param{const unsigned char* }{green},\rtfsp
+ \param{const unsigned char* }{blue}}
+
+Returns RGB values for a given palette index.
+
+\wxheading{Parameters}
+
+\docparam{pixel}{The palette index.}
+
+\docparam{red}{Receives the red value.}
+
+\docparam{green}{Receives the green value.}
+
+\docparam{blue}{Receives the blue value.}
+
+\wxheading{Return value}
+
+true if the operation was successful.
+
+\wxheading{See also}
+
+\helpref{wxPalette::GetPixel}{wxpalettegetpixel}
+
+\perlnote{In wxPerl this method takes only the {\tt pixel} parameter and
+  returns a 3-element list ( or the empty list upon failure ).}
+
+\membersection{wxPalette::IsOk}\label{wxpaletteisok}
+
+\constfunc{bool}{IsOk}{\void}
+
+Returns true if palette data is present.
+
+\membersection{wxPalette::operator $=$}\label{wxpaletteassignment}
+
+\func{wxPalette\&}{operator $=$}{\param{const wxPalette\& }{palette}}
+
+Assignment operator, using \helpref{reference counting}{trefcount}.
+

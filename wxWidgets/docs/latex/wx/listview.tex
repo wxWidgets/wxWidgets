@@ -1,0 +1,145 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        listview.tex
+%% Purpose:     wxListView documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     07.11.02
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2002 Vadim Zeitlin <vadim@wxwindows.org>
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxListView}}\label{wxlistview}
+
+This class currently simply presents a simpler to use interface for the 
+\helpref{wxListCtrl}{wxlistctrl} -- it can be thought of as a {\it fa\c{c}ade}
+for that complicated class. Using it is preferable to using 
+\helpref{wxListCtrl}{wxlistctrl} directly whenever possible because in the
+future some ports might implement wxListView but not the full set of wxListCtrl
+features.
+
+Other than different interface, this class is identical to wxListCtrl. In
+particular, it uses the same events, same window styles and so on.
+
+\wxheading{Derived from}
+
+\helpref{wxListCtrl}{wxlistctrl}\\
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/listctrl.h>
+
+%%%%%%%%%%%%% Methods in alphabetic order %%%%%%%%%%%%%
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxListView::ClearColumnImage}\label{wxlistviewclearcolumnimage}
+
+\func{void}{ClearColumnImage}{\param{int }{col}}
+
+Resets the column image -- after calling this function, no image will be shown.
+
+\wxheading{Parameters}
+
+\docparam{col}{the column to clear image for}
+
+\wxheading{See also}
+
+\helpref{SetColumnImage}{wxlistviewsetcolumnimage}
+
+
+\membersection{wxListView::Focus}\label{wxlistviewfocus}
+
+\func{void}{Focus}{\param{long }{index}}
+
+Sets focus to the item with the given {\it index}.
+
+
+\membersection{wxListView::GetFirstSelected}\label{wxlistviewgetfirstselected}
+
+\constfunc{long}{GetFirstSelected}{\void}
+
+Returns the first selected item in a (presumably) multiple selection control.
+Together with \helpref{GetNextSelected}{wxlistviewgetnextselected} it can be
+used to iterate over all selected items in the control.
+
+\wxheading{Return value}
+
+The first selected item, if any, $-1$ otherwise.
+
+
+\membersection{wxListView::GetFocusedItem}\label{wxlistviewgetfocuseditem}
+
+\constfunc{long}{GetFocusedItem}{\void}
+
+Returns the currently focused item or $-1$ if none.
+
+\wxheading{See also}
+
+\helpref{IsSelected}{wxlistviewisselected},\\
+\helpref{Focus}{wxlistviewfocus}
+
+
+\membersection{wxListView::GetNextSelected}\label{wxlistviewgetnextselected}
+
+\constfunc{long}{GetNextSelected}{\param{long }{item}}
+
+Used together with \helpref{GetFirstSelected}{wxlistviewgetfirstselected} to
+iterate over all selected items in the control.
+
+\wxheading{Return value}
+
+Returns the next selected item or $-1$ if there are no more of them.
+
+
+\membersection{wxListView::IsSelected}\label{wxlistviewisselected}
+
+\constfunc{bool}{IsSelected}{\param{long }{index}}
+
+Returns {\tt true} if the item with the given {\it index} is selected, 
+{\tt false} otherwise.
+
+\wxheading{See also}
+
+\helpref{GetFirstSelected}{wxlistviewgetfirstselected},\\
+\helpref{GetNextSelected}{wxlistviewgetnextselected}
+
+
+\membersection{wxListView::Select}\label{wxlistviewselect}
+
+\func{void}{Select}{long n, \param{bool }{on = true}}
+
+Selects or unselects the given item.
+
+\wxheading{Parameters}
+
+\docparam{n}{the item to select or unselect}
+
+\docparam{on}{if {\tt true} (default), selects the item, otherwise unselects it}
+
+\wxheading{See also}
+
+\helpref{SetItemState}{wxlistctrlsetitemstate}
+
+
+\membersection{wxListView::SetColumnImage}\label{wxlistviewsetcolumnimage}
+
+\func{void}{SetColumnImage}{\param{int }{col}, \param{int }{image}}
+
+Sets the column image for the specified column. To use the column images, the
+control must have a valid image list with at least one image.
+
+\wxheading{Parameters}
+
+\docparam{col}{the column to set image for}
+
+\docparam{image}{the index of the column image in the controls image list}
+
+\wxheading{See also}
+
+\helpref{ClearColumnImage}{wxlistviewclearcolumnimage},\\
+\helpref{SetImageList}{wxlistctrlsetimagelist}
+

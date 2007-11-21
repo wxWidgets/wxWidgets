@@ -1,0 +1,155 @@
+\section{\class{wxSpinButton}}\label{wxspinbutton}
+
+A wxSpinButton has two small up and down (or left and right) arrow buttons. It
+is often used next to a text control for increment and decrementing a value.
+Portable programs should try to use \helpref{wxSpinCtrl}{wxspinctrl} instead
+as wxSpinButton is not implemented for all platforms but wxSpinCtrl is as it
+degenerates to a simple \helpref{wxTextCtrl}{wxtextctrl} on such platforms.
+
+{\bf NB:} the range supported by this control (and wxSpinCtrl) depends on the
+platform but is at least {\tt -0x8000} to {\tt 0x7fff}. Under GTK and
+Win32 with sufficiently new version of {\tt comctrl32.dll} (at least 4.71 is
+required, 5.80 is recommended) the full 32 bit range is supported.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{wxSpinCtrl}{wxspinctrl} 
+
+\wxheading{Include files}
+
+<wx/spinbutt.h>
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxSP\_HORIZONTAL}}{Specifies a horizontal spin button (note that this style is not supported in wxGTK).}
+\twocolitem{\windowstyle{wxSP\_VERTICAL}}{Specifies a vertical spin button.}
+\twocolitem{\windowstyle{wxSP\_ARROW\_KEYS}}{The user can use arrow keys to change the value.}
+\twocolitem{\windowstyle{wxSP\_WRAP}}{The value wraps at the minimum and maximum.}
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\input spinevt.inc
+
+\wxheading{See also}
+
+\helpref{Event handling overview}{eventhandlingoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxSpinButton::wxSpinButton}\label{wxspinbuttonctor}
+
+\func{}{wxSpinButton}{\void}
+
+Default constructor.
+
+\func{}{wxSpinButton}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxSP\_HORIZONTAL},\rtfsp
+\param{const wxString\& }{name = ``spinButton"}}
+
+Constructor, creating and showing a spin button.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Window identifier. A value of -1 indicates a default value.}
+
+\docparam{pos}{Window position. If the position (-1, -1) is specified then a default position is chosen.}
+
+\docparam{size}{Window size. If the default size (-1, -1) is specified then a default size is chosen.}
+
+\docparam{style}{Window style. See \helpref{wxSpinButton}{wxspinbutton}.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxSpinButton::Create}{wxspinbuttoncreate}
+
+\membersection{wxSpinButton::\destruct{wxSpinButton}}\label{wxspinbuttondtor}
+
+\func{void}{\destruct{wxSpinButton}}{\void}
+
+Destructor, destroys the spin button control.
+
+\membersection{wxSpinButton::Create}\label{wxspinbuttoncreate}
+
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxSP\_HORIZONTAL},\rtfsp
+\param{const wxString\& }{name = ``spinButton"}}
+
+Scrollbar creation function called by the spin button constructor.
+See \helpref{wxSpinButton::wxSpinButton}{wxspinbuttonctor} for details.
+
+\membersection{wxSpinButton::GetMax}\label{wxspinbuttongetmax}
+
+\constfunc{int}{GetMax}{\void}
+
+Returns the maximum permissible value.
+
+\wxheading{See also}
+
+\helpref{wxSpinButton::SetRange}{wxspinbuttonsetrange}
+
+\membersection{wxSpinButton::GetMin}\label{wxspinbuttongetmin}
+
+\constfunc{int}{GetMin}{\void}
+
+Returns the minimum permissible value.
+
+\wxheading{See also}
+
+\helpref{wxSpinButton::SetRange}{wxspinbuttonsetrange}
+
+\membersection{wxSpinButton::GetValue}\label{wxspinbuttongetvalue}
+
+\constfunc{int}{GetValue}{\void}
+
+Returns the current spin button value.
+
+\wxheading{See also}
+
+\helpref{wxSpinButton::SetValue}{wxspinbuttonsetvalue}
+
+\membersection{wxSpinButton::SetRange}\label{wxspinbuttonsetrange}
+
+\func{void}{SetRange}{\param{int}{ min}, \param{int}{ max}}
+
+Sets the range of the spin button.
+
+\wxheading{Parameters}
+
+\docparam{min}{The minimum value for the spin button.}
+
+\docparam{max}{The maximum value for the spin button.}
+
+\wxheading{See also}
+
+\helpref{wxSpinButton::GetMin}{wxspinbuttongetmin}, \helpref{wxSpinButton::GetMax}{wxspinbuttongetmax}
+
+\membersection{wxSpinButton::SetValue}\label{wxspinbuttonsetvalue}
+
+\func{void}{SetValue}{\param{int}{ value}}
+
+Sets the value of the spin button.
+
+\wxheading{Parameters}
+
+\docparam{value}{The value for the spin button.}
+
+\wxheading{See also}
+
+\helpref{wxSpinButton::GetValue}{wxspinbuttongetvalue}
+

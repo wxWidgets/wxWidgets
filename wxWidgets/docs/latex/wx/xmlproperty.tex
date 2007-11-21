@@ -1,0 +1,84 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        xmlnode.tex
+%% Purpose:     wxXmlProperty documentation
+%% Author:      Francesco Montorsi
+%% Created:     2006-04-18
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2006 Francesco Montorsi
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxXmlProperty}}\label{wxxmlproperty}
+
+Represents a node property.
+
+Example: in {\tt <img src="hello.gif" id="3"/>}, {\tt ``src"} is property with value
+{\tt ``hello.gif"} and {\tt ``id"} is a property with value {\tt ``3"}.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/xml/xml.h>
+
+\wxheading{See also}
+
+\helpref{wxXmlDocument}{wxxmldocument}, \helpref{wxXmlNode}{wxxmlnode}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxXmlProperty::wxXmlProperty}\label{wxxmlpropertywxxmlproperty}
+
+\func{}{wxXmlProperty}{\void}
+
+
+\func{}{wxXmlProperty}{\param{const wxString\& }{name}, \param{const wxString\& }{value}, \param{wxXmlProperty* }{next = NULL}}
+
+Creates the property with given {\it name} and {\it value}.
+If {\it next} is not NULL, then sets it as sibling of this property.
+
+\membersection{wxXmlProperty::\destruct{wxXmlProperty}}\label{wxxmlpropertydtor}
+
+\func{}{\destruct{wxXmlProperty}}{\void}
+
+The virtual destructor.
+
+\membersection{wxXmlProperty::GetName}\label{wxxmlpropertygetname}
+
+\constfunc{wxString}{GetName}{\void}
+
+Returns the name of this property.
+
+\membersection{wxXmlProperty::GetNext}\label{wxxmlpropertygetnext}
+
+\constfunc{wxXmlProperty*}{GetNext}{\void}
+
+Returns the sibling of this property or NULL if there are no siblings.
+
+\membersection{wxXmlProperty::GetValue}\label{wxxmlpropertygetvalue}
+
+\constfunc{wxString}{GetValue}{\void}
+
+Returns the value of this property.
+
+\membersection{wxXmlProperty::SetName}\label{wxxmlpropertysetname}
+
+\func{void}{SetName}{\param{const wxString\& }{name}}
+
+Sets the name of this property.
+
+\membersection{wxXmlProperty::SetNext}\label{wxxmlpropertysetnext}
+
+\func{void}{SetNext}{\param{wxXmlProperty* }{next}}
+
+Sets the sibling of this property.
+
+\membersection{wxXmlProperty::SetValue}\label{wxxmlpropertysetvalue}
+
+\func{void}{SetValue}{\param{const wxString\& }{value}}
+
+Sets the value of this property.
+

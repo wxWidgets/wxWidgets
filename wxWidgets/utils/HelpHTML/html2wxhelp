@@ -1,0 +1,44 @@
+#!/bin/sh
+#
+# $Id$
+#
+# html2wxhelp Creates a wxhelp.map file from a directory full of html files.
+# It takes header lines, extracts the NAME=xxx section for the URL and the help
+# id which must be added to the header using _ID_.
+#
+# It also removes all _ID_ tags from the html sources.
+
+
+make_map()
+{
+  cat $1 | tr -d '\n' | \
+  sed "1,$ s/^.*<[hH][0-9]\([^<].*\)<\/[hH][0-9]>.*$/
+#__#\1
+/g" | \
+  fgrep \#__\# | tr '
+' '\n' | egrep -v '^$' | \
+  sed "1,$ s/^.*NAME=\"\([^\"]*\)\".*>\([^>]*\)<.*$/$1#\1;\2/g" | \
+  sed "1,$ s/^\#__\#[^>]*>\([^<>][^<>]*\)<.*$/;\1/g" | \
+  sed "1,$ s/^\(.*\);\(.*\)_\(.*\)_.*$/\3	\1	;\2/g" | \
+  sed "1,$ s/^\([^+-0123456789]\)\(.*\);\(.*\)$/-1	\1\2	;\3/g" | \
+  fgrep -v \#__\#
+}
+
+remove_ids()
+{
+	cat $1 | \
+	sed "1,$ s/_[0-9][0-9]*_//g" > tmp$$ && mv tmp$$ $1
+#  cat $1 | tr -d '\n' | \
+#  sed "1,$ s/^\(.*<[hH][0-9]\)\([^<_][^_]*\)_.*_*\(<\/[hH][0-9]>.*\)$/\1\2\3
+/g" | \
+#  tr '
+' '\n'  > tmp$$ \
+#  && mv tmp$$ $1
+}
+
+for i in *.html
+do
+	make_map $i
+        remove_ids $i
+done
+

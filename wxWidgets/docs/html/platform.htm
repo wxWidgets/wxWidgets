@@ -1,0 +1,219 @@
+
+<html>
+<head>
+   <title>Platforms supported by wxWindows 2.4</title>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Vadim Zeitlin">
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" VLINK="#00376A" LINK="#00529C" ALINK="#313063">
+
+<font face="Arial, Lucida Sans, Helvetica">
+
+<table align=center width=100% border=0 cellpadding=5 cellspacing=0>
+<tr>
+<td bgcolor="#004080" align=left height=24 background="images/bluetitlegradient.gif">
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
+<b>Supported Platforms</b>
+</font>
+</td>
+</tr>
+</table>
+
+</p>
+
+You will find below the list of all supported platforms for different ports of
+wxWindows 2.x (wxMSW/wxGTK/wxMotif ports only). The cross icon in the third
+column doesn&#39;t always mean that the platform is not supported, but may just
+wxWindows hasn&#39;t been tested on it recently (the table is being updated for
+wxWindows 2.5.1 currently).
+<p>
+See also:
+
+<ul>
+<li><A HREF="http://www.lpthe.jussieu.fr/~zeitlin/wxWindows/daily/">daily rebuilds page</A> for some of the platforms mentioned below;
+<li>the list of <a href="supported.htm">support classes</a> in each platform;
+<li>the <a href="embedded.htm">wxEmbedded page</a> which describes embedded platforms supported
+or in progress.
+</ul>
+
+<p>
+If you have tested wxWindows on a platform not mentioned here, please tell us about your experience on our mailing list!
+We would especially like to have information about compiling wxGTK on other Unix variants, such as IRIX, DG-UX,
+other flavours of BSD, ... Please note that you will generally need GNU make
+(also known as <tt>gmake</tt>) to compile wxWindows, native make programs
+often don&#39;t work.
+<p>
+
+<table width=100% border=4 cellpadding=5 cellspacing=0>
+
+<tr>
+<td bgcolor="#004080" colspan=5> <font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF"> wxWindows 2 Platforms </font> </td>
+</tr>
+
+<tr bgcolor="#dedede">
+<td align=center valign=top> <font face="Arial, Lucida Sans, Helvetica" color="#000000"> Platform </font> </td>
+<td align=center valign=top> <font face="Arial, Lucida Sans, Helvetica" color="#000000"> Compiler </font> </td>
+<td align=center valign=top> <font face="Arial, Lucida Sans, Helvetica" color="#000000"> Status </font> </td>
+<td align=center valign=top> <font face="Arial, Lucida Sans, Helvetica" color="#000000"> Tested by </font> </td>
+<td align=center valign=top> <font face="Arial, Lucida Sans, Helvetica" color="#000000"> Remarks </font> </td>
+</tr>
+
+<tr>
+<td align=center valign=center rowspan=8>Win32<br>(Win 9x/NT/2K)</td>
+     <td>Visual C++ 4.2/5.x/6.0</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>VZ, JS</td><td>Project files are provided for all versions except 4.2</td>
+<tr> <td>Borland C++ 5.0</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td><br></td><td>Also works with free command line Borland C++ 5.5</td>
+<tr> <td>Mingw32</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>GRG, VZ</td><td>Cross compilation from Linux works as well<br>
+                                                                                               Version 2.95.2 recommended, otherwise some (included) patches must be applied<br>
+                                                                                               Memory debugging code doesn&#39;t seem to work well</td>
+<tr> <td>Cygwin</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Stephane Junique<br>Andrea Venturoli</td><td>tested under NT 4, cross-compiling for mingw also works</td>
+<tr> <td>Watcom C++ 10</td><td align=center><IMG SRC="images/somewhat.gif" ALT=Almost></td><td>JS</td><td>Tested with 10.6: works, but wxImage seems to be broken<br>no support for JPEG, TIFF or OpenGL</td>
+<tr> <td>Watcom C++ 11</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Markus Neifer</td><td>Tested with 11.0b under win95</td>
+<tr> <td>Open Watcom 1.0</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Chris Elliott</td><td>Tested with 1.0 under W2K(?)</td>
+<tr> <td>Digital Mars (was Symantec C++)</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Chris Elliott</td><td>Tested with 8.34beta</td>
+</tr>
+
+<tr bgcolor="#f0f0f0">
+<td align=center valign=center>Win64<br>(Windows XP/2003)</td>
+     <td>Visual C++ 7.1</td><td align=center><img src="images/no.gif" alt=No></td><td>&nbsp;</td><td>Some minor corrections not done yet but will be in time for 2.6.0...</td>
+</tr>
+
+<tr>
+<td align=center valign=center rowspan=2>Win16<br>(Windows 3.1)</td>
+     <td>Visual C++ 1.52</td><td align=center><IMG SRC="images/somewhat.gif" ALT=Ok></td><td><br></td>
+     <td rowspan=2 valign=center>Some features are missing (OLE related classes, threads, ...)<br>
+                                 Borland C++ can&#39;t cope with ODBC, resources and new wxGrid class.<br>
+                                 <b>Last working version is wxWindows 2.2.7,
+                                 support for Win16 has been abandoned in 2.4.x.
+                                 and all traces of Win16 code were removed
+                                 after cvs BEFORE_WIN16_REMOVAL tag</b></td>
+<tr> <td>Borland C++ 4.0/5.0</td><td align=center><IMG SRC="images/somewhat.gif" ALT=Ok></td><td>JS</td>
+</tr>
+
+<tr bgcolor="#f0f0f0">
+<td align=center valign=center rowspan=4>Linux x86</td>
+     <td>wxGTK with gcc 2.7.2</td><td align=center><IMG SRC="images/no.gif" ALT=Unknown></td><td><br></td><td>Might work, but nobody uses it any more</td>
+<tr bgcolor="#f0f0f0"> <td>wxGTK with gcc 2.95--3.3</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>VZ, RR</td><td><br></td>
+<tr bgcolor="#f0f0f0"> <td>wxMotif</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td><br></td><td>with <a href="http://www.lesstif.org">LessTif</a> 0.87</td>
+<tr bgcolor="#f0f0f0"> <td>wxMotif</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td><br></td><td>with <a href="http://www.openmotif.org">OpenMotif</a></td>
+</tr>
+
+<tr> <td bgcolor="#fafafa"><br></td><td bgcolor="#fafafa" align=center colspan=5> All BSD systems tests are for wxGTK using gcc. </td>
+<tr>
+<td align=center valign=center rowspan=1>FreeBSD</td>
+     <td>all versions between 3.2 and 5.1 x86</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>VZ</td><td><br></td>
+</tr>
+
+<tr>
+<td align=center valign=center rowspan=1>NetBSD</td>
+     <td>1.6, Alpha</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>VZ</td><td><br></td>
+</tr>
+
+<tr>
+<td align=center valign=center rowspan=1>OpenBSD</td>
+     <td>3.1, Alpha</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>VZ</td><td>Some problems with shared libraries, ok with static ones</td>
+</tr>
+
+<tr bgcolor="#f0f0f0">
+<td align=center valign=center rowspan=6>Solaris</td>
+     <td>wxMotif with Sun CC 4.2</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>VZ</td><td>Thread support must be disabled on system with not MT-safe X11</td>
+<tr bgcolor="#f0f0f0"> <td>wxMotif with gcc</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td><br></td><td><br></td>
+<tr bgcolor="#f0f0f0"> <td>wxGTK with Sun CC 4.2</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>&nbsp;</td><td><br></td>
+<tr bgcolor="#f0f0f0"> <td>wxGTK with gcc</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td><br></td><td><br></td>
+<tr bgcolor="#f0f0f0"> <td>wxGTK with Sun CC 5.0 and 6.1 (Solaris 7 and 8)</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Jiri Mracek</td><td>You have to edit line 2079 in glib.h to fix GTK+ error</td>
+<tr bgcolor="#f0f0f0"> <td>wxGTK 2.5.1 with Sun CC 6.2 (Solaris 6 and 8)</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Carl Godkin</td><td>Using GNU make</td>
+</tr>
+
+<tr>
+<td align=center valign=center rowspan=4>AIX</td>
+     <td>wxGTK 2.2.9 with gcc 3.0.4</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Ian Brown</td><td>Shared library building doesn&#39;t work, use <tt>--disable-shared</tt></td>
+<tr> <td>wxGTK 2.3.3 with xlC (AIX 4.3.2)</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Irvin Probst</td><td>Both static and shared wxGTK libraries work, but only with static GTK+ and GLib</td>
+<tr> <td>wxMotif with xlC 3.1.4.0 (AIX 4.2)</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td>
+                                 <td>Bernhard Eck</td>
+                                 <td>Some problems with OpenGL and native X server</td>
+<tr> <td>wxX11 2.4.2 with xlC 6 (AIX 5.1)</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Swengtoo</td><td>In 2.4.2 you need to remove parentheses from the configure line containing AIX_CXX_LD; you should also use GNU make</td>
+</tr>
+
+<tr bgcolor="#f0f0f0">
+<td align=center valign=center rowspan=5>HP-UX</td>
+<tr bgcolor="#f0f0f0">
+     <td>HP-UX 10.20 wxGTK with HP CC A.10.22<br>or HP aCC B3910B A.01.18</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Staf Verhaegen</td>
+     <td>you need to add <tt>-Aa -D_HPUX_SOURCE</tt> to <tt>CFLAGS</tt></td>
+<tr bgcolor="#f0f0f0"> <td>HP-UX 10.20 wxGTK with gcc</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Julian Albo Garcia</td><td><br></td>
+<tr bgcolor="#f0f0f0"> <td>HP-UX 11i v1 PA-RISC, wxMotif 2.5.4, tried aCC A.03.57 and g++ 3.4.2</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Ian, Mike</td>
+        <td>For a 32-bit PA-RISC build, if you want to use <tt>SHLIB_PATH</tt> to make it easier to use 
+        wxWidgets without installing it, then add <tt>LDFLAGS=-Wl,+s</tt><br>
+        If you want to compile the test suite then aCC A.03.57 requires <tt>CXX='aCC -AA'</tt><br>
+        aCC can also be used as the C compiler instead of cc by adding <tt>CC='aCC -Ae'</tt>
+        </td>
+<tr bgcolor="#f0f0f0"> <td>HP-UX 11i v2 IA64, wxMotif 2.5.4, aCC A.06.00</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Mike</td><td><br></td>
+</tr>
+
+<tr>
+<td align=center valign=center rowspan=6>IRIX</td>
+<tr> <td bgcolor="#fafafa" colspan=5>
+         Note that all entries use MIPSPro 7.3 compiler on IRIX 6.5 with <tt>-mips3 -n32</tt> flags if not mentioned otherwise.
+         Also note that you need to set <tt>LD_LIBRARYN32_PATH</tt> under IRIX to run wxWindows programs.
+     </td>
+<tr> <td>wxGTK 2.2</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Ian</td><td>You may need to use <tt>--disable-catch_segvs</tt> if you get compiler error in utilsunx.cpp</td>
+<tr> <td>wxGTK 2.5</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Carl Godkin</td><td><br></td>
+<tr> <td rowspan=2>wxMotif</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>David Marshall</td><td>On IRIX 6.5.6 (Indigo2, 64bit), with SGI Motif 1.2</td>
+<tr> <td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Ian</td><td><br></td>
+</tr>
+
+<tr bgcolor="#f0f0f0">
+<td align=center valign=center rowspan=1>SCO UnixWare</td>
+    <td>wxGTK with gcc</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>William Suetholz</td><td>UnixWare 2.1.3 with UnixWare 7 compatibility PTF</td>
+</tr>
+
+<tr>
+<td align=center valign=center rowspan=1>DEC OSF/1</td>
+    <td>wxGTK with gcc</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Fabrice Didierjean</td><td>OSF1 4.0 on Dec Alpha<br>
+                                                                                     you may need to run configure with <tt>--host=alpha-dec-osf switch</tt></td>
+</tr>
+
+<tr bgcolor="#f0f0f0">
+<td align=center valign=center rowspan=12>OS/2</td>
+<tr bgcolor="#f0f0f0"> <td>wxOS2-2.4.x with VAC++ 3.0</td><td align=center><IMG SRC="images/somewhat.gif" ALT="Almost"></td><td>DW</td><td>Support for this out-dated compiler has been given up for 2.5</td>
+<tr bgcolor="#f0f0f0"> <td>wxOS2 with EMX</td><td align=center><IMG SRC="images/somewhat.gif" ALT="Almost"></td><td>SN</td><td><br></td>
+<tr bgcolor="#f0f0f0"> <td>wxOS2 with EMX+gcc 3.2.1</td><td align=center><IMG SRC="images/somewhat.gif" ALT="Almost"></td><td>Dave Parsons</td><td><br></td>
+<tr bgcolor="#f0f0f0"> <td>Innotek gcc 3.2.2</td><td align=center><IMG SRC="images/no.gif" ALT="No"></td><td>DW</td><td>This compilers uses an object format incompatible with current X11 libraries, so forget about wxGTK/wxMotif/wxX11. CVS now supports building wxOS2, but linking does not yet work OOTB.</td>
+<tr bgcolor="#f0f0f0"> <td>Open Watcom 1.0/1.1</td><td align=center><IMG SRC="images/no.gif" ALT=No></td><td><br></td><td>Again, object format is incompatible with X11 libs, so forget about wxGTK/wxMotif/wxX11. We would need somebody having enough time to dig into the build system and find out how to adapt OpenWatcom&#39;s makefiles (or rather bakefiles) for Windows to OS/2.</td>
+<tr bgcolor="#f0f0f0"> <td>wxGTK with EMX</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>SN</td><td><br></td>
+<tr bgcolor="#f0f0f0"> <td>wxMotif with EMX</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>SN</td><td>with <a href="http://www.lesstif.org">LessTif</a> 0.89</td>
+<tr bgcolor="#f0f0f0"> <td>wxX11 with EMX</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>SN</td><td><br></td>
+<tr bgcolor="#f0f0f0"> <td>wxGTK with EMX+gcc 3.2.1</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td><br></td><td><br></td>
+<tr bgcolor="#f0f0f0"> <td>wxMotif with EMX+gcc 3.2.1</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td><br></td><td>with <a href="http://www.lesstif.org">LessTif</a> 0.89</td>
+<tr bgcolor="#f0f0f0"> <td>wxX11 with EMX+gcc 3.2.1</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td><br></td><td><br></td>
+</tr>
+
+<tr>
+<td align=center valign=center rowspan=1>OpenVMS</td>
+<td>wxGTK with Compaq-C++ V6.2 (OpenVMS Alpha 7.3)</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Jouk Jansen</td><td><br></td>
+</tr>
+
+<tr bgcolor="#f0f0f0">
+<td align=center valign=center rowspan=1>Linux S/390</td>
+<td>wxGTK with gcc 2.95.2</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>VZ</td><td>2.3.1+ only</td>
+</tr>
+
+<tr>
+<td align=center valign=center rowspan=4>Mac OS</td>
+    <tr><td>wxMac CFM (OS 8.6+)</td><td align=center><img src="images/yes.gif" alt=Ok></td><td>SC</td><td>with Metrowerks CodeWarrior 8.3</td></tr>
+    <tr><td>wxMac Mach-O (OS X)</td><td align=center><img src="images/yes.gif" alt=Ok></td><td>SC</td><td>CodeWarrior or Apple DevTools (gcc)</td></tr>
+    <tr><td>wxCocoa (OS X)</td><td align=center><img src="images/somewhat.gif" alt="Somewhat"></td><td>DE</td><td>Apple DevTools (gcc)</td></tr>
+</tr>
+
+</table>
+
+<br>
+
+<hr>
+Contact <A HREF="mailto:zeitlin@dptmaths.ens-cachan.fr">Vadim Zeitlin</A> with
+any comments/suggestions.
+
+</font>
+
+</body>
+</html>
+
+<!-- vi: set tw=0: !-->

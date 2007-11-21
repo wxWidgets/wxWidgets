@@ -1,0 +1,44 @@
+% -----------------------------------------------------------------------------
+% wxFilterInputStream
+% -----------------------------------------------------------------------------
+\section{\class{wxFilterInputStream}}\label{wxfilterinputstream}
+
+A filter stream has the capability of a normal stream but it can be placed on top
+of another stream. So, for example, it can uncompress or decrypt the data which are read
+from another stream and pass it to the requester.
+
+\wxheading{Derived from}
+
+\helpref{wxInputStream}{wxinputstream}\\
+\helpref{wxStreamBase}{wxstreambase}
+
+\wxheading{Include files}
+
+<wx/stream.h>
+
+\wxheading{Note}
+
+The interface of this class is the same as that of wxInputStream. Only a constructor
+differs and it is documented below.
+
+\wxheading{See also}
+
+\helpref{wxFilterClassFactory}{wxfilterclassfactory}\\
+\helpref{wxFilterOutputStream}{wxfilteroutputstream}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+% -----------
+% ctor & dtor
+% -----------
+\membersection{wxFilterInputStream::wxFilterInputStream}\label{wxfilterinputstreamctor}
+
+\func{}{wxFilterInputStream}{\param{wxInputStream\&}{ stream}}
+
+\func{}{wxFilterInputStream}{\param{wxInputStream*}{ stream}}
+
+Initializes a "filter" stream.
+
+If the parent stream is passed as a pointer then the new filter stream
+takes ownership of it. If it is passed by reference then it does not.
+

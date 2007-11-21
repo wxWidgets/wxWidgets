@@ -1,0 +1,4 @@
+ICON     1   PRELOAD "mondros2.ico"
+
+RCINCLUDE \dev\wx2\WxWindows\include\wx\os2\wx.rc
+

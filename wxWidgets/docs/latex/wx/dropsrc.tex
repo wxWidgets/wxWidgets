@@ -1,0 +1,134 @@
+\section{\class{wxDropSource}}\label{wxdropsource}
+
+This class represents a source for a drag and drop operation.
+
+See \helpref{Drag and drop overview}{wxdndoverview} and \helpref{wxDataObject overview}{wxdataobjectoverview} 
+for more information.
+
+\wxheading{Derived from}
+
+None
+
+\wxheading{Include files}
+
+<wx/dnd.h>
+
+\wxheading{Types}
+
+\index{wxDragResult}wxDragResult is defined as follows:
+
+\begin{verbatim}
+enum wxDragResult
+{
+    wxDragError,    // error prevented the d&d operation from completing
+    wxDragNone,     // drag target didn't accept the data
+    wxDragCopy,     // the data was successfully copied
+    wxDragMove,     // the data was successfully moved (MSW only)
+    wxDragLink,     // operation is a drag-link
+    wxDragCancel    // the operation was cancelled by user (not an error)
+};
+\end{verbatim}
+
+\wxheading{See also}
+
+\helpref{wxDropTarget}{wxdroptarget}, 
+\helpref{wxTextDropTarget}{wxtextdroptarget}, \helpref{wxFileDropTarget}{wxfiledroptarget}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDropSource::wxDropSource}\label{wxdropsourcewxdropsource}
+
+\func{}{wxDropSource}{\param{wxWindow*}{ win = NULL},\param{const wxIconOrCursor\& }{iconCopy = wxNullIconOrCursor}, \param{const wxIconOrCursor\& }{iconMove = wxNullIconOrCursor}, \param{const wxIconOrCursor\& }{iconNone = wxNullIconOrCursor}}
+
+\func{}{wxDropSource}{\param{wxDataObject\&}{ data}, \param{wxWindow*}{ win = NULL},\param{const wxIconOrCursor\& }{iconCopy = wxNullIconOrCursor}, \param{const wxIconOrCursor\& }{iconMove = wxNullIconOrCursor}, \param{const wxIconOrCursor\& }{iconNone = wxNullIconOrCursor}}
+
+The constructors for wxDataObject.
+
+If you use the constructor without {\it data} parameter you must call 
+\helpref{SetData}{wxdropsourcesetdata} later.
+
+Note that the exact type of {\it iconCopy} and subsequent parameters differs
+between wxMSW and wxGTK: these are cursors under Windows but icons for GTK.
+You should use the macro \helpref{wxDROP\_ICON}{wxdropicon} in portable
+programs instead of directly using either of these types.
+
+\wxheading{Parameters}
+
+\docparam{win}{The window which initiates the drag and drop operation.}
+
+\docparam{iconCopy}{The icon or cursor used for feedback for copy operation.}
+
+\docparam{iconMove}{The icon or cursor used for feedback for move operation.}
+
+\docparam{iconNone}{The icon or cursor used for feedback when operation can't be done.}
+
+{\it win} is the window which initiates the drag and drop operation.
+
+\membersection{wxDropSource::\destruct{wxDropSource}}\label{wxdropsourcedtor}
+
+\func{virtual }{\destruct{wxDropSource}}{\void}
+
+\membersection{wxDropSource::SetData}\label{wxdropsourcesetdata}
+
+\func{void}{SetData}{\param{wxDataObject\&}{ data}}
+
+Sets the data \helpref{wxDataObject}{wxdataobject} associated with the 
+drop source. This will not delete any previously associated data.
+
+\membersection{wxDropSource::DoDragDrop}\label{wxdropsourcedodragdrop}
+
+\func{virtual wxDragResult}{DoDragDrop}{\param{int }{flags = {\tt wxDrag\_CopyOnly}}}
+
+Do it (call this in response to a mouse button press, for example). This starts
+the drag-and-drop operation which will terminate when the user releases the
+mouse.
+
+\wxheading{Parameters}
+
+\docparam{flags}{If {\tt wxDrag\_AllowMove} is included in the flags, data may
+be moved and not only copied (default). If {\tt wxDrag\_DefaultMove} is
+specified (which includes the previous flag), this is even the default
+operation}.
+
+\wxheading{Return value}
+
+Returns the operation requested by the user, may be {\tt wxDragCopy}, {\tt
+wxDragMove}, {\tt wxDragLink}, {\tt wxDragCancel} or {\tt wxDragNone} if an error occurred.
+
+\membersection{wxDropSource::GetDataObject}\label{wxdropsourcegetdataobject}
+
+\func{wxDataObject *}{GetDataObject}{\void}
+
+Returns the wxDataObject object that has been assigned previously.
+
+\membersection{wxDropSource::GiveFeedback}\label{wxdropsourcegivefeedback}
+
+\func{virtual bool}{GiveFeedback}{\param{wxDragResult }{effect}}
+
+Overridable: you may give some custom UI feedback during the drag and drop operation
+in this function. It is called on each mouse move, so your implementation must not be too
+slow.
+
+\wxheading{Parameters}
+
+\docparam{effect}{The effect to implement. One of {\tt wxDragCopy}, {\tt wxDragMove}, {\tt wxDragLink} and {\tt wxDragNone}. }
+
+\docparam{scrolling}{true if the window is scrolling. MSW only. }
+
+\wxheading{Return value}
+
+Return false if you want default feedback, or true if you implement your own
+feedback. The return values is ignored under GTK.
+
+\membersection{wxDropSource::SetCursor}\label{wxdropsourcesetcursor}
+
+\func{void}{SetCursor}{\param{wxDragResult }{res}, \param{const wxCursor\& }{cursor}}
+
+Set the icon to use for a certain drag result.
+
+\wxheading{Parameters}
+
+\docparam{res}{The drag result to set the icon for. }
+
+\docparam{cursor}{The ion to show when this drag result occurs. }
+

@@ -1,0 +1,52 @@
+\section{\class{wxFocusEvent}}\label{wxfocusevent}
+
+A focus event is sent when a window's focus changes. The window losing focus
+receives a ``kill focus'' event while the window gaining it gets a ``set
+focus'' one.
+
+Notice that the set focus event happens both when the user gives focus to the
+window (whether using the mouse or keyboard) and when it is done from the
+program itself using \helpref{SetFocus}{wxwindowsetfocus}.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/event.h>
+
+\wxheading{Event table macros}
+
+To process a focus event, use these event handler macros to direct input to a member
+function that takes a wxFocusEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_SET\_FOCUS(func)}}{Process a wxEVT\_SET\_FOCUS event.}
+\twocolitem{{\bf EVT\_KILL\_FOCUS(func)}}{Process a wxEVT\_KILL\_FOCUS event.}
+\end{twocollist}%
+
+\wxheading{See also}
+
+\helpref{Event handling overview}{eventhandlingoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxFocusEvent::wxFocusEvent}\label{wxfocuseventctor}
+
+\func{}{wxFocusEvent}{\param{WXTYPE }{eventType = 0}, \param{int }{id = 0}}
+
+Constructor.
+
+
+\membersection{wxFocusEvent::GetWindow}\label{wxfocuseventgetwindow}
+
+Returns the window associated with this event, that is the window which had the
+focus before for the \texttt{wxEVT\_SET\_FOCUS} event and the window which is
+going to receive focus for the \texttt{wxEVT\_KILL\_FOCUS} one.
+
+Warning: the window pointer may be \texttt{NULL}!
+

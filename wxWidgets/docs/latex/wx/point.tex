@@ -1,0 +1,84 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        point.tex
+%% Purpose:     wxPoint documentation
+%% Author:      wxTeam
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxTeam
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxPoint}}\label{wxpoint}
+
+A {\bf wxPoint} is a useful data structure for graphics operations.
+It simply contains integer {\it x} and {\it y} members.
+
+See also \helpref{wxRealPoint}{wxrealpoint} for a floating point version.
+
+\wxheading{Derived from}
+
+None
+
+\wxheading{Include files}
+
+<wx/gdicmn.h>
+
+\wxheading{See also}
+
+\helpref{wxRealPoint}{wxrealpoint}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPoint::wxPoint}\label{wxpointctor}
+
+\func{}{wxPoint}{\void}
+
+\func{}{wxPoint}{\param{int}{ x}, \param{int}{ y}}
+
+Create a point.
+
+\membersection{wxPoint::x}\label{wxpointx}
+
+\member{int}{x}
+
+x member.
+
+\membersection{wxPoint::y}\label{wxpointy}
+
+\member{int}{ y}
+
+y member.
+
+\membersection{Operators}\label{wxpointoperators}
+
+\func{void}{operator $=$}{\param{const wxPoint\& }{pt}}
+
+Assignment operator.
+
+
+\func{bool}{operator $==$}{\param{const wxPoint\& }{pt}}
+
+\func{bool}{operator $!=$}{\param{const wxPoint\& }{pt}}
+
+\func{wxPoint}{operator $+$}{\param{const wxPoint\& }{pt}}
+
+\func{wxPoint}{operator $-$}{\param{const wxPoint\& }{pt}}
+
+\func{wxPoint\&}{operator $+=$}{\param{const wxPoint\& }{pt}}
+
+\func{wxPoint\&}{operator $-=$}{\param{const wxPoint\& }{pt}}
+
+Operators for comparison, sum and subtraction between \helpref{wxPoint}{wxpoint} objects.
+
+
+\func{wxPoint}{operator $+$}{\param{const wxSize\& }{sz}}
+
+\func{wxPoint}{operator $-$}{\param{const wxSize\& }{sz}}
+
+\func{wxPoint\&}{operator $+=$}{\param{const wxSize\& }{sz}}
+
+\func{wxPoint\&}{operator $-=$}{\param{const wxSize\& }{sz}}
+ 
+Operators for sum and subtraction between a \helpref{wxPoint}{wxpoint} object and a
+\helpref{wxSize}{wxsize} object.
+

@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <include file="../../../build/bakefiles/common_contrib.bkl"/>
+
+    <set var="FL_SRC">
+        antiflickpl.cpp
+        bardragpl.cpp
+        barhintspl.cpp
+        cbcustom.cpp
+        controlbar.cpp
+        dyntbar.cpp
+        dyntbarhnd.cpp
+        frmview.cpp
+        garbagec.cpp
+        gcupdatesmgr.cpp
+        hintanimpl.cpp
+        newbmpbtn.cpp
+        panedrawpl.cpp
+        rowdragpl.cpp
+        rowlayoutpl.cpp
+        toolwnd.cpp
+        updatesmgr.cpp
+    </set>
+
+    <headers template="wx_contrib_headers">
+        <files>
+            wx/fl/antiflickpl.h
+            wx/fl/bardragpl.h
+            wx/fl/barhintspl.h
+            wx/fl/cbcustom.h
+            wx/fl/controlbar.h
+            wx/fl/dynbarhnd.h
+            wx/fl/dyntbar.h
+            wx/fl/dyntbarhnd.h
+            wx/fl/fldefs.h
+            wx/fl/frmview.h
+            wx/fl/garbagec.h
+            wx/fl/gcupdatesmgr.h
+            wx/fl/hintanimpl.h
+            wx/fl/newbmpbtn.h
+            wx/fl/panedrawpl.h
+            wx/fl/rowdragpl.h
+            wx/fl/rowlayoutpl.h
+            wx/fl/toolwnd.h
+            wx/fl/updatesmgr.h
+        </files>
+    </headers>
+
+    <dll id="fldll" template="wx_contrib_dll" cond="SHARED=='1'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_FL</define>
+        <sources>$(FL_SRC)</sources>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+    </dll>
+    
+    <lib id="fllib" template="wx_contrib_lib" cond="SHARED=='0'">
+        <sources>$(FL_SRC)</sources>
+    </lib>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">fl=fllib+fldll</set>
+
+</makefile>
+

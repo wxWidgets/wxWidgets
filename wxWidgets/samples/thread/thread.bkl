@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="thread" template="wx_sample" template_append="wx_append">
+        <sources>thread.cpp</sources>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <win32-res>thread.rc</win32-res>
+    </exe>
+
+</makefile>

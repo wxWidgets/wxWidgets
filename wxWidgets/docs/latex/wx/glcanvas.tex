@@ -1,0 +1,196 @@
+\section{\class{wxGLCanvas}}\label{wxglcanvas}
+
+wxGLCanvas is a class for displaying OpenGL graphics.
+
+There are two ways to use this class:
+
+For the older (before wx 2.7.x) and simpler method, create a wxGLCanvas window using one of the three
+constructors that implicitly create a rendering context, call \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrent} 
+to direct normal OpenGL commands to the window, and then call \helpref{wxGLCanvas::SwapBuffers}{wxglcanvasswapbuffers} 
+to show the OpenGL buffer on the window.
+
+For the newer (wx 2.7.x+) method, create a wxGLCanvas window using the constructor that does \emph{not} create an implicit rendering context,
+create an explicit instance of a \helpref{wxGLContext}{wxglcontext} that is initialized with the wxGLCanvas yourself,
+then use either \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrentrc} with the instance of the \helpref{wxGLContext}{wxglcontext}
+or \helpref{wxGLContext::SetCurrent}{wxglcontextsetcurrent} with the instance of the \helpref{wxGLCanvas}{wxglcanvas}
+to bind the OpenGL state that is represented by the rendering context to the canvas, and then call
+\helpref{wxGLCanvas::SwapBuffers}{wxglcanvasswapbuffers} to swap the buffers of the OpenGL canvas and thus show your current output.
+
+To set up the attributes for the canvas (number of bits for the depth buffer,
+number of bits for the stencil buffer and so on) you should set up the correct values of
+the {\it attribList} parameter. The values that should be set up and their meanings will be described below.
+
+To switch on wxGLCanvas support on under Windows, edit setup.h and set
+{\tt wxUSE\_GLCANVAS} to $1$. You may also need to have to add
+{\tt opengl32.lib} to the list of libraries your program is linked with. On
+Unix, pass {\tt --with-opengl} to configure to compile using OpenGL or Mesa.
+
+\wxheading{Derived from}
+
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/glcanvas.h>
+
+\wxheading{Window styles}
+
+There are no specific window styles for this class.
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{Constants}
+
+The generic GL implementation doesn't support many of these options, such as stereo, auxiliary buffers,
+alpha channel, and accum buffer. Other implementations may support them.
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{WX\_GL\_RGBA}}{Use true colour}
+\twocolitem{\windowstyle{WX\_GL\_BUFFER\_SIZE}}{Bits for buffer if not WX\_GL\_RGBA}
+\twocolitem{\windowstyle{WX\_GL\_LEVEL}}{0 for main buffer, >0 for overlay, <0 for underlay}
+\twocolitem{\windowstyle{WX\_GL\_DOUBLEBUFFER}}{Use doublebuffer}
+\twocolitem{\windowstyle{WX\_GL\_STEREO}}{Use stereoscopic display}
+\twocolitem{\windowstyle{WX\_GL\_AUX\_BUFFERS}}{Number of auxiliary buffers (not all implementation support this option)}
+\twocolitem{\windowstyle{WX\_GL\_MIN\_RED}}{Use red buffer with most bits (> MIN\_RED bits)}
+\twocolitem{\windowstyle{WX\_GL\_MIN\_GREEN}}{Use green buffer with most bits (> MIN\_GREEN bits) }
+\twocolitem{\windowstyle{WX\_GL\_MIN\_BLUE}}{Use blue buffer with most bits (> MIN\_BLUE bits) }
+\twocolitem{\windowstyle{WX\_GL\_MIN\_ALPHA}}{Use alpha buffer with most bits (> MIN\_ALPHA bits)}
+\twocolitem{\windowstyle{WX\_GL\_DEPTH\_SIZE}}{Bits for Z-buffer (0,16,32)}
+\twocolitem{\windowstyle{WX\_GL\_STENCIL\_SIZE}}{Bits for stencil buffer}
+\twocolitem{\windowstyle{WX\_GL\_MIN\_ACCUM\_RED}}{Use red accum buffer with most bits (> MIN\_ACCUM\_RED bits)}
+\twocolitem{\windowstyle{WX\_GL\_MIN\_ACCUM\_GREEN}}{Use green buffer with most bits (> MIN\_ACCUM\_GREEN bits)}
+\twocolitem{\windowstyle{WX\_GL\_MIN\_ACCUM\_BLUE}}{Use blue buffer with most bits (> MIN\_ACCUM\_BLUE bits)}
+\twocolitem{\windowstyle{WX\_GL\_MIN\_ACCUM\_ALPHA}}{Use blue buffer with most bits (> MIN\_ACCUM\_ALPHA bits)}
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{wxGLContext}{wxglcontext}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxGLCanvas::wxGLCanvas}\label{wxglcanvasconstr}
+
+\func{void}{wxGLCanvas}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id = -1},
+ \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},
+ \param{long}{ style=0}, \param{const wxString\& }{name="GLCanvas"},
+ \param{int*}{ attribList = 0}, \param{const wxPalette\&}{ palette = wxNullPalette}}
+
+\func{void}{wxGLCanvas}{\param{wxWindow* }{parent}, \param{wxGLContext* }{sharedContext}, \param{wxWindowID}{ id = -1},
+ \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},
+ \param{long}{ style=0}, \param{const wxString\& }{name="GLCanvas"},
+ \param{int*}{ attribList = 0}, \param{const wxPalette\&}{ palette = wxNullPalette}}
+
+\func{void}{wxGLCanvas}{\param{wxWindow* }{parent}, \param{wxGLCanvas* }{sharedCanvas}, \param{wxWindowID}{ id = -1},
+ \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},
+ \param{long}{ style=0}, \param{const wxString\& }{name="GLCanvas"},
+ \param{int*}{ attribList = 0}, \param{const wxPalette\&}{ palette = wxNullPalette}}
+
+\func{void}{wxGLCanvas}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id = wxID\_ANY},
+ \param{int*}{ attribList = 0},
+ \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},
+ \param{long}{ style=0}, \param{const wxString\& }{name="GLCanvas"},
+ \param{const wxPalette\&}{ palette = wxNullPalette}}
+
+Constructors.
+The first three constructors implicitly create an instance of \helpref{wxGLContext}{wxglcontext}.
+The fourth constructur is identical to the first, except for the fact that it does \emph{not}
+create such an implicit rendering context, which means that you have to create an explicit instance
+of \helpref{wxGLContext}{wxglcontext} yourself (highly recommended for future compatibility with wxWidgets
+and the flexibility of your own program!).
+
+Note that if you used one of the first three constructors, \helpref{wxGLCanvas::GetContext}{wxglcanvasgetcontext}
+returns the pointer to the implicitly created instance, and the \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrent}
+method \emph{without} the parameter should be used.
+If however you used the fourth constructor, \helpref{wxGLCanvas::GetContext}{wxglcanvasgetcontext} always returns NULL
+and the \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrentrc} method \emph{with} the parameter must be used!
+
+\docparam{parent}{Pointer to a parent window.}
+
+\docparam{sharedContext}{Context to share object resources with.}
+
+%TODO document sharedCanvas meaning
+
+\docparam{id}{Window identifier. If -1, will automatically create an identifier.}
+
+\docparam{pos}{Window position. wxDefaultPosition is (-1, -1) which indicates that wxWidgets
+should generate a default position for the window.}
+
+\docparam{size}{Window size. wxDefaultSize is (-1, -1) which indicates that wxWidgets should
+generate a default size for the window. If no suitable size can be found, the window will be sized to 20x20 pixels so that the window is visible but obviously not correctly sized.}
+
+\docparam{style}{Window style.}
+
+\docparam{name}{Window name.}
+
+\docparam{attribList}{Array of int. With this parameter you can set the device context attributes associated to this window.
+This array is zero-terminated: it should be set up with constants described in the table above.
+If a constant should be followed by a value, put it in the next array position.
+For example, the WX\_GL\_DEPTH\_SIZE should be followed by the value that indicates the number of
+bits for the depth buffer, so:}
+
+\begin{verbatim}
+attribList[index]= WX_GL_DEPTH_SIZE;
+attribList[index+1]=32;
+and so on.
+\end{verbatim}
+
+\docparam{palette}{If the window has the palette, it should by pass this value.
+Note: palette and WX\_GL\_RGBA are mutually exclusive.}
+
+
+\membersection{wxGLCanvas::GetContext}\label{wxglcanvasgetcontext}
+
+\func{wxGLContext*}{GetContext}{\void}
+
+Obtains the context that is associated with this canvas if one was implicitly created (by use of one of the first three constructors).
+Always returns NULL if the canvas was constructed with the fourth constructor.
+
+
+\membersection{wxGLCanvas::SetCurrent}\label{wxglcanvassetcurrent}
+
+\func{void}{SetCurrent}{\void}
+
+If this canvas was created with one of the first three constructors,
+a call to this method makes the implicit rendering context of this canvas current with this canvas,
+so that subsequent OpenGL calls modify the OpenGL state of the implicit rendering context.
+
+If this canvas was created with the fourth constructor, this method should not be called
+(use the SetCurrent method below with the parameter instead)!
+
+Note that this function may only be called \emph{after} the window has been shown.
+
+
+\membersection{wxGLCanvas::SetCurrent}\label{wxglcanvassetcurrentrc}
+
+\func{void}{SetCurrent}{ \param{const wxGLContext&}{ RC} }
+
+If this canvas was created with one of the first three constructors,
+this method should not be called (use the SetCurrent above without the parameter instead)!
+
+If this canvas was created with the fourth constructor, a call to this method
+makes the OpenGL state that is represented by the OpenGL rendering context { \it RC } current with this canvas,
+and if { \it win } is an object of type wxGLCanvas, the statements { \it win.SetCurrent(RC); } and { \it RC.SetCurrent(win); } are equivalent,
+see \helpref{wxGLContext::SetCurrent}{wxglcontextsetcurrent}.
+
+Note that this function may only be called \emph{after} the window has been shown.
+
+
+\membersection{wxGLCanvas::SetColour}\label{wxglcanvassetcolour}
+
+\func{void}{SetColour}{\param{const char*}{ colour}}
+
+Sets the current colour for this window, using the wxWidgets colour database to find a named colour.
+
+
+\membersection{wxGLCanvas::SwapBuffers}\label{wxglcanvasswapbuffers}
+
+\func{void}{SwapBuffers}{\void}
+
+Swaps the double-buffer of this window, making the back-buffer the front-buffer and vice versa,
+so that the output of the previous OpenGL commands is displayed on the window.
+

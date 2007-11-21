@@ -1,0 +1,204 @@
+Enhancements for wxWidgets 3.0
+==============================
+
+This table contains the brief summary of the issues below. Priority and
+Difficulty are values from 1 to 10 with 1 being the least important/difficult
+and 10 the most.
+
+Item                                                            Prio    Diff
+----------------------------------------------------------------------------
+Namespaces                                                        8      6
+STLization                                                       10      8
+Making code exception-friendly                                    8      10
+Native RTTI                                                       7      7
+TRUE/true                                                         9      1
+
+
+C++ Features
+============
+
+- Namespaces:
+    We want to have all wxWidgets identifiers in "wx" namespace but provide
+    typedefs/#defines for backwards compatibility. This can be done easily
+    for the classes and the only real problem are the enums as they would
+    all have to be duplicated at both the global scope (with "wx" prefix) and
+    in wx namespace (without it)
+
+- STLization
+    This involves providing optional wxString implementation using std::string
+    and doing the same for all our containers with the exception of wxHashMap
+    which should simply be rewritten using templates (but keeping the old
+    version for backwards compatibility -- ideally wx 3.0 would still be usable
+    without templates, even if not all of its features would be available then)
+
+- Exceptions
+    We are not going to use exceptions in wxWidgets itself but our code should
+    become exception safe. This is a very difficult task as it means that no
+    resource allocations (including memory, files, whatever) should be done
+    without using a smart pointer-like object to store the result as it is the
+    only way to prevent resource leaks in presence of exceptions
+
+- Real RTTI
+    Optionally use the real RTTI instead of wx emulation of it. Keep the
+    current stuff for backwards compatibility.
+
+- Complete replacing TRUE/FALSE with true/false
+    Trivial
+
+
+Core
+====
+
+- use wxEventLoop in all builds
+    wxApp and wxDialog should use wxEventLoop objects (the exact class can be
+    customized by user code by overriding some wxApp::CreateEventLoop())
+    instead of duplicating the same code
+
+- remove wxCOMPATIBILITY
+    wxDEPRECATED() should be used with everything inside WXWIN_COMPATIBILITY_2_4.
+    The stuff inside WXWIN_COMPATIBILITY_2_6 probably should not be deprecated
+    (yet?) because this would give thousands of warnings for the existing code.
+    Exception is api documented as obsolete in 2.6 release already.
+
+- Modularization/Build System
+    Candidates for components:
+        +   contrib widgets (and maybe some of the ones currently in the core)
+        +   wxHTML
+        +   network stuff
+        +   printing (?)
+        +   ODBC classes
+        +   ...
+
+- Project File Generation
+    We need a (GUI) tool to generate the project/makefiles for all supported
+    platforms/compilers. Not sure if it should be used for the library itself
+    (would be nice to have something like "make menuconfig" for Linux kernel
+     which allows you to navigate easily among all of the configure/setup.h
+     options but there is a problem with distributing such tool as it can't be
+     compiled by the user because it is needed before the library is built) but
+    we definitely need it for the users makefiles.
+
+- Properties/Member-Metadata, 2-Step Init with virtual create
+
+- Tidy code and add comments to headers (possibly in
+  Doxygen/Javadoc style)
+
+
+Documentation
+=============
+
+- The possibility of moving doc into header files with tool
+  support.
+- Detailed review of doc accuracy.
+- wxDC : Precise definition of default/initial state. 
+- wxDC : Pixelwise definition of operations (e.g. last point of a
+  line not drawn).
+- Events:
+    For all controls state clearly when calling a member function results in an
+    event being generated and when it doesn't.
+- Update the coding standards guide
+
+
+wxEvents
+========
+
+- Change Idle Handling
+    Current Implementation is using too many CPU cycles
+
+- Loose Coupling Event-Source Event-Sink
+    kind of the NextStep/C# very performant coupling, exposing events via
+    Metadata
+
+- Add Lazy Init of Eventtables
+
+
+Modules/Plugins
+===============
+
+Architecture
+------------
+
+We aim to arrive at a lazy initialization of modules only when they are first 
+needed. Dependency information between modules is needed. Dynamic Plug-In
+loading and unloading must be compatible with that.
+
+
+wxUniversal
+===========
+
+- Renderers within native ports.
+
+
+wxPrinting
+==========
+
+- Page preflighting capabilities in order to determine number
+  of pages.
+- Preview UI enhancement.
+
+
+wxStaticBox
+===========
+
+Hide the platform problems (GTK: 'children' must be siblings) in encapsulation 
+in order to avoid problems on ports where the hierarchy must be
+'correct'.
+
+
+Removal of old code
+===================
+
+In addition to wxCOMPATIBILITY code:
+
+- contrib/src/mmedia
+- contrib/src/applet?
+- Dialog Editor
+
+wxMiscellaneous
+===============
+
+- wxDC Support for point to char-position with text rendering
+- wxLocale Extension (eg Currency)
+- wxStreams review
+- wxURL?
+- a way to tell wxWidgets to check for any non-portable usage,
+  for a given set of platforms. Sometimes you want to be able
+  to get away with non-portable usage, and sometimes not.
+  This is probably way too time-consuming to implement.
+- In headers, don't silently omit contents if the features for this
+  header is switched off. Instead, emit an error message.
+- Implement native tree view and colour dialog in wxGTK.
+- Better way to specify About, Preferences menu ids under wxMac.
+- Must be able to portably specify relaying out a frame after the toolbar
+  has been destroyed or recreated. On wxMSW, this is done in
+  ~wxToolBar. On wxGTK, in SetToolBar. In wxMac, not at all,
+  but sending a wxSizeEvent will do it.
+- Need wxRect wxToolBar::GetToolRect(int id) or similar so we can
+  align a popup menu with a toolbar button.
+- wxMac font selector dialog is the generic font selector -
+  horrible.
+- No Append(wxArrayString&) for wxChoice and wxComboBox in wxGTK.
+  Probably other functions too. Consider adding Insert to
+  these classes, as per the patch on SF.
+- Rewrite wxFileHistory using wxString and wxArrayString, and
+  put in separate file.
+- Add wxArrayString methods to wxTextValidator and any other
+  class that needs them.
+- Add wxNotebook::GetTabRect or similar so we can estimate
+  page size better in wxNotebookBase::CalcSizeFromPage.
+- Add function to clear all wxNotebook tabs without
+  destroying the pages.
+- Add individual setters to wxScrollBar and other classes
+  that use a combined setter.
+- Remove traces of old resource system from wxWizard.
+- Have wxDirCtrl as alias for wxGenericDirCtrl.
+- Allow instant reaction to left-up in a wxGrid cell
+  (extend editor API) to work around bad checkbox
+  behaviour (click, click, click, click away...) and
+  reduce checkbox size on non-Windows platforms.
+- Add wxNotebook::HitTest for non-Windows platforms.
+- Implement rebar for all platforms. This will help us
+  get closer to native look and feel, e.g. the gradient
+  shadow on XP toolbars.
+
+Version:      $Id$

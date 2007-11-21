@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <include file="../../../build/bakefiles/common_samples.bkl"/>
+
+    <set var="TEX2RTF_SRC">
+        tex2rtf.cpp
+        tex2any.cpp
+        texutils.cpp
+        rtfutils.cpp
+        xlputils.cpp
+        htmlutil.cpp
+        readshg.cpp
+        table.cpp
+    </set>
+
+    <exe id="tex2rtf" template="wx_util_console"
+                      template_append="wx_append_base"
+                      cond="FORMAT!='msevc4prj'">
+        <define>NO_GUI</define>
+        <sources>$(TEX2RTF_SRC)</sources>
+        <wx-lib>base</wx-lib>
+        <install-to>$(BINDIR)</install-to>
+    </exe>
+
+    <exe id="tex2rtf_gui" template="wx_util"
+                          template_append="wx_append"
+                          cond="USE_GUI=='1'">
+        <sources>$(TEX2RTF_SRC)</sources>
+        <wx-lib>html</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <install-to>$(BINDIR)</install-to>
+    </exe>
+
+</makefile>

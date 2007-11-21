@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<makefile>
+    <include file="../../../build/bakefiles/common_samples.bkl"/>
+    <set var="CONTRIB_HDR_DIR">$(SRCDIR)/../../../include</set>
+    <include file="../../../build/bakefiles/common_contrib.bkl"/>
+
+    <exe id="foldtest" template="wx_contrib_sample" template_append="wx_append">
+        <sources>
+            foldpanelbartest.cpp
+            foldtestpanel.cpp
+            layouttest.cpp
+            test.cpp
+        </sources>
+        <contrib-lib>foldbar</contrib-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <win32-res>foldpanelbartest.rc</win32-res>
+    </exe>
+
+</makefile>

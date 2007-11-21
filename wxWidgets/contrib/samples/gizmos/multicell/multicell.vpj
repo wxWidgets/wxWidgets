@@ -1,0 +1,18 @@
+[COMPILER]
+version=5.0b
+compile=concur|capture|:Compile:&Compile,gcc
+make=concur|capture|:Build:&Build,make
+rebuild=concur|capture|:Rebuild:&Rebuild,
+debug=:Debug:&Debug,gdb
+execute=:Execute:E&xecute,
+user1=hide|:User 1:User 1,
+user2=hide|:User 2:User 2,
+workingdir=.
+includedirs=
+reffile=
+MACRO=\n
+[FILES]
+mtest.cpp
+multicell.cpp
+multicell.h
+[ASSOCIATION]

@@ -1,0 +1,238 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        fdrepdlg.tex
+%% Purpose:     wxFindReplaceDialog documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     01.08.01
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2001 Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxFindDialogEvent}}\label{wxfinddialogevent}
+
+wxFindReplaceDialog events
+
+\wxheading{Derived from}
+
+\helpref{wxCommandEvent}{wxcommandevent}
+
+\wxheading{Include files}
+
+<wx/fdrepdlg.h>
+
+\wxheading{Event table macros}
+
+To process a command event from 
+\helpref{wxFindReplaceDialog}{wxfindreplacedialog}, use these event handler
+macros to direct input to member functions that take a wxFindDialogEvent
+argument. The {\it id} parameter is the identifier of the find dialog and you
+may usually specify $-1$ for it unless you plan to have several find dialogs
+sending events to the same owner window simultaneously.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_FIND(id, func)}}{Find button was pressed in the dialog.}
+\twocolitem{{\bf EVT\_FIND\_NEXT(id, func)}}{Find next button was pressed in the dialog.}
+\twocolitem{{\bf EVT\_FIND\_REPLACE(id, func)}}{Replace button was pressed in the dialog.}
+\twocolitem{{\bf EVT\_FIND\_REPLACE\_ALL(id, func)}}{Replace all button was pressed in the dialog.}
+\twocolitem{{\bf EVT\_FIND\_CLOSE(id, func)}}{The dialog is being destroyed,
+any pointers to it cannot be used any longer.}
+\end{twocollist}%
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFindDialogEvent::wxFindDialogEvent}\label{wxfinddialogeventwxfinddialogevent}
+
+\func{}{wxFindDialogEvent}{\param{wxEventType }{commandType = wxEVT\_NULL}, \param{int }{id = 0}}
+
+Constuctor used by wxWidgets only.
+
+\membersection{wxFindDialogEvent::GetFlags}\label{wxfinddialogeventgetflags}
+
+\constfunc{int}{GetFlags}{\void}
+
+Get the currently selected flags: this is the combination of {\tt wxFR\_DOWN},
+{\tt wxFR\_WHOLEWORD} and {\tt wxFR\_MATCHCASE} flags.
+
+\membersection{wxFindDialogEvent::GetFindString}\label{wxfinddialogeventgetfindstring}
+
+\constfunc{wxString}{GetFindString}{\void}
+
+Return the string to find (never empty).
+
+\membersection{wxFindDialogEvent::GetReplaceString}\label{wxfinddialogeventgetreplacestring}
+
+\constfunc{const wxString\&}{GetReplaceString}{\void}
+
+Return the string to replace the search string with (only for replace and
+replace all events).
+
+\membersection{wxFindDialogEvent::GetDialog}\label{wxfinddialogeventgetdialog}
+
+\constfunc{wxFindReplaceDialog*}{GetDialog}{\void}
+
+Return the pointer to the dialog which generated this event.
+
+\section{\class{wxFindReplaceData}}\label{wxfindreplacedata}
+
+wxFindReplaceData holds the data for 
+\helpref{wxFindReplaceDialog}{wxfindreplacedialog}. It is used to initialize
+the dialog with the default values and will keep the last values from the
+dialog when it is closed. It is also updated each time a 
+\helpref{wxFindDialogEvent}{wxfinddialogevent} is generated so instead of
+using the wxFindDialogEvent methods you can also directly query this object.
+
+Note that all {\tt SetXXX()} methods may only be called before showing the
+dialog and calling them has no effect later.
+
+\wxheading{Include files}
+
+\begin{verbatim}
+#include <wx/fdrepdlg.h>
+\end{verbatim}
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Data structures}
+
+Flags used by 
+\helpref{wxFindReplaceData::GetFlags()}{wxfindreplacedatagetflags} and
+\helpref{wxFindDialogEvent::GetFlags()}{wxfinddialogeventgetflags}:
+
+\begin{verbatim}
+enum wxFindReplaceFlags
+{
+    // downward search/replace selected (otherwise - upwards)
+    wxFR_DOWN       = 1,
+
+    // whole word search/replace selected
+    wxFR_WHOLEWORD  = 2,
+
+    // case sensitive search/replace selected (otherwise - case insensitive)
+    wxFR_MATCHCASE  = 4
+}
+\end{verbatim}
+
+These flags can be specified in 
+\helpref{wxFindReplaceDialog ctor}{wxfindreplacedialogctor} or 
+\helpref{Create()}{wxfindreplacedialogcreate}:
+
+\begin{verbatim}
+enum wxFindReplaceDialogStyles
+{
+    // replace dialog (otherwise find dialog)
+    wxFR_REPLACEDIALOG = 1,
+
+    // don't allow changing the search direction
+    wxFR_NOUPDOWN      = 2,
+
+    // don't allow case sensitive searching
+    wxFR_NOMATCHCASE   = 4,
+
+    // don't allow whole word searching
+    wxFR_NOWHOLEWORD   = 8
+}
+\end{verbatim}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFindReplaceData::wxFindReplaceData}\label{wxfindreplacedatactor}
+
+\func{}{wxFindReplaceData}{\param{wxUint32 }{flags = 0}}
+
+Constuctor initializes the flags to default value ($0$).
+
+\membersection{wxFindReplaceData::GetFindString}\label{wxfindreplacedatagetfindstring}
+
+\func{const wxString\&}{GetFindString}{\void}
+
+Get the string to find.
+
+\membersection{wxFindReplaceData::GetReplaceString}\label{wxfindreplacedatagetreplacestring}
+
+\func{const wxString\&}{GetReplaceString}{\void}
+
+Get the replacement string.
+
+\membersection{wxFindReplaceData::GetFlags}\label{wxfindreplacedatagetflags}
+
+\constfunc{int}{GetFlags}{\void}
+
+Get the combination of {\tt wxFindReplaceFlags} values.
+
+\membersection{wxFindReplaceData::SetFlags}\label{wxfindreplacedatasetflags}
+
+\func{void}{SetFlags}{\param{wxUint32 }{flags}}
+
+Set the flags to use to initialize the controls of the dialog.
+
+\membersection{wxFindReplaceData::SetFindString}\label{wxfindreplacedatasetfindstring}
+
+\func{void}{SetFindString}{\param{const wxString\& }{str}}
+
+Set the string to find (used as initial value by the dialog).
+
+\membersection{wxFindReplaceData::SetReplaceString}\label{wxfindreplacedatasetreplacestring}
+
+\func{void}{SetReplaceString}{\param{const wxString\& }{str}}
+
+Set the replacement string (used as initial value by the dialog).
+
+\section{\class{wxFindReplaceDialog}}\label{wxfindreplacedialog}
+
+wxFindReplaceDialog is a standard modeless dialog which is used to allow the
+user to search for some text (and possibly replace it with something else).
+The actual searching is supposed to be done in the owner window which is the
+parent of this dialog. Note that it means that unlike for the other standard
+dialogs this one {\bf must} have a parent window. Also note that there is no
+way to use this dialog in a modal way; it is always, by design and
+implementation, modeless.
+
+Please see the dialogs sample for an example of using it.
+
+\wxheading{Include files}
+
+\begin{verbatim}
+#include <wx/fdrepdlg.h>
+\end{verbatim}
+
+\wxheading{Derived from}
+
+\helpref{wxDialog}{wxdialog}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFindReplaceDialog::wxFindReplaceDialog}\label{wxfindreplacedialogctor}
+
+\func{}{wxFindReplaceDialog}{\void}
+
+\func{}{wxFindReplaceDialog}{\param{wxWindow * }{parent}, \param{wxFindReplaceData* }{data}, \param{const wxString\& }{title}, \param{int }{style = 0}}
+
+After using default constructor \helpref{Create()}{wxfindreplacedialogcreate} 
+must be called.
+
+The {\it parent} and {\it data} parameters must be non-{\tt NULL}.
+
+\membersection{wxFindReplaceDialog::\destruct{wxFindReplaceDialog}}\label{wxfindreplacedialogdtor}
+
+\func{}{\destruct{wxFindReplaceDialog}}{\void}
+
+Destructor.
+
+\membersection{wxFindReplaceDialog::Create}\label{wxfindreplacedialogcreate}
+
+\func{bool}{Create}{\param{wxWindow * }{parent}, \param{wxFindReplaceData* }{data}, \param{const wxString\& }{title}, \param{int }{style = 0}}
+
+Creates the dialog; use \helpref{Show}{wxwindowshow} to show it on screen.
+
+The {\it parent} and {\it data} parameters must be non-{\tt NULL}.
+\membersection{wxFindReplaceDialog::GetData}\label{wxfindreplacedialoggetdata}
+
+\constfunc{const wxFindReplaceData*}{GetData}{\void}
+
+Get the \helpref{wxFindReplaceData}{wxfindreplacedata} object used by this
+dialog.
+

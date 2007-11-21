@@ -1,0 +1,67 @@
+                     Adding a wxWidgets contribution
+                     ===============================
+
+Here are some different kinds of contribution:
+
+1. Bug fixes. You can send these to the wx-dev list.
+2. New classes. New classes normally go in the contrib hierarchy:
+   please see below for more details. They may be promoted to
+   the main wxWidgets hierarchy if they are deemed to be 'core'.
+3. A utility application, such as a new dialog editor or
+   file format conversion utility. If adding to the CVS
+   archive, you may put it under the utils hierarchy,
+   preferably with further src and docs directories.
+
+You may or may not wish to add your code to the main wxWidgets CVS
+archive. Whether your code is appropriate for this archive
+should first be ascertained by discussing it on wx-dev@wxwidgets.org.
+
+The contrib hierarchy
+---------------------
+
+When contributing a new class or set of classes, please
+organise your files in the following hierarchy, so that
+when a user unarchives your contribution, it
+slots neatly into the existing source hierarchy.
+It also simplifies compilation for users, since wxWidgets
+makefiles and project files are set up to search in
+contrib/include/wx and contrib/lib. For example, to
+include yourclass.h, the following directive is used:
+
+#include "wx/yourclass/yourclass.h"
+
+Here are the directories:
+
+contrib/include/wx/yourclass/           ; Your header(s) go here
+contrib/src/yourclass/                  ; Your source file(s) go here
+contrib/samples/yourclass/              ; Your sample(s) go here
+contrib/docs/latex/yourclass/           ; Your Latex doc sources go here
+contrib/docs/html/yourclass/            ; Your HTML doc files go here
+contrib/docs/htmlhelp/yourclass/        ; Your MS HTML Help doc files go here
+contrib/docs/htb/yourclass/             ; Your wxHTML doc files go here
+contrib/docs/pdf/yourclass/             ; Your PDF doc files go here
+contrib/docs/winhelp/yourclass/         ; Your WinHelp doc files go here
+contrib/build/yourclass/                ; Your makefiles
+
+It is recommended that you produce a manual using Tex2RTF, as specified
+in Technical Note TN0003. This allows you to output all the above
+formats, though for PDF you will need Latex and Ghostscript or
+Word and Adobe Acrobat, and for MS HTML Help and WinHelp you need
+the appropriate (freely available) help compilers.
+
+Your binary library files can go in the main lib directory or contrib/lib,
+but the main lib directory is recommended.
+
+Please include a readme.txt in your source directory, and conform
+as much as possible to the coding guidelines specified on the web
+site in the 'Backroom' section. Include bakefile and generated makefiles
+(see Technote #16 for details).
+
+Your archive can be in .tgz or .zip format. For inclusion on
+the wxWidgets ftp site and CD-ROM, please send your submission to
+Julian Smart <julian@wxwidgets.org> as a binary attachment.
+An entry will be added to the Contributions web page.
+
+Author:  Julian Smart
+Version: $Id$
+

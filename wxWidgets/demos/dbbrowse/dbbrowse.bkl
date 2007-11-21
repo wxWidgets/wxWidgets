@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="dbbrowse" template="wx_sample" template_append="wx_append" cond="USE_ODBC=='1'">
+        <sources>
+            dbbrowse.cpp
+            doc.cpp
+            pgmctrl.cpp
+            tabpgwin.cpp
+            browsedb.cpp
+            dbtree.cpp
+            dbgrid.cpp
+            dlguser.cpp
+        </sources>
+        <wx-lib>dbgrid</wx-lib>
+        <wx-lib>adv</wx-lib>
+        <wx-lib>odbc</wx-lib>
+        <wx-lib>html</wx-lib>
+        <wx-lib>xml</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <win32-res>dbbrowse.rc</win32-res>
+    </exe>
+
+    <wx-data id="data_help_std">
+        <dstdir>$(BUILDDIR)/help.std</dstdir>
+        <srcdir>$(SRCDIR)/help.std</srcdir>
+        <files>
+            compiler.htm
+            dbbrowse.hhc
+            dbbrowse.hhk
+            dbbrowse.hhp
+            dbbrowse.htm
+            getcol.htm
+            getcolsh.htm
+            icons.htm
+            picgrams.htm
+            problems.htm
+            remstar.htm
+            sample.htm
+            startprm.htm
+            todo.htm
+            wxdb.htm
+            wxtable.htm
+        </files>
+    </wx-data>
+
+    <wx-data id="data_help_png">
+        <dstdir>$(BUILDDIR)/help.png</dstdir>
+        <srcdir>$(SRCDIR)/help.png</srcdir>
+        <files>
+            col.png
+            d_closed.png
+            d_open.png
+            dsn.png
+            dsnclose.png
+            dsnopen.png
+            f_closed.png
+            f_open.png
+            gnu.png
+            gtk.png
+            imbau.png
+            kde.png
+            key.png
+            keyf.png
+            linux.png
+            logo.png
+            motif.png
+            msvc.png
+            odbc.png
+            pgmctrl.png
+            redh.png
+            remstar.png
+            server.png
+            suse.png
+            tab.png
+            view.png
+            winnt.png
+            wins.png
+        </files>
+    </wx-data>
+
+</makefile>

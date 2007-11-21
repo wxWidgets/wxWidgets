@@ -1,0 +1,223 @@
+\section{\class{wxHashSet}}\label{wxhashset}
+
+This is a simple, type-safe, and reasonably efficient hash set class,
+whose interface is a subset of the interface of STL containers. In
+particular, the interface is modeled after std::set, and the various,
+non-standard, std::hash\_map.
+
+\wxheading{Example}
+
+\begin{verbatim}
+    class MyClass { /* ... */ };
+
+    // same, with MyClass* keys (only uses pointer equality!)
+    WX_DECLARE_HASH_SET( MyClass*, wxPointerHash, wxPointerEqual, MySet1 );
+    // same, with int keys
+    WX_DECLARE_HASH_SET( int, wxIntegerHash, wxIntegerEqual, MySet2 );
+    // declare a hash set with string keys
+    WX_DECLARE_HASH_SET( wxString, wxStringHash, wxStringEqual, MySet3 );
+
+    MySet1 h1;
+    MySet2 h1;
+    MySet3 h3;
+
+    // store and retrieve values
+    h1.insert( new MyClass( 1 ) );
+
+    h3.insert( "foo" );
+    h3.insert( "bar" );
+    h3.insert( "baz" );
+
+    int size = h3.size(); // now is three
+    bool has_foo = h3.find( "foo" ) != h3.end();
+
+    h3.insert( "bar" ); // still has size three
+
+    // iterate over all the elements in the class
+    MySet3::iterator it;
+    for( it = h3.begin(); it != h3.end(); ++it )
+    {
+        wxString key = *it;
+        // do something useful with key
+    }
+\end{verbatim}
+
+\wxheading{Declaring new hash set types}
+
+\begin{verbatim}
+    WX_DECLARE_HASH_SET( KEY_T,      // type of the keys
+                         HASH_T,     // hasher
+                         KEY_EQ_T,   // key equality predicate
+                         CLASSNAME); // name of the class
+\end{verbatim}
+
+The HASH\_T and KEY\_EQ\_T are the types
+used for the hashing function and key comparison. wxWidgets provides
+three predefined hashing functions: {\tt wxIntegerHash}
+for integer types ( {\tt int}, {\tt long}, {\tt short},
+and their unsigned counterparts ), {\tt wxStringHash} for strings
+( {\tt wxString}, {\tt wxChar*}, {\tt char*} ), and
+{\tt wxPointerHash} for any kind of pointer.
+Similarly three equality predicates:
+{\tt wxIntegerEqual}, {\tt wxStringEqual}, {\tt wxPointerEqual} are provided.
+
+Using this you could declare a hash set using {\tt int} values like this:
+
+\begin{verbatim}
+    WX_DECLARE_HASH_SET( int,
+                         wxIntegerHash,
+                         wxIntegerEqual,
+                         MySet );
+
+    // using an user-defined class for keys
+    class MyKey { /* ... */ };
+
+    // hashing function
+    class MyKeyHash
+    {
+    public:
+        MyKeyHash() { }
+
+        unsigned long operator()( const MyKey& k ) const
+            { /* compute the hash */ }
+
+        MyKeyHash& operator=(const MyKeyHash&) { return *this; }
+    };
+
+    // comparison operator
+    class MyKeyEqual
+    {
+    public:
+        MyKeyEqual() { }
+        bool operator()( const MyKey& a, const MyKey& b ) const
+            { /* compare for equality */ }
+
+        MyKeyEqual& operator=(const MyKeyEqual&) { return *this; }
+    };
+
+    WX_DECLARE_HASH_SET( MyKey,      // type of the keys
+                         MyKeyHash,  // hasher
+                         MyKeyEqual, // key equality predicate
+                         CLASSNAME); // name of the class
+\end{verbatim}
+
+\latexignore{\rtfignore{\wxheading{Types}}}
+
+In the documentation below you should replace wxHashSet with the name
+you used in the class declaration.
+
+\begin{twocollist}
+\twocolitem{wxHashSet::key\_type}{Type of the hash keys}
+\twocolitem{wxHashSet::mapped\_type}{Type of hash keys}
+\twocolitem{wxHashSet::value\_type}{Type of hash keys}
+\twocolitem{wxHashSet::iterator}{Used to enumerate all the elements in a hash
+set; it is similar to a {\tt value\_type*}}
+\twocolitem{wxHashSet::const\_iterator}{Used to enumerate all the elements
+in a constant hash set; it is similar to a {\tt const value\_type*}}
+\twocolitem{wxHashSet::size\_type}{Used for sizes}
+\twocolitem{wxHashSet::Insert\_Result}{The return value for
+\helpref{insert()}{wxhashsetinsert}}
+\end{twocollist}
+
+\wxheading{Iterators}
+
+An iterator is similar to a pointer, and so you can use the usual pointer
+operations: {\tt ++it} ( and {\tt it++} ) to move to the next element,
+{\tt *it} to access the element pointed to, {\tt *it}
+to access the value of the element pointed to.
+Hash sets provide forward only iterators, this
+means that you can't use {\tt --it}, {\tt it + 3}, {\tt it1 - it2}.
+
+\wxheading{Include files}
+
+<wx/hashset.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxHashSet::wxHashSet}\label{wxhashsetctor}
+
+\func{}{wxHashSet}{\param{size\_type}{ size = 10}}
+
+The size parameter is just a hint, the table will resize automatically
+to preserve performance.
+
+\func{}{wxHashSet}{\param{const wxHashSet\&}{ set}}
+
+Copy constructor.
+
+\membersection{wxHashSet::begin}\label{wxhashsetbegin}
+
+\constfunc{const\_iterator}{begin}{}
+
+\func{iterator}{begin}{}
+
+Returns an iterator pointing at the first element of the hash set.
+Please remember that hash sets do not guarantee ordering.
+
+\membersection{wxHashSet::clear}\label{wxhashsetclear}
+
+\func{void}{clear}{}
+
+Removes all elements from the hash set.
+
+\membersection{wxHashSet::count}\label{wxhashsetcount}
+
+\constfunc{size\_type}{count}{\param{const key\_type\&}{ key}}
+
+Counts the number of elements with the given key present in the set.
+This function returns only 0 or 1.
+
+\membersection{wxHashSet::empty}\label{wxhashsetempty}
+
+\constfunc{bool}{empty}{}
+
+Returns true if the hash set does not contain any elements, false otherwise.
+
+\membersection{wxHashSet::end}\label{wxhashsetend}
+
+\constfunc{const\_iterator}{end}{}
+
+\func{iterator}{end}{}
+
+Returns an iterator pointing at the one-after-the-last element of the hash set.
+Please remember that hash sets do not guarantee ordering.
+
+\membersection{wxHashSet::erase}\label{wxhashseterase}
+
+\func{size\_type}{erase}{\param{const key\_type\&}{ key}}
+
+Erases the element with the given key, and returns the number of elements
+erased (either 0 or 1).
+
+\func{void}{erase}{\param{iterator}{ it}}
+
+\func{void}{erase}{\param{const\_iterator}{ it}}
+
+Erases the element pointed to by the iterator. After the deletion
+the iterator is no longer valid and must not be used.
+
+\membersection{wxHashSet::find}\label{wxhashsetfind}
+
+\func{iterator}{find}{\param{const key\_type\&}{ key}}
+
+\constfunc{const\_iterator}{find}{\param{const key\_type\&}{ key}}
+
+If an element with the given key is present, the functions returns
+an iterator pointing at that element, otherwise an invalid iterator
+is returned (i.e. hashset.find( non\_existent\_key ) == hashset.end()).
+
+\membersection{wxHashSet::insert}\label{wxhashsetinsert}
+
+\func{Insert\_Result}{insert}{\param{const value\_type\&}{ v}}
+
+Inserts the given value in the hash set. The return value is
+equivalent to a \texttt{std::pair<wxHashMap::iterator, bool>};
+the iterator points to the inserted element, the boolean value
+is \texttt{true} if \texttt{v} was actually inserted.
+
+\membersection{wxHashSet::size}\label{wxhashsetsize}
+
+\constfunc{size\_type}{size}{}
+
+Returns the number of elements in the set.
+

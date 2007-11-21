@@ -1,0 +1,180 @@
+\section{\class{wxTimer}}\label{wxtimer}
+
+The wxTimer class allows you to execute code at specified intervals. Its
+precision is platform-dependent, but in general will not be better than 1ms nor
+worse than 1s.
+
+There are three different ways to use this class:
+
+\begin{enumerate}
+\item You may derive a new class from wxTimer and override the 
+\helpref{Notify}{wxtimernotify} member to perform the required action.
+\item Or you may redirect the notifications to any 
+\helpref{wxEvtHandler}{wxevthandler} derived object by using the non-default
+constructor or \helpref{SetOwner}{wxtimersetowner}. Then use the {\tt EVT\_TIMER} 
+macro to connect it to the event handler which will receive 
+\helpref{wxTimerEvent}{wxtimerevent} notifications.
+\item Or you may use a derived class and the {\tt EVT\_TIMER} 
+macro to connect it to an event handler defined in the derived class.
+If the default constructor is used, the timer object will be its
+own owner object, since it is derived from wxEvtHandler.
+\end{enumerate}
+
+In any case, you must start the timer with \helpref{Start}{wxtimerstart} 
+after constructing it before it actually starts sending notifications. It can
+be stopped later with \helpref{Stop}{wxtimerstop}.
+
+{\bf Note:} A timer can only be used from the main thread.
+
+\wxheading{Derived from}
+
+\helpref{wxEvtHandler}{wxevthandler}
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/timer.h>
+
+\wxheading{See also}
+
+\helpref{::wxStartTimer}{wxstarttimer}, \helpref{::wxGetElapsedTime}{wxgetelapsedtime}, \helpref{wxStopWatch}{wxstopwatch}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxTimer::wxTimer}\label{wxtimerwxtimer}
+
+\func{}{wxTimer}{\void}
+
+Default constructor. If you use it to construct the object and don't call 
+\helpref{SetOwner}{wxtimersetowner} later, you must override 
+\helpref{Notify}{wxtimernotify} method to process the notifications.
+
+\func{}{wxTimer}{\param{wxEvtHandler *}{owner}, \param{int }{id = -1}}
+
+Creates a timer and associates it with {\it owner}. Please see 
+\helpref{SetOwner}{wxtimersetowner} for the description of parameters.
+
+\membersection{wxTimer::\destruct{wxTimer}}\label{wxtimerdtor}
+
+\func{}{\destruct{wxTimer}}{\void}
+
+Destructor. Stops the timer if it is running.
+
+\membersection{wxTimer::GetInterval}\label{wxtimergetinterval}
+
+\constfunc{int}{GetInterval}{\void}
+
+Returns the current interval for the timer (in milliseconds).
+
+\membersection{wxTimer::IsOneShot}\label{wxtimerisoneshot}
+
+\constfunc{bool}{IsOneShot}{\void}
+
+Returns {\tt true} if the timer is one shot, i.e.\ if it will stop after firing the
+first notification automatically.
+
+\membersection{wxTimer::IsRunning}\label{wxtimerisrunning}
+
+\constfunc{bool}{IsRunning}{\void}
+
+Returns {\tt true} if the timer is running, {\tt false} if it is stopped.
+
+\membersection{wxTimer::Notify}\label{wxtimernotify}
+
+\func{void}{Notify}{\void}
+
+This member should be overridden by the user if the default constructor was
+used and \helpref{SetOwner}{wxtimersetowner} wasn't called.
+
+Perform whatever action which is to be taken periodically here.
+
+\membersection{wxTimer::SetOwner}\label{wxtimersetowner}
+
+\func{void}{SetOwner}{\param{wxEvtHandler *}{owner}, \param{int }{id = -1}}
+
+Associates the timer with the given {\it owner}\/ object. When the timer is
+running, the owner will receive \helpref{timer events}{wxtimerevent} with
+id equal to {\it id}\/ specified here.
+
+\membersection{wxTimer::Start}\label{wxtimerstart}
+
+\func{bool}{Start}{\param{int }{milliseconds = -1}, \param{bool }{oneShot = {\tt false}}}
+
+(Re)starts the timer. If {\it milliseconds}\/ parameter is -1 (value by default),
+the previous value is used. Returns {\tt false} if the timer could not be started,
+{\tt true} otherwise (in MS Windows timers are a limited resource).
+
+If {\it oneShot}\/ is {\tt false} (the default), the \helpref{Notify}{wxtimernotify} 
+function will be called repeatedly until the timer is stopped. If {\tt true},
+it will be called only once and the timer will stop automatically. To make your
+code more readable you may also use the following symbolic constants:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxTIMER\_CONTINUOUS}{Start a normal, continuously running, timer}
+\twocolitem{wxTIMER\_ONE\_SHOT}{Start a one shot timer}
+\end{twocollist}
+
+If the timer was already running, it will be stopped by this method before
+restarting it.
+
+\membersection{wxTimer::Stop}\label{wxtimerstop}
+
+\func{void}{Stop}{\void}
+
+Stops the timer.
+
+\section{\class{wxTimerEvent}}\label{wxtimerevent}
+
+wxTimerEvent object is passed to the event handler of timer events.
+
+For example:
+
+\begin{verbatim}
+class MyFrame : public wxFrame
+{
+public:
+    ...
+    void OnTimer(wxTimerEvent& event);
+
+private:
+    wxTimer m_timer;
+};
+
+BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_TIMER(TIMER_ID, MyFrame::OnTimer)
+END_EVENT_TABLE()
+
+MyFrame::MyFrame()
+       : m_timer(this, TIMER_ID)
+{
+    m_timer.Start(1000);    // 1 second interval
+}
+
+void MyFrame::OnTimer(wxTimerEvent& event)
+{
+    // do whatever you want to do every second here
+}
+
+\end{verbatim}
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}
+
+\wxheading{Include files}
+
+<wx/timer.h>
+
+\wxheading{See also}
+
+\helpref{wxTimer}{wxtimer}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxTimerEvent::GetInterval}\label{wxtimereventgetinterval}
+
+\constfunc{int}{GetInterval}{\void}
+
+Returns the interval of the timer which generated this event.
+

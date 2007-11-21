@@ -1,0 +1,50 @@
+\section{\class{wxBoxSizer}}\label{wxboxsizer}
+
+The basic idea behind a box sizer is that windows will most often be laid out in rather
+simple basic geometry, typically in a row or a column or several hierarchies of either.
+
+For more information, please see \helpref{Programming with wxBoxSizer}{boxsizerprogramming}.
+
+\wxheading{Derived from}
+
+\helpref{wxSizer}{wxsizer}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/sizer.h>
+
+\wxheading{See also}
+
+\helpref{wxSizer}{wxsizer}, \helpref{Sizer overview}{sizeroverview}
+
+\membersection{wxBoxSizer::wxBoxSizer}\label{wxboxsizerwxboxsizer}
+
+\func{}{wxBoxSizer}{\param{int }{orient}}
+
+Constructor for a wxBoxSizer. {\it orient} may be either of wxVERTICAL
+or wxHORIZONTAL for creating either a column sizer or a row sizer.
+
+\membersection{wxBoxSizer::RecalcSizes}\label{wxboxsizerrecalcsizes}
+
+\func{void}{RecalcSizes}{\void}
+
+Implements the calculation of a box sizer's dimensions and then sets
+the size of its children (calling \helpref{wxWindow::SetSize}{wxwindowsetsize} 
+if the child is a window). It is used internally only and must not be called
+by the user. Documented for information.
+
+\membersection{wxBoxSizer::CalcMin}\label{wxboxsizercalcmin}
+
+\func{wxSize}{CalcMin}{\void}
+
+Implements the calculation of a box sizer's minimal. It is used internally
+only and must not be called by the user. Documented for information.
+
+\membersection{wxBoxSizer::GetOrientation}\label{wxboxsizergetorientation}
+
+\func{int}{GetOrientation}{\void}
+
+Returns the orientation of the box sizer, either wxVERTICAL
+or wxHORIZONTAL.
+

@@ -1,0 +1,227 @@
+\section{\class{wxGauge}}\label{wxgauge}
+
+A gauge is a horizontal or vertical bar which shows a quantity (often time).
+
+wxGauge supports two working modes: determinate and indeterminate progress.
+
+The first is the usual working mode (see \helpref{SetValue}{wxgaugesetvalue}
+and \helpref{SetRange}{wxgaugesetrange}) while the second can be used when
+the program is doing some processing but you don't know how much progress is
+being done.
+In this case, you can periodically call the \helpref{Pulse}{wxgaugepulse}
+function to make the progress bar switch to indeterminate mode (graphically
+it's usually a set of blocks which move or bounce in the bar control).
+
+wxGauge supports dynamic switch between these two work modes.
+
+There are no user commands for the gauge.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/gauge.h>
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxGA\_HORIZONTAL}}{Creates a horizontal gauge.}
+\twocolitem{\windowstyle{wxGA\_VERTICAL}}{Creates a vertical gauge.}
+%\twocolitem{\windowstyle{wxGA\_PROGRESSBAR}}{Obsolete, doesn't do anything any more}
+\twocolitem{\windowstyle{wxGA\_SMOOTH}}{Creates smooth progress bar with one pixel wide update step (not supported by all platforms).}
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{Event handling}
+
+wxGauge is read-only so generates no events.
+
+\wxheading{See also}
+
+\helpref{wxSlider}{wxslider}, \helpref{wxScrollBar}{wxscrollbar}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxGauge::wxGauge}\label{wxgaugector}
+
+\func{}{wxGauge}{\void}
+
+Default constructor.
+
+\func{}{wxGauge}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
+\param{int}{ range}, \param{const wxPoint\& }{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxGA\_HORIZONTAL}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``gauge"}}
+
+Constructor, creating and showing a gauge.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Window parent.}
+
+\docparam{id}{Window identifier.}
+
+\docparam{range}{Integer range (maximum value) of the gauge. It is ignored when the gauge is used in indeterminate mode.}
+
+\docparam{pos}{Window position.}
+
+\docparam{size}{Window size.}
+
+\docparam{style}{Gauge style. See \helpref{wxGauge}{wxgauge}.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxGauge::Create}{wxgaugecreate}
+
+
+\membersection{wxGauge::\destruct{wxGauge}}\label{wxgaugedtor}
+
+\func{}{\destruct{wxGauge}}{\void}
+
+Destructor, destroying the gauge.
+
+
+\membersection{wxGauge::Create}\label{wxgaugecreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
+\param{int}{ range}, \param{const wxPoint\& }{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxGA\_HORIZONTAL}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``gauge"}}
+
+Creates the gauge for two-step construction. See \helpref{wxGauge::wxGauge}{wxgaugector}\rtfsp
+for further details.
+
+
+\membersection{wxGauge::GetBezelFace}\label{wxgaugegetbezelface}
+
+\constfunc{int}{GetBezelFace}{\void}
+
+Returns the width of the 3D bezel face.
+
+\wxheading{Remarks}
+
+This method is not implemented (returns $0$) for most platforms.
+
+\wxheading{See also}
+
+\helpref{wxGauge::SetBezelFace}{wxgaugesetbezelface}
+
+
+\membersection{wxGauge::GetRange}\label{wxgaugegetrange}
+
+\constfunc{int}{GetRange}{\void}
+
+Returns the maximum position of the gauge.
+
+\wxheading{See also}
+
+\helpref{wxGauge::SetRange}{wxgaugesetrange}
+
+
+\membersection{wxGauge::GetShadowWidth}\label{wxgaugegetshadowwidth}
+
+\constfunc{int}{GetShadowWidth}{\void}
+
+Returns the 3D shadow margin width.
+
+\wxheading{Remarks}
+
+This method is not implemented (returns $0$) for most platforms.
+
+\wxheading{See also}
+
+\helpref{wxGauge::SetShadowWidth}{wxgaugesetshadowwidth}
+
+
+\membersection{wxGauge::GetValue}\label{wxgaugegetvalue}
+
+\constfunc{int}{GetValue}{\void}
+
+Returns the current position of the gauge.
+
+\wxheading{See also}
+
+\helpref{wxGauge::SetValue}{wxgaugesetvalue}
+
+
+\membersection{wxGauge::IsVertical}\label{wxgaugeisvertical}
+
+\constfunc{bool}{IsVertical}{\void}
+
+Returns \true if the gauge is vertical (has \texttt{wxGA\_VERTICAL} style) and 
+\false otherwise.
+
+
+\membersection{wxGauge::SetBezelFace}\label{wxgaugesetbezelface}
+
+\func{void}{SetBezelFace}{\param{int }{width}}
+
+Sets the 3D bezel face width.
+
+\wxheading{Remarks}
+
+This method is not implemented (doesn't do anything) for most platforms.
+
+\wxheading{See also}
+
+\helpref{wxGauge::GetBezelFace}{wxgaugegetbezelface}
+
+
+\membersection{wxGauge::SetRange}\label{wxgaugesetrange}
+
+\func{void}{SetRange}{\param{int }{range}}
+
+Sets the range (maximum value) of the gauge.
+This function makes the gauge switch to determinate mode, if it's not already.
+
+\wxheading{See also}
+
+\helpref{wxGauge::GetRange}{wxgaugegetrange}
+
+
+\membersection{wxGauge::SetShadowWidth}\label{wxgaugesetshadowwidth}
+
+\func{void}{SetShadowWidth}{\param{int }{width}}
+
+Sets the 3D shadow width.
+
+\wxheading{Remarks}
+
+This method is not implemented (doesn't do anything) for most platforms.
+
+
+\membersection{wxGauge::SetValue}\label{wxgaugesetvalue}
+
+\func{void}{SetValue}{\param{int }{pos}}
+
+Sets the position of the gauge.
+This function makes the gauge switch to determinate mode, if it's not already.
+
+\wxheading{Parameters}
+
+\docparam{pos}{Position for the gauge level.}
+
+\wxheading{See also}
+
+\helpref{wxGauge::GetValue}{wxgaugegetvalue}
+
+
+\membersection{wxGauge::Pulse}\label{wxgaugepulse}
+
+\func{void}{Pulse}{\void}
+
+Switch the gauge to indeterminate mode (if required) and makes the gauge move
+a bit to indicate the user that some progress has been made.
+
+Note that after calling this function the value returned by \helpref{GetValue}{wxgaugegetvalue}
+is undefined and thus you need to explicitely call \helpref{SetValue}{wxgaugesetvalue} if you
+want to restore the determinate mode.
+

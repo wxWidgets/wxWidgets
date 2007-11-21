@@ -1,0 +1,66 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        sizeevt.tex
+%% Purpose:     wxSizeEvent documentation
+%% Author:      wxWidgets team
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxSizeEvent}}\label{wxsizeevent}
+
+A size event holds information about size change events.
+
+The EVT\_SIZE handler function will be called when the window has been resized.
+
+You may wish to use this for frames to resize their child windows as appropriate.
+
+Note that the size passed is of
+the whole window: call \helpref{wxWindow::GetClientSize}{wxwindowgetclientsize} for the area which may be
+used by the application.
+
+When a window is resized, usually only a small part of the window is damaged and you
+may only need to repaint that area. However, if your drawing depends on the size of the window,
+you may need to clear the DC explicitly and repaint the whole window. In which case, you
+may need to call \helpref{wxWindow::Refresh}{wxwindowrefresh} to invalidate the entire window.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/event.h>
+
+\wxheading{Event table macros}
+
+To process a size event, use this event handler macro to direct input to a member
+function that takes a wxSizeEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_SIZE(func)}}{Process a wxEVT\_SIZE event.}
+\end{twocollist}%
+
+\wxheading{See also}
+
+\helpref{wxSize}{wxsize},\rtfsp
+\helpref{Event handling overview}{eventhandlingoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxSizeEvent::wxSizeEvent}\label{wxsizeeventctor}
+
+\func{}{wxSizeEvent}{\param{const wxSize\& }{sz}, \param{int }{id = 0}}
+
+Constructor.
+
+\membersection{wxSizeEvent::GetSize}\label{wxsizeeventgetsize}
+
+\constfunc{wxSize}{GetSize}{\void}
+
+Returns the entire size of the window generating the size change event.
+

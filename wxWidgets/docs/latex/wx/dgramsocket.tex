@@ -1,0 +1,116 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        dgramsocket.tex
+%% Purpose:     wxSocket docs
+%% Author:      Angel Vidal Veiga (kry@amule.org)
+%% Modified by:
+%% Created:     2006
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ---------------------------------------------------------------------------
+% CLASS wxDatagramSocket
+% ---------------------------------------------------------------------------
+
+\section{\class{wxDatagramSocket}}\label{wxdatagramsocket}
+
+\wxheading{Derived from}
+
+\helpref{wxSocketBase}{wxsocketbase}
+
+\wxheading{Include files}
+
+<wx/socket.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+% ---------------------------------------------------------------------------
+% Members
+% ---------------------------------------------------------------------------
+%
+% wxDatagramSocket
+%
+\membersection{wxDatagramSocket::wxDatagramSocket}\label{wxdatagramsocketctor}
+
+\func{}{wxDatagramSocket}{\param{wxSocketFlags}{ flags = wxSOCKET\_NONE}}
+
+Constructor.
+
+\wxheading{Parameters}
+
+\docparam{flags}{Socket flags (See \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags})}
+
+%
+% ~wxDatagramSocket
+%
+\membersection{wxDatagramSocket::\destruct{wxDatagramSocket}}\label{wxdatagramsocketdtor}
+
+\func{}{\destruct{wxDatagramSocket}}{\void}
+
+Destructor. Please see \helpref{wxSocketBase::Destroy}{wxsocketbasedestroy}.
+
+%
+% ReceiveFrom
+%
+\membersection{wxDatagramSocket::ReceiveFrom}\label{wxdatagramsocketreceivefrom}
+
+\func{wxDatagramSocket\&}{ReceiveFrom}{\param{wxSockAddress\&}{ address}, \param{void *}{ buffer}, \param{wxUint32}{ nbytes}}
+
+This function reads a buffer of {\it nbytes} bytes from the socket.
+
+Use \helpref{LastCount}{wxsocketbaselastcount} to verify the number of bytes actually read.
+
+Use \helpref{Error}{wxsocketbaseerror} to determine if the operation succeeded.
+
+\wxheading{Parameters}
+
+\docparam{address}{Any address - will be overwritten with the address of the peer that sent that data.}
+
+\docparam{buffer}{Buffer where to put read data.}
+
+\docparam{nbytes}{Number of bytes.}
+
+\wxheading{Return value}
+
+Returns a reference to the current object, and the address of the peer that sent the data on address param.
+
+\wxheading{See also}
+
+\helpref{wxSocketBase::Error}{wxsocketbaseerror}, 
+\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}, 
+\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}, 
+\helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags},
+
+%
+% SendTo
+%
+\membersection{wxDatagramSocket::SendTo}\label{wxdatagramsocketsendto}
+
+\func{wxDatagramSocket\&}{SendTo}{\param{const wxSockAddress\&}{ address}, \param{const void *}{ buffer}, \param{wxUint32}{ nbytes}}
+
+This function writes a buffer of {\it nbytes} bytes to the socket.
+
+Use \helpref{LastCount}{wxsocketbaselastcount} to verify the number of bytes actually wrote.
+
+Use \helpref{Error}{wxsocketbaseerror} to determine if the operation succeeded.
+
+\wxheading{Parameters}
+
+\docparam{address}{The address of the destination peer for this data.}
+
+\docparam{buffer}{Buffer where read data is.}
+
+\docparam{nbytes}{Number of bytes.}
+
+\wxheading{Return value}
+
+Returns a reference to the current object.
+
+\wxheading{See also}
+
+\helpref{wxSocketBase::Error}{wxsocketbaseerror}, 
+\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}, 
+\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}, 
+\helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}
+

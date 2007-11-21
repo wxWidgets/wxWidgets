@@ -1,0 +1,81 @@
+% -----------------------------------------------------------------------------
+% wxBufferedInputStream
+% -----------------------------------------------------------------------------
+\section{\class{wxBufferedInputStream}}\label{wxbufferedinputstream}
+
+This stream acts as a cache. It caches the bytes read from the specified
+input stream (See \helpref{wxFilterInputStream}{wxfilterinputstream}).
+It uses wxStreamBuffer and sets the default in-buffer size to 1024 bytes.
+This class may not be used without some other stream to read the data
+from (such as a file stream or a memory stream).
+
+\wxheading{Derived from}
+
+\helpref{wxFilterInputStream}{wxfilterinputstream}
+
+\wxheading{Include files}
+
+<wx/stream.h>
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer}{wxstreambuffer}, \helpref{wxInputStream}{wxinputstream},
+\helpref{wxBufferedOutputStream}{wxbufferedoutputstream}
+
+% -----------------------------------------------------------------------------
+% wxBufferedOutputStream
+% -----------------------------------------------------------------------------
+\section{\class{wxBufferedOutputStream}}\label{wxbufferedoutputstream}
+
+This stream acts as a cache. It caches the bytes to be written to the specified
+output stream (See \helpref{wxFilterOutputStream}{wxfilteroutputstream}). The
+data is only written when the cache is full, when the buffered stream is
+destroyed or when calling SeekO().
+
+This class may not be used without some other stream to write the data
+to (such as a file stream or a memory stream).
+
+\wxheading{Derived from}
+
+\helpref{wxFilterOutputStream}{wxfilteroutputstream}
+
+\wxheading{Include files}
+
+<wx/stream.h>
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer}{wxstreambuffer}, \helpref{wxOutputStream}{wxoutputstream}
+
+% ----------
+% Members
+% ----------
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxBufferedOutputStream::wxBufferedOutputStream}\label{wxbufferedoutputstreamctor}
+
+\func{}{wxBufferedOutputStream}{\param{const wxOutputStream\&}{ parent}}
+
+Creates a buffered stream using a buffer of a default size of 1024 bytes for cashing
+the stream {\it parent}.
+
+\membersection{wxBufferedOutputStream::\destruct{wxBufferedOutputStream}}\label{wxbufferedoutputstreamdtor}
+
+\func{}{\destruct{wxBufferedOutputStream}}{\void}
+
+Destructor. Calls Sync() and destroys the internal buffer.
+
+\membersection{wxBufferedOutputStream::SeekO}\label{wxbufferedoutputstreamseeko}
+
+\func{off\_t}{SeekO}{\param{off\_t}{ pos}, \param{wxSeekMode}{ mode}}
+
+Calls Sync() and changes the stream position.
+
+\membersection{wxBufferedOutputStream::Sync}\label{wxbufferedoutputstreamsync}
+
+\func{void}{Sync}{\void}
+
+Flushes the buffer and calls Sync() on the parent stream.
+
+
+

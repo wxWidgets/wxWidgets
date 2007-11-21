@@ -1,0 +1,106 @@
+\section{\class{wxValidator}}\label{wxvalidator}
+
+wxValidator is the base class for a family of validator classes that mediate
+between a class of control, and application data.
+
+A validator has three major roles:
+
+\begin{enumerate}\itemsep=0pt
+\item to transfer data from a C++ variable or own storage to and from a control;
+\item to validate data in a control, and show an appropriate error message;
+\item to filter events (such as keystrokes), thereby changing the behaviour of the
+associated control.
+\end{enumerate}
+
+Validators can be plugged into controls dynamically.
+
+To specify a default, `null' validator, use the symbol {\bf wxDefaultValidator}.
+
+For more information, please see \helpref{Validator overview}{validatoroverview}.
+
+\pythonnote{If you wish to create a validator class in wxPython you should
+derive the class from {\tt wxPyValidator} in order to get Python-aware
+capabilities for the various virtual methods.}
+
+\wxheading{Derived from}
+
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/validate.h>
+
+\wxheading{See also}
+
+\helpref{Validator overview}{validatoroverview}, 
+\helpref{wxTextValidator}{wxtextvalidator}, 
+\helpref{wxGenericValidator}{wxgenericvalidator},
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxValidator::wxValidator}\label{wxvalidatorctor}
+
+\func{}{wxValidator}{\void}
+
+Constructor.
+
+\membersection{wxValidator::\destruct{wxValidator}}\label{wxvalidatordtor}
+
+\func{}{\destruct{wxValidator}}{\void}
+
+Destructor.
+
+\membersection{wxValidator::Clone}\label{wxvalidatorclone}
+
+\constfunc{virtual wxObject*}{Clone}{\void}
+
+All validator classes must implement the {\bf Clone} function, which returns
+an identical copy of itself. This is because validators are passed to control
+constructors as references which must be copied. Unlike objects such as pens
+and brushes, it does not make sense to have a reference counting scheme
+to do this cloning, because all validators should have separate
+data.
+
+This base function returns NULL.
+
+\membersection{wxValidator::GetWindow}\label{wxvalidatorgetwindow}
+
+\constfunc{wxWindow*}{GetWindow}{\void}
+
+Returns the window associated with the validator.
+
+\membersection{wxValidator::SetBellOnError}\label{wxvalidatorsetbellonerror}
+
+\func{void}{SetBellOnError}{\param{bool}{ doIt = true}}
+
+This functions switches on or turns off the error sound produced by the
+validators if an invalid key is pressed.
+
+\membersection{wxValidator::SetWindow}\label{wxvalidatorsetwindow}
+
+\func{void}{SetWindow}{\param{wxWindow*}{ window}}
+
+Associates a window with the validator.
+
+\membersection{wxValidator::TransferFromWindow}\label{wxvalidatortransferfromwindow}
+
+\func{virtual bool}{TransferToWindow}{}
+
+This overridable function is called when the value in the window must be
+transferred to the validator. Return false if there is a problem.
+
+\membersection{wxValidator::TransferToWindow}\label{wxvalidatortransfertowindow}
+
+\func{virtual bool}{TransferToWindow}{}
+
+This overridable function is called when the value associated with the validator must be
+transferred to the window. Return false if there is a problem.
+
+\membersection{wxValidator::Validate}\label{wxvalidatorvalidate}
+
+\func{virtual bool}{Validate}{\param{wxWindow*}{ parent}}
+
+This overridable function is called when the value in the associated window must be validated.
+Return false if the value in the window is not valid; you may pop up an error dialog.
+

@@ -1,0 +1,210 @@
+\section{\class{wxQueryCol}}\label{wxquerycol}
+
+Every ODBC data column is represented by an instance of this class.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/odbc.h>
+
+\wxheading{See also}
+
+\overview{wxQueryCol overview}{wxquerycoloverview}, \overview{wxDatabase overview}{wxdatabaseoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxQueryCol::wxQueryCol}
+
+\func{void}{wxQueryCol}{\void}
+
+Constructor. Sets the attributes of the column to default values.
+
+\membersection{wxQueryCol::\destruct{wxQueryCol}}
+
+\func{void}{\destruct{wxQueryCol}}{\void}
+
+Destructor. Deletes the wxQueryField list.
+
+\membersection{wxQueryCol::BindVar}
+
+\func{void *}{BindVar}{\param{void *}{v}, \param{long}{ sz}}
+
+Binds a user-defined variable to a column. Whenever a column is bound to a
+variable, it will automatically copy the data of the current field into this
+buffer (to a maximum of {\it sz} bytes).
+
+\membersection{wxQueryCol::FillVar}
+
+\func{void}{FillVar}{\param{int}{ recnum}}
+
+Fills the bound variable with the data of the field recnum. When no variable
+is bound to the column nothing will happen.
+
+\membersection{wxQueryCol::GetData}
+
+\func{void *}{GetData}{\param{int}{ field}}
+
+Returns a pointer to the data of the field.
+
+\membersection{wxQueryCol::GetName}
+
+\func{wxString}{GetName}{\void}
+
+Returns the name of a column.
+  
+\membersection{wxQueryCol::GetType}
+
+\func{short}{GetType}{\void}
+
+Returns the data type of a column.
+
+\membersection{wxQueryCol::GetSize}
+
+\func{long}{GetSize}{\param{int}{ field}}
+
+Return the size of the data of the field field.
+
+\membersection{wxQueryCol::IsRowDirty}
+
+\func{bool}{IsRowDirty}{\param{int}{ field}}
+
+Returns true if the given field has been changed, but not saved.
+
+\membersection{wxQueryCol::IsNullable}
+
+\func{bool}{IsNullable}{\void}
+
+Returns true if a column may contain no data.
+
+\membersection{wxQueryCol::AppendField}
+
+\func{void}{AppendField}{\param{void *}{buf}, \param{long}{ len}}
+
+Appends a wxQueryField instance to the field list of the column. {\it len} bytes from\rtfsp
+{\it buf} will be copied into the field's buffer.
+
+\membersection{wxQueryCol::SetData}
+
+\func{bool}{SetData}{\param{int}{ field}, \param{void *}{buf}, \param{long}{ len}}
+
+Sets the data of a field. This function finds the wxQueryField corresponding to\rtfsp
+{\it field} and calls wxQueryField::SetData with {\it buf} and {\it len} arguments.
+
+\membersection{wxQueryCol::SetName}
+
+\func{void}{SetName}{\param{const wxString\& }{name}}
+
+Sets the name of a column. Only useful when creating new tables or
+appending columns.
+ 
+\membersection{wxQueryCol::SetNullable}
+
+\func{void}{SetNullable}{\param{bool}{ nullable}}
+
+Determines whether a column may contain no data. Only useful when creating new tables or
+appending columns.
+
+\membersection{wxQueryCol::SetFieldDirty}
+
+\func{void}{SetFieldDirty}{\param{int}{ field}, \param{bool }{dirty = true}}
+
+Sets the dirty tag of a given field.
+
+\membersection{wxQueryCol::SetType}
+
+\func{void}{SetType}{\param{short}{ type}}
+  
+Sets the data type of a column. Only useful when creating new tables or
+appending columns.
+
+\section{\class{wxQueryField}}\label{wxqueryfield}
+
+Represents the data item for one or several columns.
+
+\wxheading{Derivation}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\overview{wxQueryField overview}{wxqueryfieldoverview}, \overview{wxDatabase overview}{wxdatabaseoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxQueryField::wxQueryField}
+
+\func{}{wxQueryField}{\void}
+
+Constructor. Sets type and size of the field to default values.
+  
+\membersection{wxQueryField::\destruct{wxQueryField}}
+
+\func{}{\destruct{wxQueryField}}{\void}
+
+Destructor. Frees the associated memory depending on the field type.
+
+\membersection{wxQueryField::AllocData}
+
+\func{bool}{AllocData}{\void}
+
+Allocates memory depending on the size and type of the field.
+
+\membersection{wxQueryField::ClearData}
+
+\func{void}{ClearData}{\void}
+
+Deletes the contents of the field buffer without deallocating the memory.
+
+\membersection{wxQueryField::GetData}
+
+\func{void *}{GetData}{\void}
+
+Returns a pointer to the field buffer.
+
+\membersection{wxQueryField::GetSize}
+
+\func{long}{GetSize}{\void}
+
+Returns the size of the field buffer.
+
+\membersection{wxQueryField::GetType}
+
+\func{short}{GetType}{\void}
+
+Returns the type of the field (currently SQL\_CHAR, SQL\_VARCHAR or SQL\_INTEGER).
+ 
+\membersection{wxQueryField::IsDirty}
+
+\func{bool}{IsDirty}{\void}
+
+Returns true if the data of a field has been changed, but not saved.
+
+\membersection{wxQueryField::SetData}
+
+\func{bool}{SetData}{\param{void *}{data}, \param{long}{ sz}}
+
+Allocates memory of the size {\it sz} and copies the contents of {\it d} into the
+field buffer.
+  
+\membersection{wxQueryField::SetDirty}
+
+\func{void}{SetDirty}{\param{bool}{ dirty = true}}
+
+Sets the dirty tag of a field.
+
+\membersection{wxQueryField::SetSize}
+
+\func{void}{SetSize}{\param{long}{ size}}
+
+Resizes the field buffer. Stored data will be lost.
+  
+\membersection{wxQueryField::SetType}
+
+\func{void}{SetType}{\param{short }{type}}
+
+Sets the type of the field. Currently the types SQL\_CHAR, SQL\_VARCHAR and
+SQL\_INTEGER are supported.
+

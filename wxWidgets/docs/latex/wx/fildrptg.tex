@@ -1,0 +1,55 @@
+\section{\class{wxFileDropTarget}}\label{wxfiledroptarget}
+
+This is a \helpref{drop target}{wxdroptarget} which accepts files (dragged
+from File Manager or Explorer).
+
+\wxheading{Derived from}
+
+\helpref{wxDropTarget}{wxdroptarget}
+
+\wxheading{Include files}
+
+<wx/dnd.h>
+
+\wxheading{See also}
+
+\helpref{Drag and drop overview}{wxdndoverview}, \helpref{wxDropSource}{wxdropsource}, 
+\helpref{wxDropTarget}{wxdroptarget}, \helpref{wxTextDropTarget}{wxtextdroptarget}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFileDropTarget::wxFileDropTarget}\label{wxfiledroptargetwxfiledroptarget}
+
+\func{}{wxFileDropTarget}{\void}
+
+Constructor.
+
+\membersection{wxFileDropTarget::OnDrop}\label{wxfiledroptargetondrop}
+
+\func{virtual bool}{OnDrop}{\param{long }{x}, \param{long }{y}, \param{const void }{*data}, \param{size\_t }{size}}
+
+See \helpref{wxDropTarget::OnDrop}{wxdroptargetondrop}. This function is implemented
+appropriately for files, and calls \helpref{wxFileDropTarget::OnDropFiles}{wxfiledroptargetondropfiles}.
+
+\membersection{wxFileDropTarget::OnDropFiles}\label{wxfiledroptargetondropfiles}
+
+\func{virtual bool}{OnDropFiles}{\param{wxCoord }{x}, \param{wxCoord }{y}, \param{const wxArrayString\& }{filenames}}
+
+Override this function to receive dropped files.
+
+\wxheading{Parameters}
+
+\docparam{x}{The x coordinate of the mouse.}
+
+\docparam{y}{The y coordinate of the mouse.}
+
+\docparam{filenames}{An array of filenames.}
+
+\wxheading{Return value}
+
+Return true to accept the data, false to veto the operation.
+
+% VZ: this clarification is probably not needed any longer?
+%\perlnote{In wxPerl there is just an array reference in place of {\tt nFiles} 
+%and {\tt files}.}
+

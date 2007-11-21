@@ -1,0 +1,408 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        menuitem.tex
+%% Purpose:     wxMenuItem documentation
+%% Author:      wxWidgets Team
+%% Modified by:
+%% Created:     
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxMenuItem}}\label{wxmenuitem}
+
+A menu item represents an item in a menu. Note that you usually don't have to
+deal with it directly as \helpref{wxMenu}{wxmenu} methods usually construct an
+object of this class for you.
+
+Also please note that the methods related to fonts and bitmaps are currently
+only implemented for Windows and GTK+.
+
+\wxheading{Derived from}
+
+% add wxOwnerDrawn once it is documented
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/menuitem.h>
+
+\wxheading{See also}
+
+\helpref{wxMenuBar}{wxmenubar}, \helpref{wxMenu}{wxmenu}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxMenuItem::wxMenuItem}\label{wxmenuitemctor}
+
+\func{}{wxMenuItem}{\param{wxMenu*}{ parentMenu = NULL}, \param{int}{ id = wxID\_SEPARATOR},
+ \param{const wxString\& }{text = ""},  \param{const wxString\& }{helpString = ""},
+ \param{wxItemKind }{kind = wxITEM\_NORMAL}, \param{wxMenu*}{ subMenu = NULL}}
+
+Constructs a wxMenuItem object.
+
+Menu items can be standard, or ``stock menu items'', or custom. For the
+standard menu items (such as commands to open a file, exit the program and so
+on, see \helpref{stock items}{stockitems} for the full list) it is enough to
+specify just the stock ID and leave \arg{text} and \arg{helpString} empty. In
+fact, leaving at least \arg{text} empty for the stock menu items is strongly
+recommended as they will have appearance and keyboard interface (including
+standard accelerators) familiar to the user.
+
+For the custom (non-stock) menu items, \arg{text} must be specified and while 
+\arg{helpString} may be left empty, it's recommended to pass the item
+description (which is automatically shown by the library in the status bar when
+the menu item is selected) in this parameter.
+
+Finally note that you can e.g. use a stock menu label without using its stock
+help string:
+
+\begin{verbatim}
+// use all stock properties:
+helpMenu->Append(wxID_ABOUT);
+
+// use the stock label and the stock accelerator but not the stock help string:
+helpMenu->Append(wxID_ABOUT, wxEmptyString, wxT("My custom help string"));
+
+// use all stock properties except for the bitmap:
+wxMenuItem *mymenu = new wxMenuItem(helpMenu, wxID_ABOUT);
+mymenu->SetBitmap(wxArtProvider::GetBitmap(wxART_WARNING));
+helpMenu->Append(mymenu);
+\end{verbatim}
+
+that is, stock properties are set independently one from the other.
+
+\wxheading{Parameters}
+
+\docparam{parentMenu}{Menu that the menu item belongs to.}
+
+\docparam{id}{Identifier for this menu item, or wxID\_SEPARATOR to indicate a separator.}
+
+\docparam{text}{Text for the menu item, as shown on the menu. An accelerator
+key can be specified using the ampersand '\&' character. In order to embed an
+ampersand character in the menu item text, the ampersand must be doubled.}
+
+\docparam{helpString}{Optional help string that will be shown on the status bar.}
+
+\docparam{kind}{May be {\tt wxITEM\_SEPARATOR}, {\tt wxITEM\_NORMAL}, 
+{\tt wxITEM\_CHECK} or {\tt wxITEM\_RADIO}}
+
+\docparam{subMenu}{If non-NULL, indicates that the menu item is a submenu.}
+
+
+\membersection{wxMenuItem::\destruct{wxMenuItem}}\label{wxmenuitemdtor}
+
+\func{}{\destruct{wxMenuItem}}{\void}
+
+Destructor.
+
+
+\membersection{wxMenuItem::Check}\label{wxmenuitemcheck}
+
+\func{void}{Check}{\param{bool}{ check = true}}
+
+Checks or unchecks the menu item.
+
+Note that this only works when the item is already appended to a menu.
+
+
+\membersection{wxMenuItem::Enable}\label{wxmenuitemenable}
+
+\func{void}{Enable}{\param{bool}{ enable = true}}
+
+Enables or disables the menu item.
+
+
+\membersection{wxMenuItem::GetBackgroundColour}\label{wxmenuitemgetbackgroundcolour}
+
+\constfunc{wxColour\&}{GetBackgroundColour}{\void}
+
+Returns the background colour associated with the menu item (Windows only).
+
+
+\membersection{wxMenuItem::GetBitmap}\label{wxmenuitemgetbitmap}
+
+\constfunc{wxBitmap\&}{GetBitmap}{\param{bool}{ checked = true}}
+
+Returns the checked or unchecked bitmap (Windows only).
+
+
+\membersection{wxMenuItem::GetFont}\label{wxmenuitemgetfont}
+
+\constfunc{wxFont\&}{GetFont}{\void}
+
+Returns the font associated with the menu item (Windows only).
+
+
+\membersection{wxMenuItem::GetHelp}\label{wxmenuitemgethelp}
+
+\constfunc{wxString}{GetHelp}{\void}
+
+Returns the help string associated with the menu item.
+
+
+\membersection{wxMenuItem::GetId}\label{wxmenuitemgetid}
+
+\constfunc{int}{GetId}{\void}
+
+Returns the menu item identifier.
+
+\membersection{wxMenuItem::GetItemLabel}\label{wxmenuitemgetitemlabel}
+
+\constfunc{wxString}{GetItemLabel}{\void}
+
+Returns the text associated with the menu item including any accelerator
+characters that were passed to the constructor or SetItemLabel.
+
+\wxheading{See also}
+
+\helpref{GetItemLabelText}{wxmenuitemgetitemlabeltext}, 
+\helpref{GetLabelText}{wxmenuitemgetlabeltext}
+
+
+\membersection{wxMenuItem::GetItemLabelText}\label{wxmenuitemgetitemlabeltext}
+
+\constfunc{wxString}{GetItemLabelText}{\void}
+
+Returns the text associated with the menu item, without any accelerator
+characters.
+
+\wxheading{See also}
+
+\helpref{GetItemLabel}{wxmenuitemgetitemlabel}, 
+\helpref{GetLabelText}{wxmenuitemgetlabeltext}
+
+
+\membersection{wxMenuItem::GetKind}\label{wxmenuitemgetkind}
+
+\constfunc{wxItemKind}{GetKind}{\void}
+
+Returns the item kind, one of {\tt wxITEM\_SEPARATOR}, {\tt wxITEM\_NORMAL}, 
+{\tt wxITEM\_CHECK} or {\tt wxITEM\_RADIO}.
+
+
+\membersection{wxMenuItem::GetLabel}\label{wxmenuitemgetlabel}
+
+\constfunc{wxString}{GetLabel}{\void}
+
+Returns the text associated with the menu item without any accelerator
+characters it might contain.
+
+This function is deprecated in favour of \helpref{GetItemLabelText}{wxmenuitemgetitemlabeltext}.
+
+\wxheading{See also}
+
+\helpref{GetText}{wxmenuitemgettext}, 
+\helpref{GetLabelFromText}{wxmenuitemgetlabelfromtext}
+
+
+\membersection{wxMenuItem::GetLabelText}\label{wxmenuitemgetlabeltext}
+
+\func{static wxString}{GetLabelText}{\param{const wxString\& }{text}}
+
+Strips all accelerator characters and mnemonics from the given {\it text}.
+For example,
+
+\begin{verbatim}
+wxMenuItem::GetLabelFromText("&Hello\tCtrl-H");
+\end{verbatim}
+
+will return just {\tt "Hello"}.
+
+\wxheading{See also}
+
+\helpref{GetItemLabelText}{wxmenuitemgetitemlabeltext}, 
+\helpref{GetItemLabel}{wxmenuitemgetitemlabel}
+
+
+\membersection{wxMenuItem::GetLabelFromText}\label{wxmenuitemgetlabelfromtext}
+
+\func{static wxString}{GetLabelFromText}{\param{const wxString\& }{text}}
+
+Strips all accelerator characters and mnemonics from the given {\it text}.
+For example,
+
+\begin{verbatim}
+wxMenuItem::GetLabelFromText("&Hello\tCtrl-H");
+\end{verbatim}
+
+will return just {\tt "Hello"}.
+
+This function is deprecated; please use \helpref{wxMenuItem::GetLabelText}{wxmenuitemgetlabeltext} instead.
+
+\wxheading{See also}
+
+\helpref{GetText}{wxmenuitemgettext}, 
+\helpref{GetLabel}{wxmenuitemgetlabel}
+
+\membersection{wxMenuItem::GetMarginWidth}\label{wxmenuitemgetmarginwidth}
+
+\constfunc{int}{GetMarginWidth}{\void}
+
+Gets the width of the menu item checkmark bitmap (Windows only).
+
+
+\membersection{wxMenuItem::GetMenu}\label{wxmenuitemgetmenu}
+
+\constfunc{wxMenu*}{GetMenu}{\void}
+
+Returns the menu this menu item is in, or NULL if this menu item is not attached.
+
+
+\membersection{wxMenuItem::GetName}\label{wxmenuitemgetname}
+
+\constfunc{wxString}{GetName}{\void}
+
+Returns the text associated with the menu item.
+
+{\bf NB:} this function is deprecated, please use 
+\helpref{GetItemLabel}{wxmenuitemgetitemlabel} or \helpref{GetItemLabelText}{wxmenuitemgetitemlabeltext} 
+instead.
+
+
+\membersection{wxMenuItem::GetText}\label{wxmenuitemgettext}
+
+\constfunc{wxString}{GetText}{\void}
+
+Returns the text associated with the menu item, such as it was passed to the
+wxMenuItem constructor, i.e. with any accelerator characters it may contain.
+
+This function is deprecated in favour of \helpref{GetItemLabel}{wxmenuitemgetitemlabel}.
+
+\wxheading{See also}
+
+\helpref{GetLabel}{wxmenuitemgetlabel}, 
+\helpref{GetLabelFromText}{wxmenuitemgetlabelfromtext}
+
+
+\membersection{wxMenuItem::GetSubMenu}\label{wxmenuitemgetsubmenu}
+
+\constfunc{wxMenu*}{GetSubMenu}{\void}
+
+Returns the submenu associated with the menu item, or NULL if there isn't one.
+
+
+\membersection{wxMenuItem::GetTextColour}\label{wxmenuitemgettextcolour}
+
+\constfunc{wxColour\&}{GetTextColour}{\void}
+
+Returns the text colour associated with the menu item (Windows only).
+
+
+\membersection{wxMenuItem::IsCheckable}\label{wxmenuitemischeckable}
+
+\constfunc{bool}{IsCheckable}{\void}
+
+Returns true if the item is checkable.
+
+
+\membersection{wxMenuItem::IsChecked}\label{wxmenuitemischecked}
+
+\constfunc{bool}{IsChecked}{\void}
+
+Returns true if the item is checked.
+
+
+\membersection{wxMenuItem::IsEnabled}\label{wxmenuitemisenabled}
+
+\constfunc{bool}{IsEnabled}{\void}
+
+Returns true if the item is enabled.
+
+
+\membersection{wxMenuItem::IsSeparator}\label{wxmenuitemisseparator}
+
+\constfunc{bool}{IsSeparator}{\void}
+
+Returns true if the item is a separator.
+
+
+\membersection{wxMenuItem::IsSubMenu}\label{wxmenuitemissubmenu}
+
+\constfunc{bool}{IsSubMenu}{\void}
+
+Returns true if the item is a submenu.
+
+
+\membersection{wxMenuItem::SetBackgroundColour}\label{wxmenuitemsetbackgroundcolour}
+
+\constfunc{void}{SetBackgroundColour}{\param{const wxColour\& }{colour}}
+
+Sets the background colour associated with the menu item (Windows only).
+
+
+\membersection{wxMenuItem::SetBitmap}\label{wxmenuitemsetbitmap}
+
+\func{void}{SetBitmap}{\param{const wxBitmap\& }{bmp}}
+
+Sets the bitmap for the menu item (Windows and GTK+ only). It is
+equivalent to \helpref{SetBitmaps}{wxmenuitemsetbitmaps}(bmp, wxNullBitmap).
+
+
+\membersection{wxMenuItem::SetBitmaps}\label{wxmenuitemsetbitmaps}
+
+\func{void}{SetBitmaps}{\param{const wxBitmap\& }{checked},
+ \param{const wxBitmap\& }{unchecked = wxNullBitmap}}
+
+Sets the checked/unchecked bitmaps for the menu item (Windows only). The first bitmap
+is also used as the single bitmap for uncheckable menu items.
+
+
+\membersection{wxMenuItem::SetFont}\label{wxmenuitemsetfont}
+
+\func{void}{SetFont}{\param{const wxFont\& }{font}}
+
+Sets the font associated with the menu item (Windows only).
+
+
+\membersection{wxMenuItem::SetHelp}\label{wxmenuitemsethelp}
+
+\func{void}{SetHelp}{\param{const wxString\& }{helpString}}
+
+Sets the help string.
+
+
+\membersection{wxMenuItem::SetItemLabel}\label{wxmenuitemsetitemlabel}
+
+\func{void}{SetItemLabel}{\param{const wxString\& }{label}}
+
+Sets the label associated with the menu item.
+
+
+\membersection{wxMenuItem::SetMarginWidth}\label{wxmenuitemsetmarginwidth}
+
+\constfunc{void}{SetMarginWidth}{\param{int}{ width}}
+
+Sets the width of the menu item checkmark bitmap (Windows only).
+
+
+\membersection{wxMenuItem::SetMenu}\label{wxmenuitemsetmenu}
+
+\func{void}{SetMenu}{\param{const wxMenu*}{menu}}
+
+Sets the parent menu which will contain this menu item.
+
+
+\membersection{wxMenuItem::SetSubMenu}\label{wxmenuitemsetsubmenu}
+
+\func{void}{SetSubMenu}{\param{const wxMenu*}{menu}}
+
+Sets the submenu of this menu item.
+
+
+\membersection{wxMenuItem::SetText}\label{wxmenuitemsettext}
+
+\func{void}{SetText}{\param{const wxString\& }{text}}
+
+Sets the text associated with the menu item.
+
+This function is deprecated in favour of \helpref{SetItemLabel}{wxmenuitemsetitemlabel}.
+
+
+\membersection{wxMenuItem::SetTextColour}\label{wxmenuitemsettextcolour}
+
+\func{void}{SetTextColour}{\param{const wxColour\& }{colour}}
+
+Sets the text colour associated with the menu item (Windows only).
+

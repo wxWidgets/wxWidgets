@@ -1,0 +1,249 @@
+\section{\class{wxUpdateUIEvent}}\label{wxupdateuievent}
+
+This class is used for pseudo-events which are called by wxWidgets
+to give an application the chance to update various user interface elements.
+
+\wxheading{Derived from}
+
+\helpref{wxCommandEvent}{wxcommandevent}\\
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/event.h>
+
+\wxheading{Event table macros}
+
+To process an update event, use these event handler macros to direct input to member
+functions that take a wxUpdateUIEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_UPDATE\_UI(id, func)}}{Process a wxEVT\_UPDATE\_UI event for the command with the given id.}
+\twocolitem{{\bf EVT\_UPDATE\_UI\_RANGE(id1, id2, func)}}{Process a wxEVT\_UPDATE\_UI event for any command with id included in the given range.}
+\end{twocollist}
+
+\wxheading{Remarks}
+
+Without update UI events, an application has to work hard to check/uncheck, enable/disable,
+show/hide, and set the text for elements such as menu items and toolbar buttons.
+The code for doing this has to be mixed up with the code that is invoked when
+an action is invoked for a menu item or button.
+
+With update UI events, you define an event handler to look at the state of
+the application and change UI elements accordingly. wxWidgets will call your
+member functions in idle time, so you don't have to worry where to call this code.
+In addition to being a clearer and more declarative method, it also means you
+don't have to worry whether you're updating a toolbar or menubar identifier.
+The same handler can update a menu item and toolbar button, if the identifier is the same.
+
+Instead of directly manipulating the menu or button, you call functions in the event
+object, such as \helpref{wxUpdateUIEvent::Check}{wxupdateuieventcheck}. wxWidgets
+will determine whether such a call has been made, and which UI element to update.
+
+These events will work for popup menus as well as menubars. Just before a menu is popped
+up, \helpref{wxMenu::UpdateUI}{wxmenuupdateui} is called to process any UI events for
+the window that owns the menu.
+
+If you find that the overhead of UI update processing is affecting
+your application, you can do one or both of the following:
+
+\begin{enumerate}
+\item Call \helpref{wxUpdateUIEvent::SetMode}{wxupdateuieventsetmode} with
+a value of wxUPDATE\_UI\_PROCESS\_SPECIFIED, and set the extra style
+wxWS\_EX\_PROCESS\_UPDATE\_EVENTS for every window that should receive update events.
+No other windows will receive update events.
+\item Call \helpref{wxUpdateUIEvent::SetUpdateInterval}{wxupdateuieventsetupdateinterval} with
+a millisecond value to set the delay between updates. You may need
+to call \helpref{wxWindow::UpdateWindowUI}{wxwindowupdatewindowui} at critical
+points, for example when a dialog is about to be shown, in case the user
+sees a slight delay before windows are updated.
+\end{enumerate}
+
+Note that although events are sent in idle time, defining a wxIdleEvent
+handler for a window does not affect this because the events are sent from \helpref{wxWindow::OnInternalIdle}{wxwindowoninternalidle} 
+which is {\bf always} called in idle time.
+
+wxWidgets tries to optimize update events on some platforms. On Windows
+and GTK+, events for menubar items are only sent when the menu is about
+to be shown, and not in idle time.
+
+\wxheading{See also}
+
+\helpref{Event handling overview}{eventhandlingoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxUpdateUIEvent::wxUpdateUIEvent}\label{wxupdateuieventctor}
+
+\func{}{wxUpdateUIEvent}{\param{wxWindowID }{commandId = 0}}
+
+Constructor.
+
+\membersection{wxUpdateUIEvent::CanUpdate}\label{wxupdateuieventcanupdate}
+
+\func{static bool}{CanUpdate}{\param{wxWindow*}{ window}}
+
+Returns {\tt true} if it is appropriate to update (send UI update events to)
+this window.
+
+This function looks at the mode used (see \helpref{wxUpdateUIEvent::SetMode}{wxupdateuieventsetmode}),
+the wxWS\_EX\_PROCESS\_UPDATE\_EVENTS flag in {\it window},
+the time update events were last sent in idle time, and
+the update interval, to determine whether events should be sent to
+this window now. By default this will always return {\tt true} because
+the update mode is initially wxUPDATE\_UI\_PROCESS\_ALL and
+the interval is set to 0; so update events will be sent as
+often as possible. You can reduce the frequency that events
+are sent by changing the mode and/or setting an update interval.
+
+\wxheading{See also}
+
+\helpref{wxUpdateUIEvent::ResetUpdateTime}{wxupdateuieventresetupdatetime}, 
+\helpref{wxUpdateUIEvent::SetUpdateInterval}{wxupdateuieventsetupdateinterval}, 
+\helpref{wxUpdateUIEvent::SetMode}{wxupdateuieventsetmode}
+
+\membersection{wxUpdateUIEvent::Check}\label{wxupdateuieventcheck}
+
+\func{void}{Check}{\param{bool}{ check}}
+
+Check or uncheck the UI element.
+
+\membersection{wxUpdateUIEvent::Enable}\label{wxupdateuieventenable}
+
+\func{void}{Enable}{\param{bool}{ enable}}
+
+Enable or disable the UI element.
+
+\membersection{wxUpdateUIEvent::Show}\label{wxupdateuieventshow}
+
+\func{void}{Show}{\param{bool}{ show}}
+
+Show or hide the UI element.
+
+\membersection{wxUpdateUIEvent::GetChecked}\label{wxupdateuieventgetchecked}
+
+\constfunc{bool}{GetChecked}{\void}
+
+Returns true if the UI element should be checked.
+
+\membersection{wxUpdateUIEvent::GetEnabled}\label{wxupdateuieventgetenabled}
+
+\constfunc{bool}{GetEnabled}{\void}
+
+Returns true if the UI element should be enabled.
+
+\membersection{wxUpdateUIEvent::GetShown}\label{wxupdateuieventgetshown}
+
+\constfunc{bool}{GetShown}{\void}
+
+Returns true if the UI element should be shown.
+
+\membersection{wxUpdateUIEvent::GetSetChecked}\label{wxupdateuieventgetsetchecked}
+
+\constfunc{bool}{GetSetChecked}{\void}
+
+Returns true if the application has called \helpref{wxUpdateUIEvent::Check}{wxupdateuieventcheck}. For wxWidgets internal use only.
+
+\membersection{wxUpdateUIEvent::GetSetEnabled}\label{wxupdateuieventgetsetenabled}
+
+\constfunc{bool}{GetSetEnabled}{\void}
+
+Returns true if the application has called \helpref{wxUpdateUIEvent::Enable}{wxupdateuieventenable}. For wxWidgets internal use only.
+
+\membersection{wxUpdateUIEvent::GetSetShown}\label{wxupdateuieventgetsetshown}
+
+\constfunc{bool}{GetSetShown}{\void}
+
+Returns true if the application has called \helpref{wxUpdateUIEvent::Show}{wxupdateuieventshow}. For wxWidgets internal use only.
+
+\membersection{wxUpdateUIEvent::GetSetText}\label{wxupdateuieventgetsettext}
+
+\constfunc{bool}{GetSetText}{\void}
+
+Returns true if the application has called \helpref{wxUpdateUIEvent::SetText}{wxupdateuieventsettext}. For wxWidgets internal use only.
+
+\membersection{wxUpdateUIEvent::GetText}\label{wxupdateuieventgettext}
+
+\constfunc{wxString}{GetText}{\void}
+
+Returns the text that should be set for the UI element.
+
+\membersection{wxUpdateUIEvent::GetMode}\label{wxupdateuieventgetmode}
+
+\func{static wxUpdateUIMode}{GetMode}{\void}
+
+Static function returning a value specifying how wxWidgets
+will send update events: to all windows, or only to those which specify that they
+will process the events.
+
+See \helpref{wxUpdateUIEvent::SetMode}{wxupdateuieventsetmode}.
+
+\membersection{wxUpdateUIEvent::GetUpdateInterval}\label{wxupdateuieventgetupdateinterval}
+
+\func{static long}{GetUpdateInterval}{\void}
+
+Returns the current interval between updates in milliseconds.
+-1 disables updates, 0 updates as frequently as possible.
+
+See \helpref{wxUpdateUIEvent::SetUpdateInterval}{wxupdateuieventsetupdateinterval}.
+
+\membersection{wxUpdateUIEvent::ResetUpdateTime}\label{wxupdateuieventresetupdatetime}
+
+\func{static void}{ResetUpdateTime}{\void}
+
+Used internally to reset the last-updated time to the
+current time. It is assumed that update events are
+normally sent in idle time, so this is called at the end of
+idle processing.
+
+\wxheading{See also}
+
+\helpref{wxUpdateUIEvent::CanUpdate}{wxupdateuieventcanupdate}, 
+\helpref{wxUpdateUIEvent::SetUpdateInterval}{wxupdateuieventsetupdateinterval}, 
+\helpref{wxUpdateUIEvent::SetMode}{wxupdateuieventsetmode}
+
+\membersection{wxUpdateUIEvent::SetMode}\label{wxupdateuieventsetmode}
+
+\func{static void}{SetMode}{\param{wxUpdateUIMode }{mode}}
+
+Specify how wxWidgets will send update events: to
+all windows, or only to those which specify that they
+will process the events.
+
+{\it mode} may be one of the following values.
+The default is wxUPDATE\_UI\_PROCESS\_ALL.
+
+\begin{verbatim}
+enum wxUpdateUIMode
+{
+        // Send UI update events to all windows
+    wxUPDATE_UI_PROCESS_ALL,
+
+        // Send UI update events to windows that have
+        // the wxWS_EX_PROCESS_UI_UPDATES flag specified
+    wxUPDATE_UI_PROCESS_SPECIFIED
+};
+\end{verbatim}
+
+\membersection{wxUpdateUIEvent::SetText}\label{wxupdateuieventsettext}
+
+\func{void}{SetText}{\param{const wxString\&}{ text}}
+
+Sets the text for this UI element.
+
+\membersection{wxUpdateUIEvent::SetUpdateInterval}\label{wxupdateuieventsetupdateinterval}
+
+\func{static void}{SetUpdateInterval}{\param{long }{updateInterval}}
+
+Sets the interval between updates in milliseconds.
+Set to -1 to disable updates, or to 0 to update as frequently as possible.
+The default is 0.
+
+Use this to reduce the overhead of UI update events if your application
+has a lot of windows. If you set the value to -1 or greater than 0,
+you may also need to call \helpref{wxWindow::UpdateWindowUI}{wxwindowupdatewindowui} 
+at appropriate points in your application, such as when a dialog
+is about to be shown.
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../build/bakefiles/config.bkl"/>
+
+    <template id="sub">
+        <dependency-of>all</dependency-of>
+    </template>
+
+    <subproject id="emulator" template="sub">
+        <dir>emulator/src</dir>
+        <installable>no</installable>
+    </subproject>
+
+    <subproject id="helpview" template="sub">
+        <dir>helpview/src</dir>
+        <installable>no</installable>
+    </subproject>
+
+    <subproject id="tex2rtf" template="sub">
+        <dir>tex2rtf/src</dir>
+        <installable>yes</installable>
+    </subproject>
+
+    <subproject id="helpgen" template="sub">
+        <dir>HelpGen/src</dir>
+        <installable>yes</installable>
+    </subproject>
+
+</makefile>

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Editra
+Comment="Programmer's Text Editor"
+Exec=/usr/bin/editra
+Icon=/usr/share/pixmaps/editra.png
+Terminal=false
+Type=Application
+Categories=Application;Development;
+StartupNotify=true

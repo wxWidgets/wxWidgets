@@ -1,0 +1,41 @@
+\section{\class{wxNotebookSizer}}\label{wxnotebooksizer}
+
+{\bf This class is deprecated and should not be used in new code! It is no
+longer needed, \helpref{wxNotebook}{wxnotebook} control can be inserted
+into any sizer class and its minimal size will be determined correctly.
+See \helpref{wxSizer overview}{sizeroverview} for more information.}
+
+wxNotebookSizer is a specialized sizer to make sizers work in connection
+with using notebooks. This sizer is different from any other sizer as 
+you must not add any children to it - instead, it queries the notebook class itself.
+The only thing this sizer does is to determine the size of the biggest
+page of the notebook and report an adjusted minimal size to a more toplevel
+sizer.
+
+\wxheading{Derived from}
+
+\helpref{wxSizer}{wxsizer}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/sizer.h>
+
+\wxheading{See also}
+
+\helpref{wxSizer}{wxsizer}, \helpref{wxNotebook}{wxnotebook}, \helpref{Sizer overview}{sizeroverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxNotebookSizer::wxNotebookSizer}\label{wxnotebooksizerwxnotebooksizer}
+
+\func{}{wxNotebookSizer}{\param{wxNotebook* }{notebook}}
+
+Constructor. It takes an associated notebook as its only parameter.
+
+\membersection{wxNotebookSizer::GetNotebook}\label{wxnotebooksizergetnotebook}
+
+\func{wxNotebook*}{GetNotebook}{\void}
+
+Returns the notebook associated with the sizer.
+

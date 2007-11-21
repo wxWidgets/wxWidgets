@@ -1,0 +1,121 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        tglbtn.tex
+%% Purpose:     wxToggleButton documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     20.11.01
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2001 Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxToggleButton}}\label{wxtogglebutton}
+
+wxToggleButton is a button that stays pressed when clicked by the user. In
+other words, it is similar to \helpref{wxCheckBox}{wxcheckbox} in
+functionality but looks like a \helpref{wxButton}{wxbutton}.
+
+You can see wxToggleButton in action in the sixth page of the
+\helpref{controls}{samplecontrols} sample.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/tglbtn.h>
+
+\wxheading{Window styles}
+
+There are no special styles for wxToggleButton.
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{Event handling}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_TOGGLEBUTTON(id, func)}}{Handles a toggle button click event.}
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{wxCheckBox}{wxcheckbox}, \helpref{wxButton}{wxbutton}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxToggleButton::wxToggleButton}\label{wxtogglebuttonconstr}
+
+\func{}{wxToggleButton}{\void}
+
+Default constructor.
+
+\func{}{wxToggleButton}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{label}, \param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize}, \param{long}{ style = 0},\rtfsp
+\param{const wxValidator\& }{val}, \param{const wxString\& }{name = ``checkBox"}}
+
+Constructor, creating and showing a toggle button.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be {\tt NULL}.}
+
+\docparam{id}{Toggle button identifier. A value of $-1$ indicates a default value.}
+
+\docparam{label}{Text to be displayed next to the toggle button.}
+
+\docparam{pos}{Toggle button position. If the position $(-1, -1)$ is specified then a default position is chosen.}
+
+\docparam{size}{Toggle button size. If the default size $(-1, -1)$ is specified then a default size is chosen.}
+
+\docparam{style}{Window style. See \helpref{wxToggleButton}{wxtogglebutton}.}
+
+\docparam{validator}{Window validator.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxToggleButton::Create}{wxtogglebuttoncreate}, \helpref{wxValidator}{wxvalidator}
+
+\membersection{wxToggleButton::\destruct{wxToggleButton}}\label{wxtogglebuttondtor}
+
+\func{}{\destruct{wxToggleButton}}{\void}
+
+Destructor, destroying the toggle button.
+
+\membersection{wxToggleButton::Create}\label{wxtogglebuttoncreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\& }{label}, \param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize}, \param{long}{ style = 0},\rtfsp
+\param{const wxValidator\& }{val}, \param{const wxString\& }{name = ``checkBox"}}
+
+Creates the toggle button for two-step construction. See \helpref{wxToggleButton::wxToggleButton}{wxtogglebuttonconstr}\rtfsp
+for details.
+
+\membersection{wxToggleButton::GetValue}\label{wxtogglebuttongetvalue}
+
+\constfunc{bool}{GetValue}{\void}
+
+Gets the state of the toggle button.
+
+\wxheading{Return value}
+
+Returns {\tt true} if it is pressed, {\tt false} otherwise.
+
+\membersection{wxToggleButton::SetValue}\label{wxtogglebuttonsetvalue}
+
+\func{void}{SetValue}{\param{const bool}{ state}}
+
+Sets the toggle button to the given state. This does not cause a
+{\tt EVT\_TOGGLEBUTTON} event to be emitted.
+
+\wxheading{Parameters}
+
+\docparam{state}{If {\tt true}, the button is pressed.}

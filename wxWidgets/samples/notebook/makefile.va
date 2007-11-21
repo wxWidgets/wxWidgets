@@ -1,0 +1,45 @@
+#
+# File:     makefile.va
+# Author:   David Webster
+# Created:  1999
+# Updated:
+# Copyright:    (c) David Webster
+# Licence:  wxWindows Licence
+#
+# Makefile : Builds sample (VisualAgeC++ V3.0, OS/2 PM)
+# Use FINAL=1 argument to nmake to build final version with no debug info.
+
+# Set WXDIR for your system
+WXDIR=$(WXWIN)
+
+!include $(WXDIR)\src\makeva.env
+
+#
+# Define which program this is and what it's path is and where to output to
+#
+PROGRAM=notebook
+THISDIR=$(WXWIN)\samples\$(PROGRAM)
+OPATH=$(THISDIR)\$D
+
+#
+# Make sure output directory is available
+#
+!if [md $(OPATH)]
+!endif
+
+#
+# Standard definitions
+#
+PROGRC=$(THISDIR)\$(PROGRAM).rcO
+OBJECTS=$(OPATH)\$(PROGRAM).obj
+PROGRES=$(OPATH)\$(PROGRAM).res
+PROGTARGET=E:\TEMP\$(PROGRAM).exe
+
+.cpp{$OPATH}.obj:
+    @echo $<
+    icc @<<
+$(CPPFLAGS) /Fo$@ /Tp $<
+<<
+
+!include $(WXDIR)\src\makeprog.va
+

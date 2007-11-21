@@ -1,0 +1,10 @@
+\subsection{Input Filters}\label{filters}
+
+The wxHTML library provides a mechanism for reading and displaying
+files of many different file formats. 
+
+\helpref{wxHtmlWindow::LoadPage}{wxhtmlwindowloadpage} can load not
+only HTML files but any known file. To make a file type known to wxHtmlWindow
+you must create a \helpref{wxHtmlFilter}{wxhtmlfilter} filter and
+register it using \helpref{wxHtmlWindow::AddFilter}{wxhtmlwindowaddfilter}.
+

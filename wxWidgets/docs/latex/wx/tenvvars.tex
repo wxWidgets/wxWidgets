@@ -1,0 +1,32 @@
+\section{Environment variables}\label{envvars}
+%\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+%\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+This section describes all environment variables that affect execution of
+wxWidgets programs.
+
+\twocolwidtha{5cm}%
+\begin{twocollist}\itemsep=0pt
+
+\twocolitem{\tt{WXTRACE}}{(Debug build only.)
+This variable can be set to a comma-separated list of trace masks used in
+\helpref{wxLogTrace}{wxlogtrace} calls;
+\helpref{wxLog::AddTraceMask}{wxlogaddtracemask} is called for every mask
+in the list during wxWidgets initialization.}
+
+\twocolitem{\tt{WXPREFIX}}{(Unix only.)
+Overrides installation prefix. Normally, the prefix
+is hard-coded and is the same as the value passed to {\tt configure} via
+the {\tt --prefix} switch when compiling the library (typically
+{\tt /usr/local} or {\tt /usr}). You can set WXPREFIX if you are for example
+distributing a binary version of an application and you don't know in advance
+where it will be installed.}
+
+\twocolitem{\tt{WXMODE}}{(wxMGL only.)
+Sets MGL video mode. The value must be in form
+{\it width}x{\it height}-{\it depth}. The default is {\tt 640x480-16}.}
+
+\twocolitem{\tt{WXSTDERR}}{(wxMGL only.)
+Redirects stderr output to a file.}
+
+\end{twocollist}

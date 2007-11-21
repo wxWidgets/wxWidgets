@@ -1,0 +1,104 @@
+\section{\class{wxModule}}\label{wxmodule}
+
+The module system is a very simple mechanism to allow applications (and parts
+of wxWidgets itself) to define initialization and cleanup functions that are
+automatically called on wxWidgets startup and exit.
+
+To define a new kind of module, derive a class from wxModule, override the
+\helpref{OnInit}{wxmoduleoninit} and \helpref{OnExit}{wxmoduleonexit} 
+functions, and add the DECLARE\_DYNAMIC\_CLASS and IMPLEMENT\_DYNAMIC\_CLASS to
+header and implementation files (which can be the same file). On
+initialization, wxWidgets will find all classes derived from wxModule, create
+an instance of each, and call each OnInit function. On exit, wxWidgets will
+call the OnExit function for each module instance.
+
+Note that your module class does not have to be in a header file.
+
+For example:
+
+\begin{verbatim}
+  // A module to allow DDE initialization/cleanup
+  // without calling these functions from app.cpp or from
+  // the user's application.
+  class wxDDEModule: public wxModule
+  {
+  public:
+      wxDDEModule() { }
+      virtual bool OnInit() { wxDDEInitialize(); return true; };
+      virtual void OnExit() { wxDDECleanUp(); };
+
+  private:
+      DECLARE_DYNAMIC_CLASS(wxDDEModule)
+  };
+
+  IMPLEMENT_DYNAMIC_CLASS(wxDDEModule, wxModule)
+
+
+  // Another module which uses DDE in its OnInit()
+  class MyModule: public wxModule
+  {
+  public:
+      wxDDEModule() { AddDependency(CLASSINFO(wxDDEModule)); }
+      virtual bool OnInit() { ... code using DDE ... }
+      virtual void OnExit() { ... }
+
+  private:
+      DECLARE_DYNAMIC_CLASS(wxDDEModule)
+  };
+\end{verbatim}
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/module.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxModule::wxModule}\label{wxmodulector}
+
+\func{}{wxModule}{\void}
+
+Constructs a wxModule object.
+
+
+\membersection{wxModule::\destruct{wxModule}}\label{wxmoduledtor}
+
+\func{}{\destruct{wxModule}}{\void}
+
+Destructor.
+
+
+\membersection{wxModule::AddDependency}\label{wxmoduleadddependency}
+
+\func{void}{AddDependency}{\param{wxClassInfo * }{dep}}
+
+Call this function from the constructor of the derived class. \arg{dep} must be
+the \helpref{CLASSINFO}{classinfo} of a wxModule-derived class and the
+corresponding module will be loaded \emph{before} and unloaded \emph{after}
+this module.
+
+Note that circular dependencies are detected and result in a fatal error.
+
+\wxheading{Parameters}
+
+\docparam{dep}{The class information object for the dependent module.}
+
+
+\membersection{wxModule::OnExit}\label{wxmoduleonexit}
+
+\func{virtual void}{OnExit}{\void}
+
+Provide this function with appropriate cleanup for your module.
+
+
+\membersection{wxModule::OnInit}\label{wxmoduleoninit}
+
+\func{virtual bool}{OnInit}{\void}
+
+Provide this function with appropriate initialization for your module. If the function
+returns false, wxWidgets will exit immediately.
+

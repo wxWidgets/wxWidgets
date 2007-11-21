@@ -1,0 +1,115 @@
+#!/bin/sh
+# tarwxmac: make up a tar.gz distribution of wxMac
+# Supply a source (e.g. ~/wx2) and destination (e.g. ~/wx2/deliver)
+
+# We can't use e.g. this:
+# ls `cat $SRC/distrib/msw/makefile.rsp` zip -@ -u $DEST/wxWidgets-$VERSION-gen.zip
+# because there's not enough space on the command line, plus we need to ignore the
+# blank lines.
+
+TAR=tar
+ARCH=`arch`
+if [ "$ARCH" = "ppc" ]; then
+  TAR=gnutar
+fi
+
+expandlines()
+{
+    toexpand=$1
+    outputfile=$2
+
+    rm -f $outputfile
+    touch $outputfile
+    for line in `cat $toexpand` ; do
+      if [ "$line" != "" ]; then
+        ls $line >> $outputfile
+      fi
+    uniq < $outputfile > /tmp/uniqtemp.txt
+    mv /tmp/uniqtemp.txt $outputfile
+    done
+}
+
+
+init=""
+if [ "$1" = "" ]
+then
+  echo Usage: tardist wx-dir output-dir version
+  exit
+fi
+
+if [ "$2" = "" ]
+then
+  echo Usage: tardist wx-dir output-dir version
+  exit
+fi
+
+if [ "$3" = "" ]
+then
+  echo Usage: tardist wx-dir output-dir version
+  exit
+fi
+
+WXVER=$3
+
+echo About to archive wxMac:
+echo   From   $1
+echo   To     $2
+echo CTRL-C if this is not correct.
+read dummy
+
+cd $1
+
+echo Removing backup files...
+rm *~ */*~ */*/*~ */*/*/*~ */*/*/*/*~
+
+rm -f $2/wxMac-${WXVER}*.tar.gz
+rm -f -r $2/wxMac-${WXVER}
+
+cp $1/include/wx/mac/setup0.h $1/include/wx/setup.h
+
+echo Tarring...
+
+### wxMac
+cat $1/distrib/msw/mac.rsp $1/distrib/msw/cocoa.rsp $1/distrib/msw/generic.rsp $1/distrib/msw/cw_mac.rsp $1/distrib/msw/tex2rtf.rsp $1/distrib/msw/utils.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/stc.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/deprecated.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxmac_in.txt
+expandlines /tmp/wxmac_in.txt /tmp/wxmac.txt
+$TAR cf $2/wxMac-${WXVER}.tar -T /tmp/wxmac.txt
+
+cat $1/distrib/msw/cw_mac.rsp > /tmp/wxmac_in.txt
+expandlines /tmp/wxmac_in.txt /tmp/wxmac.txt
+$TAR cf $2/wxWidgets-${WXVER}-CW-Mac.tar -T /tmp/wxmac.txt
+
+rm -f $1/include/wx/setup.h
+
+echo Re-tarring in a subdirectory...
+cd $2
+mkdir wxMac-${WXVER}
+cd wxMac-${WXVER}
+$TAR xf ../wxMac-${WXVER}.tar
+
+# Remove mmedia
+rm -f -r contrib/src/mmedia contrib/samples/mmedia
+cd ..
+rm -f wxMac-${WXVER}.tar
+
+$TAR cf $2/wxMac-${WXVER}.tar wxMac-${WXVER}/*
+rm -f -r wxMac-${WXVER}
+gzip $2/wxMac-${WXVER}.tar
+
+echo Re-tarring CW project files...
+cd $2
+mkdir wxWidgets-${WXVER}
+cd wxWidgets-${WXVER}
+$TAR xf $2/wxWidgets-${WXVER}-CW-Mac.tar
+cd ..
+rm -f wxWidgets-${WXVER}-CW-Mac.tar
+$TAR zcf wxWidgets-${WXVER}-CW-Mac.tar.gz wxWidgets-${WXVER}/*
+
+# Copy readme and other files
+cp $1/docs/readme.txt $2/readme-${WXVER}.txt
+cp $1/docs/changes.txt $2/changes-${WXVER}.txt
+cp $1/docs/mac/readme.txt $2/readme-mac-${WXVER}.txt
+cp $1/docs/mac/install.txt $2/install-mac-${WXVER}.txt
+cp $1/docs/cocoa/readme.txt $2/readme-cocoa-${WXVER}.txt
+cp $1/docs/cocoa/install.txt $2/install-cocoa-${WXVER}.txt
+
+echo Done!

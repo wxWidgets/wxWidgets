@@ -1,0 +1,141 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        pickerbase.tex
+%% Purpose:     wxPickerBase documentation
+%% Author:      Francesco Montorsi
+%% Created:     2006-04-18
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2006 Francesco Montorsi
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxPickerBase}}\label{wxpickerbase}
+
+Base abstract class for all pickers which support an auxiliary text control.
+This class handles all positioning and sizing of the text control like a
+an horizontal \helpref{wxBoxSizer}{wxboxsizer} would do, with the text control on
+the left of the picker button.
+The proportion (see \helpref{wxSizer}{wxsizer} documentation for more info about
+proportion values) of the picker control defaults to $1$ when there isn't a text control
+associated (see {\tt wxPB\_USE\_TEXTCTRL} style) and to $0$ otherwise.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/pickerbase.h>
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxPB\_USE\_TEXTCTRL}}{Creates a text control to the left of the
+picker which is completely managed by this \helpref{wxPickerBase}{wxpickerbase}
+class.}
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{wxColourPickerCtrl}{wxcolourpickerctrl}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPickerBase::SetInternalMargin}\label{wxpickerbasesetinternalmargin}
+
+\func{void}{SetInternalMargin}{\param{int}{margin}}
+
+Sets the margin (in pixel) between the picker and the text control.
+This function can be used only when \helpref{HasTextCtrl}{wxpickerbasehastextctrl} returns \true.
+
+
+\membersection{wxPickerBase::GetInternalMargin}\label{wxpickerbasegetinternalmargin}
+
+\constfunc{int}{GetInternalMargin}{}
+
+Returns the margin (in pixel) between the picker and the text control.
+This function can be used only when \helpref{HasTextCtrl}{wxpickerbasehastextctrl} returns \true.
+
+
+\membersection{wxPickerBase::SetTextCtrlProportion}\label{wxpickerbasesettextctrlproportion}
+
+\func{void}{SetTextCtrlProportion}{\param{int}{prop}}
+
+Sets the proportion value of the text control.
+Look at the overview of wxPickerBase for more details about this.
+This function can be used only when \helpref{HasTextCtrl}{wxpickerbasehastextctrl} returns \true.
+
+
+\membersection{wxPickerBase::SetPickerCtrlProportion}\label{wxpickerbasesetpickerctrlproportion}
+
+\func{void}{SetPickerCtrlProportion}{\param{int}{prop}}
+
+Sets the proportion value of the picker.
+Look at the overview of wxPickerBase for more details about this.
+
+
+\membersection{wxPickerBase::GetTextCtrlProportion}\label{wxpickerbasegettextctrlproportion}
+
+\constfunc{int}{GetTextCtrlProportion}{}
+
+Returns the proportion value of the text control.
+This function can be used only when \helpref{HasTextCtrl}{wxpickerbasehastextctrl} returns \true.
+
+
+\membersection{wxPickerBase::GetPickerCtrlProportion}\label{wxpickerbasegetpickerctrlproportion}
+
+\constfunc{int}{GetPickerCtrlProportion}{}
+
+Returns the proportion value of the picker.
+
+
+\membersection{wxPickerBase::HasTextCtrl}\label{wxpickerbasehastextctrl}
+
+\constfunc{bool}{HasTextCtrl}{}
+
+Returns true if this window has a valid text control (i.e. if the \windowstyle{wxPB\_USE\_TEXTCTRL} style was
+given when creating this control).
+
+
+\membersection{wxPickerBase::GetTextCtrl}\label{wxpickerbasegetextctrl}
+
+\func{wxTextCtrl *}{GetTextCtrl}{}
+
+Returns a pointer to the text control handled by this window or \texttt{NULL} if the \windowstyle{wxPB\_USE\_TEXTCTRL} style was not specified when this control was created.
+Very important: the contents of the text control could be containing an invalid representation of the entity which can be chosen through the picker (e.g. the user entered an invalid colour syntax because of a typo). Thus you should never parse the content of the textctrl to get the user's input; rather use the derived-class getter (e.g. \helpref{wxColourPickerCtrl::GetColour}{wxcolourpickerctrlgetcolour}, \helpref{wxFilePickerCtrl::GetPath}{wxfilepickerctrlgetpath}, etc).
+
+
+\membersection{wxPickerBase::IsTextCtrlGrowable}\label{wxpickerbaseistextctrlgrowable}
+
+\constfunc{bool}{IsTextCtrlGrowable}{}
+
+Returns \true if the text control is growable.
+This function can be used only when \helpref{HasTextCtrl}{wxpickerbasehastextctrl} returns \true.
+
+
+\membersection{wxPickerBase::SetPickerCtrlGrowable}\label{wxpickerbasesetpickerctrlgrowable}
+
+\func{void}{SetPickerCtrlGrowable}{\param{bool}{ grow = true}}
+
+Sets the picker control as growable when {\tt grow} is \true.
+
+
+\membersection{wxPickerBase::SetTextCtrlGrowable}\label{wxpickerbasesettextctrlgrowable}
+
+\func{void}{SetTextCtrlGrowable}{\param{bool}{ grow = true}}
+
+Sets the text control as growable when {\tt grow} is \true.
+This function can be used only when \helpref{HasTextCtrl}{wxpickerbasehastextctrl} returns \true.
+
+
+
+\membersection{wxPickerBase::IsPickerCtrlGrowable}\label{wxpickerbaseispickerctrlgrowable}
+
+\constfunc{bool}{IsPickerCtrlGrowable}{}
+
+Returns \true if the picker control is growable.
+

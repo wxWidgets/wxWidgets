@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <include file="../../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="HelpGen" template="wx_util_console"
+                      template_append="wx_append_base">
+        <sources>
+            HelpGen.cpp
+            cjparser.cpp
+            docripper.cpp
+            ifcontext.cpp
+            markup.cpp
+            scriptbinder.cpp
+            sourcepainter.cpp
+            srcparser.cpp
+        </sources>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+</makefile>

@@ -1,0 +1,64 @@
+\section{\class{wxCalculateLayoutEvent}}\label{wxcalculatelayoutevent}
+
+This event is sent by \helpref{wxLayoutAlgorithm}{wxlayoutalgorithm} to
+calculate the amount of the remaining client area that the window should
+occupy.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/laywin.h>
+
+\wxheading{Event table macros}
+
+\twocolwidtha{7cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_CALCULATE\_LAYOUT(func)}}{Process a wxEVT\_CALCULATE\_LAYOUT event,
+which asks the window to take a 'bite' out of a rectangle provided by the algorithm.}
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{wxQueryLayoutInfoEvent}{wxquerylayoutinfoevent},\rtfsp
+\helpref{wxSashLayoutWindow}{wxsashlayoutwindow},\rtfsp
+\helpref{wxLayoutAlgorithm}{wxlayoutalgorithm}.
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxCalculateLayoutEvent::wxCalculateLayoutEvent}\label{wxcalculatelayouteventctor}
+
+\func{}{wxCalculateLayoutEvent}{\param{wxWindowID }{id = 0}}
+
+Constructor.
+
+\membersection{wxCalculateLayoutEvent::GetFlags}\label{wxcalculatelayouteventgetflags}
+
+\constfunc{int}{GetFlags}{\void}
+
+Returns the flags associated with this event. Not currently used.
+
+\membersection{wxCalculateLayoutEvent::GetRect}\label{wxcalculatelayouteventgetrect}
+
+\constfunc{wxRect}{GetRect}{\void}
+
+Before the event handler is entered, returns the remaining parent client area that the window
+could occupy. When the event handler returns, this should contain the remaining parent client rectangle,
+after the event handler has subtracted the area that its window occupies.
+
+\membersection{wxCalculateLayoutEvent::SetFlags}\label{wxcalculatelayouteventsetflags}
+
+\func{void}{SetFlags}{\param{int }{flags}}
+
+Sets the flags associated with this event. Not currently used.
+
+\membersection{wxCalculateLayoutEvent::SetRect}\label{wxcalculatelayouteventsetrect}
+
+\func{void}{SetRect}{\param{const wxRect\& }{rect}}
+
+Call this to specify the new remaining parent client area, after the space occupied by the
+window has been subtracted.
+

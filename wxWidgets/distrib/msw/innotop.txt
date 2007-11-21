@@ -1,0 +1,46 @@
+; Inno Setup Script
+; Created with ScriptMaker Version 1.3.22
+; 29 January 2001 at 14:22
+
+[Setup]
+    MinVersion=4.0,4.0
+    AppName=%APPTITLE% %VERSION%
+    AppId=%APPTITLE%
+    CreateUninstallRegKey=1
+    UsePreviousAppDir=0
+    UsePreviousGroup=0
+    AppVersion=%VERSION%
+    AppVerName=%APPTITLE% %VERSION%
+    AppCopyright=Copyright © %COPYRIGHTHOLDER%
+    BackColor=$FF0000
+    BackColor2=$000000
+    BackColorDirection=toptobottom
+    WindowShowCaption=1
+    WindowStartMaximized=1
+    WindowVisible=1
+    WindowResizable=1
+    DirExistsWarning=auto
+    UninstallFilesDir={app}
+    DisableDirPage=0
+    DisableStartupPrompt=0
+    CreateAppDir=1
+    DisableProgramGroupPage=0
+;    AlwaysCreateUninstallIcon=1
+    Uninstallable=1
+;    UninstallIconName=Uninstall %APPTITLE% %VERSION%
+    UninstallDisplayName=%APPTITLE% %VERSION%
+    UninstallLogMode=Append
+    DefaultDirName=c:\%APPTITLE%-%VERSION%
+    DefaultGroupName=%APPTITLE% %VERSION%
+    LicenseFile=%LICENSEFILE%
+    InfoBeforeFile=%READMEFILE%
+    InfoAfterFile=%READMEAFTERFILE%
+;    MessagesFile=compiler:default.isl
+    DiskSpanning=0
+;    DiskSize=1457664
+;    DiskClusterSize=512
+    ReserveBytes=0
+    UseSetupLdr=1
+    SourceDir=%SOURCEDIR%
+    OutputDir=%OUTPUTDIR%
+

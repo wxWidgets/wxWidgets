@@ -1,0 +1,370 @@
+﻿<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<!-- Original source: http://wiki.wxwidgets.org/wiki.pl?Bakefile    -->
+<!-- Modified by: Francesco Montorsi <frm@users.sourceforge.net>    -->
+<!--              Vaclav Slavik <vslavik@fastmail.fm> to better fit
+                  into Bakefile's presets                           -->
+<!-- Creation date: 6/9/2004                                        -->
+<!-- Last revision: 22/1/2005 off-CVS                               -->
+<!--                $Id$ -->
+
+
+<!--
+
+FIXME: this template has (at least) the following bugs:
+
+ * it's MSW-only, the port is assumed to be wxMSW unconditionally
+
+ * multiple wx configurations (CFG variable set when building the
+   library) are not supported
+
+-->
+
+<!-- makefile tag signifies the beginning of the bakefile           -->
+<makefile>
+
+    <requires version="0.1.5"/>
+
+    <!--                        OPTIONS                             -->
+    <!--                                                            -->
+    <!--    These are essentially the configurations you            -->
+    <!--    want in bakefile.                                       -->
+    <!--                                                            -->
+    <!--    In MSVC these are the different build                   -->
+    <!--    configurations you can have (in the build menu),        -->
+    <!--    and in autoconf is enabled with enable-xxx=xx.          -->
+    <!--    For other compilers a separate configuration            -->
+    <!--    file is created (such as config.gcc on gcc)             -->
+    <!--    which has several options a user can modify.            -->
+    <!--                                                            -->
+    <!--    Note that the above only happens if an option           -->
+    <!--    is not constant, i.e. if it cannot be determined        -->
+    <!--    by bakefile itself.                                     -->
+
+    <!-- Presets for limited dmars make.exe format: -->
+    <if cond="FORMAT=='dmars'">
+        <set var="WX_UNICODE">0</set>
+        <set var="WX_DEBUG">1</set>
+        <set var="WX_SHARED">0</set>
+        <set var="WX_PYTHON">0</set>
+    </if>
+
+
+    <!--    This is a standard option that determines               -->
+    <!--    whether the user wants to build this library as         -->
+    <!--    a dll or as a static library.                           -->
+    <if cond="not isdefined('WX_SHARED')">
+        <set var="WX_SHARED_DEFAULT" overwrite="0">0</set>
+        <option name="WX_SHARED">
+            <values>0,1</values>
+            <values-description>,DLL</values-description>
+            <default-value>$(WX_SHARED_DEFAULT)</default-value>
+            <description>
+                Use DLL build of wx library to use?
+            </description>
+        </option>
+    </if>
+
+    <!-- Configuration for building the bakefile with               -->
+    <!-- unicode strings or not (unicode or ansi).                  -->
+    <if cond="not isdefined('WX_UNICODE')">
+        <set var="WX_UNICODE_DEFAULT" overwrite="0">0</set>
+        <option name="WX_UNICODE">
+            <values>0,1</values>
+            <values-description>,Unicode</values-description>
+            <default-value>$(WX_UNICODE_DEFAULT)</default-value>
+            <description>
+                Compile Unicode build of wxWidgets?
+            </description>
+        </option>
+    </if>
+
+    <if cond="not isdefined('WX_DEBUG')">
+        <set var="WX_DEBUG_DEFAULT" overwrite="0">1</set>
+        <option name="WX_DEBUG">
+            <values>0,1</values>
+            <values-description>Release,Debug</values-description>
+            <default-value>$(WX_DEBUG_DEFAULT)</default-value>
+            <description>
+                Use debug build of wxWidgets (define __WXDEBUG__)?
+            </description>
+        </option>
+    </if>
+
+    <if cond="not isdefined('WX_VERSION')">
+        <set var="WX_VERSION_DEFAULT" overwrite="0">28</set>
+        <option name="WX_VERSION">
+            <default-value>$(WX_VERSION_DEFAULT)</default-value>
+            <description>
+                Version of the wx library to build against.
+            </description>
+        </option>
+    </if>
+
+    <if cond="not isdefined('WX_MONOLITHIC')">
+        <set var="WX_MONOLITHIC_DEFAULT" overwrite="0">0</set>
+        <option name="WX_MONOLITHIC">
+            <values>0,1</values>
+            <values-description>Multilib,Monolithic</values-description>
+            <default-value>$(WX_MONOLITHIC_DEFAULT)</default-value>
+            <description>
+                Use monolithic build of wxWidgets?
+            </description>
+        </option>
+    </if>
+
+    <!-- set this to 1 to use specific settings for wxPython -->
+    <if cond="not isdefined('WX_PYTHON')">
+        <option name="WX_PYTHON" category="path">
+            <values>0,1</values>
+            <default-value>0</default-value>
+            <description>
+                Whether or not we're building against wxPython libraries.
+            </description>
+        </option>
+    </if>
+
+    <!--                     HELPER VARIABLES                       -->
+    <!--                                                            -->
+
+
+    <!--    The unicode define we want.  By default bakefile        -->
+    <!--    makes variables an empty string, so if unicode          -->
+    <!--    is not defined $(UNICODE_DEFINE) would expand           -->
+    <!--    to nothing (literally).                                 -->
+    <set var="WXUNICODE_DEFINE">
+        <if cond="WX_UNICODE=='1'">_UNICODE</if>
+    </set>
+
+    <!--    The debug define we need with win32 compilers           -->
+    <!--    (on Linux, the wx-config program is used).              -->
+    <set var="WXDEBUG_DEFINE">
+        <if cond="WX_PYTHON=='1'">__WXDEBUG__</if>
+        <if cond="WX_PYTHON=='0' and WX_DEBUG=='1'">__WXDEBUG__</if>
+    </set>
+
+    <!--    These are handy ways of dealing with the                -->
+    <!--    extensions in the library names of the                  -->
+    <!--    wxWindows library.                                      -->
+    <set var="WXLIBPOSTFIX">
+        <if cond="WX_PYTHON=='1' and WX_UNICODE=='1'">uh</if>
+        <if cond="WX_PYTHON=='1' and WX_UNICODE=='0'">h</if>
+        <if cond="WX_PYTHON=='0' and WX_DEBUG=='1' and WX_UNICODE=='1'">ud</if>
+        <if cond="WX_PYTHON=='0' and WX_DEBUG=='1' and WX_UNICODE=='0'">d</if>
+        <if cond="WX_PYTHON=='0' and WX_DEBUG=='0' and WX_UNICODE=='1'">u</if>
+    </set>
+    <set var="WX3RDPARTYLIBPOSTFIX">
+        <if cond="WX_PYTHON==0 and WX_DEBUG=='1'">d</if>
+        <if cond="WX_PYTHON==1">h</if>
+    </set>
+
+    <set var="WXCPU">
+        <if cond="FORMAT=='msevc4prj'">_$(CPU)</if>
+    </set>
+
+    <set var="WXLIBPATH">
+        <if cond="WX_SHARED=='0'">$(DIRSEP)lib$(DIRSEP)$(COMPILER)$(WXCPU)_lib</if>
+        <if cond="WX_SHARED=='1'">$(DIRSEP)lib$(DIRSEP)$(COMPILER)$(WXCPU)_dll</if>
+    </set>
+
+    <set var="WXPORT">
+        <if cond="FORMAT=='msevc4prj'">wince</if>
+        <if cond="FORMAT!='msevc4prj'">msw</if>
+    </set>
+    <set var="WXLIBINCLUDE">$(WXLIBPATH)$(DIRSEP)$(WXPORT)$(WXLIBPOSTFIX)</set>
+
+
+    <!--    All the possible mixes for the wx library names          -->
+    <set var="WXLIB_BASE_NAME">
+        <if cond="WX_MONOLITHIC=='0'">wxbase$(WX_VERSION)$(WXLIBPOSTFIX)</if>
+
+        <!--
+            the trick used to support monolithic builds is here: when the
+            <wx-lib>base</wx-lib> tag is found, and user selected
+            WX_MONOLITHIC=1, then the base library is translated to the
+            monolithic library
+        -->
+        <if cond="WX_MONOLITHIC=='1'">wx$(WXPORT)$(WX_VERSION)$(WXLIBPOSTFIX)</if>
+    </set>
+
+    <!--   Libraries whose name is prefixed with 'wxbase'            -->
+    <set var="WXLIB_NET_NAME">
+        <if cond="WX_MONOLITHIC=='0'">wxbase$(WX_VERSION)$(WXLIBPOSTFIX)_net</if>
+    </set>
+    <set var="WXLIB_XML_NAME">
+        <if cond="WX_MONOLITHIC=='0'">wxbase$(WX_VERSION)$(WXLIBPOSTFIX)_xml</if>
+    </set>
+    <set var="WXLIB_ODBC_NAME">
+        <if cond="WX_MONOLITHIC=='0'">wxbase$(WX_VERSION)$(WXLIBPOSTFIX)_odbc</if>
+    </set>
+
+    <!--   Libraries whose name is prefixed with 'wx' only          -->
+    <set var="WXLIB_CORE_NAME">
+        <if cond="WX_MONOLITHIC=='0'">wx$(WXPORT)$(WX_VERSION)$(WXLIBPOSTFIX)_core</if>
+    </set>
+    <set var="WXLIB_MEDIA_NAME">
+        <if cond="WX_MONOLITHIC=='0'">wx$(WXPORT)$(WX_VERSION)$(WXLIBPOSTFIX)_media</if>
+    </set>
+    <set var="WXLIB_XRC_NAME">
+        <if cond="WX_MONOLITHIC=='0'">wx$(WXPORT)$(WX_VERSION)$(WXLIBPOSTFIX)_xrc</if>
+    </set>
+    <set var="WXLIB_HTML_NAME">
+        <if cond="WX_MONOLITHIC=='0'">wx$(WXPORT)$(WX_VERSION)$(WXLIBPOSTFIX)_html</if>
+    </set>
+    <set var="WXLIB_ADV_NAME">
+        <if cond="WX_MONOLITHIC=='0'">wx$(WXPORT)$(WX_VERSION)$(WXLIBPOSTFIX)_adv</if>
+    </set>
+    <set var="WXLIB_QA_NAME">
+        <if cond="WX_MONOLITHIC=='0'">wx$(WXPORT)$(WX_VERSION)$(WXLIBPOSTFIX)_qa</if>
+    </set>
+    <set var="WXLIB_DBGRID_NAME">
+        <if cond="WX_MONOLITHIC=='0'">wx$(WXPORT)$(WX_VERSION)$(WXLIBPOSTFIX)_dbgrid</if>
+    </set>
+    <set var="WXLIB_GL_NAME">
+        <if cond="WX_MONOLITHIC=='0'">wx$(WXPORT)$(WX_VERSION)$(WXLIBPOSTFIX)_gl</if>
+    </set>
+    <set var="WXLIB_AUI_NAME">
+        <if cond="WX_MONOLITHIC=='0'">wx$(WXPORT)$(WX_VERSION)$(WXLIBPOSTFIX)_aui</if>
+    </set>
+    <set var="WXLIB_RICHTEXT_NAME">
+        <if cond="WX_MONOLITHIC=='0'">wx$(WXPORT)$(WX_VERSION)($WXLIBPOSTFIX)_richtext</if>
+    </set>
+
+
+
+
+
+
+    <!--                        WX TEMPLATE                         -->
+    <!--                                                            -->
+    <!--                                                            -->
+    <!--    While not required, templates make your                 -->
+    <!--    bakefiles much more readable.  Templates, in            -->
+    <!--    essence, are abstract classes like c++.                 -->
+    <!--                                                            -->
+    <!--    Your build targets "inherit" the template,              -->
+    <!--    along with the info associated with the template        -->
+
+    <!--                                                            -->
+    <!--                wxWidgets LIBRARY/APP TEMPLATE              -->
+    <!--                                                            -->
+    <!--    The "base class" of all our build targets               -->
+    <!--    This links with the appropriate native                  -->
+    <!--    libraries required by the platform, the libraries       -->
+    <!--    we want for our stuff, and the wxWindows libs.          -->
+
+    <!-- this tag is used to include wx libraries: -->
+    <define-tag name="wx-lib" rules="exe,dll,module">
+        <if cond="value=='base'"><sys-lib>$(WXLIB_BASE_NAME)</sys-lib></if>
+        <if cond="value=='core'"><sys-lib>$(WXLIB_CORE_NAME)</sys-lib></if>
+
+        <if cond="value=='net'"><sys-lib>$(WXLIB_NET_NAME)</sys-lib></if>
+        <if cond="value=='xml'"><sys-lib>$(WXLIB_XML_NAME)</sys-lib></if>
+        <if cond="value=='odbc'"><sys-lib>$(WXLIB_ODBC_NAME)</sys-lib></if>
+
+        <if cond="value=='media'"><sys-lib>$(WXLIB_MEDIA_NAME)</sys-lib></if>
+        <if cond="value=='xrc'"><sys-lib>$(WXLIB_XRC_NAME)</sys-lib></if>
+        <if cond="value=='html'"><sys-lib>$(WXLIB_HTML_NAME)</sys-lib></if>
+        <if cond="value=='adv'"><sys-lib>$(WXLIB_ADV_NAME)</sys-lib></if>
+        <if cond="value=='gl'"><sys-lib>$(WXLIB_GL_NAME)</sys-lib></if>
+        <if cond="value=='dbgrid'"><sys-lib>$(WXLIB_DBGRID_NAME)</sys-lib></if>
+        <if cond="value=='qa'"><sys-lib>$(WXLIB_QA_NAME)</sys-lib></if>
+        <if cond="value=='aui'"><sys-lib>$(WXLIB_AUI_NAME)</sys-lib></if>
+        <if cond="value=='richtext'"><sys-lib>$(WXLIB_RICHTEXT_NAME)</sys-lib></if>
+
+        <!-- wx-lib can be used also to link against contrib libraries
+             (which always have the same name, regardless of WX_MONOLITHIC value) -->
+        <if cond="value in CONTRIBLIB_LIST.split()">
+            <sys-lib>wx$(WXPORT)$(WX_VERSION)$(WXLIBPOSTFIX)_$(value)</sys-lib>
+        </if>
+
+        <if cond="value not in ALLLIB_LIST.split()">
+            <error>Unknown wxWidgets library given in the wx-lib tag</error>
+        </if>
+    </define-tag>
+
+    <!-- just a placeholder to mark the place where <wx-lib> will be placed,
+         thanks to the order precedence declaration below it: -->
+    <define-tag name="__wx-libs-point" rules="exe,dll,module"/>
+    <tag-info name="wx-lib"
+              position="before:__wx-libs-point"/>
+    <tag-info name="__wx-syslibs"
+              position="after:__wx-libs-point"/>
+
+
+    <!-- template for static wx libraries: -->
+    <template id="wx-lib">
+        <!--                    MISCELLANEOUS                       -->
+        <if cond="FORMAT=='mingw'">
+            <define>HAVE_W32API_H</define>
+            <ldflags>-mthreads</ldflags>
+        </if>
+
+        <define>$(WXUNICODE_DEFINE)</define>
+        <define>$(WXDEBUG_DEFINE)</define>
+        <define>__WXMSW__</define>
+
+        <include>$(WX_DIR)$(WXLIBINCLUDE)</include>
+        <include>$(WX_DIR)/include</include>
+    </template>
+
+
+    <!-- this ugly tag contains all sys-lib tags used by "wx" template,
+         in order to make sure they are not reorder when wx-lib is moved
+         after __wx-libs-point: -->
+    <define-tag name="__wx-syslibs" rules="exe,dll,module">
+        <!-- wx 3rd party libs, always use them: -->
+        <sys-lib cond="FORMAT!='msevc4prj'">wxtiff$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
+        <sys-lib>wxjpeg$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
+        <sys-lib>wxpng$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
+        <sys-lib>wxzlib$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
+        <!-- For regex we won't use the WX3RDPARTYLIBPOSTIX postfix:
+             unliked tiff, jpeg, png, zlib, expat, when building
+             in Unicode mode, the "u" suffix is appended to regex -->
+        <sys-lib cond="FORMAT!='msevc4prj'">wxregex$(WXLIBPOSTFIX)</sys-lib>
+        <sys-lib>wxexpat$(WX3RDPARTYLIBPOSTFIX)</sys-lib>
+
+        <!-- link-in system libs that wx depends on: -->
+        <!-- If on borland, we don't need to do much            -->
+        <if cond="FORMAT=='borland'">
+            <sys-lib>ole2w32</sys-lib>
+            <sys-lib>odbc32</sys-lib>
+        </if>
+
+        <!-- Non-borland, on the other hand...                  -->
+        <if cond="FORMAT not in ['borland','msevc4prj']">
+            <sys-lib>kernel32</sys-lib>
+            <sys-lib>user32</sys-lib>
+            <sys-lib>gdi32</sys-lib>
+            <sys-lib>comdlg32</sys-lib>
+            <sys-lib>winspool</sys-lib>
+            <sys-lib>winmm</sys-lib>
+            <sys-lib>shell32</sys-lib>
+            <sys-lib>comctl32</sys-lib>
+            <sys-lib>ole32</sys-lib>
+            <sys-lib>oleaut32</sys-lib>
+            <sys-lib>uuid</sys-lib>
+            <sys-lib>rpcrt4</sys-lib>
+            <sys-lib>advapi32</sys-lib>
+            <sys-lib>wsock32</sys-lib>
+            <sys-lib>odbc32</sys-lib>
+        </if>
+
+        <!-- Libs common to both borland and MSVC               -->
+        <if cond="FORMAT=='msvc' or FORMAT=='msvc6prj' or FORMAT=='borland'">
+            <sys-lib>oleacc</sys-lib>
+        </if>
+    </define-tag>
+
+    <!-- template for wx executables/dlls: -->
+    <template id="wx" template="wx-lib">
+        <lib-path>$(WX_DIR)$(WXLIBPATH)</lib-path>
+
+        <!-- wx libs must come before 3rd party and sys libs, this is
+             the place where the hack explained above is carried on: -->
+        <__wx-libs-point/>
+        <__wx-syslibs/>
+    </template>
+
+</makefile>

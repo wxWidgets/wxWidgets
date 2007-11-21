@@ -1,0 +1,81 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        fileconf.tex
+%% Purpose:     wxFileConfig documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     2004-10-04
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2004 Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxFileConfig}}\label{wxfileconfig}
+
+wxFileConfig implements \helpref{wxConfigBase}{wxconfigbase} interface for
+storing and retrieving configuration information using plain text files. The
+files have a simple format reminiscent of Windows INI files with lines of the
+form \texttt{key = value} defining the keys and lines of special form
+\texttt{$[$group$]$} indicating the start of each group.
+
+This class is used by default for wxConfig on Unix platforms but may also be
+used explicitly if you want to use files and not the registry even under
+Windows.
+
+\wxheading{Derived from}
+
+\helpref{wxConfigBase}{wxconfigbase}
+
+\wxheading{Include files}
+
+<wx/fileconf.h>
+
+
+\helponly{\insertatlevel{2}{\wxheading{Members}}}
+
+\membersection{wxFileConfig::wxFileConfig}\label{wxfileconfigctor}
+
+\func{}{wxFileConfig}{\param{wxInputStream\& }{is}, \param{wxMBConv\& }{conv = wxConvUTF8}}
+
+Read the config data from the specified stream instead of the associated file,
+as usual.
+
+\wxheading{See also}
+
+\helpref{Save}{wxfileconfigsave}
+
+
+\membersection{wxFileConfig::Save}\label{wxfileconfigsave}
+
+\func{bool}{Save}{\param{wxOutputStream\& }{os}, \param{wxMBConv\& }{conv = wxConvUTF8}}
+
+Saves all config data to the given stream, returns \true if data was saved
+successfully or \false on error.
+
+Note the interaction of this function with the internal ``dirty flag'': the
+data is saved unconditionally, i.e. even if the object is not dirty. However
+after saving it successfully, the dirty flag is reset so no changes will be
+written back to the file this object is associated with until you change its
+contents again.
+
+\wxheading{See also}
+
+\helpref{Flush}{wxconfigbaseflush}
+
+
+\membersection{wxFileConfig::SetUmask}\label{wxfileconfigsetumask}
+
+\func{void}{SetUmask}{\param{int }{mode}}
+
+Allows to set the mode to be used for the config file creation. For example, to
+create a config file which is not readable by other users (useful if it stores
+some sensitive information, such as passwords), you could use 
+{\tt SetUmask(0077)}.
+
+This function doesn't do anything on non-Unix platforms.
+
+\wxheading{See also}
+
+\helpref{wxCHANGE\_UMASK}{wxchangeumask}
+
+
+

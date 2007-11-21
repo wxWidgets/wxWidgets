@@ -1,0 +1,102 @@
+\section{\class{wxScopedArray}}\label{wxscopedarray}
+
+This is a simple scoped smart pointer array implementation that is similar to 
+the \urlref{Boost}{http://www.boost.org} smart pointers but rewritten to
+use macros instead.
+
+\wxheading{Example}
+
+Below is an example of using a wxWidgets scoped smart pointer and 
+pointer array.
+
+\begin{verbatim}
+  class MyClass { /* ... */ };
+
+  // declare a smart pointer to a MyClass called wxMyClassPtr
+  wxDECLARE_SCOPED_PTR(MyClass, wxMyClassPtr)
+  // declare a smart pointer to an array of chars
+  wxDECLARE_SCOPED_ARRAY(char, wxCharArray)
+
+  ...
+
+  // define the first pointer class, must be complete
+  wxDEFINE_SCOPED_PTR(MyClass, wxMyClassPtr)
+  // define the second pointer class
+  wxDEFINE_SCOPED_ARRAY(char, wxCharArray)
+
+  // create an object with a new pointer to MyClass
+  wxMyClassPtr theObj(new MyClass());
+  // reset the pointer (deletes the previous one)
+  theObj.reset(new MyClass());
+
+  // access the pointer
+  theObj->MyFunc();
+
+  // create an object with a new array of chars
+  wxCharArray theCharObj(new char[100]);
+
+  // access the array
+  theCharObj[0] = "!";
+\end{verbatim}
+
+\wxheading{Declaring new smart pointer types}
+
+\begin{verbatim}
+    wxDECLAR_SCOPED_ARRAY( TYPE,     // type of the values
+                                CLASSNAME ); // name of the class
+\end{verbatim}
+
+A smart pointer holds a pointer to an object (which must be complete
+when wxDEFINE\_SCOPED\_ARRAY() is called). The memory used by the object is
+deleted when the smart pointer goes out of scope. The first argument
+of the macro is the pointer type, the second is the name of the new
+smart pointer class being created.  Below we will use wxScopedArray to
+represent the scoped pointer array class, but the user may create the class 
+with any legal name.
+
+\wxheading{Include files}
+
+<wx/ptr\_scpd.h>
+
+\wxheading{See also}
+
+\helpref{wxScopedPtr}{wxscopedptr}\rtfsp
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxScopedArray::wxScopedArray}\label{wxscopedarrayctor}
+
+\func{}{wxScopedArray}{\param{type}{ * T = NULL}}
+
+Creates the smart pointer with the given pointer or none if NULL.  On
+compilers that support it, this uses the explicit keyword.
+
+\membersection{wxScopedArray::reset}\label{wxscopedarrayreset}
+
+\func{\void}{reset}{\param{T}{ p * = NULL}}
+
+Deletes the currently held pointer and sets it to 'p' or to NULL if no 
+arguments are specified. This function does check to make sure that the
+pointer you are assigning is not the same pointer that is already stored.
+
+\membersection{wxScopedArray::operator []}\label{wxscopedarraybracket}
+
+\func{const T \&}{operator []}{\param{long int}{i}}
+
+This operator acts like the standard [] indexing operator for C++ arrays.  The
+function does not do bounds checking.
+
+\membersection{wxScopedArray::get}\label{wxscopedarrayget}
+
+\func{const T*}{get}{\void}
+
+This operator gets the pointer stored in the smart pointer or returns NULL if
+there is none.
+
+\membersection{wxScopedArray::swap}\label{wxscopedarrayswap}
+
+\func{\void}{swap}{\param{wxScopedPtr}{ \& ot}}
+
+Swap the pointer inside the smart pointer with 'ot'. The pointer being swapped
+must be of the same type (hence the same class name).
+

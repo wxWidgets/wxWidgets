@@ -1,0 +1,549 @@
+#!/bin/sh
+# Makes the wxWidgets RPMs
+
+RPMBUILDARGS=
+PLATFORM=
+NORPMS=
+
+doupdatecvs()
+{
+  cd $WXSRC
+  echo Updating from CVS...
+  cvswx update -d -P
+}
+
+dospinwxgtk()
+{
+  echo Making wxGTK RPMs...
+  RPM_ROOT=$WXDEST/wxgtk/rpm-root
+
+  if [ ! -d $WXDEST ]; then
+    mkdir $WXDEST
+  fi
+
+  rm -f -r $WXDEST/wxgtk
+  mkdir $WXDEST/wxgtk
+  mkdir $WXDEST/wxgtk/release
+  mkdir $RPM_ROOT
+
+  cd $WXSRC
+  cd locale
+  make allmo
+  cd $WXDEST/wxgtk/release
+  echo Configuring...
+  $WXSRC/configure --with-gtk --no-recursion
+  echo Making...
+  make -j1 dist bzip-dist-only
+
+  mkdir $WXDEST/$PLATFORM
+
+  if [ "$NORPMS" != "1" ]
+  then
+
+  echo Setting up RPM build dir $RPM_ROOT...
+  rm -f -r $RPM_ROOT
+  mkdir $RPM_ROOT
+  mkdir $RPM_ROOT/BUILD
+  mkdir $RPM_ROOT/RPMS
+  mkdir $RPM_ROOT/RPMS/i386
+  mkdir $RPM_ROOT/RPMS/i686
+  mkdir $RPM_ROOT/RPMS/noarch
+  mkdir $RPM_ROOT/SOURCES
+  mkdir $RPM_ROOT/SPECS
+  mkdir $RPM_ROOT/SRPMS
+
+  echo %_topdir $RPM_ROOT > ~/.rpmmacros
+
+  echo Copying wxGTK-$WXVER.tar.bz2 to $RPM_ROOT/SOURCES...
+  cp wxGTK-$WXVER.tar.bz2 $RPM_ROOT/SOURCES
+  echo Copying wxGTK.spec to $RPM_ROOT/SPECS...
+  cp $WXSRC/wxGTK.spec $RPM_ROOT/SPECS
+
+  echo Starting wxGTK RPM build, rpmbuild args=$RPMBUILDARGS...
+  cd $RPM_ROOT
+  rpmbuild -ba $RPMBUILDARGS SPECS/wxGTK.spec 2>&1 | tee wxGTK.out
+
+  echo Finished wxGTK RPM build, in $RPM_ROOT.
+  echo "SRPMS:"
+  ls SRPMS
+  echo "RPMS/i386:"
+  ls RPMS/i386
+
+  cp $RPM_ROOT/SRPMS/*.rpm $WXDEST/$PLATFORM
+  cp $RPM_ROOT/RPMS/i386/*.rpm $WXDEST/$PLATFORM
+
+  fi
+
+  cp $WXDEST/wxgtk/release/*.tar.gz $WXDEST/$PLATFORM
+  cp $WXDEST/wxgtk/release/*.tar.bz2 $WXDEST/$PLATFORM
+
+#  rm -f -r $WXDEST/wxgtk
+
+  echo Now try the RPMs with rpm -i.
+}
+
+dospinwxmgl()
+{
+  echo Making wxMGL RPMs...
+  RPM_ROOT=$WXDEST/wxmgl/rpm-root
+
+  if [ ! -d $WXDEST ]; then
+    mkdir $WXDEST
+  fi
+
+  rm -f -r $WXDEST/wxmgl
+  mkdir $WXDEST/wxmgl
+  mkdir $WXDEST/wxmgl/release
+  mkdir $RPM_ROOT
+
+  cd $WXSRC
+  cd locale
+  make allmo
+  cd $WXDEST/wxmgl/release
+  echo Configuring...
+  $WXSRC/configure --with-mgl --no-recursion
+  echo Making...
+  make -j1 dist bzip-dist-only
+
+  if [ "$NORPMS" != "1" ]
+  then
+
+  echo Setting up RPM build dir $RPM_ROOT...
+  rm -f -r $RPM_ROOT
+  mkdir $RPM_ROOT
+  mkdir $RPM_ROOT/BUILD
+  mkdir $RPM_ROOT/RPMS
+  mkdir $RPM_ROOT/RPMS/i386
+  mkdir $RPM_ROOT/RPMS/i686
+  mkdir $RPM_ROOT/RPMS/noarch
+  mkdir $RPM_ROOT/SOURCES
+  mkdir $RPM_ROOT/SPECS
+  mkdir $RPM_ROOT/SRPMS
+
+  echo %_topdir $RPM_ROOT > ~/.rpmmacros
+
+  echo Copying wxMGL-$WXVER.tar.bz2 to $RPM_ROOT/SOURCES...
+  cp wxMGL-$WXVER.tar.bz2 $RPM_ROOT/SOURCES
+  echo Copying wxMGL.spec to $RPM_ROOT/SPECS...
+  cp $WXSRC/wxMGL.spec $RPM_ROOT/SPECS
+
+  echo Starting wxMGL RPM build...
+  cd $RPM_ROOT
+  rpmbuild -ba SPECS/wxMGL.spec 2>&1 | tee wxMGL.out
+
+  echo Finished wxMGL RPM build, in $RPM_ROOT.
+  echo "SRPMS:"
+  ls SRPMS
+  echo "RPMS/i386:"
+  ls RPMS/i386
+
+  cp $RPM_ROOT/SRPMS/*.rpm $WXDEST
+  cp $RPM_ROOT/RPMS/i386/*.rpm $WXDEST
+
+  fi
+
+  cp $WXDEST/wxmgl/release/*.tar.gz $WXDEST
+  cp $WXDEST/wxmgl/release/*.tar.bz2 $WXDEST
+
+#  rm -f -r $WXDEST/wxmgl
+
+  echo Now try the RPMs with rpm -i.
+}
+
+dospinwxmotif()
+{
+  echo Making wxMotif RPMs...
+  RPM_ROOT=$WXDEST/wxmotif/rpm-root
+
+  if [ ! -d $WXDEST ]; then
+    mkdir $WXDEST
+  fi
+
+  rm -f -r $WXDEST/wxmotif
+  mkdir $WXDEST/wxmotif
+  mkdir $WXDEST/wxmotif/release
+  mkdir $RPM_ROOT
+
+  cd $WXSRC
+  cd locale
+  make allmo
+  cd $WXDEST/wxmotif/release
+  echo Configuring...
+  $WXSRC/configure --with-motif --no-recursion
+  echo Making...
+  make -j1 dist bzip-dist-only
+
+  if [ "$NORPMS" != "1" ]
+  then
+
+  echo Setting up RPM build dir $RPM_ROOT...
+  rm -f -r $RPM_ROOT
+  mkdir $RPM_ROOT
+  mkdir $RPM_ROOT/BUILD
+  mkdir $RPM_ROOT/RPMS
+  mkdir $RPM_ROOT/RPMS/i386
+  mkdir $RPM_ROOT/RPMS/i686
+  mkdir $RPM_ROOT/RPMS/noarch
+  mkdir $RPM_ROOT/SOURCES
+  mkdir $RPM_ROOT/SPECS
+  mkdir $RPM_ROOT/SRPMS
+
+  echo %_topdir $RPM_ROOT > ~/.rpmmacros
+
+  echo Copying wxMOTIF-$WXVER.tar.bz2 to $RPM_ROOT/SOURCES...
+  cp wxMOTIF-$WXVER.tar.bz2 $RPM_ROOT/SOURCES
+  echo Copying wxMotif.spec to $RPM_ROOT/SPECS...
+  cp $WXSRC/wxMotif.spec $RPM_ROOT/SPECS
+
+  echo Starting wxMotif RPM build...
+  cd $RPM_ROOT
+  rpmbuild -ba SPECS/wxMotif.spec 2>&1 | tee wxGTK.out
+
+  echo Finished wxMotif RPM build, in $RPM_ROOT.
+  echo "SRPMS:"
+  ls SRPMS
+  echo "RPMS/i386:"
+  ls RPMS/i386
+
+  cp $RPM_ROOT/SRPMS/*.rpm $WXDEST
+  cp $RPM_ROOT/RPMS/i386/*.rpm $WXDEST
+
+  fi
+
+  cp $WXDEST/wxmotif/release/*.tar.gz $WXDEST
+  cp $WXDEST/wxmotif/release/*.tar.bz2 $WXDEST
+
+  echo Rearchiving wxMotif tarballs to change wxMOTIF to wxMotif...
+  cd $WXDEST
+  mkdir wxMotif.tmp
+  cd wxMotif.tmp
+  rm -f -r *
+  tar xfz ../wxMOTIF-$WXVER.tar.gz
+  mv wxMOTIF-$WXVER wxMotif-$WXVER
+  rm -f ../wxMOTIF-$WXVER.tar.gz
+  rm -f ../wxMOTIF-$WXVER.tar.bz2
+  tar cf ../wxMotif-$WXVER.tar *
+  gzip -c ../wxMotif-$WXVER.tar > ../wxMotif-$WXVER.tar.gz
+  bzip2 -f9 ../wxMotif-$WXVER.tar
+  cd ..
+  rm -f -r wxMotif.tmp
+#  rm -f -r $WXDEST/wxmotif
+
+  echo Now try the RPMs with rpm -i.
+}
+
+dospinwxmac()
+{
+  echo Making wxMac tarballs...
+  echo Note that this must be done on a Mac.
+  if [ ! -d $WXDEST ]; then
+    mkdir $WXDEST
+  fi
+
+  rm -f -r $WXDEST/wxmac
+  mkdir $WXDEST/wxmac
+  mkdir $WXDEST/wxmac/release
+
+  cd $WXSRC
+  cd locale
+  make allmo
+  cd $WXDEST/wxmac/release
+  echo Configuring...
+  $WXSRC/configure --with-mac --no-recursion
+  echo Making...
+  make -j1 dist bzip-dist-only
+
+  cp $WXDEST/wxmac/release/*.tar.gz $WXDEST
+  cp $WXDEST/wxmac/release/*.tar.bz2 $WXDEST
+
+  echo Rearchiving wxMac tarballs to change wxMAC to wxMAC...
+  cd $WXDEST
+  mkdir wxMac.tmp
+  cd wxMac.tmp
+  rm -f -r *
+  tar xfz ../wxMac-$WXVER.tar.gz
+  mv wxMAC-$WXVER wxMac-$WXVER
+  rm -f ../wxMAC-$WXVER.tar.gz
+  rm -f ../wxMAC-$WXVER.tar.bz2
+  tar cf ../wxMac-$WXVER.tar *
+  gzip -c ../wxMac-$WXVER.tar > ../wxMac-$WXVER.tar.gz
+  bzip2 -f9 ../wxMac-$WXVER.tar
+  cd ..
+  rm -f -r wxMac.tmp
+
+  rm -f -r $WXDEST/wxmac
+  echo Now try the RPMs with rpm -i.
+}
+
+dospinwxbase()
+{
+  echo Making wxBase RPMs...
+  RPM_ROOT=$WXDEST/wxbase/rpm-root
+
+  if [ ! -d $WXDEST ]; then
+    mkdir $WXDEST
+  fi
+
+  rm -f -r $WXDEST/wxbase
+  mkdir $WXDEST/wxbase
+  mkdir $WXDEST/wxbase/release
+  mkdir $RPM_ROOT
+
+  cd $WXSRC
+  cd locale
+  make allmo
+  cd $WXDEST/wxbase/release
+  echo Configuring...
+  $WXSRC/configure --disable-gui --no-recursion
+  echo Making...
+  make -j1 dist bzip-dist-only
+
+  mkdir $WXDEST/$PLATFORM
+
+  if [ "$NORPMS" != "1" ]
+  then
+
+  echo Setting up RPM build dir $RPM_ROOT...
+  rm -f -r $RPM_ROOT
+  mkdir $RPM_ROOT
+  mkdir $RPM_ROOT/BUILD
+  mkdir $RPM_ROOT/RPMS
+  mkdir $RPM_ROOT/RPMS/i386
+  mkdir $RPM_ROOT/RPMS/i686
+  mkdir $RPM_ROOT/RPMS/noarch
+  mkdir $RPM_ROOT/SOURCES
+  mkdir $RPM_ROOT/SPECS
+  mkdir $RPM_ROOT/SRPMS
+
+  echo %_topdir $RPM_ROOT > ~/.rpmmacros
+
+  echo Copying wxBase-$WXVER.tar.bz2 to $RPM_ROOT/SOURCES...
+  cp wxBase-$WXVER.tar.bz2 $RPM_ROOT/SOURCES
+  echo Copying wxBase.spec to $RPM_ROOT/SPECS...
+  cp $WXSRC/wxBase.spec $RPM_ROOT/SPECS
+
+  echo Starting wxBase RPM build, rpmbuild args=$RPMBUILDARGS...
+  cd $RPM_ROOT
+  rpmbuild -ba $RPMBUILDARGS SPECS/wxBase.spec 2>&1 | tee wxBase.out
+
+  echo Finished wxBase RPM build, in $RPM_ROOT.
+  echo "SRPMS:"
+  ls SRPMS
+  echo "RPMS/i386:"
+  ls RPMS/i386
+
+  cp $RPM_ROOT/SRPMS/*.rpm $WXDEST/$PLATFORM
+  cp $RPM_ROOT/RPMS/i386/*.rpm $WXDEST/$PLATFORM
+
+  fi
+
+  cp $WXDEST/wxbase/release/*.tar.gz $WXDEST/$PLATFORM
+  cp $WXDEST/wxbase/release/*.tar.bz2 $WXDEST/$PLATFORM
+
+#  rm -f -r $WXDEST/wxbase
+  echo Now try the RPMs with rpm -i.
+}
+
+dospinwxx11()
+{
+  echo Making wxX11 RPMs...
+  RPM_ROOT=$WXDEST/wxx11/rpm-root
+
+  if [ ! -d $WXDEST ]; then
+    mkdir $WXDEST
+  fi
+
+  rm -f -r $WXDEST/wxx11
+  mkdir $WXDEST/wxx11
+  mkdir $WXDEST/wxx11/release
+  mkdir $RPM_ROOT
+
+  cd $WXSRC
+  cd locale
+  make allmo
+  cd $WXDEST/wxx11/release
+  echo Configuring...
+  $WXSRC/configure --with-x11 --no-recursion
+  echo Making...
+  make -j1 dist bzip-dist-only
+
+  if [ "$NORPMS" != "1" ]
+  then
+
+  echo Setting up RPM build dir $RPM_ROOT...
+  rm -f -r $RPM_ROOT
+  mkdir $RPM_ROOT
+  mkdir $RPM_ROOT/BUILD
+  mkdir $RPM_ROOT/RPMS
+  mkdir $RPM_ROOT/RPMS/i386
+  mkdir $RPM_ROOT/RPMS/i686
+  mkdir $RPM_ROOT/RPMS/noarch
+  mkdir $RPM_ROOT/SOURCES
+  mkdir $RPM_ROOT/SPECS
+  mkdir $RPM_ROOT/SRPMS
+
+  echo %_topdir $RPM_ROOT > ~/.rpmmacros
+
+  echo Copying wxX11-$WXVER.tar.bz2 to $RPM_ROOT/SOURCES...
+  cp wxX11-$WXVER.tar.bz2 $RPM_ROOT/SOURCES
+  echo Copying wxX11.spec to $RPM_ROOT/SPECS...
+  cp $WXSRC/wxX11.spec $RPM_ROOT/SPECS
+
+  echo Starting wxX11 RPM build...
+  cd $RPM_ROOT
+  rpmbuild -ba SPECS/wxX11.spec 2>&1 | tee wxX11.out
+
+  echo Finished wxX11 RPM build, in $RPM_ROOT.
+  echo "SRPMS:"
+  ls SRPMS
+  echo "RPMS/i386:"
+  ls RPMS/i386
+
+  cp $RPM_ROOT/SRPMS/*.rpm $WXDEST
+  cp $RPM_ROOT/RPMS/i386/*.rpm $WXDEST
+
+  fi
+
+  cp $WXDEST/wxx11/release/*.tar.gz $WXDEST
+  cp $WXDEST/wxx11/release/*.tar.bz2 $WXDEST
+
+#  rm -f -r $WXDEST/wxx11
+  echo Now try the RPMs with rpm -i.
+}
+
+PROGNAME=$0
+WXSRC=$1
+WXDEST=$2
+WXVER=$3
+
+SPINWXX11=0
+SPINWXGTK1=0
+SPINWXGTK2=0
+SPINWXGTK2UNICODE=0
+SPINWXMAC=0
+SPINWXMOTIF=0
+SPINWXBASE=0
+SPINWXBASEUNICODE=0
+SPINWXMGL=0
+SPINEVERYTHING=0
+UPDATECVS=0
+
+usage()
+{
+    echo Usage: $PROGNAME "src-dir dest-dir version-number [ options ]"
+    echo Options:
+    echo "    --help          Display this help message"
+    echo "    --wxgtk1        Spin wxGTK1 RPMs"
+    echo "    --wxgtk2        Spin wxGTK2 RPMs"
+    echo "    --wxgtk2unicode Spin wxGTK2 Unicode RPMs"
+    echo "    --wxbase        Spin wxBase RPMs"
+    echo "    --wxbaseunicode Spin wxBase Unicode RPMs"
+    echo "    --wxx11         Spin wxX11 RPMs"
+    echo "    --wxmotif       Spin wxMotif RPMs"
+    echo "    --wxmgl         Spin wxMGL RPMs"
+    echo "    --wxmac         Make wxMac tarball"
+    echo "    --all           Spin EVERYTHING"
+    echo "    --updatecvs     Update from CVS"
+    echo "    --norpms        No RPMS, just tarballs"
+
+    exit 1
+}
+
+init=""
+if [ "$1" = "" ]
+then
+  usage
+  exit
+fi
+
+if [ "$2" = "" ]
+then
+  usage
+  exit
+fi
+
+if [ "$3" = "" ]
+then
+  usage
+  exit
+fi
+
+# Process command line options.
+shift 3
+for i in "$@"; do
+    case "$i" in
+	--wxx11) SPINWXX11=1 ;;
+	--wxgtk1) SPINWXGTK1=1 ;;
+	--wxgtk2) SPINWXGTK2=1 ;;
+	--wxgtk2unicode) SPINWXGTK2UNICODE=1 ;;
+	--wxmotif) SPINWXMOTIF=1 ;;
+	--wxmgl) SPINWXMGL=1 ;;
+	--wxmac) SPINWXMAC=1 ;;
+	--wxbase) SPINWXBASE=1 ;;
+	--wxbaseunicode) SPINWXBASEUNICODE=1 ;;
+	--all) SPINEVERYTHING=1 ;;
+	--updatecvs) UPDATECVS=1 ;;
+	--norpms) NORPMS=1 ;;
+	*)
+	    usage
+	    exit
+	    ;;
+    esac
+done
+
+echo About to make wxWidgets RPMs:
+echo   From    $WXSRC
+echo   To      $WXDEST
+echo   Version $WXVER
+echo CTRL-C if this is not correct.
+read dummy
+
+if [ "$UPDATECVS" = "1" ]; then
+  doupdatecvs
+fi
+
+if [ "$SPINWXX11" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxx11
+fi
+
+if [ "$SPINWXGTK1" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  RPMBUILDARGS="--without gtk2"
+  PLATFORM=gtk1
+  dospinwxgtk
+fi
+
+if [ "$SPINWXGTK2" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  RPMBUILDARGS="--with gtk2"
+  PLATFORM=gtk2
+  dospinwxgtk
+fi
+
+if [ "$SPINWXGTK2UNICODE" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  RPMBUILDARGS="--with gtk2 --with unicode"
+  PLATFORM=gtk2unicode
+  dospinwxgtk
+fi
+
+if [ "$SPINWXBASE" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  PLATFORM=base
+  dospinwxbase
+fi
+
+if [ "$SPINWXBASEUNICODE" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  RPMBUILDARGS="--with unicode"
+  PLATFORM=baseunicode
+  dospinwxbase
+fi
+
+if [ "$SPINWXMOTIF" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxmotif
+fi
+
+if [ "$SPINWXMGL" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxmgl
+fi
+
+if [ "$SPINWXMAC" = "1" ]; then
+  dospinwxmac
+fi
+

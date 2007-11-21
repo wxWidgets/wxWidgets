@@ -1,0 +1,375 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        uri.tex
+%% Purpose:     wxURI docs
+%% Author:      Ryan Norton <wxprojects@comcast.net>
+%% Modified by:
+%% Created:     7/7/2004
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Ryan Norton
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxURI}}\label{wxuri}
+
+wxURI is used to extract information from
+a URI (Uniform Resource Identifier).
+
+For information about URIs, see 
+\urlref{RFC 3986}{http://www.ietf.org/rfc/rfc3986.txt}.
+
+In short, a URL \em{is} a URI.  In other
+words, URL is a subset of a URI - all 
+acceptable URLs are also acceptable URIs.
+
+wxURI automatically escapes invalid characters in a string,
+so there is no chance of wxURI "failing" on construction/creation.
+
+wxURI supports copy construction and standard assignment
+operators.  wxURI can also be inherited from to provide
+furthur functionality.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/uri.h>
+
+\wxheading{See also}
+
+\helpref{wxURL}{wxurl}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{Obtaining individual components}\label{obtainingwxuricomponents}
+
+To obtain individual components you can use 
+one of the following methods
+
+\helpref{GetScheme}{wxurigetscheme}\\
+\helpref{GetUserInfo}{wxurigetuserinfo}\\
+\helpref{GetServer}{wxurigetserver}\\
+\helpref{GetPort}{wxurigetport}\\
+\helpref{GetPath}{wxurigetpath}\\
+\helpref{GetQuery}{wxurigetquery}\\
+\helpref{GetFragment}{wxurigetfragment}
+
+However, you should check HasXXX before
+calling a get method, which determines whether or not the component referred
+to by the method is defined according to RFC 2396.
+
+Consider an undefined component equivalent to a 
+NULL C string.\\
+\\ 
+\helpref{HasScheme}{wxurihasscheme}\\
+\helpref{HasUserInfo}{wxurihasuserinfo}\\
+\helpref{HasServer}{wxurihasserver}\\
+\helpref{HasPort}{wxurihasserver}\\
+\helpref{HasPath}{wxurihaspath}\\
+\helpref{HasQuery}{wxurihasquery}\\
+\helpref{HasFragment}{wxurihasfragment}
+
+Example:
+\begin{verbatim}
+//protocol will hold the http protocol (i.e. "http")
+wxString protocol;
+wxURI myuri(wxT("http://mysite.com"));
+if(myuri.HasScheme())
+   protocol = myuri.GetScheme();
+\end{verbatim}
+
+\membersection{Deviations from the RFC}\label{deviationsfromrfc}
+
+Note that on URIs with a "file" scheme wxURI does not
+parse the userinfo, server, or port portion.  This is to keep 
+compatability with wxFileSystem, the old wxURL, and older url specifications.
+
+\membersection{wxURI::wxURI}\label{wxuriwxuri}
+
+\func{}{wxURI}{\void}
+
+Creates an empty URI.
+
+\func{}{wxURI}{\param{const wxChar* }{uri}}
+
+Constructor for quick creation.
+
+\docparam{uri}{string to initialize with}
+
+\func{}{wxURI}{\param{const wxURI\& }{uri}}
+
+Copies this URI from another URI.
+
+\docparam{uri}{URI (Uniform Resource Identifier) to initialize with}
+
+
+\membersection{wxURI::BuildURI}\label{wxuribuilduri}
+
+\constfunc{wxString}{BuildURI}{\void}
+
+Builds the URI from its individual components and adds proper separators.
+
+If the URI is not a reference or is not resolved, 
+the URI that is returned from Get is the same one 
+passed to Create.
+
+
+\membersection{wxURI::BuildUnescapedURI}\label{wxuribuildunescapeduri}
+
+\constfunc{wxString}{BuildUnescapedURI}{\void}
+
+Builds the URI from its individual components, adds proper separators, and
+returns escape sequences to normal characters.
+
+Note that it is preferred to call this over Unescape(BuildURI()) since
+\helpref{BuildUnescapedURI}{wxuribuildunescapeduri} performs some optimizations over the plain method.
+
+
+\membersection{wxURI::Create}\label{wxuricreate}
+
+\func{const wxChar*}{Create}{\param{const wxString&}{uri}}
+
+Creates this URI from the string \arg{uri}.
+
+Returns the position at which parsing stopped (there 
+is no such thing as an "invalid" wxURI).
+
+\docparam{uri}{string to initialize from}
+
+
+\membersection{wxURI::GetFragment}\label{wxurigetfragment}
+
+\constfunc{const wxString&}{GetFragment}{\void}
+
+Obtains the fragment of this URI.
+
+The fragment of a URI is the last value of the URI,
+and is the value after a '#' character after the path 
+of the URI.
+
+\tt{http://mysite.com/mypath\#<fragment>}
+
+\membersection{wxURI::GetHostType}\label{wxurigethosttype}
+
+\constfunc{const HostType\&}{GetHostType}{\void}
+
+Obtains the host type of this URI, which is of type
+wxURI::HostType:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxURI\_REGNAME}}{Server is a host name, or the Server component itself is undefined.}
+\twocolitem{{\bf wxURI\_IPV4ADDRESS}}{Server is a IP version 4 address (XXX.XXX.XXX.XXX)}
+\twocolitem{{\bf wxURI\_IPV6ADDRESS}}{Server is a IP version 6 address ((XXX:)XXX::(XXX)XXX:XXX}
+\twocolitem{{\bf wxURI\_IPVFUTURE}}{Server is an IP address, but not versions 4 or 6}
+\end{twocollist}
+
+
+\membersection{wxURI::GetPassword}\label{wxurigetpassword}
+
+\constfunc{const wxString&}{GetPassword}{\void}
+
+Returns the password part of the userinfo component of
+this URI.  Note that this is explicitly depreciated by
+RFC 1396 and should generally be avoided if possible.
+
+\tt{http://<user>:<password>@mysite.com/mypath}
+
+
+\membersection{wxURI::GetPath}\label{wxurigetpath}
+
+\constfunc{const wxString&}{GetPath}{\void}
+
+Returns the (normalized) path of the URI.
+
+The path component of a URI comes
+directly after the scheme component
+if followed by zero or one slashes ('/'),
+or after the server/port component.
+
+Absolute paths include the leading '/'
+character.
+
+\tt{http://mysite.com<path>}
+
+\membersection{wxURI::GetPort}\label{wxurigetport}
+
+\constfunc{const wxString&}{GetPort}{\void}
+
+Returns a string representation of the URI's port.
+
+The Port of a URI is a value after the server, and 
+must come after a colon (:).
+
+\tt{http://mysite.com:<port>}
+
+Note that you can easily get the numeric value of the port
+by using wxAtoi or wxString::Format.
+
+\membersection{wxURI::GetQuery}\label{wxurigetquery}
+
+\constfunc{const wxString&}{GetQuery}{\void}
+
+Returns the Query component of the URI.
+
+The query component is what is commonly passed to a 
+cgi application, and must come after the path component,
+and after a '?' character.
+
+\tt{http://mysite.com/mypath?<query>}
+
+
+\membersection{wxURI::GetScheme}\label{wxurigetscheme}
+
+\constfunc{const wxString&}{GetScheme}{\void}
+
+Returns the Scheme component of the URI.
+
+The first part of the uri.
+
+\tt{<scheme>://mysite.com}
+
+
+\membersection{wxURI::GetServer}\label{wxurigetserver}
+
+\constfunc{const wxString&}{GetServer}{\void}
+
+Returns the Server component of the URI.
+
+The server of the uri can be a server name or 
+a type of ip address.  See
+\helpref{GetHostType}{wxurigethosttype} for the
+possible values for the host type of the 
+server component.
+
+\tt{http://<server>/mypath}
+
+
+\membersection{wxURI::GetUser}\label{wxurigetuser}
+
+\constfunc{const wxString&}{GetUser}{\void}
+
+Returns the username part of the userinfo component of
+this URI.  Note that this is explicitly depreciated by
+RFC 1396 and should generally be avoided if possible.
+
+\tt{http://<user>:<password>@mysite.com/mypath}
+
+
+\membersection{wxURI::GetUserInfo}\label{wxurigetuserinfo}
+
+\constfunc{const wxString&}{GetUserInfo}{\void}
+
+Returns the UserInfo component of the URI.
+
+The component of a URI before the server component
+that is postfixed by a '@' character.
+
+\tt{http://<userinfo>@mysite.com/mypath}
+
+
+\membersection{wxURI::HasFragment}\label{wxurihasfragment}
+
+\constfunc{bool}{HasFragment}{\void}
+
+Returns \true if the Fragment component of the URI exists.
+
+
+\membersection{wxURI::HasPath}\label{wxurihaspath}
+
+\constfunc{bool}{HasPath}{\void}
+
+Returns \true if the Path component of the URI exists.
+
+
+\membersection{wxURI::HasPort}\label{wxurihasport}
+
+\constfunc{bool}{HasPort}{\void}
+
+Returns \true if the Port component of the URI exists.
+
+
+\membersection{wxURI::HasQuery}\label{wxurihasquery}
+
+\constfunc{bool}{HasQuery}{\void}
+
+Returns \true if the Query component of the URI exists.
+
+
+\membersection{wxURI::HasScheme}\label{wxurihasscheme}
+
+\constfunc{bool}{HasScheme}{\void}
+
+Returns \true if the Scheme component of the URI exists.
+
+
+\membersection{wxURI::HasServer}\label{wxurihasserver}
+
+\constfunc{bool}{HasServer}{\void}
+
+Returns \true if the Server component of the URI exists.
+
+
+\membersection{wxURI::HasUser}\label{wxurihasuserinfo}
+
+\constfunc{bool}{HasUser}{\void}
+
+Returns \true if the User component of the URI exists.
+
+
+\membersection{wxURI::IsReference}\label{wxuriisreference}
+
+\constfunc{bool}{IsReference}{\void}
+
+Returns \true if a valid [absolute] URI, otherwise this URI
+is a URI reference and not a full URI, and IsReference
+returns \false.
+
+
+\membersection{wxURI::operator ==}\label{wxurioperatorcompare}
+
+\func{void}{operator ==}{\param{const wxURI\& }{uricomp}}
+
+Compares this URI to another URI, and returns \true if 
+this URI equals \arg{uricomp}, otherwise it returns \false.
+
+\docparam{uricomp}{URI to compare to}
+
+
+\membersection{wxURI::Resolve}\label{wxuriresolve}
+
+\func{void}{Resolve}{\param{const wxURI\& }{base}, \param{int }{flags = \texttt{wxURI\_STRICT}}}
+
+Inherits this URI from a base URI - components that do not
+exist in this URI are copied from the base, and if this URI's
+path is not an absolute path (prefixed by a '/'), then this URI's
+path is merged with the base's path.
+
+For instance, resolving "../mydir" from "http://mysite.com/john/doe" 
+results in the scheme (http) and server (mysite.com) being copied into 
+this URI, since they do not exist.  In addition, since the path
+of this URI is not absolute (does not begin with '/'), the path
+of the base's is merged with this URI's path, resulting in the URI
+"http://mysite.com/john/mydir".
+
+\docparam{base}{Base URI to inherit from.  Must be a full URI and not a reference}
+\docparam{flags}{Currently either \texttt{wxURI\_STRICT} or $0$, in non-strict
+mode some compatibility layers are enabled to allow loopholes from RFCs prior
+to 2396}
+
+\membersection{wxURI::Unescape}\label{wxuriunescape}
+
+\func{wxString}{Unescape}{\param{const wxString\& }{uri}}
+
+Translates all escape sequences (% hex hex) of \arg{uri} into
+normal characters and returns the result.
+
+This is the preferred over deprecated wxURL::ConvertFromURI.
+
+If you want to unescape an entire wxURI, use \helpref{BuildUnescapedURI}{wxuribuildunescapeduri} instead,
+as it performs some optimizations over this method.
+
+\docparam{uri}{string with escaped characters to convert}
+
+

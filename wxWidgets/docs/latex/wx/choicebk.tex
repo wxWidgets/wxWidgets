@@ -1,0 +1,57 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        choicebk.tex
+%% Purpose:     wxChoicebook documentation
+%% Author:      Vadim Zeitlin
+%% Modified by: Wlodzimierz ABX Skiba from listbook.tex
+%% Created:     15.09.04
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Vadim Zeitlin, Wlodzimierz Skiba
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxChoicebook}}\label{wxchoicebook}
+
+wxChoicebook is a class similar to \helpref{wxNotebook}{wxnotebook} but which
+uses a \helpref{wxChoice}{wxchoice} to show the labels instead of the
+tabs.
+
+There is no documentation for this class yet but its usage is
+identical to wxNotebook (except for the features clearly related to tabs
+only), so please refer to that class documentation for now. You can also
+use the \helpref{notebook sample}{samplenotebook} to see wxChoicebook in action.
+
+wxChoicebook allows the use of wxBookCtrl::GetControlSizer, allowing a program
+to add other controls next to the choice control. This is particularly useful
+when screen space is restricted, as it often is when wxChoicebook is being employed.
+
+\wxheading{Derived from}
+
+wxBookCtrlBase\\
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/choicebk.h>
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+
+\twocolitem{\windowstyle{wxCHB\_DEFAULT}}{Choose the default location for the
+labels depending on the current platform (left everywhere except Mac where
+it is top).}
+\twocolitem{\windowstyle{wxCHB\_TOP}}{Place labels above the page area.}
+\twocolitem{\windowstyle{wxCHB\_LEFT}}{Place labels on the left side.}
+\twocolitem{\windowstyle{wxCHB\_RIGHT}}{Place labels on the right side.}
+\twocolitem{\windowstyle{wxCHB\_BOTTOM}}{Place labels below the page area.}
+
+\end{twocollist}
+
+\wxheading{See also}
+
+\helpref{wxBookCtrl}{wxbookctrloverview}, \helpref{wxNotebook}{wxnotebook}, \helpref{notebook sample}{samplenotebook}
+

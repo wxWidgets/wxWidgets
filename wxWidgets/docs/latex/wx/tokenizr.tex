@@ -1,0 +1,155 @@
+\section{\class{wxStringTokenizer}}\label{wxstringtokenizer}
+
+wxStringTokenizer helps you to break a string up into a number of tokens. It
+replaces the standard C function {\tt strtok()} and also extends it in a
+number of ways.
+
+To use this class, you should create a wxStringTokenizer object, give it the
+string to tokenize and also the delimiters which separate tokens in the string
+(by default, white space characters will be used).
+
+Then \helpref{GetNextToken}{wxstringtokenizergetnexttoken} may be called
+repeatedly until it \helpref{HasMoreTokens}{wxstringtokenizerhasmoretokens} 
+returns \false.
+
+For example:
+
+\begin{verbatim}
+
+wxStringTokenizer tkz(wxT("first:second:third:fourth"), wxT(":"));
+while ( tkz.HasMoreTokens() )
+{
+    wxString token = tkz.GetNextToken();
+
+    // process token here
+}
+\end{verbatim}
+
+By default, wxStringTokenizer will behave in the same way as {\tt strtok()} if
+the delimiters string only contains white space characters but, unlike the
+standard function, it will return empty tokens if this is not the case. This
+is helpful for parsing strictly formatted data where the number of fields is
+fixed but some of them may be empty (i.e. {\tt TAB} or comma delimited text
+files).
+
+The behaviour is governed by the last 
+\helpref{constructor}{wxstringtokenizerwxstringtokenizer}/\helpref{SetString}{wxstringtokenizersetstring} 
+parameter {\tt mode} which may be one of the following:
+
+\twocolwidtha{5cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\tt wxTOKEN\_DEFAULT}}{Default behaviour (as described above):
+same as {\tt wxTOKEN\_STRTOK} if the delimiter string contains only
+whitespaces, same as {\tt wxTOKEN\_RET\_EMPTY} otherwise}
+\twocolitem{{\tt wxTOKEN\_RET\_EMPTY}}{In this mode, the empty tokens in the
+middle of the string will be returned, i.e. {\tt "a::b:"} will be tokenized in
+three tokens `a', `' and `b'. Notice that all trailing delimiters are ignored
+in this mode, not just the last one, i.e. a string \texttt{"a::b::"} would
+still result in the same set of tokens.}
+\twocolitem{{\tt wxTOKEN\_RET\_EMPTY\_ALL}}{In this mode, empty trailing tokens
+(including the one after the last delimiter character) will be returned as
+well. The string \texttt{"a::b:"} will be tokenized in four tokens: the already
+mentioned ones and another empty one as the last one and a string 
+\texttt{"a::b::"} will have five tokens.}
+\twocolitem{{\tt wxTOKEN\_RET\_DELIMS}}{In this mode, the delimiter character
+after the end of the current token (there may be none if this is the last
+token) is returned appended to the token. Otherwise, it is the same mode as 
+\texttt{wxTOKEN\_RET\_EMPTY}. Notice that there is no mode like this one but
+behaving like \texttt{wxTOKEN\_RET\_EMPTY\_ALL} instead of 
+\texttt{wxTOKEN\_RET\_EMPTY}, use \texttt{wxTOKEN\_RET\_EMPTY\_ALL} and 
+\helpref{GetLastDelimiter()}{wxstringtokenizergetlastdelimiter} to emulate it.}
+\twocolitem{{\tt wxTOKEN\_STRTOK}}{In this mode the class behaves exactly like
+the standard {\tt strtok()} function: the empty tokens are never returned.}
+\end{twocollist}
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{wxStringTokenize}{wxstringtokenize}
+
+\wxheading{Include files}
+
+<wx/tokenzr.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxStringTokenizer::wxStringTokenizer}\label{wxstringtokenizerwxstringtokenizer}
+
+\func{}{wxStringTokenizer}{\void}
+
+Default constructor. You must call 
+\helpref{SetString}{wxstringtokenizersetstring} before calling any other
+methods.
+
+\func{}{wxStringTokenizer}{\param{const wxString\& }{str}, \param{const wxString\& }{delims = " $\backslash$t$\backslash$r$\backslash$n"}, \param{wxStringTokenizerMode }{mode = wxTOKEN\_DEFAULT}}
+
+Constructor. Pass the string to tokenize, a string containing delimiters
+and the mode specifying how the string should be tokenized.
+
+
+\membersection{wxStringTokenizer::CountTokens}\label{wxstringtokenizercounttokens}
+
+\constfunc{int}{CountTokens}{\void}
+
+Returns the number of tokens remaining in the input string. The number of
+tokens returned by this function is decremented each time 
+\helpref{GetNextToken}{wxstringtokenizergetnexttoken} is called and when it
+reaches $0$ \helpref{HasMoreTokens}{wxstringtokenizerhasmoretokens} returns
+\false.
+
+
+\membersection{wxStringTokenizer::HasMoreTokens}\label{wxstringtokenizerhasmoretokens}
+
+\constfunc{bool}{HasMoreTokens}{\void}
+
+Returns \true if the tokenizer has further tokens, \false if none are left.
+
+
+\membersection{wxStringTokenizer::GetLastDelimiter}\label{wxstringtokenizergetlastdelimiter}
+
+\func{wxChar}{GetLastDelimiter}{\void}
+
+Returns the delimiter which ended scan for the last token returned by 
+\helpref{GetNextToken()}{wxstringtokenizergetnexttoken} or \texttt{NUL} if
+there had been no calls to this function yet or if it returned the trailing
+empty token in \texttt{wxTOKEN\_RET\_EMPTY\_ALL} mode.
+
+\newsince{2.7.0}
+
+
+\membersection{wxStringTokenizer::GetNextToken}\label{wxstringtokenizergetnexttoken}
+
+\constfunc{wxString}{GetNextToken}{\void}
+
+Returns the next token or empty string if the end of string was reached.
+
+
+\membersection{wxStringTokenizer::GetPosition}\label{wxstringtokenizergetposition}
+
+\constfunc{size\_t}{GetPosition}{\void}
+
+Returns the current position (i.e. one index after the last returned
+token or 0 if GetNextToken() has never been called) in the original
+string.
+
+
+\membersection{wxStringTokenizer::GetString}\label{wxstringtokenizergetstring}
+
+\constfunc{wxString}{GetString}{\void}
+
+Returns the part of the starting string without all token already extracted.
+
+
+\membersection{wxStringTokenizer::SetString}\label{wxstringtokenizersetstring}
+
+\func{void}{SetString}{\param{const wxString\& }{to\_tokenize}, \param{const wxString\& }{delims = " $\backslash$t$\backslash$r$\backslash$n"}, \param{wxStringTokenizerMode }{mode = wxTOKEN\_DEFAULT}}
+
+Initializes the tokenizer.
+
+Pass the string to tokenize, a string containing delimiters,
+and the mode specifying how the string should be tokenized.
+

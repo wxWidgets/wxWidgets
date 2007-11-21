@@ -1,0 +1,78 @@
+\section{\class{wxStdDialogButtonSizer}}\label{wxstddialogbuttonsizer}
+
+This class creates button layouts which conform to the standard button spacing and ordering defined by the platform
+or toolkit's user interface guidelines (if such things exist). By using this class, you can ensure that all your
+standard dialogs look correct on all major platforms. Currently it conforms to the Windows, GTK+ and Mac OS X
+human interface guidelines.
+
+When there aren't interface guidelines defined for a particular platform or toolkit, wxStdDialogButtonSizer reverts
+to the Windows implementation. 
+
+To use this class, first add buttons to the sizer by calling AddButton (or SetAffirmativeButton, SetNegativeButton,
+or SetCancelButton) and then call Realize in order to create the actual button layout used. Other than these special
+operations, this sizer works like any other sizer. 
+
+If you add a button with wxID\_SAVE, on Mac OS X the button will be renamed to "Save" and
+the wxID\_NO button will be renamed to "Don't Save" in accordance with the Mac OS X Human Interface Guidelines.
+
+\wxheading{Derived from}
+
+\helpref{wxBoxSizer}{wxboxsizer}\\
+\helpref{wxSizer}{wxsizer}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/sizer.h>
+
+\wxheading{See also}
+
+\helpref{wxSizer}{wxsizer}, \helpref{Sizer overview}{sizeroverview}, \helpref{wxDialog::CreateButtonSizer}{wxdialogcreatebuttonsizer}
+
+\membersection{wxStdDialogButtonSizer::wxStdDialogButtonSizer}\label{wxstddialogbuttonsizerctor}
+
+\func{}{wxStdDialogButtonSizer}{\void}
+
+Constructor for a wxStdDialogButtonSizer.
+
+\membersection{wxStdDialogButtonSizer::AddButton}\label{wxstddialogbuttonsizeraddbutton}
+
+\func{void}{AddButton}{\param{wxButton* }{button}}
+
+Adds a button to the wxStdDialogButtonSizer. The button must have one of the following identifiers:
+
+\begin{itemize}\itemsep=0pt
+\item wxID\_OK
+\item wxID\_YES
+\item wxID\_SAVE
+\item wxID\_APPLY
+\item wxID\_NO
+\item wxID\_CANCEL
+\item wxID\_HELP
+\item wxID\_CONTEXT\_HELP
+\end{itemize}
+
+\membersection{wxStdDialogButtonSizer::Realize}\label{wxstddialogbuttonsizerrealize}
+
+\func{void}{Realize}{\void}
+
+Rearranges the buttons and applies proper spacing between buttons to make them match the platform or toolkit's interface guidelines.
+
+\membersection{wxStdDialogButtonSizer::SetAffirmativeButton}\label{wxstddialogbuttonsizersetaffirmativebutton}
+
+\func{void}{SetAffirmativeButton}{\param{wxButton* }{button}}
+
+Sets the affirmative button for the sizer. This allows you to use identifiers other than the standard identifiers outlined above.
+
+\membersection{wxStdDialogButtonSizer::SetCancelButton}\label{wxstddialogbuttonsizersetcancelbutton}
+
+\func{void}{SetCancelButton}{\param{wxButton* }{button}}
+
+Sets the cancel button for the sizer. This allows you to use identifiers other than the standard identifiers outlined above.
+
+\membersection{wxStdDialogButtonSizer::SetNegativeButton}\label{wxstddialogbuttonsizersetnegativebutton}
+
+\func{void}{SetNegativeButton}{\param{wxButton* }{button}}
+
+Sets the negative button for the sizer. This allows you to use identifiers other than the standard identifiers outlined above.
+

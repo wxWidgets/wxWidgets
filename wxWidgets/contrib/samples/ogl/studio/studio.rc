@@ -1,0 +1,18 @@
+aaaa                    ICON    "studio.ico"
+
+/* Useful if PROVIDE_DEFAULT_ICONS is set in wx_setup.h */
+#define IHaveMDIParentIcon
+#define IHaveMDIChildIcon
+
+wxSTD_MDIPARENTFRAME        ICON    "studio.ico"
+wxSTD_MDICHILDFRAME         ICON    "studio.ico"
+
+studio                      ICON    "studio.ico"
+folder1                     ICON    "bitmaps/folder1.ico"
+file1                       ICON    "bitmaps/file1.ico"
+
+arrowtool                   BITMAP  "bitmaps/arrow.bmp"
+texttool                    BITMAP  "bitmaps/texttool.bmp"
+
+#include "wx/msw/wx.rc"
+

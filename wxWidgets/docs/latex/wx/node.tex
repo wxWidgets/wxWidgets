@@ -1,0 +1,63 @@
+\section{\class{wxNode}}\label{wxnode}
+
+wxNodeBase is the node structure used in linked lists (see 
+\helpref{wxList}{wxlist}) and derived classes. You should never use wxNodeBase
+class directly, however, because it works with untyped ({\tt void *}) data and
+this is unsafe. Use wxNodeBase-derived classes which are automatically defined
+by WX\_DECLARE\_LIST and WX\_DEFINE\_LIST macros instead as described in
+\helpref{wxList}{wxlist} documentation (see example there). Also note that
+although there is a class called wxNode, it is defined for backwards
+compatibility only and usage of this class is strongly deprecated.
+
+In the documentation below, the type {\tt T} should be thought of as a
+``template'' parameter: this is the type of data stored in the linked list or,
+in other words, the first argument of WX\_DECLARE\_LIST macro. Also, wxNode is
+written as wxNode<T> even though it isn't really a template class -- but it
+helps to think of it as if it were.
+
+\wxheading{Derived from}
+
+None.
+
+\wxheading{Include files}
+
+<wx/list.h>
+
+\wxheading{See also}
+
+\helpref{wxList}{wxlist}, \helpref{wxHashTable}{wxhashtable}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxNode<T>::GetData}\label{wxnodegetdata}
+
+\constfunc{T *}{GetData}{\void}
+
+Retrieves the client data pointer associated with the node.
+
+\membersection{wxNode<T>::GetNext}\label{wxnodegetnext}
+
+\constfunc{wxNode<T> *}{GetNext}{\void}
+
+Retrieves the next node or NULL if this node is the last one.
+
+\membersection{wxNode<T>::GetPrevious}\label{wxnodegetprevious}
+
+\func{wxNode<T> *}{GetPrevious}{\void}
+
+Retrieves the previous node or NULL if this node is the first one in the list.
+
+\membersection{wxNode<T>::SetData}\label{wxnodesetdata}
+
+\func{void}{SetData}{\param{T *}{data}}
+
+Sets the data associated with the node (usually the pointer will have been
+set when the node was created).
+
+\membersection{wxNode<T>::IndexOf}\label{wxnodeindexof}
+
+\func{int}{IndexOf}{\void}
+
+Returns the zero-based index of this node within the list. The return value
+will be {\tt wxNOT\_FOUND} if the node has not been added to a list yet.
+

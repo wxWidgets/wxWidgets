@@ -1,0 +1,5 @@
+include/wx/cocoa/*.h
+src/cocoa/*.cpp
+src/cocoa/*.mm
+src/cocoa/*.r
+docs/cocoa/*.txt

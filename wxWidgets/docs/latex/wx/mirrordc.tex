@@ -1,0 +1,42 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        mirrordc.tex
+%% Purpose:     wxMirrorDC documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     21.07.03
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2003 Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxMirrorDC}}\label{wxmirrordc}
+
+wxMirrorDC is a simple wrapper class which is always associated with a real 
+\helpref{wxDC}{wxdc} object and either forwards all of its operations to it
+without changes (no mirroring takes place) or exchanges {\it x} and {\it y} 
+coordinates which makes it possible to reuse the same code to draw a figure and
+its mirror -- i.e. reflection related to the diagonal line $x == y$.
+
+wxMirrorDC has been added in wxWidgets version 2.5.0.
+
+\wxheading{Derived from}
+
+\helpref{wxDC}{wxdc}
+
+\wxheading{Include files}
+
+<wx/dcmirror.h>
+
+
+\helponly{\insertatlevel{2}{\wxheading{Members}}}
+
+\membersection{wxMirrorDC::wxMirrorDC}\label{wxmirrordcwxmirrordc}
+
+\func{}{wxMirrorDC}{\param{wxDC\& }{dc}, \param{bool }{mirror}}
+
+Creates a (maybe) mirrored DC associated with the real \arg{dc}. Everything
+drawn on wxMirrorDC will appear (and maybe mirrored) on \arg{dc}.
+
+\arg{mirror} specifies if we do mirror (if it is \true) or not (if it is 
+\false).
+
