@@ -42,7 +42,7 @@ public:
     virtual void SetStyle(int style)  ;
     virtual void SetStipple(const wxBitmap& stipple)  ;
     virtual void MacSetTheme(short macThemeBrush) ;
-    virtual void MacSetThemeBackground(unsigned long macThemeBackground ,  WXRECTPTR extent) ;
+// TODO REMOVE    virtual void MacSetThemeBackground(unsigned long macThemeBackground ,  WXRECTPTR extent) ;
 
     bool operator == (const wxBrush& brush) const;
     bool operator != (const wxBrush& brush) const
@@ -50,7 +50,7 @@ public:
 
     wxMacBrushKind MacGetBrushKind()  const ;
 
-    unsigned long MacGetThemeBackground(WXRECTPTR extent)  const ;
+// TODO REMOVE    unsigned long MacGetThemeBackground(WXRECTPTR extent)  const ;
     short MacGetTheme()  const ;
     wxColour& GetColour() const ;
     virtual int GetStyle() const ;

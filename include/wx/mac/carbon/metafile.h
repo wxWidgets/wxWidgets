@@ -57,10 +57,12 @@ public:
     // Implementation
     WXHMETAFILE GetHMETAFILE() const ;
     void SetHMETAFILE(WXHMETAFILE mf) ;
+#ifndef __LP64__
     // Since the native metafile format is PDF for Quartz
     // we need a call that allows setting PICT content for
     // backwards compatibility
     void SetPICT(void* pictHandle) ;
+#endif
 };
 
 class WXDLLEXPORT wxMetafileDC: public wxDC

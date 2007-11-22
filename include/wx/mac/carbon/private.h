@@ -438,7 +438,6 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
 void wxMacReleaseBitmapButton( ControlButtonContentInfo*info );
 CGImageRef wxMacCreateCGImageFromBitmap( const wxBitmap& bitmap );
 
-#define MAC_WXCOLORREF(a) (*((RGBColor*)&(a)))
 #define MAC_WXHBITMAP(a) (GWorldPtr(a))
 #define MAC_WXHMETAFILE(a) (PicHandle(a))
 #define MAC_WXHICON(a) (IconRef(a))
@@ -1072,6 +1071,13 @@ public:
 // ============================================================================
 // graphics implementation
 // ============================================================================
+
+// draw the image 'upside down' corrected as HIViewDrawCGImage does
+
+OSStatus WXDLLEXPORT wxMacDrawCGImage(
+                               CGContextRef    inContext,
+                               const HIRect *  inBounds,
+                               CGImageRef      inImage) ;
 
 // make sure we all use one class for all conversions from wx to native colour
 
