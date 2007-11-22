@@ -732,11 +732,12 @@ inline void wxMutexGuiLeave() { }
 
 // macros for entering/leaving critical sections which may be used without
 // having to take them inside "#if wxUSE_THREADS"
-#define wxENTER_CRIT_SECT(cs)
-#define wxLEAVE_CRIT_SECT(cs)
-#define wxCRIT_SECT_DECLARE(cs)
-#define wxCRIT_SECT_DECLARE_MEMBER(cs)
-#define wxCRIT_SECT_LOCKER(name, cs)
+// (the implementation uses dummy structs to force semicolon after the macro)
+#define wxENTER_CRIT_SECT(cs)            do {} while (0)
+#define wxLEAVE_CRIT_SECT(cs)            do {} while (0)
+#define wxCRIT_SECT_DECLARE(cs)          struct wxDummyCS##cs
+#define wxCRIT_SECT_DECLARE_MEMBER(cs)   struct wxDummyCSMember##cs
+#define wxCRIT_SECT_LOCKER(name, cs)     struct wxDummyCSLocker##name
 
 // if there is only one thread, it is always the main one
 inline bool wxIsMainThread() { return true; }
