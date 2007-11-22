@@ -2338,7 +2338,7 @@ wxImageHandler *wxImage::FindHandler( const wxString& name )
 
         node = node->GetNext();
     }
-    return 0;
+    return NULL;
 }
 
 wxImageHandler *wxImage::FindHandler( const wxString& extension, long bitmapType )
@@ -2352,7 +2352,7 @@ wxImageHandler *wxImage::FindHandler( const wxString& extension, long bitmapType
             return handler;
         node = node->GetNext();
     }
-    return 0;
+    return NULL;
 }
 
 wxImageHandler *wxImage::FindHandler( long bitmapType )
@@ -2364,7 +2364,7 @@ wxImageHandler *wxImage::FindHandler( long bitmapType )
         if (handler->GetType() == bitmapType) return handler;
         node = node->GetNext();
     }
-    return 0;
+    return NULL;
 }
 
 wxImageHandler *wxImage::FindHandlerMime( const wxString& mimetype )
@@ -2376,7 +2376,7 @@ wxImageHandler *wxImage::FindHandlerMime( const wxString& mimetype )
         if (handler->GetMimeType().IsSameAs(mimetype, false)) return handler;
         node = node->GetNext();
     }
-    return 0;
+    return NULL;
 }
 
 void wxImage::InitStandardHandlers()
