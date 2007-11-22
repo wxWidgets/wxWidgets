@@ -1833,6 +1833,24 @@
 #   endif
 #endif /* wxUSE_SVG */
 
+#if wxUSE_SVG && !wxUSE_IMAGE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_SVG requires wxUSE_IMAGE"
+#   else
+#       undef wxUSE_SVG
+#       define wxUSE_SVG 0
+#   endif
+#endif /* wxUSE_SVG */
+
+#if wxUSE_SVG && !wxUSE_LIBPNG
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_SVG requires wxUSE_LIBPNG"
+#   else
+#       undef wxUSE_SVG
+#       define wxUSE_SVG 0
+#   endif
+#endif /* wxUSE_SVG */
+
 #if !wxUSE_VARIANT
 #   if wxUSE_DATAVIEWCTRL
 #       ifdef wxABORT_ON_CONFIG_ERROR
