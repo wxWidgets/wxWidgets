@@ -86,7 +86,7 @@
 #endif // __OS2__
 
 #if defined(__WXMAC__)
-    #include "MoreFilesX.h"
+//    #include "MoreFilesX.h"
 #endif
 
 #ifdef __BORLANDC__
