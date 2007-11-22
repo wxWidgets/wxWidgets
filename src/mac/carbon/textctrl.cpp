@@ -1689,7 +1689,7 @@ void wxMacMLTEControl::AdjustCreationAttributes(const wxColour &background,
 
     TXNBackground tback;
     tback.bgType = kTXNBackgroundTypeRGB;
-    tback.bg.color = MAC_WXCOLORREF( background.GetPixel() );
+    background.GetRGBColor( &tback.bg.color );
     TXNSetBackground( m_txn , &tback );
 
 
@@ -1730,7 +1730,7 @@ void wxMacMLTEControl::SetBackground( const wxBrush &brush )
     TXNBackground tback;
 
     tback.bgType = kTXNBackgroundTypeRGB;
-    tback.bg.color = MAC_WXCOLORREF( brush.GetColour().GetPixel() );
+    brush.GetColour().GetRGBColor(&tback.bg.color);
     TXNSetBackground( m_txn , &tback );
 }
 
@@ -1767,8 +1767,7 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
     if ( style.HasTextColour() )
     {
         wxASSERT( typeAttrCount < WXSIZEOF(typeAttr) );
-        color = MAC_WXCOLORREF(style.GetTextColour().GetPixel()) ;
-
+        style.GetTextColour().GetRGBColor( &color );
         typeAttr[typeAttrCount].tag = kTXNQDFontColorAttribute ;
         typeAttr[typeAttrCount].size = kTXNQDFontColorAttributeSize ;
         typeAttr[typeAttrCount].data.dataPtr = (void*) &color ;
@@ -3048,7 +3047,8 @@ void wxMacMLTEHIViewControl::SetBackground( const wxBrush &brush )
 
 #if 0
     CGColorSpaceRef rgbSpace = CGColorSpaceCreateDeviceRGB();
-    RGBColor col = MAC_WXCOLORREF(brush.GetColour().GetPixel()) ;
+    RGBColor col;
+    brush.GetColour().GetRGBColor(&col) ;
 
     float component[4] ;
     component[0] = col.red / 65536.0 ;

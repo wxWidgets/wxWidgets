@@ -2729,13 +2729,13 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     {
 
         if (color.Ok())
-            labelColor = MAC_WXCOLORREF( color.GetPixel() );
+            color.GetRGBColor(&labelColor);
         else if (list->GetTextColour().Ok())
-            labelColor = MAC_WXCOLORREF( list->GetTextColour().GetPixel() );
+            list->GetTextColour().GetRGBColor(&labelColor);
 
         if (bgColor.Ok())
         {
-            backgroundColor = MAC_WXCOLORREF( bgColor.GetPixel() );
+            bgColor.GetRGBColor(&backgroundColor);
             CGContextSaveGState(context);
 
             CGContextSetRGBFillColor(context, (float)backgroundColor.red / (float)USHRT_MAX,

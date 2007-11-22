@@ -23,60 +23,108 @@ IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 
 wxColour::wxColour(const RGBColor& col)
 {
-    FromRGBColor((WXCOLORREF *)&col);
+    InitRGBColor(col);
 }
 
-static void wxComposeRGBColor( WXCOLORREF* color , int red, int blue, int green )
+wxColour::wxColour(CGColorRef col)
 {
-    RGBColor* col = (RGBColor*) color;
-    col->red = (red << 8) + red;
-    col->blue = (blue << 8) + blue;
-    col->green = (green << 8) + green;
+    InitCGColorRef(col);
 }
 
-void wxColour::Init()
+void wxColour::GetRGBColor( RGBColor *col ) const
 {
-    m_isInit = false;
-    m_red =
-    m_blue =
-    m_green = 0;
-
-    wxComposeRGBColor( &m_pixel, m_red, m_blue, m_green );
+    col->red = (m_red << 8) + m_red;
+    col->blue = (m_blue << 8) + m_blue;
+    col->green = (m_green << 8) + m_green;
 }
 
 wxColour::~wxColour ()
 {
 }
 
-void wxColour::InitRGBA (unsigned char r, unsigned char g, unsigned char b, unsigned char a)
-{
-    m_red = r;
-    m_green = g;
-    m_blue = b;
-    m_alpha = a ;
-    m_isInit = true;
-
-    wxComposeRGBColor( &m_pixel , m_red , m_blue , m_green );
-}
-
-void wxColour::FromRGBColor( WXCOLORREF* color )
-{
-    RGBColor* col = (RGBColor*) color;
-    memcpy( &m_pixel, color, 6 );
-    m_red = col->red >> 8;
-    m_blue = col->blue >> 8;
-    m_green = col->green >> 8;
-    m_alpha = 255;
-}
-
 wxColour& wxColour::operator=(const RGBColor& col)
 {
-    FromRGBColor((WXCOLORREF *)&col);
+    InitRGBColor(col);
+    return *this;
+}
+
+wxColour& wxColour::operator=(CGColorRef col)
+{
+    InitCGColorRef(col);
     return *this;
 }
 
 bool wxColour::IsOk() const 
 {
-    return m_isInit; 
+    return m_cgColour.get() != NULL; 
 }
+
+void wxColour::InitRGBA (ChannelType r, ChannelType g, ChannelType b, ChannelType a)
+{
+    m_red = r;
+    m_green = g;
+    m_blue = b;
+    m_alpha = a ;
+
+    CGColorRef col = 0 ;
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
+    if ( CGColorCreateGenericRGB )
+        col = CGColorCreateGenericRGB( r / 255.0, g / 255.0, b / 255.0, a / 255.0 );
+    else
+#endif
+    {
+        CGFloat components[4] = { r / 255.0, g / 255.0, b / 255.0, a / 255.0 } ;    
+        col = CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ;
+    }
+    m_cgColour.reset( col );
+}
+
+void wxColour::InitRGBColor( const RGBColor& col )
+{
+    m_red = col.red >> 8;
+    m_blue = col.blue >> 8;
+    m_green = col.green >> 8;
+    m_alpha = wxALPHA_OPAQUE;
+    CGColorRef cfcol;
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
+    if ( CGColorCreateGenericRGB )
+        cfcol = CGColorCreateGenericRGB( col.red / 65535.0, col.green / 65535.0, col.blue / 65535.0, 1.0 );
+    else
+#endif
+    {
+        CGFloat components[4] = { col.red / 65535.0, col.green / 65535.0, col.blue / 65535.0, 1.0 } ;    
+        cfcol = CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ;
+    }
+    m_cgColour.reset( cfcol );
+}
+
+void wxColour::InitCGColorRef( CGColorRef col )
+{
+    m_cgColour.reset( col );
+    size_t noComp = CGColorGetNumberOfComponents( col );
+    if ( noComp >=3 && noComp <= 4 )
+    {
+        // TODO verify whether we really are on a RGB color space
+        const CGFloat *components = CGColorGetComponents( col );
+        m_red = (int)(components[0]*255+0.5);
+        m_green = (int)(components[1]*255+0.5);
+        m_blue = (int)(components[2]*255+0.5);
+        if ( noComp == 4 )
+            m_alpha =  (int)(components[3]*255+0.5);
+        else
+            m_alpha = wxALPHA_OPAQUE;
+    }
+    else
+    {
+        m_alpha = wxALPHA_OPAQUE;
+        m_red = m_green = m_blue = 0;
+    }
+}
+
+bool wxColour::operator == (const wxColour& colour) const
+{
+    return ( (IsOk() == colour.IsOk()) && (!IsOk() ||
+                                           CGColorEqualToColor( m_cgColour, colour.m_cgColour ) ) );
+}
+
 

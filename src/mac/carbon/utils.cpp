@@ -35,7 +35,7 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include "MoreFilesX.h"
+// #include "MoreFilesX.h"
 
 #ifndef __DARWIN__
     #include <Threads.h>
@@ -679,7 +679,7 @@ void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , l
 
     if ( foreground != *wxBLACK )
     {
-        fontStyle.foreColor = MAC_WXCOLORREF( foreground.GetPixel() );
+        foreground.GetRGBColor( &fontStyle.foreColor );
         fontStyle.flags |= kControlUseForeColorMask;
     }
 

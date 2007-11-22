@@ -320,7 +320,7 @@ pascal OSErr FSpGetFullPath( const FSSpec *spec,
 
     return result;
 }
-#endif
+#endif // LP64
 //
 // On the mac there are two ways to open a file - one is through apple events and the
 // finder, another is through mime types.

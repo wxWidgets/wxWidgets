@@ -201,6 +201,7 @@ void wxMetafile::SetHMETAFILE(WXHMETAFILE mf)
     m_refData = new wxMetafileRefData((CFDataRef)mf);
 }
 
+#ifndef __LP64__
 void wxMetafile::SetPICT(void* pictHandle)
 {
     UnRef();
@@ -218,6 +219,7 @@ void wxMetafile::SetPICT(void* pictHandle)
     QDPictRelease( pictRef );
     ((wxMetafileRefData*) m_refData)->Close();
 }
+#endif
 
 bool wxMetaFile::Play(wxDC *dc)
 {

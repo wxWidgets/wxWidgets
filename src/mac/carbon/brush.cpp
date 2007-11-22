@@ -183,13 +183,29 @@ void wxBrush::MacSetTheme(ThemeBrush macThemeBrush)
     M_BRUSHDATA->m_macBrushKind = kwxMacBrushTheme;
     M_BRUSHDATA->m_macThemeBrush = macThemeBrush;
 
-    RGBColor color ;
+    RGBColor color = { 0,0,0 } ;
+#ifdef __LP64__
+    CGColorRef colorref = 0;
+    HIThemeBrushCreateCGColor( macThemeBrush, &colorref );
+    size_t noComp = CGColorGetNumberOfComponents( colorref );
+    if ( noComp >=3 && noComp <= 4 )
+    {
+        // TODO verify whether we really are on a RGB color space
+        const CGFloat *components = CGColorGetComponents( colorref );
+        color.red = (int)(components[0]*255+0.5);
+        color.green = (int)(components[1]*255+0.5);
+        color.blue = (int)(components[2]*255+0.5);
+    }
+    CFRelease( colorref );
+#else
     GetThemeBrushAsColor( macThemeBrush , 32, true, &color );
+#endif
     M_BRUSHDATA->m_colour = color;
 
     RealizeResource();
 }
 
+/* TODO REMOVE
 void wxBrush::MacSetThemeBackground(unsigned long macThemeBackground, const WXRECTPTR extent)
 {
     Unshare();
@@ -200,12 +216,14 @@ void wxBrush::MacSetThemeBackground(unsigned long macThemeBackground, const WXRE
 
     RealizeResource();
 }
+*/
 
 bool wxBrush::RealizeResource()
 {
     return true;
 }
 
+/*
 unsigned long wxBrush::MacGetThemeBackground(WXRECTPTR extent) const
 {
     if ( M_BRUSHDATA && M_BRUSHDATA->m_macBrushKind == kwxMacBrushThemeBackground )
@@ -220,6 +238,7 @@ unsigned long wxBrush::MacGetThemeBackground(WXRECTPTR extent) const
         return 0;
     }
 }
+ */
 
 short wxBrush::MacGetTheme() const
 {

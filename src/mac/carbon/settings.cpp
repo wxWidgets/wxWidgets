@@ -32,7 +32,6 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
     int major, minor;
     wxColour resultColor;
-    RGBColor macRGB;
     ThemeBrush colorBrushID;
 
     wxGetOsVersion( &major, &minor );
@@ -79,16 +78,17 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break ;
 
         case wxSYS_COLOUR_HIGHLIGHT:
-
+            {
 #if 0
             // NB: enable this case as desired
-            colorBrushID = kThemeBrushAlternatePrimaryHighlightColor;
+                colorBrushID = kThemeBrushAlternatePrimaryHighlightColor;
 #else
-            colorBrushID = kThemeBrushPrimaryHighlightColor;
+                colorBrushID = kThemeBrushPrimaryHighlightColor;
 #endif
-
-            GetThemeBrushAsColor( colorBrushID, 32, true, &macRGB );
-            resultColor = wxColor( macRGB );
+                CGColorRef color ;
+                HIThemeBrushCreateCGColor( colorBrushID, &color );
+                resultColor = wxColor( color );
+            }
             break ;
 
         case wxSYS_COLOUR_BTNHIGHLIGHT:
@@ -109,11 +109,15 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             // NB: enable this case as desired
             resultColor = *wxWHITE ;
 #else
-            GetThemeBrushAsColor( kThemeBrushPrimaryHighlightColor, 32, true, &macRGB );
-            if ((macRGB.red + macRGB.green + macRGB.blue) == 0)
-                resultColor = *wxWHITE ;
-            else
-                resultColor = *wxBLACK ;
+            {
+                CGColorRef color ;
+                HIThemeBrushCreateCGColor( kThemeBrushPrimaryHighlightColor, &color );
+                wxColour highlightcolor( color );
+                if ((highlightcolor.Red() + highlightcolor.Green()  + highlightcolor.Blue() ) == 0)
+                    resultColor = *wxWHITE ;
+                else
+                    resultColor = *wxBLACK ;
+            }
 #endif
             break ;
 
@@ -234,8 +238,13 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
         // TODO: case wxSYS_SHOW_SOUNDS:
 
         case wxSYS_DCLICK_MSEC:
+#ifdef __LP64__
+            // default on mac is 30 ticks, we shouldn't really use wxSYS_DCLICK_MSEC anyway 
+            // but rather rely on the 'click-count' by the system delivered in a mouse event
+            return 500;
+#else
             return (int)(GetDblTime() * 1000. / 60.);
-
+#endif
         default:
             // unsupported metric
             break;

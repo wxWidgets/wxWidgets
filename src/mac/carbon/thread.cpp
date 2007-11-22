@@ -25,16 +25,8 @@
 
 #include "wx/thread.h"
 
-#ifdef __WXMAC__
-#ifdef __DARWIN__
-    #include <CoreServices/CoreServices.h>
-#else
-    #include <DriverServices.h>
-    #include <Multiprocessing.h>
-#endif
-
+#include <CoreServices/CoreServices.h>
 #include "wx/mac/uma.h"
-#endif
 
 // the possible states of the thread:
 // ("=>" shows all possible transitions from this state)

@@ -58,6 +58,19 @@ static const double RAD2DEG = 180.0 / M_PI;
 #pragma mark -
 #pragma mark wxMacCoreGraphicsPattern, ImagePattern, HatchPattern classes
 
+OSStatus wxMacDrawCGImage(
+                  CGContextRef    inContext,
+                  const HIRect *  inBounds,
+                  CGImageRef      inImage) 
+{
+#ifdef __LP64__
+    // todo flip
+    CGContextDrawImage(inContext, *inBounds, inImage );
+#else
+    HIViewDrawCGImage( inContext, inBounds, inImage );
+#endif
+}
+
 // CGPattern wrapper class: always allocate on heap, never call destructor
 
 class wxMacCoreGraphicsPattern
@@ -119,7 +132,7 @@ public :
     virtual void Render( CGContextRef ctxRef )
     {
         if (m_image != NULL)
-            HIViewDrawCGImage( ctxRef, &m_imageBounds, m_image );
+            wxMacDrawCGImage( ctxRef, &m_imageBounds, m_image );
     }
 
 protected :
@@ -695,7 +708,8 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
     // we need the scale here ...
 
     Fixed atsuSize = IntToFixed( int( 1 * font.MacGetFontSize()) );
-    RGBColor atsuColor = MAC_WXCOLORREF( col.GetPixel() );
+    RGBColor atsuColor ;
+    col.GetRGBColor( &atsuColor );
     ATSUAttributeTag atsuTags[] =
     {
             kATSUSizeTag ,
@@ -1648,13 +1662,13 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDo
             else
             {
                 ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->Apply(this);
-                HIViewDrawCGImage( m_cgContext , &r , image );
+                wxMacDrawCGImage( m_cgContext , &r , image );
             }
         }
     }
     else
     {
-        HIViewDrawCGImage( m_cgContext , &r , image );
+        wxMacDrawCGImage( m_cgContext , &r , image );
     }
     CGImageRelease( image );
 }
