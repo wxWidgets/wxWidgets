@@ -649,7 +649,8 @@ void wxSVGFileImplDC::DoDrawBitmap(const class wxBitmap & bmp, wxCoord x, wxCoor
     if (m_graphics_changed) NewGraphics ();
 
     wxString sTmp, s, sPNG ;
-    wxImage::AddHandler(new wxPNGHandler);
+    if ( wxImage::FindHandler(wxBITMAP_TYPE_PNG) == NULL )
+        wxImage::AddHandler(new wxPNGHandler);
 
 // create suitable file name
     sTmp.Printf ( wxT("_image%d.png"), m_sub_images);
