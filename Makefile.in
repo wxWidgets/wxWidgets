@@ -58,6 +58,7 @@ TOOLCHAIN_FULLNAME = @TOOLCHAIN_FULLNAME@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_XML = @EXTRALIBS_XML@
 EXTRALIBS_HTML = @EXTRALIBS_HTML@
+EXTRALIBS_MEDIA = @EXTRALIBS_MEDIA@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 EXTRALIBS_OPENGL = @EXTRALIBS_OPENGL@
 EXTRALIBS_SDL = @EXTRALIBS_SDL@
@@ -733,6 +734,11 @@ ALL_BASE_SOURCES =  \
 	src/mac/corefoundation/stdpaths_cf.cpp \
 	src/mac/corefoundation/strconv_cf.cpp \
 	src/mac/corefoundation/utilsexc_base.cpp \
+	src/common/fdiodispatcher.cpp \
+	src/common/selectdispatcher.cpp \
+	src/unix/appunix.cpp \
+	src/unix/evtloopunix.cpp \
+	src/unix/timerunx.cpp \
 	src/os2/dir.cpp \
 	src/os2/mimetype.cpp \
 	src/os2/stdpaths.cpp \
@@ -1908,8 +1914,12 @@ COND_TOOLKIT_X11_BASE_MACOSX_HDR =  \
 @COND_PLATFORM_MACOSX_1@BASE_PLATFORM_HDR = $(BASE_MACOSX_HDR)
 @COND_PLATFORM_MSDOS_1@BASE_PLATFORM_HDR = wx/msdos/mimetype.h
 COND_PLATFORM_OS2_1_BASE_PLATFORM_HDR =  \
+	wx/private/fdiodispatcher.h \
+	wx/private/selectdispatcher.h \
+	wx/unix/app.h \
 	wx/os2/apptbase.h \
 	wx/os2/apptrait.h \
+	wx/unix/evtloop.h \
 	wx/os2/mimetype.h \
 	wx/os2/private.h \
 	wx/os2/stdpaths.h \
@@ -3463,6 +3473,11 @@ COND_PLATFORM_MACOS_1___BASE_PLATFORM_SRC_OBJECTS =  \
 @COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS = \
 @COND_PLATFORM_MSDOS_1@	monodll_dir.o monodll_mimetype.o monodll_utilsdos.o
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS =  \
+	monodll_fdiodispatcher.o \
+	monodll_selectdispatcher.o \
+	monodll_appunix.o \
+	monodll_evtloopunix.o \
+	monodll_timerunx.o \
 	monodll_dir.o \
 	monodll_mimetype.o \
 	monodll_stdpaths.o \
@@ -5349,6 +5364,11 @@ COND_PLATFORM_MACOS_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_PLATFORM_MSDOS_1@	= monolib_dir.o monolib_mimetype.o \
 @COND_PLATFORM_MSDOS_1@	monolib_utilsdos.o
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
+	monolib_fdiodispatcher.o \
+	monolib_selectdispatcher.o \
+	monolib_appunix.o \
+	monolib_evtloopunix.o \
+	monolib_timerunx.o \
 	monolib_dir.o \
 	monolib_mimetype.o \
 	monolib_stdpaths.o \
@@ -7272,6 +7292,11 @@ COND_PLATFORM_MACOS_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 @COND_PLATFORM_MSDOS_1@	= basedll_dir.o basedll_mimetype.o \
 @COND_PLATFORM_MSDOS_1@	basedll_utilsdos.o
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
+	basedll_fdiodispatcher.o \
+	basedll_selectdispatcher.o \
+	basedll_appunix.o \
+	basedll_evtloopunix.o \
+	basedll_timerunx.o \
 	basedll_dir.o \
 	basedll_mimetype.o \
 	basedll_stdpaths.o \
@@ -7482,6 +7507,11 @@ COND_PLATFORM_MACOS_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_PLATFORM_MSDOS_1@	= baselib_dir.o baselib_mimetype.o \
 @COND_PLATFORM_MSDOS_1@	baselib_utilsdos.o
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
+	baselib_fdiodispatcher.o \
+	baselib_selectdispatcher.o \
+	baselib_appunix.o \
+	baselib_evtloopunix.o \
+	baselib_timerunx.o \
 	baselib_dir.o \
 	baselib_mimetype.o \
 	baselib_stdpaths.o \
@@ -12212,7 +12242,7 @@ distclean: clean
 @COND_SHARED_0_USE_STC_1@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wxscintilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 
 @COND_MONOLITHIC_1_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(MONODLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxregex___depname) $(__monodll___win32rc) $(__wxscintilla_library_link_DEP)
-@COND_MONOLITHIC_1_SHARED_1@	$(SHARED_LD_CXX) $@ $(MONODLL_OBJECTS) $(__wxscintilla_library_link_LIBR) $(LDFLAGS)   -L$(LIBDIRNAME) $(__monodll___macinstnamecmd) $(__monodll___importlib) $(__monodll___soname_flags) $(WXMACVERSION_CMD)  $(LIBS) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_XML) $(EXTRALIBS_HTML) $(PLUGIN_ADV_EXTRALIBS) $(__wxscintilla_library_link_LIBR_1)
+@COND_MONOLITHIC_1_SHARED_1@	$(SHARED_LD_CXX) $@ $(MONODLL_OBJECTS) $(__wxscintilla_library_link_LIBR) $(LDFLAGS)   -L$(LIBDIRNAME) $(__monodll___macinstnamecmd) $(__monodll___importlib) $(__monodll___soname_flags) $(WXMACVERSION_CMD)  $(LIBS) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_XML) $(EXTRALIBS_HTML) $(EXTRALIBS_MEDIA) $(PLUGIN_ADV_EXTRALIBS) $(__wxscintilla_library_link_LIBR_1)
 @COND_MONOLITHIC_1_SHARED_1@	
 @COND_MONOLITHIC_1_SHARED_1@	$(__monodll___so_symlinks_cmd)
 
@@ -12390,7 +12420,7 @@ distclean: clean
 @COND_MONOLITHIC_0_USE_GUI_1@wxadv: $(____wxadv_namedll_DEP) $(____wxadv_namelib_DEP)
 
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(MEDIADLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxregex___depname) $(__mediadll___win32rc) $(__coredll___depname) $(__basedll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@	$(SHARED_LD_CXX) $@ $(MEDIADLL_OBJECTS) -L$(LIBDIRNAME) -L$(LIBDIRNAME) $(LDFLAGS)   -L$(LIBDIRNAME) $(__mediadll___macinstnamecmd) $(__mediadll___importlib) $(__mediadll___soname_flags) $(WXMACVERSION_CMD)  $(LIBS) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@	$(SHARED_LD_CXX) $@ $(MEDIADLL_OBJECTS) -L$(LIBDIRNAME) -L$(LIBDIRNAME) $(LDFLAGS)   -L$(LIBDIRNAME) $(__mediadll___macinstnamecmd) $(__mediadll___importlib) $(__mediadll___soname_flags) $(WXMACVERSION_CMD)  $(LIBS) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX) $(EXTRALIBS_MEDIA)
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@	
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@	$(__mediadll___so_symlinks_cmd)
 
@@ -14274,6 +14304,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monodll_fdiodispatcher.o: $(srcdir)/src/common/fdiodispatcher.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fdiodispatcher.cpp
 
+@COND_PLATFORM_OS2_1@monodll_fdiodispatcher.o: $(srcdir)/src/common/fdiodispatcher.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fdiodispatcher.cpp
+
 @COND_PLATFORM_UNIX_1@monodll_selectdispatcher.o: $(srcdir)/src/common/selectdispatcher.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/selectdispatcher.cpp
 
@@ -14295,6 +14328,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monodll_selectdispatcher.o: $(srcdir)/src/common/selectdispatcher.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/selectdispatcher.cpp
 
+@COND_PLATFORM_OS2_1@monodll_selectdispatcher.o: $(srcdir)/src/common/selectdispatcher.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/selectdispatcher.cpp
+
 @COND_PLATFORM_UNIX_1@monodll_appunix.o: $(srcdir)/src/unix/appunix.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
 
@@ -14315,6 +14351,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monodll_appunix.o: $(srcdir)/src/unix/appunix.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
+
+@COND_PLATFORM_OS2_1@monodll_appunix.o: $(srcdir)/src/unix/appunix.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
 
 @COND_PLATFORM_UNIX_1@monodll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
@@ -14423,6 +14462,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monodll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_OS2_1@monodll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
 
 @COND_PLATFORM_UNIX_1@monodll_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
@@ -14561,6 +14603,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monodll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_OS2_1@monodll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
 
 @COND_PLATFORM_WIN32_1@monodll_thread.o: $(srcdir)/src/msw/thread.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/thread.cpp
@@ -18726,6 +18771,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monolib_fdiodispatcher.o: $(srcdir)/src/common/fdiodispatcher.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fdiodispatcher.cpp
 
+@COND_PLATFORM_OS2_1@monolib_fdiodispatcher.o: $(srcdir)/src/common/fdiodispatcher.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fdiodispatcher.cpp
+
 @COND_PLATFORM_UNIX_1@monolib_selectdispatcher.o: $(srcdir)/src/common/selectdispatcher.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/selectdispatcher.cpp
 
@@ -18747,6 +18795,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monolib_selectdispatcher.o: $(srcdir)/src/common/selectdispatcher.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/selectdispatcher.cpp
 
+@COND_PLATFORM_OS2_1@monolib_selectdispatcher.o: $(srcdir)/src/common/selectdispatcher.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/selectdispatcher.cpp
+
 @COND_PLATFORM_UNIX_1@monolib_appunix.o: $(srcdir)/src/unix/appunix.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
 
@@ -18767,6 +18818,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monolib_appunix.o: $(srcdir)/src/unix/appunix.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
+
+@COND_PLATFORM_OS2_1@monolib_appunix.o: $(srcdir)/src/unix/appunix.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
 
 @COND_PLATFORM_UNIX_1@monolib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
@@ -18875,6 +18929,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monolib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_OS2_1@monolib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
 
 @COND_PLATFORM_UNIX_1@monolib_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
@@ -19013,6 +19070,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monolib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_OS2_1@monolib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
 
 @COND_PLATFORM_WIN32_1@monolib_thread.o: $(srcdir)/src/msw/thread.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/thread.cpp
@@ -22632,6 +22692,9 @@ basedll_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@basedll_fdiodispatcher.o: $(srcdir)/src/common/fdiodispatcher.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/fdiodispatcher.cpp
 
+@COND_PLATFORM_OS2_1@basedll_fdiodispatcher.o: $(srcdir)/src/common/fdiodispatcher.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/fdiodispatcher.cpp
+
 @COND_PLATFORM_UNIX_1@basedll_selectdispatcher.o: $(srcdir)/src/common/selectdispatcher.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/selectdispatcher.cpp
 
@@ -22653,6 +22716,9 @@ basedll_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@basedll_selectdispatcher.o: $(srcdir)/src/common/selectdispatcher.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/selectdispatcher.cpp
 
+@COND_PLATFORM_OS2_1@basedll_selectdispatcher.o: $(srcdir)/src/common/selectdispatcher.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/selectdispatcher.cpp
+
 @COND_PLATFORM_UNIX_1@basedll_appunix.o: $(srcdir)/src/unix/appunix.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
 
@@ -22673,6 +22739,9 @@ basedll_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASEDLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@basedll_appunix.o: $(srcdir)/src/unix/appunix.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
+
+@COND_PLATFORM_OS2_1@basedll_appunix.o: $(srcdir)/src/unix/appunix.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
 
 @COND_PLATFORM_UNIX_1@basedll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
@@ -22781,6 +22850,9 @@ basedll_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASEDLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@basedll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_OS2_1@basedll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
 
 @COND_PLATFORM_UNIX_1@basedll_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
@@ -22919,6 +22991,9 @@ basedll_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASEDLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@basedll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_OS2_1@basedll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
 
 @COND_PLATFORM_WIN32_1@basedll_thread.o: $(srcdir)/src/msw/thread.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/thread.cpp
@@ -23391,6 +23466,9 @@ baselib_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@baselib_fdiodispatcher.o: $(srcdir)/src/common/fdiodispatcher.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/fdiodispatcher.cpp
 
+@COND_PLATFORM_OS2_1@baselib_fdiodispatcher.o: $(srcdir)/src/common/fdiodispatcher.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/fdiodispatcher.cpp
+
 @COND_PLATFORM_UNIX_1@baselib_selectdispatcher.o: $(srcdir)/src/common/selectdispatcher.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/selectdispatcher.cpp
 
@@ -23412,6 +23490,9 @@ baselib_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@baselib_selectdispatcher.o: $(srcdir)/src/common/selectdispatcher.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/selectdispatcher.cpp
 
+@COND_PLATFORM_OS2_1@baselib_selectdispatcher.o: $(srcdir)/src/common/selectdispatcher.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/selectdispatcher.cpp
+
 @COND_PLATFORM_UNIX_1@baselib_appunix.o: $(srcdir)/src/unix/appunix.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
 
@@ -23432,6 +23513,9 @@ baselib_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@baselib_appunix.o: $(srcdir)/src/unix/appunix.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
+
+@COND_PLATFORM_OS2_1@baselib_appunix.o: $(srcdir)/src/unix/appunix.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
 
 @COND_PLATFORM_UNIX_1@baselib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
@@ -23540,6 +23624,9 @@ baselib_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@baselib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_OS2_1@baselib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
 
 @COND_PLATFORM_UNIX_1@baselib_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
@@ -23678,6 +23765,9 @@ baselib_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@baselib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_OS2_1@baselib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
 
 @COND_PLATFORM_WIN32_1@baselib_thread.o: $(srcdir)/src/msw/thread.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/thread.cpp
