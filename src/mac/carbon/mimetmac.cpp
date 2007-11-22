@@ -347,7 +347,7 @@ inline void wxLogMimeDebug(const wxChar* WXUNUSED_UNLESS_DEBUG(szMsg), OSStatus 
 }
 
 // in case we're compiling in non-GUI mode
-class WXDLLEXPORT wxIcon;
+class WXDLLIMPEXP_FWD_CORE wxIcon;
 
 bool wxFileTypeImpl::SetCommand(const wxString& WXUNUSED(cmd), const wxString& WXUNUSED(verb), bool WXUNUSED(overwriteprompt))
 {
