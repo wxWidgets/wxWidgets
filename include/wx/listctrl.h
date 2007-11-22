@@ -30,7 +30,7 @@ extern WXDLLEXPORT_DATA(const char) wxListCtrlNameStr[];
 
 #if defined(__WIN32__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/listctrl.h"
-#elif defined(__WXMAC__)
+#elif defined(__WXMAC__) && !defined(__WXUNIVERSAL__)
     #include "wx/mac/carbon/listctrl.h"
 #else
     #include "wx/generic/listctrl.h"
