@@ -327,6 +327,7 @@ bool wxDisplayImplX11::ChangeMode(const wxVideoMode& WXUNUSED(mode))
 #if defined(__WXGTK__) || defined(__X__)
 
 #include "wx/utils.h"
+#include "wx/log.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
