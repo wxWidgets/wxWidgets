@@ -215,10 +215,10 @@ wxConvertFromGTK(const wxString& s, wxFontEncoding enc)
 
 #endif // !wxUSE_UNICODE
 
-// Returns false if version is certainly greater or equal than major.minor.micro
-// Returns true if version is lower than major.minor.micro OR it cannot be
-// determined and one should not rely on the availability of pango version
-// major.minor.micro, nor the non-availability
+// Returns NULL if version is certainly greater or equal than major.minor.micro
+// Returns string describing the error if version is lower than
+// major.minor.micro OR it cannot be determined and one should not rely on the
+// availability of pango version major.minor.micro, nor the non-availability
 const gchar *wx_pango_version_check (int major, int minor, int micro)
 {
 #ifdef PANGO_VERSION_MAJOR
