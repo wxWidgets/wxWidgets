@@ -97,7 +97,7 @@
 #endif
 
 #ifdef __WXMAC__
-#    include "MoreFilesX.h"
+// #    include "MoreFilesX.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -344,20 +344,9 @@ wxIsAbsolutePath (const wxString& filename)
 {
     if (!filename.empty())
     {
-#if defined(__WXMAC__) && !defined(__DARWIN__)
-        // Classic or Carbon CodeWarrior like
-        // Carbon with Apple DevTools is Unix like
-
-        // This seems wrong to me, but there is no fix. since
-        // "MacOS:MyText.txt" is absolute whereas "MyDir:MyText.txt"
-        // is not. Or maybe ":MyDir:MyText.txt" has to be used? RR.
-        if (filename.Find(':') != wxNOT_FOUND && filename[0] != ':')
-            return true ;
-#else
         // Unix like or Windows
         if (filename[0] == wxT('/'))
             return true;
-#endif
 #ifdef __VMS__
         if ((filename[0] == wxT('[') && filename[1] != wxT('.')))
             return true;
@@ -808,22 +797,12 @@ wxPathOnly (wxChar *path)
         // Search backward for a backward or forward slash
         while (i > -1)
         {
-#if defined(__WXMAC__) && !defined(__DARWIN__)
-            // Classic or Carbon CodeWarrior like
-            // Carbon with Apple DevTools is Unix like
-            if (path[i] == wxT(':') )
-            {
-                buf[i] = 0;
-                return buf;
-            }
-#else
             // Unix like or Windows
             if (path[i] == wxT('/') || path[i] == wxT('\\'))
             {
                 buf[i] = 0;
                 return buf;
             }
-#endif
 #ifdef __VMS__
             if (path[i] == wxT(']'))
             {
@@ -864,15 +843,6 @@ wxString wxPathOnly (const wxString& path)
         // Search backward for a backward or forward slash
         while (i > -1)
         {
-#if defined(__WXMAC__) && !defined(__DARWIN__)
-            // Classic or Carbon CodeWarrior like
-            // Carbon with Apple DevTools is Unix like
-            if (path[i] == wxT(':') )
-            {
-                buf[i] = 0;
-                return wxString(buf);
-            }
-#else
             // Unix like or Windows
             if (path[i] == wxT('/') || path[i] == wxT('\\'))
             {
@@ -882,7 +852,6 @@ wxString wxPathOnly (const wxString& path)
                 buf[i] = 0;
                 return wxString(buf);
             }
-#endif
 #ifdef __VMS__
             if (path[i] == wxT(']'))
             {
@@ -913,11 +882,7 @@ wxString wxPathOnly (const wxString& path)
 
 #if defined(__WXMAC__)
 
-#if TARGET_API_MAC_OSX
 #define kDefaultPathStyle kCFURLPOSIXPathStyle
-#else
-#define kDefaultPathStyle kCFURLHFSPathStyle
-#endif
 
 wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent )
 {
@@ -983,10 +948,11 @@ wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
 
 void wxMacFilename2FSSpec( const wxString& path , FSSpec *spec )
 {
-    OSStatus err = noErr ;
-    FSRef fsRef ;
-    wxMacPathToFSRef( path , &fsRef ) ;
-    err = FSRefMakeFSSpec( &fsRef , spec ) ;
+    OSStatus err = noErr;
+    FSRef fsRef;
+    wxMacPathToFSRef( path , &fsRef );
+	err = FSGetCatalogInfo(&fsRef, kFSCatInfoNone, NULL, NULL, spec, NULL);
+    verify_noerr( err );
 }
 #endif
 
@@ -1542,16 +1508,6 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
     {
     #if defined(_MSC_VER) || defined(__MINGW32__)
         ok = _getcwd(cbuf, sz) != NULL;
-    #elif defined(__WXMAC__) && !defined(__DARWIN__)
-        char lbuf[1024] ;
-        if ( getcwd( lbuf , sizeof( lbuf ) ) )
-        {
-            wxString res( lbuf , *wxConvCurrent ) ;
-            wxStrcpy( buf , res ) ;
-            ok = true;
-        }
-        else
-            ok = false ;
     #elif defined(__OS2__)
         APIRET rc;
         ULONG ulDriveNum = 0;
@@ -1574,7 +1530,7 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
         ok = getcwd(cbuf, sz) != NULL;
     #endif // platform
 
-    #if wxUSE_UNICODE && !(defined(__WXMAC__) && !defined(__DARWIN__))
+    #if wxUSE_UNICODE
         // finally convert the result to Unicode if needed
         wxConvFile.MB2WC(buf, cbuf, sz);
     #endif // wxUSE_UNICODE

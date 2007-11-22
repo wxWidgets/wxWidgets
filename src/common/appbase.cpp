@@ -790,12 +790,6 @@ void wxTrap()
 {
 #if defined(__WXMSW__) && !defined(__WXMICROWIN__)
     DebugBreak();
-#elif defined(__WXMAC__) && !defined(__DARWIN__)
-    #if __powerc
-        Debugger();
-    #else
-        SysBreak();
-    #endif
 #elif defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
     Debugger();
 #elif defined(__UNIX__)

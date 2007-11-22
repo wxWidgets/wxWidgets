@@ -169,19 +169,6 @@ void wxMessageOutputDebug::Output(const wxString& str)
     out.Replace(wxT("\t"), wxT("        "));
     out.Replace(wxT("\n"), wxT("\r\n"));
     ::OutputDebugString(out.wx_str());
-#elif defined(__WXMAC__) && !defined(__DARWIN__)
-    if ( wxIsDebuggerRunning() )
-    {
-        Str255 pstr;
-        wxString output = out + wxT(";g") ;
-        wxMacStringToPascal(output.c_str(), pstr);
-
-        #ifdef __powerc
-            DebugStr(pstr);
-        #else
-            SysBreakStr(pstr);
-        #endif
-    }
 #else
     wxFputs( out , stderr ) ;
     if ( out.Right(1) != wxT("\n") )

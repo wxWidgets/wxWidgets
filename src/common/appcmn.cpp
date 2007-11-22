@@ -565,14 +565,8 @@ void wxGUIAppTraitsBase::RemoveFromPendingDelete(wxObject *object)
 
 GSocketGUIFunctionsTable* wxGUIAppTraitsBase::GetSocketGUIFunctionsTable()
 {
-#if defined(__WXMAC__) && !defined(__DARWIN__)
-    // NB: wxMac CFM does not have any GUI-specific functions in gsocket.c and
-    //     so it doesn't need this table at all
-    return NULL;
-#else // !__WXMAC__ || __DARWIN__
     static GSocketGUIFunctionsTableConcrete table;
     return &table;
-#endif // !__WXMAC__ || __DARWIN__
 }
 
 #endif
