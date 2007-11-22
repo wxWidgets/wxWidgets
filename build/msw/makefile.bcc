@@ -1734,7 +1734,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_automtn.obj \
 	$(OBJS)\monodll_uuid.obj \
 	$(OBJS)\monodll_accel.obj \
-	$(OBJS)\monodll_animateg.obj \
 	$(OBJS)\monodll_clrpickerg.obj \
 	$(OBJS)\monodll_collpaneg.obj \
 	$(OBJS)\monodll_colrdlgg.obj \
@@ -1973,7 +1972,8 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_aboutdlg.obj \
 	$(OBJS)\monodll_sound.obj \
 	$(OBJS)\monodll_taskbar.obj \
-	$(OBJS)\monodll_joystick.obj
+	$(OBJS)\monodll_joystick.obj \
+	$(OBJS)\monodll_animateg.obj
 !endif
 !if "$(USE_STC)" == "1"
 __wxscintilla_library_link_DEP = $(__wxscintilla)
@@ -2373,7 +2373,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_automtn.obj \
 	$(OBJS)\monolib_uuid.obj \
 	$(OBJS)\monolib_accel.obj \
-	$(OBJS)\monolib_animateg.obj \
 	$(OBJS)\monolib_clrpickerg.obj \
 	$(OBJS)\monolib_collpaneg.obj \
 	$(OBJS)\monolib_colrdlgg.obj \
@@ -2612,7 +2611,8 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_aboutdlg.obj \
 	$(OBJS)\monolib_sound.obj \
 	$(OBJS)\monolib_taskbar.obj \
-	$(OBJS)\monolib_joystick.obj
+	$(OBJS)\monolib_joystick.obj \
+	$(OBJS)\monolib_animateg.obj
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
 __basedll___depname = \
@@ -2927,7 +2927,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_automtn.obj \
 	$(OBJS)\coredll_uuid.obj \
 	$(OBJS)\coredll_accel.obj \
-	$(OBJS)\coredll_animateg.obj \
 	$(OBJS)\coredll_clrpickerg.obj \
 	$(OBJS)\coredll_collpaneg.obj \
 	$(OBJS)\coredll_colrdlgg.obj \
@@ -3392,7 +3391,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_automtn.obj \
 	$(OBJS)\corelib_uuid.obj \
 	$(OBJS)\corelib_accel.obj \
-	$(OBJS)\corelib_animateg.obj \
 	$(OBJS)\corelib_clrpickerg.obj \
 	$(OBJS)\corelib_collpaneg.obj \
 	$(OBJS)\corelib_colrdlgg.obj \
@@ -3641,7 +3639,8 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_aboutdlg.obj \
 	$(OBJS)\advdll_sound.obj \
 	$(OBJS)\advdll_taskbar.obj \
-	$(OBJS)\advdll_joystick.obj
+	$(OBJS)\advdll_joystick.obj \
+	$(OBJS)\advdll_animateg.obj
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1"
 __advlib___depname = \
@@ -3706,7 +3705,8 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_aboutdlg.obj \
 	$(OBJS)\advlib_sound.obj \
 	$(OBJS)\advlib_taskbar.obj \
-	$(OBJS)\advlib_joystick.obj
+	$(OBJS)\advlib_joystick.obj \
+	$(OBJS)\advlib_animateg.obj
 !endif
 !if "$(SHARED)" == "1"
 ____wxadv_namedll_DEP = $(__advdll___depname)
@@ -3892,6 +3892,9 @@ __RTTI_DEFINE_p_53 = -dwxNO_RTTI
 !if "$(USE_THREADS)" == "0"
 __THREAD_DEFINE_p_53 = -dwxNO_THREADS
 !endif
+!if "$(UNICODE)" == "0"
+__UNICODE_DEFINE_p_54 = -dwxUSE_UNICODE=0
+!endif
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p_54 = -d_UNICODE
 !endif
@@ -3963,6 +3966,9 @@ __RTTI_DEFINE_p = -DwxNO_RTTI
 !endif
 !if "$(USE_THREADS)" == "0"
 __THREAD_DEFINE_p = -DwxNO_THREADS
+!endif
+!if "$(UNICODE)" == "0"
+__UNICODE_DEFINE_p = -DwxUSE_UNICODE=0
 !endif
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = -D_UNICODE
@@ -4172,7 +4178,7 @@ $(LIBDIRNAME)\wxscintilla$(WXDEBUGFLAG).lib: $(WXSCINTILLA_OBJECTS)
 !if "$(MONOLITHIC)" == "1" && "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_bcc$(VENDORTAG).dll: $(OBJS)\monodll_dummy.obj  $(MONODLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\monodll_version.res $(__wxscintilla_library_link_DEP)
 	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
-	c0d32.obj $(MONODLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib    $(__wxscintilla) import32.lib cw32$(__THREADSFLAG_11)$(__RUNTIME_LIBS_4).lib,, $(OBJS)\monodll_version.res
+	c0d32.obj $(MONODLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib     $(__wxscintilla) import32.lib cw32$(__THREADSFLAG_11)$(__RUNTIME_LIBS_4).lib,, $(OBJS)\monodll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR) $@
 !endif
@@ -4268,7 +4274,7 @@ wxadv: $(____wxadv_namedll_DEP) $(____wxadv_namelib_DEP)
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_MEDIA)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media_bcc$(VENDORTAG).dll: $(OBJS)\mediadll_dummy.obj  $(MEDIADLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\mediadll_version.res $(__coredll___depname) $(__basedll___depname)
 	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
-	c0d32.obj $(MEDIADLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib import32.lib cw32$(__THREADSFLAG_11)$(__RUNTIME_LIBS_4).lib,, $(OBJS)\mediadll_version.res
+	c0d32.obj $(MEDIADLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib  import32.lib cw32$(__THREADSFLAG_11)$(__RUNTIME_LIBS_4).lib,, $(OBJS)\mediadll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media $@
 !endif
@@ -7049,16 +7055,6 @@ $(OBJS)\monodll_vscroll.obj: ..\..\src\generic\vscroll.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_animatecmn.obj: ..\..\src\common\animatecmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 !endif
@@ -7165,6 +7161,16 @@ $(OBJS)\monodll_wizard.obj: ..\..\src\generic\wizard.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
+$(OBJS)\monodll_animateg.obj: ..\..\src\generic\animateg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 !endif
 
@@ -9139,16 +9145,6 @@ $(OBJS)\monolib_vscroll.obj: ..\..\src\generic\vscroll.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_animatecmn.obj: ..\..\src\common\animatecmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 !endif
@@ -9255,6 +9251,16 @@ $(OBJS)\monolib_wizard.obj: ..\..\src\generic\wizard.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
+$(OBJS)\monolib_animateg.obj: ..\..\src\generic\animateg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
@@ -10065,9 +10071,6 @@ $(OBJS)\coredll_treectrl.obj: ..\..\src\msw\treectrl.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 
 $(OBJS)\coredll_fontdlg.obj: ..\..\src\msw\fontdlg.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
-
-$(OBJS)\coredll_animateg.obj: ..\..\src\generic\animateg.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 
 $(OBJS)\coredll_colrdlgg.obj: ..\..\src\generic\colrdlgg.cpp
@@ -11381,9 +11384,6 @@ $(OBJS)\corelib_treectrl.obj: ..\..\src\msw\treectrl.cpp
 $(OBJS)\corelib_fontdlg.obj: ..\..\src\msw\fontdlg.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 
-$(OBJS)\corelib_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
-
 $(OBJS)\corelib_colrdlgg.obj: ..\..\src\generic\colrdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 
@@ -12677,6 +12677,11 @@ $(OBJS)\advdll_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
 $(OBJS)\advdll_animateg.obj: ..\..\src\generic\animateg.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
 
+!if "$(WXUNIV)" == "1"
+$(OBJS)\advdll_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
+!endif
+
 $(OBJS)\advdll_aboutdlg.obj: ..\..\src\msw\aboutdlg.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
 
@@ -12763,6 +12768,11 @@ $(OBJS)\advlib_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
 
 $(OBJS)\advlib_animateg.obj: ..\..\src\generic\animateg.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
+
+!if "$(WXUNIV)" == "1"
+$(OBJS)\advlib_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
+!endif
 
 $(OBJS)\advlib_aboutdlg.obj: ..\..\src\msw\aboutdlg.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**

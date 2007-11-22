@@ -263,6 +263,7 @@
     </set>
     <set var="UNICODE_DEFINE">
         <if cond="FORMAT!='autoconf' and UNICODE=='1'">_UNICODE</if>
+        <if cond="FORMAT!='autoconf' and UNICODE=='0'">wxUSE_UNICODE=0</if>
     </set>
     <set var="MSLU_DEFINE">
         <if cond="FORMAT!='autoconf' and MSLU=='1'">wxUSE_UNICODE_MSLU=1</if>
