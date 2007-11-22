@@ -121,7 +121,7 @@ protected:
                               wxClientDataType type);
 
     // universal wxComboBox implementation internally uses wxListBox
-    friend class WXDLLEXPORT wxComboBox;
+    friend class WXDLLIMPEXP_FWD_CORE wxComboBox;
 
     virtual void DoSetFirstItem(int n);
 
