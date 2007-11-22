@@ -343,6 +343,8 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 
 #else // !wxUSE_LIBHILDON
 
+#include "wx/log.h"
+
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 
