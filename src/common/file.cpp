@@ -198,16 +198,10 @@ bool wxFile::Create(const wxString& fileName, bool bOverwrite, int accessMode)
 {
     // if bOverwrite we create a new file or truncate the existing one,
     // otherwise we only create the new file and fail if it already exists
-#if defined(__WXMAC__) && !defined(__UNIX__) && !wxUSE_UNICODE
-    // Dominic Mazzoni [dmazzoni+@cs.cmu.edu] reports that open is still broken on the mac, so we replace
-    // int fd = open( fileName , O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL), access);
-    int fd = creat( fileName , accessMode);
-#else
     int fd = wxOpen( fileName,
                      O_BINARY | O_WRONLY | O_CREAT |
                      (bOverwrite ? O_TRUNC : O_EXCL)
                      ACCESS(accessMode) );
-#endif
     if ( fd == -1 )
     {
         wxLogSysError(_("can't create file '%s'"), fileName);

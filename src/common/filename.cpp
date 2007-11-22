@@ -1102,14 +1102,7 @@ bool wxFileName::Mkdir( const wxString& dir, int perm, int flags )
         size_t count = dirs.GetCount();
         for ( size_t i = 0; i < count; i++ )
         {
-            if ( i > 0 ||
-#if defined(__WXMAC__) && !defined(__DARWIN__)
-            // relative pathnames are exactely the other way round under mac...
-                !filename.IsAbsolute()
-#else
-                filename.IsAbsolute()
-#endif
-            )
+            if ( i > 0 || filename.IsAbsolute() )
                 currPath += wxFILE_SEP_PATH;
             currPath += dirs[i];
 
@@ -1954,8 +1947,6 @@ wxPathFormat wxFileName::GetFormat( wxPathFormat format )
     {
 #if defined(__WXMSW__) || defined(__OS2__) || defined(__DOS__)
         format = wxPATH_DOS;
-#elif defined(__WXMAC__) && !defined(__DARWIN__)
-        format = wxPATH_MAC;
 #elif defined(__VMS)
         format = wxPATH_VMS;
 #else
