@@ -354,6 +354,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
 
     // need to reset default size after changing m_gdkDecor
     gtk_window_set_default_size(GTK_WINDOW(m_widget), m_width, m_height);
+    m_decorSize.Set(0, 0);
 
     // don't allow sizing smaller than decorations
     GdkGeometry geom;

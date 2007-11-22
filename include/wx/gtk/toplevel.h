@@ -102,6 +102,9 @@ public:
     int           m_gdkFunc,
                   m_gdkDecor;
 
+    // size of WM decorations
+    wxSize m_decorSize;
+
     // private gtk_timeout_add result for mimicing wxUSER_ATTENTION_INFO and
     // wxUSER_ATTENTION_ERROR difference, -2 for no hint, -1 for ERROR hint, rest for GtkTimeout handle.
     int m_urgency_hint;

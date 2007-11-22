@@ -234,14 +234,17 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxTopLevelWindowGTK* win)
     {
         win->m_oldClientWidth  = alloc->width;
         win->m_oldClientHeight = alloc->height;
-        wxSize sizeDecor;
+
+        wxSize size(win->m_widget->allocation.width,
+                    win->m_widget->allocation.height);
         if (!win->IsFullScreen())
-            sizeDecor = GetDecorSize(win->m_gdkDecor);
-        win->m_width  = win->m_widget->allocation.width  + sizeDecor.x;
-        win->m_height = win->m_widget->allocation.height + sizeDecor.y;
+            size += win->m_decorSize;
+        win->m_width  = size.x;
+        win->m_height = size.y;
+
         if (!win->IsIconized())
         {
-            wxSizeEvent event(win->GetSize(), win->GetId());
+            wxSizeEvent event(size, win->GetId());
             event.SetEventObject(win);
             win->GetEventHandler()->ProcessEvent(event);
         }
@@ -365,14 +368,14 @@ gtk_frame_map_callback( GtkWidget* widget,
         gdk_window_get_frame_extents(widget->window, &rect);
         int w, h;
         gdk_drawable_get_size(widget->window, &w, &h);
-        wxSize& decorSize = GetDecorSize(win->m_gdkDecor);
-        const wxSize size = wxSize(rect.width - w, rect.height - h);
-        if (decorSize.x != size.x || decorSize.y != size.y)
+        const wxSize decorSize = wxSize(rect.width - w, rect.height - h);
+        if (win->m_decorSize != decorSize)
         {
             // Update window size and frame extents cache
             win->m_width = rect.width;
             win->m_height = rect.height;
-            decorSize = size;
+            win->m_decorSize = decorSize;
+            GetDecorSize(win->m_gdkDecor) = decorSize;
         }
     }
 
@@ -438,17 +441,17 @@ static gboolean property_notify_event(
             &type, &format, &nitems, &bytes_after, (guchar**)&data);
         if (status == Success && data && nitems == 4)
         {
-            wxSize& decorSize = GetDecorSize(win->m_gdkDecor);
-            const wxSize size =
+            const wxSize decorSize =
                 wxSize(int(data[0] + data[1]), int(data[2] + data[3]));
-            if (decorSize.x != size.x || decorSize.y != size.y)
+            if (win->m_decorSize != decorSize)
             {
                 // Update window size and frame extents cache
-                win->m_width  += size.x - decorSize.x;
-                win->m_height += size.y - decorSize.y;
+                win->m_width  += decorSize.x - win->m_decorSize.x;
+                win->m_height += decorSize.y - win->m_decorSize.y;
                 if (win->m_width  < 0) win->m_width  = 0;
                 if (win->m_height < 0) win->m_height = 0;
-                decorSize = size;
+                win->m_decorSize = decorSize;
+                GetDecorSize(win->m_gdkDecor) = decorSize;
                 win->m_oldClientWidth = 0;
                 gtk_widget_queue_resize(win->m_wxwindow);
             }
@@ -671,7 +674,9 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         }
     }
 
-    // m_gdkDecor needs to be set before calling GTKDoGetSize
+    m_decorSize = GetDecorSize(m_gdkDecor);
+
+    // m_sizeDecor needs to be set before calling GTKDoGetSize
     int w, h;
     GTKDoGetSize(&w, &h);
     gtk_window_set_default_size(GTK_WINDOW(m_widget), w, h);
@@ -853,7 +858,7 @@ void wxTopLevelWindowGTK::GTKDoGetSize(int *width, int *height) const
     wxSize size(m_width, m_height);
     if (!IsFullScreen())
     {
-        size -= GetDecorSize(m_gdkDecor);
+        size -= m_decorSize;
         if (size.x < 0) size.x = 0;
         if (size.y < 0) size.y = 0;
     }
@@ -936,24 +941,23 @@ void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
     const wxSize maxSize = GetMaxSize();
     GdkGeometry hints;
     int hints_mask = 0;
-    const wxSize sizeDecor = GetDecorSize(m_gdkDecor);
     if (minSize.x > 0 || minSize.y > 0)
     {
         hints_mask |= GDK_HINT_MIN_SIZE;
-        hints.min_width = minSize.x - sizeDecor.x;
+        hints.min_width = minSize.x - m_decorSize.x;
         if (hints.min_width < 0)
             hints.min_width = 0;
-        hints.min_height = minSize.y - sizeDecor.y;
+        hints.min_height = minSize.y - m_decorSize.y;
         if (hints.min_height < 0)
             hints.min_height = 0;
     }
     if (maxSize.x > 0 || maxSize.y > 0)
     {
         hints_mask |= GDK_HINT_MAX_SIZE;
-        hints.max_width = maxSize.x - sizeDecor.x;
+        hints.max_width = maxSize.x - m_decorSize.x;
         if (hints.max_width < 0)
             hints.max_width = INT_MAX;
-        hints.max_height = maxSize.y - sizeDecor.y;
+        hints.max_height = maxSize.y - m_decorSize.y;
         if (hints.max_height < 0)
             hints.max_height = INT_MAX;
     }
