@@ -15,6 +15,8 @@
 #include "wx/object.h"
 #include "wx/string.h"
 
+#include "wx/mac/corefoundation/cfref.h"
+
 struct RGBColor;
 
 // Colour
@@ -25,7 +27,7 @@ public:
     // ------------
 
     // default
-    wxColour() { Init(); }
+    wxColour() { }
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
 
     // dtor
@@ -35,49 +37,41 @@ public:
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
 
-    unsigned char Red() const { return m_red; }
-    unsigned char Green() const { return m_green; }
-    unsigned char Blue() const { return m_blue; }
-    unsigned char Alpha() const { return m_alpha; }
+    ChannelType Red() const { return m_red; }
+    ChannelType Green() const { return m_green; }
+    ChannelType Blue() const { return m_blue; }
+    ChannelType Alpha() const { return m_alpha; }
 
     // comparison
-    bool operator == (const wxColour& colour) const
-    {
-        return (m_isInit == colour.m_isInit
-                && m_red == colour.m_red
-                && m_green == colour.m_green
-                && m_blue == colour.m_blue
-                && m_alpha == colour.m_alpha);
-    }
+    bool operator == (const wxColour& colour) const;
+    
     bool operator != (const wxColour& colour) const { return !(*this == colour); }
 
-    const WXCOLORREF& GetPixel() const { return m_pixel; };
+    CGColorRef GetPixel() const { return m_cgColour; };
+    void GetRGBColor( RGBColor *col ) const;
 
     // Mac-specific ctor and assignment operator from the native colour
+    // assumes ownership of CGColorRef
+    wxColour( CGColorRef col );
     wxColour(const RGBColor& col);
     wxColour& operator=(const RGBColor& col);
+    wxColour& operator=(CGColorRef col);
 
 protected :
 
-    // Helper function
-    void Init();
 
     virtual void
-    InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
-
+    InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a);
+    void InitRGBColor( const RGBColor& col );
+    void InitCGColorRef( CGColorRef col );
 private:
-    bool          m_isInit;
-    unsigned char m_red;
-    unsigned char m_blue;
-    unsigned char m_green;
-    unsigned char m_alpha;
+    wxCFRef<CGColorRef>     m_cgColour;
 
-public:
-    WXCOLORREF m_pixel ;
-    void FromRGBColor( WXCOLORREF* color ) ;
+    ChannelType             m_red;
+    ChannelType             m_blue;
+    ChannelType             m_green;
+    ChannelType             m_alpha;
 
-
-private:
     DECLARE_DYNAMIC_CLASS(wxColour)
 };
 
