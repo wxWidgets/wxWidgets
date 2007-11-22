@@ -2500,7 +2500,7 @@ enum wxUpdateUI
 
 #define WX_OPAQUE_TYPE( name ) struct wxOpaque##name
 
-typedef unsigned char WXCOLORREF[6];
+typedef void*       WXCOLORREF;
 typedef void*       WXCGIMAGEREF;
 typedef void*       WXHBITMAP;
 typedef void*       WXHCURSOR;
