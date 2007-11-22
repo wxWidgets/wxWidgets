@@ -152,12 +152,6 @@ public:
     void ReleaseMouse();
     void Raise();
     void Lower(void);
-    void DoSetSizeHints(int minW = wxDefaultCoord,
-                        int minH = wxDefaultCoord,
-                        int maxW = wxDefaultCoord,
-                        int maxH = wxDefaultCoord,
-                        int incW = wxDefaultCoord,
-                        int incH = wxDefaultCoord);
 
     // MDI operations
     virtual void Maximize();
@@ -199,6 +193,9 @@ protected:
     void DoGetClientSize(int *width, int *height) const;
     void DoGetSize(int *width, int *height) const;
     void DoGetPosition(int *x, int *y) const ;
+    void DoSetSizeHints(int minW, int minH,
+                        int maxW, int maxH,
+                        int incW, int incH);
 };
 
 /* The client window is a child of the parent MDI frame, and itself

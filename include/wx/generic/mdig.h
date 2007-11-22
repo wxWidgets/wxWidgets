@@ -152,14 +152,6 @@ public:
     virtual void SetStatusWidths( int WXUNUSED(n), const int WXUNUSED(widths_field)[] ) {}
 #endif
 
-    // no size hints
-    virtual void DoSetSizeHints( int WXUNUSED(minW),
-                               int WXUNUSED(minH),
-                               int WXUNUSED(maxW) = wxDefaultCoord,
-                               int WXUNUSED(maxH) = wxDefaultCoord,
-                               int WXUNUSED(incW) = wxDefaultCoord,
-                               int WXUNUSED(incH) = wxDefaultCoord) {}
-
 #if wxUSE_TOOLBAR
     // no toolbar bars
     virtual wxToolBar* CreateToolBar( long WXUNUSED(style),
@@ -206,6 +198,11 @@ protected:
     void Init();
 
     virtual void DoMoveWindow(int x, int y, int width, int height);
+
+    // no size hints
+    virtual void DoSetSizeHints(int WXUNUSED(minW), int WXUNUSED(minH),
+                                int WXUNUSED(maxW), int WXUNUSED(maxH),
+                                int WXUNUSED(incW), int WXUNUSED(incH)) {}
 
     // This function needs to be called when a size change is confirmed,
     // we needed this function to prevent any body from the outside

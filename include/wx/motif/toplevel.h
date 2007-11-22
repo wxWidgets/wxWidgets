@@ -52,10 +52,6 @@ public:
     virtual wxString GetTitle() const { return m_title; }
     virtual void SetTitle( const wxString& title ) { m_title = title; }
 
-    virtual void DoSetSizeHints( int minW, int minH,
-                               int maxW = -1, int maxH = -1,
-                               int incW = -1, int incH = -1 );
-
     virtual bool SetShape( const wxRegion& region );
 
     WXWidget GetShellWidget() const;
@@ -66,6 +62,9 @@ protected:
     void PreDestroy();
 
     virtual void DoGetPosition(int* x, int* y) const;
+    virtual void DoSetSizeHints(int minW, int minH,
+                                int maxW, int maxH,
+                                int incW, int incH);
 
 private:
     // really create the Motif widget for TLW

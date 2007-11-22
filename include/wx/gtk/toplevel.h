@@ -106,12 +106,6 @@ public:
     // wxUSER_ATTENTION_ERROR difference, -2 for no hint, -1 for ERROR hint, rest for GtkTimeout handle.
     int m_urgency_hint;
 
-    // give hints to the Window Manager for how the size
-    // of the TLW can be changed by dragging
-    virtual void DoSetSizeHints( int minW, int minH,
-                                 int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
-                                 int incW = wxDefaultCoord, int incH = wxDefaultCoord );
-
     // return the size of the window without WM decorations
     void GTKDoGetSize(int *width, int *height) const;
 
@@ -119,6 +113,11 @@ public:
     virtual bool IsDecorCacheable() const;
 
 protected:
+    // give hints to the Window Manager for how the size
+    // of the TLW can be changed by dragging
+    virtual void DoSetSizeHints( int minW, int minH,
+                                 int maxW, int maxH,
+                                 int incW, int incH);
     // common part of all ctors
     void Init();
 

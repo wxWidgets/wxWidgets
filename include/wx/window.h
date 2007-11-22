@@ -417,10 +417,6 @@ public:
                        const wxSize& incSize=wxDefaultSize)
     { DoSetSizeHints(minSize.x, minSize.y, maxSize.x, maxSize.y, incSize.x, incSize.y); }
 
-    virtual void DoSetSizeHints( int minW, int minH,
-                                 int maxW, int maxH,
-                                 int incW, int incH );
-
         // Methods for setting virtual size hints
         // FIXME: What are virtual size hints?
 
@@ -1494,6 +1490,10 @@ protected:
 
     // same as DoSetSize() for the client size
     virtual void DoSetClientSize(int width, int height) = 0;
+
+    virtual void DoSetSizeHints( int minW, int minH,
+                                 int maxW, int maxH,
+                                 int incW, int incH );
 
     // move the window to the specified location and resize it: this is called
     // from both DoSetSize() and DoSetClientSize() and would usually just
