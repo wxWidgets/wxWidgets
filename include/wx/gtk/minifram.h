@@ -44,6 +44,9 @@ public:
 
     virtual void SetTitle( const wxString &title );
 
+    virtual void DoSetSizeHints( int minW, int minH,
+                                 int maxW, int maxH,
+                                 int incW, int incH );
 protected:
     virtual void DoGetClientSize(int* width, int* height) const;
 

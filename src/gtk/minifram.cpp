@@ -300,21 +300,6 @@ gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event,
 }
 
 //-----------------------------------------------------------------------------
-// "size_allocate" from GtkFixed, parent of m_mainWidget
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static void size_allocate(GtkWidget*, GtkAllocation* alloc, wxMiniFrame* win)
-{
-    // place m_mainWidget inside of decorations drawn on the GtkFixed
-    GtkAllocation alloc2 = win->m_mainWidget->allocation;
-    alloc2.width = alloc->width - 2 * win->m_miniEdge;
-    alloc2.height = alloc->height - win->m_miniTitle - 2 * win->m_miniEdge;
-    gtk_widget_size_allocate(win->m_mainWidget, &alloc2);
-}
-}
-
-//-----------------------------------------------------------------------------
 // wxMiniFrame
 //-----------------------------------------------------------------------------
 
@@ -345,21 +330,22 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
 
     wxFrame::Create( parent, id, title, pos, size, style, name );
 
-    // borders and title are on a GtkFixed between m_widget and m_mainWidget
-    GtkWidget* fixed = gtk_fixed_new();
-    gtk_fixed_set_has_window((GtkFixed*)fixed, true);
-    gtk_widget_add_events(fixed,
+    // Use a GtkEventBox for the title and borders. Using m_widget for this
+    // almost works, except that setting the resize cursor has no effect.
+    GtkWidget* eventbox = gtk_event_box_new();
+    gtk_widget_add_events(eventbox,
         GDK_POINTER_MOTION_MASK |
-        GDK_POINTER_MOTION_HINT_MASK |
-        GDK_BUTTON_MOTION_MASK |
-        GDK_BUTTON_PRESS_MASK |
-        GDK_BUTTON_RELEASE_MASK |
-        GDK_LEAVE_NOTIFY_MASK);
-    gtk_widget_show(fixed);
-    gtk_widget_reparent(m_mainWidget, fixed);
-    gtk_container_add((GtkContainer*)m_widget, fixed);
-    gtk_fixed_move((GtkFixed*)fixed, m_mainWidget, m_miniEdge, m_miniTitle + m_miniEdge);
-    g_signal_connect(fixed, "size_allocate", G_CALLBACK(size_allocate), this);
+        GDK_POINTER_MOTION_HINT_MASK);
+    gtk_widget_show(eventbox);
+    // Use a GtkAlignment to position m_mainWidget inside the decorations
+    GtkWidget* alignment = gtk_alignment_new(0, 0, 1, 1);
+    gtk_alignment_set_padding(GTK_ALIGNMENT(alignment),
+        m_miniTitle + m_miniEdge, m_miniEdge, m_miniEdge, m_miniEdge);
+    gtk_widget_show(alignment);
+    // The GtkEventBox and GtkAlignment go between m_widget and m_mainWidget
+    gtk_widget_reparent(m_mainWidget, alignment);
+    gtk_container_add(GTK_CONTAINER(eventbox), alignment);
+    gtk_container_add(GTK_CONTAINER(m_widget), eventbox);
 
     m_gdkDecor = 0;
     m_gdkFunc = 0;
@@ -368,6 +354,12 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
 
     // need to reset default size after changing m_gdkDecor
     gtk_window_set_default_size(GTK_WINDOW(m_widget), m_width, m_height);
+
+    // don't allow sizing smaller than decorations
+    GdkGeometry geom;
+    geom.min_width  = 2 * m_miniEdge;
+    geom.min_height = 2 * m_miniEdge + m_miniTitle;
+    gtk_window_set_geometry_hints(GTK_WINDOW(m_widget), NULL, &geom, GDK_HINT_MIN_SIZE);
 
     if (m_parent && (GTK_IS_WINDOW(m_parent->m_widget)))
     {
@@ -384,17 +376,17 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     }
 
     /* these are called when the borders are drawn */
-    g_signal_connect_after(fixed, "expose_event",
+    g_signal_connect_after(eventbox, "expose_event",
                       G_CALLBACK (gtk_window_own_expose_callback), this );
 
     /* these are required for dragging the mini frame around */
-    g_signal_connect (fixed, "button_press_event",
+    g_signal_connect (eventbox, "button_press_event",
                       G_CALLBACK (gtk_window_button_press_callback), this);
-    g_signal_connect (fixed, "button_release_event",
+    g_signal_connect (eventbox, "button_release_event",
                       G_CALLBACK (gtk_window_button_release_callback), this);
-    g_signal_connect (fixed, "motion_notify_event",
+    g_signal_connect (eventbox, "motion_notify_event",
                       G_CALLBACK (gtk_window_motion_notify_callback), this);
-    g_signal_connect (fixed, "leave_notify_event",
+    g_signal_connect (eventbox, "leave_notify_event",
                       G_CALLBACK (gtk_window_leave_callback), this);
     return true;
 }
@@ -414,13 +406,23 @@ void wxMiniFrame::DoGetClientSize(int* width, int* height) const
     }
 }
 
+// Keep min size at least as large as decorations
+void wxMiniFrame::DoSetSizeHints(int minW, int minH, int maxW, int maxH, int incW, int incH)
+{
+    const int w = 2 * m_miniEdge;
+    const int h = 2 * m_miniEdge + m_miniTitle;
+    if (minW < w) minW = w;
+    if (minH < h) minH = h;
+    wxFrame::DoSetSizeHints(minW, minH, maxW, maxH, incW, incH);
+}
+
 void wxMiniFrame::SetTitle( const wxString &title )
 {
     wxFrame::SetTitle( title );
 
-    GtkWidget* fixed = GTK_BIN(m_widget)->child;
-    if (fixed->window)
-        gdk_window_invalidate_rect(fixed->window, NULL, false);
+    GtkWidget* widget = GTK_BIN(m_widget)->child;
+    if (widget->window)
+        gdk_window_invalidate_rect(widget->window, NULL, false);
 }
 
 #endif // wxUSE_MINIFRAME
