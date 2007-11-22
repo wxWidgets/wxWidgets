@@ -19,6 +19,7 @@
     #include "wx/log.h"
     #include "wx/region.h"
     #include "wx/image.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/mac/uma.h"
