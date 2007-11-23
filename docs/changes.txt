@@ -88,47 +88,6 @@ Major new features in 2.8 release
   wxSearchCtrl, wxAboutBox, wxTreebook, tar streams.
 
 
-2.8.7
------
-
-All:
-
-- Fixed bug with default proxy destruction in wxURL (Axel Gembe).
-
-All (GUI):
-
-- wxGraphicsContext implementations now all have the pixel's center at (0.5,0.5),
-  avoiding differences in anti-aliasing between platforms.
-- wxChoicebook now vertically centres a left-aligned controller.
-- Improved borders and size of rich text dialogs.
-
-wxMSW:
-
-- Correct (harmless) warnings given for forward-declared DLL-exported classes
-  by mingw32 4.2 (Tim Stahlhut).
-- Fixed a bug whereby acclerators including Enter were not processed
-  when a tree control was focused.
-- Fixed AUI hint drawing bug on Vista.
-
-wxGTK:
-
-- Added gtk.window.force-background-colour wxSystemOptions option to work around
-  a background colour bug in the gtk-qt theme under KDE.
-- wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW) now returns the background
-  colour of text controls.
-- wxSysColourChangedEvent now sent when styles change.
-- wxFrame::ShowFullScreen now preserves the menubar's accelerators.
-- Implemented wxGetClientDisplayRect() correctly for wxGTK and X11-based ports.
-
-wxMac:
-
-- Multiline textcontrols now support attributes for margins and alignement; only
-  a single tab distance can be set though.
-- Deactivated refcounting checks when running under leopard for the toolbar implementation
-  as the implementation there seems to be different.
-- Fixed 'Reopen' application behaviour (a window was not always shown when reopening the app).
-
-
 2.8.8
 -----
 
@@ -145,28 +104,56 @@ All (Unix):
 2.8.7
 -----
 
-- Added an optimization to UI updates on idle, by only updating when the window
-  is shown.
+All:
+
+- Fixed bug with default proxy destruction in wxURL (Axel Gembe).
+
+All (GUI):
+
+- wxGraphicsContext implementations now all have the pixel's center at (0.5,0.5),
+  avoiding differences in anti-aliasing between platforms.
+- wxChoicebook now vertically centres a left-aligned controller.
+- Improved borders and size of rich text dialogs.
+- Added an optimization to UI updates on idle, by only updating when the
+  window is shown.
 - Multiple centre panes in wxAUI can now be resized.
 - Add support for reading alpha data from TIFF images.
 
 wxMSW:
 
-- Fixed a bug with a spurious border appearing on wxStatusBar under Windows XP/Vista.
+- Correct (harmless) warnings given for forward-declared DLL-exported classes
+  by mingw32 4.2 (Tim Stahlhut).
+- Fixed a bug whereby acclerators including Enter were not processed
+  when a tree control was focused.
+- Fixed AUI hint drawing bug on Vista.
+- Fixed a bug with a spurious border appearing on wxStatusBar under Windows
+  XP/Vista.
 
 wxGTK:
 
-- Fixed wxSpinCtrl problem not reporting the correct value
-  after calling SetValue().
-- Fixed problem with key events sometimes being sent to
-  parent window. This also solves a problem with being able
-  to change the selection of a wxListCtrl while editing a
-  label.
-- Correct context menu event coming from wxListCtrl to
-  have the right ID (not that from the client window).
+- Added gtk.window.force-background-colour wxSystemOptions option to work around
+  a background colour bug in the gtk-qt theme under KDE.
+- wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW) now returns the background
+  colour of text controls.
+- wxSysColourChangedEvent now sent when styles change.
+- wxFrame::ShowFullScreen now preserves the menubar's accelerators.
+- Implemented wxGetClientDisplayRect() correctly for wxGTK and X11-based ports.
+- Fixed wxSpinCtrl problem not reporting the correct value after calling
+  SetValue().
+- Fixed problem with key events sometimes being sent to parent window. This
+  also solves a problem with being able to change the selection of a
+  wxListCtrl while editing a label.
+- Correct context menu event coming from wxListCtrl to have the right ID (not
+  that from the client window).
 
 wxMac:
 
+- Multiline textcontrols now support attributes for margins and alignement; only
+  a single tab distance can be set though.
+- Deactivated refcounting checks when running under leopard for the toolbar
+  implementation as the implementation there seems to be different.
+- Fixed 'Reopen' application behaviour (a window was not always shown when
+  reopening the app).
 - Fixed a crash in wxToolBar when adding tools with non-standard sizes.
 
 
