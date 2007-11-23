@@ -67,7 +67,7 @@ void wxColour::InitRGBA (ChannelType r, ChannelType g, ChannelType b, ChannelTyp
     m_alpha = a ;
 
     CGColorRef col = 0 ;
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
     if ( CGColorCreateGenericRGB )
         col = CGColorCreateGenericRGB( r / 255.0, g / 255.0, b / 255.0, a / 255.0 );
     else
@@ -86,7 +86,7 @@ void wxColour::InitRGBColor( const RGBColor& col )
     m_green = col.green >> 8;
     m_alpha = wxALPHA_OPAQUE;
     CGColorRef cfcol;
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
     if ( CGColorCreateGenericRGB )
         cfcol = CGColorCreateGenericRGB( col.red / 65535.0, col.green / 65535.0, col.blue / 65535.0, 1.0 );
     else
