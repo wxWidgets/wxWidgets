@@ -167,8 +167,12 @@ public:
     WXHBITMAP GetHBITMAP( WXHBITMAP * mask = NULL ) const;
 
     // returns a CGImageRef which must released after usage with CGImageRelease
-    WXCGIMAGEREF CGImageCreate() const ;
+    CGImageRef CreateCGImage() const ;
 
+    // returns a IconRef which must be retained before and released after usage
+    IconRef GetIconRef() const;
+    // returns a IconRef which must be released after usage
+    IconRef CreateIconRef() const;
     // get read only access to the underlying buffer
     void *GetRawAccess() const ;
     // brackets to the underlying OS structure for read/write access

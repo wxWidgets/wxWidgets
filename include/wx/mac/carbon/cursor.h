@@ -15,7 +15,7 @@
 #include "wx/bitmap.h"
 
 // Cursor
-class WXDLLEXPORT wxCursor: public wxBitmap
+class WXDLLEXPORT wxCursor: public wxGDIObject
 {
   DECLARE_DYNAMIC_CLASS(wxCursor)
 
