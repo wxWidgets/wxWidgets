@@ -51,6 +51,12 @@ extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxGridNameStr[];
 #define wxGRID_VALUE_TEXT wxGRID_VALUE_STRING
 #define wxGRID_VALUE_LONG wxGRID_VALUE_NUMBER
 
+#if wxABI_VERSION >= 20808
+    // magic constant which tells (to some functions) to automatically
+    // calculate the appropriate size
+    #define wxGRID_AUTOSIZE (-1)
+#endif // wxABI_VERSION >= 20808
+
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
@@ -1995,6 +2001,10 @@ protected:
     //
     bool GetModelValues();
     bool SetModelValues();
+
+private:
+    // Calculate the minimum acceptable size for labels area
+    wxCoord CalcColOrRowLabelAreaMinSize(bool column /* or row? */);
 
     friend class WXDLLIMPEXP_ADV wxGridSelection;
 

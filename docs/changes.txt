@@ -94,6 +94,7 @@ Major new features in 2.8 release
 All (GUI):
 
 - Added wxWindow::GetNextSibling() and GetPrevSibling()
+- Support wxGRID_AUTOSIZE in wxGrid::SetRow/ColLabelSize() (Evgeniy Tarassov)
 
 All (Unix):
 
