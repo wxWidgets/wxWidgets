@@ -16,7 +16,7 @@
 #include "wx/clntdata.h"
 
 // forward decl for GetSelections()
-class WXDLLIMPEXP_FWD_CORE wxArrayInt;
+class WXDLLIMPEXP_FWD_BASE wxArrayInt;
 
 // List box item
 class WXDLLEXPORT wxListBox: public wxListBoxBase

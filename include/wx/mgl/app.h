@@ -19,7 +19,7 @@
 //-----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_FWD_CORE wxApp;
-class WXDLLIMPEXP_FWD_CORE wxLog;
+class WXDLLIMPEXP_FWD_BASE wxLog;
 class WXDLLIMPEXP_FWD_CORE wxEventLoop;
 
 //-----------------------------------------------------------------------------

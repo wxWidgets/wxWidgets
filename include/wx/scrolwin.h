@@ -15,7 +15,7 @@
 #include "wx/panel.h"
 
 class WXDLLIMPEXP_FWD_CORE wxScrollHelperEvtHandler;
-class WXDLLIMPEXP_FWD_CORE wxTimer;
+class WXDLLIMPEXP_FWD_BASE wxTimer;
 
 // default scrolled window style: scroll in both directions
 #define wxScrolledWindowStyle (wxHSCROLL | wxVSCROLL)

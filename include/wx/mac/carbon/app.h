@@ -21,7 +21,7 @@ class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxWindowMac;
 class WXDLLIMPEXP_FWD_CORE wxApp ;
 class WXDLLIMPEXP_FWD_CORE wxKeyEvent;
-class WXDLLIMPEXP_FWD_CORE wxLog;
+class WXDLLIMPEXP_FWD_BASE wxLog;
 
 // Force an exit from main loop
 void WXDLLEXPORT wxExit();

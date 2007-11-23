@@ -27,7 +27,7 @@ class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxApp;
 class WXDLLIMPEXP_FWD_CORE wxKeyEvent;
-class WXDLLIMPEXP_FWD_CORE wxLog;
+class WXDLLIMPEXP_FWD_BASE wxLog;
 class WXDLLIMPEXP_FWD_CORE wxXVisualInfo;
 
 // ----------------------------------------------------------------------------

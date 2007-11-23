@@ -64,7 +64,7 @@ class wxHtmlHelpMergedIndex;
 
 class WXDLLIMPEXP_FWD_CORE wxHelpControllerBase;
 class WXDLLIMPEXP_FWD_HTML wxHtmlHelpController;
-class WXDLLIMPEXP_FWD_CORE wxHtmlHelpWindow;
+class WXDLLIMPEXP_FWD_HTML wxHtmlHelpWindow;
 
 class WXDLLIMPEXP_HTML wxHtmlHelpFrame : public wxFrame
 {
