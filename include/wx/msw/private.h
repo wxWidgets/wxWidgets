@@ -866,7 +866,7 @@ extern WXDLLEXPORT wxString wxGetWindowClass(WXHWND hWnd);
 
 // get the window id (should be unsigned, hence this is not wxWindowID which
 // is, for mainly historical reasons, signed)
-extern WXDLLEXPORT WXWORD wxGetWindowId(WXHWND hWnd);
+extern WXDLLEXPORT int wxGetWindowId(WXHWND hWnd);
 
 // check if hWnd's WNDPROC is wndProc. Return true if yes, false if they are
 // different

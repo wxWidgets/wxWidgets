@@ -601,8 +601,8 @@ bool wxMDIParentFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
             wxWindow *child = node->GetData();
             if ( child->GetHWND() )
             {
-                long childId = wxGetWindowId(child->GetHWND());
-                if (childId == (long)id)
+                int childId = wxGetWindowId(child->GetHWND());
+                if ( childId == (signed short)id )
                 {
                     ::SendMessage( GetWinHwnd(GetClientWindow()),
                                    WM_MDIACTIVATE,

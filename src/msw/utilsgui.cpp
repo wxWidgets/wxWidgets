@@ -293,9 +293,9 @@ wxString WXDLLEXPORT wxGetWindowClass(WXHWND hWnd)
     return str;
 }
 
-WXWORD WXDLLEXPORT wxGetWindowId(WXHWND hWnd)
+int WXDLLEXPORT wxGetWindowId(WXHWND hWnd)
 {
-    return (WXWORD)GetWindowLong((HWND)hWnd, GWL_ID);
+    return ::GetWindowLong((HWND)hWnd, GWL_ID);
 }
 
 // ----------------------------------------------------------------------------
