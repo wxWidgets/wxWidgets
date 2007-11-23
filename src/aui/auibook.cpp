@@ -194,9 +194,7 @@ wxAuiDefaultTabArt::wxAuiDefaultTabArt()
     m_tab_ctrl_height = 0;
 
 #ifdef __WXMAC__
-    wxBrush toolbarbrush;
-    toolbarbrush.MacSetTheme( kThemeBrushToolbarBackground );
-    wxColor base_colour = toolbarbrush.GetColour();
+    wxColor base_colour = wxColour( wxMacCreateCGColorFromHITheme(kThemeBrushToolbarBackground));
 #else
     wxColor base_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 #endif

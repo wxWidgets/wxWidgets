@@ -199,9 +199,7 @@ wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size)
 wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 {
 #ifdef __WXMAC__
-    wxBrush toolbarbrush;
-    toolbarbrush.MacSetTheme( kThemeBrushToolbarBackground );
-    wxColor base_colour = toolbarbrush.GetColour();
+    wxColor base_colour = wxColour( wxMacCreateCGColorFromHITheme(kThemeBrushToolbarBackground));
 #else
     wxColor base_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 #endif
@@ -229,15 +227,10 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
     m_inactive_caption_gradient_colour = wxAuiStepColour(base_colour, 97);
     m_inactive_caption_text_colour = *wxBLACK;
 
-#ifdef __WXMAC__
-    m_sash_brush = toolbarbrush;
-    m_background_brush = toolbarbrush;
-    m_gripper_brush = toolbarbrush;
-#else
     m_sash_brush = wxBrush(base_colour);
     m_background_brush = wxBrush(base_colour);
     m_gripper_brush = wxBrush(base_colour);
-#endif
+
     m_border_pen = wxPen(darker2_colour);
     m_gripper_pen1 = wxPen(darker5_colour);
     m_gripper_pen2 = wxPen(darker3_colour);
@@ -419,26 +412,13 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
 
     HIRect splitterRect = CGRectMake( rect.x , rect.y , rect.width , rect.height );
     CGContextRef cgContext ;
-#if wxMAC_USE_CORE_GRAPHICS
     cgContext = (CGContextRef) dc.GetGraphicsContext()->GetNativeContext() ;
-#else
-    Rect bounds ;
-    GetPortBounds( (CGrafPtr) dc.m_macPort , &bounds ) ;
-    QDBeginCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
-    CGContextTranslateCTM( cgContext , 0 , bounds.bottom - bounds.top ) ;
-    CGContextScaleCTM( cgContext , 1 , -1 ) ;
-#endif
 
     HIThemeSplitterDrawInfo drawInfo ;
     drawInfo.version = 0 ;
     drawInfo.state = kThemeStateActive ;
     drawInfo.adornment = kHIThemeSplitterAdornmentNone ;
     HIThemeDrawPaneSplitter( &splitterRect , &drawInfo , cgContext , kHIThemeOrientationNormal ) ;
-
-#if wxMAC_USE_CORE_GRAPHICS
-#else
-    QDEndCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
-#endif
 
 #elif defined(__WXGTK__)
     // clear out the rectangle first
