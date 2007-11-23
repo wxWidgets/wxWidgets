@@ -32,7 +32,7 @@ class WXDLLIMPEXP_FWD_CORE wxDocManager;
 class WXDLLIMPEXP_FWD_CORE wxPrintInfo;
 class WXDLLIMPEXP_FWD_CORE wxCommandProcessor;
 class WXDLLIMPEXP_FWD_CORE wxFileHistory;
-class WXDLLIMPEXP_FWD_CORE wxConfigBase;
+class WXDLLIMPEXP_FWD_BASE wxConfigBase;
 
 #if wxUSE_STD_IOSTREAM
   #include "wx/iosfwrap.h"
