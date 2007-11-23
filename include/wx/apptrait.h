@@ -183,8 +183,6 @@ protected:
     #include "wx/msw/apptbase.h"
 #elif defined(__UNIX__) && !defined(__EMX__)
     #include "wx/unix/apptbase.h"
-#elif defined(__WXMAC__)
-    #include "wx/mac/apptbase.h"
 #elif defined(__OS2__)
     #include "wx/os2/apptbase.h"
 #else // no platform-specific methods to add to wxAppTraits
@@ -300,8 +298,6 @@ public:
     #include "wx/os2/apptrait.h"
 #elif defined(__UNIX__)
     #include "wx/unix/apptrait.h"
-#elif defined(__WXMAC__)
-    #include "wx/mac/apptrait.h"
 #elif defined(__DOS__)
     #include "wx/msdos/apptrait.h"
 #else

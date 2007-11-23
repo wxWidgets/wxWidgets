@@ -2534,11 +2534,16 @@ typedef struct __CFString * CFMutableStringRef;
 
 typedef struct __CFRunLoopSource * CFRunLoopSourceRef;
 
-typedef struct CGColor *CGColorRef;
+#define DECLARE_WXMAC_OPAQUE_CGREF( name ) typedef struct name* name##Ref;
+
+DECLARE_WXMAC_OPAQUE_CGREF( CGColor );
+DECLARE_WXMAC_OPAQUE_CGREF( CGImage );
+DECLARE_WXMAC_OPAQUE_CGREF( CGContext );
 
 #define DECLARE_WXMAC_OPAQUE_REF( name ) typedef struct Opaque##name* name;
 
 DECLARE_WXMAC_OPAQUE_REF( PasteboardRef );
+DECLARE_WXMAC_OPAQUE_REF( IconRef );
 
 #endif
 
