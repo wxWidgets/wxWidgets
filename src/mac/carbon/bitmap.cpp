@@ -1624,6 +1624,8 @@ IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandler, wxBitmapHandlerBase)
 // Standard Handlers
 // ----------------------------------------------------------------------------
 
+#ifndef __LP64__
+
 class WXDLLEXPORT wxPICTResourceHandler: public wxBitmapHandler
 {
     DECLARE_DYNAMIC_CLASS(wxPICTResourceHandler)
@@ -1671,10 +1673,13 @@ bool wxPICTResourceHandler::LoadFile(wxBitmap *bitmap,
 
     return false ;
 }
+#endif
 
 void wxBitmap::InitStandardHandlers()
 {
+#ifndef __LP64__
     AddHandler( new wxPICTResourceHandler ) ;
+#endif
     AddHandler( new wxICONResourceHandler ) ;
 }
 
