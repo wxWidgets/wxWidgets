@@ -961,7 +961,7 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
 
     DoMacCreateRealWindow( parent, title, pos , size , style , name ) ;
 
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+    SetBackgroundColour(wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDialogBackgroundActive)));
 
     if (GetExtraStyle() & wxFRAME_EX_METAL)
         MacSetMetalAppearance(true);
@@ -1063,15 +1063,18 @@ wxPoint wxTopLevelWindowMac::GetClientAreaOrigin() const
     return wxPoint(0, 0) ;
 }
 
-void  wxTopLevelWindowMac::MacSetBackgroundBrush( const wxBrush &brush )
+bool wxTopLevelWindowMac::SetBackgroundColour(const wxColour& col )
 {
-    wxTopLevelWindowBase::MacSetBackgroundBrush( brush ) ;
-
-    if ( m_macBackgroundBrush.Ok() && m_macBackgroundBrush.GetStyle() != wxTRANSPARENT && m_macBackgroundBrush.MacGetBrushKind() == kwxMacBrushTheme )
-    {
-        SetThemeWindowBackground( (WindowRef) m_macWindow , m_macBackgroundBrush.MacGetTheme() , false ) ;
-    }
-}
+    if ( !wxTopLevelWindowBase::SetBackgroundColour(col) && m_hasBgCol )
+        return false ;
+    
+    if ( col == wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) )
+        SetThemeWindowBackground( (WindowRef) m_macWindow,  kThemeBrushDocumentWindowBackground, false ) ;
+    else if ( col == wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) )
+        SetThemeWindowBackground( (WindowRef) m_macWindow,  kThemeBrushDialogBackgroundActive, false ) ;
+    // TODO BETTER THEME SUPPORT
+    return true;
+}    
 
 void wxTopLevelWindowMacInstallTopLevelWindowEventHandler(WindowRef window, EventHandlerRef* handler, void *ref)
 {

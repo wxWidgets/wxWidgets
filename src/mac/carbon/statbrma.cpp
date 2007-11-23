@@ -59,7 +59,7 @@ bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id,
         return false;
 
     if ( parent->MacGetTopLevelWindow()->MacGetMetalAppearance() )
-        MacSetBackgroundBrush( wxNullBrush );
+        SetBackgroundStyle( wxBG_STYLE_TRANSPARENT );
 
     // normal system font is too tall for fitting into the standard height
     SetWindowVariant( wxWINDOW_VARIANT_SMALL );

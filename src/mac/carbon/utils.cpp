@@ -687,7 +687,7 @@ void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , l
 #endif
 }
 
-void wxMacControl::SetBackground( const wxBrush &WXUNUSED(brush) )
+void wxMacControl::SetBackgroundColour( const wxColour &WXUNUSED(col) )
 {
     // TODO
     // setting up a color proc is not recommended anymore
@@ -1895,37 +1895,6 @@ OSStatus wxMacControl::SetTabEnabled( SInt16 tabNo , bool enable )
 // Quartz Support
 //
 
-// snippets from Sketch Sample from Apple :
-
-#define kGenericRGBProfilePathStr "/System/Library/ColorSync/Profiles/Generic RGB Profile.icc"
-
-/*
-    This function locates, opens, and returns the profile reference for the calibrated
-    Generic RGB color space. It is up to the caller to call CMCloseProfile when done
-    with the profile reference this function returns.
-*/
-CMProfileRef wxMacOpenGenericProfile()
-{
-    static CMProfileRef cachedRGBProfileRef = NULL;
-
-    // we only create the profile reference once
-    if (cachedRGBProfileRef == NULL)
-    {
-        CMProfileLocation loc;
-
-        loc.locType = cmPathBasedProfile;
-        strcpy(loc.u.pathLoc.path, kGenericRGBProfilePathStr);
-
-        verify_noerr( CMOpenProfile(&cachedRGBProfileRef, &loc) );
-    }
-
-    // clone the profile reference so that the caller has their own reference, not our cached one
-    if (cachedRGBProfileRef)
-        CMCloneProfileRef(cachedRGBProfileRef);
-
-    return cachedRGBProfileRef;
-}
-
 /*
     Return the generic RGB color space. This is a 'get' function and the caller should
     not release the returned value unless the caller retains it first. Usually callers
@@ -1946,6 +1915,13 @@ CGColorSpaceRef wxMacGetGenericRGBColorSpace()
     }
 
     return genericRGBColorSpace;
+}
+
+CGColorRef wxMacCreateCGColorFromHITheme( ThemeBrush brush ) 
+{
+    CGColorRef color ;
+    HIThemeBrushCreateCGColor( brush, &color );
+    return color;
 }
 
 #ifndef __LP64__

@@ -48,11 +48,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
 #include "wx/tabctrl.h"
 
 
-static wxBrush MacGetBackgroundBrush( wxWindow* window )
-{
-    wxBrush bkdBrush = window->MacGetBackgroundBrush() ;
-    return bkdBrush ;
-}
 
 wxWindowDC::wxWindowDC()
 {
@@ -89,7 +84,7 @@ wxWindowDC::wxWindowDC(wxWindow *window)
     }
     SetClippingRegion( 0 , 0 , m_width , m_height ) ;
 
-    SetBackground(MacGetBackgroundBrush(window));
+    SetBackground(wxBrush(window->GetBackgroundColour(),wxSOLID));
 
     SetFont( window->GetFont() ) ;
 }

@@ -30,11 +30,8 @@
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
-    int major, minor;
     wxColour resultColor;
     ThemeBrush colorBrushID;
-
-    wxGetOsVersion( &major, &minor );
 
     switch ( index )
     {
@@ -55,17 +52,11 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break ;
 
         case wxSYS_COLOUR_LISTBOX :
-            if (major >= 10)
-                resultColor = *wxWHITE ;
-            else
-                resultColor = wxColor( 0xEE, 0xEE, 0xEE );
+            resultColor = *wxWHITE ;
             break ;
 
         case wxSYS_COLOUR_BTNSHADOW:
-            if (major >= 10)
-                resultColor = wxColor( 0xBE, 0xBE, 0xBE );
-            else
-                resultColor = wxColor( 0x44, 0x44, 0x44 );
+            resultColor = wxColor( 0xBE, 0xBE, 0xBE );
             break ;
 
         case wxSYS_COLOUR_BTNTEXT:
@@ -85,9 +76,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 #else
                 colorBrushID = kThemeBrushPrimaryHighlightColor;
 #endif
-                CGColorRef color ;
-                HIThemeBrushCreateCGColor( colorBrushID, &color );
-                resultColor = wxColor( color );
+                resultColor = wxColor( wxMacCreateCGColorFromHITheme(colorBrushID) );
             }
             break ;
 
@@ -110,9 +99,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             resultColor = *wxWHITE ;
 #else
             {
-                CGColorRef color ;
-                HIThemeBrushCreateCGColor( kThemeBrushPrimaryHighlightColor, &color );
-                wxColour highlightcolor( color );
+                wxColour highlightcolor( wxMacCreateCGColorFromHITheme(kThemeBrushPrimaryHighlightColor) );
                 if ((highlightcolor.Red() + highlightcolor.Green()  + highlightcolor.Blue() ) == 0)
                     resultColor = *wxWHITE ;
                 else

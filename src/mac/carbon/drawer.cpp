@@ -79,9 +79,8 @@ bool wxDrawerWindow::Create(wxWindow *parent,
     if (success)
     {
         // Use drawer brush.
-        m_macBackgroundBrush.MacSetTheme(kThemeBrushDrawerBackground);
-        ::SetThemeWindowBackground((WindowRef)m_macWindow,
-         m_macBackgroundBrush.MacGetTheme(), false);
+        SetBackgroundColour( wxColour( wxMacCreateCGColorFromHITheme( kThemeBrushDrawerBackground ) ) );
+        ::SetThemeWindowBackground((WindowRef)m_macWindow, kThemeBrushDrawerBackground, false);
          
         // Leading and trailing offset are gaps from parent window edges
         // to where the drawer starts.

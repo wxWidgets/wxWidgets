@@ -483,6 +483,26 @@ static const char *gs_stripedback_xpm[] = {
 
 wxBitmap gs_stripedback_bmp( wxImage( (const char* const* ) gs_stripedback_xpm  ), -1 ) ;
 
+// make sure we all use one class for all conversions from wx to native colour
+
+class wxMacCoreGraphicsColour
+{
+    public:
+        wxMacCoreGraphicsColour();
+        wxMacCoreGraphicsColour(const wxBrush &brush);
+        ~wxMacCoreGraphicsColour();
+        
+        void Apply( CGContextRef cgContext );
+    protected:
+        void Init();
+        wxMacCFRefHolder<CGColorRef> m_color;
+        wxMacCFRefHolder<CGColorSpaceRef> m_colorSpace;
+        
+        bool m_isPattern;
+        wxMacCFRefHolder<CGPatternRef> m_pattern;
+        CGFloat* m_patternColorComponents;
+} ;
+
 wxMacCoreGraphicsColour::~wxMacCoreGraphicsColour()
 {
     delete[] m_patternColorComponents;
@@ -519,18 +539,7 @@ wxMacCoreGraphicsColour::wxMacCoreGraphicsColour( const wxBrush &brush )
     Init();
     if ( brush.GetStyle() == wxSOLID )
     {
-        if ( brush.MacGetBrushKind() == kwxMacBrushTheme )
-        {
-            CGColorRef color ;
-            HIThemeBrushCreateCGColor( brush.MacGetTheme(), &color );
-            m_color.Set( color ) ;
-        }
-        else
-        {
-            CGFloat components[4] = { brush.GetColour().Red() / 255.0 , brush.GetColour().Green() / 255.0 ,
-                brush.GetColour().Blue() / 255.0 , brush.GetColour().Alpha() / 255.0 } ;
-            m_color.Set( CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ) ;
-        }
+        m_color.Set( brush.GetColour().CreateCGColor() );
     }
     else if ( brush.IsHatch() )
     {

@@ -924,8 +924,6 @@ void wxWindowMac::Init()
     m_hScrollBarAlwaysShown = false;
     m_vScrollBarAlwaysShown = false;
 
-    m_macBackgroundBrush = wxNullBrush ;
-
     m_macIsUserPane = true;
     m_clipChildren = false ;
     m_cachedClippedRectValid = false ;
@@ -1200,26 +1198,9 @@ bool wxWindowMac::SetBackgroundColour(const wxColour& col )
     if ( !wxWindowBase::SetBackgroundColour(col) && m_hasBgCol )
         return false ;
 
-    wxBrush brush ;
-    wxColour newCol(GetBackgroundColour());
-
-    if ( newCol == wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) )
-        brush.MacSetTheme( kThemeBrushDocumentWindowBackground ) ;
-    else if ( newCol == wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) )
-        brush.MacSetTheme( kThemeBrushDialogBackgroundActive ) ;
-    else
-        brush.SetColour( newCol ) ;
-
-    MacSetBackgroundBrush( brush ) ;
-    MacUpdateControlFont() ;
+    m_peer->SetBackgroundColour( col ) ;
 
     return true ;
-}
-
-void wxWindowMac::MacSetBackgroundBrush( const wxBrush &brush )
-{
-    m_macBackgroundBrush = brush ;
-    m_peer->SetBackground( brush ) ;
 }
 
 bool wxWindowMac::MacCanFocus() const
@@ -2315,8 +2296,7 @@ void wxWindowMac::OnEraseBackground(wxEraseEvent& event)
         return ;
 
 #if TARGET_API_MAC_OSX
-    if ( !m_macBackgroundBrush.Ok() || m_macBackgroundBrush.GetStyle() == wxTRANSPARENT
-         || GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT )
+    if ( !m_backgroundColour.Ok() || GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT )
     {
         event.Skip() ;
     }
@@ -2441,10 +2421,9 @@ void  wxWindowMac::MacPaintGrowBox()
         CGPoint cgpoint = CGPointMake( rect.right - size , rect.bottom - size ) ;
         CGContextSaveGState( cgContext );
         
-        if ( m_macBackgroundBrush.Ok() && m_macBackgroundBrush.GetStyle() != wxTRANSPARENT )
+        if ( m_backgroundColour.Ok() )
         {
-            wxMacCoreGraphicsColour bkgnd( m_macBackgroundBrush ) ;
-            bkgnd.Apply( cgContext );
+            CGContextSetFillColorWithColor( cgContext, m_backgroundColour.GetCGColor() ); 
         }
         else
         {
