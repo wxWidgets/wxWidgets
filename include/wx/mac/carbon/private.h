@@ -586,7 +586,7 @@ public :
 
 
     virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle );
-    virtual void SetBackground( const wxBrush &brush );
+    virtual void SetBackgroundColour( const wxColour& col );
     virtual ControlPartCode HandleKey(  SInt16 keyCode,  SInt16 charCode, EventModifiers modifiers );
     void SetActionProc( ControlActionUPP   actionProc );
     void SetViewSize( SInt32 viewSize );
@@ -1079,27 +1079,10 @@ OSStatus WXDLLEXPORT wxMacDrawCGImage(
                                const HIRect *  inBounds,
                                CGImageRef      inImage) ;
 
-// make sure we all use one class for all conversions from wx to native colour
-
-class wxMacCoreGraphicsColour
-{
-public:
-    wxMacCoreGraphicsColour();
-    wxMacCoreGraphicsColour(const wxBrush &brush);
-    ~wxMacCoreGraphicsColour();
-    
-     void Apply( CGContextRef cgContext );
-protected:
-    void Init();
-    wxMacCFRefHolder<CGColorRef> m_color;
-    wxMacCFRefHolder<CGColorSpaceRef> m_colorSpace;
-
-    bool m_isPattern;
-    wxMacCFRefHolder<CGPatternRef> m_pattern;
-    CGFloat* m_patternColorComponents;
-} ;
+CGColorRef wxMacCreateCGColorFromHITheme( ThemeBrush brush ) ;
 
 CGColorSpaceRef wxMacGetGenericRGBColorSpace(void);
+
 void wxMacMemoryBufferReleaseProc(void *info, const void *data, size_t size);
 
 class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
@@ -1212,23 +1195,6 @@ public :
 protected :
     WindowRef m_macWindow ;
 } ;
-
-#ifndef __LP64__
-
-#ifdef WORDS_BIGENDIAN
-    inline Rect* wxMacGetPictureBounds( PicHandle pict , Rect* rect )
-    {
-       *rect = (**pict).picFrame;
-        return rect;
-    }
-#else
-    inline Rect* wxMacGetPictureBounds( PicHandle pict , Rect* rect )
-    {
-        return QDGetPictureBounds( pict , rect );
-    }
-#endif
-
-#endif
 
 #endif // wxUSE_GUI
 

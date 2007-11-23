@@ -48,6 +48,10 @@ public:
     bool operator != (const wxColour& colour) const { return !(*this == colour); }
 
     CGColorRef GetPixel() const { return m_cgColour; };
+    
+    CGColorRef GetCGColor() const { return m_cgColour; };
+    CGColorRef CreateCGColor() const { return wxCFRetain( (CGColorRef)m_cgColour ); };
+    
     void GetRGBColor( RGBColor *col ) const;
 
     // Mac-specific ctor and assignment operator from the native colour

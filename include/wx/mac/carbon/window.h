@@ -202,8 +202,6 @@ public:
     bool                MacIsUserPane() { return m_macIsUserPane; }
 
     virtual bool        MacSetupCursor( const wxPoint& pt ) ;
-    virtual void        MacSetBackgroundBrush( const wxBrush &brush ) ;
-    const wxBrush&      MacGetBackgroundBrush() const { return m_macBackgroundBrush ; }
 
     // return the rectangle that would be visible of this control,
     // regardless whether controls are hidden
@@ -287,7 +285,6 @@ protected:
 
     // true if is is not a native control but a wxWindow control
     bool                m_macIsUserPane ;
-    wxBrush             m_macBackgroundBrush ;
 
     // insets of the mac control from the wx top left corner
     wxPoint             m_macTopLeftInset ;

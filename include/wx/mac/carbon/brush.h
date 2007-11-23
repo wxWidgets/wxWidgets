@@ -18,19 +18,10 @@
 
 class WXDLLIMPEXP_FWD_CORE wxBrush;
 
-typedef enum
-{
-    kwxMacBrushColour ,
-    kwxMacBrushTheme ,
-    kwxMacBrushThemeBackground
-} wxMacBrushKind ;
-
 // Brush
 class WXDLLEXPORT wxBrush: public wxBrushBase
 {
-    DECLARE_DYNAMIC_CLASS(wxBrush)
-
-public:
+ public:
     wxBrush();
     wxBrush(short macThemeBrush ) ;
     wxBrush(const wxColour& col, int style = wxSOLID);
@@ -41,31 +32,23 @@ public:
     virtual void SetColour(unsigned char r, unsigned char g, unsigned char b) ;
     virtual void SetStyle(int style)  ;
     virtual void SetStipple(const wxBitmap& stipple)  ;
-    virtual void MacSetTheme(short macThemeBrush) ;
-// TODO REMOVE    virtual void MacSetThemeBackground(unsigned long macThemeBackground ,  WXRECTPTR extent) ;
 
     bool operator == (const wxBrush& brush) const;
     bool operator != (const wxBrush& brush) const
         { return !(*this == brush); }
 
-    wxMacBrushKind MacGetBrushKind()  const ;
-
-// TODO REMOVE    unsigned long MacGetThemeBackground(WXRECTPTR extent)  const ;
-    short MacGetTheme()  const ;
-    wxColour& GetColour() const ;
+    const wxColour& GetColour() const ;
     virtual int GetStyle() const ;
     wxBitmap *GetStipple() const ;
 
     virtual bool Ok() const { return IsOk(); }
     virtual bool IsOk() const { return (m_refData != NULL) ; }
 
-// Implementation
-
-    // Useful helper: create the brush resource
-    bool RealizeResource();
-
+protected:
+    virtual wxObjectRefData *CreateRefData() const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 private:
-    void Unshare();
+    DECLARE_DYNAMIC_CLASS(wxBrush)    
 };
 
 #endif

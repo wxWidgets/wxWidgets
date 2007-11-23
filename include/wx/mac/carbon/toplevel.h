@@ -96,8 +96,8 @@ public:
 
     virtual void SetExtraStyle(long exStyle) ;
 
-    virtual void MacSetBackgroundBrush( const wxBrush &brush ) ;
-
+    virtual bool SetBackgroundColour( const wxColour &colour );
+    
     virtual void MacInstallTopLevelWindowEventHandler() ;
 
     bool MacGetMetalAppearance() const ;
