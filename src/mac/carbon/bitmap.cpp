@@ -43,6 +43,83 @@ IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
 // under Quartz then content is transformed into a CGImageRef representing the same data
 // which can be transferred to the GPU by the OS for fast rendering
 
+class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
+{
+    friend class WXDLLIMPEXP_FWD_CORE wxIcon;
+    friend class WXDLLIMPEXP_FWD_CORE wxCursor;
+public:
+    wxBitmapRefData(int width , int height , int depth);
+    wxBitmapRefData();
+    wxBitmapRefData(const wxBitmapRefData &tocopy);
+    
+    virtual ~wxBitmapRefData();
+    
+    void Free();
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const { return m_ok; }
+    void SetOk( bool isOk) { m_ok = isOk; }
+    
+    void SetWidth( int width ) { m_width = width; }
+    void SetHeight( int height ) { m_height = height; }
+    void SetDepth( int depth ) { m_depth = depth; }
+    
+    int GetWidth() const { return m_width; }
+    int GetHeight() const { return m_height; }
+    int GetDepth() const { return m_depth; }
+    
+    void *GetRawAccess() const;
+    void *BeginRawAccess();
+    void EndRawAccess();
+    
+    bool HasAlpha() const { return m_hasAlpha; }
+    void UseAlpha( bool useAlpha );
+    
+public:
+#if wxUSE_PALETTE
+    wxPalette     m_bitmapPalette;
+#endif // wxUSE_PALETTE
+    
+    wxMask *      m_bitmapMask; // Optional mask
+    CGImageRef    CreateCGImage() const;
+    
+    // returns true if the bitmap has a size that
+    // can be natively transferred into a true icon
+    // if no is returned GetIconRef will still produce
+    // an icon but it will be generated via a PICT and
+    // rescaled to 16 x 16
+    bool          HasNativeSize();
+    
+    // caller should increase ref count if needed longer
+    // than the bitmap exists
+    IconRef       GetIconRef();
+    
+    // returns a Pict from the bitmap content
+    PicHandle     GetPictHandle();
+    
+    CGContextRef  GetBitmapContext() const;
+    
+    int           GetBytesPerRow() const { return m_bytesPerRow; }
+    private :
+    bool Create(int width , int height , int depth);
+    void Init();
+    
+    int           m_width;
+    int           m_height;
+    int           m_bytesPerRow;
+    int           m_depth;
+    bool          m_hasAlpha;
+    wxMemoryBuffer m_memBuf;
+    int           m_rawAccessCount;
+    bool          m_ok;
+    mutable CGImageRef    m_cgImageRef;
+    
+    IconRef       m_iconRef;
+    PicHandle     m_pictHandle;
+    
+    CGContextRef  m_hBitmap;
+};
+
+
 #define wxMAC_USE_PREMULTIPLIED_ALPHA 1
 static const int kBestByteAlignement = 16;
 static const int kMaskBytesPerPixel = 1;
@@ -52,7 +129,9 @@ static int GetBestBytesPerRow( int rawBytes )
     return (((rawBytes)+kBestByteAlignement-1) & ~(kBestByteAlignement-1) );
 }
 
-#if wxUSE_BMPBUTTON
+#if wxUSE_GUI
+
+// this is used for more controls than just the wxBitmap button, also for notebooks etc
 
 void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , int forceType )
 {
@@ -95,7 +174,7 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
         else if ( forceType == kControlContentCGImageRef )
         {
             info->contentType = kControlContentCGImageRef ;
-            info->u.imageRef = (CGImageRef) bmap->CGImageCreate() ;
+            info->u.imageRef = (CGImageRef) bmap->CreateCGImage() ;
         }
         else
         {
@@ -112,7 +191,7 @@ CGImageRef wxMacCreateCGImageFromBitmap( const wxBitmap& bitmap )
     wxBitmapRefData * bmap = bitmap.GetBitmapData() ;
     if ( bmap == NULL )
         return NULL ;
-    return (CGImageRef) bmap->CGImageCreate();
+    return (CGImageRef) bmap->CreateCGImage();
 }
 
 void wxMacReleaseBitmapButton( ControlButtonContentInfo*info )
@@ -505,7 +584,7 @@ PicHandle wxBitmapRefData::GetPictHandle()
             {
                 // QT does not correctly export the mask
                 // TODO if we get around to it create a synthetic PICT with the CopyBits and Mask commands
-                CGImageRef imageRef = CGImageCreate();
+                CGImageRef imageRef = CreateCGImage();
                 err = GraphicsExportSetInputCGImage( exporter, imageRef );
                 err = GraphicsExportSetOutputHandle(exporter, (Handle)m_pictHandle);
                 err = GraphicsExportDoExport(exporter, NULL);
@@ -536,7 +615,7 @@ void wxMacMemoryBufferReleaseProc(void *info, const void *data, size_t WXUNUSED(
     delete membuf ;
 }
 
-CGImageRef wxBitmapRefData::CGImageCreate() const
+CGImageRef wxBitmapRefData::CreateCGImage() const
 {
     wxASSERT( m_ok ) ;
     wxASSERT( m_rawAccessCount >= 0 ) ;
@@ -902,11 +981,25 @@ void wxBitmap::EndRawAccess()
     M_BITMAPDATA->EndRawAccess() ;
 }
 
-WXCGIMAGEREF wxBitmap::CGImageCreate() const
+CGImageRef wxBitmap::CreateCGImage() const
 {
     wxCHECK_MSG( Ok(), NULL , wxT("invalid bitmap") ) ;
 
-    return M_BITMAPDATA->CGImageCreate() ;
+    return M_BITMAPDATA->CreateCGImage() ;
+}
+
+IconRef wxBitmap::GetIconRef() const
+{
+    wxCHECK_MSG( Ok(), NULL , wxT("invalid bitmap") ) ;
+    
+    return M_BITMAPDATA->GetIconRef() ;
+}
+
+IconRef wxBitmap::CreateIconRef() const
+{
+    IconRef icon = GetIconRef();
+    verify_noerr( AcquireIconRef(icon) );
+    return icon;
 }
 
 wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const

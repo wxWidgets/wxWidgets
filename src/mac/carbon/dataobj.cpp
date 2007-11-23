@@ -647,7 +647,7 @@ void wxBitmapDataObject::SetBitmap( const wxBitmap& rBitmap )
     wxBitmapDataObjectBase::SetBitmap( rBitmap );
     if (m_bitmap.Ok())
     {
-        CGImageRef cgImageRef = (CGImageRef) m_bitmap.CGImageCreate();
+        CGImageRef cgImageRef = (CGImageRef) m_bitmap.CreateCGImage();
 
         CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault, 0);
         CGImageDestinationRef destination = CGImageDestinationCreateWithData( data , kUTTypeTIFF , 1 , NULL );

@@ -117,7 +117,7 @@ public :
     {
         wxASSERT( bmp && bmp->Ok() );
 
-        Init( (CGImageRef) bmp->CGImageCreate() , transform );
+        Init( (CGImageRef) bmp->CreateCGImage() , transform );
     }
 
     // ImagePattern takes ownership of CGImageRef passed in
@@ -1650,7 +1650,7 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDo
 {
     EnsureIsValid();
 
-    CGImageRef image = (CGImageRef)( bmp.CGImageCreate() );
+    CGImageRef image = (CGImageRef)( bmp.CreateCGImage() );
     HIRect r = CGRectMake( x , y , w , h );
     if ( bmp.GetDepth() == 1 )
     {

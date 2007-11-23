@@ -980,13 +980,13 @@ bool wxListCtrl::SetColumn(int col, wxListItem& item)
 
         if (item.GetMask() & wxLIST_MASK_IMAGE && item.GetImage() != -1 )
         {
-            columnDesc.btnContentInfo.contentType = kControlContentIconRef;
             wxImageList* imageList = GetImageList(wxIMAGE_LIST_SMALL);
             if (imageList && imageList->GetImageCount() > 0 )
             {
                 wxBitmap bmp = imageList->GetBitmap( item.GetImage() );
-                IconRef icon = bmp.GetBitmapData()->GetIconRef();
+                IconRef icon = bmp.GetIconRef();
                 columnDesc.btnContentInfo.u.iconRef = icon;
+                columnDesc.btnContentInfo.contentType = kControlContentIconRef;
             }
         }
 
@@ -2754,7 +2754,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
         wxImageList* imageList = list->GetImageList(wxIMAGE_LIST_SMALL);
         if (imageList && imageList->GetImageCount() > 0){
             wxBitmap bmp = imageList->GetBitmap(imgIndex);
-            IconRef icon = bmp.GetBitmapData()->GetIconRef();
+            IconRef icon = bmp.GetIconRef();
 
             CGContextSaveGState(context);
             CGContextTranslateCTM(context, 0,iconCGRect.origin.y + CGRectGetMaxY(iconCGRect));
@@ -2895,7 +2895,7 @@ OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemI
                         wxImageList* imageList = list->GetImageList(wxIMAGE_LIST_SMALL);
                         if (imageList && imageList->GetImageCount() > 0){
                             wxBitmap bmp = imageList->GetBitmap(imgIndex);
-                            IconRef icon = bmp.GetBitmapData()->GetIconRef();
+                            IconRef icon = bmp.GetIconRef();
                             ::SetDataBrowserItemDataIcon(itemData, icon);
                         }
                     }

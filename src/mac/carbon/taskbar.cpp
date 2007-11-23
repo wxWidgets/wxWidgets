@@ -380,7 +380,7 @@ bool wxDockTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& WXUNUSED(too
 
     // get the CGImageRef for the wxBitmap:
     // OSX builds only, but then the dock only exists in OSX
-    CGImageRef pImage = (CGImageRef) bmp.CGImageCreate();
+    CGImageRef pImage = (CGImageRef) bmp.CreateCGImage();
     wxASSERT( pImage != NULL );
 
     // actually set the dock image

@@ -24,15 +24,14 @@
 #include "wx/mac/private.h"
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxBitmap)
+IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxGDIObject)
 
 
-class WXDLLEXPORT wxCursorRefData: public wxBitmapRefData
+class WXDLLEXPORT wxCursorRefData: public wxGDIRefData
 {
-    DECLARE_NO_COPY_CLASS(wxCursorRefData)
-
-    friend class wxBitmap;
     friend class wxCursor;
+
+    DECLARE_NO_COPY_CLASS(wxCursorRefData)
 
 public:
     wxCursorRefData();
@@ -199,8 +198,6 @@ CursHandle wxGetStockCursor( int number )
 
 wxCursorRefData::wxCursorRefData()
 {
-    SetWidth( 16 );
-    SetHeight( 16 );
     m_hCursor = NULL;
 #if wxMAC_USE_COCOA
 #else

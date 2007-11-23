@@ -169,7 +169,7 @@ static bool InitializeColumnDescription(DataBrowserListViewColumnDesc& columnDes
   columnDescription.headerBtnDesc.btnFontStyle.style = normal;
   columnDescription.headerBtnDesc.btnContentInfo.contentType = kControlContentIconRef;
   if (columnPtr->GetBitmap().Ok())
-    columnDescription.headerBtnDesc.btnContentInfo.u.iconRef = columnPtr->GetBitmap().GetBitmapData()->GetIconRef();
+    columnDescription.headerBtnDesc.btnContentInfo.u.iconRef = columnPtr->GetBitmap().GetIconRef();
  // done:
   return true;
 } /* InitializeColumnDescription(DataBrowserListViewColumnDesc&, wxDataViewColumn const*, DataBrowserPropertyID, wxMacCFStringHolder const&) */
@@ -536,7 +536,7 @@ bool wxDataViewBitmapRenderer::Render(void)
     
     bitmap << this->GetValue();
     if (bitmap.Ok())
-      return (::SetDataBrowserItemDataIcon(this->GetDataReference(),bitmap.GetBitmapData()->GetIconRef()) == noErr);
+      return (::SetDataBrowserItemDataIcon(this->GetDataReference(),bitmap.GetIconRef()) == noErr);
     else
       return true;
   } /* if */
@@ -734,7 +734,7 @@ void wxDataViewColumn::SetBitmap(wxBitmap const& bitmap)
 
       wxCHECK_RET(macDataViewListCtrlPtr->GetHeaderDesc(this->GetPropertyID(),&headerDescription) == noErr,_("Could not get header description."));
       if (this->GetBitmap().Ok())
-        headerDescription.btnContentInfo.u.iconRef = this->GetBitmap().GetBitmapData()->GetIconRef();
+        headerDescription.btnContentInfo.u.iconRef = this->GetBitmap().GetIconRef();
       else
         headerDescription.btnContentInfo.u.iconRef = NULL;
       wxCHECK_RET(macDataViewListCtrlPtr->SetHeaderDesc(this->GetPropertyID(),&headerDescription) == noErr,_("Could not set icon."));
