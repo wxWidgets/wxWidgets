@@ -701,6 +701,110 @@ bool wxWindowMSW::Show(bool show)
     return true;
 }
 
+bool
+wxWindowMSW::MSWShowWithEffect(bool show,
+                               wxShowEffect effect,
+                               unsigned timeout,
+                               wxDirection dir)
+{
+    typedef BOOL (WINAPI *AnimateWindow_t)(HWND, DWORD, DWORD);
+
+    static AnimateWindow_t s_pfnAnimateWindow = NULL;
+    static bool s_initDone = false;
+    if ( !s_initDone )
+    {
+        wxLogNull noLog;
+
+        wxDynamicLibrary dllUser32(_T("user32.dll"), wxDL_VERBATIM);
+        wxDL_INIT_FUNC(s_pfn, AnimateWindow, dllUser32);
+
+        s_initDone = true;
+
+        // notice that it's ok to unload user32.dll here as it won't be really
+        // unloaded, being still in use because we link to it statically too
+    }
+
+    if ( !s_pfnAnimateWindow )
+        return Show(show);
+
+    // prepare to use AnimateWindow()
+
+    if ( !timeout )
+        timeout = 200; // this is the default animation timeout, per MSDN
+
+    DWORD dwFlags = show ? 0 : AW_HIDE;
+    bool needsDir = false;
+    switch ( effect )
+    {
+        case wxSHOW_EFFECT_ROLL:
+            needsDir = true;
+            break;
+
+        case wxSHOW_EFFECT_SLIDE:
+            needsDir = true;
+            dwFlags |= AW_SLIDE;
+            break;
+
+        case wxSHOW_EFFECT_BLEND:
+            dwFlags |= AW_BLEND;
+            break;
+
+        case wxSHOW_EFFECT_EXPAND:
+            dwFlags |= AW_CENTER;
+            break;
+
+
+        case wxSHOW_EFFECT_MAX:
+            wxFAIL_MSG( _T("invalid window show effect") );
+            return false;
+
+        default:
+            wxFAIL_MSG( _T("unknown window show effect") );
+            return false;
+    }
+
+    if ( needsDir )
+    {
+        switch ( dir )
+        {
+            case wxTOP:
+                dwFlags |= AW_VER_NEGATIVE;
+                break;
+
+            case wxBOTTOM:
+                dwFlags |= AW_VER_POSITIVE;
+                break;
+
+            case wxLEFT:
+                dwFlags |= AW_HOR_NEGATIVE;
+                break;
+
+            case wxRIGHT:
+                dwFlags |= AW_HOR_POSITIVE;
+                break;
+
+            default:
+                wxFAIL_MSG( _T("unknown window effect direction") );
+                return false;
+        }
+    }
+    else // animation effect which doesn't need the direction
+    {
+        wxASSERT_MSG( dir == wxBOTTOM,
+                        _T("non-default direction used unnecessarily") );
+    }
+
+
+    if ( !(*s_pfnAnimateWindow)(GetHwnd(), timeout, dwFlags) )
+    {
+        wxLogLastError(_T("AnimateWindow"));
+
+        return false;
+    }
+
+    return true;
+}
+
 // Raise the window to the top of the Z order
 void wxWindowMSW::Raise()
 {

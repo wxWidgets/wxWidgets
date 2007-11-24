@@ -3771,6 +3771,39 @@ done because it already was in the requested state.
 \helpref{wxRadioBox::Show}{wxradioboxshow}
 
 
+\membersection{wxWindow::ShowWithEffect}\label{wxwindowshowwitheffect}
+
+\func{virtual bool}{ShowWithEffect}{\param{wxShowEffect }{effect}, \param{unsigned }{timeout = $0$}, \param{wxDirection }{dir = wxBOTTOM}}
+
+This function shows a window, like \helpref{Show()}{wxwindowshow}, but using a
+special visual effect if possible.
+
+Possible values for \arg{effect} are:
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxSHOW\_EFFECT\_ROLL}{Roll window effect}
+\twocolitem{wxSHOW\_EFFECT\_SLIDE}{Sliding window effect}
+\twocolitem{wxSHOW\_EFFECT\_BLEND}{Fade in or out effect}
+\twocolitem{wxSHOW\_EFFECT\_EXPAND}{Expanding or collapsing effect}
+\end{twocollist}
+
+For the roll and slide effects the \arg{dir} parameter specifies the animation
+direction: it can be one of \texttt{wxTOP}, \texttt{wxBOTTOM}, \texttt{wxLEFT} 
+or \texttt{wxRIGHT}. For the other effects, this parameter is unused.
+
+The \arg{timeout} parameter specifies the time of the animation, in
+milliseconds. If the default value of $0$ is used, the default animation time
+for the current platform is used.
+
+Currently this function is only implemented in wxMSW and does the same thing as
+Show() in the other ports.
+
+\newsince{2.9.0}
+
+\wxheading{See also}
+
+\helpref{HideWithEffect}{wxwindowhidewitheffect}
+
+
 \membersection{wxWindow::Thaw}\label{wxwindowthaw}
 
 \func{virtual void}{Thaw}{\void}

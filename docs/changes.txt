@@ -194,6 +194,7 @@ All (GUI):
 - Added {wxTextCtrl,wxComboBox}::AutoComplete() and AutoCompleteFileNames()
 - Added wxH[V]ScrolledWindow (Brad Anderson, Bryan Petty).
 - Added wxNotificationMessage class for non-intrusive notifications
+- Added wxWindow::Show/HideWithEffect()
 - Added wxDC::StretchBlit() for wxMac and wxMSW (Vince Harron).
 - Added support for drop down toolbar buttons (Tim Kosse).
 - Added support for labels for toolbar controls (Vince Harron).

@@ -48,7 +48,15 @@
 enum
 {
     Show_Shaped,
-    Show_Transparent
+    Show_Transparent,
+
+    // must be consecutive and in the same order as wxShowEffect enum elements
+    Show_Effect_First,
+    Show_Effect_Roll = Show_Effect_First,
+    Show_Effect_Slide,
+    Show_Effect_Blend,
+    Show_Effect_Expand,
+    Show_Effect_Last = Show_Effect_Expand
 };
 
 // ----------------------------------------------------------------------------
@@ -78,6 +86,7 @@ public:
 private:
     void OnShowShaped(wxCommandEvent& event);
     void OnShowTransparent(wxCommandEvent& event);
+    void OnShowEffect(wxCommandEvent& event);
 
     DECLARE_EVENT_TABLE()
 };
@@ -137,6 +146,60 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+class EffectFrame : public wxFrame
+{
+public:
+    EffectFrame(wxWindow *parent,
+                wxShowEffect effect,
+                // TODO: add menu command to the main frame to allow changing
+                //       these parameters
+                unsigned timeout = 1000,
+                wxDirection dir = wxBOTTOM)
+        : wxFrame(parent, wxID_ANY,
+                  wxString::Format("Frame shown with %s effect",
+                                   GetEffectName(effect)),
+                  wxDefaultPosition, wxSize(450, 300)),
+          m_effect(effect),
+          m_timeout(timeout),
+          m_dir(dir)
+    {
+        new wxStaticText(this, wxID_ANY,
+                         wxString::Format("Effect: %s", GetEffectName(effect)),
+                         wxPoint(20, 20));
+        new wxStaticText(this, wxID_ANY,
+                         wxString::Format("Timeout: %ums", m_timeout),
+                         wxPoint(20, 60));
+
+        ShowWithEffect(m_effect, m_timeout, m_dir);
+
+        Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(EffectFrame::OnClose));
+    }
+
+private:
+    static const char *GetEffectName(wxShowEffect effect)
+    {
+        static const char *names[] =
+        {
+            "roll", "slide", "fade", "expand",
+        };
+        wxCOMPILE_TIME_ASSERT( WXSIZEOF(names) == wxSHOW_EFFECT_MAX,
+                                EffectNamesMismatch );
+
+        return names[effect];
+    }
+
+    void OnClose(wxCloseEvent& event)
+    {
+        HideWithEffect(m_effect, m_timeout, m_dir);
+
+        event.Skip();
+    }
+
+    wxShowEffect m_effect;
+    unsigned m_timeout;
+    wxDirection m_dir;
+};
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -170,6 +233,7 @@ bool MyApp::OnInit()
 BEGIN_EVENT_TABLE(MainFrame, wxFrame)
     EVT_MENU(Show_Shaped, MainFrame::OnShowShaped)
     EVT_MENU(Show_Transparent, MainFrame::OnShowTransparent)
+    EVT_MENU_RANGE(Show_Effect_First, Show_Effect_Last, MainFrame::OnShowEffect)
 END_EVENT_TABLE()
 
 MainFrame::MainFrame()
@@ -180,6 +244,11 @@ MainFrame::MainFrame()
     wxMenu * const menuFrames = new wxMenu;
     menuFrames->Append(Show_Shaped, "Show &shaped window\tCtrl-S");
     menuFrames->Append(Show_Transparent, "Show &transparent window\tCtrl-T");
+    menuFrames->AppendSeparator();
+    menuFrames->Append(Show_Effect_Roll, "Show &rolled effect\tCtrl-R");
+    menuFrames->Append(Show_Effect_Slide, "Show s&lide effect\tCtrl-L");
+    menuFrames->Append(Show_Effect_Blend, "Show &fade effect\tCtrl-F");
+    menuFrames->Append(Show_Effect_Expand, "Show &expand effect\tCtrl-E");
     menuFrames->AppendSeparator();
     menuFrames->Append(wxID_EXIT, "E&xit");
 
@@ -199,6 +268,12 @@ void MainFrame::OnShowTransparent(wxCommandEvent& WXUNUSED(event))
 {
     SeeThroughFrame *seeThroughFrame = new SeeThroughFrame();
     seeThroughFrame->Show(true);
+}
+
+void MainFrame::OnShowEffect(wxCommandEvent& event)
+{
+    int effect = wxSHOW_EFFECT_ROLL + event.GetId() - Show_Effect_Roll;
+    new EffectFrame(this, wx_static_cast(wxShowEffect, effect));
 }
 
 // ----------------------------------------------------------------------------

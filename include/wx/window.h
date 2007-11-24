@@ -117,6 +117,16 @@ enum wxWindowVariant
     #define wxWINDOW_DEFAULT_VARIANT wxT("window-default-variant")
 #endif
 
+// valid values for Show/HideWithEffect()
+enum wxShowEffect
+{
+    wxSHOW_EFFECT_ROLL,
+    wxSHOW_EFFECT_SLIDE,
+    wxSHOW_EFFECT_BLEND,
+    wxSHOW_EFFECT_EXPAND,
+    wxSHOW_EFFECT_MAX
+};
+
 // ----------------------------------------------------------------------------
 // (pseudo)template list classes
 // ----------------------------------------------------------------------------
@@ -498,6 +508,35 @@ public:
         // done (window was already shown/hidden)
     virtual bool Show( bool show = true );
     bool Hide() { return Show(false); }
+
+        // show or hide the window with a special effect, not implemented on
+        // most platforms (where it is the same as Show()/Hide() respectively)
+        //
+        // timeout specifies how long the animation should take, in ms, the
+        // default value of 0 means to use the default (system-dependent) value
+        //
+        // direction is only used with wxSHOW_EFFECT_ROLL and SLIDE values
+    virtual bool ShowWithEffect(wxShowEffect effect,
+                                unsigned timeout = 0,
+                                wxDirection dir = wxBOTTOM)
+    {
+        wxUnusedVar(effect);
+        wxUnusedVar(timeout);
+        wxUnusedVar(dir);
+
+        return Show();
+    }
+
+    virtual bool HideWithEffect(wxShowEffect effect,
+                                unsigned timeout = 0,
+                                wxDirection dir = wxBOTTOM)
+    {
+        wxUnusedVar(effect);
+        wxUnusedVar(timeout);
+        wxUnusedVar(dir);
+
+        return Hide();
+    }
 
         // returns true if window was enabled/disabled, false if nothing done
     virtual bool Enable( bool enable = true );
