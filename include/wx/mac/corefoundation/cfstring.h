@@ -74,6 +74,8 @@ public:
         m_cfs = NULL ;
     }
 
+    void Assign(CFStringRef ref , bool release = true);
+
     void Assign(const wxString &str,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
