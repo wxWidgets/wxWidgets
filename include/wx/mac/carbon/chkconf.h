@@ -67,23 +67,66 @@
 #endif
 
 /*
- * setting up 64 bit
+ * setting flags according to the platform
+ */
+
+#ifdef __LP64__
+    #if wxMAC_USE_COCOA == 0
+        #undef wxMAC_USE_COCOA
+        #define wxMAC_USE_COCOA 1
+    #endif
+    #define wxMAC_USE_QUICKDRAW 0
+#else
+    #define wxMAC_USE_QUICKDRAW 1
+#endif
+
+/* 
+ * text rendering system 
+ */
+
+/* we have different options and we turn on all that make sense 
+ * under a certain platform
+ */
+
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+
+#define wxMAC_USE_CORE_TEXT 1
+#define wxMAC_USE_ATSU_TEXT 0
+
+#else // platform < 10.5
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+#define wxMAC_USE_CORE_TEXT 1
+#else
+#define wxMAC_USE_CORE_TEXT 0
+#endif
+#define wxMAC_USE_ATSU_TEXT 1
+
+#endif
+
+// pure coregraphics text
+#define wxMAC_USE_CG_TEXT 0
+
+/*
+ * turning off capabilities that don't work under 64 bit yet
  */
 
 #ifdef __LP64__
 
-#undef wxMAC_USE_COCOA
-#define wxMAC_USE_COCOA 1
-
+#if wxUSE_DRAG_AND_DROP
 #undef wxUSE_DRAG_AND_DROP
 #define wxUSE_DRAG_AND_DROP 0
+#endif
 
+#if wxUSE_TASKBARICON
 #undef wxUSE_TASKBARICON
 #define wxUSE_TASKBARICON 0
+#endif
 
+#if wxUSE_TOOLTIPS
 #undef wxUSE_TOOLTIPS
 #define wxUSE_TOOLTIPS 0
-
+#endif
 
 
 #endif
