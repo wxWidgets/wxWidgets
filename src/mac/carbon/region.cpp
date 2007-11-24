@@ -29,19 +29,33 @@ class WXDLLEXPORT wxRegionRefData : public wxGDIRefData
 {
 public:
     wxRegionRefData()
-    { m_macRgn = NewRgn(); }
+    { 
+        m_macRgn.reset( HIShapeCreateMutable() ); 
+    }
 
+    wxRegionRefData(HIShapeRef hRegion)
+    { 
+        m_macRgn.reset( HIShapeCreateMutableCopy(hRegion) ); 
+    }
+    
+    wxRegionRefData(long x, long y, long w, long h)
+    {
+        CGRect r = CGRectMake(x,y,w,h);
+        wxCFRef<HIShapeRef> rect(HIShapeCreateWithRect(&r));
+        m_macRgn.reset( HIShapeCreateMutableCopy(rect) ); 
+    }
+    
     wxRegionRefData(const wxRegionRefData& data)
         : wxGDIRefData()
     {
-        m_macRgn = NewRgn();
-        CopyRgn( data.m_macRgn , m_macRgn );
+        m_macRgn.reset( HIShapeCreateMutableCopy(data.m_macRgn) );
     }
 
     virtual ~wxRegionRefData()
-    { DisposeRgn( m_macRgn ); }
+    { 
+    }
 
-    RgnHandle    m_macRgn;
+    wxCFRef<HIMutableShapeRef> m_macRgn;
 };
 
 #define M_REGION (((wxRegionRefData*)m_refData)->m_macRgn)
@@ -56,31 +70,29 @@ public:
  */
 wxRegion::wxRegion()
 {
-    m_refData = new wxRegionRefData;
+    m_refData = new wxRegionRefData();
 }
 
 wxRegion::wxRegion(WXHRGN hRegion )
 {
-    m_refData = new wxRegionRefData;
-    CopyRgn( (RgnHandle) hRegion , (RgnHandle) M_REGION ) ;
+    m_refData = new wxRegionRefData(hRegion);
 }
 
 wxRegion::wxRegion(long x, long y, long w, long h)
 {
-    m_refData = new wxRegionRefData;
-    SetRectRgn( (RgnHandle) M_REGION , x , y , x + w , y + h ) ;
+    m_refData = new wxRegionRefData(x , y , w , h );
 }
 
 wxRegion::wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight)
 {
-    m_refData = new wxRegionRefData;
-    SetRectRgn( (RgnHandle) M_REGION , topLeft.x , topLeft.y , bottomRight.x , bottomRight.y ) ;
+    m_refData = new wxRegionRefData(topLeft.x , topLeft.y , 
+                                    topLeft.x - bottomRight.x , 
+                                    topLeft.y - bottomRight.y);
 }
 
 wxRegion::wxRegion(const wxRect& rect)
 {
-    m_refData = new wxRegionRefData;
-    SetRectRgn( (RgnHandle) M_REGION , rect.x , rect.y , rect.x + rect.width , rect.y + rect.height ) ;
+    m_refData = new wxRegionRefData(rect.x , rect.y , rect.width , rect.height);
 }
 
 wxRegion::wxRegion(size_t n, const wxPoint *points, int WXUNUSED(fillStyle))
@@ -153,7 +165,7 @@ bool wxRegion::DoOffset(wxCoord x, wxCoord y)
         // nothing to do
         return true;
 
-    OffsetRgn( M_REGION , x , y ) ;
+    HIShapeOffset( M_REGION , x , y ) ;
 
     return true ;
 }
@@ -179,24 +191,29 @@ bool wxRegion::DoCombine(const wxRegion& region, wxRegionOp op)
     switch (op)
     {
         case wxRGN_AND:
-            SectRgn( M_REGION , OTHER_M_REGION(region) , M_REGION ) ;
+            HIShapeIntersect( M_REGION , OTHER_M_REGION(region) , M_REGION ) ;
             break ;
 
         case wxRGN_OR:
-            UnionRgn( M_REGION , OTHER_M_REGION(region) , M_REGION ) ;
+            HIShapeUnion( M_REGION , OTHER_M_REGION(region) , M_REGION ) ;
             break ;
 
         case wxRGN_XOR:
-             XorRgn( M_REGION , OTHER_M_REGION(region) , M_REGION ) ;
+            {
+                // XOR is defined as the difference between union and intersection
+                wxCFRef< HIShapeRef > unionshape( HIShapeCreateUnion( M_REGION , OTHER_M_REGION(region) ) );
+                wxCFRef< HIShapeRef > intersectionshape( HIShapeCreateIntersection( M_REGION , OTHER_M_REGION(region) ) );
+                HIShapeDifference( unionshape, intersectionshape, M_REGION );
+            }
             break ;
 
         case wxRGN_DIFF:
-            DiffRgn( M_REGION , OTHER_M_REGION(region) , M_REGION ) ;
+            HIShapeDifference( M_REGION , OTHER_M_REGION(region) , M_REGION ) ;
             break ;
 
         case wxRGN_COPY:
         default:
-            CopyRgn( OTHER_M_REGION(region) , M_REGION ) ;
+            M_REGION.reset( HIShapeCreateMutableCopy( OTHER_M_REGION(region) ) );
             break ;
     }
 
@@ -219,12 +236,12 @@ bool wxRegion::DoGetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const
 {
     if (m_refData)
     {
-        Rect box ;
-        GetRegionBounds( M_REGION , &box ) ;
-        x = box.left ;
-        y = box.top ;
-        w = box.right - box.left ;
-        h = box.bottom - box.top ;
+        CGRect box ;
+        HIShapeGetBounds( M_REGION , &box ) ;
+        x = box.origin.x ;
+        y = box.origin.y ;
+        w = box.size.width ;
+        h = box.size.height ;
 
         return true;
     }
@@ -240,7 +257,7 @@ bool wxRegion::DoGetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const
 bool wxRegion::IsEmpty() const
 {
     if ( m_refData )
-        return EmptyRgn( M_REGION ) ;
+        return HIShapeIsEmpty( M_REGION ) ;
     else
         return true ;
 }
@@ -260,8 +277,8 @@ wxRegionContain wxRegion::DoContainsPoint(wxCoord x, wxCoord y) const
     if (!m_refData)
         return wxOutRegion;
 
-    Point p = { y , x } ;
-    if (PtInRgn( p , M_REGION ) )
+    CGPoint p = { y , x } ;
+    if (HIShapeContainsPoint( M_REGION , &p ) )
         return wxInRegion;
 
     return wxOutRegion;
@@ -273,8 +290,13 @@ wxRegionContain wxRegion::DoContainsRect(const wxRect& r) const
     if (!m_refData)
         return wxOutRegion;
 
-    Rect rect = { r.y , r.x , r.y + r.height , r.x + r.width } ;
-    if (RectInRgn( &rect , M_REGION ) )
+    CGRect rect = CGRectMake(r.x,r.y,r.width,r.height);
+    wxCFRef<HIShapeRef> rectshape(HIShapeCreateWithRect(&rect));
+    wxCFRef<HIShapeRef> intersect(HIShapeCreateIntersection(rectshape,M_REGION));
+    CGRect bounds;
+    HIShapeGetBounds(intersect, &bounds);
+    
+    if ( HIShapeIsRectangular(intersect) && CGRectEqualToRect(rect,bounds) )
         return wxInRegion;
     else
         return wxOutRegion;
@@ -357,6 +379,7 @@ wxRegionIterator::wxRegionIterator(const wxRegion& region)
  * Reset iterator for a new /e region.
  */
 
+#ifndef __LP64__
 OSStatus wxMacRegionToRectsCounterCallback(
     UInt16 message, RgnHandle WXUNUSED(region), const Rect *WXUNUSED(rect), void *data )
 {
@@ -391,6 +414,7 @@ OSStatus wxMacRegionToRectsSetterCallback(
 
     return noErr;
 }
+#endif
 
 void wxRegionIterator::Reset(const wxRegion& region)
 {
@@ -409,26 +433,22 @@ void wxRegionIterator::Reset(const wxRegion& region)
     }
     else
     {
-        RegionToRectsUPP proc = 
-#ifdef __MACH__
-        (RegionToRectsUPP) wxMacRegionToRectsCounterCallback;
+#ifdef __LP64__
+        // copying this to a path and dissecting the path would be an option
+        m_numRects = 1;
+        m_rects = new wxRect[m_numRects];
+        m_rects[0] = m_region.GetBox();
+        
 #else
-        NewRegionToRectsUPP( wxMacRegionToRectsCounterCallback );
-#endif
+        RegionToRectsUPP proc = (RegionToRectsUPP) wxMacRegionToRectsCounterCallback;
 
         OSStatus err = noErr;
+        RgnHandle rgn = NewHandle();
+        
         err = QDRegionToRects (OTHER_M_REGION( region ) , kQDParseRegionFromTopLeft, proc, (void*)&m_numRects);
         if (err == noErr)
         {
-#ifndef __MACH__
-            DisposeRegionToRectsUPP (proc);
-#endif
-            proc = 
-#ifdef __MACH__
-            (RegionToRectsUPP) wxMacRegionToRectsSetterCallback;
-#else
-            NewRegionToRectsUPP (wxMacRegionToRectsSetterCallback);
-#endif
+            proc = (RegionToRectsUPP) wxMacRegionToRectsSetterCallback;
             m_rects = new wxRect[m_numRects];
             RegionToRectsCallbackData data ;
             data.m_rects = m_rects ;
@@ -439,9 +459,6 @@ void wxRegionIterator::Reset(const wxRegion& region)
         {
             m_numRects = 0;
         }
-
-#ifndef __MACH__
-        DisposeRegionToRectsUPP( proc );
 #endif
     }
 }
