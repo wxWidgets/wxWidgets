@@ -24,6 +24,9 @@ src/os2/*.def
 src/os2/*.lst
 src/os2/*.sh
 src/*.icc
+src/unix/appunix.cpp
+src/unix/evtloop.cpp
+src/unix/timerunx.cpp
 
 include/wx/os2/*.h
 include/wx/os2/*.rc
@@ -31,6 +34,7 @@ include/wx/os2/*.res
 include/wx/msw/*.cur
 include/wx/msw/*.ico
 include/wx/msw/*.bmp
+wx/unix/evtloop.h
 
 samples/minimal/Minimal.icc
 
