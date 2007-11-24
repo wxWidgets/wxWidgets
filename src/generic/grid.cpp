@@ -10529,6 +10529,12 @@ void wxGrid::AutoSizeColOrRow( int colOrRow, bool setAsMin, bool column )
 
     if ( column )
     {
+        // Ensure automatic width is not less than minimal width. See the
+        // comment in SetColSize() for explanation of why this isn't done
+        // in SetColSize().
+        if ( !setAsMin )
+            extentMax = wxMax(extentMax, GetColMinimalWidth(col));
+
         SetColSize( col, extentMax );
         if ( !GetBatchCount() )
         {
@@ -10544,6 +10550,12 @@ void wxGrid::AutoSizeColOrRow( int colOrRow, bool setAsMin, bool column )
     }
     else
     {
+        // Ensure automatic width is not less than minimal height. See the
+        // comment in SetColSize() for explanation of why this isn't done
+        // in SetRowSize().
+        if ( !setAsMin )
+            extentMax = wxMax(extentMax, GetRowMinimalHeight(row));
+
         SetRowSize(row, extentMax);
         if ( !GetBatchCount() )
         {

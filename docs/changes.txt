@@ -95,6 +95,8 @@ All (GUI):
 
 - Added wxWindow::GetNextSibling() and GetPrevSibling()
 - Support wxGRID_AUTOSIZE in wxGrid::SetRow/ColLabelSize() (Evgeniy Tarassov)
+- Ensure that wxGrid::AutoSizeColumn/Row() never sets column/row size
+  smaller than the minimal size
 
 All (Unix):
 
