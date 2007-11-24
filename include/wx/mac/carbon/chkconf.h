@@ -66,6 +66,29 @@
     #define wxMAC_USE_COCOA 0
 #endif
 
+/*
+ * setting up 64 bit
+ */
+
+#ifdef __LP64__
+
+#undef wxMAC_USE_COCOA
+#define wxMAC_USE_COCOA 1
+
+#undef wxUSE_DRAG_AND_DROP
+#define wxUSE_DRAG_AND_DROP 0
+
+#undef wxUSE_TASKBARICON
+#define wxUSE_TASKBARICON 0
+
+#undef wxUSE_TOOLTIPS
+#define wxUSE_TOOLTIPS 0
+
+
+
+#endif
+
+
 #endif
     /* _WX_MAC_CHKCONF_H_ */
 

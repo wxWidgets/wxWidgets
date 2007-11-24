@@ -152,7 +152,10 @@ private:
 */
 
 // app.h
+
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
 bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec);
+#endif
 
 #endif // wxUSE_GUI
 
