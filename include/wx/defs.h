@@ -2500,11 +2500,8 @@ enum wxUpdateUI
 
 #define WX_OPAQUE_TYPE( name ) struct wxOpaque##name
 
-typedef void*       WXCOLORREF;
-typedef void*       WXCGIMAGEREF;
 typedef void*       WXHBITMAP;
 typedef void*       WXHCURSOR;
-typedef void*       WXHRGN;
 typedef void*       WXRECTPTR;
 typedef void*       WXPOINTPTR;
 typedef void*       WXHWND;
@@ -2512,20 +2509,21 @@ typedef void*       WXEVENTREF;
 typedef void*       WXEVENTHANDLERREF;
 typedef void*       WXEVENTHANDLERCALLREF;
 typedef void*       WXAPPLEEVENTREF;
-typedef void*       WXHDC;
 typedef void*       WXHMENU;
+
 typedef unsigned int    WXUINT;
 typedef unsigned long   WXDWORD;
 typedef unsigned short  WXWORD;
 
-typedef WX_OPAQUE_TYPE(CIconHandle ) * WXHICON ;
 typedef WX_OPAQUE_TYPE(PicHandle ) * WXHMETAFILE ;
 typedef WX_OPAQUE_TYPE(ControlRef ) * WXWidget ;
 typedef WX_OPAQUE_TYPE(WindowRef) * WXWindow ;
 
 typedef void*       WXDisplay;
 
-// a few native types
+/*
+ * core frameworks
+ */
 
 typedef const void * CFTypeRef;
 
@@ -2540,10 +2538,24 @@ DECLARE_WXMAC_OPAQUE_CGREF( CGColor );
 DECLARE_WXMAC_OPAQUE_CGREF( CGImage );
 DECLARE_WXMAC_OPAQUE_CGREF( CGContext );
 
+typedef CGColorRef    WXCOLORREF;
+typedef CGImageRef    WXCGIMAGEREF;
+typedef CGContextRef  WXHDC;
+
+/*
+ * carbon
+ */
+
+typedef const struct __HIShape * HIShapeRef;
+typedef struct __HIShape * HIMutableShapeRef;
+
 #define DECLARE_WXMAC_OPAQUE_REF( name ) typedef struct Opaque##name* name;
 
 DECLARE_WXMAC_OPAQUE_REF( PasteboardRef );
 DECLARE_WXMAC_OPAQUE_REF( IconRef );
+
+typedef IconRef WXHICON ;
+typedef HIShapeRef WXHRGN;
 
 #endif
 
