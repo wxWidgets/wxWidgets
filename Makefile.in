@@ -2923,9 +2923,12 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION__ADVANCED_PLATFORM_HDR =  \
 	wx/unix/taskbarx11.h \
 	wx/generic/animate.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION__ADVANCED_PLATFORM_HDR)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@ADVANCED_PLATFORM_HDR \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= wx/unix/joystick.h wx/unix/sound.h \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	wx/unix/taskbarx11.h
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_HDR =  \
+	wx/unix/joystick.h \
+	wx/unix/sound.h \
+	wx/unix/taskbarx11.h \
+	wx/gtk/hildon/notifmsg.h
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_HDR)
 COND_TOOLKIT_MAC_ADVANCED_PLATFORM_HDR =  \
 	wx/generic/animate.h \
 	wx/mac/carbon/drawer.h \
@@ -2979,6 +2982,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/generic/helpext.h \
 	wx/generic/hyperlink.h \
 	wx/generic/laywin.h \
+	wx/generic/notifmsg.h \
 	wx/generic/propdlg.h \
 	wx/generic/sashwin.h \
 	wx/generic/splash.h \
@@ -2987,6 +2991,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/hyperlink.h \
 	wx/joystick.h \
 	wx/laywin.h \
+	wx/notifmsg.h \
 	wx/odcombo.h \
 	wx/propdlg.h \
 	wx/sashwin.h \
@@ -3021,6 +3026,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/generic/helpext.h \
 	wx/generic/hyperlink.h \
 	wx/generic/laywin.h \
+	wx/generic/notifmsg.h \
 	wx/generic/propdlg.h \
 	wx/generic/sashwin.h \
 	wx/generic/splash.h \
@@ -3029,6 +3035,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/hyperlink.h \
 	wx/joystick.h \
 	wx/laywin.h \
+	wx/notifmsg.h \
 	wx/odcombo.h \
 	wx/propdlg.h \
 	wx/sashwin.h \
@@ -5255,6 +5262,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_helpext.o \
 	monodll_hyperlinkg.o \
 	monodll_laywin.o \
+	monodll_notifmsgg.o \
 	monodll_odcombo.o \
 	monodll_propdlg.o \
 	monodll_sashwin.o \
@@ -5280,6 +5288,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_helpext.o \
 	monodll_hyperlinkg.o \
 	monodll_laywin.o \
+	monodll_notifmsgg.o \
 	monodll_odcombo.o \
 	monodll_propdlg.o \
 	monodll_sashwin.o \
@@ -7148,6 +7157,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_helpext.o \
 	monolib_hyperlinkg.o \
 	monolib_laywin.o \
+	monolib_notifmsgg.o \
 	monolib_odcombo.o \
 	monolib_propdlg.o \
 	monolib_sashwin.o \
@@ -7173,6 +7183,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_helpext.o \
 	monolib_hyperlinkg.o \
 	monolib_laywin.o \
+	monolib_notifmsgg.o \
 	monolib_odcombo.o \
 	monolib_propdlg.o \
 	monolib_sashwin.o \
@@ -10871,6 +10882,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_helpext.o \
 	advdll_hyperlinkg.o \
 	advdll_laywin.o \
+	advdll_notifmsgg.o \
 	advdll_odcombo.o \
 	advdll_propdlg.o \
 	advdll_sashwin.o \
@@ -10896,6 +10908,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_helpext.o \
 	advdll_hyperlinkg.o \
 	advdll_laywin.o \
+	advdll_notifmsgg.o \
 	advdll_odcombo.o \
 	advdll_propdlg.o \
 	advdll_sashwin.o \
@@ -10942,6 +10955,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_helpext.o \
 	advlib_hyperlinkg.o \
 	advlib_laywin.o \
+	advlib_notifmsgg.o \
 	advlib_odcombo.o \
 	advlib_propdlg.o \
 	advlib_sashwin.o \
@@ -10967,6 +10981,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_helpext.o \
 	advlib_hyperlinkg.o \
 	advlib_laywin.o \
+	advlib_notifmsgg.o \
 	advlib_odcombo.o \
 	advlib_propdlg.o \
 	advlib_sashwin.o \
@@ -11699,7 +11714,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_sound.o \
 	monodll_taskbarx11.o \
 	monodll_taskbar.o \
-	monodll_eggtrayicon.o
+	monodll_eggtrayicon.o \
+	monodll_notifmsg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS)
 COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
@@ -11772,7 +11788,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_sound.o \
 	monolib_taskbarx11.o \
 	monolib_taskbar.o \
-	monolib_eggtrayicon.o
+	monolib_eggtrayicon.o \
+	monolib_notifmsg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_0 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_0)
 COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarcmn.o \
@@ -11845,7 +11862,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_sound.o \
 	advdll_taskbarx11.o \
 	advdll_taskbar.o \
-	advdll_eggtrayicon.o
+	advdll_eggtrayicon.o \
+	advdll_notifmsg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_8)
 COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_taskbarcmn.o \
@@ -11909,7 +11927,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_sound.o \
 	advlib_taskbarx11.o \
 	advlib_taskbar.o \
-	advlib_eggtrayicon.o
+	advlib_eggtrayicon.o \
+	advlib_notifmsg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_9)
 COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_taskbarcmn.o \
@@ -17682,6 +17701,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_laywin.o: $(srcdir)/src/generic/laywin.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
 
+@COND_USE_GUI_1@monodll_notifmsgg.o: $(srcdir)/src/generic/notifmsgg.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/notifmsgg.cpp
+
 @COND_USE_GUI_1@monodll_odcombo.o: $(srcdir)/src/generic/odcombo.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/odcombo.cpp
 
@@ -17837,6 +17859,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_eggtrayicon.o: $(srcdir)/src/gtk1/eggtrayicon.c $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/gtk1/eggtrayicon.c
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_notifmsg.o: $(srcdir)/src/gtk/hildon/notifmsg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/hildon/notifmsg.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
@@ -22149,6 +22174,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_laywin.o: $(srcdir)/src/generic/laywin.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
 
+@COND_USE_GUI_1@monolib_notifmsgg.o: $(srcdir)/src/generic/notifmsgg.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/notifmsgg.cpp
+
 @COND_USE_GUI_1@monolib_odcombo.o: $(srcdir)/src/generic/odcombo.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/odcombo.cpp
 
@@ -22304,6 +22332,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_eggtrayicon.o: $(srcdir)/src/gtk1/eggtrayicon.c $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/gtk1/eggtrayicon.c
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_notifmsg.o: $(srcdir)/src/gtk/hildon/notifmsg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/hildon/notifmsg.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
@@ -30222,6 +30253,9 @@ advdll_hyperlinkg.o: $(srcdir)/src/generic/hyperlinkg.cpp $(ADVDLL_ODEP)
 advdll_laywin.o: $(srcdir)/src/generic/laywin.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
 
+advdll_notifmsgg.o: $(srcdir)/src/generic/notifmsgg.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/notifmsgg.cpp
+
 advdll_odcombo.o: $(srcdir)/src/generic/odcombo.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/odcombo.cpp
 
@@ -30408,6 +30442,9 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@advdll_eggtrayicon.o: $(srcdir)/src/gtk1/eggtrayicon.c $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	$(CCC) -c -o $@ $(ADVDLL_CFLAGS) $(srcdir)/src/gtk1/eggtrayicon.c
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_notifmsg.o: $(srcdir)/src/gtk/hildon/notifmsg.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/hildon/notifmsg.cpp
+
 @COND_TOOLKIT_MSW_WXUNIV_0@advdll_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
 
@@ -30467,6 +30504,9 @@ advlib_hyperlinkg.o: $(srcdir)/src/generic/hyperlinkg.cpp $(ADVLIB_ODEP)
 
 advlib_laywin.o: $(srcdir)/src/generic/laywin.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
+
+advlib_notifmsgg.o: $(srcdir)/src/generic/notifmsgg.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/notifmsgg.cpp
 
 advlib_odcombo.o: $(srcdir)/src/generic/odcombo.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/odcombo.cpp
@@ -30653,6 +30693,9 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@advlib_eggtrayicon.o: $(srcdir)/src/gtk1/eggtrayicon.c $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	$(CCC) -c -o $@ $(ADVLIB_CFLAGS) $(srcdir)/src/gtk1/eggtrayicon.c
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_notifmsg.o: $(srcdir)/src/gtk/hildon/notifmsg.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/hildon/notifmsg.cpp
 
 @COND_TOOLKIT_MSW_WXUNIV_0@advlib_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp

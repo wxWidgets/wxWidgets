@@ -8440,6 +8440,10 @@ SOURCE=..\..\include\wx\generic\notebook.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\notifmsg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\numdlgg.h
 # End Source File
 # Begin Source File
@@ -9241,6 +9245,10 @@ SOURCE=..\..\include\wx\nonownedwnd.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\notebook.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\notifmsg.h
 # End Source File
 # Begin Source File
 

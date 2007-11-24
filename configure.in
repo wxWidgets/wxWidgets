@@ -821,6 +821,7 @@ WX_ARG_FEATURE(listbook,    [  --enable-listbook       use wxListbook class], wx
 WX_ARG_FEATURE(listbox,     [  --enable-listbox        use wxListBox class], wxUSE_LISTBOX)
 WX_ARG_FEATURE(listctrl,    [  --enable-listctrl       use wxListCtrl class], wxUSE_LISTCTRL)
 WX_ARG_FEATURE(notebook,    [  --enable-notebook       use wxNotebook class], wxUSE_NOTEBOOK)
+WX_ARG_FEATURE(notifmsg,    [  --enable-notifmsg       use wxNotificationMessage class], wxUSE_NOTIFICATION_MESSAGE)
 WX_ARG_FEATURE(odcombobox,  [  --enable-odcombobox     use wxOwnerDrawnComboBox class], wxUSE_ODCOMBOBOX)
 WX_ARG_FEATURE(radiobox,    [  --enable-radiobox       use wxRadioBox class], wxUSE_RADIOBOX)
 WX_ARG_FEATURE(radiobtn,    [  --enable-radiobtn       use wxRadioButton class], wxUSE_RADIOBTN)
@@ -6506,6 +6507,10 @@ if test "$wxUSE_NOTEBOOK" = "yes"; then
     AC_DEFINE(wxUSE_NOTEBOOK)
     USES_CONTROLS=1
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS notebook"
+fi
+
+if test "$wxUSE_NOTIFICATION_MESSAGE" = "yes"; then
+    AC_DEFINE(wxUSE_NOTIFICATION_MESSAGE)
 fi
 
 if test "$wxUSE_ODCOMBOBOX" = "yes"; then

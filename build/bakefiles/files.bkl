@@ -2789,6 +2789,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/helpext.cpp
     src/generic/hyperlinkg.cpp
     src/generic/laywin.cpp
+    src/generic/notifmsgg.cpp
     src/generic/odcombo.cpp
     src/generic/propdlg.cpp
     src/generic/sashwin.cpp
@@ -2818,6 +2819,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/helpext.h
     wx/generic/hyperlink.h
     wx/generic/laywin.h
+    wx/generic/notifmsg.h
     wx/generic/propdlg.h
     wx/generic/sashwin.h
     wx/generic/splash.h
@@ -2826,6 +2828,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/hyperlink.h
     wx/joystick.h
     wx/laywin.h
+    wx/notifmsg.h
     wx/odcombo.h
     wx/propdlg.h
     wx/sashwin.h
@@ -2937,8 +2940,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_GTK_SRC" hints="files">
     src/gtk/taskbar.cpp
     src/gtk/eggtrayicon.c
+    src/gtk/hildon/notifmsg.cpp
 </set>
 <set var="ADVANCED_GTK_HDR" hints="files">
+    wx/gtk/hildon/notifmsg.h
 </set>
 
 <set var="ADVANCED_GTK_NATIVE_SRC" hints="files">

@@ -847,6 +847,17 @@
 // Recommended setting: 1 (can't be disabled under MSW)
 #define wxUSE_MENUS         1
 
+// Use wxNotificationMessage.
+//
+// wxNotificationMessage allows to show non-intrusive messages to the user
+// using balloons, banners, popups or whatever is the appropriate method for
+// the current platform.
+//
+// Default is 1.
+//
+// Recommended setting: 1
+#define wxUSE_NOTIFICATION_MESSAGE 1
+
 // Use wxSashWindow class.
 //
 // Default is 1.

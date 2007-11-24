@@ -29,6 +29,7 @@
 #include "wx/imaglist.h"
 #include "wx/minifram.h"
 #include "wx/sysopt.h"
+#include "wx/notifmsg.h"
 
 #if wxUSE_COLOURDLG
     #include "wx/colordlg.h"
@@ -219,10 +220,16 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_PROPERTY_SHEET,                MyFrame::OnPropertySheet)
     EVT_MENU(DIALOGS_PROPERTY_SHEET_TOOLBOOK,       MyFrame::OnPropertySheet)
     EVT_MENU(DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK, MyFrame::OnPropertySheet)
-#endif
+#endif // USE_SETTINGS_DIALOG
 
     EVT_MENU(DIALOGS_STANDARD_BUTTON_SIZER_DIALOG,  MyFrame::OnStandardButtonsSizerDialog)
+
     EVT_MENU(DIALOGS_REQUEST,                       MyFrame::OnRequestUserAttention)
+#if wxUSE_NOTIFICATION_MESSAGE
+    EVT_MENU(DIALOGS_NOTIFY_AUTO,                   MyFrame::OnNotifMsgAuto)
+    EVT_MENU(DIALOGS_NOTIFY_SHOW,                   MyFrame::OnNotifMsgShow)
+    EVT_MENU(DIALOGS_NOTIFY_HIDE,                   MyFrame::OnNotifMsgHide)
+#endif // wxUSE_NOTIFICATION_MESSAGE
 
     EVT_MENU(wxID_EXIT,                             MyFrame::OnExit)
 END_EVENT_TABLE()
@@ -422,9 +429,16 @@ bool MyApp::OnInit()
     menuDlg->Append(wxID_ANY, _T("&Property sheets"), sheet_menu);
 #endif // USE_SETTINGS_DIALOG
 
-    menuDlg->Append(DIALOGS_STANDARD_BUTTON_SIZER_DIALOG, _T("&Standard Buttons Sizer Dialog"));
+    wxMenu *menuNotif = new wxMenu;
+    menuNotif->Append(DIALOGS_REQUEST, _T("&Request user attention\tCtrl-R"));
+#if wxUSE_NOTIFICATION_MESSAGE
+    menuNotif->Append(DIALOGS_NOTIFY_AUTO, "&Automatically hidden notification");
+    menuNotif->Append(DIALOGS_NOTIFY_SHOW, "&Show manual notification");
+    menuNotif->Append(DIALOGS_NOTIFY_HIDE, "&Hide manual notification");
+#endif // wxUSE_NOTIFICATION_MESSAGE
+    menuDlg->AppendSubMenu(menuNotif, "&User notifications");
 
-    menuDlg->Append(DIALOGS_REQUEST, _T("&Request user attention\tCtrl-R"));
+    menuDlg->Append(DIALOGS_STANDARD_BUTTON_SIZER_DIALOG, _T("&Standard Buttons Sizer Dialog"));
 
     menuDlg->AppendSeparator();
     menuDlg->Append(wxID_EXIT, _T("E&xit\tAlt-X"));
@@ -483,9 +497,20 @@ MyFrame::MyFrame(wxWindow *parent,
     }
 #endif // wxUSE_COLOURDLG
 
+#if wxUSE_NOTIFICATION_MESSAGE
+    m_notifMsg = NULL;
+#endif // wxUSE_NOTIFICATION_MESSAGE
+
 #if wxUSE_STATUSBAR
     CreateStatusBar();
 #endif // wxUSE_STATUSBAR
+}
+
+MyFrame::~MyFrame()
+{
+#if wxUSE_NOTIFICATION_MESSAGE
+    delete m_notifMsg;
+#endif // wxUSE_NOTIFICATION_MESSAGE
 }
 
 #if wxUSE_COLOURDLG
@@ -1146,6 +1171,50 @@ void MyFrame::OnRequestUserAttention(wxCommandEvent& WXUNUSED(event))
 
     RequestUserAttention(wxUSER_ATTENTION_ERROR);
 }
+
+#if wxUSE_NOTIFICATION_MESSAGE
+
+void MyFrame::OnNotifMsgAuto(wxCommandEvent& WXUNUSED(event))
+{
+    if ( !wxNotificationMessage
+          (
+            "Automatic Notification",
+            "Nothing important has happened\n"
+            "this notification will disappear soon."
+          ).Show() )
+    {
+        wxLogStatus("Failed to show notification message");
+    }
+}
+
+void MyFrame::OnNotifMsgShow(wxCommandEvent& WXUNUSED(event))
+{
+    if ( !m_notifMsg )
+    {
+        m_notifMsg = new wxNotificationMessage
+                         (
+                            "wxWidgets Manual Notification",
+                            "You can hide this notification from the menu",
+                            this
+                         );
+    }
+
+    if ( !m_notifMsg->Show(wxNotificationMessage::Timeout_Never) )
+    {
+        wxLogStatus("Failed to show manual notification message");
+    }
+}
+
+void MyFrame::OnNotifMsgHide(wxCommandEvent& WXUNUSED(event))
+{
+    if ( m_notifMsg )
+    {
+        if ( !m_notifMsg->Close() )
+            wxLogStatus("Failed to hide manual notification message");
+    }
+}
+
+#endif // wxUSE_NOTIFICATION_MESSAGE
 
 void MyFrame::OnStandardButtonsSizerDialog(wxCommandEvent& WXUNUSED(event))
 {

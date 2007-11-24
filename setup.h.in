@@ -399,6 +399,8 @@
 
 #define wxUSE_MENUS         0
 
+#define wxUSE_NOTIFICATION_MESSAGE 0
+
 #define wxUSE_SASH          0
 
 #define wxUSE_SPLITTER      0

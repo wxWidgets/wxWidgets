@@ -741,6 +741,14 @@
 #   endif
 #endif /* !defined(wxUSE_NOTEBOOK) */
 
+#ifndef wxUSE_NOTIFICATION_MESSAGE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_NOTIFICATION_MESSAGE must be defined."
+#   else
+#       define wxUSE_NOTIFICATION_MESSAGE 0
+#   endif
+#endif /* !defined(wxUSE_NOTIFICATION_MESSAGE) */
+
 #ifndef wxUSE_ODCOMBOBOX
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_ODCOMBOBOX must be defined."

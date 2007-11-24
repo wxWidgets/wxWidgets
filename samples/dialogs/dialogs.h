@@ -206,6 +206,7 @@ class MyFrame: public wxFrame
 {
 public:
     MyFrame(wxWindow *parent, const wxString& title);
+    virtual ~MyFrame();
 
 #if wxUSE_MSGDLG
     void MessageBox(wxCommandEvent& event);
@@ -304,7 +305,14 @@ public:
 #endif // USE_FONTDLG_GENERIC
 
     void OnPropertySheet(wxCommandEvent& event);
+
     void OnRequestUserAttention(wxCommandEvent& event);
+#if wxUSE_NOTIFICATION_MESSAGE
+    void OnNotifMsgAuto(wxCommandEvent& event);
+    void OnNotifMsgShow(wxCommandEvent& event);
+    void OnNotifMsgHide(wxCommandEvent& event);
+#endif // wxUSE_NOTIFICATION_MESSAGE
+
     void OnStandardButtonsSizerDialog(wxCommandEvent& event);
     void OnExit(wxCommandEvent& event);
 
@@ -323,6 +331,10 @@ private:
     wxFindReplaceDialog *m_dlgFind,
                         *m_dlgReplace;
 #endif // wxUSE_FINDREPLDLG
+
+#if wxUSE_NOTIFICATION_MESSAGE
+    wxNotificationMessage *m_notifMsg;
+#endif // wxUSE_NOTIFICATION_MESSAGE
 
     wxColourData m_clrData;
 
@@ -384,6 +396,9 @@ enum
     DIALOGS_FIND,
     DIALOGS_REPLACE,
     DIALOGS_REQUEST,
+    DIALOGS_NOTIFY_AUTO,
+    DIALOGS_NOTIFY_SHOW,
+    DIALOGS_NOTIFY_HIDE,
     DIALOGS_PROPERTY_SHEET,
     DIALOGS_PROPERTY_SHEET_TOOLBOOK,
     DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK,
