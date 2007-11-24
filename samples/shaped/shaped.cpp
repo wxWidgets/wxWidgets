@@ -41,6 +41,17 @@
 #include "wx/image.h"
 
 // ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// menu ids
+enum
+{
+    Show_Shaped,
+    Show_Transparent
+};
+
+// ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
 
@@ -57,6 +68,19 @@ public:
     virtual bool OnInit();
 };
 
+
+// Main frame just contains the menu items invoking the other tests
+class MainFrame : public wxFrame
+{
+public:
+    MainFrame();
+
+private:
+    void OnShowShaped(wxCommandEvent& event);
+    void OnShowTransparent(wxCommandEvent& event);
+
+    DECLARE_EVENT_TABLE()
+};
 
 // Define a new frame type: this is going to the frame showing the
 // effect of wxFRAME_SHAPED
@@ -97,7 +121,6 @@ public:
     // event handlers (these functions should _not_ be virtual)
     void OnDoubleClick(wxMouseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
-    void OnSize(wxSizeEvent& evt);
 
 private:
     enum State
@@ -114,14 +137,74 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+// ============================================================================
+// implementation
+// ============================================================================
 
 // ----------------------------------------------------------------------------
-// event tables and other macros for wxWidgets
+// the application class
 // ----------------------------------------------------------------------------
 
-// the event tables connect the wxWidgets events with the functions (event
-// handlers) which process them. It can be also done at run-time, but for the
-// simple menu events like this the static method is much simpler.
+IMPLEMENT_APP(MyApp)
+
+// `Main program' equivalent: the program execution "starts" here
+bool MyApp::OnInit()
+{
+    if ( !wxApp::OnInit() )
+        return false;
+
+    wxInitAllImageHandlers();
+
+    new MainFrame;
+
+    // success: wxApp::OnRun() will be called which will enter the main message
+    // loop and the application will run. If we returned false here, the
+    // application would exit immediately.
+    return true;
+}
+
+// ----------------------------------------------------------------------------
+// main frame
+// ----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(MainFrame, wxFrame)
+    EVT_MENU(Show_Shaped, MainFrame::OnShowShaped)
+    EVT_MENU(Show_Transparent, MainFrame::OnShowTransparent)
+END_EVENT_TABLE()
+
+MainFrame::MainFrame()
+         : wxFrame(NULL, wxID_ANY, "wxWidgets Shaped Sample",
+                   wxDefaultPosition, wxSize(200, 100))
+{
+    wxMenuBar * const mbar = new wxMenuBar;
+    wxMenu * const menuFrames = new wxMenu;
+    menuFrames->Append(Show_Shaped, "Show &shaped window\tCtrl-S");
+    menuFrames->Append(Show_Transparent, "Show &transparent window\tCtrl-T");
+    menuFrames->AppendSeparator();
+    menuFrames->Append(wxID_EXIT, "E&xit");
+
+    mbar->Append(menuFrames, "&Show");
+    SetMenuBar(mbar);
+
+    Show();
+}
+
+void MainFrame::OnShowShaped(wxCommandEvent& WXUNUSED(event))
+{
+    ShapedFrame *shapedFrame = new ShapedFrame(this);
+    shapedFrame->Show(true);
+}
+
+void MainFrame::OnShowTransparent(wxCommandEvent& WXUNUSED(event))
+{
+    SeeThroughFrame *seeThroughFrame = new SeeThroughFrame();
+    seeThroughFrame->Show(true);
+}
+
+// ----------------------------------------------------------------------------
+// shaped frame
+// ----------------------------------------------------------------------------
+
 BEGIN_EVENT_TABLE(ShapedFrame, wxFrame)
     EVT_LEFT_DCLICK(ShapedFrame::OnDoubleClick)
     EVT_LEFT_DOWN(ShapedFrame::OnLeftDown)
@@ -137,52 +220,10 @@ BEGIN_EVENT_TABLE(ShapedFrame, wxFrame)
 END_EVENT_TABLE()
 
 
-// Create a new application object: this macro will allow wxWidgets to create
-// the application object during program execution (it's better than using a
-// static object for many reasons) and also declares the accessor function
-// wxGetApp() which will return the reference of the right type (i.e. MyApp and
-// not wxApp)
-IMPLEMENT_APP(MyApp)
-
-// ============================================================================
-// implementation
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// the application class
-// ----------------------------------------------------------------------------
-
-// `Main program' equivalent: the program execution "starts" here
-bool MyApp::OnInit()
-{
-    if ( !wxApp::OnInit() )
-        return false;
-
-    wxInitAllImageHandlers();
-
-    // Create the transparent window
-    SeeThroughFrame *seeThroughFrame = new SeeThroughFrame();
-    seeThroughFrame->Show(true);
-    SetTopWindow(seeThroughFrame);
-
-    // Create the shaped window
-    ShapedFrame *shapedFrame = new ShapedFrame(seeThroughFrame);
-    shapedFrame->Show(true);
-
-    // success: wxApp::OnRun() will be called which will enter the main message
-    // loop and the application will run. If we returned false here, the
-    // application would exit immediately.
-    return true;
-}
-
-// ----------------------------------------------------------------------------
-// shaped frame
-// ----------------------------------------------------------------------------
-
 // frame constructor
 ShapedFrame::ShapedFrame(wxFrame *parent)
        : wxFrame(parent, wxID_ANY, wxEmptyString,
-                  wxDefaultPosition, wxSize(100, 100), //wxDefaultSize,
+                  wxDefaultPosition, wxSize(100, 100),
                   0
                   | wxFRAME_SHAPED
                   | wxSIMPLE_BORDER
@@ -193,7 +234,7 @@ ShapedFrame::ShapedFrame(wxFrame *parent)
     m_hasShape = false;
     m_bmp = wxBitmap(_T("star.png"), wxBITMAP_TYPE_PNG);
     SetSize(wxSize(m_bmp.GetWidth(), m_bmp.GetHeight()));
-    SetToolTip(wxT("Right-click to exit"));
+    SetToolTip(wxT("Right-click to close"));
 
 #ifndef __WXGTK__
     // On wxGTK we can't do this yet because the window hasn't been created
@@ -225,7 +266,6 @@ void ShapedFrame::OnDoubleClick(wxMouseEvent& WXUNUSED(evt))
 void ShapedFrame::OnLeftDown(wxMouseEvent& evt)
 {
     CaptureMouse();
-    //printf("Mouse captured\n");
     wxPoint pos = ClientToScreen(evt.GetPosition());
     wxPoint origin = GetPosition();
     int dx =  pos.x - origin.x;
@@ -238,14 +278,12 @@ void ShapedFrame::OnLeftUp(wxMouseEvent& WXUNUSED(evt))
     if (HasCapture())
     {
         ReleaseMouse();
-        //printf("Mouse released\n");
     }
 }
 
 void ShapedFrame::OnMouseMove(wxMouseEvent& evt)
 {
     wxPoint pt = evt.GetPosition();
-    //printf("x:%d   y:%d\n", pt.x, pt.y);
     if (evt.Dragging() && evt.LeftIsDown())
     {
         wxPoint pos = ClientToScreen(pt);
@@ -273,21 +311,21 @@ void ShapedFrame::OnWindowCreate(wxWindowCreateEvent& WXUNUSED(evt))
 // see-through frame
 // ----------------------------------------------------------------------------
 
-// frame constructor
+BEGIN_EVENT_TABLE(SeeThroughFrame, wxFrame)
+    EVT_LEFT_DCLICK(SeeThroughFrame::OnDoubleClick)
+    EVT_PAINT(SeeThroughFrame::OnPaint)
+END_EVENT_TABLE()
+
 SeeThroughFrame::SeeThroughFrame()
        : wxFrame(NULL, wxID_ANY, "Transparency test: double click here",
                   wxPoint(100, 30), wxSize(300, 300),
-                  wxDEFAULT_FRAME_STYLE | wxSTAY_ON_TOP),
+                  wxDEFAULT_FRAME_STYLE |
+                  wxFULL_REPAINT_ON_RESIZE |
+                  wxSTAY_ON_TOP),
          m_currentState(STATE_SEETHROUGH)
 {
     SetBackgroundColour(wxColour(255, 255, 255, 255));
     SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
-}
-
-// Redraws the whole window on resize
-void SeeThroughFrame::OnSize(wxSizeEvent& WXUNUSED(evt))
-{
-    Refresh();
 }
 
 // Paints a grid of varying hue and alpha
@@ -352,10 +390,4 @@ void SeeThroughFrame::OnDoubleClick(wxMouseEvent& WXUNUSED(evt))
 
     Refresh();
 }
-
-BEGIN_EVENT_TABLE(SeeThroughFrame, wxFrame)
-    EVT_LEFT_DCLICK(SeeThroughFrame::OnDoubleClick)
-    EVT_PAINT(SeeThroughFrame::OnPaint)
-    EVT_SIZE(SeeThroughFrame::OnSize)
-END_EVENT_TABLE()
 
