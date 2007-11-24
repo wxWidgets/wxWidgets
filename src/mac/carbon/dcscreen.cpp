@@ -25,6 +25,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
 // Create a DC representing the whole screen
 wxScreenDC::wxScreenDC()
 {
+#ifdef __LP64__
+    m_graphicContext = NULL;
+    m_ok = false ;
+#else
     CGRect cgbounds ;
     cgbounds = CGDisplayBounds(CGMainDisplayID());
     Rect bounds;
@@ -39,11 +43,15 @@ wxScreenDC::wxScreenDC()
     m_width = (wxCoord)cgbounds.size.width;
     m_height = (wxCoord)cgbounds.size.height;
     m_ok = true ;
+#endif
 }
 
 wxScreenDC::~wxScreenDC()
 {
     delete m_graphicContext;
     m_graphicContext = NULL;
+#ifdef __LP64__
+#else
     DisposeWindow((WindowRef) m_overlayWindow );
+#endif
 }

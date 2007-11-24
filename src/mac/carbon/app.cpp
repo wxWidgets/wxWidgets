@@ -594,6 +594,7 @@ wxMacAppMenuEventHandler( EventHandlerCallRef WXUNUSED(handler),
     return eventNotHandledErr;
 }
 
+#ifndef __LP64__
 static pascal OSStatus
 wxMacAppCommandEventHandler( EventHandlerCallRef WXUNUSED(handler) ,
                              EventRef event ,
@@ -630,6 +631,7 @@ wxMacAppCommandEventHandler( EventHandlerCallRef WXUNUSED(handler) ,
     }
     return result ;
 }
+#endif
 
 static pascal OSStatus
 wxMacAppApplicationEventHandler( EventHandlerCallRef WXUNUSED(handler) ,
@@ -667,14 +669,15 @@ pascal OSStatus wxMacAppEventHandler( EventHandlerCallRef handler , EventRef eve
     OSStatus result = eventNotHandledErr ;
     switch ( GetEventClass( event ) )
     {
+#ifndef __LP64__
         case kEventClassCommand :
             result = wxMacAppCommandEventHandler( handler , event , data ) ;
             break ;
-
+#endif
         case kEventClassApplication :
             result = wxMacAppApplicationEventHandler( handler , event , data ) ;
             break ;
-
+#ifndef __LP64__
         case kEventClassMenu :
             result = wxMacAppMenuEventHandler( handler , event , data ) ;
             break ;
@@ -692,13 +695,23 @@ pascal OSStatus wxMacAppEventHandler( EventHandlerCallRef handler , EventRef eve
                     result = wxMacTopLevelMouseEventHandler( handler , event , NULL ) ;
             }
             break ;
-
+#endif
         case kEventClassAppleEvent :
             {
-                EventRecord rec ;
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+                if ( AEProcessEvent != NULL )
+                {
+                    result = AEProcessEvent(event);
+                }
+#endif
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
+                {
+                    EventRecord rec ;
 
-                wxMacConvertEventToRecord( event , &rec ) ;
-                result = AEProcessAppleEvent( &rec ) ;
+                    wxMacConvertEventToRecord( event , &rec ) ;
+                    result = AEProcessAppleEvent( &rec ) ;
+                }
+#endif
             }
             break ;
 
@@ -777,7 +790,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 #endif
 
     UMAInitToolbox( 4, sm_isEmbedded ) ;
-    SetEventMask( everyEvent ) ;
+// TODO CHECK Can Be Removed    SetEventMask( everyEvent ) ;
     UMAShowWatchCursor() ;
 
     // Mac OS X passes a process serial number command line argument when
@@ -842,15 +855,15 @@ bool wxApp::OnInitGui()
 {
     if ( !wxAppBase::OnInitGui() )
         return false ;
-
+#ifndef __LP64__
     InstallStandardEventHandler( GetApplicationEventTarget() ) ;
-
     if (!sm_isEmbedded)
     {
         InstallApplicationEventHandler(
             GetwxMacAppEventHandlerUPP(),
             GetEventTypeCount(eventList), eventList, wxTheApp, (EventHandlerRef *)&(wxTheApp->m_macEventHandler));
     }
+#endif
 
     if (!sm_isEmbedded)
     {
@@ -931,6 +944,7 @@ void wxApp::CleanUp()
 // misc initialization stuff
 //----------------------------------------------------------------------
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
 bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec)
 {
     OSStatus err = noErr ;
@@ -971,9 +985,7 @@ bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec)
                     UInt32 keyCode ;
                     unsigned char charCode ;
                     UInt32 modifiers ;
-#ifndef __LP64__
                     GetMouse( &rec->where) ;
-#endif
                     err = GetEventParameter(event, kEventParamKeyModifiers, typeUInt32, NULL, 4, NULL, &modifiers);
                     err = GetEventParameter(event, kEventParamKeyCode, typeUInt32, NULL, 4, NULL, &keyCode);
                     err = GetEventParameter(event, kEventParamKeyMacCharCodes, typeChar, NULL, 1, NULL, &charCode);
@@ -998,10 +1010,7 @@ bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec)
                             {
                                 UInt32 keyCode, modifiers;
                                 unsigned char charCode ;
-#ifndef __LP64__
-
                                 GetMouse( &rec->where) ;
-#endif
                                 rec->what = keyDown ;
                                 err = GetEventParameter(rawEvent, kEventParamKeyModifiers, typeUInt32, NULL, 4, NULL, &modifiers);
                                 err = GetEventParameter(rawEvent, kEventParamKeyCode, typeUInt32, NULL, 4, NULL, &keyCode);
@@ -1025,6 +1034,7 @@ bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec)
 
     return converted ;
 }
+#endif
 
 wxApp::wxApp()
 {
@@ -1514,6 +1524,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
     {
         // if window is not having a focus still testing for default enter or cancel
         // TODO: add the UMA version for ActiveNonFloatingWindow
+#ifndef __LP64__
         wxWindow* focus = wxFindWinFromMacWindow( FrontWindow() ) ;
         if ( focus )
         {
@@ -1541,6 +1552,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
                 handled = focus->GetEventHandler()->ProcessEvent( new_event );
             }
         }
+#endif
     }
     return handled ;
 }

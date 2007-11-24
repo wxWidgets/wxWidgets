@@ -310,12 +310,13 @@ void wxFontRefData::MacFindFont()
 	int attributeCount = sizeof(atsuTags) / sizeof(ATSUAttributeTag) ;
 	
 	// attempt to add atsu font 
+#if 0 
 	status = ATSUFindFontFromName(m_faceName.c_str(), strlen(m_faceName.c_str()), kFontFamilyName, kFontNoPlatform, kFontNoScript, kFontNoLanguage, &atsuFontID);
 	if ( status != noErr )
 	{
 		attributeCount--;
 	}
-	
+#endif
     ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
     {
             &atsuSize ,

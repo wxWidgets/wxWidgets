@@ -115,10 +115,13 @@ wxBitmap wxWindowDC::DoGetAsBitmap(const wxRect *subrect) const
     if (!m_window)
         return wxNullBitmap;
 
+#ifdef __LP64__
+    return wxNullBitmap;
+#else
     ControlRef handle = (ControlRef) m_window->GetHandle();
     if ( !handle )
         return wxNullBitmap;
-
+    
     HIRect rect;
     CGImageRef image;
     CGContextRef context;
@@ -161,6 +164,7 @@ wxBitmap wxWindowDC::DoGetAsBitmap(const wxRect *subrect) const
     }
 
     return bmp;
+#endif
 }
 
 /*

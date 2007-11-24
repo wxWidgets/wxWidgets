@@ -82,9 +82,12 @@ int wxMacPrintDialog::ShowModal()
     ((wxMacCarbonPrintData*)m_printDialogData.GetPrintData().GetNativeData())->TransferFrom( &m_printDialogData );
 
     int result = wxID_CANCEL;
+    
+#ifdef __LP64__
+    // TODO use NSPrintPanel
+#else
     OSErr err = noErr;
     Boolean accepted;
-
     err = PMSessionPrintDialog(
         ((wxMacCarbonPrintData*)m_printDialogData.GetPrintData().GetNativeData())->m_macPrintSession,
         ((wxMacCarbonPrintData*)m_printDialogData.GetPrintData().GetNativeData())->m_macPrintSettings,
@@ -116,7 +119,7 @@ int wxMacPrintDialog::ShowModal()
         m_printDialogData.GetPrintData().ConvertFromNative();
         ((wxMacCarbonPrintData*)m_printDialogData.GetPrintData().GetNativeData())->TransferTo( &m_printDialogData );
     }
-
+#endif
     return result;
 }
 
@@ -158,6 +161,8 @@ int wxMacPageSetupDialog::ShowModal()
     ((wxMacCarbonPrintData*)m_pageSetupData.GetPrintData().GetNativeData())->TransferFrom( &m_pageSetupData );
 
     int result = wxID_CANCEL;
+#ifdef __LP64__
+#else
     OSErr err = noErr;
     Boolean accepted;
 
@@ -194,7 +199,7 @@ int wxMacPageSetupDialog::ShowModal()
         m_pageSetupData.SetPaperSize( m_pageSetupData.GetPrintData().GetPaperSize() );
         ((wxMacCarbonPrintData*)m_pageSetupData.GetPrintData().GetNativeData())->TransferTo( &m_pageSetupData );
     }
-
+#endif
     return result;
 }
 
