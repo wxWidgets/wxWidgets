@@ -2777,15 +2777,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             CFLAGS="$wx_cv_cflags_gtk $CFLAGS"
             LIBS="$LIBS $wx_cv_libs_gtk"
 
-            dnl gtk_icon_size_lookup is not available in the GTK+ headers
-            dnl that have shipped with some versions of Sun's JDS. Not using
-            dnl AC_CHECK_FUNCS here since it only checks the function exists
-            dnl in the lib (not the header).
-            AC_CHECK_DECLS([gtk_icon_size_lookup], [],
-                           [AC_DEFINE(NEED_GTK_ICON_SIZE_LOOKUP)],
-                           [#include <gtk/gtk.h>])
-
-
             dnl test if we have at least GTK+ 2.10:
             AC_MSG_CHECKING([if GTK+ is version >= 2.10])
             AC_TRY_COMPILE([
