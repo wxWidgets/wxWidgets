@@ -121,17 +121,7 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
     HIRect headerRect = CGRectMake( x, y, w, h );
     if ( !dc.IsKindOf( CLASSINFO( wxPaintDC ) ) )
     {
-        Rect r =
-        {
-            (short) headerRect.origin.y, (short) headerRect.origin.x,
-            (short) (headerRect.origin.y + headerRect.size.height),
-            (short) (headerRect.origin.x + headerRect.size.width)
-        };
-
-        RgnHandle updateRgn = NewRgn();
-        RectRgn( updateRgn, &r );
-        HIViewSetNeedsDisplayInRegion( (HIViewRef) win->GetHandle(), updateRgn, true );
-        DisposeRgn( updateRgn );
+        win->Refresh( &rect );
     }
     else
     {
@@ -213,17 +203,7 @@ void wxRendererMac::DrawTreeItemButton( wxWindow *win,
     HIRect headerRect = CGRectMake( x, y, w, h );
     if ( !dc.IsKindOf( CLASSINFO( wxPaintDC ) ) )
     {
-        Rect r =
-    {
-            (short) headerRect.origin.y, (short) headerRect.origin.x,
-            (short) (headerRect.origin.y + headerRect.size.height),
-            (short) (headerRect.origin.x + headerRect.size.width)
-        };
-
-        RgnHandle updateRgn = NewRgn();
-        RectRgn( updateRgn, &r );
-        HIViewSetNeedsDisplayInRegion( (HIViewRef) win->GetHandle(), updateRgn, true );
-        DisposeRgn( updateRgn );
+        win->Refresh( &rect );
     }
     else
     {
@@ -268,19 +248,9 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
 
     if ( !dc.IsKindOf( CLASSINFO( wxPaintDC ) ) )
     {
-        Rect r =
-        {
-            (short) splitterRect.origin.y,
-            (short) splitterRect.origin.x,
-            (short) (splitterRect.origin.y + splitterRect.size.height),
-            (short) (splitterRect.origin.x + splitterRect.size.width)
-        };
-
-        RgnHandle updateRgn = NewRgn();
-        RectRgn( updateRgn, &r );
-        HIViewSetNeedsDisplayInRegion( (HIViewRef) win->GetHandle(), updateRgn, true );
-        DisposeRgn( updateRgn );
-    }
+        wxRect rect( splitterRect.origin.x, splitterRect.origin.y, splitterRect.size.width, splitterRect.size.height );
+        win->Refresh( &rect );
+   }
     else
     {
         CGContextRef cgContext;
@@ -304,19 +274,9 @@ wxRendererMac::DrawItemSelectionRect(wxWindow *win,
     if ( !(flags & wxCONTROL_SELECTED) )
         return;
         
-    if (flags & wxCONTROL_FOCUSED)
-    {
-        if (!IsControlActive( (ControlRef)win->GetHandle() ))
-            flags = wxCONTROL_SELECTED;
-    }
-
-    RGBColor selColor;
-    GetThemeBrushAsColor(flags & wxCONTROL_FOCUSED
-                            ? kThemeBrushAlternatePrimaryHighlightColor
-                            : kThemeBrushSecondaryHighlightColor,
-                         32, true, &selColor);
-
-    wxBrush selBrush(selColor);
+    wxBrush selBrush(wxColour( wxMacCreateCGColorFromHITheme( flags & wxCONTROL_FOCUSED ? 
+                                                             kThemeBrushAlternatePrimaryHighlightColor
+                                                             : kThemeBrushSecondaryHighlightColor ) ) , wxSOLID );
 
     dc.SetPen( *wxTRANSPARENT_PEN );
     dc.SetBrush( selBrush );
@@ -343,17 +303,7 @@ wxRendererMac::DrawMacThemeButton(wxWindow *win,
     HIRect headerRect = CGRectMake( x, y, w, h );
     if ( !dc.IsKindOf( CLASSINFO( wxPaintDC ) ) )
     {
-        Rect r =
-        {
-            (short) headerRect.origin.y, (short) headerRect.origin.x,
-            (short) (headerRect.origin.y + headerRect.size.height),
-            (short) (headerRect.origin.x + headerRect.size.width)
-        };
-
-        RgnHandle updateRgn = NewRgn();
-        RectRgn( updateRgn, &r );
-        HIViewSetNeedsDisplayInRegion( (HIViewRef) win->GetHandle(), updateRgn, true );
-        DisposeRgn( updateRgn );
+        win->Refresh( &rect );
     }
     else
     {
