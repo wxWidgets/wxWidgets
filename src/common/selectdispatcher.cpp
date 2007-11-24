@@ -30,7 +30,7 @@
     #include "wx/intl.h"
 #endif
 
-#ifdef HAVE_SYS_SELECT_H
+#if defined(HAVE_SYS_SELECT_H) || defined(__WATCOMC__)
     #include <sys/time.h>
     #include <sys/select.h>
 #endif
