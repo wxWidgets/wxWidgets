@@ -597,6 +597,14 @@ wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding)
 //
 
 // converts this string into a carbon foundation string with optional pc 2 mac encoding
+
+void wxMacCFStringHolder::Assign( CFStringRef ref , bool release )
+{
+    Release();
+    m_cfs = ref;
+    m_release = release;
+}
+
 void wxMacCFStringHolder::Assign( const wxString &st , wxFontEncoding WXUNUSED_IN_UNICODE(encoding) )
 {
     Release() ;
