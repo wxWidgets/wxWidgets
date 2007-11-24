@@ -35,16 +35,6 @@
 
 #include "wx/mac/private.h"
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
-typedef float CGFloat;
-#endif
-
-#ifdef __LP64__
-#define wxMAC_USE_CORE_TEXT 1
-#else
-#define wxMAC_USE_ATSU_TEXT 1
-#endif
-#undef wxMAC_USE_CG_TEXT 
 //-----------------------------------------------------------------------------
 // constants
 //-----------------------------------------------------------------------------
