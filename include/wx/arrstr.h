@@ -404,7 +404,7 @@ public:
     // default copy constructor is ok
 
     // iteration interface
-    unsigned int GetCount() const { return m_size; }
+    size_t GetCount() const { return m_size; }
     bool IsEmpty() const { return GetCount() == 0; }
     const wxString& operator[] (unsigned int i) const
     {
@@ -429,7 +429,7 @@ private:
     };
 
     wxStringContainerType m_type;
-    unsigned int m_size;
+    size_t m_size;
     union
     {
         const wxString *      ptr;
