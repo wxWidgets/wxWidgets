@@ -17,20 +17,12 @@ CFG=wxzlib - Win32 Debug
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "wxzlib - Win32 DLL Universal Unicode Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxzlib - Win32 DLL Universal Unicode Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxzlib - Win32 DLL Universal Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxzlib - Win32 DLL Universal Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxzlib - Win32 DLL Unicode Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxzlib - Win32 DLL Unicode Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxzlib - Win32 DLL Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxzlib - Win32 DLL Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxzlib - Win32 Universal Unicode Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxzlib - Win32 Universal Unicode Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxzlib - Win32 Universal Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxzlib - Win32 Universal Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxzlib - Win32 Unicode Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxzlib - Win32 Unicode Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxzlib - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxzlib - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE 
@@ -42,7 +34,7 @@ CFG=wxzlib - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "wxzlib - Win32 DLL Universal Unicode Release"
+!IF  "$(CFG)" == "wxzlib - Win32 DLL Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -65,7 +57,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxzlib.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxzlib.lib"
 
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "wxzlib - Win32 DLL Universal Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -88,53 +80,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxzlibd.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxzlibd.lib"
 
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 DLL Universal Release"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswunivdll\wxzlib"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswunivdll\wxzlib"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_dll\wxzlib.pdb /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_dll\wxzlib.pdb /D "WIN32" /D "_LIB" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxzlib.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxzlib.lib"
-
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 DLL Universal Debug"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswunivddll\wxzlib"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswunivddll\wxzlib"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxzlibd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxzlibd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxzlibd.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxzlibd.lib"
-
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "wxzlib - Win32 DLL Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -157,7 +103,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxzlib.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxzlib.lib"
 
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 DLL Unicode Debug"
+!ELSEIF  "$(CFG)" == "wxzlib - Win32 DLL Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -180,53 +126,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxzlibd.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxzlibd.lib"
 
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 DLL Release"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswdll\wxzlib"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswdll\wxzlib"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_dll\wxzlib.pdb /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_dll\wxzlib.pdb /D "WIN32" /D "_LIB" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxzlib.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxzlib.lib"
-
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 DLL Debug"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswddll\wxzlib"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswddll\wxzlib"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxzlibd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxzlibd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxzlibd.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxzlibd.lib"
-
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "wxzlib - Win32 Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -249,7 +149,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxzlib.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxzlib.lib"
 
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "wxzlib - Win32 Universal Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -272,53 +172,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxzlibd.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxzlibd.lib"
 
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 Universal Release"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_mswuniv\wxzlib"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_mswuniv\wxzlib"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_lib\wxzlib.pdb /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_lib\wxzlib.pdb /D "WIN32" /D "_LIB" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxzlib.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxzlib.lib"
-
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 Universal Debug"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_mswunivd\wxzlib"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_mswunivd\wxzlib"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxzlibd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxzlibd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxzlibd.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxzlibd.lib"
-
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 Unicode Release"
+!ELSEIF  "$(CFG)" == "wxzlib - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -341,7 +195,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxzlib.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxzlib.lib"
 
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 Unicode Debug"
+!ELSEIF  "$(CFG)" == "wxzlib - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -364,70 +218,16 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxzlibd.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxzlibd.lib"
 
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 Release"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_msw\wxzlib"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_msw\wxzlib"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_lib\wxzlib.pdb /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_lib\wxzlib.pdb /D "WIN32" /D "_LIB" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxzlib.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxzlib.lib"
-
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 Debug"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_mswd\wxzlib"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_mswd\wxzlib"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxzlibd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxzlibd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxzlibd.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxzlibd.lib"
-
 !ENDIF
 
 # Begin Target
 
-# Name "wxzlib - Win32 DLL Universal Unicode Release"
-# Name "wxzlib - Win32 DLL Universal Unicode Debug"
 # Name "wxzlib - Win32 DLL Universal Release"
 # Name "wxzlib - Win32 DLL Universal Debug"
-# Name "wxzlib - Win32 DLL Unicode Release"
-# Name "wxzlib - Win32 DLL Unicode Debug"
 # Name "wxzlib - Win32 DLL Release"
 # Name "wxzlib - Win32 DLL Debug"
-# Name "wxzlib - Win32 Universal Unicode Release"
-# Name "wxzlib - Win32 Universal Unicode Debug"
 # Name "wxzlib - Win32 Universal Release"
 # Name "wxzlib - Win32 Universal Debug"
-# Name "wxzlib - Win32 Unicode Release"
-# Name "wxzlib - Win32 Unicode Debug"
 # Name "wxzlib - Win32 Release"
 # Name "wxzlib - Win32 Debug"
 # Begin Group "Source Files"

@@ -46,14 +46,22 @@
         </description>
     </option>
 
-    <option name="UNICODE">
-        <values>0,1</values>
-        <values-description>,Unicode</values-description>
-        <default-value>1</default-value>
-        <description>
-            Compile Unicode build of wxWidgets?
-        </description>
-    </option>
+    <!-- don't include ANSI configuration in project files, it's going to be
+         eventually removed anyway and it only doubles the number of build
+         configs in projects: -->
+    <if cond="IS_MSVC_PRJ=='1'">
+        <set var="UNICODE">1</set>
+    </if>
+    <if cond="IS_MSVC_PRJ=='0'">
+        <option name="UNICODE">
+            <values>0,1</values>
+            <values-description>,Unicode</values-description>
+            <default-value>1</default-value>
+            <description>
+                Compile Unicode build of wxWidgets?
+            </description>
+        </option>
+    </if>
 
     <if cond="FORMAT!='autoconf' and FORMAT!='watcom'">
         <option name="MSLU">
@@ -470,7 +478,6 @@ Set the version of your Mingw installation here.
     <!-- No need for wxUniv on embedded devices (yet): -->
     <if cond="FORMAT=='msevc4prj'">
         <set var="WXUNIV">0</set>
-        <set var="UNICODE">1</set>
         <!-- Uploading debug reports from PDAs seems impractical -->
         <set var="USE_QA">0</set>
         <set var="MONOLITHIC">1</set> <!-- sic! -->
