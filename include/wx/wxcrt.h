@@ -312,16 +312,16 @@ inline wchar_t *wxStrncat(wchar_t *dest, const char *src, size_t n)
         { return WX_STR_CALL(forString, wxString(s1), wxString(s2)); }        \
     inline rettype WX_STR_DECL(name, const wxCharBuffer&, const wxCharBuffer&)\
         { return WX_STR_CALL(crtA, s1.data(), s2.data()); }                   \
-    inline int WX_STR_DECL(name, const wxCharBuffer&, const wxWCharBuffer&)   \
+    inline rettype WX_STR_DECL(name, const wxCharBuffer&, const wxWCharBuffer&)   \
         { return WX_STR_CALL(forString, wxString(s1), wxString(s2)); }        \
                                                                               \
     inline rettype WX_STR_DECL(name, const wxWCharBuffer&, const wchar_t *)   \
         { return WX_STR_CALL(crtW, s1.data(), s2); }                          \
     inline rettype WX_STR_DECL(name, const wxWCharBuffer&, const char *)      \
         { return WX_STR_CALL(forString, wxString(s1), wxString(s2)); }        \
-    inline int WX_STR_DECL(name, const wxWCharBuffer&, const wxWCharBuffer&)  \
+    inline rettype WX_STR_DECL(name, const wxWCharBuffer&, const wxWCharBuffer&)  \
         { return WX_STR_CALL(crtW, s1.data(), s2.data()); }                   \
-    inline int WX_STR_DECL(name, const wxWCharBuffer&, const wxCharBuffer&)   \
+    inline rettype WX_STR_DECL(name, const wxWCharBuffer&, const wxCharBuffer&)   \
         { return WX_STR_CALL(forString, wxString(s1), wxString(s2)); }        \
                                                                               \
     inline rettype WX_STR_DECL(name, const wxString&, const char*)            \
@@ -448,20 +448,22 @@ WX_STRCMP_FUNC(wxStrcoll, wxCRT_StrcollA, wxCRT_StrcollW, wxStrcoll_String)
 #endif // defined(wxCRT_Strcoll[AW])
 
 template<typename T>
-inline int wxStrspn_String(const wxString& s1, const T& s2)
+inline size_t wxStrspn_String(const wxString& s1, const T& s2)
 {
     size_t pos = s1.find_first_not_of(s2);
-    return (pos == wxString::npos) ? s1.length() : pos;
+    return pos == wxString::npos ? s1.length() : pos;
 }
-WX_STR_FUNC(size_t, wxStrspn, wxCRT_StrspnA, wxCRT_StrspnW, wxStrspn_String)
+WX_STR_FUNC_NO_INVERT(size_t, wxStrspn,
+                      wxCRT_StrspnA, wxCRT_StrspnW, wxStrspn_String)
 
 template<typename T>
-inline int wxStrcspn_String(const wxString& s1, const T& s2)
+inline size_t wxStrcspn_String(const wxString& s1, const T& s2)
 {
     size_t pos = s1.find_first_of(s2);
-    return (pos == wxString::npos) ? s1.length() : pos;
+    return pos == wxString::npos ? s1.length() : pos;
 }
-WX_STR_FUNC(size_t, wxStrcspn, wxCRT_StrcspnA, wxCRT_StrcspnW, wxStrcspn_String)
+WX_STR_FUNC_NO_INVERT(size_t, wxStrcspn,
+                      wxCRT_StrcspnA, wxCRT_StrcspnW, wxStrcspn_String)
 
 #undef WX_STR_DECL
 #undef WX_STR_CALL
