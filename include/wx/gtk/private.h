@@ -14,14 +14,7 @@
 
 #include <gtk/gtk.h>
 
-#include "wx/event.h"
 #include "wx/gtk/private/string.h"
-
-// fail all version tests if the GTK+ version is so ancient that it doesn't
-// even have GTK_CHECK_VERSION
-#ifndef GTK_CHECK_VERSION
-    #define GTK_CHECK_VERSION(a, b, c) 0
-#endif
 
 // pango_version_check symbol is quite recent ATM (4/2007)... so we
 // use our own wrapper which implements a smart trick.
@@ -95,12 +88,7 @@ extern const gchar *wx_pango_version_check(int major, int minor, int micro);
 
 // Some deprecated GTK+ prototypes we still use often
 // FIXME: Don't use them if possible.
-G_BEGIN_DECLS
-
-// Should use gtk_image_new, but the mask seems to be handled different,
-// and we need to migrate
-GtkWidget* gtk_pixmap_new (GdkPixmap *pixmap,
-                           GdkBitmap *mask);
+extern "C" {
 
 // Deprecated since GTK+-1.3.7:
 // Trivial wrapper around gtk_window_move, with some side effects we seem to rely on
@@ -114,25 +102,7 @@ void gtk_window_set_policy (GtkWindow *window,
                             gint       allow_grow,
                             gint       auto_shrink);
 
-G_END_DECLS
-
-//-----------------------------------------------------------------------------
-// Misc. functions
-//-----------------------------------------------------------------------------
-
-// Needed for implementing e.g. combobox on wxGTK within a modal dialog.
-void wxAddGrab(wxWindow* window);
-void wxRemoveGrab(wxWindow* window);
-
-// Escapes string so that it is valid Pango markup XML string:
-WXDLLIMPEXP_CORE wxString wxEscapeStringForPangoMarkup(const wxString& str);
-
-#ifdef __WXGTK20__
-#include <gdk/gdktypes.h>
-
-// Returns stock accelerator modifier and key code for the given ID
-WXDLLEXPORT bool wxGetStockGtkAccelerator(const char *id, GdkModifierType *mod, guint *key);
-#endif
+} // extern "C"
 
 #endif // _WX_GTK_PRIVATE_H_
 

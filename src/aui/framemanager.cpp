@@ -219,7 +219,7 @@ END_EVENT_TABLE()
 #else
   // __WXGTK20__
 
-#include "wx/gtk/private.h"
+#include <gtk/gtk.h>
 
 static void
 gtk_pseudo_window_realized_callback( GtkWidget *m_widget, void *WXUNUSED(win) )

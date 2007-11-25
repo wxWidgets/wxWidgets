@@ -304,7 +304,7 @@ wxArtProvider::~wxArtProvider()
 }
 
 #if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
-    #include "wx/gtk/private.h"
+    #include <gtk/gtk.h>
     extern GtkIconSize wxArtClientToIconSize(const wxArtClient& client);
 #endif // defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
 

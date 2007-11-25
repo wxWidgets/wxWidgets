@@ -46,11 +46,8 @@ extern "C"
     static void gtk_menu_clicked_callback(GtkWidget *widget, wxMenu *menu);
 }
 
-//-----------------------------------------------------------------------------
-// idle system
-//-----------------------------------------------------------------------------
-
 #if wxUSE_ACCEL
+static bool wxGetStockGtkAccelerator(const char *id, GdkModifierType *mod, guint *key);
 static wxString GetGtkHotKey( const wxMenuItem& item );
 #endif
 
@@ -844,7 +841,7 @@ void wxMenuItem::SetItemLabel( const wxString& str )
                                            accel_key,
                                            accel_mods );
     }
-#endif // wxUSE_FILECTRL
+#endif // wxUSE_ACCEL
 }
 
 // NOTE: this function is different from the similar functions GTKProcessMnemonics()
@@ -1176,7 +1173,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
                                         accel_mods,
                                         GTK_ACCEL_VISIBLE);
     }
-#endif // wxUSE_FILECTRL
+#endif // wxUSE_ACCEL
 
     if (pos == -1)
         gtk_menu_shell_append(GTK_MENU_SHELL(m_menu), menuItem);
@@ -1762,6 +1759,8 @@ const char *wxGetStockGtkID(wxWindowID id)
     return NULL;
 }
 
+#if wxUSE_ACCEL
+static
 bool wxGetStockGtkAccelerator(const char *id, GdkModifierType *mod, guint *key)
 {
     if (!id)
@@ -1781,5 +1780,6 @@ bool wxGetStockGtkAccelerator(const char *id, GdkModifierType *mod, guint *key)
 
     return false;
 }
+#endif // wxUSE_ACCEL
 
 #endif // wxUSE_MENUS
