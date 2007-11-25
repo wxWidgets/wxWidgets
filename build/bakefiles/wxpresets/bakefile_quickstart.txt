@@ -19,7 +19,7 @@ all the native project files for wxWidgets. So now, even though wxWidgets
 supports all these formats, wxWidgets developers need only update one file -
 the Bakefile, and it handles the rest. But Bakefile isn't specific to
 wxWidgets in any way - you can use Bakefile for your own projects, too. This
-brief tutorial will take a look at how to do that. 
+brief tutorial will take a look at how to do that.
 
 Note that this tutorial assumes that you are familiar with how to build
 software using one of the supported Bakefile makefile systems, that you have
@@ -31,10 +31,11 @@ including FreeBSD, Linux, Mac OS X, and various other operating systems.
 -- Getting Started --
 
 First, you'll need to install Bakefile. You can always find the latest version
-for download online at http://bakefile.sf.net. A binary installer is provided
+for download online at http://www.bakefile.org. A binary installer is provided
 for Windows users, while users of Unix-based operating systems (OS) will need
-to unpack the tarball and run configure && make && make install. (Packages for
-some distros are also available, check http://bakefile.sf.net for details.)
+to unpack the tarball and run configure && make && make install. (binary
+packages for some Linux distributions are also available, check
+http://www.bakefile.org/download.html for details).
 
 -- Setting Up Your wx Build Environment --
 
@@ -79,9 +80,9 @@ minimal.bkl
         <app-type>gui</app-type>
         <debug-info>on</debug-info>
         <runtime-libs>dynamic</runtime-libs>
-        
+
         <sources>minimal.cpp</sources>
-        
+
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>
@@ -90,7 +91,7 @@ minimal.bkl
 ---------------------------------------------------------------
 
 It's a complete sample ready to be baked, so go into the directory mentioned
-above and run the following command: 
+above and run the following command:
 
 On Windows:
 bakefile -f msvc -I.. minimal.bkl
@@ -138,7 +139,7 @@ how to use autoconf. Unfortunately, this topic deserves a book all its own and
 is beyond the scope of this tutorial, but a book on the subject can be found
 online at: http://sources.redhat.com/autobook/. Note that you do not need to
 use automake when you are using Bakefile, just autoconf, as Bakefile
-essentially does the same thing as automake. 
+essentially does the same thing as automake.
 ----------------------------
 
 -- Targets --
@@ -195,7 +196,7 @@ their makefiles. (i.e. DEBUG or static/dynamic library options) Also, it is
 common to have to use settings from another project; for example, any project
 that uses wxWidgets will need to build using the same flags and options that
 wxWidgets was built with. Bakefile makes these things easier by allowing users
-to create Bakefile templates, where you can store common settings. 
+to create Bakefile templates, where you can store common settings.
 
 Bakefile ships with a couple of templates, found in the 'presets' subfolder of
 your Bakefile installation. The "simple.bkl" template adds a DEBUG option to
@@ -213,15 +214,15 @@ make -f GNUmakefile DEBUG=1
 
 In order to build the software in debug mode.
 
-To simplify the building of wxWidgets-based projects, wxWidgets contains a a
+To simplify the building of wxWidgets-based projects, wxWidgets contains a
 set of Bakefiles that automatically configure your build system to be
 compatible with wxWidgets. As you'll notice in the sample above, the sample
 project uses the wx template. Once you've included the template, your software
-will now build with wxWidgets support. 
+will now build with wxWidgets support.
 
 But since the wx presets don't exist in the Bakefile presets subfolder,
 Bakefile needs to know where to find these presets. The "-I" command adds the
-wxpresets folder to Bakefile's search path. 
+wxpresets folder to Bakefile's search path.
 
 If you regularly include Bakefile presets in places other than the Bakefile
 presets folder, then you can set the BAKEFILE_PATHS environment variable so
@@ -230,19 +231,19 @@ way you no longer need to specify the -I flag each time you build.
 
 Lastly, it's important to note that the Win 32 wx project Bakefiles come with
 some common build options that users can use when building the software. These
-options are: 
+options are:
 
     Option              Values              Description
     ------              ------              -------------
-    WX_MONOLITHIC       0(default),1        Set this to 1 if you built wx 
+    WX_MONOLITHIC       0(default),1        Set this to 1 if you built wx
                                             as a monolithic library
     WX_SHARED           0(default),1        Specify static or dynamic wx libs
-    WX_UNICODE          0(defualt),1        Use ANSI or UNICODE wx libs
+    WX_UNICODE          0(default),1        Use ANSI or UNICODE wx libs
     WX_DEBUG            0,1(default)        Use release or debug wx libs
     *WX_VERSION         25,26(default)      Specify version of wx libs
 
 *Note: Any version of wx past 2.5 will be allowed here, so 25/26 is not a
-complete list of values. 
+complete list of values.
 
 These options are not needed under Unix as wx-config can be used to specify
 these options.
@@ -250,7 +251,7 @@ these options.
 -- bakefile_gen - Automated Bakefile Scripts --
 
 If you have a large project, you can imagine that the calls to Bakefile would
-get more and more complex and unwieldly to manage. For this reason, a script
+get more and more complex and unwieldy to manage. For this reason, a script
 called bakefile_gen was created, which reads in a .bkgen file that provides
 all the commands needed to build all the makefiles your project supports. A
 discussion of how to use bakefile_gen is beyond the scope of this tutorial,
