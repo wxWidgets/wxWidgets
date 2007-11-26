@@ -248,7 +248,8 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
 
     if ( !dc.IsKindOf( CLASSINFO( wxPaintDC ) ) )
     {
-        wxRect rect( splitterRect.origin.x, splitterRect.origin.y, splitterRect.size.width, splitterRect.size.height );
+        wxRect rect( (int) splitterRect.origin.x, (int) splitterRect.origin.y, (int) splitterRect.size.width, 
+                     (int) splitterRect.size.height );
         win->Refresh( &rect );
    }
     else
@@ -273,11 +274,12 @@ wxRendererMac::DrawItemSelectionRect(wxWindow *win,
 {
     if ( !(flags & wxCONTROL_SELECTED) )
         return;
-        
-    wxBrush selBrush(wxColour( wxMacCreateCGColorFromHITheme( flags & wxCONTROL_FOCUSED ? 
-                                                             kThemeBrushAlternatePrimaryHighlightColor
-                                                             : kThemeBrushSecondaryHighlightColor ) ) , wxSOLID );
-
+    
+    wxColour col( wxMacCreateCGColorFromHITheme( (flags & wxCONTROL_FOCUSED) ? 
+                                                 kThemeBrushAlternatePrimaryHighlightColor
+                                                                             : kThemeBrushSecondaryHighlightColor ) );
+    wxBrush selBrush( col );
+    
     dc.SetPen( *wxTRANSPARENT_PEN );
     dc.SetBrush( selBrush );
     dc.DrawRectangle( rect );
