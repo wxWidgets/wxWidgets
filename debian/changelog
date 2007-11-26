@@ -1,4 +1,4 @@
-wxwidgets2.8 (2.8.7.0-0) unstable; urgency=low
+wxwidgets2.8 (2.8.7.1-0) unstable; urgency=low
 
   * wxPython: New version of XRCed from Google SoC project
   * wxPython: Added the Editra programmer's editor to the wxPython tools.
