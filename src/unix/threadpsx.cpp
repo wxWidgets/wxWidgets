@@ -27,8 +27,10 @@
 #if wxUSE_THREADS
 
 #include "wx/thread.h"
+#include "wx/except.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/dynarray.h"
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -826,11 +828,15 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
                    _T("Thread %ld about to enter its Entry()."),
                    THR_ID(pthread));
 
-        pthread->m_exitcode = thread->Entry();
+        wxTRY
+        {
+            pthread->m_exitcode = thread->Entry();
 
-        wxLogTrace(TRACE_THREADS,
-                   _T("Thread %ld Entry() returned %lu."),
-                   THR_ID(pthread), wxPtrToUInt(pthread->m_exitcode));
+            wxLogTrace(TRACE_THREADS,
+                       _T("Thread %ld Entry() returned %lu."),
+                       THR_ID(pthread), wxPtrToUInt(pthread->m_exitcode));
+        }
+        wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
 
         {
             wxCriticalSectionLocker lock(thread->m_critsect);
@@ -1542,7 +1548,11 @@ void wxThread::Exit(ExitCode status)
     // might deadlock if, for example, it signals a condition in OnExit() (a
     // common case) while the main thread calls any of functions entering
     // m_critsect on us (almost all of them do)
-    OnExit();
+    wxTRY
+    {
+        OnExit();
+    }
+    wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
 
     // delete C++ thread object if this is a detached thread - user is
     // responsible for doing this for joinable ones
