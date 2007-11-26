@@ -238,13 +238,36 @@ public:
         return m_dll.IsLoaded() ? m_dll.GetSymbol(name) : NULL;
     }
 
+    void Unload()
+    {
+        if ( m_dll.IsLoaded() )
+        {
+            m_dll.Unload();
+        }
+    }
+
 private:
     wxDynamicLibrary m_dll;
     const wxChar *m_dllName;
 };
 
-static wxOnceOnlyDLLLoader wxGDI32DLL(_T("gdi32"));
 static wxOnceOnlyDLLLoader wxMSIMG32DLL(_T("msimg32"));
+
+// we must ensure that DLLs are unloaded before the static objects cleanup time
+// because we may hit the notorious DllMain() dead lock in this case if wx is
+// used as a DLL (attempting to unload another DLL from inside DllMain() hangs
+// under Windows because it tries to reacquire the same lock)
+class wxGDIDLLsCleanupModule : public wxModule
+{
+public:
+    virtual bool OnInit() { return true; }
+    virtual void OnExit() { wxMSIMG32DLL.Unload(); }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxGDIDLLsCleanupModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxGDIDLLsCleanupModule, wxModule)
 
 #endif // wxUSE_DYNLIB_CLASS
 
@@ -2694,9 +2717,9 @@ static DWORD wxGetDCLayout(HDC hdc)
 {
     typedef DWORD (WINAPI *GetLayout_t)(HDC);
     static GetLayout_t
-        pfnGetLayout = (GetLayout_t)wxGDI32DLL.GetSymbol(_T("GetLayout"));
+        wxDL_INIT_FUNC(s_pfn, GetLayout, wxDynamicLibrary(_T("gdi32.dll")));
 
-    return pfnGetLayout ? pfnGetLayout(hdc) : (DWORD)-1;
+    return s_pfnGetLayout ? s_pfnGetLayout(hdc) : (DWORD)-1;
 }
 
 wxLayoutDirection wxDC::GetLayoutDirection() const
@@ -2713,8 +2736,8 @@ void wxDC::SetLayoutDirection(wxLayoutDirection dir)
 {
     typedef DWORD (WINAPI *SetLayout_t)(HDC, DWORD);
     static SetLayout_t
-        pfnSetLayout = (SetLayout_t)wxGDI32DLL.GetSymbol(_T("SetLayout"));
-    if ( !pfnSetLayout )
+        wxDL_INIT_FUNC(s_pfn, SetLayout, wxDynamicLibrary(_T("gdi32.dll")));
+    if ( !s_pfnSetLayout )
         return;
 
     if ( dir == wxLayout_Default )
@@ -2730,7 +2753,7 @@ void wxDC::SetLayoutDirection(wxLayoutDirection dir)
     else
         layout &= ~LAYOUT_RTL;
 
-    pfnSetLayout(GetHdc(), layout);
+    s_pfnSetLayout(GetHdc(), layout);
 }
 
 #else // !wxUSE_DYNLIB_CLASS
