@@ -20,7 +20,7 @@
 
 #include "wx/dynarray.h"
 
-class WXDLLEXPORT wxToolTip;
+class WXDLLIMPEXP_FWD_CORE wxToolTip;
 
 WX_DEFINE_EXPORTED_ARRAY_PTR(wxToolTip *, wxToolTipArray);
 
