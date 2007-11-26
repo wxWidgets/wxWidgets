@@ -1369,7 +1369,6 @@ void wxTopLevelWindowMac::MacActivate( long timestamp , bool WXUNUSED(inIsActiva
         s_macDeactivateWindow = NULL;
 
     MacDelayedDeactivation(timestamp);
-    MacPropagateHiliteChanged() ;
 }
 
 void wxTopLevelWindowMac::SetTitle(const wxString& title)
@@ -1417,9 +1416,146 @@ bool wxTopLevelWindowMac::Show(bool show)
            ::TransitionWindow( (WindowRef)m_macWindow, kWindowZoomTransitionEffect, kWindowHideTransitionAction, NULL );
     }
 
-    MacPropagateVisibilityChanged() ;
-
     return true ;
+}
+
+bool wxTopLevelWindowMac::ShowWithEffect(wxShowEffect effect,
+                            unsigned timeout,
+                            wxDirection dir)
+{
+    // TODO factor common code
+    if ( !wxTopLevelWindowBase::Show(true) )
+        return false;
+ 
+    WindowTransitionEffect transition = 0 ;
+    switch( effect )
+    {
+        case wxSHOW_EFFECT_ROLL :
+        case wxSHOW_EFFECT_SLIDE :
+            transition = kWindowGenieTransitionEffect;
+            break;
+        case wxSHOW_EFFECT_BLEND :
+            transition = kWindowFadeTransitionEffect;
+            break;
+        case wxSHOW_EFFECT_EXPAND :
+        default :
+            // having sheets would be fine, but this might lead to a repositioning
+#if 0
+            if ( GetParent() )
+                transition = kWindowSheetTransitionEffect;
+            else
+#endif
+                transition = kWindowZoomTransitionEffect;
+            break;
+    }
+    
+    TransitionWindowOptions options;
+    options.version = 0;
+    options.duration = timeout / 1000.0;
+    options.window = transition == kWindowSheetTransitionEffect ? (WindowRef) GetParent()->MacGetTopLevelWindowRef() :0;
+    options.userData = 0;
+    
+    wxSize size = wxGetDisplaySize();
+    Rect bounds;
+    GetWindowBounds( (WindowRef)m_macWindow, kWindowStructureRgn, &bounds );
+    CGRect hiBounds = CGRectMake( bounds.left, bounds.top, bounds.right - bounds.left, bounds.bottom - bounds.top );
+
+    if ( dir & wxRIGHT )
+    {
+        hiBounds.origin.x = size.x;
+        hiBounds.size.width = 0;
+    }
+    if ( dir & wxUP )
+    {
+        hiBounds.origin.y = 0;
+        hiBounds.size.height = 0;
+    }
+    if ( dir & wxDOWN )
+    {
+        hiBounds.origin.y = size.y;
+        hiBounds.size.height = 0;
+    }
+    if ( dir & wxLEFT )
+    {
+        hiBounds.origin.x = 0;
+        hiBounds.size.width = 0;
+    }
+    
+    ::TransitionWindowWithOptions( (WindowRef)m_macWindow, transition, kWindowShowTransitionAction, transition == kWindowGenieTransitionEffect ? &hiBounds : NULL  ,  
+                                  false, &options );
+
+    ::SelectWindow( (WindowRef)m_macWindow ) ;
+    
+    // because apps expect a size event to occur at this moment
+    wxSizeEvent event(GetSize() , m_windowId);
+    event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(event);
+    
+    return true;
+}
+
+bool wxTopLevelWindowMac::HideWithEffect(wxShowEffect effect,
+                            unsigned timeout ,
+                            wxDirection dir )
+{
+    if ( !wxTopLevelWindowBase::Show(false) )
+        return false;
+    
+    WindowTransitionEffect transition = 0 ;
+    switch( effect )
+    {
+        case wxSHOW_EFFECT_ROLL :
+        case wxSHOW_EFFECT_SLIDE :
+            transition = kWindowGenieTransitionEffect;
+            break;
+        case wxSHOW_EFFECT_BLEND :
+            transition = kWindowFadeTransitionEffect;
+            break;
+        case wxSHOW_EFFECT_EXPAND :
+        default:
+#if 0
+            if ( GetParent() )
+                transition = kWindowSheetTransitionEffect;
+            else
+#endif
+                transition = kWindowZoomTransitionEffect;
+            break;
+    }
+    TransitionWindowOptions options;
+    options.version = 0;
+    options.duration = timeout / 1000.0;
+    options.window = transition == kWindowSheetTransitionEffect ? (WindowRef) GetParent()->MacGetTopLevelWindowRef() :0;
+    options.userData = 0;
+    
+    wxSize size = wxGetDisplaySize();
+    Rect bounds;
+    GetWindowBounds( (WindowRef)m_macWindow, kWindowStructureRgn, &bounds );
+    CGRect hiBounds = CGRectMake( bounds.left, bounds.top, bounds.right - bounds.left, bounds.bottom - bounds.top );
+    
+    if ( dir & wxRIGHT )
+    {
+        hiBounds.origin.x = size.x;
+        hiBounds.size.width = 0;
+    }
+    if ( dir & wxUP )
+    {
+        hiBounds.origin.y = 0;
+        hiBounds.size.height = 0;
+    }
+    if ( dir & wxDOWN )
+    {
+        hiBounds.origin.y = size.y;
+        hiBounds.size.height = 0;
+    }
+    if ( dir & wxLEFT )
+    {
+        hiBounds.origin.x = 0;
+        hiBounds.size.width = 0;
+    }
+    ::TransitionWindowWithOptions( (WindowRef)m_macWindow, transition, kWindowHideTransitionAction, transition == kWindowGenieTransitionEffect ? &hiBounds : NULL  ,  
+                                  false, &options );
+
+    return true;
 }
 
 bool wxTopLevelWindowMac::ShowFullScreen(bool show, long style)

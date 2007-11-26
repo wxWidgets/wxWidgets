@@ -735,11 +735,7 @@ void wxMacControl::SetVisibility( bool visible , bool redraw )
 
 bool wxMacControl::IsEnabled() const
 {
-#if TARGET_API_MAC_OSX
     return IsControlEnabled( m_controlRef );
-#else
-    return IsControlActive( m_controlRef );
-#endif
 }
 
 bool wxMacControl::IsActive() const
@@ -852,15 +848,10 @@ OSStatus wxMacControl::GetRegion( ControlPartCode partCode , RgnHandle region )
 
 OSStatus wxMacControl::SetZOrder( bool above , wxMacControl* other )
 {
-#if TARGET_API_MAC_OSX
     return HIViewSetZOrder( m_controlRef,above ? kHIViewZOrderAbove : kHIViewZOrderBelow,
        (other != NULL) ? other->m_controlRef : NULL);
-#else
-    return 0;
-#endif
 }
 
-#if TARGET_API_MAC_OSX
 // SetNeedsDisplay would not invalidate the children
 static void InvalidateControlAndChildren( HIViewRef control )
 {
@@ -883,13 +874,10 @@ static void InvalidateControlAndChildren( HIViewRef control )
         InvalidateControlAndChildren( child );
     }
 }
-#endif
 
 void wxMacControl::InvalidateWithChildren()
 {
-#if TARGET_API_MAC_OSX
     InvalidateControlAndChildren( m_controlRef );
-#endif
 }
 
 void wxMacControl::ScrollRect( wxRect *r , int dx , int dy )
@@ -997,11 +985,7 @@ wxMacDataBrowserControl::wxMacDataBrowserControl( wxWindow* peer,
     if ( gDataBrowserItemNotificationUPP == NULL )
     {
         gDataBrowserItemNotificationUPP =
-#if TARGET_API_MAC_OSX
             (DataBrowserItemNotificationUPP) NewDataBrowserItemNotificationWithItemUPP(DataBrowserItemNotificationProc);
-#else
-            NewDataBrowserItemNotificationUPP(DataBrowserItemNotificationProc);
-#endif
     }
 
     DataBrowserCallbacks callbacks;

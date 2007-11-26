@@ -416,10 +416,6 @@ void wxTextCtrl::MacVisibilityChanged()
     GetPeer()->VisibilityChanged( MacIsReallyShown() ) ;
 }
 
-void wxTextCtrl::MacEnabledStateChanged()
-{
-}
-
 void wxTextCtrl::MacCheckSpelling(bool check)
 {
     GetPeer()->CheckSpelling(check);

@@ -66,18 +66,6 @@
 #define MAC_SCROLLBAR_SIZE 15
 #define MAC_SMALL_SCROLLBAR_SIZE 11
 
-#ifndef __DARWIN__
-#include <Windows.h>
-#include <ToolUtils.h>
-#include <MacTextEditor.h>
-#endif
-
-#if TARGET_API_MAC_OSX
-#ifndef __HIVIEW__
-    #include <HIToolbox/HIView.h>
-#endif
-#endif
-
 #include <string.h>
 
 #ifdef __WXUNIVERSAL__
@@ -89,9 +77,7 @@
 BEGIN_EVENT_TABLE(wxWindowMac, wxWindowBase)
     EVT_NC_PAINT(wxWindowMac::OnNcPaint)
     EVT_ERASE_BACKGROUND(wxWindowMac::OnEraseBackground)
-#if TARGET_API_MAC_OSX
     EVT_PAINT(wxWindowMac::OnPaint)
-#endif
     EVT_SET_FOCUS(wxWindowMac::OnSetFocus)
     EVT_KILL_FOCUS(wxWindowMac::OnSetFocus)
     EVT_MOUSE_EVENTS(wxWindowMac::OnMouseEvent)
@@ -165,14 +151,14 @@ static const EventTypeSpec eventList[] =
     { kEventClassTextInput, kEventTextInputUpdateActiveInputArea } ,
 
     { kEventClassControl , kEventControlDraw } ,
-#if TARGET_API_MAC_OSX
+
     { kEventClassControl , kEventControlVisibilityChanged } ,
     { kEventClassControl , kEventControlEnabledStateChanged } ,
     { kEventClassControl , kEventControlHiliteChanged } ,
 
     { kEventClassControl , kEventControlActivate } ,
     { kEventClassControl , kEventControlDeactivate } ,
-#endif
+
     { kEventClassControl , kEventControlSetFocusPart } ,
 
     { kEventClassService , kEventServiceGetTypes },
@@ -196,7 +182,6 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 
     switch ( GetEventKind( event ) )
     {
-#if TARGET_API_MAC_OSX
         case kEventControlDraw :
             {
                 RgnHandle updateRgn = NULL ;
@@ -220,9 +205,6 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                         updateRgn = allocatedRgn ;
                     }
                 }
-
-                Rect rgnBounds ;
-                GetRegionBounds( updateRgn , &rgnBounds ) ;
 
 #if wxMAC_DEBUG_REDRAW
                 if ( thisWindow->MacIsUserPane() )
@@ -277,6 +259,8 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                             CGContextClearRect( cgContext, bounds );
                         }
 
+                        
+                        
                         if ( thisWindow->MacDoRedraw( updateRgn , cEvent.GetTicks() ) )
                             result = noErr ;
 
@@ -297,7 +281,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
             break ;
 
         case kEventControlEnabledStateChanged :
-            thisWindow->MacEnabledStateChanged() ;
+            thisWindow->MacEnabledStateChanged();
             break ;
 
         case kEventControlHiliteChanged :
@@ -316,7 +300,6 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 thisWindow->Refresh();
 #endif
             break ;
-#endif // TARGET_API_MAC_OSX
 
         // we emulate this event under Carbon CFM
         case kEventControlSetFocusPart :
@@ -698,134 +681,6 @@ pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef 
 
 DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacWindowEventHandler )
 
-#if !TARGET_API_MAC_OSX
-
-// ---------------------------------------------------------------------------
-// UserPane events for non OSX builds
-// ---------------------------------------------------------------------------
-
-static pascal void wxMacControlUserPaneDrawProc(ControlRef control, SInt16 part)
-{
-    wxWindow * win = wxFindControlFromMacControl(control) ;
-    if ( win )
-        win->MacControlUserPaneDrawProc(part) ;
-}
-wxMAC_DEFINE_PROC_GETTER( ControlUserPaneDrawUPP , wxMacControlUserPaneDrawProc ) ;
-
-static pascal ControlPartCode wxMacControlUserPaneHitTestProc(ControlRef control, Point where)
-{
-    wxWindow * win = wxFindControlFromMacControl(control) ;
-    if ( win )
-        return win->MacControlUserPaneHitTestProc(where.h , where.v) ;
-    else
-        return kControlNoPart ;
-}
-wxMAC_DEFINE_PROC_GETTER( ControlUserPaneHitTestUPP , wxMacControlUserPaneHitTestProc ) ;
-
-static pascal ControlPartCode wxMacControlUserPaneTrackingProc(ControlRef control, Point startPt, ControlActionUPP actionProc)
-{
-    wxWindow * win = wxFindControlFromMacControl(control) ;
-    if ( win )
-        return win->MacControlUserPaneTrackingProc( startPt.h , startPt.v , (void*) actionProc) ;
-    else
-        return kControlNoPart ;
-}
-wxMAC_DEFINE_PROC_GETTER( ControlUserPaneTrackingUPP , wxMacControlUserPaneTrackingProc ) ;
-
-static pascal void wxMacControlUserPaneIdleProc(ControlRef control)
-{
-    wxWindow * win = wxFindControlFromMacControl(control) ;
-    if ( win )
-        win->MacControlUserPaneIdleProc() ;
-}
-wxMAC_DEFINE_PROC_GETTER( ControlUserPaneIdleUPP , wxMacControlUserPaneIdleProc ) ;
-
-static pascal ControlPartCode wxMacControlUserPaneKeyDownProc(ControlRef control, SInt16 keyCode, SInt16 charCode, SInt16 modifiers)
-{
-    wxWindow * win = wxFindControlFromMacControl(control) ;
-    if ( win )
-        return win->MacControlUserPaneKeyDownProc(keyCode,charCode,modifiers) ;
-    else
-        return kControlNoPart ;
-}
-wxMAC_DEFINE_PROC_GETTER( ControlUserPaneKeyDownUPP , wxMacControlUserPaneKeyDownProc ) ;
-
-static pascal void wxMacControlUserPaneActivateProc(ControlRef control, Boolean activating)
-{
-    wxWindow * win = wxFindControlFromMacControl(control) ;
-    if ( win )
-        win->MacControlUserPaneActivateProc(activating) ;
-}
-wxMAC_DEFINE_PROC_GETTER( ControlUserPaneActivateUPP , wxMacControlUserPaneActivateProc ) ;
-
-static pascal ControlPartCode wxMacControlUserPaneFocusProc(ControlRef control, ControlFocusPart action)
-{
-    wxWindow * win = wxFindControlFromMacControl(control) ;
-    if ( win )
-        return win->MacControlUserPaneFocusProc(action) ;
-    else
-        return kControlNoPart ;
-}
-wxMAC_DEFINE_PROC_GETTER( ControlUserPaneFocusUPP , wxMacControlUserPaneFocusProc ) ;
-
-static pascal void wxMacControlUserPaneBackgroundProc(ControlRef control, ControlBackgroundPtr info)
-{
-    wxWindow * win = wxFindControlFromMacControl(control) ;
-    if ( win )
-        win->MacControlUserPaneBackgroundProc(info) ;
-}
-wxMAC_DEFINE_PROC_GETTER( ControlUserPaneBackgroundUPP , wxMacControlUserPaneBackgroundProc ) ;
-
-void wxWindowMac::MacControlUserPaneDrawProc(wxInt16 part)
-{
-    int x = 0 , y = 0;
-    RgnHandle rgn = NewRgn() ;
-    GetClip( rgn ) ;
-    MacWindowToRootWindow( &x, &y ) ;
-    OffsetRgn( rgn , -x , -y ) ;
-    wxMacWindowStateSaver sv( this ) ;
-    SectRgn( rgn , (RgnHandle) MacGetVisibleRegion().GetWXHRGN() , rgn ) ;
-    MacDoRedraw( rgn , 0 ) ;
-    DisposeRgn( rgn ) ;
-}
-
-wxInt16 wxWindowMac::MacControlUserPaneHitTestProc(wxInt16 x, wxInt16 y)
-{
-    return kControlNoPart ;
-}
-
-wxInt16 wxWindowMac::MacControlUserPaneTrackingProc(wxInt16 x, wxInt16 y, void* actionProc)
-{
-    return kControlNoPart ;
-}
-
-void wxWindowMac::MacControlUserPaneIdleProc()
-{
-}
-
-wxInt16 wxWindowMac::MacControlUserPaneKeyDownProc(wxInt16 keyCode, wxInt16 charCode, wxInt16 modifiers)
-{
-    return kControlNoPart ;
-}
-
-void wxWindowMac::MacControlUserPaneActivateProc(bool activating)
-{
-}
-
-wxInt16 wxWindowMac::MacControlUserPaneFocusProc(wxInt16 action)
-{
-    if ( AcceptsFocus() )
-        return 1 ;
-    else
-        return kControlNoPart ;
-}
-
-void wxWindowMac::MacControlUserPaneBackgroundProc(void* info)
-{
-}
-
-#endif
-
 // ---------------------------------------------------------------------------
 // Scrollbar Tracking for all
 // ---------------------------------------------------------------------------
@@ -1012,20 +867,6 @@ void wxWindowMac::MacInstallEventHandler( WXWidget control )
     InstallControlEventHandler( (ControlRef)control , GetwxMacWindowEventHandlerUPP(),
         GetEventTypeCount(eventList), eventList, this,
         (EventHandlerRef *)&m_macControlEventHandler);
-
-#if !TARGET_API_MAC_OSX
-    if ( (ControlRef) control == m_peer->GetControlRef() )
-    {
-        m_peer->SetData<ControlUserPaneDrawUPP>(kControlEntireControl, kControlUserPaneDrawProcTag, GetwxMacControlUserPaneDrawProc()) ;
-        m_peer->SetData<ControlUserPaneHitTestUPP>(kControlEntireControl, kControlUserPaneHitTestProcTag, GetwxMacControlUserPaneHitTestProc()) ;
-        m_peer->SetData<ControlUserPaneTrackingUPP>(kControlEntireControl, kControlUserPaneTrackingProcTag, GetwxMacControlUserPaneTrackingProc()) ;
-        m_peer->SetData<ControlUserPaneIdleUPP>(kControlEntireControl, kControlUserPaneIdleProcTag, GetwxMacControlUserPaneIdleProc()) ;
-        m_peer->SetData<ControlUserPaneKeyDownUPP>(kControlEntireControl, kControlUserPaneKeyDownProcTag, GetwxMacControlUserPaneKeyDownProc()) ;
-        m_peer->SetData<ControlUserPaneActivateUPP>(kControlEntireControl, kControlUserPaneActivateProcTag, GetwxMacControlUserPaneActivateProc()) ;
-        m_peer->SetData<ControlUserPaneFocusUPP>(kControlEntireControl, kControlUserPaneFocusProcTag, GetwxMacControlUserPaneFocusProc()) ;
-        m_peer->SetData<ControlUserPaneBackgroundUPP>(kControlEntireControl, kControlUserPaneBackgroundProcTag, GetwxMacControlUserPaneBackgroundProc()) ;
-    }
-#endif
 }
 
 // Constructor
@@ -1241,43 +1082,6 @@ void wxWindowMac::SetFocus()
         return ;
 
     SetUserFocusWindow( (WindowRef)MacGetTopLevelWindowRef() );
-
-#if !TARGET_API_MAC_OSX
-    // emulate carbon events when running under CarbonLib where they are not natively available
-    if ( former )
-    {
-        EventRef evRef = NULL ;
-
-        err = MacCreateEvent(
-            NULL , kEventClassControl , kEventControlSetFocusPart , TicksToEventTime( TickCount() ) ,
-            kEventAttributeUserEvent , &evRef );
-        verify_noerr( err );
-
-        wxMacCarbonEvent cEvent( evRef ) ;
-        cEvent.SetParameter<ControlRef>( kEventParamDirectObject , (ControlRef) former->GetHandle() ) ;
-        cEvent.SetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode , kControlFocusNoPart ) ;
-
-        wxMacWindowEventHandler( NULL , evRef , former ) ;
-        ReleaseEvent( evRef ) ;
-    }
-
-    // send new focus event
-    {
-        EventRef evRef = NULL ;
-
-        err = MacCreateEvent(
-            NULL , kEventClassControl , kEventControlSetFocusPart , TicksToEventTime( TickCount() ) ,
-            kEventAttributeUserEvent , &evRef );
-        verify_noerr( err );
-
-        wxMacCarbonEvent cEvent( evRef ) ;
-        cEvent.SetParameter<ControlRef>( kEventParamDirectObject , (ControlRef) GetHandle() ) ;
-        cEvent.SetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode , kControlFocusNextPart ) ;
-
-        wxMacWindowEventHandler( NULL , evRef , this ) ;
-        ReleaseEvent( evRef ) ;
-    }
-#endif
 }
 
 void wxWindowMac::DoCaptureMouse()
@@ -1684,23 +1488,17 @@ bool wxWindowMac::SetCursor(const wxCursor& cursor)
         pt.h = hiPoint.x;
         pt.v = hiPoint.y;
  #else
-        CGrafPtr savePort ;
-        Boolean swapped = QDSwapPort( GetWindowPort( window ) , &savePort ) ;
-
-        // TODO: If we ever get a GetCurrentEvent... replacement
-        // for the mouse position, use it...
-
-
-        GetMouse( &pt ) ;
+        GetGlobalMouse( &pt );
+        int x = pt.h;
+        int y = pt.v;
+        ScreenToClient(&x, &y);
+        pt.h = x;
+        pt.v = y;
 #endif
         control = FindControlUnderMouse( pt , window , &part ) ;
         if ( control )
             mouseWin = wxFindControlFromMacControl( control ) ;
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
-         if ( swapped )
-            QDSwapPort( savePort , NULL ) ;
-#endif
     }
 
     if ( mouseWin == this && !wxIsBusy() )
@@ -2058,16 +1856,11 @@ wxString wxWindowMac::GetLabel() const
 
 bool wxWindowMac::Show(bool show)
 {
-    bool former = MacIsReallyShown() ;
     if ( !wxWindowBase::Show(show) )
         return false;
 
-    // TODO: use visibilityChanged Carbon Event for OSX
     if ( m_peer )
         m_peer->SetVisibility( show , true ) ;
-
-    if ( former != MacIsReallyShown() )
-        MacPropagateVisibilityChanged() ;
 
     return true;
 }
@@ -2075,53 +1868,6 @@ bool wxWindowMac::Show(bool show)
 void wxWindowMac::DoEnable(bool enable)
 {
     m_peer->Enable( enable ) ;
-}
-
-//
-// status change propagations (will be not necessary for OSX later )
-//
-
-void wxWindowMac::MacPropagateVisibilityChanged()
-{
-#if !TARGET_API_MAC_OSX
-    MacVisibilityChanged() ;
-
-    wxWindowMac *child;
-    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-    while ( node )
-    {
-        child = node->GetData();
-        if ( child->IsShown() )
-            child->MacPropagateVisibilityChanged() ;
-
-        node = node->GetNext();
-    }
-#endif
-}
-
-void wxWindowMac::OnEnabled(bool WXUNUSED(enabled))
-{
-#if !TARGET_API_MAC_OSX
-    MacEnabledStateChanged() ;
-#endif
-}
-
-void wxWindowMac::MacPropagateHiliteChanged()
-{
-#if !TARGET_API_MAC_OSX
-    MacHiliteChanged() ;
-
-    wxWindowMac *child;
-    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-    while ( node )
-    {
-        child = node->GetData();
-        if (child /* && child->IsEnabled() */)
-            child->MacPropagateHiliteChanged() ;
-
-        node = node->GetNext();
-    }
-#endif
 }
 
 //
@@ -2138,6 +1884,7 @@ void wxWindowMac::MacHiliteChanged()
 
 void wxWindowMac::MacEnabledStateChanged()
 {
+    OnEnabled( m_peer->IsEnabled() );
 }
 
 //
@@ -2786,13 +2533,9 @@ void wxWindowMac::ClearBackground()
 
 void wxWindowMac::Update()
 {
-#if TARGET_API_MAC_OSX
     wxTopLevelWindowMac* top = MacGetTopLevelWindow();
     if (top)
         top->MacPerformUpdates() ;
-#else
-    ::Draw1Control( m_peer->GetControlRef() ) ;
-#endif
 }
 
 wxTopLevelWindowMac* wxWindowMac::MacGetTopLevelWindow() const
@@ -2934,7 +2677,7 @@ void wxWindowMac::MacUpdateClippedRects() const
 /*
     This function must not change the updatergn !
  */
-bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
+bool wxWindowMac::MacDoRedraw( void* updatergnr , long time )
 {
     bool handled = false ;
     Rect updatebounds ;
@@ -2959,9 +2702,9 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
             // the grow-box area of a scrolled window (scroll sample)
             wxDC* dc = new wxWindowDC(this);
             if ( IsTopLevel() )
-                dc->SetClippingRegion(wxRegion(updatergn));
+                dc->SetClippingRegion(wxRegion(HIShapeCreateWithQDRgn(updatergn)));
             else
-                dc->SetClippingRegion(wxRegion(newupdate));
+                dc->SetClippingRegion(wxRegion(HIShapeCreateWithQDRgn(newupdate)));
 
             wxEraseEvent eevent( GetId(), dc );
             eevent.SetEventObject( this );
@@ -2973,7 +2716,7 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
 
         // calculate a client-origin version of the update rgn and set m_updateRegion to that
         OffsetRgn( newupdate , -origin.x , -origin.y ) ;
-        m_updateRegion = newupdate ;
+        m_updateRegion = wxRegion(HIShapeCreateWithQDRgn(newupdate)) ;
         DisposeRgn( newupdate ) ;
 
         if ( !m_updateRegion.Empty() )
