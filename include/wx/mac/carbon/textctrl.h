@@ -171,7 +171,6 @@ public:
     virtual bool MacSetupCursor( const wxPoint& pt );
 
     virtual void MacVisibilityChanged();
-    virtual void MacEnabledStateChanged();
     virtual void MacSuperChangedPosition();
     virtual void MacCheckSpelling(bool check);
 

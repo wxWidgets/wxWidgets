@@ -84,7 +84,6 @@ public:
                                const;
 protected:
     virtual void DoEnable( bool enable );
-    virtual void OnEnabled( bool enabled );
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
 
 public:
@@ -163,7 +162,7 @@ public:
     wxWindowMac *FindItemByHWND(WXHWND hWnd, bool controlOnly = false) const;
 
     virtual void        MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
-    virtual bool        MacDoRedraw( WXHRGN updatergn , long time ) ;
+    virtual bool        MacDoRedraw( void* updatergn , long time ) ;
     virtual bool        MacCanFocus() const ;
 
     // this should not be overriden in classes above wxWindowMac
@@ -308,10 +307,6 @@ protected:
     void                MacCreateScrollBars( long style ) ;
     void                MacRepositionScrollBars() ;
     void                MacUpdateControlFont() ;
-
-    void                MacPropagateVisibilityChanged() ;
-    void                MacPropagateEnabledStateChanged() ;
-    void                MacPropagateHiliteChanged() ;
 
     // implement the base class pure virtuals
     virtual wxSize DoGetBestSize() const;

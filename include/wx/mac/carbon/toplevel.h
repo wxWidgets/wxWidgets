@@ -94,6 +94,14 @@ public:
     virtual void Lower();
     virtual bool Show( bool show = true );
 
+    virtual bool ShowWithEffect(wxShowEffect effect,
+                                unsigned timeout = 0,
+                                wxDirection dir = wxBOTTOM);
+   
+    virtual bool HideWithEffect(wxShowEffect effect,
+                                unsigned timeout = 0,
+                                wxDirection dir = wxBOTTOM);
+     
     virtual void SetExtraStyle(long exStyle) ;
 
     virtual bool SetBackgroundColour( const wxColour &colour );
