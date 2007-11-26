@@ -47,7 +47,7 @@
 // menu ids
 enum
 {
-    Show_Shaped,
+    Show_Shaped = 100,
     Show_Transparent,
 
     // must be consecutive and in the same order as wxShowEffect enum elements
@@ -273,7 +273,11 @@ void MainFrame::OnShowTransparent(wxCommandEvent& WXUNUSED(event))
 void MainFrame::OnShowEffect(wxCommandEvent& event)
 {
     int effect = wxSHOW_EFFECT_ROLL + event.GetId() - Show_Effect_Roll;
-    new EffectFrame(this, wx_static_cast(wxShowEffect, effect));
+    static wxDirection direction = wxLEFT;
+    direction = (wxDirection)(((int)direction)<< 1);
+    if ( direction > wxDOWN )
+        direction = wxLEFT ;
+    new EffectFrame(this, wx_static_cast(wxShowEffect, effect),1000,direction);
 }
 
 // ----------------------------------------------------------------------------
