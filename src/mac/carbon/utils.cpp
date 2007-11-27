@@ -189,10 +189,12 @@ bool wxCheckForInterrupt(wxWindow *WXUNUSED(wnd))
 
 void wxGetMousePosition( int* x, int* y )
 {
+#if wxMAC_USE_QUICKDRAW
     Point pt;
     GetGlobalMouse(&pt);
     *x = pt.h;
     *y = pt.v;
+#endif
 };
 
 // Return true if we have a colour display
@@ -204,6 +206,7 @@ bool wxColourDisplay()
 // Returns depth of screen
 int wxDisplayDepth()
 {
+#if wxMAC_USE_QUICKDRAW
     int theDepth = (int) CGDisplayBitsPerPixel(CGMainDisplayID());
     Rect globRect;
     SetRect(&globRect, -32760, -32760, 32760, 32760);
@@ -214,6 +217,9 @@ int wxDisplayDepth()
         theDepth = (**(**theMaxDevice).gdPMap).pixelSize;
 
     return theDepth;
+#else
+    return 32;
+#endif
 }
 
 // Get size of display
@@ -243,6 +249,8 @@ void wxDisplaySizeMM(int *width, int *height)
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+#if wxMAC_USE_QUICKDRAW
+
         HIRect bounds ;
         HIWindowGetAvailablePositioningBounds(kCGNullDirectDisplay,kHICoordSpace72DPIGlobal,
             &bounds);
@@ -254,6 +262,18 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
         *width = bounds.size.width;
     if ( height )
         *height = bounds.size.height;
+#else
+    int w, h;
+    wxDisplaySize(&w,&h); 
+    if ( x )
+        *x = 0;
+    if ( y )
+        *y = 24;
+    if ( width )
+        *width = w;
+    if ( height )
+        *height = h-24;
+#endif
 #else
     Rect r;
     GetAvailableWindowPositioningBounds( GetMainDevice() , &r );
@@ -456,6 +476,8 @@ OSStatus wxMacCarbonEvent::SetParameter(EventParamName inName, EventParamType in
 // ----------------------------------------------------------------------------
 // Control Access Support
 // ----------------------------------------------------------------------------
+
+#if wxMAC_USE_QUICKDRAW
 
 IMPLEMENT_DYNAMIC_CLASS( wxMacControl , wxObject )
 
@@ -1875,6 +1897,8 @@ OSStatus wxMacControl::SetTabEnabled( SInt16 tabNo , bool enable )
     return ::SetTabEnabled( m_controlRef , tabNo , enable );
 }
 
+#endif
+
 //
 // Quartz Support
 //
@@ -1922,6 +1946,8 @@ wxMacPortSaver::~wxMacPortSaver()
 }
 #endif
 
+#if wxMAC_USE_QUICKDRAW
+
 void wxMacGlobalToLocal( WindowRef window , Point*pt )
 {
     HIPoint p = CGPointMake( pt->h, pt->v );
@@ -1943,5 +1969,6 @@ void wxMacLocalToGlobal( WindowRef window , Point*pt )
     pt->h = p.x;
     pt->v = p.y;
 }
+#endif
 
 #endif // wxUSE_GUI
