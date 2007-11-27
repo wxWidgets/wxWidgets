@@ -1444,18 +1444,14 @@ void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
 {
     if( m_cgContext )
     {
-        HIShapeRef shape = HIShapeCreateWithQDRgn( (RgnHandle) region.GetWXHRGN() );
-        HIShapeReplacePathInCGContext( shape, m_cgContext );
+        HIShapeReplacePathInCGContext( region.GetWXHRGN() , m_cgContext );
         CGContextClip( m_cgContext );
-        CFRelease( shape );
     }
     else
     {
         // this offsetting to device coords is not really correct, but since we cannot apply affine transforms
         // to regions we try at least to have correct translations
-        wxMacCFRefHolder<HIShapeRef> hishape ;
-        hishape.Set( HIShapeCreateWithQDRgn( (RgnHandle) region.GetWXHRGN() ));
-        HIMutableShapeRef mutableShape = HIShapeCreateMutableCopy( hishape );
+        HIMutableShapeRef mutableShape = HIShapeCreateMutableCopy( region.GetWXHRGN() );
         
         CGPoint transformedOrigin = CGPointApplyAffineTransform( CGPointZero, m_windowTransform );
         HIShapeOffset( mutableShape, transformedOrigin.x, transformedOrigin.y );
