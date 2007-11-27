@@ -33,7 +33,6 @@ public:
     virtual ~wxColour();
 
     // accessors
-    bool Ok() const { return IsOk(); }
     bool IsOk() const { return m_isInit; }
 
     unsigned char Red() const { return m_red; }

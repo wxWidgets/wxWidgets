@@ -34,7 +34,6 @@ public:
     virtual ~wxColour();
 
     // accessors
-    bool Ok() const { return IsOk(); }
     bool IsOk() const;
 
     ChannelType Red() const { return m_red; }

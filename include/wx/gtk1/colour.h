@@ -45,7 +45,6 @@ public:
 
     virtual bool FromString(const wxString& str);
 
-    bool Ok() const { return IsOk(); }
     bool IsOk() const { return m_refData != NULL; }
 
     bool operator == ( const wxColour& col ) const;
