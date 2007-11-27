@@ -429,27 +429,6 @@ void UMAHideControl( ControlRef inControl )
     HIViewSetNeedsDisplay( inControl, true );
 }
 
-// keyboard focus
-OSErr UMASetKeyboardFocus( WindowPtr inWindow,
-                                 ControlRef inControl,
-                                 ControlFocusPart inPart )
-{
-    OSErr err = noErr;
-#ifndef __LP64__
-    GrafPtr port ;
-
-    GetPort( &port ) ;
-    SetPortWindowPort( inWindow ) ;
-#endif
-
-    err = SetKeyboardFocus( inWindow , inControl , inPart ) ;
-#ifndef __LP64__
-    SetPort( port ) ;
-#endif
-
-    return err ;
-}
-
 bool UMAIsWindowFloating( WindowRef inWindow )
 {
     WindowClass cl ;
