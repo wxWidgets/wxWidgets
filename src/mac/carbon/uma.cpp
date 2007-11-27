@@ -37,8 +37,6 @@ void UMACleanupToolbox()
 void UMAInitToolbox( UInt16 WXUNUSED(inMoreMastersCalls),
                      bool WXUNUSED(isEmbedded) )
 {
-    ::InitCursor();
-
     if ( Gestalt(gestaltSystemVersion, &sUMASystemVersion) != noErr)
         sUMASystemVersion = 0x0000 ;
 
@@ -97,6 +95,8 @@ bool UMAGetProcessModeDoesActivateOnFGSwitch()
 }
 
 // menu manager
+
+#if wxMAC_USE_COCOA == 0
 
 MenuRef UMANewMenu( SInt16 id , const wxString& title , wxFontEncoding encoding )
 {
@@ -313,6 +313,10 @@ void UMAInsertMenuItem( MenuRef menu , const wxString& title, wxFontEncoding enc
     UMASetMenuItemShortcut( menu , item+1 , entry ) ;
 }
 
+#endif
+
+#if wxMAC_USE_COCOA == 0
+
 void UMAShowWatchCursor()
 {
     SetThemeCursor(kThemeWatchCursor);
@@ -323,7 +327,47 @@ void UMAShowArrowCursor()
     SetThemeCursor(kThemeArrowCursor);
 }
 
+static OSStatus UMAGetHelpMenu(
+                               MenuRef *        outHelpMenu,
+                               MenuItemIndex *  outFirstCustomItemIndex,
+                               bool             allowHelpMenuCreation);
+
+static OSStatus UMAGetHelpMenu(
+                               MenuRef *        outHelpMenu,
+                               MenuItemIndex *  outFirstCustomItemIndex,
+                               bool             allowHelpMenuCreation)
+{
+    static bool s_createdHelpMenu = false ;
+    
+    if ( !s_createdHelpMenu && !allowHelpMenuCreation )
+    {
+        return paramErr ;
+    }
+    
+    OSStatus status = HMGetHelpMenu( outHelpMenu , outFirstCustomItemIndex ) ;
+    s_createdHelpMenu = ( status == noErr ) ;
+    return status ;
+}
+
+OSStatus UMAGetHelpMenu(
+                        MenuRef *        outHelpMenu,
+                        MenuItemIndex *  outFirstCustomItemIndex)
+{
+    return UMAGetHelpMenu( outHelpMenu , outFirstCustomItemIndex , true );
+}
+
+OSStatus UMAGetHelpMenuDontCreate(
+                                  MenuRef *        outHelpMenu,
+                                  MenuItemIndex *  outFirstCustomItemIndex)
+{
+    return UMAGetHelpMenu( outHelpMenu , outFirstCustomItemIndex , false );
+}
+
+#endif
+
 // window manager
+
+#if wxMAC_USE_QUICKDRAW
 
 GrafPtr UMAGetWindowPort( WindowRef inWindowRef )
 {
@@ -460,41 +504,25 @@ OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState )
 #endif
 }
 
-static OSStatus UMAGetHelpMenu(
-    MenuRef *        outHelpMenu,
-    MenuItemIndex *  outFirstCustomItemIndex,
-    bool             allowHelpMenuCreation);
-
-static OSStatus UMAGetHelpMenu(
-    MenuRef *        outHelpMenu,
-    MenuItemIndex *  outFirstCustomItemIndex,
-    bool             allowHelpMenuCreation)
+Rect * UMAGetControlBoundsInWindowCoords( ControlRef theControl, Rect *bounds )
 {
-    static bool s_createdHelpMenu = false ;
-
-    if ( !s_createdHelpMenu && !allowHelpMenuCreation )
+    GetControlBounds( theControl , bounds ) ;
+    
+    WindowRef tlwref = GetControlOwner( theControl ) ;
+    
+    wxTopLevelWindowMac* tlwwx = wxFindWinFromMacWindow( tlwref ) ;
+    if ( tlwwx != NULL )
     {
-        return paramErr ;
+        ControlRef rootControl = tlwwx->GetPeer()->GetControlRef() ;
+        HIPoint hiPoint = CGPointMake( 0 , 0 ) ;
+        HIViewConvertPoint( &hiPoint , HIViewGetSuperview(theControl) , rootControl ) ;
+        OffsetRect( bounds , (short) hiPoint.x , (short) hiPoint.y ) ;
     }
-
-    OSStatus status = HMGetHelpMenu( outHelpMenu , outFirstCustomItemIndex ) ;
-    s_createdHelpMenu = ( status == noErr ) ;
-    return status ;
+    
+    return bounds ;
 }
 
-OSStatus UMAGetHelpMenu(
-    MenuRef *        outHelpMenu,
-    MenuItemIndex *  outFirstCustomItemIndex)
-{
-    return UMAGetHelpMenu( outHelpMenu , outFirstCustomItemIndex , true );
-}
-
-OSStatus UMAGetHelpMenuDontCreate(
-    MenuRef *        outHelpMenu,
-    MenuItemIndex *  outFirstCustomItemIndex)
-{
-    return UMAGetHelpMenu( outHelpMenu , outFirstCustomItemIndex , false );
-}
+#endif
 
 #ifndef __LP64__
 
@@ -553,24 +581,6 @@ wxMacPortStateHelper::~wxMacPortStateHelper()
 }
 
 #endif
-
-Rect * UMAGetControlBoundsInWindowCoords( ControlRef theControl, Rect *bounds )
-{
-    GetControlBounds( theControl , bounds ) ;
-
-    WindowRef tlwref = GetControlOwner( theControl ) ;
-
-    wxTopLevelWindowMac* tlwwx = wxFindWinFromMacWindow( tlwref ) ;
-    if ( tlwwx != NULL )
-    {
-        ControlRef rootControl = tlwwx->GetPeer()->GetControlRef() ;
-        HIPoint hiPoint = CGPointMake( 0 , 0 ) ;
-        HIViewConvertPoint( &hiPoint , HIViewGetSuperview(theControl) , rootControl ) ;
-        OffsetRect( bounds , (short) hiPoint.x , (short) hiPoint.y ) ;
-    }
-
-    return bounds ;
-}
 
 size_t UMAPutBytesCFRefCallback( void *info, const void *bytes, size_t count )
 {
