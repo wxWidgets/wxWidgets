@@ -165,7 +165,7 @@ bool wxRegion::DoOffset(wxCoord x, wxCoord y)
         // nothing to do
         return true;
 
-    HIShapeOffset( M_REGION , x , y ) ;
+    verify_noerr( HIShapeOffset( M_REGION , x , y ) ) ;
 
     return true ;
 }
@@ -191,11 +191,11 @@ bool wxRegion::DoCombine(const wxRegion& region, wxRegionOp op)
     switch (op)
     {
         case wxRGN_AND:
-            HIShapeIntersect( M_REGION , OTHER_M_REGION(region) , M_REGION ) ;
+            verify_noerr( HIShapeIntersect( M_REGION , OTHER_M_REGION(region) , M_REGION ) );
             break ;
 
         case wxRGN_OR:
-            HIShapeUnion( M_REGION , OTHER_M_REGION(region) , M_REGION ) ;
+            verify_noerr( HIShapeUnion( M_REGION , OTHER_M_REGION(region) , M_REGION ) );
             break ;
 
         case wxRGN_XOR:
@@ -203,12 +203,12 @@ bool wxRegion::DoCombine(const wxRegion& region, wxRegionOp op)
                 // XOR is defined as the difference between union and intersection
                 wxCFRef< HIShapeRef > unionshape( HIShapeCreateUnion( M_REGION , OTHER_M_REGION(region) ) );
                 wxCFRef< HIShapeRef > intersectionshape( HIShapeCreateIntersection( M_REGION , OTHER_M_REGION(region) ) );
-                HIShapeDifference( unionshape, intersectionshape, M_REGION );
+                verify_noerr( HIShapeDifference( unionshape, intersectionshape, M_REGION ) );
             }
             break ;
 
         case wxRGN_DIFF:
-            HIShapeDifference( M_REGION , OTHER_M_REGION(region) , M_REGION ) ;
+            verify_noerr( HIShapeDifference( M_REGION , OTHER_M_REGION(region) , M_REGION ) ) ;
             break ;
 
         case wxRGN_COPY:
@@ -298,8 +298,10 @@ wxRegionContain wxRegion::DoContainsRect(const wxRect& r) const
     
     if ( HIShapeIsRectangular(intersect) && CGRectEqualToRect(rect,bounds) )
         return wxInRegion;
-    else
+    else if ( HIShapeIsEmpty( intersect ) )
         return wxOutRegion;
+    else
+        return wxPartRegion;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
