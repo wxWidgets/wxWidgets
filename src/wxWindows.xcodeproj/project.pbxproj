@@ -5489,8 +5489,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				DYLIB_COMPATIBILITY_VERSION = 2.6;
-				DYLIB_CURRENT_VERSION = 2.6.0;
+				DYLIB_COMPATIBILITY_VERSION = 2.9;
+				DYLIB_CURRENT_VERSION = 2.9.0;
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PFE_FILE_C_DIALECTS = "c++";
@@ -5510,15 +5510,11 @@
 					SCI_LEXER,
 				);
 				GCC_USE_GCC3_PFE_SUPPORT = YES;
-				GCC_VERSION_i386 = 4.0;
-				GCC_VERSION_ppc = 3.3;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
 				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = NO;
 				GCC_WARN_UNINITIALIZED_AUTOS = NO;
 				HEADER_SEARCH_PATHS = tiff/libtiff;
-				MACOSX_DEPLOYMENT_TARGET_i386 = 10.4;
-				MACOSX_DEPLOYMENT_TARGET_ppc = 10.3;
 				PRODUCT_NAME = "$(PRODUCT_NAME)_static";
 				USER_HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include mac/carbon/morefilex common jpeg png regex expat/lib tiff/libtiff stc stc/scintilla/include stc/scintilla/src";
 				USE_HEADERMAP = NO;
@@ -5535,8 +5531,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				DYLIB_COMPATIBILITY_VERSION = 2.6;
-				DYLIB_CURRENT_VERSION = 2.6.0;
+				DYLIB_COMPATIBILITY_VERSION = 2.9;
+				DYLIB_CURRENT_VERSION = 2.9.0;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_PFE_FILE_C_DIALECTS = "c++";
@@ -5555,14 +5551,10 @@
 					SCI_LEXER,
 				);
 				GCC_USE_GCC3_PFE_SUPPORT = YES;
-				GCC_VERSION_i386 = 4.0;
-				GCC_VERSION_ppc = 3.3;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
 				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = NO;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				HEADER_SEARCH_PATHS = tiff/libtiff;
-				MACOSX_DEPLOYMENT_TARGET_i386 = 10.4;
-				MACOSX_DEPLOYMENT_TARGET_ppc = 10.3;
 				PRODUCT_NAME = "$(PRODUCT_NAME)_static";
 				UNSTRIPPED_PRODUCT = NO;
 				USER_HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include mac/carbon/morefilex common jpeg png regex expat/lib tiff/libtiff stc stc/scintilla/include stc/scintilla/src";
@@ -5607,15 +5599,11 @@
 					SCI_LEXER,
 				);
 				GCC_USE_GCC3_PFE_SUPPORT = YES;
-				GCC_VERSION_i386 = 4.0;
-				GCC_VERSION_ppc = 3.3;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				HEADER_SEARCH_PATHS = tiff/libtiff;
 				INSTALL_PATH = "@executable_path/../Frameworks/";
 				LIBRARY_STYLE = DYNAMIC;
 				MACH_O_TYPE = mh_dylib;
-				MACOSX_DEPLOYMENT_TARGET_i386 = 10.4;
-				MACOSX_DEPLOYMENT_TARGET_ppc = 10.3;
 				OTHER_LDFLAGS = (
 					"$(value)",
 					"-flat_namespace",
@@ -5661,25 +5649,17 @@
 					SCI_LEXER,
 				);
 				GCC_USE_GCC3_PFE_SUPPORT = YES;
-				GCC_VERSION_i386 = 4.0;
-				GCC_VERSION_ppc = 3.3;
 				HEADER_SEARCH_PATHS = tiff/libtiff;
 				INSTALL_PATH = "@executable_path/../Frameworks/";
-				LIBRARY_STYLE = DYNAMIC;
 				MACH_O_TYPE = mh_dylib;
-				MACOSX_DEPLOYMENT_TARGET_i386 = 10.4;
-				MACOSX_DEPLOYMENT_TARGET_ppc = 10.3;
 				OTHER_LDFLAGS = (
 					"$(value)",
 					"-flat_namespace",
 				);
-				OTHER_LIBTOOL_FLAGS = "$(value) ";
 				OTHER_REZFLAGS = "-d __UNIX__";
-				REZ_EXECUTABLE = NO;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include mac/carbon/morefilex common jpeg png regex expat/lib tiff/libtiff stc stc/scintilla/include stc/scintilla/src";
 				USE_HEADERMAP = FALSE;
-				USE_SEPARATE_HEADERMAPS = YES;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -5731,7 +5711,11 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 1;
 				GCC_PREPROCESSOR_DEFINITIONS = "__WXDEBUG__\n";
+				GCC_VERSION_i386 = 4.0;
+				GCC_VERSION_ppc = 4.0;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				MACOSX_DEPLOYMENT_TARGET_i386 = 10.4;
+				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
 				PRODUCT_NAME = wx_mac;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				ZERO_LINK = YES;
@@ -5745,7 +5729,11 @@
 					ppc,
 					i386,
 				);
+				GCC_VERSION_i386 = 4.0;
+				GCC_VERSION_ppc = 4.0;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				MACOSX_DEPLOYMENT_TARGET_i386 = 10.4;
+				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
 				PRODUCT_NAME = wx_mac;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				ZERO_LINK = NO;
