@@ -2693,7 +2693,7 @@ gboolean wxDataViewCtrlInternal::get_iter( GtkTreeIter *iter, GtkTreePath *path 
 
         unsigned int i = (unsigned int)gtk_tree_path_get_indices (path)[0];
 
-        if (i >= wx_model->GetLastIndex())
+        if (i >= wx_model->GetLastIndex() + 1)
             return FALSE;
 
         iter->stamp = m_gtk_model->stamp;
@@ -2783,7 +2783,7 @@ gboolean wxDataViewCtrlInternal::iter_next( GtkTreeIter *iter )
         if (n == -1)
             return FALSE;
 
-        if (n >= (int) wx_model->GetLastIndex()-2)
+        if (n >= (int) wx_model->GetLastIndex())
             return FALSE;
 
         iter->user_data = (gpointer) ++n;
@@ -2869,7 +2869,7 @@ gint wxDataViewCtrlInternal::iter_n_children( GtkTreeIter *iter )
         wxDataViewIndexListModel *wx_model = (wxDataViewIndexListModel*) m_wx_model;
 
         if (iter == NULL)
-            return (gint) wx_model->GetLastIndex()-1;
+            return (gint) wx_model->GetLastIndex() + 1;
 
         return 0;
     }
@@ -2901,7 +2901,7 @@ gboolean wxDataViewCtrlInternal::iter_nth_child( GtkTreeIter *iter, GtkTreeIter 
         if (n < 0)
             return FALSE;
 
-        if (n >= (gint) wx_model->GetLastIndex()-1)
+        if (n >= (gint) wx_model->GetLastIndex() + 1)
             return FALSE;
 
         iter->stamp = m_gtk_model->stamp;

@@ -2291,7 +2291,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     unsigned int item_start = wxMax( 0, (update.y / m_lineHeight) );
     unsigned int item_count =
         wxMin( (int)(((update.y + update.height) / m_lineHeight) - item_start + 1),
-               (int)(GetRowCount( )- item_start) );
+               (int)(GetRowCount( ) - item_start));
     unsigned int item_last = item_start + item_count;
 
     // compute which columns needs to be redrawn
@@ -3157,7 +3157,11 @@ int wxDataViewMainWindow::RecalculateCount()
     if (!m_root)
     {
         wxDataViewIndexListModel *list_model = (wxDataViewIndexListModel*) GetOwner()->GetModel();
-        return list_model->GetLastIndex();
+#ifndef __WXMAC__
+        return list_model->GetLastIndex() + 1;
+#else
+        return list_model->GetLastIndex() - 1;
+#endif
     }
     else
     {
