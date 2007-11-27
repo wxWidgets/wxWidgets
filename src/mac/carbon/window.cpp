@@ -2041,16 +2041,21 @@ void wxWindowMac::OnEraseBackground(wxEraseEvent& event)
 {
     if ( MacGetTopLevelWindow() == NULL )
         return ;
-
+/*
 #if TARGET_API_MAC_OSX
     if ( !m_backgroundColour.Ok() || GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT )
     {
-        event.Skip() ;
     }
     else
 #endif
+*/
+    if ( GetBackgroundStyle() == wxBG_STYLE_COLOUR )
     {
         event.GetDC()->Clear() ;
+    }
+    else
+    {
+        event.Skip() ;
     }
 }
 
