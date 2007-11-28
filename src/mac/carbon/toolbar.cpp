@@ -411,7 +411,7 @@ void wxToolBarTool::SetPosition( const wxPoint& position )
 
         if ( mac_x != former_mac_x || mac_y != former_mac_y )
         {
-            UMAMoveControl( m_controlHandle, mac_x, mac_y );
+            ::MoveControl( m_controlHandle, mac_x, mac_y );
         }
     }
     else if ( IsControl() )
@@ -433,7 +433,7 @@ void wxToolBarTool::SetPosition( const wxPoint& position )
         int former_mac_y = contrlRect.top;
 
         if ( mac_x != former_mac_x || mac_y != former_mac_y )
-            UMAMoveControl( m_controlHandle, mac_x, mac_y );
+            ::MoveControl( m_controlHandle, mac_x, mac_y );
     }
 }
 
@@ -1543,7 +1543,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 
 #if 0
                 SetBevelButtonTextPlacement( m_controlHandle, kControlBevelButtonPlaceBelowGraphic );
-                UMASetControlTitle( m_controlHandle, label, wxFont::GetDefaultEncoding() );
+                SetControlTitleWithCFString( m_controlHandle , wxMacCFStringHolder( label, wxFont::GetDefaultEncoding() );
 #endif
 
                 InstallControlEventHandler(
@@ -1593,7 +1593,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
             ControlRef container = (ControlRef) GetHandle();
             wxASSERT_MSG( container != NULL, wxT("No valid Mac container control") );
 
-            UMAShowControl( controlHandle );
+            SetControlVisibility( controlHandle, true, true );
             ::EmbedControl( controlHandle, container );
         }
 

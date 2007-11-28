@@ -194,6 +194,8 @@ void wxGetMousePosition( int* x, int* y )
     GetGlobalMouse(&pt);
     *x = pt.h;
     *y = pt.v;
+#else
+    // TODO
 #endif
 };
 
@@ -218,7 +220,7 @@ int wxDisplayDepth()
 
     return theDepth;
 #else
-    return 32;
+    return 32; // TODO 
 #endif
 }
 
@@ -379,48 +381,34 @@ wxString wxMacMakeStringFromPascal( ConstStringPtr from )
 // Common Event Support
 // ----------------------------------------------------------------------------
 
-extern ProcessSerialNumber gAppProcess;
-
 void wxMacWakeUp()
 {
-    ProcessSerialNumber psn;
-    Boolean isSame;
-    psn.highLongOfPSN = 0;
-    psn.lowLongOfPSN = kCurrentProcess;
-    SameProcess( &gAppProcess , &psn , &isSame );
-    if ( isSame )
-    {
-        OSStatus err = noErr;
+    OSStatus err = noErr;
 
 #if 0
-        // lead sometimes to race conditions, although all calls used should be thread safe ...
-        static wxMacCarbonEvent s_wakeupEvent;
-        if ( !s_wakeupEvent.IsValid() )
-        {
-           err = s_wakeupEvent.Create( 'WXMC', 'WXMC', GetCurrentEventTime(),
-                        kEventAttributeNone );
-        }
-        if ( err == noErr )
-        {
-
-            if ( IsEventInQueue( GetMainEventQueue() , s_wakeupEvent ) )
-                return;
-            s_wakeupEvent.SetCurrentTime();
-            err = PostEventToQueue(GetMainEventQueue(), s_wakeupEvent,
-                                  kEventPriorityHigh );
-        }
-#else
-        wxMacCarbonEvent wakeupEvent;
-        wakeupEvent.Create( 'WXMC', 'WXMC', GetCurrentEventTime(),
-                            kEventAttributeNone );
-        err = PostEventToQueue(GetMainEventQueue(), wakeupEvent,
-                               kEventPriorityHigh );
-#endif
-    }
-    else
+    // lead sometimes to race conditions, although all calls used should be thread safe ...
+    static wxMacCarbonEvent s_wakeupEvent;
+    if ( !s_wakeupEvent.IsValid() )
     {
-        WakeUpProcess( &gAppProcess );
+       err = s_wakeupEvent.Create( 'WXMC', 'WXMC', GetCurrentEventTime(),
+                    kEventAttributeNone );
     }
+    if ( err == noErr )
+    {
+
+        if ( IsEventInQueue( GetMainEventQueue() , s_wakeupEvent ) )
+            return;
+        s_wakeupEvent.SetCurrentTime();
+        err = PostEventToQueue(GetMainEventQueue(), s_wakeupEvent,
+                              kEventPriorityHigh );
+    }
+#else
+    wxMacCarbonEvent wakeupEvent;
+    wakeupEvent.Create( 'WXMC', 'WXMC', GetCurrentEventTime(),
+                        kEventAttributeNone );
+    err = PostEventToQueue(GetMainEventQueue(), wakeupEvent,
+                           kEventPriorityHigh );
+#endif
 }
 
 #endif // wxUSE_BASE
@@ -854,7 +842,7 @@ void wxMacControl::SetLabel( const wxString &title )
     else
         encoding = wxFont::GetDefaultEncoding();
 
-    UMASetControlTitle( m_controlRef , title , encoding );
+    SetControlTitleWithCFString( m_controlRef , wxMacCFStringHolder( title , encoding ) );
 }
 
 void wxMacControl::GetFeatures( UInt32 * features )
@@ -1972,3 +1960,7 @@ void wxMacLocalToGlobal( WindowRef window , Point*pt )
 #endif
 
 #endif // wxUSE_GUI
+
+#if wxUSE_BASE
+
+#endif

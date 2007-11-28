@@ -779,8 +779,6 @@ extern "C" void macPostedEventCallback(void *WXUNUSED(unused))
     wxTheApp->ProcessPendingEvents();
 }
 
-ProcessSerialNumber gAppProcess ;
-
 bool wxApp::Initialize(int& argc, wxChar **argv)
 {
     // Mac-specific
@@ -791,7 +789,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     UMAInitToolbox( 4, sm_isEmbedded ) ;
 // TODO CHECK Can Be Removed    SetEventMask( everyEvent ) ;
-    UMAShowWatchCursor() ;
 
     // Mac OS X passes a process serial number command line argument when
     // the application is launched from the Finder. This argument must be
@@ -810,8 +807,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     if ( !wxAppBase::Initialize(argc, argv) )
         return false;
-
-    GetCurrentProcess(&gAppProcess);
 
 #if wxUSE_INTL
     wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
@@ -838,8 +833,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     CFRunLoopAddSource(CFRunLoopGetCurrent(), m_macEventPosted, kCFRunLoopCommonModes);
 	// run loop takes ownership
 	CFRelease(m_macEventPosted);
-
-    UMAShowArrowCursor() ;
 
     return true;
 }
@@ -908,8 +901,6 @@ void wxApp::CleanUp()
 
     // One last chance for pending objects to be cleaned up
     wxTheApp->DeletePendingObjects();
-
-    UMACleanupToolbox() ;
 
     if (!sm_isEmbedded)
         RemoveEventHandler( (EventHandlerRef)(wxTheApp->m_macEventHandler) );

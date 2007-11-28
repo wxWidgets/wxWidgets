@@ -80,7 +80,7 @@ void wxGLContext::SetCurrent(const wxGLCanvas& win) const
     if ( !m_aglContext )
         return;
 
-    AGLDrawable drawable = (AGLDrawable)UMAGetWindowPort(
+    AGLDrawable drawable = (AGLDrawable)GetWindowPort(
                                 MAC_WXHWND(win.MacGetTopLevelWindowRef()));
     if ( !aglSetDrawable(m_aglContext, drawable) )
         wxLogAGLError("aglSetDrawable");

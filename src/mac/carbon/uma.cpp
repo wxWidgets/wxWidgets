@@ -20,27 +20,21 @@
 
 #include "wx/mac/uma.h"
 
-// since we have decided that we only support 8.6 upwards we are
-// checking for these minimum requirements in the startup code of
-// the application so all wxWidgets code can safely assume that appearance 1.1
-// windows manager, control manager, navigation services etc. are
-// present
-
 static SInt32 sUMASystemVersion = 0 ;
 
-long UMAGetSystemVersion() { return sUMASystemVersion ; }
-
-void UMACleanupToolbox()
-{
+long UMAGetSystemVersion() 
+{ 
+    if ( sUMASystemVersion == 0 )
+    {
+        verify_noerr(Gestalt(gestaltSystemVersion, &sUMASystemVersion));
+    }
+    return sUMASystemVersion ; 
 }
 
 void UMAInitToolbox( UInt16 WXUNUSED(inMoreMastersCalls),
                      bool WXUNUSED(isEmbedded) )
 {
-    if ( Gestalt(gestaltSystemVersion, &sUMASystemVersion) != noErr)
-        sUMASystemVersion = 0x0000 ;
-
-#ifndef __LP64__
+#if 0 // ndef __LP64__
     {
         FontFamilyID fontId ;
         Str255 fontName ;
@@ -58,14 +52,9 @@ void UMAInitToolbox( UInt16 WXUNUSED(inMoreMastersCalls),
 
         OptionBits options = 0 ;
 
-        if ( UMAGetSystemVersion() < 0x1000 )
-            options |= kTXNAlwaysUseQuickDrawTextMask ;
-
         TXNInitTextension( fontDescriptions,  noOfFontDescriptions, options );
     }
 #endif
-
-    UMASetSystemIsInitialized( true );
 }
 
 // process manager
@@ -122,11 +111,6 @@ void UMASetMenuItemText( MenuRef menu,  MenuItemIndex item, const wxString& titl
     wxString str = title ;
 
     SetMenuItemTextWithCFString( menu , item , wxMacCFStringHolder(str , encoding) ) ;
-}
-
-UInt32 UMAMenuEvent( EventRecord *inEvent )
-{
-    return MenuEvent( inEvent ) ;
 }
 
 void UMAEnableMenuItem( MenuRef inMenu , MenuItemIndex inItem , bool enable)
@@ -317,16 +301,6 @@ void UMAInsertMenuItem( MenuRef menu , const wxString& title, wxFontEncoding enc
 
 #if wxMAC_USE_COCOA == 0
 
-void UMAShowWatchCursor()
-{
-    SetThemeCursor(kThemeWatchCursor);
-}
-
-void UMAShowArrowCursor()
-{
-    SetThemeCursor(kThemeArrowCursor);
-}
-
 static OSStatus UMAGetHelpMenu(
                                MenuRef *        outHelpMenu,
                                MenuItemIndex *  outFirstCustomItemIndex,
@@ -369,45 +343,9 @@ OSStatus UMAGetHelpMenuDontCreate(
 
 #if wxMAC_USE_QUICKDRAW
 
-GrafPtr UMAGetWindowPort( WindowRef inWindowRef )
-{
-    wxASSERT( inWindowRef != NULL ) ;
-
-    return (GrafPtr) GetWindowPort( inWindowRef ) ;
-}
-
-void UMADisposeWindow( WindowRef inWindowRef )
-{
-    wxASSERT( inWindowRef != NULL ) ;
-
-    DisposeWindow( inWindowRef ) ;
-}
-
-void UMASetWTitle( WindowRef inWindowRef , const wxString& title , wxFontEncoding encoding )
-{
-    SetWindowTitleWithCFString( inWindowRef , wxMacCFStringHolder(title , encoding) ) ;
-}
-
-// appearance additions
-
-void UMASetControlTitle( ControlRef inControl , const wxString& title , wxFontEncoding encoding )
-{
-    SetControlTitleWithCFString( inControl , wxMacCFStringHolder(title , encoding) ) ;
-}
-
 void UMAActivateControl( ControlRef inControl )
 {
     ::ActivateControl( inControl ) ;
-}
-
-void UMAMoveControl( ControlRef inControl , short x , short y )
-{
-    ::MoveControl( inControl , x , y ) ;
-}
-
-void UMASizeControl( ControlRef inControl , short x , short y )
-{
-    ::SizeControl( inControl , x , y ) ;
 }
 
 void UMADeactivateControl( ControlRef inControl )
@@ -415,40 +353,11 @@ void UMADeactivateControl( ControlRef inControl )
     ::DeactivateControl( inControl ) ;
 }
 
-// shows the control and adds the region to the update region
-void UMAShowControl( ControlRef inControl )
-{
-    SetControlVisibility( inControl , true , false ) ;
-    HIViewSetNeedsDisplay( inControl, true );
-}
-
-// hides the control and adds the region to the update region
-void UMAHideControl( ControlRef inControl )
-{
-    SetControlVisibility( inControl , false , false ) ;
-    HIViewSetNeedsDisplay( inControl, true );
-}
-
-bool UMAIsWindowFloating( WindowRef inWindow )
-{
-    WindowClass cl ;
-
-    GetWindowClass( inWindow , &cl ) ;
-    return cl == kFloatingWindowClass ;
-}
-
-bool UMAIsWindowModal( WindowRef inWindow )
-{
-    WindowClass cl ;
-
-    GetWindowClass( inWindow , &cl ) ;
-    return cl < kFloatingWindowClass ;
-}
-
 // others
 
 void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate )
 {
+#if 1 // TODO REMOVE
     if ( inWindowRef )
     {
 //        bool isHighlighted = IsWindowHighlited( inWindowRef ) ;
@@ -472,14 +381,6 @@ void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate )
         SetPort( port ) ;
 #endif
     }
-}
-
-OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState )
-{
-#ifndef __LP64__
-    return ::DrawThemePlacard( inRect , inState ) ;
-#else
-    return noErr;
 #endif
 }
 
@@ -499,64 +400,6 @@ Rect * UMAGetControlBoundsInWindowCoords( ControlRef theControl, Rect *bounds )
     }
     
     return bounds ;
-}
-
-#endif
-
-#ifndef __LP64__
-
-wxMacPortStateHelper::wxMacPortStateHelper( GrafPtr newport )
-{
-    m_clip = NULL ;
-    Setup( newport ) ;
-}
-
-wxMacPortStateHelper::wxMacPortStateHelper()
-{
-    m_clip = NULL ;
-}
-
-void wxMacPortStateHelper::Setup( GrafPtr newport )
-{
-    GetPort( &m_oldPort ) ;
-    SetPort( newport ) ;
-    SetOrigin(0, 0);
-
-    wxASSERT_MSG( m_clip == NULL , wxT("Cannot call setup twice") ) ;
-    m_clip = NewRgn() ;
-    GetClip( m_clip );
-    m_textFont = GetPortTextFont( (CGrafPtr) newport );
-    m_textSize = GetPortTextSize( (CGrafPtr) newport );
-    m_textStyle = GetPortTextFace( (CGrafPtr) newport );
-    m_textMode = GetPortTextMode( (CGrafPtr) newport );
-    GetThemeDrawingState( &m_drawingState ) ;
-    m_currentPort = newport ;
-}
-
-void wxMacPortStateHelper::Clear()
-{
-    if ( m_clip )
-    {
-        DisposeRgn( m_clip ) ;
-        DisposeThemeDrawingState( m_drawingState ) ;
-        m_clip = NULL ;
-    }
-}
-
-wxMacPortStateHelper::~wxMacPortStateHelper()
-{
-    if ( m_clip )
-    {
-        SetPort( m_currentPort ) ;
-        SetClip( m_clip ) ;
-        DisposeRgn( m_clip ) ;
-        TextFont( m_textFont );
-        TextSize( m_textSize );
-        TextFace( m_textStyle );
-        TextMode( m_textMode );
-        SetThemeDrawingState( m_drawingState , true ) ;
-        SetPort( m_oldPort ) ;
-    }
 }
 
 #endif
@@ -601,19 +444,3 @@ CGDataConsumerRef UMACGDataConsumerCreateWithCFData( CFMutableDataRef data )
     return CGDataConsumerCreateWithCFData( data );
 }
 #endif  // wxUSE_GUI
-
-#if wxUSE_BASE
-
-static bool sUMASystemInitialized = false ;
-
-bool UMASystemIsInitialized()
-{
-    return sUMASystemInitialized ;
-}
-
-void UMASetSystemIsInitialized(bool val)
-{
-    sUMASystemInitialized = val;
-}
-
-#endif // wxUSE_BASE

@@ -606,6 +606,8 @@ PicHandle wxBitmapRefData::GetPictHandle()
     return m_pictHandle ;
 }
 
+void wxMacMemoryBufferReleaseProc(void *info, const void *data, size_t size);
+
 void wxMacMemoryBufferReleaseProc(void *info, const void *data, size_t WXUNUSED(size))
 {
     wxMemoryBuffer* membuf = (wxMemoryBuffer*) info ;
