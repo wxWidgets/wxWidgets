@@ -2706,6 +2706,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/bmpcbox.h \
 	wx/calctrl.h \
 	wx/dataview.h \
+	wx/datectrl.h \
 	wx/dateevt.h \
 	wx/dcbuffer.h \
 	wx/aboutdlg.h \
@@ -2737,8 +2738,6 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/tipdlg.h \
 	wx/wave.h \
 	wx/wizard.h \
-	wx/datectrl.h \
-	wx/dataview.h \
 	$(ADVANCED_PLATFORM_HDR) \
 	$(ADVANCED_PLATFORM_NATIVE_HDR)
 @COND_WXUNIV_0@ADVANCED_HDR = $(COND_WXUNIV_0_ADVANCED_HDR)
@@ -2748,6 +2747,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/bmpcbox.h \
 	wx/calctrl.h \
 	wx/dataview.h \
+	wx/datectrl.h \
 	wx/dateevt.h \
 	wx/dcbuffer.h \
 	wx/aboutdlg.h \
