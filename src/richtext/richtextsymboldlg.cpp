@@ -459,47 +459,22 @@ void wxSymbolPickerDialog::CreateControls()
 
 #endif
 
-#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXPM__) || defined(__WXMGL__) || defined(__WXMOTIF__) || defined(__WXCOCOA__) || defined(__WXX11__) || defined(__WXPALMOS__)
     wxBoxSizer* itemBoxSizer20 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer3->Add(itemBoxSizer20, 0, wxGROW, 5);
 
     itemBoxSizer20->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* itemButton22 = new wxButton( itemDialog1, wxID_OK, _("Insert"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemButton22->SetDefault();
-    itemButton22->SetHelpText(_("Inserts the chosen symbol."));
-    if (wxSymbolPickerDialog::ShowToolTips())
-        itemButton22->SetToolTip(_("Inserts the chosen symbol."));
-    itemBoxSizer20->Add(itemButton22, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStdDialogButtonSizer* itemStdDialogButtonSizer22 = new wxStdDialogButtonSizer;
 
-    wxButton* itemButton23 = new wxButton( itemDialog1, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemButton23->SetHelpText(_("Closes the dialog without inserting a symbol."));
-    if (wxSymbolPickerDialog::ShowToolTips())
-        itemButton23->SetToolTip(_("Closes the dialog without inserting a symbol."));
-    itemBoxSizer20->Add(itemButton23, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer20->Add(itemStdDialogButtonSizer22, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5);
+    wxButton* itemButton23 = new wxButton( itemDialog1, wxID_OK, _("Insert"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemButton23->SetDefault();
+    itemStdDialogButtonSizer22->AddButton(itemButton23);
 
-#endif
+    wxButton* itemButton24 = new wxButton( itemDialog1, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStdDialogButtonSizer22->AddButton(itemButton24);
 
-#if defined(__WXMAC__)
-    wxBoxSizer* itemBoxSizer24 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer3->Add(itemBoxSizer24, 0, wxGROW, 5);
-
-    itemBoxSizer24->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-    wxButton* itemButton26 = new wxButton( itemDialog1, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemButton26->SetHelpText(_("Closes the dialog without inserting a symbol."));
-    if (wxSymbolPickerDialog::ShowToolTips())
-        itemButton26->SetToolTip(_("Closes the dialog without inserting a symbol."));
-    itemBoxSizer24->Add(itemButton26, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-    wxButton* itemButton27 = new wxButton( itemDialog1, wxID_OK, _("Insert"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemButton27->SetDefault();
-    itemButton27->SetHelpText(_("Inserts the chosen symbol."));
-    if (wxSymbolPickerDialog::ShowToolTips())
-        itemButton27->SetToolTip(_("Inserts the chosen symbol."));
-    itemBoxSizer24->Add(itemButton27, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-#endif
+    itemStdDialogButtonSizer22->Realize();
 
 ////@end wxSymbolPickerDialog content construction
 

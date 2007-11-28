@@ -117,7 +117,6 @@ public:
     void OnFromUnicodeSelected( wxCommandEvent& event );
 
 #endif
-
     /// wxEVT_UPDATE_UI event handler for wxID_OK
     void OnOkUpdate( wxUpdateUIEvent& event );
 
