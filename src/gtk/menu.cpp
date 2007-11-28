@@ -1245,11 +1245,19 @@ wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
 wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 {
     if ( !wxMenuBase::DoRemove(item) )
-        return (wxMenuItem *)NULL;
+        return NULL;
+
+    GtkWidget * const mitem = item->GetMenuItem();
+    if ( m_prevRadio == mitem )
+    {
+        // deleting an item starts a new radio group (has to as we shouldn't
+        // keep a deleted pointer anyhow)
+        m_prevRadio = NULL;
+    }
 
     // TODO: this code doesn't delete the item factory item and this seems
     //       impossible as of GTK 1.2.6.
-    gtk_widget_destroy( item->GetMenuItem() );
+    gtk_widget_destroy( mitem );
 
     return item;
 }
