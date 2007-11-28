@@ -62,10 +62,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef __WXUNIVERSAL__
+
 #if wxUSE_LIBGNOMEPRINT
     #include "wx/link.h"
     wxFORCE_LINK_MODULE(gnome_print)
 #endif
+
+#endif // !__WXUNIVERSAL__
 
 // ----------------------------------------------------------------------------
 // global vars
