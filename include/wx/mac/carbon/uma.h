@@ -15,11 +15,7 @@
 #include "wx/mac/private.h"
 
 void UMAInitToolbox( UInt16 inMoreMastersCalls, bool isEmbedded) ;
-void UMACleanupToolbox() ;
 long UMAGetSystemVersion() ;
-
-WXDLLIMPEXP_BASE bool UMASystemIsInitialized();
-WXDLLIMPEXP_BASE void UMASetSystemIsInitialized(bool val);
 
 // process manager
 
@@ -32,7 +28,6 @@ bool UMAGetProcessModeDoesActivateOnFGSwitch() ;
 
 MenuRef         UMANewMenu( SInt16 id , const wxString& title , wxFontEncoding encoding) ;
 void             UMASetMenuTitle( MenuRef menu , const wxString& title , wxFontEncoding encoding) ;
-UInt32             UMAMenuEvent( EventRecord *inEvent ) ;
 void             UMAEnableMenuItem( MenuRef inMenu , MenuItemIndex item , bool enable ) ;
 
 void            UMAAppendSubMenuItem( MenuRef menu , const wxString& title , wxFontEncoding encoding , SInt16 submenuid ) ;
@@ -46,51 +41,15 @@ void            UMASetMenuItemText(  MenuRef menu,  MenuItemIndex item, const wx
 // quickdraw
 
 void            UMAShowWatchCursor() ;
-void            UMAShowArrowCursor() ;
 
-// window manager
-
-WXDLLIMPEXP_BASE GrafPtr UMAGetWindowPort( WindowRef inWindowRef ) ;
-void             UMADisposeWindow( WindowRef inWindowRef ) ;
-void             UMASetWTitle( WindowRef inWindowRef , const wxString& title , wxFontEncoding encoding) ;
-
-void             UMADrawGrowIcon( WindowRef inWindowRef ) ;
-void            UMAShowHide( WindowRef inWindowRef , Boolean show) ;
-
-// appearance manager
-
-void             UMADrawControl( ControlRef inControl ) ;
-
-void             UMAEnableControl( ControlRef inControl ) ;
-void            UMADisableControl( ControlRef inControl ) ;
-void             UMAActivateControl( ControlRef inControl ) ;
-void            UMADeactivateControl( ControlRef inControl ) ;
-//                                 ControlPartCode         hiliteState)    ;
-void UMAShowControl                        (ControlRef             theControl)    ;
-void UMAHideControl                        (ControlRef             theControl);
-void UMAActivateControl                    (ControlRef             inControl);
-void UMADeactivateControl                (ControlRef             inControl);
-void UMASetControlTitle( ControlRef inControl , const wxString& title , wxFontEncoding encoding) ;
-
-void UMAMoveControl( ControlRef inControl , short x , short y ) ;
-void UMASizeControl( ControlRef inControl , short x , short y ) ;
 // control hierarchy
 
 Rect * UMAGetControlBoundsInWindowCoords(ControlRef theControl, Rect *bounds) ;
-
-// keyboard focus
-OSErr UMASetKeyboardFocus                (WindowPtr                 inWindow,
-                                 ControlRef             inControl,
-                                 ControlFocusPart         inPart)    ;
 
 // events
 
 void UMAUpdateControls( WindowPtr inWindow , RgnHandle inRgn ) ;
 OSErr UMAGetRootControl( WindowPtr inWindow , ControlRef *outControl ) ;
-
-// handling control data
-bool            UMAIsWindowFloating( WindowRef inWindow ) ;
-bool            UMAIsWindowModal( WindowRef inWindow ) ;
 
 void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate ) ;
 
@@ -106,8 +65,6 @@ OSStatus UMAGetHelpMenuDontCreate(
   MenuItemIndex *  outFirstCustomItemIndex);      /* can be NULL */
 
 // Appearance Drawing
-
-OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState ) ;
 
 #define GetWindowUpdateRgn( inWindow , updateRgn ) GetWindowRegion( inWindow , kWindowUpdateRgn, updateRgn )
 

@@ -12,6 +12,4 @@
 #ifndef _WX_DC_H_
 #define _WX_DC_H_
 
-class wxMacPortStateHelper;
-
 #endif // _WX_DC_H_
