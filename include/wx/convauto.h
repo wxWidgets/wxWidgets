@@ -26,7 +26,8 @@ public:
     // default ctor, the real conversion will be created on demand
     wxConvAuto(wxFontEncoding enc = wxFONTENCODING_DEFAULT)
     {
-        m_conv = NULL; // the rest will be initialized later
+        Init();
+
         m_encDefault = enc;
     }
 
@@ -34,7 +35,8 @@ public:
     // deduced on first use
     wxConvAuto(const wxConvAuto& other) : wxMBConv()
     {
-        m_conv = NULL;
+        Init();
+
         m_encDefault = other.m_encDefault;
     }
 
@@ -83,6 +85,15 @@ private:
 
     // return the BOM type of this buffer
     static BOMType DetectBOM(const char *src, size_t srcLen);
+
+    // common part of all ctors
+    void Init()
+    {
+        // no need to initialize m_bomType and m_consumedBOM here, this will be
+        // done when m_conv is created
+        m_conv = NULL;
+        m_ownsConv = false;
+    }
 
     // initialize m_conv with the UTF-8 conversion
     void InitWithUTF8()
