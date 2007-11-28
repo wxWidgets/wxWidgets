@@ -190,7 +190,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 
                 if ( cEvent.GetParameter<RgnHandle>(kEventParamRgnHandle, &updateRgn) != noErr )
                 {
-                    updateRgn = (RgnHandle) visRegion.GetWXHRGN() ;
+                    HIShapeGetAsQDRgn( visRegion.GetWXHRGN(), updateRgn );
                 }
                 else
                 {

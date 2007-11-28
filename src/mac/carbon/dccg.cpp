@@ -54,7 +54,7 @@ wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win ) :
             win->MacWindowToRootWindow( &x, &y ) ;
 
             // get area including focus rect
-            CopyRgn( (RgnHandle) ((wxWindow*)win)->MacGetVisibleRegion(true).GetWXHRGN() , m_newClip ) ;
+            HIShapeGetAsQDRgn( ((wxWindow*)win)->MacGetVisibleRegion(true).GetWXHRGN() , m_newClip );
             if ( !EmptyRgn( m_newClip ) )
                 OffsetRgn( m_newClip , x , y ) ;
         }

@@ -908,7 +908,7 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
 
     DoMacCreateRealWindow( parent, title, pos , size , style , name ) ;
 
-    SetBackgroundColour(wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDialogBackgroundActive)));
+    SetBackgroundColour(wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ));
 
     if (GetExtraStyle() & wxFRAME_EX_METAL)
         MacSetMetalAppearance(true);
@@ -1016,10 +1016,15 @@ bool wxTopLevelWindowMac::SetBackgroundColour(const wxColour& col )
         return false ;
     
     if ( col == wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) || col == wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDocumentWindowBackground)) )
+    {
         SetThemeWindowBackground( (WindowRef) m_macWindow,  kThemeBrushDocumentWindowBackground, false ) ;
+        SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    }
     else if ( col == wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) || col == wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDialogBackgroundActive)) )
+    {
         SetThemeWindowBackground( (WindowRef) m_macWindow,  kThemeBrushDialogBackgroundActive, false ) ;
-    // TODO BETTER THEME SUPPORT
+        SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    }
     return true;
 }    
 
