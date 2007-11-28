@@ -769,8 +769,16 @@ CGImageRef wxBitmapRefData::CGImageCreate() const
                 unsigned char * maskBufData = (unsigned char *) maskBuf->GetData();
                 unsigned char * bufData = (unsigned char *) membuf->GetData() ;
                 // copy one color component
-                for( int i = 0 ; i < m_width * m_height ; ++i )
-                    maskBufData[i] = bufData[i*4+3];
+                size_t i = 0;
+                for( int y = 0 ; y < m_height ; bufData+= m_bytesPerRow, ++y )
+                {
+                    unsigned char *bufDataIter = bufData+3;
+                    for ( int x = 0 ; x < m_width ; bufDataIter += 4, ++x, ++i )
+                    {
+                        maskBufData[i] = *bufDataIter;
+                    }
+                }
+
                 dataProvider =
                     CGDataProviderCreateWithData(
                         maskBuf , (const void *) maskBufData , m_width * m_height,
