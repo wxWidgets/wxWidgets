@@ -44,15 +44,15 @@ cannot be declared outside the class, the shift left operators are used like thi
 \begin{verbatim}
     // in the header file
     DECLARE_VARIANT_OBJECT(MyClass)
-    
+
     // in the implementation file
-    IMPLMENT_VARIANT_OBJECT(MyClass)
-    
+    IMPLEMENT_VARIANT_OBJECT(MyClass)
+
     // in the user code
     wxVariant variant;
     MyClass value;
     variant << value;
-    
+
     // or
     value << variant;
 \end{verbatim}
