@@ -990,7 +990,7 @@ if test "$wxUSE_GUI" = "yes"; then
         var=wxUSE_$toolkit
         eval "value=\$${var}"
         if test "$value" = 1; then
-          toolkit_echo=`echo $toolkit | tr A-Z a-z`
+          toolkit_echo=`echo $toolkit | tr '[[A-Z]]' '[[a-z]]'`
           AC_MSG_RESULT($toolkit_echo)
         fi
     done
@@ -3379,7 +3379,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
     if test "$TOOLKIT" = "PM" ; then
         TOOLKIT_DIR="os2"
     else
-        TOOLKIT_DIR=`echo ${TOOLKIT} | tr A-Z a-z`
+        TOOLKIT_DIR=`echo ${TOOLKIT} | tr '[[A-Z]]' '[[a-z]]'`
     fi
 
     if test "$wxUSE_UNIVERSAL" = "yes"; then
@@ -3769,7 +3769,7 @@ if test "$wxUSE_DEBUG_INFO" = "yes"; then
     DEBUG_INFO=1
 fi
 
-WX_VERSION_TAG=`echo WX${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}_${WX_RELEASE} | tr a-z A-Z`
+WX_VERSION_TAG=`echo WX${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}_${WX_RELEASE} | tr '[[a-z]]' '[[A-Z]]'`
 
 TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}"
 
@@ -7345,7 +7345,7 @@ if test "x$wxUSE_UNIVERSAL" = "xyes" ; then
             ;;
 
         *)
-            for t in `echo $wxUNIV_THEMES | tr , ' ' | tr a-z A-Z`; do
+            for t in `echo $wxUNIV_THEMES | tr , ' ' | tr '[[a-z]]' '[[A-Z]]'`; do
                 AC_DEFINE_UNQUOTED(wxUSE_THEME_$t)
             done
     esac
@@ -7410,7 +7410,7 @@ AC_SUBST(UNICODE)
 AC_SUBST(BUILD)
 AC_SUBST(DEBUG_INFO)
 AC_SUBST(DEBUG_FLAG)
-TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr A-Z a-z`
+TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr '[[A-Z]]' '[[a-z]]'`
 AC_SUBST(TOOLKIT_LOWERCASE)
 AC_SUBST(TOOLKIT_VERSION)
 AC_SUBST(SAMPLES_RPATH_FLAG)
@@ -7483,7 +7483,7 @@ then
 
                 if $CXX -o conftest$PROGRAM_EXT conftest.cpp >/dev/null 2>&1
                 then
-                    if tr -dc a-z < conftest$PROGRAM_EXT |
+                    if tr -dc '[a-z]' < conftest$PROGRAM_EXT |
                         grep awidetest >/dev/null
                     then
                         wx_cv_gcc_pch_bug=no
@@ -7833,7 +7833,7 @@ for subdir in $SUBDIRS; do
                 dnl assume that everything compiles for utils &c
                 dnl any that shouldn't be built can be added to
                 dnl DISABLED_UTILS, DISABLED_DEMOS
-                disabled_var=DISABLED_`echo $subdir | tr a-z A-Z`
+                disabled_var=DISABLED_`echo $subdir | tr '[[a-z]]' '[[A-Z]]'`
                 eval "disabled=\$$disabled_var"
                 disabled=/`echo X $disabled | sed 's@ @/|/@g'`/
                 makefiles=`(cd $srcdir ; find $subdir -name Makefile.in) | $EGREP -v "$disabled"`
