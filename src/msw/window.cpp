@@ -133,6 +133,19 @@
     #define ETS_ASSIST          7
 #endif
 
+// define the constants used by AnimateWindow() if our SDK doesn't have them
+#ifndef AW_CENTER
+    #define AW_HOR_POSITIVE 0x00000001
+    #define AW_HOR_NEGATIVE 0x00000002
+    #define AW_VER_POSITIVE 0x00000004
+    #define AW_VER_NEGATIVE 0x00000008
+    #define AW_CENTER       0x00000010
+    #define AW_HIDE         0x00010000
+    #define AW_ACTIVATE     0x00020000
+    #define AW_SLIDE        0x00040000
+    #define AW_BLEND        0x00080000
+#endif
+
 #if defined(TME_LEAVE) && defined(WM_MOUSELEAVE) && wxUSE_DYNLIB_CLASS
     #define HAVE_TRACKMOUSEEVENT
 #endif // everything needed for TrackMouseEvent()
