@@ -92,29 +92,6 @@ private:
     CGContextRef m_cg;
 };
 
-/*
-class wxMacDrawingHelper
-{
-    DECLARE_NO_COPY_CLASS(wxMacDrawingHelper)
-
-public:
-    wxMacDrawingHelper( wxWindowMac * theWindow , bool clientArea = false );
-    ~wxMacDrawingHelper();
-    bool Ok() const { return IsOk(); }
-    bool IsOk() { return m_ok; }
-    void LocalToWindow( Rect *rect) { OffsetRect( rect , m_origin.h , m_origin.v ); }
-    void LocalToWindow( Point *pt ) { AddPt( m_origin , pt ); }
-    void LocalToWindow( RgnHandle rgn ) { OffsetRgn( rgn , m_origin.h , m_origin.v ); }
-    const Point& GetOrigin() { return m_origin; }
-private:
-    Point     m_origin;
-    GrafPtr   m_formerPort;
-    GrafPtr   m_currentPort;
-    PenState  m_savedPenState;
-    bool      m_ok;
-};
-*/
-
 // app.h
 
 #if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
@@ -393,17 +370,16 @@ private :
     wxMacCFStringHolder m_helpTextRef ;
 } ;
 
-/*
-GWorldPtr         wxMacCreateGWorld( int width , int height , int depth );
-void                 wxMacDestroyGWorld( GWorldPtr gw );
-PicHandle         wxMacCreatePict( GWorldPtr gw , GWorldPtr mask = NULL );
-CIconHandle     wxMacCreateCIcon(GWorldPtr image , GWorldPtr mask , short dstDepth , short iconSize  );
-void                 wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue );
-CTabHandle         wxMacCreateColorTable( int numColors );
-*/
-void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , int forceType = 0 );
-void wxMacReleaseBitmapButton( ControlButtonContentInfo*info );
-CGImageRef wxMacCreateCGImageFromBitmap( const wxBitmap& bitmap );
+// Quartz 
+
+WXDLLIMPEXP_CORE void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , int forceType = 0 );
+WXDLLIMPEXP_CORE void wxMacReleaseBitmapButton( ControlButtonContentInfo*info );
+WXDLLIMPEXP_CORE CGImageRef wxMacCreateCGImageFromBitmap( const wxBitmap& bitmap );
+
+WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithCFData( CFDataRef data );
+WXDLLIMPEXP_CORE CGDataConsumerRef wxMacCGDataConsumerCreateWithCFData( CFMutableDataRef data );
+WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( const wxMemoryBuffer& buf );
+
 
 #define MAC_WXHBITMAP(a) (GWorldPtr(a))
 #define MAC_WXHMETAFILE(a) (PicHandle(a))
@@ -1041,14 +1017,14 @@ public:
 
 // draw the image 'upside down' corrected as HIViewDrawCGImage does
 
-OSStatus WXDLLEXPORT wxMacDrawCGImage(
+OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(
                                CGContextRef    inContext,
                                const HIRect *  inBounds,
                                CGImageRef      inImage) ;
 
-CGColorRef WXDLLEXPORT wxMacCreateCGColorFromHITheme( ThemeBrush brush ) ;
+CGColorRef WXDLLIMPEXP_CORE wxMacCreateCGColorFromHITheme( ThemeBrush brush ) ;
 
-CGColorSpaceRef WXDLLEXPORT wxMacGetGenericRGBColorSpace(void);
+CGColorSpaceRef WXDLLIMPEXP_CORE wxMacGetGenericRGBColorSpace(void);
 
 // toplevel.cpp
 

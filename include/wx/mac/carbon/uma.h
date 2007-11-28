@@ -17,11 +17,6 @@
 void UMAInitToolbox( UInt16 inMoreMastersCalls, bool isEmbedded) ;
 long UMAGetSystemVersion() ;
 
-// process manager
-
-long UMAGetProcessMode() ;
-bool UMAGetProcessModeDoesActivateOnFGSwitch() ;
-
 #if wxUSE_GUI
 
 // menu manager
@@ -38,21 +33,6 @@ void             UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxA
 
 void            UMASetMenuItemText(  MenuRef menu,  MenuItemIndex item, const wxString& title , wxFontEncoding encoding ) ;
 
-// quickdraw
-
-void            UMAShowWatchCursor() ;
-
-// control hierarchy
-
-Rect * UMAGetControlBoundsInWindowCoords(ControlRef theControl, Rect *bounds) ;
-
-// events
-
-void UMAUpdateControls( WindowPtr inWindow , RgnHandle inRgn ) ;
-OSErr UMAGetRootControl( WindowPtr inWindow , ControlRef *outControl ) ;
-
-void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate ) ;
-
 // Retrieves the Help menu handle. Warning: As a side-effect this functions also
 // creates the Help menu if it didn't exist yet.
 OSStatus UMAGetHelpMenu(
@@ -63,15 +43,6 @@ OSStatus UMAGetHelpMenu(
 OSStatus UMAGetHelpMenuDontCreate(
   MenuRef *        outHelpMenu,
   MenuItemIndex *  outFirstCustomItemIndex);      /* can be NULL */
-
-// Appearance Drawing
-
-#define GetWindowUpdateRgn( inWindow , updateRgn ) GetWindowRegion( inWindow , kWindowUpdateRgn, updateRgn )
-
-// Quartz 
-
-CGDataProviderRef UMACGDataProviderCreateWithCFData( CFDataRef data );
-CGDataConsumerRef UMACGDataConsumerCreateWithCFData( CFMutableDataRef data );
 
 #endif // wxUSE_GUI
 
