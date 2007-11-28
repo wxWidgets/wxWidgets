@@ -2805,6 +2805,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/bmpcbox.h
     wx/calctrl.h
     wx/dataview.h
+    wx/datectrl.h
     wx/dateevt.h
     wx/dcbuffer.h
     wx/editlbox.h
@@ -2837,11 +2838,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/taskbar.h
     wx/tipdlg.h
     wx/wizard.h
-</set>
-
-<set var="ADVANCED_CMN_NATIVE_HDR" hints="files">
-    wx/datectrl.h
-    wx/dataview.h
 </set>
 
 <set var="ADVANCED_MSW_SRC" hints="files">
@@ -3560,7 +3556,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="WXUNIV=='1'">$(ADVANCED_CMN_SRC) $(ADVANCED_PLATFORM_SRC) $(ADVANCED_UNIV_SRC)</if>
     </set>
     <set var="ADVANCED_HDR" hints="files">
-        <if cond="WXUNIV=='0'">$(ADVANCED_CMN_HDR) $(ADVANCED_CMN_NATIVE_HDR) $(ADVANCED_PLATFORM_HDR) $(ADVANCED_PLATFORM_NATIVE_HDR)</if>
+        <if cond="WXUNIV=='0'">$(ADVANCED_CMN_HDR) $(ADVANCED_PLATFORM_HDR) $(ADVANCED_PLATFORM_NATIVE_HDR)</if>
         <if cond="WXUNIV=='1'">$(ADVANCED_CMN_HDR) $(ADVANCED_PLATFORM_HDR) $(ADVANCED_UNIV_HDR)</if>
     </set>
 
