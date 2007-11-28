@@ -32,31 +32,6 @@ typedef SInt32 SRefCon;
 
 #ifndef __LP64__
 
-class wxMacPortStateHelper
-{
-    DECLARE_NO_COPY_CLASS(wxMacPortStateHelper)
-
-public:
-    wxMacPortStateHelper( GrafPtr newport);
-    wxMacPortStateHelper();
-    ~wxMacPortStateHelper();
-
-    void Setup( GrafPtr newport );
-    void Clear();
-    bool IsCleared() { return m_clip == NULL; }
-    GrafPtr GetCurrentPort() { return m_currentPort; }
-
-private:
-    GrafPtr          m_currentPort;
-    GrafPtr          m_oldPort;
-    RgnHandle          m_clip;
-    ThemeDrawingState m_drawingState;
-    short          m_textFont;
-    short          m_textSize;
-    short          m_textStyle;
-    short           m_textMode;
-};
-
 class WXDLLEXPORT wxMacPortSaver
 {
     DECLARE_NO_COPY_CLASS(wxMacPortSaver)
@@ -68,17 +43,6 @@ private :
     GrafPtr m_port;
 };
 
-class WXDLLEXPORT wxMacPortSetter
-{
-    DECLARE_NO_COPY_CLASS(wxMacPortSetter)
-
-public:
-    wxMacPortSetter( const wxDC* dc );
-    ~wxMacPortSetter();
-private:
-    wxMacPortStateHelper m_ph;
-    const wxDC* m_dc;
-};
 
 /*
  Clips to the visible region of a control within the current port
@@ -1082,11 +1046,9 @@ OSStatus WXDLLEXPORT wxMacDrawCGImage(
                                const HIRect *  inBounds,
                                CGImageRef      inImage) ;
 
-CGColorRef wxMacCreateCGColorFromHITheme( ThemeBrush brush ) ;
+CGColorRef WXDLLEXPORT wxMacCreateCGColorFromHITheme( ThemeBrush brush ) ;
 
-CGColorSpaceRef wxMacGetGenericRGBColorSpace(void);
-
-void wxMacMemoryBufferReleaseProc(void *info, const void *data, size_t size);
+CGColorSpaceRef WXDLLEXPORT wxMacGetGenericRGBColorSpace(void);
 
 // toplevel.cpp
 
