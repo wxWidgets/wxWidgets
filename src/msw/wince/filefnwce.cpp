@@ -44,16 +44,19 @@ int wxCRT_Open(const wxChar *filename, int oflag, int WXUNUSED(pmode))
     {
         access = GENERIC_READ;
         shareMode = FILE_SHARE_READ|FILE_SHARE_WRITE;
-        disposition |= OPEN_EXISTING;
+        disposition = OPEN_EXISTING;
     }
     else if ((oflag & (O_RDONLY | O_WRONLY | O_RDWR)) == O_WRONLY)
     {
         access = GENERIC_WRITE;
+        disposition = OPEN_ALWAYS;
     }
     else if ((oflag & (O_RDONLY | O_WRONLY | O_RDWR)) == O_RDWR)
     {
         access = GENERIC_READ|GENERIC_WRITE;
+        disposition = OPEN_ALWAYS;
     }
+
     if (oflag & O_APPEND)
     {
         if ( wxFile::Exists(filename) )
@@ -62,16 +65,16 @@ int wxCRT_Open(const wxChar *filename, int oflag, int WXUNUSED(pmode))
             shareMode = FILE_SHARE_READ;
             disposition = OPEN_EXISTING;
         }
-        //else: fall through as write_append is the same as write if the
-        //      file doesn't exist
         else
+        {
             oflag |= O_TRUNC;
+        }
     }
     if (oflag & O_TRUNC)
     {
         access |= GENERIC_WRITE;
         shareMode = 0;
-        disposition = (oflag & O_CREAT) ? CREATE_ALWAYS : TRUNCATE_EXISTING;
+        disposition = oflag & O_CREAT ? CREATE_ALWAYS : TRUNCATE_EXISTING;
     }
     else if (oflag & O_CREAT)
     {
