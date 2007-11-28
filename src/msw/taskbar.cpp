@@ -269,6 +269,7 @@ long wxTaskBarIcon::WindowProc(unsigned int msg,
     {
         m_iconAdded = false;
         SetIcon(m_icon, m_strTooltip);
+        return 0;
     }
 
     // this function should only be called for gs_msg(Restart)Taskbar messages
