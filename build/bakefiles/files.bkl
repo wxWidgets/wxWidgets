@@ -2305,7 +2305,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/helpxxxx.h
     wx/mac/icon.h
     wx/mac/imaglist.h
-    wx/mac/joystick.h
     wx/mac/listbox.h
     wx/mac/listctrl.h
     wx/mac/macnotfy.h
@@ -2330,7 +2329,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/region.h
     wx/mac/scrolbar.h
     wx/mac/slider.h
-    wx/mac/sound.h
     wx/mac/spinbutt.h
     wx/mac/spinctrl.h
     wx/mac/srchctrl.h
@@ -2882,6 +2880,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="ADVANCED_MAC_HDR" hints="files">
     wx/generic/animate.h
+    wx/mac/dataview.h
+    wx/mac/joystick.h
+    wx/mac/sound.h
     wx/mac/carbon/drawer.h
     wx/mac/carbon/dataview.h
     wx/mac/carbon/databrow.h
