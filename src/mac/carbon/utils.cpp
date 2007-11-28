@@ -823,7 +823,18 @@ void wxMacControl::GetRect( Rect *r )
 
 void wxMacControl::GetRectInWindowCoords( Rect *r )
 {
-    UMAGetControlBoundsInWindowCoords( m_controlRef , r );
+    GetControlBounds( m_controlRef , r ) ;
+    
+    WindowRef tlwref = GetControlOwner( m_controlRef ) ;
+    
+    wxTopLevelWindowMac* tlwwx = wxFindWinFromMacWindow( tlwref ) ;
+    if ( tlwwx != NULL )
+    {
+        ControlRef rootControl = tlwwx->GetPeer()->GetControlRef() ;
+        HIPoint hiPoint = CGPointMake( 0 , 0 ) ;
+        HIViewConvertPoint( &hiPoint , HIViewGetSuperview(m_controlRef) , rootControl ) ;
+        OffsetRect( r , (short) hiPoint.x , (short) hiPoint.y ) ;
+    }
 }
 
 void wxMacControl::GetBestRect( Rect *r )

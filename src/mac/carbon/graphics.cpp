@@ -2221,3 +2221,67 @@ wxGraphicsFont wxMacCoreGraphicsRenderer::CreateFont( const wxFont &font , const
         return wxNullGraphicsFont;
 }
 
+//
+// CoreGraphics Helper Methods
+//
+
+// Data Providers and Consumers
+
+size_t UMAPutBytesCFRefCallback( void *info, const void *bytes, size_t count )
+{
+    CFMutableDataRef data = (CFMutableDataRef) info;
+    if ( data )
+    {
+        CFDataAppendBytes( data, (const UInt8*) bytes, count );
+    }
+    return count;
+}
+
+void wxMacReleaseCFDataProviderCallback(void *info,
+                                      const void *WXUNUSED(data),
+                                      size_t WXUNUSED(count))
+{
+    if ( info )
+        CFRelease( (CFDataRef) info );
+}
+
+void wxMacReleaseCFDataConsumerCallback( void *info )
+{
+    if ( info )
+        CFRelease( (CFDataRef) info );
+}
+
+CGDataProviderRef wxMacCGDataProviderCreateWithCFData( CFDataRef data )
+{
+    if ( data == NULL )
+        return NULL;
+
+    return CGDataProviderCreateWithCFData( data );
+}
+
+CGDataConsumerRef wxMacCGDataConsumerCreateWithCFData( CFMutableDataRef data )
+{
+    if ( data == NULL )
+        return NULL;
+
+    return CGDataConsumerCreateWithCFData( data );
+}
+
+void wxMacReleaseMemoryBufferProviderCallback(void *info, const void *data, size_t WXUNUSED(size))
+{
+    wxMemoryBuffer* membuf = (wxMemoryBuffer*) info ;
+
+    wxASSERT( data == membuf->GetData() ) ;
+
+    delete membuf ;
+}
+
+CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( const wxMemoryBuffer& buf )
+{
+    wxMemoryBuffer* b = new wxMemoryBuffer( buf );
+    if ( b->GetDataLen() == 0 )
+        return NULL;
+        
+    return CGDataProviderCreateWithData( b , (const void *) b->GetData() , b->GetDataLen() ,
+                                                 wxMacReleaseMemoryBufferProviderCallback );
+}

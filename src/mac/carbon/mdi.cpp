@@ -48,6 +48,37 @@ static const int IDM_WINDOWICONS = 4003;
 static const int IDM_WINDOWNEXT = 4004;
 static const int IDM_WINDOWTILEVERT = 4005;
 
+// others
+
+void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate )
+{
+#if 1 // TODO REMOVE
+    if ( inWindowRef )
+    {
+//        bool isHighlighted = IsWindowHighlited( inWindowRef ) ;
+//        if ( inActivate != isHighlighted )
+#ifndef __LP64__
+        GrafPtr port ;
+        GetPort( &port ) ;
+        SetPortWindowPort( inWindowRef ) ;
+#endif
+        HiliteWindow( inWindowRef , inActivate ) ;
+        ControlRef control = NULL ;
+        ::GetRootControl( inWindowRef , &control ) ;
+        if ( control )
+        {
+            if ( inActivate )
+                ::ActivateControl( control ) ;
+            else
+                ::DeactivateControl( control ) ;
+        }
+#ifndef __LP64__
+        SetPort( port ) ;
+#endif
+    }
+#endif
+}
+
 // ----------------------------------------------------------------------------
 // Parent frame
 // ----------------------------------------------------------------------------

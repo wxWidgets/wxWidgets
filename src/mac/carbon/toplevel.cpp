@@ -390,59 +390,6 @@ void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
     }
 }
 
-ControlRef wxMacFindSubControl( wxTopLevelWindowMac* toplevelWindow, const Point& location , ControlRef superControl , ControlPartCode *outPart )
-{
-    if ( superControl )
-    {
-        UInt16 childrenCount = 0 ;
-        ControlHandle sibling ;
-        Rect r ;
-        OSStatus err = CountSubControls( superControl , &childrenCount ) ;
-        if ( err == errControlIsNotEmbedder )
-            return NULL ;
-
-        wxASSERT_MSG( err == noErr , wxT("Unexpected error when accessing subcontrols") ) ;
-
-        for ( UInt16 i = childrenCount ; i >=1  ; --i )
-        {
-            err = GetIndexedSubControl( superControl , i , & sibling ) ;
-            if ( err == errControlIsNotEmbedder )
-                return NULL ;
-
-            wxASSERT_MSG( err == noErr , wxT("Unexpected error when accessing subcontrols") ) ;
-            if ( IsControlVisible( sibling ) )
-            {
-                UMAGetControlBoundsInWindowCoords( sibling , &r ) ;
-                if ( MacPtInRect( location , &r ) )
-                {
-                    ControlHandle child = wxMacFindSubControl( toplevelWindow , location , sibling , outPart ) ;
-                    if ( child )
-                    {
-                        return child ;
-                    }
-                    else
-                    {
-                        Point testLocation = location ;
-
-                        if ( toplevelWindow )
-                        {
-                            testLocation.h -= r.left ;
-                            testLocation.v -= r.top ;
-                        }
-
-                        *outPart = TestControl( sibling , testLocation ) ;
-
-                        return sibling ;
-                    }
-                }
-            }
-        }
-    }
-
-    return NULL ;
-}
-
-
 #define NEW_CAPTURE_HANDLING 1
 
 pascal OSStatus
@@ -1068,9 +1015,9 @@ bool wxTopLevelWindowMac::SetBackgroundColour(const wxColour& col )
     if ( !wxTopLevelWindowBase::SetBackgroundColour(col) && m_hasBgCol )
         return false ;
     
-    if ( col == wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) )
+    if ( col == wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) || col == wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDocumentWindowBackground)) )
         SetThemeWindowBackground( (WindowRef) m_macWindow,  kThemeBrushDocumentWindowBackground, false ) ;
-    else if ( col == wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) )
+    else if ( col == wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) || col == wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDialogBackgroundActive)) )
         SetThemeWindowBackground( (WindowRef) m_macWindow,  kThemeBrushDialogBackgroundActive, false ) ;
     // TODO BETTER THEME SUPPORT
     return true;

@@ -2398,7 +2398,7 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
         return ;
 
     Rect bounds ;
-    UMAGetControlBoundsInWindowCoords( m_controlRef, &bounds );
+    GetRectInWindowCoords( &bounds );
 
     wxRect visRect = textctrl->MacGetClippedClientRect() ;
     Rect visBounds = { visRect.y , visRect.x , visRect.y + visRect.height , visRect.x + visRect.width } ;
@@ -2826,7 +2826,7 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
     SetControlData(m_controlRef, kControlEntireControl, kControlUserPaneFocusProcTag, sizeof(gTPFocusProc), &gTPFocusProc);
 
     // calculate the rectangles used by the control
-    UMAGetControlBoundsInWindowCoords( m_controlRef, &bounds );
+    GetRectInWindowCoords( &bounds );
 
     m_txnControlBounds = bounds ;
     m_txnVisBounds = bounds ;

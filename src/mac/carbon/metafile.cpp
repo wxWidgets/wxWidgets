@@ -100,7 +100,7 @@ wxMetafileRefData::wxMetafileRefData( int width, int height)
 
     CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault, 0);
     m_data.reset(data);
-    CGDataConsumerRef dataConsumer = UMACGDataConsumerCreateWithCFData(data);
+    CGDataConsumerRef dataConsumer = wxMacCGDataConsumerCreateWithCFData(data);
     m_context = CGPDFContextCreate( dataConsumer, (width != 0 && height != 0) ? &r : NULL , NULL );
     CGDataConsumerRelease( dataConsumer );
     if ( m_context )
@@ -140,7 +140,7 @@ void wxMetafileRefData::Close()
 
 void wxMetafileRefData::UpdateDocumentFromData()
 {
-    wxCFRef<CGDataProviderRef> provider(UMACGDataProviderCreateWithCFData(m_data));
+    wxCFRef<CGDataProviderRef> provider(wxMacCGDataProviderCreateWithCFData(m_data));
     m_pdfDoc.reset(CGPDFDocumentCreateWithProvider(provider));
     if ( m_pdfDoc != NULL )
     {
@@ -209,7 +209,7 @@ void wxMetafile::SetPICT(void* pictHandle)
     Handle picHandle = (Handle) pictHandle;
     HLock(picHandle);
     CFDataRef data = CFDataCreateWithBytesNoCopy( kCFAllocatorDefault, (const UInt8*) *picHandle, GetHandleSize(picHandle), kCFAllocatorNull);
-    wxCFRef<CGDataProviderRef> provider(UMACGDataProviderCreateWithCFData(data));
+    wxCFRef<CGDataProviderRef> provider(wxMacCGDataProviderCreateWithCFData(data));
     QDPictRef pictRef = QDPictCreateWithProvider(provider);
     CGRect rect = QDPictGetBounds(pictRef);
     m_refData = new wxMetafileRefData(wx_static_cast(int, rect.size.width),
