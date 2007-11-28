@@ -737,9 +737,6 @@ bool wxTextCtrl::Create( wxWindow *parent,
     if (style & wxTE_READONLY)
         GTKSetEditable();
 
-    if (style & wxTE_PROCESS_ENTER)
-        GTKSetActivatesDefault();
-
     // left justification (alignment) is the default anyhow
     if ( style & (wxTE_RIGHT | wxTE_CENTRE) )
         GTKSetJustification();
@@ -782,6 +779,13 @@ bool wxTextCtrl::Create( wxWindow *parent,
             au_check_range(&start, &end);
         }
     }
+    else // single line
+    {
+        // do the right thing with Enter presses depending on whether we have
+        // wxTE_PROCESS_ENTER or not
+        GTKSetActivatesDefault();
+    }
+
 
     g_signal_connect (m_text, "copy-clipboard",
                       G_CALLBACK (gtk_copy_clipboard_callback), this);
