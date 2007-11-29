@@ -550,31 +550,6 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
                 if (currentMouseWindow->CanAcceptFocus() && wxWindow::FindFocus()!=currentMouseWindow)
                     currentMouseWindow->SetFocus();
             }
-
-            // if built-in find control is finding the wrong control (ie static box instead of overlaid
-            // button, we cannot let the standard handler do its job, but must handle manually
-
-            if ( cEvent.GetKind() == kEventMouseDown )
-            {
-                if ( currentMouseWindow->MacIsReallyEnabled() )
-                {
-                    EventModifiers modifiers = cEvent.GetParameter<EventModifiers>(kEventParamKeyModifiers, typeUInt32) ;
-                    Point clickLocation = windowMouseLocation ;
-
-                    currentMouseWindow->MacRootWindowToWindow( &clickLocation.h , &clickLocation.v ) ;
-
-                    HandleControlClick( (ControlRef) currentMouseWindow->GetHandle() , clickLocation ,
-                        modifiers , (ControlActionUPP ) -1 ) ;
-
-                    if ((currentMouseWindowParent != NULL) &&
-                        (currentMouseWindowParent->GetChildren().Find(currentMouseWindow) == NULL))
-                    {
-                        currentMouseWindow = NULL;
-                    }
-                }
-
-                result = noErr ;
-            }
         }
 
         if ( cEvent.GetKind() == kEventMouseUp && wxApp::s_captureWindow )
