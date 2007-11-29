@@ -1878,9 +1878,18 @@ void wxMacDataItemBrowserControl::MacScrollTo( unsigned int n )
     GetScrollPosition( &top , &left ) ;
     wxMacDataItem * item = (wxMacDataItem*) GetItemFromLine( n );
 
+    // there is a bug in RevealItem that leads to situations
+    // in large lists, where the item does not get scrolled
+    // into sight, so we do a pre-scroll if necessary
     UInt16 height ;
     GetRowHeight( (DataBrowserItemID) item , &height ) ;
-    SetScrollPosition( n * ((UInt32)height) , left ) ;
+    UInt32 linetop = n * ((UInt32) height );
+    UInt32 linebottom = linetop + height;
+    Rect rect ;
+    GetRect( &rect );
+    
+    if ( linetop < top || linebottom > (top + rect.bottom - rect.top ) )
+        SetScrollPosition( wxMax( n-2, 0 ) * ((UInt32)height) , left ) ;
 
     RevealItem( item , kDataBrowserRevealWithoutSelecting );
 }
