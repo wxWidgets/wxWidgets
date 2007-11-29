@@ -108,17 +108,9 @@ bool wxIcon::CreateFromXpm(const char **xpm)
 bool wxIcon::LoadFile(const wxString& filename, wxBitmapType type,
     int desiredWidth, int desiredHeight)
 {
-    UnRef();
-
-    m_refData = new wxIconRefData;
-    M_ICONDATA->m_width = 5;
-    M_ICONDATA->m_height = 5;
-    M_ICONDATA->m_cocoaNSImage = [[NSImage alloc] initWithSize:NSMakeSize(5,5)];
-    M_ICONDATA->m_ok = true;
-    M_ICONDATA->m_numColors = 0;
-    M_ICONDATA->m_quality = 0;
-
-    return false;
+    wxBitmap bitmap(filename, type);
+    CopyFromBitmap(bitmap);
+    return bitmap.Ok();
 }
 
 void wxIcon::CopyFromBitmap(const wxBitmap& bitmap)
