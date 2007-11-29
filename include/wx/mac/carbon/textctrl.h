@@ -162,7 +162,6 @@ public:
     void OnUpdateDelete(wxUpdateUIEvent& event);
     void OnUpdateSelectAll(wxUpdateUIEvent& event);
 
-    void OnEraseBackground(wxEraseEvent& event);
     void OnContextMenu(wxContextMenuEvent& event);
 
     virtual bool MacCanFocus() const

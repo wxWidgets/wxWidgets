@@ -30,50 +30,6 @@ typedef SInt32 SRefCon;
 
 #include "wx/listbox.h"
 
-#ifndef __LP64__
-
-class WXDLLEXPORT wxMacPortSaver
-{
-    DECLARE_NO_COPY_CLASS(wxMacPortSaver)
-
-public:
-    wxMacPortSaver( GrafPtr port );
-    ~wxMacPortSaver();
-private :
-    GrafPtr m_port;
-};
-
-
-/*
- Clips to the visible region of a control within the current port
- */
-
-class WXDLLEXPORT wxMacWindowClipper : public wxMacPortSaver
-{
-    DECLARE_NO_COPY_CLASS(wxMacWindowClipper)
-
-public:
-    wxMacWindowClipper( const wxWindow* win );
-    ~wxMacWindowClipper();
-private:
-    GrafPtr   m_newPort;
-    RgnHandle m_formerClip;
-    RgnHandle m_newClip;
-};
-
-class WXDLLEXPORT wxMacWindowStateSaver : public wxMacWindowClipper
-{
-    DECLARE_NO_COPY_CLASS(wxMacWindowStateSaver)
-
-public:
-    wxMacWindowStateSaver( const wxWindow* win );
-    ~wxMacWindowStateSaver();
-private:
-    GrafPtr   m_newPort;
-    ThemeDrawingState m_themeDrawingState;
-};
-#endif
-
 class WXDLLEXPORT wxMacCGContextStateSaver
 {
     DECLARE_NO_COPY_CLASS(wxMacCGContextStateSaver)
@@ -417,6 +373,14 @@ WXDLLIMPEXP_CORE pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCal
 WXDLLIMPEXP_CORE Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin = true );
 
 ControlActionUPP GetwxMacLiveScrollbarActionProc();
+
+// additional optional event defines 
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
+enum {
+    kEventControlFocusPartChanged = 164
+};
+#endif
 
 class wxMacControl : public wxObject
 {
