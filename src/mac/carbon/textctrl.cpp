@@ -141,6 +141,34 @@ void* wxMacMPRemoteGUICall( classtype *object , void (classtype::*function)( con
     return result ;
 }
 
+class WXDLLEXPORT wxMacPortSaver
+{
+    DECLARE_NO_COPY_CLASS(wxMacPortSaver)
+
+public:
+    wxMacPortSaver( GrafPtr port );
+    ~wxMacPortSaver();
+private :
+    GrafPtr m_port;
+};
+
+
+/*
+ Clips to the visible region of a control within the current port
+ */
+
+class WXDLLEXPORT wxMacWindowClipper : public wxMacPortSaver
+{
+    DECLARE_NO_COPY_CLASS(wxMacWindowClipper)
+
+public:
+    wxMacWindowClipper( const wxWindow* win );
+    ~wxMacWindowClipper();
+private:
+    GrafPtr   m_newPort;
+    RgnHandle m_formerClip;
+    RgnHandle m_newClip;
+};
 
 // common parts for implementations based on MLTE
 
@@ -157,7 +185,7 @@ public :
     void AdjustCreationAttributes( const wxColour& background, bool visible ) ;
 
     virtual void SetFont( const wxFont & font, const wxColour& foreground, long windowStyle ) ;
-    virtual void SetBackground( const wxBrush &brush ) ;
+    virtual void SetBackgroundColour(const wxColour& col );
     virtual void SetStyle( long start, long end, const wxTextAttr& style ) ;
     virtual void Copy() ;
     virtual void Cut() ;
@@ -218,7 +246,7 @@ public :
 
     virtual OSStatus SetFocus( ControlFocusPart focusPart ) ;
     virtual bool HasFocus() const ;
-    virtual void SetBackground( const wxBrush &brush) ;
+    virtual void SetBackgroundColour(const wxColour& col ) ;
 
 protected :
     HIViewRef m_scrollView ;
@@ -287,7 +315,6 @@ private :
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxTextCtrlBase)
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
-    EVT_ERASE_BACKGROUND( wxTextCtrl::OnEraseBackground )
     EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
     EVT_CHAR(wxTextCtrl::OnChar)
     EVT_MENU(wxID_CUT, wxTextCtrl::OnCut)
@@ -749,15 +776,6 @@ void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
     // By default, load the first file into the text window.
     if (event.GetNumberOfFiles() > 0)
         LoadFile( event.GetFiles()[0] );
-}
-
-void wxTextCtrl::OnEraseBackground(wxEraseEvent& event)
-{
-    // all erasing should be done by the real mac control implementation
-    // while this is true for MLTE under classic, the HITextView is somehow
-    // transparent but background erase is not working correctly, so intercept
-    // things while we can...
-    event.Skip() ;
 }
 
 void wxTextCtrl::OnChar(wxKeyEvent& event)
@@ -1720,13 +1738,11 @@ void wxMacMLTEControl::AdjustCreationAttributes(const wxColour &background,
     }
 }
 
-void wxMacMLTEControl::SetBackground( const wxBrush &brush )
+void wxMacMLTEControl::SetBackgroundColour(const wxColour& col )
 {
-    // currently only solid background are supported
     TXNBackground tback;
-
     tback.bgType = kTXNBackgroundTypeRGB;
-    brush.GetColour().GetRGBColor(&tback.bg.color);
+    col.GetRGBColor(&tback.bg.color);
     TXNSetBackground( m_txn , &tback );
 }
 
@@ -2240,6 +2256,40 @@ int wxMacMLTEControl::GetLineLength(long lineNo) const
 // various OS X versions. Most deal with the scrollbars: they are not correctly embedded
 // while this can be solved on 10.3 by reassigning them the correct place, on 10.2 there is
 // no way out, therefore we are using our own implementation and our own scrollbars ....
+
+wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win ) :
+    wxMacPortSaver( (GrafPtr) GetWindowPort( (WindowRef) win->MacGetTopLevelWindowRef() ) )
+{
+    m_newPort = (GrafPtr) GetWindowPort( (WindowRef) win->MacGetTopLevelWindowRef() ) ;
+    m_formerClip = NewRgn() ;
+    m_newClip = NewRgn() ;
+    GetClip( m_formerClip ) ;
+
+    if ( win )
+    {
+        // guard against half constructed objects, this just leads to a empty clip
+        if ( win->GetPeer() )
+        {
+            int x = 0 , y = 0;
+            win->MacWindowToRootWindow( &x, &y ) ;
+
+            // get area including focus rect
+            HIShapeGetAsQDRgn( ((wxWindow*)win)->MacGetVisibleRegion(true).GetWXHRGN() , m_newClip );
+            if ( !EmptyRgn( m_newClip ) )
+                OffsetRgn( m_newClip , x , y ) ;
+        }
+
+        SetClip( m_newClip ) ;
+    }
+}
+
+wxMacWindowClipper::~wxMacWindowClipper()
+{
+    SetPort( m_newPort ) ;
+    SetClip( m_formerClip ) ;
+    DisposeRgn( m_newClip ) ;
+    DisposeRgn( m_formerClip ) ;
+}
 
 TXNScrollInfoUPP gTXNScrollInfoProc = NULL ;
 ControlActionUPP gTXNScrollActionProc = NULL ;
@@ -3037,25 +3087,9 @@ bool wxMacMLTEHIViewControl::HasFocus() const
     return control == m_textView ;
 }
 
-void wxMacMLTEHIViewControl::SetBackground( const wxBrush &brush )
+void wxMacMLTEHIViewControl::SetBackgroundColour(const wxColour& col )
 {
-    wxMacMLTEControl::SetBackground( brush ) ;
-
-#if 0
-    CGColorSpaceRef rgbSpace = CGColorSpaceCreateDeviceRGB();
-    RGBColor col;
-    brush.GetColour().GetRGBColor(&col) ;
-
-    float component[4] ;
-    component[0] = col.red / 65536.0 ;
-    component[1] = col.green / 65536.0 ;
-    component[2] = col.blue / 65536.0 ;
-    component[3] = 1.0 ; // alpha
-
-    CGColorRef color = CGColorCreate( rgbSpace , component );
-    HITextViewSetBackgroundColor( m_textView , color );
-    CGColorSpaceRelease( rgbSpace );
-#endif
+    HITextViewSetBackgroundColor( m_textView, col.GetPixel() );
 }
 
 #endif // wxUSE_TEXTCTRL

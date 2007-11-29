@@ -699,8 +699,7 @@ void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , l
 
 void wxMacControl::SetBackgroundColour( const wxColour &WXUNUSED(col) )
 {
-    // TODO
-    // setting up a color proc is not recommended anymore
+//    HITextViewSetBackgroundColor( m_textView , color );
 }
 
 void wxMacControl::SetRange( SInt32 minimum , SInt32 maximum )

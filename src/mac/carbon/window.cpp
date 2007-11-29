@@ -78,8 +78,6 @@ BEGIN_EVENT_TABLE(wxWindowMac, wxWindowBase)
     EVT_NC_PAINT(wxWindowMac::OnNcPaint)
     EVT_ERASE_BACKGROUND(wxWindowMac::OnEraseBackground)
     EVT_PAINT(wxWindowMac::OnPaint)
-    EVT_SET_FOCUS(wxWindowMac::OnSetFocus)
-    EVT_KILL_FOCUS(wxWindowMac::OnSetFocus)
     EVT_MOUSE_EVENTS(wxWindowMac::OnMouseEvent)
 END_EVENT_TABLE()
 
@@ -312,6 +310,12 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
             {
                 ControlPartCode previousControlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlPreviousPart , typeControlPartCode );
                 ControlPartCode currentControlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlCurrentPart , typeControlPartCode );
+
+                if ( thisWindow->MacGetTopLevelWindow() && thisWindow->GetPeer()->NeedsFocusRect() )
+                {
+                    thisWindow->MacInvalidateBorders();
+                }
+                
                 if ( currentControlPart == 0 )
                 {
                     // kill focus
@@ -1675,7 +1679,7 @@ void wxWindowMac::MacInvalidateBorders()
         return ;
 
     int outerBorder = MacGetLeftBorderSize() ;
-    if ( m_peer->NeedsFocusRect() && m_peer->HasFocus() )
+    if ( m_peer->NeedsFocusRect() /* && m_peer->HasFocus() */ )
         outerBorder += 4 ;
 
     if ( outerBorder == 0 )
@@ -2506,54 +2510,6 @@ wxWindowMac *wxWindowBase::DoFindFocus()
     ControlRef control ;
     GetKeyboardFocus( GetUserFocusWindow() , &control ) ;
     return wxFindControlFromMacControl( control ) ;
-}
-
-void wxWindowMac::OnSetFocus( wxFocusEvent& event )
-{
-    // panel wants to track the window which was the last to have focus in it,
-    // so we want to set ourselves as the window which last had focus
-    //
-    // notice that it's also important to do it upwards the tree because
-    // otherwise when the top level panel gets focus, it won't set it back to
-    // us, but to some other sibling
-
-    // CS: don't know if this is still needed:
-    //wxChildFocusEvent eventFocus(this);
-    //(void)GetEventHandler()->ProcessEvent(eventFocus);
-
-    if ( MacGetTopLevelWindow() && m_peer->NeedsFocusRect() )
-    {
-        GetParent()->Refresh() ;
-        wxMacWindowStateSaver sv( this ) ;
-        Rect rect ;
-
-        m_peer->GetRect( &rect ) ;
-        // on the surrounding frame
-        InsetRect( &rect, -1 , -1 ) ;
-
-        wxTopLevelWindowMac* top = MacGetTopLevelWindow();
-        if ( top )
-        {
-            wxPoint pt(0, 0) ;
-            wxMacControl::Convert( &pt , GetParent()->m_peer , top->m_peer ) ;
-            rect.left += pt.x ;
-            rect.right += pt.x ;
-            rect.top += pt.y ;
-            rect.bottom += pt.y ;
-        }
-
-        bool bIsFocusEvent = (event.GetEventType() == wxEVT_SET_FOCUS);
-        DrawThemeFocusRect( &rect , bIsFocusEvent ) ;
-        if ( !bIsFocusEvent )
-        {
-            // as this erases part of the frame we have to redraw borders
-            // and because our z-ordering is not always correct (staticboxes)
-            // we have to invalidate things, we cannot simple redraw
-            MacInvalidateBorders() ;
-        }
-    }
-
-    event.Skip();
 }
 
 void wxWindowMac::OnInternalIdle()
