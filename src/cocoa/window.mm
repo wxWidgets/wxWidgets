@@ -985,7 +985,7 @@ void wxWindowCocoaScrollView::_wx_doScroller(NSScroller *sender)
     }
     wxScrollWinEvent event(commandType, scrollpos, orientation);
     event.SetEventObject(m_owner);
-    m_owner->GetEventHandler()->ProcessEvent(event);
+    m_owner->HandleWindowEvent(event);
 }
 
 void wxWindowCocoaScrollView::UpdateSizes()
@@ -1010,7 +1010,7 @@ void wxWindowCocoaScrollView::Cocoa_FrameChanged(void)
     wxLogTrace(wxTRACE_COCOA,wxT("wxWindowCocoaScrollView=%p::Cocoa_FrameChanged for wxWindow %p"), this, m_owner);
     wxSizeEvent event(m_owner->GetSize(), m_owner->GetId());
     event.SetEventObject(m_owner);
-    m_owner->GetEventHandler()->ProcessEvent(event);
+    m_owner->HandleWindowEvent(event);
     UpdateSizes();
 }
 
@@ -1191,7 +1191,7 @@ bool wxWindowCocoa::Cocoa_drawRect(const NSRect &rect)
 
     wxPaintEvent event(m_windowId);
     event.SetEventObject(this);
-    bool ret = GetEventHandler()->ProcessEvent(event);
+    bool ret = HandleWindowEvent(event);
     m_isInPaint = false;
     return ret;
 }
@@ -1261,7 +1261,7 @@ bool wxWindowCocoa::Cocoa_mouseMoved(WX_NSEvent theEvent)
     wxMouseEvent event(wxEVT_MOTION);
     InitMouseEvent(event,theEvent);
     wxLogTrace(wxTRACE_COCOA,wxT("wxWindow=%p::Cocoa_mouseMoved @%d,%d"),this,event.m_x,event.m_y);
-    return GetEventHandler()->ProcessEvent(event);
+    return HandleWindowEvent(event);
 }
 
 void wxWindowCocoa::Cocoa_synthesizeMouseMoved()
@@ -1282,7 +1282,7 @@ void wxWindowCocoa::Cocoa_synthesizeMouseMoved()
     event.SetId(GetId());
 
     wxLogTrace(wxTRACE_COCOA,wxT("wxwin=%p Synthesized Mouse Moved @%d,%d"),this,event.m_x,event.m_y);
-    GetEventHandler()->ProcessEvent(event);
+    HandleWindowEvent(event);
 }
 
 bool wxWindowCocoa::Cocoa_mouseEntered(WX_NSEvent theEvent)
@@ -1300,7 +1300,7 @@ bool wxWindowCocoa::Cocoa_mouseEntered(WX_NSEvent theEvent)
         wxMouseEvent event(wxEVT_ENTER_WINDOW);
         InitMouseEvent(event,theEvent);
         wxLogTrace(wxTRACE_COCOA_TrackingRect,wxT("wxwin=%p Mouse Entered TR#%d @%d,%d"),this,[theEvent trackingNumber], event.m_x,event.m_y);
-        return GetEventHandler()->ProcessEvent(event);
+        return HandleWindowEvent(event);
     }
     else
         return false;
@@ -1315,7 +1315,7 @@ bool wxWindowCocoa::Cocoa_mouseExited(WX_NSEvent theEvent)
         wxMouseEvent event(wxEVT_LEAVE_WINDOW);
         InitMouseEvent(event,theEvent);
         wxLogTrace(wxTRACE_COCOA_TrackingRect,wxT("wxwin=%p Mouse Exited TR#%d @%d,%d"),this,[theEvent trackingNumber],event.m_x,event.m_y);
-        return GetEventHandler()->ProcessEvent(event);
+        return HandleWindowEvent(event);
     }
     else
         return false;
@@ -1326,7 +1326,7 @@ bool wxWindowCocoa::Cocoa_mouseDown(WX_NSEvent theEvent)
     wxMouseEvent event([theEvent clickCount]<2?wxEVT_LEFT_DOWN:wxEVT_LEFT_DCLICK);
     InitMouseEvent(event,theEvent);
     wxLogTrace(wxTRACE_COCOA,wxT("Mouse Down @%d,%d num clicks=%d"),event.m_x,event.m_y,[theEvent clickCount]);
-    return GetEventHandler()->ProcessEvent(event);
+    return HandleWindowEvent(event);
 }
 
 bool wxWindowCocoa::Cocoa_mouseDragged(WX_NSEvent theEvent)
@@ -1335,7 +1335,7 @@ bool wxWindowCocoa::Cocoa_mouseDragged(WX_NSEvent theEvent)
     InitMouseEvent(event,theEvent);
     event.m_leftDown = true;
     wxLogTrace(wxTRACE_COCOA,wxT("Mouse Drag @%d,%d"),event.m_x,event.m_y);
-    return GetEventHandler()->ProcessEvent(event);
+    return HandleWindowEvent(event);
 }
 
 bool wxWindowCocoa::Cocoa_mouseUp(WX_NSEvent theEvent)
@@ -1343,7 +1343,7 @@ bool wxWindowCocoa::Cocoa_mouseUp(WX_NSEvent theEvent)
     wxMouseEvent event(wxEVT_LEFT_UP);
     InitMouseEvent(event,theEvent);
     wxLogTrace(wxTRACE_COCOA,wxT("Mouse Up @%d,%d"),event.m_x,event.m_y);
-    return GetEventHandler()->ProcessEvent(event);
+    return HandleWindowEvent(event);
 }
 
 bool wxWindowCocoa::Cocoa_rightMouseDown(WX_NSEvent theEvent)
@@ -1351,7 +1351,7 @@ bool wxWindowCocoa::Cocoa_rightMouseDown(WX_NSEvent theEvent)
     wxMouseEvent event([theEvent clickCount]<2?wxEVT_RIGHT_DOWN:wxEVT_RIGHT_DCLICK);
     InitMouseEvent(event,theEvent);
     wxLogDebug(wxT("Mouse Down @%d,%d num clicks=%d"),event.m_x,event.m_y,[theEvent clickCount]);
-    return GetEventHandler()->ProcessEvent(event);
+    return HandleWindowEvent(event);
 }
 
 bool wxWindowCocoa::Cocoa_rightMouseDragged(WX_NSEvent theEvent)
@@ -1360,7 +1360,7 @@ bool wxWindowCocoa::Cocoa_rightMouseDragged(WX_NSEvent theEvent)
     InitMouseEvent(event,theEvent);
     event.m_rightDown = true;
     wxLogDebug(wxT("Mouse Drag @%d,%d"),event.m_x,event.m_y);
-    return GetEventHandler()->ProcessEvent(event);
+    return HandleWindowEvent(event);
 }
 
 bool wxWindowCocoa::Cocoa_rightMouseUp(WX_NSEvent theEvent)
@@ -1368,7 +1368,7 @@ bool wxWindowCocoa::Cocoa_rightMouseUp(WX_NSEvent theEvent)
     wxMouseEvent event(wxEVT_RIGHT_UP);
     InitMouseEvent(event,theEvent);
     wxLogDebug(wxT("Mouse Up @%d,%d"),event.m_x,event.m_y);
-    return GetEventHandler()->ProcessEvent(event);
+    return HandleWindowEvent(event);
 }
 
 bool wxWindowCocoa::Cocoa_otherMouseDown(WX_NSEvent theEvent)
@@ -1401,7 +1401,7 @@ void wxWindowCocoa::Cocoa_FrameChanged(void)
             m_visibleTrackingRectManager->RebuildTrackingRect();
         wxSizeEvent event(GetSize(), m_windowId);
         event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
     }
     else
     {

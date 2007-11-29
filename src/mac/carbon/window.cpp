@@ -334,7 +334,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                         inKillFocusEvent = true ;
                         wxFocusEvent event( wxEVT_KILL_FOCUS, thisWindow->GetId());
                         event.SetEventObject(thisWindow);
-                        thisWindow->GetEventHandler()->ProcessEvent(event) ;
+                        thisWindow->HandleWindowEvent(event) ;
                         inKillFocusEvent = false ;
                     }
                 }
@@ -344,7 +344,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                     // panel wants to track the window which was the last to have focus in it
                     wxLogTrace(_T("Focus"), _T("focus set(%p)"), wx_static_cast(void*, thisWindow));
                     wxChildFocusEvent eventFocus((wxWindow*)thisWindow);
-                    thisWindow->GetEventHandler()->ProcessEvent(eventFocus);
+                    thisWindow->HandleWindowEvent(eventFocus);
                     
 #if wxUSE_CARET
                     if ( thisWindow->GetCaret() )
@@ -353,7 +353,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                     
                     wxFocusEvent event(wxEVT_SET_FOCUS, thisWindow->GetId());
                     event.SetEventObject(thisWindow);
-                    thisWindow->GetEventHandler()->ProcessEvent(event) ;
+                    thisWindow->HandleWindowEvent(event) ;
                 }
             }
             break;
@@ -423,7 +423,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                             inKillFocusEvent = true ;
                             wxFocusEvent event( wxEVT_KILL_FOCUS, thisWindow->GetId());
                             event.SetEventObject(thisWindow);
-                            thisWindow->GetEventHandler()->ProcessEvent(event) ;
+                            thisWindow->HandleWindowEvent(event) ;
                             inKillFocusEvent = false ;
                         }
                     }
@@ -432,7 +432,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                         // panel wants to track the window which was the last to have focus in it
                         wxLogTrace(_T("Focus"), _T("focus set(%p)"), wx_static_cast(void*, thisWindow));
                         wxChildFocusEvent eventFocus((wxWindow*)thisWindow);
-                        thisWindow->GetEventHandler()->ProcessEvent(eventFocus);
+                        thisWindow->HandleWindowEvent(eventFocus);
 
     #if wxUSE_CARET
                         if ( thisWindow->GetCaret() )
@@ -441,7 +441,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 
                         wxFocusEvent event(wxEVT_SET_FOCUS, thisWindow->GetId());
                         event.SetEventObject(thisWindow);
-                        thisWindow->GetEventHandler()->ProcessEvent(event) ;
+                        thisWindow->HandleWindowEvent(event) ;
                     }
 #endif
                 }
@@ -1775,7 +1775,7 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
             wxPoint point(actualX, actualY);
             wxMoveEvent event(point, m_windowId);
             event.SetEventObject(this);
-            GetEventHandler()->ProcessEvent(event) ;
+            HandleWindowEvent(event) ;
         }
 
         if ( doResize )
@@ -1784,7 +1784,7 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
             wxSize size(actualWidth, actualHeight);
             wxSizeEvent event(size, m_windowId);
             event.SetEventObject(this);
-            GetEventHandler()->ProcessEvent(event);
+            HandleWindowEvent(event);
         }
     }
 }
@@ -2388,7 +2388,7 @@ void wxWindowMac::DoUpdateScrollbarVisibility()
     {
         wxSizeEvent event(GetSize(), m_windowId);
         event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
     }
 }
 
@@ -2500,7 +2500,7 @@ void wxWindowMac::MacOnScroll( wxScrollEvent &event )
         else if (event.GetEventType() == wxEVT_SCROLL_THUMBRELEASE)
             wevent.SetEventType( wxEVT_SCROLLWIN_THUMBRELEASE );
 
-        GetEventHandler()->ProcessEvent(wevent);
+        HandleWindowEvent(wevent);
     }
 }
 
@@ -2545,7 +2545,7 @@ bool wxWindowMac::MacSetupCursor( const wxPoint& pt )
     {
         wxSetCursorEvent event( pt.x , pt.y );
 
-        bool processedEvtSetCursor = GetEventHandler()->ProcessEvent(event);
+        bool processedEvtSetCursor = HandleWindowEvent(event);
         if ( processedEvtSetCursor && event.HasCursor() )
         {
             cursor = event.GetCursor() ;
@@ -2763,7 +2763,7 @@ bool wxWindowMac::MacDoRedraw( void* updatergnr , long time )
 
             wxEraseEvent eevent( GetId(), dc );
             eevent.SetEventObject( this );
-            GetEventHandler()->ProcessEvent( eevent );
+            HandleWindowEvent( eevent );
             delete dc ;
         }
 
@@ -2781,7 +2781,7 @@ bool wxWindowMac::MacDoRedraw( void* updatergnr , long time )
             wxPaintEvent event;
             event.SetTimestamp(time);
             event.SetEventObject(this);
-            GetEventHandler()->ProcessEvent(event);
+            HandleWindowEvent(event);
             handled = true ;
         }
 
@@ -2820,7 +2820,7 @@ bool wxWindowMac::MacDoRedraw( void* updatergnr , long time )
                 // paint custom borders
                 wxNcPaintEvent eventNc( child->GetId() );
                 eventNc.SetEventObject( child );
-                if ( !child->GetEventHandler()->ProcessEvent( eventNc ) )
+                if ( !child->HandleWindowEvent( eventNc ) )
                 {
                     child->MacPaintBorders(0, 0) ;
                 }
@@ -3155,7 +3155,7 @@ void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
         wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU,
                                   this->GetId(),
                                   this->ClientToScreen(event.GetPosition()));
-        if ( ! GetEventHandler()->ProcessEvent(evtCtx) )
+        if ( ! HandleWindowEvent(evtCtx) )
             event.Skip() ;
     }
     else

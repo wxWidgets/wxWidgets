@@ -333,7 +333,7 @@ void wxSpinCtrl::OnChar (
                 InitCommandEvent(vEvent);
                 vEvent.SetString(sVal);
                 vEvent.SetInt(GetValue());
-                if (GetEventHandler()->ProcessEvent(vEvent))
+                if (HandleWindowEvent(vEvent))
                     return;
                 break;
             }
@@ -351,7 +351,7 @@ void wxSpinCtrl::OnChar (
                 vEventNav.SetDirection(!rEvent.ShiftDown());
                 vEventNav.SetWindowChange(rEvent.ControlDown());
                 vEventNav.SetEventObject(this);
-                if (GetParent()->GetEventHandler()->ProcessEvent(vEventNav))
+                if (GetParent()->HandleWindowEvent(vEventNav))
                     return;
             }
             break;
@@ -373,7 +373,7 @@ void wxSpinCtrl::OnSpinChange(
 
     vEvent.SetEventObject(this);
     vEvent.SetInt(rEventSpin.GetPosition());
-    (void)GetEventHandler()->ProcessEvent(vEvent);
+    (void)HandleWindowEvent(vEvent);
     if (rEventSpin.GetSkipped())
     {
         vEvent.Skip();
@@ -406,7 +406,7 @@ bool wxSpinCtrl::ProcessTextCommand( WXWORD wCmd,
 
             vEvent.SetString(sVal);
             vEvent.SetInt(GetValue());
-            return (GetEventHandler()->ProcessEvent(vEvent));
+            return (HandleWindowEvent(vEvent));
         }
 
         case SPBN_SETFOCUS:
@@ -417,7 +417,7 @@ bool wxSpinCtrl::ProcessTextCommand( WXWORD wCmd,
                                );
 
             vEvent.SetEventObject(this);
-            return(GetEventHandler()->ProcessEvent(vEvent));
+            return(HandleWindowEvent(vEvent));
         }
         default:
             break;

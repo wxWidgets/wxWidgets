@@ -102,7 +102,7 @@ gtk_collapsiblepane_expanded_callback(GObject * WXUNUSED(object),
     {
         // fire an event
         wxCollapsiblePaneEvent ev(p, p->GetId(), p->IsCollapsed());
-        p->GetEventHandler()->ProcessEvent(ev);
+        p->HandleWindowEvent(ev);
 
         // the user asked to explicitely handle the resizing itself...
         return;
@@ -143,7 +143,7 @@ gtk_collapsiblepane_expanded_callback(GObject * WXUNUSED(object),
 
     // fire an event
     wxCollapsiblePaneEvent ev(p, p->GetId(), p->IsCollapsed());
-    p->GetEventHandler()->ProcessEvent(ev);
+    p->HandleWindowEvent(ev);
 }
 }
 

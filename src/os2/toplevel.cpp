@@ -790,7 +790,7 @@ bool wxTopLevelWindowOS2::Show( bool bShow )
         ::WinEnableWindow(m_hFrame, TRUE);
 
         vEvent.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(vEvent);
+        HandleWindowEvent(vEvent);
     }
     else
     {
@@ -965,7 +965,7 @@ bool wxTopLevelWindowOS2::ShowFullScreen( bool bShow,
 
         wxSize full( nWidth, nHeight );
         wxSizeEvent vEvent( full, GetId() );
-        GetEventHandler()->ProcessEvent(vEvent);
+        HandleWindowEvent(vEvent);
         return true;
     }
     else

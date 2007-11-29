@@ -39,7 +39,7 @@ gtk_mdi_page_change_callback( GtkNotebook *WXUNUSED(widget),
     {
         wxActivateEvent event1( wxEVT_ACTIVATE, false, child->GetId() );
         event1.SetEventObject( child);
-        child->GetEventHandler()->ProcessEvent( event1 );
+        child->HandleWindowEvent( event1 );
     }
 
     // send activate event to new child
@@ -71,7 +71,7 @@ gtk_mdi_page_change_callback( GtkNotebook *WXUNUSED(widget),
 
     wxActivateEvent event2( wxEVT_ACTIVATE, true, child->GetId() );
     event2.SetEventObject( child);
-    child->GetEventHandler()->ProcessEvent( event2 );
+    child->HandleWindowEvent( event2 );
 }
 }
 

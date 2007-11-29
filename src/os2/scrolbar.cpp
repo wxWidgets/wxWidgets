@@ -225,7 +225,7 @@ bool wxScrollBar::OS2OnScroll ( int    WXUNUSED(nOrientation),
     vEvent.SetOrientation(IsVertical() ? wxVERTICAL : wxHORIZONTAL);
     vEvent.SetPosition(nPosition);
     vEvent.SetEventObject(this);
-    return GetEventHandler()->ProcessEvent(vEvent);
+    return HandleWindowEvent(vEvent);
 } // end of wxScrollBar::OS2OnScroll
 
 void wxScrollBar::SetThumbPosition ( int nViewStart )

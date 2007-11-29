@@ -1665,7 +1665,7 @@ void wxTreeCtrl::DoExpand(const wxTreeItemId& item, int flag)
                                                            : IDX_COLLAPSE]
                                          [IDX_DONE],
                            this, item);
-        (void)GetEventHandler()->ProcessEvent(event);
+        (void)HandleWindowEvent(event);
     }
     //else: change didn't took place, so do nothing at all
 }
@@ -1727,7 +1727,7 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
                   _T("SelectItem(false) works only for multiselect") );
 
     wxTreeEvent event(wxEVT_COMMAND_TREE_SEL_CHANGING, this, item);
-    if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
+    if ( !HandleWindowEvent(event) || event.IsAllowed() )
     {
         if ( HasFlag(wxTR_MULTIPLE) )
         {
@@ -1748,7 +1748,7 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
         }
 
         event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
-        (void)GetEventHandler()->ProcessEvent(event);
+        (void)HandleWindowEvent(event);
     }
     //else: program vetoed the change
 }
@@ -2041,7 +2041,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 
         event.m_pointDrag = pt;
 
-        if ( GetEventHandler()->ProcessEvent(event) )
+        if ( HandleWindowEvent(event) )
             processed = true;
         //else: continue with generating wxEVT_CONTEXT_MENU in base class code
     }
@@ -2280,7 +2280,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                     wxTreeEvent event(wxEVT_COMMAND_TREE_END_DRAG, this, htItem);
                     event.m_pointDrag = wxPoint(x, y);
 
-                    (void)GetEventHandler()->ProcessEvent(event);
+                    (void)HandleWindowEvent(event);
 
                     // if we don't do it, the tree seems to think that 2 items
                     // are selected simultaneously which is quite weird
@@ -2632,7 +2632,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                    wxTreeEvent event2(wxEVT_COMMAND_TREE_ITEM_ACTIVATED,
                                         this, item);
-                   (void)GetEventHandler()->ProcessEvent(event2);
+                   (void)HandleWindowEvent(event2);
                 }
             }
             break;
@@ -2849,7 +2849,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     if ( event.m_item.IsOk() )
         event.SetClientObject(GetItemData(event.m_item));
 
-    bool processed = GetEventHandler()->ProcessEvent(event);
+    bool processed = HandleWindowEvent(event);
 
     // post processing
     switch ( hdr->code )

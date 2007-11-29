@@ -84,7 +84,7 @@ static pascal OSStatus wxMacDataViewCtrlEventHandler(EventHandlerCallRef handler
         DataViewEvent.SetColumn(columnIndex);
         DataViewEvent.SetDataViewColumn(DataViewCtrlPtr->GetColumn(columnIndex));
        // finally sent the equivalent wxWidget event:
-        DataViewCtrlPtr->GetEventHandler()->ProcessEvent(DataViewEvent);
+        DataViewCtrlPtr->HandleWindowEvent(DataViewEvent);
         return ::CallNextEventHandler(handler,EventReference);
       } /* if */
       else
@@ -238,7 +238,7 @@ public:
       dataViewEvent.SetEventObject(dataViewCtrlPtr);
       dataViewEvent.SetItem(item);
      // sent the equivalent wxWidget event:
-      dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
+      dataViewCtrlPtr->HandleWindowEvent(dataViewEvent);
      // done
       return true;
     } /* if */
@@ -270,7 +270,7 @@ public:
       for (size_t i=0; i<noOfEntries; ++i)
       {
         dataViewEvent.SetItem(reinterpret_cast<void*>(itemIDs[i]));
-        dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
+        dataViewCtrlPtr->HandleWindowEvent(dataViewEvent);
       } /* for */
     } /* if */
    // release allocated array space:
@@ -357,7 +357,7 @@ public:
       dataViewEvent.SetColumn(col);
       dataViewEvent.SetItem(item);
      // send the equivalent wxWidget event:
-      dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
+      dataViewCtrlPtr->HandleWindowEvent(dataViewEvent);
      // done
       return true;
     } /* if */

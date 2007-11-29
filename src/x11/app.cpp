@@ -388,14 +388,14 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
             // wxLogDebug( "OnKey from %s", win->GetName().c_str() );
 
             // We didn't process wxEVT_KEY_DOWN, so send wxEVT_CHAR
-            if (win->GetEventHandler()->ProcessEvent( keyEvent ))
+            if (win->HandleWindowEvent( keyEvent ))
                 return true;
 
             keyEvent.SetEventType(wxEVT_CHAR);
             // Do the translation again, retaining the ASCII
             // code.
             if (wxTranslateKeyEvent(keyEvent, win, window, event, true) &&
-                win->GetEventHandler()->ProcessEvent( keyEvent ))
+                win->HandleWindowEvent( keyEvent ))
                 return true;
 
             if ( (keyEvent.m_keyCode == WXK_TAB) &&
@@ -408,7 +408,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                 /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
                 new_event.SetWindowChange( keyEvent.ControlDown() );
                 new_event.SetCurrentFocus( win );
-                return win->GetParent()->GetEventHandler()->ProcessEvent( new_event );
+                return win->GetParent()->HandleWindowEvent( new_event );
             }
 
             return false;
@@ -421,7 +421,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
             wxKeyEvent keyEvent(wxEVT_KEY_UP);
             wxTranslateKeyEvent(keyEvent, win, window, event);
 
-            return win->GetEventHandler()->ProcessEvent( keyEvent );
+            return win->HandleWindowEvent( keyEvent );
         }
         case ConfigureNotify:
         {
@@ -445,7 +445,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                     wxSizeEvent sizeEvent( wxSize(XConfigureEventGetWidth(event), XConfigureEventGetHeight(event)), win->GetId() );
                     sizeEvent.SetEventObject( win );
 
-                    return win->GetEventHandler()->ProcessEvent( sizeEvent );
+                    return win->HandleWindowEvent( sizeEvent );
                 }
             }
             return false;
@@ -505,7 +505,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
             wxSizeEvent sizeEvent(sz, win->GetId());
             sizeEvent.SetEventObject(win);
 
-            return win->GetEventHandler()->ProcessEvent( sizeEvent );
+            return win->HandleWindowEvent( sizeEvent );
         }
 #endif
 #endif
@@ -570,7 +570,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 #endif
             wxMouseEvent wxevent;
             wxTranslateMouseEvent(wxevent, win, window, event);
-            return win->GetEventHandler()->ProcessEvent( wxevent );
+            return win->HandleWindowEvent( wxevent );
         }
         case FocusIn:
 #if !wxUSE_NANOX
@@ -596,7 +596,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                     focusEvent.SetWindow( g_prevFocus );
                     g_prevFocus = NULL;
 
-                    return win->GetEventHandler()->ProcessEvent(focusEvent);
+                    return win->HandleWindowEvent(focusEvent);
                 }
             }
             return false;
@@ -613,7 +613,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                 focusEvent.SetEventObject(win);
                 focusEvent.SetWindow( g_nextFocus );
                 g_nextFocus = NULL;
-                return win->GetEventHandler()->ProcessEvent(focusEvent);
+                return win->HandleWindowEvent(focusEvent);
             }
             return false;
 

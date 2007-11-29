@@ -141,7 +141,7 @@ void wxCheckListBox::DoToggleItem( int n, int x )
         event.SetEventObject(this);
         event.SetString(GetString(n));
 
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
     }
 }
 

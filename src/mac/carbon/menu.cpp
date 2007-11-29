@@ -374,13 +374,13 @@ bool wxMenu::ProcessCommand(wxCommandEvent & event)
 
     // Try the menu's event handler
     if ( /* !processed && */ GetEventHandler())
-        processed = GetEventHandler()->ProcessEvent(event);
+        processed = HandleWindowEvent(event);
 
     // Try the window the menu was popped up from
     // (and up through the hierarchy)
     wxWindow *win = GetInvokingWindow();
     if ( !processed && win )
-        processed = win->GetEventHandler()->ProcessEvent(event);
+        processed = win->HandleWindowEvent(event);
 
     return processed;
 }
@@ -567,7 +567,7 @@ wxInt32 wxMenu::MacHandleCommandProcess( wxMenuItem* item, int id, wxWindow* tar
             event.SetEventObject(targetWindow);
             event.SetInt(item->IsCheckable() ? item->IsChecked() : -1);
 
-            if ( targetWindow->GetEventHandler()->ProcessEvent(event) )
+            if ( targetWindow->HandleWindowEvent(event) )
                 result = noErr ;
         }
     }
@@ -601,7 +601,7 @@ wxInt32 wxMenu::MacHandleCommandUpdateStatus(wxMenuItem* WXUNUSED(item),
             wxWindow *win = menu->GetInvokingWindow();
             if ( win )
             {
-                processed = win->GetEventHandler()->ProcessEvent(event);
+                processed = win->HandleWindowEvent(event);
                 break;
             }
 
@@ -611,7 +611,7 @@ wxInt32 wxMenu::MacHandleCommandUpdateStatus(wxMenuItem* WXUNUSED(item),
 
     if ( !processed && targetWindow != NULL)
     {
-        processed = targetWindow->GetEventHandler()->ProcessEvent(event);
+        processed = targetWindow->HandleWindowEvent(event);
     }
 
     if ( processed )

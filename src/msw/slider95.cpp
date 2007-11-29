@@ -364,13 +364,13 @@ bool wxSlider::MSWOnScroll(int WXUNUSED(orientation),
     wxScrollEvent event(scrollEvent, m_windowId);
     event.SetPosition(newPos);
     event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent(event);
+    HandleWindowEvent(event);
 
     wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, GetId() );
     cevent.SetInt( newPos );
     cevent.SetEventObject( this );
 
-    return GetEventHandler()->ProcessEvent( cevent );
+    return HandleWindowEvent( cevent );
 }
 
 void wxSlider::Command (wxCommandEvent & event)

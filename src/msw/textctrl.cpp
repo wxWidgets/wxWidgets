@@ -1784,7 +1784,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
                 InitCommandEvent(event);
                 event.SetString(GetValue());
-                if ( GetEventHandler()->ProcessEvent(event) )
+                if ( HandleWindowEvent(event) )
                 if ( !HasFlag(wxTE_MULTILINE) )
                     return;
                 //else: multiline controls need Enter for themselves
@@ -1935,7 +1935,7 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
                                                          : wxEVT_SET_FOCUS,
                                    m_windowId);
                 event.SetEventObject(this);
-                GetEventHandler()->ProcessEvent(event);
+                HandleWindowEvent(event);
             }
             break;
 

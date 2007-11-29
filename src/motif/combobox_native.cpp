@@ -306,7 +306,7 @@ void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
                 event.SetClientData( item->GetClientData(idx) );
             event.SetExtraLong(true);
             event.SetEventObject(item);
-            item->GetEventHandler()->ProcessEvent(event);
+            item->HandleWindowEvent(event);
             break;
         }
     case XmCR_VALUE_CHANGED:
@@ -316,7 +316,7 @@ void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
             event.SetString( item->GetValue() );
             event.SetExtraLong(true);
             event.SetEventObject(item);
-            item->GetEventHandler()->ProcessEvent(event);
+            item->HandleWindowEvent(event);
             break;
         }
     default:

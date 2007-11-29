@@ -120,7 +120,7 @@ void wxFileButton::OnDialogOK(wxCommandEvent& ev)
 
         // ...and fire an event
         wxFileDirPickerEvent event(wxEVT_COMMAND_FILEPICKER_CHANGED, this, GetId(), m_path);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
     }
 }
 
@@ -172,7 +172,7 @@ static void gtk_dirbutton_currentfolderchanged_callback(GtkFileChooserButton *wi
 
     // ...and fire an event
     wxFileDirPickerEvent event(wxEVT_COMMAND_DIRPICKER_CHANGED, p, p->GetId(), p->GetPath());
-    p->GetEventHandler()->ProcessEvent(event);
+    p->HandleWindowEvent(event);
 }
 }
 

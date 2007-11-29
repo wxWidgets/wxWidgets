@@ -235,12 +235,12 @@ static ibool MGLAPI wxWindowMouseHandler(window_t *wnd, event_t *e)
 
                         event2.SetEventObject(gs_windowUnderMouse);
                         event2.SetEventType(wxEVT_LEAVE_WINDOW);
-                        gs_windowUnderMouse->GetEventHandler()->ProcessEvent(event2);
+                        gs_windowUnderMouse->HandleWindowEvent(event2);
                     }
 
                     wxMouseEvent event3(event);
                     event3.SetEventType(wxEVT_ENTER_WINDOW);
-                    win->GetEventHandler()->ProcessEvent(event3);
+                    win->HandleWindowEvent(event3);
 
                     gs_windowUnderMouse = win;
                 }
@@ -257,7 +257,7 @@ static ibool MGLAPI wxWindowMouseHandler(window_t *wnd, event_t *e)
                     wxMouseEvent evt(inside ?
                                      wxEVT_ENTER_WINDOW : wxEVT_LEAVE_WINDOW);
                     evt.SetEventObject(win);
-                    win->GetEventHandler()->ProcessEvent(evt);
+                    win->HandleWindowEvent(evt);
                     gs_windowUnderMouse = inside ? win : NULL;
                 }
             }
@@ -276,7 +276,7 @@ static ibool MGLAPI wxWindowMouseHandler(window_t *wnd, event_t *e)
     else
     {
         event.SetEventType(type);
-        return win->GetEventHandler()->ProcessEvent(event);
+        return win->HandleWindowEvent(event);
     }
 }
 
@@ -471,7 +471,7 @@ static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
     if ( e->what == EVT_KEYUP )
     {
         event.SetEventType(wxEVT_KEY_UP);
-        return win->GetEventHandler()->ProcessEvent(event);
+        return win->HandleWindowEvent(event);
     }
     else
     {
@@ -481,7 +481,7 @@ static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
         event.SetEventType(wxEVT_KEY_DOWN);
         event2 = event;
 
-        ret = win->GetEventHandler()->ProcessEvent(event);
+        ret = win->HandleWindowEvent(event);
 
         // wxMSW doesn't send char events with Alt pressed
         // Only send wxEVT_CHAR event if not processed yet. Thus, ALT-x
@@ -490,7 +490,7 @@ static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
         if ( !ret && event2.m_keyCode != 0 )
         {
             event2.SetEventType(wxEVT_CHAR);
-            ret = win->GetEventHandler()->ProcessEvent(event2);
+            ret = win->HandleWindowEvent(event2);
         }
 
         // Synthetize navigation key event, but do it only if the TAB key
@@ -505,7 +505,7 @@ static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
             // Ctrl-TAB changes the (parent) window, i.e. switch notebook page:
             navEvent.SetWindowChange(event.m_controlDown);
             navEvent.SetCurrentFocus(wxStaticCast(win, wxWindow));
-            ret = win->GetParent()->GetEventHandler()->ProcessEvent(navEvent);
+            ret = win->HandleWindowEvent(navEvent);
         }
 
         // Finally, process special meaning keys that are usually
@@ -695,24 +695,24 @@ void wxWindowMGL::SetFocus()
         {
             wxActivateEvent event(wxEVT_ACTIVATE, false, gs_activeFrame->GetId());
             event.SetEventObject(gs_activeFrame);
-            gs_activeFrame->GetEventHandler()->ProcessEvent(event);
+            gs_activeFrame->HandleWindowEvent(event);
         }
 
         gs_activeFrame = active;
         wxActivateEvent event(wxEVT_ACTIVATE, true, gs_activeFrame->GetId());
         event.SetEventObject(gs_activeFrame);
-        gs_activeFrame->GetEventHandler()->ProcessEvent(event);
+        gs_activeFrame->HandleWindowEvent(event);
     }
 
     // notify the parent keeping track of focus for the kbd navigation
     // purposes that we got it
     wxChildFocusEvent eventFocus((wxWindow*)this);
-    GetEventHandler()->ProcessEvent(eventFocus);
+    HandleWindowEvent(eventFocus);
 
     wxFocusEvent event(wxEVT_SET_FOCUS, GetId());
     event.SetEventObject(this);
     event.SetWindow((wxWindow*)oldFocusedWindow);
-    GetEventHandler()->ProcessEvent(event);
+    HandleWindowEvent(event);
 
 #if wxUSE_CARET
     // caret needs to be informed about focus change
@@ -741,7 +741,7 @@ void wxWindowMGL::KillFocus()
     wxFocusEvent event(wxEVT_KILL_FOCUS, GetId());
     event.SetEventObject(this);
     event.SetWindow(gs_toBeFocusedWindow);
-    GetEventHandler()->ProcessEvent(event);
+    HandleWindowEvent(event);
 }
 
 // ----------------------------------------------------------------------------
@@ -1056,7 +1056,7 @@ void wxWindowMGL::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         wxSize newSize(width, height);
         wxSizeEvent event(newSize, GetId());
         event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
     }
 }
 
@@ -1175,17 +1175,17 @@ void wxWindowMGL::HandlePaint(MGLDevCtx *dc)
         wxWindowDC dc((wxWindow*)this);
         wxEraseEvent eventEr(m_windowId, &dc);
         eventEr.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(eventEr);
+        HandleWindowEvent(eventEr);
     }
     m_eraseBackground = -1;
 
     wxNcPaintEvent eventNc(GetId());
     eventNc.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(eventNc);
+    HandleWindowEvent(eventNc);
 
     wxPaintEvent eventPt(GetId());
     eventPt.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(eventPt);
+    HandleWindowEvent(eventPt);
 
 #if wxUSE_CARET
     if ( caret )

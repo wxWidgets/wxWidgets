@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/event.h"
+#include "wx/evtloop.h"
 
 #ifndef WX_PRECOMP
     #include "wx/list.h"
@@ -1312,6 +1313,42 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     // Finally propagate the event upwards the window chain and/or to the
     // application object as necessary
     return TryParent(event);
+}
+
+bool wxEvtHandler::SafelyProcessEvent(wxEvent& event)
+{
+#if wxUSE_EXCEPTIONS
+    try
+    {
+#endif
+        return ProcessEvent(event);
+#if wxUSE_EXCEPTIONS
+    }
+    catch ( ... )
+    {
+        wxEventLoopBase *loop = wxEventLoopBase::GetActive();
+        try
+        {
+            if ( !wxTheApp || !wxTheApp->OnExceptionInMainLoop() )
+            {
+                if ( loop )
+                    loop->Exit();
+            }
+            //else: continue running current event loop
+
+            return false;
+        }
+        catch ( ... )
+        {
+            // OnExceptionInMainLoop() threw, possibly rethrowing the same
+            // exception again: very good, but we still need Exit() to
+            // be called
+            if ( loop )
+                loop->Exit();
+            throw;
+        }
+    }
+#endif // wxUSE_EXCEPTIONS
 }
 
 

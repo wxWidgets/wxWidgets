@@ -50,7 +50,7 @@ static void gtk_bmpbutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxBitma
 
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());
     event.SetEventObject(button);
-    button->GetEventHandler()->ProcessEvent(event);
+    button->HandleWindowEvent(event);
 }
 }
 

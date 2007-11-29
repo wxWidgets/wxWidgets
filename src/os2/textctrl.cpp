@@ -1049,7 +1049,7 @@ void wxTextCtrl::OnChar(
                 wxCommandEvent      vEvent(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
 
                 vEvent.SetEventObject(this);
-                if ( GetEventHandler()->ProcessEvent(vEvent))
+                if ( HandleWindowEvent(vEvent))
                     return;
             }
             //else: multiline controls need Enter for themselves
@@ -1071,7 +1071,7 @@ void wxTextCtrl::OnChar(
                 vEventNav.SetWindowChange(false);
                 vEventNav.SetEventObject(this);
 
-                if ( GetEventHandler()->ProcessEvent(vEventNav) )
+                if ( HandleWindowEvent(vEventNav) )
                     return;
             }
             break;
@@ -1095,7 +1095,7 @@ bool wxTextCtrl::OS2Command(
                                           );
 
                 vEvent.SetEventObject(this);
-                GetEventHandler()->ProcessEvent(vEvent);
+                HandleWindowEvent(vEvent);
             }
             break;
 

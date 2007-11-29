@@ -60,12 +60,12 @@ static void DoCommonMenuCallbackCode(wxMenu *menu, wxMenuEvent& event)
     event.SetEventObject( menu );
 
     wxEvtHandler* handler = menu->GetEventHandler();
-    if (handler && handler->ProcessEvent(event))
+    if (handler && handler->SafelyProcessEvent(event))
         return;
 
     wxWindow *win = menu->GetInvokingWindow();
     if (win)
-        win->GetEventHandler()->ProcessEvent( event );
+        win->HandleWindowEvent( event );
 }
 
 extern "C" {
@@ -573,7 +573,7 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
         if (item->IsCheckable())
             commandEvent.SetInt(item->IsChecked());
 
-        frame->GetEventHandler()->ProcessEvent(commandEvent);
+        frame->HandleWindowEvent(commandEvent);
     }
     else
     {
@@ -601,11 +601,11 @@ static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
     event.SetEventObject( menu );
 
     wxEvtHandler* handler = menu->GetEventHandler();
-    if (handler && handler->ProcessEvent(event))
+    if (handler && handler->SafelyProcessEvent(event))
         return;
 
     wxWindow *win = menu->GetInvokingWindow();
-    if (win) win->GetEventHandler()->ProcessEvent( event );
+    if (win) win->HandleWindowEvent( event );
 }
 }
 
@@ -627,12 +627,12 @@ static void gtk_menu_nolight_callback( GtkWidget *widget, wxMenu *menu )
     event.SetEventObject( menu );
 
     wxEvtHandler* handler = menu->GetEventHandler();
-    if (handler && handler->ProcessEvent(event))
+    if (handler && handler->SafelyProcessEvent(event))
         return;
 
     wxWindow *win = menu->GetInvokingWindow();
     if (win)
-        win->GetEventHandler()->ProcessEvent( event );
+        win->HandleWindowEvent( event );
 }
 }
 

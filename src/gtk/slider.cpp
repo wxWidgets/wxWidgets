@@ -46,7 +46,7 @@ ProcessScrollEvent(wxSlider *win, wxEventType evtType)
     {
         wxScrollEvent event( evtType, win->GetId(), value, orient );
         event.SetEventObject( win );
-        win->GetEventHandler()->ProcessEvent( event );
+        win->HandleWindowEvent( event );
     }
 
     // but, in any case, except if we're dragging the slider (and so the change
@@ -55,14 +55,14 @@ ProcessScrollEvent(wxSlider *win, wxEventType evtType)
     {
         wxScrollEvent event(wxEVT_SCROLL_CHANGED, win->GetId(), value, orient);
         event.SetEventObject( win );
-        win->GetEventHandler()->ProcessEvent( event );
+        win->HandleWindowEvent( event );
     }
 
     // and also generate a command event for compatibility
     wxCommandEvent event( wxEVT_COMMAND_SLIDER_UPDATED, win->GetId() );
     event.SetEventObject( win );
     event.SetInt( value );
-    win->GetEventHandler()->ProcessEvent( event );
+    win->HandleWindowEvent( event );
 }
 
 static inline wxEventType GtkScrollTypeToWx(int scrollType)

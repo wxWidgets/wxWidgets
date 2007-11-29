@@ -163,7 +163,7 @@ static gboolean gtk_frame_focus_in_callback( GtkWidget *widget,
     wxLogTrace(wxT("activate"), wxT("Activating frame %p (from focus_in)"), g_activeFrame);
     wxActivateEvent event(wxEVT_ACTIVATE, true, g_activeFrame->GetId());
     event.SetEventObject(g_activeFrame);
-    g_activeFrame->GetEventHandler()->ProcessEvent(event);
+    g_activeFrame->HandleWindowEvent(event);
 
     return FALSE;
 }
@@ -193,7 +193,7 @@ gboolean gtk_frame_focus_out_callback(GtkWidget * WXUNUSED(widget),
         wxLogTrace(wxT("activate"), wxT("Activating frame %p (from focus_in)"), g_activeFrame);
         wxActivateEvent event(wxEVT_ACTIVATE, false, g_activeFrame->GetId());
         event.SetEventObject(g_activeFrame);
-        g_activeFrame->GetEventHandler()->ProcessEvent(event);
+        g_activeFrame->HandleWindowEvent(event);
 
         g_activeFrame = NULL;
     }
@@ -246,7 +246,7 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxTopLevelWindowGTK* win)
         {
             wxSizeEvent event(size, win->GetId());
             event.SetEventObject(win);
-            win->GetEventHandler()->ProcessEvent(event);
+            win->HandleWindowEvent(event);
         }
         // else the window is currently unmapped, don't generate size events
     }
@@ -309,7 +309,7 @@ gtk_frame_configure_callback( GtkWidget* widget,
     win->m_y = point.y;
     wxMoveEvent mevent(point, win->GetId());
     mevent.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( mevent );
+    win->HandleWindowEvent( mevent );
 
     return FALSE;
 }
@@ -823,7 +823,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
         // top down), before the initial size_allocate signals occur.
         wxSizeEvent event(GetSize(), GetId());
         event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
     }
 
     bool change = wxTopLevelWindowBase::Show(show);
@@ -908,7 +908,7 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
         GetClientSize(&m_oldClientWidth, &m_oldClientHeight);
         wxSizeEvent event(GetSize(), GetId());
         event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
     }
 }
 

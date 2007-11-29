@@ -43,7 +43,7 @@ static void gtk_togglebutton_clicked_callback(GtkWidget *WXUNUSED(widget), wxTog
     wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, cb->GetId());
     event.SetInt(cb->GetValue());
     event.SetEventObject(cb);
-    cb->GetEventHandler()->ProcessEvent(event);
+    cb->HandleWindowEvent(event);
 }
 }
 

@@ -447,7 +447,7 @@ void wxMacListBoxItem::Notification(wxMacDataItemBrowserControl *owner ,
 
         // direct notification is not always having the listbox GetSelection()
         // having in synch with event, so use wxPostEvent instead
-        // list->GetEventHandler()->ProcessEvent(event);
+        // list->HandleWindowEvent(event);
 
         wxPostEvent( list->GetEventHandler(), event );
     }

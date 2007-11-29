@@ -373,7 +373,7 @@ void wxStatusBar95::DoMoveWindow(int x, int y, int width, int height)
     {
         wxSizeEvent event(GetClientSize(), m_windowId);
         event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
     }
 }
 

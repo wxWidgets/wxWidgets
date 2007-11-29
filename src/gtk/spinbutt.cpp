@@ -48,7 +48,7 @@ gtk_value_changed(GtkSpinButton* spinbutton, wxSpinButton* win)
     event.SetPosition(pos);
     event.SetEventObject(win);
 
-    if ((win->GetEventHandler()->ProcessEvent( event )) &&
+    if ((win->HandleWindowEvent( event )) &&
         !event.IsAllowed() )
     {
         /* program has vetoed */
@@ -64,7 +64,7 @@ gtk_value_changed(GtkSpinButton* spinbutton, wxSpinButton* win)
     wxSpinEvent event2(wxEVT_SCROLL_THUMBTRACK, win->GetId());
     event2.SetPosition(pos);
     event2.SetEventObject(win);
-    win->GetEventHandler()->ProcessEvent(event2);
+    win->HandleWindowEvent(event2);
 }
 }
 

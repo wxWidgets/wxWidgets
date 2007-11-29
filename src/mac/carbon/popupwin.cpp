@@ -153,7 +153,7 @@ bool wxPopupWindow::Show(bool show)
         // because apps expect a size event to occur at this moment
         wxSizeEvent event(GetSize() , m_windowId);
         event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
     }
     else
         {

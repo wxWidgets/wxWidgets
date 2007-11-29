@@ -68,7 +68,7 @@ gtk_glwindow_map_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
 {
     wxPaintEvent event( win->GetId() );
     event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( event );
+    win->HandleWindowEvent( event );
 
     win->GetUpdateRegion().Clear();
 
@@ -126,7 +126,7 @@ gtk_glcanvas_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, w
 
     wxSizeEvent event( wxSize(win->m_width,win->m_height), win->GetId() );
     event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( event );
+    win->HandleWindowEvent( event );
 }
 }
 
@@ -271,7 +271,7 @@ void wxGLCanvas::OnInternalIdle()
     {
         wxPaintEvent event( GetId() );
         event.SetEventObject( this );
-        GetEventHandler()->ProcessEvent( event );
+        HandleWindowEvent( event );
 
         GetUpdateRegion().Clear();
     }

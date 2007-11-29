@@ -171,7 +171,7 @@ bool wxTopLevelWindowPalm::Show(bool show)
 
     wxPaintEvent event(m_windowId);
     event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
+    HandleWindowEvent(event);
 
     return true;
 }
@@ -330,7 +330,7 @@ bool wxTopLevelWindowPalm::HandleSize(WXEVENTPTR event)
                    palmEvent->data.winResized.newBounds.extent.y);
     wxSizeEvent eventWx(newSize,GetId());
     eventWx.SetEventObject(this);
-    return GetEventHandler()->ProcessEvent(eventWx);
+    return HandleWindowEvent(eventWx);
 }
 
 void wxTopLevelWindowPalm::OnActivate(wxActivateEvent& event)

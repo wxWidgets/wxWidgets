@@ -167,7 +167,7 @@ bool wxMenu::ProcessCommand(wxCommandEvent & event)
     // Try the menu's event handler
     if ( !processed && GetEventHandler())
     {
-        processed = GetEventHandler()->ProcessEvent(event);
+        processed = HandleWindowEvent(event);
     }
     // Try the window the menu was popped up from (and up
     // through the hierarchy)

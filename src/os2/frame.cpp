@@ -433,7 +433,7 @@ void wxFrame::OnSysColourChanged(
         wxSysColourChangedEvent     vEvent2;
 
         vEvent2.SetEventObject(m_frameStatusBar);
-        m_frameStatusBar->GetEventHandler()->ProcessEvent(vEvent2);
+        m_frameStatusBar->HandleWindowEvent(vEvent2);
     }
 #endif //wxUSE_STATUSBAR
 
@@ -570,7 +570,7 @@ bool wxFrame::ShowFullScreen( bool bShow, long lStyle )
         wxSize sz( nWidth, nHeight );
         wxSizeEvent vEvent( sz, GetId() );
 
-        GetEventHandler()->ProcessEvent(vEvent);
+        HandleWindowEvent(vEvent);
         return true;
     }
     else
@@ -1051,7 +1051,7 @@ bool wxFrame::HandleMenuSelect( WXWORD nItem,
             wxMenuEvent                     vEvent(wxEVT_MENU_HIGHLIGHT, nItem);
 
             vEvent.SetEventObject(this);
-            GetEventHandler()->ProcessEvent(vEvent); // return value would be ignored by PM
+            HandleWindowEvent(vEvent); // return value would be ignored by PM
         }
         else
         {

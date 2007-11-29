@@ -184,5 +184,5 @@ static void wxScrollBarCallback(Widget widget, XtPointer clientData,
     wxScrollEvent event(eventType, scrollBar->GetId(),
                         cbs->value, orientation);
     event.SetEventObject(scrollBar);
-    scrollBar->GetEventHandler()->ProcessEvent(event);
+    scrollBar->HandleWindowEvent(event);
 }

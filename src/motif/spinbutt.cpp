@@ -352,7 +352,7 @@ void wxSpinButton::Increment( int delta )
     event.SetPosition( npos );
     event.SetEventObject( this );
 
-    GetEventHandler()->ProcessEvent( event );
+    HandleWindowEvent( event );
 
     if( event.IsAllowed() )
     {
@@ -360,7 +360,7 @@ void wxSpinButton::Increment( int delta )
         event.SetEventType( wxEVT_SCROLL_THUMBTRACK );
         event.SetPosition( m_pos );
 
-        GetEventHandler()->ProcessEvent( event );
+        HandleWindowEvent( event );
     }
 }
 

@@ -165,7 +165,7 @@ void wxScrollBar::MacHandleControlClick( WXWidget WXUNUSED(control), wxInt16 con
         // this is hardcoded
         window->MacOnScroll( event );
     else
-        GetEventHandler()->ProcessEvent( event );
+        HandleWindowEvent( event );
 }
 
 wxInt32 wxScrollBar::MacControlHit( WXEVENTHANDLERREF WXUNUSED(handler), WXEVENTREF mevent )
@@ -221,7 +221,7 @@ wxInt32 wxScrollBar::MacControlHit( WXEVENTHANDLERREF WXUNUSED(handler), WXEVENT
         // this is hardcoded
         window->MacOnScroll( event );
     else
-        GetEventHandler()->ProcessEvent( event );
+        HandleWindowEvent( event );
 
     return noErr;
 }

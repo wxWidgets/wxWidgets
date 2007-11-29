@@ -1211,7 +1211,7 @@ void wxWindowX11::SendEraseEvents()
     wxEraseEvent erase_event( GetId(), &dc );
     erase_event.SetEventObject( this );
 
-    if (!GetEventHandler()->ProcessEvent(erase_event) )
+    if (!HandleWindowEvent(erase_event) )
     {
         Display *xdisplay = wxGlobalDisplay();
         Window xwindow = (Window) GetClientAreaWindow();
@@ -1237,7 +1237,7 @@ void wxWindowX11::SendPaintEvents()
 
     wxPaintEvent paint_event( GetId() );
     paint_event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( paint_event );
+    HandleWindowEvent( paint_event );
 
     m_updateRegion.Clear();
 
@@ -1279,7 +1279,7 @@ void wxWindowX11::SendNcPaintEvents()
 
     wxNcPaintEvent nc_paint_event( GetId() );
     nc_paint_event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( nc_paint_event );
+    HandleWindowEvent( nc_paint_event );
 
     m_updateNcArea = false;
 }
@@ -1300,7 +1300,7 @@ void wxWindowX11::OnSysColourChanged(wxSysColourChangedEvent& event)
         {
             wxSysColourChangedEvent event2;
             event.SetEventObject(win);
-            win->GetEventHandler()->ProcessEvent(event2);
+            win->HandleWindowEvent(event2);
         }
 
         node = node->GetNext();

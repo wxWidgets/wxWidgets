@@ -229,14 +229,14 @@ void wxComboBox::doWxEvent(int nEvent)
     event2.SetInt(GetSelection());
     event2.SetEventObject(this);
     event2.SetString(GetStringSelection());
-    GetEventHandler()->ProcessEvent(event2);
+    HandleWindowEvent(event2);
 
     // For consistency with MSW and GTK, also send a text updated event
     // After all, the text is updated when a selection is made
     wxCommandEvent TextEvent( wxEVT_COMMAND_TEXT_UPDATED, GetId() );
     TextEvent.SetString( GetStringSelection() );
     TextEvent.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( TextEvent );
+    HandleWindowEvent( TextEvent );
 }
 
 

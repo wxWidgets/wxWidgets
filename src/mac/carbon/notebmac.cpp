@@ -509,7 +509,7 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
                 event.SetEventObject( this );
 
                 wxWindow *page = m_pages[m_nSelection];
-                if ( !page->GetEventHandler()->ProcessEvent( event ) )
+                if ( !page->HandleWindowEvent( event ) )
                 {
                     page->SetFocus();
                 }
@@ -527,7 +527,7 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
             if ( parent )
             {
                 event.SetCurrentFocus( this );
-                parent->GetEventHandler()->ProcessEvent( event );
+                parent->HandleWindowEvent( event );
             }
         }
     }
@@ -594,7 +594,7 @@ wxInt32 wxNotebook::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTR
             wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId,
             newSel , m_nSelection );
         changing.SetEventObject( this );
-        GetEventHandler()->ProcessEvent( changing );
+        HandleWindowEvent( changing );
 
         if ( changing.IsAllowed() )
         {
@@ -602,7 +602,7 @@ wxInt32 wxNotebook::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTR
                 wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_windowId,
                 newSel, m_nSelection );
             event.SetEventObject( this );
-            GetEventHandler()->ProcessEvent( event );
+            HandleWindowEvent( event );
         }
         else
         {

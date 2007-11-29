@@ -1539,6 +1539,13 @@ Returns the value previously passed to
 \helpref{wxWindow::SetWindowVariant}{wxwindowsetwindowvariant}.
 
 
+\membersection{wxWindow::HandleWindowEvent}\label{wxwindowhandlewindowevent}
+
+\func{bool}{HandleWindowEvent}{\param{wxEvent\& }{event}}
+
+Shorthand for \texttt{\helpref{GetEventHandler}{wxwindowgeteventhandler}()->\helpref{SafelyProcessEvent}{wxevthandlersafelyprocessevent}(event)}.
+
+
 \membersection{wxWindow::HasCapture}\label{wxwindowhascapture}
 
 \constfunc{virtual bool}{HasCapture}{\void}

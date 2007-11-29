@@ -2146,7 +2146,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                             // focus event from here and the selection one
                             // below
                             event.SetEventType(eventType);
-                            (void)GetEventHandler()->ProcessEvent(event);
+                            (void)HandleWindowEvent(event);
                         }
                         else // no focus event to send
                         {
@@ -2418,7 +2418,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
     event.SetEventType(eventType);
 
-    bool processed = GetEventHandler()->ProcessEvent(event);
+    bool processed = HandleWindowEvent(event);
 
     // post processing
     // ---------------

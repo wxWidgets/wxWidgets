@@ -308,7 +308,7 @@ bool wxSlider::SendUpdatedEvent()
     wxScrollEvent eventWxTrack(wxEVT_SCROLL_THUMBRELEASE, GetId());
     eventWxTrack.SetPosition(m_oldPos);
     eventWxTrack.SetEventObject(this);
-    bool handled = GetEventHandler()->ProcessEvent(eventWxTrack);
+    bool handled = HandleWindowEvent(eventWxTrack);
 
     // then slider event if position changed
     if( m_oldValue != m_oldPos )
@@ -339,7 +339,7 @@ bool wxSlider::SendScrollEvent(WXEVENTPTR event)
     wxScrollEvent eventWx(wxEVT_SCROLL_THUMBTRACK, GetId());
     eventWx.SetPosition(newPos);
     eventWx.SetEventObject(this);
-    return GetEventHandler()->ProcessEvent(eventWx);
+    return HandleWindowEvent(eventWx);
 }
 
 void wxSlider::Command (wxCommandEvent & event)

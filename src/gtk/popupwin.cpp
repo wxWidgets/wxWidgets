@@ -53,7 +53,7 @@ static gint gtk_popup_button_press (GtkWidget *widget, GdkEvent *gdk_event, wxPo
     wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
     event.SetEventObject( win );
 
-    (void)win->GetEventHandler()->ProcessEvent( event );
+    (void)win->HandleWindowEvent( event );
 
     return TRUE;
 }
@@ -227,7 +227,7 @@ void wxPopupWindow::DoSetSize( int x, int y, int width, int height, int sizeFlag
         gtk_widget_set_size_request( m_widget, m_width, m_height );
         wxSizeEvent event(GetSize(), GetId());
         event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
     }
 }
 
@@ -237,7 +237,7 @@ bool wxPopupWindow::Show( bool show )
     {
         wxSizeEvent event(GetSize(), GetId());
         event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
     }
 
     bool ret = wxWindow::Show( show );

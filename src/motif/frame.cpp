@@ -182,7 +182,7 @@ bool wxFrame::Create(wxWindow *parent,
     wxSizeEvent sizeEvent(newSize, GetId());
     sizeEvent.SetEventObject(this);
 
-    GetEventHandler()->ProcessEvent(sizeEvent);
+    HandleWindowEvent(sizeEvent);
 
     return true;
 }
@@ -384,7 +384,7 @@ void wxFrame::DoSetClientSize(int width, int height)
     wxSizeEvent sizeEvent(newSize, GetId());
     sizeEvent.SetEventObject(this);
 
-    GetEventHandler()->ProcessEvent(sizeEvent);
+    HandleWindowEvent(sizeEvent);
 
 }
 
@@ -536,7 +536,7 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
     {
         wxSysColourChangedEvent event2;
         event2.SetEventObject( m_frameStatusBar );
-        m_frameStatusBar->GetEventHandler()->ProcessEvent(event2);
+        m_frameStatusBar->HandleWindowEvent(event2);
     }
 
     // Propagate the event to the non-top-level children

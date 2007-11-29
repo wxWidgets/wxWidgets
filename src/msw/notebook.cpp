@@ -1143,7 +1143,7 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
                 event.SetEventObject(this);
 
                 wxWindow *page = m_pages[m_nSelection];
-                if ( !page->GetEventHandler()->ProcessEvent(event) )
+                if ( !page->HandleWindowEvent(event) )
                 {
                     page->SetFocus();
                 }
@@ -1167,7 +1167,7 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
             else if ( parent )
             {
                 event.SetCurrentFocus(this);
-                parent->GetEventHandler()->ProcessEvent(event);
+                parent->HandleWindowEvent(event);
             }
         }
     }
@@ -1441,7 +1441,7 @@ bool wxNotebook::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
   event.SetEventObject(this);
   event.SetInt(idCtrl);
 
-  bool processed = GetEventHandler()->ProcessEvent(event);
+  bool processed = HandleWindowEvent(event);
   *result = !event.IsAllowed();
   return processed;
 }

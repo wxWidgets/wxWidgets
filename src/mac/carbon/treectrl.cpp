@@ -308,13 +308,13 @@ bool wxTreeCtrl::ExpandItem(long item, int action)
             bIsExpanded
             ? wxEVT_COMMAND_TREE_ITEM_EXPANDING
             : wxEVT_COMMAND_TREE_ITEM_COLLAPSING);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
 
         event.SetEventType(
             bIsExpanded
             ? wxEVT_COMMAND_TREE_ITEM_EXPANDED
             : wxEVT_COMMAND_TREE_ITEM_COLLAPSED);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
     }
 
     return bOk;

@@ -55,7 +55,7 @@ static void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), wxButton *
 
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());
     event.SetEventObject(button);
-    button->GetEventHandler()->ProcessEvent(event);
+    button->HandleWindowEvent(event);
 }
 }
 

@@ -133,7 +133,7 @@ void wxSpinButton::MacHandleValueChanged( int inc )
 
     event.SetPosition( m_value );
     event.SetEventObject( this );
-    if ((GetEventHandler()->ProcessEvent( event )) && !event.IsAllowed())
+    if ((HandleWindowEvent( event )) && !event.IsAllowed())
         m_value = oldValue;
 
     m_peer->SetValue( m_value );
@@ -145,7 +145,7 @@ void wxSpinButton::MacHandleValueChanged( int inc )
         wxSpinEvent event2( scrollEvent, GetId() );
         event2.SetPosition( m_value );
         event2.SetEventObject( this );
-        GetEventHandler()->ProcessEvent( event2 );
+        HandleWindowEvent( event2 );
     }
 }
 

@@ -83,14 +83,14 @@ protected:
             NavEvent.SetWindowChange(false);
 
             // Get the parent of the combo and have it process the navigation?
-            if (m_cb->GetParent()->GetEventHandler()->ProcessEvent(NavEvent))
+            if (m_cb->GetParent()->HandleWindowEvent(NavEvent))
                     return;
         }
 
         // send the event to the combobox class in case the user has bound EVT_CHAR
         wxKeyEvent kevt(event);
         kevt.SetEventObject(m_cb);
-        if (m_cb->GetEventHandler()->ProcessEvent(kevt))
+        if (m_cb->HandleWindowEvent(kevt))
             // If the event was handled and not skipped then we're done
             return;
 
@@ -103,7 +103,7 @@ protected:
 
             // This will invoke the dialog default action,
             // such as the clicking the default button.
-            if (!m_cb->GetEventHandler()->ProcessEvent( event ))
+            if (!m_cb->HandleWindowEvent( event ))
             {
                 wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
                 if ( tlw && tlw->GetDefaultItem() )
@@ -128,7 +128,7 @@ protected:
     {
         event.SetEventObject(m_cb);
         event.SetId(m_cb->GetId());
-        if (! m_cb->GetEventHandler()->ProcessEvent(event))
+        if (! m_cb->HandleWindowEvent(event))
             event.Skip();
     }
 
@@ -136,7 +136,7 @@ protected:
     {
         event.SetEventObject(m_cb);
         event.SetId(m_cb->GetId());
-        if (! m_cb->GetEventHandler()->ProcessEvent(event))
+        if (! m_cb->HandleWindowEvent(event))
             event.Skip();
     }
 
@@ -144,7 +144,7 @@ protected:
     {
         event.SetEventObject(m_cb);
         event.SetId(m_cb->GetId());
-        if (! m_cb->GetEventHandler()->ProcessEvent(event))
+        if (! m_cb->HandleWindowEvent(event))
             event.Skip();
     }
 

@@ -78,7 +78,7 @@ static void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *
     else if ( choice->HasClientUntypedData() )
         event.SetClientData( choice->GetClientData(n) );
 
-    choice->GetEventHandler()->ProcessEvent(event);
+    choice->HandleWindowEvent(event);
 }
 }
 

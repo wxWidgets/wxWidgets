@@ -54,19 +54,19 @@ ProcessScrollEvent(wxSlider *win, wxEventType evtType, double dvalue)
     int value = (int)(dvalue < 0 ? dvalue - 0.5 : dvalue + 0.5);
     wxScrollEvent event( evtType, win->GetId(), value, orient );
     event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( event );
+    win->HandleWindowEvent( event );
 
     if ( evtType != wxEVT_SCROLL_THUMBTRACK )
     {
         wxScrollEvent event2(wxEVT_SCROLL_CHANGED, win->GetId(), value, orient);
         event2.SetEventObject( win );
-        win->GetEventHandler()->ProcessEvent( event2 );
+        win->HandleWindowEvent( event2 );
     }
 
     wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, win->GetId() );
     cevent.SetEventObject( win );
     cevent.SetInt( value );
-    win->GetEventHandler()->ProcessEvent( cevent );
+    win->HandleWindowEvent( cevent );
 }
 
 //-----------------------------------------------------------------------------

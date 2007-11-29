@@ -745,6 +745,13 @@ public:
         // be there)
     bool RemoveEventHandler(wxEvtHandler *handler);
 
+    // Process an event by calling GetEventHandler()->ProcessEvent() and
+    // handling any exceptions thrown by event handlers. It's mostly useful
+    // when processing wx events when called from C code (e.g. in GTK+
+    // callback) when the exception wouldn't correctly propagate to
+    // wxEventLoop.
+    bool HandleWindowEvent(wxEvent& event) const;
+
     // validators
     // ----------
 

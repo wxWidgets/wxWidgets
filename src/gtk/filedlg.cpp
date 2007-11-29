@@ -80,7 +80,7 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
 
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK);
     event.SetEventObject(dialog);
-    dialog->GetEventHandler()->ProcessEvent(event);
+    dialog->HandleWindowEvent(event);
 }
 }
 
@@ -96,7 +96,7 @@ gtk_filedialog_cancel_callback(GtkWidget * WXUNUSED(w), wxFileDialog *dialog)
 {
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
     event.SetEventObject(dialog);
-    dialog->GetEventHandler()->ProcessEvent(event);
+    dialog->HandleWindowEvent(event);
 }
 
 static void gtk_filedialog_response_callback(GtkWidget *w,

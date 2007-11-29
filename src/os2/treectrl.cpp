@@ -1591,7 +1591,7 @@ void wxTreeCtrl::Delete (
         delete (wxTreeItemAttr *)m_vAttrs.Delete((long)rItem.m_pItem);
     }
     vEvent.SetEventType(vEventType);
-    GetEventHandler()->ProcessEvent(vEvent);
+    HandleWindowEvent(vEvent);
 } // end of wxTreeCtrl::Delete
 
 // delete all children (but don't delete the item itself)
@@ -2058,7 +2058,7 @@ MRESULT wxTreeCtrl::OS2WindowProc (
                     break;
             }
             vEvent.SetEventType(vEventType);
-            bProcessed = GetEventHandler()->ProcessEvent(vEvent);
+            bProcessed = HandleWindowEvent(vEvent);
             break;
     }
     if (!bProcessed)

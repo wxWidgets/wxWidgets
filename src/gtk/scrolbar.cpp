@@ -38,14 +38,14 @@ gtk_value_changed(GtkRange* range, wxScrollBar* win)
         // first send the specific event for the user action
         wxScrollEvent evtSpec(eventType, id, value, orient);
         evtSpec.SetEventObject(win);
-        win->GetEventHandler()->ProcessEvent(evtSpec);
+        win->HandleWindowEvent(evtSpec);
 
         if (!win->m_isScrolling)
         {
             // and if it's over also send a general "changed" event
             wxScrollEvent evtChanged(wxEVT_SCROLL_CHANGED, id, value, orient);
             evtChanged.SetEventObject(win);
-            win->GetEventHandler()->ProcessEvent(evtChanged);
+            win->HandleWindowEvent(evtChanged);
         }
     }
 }
@@ -82,11 +82,11 @@ gtk_event_after(GtkRange* range, GdkEvent* event, wxScrollBar* win)
 
         wxScrollEvent evtRel(wxEVT_SCROLL_THUMBRELEASE, id, value, orient);
         evtRel.SetEventObject(win);
-        win->GetEventHandler()->ProcessEvent(evtRel);
+        win->HandleWindowEvent(evtRel);
 
         wxScrollEvent evtChanged(wxEVT_SCROLL_CHANGED, id, value, orient);
         evtChanged.SetEventObject(win);
-        win->GetEventHandler()->ProcessEvent(evtChanged);
+        win->HandleWindowEvent(evtChanged);
     }
 }
 }

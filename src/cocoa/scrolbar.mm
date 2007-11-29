@@ -176,7 +176,7 @@ void wxScrollBar::Cocoa_wxNSScrollerAction()
     wxScrollEvent event(command, GetId(), GetThumbPosition(),
         HasFlag(wxSB_VERTICAL)?wxVERTICAL:wxHORIZONTAL);
     event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
+    HandleWindowEvent(event);
 }
 
 #endif // wxUSE_SCROLLBAR

@@ -914,7 +914,7 @@ gtk_window_key_press_callback( GtkWidget *widget,
     if( wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
     {
         // Emit KEY_DOWN event
-        ret = win->GetEventHandler()->ProcessEvent( event );
+        ret = win->HandleWindowEvent( event );
     }
     else
     {
@@ -950,7 +950,7 @@ gtk_window_key_press_callback( GtkWidget *widget,
             if (command != -1)
             {
                 wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
-                ret = ancestor->GetEventHandler()->ProcessEvent( command_event );
+                ret = ancestor->HandleWindowEvent( command_event );
                 break;
             }
             if (ancestor->IsTopLevel())
@@ -1009,13 +1009,13 @@ gtk_window_key_press_callback( GtkWidget *widget,
             if (parent)
             {
                 event.SetEventType( wxEVT_CHAR_HOOK );
-                ret = parent->GetEventHandler()->ProcessEvent( event );
+                ret = parent->HandleWindowEvent( event );
             }
 
             if (!ret)
             {
                 event.SetEventType(wxEVT_CHAR);
-                ret = win->GetEventHandler()->ProcessEvent( event );
+                ret = win->HandleWindowEvent( event );
             }
         }
     }
@@ -1085,13 +1085,13 @@ gtk_wxwindow_commit_cb (GtkIMContext * WXUNUSED(context),
         if (parent)
         {
             event.SetEventType( wxEVT_CHAR_HOOK );
-            ret = parent->GetEventHandler()->ProcessEvent( event );
+            ret = parent->HandleWindowEvent( event );
         }
 
         if (!ret)
         {
             event.SetEventType(wxEVT_CHAR);
-            ret = window->GetEventHandler()->ProcessEvent( event );
+            ret = window->HandleWindowEvent( event );
         }
     }
 }
@@ -1272,7 +1272,7 @@ wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
 bool wxWindowGTK::GTKProcessEvent(wxEvent& event) const
 {
     // nothing special at this level
-    return GetEventHandler()->ProcessEvent(event);
+    return HandleWindowEvent(event);
 }
 
 int wxWindowGTK::GTKCallbackCommonPrologue(GdkEventAny *event) const
@@ -1319,12 +1319,12 @@ static bool DoSendFocusEvents(wxWindow *win)
     // Notify the parent keeping track of focus for the kbd navigation
     // purposes that we got it.
     wxChildFocusEvent eventChildFocus(win);
-    (void)win->GetEventHandler()->ProcessEvent(eventChildFocus);
+    (void)win->HandleWindowEvent(eventChildFocus);
 
     wxFocusEvent eventFocus(wxEVT_SET_FOCUS, win->GetId());
     eventFocus.SetEventObject(win);
 
-    return win->GetEventHandler()->ProcessEvent(eventFocus);
+    return win->HandleWindowEvent(eventFocus);
 }
 
 // all event handlers must have C linkage as they're called from GTK+ C code
@@ -2019,7 +2019,7 @@ gtk_window_grab_broken( GtkWidget*,
     {
         wxMouseCaptureLostEvent evt( win->GetId() );
         evt.SetEventObject( win );
-        win->GetEventHandler()->ProcessEvent( evt );
+        win->HandleWindowEvent( evt );
     }
     return false;
 }
@@ -2660,7 +2660,7 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
         {
             wxSizeEvent event( wxSize(m_width,m_height), GetId() );
             event.SetEventObject( this );
-            GetEventHandler()->ProcessEvent( event );
+            HandleWindowEvent( event );
         }
     }
 }
@@ -2678,7 +2678,7 @@ bool wxWindowGTK::GtkShowFromOnIdle()
         gtk_widget_show( m_widget );
         wxShowEvent eventShow(GetId(), true);
         eventShow.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(eventShow);
+        HandleWindowEvent(eventShow);
         m_showOnIdle = false;
         return true;
     }
@@ -2918,7 +2918,7 @@ bool wxWindowGTK::Show( bool show )
             gtk_widget_show( m_widget );
             wxShowEvent eventShow(GetId(), show);
             eventShow.SetEventObject(this);
-            GetEventHandler()->ProcessEvent(eventShow);
+            HandleWindowEvent(eventShow);
         }
     }
     else
@@ -2926,7 +2926,7 @@ bool wxWindowGTK::Show( bool show )
         gtk_widget_hide( m_widget );
         wxShowEvent eventShow(GetId(), show);
         eventShow.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(eventShow);
+        HandleWindowEvent(eventShow);
     }
 
     return true;
@@ -3669,16 +3669,16 @@ void wxWindowGTK::GtkSendPaintEvents()
         wxEraseEvent erase_event( GetId(), &dc );
         erase_event.SetEventObject( this );
 
-        GetEventHandler()->ProcessEvent(erase_event);
+        HandleWindowEvent(erase_event);
     }
 
     wxNcPaintEvent nc_paint_event( GetId() );
     nc_paint_event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( nc_paint_event );
+    HandleWindowEvent( nc_paint_event );
 
     wxPaintEvent paint_event( GetId() );
     paint_event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( paint_event );
+    HandleWindowEvent( paint_event );
 
     m_clipPaintRegion = false;
 
@@ -4012,7 +4012,7 @@ void wxWindowGTK::GTKReleaseMouseAndNotify()
     DoReleaseMouse();
     wxMouseCaptureLostEvent evt(GetId());
     evt.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( evt );
+    HandleWindowEvent( evt );
 }
 
 /* static */

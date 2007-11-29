@@ -278,7 +278,7 @@ static gboolean gtk_toolbar_dropdown_lclick_callback(GtkWidget *widget,
     if (!tool->IsEnabled()) return FALSE;
 
     wxCommandEvent evt(wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED, tool->GetId() );
-    if ( tbar->GetEventHandler()->ProcessEvent(evt) )
+    if ( tbar->HandleWindowEvent(evt) )
     {
         return TRUE;
     }

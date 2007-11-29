@@ -357,7 +357,7 @@ void wxFontColourSwatchCtrl::OnMouseEvent(wxMouseEvent& event)
         Refresh();
 
         wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, GetId());
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
     }
 }
 

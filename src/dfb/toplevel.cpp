@@ -185,7 +185,7 @@ void wxTopLevelWindowDFB::HandleFocusEvent(const wxDFBWindowEvent& event_)
 
     wxActivateEvent event(wxEVT_ACTIVATE, activate, GetId());
     event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
+    HandleWindowEvent(event);
 
     // if a frame that doesn't have wx focus inside it just got focus, we
     // need to set focus to it (or its child):

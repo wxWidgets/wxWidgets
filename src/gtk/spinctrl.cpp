@@ -51,7 +51,7 @@ gtk_value_changed(GtkSpinButton* spinbutton, wxSpinCtrl* win)
     // values in range 5..50 is then, ummm, quite challenging (hint: you can't
     // enter 1!) (VZ)
     event.SetInt(win->m_pos);
-    win->GetEventHandler()->ProcessEvent( event );
+    win->HandleWindowEvent( event );
 }
 }
 
@@ -72,7 +72,7 @@ gtk_changed(GtkSpinButton* spinbutton, wxSpinCtrl* win)
 
     // see above
     event.SetInt(win->m_pos);
-    win->GetEventHandler()->ProcessEvent( event );
+    win->HandleWindowEvent( event );
 }
 }
 
@@ -260,7 +260,7 @@ void wxSpinCtrl::OnChar( wxKeyEvent &event )
         GtkSpinButton *gsb = GTK_SPIN_BUTTON(m_widget);
         wxString val = wxGTK_CONV_BACK( gtk_entry_get_text( &gsb->entry ) );
         evt.SetString( val );
-        if (GetEventHandler()->ProcessEvent(evt)) return;
+        if (HandleWindowEvent(evt)) return;
     }
 
     event.Skip();

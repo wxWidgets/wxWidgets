@@ -152,7 +152,7 @@ bool wxTopLevelWindowMGL::Show(bool show)
         m_sizeSet = true;
         wxSizeEvent event(GetSize(), GetId());
         event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
     }
 
     if ( ret && show && CanAcceptFocus() )

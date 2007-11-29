@@ -119,7 +119,7 @@ gtk_insert_text_callback(GtkEditable *editable,
         wxCommandEvent event(wxEVT_COMMAND_TEXT_MAXLEN, win->GetId());
         event.SetEventObject(win);
         event.SetString(win->GetValue());
-        win->GetEventHandler()->ProcessEvent( event );
+        win->HandleWindowEvent( event );
     }
 }
 }
@@ -145,7 +145,7 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->GetId() );
     event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( event );
+    win->HandleWindowEvent( event );
 }
 }
 
@@ -999,7 +999,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
         wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
         event.SetEventObject(this);
         event.SetString(GetValue());
-        if (GetEventHandler()->ProcessEvent(event)) return;
+        if (HandleWindowEvent(event)) return;
     }
 
     if ((key_event.GetKeyCode() == WXK_RETURN) && !(m_windowStyle & wxTE_MULTILINE))

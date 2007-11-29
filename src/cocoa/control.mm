@@ -97,7 +97,7 @@ wxSize wxControl::DoGetBestSize() const
 
 bool wxControl::ProcessCommand(wxCommandEvent& event)
 {
-    return GetEventHandler()->ProcessEvent(event);
+    return HandleWindowEvent(event);
 }
 
 void wxControl::CocoaSetEnabled(bool enable)

@@ -222,7 +222,7 @@ public :
                     wxCommandEvent event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, checklist->GetId() );
                     event.SetInt( owner->GetLineFromItem( this ) );
                     event.SetEventObject( checklist );
-                    checklist->GetEventHandler()->ProcessEvent( event );
+                    checklist->HandleWindowEvent( event );
                 }
                 break;
 

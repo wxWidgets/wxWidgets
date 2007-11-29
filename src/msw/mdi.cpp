@@ -515,7 +515,7 @@ bool wxMDIParentFrame::HandleActivate(int state, bool minimized, WXHWND activate
     {
         wxActivateEvent event(wxEVT_ACTIVATE, true, m_currentChild->GetId());
         event.SetEventObject( m_currentChild );
-        if ( m_currentChild->GetEventHandler()->ProcessEvent(event) )
+        if ( m_currentChild->HandleWindowEvent(event) )
             processed = true;
     }
 
@@ -853,7 +853,7 @@ void wxMDIChildFrame::DoSetClientSize(int width, int height)
   wxSize size(width, height);
   wxSizeEvent event(size, m_windowId);
   event.SetEventObject( this );
-  GetEventHandler()->ProcessEvent(event);
+  HandleWindowEvent(event);
 }
 
 // Unlike other wxTopLevelWindowBase, the mdi child's "GetPosition" is not the
@@ -1103,7 +1103,7 @@ bool wxMDIChildFrame::HandleMDIActivate(long WXUNUSED(activate),
 
     ResetWindowStyle((void *)NULL);
 
-    return GetEventHandler()->ProcessEvent(event);
+    return HandleWindowEvent(event);
 }
 
 bool wxMDIChildFrame::HandleWindowPosChanging(void *pos)

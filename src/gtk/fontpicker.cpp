@@ -42,7 +42,7 @@ static void gtk_fontbutton_setfont_callback(GtkFontButton *widget,
 
     // fire the colour-changed event
     wxFontPickerEvent event(p, p->GetId(), p->GetSelectedFont());
-    p->GetEventHandler()->ProcessEvent(event);
+    p->HandleWindowEvent(event);
 }
 }
 

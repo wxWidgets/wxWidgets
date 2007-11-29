@@ -586,7 +586,7 @@ wxMacAppMenuEventHandler( EventHandlerCallRef WXUNUSED(handler),
             {
                 wxWindow *win = menu->GetInvokingWindow();
                 if (win)
-                    win->GetEventHandler()->ProcessEvent(wxevent);
+                    win->HandleWindowEvent(wxevent);
                 }
             }
     }
@@ -1408,7 +1408,7 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
     wxKeyEvent event(wxEVT_KEY_DOWN) ;
     MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
 
-    handled = focus->GetEventHandler()->ProcessEvent( event ) ;
+    handled = focus->HandleWindowEvent( event ) ;
     if ( handled && event.GetSkipped() )
         handled = false ;
 
@@ -1455,7 +1455,7 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
     bool handled;
     wxKeyEvent event( wxEVT_KEY_UP ) ;
     MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
-    handled = focus->GetEventHandler()->ProcessEvent( event ) ;
+    handled = focus->HandleWindowEvent( event ) ;
 
     return handled ;
 }
@@ -1476,7 +1476,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
     if (tlw)
     {
         event.SetEventType( wxEVT_CHAR_HOOK );
-        handled = tlw->GetEventHandler()->ProcessEvent( event );
+        handled = tlw->HandleWindowEvent( event );
         if ( handled && event.GetSkipped() )
             handled = false ;
     }
@@ -1485,7 +1485,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
     {
         event.SetEventType( wxEVT_CHAR );
         event.Skip( false ) ;
-        handled = focus->GetEventHandler()->ProcessEvent( event ) ;
+        handled = focus->HandleWindowEvent( event ) ;
     }
 
     if ( !handled && (keyval == WXK_TAB) )
@@ -1501,7 +1501,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
                 /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
                 new_event.SetWindowChange( event.ControlDown() );
                 new_event.SetCurrentFocus( focus );
-                handled = focus->GetParent()->GetEventHandler()->ProcessEvent( new_event );
+                handled = focus->GetParent()->HandleWindowEvent( new_event );
                 if ( handled && new_event.GetSkipped() )
                     handled = false ;
             }
@@ -1540,7 +1540,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
                 // generate wxID_CANCEL if command-. or <esc> has been pressed (typically in dialogs)
                 wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
                 new_event.SetEventObject( focus );
-                handled = focus->GetEventHandler()->ProcessEvent( new_event );
+                handled = focus->HandleWindowEvent( new_event );
             }
         }
 #endif

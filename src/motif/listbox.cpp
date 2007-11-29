@@ -490,7 +490,7 @@ void wxListBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
         item->DoToggleItem( n, x );
 #endif
     case XmCR_DEFAULT_ACTION:
-        item->GetEventHandler()->ProcessEvent(event);
+        item->HandleWindowEvent(event);
         break;
     case XmCR_EXTENDED_SELECT:
         switch (cbs->selection_type)
@@ -499,7 +499,7 @@ void wxListBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
         case XmADDITION:
         case XmMODIFICATION:
             item->DoToggleItem( n, x );
-            item->GetEventHandler()->ProcessEvent(event);
+            item->HandleWindowEvent(event);
             break;
         }
         break;

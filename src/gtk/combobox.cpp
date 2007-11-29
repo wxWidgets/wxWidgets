@@ -36,7 +36,7 @@ gtkcombobox_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *comb
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
     event.SetString( combo->GetValue() );
     event.SetEventObject( combo );
-    combo->GetEventHandler()->ProcessEvent( event );
+    combo->HandleWindowEvent( event );
 }
 
 static void
@@ -51,7 +51,7 @@ gtkcombobox_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
     event.SetInt( combo->GetSelection() );
     event.SetString( combo->GetStringSelection() );
     event.SetEventObject( combo );
-    combo->GetEventHandler()->ProcessEvent( event );
+    combo->HandleWindowEvent( event );
 }
 }
 
@@ -386,7 +386,7 @@ void wxComboBox::OnChar( wxKeyEvent &event )
                 eventEnter.SetInt( GetSelection() );
                 eventEnter.SetEventObject( this );
 
-                if ( GetEventHandler()->ProcessEvent(eventEnter) )
+                if ( HandleWindowEvent(eventEnter) )
                 {
                     // Catch GTK event so that GTK doesn't open the drop
                     // down list upon RETURN.

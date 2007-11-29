@@ -471,7 +471,7 @@ void wxTextCtrl::DoSendEvents(void *wxcbs, long keycode)
     // the character passed through)
     cbs->doit = False;
 
-    GetEventHandler()->ProcessEvent(event);
+    HandleWindowEvent(event);
 
     if ( !InSetValue() && m_processedDefault )
     {
@@ -667,7 +667,7 @@ wxTextWindowGainFocusProc (Widget w, XtPointer clientData, XmAnyCallbackStruct *
     wxTextCtrl *tw = (wxTextCtrl *) clientData;
     wxFocusEvent event(wxEVT_SET_FOCUS, tw->GetId());
     event.SetEventObject(tw);
-    tw->GetEventHandler()->ProcessEvent(event);
+    tw->HandleWindowEvent(event);
 }
 
 static void
@@ -679,7 +679,7 @@ wxTextWindowLoseFocusProc (Widget w, XtPointer clientData, XmAnyCallbackStruct *
     wxTextCtrl *tw = (wxTextCtrl *) clientData;
     wxFocusEvent event(wxEVT_KILL_FOCUS, tw->GetId());
     event.SetEventObject(tw);
-    tw->GetEventHandler()->ProcessEvent(event);
+    tw->HandleWindowEvent(event);
 }
 
 static void wxTextWindowActivateProc(Widget w, XtPointer clientData,

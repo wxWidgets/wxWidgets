@@ -122,7 +122,7 @@ void wxChoice::CocoaNotification_menuDidSendAction(WX_NSNotification notificatio
     event.SetInt(index);
     event.SetEventObject(this);
     event.SetString(GetStringSelection());
-    GetEventHandler()->ProcessEvent(event);
+    HandleWindowEvent(event);
 }
 
 void wxChoice::DoClear()

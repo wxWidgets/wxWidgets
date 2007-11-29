@@ -526,7 +526,7 @@ handle_text_clipboard_callback( GtkWidget *widget, wxTextCtrl *win,
 {
     wxClipboardTextEvent event( eventType, win->GetId() );
     event.SetEventObject( win );
-    if ( win->GetEventHandler()->ProcessEvent( event ) )
+    if ( win->HandleWindowEvent( event ) )
     {
         // don't let the default processing to take place if we did something
         // ourselves in the event handler
@@ -1527,7 +1527,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
             wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
             event.SetEventObject(this);
             event.SetString(GetValue());
-            if ( GetEventHandler()->ProcessEvent(event) )
+            if ( HandleWindowEvent(event) )
                 return;
         }
     }
@@ -1823,8 +1823,8 @@ void wxTextCtrl::OnUrlMouseEvent(wxMouseEvent& event)
 
     InitCommandEvent(url_event);
     // Is that a good idea? Seems not (pleasure with gtk_text_view_start_selection_drag)
-    //event.Skip(!GetEventHandler()->ProcessEvent(url_event));
-    GetEventHandler()->ProcessEvent(url_event);
+    //event.Skip(!HandleWindowEvent(url_event));
+    HandleWindowEvent(url_event);
 }
 
 bool wxTextCtrl::GTKProcessEvent(wxEvent& event) const

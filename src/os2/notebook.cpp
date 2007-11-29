@@ -223,14 +223,14 @@ int wxNotebook::SetSelection( size_t nPage )
         vEvent.SetSelection(nPage);
         vEvent.SetOldSelection(m_nSelection);
         vEvent.SetEventObject(this);
-        if (!GetEventHandler()->ProcessEvent(vEvent) || vEvent.IsAllowed())
+        if (!HandleWindowEvent(vEvent) || vEvent.IsAllowed())
         {
 
             //
             // Program allows the page change
             //
             vEvent.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
-            GetEventHandler()->ProcessEvent(vEvent);
+            HandleWindowEvent(vEvent);
 
             ::WinSendMsg( GetHWND()
                          ,BKM_TURNTOPAGE
@@ -800,7 +800,7 @@ void wxNotebook::OnNavigationKey (
 
                 wxWindow*           pPage = m_pages[m_nSelection];
 
-                if (!pPage->GetEventHandler()->ProcessEvent(rEvent))
+                if (!pPage->HandleWindowEvent(rEvent))
                 {
                     pPage->SetFocus();
                 }
@@ -822,7 +822,7 @@ void wxNotebook::OnNavigationKey (
             if (pParent)
             {
                 rEvent.SetCurrentFocus(this);
-                pParent->GetEventHandler()->ProcessEvent(rEvent);
+                pParent->HandleWindowEvent(rEvent);
             }
         }
     }

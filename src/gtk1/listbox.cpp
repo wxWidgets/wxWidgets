@@ -110,12 +110,12 @@ static gint gtk_listitem_focus_in_callback( GtkWidget *WXUNUSED(widget),
         win->m_hasFocus = true;
 
         wxChildFocusEvent eventChildFocus(win);
-        (void)win->GetEventHandler()->ProcessEvent(eventChildFocus);
+        (void)win->HandleWindowEvent(eventChildFocus);
 
         wxFocusEvent eventFocus(wxEVT_SET_FOCUS, win->GetId());
         eventFocus.SetEventObject(win);
 
-        (void)win->GetEventHandler()->ProcessEvent(eventFocus);
+        (void)win->HandleWindowEvent(eventFocus);
     }
 
     return FALSE;
@@ -149,7 +149,7 @@ static gint gtk_listitem_focus_out_callback( GtkWidget *WXUNUSED(widget),
         // process it too as otherwise bad things happen, especially in GTK2
         // where the text control simply aborts the program if it doesn't get
         // the matching focus out event
-        (void)win->GetEventHandler()->ProcessEvent( event );
+        (void)win->HandleWindowEvent( event );
     }
 
     return FALSE;
@@ -202,7 +202,7 @@ gtk_listbox_button_release_callback( GtkWidget * WXUNUSED(widget),
 
     event.SetInt(n);
 
-    listbox->GetEventHandler()->ProcessEvent( event );
+    listbox->HandleWindowEvent( event );
 
     return FALSE;
 }
@@ -237,7 +237,7 @@ gtk_listbox_button_press_callback( GtkWidget *widget,
         wxCommandEvent event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, listbox->GetId() );
         event.SetEventObject( listbox );
         event.SetInt( sel );
-        listbox->GetEventHandler()->ProcessEvent( event );
+        listbox->HandleWindowEvent( event );
     }
 #endif // wxUSE_CHECKLISTBOX
 
@@ -288,7 +288,7 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
         /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
         new_event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) );
         new_event.SetCurrentFocus( listbox );
-        ret = listbox->GetEventHandler()->ProcessEvent( new_event );
+        ret = listbox->HandleWindowEvent( new_event );
     }
 
     if ((gdk_event->keyval == GDK_Return) && (!ret))
@@ -309,7 +309,7 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
         wxCommandEvent new_event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, listbox->GetId() );
         new_event.SetEventObject( listbox );
         new_event.SetInt( sel );
-        ret = listbox->GetEventHandler()->ProcessEvent( new_event );
+        ret = listbox->HandleWindowEvent( new_event );
     }
 #endif // wxUSE_CHECKLISTBOX
 
@@ -347,7 +347,7 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
                 n = -1;
             }
             new_event.SetInt(n);
-            listbox->GetEventHandler()->ProcessEvent( new_event );
+            listbox->HandleWindowEvent( new_event );
         }
     }
 
@@ -412,7 +412,7 @@ static void gtk_listitem_select_cb( GtkWidget *widget,
 
 //    No longer required with new code in wxLB_SINGLE
 //    listbox->GetEventHandler()->AddPendingEvent( event );
-    listbox->GetEventHandler()->ProcessEvent( event );
+    listbox->HandleWindowEvent( event );
 }
 
 extern "C" {

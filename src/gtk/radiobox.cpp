@@ -67,7 +67,7 @@ static void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioBo
     event.SetInt( rb->GetSelection() );
     event.SetString( rb->GetStringSelection() );
     event.SetEventObject( rb );
-    rb->GetEventHandler()->ProcessEvent(event);
+    rb->HandleWindowEvent(event);
 }
 }
 
@@ -92,7 +92,7 @@ static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_
         // CTRL-TAB changes the (parent) window, i.e. switch notebook page
         new_event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) );
         new_event.SetCurrentFocus( rb );
-        return rb->GetParent()->GetEventHandler()->ProcessEvent( new_event );
+        return rb->GetParent()->HandleWindowEvent(new_event);
     }
 
     if ((gdk_event->keyval != GDK_Up) &&
@@ -156,7 +156,7 @@ static gint gtk_radiobutton_focus_in( GtkWidget * WXUNUSED(widget),
 
         // never stop the signal emission, it seems to break the kbd handling
         // inside the radiobox
-        (void)win->GetEventHandler()->ProcessEvent( event );
+        (void)win->HandleWindowEvent( event );
     }
 
     return FALSE;
@@ -658,7 +658,7 @@ void wxRadioBox::OnInternalIdle()
         wxFocusEvent event( wxEVT_KILL_FOCUS, GetId() );
         event.SetEventObject( this );
 
-        (void)GetEventHandler()->ProcessEvent( event );
+        (void)HandleWindowEvent( event );
     }
 }
 

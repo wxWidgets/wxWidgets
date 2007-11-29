@@ -159,7 +159,7 @@ static gint gtk_frame_focus_in_callback( GtkWidget *widget,
     wxLogTrace(wxT("activate"), wxT("Activating frame %p (from focus_in)"), g_activeFrame);
     wxActivateEvent event(wxEVT_ACTIVATE, true, g_activeFrame->GetId());
     event.SetEventObject(g_activeFrame);
-    g_activeFrame->GetEventHandler()->ProcessEvent(event);
+    g_activeFrame->HandleWindowEvent(event);
 
     return FALSE;
 }
@@ -191,7 +191,7 @@ static gint gtk_frame_focus_out_callback( GtkWidget *WXUNUSED(widget),
         wxLogTrace(wxT("activate"), wxT("Activating frame %p (from focus_in)"), g_activeFrame);
         wxActivateEvent event(wxEVT_ACTIVATE, false, g_activeFrame->GetId());
         event.SetEventObject(g_activeFrame);
-        g_activeFrame->GetEventHandler()->ProcessEvent(event);
+        g_activeFrame->HandleWindowEvent(event);
 
         g_activeFrame = NULL;
     }
@@ -291,7 +291,7 @@ gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WX
 
     wxMoveEvent mevent( wxPoint(win->m_x,win->m_y), win->GetId() );
     mevent.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( mevent );
+    win->HandleWindowEvent( mevent );
 
     return FALSE;
 }
@@ -1020,7 +1020,7 @@ void wxTopLevelWindowGTK::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
     // send size event to frame
     wxSizeEvent event( wxSize(m_width,m_height), GetId() );
     event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( event );
+    HandleWindowEvent( event );
 
     m_resizing = false;
 }

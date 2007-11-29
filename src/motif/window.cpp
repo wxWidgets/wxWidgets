@@ -1622,11 +1622,11 @@ void wxWindow::DoPaint()
         // Set an erase event first
         wxEraseEvent eraseEvent(GetId(), &dc);
         eraseEvent.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(eraseEvent);
+        HandleWindowEvent(eraseEvent);
 
         wxPaintEvent event(GetId());
         event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
 
         m_needsRefresh = false;
     }
@@ -1648,7 +1648,7 @@ void wxWindow::OnSysColourChanged(wxSysColourChangedEvent& event)
         {
             wxSysColourChangedEvent event2;
             event.SetEventObject(win);
-            win->GetEventHandler()->ProcessEvent(event2);
+            win->HandleWindowEvent(event2);
         }
 
         node = node->GetNext();
@@ -1708,7 +1708,7 @@ bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
 
                         // If ProcessEvent returns true (it was handled), then
                         // the calling code will skip the event handling.
-                        return frame->GetEventHandler()->ProcessEvent(commandEvent);
+                        return frame->HandleWindowEvent(commandEvent);
                     }
                 }
 #endif
@@ -1727,7 +1727,7 @@ bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
             {
                 wxCommandEvent commandEvent (wxEVT_COMMAND_BUTTON_CLICKED, child->GetId());
                 commandEvent.SetEventObject(child);
-                return child->GetEventHandler()->ProcessEvent(commandEvent);
+                return child->HandleWindowEvent(commandEvent);
             }
 
             return false;
@@ -1913,7 +1913,7 @@ void wxWidgetResizeProc(Widget w, XConfigureEvent *WXUNUSED(event),
         wxSize newSize(win->GetSize());
         wxSizeEvent sizeEvent(newSize, win->GetId());
         sizeEvent.SetEventObject(win);
-        win->GetEventHandler()->ProcessEvent(sizeEvent);
+        win->HandleWindowEvent(sizeEvent);
     }
 }
 
@@ -1999,7 +1999,7 @@ static void wxCanvasInputEvent(Widget drawingArea,
             wxMouseEvent wxevent(0);
             if (wxTranslateMouseEvent(wxevent, canvas, drawingArea, xevent))
             {
-                canvas->GetEventHandler()->ProcessEvent(wxevent);
+                canvas->HandleWindowEvent(wxevent);
             }
             break;
         }
@@ -2016,7 +2016,7 @@ static void wxCanvasInputEvent(Widget drawingArea,
                 if (parent)
                 {
                     event.SetEventType(wxEVT_CHAR_HOOK);
-                    if (parent->GetEventHandler()->ProcessEvent(event))
+                    if (parent->HandleWindowEvent(event))
                         return;
                 }
 
@@ -2025,10 +2025,10 @@ static void wxCanvasInputEvent(Widget drawingArea,
                 event.SetEventType(wxEVT_KEY_DOWN);
 
                 // Only process OnChar if OnKeyDown didn't swallow it
-                if (!canvas->GetEventHandler()->ProcessEvent (event))
+                if (!canvas->HandleWindowEvent (event))
                 {
                     event.SetEventType(wxEVT_CHAR);
-                    canvas->GetEventHandler()->ProcessEvent (event);
+                    canvas->HandleWindowEvent (event);
                 }
             }
             break;
@@ -2038,7 +2038,7 @@ static void wxCanvasInputEvent(Widget drawingArea,
             wxKeyEvent event (wxEVT_KEY_UP);
             if (wxTranslateKeyEvent (event, canvas, (Widget) 0, xevent))
             {
-                canvas->GetEventHandler()->ProcessEvent (event);
+                canvas->HandleWindowEvent (event);
             }
             break;
         }
@@ -2048,7 +2048,7 @@ static void wxCanvasInputEvent(Widget drawingArea,
             {
                 wxFocusEvent event(wxEVT_SET_FOCUS, canvas->GetId());
                 event.SetEventObject(canvas);
-                canvas->GetEventHandler()->ProcessEvent(event);
+                canvas->HandleWindowEvent(event);
             }
             break;
         }
@@ -2058,7 +2058,7 @@ static void wxCanvasInputEvent(Widget drawingArea,
             {
                 wxFocusEvent event(wxEVT_KILL_FOCUS, canvas->GetId());
                 event.SetEventObject(canvas);
-                canvas->GetEventHandler()->ProcessEvent(event);
+                canvas->HandleWindowEvent(event);
             }
             break;
         }
@@ -2080,7 +2080,7 @@ static void wxPanelItemEventHandler(Widget    wid,
         wxMouseEvent wxevent(0);
         if (wxTranslateMouseEvent(wxevent, window, wid, event))
         {
-            window->GetEventHandler()->ProcessEvent(wxevent);
+            window->HandleWindowEvent(wxevent);
         }
     }
 
@@ -2158,7 +2158,7 @@ static void wxScrollBarCallback(Widget scrollbar,
                            cbs->value,
                            orientation);
     event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent(event);
+    win->HandleWindowEvent(event);
 }
 
 // For repainting arbitrary windows

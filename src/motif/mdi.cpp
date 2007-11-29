@@ -238,7 +238,7 @@ bool wxMDIParentFrame::ProcessEvent(wxEvent& event)
     bool res = false;
     if (m_activeChild && event.IsKindOf(CLASSINFO(wxCommandEvent)))
     {
-        res = m_activeChild->GetEventHandler()->ProcessEvent(event);
+        res = m_activeChild->HandleWindowEvent(event);
     }
 
     if (!res)
@@ -365,7 +365,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
     {
         wxActivateEvent event(wxEVT_ACTIVATE, false, oldActiveChild->GetId());
         event.SetEventObject( oldActiveChild );
-        oldActiveChild->GetEventHandler()->ProcessEvent(event);
+        oldActiveChild->HandleWindowEvent(event);
     }
 
     // This is the currently active child
@@ -460,12 +460,12 @@ void wxMDIChildFrame::OnRaise()
     {
         wxActivateEvent event(wxEVT_ACTIVATE, false, oldActiveChild->GetId());
         event.SetEventObject( oldActiveChild );
-        oldActiveChild->GetEventHandler()->ProcessEvent(event);
+        oldActiveChild->HandleWindowEvent(event);
     }
 
     wxActivateEvent event(wxEVT_ACTIVATE, true, this->GetId());
     event.SetEventObject( this );
-    this->GetEventHandler()->ProcessEvent(event);
+    this->HandleWindowEvent(event);
 }
 
 void wxMDIChildFrame::OnLower()
@@ -477,7 +477,7 @@ void wxMDIChildFrame::OnLower()
     {
         wxActivateEvent event(wxEVT_ACTIVATE, false, oldActiveChild->GetId());
         event.SetEventObject( oldActiveChild );
-        oldActiveChild->GetEventHandler()->ProcessEvent(event);
+        oldActiveChild->HandleWindowEvent(event);
     }
     // TODO: unfortunately we don't now know which is the top-most child,
     // so make the active child NULL.
@@ -697,7 +697,7 @@ void wxMDIClientWindow::OnPageChanged(wxNotebookEvent& event)
         {
             wxActivateEvent event(wxEVT_ACTIVATE, false, oldChild->GetId());
             event.SetEventObject( oldChild );
-            oldChild->GetEventHandler()->ProcessEvent(event);
+            oldChild->HandleWindowEvent(event);
         }
     }
     if (event.GetSelection() != -1)
@@ -707,7 +707,7 @@ void wxMDIClientWindow::OnPageChanged(wxNotebookEvent& event)
         {
             wxActivateEvent event(wxEVT_ACTIVATE, true, activeChild->GetId());
             event.SetEventObject( activeChild );
-            activeChild->GetEventHandler()->ProcessEvent(event);
+            activeChild->HandleWindowEvent(event);
 
             if (activeChild->GetMDIParentFrame())
             {

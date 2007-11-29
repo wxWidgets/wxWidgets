@@ -49,7 +49,7 @@ static void gtk_dirdialog_ok_callback(GtkWidget *widget, wxDirDialog *dialog)
 
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK);
     event.SetEventObject(dialog);
-    dialog->GetEventHandler()->ProcessEvent(event);
+    dialog->HandleWindowEvent(event);
 }
 }
 
@@ -63,7 +63,7 @@ static void gtk_dirdialog_cancel_callback(GtkWidget *WXUNUSED(w),
 {
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
     event.SetEventObject(dialog);
-    dialog->GetEventHandler()->ProcessEvent(event);
+    dialog->HandleWindowEvent(event);
 }
 }
 

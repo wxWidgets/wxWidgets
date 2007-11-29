@@ -111,7 +111,7 @@ void wxSlider::ProcessEventType(wxEventType commandType)
 {
     wxScrollEvent event(commandType, GetId(), GetValue(), HasFlag(wxSL_VERTICAL)?wxVERTICAL:wxHORIZONTAL);
     event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
+    HandleWindowEvent(event);
 }
 
 static inline wxEventType wxSliderEventTypeForKeyFromEvent(NSEvent *theEvent)

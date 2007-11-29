@@ -152,7 +152,7 @@ static pascal OSStatus wxMacListCtrlEventHandler( EventHandlerCallRef handler , 
                     // FIXME: we can't use the sort property for virtual listctrls
                     // so we need to find a better way to determine which column was clicked...
                     if (!window->IsVirtual())
-                        window->GetEventHandler()->ProcessEvent( le );
+                        window->HandleWindowEvent( le );
                 }
                 result = CallNextEventHandler(handler, event);
                 break;
@@ -305,7 +305,7 @@ bool wxMacListCtrlEventDelegate::ProcessEvent( wxEvent& event )
 
     if ( !event.IsKindOf( CLASSINFO( wxCommandEvent ) ) )
     {
-        if (m_list->GetEventHandler()->ProcessEvent( event ))
+        if (m_list->HandleWindowEvent( event ))
             return true;
     }
     return wxEvtHandler::ProcessEvent(event);
@@ -648,7 +648,7 @@ void wxListCtrl::FireMouseEvent(wxEventType eventType, wxPoint position)
         le.m_itemIndex = item;
         le.m_item.m_itemId = item;
         GetItem(le.m_item);
-        GetEventHandler()->ProcessEvent(le);
+        HandleWindowEvent(le);
     }
 }
 
@@ -697,7 +697,7 @@ void wxListCtrl::OnChar(wxKeyEvent& event)
             le.m_itemIndex = m_current;
             le.m_item.m_itemId = m_current;
             GetItem(le.m_item);
-            GetEventHandler()->ProcessEvent(le);
+            HandleWindowEvent(le);
         }
     }
     event.Skip();
@@ -1743,7 +1743,7 @@ bool wxListCtrl::DeleteItem(long item)
         wxListEvent event( wxEVT_COMMAND_LIST_DELETE_ITEM, GetId() );
         event.SetEventObject( this );
         event.m_itemIndex = item;
-        GetEventHandler()->ProcessEvent( event );
+        HandleWindowEvent( event );
 
     }
     return true;
@@ -1760,7 +1760,7 @@ bool wxListCtrl::DeleteAllItems()
         m_dbImpl->MacClear();
         wxListEvent event( wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS, GetId() );
         event.SetEventObject( this );
-        GetEventHandler()->ProcessEvent( event );
+        HandleWindowEvent( event );
     }
     return true;
 }
@@ -1834,7 +1834,7 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
         le.m_col = 0;
         GetItem( le.m_item );
 
-        if ( GetParent()->GetEventHandler()->ProcessEvent( le ) && !le.IsAllowed() )
+        if ( GetParent()->HandleWindowEvent( le ) && !le.IsAllowed() )
         {
             // vetoed by user code
             return NULL;
@@ -2033,7 +2033,7 @@ long wxListCtrl::InsertItem(wxListItem& info)
         wxListEvent event( wxEVT_COMMAND_LIST_INSERT_ITEM, GetId() );
         event.SetEventObject( this );
         event.m_itemIndex = info.m_itemId;
-        GetEventHandler()->ProcessEvent( event );
+        HandleWindowEvent( event );
         return info.m_itemId;
     }
     return -1;
@@ -2200,7 +2200,7 @@ bool wxListCtrl::OnRenameAccept(long itemEdit, const wxString& value)
 
     GetItem( le.m_item );
     le.m_item.m_text = value;
-    return !GetEventHandler()->ProcessEvent( le ) ||
+    return !HandleWindowEvent( le ) ||
                 le.IsAllowed();
 }
 
@@ -2215,7 +2215,7 @@ void wxListCtrl::OnRenameCancelled(long itemEdit)
     le.m_itemIndex = itemEdit;
 
     GetItem( le.m_item );
-    GetEventHandler()->ProcessEvent( le );
+    HandleWindowEvent( le );
 }
 
 // ----------------------------------------------------------------------------

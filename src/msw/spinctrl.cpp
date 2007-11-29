@@ -207,7 +207,7 @@ bool wxSpinCtrl::ProcessTextCommand(WXWORD cmd, WXWORD WXUNUSED(id))
         wxString val = wxGetWindowText(m_hwndBuddy);
         event.SetString(val);
         event.SetInt(GetValue());
-        return GetEventHandler()->ProcessEvent(event);
+        return HandleWindowEvent(event);
     }
 
     // not processed
@@ -225,7 +225,7 @@ void wxSpinCtrl::OnChar(wxKeyEvent& event)
                 wxString val = wxGetWindowText(m_hwndBuddy);
                 event.SetString(val);
                 event.SetInt(GetValue());
-                if ( GetEventHandler()->ProcessEvent(event) )
+                if ( HandleWindowEvent(event) )
                     return;
                 break;
             }
@@ -241,7 +241,7 @@ void wxSpinCtrl::OnChar(wxKeyEvent& event)
                 eventNav.SetWindowChange(event.ControlDown());
                 eventNav.SetEventObject(this);
 
-                if ( GetParent()->GetEventHandler()->ProcessEvent(eventNav) )
+                if ( GetParent()->HandleWindowEvent(eventNav) )
                     return;
             }
             break;
@@ -571,7 +571,7 @@ void wxSpinCtrl::SendSpinUpdate(int value)
     event.SetEventObject(this);
     event.SetInt(value);
 
-    (void)GetEventHandler()->ProcessEvent(event);
+    (void)HandleWindowEvent(event);
 
     m_oldValue = value;
 }

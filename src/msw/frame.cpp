@@ -497,7 +497,7 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
     {
         wxSysColourChangedEvent event2;
         event2.SetEventObject( m_frameStatusBar );
-        m_frameStatusBar->GetEventHandler()->ProcessEvent(event2);
+        m_frameStatusBar->HandleWindowEvent(event2);
     }
 #endif // wxUSE_STATUSBAR
 
@@ -1019,7 +1019,7 @@ bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
     wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item);
     event.SetEventObject(this);
 
-    return GetEventHandler()->ProcessEvent(event);
+    return HandleWindowEvent(event);
 }
 
 bool wxFrame::HandleMenuLoop(const wxEventType& evtType, WXWORD isPopup)
@@ -1029,7 +1029,7 @@ bool wxFrame::HandleMenuLoop(const wxEventType& evtType, WXWORD isPopup)
     wxMenuEvent event(evtType, isPopup ? -1 : 0);
     event.SetEventObject(this);
 
-    return GetEventHandler()->ProcessEvent(event);
+    return HandleWindowEvent(event);
 }
 
 bool wxFrame::HandleInitMenuPopup(WXHMENU hMenu)
@@ -1051,7 +1051,7 @@ bool wxFrame::HandleInitMenuPopup(WXHMENU hMenu)
     wxMenuEvent event(wxEVT_MENU_OPEN, 0, menu);
     event.SetEventObject(this);
 
-    return GetEventHandler()->ProcessEvent(event);
+    return HandleWindowEvent(event);
 }
 
 #endif // wxUSE_MENUS

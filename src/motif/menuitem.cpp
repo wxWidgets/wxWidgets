@@ -366,7 +366,7 @@ void wxMenuItemCallback (Widget WXUNUSED(w), XtPointer clientData,
             event.SetEventObject(item->GetMenuBar()->GetMenuBarFrame());
 
             item->GetMenuBar()->GetMenuBarFrame()
-                ->GetEventHandler()->ProcessEvent(event);
+                ->HandleWindowEvent(event);
         }
         // this is the child of a popup menu
         else if (item->GetTopMenu())
@@ -398,7 +398,7 @@ void wxMenuItemArmCallback (Widget WXUNUSED(w), XtPointer clientData,
             menuEvent.SetEventObject(item->GetMenuBar()->GetMenuBarFrame());
 
             item->GetMenuBar()->GetMenuBarFrame()
-                ->GetEventHandler()->ProcessEvent(menuEvent);
+                ->HandleWindowEvent(menuEvent);
         }
     }
 }
@@ -418,7 +418,7 @@ wxMenuItemDisarmCallback (Widget WXUNUSED(w), XtPointer clientData,
             menuEvent.SetEventObject(item->GetMenuBar()->GetMenuBarFrame());
 
             item->GetMenuBar()->GetMenuBarFrame()
-                ->GetEventHandler()->ProcessEvent(menuEvent);
+                ->HandleWindowEvent(menuEvent);
         }
     }
 }

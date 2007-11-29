@@ -102,7 +102,7 @@ void wxTextCtrl::CocoaTarget_action(void)
     //event.SetString(GetValue());
 
     event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
+    HandleWindowEvent(event);
 }
 
 void wxTextCtrl::AppendText(wxString const&)

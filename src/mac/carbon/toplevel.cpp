@@ -211,25 +211,25 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
                 {
                     event.m_keyCode = WXK_CONTROL ;
                     event.SetEventType( ( modifiers & controlKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
-                    focus->GetEventHandler()->ProcessEvent( event ) ;
+                    focus->HandleWindowEvent( event ) ;
                 }
                 if ( /* focus && */ (modifiers ^ wxApp::s_lastModifiers ) & shiftKey )
                 {
                     event.m_keyCode = WXK_SHIFT ;
                     event.SetEventType( ( modifiers & shiftKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
-                    focus->GetEventHandler()->ProcessEvent( event ) ;
+                    focus->HandleWindowEvent( event ) ;
                 }
                 if ( /* focus && */ (modifiers ^ wxApp::s_lastModifiers ) & optionKey )
                 {
                     event.m_keyCode = WXK_ALT ;
                     event.SetEventType( ( modifiers & optionKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
-                    focus->GetEventHandler()->ProcessEvent( event ) ;
+                    focus->HandleWindowEvent( event ) ;
                 }
                 if ( /* focus && */ (modifiers ^ wxApp::s_lastModifiers ) & cmdKey )
                 {
                     event.m_keyCode = WXK_COMMAND ;
                     event.SetEventType( ( modifiers & cmdKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
-                    focus->GetEventHandler()->ProcessEvent( event ) ;
+                    focus->HandleWindowEvent( event ) ;
                 }
 
                 wxApp::s_lastModifiers = modifiers ;
@@ -485,7 +485,7 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
             wxToolTip::RelayEvent( g_MacLastWindow , eventleave);
 #endif
 
-            g_MacLastWindow->GetEventHandler()->ProcessEvent(eventleave);
+            g_MacLastWindow->HandleWindowEvent(eventleave);
         }
 
         if ( currentMouseWindow )
@@ -500,7 +500,7 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
             wxToolTip::RelayEvent( currentMouseWindow , evententer );
 #endif
 
-            currentMouseWindow->GetEventHandler()->ProcessEvent(evententer);
+            currentMouseWindow->HandleWindowEvent(evententer);
         }
 
         g_MacLastWindow = currentMouseWindow ;
@@ -532,7 +532,7 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
             wxToolTip::RelayEvent( currentMouseWindow , wxevent );
 #endif
 
-        if ( currentMouseWindow->GetEventHandler()->ProcessEvent(wxevent) )
+        if ( currentMouseWindow->HandleWindowEvent(wxevent) )
         {
             if ((currentMouseWindowParent != NULL) &&
                 (currentMouseWindowParent->GetChildren().Find(currentMouseWindow) == NULL))
@@ -616,7 +616,7 @@ wxMacTopLevelWindowEventHandler(EventHandlerCallRef WXUNUSED(handler),
             wxActivateEvent wxevent(wxEVT_ACTIVATE, true , toplevelWindow->GetId());
             wxevent.SetTimestamp( cEvent.GetTicks() ) ;
             wxevent.SetEventObject(toplevelWindow);
-            toplevelWindow->GetEventHandler()->ProcessEvent(wxevent);
+            toplevelWindow->HandleWindowEvent(wxevent);
             // we still sending an eventNotHandledErr in order to allow for default processing
         }
             break ;
@@ -627,7 +627,7 @@ wxMacTopLevelWindowEventHandler(EventHandlerCallRef WXUNUSED(handler),
             wxActivateEvent wxevent(wxEVT_ACTIVATE, false , toplevelWindow->GetId());
             wxevent.SetTimestamp( cEvent.GetTicks() ) ;
             wxevent.SetEventObject(toplevelWindow);
-            toplevelWindow->GetEventHandler()->ProcessEvent(wxevent);
+            toplevelWindow->HandleWindowEvent(wxevent);
             // we still sending an eventNotHandledErr in order to allow for default processing
         }
             break ;
@@ -661,7 +661,7 @@ wxMacTopLevelWindowEventHandler(EventHandlerCallRef WXUNUSED(handler),
                 wxSizeEvent event( r.GetSize() , toplevelWindow->GetId() ) ;
                 event.SetEventObject( toplevelWindow ) ;
 
-                toplevelWindow->GetEventHandler()->ProcessEvent(event) ;
+                toplevelWindow->HandleWindowEvent(event) ;
                 toplevelWindow->wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
             }
 
@@ -669,7 +669,7 @@ wxMacTopLevelWindowEventHandler(EventHandlerCallRef WXUNUSED(handler),
             {
                 wxMoveEvent event( r.GetLeftTop() , toplevelWindow->GetId() ) ;
                 event.SetEventObject( toplevelWindow ) ;
-                toplevelWindow->GetEventHandler()->ProcessEvent(event) ;
+                toplevelWindow->HandleWindowEvent(event) ;
             }
 
             result = noErr ;
@@ -697,7 +697,7 @@ wxMacTopLevelWindowEventHandler(EventHandlerCallRef WXUNUSED(handler),
                 wxSizeEvent wxevent( r , toplevelWindow->GetId() ) ;
                 wxevent.SetEventObject( toplevelWindow ) ;
                 wxRect adjustR = r ;
-                if ( toplevelWindow->GetEventHandler()->ProcessEvent(wxevent) )
+                if ( toplevelWindow->HandleWindowEvent(wxevent) )
                     adjustR = wxevent.GetRect() ;
 
                 if ( toplevelWindow->GetMaxWidth() != -1 && adjustR.GetWidth() > toplevelWindow->GetMaxWidth() )
@@ -1256,7 +1256,7 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
     }
 
     wxWindowCreateEvent event(this);
-    GetEventHandler()->ProcessEvent(event);
+    HandleWindowEvent(event);
 }
 
 void wxTopLevelWindowMac::ClearBackground()
@@ -1333,7 +1333,7 @@ bool wxTopLevelWindowMac::Show(bool show)
         // because apps expect a size event to occur at this moment
         wxSizeEvent event(GetSize() , m_windowId);
         event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
     }
     else
     {
@@ -1416,7 +1416,7 @@ bool wxTopLevelWindowMac::ShowWithEffect(wxShowEffect effect,
     // because apps expect a size event to occur at this moment
     wxSizeEvent event(GetSize() , m_windowId);
     event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
+    HandleWindowEvent(event);
     
     return true;
 }

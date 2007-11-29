@@ -307,12 +307,12 @@ void wxSlider::MacHandleControlClick(WXWidget WXUNUSED(control),
     wxScrollEvent event( wxEVT_SCROLL_THUMBTRACK, m_windowId );
     event.SetPosition( value );
     event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( event );
+    HandleWindowEvent( event );
 
     wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, m_windowId );
     cevent.SetInt( value );
     cevent.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( cevent );
+    HandleWindowEvent( cevent );
 }
 
 wxInt32 wxSlider::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler),
@@ -327,13 +327,13 @@ wxInt32 wxSlider::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler),
     wxScrollEvent event( wxEVT_SCROLL_THUMBRELEASE, m_windowId );
     event.SetPosition( value );
     event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( event );
+    HandleWindowEvent( event );
 
     wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, m_windowId );
     cevent.SetInt( value );
     cevent.SetEventObject( this );
 
-    GetEventHandler()->ProcessEvent( cevent );
+    HandleWindowEvent( cevent );
 
     return noErr;
 }

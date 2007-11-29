@@ -104,7 +104,7 @@ gtk_listbox_row_activated_callback(GtkTreeView        * WXUNUSED(treeview),
         event.SetInt(-1);
     }
 
-    listbox->GetEventHandler()->ProcessEvent( event );
+    listbox->HandleWindowEvent( event );
 }
 }
 
@@ -135,7 +135,7 @@ gtk_listitem_changed_callback(GtkTreeSelection * WXUNUSED(selection),
             event.SetExtraLong( 0 );
             event.SetInt( -1 );
 
-            listbox->GetEventHandler()->ProcessEvent( event );
+            listbox->HandleWindowEvent( event );
 
             return;
         }
@@ -145,7 +145,7 @@ gtk_listitem_changed_callback(GtkTreeSelection * WXUNUSED(selection),
             event.SetExtraLong( 1 );
             event.SetInt( selections[0] );
 
-            listbox->GetEventHandler()->ProcessEvent( event );
+            listbox->HandleWindowEvent( event );
         }
     }
     else
@@ -157,7 +157,7 @@ gtk_listitem_changed_callback(GtkTreeSelection * WXUNUSED(selection),
             event.SetExtraLong( 0 );
             event.SetInt( -1 );
 
-            listbox->GetEventHandler()->ProcessEvent( event );
+            listbox->HandleWindowEvent( event );
 
             return;
         }
@@ -178,7 +178,7 @@ gtk_listitem_changed_callback(GtkTreeSelection * WXUNUSED(selection),
             else if ( listbox->HasClientUntypedData() )
                 event.SetClientData( gtk_tree_entry_get_userdata(entry) );
 
-            listbox->GetEventHandler()->ProcessEvent( event );
+            listbox->HandleWindowEvent( event );
 
             g_object_unref (entry);
         }

@@ -518,7 +518,7 @@ void wxTextCtrl::Cut()
 
         wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, m_windowId );
         event.SetEventObject( this );
-        GetEventHandler()->ProcessEvent( event );
+        HandleWindowEvent( event );
       }
 }
 
@@ -532,7 +532,7 @@ void wxTextCtrl::Paste()
 
         wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, m_windowId );
         event.SetEventObject( this );
-        GetEventHandler()->ProcessEvent( event );
+        HandleWindowEvent( event );
     }
 }
 
@@ -847,7 +847,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
                 event.SetEventObject( this );
                 event.SetString( GetValue() );
-                if ( GetEventHandler()->ProcessEvent(event) )
+                if ( HandleWindowEvent(event) )
                     return;
             }
 

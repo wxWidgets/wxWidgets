@@ -184,7 +184,7 @@ wxSize wxControl::DoGetBestSize() const
 
 bool wxControl::ProcessCommand(wxCommandEvent& event)
 {
-    return GetEventHandler()->ProcessEvent(event);
+    return HandleWindowEvent(event);
 }
 
 WXHBRUSH wxControl::OnCtlColor(WXHDC    hWxDC,

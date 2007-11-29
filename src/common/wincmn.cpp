@@ -1051,6 +1051,11 @@ bool wxWindowBase::RemoveEventHandler(wxEvtHandler *handler)
     return false;
 }
 
+bool wxWindowBase::HandleWindowEvent(wxEvent& event) const
+{
+    return GetEventHandler()->SafelyProcessEvent(event);
+}
+
 // ----------------------------------------------------------------------------
 // colours, fonts &c
 // ----------------------------------------------------------------------------

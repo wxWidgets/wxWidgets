@@ -274,6 +274,30 @@ recursively applied to the parent window's event handler. If this returns true, 
 
 \helpref{wxEvtHandler::SearchEventTable}{wxevthandlersearcheventtable}
 
+
+\membersection{wxEvtHandler::SafelyProcessEvent}\label{wxevthandlersafelyprocessevent}
+
+\func{bool}{SafelyProcessEvent}{\param{wxEvent\& }{event}}
+
+Processes an event by calling \helpref{ProcessEvent}{wxevthandlerprocessevent}
+and handles any exceptions that occur in the process. If an exception is
+thrown in event handler, \helpref{wxApp::OnExceptionInMainLoop}{wxapponexceptioninmainloop}
+is called.
+
+\wxheading{Parameters}
+
+\docparam{event}{Event to process.}
+
+\wxheading{Return value}
+
+\true if the event was processed, \false if no handler was found or an
+exception was thrown.
+
+\wxheading{See also}
+
+\helpref{wxWindow::HandleWindowEvent}{wxwindowhandlewindowevent}
+
+
 \membersection{wxEvtHandler::SearchEventTable}\label{wxevthandlersearcheventtable}
 
 \func{virtual bool}{SearchEventTable}{\param{wxEventTable\& }{table}, \param{wxEvent\& }{event}}

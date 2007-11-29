@@ -59,7 +59,7 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
     event.SetString( combo->GetValue() );
     event.SetEventObject( combo );
-    combo->GetEventHandler()->ProcessEvent( event );
+    combo->HandleWindowEvent( event );
 }
 }
 
@@ -91,13 +91,13 @@ gtk_popup_hide_callback(GtkCombo *WXUNUSED(gtk_combo), wxComboBox *combo)
         event.SetInt( curSelection );
         event.SetString( combo->GetStringSelection() );
         event.SetEventObject( combo );
-        combo->GetEventHandler()->ProcessEvent( event );
+        combo->HandleWindowEvent( event );
 
         // for consistency with the other ports, send TEXT event
         wxCommandEvent event2( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
         event2.SetString( combo->GetStringSelection() );
         event2.SetEventObject( combo );
-        combo->GetEventHandler()->ProcessEvent( event2 );
+        combo->HandleWindowEvent( event2 );
     }
 }
 }
@@ -154,14 +154,14 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
         event.SetInt( curSelection );
         event.SetString( combo->GetStringSelection() );
         event.SetEventObject( combo );
-        combo->GetEventHandler()->ProcessEvent( event );
+        combo->HandleWindowEvent( event );
 
         // for consistency with the other ports, don't generate text update
         // events while the user is browsing the combobox neither
         wxCommandEvent event2( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
         event2.SetString( combo->GetValue() );
         event2.SetEventObject( combo );
-        combo->GetEventHandler()->ProcessEvent( event2 );
+        combo->HandleWindowEvent( event2 );
     }
 }
 }
@@ -789,7 +789,7 @@ void wxComboBox::OnChar( wxKeyEvent &event )
         eventEnter.SetInt( GetSelection() );
         eventEnter.SetEventObject( this );
 
-        if (!GetEventHandler()->ProcessEvent( eventEnter ))
+        if (!HandleWindowEvent( eventEnter ))
         {
             // This will invoke the dialog default action, such
             // as the clicking the default button.

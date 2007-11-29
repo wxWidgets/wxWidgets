@@ -206,12 +206,12 @@ void wxWindowDFB::SetFocus()
     // notify the parent keeping track of focus for the kbd navigation
     // purposes that we got it
     wxChildFocusEvent eventFocus((wxWindow*)this);
-    GetEventHandler()->ProcessEvent(eventFocus);
+    HandleWindowEvent(eventFocus);
 
     wxFocusEvent event(wxEVT_SET_FOCUS, GetId());
     event.SetEventObject(this);
     event.SetWindow((wxWindow*)oldFocusedWindow);
-    GetEventHandler()->ProcessEvent(event);
+    HandleWindowEvent(event);
 
 #if wxUSE_CARET
     // caret needs to be informed about focus change
@@ -241,7 +241,7 @@ void wxWindowDFB::DFBKillFocus()
     wxFocusEvent event(wxEVT_KILL_FOCUS, GetId());
     event.SetEventObject(this);
     event.SetWindow(gs_toBeFocusedWindow);
-    GetEventHandler()->ProcessEvent(event);
+    HandleWindowEvent(event);
 }
 
 // ----------------------------------------------------------------------------
@@ -526,7 +526,7 @@ void wxWindowDFB::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         wxSize newSize(width, height);
         wxSizeEvent event(newSize, GetId());
         event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
     }
 }
 
@@ -674,7 +674,7 @@ void wxWindowDFB::PaintWindow(const wxRect& rect)
     wxWindowDC dc((wxWindow*)this);
     wxEraseEvent eventEr(m_windowId, &dc);
     eventEr.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(eventEr);
+    HandleWindowEvent(eventEr);
 
     wxRect clientRect(GetClientRect());
 
@@ -683,7 +683,7 @@ void wxWindowDFB::PaintWindow(const wxRect& rect)
     {
         wxNcPaintEvent eventNc(GetId());
         eventNc.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(eventNc);
+        HandleWindowEvent(eventNc);
     }
     else
     {
@@ -696,7 +696,7 @@ void wxWindowDFB::PaintWindow(const wxRect& rect)
     {
         wxPaintEvent eventPt(GetId());
         eventPt.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(eventPt);
+        HandleWindowEvent(eventPt);
     }
     else
     {
@@ -1026,7 +1026,7 @@ void wxWindowDFB::HandleKeyEvent(const wxDFBWindowEvent& event_)
     if ( e.type == DWET_KEYUP )
     {
         event.SetEventType(wxEVT_KEY_UP);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
     }
     else
     {
@@ -1034,7 +1034,7 @@ void wxWindowDFB::HandleKeyEvent(const wxDFBWindowEvent& event_)
 
         event.SetEventType(wxEVT_KEY_DOWN);
 
-        if ( GetEventHandler()->ProcessEvent(event) )
+        if ( HandleWindowEvent(event) )
             return;
 
         // only send wxEVT_CHAR event if not processed yet:
@@ -1042,7 +1042,7 @@ void wxWindowDFB::HandleKeyEvent(const wxDFBWindowEvent& event_)
         if ( event.m_keyCode != 0 )
         {
             event.SetEventType(wxEVT_CHAR);
-            if ( GetEventHandler()->ProcessEvent(event) )
+            if ( HandleWindowEvent(event) )
                 return;
         }
 
@@ -1057,7 +1057,7 @@ void wxWindowDFB::HandleKeyEvent(const wxDFBWindowEvent& event_)
             // Ctrl-TAB changes the (parent) window, i.e. switch notebook page:
             navEvent.SetWindowChange(event.m_controlDown);
             navEvent.SetCurrentFocus(wxStaticCast(this, wxWindow));
-            GetParent()->GetEventHandler()->ProcessEvent(navEvent);
+            GetParent()->HandleWindowEvent(navEvent);
         }
     }
 }

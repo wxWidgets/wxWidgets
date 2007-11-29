@@ -642,7 +642,7 @@ void     wxgtk_tree_model_set_sort_column_id  (GtkTreeSortable        *sortable,
         wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, dv->GetId() );
         event.SetDataViewColumn( gs_lastLeftClickHeader );
         event.SetModel( dv->GetModel() );
-        dv->GetEventHandler()->ProcessEvent( event );
+        dv->HandleWindowEvent( event );
     }
 
     gs_lastLeftClickHeader = NULL;
@@ -1212,7 +1212,7 @@ wxgtk_cell_editable_editing_done( GtkCellEditable *editable,
     event.SetModel( dv->GetModel() );
     wxDataViewItem item( s_user_data );
     event.SetItem( item );
-    dv->GetEventHandler()->ProcessEvent( event );
+    dv->HandleWindowEvent( event );
 }
 
 static void
@@ -1230,7 +1230,7 @@ wxgtk_renderer_editing_started( GtkCellRenderer *cell, GtkCellEditable *editable
     gtk_tree_path_free( tree_path );
     wxDataViewItem item( iter.user_data );
     event.SetItem( item );
-    dv->GetEventHandler()->ProcessEvent( event );
+    dv->HandleWindowEvent( event );
 
     if (GTK_IS_CELL_EDITABLE(editable))
     {
@@ -2068,7 +2068,7 @@ gtk_dataview_header_button_press_callback( GtkWidget *widget,
         wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, dv->GetId() );
         event.SetDataViewColumn( column );
         event.SetModel( dv->GetModel() );
-        if (dv->GetEventHandler()->ProcessEvent( event ))
+        if (dv->HandleWindowEvent( event ))
             return FALSE;
     }
 
@@ -2078,7 +2078,7 @@ gtk_dataview_header_button_press_callback( GtkWidget *widget,
         wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, dv->GetId() );
         event.SetDataViewColumn( column );
         event.SetModel( dv->GetModel() );
-        if (dv->GetEventHandler()->ProcessEvent( event ))
+        if (dv->HandleWindowEvent( event ))
             return FALSE;
     }
 
@@ -2654,7 +2654,7 @@ bool wxDataViewCtrlInternal::ItemChanged( const wxDataViewItem &item )
     event.SetEventObject( m_owner );
     event.SetModel( m_owner->GetModel() );
     event.SetItem( item );
-    m_owner->GetEventHandler()->ProcessEvent( event );
+    m_owner->HandleWindowEvent( event );
 
     return true;
 }
@@ -2667,7 +2667,7 @@ bool wxDataViewCtrlInternal::ValueChanged( const wxDataViewItem &item, unsigned 
     event.SetColumn( col );
     event.SetDataViewColumn( GetOwner()->GetColumn(col) );
     event.SetItem( item );
-    m_owner->GetEventHandler()->ProcessEvent( event );
+    m_owner->HandleWindowEvent( event );
 
     return true;
 }
@@ -3120,7 +3120,7 @@ wxdataview_selection_changed_callback( GtkTreeSelection* selection, wxDataViewCt
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, dv->GetId() );
     event.SetItem( dv->GetSelection() );
     event.SetModel( dv->GetModel() );
-    dv->GetEventHandler()->ProcessEvent( event );
+    dv->HandleWindowEvent( event );
 }
 
 static void
@@ -3134,7 +3134,7 @@ wxdataview_row_activated_callback( GtkTreeView* treeview, GtkTreePath *path,
     wxDataViewItem item( (void*) iter.user_data );;
     event.SetItem( item );
     event.SetModel( dv->GetModel() );
-    dv->GetEventHandler()->ProcessEvent( event );
+    dv->HandleWindowEvent( event );
 }
 
 static gboolean
@@ -3146,7 +3146,7 @@ wxdataview_test_expand_row_callback( GtkTreeView* treeview, GtkTreeIter* iter,
     wxDataViewItem item( (void*) iter->user_data );;
     event.SetItem( item );
     event.SetModel( dv->GetModel() );
-    dv->GetEventHandler()->ProcessEvent( event );
+    dv->HandleWindowEvent( event );
 
     return !event.IsAllowed();
 }
@@ -3160,7 +3160,7 @@ wxdataview_row_expanded_callback( GtkTreeView* treeview, GtkTreeIter* iter,
     wxDataViewItem item( (void*) iter->user_data );;
     event.SetItem( item );
     event.SetModel( dv->GetModel() );
-    dv->GetEventHandler()->ProcessEvent( event );
+    dv->HandleWindowEvent( event );
 }
 
 static gboolean
@@ -3172,7 +3172,7 @@ wxdataview_test_collapse_row_callback( GtkTreeView* treeview, GtkTreeIter* iter,
     wxDataViewItem item( (void*) iter->user_data );;
     event.SetItem( item );
     event.SetModel( dv->GetModel() );
-    dv->GetEventHandler()->ProcessEvent( event );
+    dv->HandleWindowEvent( event );
 
     return !event.IsAllowed();
 }
@@ -3186,7 +3186,7 @@ wxdataview_row_collapsed_callback( GtkTreeView* treeview, GtkTreeIter* iter,
     wxDataViewItem item( (void*) iter->user_data );;
     event.SetItem( item );
     event.SetModel( dv->GetModel() );
-    dv->GetEventHandler()->ProcessEvent( event );
+    dv->HandleWindowEvent( event );
 }
 
 //-----------------------------------------------------------------------------

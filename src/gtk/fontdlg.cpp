@@ -60,7 +60,7 @@ void gtk_fontdialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFontDialog *dial
 
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK);
     event.SetEventObject( dialog );
-    dialog->GetEventHandler()->ProcessEvent( event );
+    dialog->HandleWindowEvent( event );
 }
 }
 
@@ -74,7 +74,7 @@ void gtk_fontdialog_cancel_callback( GtkWidget *WXUNUSED(w), wxFontDialog *dialo
 {
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
     event.SetEventObject( dialog );
-    dialog->GetEventHandler()->ProcessEvent( event );
+    dialog->HandleWindowEvent( event );
 }
 }
 

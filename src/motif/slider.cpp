@@ -221,13 +221,13 @@ void wxSliderCallback (Widget widget, XtPointer clientData,
     XtVaGetValues (widget, XmNvalue, &commandInt, NULL);
     event.SetInt(commandInt);
     event.SetEventObject(slider);
-    slider->GetEventHandler()->ProcessEvent(event);
+    slider->HandleWindowEvent(event);
 
     // Also send a wxCommandEvent for compatibility.
     wxCommandEvent event2(wxEVT_COMMAND_SLIDER_UPDATED, slider->GetId());
     event2.SetEventObject(slider);
     event2.SetInt( event.GetInt() );
-    slider->GetEventHandler()->ProcessEvent(event2);
+    slider->HandleWindowEvent(event2);
 }
 
 #endif // wxUSE_SLIDER

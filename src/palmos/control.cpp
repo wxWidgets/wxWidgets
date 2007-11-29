@@ -501,7 +501,7 @@ wxControl::GetCompositeControlsDefaultAttributes(wxWindowVariant WXUNUSED(varian
 
 bool wxControl::ProcessCommand(wxCommandEvent& event)
 {
-    return GetEventHandler()->ProcessEvent(event);
+    return HandleWindowEvent(event);
 }
 
 void wxControl::OnEraseBackground(wxEraseEvent& event)

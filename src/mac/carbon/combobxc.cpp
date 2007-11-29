@@ -65,7 +65,7 @@ static pascal OSStatus wxMacComboBoxEventHandler( EventHandlerCallRef handler , 
                         event.SetInt( cb->GetSelection() );
                         event.SetString( cb->GetStringSelection() );
                         event.SetEventObject( cb );
-                        cb->GetEventHandler()->ProcessEvent( event );
+                        cb->HandleWindowEvent( event );
                     }
                     break;
                 default :
@@ -126,7 +126,7 @@ protected:
                 event.SetInt( 0 );
                 event.SetString( value );
                 event.SetEventObject( m_cb );
-                m_cb->GetEventHandler()->ProcessEvent( event );
+                m_cb->HandleWindowEvent( event );
             }
             else
             {
@@ -141,7 +141,7 @@ protected:
                     event.SetInt( m_cb->GetCount() - 1 );
                     event.SetString( value );
                     event.SetEventObject( m_cb );
-                    m_cb->GetEventHandler()->ProcessEvent( event );
+                    m_cb->HandleWindowEvent( event );
                 }
 
                 // This will invoke the dialog default action, such

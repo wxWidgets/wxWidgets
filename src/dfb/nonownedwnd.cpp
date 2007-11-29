@@ -228,7 +228,7 @@ bool wxNonOwnedWindow::Show(bool show)
         m_sizeSet = true;
         wxSizeEvent event(GetSize(), GetId());
         event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
     }
 
     // make sure the window is fully painted, with all pending updates, before

@@ -1082,7 +1082,7 @@ void wxWindowOS2::OnIdle(
                            ,vPoint.y
                            ,nState
                           );
-            (void)GetEventHandler()->ProcessEvent(rEvent);
+            (void)HandleWindowEvent(rEvent);
         }
     }
     if (wxUpdateUIEvent::CanUpdate(this))
@@ -1620,7 +1620,7 @@ void wxWindowOS2::DoSetClientSize( int nWidth,
     wxSize size( nWidth, nHeight );
     wxSizeEvent vEvent( size, m_windowId );
     vEvent.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(vEvent);
+    HandleWindowEvent(vEvent);
 } // end of wxWindowOS2::DoSetClientSize
 
 // ---------------------------------------------------------------------------
@@ -2001,7 +2001,7 @@ bool wxWindowOS2::OS2ProcessMessage( WXMSG* pMsg )
                 vEvent.SetWindowChange(bWindowChange);
                 vEvent.SetEventObject(this);
 
-                if (GetEventHandler()->ProcessEvent(vEvent))
+                if (HandleWindowEvent(vEvent))
                 {
                     wxButton*       pBtn = wxDynamicCast(FindFocus(), wxButton);
 
@@ -3027,7 +3027,7 @@ bool wxWindowOS2::HandleCreate( WXLPCREATESTRUCT WXUNUSED(vCs),
 {
     wxWindowCreateEvent             vEvent((wxWindow*)this);
 
-    (void)GetEventHandler()->ProcessEvent(vEvent);
+    (void)HandleWindowEvent(vEvent);
     *pbMayCreate = true;
     return true;
 } // end of wxWindowOS2::HandleCreate
@@ -3036,7 +3036,7 @@ bool wxWindowOS2::HandleDestroy()
 {
     wxWindowDestroyEvent            vEvent((wxWindow*)this);
     vEvent.SetId(GetId());
-    (void)GetEventHandler()->ProcessEvent(vEvent);
+    (void)HandleWindowEvent(vEvent);
 
     //
     // Delete our drop target if we've got one
@@ -3075,7 +3075,7 @@ bool wxWindowOS2::HandleActivate(
                                            ,m_windowId
                                           );
     vEvent.SetEventObject(this);
-    return GetEventHandler()->ProcessEvent(vEvent);
+    return HandleWindowEvent(vEvent);
 } // end of wxWindowOS2::HandleActivate
 
 bool wxWindowOS2::HandleSetFocus( WXHWND WXUNUSED(hWnd) )
@@ -3085,7 +3085,7 @@ bool wxWindowOS2::HandleSetFocus( WXHWND WXUNUSED(hWnd) )
     // purposes that we got it
     //
     wxChildFocusEvent               vEventFocus((wxWindow *)this);
-    (void)GetEventHandler()->ProcessEvent(vEventFocus);
+    (void)HandleWindowEvent(vEventFocus);
 
 #if wxUSE_CARET
     //
@@ -3109,7 +3109,7 @@ bool wxWindowOS2::HandleSetFocus( WXHWND WXUNUSED(hWnd) )
     wxFocusEvent                    vEvent(wxEVT_SET_FOCUS, m_windowId);
 
     vEvent.SetEventObject(this);
-    return GetEventHandler()->ProcessEvent(vEvent);
+    return HandleWindowEvent(vEvent);
 } // end of wxWindowOS2::HandleSetFocus
 
 bool wxWindowOS2::HandleKillFocus( WXHWND hWnd )
@@ -3156,7 +3156,7 @@ bool wxWindowOS2::HandleKillFocus( WXHWND hWnd )
     // wxFindWinFromHandle() may return NULL, it is ok
     //
     vEvent.SetWindow(wxFindWinFromHandle(hWnd));
-    return GetEventHandler()->ProcessEvent(vEvent);
+    return HandleWindowEvent(vEvent);
 } // end of wxWindowOS2::HandleKillFocus
 
 // ---------------------------------------------------------------------------
@@ -3171,7 +3171,7 @@ bool wxWindowOS2::HandleShow(
     wxShowEvent                     vEvent(GetId(), bShow);
 
     vEvent.SetEventObject(this);
-    return GetEventHandler()->ProcessEvent(vEvent);
+    return HandleWindowEvent(vEvent);
 } // end of wxWindowOS2::HandleShow
 
 bool wxWindowOS2::HandleInitDialog( WXHWND WXUNUSED(hWndFocus) )
@@ -3179,7 +3179,7 @@ bool wxWindowOS2::HandleInitDialog( WXHWND WXUNUSED(hWndFocus) )
     wxInitDialogEvent               vEvent(GetId());
 
     vEvent.SetEventObject(this);
-    return GetEventHandler()->ProcessEvent(vEvent);
+    return HandleWindowEvent(vEvent);
 } // end of wxWindowOS2::HandleInitDialog
 
 bool wxWindowOS2::HandleEndDrag(WXWPARAM WXUNUSED(wParam))
@@ -3416,7 +3416,7 @@ bool wxWindowOS2::HandleSysColorChange()
     wxSysColourChangedEvent         vEvent;
 
     vEvent.SetEventObject(this);
-    return GetEventHandler()->ProcessEvent(vEvent);
+    return HandleWindowEvent(vEvent);
 } // end of wxWindowOS2::HandleSysColorChange
 
 bool wxWindowOS2::HandleCtlColor( WXHBRUSH* WXUNUSED(phBrush) )
@@ -3449,7 +3449,7 @@ bool wxWindowOS2::HandlePaletteChanged()
     vEvent.SetEventObject(this);
     vEvent.SetChangedWindow(wxFindWinFromHandle(hWndPalChange));
 
-    return GetEventHandler()->ProcessEvent(vEvent);
+    return HandleWindowEvent(vEvent);
 } // end of wxWindowOS2::HandlePaletteChanged
 
 //
@@ -3473,7 +3473,7 @@ void wxWindowOS2::OnSysColourChanged(
             wxSysColourChangedEvent vEvent;
 
             rEvent.SetEventObject(pWin);
-            pWin->GetEventHandler()->ProcessEvent(vEvent);
+            pWin->HandleWindowEvent(vEvent);
         }
         node = node->GetNext();
     }
@@ -3558,7 +3558,7 @@ bool wxWindowOS2::HandlePaint()
     m_updateRegion = wxRegion(hRgn, hPS);
 
     vEvent.SetEventObject(this);
-    bProcessed = GetEventHandler()->ProcessEvent(vEvent);
+    bProcessed = HandleWindowEvent(vEvent);
 
     if (!bProcessed &&
          IsKindOf(CLASSINFO(wxPanel)) &&
@@ -3681,7 +3681,7 @@ bool wxWindowOS2::HandleEraseBkgnd( WXHDC hDC )
 
     vEvent.SetEventObject(this);
 
-    rc = GetEventHandler()->ProcessEvent(vEvent);
+    rc = HandleWindowEvent(vEvent);
 
     vDC.m_hPS = NULLHANDLE;
     return true;
@@ -3707,7 +3707,7 @@ bool wxWindowOS2::HandleMinimize()
     wxIconizeEvent                  vEvent(m_windowId);
 
     vEvent.SetEventObject(this);
-    return GetEventHandler()->ProcessEvent(vEvent);
+    return HandleWindowEvent(vEvent);
 } // end of wxWindowOS2::HandleMinimize
 
 bool wxWindowOS2::HandleMaximize()
@@ -3715,7 +3715,7 @@ bool wxWindowOS2::HandleMaximize()
     wxMaximizeEvent                 vEvent(m_windowId);
 
     vEvent.SetEventObject(this);
-    return GetEventHandler()->ProcessEvent(vEvent);
+    return HandleWindowEvent(vEvent);
 } // end of wxWindowOS2::HandleMaximize
 
 bool wxWindowOS2::HandleMove( int nX, int nY )
@@ -3724,7 +3724,7 @@ bool wxWindowOS2::HandleMove( int nX, int nY )
     wxMoveEvent vEvent(pt, m_windowId);
 
     vEvent.SetEventObject(this);
-    return GetEventHandler()->ProcessEvent(vEvent);
+    return HandleWindowEvent(vEvent);
 }  // end of wxWindowOS2::HandleMove
 
 bool wxWindowOS2::HandleSize( int    nWidth,
@@ -3735,7 +3735,7 @@ bool wxWindowOS2::HandleSize( int    nWidth,
     wxSizeEvent vEvent(sz, m_windowId);
 
     vEvent.SetEventObject(this);
-    return GetEventHandler()->ProcessEvent(vEvent);
+    return HandleWindowEvent(vEvent);
 } // end of wxWindowOS2::HandleSize
 
 bool wxWindowOS2::HandleGetMinMaxInfo( PSWP pSwp )
@@ -3880,7 +3880,7 @@ bool wxWindowOS2::HandleMouseEvent( WXUINT uMsg,
                        ,uFlags
                        );
 
-        bProcessed = GetEventHandler()->ProcessEvent(vEvent);
+        bProcessed = HandleWindowEvent(vEvent);
         if (!bProcessed)
         {
             HPOINTER hCursor = (HPOINTER)GetCursor().GetHCURSOR();
@@ -3914,7 +3914,7 @@ bool wxWindowOS2::HandleMouseMove( int nX,
                        ,uFlags
                       );
 
-        (void)GetEventHandler()->ProcessEvent(vEvent);
+        (void)HandleWindowEvent(vEvent);
     }
     return HandleMouseEvent( WM_MOUSEMOVE
                             ,nX
@@ -4036,7 +4036,7 @@ bool wxWindowOS2::HandleChar( WXWPARAM WXUNUSED(wParam),
         vEvent.m_controlDown = true;
     }
 
-    return (GetEventHandler()->ProcessEvent(vEvent));
+    return (HandleWindowEvent(vEvent));
 }
 
 bool wxWindowOS2::HandleKeyDown( WXWPARAM wParam,
@@ -4060,7 +4060,7 @@ bool wxWindowOS2::HandleKeyDown( WXWPARAM wParam,
                                           ,(MPARAM)wParam
                                          ));
 
-        if (GetEventHandler()->ProcessEvent(vEvent))
+        if (HandleWindowEvent(vEvent))
         {
             return true;
         }
@@ -4089,7 +4089,7 @@ bool wxWindowOS2::HandleKeyUp( WXWPARAM wParam,
                                          ,(MPARAM)wParam
                                         ));
 
-        if (GetEventHandler()->ProcessEvent(vEvent))
+        if (HandleWindowEvent(vEvent))
             return true;
     }
     return false;
@@ -4155,7 +4155,7 @@ bool wxWindowOS2::OS2OnScroll( int nOrientation,
         default:
             return false;
     }
-    return GetEventHandler()->ProcessEvent(vEvent);
+    return HandleWindowEvent(vEvent);
 } // end of wxWindowOS2::OS2OnScroll
 
 //

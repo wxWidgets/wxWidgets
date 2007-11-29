@@ -313,7 +313,7 @@ void wxTextEntry::SendMaxLenEvent()
     wxCommandEvent event(wxEVT_COMMAND_TEXT_MAXLEN, win->GetId());
     event.SetEventObject(win);
     event.SetString(GetValue());
-    win->GetEventHandler()->ProcessEvent(event);
+    win->HandleWindowEvent(event);
 }
 
 #endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX

@@ -372,7 +372,7 @@ static void wxCloseTLWCallback( Widget WXUNUSED(widget), XtPointer client_data,
     closeEvent.SetEventObject( tlw );
 
     // May delete the dialog (with delayed deletion)
-    tlw->GetEventHandler()->ProcessEvent(closeEvent);
+    tlw->HandleWindowEvent(closeEvent);
 }
 
 void wxTLWEventHandler( Widget wid,
@@ -391,7 +391,7 @@ void wxTLWEventHandler( Widget wid,
         {
             wxevent.SetEventObject( tlw );
             wxevent.SetId( tlw->GetId() );
-            tlw->GetEventHandler()->ProcessEvent( wxevent );
+            tlw->HandleWindowEvent( wxevent );
         }
         else
         {
@@ -405,7 +405,7 @@ void wxTLWEventHandler( Widget wid,
                 keyEvent.SetEventObject( tlw );
                 keyEvent.SetId( tlw->GetId() );
                 keyEvent.SetEventType( wxEVT_CHAR_HOOK );
-                if( tlw->GetEventHandler()->ProcessEvent( keyEvent ) )
+                if( tlw->HandleWindowEvent( keyEvent ) )
                 {
                     *continueToDispatch = False;
                     return;
@@ -417,10 +417,10 @@ void wxTLWEventHandler( Widget wid,
                     keyEvent.SetEventType( wxEVT_KEY_DOWN );
 
                     // Only process OnChar if OnKeyDown didn't swallow it
-                    if( !tlw->GetEventHandler()->ProcessEvent( keyEvent ) )
+                    if( !tlw->HandleWindowEvent( keyEvent ) )
                     {
                         keyEvent.SetEventType( wxEVT_CHAR );
-                        tlw->GetEventHandler()->ProcessEvent( keyEvent );
+                        tlw->HandleWindowEvent( keyEvent );
                     }
                 }
             }

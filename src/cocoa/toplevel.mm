@@ -222,7 +222,7 @@ void wxTopLevelWindowCocoa::CocoaDelegate_windowDidBecomeKey(void)
     wxLogTrace(wxTRACE_COCOA,wxT("wxTopLevelWindowCocoa=%p::CocoaDelegate_windowDidBecomeKey"),this);
     wxActivateEvent event(wxEVT_ACTIVATE, true, GetId());
     event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
+    HandleWindowEvent(event);
 }
 
 void wxTopLevelWindowCocoa::CocoaDelegate_windowDidResignKey(void)
@@ -230,7 +230,7 @@ void wxTopLevelWindowCocoa::CocoaDelegate_windowDidResignKey(void)
     wxLogTrace(wxTRACE_COCOA,wxT("wxTopLevelWindowCocoa=%p::CocoaDelegate_windowDidResignKey"),this);
     wxActivateEvent event(wxEVT_ACTIVATE, false, GetId());
     event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
+    HandleWindowEvent(event);
 }
 
 void wxTopLevelWindowCocoa::CocoaDelegate_windowDidBecomeMain(void)
@@ -301,7 +301,7 @@ bool wxTopLevelWindowCocoa::Show(bool show)
         // is shown.  I doubt this will cause any problems though.
         wxSizeEvent event(GetSize(), GetId());
         event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
 
         [m_cocoaNSWindow makeKeyAndOrderFront:m_cocoaNSWindow];
     }

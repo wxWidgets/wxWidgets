@@ -315,7 +315,7 @@ wxControl::GetCompositeControlsDefaultAttributes(wxWindowVariant WXUNUSED(varian
 
 bool wxControl::ProcessCommand(wxCommandEvent& event)
 {
-    return GetEventHandler()->ProcessEvent(event);
+    return HandleWindowEvent(event);
 }
 
 bool wxControl::MSWOnNotify(int idCtrl,
@@ -363,7 +363,7 @@ bool wxControl::MSWOnNotify(int idCtrl,
     event.SetEventType(eventType);
     event.SetEventObject(this);
 
-    return GetEventHandler()->ProcessEvent(event);
+    return HandleWindowEvent(event);
 }
 
 WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)

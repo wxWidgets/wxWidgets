@@ -349,7 +349,7 @@ bool wxDialog::DoOK()
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, GetAffirmativeId());
     event.SetEventObject(this);
 
-    return GetEventHandler()->ProcessEvent(event);
+    return HandleWindowEvent(event);
 }
 #endif // __POCKETPC__
 

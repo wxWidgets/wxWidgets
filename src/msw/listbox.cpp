@@ -658,7 +658,7 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
     event.SetInt(n);
 
-    return GetEventHandler()->ProcessEvent(event);
+    return HandleWindowEvent(event);
 }
 
 // ----------------------------------------------------------------------------

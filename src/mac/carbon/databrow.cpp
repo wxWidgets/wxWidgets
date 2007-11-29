@@ -738,7 +738,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
             dataViewEvent.SetEventObject(dataViewCtrlPtr);
             dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
            // finally send the equivalent wxWidget event:
-            dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
+            dataViewCtrlPtr->HandleWindowEvent(dataViewEvent);
            // opening the container is allowed if not vetoed:
             return ::SetDataBrowserItemDataBooleanValue(itemData,dataViewEvent.IsAllowed());
           } /* block */
@@ -754,7 +754,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
             dataViewEvent.SetEventObject(dataViewCtrlPtr);
             dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
            // finally send the equivalent wxWidget event:
-            dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
+            dataViewCtrlPtr->HandleWindowEvent(dataViewEvent);
            // opening the container is allowed if not vetoed:
             return ::SetDataBrowserItemDataBooleanValue(itemData,dataViewEvent.IsAllowed());
           } /* block */
@@ -792,7 +792,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
           dataViewEvent.SetEventObject(dataViewCtrlPtr);
           dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
          // finally send the equivalent wxWidget event:
-          dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
+          dataViewCtrlPtr->HandleWindowEvent(dataViewEvent);
         } /* block */
         break;
       case kDataBrowserContainerOpened:
@@ -803,7 +803,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
           dataViewEvent.SetEventObject(dataViewCtrlPtr);
           dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
          // finally send the equivalent wxWidget event:
-          dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
+          dataViewCtrlPtr->HandleWindowEvent(dataViewEvent);
          // add children to the expanded container:
           dataViewCtrlPtr->AddChildrenLevel(wxDataViewItem(reinterpret_cast<void*>(itemID)));
         } /* block */
@@ -826,7 +826,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
             dataViewEvent.SetDataViewColumn(dataViewCtrlPtr->GetColumnPtr(propertyID));
           } /* if */
          // finally send the equivalent wxWidget event:
-          dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
+          dataViewCtrlPtr->HandleWindowEvent(dataViewEvent);
         } /* block */
         break;
       case kDataBrowserEditStopped:
@@ -847,7 +847,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
             dataViewEvent.SetDataViewColumn(dataViewCtrlPtr->GetColumnPtr(propertyID));
           } /* if */
          // finally send the equivalent wxWidget event:
-          dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
+          dataViewCtrlPtr->HandleWindowEvent(dataViewEvent);
         } /* block */
         break;
       case kDataBrowserItemAdded:
@@ -862,7 +862,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
           dataViewEvent.SetEventObject(dataViewCtrlPtr);
           dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
          // finally send the equivalent wxWidget event:
-          dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
+          dataViewCtrlPtr->HandleWindowEvent(dataViewEvent);
         } /* block */
         break;
       case kDataBrowserItemRemoved:
@@ -877,7 +877,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
           dataViewEvent.SetEventObject(dataViewCtrlPtr);
           dataViewEvent.SetModel      (dataViewCtrlPtr->GetModel());
          // finally send the equivalent wxWidget event:
-          dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
+          dataViewCtrlPtr->HandleWindowEvent(dataViewEvent);
         } /* block */
         break;
       case kDataBrowserUserStateChanged:
@@ -918,7 +918,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
                 dataViewEvent.SetColumn(columnIndex);
                 dataViewEvent.SetDataViewColumn(columnPtr);
                // finally send the equivalent wxWidget event:
-                dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
+                dataViewCtrlPtr->HandleWindowEvent(dataViewEvent);
               } /* if */
             } /* if */
           } /* if */

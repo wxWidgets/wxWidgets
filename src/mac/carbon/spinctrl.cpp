@@ -88,7 +88,7 @@ protected:
              wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, m_spin->GetId());
              event.SetEventObject(m_spin);
              event.SetInt(l);
-             m_spin->GetEventHandler()->ProcessEvent(event);
+             m_spin->HandleWindowEvent(event);
 
              m_spin->m_oldValue = l;
          }
@@ -116,7 +116,7 @@ protected:
             event.SetString(m_spin->GetText()->GetValue());
             event.SetInt(val);
 
-            m_spin->GetEventHandler()->ProcessEvent(event);
+            m_spin->HandleWindowEvent(event);
         }
 
         event.Skip();
@@ -166,7 +166,7 @@ protected:
         event.SetEventObject(m_spin);
         event.SetInt(pos);
 
-        m_spin->GetEventHandler()->ProcessEvent(event);
+        m_spin->HandleWindowEvent(event);
 
         m_spin->m_oldValue = pos;
     }

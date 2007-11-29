@@ -84,7 +84,7 @@ static void gtk_checkbox_toggled_callback(GtkWidget *widget, wxCheckBox *cb)
     wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, cb->GetId());
     event.SetInt(cb->Get3StateValue());
     event.SetEventObject(cb);
-    cb->GetEventHandler()->ProcessEvent(event);
+    cb->HandleWindowEvent(event);
 }
 }
 

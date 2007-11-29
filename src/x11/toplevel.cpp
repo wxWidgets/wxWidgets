@@ -268,7 +268,7 @@ void wxTopLevelWindowX11::OnInternalIdle()
     {
         wxSizeEvent event( GetClientSize(), GetId() );
         event.SetEventObject( this );
-        GetEventHandler()->ProcessEvent( event );
+        HandleWindowEvent( event );
 
         m_needResizeInIdle = false;
     }
@@ -285,7 +285,7 @@ bool wxTopLevelWindowX11::Show(bool show)
         wxSizeEvent event(GetSize(), GetId());
 
         event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
+        HandleWindowEvent(event);
 
         m_needResizeInIdle = false;
     }

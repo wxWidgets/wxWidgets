@@ -2750,7 +2750,7 @@ MRESULT wxListCtrl::OS2WindowProc( WXUINT uMsg,
                     //
             }
             vEvent.SetEventType(vEventType);
-            bProcessed = GetEventHandler()->ProcessEvent(vEvent);
+            bProcessed = HandleWindowEvent(vEvent);
             break;
     }
     if (!bProcessed)

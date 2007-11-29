@@ -354,7 +354,7 @@ wxDatePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             {
                 m_date = dt;
                 wxDateEvent event(this, dt, wxEVT_DATE_CHANGED);
-                if ( GetEventHandler()->ProcessEvent(event) )
+                if ( HandleWindowEvent(event) )
                 {
                     *result = 0;
                     return true;
