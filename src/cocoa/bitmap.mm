@@ -426,9 +426,26 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
     return true;
 }
 
-wxBitmap wxBitmap::GetSubBitmap(wxRect const&) const
+wxBitmap wxBitmap::GetSubBitmap(const wxRect& rect) const
 {
-    return wxNullBitmap;
+    wxAutoNSAutoreleasePool pool;
+    if(!Ok())
+        return wxNullBitmap;
+    NSImage *nsimage = GetNSImage(false);
+
+    [nsimage lockFocus];
+    NSRect imageRect = {{0,0}, [nsimage size]};
+    imageRect.origin.x = imageRect.size.width * rect.x / GetWidth();
+    imageRect.origin.y = imageRect.size.height * rect.y / GetHeight();
+    imageRect.size.width *= wx_static_cast(CGFloat, rect.width) / GetWidth();
+    imageRect.size.height *= wx_static_cast(CGFloat, rect.height) / GetHeight();
+
+    NSBitmapImageRep *newBitmapRep = [[NSBitmapImageRep alloc] initWithFocusedViewRect:imageRect];
+    [nsimage unlockFocus];
+
+    wxBitmap newBitmap(newBitmapRep);
+
+    return (newBitmap);
 }
 
 wxImage wxBitmap::ConvertToImage() const
