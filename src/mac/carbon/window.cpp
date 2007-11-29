@@ -160,6 +160,7 @@ static const EventTypeSpec eventList[] =
     { kEventClassControl , kEventControlDeactivate } ,
 
     { kEventClassControl , kEventControlSetFocusPart } ,
+    { kEventClassControl , kEventControlFocusPartChanged } ,
 
     { kEventClassService , kEventServiceGetTypes },
     { kEventClassService , kEventServiceCopy },
@@ -301,26 +302,27 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 #endif
             break ;
 
-        // we emulate this event under Carbon CFM
-        case kEventControlSetFocusPart :
+        //
+        // focus handling
+        // different handling on OS X
+        //
+            
+        case kEventControlFocusPartChanged :
+            // the event is emulated by wxmac for systems lower than 10.5
             {
-                Boolean focusEverything = false ;
-                ControlPartCode controlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode );
-
-                if ( cEvent.GetParameter<Boolean>(kEventParamControlFocusEverything , &focusEverything ) == noErr )
+                ControlPartCode previousControlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlPreviousPart , typeControlPartCode );
+                ControlPartCode currentControlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlCurrentPart , typeControlPartCode );
+                if ( currentControlPart == 0 )
                 {
-                }
-
-                if ( thisWindow->MacIsUserPane() )
-                    result = noErr ;
-
-                if ( controlPart == kControlFocusNoPart )
-                {
+                    // kill focus
 #if wxUSE_CARET
                     if ( thisWindow->GetCaret() )
                         thisWindow->GetCaret()->OnKillFocus();
 #endif
-
+                    
+                    wxLogTrace(_T("Focus"), _T("focus lost(%p)"), wx_static_cast(void*, thisWindow));
+                    
+                    // remove this as soon as posting the synthesized event works properly
                     static bool inKillFocusEvent = false ;
 
                     if ( !inKillFocusEvent )
@@ -332,20 +334,112 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                         inKillFocusEvent = false ;
                     }
                 }
-                else
+                else if ( previousControlPart == 0 )
                 {
+                    // set focus
                     // panel wants to track the window which was the last to have focus in it
-                    wxChildFocusEvent eventFocus(thisWindow);
+                    wxLogTrace(_T("Focus"), _T("focus set(%p)"), wx_static_cast(void*, thisWindow));
+                    wxChildFocusEvent eventFocus((wxWindow*)thisWindow);
                     thisWindow->GetEventHandler()->ProcessEvent(eventFocus);
-
+                    
 #if wxUSE_CARET
                     if ( thisWindow->GetCaret() )
                         thisWindow->GetCaret()->OnSetFocus();
 #endif
-
+                    
                     wxFocusEvent event(wxEVT_SET_FOCUS, thisWindow->GetId());
                     event.SetEventObject(thisWindow);
                     thisWindow->GetEventHandler()->ProcessEvent(event) ;
+                }
+            }
+            break;
+        case kEventControlSetFocusPart :
+            {
+#ifdef __WXMAC_OSX__
+                Boolean focusEverything = false ;
+                if ( cEvent.GetParameter<Boolean>(kEventParamControlFocusEverything , &focusEverything ) == noErr )
+                {
+                    // put a breakpoint here to catch focus everything events
+                }
+#endif                
+                ControlPartCode controlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode );
+                
+                ControlPartCode previousControlPart = 0;
+                verify_noerr( HIViewGetFocusPart(controlRef, &previousControlPart));
+
+                if ( thisWindow->MacIsUserPane() )
+                {
+                    if ( controlPart != kControlFocusNoPart )
+                        cEvent.SetParameter<ControlPartCode>( kEventParamControlPart, typeControlPartCode, 1 ) ;
+                    result = noErr ;
+                }
+                else
+                    result = CallNextEventHandler(handler, event);
+                
+                if ( UMAGetSystemVersion() < 0x1050 )
+                {
+// set back to 0 if problems arise
+#if 1   
+                    ControlPartCode currentControlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode );
+                    // synthesize the event focus changed event
+                    EventRef evRef = NULL ;
+                    
+                    OSStatus err = MacCreateEvent(
+                                         NULL , kEventClassControl , kEventControlFocusPartChanged , TicksToEventTime( TickCount() ) ,
+                                         kEventAttributeUserEvent , &evRef );
+                    verify_noerr( err );
+                    
+                    wxMacCarbonEvent iEvent( evRef ) ;
+                    iEvent.SetParameter<ControlRef>( kEventParamDirectObject , controlRef ) ;
+                    iEvent.SetParameter<ControlPartCode>( kEventParamControlPreviousPart, typeControlPartCode, previousControlPart ) ;
+                    iEvent.SetParameter<ControlPartCode>( kEventParamControlCurrentPart, typeControlPartCode, currentControlPart ) ;
+   
+#if 0
+                    // TODO test this first, avoid double posts etc...
+                    PostEventToQueue( GetMainEventQueue(), evRef , kEventPriorityHigh );
+#else
+                    wxMacWindowControlEventHandler( NULL , evRef , data ) ;
+#endif
+                    ReleaseEvent( evRef ) ;
+#else
+                    // old implementation, to be removed if the new one works
+                    if ( controlPart == kControlFocusNoPart )
+                    {
+#if wxUSE_CARET
+                        if ( thisWindow->GetCaret() )
+                            thisWindow->GetCaret()->OnKillFocus();
+#endif
+
+                        wxLogTrace(_T("Focus"), _T("focus lost(%p)"), wx_static_cast(void*, thisWindow));
+                        
+                        static bool inKillFocusEvent = false ;
+
+                        if ( !inKillFocusEvent )
+                        {
+                            inKillFocusEvent = true ;
+                            wxFocusEvent event( wxEVT_KILL_FOCUS, thisWindow->GetId());
+                            event.SetEventObject(thisWindow);
+                            thisWindow->GetEventHandler()->ProcessEvent(event) ;
+                            inKillFocusEvent = false ;
+                        }
+                    }
+                    else
+                    {
+                        // panel wants to track the window which was the last to have focus in it
+                        wxLogTrace(_T("Focus"), _T("focus set(%p)"), wx_static_cast(void*, thisWindow));
+                        wxChildFocusEvent eventFocus((wxWindow*)thisWindow);
+                        thisWindow->GetEventHandler()->ProcessEvent(eventFocus);
+
+    #if wxUSE_CARET
+                        if ( thisWindow->GetCaret() )
+                            thisWindow->GetCaret()->OnSetFocus();
+    #endif
+
+                        wxFocusEvent event(wxEVT_SET_FOCUS, thisWindow->GetId());
+                        event.SetEventObject(thisWindow);
+                        thisWindow->GetEventHandler()->ProcessEvent(event) ;
+                    }
+#endif
                 }
             }
             break ;
@@ -2434,7 +2528,7 @@ void wxWindowMac::OnSetFocus( wxFocusEvent& event )
         Rect rect ;
 
         m_peer->GetRect( &rect ) ;
-        // auf den umgebenden Rahmen zurﾁￂﾟck
+        // on the surrounding frame
         InsetRect( &rect, -1 , -1 ) ;
 
         wxTopLevelWindowMac* top = MacGetTopLevelWindow();
