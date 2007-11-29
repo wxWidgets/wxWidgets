@@ -696,18 +696,37 @@ public:
     wxMacCoreGraphicsFontData( wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col );
     ~wxMacCoreGraphicsFontData();
 
+#if wxMAC_USE_ATSU_TEXT
     virtual ATSUStyle GetATSUStyle() { return m_macATSUIStyle; }
+#endif
+#if wxMAC_USE_CORE_TEXT
+    CTFontRef GetCTFont() const { return m_ctFont ; }
+#endif
+    wxColour GetColour() const { return m_colour ; }
+    
+    bool GetUnderlined() const { return m_underlined ; }
 private :
+    wxColour m_colour;
+    bool m_underlined;
+#if wxMAC_USE_ATSU_TEXT
     ATSUStyle m_macATSUIStyle;
+#endif
+#if wxMAC_USE_CORE_TEXT
+    wxCFRef< CTFontRef > m_ctFont;
+#endif
 };
 
 wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col) : wxGraphicsObjectRefData( renderer )
 {
     m_macATSUIStyle = NULL;
+    OSStatus status = noErr;
+    m_colour = col;
+    m_underlined = font.GetUnderlined();
 
 #if wxMAC_USE_CORE_TEXT
-#elif wxMAC_USE_ATSU_TEXT
-    OSStatus status;
+    m_ctFont.reset( wxCFRetain((CTFontRef) font.MacGetCTFont()) );
+#endif
+#if wxMAC_USE_ATSU_TEXT
 
     status = ATSUCreateAndCopyStyle( (ATSUStyle) font.MacGetATSUStyle() , &m_macATSUIStyle );
 
@@ -739,20 +758,23 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
         atsuTags, atsuSizes, atsuValues);
 
     wxASSERT_MSG( status == noErr , wxT("couldn't modify ATSU style") );
-#elif WXMAC_USE_CG_TEXT
+#endif
+#if WXMAC_USE_CG_TEXT
 #endif
 }
 
 wxMacCoreGraphicsFontData::~wxMacCoreGraphicsFontData()
 {
 #if wxMAC_USE_CORE_TEXT
-#elif wxMAC_USE_ATSU_TEXT
+#endif
+#if wxMAC_USE_ATSU_TEXT
     if ( m_macATSUIStyle )
     {
         ::ATSUDisposeStyle((ATSUStyle)m_macATSUIStyle);
         m_macATSUIStyle = NULL;
     }
-#elif WXMAC_USE_CG_TEXT
+#endif
+#if WXMAC_USE_CG_TEXT
 #endif
 }
 
@@ -1720,10 +1742,39 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
     
     EnsureIsValid();
 #if wxMAC_USE_CORE_TEXT
-    // TODO core text implementation here
-#elif wxMAC_USE_ATSU_TEXT
-    DrawText(str, x, y, 0.0);
-#elif WXMAC_USE_CG_TEXT
+    if ( UMAGetSystemVersion() >= 0x1050 )
+    {
+        wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
+        wxMacCFStringHolder text(str, wxLocale::GetSystemEncoding() );
+        CTFontRef font = fref->GetCTFont();
+        CGColorRef col = fref->GetColour().GetPixel();
+        CTUnderlineStyle ustyle = fref->GetUnderlined() ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone ;
+        wxCFRef<CFNumberRef> underlined( CFNumberCreate(NULL, kCFNumberSInt32Type, &ustyle) ); 
+        CFStringRef keys[] = { kCTFontAttributeName , kCTForegroundColorAttributeName, kCTUnderlineStyleAttributeName };
+        CFTypeRef values[] = { font, col, underlined };
+        wxCFRef<CFDictionaryRef> attributes( CFDictionaryCreate(kCFAllocatorDefault, (const void**) &keys, (const void**) &values, 
+                                                        WXSIZEOF( keys ), &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) );
+        wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, attributes) );
+        wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
+        
+        y += CTFontGetAscent(font);
+        
+        CGContextSaveGState(m_cgContext);
+        CGContextTranslateCTM(m_cgContext, x, y);
+        CGContextScaleCTM(m_cgContext, 1, -1);
+        CGContextSetTextPosition(m_cgContext, 0, 0);
+        CTLineDraw( line, m_cgContext );
+        CGContextRestoreGState(m_cgContext);
+        return;
+    }
+#endif
+#if wxMAC_USE_ATSU_TEXT
+    {
+        DrawText(str, x, y, 0.0);
+        return;
+    }
+#endif
+#if WXMAC_USE_CG_TEXT
     // TODO core graphics text implementation here
 #endif
 }
@@ -1735,115 +1786,124 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
 
     EnsureIsValid();
 #if wxMAC_USE_CORE_TEXT
-    // default implementation takes care of rotation and calls non rotated DrawText afterwards
-    wxGraphicsContext::DrawText( str, x, y, angle );
-#elif wxMAC_USE_ATSU_TEXT
-    OSStatus status = noErr;
-    ATSUTextLayout atsuLayout;
-    UniCharCount chars = str.length();
-    UniChar* ubuf = NULL;
-
-#if SIZEOF_WCHAR_T == 4
-    wxMBConvUTF16 converter;
-#if wxUSE_UNICODE
-    size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 );
-    ubuf = (UniChar*) malloc( unicharlen + 2 );
-    converter.WC2MB( (char*) ubuf , str.wc_str(), unicharlen + 2 );
-#else
-    const wxWCharBuffer wchar = str.wc_str( wxConvLocal );
-    size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 );
-    ubuf = (UniChar*) malloc( unicharlen + 2 );
-    converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 );
-#endif
-    chars = unicharlen / 2;
-#else
-#if wxUSE_UNICODE
-    ubuf = (UniChar*) str.wc_str();
-#else
-    wxWCharBuffer wchar = str.wc_str( wxConvLocal );
-    chars = wxWcslen( wchar.data() );
-    ubuf = (UniChar*) wchar.data();
-#endif
-#endif
-
-    ATSUStyle style = (((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetATSUStyle());
-    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
-        &chars , &style , &atsuLayout );
-
-    wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the rotated text") );
-
-    status = ::ATSUSetTransientFontMatching( atsuLayout , true );
-    wxASSERT_MSG( status == noErr , wxT("couldn't setup transient font matching") );
-
-    int iAngle = int( angle * RAD2DEG );
-    if ( abs(iAngle) > 0 )
+    if ( UMAGetSystemVersion() >= 0x1050 )
     {
-        Fixed atsuAngle = IntToFixed( iAngle );
-        ATSUAttributeTag atsuTags[] =
-        {
-            kATSULineRotationTag ,
-        };
-        ByteCount atsuSizes[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
-        {
-            sizeof( Fixed ) ,
-        };
-        ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
-        {
-            &atsuAngle ,
-        };
-        status = ::ATSUSetLayoutControls(atsuLayout , sizeof(atsuTags) / sizeof(ATSUAttributeTag),
-            atsuTags, atsuSizes, atsuValues );
+        // default implementation takes care of rotation and calls non rotated DrawText afterwards
+        wxGraphicsContext::DrawText( str, x, y, angle );
+        return;
     }
-
-    {
-        ATSUAttributeTag atsuTags[] =
-        {
-            kATSUCGContextTag ,
-        };
-        ByteCount atsuSizes[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
-        {
-            sizeof( CGContextRef ) ,
-        };
-        ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
-        {
-            &m_cgContext ,
-        };
-        status = ::ATSUSetLayoutControls(atsuLayout , sizeof(atsuTags) / sizeof(ATSUAttributeTag),
-            atsuTags, atsuSizes, atsuValues );
-    }
-
-    ATSUTextMeasurement textBefore, textAfter;
-    ATSUTextMeasurement ascent, descent;
-
-    status = ::ATSUGetUnjustifiedBounds( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
-        &textBefore , &textAfter, &ascent , &descent );
-
-    wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
-
-    Rect rect;
-    x += (int)(sin(angle) * FixedToInt(ascent));
-    y += (int)(cos(angle) * FixedToInt(ascent));
-
-    status = ::ATSUMeasureTextImage( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
-        IntToFixed(x) , IntToFixed(y) , &rect );
-    wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
-
-    CGContextSaveGState(m_cgContext);
-    CGContextTranslateCTM(m_cgContext, x, y);
-    CGContextScaleCTM(m_cgContext, 1, -1);
-    status = ::ATSUDrawText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
-        IntToFixed(0) , IntToFixed(0) );
-
-    wxASSERT_MSG( status == noErr , wxT("couldn't draw the rotated text") );
-
-    CGContextRestoreGState(m_cgContext);
-
-    ::ATSUDisposeTextLayout(atsuLayout);
-
-#if SIZEOF_WCHAR_T == 4
-    free( ubuf );
 #endif
-#elif WXMAC_USE_CG_TEXT
+#if wxMAC_USE_ATSU_TEXT
+    {
+        OSStatus status = noErr;
+        ATSUTextLayout atsuLayout;
+        UniCharCount chars = str.length();
+        UniChar* ubuf = NULL;
+        
+#if SIZEOF_WCHAR_T == 4
+        wxMBConvUTF16 converter;
+#if wxUSE_UNICODE
+        size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 );
+        ubuf = (UniChar*) malloc( unicharlen + 2 );
+        converter.WC2MB( (char*) ubuf , str.wc_str(), unicharlen + 2 );
+#else
+        const wxWCharBuffer wchar = str.wc_str( wxConvLocal );
+        size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 );
+        ubuf = (UniChar*) malloc( unicharlen + 2 );
+        converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 );
+#endif
+        chars = unicharlen / 2;
+#else
+#if wxUSE_UNICODE
+        ubuf = (UniChar*) str.wc_str();
+#else
+        wxWCharBuffer wchar = str.wc_str( wxConvLocal );
+        chars = wxWcslen( wchar.data() );
+        ubuf = (UniChar*) wchar.data();
+#endif
+#endif
+        
+        ATSUStyle style = (((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetATSUStyle());
+        status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
+                                                   &chars , &style , &atsuLayout );
+        
+        wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the rotated text") );
+        
+        status = ::ATSUSetTransientFontMatching( atsuLayout , true );
+        wxASSERT_MSG( status == noErr , wxT("couldn't setup transient font matching") );
+        
+        int iAngle = int( angle * RAD2DEG );
+        if ( abs(iAngle) > 0 )
+        {
+            Fixed atsuAngle = IntToFixed( iAngle );
+            ATSUAttributeTag atsuTags[] =
+            {
+                kATSULineRotationTag ,
+            };
+            ByteCount atsuSizes[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+            {
+                sizeof( Fixed ) ,
+            };
+            ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+            {
+                &atsuAngle ,
+            };
+            status = ::ATSUSetLayoutControls(atsuLayout , sizeof(atsuTags) / sizeof(ATSUAttributeTag),
+                                             atsuTags, atsuSizes, atsuValues );
+        }
+        
+        {
+            ATSUAttributeTag atsuTags[] =
+            {
+                kATSUCGContextTag ,
+            };
+            ByteCount atsuSizes[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+            {
+                sizeof( CGContextRef ) ,
+            };
+            ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+            {
+                &m_cgContext ,
+            };
+            status = ::ATSUSetLayoutControls(atsuLayout , sizeof(atsuTags) / sizeof(ATSUAttributeTag),
+                                             atsuTags, atsuSizes, atsuValues );
+        }
+        
+        ATSUTextMeasurement textBefore, textAfter;
+        ATSUTextMeasurement ascent, descent;
+        
+        status = ::ATSUGetUnjustifiedBounds( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
+                                            &textBefore , &textAfter, &ascent , &descent );
+        
+        wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
+        
+        Rect rect;
+        x += (int)(sin(angle) * FixedToInt(ascent));
+        y += (int)(cos(angle) * FixedToInt(ascent));
+        
+        status = ::ATSUMeasureTextImage( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
+                                        IntToFixed(x) , IntToFixed(y) , &rect );
+        wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
+        
+        CGContextSaveGState(m_cgContext);
+        CGContextTranslateCTM(m_cgContext, x, y);
+        CGContextScaleCTM(m_cgContext, 1, -1);
+        status = ::ATSUDrawText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
+                                IntToFixed(0) , IntToFixed(0) );
+        
+        wxASSERT_MSG( status == noErr , wxT("couldn't draw the rotated text") );
+        
+        CGContextRestoreGState(m_cgContext);
+        
+        ::ATSUDisposeTextLayout(atsuLayout);
+        
+#if SIZEOF_WCHAR_T == 4
+        free( ubuf );
+#endif
+        return;
+    }
+#endif
+#if WXMAC_USE_CG_TEXT
     // default implementation takes care of rotation and calls non rotated DrawText afterwards
     wxGraphicsContext::DrawText( str, x, y, angle );
 #endif
@@ -1867,63 +1927,94 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         return;
 
 #if wxMAC_USE_CORE_TEXT
-    // TODO core text implementation here
-#elif wxMAC_USE_ATSU_TEXT
-    OSStatus status = noErr;
+    if ( UMAGetSystemVersion() >= 0x1050 )
+    {
+        wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
+        CTFontRef font = fref->GetCTFont();
 
-    ATSUTextLayout atsuLayout;
-    UniCharCount chars = str.length();
-    UniChar* ubuf = NULL;
-
+        wxMacCFStringHolder text(str, wxLocale::GetSystemEncoding() );
+        CFStringRef keys[] = { kCTFontAttributeName  };
+        CFTypeRef values[] = { font };
+        wxCFRef<CFDictionaryRef> attributes( CFDictionaryCreate(kCFAllocatorDefault, (const void**) &keys, (const void**) &values, 
+                                                                WXSIZEOF( keys ), &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) );
+        wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, attributes) );
+        wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
+            
+        CGFloat w, a, d, l;
+        
+        w = CTLineGetTypographicBounds(line, &a, &d, &l) ;
+        
+        if ( height )
+            *height = a+d+l;
+        if ( descent )
+            *descent = d;
+        if ( externalLeading )
+            *externalLeading = l;
+        if ( width )
+            *width = w;
+        return;
+    }
+#endif
+#if wxMAC_USE_ATSU_TEXT
+    {
+        OSStatus status = noErr;
+        
+        ATSUTextLayout atsuLayout;
+        UniCharCount chars = str.length();
+        UniChar* ubuf = NULL;
+        
 #if SIZEOF_WCHAR_T == 4
-    wxMBConvUTF16 converter;
+        wxMBConvUTF16 converter;
 #if wxUSE_UNICODE
-    size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 );
-    ubuf = (UniChar*) malloc( unicharlen + 2 );
-    converter.WC2MB( (char*) ubuf , str.wc_str(), unicharlen + 2 );
+        size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 );
+        ubuf = (UniChar*) malloc( unicharlen + 2 );
+        converter.WC2MB( (char*) ubuf , str.wc_str(), unicharlen + 2 );
 #else
-    const wxWCharBuffer wchar = str.wc_str( wxConvLocal );
-    size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 );
-    ubuf = (UniChar*) malloc( unicharlen + 2 );
-    converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 );
+        const wxWCharBuffer wchar = str.wc_str( wxConvLocal );
+        size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 );
+        ubuf = (UniChar*) malloc( unicharlen + 2 );
+        converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 );
 #endif
-    chars = unicharlen / 2;
+        chars = unicharlen / 2;
 #else
 #if wxUSE_UNICODE
-    ubuf = (UniChar*) str.wc_str();
+        ubuf = (UniChar*) str.wc_str();
 #else
-    wxWCharBuffer wchar = str.wc_str( wxConvLocal );
-    chars = wxWcslen( wchar.data() );
-    ubuf = (UniChar*) wchar.data();
+        wxWCharBuffer wchar = str.wc_str( wxConvLocal );
+        chars = wxWcslen( wchar.data() );
+        ubuf = (UniChar*) wchar.data();
 #endif
 #endif
-
-    ATSUStyle style = (((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetATSUStyle());
-    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
-        &chars , &style , &atsuLayout );
-
-    wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the text") );
-
-    ATSUTextMeasurement textBefore, textAfter;
-    ATSUTextMeasurement textAscent, textDescent;
-
-    status = ::ATSUGetUnjustifiedBounds( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
-        &textBefore , &textAfter, &textAscent , &textDescent );
-
-    if ( height )
-        *height = FixedToInt(textAscent + textDescent);
-    if ( descent )
-        *descent = FixedToInt(textDescent);
-    if ( externalLeading )
-        *externalLeading = 0;
-    if ( width )
-        *width = FixedToInt(textAfter - textBefore);
-
-    ::ATSUDisposeTextLayout(atsuLayout);
+        
+        ATSUStyle style = (((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetATSUStyle());
+        status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
+                                                   &chars , &style , &atsuLayout );
+        
+        wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the text") );
+        
+        ATSUTextMeasurement textBefore, textAfter;
+        ATSUTextMeasurement textAscent, textDescent;
+        
+        status = ::ATSUGetUnjustifiedBounds( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
+                                            &textBefore , &textAfter, &textAscent , &textDescent );
+        
+        if ( height )
+            *height = FixedToInt(textAscent + textDescent);
+        if ( descent )
+            *descent = FixedToInt(textDescent);
+        if ( externalLeading )
+            *externalLeading = 0;
+        if ( width )
+            *width = FixedToInt(textAfter - textBefore);
+        
+        ::ATSUDisposeTextLayout(atsuLayout);
 #if SIZEOF_WCHAR_T == 4
-    free( ubuf ) ;
+        free( ubuf ) ;
 #endif
-#elif WXMAC_USE_CG_TEXT
+        return;
+    }
+#endif
+#if WXMAC_USE_CG_TEXT
     // TODO core graphics text implementation here
 #endif
 }
@@ -1937,60 +2028,83 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
         return;
 
 #if wxMAC_USE_CORE_TEXT
-    // TODO core text implementation here
-#elif wxMAC_USE_ATSU_TEXT
-    ATSUTextLayout atsuLayout;
-    UniCharCount chars = text.length();
-    UniChar* ubuf = NULL;
-
-#if SIZEOF_WCHAR_T == 4
-    wxMBConvUTF16 converter;
-#if wxUSE_UNICODE
-    size_t unicharlen = converter.WC2MB( NULL , text.wc_str() , 0 );
-    ubuf = (UniChar*) malloc( unicharlen + 2 );
-    converter.WC2MB( (char*) ubuf , text.wc_str(), unicharlen + 2 );
-#else
-    const wxWCharBuffer wchar = text.wc_str( wxConvLocal );
-    size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 );
-    ubuf = (UniChar*) malloc( unicharlen + 2 );
-    converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 );
-#endif
-    chars = unicharlen / 2;
-#else
-#if wxUSE_UNICODE
-    ubuf = (UniChar*) text.wc_str();
-#else
-    wxWCharBuffer wchar = text.wc_str( wxConvLocal );
-    chars = wxWcslen( wchar.data() );
-    ubuf = (UniChar*) wchar.data();
-#endif
-#endif
-
-    ATSUStyle style = (((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetATSUStyle());
-    ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
-        &chars , &style , &atsuLayout );
-
-    for ( int pos = 0; pos < (int)chars; pos ++ )
     {
-        unsigned long actualNumberOfBounds = 0;
-        ATSTrapezoid glyphBounds;
-
-        // We get a single bound, since the text should only require one. If it requires more, there is an issue
-        OSStatus result;
-        result = ATSUGetGlyphBounds( atsuLayout, 0, 0, kATSUFromTextBeginning, pos + 1,
-            kATSUseDeviceOrigins, 1, &glyphBounds, &actualNumberOfBounds );
-        if (result != noErr || actualNumberOfBounds != 1 )
-            return;
-
-        widths[pos] = FixedToInt( glyphBounds.upperRight.x - glyphBounds.upperLeft.x );
-        //unsigned char uch = s[i];
+        wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
+        CTFontRef font = fref->GetCTFont();
+        
+        wxMacCFStringHolder t(text, wxLocale::GetSystemEncoding() );
+        CFStringRef keys[] = { kCTFontAttributeName  };
+        CFTypeRef values[] = { font };
+        wxCFRef<CFDictionaryRef> attributes( CFDictionaryCreate(kCFAllocatorDefault, (const void**) &keys, (const void**) &values, 
+                                                                WXSIZEOF( keys ), &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) );
+        wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, t, attributes) );
+        wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
+        
+        int chars = text.length();
+        for ( int pos = 0; pos < (int)chars; pos ++ )
+        {
+            widths[pos] = CTLineGetOffsetForStringIndex( line, pos+1 , NULL )+0.5;
+        }
+        
+        return;
     }
-
-    ::ATSUDisposeTextLayout(atsuLayout);
-#if SIZEOF_WCHAR_T == 4
-    free( ubuf ) ;
 #endif
-#elif WXMAC_USE_CG_TEXT
+#if wxMAC_USE_ATSU_TEXT
+    {
+        ATSUTextLayout atsuLayout;
+        UniCharCount chars = text.length();
+        UniChar* ubuf = NULL;
+        
+#if SIZEOF_WCHAR_T == 4
+        wxMBConvUTF16 converter;
+#if wxUSE_UNICODE
+        size_t unicharlen = converter.WC2MB( NULL , text.wc_str() , 0 );
+        ubuf = (UniChar*) malloc( unicharlen + 2 );
+        converter.WC2MB( (char*) ubuf , text.wc_str(), unicharlen + 2 );
+#else
+        const wxWCharBuffer wchar = text.wc_str( wxConvLocal );
+        size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 );
+        ubuf = (UniChar*) malloc( unicharlen + 2 );
+        converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 );
+#endif
+        chars = unicharlen / 2;
+#else
+#if wxUSE_UNICODE
+        ubuf = (UniChar*) text.wc_str();
+#else
+        wxWCharBuffer wchar = text.wc_str( wxConvLocal );
+        chars = wxWcslen( wchar.data() );
+        ubuf = (UniChar*) wchar.data();
+#endif
+#endif
+        
+        ATSUStyle style = (((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetATSUStyle());
+        ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
+                                          &chars , &style , &atsuLayout );
+        
+        for ( int pos = 0; pos < (int)chars; pos ++ )
+        {
+            unsigned long actualNumberOfBounds = 0;
+            ATSTrapezoid glyphBounds;
+            
+            // We get a single bound, since the text should only require one. If it requires more, there is an issue
+            OSStatus result;
+            result = ATSUGetGlyphBounds( atsuLayout, 0, 0, kATSUFromTextBeginning, pos + 1,
+                                        kATSUseDeviceOrigins, 1, &glyphBounds, &actualNumberOfBounds );
+            if (result != noErr || actualNumberOfBounds != 1 )
+                return;
+            
+            widths[pos] = FixedToInt( glyphBounds.upperRight.x - glyphBounds.upperLeft.x );
+            //unsigned char uch = s[i];
+        }
+        
+        ::ATSUDisposeTextLayout(atsuLayout);
+#if SIZEOF_WCHAR_T == 4
+        free( ubuf ) ;
+#endif
+    }
+#endif
+#if WXMAC_USE_CG_TEXT
     // TODO core graphics text implementation here
 #endif
 }
