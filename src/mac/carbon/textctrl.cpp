@@ -412,7 +412,7 @@ void wxTextCtrl::CreatePeer(
 
     if ( !forceMLTE )
     {
-        if ( m_windowStyle & wxTE_MULTILINE )
+        if ( m_windowStyle & wxTE_MULTILINE || ( UMAGetSystemVersion() >= 0x1050 ) )
             m_peer = new wxMacMLTEHIViewControl( this , str , pos , size , style ) ;
     }
 
@@ -1625,7 +1625,8 @@ TXNFrameOptions wxMacMLTEControl::FrameOptionsFromWXStyle( long wxStyle )
 
     if ( wxStyle & wxTE_MULTILINE )
     {
-        frameOptions |= kTXNAlwaysWrapAtViewEdgeMask ;
+        if ( ! (wxStyle & wxTE_DONTWRAP ) )
+            frameOptions |= kTXNAlwaysWrapAtViewEdgeMask ;
 
         if ( !(wxStyle & wxTE_NO_VSCROLL) )
         {
@@ -2256,6 +2257,17 @@ int wxMacMLTEControl::GetLineLength(long lineNo) const
 // various OS X versions. Most deal with the scrollbars: they are not correctly embedded
 // while this can be solved on 10.3 by reassigning them the correct place, on 10.2 there is
 // no way out, therefore we are using our own implementation and our own scrollbars ....
+
+wxMacPortSaver::wxMacPortSaver( GrafPtr port )
+{
+    ::GetPort( &m_port );
+    ::SetPort( port );
+}
+
+wxMacPortSaver::~wxMacPortSaver()
+{
+    ::SetPort( m_port );
+}
 
 wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win ) :
     wxMacPortSaver( (GrafPtr) GetWindowPort( (WindowRef) win->MacGetTopLevelWindowRef() ) )
