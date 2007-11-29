@@ -1939,20 +1939,6 @@ CGColorRef wxMacCreateCGColorFromHITheme( ThemeBrush brush )
     return color;
 }
 
-#ifndef __LP64__
-
-wxMacPortSaver::wxMacPortSaver( GrafPtr port )
-{
-    ::GetPort( &m_port );
-    ::SetPort( port );
-}
-
-wxMacPortSaver::~wxMacPortSaver()
-{
-    ::SetPort( m_port );
-}
-#endif
-
 #if wxMAC_USE_QUICKDRAW
 
 void wxMacGlobalToLocal( WindowRef window , Point*pt )
