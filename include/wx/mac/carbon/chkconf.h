@@ -90,8 +90,8 @@
 
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 
-#define wxMAC_USE_CORE_TEXT 1
-#define wxMAC_USE_ATSU_TEXT 0
+#define wxMAC_USE_CORE_TEXT 0
+#define wxMAC_USE_ATSU_TEXT 1
 
 #else // platform < 10.5
 
