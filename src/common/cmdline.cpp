@@ -369,17 +369,20 @@ void wxCmdLineParser::SetDesc(const wxCmdLineEntryDesc *desc)
         switch ( desc->kind )
         {
             case wxCMD_LINE_SWITCH:
-                AddSwitch(desc->shortName, desc->longName, desc->description,
+                AddSwitch(desc->shortName, desc->longName,
+                          wxGetTranslation(desc->description),
                           desc->flags);
                 break;
 
             case wxCMD_LINE_OPTION:
-                AddOption(desc->shortName, desc->longName, desc->description,
+                AddOption(desc->shortName, desc->longName,
+                          wxGetTranslation(desc->description),
                           desc->type, desc->flags);
                 break;
 
             case wxCMD_LINE_PARAM:
-                AddParam(desc->description, desc->type, desc->flags);
+                AddParam(wxGetTranslation(desc->description),
+                         desc->type, desc->flags);
                 break;
 
             default:
