@@ -152,10 +152,10 @@ wxSize wxButton::DoGetBestSize() const
         OSStatus err = m_peer->GetData<ControlFontStyleRec>( kControlEntireControl, kControlFontStyleTag, &controlFont );
         verify_noerr( err );
 
-        SInt16 baseline;
         wxMacCFStringHolder str( m_label,  m_font.GetEncoding() );
 
-#ifndef __LP64__
+#if wxMAC_USE_ATSU_TEXT
+        SInt16 baseline;
         if ( m_font.MacGetThemeFontID() != kThemeCurrentPortFont )
         {
             err = GetThemeTextDimensions(
