@@ -147,7 +147,7 @@ void wxFontRefData::Init(int pointSize,
     m_faceName = faceName;
     m_encoding = encoding;
     m_noAA = false;
-#ifdef wxMAC_USE_CORE_TEXT
+#if wxMAC_USE_CORE_TEXT
     m_macUIFontType = kCTFontNoFontType;
 #endif
 #if wxMAC_USE_ATSU_TEXT
