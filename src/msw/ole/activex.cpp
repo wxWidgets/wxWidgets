@@ -1123,8 +1123,9 @@ void wxActiveXContainer::OnPaint(wxPaintEvent& WXUNUSED(event))
         ::InvalidateRect(m_oleObjectHWND, NULL, false);
 #endif
         RECTL *prcBounds = (RECTL *) &posRect;
+        wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
         m_viewObject->Draw(DVASPECT_CONTENT, -1, NULL, NULL, NULL,
-            (HDC)dc.GetHDC(), prcBounds, NULL, NULL, 0);
+            (HDC)msw->GetHDC(), prcBounds, NULL, NULL, 0);
     }
 }
 
