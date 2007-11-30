@@ -108,9 +108,8 @@ public:
                 DisposeControl( m_controlHandle );
             else
             {
-                // the embedded control is not under the responsibility of the tool, it will be disposed of in the
+                // the embedded control is not under the responsibility of the tool, it gets disposed of in the
                 // proper wxControl destructor
-                wxASSERT( IsValidControlHandle(GetControl()->GetPeer()->GetControlRef() )) ;
             }
             m_controlHandle = NULL ;
         }
