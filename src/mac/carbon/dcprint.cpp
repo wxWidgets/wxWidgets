@@ -277,7 +277,7 @@ wxPrinterDCImpl::~wxPrinterDCImpl()
 
 bool wxPrinterDCImpl::StartDoc( const wxString& message )
 {
-    wxASSERT_MSG( Ok() , wxT("Called wxPrinterDC::StartDoc from an invalid object") ) ;
+    wxASSERT_MSG( IsOk() , wxT("Called wxPrinterDC::StartDoc from an invalid object") ) ;
 
     if ( !m_ok )
         return false ;
