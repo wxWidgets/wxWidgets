@@ -29,22 +29,22 @@ class WXDLLEXPORT wxRegionRefData : public wxGDIRefData
 {
 public:
     wxRegionRefData()
-    { 
-        m_macRgn.reset( HIShapeCreateMutable() ); 
+    {
+        m_macRgn.reset( HIShapeCreateMutable() );
     }
 
     wxRegionRefData(HIShapeRef hRegion)
-    { 
-        m_macRgn.reset( HIShapeCreateMutableCopy(hRegion) ); 
+    {
+        m_macRgn.reset( HIShapeCreateMutableCopy(hRegion) );
     }
-    
+
     wxRegionRefData(long x, long y, long w, long h)
     {
         CGRect r = CGRectMake(x,y,w,h);
         wxCFRef<HIShapeRef> rect(HIShapeCreateWithRect(&r));
-        m_macRgn.reset( HIShapeCreateMutableCopy(rect) ); 
+        m_macRgn.reset( HIShapeCreateMutableCopy(rect) );
     }
-    
+
     wxRegionRefData(const wxRegionRefData& data)
         : wxGDIRefData()
     {
@@ -52,7 +52,7 @@ public:
     }
 
     virtual ~wxRegionRefData()
-    { 
+    {
     }
 
     wxCFRef<HIMutableShapeRef> m_macRgn;
@@ -85,8 +85,8 @@ wxRegion::wxRegion(long x, long y, long w, long h)
 
 wxRegion::wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight)
 {
-    m_refData = new wxRegionRefData(topLeft.x , topLeft.y , 
-                                    topLeft.x - bottomRight.x , 
+    m_refData = new wxRegionRefData(topLeft.x , topLeft.y ,
+                                    topLeft.x - bottomRight.x ,
                                     topLeft.y - bottomRight.y);
 }
 
@@ -97,9 +97,12 @@ wxRegion::wxRegion(const wxRect& rect)
 
 wxRegion::wxRegion(size_t n, const wxPoint *points, int WXUNUSED(fillStyle))
 {
-    m_refData = new wxRegionRefData;
+    wxUnusedVar(n);
+    wxUnusedVar(points);
 
 #if 0 // ndef __LP64__
+    m_refData = new wxRegionRefData;
+
     // TODO : any APIs ?
     // OS X somehow does not collect the region invisibly as before, so sometimes things
     // get drawn on screen instead of just being combined into a region, therefore we allocate a temp gworld now
@@ -138,6 +141,9 @@ wxRegion::wxRegion(size_t n, const wxPoint *points, int WXUNUSED(fillStyle))
 
         ::SetGWorld( oldWorld, oldGDHandle );
     }
+#else
+    wxFAIL_MSG( "not implemented" );
+    m_refData = NULL;
 #endif
 }
 
@@ -238,10 +244,10 @@ bool wxRegion::DoGetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const
     {
         CGRect box ;
         HIShapeGetBounds( M_REGION , &box ) ;
-        x = box.origin.x ;
-        y = box.origin.y ;
-        w = box.size.width ;
-        h = box.size.height ;
+        x = wx_static_cast(int, box.origin.x);
+        y = wx_static_cast(int, box.origin.y);
+        w = wx_static_cast(int, box.size.width);
+        h = wx_static_cast(int, box.size.height);
 
         return true;
     }
@@ -295,7 +301,7 @@ wxRegionContain wxRegion::DoContainsRect(const wxRect& r) const
     wxCFRef<HIShapeRef> intersect(HIShapeCreateIntersection(rectshape,M_REGION));
     CGRect bounds;
     HIShapeGetBounds(intersect, &bounds);
-    
+
     if ( HIShapeIsRectangular(intersect) && CGRectEqualToRect(rect,bounds) )
         return wxInRegion;
     else if ( HIShapeIsEmpty( intersect ) )
@@ -440,14 +446,14 @@ void wxRegionIterator::Reset(const wxRegion& region)
         m_numRects = 1;
         m_rects = new wxRect[m_numRects];
         m_rects[0] = m_region.GetBox();
-        
+
 #else
         RegionToRectsUPP proc = (RegionToRectsUPP) wxMacRegionToRectsCounterCallback;
 
         OSStatus err = noErr;
         RgnHandle rgn = NewRgn();
         HIShapeGetAsQDRgn(OTHER_M_REGION(region), rgn);
-        
+
         err = QDRegionToRects (rgn, kQDParseRegionFromTopLeft, proc, (void*)&m_numRects);
         if (err == noErr)
         {

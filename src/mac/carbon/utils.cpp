@@ -220,7 +220,7 @@ int wxDisplayDepth()
 
     return theDepth;
 #else
-    return 32; // TODO 
+    return 32; // TODO
 #endif
 }
 
@@ -266,7 +266,7 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
         *height = bounds.size.height;
 #else
     int w, h;
-    wxDisplaySize(&w,&h); 
+    wxDisplaySize(&w,&h);
     if ( x )
         *x = 0;
     if ( y )
@@ -469,7 +469,7 @@ OSStatus wxMacCarbonEvent::SetParameter(EventParamName inName, EventParamType in
 
 IMPLEMENT_DYNAMIC_CLASS( wxMacControl , wxObject )
 
-wxMacControl::wxMacControl() 
+wxMacControl::wxMacControl()
 {
     Init();
 }
@@ -654,7 +654,7 @@ void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , l
             flush = kHIThemeTextHorizontalFlushRight;
         HIViewSetTextFont( m_controlRef , part , (CTFontRef) font.MacGetCTFont() );
         HIViewSetTextHorizontalFlush( m_controlRef, part, flush );
-        
+
         if ( foreground != *wxBLACK )
         {
             ControlFontStyleRec fontStyle;
@@ -662,7 +662,7 @@ void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , l
             fontStyle.flags = kControlUseForeColorMask;
             ::SetControlFontStyle( m_controlRef , &fontStyle );
         }
-        
+
     }
 #endif
 #if wxMAC_USE_ATSU_TEXT
@@ -845,9 +845,9 @@ void wxMacControl::GetRect( Rect *r )
 void wxMacControl::GetRectInWindowCoords( Rect *r )
 {
     GetControlBounds( m_controlRef , r ) ;
-    
+
     WindowRef tlwref = GetControlOwner( m_controlRef ) ;
-    
+
     wxTopLevelWindowMac* tlwwx = wxFindWinFromMacWindow( tlwref ) ;
     if ( tlwwx != NULL )
     {
@@ -1908,7 +1908,7 @@ void wxMacDataItemBrowserControl::MacScrollTo( unsigned int n )
     UInt32 linebottom = linetop + height;
     Rect rect ;
     GetRect( &rect );
-    
+
     if ( linetop < top || linebottom > (top + rect.bottom - rect.top ) )
         SetScrollPosition( wxMax( n-2, 0 ) * ((UInt32)height) , left ) ;
 
@@ -1954,7 +1954,7 @@ CGColorSpaceRef wxMacGetGenericRGBColorSpace()
     return genericRGBColorSpace;
 }
 
-CGColorRef wxMacCreateCGColorFromHITheme( ThemeBrush brush ) 
+CGColorRef wxMacCreateCGColorFromHITheme( ThemeBrush brush )
 {
     CGColorRef color ;
     HIThemeBrushCreateCGColor( brush, &color );
@@ -1963,6 +1963,12 @@ CGColorRef wxMacCreateCGColorFromHITheme( ThemeBrush brush )
 
 #if wxMAC_USE_QUICKDRAW
 
+static inline void PointFromHIPoint(const HIPoint& p, Point *pt)
+{
+    pt->h = wx_static_cast(short, p.x);
+    pt->v = wx_static_cast(short, p.y);
+}
+
 void wxMacGlobalToLocal( WindowRef window , Point*pt )
 {
     HIPoint p = CGPointMake( pt->h, pt->v );
@@ -1970,8 +1976,7 @@ void wxMacGlobalToLocal( WindowRef window , Point*pt )
     // TODO check toolbar offset
     HIViewFindByID( HIViewGetRoot( window ), kHIViewWindowContentID , &contentView) ;
     HIPointConvert( &p, kHICoordSpace72DPIGlobal, NULL, kHICoordSpaceView, contentView );
-    pt->h = p.x;
-    pt->v = p.y;
+    PointFromHIPoint(p, pt);
 }
 
 void wxMacLocalToGlobal( WindowRef window , Point*pt )
@@ -1981,10 +1986,10 @@ void wxMacLocalToGlobal( WindowRef window , Point*pt )
     // TODO check toolbar offset
     HIViewFindByID( HIViewGetRoot( window ), kHIViewWindowContentID , &contentView) ;
     HIPointConvert( &p, kHICoordSpaceView, contentView, kHICoordSpace72DPIGlobal, NULL );
-    pt->h = p.x;
-    pt->v = p.y;
+    PointFromHIPoint(p, pt);
 }
-#endif
+
+#endif // wxMAC_USE_QUICKDRAW
 
 #endif // wxUSE_GUI
 
