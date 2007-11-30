@@ -33,30 +33,31 @@
 
 #ifndef WX_PRECOMP
     #include "wx/math.h"
+    #include "wx/module.h"
 #endif
 
 #ifdef __WXMSW__
-#include "wx/msw/dcclient.h"
-#include "wx/msw/dcmemory.h"
-#include "wx/msw/dcscreen.h"
+    #include "wx/msw/dcclient.h"
+    #include "wx/msw/dcmemory.h"
+    #include "wx/msw/dcscreen.h"
 #endif
 
 #ifdef __WXGTK__
-#include "wx/gtk/dcclient.h"
-#include "wx/gtk/dcmemory.h"
-#include "wx/gtk/dcscreen.h"
+    #include "wx/gtk/dcclient.h"
+    #include "wx/gtk/dcmemory.h"
+    #include "wx/gtk/dcscreen.h"
 #endif
 
 #ifdef __WXMAC__
-#include "wx/mac/dcclient.h"
-#include "wx/mac/dcmemory.h"
-#include "wx/mac/dcscreen.h"
+    #include "wx/mac/dcclient.h"
+    #include "wx/mac/dcmemory.h"
+    #include "wx/mac/dcscreen.h"
 #endif
 
 #ifdef __WXX11__
-#include "wx/x11/dcclient.h"
-#include "wx/x11/dcmemory.h"
-#include "wx/x11/dcscreen.h"
+    #include "wx/x11/dcclient.h"
+    #include "wx/x11/dcmemory.h"
+    #include "wx/x11/dcscreen.h"
 #endif
 
 //----------------------------------------------------------------------------
@@ -65,21 +66,32 @@
 
 wxDCFactory *wxDCFactory::m_factory = NULL;
 
-void wxDCFactory::SetDCFactory( wxDCFactory *factory )
+void wxDCFactory::Set(wxDCFactory *factory)
 {
-    if (wxDCFactory::m_factory)
-        delete wxDCFactory::m_factory;
+    delete m_factory;
 
-    wxDCFactory::m_factory = factory;
+    m_factory = factory;
 }
 
 wxDCFactory *wxDCFactory::Get()
 {
-    if (!wxDCFactory::m_factory)
-        wxDCFactory::m_factory = new wxNativeDCFactory;
+    if ( !m_factory )
+        m_factory = new wxNativeDCFactory;
 
-    return wxDCFactory::m_factory;
+    return m_factory;
 }
+
+class wxDCFactoryCleanupModule : public wxModule
+{
+public:
+    virtual bool OnInit() { return true; }
+    virtual void OnExit() { wxDCFactory::Set(NULL); }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxDCFactoryCleanupModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxDCFactoryCleanupModule, wxModule)
 
 //-----------------------------------------------------------------------------
 // wxNativeDCFactory

@@ -129,7 +129,7 @@ public:
     virtual wxDCImpl* CreatePrinterDC( wxPrinterDC *owner, const wxPrintData &data  ) = 0;
 #endif
 
-    static void SetDCFactory( wxDCFactory *factory );
+    static void Set(wxDCFactory *factory);
     static wxDCFactory *Get();
 
 private:
