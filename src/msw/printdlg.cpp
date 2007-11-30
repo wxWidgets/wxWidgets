@@ -37,6 +37,7 @@
 
 #include "wx/printdlg.h"
 #include "wx/msw/printdlg.h"
+#include "wx/msw/dcprint.h"
 #include "wx/paper.h"
 
 #include <stdlib.h>
@@ -638,7 +639,7 @@ int wxWindowsPrintDialog::ShowModal()
 
     if ( ret && (pd->hDC) )
     {
-        wxPrinterDC *pdc = new wxPrinterDC( (WXHDC) pd->hDC );
+        wxPrinterDC *pdc = new wxPrinterDCFromHDC( (WXHDC) pd->hDC );
         m_printerDC = pdc;
         ConvertFromNative( m_printDialogData );
         return wxID_OK;

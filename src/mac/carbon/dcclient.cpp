@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/mac/carbon/dcclient.cpp
-// Purpose:     wxClientDC class
+// Purpose:     wxClientDCImpl class
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     01/02/97
@@ -28,36 +28,22 @@
 #include "wx/mac/private.h"
 
 //-----------------------------------------------------------------------------
-// constants
+// wxWindowDCImpl
 //-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-// wxPaintDC
-//-----------------------------------------------------------------------------
+IMPLEMENT_ABSTRACT_CLASS(wxWindowDCImpl, wxGCDCImpl)
 
-IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
-IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
-IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
-
-/*
- * wxWindowDC
- */
-
-#include "wx/mac/uma.h"
-#include "wx/notebook.h"
-#include "wx/tabctrl.h"
-
-
-
-wxWindowDC::wxWindowDC()
+wxWindowDCImpl::wxWindowDCImpl( wxDC *owner )
+   : wxGCDCImpl( owner )
 {
-    m_window = NULL ;
     m_release = false;
 }
 
-wxWindowDC::wxWindowDC(wxWindow *window)
+wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
+   : wxGCDCImpl( owner )
 {
-    m_window = window ;
+    m_window = window;
+    
     wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
     if (!rootwindow)
         return;
@@ -82,14 +68,14 @@ wxWindowDC::wxWindowDC(wxWindow *window)
 
         SetGraphicsContext( wxGraphicsContext::CreateFromNative( cg ) );
     }
-    SetClippingRegion( 0 , 0 , m_width , m_height ) ;
+    DoSetClippingRegion( 0 , 0 , m_width , m_height ) ;
 
     SetBackground(wxBrush(window->GetBackgroundColour(),wxSOLID));
 
     SetFont( window->GetFont() ) ;
 }
 
-wxWindowDC::~wxWindowDC()
+wxWindowDCImpl::~wxWindowDCImpl()
 {
     if ( m_release )
     {
@@ -100,7 +86,7 @@ wxWindowDC::~wxWindowDC()
     }
 }
 
-void wxWindowDC::DoGetSize( int* width, int* height ) const
+void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
 {
     if ( width )
         *width = m_width;
@@ -108,7 +94,7 @@ void wxWindowDC::DoGetSize( int* width, int* height ) const
         *height = m_height;
 }
 
-wxBitmap wxWindowDC::DoGetAsBitmap(const wxRect *subrect) const
+wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 {
     // wxScreenDC is derived from wxWindowDC, so a screen dc will
     // call this method when a Blit is performed with it as a source.
@@ -168,46 +154,50 @@ wxBitmap wxWindowDC::DoGetAsBitmap(const wxRect *subrect) const
 }
 
 /*
- * wxClientDC
+ * wxClientDCImpl
  */
 
-wxClientDC::wxClientDC()
+IMPLEMENT_ABSTRACT_CLASS(wxClientDCImpl, wxWindowDCImpl)
+
+wxClientDCImpl::wxClientDCImpl( wxDC *owner )
+ : wxWindowDCImpl( owner )
 {
-    m_window = NULL ;
 }
 
-wxClientDC::wxClientDC(wxWindow *window) :
-    wxWindowDC( window )
+wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *window ) :
+    wxWindowDCImpl( owner, window )
 {
-    wxCHECK_RET( window, _T("invalid window in wxClientDC") );
+    wxCHECK_RET( window, _T("invalid window in wxClientDCImpl") );
     wxPoint origin = window->GetClientAreaOrigin() ;
     m_window->GetClientSize( &m_width , &m_height);
     SetDeviceOrigin( origin.x, origin.y );
-    SetClippingRegion( 0 , 0 , m_width , m_height ) ;
+    DoSetClippingRegion( 0 , 0 , m_width , m_height ) ;
 }
 
-wxClientDC::~wxClientDC()
+wxClientDCImpl::~wxClientDCImpl()
 {
 }
 
 /*
- * wxPaintDC
+ * wxPaintDCImpl
  */
 
-wxPaintDC::wxPaintDC()
+IMPLEMENT_ABSTRACT_CLASS(wxPaintDCImpl, wxWindowDCImpl)
+
+wxPaintDCImpl::wxPaintDCImpl( wxDC *owner )
+ : wxWindowDCImpl( owner )
 {
-    m_window = NULL ;
 }
 
-wxPaintDC::wxPaintDC(wxWindow *window) :
-    wxWindowDC( window )
+wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
+    wxWindowDCImpl( owner, window )
 {
     wxPoint origin = window->GetClientAreaOrigin() ;
     m_window->GetClientSize( &m_width , &m_height);
     SetDeviceOrigin( origin.x, origin.y );
-    SetClippingRegion( 0 , 0 , m_width , m_height ) ;
+    DoSetClippingRegion( 0 , 0 , m_width , m_height ) ;
 }
 
-wxPaintDC::~wxPaintDC()
+wxPaintDCImpl::~wxPaintDCImpl()
 {
 }

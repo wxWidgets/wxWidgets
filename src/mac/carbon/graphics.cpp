@@ -2166,6 +2166,7 @@ public :
     // Context
 
     virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc);
+    virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc);
 
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context );
 
@@ -2218,18 +2219,26 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
     return &gs_MacCoreGraphicsRenderer;
 }
 
-wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxWindowDC& dc)
+wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxWindowDC& dc )
 {
-    wxMemoryDC* mdc = wxDynamicCast(&dc, wxMemoryDC);
-    if ( mdc )
-    {
-        return new wxMacCoreGraphicsContext(this, 
-            (CGContextRef)mdc->GetGraphicsContext()->GetNativeContext());
-    }
-    else
-    {
-        return new wxMacCoreGraphicsContext(this,(CGContextRef)dc.GetWindow()->MacGetCGContextRef() );
-    }
+    const wxDCImpl* impl = dc.GetImpl();
+    wxWindowDCImpl *win_impl = wxDynamicCast( impl, wxWindowDCImpl );
+    if (win_impl)
+        return new wxMacCoreGraphicsContext( this,
+           (CGContextRef)(win_impl->GetWindow()->MacGetCGContextRef()) );
+           
+    return NULL;
+}
+
+wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxMemoryDC& dc )
+{
+    const wxDCImpl* impl = dc.GetImpl();
+    wxMemoryDCImpl *mem_impl = wxDynamicCast( impl, wxMemoryDCImpl );
+    if (mem_impl)
+        return new wxMacCoreGraphicsContext( this, 
+            (CGContextRef)(mem_impl->GetGraphicsContext()->GetNativeContext()) );
+            
+    return NULL;
 }
 
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContextFromNativeContext( void * context )

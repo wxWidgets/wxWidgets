@@ -26,12 +26,14 @@
 #include "wx/clipbrd.h"
 #include "wx/mac/uma.h"
 #include "wx/graphics.h"
+#include "wx/mac/carbon/metafile.h"
 
 #include <stdio.h>
 #include <string.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxMetafile, wxObject)
 IMPLEMENT_ABSTRACT_CLASS(wxMetafileDC, wxDC)
+IMPLEMENT_ABSTRACT_CLASS(wxMetafileDCImpl, wxGCDCImpl)
 
 #define M_METAFILEREFDATA( a ) ((wxMetafileRefData*)(a).GetRefData())
 
@@ -226,15 +228,20 @@ bool wxMetaFile::Play(wxDC *dc)
     if (!m_refData)
         return false;
 
-    if (!dc->Ok())
+    if (!dc->IsOk())
         return false;
 
     {
-        CGContextRef cg = (CGContextRef) dc->GetGraphicsContext()->GetNativeContext();
-        CGPDFDocumentRef doc = M_METAFILEDATA->GetPDFDocument();
-        CGPDFPageRef page = CGPDFDocumentGetPage( doc, 1 );
-        wxMacCGContextStateSaver save(cg);
-        CGContextDrawPDFPage( cg, page );
+        wxDCImpl *impl = dc->GetImpl();
+        wxGCDCImpl *gc_impl = wxDynamicCast(impl, wxGCDCImpl);
+        if (gc_impl)
+        {
+            CGContextRef cg = (CGContextRef) (gc_impl->GetGraphicsContext()->GetNativeContext());
+            CGPDFDocumentRef doc = M_METAFILEDATA->GetPDFDocument();
+            CGPDFPageRef page = CGPDFDocumentGetPage( doc, 1 );
+            wxMacCGContextStateSaver save(cg);
+            CGContextDrawPDFPage( cg, page );
+        }
 //        CGContextTranslateCTM( cg, 0, bounds.size.width );
 //        CGContextScaleCTM( cg, 1, -1 );
     }
@@ -260,10 +267,12 @@ wxSize wxMetaFile::GetSize() const
 // New constructor that takes origin and extent. If you use this, don't
 // give origin/extent arguments to wxMakeMetaFilePlaceable.
 
-wxMetaFileDC::wxMetaFileDC(
+wxMetafileDCImpl::wxMetafileDCImpl(
+    wxDC *owner,
     const wxString& filename,
     int width, int height,
-    const wxString& WXUNUSED(description) )
+    const wxString& WXUNUSED(description) ) :
+    wxGCDCImpl( owner )
 {
     wxASSERT_MSG( width != 0 || height != 0, wxT("no arbitration of metafile size supported") );
     wxASSERT_MSG( filename.empty(), wxT("no file based metafile support yet"));
@@ -279,11 +288,11 @@ wxMetaFileDC::wxMetaFileDC(
     SetMapMode( wxMM_TEXT );
 }
 
-wxMetaFileDC::~wxMetaFileDC()
+wxMetafileDCImpl::~wxMetafileDCImpl()
 {
 }
 
-void wxMetaFileDC::DoGetSize(int *width, int *height) const
+void wxMetafileDCImpl::DoGetSize(int *width, int *height) const
 {
     wxCHECK_RET( m_metaFile, wxT("GetSize() doesn't work without a metafile") );
 
@@ -294,7 +303,7 @@ void wxMetaFileDC::DoGetSize(int *width, int *height) const
         (*height) = sz.y;
 }
 
-wxMetaFile *wxMetaFileDC::Close()
+wxMetaFile *wxMetafileDCImpl::Close()
 {
     delete m_graphicContext;
     m_graphicContext = NULL;

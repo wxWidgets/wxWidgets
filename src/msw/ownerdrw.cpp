@@ -312,7 +312,8 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
     }
 
 
-    HDC hdc = GetHdcOf(dc);
+    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
+    HDC hdc = GetHdcOf(*impl);
     COLORREF colOldText = ::SetTextColor(hdc, colText),
              colOldBack = ::SetBkColor(hdc, colBack);
 

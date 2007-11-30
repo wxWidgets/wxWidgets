@@ -92,7 +92,7 @@ public:
                                                           wxPageSetupDialogData * data = NULL );
 
 #if wxUSE_NEW_DC
-    virtual wxImplDC* CreatePrinterImplDC( wxPrinterDC *owner, const wxPrintData& data );
+    virtual wxDCImpl* CreatePrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data );
 #else
     virtual wxDC* CreatePrinterDC( const wxPrintData& data );
 #endif
@@ -212,19 +212,19 @@ private:
 //-----------------------------------------------------------------------------
 
 #if wxUSE_NEW_DC
-class wxGnomePrinterImplDC : public wxImplDC
+class wxGnomePrinterDCImpl : public wxDCImpl
 #else
-#define wxGnomePrinterImplDC wxGnomePrinterDC
+#define wxGnomePrinterDCImpl wxGnomePrinterDC
 class wxGnomePrinterDC : public wxDC
 #endif
 {
 public:
 #if wxUSE_NEW_DC
-    wxGnomePrinterImplDC( wxPrinterDC *owner, const wxPrintData& data );
+    wxGnomePrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data );
 #else
     wxGnomePrinterDC( const wxPrintData& data );
 #endif
-    virtual ~wxGnomePrinterImplDC();
+    virtual ~wxGnomePrinterDCImpl();
 
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
@@ -307,8 +307,8 @@ private:
     void makeEllipticalPath(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxGnomePrinterImplDC)
-    DECLARE_NO_COPY_CLASS(wxGnomePrinterImplDC)
+    DECLARE_DYNAMIC_CLASS(wxGnomePrinterDCImpl)
+    DECLARE_NO_COPY_CLASS(wxGnomePrinterDCImpl)
 };
 
 // ----------------------------------------------------------------------------

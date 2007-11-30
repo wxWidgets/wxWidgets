@@ -403,7 +403,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     }
 
     // May have pressed cancel.
-    if (!dc || !dc->Ok())
+    if (!dc || !dc->IsOk())
     {
         if (dc)
             delete dc;
@@ -606,7 +606,7 @@ void wxMacPrintPreview::DetermineScaling(void)
 
     // Get a device context for the currently selected printer
     wxPrinterDC printerDC(m_printDialogData.GetPrintData());
-    if (printerDC.Ok())
+    if (printerDC.IsOk())
     {
         printerDC.GetSizeMM(&ww, &hh);
         printerDC.GetSize( &w , &h ) ;

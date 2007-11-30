@@ -14,19 +14,20 @@
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
-#include "wx/dc.h"
+#include "wx/dcprint.h"
 #include "wx/cmndata.h"
+#include "wx/msw/dc.h"
 
-class WXDLLEXPORT wxPrinterDC : public wxDC
+// ------------------------------------------------------------------------
+//    wxPrinterDCImpl
+//
+
+class WXDLLEXPORT wxPrinterDCImpl : public wxMSWDCImpl
 {
 public:
-    // Create a printer DC (obsolete function: use wxPrintData version now)
-    wxPrinterDC(const wxString& driver, const wxString& device, const wxString& output, bool interactive = true, int orientation = wxPORTRAIT);
-
     // Create from print data
-    wxPrinterDC(const wxPrintData& data);
-
-    wxPrinterDC(WXHDC theDC);
+    wxPrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data );
+    wxPrinterDCImpl( wxPrinterDC *owner, WXHDC theDC );
 
     // override some base class virtuals
     virtual bool StartDoc(const wxString& message);
@@ -34,7 +35,7 @@ public:
     virtual void StartPage();
     virtual void EndPage();
 
-    wxRect GetPaperRect();
+    virtual wxRect GetPaperRect();
 
 protected:
     virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
@@ -55,14 +56,25 @@ protected:
     wxPrintData m_printData;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxPrinterDC)
+    DECLARE_CLASS(wxPrinterDCImpl)
+    DECLARE_NO_COPY_CLASS(wxPrinterDCImpl)
 };
-
-// Gets an HDC for the default printer configuration
-// WXHDC WXDLLEXPORT wxGetPrinterDC(int orientation);
 
 // Gets an HDC for the specified printer configuration
 WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& data);
+
+// ------------------------------------------------------------------------
+//    wxPrinterDCromHDC
+//
+
+class WXDLLEXPORT wxPrinterDCFromHDC: public wxPrinterDC
+{
+public:
+    wxPrinterDCFromHDC( WXHDC theDC )
+    {
+        m_pimpl = new wxPrinterDCImpl( this, theDC );
+    }
+};
 
 #endif // wxUSE_PRINTING_ARCHITECTURE
 

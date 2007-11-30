@@ -99,6 +99,7 @@ static inline double RadToDeg(double deg)
 #ifdef __WXGTK__
 #include <gtk/gtk.h>
 #include "wx/fontutil.h"
+#include "wx/gtk/dc.h"
 #endif
 
 #ifdef __WXMSW__
@@ -323,6 +324,7 @@ class WXDLLIMPEXP_CORE wxCairoContext : public wxGraphicsContext
 
 public:
     wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& dc );
+    wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& dc );
 #ifdef __WXGTK__
     wxCairoContext( wxGraphicsRenderer* renderer, GdkDrawable *drawable );
 #endif
@@ -1036,12 +1038,25 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
 : wxGraphicsContext(renderer)
 {
 #ifdef __WXGTK__
-#if wxUSE_NEW_DC
-    wxGTKImplDC *impldc = (wxGTKImplDC*) dc.GetImpl();
+    wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
-#else  
-    Init( gdk_cairo_create( dc.m_window ) );
 #endif
+#ifdef __WXMAC__
+    int width, height;
+    dc.GetSize( &width, &height );
+    CGContextRef cgcontext = (CGContextRef)dc.GetWindow()->MacGetCGContextRef();
+    cairo_surface_t* surface = cairo_quartz_surface_create_for_cg_context(cgcontext, width, height);
+    Init( cairo_create( surface ) );
+    cairo_surface_destroy( surface );
+#endif
+}
+
+wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& dc )
+: wxGraphicsContext(renderer)
+{
+#ifdef __WXGTK__
+    wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
+    Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
 #endif
 #ifdef __WXMAC__
     int width, height;
@@ -1465,10 +1480,7 @@ public :
     // Context
 
     virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc);
-
-#ifdef __WXMSW__
     virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc);
-#endif
 
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context );
 
@@ -1531,12 +1543,10 @@ wxGraphicsContext * wxCairoRenderer::CreateContext( const wxWindowDC& dc)
     return new wxCairoContext(this,dc);
 }
 
-#ifdef __WXMSW__
 wxGraphicsContext * wxCairoRenderer::CreateContext( const wxMemoryDC& dc)
 {
-    return NULL;
+    return new wxCairoContext(this,dc);
 }
-#endif
 
 wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeContext( void * context )
 {

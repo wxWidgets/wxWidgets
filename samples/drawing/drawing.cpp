@@ -33,6 +33,7 @@
 #include "wx/colordlg.h"
 #include "wx/image.h"
 #include "wx/artprov.h"
+#include "wx/dcgraph.h"
 
 #define wxTEST_GRAPHICS 1
 

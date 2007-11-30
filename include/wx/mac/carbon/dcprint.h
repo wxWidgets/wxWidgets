@@ -13,19 +13,18 @@
 #define _WX_DCPRINT_H_
 
 #include "wx/dc.h"
+#include "wx/dcgraph.h"
 #include "wx/cmndata.h"
 
 class wxNativePrinterDC ;
 
-class WXDLLEXPORT wxPrinterDC: public wxDC
+class WXDLLEXPORT wxPrinterDCImpl: public wxGCDCImpl
 {
- public:
+public:
 #if wxUSE_PRINTING_ARCHITECTURE
-  DECLARE_CLASS(wxPrinterDC)
 
-  // Create a printer DC
-  wxPrinterDC(const wxPrintData& printdata );
-  virtual ~wxPrinterDC();
+    wxPrinterDCImpl( wxPrinterDC *owner, const wxPrintData& printdata );
+    virtual ~wxPrinterDCImpl();
 
     virtual bool StartDoc( const wxString& WXUNUSED(message) ) ;
     virtual void EndDoc(void) ;
@@ -36,10 +35,15 @@ class WXDLLEXPORT wxPrinterDC: public wxDC
 
     wxPrintData& GetPrintData() { return m_printData; }
     virtual wxSize GetPPI() const;
- protected:
+    
+protected:
     virtual void DoGetSize( int *width, int *height ) const;
-    wxPrintData   m_printData ;
+    
+    wxPrintData        m_printData ;
     wxNativePrinterDC* m_nativePrinterDC ;
+    
+private:
+    DECLARE_CLASS(wxPrinterDC)
 #endif // wxUSE_PRINTING_ARCHITECTURE
 };
 

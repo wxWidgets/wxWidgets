@@ -74,12 +74,12 @@ wxString wxBrushString ( wxColour c, int style )
 //   wxSVGFileDC
 // ----------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxSVGFileImplDC, wxDC)
+IMPLEMENT_ABSTRACT_CLASS(wxSVGFileDCImpl, wxDC)
 
 #if wxUSE_NEW_DC
-    wxSVGFileImplDC::wxSVGFileImplDC( wxSVGFileDC *owner, const wxString &filename, 
+    wxSVGFileDCImpl::wxSVGFileDCImpl( wxSVGFileDC *owner, const wxString &filename, 
                      int width, int height, double dpi ) :
-        wxImplDC( owner )
+        wxDCImpl( owner )
     {
         Init( filename, width, height, dpi ); 
     }
@@ -91,7 +91,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxSVGFileImplDC, wxDC)
     }
 #endif
 
-void wxSVGFileImplDC::Init (const wxString &filename, int Width, int Height, double dpi)
+void wxSVGFileDCImpl::Init (const wxString &filename, int Width, int Height, double dpi)
 {
     m_width = Width ;
     m_height = Height ;
@@ -143,14 +143,14 @@ void wxSVGFileImplDC::Init (const wxString &filename, int Width, int Height, dou
 
 
 
-wxSVGFileImplDC::~wxSVGFileImplDC()
+wxSVGFileDCImpl::~wxSVGFileDCImpl()
 {
     wxString s = wxT("</g> \n</svg> \n") ;
     write(s);
     delete m_outfile ;
 }
 
-void wxSVGFileImplDC::DoGetSizeMM( int *width, int *height ) const
+void wxSVGFileDCImpl::DoGetSizeMM( int *width, int *height ) const
 {
     if (width)
         *width = wxRound( (double)m_width / m_mm_to_pix_x );
@@ -159,12 +159,12 @@ void wxSVGFileImplDC::DoGetSizeMM( int *width, int *height ) const
         *height = wxRound( (double)m_height / m_mm_to_pix_y );
 }
    
-wxSize wxSVGFileImplDC::GetPPI() const
+wxSize wxSVGFileDCImpl::GetPPI() const
 {
     return wxSize( wxRound(m_dpi), wxRound(m_dpi) );
 }
 
-void wxSVGFileImplDC::DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
+void wxSVGFileDCImpl::DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
     if (m_graphics_changed) NewGraphics ();
     wxString s ;
@@ -179,7 +179,7 @@ void wxSVGFileImplDC::DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2
     return;
 }
 
-void wxSVGFileImplDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset , wxCoord yoffset )
+void wxSVGFileDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset , wxCoord yoffset )
 {
     for ( int i = 1; i < n ; i++ )
     {
@@ -189,7 +189,7 @@ void wxSVGFileImplDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset , wxC
 }
 
 
-void wxSVGFileImplDC::DoDrawPoint (wxCoord x1, wxCoord y1)
+void wxSVGFileDCImpl::DoDrawPoint (wxCoord x1, wxCoord y1)
 {
     wxString s;
     if (m_graphics_changed) NewGraphics ();
@@ -201,24 +201,24 @@ void wxSVGFileImplDC::DoDrawPoint (wxCoord x1, wxCoord y1)
 }
 
 
-void wxSVGFileImplDC::DoDrawCheckMark(wxCoord x1, wxCoord y1, wxCoord width, wxCoord height)
+void wxSVGFileDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1, wxCoord width, wxCoord height)
 {
 #if wxUSE_NEW_DC
-    wxImplDC::DoDrawCheckMark (x1,y1,width,height) ;
+    wxDCImpl::DoDrawCheckMark (x1,y1,width,height) ;
 #else
     wxDCBase::DoDrawCheckMark (x1,y1,width,height) ;
 #endif
 }
 
 
-void wxSVGFileImplDC::DoDrawText(const wxString& text, wxCoord x1, wxCoord y1)
+void wxSVGFileDCImpl::DoDrawText(const wxString& text, wxCoord x1, wxCoord y1)
 {
     DoDrawRotatedText(text, x1,y1,0.0);
     wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::DrawText Call executed")) ;
 }
 
 
-void wxSVGFileImplDC::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoord y, double angle)
+void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoord y, double angle)
 {
     //known bug; if the font is drawn in a scaled DC, it will not behave exactly as wxMSW
     if (m_graphics_changed) NewGraphics ();
@@ -280,13 +280,13 @@ void wxSVGFileImplDC::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
 }
 
 
-void wxSVGFileImplDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxSVGFileDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     DoDrawRoundedRectangle(x, y, width, height, 0)  ;
 }
 
 
-void wxSVGFileImplDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius )
+void wxSVGFileDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius )
 
 {
     if (m_graphics_changed) NewGraphics ();
@@ -305,7 +305,7 @@ void wxSVGFileImplDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width
 }
 
 
-void wxSVGFileImplDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset,int fillStyle)
+void wxSVGFileDCImpl::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset,int fillStyle)
 {
     if (m_graphics_changed) NewGraphics ();
     wxString s, sTmp ;
@@ -331,7 +331,7 @@ void wxSVGFileImplDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wx
 }
 
 
-void wxSVGFileImplDC::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxSVGFileDCImpl::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 
 {
     if (m_graphics_changed) NewGraphics ();
@@ -351,7 +351,7 @@ void wxSVGFileImplDC::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoor
 }
 
 
-void wxSVGFileImplDC::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord xc, wxCoord yc)
+void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord xc, wxCoord yc)
 {
     /* Draws an arc of a circle, centred on (xc, yc), with starting point
     (x1, y1) and ending at (x2, y2). The current pen is used for the outline
@@ -403,7 +403,7 @@ void wxSVGFileImplDC::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
 }
 
 
-void wxSVGFileImplDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
+void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
 {
     /*
     Draws an arc of an ellipse. The current pen is used for drawing the arc
@@ -467,7 +467,7 @@ void wxSVGFileImplDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,
 }
 
 
-void wxSVGFileImplDC::DoGetTextExtent(const wxString& string, wxCoord *w, wxCoord *h, wxCoord *descent , wxCoord *externalLeading , const wxFont *font) const
+void wxSVGFileDCImpl::DoGetTextExtent(const wxString& string, wxCoord *w, wxCoord *h, wxCoord *descent , wxCoord *externalLeading , const wxFont *font) const
 
 {
     wxScreenDC sDC ;
@@ -479,7 +479,7 @@ void wxSVGFileImplDC::DoGetTextExtent(const wxString& string, wxCoord *w, wxCoor
 }
 
 
-wxCoord wxSVGFileImplDC::GetCharHeight() const
+wxCoord wxSVGFileDCImpl::GetCharHeight() const
 
 {
     wxScreenDC sDC ;
@@ -491,7 +491,7 @@ wxCoord wxSVGFileImplDC::GetCharHeight() const
 }
 
 
-wxCoord wxSVGFileImplDC::GetCharWidth() const
+wxCoord wxSVGFileDCImpl::GetCharWidth() const
 {
     wxScreenDC sDC ;
     sDC.SetFont (m_font);
@@ -503,7 +503,7 @@ wxCoord wxSVGFileImplDC::GetCharWidth() const
 
 
 /// Set Functions /////////////////////////////////////////////////////////////////
-void wxSVGFileImplDC::SetBackground( const wxBrush &brush )
+void wxSVGFileDCImpl::SetBackground( const wxBrush &brush )
 {
 
     m_backgroundBrush = brush;
@@ -511,14 +511,14 @@ void wxSVGFileImplDC::SetBackground( const wxBrush &brush )
 }
 
 
-void wxSVGFileImplDC::SetBackgroundMode( int mode )
+void wxSVGFileDCImpl::SetBackgroundMode( int mode )
 {
     m_backgroundMode = mode;
     return;
 }
 
 
-void wxSVGFileImplDC::SetBrush(const wxBrush& brush)
+void wxSVGFileDCImpl::SetBrush(const wxBrush& brush)
 
 {
     m_brush = brush ;
@@ -528,7 +528,7 @@ void wxSVGFileImplDC::SetBrush(const wxBrush& brush)
 }
 
 
-void wxSVGFileImplDC::SetPen(const wxPen& pen)
+void wxSVGFileDCImpl::SetPen(const wxPen& pen)
 {
     // width, color, ends, joins : currently implemented
     // dashes, stipple :  not implemented
@@ -538,7 +538,7 @@ void wxSVGFileImplDC::SetPen(const wxPen& pen)
     wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::SetPen Call executed")) ;
 }
 
-void wxSVGFileImplDC::NewGraphics ()
+void wxSVGFileDCImpl::NewGraphics ()
 {
 
     int w = m_pen.GetWidth ();
@@ -597,7 +597,7 @@ void wxSVGFileImplDC::NewGraphics ()
 }
 
 
-void wxSVGFileImplDC::SetFont(const wxFont& font)
+void wxSVGFileDCImpl::SetFont(const wxFont& font)
 
 {
     m_font = font ;
@@ -607,7 +607,7 @@ void wxSVGFileImplDC::SetFont(const wxFont& font)
 
 
 // export a bitmap as a raster image in png
-bool wxSVGFileImplDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
+bool wxSVGFileDCImpl::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                          wxDC* source, wxCoord xsrc, wxCoord ysrc,
                          int logicalFunc /*= wxCOPY*/, bool useMask /*= FALSE*/,
                          wxCoord /*xsrcMask = -1*/, wxCoord /*ysrcMask = -1*/)
@@ -632,7 +632,7 @@ bool wxSVGFileImplDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoor
     return FALSE ;
 }
 
-void wxSVGFileImplDC::DoDrawIcon(const class wxIcon & myIcon, wxCoord x, wxCoord y)
+void wxSVGFileDCImpl::DoDrawIcon(const class wxIcon & myIcon, wxCoord x, wxCoord y)
 {
     wxBitmap myBitmap (myIcon.GetWidth(), myIcon.GetHeight() ) ;
     wxMemoryDC memDC;
@@ -644,7 +644,7 @@ void wxSVGFileImplDC::DoDrawIcon(const class wxIcon & myIcon, wxCoord x, wxCoord
     return ;
 }
 
-void wxSVGFileImplDC::DoDrawBitmap(const class wxBitmap & bmp, wxCoord x, wxCoord y , bool  WXUNUSED(bTransparent) /*=0*/ )
+void wxSVGFileDCImpl::DoDrawBitmap(const class wxBitmap & bmp, wxCoord x, wxCoord y , bool  WXUNUSED(bTransparent) /*=0*/ )
 {
     if (m_graphics_changed) NewGraphics ();
 
@@ -685,7 +685,7 @@ void wxSVGFileImplDC::DoDrawBitmap(const class wxBitmap & bmp, wxCoord x, wxCoor
     return  ;
 }
 
-void wxSVGFileImplDC::write(const wxString &s)
+void wxSVGFileDCImpl::write(const wxString &s)
 {
     const wxCharBuffer buf = s.utf8_str();
     m_outfile->Write(buf, strlen((const char *)buf));
@@ -698,32 +698,32 @@ void wxSVGFileImplDC::write(const wxString &s)
 
 #if wxUSE_NEW_DC
 #else
-void wxSVGFileImplDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
+void wxSVGFileDCImpl::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
 {
     wxDCBase::SetAxisOrientation( xLeftRight, yBottomUp );
 }
 
-void wxSVGFileImplDC::SetMapMode(int mode)
+void wxSVGFileDCImpl::SetMapMode(int mode)
 {
     wxDCBase::SetMapMode(mode);
 }
 
-void wxSVGFileImplDC::SetUserScale(double x, double y)
+void wxSVGFileDCImpl::SetUserScale(double x, double y)
 {
     wxDCBase::SetUserScale(x,y);
 }
 
-void wxSVGFileImplDC::SetLogicalScale(double x, double y)
+void wxSVGFileDCImpl::SetLogicalScale(double x, double y)
 {
     wxDCBase::SetLogicalScale(x,y);
 }
 
-void wxSVGFileImplDC::SetLogicalOrigin(wxCoord x, wxCoord y)
+void wxSVGFileDCImpl::SetLogicalOrigin(wxCoord x, wxCoord y)
 {
     wxDCBase::SetLogicalOrigin(x,y);
 }
 
-void wxSVGFileImplDC::SetDeviceOrigin(wxCoord x, wxCoord y)
+void wxSVGFileDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
 {
     wxDCBase::SetDeviceOrigin(x,y);
 }

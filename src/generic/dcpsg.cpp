@@ -242,12 +242,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxPostScriptDC, wxDC)
 
 wxPostScriptDC::wxPostScriptDC()
 {
-    m_pimpl = new wxPostScriptImplDC( this );
+    m_pimpl = new wxPostScriptDCImpl( this );
 }
 
 wxPostScriptDC::wxPostScriptDC(const wxPrintData& printData)
 {
-    m_pimpl = new wxPostScriptImplDC( this, printData );
+    m_pimpl = new wxPostScriptDCImpl( this, printData );
 }
 
 #endif
@@ -268,7 +268,7 @@ static const double DEV2PS = 72.0 / 600.0;
 
 
 #if wxUSE_NEW_DC
-IMPLEMENT_ABSTRACT_CLASS(wxPostScriptImplDC, wxImplDC)
+IMPLEMENT_ABSTRACT_CLASS(wxPostScriptDCImpl, wxDCImpl)
 #else
 IMPLEMENT_ABSTRACT_CLASS(wxPostScriptDC, wxDC)
 #endif
@@ -276,8 +276,8 @@ IMPLEMENT_ABSTRACT_CLASS(wxPostScriptDC, wxDC)
 //-------------------------------------------------------------------------------
 
 #if wxUSE_NEW_DC
-wxPostScriptImplDC::wxPostScriptImplDC( wxPostScriptDC *owner ) :
-   wxImplDC( owner )
+wxPostScriptDCImpl::wxPostScriptDCImpl( wxPostScriptDC *owner ) :
+   wxDCImpl( owner )
 {
     Init();
 
@@ -286,8 +286,8 @@ wxPostScriptImplDC::wxPostScriptImplDC( wxPostScriptDC *owner ) :
     m_ok = true;
 }
 
-wxPostScriptImplDC::wxPostScriptImplDC( wxPostScriptDC *owner, const wxPrintData& data ) :
-   wxImplDC( owner )
+wxPostScriptDCImpl::wxPostScriptDCImpl( wxPostScriptDC *owner, const wxPrintData& data ) :
+   wxDCImpl( owner )
 {
     Init();
     
@@ -301,8 +301,8 @@ wxPostScriptImplDC::wxPostScriptImplDC( wxPostScriptDC *owner, const wxPrintData
 
 
 #if wxUSE_NEW_DC
-wxPostScriptImplDC::wxPostScriptImplDC( wxPrinterDC *owner ) :
-   wxImplDC( owner )
+wxPostScriptDCImpl::wxPostScriptDCImpl( wxPrinterDC *owner ) :
+   wxDCImpl( owner )
 #else
 wxPostScriptDC::wxPostScriptDC()
 #endif
@@ -315,8 +315,8 @@ wxPostScriptDC::wxPostScriptDC()
 }
 
 #if wxUSE_NEW_DC
-wxPostScriptImplDC::wxPostScriptImplDC( wxPrinterDC *owner, const wxPrintData& data ) :
-   wxImplDC( owner )
+wxPostScriptDCImpl::wxPostScriptDCImpl( wxPrinterDC *owner, const wxPrintData& data ) :
+   wxDCImpl( owner )
 #else
 wxPostScriptDC::wxPostScriptDC( const wxPrintData& data )
 #endif
@@ -330,7 +330,7 @@ wxPostScriptDC::wxPostScriptDC( const wxPrintData& data )
     m_ok = true;
 }
 
-void wxPostScriptImplDC::Init()
+void wxPostScriptDCImpl::Init()
 {
     m_pstream = (FILE*) NULL;
 
@@ -347,7 +347,7 @@ void wxPostScriptImplDC::Init()
 
 }
 
-wxPostScriptImplDC::~wxPostScriptImplDC ()
+wxPostScriptDCImpl::~wxPostScriptDCImpl ()
 {
     if (m_pstream)
     {
@@ -356,12 +356,12 @@ wxPostScriptImplDC::~wxPostScriptImplDC ()
     }
 }
 
-bool wxPostScriptImplDC::IsOk() const
+bool wxPostScriptDCImpl::IsOk() const
 {
   return m_ok;
 }
 
-wxRect wxPostScriptImplDC::GetPaperRect()
+wxRect wxPostScriptDCImpl::GetPaperRect()
 {
     int w = 0;
     int h = 0;
@@ -369,12 +369,12 @@ wxRect wxPostScriptImplDC::GetPaperRect()
     return wxRect(0,0,w,h);
 }
 
-int wxPostScriptImplDC::GetResolution()
+int wxPostScriptDCImpl::GetResolution()
 {
     return DPI;
 }
 
-void wxPostScriptImplDC::DoSetClippingRegion (wxCoord x, wxCoord y, wxCoord w, wxCoord h)
+void wxPostScriptDCImpl::DoSetClippingRegion (wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 {
     wxCHECK_RET( m_ok , wxT("invalid postscript dc") );
 
@@ -409,7 +409,7 @@ void wxPostScriptImplDC::DoSetClippingRegion (wxCoord x, wxCoord y, wxCoord w, w
 }
 
 
-void wxPostScriptImplDC::DestroyClippingRegion()
+void wxPostScriptDCImpl::DestroyClippingRegion()
 {
     wxCHECK_RET( m_ok , wxT("invalid postscript dc") );
 
@@ -420,37 +420,37 @@ void wxPostScriptImplDC::DestroyClippingRegion()
     }
 
 #if wxUSE_NEW_DC
-    wxImplDC::DestroyClippingRegion();
+    wxDCImpl::DestroyClippingRegion();
 #else
     wxDC::DestroyClippingRegion();
 #endif
 }
 
-void wxPostScriptImplDC::Clear()
+void wxPostScriptDCImpl::Clear()
 {
     // This should fail silently to avoid unnecessary
     // asserts
-    //    wxFAIL_MSG( wxT("wxPostScriptImplDC::Clear not implemented.") );
+    //    wxFAIL_MSG( wxT("wxPostScriptDCImpl::Clear not implemented.") );
 }
 
-bool wxPostScriptImplDC::DoFloodFill (wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), const wxColour &WXUNUSED(col), int WXUNUSED(style))
+bool wxPostScriptDCImpl::DoFloodFill (wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), const wxColour &WXUNUSED(col), int WXUNUSED(style))
 {
-    wxFAIL_MSG( wxT("wxPostScriptImplDC::FloodFill not implemented.") );
+    wxFAIL_MSG( wxT("wxPostScriptDCImpl::FloodFill not implemented.") );
     return false;
 }
 
-bool wxPostScriptImplDC::DoGetPixel (wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxColour * WXUNUSED(col)) const
+bool wxPostScriptDCImpl::DoGetPixel (wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxColour * WXUNUSED(col)) const
 {
-    wxFAIL_MSG( wxT("wxPostScriptImplDC::GetPixel not implemented.") );
+    wxFAIL_MSG( wxT("wxPostScriptDCImpl::GetPixel not implemented.") );
     return false;
 }
 
-void wxPostScriptImplDC::DoCrossHair (wxCoord WXUNUSED(x), wxCoord WXUNUSED(y))
+void wxPostScriptDCImpl::DoCrossHair (wxCoord WXUNUSED(x), wxCoord WXUNUSED(y))
 {
-    wxFAIL_MSG( wxT("wxPostScriptImplDC::CrossHair not implemented.") );
+    wxFAIL_MSG( wxT("wxPostScriptDCImpl::CrossHair not implemented.") );
 }
 
-void wxPostScriptImplDC::DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
+void wxPostScriptDCImpl::DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -472,7 +472,7 @@ void wxPostScriptImplDC::DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord
     CalcBoundingBox( x2, y2 );
 }
 
-void wxPostScriptImplDC::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord xc, wxCoord yc)
+void wxPostScriptDCImpl::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord xc, wxCoord yc)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -550,7 +550,7 @@ void wxPostScriptImplDC::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord 
     }
 }
 
-void wxPostScriptImplDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
+void wxPostScriptDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -604,7 +604,7 @@ void wxPostScriptImplDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord
     }
 }
 
-void wxPostScriptImplDC::DoDrawPoint (wxCoord x, wxCoord y)
+void wxPostScriptDCImpl::DoDrawPoint (wxCoord x, wxCoord y)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -625,7 +625,7 @@ void wxPostScriptImplDC::DoDrawPoint (wxCoord x, wxCoord y)
     CalcBoundingBox( x, y );
 }
 
-void wxPostScriptImplDC::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
+void wxPostScriptDCImpl::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -695,7 +695,7 @@ void wxPostScriptImplDC::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset
     }
 }
 
-void wxPostScriptImplDC::DoDrawPolyPolygon (int n, int count[], wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
+void wxPostScriptDCImpl::DoDrawPolyPolygon (int n, int count[], wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -771,7 +771,7 @@ void wxPostScriptImplDC::DoDrawPolyPolygon (int n, int count[], wxPoint points[]
     }
 }
 
-void wxPostScriptImplDC::DoDrawLines (int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
+void wxPostScriptDCImpl::DoDrawLines (int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -805,7 +805,7 @@ void wxPostScriptImplDC::DoDrawLines (int n, wxPoint points[], wxCoord xoffset, 
     PsPrint( "stroke\n" );
 }
 
-void wxPostScriptImplDC::DoDrawRectangle (wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxPostScriptDCImpl::DoDrawRectangle (wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -859,7 +859,7 @@ void wxPostScriptImplDC::DoDrawRectangle (wxCoord x, wxCoord y, wxCoord width, w
     }
 }
 
-void wxPostScriptImplDC::DoDrawRoundedRectangle (wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
+void wxPostScriptDCImpl::DoDrawRoundedRectangle (wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -941,7 +941,7 @@ void wxPostScriptImplDC::DoDrawRoundedRectangle (wxCoord x, wxCoord y, wxCoord w
     }
 }
 
-void wxPostScriptImplDC::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxPostScriptDCImpl::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -983,7 +983,7 @@ void wxPostScriptImplDC::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxC
     }
 }
 
-void wxPostScriptImplDC::DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y )
+void wxPostScriptDCImpl::DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y )
 {
     DoDrawBitmap( icon, x, y, true );
 }
@@ -991,7 +991,7 @@ void wxPostScriptImplDC::DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y )
 /* this has to be char, not wxChar */
 static char hexArray[] = "0123456789ABCDEF";
 
-void wxPostScriptImplDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool WXUNUSED(useMask) )
+void wxPostScriptDCImpl::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool WXUNUSED(useMask) )
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -1061,7 +1061,7 @@ void wxPostScriptImplDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoor
     PsPrint( "origstate restore\n" );
 }
 
-void wxPostScriptImplDC::SetFont( const wxFont& font )
+void wxPostScriptDCImpl::SetFont( const wxFont& font )
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -1155,7 +1155,7 @@ void wxPostScriptImplDC::SetFont( const wxFont& font )
     PsPrint( buffer );
 }
 
-void wxPostScriptImplDC::SetPen( const wxPen& pen )
+void wxPostScriptDCImpl::SetPen( const wxPen& pen )
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -1263,7 +1263,7 @@ void wxPostScriptImplDC::SetPen( const wxPen& pen )
     }
 }
 
-void wxPostScriptImplDC::SetBrush( const wxBrush& brush )
+void wxPostScriptDCImpl::SetBrush( const wxBrush& brush )
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -1307,7 +1307,7 @@ void wxPostScriptImplDC::SetBrush( const wxBrush& brush )
     }
 }
 
-void wxPostScriptImplDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
+void wxPostScriptDCImpl::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -1415,7 +1415,7 @@ void wxPostScriptImplDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y 
     CalcBoundingBox( x + size * text.length() * 2/3 , y );
 }
 
-void wxPostScriptImplDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord y, double angle )
+void wxPostScriptDCImpl::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord y, double angle )
 {
     if ( wxIsNullDouble(angle) )
     {
@@ -1530,18 +1530,18 @@ void wxPostScriptImplDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxC
     CalcBoundingBox( x + size * text.length() * 2/3 , y );
 }
 
-void wxPostScriptImplDC::SetBackground (const wxBrush& brush)
+void wxPostScriptDCImpl::SetBackground (const wxBrush& brush)
 {
     m_backgroundBrush = brush;
 }
 
-void wxPostScriptImplDC::SetLogicalFunction (int WXUNUSED(function))
+void wxPostScriptDCImpl::SetLogicalFunction (int WXUNUSED(function))
 {
-    wxFAIL_MSG( wxT("wxPostScriptImplDC::SetLogicalFunction not implemented.") );
+    wxFAIL_MSG( wxT("wxPostScriptDCImpl::SetLogicalFunction not implemented.") );
 }
 
 #if wxUSE_SPLINES
-void wxPostScriptImplDC::DoDrawSpline( const wxPointList *points )
+void wxPostScriptDCImpl::DoDrawSpline( const wxPointList *points )
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -1622,13 +1622,13 @@ void wxPostScriptImplDC::DoDrawSpline( const wxPointList *points )
 }
 #endif // wxUSE_SPLINES
 
-wxCoord wxPostScriptImplDC::GetCharWidth() const
+wxCoord wxPostScriptDCImpl::GetCharWidth() const
 {
     // Chris Breeze: reasonable approximation using wxMODERN/Courier
     return (wxCoord) (GetCharHeight() * 72.0 / 120.0);
 }
 
-void wxPostScriptImplDC::SetPrintData(const wxPrintData& data)
+void wxPostScriptDCImpl::SetPrintData(const wxPrintData& data)
 {
     m_printData = data;
 
@@ -1651,43 +1651,43 @@ void wxPostScriptImplDC::SetPrintData(const wxPrintData& data)
 
 #if wxUSE_NEW_DC
 #else
-void wxPostScriptImplDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
+void wxPostScriptDCImpl::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
 {
     wxDCBase::SetAxisOrientation(xLeftRight,yBottomUp);
 }
 
-void wxPostScriptImplDC::SetMapMode(int mode)
+void wxPostScriptDCImpl::SetMapMode(int mode)
 {
     wxDCBase::SetMapMode(mode);
 }
 
-void wxPostScriptImplDC::SetUserScale(double x, double y)
+void wxPostScriptDCImpl::SetUserScale(double x, double y)
 {
     wxDCBase::SetUserScale(x,y);
 }
 
-void wxPostScriptImplDC::SetLogicalScale(double x, double y)
+void wxPostScriptDCImpl::SetLogicalScale(double x, double y)
 {
     wxDCBase::SetLogicalScale(x,y);
 }
 
-void wxPostScriptImplDC::SetLogicalOrigin(wxCoord x, wxCoord y)
+void wxPostScriptDCImpl::SetLogicalOrigin(wxCoord x, wxCoord y)
 {
     wxDCBase::SetLogicalOrigin(x,y);
 }
 
-void wxPostScriptImplDC::SetDeviceOrigin(wxCoord x, wxCoord y)
+void wxPostScriptDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
 {
     wxDCBase::SetDeviceOrigin(x,y);
 }
 #endif
 
-void wxPostScriptImplDC::ComputeScaleAndOrigin()
+void wxPostScriptDCImpl::ComputeScaleAndOrigin()
 {
     const wxRealPoint origScale(m_scaleX, m_scaleY);
 
 #if wxUSE_NEW_DC
-    wxImplDC::ComputeScaleAndOrigin();
+    wxDCImpl::ComputeScaleAndOrigin();
 #else
     wxDC::ComputeScaleAndOrigin();
 #endif
@@ -1701,7 +1701,7 @@ void wxPostScriptImplDC::ComputeScaleAndOrigin()
     }
 }
 
-void wxPostScriptImplDC::DoGetSize(int* width, int* height) const
+void wxPostScriptDCImpl::DoGetSize(int* width, int* height) const
 {
     wxPaperSize id = m_printData.GetPaperId();
 
@@ -1731,7 +1731,7 @@ void wxPostScriptImplDC::DoGetSize(int* width, int* height) const
         *height = wxRound( h * PS2DEV );
 }
 
-void wxPostScriptImplDC::DoGetSizeMM(int *width, int *height) const
+void wxPostScriptDCImpl::DoGetSizeMM(int *width, int *height) const
 {
     wxPaperSize id = m_printData.GetPaperId();
 
@@ -1759,13 +1759,13 @@ void wxPostScriptImplDC::DoGetSizeMM(int *width, int *height) const
 }
 
 // Resolution in pixels per logical inch
-wxSize wxPostScriptImplDC::GetPPI(void) const
+wxSize wxPostScriptDCImpl::GetPPI(void) const
 {
     return wxSize( DPI, DPI );
 }
 
 
-bool wxPostScriptImplDC::StartDoc( const wxString& message )
+bool wxPostScriptDCImpl::StartDoc( const wxString& message )
 {
     wxCHECK_MSG( m_ok, false, wxT("invalid postscript dc") );
 
@@ -1854,7 +1854,7 @@ bool wxPostScriptImplDC::StartDoc( const wxString& message )
     return true;
 }
 
-void wxPostScriptImplDC::EndDoc ()
+void wxPostScriptDCImpl::EndDoc ()
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -1954,7 +1954,7 @@ void wxPostScriptImplDC::EndDoc ()
 #endif
 }
 
-void wxPostScriptImplDC::StartPage()
+void wxPostScriptDCImpl::StartPage()
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -1992,14 +1992,14 @@ void wxPostScriptImplDC::StartPage()
         PsPrint( "90 rotate\n" );
 }
 
-void wxPostScriptImplDC::EndPage ()
+void wxPostScriptDCImpl::EndPage ()
 {
     wxCHECK_RET( m_ok , wxT("invalid postscript dc") );
 
     PsPrint( "showpage\n" );
 }
 
-bool wxPostScriptImplDC::DoBlit( wxCoord xdest, wxCoord ydest,
+bool wxPostScriptDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
                            wxCoord fwidth, wxCoord fheight,
                            wxDC *source,
                            wxCoord xsrc, wxCoord ysrc,
@@ -2022,7 +2022,7 @@ bool wxPostScriptImplDC::DoBlit( wxCoord xdest, wxCoord ydest,
     return true;
 }
 
-wxCoord wxPostScriptImplDC::GetCharHeight() const
+wxCoord wxPostScriptDCImpl::GetCharHeight() const
 {
     if (m_font.Ok())
         return m_font.GetPointSize();
@@ -2030,7 +2030,7 @@ wxCoord wxPostScriptImplDC::GetCharHeight() const
         return 12;
 }
 
-void wxPostScriptImplDC::PsPrint( const wxString& str )
+void wxPostScriptDCImpl::PsPrint( const wxString& str )
 {
     const wxCharBuffer psdata(str.utf8_str());
 
@@ -2057,7 +2057,7 @@ void wxPostScriptImplDC::PsPrint( const wxString& str )
     }
 }
 
-void wxPostScriptImplDC::DoGetTextExtent(const wxString& string,
+void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
                                      wxCoord *x, wxCoord *y,
                                      wxCoord *descent, wxCoord *externalLeading,
                                      const wxFont *theFont ) const

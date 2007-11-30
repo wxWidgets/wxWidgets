@@ -82,19 +82,6 @@ public:
                     int width = 0, int height = 0,
                     const wxString& description = wxEmptyString);
 
-    virtual ~wxEnhMetaFileDC();
-
-    // obtain a pointer to the new metafile (caller should delete it)
-    wxEnhMetaFile *Close();
-
-protected:
-    virtual void DoGetSize(int *width, int *height) const;
-
-private:
-    // size passed to ctor and returned by DoGetSize()
-    int m_width,
-        m_height;
-
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxEnhMetaFileDC)
 };
 

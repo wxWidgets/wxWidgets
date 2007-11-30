@@ -52,9 +52,11 @@
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
 #include "wx/msw/printdlg.h"
+#include "wx/msw/dcprint.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/printdlg.h"
 #include "wx/mac/private/print.h"
+#include "wx/mac/dcprint.h"
 #else
 #include "wx/generic/prntdlgg.h"
 #include "wx/dcps.h"
@@ -205,33 +207,14 @@ wxDialog *wxNativePrintFactory::CreatePrintSetupDialog( wxWindow *parent,
 #endif
 }
 
-#if wxUSE_NEW_DC
-
-wxImplDC* wxNativePrintFactory::CreatePrinterImplDC( wxPrinterDC *owner, const wxPrintData& data )
+wxDCImpl* wxNativePrintFactory::CreatePrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data )
 {
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
-    return new wxWindowsPrinterDCImpl( owner, data );
-#elif defined(__WXMAC__)
-    return new wxMacPrinterDCImpl( owner, data );
+#if defined(__WXGTK__) || defined(__WXUNIVERSAL__)
+    return new wxPostScriptDCImpl( owner, data );
 #else
-    return new wxPostScriptImplDC( owner, data );
+    return new wxPrinterDCImpl( owner, data );
 #endif
 }
-
-#else
-
-wxDC* wxNativePrintFactory::CreatePrinterDC( const wxPrintData& data )
-{
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
-    return new wxPrinterDC(data);
-#elif defined(__WXMAC__)
-    return new wxPrinterDC(data);
-#else
-    return new wxPostScriptDC(data);
-#endif
-}
-
-#endif
 
 bool wxNativePrintFactory::HasOwnPrintToFile()
 {

@@ -22,6 +22,8 @@
 #include "wx/dataobj.h"
 #endif
 
+#include "wx/mac/carbon/dcclient.h"
+
 /*
  * Metafile and metafile device context classes
  *
@@ -65,32 +67,56 @@ public:
 #endif
 };
 
-class WXDLLEXPORT wxMetafileDC: public wxDC
+
+class WXDLLEXPORT wxMetafileDCImpl: public wxGCDCImpl
 {
-  DECLARE_DYNAMIC_CLASS(wxMetafileDC)
+public:
+    wxMetafileDCImpl( wxDC *owner,
+                      const wxString& filename,
+                      int width, int height,
+                      const wxString& description );
 
- public:
-    // the ctor parameters specify the filename (empty for memory metafiles),
-    // the metafile picture size and the optional description/comment
-    wxMetafileDC(const wxString& filename = wxEmptyString,
-                    int width = 0, int height = 0,
-                    const wxString& description = wxEmptyString);
+    virtual ~wxMetafileDCImpl();
 
-  virtual ~wxMetafileDC(void);
+    // Should be called at end of drawing
+    virtual wxMetafile *Close();
 
-  // Should be called at end of drawing
-  virtual wxMetafile *Close(void);
-
-  // Implementation
-  inline wxMetafile *GetMetaFile(void) const { return m_metaFile; }
-  inline void SetMetaFile(wxMetafile *mf) { m_metaFile = mf; }
+    // Implementation
+    wxMetafile *GetMetaFile(void) const { return m_metaFile; }
+    void SetMetaFile(wxMetafile *mf) { m_metaFile = mf; }
 
 protected:
     virtual void DoGetSize(int *width, int *height) const;
 
-  wxMetafile*   m_metaFile;
+    wxMetafile*   m_metaFile;
+  
+private:
+    DECLARE_CLASS(wxMetafileDCImpl)
+    DECLARE_NO_COPY_CLASS(wxMetafileDCImpl)
 };
 
+class WXDLLEXPORT wxMetafileDC: public wxDC
+{
+ public:
+    // the ctor parameters specify the filename (empty for memory metafiles),
+    // the metafile picture size and the optional description/comment
+    wxMetafileDC(  const wxString& filename = wxEmptyString,
+                    int width = 0, int height = 0,
+                    const wxString& description = wxEmptyString )
+    { m_pimpl = new wxMetafileDCImpl( this, filename, width, height, description ); }
+                    
+    wxMetafile *GetMetafile() const 
+       { return ((wxMetafileDCImpl*)m_pimpl)->GetMetaFile(); }
+       
+    wxMetafile *Close()
+       { return ((wxMetafileDCImpl*)m_pimpl)->Close(); }
+       
+private:
+    DECLARE_CLASS(wxMetafileDC)
+    DECLARE_NO_COPY_CLASS(wxMetafileDC)
+};
+                    
+          
 /*
  * Pass filename of existing non-placeable metafile, and bounding box.
  * Adds a placeable metafile header, sets the mapping mode to anisotropic,

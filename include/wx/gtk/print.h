@@ -54,7 +54,7 @@ public:
                                                           wxPageSetupDialogData * data = NULL );
 
 #if wxUSE_NEW_DC
-    virtual wxImplDC* CreatePrinterImplDC( wxPrinterDC *owner, const wxPrintData& data );
+    virtual wxDCImpl* CreatePrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data );
 #else
     virtual wxDC* CreatePrinterDC( const wxPrintData& data );
 #endif
@@ -223,19 +223,19 @@ private:
 //-----------------------------------------------------------------------------
 
 #if wxUSE_NEW_DC
-class WXDLLIMPEXP_CORE wxGtkPrinterImplDC : public wxImplDC
+class WXDLLIMPEXP_CORE wxGtkPrinterDCImpl : public wxDCImpl
 #else
-#define wxGtkPrinterImplDC wxGtkPrinterDC
+#define wxGtkPrinterDCImpl wxGtkPrinterDC
 class WXDLLIMPEXP_CORE wxGtkPrinterDC : public wxDC
 #endif
 {
 public:
 #if wxUSE_NEW_DC
-    wxGtkPrinterImplDC( wxPrinterDC *owner, const wxPrintData& data );
+    wxGtkPrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data );
 #else
     wxGtkPrinterDC( const wxPrintData& data );
 #endif
-    virtual ~wxGtkPrinterImplDC();
+    virtual ~wxGtkPrinterDCImpl();
 
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
@@ -320,8 +320,8 @@ private:
     double                  m_PS2DEV;
     double                  m_DEV2PS;
 
-    DECLARE_DYNAMIC_CLASS(wxGtkPrinterImplDC)
-    DECLARE_NO_COPY_CLASS(wxGtkPrinterImplDC)
+    DECLARE_DYNAMIC_CLASS(wxGtkPrinterDCImpl)
+    DECLARE_NO_COPY_CLASS(wxGtkPrinterDCImpl)
 };
 
 // ----------------------------------------------------------------------------

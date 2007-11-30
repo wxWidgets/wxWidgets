@@ -395,10 +395,7 @@ public:
     virtual ~wxGraphicsContext();
     
     static wxGraphicsContext* Create( const wxWindowDC& dc) ;
-    
-#ifdef __WXMSW__
     static wxGraphicsContext * Create( const wxMemoryDC& dc) ;
-#endif    
 
     static wxGraphicsContext* CreateFromNative( void * context ) ;
 
@@ -654,9 +651,8 @@ public :
     // Context
 
     virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc) = 0 ;
-#ifdef __WXMSW__
     virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc) = 0 ;
-#endif    
+    
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context ) = 0;
 
     virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window ) = 0;

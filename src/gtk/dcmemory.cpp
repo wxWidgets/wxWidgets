@@ -11,64 +11,42 @@
 #include "wx/wxprec.h"
 
 #include "wx/dcmemory.h"
+#include "wx/gtk/dcmemory.h"
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
-// wxMemoryDC
+// wxMemoryDCImpl
 //-----------------------------------------------------------------------------
 
-#if wxUSE_NEW_DC
-IMPLEMENT_ABSTRACT_CLASS(wxGTKMemoryImplDC, wxGTKWindowImplDC)
-#else
-IMPLEMENT_ABSTRACT_CLASS(wxMemoryDC,wxWindowDC)
-#endif
+IMPLEMENT_ABSTRACT_CLASS(wxMemoryDCImpl, wxWindowDCImpl)
 
-#if wxUSE_NEW_DC
-wxGTKMemoryImplDC::wxGTKMemoryImplDC( wxMemoryDC *owner ) 
-  : wxGTKWindowImplDC( owner )
+wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner ) 
+  : wxWindowDCImpl( owner )
 { 
     Init(); 
 }
 
-wxGTKMemoryImplDC::wxGTKMemoryImplDC( wxMemoryDC *owner, wxBitmap& bitmap) 
-  : wxGTKWindowImplDC( owner )
+wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap) 
+  : wxWindowDCImpl( owner )
 { 
     Init(); 
     owner->SelectObject(bitmap); 
 }
 
-wxGTKMemoryImplDC::wxGTKMemoryImplDC( wxMemoryDC *owner, wxDC *WXUNUSED(dc) )
-  : wxGTKWindowImplDC( owner )
+wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxDC *WXUNUSED(dc) )
+  : wxWindowDCImpl( owner )
 {
     Init();
 }
-#else
-wxMemoryDC::wxMemoryDC() 
-{ 
-    Init(); 
-}
 
-wxMemoryDC::wxMemoryDC(wxBitmap& bitmap) 
-{ 
-    Init(); 
-    SelectObject(bitmap); 
-}
-
-wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
-  : wxWindowDC()
-{
-    Init();
-}
-#endif
-
-wxGTKMemoryImplDC::~wxGTKMemoryImplDC()
+wxMemoryDCImpl::~wxMemoryDCImpl()
 {
     g_object_unref(m_context);
 }
 
-void wxGTKMemoryImplDC::Init()
+void wxMemoryDCImpl::Init()
 {
     m_ok = false;
 
@@ -82,14 +60,14 @@ void wxGTKMemoryImplDC::Init()
     m_fontdesc = pango_font_description_copy( pango_context_get_font_description( m_context ) );
 }
 
-void wxGTKMemoryImplDC::DoSelect( const wxBitmap& bitmap )
+void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 {
     Destroy();
 
     m_selected = bitmap;
     if (m_selected.Ok())
     {
-        m_window = m_selected.GetPixmap();
+        m_gdkwindow = m_selected.GetPixmap();
 
         m_selected.PurgeOtherRepresentations(wxBitmap::Pixmap);
 
@@ -98,11 +76,11 @@ void wxGTKMemoryImplDC::DoSelect( const wxBitmap& bitmap )
     else
     {
         m_ok = false;
-        m_window = (GdkWindow *) NULL;
+        m_gdkwindow = (GdkWindow *) NULL;
     }
 }
 
-void wxGTKMemoryImplDC::SetPen( const wxPen& penOrig )
+void wxMemoryDCImpl::SetPen( const wxPen& penOrig )
 {
     wxPen pen( penOrig );
     if ( m_selected.Ok() &&
@@ -112,10 +90,10 @@ void wxGTKMemoryImplDC::SetPen( const wxPen& penOrig )
         pen.SetColour( pen.GetColour() == *wxWHITE ? *wxBLACK : *wxWHITE );
     }
 
-    wxGTKWindowImplDC::SetPen( pen );
+    wxWindowDCImpl::SetPen( pen );
 }
 
-void wxGTKMemoryImplDC::SetBrush( const wxBrush& brushOrig )
+void wxMemoryDCImpl::SetBrush( const wxBrush& brushOrig )
 {
     wxBrush brush( brushOrig );
     if ( m_selected.Ok() &&
@@ -125,10 +103,10 @@ void wxGTKMemoryImplDC::SetBrush( const wxBrush& brushOrig )
         brush.SetColour( brush.GetColour() == *wxWHITE ? *wxBLACK : *wxWHITE);
     }
 
-    wxGTKWindowImplDC::SetBrush( brush );
+    wxWindowDCImpl::SetBrush( brush );
 }
 
-void wxGTKMemoryImplDC::SetBackground( const wxBrush& brushOrig )
+void wxMemoryDCImpl::SetBackground( const wxBrush& brushOrig )
 {
     wxBrush brush(brushOrig);
 
@@ -139,34 +117,26 @@ void wxGTKMemoryImplDC::SetBackground( const wxBrush& brushOrig )
         brush.SetColour( brush.GetColour() == *wxWHITE ? *wxBLACK : *wxWHITE );
     }
 
-    wxGTKWindowImplDC::SetBackground( brush );
+    wxWindowDCImpl::SetBackground( brush );
 }
 
-void wxGTKMemoryImplDC::SetTextForeground( const wxColour& col )
+void wxMemoryDCImpl::SetTextForeground( const wxColour& col )
 {
     if ( m_selected.Ok() && m_selected.GetDepth() == 1 )
-    {
-        wxGTKWindowImplDC::SetTextForeground( col == *wxWHITE ? *wxBLACK : *wxWHITE);
-    }
+        wxWindowDCImpl::SetTextForeground( col == *wxWHITE ? *wxBLACK : *wxWHITE);
     else
-    {
-        wxGTKWindowImplDC::SetTextForeground( col );
-    }
+        wxWindowDCImpl::SetTextForeground( col );
 }
 
-void wxGTKMemoryImplDC::SetTextBackground( const wxColour &col )
+void wxMemoryDCImpl::SetTextBackground( const wxColour &col )
 {
     if (m_selected.Ok() && m_selected.GetDepth() == 1)
-    {
-        wxGTKWindowImplDC::SetTextBackground( col == *wxWHITE ? *wxBLACK : *wxWHITE );
-    }
+        wxWindowDCImpl::SetTextBackground( col == *wxWHITE ? *wxBLACK : *wxWHITE );
     else
-    {
-        wxGTKWindowImplDC::SetTextBackground( col );
-    }
+        wxWindowDCImpl::SetTextBackground( col );
 }
 
-void wxGTKMemoryImplDC::DoGetSize( int *width, int *height ) const
+void wxMemoryDCImpl::DoGetSize( int *width, int *height ) const
 {
     if (m_selected.Ok())
     {
@@ -180,18 +150,18 @@ void wxGTKMemoryImplDC::DoGetSize( int *width, int *height ) const
     }
 }
 
-wxBitmap wxGTKMemoryImplDC::DoGetAsBitmap(const wxRect *subrect) const
+wxBitmap wxMemoryDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 {
     wxBitmap bmp = GetSelectedBitmap();
     return subrect ? bmp.GetSubBitmap(*subrect) : bmp;
 }
 
-const wxBitmap& wxGTKMemoryImplDC::GetSelectedBitmap() const
+const wxBitmap& wxMemoryDCImpl::GetSelectedBitmap() const
 {
     return m_selected;
 }
 
-wxBitmap& wxGTKMemoryImplDC::GetSelectedBitmap()
+wxBitmap& wxMemoryDCImpl::GetSelectedBitmap()
 {
     return m_selected;
 }

@@ -146,20 +146,7 @@ bool wxOverlayImpl::IsOk()
 
 void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height )
 {
-#if defined(__WXGTK20__)
-#if wxUSE_NEW_DC
-    wxImplDC *impl = dc->GetImpl();
-    wxGTKWindowImplDC *gtk_impl = wxDynamicCast( impl, wxGTKWindowImplDC );
-    if (gtk_impl)
-        m_window = gtk_impl->m_owningWindow;
-#else
-    m_window = dc->m_owningWindow;
-#endif
-#elif defined(__WXGTK__)
-    m_window = dc->m_owner;
-#elif defined(__WXMSW__)
     m_window = dc->GetWindow();
-#endif
     wxMemoryDC dcMem ;
     m_bmpSaved.Create( width, height );
     dcMem.SelectObject( m_bmpSaved );

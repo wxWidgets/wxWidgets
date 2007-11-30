@@ -76,7 +76,7 @@
     #define WXMICROWIN_CHECK_HDC_RET(x)
 #endif
 
-IMPLEMENT_ABSTRACT_CLASS(wxDC, wxDCBase)
+IMPLEMENT_ABSTRACT_CLASS(wxMSWDCImpl, wxDCImpl)
 
 // ---------------------------------------------------------------------------
 // constants
@@ -161,11 +161,11 @@ wxAlphaBlend(HDC hdcDst, int xDst, int yDst,
 class wxColourChanger
 {
 public:
-    wxColourChanger(wxDC& dc);
+    wxColourChanger(wxMSWDCImpl& dc);
    ~wxColourChanger();
 
 private:
-    wxDC& m_dc;
+    wxMSWDCImpl& m_dc;
 
     COLORREF m_colFgOld, m_colBgOld;
 
@@ -279,7 +279,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxGDIDLLsCleanupModule, wxModule)
 // wxColourChanger
 // ----------------------------------------------------------------------------
 
-wxColourChanger::wxColourChanger(wxDC& dc) : m_dc(dc)
+wxColourChanger::wxColourChanger(wxMSWDCImpl& dc) : m_dc(dc)
 {
     const wxBrush& brush = dc.GetBrush();
     if ( brush.Ok() && brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
@@ -330,10 +330,17 @@ wxColourChanger::~wxColourChanger()
 }
 
 // ---------------------------------------------------------------------------
-// wxDC
+// wxMSWDCImpl
 // ---------------------------------------------------------------------------
 
-wxDC::~wxDC()
+wxMSWDCImpl::wxMSWDCImpl( wxDC *owner, WXHDC hDC ) : 
+    wxDCImpl( owner )
+{ 
+    Init(); 
+    m_hDC = hDC; 
+}
+
+wxMSWDCImpl::~wxMSWDCImpl()
 {
     if ( m_hDC != 0 )
     {
@@ -347,9 +354,9 @@ wxDC::~wxDC()
         }
         else // we don't own our HDC
         {
-            if (m_canvas)
+            if (m_window)
             {
-                ::ReleaseDC(GetHwndOf(m_canvas), GetHdc());
+                ::ReleaseDC(GetHwndOf(m_window), GetHdc());
             }
             else
             {
@@ -363,7 +370,7 @@ wxDC::~wxDC()
 // This will select current objects out of the DC,
 // which is what you have to do before deleting the
 // DC.
-void wxDC::SelectOldObjects(WXHDC dc)
+void wxMSWDCImpl::SelectOldObjects(WXHDC dc)
 {
     if (dc)
     {
@@ -417,7 +424,7 @@ void wxDC::SelectOldObjects(WXHDC dc)
 // clipping
 // ---------------------------------------------------------------------------
 
-void wxDC::UpdateClipBox()
+void wxMSWDCImpl::UpdateClipBox()
 {
     WXMICROWIN_CHECK_HDC
 
@@ -431,25 +438,25 @@ void wxDC::UpdateClipBox()
 }
 
 void
-wxDC::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
+wxMSWDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
 {
     // check if we should try to retrieve the clipping region possibly not set
     // by our SetClippingRegion() but preset by Windows:this can only happen
     // when we're associated with an existing HDC usign SetHDC(), see there
     if ( m_clipping && !m_clipX1 && !m_clipX2 )
     {
-        wxDC *self = wxConstCast(this, wxDC);
+        wxMSWDCImpl *self = wxConstCast(this, wxMSWDCImpl);
         self->UpdateClipBox();
 
         if ( !m_clipX1 && !m_clipX2 )
             self->m_clipping = false;
     }
 
-    wxDCBase::DoGetClippingBox(x, y, w, h);
+    wxDCImpl::DoGetClippingBox(x, y, w, h);
 }
 
 // common part of DoSetClippingRegion() and DoSetClippingRegionAsRegion()
-void wxDC::SetClippingHrgn(WXHRGN hrgn)
+void wxMSWDCImpl::SetClippingHrgn(WXHRGN hrgn)
 {
     wxCHECK_RET( hrgn, wxT("invalid clipping region") );
 
@@ -494,7 +501,7 @@ void wxDC::SetClippingHrgn(WXHRGN hrgn)
     UpdateClipBox();
 }
 
-void wxDC::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
+void wxMSWDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 {
     // the region coords are always the device ones, so do the translation
     // manually
@@ -516,12 +523,12 @@ void wxDC::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
     }
 }
 
-void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
+void wxMSWDCImpl::DoSetClippingRegionAsRegion(const wxRegion& region)
 {
     SetClippingHrgn(region.GetHRGN());
 }
 
-void wxDC::DestroyClippingRegion()
+void wxMSWDCImpl::DestroyClippingRegion()
 {
     WXMICROWIN_CHECK_HDC
 
@@ -545,19 +552,19 @@ void wxDC::DestroyClippingRegion()
 #endif
     }
 
-    wxDCBase::DestroyClippingRegion();
+    wxDCImpl::DestroyClippingRegion();
 }
 
 // ---------------------------------------------------------------------------
 // query capabilities
 // ---------------------------------------------------------------------------
 
-bool wxDC::CanDrawBitmap() const
+bool wxMSWDCImpl::CanDrawBitmap() const
 {
     return true;
 }
 
-bool wxDC::CanGetTextExtent() const
+bool wxMSWDCImpl::CanGetTextExtent() const
 {
 #ifdef __WXMICROWIN__
     // TODO Extend MicroWindows' GetDeviceCaps function
@@ -570,7 +577,7 @@ bool wxDC::CanGetTextExtent() const
 #endif
 }
 
-int wxDC::GetDepth() const
+int wxMSWDCImpl::GetDepth() const
 {
     WXMICROWIN_CHECK_HDC_RET(16)
 
@@ -581,14 +588,14 @@ int wxDC::GetDepth() const
 // drawing
 // ---------------------------------------------------------------------------
 
-void wxDC::Clear()
+void wxMSWDCImpl::Clear()
 {
     WXMICROWIN_CHECK_HDC
 
     RECT rect;
-    if ( m_canvas )
+    if (m_window)
     {
-        GetClientRect((HWND) m_canvas->GetHWND(), &rect);
+        GetClientRect((HWND) m_window->GetHWND(), &rect);
     }
     else
     {
@@ -615,7 +622,7 @@ void wxDC::Clear()
     RealizeScaleAndOrigin();
 }
 
-bool wxDC::DoFloodFill(wxCoord WXUNUSED_IN_WINCE(x),
+bool wxMSWDCImpl::DoFloodFill(wxCoord WXUNUSED_IN_WINCE(x),
                        wxCoord WXUNUSED_IN_WINCE(y),
                        const wxColour& WXUNUSED_IN_WINCE(col),
                        int WXUNUSED_IN_WINCE(style))
@@ -652,11 +659,11 @@ bool wxDC::DoFloodFill(wxCoord WXUNUSED_IN_WINCE(x),
 #endif
 }
 
-bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
+bool wxMSWDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 {
     WXMICROWIN_CHECK_HDC_RET(false)
 
-    wxCHECK_MSG( col, false, _T("NULL colour parameter in wxDC::GetPixel") );
+    wxCHECK_MSG( col, false, _T("NULL colour parameter in wxMSWDCImpl::GetPixel") );
 
     // get the color of the pixel
     COLORREF pixelcolor = ::GetPixel(GetHdc(), XLOG2DEV(x), YLOG2DEV(y));
@@ -666,7 +673,7 @@ bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
     return true;
 }
 
-void wxDC::DoCrossHair(wxCoord x, wxCoord y)
+void wxMSWDCImpl::DoCrossHair(wxCoord x, wxCoord y)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -682,7 +689,7 @@ void wxDC::DoCrossHair(wxCoord x, wxCoord y)
     CalcBoundingBox(x2, y2);
 }
 
-void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
+void wxMSWDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -694,7 +701,7 @@ void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 
 // Draws an arc of a circle, centred on (xc, yc), with starting point (x1, y1)
 // and ending at (x2, y2)
-void wxDC::DoDrawArc(wxCoord x1, wxCoord y1,
+void wxMSWDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
                      wxCoord x2, wxCoord y2,
                      wxCoord xc, wxCoord yc)
 {
@@ -719,7 +726,7 @@ void wxDC::DoDrawArc(wxCoord x1, wxCoord y1,
     // treat the special case of full circle separately
     if ( x1 == x2 && y1 == y2 )
     {
-        DrawEllipse(xc - r, yc - r, 2*r, 2*r);
+        GetOwner()->DrawEllipse(xc - r, yc - r, 2*r, 2*r);
         return;
     }
 
@@ -755,7 +762,7 @@ void wxDC::DoDrawArc(wxCoord x1, wxCoord y1,
 #endif
 }
 
-void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
+void wxMSWDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1,
                            wxCoord width, wxCoord height)
 {
     // cases when we don't have DrawFrameControl()
@@ -782,7 +789,7 @@ void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
 #endif // Microwin/Normal
 }
 
-void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
+void wxMSWDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -797,7 +804,7 @@ void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
     CalcBoundingBox(x, y);
 }
 
-void wxDC::DoDrawPolygon(int n,
+void wxMSWDCImpl::DoDrawPolygon(int n,
                          wxPoint points[],
                          wxCoord xoffset,
                          wxCoord yoffset,
@@ -845,7 +852,7 @@ void wxDC::DoDrawPolygon(int n,
 }
 
 void
-wxDC::DoDrawPolyPolygon(int n,
+wxMSWDCImpl::DoDrawPolyPolygon(int n,
                         int count[],
                         wxPoint points[],
                         wxCoord xoffset,
@@ -899,7 +906,7 @@ wxDC::DoDrawPolyPolygon(int n,
   // __WXWINCE__
 }
 
-void wxDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
+void wxMSWDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -928,7 +935,7 @@ void wxDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset
     }
 }
 
-void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxMSWDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -970,7 +977,7 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
     CalcBoundingBox(x2, y2);
 }
 
-void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
+void wxMSWDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -1004,7 +1011,7 @@ void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
     CalcBoundingBox(x2, y2);
 }
 
-void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxMSWDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -1020,7 +1027,7 @@ void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 }
 
 #if wxUSE_SPLINES
-void wxDC::DoDrawSpline(const wxPointList *points)
+void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
 {
 #ifdef  __WXWINCE__
     // WinCE does not support ::PolyBezier so use generic version
@@ -1119,7 +1126,7 @@ void wxDC::DoDrawSpline(const wxPointList *points)
 #endif
 
 // Chris Breeze 20/5/98: first implementation of DrawEllipticArc on Windows
-void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
+void wxMSWDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
 {
 #ifdef __WXWINCE__
     DoDrawEllipticArcRot( x, y, w, h, sa, ea );
@@ -1180,7 +1187,7 @@ void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,d
 #endif
 }
 
-void wxDC::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
+void wxMSWDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -1196,11 +1203,11 @@ void wxDC::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
     CalcBoundingBox(x + icon.GetWidth(), y + icon.GetHeight());
 }
 
-void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask )
+void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask )
 {
     WXMICROWIN_CHECK_HDC
 
-    wxCHECK_RET( bmp.Ok(), _T("invalid bitmap in wxDC::DrawBitmap") );
+    wxCHECK_RET( bmp.Ok(), _T("invalid bitmap in wxMSWDCImpl::DrawBitmap") );
 
     int width = bmp.GetWidth(),
         height = bmp.GetHeight();
@@ -1275,13 +1282,13 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         if ( !ok )
 #endif // Win32
         {
-            // Rather than reproduce wxDC::Blit, let's do it at the wxWin API
+            // Rather than reproduce wxMSWDCImpl::Blit, let's do it at the wxWin API
             // level
             wxMemoryDC memDC;
 
             memDC.SelectObjectAsSource(bmp);
 
-            Blit(x, y, width, height, &memDC, 0, 0, wxCOPY, useMask);
+            GetOwner()->Blit(x, y, width, height, &memDC, 0, 0, wxCOPY, useMask);
 
             memDC.SelectObject(wxNullBitmap);
         }
@@ -1330,7 +1337,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
     }
 }
 
-void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
+void wxMSWDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -1340,11 +1347,11 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     CalcBoundingBox(x, y);
 
     wxCoord w, h;
-    GetTextExtent(text, &w, &h);
+    GetOwner()->GetTextExtent(text, &w, &h);
     CalcBoundingBox(x + w, y + h);
 }
 
-void wxDC::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
+void wxMSWDCImpl::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -1384,7 +1391,7 @@ void wxDC::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
     SetBkMode(GetHdc(), TRANSPARENT);
 }
 
-void wxDC::DoDrawRotatedText(const wxString& text,
+void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
                              wxCoord x, wxCoord y,
                              double angle)
 {
@@ -1436,7 +1443,7 @@ void wxDC::DoDrawRotatedText(const wxString& text,
         // containing the text to it (simpler and probably not slower than
         // determining which of them is really topmost/leftmost/...)
         wxCoord w, h;
-        GetTextExtent(text, &w, &h);
+        GetOwner()->GetTextExtent(text, &w, &h);
 
         double rad = DegToRad(angle);
 
@@ -1459,7 +1466,7 @@ void wxDC::DoDrawRotatedText(const wxString& text,
 
 #if wxUSE_PALETTE
 
-void wxDC::DoSelectPalette(bool realize)
+void wxMSWDCImpl::DoSelectPalette(bool realize)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -1484,7 +1491,7 @@ void wxDC::DoSelectPalette(bool realize)
     }
 }
 
-void wxDC::SetPalette(const wxPalette& palette)
+void wxMSWDCImpl::SetPalette(const wxPalette& palette)
 {
     if ( palette.Ok() )
     {
@@ -1493,13 +1500,13 @@ void wxDC::SetPalette(const wxPalette& palette)
     }
 }
 
-void wxDC::InitializePalette()
+void wxMSWDCImpl::InitializePalette()
 {
     if ( wxDisplayDepth() <= 8 )
     {
         // look for any window or parent that has a custom palette. If any has
         // one then we need to use it in drawing operations
-        wxWindow *win = m_canvas->GetAncestorWithCustomPalette();
+        wxWindow *win = m_window->GetAncestorWithCustomPalette();
 
         m_hasCustomPalette = win && win->HasCustomPalette();
         if ( m_hasCustomPalette )
@@ -1517,7 +1524,7 @@ void wxDC::InitializePalette()
 // SetFont/Pen/Brush() really ask to be implemented as a single template
 // function... but doing it is not worth breaking OpenWatcom build <sigh>
 
-void wxDC::SetFont(const wxFont& font)
+void wxMSWDCImpl::SetFont(const wxFont& font)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -1555,7 +1562,7 @@ void wxDC::SetFont(const wxFont& font)
     }
 }
 
-void wxDC::SetPen(const wxPen& pen)
+void wxMSWDCImpl::SetPen(const wxPen& pen)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -1593,7 +1600,7 @@ void wxDC::SetPen(const wxPen& pen)
     }
 }
 
-void wxDC::SetBrush(const wxBrush& brush)
+void wxMSWDCImpl::SetBrush(const wxBrush& brush)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -1648,7 +1655,7 @@ void wxDC::SetBrush(const wxBrush& brush)
     }
 }
 
-void wxDC::SetBackground(const wxBrush& brush)
+void wxMSWDCImpl::SetBackground(const wxBrush& brush)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -1660,7 +1667,7 @@ void wxDC::SetBackground(const wxBrush& brush)
     }
 }
 
-void wxDC::SetBackgroundMode(int mode)
+void wxMSWDCImpl::SetBackgroundMode(int mode)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -1670,7 +1677,7 @@ void wxDC::SetBackgroundMode(int mode)
     // and m_backgroundMode is used there
 }
 
-void wxDC::SetLogicalFunction(int function)
+void wxMSWDCImpl::SetLogicalFunction(int function)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -1679,7 +1686,7 @@ void wxDC::SetLogicalFunction(int function)
     SetRop(m_hDC);
 }
 
-void wxDC::SetRop(WXHDC dc)
+void wxMSWDCImpl::SetRop(WXHDC dc)
 {
     if ( !dc || m_logicalFunction < 0 )
         return;
@@ -1713,21 +1720,21 @@ void wxDC::SetRop(WXHDC dc)
     SetROP2(GetHdc(), rop);
 }
 
-bool wxDC::StartDoc(const wxString& WXUNUSED(message))
+bool wxMSWDCImpl::StartDoc(const wxString& WXUNUSED(message))
 {
     // We might be previewing, so return true to let it continue.
     return true;
 }
 
-void wxDC::EndDoc()
+void wxMSWDCImpl::EndDoc()
 {
 }
 
-void wxDC::StartPage()
+void wxMSWDCImpl::StartPage()
 {
 }
 
-void wxDC::EndPage()
+void wxMSWDCImpl::EndPage()
 {
 }
 
@@ -1735,7 +1742,7 @@ void wxDC::EndPage()
 // text metrics
 // ---------------------------------------------------------------------------
 
-wxCoord wxDC::GetCharHeight() const
+wxCoord wxMSWDCImpl::GetCharHeight() const
 {
     WXMICROWIN_CHECK_HDC_RET(0)
 
@@ -1746,7 +1753,7 @@ wxCoord wxDC::GetCharHeight() const
     return lpTextMetric.tmHeight;
 }
 
-wxCoord wxDC::GetCharWidth() const
+wxCoord wxMSWDCImpl::GetCharWidth() const
 {
     WXMICROWIN_CHECK_HDC_RET(0)
 
@@ -1757,7 +1764,7 @@ wxCoord wxDC::GetCharWidth() const
     return lpTextMetric.tmAveCharWidth;
 }
 
-void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
+void wxMSWDCImpl::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
                            wxCoord *descent, wxCoord *externalLeading,
                            const wxFont *font) const
 {
@@ -1775,7 +1782,7 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
     HFONT hfontOld;
     if ( font )
     {
-        wxASSERT_MSG( font->Ok(), _T("invalid font in wxDC::GetTextExtent") );
+        wxASSERT_MSG( font->Ok(), _T("invalid font in wxMSWDCImpl::GetTextExtent") );
 
         hfontOld = (HFONT)::SelectObject(GetHdc(), GetHfontOf(*font));
     }
@@ -1841,7 +1848,7 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
 // Each element of the array will be the width of the string up to and
 // including the coresoponding character in text.
 
-bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
+bool wxMSWDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
 {
     static int maxLenText = -1;
     static int maxWidth = -1;
@@ -1879,7 +1886,7 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
     return true;
 }
 
-void wxDC::RealizeScaleAndOrigin()
+void wxMSWDCImpl::RealizeScaleAndOrigin()
 {
     // VZ: it seems very wasteful to always use MM_ANISOTROPIC when in 99% of
     //     cases we could do with MM_TEXT and in the remaining 0.9% with
@@ -1899,7 +1906,7 @@ void wxDC::RealizeScaleAndOrigin()
     
 }
 
-void wxDC::SetMapMode(int mode)
+void wxMSWDCImpl::SetMapMode(int mode)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -1958,19 +1965,19 @@ void wxDC::SetMapMode(int mode)
     RealizeScaleAndOrigin();
 }
 
-void wxDC::SetUserScale(double x, double y)
+void wxMSWDCImpl::SetUserScale(double x, double y)
 {
     WXMICROWIN_CHECK_HDC
 
     if ( x == m_userScaleX && y == m_userScaleY )
         return;
 
-    wxDCBase::SetUserScale(x,y);
+    wxDCImpl::SetUserScale(x,y);
     
     RealizeScaleAndOrigin();
 }
 
-void wxDC::SetAxisOrientation(bool xLeftRight,
+void wxMSWDCImpl::SetAxisOrientation(bool xLeftRight,
                               bool yBottomUp)
 {
     WXMICROWIN_CHECK_HDC
@@ -1981,33 +1988,33 @@ void wxDC::SetAxisOrientation(bool xLeftRight,
     if (signX == m_signX && signY == m_signY)
         return;
     
-    wxDCBase::SetAxisOrientation( xLeftRight, yBottomUp );
+    wxDCImpl::SetAxisOrientation( xLeftRight, yBottomUp );
 
     RealizeScaleAndOrigin();
 }
 
-void wxDC::SetLogicalOrigin(wxCoord x, wxCoord y)
+void wxMSWDCImpl::SetLogicalOrigin(wxCoord x, wxCoord y)
 {
     WXMICROWIN_CHECK_HDC
 
     if ( x == m_logicalOriginX && y == m_logicalOriginY )
         return;
 
-    wxDCBase::SetLogicalOrigin( x, y );
+    wxDCImpl::SetLogicalOrigin( x, y );
 
 #ifndef __WXWINCE__
     ::SetWindowOrgEx(GetHdc(), (int)m_logicalOriginX, (int)m_logicalOriginY, NULL);
 #endif
 }
 
-void wxDC::SetDeviceOrigin(wxCoord x, wxCoord y)
+void wxMSWDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
 {
     WXMICROWIN_CHECK_HDC
 
     if ( x == m_deviceOriginX && y == m_deviceOriginY )
         return;
         
-    wxDCBase::SetDeviceOrigin( x, y );
+    wxDCImpl::SetDeviceOrigin( x, y );
 
     ::SetViewportOrgEx(GetHdc(), (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
 }
@@ -2016,7 +2023,7 @@ void wxDC::SetDeviceOrigin(wxCoord x, wxCoord y)
 // bit blit
 // ---------------------------------------------------------------------------
 
-bool wxDC::DoBlit(wxCoord dstX, wxCoord dstY,
+bool wxMSWDCImpl::DoBlit(wxCoord dstX, wxCoord dstY,
                   wxCoord dstWidth, wxCoord dstHeight,
                   wxDC *source,
                   wxCoord srcX, wxCoord srcY,
@@ -2026,7 +2033,7 @@ bool wxDC::DoBlit(wxCoord dstX, wxCoord dstY,
     return DoStretchBlit(dstX, dstY, dstWidth, dstHeight, source, srcX, srcY, dstWidth, dstHeight, rop, useMask, srcMaskX, srcMaskY);
 }
 
-bool wxDC::DoStretchBlit(wxCoord xdest, wxCoord ydest,
+bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                          wxCoord dstWidth, wxCoord dstHeight,
                          wxDC *source,
                          wxCoord xsrc, wxCoord ysrc,
@@ -2034,18 +2041,27 @@ bool wxDC::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                          int rop, bool useMask,
                          wxCoord xsrcMask, wxCoord ysrcMask)
 {
-    wxCHECK_MSG( source, false, _T("wxDC::Blit(): NULL wxDC pointer") );
+    wxCHECK_MSG( source, false, _T("wxMSWDCImpl::Blit(): NULL wxDC pointer") );
 
     WXMICROWIN_CHECK_HDC_RET(false)
 
+    wxDCImpl *impl = source->GetImpl();
+    wxMSWDCImpl *msw_impl = wxDynamicCast( impl, wxMSWDCImpl );
+    if (!msw_impl)
+    {
+        // TODO: Do we want to be able to blit
+        //       from other DCs too?
+        return false;
+    }
+
     // if either the source or destination has alpha channel, we must use
     // AlphaBlt() as other function don't handle it correctly
-    const wxBitmap& bmpSrc = source->m_selectedBitmap;
+    const wxBitmap& bmpSrc = msw_impl->GetSelectedBitmap();
     if ( bmpSrc.Ok() && (bmpSrc.HasAlpha() ||
             (m_selectedBitmap.Ok() && m_selectedBitmap.HasAlpha())) )
     {
         if ( AlphaBlt(GetHdc(), xdest, ydest, dstWidth, dstHeight,
-                      xsrc, ysrc, srcWidth, srcHeight, GetHdcOf(*source), bmpSrc) )
+                      xsrc, ysrc, srcWidth, srcHeight, GetHdcOf(*msw_impl), bmpSrc) )
             return true;
     }
 
@@ -2125,7 +2141,7 @@ bool wxDC::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                             (
                             GetHdc(),
                             xdest, ydest, dstWidth, dstHeight,
-                            GetHdcOf(*source),
+                            GetHdcOf(*msw_impl),
                             xsrc, ysrc,
                             (HBITMAP)mask->GetMaskBitmap(),
                             xsrcMask, ysrcMask,
@@ -2144,7 +2160,7 @@ bool wxDC::DoStretchBlit(wxCoord xdest, wxCoord ydest,
 
 #if wxUSE_DC_CACHEING
             // create a temp buffer bitmap and DCs to access it and the mask
-            wxDCCacheEntry* dcCacheEntry1 = FindDCInCache(NULL, source->GetHDC());
+            wxDCCacheEntry* dcCacheEntry1 = FindDCInCache(NULL, msw_impl->GetHDC());
             dc_mask = (HDC) dcCacheEntry1->m_dc;
 
             wxDCCacheEntry* dcCacheEntry2 = FindDCInCache(dcCacheEntry1, GetHDC());
@@ -2176,7 +2192,7 @@ bool wxDC::DoStretchBlit(wxCoord xdest, wxCoord ydest,
 
             // copy src to buffer using selected raster op
             if ( !::StretchBlt(dc_buffer, 0, 0, (int)dstWidth, (int)dstHeight,
-                           GetHdcOf(*source), xsrc, ysrc, srcWidth, srcHeight, dwRop) )
+                           GetHdcOf(*msw_impl), xsrc, ysrc, srcWidth, srcHeight, dwRop) )
             {
                 wxLogLastError(wxT("StretchBlt"));
             }
@@ -2287,7 +2303,7 @@ bool wxDC::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                     (
                         GetHdc(),
                         xdest, ydest, dstWidth, dstHeight,
-                        GetHdcOf(*source),
+                        GetHdcOf(*msw_impl),
                         xsrc, ysrc, srcWidth, srcHeight,
                         dwRop
                     ) )
@@ -2307,7 +2323,7 @@ bool wxDC::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                         GetHdc(),
                         xdest, ydest,
                         (int)dstWidth, (int)dstHeight,
-                        GetHdcOf(*source),
+                        GetHdcOf(*msw_impl),
                         xsrc, ysrc,
                         dwRop
                     ) )
@@ -2327,7 +2343,7 @@ bool wxDC::DoStretchBlit(wxCoord xdest, wxCoord ydest,
     return success;
 }
 
-void wxDC::GetDeviceSize(int *width, int *height) const
+void wxMSWDCImpl::GetDeviceSize(int *width, int *height) const
 {
     WXMICROWIN_CHECK_HDC
 
@@ -2337,7 +2353,7 @@ void wxDC::GetDeviceSize(int *width, int *height) const
         *height = ::GetDeviceCaps(GetHdc(), VERTRES);
 }
 
-void wxDC::DoGetSizeMM(int *w, int *h) const
+void wxMSWDCImpl::DoGetSizeMM(int *w, int *h) const
 {
     WXMICROWIN_CHECK_HDC
 
@@ -2367,7 +2383,7 @@ void wxDC::DoGetSizeMM(int *w, int *h) const
     }
 }
 
-wxSize wxDC::GetPPI() const
+wxSize wxMSWDCImpl::GetPPI() const
 {
     WXMICROWIN_CHECK_HDC_RET(wxSize(0,0))
 
@@ -2378,11 +2394,11 @@ wxSize wxDC::GetPPI() const
 }
 
 // For use by wxWidgets only, unless custom units are required.
-void wxDC::SetLogicalScale(double x, double y)
+void wxMSWDCImpl::SetLogicalScale(double x, double y)
 {
     WXMICROWIN_CHECK_HDC
 
-    wxDCBase::SetLogicalScale(x,y);
+    wxDCImpl::SetLogicalScale(x,y);
 }
 
 // ----------------------------------------------------------------------------
@@ -2397,8 +2413,8 @@ void wxDC::SetLogicalScale(double x, double y)
  * entry for the bitmap, and two for the DCs. -- JACS
  */
 
-wxList wxDC::sm_bitmapCache;
-wxList wxDC::sm_dcCache;
+wxObjectList wxMSWDCImpl::sm_bitmapCache;
+wxObjectList wxMSWDCImpl::sm_dcCache;
 
 wxDCCacheEntry::wxDCCacheEntry(WXHBITMAP hBitmap, int w, int h, int depth)
 {
@@ -2426,7 +2442,7 @@ wxDCCacheEntry::~wxDCCacheEntry()
         ::DeleteDC((HDC) m_dc);
 }
 
-wxDCCacheEntry* wxDC::FindBitmapInCache(WXHDC dc, int w, int h)
+wxDCCacheEntry* wxMSWDCImpl::FindBitmapInCache(WXHDC dc, int w, int h)
 {
     int depth = ::GetDeviceCaps((HDC) dc, PLANES) * ::GetDeviceCaps((HDC) dc, BITSPIXEL);
     wxList::compatibility_iterator node = sm_bitmapCache.GetFirst();
@@ -2462,7 +2478,7 @@ wxDCCacheEntry* wxDC::FindBitmapInCache(WXHDC dc, int w, int h)
     return entry;
 }
 
-wxDCCacheEntry* wxDC::FindDCInCache(wxDCCacheEntry* notThis, WXHDC dc)
+wxDCCacheEntry* wxMSWDCImpl::FindDCInCache(wxDCCacheEntry* notThis, WXHDC dc)
 {
     int depth = ::GetDeviceCaps((HDC) dc, PLANES) * ::GetDeviceCaps((HDC) dc, BITSPIXEL);
     wxList::compatibility_iterator node = sm_dcCache.GetFirst();
@@ -2491,17 +2507,17 @@ wxDCCacheEntry* wxDC::FindDCInCache(wxDCCacheEntry* notThis, WXHDC dc)
     return entry;
 }
 
-void wxDC::AddToBitmapCache(wxDCCacheEntry* entry)
+void wxMSWDCImpl::AddToBitmapCache(wxDCCacheEntry* entry)
 {
     sm_bitmapCache.Append(entry);
 }
 
-void wxDC::AddToDCCache(wxDCCacheEntry* entry)
+void wxMSWDCImpl::AddToDCCache(wxDCCacheEntry* entry)
 {
     sm_dcCache.Append(entry);
 }
 
-void wxDC::ClearCache()
+void wxMSWDCImpl::ClearCache()
 {
     WX_CLEAR_LIST(wxList, sm_dcCache);
     WX_CLEAR_LIST(wxList, sm_bitmapCache);
@@ -2512,7 +2528,7 @@ class wxDCModule : public wxModule
 {
 public:
     virtual bool OnInit() { return true; }
-    virtual void OnExit() { wxDC::ClearCache(); }
+    virtual void OnExit() { wxMSWDCImpl::ClearCache(); }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDCModule)
@@ -2647,7 +2663,7 @@ wxAlphaBlend(HDC hdcDst, int xDst, int yDst,
 
 #endif // #ifdef wxHAVE_RAW_BITMAP
 
-void wxDC::DoGradientFillLinear (const wxRect& rect,
+void wxMSWDCImpl::DoGradientFillLinear (const wxRect& rect,
                                  const wxColour& initialColour,
                                  const wxColour& destColour,
                                  wxDirection nDirection)
@@ -2708,7 +2724,7 @@ void wxDC::DoGradientFillLinear (const wxRect& rect,
     }
 #endif // wxUSE_DYNLIB_CLASS
 
-    wxDCBase::DoGradientFillLinear(rect, initialColour, destColour, nDirection);
+    wxDCImpl::DoGradientFillLinear(rect, initialColour, destColour, nDirection);
 }
 
 #if wxUSE_DYNLIB_CLASS
@@ -2722,7 +2738,7 @@ static DWORD wxGetDCLayout(HDC hdc)
     return s_pfnGetLayout ? s_pfnGetLayout(hdc) : (DWORD)-1;
 }
 
-wxLayoutDirection wxDC::GetLayoutDirection() const
+wxLayoutDirection wxMSWDCImpl::GetLayoutDirection() const
 {
     DWORD layout = wxGetDCLayout(GetHdc());
 
@@ -2732,7 +2748,7 @@ wxLayoutDirection wxDC::GetLayoutDirection() const
     return layout & LAYOUT_RTL ? wxLayout_RightToLeft : wxLayout_LeftToRight;
 }
 
-void wxDC::SetLayoutDirection(wxLayoutDirection dir)
+void wxMSWDCImpl::SetLayoutDirection(wxLayoutDirection dir)
 {
     typedef DWORD (WINAPI *SetLayout_t)(HDC, DWORD);
     static SetLayout_t
@@ -2759,12 +2775,12 @@ void wxDC::SetLayoutDirection(wxLayoutDirection dir)
 #else // !wxUSE_DYNLIB_CLASS
 
 // we can't provide RTL support without dynamic loading, so stub it out
-wxLayoutDirection wxDC::GetLayoutDirection() const
+wxLayoutDirection wxMSWDCImpl::GetLayoutDirection() const
 {
     return wxLayout_Default;
 }
 
-void wxDC::SetLayoutDirection(wxLayoutDirection WXUNUSED(dir))
+void wxMSWDCImpl::SetLayoutDirection(wxLayoutDirection WXUNUSED(dir))
 {
 }
 

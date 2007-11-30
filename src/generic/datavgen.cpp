@@ -2276,7 +2276,8 @@ void wxDataViewMainWindow::ScrollTo( int rows, int column )
 void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     wxDataViewModel *model = GetOwner()->GetModel();
-    wxAutoBufferedPaintDC dc( this );
+    //wxAutoBufferedPaintDC dc( this );
+    wxPaintDC dc(this);
 
     // prepare the DC
     dc.SetBackground(GetBackgroundColour());

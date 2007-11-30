@@ -29,6 +29,9 @@ typedef SInt32 SRefCon;
 #if wxUSE_GUI
 
 #include "wx/listbox.h"
+#include "wx/mac/carbon/dc.h"
+#include "wx/mac/carbon/dcclient.h"
+#include "wx/mac/carbon/dcmemory.h"
 
 class WXDLLEXPORT wxMacCGContextStateSaver
 {

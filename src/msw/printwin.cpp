@@ -44,6 +44,7 @@
 #include "wx/msw/printwin.h"
 #include "wx/msw/printdlg.h"
 #include "wx/msw/private.h"
+#include "wx/msw/dcprint.h"
 
 #include <stdlib.h>
 
@@ -119,19 +120,21 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     }
 
     // May have pressed cancel.
-    if (!dc || !dc->Ok())
+    if (!dc || !dc->IsOk())
     {
         if (dc) delete dc;
         return false;
     }
+
+    wxPrinterDCImpl *impl = (wxPrinterDCImpl*) dc->GetImpl();
 
     HDC hdc = ::GetDC(NULL);
     int logPPIScreenX = ::GetDeviceCaps(hdc, LOGPIXELSX);
     int logPPIScreenY = ::GetDeviceCaps(hdc, LOGPIXELSY);
     ::ReleaseDC(NULL, hdc);
 
-    int logPPIPrinterX = ::GetDeviceCaps((HDC) dc->GetHDC(), LOGPIXELSX);
-    int logPPIPrinterY = ::GetDeviceCaps((HDC) dc->GetHDC(), LOGPIXELSY);
+    int logPPIPrinterX = ::GetDeviceCaps((HDC) impl->GetHDC(), LOGPIXELSX);
+    int logPPIPrinterY = ::GetDeviceCaps((HDC) impl->GetHDC(), LOGPIXELSY);
     if (logPPIPrinterX == 0 || logPPIPrinterY == 0)
     {
         delete dc;
@@ -179,12 +182,12 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
 
 #if defined(__WATCOMC__) || defined(__BORLANDC__) || defined(__GNUWIN32__) || defined(__SALFORDC__) || !defined(__WIN32__)
 #ifdef STRICT
-    ::SetAbortProc((HDC) dc->GetHDC(), (ABORTPROC) m_lpAbortProc);
+    ::SetAbortProc((HDC) impl->GetHDC(), (ABORTPROC) m_lpAbortProc);
 #else
-    ::SetAbortProc((HDC) dc->GetHDC(), (FARPROC) m_lpAbortProc);
+    ::SetAbortProc((HDC) impl->GetHDC(), (FARPROC) m_lpAbortProc);
 #endif
 #else
-    ::SetAbortProc((HDC) dc->GetHDC(), (int (_stdcall *)
+    ::SetAbortProc((HDC) impl->GetHDC(), (int (_stdcall *)
         // cast it to right type only if required
         // FIXME it's really cdecl and we're casting it to stdcall - either there is
         //       something I don't understand or it will crash at first usage
@@ -370,9 +373,10 @@ void wxWindowsPrintPreview::DetermineScaling()
 
     wxRect paperRect;
 
-    if ( printerDC.Ok() )
+    if ( printerDC.IsOk() )
     {
-        HDC dc = GetHdcOf(printerDC);
+        wxPrinterDCImpl *impl = (wxPrinterDCImpl*) printerDC.GetImpl();
+        HDC dc = GetHdcOf(*impl);
         printerWidthMM = ::GetDeviceCaps(dc, HORZSIZE);
         printerHeightMM = ::GetDeviceCaps(dc, VERTSIZE);
         printerXRes = ::GetDeviceCaps(dc, HORZRES);

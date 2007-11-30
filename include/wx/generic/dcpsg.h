@@ -44,18 +44,18 @@ private:
 #endif
 
 #if wxUSE_NEW_DC
-class WXDLLEXPORT wxPostScriptImplDC : public wxImplDC
+class WXDLLEXPORT wxPostScriptDCImpl : public wxDCImpl
 #else
-#define wxPostScriptImplDC wxPostScriptDC
+#define wxPostScriptDCImpl wxPostScriptDC
 class WXDLLEXPORT wxPostScriptDC : public wxDC
 #endif
 {
 public:
 #if wxUSE_NEW_DC
-    wxPostScriptImplDC( wxPrinterDC *owner );
-    wxPostScriptImplDC( wxPrinterDC *owner, const wxPrintData& data );
-    wxPostScriptImplDC( wxPostScriptDC *owner );
-    wxPostScriptImplDC( wxPostScriptDC *owner, const wxPrintData& data );
+    wxPostScriptDCImpl( wxPrinterDC *owner );
+    wxPostScriptDCImpl( wxPrinterDC *owner, const wxPrintData& data );
+    wxPostScriptDCImpl( wxPostScriptDC *owner );
+    wxPostScriptDCImpl( wxPostScriptDC *owner, const wxPrintData& data );
 #else
     wxPostScriptDC();
 
@@ -65,7 +65,7 @@ public:
     
     void Init();
 
-    virtual ~wxPostScriptImplDC();
+    virtual ~wxPostScriptDCImpl();
 
     virtual bool Ok() const { return IsOk(); }
     virtual bool IsOk() const;
@@ -168,7 +168,7 @@ protected:
     double            m_pageHeight;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPostScriptImplDC)
+    DECLARE_DYNAMIC_CLASS(wxPostScriptDCImpl)
 };
 
 #endif

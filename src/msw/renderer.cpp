@@ -227,7 +227,7 @@ wxRendererMSW::DrawComboBoxDropButton(wxWindow * WXUNUSED(win),
     if ( flags & wxCONTROL_PRESSED )
         style |= DFCS_PUSHED | DFCS_FLAT;
 
-    ::DrawFrameControl(GetHdcOf(dc), &r, DFC_SCROLL, style);
+    ::DrawFrameControl(GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())), &r, DFC_SCROLL, style);
 }
 
 void
@@ -251,7 +251,7 @@ wxRendererMSW::DrawCheckBox(wxWindow * WXUNUSED(win),
     if ( flags & wxCONTROL_CURRENT )
         style |= DFCS_HOT;
 
-    ::DrawFrameControl(GetHdcOf(dc), &r, DFC_BUTTON, style);
+    ::DrawFrameControl(GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())), &r, DFC_BUTTON, style);
 }
 
 void
@@ -280,7 +280,7 @@ wxRendererMSW::DrawPushButton(wxWindow * WXUNUSED(win),
     RECT rc;
     wxCopyRectToRECT(rect, rc);
 
-    ::DrawFrameControl(GetHdcOf(dc), &rc, DFC_BUTTON, style);
+    ::DrawFrameControl(GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())), &rc, DFC_BUTTON, style);
 }
 
 void wxRendererMSW::DrawFocusRect(wxWindow * WXUNUSED(win),
@@ -291,7 +291,7 @@ void wxRendererMSW::DrawFocusRect(wxWindow * WXUNUSED(win),
     RECT rc;
     wxCopyRectToRECT(rect, rc);
 
-    ::DrawFocusRect(GetHdcOf(dc), &rc);
+    ::DrawFocusRect(GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())), &rc);
 }
 
 int wxRendererMSW::GetHeaderButtonHeight(wxWindow * WXUNUSED(win))
@@ -363,7 +363,7 @@ wxRendererXP::DrawComboBoxDropButton(wxWindow * win,
     wxUxThemeEngine::Get()->DrawThemeBackground
                             (
                                 hTheme,
-                                GetHdcOf(dc),
+                                GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())),
                                 CP_DROPDOWNBUTTON,
                                 state,
                                 &r,
@@ -399,7 +399,7 @@ wxRendererXP::DrawHeaderButton(wxWindow *win,
     wxUxThemeEngine::Get()->DrawThemeBackground
                             (
                                 hTheme,
-                                GetHdcOf(dc),
+                                GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())),
                                 HP_HEADERITEM,
                                 state,
                                 &r,
@@ -435,7 +435,7 @@ wxRendererXP::DrawTreeItemButton(wxWindow *win,
     wxUxThemeEngine::Get()->DrawThemeBackground
                             (
                                 hTheme,
-                                GetHdcOf(dc),
+                                GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())),
                                 TVP_GLYPH,
                                 state,
                                 &r,
@@ -485,7 +485,7 @@ wxRendererXP::DrawCheckBox(wxWindow *win,
     wxUxThemeEngine::Get()->DrawThemeBackground
                             (
                                 hTheme,
-                                GetHdcOf(dc),
+                                GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())),
                                 BP_CHECKBOX,
                                 state,
                                 &r,
@@ -524,7 +524,7 @@ wxRendererXP::DrawPushButton(wxWindow * win,
     wxUxThemeEngine::Get()->DrawThemeBackground
                             (
                                 hTheme,
-                                GetHdcOf(dc),
+                                GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())),
                                 BP_PUSHBUTTON,
                                 state,
                                 &r,

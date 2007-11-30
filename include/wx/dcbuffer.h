@@ -41,7 +41,7 @@
 // is private style and not returned by GetStyle.
 #define wxBUFFER_USES_SHARED_BUFFER 0x04
 
-class WXDLLEXPORT wxBufferedDC : public wxMemoryDC
+class WXDLLIMPEXP_CORE wxBufferedDC : public wxMemoryDC
 {
 public:
     // Default ctor, must subsequently call Init for two stage construction.
@@ -149,7 +149,7 @@ private:
 
 // Creates a double buffered wxPaintDC, optionally allowing the
 // user to specify their own buffer to use.
-class WXDLLEXPORT wxBufferedPaintDC : public wxBufferedDC
+class WXDLLIMPEXP_CORE wxBufferedPaintDC : public wxBufferedDC
 {
 public:
     // If no bitmap is supplied by the user, a temporary one will be created.
@@ -219,7 +219,7 @@ private:
 
 #ifdef __WXDEBUG__
 
-class wxAutoBufferedPaintDC : public wxAutoBufferedPaintDCBase
+class WXDLLIMPEXP_CORE wxAutoBufferedPaintDC : public wxAutoBufferedPaintDCBase
 {
 public:
 
@@ -247,7 +247,7 @@ private:
 #else // !__WXDEBUG__
 
 // In release builds, just use typedef
-typedef wxAutoBufferedPaintDCBase wxAutoBufferedPaintDC;
+typedef WXDLLIMPEXP_CORE wxAutoBufferedPaintDCBase wxAutoBufferedPaintDC;
 
 #endif
 

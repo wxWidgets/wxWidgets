@@ -41,6 +41,7 @@
 #if wxUSE_UXTHEME
 #include "wx/msw/uxtheme.h"
 #endif
+#include "wx/msw/dc.h"
 
 // Change to #if 1 to include tmschema.h for easier testing of theme
 // parameters.
@@ -479,7 +480,8 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 #if wxUSE_UXTHEME
     const bool isEnabled = IsEnabled();
 
-    HDC hDc = GetHdcOf(dc);
+    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
+    HDC hDc = GetHdcOf(*impl);
     HWND hWnd = GetHwndOf(this);
 
     wxUxThemeEngine* theme = NULL;

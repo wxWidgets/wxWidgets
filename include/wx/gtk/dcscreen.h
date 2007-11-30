@@ -10,35 +10,18 @@
 #ifndef __GTKDCSCREENH__
 #define __GTKDCSCREENH__
 
-#include "wx/dcclient.h"
+#include "wx/dcscreen.h"
+#include "wx/gtk/dcclient.h"
 
 //-----------------------------------------------------------------------------
-// wxScreenDC
+// wxScreenDCImpl
 //-----------------------------------------------------------------------------
 
-#if wxUSE_NEW_DC
-class WXDLLIMPEXP_CORE wxGTKScreenImplDC : public wxGTKWindowImplDC
-#else
-#define wxGTKScreenImplDC wxScreenDC
-class WXDLLIMPEXP_CORE wxScreenDC : public wxWindowDC
-#endif
+class WXDLLIMPEXP_CORE wxScreenDCImpl : public wxWindowDCImpl
 {
 public:
-
-#if wxUSE_NEW_DC
-    wxGTKScreenImplDC( wxScreenDC *owner );
-#else
-    wxScreenDC();
-#endif
-
-    ~wxGTKScreenImplDC();
-
-    static bool StartDrawingOnTop(wxWindow * WXUNUSED(window))
-        { return true; }
-    static bool StartDrawingOnTop(wxRect * WXUNUSED(rect) =  NULL)
-        { return true; }
-    static bool EndDrawingOnTop() { return true; }
-
+    wxScreenDCImpl( wxScreenDC *owner );
+    ~wxScreenDCImpl();
 
 protected:
     virtual void DoGetSize(int *width, int *height) const;
@@ -46,7 +29,7 @@ protected:
     void Init();
 
 private:
-    DECLARE_ABSTRACT_CLASS(wxGTKScreenImplDC)
+    DECLARE_ABSTRACT_CLASS(wxScreenDCImpl)
 };
 
 #endif // __GTKDCSCREENH__

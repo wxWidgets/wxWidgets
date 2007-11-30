@@ -412,7 +412,8 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
 
     HIRect splitterRect = CGRectMake( rect.x , rect.y , rect.width , rect.height );
     CGContextRef cgContext ;
-    cgContext = (CGContextRef) dc.GetGraphicsContext()->GetNativeContext() ;
+    wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
+    cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext() ;
 
     HIThemeSplitterDrawInfo drawInfo ;
     drawInfo.version = 0 ;

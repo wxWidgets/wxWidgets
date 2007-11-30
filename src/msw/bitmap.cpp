@@ -535,9 +535,14 @@ bool wxBitmap::Create(int width, int height, int depth)
 
 bool wxBitmap::Create(int width, int height, const wxDC& dc)
 {
-    wxCHECK_MSG( dc.Ok(), false, _T("invalid HDC in wxBitmap::Create()") );
+    wxCHECK_MSG( dc.IsOk(), false, _T("invalid HDC in wxBitmap::Create()") );
 
-    return DoCreate(width, height, -1, dc.GetHDC());
+    const wxMSWDCImpl *impl = wxDynamicCast( dc.GetImpl(), wxMSWDCImpl );
+    
+    if (impl)
+        return DoCreate(width, height, -1, impl->GetHDC());
+    else
+        return false;
 }
 
 bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
@@ -805,10 +810,15 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth)
 
 bool wxBitmap::CreateFromImage(const wxImage& image, const wxDC& dc)
 {
-    wxCHECK_MSG( dc.Ok(), false,
+    wxCHECK_MSG( dc.IsOk(), false,
                     _T("invalid HDC in wxBitmap::CreateFromImage()") );
 
-    return CreateFromImage(image, -1, dc.GetHDC());
+    const wxMSWDCImpl *impl = wxDynamicCast( dc.GetImpl(), wxMSWDCImpl );
+    
+    if (impl)
+        return CreateFromImage(image, -1, impl->GetHDC());
+    else
+        return false;
 }
 
 #if wxUSE_WXDIB

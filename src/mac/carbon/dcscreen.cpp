@@ -12,18 +12,20 @@
 #include "wx/wxprec.h"
 
 #include "wx/dcscreen.h"
+#include "wx/mac/carbon/dcscreen.h"
 
 #include "wx/mac/uma.h"
 #include "wx/graphics.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
+IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl)
 
 // TODO : for the Screenshot use case, which doesn't work in Quartz
 // we should do a GetAsBitmap using something like
 // http://www.cocoabuilder.com/archive/message/cocoa/2005/8/13/144256
 
 // Create a DC representing the whole screen
-wxScreenDC::wxScreenDC()
+wxScreenDCImpl::wxScreenDCImpl( wxDC *owner ) :
+   wxWindowDCImpl( owner )
 {
 #ifdef __LP64__
     m_graphicContext = NULL;
@@ -46,7 +48,7 @@ wxScreenDC::wxScreenDC()
 #endif
 }
 
-wxScreenDC::~wxScreenDC()
+wxScreenDCImpl::~wxScreenDCImpl()
 {
     delete m_graphicContext;
     m_graphicContext = NULL;

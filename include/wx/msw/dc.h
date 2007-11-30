@@ -13,6 +13,7 @@
 #define _WX_MSW_DC_H_
 
 #include "wx/defs.h"
+#include "wx/dc.h"
 
 // ---------------------------------------------------------------------------
 // macros
@@ -42,11 +43,11 @@ public:
 
 // this is an ABC: use one of the derived classes to create a DC associated
 // with a window, screen, printer and so on
-class WXDLLEXPORT wxDC : public wxDCBase
+class WXDLLEXPORT wxMSWDCImpl: public wxDCImpl
 {
 public:
-    wxDC(WXHDC hDC) { Init(); m_hDC = hDC; }
-    virtual ~wxDC();
+    wxMSWDCImpl(wxDC *owner, WXHDC hDC);
+    virtual ~wxMSWDCImpl();
 
     // implement base class pure virtuals
     // ----------------------------------
@@ -94,10 +95,9 @@ public:
     virtual void SetRop(WXHDC cdc);
     virtual void SelectOldObjects(WXHDC dc);
 
-    wxWindow *GetWindow() const { return m_canvas; }
     void SetWindow(wxWindow *win)
     {
-        m_canvas = win;
+        m_window = win;
 
 #if wxUSE_PALETTE
         // if we have palettes use the correct one for this window
@@ -145,7 +145,6 @@ public:
 protected:
     void Init()
     {
-        m_canvas = NULL;
         m_bOwnsDC = false;
         m_hDC = NULL;
 
@@ -161,7 +160,7 @@ protected:
 
     // create an uninitialized DC: this should be only used by the derived
     // classes
-    wxDC() { Init(); }
+    wxMSWDCImpl( wxDC *owner ) : wxDCImpl( owner ) { Init(); }
 
     void RealizeScaleAndOrigin();
 
@@ -302,12 +301,12 @@ protected:
 #endif // wxUSE_PALETTE
 
 #if wxUSE_DC_CACHEING
-    static wxList     sm_bitmapCache;
-    static wxList     sm_dcCache;
+    static wxObjectList     sm_bitmapCache;
+    static wxObjectList     sm_dcCache;
 #endif
 
-    DECLARE_DYNAMIC_CLASS(wxDC)
-    DECLARE_NO_COPY_CLASS(wxDC)
+    DECLARE_CLASS(wxMSWDCImpl)
+    DECLARE_NO_COPY_CLASS(wxMSWDCImpl)
 };
 
 // ----------------------------------------------------------------------------
@@ -315,18 +314,18 @@ protected:
 // only/mainly)
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDCTemp : public wxDC
+class WXDLLEXPORT wxDCTempImpl: public wxMSWDCImpl
 {
 public:
     // construct a temporary DC with the specified HDC and size (it should be
     // specified whenever we know it for this HDC)
-    wxDCTemp(WXHDC hdc, const wxSize& size = wxDefaultSize)
-        : wxDC(hdc),
+    wxDCTempImpl(wxDC *owner, WXHDC hdc, const wxSize& size )
+        : wxMSWDCImpl( owner, hdc ),
           m_size(size)
     {
     }
 
-    virtual ~wxDCTemp()
+    virtual ~wxDCTempImpl()
     {
         // prevent base class dtor from freeing it
         SetHDC((WXHDC)NULL);
@@ -349,8 +348,20 @@ private:
     // find it ourselves
     const wxSize m_size;
 
-    DECLARE_NO_COPY_CLASS(wxDCTemp)
+    DECLARE_NO_COPY_CLASS(wxDCTempImpl)
 };
+
+class WXDLLEXPORT wxDCTemp: public wxDC
+{
+public:
+    wxDCTemp( WXHDC hdc, const wxSize& size = wxDefaultSize )
+    {
+        m_pimpl = new wxDCTempImpl( this, hdc, size );
+    }
+
+};
+
+
 
 #endif // _WX_MSW_DC_H_
 

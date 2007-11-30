@@ -134,14 +134,23 @@ void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height
 
 void wxOverlayImpl::BeginDrawing( wxWindowDC* dc)
 {
-    dc->SetGraphicsContext( wxGraphicsContext::CreateFromNative( m_overlayContext ) );
-    wxSize size = dc->GetSize() ;
-    dc->SetClippingRegion( 0 , 0 , size.x , size.y ) ;
+    wxDCImpl *impl = dc->GetImpl();
+    wxWindowDCImpl *win_impl = wxDynamicCast(impl,wxWindowDCImpl);
+    if (win_impl)
+    {
+        win_impl->SetGraphicsContext( wxGraphicsContext::CreateFromNative( m_overlayContext ) );
+        wxSize size = dc->GetSize() ;
+        dc->SetClippingRegion( 0 , 0 , size.x , size.y ) ;
+    }
 }
 
 void wxOverlayImpl::EndDrawing( wxWindowDC* dc)
 {
-    dc->SetGraphicsContext(NULL);
+    wxDCImpl *impl = dc->GetImpl();
+    wxWindowDCImpl *win_impl = wxDynamicCast(impl,wxWindowDCImpl);
+    if (win_impl)
+        win_impl->SetGraphicsContext(NULL);
+        
     CGContextFlush( m_overlayContext );
 }
 

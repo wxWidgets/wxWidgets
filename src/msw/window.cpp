@@ -79,6 +79,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/dcclient.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -3430,9 +3431,10 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                     wxUxThemeHandle hTheme((wxWindow *)this, L"EDIT");
                     RECT rcClient = { 0, 0, 0, 0 };
                     wxClientDC dc((wxWindow *)this);
+                    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
 
                     if (theme->GetThemeBackgroundContentRect(
-                            hTheme, GetHdcOf(dc), EP_EDITTEXT, ETS_NORMAL,
+                            hTheme, GetHdcOf(*impl), EP_EDITTEXT, ETS_NORMAL,
                             &rect, &rcClient) == S_OK)
                     {
                         InflateRect(&rcClient, -1, -1);
@@ -3458,6 +3460,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
 
                     wxUxThemeHandle hTheme((wxWindow *)this, L"EDIT");
                     wxWindowDC dc((wxWindow *)this);
+                    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
 
                     // Clip the DC so that you only draw on the non-client area
                     RECT rcBorder;
@@ -3465,16 +3468,16 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
 
                     RECT rcClient;
                     theme->GetThemeBackgroundContentRect(
-                        hTheme, GetHdcOf(dc), EP_EDITTEXT, ETS_NORMAL, &rcBorder, &rcClient);
+                        hTheme, GetHdcOf(*impl), EP_EDITTEXT, ETS_NORMAL, &rcBorder, &rcClient);
                     InflateRect(&rcClient, -1, -1);
 
-                    ::ExcludeClipRect(GetHdcOf(dc), rcClient.left, rcClient.top,
+                    ::ExcludeClipRect(GetHdcOf(*impl), rcClient.left, rcClient.top,
                                       rcClient.right, rcClient.bottom);
 
                     // Make sure the background is in a proper state
                     if (theme->IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
                     {
-                        theme->DrawThemeParentBackground(GetHwnd(), GetHdcOf(dc), &rcBorder);
+                        theme->DrawThemeParentBackground(GetHwnd(), GetHdcOf(*impl), &rcBorder);
                     }
 
                     // Draw the border
@@ -3486,7 +3489,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                     //    nState = ETS_READONLY;
                     else
                         nState = ETS_NORMAL;
-                    theme->DrawThemeBackground(hTheme, GetHdcOf(dc), EP_EDITTEXT, nState, &rcBorder, NULL);
+                    theme->DrawThemeBackground(hTheme, GetHdcOf(*impl), EP_EDITTEXT, nState, &rcBorder, NULL);
                 }
             }
             break;
@@ -4685,7 +4688,7 @@ void wxWindowMSW::OnPaint(wxPaintEvent& event)
 #ifdef __WXUNIVERSAL__
     event.Skip();
 #else
-    HDC hDC = (HDC) wxPaintDC::FindDCInCache((wxWindow*) event.GetEventObject());
+    HDC hDC = (HDC) wxPaintDCImpl::FindDCInCache((wxWindow*) event.GetEventObject());
     if (hDC != 0)
     {
         MSWDefWindowProc(WM_PAINT, (WPARAM) hDC, 0);
@@ -4696,16 +4699,17 @@ void wxWindowMSW::OnPaint(wxPaintEvent& event)
 bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
 {
     wxDCTemp dc(hdc, GetClientSize());
+    wxDCTempImpl *impl = (wxDCTempImpl*) dc.GetImpl();
 
-    dc.SetHDC(hdc);
-    dc.SetWindow((wxWindow *)this);
+    impl->SetHDC(hdc);
+    impl->SetWindow((wxWindow *)this);
 
     wxEraseEvent event(m_windowId, &dc);
     event.SetEventObject(this);
     bool rc = HandleWindowEvent(event);
 
     // must be called manually as ~wxDC doesn't do anything for wxDCTemp
-    dc.SelectOldObjects(hdc);
+    impl->SelectOldObjects(hdc);
 
     return rc;
 }
@@ -4729,9 +4733,12 @@ void wxWindowMSW::OnEraseBackground(wxEraseEvent& event)
         return;
     }
 
+    wxDC *dc = event.GetDC();
+    if (!dc) return;
+    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc->GetImpl();
 
     // do default background painting
-    if ( !DoEraseBackground(GetHdcOf(*event.GetDC())) )
+    if ( !DoEraseBackground(GetHdcOf(*impl)) )
     {
         // let the system paint the background
         event.Skip();

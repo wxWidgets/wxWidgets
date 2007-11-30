@@ -17,12 +17,32 @@
 #include "wx/mac/private.h"
 
 //-----------------------------------------------------------------------------
-// wxMemoryDC
+// wxMemoryDCImpl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxPaintDC)
+IMPLEMENT_ABSTRACT_CLASS(wxMemoryDCImpl,wxPaintDCImpl)
 
-void wxMemoryDC::Init()
+
+wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner )
+  : wxPaintDCImpl( owner )
+{ 
+    Init(); 
+}
+
+wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap )
+  : wxPaintDCImpl( owner )
+{ 
+    Init(); 
+    DoSelect(bitmap);
+}
+
+wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxDC *dc )
+  : wxPaintDCImpl( owner )
+{
+    Init();
+}
+
+void wxMemoryDCImpl::Init()
 {
     m_ok = true;
     SetBackground(*wxWHITE_BRUSH);
@@ -32,13 +52,7 @@ void wxMemoryDC::Init()
     m_ok = false;
 }
 
-wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
-: m_selected()
-{
-    Init();
-}
-
-wxMemoryDC::~wxMemoryDC()
+wxMemoryDCImpl::~wxMemoryDCImpl()
 {
     if ( m_selected.Ok() )
     {
@@ -48,7 +62,7 @@ wxMemoryDC::~wxMemoryDC()
     }
 }
 
-void wxMemoryDC::DoSelect( const wxBitmap& bitmap )
+void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 {
     if ( m_selected.Ok() )
     {
@@ -82,7 +96,7 @@ void wxMemoryDC::DoSelect( const wxBitmap& bitmap )
     }
 }
 
-void wxMemoryDC::DoGetSize( int *width, int *height ) const
+void wxMemoryDCImpl::DoGetSize( int *width, int *height ) const
 {
     if (m_selected.Ok())
     {

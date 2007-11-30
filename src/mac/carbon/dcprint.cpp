@@ -27,9 +27,10 @@
 
 #include "wx/mac/uma.h"
 #include "wx/mac/private/print.h"
+#include "wx/mac/carbon/dcprint.h"
 #include "wx/graphics.h"
 
-IMPLEMENT_CLASS(wxPrinterDC, wxDC)
+IMPLEMENT_ABSTRACT_CLASS(wxPrinterDCImpl, wxGCDCImpl)
 
 class wxNativePrinterDC
 {
@@ -107,7 +108,8 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& WXUNUSED
     if ( m_err )
         return false ;
 
-    wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) dc->GetPrintData().GetNativeData() ;
+    wxPrinterDCImpl *impl = (wxPrinterDCImpl*) dc->GetImpl();
+    wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) impl->GetPrintData().GetNativeData() ;
 
     m_err = PMSessionBeginCGDocumentNoDialog(native->m_macPrintSession,
               native->m_macPrintSettings,
@@ -149,7 +151,8 @@ void wxMacCarbonPrinterDC::EndDoc( wxPrinterDC* dc )
     if ( m_err )
         return ;
 
-    wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) dc->GetPrintData().GetNativeData() ;
+    wxPrinterDCImpl *impl = (wxPrinterDCImpl*) dc->GetImpl();
+    wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) impl->GetPrintData().GetNativeData() ;
 
     m_err = PMSessionEndDocumentNoDialog(native->m_macPrintSession);
 }
@@ -159,7 +162,8 @@ void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc )
     if ( m_err )
         return ;
 
-    wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) dc->GetPrintData().GetNativeData() ;
+    wxPrinterDCImpl *impl = (wxPrinterDCImpl*) dc->GetImpl();
+    wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) impl->GetPrintData().GetNativeData() ;
 
     m_err = PMSessionBeginPageNoDialog(native->m_macPrintSession,
                  native->m_macPageFormat,
@@ -195,7 +199,7 @@ void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc )
         // since this is a non-critical error, we set the flag back
         m_err = noErr ;
     }
-    dc->SetGraphicsContext( wxGraphicsContext::CreateFromNative( pageContext ) );
+    impl->SetGraphicsContext( wxGraphicsContext::CreateFromNative( pageContext ) );
 }
 
 void wxMacCarbonPrinterDC::EndPage( wxPrinterDC* dc )
@@ -203,7 +207,8 @@ void wxMacCarbonPrinterDC::EndPage( wxPrinterDC* dc )
     if ( m_err )
         return ;
 
-    wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) dc->GetPrintData().GetNativeData() ;
+    wxPrinterDCImpl *impl = (wxPrinterDCImpl*) dc->GetImpl();
+    wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) impl->GetPrintData().GetNativeData() ;
 
     m_err = PMSessionEndPageNoDialog(native->m_macPrintSession);
     if ( m_err != noErr )
@@ -211,7 +216,7 @@ void wxMacCarbonPrinterDC::EndPage( wxPrinterDC* dc )
         PMSessionEndDocumentNoDialog(native->m_macPrintSession);
     }
     // the cg context we got when starting the page isn't valid anymore, so replace it
-    dc->SetGraphicsContext( wxGraphicsContext::Create() );
+    impl->SetGraphicsContext( wxGraphicsContext::Create() );
 }
 
 void wxMacCarbonPrinterDC::GetSize( int *w , int *h) const
@@ -231,7 +236,8 @@ wxSize wxMacCarbonPrinterDC::GetPPI() const
 //
 //
 
-wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
+wxPrinterDCImpl::wxPrinterDCImpl( wxPrinterDC *owner, const wxPrintData& printdata )
+   : wxGCDCImpl( owner )
 {
     m_ok = false ;
     m_printData = printdata ;
@@ -259,24 +265,24 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
     }
 }
 
-wxSize wxPrinterDC::GetPPI() const
+wxSize wxPrinterDCImpl::GetPPI() const
 {
     return m_nativePrinterDC->GetPPI() ;
 }
 
-wxPrinterDC::~wxPrinterDC(void)
+wxPrinterDCImpl::~wxPrinterDCImpl()
 {
     delete m_nativePrinterDC ;
 }
 
-bool wxPrinterDC::StartDoc( const wxString& message )
+bool wxPrinterDCImpl::StartDoc( const wxString& message )
 {
     wxASSERT_MSG( Ok() , wxT("Called wxPrinterDC::StartDoc from an invalid object") ) ;
 
     if ( !m_ok )
         return false ;
 
-    if ( m_nativePrinterDC->StartDoc(this, message ) )
+    if ( m_nativePrinterDC->StartDoc( (wxPrinterDC*) GetOwner(), message ) )
     {
         // in case we have to do additional things when successful
     }
@@ -292,12 +298,12 @@ bool wxPrinterDC::StartDoc( const wxString& message )
     return m_ok ;
 }
 
-void wxPrinterDC::EndDoc(void)
+void wxPrinterDCImpl::EndDoc(void)
 {
     if ( !m_ok )
         return ;
 
-    m_nativePrinterDC->EndDoc( this ) ;
+    m_nativePrinterDC->EndDoc( (wxPrinterDC*) GetOwner() ) ;
     m_ok = m_nativePrinterDC->Ok() ;
 
     if ( !m_ok )
@@ -309,10 +315,10 @@ void wxPrinterDC::EndDoc(void)
     }
 }
 
-wxRect wxPrinterDC::GetPaperRect()
+wxRect wxPrinterDCImpl::GetPaperRect()
 {
     wxCoord w, h;
-    GetSize(&w, &h);
+    GetOwner()->GetSize(&w, &h);
     wxRect pageRect(0, 0, w, h);
     wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) m_printData.GetNativeData() ;
     OSStatus err = noErr ;
@@ -324,7 +330,7 @@ wxRect wxPrinterDC::GetPaperRect()
         wxCoord(rPaper.right - rPaper.left), wxCoord(rPaper.bottom - rPaper.top));
 }
 
-void wxPrinterDC::StartPage(void)
+void wxPrinterDCImpl::StartPage()
 {
     if ( !m_ok )
         return ;
@@ -340,21 +346,21 @@ void wxPrinterDC::StartPage(void)
     m_brush = *wxTRANSPARENT_BRUSH;
     m_backgroundBrush = *wxWHITE_BRUSH;
 
-    m_nativePrinterDC->StartPage(this) ;
+    m_nativePrinterDC->StartPage( (wxPrinterDC*) GetOwner() ) ;
     m_ok = m_nativePrinterDC->Ok() ;
 
 }
 
-void wxPrinterDC::EndPage(void)
+void wxPrinterDCImpl::EndPage()
 {
     if ( !m_ok )
         return ;
 
-    m_nativePrinterDC->EndPage(this) ;
+    m_nativePrinterDC->EndPage( (wxPrinterDC*) GetOwner() );
     m_ok = m_nativePrinterDC->Ok() ;
 }
 
-void wxPrinterDC::DoGetSize(int *width, int *height) const
+void wxPrinterDCImpl::DoGetSize(int *width, int *height) const
 {
     wxCHECK_RET( m_ok , _T("GetSize() doesn't work without a valid wxPrinterDC") );
     m_nativePrinterDC->GetSize(width,  height ) ;

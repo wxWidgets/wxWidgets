@@ -945,9 +945,11 @@ void wxNotebook::OnPaint(wxPaintEvent& WXUNUSED(event))
         hbr = GetHbrushOf(brush);
     }
 
-    ::FillRect(GetHdcOf(memdc), &rc, hbr);
+    wxMSWDCImpl *impl = (wxMSWDCImpl*) memdc.GetImpl();
 
-    MSWDefWindowProc(WM_PAINT, (WPARAM)memdc.GetHDC(), 0);
+    ::FillRect(GetHdcOf(*impl), &rc, hbr);
+
+    MSWDefWindowProc(WM_PAINT, (WPARAM)(impl->GetHDC()), 0);
 
     // For some reason in RTL mode, source offset has to be -1, otherwise the
     // right border (physical) remains unpainted.

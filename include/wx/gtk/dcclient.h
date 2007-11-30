@@ -11,33 +11,23 @@
 #define __GTKDCCLIENTH__
 
 #include "wx/dc.h"
+#include "wx/gtk/dc.h"
+#include "wx/dcclient.h"
 #include "wx/region.h"
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 //-----------------------------------------------------------------------------
-// wxWindowDC
+// wxWindowDCImpl
 //-----------------------------------------------------------------------------
 
-#if wxUSE_NEW_DC
-class WXDLLIMPEXP_CORE wxGTKWindowImplDC : public wxGTKImplDC
-#else
-#define wxGTKWindowImplDC wxWindowDC
-class WXDLLIMPEXP_CORE wxWindowDC : public wxDC
-#endif
+class WXDLLIMPEXP_CORE wxWindowDCImpl : public wxGTKDCImpl
 {
 public:
+    wxWindowDCImpl( wxDC *owner );
+    wxWindowDCImpl( wxDC *owner, wxWindow *win );
 
-
-#if wxUSE_NEW_DC
-    wxGTKWindowImplDC( wxDC *owner );
-    wxGTKWindowImplDC( wxDC *owner, wxWindow *win );
-#else
-    wxWindowDC();
-    wxWindowDC( wxWindow *win );
-#endif
-
-    virtual ~wxGTKWindowImplDC();
+    virtual ~wxWindowDCImpl();
 
     virtual bool CanDrawBitmap() const { return true; }
     virtual bool CanGetTextExtent() const { return true; }
@@ -116,14 +106,13 @@ public:
     // implementation
     // --------------
 
-    GdkWindow    *m_window;
+    GdkWindow    *m_gdkwindow;
     GdkGC        *m_penGC;
     GdkGC        *m_brushGC;
     GdkGC        *m_textGC;
     GdkGC        *m_bgGC;
     GdkColormap  *m_cmap;
     bool          m_isScreenDC;
-    wxWindow     *m_owningWindow;
     wxRegion      m_currentClippingRegion;
     wxRegion      m_paintClippingRegion;
 
@@ -137,63 +126,43 @@ public:
     
     virtual void ComputeScaleAndOrigin();
 
-    virtual GdkWindow *GetGDKWindow() const { return m_window; }
+    virtual GdkWindow *GetGDKWindow() const { return m_gdkwindow; }
 
 private:
-    DECLARE_ABSTRACT_CLASS(wxGTKWindowImplDC)
+    DECLARE_ABSTRACT_CLASS(wxWindowDCImpl)
 };
 
 //-----------------------------------------------------------------------------
-// wxClientDC
+// wxClientDCImpl
 //-----------------------------------------------------------------------------
 
-#if wxUSE_NEW_DC
-class WXDLLIMPEXP_CORE wxGTKClientImplDC : public wxGTKWindowImplDC
-#else
-#define wxGTKClientImplDC wxClientDC
-class WXDLLIMPEXP_CORE wxClientDC : public wxWindowDC
-#endif
+class WXDLLIMPEXP_CORE wxClientDCImpl : public wxWindowDCImpl
 {
 public:
-
-#if wxUSE_NEW_DC
-    wxGTKClientImplDC( wxDC *owner );
-    wxGTKClientImplDC( wxDC *owner, wxWindow *win );
-#else
-    wxClientDC();
-    wxClientDC( wxWindow *win );
-#endif
+    wxClientDCImpl( wxDC *owner );
+    wxClientDCImpl( wxDC *owner, wxWindow *win );
 
 protected:
     virtual void DoGetSize(int *width, int *height) const;
 
 private:
-    DECLARE_ABSTRACT_CLASS(wxGTKClientImplDC)
+    DECLARE_ABSTRACT_CLASS(wxClientDCImpl)
 };
 
 //-----------------------------------------------------------------------------
-// wxPaintDC
+// wxPaintDCImpl
 //-----------------------------------------------------------------------------
 
-#if wxUSE_NEW_DC
-class WXDLLIMPEXP_CORE wxGTKPaintImplDC : public wxGTKClientImplDC
-#else
-#define wxGTKPaintImplDC wxPaintDC
-class WXDLLIMPEXP_CORE wxPaintDC : public wxClientDC
-#endif
+class WXDLLIMPEXP_CORE wxPaintDCImpl : public wxClientDCImpl
 {
 public:
-
-#if wxUSE_NEW_DC
-    wxGTKPaintImplDC( wxDC *owner );
-    wxGTKPaintImplDC( wxDC *owner, wxWindow *win );
-#else
-    wxPaintDC();
-    wxPaintDC( wxWindow *win );
-#endif
+    wxPaintDCImpl( wxDC *owner );
+    wxPaintDCImpl( wxDC *owner, wxWindow *win );
 
 private:
-    DECLARE_ABSTRACT_CLASS(wxGTKPaintImplDC)
+    DECLARE_ABSTRACT_CLASS(wxPaintDCImpl)
 };
 
-#endif // __GTKDCCLIENTH__
+#endif
+    // __GTKDCCLIENTH__
+

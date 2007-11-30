@@ -10,33 +10,21 @@
 #ifndef _WX_GTK_DCMEMORY_H_
 #define _WX_GTK_DCMEMORY_H_
 
-#include "wx/dcclient.h"
+#include "wx/dcmemory.h"
+#include "wx/gtk/dcclient.h"
 
 //-----------------------------------------------------------------------------
-// wxMemoryDC
+// wxMemoryDCImpl
 //-----------------------------------------------------------------------------
 
-
-#if wxUSE_NEW_DC
-class WXDLLIMPEXP_CORE wxGTKMemoryImplDC : public wxGTKWindowImplDC
-#else
-#define wxGTKMemoryImplDC wxMemoryDC
-class WXDLLIMPEXP_CORE wxMemoryDC : public wxWindowDC, public wxMemoryDCBase
-#endif
+class WXDLLIMPEXP_CORE wxMemoryDCImpl : public wxWindowDCImpl
 {
 public:
-
-#if wxUSE_NEW_DC
-    wxGTKMemoryImplDC( wxMemoryDC *owner );
-    wxGTKMemoryImplDC( wxMemoryDC *owner, wxBitmap& bitmap );
-    wxGTKMemoryImplDC( wxMemoryDC *owner, wxDC *dc );
-#else
-    wxMemoryDC();
-    wxMemoryDC(wxBitmap& bitmap);
-    wxMemoryDC( wxDC *dc );
-#endif
+    wxMemoryDCImpl( wxMemoryDC *owner );
+    wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap );
+    wxMemoryDCImpl( wxMemoryDC *owner, wxDC *dc );
     
-    virtual ~wxGTKMemoryImplDC();
+    virtual ~wxMemoryDCImpl();
 
     // these get reimplemented for mono-bitmaps to behave
     // more like their Win32 couterparts. They now interpret
@@ -49,7 +37,7 @@ public:
     virtual void SetTextBackground( const wxColour &col );
 
 protected:
-    // overridden from wxImplDC
+    // overridden from wxDCImpl
     virtual void DoGetSize( int *width, int *height ) const;
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const;
 
@@ -66,7 +54,9 @@ private:
 private:
     void Init();
 
-    DECLARE_ABSTRACT_CLASS(wxGTKMemoryImplDC)
+    DECLARE_ABSTRACT_CLASS(wxMemoryDCImpl)
 };
 
-#endif // _WX_GTK_DCMEMORY_H_
+#endif 
+    // _WX_GTK_DCMEMORY_H_
+

@@ -20,27 +20,32 @@
 
 class WXDLLIMPEXP_FWD_CORE wxWindowDC;
 
-#ifdef __WXMAC__
-#define wxGCDC wxDC
-#endif
 
-class WXDLLEXPORT wxGCDC: 
-#ifdef __WXMAC__
-    public wxDCBase
-#else
-    public wxDC
-#endif
+class WXDLLEXPORT wxGCDC: public wxDC
 {
+public:
+    wxGCDC( const wxWindowDC& dc );
+    wxGCDC( const wxMemoryDC& dc );
+    wxGCDC();
+    
+    wxGraphicsContext* GetGraphicsContext();
+    void SetGraphicsContext( wxGraphicsContext* ctx );
+    
+private:
     DECLARE_DYNAMIC_CLASS(wxGCDC)
     DECLARE_NO_COPY_CLASS(wxGCDC)
+};
 
+
+
+class WXDLLEXPORT wxGCDCImpl: public wxDCImpl
+{
 public:
-    wxGCDC(const wxWindowDC& dc);
-#ifdef __WXMSW__
-    wxGCDC( const wxMemoryDC& dc);
-#endif    
-    wxGCDC();
-    virtual ~wxGCDC();
+    wxGCDCImpl( wxDC *owner, const wxWindowDC& dc );
+    wxGCDCImpl( wxDC *owner, const wxMemoryDC& dc );
+    wxGCDCImpl( wxDC *owner );
+    
+    virtual ~wxGCDCImpl();
 
     void Init();
 
@@ -190,6 +195,10 @@ protected:
     double m_formerScaleX, m_formerScaleY;
 
     wxGraphicsContext* m_graphicContext;
+    
+private:
+    DECLARE_CLASS(wxGCDCImpl)
+    DECLARE_NO_COPY_CLASS(wxGCDCImpl)
 };
 
 #endif

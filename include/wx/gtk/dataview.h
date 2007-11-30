@@ -414,7 +414,7 @@ protected:
     virtual void DoSetIndent();
 
 private:
-    friend class wxDataViewCtrlDC;
+    friend class wxDataViewCtrlDCImpl;
     friend class wxDataViewColumn;
     friend class wxGtkDataViewModelNotifier;
     GtkWidget               *m_treeview;

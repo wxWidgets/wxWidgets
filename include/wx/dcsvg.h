@@ -31,23 +31,23 @@ class WXDLLIMPEXP_FWD_BASE wxFileOutputStream;
 #if wxUSE_NEW_DC
 class WXDLLIMPEXP_FWD_BASE wxSVGFileDC;
 
-class WXDLLIMPEXP_CORE wxSVGFileImplDC : public wxImplDC
+class WXDLLIMPEXP_CORE wxSVGFileDCImpl : public wxDCImpl
 #else
-#define wxSVGFileImplDC wxSVGFileDC
+#define wxSVGFileDCImpl wxSVGFileDC
 class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
 #endif
 {
 public:
 
 #if wxUSE_NEW_DC
-    wxSVGFileImplDC( wxSVGFileDC *owner, const wxString &filename, 
+    wxSVGFileDCImpl( wxSVGFileDC *owner, const wxString &filename, 
                      int width=320, int height=240, double dpi=72.0 );
 #else
     wxSVGFileDC( const wxString &filename,
                  int width=320, int height=240, double dpi=72.0 );
 #endif
 
-    virtual ~wxSVGFileImplDC();
+    virtual ~wxSVGFileDCImpl();
     
     bool IsOk() const { return m_OK; }
 
@@ -217,7 +217,7 @@ private:
    double              m_dpi;
 
 private:
-   DECLARE_ABSTRACT_CLASS(wxSVGFileImplDC)
+   DECLARE_ABSTRACT_CLASS(wxSVGFileDCImpl)
 };
 
 
@@ -228,7 +228,7 @@ public:
     wxSVGFileDC( const wxString &filename, 
                  int width=320, int height=240, double dpi=72.0 )
     { 
-        m_pimpl = new wxSVGFileImplDC( this, filename, width, height, dpi );
+        m_pimpl = new wxSVGFileDCImpl( this, filename, width, height, dpi );
     }
 };
 #endif

@@ -70,6 +70,7 @@ DEFINE_EVENT_TYPE(wxEVT_AUI_FIND_MANAGER)
 #ifdef __WXMSW__
     #include "wx/msw/wrapwin.h"
     #include "wx/msw/private.h"
+    #include "wx/msw/dc.h"
 #endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxAuiManagerEvent, wxEvent)
@@ -297,7 +298,8 @@ static void DrawResizeHint(wxDC& dc, const wxRect& rect)
     wxBrush brush(stipple);
     dc.SetBrush(brush);
 #ifdef __WXMSW__
-    PatBlt(GetHdcOf(dc), rect.GetX(), rect.GetY(), rect.GetWidth(), rect.GetHeight(), PATINVERT);
+    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
+    PatBlt(GetHdcOf(*impl), rect.GetX(), rect.GetY(), rect.GetWidth(), rect.GetHeight(), PATINVERT);
 #else
     dc.SetPen(*wxTRANSPARENT_PEN);
 
@@ -771,6 +773,7 @@ void wxAuiManager::UpdateHintWindowConfig()
         {
             wxFrame* f = static_cast<wxFrame*>(w);
             can_do_transparent = f->CanSetTransparent();
+            
             break;
         }
 

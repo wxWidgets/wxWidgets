@@ -12,31 +12,49 @@
 #ifndef _WX_DCCLIENT_H_BASE_
 #define _WX_DCCLIENT_H_BASE_
 
-#include "wx/defs.h"
+#include "wx/dc.h"
 
-#if defined(__WXPALMOS__)
-#include "wx/palmos/dcclient.h"
-#elif defined(__WXMSW__)
-#include "wx/msw/dcclient.h"
-#elif defined(__WXMOTIF__)
-#include "wx/motif/dcclient.h"
-#elif defined(__WXGTK20__)
-#include "wx/gtk/dcclient.h"
-#elif defined(__WXGTK__)
-#include "wx/gtk1/dcclient.h"
-#elif defined(__WXX11__)
-#include "wx/x11/dcclient.h"
-#elif defined(__WXMGL__)
-#include "wx/mgl/dcclient.h"
-#elif defined(__WXDFB__)
-#include "wx/dfb/dcclient.h"
-#elif defined(__WXMAC__)
-#include "wx/mac/dcclient.h"
-#elif defined(__WXCOCOA__)
-#include "wx/cocoa/dcclient.h"
-#elif defined(__WXPM__)
-#include "wx/os2/dcclient.h"
-#endif
+//-----------------------------------------------------------------------------
+// wxWindowDC
+//-----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxWindowDC : public wxDC
+{
+public:
+    wxWindowDC();
+    wxWindowDC( wxWindow *win );
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxWindowDC)
+};
+
+//-----------------------------------------------------------------------------
+// wxClientDC
+//-----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxClientDC : public wxWindowDC
+{
+public:
+    wxClientDC();
+    wxClientDC( wxWindow *win );
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxClientDC)
+};
+
+//-----------------------------------------------------------------------------
+// wxPaintDC
+//-----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxPaintDC : public wxClientDC
+{
+public:
+    wxPaintDC();
+    wxPaintDC( wxWindow *win );
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxPaintDC)
+};
 
 #endif
     // _WX_DCCLIENT_H_BASE_

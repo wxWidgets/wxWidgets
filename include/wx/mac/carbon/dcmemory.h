@@ -12,33 +12,31 @@
 #ifndef _WX_DCMEMORY_H_
 #define _WX_DCMEMORY_H_
 
-#include "wx/dcclient.h"
+#include "wx/mac/carbon/dcclient.h"
 
-class WXDLLEXPORT wxMemoryDC: public wxPaintDC, public wxMemoryDCBase
+class WXDLLEXPORT wxMemoryDCImpl: public wxPaintDCImpl
 {
-  DECLARE_DYNAMIC_CLASS(wxMemoryDC)
-
 public:
-    wxMemoryDC() { Init(); }
-    wxMemoryDC(wxBitmap& bitmap) { Init(); SelectObject(bitmap); }
-    wxMemoryDC( wxDC *dc ); // Create compatible DC
-    virtual ~wxMemoryDC(void);
-
-    const wxBitmap& GetSelectedBitmap() const { return m_selected; }
-    wxBitmap    GetSelectedBitmap() { return m_selected; }
-
-	wxBitmap    GetSelectedObject() { return GetSelectedBitmap() ; }
+    wxMemoryDCImpl( wxMemoryDC *owner );
+    wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap );
+    wxMemoryDCImpl( wxMemoryDC *owner, wxDC *dc ); 
+    
+    virtual ~wxMemoryDCImpl();
 
 protected:
     virtual void DoGetSize( int *width, int *height ) const;
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const 
-    { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmap(*subrect); }
+       { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmap(*subrect); }
     virtual void DoSelect(const wxBitmap& bitmap);
 
 private:
     void Init();
 
     wxBitmap  m_selected;
+    
+private:
+    DECLARE_CLASS(wxMemoryDCImpl)
+    DECLARE_NO_COPY_CLASS(wxMemoryDCImpl)
 };
 
 #endif

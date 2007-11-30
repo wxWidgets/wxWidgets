@@ -13,6 +13,7 @@
 #if wxUSE_MINIFRAME
 
 #include "wx/minifram.h"
+#include "wx/gtk/dcclient.h"
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
@@ -73,15 +74,9 @@ static gboolean gtk_window_own_expose_callback(GtkWidget* widget, GdkEventExpose
 
     wxClientDC dc(win);
 
-#if wxUSE_NEW_DC
-    wxImplDC *impl = dc.GetImpl();
-    wxGTKClientImplDC *client_impl = wxDynamicCast( impl, wxGTKClientImplDC );
-    // Hack alert
-    client_impl->m_window = widget->window;
-#else
-    // Hack alert
-    dc.m_window = widget->window;
-#endif
+    wxDCImpl *impl = dc.GetImpl();
+    wxClientDCImpl *gtk_impl = wxDynamicCast( impl, wxClientDCImpl );
+    gtk_impl->m_gdkwindow = widget->window; // Hack alert
 
     if (style & wxRESIZE_BORDER)
     {

@@ -363,7 +363,8 @@ void wxStaticBox::PaintBackground(wxDC& dc, const RECT& rc)
     //  3. this is backwards compatible behaviour and some people rely on it,
     //     see http://groups.google.com/groups?selm=4252E932.3080801%40able.es
     wxWindow *parent = GetParent();
-    HBRUSH hbr = (HBRUSH)parent->MSWGetBgBrush(dc.GetHDC(), GetHWND());
+    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
+    HBRUSH hbr = (HBRUSH)parent->MSWGetBgBrush(impl->GetHDC(), GetHWND());
 
     // if there is no special brush for painting this control, just use the
     // solid background colour
@@ -374,12 +375,13 @@ void wxStaticBox::PaintBackground(wxDC& dc, const RECT& rc)
         hbr = GetHbrushOf(brush);
     }
 
-    ::FillRect(GetHdcOf(dc), &rc, hbr);
+    ::FillRect(GetHdcOf(*impl), &rc, hbr);
 }
 
 void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
 {
-    MSWDefWindowProc(WM_PAINT, (WPARAM)GetHdcOf(dc), 0);
+    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
+    MSWDefWindowProc(WM_PAINT, (WPARAM)GetHdcOf(*impl), 0);
 
     // when using XP themes, neither setting the text colour nor transparent
     // background mode doesn't change anything: the static box def window proc
@@ -388,7 +390,7 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
     if ( m_hasFgCol && wxUxThemeEngine::GetIfActive() )
     {
         // draw over the text in default colour in our colour
-        HDC hdc = GetHdcOf(dc);
+        HDC hdc = GetHdcOf(*impl);
         ::SetTextColor(hdc, GetForegroundColour().GetPixel());
 
         const bool rtl = wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft;
@@ -484,7 +486,8 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
             // the label: this is consistent with the behaviour under pre-XP
             // systems (i.e. without visual themes) and generally makes sense
             wxBrush brush = wxBrush(GetBackgroundColour());
-            ::FillRect(GetHdcOf(dc), &dimensions, GetHbrushOf(brush));
+            wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
+            ::FillRect(GetHdcOf(*impl), &dimensions, GetHbrushOf(brush));
         }
         else // paint parent background
         {
@@ -552,7 +555,8 @@ void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     // and also the box itself
     MSWGetRegionWithoutSelf((WXHRGN) hrgn, rc.right, rc.bottom);
-    HDCClipper clipToBg(GetHdcOf(dc), hrgn);
+    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
+    HDCClipper clipToBg(GetHdcOf(*impl), hrgn);
 
     // paint the inside of the box (excluding box itself and child controls)
     PaintBackground(dc, rc);

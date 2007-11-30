@@ -126,8 +126,9 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
     else
     {
         CGContextRef cgContext;
-
-        cgContext = (CGContextRef) dc.GetGraphicsContext()->GetNativeContext();
+        wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
+        
+        cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext();
 
         {
             HIThemeButtonDrawInfo drawInfo;
@@ -209,7 +210,8 @@ void wxRendererMac::DrawTreeItemButton( wxWindow *win,
     {
         CGContextRef cgContext;
 
-        cgContext = (CGContextRef) dc.GetGraphicsContext()->GetNativeContext();
+        wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
+        cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext();
 
         HIThemeButtonDrawInfo drawInfo;
         HIRect labelRect;
@@ -255,8 +257,8 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
     else
     {
         CGContextRef cgContext;
-
-        cgContext = (CGContextRef) dc.GetGraphicsContext()->GetNativeContext();
+        wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
+        cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext();
 
         HIThemeSplitterDrawInfo drawInfo;
         drawInfo.version = 0;
@@ -309,8 +311,9 @@ wxRendererMac::DrawMacThemeButton(wxWindow *win,
     }
     else
     {
+        wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
         CGContextRef cgContext;
-        cgContext = (CGContextRef) dc.GetGraphicsContext()->GetNativeContext();
+        cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext();
 
         HIThemeButtonDrawInfo drawInfo;
         HIRect labelRect;

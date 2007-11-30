@@ -17,6 +17,8 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/dc.h"
+#include "wx/msw/dc.h"
+#include "wx/dcclient.h"
 #include "wx/dynarray.h"
 
 // ----------------------------------------------------------------------------
@@ -32,14 +34,14 @@ WX_DECLARE_EXPORTED_OBJARRAY(wxPaintDCInfo, wxArrayDCInfo);
 // DC classes
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWindowDC : public wxDC
+class WXDLLEXPORT wxWindowDCImpl : public wxMSWDCImpl
 {
 public:
     // default ctor
-    wxWindowDC();
+    wxWindowDCImpl( wxDC *owner );
 
     // Create a DC corresponding to the whole window
-    wxWindowDC(wxWindow *win);
+    wxWindowDCImpl( wxDC *owner, wxWindow *win );
 
 protected:
     // initialize the newly created DC
@@ -49,19 +51,20 @@ protected:
     virtual void DoGetSize(int *width, int *height) const;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxWindowDC)
+    DECLARE_CLASS(wxWindowDCImpl)
+    DECLARE_NO_COPY_CLASS(wxWindowDCImpl)
 };
 
-class WXDLLEXPORT wxClientDC : public wxWindowDC
+class WXDLLEXPORT wxClientDCImpl : public wxWindowDCImpl
 {
 public:
     // default ctor
-    wxClientDC();
+    wxClientDCImpl( wxDC *owner );
 
     // Create a DC corresponding to the client area of the window
-    wxClientDC(wxWindow *win);
+    wxClientDCImpl( wxDC *owner, wxWindow *win );
 
-    virtual ~wxClientDC();
+    virtual ~wxClientDCImpl();
 
 protected:
     void InitDC();
@@ -70,18 +73,19 @@ protected:
     virtual void DoGetSize(int *width, int *height) const;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxClientDC)
+    DECLARE_CLASS(wxClientDCImpl)
+    DECLARE_NO_COPY_CLASS(wxClientDCImpl)
 };
 
-class WXDLLEXPORT wxPaintDC : public wxClientDC
+class WXDLLEXPORT wxPaintDCImpl : public wxClientDCImpl
 {
 public:
-    wxPaintDC();
+    wxPaintDCImpl( wxDC *owner );
 
     // Create a DC corresponding for painting the window in OnPaint()
-    wxPaintDC(wxWindow *win);
+    wxPaintDCImpl( wxDC *owner, wxWindow *win );
 
-    virtual ~wxPaintDC();
+    virtual ~wxPaintDCImpl();
 
     // find the entry for this DC in the cache (keyed by the window)
     static WXHDC FindDCInCache(wxWindow* win);
@@ -93,7 +97,8 @@ protected:
     wxPaintDCInfo *FindInCache(size_t *index = NULL) const;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxPaintDC)
+    DECLARE_CLASS(wxPaintDCImpl)
+    DECLARE_NO_COPY_CLASS(wxPaintDCImpl)
 };
 
 /*
@@ -106,10 +111,8 @@ class WXDLLEXPORT wxPaintDCEx : public wxPaintDC
 {
 public:
     wxPaintDCEx(wxWindow *canvas, WXHDC dc);
-    virtual ~wxPaintDCEx();
+    
 private:
-    int saveState;
-
     DECLARE_CLASS(wxPaintDCEx)
     DECLARE_NO_COPY_CLASS(wxPaintDCEx)
 };

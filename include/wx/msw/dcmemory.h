@@ -12,14 +12,15 @@
 #ifndef _WX_DCMEMORY_H_
 #define _WX_DCMEMORY_H_
 
-#include "wx/dcclient.h"
+#include "wx/dcmemory.h"
+#include "wx/msw/dc.h"
 
-class WXDLLEXPORT wxMemoryDC : public wxDC, public wxMemoryDCBase
+class WXDLLEXPORT wxMemoryDCImpl: public wxMSWDCImpl
 {
 public:
-    wxMemoryDC() { CreateCompatible(NULL); Init(); }
-    wxMemoryDC(wxBitmap& bitmap) { CreateCompatible(NULL); Init(); SelectObject(bitmap); }
-    wxMemoryDC(wxDC *dc); // Create compatible DC
+    wxMemoryDCImpl( wxMemoryDC *owner );
+    wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap );
+    wxMemoryDCImpl( wxMemoryDC *owner, wxDC *dc ); // Create compatible DC
 
 
 protected:
@@ -38,7 +39,8 @@ protected:
     void Init();
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMemoryDC)
+    DECLARE_CLASS(wxMemoryDCImpl)
+    DECLARE_NO_COPY_CLASS(wxMemoryDCImpl)
 };
 
 #endif

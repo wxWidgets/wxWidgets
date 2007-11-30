@@ -16,7 +16,7 @@
     #pragma hdrstop
 #endif
 
-#include "wx/dcscreen.h"
+#include "wx/msw/dcscreen.h"
 
 #ifndef WX_PRECOMP
    #include "wx/string.h"
@@ -25,10 +25,11 @@
 
 #include "wx/msw/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxDC)
+IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxMSWDCImpl)
 
 // Create a DC representing the whole screen
-wxScreenDC::wxScreenDC()
+wxScreenDCImpl::wxScreenDCImpl( wxScreenDC *owner ) :
+    wxMSWDCImpl( owner )
 {
     m_hDC = (WXHDC) ::GetDC((HWND) NULL);
 
@@ -36,3 +37,4 @@ wxScreenDC::wxScreenDC()
     // DrawText() to OPAQUE as required, otherwise always TRANSPARENT
     ::SetBkMode( GetHdc(), TRANSPARENT );
 }
+

@@ -701,6 +701,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
         if (style & wxNO_BORDER)
             g_object_set (m_text, "has-frame", FALSE, NULL);
+            
     }
 
     m_parent->DoAddChild( this );

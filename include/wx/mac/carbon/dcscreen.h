@@ -13,23 +13,20 @@
 #define _WX_DCSCREEN_H_
 
 #include "wx/dcclient.h"
+#include "wx/mac/carbon/dcclient.h"
 
-class WXDLLEXPORT wxScreenDC: public wxWindowDC
+class WXDLLEXPORT wxScreenDCImpl: public wxWindowDCImpl
 {
-  DECLARE_DYNAMIC_CLASS(wxScreenDC)
+public:
+    wxScreenDCImpl( wxDC *owner );
+    virtual ~wxScreenDCImpl();
 
- public:
-  // Create a DC representing the whole screen
-  wxScreenDC();
-  virtual ~wxScreenDC();
-
-  // Compatibility with X's requirements for
-  // drawing on top of all windows
-  static bool StartDrawingOnTop(wxWindow* WXUNUSED(window)) { return TRUE; }
-  static bool StartDrawingOnTop(wxRect* WXUNUSED(rect) = NULL) { return TRUE; }
-  static bool EndDrawingOnTop() { return TRUE; }
- private:
-	void* m_overlayWindow;
+private:
+    void* m_overlayWindow;
+        
+private:
+    DECLARE_CLASS(wxScreenDCImpl)
+    DECLARE_NO_COPY_CLASS(wxScreenDCImpl)
 };
 
 #endif

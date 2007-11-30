@@ -22,6 +22,7 @@
 #include "wx/scrolwin.h"
 #include "wx/dialog.h"
 #include "wx/frame.h"
+#include "wx/dc.h"
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxButton;
@@ -77,7 +78,7 @@ public:
     virtual wxPageSetupDialogBase *CreatePageSetupDialog( wxWindow *parent,
                                                           wxPageSetupDialogData * data = NULL ) = 0;
 
-    virtual wxDC* CreatePrinterDC( const wxPrintData& data ) = 0;
+    virtual wxDCImpl* CreatePrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data ) = 0;
 
     // What to do and what to show in the wxPrintDialog
     // a) Use the generic print setup dialog or a native one?
@@ -121,7 +122,7 @@ public:
     virtual wxPageSetupDialogBase *CreatePageSetupDialog( wxWindow *parent,
                                                           wxPageSetupDialogData * data = NULL );
 
-    virtual wxDC* CreatePrinterDC( const wxPrintData& data );
+    virtual wxDCImpl* CreatePrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data );
 
     virtual bool HasPrintSetupDialog();
     virtual wxDialog *CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data );

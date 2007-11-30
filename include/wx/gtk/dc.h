@@ -15,22 +15,11 @@
 // wxDC
 //-----------------------------------------------------------------------------
 
-#if wxUSE_NEW_DC
-class WXDLLIMPEXP_CORE wxGTKImplDC : public wxImplDC
-#else
-#define wxGTKImplDC wxDC
-class WXDLLIMPEXP_CORE wxDC : public wxDCBase
-#endif
-
+class WXDLLIMPEXP_CORE wxGTKDCImpl : public wxDCImpl
 {
 public:
-#if wxUSE_NEW_DC
-    wxGTKImplDC( wxDC *owner );
-#else
-    wxDC();
-#endif
-
-    virtual ~wxGTKImplDC();
+    wxGTKDCImpl( wxDC *owner );
+    virtual ~wxGTKDCImpl();
 
 #if wxUSE_PALETTE
     void SetColourMap( const wxPalette& palette ) { SetPalette(palette); };
@@ -52,10 +41,10 @@ protected:
     virtual void DoGetSizeMM(int* width, int* height) const;
 
 private:
-    DECLARE_ABSTRACT_CLASS(wxGTKImplDC)
+    DECLARE_ABSTRACT_CLASS(wxGTKDCImpl)
 };
 
-// this must be defined when wxDC::Blit() honours the DC origian and needed to
+// this must be defined when wxDC::Blit() honours the DC origin and needed to
 // allow wxUniv code in univ/winuniv.cpp to work with versions of wxGTK
 // 2.3.[23]
 #ifndef wxHAS_WORKING_GTK_DC_BLIT

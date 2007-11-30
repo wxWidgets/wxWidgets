@@ -16,8 +16,6 @@
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
-#if wxUSE_NEW_DC
-
 #include "wx/dc.h"
 
 //-----------------------------------------------------------------------------
@@ -38,22 +36,9 @@ private:
     DECLARE_DYNAMIC_CLASS()
 };
 
-#else
 
-
-#if defined(__WXPALMOS__)
-#include "wx/palmos/dcprint.h"
-#elif defined(__WXMSW__)
-#include "wx/msw/dcprint.h"
-#endif
-#if defined(__WXPM__)
-#include "wx/os2/dcprint.h"
-#endif
-#if defined(__WXMAC__)
-#include "wx/mac/dcprint.h"
-#endif
-
-#endif // wxUSE_NEW_DC
-#endif // wxUSE_PRINTING_ARCHITECTURE
+#endif 
+    // wxUSE_PRINTING_ARCHITECTURE
+    
 #endif
     // _WX_DCPRINT_H_BASE_

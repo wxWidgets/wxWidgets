@@ -174,8 +174,9 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
     if ( !wxOwnerDrawn::OnDrawItem(dc, rc, act, stat) )
         return false;
 
+    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
     // now draw the check mark part
-    HDC hdc = GetHdcOf(dc);
+    HDC hdc = GetHdcOf(*impl);
 
     int nBmpWidth  = ::GetSystemMetrics(SM_CXMENUCHECK),
         nBmpHeight = ::GetSystemMetrics(SM_CYMENUCHECK);

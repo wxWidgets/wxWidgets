@@ -11,24 +11,16 @@
 #include "wx/wxprec.h"
 
 #include "wx/dc.h"
-
+#include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------
-// wxDC
+// wxGTKDCImpl
 //-----------------------------------------------------------------------------
 
-#if wxUSE_NEW_DC
-IMPLEMENT_ABSTRACT_CLASS(wxGTKImplDC, wxImplDC)
-#else
-IMPLEMENT_ABSTRACT_CLASS(wxGTKImplDC, wxDCBase)
-#endif
+IMPLEMENT_ABSTRACT_CLASS(wxGTKDCImpl, wxDCImpl)
 
-#if wxUSE_NEW_DC
-wxGTKImplDC::wxGTKImplDC( wxDC *owner ) 
-   : wxImplDC( owner )
-#else
-wxDC::wxDC()
-#endif
+wxGTKDCImpl::wxGTKDCImpl( wxDC *owner ) 
+   : wxDCImpl( owner )
 {
     m_ok = FALSE;
 
@@ -37,11 +29,11 @@ wxDC::wxDC()
     m_brush = *wxWHITE_BRUSH;
 }
 
-wxGTKImplDC::~wxGTKImplDC()
+wxGTKDCImpl::~wxGTKDCImpl()
 {
 }
 
-void wxGTKImplDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
+void wxGTKDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
     m_clipping = TRUE;
     m_clipX1 = x;
@@ -54,7 +46,7 @@ void wxGTKImplDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCo
 // get DC capabilities
 // ---------------------------------------------------------------------------
 
-void wxGTKImplDC::DoGetSizeMM( int* width, int* height ) const
+void wxGTKDCImpl::DoGetSizeMM( int* width, int* height ) const
 {
     int w = 0;
     int h = 0;
@@ -64,7 +56,7 @@ void wxGTKImplDC::DoGetSizeMM( int* width, int* height ) const
 }
 
 // Resolution in pixels per logical inch
-wxSize wxGTKImplDC::GetPPI() const
+wxSize wxGTKDCImpl::GetPPI() const
 {
     // TODO (should probably be pure virtual)
     return wxSize(0, 0);

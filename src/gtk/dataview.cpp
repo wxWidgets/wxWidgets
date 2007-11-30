@@ -32,6 +32,8 @@
 #include "wx/listimpl.cpp"
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/dc.h"
+#include "wx/gtk/dcclient.h"
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -939,20 +941,12 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
     {
         wxRect renderrect( rect.x, rect.y, rect.width, rect.height );
         wxWindowDC* dc = (wxWindowDC*) cell->GetDC();
-#if wxUSE_NEW_DC
-        wxGTKWindowDCImpl *impldc = (wxGTKWindowDCImpl *) dc->GetImpl();
-        if (impldc->m_window == NULL)
+        wxWindowDCImpl *impl = (wxWindowDCImpl *) dc->GetImpl();
+        if (impl->m_gdkwindow == NULL)
         {
-            impldc->m_window = window;
-            impldc->SetUpDC();
+            impl->m_gdkwindow = window;
+            impl->SetUpDC();
         }
-#else
-        if (dc->m_window == NULL)
-        {
-            dc->m_window = window;
-            dc->SetUpDC();
-        }
-#endif
 
         int state = 0;
         if (flags & GTK_CELL_RENDERER_SELECTED)
@@ -1657,40 +1651,36 @@ bool wxDataViewToggleRenderer::GetValue( wxVariant &value ) const
 // wxDataViewCustomRenderer
 // ---------------------------------------------------------
 
-class wxDataViewCtrlDC: public wxWindowDC
+class wxDataViewCtrlDCImpl: public wxWindowDCImpl
 {
 public:
-    wxDataViewCtrlDC( wxDataViewCtrl *window )
-    {
-#if wxUSE_NEW_DC
-        wxGTKWindowDCImpl *impl = (wxGTKWindowDCImpl*) GetImpl();
-
+   wxDataViewCtrlDCImpl( wxDC *owner, wxDataViewCtrl *window ) :
+       wxWindowDCImpl( owner )
+   {
         GtkWidget *widget = window->m_treeview;
         // Set later
-        impl->m_window = NULL;
-
-        impl->m_context = window->GtkGetPangoDefaultContext();
-        impl->m_layout = pango_layout_new( impl->m_context );
-        impl->m_fontdesc = pango_font_description_copy( widget->style->font_desc );
-
-        impl->m_cmap = gtk_widget_get_colormap( widget ? widget : window->m_widget );
-
-#else
-        GtkWidget *widget = window->m_treeview;
-        // Set later
-        m_window = NULL;
+        m_gdkwindow = NULL;
+        
+        m_window = window;
 
         m_context = window->GtkGetPangoDefaultContext();
         m_layout = pango_layout_new( m_context );
         m_fontdesc = pango_font_description_copy( widget->style->font_desc );
 
         m_cmap = gtk_widget_get_colormap( widget ? widget : window->m_widget );
-#endif
-        // Set m_window later
+
+        // Set m_gdkwindow later
         // SetUpDC();
-        // m_owner = window;
     }
 };
+
+class wxDataViewCtrlDC: public wxWindowDC
+{
+public:
+    wxDataViewCtrlDC( wxDataViewCtrl *window )
+    { m_pimpl = new wxDataViewCtrlDCImpl( this, window ); }
+};
+    
 
 // ---------------------------------------------------------
 // wxDataViewCustomRenderer

@@ -33,6 +33,8 @@
     #include "wx/module.h"
 #endif
 
+#include "wx/gtk/dc.h"
+
 #include <gtk/gtk.h>
 
 // ----------------------------------------------------------------------------
@@ -282,8 +284,8 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
 
     GdkWindow* gdk_window = NULL;
 #if wxUSE_NEW_DC
-    wxImplDC *impl = dc.GetImpl();
-    wxGTKImplDC *gtk_impl = wxDynamicCast( impl, wxGTKImplDC );
+    wxDCImpl *impl = dc.GetImpl();
+    wxGTKDCImpl *gtk_impl = wxDynamicCast( impl, wxGTKDCImpl );
     if (gtk_impl)
         gdk_window = gtk_impl->GetGDKWindow();
 #else
@@ -329,8 +331,8 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
 
     GdkWindow* gdk_window = NULL;
 #if wxUSE_NEW_DC
-    wxImplDC *impl = dc.GetImpl();
-    wxGTKImplDC *gtk_impl = wxDynamicCast( impl, wxGTKImplDC );
+    wxDCImpl *impl = dc.GetImpl();
+    wxGTKDCImpl *gtk_impl = wxDynamicCast( impl, wxGTKDCImpl );
     if (gtk_impl)
         gdk_window = gtk_impl->GetGDKWindow();
 #else
@@ -416,8 +418,8 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
 
     GdkWindow* gdk_window = NULL;
 #if wxUSE_NEW_DC
-    wxImplDC *impl = dc.GetImpl();
-    wxGTKImplDC *gtk_impl = wxDynamicCast( impl, wxGTKImplDC );
+    wxDCImpl *impl = dc.GetImpl();
+    wxGTKDCImpl *gtk_impl = wxDynamicCast( impl, wxGTKDCImpl );
     if (gtk_impl)
         gdk_window = gtk_impl->GetGDKWindow();
 #else
@@ -484,8 +486,8 @@ wxRendererGTK::DrawDropArrow(wxWindow *WXUNUSED(win),
     // are derived from it) and use its m_window.
     GdkWindow* gdk_window = NULL;
 #if wxUSE_NEW_DC
-    wxImplDC *impl = dc.GetImpl();
-    wxGTKImplDC *gtk_impl = wxDynamicCast( impl, wxGTKImplDC );
+    wxDCImpl *impl = dc.GetImpl();
+    wxGTKDCImpl *gtk_impl = wxDynamicCast( impl, wxGTKDCImpl );
     if (gtk_impl)
         gdk_window = gtk_impl->GetGDKWindow();
 #else
@@ -554,8 +556,8 @@ wxRendererGTK::DrawCheckBox(wxWindow *WXUNUSED(win),
 
     GdkWindow* gdk_window = NULL;
 #if wxUSE_NEW_DC
-    wxImplDC *impl = dc.GetImpl();
-    wxGTKImplDC *gtk_impl = wxDynamicCast( impl, wxGTKImplDC );
+    wxDCImpl *impl = dc.GetImpl();
+    wxGTKDCImpl *gtk_impl = wxDynamicCast( impl, wxGTKDCImpl );
     if (gtk_impl)
         gdk_window = gtk_impl->GetGDKWindow();
 #else
@@ -600,8 +602,8 @@ wxRendererGTK::DrawPushButton(wxWindow *WXUNUSED(win),
 
     GdkWindow* gdk_window = NULL;
 #if wxUSE_NEW_DC
-    wxImplDC *impl = dc.GetImpl();
-    wxGTKImplDC *gtk_impl = wxDynamicCast( impl, wxGTKImplDC );
+    wxDCImpl *impl = dc.GetImpl();
+    wxGTKDCImpl *gtk_impl = wxDynamicCast( impl, wxGTKDCImpl );
     if (gtk_impl)
         gdk_window = gtk_impl->GetGDKWindow();
 #else
@@ -643,8 +645,8 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
 {
     GdkWindow* gdk_window = NULL;
 #if wxUSE_NEW_DC
-    wxImplDC *impl = dc.GetImpl();
-    wxGTKImplDC *gtk_impl = wxDynamicCast( impl, wxGTKImplDC );
+    wxDCImpl *impl = dc.GetImpl();
+    wxGTKDCImpl *gtk_impl = wxDynamicCast( impl, wxGTKDCImpl );
     if (gtk_impl)
         gdk_window = gtk_impl->GetGDKWindow();
 #else
@@ -700,8 +702,8 @@ void wxRendererGTK::DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, i
 {
     GdkWindow* gdk_window = NULL;
 #if wxUSE_NEW_DC
-    wxImplDC *impl = dc.GetImpl();
-    wxGTKImplDC *gtk_impl = wxDynamicCast( impl, wxGTKImplDC );
+    wxDCImpl *impl = dc.GetImpl();
+    wxGTKDCImpl *gtk_impl = wxDynamicCast( impl, wxGTKDCImpl );
     if (gtk_impl)
         gdk_window = gtk_impl->GetGDKWindow();
 #else

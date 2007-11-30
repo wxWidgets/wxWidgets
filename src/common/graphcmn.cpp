@@ -774,12 +774,11 @@ wxGraphicsContext* wxGraphicsContext::Create( const wxWindowDC& dc)
 {
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(dc);
 }
-#ifdef __WXMSW__
+
 wxGraphicsContext* wxGraphicsContext::Create( const wxMemoryDC& dc) 
 {
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(dc);
 }
-#endif
 
 wxGraphicsContext* wxGraphicsContext::CreateFromNative( void * context )
 {

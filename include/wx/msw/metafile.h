@@ -72,20 +72,13 @@ private:
     DECLARE_DYNAMIC_CLASS(wxMetafile)
 };
 
-class WXDLLEXPORT wxMetafileDC: public wxDC
+class WXDLLEXPORT wxMetafileDCImpl: public wxMSWDCImpl
 {
 public:
-    // Don't supply origin and extent
-    // Supply them to wxMakeMetaFilePlaceable instead.
-    wxMetafileDC(const wxString& file = wxEmptyString);
-
-    // Supply origin and extent (recommended).
-    // Then don't need to supply them to wxMakeMetaFilePlaceable.
+    wxMetafileDCImpl(const wxString& file = wxEmptyString);
     wxMetafileDC(const wxString& file, int xext, int yext, int xorg, int yorg);
+    virtual ~wxMetafileDCImpl();
 
-    virtual ~wxMetafileDC();
-
-    // Should be called at end of drawing
     virtual wxMetafile *Close();
     virtual void SetMapMode(int mode);
     virtual void DoGetTextExtent(const wxString& string,
@@ -107,8 +100,36 @@ protected:
     wxMetafile*   m_metaFile;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxMetafileDC)
+    DECLARE_CLASS(wxMetafileDCImpl)
+    DECLARE_NO_COPY_CLASS(wxMetafileDCImpl)
 };
+
+class WXDLLEXPORT wxMetafileDC: public wxDC
+{
+public:
+    // Don't supply origin and extent
+    // Supply them to wxMakeMetaFilePlaceable instead.
+    wxMetafileDC(const wxString& file);
+       { m_pimpl = new wxMetafileDCImpl( this, file ); }
+
+    // Supply origin and extent (recommended).
+    // Then don't need to supply them to wxMakeMetaFilePlaceable.
+    wxMetafileDC(const wxString& file, int xext, int yext, int xorg, int yorg)
+       { m_pimpl = new wxMetafileDCImpl( this, file, xext, yext, xorg, yorg ); }
+
+    wxMetafile *GetMetafile() const 
+       { return ((wxMetafileDCImpl*)m_pimpl)->GetMetaFile(); }
+       
+    wxMetafile *Close()
+       { return ((wxMetafileDCImpl*)m_pimpl)->Close(); }
+
+private:
+    DECLARE_CLASS(wxMetafileDC)
+    DECLARE_NO_COPY_CLASS(wxMetafileDC)
+};
+
+
+
 
 /*
  * Pass filename of existing non-placeable metafile, and bounding box.

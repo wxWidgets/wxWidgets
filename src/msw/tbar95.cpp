@@ -44,6 +44,7 @@
 #endif
 
 #include "wx/sysopt.h"
+#include "wx/dcclient.h"
 
 #include "wx/msw/private.h"
 
@@ -1543,7 +1544,11 @@ void wxToolBar::OnMouseEvent(wxMouseEvent& event)
 void wxToolBar::OnEraseBackground(wxEraseEvent& event)
 {
     RECT rect = wxGetClientRect(GetHwnd());
-    HDC hdc = GetHdcOf((*event.GetDC()));
+    
+    wxDC *dc = event.GetDC();
+    if (!dc) return;
+    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc->GetImpl();
+    HDC hdc = GetHdcOf(*impl);
 
     int majorVersion, minorVersion;
     wxGetOsVersion(& majorVersion, & minorVersion);
@@ -1775,8 +1780,9 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
                             r.right = clientSize.x;
                             r.top = 0;
                             r.bottom = clientSize.y;
-
-                            HRESULT hr = theme->DrawThemeBackground(hTheme, (HDC) dc.GetHDC(), 0, 0, & r, & clipRect);
+                            
+                            wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
+                            HRESULT hr = theme->DrawThemeBackground(hTheme, GetHdcOf(*impl), 0, 0, & r, & clipRect);
                             if ( hr == S_OK )
                                 haveRefreshed = true;
                         }

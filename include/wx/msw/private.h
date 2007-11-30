@@ -213,6 +213,11 @@ struct WinStruct : public T
 #include "wx/gdicmn.h"
 #include "wx/colour.h"
 
+#include "wx/msw/dc.h"
+#include "wx/msw/dcclient.h"
+#include "wx/msw/dcmemory.h"
+
+
 // make conversion from wxColour and COLORREF a bit less painful
 inline COLORREF wxColourToRGB(const wxColour& c)
 {
