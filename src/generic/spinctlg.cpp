@@ -319,6 +319,22 @@ void wxSpinCtrl::SetTextValue(int val)
 
     // and give focus to the control!
     // m_text->SetFocus();    Why???? TODO.
+
+#ifdef __WXCOCOA__
+    /*  It's sort of a hack to do this from here but the idea is that if the
+        user has clicked on us, which is the main reason this method is called,
+        then focus probably ought to go to the text control since clicking on
+        a text control usually gives it focus.
+
+        However, if the focus is already on us (i.e. the user has turned on
+        the ability to tab to controls) then we don't want to drop focus.
+        So we only set focus if we would steal it away from a different
+        control, not if we would steal it away from ourself.
+     */
+    wxWindow *currentFocusedWindow = wxWindow::FindFocus();
+    if(currentFocusedWindow != this && currentFocusedWindow != m_text)
+        m_text->SetFocus();
+#endif
 }
 
 void wxSpinCtrl::SetValue(int val)
