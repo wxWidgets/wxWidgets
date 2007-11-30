@@ -101,11 +101,13 @@ public:
     wxUint16 MacGetThemeFontID() const ;
 
     // Returns an ATSUStyle not ATSUStyle*
-    void* MacGetATSUStyle() const ; 
 #endif
 #if wxMAC_USE_CORE_TEXT
     const void * MacGetCTFont() const;
     const void * MacGetCTFontDescriptor() const;
+#endif
+#if wxMAC_USE_CORE_TEXT || wxMAC_USE_ATSU_TEXT
+    void* MacGetATSUStyle() const ; 
 #endif
     
 private:
