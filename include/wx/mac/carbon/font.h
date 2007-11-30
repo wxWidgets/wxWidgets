@@ -50,9 +50,11 @@ public:
 
     bool Create(const wxNativeFontInfo& info);
 
-    bool MacCreateThemeFont( wxUint16 themeFontID ) ;
+    bool MacCreateFromThemeFont( wxUint16 themeFontID ) ;
 #if wxMAC_USE_CORE_TEXT
-	bool MacCreateUIFont( wxUint32 coreTextFontType );
+	bool MacCreateFromUIFont( wxUint32 coreTextFontType );
+    bool MacCreateFromCTFontDescriptor( const void * ctFontDescriptor, int pointSize = 0 );
+    bool MacCreateFromCTFont( const void * ctFont );
 #endif
     
     virtual ~wxFont();
@@ -103,6 +105,7 @@ public:
 #endif
 #if wxMAC_USE_CORE_TEXT
     const void * MacGetCTFont() const;
+    const void * MacGetCTFontDescriptor() const;
 #endif
     
 private:
