@@ -82,12 +82,7 @@ public:
     virtual wxSize GetPPI() const;
 
     virtual void SetMapMode(int mode);
-    virtual void SetUserScale(double x, double y);
 
-    virtual void SetLogicalScale(double x, double y);
-    virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
-    virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
-    virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
     virtual void SetLogicalFunction(int function);
 
     virtual void SetTextForeground(const wxColour& colour);
