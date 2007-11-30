@@ -52,19 +52,19 @@ static inline double DegToRad(double deg)
 
 IMPLEMENT_DYNAMIC_CLASS(wxGCDC, wxDC)
 
-wxGCDC::wxGCDC(const wxWindowDC& dc)
+wxGCDC::wxGCDC(const wxWindowDC& dc) :
+  wxDC( new wxGCDCImpl( this, dc ) )
 {
-    m_pimpl = new wxGCDCImpl( this, dc );
 }
 
-wxGCDC::wxGCDC( const wxMemoryDC& dc)
+wxGCDC::wxGCDC( const wxMemoryDC& dc) :
+  wxDC( new wxGCDCImpl( this, dc ) )
 {
-    m_pimpl = new wxGCDCImpl( this, dc );
 }
 
-wxGCDC::wxGCDC()
+wxGCDC::wxGCDC() :
+  wxDC( new wxGCDCImpl( this ) )
 {
-    m_pimpl = new wxGCDCImpl( this );
 }
 
 wxGraphicsContext* wxGCDC::GetGraphicsContext()
