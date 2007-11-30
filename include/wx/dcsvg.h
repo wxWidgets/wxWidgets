@@ -203,10 +203,12 @@ private:
 class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
 {
 public:
-    wxSVGFileDC( const wxString &filename, 
-                 int width=320, int height=240, double dpi=72.0 )
+    wxSVGFileDC(const wxString& filename, 
+                int width = 320,
+                int height = 240,
+                double dpi = 72.0)
+        : wxDC(new wxSVGFileDCImpl(this, filename, width, height, dpi))
     { 
-        m_pimpl = new wxSVGFileDCImpl( this, filename, width, height, dpi );
     }
 };
 

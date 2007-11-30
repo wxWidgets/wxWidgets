@@ -71,8 +71,8 @@ class WXDLLEXPORT wxPrinterDCFromHDC: public wxPrinterDC
 {
 public:
     wxPrinterDCFromHDC( WXHDC theDC )
+        : wxPrinterDC(new wxPrinterDCImpl(this, theDC))
     {
-        m_pimpl = new wxPrinterDCImpl( this, theDC );
     }
 };
 

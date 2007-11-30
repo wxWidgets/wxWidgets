@@ -27,10 +27,12 @@ class WXDLLIMPEXP_CORE wxPrinterDC : public wxDC
 public:
     wxPrinterDC();
     wxPrinterDC(const wxPrintData& data);
-    virtual ~wxPrinterDC();
 
     wxRect GetPaperRect();
     int GetResolution();
+
+protected:
+    wxPrinterDC(wxDCImpl *impl) : wxDC(impl) { }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxPrinterDC)

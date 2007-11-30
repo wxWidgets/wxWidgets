@@ -2,8 +2,6 @@
 // Name:        wx/dcclient.h
 // Purpose:     wxClientDC base header
 // Author:      Julian Smart
-// Modified by:
-// Created:
 // Copyright:   (c) Julian Smart
 // RCS-ID:      $Id$
 // Licence:     wxWindows Licence
@@ -21,11 +19,13 @@
 class WXDLLIMPEXP_CORE wxWindowDC : public wxDC
 {
 public:
-    wxWindowDC();
-    wxWindowDC( wxWindow *win );
+    wxWindowDC(wxWindow *win);
+
+protected:
+    wxWindowDC(wxDCImpl *impl) : wxDC(impl) { }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxWindowDC)
+    DECLARE_ABSTRACT_CLASS(wxWindowDC)
 };
 
 //-----------------------------------------------------------------------------
@@ -35,11 +35,13 @@ private:
 class WXDLLIMPEXP_CORE wxClientDC : public wxWindowDC
 {
 public:
-    wxClientDC();
-    wxClientDC( wxWindow *win );
+    wxClientDC(wxWindow *win);
+
+protected:
+    wxClientDC(wxDCImpl *impl) : wxWindowDC(impl) { }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxClientDC)
+    DECLARE_ABSTRACT_CLASS(wxClientDC)
 };
 
 //-----------------------------------------------------------------------------
@@ -49,12 +51,13 @@ private:
 class WXDLLIMPEXP_CORE wxPaintDC : public wxClientDC
 {
 public:
-    wxPaintDC();
-    wxPaintDC( wxWindow *win );
+    wxPaintDC(wxWindow *win);
+
+protected:
+    wxPaintDC(wxDCImpl *impl) : wxClientDC(impl) { }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPaintDC)
+    DECLARE_ABSTRACT_CLASS(wxPaintDC)
 };
 
-#endif
-    // _WX_DCCLIENT_H_BASE_
+#endif // _WX_DCCLIENT_H_BASE_

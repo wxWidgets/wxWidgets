@@ -73,7 +73,7 @@ void wxDCFactory::SetDCFactory( wxDCFactory *factory )
     wxDCFactory::m_factory = factory;
 }
 
-wxDCFactory *wxDCFactory::GetFactory()
+wxDCFactory *wxDCFactory::Get()
 {
     if (!wxDCFactory::m_factory)
         wxDCFactory::m_factory = new wxNativeDCFactory;
@@ -86,12 +86,12 @@ wxDCFactory *wxDCFactory::GetFactory()
 //-----------------------------------------------------------------------------
 
 wxDCImpl* wxNativeDCFactory::CreateWindowDC( wxWindowDC *owner )
-{ 
+{
     return new wxWindowDCImpl( owner );
 }
 
 wxDCImpl* wxNativeDCFactory::CreateWindowDC( wxWindowDC *owner, wxWindow *window )
-{ 
+{
     return new wxWindowDCImpl( owner, window );
 }
 
@@ -147,32 +147,22 @@ wxDCImpl *wxNativeDCFactory::CreatePrinterDC( wxPrinterDC *owner, const wxPrintD
 // wxWindowDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
+IMPLEMENT_ABSTRACT_CLASS(wxWindowDC, wxDC)
 
-wxWindowDC::wxWindowDC()
+wxWindowDC::wxWindowDC(wxWindow *win)
+          : wxDC(wxDCFactory::Get()->CreateWindowDC(this, win))
 {
-}
-
-wxWindowDC::wxWindowDC( wxWindow *win )
-{
-    wxDCFactory *factory = wxDCFactory::GetFactory();
-    m_pimpl = factory->CreateWindowDC( this, win );
 }
 
 //-----------------------------------------------------------------------------
 // wxClientDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
+IMPLEMENT_ABSTRACT_CLASS(wxClientDC, wxWindowDC)
 
-wxClientDC::wxClientDC()
+wxClientDC::wxClientDC(wxWindow *win)
+          : wxWindowDC(wxDCFactory::Get()->CreateClientDC(this, win))
 {
-}
-
-wxClientDC::wxClientDC( wxWindow *win )
-{
-    wxDCFactory *factory = wxDCFactory::GetFactory();
-    m_pimpl = factory->CreateClientDC( this, win );
 }
 
 //-----------------------------------------------------------------------------
@@ -182,21 +172,18 @@ wxClientDC::wxClientDC( wxWindow *win )
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
 
 wxMemoryDC::wxMemoryDC()
+          : wxDC(wxDCFactory::Get()->CreateMemoryDC(this))
 {
-    wxDCFactory *factory = wxDCFactory::GetFactory();
-    m_pimpl = factory->CreateMemoryDC( this );
 }
 
-wxMemoryDC::wxMemoryDC( wxBitmap& bitmap )
+wxMemoryDC::wxMemoryDC(wxBitmap& bitmap)
+          : wxDC(wxDCFactory::Get()->CreateMemoryDC(this, bitmap))
 {
-    wxDCFactory *factory = wxDCFactory::GetFactory();
-    m_pimpl = factory->CreateMemoryDC( this, bitmap );
 }
 
-wxMemoryDC::wxMemoryDC( wxDC *dc )
+wxMemoryDC::wxMemoryDC(wxDC *dc)
+          : wxDC(wxDCFactory::Get()->CreateMemoryDC(this, dc))
 {
-    wxDCFactory *factory = wxDCFactory::GetFactory();
-    m_pimpl = factory->CreateMemoryDC( this, dc );
 }
 
 void wxMemoryDC::SelectObject(wxBitmap& bmp)
@@ -225,21 +212,16 @@ wxBitmap& wxMemoryDC::GetSelectedBitmap()
     return GetImpl()->GetSelectedBitmap();
 }
 
-    
+
 //-----------------------------------------------------------------------------
 // wxPaintDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxClientDC)
+IMPLEMENT_ABSTRACT_CLASS(wxPaintDC, wxClientDC)
 
-wxPaintDC::wxPaintDC()
+wxPaintDC::wxPaintDC(wxWindow *win)
+         : wxClientDC(wxDCFactory::Get()->CreatePaintDC(this, win))
 {
-}
-
-wxPaintDC::wxPaintDC( wxWindow *win )
-{
-    wxDCFactory *factory = wxDCFactory::GetFactory();
-    m_pimpl = factory->CreatePaintDC( this, win );
 }
 
 //-----------------------------------------------------------------------------
@@ -249,9 +231,8 @@ wxPaintDC::wxPaintDC( wxWindow *win )
 IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
 
 wxScreenDC::wxScreenDC()
+          : wxDC(wxDCFactory::Get()->CreateScreenDC(this))
 {
-    wxDCFactory *factory = wxDCFactory::GetFactory();
-    m_pimpl = factory->CreateScreenDC( this );
 }
 
 //-----------------------------------------------------------------------------
@@ -263,19 +244,12 @@ wxScreenDC::wxScreenDC()
 IMPLEMENT_DYNAMIC_CLASS(wxPrinterDC, wxDC)
 
 wxPrinterDC::wxPrinterDC()
+           : wxDC(wxDCFactory::Get()->CreatePrinterDC(this, wxPrintData()))
 {
-    wxPrintData data;  // Does this make sense?
-    wxDCFactory *factory = wxDCFactory::GetFactory();
-    m_pimpl = factory->CreatePrinterDC( this, data );
 }
 
-wxPrinterDC::wxPrinterDC( const wxPrintData &data )
-{
-    wxDCFactory *factory = wxDCFactory::GetFactory();
-    m_pimpl = factory->CreatePrinterDC( this, data );
-}
-
-wxPrinterDC::~wxPrinterDC()
+wxPrinterDC::wxPrinterDC(const wxPrintData& data)
+           : wxDC(wxDCFactory::Get()->CreatePrinterDC(this, data))
 {
 }
 
@@ -289,7 +263,7 @@ int wxPrinterDC::GetResolution()
     return GetImpl()->GetResolution();
 }
 
-#endif
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
 //-----------------------------------------------------------------------------
 // wxDCImpl
@@ -333,7 +307,7 @@ wxDCImpl::wxDCImpl( wxDC *owner )
                     (double)wxGetDisplaySizeMM().GetWidth();
     m_mm_to_pix_y = (double)wxGetDisplaySize().GetHeight() /
                     (double)wxGetDisplaySizeMM().GetHeight();
-                    
+
     ResetBoundingBox();
     ResetClipping();
 }
@@ -1288,7 +1262,7 @@ void wxDC::GetTextExtent(const wxString& string,
             *externalLeading = externalLeading2;
     }
 
-void wxDC::GetLogicalOrigin(long *x, long *y) const 
+void wxDC::GetLogicalOrigin(long *x, long *y) const
     {
         wxCoord x2, y2;
         m_pimpl->DoGetLogicalOrigin(&x2, &y2);
@@ -1298,7 +1272,7 @@ void wxDC::GetLogicalOrigin(long *x, long *y) const
             *y = y2;
     }
 
-void wxDC::GetDeviceOrigin(long *x, long *y) const 
+void wxDC::GetDeviceOrigin(long *x, long *y) const
     {
         wxCoord x2, y2;
         m_pimpl->DoGetDeviceOrigin(&x2, &y2);
@@ -1306,9 +1280,9 @@ void wxDC::GetDeviceOrigin(long *x, long *y) const
             *x = x2;
         if ( y )
             *y = y2;
-    } 
-    
-void wxDC::GetClippingBox(long *x, long *y, long *w, long *h) const 
+    }
+
+void wxDC::GetClippingBox(long *x, long *y, long *w, long *h) const
     {
         wxCoord xx,yy,ww,hh;
         m_pimpl->DoGetClippingBox(&xx, &yy, &ww, &hh);
@@ -1316,6 +1290,6 @@ void wxDC::GetClippingBox(long *x, long *y, long *w, long *h) const
         if (y) *y = yy;
         if (w) *w = ww;
         if (h) *h = hh;
-    } 
-    
+    }
+
 #endif  // WXWIN_COMPATIBILITY_2_8

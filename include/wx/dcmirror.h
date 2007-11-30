@@ -18,7 +18,7 @@
 // wxMirrorDC allows to write the same code for horz/vertical layout
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMirrorDC : public wxDC
+class WXDLLEXPORT wxMirrorDCImpl : public wxDCImpl
 {
 public:
     // constructs a mirror DC associated with the given real DC
@@ -26,13 +26,12 @@ public:
     // if mirror parameter is true, all vertical and horizontal coordinates are
     // exchanged, otherwise this class behaves in exactly the same way as a
     // plain DC
-    //
-    // the cast to wxMirrorDC is a dirty hack done to allow us to call the
-    // protected methods of wxDCBase directly in our code below, without it it
-    // would be impossible (this is correct from C++ point of view but doesn't
-    // make any sense in this particular situation)
-    wxMirrorDC(wxDC& dc, bool mirror) : m_dc((wxMirrorDC&)dc)
-        { m_mirror = mirror; }
+    wxMirrorDCImpl(wxDC *owner, wxDCImpl& dc, bool mirror)
+        : wxDCImpl(owner),
+          m_dc(dc)
+    {
+        m_mirror = mirror;
+    }
 
     // wxDCBase operations
     virtual void Clear() { m_dc.Clear(); }
@@ -53,8 +52,7 @@ public:
     virtual bool CanGetTextExtent() const { return m_dc.CanGetTextExtent(); }
     virtual int GetDepth() const { return m_dc.GetDepth(); }
     virtual wxSize GetPPI() const { return m_dc.GetPPI(); }
-    virtual bool Ok() const { return IsOk(); }
-    virtual bool IsOk() const { return m_dc.Ok(); }
+    virtual bool IsOk() const { return m_dc.IsOk(); }
     virtual void SetMapMode(int mode) { m_dc.SetMapMode(mode); }
     virtual void SetUserScale(double x, double y)
         { m_dc.SetUserScale(GetX(x, y), GetY(x, y)); }
@@ -67,12 +65,6 @@ public:
                                   GetY(xLeftRight, yBottomUp)); }
     virtual void SetLogicalFunction(int function)
         { m_dc.SetLogicalFunction(function); }
-
-    // helper functions which may be useful for the users of this class
-    wxSize Reflect(const wxSize& sizeOrig)
-    {
-        return m_mirror ? wxSize(sizeOrig.y, sizeOrig.x) : sizeOrig;
-    }
 
 protected:
     // returns x and y if not mirroring or y and x if mirroring
@@ -276,8 +268,29 @@ protected:
     }
 
 private:
-    wxMirrorDC& m_dc;
+    wxDCImpl& m_dc;
 
+    bool m_mirror;
+
+    DECLARE_NO_COPY_CLASS(wxMirrorDCImpl)
+};
+
+class WXDLLEXPORT wxMirrorDC : public wxDC
+{
+public:
+    wxMirrorDC(wxDC& dc, bool mirror)
+        : wxDC(new wxMirrorDCImpl(this, *dc.GetImpl(), mirror))
+    {
+        m_mirror = mirror;
+    }
+
+    // helper functions which may be useful for the users of this class
+    wxSize Reflect(const wxSize& sizeOrig)
+    {
+        return m_mirror ? wxSize(sizeOrig.y, sizeOrig.x) : sizeOrig;
+    }
+
+private:
     bool m_mirror;
 
     DECLARE_NO_COPY_CLASS(wxMirrorDC)

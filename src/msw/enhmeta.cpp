@@ -142,7 +142,7 @@ bool wxEnhMetaFile::Play(wxDC *dc, wxRect *rectBound)
     wxMSWDCImpl *msw_impl = wxDynamicCast( impl, wxMSWDCImpl );
     if (!msw_impl)
         return false;
-        
+
     if ( !::PlayEnhMetaFile(GetHdcOf(*msw_impl), GetEMF(), &rect) )
     {
         wxLogLastError(_T("PlayEnhMetaFile"));
@@ -200,7 +200,7 @@ bool wxEnhMetaFile::SetClipboard(int WXUNUSED(width), int WXUNUSED(height))
 class wxEnhMetaFileDCImpl : public wxMSWDCImpl
 {
 public:
-    wxEnhMetaFileDCImpl( wxEnhMetaFileDC *owner, 
+    wxEnhMetaFileDCImpl( wxEnhMetaFileDC *owner,
                          const wxString& filename, int width, int height,
                          const wxString& description );
     virtual ~wxEnhMetaFileDCImpl();
@@ -223,8 +223,11 @@ IMPLEMENT_ABSTRACT_CLASS(wxEnhMetaFileDC, wxDC)
 wxEnhMetaFileDC::wxEnhMetaFileDC(const wxString& filename,
                                  int width, int height,
                                  const wxString& description)
+               : wxDC(new wxEnhMetaFileDCImpl(this,
+                                              filename,
+                                              width, height,
+                                              description))
 {
-    m_pimpl = new wxEnhMetaFileDCImpl( this, filename, width, height, description );
 }
 
 

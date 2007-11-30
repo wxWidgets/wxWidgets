@@ -86,7 +86,7 @@ public:
     virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
     virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
-    
+
     virtual void SetLogicalFunction(int function);
 
     // implementation from now on
@@ -242,8 +242,11 @@ protected:
     virtual void DoDrawPolyPolygon(int n, int count[], wxPoint points[],
                                    wxCoord xoffset, wxCoord yoffset,
                                    int fillStyle = wxODDEVEN_RULE);
-    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const 
-    { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmap(*subrect); }
+    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const
+    {
+        return subrect == NULL ? GetSelectedBitmap()
+                               : GetSelectedBitmap().GetSubBitmap(*subrect);
+    }
 
 
 #if wxUSE_PALETTE
@@ -314,7 +317,7 @@ protected:
 // only/mainly)
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDCTempImpl: public wxMSWDCImpl
+class WXDLLEXPORT wxDCTempImpl : public wxMSWDCImpl
 {
 public:
     // construct a temporary DC with the specified HDC and size (it should be
@@ -351,17 +354,14 @@ private:
     DECLARE_NO_COPY_CLASS(wxDCTempImpl)
 };
 
-class WXDLLEXPORT wxDCTemp: public wxDC
+class WXDLLEXPORT wxDCTemp : public wxDC
 {
 public:
-    wxDCTemp( WXHDC hdc, const wxSize& size = wxDefaultSize )
+    wxDCTemp(WXHDC hdc, const wxSize& size = wxDefaultSize)
+        : wxDC(new wxDCTempImpl(this, hdc, size))
     {
-        m_pimpl = new wxDCTempImpl( this, hdc, size );
     }
-
 };
-
-
 
 #endif // _WX_MSW_DC_H_
 

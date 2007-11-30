@@ -90,7 +90,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner ) :
 {
 }
 
-wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) : 
+wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
    wxMSWDCImpl( owner )
 {
     wxCHECK_RET( window, _T("invalid window in wxWindowDCImpl") );
@@ -329,27 +329,25 @@ class wxPaintDCExImpl: public wxPaintDCImpl
 public:
     wxPaintDCExImpl( wxDC *owner, wxWindow *window, WXHDC dc );
     ~wxPaintDCExImpl();
-    
+
     int m_saveState;
 };
 
 
 IMPLEMENT_ABSTRACT_CLASS(wxPaintDCEx,wxPaintDC)
 
-wxPaintDCEx::wxPaintDCEx( wxWindow *window, WXHDC dc )
+wxPaintDCEx::wxPaintDCEx(wxWindow *window, WXHDC dc)
+           : wxPaintDC(new wxPaintDCExImpl(this, window, dc))
 {
-    m_pimpl = new wxPaintDCExImpl( this, window, dc );
 }
 
-
-
-wxPaintDCExImpl::wxPaintDCExImpl( wxDC *owner, wxWindow *window, WXHDC dc ) :
-    wxPaintDCImpl( owner )
+wxPaintDCExImpl::wxPaintDCExImpl(wxDC *owner, wxWindow *window, WXHDC dc)
+               : wxPaintDCImpl( owner )
 {
         wxCHECK_RET( dc, wxT("wxPaintDCEx requires an existing device context") );
 
         m_saveState = 0;
-        
+
         m_window = window;
 
         wxPaintDCInfo *info = FindInCache();
