@@ -34,6 +34,9 @@
 // implementation
 // ============================================================================
 
+IMPLEMENT_DYNAMIC_CLASS(wxBufferedDC,wxMemoryDC)
+IMPLEMENT_ABSTRACT_CLASS(wxBufferedPaintDC,wxBufferedDC)
+
 // ----------------------------------------------------------------------------
 // wxSharedDCBufferManager: helper class maintaining backing store bitmap
 // ----------------------------------------------------------------------------
