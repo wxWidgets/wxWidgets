@@ -136,11 +136,13 @@ wxDCImpl* wxNativeDCFactory::CreateScreenDC( wxScreenDC *owner )
     return new wxScreenDCImpl( owner );
 }
 
+#if wxUSE_PRINTING_ARCHITECTURE
 wxDCImpl *wxNativeDCFactory::CreatePrinterDC( wxPrinterDC *owner, const wxPrintData &data )
 {
     wxPrintFactory *factory = wxPrintFactory::GetFactory();
     return factory->CreatePrinterDCImpl( owner, data );
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // wxWindowDC
@@ -257,6 +259,8 @@ wxScreenDC::wxScreenDC()
 // wxPrinterDC
 //-----------------------------------------------------------------------------
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 IMPLEMENT_DYNAMIC_CLASS(wxPrinterDC, wxDC)
 
 wxPrinterDC::wxPrinterDC()
@@ -286,6 +290,7 @@ int wxPrinterDC::GetResolution()
     return GetImpl()->GetResolution();
 }
 
+#endif
 
 //-----------------------------------------------------------------------------
 // wxDCImpl

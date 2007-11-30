@@ -125,7 +125,9 @@ public:
     virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner, wxBitmap &bitmap ) = 0;
     virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner, wxDC *dc ) = 0;
     virtual wxDCImpl* CreateScreenDC( wxScreenDC *owner ) = 0;
+#if wxUSE_PRINTING_ARCHITECTURE
     virtual wxDCImpl* CreatePrinterDC( wxPrinterDC *owner, const wxPrintData &data  ) = 0;
+#endif
     
     static void SetDCFactory( wxDCFactory *factory );
     static wxDCFactory *GetFactory();
@@ -152,7 +154,9 @@ public:
     virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner, wxBitmap &bitmap );
     virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner, wxDC *dc );
     virtual wxDCImpl* CreateScreenDC( wxScreenDC *owner );
+#if wxUSE_PRINTING_ARCHITECTURE
     virtual wxDCImpl* CreatePrinterDC( wxPrinterDC *owner, const wxPrintData &data  );
+#endif
 };
 
 //-----------------------------------------------------------------------------
