@@ -56,6 +56,12 @@
 #include "wx/mac/dcscreen.h"
 #endif
 
+#ifdef __WXX11__
+#include "wx/x11/dcclient.h"
+#include "wx/x11/dcmemory.h"
+#include "wx/x11/dcscreen.h"
+#endif
+
 //----------------------------------------------------------------------------
 // wxDCFactory
 //----------------------------------------------------------------------------
