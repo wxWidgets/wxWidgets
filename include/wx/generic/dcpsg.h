@@ -27,8 +27,6 @@
 //-----------------------------------------------------------------------------
 
 
-#if wxUSE_NEW_DC
-
 class WXDLLEXPORT wxPostScriptDC : public wxDC
 {
 public:
@@ -36,33 +34,19 @@ public:
 
     // Recommended constructor
     wxPostScriptDC(const wxPrintData& printData);
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxPostScriptDC)
 };
 
-#endif
-
-#if wxUSE_NEW_DC
 class WXDLLEXPORT wxPostScriptDCImpl : public wxDCImpl
-#else
-#define wxPostScriptDCImpl wxPostScriptDC
-class WXDLLEXPORT wxPostScriptDC : public wxDC
-#endif
 {
 public:
-#if wxUSE_NEW_DC
     wxPostScriptDCImpl( wxPrinterDC *owner );
     wxPostScriptDCImpl( wxPrinterDC *owner, const wxPrintData& data );
     wxPostScriptDCImpl( wxPostScriptDC *owner );
     wxPostScriptDCImpl( wxPostScriptDC *owner, const wxPrintData& data );
-#else
-    wxPostScriptDC();
 
-    // Recommended constructor
-    wxPostScriptDC(const wxPrintData& printData);
-#endif
-    
     void Init();
 
     virtual ~wxPostScriptDCImpl();
@@ -93,18 +77,6 @@ public:
     // Resolution in pixels per logical inch
     wxSize GetPPI() const;
 
-#if wxUSE_NEW_DC
-#else
-    // these need to be overridden as wxPostscriptDC inherits
-    // from the platform dependent wxDC and this we'd call
-    // e.g. wxMSW specific code here.
-    virtual void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
-    virtual void SetMapMode(int mode);
-    virtual void SetUserScale(double x, double y);
-    virtual void SetLogicalScale(double x, double y);
-    virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
-    virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
-#endif
     virtual void ComputeScaleAndOrigin();
 
     void SetBackgroundMode(int WXUNUSED(mode)) { }
@@ -116,9 +88,9 @@ public:
     virtual int GetDepth() const { return 24; }
 
     void PsPrint( const wxString& psdata );
-    
+
     // Overrridden for wxPrinterDC Impl
-    
+
     virtual int GetResolution();
     virtual wxRect GetPaperRect();
 

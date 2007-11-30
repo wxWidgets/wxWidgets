@@ -236,22 +236,17 @@ static char wxPostScriptHeaderReencodeISO2[] =
 //-------------------------------------------------------------------------------
 
 
-#if wxUSE_NEW_DC
-
 IMPLEMENT_DYNAMIC_CLASS(wxPostScriptDC, wxDC)
 
 wxPostScriptDC::wxPostScriptDC()
+              : wxDC(new wxPostScriptDCImpl(this))
 {
-    m_pimpl = new wxPostScriptDCImpl( this );
 }
 
 wxPostScriptDC::wxPostScriptDC(const wxPrintData& printData)
+              : wxDC(new wxPostScriptDCImpl(this, printData))
 {
-    m_pimpl = new wxPostScriptDCImpl( this, printData );
 }
-
-#endif
-
 
 // conversion
 static const double RAD2DEG  = 180.0 / M_PI;
@@ -267,22 +262,17 @@ static const double DEV2PS = 72.0 / 600.0;
 #define YLOG2DEVREL(x)  ((double)(LogicalToDeviceYRel(x)) * DEV2PS)
 
 
-#if wxUSE_NEW_DC
 IMPLEMENT_ABSTRACT_CLASS(wxPostScriptDCImpl, wxDCImpl)
-#else
-IMPLEMENT_ABSTRACT_CLASS(wxPostScriptDC, wxDC)
-#endif
 
 //-------------------------------------------------------------------------------
 
-#if wxUSE_NEW_DC
 wxPostScriptDCImpl::wxPostScriptDCImpl( wxPostScriptDC *owner ) :
    wxDCImpl( owner )
 {
     Init();
 
     m_pageHeight = 842 * PS2DEV;
-    
+
     m_ok = true;
 }
 
@@ -290,39 +280,30 @@ wxPostScriptDCImpl::wxPostScriptDCImpl( wxPostScriptDC *owner, const wxPrintData
    wxDCImpl( owner )
 {
     Init();
-    
+
     // this calculates m_pageHeight required for
     // taking the inverted Y axis into account
     SetPrintData( data );
 
     m_ok = true;
 }
-#endif
 
 
-#if wxUSE_NEW_DC
 wxPostScriptDCImpl::wxPostScriptDCImpl( wxPrinterDC *owner ) :
    wxDCImpl( owner )
-#else
-wxPostScriptDC::wxPostScriptDC()
-#endif
 {
     Init();
 
     m_pageHeight = 842 * PS2DEV;
-    
+
     m_ok = true;
 }
 
-#if wxUSE_NEW_DC
 wxPostScriptDCImpl::wxPostScriptDCImpl( wxPrinterDC *owner, const wxPrintData& data ) :
    wxDCImpl( owner )
-#else
-wxPostScriptDC::wxPostScriptDC( const wxPrintData& data )
-#endif
 {
     Init();
-    
+
     // this calculates m_pageHeight required for
     // taking the inverted Y axis into account
     SetPrintData( data );
@@ -381,14 +362,10 @@ void wxPostScriptDCImpl::DoSetClippingRegion (wxCoord x, wxCoord y, wxCoord w, w
     if (m_clipping)
         DestroyClippingRegion();
 
-#if wxUSE_NEW_DC
     m_clipX1 = x;
     m_clipY1 = y;
     m_clipX2 = x + w;
     m_clipY2 = y + h;
-#else
-    wxDC::DoSetClippingRegion(x, y, w, h);
-#endif
 
     m_clipping = true;
 
@@ -419,11 +396,7 @@ void wxPostScriptDCImpl::DestroyClippingRegion()
         PsPrint( "grestore\n" );
     }
 
-#if wxUSE_NEW_DC
     wxDCImpl::DestroyClippingRegion();
-#else
-    wxDC::DestroyClippingRegion();
-#endif
 }
 
 void wxPostScriptDCImpl::Clear()
@@ -1649,48 +1622,11 @@ void wxPostScriptDCImpl::SetPrintData(const wxPrintData& data)
         m_pageHeight = h * PS2DEV;
 }
 
-#if wxUSE_NEW_DC
-#else
-void wxPostScriptDCImpl::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
-{
-    wxDCBase::SetAxisOrientation(xLeftRight,yBottomUp);
-}
-
-void wxPostScriptDCImpl::SetMapMode(int mode)
-{
-    wxDCBase::SetMapMode(mode);
-}
-
-void wxPostScriptDCImpl::SetUserScale(double x, double y)
-{
-    wxDCBase::SetUserScale(x,y);
-}
-
-void wxPostScriptDCImpl::SetLogicalScale(double x, double y)
-{
-    wxDCBase::SetLogicalScale(x,y);
-}
-
-void wxPostScriptDCImpl::SetLogicalOrigin(wxCoord x, wxCoord y)
-{
-    wxDCBase::SetLogicalOrigin(x,y);
-}
-
-void wxPostScriptDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
-{
-    wxDCBase::SetDeviceOrigin(x,y);
-}
-#endif
-
 void wxPostScriptDCImpl::ComputeScaleAndOrigin()
 {
     const wxRealPoint origScale(m_scaleX, m_scaleY);
 
-#if wxUSE_NEW_DC
     wxDCImpl::ComputeScaleAndOrigin();
-#else
-    wxDC::ComputeScaleAndOrigin();
-#endif
 
     // If scale has changed call SetPen to recalulate the line width
     // and SetFont to recalculate font size
