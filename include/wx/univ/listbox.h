@@ -99,13 +99,10 @@ public:
     virtual void DoClear();
     virtual void DoDeleteOneItem(unsigned int n);
 
-    virtual unsigned int GetCount() const
-        { return (unsigned int)m_strings->GetCount(); }
-    virtual wxString GetString(unsigned int n) const
-        { return m_strings->Item(n); }
+    virtual unsigned int GetCount() const;
+    virtual wxString GetString(unsigned int n) const;
     virtual void SetString(unsigned int n, const wxString& s);
-    virtual int FindString(const wxString& s, bool bCase = false) const
-        { return m_strings->Index(s, bCase); }
+    virtual int FindString(const wxString& s, bool bCase = false) const;
 
     virtual bool IsSelected(int n) const
         { return m_selections.Index(n) != wxNOT_FOUND; }
@@ -249,7 +246,11 @@ protected:
 
     // the array containing all items (it is sorted if the listbox has
     // wxLB_SORT style)
-    wxArrayString* m_strings;
+    union
+    {
+        wxArrayString *unsorted;
+        wxSortedArrayString *sorted;
+    } m_strings;
 
     // this array contains the indices of the selected items (for the single
     // selection listboxes only the first element of it is used and contains

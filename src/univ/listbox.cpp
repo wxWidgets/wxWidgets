@@ -115,7 +115,7 @@ void wxListBox::Init()
     m_maxWidth = 0;
     m_scrollRangeY = 0;
     m_maxWidthItem = -1;
-    m_strings = NULL;
+    m_strings.unsorted = NULL;
 
     // no items hence no current item
     m_current = -1;
@@ -192,7 +192,10 @@ bool wxListBox::Create(wxWindow *parent,
                             validator, name) )
         return false;
 
-    m_strings = IsSorted() ? new wxSortedArrayString : new wxArrayString;
+    if ( IsSorted() )
+        m_strings.sorted = new wxSortedArrayString;
+    else
+        m_strings.unsorted = new wxArrayString;
 
     Set(n, choices);
 
@@ -208,9 +211,34 @@ wxListBox::~wxListBox()
     // call this just to free the client data -- and avoid leaking memory
     DoClear();
 
-    delete m_strings;
+    if ( IsSorted() )
+        delete m_strings.sorted;
+    else
+        delete m_strings.unsorted;
 
-    m_strings = NULL;
+    m_strings.sorted = NULL;
+}
+
+// ----------------------------------------------------------------------------
+// accessing strings
+// ----------------------------------------------------------------------------
+
+unsigned int wxListBox::GetCount() const
+{
+    return IsSorted() ? m_strings.sorted->size()
+                      : m_strings.unsorted->size();
+}
+
+wxString wxListBox::GetString(unsigned int n) const
+{
+    return IsSorted() ? m_strings.sorted->Item(n)
+                      : m_strings.unsorted->Item(n);
+}
+
+int wxListBox::FindString(const wxString& s, bool bCase) const
+{
+    return IsSorted() ? m_strings.sorted->Index(s, bCase)
+                      : m_strings.unsorted->Index(s, bCase);
 }
 
 // ----------------------------------------------------------------------------
@@ -228,8 +256,8 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
     for ( unsigned int i = 0; i < numItems; ++i )
     {
         const wxString& item = items[i];
-        idx = IsSorted() ? m_strings->Add(item)
-                         : (m_strings->Insert(item, pos), pos++);
+        idx = IsSorted() ? m_strings.sorted->Add(item)
+                         : (m_strings.unsorted->Insert(item, pos), pos++);
 
         m_itemsClientData.Insert(NULL, idx);
         AssignNewItemClientData(idx, clientData, i, type);
@@ -257,7 +285,10 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
 {
     wxCHECK_RET( !IsSorted(), _T("can't set string in sorted listbox") );
 
-    (*m_strings)[n] = s;
+    if ( IsSorted() )
+        (*m_strings.sorted)[n] = s;
+    else
+        (*m_strings.unsorted)[n] = s;
 
     if ( HasHorzScrollbar() )
     {
@@ -290,7 +321,10 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
 
 void wxListBox::DoClear()
 {
-    m_strings->Clear();
+    if ( IsSorted() )
+        m_strings.sorted->Clear();
+    else
+        m_strings.unsorted->Clear();
 
     m_itemsClientData.Clear();
     m_selections.Clear();
@@ -313,7 +347,10 @@ void wxListBox::DoDeleteOneItem(unsigned int n)
     // refreshed (as GetCount() will be decremented)
     RefreshFromItemToEnd(n);
 
-    m_strings->RemoveAt(n);
+    if ( IsSorted() )
+        m_strings.sorted->RemoveAt(n);
+    else
+        m_strings.unsorted->RemoveAt(n);
 
     m_itemsClientData.RemoveAt(n);
 
@@ -680,7 +717,7 @@ void wxListBox::DoDraw(wxControlRenderer *renderer)
     wxCoord lineHeight = GetLineHeight();
     unsigned int itemFirst = yTop / lineHeight,
                  itemLast = (yBottom + lineHeight - 1) / lineHeight,
-                 itemMax = m_strings->GetCount();
+                 itemMax = GetCount();
 
     if ( itemFirst >= itemMax )
         return;
@@ -749,7 +786,7 @@ wxCoord wxListBox::GetMaxWidth() const
     {
         wxListBox *self = wxConstCast(this, wxListBox);
         wxCoord width;
-        unsigned int count = m_strings->GetCount();
+        unsigned int count = GetCount();
         for ( unsigned int n = 0; n < count; n++ )
         {
             GetTextExtent(this->GetString(n), &width, NULL);
@@ -806,7 +843,7 @@ wxSize wxListBox::DoGetBestClientSize() const
     wxCoord width = 0,
             height = 0;
 
-    unsigned int count = m_strings->GetCount();
+    unsigned int count = GetCount();
     for ( unsigned int n = 0; n < count; n++ )
     {
         wxCoord w,h;
