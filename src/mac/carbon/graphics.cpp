@@ -718,8 +718,6 @@ private :
 
 wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col) : wxGraphicsObjectRefData( renderer )
 {
-    m_macATSUIStyle = NULL;
-    OSStatus status = noErr;
     m_colour = col;
     m_underlined = font.GetUnderlined();
 
@@ -727,6 +725,8 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
     m_ctFont.reset( wxCFRetain((CTFontRef) font.MacGetCTFont()) );
 #endif
 #if wxMAC_USE_ATSU_TEXT
+    OSStatus status = noErr;
+    m_macATSUIStyle = NULL;
 
     status = ATSUCreateAndCopyStyle( (ATSUStyle) font.MacGetATSUStyle() , &m_macATSUIStyle );
 
