@@ -221,9 +221,11 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     }
 
 #ifndef __WXWINCE__
-    if ( style & wxSYSTEM_MENU )
+    // notice that if wxCLOSE_BOX is specified we need to use WS_SYSMENU too as
+    // otherwise the close box doesn't appear
+    if ( style & (wxSYSTEM_MENU | wxCLOSE_BOX) )
         msflags |= WS_SYSMENU;
-#endif
+#endif // !__WXWINCE__
 
     // NB: under CE these 2 styles are not supported currently, we should
     //     call Minimize()/Maximize() "manually" if we want to support them
