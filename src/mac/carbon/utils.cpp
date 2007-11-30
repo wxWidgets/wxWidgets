@@ -643,7 +643,29 @@ void wxMacControl::SuperChangedPosition()
 void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle )
 {
     m_font = font;
-#ifndef __LP64__
+#if wxMAC_USE_CORE_TEXT
+    if ( UMAGetSystemVersion() >= 0x1050 )
+    {
+        HIViewPartCode part = 0;
+        HIThemeTextHorizontalFlush flush = kHIThemeTextHorizontalFlushDefault;
+        if ( ( windowStyle & wxALIGN_MASK ) & wxALIGN_CENTER_HORIZONTAL )
+            flush = kHIThemeTextHorizontalFlushCenter;
+        else if ( ( windowStyle & wxALIGN_MASK ) & wxALIGN_RIGHT )
+            flush = kHIThemeTextHorizontalFlushRight;
+        HIViewSetTextFont( m_controlRef , part , (CTFontRef) font.MacGetCTFont() );
+        HIViewSetTextHorizontalFlush( m_controlRef, part, flush );
+        
+        if ( foreground != *wxBLACK )
+        {
+            ControlFontStyleRec fontStyle;
+            foreground.GetRGBColor( &fontStyle.foreColor );
+            fontStyle.flags = kControlUseForeColorMask;
+            ::SetControlFontStyle( m_controlRef , &fontStyle );
+        }
+        
+    }
+#endif
+#if wxMAC_USE_ATSU_TEXT
     ControlFontStyleRec fontStyle;
     if ( font.MacGetThemeFontID() != kThemeCurrentPortFont )
     {
