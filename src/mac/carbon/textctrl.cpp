@@ -170,6 +170,51 @@ private:
     RgnHandle m_newClip;
 };
 
+wxMacPortSaver::wxMacPortSaver( GrafPtr port )
+{
+    ::GetPort( &m_port );
+    ::SetPort( port );
+}
+
+wxMacPortSaver::~wxMacPortSaver()
+{
+    ::SetPort( m_port );
+}
+
+wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win ) :
+wxMacPortSaver( (GrafPtr) GetWindowPort( (WindowRef) win->MacGetTopLevelWindowRef() ) )
+{
+    m_newPort = (GrafPtr) GetWindowPort( (WindowRef) win->MacGetTopLevelWindowRef() ) ;
+    m_formerClip = NewRgn() ;
+    m_newClip = NewRgn() ;
+    GetClip( m_formerClip ) ;
+    
+    if ( win )
+    {
+        // guard against half constructed objects, this just leads to a empty clip
+        if ( win->GetPeer() )
+        {
+            int x = 0 , y = 0;
+            win->MacWindowToRootWindow( &x, &y ) ;
+            
+            // get area including focus rect
+            HIShapeGetAsQDRgn( ((wxWindow*)win)->MacGetVisibleRegion(true).GetWXHRGN() , m_newClip );
+            if ( !EmptyRgn( m_newClip ) )
+                OffsetRgn( m_newClip , x , y ) ;
+        }
+        
+        SetClip( m_newClip ) ;
+    }
+}
+
+wxMacWindowClipper::~wxMacWindowClipper()
+{
+    SetPort( m_newPort ) ;
+    SetClip( m_formerClip ) ;
+    DisposeRgn( m_newClip ) ;
+    DisposeRgn( m_formerClip ) ;
+}
+
 // common parts for implementations based on MLTE
 
 class wxMacMLTEControl : public wxMacTextControl
@@ -2257,51 +2302,6 @@ int wxMacMLTEControl::GetLineLength(long lineNo) const
 // various OS X versions. Most deal with the scrollbars: they are not correctly embedded
 // while this can be solved on 10.3 by reassigning them the correct place, on 10.2 there is
 // no way out, therefore we are using our own implementation and our own scrollbars ....
-
-wxMacPortSaver::wxMacPortSaver( GrafPtr port )
-{
-    ::GetPort( &m_port );
-    ::SetPort( port );
-}
-
-wxMacPortSaver::~wxMacPortSaver()
-{
-    ::SetPort( m_port );
-}
-
-wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win ) :
-    wxMacPortSaver( (GrafPtr) GetWindowPort( (WindowRef) win->MacGetTopLevelWindowRef() ) )
-{
-    m_newPort = (GrafPtr) GetWindowPort( (WindowRef) win->MacGetTopLevelWindowRef() ) ;
-    m_formerClip = NewRgn() ;
-    m_newClip = NewRgn() ;
-    GetClip( m_formerClip ) ;
-
-    if ( win )
-    {
-        // guard against half constructed objects, this just leads to a empty clip
-        if ( win->GetPeer() )
-        {
-            int x = 0 , y = 0;
-            win->MacWindowToRootWindow( &x, &y ) ;
-
-            // get area including focus rect
-            HIShapeGetAsQDRgn( ((wxWindow*)win)->MacGetVisibleRegion(true).GetWXHRGN() , m_newClip );
-            if ( !EmptyRgn( m_newClip ) )
-                OffsetRgn( m_newClip , x , y ) ;
-        }
-
-        SetClip( m_newClip ) ;
-    }
-}
-
-wxMacWindowClipper::~wxMacWindowClipper()
-{
-    SetPort( m_newPort ) ;
-    SetClip( m_formerClip ) ;
-    DisposeRgn( m_newClip ) ;
-    DisposeRgn( m_formerClip ) ;
-}
 
 TXNScrollInfoUPP gTXNScrollInfoProc = NULL ;
 ControlActionUPP gTXNScrollActionProc = NULL ;
