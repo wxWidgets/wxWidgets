@@ -247,7 +247,7 @@ private:
 #else // !__WXDEBUG__
 
 // In release builds, just use typedef
-typedef WXDLLIMPEXP_CORE wxAutoBufferedPaintDCBase wxAutoBufferedPaintDC;
+typedef wxAutoBufferedPaintDCBase wxAutoBufferedPaintDC;
 
 #endif
 
