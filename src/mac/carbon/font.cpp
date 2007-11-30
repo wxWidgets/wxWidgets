@@ -176,11 +176,13 @@ public:
     // for true themeing support we must store the correct font
     // information here, as this speeds up and optimizes rendering
     ThemeFontID     m_macThemeFontID ;
-    ATSUStyle       m_macATSUStyle ;
 #endif
 #if wxMAC_USE_CORE_TEXT
     wxCFRef<CTFontRef> m_ctFont;
     wxCFRef<CTFontDescriptorRef> m_ctFontDescriptor;
+#endif
+#if wxMAC_USE_CORE_TEXT || wxMAC_USE_ATSU_TEXT
+    ATSUStyle       m_macATSUStyle ;
 #endif
     wxNativeFontInfo  m_info;
 };
@@ -220,13 +222,15 @@ void wxFontRefData::Init(int pointSize,
     m_macATSUFontID = 0;
     m_macATSUAdditionalQDStyles = 0 ;
     m_macThemeFontID = kThemeCurrentPortFont ;
+#endif
+#if wxMAC_USE_CORE_TEXT || wxMAC_USE_ATSU_TEXT
     m_macATSUStyle = NULL ;
 #endif
 }
 
 wxFontRefData::~wxFontRefData()
 {
-#if wxMAC_USE_ATSU_TEXT
+#if wxMAC_USE_CORE_TEXT || wxMAC_USE_ATSU_TEXT
     if ( m_macATSUStyle )
     {
         ::ATSUDisposeStyle((ATSUStyle)m_macATSUStyle);
@@ -241,7 +245,7 @@ void wxFontRefData::MacInvalidateNativeFont()
     m_ctFont.reset();
     m_ctFontDescriptor.reset();
 #endif
-#if wxMAC_USE_ATSU_TEXT
+#if wxMAC_USE_CORE_TEXT || wxMAC_USE_ATSU_TEXT
     if ( m_macATSUStyle )
     {
         ::ATSUDisposeStyle((ATSUStyle)m_macATSUStyle);
@@ -410,6 +414,56 @@ void wxFontRefData::MacFindFont()
 
             m_ctFont.reset( CTFontCreateWithFontDescriptor( m_ctFontDescriptor, m_pointSize, NULL ) );
         }
+#if wxMAC_USE_ATSU_TEXT == 0
+        OSStatus status = noErr;
+        CTFontDescriptorRef desc = m_ctFontDescriptor ;
+        ATSFontRef atsfont = CTFontGetPlatformFont( m_ctFont, &desc );
+        FMFont fmfont = FMGetFontFromATSFontRef( atsfont );
+        ATSUAttributeTag atsuTags[] =
+        {
+            kATSUFontTag ,
+            kATSUSizeTag ,
+            kATSUVerticalCharacterTag,
+            kATSUQDBoldfaceTag ,
+            kATSUQDItalicTag ,
+            kATSUQDUnderlineTag ,
+        };
+        ByteCount atsuSizes[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+        {
+            sizeof( ATSUFontID ) ,
+            sizeof( Fixed ) ,
+            sizeof( ATSUVerticalCharacterType),
+            sizeof( Boolean ) ,
+            sizeof( Boolean ) ,
+            sizeof( Boolean ) ,
+        };
+        Boolean kTrue = true ;
+        Boolean kFalse = false ;
+        
+        Fixed atsuSize = IntToFixed( m_pointSize );
+        ATSUVerticalCharacterType kHorizontal = kATSUStronglyHorizontal;
+        ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+        {
+            &fmfont ,
+            &atsuSize ,
+            &kHorizontal,
+            (m_weight == wxBOLD) ? &kTrue : &kFalse ,
+            (m_style == wxITALIC || m_style == wxSLANT) ? &kTrue : &kFalse ,
+            (m_underlined) ? &kTrue : &kFalse ,
+        };
+        
+        if ( m_macATSUStyle )
+        {
+            ::ATSUDisposeStyle((ATSUStyle)m_macATSUStyle);
+            m_macATSUStyle = NULL ;
+        }
+        status = ::ATSUCreateStyle((ATSUStyle *)&m_macATSUStyle);
+        wxASSERT_MSG( status == noErr , wxT("couldn't create ATSU style") );
+        status = ::ATSUSetAttributes(
+                                     (ATSUStyle)m_macATSUStyle,
+                                     sizeof(atsuTags) / sizeof(ATSUAttributeTag) ,
+                                     atsuTags, atsuSizes, atsuValues);
+#endif
     }
 #endif
 #if wxMAC_USE_ATSU_TEXT
@@ -872,13 +926,6 @@ wxUint32 wxFont::MacGetATSUFontID() const
     return M_FONTDATA->m_macATSUFontID;
 }
 
-void * wxFont::MacGetATSUStyle() const
-{
-    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
-
-    return M_FONTDATA->m_macATSUStyle;
-}
-
 wxUint32 wxFont::MacGetATSUAdditionalQDStyles() const
 {
     wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
@@ -891,6 +938,15 @@ wxUint16 wxFont::MacGetThemeFontID() const
     wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
 
     return M_FONTDATA->m_macThemeFontID;
+}
+#endif
+
+#if wxMAC_USE_CORE_TEXT || wxMAC_USE_ATSU_TEXT
+void * wxFont::MacGetATSUStyle() const
+{
+    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+    
+    return M_FONTDATA->m_macATSUStyle;
 }
 #endif
 
