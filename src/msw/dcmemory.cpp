@@ -115,7 +115,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 
     // check for whether the bitmap is already selected into a device context
     wxASSERT_MSG( !bitmap.GetSelectedInto() ||
-                  (bitmap.GetSelectedInto() == this),
+                  (bitmap.GetSelectedInto() == GetOwner()),
                   wxT("Bitmap is selected in another wxMemoryDC, delete the first wxMemoryDC or use SelectObject(NULL)") );
 
     m_selectedBitmap = bitmap;
@@ -124,7 +124,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
         return;
 
 #ifdef __WXDEBUG__
-    m_selectedBitmap.SetSelectedInto(this);
+    m_selectedBitmap.SetSelectedInto(GetOwner());
 #endif
     hBmp = (WXHBITMAP)::SelectObject(GetHdc(), (HBITMAP)hBmp);
 
