@@ -53,11 +53,7 @@ public:
     virtual wxPageSetupDialogBase *CreatePageSetupDialog( wxWindow *parent,
                                                           wxPageSetupDialogData * data = NULL );
 
-#if wxUSE_NEW_DC
     virtual wxDCImpl* CreatePrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data );
-#else
-    virtual wxDC* CreatePrinterDC( const wxPrintData& data );
-#endif
 
     virtual bool HasPrintSetupDialog();
     virtual wxDialog *CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data );
@@ -222,19 +218,10 @@ private:
 // wxGtkPrinterDC
 //-----------------------------------------------------------------------------
 
-#if wxUSE_NEW_DC
 class WXDLLIMPEXP_CORE wxGtkPrinterDCImpl : public wxDCImpl
-#else
-#define wxGtkPrinterDCImpl wxGtkPrinterDC
-class WXDLLIMPEXP_CORE wxGtkPrinterDC : public wxDC
-#endif
 {
 public:
-#if wxUSE_NEW_DC
     wxGtkPrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data );
-#else
-    wxGtkPrinterDC( const wxPrintData& data );
-#endif
     virtual ~wxGtkPrinterDCImpl();
 
     bool Ok() const { return IsOk(); }
