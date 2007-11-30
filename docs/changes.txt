@@ -74,6 +74,10 @@ Changes in behaviour which may result in compilation errors
 - WXWIN_COMPATIBILITY_2_4 doesn't exist any more, please update your code if
   you still relied on features deprecated since version 2.4
 
+- wxDC classes hierarchy has changed, if you derived any classes from wxDC you
+  need to review them as wxDC doesn't have any virtual methods any longer and
+  uses delegation instead of inheritance to present different behaviours.
+
 - Return type of wxString::operator[] and wxString::iterator::operator* is no
   longer wxChar (i.e. char or wchar_t), but wxUniChar. This is not a problem
   in vast majority of cases because of conversion operators, but it can break
