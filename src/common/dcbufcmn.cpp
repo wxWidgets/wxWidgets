@@ -91,6 +91,9 @@ bool wxSharedDCBufferManager::ms_usingSharedBuffer = false;
 
 IMPLEMENT_DYNAMIC_CLASS(wxSharedDCBufferManager, wxModule)
 
+IMPLEMENT_DYNAMIC_CLASS(wxBufferedDC, wxMemoryDC)
+IMPLEMENT_ABSTRACT_CLASS(wxBufferedPaintDC, wxBufferedDC)
+
 // ============================================================================
 // wxBufferedDC
 // ============================================================================

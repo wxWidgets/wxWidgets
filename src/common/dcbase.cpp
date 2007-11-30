@@ -29,7 +29,6 @@
 #include "wx/dcmemory.h"
 #include "wx/dcscreen.h"
 #include "wx/dcprint.h"
-#include "wx/dcbuffer.h" // for IMPLEMENT_DYNAMIC_CLASS
 #include "wx/prntbase.h"
 
 #ifndef WX_PRECOMP
