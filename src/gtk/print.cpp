@@ -143,21 +143,10 @@ wxGtkPrintFactory::CreatePrintSetupDialog(wxWindow * WXUNUSED(parent),
     return NULL;
 }
 
-#if wxUSE_NEW_DC
-
 wxDCImpl* wxGtkPrintFactory::CreatePrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data )
 {
     return new wxGtkPrinterDCImpl( owner, data );
 }
-
-#else
-
-wxDC* wxGtkPrintFactory::CreatePrinterDC( const wxPrintData& data )
-{
-    return new wxGtkPrinterDC(data);
-}
-
-#endif
 
 bool wxGtkPrintFactory::HasOwnPrintToFile()
 {
@@ -905,11 +894,7 @@ void wxGtkPrinter::BeginPrint(wxPrintout *printout, GtkPrintOperation *operation
     SetPrintContext(context);
     native->SetPrintContext( context );
 
-#if wxUSE_NEW_DC
     wxPrinterDC *printDC = new wxPrinterDC( printdata );
-#else
-    wxGtkPrinterDC *printDC = new wxGtkPrinterDC( printdata );
-#endif
     m_dc = printDC;
 
     if (!m_dc->IsOk())
@@ -1081,11 +1066,7 @@ wxDC* wxGtkPrinter::PrintDialog( wxWindow *parent )
 
     m_printDialogData = dialog.GetPrintDialogData();
     
-#if wxUSE_NEW_DC
     return new wxPrinterDC( m_printDialogData.GetPrintData() );
-#else
-    return new wxGtkPrinterDC( m_printDialogData.GetPrintData() );
-#endif
 }
 
 bool wxGtkPrinter::Setup( wxWindow * WXUNUSED(parent) )
@@ -1104,18 +1085,10 @@ bool wxGtkPrinter::Setup( wxWindow * WXUNUSED(parent) )
 #define YLOG2DEVREL(x)  ((double)(LogicalToDeviceYRel(x)) * m_DEV2PS)
 
 
-#if wxUSE_NEW_DC
 IMPLEMENT_ABSTRACT_CLASS(wxGtkPrinterDCImpl, wxDCImpl)
-#else
-IMPLEMENT_ABSTRACT_CLASS(wxGtkPrinterDC, wxDC)
-#endif
 
-#if wxUSE_NEW_DC
 wxGtkPrinterDCImpl::wxGtkPrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data ) :
    wxDCImpl( owner )
-#else
-wxGtkPrinterDC::wxGtkPrinterDC( const wxPrintData& data )
-#endif
 {
     m_printData = data;
 
@@ -1458,11 +1431,7 @@ void wxGtkPrinterDCImpl::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset,
 
 void wxGtkPrinterDCImpl::DoDrawPolyPolygon(int n, int count[], wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
 {
-#if wxUSE_NEW_DC
     wxDCImpl::DoDrawPolyPolygon( n, count, points, xoffset, yoffset, fillStyle );
-#else
-    wxDC::DoDrawPolyPolygon( n, count, points, xoffset, yoffset, fillStyle );
-#endif
 }
 
 void wxGtkPrinterDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
