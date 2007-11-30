@@ -1439,13 +1439,15 @@ void wxGDIPlusRenderer::Unload()
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxWindowDC& dc)
 {
     EnsureIsLoaded();
-    return new wxGDIPlusContext(this,(HDC) dc.GetHDC());
+    wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
+    return new wxGDIPlusContext(this,(HDC) msw->GetHDC());
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxMemoryDC& dc)
 {
     EnsureIsLoaded();
-    return new wxGDIPlusContext(this,(HDC) dc.GetHDC());
+    wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
+    return new wxGDIPlusContext(this,(HDC) msw->GetHDC());
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateMeasuringContext()
