@@ -129,9 +129,7 @@ void wxDCOverlay::Clear()
 
 wxOverlayImpl::wxOverlayImpl()
 {
-#if defined(__WXGTK__) || defined(__WXMSW__)
      m_window = NULL ;
-#endif
      m_x = m_y = m_width = m_height = 0 ;
 }
 

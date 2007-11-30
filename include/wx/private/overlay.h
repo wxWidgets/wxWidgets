@@ -59,13 +59,8 @@ private:
     int m_y ;
     int m_width ;
     int m_height ;
-// this is to enable wxMOTIF and UNIV to compile....
-// currently (10 oct 06) we don't use m_window
-// ce - how do we fix this
-#if defined(__WXGTK__) || defined(__WXMSW__)
     wxWindow* m_window ;
-#endif
-} ;
+};
 
 #endif // wxHAS_NATIVE_OVERLAY/!wxHAS_NATIVE_OVERLAY
 
