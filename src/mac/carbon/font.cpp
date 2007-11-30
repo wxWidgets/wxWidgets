@@ -163,11 +163,13 @@ void wxFontRefData::Init(int pointSize,
 
 wxFontRefData::~wxFontRefData()
 {
+#if wxMAC_USE_ATSU_TEXT
     if ( m_macATSUStyle )
     {
         ::ATSUDisposeStyle((ATSUStyle)m_macATSUStyle);
         m_macATSUStyle = NULL ;
     }
+#endif
 }
 
 #if wxMAC_USE_CORE_TEXT
@@ -232,7 +234,6 @@ static CTFontRef wxMacCreateCTFont(CFStringRef iFamilyName, CTFontSymbolicTraits
 
 void wxFontRefData::MacFindFont()
 {
-    OSStatus status = noErr;
 
 #if wxMAC_USE_CORE_TEXT
     if (  UMAGetSystemVersion() >= 0x1050 )
@@ -298,6 +299,7 @@ void wxFontRefData::MacFindFont()
 #endif
 #if wxMAC_USE_ATSU_TEXT
     {
+        OSStatus status = noErr;
         Str255 qdFontName ;
         if ( m_macThemeFontID != kThemeCurrentPortFont )
         {
@@ -522,7 +524,7 @@ bool wxFont::MacCreateThemeFont(wxUint16 themeFontID)
         return MacCreateUIFont(HIThemeGetUIFontType(themeFontID));
     }
 #endif
-#if wxMAC_USE_CORE_TEXT
+#if wxMAC_USE_ATSU_TEXT
     {
         UnRef();
 
@@ -532,9 +534,10 @@ bool wxFont::MacCreateThemeFont(wxUint16 themeFontID)
 
         M_FONTDATA->m_macThemeFontID = themeFontID ;
         RealizeResource();
+        return true;
     }
-    return true;
 #endif
+    return false;
 }
 
 wxFont::~wxFont()
