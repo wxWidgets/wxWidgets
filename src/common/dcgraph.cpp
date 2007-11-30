@@ -326,44 +326,6 @@ void wxGCDCImpl::SetMapMode( int mode )
     ComputeScaleAndOrigin();
 }
 
-void wxGCDCImpl::SetUserScale( double x, double y )
-{
-    // allow negative ? -> no
-
-    m_userScaleX = x;
-    m_userScaleY = y;
-    ComputeScaleAndOrigin();
-}
-
-void wxGCDCImpl::SetLogicalScale( double x, double y )
-{
-    // allow negative ?
-    m_logicalScaleX = x;
-    m_logicalScaleY = y;
-    ComputeScaleAndOrigin();
-}
-
-void wxGCDCImpl::SetLogicalOrigin( wxCoord x, wxCoord y )
-{
-    m_logicalOriginX = x * m_signX;   // is this still correct ?
-    m_logicalOriginY = y * m_signY;
-    ComputeScaleAndOrigin();
-}
-
-void wxGCDCImpl::SetDeviceOrigin( wxCoord x, wxCoord y )
-{
-    m_deviceOriginX = x;
-    m_deviceOriginY = y;
-    ComputeScaleAndOrigin();
-}
-
-void wxGCDCImpl::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
-{
-    m_signX = (xLeftRight ?  1 : -1);
-    m_signY = (yBottomUp ? -1 :  1);
-    ComputeScaleAndOrigin();
-}
-
 wxSize wxGCDCImpl::GetPPI() const
 {
     return wxSize(72, 72);
@@ -375,9 +337,8 @@ int wxGCDCImpl::GetDepth() const
 }
 
 void wxGCDCImpl::ComputeScaleAndOrigin()
-{
-    m_scaleX = m_logicalScaleX * m_userScaleX;
-    m_scaleY = m_logicalScaleY * m_userScaleY;
+{    
+    wxDCImpl::ComputeScaleAndOrigin();
 
     if ( m_graphicContext )
     {
