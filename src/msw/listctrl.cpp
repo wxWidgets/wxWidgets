@@ -2821,8 +2821,10 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
 
             int numCols = GetColumnCount();
             int* indexArray = new int[numCols];
-            BOOL rv = ListView_GetColumnOrderArray( GetHwnd(), numCols, indexArray );
-            wxASSERT_MSG( rv == TRUE, _T("invalid column index array in OnPaint()") );
+            if ( !ListView_GetColumnOrderArray( GetHwnd(), numCols, indexArray) )
+            {
+                wxFAIL_MSG( _T("invalid column index array in OnPaint()") );
+            }
 
             int x = itemRect.GetX();
             for (int col = 0; col < numCols; col++)
