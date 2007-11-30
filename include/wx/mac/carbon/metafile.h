@@ -102,8 +102,9 @@ class WXDLLEXPORT wxMetafileDC: public wxDC
     // the metafile picture size and the optional description/comment
     wxMetafileDC(  const wxString& filename = wxEmptyString,
                     int width = 0, int height = 0,
-                    const wxString& description = wxEmptyString )
-    { m_pimpl = new wxMetafileDCImpl( this, filename, width, height, description ); }
+                    const wxString& description = wxEmptyString ) :
+      wxDC( new wxMetafileDCImpl( this, filename, width, height, description) )
+    { }
                     
     wxMetafile *GetMetafile() const 
        { return ((wxMetafileDCImpl*)m_pimpl)->GetMetaFile(); }
