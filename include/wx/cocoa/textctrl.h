@@ -51,6 +51,11 @@ public:
 protected:
     virtual void Cocoa_didChangeText(void);
     virtual void CocoaTarget_action(void);
+public: // We can't make an Objective-C class or method a friend
+    // These are the new (non-virtual for ABI compatibility) messages:
+    void CocoaNotification_controlTextDidChange(WX_NSNotification notification);
+    void CocoaNotification_controlTextDidEndEditing(WX_NSNotification notification);
+    void CocoaNotification_controlTextDidBeginEditing(WX_NSNotification notification);
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
