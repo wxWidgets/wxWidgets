@@ -22,14 +22,11 @@
 // wxDC
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDC : public wxDCBase
+class WXDLLEXPORT wxX11DCImpl : public wxDCImpl
 {
 public:
-    wxDC();
-    virtual ~wxDC() { }
-
-    // implement base class pure virtuals
-    // ----------------------------------
+    wxX11DCImpl( wxDC *owner );
+    virtual ~wxX11DCImpl() { }
 
     virtual wxSize GetPPI() const;
 
@@ -49,7 +46,7 @@ protected:
     wxCoord YLOG2DEVREL(wxCoord y) const    { return LogicalToDeviceYRel(y); }
 
 private:
-    DECLARE_ABSTRACT_CLASS(wxDC)
+    DECLARE_CLASS(wxX11DCImpl)
 };
 
 #endif

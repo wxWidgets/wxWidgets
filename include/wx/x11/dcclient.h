@@ -13,6 +13,8 @@
 #define _WX_DCCLIENT_H_
 
 #include "wx/dc.h"
+#include "wx/dcclient.h"
+#include "wx/x11/dc.h"
 #include "wx/region.h"
 
 // -----------------------------------------------------------------------------
@@ -21,21 +23,17 @@
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
-class WXDLLIMPEXP_FWD_CORE wxWindowDC;
-class WXDLLIMPEXP_FWD_CORE wxPaintDC;
-class WXDLLIMPEXP_FWD_CORE wxClientDC;
-
 //-----------------------------------------------------------------------------
-// wxWindowDC
+// wxWindowDCImpl
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxWindowDC : public wxDC
+class WXDLLIMPEXP_CORE wxWindowDCImpl : public wxX11DCImpl
 {
 public:
-    wxWindowDC() { Init(); }
-    wxWindowDC( wxWindow *win );
-
-    virtual ~wxWindowDC();
+    wxWindowDCImpl( wxDC *owner );
+    wxWindowDCImpl( wxDC *owner, wxWindow *win );
+        
+    virtual ~wxWindowDCImpl();
 
     virtual bool CanDrawBitmap() const { return true; }
     virtual bool CanGetTextExtent() const { return true; }
@@ -121,7 +119,7 @@ protected:
     void Init();
 
     WXDisplay    *m_display;
-    WXWindow      m_window;
+    WXWindow      m_x11window;
     WXGC          m_penGC;
     WXGC          m_brushGC;
     WXGC          m_textGC;
@@ -129,7 +127,6 @@ protected:
     WXColormap    m_cmap;
     bool          m_isMemDC;
     bool          m_isScreenDC;
-    wxWindow     *m_owner;
     wxRegion      m_currentClippingRegion;
     wxRegion      m_paintClippingRegion;
 
@@ -142,38 +139,38 @@ protected:
     void Destroy();
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxWindowDC)
+    DECLARE_CLASS(wxWindowDCImpl)
 };
 
 //-----------------------------------------------------------------------------
 // wxClientDC
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxClientDC : public wxWindowDC
+class WXDLLIMPEXP_CORE wxClientDCImpl : public wxWindowDCImpl
 {
 public:
-    wxClientDC() { }
-    wxClientDC( wxWindow *win );
+    wxClientDCImpl( wxDC *owner ) : wxWindowDCImpl( owner ) { }
+    wxClientDCImpl( wxDC *owner, wxWindow *win );
 
 protected:
     virtual void DoGetSize(int *width, int *height) const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxClientDC)
+    DECLARE_CLASS(wxClientDCImpl)
 };
 
 //-----------------------------------------------------------------------------
 // wxPaintDC
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxPaintDC : public wxClientDC
+class WXDLLIMPEXP_CORE wxPaintDCImpl : public wxClientDCImpl
 {
 public:
-    wxPaintDC() { }
-    wxPaintDC( wxWindow *win );
+    wxPaintDCImpl( wxDC *owner ) : wxClientDCImpl( owner ) { }
+    wxPaintDCImpl( wxDC *owner, wxWindow *win );
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPaintDC)
+    DECLARE_CLASS(wxPaintDCImpl)
 };
 
 #endif

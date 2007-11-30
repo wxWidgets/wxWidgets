@@ -13,18 +13,20 @@
 #include "wx/wxprec.h"
 
 #include "wx/dc.h"
+#include "wx/x11/dc.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dcmemory.h"
 #endif
 
-IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxX11DCImpl, wxDCImpl)
 
 //-----------------------------------------------------------------------------
 // wxDC
 //-----------------------------------------------------------------------------
 
-wxDC::wxDC()
+wxX11DCImpl::wxX11DCImpl( wxDC *owner ) :
+   wxDCImpl( owner )
 {
     m_ok = false;
 
@@ -35,7 +37,7 @@ wxDC::wxDC()
     m_backgroundMode = wxTRANSPARENT;
 }
 
-void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
+void wxX11DCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
     m_clipping = true;
     m_clipX1 = x;
@@ -44,10 +46,10 @@ void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
     m_clipY2 = y + height;
 }
 
-void wxDC::DoGetSizeMM( int* width, int* height ) const
+void wxX11DCImpl::DoGetSizeMM( int* width, int* height ) const
 {
     int w, h;
-    GetSize( &w, &h );
+    DoGetSize( &w, &h );
 
     if ( width )
         *width = int( double(w) / (m_scaleX*m_mm_to_pix_x) );
@@ -56,7 +58,7 @@ void wxDC::DoGetSizeMM( int* width, int* height ) const
 }
 
 // Resolution in pixels per logical inch
-wxSize wxDC::GetPPI() const
+wxSize wxX11DCImpl::GetPPI() const
 {
     // TODO (should probably be pure virtual)
     return wxSize(0, 0);
