@@ -148,7 +148,7 @@ GTK_CONFIGURE_OPTIONS = $(COMMON_CONFIGURE_OPTIONS) \
 pytoolkit := gtk2
 PY_WX_CONFIG_OPTIONS = --version=$(release) --toolkit=$(pytoolkit) --static=no
 
-WX_UNICODE := 1
+WX_UNICODE ?= 1
 WX_OPENGL := 1
 
 ifeq ($(WX_UNICODE),1)
@@ -297,7 +297,6 @@ install_all_cross = install-msw-dev install-msw-dbg install-headers-msw
 install_all_native := $(install_all_arch) $(install_all_indep)
 
 install_all := $(install_all_native) $(install_all_cross)
-
 
 
 #---------------------------------------------------------------------------
