@@ -28,24 +28,13 @@ class WXDLLIMPEXP_FWD_BASE wxFileOutputStream;
 
 
 
-#if wxUSE_NEW_DC
 class WXDLLIMPEXP_FWD_BASE wxSVGFileDC;
 
 class WXDLLIMPEXP_CORE wxSVGFileDCImpl : public wxDCImpl
-#else
-#define wxSVGFileDCImpl wxSVGFileDC
-class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
-#endif
 {
 public:
-
-#if wxUSE_NEW_DC
     wxSVGFileDCImpl( wxSVGFileDC *owner, const wxString &filename, 
                      int width=320, int height=240, double dpi=72.0 );
-#else
-    wxSVGFileDC( const wxString &filename,
-                 int width=320, int height=240, double dpi=72.0 );
-#endif
 
     virtual ~wxSVGFileDCImpl();
     
@@ -106,16 +95,6 @@ public:
     virtual void SetBrush(const wxBrush& brush);
     virtual void SetFont(const wxFont& font);
     virtual void SetPen(const wxPen& pen);
-
-#if wxUSE_NEW_DC
-#else
-    virtual void SetMapMode( int mode );
-    virtual void SetUserScale( double x, double y );
-    virtual void SetLogicalScale( double x, double y );
-    virtual void SetLogicalOrigin( wxCoord x, wxCoord y );
-    virtual void SetDeviceOrigin( wxCoord x, wxCoord y );
-    virtual void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
-#endif
 
 private:
    virtual bool DoGetPixel(wxCoord, wxCoord, wxColour *) const
@@ -221,7 +200,6 @@ private:
 };
 
 
-#if wxUSE_NEW_DC
 class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
 {
 public:
@@ -231,8 +209,6 @@ public:
         m_pimpl = new wxSVGFileDCImpl( this, filename, width, height, dpi );
     }
 };
-#endif
-
 
 #endif // wxUSE_SVG
 

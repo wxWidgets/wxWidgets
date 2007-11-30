@@ -76,20 +76,12 @@ wxString wxBrushString ( wxColour c, int style )
 
 IMPLEMENT_ABSTRACT_CLASS(wxSVGFileDCImpl, wxDC)
 
-#if wxUSE_NEW_DC
-    wxSVGFileDCImpl::wxSVGFileDCImpl( wxSVGFileDC *owner, const wxString &filename, 
+wxSVGFileDCImpl::wxSVGFileDCImpl( wxSVGFileDC *owner, const wxString &filename, 
                      int width, int height, double dpi ) :
         wxDCImpl( owner )
     {
         Init( filename, width, height, dpi ); 
     }
-#else
-    wxSVGFileDC::wxSVGFileDC( const wxString &filename,
-                 int width, int height, double dpi )
-    { 
-        Init( filename, width, height, dpi ); 
-    }
-#endif
 
 void wxSVGFileDCImpl::Init (const wxString &filename, int Width, int Height, double dpi)
 {
@@ -203,11 +195,7 @@ void wxSVGFileDCImpl::DoDrawPoint (wxCoord x1, wxCoord y1)
 
 void wxSVGFileDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1, wxCoord width, wxCoord height)
 {
-#if wxUSE_NEW_DC
     wxDCImpl::DoDrawCheckMark (x1,y1,width,height) ;
-#else
-    wxDCBase::DoDrawCheckMark (x1,y1,width,height) ;
-#endif
 }
 
 
@@ -691,43 +679,6 @@ void wxSVGFileDCImpl::write(const wxString &s)
     m_outfile->Write(buf, strlen((const char *)buf));
     m_OK = m_outfile->Ok();
 }
-
-// ---------------------------------------------------------------------------
-// coordinates transformations
-// ---------------------------------------------------------------------------
-
-#if wxUSE_NEW_DC
-#else
-void wxSVGFileDCImpl::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
-{
-    wxDCBase::SetAxisOrientation( xLeftRight, yBottomUp );
-}
-
-void wxSVGFileDCImpl::SetMapMode(int mode)
-{
-    wxDCBase::SetMapMode(mode);
-}
-
-void wxSVGFileDCImpl::SetUserScale(double x, double y)
-{
-    wxDCBase::SetUserScale(x,y);
-}
-
-void wxSVGFileDCImpl::SetLogicalScale(double x, double y)
-{
-    wxDCBase::SetLogicalScale(x,y);
-}
-
-void wxSVGFileDCImpl::SetLogicalOrigin(wxCoord x, wxCoord y)
-{
-    wxDCBase::SetLogicalOrigin(x,y);
-}
-
-void wxSVGFileDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
-{
-    wxDCBase::SetDeviceOrigin(x,y);
-}
-#endif
 
 
 #ifdef __BORLANDC__
