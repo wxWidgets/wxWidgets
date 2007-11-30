@@ -88,7 +88,8 @@
 #define HAVE_SCHED_H 1
 #define HAVE_UNISTD_H 1
 #define HAVE_WCHAR_H 1
-#define HAVE_ICONV 1
+/* better to use the built-in CF conversions, also avoid iconv versioning problems */
+/* #undef HAVE_ICONV */
 #if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
 #define ICONV_CONST const
 #else
