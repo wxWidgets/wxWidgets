@@ -2769,26 +2769,34 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
 
     HIThemeTextHorizontalFlush hFlush = kHIThemeTextHorizontalFlushLeft;
     HIThemeTextInfo info;
-
-#ifdef __LP64__
-    info.version = kHIThemeTextInfoVersionOne;
-    info.fontID = kThemeViewsFont;
-    if (font.Ok())
+    bool setup = false;
+#if wxMAC_USE_CORE_TEXT
+    if ( UMAGetSystemVersion() >= 0x1050 )
     {
-        info.fontID = kThemeSpecifiedFont;
-        info.font = (CTFontRef) font.MacGetCTFont();
+        info.version = kHIThemeTextInfoVersionOne;
+        info.fontID = kThemeViewsFont;
+        if (font.Ok())
+        {
+            info.fontID = kThemeSpecifiedFont;
+            info.font = (CTFontRef) font.MacGetCTFont();
+            setup = true;
+        }
     }
-#else
-    info.version = kHIThemeTextInfoVersionZero;
-    info.fontID = kThemeViewsFont;
-
-    if (font.Ok())
+#endif
+#if wxMAC_USE_ATSU_TEXT
+    if ( !setup )
     {
-        if (font.GetFamily() != wxFONTFAMILY_DEFAULT)
-            info.fontID = font.MacGetThemeFontID();
+        info.version = kHIThemeTextInfoVersionZero;
+        info.fontID = kThemeViewsFont;
 
-        ::TextSize( (short)(font.MacGetFontSize()) ) ;
-        ::TextFace( font.MacGetFontStyle() ) ;
+        if (font.Ok())
+        {
+            if (font.GetFamily() != wxFONTFAMILY_DEFAULT)
+                info.fontID = font.MacGetThemeFontID();
+
+            ::TextSize( (short)(font.MacGetFontSize()) ) ;
+            ::TextFace( font.MacGetFontStyle() ) ;
+        }
     }
 #endif
 

@@ -1101,7 +1101,7 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
     m_peer->SetData<ControlSize>(kControlEntireControl, kControlSizeTag, &size ) ;
 
     wxFont font ;
-    font.MacCreateThemeFont( themeFont ) ;
+    font.MacCreateFromThemeFont( themeFont ) ;
     SetFont( font ) ;
 }
 
