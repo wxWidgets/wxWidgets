@@ -357,6 +357,8 @@ void wxSlider::GTKSetValue(int value)
 void wxSlider::SetRange( int minValue, int maxValue )
 {
     m_blockScrollEvent = true;
+    if (minValue == maxValue)
+       maxValue++;
     gtk_range_set_range(GTK_RANGE (m_widget), minValue, maxValue);
     gtk_range_set_increments(GTK_RANGE (m_widget), 1, (maxValue - minValue + 9) / 10);
     m_blockScrollEvent = false;
