@@ -80,9 +80,9 @@ void wxMemoryDCImpl::Init()
 
 bool wxMemoryDCImpl::CreateCompatible(wxDC *dc)
 {
-    wxDCImpl *impl = dc->GetImpl();
+    wxDCImpl *impl = dc ? dc->GetImpl() : NULL ;
     wxMSWDCImpl *msw_impl = wxDynamicCast( impl, wxMSWDCImpl );
-    if (!msw_impl)
+    if ( dc && !msw_impl)
     {
         m_ok = false;
         return false;
