@@ -24,7 +24,7 @@
 #include "wx/fontutil.h"
 #include "wx/graphics.h"
 
-#include "wx/mac/private.h"
+#include "wx/mac/uma.h"
 
 #ifndef __DARWIN__
 #include <ATSUnicode.h>
@@ -235,7 +235,7 @@ void wxFontRefData::MacFindFont()
     OSStatus status = noErr;
 
 #if wxMAC_USE_CORE_TEXT
-    if (  CTFontCreateWithName != NULL )
+    if (  UMAGetSystemVersion() >= 0x1050 )
     {
         if ( m_faceName.empty() && m_family == wxDEFAULT && m_macUIFontType == kCTFontNoFontType )
         {
@@ -517,7 +517,7 @@ bool wxFont::MacCreateUIFont(wxUint32 ctFontType )
 bool wxFont::MacCreateThemeFont(wxUint16 themeFontID)
 {
 #if wxMAC_USE_CORE_TEXT
-    if ( HIThemeGetUIFontType != NULL )
+    if ( UMAGetSystemVersion() >= 0x1050)
     {
         return MacCreateUIFont(HIThemeGetUIFontType(themeFontID));
     }
