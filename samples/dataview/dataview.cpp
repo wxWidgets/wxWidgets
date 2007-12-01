@@ -34,6 +34,36 @@
 
 #include "null.xpm"
 
+/* XPM */
+static const char *small1_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 6 1",
+". c Black",
+"o c #FFFFFF",
+"X c #000080",
+"O c #FFFF00",
+"  c None",
+"+ c #FF0000",
+/* pixels */
+"                ",
+"                ",
+"                ",
+"    .......     ",
+"    .XXXXX.     ",
+"    .oXXXX.     ",
+"    .oXXX.......",
+".....oXXX.OOOOO.",
+".+++.XXXX.oOOOO.",
+".o++......oOOOO.",
+".o++++.  .oOOOO.",
+".o++++.  .OOOOO.",
+".+++++.  .......",
+".......         ",
+"                ",
+"                "
+};
+
+
 
 #define DEFAULT_ALIGN                   wxALIGN_LEFT
 #define DATAVIEW_DEFAULT_STYLE          (wxDV_MULTIPLE|wxDV_HORIZ_RULES|wxDV_VERT_RULES)
@@ -327,7 +357,11 @@ class MyListModel: public wxDataViewIndexListModel
 {
 public:
     MyListModel() : 
-        wxDataViewIndexListModel( 100 )
+#ifdef __WXMAC__
+        wxDataViewIndexListModel( 1000 )
+#else
+        wxDataViewIndexListModel( 100000 )
+#endif
     {
         unsigned int i;
         for (i = 0; i < 100; i++)
@@ -380,7 +414,16 @@ public:
     {
         if (col==0)
         {
-            variant = m_array[ row ];
+            if (row >= m_array.GetCount())
+            {
+                wxString str;
+                str.Printf( "row %d", row );
+                variant = str;
+            }
+            else
+            {
+                variant = m_array[ row ];
+            }
         } else
         if (col==1)
         {
@@ -414,6 +457,9 @@ public:
     {
         if (col == 0)
         {
+            if (row >= m_array.GetCount())
+               return false;
+               
             m_array[row] = variant.GetString();
             return true;
         }
@@ -448,8 +494,6 @@ public:
 public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-    
-    void OnTestTreeCtrl(wxCommandEvent& event);
     
     void OnAddMozart(wxCommandEvent& event);
     void OnDeleteMusic(wxCommandEvent& event);
@@ -529,8 +573,6 @@ enum
     ID_ABOUT = wxID_ABOUT,
     ID_EXIT = wxID_EXIT,
     
-    ID_TEST_TREECTRL    = 40,
-    
     ID_MUSIC_CTRL       = 50,
     
     ID_ADD_MOZART       = 100,
@@ -544,7 +586,6 @@ enum
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU( ID_ABOUT, MyFrame::OnAbout )
-    EVT_MENU( ID_TEST_TREECTRL, MyFrame::OnTestTreeCtrl )
     EVT_MENU( ID_EXIT, MyFrame::OnQuit )
     EVT_BUTTON( ID_ADD_MOZART, MyFrame::OnAddMozart )
     EVT_BUTTON( ID_DELETE_MUSIC, MyFrame::OnDeleteMusic )
@@ -585,8 +626,6 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(ID_ABOUT, "&About");
     file_menu->AppendSeparator();
-    file_menu->Append(ID_TEST_TREECTRL, "Test &Treectrl");
-    file_menu->AppendSeparator();
     file_menu->Append(ID_EXIT, "E&xit");
 
     wxMenuBar *menu_bar = new wxMenuBar;
@@ -603,7 +642,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     m_musicCtrl = new wxDataViewCtrl( this, ID_MUSIC_CTRL, wxDefaultPosition,
                                     wxDefaultSize, wxDV_MULTIPLE );
-
+                                    
     m_music_model = new MyMusicModel;
     m_musicCtrl->AssociateModel( m_music_model.get() );
 
@@ -658,58 +697,18 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     button_sizer->Add( new wxButton( this, ID_GOTO, "Goto 50"), 0, wxALL, 10 );
     
     main_sizer->Add( button_sizer, 0, wxGROW, 0 );
+
+    wxBoxSizer *bottom_sizer = new wxBoxSizer( wxHORIZONTAL );
     
     m_log = new wxTextCtrl( this, -1, "", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
     m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_log));
     wxLogMessage("This is the log window");
 
-    main_sizer->Add( m_log, 1, wxGROW );
-    
-    SetSizer( main_sizer );
-}
+    bottom_sizer->Add( m_log, 1, wxGROW );
+ 
+    // wxDataViewTreeStore
 
-void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
-{
-    Close(true);
-}
-
-
-/* XPM */
-static const char *small1_xpm[] = {
-/* columns rows colors chars-per-pixel */
-"16 16 6 1",
-". c Black",
-"o c #FFFFFF",
-"X c #000080",
-"O c #FFFF00",
-"  c None",
-"+ c #FF0000",
-/* pixels */
-"                ",
-"                ",
-"                ",
-"    .......     ",
-"    .XXXXX.     ",
-"    .oXXXX.     ",
-"    .oXXX.......",
-".....oXXX.OOOOO.",
-".+++.XXXX.oOOOO.",
-".o++......oOOOO.",
-".o++++.  .oOOOO.",
-".o++++.  .OOOOO.",
-".+++++.  .......",
-".......         ",
-"                ",
-"                "
-};
-
-void MyFrame::OnTestTreeCtrl(wxCommandEvent& WXUNUSED(event) )
-{
-    wxDialog dialog( this, -1, wxString(wxT("Test wxDataViewTreeStore")));
-    
-    wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
-    
-    wxDataViewCtrl *treectrl = new wxDataViewCtrl( &dialog, -1, 
+    wxDataViewCtrl *treectrl = new wxDataViewCtrl( this, -1, 
         wxDefaultPosition, wxSize(300,200), wxDV_NO_HEADER );
         
     wxDataViewTreeStore *store = new wxDataViewTreeStore;
@@ -722,17 +721,30 @@ void MyFrame::OnTestTreeCtrl(wxCommandEvent& WXUNUSED(event) )
 
     treectrl->AppendIconTextColumn( "no label", 0, wxDATAVIEW_CELL_INERT, 200 );
 
-    main_sizer->Add( treectrl, 1, wxGROW );
-    
+    bottom_sizer->Add( treectrl );
 
-    wxSizer *button_sizer = dialog.CreateButtonSizer( wxOK );
-    if (button_sizer)
-        main_sizer->Add( button_sizer, 0, wxGROW|wxALL, 10 );
-        
-    dialog.SetSizer( main_sizer );
-    main_sizer->Fit( &dialog );
+    // wxDataViewTreeCtrl
+
+    wxDataViewTreeCtrl *treectrl2 = new wxDataViewTreeCtrl( this, -1, wxDefaultPosition, wxSize(300,200) );
+    wxImageList *ilist = new wxImageList;
+    ilist->Add( wxIcon(small1_xpm) );
+    parent = treectrl2->AppendContainer( wxDataViewItem(0), "Root 1", 0 );
+    child = treectrl2->AppendItem( parent, "Child 1", 0 );
+    child = treectrl2->AppendItem( parent, "Child 2", 0 );
+    child = treectrl2->AppendItem( parent, "Child 3", 0 );
     
-    dialog.ShowModal();
+    bottom_sizer->Add( treectrl2 );
+    
+    // main sizer
+    
+    main_sizer->Add( bottom_sizer, 0, wxGROW );
+    
+    SetSizer( main_sizer );
+}
+
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
+{
+    Close(true);
 }
 
 void MyFrame::OnAddMozart(wxCommandEvent& WXUNUSED(event) )

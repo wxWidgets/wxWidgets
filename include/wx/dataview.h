@@ -22,6 +22,7 @@
 #include "wx/variant.h"
 #include "wx/dynarray.h"
 #include "wx/icon.h"
+#include "wx/imaglist.h"
 
 #if defined(__WXGTK20__)
     // for testing
@@ -506,6 +507,7 @@ public:
 
     virtual bool AssociateModel( wxDataViewModel *model );
     wxDataViewModel* GetModel();
+    const wxDataViewModel* GetModel() const;
 
     // short cuts
     wxDataViewColumn *PrependTextColumn( const wxString &label, unsigned int model_column,
@@ -848,12 +850,18 @@ public:
     const wxIcon &GetExpandedIcon() const
         { return m_iconExpanded; }
 
+    void SetExpanded( bool expanded = true )
+        { m_isExpanded = expanded; }
+    bool IsExpanded() const
+        { return m_isExpanded; }
+
     virtual bool IsContainer()
         { return true; }
 
 private:
     wxDataViewTreeStoreNodeList  m_children;
     wxIcon                       m_iconExpanded;
+    bool                         m_isExpanded;
 };
 
 //-----------------------------------------------------------------------------
@@ -925,14 +933,15 @@ public:
     wxDataViewTreeStoreNode *m_root;
 };
 
-#if 0
 class WXDLLIMPEXP_ADV wxDataViewTreeCtrl: public wxDataViewCtrl
 {
 public:
-    wxDataViewCtrl( wxWindow *parent, wxWindowID id,
+    wxDataViewTreeCtrl();
+    wxDataViewTreeCtrl( wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = wxDV_NO_HEADER,
            const wxValidator& validator = wxDefaultValidator );
+    ~wxDataViewTreeCtrl();
 
     bool Create( wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
@@ -941,14 +950,68 @@ public:
 
     wxDataViewTreeStore *GetStore()
         { return (wxDataViewTreeStore*) GetModel(); }
+    const wxDataViewTreeStore *GetStore() const
+        { return (const wxDataViewTreeStore*) GetModel(); }
 
-    void OnExpand( wxDataViewCtrl &event );
-    void OnCollapse( wxDataViewCtrl &event );
+    void SetImageList( wxImageList *imagelist );
+    wxImageList* GetImageList() { return m_imageList; }
+    
+    wxDataViewItem AppendItem( const wxDataViewItem& parent,
+        const wxString &text, int icon = -1, wxClientData *data = NULL );
+    wxDataViewItem PrependItem( const wxDataViewItem& parent,
+        const wxString &text, int icon = -1, wxClientData *data = NULL );
+    wxDataViewItem InsertItem( const wxDataViewItem& parent, const wxDataViewItem& previous,
+        const wxString &text, int icon = -1, wxClientData *data = NULL );
+
+    wxDataViewItem PrependContainer( const wxDataViewItem& parent,
+        const wxString &text, int icon = -1, int expanded = -1,
+        wxClientData *data = NULL );
+    wxDataViewItem AppendContainer( const wxDataViewItem& parent,
+        const wxString &text, int icon = -1, int expanded = -1,
+        wxClientData *data = NULL );
+    wxDataViewItem InsertContainer( const wxDataViewItem& parent, const wxDataViewItem& previous,
+        const wxString &text, int icon = -1, int expanded = -1,
+        wxClientData *data = NULL );
+
+    wxDataViewItem GetNthChild( const wxDataViewItem& parent, unsigned int pos ) const
+        { return GetStore()->GetNthChild(parent, pos); }
+    int GetChildCount( const wxDataViewItem& parent ) const
+        { return GetStore()->GetChildCount(parent); }
+
+    void SetItemText( const wxDataViewItem& item, const wxString &text )
+        { GetStore()->SetItemText(item,text); }
+    wxString GetItemText( const wxDataViewItem& item ) const
+        { return GetStore()->GetItemText(item); }
+    void SetItemIcon( const wxDataViewItem& item, const wxIcon &icon )
+        { GetStore()->SetItemIcon(item,icon); }
+    const wxIcon &GetItemIcon( const wxDataViewItem& item ) const
+        { return GetStore()->GetItemIcon(item); }
+    void SetItemExpandedIcon( const wxDataViewItem& item, const wxIcon &icon )
+        { GetStore()->SetItemExpandedIcon(item,icon); }
+    const wxIcon &GetItemExpandedIcon( const wxDataViewItem& item ) const
+        { return GetStore()->GetItemExpandedIcon(item); }
+    void SetItemData( const wxDataViewItem& item, wxClientData *data )
+        { GetStore()->SetItemData(item,data); }
+    wxClientData *GetItemData( const wxDataViewItem& item ) const
+        { return GetStore()->GetItemData(item); }
+
+    void DeleteItem( const wxDataViewItem& item )
+        { GetStore()->DeleteItem(item); }
+    void DeleteChildren( const wxDataViewItem& item )
+        { GetStore()->DeleteChildren(item); }
+    void DeleteAllItems()
+        { GetStore()->DeleteAllItems(); }
+
+    void OnExpanded( wxDataViewEvent &event );
+    void OnCollapsed( wxDataViewEvent &event );
 
 private:
+    wxImageList  *m_imageList;
+
+private:
+    DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDataViewTreeCtrl)
 };
-#endif
 
 #endif // wxUSE_DATAVIEWCTRL
 

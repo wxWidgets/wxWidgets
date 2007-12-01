@@ -781,6 +781,11 @@ wxDataViewModel* wxDataViewCtrlBase::GetModel()
     return m_model;
 }
 
+const wxDataViewModel* wxDataViewCtrlBase::GetModel() const
+{
+    return m_model;
+}
+
 wxDataViewColumn *
 wxDataViewCtrlBase::AppendTextColumn( const wxString &label, unsigned int model_column,
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
@@ -1163,6 +1168,7 @@ wxDataViewTreeStoreContainerNode::wxDataViewTreeStoreContainerNode(
     wxDataViewTreeStoreNode( parent, text, icon, data )
 {
     m_iconExpanded = expanded;
+    m_isExpanded = false;
     m_children.DeleteContents(true);
 }
 
@@ -1424,7 +1430,15 @@ wxDataViewTreeStore::GetValue(wxVariant &variant,
     wxDataViewTreeStoreNode *node = FindNode( item );
     if (!node) return;
 
-    wxDataViewIconText data( node->GetText(), node->GetIcon() );
+    wxIcon icon( node->GetIcon());
+    if (node->IsContainer())
+    {
+        wxDataViewTreeStoreContainerNode *container = (wxDataViewTreeStoreContainerNode*) node;
+        if (container->IsExpanded() && container->GetExpandedIcon().IsOk())
+           icon = container->GetExpandedIcon();
+    }
+    
+    wxDataViewIconText data( node->GetText(), icon );
 
     variant << data;
 }
@@ -1535,6 +1549,150 @@ wxDataViewTreeStoreContainerNode *wxDataViewTreeStore::FindContainerNode( const 
 
     return (wxDataViewTreeStoreContainerNode*) node;
 }
+
+//-----------------------------------------------------------------------------
+// wxDataViewTreeCtrl
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxDataViewTreeCtrl,wxDataViewCtrl)
+
+BEGIN_EVENT_TABLE(wxDataViewTreeCtrl,wxDataViewCtrl)
+   EVT_DATAVIEW_ITEM_EXPANDED(-1, wxDataViewTreeCtrl::OnExpanded)
+   EVT_DATAVIEW_ITEM_COLLAPSED(-1, wxDataViewTreeCtrl::OnCollapsed)
+END_EVENT_TABLE()
+
+wxDataViewTreeCtrl::wxDataViewTreeCtrl()
+{
+    m_imageList = NULL;
+}
+
+wxDataViewTreeCtrl::wxDataViewTreeCtrl( wxWindow *parent, wxWindowID id,
+           const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator ) 
+{
+    m_imageList = NULL;
+    Create( parent, id, pos, size, style, validator );
+    
+    wxDataViewTreeStore *store = new wxDataViewTreeStore;
+    AssociateModel( store );
+    store->DecRef();
+    AppendIconTextColumn( "", 0, wxDATAVIEW_CELL_INERT, 200 );
+}
+
+wxDataViewTreeCtrl::~wxDataViewTreeCtrl()
+{
+    if (m_imageList)
+        delete m_imageList;
+}
+
+bool wxDataViewTreeCtrl::Create( wxWindow *parent, wxWindowID id,
+           const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator )
+{
+    return wxDataViewCtrl::Create( parent, id, pos, size, style, validator );
+}
+
+void wxDataViewTreeCtrl::SetImageList( wxImageList *imagelist )
+{
+    if (m_imageList)
+        delete m_imageList;
+
+    m_imageList = imagelist;   
+}
+    
+wxDataViewItem wxDataViewTreeCtrl::AppendItem( const wxDataViewItem& parent,
+        const wxString &text, int iconIndex, wxClientData *data )
+{
+    wxIcon icon = wxNullIcon;
+    if (m_imageList && (iconIndex != -1))
+        icon = m_imageList->GetIcon( iconIndex );
+        
+    return GetStore()->AppendItem( parent, text, icon, data );
+}
+
+wxDataViewItem wxDataViewTreeCtrl::PrependItem( const wxDataViewItem& parent,
+        const wxString &text, int iconIndex, wxClientData *data )
+{
+    wxIcon icon = wxNullIcon;
+    if (m_imageList && (iconIndex != -1))
+        icon = m_imageList->GetIcon( iconIndex );
+        
+    return GetStore()->PrependItem( parent, text, icon, data );
+}
+
+wxDataViewItem wxDataViewTreeCtrl::InsertItem( const wxDataViewItem& parent, const wxDataViewItem& previous,
+        const wxString &text, int iconIndex, wxClientData *data )
+{
+    wxIcon icon = wxNullIcon;
+    if (m_imageList && (iconIndex != -1))
+        icon = m_imageList->GetIcon( iconIndex );
+        
+    return GetStore()->InsertItem( parent, previous, text, icon, data );
+}
+
+wxDataViewItem wxDataViewTreeCtrl::PrependContainer( const wxDataViewItem& parent,
+        const wxString &text, int iconIndex, int expandedIndex, wxClientData *data )
+{
+    wxIcon icon = wxNullIcon;
+    if (m_imageList && (iconIndex != -1))
+        icon = m_imageList->GetIcon( iconIndex );
+        
+    wxIcon expanded = wxNullIcon;
+    if (m_imageList && (expandedIndex != -1))
+        expanded = m_imageList->GetIcon( expandedIndex );
+        
+    return GetStore()->PrependContainer( parent, text, icon, expanded, data );
+}
+
+wxDataViewItem wxDataViewTreeCtrl::AppendContainer( const wxDataViewItem& parent,
+        const wxString &text, int iconIndex, int expandedIndex, wxClientData *data )
+{
+    wxIcon icon = wxNullIcon;
+    if (m_imageList && (iconIndex != -1))
+        icon = m_imageList->GetIcon( iconIndex );
+        
+    wxIcon expanded = wxNullIcon;
+    if (m_imageList && (expandedIndex != -1))
+        expanded = m_imageList->GetIcon( expandedIndex );
+        
+    return GetStore()->AppendContainer( parent, text, icon, expanded, data );
+}
+
+wxDataViewItem wxDataViewTreeCtrl::InsertContainer( const wxDataViewItem& parent, const wxDataViewItem& previous,
+        const wxString &text, int iconIndex, int expandedIndex, wxClientData *data )
+{
+    wxIcon icon = wxNullIcon;
+    if (m_imageList && (iconIndex != -1))
+        icon = m_imageList->GetIcon( iconIndex );
+        
+    wxIcon expanded = wxNullIcon;
+    if (m_imageList && (expandedIndex != -1))
+        expanded = m_imageList->GetIcon( expandedIndex );
+        
+    return GetStore()->InsertContainer( parent, previous, text, icon, expanded, data );
+}
+
+
+void wxDataViewTreeCtrl::OnExpanded( wxDataViewEvent &event )
+{
+    if (m_imageList) return;
+    
+    wxDataViewTreeStoreContainerNode* container = GetStore()->FindContainerNode( event.GetItem() );
+    if (!container) return;
+    
+    container->SetExpanded( true );
+    GetStore()->ItemChanged( event.GetItem() );
+}
+
+void wxDataViewTreeCtrl::OnCollapsed( wxDataViewEvent &event )
+{
+    if (m_imageList) return;
+    
+    wxDataViewTreeStoreContainerNode* container = GetStore()->FindContainerNode( event.GetItem() );
+    if (!container) return;
+    
+    container->SetExpanded( false );
+    GetStore()->ItemChanged( event.GetItem() );
+}
+
 
 #endif // wxUSE_DATAVIEWCTRL
 
