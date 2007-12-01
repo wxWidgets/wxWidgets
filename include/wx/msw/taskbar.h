@@ -33,6 +33,24 @@ public:
     bool RemoveIcon(void);
     bool PopupMenu(wxMenu *menu);
 
+    // MSW-specific class methods
+
+    // show a balloon notification (the icon must have been already initialized
+    // using SetIcon)
+    //
+    // title and text are limited to 63 and 255 characters respectively, msec
+    // is the timeout, in milliseconds, before the balloon disappears (will be
+    // clamped down to the allowed 10-30s range by Windows if it's outside it)
+    // and flags can include wxICON_ERROR/INFO/WARNING to show a corresponding
+    // icon
+    //
+    // return true if balloon was shown, false on error (incorrect parameters
+    // or function unsupported by OS)
+    bool ShowBalloon(const wxString& title,
+                     const wxString& text,
+                     unsigned msec = 0,
+                     int flags = 0);
+
 protected:
     friend class wxTaskBarIconWindow;
 

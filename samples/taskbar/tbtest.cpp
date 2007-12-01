@@ -9,6 +9,14 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -17,7 +25,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/wx.h"
 #endif
 
 // the application icon (under Windows and OS/2 it is in resources)
@@ -28,39 +36,99 @@
 #include "smile.xpm"
 
 #include "wx/taskbar.h"
+
 #include "tbtest.h"
 
-// Declare two frames
-MyDialog   *dialog = NULL;
+// ----------------------------------------------------------------------------
+// global variables
+// ----------------------------------------------------------------------------
+
+static MyDialog *gs_dialog = NULL;
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// MyApp
+// ----------------------------------------------------------------------------
 
 IMPLEMENT_APP(MyApp)
 
-bool MyApp::OnInit(void)
+bool MyApp::OnInit()
 {
     if ( !wxApp::OnInit() )
         return false;
 
-    // Create the main frame window
-    dialog = new MyDialog(NULL, wxID_ANY, wxT("wxTaskBarIcon Test Dialog"), wxDefaultPosition, wxSize(365, 290));
+    // Create the main window
+    gs_dialog = new MyDialog(wxT("wxTaskBarIcon Test Dialog"));
 
-    dialog->Show(true);
+    gs_dialog->Show(true);
 
     return true;
 }
 
 
+// ----------------------------------------------------------------------------
+// MyDialog implementation
+// ----------------------------------------------------------------------------
+
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
+    EVT_BUTTON(wxID_ABOUT, MyDialog::OnAbout)
     EVT_BUTTON(wxID_OK, MyDialog::OnOK)
     EVT_BUTTON(wxID_EXIT, MyDialog::OnExit)
     EVT_CLOSE(MyDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
 
-MyDialog::MyDialog(wxWindow* parent, const wxWindowID id, const wxString& title,
-    const wxPoint& pos, const wxSize& size, const long windowStyle):
-  wxDialog(parent, id, title, pos, size, windowStyle)
+MyDialog::MyDialog(const wxString& title)
+        : wxDialog(NULL, wxID_ANY, title)
 {
-    Init();
+    wxSizer * const sizerTop = new wxBoxSizer(wxVERTICAL);
+
+    wxSizerFlags flags;
+    flags.Border(wxALL, 10);
+
+    sizerTop->Add(new wxStaticText
+                      (
+                        this,
+                        wxID_ANY,
+                        _T("Press 'Hide me' to hide this window, Exit to quit.")
+                      ), flags);
+
+    sizerTop->Add(new wxStaticText
+                      (
+                        this,
+                        wxID_ANY,
+                        _T("Double-click on the taskbar icon to show me again.")
+                      ), flags);
+
+    sizerTop->AddStretchSpacer()->SetMinSize(200, 50);
+
+    wxSizer * const sizerBtns = new wxBoxSizer(wxHORIZONTAL);
+    sizerBtns->Add(new wxButton(this, wxID_ABOUT, _T("&About")), flags);
+    sizerBtns->Add(new wxButton(this, wxID_OK, _T("&Hide")), flags);
+    sizerBtns->Add(new wxButton(this, wxID_EXIT, _T("E&xit")), flags);
+
+    sizerTop->Add(sizerBtns, flags.Align(wxALIGN_CENTER_HORIZONTAL));
+    SetSizerAndFit(sizerTop);
+    Centre();
+
+    m_taskBarIcon = new MyTaskBarIcon();
+#if defined(__WXCOCOA__)
+    m_dockIcon = new MyTaskBarIcon(wxTaskBarIcon::DOCK);
+#endif
+
+    // we should be able to show up to 128 characters on recent Windows versions
+    // (and 64 on Win9x)
+    if ( !m_taskBarIcon->SetIcon(wxICON(sample),
+                                 "wxTaskBarIcon Sample\n"
+                                 "With a very, very, very, very\n"
+                                 "long tooltip whose length is\n"
+                                 "greater than 64 characters.") )
+    {
+        wxLogError(wxT("Could not set icon."));
+    }
 }
 
 MyDialog::~MyDialog()
@@ -69,6 +137,22 @@ MyDialog::~MyDialog()
 #if defined(__WXCOCOA__)
     delete m_dockIcon;
 #endif
+}
+
+void MyDialog::OnAbout(wxCommandEvent& WXUNUSED(event))
+{
+    static const char * const title = "About wxWidgets Taskbar Sample";
+    static const char * const message
+        = "wxWidgets sample showing wxTaskBarIcon class\n"
+          "\n"
+          "(C) 1997 Julian Smart\n"
+          "(C) 2007 Vadim Zeitlin";
+
+#ifdef __WXMSW__
+    m_taskBarIcon->ShowBalloon(title, message, 15000, wxICON_INFORMATION);
+#else // !__WXMSW__
+    wxMessageBox(message, title, wxICON_INFORMATION, this);
+#endif // __WXMSW__/!__WXMSW__
 }
 
 void MyDialog::OnOK(wxCommandEvent& WXUNUSED(event))
@@ -86,34 +170,10 @@ void MyDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
     Destroy();
 }
 
-void MyDialog::Init(void)
-{
-  (void)new wxStaticText(this, wxID_ANY, _T("Press 'Hide me' to hide me, Exit to quit."),
-                         wxPoint(10, 20));
 
-  (void)new wxStaticText(this, wxID_ANY, _T("Double-click on the taskbar icon to show me again."),
-                         wxPoint(10, 40));
-
-  (void)new wxButton(this, wxID_EXIT, _T("Exit"), wxPoint(185, 230), wxSize(80, 25));
-  (new wxButton(this, wxID_OK, _T("Hide me"), wxPoint(100, 230), wxSize(80, 25)))->SetDefault();
-  Centre(wxBOTH);
-
-  m_taskBarIcon = new MyTaskBarIcon();
-#if defined(__WXCOCOA__)
-  m_dockIcon = new MyTaskBarIcon(wxTaskBarIcon::DOCK);
-#endif
-  // we should be able to show up to 128 characters on recent Windows versions
-  // (and 64 on Win9x)
-  if (!m_taskBarIcon->SetIcon(wxICON(sample),
-                              "wxTaskBarIcon Sample\n"
-                              "With a very, very, very, very\n"
-                              "long tooltip whose length is\n"
-                              "greater than 64 characters."))
-  {
-        wxMessageBox(wxT("Could not set icon."));
-  }
-}
-
+// ----------------------------------------------------------------------------
+// MyTaskBarIcon implementation
+// ----------------------------------------------------------------------------
 
 enum
 {
@@ -140,12 +200,12 @@ END_EVENT_TABLE()
 
 void MyTaskBarIcon::OnMenuRestore(wxCommandEvent& )
 {
-    dialog->Show(true);
+    gs_dialog->Show(true);
 }
 
 void MyTaskBarIcon::OnMenuExit(wxCommandEvent& )
 {
-    dialog->Close(true);
+    gs_dialog->Close(true);
 }
 
 static bool check = true;
@@ -197,5 +257,5 @@ wxMenu *MyTaskBarIcon::CreatePopupMenu()
 
 void MyTaskBarIcon::OnLeftButtonDClick(wxTaskBarIconEvent&)
 {
-    dialog->Show(true);
+    gs_dialog->Show(true);
 }

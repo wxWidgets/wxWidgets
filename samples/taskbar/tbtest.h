@@ -9,7 +9,7 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-class MyTaskBarIcon: public wxTaskBarIcon
+class MyTaskBarIcon : public wxTaskBarIcon
 {
 public:
 #if defined(__WXCOCOA__)
@@ -34,7 +34,7 @@ public:
 
 
 // Define a new application
-class MyApp: public wxApp
+class MyApp : public wxApp
 {
 public:
     virtual bool OnInit();
@@ -43,13 +43,11 @@ public:
 class MyDialog: public wxDialog
 {
 public:
-    MyDialog(wxWindow* parent, const wxWindowID id, const wxString& title,
-        const wxPoint& pos, const wxSize& size, const long windowStyle = wxDEFAULT_DIALOG_STYLE);
+    MyDialog(const wxString& title);
     virtual ~MyDialog();
 
 protected:
-    void Init();
-
+    void OnAbout(wxCommandEvent& event);
     void OnOK(wxCommandEvent& event);
     void OnExit(wxCommandEvent& event);
     void OnCloseWindow(wxCloseEvent& event);

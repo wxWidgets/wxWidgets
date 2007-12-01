@@ -177,7 +177,7 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
     notifyData.uFlags |= NIF_TIP;
     if ( !tooltip.empty() )
     {
-        wxStrncpy(notifyData.szTip, tooltip.c_str(), WXSIZEOF(notifyData.szTip));
+        wxStrncpy(notifyData.szTip, tooltip.wx_str(), WXSIZEOF(notifyData.szTip));
     }
 
     bool ok = wxShellNotifyIcon(m_iconAdded ? NIM_MODIFY
@@ -187,6 +187,32 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
         m_iconAdded = true;
 
     return ok;
+}
+
+bool
+wxTaskBarIcon::ShowBalloon(const wxString& title,
+                           const wxString& text,
+                           unsigned msec,
+                           int flags)
+{
+    wxCHECK_MSG( m_iconAdded, false,
+                    _T("can't be used before the icon is created") );
+
+    NotifyIconData notifyData(GetHwndOf(m_win));
+    notifyData.uFlags |= NIF_INFO;
+    notifyData.uTimeout = msec;
+    wxStrncpy(notifyData.szInfo, text.wx_str(), WXSIZEOF(notifyData.szInfo));
+    wxStrncpy(notifyData.szInfoTitle, title.wx_str(),
+                WXSIZEOF(notifyData.szInfoTitle));
+
+    if ( flags & wxICON_INFORMATION )
+        notifyData.dwInfoFlags |= NIIF_INFO;
+    else if ( flags & wxICON_WARNING )
+        notifyData.dwInfoFlags |= NIIF_WARNING;
+    else if ( flags & wxICON_ERROR )
+        notifyData.dwInfoFlags |= NIIF_ERROR;
+
+    return wxShellNotifyIcon(NIM_MODIFY, &notifyData) != 0;
 }
 
 bool wxTaskBarIcon::RemoveIcon()
