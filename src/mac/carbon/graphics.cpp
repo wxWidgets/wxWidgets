@@ -759,7 +759,7 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
 
     wxASSERT_MSG( status == noErr , wxT("couldn't modify ATSU style") );
 #endif
-#if WXMAC_USE_CG_TEXT
+#if wxMAC_USE_CG_TEXT
 #endif
 }
 
@@ -774,7 +774,7 @@ wxMacCoreGraphicsFontData::~wxMacCoreGraphicsFontData()
         m_macATSUIStyle = NULL;
     }
 #endif
-#if WXMAC_USE_CG_TEXT
+#if wxMAC_USE_CG_TEXT
 #endif
 }
 
@@ -1774,7 +1774,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
         return;
     }
 #endif
-#if WXMAC_USE_CG_TEXT
+#if wxMAC_USE_CG_TEXT
     // TODO core graphics text implementation here
 #endif
 }
@@ -1903,7 +1903,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
         return;
     }
 #endif
-#if WXMAC_USE_CG_TEXT
+#if wxMAC_USE_CG_TEXT
     // default implementation takes care of rotation and calls non rotated DrawText afterwards
     wxGraphicsContext::DrawText( str, x, y, angle );
 #endif
@@ -2014,7 +2014,7 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         return;
     }
 #endif
-#if WXMAC_USE_CG_TEXT
+#if wxMAC_USE_CG_TEXT
     // TODO core graphics text implementation here
 #endif
 }
@@ -2104,7 +2104,7 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
 #endif
     }
 #endif
-#if WXMAC_USE_CG_TEXT
+#if wxMAC_USE_CG_TEXT
     // TODO core graphics text implementation here
 #endif
 }
