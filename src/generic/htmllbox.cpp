@@ -464,7 +464,7 @@ wxPoint wxHtmlListBox::GetRootCellCoords(size_t n) const
 
 bool wxHtmlListBox::PhysicalCoordsToCell(wxPoint& pos, wxHtmlCell*& cell) const
 {
-    int n = HitTest(pos);
+    int n = VirtualHitTest(pos.y);
     if ( n == wxNOT_FOUND )
         return false;
 

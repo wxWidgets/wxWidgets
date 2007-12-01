@@ -634,7 +634,7 @@ void wxVListBox::OnLeftDown(wxMouseEvent& event)
 {
     SetFocus();
 
-    int item = HitTest(event.GetPosition());
+    int item = VirtualHitTest(event.GetPosition().y);
 
     if ( item != wxNOT_FOUND )
     {
@@ -657,7 +657,7 @@ void wxVListBox::OnLeftDown(wxMouseEvent& event)
 
 void wxVListBox::OnLeftDClick(wxMouseEvent& eventMouse)
 {
-    int item = HitTest(eventMouse.GetPosition());
+    int item = VirtualHitTest(eventMouse.GetPosition().y);
     if ( item != wxNOT_FOUND )
     {
 
