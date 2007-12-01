@@ -93,126 +93,16 @@ static int wxXErrorHandler(Display *dpy, XErrorEvent *xevent)
 }
 #endif // __WXDEBUG__
 
-bool wxApp::Initialize(int& argcOrig, wxChar **argvOrig)
+bool wxApp::Initialize(int& argc_, wxChar **argv_)
 {
 #if wxUSE_INTL
     wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
 #endif
 
-    if ( !wxAppBase::Initialize(argcOrig, argvOrig) )
+    if ( !wxAppBase::Initialize(argc_, argv_) )
         return false;
 
     wxWidgetHashTable = new wxHashTable(wxKEY_INTEGER);
-
-    return true;
-}
-
-void wxApp::CleanUp()
-{
-    wxAppBase::CleanUp();
-
-    delete wxWidgetHashTable;
-    wxWidgetHashTable = NULL;
-
-    delete m_mainLoop;
-
-    for( wxPerDisplayDataMap::iterator it  = m_perDisplayData->begin(),
-                                       end = m_perDisplayData->end();
-         it != end; ++it )
-    {
-        delete it->second->m_visualInfo;
-        // On Solaris 10 calling XtDestroyWidget on the top level widget
-        // dumps core if the locale is set to something other than "C"
-#ifndef __SUN__
-        XtDestroyWidget( it->second->m_topLevelWidget );
-#endif
-        delete it->second;
-    }
-}
-
-void wxApp::Exit()
-{
-    wxApp::CleanUp();
-
-    wxAppConsole::Exit();
-}
-
-// ============================================================================
-// wxApp
-// ============================================================================
-
-wxApp::wxApp()
-{
-    argc = 0;
-    argv = NULL;
-
-    m_mainLoop = new wxEventLoop;
-    m_mainColormap = (WXColormap) NULL;
-    m_appContext = (WXAppContext) NULL;
-    m_initialDisplay = (WXDisplay*) 0;
-    m_perDisplayData = new wxPerDisplayDataMap;
-}
-
-wxApp::~wxApp()
-{
-    delete m_perDisplayData;
-}
-
-int wxApp::MainLoop()
-{
-    /*
-    * Sit around forever waiting to process X-events. Property Change
-    * event are handled special, because they have to refer to
-    * the root window rather than to a widget. therefore we can't
-    * use an Xt-eventhandler.
-    */
-
-    XSelectInput(XtDisplay((Widget) wxTheApp->GetTopLevelWidget()),
-        XDefaultRootWindow(XtDisplay((Widget) wxTheApp->GetTopLevelWidget())),
-        PropertyChangeMask);
-
-    m_mainLoop->Run();
-
-    return 0;
-}
-
-// This should be redefined in a derived class for
-// handling property change events for XAtom IPC.
-void wxApp::HandlePropertyChange(WXEvent *event)
-{
-    // by default do nothing special
-    XtDispatchEvent((XEvent*) event); /* let Motif do the work */
-}
-
-static char *fallbackResources[] = {
-    // better defaults for CDE under Irix
-    //
-    // TODO: do something similar for the other systems, the hardcoded defaults
-    //       below are ugly
-#ifdef __SGI__
-    wxMOTIF_STR("*sgiMode: True"),
-    wxMOTIF_STR("*useSchemes: all"),
-#else // !__SGI__
-#if !wxMOTIF_USE_RENDER_TABLE
-    wxMOTIF_STR("*.fontList: -*-helvetica-medium-r-normal-*-*-120-*-*-*-*-*-*"),
-#else
-    wxMOTIF_STR("*wxDefaultRendition.fontName: -*-helvetica-medium-r-normal-*-*-120-*-*-*-*-*-*"),
-    wxMOTIF_STR("*wxDefaultRendition.fontType: FONT_IS_FONTSET"),
-    wxMOTIF_STR("*.renderTable: wxDefaultRendition"),
-#endif
-    wxMOTIF_STR("*listBox.background: white"),
-    wxMOTIF_STR("*text.background: white"),
-    wxMOTIF_STR("*comboBox.Text.background: white"),
-    wxMOTIF_STR("*comboBox.List.background: white"),
-#endif // __SGI__/!__SGI__
-    NULL
-};
-
-// Create an application context
-bool wxApp::OnInitGui()
-{
-    if( !wxAppBase::OnInitGui() )
-        return false;
 
 #ifdef __HPUX__
     // under HP-UX creating XmFontSet fails when the system locale is C and
@@ -249,6 +139,30 @@ bool wxApp::OnInitGui()
     XtSetLanguageProc(NULL, NULL, NULL);
     XtToolkitInitialize() ;
     wxTheApp->m_appContext = (WXAppContext) XtCreateApplicationContext();
+
+    static char *fallbackResources[] = {
+        // better defaults for CDE under Irix
+        //
+        // TODO: do something similar for the other systems, the hardcoded defaults
+        //       below are ugly
+#ifdef __SGI__
+        wxMOTIF_STR("*sgiMode: True"),
+        wxMOTIF_STR("*useSchemes: all"),
+#else // !__SGI__
+#if !wxMOTIF_USE_RENDER_TABLE
+        wxMOTIF_STR("*.fontList: -*-helvetica-medium-r-normal-*-*-120-*-*-*-*-*-*"),
+#else
+        wxMOTIF_STR("*wxDefaultRendition.fontName: -*-helvetica-medium-r-normal-*-*-120-*-*-*-*-*-*"),
+        wxMOTIF_STR("*wxDefaultRendition.fontType: FONT_IS_FONTSET"),
+        wxMOTIF_STR("*.renderTable: wxDefaultRendition"),
+#endif
+        wxMOTIF_STR("*listBox.background: white"),
+        wxMOTIF_STR("*text.background: white"),
+        wxMOTIF_STR("*comboBox.Text.background: white"),
+        wxMOTIF_STR("*comboBox.List.background: white"),
+#endif // __SGI__/!__SGI__
+        NULL
+    };
     XtAppSetFallbackResources((XtAppContext) wxTheApp->m_appContext, fallbackResources);
 
     // we shouldn't pass empty application/class name as it results in
@@ -270,7 +184,7 @@ bool wxApp::OnInitGui()
     char **argvX11 = new char *[argc + 1];
     for ( i = 0; i < argc; i++ )
     {
-        argvX11[i] = strdup(wxConvLibc.cWX2MB(argv[i]));
+        argvX11[i] = strdup(wxConvLibc.cWX2MB(argv_[i]));
     }
 
     argvX11[argc] = NULL;
@@ -294,13 +208,17 @@ bool wxApp::OnInitGui()
         // we have to drop the parameters which were consumed by X11+
         for ( i = 0; i < argcX11; i++ )
         {
-            while ( strcmp(wxConvLibc.cWX2MB(argv[i]), argvX11[i]) != 0 )
+            while ( strcmp(wxConvLibc.cWX2MB(argv_[i]), argvX11[i]) != 0 )
             {
-                memmove(argv + i, argv + i + 1, (argc - i)*sizeof(*argv));
+                memmove(argv_ + i, argv_ + i + 1, (argc - i)*sizeof(*argv_));
             }
         }
 
         argc = argcX11;
+
+        // update internal arg[cv] as X11 may have removed processed options:
+        argc = argc_;
+        argv = argv_;
     }
     //else: XtOpenDisplay() didn't modify our parameters
 
@@ -354,6 +272,80 @@ bool wxApp::OnInitGui()
     wxAddIdleCallback();
 
     return true;
+}
+
+void wxApp::CleanUp()
+{
+    wxAppBase::CleanUp();
+
+    delete wxWidgetHashTable;
+    wxWidgetHashTable = NULL;
+
+    delete m_mainLoop;
+
+    for( wxPerDisplayDataMap::iterator it  = m_perDisplayData->begin(),
+                                       end = m_perDisplayData->end();
+         it != end; ++it )
+    {
+        delete it->second->m_visualInfo;
+        // On Solaris 10 calling XtDestroyWidget on the top level widget
+        // dumps core if the locale is set to something other than "C"
+#ifndef __SUN__
+        XtDestroyWidget( it->second->m_topLevelWidget );
+#endif
+        delete it->second;
+    }
+}
+
+void wxApp::Exit()
+{
+    wxApp::CleanUp();
+
+    wxAppConsole::Exit();
+}
+
+// ============================================================================
+// wxApp
+// ============================================================================
+
+wxApp::wxApp()
+{
+    m_mainLoop = new wxEventLoop;
+    m_mainColormap = (WXColormap) NULL;
+    m_appContext = (WXAppContext) NULL;
+    m_initialDisplay = (WXDisplay*) 0;
+    m_perDisplayData = new wxPerDisplayDataMap;
+}
+
+wxApp::~wxApp()
+{
+    delete m_perDisplayData;
+}
+
+int wxApp::MainLoop()
+{
+    /*
+    * Sit around forever waiting to process X-events. Property Change
+    * event are handled special, because they have to refer to
+    * the root window rather than to a widget. therefore we can't
+    * use an Xt-eventhandler.
+    */
+
+    XSelectInput(XtDisplay((Widget) wxTheApp->GetTopLevelWidget()),
+        XDefaultRootWindow(XtDisplay((Widget) wxTheApp->GetTopLevelWidget())),
+        PropertyChangeMask);
+
+    m_mainLoop->Run();
+
+    return 0;
+}
+
+// This should be redefined in a derived class for
+// handling property change events for XAtom IPC.
+void wxApp::HandlePropertyChange(WXEvent *event)
+{
+    // by default do nothing special
+    XtDispatchEvent((XEvent*) event); /* let Motif do the work */
 }
 
 WXColormap wxApp::GetMainColormap(WXDisplay* display)
