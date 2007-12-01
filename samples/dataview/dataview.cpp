@@ -726,8 +726,11 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     // wxDataViewTreeCtrl
 
     wxDataViewTreeCtrl *treectrl2 = new wxDataViewTreeCtrl( this, -1, wxDefaultPosition, wxSize(300,200) );
+    
     wxImageList *ilist = new wxImageList;
     ilist->Add( wxIcon(small1_xpm) );
+    treectrl2->SetImageList( ilist );
+    
     parent = treectrl2->AppendContainer( wxDataViewItem(0), "Root 1", 0 );
     child = treectrl2->AppendItem( parent, "Child 1", 0 );
     child = treectrl2->AppendItem( parent, "Child 2", 0 );
