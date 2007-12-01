@@ -650,20 +650,20 @@ void     wxgtk_tree_model_set_sort_column_id  (GtkTreeSortable        *sortable,
     gs_lastLeftClickHeader = NULL;
 }
 
-void     wxgtk_tree_model_set_sort_func         (GtkTreeSortable        *sortable,
-						      gint                      sort_column_id,
-						      GtkTreeIterCompareFunc    func,
-						      gpointer                  data,
-						      GtkDestroyNotify          destroy)
+void     wxgtk_tree_model_set_sort_func         (GtkTreeSortable          *sortable,
+						 gint                      WXUNUSED(sort_column_id),
+						 GtkTreeIterCompareFunc    func,
+						 gpointer                  WXUNUSED(data),
+						 GtkDestroyNotify          WXUNUSED(destroy) )
 {
     g_return_if_fail (GTK_IS_WX_TREE_MODEL (sortable) );
     g_return_if_fail (func != NULL);
 }
 
-void     wxgtk_tree_model_set_default_sort_func (GtkTreeSortable        *sortable,
-						      GtkTreeIterCompareFunc    func,
-						      gpointer                  data,
-						      GtkDestroyNotify          destroy)
+void     wxgtk_tree_model_set_default_sort_func (GtkTreeSortable          *sortable,
+						 GtkTreeIterCompareFunc    func,
+						 gpointer                  WXUNUSED(data),
+						 GtkDestroyNotify          WXUNUSED(destroy) )
 {
     g_return_if_fail (GTK_IS_WX_TREE_MODEL (sortable) );
     g_return_if_fail (func != NULL);
@@ -673,6 +673,8 @@ void     wxgtk_tree_model_set_default_sort_func (GtkTreeSortable        *sortabl
 
 gboolean wxgtk_tree_model_has_default_sort_func (GtkTreeSortable        *sortable)
 {
+    g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (sortable), FALSE );
+    
     return FALSE;
 }
 
@@ -821,12 +823,12 @@ gtk_wx_cell_renderer_new (void)
 
 static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
                         GtkCellRenderer         *renderer,
-                        GdkEvent                *event,
+                        GdkEvent                *WXUNUSED(event),
                         GtkWidget               *widget,
                         const gchar             *path,
-                        GdkRectangle            *background_area,
+                        GdkRectangle            *WXUNUSED(background_area),
                         GdkRectangle            *cell_area,
-                        GtkCellRendererState     flags )
+                        GtkCellRendererState     WXUNUSED(flags) )
 {
     GtkWxCellRenderer *wxrenderer = (GtkWxCellRenderer *) renderer;
     wxDataViewCustomRenderer *cell = wxrenderer->cell;
@@ -861,7 +863,7 @@ static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
 
 static void
 gtk_wx_cell_renderer_get_size (GtkCellRenderer *renderer,
-                               GtkWidget       *widget,
+                               GtkWidget       *WXUNUSED(widget),
                                GdkRectangle    *cell_area,
                                gint            *x_offset,
                                gint            *y_offset,
@@ -969,9 +971,9 @@ gtk_wx_cell_renderer_activate(
                         GdkEvent                *event,
                         GtkWidget               *widget,
                         const gchar             *path,
-                        GdkRectangle            *background_area,
+                        GdkRectangle            *WXUNUSED(background_area),
                         GdkRectangle            *cell_area,
-                        GtkCellRendererState     flags )
+                        GtkCellRendererState     WXUNUSED(flags) )
 {
     GtkWxCellRenderer *wxrenderer = (GtkWxCellRenderer *) renderer;
     wxDataViewCustomRenderer *cell = wxrenderer->cell;
@@ -1196,7 +1198,7 @@ bool wxGtkDataViewModelNotifier::Cleared()
 static gpointer s_user_data = NULL;
 
 static void
-wxgtk_cell_editable_editing_done( GtkCellEditable *editable,
+wxgtk_cell_editable_editing_done( GtkCellEditable *WXUNUSED(editable),
                                   wxDataViewRenderer *wxrenderer )
 {
     wxDataViewColumn *column = wxrenderer->GetOwner();
@@ -1210,7 +1212,7 @@ wxgtk_cell_editable_editing_done( GtkCellEditable *editable,
 }
 
 static void
-wxgtk_renderer_editing_started( GtkCellRenderer *cell, GtkCellEditable *editable,
+wxgtk_renderer_editing_started( GtkCellRenderer *WXUNUSED(cell), GtkCellEditable *editable,
                                 gchar *path, wxDataViewRenderer *wxrenderer )
 {
     wxDataViewColumn *column = wxrenderer->GetOwner();
@@ -1384,7 +1386,7 @@ static void wxGtkTextRendererEditedCallback( GtkCellRendererText *renderer,
     gchar *arg1, gchar *arg2, gpointer user_data );
 }
 
-static void wxGtkTextRendererEditedCallback( GtkCellRendererText *renderer,
+static void wxGtkTextRendererEditedCallback( GtkCellRendererText *WXUNUSED(renderer),
     gchar *arg1, gchar *arg2, gpointer user_data )
 {
     wxDataViewTextRenderer *cell = (wxDataViewTextRenderer*) user_data;
@@ -1549,7 +1551,7 @@ bool wxDataViewBitmapRenderer::SetValue( const wxVariant &value )
     return false;
 }
 
-bool wxDataViewBitmapRenderer::GetValue( wxVariant &value ) const
+bool wxDataViewBitmapRenderer::GetValue( wxVariant &WXUNUSED(value) ) const
 {
     return false;
 }
@@ -1677,8 +1679,9 @@ public:
 class wxDataViewCtrlDC: public wxWindowDC
 {
 public:
-    wxDataViewCtrlDC( wxDataViewCtrl *window )
-    { m_pimpl = new wxDataViewCtrlDCImpl( this, window ); }
+    wxDataViewCtrlDC( wxDataViewCtrl *window ) :
+        wxWindowDC( new wxDataViewCtrlDCImpl( this, window ) )
+        { } 
 };
     
 
