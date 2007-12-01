@@ -5026,7 +5026,7 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     if ( GetWindowVariant() == wxWINDOW_VARIANT_NORMAL )
     {
         wxFont font;
-        font.MacCreateThemeFont( kThemeViewsFont );
+        font.MacCreateFromThemeFont( kThemeViewsFont );
         SetFont( font );
     }
 #endif
@@ -5039,7 +5039,7 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
         if (m_headerWin)
         {
             wxFont font;
-            font.MacCreateThemeFont( kThemeSmallSystemFont );
+            font.MacCreateFromThemeFont( kThemeSmallSystemFont );
             m_headerWin->SetFont( font );
             CalculateAndSetHeaderHeight();
         }
