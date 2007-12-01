@@ -40,6 +40,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindowDC;
 class WXDLLIMPEXP_FWD_CORE wxScreenDC;
 class WXDLLIMPEXP_FWD_CORE wxMemoryDC;
 class WXDLLIMPEXP_FWD_CORE wxPrinterDC;
+class WXDLLIMPEXP_FWD_CORE wxPrintData;
 
 //-----------------------------------------------------------------------------
 // wxDrawObject helper class
