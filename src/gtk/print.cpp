@@ -22,6 +22,7 @@
 #ifndef WX_PRECOMP
 #include "wx/log.h"
 #include "wx/dcmemory.h"
+#include "wx/dcprint.h"
 #include "wx/icon.h"
 #include "wx/math.h"
 #include "wx/image.h"

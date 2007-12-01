@@ -7,9 +7,10 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKDCH__
-#define __GTKDCH__
+#ifndef _WX_GTKDC_H_
+#define _WX_GTKDC_H_
 
+#include "wx/dc.h"
 
 //-----------------------------------------------------------------------------
 // wxDC
@@ -51,4 +52,4 @@ private:
     #define wxHAS_WORKING_GTK_DC_BLIT
 #endif
 
-#endif // __GTKDCH__
+#endif // _WX_GTKDC_H_
