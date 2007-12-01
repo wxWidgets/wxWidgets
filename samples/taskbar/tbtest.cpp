@@ -97,20 +97,28 @@ void MyDialog::Init(void)
   (void)new wxButton(this, wxID_EXIT, _T("Exit"), wxPoint(185, 230), wxSize(80, 25));
   (new wxButton(this, wxID_OK, _T("Hide me"), wxPoint(100, 230), wxSize(80, 25)))->SetDefault();
   Centre(wxBOTH);
-   
+
   m_taskBarIcon = new MyTaskBarIcon();
 #if defined(__WXCOCOA__)
   m_dockIcon = new MyTaskBarIcon(wxTaskBarIcon::DOCK);
 #endif
-  if (!m_taskBarIcon->SetIcon(wxICON(sample), wxT("wxTaskBarIcon Sample")))
+  // we should be able to show up to 128 characters on recent Windows versions
+  // (and 64 on Win9x)
+  if (!m_taskBarIcon->SetIcon(wxICON(sample),
+                              "wxTaskBarIcon Sample\n"
+                              "With a very, very, very, very\n"
+                              "long tooltip whose length is\n"
+                              "greater than 64 characters."))
+  {
         wxMessageBox(wxT("Could not set icon."));
+  }
 }
 
 
-enum {
+enum
+{
     PU_RESTORE = 10001,
     PU_NEW_ICON,
-    PU_OLD_ICON,
     PU_EXIT,
     PU_CHECKMARK,
     PU_SUB1,
@@ -123,7 +131,6 @@ BEGIN_EVENT_TABLE(MyTaskBarIcon, wxTaskBarIcon)
     EVT_MENU(PU_RESTORE, MyTaskBarIcon::OnMenuRestore)
     EVT_MENU(PU_EXIT,    MyTaskBarIcon::OnMenuExit)
     EVT_MENU(PU_NEW_ICON,MyTaskBarIcon::OnMenuSetNewIcon)
-    EVT_MENU(PU_OLD_ICON,MyTaskBarIcon::OnMenuSetOldIcon)
     EVT_MENU(PU_CHECKMARK,MyTaskBarIcon::OnMenuCheckmark)
     EVT_UPDATE_UI(PU_CHECKMARK,MyTaskBarIcon::OnMenuUICheckmark)
     EVT_TASKBAR_LEFT_DCLICK  (MyTaskBarIcon::OnLeftButtonDClick)
@@ -145,12 +152,12 @@ static bool check = true;
 
 void MyTaskBarIcon::OnMenuCheckmark(wxCommandEvent& )
 {
-       check =!check;
+    check = !check;
 }
 
 void MyTaskBarIcon::OnMenuUICheckmark(wxUpdateUIEvent &event)
 {
-       event.Check( check );
+    event.Check(check);
 }
 
 void MyTaskBarIcon::OnMenuSetNewIcon(wxCommandEvent&)
@@ -161,18 +168,6 @@ void MyTaskBarIcon::OnMenuSetNewIcon(wxCommandEvent&)
         wxMessageBox(wxT("Could not set new icon."));
 }
 
-void MyTaskBarIcon::OnMenuSetOldIcon(wxCommandEvent&)
-{
-    if (IsIconInstalled())
-    {
-        RemoveIcon();
-    }
-    else
-    {
-        wxMessageBox(wxT("wxTaskBarIcon Sample - icon already is the old version"));
-    }
-}
-
 void MyTaskBarIcon::OnMenuSub(wxCommandEvent&)
 {
     wxMessageBox(wxT("You clicked on a submenu!"));
@@ -181,15 +176,12 @@ void MyTaskBarIcon::OnMenuSub(wxCommandEvent&)
 // Overridables
 wxMenu *MyTaskBarIcon::CreatePopupMenu()
 {
-    // Try creating menus different ways
-    // TODO: Probably try calling SetBitmap with some XPMs here
     wxMenu *menu = new wxMenu;
-    menu->Append(PU_RESTORE, _T("&Restore TBTest"));
+    menu->Append(PU_RESTORE, _T("&Restore main window"));
     menu->AppendSeparator();
-    menu->Append(PU_OLD_ICON, _T("&Restore Old Icon"));    
     menu->Append(PU_NEW_ICON, _T("&Set New Icon"));
     menu->AppendSeparator();
-    menu->Append(PU_CHECKMARK, _T("Checkmark"),wxT(""), wxITEM_CHECK);
+    menu->AppendCheckItem(PU_CHECKMARK, _T("Test &check mark"));
     menu->AppendSeparator();
     wxMenu *submenu = new wxMenu;
     submenu->Append(PU_SUB1, _T("One submenu"));
