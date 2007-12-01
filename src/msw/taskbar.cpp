@@ -198,7 +198,19 @@ wxTaskBarIcon::ShowBalloon(const wxString& title,
     wxCHECK_MSG( m_iconAdded, false,
                     _T("can't be used before the icon is created") );
 
-    NotifyIconData notifyData(GetHwndOf(m_win));
+    const HWND hwnd = GetHwndOf(m_win);
+
+    // we need to enable version 5.0 behaviour to receive notifications about
+    // the balloon disappearance
+    NotifyIconData notifyData(hwnd);
+    notifyData.uFlags = 0;
+    notifyData.uVersion = 3 /* NOTIFYICON_VERSION for Windows XP */;
+
+    wxShellNotifyIcon(NIM_SETVERSION, &notifyData);
+
+
+    // do show the balloon now
+    notifyData = NotifyIconData(hwnd);
     notifyData.uFlags |= NIF_INFO;
     notifyData.uTimeout = msec;
     wxStrncpy(notifyData.szInfo, text.wx_str(), WXSIZEOF(notifyData.szInfo));
@@ -289,9 +301,7 @@ long wxTaskBarIcon::WindowProc(unsigned int msg,
                                unsigned int WXUNUSED(wParam),
                                long lParam)
 {
-    wxEventType eventType = 0;
-
-    if (msg == gs_msgRestartTaskbar)   // does the icon need to be redrawn?
+    if ( msg == gs_msgRestartTaskbar )   // does the icon need to be redrawn?
     {
         m_iconAdded = false;
         SetIcon(m_icon, m_strTooltip);
@@ -299,9 +309,10 @@ long wxTaskBarIcon::WindowProc(unsigned int msg,
     }
 
     // this function should only be called for gs_msg(Restart)Taskbar messages
-    wxASSERT(msg == gs_msgTaskbar);
+    wxASSERT( msg == gs_msgTaskbar );
 
-    switch (lParam)
+    wxEventType eventType = 0;
+    switch ( lParam )
     {
         case WM_LBUTTONDOWN:
             eventType = wxEVT_TASKBAR_LEFT_DOWN;
@@ -331,11 +342,16 @@ long wxTaskBarIcon::WindowProc(unsigned int msg,
             eventType = wxEVT_TASKBAR_MOVE;
             break;
 
-        default:
+        case NIN_BALLOONTIMEOUT:
+            eventType = wxEVT_TASKBAR_BALLOON_TIMEOUT;
+            break;
+
+        case NIN_BALLOONUSERCLICK:
+            eventType = wxEVT_TASKBAR_BALLOON_CLICK;
             break;
     }
 
-    if (eventType)
+    if ( eventType )
     {
         wxTaskBarIconEvent event(eventType, this);
 
