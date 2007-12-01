@@ -228,9 +228,9 @@ typedef wxWritableCharTypeBuffer<wchar_t> wxWritableWCharBuffer;
 
 // type of the value returned by wxString::utf8_str()
 #if wxUSE_UNICODE_UTF8
-    #define wxUTF8Buf wxCharBuffer
-#else
     #define wxUTF8Buf char *
+#else
+    #define wxUTF8Buf wxCharBuffer
 #endif
 
 // ----------------------------------------------------------------------------
