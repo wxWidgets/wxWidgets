@@ -32,6 +32,8 @@
 #ifndef WX_PRECOMP
     #include "wx/dialog.h"
     #include "wx/timer.h"
+    #include "wx/sizer.h"
+    #include "wx/statbmp.h"
 #endif //WX_PRECOMP
 
 #include "wx/artprov.h"
