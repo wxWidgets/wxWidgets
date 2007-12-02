@@ -34,6 +34,8 @@
     #include "wx/timer.h"
 #endif //WX_PRECOMP
 
+#include "wx/artprov.h"
+
 // even if the platform has the native implementation, we still normally want
 // to use the generic one (unless it's totally unsuitable for the target UI as
 // is the case of Hildon) because it may provide more features, so include
@@ -52,11 +54,13 @@ class wxNotificationMessageDialog : public wxDialog
 public:
     wxNotificationMessageDialog(wxWindow *parent,
                                 const wxString& text,
-                                int timeout);
+                                int timeout,
+                                int flags);
 
     void Set(wxWindow *parent,
              const wxString& text,
-             int timeout);
+             int timeout,
+             int flags);
 
     bool IsAutomatic() const { return m_timer.IsRunning(); }
     void SetDeleteOnHide() { m_deleteOnHide = true; }
@@ -90,7 +94,8 @@ END_EVENT_TABLE()
 
 wxNotificationMessageDialog::wxNotificationMessageDialog(wxWindow *parent,
                                                          const wxString& text,
-                                                         int timeout)
+                                                         int timeout,
+                                                         int flags)
                            : wxDialog(parent, wxID_ANY, _("Notice"),
                                       wxDefaultPosition, wxDefaultSize,
                                       0 /* no caption, no border styles */),
@@ -98,16 +103,29 @@ wxNotificationMessageDialog::wxNotificationMessageDialog(wxWindow *parent,
 {
     m_deleteOnHide = false;
 
-    Set(parent, text, timeout);
+    Set(parent, text, timeout, flags);
 }
 
 void
 wxNotificationMessageDialog::Set(wxWindow * WXUNUSED(parent),
                                  const wxString& text,
-                                 int timeout)
+                                 int timeout,
+                                 int flags)
 {
-    wxSizer *sizer = CreateTextSizer(text);
-    SetSizerAndFit(sizer);
+    wxSizer * const sizerTop = new wxBoxSizer(wxHORIZONTAL);
+    if ( flags & wxICON_MASK )
+    {
+        sizerTop->Add(new wxStaticBitmap
+                          (
+                            this,
+                            wxID_ANY,
+                            wxArtProvider::GetMessageBoxIcon(flags)
+                          ),
+                      wxSizerFlags().Centre().Border());
+    }
+
+    sizerTop->Add(CreateTextSizer(text), wxSizerFlags(1).Border());
+    SetSizerAndFit(sizerTop);
 
     if ( timeout != wxGenericNotificationMessage::Timeout_Never )
     {
@@ -194,12 +212,13 @@ bool wxGenericNotificationMessage::Show(int timeout)
                        (
                         GetParent(),
                         GetFullMessage(),
-                        timeout
+                        timeout,
+                        GetFlags()
                        );
     }
     else // update the existing dialog
     {
-        m_dialog->Set(GetParent(), GetFullMessage(), timeout);
+        m_dialog->Set(GetParent(), GetFullMessage(), timeout, GetFlags());
     }
 
     m_dialog->Show();
