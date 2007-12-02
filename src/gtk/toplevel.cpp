@@ -445,15 +445,38 @@ static gboolean property_notify_event(
                 wxSize(int(data[0] + data[1]), int(data[2] + data[3]));
             if (win->m_decorSize != decorSize)
             {
-                // Update window size and frame extents cache
-                win->m_width  += decorSize.x - win->m_decorSize.x;
-                win->m_height += decorSize.y - win->m_decorSize.y;
-                if (win->m_width  < 0) win->m_width  = 0;
-                if (win->m_height < 0) win->m_height = 0;
+                const wxSize diff = win->m_decorSize - decorSize;
                 win->m_decorSize = decorSize;
                 GetDecorSize(win->m_gdkDecor) = decorSize;
-                win->m_oldClientWidth = 0;
-                gtk_widget_queue_resize(win->m_wxwindow);
+                if (GTK_WIDGET_VISIBLE(win->m_widget))
+                {
+                    // adjust overall size to match change in frame extents
+                    win->m_width  -= diff.x;
+                    win->m_height -= diff.y;
+                    if (win->m_width  < 0) win->m_width  = 0;
+                    if (win->m_height < 0) win->m_height = 0;
+                    win->m_oldClientWidth = 0;
+                    gtk_widget_queue_resize(win->m_wxwindow);
+                }
+                else
+                {
+                    // Window not yet visible, adjust client size. This would
+                    // cause an obvious size change if window was visible.
+                    int w, h;
+                    win->GTKDoGetSize(&w, &h);
+                    gtk_window_resize(GTK_WINDOW(win->m_widget), w, h);
+                }
+            }
+            if (!GTK_WIDGET_VISIBLE(win->m_widget))
+            {
+                // gtk_widget_show() was deferred, do it now
+                wxSizeEvent sizeEvent(win->GetSize(), win->GetId());
+                sizeEvent.SetEventObject(win);
+                win->HandleWindowEvent(sizeEvent);
+                gtk_widget_show(win->m_widget);
+                wxShowEvent showEvent(win->GetId(), true);
+                showEvent.SetEventObject(win);
+                win->HandleWindowEvent(showEvent);
             }
         }
         if (data)
@@ -816,8 +839,58 @@ bool wxTopLevelWindowGTK::Show( bool show )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-    if (show && !IsShown())
+    if (show && !GTK_WIDGET_REALIZED(m_widget))
     {
+        // Initial show. If WM supports _NET_REQUEST_FRAME_EXTENTS, defer
+        // calling gtk_widget_show() until _NET_FRAME_EXTENTS property
+        // notification is received, so correct frame extents are known.
+        // This allows resizing m_widget to keep the overall size in sync with
+        // what wxWidgets expects it to be without an obvious change in the
+        // window size immediately after it becomes visible.
+
+        // Realize m_widget, so m_widget->window can be used. Realizing causes
+        // the widget tree to be size_allocated, which generates size events in
+        // the wrong order. So temporarily remove child from m_widget while
+        // realizing.
+        GtkWidget* child = GTK_BIN(m_widget)->child;
+        if (child)
+        {
+            g_object_ref(child);
+            gtk_container_remove(GTK_CONTAINER(m_widget), child);
+        }
+        gtk_widget_realize(m_widget);
+        if (child)
+        {
+            gtk_container_add(GTK_CONTAINER(m_widget), child);
+            g_object_unref(child);
+        }
+
+        // if WM supports _NET_REQUEST_FRAME_EXTENTS
+        GdkAtom request_extents =
+            gdk_atom_intern("_NET_REQUEST_FRAME_EXTENTS",  false);
+        GdkScreen* screen = gdk_drawable_get_screen(m_widget->window);
+        if (gdk_x11_screen_supports_net_wm_hint(screen, request_extents))
+        {
+            // send _NET_REQUEST_FRAME_EXTENTS
+            XClientMessageEvent xevent;
+            memset(&xevent, 0, sizeof(xevent));
+            xevent.type = ClientMessage;
+            xevent.window = gdk_x11_drawable_get_xid(m_widget->window);
+            xevent.message_type = gdk_x11_atom_to_xatom_for_display(
+                gdk_drawable_get_display(m_widget->window), request_extents);
+            xevent.format = 32;
+            Display* display = gdk_x11_drawable_get_xdisplay(m_widget->window);
+            XSendEvent(display, DefaultRootWindow(display), false,
+                SubstructureNotifyMask | SubstructureRedirectMask,
+                (XEvent*)&xevent);
+
+            // defer calling gtk_widget_show()
+            m_isShown = true;
+            return true;
+        }
+        // WM does not support _NET_REQUEST_FRAME_EXTENTS, overall size may
+        // change when correct frame extents become known.
+
         // size_allocate signals occur in reverse order (bottom to top).
         // Things work better if the initial wxSizeEvents are sent (from the
         // top down), before the initial size_allocate signals occur.
