@@ -2245,7 +2245,6 @@ bool wxWindowGTK::Create( wxWindow *parent,
     else
     {
         m_widget = gtk_scrolled_window_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
-        gtk_container_set_resize_mode(GTK_CONTAINER(m_widget), GTK_RESIZE_QUEUE);
 
         GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(m_widget);
 
@@ -2911,19 +2910,16 @@ bool wxWindowGTK::Show( bool show )
         return false;
     }
 
-    if (show)
+    if (show && m_showOnIdle)
     {
-        if (!m_showOnIdle)
-        {
-            gtk_widget_show( m_widget );
-            wxShowEvent eventShow(GetId(), show);
-            eventShow.SetEventObject(this);
-            HandleWindowEvent(eventShow);
-        }
+        // deferred
     }
     else
     {
-        gtk_widget_hide( m_widget );
+        if (show)
+            gtk_widget_show(m_widget);
+        else
+            gtk_widget_hide(m_widget);
         wxShowEvent eventShow(GetId(), show);
         eventShow.SetEventObject(this);
         HandleWindowEvent(eventShow);

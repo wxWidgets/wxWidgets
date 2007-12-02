@@ -321,7 +321,6 @@ GtkWidget* wxPizza::New(long windowStyle)
         GDK_ENTER_NOTIFY_MASK |
         GDK_LEAVE_NOTIFY_MASK |
         GDK_FOCUS_CHANGE_MASK);
-    gtk_container_set_resize_mode(GTK_CONTAINER(widget), GTK_RESIZE_QUEUE);
     return widget;
 }
 
