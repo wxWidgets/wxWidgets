@@ -148,11 +148,17 @@ wxTaskBarIcon::wxTaskBarIcon()
 
 wxTaskBarIcon::~wxTaskBarIcon()
 {
-    if (m_iconAdded)
+    if ( m_iconAdded )
         RemoveIcon();
 
-    if (m_win)
-        m_win->Destroy();
+    if ( m_win )
+    {
+        // we must use delete and not Destroy() here because the latter will
+        // only schedule the window to be deleted during the next idle event
+        // processing but we may not get any idle events if there are no other
+        // windows left in the program
+        delete m_win;
+    }
 }
 
 // Operations
