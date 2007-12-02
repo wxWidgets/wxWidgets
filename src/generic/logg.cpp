@@ -793,37 +793,16 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer *sizerAll = new wxBoxSizer(isPda ? wxVERTICAL : wxHORIZONTAL);
 
-    wxBitmap bitmap;
-    switch ( style & wxICON_MASK )
-    {
-        case wxICON_ERROR:
-            bitmap = wxArtProvider::GetBitmap(wxART_ERROR, wxART_MESSAGE_BOX);
-#ifdef __WXPM__
-            bitmap.SetId(wxICON_SMALL_ERROR);
-#endif
-            break;
-
-        case wxICON_INFORMATION:
-            bitmap = wxArtProvider::GetBitmap(wxART_INFORMATION, wxART_MESSAGE_BOX);
-#ifdef __WXPM__
-            bitmap.SetId(wxICON_SMALL_INFO);
-#endif
-            break;
-
-        case wxICON_WARNING:
-            bitmap = wxArtProvider::GetBitmap(wxART_WARNING, wxART_MESSAGE_BOX);
-#ifdef __WXPM__
-            bitmap.SetId(wxICON_SMALL_WARNING);
-#endif
-            break;
-
-        default:
-            wxFAIL_MSG(_T("incorrect log style"));
-    }
-
     if (!isPda)
-        sizerAll->Add(new wxStaticBitmap(this, wxID_ANY, bitmap), 0,
-                  wxALIGN_CENTRE_VERTICAL);
+    {
+        wxStaticBitmap *icon = new wxStaticBitmap
+                                   (
+                                    this,
+                                    wxID_ANY,
+                                    wxArtProvider::GetMessageBoxIcon(style)
+                                   );
+        sizerAll->Add(icon, 0, wxALIGN_CENTRE_VERTICAL);
+    }
 
     // create the text sizer with a minimal size so that we are sure it won't be too small
     wxString message = EllipsizeString(messages.Last());

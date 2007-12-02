@@ -148,6 +148,11 @@ public:
                           const wxArtClient& client = wxART_OTHER,
                           const wxSize& size = wxDefaultSize);
 
+    // Helper used by several generic classes: return the icon corresponding to
+    // the standard wxICON_INFORMATION/WARNING/ERROR/QUESTION flags (only one
+    // can be set)
+    static wxIcon GetMessageBoxIcon(int flags);
+
     // Query the providers for iconbundle with given ID and return it. Return
     // wxNullIconBundle if no provider provides it.
     static wxIconBundle GetIconBundle(const wxArtID& id,

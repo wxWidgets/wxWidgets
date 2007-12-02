@@ -83,30 +83,12 @@ void wxGenericMessageDialog::DoCreateMsgdialog()
     // 1) icon
     if (m_dialogStyle & wxICON_MASK)
     {
-        wxBitmap bitmap;
-        switch ( m_dialogStyle & wxICON_MASK )
-        {
-            default:
-                wxFAIL_MSG(_T("incorrect log style"));
-                // fall through
-
-            case wxICON_ERROR:
-                bitmap = wxArtProvider::GetIcon(wxART_ERROR, wxART_MESSAGE_BOX);
-                break;
-
-            case wxICON_INFORMATION:
-                bitmap = wxArtProvider::GetIcon(wxART_INFORMATION, wxART_MESSAGE_BOX);
-                break;
-
-            case wxICON_WARNING:
-                bitmap = wxArtProvider::GetIcon(wxART_WARNING, wxART_MESSAGE_BOX);
-                break;
-
-            case wxICON_QUESTION:
-                bitmap = wxArtProvider::GetIcon(wxART_QUESTION, wxART_MESSAGE_BOX);
-                break;
-        }
-        wxStaticBitmap *icon = new wxStaticBitmap(this, wxID_ANY, bitmap);
+        wxStaticBitmap *icon = new wxStaticBitmap
+                                   (
+                                    this,
+                                    wxID_ANY,
+                                    wxArtProvider::GetMessageBoxIcon(m_dialogStyle)
+                                   );
         if (is_pda)
             topsizer->Add( icon, 0, wxTOP|wxLEFT|wxRIGHT | wxALIGN_LEFT, 10 );
         else

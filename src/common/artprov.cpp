@@ -303,6 +303,36 @@ wxArtProvider::~wxArtProvider()
     return icon;
 }
 
+/* static */
+wxIcon wxArtProvider::GetMessageBoxIcon(int flags)
+{
+    wxIcon icon;
+    switch ( flags & wxICON_MASK )
+    {
+        default:
+            wxFAIL_MSG(_T("incorrect message box icon flags"));
+            // fall through
+
+        case wxICON_ERROR:
+            icon = wxArtProvider::GetIcon(wxART_ERROR, wxART_MESSAGE_BOX);
+            break;
+
+        case wxICON_INFORMATION:
+            icon = wxArtProvider::GetIcon(wxART_INFORMATION, wxART_MESSAGE_BOX);
+            break;
+
+        case wxICON_WARNING:
+            icon = wxArtProvider::GetIcon(wxART_WARNING, wxART_MESSAGE_BOX);
+            break;
+
+        case wxICON_QUESTION:
+            icon = wxArtProvider::GetIcon(wxART_QUESTION, wxART_MESSAGE_BOX);
+            break;
+    }
+
+    return icon;
+}
+
 #if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
     #include <gtk/gtk.h>
     extern GtkIconSize wxArtClientToIconSize(const wxArtClient& client);
