@@ -571,9 +571,14 @@ bool wxDataViewIconTextRenderer::Render(void)
 
    // variable definition:
     wxMacCFStringHolder cfString(iconText.GetText(),(this->GetView()->GetFont().Ok() ? this->GetView()->GetFont().GetEncoding() : wxLocale::GetSystemEncoding()));
+
+    if (iconText.GetIcon().IsOk())
+    {
+       if (::SetDataBrowserItemDataIcon(this->GetDataReference(),MAC_WXHICON(iconText.GetIcon().GetHICON())) != noErr)
+          return false;
+    }
     
-    return ((::SetDataBrowserItemDataIcon(this->GetDataReference(),MAC_WXHICON(iconText.GetIcon().GetHICON())) == noErr) &&
-            (::SetDataBrowserItemDataText(this->GetDataReference(),cfString) == noErr));
+    return (::SetDataBrowserItemDataText(this->GetDataReference(),cfString) == noErr);
   } /* if */
   else
     return false;
