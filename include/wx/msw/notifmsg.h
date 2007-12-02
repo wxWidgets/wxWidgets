@@ -47,10 +47,20 @@ public:
     // returns the task bar icon which was used previously (may be NULL)
     static wxTaskBarIcon *UseTaskBarIcon(wxTaskBarIcon *icon);
 
+    // call this to always use the generic implementation, even if the system
+    // supports the balloon tooltips used by the native one
+    static void AlwaysUseGeneric(bool alwaysUseGeneric)
+    {
+        ms_alwaysUseGeneric = alwaysUseGeneric;
+    }
+
 private:
     // common part of all ctors
     void Init() { m_impl = NULL; }
 
+
+    // flag indicating whether we should always use generic implementation
+    static bool ms_alwaysUseGeneric;
 
     // the real implementation of this class (selected during run-time because
     // the balloon task bar icons are not available in all Windows versions)

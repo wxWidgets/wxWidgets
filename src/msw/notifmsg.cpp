@@ -378,6 +378,9 @@ wxAutoNotifMsgImpl::DoShow(const wxString& title,
 // ----------------------------------------------------------------------------
 
 /* static */
+bool wxNotificationMessage::ms_alwaysUseGeneric = false;
+
+/* static */
 wxTaskBarIcon *wxNotificationMessage::UseTaskBarIcon(wxTaskBarIcon *icon)
 {
     return wxBalloonNotifMsgImpl::UseTaskBarIcon(icon);
@@ -387,7 +390,7 @@ bool wxNotificationMessage::Show(int timeout)
 {
     if ( !m_impl )
     {
-        if ( wxTheApp->GetShell32Version() >= 500 )
+        if ( !ms_alwaysUseGeneric && wxTheApp->GetShell32Version() >= 500 )
         {
             if ( timeout == Timeout_Never )
                 m_impl = new wxManualNotifMsgImpl(GetParent());
