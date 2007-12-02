@@ -19,7 +19,7 @@
 
 #include "wx/mac/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxBitmap)
+IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxGDIObject)
 
 #define M_ICONDATA ((wxIconRefData *)m_refData)
 
