@@ -60,8 +60,6 @@ WX_DEFINE_USER_EXPORTED_OBJARRAY(wxDynamicLibraryDetailsArray)
 
 #if defined(__WXPM__) || defined(__EMX__)
     const wxString wxDynamicLibrary::ms_dllext(_T(".dll"));
-#elif defined(__WXMAC__) && !defined(__DARWIN__)
-    const wxString wxDynamicLibrary::ms_dllext; // empty string
 #endif
 
 // for MSW/Unix it is defined in platform-specific file
@@ -96,29 +94,7 @@ bool wxDynamicLibrary::Load(const wxString& libnameOrig, int flags)
     // different ways to load a shared library
     //
     // FIXME: should go to the platform-specific files!
-#if defined(__WXMAC__) && !defined(__DARWIN__)
-    FSSpec      myFSSpec;
-    Ptr         myMainAddr;
-    Str255      myErrName;
-
-    wxMacFilename2FSSpec( libname , &myFSSpec );
-
-    if( GetDiskFragment( &myFSSpec,
-                         0,
-                         kCFragGoesToEOF,
-                         "\p",
-                         kPrivateCFragCopy,
-                         &m_handle,
-                         &myMainAddr,
-                         myErrName ) != noErr )
-    {
-        wxLogSysError( _("Failed to load shared library '%s' Error '%s'"),
-                       libname.c_str(),
-                       wxMacMakeStringFromPascal( myErrName ).c_str() );
-        m_handle = 0;
-    }
-
-#elif defined(__WXPM__) || defined(__EMX__)
+#if defined(__WXPM__) || defined(__EMX__)
     char err[256] = "";
     DosLoadModule(err, sizeof(err), libname.c_str(), &m_handle);
 #else // this should be the only remaining branch eventually
@@ -147,8 +123,6 @@ void wxDynamicLibrary::Unload(wxDllType handle)
 {
 #if defined(__OS2__) || defined(__EMX__)
     DosFreeModule( handle );
-#elif defined(__WXMAC__) && !defined(__DARWIN__)
-    CloseConnection( (CFragConnectionID*) &handle );
 #else
     #error  "runtime shared lib support not implemented"
 #endif
@@ -164,19 +138,7 @@ void *wxDynamicLibrary::DoGetSymbol(const wxString &name, bool *success) const
     void    *symbol = 0;
 
     wxUnusedVar(symbol);
-#if defined(__WXMAC__) && !defined(__DARWIN__)
-    Ptr                 symAddress;
-    CFragSymbolClass    symClass;
-    Str255              symName;
-#if TARGET_CARBON
-    c2pstrcpy( (StringPtr) symName, name.fn_str() );
-#else
-    strcpy( (char *)symName, name.fn_str() );
-    c2pstr( (char *)symName );
-#endif
-    if( FindSymbol( m_handle, symName, &symAddress, &symClass ) == noErr )
-        symbol = (void *)symAddress;
-#elif defined(__WXPM__) || defined(__EMX__)
+#if defined(__WXPM__) || defined(__EMX__)
     DosQueryProcAddr( m_handle, 1L, name.c_str(), (PFN*)symbol );
 #else
     symbol = RawGetSymbol(m_handle, name);
