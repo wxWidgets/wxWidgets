@@ -618,6 +618,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowse
                                                    static_cast<int>(1+rectangle->right-rectangle->left),static_cast<int>(1+rectangle->bottom-rectangle->top)),
                                             dataViewCustomRendererPtr->GetDC(),((state == kDataBrowserItemIsSelected) ? wxDATAVIEW_CELL_SELECTED : 0)));
   dataViewCustomRendererPtr->GetDC()->DestroyClippingRegion(); // probably not necessary
+  dataViewCustomRendererPtr->SetDC(NULL);
 } /* wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowserItemID, DataBrowserPropertyID, DataBrowserItemState, Rect const*, SInt16, Boolean) */
 
 OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(DataBrowserItemID itemID, DataBrowserPropertyID propertyID, DataBrowserItemDataRef itemData, Boolean getValue)
