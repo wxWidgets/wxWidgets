@@ -933,6 +933,8 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
 
   InstallControlEventHandler(this->m_peer->GetControlRef(),GetwxMacDataViewCtrlEventHandlerUPP(),GetEventTypeCount(eventList),eventList,this,NULL);
 
+  ::SetDataBrowserTableViewHiliteStyle( this->m_peer->GetControlRef(), kDataBrowserTableViewFillHilite );
+
   return true;
 } /* wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator) */
 
