@@ -24,6 +24,12 @@ On Mac OS X when using Core Graphics (wx\_MAC\_USE\_CORE\_GRAPHICS set to 1)
 colors with alpha are supported, so instances  {\tt wxPen} or  {\tt wxBrush} that are built from  {\tt wxColour} use
 the color's alpha values when stroking or filling.
 
+Note that beginning with wxWidgets 2.9.0 the entire wxDC code has been
+reorganized. All platform dependent code (actual all drawing code) has
+been moved into backend classes which derive from a common wxDCImpl
+class. The user-visible classes such as wxClientDC and wxPaintDC
+merely forward all calls to the backend implementation.
+
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}
