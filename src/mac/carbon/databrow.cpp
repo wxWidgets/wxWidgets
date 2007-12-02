@@ -578,7 +578,6 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowse
 
   wxVariant dataToRender;
 
-
   dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(this->GetPeer());
   wxCHECK_RET(dataViewCtrlPtr != NULL,                               _("Pointer to data view control not set correctly."));
   wxCHECK_RET(dataViewCtrlPtr->GetModel() != NULL,                   _("Pointer to model not set correctly."));
@@ -587,7 +586,9 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowse
   wxCHECK_RET(dataViewColumnPtr != NULL,_("No column for the specified column index existing."));
   dataViewCustomRendererPtr = dynamic_cast<wxDataViewCustomRenderer*>(dataViewColumnPtr->GetRenderer());
   wxCHECK_RET(dataViewCustomRendererPtr != NULL,_("No renderer or invalid renderer type specified for custom data column."));
-  dataViewCtrlPtr->GetModel()->GetValue(dataToRender,wxDataViewItem(reinterpret_cast<void*>(itemID)),columnIndex);
+
+  wxDataViewItem dataitem( reinterpret_cast<void*>(itemID) );
+  dataViewCtrlPtr->GetModel()->GetValue(dataToRender,dataitem,columnIndex);
   dataViewCustomRendererPtr->SetValue(dataToRender);
 
  // try to determine the content's size (drawable part):
@@ -612,12 +613,48 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowse
   content.bottom -= wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
   content.right  -= wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
 
- // make sure that 'Render' can draw only in the allowed area:
-  dataViewCustomRendererPtr->GetDC()->SetClippingRegion(content.left,content.top,content.right-content.left+1,content.bottom-content.top+1);
-  (void) (dataViewCustomRendererPtr->Render(wxRect(static_cast<int>(rectangle->left),static_cast<int>(rectangle->top),
-                                                   static_cast<int>(1+rectangle->right-rectangle->left),static_cast<int>(1+rectangle->bottom-rectangle->top)),
-                                            dataViewCustomRendererPtr->GetDC(),((state == kDataBrowserItemIsSelected) ? wxDATAVIEW_CELL_SELECTED : 0)));
-  dataViewCustomRendererPtr->GetDC()->DestroyClippingRegion(); // probably not necessary
+  wxDC *dc = dataViewCustomRendererPtr->GetDC();
+  
+  wxRect cellrect( static_cast<int>(rectangle->left),
+                   static_cast<int>(rectangle->top+2),
+                   static_cast<int>(1+rectangle->right-rectangle->left),
+                   static_cast<int>(rectangle->bottom-rectangle->top) );
+                   
+  bool is_active = IsControlActive( this->m_controlRef );
+  if (state == kDataBrowserItemIsSelected)
+  {
+      
+      wxColour col( wxMacCreateCGColorFromHITheme( (is_active) ? 
+                             kThemeBrushAlternatePrimaryHighlightColor
+                             : kThemeBrushSecondaryHighlightColor ) );
+      
+      wxRect rect = cellrect;
+      Rect itemrect;
+      GetDataBrowserItemPartBounds( this->m_controlRef, itemID, propertyID,
+         kDataBrowserPropertyEnclosingPart, &itemrect );
+      rect.x = itemrect.left;
+      rect.width = itemrect.right-itemrect.left+1;
+      
+      wxBrush selBrush( col );
+      wxPen oldpen( dc->GetPen() );
+      wxBrush oldbrush( dc->GetBrush() );
+      dc->SetPen( *wxTRANSPARENT_PEN );
+      dc->SetBrush( selBrush );
+      dc->DrawRectangle(rect);
+      dc->SetBrush( oldbrush );
+      dc->SetPen( oldpen );
+  }
+
+  wxDataViewModel *model = dataViewCtrlPtr->GetModel();
+  if ((columnIndex == 0) || !model->IsContainer(dataitem) || model->HasContainerColumns(dataitem))
+  {  
+      // make sure that 'Render' can draw only in the allowed area:
+      dc->SetClippingRegion(content.left,content.top,content.right-content.left+1,content.bottom-content.top+1);
+      (void) (dataViewCustomRendererPtr->Render( cellrect, dc, 
+                                            ((state == kDataBrowserItemIsSelected) ? wxDATAVIEW_CELL_SELECTED : 0)));
+      dc->DestroyClippingRegion(); // probably not necessary
+  }
+  
   dataViewCustomRendererPtr->SetDC(NULL);
 } /* wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowserItemID, DataBrowserPropertyID, DataBrowserItemState, Rect const*, SInt16, Boolean) */
 

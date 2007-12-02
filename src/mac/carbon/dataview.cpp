@@ -445,7 +445,7 @@ wxDataViewCustomRenderer::~wxDataViewCustomRenderer(void)
 void wxDataViewCustomRenderer::RenderText( const wxString &text, int xoffset, wxRect cell, wxDC *dc, int state )
 {
     wxDataViewCtrl *view = GetOwner()->GetOwner();
-    wxColour col = (state & wxDATAVIEW_CELL_SELECTED) ? wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) : view->GetForegroundColour();
+    wxColour col = (state & wxDATAVIEW_CELL_SELECTED) ? *wxWHITE : view->GetForegroundColour();
     dc->SetTextForeground(col);
     dc->DrawText( text, cell.x + xoffset, cell.y + ((cell.height - dc->GetCharHeight()) / 2));
 }
@@ -456,7 +456,7 @@ wxDC* wxDataViewCustomRenderer::GetDC(void)
   {
     if ((GetOwner() == NULL) || (GetOwner()->GetOwner() == NULL))
       return NULL;
-    this->m_DCPtr = new wxClientDC(this->GetOwner()->GetOwner());
+    this->m_DCPtr = new wxWindowDC(this->GetOwner()->GetOwner());
   } /* if */
   return this->m_DCPtr;
 } /* wxDataViewCustomRenderer::GetDC(void) */
