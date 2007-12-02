@@ -309,13 +309,6 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size)
         ::SendMessage(GetHwnd(), TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_DRAWDDARROWS);
 #endif
 
-    // Fix a bug on e.g. the Silver theme on WinXP where control backgrounds
-    // are incorrectly drawn, by forcing the background to a specific colour.
-    int majorVersion, minorVersion;
-    wxGetOsVersion(& majorVersion, & minorVersion);
-    if (majorVersion < 6)
-        SetBackgroundColour(GetBackgroundColour());
-
     return true;
 }
 
