@@ -68,6 +68,10 @@ public:
     // wasn't found at all
     static int GetComCtl32Version();
 
+    // the same for shell32.dll: returns 400, 471, 500, 600, ... (4.70 not
+    // currently detected)
+    static int GetShell32Version();
+
     // the SW_XXX value to be used for the frames opened by the application
     // (currently seems unused which is a bug -- TODO)
     static int m_nCmdShow;

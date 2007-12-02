@@ -602,15 +602,42 @@ void wxApp::OnQueryEndSession(wxCloseEvent& event)
 }
 
 // ----------------------------------------------------------------------------
-// miscellaneous
+// system DLL versions
 // ----------------------------------------------------------------------------
+
+#if wxUSE_DYNLIB_CLASS
+
+namespace
+{
+
+// helper function: retrieve the DLL version by using DllGetVersion(), returns
+// 0 if the DLL doesn't export such function
+int CallDllGetVersion(wxDynamicLibrary& dll)
+{
+    // now check if the function is available during run-time
+    wxDYNLIB_FUNCTION( DLLGETVERSIONPROC, DllGetVersion, dll );
+    if ( !pfnDllGetVersion )
+        return 0;
+
+    DLLVERSIONINFO dvi;
+    dvi.cbSize = sizeof(dvi);
+
+    HRESULT hr = (*pfnDllGetVersion)(&dvi);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(_T("DllGetVersion"), hr);
+
+        return 0;
+    }
+
+    return 100*dvi.dwMajorVersion + dvi.dwMinorVersion;
+}
+
+} // anonymous namespace
 
 /* static */
 int wxApp::GetComCtl32Version()
 {
-#if defined(__WXMICROWIN__) || defined(__WXWINCE__)
-    return 0;
-#else
     // cache the result
     //
     // NB: this is MT-ok as in the worst case we'd compute s_verComCtl32 twice,
@@ -619,78 +646,103 @@ int wxApp::GetComCtl32Version()
 
     if ( s_verComCtl32 == -1 )
     {
-        // initally assume no comctl32.dll at all
-        s_verComCtl32 = 0;
-
         // we're prepared to handle the errors
         wxLogNull noLog;
 
-#if wxUSE_DYNLIB_CLASS
-        // do we have it?
+        // the DLL should really be available
         wxDynamicLibrary dllComCtl32(_T("comctl32.dll"), wxDL_VERBATIM);
-
-        // if so, then we can check for the version
-        if ( dllComCtl32.IsLoaded() )
+        if ( !dllComCtl32.IsLoaded() )
         {
-            // now check if the function is available during run-time
-            wxDYNLIB_FUNCTION( DLLGETVERSIONPROC, DllGetVersion, dllComCtl32 );
-            if ( pfnDllGetVersion )
-            {
-                DLLVERSIONINFO dvi;
-                dvi.cbSize = sizeof(dvi);
+            s_verComCtl32 = 0;
+            return 0;
+        }
 
-                HRESULT hr = (*pfnDllGetVersion)(&dvi);
-                if ( FAILED(hr) )
+        // try DllGetVersion() for recent DLLs
+        s_verComCtl32 = CallDllGetVersion(dllComCtl32);
+
+        // if DllGetVersion() is unavailable either during compile or
+        // run-time, try to guess the version otherwise
+        if ( !s_verComCtl32 )
+        {
+            // InitCommonControlsEx is unique to 4.70 and later
+            void *pfn = dllComCtl32.GetSymbol(_T("InitCommonControlsEx"));
+            if ( !pfn )
+            {
+                // not found, must be 4.00
+                s_verComCtl32 = 400;
+            }
+            else // 4.70+
+            {
+                // many symbols appeared in comctl32 4.71, could use any of
+                // them except may be DllInstall()
+                pfn = dllComCtl32.GetSymbol(_T("InitializeFlatSB"));
+                if ( !pfn )
                 {
-                    wxLogApiError(_T("DllGetVersion"), hr);
+                    // not found, must be 4.70
+                    s_verComCtl32 = 470;
                 }
                 else
                 {
-                    // this is incompatible with _WIN32_IE values, but
-                    // compatible with the other values returned by
-                    // GetComCtl32Version()
-                    s_verComCtl32 = 100*dvi.dwMajorVersion +
-                                        dvi.dwMinorVersion;
-                }
-            }
-
-            // if DllGetVersion() is unavailable either during compile or
-            // run-time, try to guess the version otherwise
-            if ( !s_verComCtl32 )
-            {
-                // InitCommonControlsEx is unique to 4.70 and later
-                void *pfn = dllComCtl32.GetSymbol(_T("InitCommonControlsEx"));
-                if ( !pfn )
-                {
-                    // not found, must be 4.00
-                    s_verComCtl32 = 400;
-                }
-                else // 4.70+
-                {
-                    // many symbols appeared in comctl32 4.71, could use any of
-                    // them except may be DllInstall()
-                    pfn = dllComCtl32.GetSymbol(_T("InitializeFlatSB"));
-                    if ( !pfn )
-                    {
-                        // not found, must be 4.70
-                        s_verComCtl32 = 470;
-                    }
-                    else
-                    {
-                        // found, must be 4.71 or later
-                        s_verComCtl32 = 471;
-                    }
+                    // found, must be 4.71 or later
+                    s_verComCtl32 = 471;
                 }
             }
         }
-#endif
     }
 
     return s_verComCtl32;
-#endif // Microwin/!Microwin
 }
 
+/* static */
+int wxApp::GetShell32Version()
+{
+    static int s_verShell32 = -1;
+    if ( s_verShell32 == -1 )
+    {
+        // we're prepared to handle the errors
+        wxLogNull noLog;
+
+        wxDynamicLibrary dllShell32(_T("shell32.dll"), wxDL_VERBATIM);
+        if ( dllShell32.IsLoaded() )
+        {
+            s_verShell32 = CallDllGetVersion(dllShell32);
+
+            if ( !s_verShell32 )
+            {
+                // there doesn't seem to be any way to distinguish between 4.00
+                // and 4.70 (starting from 4.71 we have DllGetVersion()) so
+                // just assume it is 4.0
+                s_verShell32 = 400;
+            }
+        }
+        else // failed load the DLL?
+        {
+            s_verShell32 = 0;
+        }
+    }
+
+    return s_verShell32;
+}
+
+#else // !wxUSE_DYNLIB_CLASS
+
+/* static */
+int wxApp::GetComCtl32Version()
+{
+    return 0;
+}
+
+/* static */
+int wxApp::GetShell32Version()
+{
+    return 0;
+}
+
+#endif // wxUSE_DYNLIB_CLASS/!wxUSE_DYNLIB_CLASS
+
+// ----------------------------------------------------------------------------
 // Yield to incoming messages
+// ----------------------------------------------------------------------------
 
 bool wxApp::Yield(bool onlyIfNeeded)
 {
