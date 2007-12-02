@@ -32,6 +32,11 @@
 #include "wx/taskbar.h"
 #include "wx/dynlib.h"
 
+#ifndef NIN_BALLOONTIMEOUT
+    #define NIN_BALLOONTIMEOUT      0x0404
+    #define NIN_BALLOONUSERCLICK    0x0405
+#endif
+
 // initialized on demand
 static UINT gs_msgTaskbar = 0;
 static UINT gs_msgRestartTaskbar = 0;
