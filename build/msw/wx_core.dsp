@@ -4968,6 +4968,10 @@ SOURCE=..\..\include\wx\msw\notebook.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\notifmsg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\ole\oleutils.h
 # End Source File
 # Begin Source File

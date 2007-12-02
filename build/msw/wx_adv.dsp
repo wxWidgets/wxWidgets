@@ -313,6 +313,10 @@ SOURCE=..\..\src\msw\joystick.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\notifmsg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\sound.cpp
 # End Source File
 # Begin Source File
@@ -709,6 +713,10 @@ InputPath=..\..\include\wx\msw\genrcdefs.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\joystick.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\notifmsg.h
 # End Source File
 # Begin Source File
 

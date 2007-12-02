@@ -2842,11 +2842,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/taskbarcmn.cpp
     src/generic/animateg.cpp
     src/msw/aboutdlg.cpp
+    src/msw/notifmsg.cpp
     src/msw/sound.cpp
     src/msw/taskbar.cpp
 </set>
 <set var="ADVANCED_MSW_HDR" hints="files">
     wx/generic/animate.h
+    wx/msw/notifmsg.h
     wx/msw/sound.h
     wx/msw/taskbar.h
 </set>
