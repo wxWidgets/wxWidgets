@@ -203,7 +203,7 @@ wxNotificationIconEvtHandler::wxNotificationIconEvtHandler(wxTaskBarIcon *icon)
     m_icon->Connect
             (
               wxEVT_TASKBAR_BALLOON_CLICK,
-              wxTaskBarIconEventHandler(wxNotificationIconEvtHandler::OnTimeout),
+              wxTaskBarIconEventHandler(wxNotificationIconEvtHandler::OnClick),
               NULL,
               this
             );
