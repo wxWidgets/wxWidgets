@@ -3,7 +3,7 @@
 %% Purpose:     wxNotificationMessage documentation
 %% Author:      Vadim Zeitlin
 %% Created:     2007-11-24
-%% RCS-ID:      $Id: cmdlpars.tex 49199 2007-10-17 17:32:16Z VZ $
+%% RCS-ID:      $Id$
 %% Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 %% License:     wxWindows license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -39,10 +39,15 @@ Default constructor, use \helpref{SetParent}{wxnotificationmessagesetparent},
 before showing it.
 
 
-\func{}{wxNotificationMessage}{\param{const wxString\& }{title}, \param{const wxString\& }{message = wxString()}, \param{wxWindow* }{parent = NULL}}
+\func{}{wxNotificationMessage}{\param{const wxString\& }{title}, \param{const wxString\& }{message = wxString()}, \param{wxWindow* }{parent = NULL}, \parent{int }{flags = \texttt{wxICON\_INFORMATION}}
 
-Create a notification object with the given title and message (the
-latter may be empty in which case only the title will be shown).
+Create a notification object with the given attributes.
+
+See \helpref{SetTitle}{wxnotificationmessagesettitle}, 
+\helpref{SetMessage}{wxnotificationmessagesetmessage}, 
+\helpref{SetParent}{wxnotificationmessagesetparent} and
+\helpref{SetFlags}{wxnotificationmessagesetflags} for the description of the
+corresponding parameters.
 
 
 \membersection{wxNotificationMessage::Close}\label{wxnotificationmessageclose}
@@ -55,11 +60,25 @@ Returns \true if it was hidden or \false if it couldn't be done (e.g. on some
 systems automatically hidden notifications can't be hidden manually)
 
 
+\membersection{wxNotificationMessage::SetFlags}\label{wxnotificationmessagesetflags}
+
+\func{void}{SetFlags}{\param{int }{flags}}
+
+This parameter can be currently used to specify the icon to show in the
+notification. Valid values are \texttt{wxICON\_INFORMATION}, 
+\texttt{wxICON\_WARNING} and \texttt{wxICON\_ERROR} (notice that 
+\texttt{wxICON\_QUESTION} is not allowed here).
+
+Some implementations of this class may not support the icons.
+
+
 \membersection{wxNotificationMessage::SetMessage}\label{wxnotificationmessagesetmessage}
 
 \func{void}{SetMessage}{\param{const wxString\& }{message}}
 
-Set the main text of the notification.
+Set the main text of the notification. This should be a more detailed
+description than the title but still limited to reasonable length (not more
+than 256 characters).
 
 
 \membersection{wxNotificationMessage::SetParent}\label{wxnotificationmessagesetparent}
@@ -75,7 +94,7 @@ main application window by default
 
 \func{void}{SetTitle}{\param{const wxString\& }{title}}
 
-Set the title, it must be a concise string, use 
+Set the title, it must be a concise string (not more than 64 characters), use 
 \helpref{SetMessage}{wxnotificationmessagesetmessage} to give the user more
 details.
 

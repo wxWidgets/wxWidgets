@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/generic/notifmsg.h
-// Purpose:     generic implementation of wxNotificationMessage
+// Purpose:     generic implementation of wxGenericNotificationMessage
 // Author:      Vadim Zeitlin
 // Created:     2007-11-24
 // RCS-ID:      $Id$
@@ -14,22 +14,22 @@
 class wxNotificationMessageDialog;
 
 // ----------------------------------------------------------------------------
-// wxNotificationMessage
+// wxGenericNotificationMessage
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxNotificationMessage : public wxNotificationMessageBase
+class WXDLLIMPEXP_ADV wxGenericNotificationMessage : public wxNotificationMessageBase
 {
 public:
-    wxNotificationMessage() { Init(); }
-    wxNotificationMessage(const wxString& title,
-                          const wxString& message = wxString(),
-                          wxWindow *parent = NULL)
+    wxGenericNotificationMessage() { Init(); }
+    wxGenericNotificationMessage(const wxString& title,
+                                 const wxString& message = wxString(),
+                                 wxWindow *parent = NULL)
         : wxNotificationMessageBase(title, message, parent)
     {
         Init();
     }
 
-    virtual ~wxNotificationMessage();
+    virtual ~wxGenericNotificationMessage();
 
 
     virtual bool Show(int timeout = Timeout_Auto);
@@ -53,7 +53,7 @@ private:
     wxNotificationMessageDialog *m_dialog;
 
 
-    DECLARE_NO_COPY_CLASS(wxNotificationMessage)
+    DECLARE_NO_COPY_CLASS(wxGenericNotificationMessage)
 };
 
 #endif // _WX_GENERIC_NOTIFMSG_H_

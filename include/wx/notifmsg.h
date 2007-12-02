@@ -28,17 +28,23 @@ public:
     // ----------------------
 
     // default ctor, use setters below to initialize it later
-    wxNotificationMessageBase() { }
+    wxNotificationMessageBase()
+    {
+        m_parent = NULL;
+        m_flags = wxICON_INFORMATION;
+    }
 
     // create a notification object with the given title and message (the
     // latter may be empty in which case only the title will be shown)
     wxNotificationMessageBase(const wxString& title,
                               const wxString& message = wxString(),
-                              wxWindow *parent = NULL)
+                              wxWindow *parent = NULL,
+                              int flags = wxICON_INFORMATION)
         : m_title(title),
           m_message(message),
           m_parent(parent)
     {
+        SetFlags(flags);
     }
 
     // note that the setters must be called before Show()
@@ -54,6 +60,18 @@ public:
     // level parent of this window or, if this method is not called, with the
     // main application window by default
     void SetParent(wxWindow *parent) { m_parent = parent; }
+
+    // this method can currently be used to choose a standard icon to use: the
+    // parameter may be one of wxICON_INFORMATION, wxICON_WARNING or
+    // wxICON_ERROR only (but not wxICON_QUESTION)
+    void SetFlags(int flags)
+    {
+        wxASSERT_MSG( flags == wxICON_INFORMATION ||
+                        flags == wxICON_WARNING || flags == wxICON_ERROR,
+                            "Invalid icon flags specified" );
+
+        m_flags = flags;
+    }
 
 
     // showing and hiding
@@ -82,6 +100,7 @@ protected:
     const wxString& GetTitle() const { return m_title; }
     const wxString& GetMessage() const { return m_message; }
     wxWindow *GetParent() const { return m_parent; }
+    int GetFlags() const { return m_flags; }
 
     // return the concatenation of title and message separated by a new line,
     // this is suitable for simple implementation which have no support for
@@ -103,26 +122,35 @@ private:
 
     wxWindow *m_parent;
 
+    int m_flags;
+
     DECLARE_NO_COPY_CLASS(wxNotificationMessageBase)
 };
 
-#define wxUSE_GENERIC_NOTIFICATION_MESSAGE 1
-
 #if defined(__WXGTK__) && wxUSE_LIBHILDON
-    // we always use the native implementation in Hildon while the other ports
-    // will fall back to the generic one even if they have a native version too
-    #undef wxUSE_GENERIC_NOTIFICATION_MESSAGE
-    #define wxUSE_GENERIC_NOTIFICATION_MESSAGE 0
-
     #include "wx/gtk/hildon/notifmsg.h"
 /*
     TODO: provide support for
         - libnotify (Gnome)
-        - Snarl (http://www.fullphat.net/, Win32)
         - Growl (http://growl.info/, OS X)
  */
+#elif defined(__WXMSW__) && wxUSE_TASKBARICON
+    #include "wx/msw/notifmsg.h"
 #else
     #include "wx/generic/notifmsg.h"
+
+    class wxNotificationMessage : public wxGenericNotificationMessage
+    {
+    public:
+        wxNotificationMessage() { }
+        wxNotificationMessage(const wxString& title,
+                              const wxString& message = wxString(),
+                              wxWindow *parent = NULL,
+                              int flags = wxICON_INFORMATION)
+            : wxGenericNotificationMessage(title, message, parent, flags)
+        {
+        }
+    };
 #endif
 
 #endif // wxUSE_NOTIFICATION_MESSAGE

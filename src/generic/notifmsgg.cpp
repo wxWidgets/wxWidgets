@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        src/generic/notifmsgg.cpp
-// Purpose:     generic implementation of wxNotificationMessage
+// Purpose:     generic implementation of wxGenericNotificationMessage
 // Author:      Vadim Zeitlin
 // Created:     2007-11-24
 // RCS-ID:      $Id$
@@ -23,16 +23,25 @@
     #pragma hdrstop
 #endif
 
-// include this before the test below, wxUSE_GENERIC_NOTIFICATION_MESSAGE is
-// defined in this header
-#include "wx/notifmsg.h"
+#ifndef wxUSE_LIBHILDON
+    #define wxUSE_LIBHILDON 0
+#endif
 
-#if wxUSE_GENERIC_NOTIFICATION_MESSAGE
+#if wxUSE_NOTIFICATION_MESSAGE && !wxUSE_LIBHILDON
 
 #ifndef WX_PRECOMP
     #include "wx/dialog.h"
     #include "wx/timer.h"
 #endif //WX_PRECOMP
+
+// even if the platform has the native implementation, we still normally want
+// to use the generic one (unless it's totally unsuitable for the target UI as
+// is the case of Hildon) because it may provide more features, so include
+// wx/generic/notifmsg.h to get wxGenericNotificationMessage declaration even
+// if wx/notifmsg.h only declares wxNotificationMessage itself (if it already
+// uses the generic version, the second inclusion will do no harm)
+#include "wx/notifmsg.h"
+#include "wx/generic/notifmsg.h"
 
 // ----------------------------------------------------------------------------
 // wxNotificationMessageDialog
@@ -100,7 +109,7 @@ wxNotificationMessageDialog::Set(wxWindow * WXUNUSED(parent),
     wxSizer *sizer = CreateTextSizer(text);
     SetSizerAndFit(sizer);
 
-    if ( timeout != wxNotificationMessage::Timeout_Never )
+    if ( timeout != wxGenericNotificationMessage::Timeout_Never )
     {
         // wxTimer uses ms, timeout is in seconds
         m_timer.Start(timeout*1000, true /* one shot only */);
@@ -135,12 +144,12 @@ void wxNotificationMessageDialog::OnTimer(wxTimerEvent& WXUNUSED(event))
 }
 
 // ============================================================================
-// wxNotificationMessage implementation
+// wxGenericNotificationMessage implementation
 // ============================================================================
 
-int wxNotificationMessage::ms_timeout = 10;
+int wxGenericNotificationMessage::ms_timeout = 10;
 
-/* static */ void wxNotificationMessage::SetDefaultTimeout(int timeout)
+/* static */ void wxGenericNotificationMessage::SetDefaultTimeout(int timeout)
 {
     wxASSERT_MSG( timeout > 0,
                 "negative or zero default timeout doesn't make sense" );
@@ -148,17 +157,17 @@ int wxNotificationMessage::ms_timeout = 10;
     ms_timeout = timeout;
 }
 
-void wxNotificationMessage::Init()
+void wxGenericNotificationMessage::Init()
 {
     m_dialog = NULL;
 }
 
-wxNotificationMessage::~wxNotificationMessage()
+wxGenericNotificationMessage::~wxGenericNotificationMessage()
 {
     if ( m_dialog->IsAutomatic() )
     {
         // we want to allow the user to create an automatically hidden
-        // notification just by creating a local wxNotificationMessage object
+        // notification just by creating a local wxGenericNotificationMessage object
         // and so we shouldn't hide the notification when this object goes out
         // of scope
         m_dialog->SetDeleteOnHide();
@@ -172,7 +181,7 @@ wxNotificationMessage::~wxNotificationMessage()
     }
 }
 
-bool wxNotificationMessage::Show(int timeout)
+bool wxGenericNotificationMessage::Show(int timeout)
 {
     if ( timeout == Timeout_Auto )
     {
@@ -198,7 +207,7 @@ bool wxNotificationMessage::Show(int timeout)
     return true;
 }
 
-bool wxNotificationMessage::Close()
+bool wxGenericNotificationMessage::Close()
 {
     if ( !m_dialog )
         return false;
@@ -208,4 +217,4 @@ bool wxNotificationMessage::Close()
     return true;
 }
 
-#endif // wxUSE_GENERIC_NOTIFICATION_MESSAGE
+#endif // wxUSE_NOTIFICATION_MESSAGE && !wxUSE_LIBHILDON
