@@ -18,6 +18,7 @@
     #include "wx/app.h"
 #endif
 
+#include "wx/thread.h"
 #include "wx/mac/uma.h"
 
 

@@ -32,6 +32,7 @@
 #include "wx/url.h"
 #include "wx/protocol/http.h"
 #include "wx/sckstrm.h"
+#include "wx/thread.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxHTTP, wxProtocol)
 IMPLEMENT_PROTOCOL(wxHTTP, wxT("http"), wxT("80"), true)

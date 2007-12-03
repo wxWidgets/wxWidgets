@@ -44,6 +44,7 @@
 #include "wx/msgout.h"
 #include "wx/ptr_scpd.h"
 #include "wx/tokenzr.h"
+#include "wx/thread.h"
 
 #if wxUSE_EXCEPTIONS && wxUSE_STL
     #include <exception>

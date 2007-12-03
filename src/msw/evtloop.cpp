@@ -32,18 +32,14 @@
 #endif //WX_PRECOMP
 
 #include "wx/evtloop.h"
-
-
+#include "wx/thread.h"
 #include "wx/except.h"
 #include "wx/ptr_scpd.h"
-
 #include "wx/msw/private.h"
 
 #if wxUSE_GUI
     #include "wx/tooltip.h"
     #if wxUSE_THREADS
-        #include "wx/thread.h"
-
         // define the list of MSG strutures
         WX_DECLARE_LIST(MSG, wxMsgList);
 

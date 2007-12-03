@@ -36,7 +36,7 @@
 #endif
 
 #include "wx/process.h"
-
+#include "wx/thread.h"
 #include "wx/apptrait.h"
 
 

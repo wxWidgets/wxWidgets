@@ -29,6 +29,7 @@
 
 #include "wx/private/timer.h"
 #include "wx/utils.h"               // for wxNewId()
+#include "wx/thread.h"
 
 wxTimerImpl::wxTimerImpl(wxTimer *timer)
 {

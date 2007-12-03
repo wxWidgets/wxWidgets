@@ -39,6 +39,7 @@
 #include "wx/docview.h"
 #include "wx/filename.h"
 #include "wx/link.h"
+#include "wx/thread.h"
 
 #include <string.h>
 

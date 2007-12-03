@@ -37,9 +37,9 @@
 #endif
 
 #include "wx/apptrait.h"
-
 #include "wx/sckaddr.h"
 #include "wx/stopwatch.h"
+#include "wx/thread.h"
 
 // DLL options compatibility check:
 #include "wx/build.h"

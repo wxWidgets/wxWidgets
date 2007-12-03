@@ -9,11 +9,10 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __JOYSTICKH__
-#define __JOYSTICKH__
+#ifndef _WX_UNIX_JOYSTICK_H_
+#define _WX_UNIX_JOYSTICK_H_
 
 #include "wx/event.h"
-#include "wx/thread.h"
 
 class WXDLLIMPEXP_FWD_CORE wxJoystickThread;
 
@@ -93,5 +92,4 @@ protected:
     wxJoystickThread*   m_thread;
 };
 
-#endif
-    // __JOYSTICKH__
+#endif // _WX_UNIX_JOYSTICK_H_

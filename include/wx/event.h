@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_EVENT_H__
-#define _WX_EVENT_H__
+#ifndef _WX_EVENT_H_
+#define _WX_EVENT_H_
 
 #include "wx/defs.h"
 #include "wx/cpp.h"
@@ -22,8 +22,6 @@
     #include "wx/cursor.h"
 #endif
 
-#include "wx/thread.h"
-
 #include "wx/dynarray.h"
 
 // ----------------------------------------------------------------------------
@@ -31,7 +29,9 @@
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_FWD_BASE wxList;
-
+#if wxUSE_THREADS
+    class WXDLLIMPEXP_FWD_BASE wxCriticalSection;
+#endif
 #if wxUSE_GUI
     class WXDLLIMPEXP_FWD_CORE wxDC;
     class WXDLLIMPEXP_FWD_CORE wxMenu;
@@ -3112,4 +3112,4 @@ WXDLLIMPEXP_CORE wxWindow* wxFindFocusDescendant(wxWindow* ancestor);
 
 #endif // wxUSE_GUI
 
-#endif // _WX_EVENT_H__
+#endif // _WX_EVENT_H_

@@ -21,6 +21,8 @@
     #include "wx/window.h"
 #endif //WX_PRECOMP
 
+#include "wx/thread.h"
+
 #include <linux/joystick.h>
 #include <sys/types.h>
 #include <sys/stat.h>

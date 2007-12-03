@@ -49,6 +49,7 @@
 #include "wx/filename.h"
 #include "wx/dynlib.h"
 #include "wx/evtloop.h"
+#include "wx/thread.h"
 
 #include "wx/msw/private.h"
 #include "wx/msw/ole/oleutils.h"

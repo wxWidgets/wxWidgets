@@ -44,6 +44,7 @@
 
 #include "wx/filefn.h"
 #include "wx/sysopt.h"
+#include "wx/thread.h"
 
 #include "wx/mac/uma.h"
 #include "wx/mac/carbon/private/mactext.h"
