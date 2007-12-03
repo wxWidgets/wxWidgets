@@ -32,7 +32,7 @@ wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap)
   : wxWindowDCImpl( owner )
 { 
     Init(); 
-    owner->SelectObject(bitmap); 
+    DoSelect(bitmap); 
 }
 
 wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxDC *WXUNUSED(dc) )
