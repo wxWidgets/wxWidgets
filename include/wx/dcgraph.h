@@ -28,7 +28,8 @@ public:
     wxGCDC( const wxWindowDC& dc );
     wxGCDC( const wxMemoryDC& dc );
     wxGCDC();
-    
+    virtual ~wxGCDC();
+ 
     wxGraphicsContext* GetGraphicsContext();
     void SetGraphicsContext( wxGraphicsContext* ctx );
     
