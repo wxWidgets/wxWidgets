@@ -25,6 +25,7 @@
     #include "wx/memory.h"
     #include "wx/gdicmn.h"
     #include "wx/module.h"
+    #include "wx/crt.h"
 #endif
 
 #include "wx/evtloop.h"

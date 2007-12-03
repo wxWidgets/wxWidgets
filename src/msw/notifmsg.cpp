@@ -25,11 +25,14 @@
 
 #if wxUSE_NOTIFICATION_MESSAGE && wxUSE_TASKBARICON
 
+#include "wx/notifmsg.h"
+
 #ifndef WX_PRECOMP
+    #include "wx/toplevel.h"
+    #include "wx/app.h"
     #include "wx/string.h"
 #endif // WX_PRECOMP
 
-#include "wx/notifmsg.h"
 #include "wx/generic/notifmsg.h"
 
 #include "wx/taskbar.h"
