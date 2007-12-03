@@ -499,6 +499,8 @@ protected:
 #define wxDV_HORIZ_RULES             0x0004     // light horizontal rules between rows
 #define wxDV_VERT_RULES              0x0008     // light vertical rules between columns
 
+#define wxDV_ROW_LINES               0x0010     // alternating colour in rows
+
 class WXDLLIMPEXP_ADV wxDataViewCtrlBase: public wxControl
 {
 public:
@@ -939,13 +941,13 @@ public:
     wxDataViewTreeCtrl();
     wxDataViewTreeCtrl( wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = wxDV_NO_HEADER,
+           const wxSize& size = wxDefaultSize, long style = wxDV_NO_HEADER | wxDV_ROW_LINES,
            const wxValidator& validator = wxDefaultValidator );
     ~wxDataViewTreeCtrl();
 
     bool Create( wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = wxDV_NO_HEADER,
+           const wxSize& size = wxDefaultSize, long style = wxDV_NO_HEADER | wxDV_ROW_LINES,
            const wxValidator& validator = wxDefaultValidator );
 
     wxDataViewTreeStore *GetStore()
@@ -1004,6 +1006,7 @@ public:
 
     void OnExpanded( wxDataViewEvent &event );
     void OnCollapsed( wxDataViewEvent &event );
+    void OnSize( wxSizeEvent &event );
 
 private:
     wxImageList  *m_imageList;

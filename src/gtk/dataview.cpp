@@ -3344,13 +3344,12 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
         else if (style & wxDV_HORIZ_RULES)
             grid = GTK_TREE_VIEW_GRID_LINES_HORIZONTAL;
 
-        gtk_tree_view_set_grid_lines( GTK_TREE_VIEW(m_treeview), grid );
+        if (grid != GTK_TREE_VIEW_GRID_LINES_NONE)
+            gtk_tree_view_set_grid_lines( GTK_TREE_VIEW(m_treeview), grid );
     }
-    else
 #endif
-    {
-        gtk_tree_view_set_rules_hint( GTK_TREE_VIEW(m_treeview), (style & wxDV_HORIZ_RULES) != 0 );
-    }
+
+    gtk_tree_view_set_rules_hint( GTK_TREE_VIEW(m_treeview), (style & wxDV_ROW_LINES) != 0 );
 
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (m_widget),
         GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);

@@ -1693,6 +1693,11 @@ void wxDataViewTreeCtrl::OnCollapsed( wxDataViewEvent &event )
     GetStore()->ItemChanged( event.GetItem() );
 }
 
+void wxDataViewTreeCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
+{
+#if !defined(__WXGTK20__)
+#endif
+}
 
 #endif // wxUSE_DATAVIEWCTRL
 
