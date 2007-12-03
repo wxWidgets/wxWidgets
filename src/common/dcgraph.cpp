@@ -67,6 +67,10 @@ wxGCDC::wxGCDC() :
 {
 }
 
+wxGCDC::~wxGCDC()
+{
+}
+
 wxGraphicsContext* wxGCDC::GetGraphicsContext()
 {
     if (!m_pimpl) return NULL;
