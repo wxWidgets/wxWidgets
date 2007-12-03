@@ -44,7 +44,7 @@ PlayerSelectionDialog::PlayerSelectionDialog(
 
     wxListBox* list = new wxListBox(
                         this, ID_LISTBOX,
-                        wxDefaultPosition, wxDefaultSize,
+                        wxDefaultPosition, wxSize(-1, 150),
                         0, 0,
                         wxLB_SINGLE
                         );
@@ -76,6 +76,8 @@ PlayerSelectionDialog::PlayerSelectionDialog(
     topsizer->SetSizeHints( this );
 
     CentreOnParent();
+
+    m_OK->SetDefault();
 }
 
 void PlayerSelectionDialog::OnSize(wxSizeEvent& WXUNUSED(event))
