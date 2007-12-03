@@ -2457,7 +2457,7 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
     wxPoint ptOrigin = win->GetClientAreaOrigin();
     SetDeviceOrigin(ptOrigin.x, ptOrigin.y);
     wxSize size = win->GetClientSize();
-    SetClippingRegion(wxPoint(0, 0), size);
+    DoSetClippingRegion(0, 0, size.x, size.y);
 #endif 
     // __WXUNIVERSAL__
 }
