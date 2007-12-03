@@ -8,6 +8,13 @@ This model also provides its own
 \helpref{Compare}{wxdataviewindexlistmodelcompare} method
 which sorts the model's data by the index.
 
+This model is special in the it is implemented differently under OS X
+and other platforms. Under OS X a wxDataViewItem is always persistent
+and this is also the case for this class. Under other platforms, the
+meaning of a wxDataViewItem is changed to reflect a row number for
+wxDataViewIndexListModel. The consequence of this is that 
+wxDataViewIndexListModel can be used as a virtual model with an
+almost infinate number of items on platforms other than OS X.
 
 \wxheading{Derived from}
 
