@@ -1559,6 +1559,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxDataViewTreeCtrl,wxDataViewCtrl)
 BEGIN_EVENT_TABLE(wxDataViewTreeCtrl,wxDataViewCtrl)
    EVT_DATAVIEW_ITEM_EXPANDED(-1, wxDataViewTreeCtrl::OnExpanded)
    EVT_DATAVIEW_ITEM_COLLAPSED(-1, wxDataViewTreeCtrl::OnCollapsed)
+   EVT_SIZE( wxDataViewTreeCtrl::OnSize )
 END_EVENT_TABLE()
 
 wxDataViewTreeCtrl::wxDataViewTreeCtrl()
@@ -1575,7 +1576,13 @@ wxDataViewTreeCtrl::wxDataViewTreeCtrl( wxWindow *parent, wxWindowID id,
     wxDataViewTreeStore *store = new wxDataViewTreeStore;
     AssociateModel( store );
     store->DecRef();
-    AppendIconTextColumn( "", 0, wxDATAVIEW_CELL_INERT, 200 );
+    
+    wxDataViewColumn *col = AppendIconTextColumn( "", 0, wxDATAVIEW_CELL_INERT, 40 );
+    
+#if !defined(__WXGTK20__)
+    wxSize cient_size = GetClientSize();
+    col->SetWidth( size.x );
+#endif    
 }
 
 wxDataViewTreeCtrl::~wxDataViewTreeCtrl()
@@ -1670,7 +1677,6 @@ wxDataViewItem wxDataViewTreeCtrl::InsertContainer( const wxDataViewItem& parent
     return GetStore()->InsertContainer( parent, previous, text, icon, expanded, data );
 }
 
-
 void wxDataViewTreeCtrl::OnExpanded( wxDataViewEvent &event )
 {
     if (m_imageList) return;
@@ -1696,6 +1702,9 @@ void wxDataViewTreeCtrl::OnCollapsed( wxDataViewEvent &event )
 void wxDataViewTreeCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
 #if !defined(__WXGTK20__)
+    wxSize size = GetClientSize();
+    wxDataViewColumn *col = GetColumn( 0 );
+    col->SetWidth( size.x );
 #endif
 }
 
