@@ -195,7 +195,7 @@ public:
     // either should be configurable by the user (then he can change the
     // default behaviour simply by overriding CreateTraits() and returning his
     // own traits object) or which is GUI/console dependent as then wxAppTraits
-    // allows us to abstract the differences behind the common fa�de
+    // allows us to abstract the differences behind the common facade
     wxAppTraits *GetTraits();
 
 

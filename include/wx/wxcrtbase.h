@@ -2,7 +2,7 @@
  * Name:        wx/wxcrtbase.h
  * Purpose:     Type-safe ANSI and Unicode builds compatible wrappers for
  *              CRT functions
- * Author:      Joel Farley, Ove K�ven
+ * Author:      Joel Farley, Ove Kaaven
  * Modified by: Vadim Zeitlin, Robert Roebling, Ron Lee
  * Created:     1998/06/12
  * RCS-ID:      $Id$

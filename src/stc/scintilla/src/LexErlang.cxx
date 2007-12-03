@@ -1,7 +1,7 @@
 // Scintilla source code edit control
 /** @file LexErlang.cxx
  ** Lexer for Erlang.
- ** Written by Peter-Henry Mander, based on Matlab lexer by José Fonseca
+ ** Written by Peter-Henry Mander, based on Matlab lexer by Jose' Fonseca
  **/
 // Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.

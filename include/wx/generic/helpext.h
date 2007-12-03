@@ -1,7 +1,7 @@
 /*-*- c++ -*-********************************************************
  * helpext.h - an external help controller for wxWidgets            *
  *                                                                  *
- * (C) 1998 by Karsten Ballüder (Ballueder@usa.net)                 *
+ * (C) 1998 by Karsten Ballueder (Ballueder@usa.net)                *
  * License: wxWindows licence                                       *
  *                                                                  *
  * $Id$

@@ -1347,9 +1347,9 @@ wxString& wxString::MakeLower()
 // ---------------------------------------------------------------------------
 
 // some compilers (VC++ 6.0 not to name them) return true for a call to
-// isspace('ê') in the C locale which seems to be broken to me, but we have to
-// live with this by checking that the character is a 7 bit one - even if this
-// may fail to detect some spaces (I don't know if Unicode doesn't have
+// isspace('\xEA') in the C locale which seems to be broken to me, but we have
+// to live with this by checking that the character is a 7 bit one - even if 
+// this may fail to detect some spaces (I don't know if Unicode doesn't have
 // space-like symbols somewhere except in the first 128 chars), it is arguably
 // still better than trimming away accented letters
 inline int wxSafeIsspace(wxChar ch) { return (ch < 127) && wxIsspace(ch); }

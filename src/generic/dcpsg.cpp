@@ -2288,13 +2288,13 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
            /  these values from AFM files, too. Maybe later ... */
 
         // NB: casts to int are needed to suppress gcc 3.3 warnings
-        lastWidths[196] = lastWidths[(int)'A'];  // Ä
-        lastWidths[228] = lastWidths[(int)'a'];  // ä
-        lastWidths[214] = lastWidths[(int)'O'];  // Ö
-        lastWidths[246] = lastWidths[(int)'o'];  // ö
-        lastWidths[220] = lastWidths[(int)'U'];  // Ü
-        lastWidths[252] = lastWidths[(int)'u'];  // ü
-        lastWidths[223] = lastWidths[(int)251];  // ß
+        lastWidths[196] = lastWidths[(int)'A'];  // U+00C4 A Umlaute
+        lastWidths[228] = lastWidths[(int)'a'];  // U+00E4 a Umlaute
+        lastWidths[214] = lastWidths[(int)'O'];  // U+00D6 O Umlaute
+        lastWidths[246] = lastWidths[(int)'o'];  // U+00F6 o Umlaute
+        lastWidths[220] = lastWidths[(int)'U'];  // U+00DC U Umlaute
+        lastWidths[252] = lastWidths[(int)'u'];  // U+00FC u Umlaute
+        lastWidths[223] = lastWidths[(int)251];  // U+00DF eszett (scharfes s)
 
         /* JC: calculate UnderlineThickness/UnderlinePosition */
 

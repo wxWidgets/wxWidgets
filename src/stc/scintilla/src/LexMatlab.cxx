@@ -1,7 +1,7 @@
 // Scintilla source code edit control
 /** @file LexMatlab.cxx
  ** Lexer for Matlab.
- ** Written by José Fonseca
+ ** Written by Jose' Fonseca
  **
  ** Changes by Christoph Dalitz 2003/12/04:
  **   - added support for Octave

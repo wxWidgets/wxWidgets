@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/regex.h
 // Purpose:     regular expression matching
-// Author:      Karsten Ballüder
+// Author:      Karsten Ballueder
 // Modified by: VZ at 13.07.01 (integrated to wxWin)
 // Created:     05.02.2000
 // RCS-ID:      $Id$
-// Copyright:   (c) 2000 Karsten Ballüder <ballueder@gmx.net>
+// Copyright:   (c) 2000 Karsten Ballueder <ballueder@gmx.net>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
