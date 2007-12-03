@@ -30,6 +30,8 @@
     #include "wx/math.h"
 #endif
 
+#include "wx/msw/dc.h"
+
 #include "wx/msw/ole/activex.h"
 // autointerfaces that we only use here
 WX_DECLARE_AUTOOLE(wxAutoIOleInPlaceSite, IOleInPlaceSite)
