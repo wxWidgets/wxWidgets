@@ -1940,12 +1940,9 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
     // because the locale identifier (kCFLocaleIdentifier) is formatted a little bit differently, eg 
     // az_Cyrl_AZ@calendar=buddhist;currency=JPY we just recreate the base info as expected by wx here
     
-    CFTypeRef cfstr = CFLocaleGetValue(userLocaleRef, kCFLocaleLanguageCode);
-    wxMacCFStringHolder str(CFStringCreateCopy(NULL, static_cast<CFStringRef>(cfstr)));
+    wxMacCFStringHolder str(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleLanguageCode)));
     langFull = str.AsString()+"_";
-        
-    cfstr = CFLocaleGetValue(userLocaleRef, kCFLocaleCountryCode);
-    str.Assign(CFStringCreateCopy(NULL, static_cast<CFStringRef>(cfstr)));
+    str.Assign(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleCountryCode)));
     langFull += str.AsString();
 #else
     if (!wxGetEnv(wxT("LC_ALL"), &langFull) &&
