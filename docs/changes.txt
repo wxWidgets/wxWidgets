@@ -106,8 +106,6 @@ All (Unix):
 
 wxGTK:
 
-- Context menus invoked from the keyboard now show at the current mouse
-  position.
 
 
 2.8.7
