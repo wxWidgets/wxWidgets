@@ -238,7 +238,8 @@ All (GUI):
   behaviour of GetNextSibling() consistent between wxMSW and generic versions.
 - Merged wxRichTextAttr and wxTextAttrEx into wxTextAttr, and added a font table
   to wxRichTextBuffer to reduce wxFont consumption and increase performance.
-- Optimize wxGenericTreeCtrl::Collapse/ExpandAllChildren() (Szczepan Holyszewski)
+- Optimize wxGenericTreeCtrl::Collapse/ExpandAllChildren(). (Szczepan Holyszewski)
+- Added <scrollrate> parameter to wxScrolledWindow XRC handler.
 
 wxGTK:
 
