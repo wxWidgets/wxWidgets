@@ -432,6 +432,7 @@ wxScrolledWindow
 pos                        Position                -1,-1
 size                       Size                    -1,-1
 style                      Style[wxScrolledWindow] wxHSCROLL | wxVSCROLL
+scrollrate                 Size                    0,0
 
 wxScolledWindow may have children objects.
 

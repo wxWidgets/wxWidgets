@@ -55,6 +55,12 @@ wxObject *wxScrolledWindowXmlHandler::DoCreateResource()
     SetupWindow(control);
     CreateChildren(control);
 
+    if ( HasParam(wxT("scrollrate")) )
+    {
+        wxSize rate = GetSize(wxT("scrollrate"));
+        control->SetScrollRate(rate.x, rate.y);
+    }
+
     return control;
 }
 
