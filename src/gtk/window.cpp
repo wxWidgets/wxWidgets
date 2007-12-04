@@ -1659,7 +1659,7 @@ window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
 
 static gboolean wxgtk_window_popup_menu_callback(GtkWidget*, wxWindowGTK* win)
 {
-    wxContextMenuEvent event(wxEVT_CONTEXT_MENU, win->GetId(), wxPoint(-1, -1));
+    wxContextMenuEvent event(wxEVT_CONTEXT_MENU, win->GetId(), wxGetMousePosition());
     event.SetEventObject(win);
     return win->GTKProcessEvent(event);
 }
