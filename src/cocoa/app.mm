@@ -15,7 +15,6 @@
 #include "wx/app.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/dc.h"
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/module.h"
@@ -25,6 +24,8 @@
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/mbarman.h"
 #include "wx/cocoa/NSApplication.h"
+
+#include "wx/cocoa/dc.h"
 
 #import <AppKit/NSApplication.h>
 #import <Foundation/NSRunLoop.h>
@@ -162,7 +163,7 @@ void wxApp::CleanUp()
 {
     wxAutoNSAutoreleasePool pool;
 
-    wxDC::CocoaShutdownTextSystem();
+    wxCocoaDCImpl::CocoaShutdownTextSystem();
     wxMenuBarManager::DestroyInstance();
 
     [[NSNotificationCenter defaultCenter] removeObserver:sg_cocoaAppObserver];
@@ -257,7 +258,7 @@ bool wxApp::OnInitGui()
     if(!sm_isEmbedded)
         wxMenuBarManager::CreateInstance();
 
-    wxDC::CocoaInitializeTextSystem();
+    wxCocoaDCImpl::CocoaInitializeTextSystem();
     return true;
 }
 

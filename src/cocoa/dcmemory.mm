@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/cocoa/dcmemory.mm
-// Purpose:     wxMemoryDC class
+// Purpose:     wxMemoryDCImpl class
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/03/16
@@ -13,9 +13,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
-    #include "wx/dcmemory.h"
 #endif //WX_PRECOMP
 
+#include "wx/cocoa/dcmemory.h"
 #include "wx/cocoa/autorelease.h"
 
 #import <AppKit/NSImage.h>
@@ -25,29 +25,30 @@
 #import <AppKit/NSBezierPath.h>
 
 //-----------------------------------------------------------------------------
-// wxMemoryDC
+// wxMemoryDCImpl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxDC)
+IMPLEMENT_ABSTRACT_CLASS(wxMemoryDCImpl,wxCocoaDCImpl)
 
-void wxMemoryDC::Init()
+void wxMemoryDCImpl::Init()
 {
     m_cocoaNSImage = NULL;
     m_ok = false;
 }
 
-wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
+wxMemoryDCImpl::wxMemoryDCImpl(wxMemoryDC *owner, wxDC *WXUNUSED(dc))
+:   wxCocoaDCImpl(owner)
 {
     Init();
 }
 
-wxMemoryDC::~wxMemoryDC(void)
+wxMemoryDCImpl::~wxMemoryDCImpl(void)
 {
     CocoaUnwindStackAndLoseFocus();
     [m_cocoaNSImage release];
 }
 
-bool wxMemoryDC::CocoaLockFocus()
+bool wxMemoryDCImpl::CocoaLockFocus()
 {
     if(m_cocoaNSImage)
     {
@@ -63,7 +64,7 @@ bool wxMemoryDC::CocoaLockFocus()
     return false;
 }
 
-bool wxMemoryDC::CocoaUnlockFocus()
+bool wxMemoryDCImpl::CocoaUnlockFocus()
 {
     [m_cocoaNSImage unlockFocus];
     return true;
@@ -71,7 +72,7 @@ bool wxMemoryDC::CocoaUnlockFocus()
 
 // NOTE: The AppKit is unable to draw onto an NSBitmapImageRep so we must
 // instead copy the data to an offscreen window, then copy it back
-void wxMemoryDC::DoSelect( const wxBitmap& bitmap )
+void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 {
     wxAutoNSAutoreleasePool pool;
     if(m_selectedBitmap.Ok())
@@ -124,7 +125,7 @@ void wxMemoryDC::DoSelect( const wxBitmap& bitmap )
     }
 }
 
-void wxMemoryDC::DoGetSize( int *width, int *height ) const
+void wxMemoryDCImpl::DoGetSize( int *width, int *height ) const
 {
     if(width)
         *width = m_selectedBitmap.GetWidth();
@@ -132,7 +133,7 @@ void wxMemoryDC::DoGetSize( int *width, int *height ) const
         *height = m_selectedBitmap.GetHeight();
 }
 
-bool wxMemoryDC::CocoaDoBlitOnFocusedDC(wxCoord xdest, wxCoord ydest,
+bool wxMemoryDCImpl::CocoaDoBlitOnFocusedDC(wxCoord xdest, wxCoord ydest,
     wxCoord width, wxCoord height, wxCoord xsrc, wxCoord ysrc,
     int logicalFunc, bool useMask, wxCoord xsrcMask, wxCoord ysrcMask)
 {
@@ -204,7 +205,7 @@ bool wxMemoryDC::CocoaDoBlitOnFocusedDC(wxCoord xdest, wxCoord ydest,
     return false;
 }
 
-bool wxMemoryDC::CocoaGetBounds(void *rectData)
+bool wxMemoryDCImpl::CocoaGetBounds(void *rectData)
 {
     if(!rectData)
         return false;

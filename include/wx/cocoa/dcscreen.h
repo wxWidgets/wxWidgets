@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/cocoa/dcscreen.h
-// Purpose:     wxScreenDC class
+// Purpose:     wxScreenDCImpl class
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/03/16
@@ -12,15 +12,16 @@
 #ifndef __WX_COCOA_DCSCREEN_H__
 #define __WX_COCOA_DCSCREEN_H__
 
-#include "wx/dcclient.h"
+#include "wx/dcscreen.h"
+#include "wx/cocoa/dc.h"
 
-class WXDLLEXPORT wxScreenDC: public wxDC
+class WXDLLEXPORT wxScreenDCImpl: public wxCocoaDCImpl
 {
-    DECLARE_DYNAMIC_CLASS(wxScreenDC)
+    DECLARE_DYNAMIC_CLASS(wxScreenDCImpl)
 public:
-    wxScreenDC(void);
-    wxScreenDC( wxDC *dc ); // Create compatible DC
-    virtual ~wxScreenDC(void);
+    wxScreenDCImpl(wxScreenDC *owner);
+    wxScreenDCImpl(wxScreenDC *owner, wxDC *dc ); // Create compatible DC
+    virtual ~wxScreenDCImpl(void);
 
     // Compatibility with X's requirements for drawing on top of all windows
     static bool StartDrawingOnTop(wxWindow* WXUNUSED(window)) { return true; }

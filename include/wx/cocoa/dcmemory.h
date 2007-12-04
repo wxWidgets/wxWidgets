@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/cocoa/dcmemory.h
-// Purpose:     wxMemoryDC class
+// Purpose:     wxMemoryDCImpl class
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/03/16
@@ -12,17 +12,25 @@
 #ifndef __WX_COCOA_DCMEMORY_H__
 #define __WX_COCOA_DCMEMORY_H__
 
-#include "wx/dc.h"
+#include "wx/cocoa/dc.h"
 
-class WXDLLEXPORT wxMemoryDC: public wxDC, public wxMemoryDCBase
+#include "wx/dcmemory.h"
+
+class WXDLLEXPORT wxMemoryDCImpl: public wxCocoaDCImpl
 {
-    DECLARE_DYNAMIC_CLASS(wxMemoryDC)
+    DECLARE_DYNAMIC_CLASS(wxMemoryDCImpl)
 
 public:
-    wxMemoryDC() { Init(); }
-    wxMemoryDC(wxBitmap& bitmap) { Init(); SelectObject(bitmap); }
-    wxMemoryDC( wxDC *dc ); // Create compatible DC
-    virtual ~wxMemoryDC(void);
+    wxMemoryDCImpl(wxMemoryDC *owner)
+    :   wxCocoaDCImpl(owner)
+    {   Init(); }
+    wxMemoryDCImpl(wxMemoryDC *owner, wxBitmap& bitmap)
+    :   wxCocoaDCImpl(owner)
+    {   Init();
+        owner->SelectObject(bitmap);
+    }
+    wxMemoryDCImpl(wxMemoryDC *owner, wxDC *dc ); // Create compatible DC
+    virtual ~wxMemoryDCImpl(void);
 
     virtual void DoGetSize(int *width, int *height) const;
     virtual void DoSelect(const wxBitmap& bitmap);

@@ -15,11 +15,13 @@
     #include "wx/log.h"
     #include "wx/window.h"
     #include "wx/dc.h"
+    #include "wx/dcclient.h"
     #include "wx/utils.h"
 #endif //WX_PRECOMP
 
 #include "wx/tooltip.h"
 
+#include "wx/cocoa/dc.h"
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
 #include "wx/cocoa/trackingrectmanager.h"
@@ -1157,7 +1159,7 @@ NSRect wxWindowCocoa::CocoaTransformWxToBounds(NSRect rectWx)
 WX_NSAffineTransform wxWindowCocoa::CocoaGetWxToBoundsTransform()
 {
     // TODO: Handle scrolling offset
-    NSAffineTransform *transform = wxDC::CocoaGetWxToBoundsTransform([GetNSView() isFlipped], [GetNSView() bounds].size.height);
+    NSAffineTransform *transform = wxCocoaDCImpl::CocoaGetWxToBoundsTransform([GetNSView() isFlipped], [GetNSView() bounds].size.height);
     return transform;
 }
 
@@ -1782,7 +1784,7 @@ void wxWindow::GetTextExtent(const wxString& string, int *outX, int *outY,
     // transformations.  However, it's better than nothing.
     // We don't create a wxClientDC because we don't want to accidently be able to use
     // it for drawing.
-    wxDC tmpdc;
+    wxClientDC tmpdc(const_cast<wxWindow*>(this));
     return tmpdc.GetTextExtent(string, outX, outY, outDescent, outExternalLeading, inFont);
 }
 

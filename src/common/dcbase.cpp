@@ -54,6 +54,12 @@
     #include "wx/mac/dcscreen.h"
 #endif
 
+#ifdef __WXCOCOA__
+    #include "wx/cocoa/dcclient.h"
+    #include "wx/cocoa/dcmemory.h"
+    #include "wx/cocoa/dcscreen.h"
+#endif
+
 #ifdef __WXX11__
     #include "wx/x11/dcclient.h"
     #include "wx/x11/dcmemory.h"

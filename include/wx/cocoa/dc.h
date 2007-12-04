@@ -14,22 +14,24 @@
 
 DECLARE_WXCOCOA_OBJC_CLASS(NSAffineTransform);
 
-class WXDLLIMPEXP_FWD_CORE wxDC;
-WX_DECLARE_LIST(wxDC, wxCocoaDCStack);
+#include "wx/dc.h"
+
+class WXDLLIMPEXP_FWD_CORE wxCocoaDCImpl;
+WX_DECLARE_LIST(wxCocoaDCImpl, wxCocoaDCStack);
 
 //=========================================================================
 // wxDC
 //=========================================================================
-class WXDLLEXPORT wxDC: public wxDCBase
+class WXDLLIMPEXP_CORE wxCocoaDCImpl: public wxDCImpl
 {
-    DECLARE_DYNAMIC_CLASS(wxDC)
-    DECLARE_NO_COPY_CLASS(wxDC)
+    DECLARE_ABSTRACT_CLASS(wxCocoaDCImpl)
+    DECLARE_NO_COPY_CLASS(wxCocoaDCImpl)
 //-------------------------------------------------------------------------
 // Initialization
 //-------------------------------------------------------------------------
 public:
-    wxDC();
-    virtual ~wxDC();
+    wxCocoaDCImpl(wxDC *owner);
+    virtual ~wxCocoaDCImpl();
 
 //-------------------------------------------------------------------------
 // wxCocoa specifics

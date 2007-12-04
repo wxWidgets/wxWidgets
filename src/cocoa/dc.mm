@@ -11,7 +11,7 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/dc.h"
+#include "wx/cocoa/dc.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -34,11 +34,12 @@
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxCocoaDCStack);
 
-IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
-WX_NSTextStorage wxDC::sm_cocoaNSTextStorage = nil;
-WX_NSLayoutManager wxDC::sm_cocoaNSLayoutManager = nil;
-WX_NSTextContainer wxDC::sm_cocoaNSTextContainer = nil;
-wxCocoaDCStack wxDC::sm_cocoaDCStack;
+IMPLEMENT_ABSTRACT_CLASS(wxCocoaDCImpl, wxDCImpl)
+
+WX_NSTextStorage wxCocoaDCImpl::sm_cocoaNSTextStorage = nil;
+WX_NSLayoutManager wxCocoaDCImpl::sm_cocoaNSLayoutManager = nil;
+WX_NSTextContainer wxCocoaDCImpl::sm_cocoaNSTextContainer = nil;
+wxCocoaDCStack wxCocoaDCImpl::sm_cocoaDCStack;
 
 inline void CocoaSetPenForNSBezierPath(wxPen &pen, NSBezierPath *bezpath)
 {
@@ -72,7 +73,7 @@ inline void CocoaSetPenForNSBezierPath(wxPen &pen, NSBezierPath *bezpath)
     }
 }
 
-void wxDC::CocoaInitializeTextSystem()
+void wxCocoaDCImpl::CocoaInitializeTextSystem()
 {
     wxASSERT_MSG(!sm_cocoaNSTextStorage && !sm_cocoaNSLayoutManager && !sm_cocoaNSTextContainer,wxT("Text system already initalized!  BAD PROGRAMMER!"));
 
@@ -92,14 +93,14 @@ void wxDC::CocoaInitializeTextSystem()
     // [sm_cocoaNSTextContainer release]; [sm_cocoaNSTextContainer retain];
 }
 
-void wxDC::CocoaShutdownTextSystem()
+void wxCocoaDCImpl::CocoaShutdownTextSystem()
 {
     [sm_cocoaNSTextContainer release]; sm_cocoaNSTextContainer = nil;
     [sm_cocoaNSLayoutManager release]; sm_cocoaNSLayoutManager = nil;
     [sm_cocoaNSTextStorage release]; sm_cocoaNSTextStorage = nil;
 }
 
-void wxDC::CocoaUnwindStackAndLoseFocus()
+void wxCocoaDCImpl::CocoaUnwindStackAndLoseFocus()
 {
     wxCocoaDCStack::compatibility_iterator ourNode=sm_cocoaDCStack.Find(this);
     if(ourNode)
@@ -107,7 +108,7 @@ void wxDC::CocoaUnwindStackAndLoseFocus()
         wxCocoaDCStack::compatibility_iterator node=sm_cocoaDCStack.GetFirst();
         for(;node!=ourNode; node=sm_cocoaDCStack.GetFirst())
         {
-            wxDC *dc = node->GetData();
+            wxCocoaDCImpl *dc = node->GetData();
             wxASSERT(dc);
             wxASSERT(dc!=this);
             if(!dc->CocoaUnlockFocus())
@@ -123,12 +124,12 @@ void wxDC::CocoaUnwindStackAndLoseFocus()
     }
 }
 
-bool wxDC::CocoaUnwindStackAndTakeFocus()
+bool wxCocoaDCImpl::CocoaUnwindStackAndTakeFocus()
 {
     wxCocoaDCStack::compatibility_iterator node=sm_cocoaDCStack.GetFirst();
     for(;node;node = sm_cocoaDCStack.GetFirst())
     {
-        wxDC *dc = node->GetData();
+        wxCocoaDCImpl *dc = node->GetData();
         wxASSERT(dc);
         // If we're on the stack, then it's unwound enough and we have focus
         if(dc==this)
@@ -141,28 +142,29 @@ bool wxDC::CocoaUnwindStackAndTakeFocus()
     return CocoaLockFocus();
 }
 
-wxDC::wxDC(void)
+wxCocoaDCImpl::wxCocoaDCImpl(wxDC *owner)
+:   wxDCImpl(owner)
 {
     m_cocoaWxToBoundsTransform = nil;
     m_pen = *wxBLACK_PEN;
 }
 
-wxDC::~wxDC(void)
+wxCocoaDCImpl::~wxDC(void)
 {
     [m_cocoaWxToBoundsTransform release];
 }
 
-bool wxDC::CocoaLockFocus()
+bool wxCocoaDCImpl::CocoaLockFocus()
 {
     return false;
 }
 
-bool wxDC::CocoaUnlockFocus()
+bool wxCocoaDCImpl::CocoaUnlockFocus()
 {
     return false;
 }
 
-/*static*/ WX_NSAffineTransform wxDC::CocoaGetWxToBoundsTransform(bool isFlipped, float height)
+/*static*/ WX_NSAffineTransform wxCocoaDCImpl::CocoaGetWxToBoundsTransform(bool isFlipped, float height)
 {
     NSAffineTransform *transform = nil;
     // This transform flips the graphics since wxDC uses top-left origin
@@ -183,13 +185,13 @@ bool wxDC::CocoaUnlockFocus()
     return transform;
 }
 
-void wxDC::CocoaApplyTransformations()
+void wxCocoaDCImpl::CocoaApplyTransformations()
 {
     [m_cocoaWxToBoundsTransform concat];
     // TODO: Apply device/logical/user position/scaling transformations
 }
 
-void wxDC::CocoaUnapplyTransformations()
+void wxCocoaDCImpl::CocoaUnapplyTransformations()
 {
     // NOTE: You *must* call this with focus held.
     // Undo all transforms so we're back in true Cocoa coords with
@@ -201,13 +203,13 @@ void wxDC::CocoaUnapplyTransformations()
     [invertTransform release];
 }
 
-bool wxDC::CocoaGetBounds(void *rectData)
+bool wxCocoaDCImpl::CocoaGetBounds(void *rectData)
 {
     // We don't know what we are so we can't return anything.
     return false;
 }
 
-void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxCocoaDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     wxAutoNSAutoreleasePool pool;
     if(!CocoaTakeFocus()) return;
@@ -218,7 +220,7 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
     [bezpath fill];
 }
 
-void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
+void wxCocoaDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
     wxAutoNSAutoreleasePool pool;
     if(!CocoaTakeFocus()) return;
@@ -230,7 +232,7 @@ void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
     [bezpath stroke];
 }
 
-void wxDC::DoGetTextExtent(const wxString& text, wxCoord *x, wxCoord *y, wxCoord *descent, wxCoord *externalLeading, const wxFont *theFont) const
+void wxCocoaDCImpl::DoGetTextExtent(const wxString& text, wxCoord *x, wxCoord *y, wxCoord *descent, wxCoord *externalLeading, const wxFont *theFont) const
 {
     wxAutoNSAutoreleasePool pool;
 // FIXME: Cache this so it can be used for DoDrawText
@@ -252,7 +254,7 @@ void wxDC::DoGetTextExtent(const wxString& text, wxCoord *x, wxCoord *y, wxCoord
         *externalLeading=0;
 }
 
-void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
+void wxCocoaDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
     wxAutoNSAutoreleasePool pool;
     if(!CocoaTakeFocus()) return;
@@ -345,105 +347,105 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 // wxDC
 //-----------------------------------------------------------------------------
 
-void wxDC::DoDrawIcon( const wxIcon &WXUNUSED(icon), int WXUNUSED(x), int WXUNUSED(y) )
+void wxCocoaDCImpl::DoDrawIcon( const wxIcon &WXUNUSED(icon), int WXUNUSED(x), int WXUNUSED(y) )
 {
 };
 
-void wxDC::DoDrawPoint( int x, int y )
+void wxCocoaDCImpl::DoDrawPoint( int x, int y )
 {
 };
 
-void wxDC::DoDrawPolygon( int, wxPoint *, int, int, int)
+void wxCocoaDCImpl::DoDrawPolygon( int, wxPoint *, int, int, int)
 {
 };
 
-void wxDC::DoDrawLines( int, wxPoint *, int, int )
+void wxCocoaDCImpl::DoDrawLines( int, wxPoint *, int, int )
 {
 }
 
-int wxDC::GetDepth() const
+int wxCocoaDCImpl::GetDepth() const
 {
     return 0;
 }
 
-wxSize wxDC::GetPPI() const
+wxSize wxCocoaDCImpl::GetPPI() const
 {
     return wxSize(0,0);
 }
 
-bool wxDC::CanGetTextExtent() const
+bool wxCocoaDCImpl::CanGetTextExtent() const
 {
     return false;
 }
 
-wxCoord wxDC::GetCharHeight() const
+wxCoord wxCocoaDCImpl::GetCharHeight() const
 {
     return 0;
 }
 
-wxCoord wxDC::GetCharWidth() const
+wxCoord wxCocoaDCImpl::GetCharWidth() const
 {
     return 0;
 }
 
-bool wxDC::CanDrawBitmap() const
+bool wxCocoaDCImpl::CanDrawBitmap() const
 {
     return true;
 }
 
-bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
+bool wxCocoaDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 {
     return false;
 }
 
-void wxDC::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord xc, wxCoord yc)
+void wxCocoaDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord xc, wxCoord yc)
 {
 }
 
-void wxDC::SetFont(const wxFont& font)
+void wxCocoaDCImpl::SetFont(const wxFont& font)
 {
     m_font = font;
 }
 
-void wxDC::SetPen(const wxPen& pen)
+void wxCocoaDCImpl::SetPen(const wxPen& pen)
 {
     m_pen = pen;
 }
 
-void wxDC::SetBrush(const wxBrush& brush)
+void wxCocoaDCImpl::SetBrush(const wxBrush& brush)
 {
     m_brush = brush;
 }
 
-void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
+void wxCocoaDCImpl::DoSetClippingRegionAsRegion(const wxRegion& region)
 {
 }
 
-void wxDC::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxCocoaDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
 }
 
-void wxDC::DestroyClippingRegion()
+void wxCocoaDCImpl::DestroyClippingRegion()
 {
 }
 
-void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
+void wxCocoaDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
 {
 }
 
-void wxDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle)
+void wxCocoaDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle)
 {
 }
 
-void wxDC::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h, double sa, double ea)
+void wxCocoaDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h, double sa, double ea)
 {
 }
 
-void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxCocoaDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
 }
 
-void wxDC::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask)
+void wxCocoaDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask)
 {
     wxAutoNSAutoreleasePool pool;
     if(!CocoaTakeFocus()) return;
@@ -490,57 +492,58 @@ void wxDC::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask)
     [context restoreGraphicsState];
 }
 
-bool wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
+bool wxCocoaDCImpl::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
 {
     return false;
 }
 
-void wxDC::DoCrossHair(wxCoord x, wxCoord y)
+void wxCocoaDCImpl::DoCrossHair(wxCoord x, wxCoord y)
 {
 }
 
 
-bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height, wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop, bool useMask , wxCoord xsrcMask, wxCoord ysrcMask)
+bool wxCocoaDCImpl::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height, wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop, bool useMask , wxCoord xsrcMask, wxCoord ysrcMask)
 {
     if(!CocoaTakeFocus()) return false;
     if(!source) return false;
-    return source->CocoaDoBlitOnFocusedDC(xdest,ydest,width,height,
+    wxCocoaDCImpl *sourceImpl = static_cast<wxCocoaDCImpl*>(source->GetImpl());
+    return sourceImpl->CocoaDoBlitOnFocusedDC(xdest,ydest,width,height,
         xsrc, ysrc, rop, useMask, xsrcMask, ysrcMask);
 }
 
-bool wxDC::CocoaDoBlitOnFocusedDC(wxCoord xdest, wxCoord ydest,
+bool wxCocoaDCImpl::CocoaDoBlitOnFocusedDC(wxCoord xdest, wxCoord ydest,
     wxCoord width, wxCoord height, wxCoord xsrc, wxCoord ysrc,
     int logicalFunc, bool useMask, wxCoord xsrcMask, wxCoord ysrcMask)
 {
     return false;
 }
 
-void wxDC::DoGetSize( int* width, int* height ) const
+void wxCocoaDCImpl::DoGetSize( int* width, int* height ) const
 {
   *width = m_maxX-m_minX;
   *height = m_maxY-m_minY;
 };
 
-void wxDC::DoGetSizeMM( int* width, int* height ) const
+void wxCocoaDCImpl::DoGetSizeMM( int* width, int* height ) const
 {
   int w = 0;
   int h = 0;
-  GetSize( &w, &h );
+  DoGetSize( &w, &h );
 };
 
-void wxDC::SetTextForeground( const wxColour &col )
+void wxCocoaDCImpl::SetTextForeground( const wxColour &col )
 {
-  if (!Ok()) return;
+//  if (!Ok()) return;
   m_textForegroundColour = col;
 };
 
-void wxDC::SetTextBackground( const wxColour &col )
+void wxCocoaDCImpl::SetTextBackground( const wxColour &col )
 {
-  if (!Ok()) return;
+//  if (!Ok()) return;
   m_textBackgroundColour = col;
 };
 
-void wxDC::Clear()
+void wxCocoaDCImpl::Clear()
 {
     if(!CocoaTakeFocus()) return;
 
@@ -560,21 +563,21 @@ void wxDC::Clear()
     [context restoreGraphicsState];
 }
 
-void wxDC::SetBackground(const wxBrush& brush)
+void wxCocoaDCImpl::SetBackground(const wxBrush& brush)
 {
     m_backgroundBrush = brush;
 }
 
-void wxDC::SetPalette(const wxPalette&)
+void wxCocoaDCImpl::SetPalette(const wxPalette&)
 {
 }
 
-void wxDC::SetLogicalFunction(int)
+void wxCocoaDCImpl::SetLogicalFunction(int)
 {
 }
 
 
-void wxDC::SetMapMode( int mode )
+void wxCocoaDCImpl::SetMapMode( int mode )
 {
   switch (mode)
   {
@@ -596,7 +599,7 @@ void wxDC::SetMapMode( int mode )
   };
 };
 
-void wxDC::SetUserScale( double x, double y )
+void wxCocoaDCImpl::SetUserScale( double x, double y )
 {
   // allow negative ? -> no
   m_userScaleX = x;
@@ -604,7 +607,7 @@ void wxDC::SetUserScale( double x, double y )
   ComputeScaleAndOrigin();
 };
 
-void wxDC::SetLogicalScale( double x, double y )
+void wxCocoaDCImpl::SetLogicalScale( double x, double y )
 {
   // allow negative ?
   m_logicalScaleX = x;
@@ -612,26 +615,26 @@ void wxDC::SetLogicalScale( double x, double y )
   ComputeScaleAndOrigin();
 };
 
-void wxDC::SetLogicalOrigin( wxCoord x, wxCoord y )
+void wxCocoaDCImpl::SetLogicalOrigin( wxCoord x, wxCoord y )
 {
   m_logicalOriginX = x * m_signX;   // is this still correct ?
   m_logicalOriginY = y * m_signY;
   ComputeScaleAndOrigin();
 };
 
-void wxDC::SetDeviceOrigin( wxCoord x, wxCoord y )
+void wxCocoaDCImpl::SetDeviceOrigin( wxCoord x, wxCoord y )
 {
   ComputeScaleAndOrigin();
 };
 
-void wxDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
+void wxCocoaDCImpl::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
 {
   m_signX = (xLeftRight ?  1 : -1);
   m_signY = (yBottomUp  ? -1 :  1);
   ComputeScaleAndOrigin();
 };
 
-void wxDC::ComputeScaleAndOrigin(void)
+void wxCocoaDCImpl::ComputeScaleAndOrigin(void)
 {
   // CMB: copy scale to see if it changes
   double origScaleX = m_scaleX;
@@ -643,11 +646,13 @@ void wxDC::ComputeScaleAndOrigin(void)
   // CMB: if scale has changed call SetPen to recalulate the line width
   if (m_scaleX != origScaleX || m_scaleY != origScaleY)
   {
+#if 0
     // this is a bit artificial, but we need to force wxDC to think
     // the pen has changed
     const wxPen* pen = & GetPen();
     wxPen tempPen;
     m_pen = tempPen;
     SetPen(* pen);
+#endif
   }
 };
