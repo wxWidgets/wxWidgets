@@ -94,6 +94,8 @@ public:
 
     GtkWidget    *m_mainWidget;
 
+    bool m_deferShow;
+
     bool          m_fsIsShowing;         /* full screen */
     int           m_fsSaveGdkFunc, m_fsSaveGdkDecor;
     wxRect        m_fsSaveFrame;
@@ -111,9 +113,6 @@ public:
 
     // return the size of the window without WM decorations
     void GTKDoGetSize(int *width, int *height) const;
-
-    // whether frame extents are accurate
-    virtual bool IsDecorCacheable() const;
 
 protected:
     // give hints to the Window Manager for how the size

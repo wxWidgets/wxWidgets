@@ -14,9 +14,6 @@
 
 #include "wx/toplevel.h"
 
-#include <gtk/gtkversion.h>
-#if GTK_CHECK_VERSION(2, 1, 0)
-
 class WXDLLIMPEXP_ADV wxTaskBarIconAreaBase : public wxTopLevelWindow
 {
 public:
@@ -24,8 +21,6 @@ public:
 
     // Returns true if SYSTRAY protocol is supported by the desktop
     bool IsProtocolSupported();
-
-    virtual bool IsDecorCacheable() const;
 
     wxEvtHandler *m_invokingWindow;
 
@@ -35,5 +30,4 @@ protected:
 #endif // wxUSE_MENUS_NATIVE
 };
 
-#endif // GTK_CHECK_VERSION(2, 1, 0)
 #endif // _WX_GTK_TASKBARPRIV_H_
