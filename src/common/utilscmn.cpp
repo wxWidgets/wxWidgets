@@ -1137,11 +1137,11 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
         return ok;
 
     // no file type for HTML extension
-    wxLogError(_T("No default application configured for HTML files."));
+    wxLogError(_("No default application configured for HTML files."));
 
 #endif // !wxUSE_MIMETYPE && !__WXMSW__
 
-    wxLogSysError(_T("Failed to open URL \"%s\" in default browser."),
+    wxLogSysError(_("Failed to open URL \"%s\" in default browser."),
                   url.c_str());
 
     return false;
