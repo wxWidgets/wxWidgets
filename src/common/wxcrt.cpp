@@ -61,6 +61,12 @@ namespace std {}
 using namespace std ;
 #endif
 
+#if defined(__DARWIN__)
+	#include "wx/mac/corefoundation/cfref.h"
+	#include <CoreFoundation/CFLocale.h>
+	#include "wx/mac/corefoundation/cfstring.h"
+#endif
+
 #if wxUSE_WCHAR_T
 WXDLLIMPEXP_BASE size_t wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 {
@@ -153,7 +159,23 @@ char* wxSetlocale(int category, const char *locale)
 
     return NULL;
 #else // !__WXWINCE__
+#ifdef __WXMAC__
+    char *rv = NULL ;
+    if ( locale != NULL && locale[0] == 0 )
+    {
+        // we have to emulate the behaviour under OS X
+        wxCFRef<CFLocaleRef> userLocaleRef(CFLocaleCopyCurrent());
+        wxMacCFStringHolder str(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleLanguageCode)));
+        wxString langFull = str.AsString()+"_";
+        str.Assign(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleCountryCode)));
+        langFull += str.AsString();
+        rv = setlocale(category, langFull.c_str());
+    }
+    else
+        rv = setlocale(category, locale);
+#else
     char *rv = setlocale(category, locale);
+#endif
     if ( locale != NULL /* setting locale, not querying */ &&
          rv /* call was successful */ )
     {
