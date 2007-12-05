@@ -65,6 +65,7 @@ using namespace std ;
 	#include "wx/mac/corefoundation/cfref.h"
 	#include <CoreFoundation/CFLocale.h>
 	#include "wx/mac/corefoundation/cfstring.h"
+    #include <xlocale.h>
 #endif
 
 #if wxUSE_WCHAR_T
@@ -163,13 +164,26 @@ char* wxSetlocale(int category, const char *locale)
     char *rv = NULL ;
     if ( locale != NULL && locale[0] == 0 )
     {
-        // we have to emulate the behaviour under OS X
-        wxCFRef<CFLocaleRef> userLocaleRef(CFLocaleCopyCurrent());
-        wxMacCFStringHolder str(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleLanguageCode)));
-        wxString langFull = str.AsString()+"_";
-        str.Assign(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleCountryCode)));
-        langFull += str.AsString();
-        rv = setlocale(category, langFull.c_str());
+        locale_t lt = newlocale(LC_ALL_MASK, "", NULL);
+        if ( lt )
+        {
+            rv = (char*) querylocale( LC_ALL_MASK, lt );
+            freelocale(lt);
+        }
+        if ( rv == NULL || rv[0] == 0  || strcmp( rv , "C" ) == 0 || strcmp( rv, "POSIX" ) == 0 )
+        {
+            // we have to emulate the behaviour under OS X
+            wxCFRef<CFLocaleRef> userLocaleRef(CFLocaleCopyCurrent());
+            wxMacCFStringHolder str(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleLanguageCode)));
+            wxString langFull = str.AsString()+"_";
+            str.Assign(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleCountryCode)));
+            langFull += str.AsString();
+            rv = setlocale(category, langFull.c_str());
+        }
+        else
+        {
+            rv = setlocale(category, rv);
+        }
     }
     else
         rv = setlocale(category, locale);
