@@ -3,6 +3,14 @@
 This class is used for context menu events, sent to give
 the application a chance to show a context (popup) menu.
 
+Note that if \helpref{GetPosition}{wxcontextmenueventgetposition} returns wxDefaultPosition, this means that the event originated
+from a keyboard context button event, and you should compute a suitable position yourself,
+for example by calling \helpref{wxGetMousePosition}{wxgetmouseposition}.
+
+When a keyboard context menu button is pressed on Windows, a right-click event with default position is sent first,
+and if this event is not processed, the context menu event is sent. So if you process mouse events and you find your context menu event handler
+is not being called, you could call wxEvent::Skip for mouse right-down events.
+
 \wxheading{Derived from}
 
 \helpref{wxCommandEvent}{wxcommandevent}\\
@@ -44,7 +52,11 @@ Constructor.
 
 \constfunc{wxPoint}{GetPosition}{\void}
 
-Returns the position at which the menu should be shown.
+Returns the position in screen coordinates at which the menu should be shown. Use \helpref{wxWindow::ScreenToClient}{wxwindowscreentoclient} to
+convert to client coordinates. You can also omit a position from \helpref{wxWindow::PopupMenu}{wxwindowpopupmenu} in order to use
+the current mouse pointer position.
+
+If the event originated from a keyboard event, the value returned from this function will be wxDefaultPosition.
 
 \membersection{wxContextMenuEvent::SetPosition}\label{wxcontextmenueventsetposition}
 
