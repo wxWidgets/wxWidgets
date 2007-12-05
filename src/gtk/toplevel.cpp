@@ -405,35 +405,48 @@ static gboolean property_notify_event(
                 wxSize(int(data[0] + data[1]), int(data[2] + data[3]));
             if (win->m_decorSize != decorSize)
             {
-                const wxSize diff = win->m_decorSize - decorSize;
+                const wxSize diff = decorSize - win->m_decorSize;
                 win->m_decorSize = decorSize;
-                if (!win->m_deferShow)
+                bool resized = false;
+                if (win->m_deferShow)
                 {
-                    // adjust overall size to match change in frame extents
-                    win->m_width  -= diff.x;
-                    win->m_height -= diff.y;
-                    if (win->m_width  < 0) win->m_width  = 0;
-                    if (win->m_height < 0) win->m_height = 0;
-                    win->m_oldClientWidth = 0;
-                    gtk_widget_queue_resize(win->m_wxwindow);
-                }
-                else
-                {
-                    // Window not yet visible, adjust client size. This would
-                    // cause an obvious size change if window was visible.
+                    // keep overall size unchanged by shrinking m_widget,
+                    // if min size will allow it
+                    const wxSize minSize = win->GetMinSize();
                     int w, h;
                     win->GTKDoGetSize(&w, &h);
-                    gtk_window_resize(GTK_WINDOW(win->m_widget), w, h);
+                    if (w >= minSize.x && h >= minSize.y)
+                    {
+                        gtk_window_resize(GTK_WINDOW(win->m_widget), w, h);
+                        resized = true;
+                    }
+                }
+                if (!resized)
+                {
+                    // adjust overall size to match change in frame extents
+                    win->m_width  += diff.x;
+                    win->m_height += diff.y;
+                    if (win->m_width  < 0) win->m_width  = 0;
+                    if (win->m_height < 0) win->m_height = 0;
+                    if (!win->m_deferShow)
+                    {
+                        win->m_oldClientWidth = 0;
+                        gtk_widget_queue_resize(win->m_wxwindow);
+                    }
                 }
             }
             if (win->m_deferShow)
             {
                 // gtk_widget_show() was deferred, do it now
                 win->m_deferShow = false;
+                win->GetClientSize(
+                    &win->m_oldClientWidth, &win->m_oldClientHeight);
                 wxSizeEvent sizeEvent(win->GetSize(), win->GetId());
                 sizeEvent.SetEventObject(win);
                 win->HandleWindowEvent(sizeEvent);
+
                 gtk_widget_show(win->m_widget);
+
                 wxShowEvent showEvent(win->GetId(), true);
                 showEvent.SetEventObject(win);
                 win->HandleWindowEvent(showEvent);
