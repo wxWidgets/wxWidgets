@@ -36,12 +36,10 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED)
 // ============================================================================
 // implementation
 // ============================================================================
-
 // ----------------------------------------------------------------------------
 // wxToggleButton
 // ----------------------------------------------------------------------------
 
-// Single check box item
 bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxString& label,
                             const wxPoint& pos,
@@ -97,6 +95,73 @@ void wxToggleButton::Command(wxCommandEvent & event)
 }
 
 wxInt32 wxToggleButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
+{
+    wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, m_windowId);
+    event.SetInt(GetValue());
+    event.SetEventObject(this);
+    ProcessCommand(event);
+    return noErr ;
+}
+
+// ----------------------------------------------------------------------------
+// wxToggleBitmapButton
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxToggleBitmapButton, wxControl)
+
+bool wxToggleBitmapButton::Create(wxWindow *parent, wxWindowID id,
+                            const wxBitmap& label,
+                            const wxPoint& pos,
+                            const wxSize& size, long style,
+                            const wxValidator& validator,
+                            const wxString& name)
+{
+    m_macIsUserPane = FALSE ;
+    
+    m_bitmap = label;
+    
+    if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
+        return false;
+    
+    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
+    
+    m_peer = new wxMacControl(this) ;
+    
+    ControlButtonContentInfo info;
+    wxMacCreateBitmapButton( &info, m_bitmap );
+    verify_noerr ( CreateBevelButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , 
+        kControlBevelButtonNormalBevel , kControlBehaviorOffsetContents | kControlBehaviorToggles , &info , 0 , 0 , 0 , m_peer->GetControlRefAddr() ) );
+    
+    MacPostControlCreate(pos,size) ;
+    
+    return TRUE;
+}
+
+wxSize wxToggleBitmapButton::DoGetBestSize() const
+{
+    if (!m_bitmap.IsOk())
+       return wxSize(20,20);
+       
+    return wxSize ( m_bitmap.GetWidth()+6, m_bitmap.GetHeight()+6 ) ;
+}
+
+void wxToggleBitmapButton::SetValue(bool val)
+{
+    m_peer->SetValue( val ) ;
+}
+
+bool wxToggleBitmapButton::GetValue() const
+{
+    return m_peer->GetValue() ;
+}
+
+void wxToggleBitmapButton::Command(wxCommandEvent & event)
+{
+   SetValue((event.GetInt() != 0));
+   ProcessCommand(event);
+}
+
+wxInt32 wxToggleBitmapButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
 {
     wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, m_windowId);
     event.SetInt(GetValue());
