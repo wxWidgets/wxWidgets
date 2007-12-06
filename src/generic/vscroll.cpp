@@ -2,7 +2,7 @@
 // Name:        src/generic/vscroll.cpp
 // Purpose:     wxVScrolledWindow implementation
 // Author:      Vadim Zeitlin
-// Modified by: Brad Anderson
+// Modified by: Brad Anderson, David Warkentin
 // Created:     30.05.03
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
@@ -157,6 +157,7 @@ wxVarScrollHelperBase::wxVarScrollHelperBase(wxWindow *win)
     m_win =
     m_targetWindow = (wxWindow *)NULL;
 
+    m_physicalScrolling = true;
     m_handler = NULL;
 
     m_win = win;
