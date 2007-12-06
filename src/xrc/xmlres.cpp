@@ -1689,6 +1689,7 @@ static void AddStdXRCID_Records()
     stdID(wxID_HELP_CONTEXT);
     stdID(wxID_CLOSE_ALL);
     stdID(wxID_PREFERENCES);
+    stdID(wxID_EDIT);
     stdID(wxID_CUT);
     stdID(wxID_COPY);
     stdID(wxID_PASTE);
