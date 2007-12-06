@@ -643,6 +643,19 @@ void wxSpinCtrl::DoGetSize(int *x, int *y) const
         *y = ctrlrect.bottom - ctrlrect.top;
 }
 
+void wxSpinCtrl::DoGetClientSize(int *x, int *y) const
+{
+    RECT spinrect = wxGetClientRect(GetHwnd());
+    RECT textrect = wxGetClientRect(GetBuddyHwnd());
+    RECT ctrlrect;
+    UnionRect(&ctrlrect,&textrect, &spinrect);
+
+    if ( x )
+        *x = ctrlrect.right - ctrlrect.left;
+    if ( y )
+        *y = ctrlrect.bottom - ctrlrect.top;
+}
+
 void wxSpinCtrl::DoGetPosition(int *x, int *y) const
 {
     // hack: pretend that our HWND is the text control just for a moment
