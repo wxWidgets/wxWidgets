@@ -50,6 +50,48 @@ WX_DEFINE_LIST(wxRichTextLineList)
 
 const wxChar wxRichTextLineBreakChar = (wxChar) 29;
 
+// Helpers for efficiency
+
+inline void wxCheckSetFont(wxDC& dc, const wxFont& font)
+{
+    const wxFont& font1 = dc.GetFont();
+    if (font1.IsOk() && font.IsOk())
+    {
+        if (font1.GetPointSize() == font.GetPointSize() &&
+            font1.GetFamily() == font.GetFamily() &&
+            font1.GetStyle() == font.GetStyle() &&
+            font1.GetWeight() == font.GetWeight() &&
+            font1.GetFaceName() == font.GetFaceName())
+            return;
+    }
+    dc.SetFont(font);
+}
+
+inline void wxCheckSetPen(wxDC& dc, const wxPen& pen)
+{
+    const wxPen& pen1 = dc.GetPen();
+    if (pen1.IsOk() && pen.IsOk())
+    {
+        if (pen1.GetWidth() == pen.GetWidth() &&
+            pen1.GetStyle() == pen.GetStyle() &&
+            pen1.GetColour() == pen.GetColour())
+            return;
+    }
+    dc.SetPen(pen);
+}
+
+inline void wxCheckSetBrush(wxDC& dc, const wxBrush& brush)
+{
+    const wxBrush& brush1 = dc.GetBrush();
+    if (brush1.IsOk() && brush.IsOk())
+    {
+        if (brush1.GetStyle() == brush.GetStyle() &&
+            brush1.GetColour() == brush.GetColour())
+            return;
+    }
+    dc.SetBrush(brush);
+}
+
 /*!
  * wxRichTextObject
  * This is the base for drawable objects.
@@ -2989,7 +3031,7 @@ bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
                 else
                     font = (*wxNORMAL_FONT);
 
-                dc.SetFont(font);
+                wxCheckSetFont(dc, font);
 
                 lineHeight = dc.GetCharHeight();
                 linePos = GetPosition();
@@ -3088,7 +3130,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     if (attr.GetLineSpacing() != 10 && GetBuffer())
     {
         wxFont font(GetBuffer()->GetFontTable().FindFont(attr));
-        dc.SetFont(font);
+        wxCheckSetFont(dc, font);
         lineSpacing = (ConvertTenthsMMToPixels(dc, dc.GetCharHeight()) * attr.GetLineSpacing())/10;
     }
 
@@ -3123,13 +3165,24 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
 
     int lineCount = 0;
 
+    wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxRichTextObject* child = node->GetData();
+
+        child->SetCachedSize(wxDefaultSize);
+        child->Layout(dc, rect, style);
+
+        node = node->GetNext();
+    }
+
     // Split up lines
 
     // We may need to go back to a previous child, in which case create the new line,
     // find the child corresponding to the start position of the string, and
     // continue.
 
-    wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
+    node = m_children.GetFirst();
     while (node)
     {
         wxRichTextObject* child = node->GetData();
@@ -3140,9 +3193,6 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         // since for example if position is dependent on vertical line size, we
         // can't tell the position until the size is determined. So possibly introduce
         // another layout phase.
-
-        // TODO: can't this be called only once per child?
-        child->Layout(dc, rect, style);
 
         // Available width depends on whether we're on the first or subsequent lines
         int availableSpaceForText = (lineCount == 0 ? availableTextSpaceFirstLine : availableTextSpaceSubsequentLines);
@@ -3268,7 +3318,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         if (lineHeight == 0 && GetBuffer())
         {
             wxFont font(GetBuffer()->GetFontTable().FindFont(attr));
-            dc.SetFont(font);
+            wxCheckSetFont(dc, font);
             lineHeight = dc.GetCharHeight();
         }
         if (maxDescent == 0)
@@ -3827,17 +3877,52 @@ bool wxRichTextParagraph::FindWrapPosition(const wxRichTextRange& range, wxDC& d
 {
     // Find the first position where the line exceeds the available space.
     wxSize sz;
-    long i;
     long breakPosition = range.GetEnd();
-    for (i = range.GetStart(); i <= range.GetEnd(); i++)
-    {
-        int descent = 0;
-        GetRangeSize(wxRichTextRange(range.GetStart(), i), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
 
-        if (sz.x > availableSpace)
+    // Binary chop for speed
+    long minPos = range.GetStart();
+    long maxPos = range.GetEnd();
+    while (true)
+    {
+        if (minPos == maxPos)
         {
-            breakPosition = i-1;
+            int descent = 0;
+            GetRangeSize(wxRichTextRange(range.GetStart(), minPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
+
+            if (sz.x > availableSpace)
+                breakPosition = minPos - 1;
             break;
+        }
+        else if ((maxPos - minPos) == 1)
+        {
+            int descent = 0;
+            GetRangeSize(wxRichTextRange(range.GetStart(), minPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
+
+            if (sz.x > availableSpace)
+                breakPosition = minPos - 1;
+            else
+            {
+                GetRangeSize(wxRichTextRange(range.GetStart(), maxPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
+                if (sz.x > availableSpace)
+                    breakPosition = maxPos-1;
+            }
+            break;
+        }
+        else
+        {
+            long nextPos = minPos + ((maxPos - minPos) / 2);
+
+            int descent = 0;
+            GetRangeSize(wxRichTextRange(range.GetStart(), nextPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
+
+            if (sz.x > availableSpace)
+            {
+                maxPos = nextPos;
+            }
+            else
+            {
+                minPos = nextPos;
+            }
         }
     }
 
@@ -4133,7 +4218,7 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
     // is selected.
 
     wxFont font(GetBuffer()->GetFontTable().FindFont(textAttr));
-    dc.SetFont(font);
+    wxCheckSetFont(dc, font);
 
     // (a) All selected.
     if (selectionRange.GetStart() <= range.GetStart() && selectionRange.GetEnd() >= range.GetEnd())
@@ -4265,8 +4350,8 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttr& attr, con
         wxColour highlightColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
         wxColour highlightTextColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
 
-        dc.SetBrush(wxBrush(highlightColour));
-        dc.SetPen(wxPen(highlightColour));
+        wxCheckSetBrush(dc, wxBrush(highlightColour));
+        wxCheckSetPen(dc, wxPen(highlightColour));
         dc.SetTextForeground(highlightTextColour);
         dc.SetBackgroundMode(wxTRANSPARENT);
     }
@@ -4319,9 +4404,9 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttr& attr, con
                 if (attr.HasTextEffects() && (attr.GetTextEffects() & wxTEXT_ATTR_EFFECT_STRIKETHROUGH))
                 {
                     wxPen oldPen = dc.GetPen();
-                    dc.SetPen(wxPen(attr.GetTextColour(), 1));
+                    wxCheckSetPen(dc, wxPen(attr.GetTextColour(), 1));
                     dc.DrawLine(x, (int) (y+(h/2)+0.5), x+w, (int) (y+(h/2)+0.5));
-                    dc.SetPen(oldPen);
+                    wxCheckSetPen(dc, oldPen);
                 }
 
                 x = nextTabPos;
@@ -4343,9 +4428,9 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttr& attr, con
         if (attr.HasTextEffects() && (attr.GetTextEffects() & wxTEXT_ATTR_EFFECT_STRIKETHROUGH))
         {
             wxPen oldPen = dc.GetPen();
-            dc.SetPen(wxPen(attr.GetTextColour(), 1));
+            wxCheckSetPen(dc, wxPen(attr.GetTextColour(), 1));
             dc.DrawLine(x, (int) (y+(h/2)+0.5), x+w, (int) (y+(h/2)+0.5));
-            dc.SetPen(oldPen);
+            wxCheckSetPen(dc, oldPen);
         }
 
         x += w;
@@ -4357,7 +4442,9 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttr& attr, con
 /// Lay the item out
 bool wxRichTextPlainText::Layout(wxDC& dc, const wxRect& WXUNUSED(rect), int WXUNUSED(style))
 {
-    GetRangeSize(GetRange(), m_size, m_descent, dc, 0, wxPoint(0, 0));
+    // Only lay out if we haven't already cached the size
+    if (m_size.x == -1)
+        GetRangeSize(GetRange(), m_size, m_descent, dc, 0, wxPoint(0, 0));
 
     return true;
 }
@@ -4387,7 +4474,7 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
     // formatted text by doing it in chunks according to the line ranges
 
     wxFont font(GetBuffer()->GetFontTable().FindFont(textAttr));
-    dc.SetFont(font);
+    wxCheckSetFont(dc, font);
 
     int startPos = range.GetStart() - GetRange().GetStart();
     long len = range.GetLength();
@@ -5680,13 +5767,13 @@ bool wxRichTextStdRenderer::DrawStandardBullet(wxRichTextParagraph* paragraph, w
 {
     if (bulletAttr.GetTextColour().Ok())
     {
-        dc.SetPen(wxPen(bulletAttr.GetTextColour()));
-        dc.SetBrush(wxBrush(bulletAttr.GetTextColour()));
+        wxCheckSetPen(dc, wxPen(bulletAttr.GetTextColour()));
+        wxCheckSetBrush(dc, wxBrush(bulletAttr.GetTextColour()));
     }
     else
     {
-        dc.SetPen(*wxBLACK_PEN);
-        dc.SetBrush(*wxBLACK_BRUSH);
+        wxCheckSetPen(dc, *wxBLACK_PEN);
+        wxCheckSetBrush(dc, *wxBLACK_BRUSH);
     }
 
     wxFont font;
@@ -5697,7 +5784,7 @@ bool wxRichTextStdRenderer::DrawStandardBullet(wxRichTextParagraph* paragraph, w
     else
         font = (*wxNORMAL_FONT);
 
-    dc.SetFont(font);
+    wxCheckSetFont(dc, font);
 
     int charHeight = dc.GetCharHeight();
 
@@ -5771,7 +5858,7 @@ bool wxRichTextStdRenderer::DrawTextBullet(wxRichTextParagraph* paragraph, wxDC&
         else
             font = (*wxNORMAL_FONT);
 
-        dc.SetFont(font);
+        wxCheckSetFont(dc, font);
 
         if (attr.GetTextColour().Ok())
             dc.SetTextForeground(attr.GetTextColour());
@@ -6371,8 +6458,8 @@ bool wxRichTextImage::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichT
 
     if (selectionRange.Contains(range.GetStart()))
     {
-        dc.SetBrush(*wxBLACK_BRUSH);
-        dc.SetPen(*wxBLACK_PEN);
+        wxCheckSetBrush(dc, *wxBLACK_BRUSH);
+        wxCheckSetPen(dc, *wxBLACK_PEN);
         dc.SetLogicalFunction(wxINVERT);
         dc.DrawRectangle(rect);
         dc.SetLogicalFunction(wxCOPY);
