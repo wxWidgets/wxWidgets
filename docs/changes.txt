@@ -98,6 +98,7 @@ All (GUI):
 - Ensure that wxGrid::AutoSizeColumn/Row() never sets column/row size
   smaller than the minimal size.
 - Added <scrollrate> parameter to wxScrolledWindow XRC handler.
+- wxRichTextCtrl performance has been improved considerably.
 
 All (Unix):
 
