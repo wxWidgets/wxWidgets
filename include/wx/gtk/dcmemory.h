@@ -36,7 +36,6 @@ public:
     virtual void SetTextForeground( const wxColour &col );
     virtual void SetTextBackground( const wxColour &col );
 
-protected:
     // overridden from wxDCImpl
     virtual void DoGetSize( int *width, int *height ) const;
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const;
@@ -44,14 +43,12 @@ protected:
     // overridden for wxMemoryDC Impl
     virtual void DoSelect(const wxBitmap& bitmap);
 
-public:
     virtual const wxBitmap& GetSelectedBitmap() const;
     virtual wxBitmap& GetSelectedBitmap();
 
 private:
     wxBitmap  m_selected;
     
-private:
     void Init();
 
     DECLARE_ABSTRACT_CLASS(wxMemoryDCImpl)

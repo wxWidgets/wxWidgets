@@ -7,10 +7,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKDCCLIENTH__
-#define __GTKDCCLIENTH__
+#ifndef _WX_GTKDCCLIENT_H_
+#define _WX_GTKDCCLIENT_H_
 
-#include "wx/dc.h"
 #include "wx/gtk/dc.h"
 #include "wx/dcclient.h"
 #include "wx/region.h"
@@ -32,7 +31,6 @@ public:
     virtual bool CanDrawBitmap() const { return true; }
     virtual bool CanGetTextExtent() const { return true; }
 
-protected:
     virtual void DoGetSize(int *width, int *height) const;
     virtual bool DoFloodFill( wxCoord x, wxCoord y, const wxColour& col, int style=wxFLOOD_SURFACE );
     virtual bool DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const;
@@ -75,8 +73,6 @@ protected:
     virtual void DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height );
     virtual void DoSetClippingRegionAsRegion( const wxRegion &region );
 
-
-public:
     virtual wxCoord GetCharWidth() const;
     virtual wxCoord GetCharHeight() const;
 
@@ -128,7 +124,6 @@ public:
 
     virtual GdkWindow *GetGDKWindow() const { return m_gdkwindow; }
 
-private:
     DECLARE_ABSTRACT_CLASS(wxWindowDCImpl)
 };
 
@@ -142,10 +137,8 @@ public:
     wxClientDCImpl( wxDC *owner );
     wxClientDCImpl( wxDC *owner, wxWindow *win );
 
-protected:
     virtual void DoGetSize(int *width, int *height) const;
 
-private:
     DECLARE_ABSTRACT_CLASS(wxClientDCImpl)
 };
 
@@ -159,10 +152,7 @@ public:
     wxPaintDCImpl( wxDC *owner );
     wxPaintDCImpl( wxDC *owner, wxWindow *win );
 
-private:
     DECLARE_ABSTRACT_CLASS(wxPaintDCImpl)
 };
 
-#endif
-    // __GTKDCCLIENTH__
-
+#endif // _WX_GTKDCCLIENT_H_

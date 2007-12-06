@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKDCSCREENH__
-#define __GTKDCSCREENH__
+#ifndef _WX_GTKDCSCREEN_H_
+#define _WX_GTKDCSCREEN_H_
 
 #include "wx/dcscreen.h"
 #include "wx/gtk/dcclient.h"
@@ -23,14 +23,12 @@ public:
     wxScreenDCImpl( wxScreenDC *owner );
     ~wxScreenDCImpl();
 
-protected:
     virtual void DoGetSize(int *width, int *height) const;
 
+protected:
     void Init();
 
-private:
     DECLARE_ABSTRACT_CLASS(wxScreenDCImpl)
 };
 
-#endif // __GTKDCSCREENH__
-
+#endif // _WX_GTKDCSCREEN_H_

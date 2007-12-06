@@ -16,7 +16,6 @@
 
 #include "wx/dc.h"
 #include "wx/geometry.h"
-#include "wx/dynarray.h"
 #include "wx/graphics.h"
 
 class WXDLLIMPEXP_FWD_CORE wxWindowDC;
@@ -33,11 +32,9 @@ public:
     wxGraphicsContext* GetGraphicsContext();
     void SetGraphicsContext( wxGraphicsContext* ctx );
     
-private:
     DECLARE_DYNAMIC_CLASS(wxGCDC)
     DECLARE_NO_COPY_CLASS(wxGCDC)
 };
-
 
 
 class WXDLLEXPORT wxGCDCImpl: public wxDCImpl
@@ -95,7 +92,6 @@ public:
     wxGraphicsContext* GetGraphicsContext() { return m_graphicContext; }
     virtual void SetGraphicsContext( wxGraphicsContext* ctx );
     
-protected:
     // the true implementations
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
         int style = wxFLOOD_SURFACE);
@@ -193,11 +189,9 @@ protected:
 
     wxGraphicsContext* m_graphicContext;
     
-private:
     DECLARE_CLASS(wxGCDCImpl)
     DECLARE_NO_COPY_CLASS(wxGCDCImpl)
 };
 
-#endif
-
+#endif // wxUSE_GRAPHICS_CONTEXT
 #endif // _WX_GRAPHICS_DC_H_

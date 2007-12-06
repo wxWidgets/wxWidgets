@@ -22,8 +22,6 @@ public:
     wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap );
     wxMemoryDCImpl( wxMemoryDC *owner, wxDC *dc ); // Create compatible DC
 
-
-protected:
     // override some base class virtuals
     virtual void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     virtual void DoGetSize(int* width, int* height) const;
@@ -32,13 +30,13 @@ protected:
     virtual wxBitmap DoGetAsBitmap(const wxRect* subrect) const 
     { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmapOfHDC(*subrect, GetHDC() );}
 
+protected:
     // create DC compatible with the given one or screen if dc == NULL
     bool CreateCompatible(wxDC *dc);
 
     // initialize the newly created DC
     void Init();
 
-private:
     DECLARE_CLASS(wxMemoryDCImpl)
     DECLARE_NO_COPY_CLASS(wxMemoryDCImpl)
 };

@@ -29,15 +29,14 @@ public:
     wxWindowDCImpl( wxDC *owner, wxWindow *window );
     virtual ~wxWindowDCImpl();
     
-protected :
     virtual void DoGetSize( int *width, int *height ) const;
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const; 
 
+protected:
     bool m_release;
     int	 m_width;
     int	 m_height;
 
-private:
     DECLARE_CLASS(wxWindowDCImpl)
     DECLARE_NO_COPY_CLASS(wxWindowDCImpl)
 };

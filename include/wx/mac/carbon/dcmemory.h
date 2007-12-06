@@ -23,7 +23,6 @@ public:
     
     virtual ~wxMemoryDCImpl();
 
-protected:
     virtual void DoGetSize( int *width, int *height ) const;
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const 
        { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmap(*subrect); }
@@ -34,7 +33,6 @@ private:
 
     wxBitmap  m_selected;
     
-private:
     DECLARE_CLASS(wxMemoryDCImpl)
     DECLARE_NO_COPY_CLASS(wxMemoryDCImpl)
 };

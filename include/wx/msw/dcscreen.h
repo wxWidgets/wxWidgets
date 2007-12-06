@@ -21,13 +21,11 @@ public:
     // Create a DC representing the whole screen
     wxScreenDCImpl( wxScreenDC *owner );
 
-protected:
     virtual void DoGetSize(int *w, int *h) const
     {
         GetDeviceSize(w, h);
     }
 
-private:
     DECLARE_CLASS(wxScreenDCImpl)
     DECLARE_NO_COPY_CLASS(wxScreenDCImpl)
 };

@@ -164,6 +164,7 @@ protected:
 
     void RealizeScaleAndOrigin();
 
+public:
     virtual void DoGetTextExtent(const wxString& string,
                                  wxCoord *x, wxCoord *y,
                                  wxCoord *descent = NULL,
@@ -260,6 +261,7 @@ protected:
     void InitializePalette();
 #endif // wxUSE_PALETTE
 
+protected:
     // common part of DoDrawText() and DoDrawRotatedText()
     void DrawAnyText(const wxString& text, wxCoord x, wxCoord y);
 
@@ -334,7 +336,6 @@ public:
         SetHDC((WXHDC)NULL);
     }
 
-protected:
     virtual void DoGetSize(int *w, int *h) const
     {
         wxASSERT_MSG( m_size.IsFullySpecified(),

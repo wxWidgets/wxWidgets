@@ -36,12 +36,10 @@ public:
 
     virtual GdkWindow* GetGDKWindow() const { return NULL; }
 
-protected:
     // base class pure virtuals implemented here
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     virtual void DoGetSizeMM(int* width, int* height) const;
 
-private:
     DECLARE_ABSTRACT_CLASS(wxGTKDCImpl)
 };
 

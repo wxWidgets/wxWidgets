@@ -43,14 +43,12 @@ public:
     // Create a DC corresponding to the whole window
     wxWindowDCImpl( wxDC *owner, wxWindow *win );
 
+    virtual void DoGetSize(int *width, int *height) const;
+
 protected:
     // initialize the newly created DC
     void InitDC();
 
-    // override some base class virtuals
-    virtual void DoGetSize(int *width, int *height) const;
-
-private:
     DECLARE_CLASS(wxWindowDCImpl)
     DECLARE_NO_COPY_CLASS(wxWindowDCImpl)
 };
@@ -66,13 +64,11 @@ public:
 
     virtual ~wxClientDCImpl();
 
+    virtual void DoGetSize(int *width, int *height) const;
+
 protected:
     void InitDC();
 
-    // override some base class virtuals
-    virtual void DoGetSize(int *width, int *height) const;
-
-private:
     DECLARE_CLASS(wxClientDCImpl)
     DECLARE_NO_COPY_CLASS(wxClientDCImpl)
 };
@@ -96,7 +92,6 @@ protected:
     // find the entry for this DC in the cache (keyed by the window)
     wxPaintDCInfo *FindInCache(size_t *index = NULL) const;
 
-private:
     DECLARE_CLASS(wxPaintDCImpl)
     DECLARE_NO_COPY_CLASS(wxPaintDCImpl)
 };
@@ -112,7 +107,6 @@ class WXDLLEXPORT wxPaintDCEx : public wxPaintDC
 public:
     wxPaintDCEx(wxWindow *canvas, WXHDC dc);
     
-private:
     DECLARE_CLASS(wxPaintDCEx)
     DECLARE_NO_COPY_CLASS(wxPaintDCEx)
 };
