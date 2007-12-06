@@ -2534,9 +2534,9 @@ typedef struct __CFRunLoopSource * CFRunLoopSourceRef;
 
 #define DECLARE_WXMAC_OPAQUE_CGREF( name ) typedef struct name* name##Ref;
 
-DECLARE_WXMAC_OPAQUE_CGREF( CGColor );
-DECLARE_WXMAC_OPAQUE_CGREF( CGImage );
-DECLARE_WXMAC_OPAQUE_CGREF( CGContext );
+DECLARE_WXMAC_OPAQUE_CGREF( CGColor )
+DECLARE_WXMAC_OPAQUE_CGREF( CGImage )
+DECLARE_WXMAC_OPAQUE_CGREF( CGContext )
 
 typedef CGColorRef    WXCOLORREF;
 typedef CGImageRef    WXCGIMAGEREF;
@@ -2551,8 +2551,8 @@ typedef struct __HIShape * HIMutableShapeRef;
 
 #define DECLARE_WXMAC_OPAQUE_REF( name ) typedef struct Opaque##name* name;
 
-DECLARE_WXMAC_OPAQUE_REF( PasteboardRef );
-DECLARE_WXMAC_OPAQUE_REF( IconRef );
+DECLARE_WXMAC_OPAQUE_REF( PasteboardRef )
+DECLARE_WXMAC_OPAQUE_REF( IconRef )
 
 typedef IconRef WXHICON ;
 typedef HIShapeRef WXHRGN;
