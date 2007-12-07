@@ -37,6 +37,15 @@
     #define NIN_BALLOONUSERCLICK    0x0405
 #endif
 
+#ifndef NIM_SETVERSION
+    #define NIM_SETVERSION  0x00000004
+#endif
+
+#ifndef NIF_INFO
+    #define NIF_INFO        0x00000010
+#endif
+
+
 // initialized on demand
 static UINT gs_msgTaskbar = 0;
 static UINT gs_msgRestartTaskbar = 0;
@@ -215,7 +224,9 @@ wxTaskBarIcon::ShowBalloon(const wxString& title,
     // the balloon disappearance
     NotifyIconData notifyData(hwnd);
     notifyData.uFlags = 0;
+#if (WINVER >= 0x0500)
     notifyData.uVersion = 3 /* NOTIFYICON_VERSION for Windows XP */;
+#endif
 
     wxShellNotifyIcon(NIM_SETVERSION, &notifyData);
 
@@ -223,6 +234,7 @@ wxTaskBarIcon::ShowBalloon(const wxString& title,
     // do show the balloon now
     notifyData = NotifyIconData(hwnd);
     notifyData.uFlags |= NIF_INFO;
+#if (WINVER >= 0x0500)
     notifyData.uTimeout = msec;
     wxStrncpy(notifyData.szInfo, text.wx_str(), WXSIZEOF(notifyData.szInfo));
     wxStrncpy(notifyData.szInfoTitle, title.wx_str(),
@@ -234,6 +246,7 @@ wxTaskBarIcon::ShowBalloon(const wxString& title,
         notifyData.dwInfoFlags |= NIIF_WARNING;
     else if ( flags & wxICON_ERROR )
         notifyData.dwInfoFlags |= NIIF_ERROR;
+#endif
 
     return wxShellNotifyIcon(NIM_MODIFY, &notifyData) != 0;
 }
