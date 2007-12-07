@@ -495,6 +495,9 @@ void wxMimeTypesManagerImpl::LoadGnomeMimeFilesFromDir(
     wxString dirname = dirbase;
     dirname << wxT("/mime-info");
 
+    // Don't complain if we don't have permissions to read - it confuses users
+    wxLogNull logNull;
+
     if ( !wxDir::Exists(dirname) )
         return;
 
@@ -887,6 +890,10 @@ void wxMimeTypesManagerImpl::LoadKDELinksForMimeType(const wxString& dirbase,
 {
     wxFileName dirname(dirbase, wxEmptyString);
     dirname.AppendDir(subdir);
+
+    // Don't complain if we don't have permissions to read - it confuses users
+    wxLogNull logNull;
+
     wxDir dir(dirname.GetPath());
     if(! dir.IsOpened())
         return;
@@ -914,6 +921,9 @@ void wxMimeTypesManagerImpl::LoadKDELinksForMimeType(const wxString& dirbase,
 void wxMimeTypesManagerImpl::LoadKDELinkFilesFromDir(const wxString& dirname,
                                             const wxArrayString& icondirs)
 {
+    // Don't complain if we don't have permissions to read - it confuses users
+    wxLogNull logNull;
+
     if(! wxDir::Exists(dirname))
         return;
 
@@ -1013,6 +1023,9 @@ void wxMimeTypesManagerImpl::LoadKDEApp(const wxString& filename)
 
 void wxMimeTypesManagerImpl::LoadKDEAppsFilesFromDir(const wxString& dirname)
 {
+    // Don't complain if we don't have permissions to read - it confuses users
+    wxLogNull logNull;
+
     if(! wxDir::Exists(dirname))
         return;
     wxDir dir(dirname);
