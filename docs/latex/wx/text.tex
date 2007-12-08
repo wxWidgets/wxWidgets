@@ -173,7 +173,7 @@ control. This could be done in the following way:
   wxTextCtrl *control = new wxTextCtrl(...);
 
   std::streambuf *sbOld = std::cout.rdbuf();
-  std::cout.rdbuf(*control);
+  std::cout.rdbuf(control);
 
   // use cout as usual, the output appears in the text control
   ...
