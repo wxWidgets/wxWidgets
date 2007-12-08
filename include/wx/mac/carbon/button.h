@@ -81,8 +81,6 @@ public:
 
     void SetOpen( bool open );
     bool IsOpen() const;
-    void SetLabel( const wxString &label );
-    wxString GetLabel() const;
 
     virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
 
