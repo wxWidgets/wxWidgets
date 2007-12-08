@@ -326,7 +326,7 @@ private :
 #if wxUSE_TIMER 
     wxMacToolTipTimer* m_timer ;
 #endif
-    wxMacCFStringHolder m_helpTextRef ;
+    wxCFStringRef m_helpTextRef ;
 } ;
 
 // Quartz 
@@ -781,7 +781,7 @@ public :
 
 protected :
     wxString    m_label;
-    wxMacCFStringHolder m_cfLabel;
+    wxCFStringRef m_cfLabel;
     void *      m_data;
     SInt32      m_order;
     DataBrowserPropertyID m_colId;
