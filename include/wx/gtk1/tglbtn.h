@@ -32,7 +32,7 @@ extern WXDLLIMPEXP_CORE const char wxCheckBoxNameStr[];
 // wxToggleBitmapButton
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxToggleBitmapButton: public wxControl
+class WXDLLIMPEXP_CORE wxToggleBitmapButton: public wxToggleButtonBase
 {
 public:
     // construction/destruction
