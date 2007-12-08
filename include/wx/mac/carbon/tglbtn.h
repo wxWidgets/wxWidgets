@@ -16,11 +16,11 @@
 WXDLLEXPORT_DATA(extern const char) wxCheckBoxNameStr[];
 
 
-class WXDLLEXPORT wxToggleBitmapButton : public wxControl
+class WXDLLEXPORT wxBitmapToggleButton : public wxToggleButtonBase
 {
 public:
-    wxToggleBitmapButton() {}
-    wxToggleBitmapButton(wxWindow *parent,
+    wxBitmapToggleButton() {}
+    wxBitmapToggleButton(wxWindow *parent,
                    wxWindowID id,
                    const wxBitmap& label,
                    const wxPoint& pos = wxDefaultPosition,
@@ -56,11 +56,11 @@ protected:
     virtual wxSize DoGetBestSize() const;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxToggleBitmapButton)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxBitmapToggleButton)
 };
 
 
-class WXDLLEXPORT wxToggleButton : public wxControl
+class WXDLLEXPORT wxToggleButton : public wxToggleButtonBase
 {
 public:
     wxToggleButton() {}
