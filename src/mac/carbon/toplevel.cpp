@@ -1204,7 +1204,7 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
     SetWindowBounds(  (WindowRef) m_macWindow , kWindowStructureRgn , &theBoundsRect ) ;
 
     wxAssociateWinWithMacWindow( (WindowRef) m_macWindow , this ) ;
-    SetWindowTitleWithCFString( (WindowRef) m_macWindow , wxMacCFStringHolder( title , m_font.GetEncoding() ) );
+    SetWindowTitleWithCFString( (WindowRef) m_macWindow , wxCFStringRef( title , m_font.GetEncoding() ) );
     m_peer = new wxMacControl(this , true /*isRootControl*/) ;
 
     // There is a bug in 10.2.X for ::GetRootControl returning the window view instead of
@@ -1301,7 +1301,7 @@ void wxTopLevelWindowMac::MacActivate( long timestamp , bool WXUNUSED(inIsActiva
 void wxTopLevelWindowMac::SetTitle(const wxString& title)
 {
     wxWindow::SetLabel( title ) ;
-    SetWindowTitleWithCFString( (WindowRef) m_macWindow , wxMacCFStringHolder( title , m_font.GetEncoding() ) ) ;
+    SetWindowTitleWithCFString( (WindowRef) m_macWindow , wxCFStringRef( title , m_font.GetEncoding() ) ) ;
 }
 
 wxString wxTopLevelWindowMac::GetTitle() const

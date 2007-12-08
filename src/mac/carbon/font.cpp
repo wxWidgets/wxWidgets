@@ -361,10 +361,10 @@ void wxFontRefData::MacFindFont()
         {
             m_ctFont.reset(CTFontCreateUIFontForLanguage( kCTFontSystemFontType, 0.0, NULL ));
         }
-        
-        if ( m_ctFont.get() )
+           
+        if ( m_ctFont )
         {            
-            wxMacCFStringHolder name( CTFontCopyFamilyName( m_ctFont ) );
+            wxCFStringRef name( CTFontCopyFamilyName( m_ctFont ) );
             m_faceName = name.AsString();
             m_pointSize = CTFontGetSize(m_ctFont) ;
             CTFontSymbolicTraits traits = CTFontGetSymbolicTraits( m_ctFont );
@@ -402,7 +402,7 @@ void wxFontRefData::MacFindFont()
                 }
             }
 
-            wxMacCFStringHolder cf( m_faceName, wxLocale::GetSystemEncoding() );
+            wxCFStringRef cf( m_faceName, wxLocale::GetSystemEncoding() );
             CTFontSymbolicTraits traits = 0;
         
             if (m_weight == wxBOLD)
@@ -539,7 +539,7 @@ void wxFontRefData::MacFindFont()
                     m_macFontFamily = GetAppFont();
                 else
                 {
-                    wxMacCFStringHolder cf( m_faceName, wxLocale::GetSystemEncoding() );
+                    wxCFStringRef cf( m_faceName, wxLocale::GetSystemEncoding() );
                     ATSFontFamilyRef atsfamily = ATSFontFamilyFindFromName( cf , kATSOptionFlagsDefault );
                     if ( atsfamily == (ATSFontFamilyRef) -1 )
                     {

@@ -140,7 +140,7 @@ bool wxMacCarbonPrintData::TransferFrom( const wxPrintData &data )
     // collate cannot be set
 #if 0 // not yet tested
     if ( !m_printerName.empty() )
-        PMSessionSetCurrentPrinter( (PMPrintSession) m_macPrintSession , wxMacCFStringHolder( m_printerName , wxFont::GetDefaultEncoding() ) ) ;
+        PMSessionSetCurrentPrinter( (PMPrintSession) m_macPrintSession , wxCFStringRef( m_printerName , wxFont::GetDefaultEncoding() ) ) ;
 #endif
 #ifndef __LP64__
     PMColorMode color ;
@@ -222,7 +222,7 @@ bool wxMacCarbonPrintData::TransferTo( wxPrintData &data )
     // collate cannot be set
 #if 0
     {
-        wxMacCFStringHolder name ;
+        wxCFStringRef name ;
         PMPrinter printer ;
         PMSessionGetCurrentPrinter( m_macPrintSession ,
             &printer ) ;

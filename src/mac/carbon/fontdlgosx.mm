@@ -65,14 +65,14 @@
 {
     [super initWithFrame:rectBox];
 
-    wxMacCFStringHolder cfOkString( wxT("OK"), wxLocale::GetSystemEncoding() );
-    wxMacCFStringHolder cfCancelString( wxT("Cancel"), wxLocale::GetSystemEncoding() );
+    wxCFStringRef cfOkString( wxT("OK"), wxLocale::GetSystemEncoding() );
+    wxCFStringRef cfCancelString( wxT("Cancel"), wxLocale::GetSystemEncoding() );
 
     NSRect rectCancel = NSMakeRect( 10.0 , 10.0 , 82  , 24 );
     NSRect rectOK = NSMakeRect( 100.0 , 10.0 , 82  , 24 );
 
     NSButton* cancelButton = [[NSButton alloc] initWithFrame:rectCancel];
-    [cancelButton setTitle:(NSString*)cfCancelString.Detach()];
+    [cancelButton setTitle:(NSString*)wxCFRetain((CFStringRef)cfCancelString)];
     [cancelButton setBezelStyle:NSRoundedBezelStyle];
     [cancelButton setButtonType:NSMomentaryPushInButton];
     [cancelButton setAction:@selector(cancelPressed:)];
@@ -80,7 +80,7 @@
     m_cancelButton = cancelButton ;
 
     NSButton* okButton = [[NSButton alloc] initWithFrame:rectOK];
-    [okButton setTitle:(NSString*)cfOkString.Detach()];
+    [okButton setTitle:(NSString*)wxCFRetain((CFStringRef)cfOkString)];
     [okButton setBezelStyle:NSRoundedBezelStyle];
     [okButton setButtonType:NSMomentaryPushInButton];
     [okButton setAction:@selector(okPressed:)];

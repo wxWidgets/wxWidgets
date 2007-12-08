@@ -393,7 +393,7 @@ bool wxSound::DoPlay(unsigned flags) const
             Handle dataRef = NULL;
             OSType dataRefType;
 
-            err = QTNewDataReferenceFromFullPathCFString(wxMacCFStringHolder(m_sndname,wxLocale::GetSystemEncoding()),
+            err = QTNewDataReferenceFromFullPathCFString(wxCFStringRef(m_sndname,wxLocale::GetSystemEncoding()),
                 (UInt32)kQTNativeDefaultPathStyle, 0, &dataRef, &dataRefType);
 
             wxASSERT(err == noErr);

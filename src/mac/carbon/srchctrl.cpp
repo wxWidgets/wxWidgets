@@ -159,7 +159,7 @@ void wxMacSearchFieldControl::SetDescriptiveText(const wxString& text)
 {
     verify_noerr( HISearchFieldSetDescriptiveText(
                       m_controlRef,
-                      wxMacCFStringHolder( text, wxFont::GetDefaultEncoding() )));
+                      wxCFStringRef( text, wxFont::GetDefaultEncoding() )));
 }
 
 wxString wxMacSearchFieldControl::GetDescriptiveText() const
@@ -168,7 +168,7 @@ wxString wxMacSearchFieldControl::GetDescriptiveText() const
     verify_noerr( HISearchFieldCopyDescriptiveText( m_controlRef, &cfStr ));
     if ( cfStr )
     {
-        return wxMacCFStringHolder(cfStr).AsString();
+        return wxCFStringRef(cfStr).AsString();
     }
     else
     {

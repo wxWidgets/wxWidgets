@@ -822,7 +822,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         CFRelease( url ) ;
         CFStringRef path = CFURLCopyFileSystemPath ( urlParent , kCFURLPOSIXPathStyle ) ;
         CFRelease( urlParent ) ;
-        wxString cwd = wxMacCFStringHolder(path).AsString(wxLocale::GetSystemEncoding());
+        wxString cwd = wxCFStringRef(path).AsString(wxLocale::GetSystemEncoding());
         wxSetWorkingDirectory( cwd ) ;
     }
 

@@ -1443,22 +1443,53 @@ bool wxMacCoreGraphicsContext::SetLogicalFunction( int function )
     EnsureIsValid();
     
     bool retval = false;
-
-    if ( function == wxCOPY )
+    bool shouldAntiAlias = true;
+    CGBlendMode mode = kCGBlendModeNormal;
+    
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+    if ( UMAGetSystemVersion() >= 0x1050 )
     {
         retval = true;
-        CGContextSetBlendMode( m_cgContext, kCGBlendModeNormal );
+        switch ( function )
+        {
+            // TODO find best corresponding porter duff modes
+            case wxCOPY :
+                mode = kCGBlendModeCopy;
+                break;
+            case wxCLEAR :
+                mode = kCGBlendModeClear;
+                break;
+            case wxXOR :
+                mode = kCGBlendModeXOR;
+                shouldAntiAlias = false;
+                break;  
+            default :
+                retval = false;
+                break;
+        }
     }
-    else if ( function == wxINVERT || function == wxXOR )
+    else
+#endif
     {
-        // change color to white
-        CGContextSetBlendMode( m_cgContext, kCGBlendModeExclusion );
-        CGContextSetShouldAntialias( m_cgContext, false );
-        retval = true;
+        if ( function == wxCOPY )
+        {
+            retval = true;
+        }
+        else if ( function == wxINVERT || function == wxXOR )
+        {
+            // change color to white
+            mode = kCGBlendModeExclusion;
+            shouldAntiAlias = false;
+            retval = true;
+        }
     }
     
     if (retval)
+    {
         m_logicalFunction = function;
+        CGContextSetBlendMode( m_cgContext, mode );
+        CGContextSetShouldAntialias(m_cgContext, shouldAntiAlias);
+    }
     return retval ;
 }
 
@@ -1745,7 +1776,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
     if ( UMAGetSystemVersion() >= 0x1050 )
     {
         wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
-        wxMacCFStringHolder text(str, wxLocale::GetSystemEncoding() );
+        wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
         CTFontRef font = fref->GetCTFont();
         CGColorRef col = fref->GetColour().GetPixel();
         CTUnderlineStyle ustyle = fref->GetUnderlined() ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone ;
@@ -1797,34 +1828,11 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
     {
         OSStatus status = noErr;
         ATSUTextLayout atsuLayout;
-        UniCharCount chars = str.length();
-        UniChar* ubuf = NULL;
-        
-#if SIZEOF_WCHAR_T == 4
-        wxMBConvUTF16 converter;
-#if wxUSE_UNICODE
-        size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 );
-        ubuf = (UniChar*) malloc( unicharlen + 2 );
-        converter.WC2MB( (char*) ubuf , str.wc_str(), unicharlen + 2 );
-#else
-        const wxWCharBuffer wchar = str.wc_str( wxConvLocal );
-        size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 );
-        ubuf = (UniChar*) malloc( unicharlen + 2 );
-        converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 );
-#endif
-        chars = unicharlen / 2;
-#else
-#if wxUSE_UNICODE
-        ubuf = (UniChar*) str.wc_str();
-#else
-        wxWCharBuffer wchar = str.wc_str( wxConvLocal );
-        chars = wxWcslen( wchar.data() );
-        ubuf = (UniChar*) wchar.data();
-#endif
-#endif
-        
+        wxMacUniCharBuffer unibuf( str );
+        UniCharCount chars = unibuf.GetChars();
+
         ATSUStyle style = (((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetATSUStyle());
-        status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
+        status = ::ATSUCreateTextLayoutWithTextPtr( unibuf.GetBuffer() , 0 , chars , chars , 1 ,
                                                    &chars , &style , &atsuLayout );
         
         wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the rotated text") );
@@ -1897,9 +1905,6 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
         
         ::ATSUDisposeTextLayout(atsuLayout);
         
-#if SIZEOF_WCHAR_T == 4
-        free( ubuf );
-#endif
         return;
     }
 #endif
@@ -1932,7 +1937,7 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
         CTFontRef font = fref->GetCTFont();
 
-        wxMacCFStringHolder text(str, wxLocale::GetSystemEncoding() );
+        wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
         CFStringRef keys[] = { kCTFontAttributeName  };
         CFTypeRef values[] = { font };
         wxCFRef<CFDictionaryRef> attributes( CFDictionaryCreate(kCFAllocatorDefault, (const void**) &keys, (const void**) &values, 
@@ -1960,34 +1965,11 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         OSStatus status = noErr;
         
         ATSUTextLayout atsuLayout;
-        UniCharCount chars = str.length();
-        UniChar* ubuf = NULL;
-        
-#if SIZEOF_WCHAR_T == 4
-        wxMBConvUTF16 converter;
-#if wxUSE_UNICODE
-        size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 );
-        ubuf = (UniChar*) malloc( unicharlen + 2 );
-        converter.WC2MB( (char*) ubuf , str.wc_str(), unicharlen + 2 );
-#else
-        const wxWCharBuffer wchar = str.wc_str( wxConvLocal );
-        size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 );
-        ubuf = (UniChar*) malloc( unicharlen + 2 );
-        converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 );
-#endif
-        chars = unicharlen / 2;
-#else
-#if wxUSE_UNICODE
-        ubuf = (UniChar*) str.wc_str();
-#else
-        wxWCharBuffer wchar = str.wc_str( wxConvLocal );
-        chars = wxWcslen( wchar.data() );
-        ubuf = (UniChar*) wchar.data();
-#endif
-#endif
+        wxMacUniCharBuffer unibuf( str );
+        UniCharCount chars = unibuf.GetChars();
         
         ATSUStyle style = (((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetATSUStyle());
-        status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
+        status = ::ATSUCreateTextLayoutWithTextPtr( unibuf.GetBuffer() , 0 , chars , chars , 1 ,
                                                    &chars , &style , &atsuLayout );
         
         wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the text") );
@@ -2008,9 +1990,7 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
             *width = FixedToInt(textAfter - textBefore);
         
         ::ATSUDisposeTextLayout(atsuLayout);
-#if SIZEOF_WCHAR_T == 4
-        free( ubuf ) ;
-#endif
+
         return;
     }
 #endif
@@ -2032,7 +2012,7 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
         wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
         CTFontRef font = fref->GetCTFont();
         
-        wxMacCFStringHolder t(text, wxLocale::GetSystemEncoding() );
+        wxCFStringRef t(text, wxLocale::GetSystemEncoding() );
         CFStringRef keys[] = { kCTFontAttributeName  };
         CFTypeRef values[] = { font };
         wxCFRef<CFDictionaryRef> attributes( CFDictionaryCreate(kCFAllocatorDefault, (const void**) &keys, (const void**) &values, 
@@ -2052,34 +2032,11 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
 #if wxMAC_USE_ATSU_TEXT
     {
         ATSUTextLayout atsuLayout;
-        UniCharCount chars = text.length();
-        UniChar* ubuf = NULL;
-        
-#if SIZEOF_WCHAR_T == 4
-        wxMBConvUTF16 converter;
-#if wxUSE_UNICODE
-        size_t unicharlen = converter.WC2MB( NULL , text.wc_str() , 0 );
-        ubuf = (UniChar*) malloc( unicharlen + 2 );
-        converter.WC2MB( (char*) ubuf , text.wc_str(), unicharlen + 2 );
-#else
-        const wxWCharBuffer wchar = text.wc_str( wxConvLocal );
-        size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 );
-        ubuf = (UniChar*) malloc( unicharlen + 2 );
-        converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 );
-#endif
-        chars = unicharlen / 2;
-#else
-#if wxUSE_UNICODE
-        ubuf = (UniChar*) text.wc_str();
-#else
-        wxWCharBuffer wchar = text.wc_str( wxConvLocal );
-        chars = wxWcslen( wchar.data() );
-        ubuf = (UniChar*) wchar.data();
-#endif
-#endif
+        wxMacUniCharBuffer unibuf( text );
+        UniCharCount chars = unibuf.GetChars();
         
         ATSUStyle style = (((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetATSUStyle());
-        ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
+        ::ATSUCreateTextLayoutWithTextPtr( unibuf.GetBuffer() , 0 , chars , chars , 1 ,
                                           &chars , &style , &atsuLayout );
         
         for ( int pos = 0; pos < (int)chars; pos ++ )
@@ -2099,9 +2056,6 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
         }
         
         ::ATSUDisposeTextLayout(atsuLayout);
-#if SIZEOF_WCHAR_T == 4
-        free( ubuf ) ;
-#endif
     }
 #endif
 #if wxMAC_USE_CG_TEXT

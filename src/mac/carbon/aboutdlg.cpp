@@ -48,7 +48,7 @@ public:
 
     void Set(CFStringRef key, const wxString& value)
     {
-        CFDictionarySetValue(*this, key, wxMacCFStringHolder(value));
+        CFDictionarySetValue(*this, key, wxCFStringRef(value));
     }
 };
 

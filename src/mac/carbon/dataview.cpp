@@ -113,7 +113,7 @@ static DataBrowserItemID* CreateDataBrowserItemIDArray(size_t& noOfEntries, wxDa
   return itemIDs;
 } /* CreateDataBrowserItemIDArray(size_t&, wxDataViewItemArray const&) */
 
-static bool InitializeColumnDescription(DataBrowserListViewColumnDesc& columnDescription, wxDataViewColumn const* columnPtr, DataBrowserPropertyID columnPropertyID, wxMacCFStringHolder const& title)
+static bool InitializeColumnDescription(DataBrowserListViewColumnDesc& columnDescription, wxDataViewColumn const* columnPtr, DataBrowserPropertyID columnPropertyID, wxCFStringRef const& title)
 {
  // set properties for the column:
   columnDescription.propertyDesc.propertyID    = columnPropertyID;
@@ -172,7 +172,7 @@ static bool InitializeColumnDescription(DataBrowserListViewColumnDesc& columnDes
     columnDescription.headerBtnDesc.btnContentInfo.u.iconRef = columnPtr->GetBitmap().GetIconRef();
  // done:
   return true;
-} /* InitializeColumnDescription(DataBrowserListViewColumnDesc&, wxDataViewColumn const*, DataBrowserPropertyID, wxMacCFStringHolder const&) */
+} /* InitializeColumnDescription(DataBrowserListViewColumnDesc&, wxDataViewColumn const*, DataBrowserPropertyID, wxCFStringRef const&) */
 
 //-----------------------------------------------------------------------------
 // local function pointers
@@ -493,7 +493,7 @@ bool wxDataViewTextRenderer::Render(void)
   if (this->GetValue().GetType() == this->GetVariantType())
   {
    // variable definition:
-    wxMacCFStringHolder cfString(this->GetValue().GetString(),(this->GetView()->GetFont().Ok() ? this->GetView()->GetFont().GetEncoding() : wxLocale::GetSystemEncoding()));
+    wxCFStringRef cfString(this->GetValue().GetString(),(this->GetView()->GetFont().Ok() ? this->GetView()->GetFont().GetEncoding() : wxLocale::GetSystemEncoding()));
 
     return (::SetDataBrowserItemDataText(this->GetDataReference(),cfString) == noErr);
   } /* if */
@@ -570,7 +570,7 @@ bool wxDataViewIconTextRenderer::Render(void)
     iconText << this->GetValue();
 
    // variable definition:
-    wxMacCFStringHolder cfString(iconText.GetText(),(this->GetView()->GetFont().Ok() ? this->GetView()->GetFont().GetEncoding() : wxLocale::GetSystemEncoding()));
+    wxCFStringRef cfString(iconText.GetText(),(this->GetView()->GetFont().Ok() ? this->GetView()->GetFont().GetEncoding() : wxLocale::GetSystemEncoding()));
 
     if (iconText.GetIcon().IsOk())
     {
@@ -877,7 +877,7 @@ void wxDataViewColumn::SetTitle(wxString const& title)
     {
      // variable definition and initialization:
       DataBrowserListViewHeaderDesc headerDescription;
-      wxMacCFStringHolder           cfTitle(title,(dataViewCtrlPtr->GetFont().Ok() ? dataViewCtrlPtr->GetFont().GetEncoding() : wxLocale::GetSystemEncoding()));
+      wxCFStringRef           cfTitle(title,(dataViewCtrlPtr->GetFont().Ok() ? dataViewCtrlPtr->GetFont().GetEncoding() : wxLocale::GetSystemEncoding()));
       
       wxCHECK_RET(macDataViewListCtrlPtr->GetHeaderDesc(this->GetPropertyID(),&headerDescription) == noErr,_("Could not get header description."));
       headerDescription.titleString = cfTitle;
@@ -956,7 +956,7 @@ bool wxDataViewCtrl::AppendColumn(wxDataViewColumn* columnPtr)
 
   wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
 
-  wxMacCFStringHolder title(columnPtr->GetTitle(),this->m_font.Ok() ? this->m_font.GetEncoding() : wxLocale::GetSystemEncoding());
+  wxCFStringRef title(columnPtr->GetTitle(),this->m_font.Ok() ? this->m_font.GetEncoding() : wxLocale::GetSystemEncoding());
 
 
  // first, some error checking:
@@ -1072,7 +1072,7 @@ bool wxDataViewCtrl::PrependColumn(wxDataViewColumn* columnPtr)
 
   wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
 
-  wxMacCFStringHolder title(columnPtr->GetTitle(),this->m_font.Ok() ? this->m_font.GetEncoding() : wxLocale::GetSystemEncoding());
+  wxCFStringRef title(columnPtr->GetTitle(),this->m_font.Ok() ? this->m_font.GetEncoding() : wxLocale::GetSystemEncoding());
 
 
  // first, some error checking:

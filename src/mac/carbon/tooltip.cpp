@@ -228,7 +228,7 @@ void wxMacToolTip::Draw()
         wxMacLocalToGlobal( m_window , &p ) ;
         SetRect( &tag.absHotRect , p.h - 2 , p.v - 2 , p.h + 2 , p.v + 2 );
 
-        m_helpTextRef.Assign( m_label , wxFONTENCODING_DEFAULT ) ;
+        m_helpTextRef = wxCFStringRef( m_label , wxFONTENCODING_DEFAULT ) ;
         tag.content[kHMMinimumContentIndex].contentType = kHMCFStringContent ;
         tag.content[kHMMinimumContentIndex].u.tagCFString = m_helpTextRef ;
         tag.content[kHMMaximumContentIndex].contentType = kHMCFStringContent ;
@@ -258,7 +258,6 @@ void wxMacToolTip::Clear()
         return ;
 
     HMHideTag() ;
-    m_helpTextRef.Release() ;
 }
 
 #endif // wxUSE_TOOLTIPS

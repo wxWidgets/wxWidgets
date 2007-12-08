@@ -110,14 +110,14 @@ static pascal void NavEventProc(
                 wxString extension = firstExtension.AfterLast('.') ;
                 wxString sfilename ;
 
-                wxMacCFStringHolder cfString( NavDialogGetSaveFileName( ioParams->context ) , false  );
+                wxCFStringRef cfString( wxCFRetain( NavDialogGetSaveFileName( ioParams->context ) ) );
                 sfilename = cfString.AsString() ;
 
                 int pos = sfilename.Find('.', true) ;
                 if ( pos != wxNOT_FOUND && extension != wxT("*") )
                 {
                     sfilename = sfilename.Left(pos+1)+extension ;
-                    cfString.Assign( sfilename , wxFONTENCODING_DEFAULT ) ;
+                    cfString = wxCFStringRef( sfilename , wxFONTENCODING_DEFAULT ) ;
                     NavDialogSetSaveFileName( ioParams->context , cfString ) ;
                 }
             }
@@ -301,10 +301,10 @@ int wxFileDialog::ShowModal()
     // this was always unset in the old code
     dialogCreateOptions.optionFlags &= ~kNavSelectDefaultLocation;
 
-    wxMacCFStringHolder message(m_message, m_font.GetEncoding());
+    wxCFStringRef message(m_message, m_font.GetEncoding());
     dialogCreateOptions.windowTitle = message;
 
-    wxMacCFStringHolder defaultFileName(m_fileName, m_font.GetEncoding());
+    wxCFStringRef defaultFileName(m_fileName, m_font.GetEncoding());
     dialogCreateOptions.saveFileName = defaultFileName;
 
 
@@ -324,7 +324,7 @@ int wxFileDialog::ShowModal()
         myData.menuitems = dialogCreateOptions.popupExtension ;
         for ( size_t i = 0 ; i < numFilters ; ++i )
         {
-            CFArrayAppendValue( popup , (CFStringRef) wxMacCFStringHolder( myData.name[i] , m_font.GetEncoding() ) ) ;
+            CFArrayAppendValue( popup , (CFStringRef) wxCFStringRef( myData.name[i] , m_font.GetEncoding() ) ) ;
         }
     }
 

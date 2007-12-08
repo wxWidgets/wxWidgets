@@ -67,7 +67,7 @@ MenuRef UMANewMenu( SInt16 id , const wxString& title , wxFontEncoding encoding 
     MenuRef menu ;
 
     CreateNewMenu( id , 0 , &menu ) ;
-    SetMenuTitleWithCFString( menu , wxMacCFStringHolder(str , encoding ) ) ;
+    SetMenuTitleWithCFString( menu , wxCFStringRef(str , encoding ) ) ;
 
     return menu ;
 }
@@ -76,7 +76,7 @@ void UMASetMenuTitle( MenuRef menu , const wxString& title , wxFontEncoding enco
 {
     wxString str = wxStripMenuCodes( title ) ;
 
-    SetMenuTitleWithCFString( menu , wxMacCFStringHolder(str , encoding) ) ;
+    SetMenuTitleWithCFString( menu , wxCFStringRef(str , encoding) ) ;
 }
 
 void UMASetMenuItemText( MenuRef menu,  MenuItemIndex item, const wxString& title, wxFontEncoding encoding )
@@ -84,7 +84,7 @@ void UMASetMenuItemText( MenuRef menu,  MenuItemIndex item, const wxString& titl
     // we don't strip the accels here anymore, must be done before
     wxString str = title ;
 
-    SetMenuItemTextWithCFString( menu , item , wxMacCFStringHolder(str , encoding) ) ;
+    SetMenuItemTextWithCFString( menu , item , wxCFStringRef(str , encoding) ) ;
 }
 
 void UMAEnableMenuItem( MenuRef inMenu , MenuItemIndex inItem , bool enable)

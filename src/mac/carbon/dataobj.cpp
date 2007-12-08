@@ -184,7 +184,7 @@ void wxDataFormat::SetId( NativeFormat format )
     else 
     {
         m_type = wxDF_PRIVATE;
-        m_id = wxMacCFStringHolder( (CFStringRef) CFRetain((CFStringRef) format )).AsString();
+        m_id = wxCFStringRef( (CFStringRef) CFRetain((CFStringRef) format )).AsString();
     }
 }
 
@@ -198,7 +198,7 @@ void wxDataFormat::SetId( const wxString& zId )
         m_format = 0;
     }
     // since it is private, no need to conform to anything ...
-    m_format = (long) wxMacCFStringHolder(m_id).Detach();
+    m_format = (long) wxCFRetain( (CFStringRef) wxCFStringRef(m_id) );
 }
 
 bool wxDataFormat::operator==(const wxDataFormat& format) const
@@ -423,7 +423,7 @@ bool wxDataObject::GetFromPasteboard( void * pb )
                                 CFMutableStringRef cfMutableString = CFStringCreateMutableCopy(NULL, 0, cfString);
                                 CFRelease( cfString );
                                 CFStringNormalize(cfMutableString,kCFStringNormalizationFormC);
-                                wxString path = wxMacCFStringHolder(cfMutableString).AsString();
+                                wxString path = wxCFStringRef(cfMutableString).AsString();
                                 if (!path.empty())
                                     filenamesPassed += path + wxT("\n");
                             }

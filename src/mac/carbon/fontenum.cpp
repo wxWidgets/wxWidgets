@@ -87,7 +87,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
 
             CFStringRef theName = NULL;
             ATSFontFamilyGetName(theATSFontFamilyRef, kATSOptionFlagsDefault, &theName);
-            wxMacCFStringHolder cfName(theName) ;
+            wxCFStringRef cfName(theName) ;
             fontFamilies.Add(cfName.AsString(wxLocale::GetSystemEncoding()));
         }
         else if (status == kATSIterationScopeModified) // Make sure the font database hasn’t changed.

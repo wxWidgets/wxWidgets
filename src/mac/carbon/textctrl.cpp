@@ -1339,7 +1339,7 @@ bool wxMacUnicodeTextControl::Create( wxTextCtrl *wxPeer,
     Rect bounds = wxMacGetBoundsForControl( wxPeer , pos , size ) ;
     wxString st = str ;
     wxMacConvertNewlines10To13( &st ) ;
-    wxMacCFStringHolder cf(st , m_font.GetEncoding()) ;
+    wxCFStringRef cf(st , m_font.GetEncoding()) ;
     CFStringRef cfr = cf ;
 
     m_valueTag = kControlEditTextCFStringTag ;
@@ -1383,7 +1383,7 @@ wxString wxMacUnicodeTextControl::GetStringValue() const
     CFStringRef value = GetData<CFStringRef>(0, m_valueTag) ;
     if ( value )
     {
-        wxMacCFStringHolder cf(value) ;
+        wxCFStringRef cf(value) ;
         result = cf.AsString() ;
     }
 
@@ -1400,7 +1400,7 @@ void wxMacUnicodeTextControl::SetStringValue( const wxString &str )
 {
     wxString st = str ;
     wxMacConvertNewlines10To13( &st ) ;
-    wxMacCFStringHolder cf( st , m_font.GetEncoding() ) ;
+    wxCFStringRef cf( st , m_font.GetEncoding() ) ;
     verify_noerr( SetData<CFStringRef>( 0, m_valueTag , cf ) ) ;
 }
 
@@ -1466,7 +1466,7 @@ void wxMacUnicodeTextControl::SetSelection( long from , long to )
     CFStringRef value = GetData<CFStringRef>(0, m_valueTag) ;
     if ( value )
     {
-        wxMacCFStringHolder cf(value) ;
+        wxCFStringRef cf(value) ;
         textLength = cf.AsString().length() ;
     }
 
@@ -1499,7 +1499,7 @@ void wxMacUnicodeTextControl::WriteText( const wxString& str )
 
     if ( HasFocus() )
     {
-        wxMacCFStringHolder cf(st , m_font.GetEncoding() ) ;
+        wxCFStringRef cf(st , m_font.GetEncoding() ) ;
         CFStringRef value = cf ;
         SetData<CFStringRef>( 0, kControlEditTextInsertCFStringRefTag, &value );
     }

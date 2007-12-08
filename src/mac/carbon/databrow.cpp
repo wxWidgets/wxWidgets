@@ -720,7 +720,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
             if (errorStatus == noErr)
             {
              // variable definitions and initializations:
-              wxMacCFStringHolder modifiedString(stringReference);
+              wxCFStringRef modifiedString(stringReference);
               wxVariant           modifiedData(modifiedString.AsString());
 
               if (dataViewCtrlPtr->GetModel()->SetValue(modifiedData,wxDataViewItem(reinterpret_cast<void*>(itemID)),static_cast<unsigned int>(columnIndex)))

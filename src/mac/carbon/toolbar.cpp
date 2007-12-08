@@ -187,8 +187,8 @@ public:
 
             HIToolbarItemSetHelpText(
                 m_toolbarItemRef,
-                wxMacCFStringHolder( GetShortHelp(), enc ),
-                wxMacCFStringHolder( GetLongHelp(), enc ) );
+                wxCFStringRef( GetShortHelp(), enc ),
+                wxCFStringRef( GetLongHelp(), enc ) );
         }
     }
 
@@ -831,7 +831,7 @@ bool wxToolBar::Create(
     {
         wxString labelStr = wxString::Format( wxT("%p"), this );
         err = HIToolbarCreate(
-          wxMacCFStringHolder( labelStr, wxFont::GetDefaultEncoding() ), 0,
+          wxCFStringRef( labelStr, wxFont::GetDefaultEncoding() ), 0,
           (HIToolbarRef*) &m_macHIToolbarRef );
 
         if (m_macHIToolbarRef != NULL)
@@ -1516,7 +1516,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                     HIToolbarItemRef item;
                     wxString labelStr = wxString::Format(wxT("%p"), tool);
                     err = HIToolbarItemCreate(
-                        wxMacCFStringHolder(labelStr, wxFont::GetDefaultEncoding()),
+                        wxCFStringRef(labelStr, wxFont::GetDefaultEncoding()),
                         kHIToolbarItemCantBeRemoved | kHIToolbarItemAnchoredLeft | kHIToolbarItemAllowDuplicates, &item );
                     if (err  == noErr)
                     {
@@ -1526,7 +1526,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                         InstallEventHandler(
                             HIObjectGetEventTarget(item), GetwxMacToolBarEventHandlerUPP(),
                             GetEventTypeCount(toolBarEventList), toolBarEventList, tool, NULL );
-                        HIToolbarItemSetLabel( item, wxMacCFStringHolder(label, m_font.GetEncoding()) );
+                        HIToolbarItemSetLabel( item, wxCFStringRef(label, m_font.GetEncoding()) );
                         HIToolbarItemSetImage( item, info2.u.imageRef );
                         HIToolbarItemSetCommandID( item, kHIToolbarCommandPressAction );
                         tool->SetToolbarItemRef( item );
@@ -1542,7 +1542,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 
 #if 0
                 SetBevelButtonTextPlacement( m_controlHandle, kControlBevelButtonPlaceBelowGraphic );
-                SetControlTitleWithCFString( m_controlHandle , wxMacCFStringHolder( label, wxFont::GetDefaultEncoding() );
+                SetControlTitleWithCFString( m_controlHandle , wxCFStringRef( label, wxFont::GetDefaultEncoding() );
 #endif
 
                 InstallControlEventHandler(

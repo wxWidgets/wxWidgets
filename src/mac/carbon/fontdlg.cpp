@@ -132,7 +132,7 @@ wxMacCarbonFontPanelHandler(EventHandlerCallRef WXUNUSED(nextHandler),
 #endif
                 if ( cfName!=NULL )
                 {
-                    fontdata.m_chosenFont.SetFaceName(wxMacCFStringHolder(cfName).AsString(wxLocale::GetSystemEncoding()));
+                    fontdata.m_chosenFont.SetFaceName(wxCFStringRef(cfName).AsString(wxLocale::GetSystemEncoding()));
                     fontdata.m_chosenFont.SetPointSize(fontSize);
                     fontdata.m_chosenFont.SetStyle(fontStyle & italic ? wxFONTSTYLE_ITALIC : wxFONTSTYLE_NORMAL);
                     fontdata.m_chosenFont.SetUnderlined((fontStyle & underline)!=0);

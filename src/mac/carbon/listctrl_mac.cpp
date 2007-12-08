@@ -970,7 +970,7 @@ bool wxListCtrl::SetColumn(int col, wxListItem& item)
                 enc = m_font.GetEncoding();
             else
                 enc = wxLocale::GetSystemEncoding();
-            wxMacCFStringHolder cfTitle;
+            wxCFStringRef cfTitle;
             cfTitle.Assign( item.GetText() , enc );
             if(columnDesc.titleString)
                 CFRelease(columnDesc.titleString);
@@ -2666,8 +2666,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     if (font == wxNullFont)
         font = listFont;
 
-    wxMacCFStringHolder cfString;
-    cfString.Assign( text, wxLocale::GetSystemEncoding() );
+    wxCFStringRef cfString( text, wxLocale::GetSystemEncoding() );
 
     Rect enclosingRect;
     CGRect enclosingCGRect, iconCGRect, textCGRect;
@@ -2888,10 +2887,8 @@ OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemI
             default :
                 if ( property >= kMinColumnId )
                 {
-                    wxMacCFStringHolder cfStr;
-
                     if (!text.IsEmpty()){
-                        cfStr.Assign( text, wxLocale::GetSystemEncoding() );
+                        wxCFStringRef cfStr( text, wxLocale::GetSystemEncoding() );
                         err = ::SetDataBrowserItemDataText( itemData, cfStr );
                         err = noErr;
                     }
@@ -2926,7 +2923,7 @@ OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemI
                     // can then deal with the veto
                     CFStringRef sr ;
                     verify_noerr( GetDataBrowserItemDataText( itemData , &sr ) ) ;
-                    wxMacCFStringHolder cfStr(sr) ;;
+                    wxCFStringRef cfStr(sr) ;;
                     if (m_isVirtual)
                         list->SetItem( (long)itemData-1 , listColumn, cfStr.AsString() ) ;
                     else

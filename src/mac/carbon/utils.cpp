@@ -874,7 +874,7 @@ void wxMacControl::SetLabel( const wxString &title )
     else
         encoding = wxFont::GetDefaultEncoding();
 
-    SetControlTitleWithCFString( m_controlRef , wxMacCFStringHolder( title , encoding ) );
+    SetControlTitleWithCFString( m_controlRef , wxCFStringRef( title , encoding ) );
 }
 
 void wxMacControl::GetFeatures( UInt32 * features )
@@ -1340,7 +1340,7 @@ void wxMacDataItem::SetColumn( short col )
 void wxMacDataItem::SetLabel( const wxString& str)
 {
     m_label = str;
-    m_cfLabel.Assign( str , wxLocale::GetSystemEncoding());
+    m_cfLabel = wxCFStringRef( str , wxLocale::GetSystemEncoding());
 }
 
 const wxString& wxMacDataItem::GetLabel() const
@@ -1601,8 +1601,7 @@ void wxMacDataItemBrowserControl::InsertColumn(int colId, DataBrowserPropertyTyp
         enc = m_font.GetEncoding();
     else
         enc = wxLocale::GetSystemEncoding();
-    wxMacCFStringHolder cfTitle;
-    cfTitle.Assign( title, enc );
+    wxCFStringRef cfTitle( title, enc );
     columnDesc.headerBtnDesc.titleString = cfTitle;
 
     columnDesc.headerBtnDesc.minimumWidth = 0;
