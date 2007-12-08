@@ -285,11 +285,11 @@ MyDialog::MyDialog(wxFrame *parent)
 
     // now add test controls in the collapsible pane
     wxWindow *win = m_collPane->GetPane();
-    wxSizer *paneSz = new wxGridSizer(2, 2, 5, 5);
-    paneSz->Add(new wxColourPickerCtrl(win, -1), 1, wxGROW|wxALL, 2);
-    paneSz->Add(new wxFontPickerCtrl(win, -1), 1, wxGROW|wxALL, 2);
-    paneSz->Add(new wxFilePickerCtrl(win, -1), 1, wxALL|wxALIGN_CENTER, 2);
-    paneSz->Add(new wxDirPickerCtrl(win, -1), 1, wxALL|wxALIGN_CENTER, 2);
+    wxSizer *paneSz = new wxGridSizer(4, 1, 5, 5);
+    paneSz->Add(new wxColourPickerCtrl(win, -1), 1, wxALL|wxALIGN_LEFT, 2);
+    paneSz->Add(new wxFontPickerCtrl(win, -1), 1, wxALL|wxALIGN_LEFT, 2);
+    paneSz->Add(new wxFilePickerCtrl(win, -1), 1, wxALL|wxALIGN_LEFT, 2);
+    paneSz->Add(new wxDirPickerCtrl(win, -1), 1, wxALL|wxALIGN_LEFT, 2);
     win->SetSizer(paneSz);
     paneSz->SetSizeHints(win);
 
