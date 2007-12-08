@@ -79,6 +79,14 @@
 #    endif
 #endif /* !defined(wxUSE_OLE_AUTOMATION) */
 
+#ifndef wxUSE_TASKBARICON_BALLOONS
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_TASKBARICON_BALLOONS must be defined."
+#   else
+#       define wxUSE_TASKBARICON_BALLOONS 0
+#   endif
+#endif /* wxUSE_TASKBARICON_BALLOONS */
+
 #ifndef wxUSE_UNICODE_MSLU
 #    ifdef wxABORT_ON_CONFIG_ERROR
 #        error "wxUSE_UNICODE_MSLU must be defined."
@@ -119,6 +127,16 @@
 #   else
 #       define wxUSE_NORLANDER_HEADERS 0
 #   endif
+#endif
+
+/*
+ * See WINVER definition in wx/msw/wrapwin.h for the explanation of this test
+ * logic.
+ */
+#if (defined(__VISUALC__) && (__VISUALC__ < 1300)) && \
+        (!defined(WINVER) || WINVER < 0x0500)
+#   undef wxUSE_TASKBARICON_BALLOONS
+#   define wxUSE_TASKBARICON_BALLOONS 0
 #endif
 
 /*

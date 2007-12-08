@@ -134,7 +134,7 @@ private:
         - libnotify (Gnome)
         - Growl (http://growl.info/, OS X)
  */
-#elif defined(__WXMSW__) && wxUSE_TASKBARICON
+#elif defined(__WXMSW__) && wxUSE_TASKBARICON && wxUSE_TASKBARICON_BALLOONS
     #include "wx/msw/notifmsg.h"
 #else
     #include "wx/generic/notifmsg.h"

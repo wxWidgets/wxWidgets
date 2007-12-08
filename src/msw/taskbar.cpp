@@ -209,6 +209,8 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
     return ok;
 }
 
+#if wxUSE_TASKBARICON_BALLOONS
+
 bool
 wxTaskBarIcon::ShowBalloon(const wxString& title,
                            const wxString& text,
@@ -224,9 +226,7 @@ wxTaskBarIcon::ShowBalloon(const wxString& title,
     // the balloon disappearance
     NotifyIconData notifyData(hwnd);
     notifyData.uFlags = 0;
-#if (WINVER >= 0x0500)
     notifyData.uVersion = 3 /* NOTIFYICON_VERSION for Windows XP */;
-#endif
 
     wxShellNotifyIcon(NIM_SETVERSION, &notifyData);
 
@@ -234,7 +234,6 @@ wxTaskBarIcon::ShowBalloon(const wxString& title,
     // do show the balloon now
     notifyData = NotifyIconData(hwnd);
     notifyData.uFlags |= NIF_INFO;
-#if (WINVER >= 0x0500)
     notifyData.uTimeout = msec;
     wxStrncpy(notifyData.szInfo, text.wx_str(), WXSIZEOF(notifyData.szInfo));
     wxStrncpy(notifyData.szInfoTitle, title.wx_str(),
@@ -246,10 +245,11 @@ wxTaskBarIcon::ShowBalloon(const wxString& title,
         notifyData.dwInfoFlags |= NIIF_WARNING;
     else if ( flags & wxICON_ERROR )
         notifyData.dwInfoFlags |= NIIF_ERROR;
-#endif
 
     return wxShellNotifyIcon(NIM_MODIFY, &notifyData) != 0;
 }
+
+#endif // wxUSE_TASKBARICON_BALLOONS
 
 bool wxTaskBarIcon::RemoveIcon()
 {

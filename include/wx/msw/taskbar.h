@@ -35,6 +35,7 @@ public:
 
     // MSW-specific class methods
 
+#if wxUSE_TASKBARICON_BALLOONS
     // show a balloon notification (the icon must have been already initialized
     // using SetIcon)
     //
@@ -50,6 +51,7 @@ public:
                      const wxString& text,
                      unsigned msec = 0,
                      int flags = 0);
+#endif // wxUSE_TASKBARICON_BALLOONS
 
 protected:
     friend class wxTaskBarIconWindow;

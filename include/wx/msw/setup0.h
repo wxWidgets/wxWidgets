@@ -1332,6 +1332,15 @@
 // Recommended setting: 1, set to 0 for a small library size reduction
 #define wxUSE_OWNER_DRAWN 1
 
+// Set this to 1 to enable MSW-specific wxTaskBarIcon::ShowBalloon() method. It
+// is required by native wxNotificationMessage implementation.
+//
+// Default is 1 but disabled in wx/msw/chkconf.h if SDK is too old to contain
+// the necessary declarations.
+//
+// Recommended setting: 1, set to 0 for a tiny library size reduction
+#define wxUSE_TASKBARICON_BALLOONS 1
+
 // Set to 1 to compile MS Windows XP theme engine support
 #define wxUSE_UXTHEME           1
 
@@ -1368,17 +1377,6 @@
 //
 // Recommended setting: 1, set to 0 if your programs never crash
 #define wxUSE_CRASHREPORT 1
-
-// ----------------------------------------------------------------------------
-// obsolete settings
-// ----------------------------------------------------------------------------
-
-// NB: all settings in this section are obsolete and should not be used/changed
-//     at all, they will disappear
-
-// Define 1 to use bitmap messages.
-#define wxUSE_BITMAP_MESSAGE         1
-
 /* --- end MSW options --- */
 
 #endif // _WX_SETUP_H_
