@@ -82,7 +82,11 @@ protected:
     int GetBorder() const;
 
     // child controls
+#ifdef __WXMAC__
+    wxDisclosureTriangle *m_pButton;
+#else
     wxButton *m_pButton;
+#endif
     wxStaticLine *m_pStaticLine;
     wxWindow *m_pPane;
     wxSizer *m_sz;

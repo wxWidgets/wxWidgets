@@ -69,17 +69,19 @@ bool wxGenericCollapsiblePane::Create(wxWindow *parent,
 
     m_strLabel = label;
 
+#ifdef __WXMAC__
+    // on Mac we use the disclosure triangle
+    m_pStaticLine = NULL;
+    m_pButton = new wxDisclosureTriangle( this, wxID_ANY, GetBtnLabel() );
+    m_sz = new wxBoxSizer(wxHORIZONTAL);
+    // m_sz->Add(4,4); where shall we put it?
+    m_sz->Add( m_pButton );
+#else
     // create children and lay them out using a wxBoxSizer
     // (so that we automatically get RTL features)
     m_pButton = new wxButton(this, wxID_ANY, GetBtnLabel(), wxPoint(0, 0),
                              wxDefaultSize, wxBU_EXACTFIT);
     m_pStaticLine = new wxStaticLine(this, wxID_ANY);
-#ifdef __WXMAC__
-    // on Mac we put the static libe above the button
-    m_sz = new wxBoxSizer(wxVERTICAL);
-    m_sz->Add(m_pStaticLine, 0, wxALL|wxGROW, GetBorder());
-    m_sz->Add(m_pButton, 0, wxLEFT|wxRIGHT|wxBOTTOM, GetBorder());
-#else
     // on other platforms we put the static line and the button horizontally
     m_sz = new wxBoxSizer(wxHORIZONTAL);
     m_sz->Add(m_pButton, 0, wxLEFT|wxTOP|wxBOTTOM, GetBorder());
@@ -104,14 +106,14 @@ bool wxGenericCollapsiblePane::Create(wxWindow *parent,
 
 wxGenericCollapsiblePane::~wxGenericCollapsiblePane()
 {
-    if (m_pButton && m_pStaticLine && m_sz)
-    {
+    if (m_pButton)
         m_pButton->SetContainingSizer(NULL);
+    
+    if (m_pStaticLine)
         m_pStaticLine->SetContainingSizer(NULL);
-
-        // our sizer is not deleted automatically since we didn't use SetSizer()!
-        wxDELETE(m_sz);
-    }
+    
+    // our sizer is not deleted automatically since we didn't use SetSizer()!
+    wxDELETE(m_sz);
 }
 
 wxSize wxGenericCollapsiblePane::DoGetBestSize() const
@@ -215,8 +217,13 @@ void wxGenericCollapsiblePane::Collapse(bool collapse)
     m_pPane->Show(!collapse);
 
     // update button label
+#ifdef __WXMAC__
+    m_pButton->SetLabel(GetBtnLabel());
+#else
     // NB: this must be done after updating our "state"
     m_pButton->SetLabel(GetBtnLabel());
+#endif
+
 
     OnStateChange(GetBestSize());
 }
@@ -224,16 +231,25 @@ void wxGenericCollapsiblePane::Collapse(bool collapse)
 void wxGenericCollapsiblePane::SetLabel(const wxString &label)
 {
     m_strLabel = label;
+#ifdef __WXMAC__
+    m_pButton->SetLabel(GetBtnLabel());
+#else
     m_pButton->SetLabel(GetBtnLabel());
     m_pButton->SetInitialSize();
+#endif
 
     Layout();
 }
 
 bool wxGenericCollapsiblePane::Layout()
 {
+#ifdef __WXMAC__
+    if (!m_pButton || !m_pPane || !m_sz)
+        return false;     // we need to complete the creation first!
+#else
     if (!m_pButton || !m_pStaticLine || !m_pPane || !m_sz)
         return false;     // we need to complete the creation first!
+#endif
 
     wxSize oursz(GetSize());
 

@@ -210,3 +210,73 @@ wxInt32 wxButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF
 
     return noErr;
 }
+
+//-------------------------------------------------------
+// wxDisclosureTriangle
+//-------------------------------------------------------
+
+bool wxDisclosureTriangle::Create(wxWindow *parent, wxWindowID id, const wxString& label,
+   const wxPoint& pos, const wxSize& size, long style,const wxValidator& validator, const wxString& name )
+{
+    m_macIsUserPane = false ;
+
+    if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
+        return false;
+
+    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
+    m_peer = new wxMacControl(this) ;
+
+    OSStatus err = CreateDisclosureTriangleControl(
+            MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds, 
+            kControlDisclosureTrianglePointDefault,
+            CFSTR("Test"),
+            0,    // closed
+            TRUE, // draw title
+            TRUE, // auto toggle back and forth
+            m_peer->GetControlRefAddr() );
+            
+    verify_noerr( err );
+    wxASSERT_MSG( m_peer != NULL && m_peer->Ok() , wxT("No valid Mac control") ) ;
+
+    MacPostControlCreate( pos, size );
+
+    return true;
+}
+
+void wxDisclosureTriangle::SetOpen( bool open )
+{
+    // TODO
+}
+
+bool wxDisclosureTriangle::IsOpen() const
+{
+   // TODO
+   return true;
+}
+
+void wxDisclosureTriangle::SetLabel( const wxString &label )
+{
+    // TODO
+}
+
+wxString wxDisclosureTriangle::GetLabel() const
+{
+    return wxEmptyString;
+}
+
+wxInt32 wxDisclosureTriangle::MacControlHit( WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) )
+{
+    // Just emit button event for now
+    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, m_windowId);
+    event.SetEventObject(this);
+    ProcessCommand(event);
+
+    return noErr;
+}
+
+wxSize wxDisclosureTriangle::DoGetBestSize() const
+{
+    return wxSize(16,16);
+}
+
+
