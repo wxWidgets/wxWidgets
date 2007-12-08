@@ -900,13 +900,13 @@ wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathCompon
     CFMutableStringRef cfMutableString = CFStringCreateMutableCopy(NULL, 0, cfString);
     CFRelease( cfString );
     CFStringNormalize(cfMutableString,kCFStringNormalizationFormC);
-    return wxMacCFStringHolder(cfMutableString).AsString();
+    return wxCFStringRef(cfMutableString).AsString();
 }
 
 OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef )
 {
     OSStatus err = noErr ;
-    CFMutableStringRef cfMutableString = CFStringCreateMutableCopy(NULL, 0, wxMacCFStringHolder(path));
+    CFMutableStringRef cfMutableString = CFStringCreateMutableCopy(NULL, 0, wxCFStringRef(path));
     CFStringNormalize(cfMutableString,kCFStringNormalizationFormD);
     CFURLRef url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kDefaultPathStyle, false);
     CFRelease( cfMutableString );
@@ -931,7 +931,7 @@ wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname )
     CFMutableStringRef cfMutableString = CFStringCreateMutableCopy(NULL, 0, cfname);
     CFRelease( cfname );
     CFStringNormalize(cfMutableString,kCFStringNormalizationFormC);
-    return wxMacCFStringHolder(cfMutableString).AsString() ;
+    return wxCFStringRef(cfMutableString).AsString() ;
 }
 
 #ifndef __LP64__

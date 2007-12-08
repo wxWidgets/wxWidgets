@@ -1934,15 +1934,14 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
     // first get the string identifying the language from the environment
     wxString langFull;
 #ifdef __WXMAC__
-    // as at the C-runtime level many OS X versions only have a "C" locale, therefore we use the CFLocale (ICU based)
     wxCFRef<CFLocaleRef> userLocaleRef(CFLocaleCopyCurrent());
     
     // because the locale identifier (kCFLocaleIdentifier) is formatted a little bit differently, eg 
     // az_Cyrl_AZ@calendar=buddhist;currency=JPY we just recreate the base info as expected by wx here
     
-    wxMacCFStringHolder str(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleLanguageCode)));
+    wxCFStringRef str(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleLanguageCode)));
     langFull = str.AsString()+"_";
-    str.Assign(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleCountryCode)));
+    str.reset(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleCountryCode)));
     langFull += str.AsString();
 #else
     if (!wxGetEnv(wxT("LC_ALL"), &langFull) &&
@@ -2649,7 +2648,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
             wxFAIL_MSG( "Unknown locale info" );
     }
 
-    wxMacCFStringHolder
+    wxCFStringRef
         str(CFStringCreateCopy(NULL, static_cast<CFStringRef>(cfstr)));
     return str.AsString();
 }

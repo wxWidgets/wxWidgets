@@ -174,9 +174,9 @@ char* wxSetlocale(int category, const char *locale)
         {
             // we have to emulate the behaviour under OS X
             wxCFRef<CFLocaleRef> userLocaleRef(CFLocaleCopyCurrent());
-            wxMacCFStringHolder str(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleLanguageCode)));
+            wxCFStringRef str(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleLanguageCode)));
             wxString langFull = str.AsString()+"_";
-            str.Assign(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleCountryCode)));
+            str.reset(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleCountryCode)));
             langFull += str.AsString();
             rv = setlocale(category, langFull.c_str());
         }
