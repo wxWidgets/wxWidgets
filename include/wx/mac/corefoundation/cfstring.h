@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/mac/corefoundation/cfstring.h
-// Purpose:     wxMacCFStringHolder and other string functions
+// Purpose:     wxCFStringRef and other string functions
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     2004-10-29 (from code in wx/mac/carbon/private.h)
@@ -13,14 +13,11 @@
 #ifndef __WX_CFSTRINGHOLDER_H__
 #define __WX_CFSTRINGHOLDER_H__
 
-#ifdef __DARWIN__
-    #include <CoreFoundation/CFString.h>
-#else
-    #include <CFString.h>
-#endif
+#include <CoreFoundation/CFString.h>
 
 #include "wx/dlimpexp.h"
 #include "wx/fontenc.h"
+#include "wx/mac/corefoundation/cfref.h"
 
 class WXDLLIMPEXP_FWD_BASE wxString;
 
@@ -34,60 +31,33 @@ WXDLLIMPEXP_BASE wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding) 
 WXDLLIMPEXP_BASE wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding) ;
 WXDLLIMPEXP_BASE void wxMacWakeUp() ;
 
-class WXDLLIMPEXP_BASE wxMacCFStringHolder
+class WXDLLIMPEXP_BASE wxCFStringRef : public wxCFRef< CFStringRef >
 {
 public:
-    wxMacCFStringHolder()
-        : m_cfs(NULL) , m_release(false)
+    wxCFStringRef()
     {
     }
 
-    wxMacCFStringHolder(const wxString &str,
-                        wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
-        : m_cfs(NULL) , m_release(false)
-    {
-        Assign( str , encoding ) ;
-    }
+    wxCFStringRef(const wxString &str,
+                        wxFontEncoding encoding = wxFONTENCODING_DEFAULT) ;
 
-    wxMacCFStringHolder(CFStringRef ref , bool release = true )
-        : m_cfs(ref) , m_release(release)
+    wxCFStringRef(CFStringRef ref)
+        : wxCFRef< CFStringRef >(ref) 
     {
     }
 
-    ~wxMacCFStringHolder()
+    wxCFStringRef(const wxCFStringRef& otherRef )
+        : wxCFRef< CFStringRef >(otherRef) 
     {
-        Release() ;
     }
 
-    CFStringRef Detach()
+    ~wxCFStringRef()
     {
-        CFStringRef retval = m_cfs ;
-        m_release = false ;
-        m_cfs = NULL ;
-        return retval ;
     }
 
-    void Release()
-    {
-        if ( m_release && m_cfs)
-            CFRelease( m_cfs ) ;
-        m_cfs = NULL ;
-    }
-
-    void Assign(CFStringRef ref , bool release = true);
-
-    void Assign(const wxString &str,
-                wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-
-    operator CFStringRef () const { return m_cfs; }
     wxString AsString( wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
 
 private:
-
-    CFStringRef m_cfs;
-    bool m_release ;
-
-    DECLARE_NO_COPY_CLASS( wxMacCFStringHolder )
 } ;
 
 // corresponding class for holding UniChars (native unicode characters)
