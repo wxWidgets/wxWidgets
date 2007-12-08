@@ -500,6 +500,14 @@ public:
     // components of the result respectively
     virtual wxSize GetWindowBorderSize() const;
 
+    // wxSizer and friends use this to give a chance to a component to recalc
+    // its min size once one of the final size components is known. Override 
+    // this function when that is useful (such as for wxStaticText which can 
+    // stretch over several lines). Parameter availableOtherDir
+    // tells the item how much more space there is available in the opposite 
+    // direction (-1 if unknown).
+    virtual bool InformFirstDirection( int WXUNUSED(direction), int WXUNUSED(size), int WXUNUSED(availableOtherDir) )
+    { return false; }
 
     // window state
     // ------------

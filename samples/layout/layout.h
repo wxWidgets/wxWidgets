@@ -29,6 +29,7 @@ public:
     void TestGridBagSizer(wxCommandEvent& event);
     void TestNested(wxCommandEvent& event);
     void TestSetMinimal(wxCommandEvent& event);
+    void TestWrap(wxCommandEvent& event);
 
     void OnAbout(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
@@ -57,7 +58,7 @@ protected:
 class MyFlexSizerFrame : public wxFrame
 {
 public:
-    MyFlexSizerFrame(const wxChar *title, int x, int y );
+    MyFlexSizerFrame(const wxString &title, int x, int y );
 
 private:
     void InitFlexSizer(wxFlexGridSizer *sizer, wxWindow* parent);
@@ -68,7 +69,7 @@ private:
 class MySizerDialog : public wxDialog
 {
 public:
-    MySizerDialog(wxWindow *parent, const wxChar *title);
+    MySizerDialog(wxWindow *parent, const wxString &title );
 };
 
 
@@ -76,7 +77,7 @@ public:
 class MyGridBagSizerFrame : public wxFrame
 {
 public:
-    MyGridBagSizerFrame(const wxChar *title, int x, int y );
+    MyGridBagSizerFrame(const wxString &title, int x, int y );
 
     void OnHideBtn(wxCommandEvent&);
     void OnShowBtn(wxCommandEvent&);
@@ -101,7 +102,7 @@ private:
 class MySimpleSizerFrame : public wxFrame
 {
 public:
-    MySimpleSizerFrame(const wxChar *title, int x, int y );
+    MySimpleSizerFrame(const wxString &title, int x, int y );
     
     void OnSetSmallSize( wxCommandEvent &event);
     void OnSetBigSize( wxCommandEvent &event);
@@ -119,11 +120,19 @@ private:
 class MyNestedSizerFrame : public wxFrame
 {
 public:
-    MyNestedSizerFrame(const wxChar *title, int x, int y );
+    MyNestedSizerFrame(const wxString &title, int x, int y );
     
     
 private:
     wxTextCtrl  *m_target;
+};
+
+// a frame with several wrapping sizers
+
+class MyWrapSizerFrame: public wxFrame
+{
+public:
+    MyWrapSizerFrame(const wxString &title, int x, int y );
 };
 
 // controls and menu constants
@@ -135,6 +144,7 @@ enum
     LAYOUT_TEST_PROPORTIONS,
     LAYOUT_TEST_SET_MINIMAL,
     LAYOUT_TEST_NESTED,
+    LAYOUT_TEST_WRAP,
     LAYOUT_QUIT = wxID_EXIT,
     LAYOUT_ABOUT = wxID_ABOUT
 };

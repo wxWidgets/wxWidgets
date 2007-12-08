@@ -345,6 +345,12 @@ public:
     wxPoint GetPosition() const
         { return m_pos; }
 
+    // Called once the first component of an item has been decided. This is 
+    // used in algorithms that depend on knowing the size in one direction 
+    // before the min size in the other direction can be known. 
+    // Returns true if it made use of the information (and min size was changed).
+    bool InformFirstDirection( int direction, int size, int availableOtherDir=-1 );
+
     // these functions delete the current contents of the item if it's a sizer
     // or a spacer but not if it is a window
     void AssignWindow(wxWindow *window)
@@ -551,6 +557,11 @@ public:
     virtual void Clear( bool delete_windows = false );
     virtual void DeleteWindows();
 
+    // Inform sizer about the first direction that has been decided (by parent item)
+    // Returns true if it made use of the informtion (and recalculated min size)
+    virtual bool InformFirstDirection( int WXUNUSED(direction), int WXUNUSED(size), int WXUNUSED(availableOtherDir) )
+        { return false; }
+    
     void SetMinSize( int width, int height )
         { DoSetMinSize( width, height ); }
     void SetMinSize( const wxSize& size )
@@ -748,6 +759,7 @@ public:
 protected:
     void AdjustForFlexDirection();
     void AdjustForGrowables(const wxSize& sz);
+    void FindWidthsAndHeights(int nrows, int ncols);
 
     // the heights/widths of all rows/columns
     wxArrayInt  m_rowHeights,
@@ -858,6 +870,37 @@ protected:
 
 private:
     DECLARE_CLASS(wxBoxSizer)
+};
+
+//---------------------------------------------------------------------------
+// wxWrapSizer - A box sizer that can wrap items on several lines when 
+// widths exceed available width.
+//---------------------------------------------------------------------------
+
+// Borrow unused flag value
+#define wxEXTEND_LAST_ON_EACH_LINE	wxFULL_REPAINT_ON_RESIZE
+
+class WXDLLEXPORT wxWrapSizer: public wxBoxSizer
+{
+public:
+    wxWrapSizer( int orient=wxHORIZONTAL, int flags=wxEXTEND_LAST_ON_EACH_LINE );
+    virtual ~wxWrapSizer();
+
+    virtual void RecalcSizes();
+    virtual wxSize CalcMin();
+    
+    virtual bool InformFirstDirection( int direction, int size, int availableOtherDir );
+    
+protected:
+    int m_prim_size_last;    // Size in primary direction last time
+    int m_n_line;            // Number of lines
+    wxBoxSizer m_rows;       // Rows of items
+    int m_flags;
+
+    void AdjustPropLastItem(wxSizer *psz, wxSizerItem *itemLast);    
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxWrapSizer);
 };
 
 //---------------------------------------------------------------------------

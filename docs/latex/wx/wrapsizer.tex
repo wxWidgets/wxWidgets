@@ -1,0 +1,53 @@
+\section{\class{wxWrapSizer}}\label{wxwrapsizer}
+
+A wrap sizer lays out its items in a single line, like a box sizer - as long 
+as there is space available in that direction. Once all available space in 
+the primary direction has been used a new line is added an items are added there.
+
+So a wrap sizer has a primary orientation for adding items, and adds lines
+as needed in the secondary direction. 
+
+\wxheading{Derived from}
+
+\helpref{wxBoxSizer}{wxboxsizer}\\
+\helpref{wxSizer}{wxsizer}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/wrapsizer.h>
+
+\wxheading{Library}
+
+\helpref{wxCore}{librarieslist}
+
+\wxheading{See also}
+
+\helpref{wxBoxSizer}{wxboxsizer}, \helpref{wxSizer}{wxsizer}, \helpref{Sizer overview}{sizeroverview}
+
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxWrapSizer::wxWrapSizer}\label{wxwrapsizerwxwrapsizer}
+
+\func{}{wxWrapSizer}{\param{int }{orient}, \param{int }{flags}}
+
+Constructor for a wxWrapSizer. {\it orient} determines the primary direction of
+the sizer (the most common case being wxHORIZONTAL). The flags parameter may have 
+the value wxEXTEND_LAST_ON_EACH_LINE. This will cause the last item one each line
+to use any remaining space on that line.
+
+\membersection{wxWrapSizer::InformFirstDirection}\label{wxwrapsizerinformfirstdirection}
+
+\func{bool}{InformFirstDirection}{\param{int }{direction}, \param{int }{size}, 
+\param{int }{availableOtherDir }}
+
+Not used by an application. This is the mechanism by which sizers can inform 
+sub-items of the first determined size component. The sub-item can then better
+determine its size requirements. 
+
+Returns true if the information was used (and the sub-item min size was updated).
+
+
+
