@@ -85,7 +85,7 @@ static wxString BundleRelativeURLToPath(CFURLRef relativeURL)
     wxCHECK_MSG(absoluteURL, wxEmptyString, wxT("Failed to resolve relative URL to absolute URL"));
     CFStringRef cfStrPath = CFURLCopyFileSystemPath(absoluteURL,kDefaultPathStyle);
     CFRelease(absoluteURL);
-    return wxMacCFStringHolder(cfStrPath).AsString(wxLocale::GetSystemEncoding());
+    return wxCFStringRef(cfStrPath).AsString(wxLocale::GetSystemEncoding());
 }
 
 wxString wxStandardPathsCF::GetFromFunc(wxCFURLRef (*func)(wxCFBundleRef)) const

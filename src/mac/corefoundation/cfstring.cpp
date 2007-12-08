@@ -22,11 +22,7 @@
 
 #include "wx/mac/corefoundation/cfstring.h"
 
-#ifdef __DARWIN__
-    #include <CoreServices/CoreServices.h>
-#else
-    #include <TextCommon.h>
-#endif
+#include <CoreServices/CoreServices.h>
 
 void wxMacConvertNewlines13To10( char * data )
 {
@@ -593,25 +589,16 @@ wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding)
 
 
 //
-// CFStringRefs (Carbon only)
+// CFStringRefs
 //
 
-// converts this string into a carbon foundation string with optional pc 2 mac encoding
+// converts this string into a core foundation string with optional pc 2 mac encoding
 
-void wxMacCFStringHolder::Assign( CFStringRef ref , bool release )
+wxCFStringRef::wxCFStringRef( const wxString &st , wxFontEncoding WXUNUSED_IN_UNICODE(encoding) )
 {
-    Release();
-    m_cfs = ref;
-    m_release = release;
-}
-
-void wxMacCFStringHolder::Assign( const wxString &st , wxFontEncoding WXUNUSED_IN_UNICODE(encoding) )
-{
-    Release() ;
     if (st.IsEmpty())
     {
-        m_cfs = CFSTR("") ;
-        CFRetain( m_cfs ) ;
+        reset( wxCFRetain( CFSTR("") ) );
     }
     else
     {
@@ -619,8 +606,8 @@ void wxMacCFStringHolder::Assign( const wxString &st , wxFontEncoding WXUNUSED_I
         wxMacConvertNewlines13To10( &str ) ;
 #if wxUSE_UNICODE
 #if SIZEOF_WCHAR_T == 2
-        m_cfs = CFStringCreateWithCharacters( kCFAllocatorDefault,
-            (UniChar*)str.wc_str() , str.Len() );
+        reset( CFStringCreateWithCharacters( kCFAllocatorDefault,
+            (UniChar*)str.wc_str() , str.Len() ) );
 #else
         wxMBConvUTF16 converter ;
         size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 ) ;
@@ -631,30 +618,29 @@ void wxMacCFStringHolder::Assign( const wxString &st , wxFontEncoding WXUNUSED_I
         delete[] unibuf ;
 #endif
 #else // not wxUSE_UNICODE
-        m_cfs = CFStringCreateWithCString( kCFAllocatorSystemDefault , str.c_str() ,
-            wxMacGetSystemEncFromFontEnc( encoding ) ) ;
+        reset( CFStringCreateWithCString( kCFAllocatorSystemDefault , str.c_str() ,
+            wxMacGetSystemEncFromFontEnc( encoding ) ) );
 #endif
     }
-    m_release = true ;
 }
 
-wxString wxMacCFStringHolder::AsString(wxFontEncoding WXUNUSED_IN_UNICODE(encoding))
+wxString wxCFStringRef::AsString(wxFontEncoding WXUNUSED_IN_UNICODE(encoding))
 {
-    if ( m_cfs == NULL )
+    if ( !get() )
         return wxEmptyString ;
 
-    Size cflen = CFStringGetLength( m_cfs )  ;
+    Size cflen = CFStringGetLength( get() )  ;
     size_t noChars ;
     wxChar* buf = NULL ;
 
 #if wxUSE_UNICODE
 #if SIZEOF_WCHAR_T == 2
     buf = new wxChar[ cflen + 1 ] ;
-    CFStringGetCharacters( m_cfs , CFRangeMake( 0 , cflen ) , (UniChar*) buf ) ;
+    CFStringGetCharacters( get() , CFRangeMake( 0 , cflen ) , (UniChar*) buf ) ;
     noChars = cflen ;
 #else
     UniChar* unibuf = new UniChar[ cflen + 1 ] ;
-    CFStringGetCharacters( m_cfs , CFRangeMake( 0 , cflen ) , (UniChar*) unibuf ) ;
+    CFStringGetCharacters( get() , CFRangeMake( 0 , cflen ) , (UniChar*) unibuf ) ;
     unibuf[cflen] = 0 ;
     wxMBConvUTF16 converter ;
     noChars = converter.MB2WC( NULL , (const char*)unibuf , 0 ) ;
@@ -666,10 +652,10 @@ wxString wxMacCFStringHolder::AsString(wxFontEncoding WXUNUSED_IN_UNICODE(encodi
 #endif
 #else
     CFIndex cStrLen ;
-    CFStringGetBytes( m_cfs , CFRangeMake(0, cflen) , wxMacGetSystemEncFromFontEnc( encoding ) ,
+    CFStringGetBytes( get() , CFRangeMake(0, cflen) , wxMacGetSystemEncFromFontEnc( encoding ) ,
         '?' , false , NULL , 0 , &cStrLen ) ;
     buf = new wxChar[ cStrLen + 1 ] ;
-    CFStringGetBytes( m_cfs , CFRangeMake(0, cflen) , wxMacGetSystemEncFromFontEnc( encoding ) ,
+    CFStringGetBytes( get() , CFRangeMake(0, cflen) , wxMacGetSystemEncFromFontEnc( encoding ) ,
         '?' , false , (unsigned char*) buf , cStrLen , &cStrLen) ;
     noChars = cStrLen ;
 #endif
@@ -681,6 +667,9 @@ wxString wxMacCFStringHolder::AsString(wxFontEncoding WXUNUSED_IN_UNICODE(encodi
     return result ;
 }
 
+//
+// wxMacUniCharBuffer
+//
 
 wxMacUniCharBuffer::wxMacUniCharBuffer( const wxString &str )
 {

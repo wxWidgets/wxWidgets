@@ -87,7 +87,7 @@ long wxMacExecute(wxChar **argv,
     CFURLRef cfurlApp =
         CFURLCreateWithFileSystemPath(
             kCFAllocatorDefault,
-            wxMacCFStringHolder(path),
+            wxCFStringRef(path),
             kDefaultPathStyle,
             true); //false == not a directory
 
@@ -155,7 +155,7 @@ long wxMacExecute(wxChar **argv,
             // First, try creating as a directory
             cfurlCurrentFile = CFURLCreateWithFileSystemPath(
                                 kCFAllocatorDefault,
-                                wxMacCFStringHolder(*argv),
+                                wxCFStringRef(*argv),
                                 kDefaultPathStyle,
                                 true); //true == directory
         }
@@ -165,7 +165,7 @@ long wxMacExecute(wxChar **argv,
             // as a regular file
             cfurlCurrentFile = CFURLCreateWithFileSystemPath(
                                 kCFAllocatorDefault,
-                                wxMacCFStringHolder(*argv),
+                                wxCFStringRef(*argv),
                                 kDefaultPathStyle,
                                 false); //false == regular file
         }
@@ -176,7 +176,7 @@ long wxMacExecute(wxChar **argv,
             // so try creating it through CFURLCreateWithString
             cfurlCurrentFile = CFURLCreateWithString(
                                 kCFAllocatorDefault,
-                                wxMacCFStringHolder(*argv),
+                                wxCFStringRef(*argv),
                                 NULL);
         }
 

@@ -140,8 +140,7 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
         CFStringRef cfsProduct = (CFStringRef)
             CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDProductKey));
         m_szProductName =
-            wxMacCFStringHolder( cfsProduct,
-                                    false
+            wxCFStringRef( wxCFRetain(cfsProduct)
                                ).AsString();
 
         //Get the Product ID Key
