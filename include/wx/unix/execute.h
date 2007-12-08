@@ -71,7 +71,7 @@ extern WXDLLIMPEXP_BASE void wxHandleProcessTermination(wxEndProcessData *proc_d
 // child process. The return valus is port-specific.
 extern WXDLLIMPEXP_CORE int wxAddProcessCallback(wxEndProcessData *proc_data, int fd);
 
-#if defined(__DARWIN__) && (defined(__WXMAC__) || defined(__WXCOCOA__))
+#if defined(__WXMAC__) || defined(__WXCOCOA__)
 // For ports (e.g. DARWIN) which can add callbacks based on the pid
 extern int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid);
 #endif
