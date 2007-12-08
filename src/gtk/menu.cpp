@@ -1054,6 +1054,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
     if ( mitem->IsSeparator() )
     {
         menuItem = gtk_separator_menu_item_new();
+        m_prevRadio = NULL;
     }
     else if ( mitem->GetBitmap().Ok() ||
                 (mitem->GetKind() == wxITEM_NORMAL && isstock) )
