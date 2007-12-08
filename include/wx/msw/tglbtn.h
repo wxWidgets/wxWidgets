@@ -16,7 +16,7 @@
 extern WXDLLEXPORT_DATA(const char) wxCheckBoxNameStr[];
 
 // Checkbox item (single checkbox)
-class WXDLLEXPORT wxToggleButton : public wxControl
+class WXDLLEXPORT wxToggleButton : public wxToggleButtonBase
 {
 public:
     wxToggleButton() {}
