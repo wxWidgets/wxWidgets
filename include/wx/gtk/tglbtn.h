@@ -29,15 +29,15 @@ class WXDLLIMPEXP_FWD_CORE wxToggleBitmapButton;
 extern WXDLLIMPEXP_CORE const char wxCheckBoxNameStr[];
 
 //-----------------------------------------------------------------------------
-// wxToggleBitmapButton
+// wxBitmapToggleButton
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxToggleBitmapButton: public wxControl
+class WXDLLIMPEXP_CORE wxBitmapToggleButton: public wxToggleButtonBase
 {
 public:
     // construction/destruction
-    wxToggleBitmapButton() {}
-    wxToggleBitmapButton(wxWindow *parent,
+    wxBitmapToggleButton() {}
+    wxBitmapToggleButton(wxWindow *parent,
                    wxWindowID id,
                    const wxBitmap& label,
                    const wxPoint& pos = wxDefaultPosition,
@@ -82,14 +82,14 @@ protected:
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxToggleBitmapButton)
+    DECLARE_DYNAMIC_CLASS(wxBitmapToggleButton)
 };
 
 //-----------------------------------------------------------------------------
 // wxToggleButton
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxToggleButton: public wxControl
+class WXDLLIMPEXP_CORE wxToggleButton: public wxToggleButtonBase
 {
 public:
     // construction/destruction

@@ -104,12 +104,12 @@ wxInt32 wxToggleButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEV
 }
 
 // ----------------------------------------------------------------------------
-// wxToggleBitmapButton
+// wxBitmapToggleButton
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxToggleBitmapButton, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxBitmapToggleButton, wxControl)
 
-bool wxToggleBitmapButton::Create(wxWindow *parent, wxWindowID id,
+bool wxBitmapToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxBitmap& label,
                             const wxPoint& pos,
                             const wxSize& size, long style,
@@ -137,7 +137,7 @@ bool wxToggleBitmapButton::Create(wxWindow *parent, wxWindowID id,
     return TRUE;
 }
 
-wxSize wxToggleBitmapButton::DoGetBestSize() const
+wxSize wxBitmapToggleButton::DoGetBestSize() const
 {
     if (!m_bitmap.IsOk())
        return wxSize(20,20);
@@ -145,23 +145,23 @@ wxSize wxToggleBitmapButton::DoGetBestSize() const
     return wxSize ( m_bitmap.GetWidth()+6, m_bitmap.GetHeight()+6 ) ;
 }
 
-void wxToggleBitmapButton::SetValue(bool val)
+void wxBitmapToggleButton::SetValue(bool val)
 {
     m_peer->SetValue( val ) ;
 }
 
-bool wxToggleBitmapButton::GetValue() const
+bool wxBitmapToggleButton::GetValue() const
 {
     return m_peer->GetValue() ;
 }
 
-void wxToggleBitmapButton::Command(wxCommandEvent & event)
+void wxBitmapToggleButton::Command(wxCommandEvent & event)
 {
    SetValue((event.GetInt() != 0));
    ProcessCommand(event);
 }
 
-wxInt32 wxToggleBitmapButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
+wxInt32 wxBitmapToggleButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
 {
     wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, m_windowId);
     event.SetInt(GetValue());

@@ -24,6 +24,53 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, 19)
 END_DECLARE_EVENT_TYPES()
 
+// ----------------------------------------------------------------------------
+// wxToggleButtonBase
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxToggleButtonBase : public wxControl
+{
+public:
+    wxToggleButtonBase() { }
+
+    // Get/set the value
+    virtual void SetValue(bool state) = 0;
+    virtual bool GetValue() const = 0;
+
+    void UpdateWindowUI(long flags)
+    {
+        wxControl::UpdateWindowUI(flags);
+
+        if ( !IsShown() )
+            return;
+
+        wxWindow *tlw = wxGetTopLevelParent( this );
+        if (tlw && wxPendingDelete.Member( tlw ))
+           return;
+
+        wxUpdateUIEvent event( GetId() );
+        event.SetEventObject(this);
+
+        if (GetEventHandler()->ProcessEvent(event) )
+        {
+            if ( event.GetSetChecked() )
+                SetValue( event.GetChecked() );
+        }
+    }
+
+    // Buttons on MSW can look bad if they are not native colours, because
+    // then they become owner-drawn and not theme-drawn.  Disable it here
+    // in wxToggleButtonBase to make it consistent.
+    virtual bool ShouldInheritColours() const { return false; }
+
+protected:
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
+    DECLARE_NO_COPY_CLASS(wxToggleButtonBase)
+};
+
+
 #define EVT_TOGGLEBUTTON(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, id, wxCommandEventHandler(fn))
 

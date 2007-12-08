@@ -121,6 +121,7 @@ bool wxGenericValidator::TransferToWindow(void)
         }
     } else
 #endif
+
 #if wxUSE_TOGGLEBTN
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxToggleButton)) )
     {
@@ -131,6 +132,17 @@ bool wxGenericValidator::TransferToWindow(void)
             return true;
         }
     } else
+#if defined(__WXMAC__) || defined(__WXGTK20__)
+    if (m_validatorWindow->IsKindOf(CLASSINFO(wxBitmapToggleButton)) )
+    {
+        wxBitmapToggleButton * pControl = (wxBitmapToggleButton *) m_validatorWindow;
+        if (m_pBool)
+        {
+            pControl->SetValue(*m_pBool);
+            return true;
+        }
+    } else
+#endif
 #endif
 
     // int controls
