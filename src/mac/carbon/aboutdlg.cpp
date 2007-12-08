@@ -30,10 +30,10 @@
 #include "wx/mac/private.h"
 
 // helper class for HIAboutBox options
-class AboutBoxOptions : public wxMacCFRefHolder<CFMutableDictionaryRef>
+class AboutBoxOptions : public wxCFRef<CFMutableDictionaryRef>
 {
 public:
-    AboutBoxOptions() : wxMacCFRefHolder<CFMutableDictionaryRef>
+    AboutBoxOptions() : wxCFRef<CFMutableDictionaryRef>
                         (
                           CFDictionaryCreateMutable
                           (

@@ -264,8 +264,8 @@ public:
 
 protected :
     CGLineCap m_cap;
-    wxMacCFRefHolder<CGColorRef> m_color;
-    wxMacCFRefHolder<CGColorSpaceRef> m_colorSpace;
+    wxCFRef<CGColorRef> m_color;
+    wxCFRef<CGColorSpaceRef> m_colorSpace;
 
     CGLineJoin m_join;
     CGFloat m_width;
@@ -276,7 +276,7 @@ protected :
 
 
     bool m_isPattern;
-    wxMacCFRefHolder<CGPatternRef> m_pattern;
+    wxCFRef<CGPatternRef> m_pattern;
     CGFloat* m_patternColorComponents;
 };
 
@@ -287,7 +287,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
 
     CGFloat components[4] = { pen.GetColour().Red() / 255.0 , pen.GetColour().Green() / 255.0 ,
             pen.GetColour().Blue() / 255.0 , pen.GetColour().Alpha() / 255.0 } ;
-    m_color.Set( CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ) ;
+    m_color.reset( CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ) ;
 
     // TODO: * m_dc->m_scaleX
     m_width = pen.GetWidth();
@@ -390,8 +390,8 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
                 wxBitmap* bmp = pen.GetStipple();
                 if ( bmp && bmp->Ok() )
                 {
-                    m_colorSpace.Set( CGColorSpaceCreatePattern( NULL ) );
-                    m_pattern.Set( *( new ImagePattern( bmp , CGAffineTransformMakeScale( 1,-1 ) ) ) );
+                    m_colorSpace.reset( CGColorSpaceCreatePattern( NULL ) );
+                    m_pattern.reset( (CGPatternRef) *( new ImagePattern( bmp , CGAffineTransformMakeScale( 1,-1 ) ) ) );
                     m_patternColorComponents = new CGFloat[1] ;
                     m_patternColorComponents[0] = 1.0;
                     m_isPattern = true;
@@ -402,8 +402,8 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
         default :
             {
                 m_isPattern = true;
-                m_colorSpace.Set( CGColorSpaceCreatePattern( wxMacGetGenericRGBColorSpace() ) );
-                m_pattern.Set( *( new HatchPattern( pen.GetStyle() , CGAffineTransformMakeScale( 1,-1 ) ) ) );
+                m_colorSpace.reset( CGColorSpaceCreatePattern( wxMacGetGenericRGBColorSpace() ) );
+                m_pattern.reset( (CGPatternRef) *( new HatchPattern( pen.GetStyle() , CGAffineTransformMakeScale( 1,-1 ) ) ) );
                 m_patternColorComponents = new CGFloat[4] ;
                 m_patternColorComponents[0] = pen.GetColour().Red() / 255.0;
                 m_patternColorComponents[1] = pen.GetColour().Green() / 255.0;
@@ -492,11 +492,11 @@ class wxMacCoreGraphicsColour
         void Apply( CGContextRef cgContext );
     protected:
         void Init();
-        wxMacCFRefHolder<CGColorRef> m_color;
-        wxMacCFRefHolder<CGColorSpaceRef> m_colorSpace;
+        wxCFRef<CGColorRef> m_color;
+        wxCFRef<CGColorSpaceRef> m_colorSpace;
         
         bool m_isPattern;
-        wxMacCFRefHolder<CGPatternRef> m_pattern;
+        wxCFRef<CGPatternRef> m_pattern;
         CGFloat* m_patternColorComponents;
 } ;
 
@@ -536,13 +536,13 @@ wxMacCoreGraphicsColour::wxMacCoreGraphicsColour( const wxBrush &brush )
     Init();
     if ( brush.GetStyle() == wxSOLID )
     {
-        m_color.Set( brush.GetColour().CreateCGColor() );
+        m_color.reset( brush.GetColour().CreateCGColor() );
     }
     else if ( brush.IsHatch() )
     {
         m_isPattern = true;
-        m_colorSpace.Set( CGColorSpaceCreatePattern( wxMacGetGenericRGBColorSpace() ) );
-        m_pattern.Set( *( new HatchPattern( brush.GetStyle() , CGAffineTransformMakeScale( 1,-1 ) ) ) );
+        m_colorSpace.reset( CGColorSpaceCreatePattern( wxMacGetGenericRGBColorSpace() ) );
+        m_pattern.reset( (CGPatternRef) *( new HatchPattern( brush.GetStyle() , CGAffineTransformMakeScale( 1,-1 ) ) ) );
 
         m_patternColorComponents = new CGFloat[4] ;
         m_patternColorComponents[0] = brush.GetColour().Red() / 255.0;
@@ -559,8 +559,8 @@ wxMacCoreGraphicsColour::wxMacCoreGraphicsColour( const wxBrush &brush )
             m_isPattern = true;
             m_patternColorComponents = new CGFloat[1] ;
             m_patternColorComponents[0] = 1.0;
-            m_colorSpace.Set( CGColorSpaceCreatePattern( NULL ) );
-            m_pattern.Set( *( new ImagePattern( bmp , CGAffineTransformMakeScale( 1,-1 ) ) ) );
+            m_colorSpace.reset( CGColorSpaceCreatePattern( NULL ) );
+            m_pattern.reset( (CGPatternRef) *( new ImagePattern( bmp , CGAffineTransformMakeScale( 1,-1 ) ) ) );
         }
     }
 }
@@ -1273,7 +1273,7 @@ private:
     wxDouble m_width;
     wxDouble m_height;
 
-    wxMacCFRefHolder<HIShapeRef> m_clipRgn;
+    wxCFRef<HIShapeRef> m_clipRgn;
 };
 
 //-----------------------------------------------------------------------------
@@ -1323,7 +1323,7 @@ void wxMacCoreGraphicsContext::Init()
     m_height = 0;
 
     HIRect r = CGRectMake(0,0,0,0);
-    m_clipRgn.Set(HIShapeCreateWithRect(&r));
+    m_clipRgn.reset(HIShapeCreateWithRect(&r));
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, CGContextRef cgcontext, wxDouble width, wxDouble height ) : wxGraphicsContext(renderer)
@@ -1422,8 +1422,7 @@ void wxMacCoreGraphicsContext::EnsureIsValid()
 		if ( !HIShapeIsEmpty(m_clipRgn) )
 		{
             // the clip region is in device coordinates, so we convert this again to user coordinates
-            wxMacCFRefHolder<HIMutableShapeRef> hishape ;
-            hishape.Set( HIShapeCreateMutableCopy( m_clipRgn ) );
+            wxCFRef<HIMutableShapeRef> hishape( HIShapeCreateMutableCopy( m_clipRgn ) );
             CGPoint transformedOrigin = CGPointApplyAffineTransform( CGPointZero,m_windowTransform);
             HIShapeOffset( hishape, -transformedOrigin.x, -transformedOrigin.y );
 			HIShapeReplacePathInCGContext( hishape, m_cgContext );
@@ -1508,7 +1507,7 @@ void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
         
         CGPoint transformedOrigin = CGPointApplyAffineTransform( CGPointZero, m_windowTransform );
         HIShapeOffset( mutableShape, transformedOrigin.x, transformedOrigin.y );
-        m_clipRgn.Set(mutableShape);
+        m_clipRgn.reset(mutableShape);
     }
 }
 
@@ -1525,7 +1524,7 @@ void wxMacCoreGraphicsContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDoubl
         // the clipping itself must be stored as device coordinates, otherwise 
         // we cannot apply it back correctly
         r.origin= CGPointApplyAffineTransform( r.origin, m_windowTransform );
-        m_clipRgn.Set(HIShapeCreateWithRect(&r));
+        m_clipRgn.reset(HIShapeCreateWithRect(&r));
     }
 }
 
@@ -1547,7 +1546,7 @@ void wxMacCoreGraphicsContext::ResetClip()
     else
     {
         HIRect r = CGRectMake(0,0,0,0);
-        m_clipRgn.Set(HIShapeCreateWithRect(&r));
+        m_clipRgn.reset(HIShapeCreateWithRect(&r));
     }
 }
 

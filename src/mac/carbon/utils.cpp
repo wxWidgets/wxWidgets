@@ -1943,11 +1943,11 @@ OSStatus wxMacControl::SetTabEnabled( SInt16 tabNo , bool enable )
 
 CGColorSpaceRef wxMacGetGenericRGBColorSpace()
 {
-    static wxMacCFRefHolder<CGColorSpaceRef> genericRGBColorSpace;
+    static wxCFRef<CGColorSpaceRef> genericRGBColorSpace;
 
     if (genericRGBColorSpace == NULL)
     {
-        genericRGBColorSpace.Set( CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB ) );
+        genericRGBColorSpace.reset( CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB ) );
     }
 
     return genericRGBColorSpace;
