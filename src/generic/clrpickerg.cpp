@@ -27,8 +27,8 @@
 #if wxUSE_COLOURPICKERCTRL
 
 #include "wx/clrpicker.h"
-
 #include "wx/colordlg.h"
+#include "wx/dcmemory.h"
 
 
 // ============================================================================

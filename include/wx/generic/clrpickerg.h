@@ -13,6 +13,7 @@
 #define _WX_CLRPICKER_H_
 
 #include "wx/button.h"
+#include "wx/bmpbuttn.h"
 #include "wx/cmndata.h"
 
 //-----------------------------------------------------------------------------
