@@ -1372,7 +1372,7 @@ public:
 #if wxUSE_WCHAR_T
     const wxWCharBuffer wc_str(const wxMBConv& conv = wxConvLibc) const;
 #endif // wxUSE_WCHAR_T
-    const wxCharBuffer fn_str() const { return wxConvFile.cWC2WX( wc_str( wxConvLocal ) ); }
+    const wxCharBuffer fn_str() const { return wxConvFile.cWC2WX( wc_str( wxConvLibc ) ); }
 #endif // Unicode/ANSI
 
   // overloaded assignment
