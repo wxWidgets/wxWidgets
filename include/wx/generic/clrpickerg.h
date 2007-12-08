@@ -19,7 +19,7 @@
 // wxGenericColourButton: a button which brings up a wxColourDialog
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGenericColourButton : public wxButton,
+class WXDLLIMPEXP_CORE wxGenericColourButton : public wxBitmapButton,
                                                public wxColourPickerWidgetBase
 {
 public:
@@ -63,6 +63,7 @@ public:
 
 
 protected:
+    wxBitmap    m_bitmap;
 
     wxSize DoGetBestSize() const;
 

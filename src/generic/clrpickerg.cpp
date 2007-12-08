@@ -36,7 +36,7 @@
 // ============================================================================
 
 wxColourData wxGenericColourButton::ms_data;
-IMPLEMENT_DYNAMIC_CLASS(wxGenericColourButton, wxButton)
+IMPLEMENT_DYNAMIC_CLASS(wxGenericColourButton, wxBitmapButton)
 
 // ----------------------------------------------------------------------------
 // wxGenericColourButton
@@ -47,8 +47,10 @@ bool wxGenericColourButton::Create( wxWindow *parent, wxWindowID id,
                         const wxSize &size, long style,
                         const wxValidator& validator, const wxString &name)
 {
+    m_bitmap = wxBitmap( 60, 13 );
+
     // create this button
-    if (!wxButton::Create( parent, id, wxEmptyString, pos,
+    if (!wxBitmapButton::Create( parent, id, m_bitmap, pos,
                            size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxGenericColourButton creation failed") );
@@ -99,33 +101,30 @@ void wxGenericColourButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
 
 void wxGenericColourButton::UpdateColour()
 {
-    if ( !m_colour.Ok() )
-    {
-        if ( HasFlag(wxCLRP_SHOW_LABEL) )
-            SetLabel(wxEmptyString);
-        return;
-    }
-
-    // some combinations of the fg/bg colours may be unreadable, so we invert
-    // the colour to make sure fg colour is different enough from m_colour
-    wxColour colFg(~m_colour.Red(), ~m_colour.Green(), ~m_colour.Blue());
-
-    SetForegroundColour(colFg);
-    SetBackgroundColour(m_colour);
-
+    wxMemoryDC dc(m_bitmap);
+    dc.SetPen( *wxTRANSPARENT_PEN );
+    dc.SetBrush( wxBrush(m_colour) );
+    dc.DrawRectangle( 0,0,m_bitmap.GetWidth(),m_bitmap.GetHeight() );
+    dc.SelectObject( wxNullBitmap );
+    SetBitmapLabel( m_bitmap );
+    
+#if 0
     if ( HasFlag(wxCLRP_SHOW_LABEL) )
         SetLabel(m_colour.GetAsString(wxC2S_HTML_SYNTAX));
+#endif
 }
 
 wxSize wxGenericColourButton::DoGetBestSize() const
 {
-    wxSize sz(wxButton::DoGetBestSize());
+    wxSize sz(wxBitmapButton::DoGetBestSize());
+    sz.y += 6;
+    sz.x += 30;
     if ( HasFlag(wxCLRP_SHOW_LABEL) )
         return sz;
 
     // if we have no label, then make this button a square
-    // (like e.g. native GTK version of this control)
-    sz.SetWidth(sz.GetHeight());
+    // (like e.g. native GTK version of this control) ???
+    // sz.SetWidth(sz.GetHeight());
     return sz;
 }
 
