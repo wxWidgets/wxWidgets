@@ -229,39 +229,30 @@ bool wxDisclosureTriangle::Create(wxWindow *parent, wxWindowID id, const wxStrin
     OSStatus err = CreateDisclosureTriangleControl(
             MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds, 
             kControlDisclosureTrianglePointDefault,
-            CFSTR("Test"),
+            wxCFStringRef( label ),
             0,    // closed
             TRUE, // draw title
             TRUE, // auto toggle back and forth
             m_peer->GetControlRefAddr() );
-            
+           
     verify_noerr( err );
     wxASSERT_MSG( m_peer != NULL && m_peer->Ok() , wxT("No valid Mac control") ) ;
 
     MacPostControlCreate( pos, size );
-
+    // passing the text in the param doesn't seem to work, so lets do if again
+    SetLabel( label );
+    
     return true;
 }
 
 void wxDisclosureTriangle::SetOpen( bool open )
 {
-    // TODO
+    m_peer->SetValue( open ? 1 : 0 );
 }
 
 bool wxDisclosureTriangle::IsOpen() const
 {
-   // TODO
-   return true;
-}
-
-void wxDisclosureTriangle::SetLabel( const wxString &label )
-{
-    // TODO
-}
-
-wxString wxDisclosureTriangle::GetLabel() const
-{
-    return wxEmptyString;
+   return m_peer->GetValue() == 1;
 }
 
 wxInt32 wxDisclosureTriangle::MacControlHit( WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) )
