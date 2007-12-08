@@ -198,7 +198,7 @@ bool wxListBox::Create(wxWindow *parent,
 
 wxListBox::~wxListBox()
 {
-    Free();
+    Clear();
 }
 
 WXDWORD wxListBox::MSWGetStyle(long style, WXDWORD *exstyle) const
