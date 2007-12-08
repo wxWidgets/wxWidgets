@@ -71,11 +71,14 @@ bool wxGenericCollapsiblePane::Create(wxWindow *parent,
 
 #ifdef __WXMAC__
     // on Mac we use the disclosure triangle
+    // we need a light gray line above and below, lets approximate with the frame
     m_pStaticLine = NULL;
-    m_pButton = new wxDisclosureTriangle( this, wxID_ANY, GetBtnLabel() );
+    m_pButton = new wxDisclosureTriangle( this, wxID_ANY, GetBtnLabel(), 
+                                         wxDefaultPosition, wxDefaultSize, wxSIMPLE_BORDER );
+    m_pButton->SetBackgroundColour( wxColour( 221, 226, 239 ) );
     m_sz = new wxBoxSizer(wxHORIZONTAL);
     // m_sz->Add(4,4); where shall we put it?
-    m_sz->Add( m_pButton );
+    m_sz->Add( m_pButton, 1);
 #else
     // create children and lay them out using a wxBoxSizer
     // (so that we automatically get RTL features)
@@ -133,7 +136,12 @@ wxSize wxGenericCollapsiblePane::DoGetBestSize() const
 
 wxString wxGenericCollapsiblePane::GetBtnLabel() const
 {
+    // on mac the triangle indicates the state, no string change
+#ifdef __WXMAC__
+    return m_strLabel;
+#else
     return m_strLabel + (IsCollapsed() ? wxT(" >>") : wxT(" <<"));
+#endif
 }
 
 void wxGenericCollapsiblePane::OnStateChange(const wxSize& sz)
@@ -218,7 +226,7 @@ void wxGenericCollapsiblePane::Collapse(bool collapse)
 
     // update button label
 #ifdef __WXMAC__
-    m_pButton->SetLabel(GetBtnLabel());
+    m_pButton->SetOpen( !collapse );
 #else
     // NB: this must be done after updating our "state"
     m_pButton->SetLabel(GetBtnLabel());
