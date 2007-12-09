@@ -15,6 +15,9 @@
 // forward declared
 class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxStaticLine;
+#ifdef __WXMAC__
+class WXDLLIMPEXP_FWD_CORE wxDisclosureTriangle;
+#endif
 
 // ----------------------------------------------------------------------------
 // wxGenericCollapsiblePane
