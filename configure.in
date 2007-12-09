@@ -6654,7 +6654,7 @@ if test "$wxUSE_TREECTRL" = "yes"; then
 fi
 
 if test "$wxUSE_POPUPWIN" = "yes"; then
-    if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 ; then
+    if test "$wxUSE_COCOA" = 1 ; then
         AC_MSG_WARN([Popup window not yet supported under Mac OS X... disabled])
     else
         if test "$wxUSE_PM" = 1; then
