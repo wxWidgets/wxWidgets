@@ -582,6 +582,8 @@
 
 #define wxUSE_OWNER_DRAWN 0
 
+#define wxUSE_TASKBARICON_BALLOONS 0
+
 #define wxUSE_UXTHEME           0
 
 #define wxUSE_INKEDIT  0
@@ -593,11 +595,6 @@
 
 
 #define wxUSE_CRASHREPORT 0
-
-
-
-#define wxUSE_BITMAP_MESSAGE         0
-
 /* --- end MSW options --- */
 
 /*
