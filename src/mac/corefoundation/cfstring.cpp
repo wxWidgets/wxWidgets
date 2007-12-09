@@ -613,8 +613,8 @@ wxCFStringRef::wxCFStringRef( const wxString &st , wxFontEncoding WXUNUSED_IN_UN
         size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 ) ;
         UniChar *unibuf = new UniChar[ unicharlen / sizeof(UniChar) + 1 ] ;
         converter.WC2MB( (char*)unibuf , str.wc_str() , unicharlen ) ;
-        m_cfs = CFStringCreateWithCharacters( kCFAllocatorDefault ,
-            unibuf , unicharlen / sizeof(UniChar) ) ;
+        reset( CFStringCreateWithCharacters( kCFAllocatorDefault ,
+            unibuf , unicharlen / sizeof(UniChar) ) );
         delete[] unibuf ;
 #endif
 #else // not wxUSE_UNICODE
