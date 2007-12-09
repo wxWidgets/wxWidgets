@@ -23,7 +23,10 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_NOTIFICATION_MESSAGE && wxUSE_TASKBARICON
+// we can only use the native implementation if we have a working
+// wxTaskBarIcon::ShowBalloon() method
+#if wxUSE_NOTIFICATION_MESSAGE && \
+        wxUSE_TASKBARICON && wxUSE_TASKBARICON_BALLOONS
 
 #include "wx/notifmsg.h"
 
