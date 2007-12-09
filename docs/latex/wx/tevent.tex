@@ -544,7 +544,7 @@ public:
         { return m_curve; }
 
     // required for sending with wxPostEvent()
-    wxEvent* Clone();
+    virtual wxEvent *Clone() const;
 
 private:
     wxPlotCurve   *m_curve;
