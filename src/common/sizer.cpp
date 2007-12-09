@@ -1858,7 +1858,8 @@ void wxBoxSizer::RecalcSizes()
     // Inform child items about the size in minor direction, that can
     // change how much free space we have in major dir and how to distribute it.
     int majorMinSum = 0;
-    for ( wxSizerItemList::const_iterator i = m_children.begin();
+    wxSizerItemList::const_iterator i ;
+    for ( i = m_children.begin();
           i != m_children.end();
           ++i )
     {
@@ -1890,7 +1891,7 @@ void wxBoxSizer::RecalcSizes()
     wxPoint pt(m_position);
 
     int totalProportion = m_totalProportion;
-    for ( wxSizerItemList::const_iterator i = m_children.begin();
+    for ( i = m_children.begin();
           i != m_children.end();
           ++i )
     {
