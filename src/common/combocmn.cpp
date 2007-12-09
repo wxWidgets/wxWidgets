@@ -86,10 +86,10 @@
 
 #elif defined(__WXMAC__)
 
-#define USE_TRANSIENT_POPUP           0 // Use wxPopupWindowTransient (preferred, if it works properly on platform)
-#define TRANSIENT_POPUPWIN_IS_PERFECT 0 // wxPopupTransientWindow works, its child can have focus, and common
+#define USE_TRANSIENT_POPUP           1 // Use wxPopupWindowTransient (preferred, if it works properly on platform)
+#define TRANSIENT_POPUPWIN_IS_PERFECT 1 // wxPopupTransientWindow works, its child can have focus, and common
                                         // native controls work on it like normal.
-#define POPUPWIN_IS_PERFECT           0 // Same, but for non-transient popup window.
+#define POPUPWIN_IS_PERFECT           1 // Same, but for non-transient popup window.
 #define TEXTCTRL_TEXT_CENTERED        1 // 1 if text in textctrl is vertically centered
 #define FOCUS_RING                    3 // Reserve room for the textctrl's focus ring to display
 
@@ -113,7 +113,7 @@
 // Popupwin is really only supported on wxMSW (not WINCE) and wxGTK, regardless
 // what the wxUSE_POPUPWIN says.
 // FIXME: Why isn't wxUSE_POPUPWIN reliable any longer? (it was in wxW2.6.2)
-#if (!defined(__WXMSW__) && !defined(__WXGTK__)) || defined(__WXWINCE__)
+#if (!defined(__WXMSW__) && !defined(__WXGTK__) && !defined(__WXMAC__)) || defined(__WXWINCE__)
 #undef wxUSE_POPUPWIN
 #define wxUSE_POPUPWIN 0
 #endif
