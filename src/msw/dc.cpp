@@ -131,7 +131,7 @@ static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 // otherwise
 static bool AlphaBlt(HDC hdcDst,
                      int x, int y, int dstWidth, int dstHeight,
-                     int srcX, int srcY, 
+                     int srcX, int srcY,
                      int srcWidth, int srcHeight,
                      HDC hdcSrc,
                      const wxBitmap& bmp);
@@ -142,7 +142,7 @@ static bool AlphaBlt(HDC hdcDst,
 static void
 wxAlphaBlend(HDC hdcDst, int xDst, int yDst,
              int dstWidth, int dstHeight,
-             int srcX, int srcY, 
+             int srcX, int srcY,
              int srcWidth, int srcHeight,
              const wxBitmap& bmpSrc);
 
@@ -333,11 +333,11 @@ wxColourChanger::~wxColourChanger()
 // wxMSWDCImpl
 // ---------------------------------------------------------------------------
 
-wxMSWDCImpl::wxMSWDCImpl( wxDC *owner, WXHDC hDC ) : 
+wxMSWDCImpl::wxMSWDCImpl( wxDC *owner, WXHDC hDC ) :
     wxDCImpl( owner )
-{ 
-    Init(); 
-    m_hDC = hDC; 
+{
+    Init();
+    m_hDC = hDC;
 }
 
 wxMSWDCImpl::~wxMSWDCImpl()
@@ -944,34 +944,21 @@ void wxMSWDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
     wxCoord x2 = x + width;
     wxCoord y2 = y + height;
 
-    if ((m_logicalFunction == wxCOPY) && (m_pen.GetStyle() == wxTRANSPARENT))
-    {
-        RECT rect;
-        rect.left = XLOG2DEV(x);
-        rect.top = YLOG2DEV(y);
-        rect.right = XLOG2DEV(x2);
-        rect.bottom = YLOG2DEV(y2);
-        (void)FillRect(GetHdc(), &rect, (HBRUSH)m_brush.GetResourceHandle() );
-    }
-    else
-    {
-        // Windows draws the filled rectangles without outline (i.e. drawn with a
-        // transparent pen) one pixel smaller in both directions and we want them
-        // to have the same size regardless of which pen is used - adjust
+    wxCoord x2dev = XLOG2DEV(x2),
+            y2dev = YLOG2DEV(y2);
 
-        // I wonder if this shouldnt be done after the LOG2DEV() conversions. RR.
-        if ( m_pen.GetStyle() == wxTRANSPARENT )
-        {
-            // Apparently not needed for WinCE (see e.g. Life! demo)
+    // Windows (but not Windows CE) draws the filled rectangles without outline
+    // (i.e. drawn with a transparent pen) one pixel smaller in both directions
+    // and we want them to have the same size regardless of which pen is used
 #ifndef __WXWINCE__
-            x2++;
-            y2++;
-#endif
-        }
-
-        (void)Rectangle(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2));
+    if ( m_pen.GetStyle() == wxTRANSPARENT )
+    {
+        x2dev++;
+        y2dev++;
     }
+#endif // !__WXWINCE__
 
+    (void)Rectangle(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), x2dev, y2dev);
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x2, y2);
@@ -1903,7 +1890,7 @@ void wxMSWDCImpl::RealizeScaleAndOrigin()
     ::SetViewportOrgEx(GetHdc(), m_deviceOriginX, m_deviceOriginY, NULL);
     ::SetWindowOrgEx(GetHdc(), m_logicalOriginX, m_logicalOriginY, NULL);
 #endif
-    
+
 }
 
 void wxMSWDCImpl::SetMapMode(int mode)
@@ -1959,9 +1946,9 @@ void wxMSWDCImpl::SetMapMode(int mode)
                 wxFAIL_MSG( _T("unknown mapping mode in SetMapMode") );
         }
     }
-    
+
     ComputeScaleAndOrigin();
-    
+
     RealizeScaleAndOrigin();
 }
 
@@ -1973,7 +1960,7 @@ void wxMSWDCImpl::SetUserScale(double x, double y)
         return;
 
     wxDCImpl::SetUserScale(x,y);
-    
+
     RealizeScaleAndOrigin();
 }
 
@@ -1984,10 +1971,10 @@ void wxMSWDCImpl::SetAxisOrientation(bool xLeftRight,
 
     int signX = xLeftRight ? 1 : -1,
         signY = yBottomUp ? -1 : 1;
-        
+
     if (signX == m_signX && signY == m_signY)
         return;
-    
+
     wxDCImpl::SetAxisOrientation( xLeftRight, yBottomUp );
 
     RealizeScaleAndOrigin();
@@ -2013,7 +2000,7 @@ void wxMSWDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
 
     if ( x == m_deviceOriginX && y == m_deviceOriginY )
         return;
-        
+
     wxDCImpl::SetDeviceOrigin( x, y );
 
     ::SetViewportOrgEx(GetHdc(), (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
@@ -2544,7 +2531,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxDCModule, wxModule)
 
 static bool AlphaBlt(HDC hdcDst,
                      int x, int y, int dstWidth, int dstHeight,
-                     int srcX, int srcY, 
+                     int srcX, int srcY,
                      int srcWidth, int srcHeight,
                      HDC hdcSrc,
                      const wxBitmap& bmp)
@@ -2604,7 +2591,7 @@ static bool AlphaBlt(HDC hdcDst,
 static void
 wxAlphaBlend(HDC hdcDst, int xDst, int yDst,
              int dstWidth, int dstHeight,
-             int srcX, int srcY, 
+             int srcX, int srcY,
              int srcWidth, int srcHeight,
              const wxBitmap& bmpSrc)
 {
