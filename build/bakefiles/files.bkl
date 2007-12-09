@@ -2226,6 +2226,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/overlay.cpp
     src/mac/carbon/palette.cpp
     src/mac/carbon/pen.cpp
+    src/mac/carbon/popupwin.cpp
     src/mac/carbon/printdlg.cpp
     src/mac/carbon/printmac.cpp
     src/mac/carbon/radiobox.cpp

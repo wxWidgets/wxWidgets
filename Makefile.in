@@ -4635,6 +4635,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_overlay.o \
 	monodll_palette.o \
 	monodll_pen.o \
+	monodll_popupwin.o \
 	monodll_printdlg.o \
 	monodll_printmac.o \
 	monodll_radiobox.o \
@@ -6529,6 +6530,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_overlay.o \
 	monolib_palette.o \
 	monolib_pen.o \
+	monolib_popupwin.o \
 	monolib_printdlg.o \
 	monolib_printmac.o \
 	monolib_radiobox.o \
@@ -8702,6 +8704,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_overlay.o \
 	coredll_palette.o \
 	coredll_pen.o \
+	coredll_popupwin.o \
 	coredll_printdlg.o \
 	coredll_printmac.o \
 	coredll_radiobox.o \
@@ -10200,6 +10203,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_overlay.o \
 	corelib_palette.o \
 	corelib_pen.o \
+	corelib_popupwin.o \
 	corelib_printdlg.o \
 	corelib_printmac.o \
 	corelib_radiobox.o \
@@ -15582,6 +15586,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_popupwin.o: $(srcdir)/src/motif/popupwin.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/popupwin.cpp
 
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_popupwin.o: $(srcdir)/src/mac/carbon/popupwin.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/popupwin.cpp
+
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_popupwin.o: $(srcdir)/src/os2/popupwin.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/popupwin.cpp
 
@@ -20060,6 +20067,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_popupwin.o: $(srcdir)/src/motif/popupwin.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/popupwin.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_popupwin.o: $(srcdir)/src/mac/carbon/popupwin.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/popupwin.cpp
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_popupwin.o: $(srcdir)/src/os2/popupwin.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/popupwin.cpp
@@ -25068,6 +25078,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_popupwin.o: $(srcdir)/src/motif/popupwin.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/popupwin.cpp
 
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_popupwin.o: $(srcdir)/src/mac/carbon/popupwin.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/popupwin.cpp
+
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_popupwin.o: $(srcdir)/src/os2/popupwin.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/popupwin.cpp
 
@@ -28142,6 +28155,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_popupwin.o: $(srcdir)/src/motif/popupwin.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/popupwin.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_popupwin.o: $(srcdir)/src/mac/carbon/popupwin.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/popupwin.cpp
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_popupwin.o: $(srcdir)/src/os2/popupwin.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/popupwin.cpp
