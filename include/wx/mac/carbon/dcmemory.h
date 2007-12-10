@@ -28,6 +28,11 @@ public:
        { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmap(*subrect); }
     virtual void DoSelect(const wxBitmap& bitmap);
 
+    virtual const wxBitmap& GetSelectedBitmap() const
+        { return m_selected; }
+    virtual wxBitmap& GetSelectedBitmap()
+        { return m_selected; }
+    
 private:
     void Init();
 
