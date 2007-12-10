@@ -23,7 +23,6 @@ class WXDLLEXPORT wxBrush: public wxBrushBase
 {
  public:
     wxBrush();
-    wxBrush(short macThemeBrush ) ;
     wxBrush(const wxColour& col, int style = wxSOLID);
     wxBrush(const wxBitmap& stipple);
     virtual ~wxBrush();
@@ -40,9 +39,6 @@ class WXDLLEXPORT wxBrush: public wxBrushBase
     const wxColour& GetColour() const ;
     virtual int GetStyle() const ;
     wxBitmap *GetStipple() const ;
-
-    virtual bool Ok() const { return IsOk(); }
-    virtual bool IsOk() const { return (m_refData != NULL) ; }
 
 protected:
     virtual wxObjectRefData *CreateRefData() const;
