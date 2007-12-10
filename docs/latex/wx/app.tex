@@ -64,7 +64,13 @@ Number of command line arguments (after environment-specific processing).
 \member{wxChar **}{argv}
 
 Command line arguments (after environment-specific processing).
+Under Windows and Linux/Unix, you should parse the command line
+arguments and check for files to be opened when starting your
+application. Under OS X, you need to override \helpref{MacOpenFile}{wxappmacopenfile}
+since command line arguments are used differently there.
 
+You may use the \helpref{wxCmdLineParser}{wxcmdlineparser} to
+parse command line arguments.
 
 \membersection{wxApp::CreateLogTarget}\label{wxappcreatelogtarget}
 
@@ -280,6 +286,42 @@ This can be useful to test whether events can be dispatched. For example,
 if this function returns \false, non-blocking sockets cannot be used because
 the events from them would never be processed.
 
+
+\membersection{wxApp::MacNewFile}\label{wxappmacnewfile}
+
+\func{void}{MacNewFile}{\void}
+
+Mac specific. Called in response of an "open-application" Apple event.
+Override this to create a new document in your app.
+
+\membersection{wxApp::MacOpenFile}\label{wxappmacopenfile}
+
+\func{void}{MacOpenFile}{\param{const wxString\& }{fileName}}
+
+Mac specific. Called in response of an "open-document" Apple event. You need to 
+override this method in order to open a document file after the
+user double clicked on it or if the document file was dropped
+on either the running application or the application icon in
+Finder.
+
+\membersection{wxApp::MacOpenURL}\label{wxappmacopenurl}
+
+\func{void}{MacOpenURL}{\param{const wxString\& }{url}}
+
+Mac specific. Called in response of a "get-url" Apple event.
+
+\membersection{wxApp::MacPrintFile}\label{wxappmacprintfile}
+
+\func{void}{MacPrintFile}{\param{const wxString\& }{fileName}}
+
+Mac specific. Called in response of a "print-document" Apple event.
+
+
+\membersection{wxApp::MacReopenApp}\label{wxappmacreopenapp}
+
+\func{void}{MacReopenApp}{\void}
+
+Mac specific. Called in response of a "reopen-application" Apple event.
 
 \membersection{wxApp::MainLoop}\label{wxappmainloop}
 
