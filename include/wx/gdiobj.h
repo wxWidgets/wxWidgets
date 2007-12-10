@@ -31,6 +31,11 @@ class WXDLLIMPEXP_CORE wxGDIObject: public wxObject
 public:
     bool IsNull() const { return m_refData == NULL; }
 
+    // older version, for backwards compat
+    bool Ok() const { return IsOk(); }
+    
+    virtual bool IsOk() const { return (m_refData != NULL) ; }
+
 #if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXPALMOS__)
     // Creates the resource
     virtual bool RealizeResource() { return false; }
