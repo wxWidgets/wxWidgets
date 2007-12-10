@@ -2504,6 +2504,7 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/generic/clrpickerg.h \
 	wx/generic/collpaneg.h \
 	wx/generic/fdrepdlg.h \
+	wx/generic/filepickerg.h \
 	wx/generic/fontdlgg.h \
 	wx/generic/fontpickerg.h \
 	wx/generic/listctrl.h \
