@@ -44,7 +44,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
 {
     m_window = window;
     
-    wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
+    WindowRef rootwindow = (WindowRef) window->MacGetTopLevelWindowRef() ;
     if (!rootwindow)
         return;
 
