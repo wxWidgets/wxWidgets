@@ -147,10 +147,7 @@ void wxDataFormat::SetType( wxDataFormatId dataType )
 
 wxString wxDataFormat::GetId() const
 {
-    wxCHECK_MSG( !IsStandard(), wxEmptyString,
-                 wxT("name of predefined format cannot be retrieved") );
-
-    return m_id;
+    return wxCFStringRef(wxCFRetain((CFStringRef)m_format)).AsString();
 }
 
 void wxDataFormat::SetId( NativeFormat format )
