@@ -31771,6 +31771,9 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/src/png
 	mkdir $(DISTDIR)/src/jpeg
 	mkdir $(DISTDIR)/src/tiff
+	mkdir $(DISTDIR)/src/tiff/config
+	mkdir $(DISTDIR)/src/tiff/libtiff
+	mkdir $(DISTDIR)/src/tiff/m4
 	mkdir $(DISTDIR)/src/unix
 	mkdir $(DISTDIR)/src/xrc
 	$(CP_P) $(SRCDIR)/xrc/*.cpp $(DISTDIR)/src/xrc
@@ -31792,9 +31795,16 @@ ALL_GUI_DIST: ALL_DIST
 	$(CP_P) $(JPEGDIR)/*.h $(DISTDIR)/src/jpeg
 	$(CP_P) $(JPEGDIR)/*.c $(DISTDIR)/src/jpeg
 	$(CP_P) $(JPEGDIR)/README $(DISTDIR)/src/jpeg
-	$(CP_P) $(TIFFDIR)/*.h $(DISTDIR)/src/tiff
-	$(CP_P) $(TIFFDIR)/*.c $(DISTDIR)/src/tiff
+	$(CP_P) $(TIFFDIR)/config/* $(DISTDIR)/src/tiff/config
+	$(CP_P) $(TIFFDIR)/libtiff/*.c $(DISTDIR)/src/tiff/libtiff
+	$(CP_P) $(TIFFDIR)/libtiff/*.h $(DISTDIR)/src/tiff/libtiff
+	$(CP_P) $(TIFFDIR)/m4/* $(DISTDIR)/src/tiff/m4
 	$(CP_P) $(TIFFDIR)/README $(DISTDIR)/src/tiff
+	$(CP_P) $(TIFFDIR)/VERSION $(DISTDIR)/src/tiff
+	$(CP_P) $(TIFFDIR)/configure* $(DISTDIR)/src/tiff
+	$(CP_P) $(TIFFDIR)/aclocal.m4 $(DISTDIR)/src/tiff
+	$(CP_P) $(TIFFDIR)/autogen.sh $(DISTDIR)/src/tiff
+	$(CP_P) $(TIFFDIR)/Makefile* $(DISTDIR)/src/tiff
 
 BASE_DIST: ALL_DIST INTL_DIST
 	# make --disable-gui the default
