@@ -148,7 +148,7 @@ void MyDialog::OnAbout(wxCommandEvent& WXUNUSED(event))
           "(C) 1997 Julian Smart\n"
           "(C) 2007 Vadim Zeitlin";
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && wxUSE_TASKBARICON_BALLOONS
     m_taskBarIcon->ShowBalloon(title, message, 15000, wxICON_INFORMATION);
 #else // !__WXMSW__
     wxMessageBox(message, title, wxICON_INFORMATION, this);
