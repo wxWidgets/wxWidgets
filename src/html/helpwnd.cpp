@@ -315,17 +315,6 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
 {
     m_hfStyle = helpStyle;
 
-    wxImageList *ContentsImageList = new wxImageList(16, 16);
-    ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_BOOK,
-                                                  wxART_HELP_BROWSER,
-                                                  wxSize(16, 16)));
-    ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_FOLDER,
-                                                  wxART_HELP_BROWSER,
-                                                  wxSize(16, 16)));
-    ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_PAGE,
-                                                  wxART_HELP_BROWSER,
-                                                  wxSize(16, 16)));
-
     // Do the config in two steps. We read the HtmlWindow customization after we
     // create the window.
     if (m_Config)
@@ -365,7 +354,7 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
 #ifdef __WXMSW__
     wxBorder htmlWindowBorder = GetDefaultBorder();
     if (htmlWindowBorder == wxBORDER_SUNKEN)
-    	htmlWindowBorder = wxBORDER_SIMPLE;
+        htmlWindowBorder = wxBORDER_SIMPLE;
 #else
     wxBorder htmlWindowBorder = wxBORDER_SIMPLE;
 #endif
@@ -458,6 +447,17 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
                                        wxTR_LINES_AT_ROOT
 #endif
                                        );
+
+        wxImageList *ContentsImageList = new wxImageList(16, 16);
+        ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_BOOK,
+                                                      wxART_HELP_BROWSER,
+                                                      wxSize(16, 16)));
+        ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_FOLDER,
+                                                      wxART_HELP_BROWSER,
+                                                      wxSize(16, 16)));
+        ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_PAGE,
+                                                      wxART_HELP_BROWSER,
+                                                      wxSize(16, 16)));
 
         m_ContentsBox->AssignImageList(ContentsImageList);
 
