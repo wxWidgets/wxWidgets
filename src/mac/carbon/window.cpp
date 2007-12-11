@@ -336,7 +336,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
         // focus handling
         // different handling on OS X
         //
-            
+
         case kEventControlFocusPartChanged :
             // the event is emulated by wxmac for systems lower than 10.5
             {
@@ -349,9 +349,9 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                     if ( thisWindow->GetCaret() )
                         thisWindow->GetCaret()->OnKillFocus();
 #endif
-                    
+
                     wxLogTrace(_T("Focus"), _T("focus lost(%p)"), wx_static_cast(void*, thisWindow));
-                    
+
                     // remove this as soon as posting the synthesized event works properly
                     static bool inKillFocusEvent = false ;
 
@@ -371,12 +371,12 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                     wxLogTrace(_T("Focus"), _T("focus set(%p)"), wx_static_cast(void*, thisWindow));
                     wxChildFocusEvent eventFocus((wxWindow*)thisWindow);
                     thisWindow->GetEventHandler()->ProcessEvent(eventFocus);
-                    
+
 #if wxUSE_CARET
                     if ( thisWindow->GetCaret() )
                         thisWindow->GetCaret()->OnSetFocus();
 #endif
-                    
+
                     wxFocusEvent event(wxEVT_SET_FOCUS, thisWindow->GetId());
                     event.SetEventObject(thisWindow);
                     thisWindow->GetEventHandler()->ProcessEvent(event) ;
@@ -391,9 +391,9 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 {
                     // put a breakpoint here to catch focus everything events
                 }
-#endif                
+#endif
                 ControlPartCode controlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode );
-                
+
                 ControlPartCode previousControlPart = 0;
                 verify_noerr( HIViewGetFocusPart(controlRef, &previousControlPart));
 
@@ -405,25 +405,25 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 }
                 else
                     result = CallNextEventHandler(handler, event);
-                
+
                 if ( UMAGetSystemVersion() < 0x1050 )
                 {
 // set back to 0 if problems arise
-#if 1   
+#if 1
                     ControlPartCode currentControlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode );
                     // synthesize the event focus changed event
                     EventRef evRef = NULL ;
-                    
+
                     OSStatus err = MacCreateEvent(
                                          NULL , kEventClassControl , kEventControlFocusPartChanged , TicksToEventTime( TickCount() ) ,
                                          kEventAttributeUserEvent , &evRef );
                     verify_noerr( err );
-                    
+
                     wxMacCarbonEvent iEvent( evRef ) ;
                     iEvent.SetParameter<ControlRef>( kEventParamDirectObject , controlRef ) ;
                     iEvent.SetParameter<ControlPartCode>( kEventParamControlPreviousPart, typeControlPartCode, previousControlPart ) ;
                     iEvent.SetParameter<ControlPartCode>( kEventParamControlCurrentPart, typeControlPartCode, currentControlPart ) ;
-   
+
 #if 0
                     // TODO test this first, avoid double posts etc...
                     PostEventToQueue( GetMainEventQueue(), evRef , kEventPriorityHigh );
@@ -441,7 +441,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 #endif
 
                         wxLogTrace(_T("Focus"), _T("focus lost(%p)"), wx_static_cast(void*, thisWindow));
-                        
+
                         static bool inKillFocusEvent = false ;
 
                         if ( !inKillFocusEvent )
@@ -1367,7 +1367,7 @@ void wxWindowMac::SetFocus()
 
     // as we cannot rely on the control features to find out whether we are in full keyboard mode,
     // we can only leave in case of an error
-    
+
     wxLogTrace(_T("Focus"), _T("SetFocus(%p)"), wx_static_cast(void*, this));
 
     OSStatus err = m_peer->SetFocus( kControlFocusNextPart ) ;
@@ -2553,14 +2553,14 @@ void  wxWindowMac::MacPaintGrowBox()
 
         CGContextRef cgContext = (CGContextRef) MacGetCGContextRef() ;
         wxASSERT( cgContext ) ;
-        
+
         m_peer->GetRect( &rect ) ;
 
         int size = m_hScrollBar ? m_hScrollBar->GetSize().y : ( m_vScrollBar ? m_vScrollBar->GetSize().x : MAC_SCROLLBAR_SIZE ) ;
         CGRect cgrect = CGRectMake( rect.right - size , rect.bottom - size , size , size ) ;
         CGPoint cgpoint = CGPointMake( rect.right - size , rect.bottom - size ) ;
         CGContextSaveGState( cgContext );
-        
+
         if ( m_macBackgroundBrush.Ok() && m_macBackgroundBrush.GetStyle() != wxTRANSPARENT )
         {
             wxMacCoreGraphicsColour bkgnd( m_macBackgroundBrush ) ;
@@ -2568,7 +2568,7 @@ void  wxWindowMac::MacPaintGrowBox()
         }
         else
         {
-            CGContextSetRGBFillColor( cgContext, 1.0, 1.0 , 1.0 , 1.0 ); 
+            CGContextSetRGBFillColor( cgContext, 1.0, 1.0 , 1.0 , 1.0 );
         }
         CGContextFillRect( cgContext, cgrect );
         CGContextRestoreGState( cgContext );
@@ -2833,7 +2833,7 @@ wxWindow *wxWindowBase::DoFindFocus()
 {
     ControlRef control ;
     GetKeyboardFocus( GetUserFocusWindow() , &control ) ;
-    wxLogTrace(_T("Focus"), _T("FindFocus(windowref=%p, peer =%p, wxwindow = %p)"), 
+    wxLogTrace(_T("Focus"), _T("FindFocus(windowref=%p, peer =%p, wxwindow = %p)"),
                 wx_static_cast(void*, GetUserFocusWindow()), wx_static_cast(void*, control)
                , wx_static_cast(void*, wxFindControlFromMacControl( control )));
     return (wxWindow*)wxFindControlFromMacControl( control ) ;
@@ -3546,6 +3546,7 @@ void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
         wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU,
                                   this->GetId(),
                                   this->ClientToScreen(event.GetPosition()));
+        evtCtx.SetEventObject(this);
         if ( ! GetEventHandler()->ProcessEvent(evtCtx) )
             event.Skip() ;
     }
