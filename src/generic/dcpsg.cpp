@@ -1342,11 +1342,9 @@ void wxPostScriptDCImpl::DoDrawText( const wxString& text, wxCoord x, wxCoord y 
     PsPrint( buffer );
     PsPrint( "(" );
 
-    size_t len = strlen(textbuf);
-    size_t i;
-    for (i = 0; i < len; i++)
+    for ( const char *p = textbuf; *p != '\0'; p++ )
     {
-        int c = (unsigned char) textbuf[i];
+        int c = (unsigned char)*p;
         if (c == ')' || c == '(' || c == '\\')
         {
             /* Cope with special characters */
@@ -1450,26 +1448,27 @@ void wxPostScriptDCImpl::DoDrawRotatedText( const wxString& text, wxCoord x, wxC
 
     PsPrint( "(" );
     const wxWX2MBbuf textbuf = text.mb_str();
-    size_t len = strlen(textbuf);
-    size_t i;
-    for (i = 0; i < len; i++)
+    if ( textbuf )
     {
-        int c = (unsigned char) textbuf[i];
-        if (c == ')' || c == '(' || c == '\\')
+        for ( const char *p = textbuf; *p != '\0'; p++ )
         {
-            /* Cope with special characters */
-            PsPrint( "\\" );
-            PsPrint( (char) c );
-        }
-        else if ( c >= 128 )
-        {
-            /* Cope with character codes > 127 */
-            buffer.Printf( "\\%o", c);
-            PsPrint( buffer );
-        }
-        else
-        {
-            PsPrint( (char) c );
+            int c = (unsigned char)*p;
+            if (c == ')' || c == '(' || c == '\\')
+            {
+                /* Cope with special characters */
+                PsPrint( "\\" );
+                PsPrint( (char) c );
+            }
+            else if ( c >= 128 )
+            {
+                /* Cope with character codes > 127 */
+                buffer.Printf( "\\%o", c);
+                PsPrint( buffer );
+            }
+            else
+            {
+                PsPrint( (char) c );
+            }
         }
     }
 
