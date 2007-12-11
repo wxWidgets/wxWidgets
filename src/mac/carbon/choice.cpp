@@ -50,14 +50,17 @@ bool wxChoice::Create(wxWindow *parent,
     const wxValidator& validator,
     const wxString& name )
 {
-    return Create(
-        parent, id, pos, size, 0, NULL,
-        style, validator, name );
+    if ( !Create( parent, id, pos, size, 0, NULL, style, validator, name ) )
+        return false;
 
     Append( choices );
 
     if ( !choices.empty() )
         SetSelection( 0 );
+
+    SetInitialSize( size );
+
+    return true;
 }
 
 bool wxChoice::Create(wxWindow *parent,
