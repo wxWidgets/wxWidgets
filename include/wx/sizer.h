@@ -814,7 +814,7 @@ public:
 protected:
     // helpers for our code: this returns the component of the given wxSize in
     // the direction of the sizer and in the other direction, respectively
-    int SizeInMajorDir(const wxSize& sz) const
+    int GetSizeInMajorDir(const wxSize& sz) const
     {
         return m_orient == wxHORIZONTAL ? sz.x : sz.y;
     }
@@ -829,7 +829,7 @@ protected:
         return m_orient == wxHORIZONTAL ? pt.x : pt.y;
     }
 
-    int SizeInMinorDir(const wxSize& sz) const
+    int GetSizeInMinorDir(const wxSize& sz) const
     {
         return m_orient == wxHORIZONTAL ? sz.y : sz.x;
     }
