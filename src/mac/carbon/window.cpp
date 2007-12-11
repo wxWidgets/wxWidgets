@@ -258,8 +258,8 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                             CGContextClearRect( cgContext, bounds );
                         }
 
-                        
-                        
+
+
                         if ( thisWindow->MacDoRedraw( updateRgn , cEvent.GetTicks() ) )
                             result = noErr ;
 
@@ -304,7 +304,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
         // focus handling
         // different handling on OS X
         //
-            
+
         case kEventControlFocusPartChanged :
             // the event is emulated by wxmac for systems lower than 10.5
             {
@@ -315,7 +315,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 {
                     thisWindow->MacInvalidateBorders();
                 }
-                
+
                 if ( currentControlPart == 0 )
                 {
                     // kill focus
@@ -323,9 +323,9 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                     if ( thisWindow->GetCaret() )
                         thisWindow->GetCaret()->OnKillFocus();
 #endif
-                    
+
                     wxLogTrace(_T("Focus"), _T("focus lost(%p)"), wx_static_cast(void*, thisWindow));
-                    
+
                     // remove this as soon as posting the synthesized event works properly
                     static bool inKillFocusEvent = false ;
 
@@ -345,12 +345,12 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                     wxLogTrace(_T("Focus"), _T("focus set(%p)"), wx_static_cast(void*, thisWindow));
                     wxChildFocusEvent eventFocus((wxWindow*)thisWindow);
                     thisWindow->HandleWindowEvent(eventFocus);
-                    
+
 #if wxUSE_CARET
                     if ( thisWindow->GetCaret() )
                         thisWindow->GetCaret()->OnSetFocus();
 #endif
-                    
+
                     wxFocusEvent event(wxEVT_SET_FOCUS, thisWindow->GetId());
                     event.SetEventObject(thisWindow);
                     thisWindow->HandleWindowEvent(event) ;
@@ -365,9 +365,9 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 {
                     // put a breakpoint here to catch focus everything events
                 }
-#endif                
+#endif
                 ControlPartCode controlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode );
-                
+
                 ControlPartCode previousControlPart = 0;
                 verify_noerr( HIViewGetFocusPart(controlRef, &previousControlPart));
 
@@ -379,25 +379,25 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 }
                 else
                     result = CallNextEventHandler(handler, event);
-                
+
                 if ( UMAGetSystemVersion() < 0x1050 )
                 {
 // set back to 0 if problems arise
-#if 1   
+#if 1
                     ControlPartCode currentControlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode );
                     // synthesize the event focus changed event
                     EventRef evRef = NULL ;
-                    
+
                     OSStatus err = MacCreateEvent(
                                          NULL , kEventClassControl , kEventControlFocusPartChanged , TicksToEventTime( TickCount() ) ,
                                          kEventAttributeUserEvent , &evRef );
                     verify_noerr( err );
-                    
+
                     wxMacCarbonEvent iEvent( evRef ) ;
                     iEvent.SetParameter<ControlRef>( kEventParamDirectObject , controlRef ) ;
                     iEvent.SetParameter<ControlPartCode>( kEventParamControlPreviousPart, typeControlPartCode, previousControlPart ) ;
                     iEvent.SetParameter<ControlPartCode>( kEventParamControlCurrentPart, typeControlPartCode, currentControlPart ) ;
-   
+
 #if 0
                     // TODO test this first, avoid double posts etc...
                     PostEventToQueue( GetMainEventQueue(), evRef , kEventPriorityHigh );
@@ -415,7 +415,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 #endif
 
                         wxLogTrace(_T("Focus"), _T("focus lost(%p)"), wx_static_cast(void*, thisWindow));
-                        
+
                         static bool inKillFocusEvent = false ;
 
                         if ( !inKillFocusEvent )
@@ -454,7 +454,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 
         case kEventControlGetClickActivation :
             {
-            	// fix to always have a proper activation for DataBrowser controls (stay in bkgnd otherwise)
+                // fix to always have a proper activation for DataBrowser controls (stay in bkgnd otherwise)
                 WindowRef owner = cEvent.GetParameter<WindowRef>(kEventParamWindowRef);
                 if ( !IsWindowActive(owner) )
                 {
@@ -605,7 +605,7 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
         charBuf[ numChars - 1 ] = 0;
 #if SIZEOF_WCHAR_T == 2
         uniChars = (wchar_t*) charBuf ;
-/*        memcpy( uniChars , charBuf , numChars * 2 ) ;*/	// is there any point in copying charBuf over itself? (in fact, memcpy isn't even guaranteed to work correctly if the source and destination ranges overlap...)
+/*        memcpy( uniChars , charBuf , numChars * 2 ) ;*/   // is there any point in copying charBuf over itself? (in fact, memcpy isn't even guaranteed to work correctly if the source and destination ranges overlap...)
 #else
         // the resulting string will never have more chars than the utf16 version, so this is safe
         wxMBConvUTF16 converter ;
@@ -627,29 +627,29 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
 
                     UInt32 message = uniChars[pos] < 128 ? (char)uniChars[pos] : '?';
 /*
-	NB: faking a charcode here is problematic. The kEventTextInputUpdateActiveInputArea event is sent
-	multiple times to update the active range during inline input, so this handler will often receive
-	uncommited text, which should usually not trigger side effects. It might be a good idea to check the
-	kEventParamTextInputSendFixLen parameter and verify if input is being confirmed (see CarbonEvents.h).
-	On the other hand, it can be useful for some applications to react to uncommitted text (for example,
-	to update a status display), as long as it does not disrupt the inline input session. Ideally, wx
-	should add new event types to support advanced text input. For now, I would keep things as they are.
+    NB: faking a charcode here is problematic. The kEventTextInputUpdateActiveInputArea event is sent
+    multiple times to update the active range during inline input, so this handler will often receive
+    uncommited text, which should usually not trigger side effects. It might be a good idea to check the
+    kEventParamTextInputSendFixLen parameter and verify if input is being confirmed (see CarbonEvents.h).
+    On the other hand, it can be useful for some applications to react to uncommitted text (for example,
+    to update a status display), as long as it does not disrupt the inline input session. Ideally, wx
+    should add new event types to support advanced text input. For now, I would keep things as they are.
 
-	However, the code that was being used caused additional problems:
+    However, the code that was being used caused additional problems:
                     UInt32 message = (0  << 8) + ((char)uniChars[pos] );
-	Since it simply truncated the unichar to the last byte, it ended up causing weird bugs with inline
-	input, such as switching to another field when one attempted to insert the character U+4E09 (the kanji
-	for "three"), because it was truncated to 09 (kTabCharCode), which was later "converted" to WXK_TAB
-	(still 09) in wxMacTranslateKey; or triggering the default button when one attempted to insert U+840D
-	(the kanji for "name"), which got truncated to 0D and interpreted as a carriage return keypress.
-	Note that even single-byte characters could have been misinterpreted, since MacRoman charcodes only
-	overlap with Unicode within the (7-bit) ASCII range.
-	But simply passing a NUL charcode would disable text updated events, because wxTextCtrl::OnChar checks
-	for codes within a specific range. Therefore I went for the solution seen above, which keeps ASCII
-	characters as they are and replaces the rest with '?', ensuring that update events are triggered.
-	It would be better to change wxTextCtrl::OnChar to look at the actual unicode character instead, but
-	I don't have time to look into that right now.
-		-- CL
+    Since it simply truncated the unichar to the last byte, it ended up causing weird bugs with inline
+    input, such as switching to another field when one attempted to insert the character U+4E09 (the kanji
+    for "three"), because it was truncated to 09 (kTabCharCode), which was later "converted" to WXK_TAB
+    (still 09) in wxMacTranslateKey; or triggering the default button when one attempted to insert U+840D
+    (the kanji for "name"), which got truncated to 0D and interpreted as a carriage return keypress.
+    Note that even single-byte characters could have been misinterpreted, since MacRoman charcodes only
+    overlap with Unicode within the (7-bit) ASCII range.
+    But simply passing a NUL charcode would disable text updated events, because wxTextCtrl::OnChar checks
+    for codes within a specific range. Therefore I went for the solution seen above, which keeps ASCII
+    characters as they are and replaces the rest with '?', ensuring that update events are triggered.
+    It would be better to change wxTextCtrl::OnChar to look at the actual unicode character instead, but
+    I don't have time to look into that right now.
+        -- CL
 */
                     if ( wxTheApp->MacSendCharEvent(
                                                     focus , message , 0 , when , 0 , 0 , uniChars[pos] ) )
@@ -2263,21 +2263,21 @@ void  wxWindowMac::MacPaintGrowBox()
 
         CGContextRef cgContext = (CGContextRef) MacGetCGContextRef() ;
         wxASSERT( cgContext ) ;
-        
+
         m_peer->GetRect( &rect ) ;
 
         int size = m_hScrollBar ? m_hScrollBar->GetSize().y : ( m_vScrollBar ? m_vScrollBar->GetSize().x : MAC_SCROLLBAR_SIZE ) ;
         CGRect cgrect = CGRectMake( rect.right - size , rect.bottom - size , size , size ) ;
         CGPoint cgpoint = CGPointMake( rect.right - size , rect.bottom - size ) ;
         CGContextSaveGState( cgContext );
-        
+
         if ( m_backgroundColour.Ok() )
         {
-            CGContextSetFillColorWithColor( cgContext, m_backgroundColour.GetCGColor() ); 
+            CGContextSetFillColorWithColor( cgContext, m_backgroundColour.GetCGColor() );
         }
         else
         {
-            CGContextSetRGBFillColor( cgContext, 1.0, 1.0 , 1.0 , 1.0 ); 
+            CGContextSetRGBFillColor( cgContext, 1.0, 1.0 , 1.0 , 1.0 );
         }
         CGContextFillRect( cgContext, cgrect );
         CGContextRestoreGState( cgContext );
@@ -3155,6 +3155,7 @@ void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
         wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU,
                                   this->GetId(),
                                   this->ClientToScreen(event.GetPosition()));
+        evtCtx.SetEventObject(this);
         if ( ! HandleWindowEvent(evtCtx) )
             event.Skip() ;
     }
