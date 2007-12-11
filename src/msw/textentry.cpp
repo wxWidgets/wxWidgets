@@ -375,6 +375,8 @@ bool wxTextEntry::AutoComplete(const wxArrayString& choices)
     pAutoComplete->Release();
     return true;
 #else // !HAS_AUTOCOMPLETE
+    wxUnusedVar(choices);
+
     return false;
 #endif // HAS_AUTOCOMPLETE/!HAS_AUTOCOMPLETE
 }
