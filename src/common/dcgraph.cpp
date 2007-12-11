@@ -143,7 +143,7 @@ void wxGCDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
 
 bool wxGCDC::StartDoc( const wxString& WXUNUSED(message) ) 
 {
-    return false;
+    return true;
 }
 
 void wxGCDC::EndDoc() 
