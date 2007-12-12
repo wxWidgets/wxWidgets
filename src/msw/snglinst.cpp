@@ -40,7 +40,7 @@
 // wxSingleInstanceCheckerImpl: the real implementation class
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxSingleInstanceCheckerImpl
+class WXDLLIMPEXP_BASE wxSingleInstanceCheckerImpl
 {
 public:
     wxSingleInstanceCheckerImpl()

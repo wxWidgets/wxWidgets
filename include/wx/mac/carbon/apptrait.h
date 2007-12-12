@@ -16,7 +16,7 @@
 // wxGUI/ConsoleAppTraits: must derive from wxAppTraits, not wxAppTraitsBase
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxConsoleAppTraits : public wxConsoleAppTraitsBase
+class WXDLLIMPEXP_BASE wxConsoleAppTraits : public wxConsoleAppTraitsBase
 {
 public:
     // no timer support in wxBase yet

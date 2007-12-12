@@ -19,7 +19,7 @@ class wxPipe;
 // wxAppTraits: the Unix version adds extra hooks needed by Unix code
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxAppTraits : public wxAppTraitsBase
+class WXDLLIMPEXP_BASE wxAppTraits : public wxAppTraitsBase
 {
 public:
     // wxExecute() support methods

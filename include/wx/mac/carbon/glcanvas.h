@@ -20,7 +20,7 @@
 #  include <agl.h>
 #endif
 
-class WXDLLEXPORT wxGLContext : public wxGLContextBase
+class WXDLLIMPEXP_GL wxGLContext : public wxGLContextBase
 {
 public:
     wxGLContext(wxGLCanvas *win, const wxGLContext *other = NULL);
@@ -37,7 +37,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxGLContext)
 };
 
-class WXDLLEXPORT wxGLCanvas : public wxGLCanvasBase
+class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasBase
 {
 public:
     wxGLCanvas(wxWindow *parent,

@@ -15,7 +15,7 @@
 class WXDLLIMPEXP_FWD_CORE wxIcon;
 class WXDLLIMPEXP_FWD_CORE wxMenu;
 
-class WXDLLEXPORT wxTaskBarIcon : public wxTaskBarIconBase
+class WXDLLIMPEXP_ADV wxTaskBarIcon : public wxTaskBarIconBase
 {
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxTaskBarIcon)
 public:

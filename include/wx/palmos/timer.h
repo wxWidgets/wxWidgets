@@ -12,7 +12,7 @@
 #ifndef _WX_TIMER_H_
 #define _WX_TIMER_H_
 
-class WXDLLEXPORT wxTimer : public wxTimerBase
+class WXDLLIMPEXP_BASE wxTimer : public wxTimerBase
 {
 friend void wxProcessTimer(wxTimer& timer);
 

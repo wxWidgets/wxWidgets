@@ -385,13 +385,13 @@ static inline wxString wxLogSysErrorHelper(long err)
     return wxString::Format(_(" (error %ld: %s)"), err, wxSysErrorMsg(err));
 }
 
-void WXDLLEXPORT wxVLogSysError(const wxString& format, va_list argptr)
+void WXDLLIMPEXP_BASE wxVLogSysError(const wxString& format, va_list argptr)
 {
     wxVLogSysError(wxSysErrorCode(), format, argptr);
 }
 
 #if !wxUSE_UTF8_LOCALE_ONLY
-void WXDLLEXPORT wxDoLogSysErrorWchar(const wxChar *format, ...)
+void WXDLLIMPEXP_BASE wxDoLogSysErrorWchar(const wxChar *format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
@@ -401,7 +401,7 @@ void WXDLLEXPORT wxDoLogSysErrorWchar(const wxChar *format, ...)
 #endif // !wxUSE_UTF8_LOCALE_ONLY
 
 #if wxUSE_UNICODE_UTF8
-void WXDLLEXPORT wxDoLogSysErrorUtf8(const char *format, ...)
+void WXDLLIMPEXP_BASE wxDoLogSysErrorUtf8(const char *format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
@@ -410,7 +410,7 @@ void WXDLLEXPORT wxDoLogSysErrorUtf8(const char *format, ...)
 }
 #endif // wxUSE_UNICODE_UTF8
 
-void WXDLLEXPORT wxVLogSysError(long err, const wxString& format, va_list argptr)
+void WXDLLIMPEXP_BASE wxVLogSysError(long err, const wxString& format, va_list argptr)
 {
     if ( wxLog::IsEnabled() ) {
         wxLog::OnLog(wxLOG_Error,
@@ -420,7 +420,7 @@ void WXDLLEXPORT wxVLogSysError(long err, const wxString& format, va_list argptr
 }
 
 #if !wxUSE_UTF8_LOCALE_ONLY
-void WXDLLEXPORT wxDoLogSysErrorWchar(long lErrCode, const wxChar *format, ...)
+void WXDLLIMPEXP_BASE wxDoLogSysErrorWchar(long lErrCode, const wxChar *format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
@@ -430,7 +430,7 @@ void WXDLLEXPORT wxDoLogSysErrorWchar(long lErrCode, const wxChar *format, ...)
 #endif // !wxUSE_UTF8_LOCALE_ONLY
 
 #if wxUSE_UNICODE_UTF8
-void WXDLLEXPORT wxDoLogSysErrorUtf8(long lErrCode, const char *format, ...)
+void WXDLLIMPEXP_BASE wxDoLogSysErrorUtf8(long lErrCode, const char *format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
@@ -441,7 +441,7 @@ void WXDLLEXPORT wxDoLogSysErrorUtf8(long lErrCode, const char *format, ...)
 
 #ifdef __WATCOMC__
 // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-void WXDLLEXPORT wxDoLogSysErrorWchar(unsigned long lErrCode, const wxChar *format, ...)
+void WXDLLIMPEXP_BASE wxDoLogSysErrorWchar(unsigned long lErrCode, const wxChar *format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
@@ -449,7 +449,7 @@ void WXDLLEXPORT wxDoLogSysErrorWchar(unsigned long lErrCode, const wxChar *form
     va_end(argptr);
 }
 
-void WXDLLEXPORT wxVLogSysError(unsigned long err, const wxString& format, va_list argptr)
+void WXDLLIMPEXP_BASE wxVLogSysError(unsigned long err, const wxString& format, va_list argptr)
     { wxVLogSysError((long)err, format, argptr); }
 #endif // __WATCOMC__
 

@@ -20,7 +20,7 @@
 
 class wxTimerDesc;
 
-class WXDLLEXPORT wxGenericTimerImpl : public wxTimerImpl
+class WXDLLIMPEXP_BASE wxGenericTimerImpl : public wxTimerImpl
 {
 public:
     wxGenericTimerImpl(wxTimer* timer) : wxTimerImpl(timer) { Init(); }

@@ -1703,7 +1703,7 @@ bool wxFindFileInPath(wxString *pStr, const wxString& szPath, const wxString& sz
     return false;
 }
 
-void WXDLLEXPORT wxSplitPath(const wxString& fileName,
+void WXDLLIMPEXP_BASE wxSplitPath(const wxString& fileName,
                              wxString *pstrPath,
                              wxString *pstrName,
                              wxString *pstrExt)
@@ -1713,7 +1713,7 @@ void WXDLLEXPORT wxSplitPath(const wxString& fileName,
 
 #if wxUSE_DATETIME
 
-time_t WXDLLEXPORT wxFileModificationTime(const wxString& filename)
+time_t WXDLLIMPEXP_BASE wxFileModificationTime(const wxString& filename)
 {
     wxDateTime mtime;
     if ( !wxFileName(filename).GetTimes(NULL, &mtime, NULL) )
@@ -1729,7 +1729,7 @@ time_t WXDLLEXPORT wxFileModificationTime(const wxString& filename)
 // Returns 0 if none or if there's a problem.
 // filterStr is in the form: "All files (*.*)|*.*|JPEG Files (*.jpeg)|*.jpeg"
 
-int WXDLLEXPORT wxParseCommonDialogsFilter(const wxString& filterStr,
+int WXDLLIMPEXP_BASE wxParseCommonDialogsFilter(const wxString& filterStr,
                                            wxArrayString& descriptions,
                                            wxArrayString& filters)
 {

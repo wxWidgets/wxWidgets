@@ -28,7 +28,7 @@ class WXDLLIMPEXP_FWD_BASE wxFileOutputStream;
 
 
 
-class WXDLLIMPEXP_FWD_BASE wxSVGFileDC;
+class WXDLLIMPEXP_FWD_CORE wxSVGFileDC;
 
 class WXDLLIMPEXP_CORE wxSVGFileDCImpl : public wxDCImpl
 {

@@ -17,7 +17,7 @@
 
 #include "wx/object.h"
 
-class WXDLLEXPORT wxSound : public wxSoundBase
+class WXDLLIMPEXP_ADV wxSound : public wxSoundBase
 {
 public:
   wxSound();

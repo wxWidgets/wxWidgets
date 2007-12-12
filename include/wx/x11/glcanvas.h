@@ -15,7 +15,7 @@
 
 #include "wx/unix/glx11.h"
 
-class WXDLLEXPORT wxGLCanvas : public wxGLCanvasX11
+class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasX11
 {
 public:
     wxGLCanvas(wxWindow *parent,

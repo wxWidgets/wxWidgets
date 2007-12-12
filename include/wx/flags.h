@@ -154,7 +154,7 @@ private :
 };
 
 #define WX_DEFINE_FLAGS( flags ) \
-    class WXDLLEXPORT flags \
+    class WXDLLIMPEXP_BASE flags \
     {\
     public : \
         flags(long data=0) :m_data(data) {} \

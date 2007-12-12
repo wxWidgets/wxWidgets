@@ -84,7 +84,7 @@ enum wxAnimationType
 // wxAnimationDecoder class
 // --------------------------------------------------------------------------
 
-class WXDLLEXPORT wxAnimationDecoder : public wxObjectRefData
+class WXDLLIMPEXP_ADV wxAnimationDecoder : public wxObjectRefData
 {
 public:
     wxAnimationDecoder()

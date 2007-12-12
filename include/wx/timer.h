@@ -116,7 +116,7 @@ protected:
 // wxTimerRunner: starts the timer in its ctor, stops in the dtor
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTimerRunner
+class WXDLLIMPEXP_BASE wxTimerRunner
 {
 public:
     wxTimerRunner(wxTimer& timer) : m_timer(timer) { }
