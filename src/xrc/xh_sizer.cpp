@@ -239,8 +239,10 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
             sizer->Fit(m_parentAsWindow);
         m_node = nd;
 
-        if (m_parentAsWindow->GetWindowStyle() & (wxMAXIMIZE_BOX | wxRESIZE_BORDER))
+        if (m_parentAsWindow->IsTopLevel())
+        {
             sizer->SetSizeHints(m_parentAsWindow);
+        }
     }
 
     return sizer;
