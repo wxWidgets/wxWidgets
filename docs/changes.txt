@@ -158,6 +158,15 @@ Deprecated methods and their replacements
 Major new features in this release
 ----------------------------------
 
+- wxWidgets is now always built with Unicode support but provides the same
+  simple (i.e. "char *"-tolerant) API as was available in ANSI build in the
+  past.
+
+- wxWidgets may now use either wchar_t (UTF-16/32) or UTF-8 internally,
+  depending on what is optimal for the target platform.
+
+- Events loops and timers can now be used in wxBase, without GUI.
+
 
 2.9.0
 -----
