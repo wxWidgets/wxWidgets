@@ -19,44 +19,49 @@
 <output indent="yes"/>
 
 <variable
-    name="top-level-base"
-    select="/*/xsl:import |
-            /*/xsl:include |
-            /*/xsl:attribute-set |
-            /*/xsl:character-map |
-            /*/xsl:decimal-format |
-            /*/xsl:function |
-            /*/xsl:import-schema |
-            /*/xsl:key |
-            /*/xsl:namespace-alias |
-            /*/xsl:output |
-            /*/xsl:param |
-            /*/xsl:preserve-space |
-            /*/xsl:strip-space |
-            /*/xsl:variable"/>
+    name="root"
+    select="//*[not(ancestor-or-self::*[name() != name(/*)])]"/>
 
 <variable
+    name="includes"
+    select="$root[position() > 1]"/>
+
+<variable
+    xmlns:func="http://exslt.org/functions"
     name="top-level"
-    select="$top-level-base |
-            /*/xsl:template"/>
-
-<variable
-    name="top-level-copy"
-    select="$top-level-base |
-            /*/xsl:template
-                [not(following-sibling::xsl:template/@name = @name)]"/>
+    select="$root/xsl:import |
+            $root/xsl:include |
+            $root/xsl:attribute-set |
+            $root/xsl:character-map |
+            $root/xsl:decimal-format |
+            $root/xsl:function |
+            $root/xsl:import-schema |
+            $root/xsl:key |
+            $root/xsl:namespace-alias |
+            $root/xsl:output |
+            $root/xsl:param |
+            $root/xsl:preserve-space |
+            $root/xsl:strip-space |
+            $root/xsl:template |
+            $root/xsl:variable |
+            $root/func:function"/>
 
 <template match="/">
     <XSL:transform>
-        <copy-of select="/*/namespace::*"/>
+        <copy-of select="$root/namespace::*"/>
 
-        <for-each select="/*/@xsl:*">
+        <for-each select="$root/@xsl:*">
             <attribute name="{local-name()}">
                 <value-of select="."/>
             </attribute>
         </for-each>
 
-        <apply-templates mode="copy-xsl" select="$top-level-copy"/>
+        <for-each select="$top-level">
+            <if test="not(../ancestor::*/*[name() = name(current()) and @name = current()/@name])">
+                <apply-templates mode="copy-xsl" select="."/>
+            </if>
+        </for-each>
+
         <apply-templates select="*"/>
     </XSL:transform>
 </template>
@@ -66,11 +71,22 @@
         <call-template name="coord-pattern"/>
     </variable>
 
+    <variable name="is-xsl">
+        <call-template name="is-xsl"/>
+    </variable>
+
     <XSL:template match="*[generate-id() = generate-id(document('', /){$pattern})]">
         <copy-of select="namespace::*"/>
         <choose>
-            <when test="/*/xsl:template[@name = name(current())]">
-                <call-template name="expand"/>
+            <when test="$root/xsl:template[@name = name(current())]">
+                <call-template name="expand">
+                    <with-param name="inside-xsl" select="$is-xsl = 'true'"/>
+                </call-template>
+            </when>
+            <when test="count($includes | .) = count($includes)">
+                <if test="node()">
+                    <XSL:apply-templates select="node()"/>
+                </if>
             </when>
             <when test="count($top-level | .) != count($top-level)">
                 <call-template name="create-context"/>
@@ -78,7 +94,7 @@
         </choose>
     </XSL:template>
 
-    <if test="not(self::xsl:*)">
+    <if test="$is-xsl != 'true'">
         <apply-templates select="node()"/>
     </if>
 </template>
@@ -89,7 +105,7 @@
     <copy/>
 </template>
 
-<template mode="copy-xsl" match="*[/*/xsl:template/@name = name()]">
+<template mode="copy-xsl" match="*[//xsl:template[not(ancestor::*[name() != name(/*)])]/@name = name()]">
     <choose>
         <when test="ancestor::xsl:template[@name = name(current())]">
             <XSL:choose>
@@ -106,7 +122,9 @@
             </XSL:choose>
         </when>
         <otherwise>
-            <call-template name="expand"/>
+            <call-template name="expand">
+                <with-param name="inside-xsl" select="true()"/>
+            </call-template>
         </otherwise>
     </choose>
 </template>
@@ -132,14 +150,38 @@
     </for-each>
 </template>
 
+<template name="is-xsl">
+    <param name="element" select="."/>
+    <choose>
+        <when test="$element/self::xsl:*">
+            <value-of select="true()"/>
+        </when>
+        <otherwise>
+            <variable name="namespace" select="namespace-uri($element)"/>
+            <variable name="extension-namespaces">
+                <for-each select="$element/ancestor-or-self::*/@xsl:extension-element-prefixes">
+                    <variable name="prefixes"
+                              select="concat(' ', normalize-space(.), ' ')"/>
+                    <variable name="namespaces"
+                              select="../namespace::*[contains($prefixes, concat(' ', name(), ' ')) or
+                                                      (name() = '' and contains($prefixes, ' #default '))]"/>
+                    <value-of select="$namespaces[. = $namespace]"/>
+                </for-each>
+            </variable>
+            <value-of select="$extension-namespaces != ''"/>
+        </otherwise>
+    </choose>
+</template>
+
 <template name="expand">
-    <variable name="params" select="/*/xsl:template[@name = name(current())]/xsl:param"/>
+    <param name="inside-xsl"/>
+    <variable name="params" select="$root/xsl:template[@name = name(current())]/xsl:param"/>
 
     <XSL:call-template name="{name()}">
-        <if test="$params">
+        <if test="node() and $params">
             <XSL:with-param name="{$params[1]/@name}">
                 <choose>
-                    <when test="ancestor-or-self::xsl:*">
+                    <when test="$inside-xsl">
                         <apply-templates mode="copy-xsl" select="node()"/>
                     </when>
                     <otherwise>
@@ -153,11 +195,24 @@
         </if>
 
         <for-each select="@*">
-            <XSL:with-param name="{name()}">
-                <call-template name="avt">
-                    <with-param name="string" select="."/>
+            <variable name="expr">
+                <call-template name="before">
+                    <with-param name="string" select="substring-after(., '{')"/>
+                    <with-param name="target">}</with-param>
                 </call-template>
-            </XSL:with-param>
+            </variable>
+            <choose>
+                <when test="string-length($expr) = string-length(.) - 2">
+                    <XSL:with-param name="{name()}" select="{$expr}"/>
+                </when>
+                <otherwise>
+                    <XSL:with-param name="{name()}">
+                        <call-template name="avt">
+                            <with-param name="string" select="."/>
+                        </call-template>
+                    </XSL:with-param>
+                </otherwise>
+            </choose>
         </for-each>
     </XSL:call-template>
 </template>
@@ -181,8 +236,13 @@
 
     <XSL:for-each select="{$parent-pattern}/*">
         <XSL:if test="count({$pattern} | .) = 1">
+            <variable name="is-xsl">
+                <call-template name="is-xsl">
+                    <with-param name="element" select="$elements[1]"/>
+                </call-template>
+            </variable>
             <choose>
-                <when test="$elements[1]/self::xsl:*">
+                <when test="$is-xsl = 'true'">
                     <apply-templates mode="copy-xsl" select="$elements[1]"/>
                     <if test="$elements[2]">
                         <call-template name="create-context">

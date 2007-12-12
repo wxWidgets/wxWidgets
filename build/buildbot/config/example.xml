@@ -16,15 +16,12 @@
     http://www.wxwidgets.org/wiki/index.php/Development:_Buildbot
 -->
 
-<bot xmlns:xi="http://www.w3.org/2001/XInclude"
-     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-     xmlns:exsl="http://exslt.org/common"
-     xsl:version="1.0">
+<bot xmlns:xi="http://www.w3.org/2001/XInclude">
 
 <!--
     Common declarations.
 -->
-<xi:include href="include.xml" xpointer="xpointer(*/*)"/>
+<xi:include href="include/defs.xml"/>
 
 <!--
     Notes:
@@ -44,28 +41,39 @@
     <name>Linux x86_64 wxGTK Stable</name>
 
     <!--
-        Unique. The name of a directory for the bulid. On most slaves must
-        be a single name, on the Testdrive builds it must be a path such as
-        '/tmp/wx/td_gtk'.
+        Unique. The name of a directory for the bulid.
     -->
     <builddir>example_gtk</builddir>
 
     <!--
-        The name of a scheduler that will trigger this build. The schedulers
-        are usually defined in common.xml, look in there to see if there is
-        already one you can use, and add a new one if not.
+        The name of a scheduler that will trigger this build. common.xml
+        currently defines:
+        
+        * 'trunk_quick' and 'stable_quick'. These trigger a build after
+          every source change on the trunk and stable branches respectively.
 
-        The 'trunk_quick' and 'stable_quick' schedulers currently in
-        common.xml trigger a build after every source change on the trunk
-        and stable branches respectively. There are also daily and weekly
-        schedulers 'daily_6am', 'monday_6am', 'tuesday_6am' and so on.
+        * Weekly schedulers that fire once a week. There is one of these
+          for every half hour of the week, e.g. you have monday_0600,
+          monday_0630, etc..
+
+        * Daily schedulers that fire once a day. There is also one of these
+          for every half hour, e.g. daily_0600, daily_0630, etc..
+
+        An empty <scheduler/> element takes its value from the previous build
+        incremented in the following way:
+        
+        * Weekly schedulers are incremented by a day, monday_0600 becomes
+          tuesday_0600, and at the end of the week the time is also bumped by
+          an hour, saturday_0600 becomes sunday_0700.
+
+        * Daily scheduler are incremented by an hour.
 
         The <scheduler> element can be omitted, in which case the build
         never runs automatically, but can still be triggered manually.
         Or you can use several, e.g. you could use two weekly schedulers
         that fire on different days to have a build run twice a week.
     -->
-    <scheduler>trunk_quick</scheduler>
+    <scheduler>monday_0600</scheduler>
 
     <!--
         The meaning of <sandbox> is specific to the build slave. There
@@ -117,29 +125,25 @@
         <configure/>
 
         <!--
-            Compile the library. For Windows builds use <compile-msw/>
-            instead which runs the make command in the 'build\msw'
-            subdirectory instead of the wxWidgets root.
+            Compile the wxWidgets library, subdirectories and tests.
+
+            Takes the following attributes which can all be either 'true' or
+            'false':
+                wx          - build the library
+                samples     - build the samples
+                utils       - build the utils
+                demos       - build the demos
+                contrib     - build the contrib
+                tests       - build the tests
+                msw         - the library makefile is under build\msw
+                gui         - if 'false' builds only a subset of the above
+
+            The attributes usually default to the right values.
         -->
-        <compile/>
+        <compile-all/>
 
         <!--
-            Compile subdirectories. There is also <compile-contrib/> for
-            branches that have contrib.
-        -->
-        <compile-samples/>
-        <compile-utils/>
-        <compile-tests/>
-
-        <!--
-            Run the test suites. For Windows builds the command to run the
-            test suite must be overridden, e.g.:
-                <run-tests>
-                    <command>PATH=..\lib\vc_dll;%PATH%</command>
-                    <command>cd tests</command>
-                    <command>vc_msw\test</command>
-                    <command>vc_msw\test_gui</command>
-                </run-tests>
+            Run the test suites.
         -->
         <run-tests/>
     </steps>
