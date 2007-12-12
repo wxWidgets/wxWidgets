@@ -243,7 +243,7 @@
 
     <steps>
         <checkout/>
-        <configure options="- -with-gtk {$cygwin-x-opts}"/>
+        <configure options="--with-gtk {$cygwin-x-opts}"/>
         <compile-all/>
     </steps>
 </build>
@@ -255,7 +255,7 @@
 
     <steps>
         <checkout branch="{$STABLE_BRANCH}"/>
-        <configure options="- -with-gtk {$cygwin-x-opts}"/>
+        <configure options="--with-gtk {$cygwin-x-opts}"/>
         <compile-all/>
     </steps>
 </build>
