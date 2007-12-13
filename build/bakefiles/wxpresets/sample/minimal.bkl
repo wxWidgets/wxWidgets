@@ -5,8 +5,7 @@
 
     <include file="presets/wx.bkl"/>
 
-    <exe id="minimal" template="wx">
-        <app-type>gui</app-type>
+    <exe id="minimal" template="wxgui">
 
         <!-- this sample builds always in debug mode; if you have
              compiled wxWidgets in release mode, you'll get link errors! -->

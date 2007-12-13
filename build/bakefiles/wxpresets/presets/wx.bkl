@@ -321,10 +321,14 @@
             <debug-info>$(_DEBUGINFO)</debug-info>
         </if>
     </template>
+    
+    <!-- Template for building wx-based GUI applications -->
+    <template id="wxgui" template="wx">
+        <app-type>gui</app-type>
+    </template>
 
     <!-- Template for building wx-based console applications -->
     <template id="wxconsole" template="wx">
-        <define>wxUSE_GUI=0</define>
         <app-type>console</app-type>
     </template>
 

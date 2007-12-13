@@ -76,8 +76,7 @@ minimal.bkl
 
     <include file="presets/wx.bkl"/>
 
-    <exe id="minimal" template="wx">
-        <app-type>gui</app-type>
+    <exe id="minimal" template="wxgui">
         <debug-info>on</debug-info>
         <runtime-libs>dynamic</runtime-libs>
 
@@ -217,8 +216,12 @@ In order to build the software in debug mode.
 To simplify the building of wxWidgets-based projects, wxWidgets contains a
 set of Bakefiles that automatically configure your build system to be
 compatible with wxWidgets. As you'll notice in the sample above, the sample
-project uses the wx template. Once you've included the template, your software
-will now build with wxWidgets support.
+project uses the "wxgui" template. Once you've included the template, your software
+will now build as a GUI application with wxWidgets support.
+
+There's also "wxconsole" template for building console-based wxWidgets applications
+and "wx" template that doesn't specify application type (GUI or console) and can be
+used e.g. for building libraries that use wxWidgets.
 
 But since the wx presets don't exist in the Bakefile presets subfolder,
 Bakefile needs to know where to find these presets. The "-I" command adds the
