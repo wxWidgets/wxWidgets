@@ -1562,7 +1562,12 @@ void wxWindowMSW::Thaw()
                     if ( child->IsTopLevel() )
                         continue;
                     else
-                        child->Thaw();
+                    {
+                        // in case the child was added while the TLW was
+                        // frozen, it won't be frozen now so avoid the Thaw.
+                        if ( child->IsFrozen() )
+                            child->Thaw();
+                    }
                 }
             }
             else // This is not a TLW, so just thaw it.
