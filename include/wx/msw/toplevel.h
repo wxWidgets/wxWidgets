@@ -75,6 +75,12 @@ public:
     virtual bool SetTransparent(wxByte alpha);
     virtual bool CanSetTransparent();
 
+    //Top level windows have different freeze semantics on Windows
+    virtual void Freeze();
+    virtual void Thaw();
+
+    virtual void AddChild( wxWindowBase *child );
+
 
     // implementation from now on
     // --------------------------

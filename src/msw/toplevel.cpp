@@ -1170,6 +1170,60 @@ bool wxTopLevelWindowMSW::CanSetTransparent()
     return (os_type == wxOS_WINDOWS_NT && ver_major >= 5);
 }
 
+
+void wxTopLevelWindowMSW::Freeze()
+{
+    if ( !m_frozenness++) {
+        if (IsShown()) {
+            for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+                node;
+                node = node->GetNext() )
+            {
+                wxWindow *child = node->GetData();
+                if ( child->IsTopLevel() )
+                    continue;
+                else
+                    child->Freeze();
+            }
+        }
+    }
+}
+
+void wxTopLevelWindowMSW::Thaw()
+{
+    wxASSERT_MSG( m_frozenness > 0, _T("Thaw() without matching Freeze()") );
+    if ( --m_frozenness == 0 )
+    {
+        if ( IsShown() ) {
+            for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+                node;
+                node = node->GetNext() )
+            {
+                wxWindow *child = node->GetData();
+                if ( child->IsTopLevel() )
+                    continue;
+                else
+                    child->Thaw();
+            }
+        }
+    }
+}
+
+
+void wxTopLevelWindowMSW::AddChild(wxWindowBase *child )
+{
+    //adding a child while frozen will assert when thawn,
+    // so freeze it
+    if (child && !child->IsTopLevel() && IsFrozen()) {
+        //need to match our current freeze level
+        for (unsigned int ii=0;ii< m_frozenness;ii++) {
+            child->Freeze();
+        }
+    }
+    wxTopLevelWindowBase::AddChild(child);
+}
+
+
 // ----------------------------------------------------------------------------
 // wxTopLevelWindow event handling
 // ----------------------------------------------------------------------------

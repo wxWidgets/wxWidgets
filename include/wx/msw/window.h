@@ -555,8 +555,7 @@ private:
     bool HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 
 
-    // number of calls to Freeze() minus number of calls to Thaw()
-    unsigned int m_frozenness;
+    
 
     // current defer window position operation handle (may be NULL)
     WXHANDLE m_hDWP;
@@ -567,6 +566,10 @@ protected:
     // this window before the group of deferred changes is completed.
     wxPoint     m_pendingPosition;
     wxSize      m_pendingSize;
+
+    // number of calls to Freeze() minus number of calls to Thaw()
+    // protected so that wxTopLevelWindowMSW can access it
+    unsigned int m_frozenness;
 
 private:
 #ifdef __POCKETPC__
