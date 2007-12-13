@@ -1643,6 +1643,8 @@ window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
 
     wxMouseEvent event(wxEVT_MOUSEWHEEL);
     InitMouseEvent(win, event, gdk_event);
+
+    // FIXME: Get these values from GTK or GDK
     event.m_linesPerAction = 3;
     event.m_wheelDelta = 120;
     if (gdk_event->direction == GDK_SCROLL_UP)
