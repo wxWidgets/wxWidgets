@@ -496,6 +496,14 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
 
         wxWindow *child = node->GetData();
 
+        // don't TAB to another TLW
+        if ( child->IsTopLevel() )
+        {
+            node = forward ? node->GetNext() : node->GetPrevious();
+
+            continue;
+        }
+
 #if defined(__WXMSW__) && wxUSE_RADIOBTN
         if ( event.IsFromTab() )
         {
