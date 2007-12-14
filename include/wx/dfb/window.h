@@ -191,7 +191,7 @@ private:
 
     friend class wxNonOwnedWindow; // for HandleXXXEvent
     friend class wxOverlayImpl; // for Add/RemoveOverlay
-    friend class wxWindowDC; // for PaintOverlays
+    friend class wxWindowDCImpl; // for PaintOverlays
 
     DECLARE_DYNAMIC_CLASS(wxWindowDFB)
     DECLARE_NO_COPY_CLASS(wxWindowDFB)

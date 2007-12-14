@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/dfb/dcmemory.cpp
-// Purpose:     wxMemoryDC implementation
+// Purpose:     wxMemoryDCImpl implementation
 // Author:      Vaclav Slavik
 // Created:     2006-08-16
 // RCS-ID:      $Id$
@@ -19,12 +19,11 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/dcmemory.h"
-
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
 #endif
 
+#include "wx/dfb/dcmemory.h"
 #include "wx/dfb/private.h"
 
 // ===========================================================================
@@ -32,22 +31,23 @@
 // ===========================================================================
 
 //-----------------------------------------------------------------------------
-// wxMemoryDC
+// wxMemoryDCImpl
 //-----------------------------------------------------------------------------
 
-#warning "FIXME: verify/fix that wxMemoryDC works correctly with mono bitmaps"
+#warning "FIXME: verify/fix that wxMemoryDCImpl works correctly with mono bitmaps"
 
-IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
+IMPLEMENT_ABSTRACT_CLASS(wxMemoryDCImpl, wxDFBDCImpl)
 
-void wxMemoryDC::Init()
+void wxMemoryDCImpl::Init()
 {
 }
 
-wxMemoryDC::wxMemoryDC(wxDC *WXUNUSED(dc))
+wxMemoryDCImpl::wxMemoryDCImpl(wxMemoryDC *owner, wxDC *WXUNUSED(dc))
+              : wxDFBDCImpl(owner)
 {
 }
 
-void wxMemoryDC::DoSelect(const wxBitmap& bitmap)
+void wxMemoryDCImpl::DoSelect(const wxBitmap& bitmap)
 {
     m_bmp = bitmap;
 

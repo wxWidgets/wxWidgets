@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/dfb/dcscreen.h
-// Purpose:     wxScreenDC declaration
+// Purpose:     wxScreenDCImpl declaration
 // Author:      Vaclav Slavik
 // Created:     2006-08-10
 // RCS-ID:      $Id$
@@ -11,21 +11,14 @@
 #ifndef _WX_DFB_DCSCREEN_H_
 #define _WX_DFB_DCSCREEN_H_
 
-#include "wx/dc.h"
+#include "wx/dfb/dc.h"
 
-class WXDLLIMPEXP_CORE wxScreenDC: public wxDC
+class WXDLLIMPEXP_CORE wxScreenDCImpl : public wxDFBDCImpl
 {
 public:
-    wxScreenDC();
+    wxScreenDCImpl(wxScreenDC *owner);
 
-    static bool StartDrawingOnTop(wxWindow *WXUNUSED(window))
-        { return true; }
-    static bool StartDrawingOnTop(wxRect *WXUNUSED(rect) = NULL)
-        { return true; }
-    static bool EndDrawingOnTop()
-        { return true; }
-
-    DECLARE_DYNAMIC_CLASS(wxScreenDC)
+    DECLARE_DYNAMIC_CLASS(wxScreenDCImpl)
 };
 
 #endif // _WX_DFB_DCSCREEN_H_

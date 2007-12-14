@@ -185,6 +185,18 @@ public:
     // query dimension, colour deps, resolution
 
     virtual void DoGetSize(int *width, int *height) const = 0;
+    void GetSize(int *width, int *height) const
+    {
+        return DoGetSize(width, height);
+    }
+
+    wxSize GetSize() const
+    {
+        int w, h;
+        DoGetSize(&w, &h);
+        return wxSize(w, h);
+    }
+
     virtual void DoGetSizeMM(int* width, int* height) const = 0;
 
     virtual int GetDepth() const = 0;
@@ -570,13 +582,8 @@ public:
 
     void GetSize(int *width, int *height) const
         { m_pimpl->DoGetSize(width, height); }
-
     wxSize GetSize() const
-    {
-        int w, h;
-        m_pimpl->DoGetSize(&w, &h);
-        return wxSize(w, h);
-    }
+        { return m_pimpl->GetSize(); }
 
     void GetSizeMM(int* width, int* height) const
         { m_pimpl->DoGetSizeMM(width, height); }

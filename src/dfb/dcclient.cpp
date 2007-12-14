@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/dfb/dcclient.cpp
-// Purpose:     wxWindowDC, wxClientDC and wxPaintDC
+// Purpose:     wxWindowDCImpl, wxClientDCImpl and wxPaintDC
 // Author:      Vaclav Slavik
 // Created:     2006-08-10
 // RCS-ID:      $Id$
@@ -23,13 +23,12 @@
     #pragma hdrstop
 #endif
 
-#include "wx/dcclient.h"
-
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/nonownedwnd.h"
 #endif
 
+#include "wx/dfb/dcclient.h"
 #include "wx/dfb/private.h"
 
 #define TRACE_PAINT  "paint"
@@ -93,17 +92,18 @@ wxIDirectFBSurfacePtr CreateDummySurface(wxWindow *win, const wxRect *rect)
 }
 
 //-----------------------------------------------------------------------------
-// wxWindowDC
+// wxWindowDCImpl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
+IMPLEMENT_ABSTRACT_CLASS(wxWindowDCImpl, wxDFBDCImpl)
 
-wxWindowDC::wxWindowDC(wxWindow *win)
+wxWindowDCImpl::wxWindowDCImpl(wxDC *owner, wxWindow *win)
+              : wxDFBDCImpl(owner)
 {
     InitForWin(win, NULL);
 }
 
-void wxWindowDC::InitForWin(wxWindow *win, const wxRect *rect)
+void wxWindowDCImpl::InitForWin(wxWindow *win, const wxRect *rect)
 {
     wxCHECK_RET( win, "invalid window" );
 
@@ -197,7 +197,7 @@ void wxWindowDC::InitForWin(wxWindow *win, const wxRect *rect)
     SetDeviceOrigin(origin.x, origin.y);
 }
 
-wxWindowDC::~wxWindowDC()
+wxWindowDCImpl::~wxWindowDCImpl()
 {
     wxIDirectFBSurfacePtr surface(GetDirectFBSurface());
     if ( !surface )
@@ -227,12 +227,13 @@ wxWindowDC::~wxWindowDC()
 }
 
 //-----------------------------------------------------------------------------
-// wxClientDC
+// wxClientDCImpl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
+IMPLEMENT_ABSTRACT_CLASS(wxClientDCImpl, wxWindowDCImpl)
 
-wxClientDC::wxClientDC(wxWindow *win)
+wxClientDCImpl::wxClientDCImpl(wxDC *owner, wxWindow *win)
+              : wxWindowDCImpl(owner, win)
 {
     wxCHECK_RET( win, "invalid window" );
 
@@ -244,4 +245,4 @@ wxClientDC::wxClientDC(wxWindow *win)
 // wxPaintDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
+IMPLEMENT_ABSTRACT_CLASS(wxPaintDCImpl, wxWindowDCImpl)

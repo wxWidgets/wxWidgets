@@ -13,23 +13,28 @@
 
 #include "wx/defs.h"
 #include "wx/region.h"
+#include "wx/dc.h"
 #include "wx/dfb/dfbptr.h"
 
 wxDFB_DECLARE_INTERFACE(IDirectFBSurface);
 
 //-----------------------------------------------------------------------------
-// wxDC
+// wxDFBDCImpl
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDC : public wxDCBase
+class WXDLLIMPEXP_CORE wxDFBDCImpl : public wxDCImpl
 {
 public:
-    wxDC();
+    // ctors
+    wxDFBDCImpl(wxDC *owner) : wxDCImpl(owner) { m_surface = NULL; }
+    wxDFBDCImpl(wxDC *owner, const wxIDirectFBSurfacePtr& surface)
+        : wxDCImpl(owner)
+    {
+        DFBInit(surface);
+    }
 
-    // Ctor.
-    wxDC(const wxIDirectFBSurfacePtr& surface);
+    bool IsOk() const { return m_surface != NULL; }
 
-public:
     // implement base class pure virtuals
     // ----------------------------------
 
@@ -80,7 +85,7 @@ protected:
     wxCoord XLOG2DEVREL(wxCoord x) const    { return LogicalToDeviceXRel(x); }
     wxCoord YLOG2DEV(wxCoord y) const       { return LogicalToDeviceY(y); }
     wxCoord YLOG2DEVREL(wxCoord y) const    { return LogicalToDeviceYRel(y); }
-    
+
     // initializes the DC from a surface, must be called if default ctor
     // was used
     void DFBInit(const wxIDirectFBSurfacePtr& surface);
@@ -158,7 +163,7 @@ protected:
 
     friend class WXDLLIMPEXP_FWD_CORE wxOverlayImpl; // for Init
 
-    DECLARE_DYNAMIC_CLASS(wxDC)
+    DECLARE_ABSTRACT_CLASS(wxDFBDCImpl)
 };
 
 #endif // _WX_DFB_DC_H_

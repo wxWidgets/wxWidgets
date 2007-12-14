@@ -66,6 +66,12 @@
     #include "wx/x11/dcscreen.h"
 #endif
 
+#ifdef __WXDFB__
+    #include "wx/dfb/dcclient.h"
+    #include "wx/dfb/dcmemory.h"
+    #include "wx/dfb/dcscreen.h"
+#endif
+
 //----------------------------------------------------------------------------
 // wxDCFactory
 //----------------------------------------------------------------------------

@@ -11,21 +11,30 @@
 #ifndef _WX_DFB_DCMEMORY_H_
 #define _WX_DFB_DCMEMORY_H_
 
-#include "wx/dc.h"
+#include "wx/dfb/dc.h"
 #include "wx/bitmap.h"
 
-class WXDLLIMPEXP_CORE wxMemoryDC : public wxDC, public wxMemoryDCBase
+class WXDLLIMPEXP_CORE wxMemoryDCImpl : public wxDFBDCImpl
 {
 public:
-    wxMemoryDC() { Init(); }
-    wxMemoryDC(wxBitmap& bitmap) { Init(); SelectObject(bitmap); }
-    wxMemoryDC(wxDC *dc); // create compatible DC
+    wxMemoryDCImpl(wxMemoryDC *owner)
+        : wxDFBDCImpl(owner)
+    {
+        Init();
+    }
 
-    // implementation from now on:
+    wxMemoryDCImpl(wxMemoryDC *owner, wxBitmap& bitmap)
+        : wxDFBDCImpl(owner)
+    {
+        Init();
+        DoSelect(bitmap);
+    }
 
-    wxBitmap GetSelectedObject() const { return m_bmp; }
+    wxMemoryDCImpl(wxMemoryDC *owner, wxDC *dc); // create compatible DC
 
-protected:
+    // override wxMemoryDC-specific base class virtual methods
+    virtual const wxBitmap& GetSelectedBitmap() const { return m_bmp; }
+    virtual wxBitmap& GetSelectedBitmap() { return m_bmp; }
     virtual void DoSelect(const wxBitmap& bitmap);
 
 private:
@@ -33,7 +42,7 @@ private:
 
     wxBitmap m_bmp;
 
-    DECLARE_DYNAMIC_CLASS(wxMemoryDC)
+    DECLARE_DYNAMIC_CLASS(wxMemoryDCImpl)
 };
 
 #endif // _WX_DFB_DCMEMORY_H_

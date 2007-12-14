@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/dfb/dc.cpp
-// Purpose:     wxDC class
+// Purpose:     wxDFBDCImpl class
 // Author:      Vaclav Slavik
 // Created:     2006-08-07
 // RCS-ID:      $Id$
@@ -24,11 +24,11 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/dc.h"
     #include "wx/dcmemory.h"
     #include "wx/log.h"
 #endif
 
+#include "wx/dfb/dc.h"
 #include "wx/dfb/private.h"
 
 // these values are used to initialize newly created DC
@@ -41,28 +41,16 @@
 // ===========================================================================
 
 //-----------------------------------------------------------------------------
-// wxDC
+// wxDFBDCImpl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxDC, wxDCBase)
+IMPLEMENT_ABSTRACT_CLASS(wxDFBDCImpl, wxDCImpl)
 
-// Default constructor
-wxDC::wxDC()
+void wxDFBDCImpl::DFBInit(const wxIDirectFBSurfacePtr& surface)
 {
-    m_ok = false;
-}
-
-wxDC::wxDC(const wxIDirectFBSurfacePtr& surface)
-{
-    DFBInit(surface);
-}
-
-void wxDC::DFBInit(const wxIDirectFBSurfacePtr& surface)
-{
-    m_ok = (surface != NULL);
-    wxCHECK_RET( surface != NULL, "invalid surface" );
-
     m_surface = surface;
+
+    wxCHECK_RET( surface != NULL, "invalid surface" );
 
     m_mm_to_pix_x = (double)wxGetDisplaySize().GetWidth() /
                     (double)wxGetDisplaySizeMM().GetWidth();
@@ -79,9 +67,9 @@ void wxDC::DFBInit(const wxIDirectFBSurfacePtr& surface)
 // clipping
 // ---------------------------------------------------------------------------
 
-void wxDC::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
+void wxDFBDCImpl::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxSize size(GetSize());
 
@@ -107,15 +95,15 @@ void wxDC::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
     m_clipping = true;
 }
 
-void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
+void wxDFBDCImpl::DoSetClippingRegionAsRegion(const wxRegion& region)
 {
     // NB: this can be done because wxDFB only supports rectangular regions
-    SetClippingRegion(region.AsRect());
+    GetOwner()->SetClippingRegion(region.AsRect());
 }
 
-void wxDC::DestroyClippingRegion()
+void wxDFBDCImpl::DestroyClippingRegion()
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     m_surface->SetClip(NULL);
 
@@ -126,7 +114,7 @@ void wxDC::DestroyClippingRegion()
 // query capabilities
 // ---------------------------------------------------------------------------
 
-int wxDC::GetDepth() const
+int wxDFBDCImpl::GetDepth() const
 {
     return m_surface->GetDepth();
 }
@@ -135,9 +123,9 @@ int wxDC::GetDepth() const
 // drawing
 // ---------------------------------------------------------------------------
 
-void wxDC::Clear()
+void wxDFBDCImpl::Clear()
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     if ( m_backgroundBrush.GetStyle() == wxTRANSPARENT )
         return;
@@ -153,30 +141,37 @@ void wxDC::Clear()
 extern bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
                           const wxColour & col, int style);
 
-bool wxDC::DoFloodFill(wxCoord x, wxCoord y,
+bool wxDFBDCImpl::DoFloodFill(wxCoord x, wxCoord y,
                        const wxColour& col, int style)
 {
-    return wxDoFloodFill(this, x, y, col, style);
+    return wxDoFloodFill(GetOwner(), x, y, col, style);
 }
 
-bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
+bool wxDFBDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 {
-    wxCHECK_MSG( col, false, "NULL colour parameter in wxDC::GetPixel");
+    wxCHECK_MSG( col, false, "NULL colour parameter in wxDFBDCImpl::GetPixel");
 
     wxFAIL_MSG( "GetPixel not implemented" );
+
+    wxUnusedVar(x);
+    wxUnusedVar(y);
+
     return false;
 }
 
-void wxDC::DoCrossHair(wxCoord x, wxCoord y)
+void wxDFBDCImpl::DoCrossHair(wxCoord x, wxCoord y)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxFAIL_MSG( "CrossHair not implemented" );
+
+    wxUnusedVar(x);
+    wxUnusedVar(y);
 }
 
-void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
+void wxDFBDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     if ( m_pen.GetStyle() == wxTRANSPARENT )
         return;
@@ -214,18 +209,18 @@ void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 
 // Draws an arc of a circle, centred on (xc, yc), with starting point (x1, y1)
 // and ending at (x2, y2)
-void wxDC::DoDrawArc(wxCoord x1, wxCoord y1,
-                     wxCoord x2, wxCoord y2,
-                     wxCoord xc, wxCoord yc)
+void wxDFBDCImpl::DoDrawArc(wxCoord WXUNUSED(x1), wxCoord WXUNUSED(y1),
+                            wxCoord WXUNUSED(x2), wxCoord WXUNUSED(y2),
+                            wxCoord WXUNUSED(xc), wxCoord WXUNUSED(yc))
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxFAIL_MSG( "DrawArc not implemented" );
 }
 
-void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
+void wxDFBDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     // NB: DirectFB API doesn't provide a function for drawing points, so
     //     implement it as 1px long line. This is inefficient, but then, so is
@@ -235,24 +230,27 @@ void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
     // FIXME_DFB: implement special cases for common formats (RGB24,RGBA/RGB32)
 }
 
-void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset,int WXUNUSED(fillStyle))
+void wxDFBDCImpl::DoDrawPolygon(int WXUNUSED(n), wxPoint WXUNUSED(points)[],
+                                wxCoord WXUNUSED(xoffset), wxCoord WXUNUSED(yoffset),
+                                int WXUNUSED(fillStyle))
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxFAIL_MSG( "DrawPolygon not implemented" );
 }
 
-void wxDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
+void wxDFBDCImpl::DoDrawLines(int WXUNUSED(n), wxPoint WXUNUSED(points)[],
+                              wxCoord WXUNUSED(xoffset), wxCoord WXUNUSED(yoffset))
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     // TODO: impl. using DirectDB's DrawLines
     wxFAIL_MSG( "DrawLines not implemented" );
 }
 
-void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxDFBDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxCoord xx = XLOG2DEV(x);
     wxCoord yy = YLOG2DEV(y);
@@ -290,30 +288,42 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
     CalcBoundingBox(x + width, y + height);
 }
 
-void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
+void wxDFBDCImpl::DoDrawRoundedRectangle(wxCoord WXUNUSED(x),
+                                         wxCoord WXUNUSED(y),
+                                         wxCoord WXUNUSED(width),
+                                         wxCoord WXUNUSED(height),
+                                         double WXUNUSED(radius))
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxFAIL_MSG( "DrawRoundedRectangle not implemented" );
 }
 
-void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxDFBDCImpl::DoDrawEllipse(wxCoord WXUNUSED(x),
+                                wxCoord WXUNUSED(y),
+                                wxCoord WXUNUSED(width),
+                                wxCoord WXUNUSED(height))
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxFAIL_MSG( "DrawElipse not implemented" );
 }
 
-void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
+void wxDFBDCImpl::DoDrawEllipticArc(wxCoord WXUNUSED(x),
+                                    wxCoord WXUNUSED(y),
+                                    wxCoord WXUNUSED(w),
+                                    wxCoord WXUNUSED(h),
+                                    double WXUNUSED(sa),
+                                    double WXUNUSED(ea))
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxFAIL_MSG( "DrawElipticArc not implemented" );
 }
 
-void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
+void wxDFBDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxCoord xx = XLOG2DEV(x);
     wxCoord yy = YLOG2DEV(y);
@@ -321,7 +331,7 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     // update the bounding box
     wxCoord w, h;
     CalcBoundingBox(x, y);
-    GetTextExtent(text, &w, &h);
+    DoGetTextExtent(text, &w, &h);
     CalcBoundingBox(x + w, y + h);
 
     // if background mode is solid, DrawText must paint text's background:
@@ -345,11 +355,11 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     SelectColour(m_pen.GetColour());
 }
 
-void wxDC::DoDrawRotatedText(const wxString& text,
-                             wxCoord x, wxCoord y,
-                             double angle)
+void wxDFBDCImpl::DoDrawRotatedText(const wxString& WXUNUSED(text),
+                                    wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
+                                    double WXUNUSED(angle))
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxFAIL_MSG( "DrawRotatedText not implemented" );
 }
@@ -358,36 +368,36 @@ void wxDC::DoDrawRotatedText(const wxString& text,
 // set GDI objects
 // ---------------------------------------------------------------------------
 
-void wxDC::SetPen(const wxPen& pen)
+void wxDFBDCImpl::SetPen(const wxPen& pen)
 {
     m_pen = pen.Ok() ? pen : DEFAULT_PEN;
 
     SelectColour(m_pen.GetColour());
 }
 
-void wxDC::SetBrush(const wxBrush& brush)
+void wxDFBDCImpl::SetBrush(const wxBrush& brush)
 {
     m_brush = brush.Ok() ? brush : DEFAULT_BRUSH;
 }
 
-void wxDC::SelectColour(const wxColour& clr)
+void wxDFBDCImpl::SelectColour(const wxColour& clr)
 {
     m_surface->SetColor(clr.Red(), clr.Green(), clr.Blue(), clr.Alpha());
     #warning "use SetColorIndex?"
 }
 
 #if wxUSE_PALETTE
-void wxDC::SetPalette(const wxPalette& WXUNUSED(palette))
+void wxDFBDCImpl::SetPalette(const wxPalette& WXUNUSED(palette))
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxFAIL_MSG( "SetPalette not implemented" );
 }
 #endif // wxUSE_PALETTE
 
-void wxDC::SetFont(const wxFont& font)
+void wxDFBDCImpl::SetFont(const wxFont& font)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxFont f(font.Ok() ? font : DEFAULT_FONT);
 
@@ -402,29 +412,29 @@ void wxDC::SetFont(const wxFont& font)
     }
 }
 
-wxIDirectFBFontPtr wxDC::GetCurrentFont() const
+wxIDirectFBFontPtr wxDFBDCImpl::GetCurrentFont() const
 {
     bool aa = (GetDepth() > 8);
     return m_font.GetDirectFBFont(aa);
 }
 
-void wxDC::SetBackground(const wxBrush& brush)
+void wxDFBDCImpl::SetBackground(const wxBrush& brush)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     if (!brush.Ok()) return;
 
     m_backgroundBrush = brush;
 }
 
-void wxDC::SetBackgroundMode(int mode)
+void wxDFBDCImpl::SetBackgroundMode(int mode)
 {
     m_backgroundMode = mode;
 }
 
-void wxDC::SetLogicalFunction(int function)
+void wxDFBDCImpl::SetLogicalFunction(int function)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     // NB: we could also support XOR, but for blitting only (via DSBLIT_XOR);
     //     and possibly others via SetSrc/DstBlendFunction()
@@ -434,21 +444,21 @@ void wxDC::SetLogicalFunction(int function)
     m_logicalFunction = function;
 }
 
-bool wxDC::StartDoc(const wxString& WXUNUSED(message))
+bool wxDFBDCImpl::StartDoc(const wxString& WXUNUSED(message))
 {
     // We might be previewing, so return true to let it continue.
     return true;
 }
 
-void wxDC::EndDoc()
+void wxDFBDCImpl::EndDoc()
 {
 }
 
-void wxDC::StartPage()
+void wxDFBDCImpl::StartPage()
 {
 }
 
-void wxDC::EndPage()
+void wxDFBDCImpl::EndPage()
 {
 }
 
@@ -456,9 +466,9 @@ void wxDC::EndPage()
 // text metrics
 // ---------------------------------------------------------------------------
 
-wxCoord wxDC::GetCharHeight() const
+wxCoord wxDFBDCImpl::GetCharHeight() const
 {
-    wxCHECK_MSG( Ok(), -1, wxT("invalid dc") );
+    wxCHECK_MSG( IsOk(), -1, wxT("invalid dc") );
     wxCHECK_MSG( m_font.Ok(), -1, wxT("no font selected") );
 
     int h = -1;
@@ -466,9 +476,9 @@ wxCoord wxDC::GetCharHeight() const
     return YDEV2LOGREL(h);
 }
 
-wxCoord wxDC::GetCharWidth() const
+wxCoord wxDFBDCImpl::GetCharWidth() const
 {
-    wxCHECK_MSG( Ok(), -1, wxT("invalid dc") );
+    wxCHECK_MSG( IsOk(), -1, wxT("invalid dc") );
     wxCHECK_MSG( m_font.Ok(), -1, wxT("no font selected") );
 
     int w = -1;
@@ -478,11 +488,11 @@ wxCoord wxDC::GetCharWidth() const
     return YDEV2LOGREL(w);
 }
 
-void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
+void wxDFBDCImpl::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
                            wxCoord *descent, wxCoord *externalLeading,
                            const wxFont *theFont) const
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
     wxCHECK_RET( m_font.Ok(), wxT("no font selected") );
     wxCHECK_RET( !theFont || theFont->Ok(), wxT("invalid font") );
 
@@ -490,7 +500,7 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
     if ( theFont != NULL )
     {
         oldFont = m_font;
-        wxConstCast(this, wxDC)->SetFont(*theFont);
+        wxConstCast(this, wxDFBDCImpl)->SetFont(*theFont);
     }
 
     wxCoord xx = 0, yy = 0;
@@ -519,7 +529,7 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
     if ( externalLeading ) *externalLeading = 0;
 
     if ( theFont != NULL )
-        wxConstCast(this, wxDC)->SetFont(oldFont);
+        wxConstCast(this, wxDFBDCImpl)->SetFont(oldFont);
 }
 
 
@@ -531,15 +541,15 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
 // FIXME_DFB: scaling affects pixel size of font, pens, brushes, which
 //            is not currently implemented here; probably makes sense to
 //            switch to Cairo instead of implementing everything for DFB
-    
-void wxDC::DoGetSize(int *w, int *h) const
+
+void wxDFBDCImpl::DoGetSize(int *w, int *h) const
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     m_surface->GetSize(w, h);
 }
 
-void wxDC::DoGetSizeMM(int *width, int *height) const
+void wxDFBDCImpl::DoGetSizeMM(int *width, int *height) const
 {
     #warning "move this to common code?"
     int w = 0;
@@ -549,7 +559,7 @@ void wxDC::DoGetSizeMM(int *width, int *height) const
     if ( height ) *height = int(double(h) / (m_userScaleY*m_mm_to_pix_y));
 }
 
-wxSize wxDC::GetPPI() const
+wxSize wxDFBDCImpl::GetPPI() const
 {
     #warning "move this to common code?"
     return wxSize(int(double(m_mm_to_pix_x) * inches2mm),
@@ -561,13 +571,13 @@ wxSize wxDC::GetPPI() const
 // Blitting
 // ---------------------------------------------------------------------------
 
-bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
-                  wxCoord width, wxCoord height,
-                  wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                  int rop, bool useMask,
-                  wxCoord xsrcMask, wxCoord ysrcMask)
+bool wxDFBDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
+                         wxCoord width, wxCoord height,
+                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
+                         int rop, bool useMask,
+                         wxCoord xsrcMask, wxCoord ysrcMask)
 {
-    wxCHECK_MSG( Ok(), false, "invalid dc" );
+    wxCHECK_MSG( IsOk(), false, "invalid dc" );
     wxCHECK_MSG( source, false, "invalid source dc" );
 
     // NB: we could also support XOR here (via DSBLIT_XOR)
@@ -596,7 +606,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
     wxMemoryDC *sourceAsMemDC = wxDynamicCast(source, wxMemoryDC);
     if ( sourceAsMemDC )
     {
-        DoDrawSubBitmap(sourceAsMemDC->GetSelectedObject(),
+        DoDrawSubBitmap(sourceAsMemDC->GetSelectedBitmap(),
                         xsrc, ysrc,
                         width, height,
                         xdest, ydest,
@@ -605,18 +615,22 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
     }
     else
     {
-        return DoBlitFromSurface(source->GetDirectFBSurface(),
-                                 xsrc, ysrc,
-                                 width, height,
-                                 xdest, ydest);
+        return DoBlitFromSurface
+               (
+                 static_cast<wxDFBDCImpl *>(source->GetImpl())
+                    ->GetDirectFBSurface(),
+                 xsrc, ysrc,
+                 width, height,
+                 xdest, ydest
+               );
     }
 
     return true;
 }
 
-void wxDC::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask)
+void wxDFBDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
     wxCHECK_RET( bmp.Ok(), wxT("invalid bitmap") );
 
     DoDrawSubBitmap(bmp,
@@ -625,17 +639,17 @@ void wxDC::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask)
                     m_logicalFunction, useMask);
 }
 
-void wxDC::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
+void wxDFBDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
 {
     // VZ: egcs 1.0.3 refuses to compile this without cast, no idea why
     DoDrawBitmap((const wxBitmap&)icon, x, y, true);
 }
 
-void wxDC::DoDrawSubBitmap(const wxBitmap &bmp,
+void wxDFBDCImpl::DoDrawSubBitmap(const wxBitmap &bmp,
                            wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                            wxCoord destx, wxCoord desty, int rop, bool useMask)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
     wxCHECK_RET( bmp.Ok(), wxT("invalid bitmap") );
 
     // NB: we could also support XOR here (via DSBLIT_XOR)
@@ -666,10 +680,10 @@ void wxDC::DoDrawSubBitmap(const wxBitmap &bmp,
                       destx, desty);
 }
 
-bool wxDC::DoBlitFromSurface(const wxIDirectFBSurfacePtr& src,
-                             wxCoord srcx, wxCoord srcy,
-                             wxCoord w, wxCoord h,
-                             wxCoord dstx, wxCoord dsty)
+bool wxDFBDCImpl::DoBlitFromSurface(const wxIDirectFBSurfacePtr& src,
+                                    wxCoord srcx, wxCoord srcy,
+                                    wxCoord w, wxCoord h,
+                                    wxCoord dstx, wxCoord dsty)
 {
     // don't do anything if the source rectangle is outside of source surface,
     // DirectFB would assert in that case:

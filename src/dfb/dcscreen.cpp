@@ -19,8 +19,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/dcscreen.h"
-
+#include "wx/dfb/dcscreen.h"
 #include "wx/dfb/private.h"
 
 // ===========================================================================
@@ -34,9 +33,10 @@
 #warning "FIXME: this doesn't work (neither single app nor multiapp core)
 // FIXME: maybe use a subsurface as well?
 
-IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxDC)
+IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxDFBDCImpl)
 
-wxScreenDC::wxScreenDC()
+wxScreenDCImpl::wxScreenDCImpl(wxScreenDC *owner)
+              : wxDFBDCImpl(owner)
 {
     DFBInit(wxIDirectFB::Get()->GetPrimarySurface());
 }
