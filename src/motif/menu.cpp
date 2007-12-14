@@ -162,17 +162,14 @@ void wxMenu::SetTitle(const wxString& label)
 
 bool wxMenu::ProcessCommand(wxCommandEvent & event)
 {
-    bool processed = false;
+    // Try the menu's event handler first
+    wxEvtHandler * const handler = GetEventHandler();
+    bool processed = handler ? handler->SafelyProcessEvent(event) : false;
 
-    // Try the menu's event handler
-    if ( !processed && GetEventHandler())
-    {
-        processed = HandleWindowEvent(event);
-    }
     // Try the window the menu was popped up from (and up
     // through the hierarchy)
     if ( !processed && GetInvokingWindow())
-        processed = GetInvokingWindow()->ProcessEvent(event);
+        processed = GetInvokingWindow()->HandleWindowEvent(event);
 
     return processed;
 }
