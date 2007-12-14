@@ -33,6 +33,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/evtloop.h"
+#include "wx/thread.h"
 
 #ifdef __VMS__
     #pragma message disable nosimpint
