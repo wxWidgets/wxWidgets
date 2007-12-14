@@ -19,6 +19,7 @@
 #include "wx/app.h"
 
 #include "wx/evtloop.h"
+#include "wx/thread.h"
 #include "wx/dfb/private.h"
 #include "wx/private/fontmgr.h"
 
