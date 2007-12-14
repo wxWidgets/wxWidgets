@@ -1621,7 +1621,9 @@ bool wxQuantize::Quantize(const wxImage& src, wxImage& dest,
         delete[] g;
         delete[] b;
     }
-#endif // wxUSE_PALETTE
+#else // !wxUSE_PALETTE
+    wxUnusedVar(pPalette);
+#endif // wxUSE_PALETTE/!wxUSE_PALETTE
 
     return true;
 }
