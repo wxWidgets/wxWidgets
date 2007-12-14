@@ -33,9 +33,9 @@ public:
         m_macRgn.reset( HIShapeCreateMutable() );
     }
 
-    wxRegionRefData(HIShapeRef hRegion)
+    wxRegionRefData(wxCFRef<HIShapeRef> &region)
     {
-        m_macRgn.reset( HIShapeCreateMutableCopy(hRegion) );
+        m_macRgn.reset( HIShapeCreateMutableCopy(region) );
     }
 
     wxRegionRefData(long x, long y, long w, long h)
@@ -75,7 +75,8 @@ wxRegion::wxRegion()
 
 wxRegion::wxRegion(WXHRGN hRegion )
 {
-    m_refData = new wxRegionRefData(hRegion);
+    wxCFRef< HIShapeRef > shape( (HIShapeRef) hRegion );
+    m_refData = new wxRegionRefData(shape);
 }
 
 wxRegion::wxRegion(long x, long y, long w, long h)
@@ -100,8 +101,7 @@ wxRegion::wxRegion(size_t n, const wxPoint *points, int WXUNUSED(fillStyle))
     wxUnusedVar(n);
     wxUnusedVar(points);
 
-#if 0 // ndef __LP64__
-    m_refData = new wxRegionRefData;
+#ifndef __LP64__
 
     // TODO : any APIs ?
     // OS X somehow does not collect the region invisibly as before, so sometimes things
@@ -137,9 +137,17 @@ wxRegion::wxRegion(size_t n, const wxPoint *points, int WXUNUSED(fillStyle))
         if ( x1 != x2 || y1 != y2 )
             ::LineTo( x1, y1 ) ;
 
-        CloseRgn( M_REGION ) ;
-
+        RgnHandle tempRgn = NewRgn();
+        CloseRgn( tempRgn ) ;
+ 
         ::SetGWorld( oldWorld, oldGDHandle );
+        wxCFRef<HIShapeRef> tempShape( HIShapeCreateWithQDRgn(tempRgn ) );
+        m_refData = new wxRegionRefData(tempShape);
+        DisposeRgn( tempRgn );
+    }
+    else
+    {
+        m_refData = new wxRegionRefData;
     }
 #else
     wxFAIL_MSG( "not implemented" );
