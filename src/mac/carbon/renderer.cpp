@@ -127,7 +127,7 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
     {
         CGContextRef cgContext;
         wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
-        
+
         cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext();
 
         {
@@ -250,7 +250,7 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
 
     if ( !dc.IsKindOf( CLASSINFO( wxPaintDC ) ) )
     {
-        wxRect rect( (int) splitterRect.origin.x, (int) splitterRect.origin.y, (int) splitterRect.size.width, 
+        wxRect rect( (int) splitterRect.origin.x, (int) splitterRect.origin.y, (int) splitterRect.size.width,
                      (int) splitterRect.size.height );
         win->Refresh( &rect );
    }
@@ -269,19 +269,19 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
 }
 
 void
-wxRendererMac::DrawItemSelectionRect(wxWindow *win,
+wxRendererMac::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
                                      wxDC& dc,
                                      const wxRect& rect,
-                                     int flags )
+                                     int flags)
 {
     if ( !(flags & wxCONTROL_SELECTED) )
         return;
-    
-    wxColour col( wxMacCreateCGColorFromHITheme( (flags & wxCONTROL_FOCUSED) ? 
+
+    wxColour col( wxMacCreateCGColorFromHITheme( (flags & wxCONTROL_FOCUSED) ?
                                                  kThemeBrushAlternatePrimaryHighlightColor
                                                                              : kThemeBrushSecondaryHighlightColor ) );
     wxBrush selBrush( col );
-    
+
     dc.SetPen( *wxTRANSPARENT_PEN );
     dc.SetBrush( selBrush );
     dc.DrawRectangle( rect );

@@ -51,7 +51,7 @@ wxPopupWindow::~wxPopupWindow()
     }
 }
 
-bool wxPopupWindow::Create(wxWindow *parent, int flags)
+bool wxPopupWindow::Create(wxWindow *parent, int WXUNUSED(flags))
 {
     m_macIsUserPane = false ;
 
@@ -63,13 +63,15 @@ bool wxPopupWindow::Create(wxWindow *parent, int flags)
 
     WindowClass wclass = kHelpWindowClass;
     WindowAttributes attr = kWindowCompositingAttribute ;
-    WindowRef parentWindow =(WindowRef) parent->MacGetTopLevelWindowRef();
 
     Rect bounds = { 0,0,0,0 };
     OSStatus err = ::CreateNewWindow( wclass , attr , &bounds , (WindowRef*)&m_popupWindowRef ) ;
     if ( err == noErr )
     {
-//        SetWindowGroup( (WindowRef) m_popupWindowRef, GetWindowGroup(parentWindow));    //  Put them in the same group so that their window layers are consistent
+#if 0
+        WindowRef parentWindow =(WindowRef) parent->MacGetTopLevelWindowRef();
+        SetWindowGroup( (WindowRef) m_popupWindowRef, GetWindowGroup(parentWindow));    //  Put them in the same group so that their window layers are consistent
+#endif
 }
 
     m_peer = new wxMacControl(this , true /*isRootControl*/) ;
