@@ -602,7 +602,7 @@ bool MyChild::OnSave(wxString filename)
 {
     wxSVGFileDC svgDC (filename, 600, 650) ;
     m_canvas->OnDraw (svgDC);
-    return svgDC.Ok();
+    return svgDC.IsOk();
 }
 
 
