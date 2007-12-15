@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/motif/dc.h
-// Purpose:     wxDC class
+// Purpose:     wxMotifDCImpl class
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
@@ -12,48 +12,26 @@
 #ifndef _WX_DC_H_
 #define _WX_DC_H_
 
-#include "wx/pen.h"
-#include "wx/brush.h"
-#include "wx/icon.h"
-#include "wx/font.h"
-#include "wx/gdicmn.h"
+#include "wx/dc.h"
 
-//-----------------------------------------------------------------------------
-// constants
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// wxMotifDCImpl
+// ----------------------------------------------------------------------------
 
-#ifndef MM_TEXT
-#define MM_TEXT         0
-#define MM_ISOTROPIC    1
-#define MM_ANISOTROPIC  2
-#define MM_LOMETRIC     3
-#define MM_HIMETRIC     4
-#define MM_TWIPS        5
-#define MM_POINTS       6
-#define MM_METRIC       7
-#endif
-
-//-----------------------------------------------------------------------------
-// wxDC
-//-----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxDC : public wxDCBase
+class WXDLLEXPORT wxMotifDCImpl : public wxDCImpl
 {
-    DECLARE_DYNAMIC_CLASS(wxDC)
-
 public:
-    wxDC();
-    virtual ~wxDC() { }
+    wxMotifDCImpl(wxDC *owner);
 
     virtual wxSize GetPPI() const;
 
 protected:
     virtual void DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
     virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
-        bool useMask = false);
+                              bool useMask = false);
 
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
-        wxCoord width, wxCoord height);
+                                     wxCoord width, wxCoord height);
     virtual void DoGetSize(int *width, int *height) const;
     virtual void DoGetSizeMM(int* width, int* height) const;
 
@@ -67,7 +45,7 @@ public:
     wxCoord XLOG2DEVREL(wxCoord x) const    { return LogicalToDeviceXRel(x); }
     wxCoord YLOG2DEV(wxCoord y) const       { return LogicalToDeviceY(y); }
     wxCoord YLOG2DEVREL(wxCoord y) const    { return LogicalToDeviceYRel(y); }
-    
+
     // Without device translation, for backing pixmap purposes
     wxCoord XLOG2DEV_2(wxCoord x) const
     {
@@ -78,7 +56,7 @@ public:
         return wxRound((double)(y - m_logicalOriginY) * m_scaleY) * m_signY;
     }
 
+    DECLARE_DYNAMIC_CLASS(wxMotifDCImpl)
 };
 
-#endif
-// _WX_DC_H_
+#endif // _WX_DC_H_

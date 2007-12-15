@@ -12,20 +12,21 @@
 #ifndef _WX_DCPRINT_H_
 #define _WX_DCPRINT_H_
 
-#include "wx/dc.h"
+#include "wx/motif/dc.h"
 
-class WXDLLEXPORT wxPrinterDC: public wxDC
+class WXDLLEXPORT wxPrinterDC : public wxMotifDCImpl
 {
 public:
-    DECLARE_CLASS(wxPrinterDC)
-
     // Create a printer DC
-    wxPrinterDC(const wxString& driver, const wxString& device, const wxString& output, bool interactive = true, int orientation = wxPORTRAIT);
+    wxPrinterDCImpl(const wxString& driver, const wxString& device,
+                    const wxString& output,
+                    bool interactive = true,
+                    int orientation = wxPORTRAIT);
+    virtual ~wxPrinterDC();
 
     wxRect GetPaperRect();
 
-    virtual ~wxPrinterDC();
+    DECLARE_CLASS(wxPrinterDCImpl)
 };
 
-#endif
-// _WX_DCPRINT_H_
+#endif // _WX_DCPRINT_H_

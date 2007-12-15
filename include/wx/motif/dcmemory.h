@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/motif/dcmemory.h
-// Purpose:     wxMemoryDC class
+// Purpose:     wxMemoryDCImpl class
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
@@ -12,23 +12,23 @@
 #ifndef _WX_DCMEMORY_H_
 #define _WX_DCMEMORY_H_
 
-#include "wx/dcclient.h"
+#include "wx/motif/dcclient.h"
 
-class WXDLLIMPEXP_CORE wxMemoryDC : public wxWindowDC, public wxMemoryDCBase
+class WXDLLIMPEXP_CORE wxMemoryDCImpl : public wxWindowDCImpl
 {
-    DECLARE_DYNAMIC_CLASS(wxMemoryDC)
-
 public:
-    wxMemoryDC() { Init(); }
-    wxMemoryDC(wxBitmap& bitmap) { Init(); SelectObject(bitmap); }
-    wxMemoryDC( wxDC *dc ); // Create compatible DC
-    virtual ~wxMemoryDC();
+    wxMemoryDCImpl(wxMemoryDC *owner) : wxWindowDCImpl(owner) { Init(); }
+    wxMemoryDCImpl(wxMemoryDC *owner, wxBitmap& bitmap)
+        : wxWindowDCImpl(owner)
+    {
+        Init();
+        DoSelect(bitmap);
+    }
 
-    void DoGetSize( int *width, int *height ) const;
+    wxMemoryDCImpl(wxMemoryDC *owner, wxDC *dc);
+    virtual ~wxMemoryDCImpl();
 
-    wxBitmap& GetBitmap() const { return (wxBitmap&) m_bitmap; }
-
-protected:
+    virtual void DoGetSize( int *width, int *height ) const;
     virtual void DoSelect(const wxBitmap& bitmap);
 
 private:
@@ -36,7 +36,9 @@ private:
 
     void Init();
 
-    wxBitmap  m_bitmap;
+    wxBitmap m_bitmap;
+
+    DECLARE_DYNAMIC_CLASS(wxMemoryDCImpl)
 };
 
 #endif

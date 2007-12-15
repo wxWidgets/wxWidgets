@@ -80,6 +80,7 @@
 #endif
 
 #include "wx/motif/private.h"
+#include "wx/motif/dcclient.h"
 
 #include <string.h>
 
@@ -880,6 +881,9 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
     int y2 = (dy >= 0) ? y + dy : y;
 
     wxClientDC dc(this);
+    wxClientDCImpl * const
+        dcimpl = static_cast<wxClientDCImpl *>(dc.GetImpl());
+    GC const gc = (GC) dcimpl->GetGC();
 
     dc.SetLogicalFunction (wxCOPY);
 
@@ -887,10 +891,9 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
     Window window = XtWindow(widget);
     Display* display = XtDisplay(widget);
 
-    XCopyArea(display, window, window, (GC) dc.GetGC(),
-              x1, y1, w1, h1, x2, y2);
+    XCopyArea(display, window, window, gc, x1, y1, w1, h1, x2, y2);
 
-    dc.SetAutoSetting(true);
+    dcimpl->SetAutoSetting(true);
     wxBrush brush(GetBackgroundColour(), wxSOLID);
     dc.SetBrush(brush); // FIXME: needed?
 
@@ -918,8 +921,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         rect->width = dx;
         rect->height = h;
 
-        XFillRectangle(display, window,
-            (GC) dc.GetGC(), rect->x, rect->y, rect->width, rect->height);
+        XFillRectangle(display, window, gc, rect->x, rect->y, rect->width, rect->height);
 
         rect->x = rect->x;
         rect->y = rect->y;
@@ -937,9 +939,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         rect->width = -dx;
         rect->height = h;
 
-        XFillRectangle(display, window,
-            (GC) dc.GetGC(), rect->x, rect->y, rect->width,
-            rect->height);
+        XFillRectangle(display, window, gc, rect->x, rect->y, rect->width, rect->height);
 
         rect->x = rect->x;
         rect->y = rect->y;
@@ -957,8 +957,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         rect->width = w;
         rect->height = dy;
 
-        XFillRectangle(display, window,
-            (GC) dc.GetGC(), rect->x, rect->y, rect->width, rect->height);
+        XFillRectangle(display, window, gc, rect->x, rect->y, rect->width, rect->height);
 
         rect->x = rect->x;
         rect->y = rect->y;
@@ -976,8 +975,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         rect->width = w;
         rect->height = -dy;
 
-        XFillRectangle(display, window,
-            (GC) dc.GetGC(), rect->x, rect->y, rect->width, rect->height);
+        XFillRectangle(display, window, gc, rect->x, rect->y, rect->width, rect->height);
 
         rect->x = rect->x;
         rect->y = rect->y;
@@ -1549,10 +1547,13 @@ void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
         wxClientDC dc(this);
         wxBrush backgroundBrush(GetBackgroundColour(), wxSOLID);
         dc.SetBackground(backgroundBrush);
+
+        wxClientDCImpl * const
+            dcimpl = static_cast<wxClientDCImpl *>(dc.GetImpl());
         if (rect)
-            dc.Clear(*rect);
+            dcimpl->Clear(*rect);
         else
-            dc.Clear();
+            dcimpl->Clear();
     }
 
     XSendEvent(display, thisWindow, False, ExposureMask, (XEvent *)&dummyEvent);
@@ -1565,7 +1566,10 @@ void wxWindow::DoPaint()
     {
       wxPaintDC dc(this);
 
-      GC tempGC = (GC) dc.GetBackingGC();
+      wxPaintDCImpl * const
+          dcimpl = static_cast<wxPaintDCImpl *>(dc.GetImpl());
+
+      GC tempGC = (GC) dcimpl->GetBackingGC();
 
       Widget widget = (Widget) GetMainWidget();
 

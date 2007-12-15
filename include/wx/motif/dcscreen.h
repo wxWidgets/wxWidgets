@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/motif/dcscreen.h
-// Purpose:     wxScreenDC class
+// Purpose:     wxScreenDCImpl class
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
@@ -12,16 +12,14 @@
 #ifndef _WX_DCSCREEN_H_
 #define _WX_DCSCREEN_H_
 
-#include "wx/dcclient.h"
+#include "wx/motif/dcclient.h"
 
-class WXDLLEXPORT wxScreenDC: public wxWindowDC
+class WXDLLEXPORT wxScreenDCImpl : public wxWindowDCImpl
 {
-    DECLARE_DYNAMIC_CLASS(wxScreenDC)
-
 public:
     // Create a DC representing the whole screen
-    wxScreenDC();
-    virtual ~wxScreenDC();
+    wxScreenDCImpl(wxScreenDC *owner);
+    virtual ~wxScreenDCImpl();
 
     // Compatibility with X's requirements for
     // drawing on top of all windows
@@ -37,7 +35,8 @@ private:
     // constructor.
     static int sm_overlayWindowX;
     static int sm_overlayWindowY;
+
+    DECLARE_DYNAMIC_CLASS(wxScreenDCImpl)
 };
 
-#endif
-// _WX_DCSCREEN_H_
+#endif // _WX_DCSCREEN_H_

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/motif/dcmemory.cpp
-// Purpose:     wxMemoryDC class
+// Purpose:     wxMemoryDCImpl class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
@@ -11,8 +11,6 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-
-#include "wx/dcmemory.h"
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -28,14 +26,15 @@
 #endif
 
 #include "wx/motif/private.h"
+#include "wx/motif/dcmemory.h"
 
 //-----------------------------------------------------------------------------
-// wxMemoryDC
+// wxMemoryDCImpl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxWindowDC)
+IMPLEMENT_ABSTRACT_CLASS(wxMemoryDCImpl, wxWindowDCImpl)
 
-void wxMemoryDC::Init()
+void wxMemoryDCImpl::Init()
 {
     m_ok = true;
     m_display = wxGetDisplay();
@@ -59,11 +58,12 @@ void wxMemoryDC::Init()
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 }
 
-wxMemoryDC::wxMemoryDC( wxDC* dc )
+wxMemoryDCImpl::wxMemoryDCImpl(wxMemoryDC *owner, wxDC* dc)
+              : wxWindowDCImpl(owner)
 {
     m_ok = true;
     if (dc && dc->IsKindOf(CLASSINFO(wxWindowDC)))
-        m_display = ((wxWindowDC*)dc)->GetDisplay();
+        m_display = ((wxWindowDCImpl *)dc->GetImpl())->GetDisplay();
     else
         m_display = wxGetDisplay();
 
@@ -85,11 +85,11 @@ wxMemoryDC::wxMemoryDC( wxDC* dc )
     SetPen (* wxBLACK_PEN);
 }
 
-wxMemoryDC::~wxMemoryDC(void)
+wxMemoryDCImpl::~wxMemoryDCImpl(void)
 {
 }
 
-void wxMemoryDC::DoSelect( const wxBitmap& bitmap )
+void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 {
     m_bitmap = bitmap;
 
@@ -125,7 +125,7 @@ void wxMemoryDC::DoSelect( const wxBitmap& bitmap )
     };
 }
 
-void wxMemoryDC::DoGetSize( int *width, int *height ) const
+void wxMemoryDCImpl::DoGetSize( int *width, int *height ) const
 {
     if (m_bitmap.Ok())
     {
