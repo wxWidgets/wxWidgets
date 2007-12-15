@@ -98,7 +98,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 wxedit: $(WXEDIT_OBJECTS)
-	$(CXX) -o $@ $(WXEDIT_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
+	$(CXX) -o $@ $(WXEDIT_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
 
 wxedit_wxedit.o: ./wxedit.cpp
 	$(CXX) -c -o $@ $(WXEDIT_CXXFLAGS) $(CPPDEPS) $<

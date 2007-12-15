@@ -99,7 +99,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 arttest: $(ARTTEST_OBJECTS)
-	$(CXX) -o $@ $(ARTTEST_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
+	$(CXX) -o $@ $(ARTTEST_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
 
 arttest_arttest.o: ./arttest.cpp
 	$(CXX) -c -o $@ $(ARTTEST_CXXFLAGS) $(CPPDEPS) $<

@@ -108,6 +108,9 @@ endif
 ifeq ($(USE_THREADS),0)
 __THREAD_DEFINE_p = -DwxNO_THREADS
 endif
+ifeq ($(UNICODE),0)
+__UNICODE_DEFINE_p = -DwxUSE_UNICODE=0
+endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p = -D_UNICODE
 endif

@@ -170,6 +170,9 @@ endif
 ifeq ($(USE_THREADS),0)
 __THREAD_DEFINE_p_3 = --define wxNO_THREADS
 endif
+ifeq ($(UNICODE),0)
+__UNICODE_DEFINE_p_3 = --define wxUSE_UNICODE=0
+endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p_3 = --define _UNICODE
 endif
@@ -232,6 +235,9 @@ __RTTI_DEFINE_p = -DwxNO_RTTI
 endif
 ifeq ($(USE_THREADS),0)
 __THREAD_DEFINE_p = -DwxNO_THREADS
+endif
+ifeq ($(UNICODE),0)
+__UNICODE_DEFINE_p = -DwxUSE_UNICODE=0
 endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p = -D_UNICODE

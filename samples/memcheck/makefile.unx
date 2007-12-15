@@ -98,7 +98,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 memcheck: $(MEMCHECK_OBJECTS)
-	$(CXX) -o $@ $(MEMCHECK_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
+	$(CXX) -o $@ $(MEMCHECK_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
 
 memcheck_memcheck.o: ./memcheck.cpp
 	$(CXX) -c -o $@ $(MEMCHECK_CXXFLAGS) $(CPPDEPS) $<

@@ -195,6 +195,9 @@ __THREAD_DEFINE_p =
 __THREAD_DEFINE_p = -dwxNO_THREADS
 !endif
 __UNICODE_DEFINE_p =
+!ifeq UNICODE 0
+__UNICODE_DEFINE_p = -dwxUSE_UNICODE=0
+!endif
 !ifeq UNICODE 1
 __UNICODE_DEFINE_p = -d_UNICODE
 !endif
@@ -250,7 +253,7 @@ $(OBJS)\erase.exe :  $(ERASE_OBJECTS) $(OBJS)\erase_erase.res
 	@%append $(OBJS)\erase.lbc option caseexact
 	@%append $(OBJS)\erase.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(ERASE_OBJECTS)) do @%append $(OBJS)\erase.lbc file %i
-	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\erase.lbc library %i
+	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib) do @%append $(OBJS)\erase.lbc library %i
 	@%append $(OBJS)\erase.lbc option resource=$(OBJS)\erase_erase.res
 	@for %i in () do @%append $(OBJS)\erase.lbc option stack=%i
 	wlink @$(OBJS)\erase.lbc

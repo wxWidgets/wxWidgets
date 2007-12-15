@@ -98,7 +98,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 scrollsub: $(SCROLLSUB_OBJECTS)
-	$(CXX) -o $@ $(SCROLLSUB_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
+	$(CXX) -o $@ $(SCROLLSUB_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
 
 scrollsub_scrollsub.o: ./scrollsub.cpp
 	$(CXX) -c -o $@ $(SCROLLSUB_CXXFLAGS) $(CPPDEPS) $<

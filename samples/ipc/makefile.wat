@@ -200,6 +200,9 @@ __THREAD_DEFINE_p =
 __THREAD_DEFINE_p = -dwxNO_THREADS
 !endif
 __UNICODE_DEFINE_p =
+!ifeq UNICODE 0
+__UNICODE_DEFINE_p = -dwxUSE_UNICODE=0
+!endif
 !ifeq UNICODE 1
 __UNICODE_DEFINE_p = -d_UNICODE
 !endif
@@ -265,7 +268,7 @@ $(OBJS)\ipcclient.exe :  $(IPCCLIENT_OBJECTS) $(OBJS)\ipcclient_sample.res
 	@%append $(OBJS)\ipcclient.lbc option caseexact
 	@%append $(OBJS)\ipcclient.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(IPCCLIENT_OBJECTS)) do @%append $(OBJS)\ipcclient.lbc file %i
-	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\ipcclient.lbc library %i
+	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib) do @%append $(OBJS)\ipcclient.lbc library %i
 	@%append $(OBJS)\ipcclient.lbc option resource=$(OBJS)\ipcclient_sample.res
 	@for %i in () do @%append $(OBJS)\ipcclient.lbc option stack=%i
 	wlink @$(OBJS)\ipcclient.lbc
@@ -277,7 +280,7 @@ $(OBJS)\ipcserver.exe :  $(IPCSERVER_OBJECTS) $(OBJS)\ipcserver_sample.res
 	@%append $(OBJS)\ipcserver.lbc option caseexact
 	@%append $(OBJS)\ipcserver.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(IPCSERVER_OBJECTS)) do @%append $(OBJS)\ipcserver.lbc file %i
-	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\ipcserver.lbc library %i
+	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib) do @%append $(OBJS)\ipcserver.lbc library %i
 	@%append $(OBJS)\ipcserver.lbc option resource=$(OBJS)\ipcserver_sample.res
 	@for %i in () do @%append $(OBJS)\ipcserver.lbc option stack=%i
 	wlink @$(OBJS)\ipcserver.lbc

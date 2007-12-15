@@ -123,7 +123,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 widgets: $(WIDGETS_OBJECTS)
-	$(CXX) -o $@ $(WIDGETS_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs xml,adv,html,core,base`
+	$(CXX) -o $@ $(WIDGETS_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs xml,adv,html,core,base`
 
 widgets_bmpcombobox.o: ./bmpcombobox.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<

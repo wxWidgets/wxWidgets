@@ -190,6 +190,9 @@ __THREAD_DEFINE_p =
 __THREAD_DEFINE_p = -dwxNO_THREADS
 !endif
 __UNICODE_DEFINE_p =
+!ifeq UNICODE 0
+__UNICODE_DEFINE_p = -dwxUSE_UNICODE=0
+!endif
 !ifeq UNICODE 1
 __UNICODE_DEFINE_p = -d_UNICODE
 !endif

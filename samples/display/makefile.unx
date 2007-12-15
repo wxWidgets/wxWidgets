@@ -98,7 +98,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 display: $(DISPLAY_OBJECTS)
-	$(CXX) -o $@ $(DISPLAY_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
+	$(CXX) -o $@ $(DISPLAY_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
 
 display_display.o: ./display.cpp
 	$(CXX) -c -o $@ $(DISPLAY_CXXFLAGS) $(CPPDEPS) $<
