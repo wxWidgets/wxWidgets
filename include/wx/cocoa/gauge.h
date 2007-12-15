@@ -54,7 +54,7 @@ public:
     inline WX_NSProgressIndicator GetNSProgressIndicator() const { return (WX_NSProgressIndicator)m_cocoaNSView; }
 protected:
     // NSProgressIndicator cannot be enabled/disabled
-    virtual void CocoaSetEnabled(bool enable) { }
+    virtual void CocoaSetEnabled(bool WXUNUSED(enable)) { }
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------

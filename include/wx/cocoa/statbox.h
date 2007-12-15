@@ -49,7 +49,7 @@ public:
 // ------------------------------------------------------------------------
 protected:
     // Static boxes cannot be enabled/disabled
-    virtual void CocoaSetEnabled(bool enable) { }
+    virtual void CocoaSetEnabled(bool WXUNUSED(enable)) { }
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
