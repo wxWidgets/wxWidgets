@@ -907,18 +907,12 @@ void wxSizer::SetSizeHints( wxWindow *window )
                           window->GetMaxHeight() );
 }
 
+#if WXWIN_COMPATIBILITY_2_8
 void wxSizer::SetVirtualSizeHints( wxWindow *window )
 {
-    // Preserve the window's max size hints, but set the
-    // lower bound according to the sizer calculations.
-
     FitInside( window );
-    wxSize size( window->GetVirtualSize() );
-    window->SetVirtualSizeHints( size.x,
-                                 size.y,
-                                 window->GetMaxWidth(),
-                                 window->GetMaxHeight() );
 }
+#endif // WXWIN_COMPATIBILITY_2_8
 
 wxSize wxSizer::GetMaxWindowSize( wxWindow *window ) const
 {

@@ -604,7 +604,10 @@ public:
     wxSize Fit( wxWindow *window );
     void FitInside( wxWindow *window );
     void SetSizeHints( wxWindow *window );
-    void SetVirtualSizeHints( wxWindow *window );
+#if WXWIN_COMPATIBILITY_2_8
+    // This only calls FitInside() since 2.9
+    wxDEPRECATED( void SetVirtualSizeHints( wxWindow *window ) );
+#endif
 
     wxSizerItemList& GetChildren()
         { return m_children; }

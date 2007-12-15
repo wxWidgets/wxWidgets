@@ -193,11 +193,6 @@ wxWindowBase::wxWindowBase()
 
     m_scrollHelper = (wxScrollHelper *) NULL;
 
-    m_minVirtualWidth =
-    m_maxVirtualWidth = wxDefaultCoord;
-    m_minVirtualHeight =
-    m_maxVirtualHeight = wxDefaultCoord;
-
     m_windowVariant = wxWINDOW_VARIANT_NORMAL;
 #if wxUSE_SYSTEM_OPTIONS
     if ( wxSystemOptions::HasOption(wxWINDOW_DEFAULT_VARIANT) )
@@ -771,26 +766,20 @@ void wxWindowBase::DoSetSizeHints( int minW, int minH,
 }
 
 
-void wxWindowBase::SetVirtualSizeHints( int minW, int minH,
-                                        int maxW, int maxH )
+#if WXWIN_COMPATIBILITY_2_8
+void wxWindowBase::SetVirtualSizeHints(int WXUNUSED(minW), int WXUNUSED(minH),
+                                       int WXUNUSED(maxW), int WXUNUSED(maxH))
 {
-    m_minVirtualWidth = minW;
-    m_maxVirtualWidth = maxW;
-    m_minVirtualHeight = minH;
-    m_maxVirtualHeight = maxH;
 }
+
+void wxWindowBase::SetVirtualSizeHints(const wxSize& WXUNUSED(minsize),
+                                       const wxSize& WXUNUSED(maxsize))
+{
+}
+#endif // WXWIN_COMPATIBILITY_2_8
 
 void wxWindowBase::DoSetVirtualSize( int x, int y )
 {
-    if ( m_minVirtualWidth != wxDefaultCoord && m_minVirtualWidth > x )
-        x = m_minVirtualWidth;
-    if ( m_maxVirtualWidth != wxDefaultCoord && m_maxVirtualWidth < x )
-        x = m_maxVirtualWidth;
-    if ( m_minVirtualHeight != wxDefaultCoord && m_minVirtualHeight > y )
-        y = m_minVirtualHeight;
-    if ( m_maxVirtualHeight != wxDefaultCoord && m_maxVirtualHeight < y )
-        y = m_maxVirtualHeight;
-
     m_virtualSize = wxSize(x, y);
 }
 

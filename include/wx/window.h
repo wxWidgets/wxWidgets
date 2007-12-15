@@ -425,16 +425,14 @@ public:
                        const wxSize& incSize=wxDefaultSize)
     { DoSetSizeHints(minSize.x, minSize.y, maxSize.x, maxSize.y, incSize.x, incSize.y); }
 
-        // Methods for setting virtual size hints
-        // FIXME: What are virtual size hints?
 
-    virtual void SetVirtualSizeHints( int minW, int minH,
-                                      int maxW = wxDefaultCoord, int maxH = wxDefaultCoord );
-    void SetVirtualSizeHints( const wxSize& minSize,
-                              const wxSize& maxSize=wxDefaultSize)
-    {
-        SetVirtualSizeHints(minSize.x, minSize.y, maxSize.x, maxSize.y);
-    }
+#if WXWIN_COMPATIBILITY_2_8
+    // these are useless and do nothing since wxWidgets 2.9
+    wxDEPRECATED( virtual void SetVirtualSizeHints( int minW, int minH,
+                                      int maxW = wxDefaultCoord, int maxH = wxDefaultCoord ) );
+    wxDEPRECATED( void SetVirtualSizeHints( const wxSize& minSize,
+                                            const wxSize& maxSize=wxDefaultSize) );
+#endif // WXWIN_COMPATIBILITY_2_8
 
 
         // Call these to override what GetBestSize() returns. This
@@ -1460,11 +1458,6 @@ protected:
     wxSize                m_virtualSize;
 
     wxScrollHelper       *m_scrollHelper;
-
-    int                   m_minVirtualWidth;    // VirtualSizeHints
-    int                   m_minVirtualHeight;
-    int                   m_maxVirtualWidth;
-    int                   m_maxVirtualHeight;
 
     wxWindowVariant       m_windowVariant ;
 
