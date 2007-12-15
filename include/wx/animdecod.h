@@ -84,16 +84,13 @@ enum wxAnimationType
 // wxAnimationDecoder class
 // --------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxAnimationDecoder : public wxObjectRefData
+class WXDLLIMPEXP_CORE wxAnimationDecoder : public wxObjectRefData
 {
 public:
     wxAnimationDecoder()
     {
-        m_background = wxNullColour;
         m_nFrames = 0;
     }
-    virtual ~wxAnimationDecoder() { }
-
 
     virtual bool Load( wxInputStream& stream ) = 0;
     virtual bool CanRead( wxInputStream& stream ) const = 0;
@@ -140,7 +137,7 @@ protected:
     wxColour m_background;
 };
 
-
 #endif  // wxUSE_STREAMS
+
 #endif  // _WX_ANIMDECOD_H
 
