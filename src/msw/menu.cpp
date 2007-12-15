@@ -793,7 +793,7 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id_)
     const int id = (signed short)id_;
 
     // ignore commands from the menu title
-    if ( id != idMenuTitle )
+    if ( id != (int)idMenuTitle )
     {
         // update the check item when it's clicked
         wxMenuItem * const item = FindItem(id);

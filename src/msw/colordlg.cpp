@@ -120,7 +120,7 @@ int wxColourDialog::ShowModal()
     CHOOSECOLOR chooseColorStruct;
     memset(&chooseColorStruct, 0, sizeof(CHOOSECOLOR));
 
-    int i;
+    size_t i;
 
     // and transfer data from m_colourData to it
     COLORREF custColours[16];
