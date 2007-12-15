@@ -2208,7 +2208,7 @@ void wxWindowDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, w
 
     wxCoord xx, yy, ww, hh;
     m_currentClippingRegion.GetBox( xx, yy, ww, hh );
-    wxDCImpl::DoSetClippingRegion( xx, yy, ww, hh );
+    wxX11DCImpl::DoSetClippingRegion( xx, yy, ww, hh );
 
     XSetRegion( (Display*) m_display, (GC) m_penGC, (Region) m_currentClippingRegion.GetX11Region() );
     XSetRegion( (Display*) m_display, (GC) m_brushGC, (Region) m_currentClippingRegion.GetX11Region() );
@@ -2240,7 +2240,7 @@ void wxWindowDCImpl::DoSetClippingRegionAsRegion( const wxRegion& region )
 
     wxCoord xx, yy, ww, hh;
     m_currentClippingRegion.GetBox( xx, yy, ww, hh );
-    wxDCImpl::DoSetClippingRegion( xx, yy, ww, hh );
+    wxX11DCImpl::DoSetClippingRegion( xx, yy, ww, hh );
 
     XSetRegion( (Display*) m_display, (GC) m_penGC, (Region) m_currentClippingRegion.GetX11Region() );
     XSetRegion( (Display*) m_display, (GC) m_brushGC, (Region) m_currentClippingRegion.GetX11Region() );

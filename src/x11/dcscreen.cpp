@@ -32,8 +32,8 @@
 
 IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl,wxPaintDCImpl)
 
-wxScreenDCImpl::wxScreenDCImpl( wxDC* owner ) :
-  wxPaintDCImpl( owner )
+wxScreenDCImpl::wxScreenDCImpl( wxDC* owner )
+              : wxPaintDCImpl( owner )
 {
     m_ok = false;
 
@@ -67,3 +67,7 @@ wxScreenDCImpl::~wxScreenDCImpl()
     XSetSubwindowMode( (Display*) m_display, (GC) m_bgGC, ClipByChildren );
 }
 
+void wxScreenDCImpl::DoGetSize(int *width, int *height) const
+{
+    wxDisplaySize(width, height);
+}
