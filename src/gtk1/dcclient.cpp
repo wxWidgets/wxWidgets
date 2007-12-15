@@ -1143,8 +1143,11 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
     xsrc = source->LogicalToDeviceX(xsrc);
     ysrc = source->LogicalToDeviceY(ysrc);
 
-    wxClientDCImpl *srcDC = (wxClientDCImpl*)source->GetImpl();
-    wxMemoryDCImpl *memDC = (wxMemoryDCImpl*)source;
+    wxWindowDCImpl *srcDC = wxDynamicCast(source->GetImpl(), wxWindowDCImpl);
+    wxCHECK_MSG( srcDC, false, "source must be a window DC" );
+
+    // FIXME: this cast is not always valid, see the code using m_isMemDC
+    wxMemoryDCImpl *memDC = wx_static_cast(wxMemoryDCImpl *, srcDC);
 
     bool use_bitmap_method = false;
     bool is_mono = false;
