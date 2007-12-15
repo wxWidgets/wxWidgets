@@ -557,8 +557,8 @@ wxDDEConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
                  _T("wxDDEServer::Execute() supports only text data") );
 
     wxMemoryBuffer buffer;
-    LPBYTE realData wxDUMMY_INITIALIZE(NULL);
-    size_t realSize wxDUMMY_INITIALIZE(0);
+    LPBYTE realData = NULL;
+    size_t realSize = 0;
     wxMBConv *conv = NULL;
 
     // Windows only supports either ANSI or UTF-16 format depending on the
