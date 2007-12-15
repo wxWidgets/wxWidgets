@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        src/common/regex.cpp
 // Purpose:     regular expression matching
-// Author:      Karsten Ballüder and Vadim Zeitlin
+// Author:      Karsten Ballueder and Vadim Zeitlin
 // Modified by:
 // Created:     13.07.01
 // RCS-ID:      $Id$
-// Copyright:   (c) 2000 Karsten Ballüder <ballueder@gmx.net>
+// Copyright:   (c) 2000 Karsten Ballueder <ballueder@gmx.net>
 //                  2001 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
