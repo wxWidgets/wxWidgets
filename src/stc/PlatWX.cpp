@@ -138,8 +138,9 @@ Font::Font() {
 Font::~Font() {
 }
 
-void Font::Create(const char *faceName, int characterSet, int size, bool bold, bool italic, bool extraFontFlag) {
-
+void Font::Create(const char *faceName, int characterSet,
+                  int size, bool bold, bool italic,
+                  bool WXUNUSED(extraFontFlag)) {
     Release();
 
     // The minus one is done because since Scintilla uses SC_SHARSET_DEFAULT
